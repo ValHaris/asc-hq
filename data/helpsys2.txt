@@ -82,7 +82,8 @@
 #pos10# F4  #pos70#: Choose unit
 #pos10# F5  #pos70#: Choose color
 #pos10# F6  #pos70#: Choose building
-#pos10# F7  #pos70#: Choose special object
+#pos10# F7  #pos70#: Choose object from palette.map
+#pos10# shift+F7  #pos70#: Choose object from list
 #pos10# F8  #pos70#: Choose mine
 #pos10# F9  #pos70#: Choose weather
 #pos10# F10  #pos70#: Exit

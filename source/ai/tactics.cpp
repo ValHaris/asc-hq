@@ -112,10 +112,10 @@ void AI :: searchTargets ( pvehicle veh, int x, int y, TargetVector& tl, int mov
                   checkDir = attackerDirection+sidenum/2 - (nf+1)/2;
             }
 
-            MapCoordinate mc = getNeighbouringFieldCoordinate ( MapCoordinate ( mv->attackx, mv->attacky), (attackerDirection+checkDir)%sidenum );
+            MapCoordinate mc = getNeighbouringFieldCoordinate ( MapCoordinate ( mv->attackx, mv->attacky), checkDir%sidenum );
             pfield fld = getMap()->getField(mc);
             if ( fld && !fld->building && !fld->vehicle )
-               hemmingFactor += AttackFormula::getHemmingFactor ( checkDir - attackerDirection );
+               hemmingFactor += AttackFormula::getHemmingFactor ( nf );
          }
 
          mv->result = int( getAttackValue ( uau, mv->attacker, mv->enemy, hemmingFactor ));

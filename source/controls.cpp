@@ -3,9 +3,14 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.131 2002-04-21 21:27:00 mbickel Exp $
+//     $Id: controls.cpp,v 1.132 2002-09-19 20:20:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.131  2002/04/21 21:27:00  mbickel
+//      Mapeditor: Fixed crash in "Put Resources"
+//      Updating the small map after AI
+//      Fixed infinite loop "quit game" after sending signal
+//
 //     Revision 1.130  2002/04/05 19:01:45  mbickel
 //      Fixed: reaction fire attackes being replayed twice
 //      Fixed: crash when reaction fire during landing on carrier
@@ -1496,13 +1501,16 @@ int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
                if ( battle.dv.damage >= 100 )
                   result = 1;
 
+               ul->eht->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  (vehicle->color / 8) );
+
                battle.setresult();
+
+               if ( ad2 < 100 )
+                  ul->eht->attacked = false;
 
 //               logtoreplayinfo ( rpl_reactionfire, ulex, uley, x, y, ad1, ad2, dd1, dd2, atw->num[num] );
 
                dashboard.x = 0xffff;
-               ul->eht->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  (vehicle->color / 8) );
-               ul->eht->attacked = false;
                removeunit ( ul->eht );
 
             }

@@ -35,14 +35,15 @@
 */
 ASCString& ASCString::toLower ( )
 {
-    auto_ptr< charT > l_autopBuf ( new charT [ length () + sizeof ( charT ) ] );
-
-    charT* l_pBuf = l_autopBuf.get();
+//    auto_ptr< charT > l_autopBuf ( new charT [ length () + sizeof ( charT ) ] );
+//    charT* l_pBuf = l_autopBuf.get();
+    charT* l_pBuf = new charT [ length () + sizeof ( charT ) ];
 
     ASCStringHelpers::_Strcpy ( l_pBuf, c_str () );
     ASCStringHelpers::_Strlwr ( l_pBuf );
     assign  ( l_pBuf );
 
+    delete[] l_pBuf;
     return *this;
 }
 
@@ -53,14 +54,14 @@ ASCString& ASCString::toLower ( )
 */
 ASCString& ASCString::toUpper ( )
 {
-    auto_ptr< charT > l_autopBuf ( new charT [ length () + sizeof ( charT ) ] );
-    
-    charT* l_pBuf = l_autopBuf.get();
+//    auto_ptr< charT > l_autopBuf ( new charT [ length () + sizeof ( charT ) ] );
+    charT* l_pBuf = new charT [ length () + sizeof ( charT ) ];
 
     ASCStringHelpers::_Strcpy ( l_pBuf, c_str () );
     ASCStringHelpers::_Strupr ( l_pBuf );
     assign  ( l_pBuf );
-    
+
+    delete[] l_pBuf;
     return *this;
 }
 

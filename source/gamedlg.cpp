@@ -1,9 +1,14 @@
 /*! \file gamedlg.cpp    
     \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.93 2002-03-26 22:23:09 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.94 2002-09-19 20:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.93  2002/03/26 22:23:09  mbickel
+//      Fixed: music was started even if turned off in ini file
+//      Fixed: crash in reaction fire
+//      Fixed: reaction fire not occuring when changing height
+//
 //     Revision 1.92  2002/03/14 18:14:37  mbickel
 //      Improved messages for proposing peace
 //      Fixed display error when enterering passwords
@@ -3260,7 +3265,7 @@ void tmultiplayersettings :: buttonpressed ( int id )
              actmap->player[i].research.settechlevel ( techlevel );
 
       if ( replays )
-         actmap->replayinfo = new treplayinfo;
+         actmap->replayinfo = new tmap::ReplayInfo;
       else
          if ( actmap->replayinfo ) {
             delete actmap->replayinfo;

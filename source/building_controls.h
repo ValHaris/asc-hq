@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: building_controls.h,v 1.11 2001-11-15 20:46:05 mbickel Exp $
+//     $Id: building_controls.h,v 1.12 2002-09-19 20:20:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2001/11/15 20:46:05  mbickel
+//      Fixed: replay not working when moving units out of carriers
+//
 //     Revision 1.10  2001/10/31 18:34:30  mbickel
 //      Some adjustments and fixes for gcc 3.0.2
 //
@@ -208,9 +211,8 @@ class    cbuildingcontrols : public virtual ccontainercontrols
       class    crecycling
       {                           // RECYCLING
          public :
-            int      material, energy;
-            void     resourceuse ( pvehicle eht );
-            void     recycle (pvehicle eht);
+            Resources resourceuse ( pvehicle eht );
+            void      recycle (pvehicle eht);
       }
       recycling;
 

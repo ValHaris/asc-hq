@@ -106,17 +106,27 @@ Walk throughs that describe the usage of these editors can be found here:
 <A HREF="biimport.html">Importing graphics from Battle Isle</A>. Although we no longer use the Battle Isle graphics and the Battle Isle vehicle set has been completely implemented in ASC (but it is not part of the distribution), this text should still be a useful introduction and guide to the editors.<P>
 
 <A NAME="ID"><H3>IDs</H3></A>
-The items of every category are identified by a ID that has
-to be unique for each category. When you're creating
-new items you should check which IDs are not used yet. This can be done using the programs <TT>VIEWID.EXE</TT>.
+The items of every category are identified by an ID that has
+to be unique for each category. The assignment of these IDs is the only aspect of ASC that absolutely needs a central management. 
 
-(A note for those users who don't know how to work with a command line program: you can redirect the output to a file by starting <TT>VIEWID.EXE &gt; FILENAME</TT>).<P>
+If you are just experimenting, you can use IDs from 100000 to 199999 , but you must never publish ASC items that uses these IDs. 
+If you start building some items that you intend to publish, write a short mail to the mailinglist requesting your own set of IDs. There is no shortage of IDs with 2147483647 IDs being available, 
+but it must be ensured that each ID is used only once, worldwide.
 
-To experiment you can just use any ID that is not used up to now. But if someone else makes items using the same IDs and publishes these items you can get into trouble if you want to use them too. If you make only a few items and don't build any maps using these items you can change the IDs 
-afterwards. But the best way to prevent all these problems is to contact us
-through the mailing lists and get your own set of IDs. The upper limit for some IDs is 2147483647 (signed 32 bit integer) and for others 65535 ( unsigned 16 bit) and there is no problem (or better there should not be problems....) using such large IDs. Some older versions of ASC had a problem with the memory requirements, but that is fixed now. IDs must be greater than 0.<P>
 
-Please do not use IDs below 100 for new objects !!<P>
+Here's an example to illustrate the problem:
+<blockquote>
+Person A builds a unitset UA and uses the IDs 1400 to 1499. These units are published, many maps are created that use these units and many mail games are being played on these maps.
+Without knowing that, person B creates their own unit set (lets call it UB) and also uses the IDs 1400  to 1499. As long as B doesn't install UA, there's no problem. Now UB is published, becomes quite successfull and people start playing it by mail.
+
+But nobody will be able to install both UA and UB because of the conflicting IDs. 
+And neither person A nor person B will be able to change the IDs of their unitset, because then all existing maps, all running games and all savegames that are using these units will be lost.
+
+So by not coordinating the usage of IDs A and B have made two absolutely incompatible versions of ASC, one that has UA installed and one that has UB installed.
+
+</blockquote>
+
+So if you build some ASC items and there is the slightest chance that these items will leave you PC (for example because you want to play against a friend using these items), please obtain your own unique set of IDs.
 
 <P>
 

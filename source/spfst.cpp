@@ -2,9 +2,13 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.109 2002-03-19 20:38:56 mbickel Exp $
+//     $Id: spfst.cpp,v 1.110 2002-09-19 20:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.109  2002/03/19 20:38:56  mbickel
+//      Some cleanup and documentation in dlg_box
+//      Fixed some type assignment errors
+//
 //     Revision 1.108  2002/03/18 21:42:17  mbickel
 //      Some cleanup and documentation in the Mine class
 //      The number of mines is now displayed in the field information window
@@ -339,7 +343,10 @@ int         fieldaccessible( const pfield        field,
       
 
    if ( !field->vehicle && !field->building ) {
-      return terrainaccessible ( field, vehicle, uheight );
+      if ( vehicle->typ->height & uheight )
+         return terrainaccessible ( field, vehicle, uheight );
+      else
+         return 0;
    } else {
       int m1 = vehicle->weight(); 
       int mx = vehicle->weight(); 

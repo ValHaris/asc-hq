@@ -32,7 +32,7 @@
     <LIBRARIES value="vcl.lib rtl.lib"/>
     <SPARELIBS value="rtl.lib vcl.lib"/>
     <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi bcbsmp.bpi dclocx.bpi"/>
-    <PATHCPP value=".;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..\sdl;..\..\..\sdl;..\..\..\sdl;..\..\..\sdl;..\..\..\sdl;..\..\..\..\..\sdl\src\main\win32;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..\LIBS\getopt;..\..\..\LIBS\getopt;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..;..\..\..\sdl;..\..\..;..\..\..;..\..\.."/>
+    <PATHCPP value=".;..\..\..;..\..\..\sdl;..\..\..\..\..\sdl\src\main\win32;..\..\..\LIBS\getopt"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
@@ -236,7 +236,7 @@ Item1=C:\Programme\ascsrc\games\asc\source\win32\borland
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=-l tutorial4.map
+RunParams=
 Launcher=
 UseLauncher=0
 DebugCWD=

@@ -2,9 +2,17 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.81 2002-04-05 09:25:05 mbickel Exp $
+//     $Id: building.cpp,v 1.82 2002-09-19 20:20:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.81  2002/04/05 09:25:05  mbickel
+//      Project files now for Borland C++ Builder 6
+//      Fixed: netcontrol not working
+//      Fixed: replay errors when constructing turrets
+//      Submarine require no fuel for sufacing
+//      Field info dialog extended
+//      Fixed several buffer overruns
+//
 //     Revision 1.80  2002/03/27 00:18:20  mbickel
 //      Changed the resource weight
 //
@@ -1156,6 +1164,9 @@ void  ccontainercontrols :: crefill :: emptyeverything ( pvehicle eht )
       if ( eht->typ->weapons.weapon[ i ].requiresAmmo() )
          ammunition ( eht, i, 0 );
 
+   for ( int i = 0; i < 32; i++ )
+      if ( eht->loading[i] )
+         emptyeverything ( eht->loading[i] );
 }
 
 
@@ -1207,6 +1218,7 @@ void ccontainercontrols :: cmove_unit_in_container :: moveup ( pvehicle eht )
                cc_t->vehicle->loading[i] = 0;
 
             }
+            logtoreplayinfo ( rpl_moveUnitUpDown, targe->getPosition().x, targe->getPosition().y, cc_t->vehicle->networkid, targe->networkid, eht->networkid );
          } else
             if ( targb ) {
                int i = 0;
@@ -1221,6 +1233,7 @@ void ccontainercontrols :: cmove_unit_in_container :: moveup ( pvehicle eht )
 
                   cc_t->vehicle->loading[i] = 0;
                }
+               logtoreplayinfo ( rpl_moveUnitUpDown, targb->getPosition().x, targb->getPosition().y, cc_t->vehicle->networkid, -1, eht->networkid );
             }
       }
 }
@@ -1243,12 +1256,14 @@ void ccontainercontrols :: cmove_unit_in_container :: movedown ( pvehicle eht, p
                i++;
 
             cc_t->vehicle->loading[i] = 0;
+            logtoreplayinfo ( rpl_moveUnitUpDown, cc_t->vehicle->getPosition().x, cc_t->vehicle->getPosition().y, cc_t->vehicle->networkid, into->networkid, eht->networkid );
          } else
             if ( cc_b ) {
                while ( cc_b->building->loading[i] != eht)
                   i++;
 
                cc_b->building->loading[i] = 0;
+               logtoreplayinfo ( rpl_moveUnitUpDown, cc_b->building->getPosition().x, cc_b->building->getPosition().y, -1, into->networkid, eht->networkid );
             }
       }
    }
@@ -1523,7 +1538,7 @@ void  cbuildingcontrols :: removevehicle ( pvehicle *peht )
 }
 
 
-void  cbuildingcontrols :: crecycling :: resourceuse (pvehicle eht)
+Resources  cbuildingcontrols :: crecycling :: resourceuse (pvehicle eht)
 {
    int   output;
    if ( cc->getspecfunc( mbuilding ) & cgrecyclingplantb)
@@ -1531,21 +1546,28 @@ void  cbuildingcontrols :: crecycling :: resourceuse (pvehicle eht)
    else
       output = destructoutput;
 
-   material = eht->typ->productionCost.material * (100 - eht->damage/2 ) / 100 / output;
-   energy = 0;
+   Resources res;
+
+   for (int i=0; i<=31; i++)
+      if ( eht->loading[i] )
+         res += resourceuse ( eht->loading[i] );
+
+
+   res.material += eht->typ->productionCost.material * (100 - eht->damage/2 ) / 100 / output;
+   return res;
 }
 
 
 void  cbuildingcontrols :: crecycling :: recycle (pvehicle eht)
 {
    if (choice_dlg("do you really want to recycle this unit ?","~y~es","~n~o") == 1) {
-      resourceuse ( eht );
+      Resources res = resourceuse ( eht );
 
-      if ( CGameOptions::Instance()->container.emptyeverything )
-         cc->refill.emptyeverything ( eht );
+      // if ( CGameOptions::Instance()->container.emptyeverything )
+      cc->refill.emptyeverything ( eht );
 
 
-      cc->putmaterial ( material );
+      cc->putmaterial ( res.material );
 
       cc_b->removevehicle (&eht);
    }
@@ -6614,10 +6636,10 @@ void    ccontainer_b :: recyclingicon_cb :: exec ( void )
 
 const char* ccontainer_b :: recyclingicon_cb :: getinfotext  ( void )
 {
-   resourceuse ( main->getmarkedunit() );
+   Resources res = resourceuse ( main->getmarkedunit() );
    strcpy ( &infotextbuf[100], infotext.c_str() );
    int n = 0;
-   sprintf ( &infotextbuf[100+strlen( &infotextbuf[100])], resourceusagestring, energy, -material, n );
+   sprintf ( &infotextbuf[100+strlen( &infotextbuf[100])], resourceusagestring, res.energy, -res.material, n );
    return &infotextbuf[100];
 }
 

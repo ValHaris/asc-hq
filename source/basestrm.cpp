@@ -2,9 +2,17 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.73 2002-04-05 09:25:05 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.74 2002-09-19 20:20:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.73  2002/04/05 09:25:05  mbickel
+//      Project files now for Borland C++ Builder 6
+//      Fixed: netcontrol not working
+//      Fixed: replay errors when constructing turrets
+//      Submarine require no fuel for sufacing
+//      Field info dialog extended
+//      Fixed several buffer overruns
+//
 //     Revision 1.72  2002/03/11 18:47:36  mbickel
 //      Fixed: Remaining movement of troopers not displayed
 //      Fixed wrong text position in mouse options
@@ -805,11 +813,13 @@ void         tnstream::writepchar(const char* pc)
 { 
    if ( pc ) {
       const char *pch1 = pc;
-    
-      pch1--;
+      int loop = 0;
+
       do {
-         pch1++;
+         if ( loop )
+            pch1++;
          writedata( pch1, 1 );
+         loop++;
       } while ( *pch1 > 0  ); /* enddo */
    } else {
        char         pch1 = 0;

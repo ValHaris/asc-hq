@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.87 2002-05-07 19:52:47 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.88 2002-09-19 20:20:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.87  2002/05/07 19:52:47  mbickel
+//      Updated documentation
+//      Dialog themes can be reloaded during runtime.
+//
 //     Revision 1.86  2002/04/09 22:19:06  mbickel
 //      Fixed AI bugs
 //      Fixed: invalid player name displayed in dashboard
@@ -465,7 +469,10 @@ int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int heigh
          height = veh->height;
 
       if ( veh->maxMovement() )
-         initialMovement = veh->typ->movement[log2 ( height ) ] * veh->getMovement( false ) / veh->maxMovement();
+         if ( veh->typ->movement[log2 ( height ) ] )
+            initialMovement = veh->typ->movement[log2 ( height ) ] * veh->getMovement( false ) / veh->maxMovement();
+         else
+            initialMovement = veh->getMovement( false );
       else
          initialMovement = 0;
 
@@ -589,7 +596,7 @@ void VehicleMovement :: searchmove(int         x,
       int mm1;   // fuelconsumption
       int mm2;   // movementdist
 
-      calcmovemalus(ox,oy,x,y,vehicle,direc, mm1, mm2);
+      calcmovemalus(ox,oy,x,y,vehicle,direc, mm1, mm2, search.height);
 
       streck -= mm2;
       fuelneeded   += mm1;
@@ -706,7 +713,7 @@ void   VehicleMovement :: FieldReachableRek :: move(int          x,
        int mm1;      // fuelusage
        int mm2;      // movementusage
 
-       calcmovemalus(ox, oy, x, y, vehicle, direc, mm1, mm2);
+       calcmovemalus(ox, oy, x, y, vehicle, direc, mm1, mm2, height);
 
        fuel += mm1;
        streck += mm2;
@@ -2246,6 +2253,9 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
 
 void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehicle targetUnit )
 {
+   if ( getdiplomaticstatus2(bld->color, targetUnit->color) != capeace)
+      return;
+      
    VehicleService::Target targ;
    MapCoordinate pos = bld->getEntry();
    int dist = beeline ( pos.x, pos.y, targetUnit->xpos, targetUnit->ypos );

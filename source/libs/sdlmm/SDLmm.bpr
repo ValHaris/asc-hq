@@ -21,7 +21,7 @@
     <LIBRARIES value=""/>
     <SPARELIBS value=""/>
     <PACKAGES value=""/>
-    <PATHCPP value=".;..\..\..\..\sdlmm\src;..\..\..\..\sdlmm\src;..\..\..\..\sdlmm\src;..\..\..\..\sdlmm\src;..\..\..\..\sdlmm\src;..\..\..\..\sdlmm\src;..\..\..\..\sdlmm\src;..\..\..\..\sdlmm\src;..\..\..\..\sdlmm\src;..\..\..\..\sdlmm\src;..\..\..\..\sdlmm\src;..\..\..\..\sdlmm\src"/>
+    <PATHCPP value=".;..\..\..\..\sdlmm\src"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>

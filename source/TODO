@@ -13,7 +13,19 @@ Bugs:
  -  subbase.map
 
  -  redraw problems with Win9x after task switch
+
+=====
+
+
+
+ - *.ascmapxlat
+ - cant' conquer subbase
+ - can load to much tanks into a vader inside a transport ship
+ - replay errors in 525
+ -  genom starting from carrier: increased range
  
+=========
+
 Small tasks:
 
 -4- Replay: don't repeat identical inconsistency messages
@@ -56,6 +68,7 @@ Small tasks:
 -8-  kamikaze weapon
 
 -6- resize graphics to contain all vehicle categories in weapon info
+
 
 Medium sized tasks
 
@@ -158,7 +171,13 @@ Requested features:
 - infotext should be displayed by right clicking on the description in the main 
   screen
   
-  
+>Zu den baubaren/abreissbaren objekten Objekten. Jedes baubare oder
+>abreissbare Objekt erh„lt optional eine "Scrap-ID". zb. Straáe=1 , Brcke=2,
+>Wald=3, Felsen=10 ....
+
+- Wracks
+
+- BI1 Blocking  
 
 Requested features whos necessity should be discussed...
 

@@ -133,6 +133,8 @@ void AI::checkKeys ( void )
 
 void AI:: run ( bool benchMark )
 {
+   int* ip = new int[100];
+
    this->benchMark = benchMark;
 
    if ( getMap()->playerView >= 0 && !benchMark)

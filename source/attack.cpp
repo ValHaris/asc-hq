@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: attack.cpp,v 1.59 2002-04-21 21:50:29 mbickel Exp $
+//     $Id: attack.cpp,v 1.60 2002-09-19 20:20:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.59  2002/04/21 21:50:29  mbickel
+//      ASC spec files: automatic versioning
+//      Some cleanup and documentation
+//
 //     Revision 1.58  2002/03/02 23:04:00  mbickel
 //      Some cleanup of source code
 //      Improved Paragui Integration
@@ -189,6 +193,10 @@ float AttackFormula :: getHemmingFactor ( int relDir )
    relDir  %= 6;
    if ( relDir < 0 )
       relDir += sidenum;
+
+   if ( relDir == 5 )
+      displaymessage("float AttackFormula :: getHemmingFactor - invalid direction", 1 );
+      
    return hemming[relDir]*maxHemmingFactor/maxHemmingSum;
 }
 

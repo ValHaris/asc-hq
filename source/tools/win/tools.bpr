@@ -19,7 +19,7 @@
     <LIBRARIES value=""/>
     <SPARELIBS value=""/>
     <PACKAGES value=""/>
-    <PATHCPP value=".;..\..;..\..;..\..;..\..;..\..;..\..;..\..;..\..;..\..;..\..;..\..;..\..;..\..;..\..;..\..;..\..;..\..;..\..;..\..\sdl;..\..\LIBS\getopt;..\..\LIBS\getopt;..\..;..\..;..\..;..\..;..\..;..\..;..\lib"/>
+    <PATHCPP value=".;..\..;..\..\sdl;..\..\LIBS\getopt;..\lib"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>

@@ -1,6 +1,10 @@
-//     $Id: gui.h,v 1.21 2001-07-13 12:53:01 mbickel Exp $
+//     $Id: gui.h,v 1.22 2002-09-19 20:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2001/07/13 12:53:01  mbickel
+//      Fixed duplicate icons in replay
+//      Fixed crash in tooltip help
+//
 //     Revision 1.20  2001/02/04 21:26:56  mbickel
 //      The AI status is written to savegames -> new savegame revision
 //      Lots of bug fixes
@@ -112,8 +116,8 @@
 #endif
 
 
-#ifndef gui_h
-#define gui_h
+#ifndef guiH
+#define guiH
 
 #include "basestrm.h"
 #include "spfst.h"

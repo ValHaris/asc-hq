@@ -1,6 +1,11 @@
-//     $Id: unitctrl.h,v 1.28 2002-03-26 22:23:09 mbickel Exp $
+//     $Id: unitctrl.h,v 1.29 2002-09-19 20:20:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2002/03/26 22:23:09  mbickel
+//      Fixed: music was started even if turned off in ini file
+//      Fixed: crash in reaction fire
+//      Fixed: reaction fire not occuring when changing height
+//
 //     Revision 1.27  2001/11/28 13:03:16  mbickel
 //      Fixed: attack selectable although 0% hit accuracy
 //      Fixed: refuelling not possible if weapon had wrong target height
@@ -158,8 +163,8 @@
     Boston, MA  02111-1307  USA
 */
 
-#ifndef unitctrl_h_included
-#define unitctrl_h_included
+#ifndef unitctrlH
+#define unitctrlH
 
 #include <vector>
 #include <map>

@@ -58,12 +58,15 @@ AI::AiResult AI::strategy( void )
 
                   AI::Section* sec = sections.getBest ( 0, veh, &dest, true );
                   if ( sec ) {
+                     int nwid = veh->networkid;
                      if ( moveUnit ( veh, dest, false))
                         localResult.unitsMoved++;
 
-                     AiParameter& aip = *veh->aiparam[getPlayerNum()];
+                     if ( getMap()->getUnit(nwid)) {
+                        AiParameter& aip = *veh->aiparam[getPlayerNum()];
 
-                     aip.dest = dest;
+                       aip.dest = dest;
+                     }
                   }
                }
             }

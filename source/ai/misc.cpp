@@ -514,9 +514,9 @@ int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path )
          bool fieldFound = false;
          AStar3D::Path::const_iterator lastmatch = pi;
          AStar3D::Path::const_iterator i = pi;
-         while ( i->z == veh->height && i != path.end() ) {
+         while ( i != path.end() && i->z == veh->height ) {
             if ( vm.reachableFields.isMember ( i->x, i->y )) {
-               // don't accidently conquer the buildings of you allies
+               // don't accidently conquer the buildings of your allies
                if ( !getfield ( i->x, i->y )->building || getdiplomaticstatus2 ( getfield ( i->x, i->y )->building->color, getPlayerNum()*8) == cawar ) {
                   lastmatch = i;
                   fieldFound = true;

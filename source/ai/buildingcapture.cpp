@@ -27,7 +27,10 @@ float AI :: getCaptureValue ( const pbuilding bld, const pvehicle veh  )
    HiddenAStar ast ( this, veh );
    HiddenAStar::Path path;
    ast.findPath ( path, bld->getEntry().x, bld->getEntry().y );
-   return getCaptureValue ( bld, ast.getTravelTime() );
+   if ( ast.getTravelTime() >= 0 )
+      return getCaptureValue ( bld, ast.getTravelTime() );
+   else
+      return minfloat;
 }
 
 
@@ -135,6 +138,8 @@ void         SearchReconquerBuilding :: testfield(const MapCoordinate& mc)
 
 float AI :: getCaptureValue ( const pbuilding bld, int traveltime  )
 {
+   if ( traveltime < 0 )
+      traveltime = 0;
    return float(bld->aiparam[getPlayerNum()]->getValue()) / float(traveltime+1);
 }
 

@@ -958,12 +958,12 @@ bool tmap :: ResourceTribute :: empty ( )
       for (int j = 0; j < 8; j++)
          for (int k = 0; k < 3; k++) {
             if ( avail[i][j].resource(k) )
-               return true;
+               return false;
             if ( paid[i][j].resource(k) )
-               return true;
+               return false;
          }
 
-   return false;
+   return true;
 }
 
 void tmap :: ResourceTribute :: read ( tnstream& stream )
@@ -1867,16 +1867,67 @@ void AiParameter :: clearJobs()
 
 
 
-treplayinfo :: treplayinfo ( void )
+tmap :: ReplayInfo :: ReplayInfo ( void )
 {
    for (int i = 0; i < 8; i++) {
       guidata[i] = NULL;
       map[i] = NULL;
    }
    actmemstream = NULL;
+   stopRecordingActions = 0;
 }
 
-treplayinfo :: ~treplayinfo ( )
+void tmap :: ReplayInfo :: read ( tnstream& stream )
+{
+   bool loadgui[8];
+   bool loadmap[8];
+
+   for ( int i = 0; i < 8; i++ )
+      loadgui[i] = stream.readInt();
+
+   for ( int i = 0; i < 8; i++ )
+      loadmap[i] = stream.readInt();
+
+   stream.readInt(); // was: actmemstream
+
+   for ( int i = 0; i < 8; i++ ) {
+      if ( loadgui[i] ) {
+         guidata[i] = new tmemorystreambuf;
+         guidata[i]->readfromstream ( &stream );
+      } else
+         guidata[i] = NULL;
+
+      if ( loadmap[i] ) {
+         map[i] = new tmemorystreambuf;
+         map[i]->readfromstream ( &stream );
+      } else
+         map[i] = NULL;
+   }
+
+   actmemstream = NULL;
+}
+
+void tmap :: ReplayInfo :: write ( tnstream& stream )
+{
+   for ( int i = 0; i < 8; i++ )
+      stream.writeInt ( guidata[i] != NULL );
+
+   for ( int i = 0; i < 8; i++ )
+      stream.writeInt ( map[i] != NULL );
+
+   stream.writeInt ( actmemstream != NULL );
+
+   for ( int i = 0; i < 8; i++ ) {
+      if ( guidata[i] )
+         guidata[i]->writetostream ( &stream );
+
+      if ( map[i] )
+         map[i]->writetostream ( &stream );
+   }
+}
+
+
+tmap :: ReplayInfo :: ~ReplayInfo ( )
 {
    for (int i = 0; i < 8; i++)  {
       if ( guidata[i] ) {

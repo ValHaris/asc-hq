@@ -5,9 +5,14 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.69 2002-05-07 21:32:49 mbickel Exp $
+//     $Id: loaders.cpp,v 1.70 2002-09-19 20:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.69  2002/05/07 21:32:49  mbickel
+//      Fixed crash in mapeditor
+//      Fixed: conquering of allied buildings
+//      Fixed: ambiguity in pulldown menu keys
+//
 //     Revision 1.68  2002/03/18 21:42:17  mbickel
 //      Some cleanup and documentation in the Mine class
 //      The number of mines is now displayed in the field information window
@@ -408,31 +413,31 @@ void         seteventtriggers( pmap actmap )
                  
                int xpos = event->trigger_data[j]->xpos; 
                int ypos = event->trigger_data[j]->ypos; 
-               if ( xpos != -1  &&  ypos != -1  &&  event->triggerstatus[j] != 2 ) {
+               if ( xpos != -1  &&  ypos != -1  &&  event->triggerstatus[j] != 2 && actmap->getField(xpos,ypos)->building ) {
                   pbuilding building = actmap->getField(xpos,ypos)->building;
-                  event->trigger_data[j]->building = building; 
-                  if ((event->trigger[j] == ceventt_buildingconquered)) 
+                  event->trigger_data[j]->building = building;
+                  if ((event->trigger[j] == ceventt_buildingconquered))
                      building->connection |= cconnection_conquer;
-                  if ((event->trigger[j] == ceventt_buildinglost)) 
+                  if ((event->trigger[j] == ceventt_buildinglost))
                      building->connection |= cconnection_lose;
-                  if ((event->trigger[j] == ceventt_buildingdestroyed)) 
+                  if ((event->trigger[j] == ceventt_buildingdestroyed))
                      building->connection |= cconnection_destroy;
-                  if ((event->trigger[j] == ceventt_building_seen )) 
+                  if ((event->trigger[j] == ceventt_building_seen ))
                      building->connection |= cconnection_seen;
                 } else
                   event->trigger_data[j]->building = NULL;
 
                event->trigger_data[j]->xpos = -1;
                event->trigger_data[j]->ypos = -1;
-            } 
-            if ((event->trigger[j] == ceventt_unitconquered) || 
-                (event->trigger[j] == ceventt_unitlost) || 
-                (event->trigger[j] == ceventt_unitdestroyed)) { 
+            }
+            if ((event->trigger[j] == ceventt_unitconquered) ||
+                (event->trigger[j] == ceventt_unitlost) ||
+                (event->trigger[j] == ceventt_unitdestroyed)) {
                int xpos = event->trigger_data[j]->xpos;
                int ypos = event->trigger_data[j]->ypos;
                if ( xpos != -1 && ypos != -1  && event->triggerstatus[j] != 2 ) {
                   pvehicle vehicle;
-                  if ( event->trigger_data[j]->networkid != -1 ) 
+                  if ( event->trigger_data[j]->networkid != -1 )
                      vehicle = actmap->getUnit ( xpos, ypos, event->trigger_data[j]->networkid );
                   else
                      vehicle = actmap->getField(xpos,ypos)->vehicle;
@@ -1182,49 +1187,6 @@ void        tspfldloaders::readnetwork ( void )
 
 
 
-
-/**************************************************************/
-/*     Replay Data  schreiben / lesen                       ÿ */
-/**************************************************************/
-
-void            tspfldloaders::writereplayinfo ( void )
-{
-   if ( spfld->replayinfo ) {
-       stream->writedata2 ( *(spfld->replayinfo) );
-       for ( int i = 0; i < 8; i++ ) {
-          if ( spfld->replayinfo->guidata[i] )
-             spfld->replayinfo->guidata[i]->writetostream ( stream );
-             
-          if ( spfld->replayinfo->map[i] )
-             spfld->replayinfo->map[i]->writetostream ( stream );
-       }
-   }
-}
-
-
-void            tspfldloaders::readreplayinfo ( void )
-{
-   if ( spfld->__loadreplayinfo ) {
-       spfld->replayinfo = new treplayinfo;
-       stream->readdata2 ( *(spfld->replayinfo) );
-       for ( int i = 0; i < 8; i++ ) {
-          if ( spfld->replayinfo->guidata[i] ) {
-             spfld->replayinfo->guidata[i] = new tmemorystreambuf;
-             spfld->replayinfo->guidata[i]->readfromstream ( stream );
-          }
-             
-          if ( spfld->replayinfo->map[i] ) {
-             spfld->replayinfo->map[i] = new tmemorystreambuf;
-             spfld->replayinfo->map[i]->readfromstream ( stream );
-          }
-       }
-
-       spfld->replayinfo->actmemstream = NULL;
-   }
-}
-
-
-
 /**************************************************************/
 /*     fielder schreiben / lesen                             ÿ */
 /**************************************************************/
@@ -1836,7 +1798,8 @@ void   tsavegameloaders::savegame( pnstream strm, pmap gamemap, bool writeReplay
 
    stream->writeInt( writeReplays );
    if ( writeReplays )
-      writereplayinfo ();
+      if( spfld->replayinfo )
+         spfld->replayinfo->write(*stream);
 
    writeAI();
 
@@ -1917,14 +1880,17 @@ tmap*          tsavegameloaders::loadgame( pnstream strm )
 
    readdissections();
 
-   if ( version >= 0xff35 ) {
-      bool rpl = stream->readInt();
-      if ( rpl )
-         readreplayinfo ();
-      else
-         spfld->replayinfo = NULL;
+   bool loadReplay = true;
+   if ( version >= 0xff35 ) 
+      if ( !stream->readInt() )
+         loadReplay = false;
+
+   if ( loadReplay ) {
+      spfld->replayinfo = new tmap::ReplayInfo;
+      spfld->replayinfo->read ( *stream );
    } else
-      readreplayinfo ();
+      spfld->replayinfo = NULL;
+
 
    if ( version >= 0xff34 )
       readAI ();
@@ -2018,7 +1984,9 @@ int          tnetworkloaders::savenwgame( pnstream strm )
    writefields ( );
 
    writedissections();
-   writereplayinfo ();
+
+   if ( spfld->replayinfo )
+      spfld->replayinfo->write ( *stream );
 
    stream->writeInt ( actnetworkversion );
 
@@ -2075,7 +2043,11 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
    readfields ( );
  
    readdissections();
-   readreplayinfo ();
+
+   if ( spfld->__loadreplayinfo ) {
+      spfld->replayinfo = new tmap::ReplayInfo;
+      spfld->replayinfo->read ( *stream );
+   }
 
    stream->readdata2( version );
    if (version > actnetworkversion || version < minnetworkversion )

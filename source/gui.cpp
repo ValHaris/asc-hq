@@ -4,9 +4,17 @@
 */
 
 
-//     $Id: gui.cpp,v 1.77 2002-04-05 09:25:09 mbickel Exp $
+//     $Id: gui.cpp,v 1.78 2002-09-19 20:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.77  2002/04/05 09:25:09  mbickel
+//      Project files now for Borland C++ Builder 6
+//      Fixed: netcontrol not working
+//      Fixed: replay errors when constructing turrets
+//      Submarine require no fuel for sufacing
+//      Field info dialog extended
+//      Fixed several buffer overruns
+//
 //     Revision 1.76  2002/03/26 22:23:09  mbickel
 //      Fixed: music was started even if turned off in ini file
 //      Fixed: crash in reaction fire
@@ -1129,6 +1137,9 @@ void  tnsguiiconmove::exec         ( void )
       displaymap();
 
    } else {
+     if ( !pendingVehicleActions.move )
+        return;
+        
      int ms = pendingVehicleActions.move->getStatus();
      if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_move &&  (ms == 2 || ms == 3 )) {
         int res;
@@ -1716,6 +1727,7 @@ int   tnsguiiconputmine::available    ( void )
 void  tnsguiiconputmine::exec         ( void ) 
 {
    legemine(0, 0); 
+   dashboard.x = 0xffff;
    displaymap();
 }
 
@@ -2644,11 +2656,8 @@ tnputvehiclecontainerguiicon :: tnputvehiclecontainerguiicon ( pvehicletype obj 
    if ( obj ) {
       priority = 100;
       buildnum++;
-      infotext      = new char[1000];
       picture[0]    = vehicle->buildicon;
-      char buf[10000];
-      sprintf ( buf, "%s : %d material and %d fuel needed", vehicle->getName().c_str(), vehicle->productionCost.material, vehicle->productionCost.energy );
-      infotext = buf;
+      infotext.format ( "%s : %d material and %d fuel needed", vehicle->getName().c_str(), vehicle->productionCost.material, vehicle->productionCost.energy );
    } else {
       picture[0] = icons.selectweaponguicancel;
       infotext = "Cancel";

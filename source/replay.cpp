@@ -100,7 +100,7 @@ void checkforreplay ( void )
 void initReplayLogging()
 {
    if ( startreplaylate ) {
-      actmap->replayinfo = new treplayinfo;
+      actmap->replayinfo = new tmap::ReplayInfo;
       startreplaylate = 0;
    }
 
@@ -238,10 +238,22 @@ void ReplayMapDisplay :: wait ( int minTime )
 
 
 
+LockReplayRecording::LockReplayRecording( tmap::ReplayInfo& _ri )
+                    : ri ( _ri )
+{
+   ri.stopRecordingActions++;
+}
+
+LockReplayRecording::~LockReplayRecording()
+{
+   ri.stopRecordingActions--;
+}
+
+
 void logtoreplayinfo ( trpl_actions _action, ... )
 {
    char action = _action;
-   if ( actmap->replayinfo && actmap->replayinfo->actmemstream ) {
+   if ( actmap->replayinfo && actmap->replayinfo->actmemstream && !actmap->replayinfo->stopRecordingActions) {
       pnstream stream = actmap->replayinfo->actmemstream;
 
       va_list paramlist;
@@ -525,10 +537,23 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( pos );
          stream->writeInt ( amnt );
       }
+      if ( action == rpl_moveUnitUpDown ) {
+         int x =  va_arg ( paramlist, int );
+         int y =  va_arg ( paramlist, int );
+         int nwid_from = va_arg ( paramlist, int );
+         int nwid_to = va_arg ( paramlist, int );
+         int nwid_moving = va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         int size = 5;
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( nwid_from );
+         stream->writeInt ( nwid_to );
+         stream->writeInt ( nwid_moving );
+      }
 
       va_end ( paramlist );
-
-
    }
 }
 
@@ -1145,6 +1170,57 @@ void trunreplay :: execnextreplaymove ( void )
                                     displaymessage("severe replay inconsistency:\nno building for refuel-unit command !", 1);
                               }
          break;
+      case rpl_moveUnitUpDown: {
+                                 stream->readInt();  // size
+                                 int x =  stream->readInt();
+                                 int y =  stream->readInt();
+                                 int nwid_from = stream->readInt();
+                                 int nwid_to = stream->readInt();
+                                 int nwid_moving = stream->readInt();
+
+                                 readnextaction();
+
+                                 pvehicle eht = actmap->getUnit ( x, y, nwid_moving );
+
+                                 ContainerBase* from;
+                                 if ( nwid_from >= 0 )
+                                    from = actmap->getUnit ( x, y, nwid_from );
+                                 else
+                                    from = actmap->getField ( x, y )->building;
+
+                                 ContainerBase* to;
+                                 if ( nwid_to >= 0 )
+                                    to = actmap->getUnit ( x, y, nwid_to );
+                                 else
+                                    to = actmap->getField ( x, y )->building;
+
+                                 if ( eht && from && to ) {
+                                    int i = 0;
+                                    while ( from->loading[i] != eht )
+                                       i++;
+
+                                    if ( i >= 32 ) {
+                                       displaymessage("severe replay inconsistency: container for moveUpDown 2 !", 1);
+                                       return;
+                                    }
+
+                                    from->loading[i] = NULL;
+
+                                    while ( to->loading[i]  )
+                                       i++;
+
+                                    if ( i >= 32 ) {
+                                       displaymessage("severe replay inconsistency: container for moveUpDown 3 !", 1);
+                                       return;
+                                    }
+
+                                    to->loading[i] = eht;
+
+                                 } else
+                                    displaymessage("severe replay inconsistency: container for moveUpDown !", 1);
+                              }
+                              break;
+
       default:{
                  int size = stream->readInt();
                  for ( int i = 0; i< size; i++ )

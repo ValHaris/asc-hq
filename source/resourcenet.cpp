@@ -325,12 +325,14 @@ void GetResource :: checkbuilding ( pbuilding b )
          int toget = need-got;
          if ( b->actstorage.resource( resourcetype ) < toget )
             toget = b->actstorage.resource( resourcetype );
-      
+
          if ( !queryonly )
             b->actstorage.resource( resourcetype ) -= toget;
          got += toget;
       }
    } else {
+      // Codeguard reports "Pointer arithmetic in invalid memory". Whats wrong here ?
+      // Resources tttt = actmap->tribute.avail[ b->color / 8 ][ player ];
       int gettable = actmap->tribute.avail[ b->color / 8 ][ player ].resource(resourcetype) - tributegot[ resourcetype ][ b->color / 8];
       if ( gettable > 0 ) {
          int toget = need-got;

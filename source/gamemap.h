@@ -20,8 +20,8 @@
  ***************************************************************************/
 
 
-#ifndef gamemap_h_included
- #define gamemap_h_included
+#ifndef gamemapH
+ #define gamemapH
 
  #include <vector>
 
@@ -264,18 +264,6 @@ class  tfield {
 
 
 
-  class treplayinfo {
-  public:
-    pmemorystreambuf guidata[8];
-    pmemorystreambuf map[8];
-    pmemorystream    actmemstream;
-    treplayinfo ( void );
-    ~treplayinfo ( );
-  };
-
-
-
-
 
 
 //! The map. THE central structure of ASC, which holds everything not globally available together
@@ -315,7 +303,7 @@ class tmap {
 
       //! the campaign properties of map
       Campaign*    campaign;
-  
+
       //! the player who is currently making his moves (may be human or AI)
       signed char  actplayer; 
 
@@ -494,7 +482,24 @@ class tmap {
 
       //! if a player has won a singleplayer map, but wants to continue playing without any enemies, this will be set to 1
       int           continueplaying;
-      treplayinfo*  replayinfo;
+
+      class ReplayInfo {
+      public:
+          ReplayInfo ( void );
+
+          pmemorystreambuf guidata[8];
+          pmemorystreambuf map[8];
+          pmemorystream    actmemstream;
+
+          //! if stopRecordingActions > 0 then no actions will be recorded. \see LockReplayRecording
+          int stopRecordingActions;
+          void read ( tnstream& stream );
+          void write ( tnstream& stream );
+          ~ReplayInfo ( );
+        };
+
+
+      ReplayInfo*  replayinfo;
 
       //! a helper variable to store some information during the loading process. No usage outside.
       bool          __loadreplayinfo;

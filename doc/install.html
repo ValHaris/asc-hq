@@ -105,8 +105,20 @@ environment variable <tt>ASC_CONFIGFILE</tt> to the path of your config file.
 
 
 
-<h2>Compiling ASC: FAQ</h2>
+<h2>Compiling ASC: general advice</h2>
 
+
+ASC requires several libraries. If your distribution has these libraries included, just install them from your distribution.<p>
+
+But if you have to download libraries (like SDL or Paragui) and install them yourself, I recommend to download the source and compile the library yourself. 
+Libraries in RPM are prebuild and can't adjust themself to your system.  <p>
+
+An example: SDL has several different methods of sound output. If all are enable during build, you need those libraries installed just to use SDL. If only one sound system is enabled, there is the chance that this is the wrong sound system for your installation.
+But if you build SDL yourself, configure will automatically detect which sound system to use and configure the source accordingly, so it will run immediately.<p>
+
+The experience after many many problem reports is that compiling the source makes less hassle. You can try RPM packages, but if they don't work, uninstall them and get the source.
+
+<h2>Compiling ASC: FAQ</h2>
 
 <h3>configure or bootstrap complains it can't find sdl or paragui </h3>
 
@@ -126,6 +138,10 @@ If you have installed SDL in a non-standard directory, run: <br>
 &lt;where&gt; should be the prefix you make installed SDL into.
 
 
+<h3>the compile complains: Could not run SDL test program </h3>
+
+If you've installed the SDL.RPM packages, you can try to build SDL yourself. The SDL.RPM is compiled for a certain system configuration, if you have a different one SDL may not link. 
+This seems to be caused by missing dependencies in the SDL.RPM
 
 
 
@@ -308,7 +324,7 @@ operates.
 
 <hr>
 <i>
-$Id: install.html,v 1.5 2002-03-19 19:29:31 mbickel Exp $
+$Id: install.html,v 1.6 2002-09-19 20:20:04 mbickel Exp $
 </i>
 </BODY>
 </HTML>

@@ -5,9 +5,14 @@
 
 */
 
-//     $Id: loaders.h,v 1.20 2002-05-07 21:32:49 mbickel Exp $
+//     $Id: loaders.h,v 1.21 2002-09-19 20:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2002/05/07 21:32:49  mbickel
+//      Fixed crash in mapeditor
+//      Fixed: conquering of allied buildings
+//      Fixed: ambiguity in pulldown menu keys
+//
 //     Revision 1.19  2001/10/11 10:41:06  mbickel
 //      Restructured platform fileio handling
 //      Added map archival information to mapeditor
@@ -216,9 +221,6 @@ class  tspfldloaders {
            void            writemessagelist( MessagePntrContainer& lst );
            void            readmessages ( void );
            void            readmessagelist( MessagePntrContainer& lst );
-
-           void            writereplayinfo ( void );
-           void            readreplayinfo ( void );
 
            void            chainitems ( pmap actmap );
            void            setplayerexistencies ( void );

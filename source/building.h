@@ -6,9 +6,15 @@
    #building_controls.h
 */
 
-//     $Id: building.h,v 1.19 2001-01-28 14:04:06 mbickel Exp $
+//     $Id: building.h,v 1.20 2002-09-19 20:20:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2001/01/28 14:04:06  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.18  2001/01/24 11:53:12  mbickel
 //      Fixed some compilation problems with gcc
 //
@@ -41,13 +47,13 @@
 #endif
 
 
-#ifndef building_h
-#define building_h
+#ifndef buildingH
+ #define buildingH
 
 
 
-extern int recursiondepth;
-extern void  container ( pvehicle eht, pbuilding bld );
+ extern int recursiondepth;
+ extern void  container ( pvehicle eht, pbuilding bld );
 
 
 #endif

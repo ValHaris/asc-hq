@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef replay_h_included
- #define replay_h_included
+#ifndef replayH
+ #define replayH
 
 #include "gui.h"
 #include "controls.h"
@@ -37,19 +37,20 @@ enum trpl_actions { rpl_attack,
                     rpl_putmine, 
                     rpl_removemine, 
                     rpl_produceunit, 
-                    rpl_removeunit, 
+                    rpl_removeunit,
                     rpl_trainunit,
                     rpl_reactionfire, 
                     rpl_finished, 
                     rpl_shareviewchange, 
-                    rpl_alliancechange, 
+                    rpl_alliancechange,
                     rpl_move2, 
                     rpl_buildtnk,
                     rpl_refuel, 
                     rpl_bldrefuel, 
                     rpl_move3, 
                     rpl_changeheight2,
-                    rpl_buildtnk2 };
+                    rpl_buildtnk2,
+                    rpl_moveUnitUpDown };
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 
@@ -79,8 +80,15 @@ class trunreplay {
             int status;
             void firstinit ( void );
             int  run ( int player );
-
    };
+
+class LockReplayRecording {
+        tmap::ReplayInfo& ri;
+     public:
+        LockReplayRecording ( tmap::ReplayInfo& _ri );
+        ~LockReplayRecording();
+};
+
 extern trunreplay runreplay;
 
 //! a hack to enable the replay in a game that was started without replays

@@ -20,8 +20,8 @@
  ***************************************************************************/
 
 
-#ifndef resourcenet_h_included
- #define resourcenet_h_included
+#ifndef resourcenetH
+ #define resourcenetH
 
 //! Base class for the management of resource networks and globally stored resources
 class MapNetwork {
