@@ -3,9 +3,16 @@
 */
 
 
-//     $Id: sg.cpp,v 1.160 2001-08-06 20:54:43 mbickel Exp $
+//     $Id: sg.cpp,v 1.161 2001-08-06 21:38:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.160  2001/08/06 20:54:43  mbickel
+//      Fixed lots of crashes related to the new text files
+//      Fixed delayed events
+//      Fixed crash in terrin change event
+//      Fixed visibility of mines
+//      Fixed crashes in event loader
+//
 //     Revision 1.159  2001/08/06 15:35:09  mbickel
 //      Fixed wrong resulution from config file
 //      Added duplicate ID checking
@@ -354,7 +361,7 @@
 
 
 
-#define MEMCHK
+// #define MEMCHK
 
 #include "memorycheck.cpp"
 

@@ -3,9 +3,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.108 2001-07-28 21:09:08 mbickel Exp $
+//     $Id: controls.cpp,v 1.109 2001-08-06 21:38:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.108  2001/07/28 21:09:08  mbickel
+//      Prepared vehicletype structure for textIO
+//
 //     Revision 1.107  2001/07/28 11:19:10  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -1051,6 +1054,7 @@ void build_vehicles_reset( void )
    displaymap();
    actgui->restorebackground();
    actgui = &gui;
+   actgui->restorebackground();
 }
 
 
