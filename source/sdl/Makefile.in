@@ -71,7 +71,7 @@ VERSION = @VERSION@
 
 noinst_LIBRARIES = libsdl.a
 
-libsdl_a_SOURCES = sound.cpp timer.cpp graphics.cpp events.cpp SDLStretch.cpp loadimage.cpp
+libsdl_a_SOURCES = sound.cpp timer.cpp graphics.cpp events.cpp SDLStretch.cpp loadimage.cpp asc_IMG_jpg.c
 
 EXTRA_DIST = events.cpp graphics.cpp graphics.h timer.cpp sound.cpp sound.h 
 
@@ -90,11 +90,15 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 libsdl_a_LIBADD = 
 libsdl_a_OBJECTS =  sound.o timer.o graphics.o events.o SDLStretch.o \
-loadimage.o
+loadimage.o asc_IMG_jpg.o
 AR = ar
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
 CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@
+CFLAGS = @CFLAGS@
+COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
 DIST_COMMON =  Makefile.am Makefile.in
 
 
@@ -102,8 +106,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DEP_FILES =  .deps/SDLStretch.P .deps/events.P .deps/graphics.P \
-.deps/loadimage.P .deps/sound.P .deps/timer.P
+DEP_FILES =  .deps/SDLStretch.P .deps/asc_IMG_jpg.P .deps/events.P \
+.deps/graphics.P .deps/loadimage.P .deps/sound.P .deps/timer.P
 SOURCES = $(libsdl_a_SOURCES)
 OBJECTS = $(libsdl_a_OBJECTS)
 

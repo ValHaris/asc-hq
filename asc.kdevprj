@@ -30,11 +30,11 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/building.cpp,/home/martin/asc/source/typen.h,/home/martin/asc/source/tsm.bat,/home/martin/asc/source/unitctrl.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/sdl/asc_IMG_jpg.c,/home/martin/asc/source/sdl/loadimage.cpp,/usr/local/include/SDL/SDL_image.h,/home/martin/asc/source/strtmesg.cpp,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/tsm.bat
-cpp_file=/home/martin/asc/source/building.cpp
+header_file=/usr/local/include/SDL/SDL_image.h
+cpp_file=/home/martin/asc/source/strtmesg.cpp
 browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/welcome/index.html
 [source/controls.cpp]
 install_location=

@@ -21,6 +21,9 @@
 #include "../loadimage.h"
 
 
+extern "C" SDL_Surface *IMG_LoadJPG_RW_D(SDL_RWops *src, int depth);
+
+
 int loadFullscreenImage ( const char* filename )
 {
    tnfilestream s ( filename, 1 );

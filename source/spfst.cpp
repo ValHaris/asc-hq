@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.51 2000-08-09 12:39:32 mbickel Exp $
+//     $Id: spfst.cpp,v 1.52 2000-08-10 11:18:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2000/08/09 12:39:32  mbickel
+//      fixed invalid height when constructing vehicle with other vehicles
+//      fixed wrong descent icon being shown
+//
 //     Revision 1.50  2000/08/08 13:38:34  mbickel
 //      Fixed: construction of buildings doesn't consume resources
 //      Fixed: no unit information visible for satellites
@@ -6248,8 +6252,9 @@ int tvehicle::getmaxmaterialforweight ( void )
 
 int  tvehicle :: vehicleloadable ( pvehicle vehicle, int uheight )
 {
-   if ( height & (chtieffliegend | chfliegend | chhochfliegend ))
-      return 0;
+   if ( getfield ( xpos, ypos )->vehicle == this ) // not standing in some other transport / building
+      if ( height & (chtieffliegend | chfliegend | chhochfliegend ))
+         return 0;
 
    if ( uheight == -1 )
       uheight = vehicle->height;
