@@ -1,6 +1,9 @@
-//     $Id: edglobal.cpp,v 1.11 2000-05-10 19:55:49 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.12 2000-05-11 20:12:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/05/10 19:55:49  mbickel
+//      Fixed empty loops when waiting for mouse events
+//
 //     Revision 1.10  2000/04/27 16:25:21  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -288,6 +291,10 @@ void         GetString::init(char* _title)
 
 void         GetString::run(void)
 { 
+   if ( pcgo ) {
+      delete pcgo;
+      pcgo = NULL;
+   }
    pbutton pb = firstbutton;
    while ( pb &&  (pb->id != 3)) 
       pb = pb->next;
@@ -351,6 +358,8 @@ char* getbipath ( void )
    strcat ( filename2, pathdelimitterstring );
    strcat ( filename2, "*.dat");
 
+   int cnt = 0;
+
    while ( !exist ( filename2 )) {
       char* res = getstring("enter Battle Isle path", filename );
       if ( res == NULL )
@@ -361,6 +370,11 @@ char* getbipath ( void )
       strcat ( filename2, "mis");
       strcat ( filename2, pathdelimitterstring );
       strcat ( filename2, "*.dat");
+      cnt++;
+      #ifndef _DOS_
+      if (!exist ( filename2 ) && cnt == 1 )
+         displaymessage("The 'mis' and 'ger' / 'eng' directories must be lower case to import files from them !", 1 );
+      #endif
    }
    appendbackslash( filename );
    char* buf = strdup ( filename );
@@ -741,14 +755,16 @@ void execaction(int code)
             break;
             
          strcpy ( filename2, path );
-         strcat ( filename2, "mis\\");
+         strcat ( filename2, "mis");
+         strcat ( filename2, pathdelimitterstring );
          strcat ( filename2, "*.dat");
 
          char filename[260];
          fileselectsvga ( filename2, filename,1 );
          if ( filename[0] ) {
             strcpy ( filename2, path );
-            strcat ( filename2, "mis\\");
+            strcat ( filename2, "mis");
+            strcat ( filename2, pathdelimitterstring );
             strcat ( filename2, filename);
             pwterraintype t = auswahl->weather[auswahlw];
             if ( !t )
@@ -769,14 +785,16 @@ void execaction(int code)
             break;
             
          strcpy ( filename2, path );
-         strcat ( filename2, "mis\\");
+         strcat ( filename2, "mis");
+         strcat ( filename2, pathdelimitterstring );
          strcat ( filename2, "*.dat");
 
          char filename[260];
          fileselectsvga ( filename2, filename,1 );
          if ( filename[0] ) {
             strcpy ( filename2, path );
-            strcat ( filename2, "mis\\");
+            strcat ( filename2, "mis");
+            strcat ( filename2, pathdelimitterstring );
             strcat ( filename2, filename);
             insertbattleislemap ( getxpos(), getypos(), path, filename );
             displaymap();

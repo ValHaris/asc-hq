@@ -1,6 +1,15 @@
-//     $Id: loadbi3.cpp,v 1.15 2000-04-27 16:25:24 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.16 2000-05-11 20:12:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/04/27 16:25:24  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.14  2000/04/02 21:51:08  mbickel
 //      Fixed bugs graphic set loading routines
 //
@@ -100,6 +109,9 @@
 #ifndef HEXAGON
 #error This file should only by used in the hexagonal version
 #endif
+
+#pragma pack(1)
+
 
 class ActiveGraphicPictures {
    public:
@@ -278,7 +290,8 @@ void checkbi3dir ( void )
          
          if ( !exist ( temp ) ) {
             strcpy ( temp, gameoptions.bi3.dir );
-            strcat ( temp, "LIB\\" );
+            strcat ( temp, "LIB" );
+            strcat ( temp, pathdelimitterstring );
             strcat ( temp, LIBFiles[i].Name );
             if ( !exist ( temp ) ) {
                printf("Battle Isle fle %s not found !\n", temp );
@@ -290,8 +303,8 @@ void checkbi3dir ( void )
          if ( !graphicinitialized ) {
             printf("Enter Battle Isle directory:\n" );
             scanf ( "%s", gameoptions.bi3.dir );
-            if ( gameoptions.bi3.dir[ strlen ( gameoptions.bi3.dir )-1 ] != '\\' )
-               strcat ( gameoptions.bi3.dir, "\\" );
+            if ( gameoptions.bi3.dir[ strlen ( gameoptions.bi3.dir )-1 ] != pathdelimitter )
+               strcat ( gameoptions.bi3.dir, "pathdelimitterstring" );
             gameoptions.changed = 1;
          } else {
             closegraphics();
@@ -1721,14 +1734,16 @@ void    tloadBImap :: ReadShopNames( FILE* fp )
 void tloadBImap :: GetTXTName ( const char* path, const char* filename, char* buf )
 {
     strcpy ( buf, path );
-    strcat ( buf, "ger\\" );
+    strcat ( buf, "ger" );
+    strcat ( buf, pathdelimitterstring );
     strcat ( buf, filename );
     strcpy ( &buf[ strlen ( buf ) - 3], "txt" );
     if ( exist ( buf )) 
        return;
 
     strcpy ( buf, path );
-    strcat ( buf, "eng\\" );
+    strcat ( buf, "eng" );
+    strcat ( buf, pathdelimitterstring );
     strcat ( buf, filename );
     strcpy ( &buf[ strlen ( buf ) - 3], "txt" );
     if ( exist ( buf )) 
@@ -1807,7 +1822,8 @@ void tloadBImap :: LoadFromFile( char* path, char* AFileName, pwterraintype trrn
    
        char completefilename[1000];
        strcpy ( completefilename, path );
-       strcat ( completefilename, "mis\\" );
+       strcat ( completefilename, "mis" );
+       strcat ( completefilename, pathdelimitterstring );
        strcat ( completefilename, AFileName );
        tn_file_buf_stream stream ( completefilename, 1 );
        MissFile = &stream;
@@ -1828,6 +1844,8 @@ void tloadBImap :: LoadFromFile( char* path, char* AFileName, pwterraintype trrn
        if ( actmap->title )
           delete actmap->title;
        actmap->title = GetStr ( 1, 24 );
+       if ( !actmap->title )
+          actmap->title = strdup ( "imported BI map");
 
     } /* endtry */
     catch ( tfileerror err ) {
@@ -1877,3 +1895,4 @@ int activateGraphicSet ( int id  )
   return    activeGraphicPictures.setActive ( id );
 }
 
+#pragma pack()
