@@ -23,7 +23,7 @@
  #include "containerbase.h"
  #include "ascstring.h"
 
-
+ #pragma pack(1)
 
  class Vehicle : public ContainerBase {
     Vehicle (  );
@@ -248,6 +248,7 @@
     ~Vehicle ( );
 };
 
+ #pragma pack()
 
 #endif
 

@@ -64,6 +64,7 @@ Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player )
    gamemap->player[player].vehicleList.push_back ( this );
    gamemap->unitnetworkid++;
    networkid = gamemap->unitnetworkid;
+   printf ("%d\n", sizeof(Vehicle ));
 
 }
 

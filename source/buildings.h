@@ -27,6 +27,7 @@
  #include "ascstring.h"
  #include "buildingtype.h"
 
+ #pragma pack(1)
 
 
 class  Building : public ContainerBase {
@@ -181,5 +182,6 @@ class  Building : public ContainerBase {
      const ResourceMatrix& getRepairEfficiency ( void ) { return repairEfficiency; };
 };
 
+ #pragma pack()
 
 #endif

@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.43 2001-02-18 15:37:13 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.44 2001-04-30 11:41:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2001/02/18 15:37:13  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.42  2001/02/11 20:40:29  mbickel
 //      Fixed compilation problems with gcc
 //
@@ -103,6 +109,10 @@
 #include "gameoptions.h"
 #include "events.h"
 #include "graphicset.h"
+#include "spfst.h"
+#include "loaders.h"
+#include "dialog.h"
+
 
 #ifdef converter
  #error The small editors should not need to use LoadBi3
@@ -292,9 +302,6 @@ const int energyfactor = 390;
 
 
 
-#include "spfst.h"
-#include "loaders.h"
-#include "dialog.h"
 
       char* HeadID = "MSSN";
       char* ACTNID = "ACTN";
@@ -303,7 +310,6 @@ const int energyfactor = 390;
       char* MISSID = "MISS";
 
 
-#pragma pack(1)
 
 class tloadBImap {
      
@@ -567,10 +573,11 @@ pvehicletype  tloadBImap :: getvehicletype ( int tp )
 
 pvehicle tloadBImap :: getunit ( int tp, int col )
 {
-   if ( tp != 0xffff ) {
+   if ( tp != 0xffff && tp != 0xff && col != 0xff ) {
       pvehicletype vt = getvehicletype ( tp );
       if ( vt ) {
-         pvehicle eht = new Vehicle ( vt, actmap, col );
+         Vehicle* eht = new Vehicle ( vt, actmap, col );
+         printf ("%d\n", sizeof(Vehicle ));
          eht->fillMagically();
          return eht;
       }
