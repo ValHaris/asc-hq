@@ -1,36 +1,180 @@
-2002-10-15 18:52  mbickel
+2002-11-09 20:10  mbickel
+
+	* source/: basestrm.cpp, controls.cpp, sg.cpp, sgstream.cpp,
+	strtmesg.cpp, tools/win/demount.bpf, tools/win/demount.bpr,
+	tools/win/mount.bpr, win32/borland/asc.bpr:  Fixed: invalid data
+	return after EOF if file very small
+	 Resourceproduction of matter converter now working if not all
+	resources could be stored
+	 mk1 V3 required
+
+2002-11-07 19:42  mbickel
+
+	* doc/asc.html, source/controls.cpp, source/loaders.cpp,
+	source/objecttype.cpp, source/sg.cpp, source/win32/borland/asc.bpr:
+	 Fixed crash in reaction fire
+	 Improved autoborder object netification
+	 Fixed crash when mail game was loaded by command line parameters
+
+2002-11-06 21:46  mbickel
+
+	* bootstrap, source/objecttype.cpp:  Fixed build problems
+
+2002-11-05 19:57  mbickel
+
+	* source/: strtmesg.cpp, viewcalculation.cpp:  Fixed: resource
+	detection by units not working
+
+2002-11-05 10:48  mbickel
+
+	* source/objecttype.cpp:  Updated Linux build system
+
+2002-11-05 10:05  mbickel
+
+	* source/: building.cpp, buildings.cpp, buildingtype.h,
+	controls.cpp, edmisc.cpp, gamemap.cpp, objecttype.cpp,
+	objecttype.h, strtmesg.cpp, textfiletags.cpp, vehicletype.cpp: 
+	Fixed: mining stations produced not enough output
+	 Changed default building properties in mapeditor
+	 new autoborder object netting function
+
+2002-11-02 18:02  mbickel
+
+	* source/vehicletype.cpp:  Fixed gcc compilation problem
+
+2002-11-02 15:13  mbickel
+
+	* source/: edglobal.cpp, itemrepository.cpp, itemrepository.h,
+	objecttype.cpp, objecttype.h, spfst.cpp, spfst.h, strtmesg.cpp,
+	textfile_evaluation.cpp, textfile_evaluation.h, textfiletags.cpp,
+	textfiletags.h:  New net handling for objects
+
+2002-11-01 21:44  mbickel
+
+	* data/helpsyst.txt, source/controls.cpp, source/edglobal.cpp,
+	source/edglobal.h, source/edmisc.cpp, source/edmisc.h,
+	source/edselfnt.cpp, source/edselfnt.h, source/gamemap.cpp,
+	source/gamemap.h, source/gui.cpp, source/strtmesg.cpp:	Added
+	function to specify which units can be build by other units
+
+2002-11-01 15:06  mbickel
+
+	* data/helpsyst.txt, data/paybacktime.msg, source/edevents.cpp,
+	source/spfst.cpp, source/strtmesg.cpp, source/unitctrl.cpp,
+	source/tools/weaponguide.cpp:  Changing the height between floating
+	and driving has no movecost any more
+	 submarines evalute the field properties, not the terrain type
+	properties
+
+2002-11-01 13:40  mbickel
+
+	* source/: dialog.cpp, edevents.cpp, gamedlg.cpp, gamemap.cpp,
+	gamemap.h, missions.cpp, paradialog.cpp, strtmesg.cpp:	Added
+	supervisor-save-map function
+
+2002-10-30 13:10  mbickel
+
+	* source/: edmisc.cpp, graphicselector.cpp, graphicset.h,
+	strtmesg.cpp, textfile_evaluation.cpp, textfile_evaluation.h,
+	textfiletags.cpp, textfiletags.h, vehicletype.cpp, vehicletype.h,
+	ai/ai_common.h, ai/valuation.cpp, tools/bi2pcx.cpp,
+	tools/win/tools.bpr:  VehicleTypes can now be assigned a
+	recommended AIJob
+
+2002-10-29 20:00  mbickel
+
+	* source/: loadbi3.cpp, strtmesg.cpp:  Fixed crashes when inserting
+	a BI3 map
+
+2002-10-27 23:19  mbickel
+
+	* data/helpsys2.txt, source/graphicset.cpp, source/graphicset.h,
+	source/objecttype.cpp, source/strtmesg.cpp, source/terraintype.cpp,
+	source/terraintype.h, source/textfiletags.cpp, source/typen.h,
+	source/unitctrl.cpp, source/vehicle.cpp, source/vehicle.h,
+	source/win32/borland/asc.bpr:  Added bridge terrain property
+	 Some restructuring of the graphic set code
+
+2002-10-21 13:23  mbickel
+
+	* Makefile.in, data/Makefile.in, data/dialog/Makefile.in,
+	data/music/Makefile.in, doc/Makefile.in, doc/linux_faq.html,
+	doc/manpages/Makefile.in, source/Makefile.in,
+	source/ai/Makefile.in, source/clparser/Makefile.in,
+	source/docs/Makefile.in, source/docs/en/Makefile.in,
+	source/libs/Makefile.in, source/libs/triangul/Makefile.in,
+	source/sdl/Makefile.in, source/tools/Makefile.in,
+	source/tools/lib/Makefile.in, source/tools/linux/Makefile.in,
+	source/unix/Makefile.in, source/unix/mapeditor/Makefile.in:  Adding
+	all Makefile.in
+
+2002-10-19 19:46  mbickel
+
+	* configure, configure.in, source/strtmesg.cpp:  Updated version
+	number to 1.11.0.2
+
+2002-10-19 17:42  mbickel
+
+	* config.h.in, configure, configure.in, source/unix/fileio.h: 
+	Fixes to the build system
+
+2002-10-19 17:11  mbickel
+
+	* source/: basestrm.cpp, tools/mount.cpp, tools/patchpcx.cpp,
+	win32/borland/fileio.h:  Made listing of directories more portable
+
+2002-10-16 14:52  mbickel
+
+	* ChangeLog, config.h.in:  Updated changelog
+
+2002-10-16 14:44  mbickel
+
+	* config.h.in, configure.in:  Fixes to the build system
+
+2002-10-16 14:14  mbickel
+
+	* bootstrap, configure.in, source/ai/Makefile.am,
+	source/sdl/Makefile.am, source/tools/linux/Makefile.am,
+	source/unix/Makefile.am, source/unix/mapeditor/Makefile.am:  Fixed
+	to the build system
+
+2002-10-16 11:33  mbickel
+
+	* configure.in:  Fixed duplicate Makefiles in configure.in
+
+2002-10-15 17:52  mbickel
 
 	* source/: stringtokenizer.cpp, stringtokenizer.h, strtmesg.cpp,
 	win32/borland/asc.bpr:	Fixed update detection
 
-2002-10-14 20:57  mbickel
+2002-10-14 19:57  mbickel
 
 	* data/asc.gfx:  Updated asc.gfx
 
-2002-10-14 20:54  mbickel
+2002-10-14 19:54  mbickel
 
 	* source/: strtmesg.cpp, win32/borland/asc.bpr:  Updated version
 	number
 
-2002-10-14 20:17  mbickel
+2002-10-14 19:17  mbickel
 
 	* data/: Makefile.am, asc.gfx:	Updated asc.gfx
 
-2002-10-14 19:24  mbickel
+2002-10-14 18:24  mbickel
 
 	* asc.lsm, configure.in, getmusic:  Updated makefiles
 
-2002-10-14 12:50  mbickel
+2002-10-14 11:50  mbickel
 
 	* source/: strtmesg.cpp, sdl/sound.cpp:  Improved error messages on
 	sound initialization
 
-2002-10-12 20:06  mbickel
+2002-10-12 19:06  mbickel
 
 	* source/tools/linux/Makefile.am:  Updated Makefile for
 	mount/demount
 
-2002-10-12 19:28  mbickel
+2002-10-12 18:28  mbickel
 
 	* source/: basestrm.cpp, controls.cpp, edglobal.cpp, edmain.cpp,
 	edmisc.cpp, gamedlg.cpp, gamemap.cpp, gamemap.h, graphicset.cpp,
@@ -41,7 +185,7 @@
 	 Changed map format
 	 Improved log messages
 
-2002-10-09 18:58  mbickel
+2002-10-09 17:58  mbickel
 
 	* source/: controls.cpp, dialog.cpp, edmain.cpp, edmisc.cpp,
 	edmisc.h, edselfnt.cpp, edselfnt.h, graphicset.cpp, graphicset.h,
@@ -50,12 +194,12 @@
 	textfile_evaluation.cpp:  Fixed to GrafikSet loading
 	 New item filter for mapeditor
 
-2002-10-06 18:26  mbickel
+2002-10-06 17:26  mbickel
 
 	* config.h.in, source/textfile_evaluation.cpp:	Removed duplicate
 	methods from textfile_evaluation
 
-2002-10-06 17:44  mbickel
+2002-10-06 16:44  mbickel
 
 	* source/: buildingtype.cpp, edmain.cpp, edmisc.cpp,
 	itemrepository.cpp, loadbi3.cpp, music.cpp, objecttype.cpp,
@@ -69,32 +213,32 @@
 	.asctxt files
 	 Speed up of replays
 
-2002-10-05 23:22  mbickel
+2002-10-05 22:22  mbickel
 
 	* source/: dlg_box.cpp, dlg_box.h, itemrepository.cpp,
 	textfileparser.cpp, textfileparser.h:  Added inheritance to
 	textfiles
 
-2002-10-05 21:14  mbickel
+2002-10-05 20:14  mbickel
 
 	* bootstrap:  aclocal now called two times, since some versions of
 	libtool want it this way...
 
-2002-10-05 20:56  mbickel
+2002-10-05 19:56  mbickel
 
 	* configure.in:  Fixed duplicate Makefile generation
 
-2002-10-05 19:41  mbickel
+2002-10-05 18:41  mbickel
 
 	* config.h.in, source/textfileparser.cpp,
 	source/libs/triangul/triangul.h:  Fixes for compiling on gcc 2.95
 
-2002-10-04 23:11  mbickel
+2002-10-04 22:11  mbickel
 
 	* bootstrap, config.h.in, configure.in, missing,
 	source/unix/Makefile.am, acconfig.h:  Fixes to the build system
 
-2002-10-02 22:21  mbickel
+2002-10-02 21:21  mbickel
 
 	* asc.kdevprj, config.h.in, configure.in, doc/install.html,
 	source/basestrm.h, source/building.cpp, source/dialog.cpp,
@@ -107,7 +251,7 @@
 	source/libs/triangul/triangul.h:  Many tweaks to compile ASC with
 	gcc 3.2 (not completed yet)
 
-2002-10-01 11:23  mbickel
+2002-10-01 10:23  mbickel
 
 	* asc.bpg, data/asc.gfx, source/TODO, source/basegfx.h,
 	source/building.cpp, source/buildings.cpp, source/buildings.h,
@@ -125,7 +269,7 @@
 	 Added inheritance to text files
 	 updated graphics
 
-2002-09-19 22:20  mbickel
+2002-09-19 21:20  mbickel
 
 	* configure.in, data/helpsys2.txt, doc/asc.html, doc/editors.html,
 	doc/install.html, source/TODO, source/ascstring.cpp,
@@ -144,7 +288,7 @@
 	source/win32/borland/mapeditor/mapeditor.bpr:  Cleanup and various
 	bug fixes
 
-2002-05-07 23:32  mbickel
+2002-05-07 22:32  mbickel
 
 	* source/: buildings.cpp, loaders.cpp, loaders.h, sg.cpp,
 	strtmesg.cpp, win32/borland/mapeditor/mapeditor.bpr:  Fixed crash
@@ -152,13 +296,13 @@
 	 Fixed: conquering of allied buildings
 	 Fixed: ambiguity in pulldown menu keys
 
-2002-05-07 22:11  mbickel
+2002-05-07 21:11  mbickel
 
 	* ChangeLog, asc.kdevprj, configure.in, source/strtmesg.cpp,
 	source/textfileparser.h:  Some tweaks to make the code gcc
 	compatible
 
-2002-05-07 21:52  mbickel
+2002-05-07 20:52  mbickel
 
 	* configure.in, doc/linux_faq.html, source/TODO,
 	source/paradialog.cpp, source/paradialog.h, source/sg.cpp,
@@ -167,11 +311,11 @@
 	source/win32/borland/asc.bpr:  Updated documentation
 	 Dialog themes can be reloaded during runtime.
 
-2002-04-27 16:32  mbickel
+2002-04-27 15:32  mbickel
 
 	* data/evilisle.map:  Fixed: data bugs in Evil Island map
 
-2002-04-27 16:30  mbickel
+2002-04-27 15:30  mbickel
 
 	* data/railstat.map, source/buildings.cpp, source/vehicle.cpp,
 	source/vehicletype.cpp, source/ai/ai.bpr,
@@ -179,64 +323,64 @@
 	missing planes in railstation map
 	 Airplanes cannot land on carriers after attacking
 
-2002-04-22 22:37  mbickel
+2002-04-22 21:37  mbickel
 
 	* buildnewrpm.sh, source/buildingtype.cpp,
 	source/textfileparser.cpp, source/textfileparser.h:  Added: default
 	value for text file entries
 	 Fixed: oil platform not working
 
-2002-04-21 23:50  mbickel
+2002-04-21 22:50  mbickel
 
 	* asc.another.spec, asc.spec, asc.spec.in, configure.in,
 	source/attack.cpp, source/buildings.cpp, source/containerbase.h,
 	source/vehicle.cpp:  ASC spec files: automatic versioning
 	 Some cleanup and documentation
 
-2002-04-21 23:27  mbickel
+2002-04-21 22:27  mbickel
 
 	* source/: TODO, controls.cpp, edgen.cpp, edmisc.cpp, edmisc.h,
 	sg.cpp, ai/base.cpp:  Mapeditor: Fixed crash in "Put Resources"
 	 Updating the small map after AI
 	 Fixed infinite loop "quit game" after sending signal
 
-2002-04-18 00:41  mbickel
+2002-04-17 23:41  mbickel
 
 	* configure.in, getmusic, data/Makefile.am, data/music/Makefile.am,
 	source/edgen.cpp:  Updated build system to warn about missing music
 	 Updated build system to insert version information automatically
 	 edgen.cpp compiles with gcc 3.0.4 again
 
-2002-04-14 19:21  mbickel
+2002-04-14 18:21  mbickel
 
 	* source/: edevents.cpp, edglobal.cpp, edmisc.cpp, edmisc.h: 
 	Renamed global variable pf to pf2 due to name clash with SDL_mixer
 	library
 
-2002-04-14 19:12  mbickel
+2002-04-14 18:12  mbickel
 
 	* doc/credits.html, source/dashboard.cpp, source/strtmesg.cpp,
 	source/win32/borland/asc.bpr:  Added credits section do
 	documentation
 	 Selecting vehicle types for production: description now shown
 
-2002-04-11 22:18  mbickel
+2002-04-11 21:18  mbickel
 
 	* data/helpsyst.txt, doc/credits.html, doc/index.html,
 	source/sg.cpp, source/win32/borland/asc.bpr:  Added credits section
 	to documentation
 	 Improved command line parameters
 
-2002-04-11 20:33  mbickel
+2002-04-11 19:33  mbickel
 
 	* source/sg.cpp:  Enhanced command line options
 
-2002-04-10 23:12  mbickel
+2002-04-10 22:12  mbickel
 
 	* source/: gameoptions.cpp, gameoptions.h, sgstream.cpp:  Win32
 	version now searches registry for install path
 
-2002-04-10 00:19  mbickel
+2002-04-09 23:19  mbickel
 
 	* source/: dashboard.cpp, edmisc.cpp, gamemap.cpp, gamemap.h,
 	sg.cpp, strtmesg.cpp, textfileparser.cpp, unitctrl.cpp, ai/ai.bpr,
@@ -244,25 +388,25 @@
 	bugs
 	 Fixed: invalid player name displayed in dashboard
 
-2002-04-09 23:14  mbickel
+2002-04-09 22:14  mbickel
 
 	* asc.spec:  Added asc.spec file
 
-2002-04-09 23:03  mbickel
+2002-04-09 22:03  mbickel
 
 	* source/tools/raw2pcx.cpp:  Added missing file: raw2pcx.cpp
 
-2002-04-09 20:49  mbickel
+2002-04-09 19:49  mbickel
 
 	* source/basegfx.h:  Added a bit of documentation
 
-2002-04-05 21:01  mbickel
+2002-04-05 20:01  mbickel
 
 	* source/: controls.cpp, unitctrl.cpp:	Fixed: reaction fire
 	attackes being replayed twice
 	 Fixed: crash when reaction fire during landing on carrier
 
-2002-04-05 11:25  mbickel
+2002-04-05 10:25  mbickel
 
 	* source/: ASCStringHelpers.h, ascstring.cpp, basestrm.cpp,
 	building.cpp, controls.cpp, dialog.cpp, dlg_box.cpp, edgen.cpp,
@@ -283,7 +427,7 @@
 	 Field info dialog extended
 	 Fixed several buffer overruns
 
-2002-04-02 23:57  mbickel
+2002-04-02 22:57  mbickel
 
 	* source/newfont.cpp:  Fixed buffer overflow
 
@@ -926,27 +1070,27 @@
 	 Added several new experimental map parameters
 	 Some improvements to the campaign maps
 
-2001-10-24 18:30  mbickel
+2001-10-24 17:30  mbickel
 
 	* ChangeLog, configure, configure.in, doc/manpages/Makefile.in,
 	source/resourcenet.h:  Added test for SDLmm to configure.in
 
-2001-10-23 17:37  mbickel
+2001-10-23 16:37  mbickel
 
 	* source/: TODO, resourcenet.cpp, strtmesg.cpp:  Fixed crash when
 	determining the emount of energy available in buildings
 
-2001-10-22 23:04  mbickel
+2001-10-22 22:04  mbickel
 
 	* source/: strtmesg.cpp, win32/borland/asc.bpr:  Increased version
 	number
 
-2001-10-22 20:53  mbickel
+2001-10-22 19:53  mbickel
 
 	* source/loadbi3.cpp:  Fixed BI3 map translation errors: wrong
 	order of table evaluation
 
-2001-10-22 20:22  mbickel
+2001-10-22 19:22  mbickel
 
 	* source/: attack.cpp, controls.cpp, dashboard.cpp, dashboard.h,
 	resourcenet.cpp, resourcenet.h, vehicle.cpp, vehicle.h:  Reaction
@@ -954,14 +1098,14 @@
 	  manually
 	 Fixed behaviour of generator vehicles on BI-mode maps
 
-2001-10-21 22:18  mbickel
+2001-10-21 21:18  mbickel
 
 	* source/: CLoadable.cpp, gameoptions.cpp, gameoptions.h,
 	loadbi3.cpp, spfst.cpp:  Fixed non-empty table problem with BI3 map
 	import
 	 Added ini parameter to specify wood behaviour
 
-2001-10-21 22:00  mbickel
+2001-10-21 21:00  mbickel
 
 	* Makefile.in, aclocal.m4, configure, configure.in,
 	data/Makefile.in, data/message1.txt, doc/Makefile.in,
@@ -978,14 +1122,14 @@
 	 Fxied: invalid order in which objects were displayed
 	 Replay: moving units are only displayed if BOTH fields are visible
 
-2001-10-21 18:07  mbickel
+2001-10-21 17:07  mbickel
 
 	* source/: oldlzw.cpp, textfiletags.cpp, vehicletype.cpp,
 	vehicletype.h, viewcalculation.cpp, viewcalculation.h,
 	win32/borland/asc.bpr:	New vehicle function: jam only own field
 	 Fixed compilation problem
 
-2001-10-21 15:16  mbickel
+2001-10-21 14:16  mbickel
 
 	* doc/source.html, source/astar2.h, source/attack.h,
 	source/basestreaminterface.h, source/basestrm.cpp,
@@ -994,19 +1138,19 @@
 	source/loadbi3.h, source/loadpcxc.cpp, source/misc.cpp,
 	source/misc.h, source/oldai.cpp:  Cleanup and documentation
 
-2001-10-17 12:23  mbickel
+2001-10-17 11:23  mbickel
 
 	* source/: itemrepository.cpp, strtmesg.cpp, win32/borland/asc.bpr,
 	win32/borland/mapeditor/mapeditor.bpr:	version now 1.9.4.1
 
-2001-10-17 00:11  mbickel
+2001-10-16 23:11  mbickel
 
 	* config.h.in, configure, configure.in, doc/source.html,
 	source/buildingtype.h, source/objecttype.h, source/sg.cpp,
 	source/vehicletype.h, source/ai/service.cpp:  Fixed AI crashes
 	 Updated documentation
 
-2001-10-16 21:58  mbickel
+2001-10-16 20:58  mbickel
 
 	* configure.in, data/title_mapeditor.jpg, doc/source.html,
 	doc/source_borland.html, source/attack.cpp, source/buildings.cpp,
@@ -1027,13 +1171,13 @@
 	for mapeditor
 	 Updated source documentation
 
-2001-10-16 21:56  mbickel
+2001-10-16 20:56  mbickel
 
 	* source/win32/msvc/: ASC.sln, ASC/ASC.sln, ASC/ASC.vcproj,
 	jpeglib/jpeglib.vcproj, libbzip2/libbzip2.vcproj,
 	mapeditor/mapeditor.vcproj:  Added MSVC project files
 
-2001-10-16 17:33  mbickel
+2001-10-16 16:33  mbickel
 
 	* configure, configure.in, data/Makefile.am, data/Makefile.in,
 	data/icon_asc.gif, data/icon_mapeditor.gif,
@@ -1044,23 +1188,23 @@
 	 Fixed crash when building icons
 	 Removed assembled datafiles
 
-2001-10-12 02:32  mbickel
+2001-10-12 01:32  mbickel
 
 	* source/: loadbi3.cpp, tools/viewid.cpp, tools/win/viewid.bpf,
 	tools/win/viewid.bpr:  Fixed crash in loadbi3
 
-2001-10-12 02:18  mbickel
+2001-10-12 01:18  mbickel
 
 	* source/strtmesg.cpp:	Version now 1.9.4
 
-2001-10-12 02:16  mbickel
+2001-10-12 01:16  mbickel
 
 	* source/: itemrepository.cpp, objecttype.cpp, terraintype.cpp,
 	textfileparser.cpp, textfileparser.h, tools/bin2text.cpp,
 	tools/viewid.cpp, tools/linux/Makefile.am, tools/linux/Makefile.in,
 	unix/Makefile.am, unix/Makefile.in:  Some cleanup and bugfixes
 
-2001-10-11 12:41  mbickel
+2001-10-11 11:41  mbickel
 
 	* asc.kdevprj, configure, configure.in, source/basestrm.cpp,
 	source/controls.cpp, source/dialog.cpp, source/dialog.h,
@@ -1075,13 +1219,13 @@
 	Restructured platform fileio handling
 	 Added map archival information to mapeditor
 
-2001-10-11 12:22  mbickel
+2001-10-11 11:22  mbickel
 
 	* source/: building.cpp, edevents.cpp, edgen.cpp, edglobal.cpp,
 	edmisc.cpp, sgstream.cpp, tools/mount.cpp, win32/msvc/global_os.h: 
 	Some cleanup and fixes for Visual C++
 
-2001-10-08 16:44  mbickel
+2001-10-08 15:44  mbickel
 
 	* asc.bpg, data/palette.map, source/basestrm.h,
 	source/controls.cpp, source/dialog.cpp, source/edmisc.cpp,
@@ -1092,7 +1236,7 @@
 	source/win32/borland/asc.bpr,
 	source/win32/borland/mapeditor/mapeditor.bpr:  Some cleanup
 
-2001-10-08 16:12  mbickel
+2001-10-08 15:12  mbickel
 
 	* source/: basestrm.cpp, basestrm.h, edglobal.cpp, edglobal.h,
 	edmisc.cpp, gamemap.cpp, loadbi3.cpp, map2pcx.cpp, strtmesg.cpp,
@@ -1101,13 +1245,13 @@
 	 Map2PCX improvements
 	 Mapeditor usability improvements
 
-2001-10-06 13:30  mbickel
+2001-10-06 12:30  mbickel
 
 	* ChangeLog, data/legacy/A_BOMBER.VEH, source/itemrepository.cpp,
 	source/loadbi3.cpp, source/map2pcx.cpp, source/strtmesg.cpp,
 	source/typen.h:  Fixed bug in gametime calculation
 
-2001-10-03 22:56  mbickel
+2001-10-03 21:56  mbickel
 
 	* data/bi3maptranslation.txt, data/helpsys2.txt, data/helpsyst.txt,
 	source/attack.cpp, source/dashboard.cpp, source/dashboard.h,
@@ -1120,13 +1264,13 @@
 	 Weapons can now have different efficiencies against different unit
 	classes
 
-2001-10-02 20:08  mbickel
+2001-10-02 19:08  mbickel
 
 	* asc.bpg, source/edmain.cpp, source/sg.cpp:  Changed parser error
 	handling to use exceptions
 	 Removed gfx2pcx project
 
-2001-10-02 16:06  mbickel
+2001-10-02 15:06  mbickel
 
 	* source/: TODO, attack.cpp, baseaiinterface.h, controls.cpp,
 	dialog.cpp, dialog.h, dlg_box.cpp, dlg_box.h, edevents.cpp,
@@ -1144,49 +1288,49 @@
 	 Added ability to choose amoung different BI3 import tables
 	 Added map transformation tables
 
-2001-09-30 15:09  mbickel
+2001-09-30 14:09  mbickel
 
 	* ChangeLog, data/first.map, data/first.msg, data/paybacktime.map,
 	data/paybacktime.msg, source/strtmesg.cpp:  Updated maps
 	 Version now 1.9.1
 
-2001-09-30 13:04  mbickel
+2001-09-30 12:04  mbickel
 
 	* data/paybacktime.map:  Corrected alliances in paybacktime
 
-2001-09-29 22:44  mbickel
+2001-09-29 21:44  mbickel
 
 	* data/paybacktime.map, source/strtmesg.cpp,
 	source/ai/valuation.cpp:  AI does better job of finding unit jobs
 	 Adjusted players of paybacktime
 
-2001-09-28 23:08  mbickel
+2001-09-28 22:08  mbickel
 
 	* asc.bpg, data/first.map, data/first.msg, data/paybacktime.map,
 	data/paybacktime.msg, source/strtmesg.cpp, source/ai/base.cpp: 
 	Improved first two campaign maps
 	 Version now 1.9.0-pre2
 
-2001-09-28 21:36  mbickel
+2001-09-28 20:36  mbickel
 
 	* data/first.map, source/sg.cpp:  New startup map
 
-2001-09-28 19:43  mbickel
+2001-09-28 18:43  mbickel
 
 	* data/helpsyst.txt, source/basegfx.cpp, source/vehicletype.h: 
 	Fixed bug: wrong graphics with hillside
 	 Fixed bug: crash when vehicle function not found
 	 Updated Helpsystem
 
-2001-09-27 00:07  mbickel
+2001-09-26 23:07  mbickel
 
 	* data/: helpsys2.txt, message1.txt:  Updated online help
 
-2001-09-26 22:30  mbickel
+2001-09-26 21:30  mbickel
 
 	* source/strtmesg.cpp:	Changed version number to 1.9.0-pre1
 
-2001-09-26 21:53  mbickel
+2001-09-26 20:53  mbickel
 
 	* configure, configure.in, data/Makefile.am, data/Makefile.in,
 	data/a_battl2.veh, data/a_battle.veh, data/a_bfigh1.veh,
@@ -1400,49 +1544,49 @@
 	Reorganized data files for coming ASC 1.9.0 release
 	 Improved field information dialog
 
-2001-09-26 21:44  mbickel
+2001-09-26 20:44  mbickel
 
 	* asc.bpg, source/controls.cpp, source/gamemap.cpp,
 	source/tools/weaponguide.cpp:  Fixed bugs in map resizing
 
-2001-09-25 22:15  mbickel
+2001-09-25 21:15  mbickel
 
 	* source/sg.cpp:  Changed startup map to paybacktime
 
-2001-09-25 20:03  mbickel
+2001-09-25 19:03  mbickel
 
 	* source/: controls.cpp, typen.h:  Move after attack doesn't reduce
 	a units movement
 
-2001-09-25 17:13  mbickel
+2001-09-25 16:13  mbickel
 
 	* data/message1.txt, source/attack.cpp, source/strtmesg.cpp,
 	source/unitctrl.cpp, source/unitctrl.h:  New version number
 	 Fixed crash when reaction fire during ascend
 
-2001-09-25 16:06  mbickel
+2001-09-25 15:06  mbickel
 
 	* source/tools/demount.cpp:  Fixed: some files were not extracted
 	by demount
 
-2001-09-25 11:35  mbickel
+2001-09-25 10:35  mbickel
 
 	* source/: gamemap.cpp, spfst.cpp:  Fixed disappearing building
 	when resizing map
 
-2001-09-24 19:22  mbickel
+2001-09-24 18:22  mbickel
 
 	* source/: buildings.h, buildingtype.h, doxygen.config, gamemap.h,
 	spfst.cpp, typen.h:  Fixed crash in end of turn
 	 Improved documentation
 
-2001-09-24 14:05  mbickel
+2001-09-24 13:05  mbickel
 
 	* ChangeLog, README, source/TODO, source/buildingtype.h,
 	source/edglobal.cpp, source/ai/service.cpp, source/tools/mount.cpp:
 	 Fixed: airplanes landing in wrong building for repairs
 
-2001-09-24 01:06  mbickel
+2001-09-24 00:06  mbickel
 
 	* source/: building.cpp, building_controls.h, edglobal.cpp,
 	edmain.cpp, mapdisplay.cpp, unitctrl.cpp, vehicle.cpp, vehicle.h: 
@@ -1452,7 +1596,7 @@
 	  - production icon displayed although unit could not be produced
 	  - invisible building becoming visible in fog of war
 
-2001-09-20 17:36  mbickel
+2001-09-20 16:36  mbickel
 
 	* source/: basestrm.cpp, edselfnt.cpp, gamemap.cpp, gui.cpp,
 	objecttype.cpp, objecttype.h, palette.cpp, palette.h, strtmesg.cpp,
@@ -1460,25 +1604,25 @@
 	tools/weaponguide.cpp, win32/borland/asc.bpr:  New object
 	displaying mode
 
-2001-09-18 13:19  mbickel
+2001-09-18 12:19  mbickel
 
 	* source/: vehicletype.cpp, tools/weaponguide.cpp:  Fixed bug in
 	determining units loadable into a transport
 	 Weaponguide displays removable objects
 
-2001-09-14 13:34  mbickel
+2001-09-14 12:34  mbickel
 
 	* source/: buildingtype.cpp, strtmesg.cpp, vehicletype.cpp:  Fixed
 	loadable-check for transports in mapeditor
 
-2001-09-13 21:34  mbickel
+2001-09-13 20:34  mbickel
 
 	* ChangeLog, doc/source.html, source/ai/misc.cpp,
 	source/ai/service.cpp, source/ai/strategy.cpp,
 	source/ai/tactics.cpp, source/tools/bin2text.cpp:  Fixed several AI
 	problems
 
-2001-09-13 19:43  mbickel
+2001-09-13 18:43  mbickel
 
 	* asc.bpg, data/message1.txt, source/CLoadable.cpp, source/TODO,
 	source/attack.cpp, source/basestrm.cpp, source/building.cpp,
@@ -1492,17 +1636,17 @@
 	source/tools/win/bin2text.bpr, source/win32/borland/asc.bpf,
 	source/win32/borland/asc.bpr:  Many, many bug fixes
 
-2001-09-13 16:25  mbickel
+2001-09-13 15:25  mbickel
 
 	* source/tools/weaponguide.cpp:  Improved elimination of text tags
 	in description
 
-2001-09-07 11:33  mbickel
+2001-09-07 10:33  mbickel
 
 	* source/: strtmesg.cpp, textfileparser.cpp, vehicletype.cpp: 
 	Fixed broken PCX loading for ASCTXT files
 
-2001-08-28 15:24  mbickel
+2001-08-28 14:24  mbickel
 
 	* asc.bpg, source/libs/sdlmm/SDLmm.bpf,
 	source/libs/sdlmm/SDLmm.bpr, source/tools/win/bin2text.bpf,
@@ -1519,7 +1663,7 @@
 	source/win32/borland/mapeditor/mapeditor.bpr:  Added project files
 	for SDLmm
 
-2001-08-28 11:51  mbickel
+2001-08-28 10:51  mbickel
 
 	* source/: basegfx.h, textfileparser.cpp, ai/ai.bpr,
 	tools/bi2pcx.cpp, tools/bin2text.cpp, tools/makegfx.cpp,
@@ -1537,7 +1681,7 @@
 	win32/borland/mapeditor/mapeditor.bpr:	Added SDL_image and SDLmm
 	to the win32 project files
 
-2001-08-27 23:03  mbickel
+2001-08-27 22:03  mbickel
 
 	* configure, configure.in, source/baseaiinterface.h,
 	source/basegfx.cpp, source/basegfx.h, source/basestrm.h,
@@ -1553,13 +1697,13 @@
 	mounted from any number of PNG files
 	 Several AI improvements
 
-2001-08-26 23:39  mbickel
+2001-08-26 22:39  mbickel
 
 	* source/: objecttype.cpp, tools/linux/Makefile.am,
 	tools/linux/Makefile.in:  Fixed bugs in objecttype loading /
 	writing of text files
 
-2001-08-26 22:55  mbickel
+2001-08-26 21:55  mbickel
 
 	* asc.bpg, source/buildingtype.cpp, source/buildingtype.h,
 	source/containerbasetype.h, source/edselfnt.cpp,
@@ -1571,88 +1715,88 @@
 	bin2text can now load text files too
 	 LoadableItemType interface class added
 
-2001-08-24 17:50  mbickel
+2001-08-24 16:50  mbickel
 
 	* source/: astar2.cpp, strtmesg.cpp, unitctrl.cpp, ai/ai.h,
 	ai/misc.cpp, ai/service.cpp, ai/tactics.cpp, ai/valuation.cpp:	AI
 	performs better services when there are no service units
 
-2001-08-19 14:50  mbickel
+2001-08-19 13:50  mbickel
 
 	* source/: edmisc.cpp, loaders.cpp, missions.cpp, sg.cpp:  fixed
 	event trigger allenemybuildings
 
-2001-08-19 14:31  mbickel
+2001-08-19 13:31  mbickel
 
 	* source/: edevents.cpp, gamemap.cpp, loaders.cpp, missions.cpp,
 	sg.cpp, ai/base.cpp:  Fixed several bugs in event and campaign
 	handling
 
-2001-08-19 12:48  mbickel
+2001-08-19 11:48  mbickel
 
 	* source/: dlg_box.cpp, edevents.cpp, gamedlg.cpp, typen.cpp,
 	tools/mount.cpp:  Fixed display problems in event dlg in mapeditor
 	 Fixed error when starting campaign with AI as first player
 
-2001-08-18 14:30  mbickel
+2001-08-18 13:30  mbickel
 
 	* source/: strtmesg.cpp, ai/service.cpp:  Fixed crash in AI:
 	"trying to move immobile units"
 
-2001-08-17 21:02  mbickel
+2001-08-17 20:02  mbickel
 
 	* source/: objecttype.cpp, objecttype.h, strtmesg.cpp,
 	textfileparser.cpp, textfileparser.h, tools/mount.cpp:	Objecttypes
 	can now use mirrored images in text files
 
-2001-08-15 16:02  mbickel
+2001-08-15 15:02  mbickel
 
 	* data/message1.txt, source/TODO, source/gui.cpp,
 	source/unitctrl.cpp, source/vehicle.cpp, source/vehicle.h:  Updated
 	message texts
 
-2001-08-15 15:47  mbickel
+2001-08-15 14:47  mbickel
 
 	* asc.kdevprj, source/loaders.cpp, source/mapdisplay.cpp,
 	source/strtmesg.cpp, source/vehicletype.cpp:  Fixed crash when
 	loading old vehicletypes
 
-2001-08-10 11:36  mbickel
+2001-08-10 10:36  mbickel
 
 	* source/strtmesg.cpp:	Increased version number
 
-2001-08-10 01:13  mbickel
+2001-08-10 00:13  mbickel
 
 	* ChangeLog, asc.kdevprj, source/buildingtype.cpp,
 	source/itemrepository.cpp, source/textfileparser.cpp:  Finished
 	text io for building types
 
-2001-08-10 00:08  mbickel
+2001-08-09 23:08  mbickel
 
 	* asc.bpg, source/buildingtype.cpp, source/loadpcx.h,
 	source/loadpcxc.cpp, source/textfileparser.cpp,
 	source/textfileparser.h, source/tools/win/bin2text.bpr:  Improved
 	building text file IO
 
-2001-08-09 21:48  mbickel
+2001-08-09 20:48  mbickel
 
 	* asc.kdevprj, source/buildingtype.cpp:  Improved building text
 	files
 
-2001-08-09 21:28  mbickel
+2001-08-09 20:28  mbickel
 
 	* source/: buildingtype.cpp, buildingtype.h, controls.cpp,
 	edmisc.cpp, loadbi3.cpp, loaders.cpp, sgstream.cpp,
 	textfiletags.cpp, textfiletags.h, tools/bin2text.cpp:  Started
 	adding buildingtype text file functions
 
-2001-08-09 19:06  mbickel
+2001-08-09 18:06  mbickel
 
 	* asc.bpg, source/edselfnt.cpp, source/mapdisplay.cpp,
 	source/mapdisplay.h, source/ai/ai.bpr,
 	source/ai/buildingcapture.cpp:	Fixed some warnings
 
-2001-08-09 17:58  mbickel
+2001-08-09 16:58  mbickel
 
 	* asc.kdevprj, data/bi3maptranslation.txt, data/data.version,
 	source/edglobal.cpp, source/loadbi3.cpp, source/objxlat.cpp,
@@ -1661,7 +1805,7 @@
 	 More flexible BI3 map import
 	 Better textfile error messages
 
-2001-08-09 16:50  mbickel
+2001-08-09 15:50  mbickel
 
 	* asc.bpg, data/bi3maptranslation.txt, data/g_bpipe.veh,
 	data/palette.map, data/legacy/g_bpipe.veh, source/basestrm.cpp,
@@ -1676,7 +1820,7 @@
 	 Better error messages in text parser
 	 Better error message: duplicate ID
 
-2001-08-09 12:28  mbickel
+2001-08-09 11:28  mbickel
 
 	* asc.kdevprj, configure, configure.in, source/baseaiinterface.h,
 	source/dialog.cpp, source/dlg_box.cpp, source/dlg_box.h,
@@ -1688,13 +1832,13 @@
 	source/ai/service.cpp, source/ai/tactics.cpp:  Fixed AI problems
 	 Mapeditor can edit a units AI parameter
 
-2001-08-08 00:11  mbickel
+2001-08-07 23:11  mbickel
 
 	* ChangeLog, asc.kdevprj, data/helpsys2.txt,
 	source/unix/global_os.h:  Unix build now uses namespace
 	 Fixed typo in tutorial
 
-2001-08-07 23:24  mbickel
+2001-08-07 22:24  mbickel
 
 	* data/s_aa-shi.veh, data/s_battle.veh, data/s_cruisr.veh,
 	data/s_destro.veh, source/edselfnt.cpp, source/unix/global_os.h: 
@@ -1702,7 +1846,7 @@
 	 Added namespace std usage to unix config
 	 Updated vehicles (provided by gamer)
 
-2001-08-07 17:58  mbickel
+2001-08-07 16:58  mbickel
 
 	* data/helpsys9.msg, source/attack.cpp, source/controls.cpp,
 	source/dlg_box.cpp, source/gamedlg.cpp, source/gui.cpp,
@@ -1710,12 +1854,12 @@
 	 Fixed crash in weapon info with mines
 	 Fixed cancel Button in object construction
 
-2001-08-06 23:38  mbickel
+2001-08-06 22:38  mbickel
 
 	* source/: controls.cpp, sg.cpp:  Fixed: ghost icons remained after
 	vehicle construction canceled
 
-2001-08-06 22:54  mbickel
+2001-08-06 21:54  mbickel
 
 	* asc.kdevprj, source/buildings.cpp, source/edmain.cpp,
 	source/gui.cpp, source/loaders.cpp, source/mapdisplay.cpp,
@@ -1730,23 +1874,23 @@
 	 Fixed visibility of mines
 	 Fixed crashes in event loader
 
-2001-08-06 17:35  mbickel
+2001-08-06 16:35  mbickel
 
 	* source/: buildingtype.h, itemrepository.cpp, sg.cpp,
 	strtmesg.cpp:  Fixed wrong resulution from config file
 	 Added duplicate ID checking
 
-2001-08-03 11:06  mbickel
+2001-08-03 10:06  mbickel
 
 	* data/data.version:  Increased data version
 
-2001-08-03 10:53  mbickel
+2001-08-03 09:53  mbickel
 
 	* source/: strtmesg.cpp, vehicletype.cpp, tools/weaponguide.cpp: 
 	Added missing construction cost to vehicletype text formats
 	 New version of weaponguide
 
-2001-08-02 20:50  mbickel
+2001-08-02 19:50  mbickel
 
 	* data/bi3maptranslation.txt, source/edmain.cpp, source/sg.cpp,
 	source/sgstream.cpp, source/sgstream.h, source/spfst.cpp,
@@ -1754,7 +1898,7 @@
 	handling in Text parsers
 	 Improved version information
 
-2001-08-02 20:18  mbickel
+2001-08-02 19:18  mbickel
 
 	* asc.kdevprj, configure, configure.in, data/bi3maptranslation.txt,
 	doc/manpages/Makefile.in, source/edmain.cpp, source/loadbi3.h,
@@ -1762,7 +1906,7 @@
 	source/tools/bi2pcx.cpp:  BI3 map translation tables now in
 	textfile too
 
-2001-08-02 17:33  mbickel
+2001-08-02 16:33  mbickel
 
 	* source/: ascstring.cpp, ascstring.h, edglobal.cpp, edglobal.h,
 	edmain.cpp, itemrepository.cpp, itemrepository.h, loadpcx.h,
@@ -1773,21 +1917,21 @@
 	tools/bin2text.cpp, tools/mount.cpp, tools/weaponguide.cpp: 
 	Completed text based file formats
 
-2001-07-31 22:16  mbickel
+2001-07-31 21:16  mbickel
 
 	* asc.kdevprj, source/buildingtype.h, source/vehicletype.h: 
 	Changed headers to use common types
 
-2001-07-31 11:50  mbickel
+2001-07-31 10:50  mbickel
 
 	* asc.kdevprj, source/ai/tactics.cpp:  Fixed crash in AI
 
-2001-07-30 20:18  mbickel
+2001-07-30 19:18  mbickel
 
 	* doc/source.html:  Updated source.html to reflect Visual Studio
 	.net
 
-2001-07-30 20:03  mbickel
+2001-07-30 19:03  mbickel
 
 	* source/: buildings.h, containerbase.cpp, containerbase.h,
 	mapdisplay.cpp, objecttype.cpp, unitctrl.cpp, vehicle.cpp,
@@ -1795,7 +1939,7 @@
 	tools/weaponguide.cpp, win32/borland/asc.bpr, win32/msvc/fileio.h,
 	win32/msvc/global_os.h:  Fixed some more warnings
 
-2001-07-30 19:43  mbickel
+2001-07-30 18:43  mbickel
 
 	* source/: dialog.cpp, dlg_box.cpp, dlgraph.cpp, pd.cpp, pd.h,
 	sg.cpp, sgstream.cpp, terraintype.cpp, terraintype.h,
@@ -1807,36 +1951,36 @@
 	.net project files
 	 Fixed some warnings
 
-2001-07-30 15:24  mbickel
+2001-07-30 14:24  mbickel
 
 	* source/win32/borland/: asc.bpr, asc.mak, mapeditor/mapeditor.bpr,
 	mapeditor/mapeditor.mak:  Removed VCL from Borland Make- and
 	Project Files
 
-2001-07-30 10:50  mbickel
+2001-07-30 09:50  mbickel
 
 	* source/tools/weaponguide.cpp:  Fixed bugs in weaponguide: wrong
 	file open for detailed6
 				    crash in output of buildable objects
 
-2001-07-29 23:26  mbickel
+2001-07-29 22:26  mbickel
 
 	* source/: building.cpp, building_controls.h:  Fixed: Torpedo-units
 	could not leave submerged submarine
 
-2001-07-29 20:23  mbickel
+2001-07-29 19:23  mbickel
 
 	* doc/source.html:  Updated win32 build instructions
 
-2001-07-29 20:11  mbickel
+2001-07-29 19:11  mbickel
 
 	* doc/source.html:  Updated win32 build instructions again
 
-2001-07-29 20:07  mbickel
+2001-07-29 19:07  mbickel
 
 	* doc/source.html:  Updated Win32 build instructions
 
-2001-07-28 23:09  mbickel
+2001-07-28 22:09  mbickel
 
 	* source/: controls.cpp, dialog.cpp, edmisc.cpp, gui.cpp,
 	loadbi3.cpp, spfst.cpp, strtmesg.cpp, terraintype.cpp,
@@ -1850,7 +1994,7 @@
 	win32/borland/mapeditor/mapeditor.bpr:	Prepared vehicletype
 	structure for textIO
 
-2001-07-28 15:40  mbickel
+2001-07-28 14:40  mbickel
 
 	* source/: libs/bzlib/win/bzlib.bpr,
 	libs/triangul/win32/triangulation.bpr, tools/win/bin2text.bpr,
@@ -1862,17 +2006,17 @@
 	win32/borland/mapeditor/mapeditor.bpr,
 	win32/borland/mapeditor/mapeditor.mak:	Updated BCC makefiles
 
-2001-07-28 15:26  mbickel
+2001-07-28 14:26  mbickel
 
 	* asc.bpg, source/tools/weaponguide.cpp,
 	source/tools/win/weaponguide.mak:  Updated weaponguide again
 
-2001-07-28 15:18  mbickel
+2001-07-28 14:18  mbickel
 
 	* asc.kdevprj, source/tools/weaponguide.cpp:  Merged changes into
 	weaponguide.cpp
 
-2001-07-28 13:54  mbickel
+2001-07-28 12:54  mbickel
 
 	* asc.kdevprj, source/map2pcx.cpp, source/research.cpp,
 	source/research.h, source/clparser/Makefile.am,
@@ -1882,7 +2026,7 @@
 	source/tools/linux/Makefile.in, source/unix/Makefile.in,
 	source/unix/mapeditor/Makefile.in:  Updated weaponguide
 
-2001-07-28 13:19  mbickel
+2001-07-28 12:19  mbickel
 
 	* asc.bpg, source/basestreaminterface.h, source/basestrm.cpp,
 	source/basestrm.h, source/buildings.cpp, source/controls.cpp,
@@ -1904,7 +2048,7 @@
 	source/win32/borland/mapeditor/mapeditor.bpr:  Updated weaponguide
 	 moved item repository from spfst to itemrepository
 
-2001-07-28 00:29  mbickel
+2001-07-27 23:29  mbickel
 
 	* asc.bpg, bccmake.bat, data/coast137.trr, data/coast138.trr,
 	data/coast139.trr, data/coast140.trr, data/coast141.trr,
@@ -1926,11 +2070,11 @@
 	 Added bin2text win32 project files
 	 Some improvement and bugfixes in text-file loading
 
-2001-07-27 23:38  mbickel
+2001-07-27 22:38  mbickel
 
 	* source/clparser/bin2txt.h:  Added bin2txt.h
 
-2001-07-27 23:13  mbickel
+2001-07-27 22:13  mbickel
 
 	* ChangeLog, asc.kdevprj, source/TODO, source/ascstring.cpp,
 	source/ascstring.h, source/basestreaminterface.h,
@@ -1957,7 +2101,7 @@
 	source/unix/mapeditor/Makefile.in:  Added text based file formats
 	 Terraintype and Objecttype restructured
 
-2001-07-25 21:56  mbickel
+2001-07-25 20:56  mbickel
 
 	* source/: attack.cpp, libs/bzlib/win/bzlib.bpr,
 	libs/triangul/win32/triangulation.bpr, tools/win/demount.bpr,
@@ -1966,14 +2110,14 @@
 	tools/win/weaponguide.bpr, win32/borland/asc.bpr,
 	win32/borland/mapeditor/mapeditor.bpr:	Fixed: kamikaze not working
 
-2001-07-25 21:01  mbickel
+2001-07-25 20:01  mbickel
 
 	* asc.kdevprj, data/tutor1.map, source/ascstring.cpp,
 	source/ascstring.h, source/basestrm.cpp, source/misc.cpp,
 	source/sg.cpp, source/soundList.cpp, source/strtmesg.cpp,
 	source/ai/valuation.cpp:  Started adding text file formats
 
-2001-07-25 20:00  mbickel
+2001-07-25 19:00  mbickel
 
 	* source/: PropertyGroup.cpp, gamedlg.cpp, unitctrl.cpp:  Fixed:
 	units could repair without repairing function but
@@ -1981,11 +2125,11 @@
 	 Fixed: crash when kamikaze attack occured during movement
 	 Fixed: log(0) error in refuelling dialog
 
-2001-07-20 23:27  mbickel
+2001-07-20 22:27  mbickel
 
 	* source/sg.cpp:  even more diagnostic messages
 
-2001-07-20 22:37  mbickel
+2001-07-20 21:37  mbickel
 
 	* source/: sg.cpp, libs/bzlib/win/bzlib.bpr,
 	libs/triangul/win32/triangulation.bpr, sdl/sound.cpp,
@@ -1996,18 +2140,18 @@
 	win32/borland/mapeditor/mapeditor.bpr:	Enhanced logging
 	capabilities
 
-2001-07-18 23:51  mbickel
+2001-07-18 22:51  mbickel
 
 	* source/TODO:	Removed fixed bugs
 
-2001-07-18 22:53  mbickel
+2001-07-18 21:53  mbickel
 
 	* source/: dashboard.cpp, strtmesg.cpp, vehicle.cpp, sdl/sound.cpp:
 	 Fixed sound failing during game
 	 Fixed crash on loading game
 	 Fixed ammo not being displayed in large weapon info
 
-2001-07-18 20:15  mbickel
+2001-07-18 19:15  mbickel
 
 	* asc.kdevprj, source/CLoadable.cpp, source/CLoadable.h,
 	source/Named.cpp, source/Named.h, source/Property.cpp,
@@ -2018,7 +2162,7 @@
 	 Fixed: unmoveable units are moved by AI
 	 Some reformatting of source files
 
-2001-07-18 18:05  mbickel
+2001-07-18 17:05  mbickel
 
 	* source/: TODO, controls.cpp, controls.h, dialog.cpp, dlg_box.cpp,
 	gamedlg.h, gamemap.cpp, loaders.cpp, sg.cpp, soundList.h,
@@ -2033,13 +2177,13 @@
 	 Fixed: cannot attack after declaring of war
 	 New: ffading of sounds
 
-2001-07-15 23:31  mbickel
+2001-07-15 22:31  mbickel
 
 	* source/: dlg_box.cpp, soundList.cpp, soundList.h, unitctrl.cpp,
 	sdl/sound.cpp, sdl/sound.h, tools/weaponguide.cpp:  The movement
 	sounds can now fade in and out
 
-2001-07-15 23:00  mbickel
+2001-07-15 22:00  mbickel
 
 	* asc.kdevprj, source/attack.cpp, source/basegfx.cpp,
 	source/building.cpp, source/controls.cpp, source/dashboard.cpp,
@@ -2051,32 +2195,32 @@
 	source/ai/misc.cpp, source/ai/service.cpp, source/ai/tactics.cpp,
 	source/ai/valuation.cpp:  Some cleanup in the vehicletype class
 
-2001-07-15 17:25  mbickel
+2001-07-15 16:25  mbickel
 
 	* data/: harb0194.trr, harb0195.trr, harb0196.trr, harb0197.trr,
 	harb0198.trr, harb0199.trr, harb0200.trr, harb0201.trr:  Harbour
 	fields now have deeper water
 
-2001-07-15 12:36  mbickel
+2001-07-15 11:36  mbickel
 
 	* source/: network.cpp, strtmesg.cpp:  Added explanation message in
 	email game save dialog
 
-2001-07-15 00:57  mbickel
+2001-07-14 23:57  mbickel
 
 	* ChangeLog, data/helpsyst.txt:  Updated credits
 
-2001-07-14 23:26  mbickel
+2001-07-14 22:26  mbickel
 
 	* asc.kdevprj, source/strtmesg.cpp:  Updated version information
 
-2001-07-14 23:10  mbickel
+2001-07-14 22:10  mbickel
 
 	* doc/source.html, source/ai/ai.mak, source/win32/borland/asc.mak,
 	source/win32/borland/mapeditor/mapeditor.mak:  Updated
 	documentation and BCC make files
 
-2001-07-14 23:07  mbickel
+2001-07-14 22:07  mbickel
 
 	* data/sounds.txt, doc/source.html, source/TODO,
 	source/dlg_box.cpp, source/dlg_box.h, source/edmain.cpp,
@@ -2089,12 +2233,12 @@
 	under Win32 too
 	 Error reporting on Win32 during startup works again.
 
-2001-07-14 21:33  mbickel
+2001-07-14 20:33  mbickel
 
 	* asc.kdevprj, data/sounds.txt, source/soundList.cpp:  Some sound
 	fixes
 
-2001-07-14 21:13  mbickel
+2001-07-14 20:13  mbickel
 
 	* asc.kdevprj, config.h.in, configure, configure.in,
 	data/a_battl2.veh, data/a_battle.veh, data/a_bfigh1.veh,
@@ -2122,12 +2266,12 @@
 	 Moveing units make sounds
 	 Added sound files to data
 
-2001-07-14 16:26  mbickel
+2001-07-14 15:26  mbickel
 
 	* source/: dialog.cpp, dlg_box.cpp, dlgraph.cpp, sdl/sound.cpp,
 	sdl/sound.h:  Some cleanup
 
-2001-07-14 15:15  mbickel
+2001-07-14 14:15  mbickel
 
 	* asc.kdevprj, source/ascstring.cpp, source/ascstring.h,
 	source/attack.cpp, source/basestreaminterface.h,
@@ -2136,7 +2280,7 @@
 	source/soundList.h, source/sdl/sound.cpp, source/sdl/sound.h: 
 	Rewrote sound handling
 
-2001-07-13 21:33  mbickel
+2001-07-13 20:33  mbickel
 
 	* source/: TODO, dashboard.cpp, network.cpp, unitctrl.cpp:  Fixed
 	crashes in the dashboards experience display
@@ -2144,14 +2288,14 @@
 	       AI and replay warnings)
 	 Fixed crash when starting network game from main menu
 
-2001-07-13 16:02  mbickel
+2001-07-13 15:02  mbickel
 
 	* source/: TODO, network.cpp, replay.cpp, sg.cpp, unitctrl.cpp: 
 	Fixed inconsistency in replay (shareviewchange)
 	 Fixed sound initialization problem
 	 Speed up of movement
 
-2001-07-13 14:53  mbickel
+2001-07-13 13:53  mbickel
 
 	* asc.bpg, source/gamedlg.cpp, source/gui.cpp, source/gui.h,
 	source/replay.cpp, source/replay.h, source/typen.cpp,
@@ -2159,11 +2303,11 @@
 	replay
 	 Fixed crash in tooltip help
 
-2001-07-11 23:31  mbickel
+2001-07-11 22:31  mbickel
 
 	* TODO, source/TODO:  Updated ToDO lists
 
-2001-07-11 22:44  mbickel
+2001-07-11 21:44  mbickel
 
 	* data/g_puma.veh, data/s_typhon.veh, data/standard.set,
 	data/legacy/A_BOMBER.VEH, data/legacy/G_DITCH.VEH,
@@ -2176,7 +2320,7 @@
 	vehicles from the data file.
 	 Put all legacy units in into the data/legacy directory
 
-2001-07-11 22:13  mbickel
+2001-07-11 21:13  mbickel
 
 	* doc/source.html, doc/source_watcom.html, source/gamemap.cpp,
 	source/gamemap.h, source/loaders.cpp,
@@ -2191,31 +2335,31 @@
 	exception occures during game loading
 	 Fixed wrong sender of mails
 
-2001-07-09 19:38  mbickel
+2001-07-09 18:38  mbickel
 
 	* source/: network.cpp, win32/borland/asc.bpr:	New default email
 	filename
 	 removed limitation for 8 character long email filenames
 
-2001-07-09 19:01  mbickel
+2001-07-09 18:01  mbickel
 
 	* source/: dialog.cpp, dlg_box.cpp, strtmesg.cpp, sdl/events.cpp,
 	win32/borland/asc.bpr:	Small map can now be even smaller
 	 fixed redraw problems on windows
 	 fixed no-font crash
 
-2001-07-09 14:08  mbickel
+2001-07-09 13:08  mbickel
 
 	* asc.kdevprj, source/graphicset.cpp, source/loaders.cpp,
 	source/strtmesg.cpp:  Fixed: crash when saving game
 
-2001-07-09 00:54  mbickel
+2001-07-08 23:54  mbickel
 
 	* asc.kdevprj, source/typen.h, source/ai/service.cpp:  Added
 	version checking for coordinate loading
 	 Fixed crash when loading AI-savegames
 
-2001-07-08 22:55  mbickel
+2001-07-08 21:55  mbickel
 
 	* asc.kdevprj, source/graphicset.cpp, source/clparser/Makefile.am,
 	source/clparser/Makefile.in, source/clparser/tank2pcx.cpp,
@@ -2224,27 +2368,27 @@
 	source/tools/linux/Makefile.in:  Fixed linux makefiles
 	 Added command line parsing to tank2pcx
 
-2001-07-08 22:10  mbickel
+2001-07-08 21:10  mbickel
 
 	* source/tools/win/: tank2pcx.bpf, tank2pcx.bpr:  Added tank2pcx to
 	project
 
-2001-07-08 22:09  mbickel
+2001-07-08 21:09  mbickel
 
 	* asc.bpg, source/gamedlg.cpp, source/strtmesg.cpp,
 	source/tools/pcxtank.cpp, source/tools/linux/Makefile.am:  Added
 	tank2pcx tool to project
 	 Fixed bug in refuel dialog
 
-2001-07-08 20:15  mbickel
+2001-07-08 19:15  mbickel
 
 	* source/ai/ai_common.h:  Added <float.h> include
 
-2001-07-05 18:23  mbickel
+2001-07-05 17:23  mbickel
 
 	* source/pointers.h:  Fixed double definition of pvehicle
 
-2001-07-04 18:53  mbickel
+2001-07-04 17:53  mbickel
 
 	* asc.bpg, bccmake.bat, doc/source.html, source/gamedlg.cpp,
 	source/strtmesg.cpp, source/tools/mount.cpp,
@@ -2254,12 +2398,12 @@
 	 Improved build process for Borland command line compiler
 	 Updated source documentation
 
-2001-07-04 12:27  mbickel
+2001-07-04 11:27  mbickel
 
 	* source/win32/borland/: asc.mak, mapeditor/mapeditor.mak:  ASC and
 	Mapeditor don't require VCL50 to link any more
 
-2001-07-03 22:53  mbickel
+2001-07-03 21:53  mbickel
 
 	* source/: tools/win/demount.bpr, tools/win/demount.mak,
 	tools/win/gfx2pcx.bpr, tools/win/gfx2pcx.mak,
@@ -2271,7 +2415,7 @@
 	win32/borland/mapeditor/mapeditor.mak:	Borland C++ Makefiles don't
 	require the VCL any more
 
-2001-07-03 12:05  mbickel
+2001-07-03 11:05  mbickel
 
 	* bccmake.bat, doc/source.html, source/sg.cpp, source/ai/ai.mak,
 	source/libs/bzlib/win/bzlib.mak, source/libs/jpeg-6b/libjpeg.mak,
@@ -2283,28 +2427,28 @@
 	source/win32/borland/mapeditor/mapeditor.mak:  Added Makefiles for
 	Borland C++ command line compiler
 
-2001-07-02 17:09  mbickel
+2001-07-02 16:09  mbickel
 
 	* source/tools/: makegfx.cpp, win/makegfx.bpr:	Better error
 	messages in makegfx
 
-2001-07-02 12:14  mbickel
+2001-07-02 11:14  mbickel
 
 	* source/: controls.cpp, strtmesg.cpp:	Fixed crash when starting
 	new email games
 	 New version: 1.3.19
 
-2001-06-25 17:36  mbickel
+2001-06-25 16:36  mbickel
 
 	* asc.kdevprj, doc/graphics.html, source/dashboard.cpp,
 	source/events.h, source/graphicset.cpp, source/sdl/events.cpp: 
 	Help on experience icon
 
-2001-06-25 17:32  mbickel
+2001-06-25 16:32  mbickel
 
 	* source/strtmesg.cpp:	Updated version: 1.3.18
 
-2001-06-14 16:46  mbickel
+2001-06-14 15:46  mbickel
 
 	* asc.kdevprj, source/CLoadable.cpp, source/basestrm.cpp,
 	source/basestrm.h, source/dialog.cpp, source/gameoptions.cpp,
@@ -2315,7 +2459,7 @@
 	 The fileselect dialog box shows the file's location
 	 new ascmap2pcx param: outputdir
 
-2001-05-24 17:37  mbickel
+2001-05-24 16:37  mbickel
 
 	* asc.kdevprj, data/Makefile.am, data/Makefile.in,
 	source/astar2.cpp, source/edglobal.cpp, source/edmisc.cpp,
@@ -2326,17 +2470,17 @@
 	fire could not be disabled when unit out of ammo
 	 Fixed several AI problems
 
-2001-05-22 10:19  mbickel
+2001-05-22 09:19  mbickel
 
 	* ChangeLog, asc.kdevprj, source/strtmesg.cpp,
 	source/ai/buildingcapture.cpp:	Fixed an infinite loop in
 	AI::checkBuildingCapture
 
-2001-05-21 14:50  mbickel
+2001-05-21 13:50  mbickel
 
 	* source/strtmesg.cpp:	Updated version to 1.3.15
 
-2001-05-21 14:46  mbickel
+2001-05-21 13:46  mbickel
 
 	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
 	source/controls.cpp, source/dlg_box.cpp, source/dlg_box.h,
@@ -2349,7 +2493,7 @@
 	 Fixed bugs in even loading / writing
 	 Fixed wrong build order AI <-> main program
 
-2001-05-19 15:07  mbickel
+2001-05-19 14:07  mbickel
 
 	* source/: edmain.cpp, events.h, sg.cpp, libs/readme.txt,
 	libs/getopt/getopt.c, libs/getopt/getopt.h, libs/getopt/getopt1.c,
@@ -2362,7 +2506,7 @@
 	Borland C++ Builder again
 	 Added getopt for use with BCB
 
-2001-05-19 00:30  mbickel
+2001-05-18 23:30  mbickel
 
 	* acconfig.h, acinclude.m4, aclocal.m4, asc.kdevprj, config.h.in,
 	configure, configure.in, data/Makefile.am, data/Makefile.in,
@@ -2377,13 +2521,13 @@
 	path
 	  will now be compiled directly into ASC
 
-2001-05-17 22:10  mbickel
+2001-05-17 21:10  mbickel
 
 	* asc.kdevprj, source/edmain.cpp, source/loadbi3.cpp:  Fixed:
 	mapeditor was unable to load maps
 	 Removed debugging output from bi3 map loader
 
-2001-05-17 20:45  mbickel
+2001-05-17 19:45  mbickel
 
 	* Makefile.in, configure, configure.in, data/Makefile.in,
 	doc/Makefile.in, source/Makefile.in, source/ai/Makefile.in,
@@ -2395,7 +2539,7 @@
 	Changed configure.in so that the command line parser generation is
 	   optional
 
-2001-05-17 16:23  mbickel
+2001-05-17 15:23  mbickel
 
 	* Makefile.am, Makefile.in, asc.kdevprj, configure, configure.in,
 	data/Makefile.in, doc/Makefile.am, doc/Makefile.in,
@@ -2427,7 +2571,7 @@
 	Rewrote command line parameters of all programs
 	 Made manpages generation optional
 
-2001-05-17 01:21  mbickel
+2001-05-17 00:21  mbickel
 
 	* Makefile.am, Makefile.in, asc.kdevprj, config.h.in, configure,
 	configure.in, data/Makefile.am, data/Makefile.handwritten,
@@ -2457,7 +2601,7 @@
 	   integrated it into autoconf/automake
 	 Replaced command line parsing of ASC and ASCmapedit
 
-2001-05-15 11:54  mbickel
+2001-05-15 10:54  mbickel
 
 	* asc.kdevprj, configure, configure.in, data/640480.pcx,
 	data/Makefile.handwritten, data/a_battl2.veh, data/a_battle.veh,
@@ -2748,34 +2892,34 @@
 	 The executable names of all ASC helper programs now start with
 	'asc_'
 
-2001-05-14 17:31  mbickel
+2001-05-14 16:31  mbickel
 
 	* asc.kdevprj, configure, configure.in, source/tools/mount.cpp: 
 	Changed usage of asc_mount
 	 Updated configure.in
 
-2001-05-10 18:24  mbickel
+2001-05-10 17:24  mbickel
 
 	* source/tools/java/: CompAll.bat, StartSelector.bat,
 	UnitEditor.java:  Fixed crash in Java-Uniteditor when palette not
 	available
 
-2001-04-30 13:55  mbickel
+2001-04-30 12:55  mbickel
 
 	* source/strtmesg.cpp:	Updated version to 1.3.14
 
-2001-04-30 13:41  mbickel
+2001-04-30 12:41  mbickel
 
 	* asc.kdevprj, source/buildings.h, source/loadbi3.cpp,
 	source/vehicle.cpp, source/vehicle.h:  Fixed crash when importing
 	BI maps due to different structure packing
 
-2001-04-29 23:55  mbickel
+2001-04-29 22:55  mbickel
 
 	* source/tools/win/: demount.bpr, gfx2pcx.bpr, makegfx.bpr:  Fixed:
 	Some windows editor crashed due to invalid runtime libraries
 
-2001-04-03 14:53  mbickel
+2001-04-03 13:53  mbickel
 
 	* asc.bpg, source/ai/ai.bpf, source/ai/ai.bpr, source/ai/base.cpp,
 	source/ai/misc.cpp, source/ai/service.cpp,
@@ -2785,7 +2929,7 @@
 	Compiled ASC with Borland
 	 Added AI-lib project files for BC++B
 
-2001-04-03 13:54  mbickel
+2001-04-03 12:54  mbickel
 
 	* asc.kdevprj, source/astar2.cpp, source/astar2.h,
 	source/building.cpp, source/buildings.cpp, source/buildings.h,
@@ -2798,12 +2942,12 @@
 	source/tools/linux/Makefile.in:  AI Improvements: production ,
 	servicing
 
-2001-04-01 15:00  mbickel
+2001-04-01 14:00  mbickel
 
 	* source/tools/win/: viewid.bpf, viewid.bpr:  Added win32 project
 	files for viewid
 
-2001-04-01 14:59  mbickel
+2001-04-01 13:59  mbickel
 
 	* asc.bpg, source/building.cpp, source/building_controls.h,
 	source/buildings.cpp, source/buildings.h, source/gui.cpp,
@@ -2815,7 +2959,7 @@
 	 Added viewid win32-project
 	 Improved AI : production and service path finding
 
-2001-03-30 14:43  mbickel
+2001-03-30 13:43  mbickel
 
 	* asc.kdevprj, configure, configure.in, source/Makefile.am,
 	source/Makefile.in, source/TODO, source/artint.cpp,
@@ -3692,13 +3836,13 @@
 	to run under Linux
 	 Started implementing a better directory choosing dialog
 
-2000-10-26 21:17  mbickel
+2000-10-26 20:17  mbickel
 
 	* source/: edmain.cpp, dos/asc.tgt, dos/asc.wpj,
 	dos/mapedit/edhex.tgt, tools/weaponguide.cpp,
 	tools/dos/weapguid.tgt:  Removed fullscreen settings in mapeditor
 
-2000-10-26 20:55  mbickel
+2000-10-26 19:55  mbickel
 
 	* source/: CLoadable.cpp, artint.h, edmain.cpp, edselfnt.cpp,
 	gameoptions.cpp, gameoptions.h, typen.h, win32/asc.tgt,
@@ -3706,12 +3850,12 @@
 	the properties of a vehicle inside a building
 	 Added mapeditorFullscreen switch to asc.ini
 
-2000-10-26 20:15  mbickel
+2000-10-26 19:15  mbickel
 
 	* source/gamemap.cpp:  Added gamemap.cpp, which contains methods
 	from tmap
 
-2000-10-26 20:14  mbickel
+2000-10-26 19:14  mbickel
 
 	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
 	source/artint.cpp, source/artint.h, source/buildingtype.cpp,
@@ -3722,18 +3866,18 @@
 	units to repair
 	 tmap is not memory layout sensitive any more
 
-2000-10-24 17:35  schelli
+2000-10-24 16:35  schelli
 
 	* source/: edmain.cpp, edmisc.cpp, libs/jpeg/jpeglib.h,
 	tools/java/MainWindow.form, tools/java/MainWindow.java,
 	tools/java/Readme.txt, win32/asc.wpj, win32/mapedit/mapedit.tgt:
 	MapEd FullScreen support added weapons ammo now editable in MapEd
 
-2000-10-19 13:40  mbickel
+2000-10-19 12:40  mbickel
 
 	* source/edmisc.cpp:  Fixed crash when editing unit values
 
-2000-10-18 20:53  mbickel
+2000-10-18 19:53  mbickel
 
 	* doc/source.html, source/sg.cpp, source/libs/readme.txt,
 	source/libs/jpeg-6b/jconfig.h, source/libs/jpeg-6b/jpeg.tgt,
@@ -3743,7 +3887,7 @@
 	source/win32/mapedit/mapedit.tgt:  Added JPEG support to windows
 	version
 
-2000-10-18 19:09  mbickel
+2000-10-18 18:09  mbickel
 
 	* doc/source.html, source/edmain.cpp, source/events.h,
 	source/sg.cpp, source/spfst.cpp, source/spfst.h, source/typen.cpp,
@@ -3754,18 +3898,18 @@
 	source/tools/tools.wpj, source/tools/weaponguide.cpp,
 	source/tools/dos/makeveh.tgt:  Fixed eventhandling for DOS
 
-2000-10-18 17:10  mbickel
+2000-10-18 16:10  mbickel
 
 	* source/: edmain.cpp, events.h, sg.cpp, strtmesg.cpp,
 	dos/keybp.cpp, dos/mousehnd.cpp, dos/timer.cpp, sdl/events.cpp,
 	win32/asc.tgt, win32/asc.wpj, win32/mapedit/mapedit.tgt:  Fixed
 	event handling for windows and dos
 
-2000-10-18 16:16  mbickel
+2000-10-18 15:16  mbickel
 
 	* source/events.h:  Added events.h
 
-2000-10-18 16:13  mbickel
+2000-10-18 15:13  mbickel
 
 	* asc.kdevprj, source/artint.cpp, source/attack.cpp,
 	source/basegfx.cpp, source/basegfx.h, source/basegui.h,
@@ -3786,16 +3930,16 @@
 	may be currently broken, will be
 	  fixed soon.
 
-2000-10-18 14:40  mbickel
+2000-10-18 13:40  mbickel
 
 	* source/: sg.cpp, sdl/events.cpp, sdl/graphics.cpp:  Rewrite event
 	handling for windows
 
-2000-10-17 22:21  schelli
+2000-10-17 21:21  schelli
 
 	* source/tools/java/MainWindow.java: App now remembers path
 
-2000-10-17 19:28  schelli
+2000-10-17 18:28  schelli
 
 	* source/tools/java/: BuildRange.java, ClassBound.java,
 	CompAll.bat, MainWindow.java, MakeCheckIntRangeField.java, PK.java,
@@ -3806,7 +3950,7 @@
 	class-handling bugs fixed load & save routines fully implemented
 	terrainacces added
 
-2000-10-17 15:04  mbickel
+2000-10-17 14:04  mbickel
 
 	* source/: sgstream.cpp, typen.h, libs/triangul/triangul.tgt,
 	libs/triangul/triangul.wpj, libs/triangul/trimisc.c,
@@ -3815,7 +3959,7 @@
 	terrainaccess reading/writing
 	 Added Win32 project files
 
-2000-10-17 14:12  mbickel
+2000-10-17 13:12  mbickel
 
 	* source/: sgstream.cpp, sgstream.h, typen.h, dos/asc.tgt,
 	dos/asc.wpj, dos/global_os.h, dos/mapedit/edhex.tgt,
@@ -3823,14 +3967,14 @@
 	Improved vehicletype loading/saving routines
 	 documented some global variables
 
-2000-10-17 12:46  mbickel
+2000-10-17 11:46  mbickel
 
 	* asc.kdevprj, config.h.in, configure, configure.in,
 	source/Makefile.in, source/libs/triangul/trimisc.c,
 	source/sdl/events.cpp:	Added log2 testing to configure.in
 	 Eventhandling now different between Win32 and Linux
 
-2000-10-16 16:34  mbickel
+2000-10-16 15:34  mbickel
 
 	* doc/source.html, source/dlgraph.cpp, source/dos/global_os.h,
 	source/dos/keybp.cpp, source/sdl/events.cpp,
@@ -3842,23 +3986,23 @@
 	 Removed MSVC project files and put them into a zip file in
 	   asc/source/win32/msvc/
 
-2000-10-16 11:50  mbickel
+2000-10-16 10:50  mbickel
 
 	* source/: TODO, dos/asc.tgt, dos/asc.wpj, dos/mapedit/edhex.tgt,
 	libs/bzlib/dos/libbzip2.tgt, libs/triangul/trimisc.c,
 	libs/triangul/dos/triangul.tgt:  DOS adjustments
 
-2000-10-16 11:37  mbickel
+2000-10-16 10:37  mbickel
 
 	* asc.kdevprj, source/dlg_box.cpp:  Fixed Win32: not recognizing
 	keys in dialog box
 
-2000-10-15 14:31  mbickel
+2000-10-15 13:31  mbickel
 
 	* source/win32/: asc.tgt, asc.wpj, mapedit/mapedit.tgt:  Worked on
 	Win32 port (Watcom)
 
-2000-10-15 00:40  schelli
+2000-10-14 23:40  schelli
 
 	* source/tools/java/: CompAll.bat, ToDO.txt, Unit.java,
 	UnitEditor.form, UnitEditor.java: AutoRepairRate added version will
@@ -3866,7 +4010,7 @@
 	added Weapon pannel restructured + can.NOT.hit added data-arrays
 	updated
 
-2000-10-14 17:31  mbickel
+2000-10-14 16:31  mbickel
 
 	* asc.kdevprj, source/AUTHORS, source/COPYING, source/NEWS,
 	source/astar2.cpp, source/basestreaminterface.h, source/basestrm.h,
@@ -3874,7 +4018,7 @@
 	source/sdl/keysymbols.h:  Moved key symbols to separate files
 	 Moved tnstream to its own file
 
-2000-10-14 16:16  mbickel
+2000-10-14 15:16  mbickel
 
 	* source/: artint.cpp, dialog.cpp, dlg_box.cpp, edglobal.cpp,
 	edmisc.h, gamedlg.cpp, network.cpp, sg.cpp, sgstream.cpp,
@@ -3882,12 +4026,12 @@
 	win32/asc.wpj, win32/mapedit/mapedit.tgt:  Cleaned up includes
 	 Added mapeditor to win32 watcom project
 
-2000-10-14 15:34  mbickel
+2000-10-14 14:34  mbickel
 
 	* doc/source.html, source/ChangeLog:  Updated source documentation:
 	added paragraph about installing STLPORT
 
-2000-10-14 15:07  mbickel
+2000-10-14 14:07  mbickel
 
 	* source/: loadbi3.h, loaders.cpp, sg.wpj, sgstream.cpp,
 	weather.cpp, dos/asc.tgt, dos/asc.wpj, dos/mapedit/edhex.tgt,
@@ -3900,19 +4044,19 @@
 	 Win32 version with Watcom compiles and links ! But doesn't run
 	yet...
 
-2000-10-14 13:18  mbickel
+2000-10-14 12:18  mbickel
 
 	* source/: dos/basevesa.obj, dos/dispfont.obj, dos/mouse.obj,
 	dos/pcx.obj, dos/spfldutl.obj, tools/Makefile.bcc:  Added obj files
 	of assembler routines for DOS version
 	 Removed absolute path from source/tools/Makefile.bcc
 
-2000-10-14 12:55  mbickel
+2000-10-14 11:55  mbickel
 
 	* source/win32/: asc.tgt, asc.wpj, watcom/fileio.h,
 	watcom/global_os.h:  Added ASC-Win32 project files for Watcom
 
-2000-10-14 12:52  mbickel
+2000-10-14 11:52  mbickel
 
 	* doc/source.html, source/astar2.cpp, source/basegfx.h,
 	source/basestrm.h, source/controls.cpp, source/dialog.cpp,
@@ -3925,7 +4069,7 @@
 	source/win32/msvc/fileio.h, source/win32/msvc/global_os.h:  Some
 	adjustments for a Win32 port
 
-2000-10-13 15:15  schelli
+2000-10-13 14:15  schelli
 
 	* source/tools/java/: AbsoluteConstraints.java,
 	AbsoluteLayout.java, ClassBound.java, CompAll.bat,
@@ -3937,13 +4081,13 @@
 	org/netbeans/lib/awtextra/AbsoluteConstraints.java,
 	org/netbeans/lib/awtextra/AbsoluteLayout.java: [no log message]
 
-2000-10-13 00:24  mbickel
+2000-10-12 23:24  mbickel
 
 	* source/: basestrm.cpp, basestrm.h, misc.h, sg.cpp, sgstream.cpp,
 	typen.cpp, weather.cpp:  Made the DOS part of the new platform
 	system work again
 
-2000-10-12 23:37  mbickel
+2000-10-12 22:37  mbickel
 
 	* asc.kdevprj, configure, configure.in, source/Makefile.am,
 	source/Makefile.in, source/basestrm.h, source/dialog.cpp,
@@ -3956,14 +4100,14 @@
 	source/win32/borland/global_os.h:  Further restructured platform
 	dependant routines
 
-2000-10-12 22:21  mbickel
+2000-10-12 21:21  mbickel
 
 	* source/: basestrm.cpp, basestrm.h, ndir.h, sg.wpj, dos/fileio.h,
 	dos/wat_asm.bat, tools/Makefile.bcc, unix/fileio.h, win32/fileio.h,
 	win32/borland/fileio.h:  Restructuring operating system dependant
 	files
 
-2000-10-12 21:51  mbickel
+2000-10-12 20:51  mbickel
 
 	* source/: basestrm.cpp, basestrm.h, global.h, loadbi3.cpp,
 	misc.cpp, sgstream.cpp, libs/bzlib/Makefile.bcc,
@@ -3976,7 +4120,7 @@
 	borland
 	   C++
 
-2000-10-12 21:00  mbickel
+2000-10-12 20:00  mbickel
 
 	* asc.kdevprj, source/basestrm.cpp, source/basestrm.h,
 	source/buildingtype.cpp, source/edselfnt.cpp, source/loadbi3.cpp,
@@ -3987,30 +4131,30 @@
 	   problems with the byte order)
 	 Building ID and name are now correctly displayed in mapeditor
 
-2000-10-11 23:25  mbickel
+2000-10-11 22:25  mbickel
 
 	* asc.kdevprj, source/containerbase.cpp, source/containerbase.h: 
 	Fixed uninitilized ladung in containerbase
 
-2000-10-11 21:50  mbickel
+2000-10-11 20:50  mbickel
 
 	* asc.kdevprj, config.h.in, configure, configure.in,
 	source/errors.h, source/global.h, source/strtmesg.cpp:	Cleaned up
 	Linux make procedure
 
-2000-10-11 18:59  mbickel
+2000-10-11 17:59  mbickel
 
 	* README, source/sg.wpj, source/tools/asctool.tgt,
 	source/tools/tools.wpj:  Some more improvement of the Watcom build
 	process
 
-2000-10-11 18:45  mbickel
+2000-10-11 17:45  mbickel
 
 	* doc/source.html, source/mouse.asm, source/sg.wpj, source/tsm.bat,
 	source/watcom.bat, source/dos/mouse.asm:  Improved the build
 	process for Watcom
 
-2000-10-11 17:33  mbickel
+2000-10-11 16:33  mbickel
 
 	* source/: Named.h, buildingtype.cpp, buildingtype.h,
 	containerbase.cpp, edmisc.cpp, global.h, sg.wpj, spfst.cpp,
@@ -4026,7 +4170,7 @@
 	structure
 	 Watcom compatibility
 
-2000-10-11 16:26  mbickel
+2000-10-11 15:26  mbickel
 
 	* ChangeLog, asc.kdevprj, config.h.in, configure, configure.in,
 	source/Makefile.am, source/Makefile.in, source/artint.cpp,
@@ -4066,7 +4210,7 @@
 	   spfst -> spfst, mapalgorithm
 	 bzlib is now statically linked and sources integrated
 
-2000-10-03 18:49  mbickel
+2000-10-03 17:49  mbickel
 
 	* source/tools/: makeobl4.cpp, java/AbsoluteConstraints.java,
 	java/AbsoluteLayout.java, java/ClassBound.java, java/CompAll.bat,
@@ -4078,14 +4222,14 @@
 	java/UnitWeapon.java, java/Weapon.java, java/Weapons.java:  Added
 	Java Vehicle editor
 
-2000-09-27 18:08  mbickel
+2000-09-27 17:08  mbickel
 
 	* asc.kdevprj, configure, configure.in, source/artint.cpp,
 	source/controls.cpp, source/dialog.cpp, source/sg.cpp,
 	source/spfst.cpp, source/spfst.h, source/typen.cpp, source/typen.h,
 	source/unitctrl.cpp, source/unitctrl.h:  AI improvements
 
-2000-09-26 22:02  mbickel
+2000-09-26 21:02  mbickel
 
 	* source/libs/bzlib/: Makefile-libbz2_so,
 	README.COMPILATION.PROBLEMS, dlltest.c, dlltest.dsp, libbz2.dsp,
@@ -4093,7 +4237,7 @@
 	sample3.bz2, sample3.ref, spewG.c, unzcrash.c, words0:	Added all
 	files from bzlib 1.0.0
 
-2000-09-26 21:58  mbickel
+2000-09-26 20:58  mbickel
 
 	* source/libs/: readme.txt, bzlib/CHANGES, bzlib/LICENSE,
 	bzlib/Makefile, bzlib/README, bzlib/blocksort.c, bzlib/bzip2.1,
@@ -4107,24 +4251,24 @@
 	bzlib/words3:  Upgraded the included bzlib (which is used for DOS)
 	to 1.0.0
 
-2000-09-26 20:05  mbickel
+2000-09-26 19:05  mbickel
 
 	* asc.kdevprj, configure, configure.in, source/artint.cpp,
 	source/basestrm.cpp, source/basestrm.h:  Upgraded to bzlib 1.0.0
 	(which is incompatible to older versions)
 
-2000-09-25 22:04  mbickel
+2000-09-25 21:04  mbickel
 
 	* source/: TODO, artint.cpp, artint.h, astar2.cpp, astar2.h,
 	building.cpp, building_controls.h, sg.cpp, spfst.cpp, spfst.h,
 	strtmesg.cpp, typen.cpp, typen.h, unitctrl.cpp, unitctrl.h:  AI
 	improvements
 
-2000-09-25 17:05  mbickel
+2000-09-25 16:05  mbickel
 
 	* source/: artint.cpp, typen.cpp:  Some fixes for Watcom
 
-2000-09-25 15:25  mbickel
+2000-09-25 14:25  mbickel
 
 	* asc.kdevprj, source/artint.cpp, source/artint.h,
 	source/dialog.cpp, source/typen.cpp, source/typen.h,
@@ -4132,7 +4276,7 @@
 	height of units
 	 Heightchaning routines improved
 
-2000-09-24 21:57  mbickel
+2000-09-24 20:57  mbickel
 
 	* asc.kdevprj, source/TODO, source/artint.cpp, source/basestrm.h,
 	source/controls.h, source/gui.cpp, source/sg.cpp, source/typen.h,
@@ -4140,29 +4284,29 @@
 	are now more powerful since they use
 	   UnitMovement on their own.
 
-2000-09-23 19:46  mbickel
+2000-09-23 18:46  mbickel
 
 	* asc.kdevprj, doc/asc.css, doc/contact.html, doc/source.html,
 	doc/graphics/body2b.jpg, doc/graphics/join.gif,
 	doc/graphics/sflogo.gif:  Updated documentation directory
 
-2000-09-22 21:05  mbickel
+2000-09-22 20:05  mbickel
 
 	* configure:  Fix: Missing makefile for mapedit and tools
 
-2000-09-22 20:53  mbickel
+2000-09-22 19:53  mbickel
 
 	* configure.in:  Fix: Makefile for mapedit and tools missing
 
-2000-09-20 17:05  mbickel
+2000-09-20 16:05  mbickel
 
 	* source/sgstream.cpp:	Better error handling on startup.
 
-2000-09-17 18:16  mbickel
+2000-09-17 17:16  mbickel
 
 	* source/: artint.cpp, typen.h:  Some fixes for Watcom
 
-2000-09-17 17:20  mbickel
+2000-09-17 16:20  mbickel
 
 	* asc.kdevprj, source/CLoadable.cpp, source/building.h,
 	source/building_controls.h, source/controls.cpp, source/controls.h,
@@ -4173,43 +4317,43 @@
 	automatically invoked (depending on gameoptions)
 	 Some cleanup
 
-2000-09-17 17:18  mbickel
+2000-09-17 16:18  mbickel
 
 	* doc/source.html:  Added paragraph about source formatting
 
-2000-09-17 17:17  mbickel
+2000-09-17 16:17  mbickel
 
 	* source/: artint.cpp, artint.h:  some restructuring; moving units
 	out of buildings
 
-2000-09-17 17:16  mbickel
+2000-09-17 16:16  mbickel
 
 	* source/building.cpp:	reformatted the whole file with Astyle
 
-2000-09-16 15:02  mbickel
+2000-09-16 14:02  mbickel
 
 	* source/: CLoadable.cpp, controls.cpp, controls.h,
 	gameoptions.cpp, gameoptions.h, sg.cpp:  Put the AI in place
 
-2000-09-16 13:47  mbickel
+2000-09-16 12:47  mbickel
 
 	* source/: attack.cpp, attack.h, controls.cpp, controls.h,
 	dialog.cpp, dialog.h, edmisc.cpp, gamedlg.cpp, gamedlg.h,
 	loadbi3.h, misc.cpp, misc.h, sg.cpp:  Some cleanup and
 	documentation again
 
-2000-09-10 12:19  mbickel
+2000-09-10 11:19  mbickel
 
 	* asc.kdevprj, source/artint.cpp, source/typen.h,
 	source/unitctrl.cpp:  AI improvements
 
-2000-09-07 18:42  mbickel
+2000-09-07 17:42  mbickel
 
 	* source/: artint.cpp, artint.h, astar2.cpp, astar2.h, edmain.cpp,
 	dos/memory.cpp, dos/mousehnd.cpp:  Made some adjustments so that
 	ASC compiles with Watcom again...
 
-2000-09-07 17:49  mbickel
+2000-09-07 16:49  mbickel
 
 	* asc.kdevprj, source/CLoadable.cpp, source/attack.h,
 	source/basegfx.h, source/controls.cpp, source/edmain.cpp,
@@ -4218,36 +4362,36 @@
 	source/sg.cpp, source/spfst.h, source/typen.cpp, source/typen.h: 
 	some cleanup and documentation
 
-2000-09-07 17:42  mbickel
+2000-09-07 16:42  mbickel
 
 	* source/: astar2.cpp, astar2.h:  Put class around A*
 	 Added function to get all reachable fields
 
-2000-09-07 17:42  mbickel
+2000-09-07 16:42  mbickel
 
 	* source/: artint.cpp, artint.h: [no log message]
 
-2000-09-05 21:57  gulliver
+2000-09-05 20:57  gulliver
 
 	* source/sg.cpp: namespace std added on vector
 
-2000-09-05 21:55  gulliver
+2000-09-05 20:55  gulliver
 
 	* source/basestrm.cpp: namespace std added on string vars
 
-2000-09-02 17:36  mbickel
+2000-09-02 16:36  mbickel
 
 	* source/: astar2.cpp, loaders.cpp, loaders.h, spfst.h:  Some minor
 	cleanup and documentation
 
-2000-09-02 15:59  mbickel
+2000-09-02 14:59  mbickel
 
 	* asc.kdevprj, source/artint.cpp, source/artint.h,
 	source/astar2.cpp, source/doxygen.config, source/spfst.cpp,
 	source/spfst.h, source/typen.h:  Worked on AI
 	 Started using doxygen
 
-2000-09-01 19:46  mbickel
+2000-09-01 18:46  mbickel
 
 	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
 	source/astar2.cpp, source/astar2.h, source/sg.cpp,
@@ -4255,7 +4399,7 @@
 	code
 	 Renamed tvehicle class to Vehicle
 
-2000-09-01 17:47  mbickel
+2000-09-01 16:47  mbickel
 
 	* source/: astar2.cpp, astar2.h, sg.cpp, sg.wpj, sgstream.h,
 	spfst.h, tools/krkr.cpp, tools/maketank.cpp, tools/tools.wpj,
@@ -4264,34 +4408,34 @@
 	 Fixed: viewid crashed
 	 Fixed display error in ynswitch ( krkr.cpp )
 
-2000-08-30 18:26  mbickel
+2000-08-30 17:26  mbickel
 
 	* source/gui.h: [no log message]
 
-2000-08-30 16:45  mbickel
+2000-08-30 15:45  mbickel
 
 	* asc.kdevprj, source/building.cpp, source/building.h,
 	source/gui.cpp, source/gui.h:  ASC compiles and links with GCC
 	again...
 
-2000-08-29 22:21  mbickel
+2000-08-29 21:21  mbickel
 
 	* asc.kdevprj, source/artint.cpp, source/building.cpp,
 	source/building.h, source/gui.cpp, source/gui.h:  Tried to make
 	source GCC compliant, but some problems still remain
 
-2000-08-29 19:42  mbickel
+2000-08-29 18:42  mbickel
 
 	* source/: building.cpp, building.h, controls.cpp, gui.cpp, gui.h: 
 	Restructured GUI to make it compilable with VisualC.
 
-2000-08-29 12:36  mbickel
+2000-08-29 11:36  mbickel
 
 	* source/: dialog.cpp, sg.cpp, strtmesg.cpp, unitctrl.cpp:  Removed
 	Debug code
 	 Fixed bug: movement left when changing height into buildings
 
-2000-08-28 21:49  mbickel
+2000-08-28 20:49  mbickel
 
 	* asc.kdevprj, source/building.cpp, source/building.h,
 	source/controls.cpp, source/controls.h, source/dialog.cpp,
@@ -4300,7 +4444,7 @@
 	 Fixed: airplanes being able to endlessly takeoff and land
 	 Fixed: buildings constructable by unit without resources
 
-2000-08-28 17:58  mbickel
+2000-08-28 16:58  mbickel
 
 	* asc.kdevprj, source/loaders.cpp, source/sg.cpp,
 	source/strtmesg.cpp:  Fixed short displaying of map before password
@@ -4309,21 +4453,21 @@
 	 Fixed reaction fire not working when loading an old ( < ASC1.2.0 )
 	file
 
-2000-08-28 16:37  mbickel
+2000-08-28 15:37  mbickel
 
 	* asc.kdevprj, source/building.cpp, source/controls.cpp,
 	source/controls.h, source/sg.cpp:  Fixed: satellite not able to
 	leave orbiter
 	 Restructured next-turn routines
 
-2000-08-26 17:33  mbickel
+2000-08-26 16:33  mbickel
 
 	* source/: controls.cpp, dialog.cpp, dialog.h, dlg_box.cpp,
 	dlg_box.h, gamedlg.cpp, sg.cpp, sg.wpj, tools/pcxtank.cpp:  Warning
 	message displayed if empty password is entered
 	 pcxtank now displays error messages
 
-2000-08-25 15:42  mbickel
+2000-08-25 14:42  mbickel
 
 	* asc.kdevprj, source/artint.cpp, source/building.cpp,
 	source/controls.cpp, source/dialog.cpp, source/gamedlg.cpp,
@@ -4333,7 +4477,7 @@
 	 Fixed: sub could not be seen when standing on a mine
 	 Some AI improvements
 
-2000-08-21 19:50  mbickel
+2000-08-21 18:50  mbickel
 
 	* asc.kdevprj, source/basegfx.h, source/basestrm.cpp,
 	source/edmain.cpp, source/gamedlg.cpp, source/loaders.cpp,
@@ -4346,60 +4490,60 @@
 	 Fixed: crash when events referenced a unit that has been shot down
 	 Fixed: screenshot being written to wrong directory
 
-2000-08-19 18:25  mbickel
+2000-08-19 17:25  mbickel
 
 	* source/: mousecontrol.h, ndir.h:  Added provisional
 	mousecontrol.h , ndir.h
 
-2000-08-18 14:45  mbickel
+2000-08-18 13:45  mbickel
 
 	* doc/: source.htm, source.html:  Renamed doc/source.htm to
 	doc/source.html
 
-2000-08-15 18:22  mbickel
+2000-08-15 17:22  mbickel
 
 	* ChangeLog, asc.kdevprj, doc/readme.linux, source/edselfnt.cpp: 
 	Fixed: crash in mapedit when selecting a unit as buildingcargo
 
-2000-08-13 17:22  mbickel
+2000-08-13 16:22  mbickel
 
 	* source/: sg.cpp, sg.wpj:  Improved data version control
 	 Fixed: not all experience symbols were loaded
 
-2000-08-13 16:09  mbickel
+2000-08-13 15:09  mbickel
 
 	* source/: dialog.cpp, dos/loadimage.cpp:  Removed debug output in
 	unitset info
 
-2000-08-13 14:55  mbickel
+2000-08-13 13:55  mbickel
 
 	* asc.kdevprj, source/basestrm.cpp:  Fixed IO errors with very
 	small files
 
-2000-08-13 14:35  mbickel
+2000-08-13 13:35  mbickel
 
 	* asc.kdevprj, source/sg.cpp: 
 	 Dataversion >= 3 is now required
 
-2000-08-13 13:55  mbickel
+2000-08-13 12:55  mbickel
 
 	* source/: attack.cpp, sg.cpp, strtmesg.cpp, typen.h, unitctrl.cpp:
 	 Attacking now decreases a units movement by 20% if it has the
 	   "move after attack" flag.
 
-2000-08-13 12:24  mbickel
+2000-08-13 11:24  mbickel
 
 	* asc.kdevprj, source/controls.cpp, source/typen.cpp:  Fixed:
 	movement decrease when cloning units
 	 Fixed: refuel skipped next action in replay
 
-2000-08-13 11:53  mbickel
+2000-08-13 10:53  mbickel
 
 	* source/: building.cpp, controls.cpp, controls.h, dialog.cpp,
 	dialog.h, gamedlg.cpp, gamedlg.h, spfst.cpp:  Refuelling is now
 	logged for replays
 
-2000-08-12 17:03  mbickel
+2000-08-12 16:03  mbickel
 
 	* asc.kdevprj, source/attack.cpp, source/basestrm.cpp,
 	source/controls.cpp, source/dialog.cpp, source/gamedlg.cpp,
@@ -4409,12 +4553,12 @@
 	movement
 	 ASC compiles and runs under Linux again...
 
-2000-08-12 17:01  mbickel
+2000-08-12 16:01  mbickel
 
 	* source/: gui.cpp, gui.h:  Restored old versions of GUI ; new ones
 	were broken
 
-2000-08-12 14:52  mbickel
+2000-08-12 13:52  mbickel
 
 	* source/: attack.cpp, attack.h, controls.cpp, controls.h,
 	dialog.cpp, dialog.h, dlg_box.cpp, dlg_box.h, edevents.cpp,
@@ -4426,7 +4570,7 @@
 	libs/jpeg/jpeglib.h, tools/makeobl4.cpp, tools/maketank.cpp,
 	tools/maketech.cpp:  Made DOS-Version compile and run again.
 
-2000-08-12 11:17  gulliver
+2000-08-12 10:17  gulliver
 
 	* source/: CLoadable.cpp, CLoadable.h, artint.cpp, attack.cpp,
 	basegfx.cpp, basegfx.h, basestrm.cpp, basestrm.h, building.cpp,
@@ -4438,29 +4582,29 @@
 	sdl/graphics.cpp, sdl/loadimage.cpp, sdl/sound.cpp,
 	test/testcodepage.cpp: [no log message]
 
-2000-08-12 11:11  gulliver
+2000-08-12 10:11  gulliver
 
 	* source/: PropertyGroup.cpp, gameoptions.cpp, gameoptions.h: [no
 	log message]
 
-2000-08-11 14:24  mbickel
+2000-08-11 13:24  mbickel
 
 	* asc.kdevprj, source/loaders.cpp, source/loaders.h,
 	source/typen.cpp, source/typen.h:  Fixed: no movement after
 	refuelling unit
 	 Restructured reading/writing of units
 
-2000-08-11 13:40  mbickel
+2000-08-11 12:40  mbickel
 
 	* source/test/testcodepage.cpp:  Added program for testing
 	character>127 handling
 
-2000-08-11 13:38  mbickel
+2000-08-11 12:38  mbickel
 
 	* source/: building.cpp, dialog.cpp, sg.wpj:  Enabled resource
 	control subwindow in BI resource mode
 
-2000-08-10 13:18  mbickel
+2000-08-10 12:18  mbickel
 
 	* asc.kdevprj, source/spfst.cpp, source/strtmesg.cpp,
 	source/sdl/Makefile.am, source/sdl/Makefile.in,
@@ -4468,33 +4612,33 @@
 	building: moveunitdown
 	 changed loadimage to use standard SDL_image
 
-2000-08-10 12:20  mbickel
+2000-08-10 11:20  mbickel
 
 	* source/: sg.wpj, strtmesg.cpp, typen.cpp, typen.h:  Added
 	building function "produce all unit types"
 
-2000-08-09 15:18  mbickel
+2000-08-09 14:18  mbickel
 
 	* asc.kdevprj, source/building.cpp, source/unitctrl.cpp:  Fixed:
 	invalid movement cost for airplanes flying with wind
 	 Fixed: building mineral resource info: wrong lines for
 	availability
 
-2000-08-09 14:39  mbickel
+2000-08-09 13:39  mbickel
 
 	* source/: dialog.cpp, gui.cpp, sg.wpj, spfst.cpp, typen.cpp,
 	typen.h:  fixed invalid height when constructing vehicle with other
 	vehicles
 	 fixed wrong descent icon being shown
 
-2000-08-08 15:38  mbickel
+2000-08-08 14:38  mbickel
 
 	* asc.kdevprj, source/controls.cpp, source/spfst.cpp,
 	source/typen.cpp:  Fixed: construction of buildings doesn't consume
 	resources
 	 Fixed: no unit information visible for satellites
 
-2000-08-08 15:21  mbickel
+2000-08-08 14:21  mbickel
 
 	* source/: CLoadable.cpp, controls.cpp, dialog.cpp,
 	gameoptions.cpp, gameoptions.h, sg.cpp, sgstream.cpp, typen.cpp,
@@ -4503,7 +4647,7 @@
 	buildingtypes and vehicletypes
 	 Added option: showUnitOwner
 
-2000-08-08 11:47  mbickel
+2000-08-08 10:47  mbickel
 
 	* asc.kdevprj, configure, configure.in, source/artint.cpp,
 	source/attack.cpp, source/building.cpp, source/building.h,
@@ -4516,12 +4660,12 @@
 	 fixed graphical error in ammo transfer
 	 fixed reaction fire not allowing manual attack
 
-2000-08-07 23:10  mbickel
+2000-08-07 22:10  mbickel
 
 	* source/: artint.cpp, attack.cpp, edmisc.cpp, spfst.cpp:  Fixed
 	some syntax errors
 
-2000-08-07 18:29  mbickel
+2000-08-07 17:29  mbickel
 
 	* source/: artint.cpp, attack.cpp, controls.cpp, gamedlg.cpp,
 	gamedlg.h, gui.cpp, loaders.cpp, sg.cpp, sg.wpj, typen.cpp,
@@ -4529,18 +4673,18 @@
 	 Fixed bug in attack formula; improved attack formula
 	 Rewrote reactionfire
 
-2000-08-06 15:14  mbickel
+2000-08-06 14:14  mbickel
 
 	* asc.kdevprj, source/dlg_box.cpp, source/edselfnt.cpp:  Fixed
 	crashes in mapeditor
 
-2000-08-06 14:18  mbickel
+2000-08-06 13:18  mbickel
 
 	* source/: gamedlg.cpp, gameoptions.cpp, strtmesg.cpp, typen.cpp,
 	tools/maketank.cpp:  Gameoptions: new default values
 	 Maketank: negative buildable-object-IDs
 
-2000-08-06 13:38  mbickel
+2000-08-06 12:38  mbickel
 
 	* asc.kdevprj, source/Makefile.am, source/Makefile.in, source/TODO,
 	source/building.cpp, source/controls.cpp, source/dialog.cpp,
@@ -4557,24 +4701,24 @@
 	 map parameters can be specified when starting a map
 	 map parameters are reported to all players in multiplayer games
 
-2000-08-05 22:17  mbickel
+2000-08-05 21:17  mbickel
 
 	* source/: gamedlg.cpp, loadimage.h, loadjpg.cpp, loadjpg.h,
 	sg.cpp, sg.h, sg.wpj, dos/loadjpg.cpp, dos/loadjpg.h:  Restructured
 	Fullscreen Image loading
 
-2000-08-05 20:26  mbickel
+2000-08-05 19:26  mbickel
 
 	* asc.kdevprj, source/loadimage.h, source/sg.cpp,
 	source/sdl/Makefile.am, source/sdl/Makefile.in,
 	source/sdl/loadimage.cpp:  Added Fullscreen-JPG-Support
 
-2000-08-05 17:30  mbickel
+2000-08-05 16:30  mbickel
 
 	* source/: building.cpp, controls.cpp, strtmesg.cpp, typen.cpp: 
 	Fixed possible divisions by 0 in attack/defensebonus
 
-2000-08-05 15:38  mbickel
+2000-08-05 14:38  mbickel
 
 	* asc.kdevprj, source/attack.cpp, source/attack.h,
 	source/building.cpp, source/controls.cpp, source/loaders.cpp,
@@ -4583,7 +4727,7 @@
 	height checking for moving units in and out of
 	   transports / building
 
-2000-08-04 17:10  mbickel
+2000-08-04 16:10  mbickel
 
 	* source/: artint.cpp, attack.cpp, building.cpp, controls.cpp,
 	dialog.cpp, edmisc.cpp, edselfnt.cpp, gui.cpp, loaders.cpp, sg.cpp,
@@ -4594,7 +4738,7 @@
 	 terrain: negative attack / defensebonus allowed
 	 new mapparameters that affect damaging and repairing of building
 
-2000-08-03 21:45  mbickel
+2000-08-03 20:45  mbickel
 
 	* source/: basestrm.cpp, edmisc.cpp, loaders.cpp, sg.cpp, sg.wpj,
 	strtmesg.cpp, dos/loadpcx.cpp, tools/demount.wpj,
@@ -4602,13 +4746,13 @@
 	tools/win/demount.tgt:	Fixed some bugs in DOS code
 	 Removed submarine.ascent != 0 hack
 
-2000-08-03 21:23  mbickel
+2000-08-03 20:23  mbickel
 
 	* acinclude.m4, source/sdl/SDLStretch.cpp, source/sdl/SDLStretch.h:
 	 Added SDLStretch routines
 	 Added acinclude.m4 (from SDL1.1.3)
 
-2000-08-03 21:21  mbickel
+2000-08-03 20:21  mbickel
 
 	* Makefile.in, aclocal.m4, asc.kdevprj, config.h.in, configure,
 	configure.in, source/Makefile.am, source/Makefile.in,
@@ -4626,7 +4770,7 @@
 	 Started adding SDL_image support
 	 Upgraded to SDL1.1.3 (for SDL_image)
 
-2000-08-03 15:11  mbickel
+2000-08-03 14:11  mbickel
 
 	* source/: artint.cpp, attack.cpp, attack.h, building.cpp,
 	controls.cpp, dialog.cpp, dlg_box.cpp, dlg_box.h, edmisc.cpp,
@@ -4637,7 +4781,7 @@
 	 negative attack- and defenseboni possible
 	 changed attackformula
 
-2000-08-02 20:18  mbickel
+2000-08-02 19:18  mbickel
 
 	* source/: sgstream.cpp, tools/bldhex.cpp, tools/tools.wpj,
 	tools/dos/bi2pcx.tgt, tools/dos/makebld.tgt, tools/dos/makeobl.tgt,
@@ -4647,7 +4791,7 @@
 	Projectfiles for tools
 	 Makebld can now save a buildings image
 
-2000-08-02 19:27  mbickel
+2000-08-02 18:27  mbickel
 
 	* source/: sgstream.cpp, tools/demount.wpj, tools/mount.wpj,
 	tools/dos/demount.tgt, tools/dos/dosmount.tgt,
@@ -4655,7 +4799,7 @@
 	tools/win/demount.tgt, tools/win/winmount.tgt:	Renamed translation
 	to transformation in unitset definition file
 
-2000-08-02 17:52  mbickel
+2000-08-02 16:52  mbickel
 
 	* asc.kdevprj, source/artint.cpp, source/basestrm.cpp,
 	source/basestrm.h, source/controls.cpp, source/dialog.cpp,
@@ -4667,7 +4811,7 @@
 	 demount accepts now more than one container file
 	 Unitset information dialog added
 
-2000-08-02 12:28  mbickel
+2000-08-02 11:28  mbickel
 
 	* source/: basestrm.cpp, basestrm.h, controls.cpp, controls.h,
 	dialog.cpp, loadbi3.cpp, misc.h, newfont.h, sg.wpj, sgstream.cpp,
@@ -4676,25 +4820,25 @@
 	 Streams can now report their name
 	 Field information shows units filename
 
-2000-08-02 10:47  mbickel
+2000-08-02 09:47  mbickel
 
 	* asc.kdevprj, source/controls.cpp, source/controls.h,
 	source/dlg_box.cpp:  Fixed: Mineral resources where visible for all
 	players
 
-2000-08-01 15:50  mbickel
+2000-08-01 14:50  mbickel
 
 	* asc.kdevprj, source/network.cpp, source/spfst.cpp,
 	source/unitctrl.cpp:  Chaning the height of airplanes is not
 	affected by wind any more.
 	 Fixed: Airplanes could ascend onto buildings
 
-2000-08-01 14:38  mbickel
+2000-08-01 13:38  mbickel
 
 	* source/: CLoadable.cpp, PropertyGroup.cpp, strtmesg.cpp:  Some
 	more configuration file refinements
 
-2000-08-01 12:39  mbickel
+2000-08-01 11:39  mbickel
 
 	* INSTALL, asc.kdevprj, doc/readme.linux, source/CLoadable.cpp,
 	source/basestrm.cpp, source/basestrm.h, source/edmain.cpp,
@@ -4703,7 +4847,7 @@
 	documentation
 	 Refined configuration file handling
 
-2000-07-31 21:16  mbickel
+2000-07-31 20:16  mbickel
 
 	* source/: basestrm.cpp, basestrm.h, controls.cpp, dialog.cpp,
 	edmain.cpp, gameoptions.cpp, sg.cpp, sg.wpj, sgstream.cpp,
@@ -4717,7 +4861,7 @@
 	status
 	 Fixed: division by zero when moving unit without fuel consumption
 
-2000-07-31 20:02  mbickel
+2000-07-31 19:02  mbickel
 
 	* asc.kdevprj, source/CLoadable.cpp, source/Property.cpp,
 	source/PropertyGroup.cpp, source/basestrm.cpp, source/basestrm.h,
@@ -4729,18 +4873,18 @@
 	 ASC searches its data files in all directories specified in ascrc
 	 Renamed all tools so they begin with asc
 
-2000-07-29 20:40  mbickel
+2000-07-29 19:40  mbickel
 
 	* source/: building.cpp, sg.wpj, strtmesg.cpp:	Fixed crash in ammo
 	transfer window inside buildings/transports
 
-2000-07-29 17:28  mbickel
+2000-07-29 16:28  mbickel
 
 	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
 	source/PropertyGroup.h, source/sgstream.cpp:  Plaintext configfile
 	runs now in Linux version too
 
-2000-07-29 16:54  mbickel
+2000-07-29 15:54  mbickel
 
 	* source/: CLoadable.cpp, CLoadable.h, Named.cpp, Named.h,
 	Property.cpp, Property.h, PropertyGroup.cpp, PropertyGroup.h,
@@ -4751,47 +4895,47 @@
 	spfst.cpp, typen.cpp, typen.h, unitctrl.cpp:  plain text
 	configuration file implemented
 
-2000-07-28 12:15  mbickel
+2000-07-28 11:15  mbickel
 
 	* source/: basestrm.cpp, basestrm.h, sg.cpp, sgstream.cpp,
 	spfst.cpp, typen.h, unitctrl.cpp:  Fixed broken movement
 	 Fixed graphical artefacts when moving some airplanes
 
-2000-07-26 17:58  mbickel
+2000-07-26 16:58  mbickel
 
 	* source/: gamedlg.cpp, loaders.cpp, sg.wpj, unitctrl.cpp:  Fixed:
 	infinite loop when landing with an aircraft which is low on fuel
 	 Fixed a bug in loadgame
 
-2000-07-24 15:55  mbickel
+2000-07-24 14:55  mbickel
 
 	* asc.kdevprj, source/strtmesg.cpp, source/unitctrl.cpp:  Fixed
 	crash when attacking unit is destroyed by attacked unit
 
-2000-07-23 19:59  mbickel
+2000-07-23 18:59  mbickel
 
 	* source/: artint.cpp, artint.h, controls.cpp, controls.h,
 	dialog.cpp, spfst.h, unitctrl.cpp:  various AI improvements
 	 new terrain information window
 
-2000-07-22 20:57  mbickel
+2000-07-22 19:57  mbickel
 
 	* source/: controls.cpp, sg.cpp:  New message during save operation
 	 Weapon efficiency displayed did not correspond to mouse position
 	when
 	   first weapon was service
 
-2000-07-16 18:15  mbickel
+2000-07-16 17:15  mbickel
 
 	* source/: building.cpp, controls.cpp:	Building: ammotransfer
 	improved
 
-2000-07-16 16:57  mbickel
+2000-07-16 15:57  mbickel
 
 	* asc.kdevprj, source/controls.cpp, source/sg.cpp,
 	source/spfst.cpp, source/spfst.h:  Datafile versioning
 
-2000-07-16 16:19  mbickel
+2000-07-16 15:19  mbickel
 
 	* source/: artint.cpp, artint.h, attack.cpp, attack.h,
 	building.cpp, controls.cpp, dialog.cpp, edmain.cpp, gui.cpp,
@@ -4802,16 +4946,16 @@
 	   moved weapon functions to attack.cpp
 	 Mount doesn't modify PCX files any more.
 
-2000-07-12 15:37  mbickel
+2000-07-12 14:37  mbickel
 
 	* asc.kdevprj, source/tools/mount.cpp:	ascMount now working again
 
-2000-07-12 10:27  mbickel
+2000-07-12 09:27  mbickel
 
 	* source/: gamedlg.cpp, sg.wpj, strtmesg.cpp:  Prepared 1.1.9
 	release
 
-2000-07-10 17:21  mbickel
+2000-07-10 16:21  mbickel
 
 	* source/: building.cpp, controls.cpp, sg.cpp, tools/printbld.cpp: 
 	Fixed crash in replay (alliancechange)
@@ -4819,47 +4963,47 @@
 	buildings
 	 Removed save game description dialog
 
-2000-07-06 13:07  mbickel
+2000-07-06 12:07  mbickel
 
 	* source/: artint.cpp, artint.h, attack.cpp, attack.h,
 	building.cpp, controls.cpp, controls.h, sg.cpp, spfst.cpp, spfst.h,
 	typen.h:  More AI work
 	 Started modularizing the attack formula
 
-2000-07-05 15:26  mbickel
+2000-07-05 14:26  mbickel
 
 	* asc.kdevprj, source/artint.cpp:  AI
 
-2000-07-05 12:49  mbickel
+2000-07-05 11:49  mbickel
 
 	* source/: artint.cpp, missions.cpp, missions.h, sg.cpp, typen.cpp:
 	 Fixed AI bugs
 	 setbuildingdamage event now updates the screen
 
-2000-07-05 11:24  mbickel
+2000-07-05 10:24  mbickel
 
 	* source/: edevents.cpp, missions.cpp, sg.wpj, strtmesg.cpp,
 	typen.cpp, typen.h:  New event action: change building damage
 
-2000-07-04 20:39  mbickel
+2000-07-04 19:39  mbickel
 
 	* source/: building.cpp, strtmesg.cpp, typen.cpp:  Added weapon
 	information in buildings
 	 Made buried pipeline darker
 
-2000-07-04 19:10  mbickel
+2000-07-04 18:10  mbickel
 
 	* asc.kdevprj, source/controls.cpp:  Fixed crash in replay with
 	invalid removebuilding coordinates
 
-2000-07-02 23:04  mbickel
+2000-07-02 22:04  mbickel
 
 	* source/: attack.cpp, controls.cpp, dialog.cpp, loadbi3.cpp,
 	sg.wpj, spfst.cpp, spfst.h, typen.cpp, unitctrl.cpp:  Fixed crash
 	in Replay
 	 Fixed graphic errors in replay
 
-2000-06-28 21:26  mbickel
+2000-06-28 20:26  mbickel
 
 	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
 	source/building.cpp, source/edglobal.cpp, source/edmisc.cpp,
@@ -4870,7 +5014,7 @@
 	 Added artint.cpp to makefiles
 	 Some cleanup
 
-2000-06-28 20:30  mbickel
+2000-06-28 19:30  mbickel
 
 	* source/: artint.cpp, artint.h, basestrm.cpp, basestrm.h,
 	building.cpp, controls.cpp, gui.cpp, loaders.cpp, sg.cpp, sg.wpj,
@@ -4879,38 +5023,38 @@
 	 Started making loaders independent of memory layout
 	 Destroyed buildings can now leave objects behind.
 
-2000-06-23 14:09  mbickel
+2000-06-23 13:09  mbickel
 
 	* source/sg.cpp:  Graphicsets now selectable in ASC too.
 
-2000-06-23 13:53  mbickel
+2000-06-23 12:53  mbickel
 
 	* asc.kdevprj, source/spfst.cpp, source/unitctrl.cpp:  Fixed a bug
 	that crashed ASC when trying to ascend with a unit near the
 	  border of the map
 
-2000-06-23 11:48  mbickel
+2000-06-23 10:48  mbickel
 
 	* source/: dlg_box.cpp, strtmesg.cpp, dos/keybp.cpp:  Improved key
 	handling in intedit/stredit
 
-2000-06-23 11:24  mbickel
+2000-06-23 10:24  mbickel
 
 	* asc.kdevprj, source/controls.cpp, source/dlg_box.cpp,
 	source/keybp.h:  Fixed crash in replay
 	 enabled cursor movement in stredit
 
-2000-06-22 16:16  mbickel
+2000-06-22 15:16  mbickel
 
 	* source/libs/readme.txt:  Added url of Jpeg library for ASC-DOS to
 	documentation
 
-2000-06-22 16:13  mbickel
+2000-06-22 15:13  mbickel
 
 	* source/libs/: readme.txt, bzlib/libbzip2.wpj:  Removed JPEG
 	library
 
-2000-06-22 16:08  mbickel
+2000-06-22 15:08  mbickel
 
 	* source/libs/jpeg/: ansi2knr.1, ansi2knr.cpp, cderror.h,
 	cdjpeg.cpp, cdjpeg.h, change.log, cjpeg.1, cjpeg.cpp, ckconfig.cpp,
@@ -4941,38 +5085,38 @@
 	wizard.doc, wrbmp.cpp, wrgif.cpp, wrjpgcom.1, wrjpgcom.cpp,
 	wrppm.cpp, wrrle.cpp, wrtarga.cpp:  Removed JPEG library
 
-2000-06-22 14:36  mbickel
+2000-06-22 13:36  mbickel
 
 	* ChangeLog, asc.kdevprj, source/sg.cpp, source/strtmesg.cpp: 
 	Fixed compilation problems with gcc
 	 version now ASC1.1.6
 
-2000-06-19 22:05  mbickel
+2000-06-19 21:05  mbickel
 
 	* source/: artint.cpp, artint.h, building.cpp, building.h,
 	controls.cpp, mousehnd.cpp, sg.cpp, sg.wpj, strtmesg.cpp,
 	dos/mousehnd.cpp, tools/asctool.tgt, tools/tools.wpj:  Fixed crash
 	when transfering ammo to vehicle with > 8 weapons
 
-2000-06-09 17:13  mbickel
+2000-06-09 16:13  mbickel
 
 	* source/TODO:	Updated TODO file: more info on configuration file
 	IO
 
-2000-06-09 15:12  mbickel
+2000-06-09 14:12  mbickel
 
 	* source/: building.cpp, controls.cpp, controls.h, gamedlg.cpp,
 	sg.cpp, spfst.cpp, strtmesg.cpp, typen.h:  Fixed tribute function
 	and renamed it to "transfer resources"
 
-2000-06-09 12:50  mbickel
+2000-06-09 11:50  mbickel
 
 	* asc.kdevprj, source/pd.cpp, source/pd.h, source/sg.cpp,
 	source/unitctrl.cpp, source/unitctrl.h, source/sdl/events.cpp: 
 	Repaired keyboard control of pulldown menu
 	 Fixed compile errors at fieldlist with gcc
 
-2000-06-08 23:03  mbickel
+2000-06-08 22:03  mbickel
 
 	* source/: attack.cpp, attack.h, controls.cpp, controls.h,
 	dialog.h, gui.cpp, gui.h, sg.wpj, spfst.cpp, spfst.h, strtmesg.cpp,
@@ -4980,22 +5124,22 @@
 	vehicle action: attack
 	 wrote documentation for vehicle actions
 
-2000-06-08 23:00  mbickel
+2000-06-08 22:00  mbickel
 
 	* doc/source.htm:  updated source documentation: added description
 	of source files
 
-2000-06-06 22:17  mbickel
+2000-06-06 21:17  mbickel
 
 	* source/: gamedlg.cpp, soundList.h, dos/sound.cpp, dos/sound.h: 
 	Updated dummy sound headers for DOS
 
-2000-06-06 22:05  mbickel
+2000-06-06 21:05  mbickel
 
 	* source/TODO:	nosound option is implemented, removed from TODO
 	file
 
-2000-06-06 22:03  mbickel
+2000-06-06 21:03  mbickel
 
 	* asc.kdevprj, source/building.cpp, source/gamedlg.cpp,
 	source/sg.cpp, source/soundList.cpp, source/soundList.h,
@@ -5005,21 +5149,21 @@
 	 Sound can now be disable by a command line parameter and the game
 	options
 
-2000-06-06 20:59  mbickel
+2000-06-06 19:59  mbickel
 
 	* source/TODO:	New things TODO
 
-2000-06-05 20:33  mbickel
+2000-06-05 19:33  mbickel
 
 	* source/sg.cpp:  Refined password check for mail games
 
-2000-06-05 20:21  mbickel
+2000-06-05 19:21  mbickel
 
 	* source/: basestrm.cpp, controls.cpp, controls.h, sg.cpp:  Fixed a
 	security hole which was opened with the new method of loading
 	   mail games by command line parameters
 
-2000-06-04 23:39  mbickel
+2000-06-04 22:39  mbickel
 
 	* source/: attack.cpp, attack.h, controls.cpp, dialog.cpp, gui.cpp,
 	sg.cpp, sg.wpj, unitctrl.cpp, unitctrl.h:  Added OK button to
@@ -5028,7 +5172,7 @@
 	 new text for attack result prediction
 	 Added constructors to attack functions
 
-2000-06-01 17:27  mbickel
+2000-06-01 16:27  mbickel
 
 	* asc.kdevprj, source/global.h, source/keybp.h, source/sg.cpp,
 	source/soundList.cpp, source/sdl/events.cpp,
@@ -5037,19 +5181,19 @@
 	of ASC
 	 Fixed error at startup: unable to load smalaril.fnt
 
-2000-06-01 17:03  mbickel
+2000-06-01 16:03  mbickel
 
 	* source/sg.cpp:  New command line evaluation code and parameters:
 	   Maps, savegames and email games can now be loaded by passing an
 	command
 	   line parameter.  From Sven Riedel
 
-2000-05-30 21:59  mbickel
+2000-05-30 20:59  mbickel
 
 	* asc.kdevprj, source/basestrm.cpp:  Fixed bug in basestrm:
 	container having higher priority than single file
 
-2000-05-30 20:39  mbickel
+2000-05-30 19:39  mbickel
 
 	* source/: attack.cpp, basegfx.cpp, basegfx.h, basemacr.inc,
 	basestrm.cpp, basestrm.h, basevesa.asm, basevesa.inc, cdrom.cpp,
@@ -5069,26 +5213,26 @@
 	tools/viewid.cpp:  Added support for multiple directories
 	 Moved DOS specific files to a separate directory
 
-2000-05-28 23:07  mbickel
+2000-05-28 22:07  mbickel
 
 	* source/tools/: Makefile, linux/Makefile:  Removed some
 	unnecessary Makefiles
 
-2000-05-28 23:05  mbickel
+2000-05-28 22:05  mbickel
 
 	* asc.kdevprj, source/loadbi3.cpp, source/tools/linux/Makefile: 
 	Linux version of mapedit was unable to load buildings in BI3 map
 
-2000-05-25 13:07  mbickel
+2000-05-25 12:07  mbickel
 
 	* source/: loaders.cpp, loaders.h:  Added functions to check files
 	for valid mail / savegame files.
 
-2000-05-23 23:09  mbickel
+2000-05-23 22:09  mbickel
 
 	* asc.kdevprj, source/loadpcxc.cpp:  Removed boolean data type
 
-2000-05-23 22:40  mbickel
+2000-05-23 21:40  mbickel
 
 	* source/: artint.h, basegfx.cpp, basegfx.h, cdrom.cpp, cdrom.h,
 	controls.cpp, controls.h, dialog.cpp, dialog.h, dlg_box.cpp,
@@ -5100,7 +5244,7 @@
 	vesa.cpp, tools/bi2pcx.cpp, tools/tools.wpj, tools/dos/makeobl.tgt,
 	tools/dos/maketrr.tgt:	Removed boolean type
 
-2000-05-22 17:40  mbickel
+2000-05-22 16:40  mbickel
 
 	* asc.kdevprj, source/basestrm.cpp, source/building.cpp,
 	source/controls.cpp, source/dialog.cpp, source/edmain.cpp,
@@ -5109,12 +5253,12 @@
 	source/libs/triangul/trimisc.c, source/sdl/sound.cpp,
 	source/sdl/testSound.cpp:  Included patches for Win32 version
 
-2000-05-21 19:18  mbickel
+2000-05-21 18:18  mbickel
 
 	* source/: loadbi3.cpp, objxlat.cpp:  Moved BI3 import tables to a
 	separate file: objxlat.cpp
 
-2000-05-18 19:48  mbickel
+2000-05-18 18:48  mbickel
 
 	* source/: building.cpp, gui.cpp:  When moving units out of
 	buildings/transports, indirectly accessible
@@ -5123,40 +5267,40 @@
 	an
 	    helicopter
 
-2000-05-18 16:39  mbickel
+2000-05-18 15:39  mbickel
 
 	* source/: gamedlg.cpp, strtmesg.cpp:  Changed version number to
 	1.1.4
 
-2000-05-18 16:14  mbickel
+2000-05-18 15:14  mbickel
 
 	* asc.kdevprj, source/controls.cpp, source/sg.cpp,
 	source/spfst.cpp, source/unitctrl.cpp, source/tools/linux/Makefile:
 	 Fixed bug in movemalus calculation for movement
 	 Added "view movement range"
 
-2000-05-11 22:12  mbickel
+2000-05-11 21:12  mbickel
 
 	* asc.kdevprj, source/edglobal.cpp, source/loadbi3.cpp: 
 	mapedit(lin) can now import BI3 maps
 
-2000-05-11 17:45  mbickel
+2000-05-11 16:45  mbickel
 
 	* source/: gui.cpp, strtmesg.cpp:  No vehicle action icons are
 	shown when another action is running
 
-2000-05-10 23:13  mbickel
+2000-05-10 22:13  mbickel
 
 	* source/controls.cpp:	Improved error messages for mail game
 	loader
 
-2000-05-10 22:56  mbickel
+2000-05-10 21:56  mbickel
 
 	* asc.kdevprj, source/mousehnd.h, source/timer.h,
 	source/sdl/events.cpp, source/sdl/timer.cpp:  mouseparams and
 	ticker now volatile under linux too
 
-2000-05-10 21:55  mbickel
+2000-05-10 20:55  mbickel
 
 	* asc.kdevprj, source/building.cpp, source/controls.cpp,
 	source/dialog.cpp, source/dlg_box.cpp, source/edevents.cpp,
@@ -5166,16 +5310,16 @@
 	source/sdl/timer.cpp:  Fixed empty loops when waiting for mouse
 	events
 
-2000-05-10 21:15  mbickel
+2000-05-10 20:15  mbickel
 
 	* asc.kdevprj, source/spfst.cpp, source/unitctrl.cpp:  Fixed
 	invalid height when trying to change a units height
 
-2000-05-08 22:56  mbickel
+2000-05-08 21:56  mbickel
 
 	* source/sg.cpp:  Some cleanup
 
-2000-05-08 22:38  mbickel
+2000-05-08 21:38  mbickel
 
 	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
 	source/controls.cpp, source/sdl/Makefile.am,
@@ -5185,32 +5329,32 @@
 	 Fixed bug in mount: crash when file > 1 MB
 	 Fixed bug in visibility calculation
 
-2000-05-07 20:21  mbickel
+2000-05-07 19:21  mbickel
 
 	* source/: attack.cpp, gamedlg.cpp, strtmesg.cpp, typen.h:  Speed
 	of attack animation can now be specified
 
-2000-05-07 19:04  mbickel
+2000-05-07 18:04  mbickel
 
 	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
 	source/gui.cpp, source/strtmesg.cpp, source/unitctrl.cpp,
 	source/sdl/Makefile.am, source/sdl/Makefile.in:  Fixed a bug in
 	movement
 
-2000-05-07 14:53  mbickel
+2000-05-07 13:53  mbickel
 
 	* asc.kdevprj, source/basegfx.cpp, source/edevents.cpp,
 	source/misc.cpp, source/misc.h, source/timer.cpp, source/timer.h,
 	source/sdl/timer.cpp:  some minor adjustments
 
-2000-05-07 14:12  mbickel
+2000-05-07 13:12  mbickel
 
 	* source/: controls.cpp, controls.h, dialog.cpp, gamedlg.cpp,
 	gamedlg.h, gui.cpp, sg.cpp, sg.wpj, strtmesg.cpp, typen.cpp,
 	typen.h:  New mouse option dialog
 	 weapon info can now be displayed by clicking on a unit
 
-2000-05-06 22:25  mbickel
+2000-05-06 21:25  mbickel
 
 	* source/: dlg_box.cpp, dlg_box.h, gui.cpp, misc.cpp, misc.h,
 	pd.cpp, sg.wpj, sgstream.cpp, spfst.cpp, typen.cpp, typen.h,
@@ -5221,7 +5365,7 @@
 			   are marked darker
 		-intedit/stredit: mouseclick outside is like hitting enter
 
-2000-05-06 21:57  mbickel
+2000-05-06 20:57  mbickel
 
 	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
 	source/basestrm.cpp, source/edmain.cpp, source/edmisc.cpp,
@@ -5229,7 +5373,7 @@
 	source/typen.cpp, source/sdl/Makefile.am, source/sdl/Makefile.in: 
 	Mapeditor/linux is now running
 
-2000-05-05 23:15  mbickel
+2000-05-05 22:15  mbickel
 
 	* asc.kdevprj, configure, configure.in, source/Makefile.am,
 	source/Makefile.in, source/edevents.cpp, source/edgen.cpp,
@@ -5241,26 +5385,26 @@
 	Makefiles for mount/demount and mapeditor
 	 mapeditor can now be compiled for linux, but is not running yet
 
-2000-05-03 16:50  mbickel
+2000-05-03 15:50  mbickel
 
 	* source/libs/bzlib/win/libbzip2.tgt:  Added win32 version of
 	libbzip2
 
-2000-05-03 16:49  mbickel
+2000-05-03 15:49  mbickel
 
 	* source/oldlzw.cpp:  Fixed a bug in LZW decompression
 
-2000-05-03 16:37  mbickel
+2000-05-03 15:37  mbickel
 
 	* source/tools/mount.wpj:  Added mount.wpj again
 
-2000-05-03 16:36  mbickel
+2000-05-03 15:36  mbickel
 
 	* source/tools/: asctool.tgt, demount.wpj, makebuld.wpj, tools.wpj,
 	trrn2pcx.cpp, dos/dosmount.tgt, os2/demount.tgt, win/demount.tgt: 
 	Even more restructuring of the small editors
 
-2000-05-03 16:26  mbickel
+2000-05-03 15:26  mbickel
 
 	* source/tools/: bi2pcx.wpj, demount.tgt, dosmount.tgt,
 	makeobl.wpj, maketank.wpj, maketec.tgt, maketech.tgt, maketech.wpj,
@@ -5280,14 +5424,14 @@
 	hexagon/printveh.tgt, hexagon/prnttk6.tgt, hexagon/prntveh.tgt,
 	hexagon/viewid.tgt:  Reorganized small editors
 
-2000-05-02 19:28  mbickel
+2000-05-02 18:28  mbickel
 
 	* asc.kdevprj, source/sg.cpp, source/strtmesg.cpp,
 	source/tools/demount.cpp, source/tools/mount.cpp,
 	source/tools/linux/makefile:  Linux: Added makefile for demount and
 	mount(con)
 
-2000-05-02 18:20  mbickel
+2000-05-02 17:20  mbickel
 
 	* source/: building.cpp, controls.cpp, controls.h, edselfnt.cpp,
 	gui.cpp, gui.h, sg.cpp, unitctrl.cpp, tools/maketank.cpp:  Fixed
@@ -5297,7 +5441,7 @@
 	 Movecost is now displayed for mines and repairs
 	 Weapon info now shows unhittable units
 
-2000-04-27 19:59  mbickel
+2000-04-27 18:59  mbickel
 
 	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
 	source/attack.cpp, source/controls.cpp, source/dialog.cpp,
@@ -5305,7 +5449,7 @@
 	Kdevelop project file
 	 Fixed some graphical errors
 
-2000-04-27 18:25  mbickel
+2000-04-27 17:25  mbickel
 
 	* source/: Makefile.am, Makefile.in, attack.cpp, attack.h,
 	basestrm.cpp, basestrm.h, building.cpp, building.h, cdrom.cpp,
@@ -5329,63 +5473,63 @@
 	   currently movement and height change included
 	 Changed timer to SDL_GetTicks
 
-2000-04-17 20:55  mbickel
+2000-04-17 19:55  mbickel
 
 	* INSTALL, README, TODO, doc/readme.linux, source/README,
 	source/sg.cpp, source/spfst.cpp:  Fixed the DOS version
 
-2000-04-17 20:30  mbickel
+2000-04-17 19:30  mbickel
 
 	* asc.kdevprj, source/spfst.cpp, source/strtmesg.cpp:  Even more
 	SDL speed improvements
 
-2000-04-17 18:27  mbickel
+2000-04-17 17:27  mbickel
 
 	* asc.kdevprj, source/spfst.cpp, source/spfst.h,
 	source/strtmesg.cpp:  Optimized vehicle movement for SDL version
 
-2000-04-15 17:51  mbickel
+2000-04-15 16:51  mbickel
 
 	* INSTALL, README, doc/readme.linux, source/sg.cpp:  Updated linux
 	documentation
 
-2000-04-14 22:23  mbickel
+2000-04-14 21:23  mbickel
 
 	* doc/source.htm:  Updated documentation to reflect the linux port
 
-2000-04-06 11:07  mbickel
+2000-04-06 10:07  mbickel
 
 	* source/: TODO, edmisc.cpp, strtmesg.cpp, libs/jpeg/jpeglib.h: 
 	Fixed a bug in the mapeditor that prevented transports from being
 	loaded
 
-2000-04-04 10:31  mbickel
+2000-04-04 09:31  mbickel
 
 	* source/: gamedlg.cpp, sg.wpj, strtmesg.cpp, tools/demount.wpj: 
 	Fixed a bug that exited ASC when trying to give units to your
 	allies.
 
-2000-04-03 11:52  mbickel
+2000-04-03 10:52  mbickel
 
 	* source/: sg.wpj, spfst.cpp, strtmesg.cpp:  Fixed crash in mine
 	strength calculation
 
-2000-04-02 23:51  mbickel
+2000-04-02 22:51  mbickel
 
 	* source/: loadbi3.cpp, strtmesg.cpp:  Fixed bugs graphic set
 	loading routines
 
-2000-04-01 18:54  mbickel
+2000-04-01 17:54  mbickel
 
 	* source/: loadbi3.cpp, tools/bi2pcx.cpp:  Updated BI2PCX to use
 	the new interchangeable graphic sets
 	 Tagged ASC1-0-0
 
-2000-04-01 15:04  mbickel
+2000-04-01 14:04  mbickel
 
 	* INSTALL, README:  Updated documentation
 
-2000-04-01 13:38  mbickel
+2000-04-01 12:38  mbickel
 
 	* source/: edglobal.cpp, edmisc.cpp, loadbi3.cpp, loadbi3.h,
 	sg.cpp, sg.wpj, strtmesg.cpp, typen.h, tools/makebdt.cpp,
@@ -5399,18 +5543,18 @@
 	small editors
 	 Added version numbering
 
-2000-03-29 17:29  mbickel
+2000-03-29 16:29  mbickel
 
 	* doc/readme.linux:  Added readme.linux
 
-2000-03-29 17:28  mbickel
+2000-03-29 16:28  mbickel
 
 	* Makefile.in, README, asc.kdevprj, asc.lsm, source/README,
 	source/TODO, source/sg.cpp, source/libs/readme.txt,
 	source/libs/stl/readme.txt:  Preparations for the Linux release:
 	  updated help files and documentation
 
-2000-03-29 11:58  mbickel
+2000-03-29 10:58  mbickel
 
 	* source/: basestrm.cpp, cdrom.cpp, dialog.cpp, dialog.h,
 	dlg_box.cpp, dlg_box.h, edevents.h, edgen.h, edmisc.cpp,
@@ -6110,8 +6254,7 @@
 	source/tools/hexagon/printveh.tgt,
 	source/tools/hexagon/prnttk6.tgt, source/tools/hexagon/prntveh.tgt,
 	source/tools/hexagon/viewid.tgt, source/tools/os2/os2mount.tgt,
-	source/tools/win/winmount.tgt: Imported source from Nov 8th into
-	repository
+	source/tools/win/winmount.tgt: Initial revision
 
 1999-11-15 20:36  mbickel
 
@@ -6302,5 +6445,6 @@
 	source/tools/hexagon/printveh.tgt,
 	source/tools/hexagon/prnttk6.tgt, source/tools/hexagon/prntveh.tgt,
 	source/tools/hexagon/viewid.tgt, source/tools/os2/os2mount.tgt,
-	source/tools/win/winmount.tgt: Initial revision
+	source/tools/win/winmount.tgt: Imported source from Nov 8th into
+	repository
 
