@@ -864,7 +864,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
 
    int job = recommendedAIJob;
    pc.addNamedInteger ( "RecommendedAIJob", job, AiParameter::jobNum, AIjobs, AiParameter::job_undefined );
-   recommendedAIJob = job;
+   recommendedAIJob = AiParameter::Job(job);
 
    setupPictures();
    #ifndef converter
