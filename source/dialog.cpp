@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.48 2000-08-13 09:53:59 mbickel Exp $
+//     $Id: dialog.cpp,v 1.49 2000-08-13 14:09:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2000/08/13 09:53:59  mbickel
+//      Refuelling is now logged for replays
+//
 //     Revision 1.47  2000/08/12 15:03:20  mbickel
 //      Fixed bug in unit movement
 //      ASC compiles and runs under Linux again...
@@ -5617,12 +5620,12 @@ void viewUnitSetinfo ( void )
               "#font02#Unit Information:#font01##aeinzug20##eeinzug20##crtp10#" ;
 
          pvehicletype typ = getactfield()->vehicle->typ;
-
+/*
          s += "\nreactionfire.Status: ";
          s += strrr( getactfield()->vehicle->reactionfire.status );
          s += "\nreactionfire.enemiesattackable: ";
          s += strrr ( getactfield()->vehicle->reactionfire.enemiesAttackable );
-
+*/
          s += "Unit name: " ;
          if ( typ->name && typ->name[0] )
             s += typ->name ;
