@@ -2,9 +2,15 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.38 2001-02-18 15:37:08 mbickel Exp $
+//     $Id: edmain.cpp,v 1.39 2001-03-07 21:40:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2001/02/18 15:37:08  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.37  2001/01/31 14:52:36  mbickel
 //      Fixed crashes in BI3 map importing routines
 //      Rewrote memory consistency checking
@@ -376,7 +382,7 @@ void checkLeftMouseButton ( )
       x += actmap->xpos;
       y += actmap->ypos;
 
-      if ( mouseparams.taste == 1 )
+      if ( mouseparams.taste )
          cursor.gotoxy ( x,y );
 
       if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) {
@@ -411,11 +417,10 @@ void checkLeftMouseButton ( )
                }
             }
          } else
-            buttonStat = 0;
+            if ( buttonStat )
+               buttonStat = 0;
       }
-   } else
-      buttonStat = 0;
-
+   } 
 
 /*
             if ( mouseparams.taste == 1 ) {

@@ -2,9 +2,15 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.51 2001-02-26 12:35:10 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.52 2001-03-07 21:40:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2001/02/26 12:35:10  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.50  2001/02/18 15:37:08  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -2695,7 +2701,7 @@ void         tunit::init(  )
    int unitheights = 0;
    heightxs = 320;
    pfield fld = getfield ( unit->xpos, unit->ypos);
-   if ( fld->vehicle == unit ) {
+   if ( fld && fld->vehicle == unit ) {
       npush ( unit->height );
       for (i=0;i<=7 ;i++) {
           unit->height = 1 << i;
@@ -2793,9 +2799,14 @@ void         tunit::run(void)
 void         tunit::buttonpressed(int         id)
 {
    int ht;
+   int temp, storage;
 
    switch (id) {
-   case 3:  addeingabe(12,&unit->tank.material, 0, unit->putResource(maxint, Resources::Material, 1 ) );
+   case 3:  temp = unit->tank.material;
+            unit->tank.material = 0;
+            storage = unit->putResource(maxint, Resources::Material, 1 );
+            addeingabe(12,&unit->tank.material, 0, storage );
+            unit->tank.material = min ( storage, temp );
       break;
 
    case 4 :
@@ -2817,7 +2828,11 @@ void         tunit::buttonpressed(int         id)
      unit->setMovement ( unit->typ->movement[ log2 ( unit->height ) ] );
    }
    break;
-   case 12: addeingabe( 3, &unit->tank.fuel, 0, unit->putResource(maxint, Resources::Fuel, 1 ) );
+   case 12: temp = unit->tank.fuel;
+            unit->tank.fuel = 0;
+            storage = unit->putResource(maxint, Resources::Fuel, 1 );
+            addeingabe( 3, &unit->tank.fuel, 0, storage );
+            unit->tank.fuel = min ( storage, temp );
       break;
 
    case 14 :

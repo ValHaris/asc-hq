@@ -142,7 +142,7 @@ TemporaryContainerStorage :: TemporaryContainerStorage ( ContainerBase* _cb, boo
 {
    cb = _cb;
    tmemorystream stream ( &buf, tnstream::writing );
-   cb->write ( stream, false );
+   cb->write ( stream, storeCargo );
    _storeCargo = storeCargo;
 }
 

@@ -2,9 +2,12 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.23 2001-02-11 11:39:33 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.24 2001-03-07 21:40:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2001/02/11 11:39:33  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.22  2001/02/01 22:48:39  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -1489,6 +1492,8 @@ void selunitcargo( pvehicle transport )
    if ( newcargo ) {
       pvehicle unit = new Vehicle ( newcargo, actmap, transport->color / 8 );
       unit->fillMagically();
+      if ( transport )
+         unit->setnewposition ( transport->getPosition() );
       // generatevehicle_ka ( newcargo, transport->color / 8, unit );
     
       int match = 0;

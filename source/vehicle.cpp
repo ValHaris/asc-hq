@@ -565,6 +565,10 @@ void Vehicle :: setnewposition ( int x , int y )
            loading[i]->setnewposition ( x , y );
 }
 
+void Vehicle :: setnewposition ( const MapCoordinate& mc )
+{
+   setnewposition ( mc.x, mc.y );
+}
 
 /*
 int Vehicle :: getstrongestweapon( int aheight, int distance)

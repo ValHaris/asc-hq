@@ -178,6 +178,8 @@
 
     //! sets the unit (and its cargo) the a new position (the unit will not be chained to a field)
     void setnewposition ( int x, int y );
+    void setnewposition ( const MapCoordinate& mc );
+
     void setup_classparams_after_generation ( void );
 
     /** converts the unit so it is owned by 'player'. Note that the player is passed
