@@ -30,7 +30,7 @@
 #include "..\misc.h"
 #include "..\vesa.h"
 #include "..\basestrm.h"
-
+#include "..\basegfx.h"
 
 #define vid(wildcard,structure) printf("%s\n", wildcard );  maxid=0; for ( int j = 0; j < 60; j++ ) printf("="); tfindfile ff ( wildcard ); char* c = ff.getnextname(); structure data; while( c ) { { tnfilestream mainstream ( c, 1 ); int c; mainstream.readdata2 ( c ); mainstream.readdata ( &data, sizeof ( data )); } if ( data.id > maxid ) maxid = data.id; int found = 0; for(int i = 0; i <= id.getlength(); i++ ) if ( id[i].id == data.id ) { id[i].count++; found = 1; } if( !found ) { int ps = id.getlength()+1; id[ps].id = data.id; id[ps].count = 1; } c = ff.getnextname(); }
 

@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.28 2000-03-29 15:28:28 mbickel Exp $
+//     $Id: sg.cpp,v 1.29 2000-04-01 11:38:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/03/29 15:28:28  mbickel
+//      Preparations for the Linux release:
+//       updated help files and documentation
+//
 //     Revision 1.27  2000/03/29 09:58:48  mbickel
 //      Improved memory handling for DOS version
 //      Many small changes I can't remember ;-)
@@ -2139,8 +2143,13 @@ void execuseraction ( tuseractions action )
         case ua_editjournal:          editjournal();
                        break;
                        
-        case ua_viewaboutmessage:     help(30);
-                                      displaymessage2 ( getaboutmessage());
+        case ua_viewaboutmessage:     {
+                                         help(30);
+                                         tviewanytext vat;
+                                         vat.init ( "about", getstartupmessage() );
+                                         vat.run();
+                                         vat.done();
+                                      }
                        break;
                                           
         case ua_continuenetworkgame:   continuenetworkgame();

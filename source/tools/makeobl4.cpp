@@ -25,6 +25,7 @@
 
 #include "..\tpascal.inc"
 #include "..\typen.h"
+#include "..\basegfx.h"
 #include "..\newfont.h"
 #include "..\vesa.h"
 #include "..\loadpcx.h"
@@ -128,7 +129,7 @@ main (int argc, char *argv[] )
             _outtext ( s );
             wait ();
             nosound ();
-            settextmode ( 3 );
+            closegraphics ();
             exit (0);
          } 
    
@@ -174,7 +175,7 @@ main (int argc, char *argv[] )
                if ( first ) {
                   do {
                      if ( graph == 1 ) {
-                        initsvga (0x101);
+                        initgraphics ( 640, 480, 8);
                          
                         loadpalette();
                         setvgapalette256 ( pal );
@@ -186,14 +187,14 @@ main (int argc, char *argv[] )
                        
                         fileselect ("*.PCX", _A_NORMAL, pictfile);
                                                   
-                        initsvga (0x101);
+                        initgraphics ( 640, 480, 8);
                         ft->picture[ww][ft->pictnum].picture = loadpcx2(pictfile.name);
                         ft->picture[ww][ft->pictnum].bi3pic = -1;
                         ft->picture[ww][ft->pictnum].flip = 0;
                      }
                      ft->pictnum++;
                                        
-                     closesvga();
+                     closegraphics();
                      settxt50mode();
             
                     /*
@@ -215,14 +216,14 @@ main (int argc, char *argv[] )
                   _wait();
    
                   if ( graph == 1 ) {
-                     initsvga (0x101);
+                     initgraphics ( 640, 480, 8);
                      tnfilestream mainstream ( "palette.pal" , 1);
                      mainstream.readdata( (char*) pal, sizeof(pal)); 
                      setvgapalette256 ( pal );
 
                      for ( int m = 0; m < ft->pictnum; m++ ) 
                         getbi3pict_double ( &ft->picture[ww][m].bi3pic, &ft->picture[ww][m].picture );
-                     closesvga();
+                     closegraphics();
                      settxt50mode();
                   } else {
                      for ( int m = 0; m < ft->pictnum; m++ ) {
@@ -230,11 +231,11 @@ main (int argc, char *argv[] )
                        
                         fileselect ("*.PCX", _A_NORMAL, pictfile);
                                                   
-                        initsvga (0x101);
+                        initgraphics ( 640, 480, 8);
                         ft->picture[ww][m].picture = loadpcx2(pictfile.name);
                         ft->picture[ww][m].bi3pic = -1;
                         ft->picture[ww][m].flip = 0;
-                        closesvga();
+                        closegraphics();
                         settxt50mode();
                      } 
                   }
@@ -242,7 +243,7 @@ main (int argc, char *argv[] )
             }                                         
    
       } else { 
-         initsvga (0x101);
+         initgraphics ( 640, 480, 8);
    
          putspriteimage( 50, 50, ft->picture[0][0].picture ); 
    
@@ -253,9 +254,9 @@ main (int argc, char *argv[] )
          setvgapalette256(pal);
    
          wait();
-   
+         closegraphics();
       } 
-   
+     
       settxt50mode();
    
       printf ("\n    ID : \n");
@@ -295,10 +296,10 @@ main (int argc, char *argv[] )
       num_ed ( ft->height , 0, maxint);
    
       printf ("\n    production cost material : \n");
-      num_ed ( ft->buildcost.material , 0, maxint);
+      num_ed ( ft->buildcost.a.material , 0, maxint);
    
       printf ("\n    production cost fuel : \n");
-      num_ed ( ft->buildcost.fuel, 0, maxint);
+      num_ed ( ft->buildcost.a.fuel, 0, maxint);
    
      #ifdef HEXAGON
       printf ("\n    production cost movement : \n");
@@ -309,10 +310,10 @@ main (int argc, char *argv[] )
      #endif
    
       printf ("\n    removal cost material : \n");
-      num_ed ( ft->removecost.material , 0, maxint);
+      num_ed ( ft->removecost.a.material , 0, maxint);
    
       printf ("\n    removal cost  fuel : \n");
-      num_ed ( ft->removecost.fuel, 0, maxint);
+      num_ed ( ft->removecost.a.fuel, 0, maxint);
    
      #ifdef HEXAGON
       printf ("\n    removal cost  movement : \n");
@@ -390,8 +391,8 @@ main (int argc, char *argv[] )
          }
       }
    
-      ft->buildcost.energy = 0;
-      ft->removecost.energy = 0;
+      ft->buildcost.a.energy = 0;
+      ft->removecost.a.energy = 0;
    
      {
                 for (int j=0; j< cmovemalitypenum; j ++)
@@ -460,7 +461,7 @@ void *       loadpcx2(char *       filestring)
    activefontsettings.justify = lefttext; 
 
 
-   initsvga(0x101);
+   initgraphics ( 640, 480, 8);
    b = loadpcxxy(filestring, 1, 0,0); 
    if (b == 0) { 
       p = malloc( 10000 ); 

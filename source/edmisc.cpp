@@ -1,6 +1,10 @@
-//     $Id: edmisc.cpp,v 1.11 2000-03-29 09:58:45 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.12 2000-04-01 11:38:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/03/29 09:58:45  mbickel
+//      Improved memory handling for DOS version
+//      Many small changes I can't remember ;-)
+//
 //     Revision 1.10  2000/03/16 14:06:55  mbickel
 //      Added unitset transformation to the mapeditor
 //
@@ -3657,13 +3661,6 @@ void  UnitTypeTransformation ::transformvehicle ( pvehicle veh, int unitsetnum, 
 }
 
 
-void test ( void )
-{
-  cout<<"Results of string1_test:"<<endl;
-  char* array = "Hello, World!";
-  __STD::string v(array);
-}
-
 void UnitTypeTransformation :: run ( void )
 {
    vehicleTypesNotTransformedNum = 0;
@@ -3712,7 +3709,7 @@ void UnitTypeTransformation :: run ( void )
       }
 
     if ( vehicleTypesNotTransformedNum ) {
-       __STD::string s = "The following vehicles could not be transformed: ";
+       string s = "The following vehicles could not be transformed: ";
        for ( int i = 0; i < vehicleTypesNotTransformedNum; i++ ) {
           s += "\n ID ";
           s += strrr ( vehicleTypesNotTransformed[i] );

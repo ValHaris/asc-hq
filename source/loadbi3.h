@@ -1,6 +1,9 @@
-//     $Id: loadbi3.h,v 1.3 2000-03-11 18:22:07 mbickel Exp $
+//     $Id: loadbi3.h,v 1.4 2000-04-01 11:38:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/03/11 18:22:07  mbickel
+//      Added support for multiple graphic sets
+//
 //     Revision 1.2  1999/11/16 03:41:55  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -36,6 +39,7 @@
 
 #include "sgstream.h"
 #include "typen.h"
+#include "palette.h"
 
 extern void loadbi3graphics( void );
 extern void getbi3pict ( int* num, void** picture );
@@ -49,7 +53,7 @@ extern int  loadbi3pict_double ( int num, void** pict, int interpolate = 0, int 
 extern void loadbi3pict ( int num, void** pict );
 extern int bi3graphnum;
 extern void check_bi3_dir ( void );
-extern unsigned char bi2asc_color_translation_table[256];
+extern tpixelxlattable bi2asc_color_translation_table;
 extern void importbattleislemap ( char* path, char* filename, pwterraintype trrn );
 extern void insertbattleislemap ( int x, int y, char* path, char* filename  );
 

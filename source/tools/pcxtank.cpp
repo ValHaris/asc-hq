@@ -34,6 +34,7 @@
 #include "..\sgstream.h"
 #include "..\vesa.h"
 #include "..\loadpcx.h"
+#include "..\basegfx.h"
 
 char header[2][500];
 char text[200][500];
@@ -91,8 +92,8 @@ main(int argc, char *argv[] )
    tfindfile ff ( wildcard );
  
    char* cn = ff.getnextname();
-
-   initsvga ( 0x101 );
+   
+   initgraphics ( 640, 480, 8 );
    load_palette();
  
    while( cn ) { 
@@ -127,7 +128,7 @@ main(int argc, char *argv[] )
       num++;
    }
 
-   settextmode ( 3 );
+   closegraphics ( );
 
    return 0;
 };

@@ -1,6 +1,9 @@
-//     $Id: loadbi3.cpp,v 1.11 2000-03-11 18:22:06 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.12 2000-04-01 11:38:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/03/11 18:22:06  mbickel
+//      Added support for multiple graphic sets
+//
 //     Revision 1.10  2000/01/04 19:43:52  mbickel
 //      Continued Linux port
 //
@@ -77,6 +80,7 @@
 #include "typen.h"
 #include "misc.h"
 #include "stack.h"
+#include "palette.h"
 
 #ifndef converter
  #include "dlg_box.h"
@@ -285,7 +289,7 @@ void checkbi3dir ( void )
   battleisleversion = 3;
 }
 
-unsigned char bi2asc_color_translation_table[256];
+tpixelxlattable bi2asc_color_translation_table;
 
 class initloadbi3 {
       public:

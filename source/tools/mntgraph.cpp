@@ -12,6 +12,7 @@
 #include "..\sgstream.h"
 #include "krkr.h"
 #include "..\basegfx.h"
+#include "..\loadbi3.h"
 
 
 int interpol;
@@ -111,7 +112,15 @@ void getpic ( int pos, int offset )
       TrueColorImage* img = zoomimage ( buf, fsx, fsy, *activepalette256, 0 );
       asc_free ( buf );
       buf = convertimage ( img, pal );
-   }
+   } else
+     if ( lockpalette == 2 ) {
+        bi2asc_color_translation_table[255] = 255;
+        bi2asc_color_translation_table[0] = 0;
+        void* nb = xlatpict ( &bi2asc_color_translation_table, buf );
+        asc_free ( buf );
+        buf = asc_malloc ( getpicsize2 ( nb ));
+        memcpy ( buf, nb, getpicsize2 ( nb ));
+     }
 
    if ( doublesize ) 
       pics[pos] = buf;
@@ -196,7 +205,7 @@ int main(int argc, char *argv[] )
    }
 
    {
-      tnfilestream s ( "newgraph.dta", 2 );
+      tnfilestream s ( "newgraph.gfx", 2 );
       int magic = -1;
       s.writedata2 ( magic );
 

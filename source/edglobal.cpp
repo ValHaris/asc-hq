@@ -1,6 +1,9 @@
-//     $Id: edglobal.cpp,v 1.8 2000-03-16 14:06:54 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.9 2000-04-01 11:38:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/03/16 14:06:54  mbickel
+//      Added unitset transformation to the mapeditor
+//
 //     Revision 1.7  2000/03/11 18:22:04  mbickel
 //      Added support for multiple graphic sets
 //
@@ -492,11 +495,6 @@ void execaction(int code)
              cursor.show();
              }
        break;
-    case act_about :  {
-                                  activefontsettings.length = 530;
-                                  showtext2(kgetaboutmessage(),100,435);
-                                 }
-       break;
     case act_changeunitdir : {
                       pf = getactfield();
                       if ( (pf != NULL) && (pf->vehicle != NULL ) ){
@@ -705,10 +703,13 @@ void execaction(int code)
                } 
        }
        break;
+    case act_about :  
     case act_aboutbox : {
          help(1020);
-         activefontsettings.length = 530;
-         showtext2(kgetaboutmessage(),100,agmp->resolutiony - 30 );
+         tviewanytext vat;
+         vat.init ( "about", kgetstartupmessage() );
+         vat.run();
+         vat.done();
       }
       break;
    case act_smoothcoasts : {

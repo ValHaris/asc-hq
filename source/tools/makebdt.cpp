@@ -29,6 +29,7 @@
 #include "..\sgstream.h"
 #include "..\misc.h"
 #include "..\stack.h"
+#include "..\basegfx.h"
 
 #ifdef HEXAGON
 #include "..\loadbi3.h"
@@ -198,7 +199,7 @@ int main(int argc, char *argv[] )
    
                                fileselect ("*.PCX", _A_NORMAL, pictfile);
                                                          
-                               initsvga (0x101);
+                               initgraphics ( 640, 480, 8 );
                                loadpcx2(pictfile.name, bdt->weather[i], j);
                                #ifdef HEXAGON
                                bdt->weather[i]->bi_picture[j] = -1;
@@ -208,7 +209,7 @@ int main(int argc, char *argv[] )
    
                             } else {
                               #ifdef HEXAGON
-                               initsvga (0x101);
+                               initgraphics ( 640, 480, 8 );
                                getbi3pict ( &bdt->weather[i]->bi_picture[j], &bdt->weather[i]->picture[j] ); 
                                num++;
                                settxt50mode (); 
@@ -229,8 +230,7 @@ int main(int argc, char *argv[] )
                    }  while (!ok);
                   
                 } else { 
-                   void     *p, *q;
-                   initsvga (0x101);
+                   initgraphics ( 640, 480, 8 );
              
                    for (int j = 0; j < 8; j++)
                      if (bdt->weather[i]->picture[j])
@@ -457,12 +457,11 @@ int main(int argc, char *argv[] )
 void        loadpcx2(char *       filestring, pwterraintype bdt, int i)
 {      
   void         *p = NULL;
-  byte         *b;
 
 
 
 
-   initsvga( 0x101 );
+   initgraphics ( 640, 480, 8 );
    loadpcxxy ( filestring, 1, 0,0); 
 
    bdt->picture[i] = malloc( fieldsize );

@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.15 2000-03-16 14:06:57 mbickel Exp $
+//     $Id: typen.h,v 1.16 2000-04-01 11:38:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/03/16 14:06:57  mbickel
+//      Added unitset transformation to the mapeditor
+//
 //     Revision 1.14  2000/03/11 18:22:11  mbickel
 //      Added support for multiple graphic sets
 //
@@ -61,23 +64,23 @@
 //
 //
 /*                                                           
-							     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-							     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
-
-							     This program is free software; you can redistribute it and/or modify
-							     it under the terms of the GNU General Public License as published by
-							     the Free Software Foundation; either version 2 of the License, or
-							     (at your option) any later version.
-
-							     This program is distributed in the hope that it will be useful,
-							     but WITHOUT ANY WARRANTY; without even the implied warranty of
-							     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-							     GNU General Public License for more details.
-
-							     You should have received a copy of the GNU General Public License
-							     along with this program; see the file COPYING. If not, write to the 
-							     Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
-							     Boston, MA  02111-1307  USA
+     This file is part of Advanced Strategic Command; http://www.asc-hq.de
+     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
+ 
+     This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+ 
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     GNU General Public License for more details.
+ 
+     You should have received a copy of the GNU General Public License
+     along with this program; see the file COPYING. If not, write to the 
+     Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+     Boston, MA  02111-1307  USA
 */
 
 #ifndef typen_h                                                                            
@@ -277,29 +280,33 @@ typedef tbuildrange* pbuildrange;
 
 
 class SingleWeapon {
- private:
-  int          typ; /* BM <= CWaffentypen.  This is a hirisute bit pattern, so we should wrap it and
-		     *                      make it private ASAP - STEB */
- public:
-  int          targ;           /*  BM      <= CHoehenstufen  */
-  int          sourceheight;   /*  BM  "  */
-  int          maxdistance;
-  int          mindistance;
-  int          count;
-  int          maxstrength;    // Wenn der Waffentyp == Mine ist, dann ist hier die Minenst„rke als Produkt mit der Bassi 64 abgelegt.
-  int          minstrength;
-  int          efficiency[13]; // floating and driving are the same ; 0-5 is lower ; 6 is same height ; 7-12 is higher
-  int          targets_not_hittable; // BM   <=  cmovemalitypes
- private:
-  int          reserved[9];
- public:
-  int          getScalarWeaponType(void) const;
-  int          requiresAmmo(void) const;
-  int          shootable( void ) const;
-  int          service( void ) const;
-  int          canRefuel ( void ) const;
-  void         set ( int type );  // will be enhanced later ...
-  int          offensive( void ) const;
+  #ifdef converter
+   public:
+  #else
+   private:
+  #endif
+    int          typ; /* BM <= CWaffentypen.  This is a hirisute bit pattern, so we should wrap it and
+  		     *                      make it private ASAP - STEB */
+   public:
+    int          targ;           /*  BM      <= CHoehenstufen  */
+    int          sourceheight;   /*  BM  "  */
+    int          maxdistance;
+    int          mindistance;
+    int          count;
+    int          maxstrength;    // Wenn der Waffentyp == Mine ist, dann ist hier die Minenst„rke als Produkt mit der Bassi 64 abgelegt.
+    int          minstrength;
+    int          efficiency[13]; // floating and driving are the same ; 0-5 is lower ; 6 is same height ; 7-12 is higher
+    int          targets_not_hittable; // BM   <=  cmovemalitypes
+   private:
+    int          reserved[9];
+   public:
+    int          getScalarWeaponType(void) const;
+    int          requiresAmmo(void) const;
+    int          shootable( void ) const;
+    int          service( void ) const;
+    int          canRefuel ( void ) const;
+    void         set ( int type );  // will be enhanced later ...
+    int          offensive( void ) const;
 };
 
 class  UnitWeapon {
