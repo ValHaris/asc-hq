@@ -518,7 +518,10 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
       if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer )
          ast = new HiddenAStar3D ( this, veh );
       else
-         ast = new StratAStar3D ( this, veh );
+         if ( beeline ( veh->getPosition(), destination) > veh->maxMovement() )
+            ast = new StratAStar3D ( this, veh );
+         else
+            ast = new AStar3D ( getMap(), veh );
 
       auto_ptr<AStar3D> ap ( ast );
 

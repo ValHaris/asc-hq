@@ -95,7 +95,7 @@ void AI :: searchTargets ( pvehicle veh, const MapCoordinate3D& pos, TargetVecto
          for ( int nf = 0; nf < sidenum; nf++ ) {
             MapCoordinate mc = getNeighbouringFieldCoordinate ( MapCoordinate ( mv->attackx, mv->attacky), nf );
             pfield fld = getMap()->getField(mc);
-            if ( fld )
+            if ( fld && !veh->typ->wait)
                mv->neighbouringFieldsReachable[nf] = (vm.fieldVisited( MapCoordinate3D(mc.x, mc.y, pos.getBitmappedHeight()) ) || ( veh->xpos == mc.x && veh->ypos == mc.y )) && !fld->building && (!fld->vehicle || fld->unitHere(veh));
             else
                mv->neighbouringFieldsReachable[nf] = false;
@@ -265,7 +265,7 @@ AI::AiResult AI::executeMoveAttack ( pvehicle veh, TargetVector& tv )
 
 bool AI::targetsNear( pvehicle veh )
 {
-   AStar3D ast ( getMap(), veh, false, veh->maxMovement() );
+   AStar3D ast ( getMap(), veh, false, veh->getMovement() );
    ast.findAllAccessibleFields ();
    TargetVector tv;
    getAttacks ( ast, veh, tv, 0, true );
@@ -290,7 +290,7 @@ MapCoordinate AI::getDestination ( const pvehicle veh )
    AiParameter::Task task = veh->aiparam[ getPlayerNum() ]->getTask();
    if ( task == AiParameter::tsk_nothing || task == AiParameter::tsk_tactics ) {
       TargetVector tv;
-      AStar3D ast ( getMap(), veh, false, veh->maxMovement() );
+      AStar3D ast ( getMap(), veh, false, veh->getMovement() );
       ast.findAllAccessibleFields ();
       getAttacks ( ast, veh, tv, 0 );
 
@@ -560,7 +560,7 @@ AI::AiResult AI::tactics( void )
                i++;
             } else {
 
-               AStar3D ast ( getMap(), veh, false, veh->maxMovement() );
+               AStar3D ast ( getMap(), veh, false, veh->getMovement() );
                ast.findAllAccessibleFields ();
                TargetVector tv;
                getAttacks ( ast, veh, tv, hemmingBonus );
@@ -720,6 +720,7 @@ AI::AiResult AI::tactics( void )
                         checkKeys();
                         // if ( i+1 < finalAttackNum ) {
                         if ( i < finalAttackNum && finalPositions[finalOrder[i]] ) {
+                           pvehicle a = finalPositions[finalOrder[i]];
                            VehicleAttack va ( mapDisplay, NULL );
                            va.execute ( finalPositions[finalOrder[i]], -1, -1, 0, 0, -1 );
                            if ( va.getStatus() != 2 )
@@ -729,8 +730,6 @@ AI::AiResult AI::tactics( void )
                            if ( va.getStatus() != 1000 )
                               displaymessage("inconsistency #1 in AI::tactics attack", 1 );
 
-
-                           pvehicle a = finalPositions[finalOrder[i]];
                            TactVehicles::iterator att = find ( tactVehicles.begin(), tactVehicles.end(), a ) ;
                            tactVehicles.erase ( att );
                         }

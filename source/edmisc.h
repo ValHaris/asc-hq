@@ -1,6 +1,11 @@
-//     $Id: edmisc.h,v 1.28 2003-03-20 10:08:29 mbickel Exp $
+//     $Id: edmisc.h,v 1.29 2003-03-26 19:16:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2003/03/20 10:08:29  mbickel
+//      KI speed up
+//      mapeditor: added clipboard
+//      Fixed movement issues
+//
 //     Revision 1.27  2002/11/01 20:44:53  mbickel
 //      Added function to specify which units can be build by other units
 //
@@ -399,6 +404,8 @@ class ClipBoard {
       void clear();
       void addUnit ( pvehicle unit );
       void addBuilding ( pbuilding bld );
+      Vehicle* pasteUnit();
+      Vehicle* pasteUnit( tnstream& stream);
       void place ( const MapCoordinate& pos );
 
       void write( tnstream& stream );

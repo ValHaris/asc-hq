@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.97 2003-03-20 11:16:17 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.98 2003-03-26 19:16:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.97  2003/03/20 11:16:17  mbickel
+//      Fixed: compilation problems with gcc
+//
 //     Revision 1.96  2003/03/20 10:08:29  mbickel
 //      KI speed up
 //      mapeditor: added clipboard
@@ -3658,8 +3661,6 @@ class UnitProductionLimitation : public tladeraum {
           public:
               UnitProductionLimitation ( tmap::UnitProduction& _up ) : up ( _up ) { ids = up.idsAllowed;  };
               void init (  );
-
-
 };
 
 
@@ -3798,6 +3799,22 @@ void tvehiclecargo :: checkforadditionalkeys ( tkey ch )
           changeunitvalues( transport->loading[ cursorpos ] );
        if ( ch == ct_c )
           unit_cargo( transport->loading[ cursorpos ] );
+
+       if ( ch == ct_c + ct_stp )
+          if ( transport->loading[ cursorpos ] )
+             clipBoard.addUnit( transport->loading[ cursorpos ] );
+   }
+   if ( ch == ct_v + ct_stp ) {
+      Vehicle* veh = clipBoard.pasteUnit();
+      if ( transport->vehicleFit( veh ))
+         for ( int i = 0; i < 32; i++ )
+            if ( !transport->loading[i] ) {
+               veh->convert( log2(transport->color) );
+               transport->loading[i] = veh;
+               redraw();
+               return;
+            }
+      delete veh;
    }
 }
 
@@ -3877,6 +3894,21 @@ void tbuildingcargo :: checkforadditionalkeys ( tkey ch )
           changeunitvalues( building->loading[ cursorpos ] );
        if ( ch == ct_c )
           unit_cargo( building->loading[ cursorpos ] );
+
+       if ( ch == ct_c + ct_stp )
+          clipBoard.addUnit( building->loading[ cursorpos ] );
+   }
+   if ( ch == ct_v + ct_stp ) {
+      Vehicle* veh = clipBoard.pasteUnit();
+      if ( building->vehicleFit( veh ))
+         for ( int i = 0; i < 32; i++ )
+            if ( !building->loading[i] ) {
+               veh->convert( log2(building->color) );
+               building->loading[i] = veh;
+               redraw();
+               return;
+            }
+      delete veh;
    }
 }
 
@@ -4689,6 +4721,30 @@ void ClipBoard::addBuilding ( pbuilding bld )
 }
 
 
+Vehicle* ClipBoard::pasteUnit( tnstream& stream )
+{
+   Vehicle* veh = Vehicle::newFromStream( actmap, stream );
+
+   actmap->unitnetworkid++;
+   veh->networkid = actmap->unitnetworkid;
+
+   return veh;
+}
+
+Vehicle* ClipBoard::pasteUnit(  )
+{
+  if ( !objectNum )
+     return NULL;
+
+  tmemorystream stream ( &buf, tnstream::reading );
+  Type type = Type(stream.readInt());
+  if ( type == ClipVehicle ) 
+     return pasteUnit ( stream );
+
+  return NULL;
+}
+
+
 void ClipBoard::place ( const MapCoordinate& pos )
 {
   if ( !objectNum )
@@ -4697,8 +4753,8 @@ void ClipBoard::place ( const MapCoordinate& pos )
   tmemorystream stream ( &buf, tnstream::reading );
   Type type = Type(stream.readInt());
   if ( type == ClipVehicle ) {
-     Vehicle* veh = Vehicle::newFromStream( actmap, stream );
      pfield fld = actmap->getField ( pos );
+     Vehicle* veh = pasteUnit ( stream );
 
      if ( !fieldAccessible ( fld, veh ) && !actmap->getgameparameter( cgp_movefrominvalidfields) ) {
         delete veh;

@@ -22,7 +22,7 @@
       obj\stack.obj obj\stringtokenizer.obj obj\strtmesg.obj obj\terraintype.obj 
       obj\textfile_evaluation.obj obj\textfileparser.obj obj\textfiletags.obj 
       obj\typen.obj obj\unitctrl.obj obj\vehicle.obj obj\vehicletype.obj 
-      obj\viewcalculation.obj obj\weather.obj"/>
+      obj\viewcalculation.obj obj\weather.obj obj\messagedlg.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -149,13 +149,14 @@
       <FILE FILENAME="..\..\vehicletype.cpp" FORMNAME="" UNITNAME="vehicletype" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\viewcalculation.cpp" FORMNAME="" UNITNAME="viewcalculation" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\weather.cpp" FORMNAME="" UNITNAME="weather" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\messagedlg.cpp" FORMNAME="" UNITNAME="messagedlg" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
 
   <FILES>
     <FILE type="override" value="..\..\astar2.cpp" translator="Auto">
-      <CFLAG1 value=" -vi"/>
+      <CFLAG1 value="-Od -vi"/>
     </FILE>
     <FILE type="override" value="..\..\basestrm.cpp" translator="Auto">
     </FILE>

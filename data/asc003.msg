@@ -6,7 +6,7 @@ sie haben erstklassige Arbeit geliefert. Mit der Eroberung von Relnid und der Ei
 Im Moment streitet sich die Fuehrung noch wie sie gegen uns vorgenen wollen. Im Westen befinden sich zwei Fahrzeugfabriken, Dies muessen wir ausnutzen und weiter Stuetzpunkte erobern, um den mit Sicherheit zu erwartenden Gegenangriff entgegenzutreten. Sollten wir keinen Erfolg haben, so steht uns eine aussichtlose Schlacht bevor.
 
 
-; try babelfish.altavista.com :-)
+; try http://babelfish.altavista.com :-)
 
 Viel Glueck
 Commander

@@ -430,6 +430,16 @@ void Vehicle :: endTurn( void )
 
    reactionfire.endTurn();
 
+   if ( !gamemap->getField(getPosition())->unitHere(this)) {
+      int mx = -1;
+      for ( int h = 0; h < 8; h++ )
+         if ( typ->height & ( 1 << h))
+            if ( typ->movement[h] > mx ) {
+               mx = typ->movement[h];
+               height = 1 << h;
+            }
+   }
+
    resetMovement();
    attacked = false;
 
@@ -1559,6 +1569,16 @@ Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream )
    Vehicle* v = new Vehicle ( fzt, gamemap, color/8, -2 );
 
    v->readData ( stream );
+
+   for ( int p = 0; p < 9; p++ )
+      for ( Player::VehicleList::iterator i = gamemap->player[p].vehicleList.begin(); i != gamemap->player[p].vehicleList.end(); ++i )
+          if ( *i != v )
+             if ( (*i)->networkid == v->networkid ) {
+                warning("duplicate network id detected !");
+                gamemap->unitnetworkid++;
+                v->networkid = gamemap->unitnetworkid;
+             }
+
    return v;
 }
 
