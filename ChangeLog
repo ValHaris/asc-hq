@@ -1,3 +1,598 @@
+2000-08-13 17:22  mbickel
+
+	* source/: sg.cpp, sg.wpj, hexagon/asc.tgt:  Improved data version
+	control
+	 Fixed: not all experience symbols were loaded
+
+2000-08-13 16:09  mbickel
+
+	* source/: dialog.cpp, dos/loadimage.cpp:  Removed debug output in
+	unitset info
+
+2000-08-13 14:55  mbickel
+
+	* asc.kdevprj, source/basestrm.cpp:  Fixed IO errors with very
+	small files
+
+2000-08-13 14:35  mbickel
+
+	* asc.kdevprj, source/sg.cpp: 
+	 Dataversion >= 3 is now required
+
+2000-08-13 13:55  mbickel
+
+	* source/: attack.cpp, sg.cpp, strtmesg.cpp, typen.h, unitctrl.cpp:
+	 Attacking now decreases a units movement by 20% if it has the
+	   "move after attack" flag.
+
+2000-08-13 12:24  mbickel
+
+	* asc.kdevprj, source/controls.cpp, source/typen.cpp:  Fixed:
+	movement decrease when cloning units
+	 Fixed: refuel skipped next action in replay
+
+2000-08-13 11:53  mbickel
+
+	* source/: building.cpp, controls.cpp, controls.h, dialog.cpp,
+	dialog.h, gamedlg.cpp, gamedlg.h, spfst.cpp:  Refuelling is now
+	logged for replays
+
+2000-08-12 17:03  mbickel
+
+	* asc.kdevprj, source/attack.cpp, source/basestrm.cpp,
+	source/controls.cpp, source/dialog.cpp, source/gamedlg.cpp,
+	source/global.h, source/loadpcxc.cpp, source/sg.cpp,
+	source/unitctrl.cpp, source/sdl/asc_IMG_jpg.c,
+	source/sdl/events.cpp, source/sdl/loadimage.cpp:  Fixed bug in unit
+	movement
+	 ASC compiles and runs under Linux again...
+
+2000-08-12 17:01  mbickel
+
+	* source/: gui.cpp, gui.h:  Restored old versions of GUI ; new ones
+	were broken
+
+2000-08-12 14:52  mbickel
+
+	* source/: attack.cpp, attack.h, controls.cpp, controls.h,
+	dialog.cpp, dialog.h, dlg_box.cpp, dlg_box.h, edevents.cpp,
+	edgen.cpp, edgen.h, edglobal.cpp, edmisc.cpp, edmisc.h, flview.cpp,
+	flview.h, gamedlg.cpp, gamedlg.h, global.h, loaders.cpp, loaders.h,
+	missions.cpp, mousehnd.h, movecurs.inc, network.cpp, network.h,
+	newfont.cpp, newfont.h, pd.cpp, pd.h, sg.cpp, spfst.cpp, spfst.h,
+	dos/cdrom.cpp, dos/cdrom.h, dos/loadpcx.cpp, dos/mousehnd.cpp,
+	libs/jpeg/jpeglib.h, tools/makeobl4.cpp, tools/maketank.cpp,
+	tools/maketech.cpp:  Made DOS-Version compile and run again.
+
+2000-08-12 11:17  gulliver
+
+	* source/: CLoadable.cpp, CLoadable.h, artint.cpp, attack.cpp,
+	basegfx.cpp, basegfx.h, basestrm.cpp, basestrm.h, building.cpp,
+	building.h, controls.cpp, controls.h, dialog.cpp, dlg_box.cpp,
+	dlg_box.h, dlgraph.cpp, gamedlg.cpp, gamedlg.h, global.h, gui.cpp,
+	gui.h, loadbi3.cpp, mousehnd.h, network.cpp, sg.cpp, sgstream.cpp,
+	sgstream.h, spfst.cpp, spfst.h, tpascal.inc, typen.cpp, typen.h,
+	libs/jpeg/jpeglib.h, sdl/asc_IMG_jpg.c, sdl/events.cpp,
+	sdl/graphics.cpp, sdl/loadimage.cpp, sdl/sound.cpp: [no log
+	message]
+
+2000-08-12 11:11  gulliver
+
+	* source/: PropertyGroup.cpp, gameoptions.cpp, gameoptions.h: [no
+	log message]
+
+2000-08-11 14:24  mbickel
+
+	* asc.kdevprj, source/loaders.cpp, source/loaders.h,
+	source/typen.cpp, source/typen.h:  Fixed: no movement after
+	refuelling unit
+	 Restructured reading/writing of units
+
+2000-08-11 13:38  mbickel
+
+	* source/: building.cpp, dialog.cpp, sg.wpj:  Enabled resource
+	control subwindow in BI resource mode
+
+2000-08-10 13:18  mbickel
+
+	* asc.kdevprj, source/spfst.cpp, source/strtmesg.cpp,
+	source/sdl/Makefile.am, source/sdl/Makefile.in,
+	source/sdl/asc_IMG_jpg.c, source/sdl/loadimage.cpp:  Fixed
+	building: moveunitdown
+	 changed loadimage to use standard SDL_image
+
+2000-08-10 12:20  mbickel
+
+	* source/: sg.wpj, strtmesg.cpp, typen.cpp, typen.h:  Added
+	building function "produce all unit types"
+
+2000-08-09 15:18  mbickel
+
+	* asc.kdevprj, source/building.cpp, source/unitctrl.cpp:  Fixed:
+	invalid movement cost for airplanes flying with wind
+	 Fixed: building mineral resource info: wrong lines for
+	availability
+
+2000-08-09 14:39  mbickel
+
+	* source/: dialog.cpp, gui.cpp, sg.wpj, spfst.cpp, typen.cpp,
+	typen.h:  fixed invalid height when constructing vehicle with other
+	vehicles
+	 fixed wrong descent icon being shown
+
+2000-08-08 15:38  mbickel
+
+	* asc.kdevprj, source/controls.cpp, source/spfst.cpp,
+	source/typen.cpp:  Fixed: construction of buildings doesn't consume
+	resources
+	 Fixed: no unit information visible for satellites
+
+2000-08-08 15:21  mbickel
+
+	* source/: CLoadable.cpp, controls.cpp, dialog.cpp,
+	gameoptions.cpp, gameoptions.h, sg.cpp, sgstream.cpp, typen.cpp,
+	typen.h, tools/bldhex.cpp, tools/maketank.cpp, tools/printbld.cpp,
+	tools/printtnk.cpp:  Added unitCategoriesLoadable property to
+	buildingtypes and vehicletypes
+	 Added option: showUnitOwner
+
+2000-08-08 11:47  mbickel
+
+	* asc.kdevprj, configure, configure.in, source/artint.cpp,
+	source/attack.cpp, source/building.cpp, source/building.h,
+	source/controls.cpp, source/dlg_box.cpp, source/dlg_box.h,
+	source/dlgraph.cpp, source/edmisc.cpp, source/gamedlg.cpp,
+	source/gui.cpp, source/sg.cpp, source/spfst.cpp, source/typen.cpp,
+	source/unitctrl.cpp, source/sdl/loadimage.cpp: 
+	 speed up of dialog boxes in linux
+	 fixed graphical errors in attack
+	 fixed graphical error in ammo transfer
+	 fixed reaction fire not allowing manual attack
+
+2000-08-07 23:10  mbickel
+
+	* source/: artint.cpp, attack.cpp, edmisc.cpp, spfst.cpp:  Fixed
+	some syntax errors
+
+2000-08-07 18:29  mbickel
+
+	* source/: artint.cpp, attack.cpp, controls.cpp, gamedlg.cpp,
+	gamedlg.h, gui.cpp, loaders.cpp, sg.cpp, sg.wpj, typen.cpp,
+	typen.h, unitctrl.cpp:	orbiting units don't consume fuel any more
+	 Fixed bug in attack formula; improved attack formula
+	 Rewrote reactionfire
+
+2000-08-06 15:14  mbickel
+
+	* asc.kdevprj, source/dlg_box.cpp, source/edselfnt.cpp:  Fixed
+	crashes in mapeditor
+
+2000-08-06 14:18  mbickel
+
+	* source/: gamedlg.cpp, gameoptions.cpp, strtmesg.cpp, typen.cpp,
+	tools/maketank.cpp:  Gameoptions: new default values
+	 Maketank: negative buildable-object-IDs
+
+2000-08-06 13:38  mbickel
+
+	* asc.kdevprj, source/Makefile.am, source/Makefile.in, source/TODO,
+	source/building.cpp, source/controls.cpp, source/dialog.cpp,
+	source/dialog.h, source/dlg_box.cpp, source/dlg_box.h,
+	source/edevents.cpp, source/edevents.h, source/edglobal.cpp,
+	source/edmisc.cpp, source/edselfnt.cpp, source/edselfnt.h,
+	source/gamedlg.cpp, source/loadbi3.cpp, source/sg.cpp,
+	source/spfst.cpp, source/typen.cpp, source/typen.h,
+	source/mapedit/Makefile.am, source/mapedit/Makefile.in,
+	source/sdl/loadimage.cpp:  New map paramter: fuel globally
+	available
+	 Mapeditor can now filter buildings too
+	 Fixed unfreed memory in fullscreen image loading
+	 Fixed: wasted cpu cycles in building
+	 map parameters can be specified when starting a map
+	 map parameters are reported to all players in multiplayer games
+
+2000-08-05 22:17  mbickel
+
+	* source/: gamedlg.cpp, loadimage.h, loadjpg.cpp, loadjpg.h,
+	sg.cpp, sg.h, sg.wpj, dos/loadjpg.cpp, dos/loadjpg.h,
+	hexagon/asc.tgt:  Restructured Fullscreen Image loading
+
+2000-08-05 20:26  mbickel
+
+	* asc.kdevprj, source/loadimage.h, source/sg.cpp,
+	source/sdl/Makefile.am, source/sdl/Makefile.in,
+	source/sdl/loadimage.cpp:  Added Fullscreen-JPG-Support
+
+2000-08-05 17:30  mbickel
+
+	* source/: building.cpp, controls.cpp, strtmesg.cpp, typen.cpp: 
+	Fixed possible divisions by 0 in attack/defensebonus
+
+2000-08-05 15:38  mbickel
+
+	* asc.kdevprj, source/attack.cpp, source/attack.h,
+	source/building.cpp, source/controls.cpp, source/loaders.cpp,
+	source/sg.cpp, source/sgstream.cpp, source/spfst.cpp,
+	source/typen.cpp, source/typen.h, source/unitctrl.cpp:	Rewrote
+	height checking for moving units in and out of
+	   transports / building
+
+2000-08-04 17:10  mbickel
+
+	* source/: artint.cpp, attack.cpp, building.cpp, controls.cpp,
+	dialog.cpp, edmisc.cpp, edselfnt.cpp, gui.cpp, loaders.cpp, sg.cpp,
+	sg.wpj, sgstream.cpp, spfst.cpp, typen.cpp, typen.h, unitctrl.cpp,
+	hexagon/asc.tgt, tools/makebdt.cpp:  Moving transports costs
+	movement for units inside
+	 refuelled vehicles now have full movement in the same turn
+	 terrain: negative attack / defensebonus allowed
+	 new mapparameters that affect damaging and repairing of building
+
+2000-08-03 21:45  mbickel
+
+	* source/: basestrm.cpp, edmisc.cpp, loaders.cpp, sg.cpp, sg.wpj,
+	strtmesg.cpp, dos/loadpcx.cpp, hexagon/asc.tgt, tools/demount.wpj,
+	tools/os2/demount.tgt, tools/win/demount.tgt:  Fixed some bugs in
+	DOS code
+	 Removed submarine.ascent != 0 hack
+
+2000-08-03 21:23  mbickel
+
+	* acinclude.m4, source/sdl/SDLStretch.cpp, source/sdl/SDLStretch.h:
+	 Added SDLStretch routines
+	 Added acinclude.m4 (from SDL1.1.3)
+
+2000-08-03 21:21  mbickel
+
+	* Makefile.in, aclocal.m4, asc.kdevprj, config.h.in, configure,
+	configure.in, source/Makefile.am, source/Makefile.in,
+	source/basestrm.cpp, source/basestrm.h, source/building.cpp,
+	source/edmisc.cpp, source/edselfnt.cpp, source/loadbi3.cpp,
+	source/loadpcxc.cpp, source/sg.cpp, source/spfst.cpp,
+	source/typen.cpp, source/docs/Makefile.in,
+	source/docs/en/Makefile.in, source/libs/Makefile.in,
+	source/libs/triangul/Makefile.in, source/mapedit/Makefile.in,
+	source/sdl/Makefile.am, source/sdl/Makefile.in,
+	source/sdl/sound.cpp, source/tools/Makefile.in,
+	source/tools/linux/Makefile.am, source/tools/linux/Makefile.in: 
+	Fixed: units had invalid height when produced in some buildings
+	 Fixed: units could not enter building if unitheightreq==0
+	 Started adding SDL_image support
+	 Upgraded to SDL1.1.3 (for SDL_image)
+
+2000-08-03 15:11  mbickel
+
+	* source/: artint.cpp, attack.cpp, attack.h, building.cpp,
+	controls.cpp, dialog.cpp, dlg_box.cpp, dlg_box.h, edmisc.cpp,
+	gui.cpp, loaders.cpp, loaders.h, strtmesg.cpp, typen.cpp, typen.h,
+	tools/makeobl4.cpp:  Fixed: on/off switching of generator vehicle
+	produced endless amounts of energy
+	 Repairing units now reduces their experience
+	 negative attack- and defenseboni possible
+	 changed attackformula
+
+2000-08-02 20:18  mbickel
+
+	* source/: sgstream.cpp, tools/bldhex.cpp, tools/tools.wpj:  Fixed
+	broken Watcom Projectfiles for tools
+	 Makebld can now save a buildings image
+
+2000-08-02 19:27  mbickel
+
+	* source/: sgstream.cpp, tools/demount.wpj, tools/mount.wpj,
+	tools/os2/demount.tgt, tools/os2/os2mount.tgt,
+	tools/win/demount.tgt, tools/win/winmount.tgt:	Renamed translation
+	to transformation in unitset definition file
+
+2000-08-02 17:52  mbickel
+
+	* asc.kdevprj, source/artint.cpp, source/basestrm.cpp,
+	source/basestrm.h, source/controls.cpp, source/dialog.cpp,
+	source/dialog.h, source/edglobal.cpp, source/edglobal.h,
+	source/edmain.cpp, source/edmisc.cpp, source/sg.cpp,
+	source/sgstream.cpp, source/sgstream.h, source/spfst.cpp,
+	source/strtmesg.cpp, source/tools/demount.cpp,
+	source/tools/mount.cpp:  New unit set definition files
+	 demount accepts now more than one container file
+	 Unitset information dialog added
+
+2000-08-02 12:28  mbickel
+
+	* source/: basestrm.cpp, basestrm.h, controls.cpp, controls.h,
+	dialog.cpp, loadbi3.cpp, misc.h, newfont.h, sg.wpj, sgstream.cpp,
+	spfst.h, typen.cpp, typen.h, libs/stl/readme.txt:  Fixed: generator
+	vehicle not working
+	 Streams can now report their name
+	 Field information shows units filename
+
+2000-08-02 10:47  mbickel
+
+	* asc.kdevprj, source/controls.cpp, source/controls.h,
+	source/dlg_box.cpp:  Fixed: Mineral resources where visible for all
+	players
+
+2000-08-01 15:50  mbickel
+
+	* asc.kdevprj, source/network.cpp, source/spfst.cpp,
+	source/unitctrl.cpp:  Chaning the height of airplanes is not
+	affected by wind any more.
+	 Fixed: Airplanes could ascend onto buildings
+
+2000-08-01 14:38  mbickel
+
+	* source/: CLoadable.cpp, PropertyGroup.cpp, strtmesg.cpp:  Some
+	more configuration file refinements
+
+2000-08-01 12:39  mbickel
+
+	* INSTALL, asc.kdevprj, doc/readme.linux, source/CLoadable.cpp,
+	source/basestrm.cpp, source/basestrm.h, source/edmain.cpp,
+	source/gameoptions.cpp, source/gameoptions.h, source/gui.cpp,
+	source/sg.cpp, source/sgstream.cpp, source/sgstream.h:	Updated
+	documentation
+	 Refined configuration file handling
+
+2000-07-31 21:16  mbickel
+
+	* source/: basestrm.cpp, basestrm.h, controls.cpp, dialog.cpp,
+	edmain.cpp, gameoptions.cpp, sg.cpp, sg.wpj, sgstream.cpp,
+	unitctrl.cpp, hexagon/asc.tgt, tools/asctool.tgt,
+	tools/maketank.cpp, tools/tools.wpj:  Improved handing of multiple
+	directories
+	 Fixed: wind direction not displayed when cycling through wind
+	heights
+	 Fixed: oil rig not working
+	 Fixed: resources becomming visible when checking mining station
+	status
+	 Fixed: division by zero when moving unit without fuel consumption
+
+2000-07-31 20:02  mbickel
+
+	* asc.kdevprj, source/CLoadable.cpp, source/Property.cpp,
+	source/PropertyGroup.cpp, source/basestrm.cpp, source/basestrm.h,
+	source/edglobal.cpp, source/edmain.cpp, source/gameoptions.cpp,
+	source/gameoptions.h, source/sg.cpp, source/sgstream.cpp,
+	source/sgstream.h, source/strtmesg.cpp, source/mapedit/Makefile.am,
+	source/mapedit/Makefile.in, source/tools/linux/Makefile.am,
+	source/tools/linux/Makefile.in:  New configuration file handling
+	 ASC searches its data files in all directories specified in ascrc
+	 Renamed all tools so they begin with asc
+
+2000-07-29 20:40  mbickel
+
+	* source/: building.cpp, sg.wpj, strtmesg.cpp, hexagon/asc.tgt: 
+	Fixed crash in ammo transfer window inside buildings/transports
+
+2000-07-29 17:28  mbickel
+
+	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
+	source/PropertyGroup.h, source/sgstream.cpp,
+	source/mapedit/Makefile.am, source/mapedit/Makefile.in:  Plaintext
+	configfile runs now in Linux version too
+
+2000-07-29 16:54  mbickel
+
+	* source/: CLoadable.cpp, CLoadable.h, Named.cpp, Named.h,
+	Property.cpp, Property.h, PropertyGroup.cpp, PropertyGroup.h,
+	PropertyIF.h, artint.cpp, artint.h, attack.cpp, building.cpp,
+	controls.cpp, dialog.cpp, edglobal.cpp, gamedlg.cpp,
+	gameoptions.cpp, gameoptions.h, gui.cpp, loadbi3.cpp, loadbi3.h,
+	loaders.cpp, network.cpp, sg.cpp, sg.wpj, sgstream.cpp, sgstream.h,
+	spfst.cpp, typen.cpp, typen.h, unitctrl.cpp, hexagon/asc.tgt,
+	hexagon/mapedit/edhex.tgt:  plain text configuration file
+	implemented
+
+2000-07-28 12:15  mbickel
+
+	* source/: basestrm.cpp, basestrm.h, sg.cpp, sgstream.cpp,
+	spfst.cpp, typen.h, unitctrl.cpp:  Fixed broken movement
+	 Fixed graphical artefacts when moving some airplanes
+
+2000-07-26 17:58  mbickel
+
+	* source/: gamedlg.cpp, loaders.cpp, sg.wpj, unitctrl.cpp:  Fixed:
+	infinite loop when landing with an aircraft which is low on fuel
+	 Fixed a bug in loadgame
+
+2000-07-24 15:55  mbickel
+
+	* asc.kdevprj, source/strtmesg.cpp, source/unitctrl.cpp:  Fixed
+	crash when attacking unit is destroyed by attacked unit
+
+2000-07-23 19:59  mbickel
+
+	* source/: artint.cpp, artint.h, controls.cpp, controls.h,
+	dialog.cpp, spfst.h, unitctrl.cpp:  various AI improvements
+	 new terrain information window
+
+2000-07-22 20:57  mbickel
+
+	* source/: controls.cpp, sg.cpp:  New message during save operation
+	 Weapon efficiency displayed did not correspond to mouse position
+	when
+	   first weapon was service
+
+2000-07-16 18:15  mbickel
+
+	* source/: building.cpp, controls.cpp:	Building: ammotransfer
+	improved
+
+2000-07-16 16:57  mbickel
+
+	* asc.kdevprj, source/controls.cpp, source/sg.cpp,
+	source/spfst.cpp, source/spfst.h, source/mapedit/Makefile.am,
+	source/mapedit/Makefile.in:  Datafile versioning
+
+2000-07-16 16:19  mbickel
+
+	* source/: artint.cpp, artint.h, attack.cpp, attack.h,
+	building.cpp, controls.cpp, dialog.cpp, edmain.cpp, gui.cpp,
+	loadbi3.cpp, loaders.cpp, sg.cpp, sg.wpj, spfst.cpp, spfst.h,
+	typen.h, unitctrl.cpp, unitctrl.h, hexagon/asc.tgt,
+	hexagon/mapedit/edhex.tgt, tools/mount.cpp:  AI has now some
+	primitive tactics implemented
+	 Some clean up
+	   moved weapon functions to attack.cpp
+	 Mount doesn't modify PCX files any more.
+
+2000-07-12 15:37  mbickel
+
+	* asc.kdevprj, source/tools/mount.cpp:	ascMount now working again
+
+2000-07-12 10:27  mbickel
+
+	* source/: gamedlg.cpp, sg.wpj, strtmesg.cpp, hexagon/asc.tgt: 
+	Prepared 1.1.9 release
+
+2000-07-10 17:21  mbickel
+
+	* source/: building.cpp, controls.cpp, sg.cpp, tools/printbld.cpp: 
+	Fixed crash in replay (alliancechange)
+	 Fixed some movement problems when moving units out of transports /
+	buildings
+	 Removed save game description dialog
+
+2000-07-06 13:07  mbickel
+
+	* source/: artint.cpp, artint.h, attack.cpp, attack.h,
+	building.cpp, controls.cpp, controls.h, sg.cpp, spfst.cpp, spfst.h,
+	typen.h:  More AI work
+	 Started modularizing the attack formula
+
+2000-07-05 15:26  mbickel
+
+	* asc.kdevprj, source/artint.cpp:  AI
+
+2000-07-05 12:49  mbickel
+
+	* source/: artint.cpp, missions.cpp, missions.h, sg.cpp, typen.cpp:
+	 Fixed AI bugs
+	 setbuildingdamage event now updates the screen
+
+2000-07-05 11:24  mbickel
+
+	* source/: edevents.cpp, missions.cpp, sg.wpj, strtmesg.cpp,
+	typen.cpp, typen.h:  New event action: change building damage
+
+2000-07-04 20:39  mbickel
+
+	* source/: building.cpp, strtmesg.cpp, typen.cpp:  Added weapon
+	information in buildings
+	 Made buried pipeline darker
+
+2000-07-04 19:10  mbickel
+
+	* asc.kdevprj, source/controls.cpp:  Fixed crash in replay with
+	invalid removebuilding coordinates
+
+2000-07-02 23:04  mbickel
+
+	* source/: attack.cpp, controls.cpp, dialog.cpp, loadbi3.cpp,
+	sg.wpj, spfst.cpp, spfst.h, typen.cpp, unitctrl.cpp:  Fixed crash
+	in Replay
+	 Fixed graphic errors in replay
+
+2000-06-28 21:26  mbickel
+
+	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
+	source/building.cpp, source/edglobal.cpp, source/edmisc.cpp,
+	source/edselfnt.cpp, source/loaders.cpp, source/movecurs.inc,
+	source/sgstream.cpp, source/spfst.cpp, source/spfst.h,
+	source/strtmesg.cpp, source/typen.cpp:	fixed bug in object
+	generation by building removal
+	 Added artint.cpp to makefiles
+	 Some cleanup
+
+2000-06-28 20:30  mbickel
+
+	* source/: artint.cpp, artint.h, basestrm.cpp, basestrm.h,
+	building.cpp, controls.cpp, gui.cpp, loaders.cpp, sg.cpp, sg.wpj,
+	sgstream.cpp, spfst.cpp, strtmesg.cpp, typen.cpp, typen.h,
+	hexagon/asc.tgt, tools/bldhex.cpp:  Started working on AI
+	 Started making loaders independent of memory layout
+	 Destroyed buildings can now leave objects behind.
+
+2000-06-23 14:09  mbickel
+
+	* source/sg.cpp:  Graphicsets now selectable in ASC too.
+
+2000-06-23 13:53  mbickel
+
+	* asc.kdevprj, source/spfst.cpp, source/unitctrl.cpp:  Fixed a bug
+	that crashed ASC when trying to ascend with a unit near the
+	  border of the map
+
+2000-06-23 11:48  mbickel
+
+	* source/: dlg_box.cpp, strtmesg.cpp, dos/keybp.cpp:  Improved key
+	handling in intedit/stredit
+
+2000-06-23 11:24  mbickel
+
+	* asc.kdevprj, source/controls.cpp, source/dlg_box.cpp,
+	source/keybp.h:  Fixed crash in replay
+	 enabled cursor movement in stredit
+
+2000-06-22 16:16  mbickel
+
+	* source/libs/readme.txt:  Added url of Jpeg library for ASC-DOS to
+	documentation
+
+2000-06-22 16:13  mbickel
+
+	* source/libs/: readme.txt, bzlib/libbzip2.wpj:  Removed JPEG
+	library
+
+2000-06-22 16:08  mbickel
+
+	* source/libs/jpeg/: ansi2knr.1, ansi2knr.cpp, cderror.h,
+	cdjpeg.cpp, cdjpeg.h, change.log, cjpeg.1, cjpeg.cpp, ckconfig.cpp,
+	config.sub, djpeg.1, djpeg.cpp, example.cpp, filelist.doc,
+	install.doc, jcapimin.cpp, jcapistd.cpp, jccoefct.cpp, jccolor.cpp,
+	jcdctmgr.cpp, jchuff.cpp, jchuff.h, jcinit.cpp, jcmainct.cpp,
+	jcmarker.cpp, jcmaster.cpp, jcomapi.cpp, jconfig.bcc, jconfig.cfg,
+	jconfig.dj, jconfig.doc, jconfig.mac, jconfig.mc6, jconfig.sas,
+	jconfig.st, jconfig.vc, jconfig.vms, jcparam.cpp, jcphuff.cpp,
+	jcprepct.cpp, jcsample.cpp, jctrans.cpp, jdapimin.cpp,
+	jdapistd.cpp, jdatadst.cpp, jdatasrc.cpp, jdcoefct.cpp,
+	jdcolor.cpp, jdct.h, jddctmgr.cpp, jdhuff.cpp, jdhuff.h,
+	jdinput.cpp, jdmainct.cpp, jdmarker.cpp, jdmaster.cpp, jdmerge.cpp,
+	jdosaobj.doc, jdphuff.cpp, jdpostct.cpp, jdsample.cpp, jdtrans.cpp,
+	jerror.cpp, jerror.h, jfdctflt.cpp, jfdctfst.cpp, jfdctint.cpp,
+	jidctflt.cpp, jidctfst.cpp, jidctint.cpp, jidctred.cpp, jinclude.h,
+	jmemansi.cpp, jmemdos.cpp, jmemdosa.asm, jmemmac.cpp, jmemmgr.cpp,
+	jmemname.cpp, jmemnobs.cpp, jmemsys.h, jpeg.lb1, jpeg.tgt,
+	jpeg.txt, jpeg.wpj, jpegint.h, jpegtran.1, jpegtran.cpp,
+	jquant1.cpp, jquant2.cpp, jutils.cpp, jversion.h, libjpeg.doc,
+	ltconfig, ltmain.sh, makcjpeg.st, makdjpeg.st, makeapps.ds,
+	makefile.bcc, makefile.cfg, makefile.dj, makefile.mak,
+	makefile.mc6, makefile.mms, makefile.sas, makefile.vc,
+	makefile.vms, makelib.ds, makeproj.mac, makljpeg.st, maktjpeg.st,
+	makvms.opt, rdbmp.cpp, rdcolmap.cpp, rdgif.cpp, rdjpgcom.1,
+	rdjpgcom.cpp, rdppm.cpp, rdrle.cpp, rdswitch.cpp, rdtarga.cpp,
+	readme, readme.dos, transupp.cpp, transupp.h, usage.doc,
+	wizard.doc, wrbmp.cpp, wrgif.cpp, wrjpgcom.1, wrjpgcom.cpp,
+	wrppm.cpp, wrrle.cpp, wrtarga.cpp:  Removed JPEG library
+
+2000-06-22 14:36  mbickel
+
+	* ChangeLog, asc.kdevprj, source/sg.cpp, source/strtmesg.cpp: 
+	Fixed compilation problems with gcc
+	 version now ASC1.1.6
+
+2000-06-19 22:05  mbickel
+
+	* source/: artint.cpp, artint.h, building.cpp, building.h,
+	controls.cpp, mousehnd.cpp, sg.cpp, sg.wpj, strtmesg.cpp,
+	dos/mousehnd.cpp, hexagon/asc.tgt, hexagon/mapedit/edhex.tgt,
+	tools/asctool.tgt, tools/tools.wpj:  Fixed crash when transfering
+	ammo to vehicle with > 8 weapons
+
+2000-06-09 17:13  mbickel
+
+	* source/TODO:	Updated TODO file: more info on configuration file
+	IO
+
 2000-06-09 15:12  mbickel
 
 	* source/: building.cpp, controls.cpp, controls.h, gamedlg.cpp,
@@ -15,8 +610,8 @@
 
 	* source/: attack.cpp, attack.h, controls.cpp, controls.h,
 	dialog.h, gui.cpp, gui.h, sg.wpj, spfst.cpp, spfst.h, strtmesg.cpp,
-	typen.cpp, typen.h, unitctrl.cpp, unitctrl.h, hexagon/asc.tgt:	New
-	vehicle action: attack
+	typen.cpp, typen.h, unitctrl.cpp, unitctrl.h, view.cpp,
+	hexagon/asc.tgt:  New vehicle action: attack
 	 wrote documentation for vehicle actions
 
 2000-06-08 23:00  mbickel
@@ -90,10 +685,13 @@
 
 2000-05-30 20:39  mbickel
 
-	* source/: attack.cpp, basegfx.cpp, basegfx.h, basestrm.cpp,
-	basestrm.h, controls.cpp, dialog.cpp, dlg_box.cpp, edmisc.h,
-	gui.cpp, loadpcx.h, network.cpp, sg.wpj, spfst.cpp, spfst.h,
-	dos/basemacr.inc, dos/basevesa.asm, dos/basevesa.inc,
+	* source/: attack.cpp, basegfx.cpp, basegfx.h, basemacr.inc,
+	basestrm.cpp, basestrm.h, basevesa.asm, basevesa.inc, cdrom.cpp,
+	cdrom.h, controls.cpp, dialog.cpp, dispfont.asm, dlg_box.cpp,
+	edmisc.h, gui.cpp, keybp.cpp, loadpcx.cpp, loadpcx.h, network.cpp,
+	pcx.asm, realint.cpp, realint.h, setpages.inc, sg.wpj,
+	spfldutl.asm, spfldutl.h, spfst.cpp, spfst.h, timer.cpp, vesa.cpp,
+	vesa.h, dos/basemacr.inc, dos/basevesa.asm, dos/basevesa.inc,
 	dos/cdrom.cpp, dos/cdrom.h, dos/dispfont.asm, dos/keybp.cpp,
 	dos/loadpcx.cpp, dos/pcx.asm, dos/realint.cpp, dos/realint.h,
 	dos/setpages.inc, dos/spfldutl.asm, dos/spfldutl.h, dos/timer.cpp,
@@ -128,14 +726,14 @@
 
 2000-05-23 22:40  mbickel
 
-	* source/: artint.h, basegfx.cpp, basegfx.h, controls.cpp,
-	controls.h, dialog.cpp, dialog.h, dlg_box.cpp, dlg_box.h,
-	dlgraph.cpp, edevents.cpp, edevents.h, edgen.cpp, edgen.h,
-	edmain.cpp, edmisc.cpp, edmisc.h, flview.h, gamedlg.cpp, gamedlg.h,
-	loadpcx.h, missions.cpp, newfont.h, pd.cpp, pd.h, sg.cpp,
-	sgstream.cpp, sgstream.h, spfst.cpp, spfst.h, tpascal.inc,
-	typen.cpp, typen.h, unitctrl.h, tools/bi2pcx.cpp, tools/tools.wpj: 
-	Removed boolean type
+	* source/: artint.h, basegfx.cpp, basegfx.h, cdrom.cpp, cdrom.h,
+	controls.cpp, controls.h, dialog.cpp, dialog.h, dlg_box.cpp,
+	dlg_box.h, dlgraph.cpp, edevents.cpp, edevents.h, edgen.cpp,
+	edgen.h, edmain.cpp, edmisc.cpp, edmisc.h, flview.h, gamedlg.cpp,
+	gamedlg.h, loadpcx.cpp, loadpcx.h, missions.cpp, newfont.h, pd.cpp,
+	pd.h, realint.cpp, realint.h, sg.cpp, sgstream.cpp, sgstream.h,
+	spfst.cpp, spfst.h, tpascal.inc, typen.cpp, typen.h, unitctrl.h,
+	vesa.cpp, tools/bi2pcx.cpp, tools/tools.wpj:  Removed boolean type
 
 2000-05-22 17:40  mbickel
 
@@ -241,7 +839,7 @@
 2000-05-07 14:53  mbickel
 
 	* asc.kdevprj, source/basegfx.cpp, source/edevents.cpp,
-	source/misc.cpp, source/misc.h, source/timer.h,
+	source/misc.cpp, source/misc.h, source/timer.cpp, source/timer.h,
 	source/sdl/timer.cpp:  some minor adjustments
 
 2000-05-07 14:12  mbickel
@@ -350,15 +948,15 @@
 2000-04-27 18:25  mbickel
 
 	* source/: Makefile.am, Makefile.in, attack.cpp, attack.h,
-	basestrm.cpp, basestrm.h, building.cpp, building.h, controls.cpp,
-	controls.h, dialog.cpp, dlg_box.cpp, dlg_box.h, dlgraph.cpp,
-	edevents.cpp, edglobal.cpp, edmain.cpp, edmisc.cpp, edmisc.h,
-	edselfnt.cpp, gamedlg.cpp, gui.cpp, gui.h, loadbi3.cpp,
-	loaders.cpp, loaders.h, missions.cpp, sg.cpp, sg.wpj, sgstream.cpp,
-	spfst.cpp, spfst.h, strtmesg.cpp, tpascal.inc, typen.cpp, typen.h,
-	unitctrl.cpp, unitctrl.h, weather.h, dos/memory.cpp,
-	hexagon/asc.tgt, libs/bzlib/libbzip2.wpj, sdl/events.cpp,
-	sdl/timer.cpp, tools/bi2pcx.cpp, tools/bldhex.cpp,
+	basestrm.cpp, basestrm.h, building.cpp, building.h, cdrom.cpp,
+	cdrom.h, controls.cpp, controls.h, dialog.cpp, dlg_box.cpp,
+	dlg_box.h, dlgraph.cpp, edevents.cpp, edglobal.cpp, edmain.cpp,
+	edmisc.cpp, edmisc.h, edselfnt.cpp, gamedlg.cpp, gui.cpp, gui.h,
+	loadbi3.cpp, loaders.cpp, loaders.h, missions.cpp, sg.cpp, sg.wpj,
+	sgstream.cpp, spfst.cpp, spfst.h, strtmesg.cpp, tpascal.inc,
+	typen.cpp, typen.h, unitctrl.cpp, unitctrl.h, weather.h,
+	dos/memory.cpp, hexagon/asc.tgt, libs/bzlib/libbzip2.wpj,
+	sdl/events.cpp, sdl/timer.cpp, tools/bi2pcx.cpp, tools/bldhex.cpp,
 	tools/demount.cpp, tools/demount.wpj, tools/makebdt.cpp,
 	tools/makeobl4.cpp, tools/maketank.cpp, tools/maketech.cpp,
 	tools/mount.cpp, tools/pcxtank.cpp, tools/printbld.cpp,
@@ -373,8 +971,8 @@
 
 2000-04-17 20:55  mbickel
 
-	* INSTALL, README, TODO, doc/readme.linux, source/sg.cpp,
-	source/spfst.cpp:  Fixed the DOS version
+	* INSTALL, README, TODO, doc/readme.linux, source/README,
+	source/sg.cpp, source/spfst.cpp:  Fixed the DOS version
 
 2000-04-17 20:30  mbickel
 
@@ -448,18 +1046,19 @@
 
 2000-03-29 17:28  mbickel
 
-	* Makefile.in, README, asc.kdevprj, asc.lsm, source/TODO,
-	source/sg.cpp, source/libs/readme.txt, source/libs/stl/readme.txt: 
-	Preparations for the Linux release:
+	* Makefile.in, README, asc.kdevprj, asc.lsm, source/README,
+	source/TODO, source/sg.cpp, source/libs/readme.txt,
+	source/libs/stl/readme.txt:  Preparations for the Linux release:
 	  updated help files and documentation
 
 2000-03-29 11:58  mbickel
 
-	* source/: basestrm.cpp, dialog.cpp, dialog.h, dlg_box.cpp,
-	dlg_box.h, edevents.h, edgen.h, edmisc.cpp, edselfnt.cpp,
-	flview.cpp, flview.h, gamedlg.cpp, sg.cpp, sg.wpj, sgstream.cpp,
-	sgstream.h, dos/memory.cpp, dos/memory.h, hexagon/asc.tgt: 
-	Improved memory handling for DOS version
+	* source/: basestrm.cpp, cdrom.cpp, dialog.cpp, dialog.h,
+	dlg_box.cpp, dlg_box.h, edevents.h, edgen.h, edmisc.cpp,
+	edselfnt.cpp, flview.cpp, flview.h, gamedlg.cpp, realint.cpp,
+	sg.cpp, sg.wpj, sgstream.cpp, sgstream.h, view.cpp, dos/memory.cpp,
+	dos/memory.h, hexagon/asc.tgt:	Improved memory handling for DOS
+	version
 	 Many small changes I can't remember ;-)
 
 2000-03-16 15:06  mbickel
@@ -612,8 +1211,8 @@
 
 2000-01-19 23:03  mbickel
 
-	* source/: dialog.cpp, sg.wpj, hexagon/asc.tgt:  Fixed a bug in the
-	DOS keyboard code
+	* source/: dialog.cpp, keybp.cpp, sg.wpj, hexagon/asc.tgt:  Fixed a
+	bug in the DOS keyboard code
 
 2000-01-19 22:18  mbickel
 
@@ -624,8 +1223,9 @@
 2000-01-07 14:20  mbickel
 
 	* asc.kdevprj, source/basegfx.h, source/sg.cpp, source/spfst.cpp,
-	source/sdl/events.cpp, source/sdl/graphics.cpp,
-	source/sdl/graphics.h:	DGA fullscreen mode now working
+	source/vesa.cpp, source/vesa.h, source/sdl/events.cpp,
+	source/sdl/graphics.cpp, source/sdl/graphics.h:  DGA fullscreen
+	mode now working
 
 2000-01-06 15:11  mbickel
 
@@ -646,14 +1246,16 @@
 	source/basegfx.cpp, source/basegfx.h, source/building.cpp,
 	source/controls.cpp, source/dialog.cpp, source/dlg_box.cpp,
 	source/dlg_box.h, source/edglobal.cpp, source/gamedlg.cpp,
-	source/gui.cpp, source/keybp.h, source/loadbi3.cpp,
-	source/newfont.cpp, source/pd.cpp, source/sg.cpp, source/spfst.cpp,
-	source/stack.h, source/sdl/events.cpp, source/sdl/graphics.cpp,
+	source/gui.cpp, source/keybp.cpp, source/keybp.h,
+	source/loadbi3.cpp, source/newfont.cpp, source/pd.cpp,
+	source/sg.cpp, source/spfst.cpp, source/stack.h,
+	source/sdl/events.cpp, source/sdl/graphics.cpp,
 	source/sdl/timer.cpp:  Continued Linux port
 
 2000-01-02 21:23  mbickel
 
-	* configure.in, source/dialog.cpp:  Improved keyboard handling in
+	* configure.in, source/dialog.cpp, source/keybp.cpp,
+	source/vesa.cpp, source/vesa.h:  Improved keyboard handling in
 	dialog boxes under DOS
 
 2000-01-02 20:47  mbickel
@@ -670,7 +1272,11 @@
 2000-01-01 22:30  mbickel
 
 	* INSTALL, Makefile.dist, asc.kdevprj, config.h.in, configure,
-	configure.in, source/Makefile.in:  Cleaned up makefiles & Co
+	configure.in, source/INSTALL, source/Makefile.in,
+	source/aclocal.m4, source/config.h.in, source/config.status,
+	source/configure, source/configure.in, source/install-sh,
+	source/kbhit.cpp, source/missing, source/mkinstalldirs:  Cleaned up
+	makefiles & Co
 
 2000-01-01 20:38  mbickel
 
@@ -696,8 +1302,9 @@
 
 1999-12-30 22:04  mbickel
 
-	* source/: dlg_box.cpp, keybp.h, sg.cpp, hexagon/asc.tgt,
-	tools/maketank.cpp:  Restored DOS compatibility again.
+	* source/: dlg_box.cpp, keybp.cpp, keybp.h, sg.cpp,
+	hexagon/asc.tgt, tools/maketank.cpp:  Restored DOS compatibility
+	again.
 
 1999-12-30 21:30  mbickel
 
@@ -724,8 +1331,8 @@
 
 1999-12-28 23:04  mbickel
 
-	* source/: basegfx.cpp, keybp.h, sg.cpp, timer.h:  Had to make some
-	changes again to compile it for DOS...
+	* source/: basegfx.cpp, keybp.cpp, keybp.h, sg.cpp, timer.h:  Had
+	to make some changes again to compile it for DOS...
 
 1999-12-28 22:02  mbickel
 
@@ -739,12 +1346,13 @@
 	source/dialog.cpp, source/dlg_box.cpp, source/dlgraph.cpp,
 	source/gamedlg.cpp, source/global.h, source/gui.cpp, source/gui.h,
 	source/keybp.h, source/loadbi3.cpp, source/loaders.cpp,
-	source/loadjpg.cpp, source/loadpcxc.cpp, source/misc.cpp,
-	source/misc.h, source/mousehnd.h, source/network.h,
-	source/newfont.cpp, source/newfont.h, source/palette.h,
-	source/pd.cpp, source/pd.h, source/sg.cpp, source/sgstream.cpp,
-	source/spfst.cpp, source/spfst.h, source/timer.h, source/typen.h,
-	source/weather.h, source/libs/Makefile.am, source/libs/Makefile.in,
+	source/loadjpg.cpp, source/loadpcx.cpp, source/loadpcxc.cpp,
+	source/misc.cpp, source/misc.h, source/mousehnd.h,
+	source/network.h, source/newfont.cpp, source/newfont.h,
+	source/palette.h, source/pd.cpp, source/pd.h, source/sg.cpp,
+	source/sgstream.cpp, source/spfst.cpp, source/spfst.h,
+	source/timer.h, source/typen.h, source/weather.h,
+	source/libs/Makefile.am, source/libs/Makefile.in,
 	source/libs/triangul/Makefile.am, source/libs/triangul/Makefile.in,
 	source/sdl/Makefile.am, source/sdl/Makefile.in,
 	source/sdl/events.cpp, source/sdl/graphics.cpp,
@@ -763,13 +1371,13 @@
 	edglobal.cpp, edglobal.h, edmain.cpp, edmisc.cpp, edmisc.h,
 	edselfnt.cpp, edselfnt.h, gamedlg.cpp, gui.cpp, loadpcxc.cpp,
 	sg.cpp, sg.wpj, sgstream.cpp, spfst.cpp, typen.cpp, typen.h,
-	tools/maketank.cpp, tools/viewid.cpp:  new vehicle function: each
-	weapon can now be set to not attack certain
+	vesa.cpp, tools/maketank.cpp, tools/viewid.cpp:  new vehicle
+	function: each weapon can now be set to not attack certain
 			       vehicles
 
 1999-12-27 13:51  mbickel
 
-	* source/keybp.h:  Cleanup for Linux port
+	* source/: keybp.cpp, keybp.h:	Cleanup for Linux port
 
 1999-12-14 21:23  mbickel
 
@@ -825,12 +1433,13 @@
 1999-11-22 19:26  mbickel
 
 	* source/: artint.cpp, attack.cpp, basegfx.cpp, basegfx.h,
-	basestrm.cpp, building.cpp, controls.cpp, dialog.cpp, dlg_box.cpp,
-	dlg_box.h, edmain.cpp, edmisc.cpp, edmisc.h, gamedlg.cpp,
-	gamedlg.h, global.h, gui.cpp, loadbi3.cpp, loaders.cpp,
-	loadjpg.cpp, loadpcxc.cpp, missions.cpp, mousehnd.cpp, mousehnd.h,
-	newfont.cpp, newfont.h, oldlzw.cpp, pd.cpp, sg.cpp, sg.wpj,
-	sgstream.cpp, spfst.cpp, spfst.h, weather.cpp, hexagon/asc.tgt,
+	basestrm.cpp, building.cpp, configure, controls.cpp, dialog.cpp,
+	dlg_box.cpp, dlg_box.h, edmain.cpp, edmisc.cpp, edmisc.h,
+	gamedlg.cpp, gamedlg.h, global.h, gui.cpp, loadbi3.cpp,
+	loaders.cpp, loadjpg.cpp, loadpcx.cpp, loadpcxc.cpp, missions.cpp,
+	mousehnd.cpp, mousehnd.h, newfont.cpp, newfont.h, oldlzw.cpp,
+	pd.cpp, sg.cpp, sg.wpj, sgstream.cpp, spfldutl.h, spfst.cpp,
+	spfst.h, vesa.cpp, vesa.h, weather.cpp, hexagon/asc.tgt,
 	hexagon/mapedit/edhex.tgt, tools/demount.cpp, tools/demount.tgt,
 	tools/demount.wpj:  Restructured graphics engine:
 	   VESA now only for DOS
@@ -844,30 +1453,33 @@
 
 1999-11-20 21:33  tmwilson
 
-	* source/: timer.h, typen.cpp, typen.h, weather.cpp, weather.h:
-	Started a Linux(Unix)-only branch so the DOS code can be removed
-	without interfering with the other development branch.	Started
-	rewriting/removing code that is no longer needed from DOS.
-
-1999-11-20 21:30  tmwilson
-
-	* source/: ChangeLog, Makefile.in, artint.cpp, artint.h,
-	attack.cpp, attack.h, basegui.h, basestrm.cpp, basestrm.h,
-	basetemp.h, building.cpp, building.h, controls.cpp, controls.h,
-	dialog.cpp, dialog.h, dlg_box.cpp, dlg_box.h, dlgraph.cpp,
-	edevents.cpp, edevents.h, edgen.cpp, edgen.h, edglobal.cpp,
-	edglobal.h, edmain.cpp, edmisc.cpp, edmisc.h, edselfnt.cpp,
-	edselfnt.h, flview.cpp, flview.h, gamedlg.cpp, gamedlg.h, global.h,
-	gui.cpp, gui.h, history.cpp, keybp.h, loadbi3.cpp, loadbi3.h,
-	loaders.cpp, loaders.h, loadjpg.cpp, loadjpg.h, loadpcx.h, lzw.h,
-	misc.cpp, misc.h, missions.cpp, missions.h, mousehnd.cpp,
-	mousehnd.h, network.cpp, network.h, newfont.cpp, newfont.h,
-	oldlzw.cpp, palette.cpp, palette.h, pd.cpp, pd.h, sg.cpp, sg.h,
-	sgstream.cpp, sgstream.h, spfst.cpp, spfst.h, stack.cpp, stack.h,
-	strtmesg.cpp, strtmesg.h: Started a Linux(Unix)-only branch so the
+	* source/: timer.h, typen.cpp, typen.h, vesa.cpp, vesa.h, view.cpp,
+	weather.cpp, weather.h: Started a Linux(Unix)-only branch so the
 	DOS code can be removed without interfering with the other
 	development branch.  Started rewriting/removing code that is no
 	longer needed from DOS.
+
+1999-11-20 21:30  tmwilson
+
+	* source/: ChangeLog, Makefile.in, README, aclocal.m4, artint.cpp,
+	artint.h, attack.cpp, attack.h, basegui.h, basestrm.cpp,
+	basestrm.h, basetemp.h, building.cpp, building.h, cdrom.cpp,
+	cdrom.h, config.status, configure, configure.in, controls.cpp,
+	controls.h, dialog.cpp, dialog.h, dlg_box.cpp, dlg_box.h,
+	dlgraph.cpp, edevents.cpp, edevents.h, edgen.cpp, edgen.h,
+	edglobal.cpp, edglobal.h, edmain.cpp, edmisc.cpp, edmisc.h,
+	edselfnt.cpp, edselfnt.h, flview.cpp, flview.h, gamedlg.cpp,
+	gamedlg.h, global.h, gui.cpp, gui.h, history.cpp, kbhit.cpp,
+	keybp.cpp, keybp.h, loadbi3.cpp, loadbi3.h, loaders.cpp, loaders.h,
+	loadjpg.cpp, loadjpg.h, loadpcx.cpp, loadpcx.h, lzw.h, misc.cpp,
+	misc.h, missions.cpp, missions.h, mousehnd.cpp, mousehnd.h,
+	network.cpp, network.h, newfont.cpp, newfont.h, oldlzw.cpp,
+	palette.cpp, palette.h, pd.cpp, pd.h, realint.cpp, realint.h,
+	sg.cpp, sg.h, sgstream.cpp, sgstream.h, spfldutl.h, spfst.cpp,
+	spfst.h, stack.cpp, stack.h, strtmesg.cpp, strtmesg.h, timer.cpp:
+	Started a Linux(Unix)-only branch so the DOS code can be removed
+	without interfering with the other development branch.	Started
+	rewriting/removing code that is no longer needed from DOS.
 
 1999-11-18 18:30  mbickel
 
@@ -879,10 +1491,10 @@
 1999-11-16 18:03  mbickel
 
 	* source/: basestrm.cpp, basestrm.h, building.cpp, controls.cpp,
-	dialog.cpp, gamedlg.cpp, global.h, gui.cpp, loadbi3.cpp, sg.cpp,
-	sg.wpj, spfst.cpp, typen.cpp, typen.h, hexagon/asc.tgt,
-	hexagon/mapedit/edhex.tgt: Made ASC compilable for DOS again :-)
-	Merged all the bug fixes in that I did last week
+	dialog.cpp, gamedlg.cpp, global.h, gui.cpp, keybp.cpp, loadbi3.cpp,
+	sg.cpp, sg.wpj, spfst.cpp, typen.cpp, typen.h, vesa.cpp,
+	hexagon/asc.tgt, hexagon/mapedit/edhex.tgt: Made ASC compilable for
+	DOS again :-) Merged all the bug fixes in that I did last week
 
 1999-11-16 04:43  tmwilson
 
@@ -904,21 +1516,25 @@
 
 1999-11-16 04:40  tmwilson
 
-	* source/: AUTHORS, COPYING, ChangeLog, Makefile.am, Makefile.in,
-	NEWS, TODO, artint.cpp, artint.h, attack.cpp, attack.h, basegui.h,
-	basestrm.cpp, basestrm.h, basetemp.h, building.cpp, building.h,
-	controls.cpp, controls.h, dialog.cpp, dialog.h, dlg_box.cpp,
-	dlg_box.h, dlgraph.cpp, edevents.cpp, edevents.h, edgen.cpp,
-	edgen.h, edglobal.cpp, edglobal.h, edmain.cpp, edmisc.cpp,
-	edmisc.h, edselfnt.cpp, edselfnt.h, flview.cpp, flview.h,
-	gamedlg.cpp, gamedlg.h, gui.cpp, gui.h, history.cpp, keybp.h,
-	loadbi3.cpp, loadbi3.h, loaders.cpp, loaders.h, loadjpg.cpp,
-	loadjpg.h, loadpcx.h, lzw.h, misc.cpp, misc.h, missions.cpp,
-	missions.h, mousehnd.cpp, mousehnd.h, network.cpp, network.h,
-	newfont.cpp, newfont.h, oldlzw.cpp, palette.cpp, palette.h, pd.cpp,
-	pd.h, sg.cpp, sg.h, sgstream.cpp, sgstream.h, spfst.cpp, spfst.h,
-	stack.cpp, stack.h, strtmesg.cpp, strtmesg.h, timer.h, typen.cpp,
-	typen.h, weather.cpp, weather.h, libs/jpeg/ansi2knr.cpp,
+	* source/: AUTHORS, COPYING, ChangeLog, INSTALL, Makefile.am,
+	Makefile.in, NEWS, README, TODO, aclocal.m4, artint.cpp, artint.h,
+	attack.cpp, attack.h, basegui.h, basestrm.cpp, basestrm.h,
+	basetemp.h, building.cpp, building.h, cdrom.cpp, cdrom.h,
+	config.h.in, config.status, configure, configure.in, controls.cpp,
+	controls.h, dialog.cpp, dialog.h, dlg_box.cpp, dlg_box.h,
+	dlgraph.cpp, edevents.cpp, edevents.h, edgen.cpp, edgen.h,
+	edglobal.cpp, edglobal.h, edmain.cpp, edmisc.cpp, edmisc.h,
+	edselfnt.cpp, edselfnt.h, flview.cpp, flview.h, gamedlg.cpp,
+	gamedlg.h, gui.cpp, gui.h, history.cpp, install-sh, kbhit.cpp,
+	keybp.cpp, keybp.h, loadbi3.cpp, loadbi3.h, loaders.cpp, loaders.h,
+	loadjpg.cpp, loadjpg.h, loadpcx.cpp, loadpcx.h, lzw.h, misc.cpp,
+	misc.h, missing, missions.cpp, missions.h, mkinstalldirs,
+	mousehnd.cpp, mousehnd.h, network.cpp, network.h, newfont.cpp,
+	newfont.h, oldlzw.cpp, palette.cpp, palette.h, pd.cpp, pd.h,
+	realint.cpp, realint.h, sg.cpp, sg.h, sgstream.cpp, sgstream.h,
+	spfldutl.h, spfst.cpp, spfst.h, stack.cpp, stack.h, strtmesg.cpp,
+	strtmesg.h, timer.cpp, timer.h, typen.cpp, typen.h, vesa.cpp,
+	vesa.h, view.cpp, weather.cpp, weather.h, libs/jpeg/ansi2knr.cpp,
 	libs/jpeg/cdjpeg.cpp, libs/jpeg/cjpeg.cpp, libs/jpeg/ckconfig.cpp,
 	libs/jpeg/djpeg.cpp, libs/jpeg/example.cpp, libs/jpeg/jcapimin.cpp,
 	libs/jpeg/jcapistd.cpp, libs/jpeg/jccoefct.cpp,
@@ -956,47 +1572,53 @@
 
 	* doc/source.htm, source/artint.cpp, source/artint.h,
 	source/attack.cpp, source/attack.h, source/basegui.h,
-	source/basestrm.cpp, source/basestrm.h, source/basetemp.h,
-	source/building.cpp, source/building.h, source/controls.cpp,
-	source/controls.h, source/dialog.cpp, source/dialog.h,
+	source/basemacr.inc, source/basestrm.cpp, source/basestrm.h,
+	source/basetemp.h, source/basevesa.asm, source/basevesa.inc,
+	source/building.cpp, source/building.h, source/cdrom.cpp,
+	source/cdrom.h, source/controls.cpp, source/controls.h,
+	source/dialog.cpp, source/dialog.h, source/dispfont.asm,
 	source/dlg_box.cpp, source/dlg_box.h, source/dlgraph.cpp,
 	source/edevents.cpp, source/edevents.h, source/edgen.cpp,
 	source/edgen.h, source/edglobal.cpp, source/edglobal.h,
 	source/edmain.cpp, source/edmisc.cpp, source/edmisc.h,
 	source/edselfnt.cpp, source/edselfnt.h, source/flview.cpp,
 	source/flview.h, source/gamedlg.cpp, source/gamedlg.h,
-	source/gui.cpp, source/gui.h, source/history.cpp, source/keybp.h,
-	source/loadbi3.cpp, source/loadbi3.h, source/loaders.cpp,
-	source/loaders.h, source/loadjpg.cpp, source/loadjpg.h,
-	source/loadpcx.h, source/lzw.h, source/misc.cpp, source/misc.h,
-	source/missions.cpp, source/missions.h, source/mouse.asm,
-	source/mousehnd.cpp, source/mousehnd.h, source/movecurs.inc,
-	source/network.cpp, source/network.h, source/newfont.cpp,
-	source/newfont.h, source/oldlzw.cpp, source/palette.cpp,
-	source/palette.h, source/pd.cpp, source/pd.h, source/rdtsc.asm,
+	source/gui.cpp, source/gui.h, source/history.cpp, source/keybp.cpp,
+	source/keybp.h, source/loadbi3.cpp, source/loadbi3.h,
+	source/loaders.cpp, source/loaders.h, source/loadjpg.cpp,
+	source/loadjpg.h, source/loadpcx.cpp, source/loadpcx.h,
+	source/lzw.h, source/misc.cpp, source/misc.h, source/missions.cpp,
+	source/missions.h, source/mouse.asm, source/mousehnd.cpp,
+	source/mousehnd.h, source/movecurs.inc, source/network.cpp,
+	source/network.h, source/newfont.cpp, source/newfont.h,
+	source/oldlzw.cpp, source/palette.cpp, source/palette.h,
+	source/pcx.asm, source/pd.cpp, source/pd.h, source/rdtsc.asm,
+	source/realint.cpp, source/realint.h, source/setpages.inc,
 	source/sg.cpp, source/sg.h, source/sg.wpj, source/sgstream.cpp,
-	source/sgstream.h, source/spfst.cpp, source/spfst.h,
-	source/stack.cpp, source/stack.h, source/strtmesg.cpp,
-	source/strtmesg.h, source/timer.h, source/tpascal.inc,
-	source/tsm.bat, source/typen.cpp, source/typen.h,
-	source/weather.cpp, source/weather.h, source/hexagon/asc.tgt,
-	source/hexagon/mapedit/edhex.tgt, source/libs/bzlib/blocksort.c,
-	source/libs/bzlib/bzip2.1, source/libs/bzlib/bzip2.1.preformatted,
-	source/libs/bzlib/bzip2.c, source/libs/bzlib/CHANGES,
-	source/libs/bzlib/bzip2.txt, source/libs/bzlib/bzip2recover.c,
-	source/libs/bzlib/bzlib.c, source/libs/bzlib/bzlib.h,
-	source/libs/bzlib/bzlib_private.h, source/libs/bzlib/compress.c,
-	source/libs/bzlib/crctable.c, source/libs/bzlib/decompress.c,
-	source/libs/bzlib/howbig.c, source/libs/bzlib/huffman.c,
-	source/libs/bzlib/libbz2.def, source/libs/bzlib/libbzip2.tgt,
-	source/libs/bzlib/LICENSE, source/libs/bzlib/Makefile,
-	source/libs/bzlib/libbzip2.wpj, source/libs/bzlib/manual.ps,
-	source/libs/bzlib/README, source/libs/bzlib/manual.texi,
-	source/libs/bzlib/manual_1.html, source/libs/bzlib/manual_2.html,
-	source/libs/bzlib/manual_3.html, source/libs/bzlib/manual_4.html,
-	source/libs/bzlib/manual_toc.html, source/libs/bzlib/randtable.c,
-	source/libs/bzlib/words1, source/libs/bzlib/words2,
-	source/libs/bzlib/words3, source/libs/bzlib/os2/libbzip2.lb1,
+	source/sgstream.h, source/spfldutl.asm, source/spfldutl.h,
+	source/spfst.cpp, source/spfst.h, source/stack.cpp, source/stack.h,
+	source/strtmesg.cpp, source/strtmesg.h, source/timer.cpp,
+	source/timer.h, source/tpascal.inc, source/tsm.bat,
+	source/typen.cpp, source/typen.h, source/vesa.cpp, source/vesa.h,
+	source/view.cpp, source/weather.cpp, source/weather.h,
+	source/hexagon/asc.tgt, source/hexagon/mapedit/edhex.tgt,
+	source/libs/bzlib/blocksort.c, source/libs/bzlib/bzip2.1,
+	source/libs/bzlib/bzip2.1.preformatted, source/libs/bzlib/bzip2.c,
+	source/libs/bzlib/CHANGES, source/libs/bzlib/bzip2.txt,
+	source/libs/bzlib/bzip2recover.c, source/libs/bzlib/bzlib.c,
+	source/libs/bzlib/bzlib.h, source/libs/bzlib/bzlib_private.h,
+	source/libs/bzlib/compress.c, source/libs/bzlib/crctable.c,
+	source/libs/bzlib/decompress.c, source/libs/bzlib/howbig.c,
+	source/libs/bzlib/huffman.c, source/libs/bzlib/libbz2.def,
+	source/libs/bzlib/libbzip2.tgt, source/libs/bzlib/LICENSE,
+	source/libs/bzlib/Makefile, source/libs/bzlib/libbzip2.wpj,
+	source/libs/bzlib/manual.ps, source/libs/bzlib/README,
+	source/libs/bzlib/manual.texi, source/libs/bzlib/manual_1.html,
+	source/libs/bzlib/manual_2.html, source/libs/bzlib/manual_3.html,
+	source/libs/bzlib/manual_4.html, source/libs/bzlib/manual_toc.html,
+	source/libs/bzlib/randtable.c, source/libs/bzlib/words1,
+	source/libs/bzlib/words2, source/libs/bzlib/words3,
+	source/libs/bzlib/os2/libbzip2.lb1,
 	source/libs/bzlib/os2/libbzip2.tgt, source/libs/jpeg/ansi2knr.1,
 	source/libs/jpeg/ansi2knr.cpp, source/libs/jpeg/cderror.h,
 	source/libs/jpeg/cdjpeg.cpp, source/libs/jpeg/cdjpeg.h,
@@ -1142,47 +1764,53 @@
 
 	* doc/source.htm, source/artint.cpp, source/artint.h,
 	source/attack.cpp, source/attack.h, source/basegui.h,
-	source/basestrm.cpp, source/basestrm.h, source/basetemp.h,
-	source/building.cpp, source/building.h, source/controls.cpp,
-	source/controls.h, source/dialog.cpp, source/dialog.h,
+	source/basemacr.inc, source/basestrm.cpp, source/basestrm.h,
+	source/basetemp.h, source/basevesa.asm, source/basevesa.inc,
+	source/building.cpp, source/building.h, source/cdrom.cpp,
+	source/cdrom.h, source/controls.cpp, source/controls.h,
+	source/dialog.cpp, source/dialog.h, source/dispfont.asm,
 	source/dlg_box.cpp, source/dlg_box.h, source/dlgraph.cpp,
 	source/edevents.cpp, source/edevents.h, source/edgen.cpp,
 	source/edgen.h, source/edglobal.cpp, source/edglobal.h,
 	source/edmain.cpp, source/edmisc.cpp, source/edmisc.h,
 	source/edselfnt.cpp, source/edselfnt.h, source/flview.cpp,
 	source/flview.h, source/gamedlg.cpp, source/gamedlg.h,
-	source/gui.cpp, source/gui.h, source/history.cpp, source/keybp.h,
-	source/loadbi3.cpp, source/loadbi3.h, source/loaders.cpp,
-	source/loaders.h, source/loadjpg.cpp, source/loadjpg.h,
-	source/loadpcx.h, source/lzw.h, source/misc.cpp, source/misc.h,
-	source/missions.cpp, source/missions.h, source/mouse.asm,
-	source/mousehnd.cpp, source/mousehnd.h, source/movecurs.inc,
-	source/network.cpp, source/network.h, source/newfont.cpp,
-	source/newfont.h, source/oldlzw.cpp, source/palette.cpp,
-	source/palette.h, source/pd.cpp, source/pd.h, source/rdtsc.asm,
+	source/gui.cpp, source/gui.h, source/history.cpp, source/keybp.cpp,
+	source/keybp.h, source/loadbi3.cpp, source/loadbi3.h,
+	source/loaders.cpp, source/loaders.h, source/loadjpg.cpp,
+	source/loadjpg.h, source/loadpcx.cpp, source/loadpcx.h,
+	source/lzw.h, source/misc.cpp, source/misc.h, source/missions.cpp,
+	source/missions.h, source/mouse.asm, source/mousehnd.cpp,
+	source/mousehnd.h, source/movecurs.inc, source/network.cpp,
+	source/network.h, source/newfont.cpp, source/newfont.h,
+	source/oldlzw.cpp, source/palette.cpp, source/palette.h,
+	source/pcx.asm, source/pd.cpp, source/pd.h, source/rdtsc.asm,
+	source/realint.cpp, source/realint.h, source/setpages.inc,
 	source/sg.cpp, source/sg.h, source/sg.wpj, source/sgstream.cpp,
-	source/sgstream.h, source/spfst.cpp, source/spfst.h,
-	source/stack.cpp, source/stack.h, source/strtmesg.cpp,
-	source/strtmesg.h, source/timer.h, source/tpascal.inc,
-	source/tsm.bat, source/typen.cpp, source/typen.h,
-	source/weather.cpp, source/weather.h, source/hexagon/asc.tgt,
-	source/hexagon/mapedit/edhex.tgt, source/libs/bzlib/blocksort.c,
-	source/libs/bzlib/bzip2.1, source/libs/bzlib/bzip2.1.preformatted,
-	source/libs/bzlib/bzip2.c, source/libs/bzlib/CHANGES,
-	source/libs/bzlib/bzip2.txt, source/libs/bzlib/bzip2recover.c,
-	source/libs/bzlib/bzlib.c, source/libs/bzlib/bzlib.h,
-	source/libs/bzlib/bzlib_private.h, source/libs/bzlib/compress.c,
-	source/libs/bzlib/crctable.c, source/libs/bzlib/decompress.c,
-	source/libs/bzlib/howbig.c, source/libs/bzlib/huffman.c,
-	source/libs/bzlib/libbz2.def, source/libs/bzlib/libbzip2.tgt,
-	source/libs/bzlib/LICENSE, source/libs/bzlib/Makefile,
-	source/libs/bzlib/libbzip2.wpj, source/libs/bzlib/manual.ps,
-	source/libs/bzlib/README, source/libs/bzlib/manual.texi,
-	source/libs/bzlib/manual_1.html, source/libs/bzlib/manual_2.html,
-	source/libs/bzlib/manual_3.html, source/libs/bzlib/manual_4.html,
-	source/libs/bzlib/manual_toc.html, source/libs/bzlib/randtable.c,
-	source/libs/bzlib/words1, source/libs/bzlib/words2,
-	source/libs/bzlib/words3, source/libs/bzlib/os2/libbzip2.lb1,
+	source/sgstream.h, source/spfldutl.asm, source/spfldutl.h,
+	source/spfst.cpp, source/spfst.h, source/stack.cpp, source/stack.h,
+	source/strtmesg.cpp, source/strtmesg.h, source/timer.cpp,
+	source/timer.h, source/tpascal.inc, source/tsm.bat,
+	source/typen.cpp, source/typen.h, source/vesa.cpp, source/vesa.h,
+	source/view.cpp, source/weather.cpp, source/weather.h,
+	source/hexagon/asc.tgt, source/hexagon/mapedit/edhex.tgt,
+	source/libs/bzlib/blocksort.c, source/libs/bzlib/bzip2.1,
+	source/libs/bzlib/bzip2.1.preformatted, source/libs/bzlib/bzip2.c,
+	source/libs/bzlib/CHANGES, source/libs/bzlib/bzip2.txt,
+	source/libs/bzlib/bzip2recover.c, source/libs/bzlib/bzlib.c,
+	source/libs/bzlib/bzlib.h, source/libs/bzlib/bzlib_private.h,
+	source/libs/bzlib/compress.c, source/libs/bzlib/crctable.c,
+	source/libs/bzlib/decompress.c, source/libs/bzlib/howbig.c,
+	source/libs/bzlib/huffman.c, source/libs/bzlib/libbz2.def,
+	source/libs/bzlib/libbzip2.tgt, source/libs/bzlib/LICENSE,
+	source/libs/bzlib/Makefile, source/libs/bzlib/libbzip2.wpj,
+	source/libs/bzlib/manual.ps, source/libs/bzlib/README,
+	source/libs/bzlib/manual.texi, source/libs/bzlib/manual_1.html,
+	source/libs/bzlib/manual_2.html, source/libs/bzlib/manual_3.html,
+	source/libs/bzlib/manual_4.html, source/libs/bzlib/manual_toc.html,
+	source/libs/bzlib/randtable.c, source/libs/bzlib/words1,
+	source/libs/bzlib/words2, source/libs/bzlib/words3,
+	source/libs/bzlib/os2/libbzip2.lb1,
 	source/libs/bzlib/os2/libbzip2.tgt, source/libs/jpeg/ansi2knr.1,
 	source/libs/jpeg/ansi2knr.cpp, source/libs/jpeg/cderror.h,
 	source/libs/jpeg/cdjpeg.cpp, source/libs/jpeg/cdjpeg.h,

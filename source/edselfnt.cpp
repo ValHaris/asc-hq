@@ -1,6 +1,9 @@
-//     $Id: edselfnt.cpp,v 1.12 2000-08-06 13:14:16 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.13 2000-08-15 16:22:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/08/06 13:14:16  mbickel
+//      Fixed crashes in mapeditor
+//
 //     Revision 1.11  2000/08/06 11:39:06  mbickel
 //      New map paramter: fuel globally available
 //      Mapeditor can now filter buildings too
@@ -1377,30 +1380,33 @@ void selbuildingcargo( pbuilding bld )
    svtfbc.init( getvehicletypevector() );
    pvehicletype newcargo = svtfbc.selectitem ( NULL );
    if ( newcargo ) {
-      pvehicle unit;
+      pvehicle unit = NULL;
       generatevehicle_ka ( newcargo, bld->color / 8, unit );
-     
+
       int match = 0;
       int poss = 0;
-      for ( int i = 0; i < 8; i++ )
-         if ( unit->typ->height & ( 1 << i )) {
-            unit->height = 1 << i;
-            if ( bld->vehicleloadable ( unit )) {
-               poss |= 1 << i;
-               match = 1;
-         }
+      if ( unit ) {
+         for ( int i = 0; i < 8; i++ )
+            if ( unit->typ->height & ( 1 << i )) {
+               unit->height = 1 << i;
+               if ( bld->vehicleloadable ( unit )) {
+                  poss |= 1 << i;
+                  match = 1;
+               }
+            }
 
-       for ( int h2 = 0; h2<8; h2++ )
-         if ( unit->typ->height & ( 1 << h2 ))
-            if ( poss & ( 1 << h2 ))
-               if ( bld->typ->loadcapability & ( 1 << h2))
-                  unit->height = 1 << h2;
+          for ( int h2 = 0; h2<8; h2++ )
+            if ( unit->typ->height & ( 1 << h2 ))
+               if ( poss & ( 1 << h2 ))
+                  if ( bld->typ->loadcapability & ( 1 << h2))
+                     unit->height = 1 << h2;
 
-       for ( int h1 = 0; h1<8; h1++ )
-         if ( unit->typ->height & ( 1 << h1 ))
-            if ( poss & ( 1 << h1 ))
-               if ( bld->typ->buildingheight & ( 1 << h1))
-                  unit->height = 1 << h1;
+          for ( int h1 = 0; h1<8; h1++ )
+            if ( unit->typ->height & ( 1 << h1 ))
+               if ( poss & ( 1 << h1 ))
+                  if ( bld->typ->buildingheight & ( 1 << h1))
+                     unit->height = 1 << h1;
+       }
 
        if ( match ) {
           int p = 0;
@@ -1408,7 +1414,7 @@ void selbuildingcargo( pbuilding bld )
             p++;
           bld->loading[p] = unit;
           unit->setMovement ( unit->typ->movement[log2( unit->height)] );
-       } else
+       } else {
            displaymessage("The unit could not be loaded !",1);
            removevehicle ( &unit );
        }

@@ -13,7 +13,7 @@ The project's website is http://www.asc-hq.org
 
 ------------------------------------------------------------------------------
 
-Since version 1.1.11 ASC looks for all savegames, email files etc. in ~./asc
+Since version 1.2.0 ASC looks for all savegames, email files etc. in ~./asc
 and writes all files there. If you have previosly run ASC from a different
 directory, either move all your files to ~/.asc/ or specify your directory as 
 searchPath in ~/.asc/ascrc (this file is generated when the new ASC version 
@@ -29,20 +29,27 @@ clicking on help on the right hand side when the menu bar appears.
 
 Troubleshooting:
 
-1)  ASC complains it can't find palette.pal
-    This happens if main.con are not in your current directory when you run 
-    asc. cd to the asc directory ( containing main.con ) and try again.
-
-2)  ASC complains it can't load libSDL-1.0.so.0
-    This happens if you haven't got version 1.0.2 or later of SDL installed
+1)  ASC complains it can't load libSDL-1.1.so.0
+    This happens if you haven't got version 1.1.0 or later of SDL installed
     on your system.  Get it from :
 
-    http://www.devolution.com/~slouken/SDL/cvs/SDL-1.0.tar.gz
+    http://www.libsdl.org/download-1.1.html
 
     unpack it, and cd into it.  ./autogen.sh ; make
     then become root and make install.
 
-3)  I have installed SDL, but ASC still can't load libSDL-1.0.so.0
+2)  ASC complains it can't load libSDL_image-1.0.so.0
+    This happens if you haven't got version 1.1.0 or later of SDL installed
+    on your system.  Get it from :
+
+    http://www.libsdl.org/projects/SDL_image/index.html
+
+    unpack it, and cd into it.  ./autogen.sh ; make
+    then become root and make install.
+
+
+3)  I have installed SDL / SDL_image, but ASC still can't load
+    libSDL-1.1.so.0 or libSDL_image-1.0.so.0
     You probably don't have /usr/local/lib in your LD_LIBRARY_PATH or
     /etc/ld.so.conf.  The quick solution is to incant:
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
@@ -53,18 +60,25 @@ Troubleshooting:
     to /etc/ld.so.conf (you must be root to do this).
 
 4)  ASC complains that it can't find SDL_EnableKeyRepeat
-    You're running an old version of SDL.  See fixes in 2 and 3 above.
+    You're running an old version of SDL.  See fixes in 1 and 3 above.
 
 5)  ASC doesn't run and/or it crashes my X server.
     try running it with the -window flag on the command line.
     
 6)  ASC runs in fullscreen, but there is a big black border arount the
-    area of the screen that is beeing used:
+    area of the screen:
+
     You must add the resolution 800*600 to your xf86config, which is the 
     resolution ASC uses by default.
-    Alternatively, you can run ASC in window mode ( -window on the command
+    Your Linux distribution may have a more comfortable way to do this.
+    On SuSE Linux for example, this can be done with SAX on the
+    "extended desktop settings" (?) page.
+
+    Alternatively, you can run ASC in window mode ( --window on the command
     line), or change the resolution it uses ( -x and -y command line options)
     Type ASC --help for a summary of the command line parameters
+
+
 
 Some notes:
  - to run under X in fullscreen mode you need DGA. You may need to upgrade
