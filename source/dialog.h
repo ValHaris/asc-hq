@@ -1,7 +1,10 @@
-//     $Id: dialog.h,v 1.6 2000-05-23 20:40:42 mbickel Exp $
+//     $Id: dialog.h,v 1.7 2000-06-08 21:03:41 mbickel Exp $
 
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/05/23 20:40:42  mbickel
+//      Removed boolean type
+//
 //     Revision 1.5  2000/03/29 09:58:44  mbickel
 //      Improved memory handling for DOS version
 //      Many small changes I can't remember ;-)
@@ -94,7 +97,7 @@ class    tscrollbarn {
 extern void  vehicle_information ( pvehicletype type = NULL);
    
 extern int   dispmessage2(int          id,
-                          char *       st);
+                          char *       st = NULL );
    
 extern void  loadmessages(void);
    

@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.19 2000-06-06 20:03:19 mbickel Exp $
+//     $Id: typen.cpp,v 1.20 2000-06-08 21:03:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/06/06 20:03:19  mbickel
+//      Fixed graphical error when transfering ammo in buildings
+//      Sound can now be disable by a command line parameter and the game options
+//
 //     Revision 1.18  2000/05/23 20:40:52  mbickel
 //      Removed boolean type
 //
@@ -1118,6 +1122,18 @@ void tvehicle :: resetmovement ( void )
     } 
     */
 }
+
+
+int tvehicle :: weapexist( void )
+{ 
+   if ( typ->weapons->count > 0) 
+      for ( int b = 0; b < typ->weapons->count ; b++) 
+         if ( typ->weapons->weapon[b].shootable() ) 
+            if ( typ->weapons->weapon[b].offensive() ) 
+               if ( ammo[b] ) 
+                  return 1; 
+    return 0;
+} 
 
 
 void tvehicle :: putimage ( int x, int y )

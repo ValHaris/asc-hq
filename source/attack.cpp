@@ -1,6 +1,12 @@
-//     $Id: attack.cpp,v 1.16 2000-06-04 21:39:17 mbickel Exp $
+//     $Id: attack.cpp,v 1.17 2000-06-08 21:03:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/06/04 21:39:17  mbickel
+//      Added OK button to ViewText dialog (used in "About ASC", for example)
+//      Invalid command line parameters are now reported
+//      new text for attack result prediction
+//      Added constructors to attack functions
+//
 //     Revision 1.15  2000/05/30 18:39:19  mbickel
 //      Added support for multiple directories
 //      Moved DOS specific files to a separate directory
@@ -122,23 +128,24 @@
    #define  kf_planes  18               /* wird durch 8 geteilt */
 
 
-byte         attackstrength(byte         damage)
+int          attackstrength(byte         damage)
 { 
    return (300 - 2 * damage) / 3; 
 } 
 
-
-byte         get_heaviest_weapon(pvehicle     d_eht,
-                                 byte         aheight,
-                                 byte         distance)
+/*
+int          get_strongest_weapon(pvehicle     d_eht,
+                                  int          targetheight,
+                                  int          distance,
+                                  int          targettype )
 { 
    int i = 0; 
    int str = 0; 
-   int hw = 255;   /*  error-wert  ( keine waffe gefunden )  */ 
+   int hw = 255;   
    if (distance <= maxmalq) 
          while (i + 1 <= d_eht->typ->weapons->count) { 
-            if ((d_eht->ammo[i] > 0) && (d_eht->weapstrength[i] > str) && (d_eht->typ->weapons->weapon[i].mindistance <= distance) && (d_eht->typ->weapons->weapon[i].maxdistance >= distance) && (d_eht->typ->weapons->weapon[i].targ & aheight ) && 
-               (d_eht->typ->weapons->weapon[i].sourceheight & d_eht->height )) {
+            if ((d_eht->ammo[i] > 0) && (d_eht->weapstrength[i] > str) && (d_eht->typ->weapons->weapon[i].mindistance <= distance) && (d_eht->typ->weapons->weapon[i].maxdistance >= distance) && (d_eht->typ->weapons->weapon[i].targ & aheight ) 
+                 && (d_eht->typ->weapons->weapon[i].sourceheight & d_eht->height )) {
                hw = i;
                str = d_eht->weapstrength[i]; 
             } 
@@ -146,7 +153,7 @@ byte         get_heaviest_weapon(pvehicle     d_eht,
       } 
    return hw; 
 } 
-
+*/
 
 
 
@@ -514,9 +521,21 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    int dist = beeline ( attackingunit->xpos, attackingunit->ypos, attackedunit->xpos, attackedunit->ypos );
    int _weapon;
 
-   if ( weapon == -1 )
-      _weapon = get_heaviest_weapon( attackingunit, attackedunit->height, dist );
-   else
+   if ( weapon == -1 ) {
+      pattackweap atw = attackpossible( attackingunit, attackedunit->xpos, attackedunit->ypos );
+      int n = -1;
+      int s = 0;
+      for ( int i = 0; i < atw->count; i++ )
+         if ( atw->strength[i] > s ) {
+            s = atw->strength[i];
+            n = i;
+         }
+   
+      _weapon = atw->num[n];
+   
+      delete atw;
+   
+   } else
       _weapon  = weapon;
 
    SingleWeapon* weap = attackingunit->getWeapon(_weapon);
@@ -547,7 +566,7 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
 
 
    if ( dist <= maxmalq  &&  respond ) {
-      tattackweap atw;
+      AttackWeap atw;
       attackpossible2n ( attackedunit, attackingunit, &atw );
       int n = -1;
       int s = 0;
@@ -673,9 +692,20 @@ void tunitattacksbuilding :: setup ( pvehicle attackingunit, int x, int y, int w
    int dist = beeline ( attackingunit->xpos, attackingunit->ypos, x, y );
    int _weapon;
 
-   if ( weapon == -1 )
-      _weapon = get_heaviest_weapon( attackingunit, _attackedbuilding->typ->buildingheight, dist );
-   else
+   if ( weapon == -1 ) {
+      pattackweap atw = attackpossible( attackingunit, x, y );
+      int n = -1;
+      int s = 0;
+      for ( int i = 0; i < atw->count; i++ )
+         if ( atw->strength[i] > s ) {
+            s = atw->strength[i];
+            n = i;
+         }
+   
+      _weapon = atw->num[n];
+   
+      delete atw;
+   } else
       _weapon  = weapon;
 
    SingleWeapon *weap = &attackingunit->typ->weapons->weapon[_weapon];

@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.34 2000-06-05 18:21:21 mbickel Exp $
+//     $Id: controls.cpp,v 1.35 2000-06-08 21:03:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2000/06/05 18:21:21  mbickel
+//      Fixed a security hole which was opened with the new method of loading
+//        mail games by command line parameters
+//
 //     Revision 1.33  2000/06/04 21:39:18  mbickel
 //      Added OK button to ViewText dialog (used in "About ASC", for example)
 //      Invalid command line parameters are now reported
@@ -2169,7 +2173,7 @@ treactionfirereplay :: treactionfirereplay ( void )
    unit = NULL;
 }
 
-void treactionfirereplay :: init ( pvehicle eht, FieldList* fieldlist )
+void treactionfirereplay :: init ( pvehicle eht, IntFieldList* fieldlist )
 {
    if ( runreplay.status > 0 ) {
       preactionfire_replayinfo rpli;
@@ -2275,7 +2279,7 @@ tsearchreactionfireingunits :: tsearchreactionfireingunits ( void )
       unitlist[i] = NULL;
 }
 
-void tsearchreactionfireingunits :: init ( pvehicle vehicle, FieldList* fieldlist )
+void tsearchreactionfireingunits :: init ( pvehicle vehicle, IntFieldList* fieldlist )
 {
    int x1 = maxint;
    int y1 = maxint;
@@ -2489,178 +2493,7 @@ tsearchreactionfireingunits :: ~tsearchreactionfireingunits()
 }
                                    
 
-
-
-void         tsearchattackablevehicles::init( const pvehicle     eht)
-{ 
-   messages = true; 
-   angreifer = eht; 
-   kamikaze = false; 
-}
-
-
-
-void         tsearchattackablevehicles::testfield(void)
-{ 
-  pattackweap  atw; 
-
-   if (fieldvisiblenow(getfield(xp,yp))) { 
-      atw = attackpossible(angreifer,xp,yp); 
-      if (atw->count > 0) { 
-         getfield(xp,yp)->a.temp = dist; 
-         anzahlgegner++;
-      } 
-      delete atw;
-   } 
-} 
-
-
-void         tsearchattackablevehicles::initattacksearch(void)
-{ 
-  integer      ma, mi, a, d; 
-
-     /* cleartemps; */ 
-
-   attackposs = false; 
-   anzahlgegner = 0; 
-
-   if (angreifer == NULL) { 
-      if (messages) 
-         dispmessage2(201,getactfield()->typ->terraintype->name); 
-
-      return;
-   } 
-
-   moveparams.movesx = angreifer->xpos; 
-   moveparams.movesy = angreifer->ypos; 
-   if (fieldvisiblenow(getfield(moveparams.movesx,moveparams.movesy)) == false) 
-      return;
-
-
-   if (angreifer->attacked) { 
-      if (messages) 
-         dispmessage2(202,""); 
-      return;
-   } 
-
-   if (angreifer->typ->weapons->count == 0) { 
-      if (messages) 
-         dispmessage2(204,""); 
-      return;
-   } 
-   if (angreifer->typ->wait &&  angreifer->reactionfire_active < 3 ) 
-      if (angreifer->movement != angreifer->typ->movement[log2(angreifer->height)]) { 
-         if (messages) 
-            dispmessage2(205,""); 
-         return;
-      } 
-
-   d = 0; 
-   ma = 0; 
-   mi = 20000; 
-   for (a = 0; a < angreifer->typ->weapons->count; a++) { 
-      if (angreifer->ammo[a] > 0) 
-         d++; 
-
-         if ((angreifer->typ->weapons->weapon[a].maxdistance >> 3) > ma) ma = (angreifer->typ->weapons->weapon[a].maxdistance >> 3);
-         if ((angreifer->typ->weapons->weapon[a].mindistance >> 3) < mi) mi = (angreifer->typ->weapons->weapon[a].mindistance >> 3);
-      
-   } 
-
-   if (d == 0) { 
-      if (messages) 
-         dispmessage2(204,""); 
-      return;
-   } 
-   attackposs = true; 
-   initsuche(angreifer->xpos,angreifer->ypos,ma + 1,mi); 
-} 
-
-
-void         tsearchattackablevehicles::startsuche(void)
-{ 
-   if (attackposs) { 
-      tsearchfields::startsuche();
-      if (anzahlgegner > 0) { 
-         moveparams.movestatus = 10; 
-         displaymap(); 
-      } 
-      else 
-         if (messages) 
-            dispmessage2(206,""); 
-   } 
-} 
-
-
-void         tsearchattackablevehicles::run(void)
-{ 
-   initattacksearch(); 
-   startsuche(); 
-} 
-
-
-void         tsearchattackablevehicleskamikaze::init(  const pvehicle eht )
-{ 
-   tsearchattackablevehicles::init(eht);
-   kamikaze = true; 
-} 
-
-
-void         tsearchattackablevehicleskamikaze::initattacksearch(void)
-{ 
-
-
-   if (angreifer == NULL) { 
-      if (messages) 
-         dispmessage2(201,getactfield()->typ->terraintype->name); 
-      return;
-   } 
-
-     /* cleartemps; */ 
-
-   attackposs = false; 
-   anzahlgegner = 0; 
-
-   moveparams.movesx = angreifer->xpos; 
-   moveparams.movesy = angreifer->ypos; 
-
-   if (angreifer->attacked) { 
-      if (messages) 
-         dispmessage2(202,""); 
-      return;
-   } 
-   if (angreifer->typ->wait) 
-      if (angreifer->movement != angreifer->typ->movement[log2(angreifer->height)]) { 
-         if (messages) 
-            dispmessage2(205,""); 
-         return;
-      } 
-
-
-   attackposs = true; 
-   initsuche(angreifer->xpos,angreifer->ypos,1,1); 
-} 
-
-
-void         tsearchattackablevehicleskamikaze::testfield(void)
-{ 
- pvehicle     eht; 
-
-   if (fieldvisiblenow(getfield(xp,yp))) { 
-      eht = getfield(xp,yp)->vehicle; 
-      if (eht != NULL) 
-         if (((angreifer->height >= chtieffliegend) && (eht->height <= angreifer->height) && (eht->height >= chschwimmend)) 
-           || ((angreifer->height == chfahrend) && (eht->height == chfahrend)) 
-           || ((angreifer->height == chschwimmend) && (eht->height == chschwimmend))
-           || ((angreifer->height == chgetaucht) && (eht->height >=  chgetaucht) && (eht->height <= chschwimmend))) {
-            getfield(xp,yp)->a.temp = dist; 
-            anzahlgegner++; 
-         } 
-   } 
-} 
-
-
-
+/*
 void         attack(char      kamikaze, int  weapnum )
 {                                            
 
@@ -2747,6 +2580,7 @@ void         attack(char      kamikaze, int  weapnum )
 
       } 
 } 
+*/
 
 int squareroot ( int i )
 {

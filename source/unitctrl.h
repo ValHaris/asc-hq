@@ -1,6 +1,12 @@
-//     $Id: unitctrl.h,v 1.4 2000-06-04 21:39:22 mbickel Exp $
+//     $Id: unitctrl.h,v 1.5 2000-06-08 21:03:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/06/04 21:39:22  mbickel
+//      Added OK button to ViewText dialog (used in "About ASC", for example)
+//      Invalid command line parameters are now reported
+//      new text for attack result prediction
+//      Added constructors to attack functions
+//
 //     Revision 1.3  2000/05/23 20:40:53  mbickel
 //      Removed boolean type
 //
@@ -47,27 +53,37 @@
 #include "basestrm.h"
 #include "spfst.h"
 
+
+template<class T>
 class FieldList {
        pmap localmap;
        int fieldnum;
        dynamic_array<int> xpos;
        dynamic_array<int> ypos;
+       dynamic_array<T>   data;
      public:
        FieldList ( void );
        int getFieldNum ( void );
        pfield getField ( int num );
+       T* getData ( int num );
+       T* getData ( int x, int y );
        void getFieldCoordinates ( int num, int* x, int* y );
-       void addField ( int x, int y );
+       void addField ( int x, int y, T* _data = NULL );
        void setMap ( pmap map );
        pmap getMap ( void );
        int isMember ( int x, int y );
      };
 
 
+
+typedef FieldList<int> IntFieldList;
+typedef FieldList<AttackWeap> AttackFieldList;
+
+
 typedef class PendingVehicleActions* PPendingVehicleActions;
 
 
-enum VehicleActionType { vat_nothing, vat_move, vat_ascent, vat_descent };
+enum VehicleActionType { vat_nothing, vat_move, vat_ascent, vat_descent, vat_attack };
 
 class VehicleAction {
            protected:
@@ -82,6 +98,25 @@ class VehicleAction {
               virtual ~VehicleAction ( );
          };
 
+/* Usage of VehicleActions:
+ *   The contstructor usually requires passing of MapDisplayInterface* which is a class that controls the visual 
+ *    output of the vehicle action. "defaultMapDisplay" is a global object that handles the output. When NULL is passed, 
+ *    any graphical output is disabled. 
+ *   available ( unit ) checks, whether this functions is available or not. If it is available, it can be exectuted
+ *    with several calls to:
+ *   execute ( ... ). Most vehicle actions are divided into several tasks, which have to be executed one after another.
+ *    getStatus() return the current task number, which has to be passed to execute. I recommend to pass hardcoded constants
+ *    to execute instead of getStatus() to make sure the caller and the action are in sync.
+ *    The parameters for execute are explained for each vehicle function; -1 is used for parameters that are not used
+ *    If an error occurs, the result of execute will be negative and indicate an appropriate error message 
+ *    (file message1.txt). You can get it with getmessage( -result ) or directly print it to the status line with 
+ *    dispmessage2 ( -result );
+ *    A result of 1000 shows that the action is completed.
+ *   registerPVA is usually not necessary to be called externally
+ */
+
+
+
 typedef int trichtungen[sidenum]; 
 
 
@@ -90,7 +125,7 @@ class BaseVehicleMovement : public VehicleAction {
               MapDisplayInterface* mapDisplay;
            public:
               BaseVehicleMovement ( VehicleActionType _actionType, PPendingVehicleActions _pva ) : VehicleAction ( _actionType, _pva ) {};
-              FieldList path;
+              IntFieldList path;
               pvehicle getVehicle ( void ) { return vehicle; };
 
             protected:
@@ -121,7 +156,7 @@ class BaseVehicleMovement : public VehicleAction {
                                           pvehicle     eht,
                                           int          md,
                                           int          _height,
-                                          FieldList*   path );
+                                          IntFieldList*   path );
                   } fieldReachableRek;
           };
 
@@ -129,8 +164,8 @@ class BaseVehicleMovement : public VehicleAction {
 class VehicleMovement : public BaseVehicleMovement {
               int status;
            public:
-              FieldList reachableFields;
-              FieldList reachableFieldsIndirect;
+              IntFieldList reachableFields;
+              IntFieldList reachableFieldsIndirect;
               int available ( pvehicle veh ) const;
               int getStatus ( void ) { return status; };
               int execute ( pvehicle veh, int x, int y, int step, int height, int param2 );
@@ -157,11 +192,31 @@ class VehicleMovement : public BaseVehicleMovement {
 
           };
 
+/* VehicleMovement:
+ *
+ *   Step 0:   execute ( vehicle, -1, -1, step = 0 , height, -1 );
+ *                 height is usually -1, which means the aircraft will move on the same level of height it currently has
+ *                        But there are situations like starting aircraft from carriers where it has to be set to the height 
+ *                        the aircraft should move on after start. Don't use this height for regular height changing!
+ *
+ *             the fields that are reachable will be stored in "reachableFields". "reachableFieldsIndirect" contains fields
+ *                 the unit could move to if the field was empty
+ *
+ *   Step 2:   execute ( NULL, destination-x, destination-y, step = 2, -1, -1 );
+ *                The destination must be one of the fields in "reachableFields"
+ *                the effect of this step is that "path" contains the fields that the unit will move over to reach the 
+ *                 destination.
+ *            
+ *   Step 3:   execute ( NULL, destination-x, destination-y, step = 3, -1, -1 );
+ *                The destination must be one of the fields in "path"
+ */
+
+
 
 class ChangeVehicleHeight : public BaseVehicleMovement {
               int status;
            public:
-              FieldList reachableFields;
+              IntFieldList reachableFields;
               int getStatus ( void ) { return status; };
               int execute ( pvehicle veh, int x, int y, int step, int height, int param2 );
               ChangeVehicleHeight ( MapDisplayInterface* md, PPendingVehicleActions _pva , VehicleActionType vat );
@@ -191,18 +246,65 @@ class DecreaseVehicleHeight : public ChangeVehicleHeight {
           };
 
 
-/*
+/* IncreaseVehicleHeight / DecreaseVehicleHeight:
+ *
+ *   Step 0:   execute ( vehicle, -1, -1, step = 0 , newheight, -1 );
+ *                 newheight should be vehicle->height >> 1 for DecreaseVehicleHeight and 
+ *                                     vehicle->height << 1 for IncreaseVehicleHeight.
+ *                 Depending of the units ability to change its height vertically (for example helicopter and submarine) or
+ *                   by moving a distance ( normal airplanes ), execute will either immediatly change the units height and 
+ *                   finish (status == 1000), or follow the same procedure as VehicleMovement.
+ *   (Step 2)  see VehicleMovement
+ *   (Step 3)  see VehicleMovement
+ */
+
+
+
 class VehicleAttack : public VehicleAction {
+              pvehicle vehicle;
               int status;
+              int kamikaze;
+              class tsearchattackablevehicles : public tsearchfields {
+                                  VehicleAttack* va;
+                               public:
+                                  int       anzahlgegner;
+                                  pvehicle  angreifer;
+                                  int       kamikaze;
+                                  void            init ( const pvehicle eht, int _kamikaze, VehicleAttack* _va );
+                                  virtual void    testfield ( void );
+                                  int             run ( void );
+                          } search;
+
+           protected:
+              MapDisplayInterface* mapDisplay;
            public:
+              AttackFieldList attackableVehicles;
+              AttackFieldList attackableBuildings;
+              AttackFieldList attackableObjects;
+
               int getStatus( void ) { return status; };
-              virtual int available ( pvehicle veh ) const = 0;
-              virtual int execute ( pvehicle veh, int x, int y, int step, int param1, int param2 ) = 0;
+              virtual int available ( pvehicle veh ) const;
+              virtual int execute ( pvehicle veh, int x, int y, int step, int _kamikaze, int weapnum );
               virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
-              VehicleAttack ( VehicleActionType _actionType, PPendingVehicleActions _pva  );
+              VehicleAttack ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
               virtual ~VehicleAttack ( );
          };
-*/
+
+
+
+/* VehicleAttack:
+ *
+ *   Step 0:   execute ( vehicle, -1, -1, step = 0 , kamikaze, -1 );
+ *                 kamikaze attack is not implemented yet. Always pass 0
+ *                        
+ *                 "attackableVehicles", "attackableBuildings", "attackableObjects" contains the possible targets of the 
+ *                   unit, along with information about the weapon(s) which can be used for the attack
+ *
+ *   Step 2:   execute ( NULL, target-x, target-y, step = 2, -1, weapnum );
+ *                The target destination must be part of one of the "attackable*" fields.
+ *                weapnum may either be a specific weapon or -1 if the most powerful one should be used
+ */
+
 
 
 class PendingVehicleActions {
@@ -214,6 +316,7 @@ class PendingVehicleActions {
             VehicleMovement* move;
             IncreaseVehicleHeight* ascent;
             DecreaseVehicleHeight* descent;
+            VehicleAttack* attack;
             ~PendingVehicleActions ( );
          };
 

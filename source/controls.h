@@ -1,6 +1,10 @@
-//     $Id: controls.h,v 1.12 2000-06-05 18:21:23 mbickel Exp $
+//     $Id: controls.h,v 1.13 2000-06-08 21:03:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/06/05 18:21:23  mbickel
+//      Fixed a security hole which was opened with the new method of loading
+//        mail games by command line parameters
+//
 //     Revision 1.11  2000/05/23 20:40:40  mbickel
 //      Removed boolean type
 //
@@ -256,28 +260,6 @@ enum tvisibilitytempbuf { vsight, vjamming, vfeatures };
 
 
 
-
-  class tsearchattackablevehicles : public tsearchfields {
-                public:
-                                  char   messages;
-                                  word      anzahlgegner;
-                                  pvehicle  angreifer;
-                                  char   attackposs;
-                                  char   kamikaze;
-                                  void            init ( const pvehicle eht );
-                                  virtual void    testfield ( void );
-                                  virtual void    initattacksearch ( void );
-                                  virtual void    startsuche ( void );
-                                  void            run ( void );
-                               };                                             
-  class tsearchattackablevehicleskamikaze : public tsearchattackablevehicles {
-                public:
-                                  void            init ( const pvehicle eht );
-                                  virtual void    testfield ( void );        
-                                  virtual void    initattacksearch ( void );
-                                       };
-
-
    class trefuelvehicle : public tsearchfields {
                 public:
                        char             mode;
@@ -322,7 +304,7 @@ enum tvisibilitytempbuf { vsight, vjamming, vfeatures };
 extern void  _td_movement(pvehicle     vehicle, int unitheight = -1);
 
 
-extern void  attack(char      kamikaze, int  weapnum = 0);
+// extern void  attack(char      kamikaze, int  weapnum = 0);
 
 extern void  calcmovemalus(int          x1,
                            int          y1,
@@ -622,7 +604,7 @@ extern int  evaluateviewcalculation ( int player_fieldcount_mask = 0 );     // p
 class treactionfire {
           public:
              virtual int  checkfield ( int x, int y, pvehicle &eht, MapDisplayInterface* md ) = 0;
-             virtual void init ( pvehicle eht, FieldList* fieldlist ) = 0;
+             virtual void init ( pvehicle eht, IntFieldList* fieldlist ) = 0;
              virtual ~treactionfire() {};                           
         };
 
@@ -635,7 +617,7 @@ class treactionfirereplay : public treactionfire {
              treactionfirereplay ( void );
              ~treactionfirereplay ( );
              virtual int checkfield ( int x, int y, pvehicle &eht, MapDisplayInterface* md );
-             virtual void init ( pvehicle eht, FieldList* fieldlist );
+             virtual void init ( pvehicle eht, IntFieldList* fieldlist );
    };
 
 class tsearchreactionfireingunits : public treactionfire {
@@ -648,7 +630,7 @@ class tsearchreactionfireingunits : public treactionfire {
            public:
 
                 tsearchreactionfireingunits( void );
-                void init ( pvehicle eht, FieldList* fieldlist );
+                void init ( pvehicle eht, IntFieldList* fieldlist );
                 int  checkfield ( int x, int y, pvehicle &eht, MapDisplayInterface* md );  
                 ~tsearchreactionfireingunits();
       };

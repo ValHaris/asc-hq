@@ -1,6 +1,12 @@
-//     $Id: gui.cpp,v 1.22 2000-06-04 21:39:20 mbickel Exp $
+//     $Id: gui.cpp,v 1.23 2000-06-08 21:03:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/06/04 21:39:20  mbickel
+//      Added OK button to ViewText dialog (used in "About ASC", for example)
+//      Invalid command line parameters are now reported
+//      new text for attack result prediction
+//      Added constructors to attack functions
+//
 //     Revision 1.21  2000/05/30 18:39:24  mbickel
 //      Added support for multiple directories
 //      Moved DOS specific files to a separate directory
@@ -1172,6 +1178,7 @@ void  tnsguiiconmove::display      ( void )
 
 
 tnsguiiconattack::tnsguiiconattack ( void )
+                 :vehicleAttack ( NULL )
 {
    strcpy ( filename, "attack" );
 }
@@ -1180,25 +1187,46 @@ tnsguiiconattack::tnsguiiconattack ( void )
 
 int   tnsguiiconattack::available    ( void ) 
 {
-   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) { 
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
       pvehicle eht = getactfield()->vehicle; 
-      if (eht != NULL) 
-         if (eht->color == actmap->actplayer * 8) 
-            if (eht->attacked == false)
-              if ((eht->typ->wait == false) || (eht->movement == eht->typ->movement[log2(eht->height)]  ||  eht->reactionfire_active >= 3 ))
-                if (weapexist(eht))
-                   return 1;
- 
+      if ( eht ) 
+         if ( eht->color == actmap->actplayer * 8) 
+            if ( vehicleAttack.available ( eht ))
+               return 1; 
    } 
    return 0;
 }
 
 void  tnsguiiconattack::exec         ( void ) 
 {
-   attack(false); 
+   if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
+      new VehicleAttack ( &defaultMapDisplay, &pendingVehicleActions );
+
+      int res;
+      res = pendingVehicleActions.attack->execute ( getactfield()->vehicle, -1, -1, 0, 0, -1 );
+      if ( res < 0 ) {
+         dispmessage2 ( -res, NULL );
+         delete pendingVehicleActions.action;
+         return;
+      }
+
+      int i;
+      for ( i = 0; i < pendingVehicleActions.attack->attackableVehicles.getFieldNum(); i++ ) 
+         pendingVehicleActions.attack->attackableVehicles.getField( i ) ->a.temp = 1;
+      for ( i = 0; i < pendingVehicleActions.attack->attackableBuildings.getFieldNum(); i++ ) 
+         pendingVehicleActions.attack->attackableBuildings.getField( i ) ->a.temp = 1;
+      for ( i = 0; i < pendingVehicleActions.attack->attackableObjects.getFieldNum(); i++ ) 
+         pendingVehicleActions.attack->attackableObjects.getField( i ) ->a.temp = 1;
+
+      displaymap();
+
+      actgui->restorebackground();
+      selectweaponguihost.init( hgmp->resolutionx, hgmp->resolutiony );
+      //selectweaponguihost.restorebackground();
+      actgui = &selectweaponguihost;
+      actgui->painticons();
+   }
 }
-
-
 
 
 
@@ -2146,7 +2174,7 @@ int   tnsguiiconenablereactionfire::available    ( void )
       if ( eht->color == actmap->actplayer * 8) 
          if ( !eht->reactionfire_active )
             if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
-               if ( weapexist ( eht ))
+               if ( eht->weapexist() )
                   return 1;
 
    return 0;
@@ -2174,7 +2202,7 @@ int   tnsguiicondisablereactionfire::available    ( void )
       if ( eht->color == actmap->actplayer * 8) 
          if ( eht->reactionfire_active )
             if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
-               if ( weapexist ( eht ))
+               if ( eht->weapexist() )
                   return 1;
 
    return 0;
@@ -2686,19 +2714,23 @@ tselectweaponguihost::tselectweaponguihost ( void )
 
 void tselectweaponguihost :: init ( int resolutionx, int resolutiony )
 {
-   tguihost :: init ( resolutionx, resolutiony );
+    tguihost :: init ( resolutionx, resolutiony );
    
-    pvehicle eht = getfield(moveparams.movesx,moveparams.movesy)->vehicle;
-    
-    pattackweap atw = attackpossible(eht, getxpos(),getypos());
+    // pvehicle eht = getfield(moveparams.movesx,moveparams.movesy)->vehicle;
+    // pattackweap atw = attackpossible(eht, getxpos(),getypos());
+
+    pattackweap atw = pendingVehicleActions.attack->attackableVehicles.getData( getxpos(), getypos() );
+    if ( !atw ) 
+       atw = pendingVehicleActions.attack->attackableBuildings.getData( getxpos(), getypos() );
+    if ( !atw ) 
+       atw = pendingVehicleActions.attack->attackableObjects.getData( getxpos(), getypos() );
  
     getfirsticon()->setup ( atw, 0 );
     
-    delete atw;
-
     x = getxpos();
     y = getypos();
 }
+
 
 int     tselectweaponguihost ::  painticons ( void )
 {
@@ -2862,14 +2894,16 @@ void  tnweapselguiicon::exec         ( void )
 {
    if ( available() ) {
       if ( weapnum >= 0 ) {
-         attack ( false, weapnum );
-         displaymap();
-      } else {
-         moveparams.movestatus = 0;
-         cleartemps ( 0xff );
-         displaymap();
-         dashboard.x = 0xffff;
+         int res = pendingVehicleActions.attack->execute ( NULL, getxpos(), getypos(), 2, 0, weapnum );
+         if ( res < 0 )
+            dispmessage2 ( -res, NULL );
+
       }
+      delete pendingVehicleActions.attack;
+      cleartemps ( 0xff );
+      displaymap();
+      dashboard.x = 0xffff;
+
       actgui = &gui;
    }
 }
@@ -2926,7 +2960,7 @@ void  tnweapselguiicon::checkforkey  ( tkey key )
 void  tnweapselguiicon::setup        ( pattackweap atw, int n )
 {
    iconnum  = n;
-   if ( n < atw->count ) {
+   if ( atw && n < atw->count ) {
       typ      = log2( atw->typ[n] );
       strength = atw->strength[n];
       weapnum  = atw->num[n];
@@ -2942,7 +2976,7 @@ void  tnweapselguiicon::setup        ( pattackweap atw, int n )
           else
              picture[0]  = icons.selectweapongui[ typ ];
    } else 
-      if ( n == atw->count ) {
+      if ( (!atw && n == 0 ) || (atw && n == atw->count) ) {
         typ      = -2;
         strength = -1;
         weapnum  = -1;

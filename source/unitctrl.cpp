@@ -1,6 +1,12 @@
-//     $Id: unitctrl.cpp,v 1.8 2000-06-04 21:39:22 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.9 2000-06-08 21:03:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/06/04 21:39:22  mbickel
+//      Added OK button to ViewText dialog (used in "About ASC", for example)
+//      Invalid command line parameters are now reported
+//      new text for attack result prediction
+//      Added constructors to attack functions
+//
 //     Revision 1.7  2000/05/18 14:14:50  mbickel
 //      Fixed bug in movemalus calculation for movement
 //      Added "view movement range"
@@ -72,18 +78,18 @@ PendingVehicleActions pendingVehicleActions;
 
 
 
-FieldList :: FieldList ( void )
+template<class T> FieldList<T> :: FieldList ( void )
 {
    fieldnum = 0;
    localmap = NULL;
 }
 
-int FieldList :: getFieldNum ( void )
+template<class T> int FieldList<T> :: getFieldNum ( void )
 {
    return fieldnum;
 }
 
-pfield FieldList :: getField ( int num )
+template<class T> pfield FieldList<T> :: getField ( int num )
 {
    if ( num < fieldnum && num >= 0 )
       return getfield ( xpos[num], ypos[num] );
@@ -91,7 +97,26 @@ pfield FieldList :: getField ( int num )
       return NULL;
 }
 
-void FieldList :: getFieldCoordinates ( int num, int* x, int* y )
+
+template<class T> T* FieldList<T> :: getData ( int num )
+{
+   if ( num < fieldnum && num >= 0 )
+      return &data[num] ;
+   else
+      return NULL;
+}
+
+template<class T> T* FieldList<T> :: getData ( int x, int y )
+{
+   for ( int i = 0; i < fieldnum; i++ )
+      if ( xpos[i] == x && ypos[i] == y )
+         return &data[i];
+
+   return NULL;
+}
+
+
+template<class T> void FieldList<T> :: getFieldCoordinates ( int num, int* x, int* y )
 {
    if ( num < fieldnum && num >= 0 ) {
       *x = xpos[num];
@@ -102,7 +127,7 @@ void FieldList :: getFieldCoordinates ( int num, int* x, int* y )
    }
 }
 
-void FieldList :: addField ( int x, int y )
+template<class T> void FieldList<T> :: addField ( int x, int y, T* _data )
 {
    int found = 0;
    for( int i = 0; i < fieldnum; i++ )
@@ -111,21 +136,24 @@ void FieldList :: addField ( int x, int y )
    if ( !found ) {
       xpos[fieldnum] = x;
       ypos[fieldnum] = y;
+      if ( _data )
+         data[fieldnum] = *_data;
+         
       fieldnum++;
    }
 }
 
-void FieldList :: setMap ( pmap map )
+template<class T> void FieldList<T> :: setMap ( pmap map )
 {
    localmap = map;
 }
 
-pmap FieldList :: getMap ( void )
+template<class T> pmap FieldList<T> :: getMap ( void )
 {
    return localmap;
 }
 
-int FieldList :: isMember ( int x, int y )
+template<class T> int FieldList<T> :: isMember ( int x, int y )
 {
    for ( int i = 0; i < fieldnum; i++ )
       if ( xpos[i] == x && ypos[i] == y )
@@ -542,7 +570,7 @@ void   VehicleMovement :: FieldReachableRek :: run(int          x22,
                                                    pvehicle     eht,
                                                    int          md,
                                                    int          _height,
-                                                   FieldList*   path )
+                                                   IntFieldList*   path )
                
 /*  mode :  1 krzesten weg finden
             2 irgendeinen weg finden  */ 
@@ -1326,7 +1354,206 @@ PendingVehicleActions :: ~PendingVehicleActions ( )
 {
    if ( action ) 
       delete action;
+}
 
+
+VehicleAttack :: VehicleAttack ( MapDisplayInterface* md, PPendingVehicleActions _pva )
+               : VehicleAction ( vat_attack, _pva )
+{
+   status = 0;
+   mapDisplay = md;
+   if ( pva )
+      pva->attack = this;
+}
+
+
+int VehicleAttack :: available ( pvehicle eht ) const
+{
+   if (eht != NULL) 
+      if (eht->attacked == false)
+         if ((eht->typ->wait == false) || (eht->movement == eht->typ->movement[log2(eht->height)]  ||  eht->reactionfire_active >= 3 ))
+            if ( eht->weapexist() )
+               return 1;
+
+   return 0;
+}
+
+
+int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamikaze, int weapnum )
+{
+   if ( step != status )
+      return -1;
+
+   if ( status == 0 ) {
+      vehicle = veh ;
+      if ( !vehicle ) {
+         status = -101;
+         return status;
+      }
+
+      kamikaze = _kamikaze;
+
+      search.init( veh, kamikaze, this ); 
+      search.run(); 
+
+      if ( search.anzahlgegner <= 0 ) {
+         status =  -206;
+         return status;
+      }
+
+      status = 2;
+      return status;
+  } else
+  if ( status == 2 ) {
+      pattackweap atw = NULL;
+      if ( attackableVehicles.isMember ( x, y ))
+         atw = attackableVehicles.getData ( x, y );
+      else
+         if ( attackableObjects.isMember ( x, y ))
+            atw = attackableObjects.getData ( x, y );
+         else
+            if ( attackableBuildings.isMember ( x, y ))
+               atw = attackableBuildings.getData ( x, y );
+
+      tfight* battle = NULL;
+      switch ( atw->target ) {
+         case AttackWeap::vehicle: battle = new tunitattacksunit ( vehicle, getfield(x,y)->vehicle, 1, weapnum );
+            break;
+         case AttackWeap::building: battle = new tunitattacksbuilding ( vehicle, x, y , weapnum );
+            break;
+         case AttackWeap::object: battle = new tunitattacksobject ( vehicle, x, y, weapnum );
+            break;
+         default : status = -1;
+                   return status;
+      } /* endswitch */
+
+      int ad1 = battle->av.damage;
+      int dd1 = battle->dv.damage;
+
+      if ( mapDisplay )
+         battle->calcdisplay ();
+      else
+         battle->calc();
+
+      int ad2 = battle->av.damage;
+      int dd2 = battle->dv.damage;
+      battle->setresult ();
+
+      logtoreplayinfo ( rpl_attack, vehicle->xpos, vehicle->ypos, x, y, ad1, ad2, dd1, dd2, weapnum );
+
+      computeview();
+
+      status = 1000;
+  } 
+  return status;
+}
+
+
+
+void     VehicleAttack :: tsearchattackablevehicles :: init( const pvehicle eht, int _kamikaze, VehicleAttack* _va )
+{ 
+   angreifer = eht; 
+   kamikaze = _kamikaze; 
+   va = _va;
+}
+
+
+
+void     VehicleAttack :: tsearchattackablevehicles::testfield( void )
+{ 
+   if ( fieldvisiblenow(getfield(xp,yp)) ) { 
+      if ( !kamikaze ) {
+         pattackweap atw = attackpossible( angreifer, xp, yp ); 
+         if (atw->count > 0) { 
+            switch ( atw->target ) {
+               case AttackWeap::vehicle:  va->attackableVehicles.addField  ( xp, yp, atw );
+                  break;                                    
+               case AttackWeap::building: va->attackableBuildings.addField ( xp, yp, atw );
+                  break;
+               case AttackWeap::object:   va->attackableObjects.addField   ( xp, yp, atw );
+                  break;
+            } /* endswitch */
+            anzahlgegner++;
+         } 
+         delete atw;
+      } else {
+          if (fieldvisiblenow(getfield(xp,yp))) { 
+             pvehicle eht = getfield(xp,yp)->vehicle; 
+             if (eht != NULL) 
+                if (((angreifer->height >= chtieffliegend) && (eht->height <= angreifer->height) && (eht->height >= chschwimmend)) 
+                  || ((angreifer->height == chfahrend) && (eht->height == chfahrend)) 
+                  || ((angreifer->height == chschwimmend) && (eht->height == chschwimmend))
+                  || ((angreifer->height == chgetaucht) && (eht->height >=  chgetaucht) && (eht->height <= chschwimmend))) {
+                   getfield(xp,yp)->a.temp = dist; 
+                   anzahlgegner++; 
+                } 
+          } 
+      }
+   } 
+} 
+
+
+int      VehicleAttack :: tsearchattackablevehicles::run( void )
+{ 
+   anzahlgegner = 0; 
+
+   if (angreifer == NULL) 
+      return -201;
+   
+
+   moveparams.movesx = angreifer->xpos; 
+   moveparams.movesy = angreifer->ypos; 
+   if (fieldvisiblenow(getfield(moveparams.movesx,moveparams.movesy)) == false) 
+      return -1;
+
+   if (angreifer->attacked) 
+      return -202;
+   
+
+   if (angreifer->typ->weapons->count == 0) 
+      return -204;
+   
+   if (angreifer->typ->wait &&  angreifer->reactionfire_active < 3 ) 
+      if (angreifer->movement != angreifer->typ->movement[log2(angreifer->height)]) 
+         return -205;
+      
+
+   int d = 0; 
+   int maxdist = 0; 
+   int mindist = 20000; 
+   for ( int a = 0; a < angreifer->typ->weapons->count; a++) 
+      if (angreifer->ammo[a] > 0) {
+         d++; 
+
+         if ((angreifer->typ->weapons->weapon[a].maxdistance >> 3) > maxdist) 
+            maxdist = (angreifer->typ->weapons->weapon[a].maxdistance >> 3);
+
+         if ((angreifer->typ->weapons->weapon[a].mindistance >> 3) < mindist) 
+            mindist = (angreifer->typ->weapons->weapon[a].mindistance >> 3);
+      }
+   
+
+   if (d == 0) 
+      return -204;
+   
+   initsuche( angreifer->xpos,angreifer->ypos, maxdist + 1, mindist ); 
+   startsuche();
+
+   return 0;
+} 
+
+void VehicleAttack :: registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva )
+{
+   VehicleAction::registerPVA ( _actionType, _pva );
+   if ( pva )
+      pva->attack = this;
+}
+
+
+VehicleAttack :: ~VehicleAttack ( )
+{
+   if ( pva )
+      pva->attack = NULL;
 }
 
 

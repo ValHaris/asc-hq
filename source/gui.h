@@ -1,6 +1,13 @@
-//     $Id: gui.h,v 1.7 2000-05-02 16:20:54 mbickel Exp $
+//     $Id: gui.h,v 1.8 2000-06-08 21:03:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/05/02 16:20:54  mbickel
+//      Fixed bug with several simultaneous vehicle actions running
+//      Fixed graphic error at ammo transfer in buildings
+//      Fixed ammo loss at ammo transfer
+//      Movecost is now displayed for mines and repairs
+//      Weapon info now shows unhittable units
+//
 //     Revision 1.6  2000/04/27 16:25:24  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -412,6 +419,7 @@ class tnsguiiconmove : public tnsguiicon {
 
 
 class tnsguiiconattack : public tnsguiicon {
+          VehicleAttack vehicleAttack;
         public:
           virtual int   available    ( void ) ;
           virtual void  exec         ( void ) ;

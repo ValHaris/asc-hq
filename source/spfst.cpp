@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.30 2000-05-30 18:39:25 mbickel Exp $
+//     $Id: spfst.cpp,v 1.31 2000-06-08 21:03:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/05/30 18:39:25  mbickel
+//      Added support for multiple directories
+//      Moved DOS specific files to a separate directory
+//
 //     Revision 1.29  2000/05/23 20:40:49  mbickel
 //      Removed boolean type
 //
@@ -600,24 +604,6 @@ void         initmap( void )
    #endif
 
 } 
-
-
-
-char   weapexist( const pvehicle     eht)
-{ 
-  byte          b;
-
-   if (eht->typ->weapons->count > 0) 
-      for (b = 0; b < eht->typ->weapons->count ; b++) 
-         if (eht->typ->weapons->weapon[b].shootable() ) 
-            if (eht->typ->weapons->weapon[b].offensive() ) 
-               if (eht->ammo[b] ) 
-                  return true; 
-               
-    return false;
-} 
-
-
 
 
 int          getdirection(    int      x1,
@@ -2015,7 +2001,7 @@ pattackweap  attackpossible( const pvehicle     angreifer,
                             integer      x,
                             integer      y)
 { 
-  pattackweap atw = new tattackweap;
+  pattackweap atw = new AttackWeap;
            
   memset(atw, 0, sizeof(*atw));
 
@@ -2051,6 +2037,7 @@ pattackweap  attackpossible( const pvehicle     angreifer,
                                           atw->strength[atw->count ] = angreifer->weapstrength[i]; 
                                           atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType() ;
                                           atw->num[atw->count ] = i; 
+                                          atw->target = AttackWeap::building;
                                           atw->count++;
                                        } 
 
@@ -2059,6 +2046,7 @@ pattackweap  attackpossible( const pvehicle     angreifer,
                         } 
                      } 
       } 
+
    if ( efield->object ) {
       int n = 0;
       for ( int j = 0; j < efield->object->objnum; j++ )
@@ -2082,6 +2070,7 @@ pattackweap  attackpossible( const pvehicle     angreifer,
                                           atw->strength[atw->count ] = angreifer->weapstrength[i];
                                           atw->num[atw->count ] = i;
                                           atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
+                                          atw->target = AttackWeap::object;
                                           atw->count++;
                                        } 
       
@@ -2125,6 +2114,7 @@ char      attackpossible2u( const pvehicle     angreifer,
                               atw->strength[atw->count] = angreifer->weapstrength[i];
                               atw->num[atw->count ] = i;
                               atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
+                              atw->target = AttackWeap::vehicle;
                               atw->count++;
                            }
                         }
@@ -2166,6 +2156,7 @@ char      attackpossible28( const pvehicle     angreifer,
                                     atw->strength[atw->count] = angreifer->weapstrength[i];
                                     atw->num[atw->count ] = i;
                                     atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
+                                    atw->target = AttackWeap::vehicle;
                                     atw->count++;
                                  }
                               }
@@ -2209,6 +2200,7 @@ char      attackpossible2n( const pvehicle     angreifer,
                                           atw->strength[atw->count] = angreifer->weapstrength[i];
                                           atw->num[atw->count ] = i;
                                           atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
+                                          atw->target = AttackWeap::vehicle;
                                           atw->count++;
                                        }
                                     }

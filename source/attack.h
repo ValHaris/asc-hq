@@ -1,6 +1,12 @@
-//     $Id: attack.h,v 1.6 2000-06-04 21:39:18 mbickel Exp $
+//     $Id: attack.h,v 1.7 2000-06-08 21:03:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/06/04 21:39:18  mbickel
+//      Added OK button to ViewText dialog (used in "About ASC", for example)
+//      Invalid command line parameters are now reported
+//      new text for attack result prediction
+//      Added constructors to attack functions
+//
 //     Revision 1.5  2000/04/27 16:25:14  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -146,7 +152,7 @@ class tunitattacksobject : public tfight {
       };
 
 
-extern byte         attackstrength(byte         damage);
+extern int attackstrength(byte         damage);
 
 
 #endif

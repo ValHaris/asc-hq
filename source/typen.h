@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.23 2000-06-06 20:03:19 mbickel Exp $
+//     $Id: typen.h,v 1.24 2000-06-08 21:03:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/06/06 20:03:19  mbickel
+//      Fixed graphical error when transfering ammo in buildings
+//      Sound can now be disable by a command line parameter and the game options
+//
 //     Revision 1.22  2000/05/23 20:40:53  mbickel
 //      Removed boolean type
 //
@@ -662,6 +666,7 @@ class tvehicle { /*** Bei Žnderungen unbedingt Save/LoadGame und Konstruktor kor
     tvehicle ( pvehicle src, pmap actmap ); // if actmap == NULL  ==> unit will not be chained
     void clone ( pvehicle src, pmap actmap ); // if actmap == NULL  ==> unit will not be chained
     void transform ( pvehicletype type );     // to be used with extreme caution, and only in the mapeditor !!
+    int weapexist ( void );     // Is the unit able to shoot ?
     ~tvehicle ( ); 
   private:
     void init ( void );

@@ -1,6 +1,10 @@
-//     $Id: spfst.h,v 1.9 2000-05-30 18:39:27 mbickel Exp $
+//     $Id: spfst.h,v 1.10 2000-06-08 21:03:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/05/30 18:39:27  mbickel
+//      Added support for multiple directories
+//      Moved DOS specific files to a separate directory
+//
 //     Revision 1.8  2000/05/23 20:40:52  mbickel
 //      Removed boolean type
 //
@@ -125,14 +129,18 @@
 
    typedef class tweapdist* pweapdist ;
 
-   struct tattackweap { 
+
+   class AttackWeap { 
+               public:
                     int          count; 
                     int          strength[16]; 
                     int          num[16]; 
                     int          typ[16];
+
+                    enum Target { nothing, vehicle, building, object } target;
                  }; 
 
-   typedef struct tattackweap* pattackweap ;
+   typedef class AttackWeap* pattackweap ;
 
    class tcursor { 
            public:
@@ -323,8 +331,6 @@ extern char vehicleplattfahrbar( const pvehicle     vehicle,
 extern byte  fieldaccessible( const pfield        field,
                             const pvehicle     vehicle,
                             int  uheight = -1 );
-
-extern char weapexist( const pvehicle     eht);
 
   /*  sonstiges  */ 
 
