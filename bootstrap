@@ -2,6 +2,7 @@
 
 set -x
 
+aclocal
 libtoolize --force --copy
 aclocal
 autoheader
