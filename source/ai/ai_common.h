@@ -28,6 +28,7 @@
 #include <math.h>
 #include <algorithm>
 #include <memory>
+#include <float.h>
 
 #include "ai.h"
 
