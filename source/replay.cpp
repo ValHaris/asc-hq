@@ -37,6 +37,7 @@
 #include "dashboard.h"
 #include "itemrepository.h"
 #include "building_controls.h"
+#include "resourcenet.h"
 
 
 trunreplay runreplay;
@@ -1852,6 +1853,8 @@ int  trunreplay :: run ( int player, int viewingplayer )
 
    orgmap = actmap;
    actmap = loadreplay ( orgmap->replayinfo->map[player]  );
+
+   transfer_all_outstanding_tribute();   
 
    actmap->playerView = viewingplayer;
 
