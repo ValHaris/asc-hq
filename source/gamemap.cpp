@@ -814,10 +814,18 @@ pvehicle tmap :: getUnit ( pvehicle eht, int nwid )
 
 pvehicle tmap :: getUnit ( int nwid )
 {
+   VehicleLookupCache::iterator i = vehicleLookupCache.find( nwid );
+   if ( i != vehicleLookupCache.end() )
+      return i->second;
+
+
    for ( int p = 0; p < 9; p++ )
       for ( Player::VehicleList::iterator i = player[p].vehicleList.begin(); i != player[p].vehicleList.end(); i++ )
-         if ( (*i)->networkid == nwid )
+         if ( (*i)->networkid == nwid ) {
+            displaymessage("warning: id not registered in VehicleLookupCache!",1);
             return *i;
+
+         }
 
    return NULL;
 }

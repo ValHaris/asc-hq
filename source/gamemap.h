@@ -438,6 +438,8 @@ class tmap {
 
       } player[9];
 
+      typedef map<int, Vehicle*> VehicleLookupCache;
+      VehicleLookupCache vehicleLookupCache; 
 
       int eventID;
 

@@ -3,9 +3,16 @@
 */
 
 
-//     $Id: ai.h,v 1.19 2003-05-29 13:54:53 mbickel Exp $
+//     $Id: ai.h,v 1.20 2004-10-23 19:16:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2003/05/29 13:54:53  mbickel
+//      Fixed: unit could not enter container when having max size
+//      Added SDL_Delay() to movement loop (for FreeBSD)
+//      Added Lava_Barrier terrain bit
+//      AI logs unit success
+//      Replay have a much stricted consistency checking for refuelling
+//
 //     Revision 1.18  2003/04/23 18:31:11  mbickel
 //      Fixed: AI problems
 //      Improved cheating detection in replay
@@ -405,7 +412,7 @@
              */
             int moveUnit ( pvehicle veh, const AStar3D::Path& path, bool intoBuildings = true, bool intoTransports = true );
 
-            void getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBonus, bool justOne = false );
+            void getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBonus, bool justOne = false, bool executeService = true );
             void searchTargets ( pvehicle veh, const MapCoordinate3D& pos, TargetVector& tl, int moveDist, AStar3D& vm, int hemmingBonus );
             bool targetsNear( pvehicle veh );
 

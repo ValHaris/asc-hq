@@ -1157,7 +1157,7 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
       if ( targetUnit->typ->weapons.weapon[i].requiresAmmo() ) {
          int type = targetUnit->typ->weapons.weapon[i].getScalarWeaponType();
          if ( type >= 0 )
-            if ( (bld->ammo[type] || targetUnit->ammo[i] || (bld->typ->special & cgammunitionproductionb)) && (bld->typ->special & (cgexternalloadingb | cgexternalammoloadingb ))) {
+            if ( (bld->ammo[type] || targetUnit->ammo[i] || (bld->typ->special & cgammunitionproductionb)) && ((bld->typ->special & (cgexternalloadingb | cgexternalammoloadingb )) || dist == 0 )) {
                const SingleWeapon& destWeapon = targetUnit->typ->weapons.weapon[i];
 
                VehicleService::Target::Service s;

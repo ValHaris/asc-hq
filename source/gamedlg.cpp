@@ -1832,19 +1832,23 @@ void researchinfo ( void )
       ri.done();
    }
    {
+      vector<ASCString> sv;
+      for ( vector<int>::iterator i = actmap->player[actmap->actplayer].research.developedTechnologies.begin(); i != actmap->player[actmap->actplayer].research.developedTechnologies.end(); ++i ) {
+         Technology* t = technologyRepository.getObject_byID( *i );
+         if ( t )
+            sv.push_back ( t->name );
+      }
+      sort ( sv.begin(), sv.end() );
 
-   ASCString s;
-   for ( vector<int>::iterator i = actmap->player[actmap->actplayer].research.developedTechnologies.begin(); i != actmap->player[actmap->actplayer].research.developedTechnologies.end(); ++i ) {
-      Technology* t = technologyRepository.getObject_byID( *i );
-      if ( t )
-         s += t->name + "\n";
-   }
+      ASCString s;
+      for ( vector<ASCString>::iterator i = sv.begin(); i != sv.end(); ++i )
+         s += *i + "\n";
 
 
-   tviewanytext vat ;
-   vat.init ( "Developed Technologies", s.c_str(), 20, -1 , 450, 480 );
-   vat.run();
-   vat.done();
+      tviewanytext vat ;
+      vat.init ( "Developed Technologies", s.c_str(), 20, -1 , 450, 480 );
+      vat.run();
+      vat.done();
 
    }
    if ( skeypress( ct_lshift)) {

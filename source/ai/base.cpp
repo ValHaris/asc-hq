@@ -115,6 +115,14 @@ void    AI :: setup (void)
       actmap->player[p].existanceAtBeginOfTurn = actmap->player[p].exist();
 
 
+   for ( Player::VehicleList::iterator i = getPlayer().vehicleList.begin(); i != getPlayer().vehicleList.end(); ++i)
+       if ( (*i)->typ->functions & cfmovewithRF )
+          if ( (*i)->reactionfire.getStatus() == Vehicle::ReactionFire::off )
+             (*i)->reactionfire.enable();
+
+
+
+
    // showthreats("init: threatvals generated");
    displaymessage2("setup completed ... ");
 }

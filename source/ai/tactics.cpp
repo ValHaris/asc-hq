@@ -165,7 +165,7 @@ bool AI::moveVariantComp ( const AI::MoveVariant* mv1, const AI::MoveVariant* mv
    // return ( mv1->result < mv2->result || (mv1->result == mv2->result && mv1->moveDist > mv2->moveDist ));
 }
 
-void AI::getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBonus, bool justOne )
+void AI::getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBonus, bool justOne, bool executeService )
 {
 
    //! first check
@@ -242,7 +242,7 @@ void AI::getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBo
          apl = NULL;
       }
 
-      if ( !tv.size() && fuelLacking )
+      if ( !tv.size() && fuelLacking && executeService)
          issueRefuelOrder( veh, true );
    }
 }
@@ -312,7 +312,7 @@ bool AI::targetsNear( pvehicle veh )
    AStar3D ast ( getMap(), veh, false, veh->getMovement() );
    ast.findAllAccessibleFields ();
    TargetVector tv;
-   getAttacks ( ast, veh, tv, 0, true );
+   getAttacks ( ast, veh, tv, 0, true, false );
    if ( tv.size() )
       return true;
    else
