@@ -908,8 +908,6 @@ void checkDataVersion( )
    } else
       dataOk = false;
 
-      return;
-
    if ( !dataOk )
       fatalError("A newer version of the data file 'mk1.con' is required. \n"
                  "You can get a new data package at http://www.asc-hq.org", 2 );
@@ -923,9 +921,21 @@ void checkDataVersion( )
    } else
       dataOk = false;
 
-
    if ( !dataOk )
       fatalError("A newer version of the data file 'buildings.con' is required. \n"
+                 "You can get a new data package at http://www.asc-hq.org", 2 );
+
+
+   if ( exist ( "trrobj.version" )) {
+      tnfilestream s ( "trrobj.version", tnstream::reading );
+      char v = s.readChar();
+      if ( v < '7' )
+         dataOk = false;
+   } else
+      dataOk = false;
+
+   if ( !dataOk )
+      fatalError("A newer version of the data file 'trrobj.con' is required. \n"
                  "You can get a new data package at http://www.asc-hq.org", 2 );
 
 }

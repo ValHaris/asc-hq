@@ -54,7 +54,7 @@ void SoundLoopManager :: activate ( )
    }
    active = true;
 }
-
+  
 
 SoundList& SoundList::getInstance()
 {
@@ -155,12 +155,17 @@ void SoundList::initialize(  )
 
 Sound* SoundList::getSound( const ASCString& filename, int fadeIn )
 {
-	displayLogMessage ( 10, " SoundList::getSound(1) : trying to acquire handle for sound %s \n", filename.c_str() );
+   displayLogMessage ( 10, " SoundList::getSound(1) : trying to acquire handle for sound %s \n", filename.c_str() );
 
    if ( soundFiles.find ( filename ) == soundFiles.end() ) {
-     displayLogMessage ( 10, " Sound has not been loaded !\n" );
+     displayLogMessage ( 10, " Sound has not been loaded ...\n" );
      Sound* s = new Sound ( filename, fadeIn );
      soundFiles[filename] = s;
+     if ( s != NULL )
+        displayLogMessage ( 10, " loading sound completed\n" );
+     else
+        displayLogMessage ( 10, " loading sound failed\n" );
+
      return s;
   } else
      return soundFiles[filename];
@@ -180,10 +185,12 @@ Sound* SoundList::getSound( Sample snd, int subType, const ASCString& label )
       for ( vector<SoundAssignment>::iterator i = soundAssignments.begin(); i != soundAssignments.end(); i++ )
          if ( snd == i->sample && subType == i->subType )
             if ( newlabel.empty() || i->snd.find( newlabel ) == i->snd.end() ) {
-            	displayLogMessage ( 10, " SoundList::getSound(2) : label not found, returning default sound \n" );
+            	displayLogMessage ( 10, " SoundList::getSound(2) : label " + label + " not found, returning default sound \n" );
+               if ( !i->defaultSound )
+               	displayLogMessage ( 10, "  SoundList::getSound(2) : no default sound registered !!!! \n" );
                return i->defaultSound;
             } else {
-	            displayLogMessage ( 10, " SoundList::getSound(2) : label found, returning matching sound \n" );
+	            displayLogMessage ( 10, " SoundList::getSound(2) : label " + label + " found, returning matching sound \n" );
                return i->snd[newlabel];
             }
    }
