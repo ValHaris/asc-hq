@@ -1,6 +1,10 @@
-//     $Id: controls.h,v 1.5 1999-12-28 21:02:47 mbickel Exp $
+//     $Id: controls.h,v 1.6 2000-01-01 19:04:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/12/28 21:02:47  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.4  1999/12/07 21:57:56  mbickel
 //      Fixed bugs in Weapon information window
 //      Added vehicle function "no air refuelling"
@@ -404,7 +408,7 @@ class trunreplay {
                int y;
             } lastvisiblecursorpos;
 
-            trpl_actions nextaction;
+            char nextaction;
 
             void readnextaction ( void );
 

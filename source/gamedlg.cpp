@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.10 1999-12-30 20:30:33 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.11 2000-01-01 19:04:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  1999/12/30 20:30:33  mbickel
+//      Improved Linux port again.
+//
 //     Revision 1.9  1999/12/29 17:38:11  mbickel
 //      Continued Linux port
 //
@@ -2674,6 +2677,7 @@ int  tparagraph :: reflow( int all  )
 
 pparagraph tparagraph :: movecursor ( int dx, int dy )
 {
+   collategraphicoperations cgo;
    pparagraph newcursorpos = this;
 
    if ( cursorstat )
@@ -2738,6 +2742,7 @@ pparagraph tparagraph :: movecursor ( int dx, int dy )
 void tparagraph :: displaycursor ( void )
 {
    if ( cursor >= 0 ) {
+      collategraphicoperations cgo;
       int startline;
       int starty;
       if ( ps.line1num < 0 ) {
@@ -2770,6 +2775,7 @@ void tparagraph :: setpos ( int x1, int y1, int y2, int linepos, int linenum  )
 
 void tparagraph :: display ( void )
 {
+   collategraphicoperations cgo;
    if ( cursorstat )
       displaycursor();
    cursorstat = 0;
@@ -2889,8 +2895,8 @@ void tmessagedlg :: inserttext ( char* txt )
 void tmessagedlg :: run ( void )
 {
    tdialogbox::run ( );
-   if ( taste != cto_invvalue ) {
-      if ( taste == cto_bspace )
+   if ( prntkey != cto_invvalue ) {
+      if ( prntkey == cto_bspace )
          actparagraph = actparagraph->erasechar ( 1 );
       else
       if ( taste == cto_entf )
@@ -2914,8 +2920,8 @@ void tmessagedlg :: run ( void )
       if ( taste == cto_esc ) 
          printf("\a");
       else
-      if ( taste < 256 )
-         actparagraph->addchar ( taste );
+      if ( prntkey > 31 && prntkey < 256 )
+         actparagraph->addchar ( prntkey );
    }
    if ( lastcursortick + blinkspeed < ticker ) {
       actparagraph->displaycursor();
@@ -3004,6 +3010,7 @@ tnewmessage :: tnewmessage ( void )
 
 void tnewmessage :: init ( void )
 {
+   collategraphicoperations cgo;
    tdialogbox :: init ( );
    title = rtitle;
    for ( int i = 0; i < 8; i++ ) 
@@ -3101,6 +3108,7 @@ class teditmessage : public tmessagedlg  {
 
 void teditmessage :: init ( pmessage msg  )
 {
+   collategraphicoperations cgo;
    message = msg;
    tdialogbox :: init ( );
    title = "edit message";

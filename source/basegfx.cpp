@@ -1,6 +1,9 @@
-//     $Id: basegfx.cpp,v 1.7 1999-12-28 22:04:24 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.8 2000-01-01 19:04:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  1999/12/28 22:04:24  mbickel
+//      Had to make some changes again to compile it for DOS...
+//
 //     Revision 1.6  1999/12/28 21:02:34  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -1140,6 +1143,21 @@ collategraphicoperations :: collategraphicoperations ( void )
    #ifndef _DOS_
    olddirectscreenaccess = agmp->directscreenaccess;
    agmp->directscreenaccess = 1;
+   #endif
+}
+
+void collategraphicoperations :: on ( void )
+{
+   #ifndef _DOS_
+   agmp->directscreenaccess = 1;
+   #endif
+}
+
+void collategraphicoperations :: off ( void )
+{
+   #ifndef _DOS_
+   agmp->directscreenaccess = 0;
+   CheckForDirectScreenAccess;
    #endif
 }
 

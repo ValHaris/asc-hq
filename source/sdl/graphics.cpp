@@ -15,9 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: graphics.cpp,v 1.1 1999-12-28 21:03:31 mbickel Exp $
+//     $Id: graphics.cpp,v 1.2 2000-01-01 19:04:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  1999/12/28 21:03:31  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 
 
 #include <stdlib.h>
@@ -103,13 +107,26 @@ void setdisplaystart( int x, int y)
 void set_vgapalette256 ( dacpalette256 pal )
 {
 	SDL_Color spal[256];
+	int col;
 	for ( int i = 0; i < 256; i++ ) {
-		spal[i].r = pal[i][0] * 4;
-		spal[i].g = pal[i][1] * 4;
-		spal[i].b = pal[i][2] * 4;
+	   for ( int c = 0; c < 3; c++ ) {
+         if ( pal[i][c] == 255 )
+            col = activepalette[i][c];
+         else {
+            col = pal[i][c];
+            activepalette[i][c] = col;
+         }
+         switch ( c ) {
+            case 0: spal[i].r = col * 4; break;
+            case 1: spal[i].g = col * 4; break;
+		      case 2: spal[i].b = col * 4; break;
+		   };
+      }
+	
+	
 	}	
 	int res = SDL_SetColors ( screen, spal, 0, 256 );
-	printf("result of setting the palette is %d \n", res );
+	// printf("result of setting the palette is %d \n", res );
 }
 
 int dont_use_linear_framebuffer;

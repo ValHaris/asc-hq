@@ -1,6 +1,15 @@
-//     $Id: attack.cpp,v 1.3 1999-11-22 18:26:48 mbickel Exp $
+//     $Id: attack.cpp,v 1.4 2000-01-01 19:04:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/22 18:26:48  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.2  1999/11/16 03:41:02  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -260,7 +269,9 @@ void tfight :: paintline ( int num, int val, int col )
 #define maxattackshown 24
 
 void tfight :: calcdisplay ( int ad, int dd )
-{                                
+{
+   collategraphicoperations cgo;
+
    setinvisiblemouserectanglestk ( agmp->resolutionx - ( 640 - 450), 211, agmp->resolutionx - ( 640 - 623 ), 426 );
    if ( !icons.attack.orgbkgr ) {
       icons.attack.orgbkgr = new char [ imagesize ( agmp->resolutionx - ( 640 - 450), 211, agmp->resolutionx - ( 640 - 623 ), 426 ) ];
@@ -336,7 +347,7 @@ void tfight :: calcdisplay ( int ad, int dd )
       else
          paintbar ( 8, -100 * dv.defensebonus / maxdefenseshown, yellow );
 
-
+   cgo.off();
 
    int t = ticker;
    calc();
@@ -368,13 +379,14 @@ void tfight :: calcdisplay ( int ad, int dd )
 
    for ( int i = 0; i < steps; i++ ) {
       t = ticker;
+      collategraphicoperations cgo2;
+      {
+         if ( i < av.damage - avd )
+           paintline ( 4, 100 - ( avd + i ), bk );
 
-      if ( i < av.damage - avd )
-        paintline ( 4, 100 - ( avd + i ), bk );
-
-      if ( i < dv.damage - dvd )
-        paintline ( 5, 100 - ( dvd + i ), bk );
-
+         if ( i < dv.damage - dvd )
+           paintline ( 5, 100 - ( dvd + i ), bk );
+      }
       do {
 
       } while ( t + tme > ticker ); /* enddo */

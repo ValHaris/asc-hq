@@ -1,6 +1,9 @@
-//     $Id: basestrm.cpp,v 1.11 1999-12-29 17:38:05 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.12 2000-01-01 19:04:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  1999/12/29 17:38:05  mbickel
+//      Continued Linux port
+//
 //     Revision 1.10  1999/12/29 12:50:40  mbickel
 //      Removed a fatal error message in GUI.CPP
 //      Made some modifications to allow platform dependant path delimitters
@@ -130,7 +133,7 @@ const char* pathdelimitterstring = "/";
 #ifdef _DOS_
 int verbosity = 0;
 #else
-int verbosity = 10;
+int verbosity = 0;
 #endif
 
 #pragma pack(1)

@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.13 1999-12-30 20:30:24 mbickel Exp $
+//     $Id: controls.cpp,v 1.14 2000-01-01 19:04:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  1999/12/30 20:30:24  mbickel
+//      Improved Linux port again.
+//
 //     Revision 1.12  1999/12/29 17:38:07  mbickel
 //      Continued Linux port
 //
@@ -127,7 +130,7 @@ void         tsearchexternaltransferfields :: testfield( void )
 
   if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) {
      pfield fld  = getfield ( xp, yp );
-     if ( fld->vehicle )
+     if ( fld && fld->vehicle )
         if ( fld->vehicle->height & bld->typ->externalloadheight ) {
            numberoffields++;
            fld->a.temp = 123;
@@ -7124,6 +7127,9 @@ void MapNetwork :: searchfield ( int x, int y, int dir )
 void MapNetwork :: searchbuilding ( int x, int y )
 {
    pbuilding bld = getfield( x, y )->building;
+   if ( !bld )
+      return;
+
    pfield entry = getbuildingfield ( bld, bld->typ->entry.x, bld->typ->entry.y );
    if ( entry->a.temp )
       return;
@@ -7139,7 +7145,7 @@ void MapNetwork :: searchbuilding ( int x, int y )
             int xp, yp;
             getbuildingfieldcoordinates ( bld, i, j, xp, yp );
             pfield fld2 = getfield ( xp, yp );
-            if ( fld2->building == bld ) 
+            if ( fld2 && fld2->building == bld )
                for ( int d = 0; d < sidenum; d++ ) {
                   int xp2 = xp;
                   int yp2 = yp;
@@ -7200,13 +7206,14 @@ void MapNetwork :: start ( int x, int y )
       } else  
          if ( globalsearch() == 0 ) {
             pfield fld = getfield ( x, y );
-            if ( fld->building ) {
-               if ( pass == 1 )
-                  checkbuilding( fld->building );
-            } else
-               if ( fld->vehicle )
-                  if ( pass == 2 )
-                     checkvehicle ( fld->vehicle );
+            if ( fld )
+               if ( fld->building ) {
+                  if ( pass == 1 )
+                     checkbuilding( fld->building );
+               } else
+                  if ( fld->vehicle )
+                     if ( pass == 2 )
+                        checkvehicle ( fld->vehicle );
          }
 }
 
@@ -7219,7 +7226,9 @@ int ResourceNet :: fieldavail ( int x, int y )
 /*    pobject o = fld->checkforobject ( pipelineobject ) ; 
     if ( o )
        return o->dir;
-    else */ {
+    else */
+
+    if ( fld ) {
        tterrainbits tb = cbpipeline;
        if ( resourcetype == 0)
          tb |= cbpowerline;
@@ -7231,14 +7240,17 @@ int ResourceNet :: fieldavail ( int x, int y )
              int yp = y;
              getnextfield ( xp, yp , i );
              pfield fld2 = getfield ( xp, yp );
-             if ( (fld2->bdt & tb) ||  fld2->building )
-                d |= ( 1 << i );
+             if ( fld2 )
+                if ( (fld2->bdt & tb) ||  fld2->building )
+                   d |= ( 1 << i );
           }
           return d;
 
        } else
           return 0;
     }
+    return 0;
+
 }
 
 

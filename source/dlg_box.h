@@ -1,6 +1,15 @@
-//     $Id: dlg_box.h,v 1.3 1999-11-22 18:27:14 mbickel Exp $
+//     $Id: dlg_box.h,v 1.4 2000-01-01 19:04:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/22 18:27:14  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.2  1999/11/16 03:41:25  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -95,7 +104,8 @@
                      pbutton      firstbutton; 
 
                  public:
-                     tkey         taste; 
+                     tkey         taste;
+                     int          prntkey;
 
                      void         addbutton( const char *       ltxt,
                        int          lx1,

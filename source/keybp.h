@@ -1,6 +1,9 @@
-//     $Id: keybp.h,v 1.7 1999-12-30 21:04:46 mbickel Exp $
+//     $Id: keybp.h,v 1.8 2000-01-01 19:04:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  1999/12/30 21:04:46  mbickel
+//      Restored DOS compatibility again.
+//
 //     Revision 1.6  1999/12/30 20:30:35  mbickel
 //      Improved Linux port again.
 //
@@ -594,7 +597,8 @@
     extern void initkeyb(void);
     extern void closekeyb(void);
     extern void wait(void);
-    tkey char2key (int ch);
+    extern tkey char2key (int ch);
+    extern void getkeysyms ( tkey* keysym, int* keyprnt );
 
 #ifndef _DOS_
 extern int getch(void);

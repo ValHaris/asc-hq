@@ -1,6 +1,9 @@
-//     $Id: dlg_box.cpp,v 1.9 1999-12-30 21:04:42 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.10 2000-01-01 19:04:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  1999/12/30 21:04:42  mbickel
+//      Restored DOS compatibility again.
+//
 //     Revision 1.8  1999/12/30 20:30:30  mbickel
 //      Improved Linux port again.
 //
@@ -1601,11 +1604,13 @@ void         tdialogbox::run(void)
       } 
    } 
    if (keypress()) {
-      taste = r_key (); 
+      // taste = r_key ();
+      getkeysyms ( &taste, &prntkey );
       // screensaverparameters.lasttick = ticker; 
    } 
    else {
-      taste = ct_invvalue; 
+      taste = ct_invvalue;
+      prntkey = cto_invvalue;
    }
 
    releasetimeslice();

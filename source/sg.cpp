@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.12 1999-12-30 21:04:47 mbickel Exp $
+//     $Id: sg.cpp,v 1.13 2000-01-01 19:04:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  1999/12/30 21:04:47  mbickel
+//      Restored DOS compatibility again.
+//
 //     Revision 1.11  1999/12/30 20:30:38  mbickel
 //      Improved Linux port again.
 //
@@ -1762,9 +1765,15 @@ void benchgame ( int mode )
    int n = 0;
    int t2 = t;
    do {
-      if ( mode == 1 )
-         computeview();
-      displaymap();
+      if ( mode <= 1 ) {
+         if ( mode == 1 )
+            computeview();
+         displaymap();
+      } else {
+        #ifndef _DOS_
+        copy2screen();
+        #endif
+      }
       n++;
       t2 = ticker;
    } while ( t + 1000 > t2 ); /* enddo */
@@ -1957,8 +1966,11 @@ void execuseraction ( tuseractions action )
 		displaymessage(" Heap not OK", 1 );
 #endif
 	      break;
-                     
+#ifdef _DOS_
             case ua_benchgamewov:  benchgame( 0 );
+#else
+            case ua_benchgamewov:  benchgame( 2 );
+#endif
             break;
             
             case ua_benchgamewv :  benchgame( 1 );
@@ -2192,10 +2204,10 @@ void mainloopgeneralmousecheck ( void )
 
   if (lasttick + 5 < ticker) {
       if ((dashboard.x != getxpos()) || (dashboard.y != getypos())) {
+         collategraphicoperations cgo;
          mousevisible(false);
 
          dashboard.paint ( getactfield(), actmap->playerview );
-
          actgui->painticons();
 
          mousevisible(true);

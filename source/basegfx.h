@@ -369,6 +369,8 @@ class collategraphicoperations {
        public:
          collategraphicoperations ( void );
          ~collategraphicoperations ();
+         void on ( void );
+         void off ( void );
 };
 
 extern void copySurface2screen( void );

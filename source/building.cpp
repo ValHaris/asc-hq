@@ -1,6 +1,10 @@
-//     $Id: building.cpp,v 1.11 1999-12-28 21:02:40 mbickel Exp $
+//     $Id: building.cpp,v 1.12 2000-01-01 19:04:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  1999/12/28 21:02:40  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.10  1999/12/27 12:59:42  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -1762,6 +1766,7 @@ void  ccontainer :: done ()
 
 void  ccontainer :: movemark (int direction)
 {
+    collategraphicoperations cgo;
     if (direction != repaint  &&  direction != repaintall ) {
         setinvisiblemouserectanglestk ( unitposx[mark.x], unitposy[mark.y], unitposx[mark.x+1], unitposy[mark.y+1] );
 

@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.12 1999-12-30 20:30:40 mbickel Exp $
+//     $Id: spfst.cpp,v 1.13 2000-01-01 19:04:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  1999/12/30 20:30:40  mbickel
+//      Improved Linux port again.
+//
 //     Revision 1.11  1999/12/29 12:50:48  mbickel
 //      Removed a fatal error message in GUI.CPP
 //      Made some modifications to allow platform dependant path delimitters
@@ -1150,10 +1153,9 @@ void         generate_vehicle(pvehicletype fztyp,
 
   vehicle->color = col * 8 ;
 
-   actmap->chainunit ( vehicle );
-
    vehicle->typ = fztyp;
 
+   actmap->chainunit ( vehicle );
 
    vehicle->damage = 0;
    vehicle->fuel = 0;

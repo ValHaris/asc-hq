@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.3 1999-12-30 20:30:44 mbickel Exp $
+//     $Id: events.cpp,v 1.4 2000-01-01 19:04:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/12/30 20:30:44  mbickel
+//      Improved Linux port again.
+//
 //     Revision 1.2  1999/12/29 17:38:22  mbickel
 //      Continued Linux port
 //
@@ -303,10 +306,34 @@ int rp_key(void)
          }
          r = SDL_mutexV ( keyboardmutex );
     	}
-    	if (!found )
-    	   sleep(1);
+    	if (!found ) {
+      	int t = ticker;
+      	while ( t + 5 > ticker );
+      }	
    } while ( !found ); 	
    return key;
+}
+
+void getkeysyms ( tkey* keysym, int* keyprnt )
+{
+	int found = 0;
+  	do {
+      int r = SDL_mutexP ( keyboardmutex );
+    	if ( !r ) {
+    	   if ( !keybuffer_prnt.empty() ) {
+            *keysym = keybuffer_sym.front();
+            *keyprnt = keybuffer_prnt.front();
+            keybuffer_sym.pop();
+            keybuffer_prnt.pop();
+            found++;
+         }
+         r = SDL_mutexV ( keyboardmutex );
+    	}
+    	if (!found ) {
+      	int t = ticker;
+      	while ( t + 5 > ticker );
+      }	
+   } while ( !found ); 	
 }
 
 
@@ -326,6 +353,9 @@ char  skeypress(tkey keynr)
    Uint8 *keystate = SDL_GetKeyState ( NULL );
    return keystate[ keynr ];
 }
+
+
+
 
 
 int getch(void)
