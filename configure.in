@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl AC_REVISION($Revision: $)dnl
+dnl AC_REVISION($Revision: 1.49 $)dnl
 dnl AM_MAINTAINER_MODE
 AC_INIT(source/typen.h)
 
@@ -67,11 +67,18 @@ LIBS="$LIBS $SDL_LIBS"
 AC_CHECK_LIB( SDL_image, IMG_LoadJPG_RW,,  AC_MSG_ERROR( ASC requires the SDL_image library. You can get it at www.libsdl.org ), )
 AC_CHECK_LIB( SDL_mixer, Mix_PlayChannelTimed,, AC_MSG_ERROR( ASC requires the SDL_mixer library. You can get it at www.libsdl.org ) )
 
+AM_PATH_SMPEG(0.4.3, :, AC_MSG_ERROR([*** SMPEG version 0.4.3 not found! Get it from http://www.lokigames.com/development/smpeg.php3 ]))
+
+CXXFLAGS="$CXXFLAGS $SMPEG_CFLAGS"
+CFLAGS="$CFLAGS $SMPEG_CFLAGS"
+LIBS="$LIBS $SMPEG_LIBS"
+
 dnl ugly work around for this yet buggy SDLmm check
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
 AM_PATH_SDLMM(0.1.8, :, AC_MSG_ERROR([*** SDLmm version 0.1.8 not found! Get it from http://sdlmm.sf.net ]))
+
 
 AC_LANG_RESTORE
 

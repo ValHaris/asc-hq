@@ -19,6 +19,7 @@
 
 #include "../basestrm.h"
 #include "../sgstream.h"
+#include "../music.h"
 
 /** How long should this process sleep while waiting for a sound to play
  */

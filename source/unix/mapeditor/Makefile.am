@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.6 2001-12-14 10:20:06 mbickel Exp $
+## $Id: Makefile.am,v 1.7 2002-01-19 23:10:27 mbickel Exp $
 
 vpath %.cpp ../..
 
@@ -24,7 +24,7 @@ mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp \
 password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \
 terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
-stringtokenizer.cpp
+stringtokenizer.cpp music.cpp
 asc_mapedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @SDLMM_LIBS@ @LDADDLIBBZ2@
 
@@ -37,7 +37,8 @@ mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp \
 password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \
 terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
-stringtokenizer.cpp
+stringtokenizer.cpp music.cpp
+
 asc_map2pcx_LDADD   	= $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/sdl/libsdl.la
 

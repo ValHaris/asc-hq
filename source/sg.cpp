@@ -69,6 +69,9 @@
 #include <memory>
 #include <SDL_image.h>
 
+#include "smpeg/smpeg.h"
+#include "SDL_mixer.h"
+
 
 #include "vehicletype.h"
 #include "buildingtype.h"
@@ -2257,9 +2260,6 @@ int main(int argc, char *argv[] )
 
    /* Clean up on exit */
    atexit(SDL_Quit);
-
-
-
 
    if ( modenum8 > 0 ) {
       #ifdef _DOS_
