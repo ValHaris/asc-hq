@@ -1,5 +1,5 @@
-javac org\netbeans\lib\awtextra\AbsoluteConstraints.java
-javac org\netbeans\lib\awtextra\AbsoluteLayout.java
+javac org/netbeans/lib/awtextra/AbsoluteConstraints.java
+javac org/netbeans/lib/awtextra/AbsoluteLayout.java
 javac ImgCanvas.java
 javac ImageProcess.java
 javac PaletteInfo.java

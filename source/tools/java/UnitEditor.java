@@ -1,6 +1,9 @@
-//     $Id: UnitEditor.java,v 1.10 2000-11-08 19:37:41 mbickel Exp $
+//     $Id: UnitEditor.java,v 1.11 2001-05-10 16:24:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/11/08 19:37:41  mbickel
+//      Changed the terrain types (again): "lava" now replaces "small trench"
+//
 //     Revision 1.9  2000/11/07 22:14:33  mbickel
 //      Added terrain type "Lava"
 //
@@ -148,6 +151,7 @@ public class UnitEditor extends javax.swing.JFrame {
     private javax.swing.JCheckBox accessDiesHeightTableCheckBox[];
     //Image-Table
     private ImgCanvas canvas;
+    private boolean pictureAvail;
     private ImageProcess imgProcess;
 
 
@@ -158,6 +162,7 @@ public class UnitEditor extends javax.swing.JFrame {
         // action new / load;
         //exitAct exit / dispose        
         initDone = 0;
+        pictureAvail = false;
 
         if (unitPath.length() == 0) return;
         exitAction = exitAct;
@@ -635,7 +640,7 @@ public class UnitEditor extends javax.swing.JFrame {
             accessDiesHeightTableCheckBox[i].setSelected(true);
         }
 
-        
+        /*
         canvas = new ImgCanvas();
         s = new SgStream("E:\\Demount\\palette.pal",s.STREAM_READ);
         if ( s.error == 0 ) canvas.palette = s.readPalette();
@@ -643,7 +648,7 @@ public class UnitEditor extends javax.swing.JFrame {
         canvas.setVisible(false);
         jPanelPicture.add (canvas, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 10, 110, 110));
         imgProcess = new ImageProcess(tUnit.picPackage[0],canvas);
-
+*/
         initDone = 1;
 
         pack ();
@@ -1325,8 +1330,10 @@ private void jTabbedPaneMainStateChanged (javax.swing.event.ChangeEvent evt) {//
         else classFunctionSelectCheckBox[i].setEnabled(false);
         // check if functions are available on this unit, then they can be available at this class
         // functions -> class panel
-        canvas.setVisible(true);
-        canvas.showImage();
+        if ( pictureAvail ) {
+           canvas.setVisible(true);
+           canvas.showImage();
+        }
         //showImage, if Image-Tab selected
     }
   }//GEN-LAST:event_jTabbedPaneMainStateChanged
