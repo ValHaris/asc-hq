@@ -1,6 +1,10 @@
-//     $Id: basestrm.h,v 1.5 1999-12-28 21:02:38 mbickel Exp $
+//     $Id: basestrm.h,v 1.6 1999-12-29 12:50:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/12/28 21:02:38  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.4  1999/12/27 12:59:40  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -657,6 +661,10 @@ extern const char* filereadmode;
 extern const char* filewritemode;
 
 extern int verbosity;
+
+extern const char pathdelimitter; 
+extern const char* pathdelimitterstring; 
+
 
 #endif
 

@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.10 1999-12-28 21:03:22 mbickel Exp $
+//     $Id: spfst.cpp,v 1.11 1999-12-29 12:50:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  1999/12/28 21:03:22  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.9  1999/12/27 13:00:11  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -4491,7 +4495,6 @@ void tgeneraldisplaymap :: pnt_main ( void )
    
                yp = vfbtopspace + y * fielddisty;
    
-
 
                if (b > visible_ago ) {
    

@@ -1,6 +1,10 @@
-//     $Id: edmisc.cpp,v 1.5 1999-12-27 12:59:56 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.6 1999-12-29 12:50:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/12/27 12:59:56  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.4  1999/12/07 22:05:09  mbickel
 //      Added password verification for loading maps
 //
@@ -493,7 +497,8 @@ void placeunit(void)
          mapsaved = false;
          pf = getactfield(); 
          if (pf != NULL) 
-            if ( terrainaccessible(pf,pf->vehicle) || actmap->gameparameter[ cgp_movefrominvalidfields] ) 
+              // !( pf->bdt & cbbuildingentry)
+            if ( !( pf->building             ) && ( terrainaccessible(pf,pf->vehicle) || actmap->gameparameter[ cgp_movefrominvalidfields]) ) 
                { 
                   int set = 1;
                   if ( pf->vehicle ) {

@@ -1,6 +1,10 @@
-//     $Id: basestrm.cpp,v 1.9 1999-12-28 21:02:37 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.10 1999-12-29 12:50:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  1999/12/28 21:02:37  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.8  1999/12/27 12:59:38  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -111,7 +115,19 @@ const char* filereadmode = "r";
 const char* filewritemode = "w";
 #endif
 
+#ifdef _DOS_
+const char pathdelimitter = '\\';
+const char* pathdelimitterstring = "\\";
+#else
+const char pathdelimitter = '/';
+const char* pathdelimitterstring = "/";
+#endif
+
+#ifdef _DOS_
+int verbosity = 0;
+#else
 int verbosity = 10;
+#endif
 
 #pragma pack(1)
 struct trleheader {
@@ -1612,9 +1628,26 @@ int patimat (const char *pat, const char *str)
 
 
 
-
 tfindfile :: tfindfile ( const char* name )
 {
+   char* directory;
+   char wildcard[1000];
+
+   if ( strchr ( name, pathdelimitter )) {
+      char buf[1000];
+      strcpy ( buf, name );
+      int i = strlen ( buf )-1;
+      while ( buf[i] != pathdelimitter )
+         i--;
+      buf[i+1] = 0;
+      directory = buf;
+      strcpy ( wildcard, &name[i+1] );
+
+   } else {
+      directory = ascdirectory;
+      strcpy ( wildcard, name );
+   }
+
    found = 0;
    act = 0;
    if ( !name )
@@ -1624,14 +1657,14 @@ tfindfile :: tfindfile ( const char* name )
       DIR *dirp; 
       struct dirent *direntp; 
   
-      dirp = opendir( ascdirectory );   // Watcom C allows DOS-Wildcards as Parameter for opendir
+      dirp = opendir( directory );   
       if( dirp != NULL ) { 
         for(;;) { 
           direntp = readdir( dirp ); 
           if ( direntp == NULL ) 
              break; 
              
-          if ( patimat ( name, direntp->d_name )) {
+          if ( patimat ( wildcard, direntp->d_name )) {
              names[found] = strdup ( direntp->d_name );
              namedupes[found] = 1;
              found++;

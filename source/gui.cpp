@@ -1,6 +1,10 @@
-//     $Id: gui.cpp,v 1.7 1999-12-28 21:02:57 mbickel Exp $
+//     $Id: gui.cpp,v 1.8 1999-12-29 12:50:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  1999/12/28 21:02:57  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.6  1999/12/27 13:00:03  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -2054,8 +2058,10 @@ void tnsguiiconcontainer :: exec         ( void )
    containeractive++;
    mousecontrol->reset();
    pfield fld = getactfield ();
+   /*
    if ( fld->vehicle && fld->building )
-      displaymessage( "gui.cpp   tnsguiiconcontainer :: exec  ; both unit and building on a field", 2 ); 
+      displaymessage( "gui.cpp   tnsguiiconcontainer :: exec  ; both unit and building on a field", 1 ); 
+   */
    container( fld->vehicle, fld->building );
    containeractive--;
 }

@@ -1,6 +1,10 @@
-//     $Id: edglobal.cpp,v 1.3 1999-12-27 12:59:52 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.4 1999-12-29 12:50:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/12/27 12:59:52  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.2  1999/11/16 03:41:33  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -297,8 +301,8 @@ char*    getstring( char*  title, char* orgval )
 
 void appendbackslash ( char* string )
 {
-   if ( strlen ( string ) && string[strlen ( string ) -1] != '\\' )
-      strcat ( string, "\\");
+   if ( strlen ( string ) && string[strlen ( string ) -1] != pathdelimitter )
+      strcat ( string, pathdelimitterstring );
 }
 
 char* getbipath ( void )
@@ -310,7 +314,8 @@ char* getbipath ( void )
    char filename2[1000];
    strcpy ( filename2, filename );
    appendbackslash( filename2 );
-   strcat ( filename2, "mis\\");
+   strcat ( filename2, "mis");
+   strcat ( filename2, pathdelimitterstring );
    strcat ( filename2, "*.dat");
 
    while ( !exist ( filename2 )) {
@@ -320,7 +325,8 @@ char* getbipath ( void )
 
       strcpy ( filename2, filename );
       appendbackslash( filename2 );
-      strcat ( filename2, "mis\\");
+      strcat ( filename2, "mis");
+      strcat ( filename2, pathdelimitterstring );
       strcat ( filename2, "*.dat");
    }
    appendbackslash( filename );
