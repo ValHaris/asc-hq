@@ -1497,11 +1497,12 @@ void checkpulldown( tkey ch )
 
 void mainloopgeneralkeycheck ( tkey& ch )
 {
-   ch = r_key();
+   int keyprn;
+   getkeysyms ( &ch, &keyprn );
    checkpulldown( ch );
 
    movecursor(ch);
-   actgui->checkforkey ( ch );
+   actgui->checkforkey ( ch, keyprn );
 }
 
 

@@ -539,6 +539,18 @@ your net, but you will need resources in that particular building you can fill
 the tanks of this building by enabling &quot;store <cite>resource</cite>&quot; and prevent extraction 
 of these resources through the net by enabling &quot;stop <cite>resource</cite> extraction&quot;.
 <p>
+The available functions are:
+<dl>
+<dt>store</dt>
+<dd>This causes the building to get as much resources as possible from the net and store it. These resources are still available to the outside (if no other net control functions are enabled). <br>Situation sample: the enemy will cut the connection to a factory, but you still want to use it for production.  </dd>
+<dt>move out</dt>
+<dd>The antipode to <i>store</i>. This will move all resources to other locations in the resource net. <br>Situation sample: the enemy is about to conquer a building which stores resources.</dd>
+<dt>stop storing</dt>
+<dd>No more resources will be stored in this building.</dd>
+<dt>stop extraction</dt>
+<dd>No resources from this building will be used. The resources themselfes will not be touched, they will be kept in the building. This is the only function that affects the amount of available resources. </dd>
+
+</dl>
 <p>
 <h3>9.14  <a name="conquer">Conquering buildings</a></h3>
 <p>Enemy buildings can be conquered with any unit that has the &quot;conquer_buildings&quot; 
@@ -670,7 +682,7 @@ these building types if you don't already have one.
 <p>Any thoughts about how we can improve this are always welcome. I know that this 
 is not the perfect solution. 
 <p>
-<h3>9.20  <a name="Building_Buildings">Supervisor in multiplayer games</a></h3>
+<h3>9.20  <a name="supervisor">Supervisor in multiplayer games</a></h3>
 <p>
 <p>As a supervisor you can switch other players to computer and back, change their 
 position (the computer on which they play) and so on.
@@ -684,6 +696,7 @@ password to change the above mentioned settings.
 <p>
 <p>Without logging on as supervisor a player can only switch himself to computer or 
 off and he can change his or the next players position.
+
 
 <p><!--================================================================--><HR>
 <h2>10.  <a name="FAQ">FAQ</a></h2>

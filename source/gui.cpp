@@ -4,9 +4,13 @@
 */
 
 
-//     $Id: gui.cpp,v 1.82 2002-12-06 10:00:42 mbickel Exp $
+//     $Id: gui.cpp,v 1.83 2002-12-12 20:36:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.82  2002/12/06 10:00:42  mbickel
+//      Fixed: object construction icon missing when unit can only remove objects
+//      mapeditor: Fixed: neutral buildings not working
+//
 //     Revision 1.81  2002/11/17 11:43:23  mbickel
 //      Fixed replay errors when replaying the AI moves
 //
@@ -594,13 +598,13 @@ void   GuiHost<T> :: runpressedmouse ( int taste  )
 
 
 template<class T> 
-void   GuiHost<T>::checkforkey ( tkey key )
+void   GuiHost<T>::checkforkey ( tkey key, int keyprn )
 {
    if ( key == ct_enter ) {
       if ( actshownicons[0][0] )
          bi2control();
    } else
-      getfirsticon()->checkforkey( key );
+      getfirsticon()->checkforkey( keyprn );
 }
 
 
@@ -994,7 +998,7 @@ int  tnguiicon::pressedbymouse( void )
 void  tnguiicon::checkforkey  ( tkey key )
 {
    if ( available () )
-      for (int i = 0; i < 6 ; i++ ) 
+      for (int i = 0; i < 6 ; i++ )
 
          if ( keys[0][i] )
            if ( char2key( keys[0][i] ) == key ) {
@@ -2758,10 +2762,10 @@ int     tselectweaponguihost ::  painticons ( void )
    return SelectWeaponBaseGuiHost::painticons();
 }
 
-void    tselectweaponguihost ::  checkforkey ( tkey key )
+void    tselectweaponguihost ::  checkforkey ( tkey key, int keyprn )
 {
    checkcoordinates();
-   SelectWeaponBaseGuiHost::checkforkey( key );
+   SelectWeaponBaseGuiHost::checkforkey( key, keyprn );
 }
 
 void    tselectweaponguihost ::  checkformouse ( void )

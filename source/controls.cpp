@@ -3,9 +3,16 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.145 2002-12-12 11:34:17 mbickel Exp $
+//     $Id: controls.cpp,v 1.146 2002-12-12 20:36:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.145  2002/12/12 11:34:17  mbickel
+//      Fixed: ai crashing when weapon has no ammo
+//      Fixed: ASC crashed when loading game with ID not found
+//      Fixed: more ai problems
+//      AI now faster
+//      Fixed: removing objects overfill a units tank
+//
 //     Revision 1.144  2002/12/08 21:53:39  mbickel
 //      Fixed: mining station produces twice the resources
 //      Updated file version numbers
@@ -520,10 +527,12 @@ void         putbuildinglevel1(void)
 
    mousevisible(true);
    do {
-     if ( keypress() ) {
-        taste = r_key();
-        selectbuildinggui.checkforkey(taste);
-     }
+      if ( keypress() ) {
+         int keyprn;
+         tkey input;
+         getkeysyms( &input, &keyprn );
+         selectbuildinggui.checkforkey(taste, keyprn );
+      }
 
      selectbuildinggui.checkformouse();
      releasetimeslice();

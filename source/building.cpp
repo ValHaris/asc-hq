@@ -2,9 +2,16 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.87 2002-12-12 11:34:17 mbickel Exp $
+//     $Id: building.cpp,v 1.88 2002-12-12 20:36:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.87  2002/12/12 11:34:17  mbickel
+//      Fixed: ai crashing when weapon has no ammo
+//      Fixed: ASC crashed when loading game with ID not found
+//      Fixed: more ai problems
+//      AI now faster
+//      Fixed: removing objects overfill a units tank
+//
 //     Revision 1.86  2002/11/30 18:04:48  mbickel
 //      Powerplant subwindow only displayed when building consumes resources
 //
@@ -2425,7 +2432,9 @@ void  ccontainer :: run ()
    mousevisible(true);
    do {
       if (keypress () ) {
-         tkey input=r_key();
+         int keyprn;
+         tkey input;
+         getkeysyms( &input, &keyprn );
          containeronlinemousehelp->removehelp ();
 
          if ( input == ct_tab ) {
@@ -2456,7 +2465,7 @@ void  ccontainer :: run ()
                        end=1; */
 
          if ( keymode == 0 ) {
-            actgui->checkforkey (input);
+            actgui->checkforkey (input, keyprn);
 
             if ( input==ct_up || input==ct_8k)    movemark(cursor_up);
             if ( input==ct_down || input==ct_2k)  movemark(cursor_down);

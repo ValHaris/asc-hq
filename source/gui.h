@@ -1,6 +1,9 @@
-//     $Id: gui.h,v 1.22 2002-09-19 20:20:05 mbickel Exp $
+//     $Id: gui.h,v 1.23 2002-12-12 20:36:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2002/09/19 20:20:05  mbickel
+//      Cleanup and various bug fixes
+//
 //     Revision 1.21  2001/07/13 12:53:01  mbickel
 //      Fixed duplicate icons in replay
 //      Fixed crash in tooltip help
@@ -155,7 +158,7 @@ class BasicGuiHost {
         virtual int    painticons ( void ) = 0;
         virtual void   paintsmallicons ( int taste, int up ) = 0;
         virtual void   restorebackground ( void ) = 0;
-        virtual void   checkforkey ( tkey key ) = 0;
+        virtual void   checkforkey ( tkey key, int keyprn ) = 0;
         virtual void   checkformouse ( void ) = 0;
         virtual void   runpressedmouse ( int taste ) = 0;
         virtual void   savebackground ( void ) = 0;
@@ -194,7 +197,7 @@ class GuiHost : public BasicGuiHost {
 
         void   starticonload ( void );
 
-        virtual void   checkforkey ( tkey key );
+        virtual void   checkforkey ( tkey key, int keyprn );
         virtual void   checkformouse ( void );
         void   savebackground ( void );
         virtual int    painticons ( void );
@@ -358,7 +361,7 @@ class tselectweaponguihost : public SelectWeaponBaseGuiHost {
 
          void              init ( int resolutionx, int resolutiony );
          virtual int       painticons ( void );
-         virtual void      checkforkey ( tkey key );
+         virtual void      checkforkey ( tkey key, int keyprn );
          virtual void      checkformouse ( void );
          virtual void      checkcoordinates ( void ); 
    };
