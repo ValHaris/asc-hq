@@ -1000,6 +1000,8 @@ void trunreplay :: execnextreplaymove ( void )
                                 if ( battle.av.damage < ad2 || battle.dv.damage > dd2 )
                                    error("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", battle.av.damage,ad2 ,battle.dv.damage, dd2);
                                 battle.setresult ();
+                                if ( battle.av.damage >= 100 || battle.dv.damage >= 100 )
+                                   computeview( actmap );
                                 dashboard.x = 0xffff;
                              } else
                              if ( targ->building ) {
@@ -1018,6 +1020,8 @@ void trunreplay :: execnextreplaymove ( void )
                                 if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
                                    error("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", battle.av.damage,ad2 ,battle.dv.damage, dd2);
                                 battle.setresult ();
+                                if ( battle.av.damage >= 100 || battle.dv.damage >= 100 )
+                                   computeview( actmap );
                                 dashboard.x = 0xffff;
                              } else
                              if ( !targ->objects.empty() ) {
@@ -1034,9 +1038,10 @@ void trunreplay :: execnextreplaymove ( void )
                                 if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
                                    error("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", battle.av.damage,ad2 ,battle.dv.damage, dd2);
                                 battle.setresult ();
+                                if ( battle.av.damage >= 100 || battle.dv.damage >= 100 )
+                                   computeview( actmap );
                                 dashboard.x = 0xffff;
                              }
-                             computeview( actmap );
                              displaymap();
                           } else
                              error("severe replay inconsistency:\nno vehicle for attack command !");

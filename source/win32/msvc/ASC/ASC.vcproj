@@ -19,10 +19,11 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/sdlmm/src;../../../libs/getopt;&quot;$(Libsigcpp)&quot;;&quot;$(paragui1)/include&quot;"
+				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/sdlmm/src;../../../libs/getopt;&quot;../../../libs/libsigc++&quot;;&quot;$(paragui1)/include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;NO_PARAGUI"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="0"
+				RuntimeLibrary="3"
 				DisableLanguageExtensions="FALSE"
 				DefaultCharIsUnsigned="TRUE"
 				RuntimeTypeInfo="TRUE"
@@ -39,7 +40,7 @@
 				ShowProgress="0"
 				OutputFile="$(OutDir)/bin/ASC.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/Release&quot;;&quot;$(SDL_image)/VisualC/Release&quot;;&quot;$(OutDir)/lib&quot;;../../../libs/SDLmm/SDLmm/debug;&quot;$(SDL)/VisualC/SDLmain/Release&quot;;&quot;$(SDL)/VisualC/SDL/Release&quot;;&quot;../../../libs/libsigc++/sigc++/Release&quot;"
+				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/Debug&quot;;&quot;$(SDL_image)/VisualC/Debug&quot;;&quot;$(OutDir)/lib&quot;;../../../libs/SDLmm/SDLmm/debug;&quot;$(SDL)/VisualC/SDLmain/Debug&quot;;&quot;$(SDL)/VisualC/SDL/Debug&quot;;&quot;../../../libs/libsigc++/sigc++/Debug&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/ASC.pdb"
@@ -68,12 +69,14 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="../../../Release"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
+				EnableIntrinsicFunctions="TRUE"
+				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)/include&quot;;../../../libs/SDLmm/include;&quot;$(SDL_mixer)&quot;;../../../libs/;&quot;../../../libs/libsigc++&quot;;../../../libs/getopt"
 				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;NO_PARAGUI"
 				RuntimeLibrary="2"
@@ -92,7 +95,7 @@
 				AdditionalDependencies="sdlevent.lib triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc++.lib"
 				OutputFile="$(OutDir)/bin/ASC.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/Release&quot;;&quot;$(SDL_image)/VisualC/Release&quot;;&quot;$(OutDir)/lib&quot;;&quot;../../../libs/libsigc++/sigc++/release&quot;;../../../libs/SDLmm/SDLmm/debug;&quot;$(SDL)/VisualC/SDLmain/Release&quot;;&quot;$(SDL)/VisualC/SDL/Release&quot;"
+				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/Release&quot;;&quot;$(SDL_image)/VisualC/Release&quot;;../../../Release/lib;&quot;../../../libs/libsigc++/sigc++/release&quot;;../../../libs/SDLmm/SDLmm/release;&quot;$(SDL)/VisualC/SDLmain/Release&quot;;&quot;$(SDL)/VisualC/SDL/Release&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/ASC.pdb"
 				SubSystem="2"
@@ -246,9 +249,6 @@
 				RelativePath="..\..\..\messages.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\misc.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\ai\misc.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -262,6 +262,9 @@
 						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\misc.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\music.cpp">
