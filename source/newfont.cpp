@@ -6,9 +6,12 @@
     
 */
 
-//     $Id: newfont.cpp,v 1.14 2001-12-19 17:16:29 mbickel Exp $
+//     $Id: newfont.cpp,v 1.15 2002-04-02 21:57:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2001/12/19 17:16:29  mbickel
+//      Some include file cleanups
+//
 //     Revision 1.13  2001/12/14 10:20:05  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -486,17 +489,16 @@ void         showtext3c( const char *       txt,
 {
    // collategraphicoperations cgo;
 
-    char         *s, *s2, *s3;
     int         i, j,k;
     word         newx; 
-    signed char  cnt;
+    int          cnt;
     int         orgjus; 
 
 
    npush( activefontsettings );
-   s2 = new char [ 255 ];
-   s  = new char [ 255 ];
-   s3 = new char [ 255 ];
+   char s2[1000];
+   char s[1000];
+   char s3[1000];
    s2[0] = 0;
 
    i = 0;
@@ -552,13 +554,10 @@ void         showtext3c( const char *       txt,
          activefontsettings.justify = lefttext; 
          showtext2c(s,newx,ypos); 
       } 
-      i = j + 1; 
+      i = j + 1;
       while ((txt[i] != '~') && (txt[i] != 0))
         i++;
-   } 
-   delete[] s3;
-   delete[] s;
-   delete[] s2;
+   }
 
    npop( activefontsettings );
 } 
