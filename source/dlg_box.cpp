@@ -1,6 +1,9 @@
-//     $Id: dlg_box.cpp,v 1.10 2000-01-01 19:04:17 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.11 2000-01-04 19:43:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/01/01 19:04:17  mbickel
+//     /tmp/cvsVhJ4Z3
+//
 //     Revision 1.9  1999/12/30 21:04:42  mbickel
 //      Restored DOS compatibility again.
 //
@@ -299,6 +302,7 @@ void* gmalloc ( int size )
 
 tdialogbox::tdialogbox()
 {
+   pcgo = NULL;
    virtualbufoffset = 0;
    boxstatus = 0;
 
@@ -487,7 +491,7 @@ void         tdialogbox::init(void)
    ysize = 380; 
    starty = 40; 
    title = "dialogbox";
-   push(activefontsettings,sizeof(activefontsettings)); 
+   npush( activefontsettings );
    activefontsettings.height = 0;
    activefontsettings.length = 0;
    memset(taborder, 0, sizeof(taborder));
@@ -989,6 +993,7 @@ void         tdialogbox::enablebutton(byte         id)
    if ( mss == 2 )
       setinvisiblemouserectanglestk ( x1 + pb->x1, y1 + pb->y1, x1 + pb->x2, y1 + pb->y2 );
 
+   collategraphicoperations cgo ( x1 + pb->x1, y1 + pb->y1, x1 + pb->x2, y1 + pb->y2 );
 
 
    char strng[200];
@@ -1217,7 +1222,7 @@ void         tdialogbox::disablebutton(byte         id)
    } 
    delete[] s;
    pb->active = false; 
-   pop(activefontsettings,sizeof(activefontsettings)); 
+   npop( activefontsettings );
    rebuildtaborder(); 
 } 
 
@@ -1291,7 +1296,6 @@ void         tdialogbox::redraw(void)
 
 void         tdialogbox::buildgraphics(void)
 { 
-  collategraphicoperations cgo;
 
   if ( x1 == -1 ) 
      x1 = ( agmp->resolutionx - xsize ) / 2;
@@ -1308,7 +1312,9 @@ void         tdialogbox::buildgraphics(void)
   if ( ysize == -1)
      ysize = agmp->resolutiony - ysize*2;
 
-   if (windowstyle & dlg_notitle ) 
+  pcgo = new collategraphicoperations ( x1, y1, x1 + xsize, y1 + ysize );
+
+   if (windowstyle & dlg_notitle )
       if (windowstyle & dlg_wintitle ) 
          windowstyle ^= dlg_wintitle;
 
@@ -1359,7 +1365,7 @@ void         tdialogbox::done(void)
          putimage(x1,y1,tp); 
          gfree ( tp );
       } 
-      pop(activefontsettings,sizeof(activefontsettings)); 
+      npop( activefontsettings );
       if (ms == 2) 
          mousevisible(true); 
    }
@@ -1453,12 +1459,13 @@ void         tdialogbox::execbutton( pbutton      pb, boolean      mouse )
                    ys1 = yb2 - ysd - 1;
 
                 if ( ys1 != ys1b ) {
-                   collategraphicoperations cgo;
+                   collategraphicoperations cgo ( x1 + pb->x1, y1 + pb->y1, x1 + pb->x2, y1 + pb->y2 );
                    ys1b = ys1;
                    // waitretrace();
                    mousevisible(false);
                    paintsurface2(x1 + pb->x1 + 1,y1 + pb->y1 + 1,x1 + pb->x2 - 1,y1 + pb->y2 - 1 );
                    rahmen(true, xb1 + 1, ys1, xb2 - 1, ys1 + ysd);
+                   cgo.off();
                    int j = (ys1 - yb1 - 1) * (*pw2) / l;
                    if (j != *pw) {
                       *pw = j;
@@ -1519,7 +1526,12 @@ void         tdialogbox::showtabmark(byte         b)
 
 
 void         tdialogbox::run(void)
-{ 
+{
+  if ( pcgo ) {
+     delete pcgo;
+     pcgo = NULL;
+  }
+
   int          xm, ym, xp, yp;
   int          i, oldx, oldy, xp2, yp2;
   pbutton      pb; 
@@ -1769,11 +1781,11 @@ void         tdialogbox::rahmen3(char *       txt,
                      integer      y2,
                      byte         style)
 { 
-   collategraphicoperations cgs;
+   collategraphicoperations cgs( x1, y1, x2, y2 );
 
   word         w;
 
-   push(activefontsettings,sizeof(activefontsettings)); 
+   npush( activefontsettings );
    activefontsettings.font = schriften.smallarial;
    w = gettextwdth(txt,NULL); 
    if (style == 1) { 
@@ -1787,7 +1799,7 @@ void         tdialogbox::rahmen3(char *       txt,
    activefontsettings.length = 0;
    showtext2(txt,x1 + 12,y1 - activefontsettings.font->height / 2); 
 
-   pop(activefontsettings,sizeof(activefontsettings)); 
+   npop( activefontsettings );
 } 
 
 
@@ -2075,7 +2087,7 @@ void         tdialogbox::stredit(char *       s,
    activefontsettings.length = wdth;
    activefontsettings.height = activefontsettings.font->height;
    {
-     collategraphicoperations cgo;
+     collategraphicoperations cgo ( x1, y1, x1 + wdth, y1 + activefontsettings.height );
      dispeditstring ( ss, x1, y1 );
      position = strlen(s);
      einfuegen = true;
@@ -2173,7 +2185,7 @@ void         tdialogbox::stredit(char *       s,
             } /* endif */
             
             if (gettextwdth_stredit( ss2, NULL ) < wdth ) {
-              collategraphicoperations cgo;
+              collategraphicoperations cgo ( x1, y1, x1 + wdth, y1 + activefontsettings.height );
               lne(x1,y1,ss,position,einfuegen);
               ss3 = ss2;
               ss2 = ss;
@@ -2184,7 +2196,7 @@ void         tdialogbox::stredit(char *       s,
             } /* endif */
          } 
          if ((cc == cto_bspace ) && (position > 0)) {   /* Backspace */
-            collategraphicoperations cgo;
+            collategraphicoperations cgo ( x1, y1, x1 + wdth, y1 + activefontsettings.height );
             lne(x1,y1,ss,position,einfuegen);
             for (i=0; i+1< position ; i++ ) {
                ss2[i] = ss[i];
@@ -2231,7 +2243,6 @@ void         tdialogbox::lne(int          x1,
                  int          position,
                  boolean      einfuegen)
 {
-  collategraphicoperations cgo;
  int          i, j, k;
  char* ss2;
 
@@ -2240,7 +2251,8 @@ void         tdialogbox::lne(int          x1,
    i = x1 + gettextwdth(ss2,activefontsettings.font);
    j = y1; 
    k = y1 + activefontsettings.font->height; 
-   xorline(i,j,i,k,3); 
+   collategraphicoperations cgo ( i-1, j, i+1, k );
+   xorline(i,j,i,k,3);
    if (einfuegen == false) { 
       xorline(i + 1,j,i + 1,k,3); 
       xorline(i - 1,j,i - 1,k,3); 
@@ -2295,7 +2307,7 @@ void         tdialogbox::intedit(int *    st,
             cc = cto_invvalue;
 
          if (cc != cto_invvalue ) {
-            collategraphicoperations cgo;
+            collategraphicoperations cgo ( x1, y1, x1 + wdth, y1 + activefontsettings.height );
 
             lne(x1,y1,ss,position,einfuegen);
             switch (cc) {
@@ -2646,7 +2658,7 @@ void tviewtext::setparams ( int xx1, int yy1, int xx2, int yy2, char* ttxt, char
 
 void tviewtext::displaytext ( void )
 {
-  collategraphicoperations cgo;
+  collategraphicoperations cgo ( tvt_x1, tvt_y1, tvt_x2, tvt_y2 );
 
    tvt_color = defaulttextcolor;
    tvt_maxlineheight = activefontsettings.font->height + 5;
@@ -3472,7 +3484,8 @@ int displaymessage2( char* formatstring, ... )
    activefontsettings.length = agmp->resolutionx - ( 640 - 387);
 
    int yy = agmp->resolutiony - ( 480 - 450 );
-   setinvisiblemouserectanglestk ( 37, yy, 37 + activefontsettings.length, 450 + activefontsettings.font->height );
+   setinvisiblemouserectanglestk ( 37, yy, 37 + activefontsettings.length, yy + activefontsettings.font->height );
+   collategraphicoperations cgo ( 37, yy, 37 + activefontsettings.length, yy + activefontsettings.font->height );
    showtext3c( stringtooutput, 37, yy );
    getinvisiblemouserectanglestk();
 

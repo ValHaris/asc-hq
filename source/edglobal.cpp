@@ -1,6 +1,10 @@
-//     $Id: edglobal.cpp,v 1.4 1999-12-29 12:50:43 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.5 2000-01-04 19:43:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/12/29 12:50:43  mbickel
+//      Removed a fatal error message in GUI.CPP
+//      Made some modifications to allow platform dependant path delimitters
+//
 //     Revision 1.3  1999/12/27 12:59:52  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -162,7 +166,7 @@ int infomessage( char* formatstring, ... )
    activefontsettings.length = agmp->resolutionx - ( 640 - 387);
 
    int yy = agmp->resolutiony - ( 480 - 450 );
-   setinvisiblemouserectanglestk ( 37, yy, 37 + activefontsettings.length, 450 + activefontsettings.font->height );
+   setinvisiblemouserectanglestk ( 37, yy, 37 + activefontsettings.length, yy + activefontsettings.font->height );
    showtext3c( stringtooutput, 37, yy );
    getinvisiblemouserectanglestk();
 

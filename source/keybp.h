@@ -1,6 +1,9 @@
-//     $Id: keybp.h,v 1.8 2000-01-01 19:04:18 mbickel Exp $
+//     $Id: keybp.h,v 1.9 2000-01-04 19:43:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/01/01 19:04:18  mbickel
+//     /tmp/cvsVhJ4Z3
+//
 //     Revision 1.7  1999/12/30 21:04:46  mbickel
 //      Restored DOS compatibility again.
 //
@@ -605,3 +608,4 @@ extern int getch(void);
 extern int kbhit(void);
 #endif
 
+extern int exitprogram;

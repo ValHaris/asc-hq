@@ -26,6 +26,7 @@ AC_TYPE_SIZE_T
 dnl Checks for libraries.
 AC_CHECK_LIB( pthread, pthread_create )
 AC_CHECK_LIB( SDL, SDL_GetVideoSurface, , AC_MSG_ERROR( ASC requires SDL to be installed ) )
+AC_CHECK_LIB( SDL, SDL_EnableKeyRepeat, , AC_MSG_ERROR( SDL is not up to date ) )
 AC_CHECK_LIB( bz2, bzReadOpen )
 
 dnl Checks for library functions.

@@ -1,6 +1,9 @@
-//     $Id: newfont.cpp,v 1.6 1999-12-29 17:38:18 mbickel Exp $
+//     $Id: newfont.cpp,v 1.7 2000-01-04 19:43:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/12/29 17:38:18  mbickel
+//      Continued Linux port
+//
 //     Revision 1.5  1999/12/28 21:03:13  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -358,7 +361,7 @@ void         showtext3( const char *       txt,
                        word         xpos,
                        word         ypos)
 {
-   collategraphicoperations cgo;
+   // collategraphicoperations cgo ( xpos, ypos, max ( activefontsettings.height, activefontsettings->font.height ),;
 
     char         *s, *s2, *s3;
     byte         i, j,k;
@@ -369,7 +372,7 @@ void         showtext3( const char *       txt,
 
    if (txt[0] == 0)
        return;
-   push(activefontsettings,sizeof(activefontsettings)); 
+   npush( activefontsettings );
    s2 = new char [ 255 ];
    s  = new char [ 255 ];
    s3 = new char [ 255 ];
@@ -437,7 +440,7 @@ void         showtext3( const char *       txt,
    delete[] s;
    delete[] s2;
 
-   pop(activefontsettings,sizeof(activefontsettings)); 
+   npop( activefontsettings );
 } 
 
 
@@ -449,7 +452,7 @@ void         showtext3c( const char *       txt,
                        word         xpos,
                        word         ypos)
 {
-   collategraphicoperations cgo;
+   // collategraphicoperations cgo;
 
     char         *s, *s2, *s3;
     byte         i, j,k;
@@ -458,7 +461,7 @@ void         showtext3c( const char *       txt,
     byte         orgjus; 
 
 
-   push(activefontsettings,sizeof(activefontsettings)); 
+   npush( activefontsettings );
    s2 = new char [ 255 ];
    s  = new char [ 255 ];
    s3 = new char [ 255 ];
@@ -525,7 +528,7 @@ void         showtext3c( const char *       txt,
    delete[] s;
    delete[] s2;
 
-   pop(activefontsettings,sizeof(activefontsettings)); 
+   npop( activefontsettings );
 } 
 
 void showtext4 ( const char* TextToOutput, int x1, int y1, ... )
@@ -570,8 +573,8 @@ char* int2string ( int i, char* buf )
    if ( gettextwdth ( buf, NULL ) > activefontsettings.length   &&  activefontsettings.length) {
       char buf2[50];
 
-      int pot  = log10 ( i );
-      int base = pow ( 10, pot );
+      int pot  = (int) log10 ( i );
+      int base = (int) pow ( 10, pot );
       int first = i / base;
       int rest = i - first * base;
 

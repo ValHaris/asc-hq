@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.13 2000-01-01 19:04:19 mbickel Exp $
+//     $Id: spfst.cpp,v 1.14 2000-01-04 19:43:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/01/01 19:04:19  mbickel
+//     /tmp/cvsVhJ4Z3
+//
 //     Revision 1.12  1999/12/30 20:30:40  mbickel
 //      Improved Linux port again.
 //
@@ -1806,6 +1809,7 @@ void       tcursor::putbkgr ( void )
      int yp = idisplaymap.getfieldposy( posx, posy );
 
      //setinvisiblemouserectanglestk ( xp, yp, xp + fieldxsize, yp + fieldysize );
+     collategraphicoperations cgo ( xp, yp, xp + fieldxsize, yp + fieldysize );
      if (agmp-> linearaddress != hgmp-> linearaddress ) {
         npush( *agmp );
         *agmp = *hgmp;
@@ -1826,6 +1830,7 @@ void       tcursor::putimg ( void )
      checksize();
 
      //setinvisiblemouserectanglestk ( xp, yp, xp + fieldxsize, yp + fieldysize );
+     collategraphicoperations cgo ( xp, yp, xp + fieldxsize, yp + fieldysize );
      if (agmp-> linearaddress != hgmp-> linearaddress ) {
         npush( *agmp );
         *agmp = *hgmp;

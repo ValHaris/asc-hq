@@ -1,6 +1,9 @@
-//     $Id: keybp.cpp,v 1.7 2000-01-02 20:23:38 mbickel Exp $
+//     $Id: keybp.cpp,v 1.8 2000-01-04 19:43:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/01/02 20:23:38  mbickel
+//      Improved keyboard handling in dialog boxes under DOS
+//
 //     Revision 1.6  1999/12/30 21:04:45  mbickel
 //      Restored DOS compatibility again.
 //
@@ -68,6 +71,8 @@
     unsigned char pressed;
     unsigned char p;
     unsigned char exkey;
+    
+    int exitprogram = 0;
 
 
 

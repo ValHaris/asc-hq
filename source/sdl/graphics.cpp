@@ -15,9 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: graphics.cpp,v 1.3 2000-01-02 19:47:09 mbickel Exp $
+//     $Id: graphics.cpp,v 1.4 2000-01-04 19:43:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/01/02 19:47:09  mbickel
+//      Continued Linux port
+//      Fixed crash at program exit
+//
 //     Revision 1.2  2000/01/01 19:04:20  mbickel
 //     /tmp/cvsVhJ4Z3
 //
@@ -53,7 +57,7 @@ int initgraphics ( int x, int y, int depth )
   atexit(SDL_Quit);
 
   /* Initialize the display in a 640x480 8-bit palettized mode */
-  screen = SDL_SetVideoMode(x, y, depth, SDL_SWSURFACE);
+  screen = SDL_SetVideoMode(x, y, depth, SDL_SWSURFACE | SDL_FULLSCREEN );
   if ( screen == NULL ) {
      fprintf(stderr, "Couldn't set %dx%dx%d video mode: %s\n",x,y,depth, SDL_GetError());
      return -1;
@@ -108,7 +112,7 @@ int copy2screen( int x1, int y1, int x2, int y2 )
    if ( x1 == -1 || y1 == -1 || x2 == -1 || y2 == -1 )
       SDL_UpdateRect ( screen , 0,0,0,0 );
    else
-      SDL_UpdateRect ( screen , x1, y1, x2-x1+1, y2-y1 );
+      SDL_UpdateRect ( screen , x1, y1, x2-x1+1, y2-y1+1 );
 }
 
 

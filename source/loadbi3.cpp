@@ -1,6 +1,10 @@
-//     $Id: loadbi3.cpp,v 1.9 2000-01-02 19:47:08 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.10 2000-01-04 19:43:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/01/02 19:47:08  mbickel
+//      Continued Linux port
+//      Fixed crash at program exit
+//
 //     Revision 1.8  1999/12/28 21:03:01  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -178,7 +182,7 @@ unsigned char bi2asc_color_translation_table[256];
 class initloadbi3 {
       public:
          initloadbi3 ( void ) { bi2asc_color_translation_table[0] = 254; };
-      } a;
+      } LoadBi3init;
 
 
 void loadbi3graphics( void )

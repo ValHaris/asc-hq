@@ -1,6 +1,9 @@
-//     $Id: dlg_box.h,v 1.4 2000-01-01 19:04:17 mbickel Exp $
+//     $Id: dlg_box.h,v 1.5 2000-01-04 19:43:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/01/01 19:04:17  mbickel
+//     /tmp/cvsVhJ4Z3
+//
 //     Revision 1.3  1999/11/22 18:27:14  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -179,6 +182,7 @@ typedef class tdialogbox* pdialogbox;
                      byte         markedtab; 
                      byte         disablecolor; 
                      int          boxstatus;
+                     collategraphicoperations* pcgo;
 
                      tdialogbox();
 

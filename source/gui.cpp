@@ -1,6 +1,10 @@
-//     $Id: gui.cpp,v 1.10 2000-01-02 19:47:07 mbickel Exp $
+//     $Id: gui.cpp,v 1.11 2000-01-04 19:43:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/01/02 19:47:07  mbickel
+//      Continued Linux port
+//      Fixed crash at program exit
+//
 //     Revision 1.9  1999/12/29 17:38:14  mbickel
 //      Continued Linux port
 //
@@ -235,7 +239,7 @@ void tguihost :: putbackground ( int xx , int yy )
 
 int    tguihost::painticons ( void )
 {
-   collategraphicoperations cgo;
+   collategraphicoperations cgo ( guixpos, guiypos, guixpos + columncount*(guiiconsizex + guigapx), guiypos + iconspaintable/columncount*(guiiconsizey + guigapy) + guiiconsizey );
    // int oldnumpainted = numpainted;
    numpainted = 0;
 
@@ -262,6 +266,7 @@ void   tguihost :: cleanup ( void )    // wird zum entfernen der kleinen guiicon
 {
    if ( smalliconpos.buf ) {
       setinvisiblemouserectanglestk ( smalliconpos.x, smalliconpos.y, smalliconpos.x + smalliconpos.xsize, smalliconpos.y + guismalliconsizey );
+      collategraphicoperations cgo ( smalliconpos.x, smalliconpos.y, smalliconpos.x + smalliconpos.xsize, smalliconpos.y + guismalliconsizey );
       putimage ( smalliconpos.x, smalliconpos.y, smalliconpos.buf );
       getinvisiblemouserectanglestk (  );
 
@@ -276,7 +281,6 @@ void   tguihost::paintsmallicons ( int taste, int up )
 {
    int num;
    {
-      collategraphicoperations cgo;
 
       npush ( paintsize );
 
@@ -304,6 +308,7 @@ void   tguihost::paintsmallicons ( int taste, int up )
          smalliconpos.y = 0;
 
       setinvisiblemouserectanglestk ( smalliconpos.x, smalliconpos.y, smalliconpos.x + smalliconpos.xsize, smalliconpos.y + guismalliconsizey );
+      collategraphicoperations cgo ( smalliconpos.x, smalliconpos.y, smalliconpos.x + smalliconpos.xsize, smalliconpos.y + guismalliconsizey );
 
       smalliconpos.buf = new char[ imagesize ( smalliconpos.x, smalliconpos.y, smalliconpos.x + smalliconpos.xsize, smalliconpos.y + guismalliconsizey )];
 
@@ -633,7 +638,8 @@ int    tguihost::numpainted;
 void   tguihost::restorebackground ( void )
 {
    setinvisiblemouserectanglestk ( guixpos, guiypos, guixpos + columncount*(guiiconsizex + guigapx) + guiiconsizex, guiypos + iconspaintable/columncount*(guiiconsizey + guigapy) + guiiconsizey );
-   for (int j = 0; j < iconspaintable/columncount ; j++ ) 
+   collategraphicoperations cgo ( guixpos, guiypos, guixpos + columncount*(guiiconsizex + guigapx) + guiiconsizex, guiypos + iconspaintable/columncount*(guiiconsizey + guigapy) + guiiconsizey );
+   for (int j = 0; j < iconspaintable/columncount ; j++ )
       for (int i = 0; i< columncount ; i++) {
          putbackground ( i, j );
          actshownicons[i][j] = NULL;
@@ -823,6 +829,7 @@ void  tnguiicon::iconpressed ( void )
       char* buf = new char [ imagesize ( 8,8, 40,26 )];
    
       setinvisiblemouserectanglestk ( x, y, x + guiiconsizex, y + guiiconsizey );
+      collategraphicoperations cgo ( x, y, x + guiiconsizex, y + guiiconsizey );
       display();
       getimage ( x+8, y+8, x+40, y+26, buf );
       putspriteimage ( x, y, icons.guiknopf );
@@ -835,6 +842,7 @@ void  tnguiicon::iconpressed ( void )
       char* buf = new char [ imagesize ( 4,4, 20,13 )];
    
       setinvisiblemouserectanglestk ( x, y, x + guismalliconsizex, y + guismalliconsizey );
+      collategraphicoperations cgo ( x, y, x + guismalliconsizex, y + guismalliconsizey );
       getimage ( x+4, y+4, x+20, y+13, buf );
       putspriteimage ( x, y, halfpict ( icons.guiknopf ) );
       putimage ( x+5, y+5, buf );
@@ -985,10 +993,12 @@ void tnguiicon::putpict ( void* buf )
 
    if ( host->paintsize == 0 ) {
       setinvisiblemouserectanglestk ( x, y, x + guiiconsizex, y + guiiconsizey );
+      collategraphicoperations cgo ( x, y, x + guiiconsizex, y + guiiconsizey );
       putspriteimage ( x, y, buf );
       getinvisiblemouserectanglestk ( );
    } else {
       setinvisiblemouserectanglestk ( x, y, x + guismalliconsizex, y + guismalliconsizey );
+      collategraphicoperations cgo ( x, y, x + guismalliconsizex, y + guismalliconsizey );
       putspriteimage ( x, y, halfpict ( buf ) );
       getinvisiblemouserectanglestk ( );
    }

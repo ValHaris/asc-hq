@@ -1,6 +1,10 @@
-//     $Id: basegfx.cpp,v 1.9 2000-01-02 19:47:03 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.10 2000-01-04 19:43:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/01/02 19:47:03  mbickel
+//      Continued Linux port
+//      Fixed crash at program exit
+//
 //     Revision 1.8  2000/01/01 19:04:13  mbickel
 //     /tmp/cvsVhJ4Z3
 //
@@ -30,12 +34,6 @@ tgraphmodeparameters *hgmp = (tgraphmodeparameters *) & hardwaregraphmodeparamet
 
 
 int xlatbuffersize = 66000;
-
-#ifdef _DOS_
- #define CheckForDirectScreenAccess 
-#else
- #define CheckForDirectScreenAccess if (agmp->directscreenaccess == 0) copy2screen();
-#endif
 
 void generategrayxlattable( ppixelxlattable tab, byte offset, byte size)
 {
@@ -81,7 +79,8 @@ rahmen(boolean invers,
        integer x2,
        integer y2)
 {
-	byte            col;
+   collategraphicoperations cgo ( x1, y1, x2, y2 );
+   int col;
 
 	if (invers == false)
 		col = white;
@@ -95,7 +94,6 @@ rahmen(boolean invers,
 		col = darkgray;
 	line(x2, y1, x2, y2, col);
 	line(x1, y2, x2, y2, col);
-    CheckForDirectScreenAccess
 }
 
 void tdrawline :: start ( int x1, int y1, int x2, int y2 )
@@ -186,7 +184,7 @@ line(int  x1,
      int  y2,
      char actcol)
 {
-   collategraphicoperations cgs;
+   collategraphicoperations cgs ( x1, y1, x2, y2 );
 	float           m, b;
 	int             w;
 	float           yy1, yy2, xx1, xx2;
@@ -246,7 +244,7 @@ xorline(int  x1,
      int  y2,
      char actcol)
 {
-   collategraphicoperations cgs;
+   collategraphicoperations cgs ( x1, y1, x2, y2 );
 
 	float           m, b;
 	int             w;
@@ -302,7 +300,7 @@ rectangle(int x1,
 	  int y2,
 	  byte color)
 {
-   collategraphicoperations cgs;
+   collategraphicoperations cgs ( x1, y1, x2, y2 );
 
 	line(x1, y1, x1, y2, color);
 	line(x1, y1, x2, y1, color);
@@ -318,7 +316,7 @@ void xorrectangle(int x1,
 	     int y2,
 	     byte color)
 {
-   collategraphicoperations cgs;
+   collategraphicoperations cgs ( x1, y1, x2, y2 );
 
           xorline(x1,y1,x1,y2,color); 
           xorline(x1,y1,x2,y1,color);
@@ -432,6 +430,7 @@ void putshadow ( int x1, int y1, void* ptr, ppixelxlattable xl )
    char* c = (char*) ptr + 4;
    int spacelength = agmp->scanlinelength - *w - 1;
 
+   collategraphicoperations cgo ( x1, y1, x1 + w[0], y1+w[1] );
    if ( agmp->windowstatus == 100 ) {
       char* buf = (char*) (agmp->scanlinelength * y1 + x1 + agmp->linearaddress);
       for ( int y = w[1] + 1; y > 0; y-- ) {
@@ -445,7 +444,6 @@ void putshadow ( int x1, int y1, void* ptr, ppixelxlattable xl )
       }
    }
 
-   CheckForDirectScreenAccess
 }
 
 void putpicturemix ( int x1, int y1, void* ptr, int rotation, char* mixbuf )
@@ -454,6 +452,7 @@ void putpicturemix ( int x1, int y1, void* ptr, int rotation, char* mixbuf )
    char* c = (char*) ptr + 4;
    int spacelength = agmp->scanlinelength - *w - 1;
 
+   collategraphicoperations cgo ( x1, y1, x1 + w[0], y1+w[1] );
    if ( agmp->windowstatus == 100 ) {
       char* buf = (char*) (agmp->scanlinelength * y1 + x1 + agmp->linearaddress);
       for ( int y = w[1] + 1; y > 0; y-- ) {
@@ -472,7 +471,6 @@ void putpicturemix ( int x1, int y1, void* ptr, int rotation, char* mixbuf )
       }
    }
 
-   CheckForDirectScreenAccess
 }
 
 
@@ -482,6 +480,7 @@ void putinterlacedrotimage ( int x1, int y1, void* ptr, int rotation )
    char* c = (char*) ptr + 4;
    int spacelength = agmp->scanlinelength - *w - 1;
 
+   collategraphicoperations cgo ( x1, y1, x1 + w[0], y1+w[1] );
    if ( agmp->windowstatus == 100 ) {
       char* buf = (char*) (agmp->scanlinelength * y1 + x1 + agmp->linearaddress);
       for ( int y = w[1] + 1; y > 0; y-- ) {
@@ -499,7 +498,6 @@ void putinterlacedrotimage ( int x1, int y1, void* ptr, int rotation )
       }
    }
 
-   CheckForDirectScreenAccess
 }
 
 
@@ -557,6 +555,7 @@ void flippict ( void* s, void* d, int dir )
 
 void putpixel(int x1, int y1, int color)
 {
+   collategraphicoperations cgo ( x1, y1, x1, y1 );
    if ( agmp->byteperpix == 1 )
       putpixel8 ( x1, y1, color );
    else {
@@ -595,7 +594,6 @@ void putpixel(int x1, int y1, int color)
       }
    }
 
-   CheckForDirectScreenAccess
 }
 
 int getpixel(int x1, int y1)
@@ -1050,7 +1048,8 @@ void setvgapalette256 ( dacpalette256 pal )
 
 void ellipse ( int x1, int y1, int x2, int y2, int color, float tolerance )
 {
-   collategraphicoperations cgo;
+   collategraphicoperations cgs ( x1, y1, x2, y2 );
+
    int midx = (x1 + x2) / 2;
    int midy = (y1 + y2) / 2;
    float xr = x2 - x1;
@@ -1070,8 +1069,6 @@ void ellipse ( int x1, int y1, int x2, int y2, int color, float tolerance )
          if (  tmp <= 1 + tolerance && tmp >= 1 - tolerance )
             putpixel ( x, y, color );
       }
-
-   CheckForDirectScreenAccess
 
 }
 
@@ -1144,6 +1141,7 @@ tvirtualdisplay :: ~tvirtualdisplay ( )
 collategraphicoperations :: collategraphicoperations ( void )
 {
    #ifndef _DOS_
+   status = 1;
    x1 = -1; y1 = -1;
    x2 = -1; y2 = -1;
    olddirectscreenaccess = agmp->directscreenaccess;
@@ -1154,6 +1152,7 @@ collategraphicoperations :: collategraphicoperations ( void )
 collategraphicoperations :: collategraphicoperations ( int _x1, int _y1, int _x2, int _y2 )
 {
    #ifndef _DOS_
+   status = 1;
    x1 = _x1; y1 = _y1;
    x2 = _x2; y2 = _y2;
    olddirectscreenaccess = agmp->directscreenaccess;
@@ -1166,12 +1165,14 @@ void collategraphicoperations :: on ( void )
 {
    #ifndef _DOS_
    agmp->directscreenaccess = 1;
+   status = 1;
    #endif
 }
 
 void collategraphicoperations :: off ( void )
 {
    #ifndef _DOS_
+   status = 0;
    agmp->directscreenaccess = 0;
    if (agmp->directscreenaccess == 0)
       copy2screen( x1, y1, x2, y2 );
@@ -1182,9 +1183,11 @@ void collategraphicoperations :: off ( void )
 collategraphicoperations :: ~collategraphicoperations (  )
 {
    #ifndef _DOS_
-   agmp->directscreenaccess = olddirectscreenaccess;
-   if (agmp->directscreenaccess == 0)
-      copy2screen( x1, y1, x2, y2 );
+   if ( status ) {
+      agmp->directscreenaccess = olddirectscreenaccess;
+      if (agmp->directscreenaccess == 0)
+         copy2screen( x1, y1, x2, y2 );
+   }
    #endif
 }
 
@@ -1220,10 +1223,10 @@ void copySurface2screen( int x1, int y1, int x2, int y2 )
 
 void putpixel8 ( int x1, int y1, int color )
 {
+    collategraphicoperations cgo ( x1, y1, x1, y1 );
     char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
     *buf = color;
 
-   CheckForDirectScreenAccess
 }
 
 int getpixel8 ( int x1, int y1 )
@@ -1231,12 +1234,12 @@ int getpixel8 ( int x1, int y1 )
     char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
     return *buf;
 
-   CheckForDirectScreenAccess
 }
 
 
 void bar(int x1, int y1, int x2, int y2, char color)
 {
+   collategraphicoperations cgo ( x1, y1, x2, y2 );
    if ( agmp->windowstatus == 100 ) {
       int spacelength = agmp->scanlinelength - (x2-x1) - 1;
       char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
@@ -1248,7 +1251,6 @@ void bar(int x1, int y1, int x2, int y2, char color)
       }
    }
 
-   CheckForDirectScreenAccess
 }
 
 
@@ -1273,7 +1275,7 @@ void getimage(int x1, int y1, int x2, int y2, void *buffer)
       }
    }
 
-   CheckForDirectScreenAccess
+
 }
 
 void putimage ( int x1, int y1, void* img )
@@ -1287,6 +1289,8 @@ void putimage ( int x1, int y1, void* img )
    
       if ( hd->id == 16973 ) { 
    
+         collategraphicoperations cgo ( x1, y1, x1+hd->x, y1+hd->y );
+
          int spacelength = agmp->scanlinelength - hd->x - 1;
 
          src  += sizeof ( *hd );
@@ -1313,6 +1317,7 @@ void putimage ( int x1, int y1, void* img )
          }
       } else {
          word* w = (word*) img;
+         collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
          int spacelength = agmp->scanlinelength - *w - 1;
          src += 4;
          for ( int y = w[1] + 1; y > 0; y-- ) {
@@ -1324,7 +1329,6 @@ void putimage ( int x1, int y1, void* img )
       }
    }
 
-   CheckForDirectScreenAccess
 }
 
 void putxlatfilter ( int x1, int y1, void* pic, char* xlattables )
@@ -1336,6 +1340,8 @@ void putxlatfilter ( int x1, int y1, void* pic, char* xlattables )
       trleheader*   hd = (trleheader*) pic;
    
       if ( hd->id == 16973 ) { 
+         collategraphicoperations cgo ( x1, y1, x1+hd->x, y1+hd->y );
+
          int spacelength = agmp->scanlinelength - hd->x - 1;
          src  += sizeof ( *hd );
 
@@ -1364,6 +1370,7 @@ void putxlatfilter ( int x1, int y1, void* pic, char* xlattables )
          }
       } else {
          word* w = (word*) pic;
+         collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
          int spacelength = agmp->scanlinelength - *w - 1;
 
          src += 4;
@@ -1378,7 +1385,6 @@ void putxlatfilter ( int x1, int y1, void* pic, char* xlattables )
       }
    }
 
-   CheckForDirectScreenAccess
 }
 
 
@@ -1390,6 +1396,7 @@ void putspriteimage ( int x1, int y1, void* pic )
       trleheader*   hd = (trleheader*) pic;
       char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
       if ( hd->id == 16973 ) { 
+         collategraphicoperations cgo ( x1, y1, x1+hd->x, y1+hd->y );
          int spacelength = agmp->scanlinelength - hd->x - 1;
          src  += sizeof ( *hd );
 
@@ -1420,6 +1427,7 @@ void putspriteimage ( int x1, int y1, void* pic )
          }
       } else {
          word* w = (word*) pic;
+         collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
          int spacelength = agmp->scanlinelength - *w - 1;
          src += 4;
          for ( int y = w[1] + 1; y > 0; y-- ) {
@@ -1435,7 +1443,6 @@ void putspriteimage ( int x1, int y1, void* pic )
       }
    }
 
-   CheckForDirectScreenAccess
 }
 
 void putrotspriteimage(int x1, int y1, void *pic, int rotationvalue)
@@ -1447,7 +1454,8 @@ void putrotspriteimage(int x1, int y1, void *pic, int rotationvalue)
       trleheader*   hd = (trleheader*) pic;
    
       if ( hd->id == 16973 ) { 
-   
+         collategraphicoperations cgo ( x1, y1, x1+hd->x, y1+hd->y );
+
          int spacelength = agmp->scanlinelength - hd->x - 1;
          src  += sizeof ( *hd );
 
@@ -1486,6 +1494,7 @@ void putrotspriteimage(int x1, int y1, void *pic, int rotationvalue)
          }
       } else {
          word* w = (word*) pic;
+         collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
          int spacelength = agmp->scanlinelength - *w - 1;
          src += 4;
          for ( int y = w[1] + 1; y > 0; y-- ) {
@@ -1505,7 +1514,6 @@ void putrotspriteimage(int x1, int y1, void *pic, int rotationvalue)
       }
    }
 
-   CheckForDirectScreenAccess
 }
 
 void putrotspriteimage90(int x1, int y1, void *pic, int rotationvalue)
@@ -1513,6 +1521,7 @@ void putrotspriteimage90(int x1, int y1, void *pic, int rotationvalue)
    word* w = (word*) pic;
    // char* c = (char*) pic + 4;
    int spacelength = agmp->scanlinelength - *w - 1;
+   collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
 
    if ( agmp->windowstatus == 100 ) {
       char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
@@ -1532,12 +1541,12 @@ void putrotspriteimage90(int x1, int y1, void *pic, int rotationvalue)
       }
    }
 
-   CheckForDirectScreenAccess
 }
 
 void putrotspriteimage180(int x1, int y1, void *pic, int rotationvalue)
 {
    word* w = (word*) pic;
+   collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
    // char* c = (char*) pic + 4;
    int spacelength = agmp->scanlinelength - *w - 1;
 
@@ -1559,12 +1568,12 @@ void putrotspriteimage180(int x1, int y1, void *pic, int rotationvalue)
       }
    }
 
-   CheckForDirectScreenAccess
 }
 
 void putrotspriteimage270(int x1, int y1, void *pic, int rotationvalue)
 {
    word* w = (word*) pic;
+   collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
    // char* c = (char*) pic + 4;
    int spacelength = agmp->scanlinelength - *w - 1;
 
@@ -1586,11 +1595,11 @@ void putrotspriteimage270(int x1, int y1, void *pic, int rotationvalue)
       }
    }
 
-   CheckForDirectScreenAccess
 }
 
 void puttexture ( int x1, int y1, int x2, int y2, void *texture )
 {
+   collategraphicoperations cgo ( x1, y1, x2, y2 );
    char* c = (char*) texture;
    int spacelength = agmp->scanlinelength - (x2 - x1) - 1;
 
@@ -1607,12 +1616,12 @@ void puttexture ( int x1, int y1, int x2, int y2, void *texture )
       }
    }
 
-   CheckForDirectScreenAccess
 }
 
 
 void putspritetexture ( int x1, int y1, int x2, int y2, void *texture )
 {
+   collategraphicoperations cgo ( x1, y1, x2, y2 );
    char* c = (char*) texture;
    int spacelength = agmp->scanlinelength - (x2 - x1) - 1;
 
@@ -1631,11 +1640,11 @@ void putspritetexture ( int x1, int y1, int x2, int y2, void *texture )
       }
    }
 
-   CheckForDirectScreenAccess
 }
 
 void putimageprt ( int x1, int y1, int x2, int y2, void *texture, int dx, int dy )
 {
+   collategraphicoperations cgo ( x1, y1, x2, y2 );
    word* w = (word*) texture;
    int spacelength = agmp->scanlinelength - *w - 1;
 
@@ -1653,15 +1662,13 @@ void putimageprt ( int x1, int y1, int x2, int y2, void *texture, int dx, int dy
       }
    }
 
-   CheckForDirectScreenAccess
 }
 
 void copybuf2displaymemory(int size, void *buf)
 {
+   collategraphicoperations cgo ;
    memcpy ( (void*) agmp->linearaddress, buf, size );
-
-   CheckForDirectScreenAccess
-}         
+}
 
 
 void* xlatpict ( ppixelxlattable xl, void* vbuf )
@@ -1820,6 +1827,8 @@ void showtext ( const char* text, int x, int y, int textcol )
        } 
        
     }
+    collategraphicoperations cgo ( x, y, x +length + leftextralength + rightextralength, y + fontheight + extraheight );
+
     int suppressbkgr = 0;
     int spacelength = agmp->scanlinelength - (length + leftextralength + rightextralength);
     if ( activefontsettings.background == 255 ) {
@@ -1882,7 +1891,6 @@ void showtext ( const char* text, int x, int y, int textcol )
           fb += spacelength;
        }
 
-   CheckForDirectScreenAccess
 }
 
 void showtext2 ( const char* text, int x, int y )

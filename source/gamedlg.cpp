@@ -1,6 +1,10 @@
-//     $Id: gamedlg.cpp,v 1.12 2000-01-02 19:47:06 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.13 2000-01-04 19:43:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/01/02 19:47:06  mbickel
+//      Continued Linux port
+//      Fixed crash at program exit
+//
 //     Revision 1.11  2000/01/01 19:04:17  mbickel
 //     /tmp/cvsVhJ4Z3
 //
@@ -987,7 +991,7 @@ void         tnewcampaignlevel::showmapinfo(word         ypos)
 { 
 
    activefontsettings.font = schriften.smallarial;
-   push(activefontsettings,sizeof(activefontsettings)); 
+   npush( activefontsettings );
    if (message1[0] == 0) {
        activefontsettings.length = 120;
        activefontsettings.justify = righttext; 
@@ -1016,7 +1020,7 @@ void         tnewcampaignlevel::showmapinfo(word         ypos)
       showtext2(message2,x1 + 30,y1 + ypos + 45); 
    } 
 
-   pop(activefontsettings,sizeof(activefontsettings)); 
+   npop( activefontsettings );
 } 
 
 
@@ -1085,7 +1089,7 @@ void         tcontinuecampaign::showmapinfo(word         ypos)
 { 
    collategraphicoperations cgo;
    tnewcampaignlevel::showmapinfo(ypos);
-   push(activefontsettings,sizeof(activefontsettings)); 
+   npush( activefontsettings );
 
    activefontsettings.font = schriften.smallarial;
    if (message1[0] == 0) {
@@ -1102,7 +1106,7 @@ void         tcontinuecampaign::showmapinfo(word         ypos)
 
    }
 
-   pop(activefontsettings,sizeof(activefontsettings)); 
+   npop( activefontsettings );
 } 
 
 
@@ -3775,15 +3779,17 @@ tonlinemousehelp :: ~tonlinemousehelp (  )
 void tonlinemousehelp :: mouseaction ( void )
 {
    lastmousemove = ticker;
+  #ifdef _DOS_
    if ( active == 2 )
       removehelp();
+  #endif
 }
 
 #define maxonlinehelplinenum 5
 
 void tonlinemousehelp :: displayhelp ( int messagenum )
 {
-  int i;
+   int i;
    if ( active == 1 ) {
       char* str = getmessage ( messagenum );
       if ( str ) {
@@ -3814,9 +3820,13 @@ void tonlinemousehelp :: displayhelp ( int messagenum )
             if ( j > width )
                width = j;
          }
-   
+        #ifdef _DOS_
          pos.x1 = mouseparams.x - width/2 - 2;
          pos.x2 = mouseparams.x + width/2 + 2;
+        #else
+         pos.x1 = mouseparams.x - width - 2;
+         pos.x2 = mouseparams.x + 2;
+        #endif
    
          if ( pos.x1 < 0 ) {
             pos.x1 = 0;
@@ -3867,8 +3877,15 @@ void tonlinemousehelp :: removehelp ( void )
 void tonlinemousehelp :: checklist ( tonlinehelplist* list )
 {
      for ( int i = 0; i < list->num; i++ )
-        if ( mouseinrect ( &list->item[i].rect ))
+        if ( mouseinrect ( &list->item[i].rect )) {
+          #ifdef _DOS_
            displayhelp( list->item[i].messagenum );
+          #else
+           displayhelp( list->item[i].messagenum );
+           while ( mouseinrect ( &list->item[i].rect ) && mouseparams.taste == 0 && !keypress());
+           removehelp();
+          #endif
+        }
 
 }
 

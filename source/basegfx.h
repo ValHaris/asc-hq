@@ -367,6 +367,7 @@ class fatalgraphicserror {
 class collategraphicoperations {
          int olddirectscreenaccess;
          int x1, y1, x2, y2;
+         int status;
        public:
          collategraphicoperations ( void );
          collategraphicoperations ( int _x1, int _y1, int _x2, int _y2 );

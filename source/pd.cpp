@@ -1,6 +1,9 @@
-//     $Id: pd.cpp,v 1.6 1999-12-30 20:30:37 mbickel Exp $
+//     $Id: pd.cpp,v 1.7 2000-01-04 19:43:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/12/30 20:30:37  mbickel
+//      Improved Linux port again.
+//
 //     Revision 1.5  1999/12/29 17:38:19  mbickel
 //      Continued Linux port
 //
@@ -141,12 +144,12 @@ void tpulldown::run(void)
    do { 
       if (mouseparams.y <= pdb.pdbreite) {
          if ( (pdfieldnr < pdb.count-1 ) && (mouseparams.x > pdb.field[pdfieldnr+1].xstart)) {
-            collategraphicoperations cgo;
+            // collategraphicoperations cgo;
             closepdfield();
             pdfieldnr++;
             openpdfield();
          } else if ( (pdfieldnr > 0 ) && (mouseparams.x < pdb.field[pdfieldnr].xstart) ) {
-            collategraphicoperations cgo;
+            // collategraphicoperations cgo;
             closepdfield();
             pdfieldnr --;
             openpdfield();
@@ -154,12 +157,12 @@ void tpulldown::run(void)
       } else if (mouseparams.y <= pdb.pdbreite + pdb.field[pdfieldnr].height) {
          if ( (mouseparams.x >= anf ) && (mouseparams.x <= ende ) ) {
             if ( (buttonnr > 0 ) && (mouseparams.y < pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr) ) ) {
-               collategraphicoperations cgo;
+               // collategraphicoperations cgo;
                hidebutton();
                buttonnr--;
                showbutton();
             } else if ( (buttonnr < pdb.field[pdfieldnr].count-1 ) && (mouseparams.y > pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr+1) ) ) {
-               collategraphicoperations cgo;
+               // collategraphicoperations cgo;
                hidebutton();
                buttonnr++;
                showbutton();
@@ -305,7 +308,7 @@ void tpulldown::done(void)
 void tpulldown::baron(void)
 { 
    if (barstatus == false ) {
-      collategraphicoperations cgo;
+      collategraphicoperations cgo ( 0,0, agmp->resolutionx-1 ,pdb.pdbreite );
 
       savefont = activefontsettings; 
       setvars();
@@ -333,7 +336,7 @@ void tpulldown::baron(void)
 void tpulldown::baroff(void)
 { 
    if (barstatus == true) {
-      collategraphicoperations cgo;
+      collategraphicoperations cgo ( 0,0, agmp->resolutionx-1 ,pdb.pdbreite );
 
       mousevisible(false);
       putimage(0,0,barbackgrnd);
@@ -358,7 +361,6 @@ int tpulldown::getpdfieldheight(byte pdfieldnr,byte pos)
 
 void         tpulldown::openpdfield(void)
 {
-   collategraphicoperations cgo;
 
    int zw;
    setvars();
@@ -377,6 +379,7 @@ void         tpulldown::openpdfield(void)
       } 
 
    mousevisible(false);
+   collategraphicoperations cgo ( anf - 3, 0 ,ende + 3, pdb.pdbreite + 6 + pdb.field[pdfieldnr].height );
    backgrnd = asc_malloc( imagesize(anf - 3, 0 ,ende + 3,pdb.pdbreite + 6 + pdb.field[pdfieldnr].height) );
    getimage(anf - 3, 0 ,ende + 3, pdb.pdbreite + 6 + pdb.field[pdfieldnr].height,backgrnd);
 
@@ -421,8 +424,9 @@ void         tpulldown::openpdfield(void)
 
 void         tpulldown::closepdfield(void)
 {
-   collategraphicoperations cgo;
-
+   int w, h;
+   getpicsize ( backgrnd, w,h );
+   collategraphicoperations cgo ( anf-3, 0, anf-3 + w, h);
    mousevisible(false);
    putimage(anf - 3,0,backgrnd);
    asc_free(backgrnd); 
@@ -431,21 +435,21 @@ void         tpulldown::closepdfield(void)
 
 void tpulldown::hidebutton(void)
 { 
-   collategraphicoperations cgo;
 
    if (strcmp(pdb.field[pdfieldnr].button[buttonnr].name,"seperator") == 0) return;
    mousevisible(false); 
-   nolines(anf,pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr),ende,pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr+1));
+   collategraphicoperations cgo ( anf,pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr),ende,pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr+1));
+   nolines(                       anf,pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr),ende,pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr+1));
    mousevisible(true); 
 } 
 
 void tpulldown::showbutton(void)
 { 
-   collategraphicoperations cgo;
 
    if (strcmp(pdb.field[pdfieldnr].button[buttonnr].name,"seperator") == 0) return;
    mousevisible(false); 
-   lines(anf,pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr),ende,pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr+1));
+   collategraphicoperations cgo ( anf,pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr),ende,pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr+1));
+   lines(                         anf,pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr),ende,pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr+1));
    mousevisible(true); 
 } 
 

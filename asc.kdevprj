@@ -30,11 +30,11 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/blub.h,/home/martin/asc/source/building.cpp,/home/martin/asc/source/building.h,/home/martin/asc/source/sdl/events.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/dlg_box.h,/home/martin/asc/source/gamedlg.cpp,/home/martin/asc/source/sdl/events.cpp,/home/martin/asc/source/sdl/graphics.cpp,/home/martin/asc/source/sdl/timer.cpp,/home/martin/asc/source/mousehnd.h,/home/martin/asc/source/stack.h,/home/martin/asc/source/controls.cpp,/home/martin/asc/source/newfont.cpp,/home/martin/asc/source/edevents.cpp,/home/martin/asc/source/dlg_box.cpp,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/building.h
-cpp_file=/home/martin/asc/source/sdl/events.cpp
+header_file=/home/martin/asc/source/stack.h
+cpp_file=/home/martin/asc/source/gamedlg.cpp
 browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/index-7.html#ss7.2
 [source/controls.cpp]
 install_location=
@@ -94,7 +94,7 @@ ldflags=
 addcxxflags=-I/usr/lib/SDL/include -D_NOASM_ -funsigned-char -DHEXAGON -Dsgmain -DFREEMAPZOOM -DNEWKEYB
 ldadd=-lSDL -lpthread -lbz2
 bin_program=asc
-cxxflags= -O0 -g3 -Wall -W 
+cxxflags=-O0 -g3 -Wall -W
 [source/sdl/graphics.cpp]
 install_location=
 dist=true
@@ -334,7 +334,7 @@ dist=true
 install=false
 type=HEADER
 [General]
-make_options= -j1
+make_options=-j1
 execute_args=
 makefiles=Makefile.am,source/Makefile.am,source/docs/Makefile.am,source/docs/en/Makefile.am,source/sdl/Makefile.am,source/libs/triangul/Makefile.am,source/libs/Makefile.am,
 version_control=None

@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.14 2000-01-01 19:04:15 mbickel Exp $
+//     $Id: controls.cpp,v 1.15 2000-01-04 19:43:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/01/01 19:04:15  mbickel
+//     /tmp/cvsVhJ4Z3
+//
 //     Revision 1.13  1999/12/30 20:30:24  mbickel
 //      Improved Linux port again.
 //
@@ -2847,7 +2850,7 @@ void         moveunitxy(pvehicle     vehicle,
    netlevel += 10;
 
    moveparams.moveerr = 0; 
-   push(tempsvisible,sizeof(tempsvisible)); 
+   npush( tempsvisible );
    tempsvisible = false; 
 
 
@@ -3086,7 +3089,7 @@ void         moveunitxy(pvehicle     vehicle,
    cleartemps(7); 
    moveparams.movestatus = 0; 
    moveparams.uheight = -1;
-   pop(tempsvisible,sizeof(tempsvisible)); 
+   npop( tempsvisible );
 
    if ( fieldvisiblenow ( getactfield(), actmap->playerview ))
       cursor.show();
@@ -4837,11 +4840,11 @@ void   tdashboard :: paintvehicleinfo( const pvehicle     vehicle,
                                        const pvehicletype vt )
 { 
 
-   collategraphicoperations cgo;
+   collategraphicoperations cgo ( agmp->resolutionx - 800 + 610, 15, agmp->resolutionx - 800 + 783, 307 );
 
    byte         ms; 
  
-   push(activefontsettings,sizeof(activefontsettings)); 
+   npush( activefontsettings );
    ms = getmousestatus();
    if (ms == 2) mousevisible(false); 
    dashboard.backgrndcol    = 24;
@@ -4880,7 +4883,7 @@ void   tdashboard :: paintvehicleinfo( const pvehicle     vehicle,
    dashboard.x = getxpos();
    dashboard.y = getypos();
    if (ms == 2) mousevisible(true); 
-   pop(activefontsettings,sizeof(activefontsettings)); 
+   npop( activefontsettings );
 
    dashboard.repainthard = 0;
 
@@ -7713,7 +7716,7 @@ void cmousecontrol :: chkmouse ( void )
    
          if ( r ) 
             if ( (cursor.posx != x || cursor.posy != y) && ( moveparams.movestatus == 0) ) {
-               collategraphicoperations cgo;
+               // collategraphicoperations cgo;
                mousestat = 1;
                mousevisible(false);
                cursor.hide();
@@ -7752,7 +7755,7 @@ void cmousecontrol :: chkmouse ( void )
                newy--;
 
             if ( newx != actmap->xpos  || newy != actmap->ypos ) {
-               collategraphicoperations cgo;
+               // collategraphicoperations cgo;
                cursor.hide();
                actmap->xpos = newx;
                actmap->ypos = newy;
@@ -7775,7 +7778,7 @@ void cmousecontrol :: chkmouse ( void )
    
          if ( r ) 
             if ( (cursor.posx != x || cursor.posy != y) && ( moveparams.movestatus == 0   ||  getfield(actmap->xpos + x , actmap->ypos + y)->a.temp == 0) ) {
-               collategraphicoperations cgo;
+               // collategraphicoperations cgo;
                mousestat = 1;
                mousevisible(false);
                cursor.hide();
@@ -7786,7 +7789,7 @@ void cmousecontrol :: chkmouse ( void )
             } else 
               if ( mousestat == 2  ||  mousestat == 0 ||  (moveparams.movestatus && getfield( actmap->xpos + x, actmap->ypos + y)->a.temp )  ) {
                  {
-                    collategraphicoperations cgo;
+                    // collategraphicoperations cgo;
                     if ( cursor.posx != x || cursor.posy != y ) {
                        mousevisible(false);
                        cursor.hide();
@@ -7816,7 +7819,7 @@ void cmousecontrol :: chkmouse ( void )
          int r = getfieldundermouse ( &x, &y );
          {
 
-            collategraphicoperations cgo;
+            // collategraphicoperations cgo;
 
             if ( r && ( cursor.posx != x || cursor.posy != y) ) {
                mousevisible(false);

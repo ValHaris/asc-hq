@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.12 2000-01-02 20:23:37 mbickel Exp $
+//     $Id: dialog.cpp,v 1.13 2000-01-04 19:43:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/01/02 20:23:37  mbickel
+//      Improved keyboard handling in dialog boxes under DOS
+//
 //     Revision 1.11  2000/01/02 19:47:05  mbickel
 //      Continued Linux port
 //      Fixed crash at program exit
@@ -166,7 +169,7 @@ void         tstatisticarmies ::newknopfdruck(integer      xx1,
     boolean      kn; 
     integer      mt; 
     {
-        collategraphicoperations cgo;
+        collategraphicoperations cgo ( xx1, yy1, xx2, yy2 );
         mt = mouseparams.taste;
         mousevisible(false);
         p = new char [ imagesize ( xx1 + 1,yy1 + 1,xx2 - 2,yy2 - 2 )];
@@ -198,7 +201,7 @@ void         tstatisticarmies ::newknopfdruck(integer      xx1,
      }  while (kn == true);
 
      {
-        collategraphicoperations cgo;
+        collategraphicoperations cgo ( xx1, yy1, xx2, yy2 );
 
         mousevisible(false);
         putimage(xx1 + 1,yy1 + 1,p);
@@ -243,7 +246,6 @@ void         tstatistics::init(void)
 
 void         tstatisticarmies::init(void)
 { 
-  collategraphicoperations cgo;
   byte         i;
 
    tstatistics::init();
@@ -257,7 +259,7 @@ void         tstatisticarmies::init(void)
    addbutton("e~x~it",10,ysize - 35,xsize - 10,ysize - 10,0,1,2,true); 
    addbutton("~c~hange display mode",10,ysize - 65,xsize - 10,ysize - 40,0,1,1,true); 
    
-   buildgraphics(); 
+   buildgraphics();
    rahmen(true,x1 + 10,y1 + 50,x1 + xsize - 10,y1 + ysize - 70); 
    for (i = 0; i <= 2; i++) 
       putimage(x1 + 20,y1 + 75 + i * 90,icons.statarmy[i]); 
@@ -267,7 +269,6 @@ void         tstatisticarmies::init(void)
 
 void         tstatisticbuildings::init(void)
 { 
-  collategraphicoperations cgo;
 
    tstatistics::init();
    categories = 1; 
@@ -280,7 +281,7 @@ void         tstatisticbuildings::init(void)
    addbutton("e~x~it",10,ysize - 35,xsize - 10,ysize - 10,0,1,2,true); 
    addbutton("~c~hange display mode",10,ysize - 65,xsize - 10,ysize - 40,0,1,1,true); 
 
-   buildgraphics(); 
+   buildgraphics();
    rahmen(true,x1 + 10,y1 + 50,x1 + xsize - 10,y1 + ysize - 70); 
 } 
 
@@ -355,7 +356,7 @@ void         tstatisticbuildings::count(void)
 
 void         tstatistics::paintgraph(void)
 { 
-  collategraphicoperations cgo;
+   collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );
    int    linestart = x1 + 95;
 
   int      max; 
@@ -720,7 +721,6 @@ void         tweaponinfo::run(void)
 
 void         tvehicleinfo::init( pvehicletype type )
 { 
-  collategraphicoperations cgo;
 
    aktvehicle = type;
    tdialogbox::init();
@@ -755,7 +755,7 @@ void         tvehicleinfo::init( pvehicletype type )
    hidebutton ( 8 );
 
 
-   buildgraphics(); 
+   buildgraphics();
 
 
 
@@ -784,7 +784,7 @@ void         tvehicleinfo::lines(integer      xp1,
                                  integer      yp2,
                                  char *       st)
 { 
-  collategraphicoperations cgo;
+  collategraphicoperations cgo ( xp1, yp1, xp2, yp2);
    rahmen(true,xp1,yp1,xp2,yp2);
    rahmen(false,xp1 + 1,yp1 + 1,xp2 - 1,yp2 - 1); 
 } 
@@ -811,7 +811,7 @@ void         tvehicleinfo::lines(integer      xp1,
 
 void         tvehicleinfo::paintmarkweap(void)
 { 
-  collategraphicoperations cgo;
+  collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );
   byte         mas;
   int ii,jj,ll;
   char strng[100];
@@ -884,7 +884,7 @@ extern dacpalette256 pal;
 
 void         tvehicleinfo::zeigevehicle(void)
 { 
-  collategraphicoperations cgo;
+  collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
 
       activefontsettings.font = schriften.smallarial; 
       activefontsettings.length = 240;
@@ -920,7 +920,7 @@ void         tvehicleinfo::zeigevehicle(void)
 
 void tvehicleinfo::showgeneralinfos ( void ) 
 {
-  collategraphicoperations cgo;
+  collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
  char mss = getmousestatus();
  if (mss == 2)
     mousevisible(false);
@@ -977,7 +977,7 @@ void tvehicleinfo::showgeneralinfos ( void )
 
 void  tvehicleinfo::showgeneralinfovariables( void )
 {
-  collategraphicoperations cgo;
+  collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
  int          ii, kk;
  pointer      q; 
  char         strng[100];
@@ -1198,7 +1198,7 @@ void  tvehicleinfo::showgeneralinfovariables( void )
 
 void tvehicleinfo::showweapons ( void )
 {                             
-  collategraphicoperations cgo;
+  collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
 
  char mss = getmousestatus();
  if (mss == 2)
@@ -1232,7 +1232,7 @@ void tvehicleinfo::showweapons ( void )
 
 void tvehicleinfo::showweaponsvariables( void )
 {
-  collategraphicoperations cgo;
+  collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
 
    char strng[100];
    int xa,ya,ii;
@@ -1423,7 +1423,7 @@ void tvehicleinfo::showweaponsvariables( void )
 
 void         tvehicleinfo::showinfotext( void )
 {
-  collategraphicoperations cgo;
+  collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
 
    char *b;
    if (aktvehicle->infotext)
@@ -1462,7 +1462,7 @@ void         tvehicleinfo::showinfotext( void )
 
 void         tvehicleinfo::showclasses( void )
 {
-  collategraphicoperations cgo;
+  collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
 
   int i, j;
 
@@ -1846,7 +1846,6 @@ class  tchoice_dlg : public tdialogbox {
 
 void         tchoice_dlg::init( char* a, char* b, char* c )
 {
-  collategraphicoperations cgo;
   tdialogbox::init();
   windowstyle |= dlg_notitle;
   int wdth = gettextwdth ( a, schriften.arial8 ) ;
@@ -1857,8 +1856,12 @@ void         tchoice_dlg::init( char* a, char* b, char* c )
 
   ysize = 100; 
   addbutton(b,10,60,xsize/2-5,90,0,1,1,true); 
-  addbutton(c,xsize/2+5,60,xsize-10,90,0,1,2,true); 
-  buildgraphics(); 
+  addbutton(c,xsize/2+5,60,xsize-10,90,0,1,2,true);
+
+  x1 = (640 - xsize) / 2;
+  y1 = (480 - ysize) / 2;
+
+  buildgraphics();
   activefontsettings.font = schriften.arial8; 
   activefontsettings.justify = centertext; 
   activefontsettings.length = xsize - 20;
@@ -2004,7 +2007,6 @@ class   tfileselectsvga : public tdialogbox {
 
 void         tfileselectsvga::init( char sw  )
 { 
-  collategraphicoperations cgo;
 
    tdialogbox::init();
    swtch = sw; 
@@ -2040,7 +2042,7 @@ void         tfileselectsvga::init( char sw  )
    addscrollbar(xsize - 30,starty + 10,xsize - 10,ysize - 60, &numberoffiles, actshownfilenum, &firstshownfile, 5, 0);
    hidebutton ( 5 );
 
-   buildgraphics(); 
+   buildgraphics();
 
    rahmen(true,x1 + 10,y1 + starty + 10, x1 + xsize - 35,y1 + ysize - 57);   /* fileausgabe */
 
@@ -2068,7 +2070,7 @@ void         tfileselectsvga::buttonpressed(byte         id)
       break; 
       
       case 3:   { 
-            collategraphicoperations cgo;
+            collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
             sort_time = (boolean) !sort_name;
             enablebutton(4); 
             sortentries(); 
@@ -2077,7 +2079,7 @@ void         tfileselectsvga::buttonpressed(byte         id)
       break; 
       
       case 4:   { 
-            collategraphicoperations cgo;
+            collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
             sort_name = (boolean) !sort_time;
             enablebutton(3); 
             sortentries(); 
@@ -2250,7 +2252,7 @@ void         tfileselectsvga::fileausgabe(boolean     force , int dispscrollbar)
    if (numberoffiles == 0)
       return;
 
-  collategraphicoperations cgo;
+   collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
 
    mousevisible(false);
 
@@ -2394,7 +2396,7 @@ boolean      tfileselectsvga::speedsearch(char         input)
 
 void         tfileselectsvga::displayspeedsearch(void)
 { 
-  collategraphicoperations cgo;
+  collategraphicoperations cgo ( x1 + 225, y1 + ysize - 30, x1 + 225 + 90, y1 + ysize );
 
    mousevisible(false);
    npush ( activefontsettings );
@@ -2475,25 +2477,25 @@ void         tfileselectsvga::run(void)
          tdialogbox::run();
 
          if ( numberoffiles ) {
-            switch ( prntkey ) {
-            case cto_down:  markedfile++;
+            switch ( taste ) {
+            case ct_down:  markedfile++;
                             checkfsf( 1 );
                             fileausgabe(false,1);
                break;
 
-            case cto_up:    if ( markedfile > 0) {
+            case ct_up:    if ( markedfile > 0) {
                                markedfile--;
                                checkfsf( 1 );
                                fileausgabe(false,1);
                             }
                break;
 
-            case cto_pdown: markedfile+=actshownfilenum - 1;
+            case ct_pdown: markedfile+=actshownfilenum - 1;
                             checkfsf( 1 );
                             fileausgabe(false,1); 
                break;
 
-            case cto_pup:    if ( markedfile > actshownfilenum - 1) 
+            case ct_pup:    if ( markedfile > actshownfilenum - 1)
                                markedfile-= actshownfilenum - 1;
                             else
                                markedfile = 0;
@@ -2501,11 +2503,11 @@ void         tfileselectsvga::run(void)
                             fileausgabe(false,1);
                break;
 
-            case cto_pos1:  markedfile = 0;
+            case ct_pos1:  markedfile = 0;
                             checkfsf( 1 );
                             fileausgabe(false,1);
                break;
-            case cto_ende:  markedfile = numberoffiles - 1;
+            case ct_ende:  markedfile = numberoffiles - 1;
                             checkfsf( 1 );
                             fileausgabe(false,1);
                break;
@@ -2684,7 +2686,6 @@ void testdisptext ( void )
 
 void tenterfiledescription::init ( char* descrip )
 {
-   collategraphicoperations cgo;
 
    tdialogbox::init();
    xsize = 350;
@@ -2703,6 +2704,7 @@ void tenterfiledescription::init ( char* descrip )
    addeingabe ( 1, (void*) description, 0, 100 );
    addbutton( "~O~K", 15, ysize - 35, xsize - 15, ysize - 10, 0,1,2,true);
    addkey( 2, ct_enter);
+
    buildgraphics();
    status = 0;
 }
@@ -2777,7 +2779,6 @@ class tshowmap : public tdialogbox, public tbasicshowmap {
 
 void  tshowmap::init ( void )
 {
-  collategraphicoperations cgo;
 
    tdialogbox::init();
    windowstyle ^= dlg_notitle;
@@ -3347,8 +3348,6 @@ int tbasicshowmap::getposfieldy ( int c )
 
 void tbasicshowmap::dispimage ( void )
 {
-  collategraphicoperations cgo;
-
    int xsize;
    int ysize;
    int x1 = xp1;
@@ -3364,7 +3363,8 @@ void tbasicshowmap::dispimage ( void )
    else
       ysize = mysize;
 
-   setinvisiblemouserectanglestk ( xp1, yp1, xp1 + xsize, yp1 + ysize );
+   setinvisiblemouserectanglestk ( xp1, yp1, xp1 + txsize, yp1 + tysize );
+   collategraphicoperations cgo ( xp1, yp1, xp1 + txsize, yp1 + tysize );;
 
    mapwindow.x1 = (txsize - xsize) / 2;
    mapwindow.y1 = (tysize - ysize) / 2;
@@ -3687,7 +3687,6 @@ static const char*    cens[]  = { "player", "alliance", "computer" };
 
 void         tenternamestrings::init(  pnamestrings namestrings, char plyexist, char md )
 { 
-  collategraphicoperations cgo;
 
   char         i, j;
 
@@ -3921,7 +3920,7 @@ int          tsetalliances::getcapabilities ( void )
 
 void          tsetalliances::redraw ( void )
 {
-  collategraphicoperations cgo;
+  collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );
 
    inherited::redraw();
 
@@ -3938,7 +3937,7 @@ void          tsetalliances::redraw ( void )
 
 void         tsetalliances::displayplayernamesintable( void )
 {
-  collategraphicoperations cgo;
+   collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
    npush ( activefontsettings );
    activefontsettings.background = dblue; 
    activefontsettings.length = ali_x1 - 41 ;
@@ -3960,7 +3959,7 @@ char* shareview_modenames[2] = { "none", "share view" };
 
 void         tsetalliances::buildhlgraphics(void)
 { 
-  collategraphicoperations cgo;
+   collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
 
   byte         i, j;
   byte         mss; 

@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.14 2000-01-02 19:47:08 mbickel Exp $
+//     $Id: sg.cpp,v 1.15 2000-01-04 19:43:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/01/02 19:47:08  mbickel
+//      Continued Linux port
+//      Fixed crash at program exit
+//
 //     Revision 1.13  2000/01/01 19:04:18  mbickel
 //     /tmp/cvsVhJ4Z3
 //
@@ -2134,11 +2138,12 @@ void checkpulldown( tkey* ch )
    }
 }
 
-
+extern int a;
 void mainloopgeneralkeycheck ( tkey& ch )
 {
-    // screensaverparameters.lasttick = ticker; 
-    ch = r_key(); 
+    // screensaverparameters.lasttick = ticker;
+    ch = r_key();
+    a--;
     pd.key = ch;
     checkpulldown( &ch );
     keyinput[keyinputptr] = ch;
@@ -2167,6 +2172,8 @@ void mainloopgeneralkeycheck ( tkey& ch )
 
 void mainloopgeneralmousecheck ( void )
 {
+    if ( exitprogram )
+       execuseraction ( ua_exitgame );
     actgui->checkformouse();
 
     dashboard.checkformouse();
@@ -2207,7 +2214,7 @@ void mainloopgeneralmousecheck ( void )
 
   if (lasttick + 5 < ticker) {
       if ((dashboard.x != getxpos()) || (dashboard.y != getypos())) {
-         collategraphicoperations cgo;
+         // collategraphicoperations cgo;
          mousevisible(false);
 
          dashboard.paint ( getactfield(), actmap->playerview );

@@ -1,6 +1,10 @@
-//     $Id: timer.cpp,v 1.1 1999-12-28 21:03:31 mbickel Exp $
+//     $Id: timer.cpp,v 1.2 2000-01-04 19:43:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  1999/12/28 21:03:31  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 
  /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -30,7 +34,8 @@
 #define timerintr 0x08
 #define pit_freq 0x1234DD  
 
-    static int  ticker,clock_ticks, counter,tticker;
+    static int  ticker = 0;
+    static int  clock_ticks, counter,tticker;
     char         init=0;
 
 

@@ -15,9 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.5 2000-01-02 19:47:08 mbickel Exp $
+//     $Id: events.cpp,v 1.6 2000-01-04 19:43:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/01/02 19:47:08  mbickel
+//      Continued Linux port
+//      Fixed crash at program exit
+//
 //     Revision 1.4  2000/01/01 19:04:20  mbickel
 //     /tmp/cvsVhJ4Z3
 //
@@ -39,6 +43,7 @@
 #include "../mousehnd.h"
 #include "../keybp.h"
 #include "../timer.h"
+#include "../stack.h"
 
 #include "SDL.h"
 #include "SDL_thread.h"
@@ -58,6 +63,11 @@ queue<Uint32> keybuffer_prnt;
 
 int eventthreadinitialized = 0;
 int closethread = 0;
+int exitprogram = 0;
+
+#define mouseprocnum 10
+tsubmousehandler* pmouseprocs[ mouseprocnum ];
+
 
 int mouse_in_off_area ( void )
 {
@@ -84,6 +94,16 @@ byte getmousestatus ()
       return 0;
 }
 
+int a = 0;
+int b = 0;
+
+void callsubhandler ( void )
+{
+     for ( int i = 0; i < mouseprocnum; i++ )
+        if ( pmouseprocs[i] )
+           pmouseprocs[i]->mouseaction();
+}
+
 
 int eventhandler ( void* nothing )
 {
@@ -95,13 +115,13 @@ int eventhandler ( void* nothing )
             case SDL_MOUSEBUTTONDOWN: {
                int taste = event.button.button - 1;
                int state = event.button.type == SDL_MOUSEBUTTONDOWN;
-
                if ( state )
                   mouseparams.taste |= (1 << taste);
                else
                   mouseparams.taste &= ~(1 << taste);
                mouseparams.x = event.button.x;
                mouseparams.y = event.button.y;
+               callsubhandler();
             }
             break;
 
@@ -109,6 +129,7 @@ int eventhandler ( void* nothing )
                mouseparams.x = event.motion.x;
                mouseparams.y = event.motion.y;
                mouseparams.taste = event.motion.state;
+               callsubhandler();
             }
             break;
             case SDL_KEYDOWN: {
@@ -124,17 +145,16 @@ int eventhandler ( void* nothing )
             	   keybuffer_sym.push ( key );
             	   keybuffer_prnt.push ( event.key.keysym.unicode );
             	   r = SDL_mutexV ( keyboardmutex );
-            	}
+            	   a++;
+            	} else
+            	   b++;
             }
             break;
             case SDL_KEYUP: {
             }
             break;
 
-            case SDL_QUIT: {
-                    printf("Quit requested, quitting.\n");
-                    exit(0);
-            }
+            case SDL_QUIT: exitprogram = 1;
             break;
          }
       }
@@ -237,19 +257,37 @@ int mouseinrect ( const tmouserect* rect )
 
 void addmouseproc ( tsubmousehandler* proc )
 {
+   for (int i = 0; i < mouseprocnum ; i++) {
+      if ( !pmouseprocs[i] ) {
+         pmouseprocs[i] = proc;
+         break;
+      }
+   } /* endfor */
+
+   if ( i >= mouseprocnum )
+      exit(1);
 }
 
 void removemouseproc ( tsubmousehandler* proc )
 {
+   for (int i = 0; i < mouseprocnum ; i++)
+      if ( pmouseprocs[i] == proc )
+         pmouseprocs[i] = NULL;
 }
 
 void pushallmouseprocs ( void )
 {
+   for (int i = 0; i < mouseprocnum ; i++) {
+      npush ( pmouseprocs[i] );
+      pmouseprocs[i] = NULL;
+   }
 }
 
 
 void popallmouseprocs ( void )
 {
+   for (int i = 0; i < mouseprocnum ; i++)
+      npop ( pmouseprocs[i] );
 }
 
 
@@ -358,6 +396,7 @@ void getkeysyms ( tkey* keysym, int* keyprnt )
 void initkeyb(void)
 {
    initeventthread();
+   SDL_EnableKeyRepeat ( 250, 30 );
 }
 
 
