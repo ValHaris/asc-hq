@@ -730,7 +730,7 @@ void checkDataVersion( )
    } else
       dataVersion = 0;
 
-   if ( dataVersion < 10 || dataVersion > 0xffff )
+   if ( dataVersion < 11 || dataVersion > 0xffff )
       versionError ( "main.con", location );
 
 
