@@ -342,9 +342,9 @@ void TerrainType :: runTextIO ( PropertyContainer& pc )
          weatherBits.set(i);
 
    pc.addString( "Name", name );
-   pc.addInteger( "ID", id ).evaluate();
+   pc.addInteger( "ID", id );
 
-   pc.addTagArray( "Weather", weatherBits, cwettertypennum-1, weatherTags ).evaluate();
+   pc.addTagArray( "Weather", weatherBits, cwettertypennum-1, weatherTags );
 
    for ( int i = 0; i < cwettertypennum; i++ )
       if ( weatherBits.test(i) ) {
@@ -367,7 +367,7 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
       if ( bi_pict >= 0 )
          bi3pics = true;
 
-   pc.addBool  ( "UseGFXpics", bi3pics ).evaluate();
+   pc.addBool  ( "UseGFXpics", bi3pics );
    if ( !bi3pics ) {
       bi_pict = -1;
       int w = cwettertypennum-1;
@@ -380,10 +380,10 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
          s = "terrain";
          s += strrr(terraintype->id);
       }
-      pc.addImage ( "picture", pict, s + weatherAbbrev[w] ).evaluate();
+      pc.addImage ( "picture", pict, s + weatherAbbrev[w] );
 
    } else {
-      pc.addInteger ( "GFX_Picture", bi_pict ).evaluate();
+      pc.addInteger ( "GFX_Picture", bi_pict );
       loadbi3pict_double ( bi_pict,
                            &pict,
                            CGameOptions::Instance()->bi3.interpolate.terrain );
@@ -396,7 +396,7 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
    pc.addInteger ( "DefenseBonus", defensebonus );
    pc.addInteger ( "AttackBonus",  attackbonus );
    pc.addInteger ( "BasicJamming", basicjamming );
-   pc.addIntegerArray ( "MoveMalus", move_malus ).evaluate();
+   pc.addIntegerArray ( "MoveMalus", move_malus );
    int mm = move_malus.size();
    move_malus.resize( cmovemalitypenum );
    for ( int i = mm; i < cmovemalitypenum; i++ )

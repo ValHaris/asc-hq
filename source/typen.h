@@ -1,6 +1,14 @@
-//     $Id: typen.h,v 1.111 2002-04-05 09:25:09 mbickel Exp $
+//     $Id: typen.h,v 1.112 2002-10-01 09:23:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.111  2002/04/05 09:25:09  mbickel
+//      Project files now for Borland C++ Builder 6
+//      Fixed: netcontrol not working
+//      Fixed: replay errors when constructing turrets
+//      Submarine require no fuel for sufacing
+//      Field info dialog extended
+//      Fixed several buffer overruns
+//
 //     Revision 1.110  2002/03/27 00:18:21  mbickel
 //      Changed the resource weight
 //
@@ -962,8 +970,6 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 /// Constants that specify the layout of ASC
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
-
-#define maxloadableunits 27  // Mehr vehicle d?rfen nicht in einen Transporter rein
 
 #define guiiconsizex 49  
 #define guiiconsizey 35  

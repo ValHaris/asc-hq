@@ -97,6 +97,8 @@ Vehicletype :: Vehicletype ( void )
    id = 0;
    fuelConsumption = 0;
    functions = 0;
+   wreckageObject = -1;
+
    movement.resize(8);
    for ( i = 0; i < 8; i++ )
       movement[i] = 0;
@@ -163,7 +165,7 @@ int Vehicletype::maxsize ( void ) const
 extern void* generate_vehicle_gui_build_icon ( pvehicletype tnk );
 #endif
 
-const int vehicle_version = 7;
+const int vehicle_version = 8;
 
 
 
@@ -321,6 +323,10 @@ void Vehicletype :: read ( tnstream& stream )
 
    bool load_weapons = stream.readInt();
    autorepairrate = stream.readInt();
+   if ( version >= 8 )
+      wreckageObject = stream.readInt();
+
+
    if ( version <= 2 )
       stream.readInt( ); // dummy
 
@@ -379,6 +385,23 @@ void Vehicletype :: read ( tnstream& stream )
    } else
       setupRemovableObjectsFromOldFileLayout();
 
+   if ( version >= 8 ) {
+      int num = stream.readInt();
+      for ( int i = 0; i < num; i++ ) {
+         int from = stream.readInt();
+         int to   = stream.readInt();
+
+         objectGroupsBuildable.push_back ( IntRange ( from, to ));
+      }
+
+      num = stream.readInt();
+      for ( int i = 0; i < num; i++ ) {
+         int from = stream.readInt();
+         int to   = stream.readInt();
+
+         objectGroupsRemovable.push_back ( IntRange ( from, to ));
+      }
+   }
 
    if ( vehiclesbuildablenum )
       for ( i = 0; i < vehiclesbuildablenum; i++ ) {
@@ -575,6 +598,7 @@ void Vehicletype:: write ( tnstream& stream ) const
    stream.writeInt( 1 ); // weapons
 
    stream.writeInt( autorepairrate );
+   stream.writeInt( wreckageObject );
 
    stream.writeInt( vehicleCategoriesLoadable );
 
@@ -606,6 +630,19 @@ void Vehicletype:: write ( tnstream& stream ) const
       stream.writeInt ( objectsRemovable[i].from );
       stream.writeInt ( objectsRemovable[i].to );
    }
+
+   stream.writeInt ( objectGroupsBuildable.size() );
+   for ( i = 0; i < objectGroupsBuildable.size(); i++ ) {
+      stream.writeInt ( objectGroupsBuildable[i].from );
+      stream.writeInt ( objectGroupsBuildable[i].to );
+   }
+
+   stream.writeInt ( objectGroupsRemovable.size() );
+   for ( i = 0; i < objectGroupsRemovable.size(); i++ ) {
+      stream.writeInt ( objectGroupsRemovable[i].from );
+      stream.writeInt ( objectGroupsRemovable[i].to );
+   }
+
 
    for ( i = 0; i < vehiclesBuildable.size(); i++ ) {
       stream.writeInt ( vehiclesBuildable[i].from );
@@ -669,6 +706,8 @@ Vehicletype :: ~Vehicletype ( )
          delete aiparam[i];
          aiparam[i] = NULL;
       }
+
+
 }
 
 
@@ -745,9 +784,9 @@ UnitWeapon :: UnitWeapon ( void )
 
 void Vehicletype::runTextIO ( PropertyContainer& pc )
 {
-   pc.addString( "Name", name ).evaluate();
-   pc.addInteger( "ID", id ).evaluate();
-   pc.addString( "Description", description).evaluate();
+   pc.addString( "Name", name );
+   pc.addInteger( "ID", id );
+   pc.addString( "Description", description);
    ASCString it = infotext;
 
    while ( it.find ( "\n" ) != ASCString::npos )
@@ -755,13 +794,13 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    while ( it.find ( "\r" ) != ASCString::npos )
       it.replace ( it.find ( "\r" ), 1, "" );
 
-   pc.addString( "Infotext", it ).evaluate();
+   pc.addString( "Infotext", it );
 
    if ( pc.isReading() )
       infotext = it;
 
    pc.addInteger( "Armor", armor );
-   pc.addInteger("View", view ).evaluate();
+   pc.addInteger("View", view );
    if ( view > 255 )
       view = 255;
 
@@ -772,7 +811,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    } else
       fn = extractFileName_withoutSuffix( filename );
 
-   pc.addImage( "Picture", picture[0], fn ).evaluate();
+   pc.addImage( "Picture", picture[0], fn );
 
    pc.openBracket ( "ConstructionCost" );
    productionCost.runTextIO ( pc );
@@ -802,6 +841,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    pc.addInteger("MaxSurvivableStorm", maxwindspeedonwater );
    pc.addInteger("ResourceDrillingRange", digrange );
    pc.addInteger("SelfRepairRate", autorepairrate );
+   pc.addInteger("WreckageObject", wreckageObject, -1 );
 
 
    pc.addInteger("Weight",  weight);
@@ -812,7 +852,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    pc.openBracket ( "Construction" );
     pc.addIntRangeArray ( "Buildings", buildingsBuildable );
     pc.addIntRangeArray ( "Vehicles", vehiclesBuildable );
-    pc.addIntRangeArray ( "Objects", objectsBuildable ).evaluate();
+    pc.addIntRangeArray ( "Objects", objectsBuildable );
     if ( pc.isReading() ) {
       if ( pc.find ( "ObjectsRemovable" ))
          pc.addIntRangeArray ( "ObjectsRemovable", objectsRemovable );
@@ -820,12 +860,14 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
          setupRemovableObjectsFromOldFileLayout();
     } else
          pc.addIntRangeArray ( "ObjectsRemovable", objectsRemovable );
-         
+
+    pc.addIntRangeArray ( "ObjectGroupsBuildable", objectGroupsBuildable, false );
+    pc.addIntRangeArray ( "ObjectGroupsRemovable", objectGroupsRemovable, false );
    pc.closeBracket();
 
    pc.openBracket ( "Weapons");
     pc.addInteger("Initiative", initiative );
-    pc.addInteger("Number", weapons.count ).evaluate();
+    pc.addInteger("Number", weapons.count );
     for ( int i = 0; i < weapons.count; i++ ) {
         pc.openBracket ( ASCString("Weapon")+strrr(i) );
         weapons.weapon[i].runTextIO( pc );
@@ -849,8 +891,8 @@ void SingleWeapon::runTextIO ( PropertyContainer& pc )
    pc.addInteger("MaxRange", maxdistance );
    pc.addInteger("MinRange", mindistance );
    pc.addInteger("Ammo", count );
-   pc.addInteger("Punch@MaxRange", minstrength ).evaluate();
-   pc.addInteger("Punch@MinRange", maxstrength ).evaluate();
+   pc.addInteger("Punch@MaxRange", minstrength );
+   pc.addInteger("Punch@MinRange", maxstrength );
    pc.openBracket("HitAccuracy" ); {
      for ( int j = 0; j < 13; j++ )
         if ( j < 6 )
@@ -865,7 +907,7 @@ void SingleWeapon::runTextIO ( PropertyContainer& pc )
    if ( pc.isReading() ) {
       if ( pc.find ( "cantHit" )) {
          int targets_not_hittable;
-         pc.addTagInteger( "cantHit", targets_not_hittable, cmovemalitypenum, unitCategoryTags ).evaluate();
+         pc.addTagInteger( "cantHit", targets_not_hittable, cmovemalitypenum, unitCategoryTags );
          for ( int i = 0; i < cmovemalitypenum; i++ )
             if ( targets_not_hittable & ( 1 << i ))
                targetingAccuracy[i] = 0;

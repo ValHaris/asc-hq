@@ -3,9 +3,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.132 2002-09-19 20:20:04 mbickel Exp $
+//     $Id: controls.cpp,v 1.133 2002-10-01 09:23:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.132  2002/09/19 20:20:04  mbickel
+//      Cleanup and various bug fixes
+//
 //     Revision 1.131  2002/04/21 21:27:00  mbickel
 //      Mapeditor: Fixed crash in "Put Resources"
 //      Updating the small map after AI
@@ -927,6 +930,8 @@ void build_objects_reset( void )
 }
 
    class tbuildstreet : public SearchFields {
+                       enum Mode { Build, Remove };
+                       pobjectcontainers_buildable_on_field obj;
                 public:
                        pvehicle         actvehicle;
                        word             numberoffields;
@@ -934,7 +939,8 @@ void build_objects_reset( void )
                        virtual void     testfield ( const MapCoordinate& mc );
                        void             initbs ( void );
                        void             run ( void );
-                       tbuildstreet ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
+                       void             checkObject ( pfield fld, pobjecttype objtype, Mode mode );
+                       tbuildstreet ( pmap _gamemap ) : SearchFields ( _gamemap ), obj ( NULL ) {};
                   };
 
 
@@ -963,50 +969,70 @@ void    getobjbuildcosts ( pobjecttype obj, pfield fld, Resources* resource, int
    *movecost =  ( 8 + ( fld->getmovemalus( 0 ) - 8 ) / ( objectbuildmovecost / 8 ) ) * mvcost  / 8;
 }
 
+
+
+void tbuildstreet::checkObject( pfield fld, pobjecttype objtype, Mode mode )
+{
+    if ( !objtype || !fld )
+       return;
+
+    if ( mode == Build ) {
+       if ( objtype->terrainaccess.accessible( fld->bdt ) > 0 &&  !fld->checkforobject ( objtype ) ) {
+          int movecost;
+          Resources cost;
+          getobjbuildcosts ( objtype, fld, &cost, &movecost );
+          if ( actvehicle->tank >= cost && actvehicle->getMovement() >= movecost ) {
+             obj->objects_buildable[ obj->objects_buildable_num++ ] = objtype;
+
+             fld->a.temp = 1;
+             numberoffields++;
+          }
+       }
+    } else {
+       if ( fld->checkforobject ( objtype ) ) {
+          int movecost;
+          Resources cost;
+          getobjbuildcosts ( objtype, fld, &cost, &movecost );
+          if ( actvehicle->tank >= cost && actvehicle->getMovement() >= movecost ) {
+             obj->objects_removable[ obj->objects_removable_num++ ] = objtype;
+             fld->a.temp = 1;
+             numberoffields++;
+          }
+       }
+    }
+}
+
 void         tbuildstreet::testfield( const MapCoordinate& mc )
 {
    pfield fld = gamemap->getField(mc);
 
-   pobjectcontainers_buildable_on_field obj = new tobjectcontainers_buildable_on_field ( mc.x, mc.y );
-
+   obj = new tobjectcontainers_buildable_on_field ( mc.x, mc.y );
    objects_buildable.field[ objects_buildable.fieldnum++ ] = obj;
 
-   if ( !fld->vehicle ) {
-      if ( !fld->building ) {
+   if ( !fld->vehicle && !fld->building ) {
+      for ( int i = 0; i < actvehicle->typ->objectsBuildable.size(); i++ )
+        for ( int j = actvehicle->typ->objectsBuildable[i].from; j <= actvehicle->typ->objectsBuildable[i].to; j++ )
+          checkObject( fld, getobjecttype_forid ( j ), Build );
 
-         for ( int i = 0; i < actvehicle->typ->objectsBuildable.size(); i++ )
-           for ( int j = actvehicle->typ->objectsBuildable[i].from; j <= actvehicle->typ->objectsBuildable[i].to; j++ ) {
-             pobjecttype objtype = getobjecttype_forid ( j );
-             if ( objtype )
-                if ( objtype->terrainaccess.accessible( fld->bdt ) > 0 &&  !fld->checkforobject ( objtype ) ) {
-                   int movecost;
-                   Resources cost;
-                   getobjbuildcosts ( objtype, fld, &cost, &movecost );
-                   if ( actvehicle->tank >= cost && actvehicle->getMovement() >= movecost ) {
-                      obj->objects_buildable[ obj->objects_buildable_num++ ] = objtype;
+      for ( int i = 0; i < actvehicle->typ->objectGroupsBuildable.size(); i++ )
+        for ( int j = actvehicle->typ->objectGroupsBuildable[i].from; j <= actvehicle->typ->objectGroupsBuildable[i].to; j++ )
+          for ( int k = 0; k < objecttypenum; k++ ) {
+             pobjecttype objtype = getobjecttype_forpos ( k );
+             if ( objtype->groupID == j )
+                checkObject( fld, objtype, Build );
+          }
 
-                      fld->a.temp = 1;
-                      numberoffields++;
-                   }
-                }
-           }
+      for ( int i = 0; i < actvehicle->typ->objectsRemovable.size(); i++ )
+        for ( int j = actvehicle->typ->objectsRemovable[i].from; j <= actvehicle->typ->objectsRemovable[i].to; j++ )
+          checkObject( fld, getobjecttype_forid ( j ), Remove );
 
-         for ( int i = 0; i < actvehicle->typ->objectsRemovable.size(); i++ )
-           for ( int j = actvehicle->typ->objectsRemovable[i].from; j <= actvehicle->typ->objectsRemovable[i].to; j++ ) {
-             pobjecttype objtype = getobjecttype_forid ( j );
-             if ( objtype )
-                if ( fld->checkforobject ( objtype ) ) {
-                   int movecost;
-                   Resources cost;
-                   getobjbuildcosts ( objtype, fld, &cost, &movecost );
-                   if ( actvehicle->tank >= cost && actvehicle->getMovement() >= movecost ) {
-                      obj->objects_removable[ obj->objects_removable_num++ ] = objtype;
-                      fld->a.temp = 1;
-                      numberoffields++;
-                   }
-                }
-           }
-      }
+      for ( int i = 0; i < actvehicle->typ->objectGroupsRemovable.size(); i++ )
+        for ( int j = actvehicle->typ->objectGroupsRemovable[i].from; j <= actvehicle->typ->objectGroupsRemovable[i].to; j++ )
+          for ( int k = 0; k < objecttypenum; k++ ) {
+             pobjecttype objtype = getobjecttype_forpos ( k );
+             if ( objtype->groupID == j )
+                checkObject( fld, objtype, Remove );
+          }
    }
 }
 

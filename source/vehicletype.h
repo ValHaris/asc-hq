@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef vehicletype_h_included
- #define vehicletype_h_included
+#ifndef vehicletypeH
+ #define vehicletypeH
 
  #include "typen.h"
  #include "containerbase.h"
@@ -66,10 +66,10 @@ extern const char* AIjobs[];
      int          typ;
     public:
      //! the weapon can attack targets at these levels of height (bitmapped)
-     int          targ;   
+     int          targ;
 
      //! the weapon can be shot from these levels of height (bitmapped)
-     int          sourceheight;  
+     int          sourceheight;
 
      //! the maximum distance the weapon can shoot
      int          maxdistance;
@@ -80,10 +80,10 @@ extern const char* AIjobs[];
      //! amount of ammunition the unit having this weapon can carry
      int          count;
 
-     //! strength of the weapon when fired over the minimal distance 
+     //! strength of the weapon when fired over the minimal distance
      int          maxstrength;
 
-     //! strength of the weapon when fired over the maximum distance 
+     //! strength of the weapon when fired over the maximum distance
      int          minstrength;
 
      /** the targeting accuracy of the weapon over different height differences between the attacking unit and the target.
@@ -91,9 +91,9 @@ extern const char* AIjobs[];
          All values are in percent.
          The index for this array is the height difference+6
          Example: low flying airplane attacking a submerged submarine:
-                  height difference is -2 ; index here is 4 
+                  height difference is -2 ; index here is 4
      */
-     int          efficiency[13]; 
+     int          efficiency[13];
 
      /** the effectiveness of the weapon against different targets.
          All values are in percent. \see cmovemalitypes
@@ -125,10 +125,10 @@ extern const char* AIjobs[];
  class Vehicletype : public ContainerBaseType {
     public:
         //! name of the unit, for example "B-52"
-        ASCString    name;          
+        ASCString    name;
 
         //! short description of the units role, for example "strategic bomber"
-        ASCString    description;   
+        ASCString    description;
 
         //! an extensive information about the unit which may be several paragraphs long
         ASCString    infotext;
@@ -138,59 +138,59 @@ extern const char* AIjobs[];
         int armor;
 
         //! the image of the unit. Only 6 images are used
-        void*        picture[8];    
+        void*        picture[8];
 
         //! the levels of height which this unit can enter
-        int          height;        
+        int          height;
 
         //! not used any more
-        int          researchid;  
+        int          researchid;
 
         //! if the unit can change the level of height, this is the number of fields the unit must move to go from one level to the next
-        int          steigung;   
+        int          steigung;
 
         //! the radar jamming power
-        int          jamming;      
+        int          jamming;
 
-        //! the visibility range 
-        int          view;         
+        //! the visibility range
+        int          view;
 
         //! If the unit cannot attack in the same turn after it has moved, it has to wait
-        bool         wait;        
-  
+        bool         wait;
+
         /** @name Unit cargo
-            properties for specifying which units can be carried by this vehicletype and which not 
+            properties for specifying which units can be carried by this vehicletype and which not
         */
         //@{
         //! the maximum weight that the unit can carry
         int          loadcapacity;
 
         //! the maximum weight of a single unit that can be carried
-        int          maxunitweight; 
+        int          maxunitweight;
 
         //! A unit that is going to be loaded must be on one of these levels of height (bitmapped)
         int          loadcapability;
 
         /** Additional levels of height that a unit must be able to enter to be allowed as cargo (bitmapped).
             If 0 or 255 there are no restrictions
-         */   
+         */
         int          loadcapabilityreq;
 
-        //! A unit that is able to enter one of these levels of height is not allowed to enter (bitmapped)  
+        //! A unit that is able to enter one of these levels of height is not allowed to enter (bitmapped)
         int          loadcapabilitynot;
 
-        //! all unit categories whose bit is not set here may not enter (bitmapped) \see cmovemalitypes 
+        //! all unit categories whose bit is not set here may not enter (bitmapped) \see cmovemalitypes
         int          vehicleCategoriesLoadable;
         //@}
 
 
-        //! the identification number of the unit  
+        //! the identification number of the unit
         int          id;
 
         //! the resource storage capacity
         Resources    tank;
 
-        //! the fuel consumption to move a single field 
+        //! the fuel consumption to move a single field
         int          fuelConsumption;
 
         //! Special abilities of the unit (bitmapped). \see cvehiclefunctions
@@ -220,8 +220,8 @@ extern const char* AIjobs[];
         //! the maximum speed of the wind that the unit can survive when on open water without sinking
         int          maxwindspeedonwater;
 
-        //! radius of the circle in which a unit can search for mineral resolures (measured in number of fields, not distance !) 
-        int          digrange;     
+        //! radius of the circle in which a unit can search for mineral resolures (measured in number of fields, not distance !)
+        int          digrange;
 
         //! unused
         int          initiative;      
@@ -250,11 +250,21 @@ extern const char* AIjobs[];
         //! the ids of objects this unit can remove
         vector<IntRange> objectsRemovable;
 
+        //! the group-ids of objects this unit can construct
+        vector<IntRange> objectGroupsBuildable;
+
+        //! the group-ids of objects this unit can remove
+        vector<IntRange> objectGroupsRemovable;
+
+
         //! The weapons
         UnitWeapon   weapons;
 
         //! the damage this unit can repair itself automatically each turn.
         int          autorepairrate;
+
+        //! if the unit is destroyed, it can leave an wreckage object behind ( < 0 to disable ) 
+        int wreckageObject;
 
         //! some information the AI stores about this unit
         AiValue* aiparam[8];

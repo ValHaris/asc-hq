@@ -2,9 +2,14 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.82 2002-04-21 21:27:00 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.83 2002-10-01 09:23:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.82  2002/04/21 21:27:00  mbickel
+//      Mapeditor: Fixed crash in "Put Resources"
+//      Updating the small map after AI
+//      Fixed infinite loop "quit game" after sending signal
+//
 //     Revision 1.81  2002/04/14 17:21:18  mbickel
 //      Renamed global variable pf to pf2 due to name clash with SDL_mixer library
 //
@@ -4342,8 +4347,8 @@ void transformMap ( )
              if ( fld->typ->terraintype->id == terrainobjtranslation[i*3] ) {
                 TerrainType* tt = getterraintype_forid ( terrainobjtranslation[i*3+1] );
                 if ( tt ) {
-                   fld->addobject ( getobjecttype_forid ( terrainobjtranslation[i*3+2] ));
                    fld->typ = tt->weather[fld->getweather()];
+                   fld->addobject ( getobjecttype_forid ( terrainobjtranslation[i*3+2] ), true );
                    fld->setparams();
                 }
              }

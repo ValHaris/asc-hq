@@ -31,6 +31,7 @@ ObjectType :: ObjectType ( void )
    removeicon = NULL;
    dirlist = NULL;
    dirlistnum = 0;
+   groupID = -1;
 
    displayMethod = 0;
    canExistBeneathBuildings = false;
@@ -124,7 +125,7 @@ void ObjectType :: display ( int x, int y )
 }
 
 
-const int object_version = 2;
+const int object_version = 3;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -280,6 +281,10 @@ void ObjectType :: read ( tnstream& stream )
              linkableTerrain.push_back ( stream.readInt() );
       }
 
+      if ( version >= 3 )
+         groupID = stream.readInt();
+
+
 
    #ifndef converter
     buildicon = generate_object_gui_build_icon ( this, 0 );
@@ -425,23 +430,26 @@ void ObjectType :: write ( tnstream& stream ) const
     for ( int i = 0; i < linkableTerrain.size(); i++ )
         stream.writeInt( linkableTerrain[i] );
 
+    stream.writeInt ( groupID );
+
 }
 
 
 void ObjectType :: runTextIO ( PropertyContainer& pc )
 {
-   pc.addInteger  ( "ID", id ).evaluate();
-   pc.addTagArray ( "Weather", weather, cwettertypennum-1, weatherTags ).evaluate();
+   pc.addInteger  ( "ID", id );
+   pc.addInteger  ( "GroupID", groupID, -1 );
+   pc.addTagArray ( "Weather", weather, cwettertypennum-1, weatherTags );
    pc.addBool     ( "visible_in_fogOfWar", visibleago );
    pc.addIntegerArray ( "LinkableObjects", linkableObjects );
-   if ( pc.find ( "LinkableTerrain" ) || !pc.isReading() ) 
+   if ( pc.find ( "LinkableTerrain" ) || !pc.isReading() )
       pc.addIntegerArray ( "LinkableTerrain", linkableTerrain );
 
    if ( pc.find ( "canExistBeneathBuildings" ) || !pc.isReading() )
       pc.addBool ( "canExistBeneathBuildings", canExistBeneathBuildings );
 
    pc.addInteger  ( "Armor", armor );
-   pc.addIntegerArray ( "Movemalus_plus", movemalus_plus ).evaluate();
+   pc.addIntegerArray ( "Movemalus_plus", movemalus_plus );
    int mm = movemalus_plus.size();
    movemalus_plus.resize( cmovemalitypenum );
    for ( int i = mm; i < cmovemalitypenum; i++ ) {
@@ -452,7 +460,7 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
    }
 
 
-   pc.addIntegerArray ( "Movemalus_abs", movemalus_abs ).evaluate();
+   pc.addIntegerArray ( "Movemalus_abs", movemalus_abs );
    mm = movemalus_abs.size();
    movemalus_abs.resize( cmovemalitypenum );
    for ( int i = mm; i < cmovemalitypenum; i++ ) {
@@ -501,10 +509,10 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                 if ( weatherPicture[i].bi3pic[j] >= 0 )
                    bi3pics = true;
 
-         pc.addBool  ( "UseGFXpics", bi3pics ).evaluate();
+         pc.addBool  ( "UseGFXpics", bi3pics );
          if ( bi3pics ) {
-            pc.addIntegerArray ( "GFXpictures", weatherPicture[i].bi3pic ).evaluate();
-            pc.addIntegerArray ( "FlipPictures", weatherPicture[i].flip ).evaluate();
+            pc.addIntegerArray ( "GFXpictures", weatherPicture[i].bi3pic );
+            pc.addIntegerArray ( "FlipPictures", weatherPicture[i].flip );
             weatherPicture[i].images.resize( weatherPicture[i].bi3pic.size() );
 
             if ( pc.isReading() )
@@ -520,7 +528,7 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                s = "object";
                s += strrr(id);
             }
-            pc.addImageArray ( "picture",   weatherPicture[i].images, s + weatherAbbrev[i] ).evaluate();
+            pc.addImageArray ( "picture",   weatherPicture[i].images, s + weatherAbbrev[i] );
 
             if ( pc.find ( "FlipPictures" ) ) {
                vector<int>   imgReferences;
@@ -534,8 +542,8 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                   imgReferences[j] = -1;
                }
 
-               pc.addIntegerArray ( "FlipPictures", weatherPicture[i].flip ).evaluate();
-               pc.addIntegerArray ( "ImageReference", imgReferences ).evaluate();
+               pc.addIntegerArray ( "FlipPictures", weatherPicture[i].flip );
+               pc.addIntegerArray ( "ImageReference", imgReferences );
 
                for ( int j = 0; j < weatherPicture[i].images.size(); j++ )
                   if ( imgReferences[j] >= 0 && imgReferences[j] < weatherPicture[i].images.size() ) {

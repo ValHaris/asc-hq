@@ -19,8 +19,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef buildings_h_included
- #define buildings_h_included
+#ifndef buildingsH
+ #define buildingsH
 
  #include "typen.h"
  #include "containerbase.h"
@@ -189,7 +189,7 @@ class  Building : public ContainerBase {
     
     //! registers the building at the given position on the map
     int  chainbuildingtofield ( const MapCoordinate& entryPos, bool setupImages = true );
-    
+
     //! unregister the building from the map position
     int  unchainbuildingfromfield ( void );
 
@@ -198,9 +198,9 @@ class  Building : public ContainerBase {
     //! returns the completion of the building. \see setCompletion(int,bool)
     int getCompletion() const { return _completion; };
 
-    /** Sets the level of completion of the building. 
+    /** Sets the level of completion of the building.
         \param completion range: 0 .. typ->construction_steps-1 . If completion == typ->construction_steps-1 the building is completed and working.
-        \param setupImages Are the building image pointer of the fields the building is standing on updated? 
+        \param setupImages Are the building image pointer of the fields the building is standing on updated?
         \see Buildingtype::construction_steps
     **/
     void setCompletion ( int completion, bool setupImages = true  );
@@ -210,6 +210,9 @@ class  Building : public ContainerBase {
 
     //! returns the amount of resources that the net which the building is connected to produces each turn
     Resources netResourcePlus( ) const;
+
+    //! regroup units. This is necessary for the building dialog which only displays the first 18 units, although more than 18 can be inside ( for example, there are 18 inside, and then the enemy conquers it using a trooper)
+    void regroupUnits ();
 
     ~Building();
 

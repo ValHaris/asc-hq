@@ -137,8 +137,7 @@ void PropertyContainer::setup ( Property* p, const ASCString& name_ )
    p->setPropertyContainer ( this );
    properties.push_back ( p );
 
-   if ( !isReading() )
-      p->evaluate();
+   p->evaluate();
 }
 
 
@@ -187,9 +186,9 @@ PropertyContainer::IntegerArrayProperty&  PropertyContainer::addIntegerArray ( c
    return *ip;
 }
 
-PropertyContainer::IntRangeArrayProperty&  PropertyContainer::addIntRangeArray ( const ASCString& name, vector<IntRange>& property )
+PropertyContainer::IntRangeArrayProperty&  PropertyContainer::addIntRangeArray ( const ASCString& name, vector<IntRange>& property, bool required )
 {
-   IntRangeArrayProperty* ip = new IntRangeArrayProperty ( property );
+   IntRangeArrayProperty* ip = new IntRangeArrayProperty ( property, required );
    setup ( ip, name );
    return *ip;
 }
@@ -256,7 +255,7 @@ bool PropertyContainer::find ( const ASCString& name )
    n += name;
    n.toLower();
 
-   return textPropertyGroup->find ( n ) != textPropertyGroup->entries.end();
+   return textPropertyGroup->find ( n ) != NULL;
 }
 
 
@@ -304,15 +303,13 @@ void PropertyContainer::Property::findEntry ()
 {
    if ( !propertyContainer )
       fatalError ( "PropertyContainer::Property::evaluate - no propertyContainer ");
-   if (!entry ) {
-      for ( TextPropertyGroup::Entries::iterator i = propertyContainer->textPropertyGroup->entries.begin(); i != propertyContainer->textPropertyGroup->entries.end(); i++ )
-          if ( i->propertyName == name ) {
-             entry = &(*i);
-             return;
-          }
-   }
 
-   if ( !hasDefault() )
+   name.toLower();
+
+   if (!entry )
+      entry = propertyContainer->textPropertyGroup->find ( name );
+
+   if ( !entry && !hasDefault() )
       propertyContainer->error ( "entry " + name +" not found" );
 }
 
@@ -433,6 +430,10 @@ void PropertyContainer::IntRangeArrayProperty::evaluate_rw ( )
 {
    if ( propertyContainer->isReading() ) {
       property.clear();
+
+      if ( hasDefault() && !entry )
+         return;
+
       StringTokenizer st ( entry->value );
       ASCString s = st.getNextToken();
       while ( !s.empty() ) {
@@ -689,26 +690,104 @@ void PropertyContainer::ImageArrayProperty::evaluate_rw ( )
 }
 
 
+void TextPropertyList::buildIDs()
+{
+   for ( iterator i = begin(); i != end(); i++ ) {
+      int id = (*i)->evalID();
+      if ( id > 0 )
+         identCache[id] = *i;
+   }
+}
+
+TextPropertyGroup* TextPropertyList::get ( int id )
+{
+   IdentCache::iterator f = identCache.find ( id );
+   if ( f != identCache.end() )
+      return &(*(f->second));
+   else
+      return NULL;
+}
+
+
 ///////////////////// TextPropertyGroup //////////////////////////
 
 void TextPropertyGroup :: buildInheritance(TextPropertyList& tpl )
 {
+   static list<TextPropertyGroup*> callStack;
+
    if ( !inheritanceBuild ) {
-      if ( find ( "inherits") != entries.end()) {
-         
+      if ( std::find ( callStack.begin(), callStack.end(), this ) != callStack.end() )
+         fatalError ( "endless inheritance loop detected: type " + typeName + "; ID " + strrr ( id ));
+
+      callStack.push_back( this );
+
+      if ( find ( "parents") != NULL ) {
+         PropertyReadingContainer prc ( typeName, this );
+         typedef vector<int> ParentIDs;
+         ParentIDs parentIDs;
+         prc.addIntegerArray ( "parents", parentIDs );
+         for ( ParentIDs::iterator i = parentIDs.begin(); i != parentIDs.end(); i++ ) {
+            TextPropertyGroup* p = tpl.get ( *i );
+            if ( p ) {
+               parents.push_back ( p );
+               p->buildInheritance( tpl );
+            } else
+               fatalError ( location + " : no parent with ID " + strrr(*i) + " of type " + typeName + " could be found !" );
+         }
       }
+
+      for ( Entries::iterator i = entries.begin(); i != entries.end(); i++ ) {
+         if ( i->op != Entry::eq ) {
+            Parents::iterator p = parents.begin();
+            while ( p != parents.end() ) {
+               i->parent = (*p)->find( i->propertyName );
+               if ( i->parent )
+                  break;
+               p++;
+            }
+            if ( p == parents.end())
+               fatalError ( "could not find a parent entry for " + typeName + " :: " + i->propertyName  );
+         }
+      }
+
+      callStack.pop_back();
+
+      inheritanceBuild = true;
    }
 }
 
-
-
-TextPropertyGroup::Entries::iterator  TextPropertyGroup :: find( const ASCString& n )
+int TextPropertyGroup :: evalID()
 {
-   for ( Entries::iterator i = entries.begin(); i != entries.end(); i++ )
-      if ( i->propertyName == n )
-         return i;
-   return entries.end();
+   PropertyReadingContainer prc ( typeName, this );
+   prc.addInteger ( "ID", id, 0 );
+   return id;
 }
+
+
+
+
+TextPropertyGroup::Entry*  TextPropertyGroup :: find( const ASCString& n )
+{
+   EntryCache::iterator i = entryCache.find ( n );
+   if ( i != entryCache.end() )
+      return i->second;
+   else {
+      for ( Parents::iterator p = parents.begin(); p != parents.end(); p++ ) {
+         TextPropertyGroup::Entry* ent = (*p)->find ( n );
+         if ( ent )
+            return ent;
+      }
+      return NULL;
+   }
+}
+
+void TextPropertyGroup::addEntry( const Entry& entry )
+{
+   entries.push_back ( entry );
+   entryCache[entry.propertyName] = &entries.back();
+}
+
+
 
 ///////////////////// TextFormatParser //////////////////////////
 
@@ -778,7 +857,7 @@ void TextFormatParser::parseLine ( const ASCString& line )
       for ( Level::iterator i = level.begin(); i != level.end(); i++ )
          s += *i + ".";
       s += s1;
-      textPropertyGroup->entries.push_back ( TextPropertyGroup::Entry (s, TextPropertyGroup::Entry::Operator(op), s3 ) );
+      textPropertyGroup->addEntry ( TextPropertyGroup::Entry (s, TextPropertyGroup::Entry::Operator(op), s3 ) );
       return;
    }
 

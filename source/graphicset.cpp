@@ -144,10 +144,6 @@ void loadbi3graphics( void )
    logtofile("loadbi3graphics");
    #endif
 
-   if ( !keeporiginalpalette )
-      if ( bi2asc_color_translation_table[0] == 254 )
-         loadpalette();
-
    loadpalette();
 
    int highestPicNum = 0;
@@ -160,6 +156,12 @@ void loadbi3graphics( void )
       int o;
       tnfilestream s ( "emptyfld.raw", tnstream::reading );
       s.readrlepict ( &emptyfield, false, &o );
+
+      void* p = uncompress_rlepict ( emptyfield );
+      if ( p ) {
+         asc_free ( emptyfield );
+         emptyfield  = p;
+      }
    }
    int emptyfieldsize = getpicsize2 ( emptyfield );
 

@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef itemrepository_h_included
-#define itemrepository_h_included
+#ifndef itemrepositoryH
+#define itemrepositoryH
 
 #include <vector>
 #include "ascstring.h"

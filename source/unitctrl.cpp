@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.88 2002-09-19 20:20:06 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.89 2002-10-01 09:23:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.88  2002/09/19 20:20:06  mbickel
+//      Cleanup and various bug fixes
+//
 //     Revision 1.87  2002/05/07 19:52:47  mbickel
 //      Updated documentation
 //      Dialog themes can be reloaded during runtime.
@@ -899,8 +902,9 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
             int i = 0; 
             while (oldfield->building->loading[i] != vehicle) 
                i++; 
-            oldfield->building->loading[i] = NULL; 
-         } 
+            oldfield->building->loading[i] = NULL;
+            oldfield->building->regroupUnits();
+         }
    }
 
    SoundLoopManager slm ( SoundList::getInstance().getSound( SoundList::moving, vehicle->typ->movemalustyp ), false );

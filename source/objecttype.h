@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef objecttype_h_included
- #define objecttype_h_included
+#ifndef objecttypeH
+ #define objecttypeH
 
  #include "typen.h"
  #include "terraintype.h"
@@ -27,6 +27,9 @@
    public:
      //! the id of the object, used when referencing objects in files
      int id;
+
+     //! the group ID allows units to specify whole groups of objects to be buildable / removable without specifying each individual object.
+     int groupID;
 
      //! bitmapped variable containing the different weather types the objects exist for
      BitSet weather;

@@ -33,27 +33,18 @@
     Boston, MA  02111-1307  USA
 */
 
-#ifndef basegfx_h
-#define basegfx_h
+#ifndef basegfxH
+#define basegfxH
 
-#ifdef WIN32
 #include <sdlmm.h>
-#else
-#include <sdlmm.h>
-#endif
-
 #include "tpascal.inc"
 #include "global.h"
 #include "palette.h"
-#ifdef _DOS_
- #include "dos/vesa.h"
-#else
- #include "sdl/graphics.h"
-#endif
+#include "sdl/graphics.h"
 
 #pragma pack(1)
 
-//! a graphical surface. 
+//! a graphical surface.
 struct  tgraphmodeparameters {
             int           resolutionx      ;       //!< the number of visible pixels in x direction
             int           resolutiony      ;       //!< the number of visible pixels in y direction

@@ -339,7 +339,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
 {
    try {
       pc.addString( "Name", name );
-      pc.addInteger ( "ConstructionStages", construction_steps ).evaluate();
+      pc.addInteger ( "ConstructionStages", construction_steps );
 
       BitSet weatherBits;
 
@@ -349,7 +349,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
                if ( w_picture[i][0][x][y] )
                   weatherBits.set(i);
 
-      pc.addTagArray( "Weather", weatherBits, cwettertypennum-1, weatherTags ).evaluate();
+      pc.addTagArray( "Weather", weatherBits, cwettertypennum-1, weatherTags );
 
 
       ASCString fieldNames;
@@ -360,7 +360,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
                fieldNames += " ";
             }
 
-      pc.addString( "Fields", fieldNames ).evaluate();
+      pc.addString( "Fields", fieldNames );
 
       typedef vector<LocalCoordinate> Fields;
       Fields fields;
@@ -379,7 +379,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
             if ( w_picture[0][0][i][j] && bi_picture[0][0][i][j] >= 0 )
                bi3pics = true;
 
-      pc.addBool  ( "UseGFXpics", bi3pics ).evaluate();
+      pc.addBool  ( "UseGFXpics", bi3pics );
 
       if ( bi3pics ) {
          pc.openBracket ( "GFXpictures");
@@ -391,7 +391,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
                   pc.openBracket ( ASCString("Stage")+strrr(c+1) );
 
                   for ( Fields::iterator i = fields.begin(); i != fields.end(); i++ ) {
-                     pc.addInteger ( i->toString(), bi_picture[w][c][i->x][i->y] ).evaluate();
+                     pc.addInteger ( i->toString(), bi_picture[w][c][i->x][i->y] );
                      if ( pc.isReading() )
                         loadbi3pict_double ( bi_picture[w][c][i->x][i->y],
                                              &w_picture[w][c][i->x][i->y],
@@ -418,7 +418,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
                   void* img = asc_malloc ( imagesize ( 0, 0, construction_steps*500-1, 250-1 ));
                   getimage ( 0, 0, construction_steps*500-1, 250-1, img );
 
-                  pc.addImage ( weatherTags[w], img, extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".pcx" ).evaluate();
+                  pc.addImage ( weatherTags[w], img, extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".pcx" );
 
                   asc_free ( img );
                }
@@ -426,7 +426,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
             for ( int w = 0; w < cwettertypennum; w++ )
                if ( weatherBits.test(w) ) {
                   void* img = NULL;
-                  pc.addImage ( weatherTags[w], img, extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".pcx" ).evaluate();
+                  pc.addImage ( weatherTags[w], img, extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".pcx" );
                   tvirtualdisplay vd ( construction_steps*500, 250 );
                   putimage ( 0, 0, img );
                   asc_free ( img );
@@ -466,7 +466,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
             if ( destruction_objects[i][j] > 0 )
                rubble = true;
 
-      pc.addBool ( "RubbleObjects", rubble ).evaluate();
+      pc.addBool ( "RubbleObjects", rubble );
       if ( rubble ) {
          pc.openBracket ( "Rubble");
          for ( Fields::iterator i = fields.begin(); i != fields.end(); i++ )
@@ -476,7 +476,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
 
 
       ASCString entryString = entry.toString();
-      pc.addString ( "Entry", entryString ).evaluate();
+      pc.addString ( "Entry", entryString );
       if ( pc.isReading() ) {
          StringTokenizer st ( entryString );
          entry = LocalCoordinate ( st.getNextToken() );
@@ -484,7 +484,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
 
       pc.addInteger( "ID", id );
       pc.addInteger( "Armor", _armor );
-      pc.addInteger( "View", view ).evaluate();
+      pc.addInteger( "View", view );
       if ( view > 255 )
          view = 255;
 

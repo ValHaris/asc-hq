@@ -30,6 +30,7 @@
 #include "../sgstream.h"
 #include "../strtmesg.h"
 #include "../textfileparser.h"
+#include "../itemrepository.h"
 
 #ifdef WIN32
 #undef main
@@ -88,6 +89,8 @@ int main(int argc, char *argv[] )
          FILE* fp = fopen (itemlistfile.c_str(), filewritemodetext );
          printf(" Printing graphics usage to text file %s \n\n", itemlistfile.c_str() );
 
+         loadalltextfiles();
+
          {
          /*
             for ( int i = 0; i < getterraintranslatenum(); i++ ) {
@@ -99,20 +102,14 @@ int main(int argc, char *argv[] )
             }
             */
          }
-      
+
          {
             printf("\nLoading terrain:\n");
-            tfindfile ff ( "*.trr" );
-            string c = ff.getnextname();
-            while ( !c.empty() ) { 
-               if ( verbosity )
-                  printf("loading %s\n", c.c_str() ) ;
-               else
-                  printf(".");
-               fflush ( stdout );
-      
-               pterraintype bdt = loadterraintype ( c.c_str() );
-               fprintf(fp, "\n%s ; id %d ; pictures ", c.c_str(), bdt->id );
+            loadallterraintypes();
+            for ( int trr = 0; trr < terraintypenum; trr++ ) {
+
+               pterraintype bdt = getterraintype_forpos(trr);
+               fprintf(fp, "\n%s ; id %d ; pictures ", bdt->filename.c_str(), bdt->id );
 
                for ( int i = 0; i< cwettertypennum; i++ )
                   if ( bdt->weather[i] )
@@ -121,7 +118,7 @@ int main(int argc, char *argv[] )
                               int n = bdt->weather[i]->bi_pict;
                               int t = bipict[n].textnum++;
                               if ( (i == 0)  ||  (bdt->weather[0]->bi_pict < 0) ) {
-                                 sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", c.c_str(), bdt->id );
+                                 sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", bdt->filename.c_str(), bdt->id );
                                  bipict [ n ].entry[ t ].color = 1;
                               } else {
                                  sprintf ( bipict [ n ].entry[ t ] .text, "-> %d ; w=%d", bdt->weather[0]->bi_pict,i );
@@ -129,11 +126,9 @@ int main(int argc, char *argv[] )
                               }
                               fprintf( fp, "%d ", n );
                            }
-      
-               c = ff.getnextname();
             }
          }
-      
+
          {
          /*
             for ( int i = 0; i < getobjectcontainertranslatenum(); i++ ) {
@@ -150,17 +145,10 @@ int main(int argc, char *argv[] )
          }
          {
             printf("\nLoading objects:\n");
-            tfindfile ff ( "*.obl" );
-            string c = ff.getnextname();
-            while ( !c.empty() ) { 
-               if ( verbosity )
-                  printf("loading %s\n", c.c_str() ) ;
-               else
-                  printf(".");
-               fflush ( stdout );
-      
-               pobjecttype obj = loadobjecttype ( c.c_str() );
-               fprintf(fp, "\n%s ; id %d ; pictures ", c.c_str(), obj->id );
+            loadallobjecttypes();
+            for ( int ob = 0; ob < objecttypenum; ob++ ) {
+               pobjecttype obj = getobjecttype_forpos( ob );
+               fprintf(fp, "\n%s ; id %d ; pictures ", obj->filename.c_str(), obj->id );
 
                for ( int w = 0; w < cwettertypennum; w++ )
                   if ( obj->weather.test(w)  )
@@ -169,8 +157,8 @@ int main(int argc, char *argv[] )
                             int n = obj->weatherPicture[w].bi3pic[i];
                             int t = bipict[n].textnum;
                             bipict[n].textnum += 2;
-            
-                            sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", c.c_str(), obj->id );
+
+                            sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", obj->filename.c_str(), obj->id );
                             sprintf ( bipict [ n ].entry[ t+1 ] .text, "    #%d ", i );
                             if ( obj->weatherPicture[w].flip[i] & 1 )
                                strcat ( bipict [ n ].entry[ t+1 ] .text, "H" );
@@ -178,28 +166,21 @@ int main(int argc, char *argv[] )
                                strcat ( bipict [ n ].entry[ t+1 ] .text, "V" );
 
                             fprintf( fp, "%d ", n );
-            
+
                             bipict [ n ].entry[ t ].color = 2;
                             bipict [ n ].entry[ t+1 ].color = 2;
                          }
-      
-               c = ff.getnextname();
+
             }
          }
-      
+
          {
             printf("\nLoading buildings:\n");
-            tfindfile ff ( "*.bld" );
-            string c = ff.getnextname();
-            while ( !c.empty() ) { 
-               if ( verbosity )
-                  printf("loading %s\n", c.c_str() ) ;
-               else
-                  printf(".");
-               fflush ( stdout );
-      
-               pbuildingtype bld = loadbuildingtype ( c.c_str() );
-               fprintf(fp, "\n%s ; id %d ; pictures ", c.c_str(), bld->id );
+            loadallbuildingtypes();
+            for ( int bl = 0; bl < buildingtypenum; bl++ ) {
+
+               pbuildingtype bld = getbuildingtype_forpos ( bl );
+               fprintf(fp, "\n%s ; id %d ; pictures ", bld->filename.c_str(), bld->id );
       
                for ( int i = 0; i< cwettertypennum ; i++ )
                   for ( int j = 0; j < maxbuildingpicnum; j++ )
@@ -211,55 +192,45 @@ int main(int argc, char *argv[] )
                                  int t = bipict[n].textnum;
                                  bipict[n].textnum += 2;
                  
-                                 sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", c.c_str(), bld->id );
+                                 sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", bld->filename.c_str(), bld->id );
                                  sprintf ( bipict [ n ].entry[ t+1 ] .text, "    W=%d #%d X=%d Y=%d", i, j, k, l );
 
                                  fprintf( fp, "%d ", n );
-                 
+
                                  bipict [ n ].entry[ t ].color = 3;
                                  bipict [ n ].entry[ t+1 ].color = 3;
                               }
-      
-               c = ff.getnextname();
             }
          }
-      
+
          {
             printf("\nLoading vehicles:\n");
-               tfindfile ff ( "*.veh" );
-               string c = ff.getnextname();
-               while ( !c.empty() ) { 
-                  if ( verbosity )
-                     printf("loading %s\n", c.c_str() ) ;
-                  else
-                     printf(".");
-                  fflush ( stdout );
-         
-                  pvehicletype tnk = loadvehicletype ( c.c_str() );
-                  fprintf(fp, "\n%s ; id %d ; pictures ", c.c_str(), tnk->id );
-         
-                  if ( tnk->bipicture > 0 ) {
-                     int n = tnk->bipicture;
-                     int t = bipict[n].textnum;
-                     bipict[n].textnum += 1;
-          
-                     sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", c.c_str(), tnk->id );
+            loadallvehicletypes();
+            for ( int ve = 0; ve < vehicletypenum; ve++ ) {
 
-                     fprintf( fp, "%d ", n );
-          
-                     bipict [ n ].entry[ t ].color = 4;
-                  }
-         
-                  c = ff.getnextname();
+               pvehicletype tnk = getvehicletype_forpos( ve );
+               fprintf(fp, "\n%s ; id %d ; pictures ", tnk->filename.c_str(), tnk->id );
+
+               if ( tnk->bipicture > 0 ) {
+                  int n = tnk->bipicture;
+                  int t = bipict[n].textnum;
+                  bipict[n].textnum += 1;
+
+                  sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", tnk->filename.c_str(), tnk->id );
+
+                  fprintf( fp, "%d ", n );
+
+                  bipict [ n ].entry[ t ].color = 4;
                }
-            
+            }
+
          }
          fclose(fp);
-      } else 
+      } else
          loadbi3graphics();
-   
-   
-   
+
+
+
       char* name = "monogui.fnt";
       pfont fnt;
       {
@@ -274,24 +245,24 @@ int main(int argc, char *argv[] )
       int ys;
       int colnum;
       if ( wide ) {
-         ys = 800 * (usage+1);
+         ys = 1600 * (usage+1);
          colnum = 10;
       } else {
-         ys = 400 * (usage+1);
+         ys = 800 * (usage+1);
          colnum = 5;
       }
-   
+
       printf("\nallocating buffer \n" ) ;
       fflush ( stdout );
-   
+
       tvirtualdisplay vdp ( ys, 30000 / ( wide + 1 ) * (!!scale+1), 255 );
-   
+
       int colxl[] = {0, black, blue, green, red };
-   
+
       int x0 = 30;
       int xd = ( agmp->resolutionx - 2 * x0 ) / colnum ;
-   
-   
+
+
       int y0 = 10;
       int yd;
       if ( scale )
@@ -299,20 +270,20 @@ int main(int argc, char *argv[] )
       else
          yd = fieldsizey/2 + 5;
 
-      activefontsettings.font = fnt; 
-      activefontsettings.color = black; 
-      activefontsettings.background = 255; 
+      activefontsettings.font = fnt;
+      activefontsettings.color = black;
+      activefontsettings.background = 255;
       activefontsettings.length = xd;
-      activefontsettings.justify = lefttext; 
-      activefontsettings.height = 0; 
-   
-   
+      activefontsettings.justify = lefttext;
+      activefontsettings.height = 0;
+
+
       int yp = y0;
       int lastlinenum = 0;
-   
+
       if ( wide )
          line ( agmp->resolutionx / 2 - 3, 0, agmp->resolutionx / 2 - 3, agmp->resolutiony -1, black );
-   
+
       printf("Generating image: \n" ) ;
       fflush ( stdout );
       activateGraphicSet ( id );
@@ -325,29 +296,29 @@ int main(int argc, char *argv[] )
 
          if ( !(i % colnum) ) {
             if ( i ) {
-              if ( yd > (activefontsettings.font->height + 2 )* lastlinenum ) 
+              if ( yd > (activefontsettings.font->height + 2 )* lastlinenum )
                  yp += yd;
               else
                  yp += (activefontsettings.font->height + 2 ) * (lastlinenum + 1);
             }
             lastlinenum = 0;
-            activefontsettings.color = black; 
+            activefontsettings.color = black;
             showtext2 ( strrr ( i ), 1, yp + ( yd - 5 - activefontsettings.font->height) / 2 );
-   
+
             if ( verbosity )
                printf ( "line %d\n", i / colnum );
             else
                printf(".");
             fflush ( stdout );
          }
-   
+
          if ( v ) {
             putimage ( x0 + (i % colnum) * xd, yp, v );
             if ( usage )
                for ( int j = 0; j < bipict[i].textnum; j++ ) {
-                  activefontsettings.color = colxl[bipict[i].entry[j].color]; 
+                  activefontsettings.color = colxl[bipict[i].entry[j].color];
                   showtext2 ( bipict[i].entry[j].text, x0 + (i % colnum) * xd + (scale ? fieldsizex : fieldsizex/2) + 5 , yp + j * (activefontsettings.font->height + 2 ));
-      
+
                   if ( lastlinenum < j+1 )
                      lastlinenum = j+1;
                }

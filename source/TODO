@@ -17,12 +17,7 @@ Bugs:
 =====
 
 
-
  - *.ascmapxlat
- - cant' conquer subbase
- - can load to much tanks into a vader inside a transport ship
- - replay errors in 525
- -  genom starting from carrier: increased range
  
 =========
 
@@ -174,8 +169,6 @@ Requested features:
 >Zu den baubaren/abreissbaren objekten Objekten. Jedes baubare oder
 >abreissbare Objekt erh„lt optional eine "Scrap-ID". zb. Straáe=1 , Brcke=2,
 >Wald=3, Felsen=10 ....
-
-- Wracks
 
 - BI1 Blocking  
 

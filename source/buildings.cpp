@@ -143,6 +143,24 @@ void* Building :: getpicture ( const BuildingType::LocalCoordinate& localCoordin
 }
 
 
+void Building::regroupUnits ()
+{
+   int num = 0;
+   for ( int i = 18; i < 32; i++ )
+      if ( loading[i] )
+         num++;
+
+   if ( num ) {
+      for ( int i = 0; i < 18; i++ )
+         if ( !loading[i] ) {
+            for ( int j = i+1; j < 32; j++ )
+               loading[j-1] = loading[j];
+            loading[31] = NULL;
+         }
+   }
+}
+
+
 int Building :: vehicleloadable ( pvehicle vehicle, int uheight ) const
 {
    if ( uheight == -1 )
@@ -155,13 +173,12 @@ int Building :: vehicleloadable ( pvehicle vehicle, int uheight ) const
    if ( getCompletion() ==  typ->construction_steps - 1 )
       if ( typ->loadcapability & uheight ) {
          if ( (( typ->loadcapacity >= vehicle->size())               // the unit is physically able to get "through the door"
-           && ( vehiclesLoaded()+1 < maxloadableunits )
            && (( typ->unitheightreq & vehicle->typ->height ) || !typ->unitheightreq)
            && !( typ->unitheight_forbidden & vehicle->typ->height) )
                    ||
              ( vehicle->functions & cf_trooper )
-           ) {
-         //  && ( (uheight == typ->buildingheight)  || (typ->buildingheight >= chschwimmend && hgt == chfahrend) ))) {
+           )
+           if ( (vehiclesLoaded()+1 < maxloadableunits ) || vehicle->color != color ) {
 
          #ifdef karteneditor
               return 2;

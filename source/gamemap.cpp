@@ -1362,7 +1362,7 @@ Mine& tfield::getMine ( int n )
   return *i;
 }
 
-void  tfield :: addobject( pobjecttype obj, int dir, int force )
+void  tfield :: addobject( pobjecttype obj, int dir, bool force )
 { 
    if ( !obj )
       return;

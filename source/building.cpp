@@ -2,9 +2,12 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.82 2002-09-19 20:20:04 mbickel Exp $
+//     $Id: building.cpp,v 1.83 2002-10-01 09:23:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.82  2002/09/19 20:20:04  mbickel
+//      Cleanup and various bug fixes
+//
 //     Revision 1.81  2002/04/05 09:25:05  mbickel
 //      Project files now for Borland C++ Builder 6
 //      Fixed: netcontrol not working
@@ -1531,7 +1534,8 @@ void  cbuildingcontrols :: removevehicle ( pvehicle *peht )
    for (int i=0; i<=31; i++) {
       if ( *peht == building->loading[i] )
          building->loading[i]=NULL;
-   };
+   }
+   building->regroupUnits();
    logtoreplayinfo ( rpl_removeunit, building->getEntry().x, building->getEntry().y, (*peht)->networkid );
    delete *peht;
    *peht = NULL;

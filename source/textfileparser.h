@@ -20,8 +20,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef textfileparser_h_included
-#define textfileparser_h_included
+#ifndef textfileparserH
+#define textfileparserH
 
 #include <vector>
 #include "ascstring.h"
@@ -35,26 +35,45 @@ class ParsingError : public ASCmsgException {
 };
 
 class TextPropertyGroup;
-typedef PointerList<TextPropertyGroup*> TextPropertyList;
+
+class TextPropertyList : public PointerList<TextPropertyGroup*> {
+                  typedef map<int,TextPropertyGroup*> IdentCache;
+                  IdentCache identCache;
+                public:
+                   void buildIDs();
+                   TextPropertyGroup* get ( int id );
+};
 
 /** Class that stores all the (preparsed) entries of an .ASCTXT file. 
-    The entries consist of a PropertyName, an operator and a value, but don't have any type information 
+    The entries consist of a PropertyName, an operator and a value, but don't have any type information
 */
 class TextPropertyGroup {
          bool inheritanceBuild;
+         bool abstract;
+         int id;
       public:
-          TextPropertyGroup() : inheritanceBuild ( false ) {};
-          
+          TextPropertyGroup() : inheritanceBuild ( false ), abstract ( false ), id ( -1 ) {};
+
           class Entry {
             public:
                ASCString propertyName;
                enum Operator { eq, mult_eq } op;
                ASCString value;
-               Entry ( const ASCString& propertyName_, Operator op_, const ASCString& value_ ) : propertyName ( propertyName_ ), op ( op_ ), value ( value_ ) { propertyName.toLower(); };
+               Entry* parent;
+               Entry ( const ASCString& propertyName_, Operator op_, const ASCString& value_ ) : propertyName ( propertyName_ ), op ( op_ ), value ( value_ ), parent ( NULL ) { propertyName.toLower(); };
          };
 
+      private:
+         typedef map<ASCString, Entry*> EntryCache;
+         EntryCache entryCache;
          typedef list<Entry> Entries;
          Entries entries;
+      public:
+         void addEntry( const Entry& entry );
+         Entry* find( const ASCString& n );
+
+         typedef list<TextPropertyGroup*> Parents;
+         Parents parents;
 
          ASCString fileName;
          ASCString location;
@@ -62,8 +81,9 @@ class TextPropertyGroup {
          //! the name of the structure. For example "VehicleType"
          ASCString typeName;
 
+         int evalID();
+
          void buildInheritance( TextPropertyList& tpl );
-         Entries::iterator find( const ASCString& n );
 };
 
 
@@ -178,10 +198,12 @@ class PropertyContainer {
          class IntRangeArrayProperty : public Property {
               typedef vector<IntRange> PropertyType;
               PropertyType& property;
+              bool required;
+              bool hasDefault() {return !required; };
             protected:
               void evaluate_rw ( );
             public:
-               IntRangeArrayProperty ( vector<IntRange>& property_ ) : property ( property_ ) {};
+               IntRangeArrayProperty ( vector<IntRange>& property_, bool _required ) : property ( property_ ), required(_required) {};
          };
          class TagArrayProperty : public Property {
               BitSet& property;
@@ -245,7 +267,7 @@ class PropertyContainer {
          IntProperty&           addInteger ( const ASCString& name, int& property );
          IntProperty&           addInteger ( const ASCString& name, int& property, int defaultValue );
          IntegerArrayProperty&  addIntegerArray ( const ASCString& name, vector<int>& property );
-         IntRangeArrayProperty& addIntRangeArray ( const ASCString& name, vector<IntRange>& property );
+         IntRangeArrayProperty& addIntRangeArray ( const ASCString& name, vector<IntRange>& property, bool required = true );
          TagArrayProperty&      addTagArray ( const ASCString& name, BitSet& property, int tagNum, const char** tags, bool inverted = false );
          TagIntProperty&        addTagInteger ( const ASCString& name, int& property, int tagNum, const char** tags, bool inverted = false );
          NamedIntProperty&      addNamedInteger ( const ASCString& name, int& property, int tagNum, const char** tags );

@@ -89,6 +89,17 @@ Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player, int networkI
 
 Vehicle :: ~Vehicle (  )
 {
+   #ifndef karteneditor
+   if ( typ->wreckageObject >= 0 ) {
+      pfield fld = getMap()->getField(getPosition());
+      if ( fld->vehicle ==  this ) {
+         pobjecttype obj = getMap()->getobjecttype_byid( typ->wreckageObject );
+         if ( obj )
+            getMap()->getField(getPosition()) -> addobject ( obj );
+      }
+   }
+   #endif
+
    if ( viewOnMap && gamemap ) {
       removeview();
       viewOnMap = false;

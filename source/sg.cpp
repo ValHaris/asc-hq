@@ -871,6 +871,8 @@ void         startnewsinglelevelfromgame(void)
 {
    cursor.hide();
    newsinglelevel();
+   if ( !actmap )
+      throw NoMapLoaded();
    computeview( actmap );
    displaymap();
    cursor.show();
@@ -1876,6 +1878,9 @@ void runmainmenu ( void )
                break;
             case ct_stp + ct_l:
                execuseraction ( ua_loadgame );
+               break;
+            case ct_stp + ct_n:
+               execuseraction ( ua_startnewsinglelevel );
                break;
             case ct_x + ct_stp:
                execuseraction ( ua_exitgame );

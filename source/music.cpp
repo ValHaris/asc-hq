@@ -37,7 +37,7 @@ void MusicPlayList :: runTextIO ( PropertyContainer& pc )
 {
    TrackList files;
    pc.addString( "Name", name );
-   pc.addStringArray( "Tracks", files ).evaluate();
+   pc.addStringArray( "Tracks", files );
 
    for ( TrackList::iterator i = files.begin(); i != files.end(); i++ ) {
       tfindfile ff ( *i );
