@@ -1,1 +1,0 @@
-tasm %1 -m3 -zi -mx

@@ -38,7 +38,8 @@ But, as always, there are exceptions where it helps to break a command into seve
 <H3>Required Tools</H3>
 <H4>for building the DOS version</H4>
 We are developing the project with Watcom C/C++ Version 11.0b. The project files for the Watcom IDE are included. It has been anounced that Watcom C/C++ is going to be released as Open Source. Check out <A HREF="http://www.openwatcom.org">www.openwatcom.org</A>.<P>
-The assembler files (with the exception of <TT>RDTSC.ASM</TT>) can not be assembled by WASM since it does not support the high level language interfaces that TASM provides. We are using TASM 3.2 and the file <TT>TSM.BAT</TT> that contains the necessary switches for it is included. But since the Assembler files are quite stable and usually do not need to be build again we also provide their assembled <TT>*.OBJ</TT> files to make the building of the project possible without having TASM.<P>
+The assembler files (with the exception of <TT>RDTSC.ASM</TT>) can not be assembled by WASM since it does not support the high level language interfaces that TASM ( we are using version 3.2) provides. The bach file <TT>asc\source\watcom.bat</TT> assembles all asm files that are needed, provided that TASM is in the path. <!-- It is principially possible to compile ASC without any assembler routines (the Linux version does this), but since the Assembler files are quite stable and usually do not need to be build again we also provide their assembled <TT>*.OBJ</TT> files to make the building of the project possible without having TASM. -->
+<P>
 
 Since Watcom C++ does not come with the STL, we use STLport 4.0 which can be obtained from <A HREF="http://www.stlport.org">www.stlport.org</A>.<P>
 
