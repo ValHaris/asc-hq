@@ -84,8 +84,8 @@ int main(int argc, char *argv[] )
          try {
             tfindfile ff ( index[i].name );
             bool incontainer;
-            ff.getnextname ( NULL, &incontainer );
-            if ( incontainer ) {
+            ASCString nme = ff.getnextname ( NULL, &incontainer );
+            if ( incontainer || nme.empty() ) {
                tnfilestream instream ( index[i].name, tnstream::reading );
                char namebuf[ maxFileStringSize ];
                int j = -1;
