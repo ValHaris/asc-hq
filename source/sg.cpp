@@ -115,6 +115,7 @@
 #include "clipboard.h"
 #include "mapdisplay2.h"
 #include "guiiconhandler.h"
+#include "guifunctions.h"
 
 // #define MEMCHK
 
@@ -1740,6 +1741,9 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
    mapDisplay = new MapDisplayPG( this, PG_Rect(20,20,Width() - 200, Height() - 20));
    menu = new Menu(this, PG_Rect(0,0,Width(),20));
    guiHost = new NewGuiHost( this, PG_Rect(Width()-180, 20, 170, Height()-60));
+   
+   guiHost->pushIconHandler( &GuiFunctions::primaryGuiIcons );
+
 }
 
 
@@ -2013,6 +2017,8 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
       delete actprogressbar;
       actprogressbar = NULL;
    }
+   
+   registerGuiFunctions( GuiFunctions::primaryGuiIcons );
 }
 
 

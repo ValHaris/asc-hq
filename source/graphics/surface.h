@@ -48,6 +48,7 @@
       void* toBGI() const;
 
       void read ( tnstream& stream ) ;
+      void readImageFile ( tnstream& stream ) ;
       void write ( tnstream& stream ) const;
       void strech ( int width, int height );
 

@@ -239,6 +239,10 @@ void MapDisplayPG::readData()
       } {
          tnfilestream stream ("curshex.raw",tnstream::reading);
          icons.cursor.read( stream );
+      } {
+         tnfilestream stream ("markedfield.pcx",tnstream::reading);
+         icons.markField.readImageFile( stream );
+         icons.markField.detectColorKey();
       }
    }
 }
@@ -337,16 +341,18 @@ void MapDisplayPG::paintTerrain( int playerView )
 
 
                   /* display marked fields */
-                  /*
+                  
                       if ( pass == 8 ) {
 
                           if ( fld->a.temp && tempsvisible )
-                             putspriteimage(  r, yp, cursor.markfield);
+                             surface->Blit( icons.markField, pos );
                           else
                              if ( fld->a.temp2 && tempsvisible )
-                                putspriteimage(  r, yp, xlatpict ( &xlattables.a.dark2 , cursor.markfield));
+                                surface->Blit( icons.markField, pos );
+                                // putspriteimage(  r, yp, xlatpict ( &xlattables.a.dark2 , cursor.markfield));
+                                
                       }
-                      */
+                      
 
                } else {
                   if (visibility == visible_ago) {
@@ -548,6 +554,8 @@ bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
          cursor.visible = true;
          dirty = Curs;
          Update();
+         
+         updateFieldInfo();
          return true;
       }
    }      

@@ -29,6 +29,12 @@
 #include <SDL_image.h>
 
 #include "guiiconhandler.h"
+#include "spfst.h"
+
+const int guiIconSizeX = 49;
+const int guiIconSizeY = 35;
+const int guiIconSpace = 5;
+const int guiIconColumnNum = 3;
 
 
 IconRepository::Repository IconRepository::repository;
@@ -46,16 +52,119 @@ Surface& IconRepository::getIcon( const ASCString& name )
 }
 
 
-NewGuiHost :: NewGuiHost (PG_Widget *parent, const PG_Rect &r )
-         : PG_Window( parent, r ) 
+GuiButton::GuiButton( PG_Widget *parent, const PG_Rect &r ) : PG_Button( parent, r, "", -1, "GuiButton"), func( NULL ) 
 {
+  sigClick.connect ( SigC::slot( *this, &GuiButton::exec ));
+  SetBackground( PRESSED, IconRepository::getIcon("empty-pressed.png").getBaseSurface() );
+  SetBackground( HIGHLITED, IconRepository::getIcon("empty-high.png").getBaseSurface() );
+  SetBackground( UNPRESSED, IconRepository::getIcon("empty.png").getBaseSurface() );
+}
 
-}         
+bool GuiButton::exec() 
+{
+  if ( func ) {
+     func->execute( pos );
+     return true;
+  } 
+  return false;   
+}
 
 
+void GuiButton::registerFunc( GuiFunction* f, const MapCoordinate& position )
+{
+   func = f;
+   pos = position;
+   SetIcon( f->getImage( position).getBaseSurface());
+}
+
+void GuiButton::unregisterFunc()
+{
+   func = NULL;
+   SetIcon ( NULL );
+}
+
+
+
+void GuiIconHandler::eval()
+{
+   MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
+   
+   int num = 0;
+   for ( Functions::iterator i = functions.begin(); i != functions.end(); ++i ) {
+      if ( (*i)->available(mc )) {
+         GuiButton* b = host->getButton(num);
+         b->registerFunc( *i, mc );
+         b->Show();
+         ++num;
+      }
+   }
+
+   host->disableButtons(num);   
+}
 
 
 void GuiIconHandler::registerUserFunction( GuiFunction* function )
 {
    functions.push_back ( function );
 }
+
+
+GuiIconHandler::~GuiIconHandler()
+{
+   for ( Functions::iterator i = functions.begin(); i != functions.end(); ++i ) 
+      delete *i;
+   
+}
+
+
+
+
+
+
+
+NewGuiHost :: NewGuiHost (PG_Widget *parent, const PG_Rect &r )
+         : PG_Window( parent, r ) , handler(NULL)
+{
+   updateFieldInfo.connect ( SigC::slot( *this, &NewGuiHost::eval ));
+}         
+
+void NewGuiHost::eval()
+{
+   if ( handler )
+      handler->eval();
+}
+
+void NewGuiHost::pushIconHandler( GuiIconHandler* iconHandler )
+{
+   handler = iconHandler;
+   iconHandler->registerHost( this );
+}
+
+
+GuiButton* NewGuiHost::getButton( int i )
+{
+   while ( i >= buttons.size() ) {
+      int w = (Width() - 4 * guiIconSpace) / guiIconColumnNum;
+      GuiButton* b = new GuiButton ( this, PG_Rect( guiIconSpace + i%3 * w, guiIconSpace + i/3 * (guiIconSpace + guiIconSizeY), guiIconSizeX, guiIconSizeY));
+      buttons.push_back ( b );
+      b->Hide();
+   }
+   return buttons[i];
+}
+
+
+void NewGuiHost::disableButtons( int i )
+{
+   for ( int j = i; j < buttons.size(); ++j) {
+      GuiButton* b = getButton(j);
+      b->Hide();
+      b->unregisterFunc();
+   }   
+}
+
+NewGuiHost::~NewGuiHost()
+{
+   if ( handler )
+      handler->registerHost( NULL );
+}      
+

@@ -133,10 +133,14 @@ void Movement::execute( const MapCoordinate& pos )
 
 
 
-void registerGuiFunctions( GuiIconHandler& handler )
-{
-   handler.registerUserFunction( new Movement() );
-}
 
+
+   GuiIconHandler primaryGuiIcons;
 
 } // namespace GuiFunctions
+
+
+void registerGuiFunctions( GuiIconHandler& handler )
+{
+   handler.registerUserFunction( new GuiFunctions::Movement() );
+}

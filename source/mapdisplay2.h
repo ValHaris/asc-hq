@@ -40,6 +40,7 @@ class MapDisplayPG: public PG_Widget {
          Surface mapBackground;
          Surface notVisible;
          Surface cursor;
+         Surface markField;
       };
       static Icons icons;
       

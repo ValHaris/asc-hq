@@ -62,6 +62,7 @@
 
 SigC::Signal0<void> repaintMap;
 SigC::Signal0<void> repaintDisplay;
+SigC::Signal0<void> updateFieldInfo;
 
 
    tcursor            cursor;

@@ -252,6 +252,12 @@ void Surface::read ( tnstream& stream )
 
 }
 
+void Surface::readImageFile( tnstream& stream )
+{
+   SetSurface( IMG_Load_RW( SDL_RWFromStream ( &stream ), true ));
+}
+
+
 Surface Surface::createSurface( int width, int height, SDLmm::Color color )
 {
    Surface s = createSurface ( width, height, 8, color );

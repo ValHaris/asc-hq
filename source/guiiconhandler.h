@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.1 2004-12-11 21:22:30 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.2 2004-12-12 11:35:12 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -66,7 +66,7 @@ class GenericGuiFunction : public GuiFunction {
      public:   
      
         GenericGuiFunction( Surface icon_, Availability availability, Execution execution, const ASCString& iconName ) 
-                         : icon(icon_), avail(availability), exec(execution), name(iconName) {};
+                         : name(iconName), icon(icon_), avail(availability), exec(execution) {};
 
         bool available( const MapCoordinate& pos ) { return avail(pos); };
         void execute( const MapCoordinate& pos )   { exec(pos); };
@@ -75,25 +75,55 @@ class GenericGuiFunction : public GuiFunction {
 };
 
 
+class GuiButton : public PG_Button {
+          GuiFunction* func;
+          MapCoordinate pos;
+       public:
+          GuiButton( PG_Widget *parent, const PG_Rect &r );
+          void registerFunc( GuiFunction* f, const MapCoordinate& position );
+          void unregisterFunc();
+          bool exec();
+};
+
+class NewGuiHost;
 
 class GuiIconHandler {
 
-     list<GuiFunction*> functions;    
+     typedef list<GuiFunction*> Functions;
+     Functions functions;    
+     
+     NewGuiHost* host;
 
+     
      public:
+       GuiIconHandler() : host(NULL) {};
+     
        /** registers a user function. Icons are displayed in the order that they were registered. 
           By passing an object here, the GuiIconHandler wil obtain ownership of the object and delete it on his destruction */
        void registerUserFunction( GuiFunction* function );
+       void registerHost( NewGuiHost* guiIconHost ) { host = guiIconHost; };
 
+       void eval();
+       ~GuiIconHandler();
 };
 
 
 class NewGuiHost : public PG_Window {
-
+        GuiIconHandler* handler;
      public:
         NewGuiHost (PG_Widget *parent, const PG_Rect &r ) ;
         void pushIconHandler( GuiIconHandler* iconHandler );
+        void eval();
 
+        typedef vector<GuiButton*> Buttons;
+        Buttons buttons;
+     
+        GuiButton* getButton( int i );
+        
+        //! disables all button from i onward
+        void disableButtons( int i );
+        
+        ~NewGuiHost();
             
 };
 
