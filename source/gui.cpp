@@ -1,6 +1,15 @@
-//     $Id: gui.cpp,v 1.4 1999-11-22 18:27:29 mbickel Exp $
+//     $Id: gui.cpp,v 1.5 1999-12-07 22:13:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/11/22 18:27:29  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.3  1999/11/16 17:04:05  mbickel
 //     Made ASC compilable for DOS again :-)
 //     Merged all the bug fixes in that I did last week
@@ -97,9 +106,11 @@ void         repositionmouse ( void )
 
 void setmouseongui( void )
 {
+   /*
    setmouseposition ( guixpos + guiiconsizex / 2, guiypos + guiiconsizey / 2);
 
    while (mouseparams.taste & 1) ;
+   */
 }
 
 #ifdef _DOS_
@@ -388,12 +399,13 @@ void   tguihost::checkformouse ( void )
 
 void   tguihost :: runpressedmouse ( int taste  )
 {
+   
    mousevisible ( false );
    int oldmousex = mouseparams.x;
    int oldmousey = mouseparams.y;
    setmouseposition ( guixpos + guiiconsizex / 2, guiypos + guiiconsizey / 2);
    mousevisible ( true );
-
+  
    int zy = -1;
    int zx = -1;
 

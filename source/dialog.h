@@ -1,6 +1,15 @@
-//     $Id: dialog.h,v 1.2 1999-11-16 03:41:21 tmwilson Exp $
+//     $Id: dialog.h,v 1.3 1999-12-07 22:13:18 mbickel Exp $
+
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:21  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -111,15 +120,6 @@ extern char mix2colors ( int a, int b );
 extern char mix4colors ( int a, int b, int c, int d );
 
 extern char*        getmessage(word         id);
-
-#ifndef karteneditor
-#include "network.h"
-class taskforsupervisorpassword : public tenterpassword {
-                           virtual int checkforreask ( int crc );
-                         public:
-                           void init ( int* crc, int mode );
-                        };
-#endif
 
 /*
 
@@ -264,5 +264,46 @@ extern void  verlademunition(pvehicle     vehicle,
      /*  3: auáen fast  */ 
 
 extern void viewterraininfo ( void );
+
+
+
+class tenterpassword : public tdialogbox {
+             protected:
+               char strng1[40];
+               char strng2[40];
+               
+               int status;
+               int *cr;
+               int reask;
+               int confirm;
+
+               void dispeditstring ( char* st , int   x1, int   y1 );
+                                           
+               void lne(int          x1, int          y1, char *       s, int          position, boolean      einfuegen);
+
+               virtual int checkforreask ( int crc );
+
+               virtual int    gettextwdth_stredit ( char* txt, pfont font );             
+            public:
+               int  getcapabilities ( void );
+               void init ( int* crc, int mode, char* ttl = NULL );  // mode : 0 = es muá unbedingt ein passwort eingegeben werden; 1 = Eingabe kann abgebrochen werden
+               void  run ( int* result );
+               void buttonpressed ( char id );
+           };
+
+
+#ifndef karteneditor
+#include "network.h"
+class taskforsupervisorpassword : public tenterpassword {
+                           virtual int checkforreask ( int crc );
+                         public:
+                           void init ( int* crc, int mode );
+                        };
+#endif
+
+
+extern void enterpassword ( int* cr );
+extern int encodepassword ( char* pw );
+
 
 #endif

@@ -1,6 +1,11 @@
-//     $Id: spfst.cpp,v 1.6 1999-11-25 22:00:12 mbickel Exp $
+//     $Id: spfst.cpp,v 1.7 1999-12-07 22:13:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/11/25 22:00:12  mbickel
+//      Added weapon information window
+//      Added support for primary offscreen frame buffers to graphics engine
+//      Restored file time handling for DOS version
+//
 //     Revision 1.5  1999/11/23 21:07:35  mbickel
 //      Many small bugfixes
 //
@@ -4223,7 +4228,7 @@ void tgeneraldisplaymap :: putdirecpict ( int x1, int y1, const void* ptr )
 
 int  tgeneraldisplaymap :: getscreenxsize( int target )
 {
-   if ( actmap && dispmapdata.numberoffieldsx >= actmap->xsize )
+   if ( actmap && dispmapdata.numberoffieldsx >= actmap->xsize && actmap->xsize > 0 )
       return actmap->xsize ;
    else
       return dispmapdata.numberoffieldsx;
@@ -4231,7 +4236,7 @@ int  tgeneraldisplaymap :: getscreenxsize( int target )
 
 int  tgeneraldisplaymap :: getscreenysize( int target )
 {
-      if ( actmap && dispmapdata.numberoffieldsy >= actmap->ysize )
+      if ( actmap && dispmapdata.numberoffieldsy >= actmap->ysize && actmap->ysize > 0 )
          return actmap->ysize;
       else
          return dispmapdata.numberoffieldsy;

@@ -1,5 +1,6 @@
 
 #include <string.h>
+#include <malloc.h>
 #include "basegfx.h"
 #include "newfont.h"
 #include "misc.h"

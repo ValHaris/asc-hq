@@ -1,6 +1,15 @@
-//     $Id: loadbi3.cpp,v 1.5 1999-11-22 18:27:32 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.6 1999-12-07 22:13:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/11/22 18:27:32  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.4  1999/11/18 17:31:13  mbickel
 //      Improved BI-map import translation tables
 //      Moved macros to substitute Watcom specific routines into global.h
@@ -544,7 +553,7 @@ const int terraintranslate[terraintranslatenum][2] = {{ 574 , 526 } , { 575 , 12
                                                       { 576 ,1238 } , { 578 , 1245 }, {579, 1249 }, 
                                                       { 580 ,1253 } , { 242 , 1135 }, {463,  449 },
                                                       { 464,  450 } , { 465,  451  }, {466,  452 },
-                                                      { 237, 1284 } , { 233, 1094 }};
+                                                      { 237, 1108 } , { 233, 1094 }};
 
 const int terraincombixlatnum = 2;
 struct terraincombixlat {
@@ -556,7 +565,7 @@ struct terraincombixlat {
 const terraincombixlat terraincombixlat[terraincombixlatnum] = {{ 222, 1011, 0, 1 }, 
                                                                 { 223, 1012, 0, 1 }};
 
-const int objecttranslatenum = 26;
+const int objecttranslatenum = 30;
 const int objecttranslate[objecttranslatenum][5] = {{ 1264, 1470, 1500, -1, -1 }, 
                                                     { 1265, 1470, -1, 1560, -1 }, 
                                                     { 1266, 1470, -1, -1, 1530 }, 
@@ -582,7 +591,11 @@ const int objecttranslate[objecttranslatenum][5] = {{ 1264, 1470, 1500, -1, -1 }
                                                     {  236, 1102, -1, -1, -1 },
                                                     { 1283, 1284, -1, -1, -1 },
                                                     { 1334, 1325, -1, -1, -1 },
-                                                    { 1333, 1320, -1, -1, -1 }
+                                                    { 1333, 1320, -1, -1, -1 },
+                                                    {  238, 1113, -1, -1, -1 },
+                                                    {  239, 1118, -1, -1, -1 },
+                                                    {  240, 1125, -1, -1, -1 },
+                                                    {  241, 1131, -1, -1, -1 }
                                                     };
 
 

@@ -1,6 +1,11 @@
-//     $Id: building.cpp,v 1.7 1999-11-25 21:59:59 mbickel Exp $
+//     $Id: building.cpp,v 1.8 1999-12-07 22:13:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  1999/11/25 21:59:59  mbickel
+//      Added weapon information window
+//      Added support for primary offscreen frame buffers to graphics engine
+//      Restored file time handling for DOS version
+//
 //     Revision 1.6  1999/11/23 21:07:21  mbickel
 //      Many small bugfixes
 //
@@ -1577,13 +1582,13 @@ void   ccontainer :: checkformouse( void )
       if ( mouseparams.taste == gameoptions.mouse.fieldmarkbutton ) {
          int i,j;
          if ( getfieldundermouse ( &i, &j ))
-            if ( i != mark.y  ||  j != mark.x ) {
+            if ( i != mark.x  ||  j != mark.y ) {
                setinvisiblemouserectanglestk ( unitposx[mark.x], unitposy[mark.y], unitposx[mark.x+1], unitposy[mark.y+1] );
                putspriteimage ( unitposx[mark.x], unitposy[mark.y], inactivefield);
                displayloading ( mark.x, mark.y );
                getinvisiblemouserectanglestk ();
-               mark.x = j;
-               mark.y = i;
+               mark.x = i;
+               mark.y = j;
                setinvisiblemouserectanglestk ( unitposx[mark.x], unitposy[mark.y], unitposx[mark.x+1], unitposy[mark.y+1] );
                putspriteimage ( unitposx[mark.x], unitposy[mark.y], activefield);
                displayloading ( mark.x, mark.y, 0, 1 );
@@ -1635,7 +1640,7 @@ void ccontainer :: unitchanged( void )
 
 void  ccontainer :: paintvehicleinfo ( void )
 {
-   dashboard.paintvehicleinfo ( getmarkedunit(), NULL, NULL );
+   dashboard.paintvehicleinfo ( getmarkedunit(), NULL, NULL, NULL );
 }
 
 void  ccontainer :: run ()
@@ -3159,14 +3164,11 @@ pvehicle ccontainer_b :: getloadedunit (int num)
 void  ccontainer_b :: paintvehicleinfo ( void )
 {
    if ( unitmode == mnormal )
-      dashboard.paintvehicleinfo ( getmarkedunit(), NULL, NULL );
+      dashboard.paintvehicleinfo ( getmarkedunit(), NULL, NULL, NULL );
    else {
       pvehicletype fzt = getmarkedunittype ();
-      if ( fzt ) {
-         pvehicle tempunit = produceunit.produce_hypothetically( fzt );
-         :: dashboard.paintvehicleinfo ( tempunit, NULL, NULL );
-         :: removevehicle ( &tempunit );
-      }
+      if ( fzt ) 
+         :: dashboard.paintvehicleinfo ( NULL, NULL, NULL, fzt );
 
    }
 }

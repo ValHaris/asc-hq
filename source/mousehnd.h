@@ -1,6 +1,15 @@
-//     $Id: mousehnd.h,v 1.3 1999-11-22 18:27:43 mbickel Exp $
+//     $Id: mousehnd.h,v 1.4 1999-12-07 22:13:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/22 18:27:43  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.2  1999/11/16 03:42:12  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -48,7 +57,6 @@ extern void mousevisible( int an );
 extern byte getmousestatus ();
 
 extern void setmouseposition ( int x, int y );
-extern int  getdoubleclick ( int key );
 
 extern void setinvisiblemouserectangle ( int x1, int y1, int x2, int y2 );
 // -1, -1, -1, -1  schaltet die Maus wieder Åberall an

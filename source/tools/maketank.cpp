@@ -26,6 +26,7 @@
 
 #include "..\tpascal.inc"
 #include "..\typen.h"
+#include "..\basegfx.h"
 #include "..\vesa.h"
 #include "..\loadpcx.h"
 #include "..\sgstream.h"
@@ -121,17 +122,15 @@ main (int argc, char *argv[] )
          stredit2 (datfile.name, 9, 255,255);
          strcat (datfile.name, ".veh");
          if (exist(datfile.name)) {
-            sound (800);
             clearscreen(); 
             _settextcolor (15);
             _setbkcolor (red);
             _settextposition (4, 5);
             char s[100];
-            sprintf ( s, " !! Attention :  Filename <%s> already exists !! \n", datfile.name );
+            sprintf ( s, " !! \a Attention :  Filename <%s> already exists !! \n", datfile.name );
             _outtext ( s );
             _wait ();
-            nosound ();
-            settextmode ( 3 );
+            // settextmode ( 3 );
             exit (0);
          } 
    
@@ -170,12 +169,12 @@ main (int argc, char *argv[] )
              printf ("\n    use pictures of Battle Isle or own picture ?\n");
              yn_switch ("BI", "seperate picture" , 1, 0, battleisle);
              if ( battleisle ) {
-                initsvga (0x101);
+                initgraphics (640, 480, 8);
                 getbi3pict_double ( &ft->bipicture, &ft->picture[0] ); 
-             } else {
+             } else {    
                 fileselect ("*.PCX", _A_NORMAL, pictfile);
                                           
-                initsvga (0x101);
+                initgraphics (640, 480, 8);
                 ft->picture[0] = loadpcx2(pictfile.name);
                 ft->bipicture = -1;
                 for ( int i = 1;  i < 8; i++ )
@@ -190,7 +189,7 @@ main (int argc, char *argv[] )
         
       } else { 
          void     *p, *q;
-         initsvga (0x101);
+         initgraphics (640, 480, 8);
          setvgapalette256(pal);
          p = ft->picture[0]; 
          q = ft->picture[1]; 
@@ -266,7 +265,9 @@ main (int argc, char *argv[] )
    
          printf ("\n    Levels of height the unit can enter \n"
                  "\n           ( no gaps allowed !!) \n");
-         bitselect (ft->height, choehenstufen, choehenstufennum);
+         int height = ft->height;
+         bitselect ( height, choehenstufen, choehenstufennum);
+         ft->height = height;
    
          printf ("\n    Movement  (note that one field with road has %d movement points)", minmalq);
          for (i = 0; i <= 7; i++) 
@@ -295,7 +296,9 @@ main (int argc, char *argv[] )
    
              if ( n > 1 ) {
                 printf ("\n    distance the unit needs to change height");
-                num_ed (ft->steigung, 0, 255);
+                int ascend = ft->steigung;
+                num_ed (ascend, 0, 255);
+                ft->steigung = ascend;
              }
          }
    
@@ -432,9 +435,11 @@ main (int argc, char *argv[] )
    
          printf ("\n    view  \n" );
          num_ed (ft->view, 0, 255);
-   
+                   
+         int jamm = ft->jamming;
          printf ("\n    jamming  \n" );
-         num_ed (ft->jamming, 0, 255);
+         num_ed (jamm, 0, 255);
+         ft->jamming = jamm;
       } 
    
       clearscreen ();
@@ -774,7 +779,7 @@ void *       loadpcx2(char *       filestring)
   byte         b; 
 
 
-   initsvga(0x101);
+   initgraphics (640, 480, 8);
    bar ( 0, 0, 639, 479, 255 );
    b = loadpcxxy(filestring, 1, 0,0); 
    if (b == 0) { 
