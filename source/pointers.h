@@ -27,7 +27,6 @@
 
  typedef class tterrainaccess *pterrainaccess;
 // typedef struct tcrc *pcrc;
- typedef class Vehicle  tvehicle ;
  typedef class Vehicle* pvehicle ;
  typedef class tobjecttype* pobjecttype;
  typedef class tmap*  pmap;

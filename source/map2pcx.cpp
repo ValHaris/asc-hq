@@ -47,36 +47,36 @@ void         loadcursor(void)
 
   {
      #ifdef HEXAGON
-      tnfilestream stream ("hexfeld.raw", 1);
+      tnfilestream stream ("hexfeld.raw", tnstream::reading);
      #else
-      tnfilestream stream ("oktfld2.raw", 1);
+      tnfilestream stream ("oktfld2.raw", tnstream::reading);
      #endif
       stream.readrlepict ( &icons.fieldshape, false, &w );
   }
 
    #ifdef FREEMAPZOOM 
    {
-      tnfilestream stream ("mapbkgrb.raw", 1);
+      tnfilestream stream ("mapbkgrb.raw", tnstream::reading);
       stream.readrlepict ( &icons.mapbackground, false, &w );
    }
    #endif
 
   {
     #ifdef HEXAGON
-      tnfilestream stream ("hexfld_a.raw",1); 
+      tnfilestream stream ("hexfld_a.raw",tnstream::reading);
     #else
-      tnfilestream stream ("markacti.raw",1); 
+      tnfilestream stream ("markacti.raw",tnstream::reading);
     #endif
     stream.readrlepict( &icons.stellplatz, false, &w);
   }
 
   {
-    tnfilestream stream ("x.raw",1); 
+    tnfilestream stream ("x.raw", tnstream::reading);
     stream.readrlepict( &icons.X, false, &w);
   }
 
   {
-     tnfilestream stream ("pfeil-a0.raw",1);
+     tnfilestream stream ("pfeil-a0.raw", tnstream::reading);
      for (i=0;i<8 ;i++ ) stream.readrlepict( &icons.pfeil2[i], false, &w);
   }
 
@@ -124,7 +124,7 @@ FilesToLoad filesToLoad;
 
 pfont load_font(char* name)
 {
-   tnfilestream stream ( name, 1 );
+   tnfilestream stream ( name, tnstream::reading );
    return loadfont ( &stream );
 }
 
@@ -195,7 +195,7 @@ int mapeditorMainThread ( void* _mapname )
 
    } /* end try */
    catch ( tfileerror err ) {
-      displaymessage ( " error loading file %s ",2,err.filename );
+      displaymessage ( " error loading file %s ",2,err.getFileName().c_str() );
    } /* end catch */
 
    return 0;

@@ -75,14 +75,14 @@ int main(int argc, char *argv[] )
 
       for ( i = 0; i < num; i++ ) {
          try {
-            tnfilestream instream ( index[i].name, 1 );
+            tnfilestream instream ( index[i].name, tnstream::reading );
             char namebuf[ maxFileStringSize ];
             int j = -1;
             do {
                j++;
                namebuf[j] = tolower ( index[i].name[j] );
             } while ( namebuf[j] );
-            tn_file_buf_stream outstream ( namebuf, 2 );
+            tn_file_buf_stream outstream ( namebuf, tnstream::writing );
             int size ;
             do {
                size = instream.readdata ( buf, bufsize, 0 );
@@ -90,7 +90,7 @@ int main(int argc, char *argv[] )
             } while ( size == bufsize );
          } /* endtry */
          catch ( tfileerror err) {
-            printf( "error writing file %s ", err.filename );
+            printf( "error writing file %s ", err.getFileName().c_str() );
             return 1;
          } /* endcatch */
 

@@ -204,7 +204,7 @@ bzmain( char *argv1, char* argv2  )
     fclose ( fp );
 
     // tnfilestream instream ( argv1, 1 );
-    tnfilestream outstream ( argv2, 2 );
+    tnfilestream outstream ( argv2, tnstream::writing );
     // instream.readdata ( buf, size, 0 );
     outstream.writedata ( buf, size );
 

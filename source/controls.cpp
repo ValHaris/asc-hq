@@ -3,9 +3,15 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.97 2001-02-18 15:37:02 mbickel Exp $
+//     $Id: controls.cpp,v 1.98 2001-02-18 17:52:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.97  2001/02/18 15:37:02  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.96  2001/02/11 11:39:28  mbickel
 //      Some cleanup and documentation
 //
@@ -1320,7 +1326,7 @@ void tsearchreactionfireingunits :: init ( pvehicle vehicle, IntFieldList* field
          pvehicle eht = getfield ( x, y )->vehicle;
          if ( eht )
             if ( eht->color != vehicle->color )
-               if ( eht->reactionfire.getStatus() >= tvehicle::ReactionFire::ready )
+               if ( eht->reactionfire.getStatus() >= Vehicle::ReactionFire::ready )
                   if ( eht->reactionfire.enemiesAttackable & ( 1 << ( vehicle->color / 8 )))
                      if ( getdiplomaticstatus ( eht->color ) == cawar )
                         if ( attackpossible2u ( eht, vehicle ) )
@@ -3107,7 +3113,7 @@ void continuenetworkgame ( void )
       throw NoMapLoaded();
    } /* endcatch */
    catch ( tfileerror err) {
-      displaymessage( "error reading game %s ", 1, err.getFileName() );
+      displaymessage( "error reading game %s ", 1, err.getFileName().c_str() );
       throw NoMapLoaded();
    } /* endcatch */
    catch ( ASCexception ) {

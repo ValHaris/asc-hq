@@ -1,6 +1,12 @@
-//     $Id: unitctrl.cpp,v 1.50 2001-02-18 15:37:23 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.51 2001-02-18 17:52:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2001/02/18 15:37:23  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.49  2001/02/06 16:27:44  mbickel
 //      bugfixes, bugfixes and bugfixes
 //
@@ -275,7 +281,7 @@ int VehicleMovement :: available ( pvehicle veh ) const
    if ( status == 0 )
      if ( veh )
        if ( getfield ( veh->xpos, veh->ypos )->unitHere ( veh ) )
-          if ( veh->getMovement() >= minmalq && veh->reactionfire.getStatus() == tvehicle::ReactionFire::off )
+          if ( veh->getMovement() >= minmalq && veh->reactionfire.getStatus() == Vehicle::ReactionFire::off )
              if ( terrainaccessible ( getfield ( veh->xpos, veh->ypos ), veh ) || actmap->getgameparameter( cgp_movefrominvalidfields) )
                 return 1;
 
@@ -1539,7 +1545,7 @@ int VehicleAttack :: available ( pvehicle eht ) const
    if (eht != NULL) 
       if (eht->attacked == false)
          if ( eht->weapexist() ) 
-            if ( eht->reactionfire.getStatus() == tvehicle::ReactionFire::off ) {
+            if ( eht->reactionfire.getStatus() == Vehicle::ReactionFire::off ) {
                if (eht->typ->wait == false  ||  !eht->hasMoved() )
                   return 1;
             } else {

@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: attack.cpp,v 1.41 2001-02-18 15:36:59 mbickel Exp $
+//     $Id: attack.cpp,v 1.42 2001-02-18 17:52:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2001/02/18 15:36:59  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.40  2001/02/08 21:21:02  mbickel
 //      AI attacks and services more sensibly
 //
@@ -590,7 +596,7 @@ void tunitattacksunit :: setresult ( void )
    _attackingunit->experience = av.experience;
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
-   if ( _attackingunit->reactionfire.getStatus() >= tvehicle::ReactionFire::ready )
+   if ( _attackingunit->reactionfire.getStatus() >= Vehicle::ReactionFire::ready )
       _attackingunit->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  dv.color );
 
    _attackingunit->attacked = true; 

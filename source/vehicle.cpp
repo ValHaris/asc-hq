@@ -501,8 +501,11 @@ void Vehicle::ReactionFire::disable ( void )
 void Vehicle::ReactionFire::endTurn ( void )
 {
    if ( status >= init1 ) {
-      if ( status < ready )
-         status++;
+      if ( status == init1 )
+         status = init2;
+      else
+         if ( status == init2 )
+            status = ready;
 
       if ( status == ready )
          enemiesAttackable = 0xff;
@@ -996,69 +999,6 @@ void Vehicle :: fillMagically( void )
 }
 
 
-
-/* Translate the weapon/mine/service bit pattern into scalar
- * weapon number for use in fetching UI resources.
- */
-int SingleWeapon::getScalarWeaponType(void) const {
-   if ( typ & (cwweapon | cwmineb) )
-      return log2 ( typ & (cwweapon | cwmineb) );
-   else
-      return -1;
-}
-
-
-bool SingleWeapon::requiresAmmo(void) const
-{
-   return typ & ( cwweapon | cwmineb );
-}
-
-bool SingleWeapon::shootable( void ) const
-{
-   return typ & cwshootableb;
-}
-
-bool SingleWeapon::offensive( void ) const
-{
-   return typ & cwweapon;
-}
-
-bool SingleWeapon::service( void ) const
-{
-   return typ & cwserviceb;
-}
-
-bool SingleWeapon::canRefuel( void ) const
-{
-   return typ & cwammunitionb;
-}
-
-void SingleWeapon::set ( int type )
-{
-   typ = type;
-}
-
-ASCString SingleWeapon::getName ( void )
-{
-   ASCString s;
-
-   int k = getScalarWeaponType();
-   if ( k < cwaffentypennum && k >= 0 ) 
-      s = cwaffentypen[k];
-   else
-      if ( service() )
-         s = cwaffentypen[cwservicen];
-      else
-         s = "undefined";
-
-   return s;
-}
-
-UnitWeapon :: UnitWeapon ( void )
-{
-   count = 0;
-   memset ( weapon, 0, sizeof ( weapon ));
-}
 
 
 #define cem_experience    0x1

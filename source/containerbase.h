@@ -24,6 +24,7 @@
  #define containerbase_h_included
 
  #include "typen.h"
+ #include "containerbasetype.h"
 
 
 class EventHook {
@@ -32,11 +33,6 @@ class EventHook {
           virtual void receiveEvent ( Events ev, int data ) = 0;
        };
 
-class ContainerBaseType {
-   public:
-     Resources productionCost;
-     virtual ~ContainerBaseType() {};
-};
 
 
 /** \brief The parent class of Vehicle and Building;

@@ -4,9 +4,15 @@
 */
 
 
-//     $Id: gui.cpp,v 1.53 2001-02-18 15:37:12 mbickel Exp $
+//     $Id: gui.cpp,v 1.54 2001-02-18 17:52:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.53  2001/02/18 15:37:12  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.52  2001/02/11 11:39:36  mbickel
 //      Some cleanup and documentation
 //
@@ -2185,7 +2191,7 @@ int   tnsguiiconenablereactionfire::available    ( void )
    pvehicle eht = getactfield()->vehicle;
    if ( eht )
       if ( eht->color == actmap->actplayer * 8) 
-         if ( eht->reactionfire.getStatus() == tvehicle::ReactionFire::off )
+         if ( eht->reactionfire.getStatus() == Vehicle::ReactionFire::off )
             if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
                if ( eht->weapexist() )
                   return 1;
@@ -2213,7 +2219,7 @@ int   tnsguiicondisablereactionfire::available    ( void )
    pvehicle eht = getactfield()->vehicle;
    if ( eht )
       if ( eht->color == actmap->actplayer * 8) 
-         if ( eht->reactionfire.getStatus() != tvehicle::ReactionFire::off )
+         if ( eht->reactionfire.getStatus() != Vehicle::ReactionFire::off )
             if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
                if ( eht->weapexist() )
                   return 1;

@@ -23,6 +23,7 @@
 #include "typen.h"
 #include "containerbase.h"
 #include "vehicletype.h"
+#include "vehicle.h"
 
 ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, pmap map, int player ) : gamemap ( map ), baseType (bt)
 {
