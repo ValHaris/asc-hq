@@ -374,6 +374,8 @@ AI::ServiceOrder& AI :: issueRefuelOrder ( pvehicle veh, bool returnImmediately 
 MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distance )
 {
    pvehicle veh = so.getTargetUnit();
+   if ( !veh->canMove() )
+      return MapCoordinate ( -1, -1 );
 
    AStar3D astar ( getMap(), veh );
    astar.findAllAccessibleFields (  );
