@@ -1,6 +1,9 @@
-//     $Id: loadbi3.cpp,v 1.17 2000-05-21 17:18:50 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.18 2000-05-28 21:05:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/05/21 17:18:50  mbickel
+//      Moved BI3 import tables to a separate file: objxlat.cpp
+//
 //     Revision 1.16  2000/05/11 20:12:05  mbickel
 //      mapedit(lin) can now import BI3 maps
 //
@@ -874,6 +877,7 @@ const int* getobjectcontainertranslate ( int pos )
       int MAPID  = '\0PAM';
       int MISSID = 'SSIM';
 
+#pragma pack(1)
 
 class tloadBImap {
      

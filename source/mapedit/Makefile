@@ -66,7 +66,7 @@ PACKAGE = asc
 RANLIB = ranlib
 VERSION = 0.1
 
-CXXFLAGS = -g -O3 -Dkarteneditor -I./ -DHEXAGON -DFREEMAPZOOM -funsigned-char -D_NOASM_ -DNEWKEYB
+CXXFLAGS = -g -O2 -Dkarteneditor -I./ -DHEXAGON -DFREEMAPZOOM -funsigned-char -D_NOASM_ -DNEWKEYB
 
 bin_PROGRAMS = mapedit
 

@@ -66,7 +66,7 @@ PACKAGE = asc
 RANLIB = ranlib
 VERSION = 0.1
 
-CXXFLAGS = -g -O3 -Dconverter
+CXXFLAGS = -g -O2 -Dconverter
 
 bin_PROGRAMS = demount ascmount
 
