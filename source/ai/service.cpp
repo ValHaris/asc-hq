@@ -623,20 +623,22 @@ AI::AiResult AI :: executeServices ( )
   for_each ( serviceOrders.begin(), serviceOrders.end(), ServiceOrder::releaseServiceUnit );
 
   AiResult res;
+  static int i = 0;
 
-  Player::VehicleList::iterator nvi;
-  for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); ) {
-      nvi = vi;
-      ++nvi;
-
-      pvehicle veh = *vi;
-      checkKeys();
-      int counter = 0;
-      if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_supply ) {
-         runServiceUnit ( veh );
+  vector<int> unitIds;
+  for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); ++vi ) 
+     unitIds.push_back ( (*vi)->networkid );
+  
+  
+  for ( vector<int>::iterator vi = unitIds.begin(); vi != unitIds.end(); ++vi ) {
+      pvehicle veh = getMap()->getUnit( *vi );
+      if ( veh ) {
+        checkKeys();
+        int counter = 0;
+        if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_supply ) {
+                runServiceUnit ( veh );
+        }
       }
-
-      vi = nvi;
   }
 
   removeServiceOrdersForUnit ( NULL );
@@ -676,15 +678,17 @@ AI::AiResult AI :: executeServices ( )
   }
 
 
+  unitIds.clear();
+  for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); ++vi ) 
+     unitIds.push_back ( (*vi)->networkid );
+  
+  
   counter = 0;
-  for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); ) {
-     nvi = vi;
-     ++nvi;
-
-     pvehicle veh = *vi;
+  for ( vector<int>::iterator vi = unitIds.begin(); vi != unitIds.end(); ++vi ) {
+     pvehicle veh = getMap()->getUnit( *vi );
      checkKeys();
 
-     if ( veh->canMove() && veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat ) {
+     if ( veh && veh->canMove() && veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat ) {
         displaymessage2("retreating with unit %d", ++counter);
         int nwid = veh->networkid;
         moveUnit ( veh, veh->aiparam[ getPlayerNum() ]->dest, true );
@@ -715,7 +719,6 @@ AI::AiResult AI :: executeServices ( )
            }
         }
      }
-     vi = nvi;
   }
 
   /*
