@@ -2,9 +2,13 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.28 2001-07-28 11:19:10 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.29 2001-08-07 21:24:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2001/07/28 11:19:10  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.27  2001/07/27 21:13:34  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -1516,6 +1520,7 @@ void selunitcargo( pvehicle transport )
             unit->height = 1 << i;
             unit->tank.material = unit->typ->tank.material;
             unit->tank.fuel = unit->typ->tank.fuel;
+
             if ( transport->vehicleloadable ( unit )) {
                int p = 0;
                while ( transport->loading[p] )
@@ -1540,6 +1545,17 @@ void selunitcargo( pvehicle transport )
       if ( !match ) {
         delete unit;
         displaymessage("The unit could not be loaded !",1);
+      } else {
+         for ( int i = 0; i < 8; i++ )
+            if ( unit->typ->height & ( 1 << i )) {
+               int h = transport->height;
+               if ( h & (chschwimmend | chfahrend ))
+                  h |= (chschwimmend | chfahrend );
+
+               if ( h & ( 1 << i ))
+                  unit->height = 1 << i;
+            }
+         unit->resetMovement();
       }
    }
 }
