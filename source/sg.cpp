@@ -1218,17 +1218,18 @@ void showCargoSummary()
    Summary summary;
 
    pfield fld = getactfield();
-   if ( fld && fld->vehicle )
+   if ( fld && fld->vehicle && fld->vehicle->getOwner() == actmap->actplayer ) {
       calcCargoSummary( fld->vehicle, summary );
 
-   ASCString s;
-   for ( Summary::iterator i = summary.begin(); i != summary.end(); ++i )
-      s += vehicleTypeRepository.getObject_byID( i->first )->name + ": " + strrr(i->second) + "\n";
+      ASCString s;
+      for ( Summary::iterator i = summary.begin(); i != summary.end(); ++i )
+         s += vehicleTypeRepository.getObject_byID( i->first )->name + ": " + strrr(i->second) + "\n";
 
-   tviewanytext vat ;
-   vat.init ( "Cargo information", s.c_str(), 20, -1 , 450, 480 );
-   vat.run();
-   vat.done();
+      tviewanytext vat ;
+      vat.init ( "Cargo information", s.c_str(), 20, -1 , 450, 480 );
+      vat.run();
+      vat.done();
+   }
 }
 
 
