@@ -1,6 +1,12 @@
-//     $Id: controls.cpp,v 1.33 2000-06-04 21:39:18 mbickel Exp $
+//     $Id: controls.cpp,v 1.34 2000-06-05 18:21:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2000/06/04 21:39:18  mbickel
+//      Added OK button to ViewText dialog (used in "About ASC", for example)
+//      Invalid command line parameters are now reported
+//      new text for attack result prediction
+//      Added constructors to attack functions
+//
 //     Revision 1.32  2000/05/30 18:39:21  mbickel
 //      Added support for multiple directories
 //      Moved DOS specific files to a separate directory
@@ -5156,7 +5162,7 @@ void initchoosentechnology( void )
    }
 }
 
-void newturnforplayer ( int forcepasswordchecking )
+void newturnforplayer ( int forcepasswordchecking, char* password )
 {
 
    checkalliances_at_beginofturn ();
@@ -5203,19 +5209,17 @@ void newturnforplayer ( int forcepasswordchecking )
                humannum++;
          
    
-      if ( humannum > 1  ||  forcepasswordchecking ) {
+      if ( humannum > 1  ||  forcepasswordchecking > 0 ) {
          tlockdispspfld ldsf;
          backgroundpict.paint();
 
-         /*
-         {
-            tnfilestream stream ( "bkgr42.pcx", 1 );
-            loadpcxxy( &stream, 0, 0 ); 
-         }
-         */
-
-         if ( (actmap->player[actmap->actplayer].passwordcrc && actmap->player[actmap->actplayer].passwordcrc != gameoptions.defaultpassword ) || actmap->time.a.turn == 1 || (actmap->network && actmap->network->globalparams.reaskpasswords) ) {
-            enterpassword ( &actmap->player[actmap->actplayer].passwordcrc );
+         if ( (actmap->player[actmap->actplayer].passwordcrc && actmap->player[actmap->actplayer].passwordcrc != gameoptions.defaultpassword && actmap->player[actmap->actplayer].passwordcrc != encodepassword ( password )) 
+            || actmap->time.a.turn == 1 || (actmap->network && actmap->network->globalparams.reaskpasswords) ) {
+               if ( forcepasswordchecking < 0 ) {
+                  erasemap( actmap );
+                  throw tnomaploaded();
+               } else
+                  enterpassword ( &actmap->player[actmap->actplayer].passwordcrc );
          } else
             displaymessage("next player is:\n%s",3,actmap->player[actmap->actplayer].name );
       }

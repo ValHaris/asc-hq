@@ -1,6 +1,9 @@
-//     $Id: basestrm.cpp,v 1.23 2000-05-30 19:59:18 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.24 2000-06-05 18:21:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/05/30 19:59:18  mbickel
+//      Fixed bug in basestrm: container having higher priority than single file
+//
 //     Revision 1.22  2000/05/30 18:39:20  mbickel
 //      Added support for multiple directories
 //      Moved DOS specific files to a separate directory
@@ -1715,7 +1718,7 @@ int patimat (const char *pat, const char *str)
             return *str && patimat(pat+1, str+1);
 
       default  :
-#ifdef _DOS_     // DOS filenames are not case sensitive
+#if defined ( _DOS_ ) | defined ( WIN32 )   // DOS filenames are not case sensitive
             return (toupper(*pat) == toupper(*str)) && patimat(pat+1, str+1);
 #else
             return (*pat == *str) && patimat(pat+1, str+1);

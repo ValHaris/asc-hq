@@ -1,6 +1,9 @@
-//     $Id: controls.h,v 1.11 2000-05-23 20:40:40 mbickel Exp $
+//     $Id: controls.h,v 1.12 2000-06-05 18:21:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/05/23 20:40:40  mbickel
+//      Removed boolean type
+//
 //     Revision 1.10  2000/05/07 12:12:14  mbickel
 //      New mouse option dialog
 //      weapon info can now be displayed by clicking on a unit
@@ -649,5 +652,8 @@ class tsearchreactionfireingunits : public treactionfire {
                 int  checkfield ( int x, int y, pvehicle &eht, MapDisplayInterface* md );  
                 ~tsearchreactionfireingunits();
       };
+
+extern void newturnforplayer ( int forcepasswordchecking, char* password = NULL );
+
 
 #endif

@@ -1,6 +1,12 @@
-//     $Id: sg.cpp,v 1.45 2000-06-04 21:39:21 mbickel Exp $
+//     $Id: sg.cpp,v 1.46 2000-06-05 18:21:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2000/06/04 21:39:21  mbickel
+//      Added OK button to ViewText dialog (used in "About ASC", for example)
+//      Invalid command line parameters are now reported
+//      new text for attack result prediction
+//      Added constructors to attack functions
+//
 //     Revision 1.44  2000/06/01 15:27:46  mbickel
 //      Some changes for the upcoming Win32 version of ASC
 //      Fixed error at startup: unable to load smalaril.fnt
@@ -1834,17 +1840,15 @@ void         startnewsinglelevelfromgame(void)
 
 
    
-void ladestartkarte( char *emailgame=NULL, char *mapname=NULL, 
-   char *savegame=NULL )
+void ladestartkarte( char *emailgame=NULL, char *mapname=NULL, char *savegame=NULL, char *password=NULL )
 {         
-  char s[300];
+   char s[300];
    if( emailgame != NULL ) {
       if( validateemlfile( emailgame ) == 0 ) {
-         fprintf( stderr, "Email gamefile %s is invalid. Aborting.\n",
-            emailgame );
+         fprintf( stderr, "Email gamefile %s is invalid. Aborting.\n", emailgame );
          exit(-1);
       }
-
+         
       try {
          tnfilestream gamefile ( emailgame, 1 );
          tnetworkloaders nwl;
@@ -1855,6 +1859,14 @@ void ladestartkarte( char *emailgame=NULL, char *mapname=NULL,
          fprintf ( stderr, "%s is not a legal email game. \n", emailgame );
          exit(-1);
       }
+
+      try {
+         newturnforplayer ( -1, password );
+      } /* endtry */
+      catch ( tnomaploaded ) {
+         fprintf ( stderr, "invalid password specified for %s\n", emailgame );
+         exit(-1);
+      } /* endcatch */
 
    } else if( savegame != NULL ) {
       if( validatesavfile( savegame ) == 0 ) {
@@ -2694,35 +2706,22 @@ const char* progressbarfilename = "progress.8mn";
 
 
 void loaddata( int resolx, int resoly, 
-   char *emailgame=NULL, char *mapname=NULL, char *savegame=NULL ) 
+   char *emailgame=NULL, char *mapname=NULL, char *savegame=NULL, char *password=NULL ) 
 {
-#ifdef logging
-    logtofile("initializing progress bar");
-#endif
-
    actprogressbar = new tprogressbar; 
    if ( actprogressbar ) {
       tfindfile ff ( progressbarfilename );
       if ( ff.getnextname() ) {
-#ifdef logging
-         logtofile("progress bar file found");
-#endif
          tnfilestream strm ( progressbarfilename, 1 );
          actprogressbar->start ( 255, 0, 
             agmp->resolutiony-3, agmp->resolutionx-1, 
             agmp->resolutiony-1, &strm );
       } else {
-#ifdef logging
-       logtofile("progress bar file NOT found");
-#endif
          actprogressbar->start ( 255, 0, 
             agmp->resolutiony-3, agmp->resolutionx-1, 
             agmp->resolutiony-1, NULL );
       }
    }
-#ifdef logging
-   else logtofile("allocating of progress bar failed");
-#endif
 
    weapdist = new tweapdist;
 
@@ -3196,7 +3195,7 @@ int main(int argc, char *argv[] )
 
 
    int cntr = ticker;
-   char *emailgame = NULL, *mapname = NULL, *savegame = NULL;
+   char *emailgame = NULL, *mapname = NULL, *savegame = NULL, *password = NULL;
 
    for (i = 1; i<argc; i++ ) {
       if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {
@@ -3247,6 +3246,11 @@ int main(int argc, char *argv[] )
          emailgame = argv[++i]; continue;
       }
 
+      if ( strcmpi ( &argv[i][1], "password" ) == 0 ||
+           strcmpi ( &argv[i][1], "pw" ) == 0 ) {
+         password = argv[++i]; continue;
+      }
+
       if ( strcmpi ( &argv[i][1], "savegame" ) == 0 ||
             strcmpi( &argv[i][1], "sg" ) == 0 ) {
          savegame = argv[++i]; continue;
@@ -3263,6 +3267,7 @@ int main(int argc, char *argv[] )
         printf( " Parameters: \n"
                 "\t-h\t\tThis page\n"
                 "\t-eg file\n\t-emailgame file\tcontinue an email game\n"
+                "\t-pw phrase\n\t-password phrase\tuse phrase as password for the email game\n"
                 "\t-sg file\n\t-savegame file\tcontinue a saved game\n"
                 "\t-lm file\n\t-loadmap file\tstart with a given map\n"
                 "\t-x:X\t\tSet horizontal resolution to X; default is 800 \n"
@@ -3406,7 +3411,7 @@ int main(int argc, char *argv[] )
                read_JPEG_file ( &stream );
             }
 
-            loaddata( resolx, resoly, emailgame, mapname, savegame );
+            loaddata( resolx, resoly, emailgame, mapname, savegame, password );
          } 
          catch ( tfileerror err ) {
             displaymessage ( "unable to access file %s \n", 2, err.filename );
