@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.37 2000-05-07 12:12:17 mbickel Exp $
+//     $Id: sg.cpp,v 1.38 2000-05-08 20:56:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2000/05/07 12:12:17  mbickel
+//      New mouse option dialog
+//      weapon info can now be displayed by clicking on a unit
+//
 //     Revision 1.36  2000/05/06 19:57:10  mbickel
 //      Mapeditor/linux is now running
 //
@@ -1966,29 +1970,6 @@ void execuseraction ( tuseractions action )
             case ua_showpalette  :   showpalette(); 
             break; 
                               
-           /*
-            case ct_f3:   computerturn(); 
-            break; 
-            
-            case ct_f4:   if (getactfield()->vehicle != NULL)
-                           displaymessage("completethreatvalue : %d",1, getactfield()->vehicle->completethreatvalue);
-            break; 
-            
-            case ct_f5:   displaymessage("mine : %d ",1, getactfield()->mine );
-            break; 
-            
-            case ct_f6:   longdistmove(); 
-            break; 
-            
-            ct_f9     : displaymessage(strr(moveparams.movestatus),'',1); 
-            break;
-            
-            case ct_f6:      if ( (++getactfield()->direction) > 7 )
-                               getactfield()->direction = 0  ;
-                            displaymap();
-                            break;
-           */                            
-
             case ua_dispvehicleimprovement    : displaymessage("Research:\n%s %d \n%s %d \n%s %d \n"
                                                                           "%s %d \n%s %d \n%s %d \n"
                                                                           "%s %d \n%s %d \n%s %d \n"
