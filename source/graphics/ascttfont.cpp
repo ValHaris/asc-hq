@@ -19,8 +19,11 @@
  ***************************************************************************/
 #include "ascttfont.h"
 #include <map>
+#include <stdio.h>
 #include <cstdlib>
-//#include "misc.h"
+#include "../misc.h"
+#include "../basestrm.h"
+#include "../errors.h"
 
 const ASCRGBColor ASCRGBColor::BLACKCOLOR(0,0,0);
 
@@ -30,7 +33,16 @@ ASCTTFont::ASCTTFont(): defaultColor(ASCRGBColor(0,0,0))
 }
 
 ASCTTFont::ASCTTFont(const ASCString& file, int size, const ASCRGBColor& defColor): defaultColor(defColor){
-  myFont = TTF_OpenFont(file.c_str(), size);
+  tnfilestream fs( file, tnstream::reading );
+  std::cout << fs.getLocation() << " size:" << fs.getSize() << std::endl;
+  SDL_RWops* ops = SDL_RWFromStream( &fs );
+  if(!ops){
+     std::cout << "loading failed" << std::endl;    
+  }
+  myFont = TTF_OpenFontIndexRW(ops, 1, size,0); 
+  if(0 == myFont){    
+    printf("TTF_OpenFontRW: %s\n", TTF_GetError());
+  }
 }
 
 ASCTTFont::~ASCTTFont()
@@ -58,7 +70,7 @@ ASCTTFontFactory::~ASCTTFontFactory(){
 }
 
 const ASCTTFont& ASCTTFontFactory::newFont(ASCString file, int size, const ASCRGBColor& defaultColor){
-  ASCString key(file /*+ strrr(size)*/);
+  ASCString key(file + strrr(size));
   FontMap::iterator it = fonts.find(key);  
   ASCTTFont* font;
   if(it != fonts.end()){
@@ -118,4 +130,5 @@ SDL_Surface* ASCTTFontRenderBlended::render(const ASCTTFont* font, ASCString tex
   SDL_Color color ={col.getRedValue(), col.getGreenValue(), col.getBlueValue()};
   return TTF_RenderText_Blended(font->myFont, text.c_str(), color);
 }
+
 

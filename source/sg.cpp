@@ -121,6 +121,7 @@
 #include "statisticdialog.h"
 #include "clipboard.h"
 
+#include "../../SDL_ttf/SDL_ttf.h"
 
 // #define MEMCHK
 
@@ -1900,6 +1901,27 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
    schriften.guifont = load_font("gui.fnt");
    schriften.guicolfont = load_font("guicol.fnt");
    schriften.monogui = load_font("monogui.fnt");
+  #if 0
+   TTF_Init();
+    tnfilestream fs( "C:\\Programme\\ascdev\\asc\\data\\dialog\\asc\\font.ttf", tnstream::reading );
+    std::cout << fs.getLocation() << " size:" << fs.getSize() << std::endl; //Ausgabe stimmt
+    SDL_RWops* ops = SDL_RWFromStream( &fs );
+    if(!ops){//Ist false
+       std::cout << "loading failed" << std::endl;
+    }
+    TTF_Font* myFont = TTF_OpenFontIndexRW(ops, 0, 14,0); //klappt nicht
+    //SDL_RWclose(ops);
+    /*std::FILE* filep = fopen(file.c_str(), "r");
+    SDL_RWops* ops2 = SDL_RWFromFP( filep, 0 );
+    myFont = TTF_OpenFontRW(ops2, 0, size);
+    */
+    //myFont = TTF_OpenFont(file.c_str(), size);
+    if(0 == myFont){ //Wird betreten
+       printf("TTF_OpenFontRW: %s\n", TTF_GetError());
+    }
+#endif
+
+
    activefontsettings.markfont = schriften.guicolfont;
    shrinkfont ( schriften.guifont, -1 );
    shrinkfont ( schriften.guicolfont, -1 );

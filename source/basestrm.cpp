@@ -603,9 +603,9 @@ static int stream_seek( struct SDL_RWops *context, int offset, int whence)
    	if ( whence == SEEK_CUR )
 	      stream->seek ( offset + stream->getPosition() );
 	   else
-         if ( whence == SEEK_SET )
+         if ( whence == SEEK_END )
             stream->seek ( offset + stream->getSize() );
-  return 0;
+  return stream->getPosition();
 }
 
 
