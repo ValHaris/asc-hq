@@ -6288,9 +6288,13 @@ void ccontainer_b :: BuildProductionLineIcon :: exec( )
    }
 
    if ( idList.size() ) {
-      int pos =  chooseString ( "Select Unit Type", list );
-      if ( pos >= 0 && pos < 255) {
-         int id = idList[pos];
+      vector<ASCString> buttons;
+      buttons.push_back ( "Build" );
+      buttons.push_back ( "Cancel" );
+
+      pair<int,int> pos =  chooseString ( "Select Unit Type", list, buttons );
+      if ( pos.first == 0 && pos.second >= 0 ) {
+         int id = idList[pos.second];
          if ( id >= 0 ) {
             Vehicletype* veh = actmap->getvehicletype_byid ( id );
             int result = cc_b->buildProductionLine.build( veh );

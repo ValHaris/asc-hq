@@ -558,7 +558,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
 
       pc.addTagInteger( "ExternalLoading", externalloadheight, choehenstufennum, heightTags );
 
-      techDependency.runTextIO( pc, ASCString("B")+strrr(id) );
+      techDependency.runTextIO( pc, ASCString("b")+strrr(id) );
 
    }
    catch ( InvalidString ) {
