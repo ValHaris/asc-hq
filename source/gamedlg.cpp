@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.30 2000-07-12 08:27:06 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.31 2000-07-26 15:58:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/07/12 08:27:06  mbickel
+//      Prepared 1.1.9 release
+//
 //     Revision 1.29  2000/06/09 13:12:25  mbickel
 //      Fixed tribute function and renamed it to "transfer resources"
 //
@@ -1030,7 +1033,7 @@ void         tnewcampaignlevel::searchmapinfo(void)
 
    if ((status == 5) || ( status == 6 )) {
       strcpy(message1,  "multiple maps with the same id/password found" );
-      message2[0] = 0;
+      // message2[0] = 0;
       mapinfo[0] = 0;
       maptitle[0] = 0;
       mapname[0] = 0;

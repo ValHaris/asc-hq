@@ -1,6 +1,12 @@
-//     $Id: loaders.cpp,v 1.14 2000-07-16 14:20:03 mbickel Exp $
+//     $Id: loaders.cpp,v 1.15 2000-07-26 15:58:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/07/16 14:20:03  mbickel
+//      AI has now some primitive tactics implemented
+//      Some clean up
+//        moved weapon functions to attack.cpp
+//      Mount doesn't modify PCX files any more.
+//
 //     Revision 1.13  2000/06/28 19:26:16  mbickel
 //      fixed bug in object generation by building removal
 //      Added artint.cpp to makefiles
@@ -1792,7 +1798,7 @@ void     tspfldloaders::readmap ( void )
 
     if ( spfld->ellipse ) {
        spfld->ellipse = new EllipseOnScreen;
-       stream->writedata2 ( *(spfld->ellipse) );
+       stream->readdata2 ( *(spfld->ellipse) );
     }
 
     int orggpnum = spfld->gameparameter_num;

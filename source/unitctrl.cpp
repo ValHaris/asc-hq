@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.15 2000-07-24 13:55:18 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.16 2000-07-26 15:58:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/07/24 13:55:18  mbickel
+//      Fixed crash when attacking unit is destroyed by attacked unit
+//
 //     Revision 1.14  2000/07/23 17:59:53  mbickel
 //      various AI improvements
 //      new terrain information window
@@ -519,6 +522,7 @@ void   VehicleMovement :: FieldReachableRek :: run(int          x22,
 /*  mode :  1 krzesten weg finden
             2 irgendeinen weg finden  */ 
 { 
+   shortestway.tiefe = -1;
    actmap->cleartemps(7); 
 
    x2 = x22;
@@ -568,10 +572,11 @@ void   VehicleMovement :: FieldReachableRek :: run(int          x22,
          break; 
    } 
 
-   path->addField ( eht->xpos, eht->ypos );
-   for ( int d = 1; d <= shortestway.tiefe; d++) 
-      path->addField ( shortestway.field[d].x, shortestway.field[d].y ); 
-
+   if ( zielerreicht ) {
+      path->addField ( eht->xpos, eht->ypos );
+      for ( int d = 1; d <= shortestway.tiefe; d++) 
+         path->addField ( shortestway.field[d].x, shortestway.field[d].y ); 
+   }
    actmap->cleartemps(7); 
 } 
 
@@ -861,6 +866,9 @@ int ChangeVehicleHeight :: execute_withmove ( void )
 
    if ( vehicle->typ->height & (chtieffliegend | chfliegend | chhochfliegend) ) {
       int w;
+      if ( vehicle->fuel < steigung * maxmalq )
+         return -115;
+
       if ( newheight > vehicle->height ) { 
          w = (vehicle->height << 1);
          if ( w != chtieffliegend) { 
