@@ -2,9 +2,12 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.113 2002-11-01 12:40:50 mbickel Exp $
+//     $Id: dialog.cpp,v 1.114 2002-11-11 08:38:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.113  2002/11/01 12:40:50  mbickel
+//      Added supervisor-save-map function
+//
 //     Revision 1.112  2002/10/09 16:58:46  mbickel
 //      Fixed to GrafikSet loading
 //      New item filter for mapeditor
@@ -6033,12 +6036,12 @@ tmessagedlg :: ~tmessagedlg ( )
 void tmessagedlg :: setup ( void )
 {
    xsize = 500;
-   ysize = 400;
+   ysize = 450;
    ok = 0;
    tx1 = 20;
    ty1 = starty + 10;
    tx2 = xsize - 40;
-   ty2 = ysize - ty1 - 40;
+   ty2 = ysize - ty1 - 80;
 
    addbutton ( "~S~end", 10, ysize - 30, xsize / 2 - 5, ysize - 10 , 0, 1, 1, true );
    clearkey ( 1 );
