@@ -726,7 +726,7 @@ bool Building::MatterConverter :: run()
 
       for ( int r = 0; r < 3; r++ )
          if ( bld->plus.resource(r) > 0 ) {
-            int p = bld->putResource ( bld->plus.resource(r), 0, 1 );
+            int p = bld->putResource ( bld->plus.resource(r), r, 1 );
 
             if ( perc > 100 * p / bld->plus.resource(r) )
                perc = 100 * p / bld->plus.resource(r) ;
@@ -1110,6 +1110,7 @@ Resources Building :: getResourcePlus( )
   if ( w )
     r = w->getPlus();
   delete w;
+
   return r;
 }
 
