@@ -540,7 +540,7 @@ void Vehicle::ReactionFire::disable ( void )
 
 void Vehicle::ReactionFire::endTurn ( void )
 {
-   if ( status >= init1a ) {
+   if ( status != off ) {
       if ( status == init1a )
          status = init1b;
       else

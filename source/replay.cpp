@@ -554,14 +554,16 @@ int  trunreplay :: removeunit ( int x, int y, int nwid )
    if ( !fld->vehicle )
       if ( fld->building ) {
          for ( int i = 0; i < 32; i++ ) {
-            if ( fld->building->loading[i]->networkid == nwid ) {
-               delete fld->building->loading[i];
-               fld->building->loading[i] = NULL;
-               return 1;
-            } else {
-               int ld = removeunit ( fld->building->loading[i], nwid );
-               if ( ld )
-                  return ld;
+            if ( fld->building->loading[i] ) {
+               if ( fld->building->loading[i]->networkid == nwid ) {
+                  delete fld->building->loading[i];
+                  fld->building->loading[i] = NULL;
+                  return 1;
+               } else {
+                  int ld = removeunit ( fld->building->loading[i], nwid );
+                  if ( ld )
+                     return ld;
+               }
             }
          }
          return 0;

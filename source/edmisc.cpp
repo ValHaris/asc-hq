@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.78 2002-03-18 21:42:17 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.79 2002-03-19 18:42:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.78  2002/03/18 21:42:17  mbickel
+//      Some cleanup and documentation in the Mine class
+//      The number of mines is now displayed in the field information window
+//
 //     Revision 1.77  2002/03/18 09:31:51  mbickel
 //      Fixed: canceling Reactionfire enabled units that can not attack after
 //             moving to move in the same turn
@@ -1033,9 +1037,9 @@ void         pdsetup(void)
    pd.addbutton ( "Resi~z~e mapõR",             act_resizemap );
    pd.addbutton ( "set global ~w~eatherõctrl-W", act_setactweatherglobal );
    pd.addbutton ( "Sm~o~oth coasts",          act_smoothcoasts );
-   pd.addbutton ( "unitset transformation",    act_unitsettransformation );
-   pd.addbutton ( "map transformation",        act_transformMap );
-   pd.addbutton ( "Compare Resources ", act_displayResourceComparison );
+   pd.addbutton ( "~U~nitset transformation",    act_unitsettransformation );
+   pd.addbutton ( "map ~t~ransformation",        act_transformMap );
+   pd.addbutton ( "Com~p~are Resources ", act_displayResourceComparison );
 
    pd.addfield ("~O~ptions");
     pd.addbutton ( "~M~ap valuesõctrl+M",          act_changemapvals );

@@ -97,7 +97,7 @@
          Vehicle* unit;
        public:
          ReactionFire ( Vehicle* _unit ) : unit ( _unit ) {};
-         enum Status { off, init1a, init1b, init2, ready };
+         enum Status { off, init1a, init2, ready, init1b };
 
          //! for each player that can still be attacked one bit is set
          int enemiesAttackable;
