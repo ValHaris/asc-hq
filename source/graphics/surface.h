@@ -35,7 +35,7 @@
       Surface() : SDLmm::Surface(NULL) {};
 
       static Surface createSurface( int width, int height, SDLmm::Color color = 255 );
-      static Surface createSurface( int width, int height, int depth, SDLmm::Color color = 255 );
+      static Surface createSurface( int width, int height, int depth, SDLmm::Color color = 0xff0000ff );
       
       /**
          Creates an image from an BGI image structure.

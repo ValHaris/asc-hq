@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.124.2.4 2004-10-26 16:35:04 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.124.2.5 2004-11-10 20:22:50 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -1242,6 +1242,14 @@ void         repaintdisplay(void)
    showallchoices();
    cursor.show();
    mousevisible(true);
+   {
+     tnfilestream s ("test", tnstream::writing);
+     auswahl->write ( s );
+   }
+   {   
+     tnfilestream s ("test", tnstream::reading);
+     auswahl->read ( s );
+   }   
 }
 
 #ifndef pbpeditor

@@ -1127,14 +1127,18 @@ vector<Surface> loadASCImage ( const ASCString& file, int num )
    Surface s ( IMG_Load_RW ( SDL_RWFromStream( &fs ), 1));
    if ( s.GetPixelFormat().BitsPerPixel() == 8 )
       s.assignDefaultPalette();
+
       
+   int depth = s.GetPixelFormat().BitsPerPixel();
+   
    for ( int i = 0; i < num; i++ ) {
        int x1 = (i % 10) * 100;
        int y1 = (i / 10) * 100;
-       int depth = s.GetPixelFormat().BitsPerPixel();
        if ( depth > 8 && depth < 32 )
           depth = 32;
+          
        Surface s2 = Surface::createSurface(fieldsizex,fieldsizey, depth );
+       
        if ( s2.GetPixelFormat().BitsPerPixel() != 8 || s.GetPixelFormat().BitsPerPixel() != 8 ) {
           s2.Blit( s, SDLmm::SRect(SPoint(x1,y1),fieldsizex,fieldsizey), SPoint(0,0));
           applyLegacyFieldMask(s2);
@@ -1215,7 +1219,7 @@ ASCImageProperty::PropertyType ASCImageProperty::operation_eq ( const TextProper
          do {
             tnfilestream fs ( fn, tnstream::reading );
             SDLmm::Surface s2 ( IMG_LoadPNG_RW ( SDL_RWFromStream( &fs )));
-            s2.SetAlpha ( SDL_SRCALPHA, SDL_ALPHA_OPAQUE );
+            // s2.SetAlpha ( SDL_SRCALPHA, SDL_ALPHA_OPAQUE );
             if ( !s )
                s = new SDLmm::Surface ( s2 );
             else {

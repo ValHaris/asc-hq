@@ -140,8 +140,8 @@ void ObjectType :: display ( Surface& surface, SPoint pos, int dir, int weather 
                   if ( flip )
                      megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Flip>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip); 
                   else   
-                     // megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam); 
-                     surface.Blit(getPicture(dir,weather),pos );
+                     megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam); 
+                     // surface.Blit(getPicture(dir,weather),pos );
                }
             }   
    }

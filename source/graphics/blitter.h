@@ -23,6 +23,7 @@
 
  #include <cmath>
  #include <map>
+ #include "../libs/loki/static_check.h"
  #include "../libs/sdlmm/src/sdlmm.h"
  #include "surface.h"
 
@@ -103,23 +104,27 @@
        SourcePixelType srcColorKey;
        TargetPixelType destColorKey;
        bool srcHasColorKey;
+       int srcColorMask;
      public:   
 
        ColorConverter( const Surface& sourceSurface, Surface& targetSurface ) {
           rshift = sourceSurface.GetPixelFormat().Rshift() + 2;
           gshift = sourceSurface.GetPixelFormat().Gshift() + 2;
           bshift = sourceSurface.GetPixelFormat().Bshift() + 2;
-          srcColorKey = sourceSurface.GetPixelFormat().colorkey();
+          srcColorMask = ~sourceSurface.GetPixelFormat().Amask();
+          srcColorKey = sourceSurface.GetPixelFormat().colorkey() & srcColorMask;
+          
           srcHasColorKey = sourceSurface.flags() & SDL_SRCCOLORKEY;
           if ( targetSurface.flags() & SDL_SRCCOLORKEY )
              destColorKey = targetSurface.GetPixelFormat().colorkey();
           else   
              destColorKey = 0xff;
              
+             
        };
        
        TargetPixelType convert ( SourcePixelType sp ) { 
-          if ( srcHasColorKey && sp == srcColorKey )
+          if ( srcHasColorKey && (sp & srcColorMask) == srcColorKey )
              return destColorKey;
           else   
              return truecolor2pal_table[ ((sp >> rshift) & 0x3f) + (((sp >> gshift) & 0x3f) << 6) + (((sp >> bshift) & 0x3f) << 12)];
@@ -492,16 +497,19 @@
   template<int pixelsize>
   class ColorMerger_AlphaShadow : public ColorMerger_AlphaHandler<pixelsize> {
          typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+         const char* table;
       protected:
 
          void assign ( PixelType src, PixelType* dest )
          {
+            // STATIC_CHECK ( pixelsize == 1, wrong_pixel_size );
             if ( isNotAlpha(src ) ) {
-               *dest = xlattables.a.dark2[*dest];
+               *dest = table[*dest];
             }   
          };
       public:
-         ColorMerger_AlphaShadow ( NullParamType npt = nullParam) {};   
+         ColorMerger_AlphaShadow ( NullParamType npt = nullParam) : table ( xlattables.a.dark1 ) {};   
+         ColorMerger_AlphaShadow ( const char* translationTable ) : table ( translationTable ) {};   
  };
 
  template<int pixelsize>
@@ -510,6 +518,7 @@
       protected:
          void assign ( PixelType src, PixelType* dest )
          {
+            // STATIC_CHECK ( pixelsize == 1, wrong_pixel_size );
             if ( isNotAlpha(src ) ) {
                *dest = colormixbufchar[*dest + src*256 ];
             }   
@@ -526,6 +535,7 @@
       protected:
          void assign ( PixelType src, PixelType* dest )
          {
+            // STATIC_CHECK ( pixelsize == 1, wrong_pixel_size );
             if ( isNotAlpha(src ) ) {
                *dest = table[ *dest + src*256 ];
             }   

@@ -43,14 +43,13 @@
     stream.writeInt(pf.Rshift()) ;
     stream.writeInt(pf.Gshift()) ;
     stream.writeInt(pf.Bshift()) ;
-    stream.writeInt(0) ; // pf.Ashift()
+    stream.writeInt(pf.Ashift()) ; 
     stream.writeInt(pf.Rloss()) ;
     stream.writeInt(pf.Gloss()) ;
     stream.writeInt(pf.Bloss()) ;
     stream.writeInt(pf.Aloss()) ;
     stream.writeInt(pf.colorkey()) ;
     stream.writeInt(pf.alpha()) ;
-
  }
 
  SDL_PixelFormat* readSDLPixelFormat( tnstream& stream )
@@ -113,8 +112,45 @@ Surface::Surface(const SDLmm::Surface& other) : SDLmm::Surface ( other )
      ::writeDefaultPixelFormat( GetPixelFormat(),stream );
  }
 
+ const int surfaceVersion = 2;
 
+void Surface::write ( tnstream& stream ) const
+{
+   stream.writeWord( 16974 );
+   stream.writeWord ( 1 );
+   stream.writeChar ( 0 );
+   stream.writeWord ( w() );
+   stream.writeWord ( h() );
+   stream.writeInt( surfaceVersion );
 
+   SDLmm::PixelFormat pf = GetPixelFormat();
+
+   stream.writeChar ( pf.BitsPerPixel() );
+   stream.writeChar ( pf.BytesPerPixel() );
+   stream.writeInt ( GetPixelFormat().colorkey());
+   stream.writeInt( flags() );
+   if ( pf.BytesPerPixel() == 1 ) {
+      for ( int y = 0; y < h(); ++y )
+         stream.writedata( ((char*)me->pixels) + y*pitch(), w() );
+      /*
+      for ( int y = 0; y < h(); ++y )
+         for ( int x = 0; x < w(); ++x )
+            stream.writeChar( GetPixel(x,y));
+      */      
+   } else {
+      SDLmm::PixelFormat pf = GetPixelFormat();
+      stream.writeInt(pf.Rmask()) ;
+      stream.writeInt(pf.Gmask()) ;
+      stream.writeInt(pf.Bmask()) ;
+      stream.writeInt(pf.Amask()) ;
+      for ( int y = 0; y < h(); ++y )
+         for ( int x = 0; x < w(); ++x )
+            stream.writeInt( GetPixel(x,y));
+   }
+
+}
+
+ 
 void Surface::read ( tnstream& stream )
 {
   trleheader   hd;
@@ -141,9 +177,14 @@ void Surface::read ( tnstream& stream )
    }
    else {
       if (hd.id == 16974) {
+         int version = stream.readInt();
+         if ( version > surfaceVersion )
+            throw tinvalidversion( stream.getLocation(), version, surfaceVersion );
+             
          int bitsPerPixel = stream.readChar();
          int bytesPerPixel = stream.readChar();
          int colorkey = stream.readInt();
+         int flags = stream.readInt();
          if ( bytesPerPixel == 1 ) {
             SDL_Surface* s = SDL_CreateRGBSurface ( SDL_SWSURFACE, hd.x, hd.y, 8, 0xff, 0xff, 0xff, 0xff );
             Uint8* p = (Uint8*)( s->pixels );
@@ -169,7 +210,14 @@ void Surface::read ( tnstream& stream )
                   *(p++) = stream.readInt();
             SetSurface( s );
          }
-         SetColorKey( SDL_SRCCOLORKEY, colorkey );
+         if ( flags & SDL_SRCCOLORKEY )
+            SetColorKey( SDL_SRCCOLORKEY, colorkey );
+            
+         if ( flags & SDL_SRCALPHA )
+            SetAlpha ( SDL_SRCALPHA, GetPixelFormat().alpha());
+         else
+            SetAlpha ( 0, SDL_ALPHA_OPAQUE);
+            
       } else {
          int w =  (hd.id + 1) * (hd.size + 1) + 4 ;
          char  *pnter = new char [ w ];
@@ -196,9 +244,12 @@ Surface Surface::createSurface( int width, int height, int depth, SDLmm::Color c
 {
    assert ( depth == 32 || depth == 8 );
    Surface s ( SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, depth, 0xff, 0xff00, 0xff0000, 0xff000000 ));
-   s.Fill(color);
-   if ( depth == 8 )
+   if ( depth == 32 )
+      s.Fill(color);
+   else {
+      s.Fill(color & 0xff );
       s.assignDefaultPalette();
+   }   
    // s.SetColorKey( SDL_SRCCOLORKEY, 255 );
    return s;
 }
@@ -232,40 +283,6 @@ void Surface::assignPalette(SDL_Color* colors, int startColor, int colorNum )
 
 
 
-void Surface::write ( tnstream& stream ) const
-{
-
-   stream.writeWord( 16974 );
-   stream.writeWord ( 1 );
-   stream.writeChar ( 0 );
-   stream.writeWord ( w() );
-   stream.writeWord ( h() );
-
-   SDLmm::PixelFormat pf = GetPixelFormat();
-
-   stream.writeChar ( pf.BitsPerPixel() );
-   stream.writeChar ( pf.BytesPerPixel() );
-   stream.writeInt ( GetPixelFormat().colorkey());
-   if ( pf.BytesPerPixel() == 1 ) {
-      for ( int y = 0; y < h(); ++y )
-         stream.writedata( ((char*)me->pixels) + y*pitch(), w() );
-      /*
-      for ( int y = 0; y < h(); ++y )
-         for ( int x = 0; x < w(); ++x )
-            stream.writeChar( GetPixel(x,y));
-      */      
-   } else {
-      SDLmm::PixelFormat pf = GetPixelFormat();
-      stream.writeInt(pf.Rmask()) ;
-      stream.writeInt(pf.Gmask()) ;
-      stream.writeInt(pf.Bmask()) ;
-      stream.writeInt(pf.Amask()) ;
-      for ( int y = 0; y < h(); ++y )
-         for ( int x = 0; x < w(); ++x )
-            stream.writeInt( GetPixel(x,y));
-   }
-
-}
 
 void Surface::strech ( int width, int height )
 {
@@ -290,9 +307,19 @@ void Surface::strech ( int width, int height )
 
 void Surface::detectColorKey ( bool RLE )
 {
+
+
+   // detect if image has per pixel alpha - don't use ColorKey then
+   if ( GetPixelFormat().BitsPerPixel() > 8 ) 
+      if ( (GetPixel(0,0) >> GetPixelFormat().Ashift())  != SDL_ALPHA_OPAQUE ) 
+         if ( flags() & SDL_SRCALPHA )
+            return;
+   
    int flags = SDL_SRCCOLORKEY;
    if ( RLE )
       flags |= SDL_RLEACCEL;
+      
+   SetAlpha ( 0, 0 );
       
    if ( GetPixelFormat().BitsPerPixel() > 8 )
       SetColorKey( flags, GetPixel(0,0) & ( GetPixelFormat().Rmask() | GetPixelFormat().Gmask() | GetPixelFormat().Bmask()));
@@ -344,7 +371,7 @@ void applyLegacyFieldMask( Surface& s, int x, int y )
             if ( *s == 0 )
                *d = 0;   
             else
-               *d = 0xfefefe;
+               *d = 0xfffefefe;
               
       mask32->SetColorKey( SDL_SRCCOLORKEY, 0 );
       

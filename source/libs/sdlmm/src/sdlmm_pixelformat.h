@@ -61,6 +61,7 @@ namespace SDLmm {
     Uint8 Rshift() const { return me->Rshift; }
     Uint8 Gshift() const { return me->Gshift; }
     Uint8 Bshift() const { return me->Bshift; }
+    Uint8 Ashift() const { return me->Ashift; }
 
     Uint8 Rloss() const { return me->Rloss; }
     Uint8 Gloss() const { return me->Gloss; }

@@ -243,6 +243,9 @@ char generateaveragecolprt ( int x1, int y1, int x2, int y2, const Surface& img 
    int r=0, g=0, b=0;
    
    SDLmm::Color ck = img.GetPixelFormat().colorkey();
+   if ( img.GetPixelFormat().BitsPerPixel() > 8 )
+      ck &= ~img.GetPixelFormat().Amask();
+      
    bool noColorKey = !(img.flags() & SDL_SRCCOLORKEY);
    
    for ( int j=y1; j< y2 ; j++ ) {
