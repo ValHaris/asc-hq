@@ -71,6 +71,7 @@ enum trpl_actions { rpl_attack,
 extern void logtoreplayinfo ( trpl_actions action, ... );
 
 class trunreplay {
+            ASCString lastErrorMessage;
          protected:
             int movenum;
             treplayguihost& gui;
@@ -83,6 +84,8 @@ class trunreplay {
             void wait ( MapCoordinate pos, int t = ticker );
             void wait ( MapCoordinate pos1, MapCoordinate pos2, int t = ticker );
             int actplayer;
+
+            void error( const char* message, ... );
 
             char nextaction;
 

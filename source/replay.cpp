@@ -693,6 +693,25 @@ trunreplay :: trunreplay ( void ) : gui ( replayGuiHost )
    movenum = 0;
 }
 
+void trunreplay::error( const char* message, ... )
+{
+   va_list paramlist;
+   va_start ( paramlist, message );
+   if ( message != lastErrorMessage ) {
+      char tempbuf[1000];
+
+      int lng = vsprintf( tempbuf, message, paramlist );
+      if ( lng >= 1000 )
+         displaymessage ( "trunreplay::error: String to long !\nPlease report this error", 1 );
+
+      va_end ( paramlist );
+      
+      displaymessage(tempbuf, 1 );
+      lastErrorMessage = message;
+   }
+}
+
+
 int    trunreplay :: removeunit ( pvehicle eht, int nwid )
 {
    if ( !eht )
@@ -833,7 +852,7 @@ void trunreplay :: execnextreplaymove ( void )
                         }
 
                         if ( !eht )
-                           displaymessage("severe replay inconsistency:\nno vehicle for move1 command !", 1);
+                           error("severe replay inconsistency:\nno vehicle for move1 command !");
                      }
          break;
       case rpl_move4:
@@ -868,7 +887,7 @@ void trunreplay :: execnextreplaymove ( void )
                         }
 
                         if ( !eht )
-                           displaymessage("severe replay inconsistency:\nno vehicle for move2 command !", 1);
+                           error("severe replay inconsistency:\nno vehicle for move2 command !");
                      }
          break;
       case rpl_attack: {
@@ -900,7 +919,7 @@ void trunreplay :: execnextreplaymove ( void )
                                    battle.calc ();
                                 }
                                 if ( battle.av.damage < ad2 || battle.dv.damage > dd2 )
-                                   displaymessage("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", 1, battle.av.damage,ad2 ,battle.dv.damage, dd2);
+                                   error("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", battle.av.damage,ad2 ,battle.dv.damage, dd2);
                                 battle.setresult ();
                                 dashboard.x = 0xffff;
                              } else
@@ -918,7 +937,7 @@ void trunreplay :: execnextreplaymove ( void )
                                    battle.dv.damage = dd2; */
                                 }
                                 if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
-                                   displaymessage("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", 1, battle.av.damage,ad2 ,battle.dv.damage, dd2);
+                                   error("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", battle.av.damage,ad2 ,battle.dv.damage, dd2);
                                 battle.setresult ();
                                 dashboard.x = 0xffff;
                              } else
@@ -934,14 +953,14 @@ void trunreplay :: execnextreplaymove ( void )
                                    //battle.dv.damage = dd2;
                                 }
                                 if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
-                                   displaymessage("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", 1, battle.av.damage,ad2 ,battle.dv.damage, dd2);
+                                   error("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", battle.av.damage,ad2 ,battle.dv.damage, dd2);
                                 battle.setresult ();
                                 dashboard.x = 0xffff;
                              }
                              computeview( actmap );
                              displaymap();
                           } else
-                             displaymessage("severe replay inconsistency:\nno vehicle for attack command !", 1);
+                             error("severe replay inconsistency:\nno vehicle for attack command !");
 
                       }
          break;
@@ -986,7 +1005,7 @@ void trunreplay :: execnextreplaymove ( void )
                         }
 
                         if ( !eht )
-                           displaymessage("severe replay inconsistency:\nno vehicle for changeheight command !", 1);
+                           error("severe replay inconsistency:\nno vehicle for changeheight command !");
 
 
                      }
@@ -1013,7 +1032,7 @@ void trunreplay :: execnextreplaymove ( void )
                               wait( MapCoordinate(x,y) );
                               removeActionCursor();
                            } else
-                              displaymessage("severe replay inconsistency:\nno vehicle for convert command !", 1);
+                              error("severe replay inconsistency:\nno vehicle for convert command !");
 
 
                        }
@@ -1054,11 +1073,11 @@ void trunreplay :: execnextreplaymove ( void )
                                     Resources res2 =  static_cast<ContainerBase*>(veh)->getResource( cost, 0, 1  );
                                     for ( int r = 0; r < 3; r++ )
                                        if ( res2.resource(r) < cost.resource(r)  && cost.resource(r) > 0 )
-                                          displaymessage("Resource mismatch: not enough resources to construct/remove object !", 1 );
+                                          error("Resource mismatch: not enough resources to construct/remove object !");
                                        
 
                                  } else
-                                    displaymessage("replay inconsistency:\nCannot find Unit to build/remove Object !", 1 );
+                                    error("replay inconsistency:\nCannot find Unit to build/remove Object !");
                               }
                              
                              
@@ -1067,7 +1086,7 @@ void trunreplay :: execnextreplaymove ( void )
                               wait(MapCoordinate(x,y));
                               removeActionCursor();
                            } else
-                              displaymessage("severe replay inconsistency:\nCannot find Object to build/remove !", 1 );
+                              error("severe replay inconsistency:\nCannot find Object to build/remove !");
 
                        }
          break;
@@ -1116,10 +1135,10 @@ void trunreplay :: execnextreplaymove ( void )
                                     Resources rr = constructorField->getContainer()->getResource( r, 0 );
                                     if ( rr < r ) {
                                        displayActionCursor ( x, y );
-                                       displaymessage("severe replay inconsistency: \nNot enough resources to produce unit %s !\nRequired: %d/%d/%d ; Available: %d/%d/%d", 1, v->typ->description.c_str(), r.energy, r.material, r.fuel, rr.energy, rr.material, rr.fuel);
+                                       error("severe replay inconsistency: \nNot enough resources to produce unit %s !\nRequired: %d/%d/%d ; Available: %d/%d/%d", v->typ->description.c_str(), r.energy, r.material, r.fuel, rr.energy, rr.material, rr.fuel);
                                     }
                                  } else
-                                    displaymessage("severe replay inconsistency: could not find constructor !", 1);
+                                    error("severe replay inconsistency: could not find constructor !");
 
                               }
 
@@ -1128,7 +1147,7 @@ void trunreplay :: execnextreplaymove ( void )
                               wait(MapCoordinate(x,y) );
                               removeActionCursor();
                            } else
-                              displaymessage("severe replay inconsistency:\nCannot find Vehicle to build !", 1 );
+                              error("severe replay inconsistency:\nCannot find Vehicle to build !");
 
                        }
          break;
@@ -1167,14 +1186,14 @@ void trunreplay :: execnextreplaymove ( void )
                                        veh->getResource( bld->productionCost.material * mf / 100, 1, 0 );
                                        veh->getResource( bld->productionCost.fuel * ff / 100 , 2, 0 );
                                      } else
-                                        displaymessage("severe replay inconsistency:\nCannot find vehicle to build/remove building !", 1 );
+                                        error("severe replay inconsistency:\nCannot find vehicle to build/remove building !");
                                   }
 
                                   displaymap();
                                   wait(MapCoordinate(x,y));
                                   removeActionCursor();
                                } else
-                                  displaymessage("severe replay inconsistency:\nCannot find building to build/remove building!", 1 );
+                                  error("severe replay inconsistency:\nCannot find building to build/remove building!" );
                             }
          break;
       case rpl_putmine: {
@@ -1197,7 +1216,7 @@ void trunreplay :: execnextreplaymove ( void )
                               }
                               removeActionCursor();
                            } else
-                              displaymessage("severe replay inconsistency:\nno field for putmine command !", 1);
+                              error("severe replay inconsistency:\nno field for putmine command !");
 
                        }
          break;
@@ -1218,7 +1237,7 @@ void trunreplay :: execnextreplaymove ( void )
                               }
                               removeActionCursor ( );
                            } else
-                              displaymessage("severe replay inconsistency:\nno field for remove mine command !", 1);
+                              error("severe replay inconsistency:\nno field for remove mine command !");
 
                        }
          break;
@@ -1242,7 +1261,7 @@ void trunreplay :: execnextreplaymove ( void )
                               wait();
                               removeActionCursor();
                            } else
-                              displaymessage("severe replay inconsistency:\nno building for removebuilding command !", 1);
+                              error("severe replay inconsistency:\nno building for removebuilding command !");
 
                        }
          break;
@@ -1274,7 +1293,7 @@ void trunreplay :: execnextreplaymove ( void )
                                        Resources r = fld->building->getResource( tnk->productionCost, 0 );
                                        if ( r < tnk->productionCost ) {
                                           displayActionCursor ( x, y );
-                                          displaymessage("severe replay inconsistency: \nNot enough resources to produce unit %s !\nRequired: %d/%d/%d ; Available: %d/%d/%d", 1, eht->typ->description.c_str(), tnk->productionCost.energy, tnk->productionCost.material, tnk->productionCost.fuel, r.energy, r.material, r.fuel);
+                                          error("severe replay inconsistency: \nNot enough resources to produce unit %s !\nRequired: %d/%d/%d ; Available: %d/%d/%d", eht->typ->description.c_str(), tnk->productionCost.energy, tnk->productionCost.material, tnk->productionCost.fuel, r.energy, r.material, r.fuel);
                                        }
                                        int i = 0;
                                        while ( fld->building->loading[i])
@@ -1289,7 +1308,7 @@ void trunreplay :: execnextreplaymove ( void )
                                        removeActionCursor();
                                     }
                                  } else
-                                    displaymessage("severe replay inconsistency:\nCannot find vehicle to build/remove !", 1 );
+                                    error("severe replay inconsistency:\nCannot find vehicle to build/remove !");
 
                               }
          break;
@@ -1322,7 +1341,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  if ( eht ) {
                                     eht->experience = exp;
                                  } else
-                                    displaymessage("severe replay inconsistency:\nno vehicle for trainunit command !", 1);
+                                    error("severe replay inconsistency:\nno vehicle for trainunit command !");
 
                               }
          break;
@@ -1380,21 +1399,21 @@ void trunreplay :: execnextreplaymove ( void )
                                      else {
                                         switch ( pos ) {
                                         case 1000: if ( eht->tank.energy != old && old >= 0 )
-                                                      displaymessage("severe replay inconsistency:\nthe resources of unit not matching. \nrecorded: %d , expected: %d !", 1, old, eht->tank.energy);
+                                                      error("severe replay inconsistency:\nthe resources of unit not matching. \nrecorded: %d , expected: %d !", old, eht->tank.energy);
                                                    eht->tank.energy = amnt;
                                            break;
                                         case 1001: if ( eht->tank.material != old && old >= 0 )
-                                                      displaymessage("severe replay inconsistency:\nthe resources of unit not matching. \nrecorded: %d , expected: %d !", 1, old, eht->tank.material);
+                                                      error("severe replay inconsistency:\nthe resources of unit not matching. \nrecorded: %d , expected: %d !", old, eht->tank.material);
                                                    eht->tank.material = amnt;
                                            break;
                                         case 1002: if ( eht->tank.fuel != old && old >= 0 )
-                                                      displaymessage("severe replay inconsistency:\nthe resources of unit not matching. \nrecorded: %d , expected: %d !", 1, old, eht->tank.fuel);
+                                                      error("severe replay inconsistency:\nthe resources of unit not matching. \nrecorded: %d , expected: %d !", old, eht->tank.fuel);
                                                    eht->tank.fuel = amnt;
                                            break;
                                         } /* endswitch */
                                      }
                                  } else
-                                    displaymessage("severe replay inconsistency:\nno vehicle for refuel-unit command !", 1);
+                                    error("severe replay inconsistency:\nno vehicle for refuel-unit command !");
                               }
          break;
       case rpl_refuel3 : {
@@ -1408,9 +1427,9 @@ void trunreplay :: execnextreplaymove ( void )
                                  if ( cb ) {
                                     int d = cb->getResource(delta, type-1000, false);
                                     if ( d != delta )
-                                       displaymessage("severe replay inconsistency:\nthe resources of container not matching. \nrequired: %d , available: %d !", 1, delta, d);
+                                       error("severe replay inconsistency:\nthe resources of container not matching. \nrequired: %d , available: %d !", delta, d);
                                  } else
-                                    displaymessage("severe replay inconsistency:\nno vehicle for refuel3 command !", 1);
+                                    error("severe replay inconsistency:\nno vehicle for refuel3 command !");
                               }
          break;
       case rpl_bldrefuel : {
@@ -1428,7 +1447,7 @@ void trunreplay :: execnextreplaymove ( void )
                                      else
                                         bld->getResource ( amnt, pos-1000, 0 );
                                  } else
-                                    displaymessage("severe replay inconsistency:\nno building for refuel-unit command !", 1);
+                                    error("severe replay inconsistency:\nno building for refuel-unit command !");
                               }
          break;
       case rpl_moveUnitUpDown: {
@@ -1461,7 +1480,7 @@ void trunreplay :: execnextreplaymove ( void )
                                        i++;
 
                                     if ( i >= 32 ) {
-                                       displaymessage("severe replay inconsistency: container for moveUpDown 2 !", 1);
+                                       error("severe replay inconsistency: container for moveUpDown 2 !");
                                        return;
                                     }
 
@@ -1471,14 +1490,14 @@ void trunreplay :: execnextreplaymove ( void )
                                        i++;
 
                                     if ( i >= 32 ) {
-                                       displaymessage("severe replay inconsistency: container for moveUpDown 3 !", 1);
+                                       error("severe replay inconsistency: container for moveUpDown 3 !");
                                        return;
                                     }
 
                                     to->loading[i] = eht;
 
                                  } else
-                                    displaymessage("severe replay inconsistency: container for moveUpDown !", 1);
+                                    error("severe replay inconsistency: container for moveUpDown !");
                               }
                               break;
       case rpl_repairUnit : {
@@ -1496,9 +1515,9 @@ void trunreplay :: execnextreplaymove ( void )
                                  if ( eht && dest ) {
                                     eht->repairItem ( dest, amount );
                                     if ( eht->tank.fuel != fuelremain || eht->tank.material != matremain )
-                                         displaymessage("severe replay inconsistency:\nthe resources of unit not matching for repair operation!", 1);
+                                         error("severe replay inconsistency:\nthe resources of unit not matching for repair operation!");
                                  } else
-                                    displaymessage("severe replay inconsistency:\nno vehicle for repair-unit command !", 1);
+                                    error("severe replay inconsistency:\nno vehicle for repair-unit command !");
                               }
          break;
       case rpl_repairUnit2 : {
@@ -1515,7 +1534,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  if ( bld && dest ) {
                                     bld->repairItem ( dest, amount );
                                  } else
-                                    displaymessage("severe replay inconsistency:\nno vehicle for repair-unit command !", 1);
+                                    error("severe replay inconsistency:\nno vehicle for repair-unit command !");
                               }
          break;
       case rpl_produceAmmo : {
@@ -1531,7 +1550,7 @@ void trunreplay :: execnextreplaymove ( void )
                                     bc.init ( bld );
                                     bc.produceammunition.produce( type, amount );
                                  } else
-                                    displaymessage("severe replay inconsistency:\nno building for produce ammo command !", 1);
+                                    error("severe replay inconsistency:\nno building for produce ammo command !");
 
                               }
          break;
@@ -1548,12 +1567,12 @@ void trunreplay :: execnextreplaymove ( void )
                                        bc.init ( bld );
                                        int result = bc.buildProductionLine.build( veh );
                                        if ( result < 0)
-                                          displaymessage("severe replay inconsistency:\ncould not build production line!\n%s !", 1, getmessage(result));
+                                          error("severe replay inconsistency:\ncould not build production line!\n%s !", getmessage(result));
                                     } else
-                                       displaymessage("severe replay inconsistency:\ntechnology for building production line not available!", 1);
+                                       error("severe replay inconsistency:\ntechnology for building production line not available!");
 
                                  } else
-                                    displaymessage("severe replay inconsistency:\nno building for build production line command !", 1);
+                                    error("severe replay inconsistency:\nno building for build production line command !");
 
                               }
          break;
@@ -1569,10 +1588,10 @@ void trunreplay :: execnextreplaymove ( void )
                                     bc.init ( bld );
                                     int result = bc.removeProductionLine.remove( veh );
                                     if ( result < 0)
-                                       displaymessage("severe replay inconsistency:\ncould not remove production line!\n%s !", 1, getmessage(result));
+                                       error("severe replay inconsistency:\ncould not remove production line!\n%s !", getmessage(result));
 
                                  } else
-                                    displaymessage("severe replay inconsistency:\nno building for remove production line command !", 1);
+                                    error("severe replay inconsistency:\nno building for remove production line command !");
 
                               }
          break;
@@ -1585,7 +1604,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  if ( bld )
                                     bld->researchpoints = amount;
                                  else
-                                    displaymessage("severe replay inconsistency:\nno building for set research command !", 1);
+                                    error("severe replay inconsistency:\nno building for set research command !");
 
                               }
          break;
@@ -1599,7 +1618,7 @@ void trunreplay :: execnextreplaymove ( void )
                                     actmap->player[player].research.addanytechnology( tech );
                                     actmap->player[player].research.progress -= tech->researchpoints;
                                  } else
-                                    displaymessage("severe replay inconsistency:\nno technology for tech researched command !", 1);
+                                    error("severe replay inconsistency:\nno technology for tech researched command !");
          break;
       }
 
@@ -1662,6 +1681,7 @@ int  trunreplay :: run ( int player, int viewingplayer )
    if ( status < 0 )
       firstinit ( );
 
+   lastErrorMessage = "";
 
    cursor.hide();
    movenum = 0;
@@ -1743,7 +1763,7 @@ int  trunreplay :: run ( int player, int viewingplayer )
                    vat.done();
                 }
              } else
-                displaymessage("Replay: no map to compare to!", 1 );
+                error("Replay: no map to compare to!");
 
              delete nextPlayerMap;
           }
