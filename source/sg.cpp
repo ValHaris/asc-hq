@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.102 2000-10-14 14:16:06 mbickel Exp $
+//     $Id: sg.cpp,v 1.103 2000-10-18 12:40:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.102  2000/10/14 14:16:06  mbickel
+//      Cleaned up includes
+//      Added mapeditor to win32 watcom project
+//
 //     Revision 1.101  2000/10/14 10:52:52  mbickel
 //      Some adjustments for a Win32 port
 //
@@ -255,6 +259,12 @@
  #include "dos\memory.h"
 #endif
 
+#ifdef _WIN32_
+ #include "sdl.h"
+ #include "SDL_thread.h"
+ extern int eventthread ( void * nothing );
+ extern int closethread;
+#endif
 
 // #define MEMCHK
 
@@ -3036,42 +3046,51 @@ class tnewkeyb {
           };
 
 
-/*
-extern SDL_Surface* SDL_GetRealVideoSurface ( void );
 
-void ASC_UpdateRects (SDL_Surface *screen, int numrects, SDL_Rect *rects)
+
+int gamethread ( void* emailgame )
 {
-        int i;
+      do {
+         try {
+            if ( !actmap || actmap->xsize <= 0 || actmap->ysize <= 0 ) {
+               runmainmenu();
+            } else {
+               if ( actmap->actplayer == -1 ) next_turn();
 
-                        for ( i=0; i<numrects; ++i ) {
-                                SDL_LowerBlit(screen, &rects[i],
-                                                SDL_GetRealVideoSurface(), &rects[i]);
-                        }
+               backgroundpict.paint();
+
+               if ( emailgame ) {
+                  initNetworkGame ( );
+               }
+
+               displaymap();
+               cursor.show();
+
+               moveparams.movestatus = 0;
+
+               actgui->painticons();
+               mousevisible(true);
+
+               dashboard.x = 0xffff;
+               dashboard.y = 0xffff;
+
+               static int displayed = 0;
+               /*
+               if ( !displayed )
+                  displaymessage2( "time for startup: %d * 1/100 sec", ticker-cntr );
+                 
+               displayed = 1;
+               */
+
+               mainloop();
+               mousevisible ( false );
+            }
+         } /* endtry */
+         catch ( NoMapLoaded ) { } /* endcatch */
+      } while ( abortgame == 0);
+   closethread = 1; 
+   return 0;
 }
-
-
-void ASC_UpdateRect(SDL_Surface *screen, Sint32 x, Sint32 y, Uint32 w, Uint32 h)
-{
-        if ( screen ) {
-                SDL_Rect rect;
-
-                if ( w == 0 )
-                        w = screen->w;
-                if ( h == 0 )
-                        h = screen->h;
-                if ( (int)(x+w) > screen->w )
-                        return;
-                if ( (int)(y+h) > screen->h )
-                        return;
-
-                rect.x = x;
-                rect.y = y;
-                rect.w = w;
-                rect.h = h;
-                ASC_UpdateRects(screen, 1, &rect);
-        }
-}
-*/
 
 
 int main(int argc, char *argv[] )
@@ -3339,16 +3358,6 @@ int main(int argc, char *argv[] )
          displaymessage ( "loading of game failed", 2 );
       }
 
-#ifdef logging
-      logtofile ( "sg.cpp / main / initializing keyboard handler ");
-      for ( int jj = 0; jj < 8; jj++ ) {
-         char tmpcbuf[200];
-         sprintf( tmpcbuf, "humanplayername; address is %x",
-            actmap->humanplayername[jj]);
-         logtofile ( tmpcbuf );
-      }
-#endif
-
       if( initmousehandler( icons.mousepointer ))
          displaymessage("mouse required", 2 );
 
@@ -3360,9 +3369,6 @@ int main(int argc, char *argv[] )
       generategrayxlattable( xlatpictgraytable, 160, 16 );
       (*xlatpictgraytable)[255] = 255;
 
-#ifdef logging
-      logtofile ( "sg.cpp / main / initializing mouse handler ");
-#endif
       addmouseproc ( &mousescrollproc );
 
       loadtexture();
@@ -3376,41 +3382,13 @@ int main(int argc, char *argv[] )
       keyinputptr = 0;
       abortgame = 0;
 
-      do {
-         try {
-            if ( !actmap || actmap->xsize <= 0 || actmap->ysize <= 0 ) {
-               runmainmenu();
-            } else {
-               if ( actmap->actplayer == -1 ) next_turn();
 
-               backgroundpict.paint();
-
-               if ( emailgame ) {
-                  initNetworkGame ( );
-               }
-
-               displaymap();
-               cursor.show();
-
-               moveparams.movestatus = 0;
-
-               actgui->painticons();
-               mousevisible(true);
-
-               dashboard.x = 0xffff;
-               dashboard.y = 0xffff;
-
-               static int displayed = 0;
-               if ( !displayed )
-                  displaymessage2( "time for startup: %d * 1/100 sec", ticker-cntr );
-               displayed = 1;
-
-               mainloop();
-               mousevisible ( false );
-            }
-         } /* endtry */
-         catch ( NoMapLoaded ) { } /* endcatch */
-      } while ( abortgame == 0);
+     #ifdef _WIN32_  
+      SDL_CreateThread ( gamethread, emailgame );
+      eventthread( NULL );
+     #else
+      gamethread( NULL );
+     #endif 
 
       closegraphics();
       writegameoptions ( );
@@ -3422,9 +3400,6 @@ int main(int argc, char *argv[] )
       onlinehelpwind = NULL;
    } // if 8 bit initialization successfull
 
-#ifdef logging
-   logtofile ( "sg.cpp / main / returning ");
-#endif
 #ifdef MEMCHK
    verifyallblocks();
 #endif

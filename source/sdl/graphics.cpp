@@ -15,9 +15,14 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: graphics.cpp,v 1.15 2000-10-16 14:34:13 mbickel Exp $
+//     $Id: graphics.cpp,v 1.16 2000-10-18 12:40:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/10/16 14:34:13  mbickel
+//      Win32 port is now running fine.
+//      Removed MSVC project files and put them into a zip file in
+//        asc/source/win32/msvc/
+//
 //     Revision 1.14  2000/10/14 14:16:11  mbickel
 //      Cleaned up includes
 //      Added mapeditor to win32 watcom project
@@ -171,12 +176,21 @@ void  closegraphics ( void )
 
 int copy2screen( void )
 {
+  #ifdef _WIN32_  
+   SDL_ShowCursor(0);
+  #endif 
    SDL_UpdateRect ( screen , 0,0,0,0 );
-        return 0;
+  #ifdef _WIN32_  
+   SDL_ShowCursor(1);
+  #endif 
+   return 0;
 }
 
 int copy2screen( int x1, int y1, int x2, int y2 )
 {
+  #ifdef _WIN32_  
+   SDL_ShowCursor(0);
+  #endif 
    if ( x1 == -1 || y1 == -1 || x2 == -1 || y2 == -1 )
       SDL_UpdateRect ( screen , 0,0,0,0 );
    else
@@ -187,7 +201,13 @@ int copy2screen( int x1, int y1, int x2, int y2 )
             SDL_UpdateRect ( screen , x2, y1, x1-x2+1, y2-y1+1 );
          else
             SDL_UpdateRect ( screen , x1, y2, x2-x1+1, y1-y2+1 );
-        return 0;
+
+
+  #ifdef _WIN32_  
+   SDL_ShowCursor(1);
+  #endif 
+          
+   return 0;
 }
 
 

@@ -15,9 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.22 2000-10-17 10:46:39 mbickel Exp $
+//     $Id: events.cpp,v 1.23 2000-10-18 12:40:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/10/17 10:46:39  mbickel
+//      Added log2 testing to configure.in
+//      Eventhandling now different between Win32 and Linux
+//
 //     Revision 1.21  2000/10/16 14:34:12  mbickel
 //      Win32 port is now running fine.
 //      Removed MSVC project files and put them into a zip file in
@@ -248,6 +252,18 @@ int processEvents ( )
 
 }
 
+#ifdef _WIN32_
+int eventthread ( void* nothing )
+{
+   while ( !closethread ) {
+       if ( !processEvents() )
+          SDL_Delay(10);
+   }
+   return 0;
+}
+#endif
+
+
 int eventhandler ( void* nothing )
 {
    while ( !closethread ) {
@@ -260,7 +276,7 @@ int eventhandler ( void* nothing )
    return 0;
 }
 
-SDL_Thread* eventthread = NULL;
+SDL_Thread* eventThreadHandler = NULL;
 
 int initeventthread ( void )
 {
@@ -271,7 +287,7 @@ int initeventthread ( void )
         exit(1);
       }
       SDL_EnableUNICODE ( 1 );
-      eventthread = SDL_CreateThread ( eventhandler, NULL );
+      eventThreadHandler = SDL_CreateThread ( eventhandler, NULL );
    }
    eventthreadinitialized++;
         return 0;
@@ -285,7 +301,7 @@ int closeeventthread ( void )
          closethread = 1;
       }
    }
-        return 0; 
+   return 0; 
 }
 
 
@@ -293,9 +309,9 @@ int closeeventthread ( void )
 
 int  releasetimeslice( void )
 {
-    #ifdef _WIN32_
+//    #ifdef _WIN32_
     if ( !processEvents())
-    #endif
+//    #endif
        SDL_Delay(10);
     return 0;
 }
