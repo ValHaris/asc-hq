@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.46 2002-03-17 21:25:18 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.47 2002-04-14 17:21:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2002/03/17 21:25:18  mbickel
+//      Fixed: View unit movement revealed the reaction fire status of enemy units
+//      Mapeditor: new function "resource comparison"
+//
 //     Revision 1.45  2002/03/02 23:04:01  mbickel
 //      Some cleanup of source code
 //      Improved Paragui Integration
@@ -673,10 +677,10 @@ void execaction(int code)
              }
        break;
     case act_changeunitdir : {
-                      pf = getactfield();
-                      if ( (pf != NULL) && (pf->vehicle != NULL ) ){
-                         pf->vehicle->direction++;
-                         if (pf->vehicle->direction>sidenum-1) pf->vehicle->direction = 0;
+                      pf2 = getactfield();
+                      if ( (pf2 != NULL) && (pf2->vehicle != NULL ) ){
+                         pf2->vehicle->direction++;
+                         if (pf2->vehicle->direction>sidenum-1) pf2->vehicle->direction = 0;
                          mapsaved = false;
                          displaymap();
                       } 
@@ -702,10 +706,10 @@ void execaction(int code)
               }
        break;
     case act_changeterraindir : {
-                      pf = getactfield();
-                      if (pf != NULL) {
-                         pf->direction++;
-                         if (pf->direction>sidenum-1) pf->direction = 0;
+                      pf2 = getactfield();
+                      if (pf2 != NULL) {
+                         pf2->direction++;
+                         if (pf2->direction>sidenum-1) pf2->direction = 0;
                          mapsaved = false;
                          displaymap();
                       } 
@@ -755,17 +759,17 @@ void execaction(int code)
        break;
        
     case act_deletething : {
-                         pf = getactfield();
+                         pf2 = getactfield();
                          mapsaved = false;
-                         if (pf != NULL) {
-                            if (pf->vehicle != NULL)
-                               delete pf->vehicle;
+                         if (pf2 != NULL) {
+                            if (pf2->vehicle != NULL)
+                               delete pf2->vehicle;
                             else
-                               if (pf->building != NULL)
-                                  delete pf->building;
+                               if (pf2->building != NULL)
+                                  delete pf2->building;
                                else {
-                                  pf->removeobject( NULL );
-                                  pf->removemine( -1 );
+                                  pf2->removeobject( NULL );
+                                  pf2->removemine( -1 );
                                 }
                             mapsaved = false;
                             displaymap();
@@ -773,58 +777,58 @@ void execaction(int code)
                       } 
         break;
     case act_deleteunit : {
-                         pf = getactfield();
-                         if (pf != NULL)
-                            if (pf->vehicle != NULL) {
-                               delete pf->vehicle;
+                         pf2 = getactfield();
+                         if (pf2 != NULL)
+                            if (pf2->vehicle != NULL) {
+                               delete pf2->vehicle;
                                mapsaved = false;
                                displaymap();
                             }
                          }
         break;
      case act_deletebuilding : {
-                         pf = getactfield();
-                         if (pf != NULL) 
-                            if (pf->building != NULL) { 
-                               delete pf->building;
+                         pf2 = getactfield();
+                         if (pf2 != NULL) 
+                            if (pf2->building != NULL) { 
+                               delete pf2->building;
                                mapsaved = false;
                                displaymap();
                             }
                       }
         break;
      case act_deleteobject : {
-                         pf = getactfield();
-                         if ( pf ) {
+                         pf2 = getactfield();
+                         if ( pf2 ) {
                             mapsaved = false;
-                            pf->removeobject( actobject );
+                            pf2->removeobject( actobject );
                             displaymap();
                          }
                       }
         break;
      case act_deletetopmostobject : {
-                         pf = getactfield();
-                         if ( pf ) {
+                         pf2 = getactfield();
+                         if ( pf2 ) {
                             mapsaved = false;
-                            pf->removeobject( NULL );
+                            pf2->removeobject( NULL );
                             displaymap();
                          }
                       }
         break;
      case act_deleteallobjects : {
-                         pf = getactfield();
-                         if ( pf ) {
+                         pf2 = getactfield();
+                         if ( pf2 ) {
                             mapsaved = false;
-                            pf->objects.clear( );
+                            pf2->objects.clear( );
                             calculateallobjects();
                             displaymap();
                          }
                       }
         break;
      case act_deletemine : {
-                         pf = getactfield();
-                         if (pf != NULL) {
+                         pf2 = getactfield();
+                         if (pf2 != NULL) {
                             mapsaved = false;
-                            pf->removemine( -1 );
+                            pf2->removemine( -1 );
                             displaymap();
                          }
                       }
@@ -842,14 +846,14 @@ void execaction(int code)
     case act_savemapas :  k_savemap(true);
        break;
     case act_changeunitvals :   {
-                 pf = getactfield();
-                 if ( pf  ) {
-                    if ( pf->vehicle ) {
-                       changeunitvalues(pf->vehicle);
+                 pf2 = getactfield();
+                 if ( pf2  ) {
+                    if ( pf2->vehicle ) {
+                       changeunitvalues(pf2->vehicle);
                        displaymap();
                     }
-                    else if ( pf->building ) {
-                       changebuildingvalues(*pf->building);
+                    else if ( pf2->building ) {
+                       changebuildingvalues(*pf2->building);
                     } /* endif */
                  } /* endif */
               } 

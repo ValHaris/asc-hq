@@ -1,6 +1,10 @@
-//     $Id: edmisc.h,v 1.23 2002-03-17 21:25:18 mbickel Exp $
+//     $Id: edmisc.h,v 1.24 2002-04-14 17:21:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2002/03/17 21:25:18  mbickel
+//      Fixed: View unit movement revealed the reaction fire status of enemy units
+//      Mapeditor: new function "resource comparison"
+//
 //     Revision 1.22  2002/02/21 17:06:50  mbickel
 //      Completed Paragui integration
 //      Moved mail functions to own file (messages)
@@ -247,7 +251,7 @@
 #define minecount 4
 
    extern tkey                     ch;
-   extern pfield                    pf;
+   extern pfield                    pf2;
    extern pterraintype      auswahl;
    extern pvehicletype        auswahlf;
    extern pbuildingtype    auswahlb;

@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.80 2002-04-09 22:19:06 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.81 2002-04-14 17:21:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.80  2002/04/09 22:19:06  mbickel
+//      Fixed AI bugs
+//      Fixed: invalid player name displayed in dashboard
+//
 //     Revision 1.79  2002/03/19 18:42:52  mbickel
 //      Fixed bug introduced by fixing the MAA-reaction-fire bug
 //
@@ -399,7 +403,7 @@
 #endif
 
    tkey         ch;
-   pfield               pf;
+   pfield               pf2;
 
    pterraintype auswahl;
    pvehicletype auswahlf;
@@ -588,27 +592,27 @@ int rightmousebox(void)
 {  tmousebuttonbox tmb;
 
    tmb.init();
-   pf = getactfield();
-   if (pf != NULL) {
+   pf2 = getactfield();
+   if (pf2 != NULL) {
 
-      if ( pf->vehicle ) {
+      if ( pf2->vehicle ) {
          tmb.additem(act_changeunitvals);
-         if ( pf->vehicle->typ->loadcapacity > 0 )
+         if ( pf2->vehicle->typ->loadcapacity > 0 )
             tmb.additem(act_changecargo);
          tmb.additem(act_deleteunit);
       }
       tmb.additem(act_seperator);
-      if ( pf->building ) {
+      if ( pf2->building ) {
          tmb.additem(act_changeunitvals);
-         if ( pf->building->typ->loadcapacity > 0  )
+         if ( pf2->building->typ->loadcapacity > 0  )
             tmb.additem(act_changecargo);
-         if ( pf->building->typ->special & cgvehicleproductionb )
+         if ( pf2->building->typ->special & cgvehicleproductionb )
             tmb.additem(act_changeproduction);
          tmb.additem(act_deletebuilding);
          tmb.additem(act_deleteunit);
       }
       tmb.additem(act_seperator);
-      if ( !pf->mines.empty() ) {
+      if ( !pf2->mines.empty() ) {
          tmb.additem(act_changeminestrength);
          tmb.additem(act_deletemine);
       }
@@ -618,7 +622,7 @@ int rightmousebox(void)
 
       tmb.additem(act_seperator);
 
-      if ( !pf->objects.empty() ) {
+      if ( !pf2->objects.empty() ) {
          tmb.additem( act_deletetopmostobject );
          tmb.additem( act_deleteobject );
          tmb.additem( act_deleteallobjects );
@@ -780,7 +784,7 @@ void placebodentyp(void)
       displaymap();
    } else {
       lastselectiontype = cselbodentyp;
-      pf = getactfield(); 
+      pf2 = getactfield(); 
       if (tfill) { 
          filly2 = cursor.posy + actmap->ypos; 
          fillx2 = cursor.posx + actmap->xpos;
@@ -788,19 +792,21 @@ void placebodentyp(void)
          if (filly1 > filly2) exchg(&filly1,&filly2);
          for (i = filly1; i <= filly2; i++) 
             for (j = fillx1; j <= fillx2; j++) { 
-               pf = getfield(j,i); 
-               if ( pf ) {
+               pf2 = getfield(j,i); 
+               if ( pf2 ) {
                   if ( auswahl->weather[auswahlw] ) 
-                     pf->typ = auswahl->weather[auswahlw]; 
+                     pf2->typ = auswahl->weather[auswahlw]; 
                   else
-                     pf->typ = auswahl->weather[0]; 
+                     pf2->typ = auswahl->weather[0]; 
    
-                  pf->direction = auswahld;
-                  pf->setparams();
-                  if (pf->vehicle != NULL) 
-                     if ( (pf->vehicle->typ->terrainaccess.accessible ( pf->bdt ) < 0) || (pf->vehicle->typ->terrainaccess.accessible ( pf->bdt ) == 0 && actmap->getgameparameter( cgp_movefrominvalidfields ) == 0 )) {
-                        delete pf->vehicle;
-                        pf->vehicle = NULL;
+                  pf2->direction = auswahld;
+                  pf2->setparams();
+                  if (pf2->vehicle != NULL) 
+                     if ( (pf2->vehicle->typ->terrainaccess.accessible ( 
+pf2->bdt ) < 0) || (pf2->vehicle->typ->terrainaccess.accessible ( pf2->bdt 
+) == 0 && actmap->getgameparameter( cgp_movefrominvalidfields ) == 0 )) {
+                        delete pf2->vehicle;
+                        pf2->vehicle = NULL;
                      }
                }
             }
@@ -810,17 +816,19 @@ void placebodentyp(void)
       }
       else {
          if ( auswahl->weather[auswahlw] )
-            pf->typ = auswahl->weather[auswahlw];
+            pf2->typ = auswahl->weather[auswahlw];
          else
-            pf->typ = auswahl->weather[0];
-         pf->direction = auswahld;
-         pf->setparams();
-         if (pf->vehicle != NULL)
-            if ( (pf->vehicle->typ->terrainaccess.accessible ( pf->bdt ) < 0) || (pf->vehicle->typ->terrainaccess.accessible ( pf->bdt ) == 0 && actmap->getgameparameter( cgp_movefrominvalidfields ) == 0 )) {
-               delete pf->vehicle;
-               pf->vehicle = NULL;
+            pf2->typ = auswahl->weather[0];
+         pf2->direction = auswahld;
+         pf2->setparams();
+         if (pf2->vehicle != NULL)
+            if ( (pf2->vehicle->typ->terrainaccess.accessible ( pf2->bdt ) 
+< 0) || (pf2->vehicle->typ->terrainaccess.accessible ( pf2->bdt ) == 0 && 
+actmap->getgameparameter( cgp_movefrominvalidfields ) == 0 )) {
+               delete pf2->vehicle;
+               pf2->vehicle = NULL;
             }
-      } 
+      }
    } /* endif */
    displaymap(); 
    mousevisible(true); 
@@ -854,56 +862,62 @@ void placeunit(void)
          cursor.hide(); 
          mousevisible(false); 
          mapsaved = false;
-         pf = getactfield();
+         pf2 = getactfield();
          int accessible = 1;
          if ( auswahlf ) {
-            accessible = auswahlf->terrainaccess.accessible ( pf->bdt );
+            accessible = auswahlf->terrainaccess.accessible ( pf2->bdt );
             if ( auswahlf->height >= chtieffliegend )
                accessible = 1;
          }
 
-         if (pf != NULL) 
-              // !( pf->bdt & cbbuildingentry)
-            if ( !( pf->building             ) && ( accessible || actmap->getgameparameter( cgp_movefrominvalidfields)) ) {
+         if (pf2 != NULL) 
+              // !( pf2->bdt & cbbuildingentry)
+            if ( !( pf2->building             ) && ( accessible || 
+actmap->getgameparameter( cgp_movefrominvalidfields)) ) {
                int set = 1;
-               if ( pf->vehicle ) {
-                  if ( pf->vehicle->typ != auswahlf ) {
-                     delete pf->vehicle;
-                     pf->vehicle = NULL;
+               if ( pf2->vehicle ) {
+                  if ( pf2->vehicle->typ != auswahlf ) {
+                     delete pf2->vehicle;
+                     pf2->vehicle = NULL;
                    } else {
                       set = 0;
-                      pf->vehicle->color = farbwahl * 8;
+                      pf2->vehicle->color = farbwahl * 8;
                    }
                }
                if ((auswahlf != NULL) && set ) {
-                  pf->vehicle = new Vehicle ( auswahlf, actmap, farbwahl );
-                  pf->vehicle->setnewposition ( getxpos(), getypos() );
-                  pf->vehicle->fillMagically();
-                  pf->vehicle->height=1;
-                  while ( ! ( ( ( ( pf->vehicle->height & pf->vehicle->typ->height ) > 0) && (terrainaccessible(pf,pf->vehicle) == 2) ) ) && (pf->vehicle->height != 0) )
-                     pf->vehicle->height = pf->vehicle->height * 2;
-                  if (pf->vehicle->height == 0 ) {
+                  pf2->vehicle = new Vehicle ( auswahlf, actmap, farbwahl 
+);
+                  pf2->vehicle->setnewposition ( getxpos(), getypos() );
+                  pf2->vehicle->fillMagically();
+                  pf2->vehicle->height=1;
+                  while ( ! ( ( ( ( pf2->vehicle->height & 
+pf2->vehicle->typ->height ) > 0) && (terrainaccessible(pf2,pf2->vehicle) 
+== 2) ) ) && (pf2->vehicle->height != 0) )
+                     pf2->vehicle->height = pf2->vehicle->height * 2;
+                  if (pf2->vehicle->height == 0 ) {
                      if ( actmap->getgameparameter( cgp_movefrominvalidfields) ) {
-                        pf->vehicle->height=1;
-                        while ( !(pf->vehicle->height & pf->vehicle->typ->height) && pf->vehicle->height )
-                           pf->vehicle->height = pf->vehicle->height * 2;
+                        pf2->vehicle->height=1;
+                        while ( !(pf2->vehicle->height & 
+pf2->vehicle->typ->height) && pf2->vehicle->height )
+                           pf2->vehicle->height = pf2->vehicle->height * 
+2;
                      }
-                     if (pf->vehicle->height == 0 ) {
-                        delete pf->vehicle;
-                        pf->vehicle = NULL;
+                     if (pf2->vehicle->height == 0 ) {
+                        delete pf2->vehicle;
+                        pf2->vehicle = NULL;
                      }
                   }
-                  if ( pf->vehicle ) {
-                     pf->vehicle->setMovement ( pf->vehicle->typ->movement[log2(pf->vehicle->height)] );
-                     pf->vehicle->direction = auswahld;
+                  if ( pf2->vehicle ) {
+                     pf2->vehicle->setMovement ( pf2->vehicle->typ->movement[log2(pf2->vehicle->height)] );
+                     pf2->vehicle->direction = auswahld;
                   }
                }
             } 
             else
                if (auswahlf == NULL)
-                  if (pf->vehicle != NULL) {
-                     delete pf->vehicle;
-                     pf->vehicle = NULL;
+                  if (pf2->vehicle != NULL) {
+                     delete pf2->vehicle;
+                     pf2->vehicle = NULL;
                   }
          displaymap(); 
          mousevisible(true); 
@@ -918,7 +932,7 @@ void placeobject(void)
    cursor.hide();
    mousevisible(false); 
    mapsaved = false;
-   pf = getactfield(); 
+   pf2 = getactfield(); 
    if (tfill) { 
       putstreets2(fillx1,filly1,cursor.posx + actmap->xpos,cursor.posy + actmap->ypos, actobject ); 
       // 5. parameter zeiger auf object
@@ -926,11 +940,11 @@ void placeobject(void)
       tfill = false; 
       pdbaroff(); 
    } else {
-      pf = getactfield();
-      pvehicle eht = pf->vehicle;
-      pf->vehicle = NULL;
-      pf->addobject( actobject );
-      pf->vehicle = eht;
+      pf2 = getactfield();
+      pvehicle eht = pf2->vehicle;
+      pf2->vehicle = NULL;
+      pf2->addobject( actobject );
+      pf2->vehicle = eht;
    }
 
    lastselectiontype = cselobject;
@@ -957,7 +971,7 @@ void putactthing ( void )
     cursor.hide(); 
     mousevisible(false); 
     mapsaved = false;
-    pf = getactfield();
+    pf2 = getactfield();
     switch (lastselectiontype) {
        case cselbodentyp :
        case cselweather : placebodentyp();
@@ -1917,8 +1931,8 @@ void tchangepoly::setpolytemps (int value)
 void tchangepoly::setpolypoints(int value)
 {
    for (int i=0;i < poly->vertexnum ;i++ ) {
-      pf = getfield(poly->vertex[i].x,poly->vertex[i].y);
-      pf->a.temp = value;
+      pf2 = getfield(poly->vertex[i].x,poly->vertex[i].y);
+      pf2->a.temp = value;
    } /* endfor */
 }
 
@@ -3214,9 +3228,9 @@ void         tres::init(void)
    ysize = 200;
    w = (xsize - 60) / 2;
    action = 0;
-   pf = getactfield();
-   fuel = pf->fuel;
-   material = pf->material;
+   pf2 = getactfield();
+   fuel = pf2->fuel;
+   material = pf2->material;
 
    windowstyle = windowstyle ^ dlg_in3d;
 
@@ -3250,8 +3264,8 @@ void         tres::buttonpressed(int         id)
    if (id == 7) {
       mapsaved = false;
       action = 1;
-      pf->fuel = fuel;
-      pf->material = material;
+      pf2->fuel = fuel;
+      pf2->material = material;
    }
    if (id == 8) action = 1;
 }
@@ -3291,8 +3305,8 @@ void         tminestrength::init(void)
    ysize = 160;
    w = (xsize - 60) / 2;
    action = 0;
-   pf = getactfield();
-   strength = pf->mines.begin()->strength;
+   pf2 = getactfield();
+   strength = pf2->mines.begin()->strength;
 
    windowstyle = windowstyle ^ dlg_in3d;
 
@@ -3324,7 +3338,7 @@ void         tminestrength::buttonpressed(int         id)
    if (id == 7) {
       mapsaved = false;
       action = 1;
-      pf->mines.begin()->strength = strength;
+      pf2->mines.begin()->strength = strength;
    }
    if (id == 8) action = 1;
 }
@@ -3332,8 +3346,8 @@ void         tminestrength::buttonpressed(int         id)
 
 void         changeminestrength(void)
 {
-   pf =  getactfield();
-   if ( pf->mines.empty() )
+   pf2 =  getactfield();
+   if ( pf2->mines.empty() )
       return;
 
    tminestrength  ms;

@@ -2,9 +2,12 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.30 2001-10-11 10:22:49 mbickel Exp $
+//     $Id: edevents.cpp,v 1.31 2002-04-14 17:21:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2001/10/11 10:22:49  mbickel
+//      Some cleanup and fixes for Visual C++
+//
 //     Revision 1.29  2001/10/02 14:06:28  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -1467,14 +1470,14 @@ pvehicle selectunit ( pvehicle unit )
        do { 
           getxy_unit(&x,&y); 
           if ((x != 50000)) { 
-             pf = getfield(x,y);
+             pf2 = getfield(x,y);
              abb = false;
-             if ( pf && pf->vehicle ) 
+             if ( pf2 && pf2->vehicle ) 
                 abb = true;
           }
        }  while (!((x == 50000) || abb)); 
        if ((x != 50000) && abb) 
-          return pf->vehicle;
+          return pf2->vehicle;
        else 
           return NULL;
     } else {
@@ -1501,7 +1504,7 @@ int selectunit ( int unitnetworkid )
 
 void         tcreateevent::buttonpressed(int         id)
 {   int           nid, nr, rnr;
-    pfield        pf; 
+    pfield        pf2; 
     char    abb; 
     word        i;
     int           *puffer= NULL;
@@ -1814,16 +1817,16 @@ void         tcreateevent::buttonpressed(int         id)
                                    do { 
                                        getxy_building(&x,&y); 
                                        if ((x != 50000)) { 
-                                          pf = getfield(x,y);
+                                          pf2 = getfield(x,y);
                                           abb = false;
-                                          if (pf != NULL) if (pf->building != NULL) abb = true;
+                                          if (pf2 != NULL) if (pf2->building != NULL) abb = true;
                                        }
                                    }  while (!((x == 50000) || abb)); 
                                    redraw();
                                    if ((x != 50000) && abb) {
                                       if ( !ae->trigger_data[nid] )
                                          ae->trigger_data[nid] = new tevent::LargeTriggerData;
-                                      ae->trigger_data[nid]->building = pf->building; 
+                                      ae->trigger_data[nid]->building = pf2->building; 
                                       ae->trigger[nid] = rnr; 
                                    } 
                                    else
