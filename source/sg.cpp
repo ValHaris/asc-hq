@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.52 2000-06-22 12:36:30 mbickel Exp $
+//     $Id: sg.cpp,v 1.53 2000-06-23 12:09:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2000/06/22 12:36:30  mbickel
+//      Fixed compilation problems with gcc
+//      version now ASC1.1.6
+//
 //     Revision 1.51  2000/06/19 20:05:06  mbickel
 //      Fixed crash when transfering ammo to vehicle with > 8 weapons
 //
@@ -1504,7 +1508,8 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_exitgame,        ua_newcampaign,      ua_loadgame,  ua_savegame, ua_setupalliances, ua_settribute, ua_giveunitaway, 
                     ua_vehicleinfo,     ua_researchinfo,     ua_unitstatistics, ua_buildingstatistics, ua_newmessage, ua_viewqueuedmessages, 
                     ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
-                    ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences };
+                    ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
+                    ua_selectgraphicset };
 
 
 void         tsgpulldown :: init ( void )
@@ -1570,6 +1575,8 @@ void         tsgpulldown :: init ( void )
    addbutton ( "benchmark without view calcõ5", ua_benchgamewov ); 
    addbutton ( "benchmark with view calcõ6", ua_benchgamewv); 
    addbutton ( "test memory integrity", ua_heapcheck );
+   addbutton ( "seperator", -1 );
+   addbutton ( "select graphic set", ua_selectgraphicset );
 
   addfield ( "~H~elp" );
    addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem ); 
@@ -2054,6 +2061,20 @@ void  checkforvictory ( void )
 }
 
 
+void selectgraphicset ( void )
+{
+   char filename[300];
+   fileselectsvga("*.gfx",filename,1);
+   if ( filename[0] ) {
+      int id = getGraphicSetIdFromFilename ( filename );
+      if ( id != actmap->graphicset ) {
+         actmap->graphicset = id;
+         displaymap();
+      }
+   }
+}
+
+
 void execuseraction ( tuseractions action )
 {
    switch ( action ) {
@@ -2316,6 +2337,8 @@ void execuseraction ( tuseractions action )
                                     else
                                        displaymessage("This map is not played across a network",3 );
                        break;
+        case ua_selectgraphicset:   selectgraphicset();
+                       break;
     }                                   
                        
 
@@ -2445,18 +2468,6 @@ void viewunreadmessages ( void )
       }
 }
 
-void selectgraphicset ( void )
-{
-   char filename[300];
-   fileselectsvga("*.gfx",filename,1);
-   if ( filename[0] ) {
-      int id = getGraphicSetIdFromFilename ( filename );
-      if ( id != actmap->graphicset ) {
-         actmap->graphicset = id;
-         displaymap();
-      }
-   }
-}
 
 
 class WeaponRange : public tsearchfields {
