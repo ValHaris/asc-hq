@@ -5,9 +5,12 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.58 2001-08-09 19:28:22 mbickel Exp $
+//     $Id: loaders.cpp,v 1.59 2001-08-15 13:47:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2001/08/09 19:28:22  mbickel
+//      Started adding buildingtype text file functions
+//
 //     Revision 1.57  2001/08/06 20:54:43  mbickel
 //      Fixed lots of crashes related to the new text files
 //      Fixed delayed events
@@ -1361,7 +1364,7 @@ void tspfldloaders::readfields ( void )
 
          fld2 = & spfld->field[l];
 
-         fld2->bdt.set ( 0 , 0 );
+         fld2->bdt.setInt ( 0 , 0 );
 
          char b1, b3, b4;
          b1 = stream->readChar();

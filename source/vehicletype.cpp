@@ -394,10 +394,10 @@ void Vehicletype :: read ( tnstream& stream )
    if ( ___loadterrainaccess || version >= 5 )
       terrainaccess.read ( stream );
    else {
-      terrainaccess.terrain.set ( _terrain, 0 );
-      terrainaccess.terrainreq.set ( _terrainreq, 0 );
-      terrainaccess.terrainnot.set ( _terrainnot, 0 );
-      terrainaccess.terrainkill.set ( _terrainkill, 0 );
+      terrainaccess.terrain.setInt ( _terrain, 0 );
+      terrainaccess.terrainreq.setInt ( _terrainreq, 0 );
+      terrainaccess.terrainnot.setInt ( _terrainnot, 0 );
+      terrainaccess.terrainkill.setInt ( _terrainkill, 0 );
    }
 
    if ( buildingsbuildablenum )

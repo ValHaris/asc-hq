@@ -864,7 +864,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
                   /* display buildings */
 
-                      if ( fld->building  &&  (log2(fld->building->typ->buildingheight)+1 == hgt ) )
+                      if ( fld->building  &&  (log2(fld->building->typ->buildingheight)+1 == hgt ) && fld->picture )
                            if ((b == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerview*8 ))
                               if (fld->building->visible)
                                  if ( fld->building->typ->buildingheight < chschwimmend )
@@ -953,9 +953,9 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
                } else {
                   if (b == visible_ago) {
-                       if ( fld->building )
-                           if ((b == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerview*8 ))
-                               putrotspriteimage(r + buildingrightshift, yp + buildingdownshift, fld->picture, fld->building->color);
+                     if ( fld->building && fld->picture )
+                        if ((b == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerview*8 ))
+                           putrotspriteimage(r + buildingrightshift, yp + buildingdownshift, fld->picture, fld->building->color);
 
                   }
                }
