@@ -11,7 +11,7 @@ BCB = $(MAKEDIR)\..
 # section.
 # ---------------------------------------------------------------------------
 
-VERSION = BCB.05.03
+VERSION = BCB.06.00
 # ---------------------------------------------------------------------------
 PROJECT = asc.exe
 OBJFILES = obj\sg.obj obj\dlg_box.obj obj\attack.obj obj\basegfx.obj obj\basestrm.obj \
@@ -30,37 +30,44 @@ OBJFILES = obj\sg.obj obj\dlg_box.obj obj\attack.obj obj\basegfx.obj obj\basestr
     obj\ascstring.obj obj\resourcenet.obj obj\mapdisplay.obj obj\vehicle.obj \
     obj\buildings.obj obj\networkdata.obj obj\getopt1.obj obj\getopt.obj \
     obj\objecttype.obj obj\terraintype.obj obj\textfileparser.obj \
-    obj\textfiletags.obj obj\itemrepository.obj
+    obj\textfiletags.obj obj\itemrepository.obj obj\stringtokenizer.obj \
+    obj\music.obj obj\paradialog.obj obj\messages.obj \
+    obj\textfile_evaluation.obj
 RESFILES = 
 MAINSOURCE = asc.bpf
 RESDEPEN = $(RESFILES)
-LIBFILES = ..\..\libs\bzlib\win\bzlib.lib ..\..\libs\jpeg-6b\libjpeg.lib \
-    ..\..\libs\triangul\win32\triangulation.lib ..\..\..\..\sdl\bin\sdl.lib \
-    ..\..\AI\ai.lib ..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB
+LIBFILES = ..\..\libs\bzlib\win\bzlib.lib ..\..\libs\triangul\win32\triangulation.lib \
+    ..\..\..\..\sdl\bin\sdl.lib ..\..\AI\ai.lib \
+    ..\..\..\..\SDL_image\bin\SDL_image.lib ..\..\libs\sdlmm\SDLmm.lib \
+    ..\..\libs\jpeg-6b\libjpeg.lib ..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB \
+    ..\..\..\..\paragui\borland\Paragui.lib \
+    ..\..\..\..\freetype2\objs\freetype.lib ..\..\..\..\Expat\Libs\exp.lib
 IDLFILES = 
 IDLGENFILES = 
-LIBRARIES = 
-PACKAGES = VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi
-SPARELIBS = 
+LIBRARIES = vcl.lib rtl.lib
+PACKAGES = rtl.bpi vcl.bpi vclx.bpi bcbsmp.bpi dclocx.bpi
+SPARELIBS = rtl.lib vcl.lib
 DEFFILE = 
+OTHERFILES = 
 # ---------------------------------------------------------------------------
-PATHCPP = .;..\..;..\..\..\..\sdl\src\main\win32;..\..\sdl;..\..\LIBS\getopt
-PATHASM = .;
-PATHPAS = .;
-PATHRC = .;
 DEBUGLIBPATH = $(BCB)\lib\debug
 RELEASELIBPATH = $(BCB)\lib\release
 USERDEFINES = HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32;_DEBUG
 SYSDEFINES = NO_STRICT;_NO_VCL
-INCLUDEPATH = ..\..;..\..\LIBS\getopt;..\..\AI;C:\BORLAND\CBuilder5\Projects\;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl_mixer;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
-LIBPATH = ..\..;..\..\LIBS\getopt;..\..\AI;C:\BORLAND\CBuilder5\Projects\;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
-WARNINGS= -w-par -w-8027 -w-8026 -w-csu
+INCLUDEPATH = ..\..\..\..\..\Borland\CBuilder6\Projects;..\..;..\..\LIBS\getopt;..\..\AI;C:\BORLAND\CBuilder5\Projects;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl_mixer;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image;..\..\..\..\paragui\include;..\..\..\..\freetype2\include
+LIBPATH = ..\..\..\..\..\Borland\CBuilder6\Projects;..\..;..\..\LIBS\getopt;..\..\AI;C:\BORLAND\CBuilder5\Projects;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
+WARNINGS= -w-pck -w-par -w-8027 -w-8026 -w-csu
+PATHCPP = .;..\..;..\..\..\..\sdl\src\main\win32;..\..\sdl;..\..\LIBS\getopt
+PATHASM = .;
+PATHPAS = .;
+PATHRC = .;
+PATHOBJ = .;$(LIBPATH)
 # ---------------------------------------------------------------------------
 CFLAG1 = -Od -Q -Vx -Ve -X- -r- -a1 -5 -b -k -y -v -vi- -tW -tWM -c -K
 IDLCFLAGS = 
-PFLAGS = -N2obj -N0obj -$Y+ -$W -$O- -v -JPHNE -M
+PFLAGS = -N2obj -N0obj -$Y+ -$W -$O- -$A8 -v -JPHNE -M
 RFLAGS = 
-AFLAGS = /mx /w2 /zd
+AFLAGS = /mx /w2 /zi
 LFLAGS = -Iobj -D"" -aa -Tpe -GD -s -Gn -M -v
 # ---------------------------------------------------------------------------
 ALLOBJ = c0w32.obj $(OBJFILES)
@@ -160,8 +167,12 @@ BRCC32 = brcc32
 !if $d(PATHRC)
 .PATH.RC  = $(PATHRC)
 !endif
+
+!if $d(PATHOBJ)
+.PATH.OBJ  = $(PATHOBJ)
+!endif
 # ---------------------------------------------------------------------------
-$(PROJECT): $(IDLGENFILES) $(OBJFILES) $(RESDEPEN) $(DEFFILE)
+$(PROJECT): $(OTHERFILES) $(IDLGENFILES) $(OBJFILES) $(RESDEPEN) $(DEFFILE)
     $(BCB)\BIN\$(LINKER) @&&!
     $(LFLAGS) -L$(LIBPATH) +
     $(ALLOBJ), +
@@ -194,7 +205,13 @@ $(PROJECT): $(IDLGENFILES) $(OBJFILES) $(RESDEPEN) $(DEFFILE)
 
 .rc.res:
     $(BCB)\BIN\$(BRCC32) $(RFLAGS) -I$(INCLUDEPATH) -D$(USERDEFINES);$(SYSDEFINES) -fo$@ $<
+
+
+
 # ---------------------------------------------------------------------------
+
+obj\astar2.obj: ..\..\astar2.cpp
+  $(BCB)\BIN\$(BCC32) $(CFLAG1) -vi  -I$(INCLUDEPATH) -D$(USERDEFINES) -D$(SYSDEFINES) -n$(@D) {$** }
 
 
 

@@ -11,7 +11,7 @@ BCB = $(MAKEDIR)\..
 # section.
 # ---------------------------------------------------------------------------
 
-VERSION = BCB.05.03
+VERSION = BCB.06.00
 # ---------------------------------------------------------------------------
 PROJECT = triangulation.lib
 OBJFILES = ..\trimisc.obj ..\monotone.obj ..\tri.obj ..\construc.obj
@@ -25,25 +25,27 @@ LIBRARIES =
 PACKAGES = 
 SPARELIBS = 
 DEFFILE = 
+OTHERFILES = 
 # ---------------------------------------------------------------------------
-PATHCPP = .;..\..\triangul
-PATHASM = .;
-PATHPAS = .;
-PATHRC = .;
 LINKER = TLib
 DEBUGLIBPATH = 
 RELEASELIBPATH = 
 USERDEFINES = _DEBUG;_WIN32_
-SYSDEFINES = _RTLDLL;NO_STRICT
+SYSDEFINES = NO_STRICT
 INCLUDEPATH = ..\;..\..\triangul;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include
 LIBPATH = ..\;..\..\triangul;$(BCB)\lib\obj;$(BCB)\lib
 WARNINGS = -w-par
 LISTFILE = 
+PATHCPP = .;..
+PATHASM = .;
+PATHPAS = .;
+PATHRC = .;
+PATHOBJ = .;$(LIBPATH)
 # ---------------------------------------------------------------------------
-CFLAG1 = -Od -H=$(BCB)\lib\vcl50.csm -Hc -Q -Vx -Ve -X- -r- -a1 -b -k -y -v -vi- -c \
-    -tW -tWM
+CFLAG1 = -Od -H=c:\PROGRA~1\borland\CBUILD~2\lib\vcl60.csm -Hc -Q -Vx -Ve -X- -r- \
+    -a1 -b -k -y -v -vi- -c -tW -tWM
 IDLCFLAGS = 
-PFLAGS = -$YD -$W -$O- -v -JPHNE -M
+PFLAGS = -$YD -$W -$O- -$A8 -v -JPHNE -M
 RFLAGS = 
 AFLAGS = /mx /w2 /zd
 LFLAGS = 
@@ -152,7 +154,7 @@ COMMA =
 COMMA = ,
 !endif
 
-$(PROJECT): $(IDLGENFILES) $(OBJFILES) $(RESDEPEN) $(DEFFILE)
+$(PROJECT):  $(OTHERFILES) $(IDLGENFILES) $(OBJFILES) $(RESDEPEN) $(DEFFILE)
     $(BCB)\BIN\$(LINKER) /u $@ @&&!
     $(LFLAGS) $? $(COMMA) $(LISTFILE)
 
@@ -181,6 +183,9 @@ $(PROJECT): $(IDLGENFILES) $(OBJFILES) $(RESDEPEN) $(DEFFILE)
 
 .rc.res:
     $(BCB)\BIN\$(BRCC32) $(RFLAGS) -I$(INCLUDEPATH) -D$(USERDEFINES);$(SYSDEFINES) -fo$@ $<
+
+
+
 # ---------------------------------------------------------------------------
 
 

@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.50 2002-11-02 14:13:17 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.51 2003-02-02 13:04:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2002/11/02 14:13:17  mbickel
+//      New net handling for objects
+//
 //     Revision 1.49  2002/11/01 20:44:53  mbickel
 //      Added function to specify which units can be build by other units
 //
@@ -779,10 +782,12 @@ void execaction(int code)
                             else
                                if (pf2->building != NULL)
                                   delete pf2->building;
-                               else {
-                                  pf2->removeobject( NULL );
-                                  pf2->removemine( -1 );
-                                }
+                               else
+                                  if ( !pf2->mines.empty() )
+                                     pf2->removemine( -1 );
+                                  else
+                                     pf2->removeobject( NULL );
+                                
                             mapsaved = false;
                             displaymap();
                          }

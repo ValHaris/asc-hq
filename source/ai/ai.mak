@@ -11,7 +11,7 @@ BCB = $(MAKEDIR)\..
 # section.
 # ---------------------------------------------------------------------------
 
-VERSION = BCB.05.03
+VERSION = BCB.06.00
 # ---------------------------------------------------------------------------
 PROJECT = ai.lib
 OBJFILES = valuation.obj buildingcapture.obj misc.obj service.obj strategy.obj \
@@ -26,32 +26,34 @@ LIBRARIES =
 PACKAGES = 
 SPARELIBS = 
 DEFFILE = 
+OTHERFILES = 
 # ---------------------------------------------------------------------------
-PATHCPP = .;
-PATHASM = .;
-PATHPAS = .;
-PATHRC = .;
 LINKER = TLib
 DEBUGLIBPATH = 
 RELEASELIBPATH = 
 USERDEFINES = HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32;_DEBUG
 SYSDEFINES = NO_STRICT
-INCLUDEPATH = $(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer
+INCLUDEPATH = $(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer;..\..\..\SDLmm\src
 LIBPATH = $(BCB)\lib\obj;$(BCB)\lib
-WARNINGS = -w-par
+WARNINGS = -w-pck -w-par -w-csu
 LISTFILE = 
+PATHCPP = .;
+PATHASM = .;
+PATHPAS = .;
+PATHRC = .;
+PATHOBJ = .;$(LIBPATH)
 # ---------------------------------------------------------------------------
-CFLAG1 = -Od -H=$(BCB)\lib\vcl50.csm -Hc -Q -Vx -Ve -X- -r- -a1 -5 -b -k -y -v -vi- \
-    -K -c -tW -tWM
+CFLAG1 = -Od -H=c:\PROGRA~1\borland\CBUILD~2\lib\vcl60.csm -Hc -Q -Vx -Ve -X- -r- \
+    -a1 -5 -b -k -y -v -vi- -K -c -tW -tWM
 IDLCFLAGS = 
-PFLAGS = -$YD -$W -$O- -v -JPHNE -M
+PFLAGS = -$Y+ -$W -$O- -$A8 -v -JPHNE -M
 RFLAGS = 
-AFLAGS = /mx /w2 /zd
-LFLAGS = /P64
+AFLAGS = /mx /w2 /zi
+LFLAGS = /P256
 # ---------------------------------------------------------------------------
 ALLOBJ = $(OBJFILES)
 ALLRES = 
-ALLLIB = 
+ALLLIB = cg32.lib
 # ---------------------------------------------------------------------------
 !ifdef IDEOPTIONS
 
@@ -153,7 +155,7 @@ COMMA =
 COMMA = ,
 !endif
 
-$(PROJECT): $(IDLGENFILES) $(OBJFILES) $(RESDEPEN) $(DEFFILE)
+$(PROJECT):  $(OTHERFILES) $(IDLGENFILES) $(OBJFILES) $(RESDEPEN) $(DEFFILE)
     $(BCB)\BIN\$(LINKER) /u $@ @&&!
     $(LFLAGS) $? $(COMMA) $(LISTFILE)
 
@@ -182,6 +184,9 @@ $(PROJECT): $(IDLGENFILES) $(OBJFILES) $(RESDEPEN) $(DEFFILE)
 
 .rc.res:
     $(BCB)\BIN\$(BRCC32) $(RFLAGS) -I$(INCLUDEPATH) -D$(USERDEFINES);$(SYSDEFINES) -fo$@ $<
+
+
+
 # ---------------------------------------------------------------------------
 
 

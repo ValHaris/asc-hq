@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.87 2002-12-23 12:50:25 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.88 2003-02-02 13:04:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.87  2002/12/23 12:50:25  mbickel
+//      Fixed AI crash
+//      Minimap now working with partially defined graphic sets
+//
 //     Revision 1.86  2002/11/09 19:10:50  mbickel
 //      Fixed: invalid data return after EOF if file very small
 //      Resourceproduction of matter converter now working if not all resources could be stored
@@ -1101,7 +1105,7 @@ void checkDataVersion( )
    } else
       dataVersion = 0;
 
-   if ( dataVersion < 8 || dataVersion > 0xffff ) {
+   if ( dataVersion < 9 || dataVersion > 0xffff ) {
       fatalError("A newer version of the data file 'main.con' is required. \n"
                  "You can get a new data package at http://www.asc-hq.org", 2 );
    }
