@@ -123,6 +123,7 @@ Event::Event ( tmap& map_ ) : gamemap ( map_ ), action(NULL), playerBitmap(0xff)
    id = ++gamemap.eventID;
    triggerTime.abstime = -1;
    status = Untriggered;
+   triggerConnection = AND;
 }
 
 
@@ -237,7 +238,12 @@ void Event::read ( tnstream& stream )
       reArmNum = 0;
 
    if ( version >= 4 ) {
-      triggerConnection = TriggerConnection ( stream.readInt() );
+      int tc = stream.readInt();
+      if ( tc == 0 )
+         triggerConnection = AND;
+      else
+         triggerConnection = OR;
+
       status = Status ( stream.readInt() );
    } else {
       triggerConnection = AND;
