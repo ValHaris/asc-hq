@@ -123,8 +123,9 @@ class AStar3D {
            bool canStop;
            bool hasAttacked;
            int enterHeight;
-           Node(): gval(0), hval(0), canStop(false), enterHeight(-1) {}
+           Node(): gval(0), hval(0), canStop(false), enterHeight(-1), deleted(false) {}
            bool operator< ( const Node& a );
+           bool deleted;
        };
 
     protected:
@@ -159,7 +160,7 @@ class AStar3D {
     protected:
 
        
-       void get_first( Container& v, Node& n );
+       bool get_first( Container& v, Node& n );
 
        void nodeVisited ( const Node& n, HexDirection direc, Container& open, int prevHeight = -10, int heightChangeDist = 0 );
 

@@ -509,7 +509,6 @@ AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const
 // greater(Node) is an STL thing to create a 'comparison' object out of
 // the greater-than operator, and call it comp.
 
-
 // I'm using a priority queue implemented as a heap.  STL has some nice
 // heap manipulation functions.  (Look at the source to `priority_queue'
 // for details.)  I didn't use priority_queue because later on, I need
@@ -517,23 +516,34 @@ AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const
 // abstraction layer on priority_queue wouldn't let me do that.
 
 
+#define _DDEBUG_ASTAR
 
-inline void AStar3D::get_first( Container& v, Node& n )
+bool AStar3D::get_first( Container& v, Node& n )
 {
 #ifdef _DEBUG_ASTAR
-        for ( Container::iterator i = v.begin(); i != v.end(); i++ )
+static int call = 0;
+++call;
+        for ( Container::iterator i = v.begin(); i != v.end(); i++ ) {
            if ( i->gval < v.begin()->gval )
               warning("warning");
+        }
+
 #endif
 
-    n = v.front();
-    pop_heap( v.begin(), v.end(), comp );
-    v.pop_back();
+    do {
+       if ( v.empty() )
+          return false;
+       n = v.front();
+       pop_heap( v.begin(), v.end(), comp );
+       v.pop_back();
+    } while ( n.deleted );
+    return true;
 
 #ifdef _DEBUG_ASTAR
-        for ( Container::iterator i = v.begin(); i != v.end(); i++ )
+        for ( Container::iterator i = v.begin(); i != v.end(); i++ ) {
            if ( i->gval < v.begin()->gval )
               warning("warning");
+        }
 #endif
 }
 
@@ -547,56 +557,26 @@ void AStar3D :: nodeVisited ( const Node& N2, HexDirection direc, Container& ope
               warning("warning");
 #endif
 
-   // If this spot (hn) hasn't been visited, its mark is DirNone
-   if( getPosDir(N2.h) == DirNone ) {
+   bool add = false;
+   if ( getPosDir(N2.h) == DirNone )
+      add = true;
+   else {
+       Container::iterator find1 = open.end();
+       for( Container::iterator i = open.begin(); i != open.end(); i++ )
+           if( i->h == N2.h )
+              if ( i->gval > N2.gval ) {
+                 add = true;
+                 i->deleted = true;
+              }
+   }
 
-       // The space is not marked
-
+   if( add ) {
        if ( N2.gval <= MAXIMUM_PATH_LENGTH && N2.gval <= longestPath ) {
           getPosDir(N2.h) = ReverseDirection(direc);
           getPosHHop(N2.h) = 10 + prevHeight + 1000 * heightChangeDist;
           open.push_back( N2 );
           push_heap( open.begin(), open.end(), comp );
        }
-
-       /* some debug code
-       fld->a.temp = 1;
-       cursor.gotoxy ( N2.h.x, N2.h.y );
-       displaymap();
-       */
-
-   } else {
-       Container::iterator find1 = open.end();
-       for( Container::iterator i = open.begin(); i != open.end(); i++ )
-           if( i->h == N2.h ) {
-               find1 = i;
-               break;
-           }
-
-       // if found, call it N3
-       if( find1 != open.end() ) {
-           Node N3 = *find1;
-           if( N3.gval > N2.gval ) {
-               getPosDir(N2.h) = ReverseDirection(direc);
-               getPosHHop(N2.h) = 10 + prevHeight + 1000 * heightChangeDist;
-
-               // Replace N3 with N2 in the open list
-               Container::iterator last = open.end() - 1;
-
-               // ????
-               *find1 = *last;
-
-               *last = N2;
-
-               push_heap( open.begin(), open.end(), comp );
-           }
-       } /*else
-          if ( N2.gval <= MAXIMUM_PATH_LENGTH && N2.gval <= longestPath ) {
-             getPosDir(N2.h) = ReverseDirection(direc);
-             getPosHHop(N2.h) = 10 + prevHeight + 1000 * heightChangeDist;
-             open.push_back( N2 );
-             push_heap( open.begin(), open.end(), comp );
-          }*/
    }
 
 #ifdef _DEBUG_ASTAR
@@ -605,7 +585,7 @@ void AStar3D :: nodeVisited ( const Node& N2, HexDirection direc, Container& ope
               warning("warning");
 #endif
 
- }
+}
 
 
 const int* getDirectionOrder ( int x, int y, int x2, int y2 )
@@ -673,7 +653,9 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
     // While there are still nodes to visit, visit them!
     while( !open.empty() ) {
-        get_first( open, N );
+        bool got = get_first( open, N );
+        if ( !got )
+           break;
 
         visited.push_back( N );
         // If we're at the goal, then exit
