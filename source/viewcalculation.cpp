@@ -178,7 +178,7 @@ void         tcomputebuildingview::init( const pbuilding    bld,  int _mode )
    sonar = !!(bld->typ->special & cgsonarb);
 
    minenview = false;
-   satellitenview = true;
+   satellitenview = !!(bld->typ->special & cgsatviewb);
 
    building = bld;
 

@@ -164,7 +164,8 @@ const char*  buildingFunctionTags[cbuildingfunctionnum]  =
                 "ExternalResourceTransfer",
                 "ExternalAmmoTransfer",
                 "NoObjectChaining",
-                "Selfdestruct_at_conquer" };
+                "Selfdestruct_at_conquer",
+                "SatView" };
 
 
  const char* weatherAbbrev[cwettertypennum]

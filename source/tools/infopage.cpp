@@ -33,9 +33,11 @@
 #include "infopage.h"
 #include "guidegenerator.h"
 
-#define USE_GRAPHVIZ
 
+#define USE_GRAPHVIZ
 const ASCString InfoPage::ANCHORTOP = "pageTop";
+
+const ASCString TechTreePage::TITLE = "Tech tree";
 
 const ASCString BuildingMainPage::TITLE = "Main info";
 const ASCString BuildingTerrainPage::TITLE = "Construction";
@@ -102,8 +104,8 @@ InfoPage::~InfoPage() {}
 ;
 
 
-InfoPage::InfoPage(const ContainerBaseType&  baseType, ASCString fn, ASCString fp, ASCString in, ASCString title, GuideGenerator* gen):filePath(fp), fileName(fn), cbt(baseType), index(in), generator(gen), pageTitle(title) {
-  buildingInfStream = openFileStream(filePath + fileName + index + HTML);
+InfoPage::InfoPage(const ContainerBaseType&  baseType, ASCString fn, ASCString fp, ASCString in, ASCString title, GuideGenerator* gen):filePath(fp), fileName(fn), cbt(baseType), index(in), generator(gen), pageTitle(title), fullFileName(filePath + fileName + index + HTML) {
+  buildingInfStream = openFileStream(fullFileName);
 
 }
 
@@ -276,31 +278,37 @@ void InfoPage::addParagraph(ASCString text) {
   *buildingInfStream << "<p>" << text << "</p>" << endl;
 
 }
-void InfoPage::addLink(ASCString label, ASCString ref, ASCString cssClass) {
-  *buildingInfStream << constructLink(label, ref, cssClass) << endl;
+void InfoPage::addLink(ASCString label, ASCString ref, ASCString cssClass, ASCString target) {
+  *buildingInfStream << constructLink(label, ref, cssClass, target) << endl;
 
 }
 
-ASCString InfoPage::constructLink(ASCString label, ASCString ref, ASCString cssClass) {
+ASCString InfoPage::constructLink(ASCString label, ASCString ref, ASCString cssClass, ASCString target) {
   ASCString result = "<a ";
   if(!cssClass.empty()) {
     result += "class =\"" + cssClass + "\" ";
+  }
+  if(!target.empty()){
+    result += "target =\"" + target +"\" ";
   }
   return(result+= "href=\"" + ref + "\">" + label + "</a>&nbsp");
 }
 
 
-ASCString InfoPage::constructImageLink(ASCString ref, ASCString altText, int width) {
-  ASCString result = "<img src=\"" + ref + "\" alt=\"" + altText + "\"";
+ASCString InfoPage::constructImageLink(ASCString ref, ASCString altText, ASCString cssClass, int width) {
+  ASCString result = "<img src=\"" + ref + "\" alt=\"" + altText + "\" ";
   if(width > 0) {
     result += ASCString(" width =\"") + strrr(width) + "\"";
+  }
+  if(!cssClass.empty()) {
+    result += " class =\"" + cssClass + "\" ";
   }
   result += + ">";
   return result;
 }
 
 void InfoPage::addImage(ASCString ref, ASCString altText, int imageWidth) {
-  *buildingInfStream << constructImageLink(ref, altText);
+  *buildingInfStream << constructImageLink(ref, altText, "", imageWidth);
 }
 
 void InfoPage::buildLeftArea() {
@@ -320,8 +328,8 @@ void InfoPage::buildLeftArea() {
   *buildingInfStream << "</tr>" << endl;
   endTable();
 }
-void InfoPage::addMainText(){
- addHeadline("Description", 2);
+void InfoPage::addMainText() {
+  addHeadline("Description", 2);
   if ( !cbt.infotext.empty() ) {
     ASCString text = cbt.infotext;
     while ( text.find ( "#crt#" ) != ASCString::npos )
@@ -544,9 +552,9 @@ void BuildingTerrainPage::buildContent() {
       if ( bt.terrainaccess.terrain.test(i) ) {
         addTREntry(terrain, constructImageLink(STDGFXPATH + ASCString("haken.gif"), "YES") + "<td class=\"wg\"></td><td class=\"wg\">" );
       } /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                if ( bt.terrainaccess.terrainreq.test(i) ){
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             addTREntry(terrain, constructImageLink("http://www.asc-hq.org/asc/unitguide/exkl.gif"));
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }*/
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            if ( bt.terrainaccess.terrainreq.test(i) ){
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         addTREntry(terrain, constructImageLink("http://www.asc-hq.org/asc/unitguide/exkl.gif"));
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }*/
       if ( bt.terrainaccess.terrainnot.test(i) ) {
         addTREntry(terrain, "</td> <td class=\"wg\">" + constructImageLink(STDGFXPATH + ASCString("hakenrot.gif"), "YES") + "<td class=\"wg\">");
       }
@@ -786,7 +794,7 @@ void UnitCargoPage::buildContent() {
   addTREntry("Material", vt.tank.material);
   addTREntry("Fuel", vt.tank.fuel);
   endTable();
-  addHeadline("Capacaties: Units", 4);  
+  addHeadline("Capacaties: Units", 4);
   if(cbt.maxLoadableUnits) {
     startTable(1, RELATIVE, 100);
     addTREntry("Maximal loadable Units", cbt.maxLoadableUnits);
@@ -1261,10 +1269,10 @@ void UnitWeaponPage::buildContent() {
           s = addTREntryln(s, (constructImageLink((STDGFXPATH + ASCString("hoehe") + strrr(h) +".gif"), choehenstufen[h] )));
           hstring += s;
         } /*else {
-                                                                                                                      ASCString s;
-                                                                                                                      s = addTREntryln(s, (constructImageLink((STDGFXPATH + ASCString("hoehetrans") + strrr(h) +".gif"), "None" )));
-                                                                                                                      hstring += s;
-                                                                                                                    }*/
+                                                                                                                                  ASCString s;
+                                                                                                                                  s = addTREntryln(s, (constructImageLink((STDGFXPATH + ASCString("hoehetrans") + strrr(h) +".gif"), "None" )));
+                                                                                                                                  hstring += s;
+                                                                                                                                }*/
       addTDEntry(hstring);
     }
     *buildingInfStream << "</tr>" << endl;
@@ -1278,10 +1286,10 @@ void UnitWeaponPage::buildContent() {
           s = addTREntryln(s, (constructImageLink((STDGFXPATH + ASCString("hoehe") + strrr(h) +".gif"), choehenstufen[h] )));
           hstring += s;
         } /*else {
-                                                                                                                      ASCString s;
-                                                                                                                      s = addTREntryln(s, (constructImageLink((STDGFXPATH + ASCString("hoehetrans") + strrr(h) +".gif"), "None" )));
-                                                                                                                      hstring += s;
-                                                                                                                    }*/
+                                                                                                                                  ASCString s;
+                                                                                                                                  s = addTREntryln(s, (constructImageLink((STDGFXPATH + ASCString("hoehetrans") + strrr(h) +".gif"), "None" )));
+                                                                                                                                  hstring += s;
+                                                                                                                                }*/
       addTDEntry(hstring);
     }
     *buildingInfStream << "</tr>" << endl;
@@ -1313,7 +1321,7 @@ void UnitWeaponPage::buildContent() {
     endTable();
   } else {
     addParagraph("No weapon systems available");
-  }  
+  }
 }
 //******************************************************************************************************
 UnitConstructionPage::UnitConstructionPage(const VehicleType&  vt, ASCString filePath, UnitGuideGen* generator):UnitInfoPage(vt, filePath, CONSTRUCTIONLINKSUFFIX, TITLE, generator) {}
@@ -1438,31 +1446,66 @@ UnitResearchPage::UnitResearchPage(const VehicleType&  vt, ASCString filePath, U
 
 void UnitResearchPage::buildContent() {
 #ifdef USE_GRAPHVIZ
-  ASCString tempTechFileName = filePath + fileName + "_tech";
+  addHeadline("TechTree", 3);
+  startTable(0, RELATIVE, 100, RELATIVE, 100);
+  *buildingInfStream << "<tr>" << endl;
+  startTD();
+  ASCString techedFileName = fileName + "_tech";
+  ASCString tempTechFileName = filePath + techedFileName;
   {
     tn_file_buf_stream f ( tempTechFileName + ".dot", tnstream::writing );
 
-    f.writeString ( "digraph  \"Tech Dependency\" { \n bgcolor=\"transparent\" \nnode [bgcolor=\"blue\"]\n", false );
-
+    f.writeString ( "digraph  \"Tech Dependency\" { \nbgcolor=\"transparent\" \n", false );
+    f.writeString("node [bgcolor=\"blue\"]\n", false);
 
     vt.techDependency.writeInvertTreeOutput( vt.getName() + " ", f );
     f.writeString ( "\"" + vt.getName() + " \" [shape=diamond] \n", false );
 
     f.writeString ( "}\n", false );
+
   }
-
-  addImage(tempTechFileName + ".png", "TECH-TREE");
-
-  ASCString sysCommand = "dot " + tempTechFileName + ".dot  -Tpng -o" + tempTechFileName + ".png";
+  ASCString techPicPath = RELATIVEIMGPATH + techedFileName + ".png";
+  ASCString dotFile = tempTechFileName + ".dot";
+  ASCString sysCommand = "dot " + dotFile + "  -Tpng -o" + tempTechFileName + ".png";
   int res = system ( sysCommand.c_str() );
   if ( res != 0 ) {
-    cout << "ERROR encountered at: " << sysCommand.c_str() << endl;
+    cerr << "ERROR encountered at: " << sysCommand.c_str() << endl;
   }
-
+  
+  remove(dotFile.c_str());
+  
+  TechTreePage ttp(vt, techedFileName, filePath, generator, techPicPath);
+  ttp.buildPage();  
+  if(generator->generatesUpload()) {
+    InfoPageUtil::updateFile(ttp.getPageFileName(), generator->getFilePath());
+    InfoPageUtil::updateFile(tempTechFileName + ".png", generator->getFilePath());    
+  }    
+  addLink(constructImageLink(RELATIVEIMGPATH + techedFileName + ".png", "TECH-TREE", "techtree"),  techedFileName + HTML, "", "External");
+  endTD();
+  addParagraph("(Click to enlarge)");
+  *buildingInfStream << "</tr>" << endl;
+  endTable();
+    
 #endif
 }
 
+//***************************************************************************************************************
+TechTreePage::TechTreePage(const ContainerBaseType& cbt, ASCString fn, ASCString filePath, GuideGenerator* generator, ASCString tPPath):
+InfoPage(cbt, fn, filePath, "", TITLE, generator), techPicPath(tPPath) {}
 
+void TechTreePage::buildContent() {}
+
+void TechTreePage::addSectionLinks() {
+}
+
+void TechTreePage::buildPage() {
+  createHTMLHeader(generator->getCSSPath());
+  startBody();
+  addImage(techPicPath, "Tech Tree");
+  endBody();
+  endHTML();
+
+}
 
 
 

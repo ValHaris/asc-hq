@@ -4119,6 +4119,7 @@ void  ccontainer_b :: crepairbuilding_subwindow :: checkformouse ( void )
    if ( cc_b->building->damage )
       if ( objpressedbymouse ( 0 ) ) {
          cc_b->building->repairItem ( cc_b->building, ndamag );
+         cc_b->building->repairedThisTurn = 1;
          hostcontainer->repaintresources = 1;
          paintvariables();
       }

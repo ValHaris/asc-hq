@@ -1,7 +1,7 @@
 //
 // C++ Implementation: guidegenerator
 //
-// Description: 
+// Description:
 //
 //
 // Author: Kevin Hirschmann <hirsch@dhcppc0>, (C) 2004
@@ -37,6 +37,9 @@
 #include "guidegenerator.h"
 #include "infopage.h"
 
+typedef vector<InfoPage*> InfoPageVector;
+
+
 const ASCString BuildingGuideGen::APPENDIX ="B";
 const ASCString UnitGuideGen::APPENDIX ="U";
 
@@ -46,6 +49,101 @@ const ASCString UnitGuideGen::AIRUNIT = "Aircraft";
 const ASCString UnitGuideGen::SEAUNIT = "Marine";
 const ASCString UnitGuideGen:: TURRETUNIT = "Turret";
 
+bool InfoPageUtil::equalFiles(const ASCString src, const ASCString dst) {
+  const int maxFileSize = 10000000;
+  auto_ptr<char> s ( new char[maxFileSize]);
+  auto_ptr<char> d ( new char[maxFileSize]);
+  FILE* i = fopen ( src.c_str(), filereadmode );
+  FILE* o = fopen ( dst.c_str(), filereadmode );
+  bool result = true;
+  if ( !i )
+    fatalError ("equalFiles :: Could not open input file " + src);
+  if ( !o ) {
+    fclose ( i );
+    result = false;
+    return result;
+  } else {
+    int s1 = fread ( s.get(), 1, maxFileSize, i );
+    int s2 = fread ( d.get(), 1, maxFileSize, o );
+    if ( s1 != s2 )
+      result = false;
+    else {
+      for ( int i = 0; i < s1; i++ )
+        if ( s.get()[i] != d.get()[i] ) {
+          result = false;
+          break;
+        }
+    }
+  }
+  fclose( o );
+  fclose( i );
+  return result;
+}
+
+void InfoPageUtil::copyFile(const ASCString src, const ASCString dst) {
+  const int maxFileSize = 10000000;
+
+  auto_ptr<char> s ( new char[maxFileSize]);
+  FILE* i = fopen ( src.c_str(), filereadmode );
+  FILE* o = fopen ( dst.c_str(), filewritemode);
+  if(!i){
+    fclose( o );
+    return;
+  }
+  if ( !o ){
+   fclose( i );
+   return;
+  }
+  int s1 = fread ( s.get(), 1, maxFileSize, i );
+  fwrite ( s.get(), 1, s1, o );
+  fclose( o );
+  fclose( i );
+  printf("*");
+}
+
+bool InfoPageUtil::diffMove(const ASCString src, const ASCString dst) {
+  if(equalFiles(src, dst)) {
+    remove(src.c_str());
+    return false;
+  } else {
+    InfoPageUtil::copyFile(src, dst);
+    remove(src.c_str());
+    return true;
+  }  
+}
+
+ASCString InfoPageUtil::getTmpPath() {
+#ifdef _WIN32_
+  ASCString tempPath = getenv("temp");
+  appendbackslash(tempPath);
+  return tempPath;
+#else
+  return ("/tmp/");
+#endif
+
+}
+
+void InfoPageUtil::updateFile(ASCString fileName, ASCString exportPath) {  
+  ASCString destilledFileName = fileName;
+  ASCString uploadDir = exportPath + UPLOADDIR;
+#ifdef _WIN32_
+  destilledFileName.erase(0, fileName.find_last_of("\\") + 1);
+  uploadDir += "\\";
+#else
+  destilledFileName.erase(0, fileName.find_last_of("/") + 1);
+  uploadDir += "/";
+#endif
+  ASCString exportTarget = exportPath + destilledFileName ;
+  ASCString tmpTarget = InfoPageUtil::getTmpPath() + destilledFileName;
+  bool updatedFile = InfoPageUtil::diffMove(tmpTarget, exportTarget);  
+  ASCString uploadTarget = uploadDir + destilledFileName;
+  if(updatedFile) {
+    InfoPageUtil::copyFile(exportTarget, uploadTarget);
+  } else {
+    remove(uploadTarget.c_str());
+  }
+}
+//*************************************************************************************************************
 ImageConverter::ImageConverter() {}
 
 
@@ -66,31 +164,9 @@ ASCString ImageConverter::createPic(const BuildingType&  bt, ASCString filePath)
   pal[255][2] = 252;
   int xsize = 300;
   int ysize = 200;
-  convert(bt, constructImgPath(bt, filePath), xsize, ysize);
+  convert(constructImgFileName(bt), filePath, xsize, ysize);
   return  (constructImgPath(bt, RELATIVEIMGPATH)) ;
 }
-
-void ImageConverter::convert(const ContainerBaseType&  cbt,  ASCString file, int xsize, int ysize) {
-  ASCString command;
-
-#ifdef _WIN32_
-  ASCString tempPath = getenv("temp");
-  appendbackslash(tempPath);
-#else
-  ASCString tempPath = "/tmp/";
-#endif
-
-  ASCString tempFileName = tempPath + "tempPic.pcx";
-  cout << "command is: " << command << endl;
-  command = "convert \"" + tempFileName + "\" -transparent \"#f8f4f0\" " + "\"" + file + "\"";
-  cout << "creating image..." << command << endl;
-  writepcx ( tempFileName, 0, 0, xsize, ysize, pal );
-  cout << "creating image..." << file << endl;
-  system( command.c_str() );
-  //copyFile( tempPath + fileName+ ".gif", prefixDir + fileName+ ".gif" );
-  remove ( tempFileName.c_str() );
-}
-
 
 ASCString ImageConverter::createPic(const VehicleType&  vt, ASCString filePath) {
   tvirtualdisplay sb(100,100,255);
@@ -98,21 +174,45 @@ ASCString ImageConverter::createPic(const VehicleType&  vt, ASCString filePath) 
   pal[255][0] = 254;
   pal[255][1] = 253;
   pal[255][2] = 252;
-  convert(vt, constructImgPath(vt, filePath));
+  convert(constructImgFileName(vt), filePath);
   return  (constructImgPath(vt, RELATIVEIMGPATH)) ;
 }
 
+
+void ImageConverter::convert(const ASCString&  fileName,  ASCString filePath, int xsize, int ysize) {
+  ASCString command;  
+  ASCString tempFileName = InfoPageUtil::getTmpPath() + "tempPic.pcx";  
+  command = "convert \"" + tempFileName + "\" -transparent \"#f8f4f0\" " + "\"" + filePath + fileName + "\"";  
+  writepcx ( tempFileName, 0, 0, xsize, ysize, pal );
+  cout << "creating image..." << fileName << endl;
+  system( command.c_str() );
+  remove ( tempFileName.c_str() );
+}
+
+
+
+
 ASCString ImageConverter::constructImgPath(const BuildingType&  bt, const ASCString filePath) {
- return (filePath + strrr(bt.id) + "B.gif");
+  return (filePath + constructImgFileName(bt));
 }
 
 ASCString ImageConverter::constructImgPath(const VehicleType&  vt, const ASCString filePath) {
- return (filePath + strrr(vt.id) + "U.gif");
+  return (filePath + constructImgFileName(vt));
 }
+
+ASCString ImageConverter::constructImgFileName(const BuildingType&  bt) {
+  return (strrr(bt.id) + ASCString("B.gif"));
+}
+
+ASCString ImageConverter::constructImgFileName(const VehicleType&  vt) {
+  return (strrr(vt.id) + ASCString("U.gif"));
+}
+
 
 //**************************************************************************************************************
 
-GuideGenerator::GuideGenerator(ASCString fp, ASCString css, int id, bool imgCreate, int imageSize):filePath(fp), cssFile(css), setID(id), createImg(imgCreate), imageWidth(imageSize) {}
+GuideGenerator::GuideGenerator(ASCString fp, ASCString css, int id, bool imgCreate, bool upload,
+                               int imageSize):filePath(fp), cssFile(css), setID(id), createImg(imgCreate), createUpload(upload), imageWidth(imageSize) {}
 
 const ASCString& GuideGenerator::getImagePath(int id) {
   return graphicRefs[id];
@@ -122,9 +222,10 @@ const ASCString& GuideGenerator::getCSSPath() const {
   return cssFile;
 }
 
+
 //******************************************************************************************************
-BuildingGuideGen::BuildingGuideGen(ASCString fp, ASCString css, int id, bool imgCreate, bool bUnique, 
-int imageSize): GuideGenerator(fp, css, id, imgCreate), buildingsUnique(bUnique) {}
+BuildingGuideGen::BuildingGuideGen(ASCString fp, ASCString css, int id, bool imgCreate, bool bUnique,
+                                   bool upload, int imageSize): GuideGenerator(fp, css, id, upload, imgCreate), buildingsUnique(bUnique) {}
 
 
 ASCString BuildingGuideGen::constructFileName(const BuildingType& bType) {
@@ -135,22 +236,36 @@ ASCString BuildingGuideGen::constructFileName(const BuildingType& bType) {
 void BuildingGuideGen::processBuilding(const BuildingType&  bt) {
   cout << "Processing building:"  << bt.id <<", " << bt.name << endl;
   int buildingID = bt.id;
-  ASCString imgPath;
   ImageConverter ic;
+  ASCString imgPath;
+  ASCString target;  
+  if(createUpload){
+    target = InfoPageUtil::getTmpPath();
+  }else{
+    target = filePath;
+  }
   if(createImg) {
-    imgPath = ic.createPic(bt, filePath);
+    imgPath = ic.createPic(bt, target);
+    if(createUpload){      
+      InfoPageUtil::updateFile(ic.constructImgPath(bt, filePath), filePath);
+    }    
   } else {
     imgPath = ic.constructImgPath(bt, filePath);
-  }
+  }  
   graphicRefs.insert(Int2String::value_type(buildingID, imgPath));
-  BuildingMainPage mp(bt, filePath, this);
-  mp.buildPage();
-  BuildingTerrainPage tp(bt, filePath, this);
-  tp.buildPage();
-  BuildingCargoPage ap(bt, filePath,  this);
-  ap.buildPage();
-  BuildingResourcePage rp(bt, filePath, this);
-  rp.buildPage();
+  InfoPageVector ipv;
+  BuildingMainPage mp(bt, target, this);
+  ipv.push_back(&mp);
+  BuildingTerrainPage tp(bt, target, this);
+  ipv.push_back(&tp);
+  BuildingCargoPage ap(bt, target,  this);
+  ipv.push_back(&ap);
+  BuildingResourcePage rp(bt, target, this);
+  ipv.push_back(&rp);
+  for(int i = 0; i < ipv.size(); i++) {
+    ipv[i]->buildPage();
+    InfoPageUtil::updateFile(ipv[i]->getPageFileName(), filePath);
+  }
 }
 
 
@@ -160,7 +275,7 @@ void BuildingGuideGen::generateCategories() const {
     for ( std::vector<SingleUnitSet*>::iterator i = unitSets.begin(); i != unitSets.end(); i++  ) {
       SingleUnitSet* s = (*i);
       if((s->ID == setID)||(setID<=0)) {
-        ASCString fileName =  filePath + s->name + APPENDIX + GROUPS;
+        ASCString fileName =  InfoPageUtil::getTmpPath() + s->name + APPENDIX + GROUPS;
         Category set(s->name, cssFile);
 
         Category* hqCat = new Category(HQ, cssFile);
@@ -217,6 +332,7 @@ void BuildingGuideGen::generateCategories() const {
         set.addEntry(idCat);
         GroupFile gf (fileName.c_str(), set);
         gf.write();
+        InfoPageUtil::updateFile(fileName, filePath);
       }
     }
   } catch(ASCmsgException& e) {
@@ -237,7 +353,7 @@ void BuildingGuideGen::processSubjects() {
         SingleUnitSet* s = (*i);
         if((s->ID == setID) && (s->isMember(bt->id,SingleUnitSet::unit))) {
           if(buildingNames.end() != buildingNames.find(strrr(s->ID) +bt->name)||(!buildingsUnique)) {
-	    cout << "Test 1 " << setID << endl;
+            cout << "Test 1 " << setID << endl;
             processBuilding(*bt);
             buildingNames.insert(strrr(s->ID) +bt->name);
           }
@@ -250,7 +366,7 @@ void BuildingGuideGen::processSubjects() {
   generateCategories();
 }
 //UnitGuideGen****************************************************************************************************
-UnitGuideGen::UnitGuideGen(ASCString fp, ASCString css, int id, bool imgCreate, int imageSize): GuideGenerator(fp, css, id, imgCreate, imageSize) {}
+UnitGuideGen::UnitGuideGen(ASCString fp, ASCString css, int id, bool imgCreate, bool upload, int imageSize): GuideGenerator(fp, css, id, imgCreate, upload, imageSize) {}
 
 
 
@@ -268,7 +384,7 @@ void UnitGuideGen::processSubjects() {
     if(setID > 0) {
       for ( std::vector<SingleUnitSet*>::iterator i = unitSets.begin(); i != unitSets.end(); i++  ) {
         SingleUnitSet* s = (*i);
-        if((s->ID == setID) && (s->isMember(vt->id, SingleUnitSet::unit))) {
+        if((s->ID == setID) && (s->isMember(vt->id,SingleUnitSet::unit))) {
           processUnit(*vt);
         }
       }
@@ -282,26 +398,40 @@ void UnitGuideGen::processSubjects() {
 void UnitGuideGen::processUnit(const VehicleType& vt) {
   cout << "Processing unit:"  << vt.id <<", " << vt.name << endl;
   int unitID = vt.id;
-  ASCString imgPath;
   ImageConverter ic;
+  ASCString imgPath;
+  ASCString target;
+  if(createUpload){
+    target = InfoPageUtil::getTmpPath();
+  }else{
+    target = filePath;
+  }
   if(createImg) {
-    imgPath = ic.createPic(vt, filePath);
+    imgPath = ic.createPic(vt, target);
+    if(createUpload){      
+      InfoPageUtil::updateFile(ic.constructImgPath(vt, filePath), filePath);
+    }
   } else {
     imgPath = ic.constructImgPath(vt, filePath);
   }
   graphicRefs.insert(Int2String::value_type(unitID, imgPath));
-  UnitMainPage mp(vt, filePath, this);
-  mp.buildPage();
-  UnitTerrainPage tp(vt, filePath, this);
-  tp.buildPage();
-  UnitCargoPage ap(vt, filePath,  this);
-  ap.buildPage();
-  UnitWeaponPage wp(vt, filePath, this);
-  wp.buildPage();
-  UnitConstructionPage cp(vt,filePath, this);
-  cp.buildPage();
-  UnitResearchPage rp(vt, filePath, this);
-  rp.buildPage();
+  InfoPageVector ipv;  
+  UnitMainPage mp(vt, target, this);
+  ipv.push_back(&mp);
+  UnitTerrainPage tp(vt, target, this);
+  ipv.push_back(&tp);
+  UnitCargoPage ap(vt, target,  this);
+  ipv.push_back(&ap);
+  UnitWeaponPage wp(vt, target, this);
+  ipv.push_back(&wp);
+  UnitConstructionPage cp(vt, target, this);
+  ipv.push_back(&cp);
+  UnitResearchPage rp(vt, target, this);
+  ipv.push_back(&rp);
+  for(int i = 0; i < ipv.size(); i++) {
+    ipv[i]->buildPage();
+    InfoPageUtil::updateFile(ipv[i]->getPageFileName(), filePath);
+  }
 }
 
 void UnitGuideGen::generateCategories() const {
@@ -309,7 +439,7 @@ void UnitGuideGen::generateCategories() const {
     for ( std::vector<SingleUnitSet*>::iterator i = unitSets.begin(); i != unitSets.end(); i++  ) {
       SingleUnitSet* s = (*i);
       if((s->ID == setID)||(setID<=0)) {
-        ASCString fileName =  filePath + s->name + APPENDIX + GROUPS;
+        ASCString fileName =  InfoPageUtil::getTmpPath() + s->name + APPENDIX + GROUPS;
         Category set(s->name, cssFile);
 
         Category* trooperCat = new Category(TROOPER, cssFile);
@@ -331,7 +461,7 @@ void UnitGuideGen::generateCategories() const {
 
         for ( int unit = 0; unit < vehicleTypeRepository.getNum(); unit++ ) {
           VehicleType*  vt = vehicleTypeRepository.getObject_byPos ( unit );
-          if(s->isMember(vt->id, SingleUnitSet::unit )) {
+          if(s->isMember(vt->id,SingleUnitSet::unit)) {
             ASCString fileLink = strrr(vt->id) + APPENDIX + ASCString(MAINLINKSUFFIX) + HTML;
 
             CategoryMember* dataEntry = new CategoryMember(vt->name.toUpper(), cssFile, fileLink, TARGET);
@@ -376,9 +506,10 @@ void UnitGuideGen::generateCategories() const {
         }
         set.sort();
         idCat->sort();
-        set.addEntry(idCat);
+        set.addEntry(idCat);	
         GroupFile gf (fileName.c_str(), set);
         gf.write();
+        InfoPageUtil::updateFile(fileName, filePath);
       }
     }
   } catch(ASCmsgException& e) {

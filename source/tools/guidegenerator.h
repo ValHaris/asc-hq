@@ -38,10 +38,28 @@
 
 #define VehicleType Vehicletype
 #define RELATIVEIMGPATH "./"
+#define UPLOADDIR "upload"
 
 typedef map<int, ASCString> Int2String;
 typedef map<int, Category*> GroupFileEntriesMap;
 typedef set<ASCString> StringSet;
+
+
+class InfoPageUtil{
+
+public:
+
+static bool diffMove( const ASCString src, const ASCString dst );
+
+static ASCString getTmpPath();
+
+static void copyFile(const ASCString src, const ASCString dst);
+
+static bool equalFiles(const ASCString src, const ASCString dst);
+
+static void updateFile(ASCString fileName, ASCString exportPath);
+};
+
 
 /**
 *@brief Abstract base class for building and unit guide generator
@@ -56,7 +74,7 @@ public:
   *@param setID The set of which the guide is created, if set to 0 guides for all sets will be created
   *@param createImg Determines if images shall be created.
   */
-  GuideGenerator(ASCString filePath, ASCString cssPath, int setID, bool createImg, int imageSize = 0);
+  GuideGenerator(ASCString filePath, ASCString cssPath, int setID, bool createImg, bool upload = false, int imageSize = 0);
   /**
   *@brief Destructor
   */
@@ -74,17 +92,28 @@ public:
   const ASCString& getImagePath(int ID);
   /**
   *@brief Returns the path to the css-File used by generated pages
-  *       
+  *        void diffCopy( const ASCString& src, const ASCString& dst );
   */
   const ASCString& getCSSPath() const;  
   /*
   *@brief Gets the width for the unit image
   */
-  int getImageWidth(){
+  int getImageWidth() const{
     return imageWidth;
   }
-
-
+  /*
+  *@brief Tests if the generator is running in upload mode
+  */
+  bool generatesUpload() const{
+    return createUpload;
+  }
+  /*
+  *@brief Gets the filePath of the output
+  */
+  const ASCString getFilePath() const{
+    return filePath;
+  }
+   
 
 protected:
   /**
@@ -109,9 +138,15 @@ protected:
   */
   int setID;
   /**
-  *@param imageWidth Determines the width of the unit image in pix
+  *@brief imageWidth Determines the width of the unit image in pix
   */
   int imageWidth;
+  /**
+  *@brief createUpload Defines if an upload specific output shall be created
+  *       This upload is placed in a special directory which contains only
+  *       data which differs from previous generated data
+  */
+  bool createUpload;
   /**
   *@brief Default-Constructor
   */
@@ -135,7 +170,7 @@ public:
   *@param buildingsUnique Determines if the pages for a building shall be created only once or for each
   *       of its occurence in the set (different directions, different weather) 
   */
-  BuildingGuideGen(ASCString filePath, ASCString cssPath, int setID, bool createImg, bool buildingsUnique = false, int imageSize = 0);
+  BuildingGuideGen(ASCString filePath, ASCString cssPath, int setID, bool createImg, bool buildingsUnique = false, bool upload = false, int imageSize = 0);
   /*
   *@brief Destructor
   */
@@ -197,7 +232,7 @@ public:
   *@param createImg Determines if images shall be created.
   *@param imageSize Determines the width of the unit image in pix
   */
-  UnitGuideGen(ASCString filePath, ASCString cssPath, int setID, bool createImg, int imageSize = 0);
+  UnitGuideGen(ASCString filePath, ASCString cssPath, int setID, bool createImg, bool upload = false, int imageSize = 0);
   /**
   *@brief Destructor
   */
@@ -295,19 +330,21 @@ public:
   */
   ASCString constructImgPath(const VehicleType&  cbt, const ASCString filePath);
   
+  ASCString constructImgFileName(const VehicleType&  vt);
   
+  ASCString constructImgFileName(const BuildingType&  vt);
   
   
   
 private:
   /**
   *@brief Converts a pcx-file of a building to a gif
-  *@param cbt The ContainerBaseType of which a pic is created
+  *@param fileName The file name for the created pic
   *@param filePath The place where the image will be stored
   *@param xsize The width of the created image
   *@param ysize The height of the created image
   */
-  void convert(const ContainerBaseType&  cbt, ASCString filePath , int xsize = fieldsizex, int ysize = fieldsizey); 
+  void convert(const ASCString&  fileName, ASCString filePath , int xsize = fieldsizex, int ysize = fieldsizey); 
 
 
 };

@@ -76,10 +76,12 @@ typedef vector<int> IntVec;
 enum TableWidth{NONE, RELATIVE, ABSOLUTE};
 enum TableFrame{BOX, VOID, RHS};
 
-  /**
-  *@brief Abstract representation of one information page of a guide
-  *@author Kevin Hirschmann
-  */
+
+
+/**
+*@brief Abstract representation of one information page of a guide
+*@author Kevin Hirschmann
+*/
 class InfoPage {
 
 public:
@@ -87,12 +89,17 @@ public:
   *@brief Destructor
   */
   virtual ~InfoPage();
-    
+
   /**
   *@brief Fills a page with content
   */
   void buildPage();
-
+  /**
+  *@brief Returns the name of the page file
+  */
+  const ASCString getPageFileName() {
+    return fullFileName;
+  }
 protected:
   /**
   *@brief The file name of the guiding page
@@ -132,7 +139,8 @@ protected:
   *@param generator The GuideGenerator which is constructing this page
   */
   InfoPage(const ContainerBaseType&  contBaseType, ASCString fileName, ASCString filePath, ASCString index, ASCString title, GuideGenerator* generator);
-  
+
+
   /**
   *@brief Builds the REAL content with information on the right page side  
   */
@@ -156,7 +164,7 @@ protected:
   *@param fuel The fuel value
   *@return A string listing EMF, each separated by <br>
   */
-  ASCString constructEMF(int energy, int material, int fuel);  
+  ASCString constructEMF(int energy, int material, int fuel);
   /**
   *@brief Opens a file stream for output
   *@param fileName The path+fileName to the file where the stream writes to
@@ -164,7 +172,7 @@ protected:
   */
   ofstream* openFileStream(const ASCString& fileName);
 
-  
+
   /**
   *@brief Creates a HTML header. 
   *@param cssPath The css-File used for the InfoPage. Default is empty.
@@ -208,7 +216,7 @@ protected:
   *@param ref The destination where the link points to
   *@param cssClass A cssClass defining the style of the link
   */
-  void addLink(ASCString label, ASCString ref, ASCString cssClass = "");
+  void addLink(ASCString label, ASCString ref, ASCString cssClass = "", ASCString target= "");
   /**
   *@brief Constructs a text link and returns the result
   *@param label The label of the link
@@ -216,20 +224,20 @@ protected:
   *@param cssClass A cssClass defining the style of the link
   *@return The new constructed link
   */
-  ASCString constructLink(ASCString label, ASCString ref, ASCString cssClass = "");
+  ASCString constructLink(ASCString label, ASCString ref, ASCString cssClass = "", ASCString target= "");
   /**
   *@brief Adds an image to the page  
   *@param ref The destination of the image added
   *@param altText The alternative text displayed if the image is not found
   */
-  void addImage(ASCString ref, ASCString altText, int imageWidth = 0);  
+  void addImage(ASCString ref, ASCString altText, int imageWidth = 0);
   /**
   *@brief Constructs the link to an image and returns it
   *@param ref The destination of the image added
   *@param altText The alternative text displayed if the image is not found
   *@param width The width for the image
   */
-  ASCString constructImageLink(ASCString ref, ASCString altText, int width = 0);
+  ASCString constructImageLink(ASCString ref, ASCString altText, ASCString cssClass ="",  int width = 0);
   /**
   *@brief Constructs a string containing the links to all height pictures
           identified by height.
@@ -242,7 +250,7 @@ protected:
   *@brief Adds a headline to the page
   *@param headline The headline to be displayed
   *@param select The chosen size of the headline. Possible values are 1-6 (HTML 4.0)
-  */    
+  */
   void addHeadline(ASCString headline, int select);
   /**
   *@brief Adds a text paragraph to the page
@@ -254,7 +262,7 @@ protected:
           In the table header field a text is added
   *@param title The title to be added to the new added table header field  
   */
-  void addTitle(const ASCString& title); 
+  void addTitle(const ASCString& title);
   /**
   *@brief Adds a table row with one table header field and one table data field. 
           In the table header field a text and in the table data field a string is added
@@ -308,28 +316,33 @@ private:
   /**
   *@brief name for the anchor at pageTop
   */
- static const ASCString ANCHORTOP;
-
-  
-};
+  static const ASCString ANCHORTOP;
 
   /**
-  *@brief  Abstract representation of one building information page of a guide           
-  *@author Kevin Hirschmann
-  */
+   *@brief fullFileName Consists of: path + fileName + index + extension
+   */
+  ASCString fullFileName;
+
+
+};
+
+/**
+*@brief  Abstract representation of one building information page of a guide           
+*@author Kevin Hirschmann
+*/
 class BuildingInfoPage: public InfoPage {
 public:
   /**
   *@brief Destructor
   */
   virtual ~BuildingInfoPage();
-  
+
 protected:
-    /**
-    *@brief The BuildingType for which an info page is created. Avoids downcasts from 
-            member cbt in super class InfoPage
-    */
-    const BuildingType& bt;
+  /**
+  *@brief The BuildingType for which an info page is created. Avoids downcasts from 
+          member cbt in super class InfoPage
+  */
+  const BuildingType& bt;
   /**
   *@brief Creates a new building info-page
   *@param contBaseType The ContainerBaseType for which the page is created  
@@ -341,10 +354,10 @@ protected:
   BuildingInfoPage(const BuildingType&  buildingType, ASCString filePath, ASCString index, ASCString title, BuildingGuideGen* generator);
   /**
   *@brief Adds the links to all pages of this BuildingType to the info page
-  */  
+  */
   virtual void addSectionLinks();
-  
-  
+
+
 };
 
 
@@ -358,7 +371,7 @@ public:
   /**
   *@brief  The page title
   */
-  static const ASCString TITLE;  
+  static const ASCString TITLE;
   /**
   *@brief  Destructor
   */
@@ -391,7 +404,7 @@ protected:
   static const ASCString EXLOADING;
   static const ASCString EXRESLOADING;
 
-  private:
+private:
   /**
   *@brief  Assigns the BuildingType to one category. To which category is
   defined by the BuildingTyps capabilities and the order upon them in this method  
@@ -400,7 +413,7 @@ protected:
   /**
   *@brief  Adds the capabilities of the BuildingType to the page
   */
-  void addCapabilities();  
+  void addCapabilities();
   /**
   *@brief  Adds the main content on the right side
   */
@@ -415,7 +428,7 @@ protected:
 *@author Kevin Hirschmann
 */
 class BuildingTerrainPage: public BuildingInfoPage {
-private:  
+private:
   /**
   *@brief  Adds construction costs of the building
   */
@@ -460,7 +473,7 @@ public:
   /**
   *@brief  Adds the main content on the right side
   */
-  void buildContent();  
+  void buildContent();
   /**
   *@brief  The page title
   */
@@ -475,7 +488,7 @@ public:
 *@author Kevin Hirschmann
 */
 class BuildingResourcePage: public BuildingInfoPage {
-private:  
+private:
   /**
   *@brief  Adds the main content on the right side
   */
@@ -524,10 +537,10 @@ protected:
   *@brief The VehicleType for which the page is constructed. Avoids downcasting 
           from memeber cbt of super class
   */
-  const VehicleType& vt;  
- /**
-  *@brief Adds the links to all pages of this VehicleType to the info page
-  */
+  const VehicleType& vt;
+  /**
+   *@brief Adds the links to all pages of this VehicleType to the info page
+   */
   virtual void addSectionLinks();
 };
 
@@ -543,16 +556,16 @@ public:
   *@brief filePath The path to where the page is stored
   *@brief generator The UnitGuideGen constructing the page
   */
-  UnitCargoPage(const VehicleType&  vt, ASCString filePath, UnitGuideGen* generator);  
+  UnitCargoPage(const VehicleType&  vt, ASCString filePath, UnitGuideGen* generator);
   /**
   *@brief  The page title
   */
   static const ASCString TITLE;
-  protected:
+protected:
   /**
   *@brief  Adds the main content on the right side
   */
-  virtual void buildContent();  
+  virtual void buildContent();
 
 };
 
@@ -569,7 +582,7 @@ public:
   *@brief generator The UnitGuideGen constructing the page
   */
   UnitMainPage(const VehicleType&  vt, ASCString filePath, UnitGuideGen* generator);
-  
+
   /**
   *@brief  The page title
   */
@@ -705,6 +718,22 @@ public:
   *@brief  The page title
   */
   static const ASCString TITLE;
+};
+
+class TechTreePage: public InfoPage {
+
+public:
+  TechTreePage(const ContainerBaseType& cbt, ASCString fileName, ASCString filePath, GuideGenerator* generator,
+  ASCString techPicPath); 
+  virtual ~TechTreePage(){};  //Fehlen noch
+  virtual void buildPage();
+  virtual void buildContent();
+  virtual void addSectionLinks();
+
+private:  
+  static const ASCString TITLE;
+  ASCString techPicPath;
+
 };
 
 #endif

@@ -63,7 +63,8 @@ const char*  cbuildingfunctions[cbuildingfunctionnum]  =
                 "external resource transfer",
                 "external ammo transfer",
                 "no object chaining",
-                "self destruct on conquer" };
+                "self destruct on conquer",
+                "view satellites" };
 
 
 BuildingType :: BuildingType ( void )
@@ -557,7 +558,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
 
       pc.addTagInteger( "ExternalLoading", externalloadheight, choehenstufennum, heightTags );
 
-      techDependency.runTextIO( pc, strrr(id) );
+      techDependency.runTextIO( pc, ASCString("B")+strrr(id) );
 
    }
    catch ( InvalidString ) {
