@@ -1,6 +1,9 @@
-//     $Id: strtmesg.cpp,v 1.5 2000-04-03 09:52:16 mbickel Exp $
+//     $Id: strtmesg.cpp,v 1.6 2000-04-04 08:31:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/04/03 09:52:16  mbickel
+//      Fixed crash in mine strength calculation
+//
 //     Revision 1.4  2000/04/02 21:51:09  mbickel
 //      Fixed bugs graphic set loading routines
 //
@@ -39,7 +42,7 @@
 
 
 // These strings should be the same as the release tags in CVS !
-const char* asc_release="ASC1.0.2";
+const char* asc_release="ASC1.0.3";
 
 #include <stdio.h>
 

@@ -1,6 +1,10 @@
-//     $Id: gamedlg.cpp,v 1.18 2000-03-29 09:58:46 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.19 2000-04-04 08:31:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/03/29 09:58:46  mbickel
+//      Improved memory handling for DOS version
+//      Many small changes I can't remember ;-)
+//
 //     Revision 1.17  2000/03/11 18:22:05  mbickel
 //      Added support for multiple graphic sets
 //
@@ -6242,11 +6246,16 @@ void         tgiveunitawaydlg :: init(void)
    num = 0;
    for ( int i = 0; i < 8; i++ )
       if ( actmap->player[i].existent )
-         if ( i != actmap->actplayer && getdiplomaticstatus ( i ) == capeace ) 
+         if ( i != actmap->actplayer && getdiplomaticstatus ( i*8 ) == capeace ) 
             ply[num++] = i;
 
    if ( fld->building )
       ply[num++] = 8;
+
+   if ( !num ) {
+      displaymessage("You don't have anny allies", 1 );
+      return;
+   }
 
    tdialogbox::init();
 
@@ -6288,6 +6297,9 @@ void         tgiveunitawaydlg :: buttonpressed ( char id )
 
 void tgiveunitawaydlg :: run ( void )
 {
+   if ( !num ) 
+      return;
+
    while ( mouseparams.taste );
 
    mousevisible ( true );
