@@ -7,9 +7,15 @@
 */
 
 
-//     $Id: network.cpp,v 1.22 2001-07-13 19:33:30 mbickel Exp $
+//     $Id: network.cpp,v 1.23 2001-07-15 10:36:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2001/07/13 19:33:30  mbickel
+//      Fixed crashes in the dashboards experience display
+//      Fixed inconsistent movement cost calculation (which caused
+//            AI and replay warnings)
+//      Fixed crash when starting network game from main menu
+//
 //     Revision 1.21  2001/07/13 14:02:48  mbickel
 //      Fixed inconsistency in replay (shareviewchange)
 //      Fixed sound initialization problem
@@ -270,6 +276,16 @@ void tfiletransfernetworkconnection::tsendsetup::init ( pnetworkconnectionparame
    exitpossible = exitposs;
 
    /*tfiletransfernetworkconnection::*/tsetup::init (  );
+
+   activefontsettings.font = schriften.smallarial;
+   activefontsettings.justify = lefttext;
+   activefontsettings.length = 0;
+   showtext2("Please enter the filename into which ASC will", x1+25, y1+130 );
+   showtext2("write your game. Send this file to the next player.", x1+25, y1+150 );
+   showtext2("You will not be asked for this filename again during", x1+25, y1+170 );
+   showtext2("this game, so place the % character somehwere.", x1+25, y1+190 );
+   showtext2("The % character will automatically be replaced by", x1+25, y1+210 );
+   showtext2("the turn number to allow archiving of the files.", x1+25, y1+230 );
 }
 
 
