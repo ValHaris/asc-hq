@@ -30,6 +30,18 @@ StringTokenizer :: StringTokenizer ( const ASCString& _str, bool includeOperator
 //   }
 }
 
+StringTokenizer :: StringTokenizer ( const ASCString& _str, const ASCString& delimitter_ )
+                 : str( _str ), i ( 0 ), includeOperators ( false ), delimitter(delimitter_)
+{
+}
+
+StringTokenizer :: StringTokenizer ( const ASCString& _str, const char* delimitter_ )
+                 : str( _str ), i ( 0 ), includeOperators ( false ), delimitter(delimitter_)
+{
+}
+
+
+
 int StringTokenizer::CharSpace ( char c )
 {
   if ( c <= ' ' )
@@ -48,6 +60,7 @@ int StringTokenizer::CharSpace ( char c )
 
 ASCString StringTokenizer::getNextToken( )
 {
+   const char* sp = str.c_str();
    while ( i < str.length() && !CharSpace(str[i]) )
      i++;
 

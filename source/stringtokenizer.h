@@ -25,6 +25,7 @@
 
  #include "ascstring.h"
 
+ //! This String Tokenizer is NOT intended to be a general purpose tool. It is exclusively used by the TextFileParser
  class StringTokenizer {
        const ASCString& str;
        int i;
@@ -34,7 +35,8 @@
        int CharSpace ( char c );
     public:
        StringTokenizer ( const ASCString& _str, bool includeOperators_ = false );
-       StringTokenizer ( const ASCString& _str, const ASCString& delimitter_ ) : str( _str ), i ( 0 ), includeOperators ( true ), delimitter(delimitter_) {};
+       StringTokenizer ( const ASCString& _str, const ASCString& delimitter_ );
+       StringTokenizer ( const ASCString& _str, const char* delimitter_ );
        ASCString getNextToken ( );
        ASCString getRemaining ( );
  };

@@ -1,4 +1,4 @@
-//     $Id: strtmesg.cpp,v 1.126 2002-10-14 18:54:39 mbickel Exp $
+//     $Id: strtmesg.cpp,v 1.127 2002-10-15 16:52:46 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -22,7 +22,7 @@
 
 
 // These strings should be the same as the release tags in CVS !
-const char* asc_release="ASC1.11.0.0";
+const char* asc_release="ASC1.11.0.1";
 
 #include <stdio.h>
 #include "strtmesg.h"
@@ -38,14 +38,22 @@ const char* getVersionString (  )
 int getNumericVersion ( )
 {
    int vers = 0;
-   StringTokenizer st ( &asc_release[3], "." );
+   const char* d = asc_release+3;
    for ( int i = 0; i < 4; i++ ) {
-      ASCString s = st.getNextToken();
       vers *= 256;
-      if ( !s.empty() )
+      if ( *d ) {
+         const char* start = d;
+         do 
+           d++;
+         while ( *d != '.' && *d != 0 );
+
+         ASCString s ( start, d-start );
          vers += atoi ( s.c_str() );
-      
+         if ( *d )
+           d++;
+      }
    }
+   return vers;
 }
 
 const char* getFullVersionString (  )
