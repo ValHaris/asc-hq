@@ -80,7 +80,12 @@ You might need to download the files manually. Read the section
 
 =======================================================================
 
-   These are generic installation instructions.
+If you got the sourcecode through CVS, you need to run "bootstrap" to
+generate the "configure" script.
+
+The remaining information of this file are generic installation
+instructions.
+
 
    The `configure' shell script attempts to guess correct values for
 various system-dependent variables used during compilation.  It uses
