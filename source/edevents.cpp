@@ -2,9 +2,12 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.32 2002-10-02 20:21:00 mbickel Exp $
+//     $Id: edevents.cpp,v 1.33 2002-11-01 12:40:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2002/10/02 20:21:00  mbickel
+//      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
+//
 //     Revision 1.31  2002/04/14 17:21:17  mbickel
 //      Renamed global variable pf to pf2 due to name clash with SDL_mixer library
 //
@@ -1724,12 +1727,15 @@ void         tcreateevent::buttonpressed(int         id)
                       oldval = ae->intdata[0] ;
                    int nr = selectgameparameter( oldval );
                    if ( (nr >= 0) && ( nr < gameparameternum) ) {
-                      int newval = getid("Parameter Val",gameparameterdefault[nr],minint,maxint); // !!!
-                      freedata();
-                      ae->intdata = new int[2];
-                      ae->datasize = 2 * sizeof ( int );
-                      ae->intdata[0] = nr;
-                      ae->intdata[1] = newval;
+                      if ( gameParameterChangeableByEvent[ nr ] {
+                         int newval = getid("Parameter Val",gameparameterdefault[nr],minint,maxint); // !!!
+                         freedata();
+                         ae->intdata = new int[2];
+                         ae->datasize = 2 * sizeof ( int );
+                         ae->intdata[0] = nr;
+                         ae->intdata[1] = newval;
+                      } else
+                         displaymessage("This parameter cannot be chaned by events",1);
                    } else ae->a.action = 255;
                 }
                 break;

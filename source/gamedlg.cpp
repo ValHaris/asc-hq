@@ -1,9 +1,14 @@
 /*! \file gamedlg.cpp    
     \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.96 2002-10-12 17:28:03 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.97 2002-11-01 12:40:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.96  2002/10/12 17:28:03  mbickel
+//      Fixed "enemy unit loaded" bug.
+//      Changed map format
+//      Improved log messages
+//
 //     Revision 1.95  2002/10/02 20:21:00  mbickel
 //      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
 //
@@ -3218,6 +3223,13 @@ void sendGameParameterAsMail ( void )
 {
    ASCString s;
    writeGameParametersToString ( s );
+
+   if ( actmap->getgameparameter( cgp_superVisorCanSaveMap) ) {
+      s = "#color4#Warning ! This game has been started with the option enabled that allows the Supervisor to save the map. This will allow him to spy on everything. \n"
+           "If you did not initiate this game yourself, don't play with this option unless you were specifically informed why this option had to be enabled. \n"
+           "#color0# \n" + s;
+   }
+
    new Message ( s, actmap, 255 );
 }
 

@@ -2,9 +2,13 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.112 2002-10-09 16:58:46 mbickel Exp $
+//     $Id: dialog.cpp,v 1.113 2002-11-01 12:40:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.112  2002/10/09 16:58:46  mbickel
+//      Fixed to GrafikSet loading
+//      New item filter for mapeditor
+//
 //     Revision 1.111  2002/10/02 20:21:00  mbickel
 //      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
 //
@@ -3730,15 +3734,17 @@ void         tsetalliances::init( int supervis )
    }
    #endif
 
-   if ( supervis )
+   if ( supervis ) {
      supervisor = 1;
+     oninit = 0;
+   }
 
    shareview_changeable = actmap->actplayer >= 0   &&  !oninit ;
 
    tdialogbox::init();
    title = "set alliances";
    status = 0; 
-   x1 = 30; 
+   x1 = 30;
    y1 = 10; 
    xsize = 580; 
    ysize = 460; 
@@ -3782,13 +3788,17 @@ void         tsetalliances::init( int supervis )
    if ( !supervisor )
      addbutton("~s~upervisor",400,200,xsize - 20,230,0,1,6, !actmap->supervisorpasswordcrc.empty() );
    else {
-      if ( !mapeditor && !oninit )
+      if ( !mapeditor && !oninit ) {
+          if ( actmap->getgameparameter( cgp_superVisorCanSaveMap) ) {
+             addbutton ("save map", 400,290,xsize - 20,320, 0, 1, 116, true );
+          }
           for ( int i = 0; i < 8; i++ )
              if ( actmap->player[i].exist() ) {
                 int x = x1 + 10 + ply_x1 + 2 * tsa_namelength;
                 int y = y1 + ply_y1 + i * 22 - 10;
                 addbutton ("reset passw.", x, y, x+ 90, y + 15, 0, 1, 70+i, true );
              }
+      }
    }
 
 
@@ -3849,7 +3859,7 @@ void         tsetalliances::displayplayernamesintable( void )
    npush ( activefontsettings );
    activefontsettings.background = dblue; 
    activefontsettings.length = ali_x1 - 41 ;
-   for (int j = 0; j < playernum ; j++) {   /*  y */ 
+   for (int j = 0; j < playernum ; j++) {   /*  y */
       activefontsettings.color = 20 + 8 * playerpos[j]; 
       showtext2( actmap->player[ playerpos[j]].getName().c_str(), x1 + 40,y1 + ali_y1 + j * 22);
    }
@@ -3895,7 +3905,7 @@ void         tsetalliances::buildhlgraphics(void)
          playernum++; 
          playerexist |= 1 << i;
       } 
-   } 
+   }
 
    activefontsettings.background = dblue; 
    for (i = 0; i < playernum ; i++) { 
@@ -3918,7 +3928,7 @@ void         tsetalliances::buildhlgraphics(void)
               if ( actmap->player[playerpos[i]].stat != 2 )
                   putimage(x1 + ali_x1 + i * 30,y1 + ali_y1 + j * 22,icons.diplomaticstatus[alliancedata[playerpos[i]][playerpos[j]]]); 
          } 
-   } 
+   }
    displayplayernamesintable ( );
    paintkeybar(); 
    if (mss == 2) 
@@ -3941,7 +3951,7 @@ void         tsetalliances::paintkeybar(void)
       if (xp > 1) 
         xx2 = x1 + ply_x1 - 3 + 48 + tsa_namelength * 3; 
       xorrectangle(xx1 + xp * tsa_namelength,y1 + ply_y1 - 3,xx2,y1 + ply_y1 - 3 + (lastplayer + 1) * 22,100); 
-   } 
+   }
    if (bx == 1) { 
       xorrectangle(x1 + ali_x1 - 5,y1 + ali_y1 - 3 + ya * 22,x1 + ali_x1 + (playernum) * 30 - 12,y1 + ali_y1 - 5 + (ya + 1) * 22,14); 
       xorrectangle(x1 + ali_x1 - 5 + xa * 30,y1 + ali_y1 - 3,x1 + ali_x1 + (xa + 1) * 30 - 12,y1 + ali_y1 - 5 + playernum * 22,100); 
@@ -4102,7 +4112,7 @@ void         tsetalliances::click(pascal_byte         bxx,
            nextplayer = 0;
       } while ( !actmap->player[nextplayer].exist() ); /* enddo */
 
-      if (x == 1 && ( y == actmap->actplayer || y == nextplayer || supervisor ) ) { 
+      if (x == 1 && ( y == actmap->actplayer || y == nextplayer || supervisor ) ) {
          location[y]++;
          if (location[y] >= playernum) 
             location[y] = 0; 
@@ -4194,7 +4204,7 @@ void         tsetalliances::buttonpressed( int id )
   int i;
 
    switch (id) {
-      
+
       case 1:   status = 10; 
       break; 
       case 2: if ( oninit )
@@ -4240,16 +4250,16 @@ void         tsetalliances::buttonpressed( int id )
                   tenternamestrings   enternamestrings;
                   enternamestrings.init( &computername, plx ,2);
                   enternamestrings.run(); 
-                  enternamestrings.done(); 
-                  buildhlgraphics(); 
+                  enternamestrings.done();
+                  buildhlgraphics();
                }
-      break; 
+      break;
 */
       #ifndef karteneditor
       case 5: setparams();
               setupnetwork ( actmap->network );
               break;
-              
+
       case 6: {
                  if ( !actmap->supervisorpasswordcrc.empty() ) {
                     bool success = enterpassword ( actmap->supervisorpasswordcrc, false, true );
@@ -4260,6 +4270,13 @@ void         tsetalliances::buttonpressed( int id )
                  }
               }
       break;
+      case 116: {
+                    ASCString filename;
+                    fileselectsvga(mapextension, filename, false);
+                    if ( !filename.empty() )
+                       savemap( filename.c_str() );
+
+                }
       #endif
    }
    if ( id >= 70 && id <= 77 ) {

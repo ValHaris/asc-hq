@@ -1976,6 +1976,31 @@ const int gameparameterdefault [ gameparameternum ] = { 1,
                                                         100,
                                                         10 };
 
+
+const bool gameParameterChangeableByEvent [ gameparameternum ] = { true,
+                                                                 true,
+                                                                 true,
+                                                                 true,
+                                                                 true,
+                                                                 true,
+                                                                 true,
+                                                                 true,
+                                                                 true,
+                                                                 true,
+                                                                 true,
+                                                                 true,
+                                                                 true,
+                                                                 true,
+                                                                 true,
+                                                                 true,
+                                                                 true,
+                                                                 true,
+                                                                 true,
+                                                                 true,
+                                                                 true,
+                                                                 true,
+                                                                 false };
+
 const int gameParameterLowerLimit [ gameparameternum ] = { 1,
                                                            1,
                                                            0,
@@ -1996,6 +2021,7 @@ const int gameParameterLowerLimit [ gameparameternum ] = { 1,
                                                            0,
                                                            0,
                                                            1,
+                                                           0,
                                                            0,
                                                            0 };
 
@@ -2020,7 +2046,8 @@ const int gameParameterUpperLimit [ gameparameternum ] = { maxint,
                                                            2,
                                                            100,
                                                            1000,
-                                                           100 };
+                                                           100,
+                                                           1 };
 
 const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "freezing time of icebreaker fairway",
@@ -2043,5 +2070,6 @@ const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "initial map visibility",
                                                       "attack power (EXPERIMENTAL!)",
                                                       "jamming amplifier (EXPERIMENTAL!)",
-                                                      "jamming slope (EXPERIMENTAL!)" };
+                                                      "jamming slope (EXPERIMENTAL!)",
+                                                      "The Supervisor may save a game as new map (spying!!!)" };
 
