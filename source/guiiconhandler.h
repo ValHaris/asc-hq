@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.4 2004-12-17 11:19:20 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.5 2004-12-29 17:23:57 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -40,10 +40,10 @@
 class GuiFunction {
 
      public:
-       virtual bool available( const MapCoordinate& pos ) = 0;
-       virtual void execute( const MapCoordinate& pos ) = 0;
-       virtual Surface& getImage( const MapCoordinate& pos ) = 0;
-       virtual ASCString getName( const MapCoordinate& pos ) = 0;
+       virtual bool available( const MapCoordinate& pos, int num ) = 0;
+       virtual void execute( const MapCoordinate& pos, int num ) = 0;
+       virtual Surface& getImage( const MapCoordinate& pos, int num ) = 0;
+       virtual ASCString getName( const MapCoordinate& pos, int num ) = 0;
        virtual ~GuiFunction() {};
 };
 
@@ -61,19 +61,20 @@ class GenericGuiFunction : public GuiFunction {
         GenericGuiFunction( Surface icon_, Availability availability, Execution execution, const ASCString& iconName ) 
                          : name(iconName), icon(icon_), avail(availability), exec(execution) {};
 
-        bool available( const MapCoordinate& pos ) { return avail(pos); };
-        void execute( const MapCoordinate& pos )   { exec(pos); };
-        Surface& getImage( const MapCoordinate& pos ) { return icon; };
-        ASCString getName( const MapCoordinate& pos ) { return name; };
+        bool available( const MapCoordinate& pos, int num ) { return avail(pos); };
+        void execute( const MapCoordinate& pos, int num )   { exec(pos); };
+        Surface& getImage( const MapCoordinate& pos, int num ) { return icon; };
+        ASCString getName( const MapCoordinate& pos, int num ) { return name; };
 };
 
 
 class GuiButton : public PG_Button {
           GuiFunction* func;
           MapCoordinate pos;
+          int num;
        public:
           GuiButton( PG_Widget *parent, const PG_Rect &r );
-          void registerFunc( GuiFunction* f, const MapCoordinate& position );
+          void registerFunc( GuiFunction* f, const MapCoordinate& position, int num );
           void unregisterFunc();
           bool exec();
 };
@@ -82,30 +83,36 @@ class NewGuiHost;
 
 class GuiIconHandler {
 
-     typedef list<GuiFunction*> Functions;
-     Functions functions;    
+       typedef list<GuiFunction*> Functions;
+       Functions functions;    
      
-     NewGuiHost* host;
 
-     
+
+       friend class NewGuiHost;
+       void registerHost( NewGuiHost* guiIconHost ) { host = guiIconHost; };
+     protected:  
+        NewGuiHost* host;
+          
      public:
        GuiIconHandler() : host(NULL) {};
      
        /** registers a user function. Icons are displayed in the order that they were registered. 
           By passing an object here, the GuiIconHandler wil obtain ownership of the object and delete it on his destruction */
        void registerUserFunction( GuiFunction* function );
-       void registerHost( NewGuiHost* guiIconHost ) { host = guiIconHost; };
 
-       void eval();
-       ~GuiIconHandler();
+       virtual void eval();
+       virtual ~GuiIconHandler();
 };
 
 
 class NewGuiHost : public Panel {
         GuiIconHandler* handler;
+        static NewGuiHost* theGuiHost;
+        list<GuiIconHandler*> iconHandlerStack;
      public:
         NewGuiHost (PG_Widget *parent, const PG_Rect &r ) ;
-        void pushIconHandler( GuiIconHandler* iconHandler );
+        static void pushIconHandler( GuiIconHandler* iconHandler );
+        static void popIconHandler();
         void eval();
 
         typedef vector<GuiButton*> Buttons;

@@ -1,4 +1,4 @@
-//     $Id: unitctrl.h,v 1.36.2.4 2004-12-16 18:48:31 mbickel Exp $
+//     $Id: unitctrl.h,v 1.36.2.5 2004-12-29 17:23:57 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -255,6 +255,7 @@ class VehicleAttack : public VehicleAction {
               AttackFieldList attackableObjects;
 
               int getStatus( void ) { return status; };
+              Vehicle* getAttacker() { return vehicle; };
               virtual int available ( Vehicle* veh ) const { return status==0 && avail(veh); };
               static bool avail( Vehicle* veh );
               virtual int execute ( Vehicle* veh, int x, int y, int step, int _kamikaze, int weapnum );

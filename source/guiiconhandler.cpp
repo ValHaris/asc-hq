@@ -40,7 +40,7 @@ const int guiIconColumnNum = 3;
 
 
 
-GuiButton::GuiButton( PG_Widget *parent, const PG_Rect &r ) : PG_Button( parent, r, "", -1, "GuiButton"), func( NULL )
+GuiButton::GuiButton( PG_Widget *parent, const PG_Rect &r ) : PG_Button( parent, r, "", -1, "GuiButton"), func( NULL ), num(-1)
 {
   sigClick.connect ( SigC::slot( *this, &GuiButton::exec ));
   SetBackground( PRESSED, IconRepository::getIcon("empty-pressed.png").getBaseSurface() );
@@ -52,18 +52,19 @@ GuiButton::GuiButton( PG_Widget *parent, const PG_Rect &r ) : PG_Button( parent,
 bool GuiButton::exec()
 {
   if ( func ) {
-     func->execute( pos );
+     func->execute( pos, num );
      return true;
   }
   return false;
 }
 
 
-void GuiButton::registerFunc( GuiFunction* f, const MapCoordinate& position )
+void GuiButton::registerFunc( GuiFunction* f, const MapCoordinate& position, int num )
 {
+   this->num = num;
    func = f;
    pos = position;
-   SetIcon( f->getImage( position).getBaseSurface());
+   SetIcon( f->getImage( position, num).getBaseSurface());
 }
 
 void GuiButton::unregisterFunc()
@@ -86,9 +87,9 @@ void GuiIconHandler::eval()
 
    int num = 0;
    for ( Functions::iterator i = functions.begin(); i != functions.end(); ++i ) {
-      if ( (*i)->available(mc )) {
+      if ( (*i)->available(mc, 0 )) {
          GuiButton* b = host->getButton(num);
-         b->registerFunc( *i, mc );
+         b->registerFunc( *i, mc, 0 );
          b->Show();
          ++num;
       }
@@ -115,12 +116,13 @@ GuiIconHandler::~GuiIconHandler()
 
 
 
-
+NewGuiHost* NewGuiHost::theGuiHost = NULL;
 
 NewGuiHost :: NewGuiHost (PG_Widget *parent, const PG_Rect &r )
          : Panel( parent, r, "GuiIcons", false ) , handler(NULL)
 {
    updateFieldInfo.connect ( SigC::slot( *this, &NewGuiHost::eval ));
+   theGuiHost = this;
 }
 
 void NewGuiHost::eval()
@@ -131,8 +133,29 @@ void NewGuiHost::eval()
 
 void NewGuiHost::pushIconHandler( GuiIconHandler* iconHandler )
 {
-   handler = iconHandler;
-   iconHandler->registerHost( this );
+   if ( !theGuiHost )
+      return;
+
+   if ( theGuiHost->handler )
+      theGuiHost->iconHandlerStack.push_back( theGuiHost->handler );
+      
+   theGuiHost->handler = iconHandler;
+   iconHandler->registerHost( theGuiHost );
+   updateFieldInfo();
+}
+
+void NewGuiHost::popIconHandler( )
+{
+   if ( !theGuiHost )
+      return;
+
+   assert( theGuiHost->handler );
+   
+   theGuiHost->handler->registerHost( NULL );
+   
+   theGuiHost->handler = theGuiHost->iconHandlerStack.back();
+   theGuiHost->iconHandlerStack.pop_back();
+   updateFieldInfo();
 }
 
 

@@ -38,7 +38,7 @@
     <run>
       <directoryradio>executable</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>source/unix/asc</mainprogram>
+      <mainprogram>source/unix/asc/asc</mainprogram>
       <programargs/>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
@@ -52,7 +52,6 @@
       <group pattern="AUTHORS;COPYING;ChangeLog;INSTALL;README;TODO;NEWS" name="GNU" />
       <group pattern="*" name="Andere" />
       <hidenonprojectfiles>false</hidenonprojectfiles>
-      <hidenonlocation>false</hidenonlocation>
     </groups>
     <tree>
       <hidepatterns>*.o,*.lo,CVS</hidepatterns>

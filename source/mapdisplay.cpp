@@ -350,8 +350,8 @@ void MapDisplayPG::fillSurface( int playerView )
 
 void MapDisplayPG::checkViewPosition()
 {
-   if ( offset.x + field.numx >= actmap->xsize )
-      offset.x = max(0,actmap->xsize - field.numx);
+   if ( offset.x + field.numx >= actmap->xsize +1 )
+      offset.x = max(0,actmap->xsize - field.numx +1 );
 
    if ( offset.y + field.numy >= actmap->ysize )
       offset.y = max(0,actmap->ysize - field.numy);
@@ -544,8 +544,8 @@ bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
             newx = 0;
          if ( newy < 0 )
             newy = 0;
-         if ( newx > actmap->xsize - field.numx )
-            newx = actmap->xsize - field.numx;
+         if ( newx > actmap->xsize - field.numx +1 )
+            newx = actmap->xsize - field.numx + 1;
          if ( newy > actmap->ysize - field.numy )
             newy = actmap->ysize - field.numy;
 
