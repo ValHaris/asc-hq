@@ -258,10 +258,15 @@ void flippict ( void* s, void* d, int dir = 1 );
 void* halfpict ( void* vbuf );
 
 
-/** rotates the picture image by angle clockwise. The new image will be written to a static 
-     buffer that is overwritten the next time halfpict or #xlatpict is called. The address of the 
-     buffer is returned.                                                           */
+/** rotates the picture image by angle clockwise. The resulting image will have exactly the
+    same size as the original image, resulting in the image being clipped      */
 char* rotatepict ( void* image, int angle );
+
+
+/** rotates the picture image by angle clockwise. The resulting image will be larger
+    than the original one   */
+char* rotatepict_grw ( void* image, int organgle );
+
 
 //! returns the pixel at position x/y of the image buf or -1 if the pixel does not exist
 extern int getpixelfromimage ( void* buf, int x, int y );

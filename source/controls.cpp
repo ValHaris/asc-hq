@@ -3,9 +3,14 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.147 2002-12-15 23:54:46 mbickel Exp $
+//     $Id: controls.cpp,v 1.148 2003-01-06 16:52:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.147  2002/12/15 23:54:46  mbickel
+//      New: system sends mail if units die
+//      Fixed: orbiting and submerged units could crash on water due to wind
+//      Updated documentation
+//
 //     Revision 1.146  2002/12/12 20:36:05  mbickel
 //      Updated documentation
 //      Fixed: hotkey for gui icons not allways working
@@ -1028,16 +1033,16 @@ void         tbuildstreet::initbs(void)
 
 void    getobjbuildcosts ( pobjecttype obj, pfield fld, Resources* resource, int* movecost )
 {
-   int mvcost;
+//   int mvcost;
 
    if ( !fld->checkforobject ( obj ) ) {
       *resource = obj->buildcost;
-      mvcost = obj->build_movecost;
+      *movecost = obj->build_movecost;
    } else {
       *resource = obj->removecost;
-       mvcost = obj->remove_movecost;
+       *movecost = obj->remove_movecost;
    }
-   *movecost =  ( 8 + ( fld->getmovemalus( 0 ) - 8 ) / ( objectbuildmovecost / 8 ) ) * mvcost  / 8;
+ //   *movecost =  ( 8 + ( fld->getmovemalus( 0 ) - 8 ) / ( objectbuildmovecost / 8 ) ) * mvcost  / 8;
 }
 
 

@@ -1,6 +1,13 @@
-//     $Id: unitctrl.cpp,v 1.94 2002-12-12 11:34:18 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.95 2003-01-06 16:52:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.94  2002/12/12 11:34:18  mbickel
+//      Fixed: ai crashing when weapon has no ammo
+//      Fixed: ASC crashed when loading game with ID not found
+//      Fixed: more ai problems
+//      AI now faster
+//      Fixed: removing objects overfill a units tank
+//
 //     Revision 1.93  2002/11/27 21:25:56  mbickel
 //      AI fixes
 //
@@ -1552,11 +1559,13 @@ int ChangeVehicleHeight :: verticalHeightChange ( void )
             if ( !helicopter_attack_after_ascent )
                vehicle->attacked = 1;
 
-            vehicle->setMovement ( newmovement - moveCost);
+            vehicle->setMovement ( newmovement, 0 );
+            vehicle->height = newheight;
+            vehicle->decreaseMovement( moveCost );
          }
 
       logtoreplayinfo ( rpl_changeheight, (int) vehicle->xpos, (int) vehicle->ypos, 
-                                          (int) vehicle->xpos, (int) vehicle->ypos, vehicle->networkid, (int) vehicle->height, (int) newheight );
+                                          (int) vehicle->xpos, (int) vehicle->ypos, vehicle->networkid, oldheight, (int) newheight );
       vehicle->height = newheight; 
    } 
    else {   /*  not an aircraft */ 
@@ -1968,7 +1977,7 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
 
       logtoreplayinfo ( rpl_attack, xp1, yp1, x, y, ad1, ad2, dd1, dd2, weapnum );
 
-      computeview( actmap );
+      // computeview( actmap );
 
       if ( mapDisplay && shown )
          mapDisplay->displayMap();

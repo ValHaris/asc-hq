@@ -2,9 +2,14 @@
     \brief Platform indepedant graphic functions. 
 */
 
-//     $Id: basegfx.cpp,v 1.33 2002-03-03 22:19:32 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.34 2003-01-06 16:52:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2002/03/03 22:19:32  mbickel
+//      Updated documentation
+//      Improved user interface
+//      Fixed AI bug
+//
 //     Revision 1.32  2001/12/19 17:16:28  mbickel
 //      Some include file cleanups
 //
@@ -705,6 +710,70 @@ char* rotatepict ( void* image, int organgle )
 
    return dst;
 }
+
+
+char* rotatepict_grw ( void* image, int organgle )
+{
+   int fieldxsize, fieldysize;
+   getpicsize(image, fieldxsize, fieldysize );
+
+   float angle = ((float)organgle) / 360 * 2 * pi + pi;
+
+   int d = sqrt(fieldxsize*fieldxsize + fieldysize*fieldysize );
+
+   char* dst = new char[ imagesize ( 0, 0, d,d ) ];
+   dst[0] = d-1;
+   dst[1] = 0;
+
+   dst[2] = d-1;
+   dst[3] = 0;
+
+   char* pnt  = dst + 4;
+
+   for ( int y = 0; y < d; y++ ) {
+      for ( int x = 0; x < d; x++ ) {
+         int dx = x - d/2 ;
+         int dy = d/2 - y;
+         float nx, ny;
+         if ( organgle != 0 && organgle != -180 && organgle != 180) {
+            float wnk ;
+            if ( dx  )
+               wnk = atan2 ( dy, dx );
+            else
+               if ( dy > 0 )
+                  wnk = pi/2;
+               else
+                  wnk = -pi/2;
+
+            wnk -= angle;
+            float radius = sqrt ( dx * dx + dy * dy );
+
+            nx = radius * cos ( wnk );
+            ny = radius * sin ( wnk );
+         } else
+            if ( organgle == 0 ) {
+               nx = -dx;
+               ny = -dy;
+            } else
+               if ( organgle == 180 || organgle == -180) {
+                  nx = dx;
+                  ny = dy;
+               }
+
+
+         int newpix = getimagepixel ( image, (int)-nx, (int)ny );
+         if ( newpix == -1 )
+            *pnt = 255;
+         else
+            *pnt = newpix;
+
+         pnt++;
+      }
+   }
+
+   return dst;
+}
+
 
 void flippict ( void* s, void* d, int dir )
 {

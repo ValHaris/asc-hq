@@ -483,7 +483,7 @@ void Vehicle :: setMovement ( int newmove, int cargoDivisor )
                if ( cargoDivisor )
                   lperc /= cargoDivisor;
 
-               loading[i]->setMovement ( loading[i]->getMovement() - lperc * loading[i]->typ->movement[ log2 ( loading[i]->height)] / 1000 , 1 );
+               loading[i]->setMovement ( loading[i]->getMovement(false) - lperc * loading[i]->typ->movement[ log2 ( loading[i]->height)] / 1000 , 1 );
             }
          } /* endfor */
    }
@@ -728,7 +728,8 @@ void Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
 
 
       gamemap->getField ( x, y )->vehicle = v;
-      tank -= tnk->productionCost;
+      tank.material -= tnk->productionCost.material;
+      tank.fuel -= tnk->productionCost.energy;
 
       int refuel = 0;
       for ( int i = 0; i < typ->weapons.count; i++ )

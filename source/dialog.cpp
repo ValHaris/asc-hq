@@ -2,9 +2,12 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.120 2002-12-23 13:43:22 mbickel Exp $
+//     $Id: dialog.cpp,v 1.121 2003-01-06 16:52:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.120  2002/12/23 13:43:22  mbickel
+//      Fixed to compile with gcc 3.2
+//
 //     Revision 1.119  2002/12/23 12:50:25  mbickel
 //      Fixed AI crash
 //      Minimap now working with partially defined graphic sets
@@ -5203,8 +5206,12 @@ void viewterraininfo ( void )
 
       for ( int i = 0; i < cmovemalitypenum; i++ ) {
          char t2[1000];
+         if ( getactfield()->vehicle && getactfield()->vehicle->typ->movemalustyp == i )
+            strcat ( text, "#color1#");
          sprintf(t2, "%s: %d\n",  cmovemalitypes[i], fld->getmovemalus(i) );
          strcat ( text, t2 );
+         if ( getactfield()->vehicle && getactfield()->vehicle->typ->movemalustyp == i )
+            strcat ( text, "#color0#");
       }
 
       int mines[4] = { 0, 0, 0, 0 };

@@ -2,9 +2,14 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.88 2002-12-12 20:36:05 mbickel Exp $
+//     $Id: building.cpp,v 1.89 2003-01-06 16:52:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.88  2002/12/12 20:36:05  mbickel
+//      Updated documentation
+//      Fixed: hotkey for gui icons not allways working
+//      Fixed: objects in fog of war were always displayed for normal weather
+//
 //     Revision 1.87  2002/12/12 11:34:17  mbickel
 //      Fixed: ai crashing when weapon has no ammo
 //      Fixed: ASC crashed when loading game with ID not found
@@ -1297,10 +1302,6 @@ void ccontainercontrols :: cmove_unit_in_container :: movedown ( pvehicle eht, p
 
 VehicleMovement*   ccontainercontrols :: movement (  pvehicle eht )
 {
-   if ( eht->getMovement() < minmalq )
-      return NULL;
-
-
    movementparams.height   = eht->height;
    movementparams.movement = eht->getMovement();
    movementparams.attacked = eht->attacked;
@@ -2075,7 +2076,16 @@ int   ctransportcontrols :: moveavail ( pvehicle eht, int height )
    if ( recursiondepth > 0 )
       return 0;
 
-   if ( eht->getMovement() < minmalq )
+   int maxm = 0;
+   for ( int i = 0; i < 8; i++ )
+      if ( eht->typ->height & (1 << i ))
+         if ( eht->typ->movement[i] > maxm )
+            maxm = eht->typ->movement[i];
+
+   if ( !eht->maxMovement() )
+      return 0;
+      
+   if ( eht->getMovement() * maxm / eht->maxMovement() < minmalq )
       return 0;
 
    if ( vehicle->height <= chgetaucht )
@@ -2104,7 +2114,10 @@ int   ctransportcontrols :: moveavail ( pvehicle eht, int height )
          if ( eht->functions & cf_trooper )
             return 2;
          else
-            return 0;
+            if ( vehicle->height & eht->typ->height )
+               return moveavail ( eht, vehicle->height );
+            else
+               return 0;
    } else
       if ( vehicle->height <= chfliegend)  {
          if (((eht->typ->height & vehicle->typ->loadcapabilityreq) || !vehicle->typ->loadcapabilityreq ) &&
@@ -2600,7 +2613,7 @@ void  ccontainer :: setpictures ( void )
       pvehicle unit = getloadedunit ( i );
       if ( unit ) {
          picture[i] = unit->typ->picture[0] ;
-         if ( unit->getMovement() >= minmalq )
+         if ( unit->getMovement() > 0 )
             pictgray[i] = 0;
          else
             pictgray[i] = 1;

@@ -849,7 +849,7 @@ void         tdashboard::paintwind( int repaint )
       if ( actmap->weather.wind[height].speed ) {
           if ( lastdir != actmap->weather.wind[height].direction ) {
              putimage ( agmp->resolutionx - ( 640 - 506), 227, icons.wind[ 8 ] );
-             char* pic = rotatepict ( icons.windarrow, directionangle[ actmap->weather.wind[height].direction ] );
+             char* pic = rotatepict_grw ( icons.windarrow, directionangle[ actmap->weather.wind[height].direction ] );
              int h1,w1, h2, w2;
              getpicsize ( pic, w2, h2 );
              getpicsize ( icons.wind[ 8 ], w1, h1 );

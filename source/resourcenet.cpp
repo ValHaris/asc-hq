@@ -519,10 +519,11 @@ void transfer_all_outstanding_tribute ( void )
                      got [resourcetype ] = i;
                      actmap->bi_resource[ player ].resource(resourcetype) -= i;
                      actmap->bi_resource[ targplayer ].resource(resourcetype) += i;
+
+                     actmap->tribute.avail[ player ][ targplayer ].resource( resourcetype ) -= got[resourcetype];
+                     actmap->tribute.paid[ targplayer ][ player ].resource( resourcetype ) += got[resourcetype];
                   }
 
-                  actmap->tribute.avail[ player ][ targplayer ].resource( resourcetype ) -= got[resourcetype];
-                  actmap->tribute.paid[ targplayer ][ player ].resource( resourcetype ) += got[resourcetype];
 
                }
                if ( topay[0] || topay[1] || topay[2] ) {

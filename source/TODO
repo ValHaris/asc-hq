@@ -16,6 +16,14 @@ Bugs:
  
  -  !!! Wind problems !!! windbug.asc
 
+
+1. Lussx Station.
+solange gengend Energie da ist, l„uft die Produktion normal, aber schon in
+der 2. Runde tritt ein fehler aus. es wird zuwenig Fuel produziert. Selbst
+wenn man die Produktion jetzt soweit herunterf„hrt, das Energieberschuss
+herrscht, wird keine Energie gutgeschrieben.
+
+ bugtest.sav
 =====
 
 

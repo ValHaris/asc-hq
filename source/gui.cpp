@@ -4,9 +4,14 @@
 */
 
 
-//     $Id: gui.cpp,v 1.84 2002-12-17 22:02:17 mbickel Exp $
+//     $Id: gui.cpp,v 1.85 2003-01-06 16:52:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.84  2002/12/17 22:02:17  mbickel
+//      Enemy mines can now be crossed even if visible
+//      submerged mines can not be placed on shallow water
+//      new game parameter: objects destroyable by terrain
+//
 //     Revision 1.83  2002/12/12 20:36:06  mbickel
 //      Updated documentation
 //      Fixed: hotkey for gui icons not allways working
@@ -1005,7 +1010,7 @@ void  tnguiicon::checkforkey  ( tkey key )
    if ( available () )
       for (int i = 0; i < 6 ; i++ )
 
-         if ( keys[0][i] )
+         if ( keys[0][i] && key )
            if ( char2key( keys[0][i] ) == key ) {
               exec();
               return;
