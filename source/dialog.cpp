@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.14 2000-01-06 11:19:11 mbickel Exp $
+//     $Id: dialog.cpp,v 1.15 2000-01-19 22:03:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/01/06 11:19:11  mbickel
+//      Worked on the Linux-port again...
+//
 //     Revision 1.13  2000/01/04 19:43:49  mbickel
 //      Continued Linux port
 //
@@ -2481,24 +2484,24 @@ void         tfileselectsvga::run(void)
 
          if ( numberoffiles ) {
             switch ( taste ) {
-            case ct_down:  markedfile++;
+            case cto_down:  markedfile++;
                             checkfsf( 1 );
                             fileausgabe(false,1);
                break;
 
-            case ct_up:    if ( markedfile > 0) {
+            case cto_up:    if ( markedfile > 0) {
                                markedfile--;
                                checkfsf( 1 );
                                fileausgabe(false,1);
                             }
                break;
 
-            case ct_pdown: markedfile+=actshownfilenum - 1;
+            case cto_pdown: markedfile+=actshownfilenum - 1;
                             checkfsf( 1 );
                             fileausgabe(false,1); 
                break;
 
-            case ct_pup:    if ( markedfile > actshownfilenum - 1)
+            case cto_pup:    if ( markedfile > actshownfilenum - 1)
                                markedfile-= actshownfilenum - 1;
                             else
                                markedfile = 0;
@@ -2506,17 +2509,15 @@ void         tfileselectsvga::run(void)
                             fileausgabe(false,1);
                break;
 
-            case ct_pos1:  markedfile = 0;
+            case cto_pos1:  markedfile = 0;
                             checkfsf( 1 );
                             fileausgabe(false,1);
                break;
-            case ct_ende:  markedfile = numberoffiles - 1;
+            case cto_ende:  markedfile = numberoffiles - 1;
                             checkfsf( 1 );
                             fileausgabe(false,1);
                break;
 
-            default:
-              break;
             } /* endswitch */
 
             if (ausgabeaborted) 

@@ -1,6 +1,9 @@
-//     $Id: keybp.cpp,v 1.8 2000-01-04 19:43:52 mbickel Exp $
+//     $Id: keybp.cpp,v 1.9 2000-01-19 22:03:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/01/04 19:43:52  mbickel
+//      Continued Linux port
+//
 //     Revision 1.7  2000/01/02 20:23:38  mbickel
 //      Improved keyboard handling in dialog boxes under DOS
 //
@@ -496,7 +499,7 @@ void getkeysyms ( tkey* keysym, int* keyprnt )
 {
    if (keyboardinit == 0) {
       tkey k = r_key();
-     #ifdef NEWKEYB
+     #ifdef NEW_KEYB
       *keysym = ct_invvalue;
      #else
       *keysym = k;
@@ -524,7 +527,7 @@ void  closekeyb(void)
 
 void wait(void)
 { 
-   tkey   cha; 
+//   tkey   cha; 
 
    //   do {
    //      cha = r_key();
