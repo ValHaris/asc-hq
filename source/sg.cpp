@@ -1,6 +1,11 @@
-//     $Id: sg.cpp,v 1.60 2000-07-22 18:57:57 mbickel Exp $
+//     $Id: sg.cpp,v 1.61 2000-07-28 10:15:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2000/07/22 18:57:57  mbickel
+//      New message during save operation
+//      Weapon efficiency displayed did not correspond to mouse position when
+//        first weapon was service
+//
 //     Revision 1.59  2000/07/16 14:57:42  mbickel
 //      Datafile versioning
 //
@@ -3433,7 +3438,7 @@ int main(int argc, char *argv[] )
    try {
       if ( exist ( "data.version" )) {
          tnfilestream s ( "data.version", 1 );
-         dataVersion = s.readint();
+         dataVersion = s.readInt();
       } else
          dataVersion = 0;
 

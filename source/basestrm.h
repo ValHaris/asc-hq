@@ -1,6 +1,11 @@
-//     $Id: basestrm.h,v 1.12 2000-06-28 18:30:57 mbickel Exp $
+//     $Id: basestrm.h,v 1.13 2000-07-28 10:15:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/06/28 18:30:57  mbickel
+//      Started working on AI
+//      Started making loaders independent of memory layout
+//      Destroyed buildings can now leave objects behind.
+//
 //     Revision 1.11  2000/05/30 18:39:20  mbickel
 //      Added support for multiple directories
 //      Moved DOS specific files to a separate directory
@@ -250,13 +255,13 @@ class tnstream {
            virtual void readpnchar( char** pc, int maxlength = 0) ;
            virtual void writepchar( const char* pc) ;
 
-           virtual int  readint  ( void );
-           virtual word readword ( void );
-           virtual char readchar ( void );
+           virtual int  readInt  ( void );
+           virtual word readWord ( void );
+           virtual char readChar ( void );
 
-           virtual void writeint  ( int  i );
-           virtual void writeword ( word w );
-           virtual void writechar ( char c );
+           virtual void writeInt  ( int  i );
+           virtual void writeWord ( word w );
+           virtual void writeChar ( char c );
 
            virtual void writerlepict ( const void* pnter );
            virtual void readrlepict( void** pnter, int allocated, int* size);

@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.39 2000-07-16 14:57:42 mbickel Exp $
+//     $Id: spfst.cpp,v 1.40 2000-07-28 10:15:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2000/07/16 14:57:42  mbickel
+//      Datafile versioning
+//
 //     Revision 1.38  2000/07/16 14:20:05  mbickel
 //      AI has now some primitive tactics implemented
 //      Some clean up
@@ -4565,6 +4568,7 @@ pfieldlist generatelst ( int x1, int y1, int x2, int y2 )
        
      case 4: adddirpts ( x1, y1, list, 3 );
              adddirpts ( x1, y1, list, 5 );
+             adddirpts ( x1, y1, list, 2 );
              break;
              
      case 5: adddirpts ( x1, y1, list, 0 );

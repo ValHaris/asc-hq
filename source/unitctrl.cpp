@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.16 2000-07-26 15:58:10 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.17 2000-07-28 10:15:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/07/26 15:58:10  mbickel
+//      Fixed: infinite loop when landing with an aircraft which is low on fuel
+//      Fixed a bug in loadgame
+//
 //     Revision 1.15  2000/07/24 13:55:18  mbickel
 //      Fixed crash when attacking unit is destroyed by attacked unit
 //
@@ -413,7 +417,7 @@ void   VehicleMovement :: FieldReachableRek :: move(int          x,
     int ox = x; 
     int oy = y; 
     strecke.tiefe++;
-    if ( zielerreicht ) 
+    if ( zielerreicht == 2 ) 
        return;
 
     if (mode == 1)
@@ -469,14 +473,15 @@ void   VehicleMovement :: FieldReachableRek :: move(int          x,
     strecke.field[strecke.tiefe].y = y; 
     if ((x == x2) && (y == y2)) { 
        distance = streck; 
+       zielerreicht = 1;
 
        shortestway = strecke; 
        if (actmap->weather.wind[ getwindheightforunit ( vehicle ) ].speed && vehicle->height >= chtieffliegend && vehicle->height <= chhochfliegend) {
           if ((mode == 2) || ((mode == 1) && (streck == windbeeline(x1,y1,x2,y2))))
-             zielerreicht = true;
+             zielerreicht = 2;
        } else {
           if ((mode == 2) || ((mode == 1) && (streck == beeline(x2,y2,x1,y1))))
-             zielerreicht = true;
+             zielerreicht = 2;
        }
     } 
     else { 
@@ -505,7 +510,7 @@ void   VehicleMovement :: FieldReachableRek :: move(int          x,
        for (int i = 0; i <= 4; i++) { 
           move( x, y, (*direc2)[i], streck, fuel );
           strecke.tiefe--;
-          if ( zielerreicht ) 
+          if ( zielerreicht == 2 ) 
              return;
        } 
     } 
@@ -535,7 +540,7 @@ void   VehicleMovement :: FieldReachableRek :: run(int          x22,
    y1 = vehicle->ypos; 
 
    maxwegstrecke = vehicle->movement; 
-   zielerreicht = false; 
+   zielerreicht = 0; 
    distance = 0; 
 
    int a,b;
@@ -568,11 +573,11 @@ void   VehicleMovement :: FieldReachableRek :: run(int          x22,
             return;
          }  */
 
-      if ((mode == 1) && zielerreicht) 
+      if ((mode == 1) && zielerreicht==2) 
          break; 
    } 
 
-   if ( zielerreicht ) {
+   if ( zielerreicht >= 1) {
       path->addField ( eht->xpos, eht->ypos );
       for ( int d = 1; d <= shortestway.tiefe; d++) 
          path->addField ( shortestway.field[d].x, shortestway.field[d].y ); 

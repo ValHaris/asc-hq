@@ -1,6 +1,12 @@
-//     $Id: typen.h,v 1.29 2000-07-16 14:20:06 mbickel Exp $
+//     $Id: typen.h,v 1.30 2000-07-28 10:15:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/07/16 14:20:06  mbickel
+//      AI has now some primitive tactics implemented
+//      Some clean up
+//        moved weapon functions to attack.cpp
+//      Mount doesn't modify PCX files any more.
+//
 //     Revision 1.28  2000/07/06 11:07:29  mbickel
 //      More AI work
 //      Started modularizing the attack formula
@@ -522,7 +528,7 @@ class SingleWeapon {
     int          service( void ) const;
     int          canRefuel ( void ) const;
     void         set ( int type );  // will be enhanced later ...
-    int          gettyp ( void ) { return typ; };
+    int          gettype ( void ) { return typ; };
     int          offensive( void ) const;
 };
 
@@ -539,7 +545,7 @@ class tvehicletype {    // This structure does not have a fixed layout any more 
        char*        name;          /* z.B. Exterminator  */
        char*        description;   /* z.B. Jagdbomber    */
        char*        infotext;      /* optional, kann sehr ausfÅhrlich sein. Empfehlenswert Åber eine Textdatei einzulesen */
-       struct tweapons {  // fixed layout
+       struct tweapons {  
          char         weaponcount; 
          struct tweapon {
            word         typ;            /*  BM      <= CWaffentypen  */

@@ -1,6 +1,11 @@
-//     $Id: basestrm.cpp,v 1.25 2000-06-28 18:30:57 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.26 2000-07-28 10:15:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/06/28 18:30:57  mbickel
+//      Started working on AI
+//      Started making loaders independent of memory layout
+//      Destroyed buildings can now leave objects behind.
+//
 //     Revision 1.24  2000/06/05 18:21:21  mbickel
 //      Fixed a security hole which was opened with the new method of loading
 //        mail games by command line parameters
@@ -378,21 +383,21 @@ void tnstream :: writerlepict ( const void* buf )
 }
 
 
-int  tnstream::readint  ( void )
+int  tnstream::readInt  ( void )
 {
    int i;
    readdata2 ( i );
    return i;
 }
 
-word tnstream::readword ( void )
+word tnstream::readWord ( void )
 {
    word w;
    readdata2 ( w );
    return w;
 }
 
-char tnstream::readchar ( void )
+char tnstream::readChar ( void )
 {
    char c;
    readdata2 ( c );
@@ -400,17 +405,17 @@ char tnstream::readchar ( void )
 }
 
 
-void tnstream::writeint  ( int i )
+void tnstream::writeInt  ( int i )
 {
    writedata2 ( i );
 }
 
-void tnstream::writeword ( word w )
+void tnstream::writeWord ( word w )
 {
    writedata2 ( w );
 }
 
-void tnstream::writechar ( char c )
+void tnstream::writeChar ( char c )
 {
    writedata2 ( c );
 }
