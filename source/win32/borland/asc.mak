@@ -37,7 +37,7 @@ LIBFILES = ..\..\libs\bzlib\win\bzlib.lib ..\..\libs\jpeg-6b\libjpeg.lib \
     ..\..\AI\ai.lib
 IDLFILES = 
 IDLGENFILES = 
-LIBRARIES = VCL50.lib
+LIBRARIES = 
 PACKAGES = VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi
 SPARELIBS = VCL50.lib
 DEFFILE = 
