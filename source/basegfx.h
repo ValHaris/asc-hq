@@ -424,4 +424,6 @@ extern void setWindowCaption ( const char* s );
 */
 extern void* convertSurface ( SDLmm::Surface& s, bool paletteTranslation = true );
 
+extern SPoint getPixelRotationLocation( SPoint pos, int width, int height, int degrees );
+
 #endif

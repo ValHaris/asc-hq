@@ -27,6 +27,7 @@
  #include "surface.h"
 
  #include "../palette.h"
+ #include "../basegfx.h"
 
  typedef SDLmm::Color Color;
 
@@ -263,14 +264,14 @@
        void init ( const Surface& srv )
        {
           SourcePixelSelector::init(srv);
-          w = getWidth();
-          h = getHeight();
+          w = SourcePixelSelector::getWidth();
+          h = SourcePixelSelector::getHeight();
        };
 
 
        PixelType getPixel(int x, int y)
        {
-         SPoint newpos = getPixelRotationLocation( SPoint(x,y), w, h, degrees );
+         SPoint newpos = ::getPixelRotationLocation( SPoint(x,y), w, h, degrees );
          return SourcePixelSelector::getPixel ( newpos.x, newpos.y );
        };
 
