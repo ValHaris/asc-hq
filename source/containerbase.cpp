@@ -271,6 +271,9 @@ const ContainerBaseType::TransportationIO* ContainerBase::vehicleUnloadSystem ( 
 
 int  ContainerBase :: vehicleDocking ( const Vehicle* vehicle, bool out ) const
 {
+   if ( vehicle == this )
+      return 0;
+
    int height = 0;
 
    if ( baseType->vehicleFit ( vehicle->typ ) && ( vehicleFit( vehicle ) || out ) )

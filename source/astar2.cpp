@@ -566,7 +566,7 @@ AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const
 
 void AStar3D :: nodeVisited ( const Node& N2, HexDirection direc, Container& open, int prevHeight, int heightChangeDist )
 {
-   if ( N2.gval <= MAXIMUM_PATH_LENGTH && N2.gval <= longestPath ) {
+   if ( N2.gval <= MAXIMUM_PATH_LENGTH && N2.gval < longestPath ) {
       if ( getPosDir(N2.h) == DirNone ) {
          open.add ( N2 );
          getPosDir(N2.h) = ReverseDirection(direc);
