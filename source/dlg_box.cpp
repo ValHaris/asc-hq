@@ -1,6 +1,10 @@
-//     $Id: dlg_box.cpp,v 1.39 2000-11-29 11:05:26 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.40 2000-11-29 17:58:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2000/11/29 11:05:26  mbickel
+//      Improved userinterface of the mapeditor
+//      map::preferredfilenames uses now strings (instead of char*)
+//
 //     Revision 1.38  2000/11/29 09:40:19  mbickel
 //      The mapeditor has now two maps simultaneously active
 //      Moved memorychecking functions to its own file: memorycheck.cpp
@@ -922,21 +926,22 @@ void         tdialogbox::rebuildtaborder(void)
    } 
 
    if (i > 0) { 
-   if (markedtab > 0) 
-      pb2 = taborder[i].button; 
+      if (markedtab > 0) 
+         pb2 = taborder[i].button; 
    } 
    else 
       pb2 = NULL; 
 
    showtabmark(markedtab); 
 
-
-   markedtab = 0; 
-   if (tabcount > 0) { 
-      for (i = 1; i <= tabcount; i++) 
-         if (taborder[i].button == pb2) 
-            markedtab = i; 
-   } 
+   if ( markedtab ) {
+      markedtab = 0; 
+      if (tabcount > 0) { 
+         for (i = 1; i <= tabcount; i++) 
+            if (taborder[i].button == pb2) 
+               markedtab = i; 
+      } 
+   }
 
    showtabmark(markedtab); 
 } 
