@@ -73,9 +73,9 @@ VComponent
 17
 WRect
 240
-225
+213
 5680
-4254
+4242
 1
 0
 18
@@ -89,9 +89,9 @@ VComponent
 20
 WRect
 1040
-1019
-5688
-4266
+1007
+5680
+4254
 1
 0
 21
@@ -100,4 +100,4 @@ WFileName
 libs\triangul\triangul.tgt
 0
 -1
-13
+10

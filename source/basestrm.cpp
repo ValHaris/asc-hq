@@ -1,6 +1,13 @@
-//     $Id: basestrm.cpp,v 1.42 2000-10-12 19:51:43 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.43 2000-10-12 20:21:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2000/10/12 19:51:43  mbickel
+//      Added a stub program for generating a weapon guide
+//      Added makefiles to compile this weaponguide with the free borland C++
+//        compiler
+//      Made some adjustments to basic IO file for compiling them with borland
+//        C++
+//
 //     Revision 1.41  2000/10/12 19:00:20  mbickel
 //      Fixed crash in building placement
 //      Replaced multi-character character constants by strings (there where
@@ -223,52 +230,22 @@
 #include "global.h"
 #include "basestrm.h"
 
-#if defined(_DOS_) | defined(WIN32)
- #include <direct.h>
- #include <dirent.h>
-  #include "ndir.h"
-  
+#ifdef _DOS_
+  #include "dos/fileio.h"
 #else
-
- #ifdef HAVE_SYS_DIRENT_H
-  #include <sys/dirent.h>
- #endif
-
- #if HAVE_DIRENT_H
-  #include <dirent.h>
-  #define NAMLEN(dirent) strlen((dirent)->d_name)
+ #ifdef _WIN32_
+   #include "win32/fileio.h"
  #else
-  #define dirent direct
-  #define NAMLEN(dirent) (dirent)->d_namlen
-  #if HAVE_SYS_NDIR_H
-   #include <sys/ndir.h>
-  #endif
-  #if HAVE_SYS_DIR_H
-   #include <sys/dir.h>
-  #endif
-  #if HAVE_NDIR_H
-   #include <ndir.h>
+  #ifdef _UNIX_
+    #include "unix/fileio.h"
   #endif
  #endif
- #define direct dirent
-
 #endif
 
 
 
 
 
-#if defined(_DOS_) | defined(WIN32)
- const char* filereadmode = "rb";
- const char* filewritemode = "wb";
- const char pathdelimitter = '\\';
- const char* pathdelimitterstring = "\\";
-#else
- const char* filereadmode = "r";
- const char* filewritemode = "w";
- const char pathdelimitter = '/';
- const char* pathdelimitterstring = "/";
-#endif
 
  const int maxSearchDirNum = 10;
  int searchDirNum = 0;
@@ -278,11 +255,7 @@
 
 
 
-#ifdef _DOS_
  int verbosity = 0;
-#else
- int verbosity = 0;
-#endif
 
 #pragma pack(1)
 struct trleheader {
@@ -749,7 +722,7 @@ void MemoryStreamCopy :: seek ( int newpos )
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#if !( defined(_DOS_) | defined(WIN32))
+#ifdef _SDL_
 
 static int stream_seek( struct SDL_RWops *context, int offset, int whence)
 {
@@ -1060,7 +1033,7 @@ tncontainerstream :: tncontainerstream ( const char* containerfilename, Containe
          if ( index[i].name ) {
             readpchar ( &index[i].name );
 
-           #if !(defined ( _DOS_ ) | defined ( WIN32 ))
+           #if CASE_SENSITIVE_FILE_NAMES == 1
             // quick hack to be able to use existing CON files.
             char *c = index[i].name;
             while ( *c ) {
@@ -1995,7 +1968,7 @@ int patimat (const char *pat, const char *str)
             return *str && patimat(pat+1, str+1);
 
       default  :
-#if defined ( _DOS_ ) | defined ( WIN32 )   // DOS filenames are not case sensitive
+#if CASE_SENSITIVE_FILE_NAMES == 0 
             return (toupper(*pat) == toupper(*str)) && patimat(pat+1, str+1);
 #else
             return (*pat == *str) && patimat(pat+1, str+1);

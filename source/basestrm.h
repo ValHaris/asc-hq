@@ -1,6 +1,13 @@
-//     $Id: basestrm.h,v 1.25 2000-10-12 19:51:44 mbickel Exp $
+//     $Id: basestrm.h,v 1.26 2000-10-12 20:21:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/10/12 19:51:44  mbickel
+//      Added a stub program for generating a weapon guide
+//      Added makefiles to compile this weaponguide with the free borland C++
+//        compiler
+//      Made some adjustments to basic IO file for compiling them with borland
+//        C++
+//
 //     Revision 1.24  2000/10/12 19:00:21  mbickel
 //      Fixed crash in building placement
 //      Replaced multi-character character constants by strings (there where
@@ -155,13 +162,6 @@
 
 
 #pragma pack(1)
-
-
-#ifdef _DOS_
- #define maxfilenamelength 8
-#else
- #define maxfilenamelength 255
-#endif
 
 
 
