@@ -3,6 +3,9 @@
 /* The directory in which the data files are going to be installed */
 #undef GAME_DATADIR
 
+/* Define to 1 if you have the <bitset> header file. */
+#undef HAVE_BITSET
+
 /* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
    */
 #undef HAVE_DIRENT_H
