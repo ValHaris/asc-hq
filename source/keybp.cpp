@@ -1,6 +1,9 @@
-//     $Id: keybp.cpp,v 1.4 1999-12-27 12:51:36 mbickel Exp $
+//     $Id: keybp.cpp,v 1.5 1999-12-28 22:04:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/12/27 12:51:36  mbickel
+//      Cleanup for Linux port
+//
 //     Revision 1.3  1999/11/16 17:04:07  mbickel
 //     Made ASC compilable for DOS again :-)
 //     Merged all the bug fixes in that I did last week
@@ -62,7 +65,7 @@
 
 
 
-char  skeypress(char keynr)
+char  skeypress( tkey keynr)
 { 
    #ifdef NEWKEYB   
      return normkey[keynr];

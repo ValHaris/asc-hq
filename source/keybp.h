@@ -1,6 +1,10 @@
-//     $Id: keybp.h,v 1.4 1999-12-28 21:03:00 mbickel Exp $
+//     $Id: keybp.h,v 1.5 1999-12-28 22:04:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/12/28 21:03:00  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.3  1999/12/27 12:51:38  mbickel
 //      Cleanup for Linux port
 //
@@ -538,6 +542,8 @@
     extern void wait(void);
     tkey char2key (int ch);
 
-
+#ifndef _DOS_
 extern int getch(void);
 extern int kbhit(void);
+#endif
+

@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.8 1999-12-28 21:03:19 mbickel Exp $
+//     $Id: sg.cpp,v 1.9 1999-12-28 22:04:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  1999/12/28 21:03:19  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.7  1999/12/27 13:00:07  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -104,9 +108,6 @@
 #include "loadbi3.h"
 #endif
 
-
-
-   #include <dirent.h>			/* Directory information.	*/
 
 
 // #define MEMCHK

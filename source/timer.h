@@ -1,6 +1,10 @@
-//     $Id: timer.h,v 1.3 1999-12-28 21:03:25 mbickel Exp $
+//     $Id: timer.h,v 1.4 1999-12-28 22:04:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/12/28 21:03:25  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.2  1999/11/16 03:42:43  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -30,9 +34,11 @@
     Boston, MA  02111-1307  USA
 */
 
-
+#ifdef _DOS_
+    volatile extern long        ticker;
+#else
     extern int ticker;
-
+#endif
     extern void ndelay(int time);
     extern void inittimer(int frequence);
     extern void closetimer(void);

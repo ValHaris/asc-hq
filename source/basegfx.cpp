@@ -1,6 +1,10 @@
-//     $Id: basegfx.cpp,v 1.6 1999-12-28 21:02:34 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.7 1999-12-28 22:04:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/12/28 21:02:34  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 
 
 #include <string.h>
@@ -1131,6 +1135,28 @@ tvirtualdisplay :: ~tvirtualdisplay ( )
 }
 
 
+collategraphicoperations :: collategraphicoperations ( void )
+{
+   #ifndef _DOS_
+   olddirectscreenaccess = agmp->directscreenaccess;
+   agmp->directscreenaccess = 1;
+   #endif
+}
+
+collategraphicoperations :: ~collategraphicoperations (  )
+{
+   #ifndef _DOS_
+   agmp->directscreenaccess = olddirectscreenaccess;
+   CheckForDirectScreenAccess;
+   #endif
+}
+
+void copySurface2screen( void )
+{
+   CheckForDirectScreenAccess;
+}
+
+
 
 #ifdef _NOASM_
 
@@ -1827,22 +1853,6 @@ void showtext2c ( const char* text, int x, int y )
 
 
 
-collategraphicoperations :: collategraphicoperations ( void )
-{
-   olddirectscreenaccess = agmp->directscreenaccess;
-   agmp->directscreenaccess = 1;
-}
-
-collategraphicoperations :: ~collategraphicoperations (  )
-{
-   agmp->directscreenaccess = olddirectscreenaccess;
-   CheckForDirectScreenAccess;
-}
-
-void copySurface2screen( void )
-{
-   CheckForDirectScreenAccess;
-}
 
 
 #endif
