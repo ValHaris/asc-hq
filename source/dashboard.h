@@ -26,43 +26,49 @@
  #define dashboardH
 
 #include "paradialog.h"
-  
-class WindInfoPanel : public Panel {
-        Surface windArrow; 
+
+
+class DashboardPanel : public Panel {
+    protected:
+      DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme );
+
+      void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
+
+      void registerSpecialDisplay( const ASCString& name );
+
+    public:
+      void eval();
+
+};
+
+class WindInfoPanel : public DashboardPanel {
+        Surface windArrow;
         int dir;
      protected:
         void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
      public:
         WindInfoPanel (PG_Widget *parent, const PG_Rect &r ) ;
-        void eval();
-
-        
-        ~WindInfoPanel();
-            
 };
 
-class UnitInfoPanel : public Panel {
-        void registerSpecialDisplay( const ASCString& name );
+class UnitInfoPanel : public DashboardPanel {
      protected:
         bool onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event );
-        void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
      public:
         UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) ;
-        void eval();
 };
- 
+
 class WeaponInfoPanel : public Panel {
         static ASCString name;
      protected:
         bool onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event );
      public:
         WeaponInfoPanel (PG_Widget *parent, const PG_Rect &r ) ;
-        
+
         static const ASCString& WIP_Name();
         // void eval();
 };
 
- 
+
 #if 0
 
  

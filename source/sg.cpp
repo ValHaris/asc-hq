@@ -1766,18 +1766,18 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
 
 void MainScreenWidget::spawnPanel ( Panels panel )
 {
-   if ( panel == ButtonPanel ) {
-      guiHost = new NewGuiHost( this, PG_Rect(Width()-180, 20, 170, 300));
-      guiHost->pushIconHandler( &GuiFunctions::primaryGuiIcons );
-      guiHost->Show();
-   }
    if ( panel == WindInfo ) {
-      WindInfoPanel* wi = new WindInfoPanel( this, PG_Rect(Width()-180, 320, 170, 80));
+      WindInfoPanel* wi = new WindInfoPanel( this, PG_Rect(Width()-180, 340, 170, 114));
       wi->Show();
    }
    if ( panel == UnitInfo ) {
-      UnitInfoPanel* ui = new UnitInfoPanel( this, PG_Rect(Width()-180, 400, 170, 220));
+      UnitInfoPanel* ui = new UnitInfoPanel( this, PG_Rect(Width()-180, 20, 170, 320));
       ui->Show();
+   }
+   if ( panel == ButtonPanel ) {
+      guiHost = new NewGuiHost( this, PG_Rect(Width()-180, 454, 170, 220));
+      guiHost->pushIconHandler( &GuiFunctions::primaryGuiIcons );
+      guiHost->Show();
    }
 }
 

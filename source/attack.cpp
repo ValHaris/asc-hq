@@ -265,15 +265,10 @@ class AttackPanel : public Panel {
      public:
         AttackPanel ( tfight& engine_ ) ;
         void setBarGraphValue( const ASCString& widgetName, float fraction ) { Panel::setBargraphValue( widgetName, fraction ); };
-        void setBarGraphColor( const ASCString& widgetName, PG_Color color ){
-            BarGraphWidget* bgw = dynamic_cast<BarGraphWidget*>( FindChild( widgetName, true ) );
-            if ( bgw )
-               bgw->setColor( color );
-        };
       void setLabelText ( const ASCString& widgetName, int i ) { Panel::setLabelText ( widgetName, i ); };
       void setLabelText ( const ASCString& widgetName, const ASCString& i ) { Panel::setLabelText ( widgetName, i ); };
       void dispValue ( const ASCString& name, float value, float maxvalue, PG_Color color );
-
+      void setBarGraphColor( const ASCString& widgetName, PG_Color color ) { Panel::setBarGraphColor( widgetName, color ); };
       void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
    private:
       void registerSpecialDisplay( const ASCString& name );

@@ -504,6 +504,46 @@
  };
 */
 
+
+  template<int pixelsize>
+  class ColorTransform_PlayerTrueCol {
+        typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+        PixelType refColor;
+        int refr, refg, refb;
+    protected:
+        ColorTransform_PlayerTrueCol() : refColor(0),refr(0),refg(0),refb(0) {};
+
+        PixelType transform( PixelType col) {
+           int r = (col >> 16) & 0xff;
+           int g = (col >> 8) & 0xff;
+           int b = (col ) & 0xff;
+           if ( g==0 && b==0) {
+              return ((refr * r / 256) << 16) + ((refg * r / 256) << 8) + (refb * r / 256);
+           } else
+              if ( r==255 && g==b ) {
+                 return ((refr + ( 255-refr) * g / 255) << 16) + ((refg + ( 255-refg) * g / 255) << 8) + (refb + ( 255-refb) * g / 255);
+              } else
+                 return col;
+        };
+
+        void init( Surface& src ) {
+
+        }
+
+     public:
+        ColorTransform_PlayerTrueCol( PixelType color ) { setColor(color); };
+        ColorTransform_PlayerTrueCol ( NullParamType npt ) : refColor(0),refr(0),refg(0),refb(0) {};
+
+        void setColor( PixelType color )
+        {
+           refColor = color;
+           refr = (color >> 16) & 0xff;
+           refg = (color >> 8) & 0xff;
+           refb = (color ) & 0xff;
+        };
+ };
+
+
  template<int pixelSize>
  class ColorTransform_XLAT {
         const char* table;

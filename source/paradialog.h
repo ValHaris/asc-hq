@@ -84,26 +84,14 @@ class ASC_PG_Dialog : public PG_Window {
 };
 
 class Panel : public  PG_Window {
-     ASCString panelName;     
-   /*
-     class PrimitiveObject {
-        public:
-           ASCString name;
-           PG_Rect position;
-     };
-     
-     class Emboss: public PrimitiveObject {
-        public:
-           bool
-     };
-     */
-
-      bool setup();               
+      ASCString panelName;     
+      bool setup();
    protected:   
       void setLabelText ( const ASCString& widgetName, const ASCString& text );
       void setLabelText ( const ASCString& widgetName, int i );
       void setBargraphValue( const ASCString& widgetName, float fraction );
-              
+      void setBarGraphColor( const ASCString& widgetName, PG_Color color );
+
    public:  
       Panel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme = true );
 

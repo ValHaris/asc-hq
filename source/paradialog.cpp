@@ -747,6 +747,14 @@ void Panel::setBargraphValue( const ASCString& widgetName, float fraction )
 }
 
 
+void Panel::setBarGraphColor( const ASCString& widgetName, PG_Color color )
+{
+   BarGraphWidget* bgw = dynamic_cast<BarGraphWidget*>( FindChild( widgetName, true ) );
+   if ( bgw )
+      bgw->setColor( color );
+}
+
+
 bool Panel::setup()
 {
    try {
