@@ -9507,12 +9507,12 @@ else
   { { echo "$as_me:$LINENO: error:
 ASC requires the SDL_mixer library. If you have a distribution supplied
 SDL_mixer.RPM installed, perhaps the SDL_mixer-devel.RPM is missing.
-If your distribution does not include the SDL_image library, you can get it
+If your distribution does not include the SDL_mixer library, you can get it
 from http://www.libsdl.org/projects/SDL_mixer/ " >&5
 echo "$as_me: error:
 ASC requires the SDL_mixer library. If you have a distribution supplied
 SDL_mixer.RPM installed, perhaps the SDL_mixer-devel.RPM is missing.
-If your distribution does not include the SDL_image library, you can get it
+If your distribution does not include the SDL_mixer library, you can get it
 from http://www.libsdl.org/projects/SDL_mixer/ " >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -9715,7 +9715,6 @@ echo "$as_me: error: Library requirements (sigc++-1.2) not met; consider adjusti
 
 
 
-
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -9813,7 +9812,7 @@ else
 echo "${ECHO_T}no" >&6
 fi
 
-  min_paragui_version=1.0.1
+  min_paragui_version=1.1.7
   echo "$as_me:$LINENO: checking for PARAGUI - version >= $min_paragui_version" >&5
 echo $ECHO_N "checking for PARAGUI - version >= $min_paragui_version... $ECHO_C" >&6
   no_paragui=""
@@ -10011,7 +10010,7 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
      PARAGUI_CFLAGS=""
      PARAGUI_LIBS=""
      { { echo "$as_me:$LINENO: error:
-   *** PARAGUI version 1.0.1 not found! ASC requires the Paragui library.
+   *** PARAGUI version 1.1.7 not found! ASC requires the Paragui library.
    If you have a distribution supplied Paragui.RPM installed, perhaps the
    Paragui-devel.RPM is missing. If your distribution does not include the
    Paragui library, you can get it from http://www.paragui.org/
@@ -10019,7 +10018,7 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
    ASC without Paragui. Some not-so-important dialogs will be missing, but
    you will be able to play ASC " >&5
 echo "$as_me: error:
-   *** PARAGUI version 1.0.1 not found! ASC requires the Paragui library.
+   *** PARAGUI version 1.1.7 not found! ASC requires the Paragui library.
    If you have a distribution supplied Paragui.RPM installed, perhaps the
    Paragui-devel.RPM is missing. If your distribution does not include the
    Paragui library, you can get it from http://www.paragui.org/
@@ -12703,12 +12702,13 @@ if test "${enable_debug+set}" = set; then
   ENABLEDEBUG=1
 fi;
 if test "X$ENABLEDEBUG" = "X1"; then
-   CXXFLAGS="$CXXFLAGS -g3"
+   CXXFLAGS="$CXXFLAGS -O0 -g3"
    echo SDL_CFLAGS $SDL_CFLAGS
    echo SDL_LIBS $SDL_LIBS
    echo PARAGUI_CFLAGS $PARAGUI_CFLAGS
    echo PARAGUI_LIBS $PARAGUI_LIBS
    echo CFLAGS $CFLAGS
+   echo CXXFLAGS $CXXFLAGS
    echo LIBS $LIBS
    echo LDFLAGS $LDFLAGS
    echo SIGC_CFLAGS $SIGC_CFLAGS

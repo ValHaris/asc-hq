@@ -77,81 +77,13 @@ void ASC_PG_App :: reloadTheme()
 }
 
 
-/*
-PG_Theme* ASC_PG_App::LoadTheme(const char* xmltheme, bool asDefault, const char* searchpath) {
-	PG_Theme* theme = NULL;
-
-	PG_LogDBG("Locating theme '%s' ...", xmltheme);
-
-	// MacOS does not use file path separator '/', instead ':' is used
-	// There could be clever solution for this, but for a while...
-	// let's assume that "data" directory must exist in working directory on MacOS.
-	// Masahiro Minami<elsur@aaa.letter.co.jp>
-	// 01/05/06
-
-	// add paths to the archive
-
-	//#ifndef macintosh
-
-	if(searchpath != NULL) {
-		if(AddArchive(searchpath)) {
-			PG_LogDBG("'%s' added to searchpath", searchpath);
-		}
-	}
-
-	theme = PG_Theme::Load(xmltheme);
-
-	if(theme && asDefault) {
-
-		const char* c = theme->FindDefaultFontName();
-		if(c == NULL) {
-			PG_LogWRN("Unable to load default font ...");
-			delete theme;
-			return NULL;
-		}
-
-		DefaultFont = new PG_Font(c, theme->FindDefaultFontSize());
-		DefaultFont->SetStyle(theme->FindDefaultFontStyle());
-
-		PG_LogMSG("defaultfont: %s", c);
-		PG_LogMSG("size: %i", DefaultFont->GetSize());
-
-		my_background = theme->FindSurface("Background", "Background", "background");
-		my_backmode = theme->FindProperty("Background", "Background", "backmode");
-		SDL_Color* bc = theme->FindColor("Background", "Background", "backcolor");
-		if(bc != NULL) {
-			my_backcolor = *bc;
-		}
-		if(my_scaled_background) {
-			// Destroyed scaled background if present
-			SDL_FreeSurface(my_scaled_background);
-			my_scaled_background = 0;
-		}
-	} else {
-
-		PG_LogWRN("Failed to load !");
-	}
-
-	if((my_Theme != NULL) && asDefault) {
-		delete my_Theme;
-		my_Theme = NULL;
-	}
-
-	if(asDefault && theme) {
-		my_Theme = theme;
-	}
-
-	return theme;
-}
-*/
-
 //! A Paragui widget that fills the whole screen and redraws it whenever Paragui wants to it.
-class MainScreenWidget : public PG_ThemeWidget, public PG_EventObject {
+class MainScreenWidget : public PG_Widget {
     bool gameInitialized;
     bool dirtyFlag;
 public:
     MainScreenWidget( )
-       : PG_ThemeWidget(NULL, PG_Rect ( 0, 0, ::getScreen()->w, ::getScreen()->h ), true),
+       : PG_Widget(NULL, PG_Rect ( 0, 0, ::getScreen()->w, ::getScreen()->h ), false),
          gameInitialized (false), dirtyFlag(true) {};
 
     //! to be called after ASC has completed loading and repaintdisplay() is available and working.
@@ -161,7 +93,7 @@ public:
 
 protected:
 //    void eventDraw (SDL_Surface* surface, const PG_Rect& rect);
-    void eventBlit ( SDL_Surface* srf, const PG_Rect &src, const PG_Rect& dst );
+    void Blit ( bool recursive = true, bool restore = true );
 };
 
 MainScreenWidget* mainScreenWidget = NULL;
@@ -178,8 +110,9 @@ void MainScreenWidget::eventDraw (SDL_Surface* surface, const PG_Rect& rect)
     }
 }
 */
-void MainScreenWidget::eventBlit ( SDL_Surface* srf, const PG_Rect &src, const PG_Rect& dst )
+void MainScreenWidget::Blit ( bool recursive , bool restore )
 {
+/*
     if ( gameInitialized && dirtyFlag ) {
        SDL_Surface* screen = ::getScreen();
        initASCGraphicSubsystem( srf, NULL );
@@ -188,6 +121,7 @@ void MainScreenWidget::eventBlit ( SDL_Surface* srf, const PG_Rect &src, const P
        dirtyFlag = false;
     }
     PG_ThemeWidget::eventBlit( srf, src, dst );
+    */
 }
 
 
@@ -205,14 +139,14 @@ class ASC_PG_Dialog : public PG_Window {
     protected:
        int quitModalLoop;
     public:
-       ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const char *windowtext, Uint32 flags=WF_DEFAULT, const char *style="Window", int heightTitlebar=25);
+       ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const char *windowtext, WindowFlags flags=DEFAULT, const char *style="Window", int heightTitlebar=25);
        int Run( );
        ~ASC_PG_Dialog();
 };
 
 
 
-ASC_PG_Dialog :: ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const char *windowtext, Uint32 flags, const char *style, int heightTitlebar )
+ASC_PG_Dialog :: ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const char *windowtext, WindowFlags flags, const char *style, int heightTitlebar )
        :PG_Window ( parent, r, windowtext, flags, style, heightTitlebar ),
         quitModalLoop ( 0 )
 {
@@ -250,19 +184,27 @@ int ASC_PG_Dialog::Run ( )
  public:
  	SoundSettings(PG_Widget* parent, const PG_Rect& r );
  protected:
- 	bool eventButtonClick(int id, PG_Widget* widget);
- 	bool eventScrollPos(int id, PG_Widget* widget, unsigned long data);
- 	bool eventScrollTrack(int id, PG_Widget* widget, unsigned long data);
+ 
+        bool radioButtonEvent( PG_RadioButton* button, bool state);
+        bool buttonEvent( PG_Button* button );
+ 	bool eventScrollTrack(PG_Slider* slider, long data);
+        bool closeWindow()
+        {
+           quitModalLoop = 1;
+           return true;
+        };   
+        
  };
 
 SoundSettings::SoundSettings(PG_Widget* parent, const PG_Rect& r ) :
-               ASC_PG_Dialog(parent, r, "Sound Settings", WF_SHOW_CLOSE )
+               ASC_PG_Dialog(parent, r, "Sound Settings", SHOW_CLOSE )
 {
         soundSettings = CGameOptions::Instance()->sound;
 
-        PG_CheckButton* musb = new PG_CheckButton(this, 20, PG_Rect( 30, 50, 200, 20 ), "Enable Music" );
+        PG_CheckButton* musb = new PG_CheckButton(this, PG_Rect( 30, 50, 200, 20 ), "Enable Music", 1 );
+        musb->sigClick.connect(SigC::slot( *this, &SoundSettings::radioButtonEvent ));
         new PG_Label ( this, PG_Rect(30, 80, 150, 20), "Music Volume" );
-	PG_Slider* mus = new PG_Slider(this, 21, PG_Rect(180, 80, 200, 20), PG_SB_HORIZONTAL);
+	PG_Slider* mus = new PG_Slider(this, PG_Rect(180, 80, 200, 20), PG_Slider::HORIZONTAL, 21);
 	mus->SetRange(0,100);
 	mus->SetPosition(soundSettings.musicVolume);
         if ( soundSettings.muteMusic )
@@ -271,9 +213,10 @@ SoundSettings::SoundSettings(PG_Widget* parent, const PG_Rect& r ) :
            musb->SetPressed();
 
 
-        PG_CheckButton* sndb = new PG_CheckButton(this, 30, PG_Rect( 30, 150, 200, 20 ), "Enable Sound" );
+        PG_CheckButton* sndb = new PG_CheckButton(this, PG_Rect( 30, 150, 200, 20 ), "Enable Sound", 2 );
+        sndb->sigClick.connect(SigC::slot( *this, &SoundSettings::radioButtonEvent ));
         new PG_Label ( this, PG_Rect(30, 180, 150, 20), "Sound Volume" );
-	PG_Slider* snd = new PG_Slider(this, 31, PG_Rect(180, 180, 200, 20), PG_SB_HORIZONTAL);
+	PG_Slider* snd = new PG_Slider(this, PG_Rect(180, 180, 200, 20), PG_Slider::HORIZONTAL, 31);
 	snd->SetRange(0,100);
 	snd->SetPosition(soundSettings.soundVolume);
         if ( soundSettings.muteEffects )
@@ -282,8 +225,13 @@ SoundSettings::SoundSettings(PG_Widget* parent, const PG_Rect& r ) :
            sndb->SetPressed();
 
 
-	new PG_Button(this, 100, PG_Rect(30,r.h-40,(r.w-70)/2,30), "OK");
-	new PG_Button(this, 101, PG_Rect(r.w/2+5,r.h-40,(r.w-70)/2,30), "Cancel");
+	PG_Button* b1 = new PG_Button(this, PG_Rect(30,r.h-40,(r.w-70)/2,30), "OK", 100);
+        b1->sigClick.connect(SigC::slot( *this, &SoundSettings::closeWindow ));
+        
+	PG_Button* b2 = new PG_Button(this, PG_Rect(r.w/2+5,r.h-40,(r.w-70)/2,30), "Cancel", 101);
+        b2->sigClick.connect(SigC::slot( *this, &SoundSettings::buttonEvent ));
+        
+        sigClose.connect( SigC::slot( *this, &SoundSettings::closeWindow ));
 }
 
 
@@ -299,19 +247,26 @@ void SoundSettings::updateSettings()
 
 }
 
-bool SoundSettings::eventScrollPos(int id, PG_Widget* widget, unsigned long data){
-	return false;
-}
+bool SoundSettings::radioButtonEvent( PG_RadioButton* button, bool state)
+{
+   if ( button->GetID() == 1 )
+      CGameOptions::Instance()->sound.muteMusic = !state;
+   if ( button->GetID() == 2 )
+      CGameOptions::Instance()->sound.muteEffects = !state;
+   updateSettings();
+   return true;
+}   
 
-bool SoundSettings::eventScrollTrack(int id, PG_Widget* widget, unsigned long data) {
-	if(id == 21){
+
+bool SoundSettings::eventScrollTrack(PG_Slider* slider, long data) {
+	if(slider->GetID() == 21){
                 CGameOptions::Instance()->sound.musicVolume = data;
                 CGameOptions::Instance()->setChanged();
                 updateSettings();
 		return true;
 	}
 
-	if(id == 31){
+	if(slider->GetID() == 31){
                 CGameOptions::Instance()->sound.soundVolume = data;
                 CGameOptions::Instance()->setChanged();
                 updateSettings();
@@ -320,39 +275,14 @@ bool SoundSettings::eventScrollTrack(int id, PG_Widget* widget, unsigned long da
 	return false;
 }
 
-bool SoundSettings::eventButtonClick(int id, PG_Widget* widget) {
-	if (id==PG_WINDOW_CLOSE ) {
-           quitModalLoop = 1;
-           return true;
-	}
 
-	if(id == 100) {
-           quitModalLoop = 1;
-           return true;
-	}
 
-	if(id == 101) {
+bool SoundSettings::buttonEvent( PG_Button* button ) 
+{
            quitModalLoop = 2;
            CGameOptions::Instance()->sound = soundSettings;
            updateSettings();
            return true;
-	}
-
-        //music
-        if ( id == 20 ) {
-           CGameOptions::Instance()->sound.muteMusic = !(static_cast<PG_CheckButton*>(widget))-> GetPressed();
-           updateSettings();
-           return true;
-        }
-
-        //sound effects
-        if ( id == 30 ) {
-           CGameOptions::Instance()->sound.muteEffects = !(static_cast<PG_CheckButton*>(widget))-> GetPressed();
-           updateSettings();
-           return true;
-        }
-
-	return PG_Window::eventButtonClick(id, widget);
 }
 
 

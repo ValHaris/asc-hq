@@ -190,7 +190,7 @@ class  tfield {
     Mine& getMine ( int n );
 
 
-    typedef vector<Object> ObjectContainer;
+    typedef vector< ::Object> ObjectContainer;
     ObjectContainer objects;
 
     /** add an object to the field

@@ -145,7 +145,7 @@ AC_CHECK_LIB( SDL_mixer,
 	      AC_MSG_ERROR( [[
 ASC requires the SDL_mixer library. If you have a distribution supplied 
 SDL_mixer.RPM installed, perhaps the SDL_mixer-devel.RPM is missing. 
-If your distribution does not include the SDL_image library, you can get it 
+If your distribution does not include the SDL_mixer library, you can get it 
 from http://www.libsdl.org/projects/SDL_mixer/ ]]))
 
 
@@ -176,11 +176,6 @@ AC_SUBST(SIGC_CFLAGS)
 
 
 
-dnl How do we add $SDL_FLAGS to the CFLAGS so gcc finds these headers ?
-dnl
-dnl AC_CHECK_HEADERS( SDL_image.h,, AC_MSG_ERROR( ASC requires the development files for the SDL_image library. You can get the complete library at www.libsdl.org ))
-dnl AC_CHECK_HEADERS( SDL_mixer.h,, AC_MSG_ERROR( ASC requires the development files for the SDL_mixer library. You can get the complete library at www.libsdl.org ))
-
 
 dnl ugly work around for this yet buggy SDLmm check
 AC_LANG_SAVE
@@ -200,10 +195,10 @@ AC_ARG_ENABLE( paragui, [  --disable-paragui       Don't use paragui .], usepara
 
 if test "x$useparagui" != "xno"; then
 
-   AM_PATH_PARAGUI(1.0.1,
+   AM_PATH_PARAGUI(1.1.7,
                :,
                AC_MSG_ERROR([[
-   *** PARAGUI version 1.0.1 not found! ASC requires the Paragui library.
+   *** PARAGUI version 1.1.7 not found! ASC requires the Paragui library.
    If you have a distribution supplied Paragui.RPM installed, perhaps the
    Paragui-devel.RPM is missing. If your distribution does not include the
    Paragui library, you can get it from http://www.paragui.org/
@@ -436,7 +431,7 @@ AC_OUTPUT(  Makefile \
 
 AC_ARG_ENABLE( debug, [  --enable-debug          enables some debugging options and output], ENABLEDEBUG=1 )
 if test "X$ENABLEDEBUG" = "X1"; then
-   CXXFLAGS="$CXXFLAGS -g3"
+   CXXFLAGS="$CXXFLAGS -O0 -g3"
    echo SDL_CFLAGS $SDL_CFLAGS
    echo SDL_LIBS $SDL_LIBS
 dnl   echo SDLMM_CFLAGS $SDLMM_CXXFLAGS
@@ -444,6 +439,7 @@ dnl   echo SDLMM_LIBS $SDLMM_LIBS
    echo PARAGUI_CFLAGS $PARAGUI_CFLAGS
    echo PARAGUI_LIBS $PARAGUI_LIBS
    echo CFLAGS $CFLAGS
+   echo CXXFLAGS $CXXFLAGS
    echo LIBS $LIBS
    echo LDFLAGS $LDFLAGS
    echo SIGC_CFLAGS $SIGC_CFLAGS
