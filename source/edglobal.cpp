@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.58 2004-05-12 20:05:52 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.59 2004-05-20 14:01:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2004/05/12 20:05:52  mbickel
+//      Restructured file loading routines for upcoming data cache
+//
 //     Revision 1.57  2004/05/11 20:22:33  mbickel
 //      Readded research system to ASC
 //
@@ -400,7 +403,9 @@ mc_check mc;
         "Load Clipboard",
         "Set Turn Number",
         "Show Pipeline Net",
-        "Edit Research" };
+        "Edit Technologies",
+        "Edit ResearchPoints",
+        "Generate TechTree" };
 
 
 // õS Infomessage
@@ -1176,6 +1181,10 @@ void execaction(int code)
    case act_showPipeNet: showPipeNet();
       break;
    case act_editResearch:  editResearch();
+      break;
+   case act_editResearchPoints:  editResearchPoints();
+      break;
+   case act_generateTechTree: generateTechTree();
       break;
 
     }

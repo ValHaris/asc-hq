@@ -151,9 +151,14 @@ void TerrainType::MoveMalus::read( tnstream& stream, int defaultValue, int moveM
    #endif
 
    for ( int j=0; j< mmcount ; j++ ) {
-      if (j < moveMalusCount )
-         push_back ( stream.readChar() );
-      else
+      if (j < moveMalusCount ) {
+         int i;
+         if ( version < 2 )
+            i = stream.readChar();
+         else
+            i = stream.readInt();
+         push_back ( i );
+      } else
          if ( j == 0 )
             push_back ( defaultValue );
          else
@@ -163,10 +168,10 @@ void TerrainType::MoveMalus::read( tnstream& stream, int defaultValue, int moveM
 
 void TerrainType::MoveMalus::write ( tnstream& stream ) const
 {
-  stream.writeInt(1);
+  stream.writeInt(2);
   stream.writeInt( size() );
   for ( int m = 0; m < size(); m++ )
-     stream.writeChar ( at(m) );
+     stream.writeInt ( at(m) );
 }
 
 

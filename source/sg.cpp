@@ -586,7 +586,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
                     ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog, ua_reloadDlgTheme, ua_showPlayerSpeed, ua_renameunit,
-                    ua_statisticdialog, ua_viewPipeNet };
+                    ua_statisticdialog, ua_viewPipeNet, ua_cancelResearch, ua_showResearchStatus };
 
 
 class tsgpulldown : public tpulldown
@@ -628,6 +628,7 @@ void         tsgpulldown :: init ( void )
    addbutton ( "transfer ~U~nit control", ua_giveunitaway );
    addbutton ( "~r~ename unit", ua_renameunit );
    addbutton ( "~T~ransfer resources", ua_settribute);
+   addbutton ( "~C~ancel Research", ua_cancelResearch );
 
    addfield ( "~I~nfo" );
    addbutton ( "~V~ehicle types", ua_vehicleinfo );
@@ -641,6 +642,7 @@ void         tsgpulldown :: init ( void )
    addbutton ( "seperator", -1 );
    // addbutton ( "~R~esearch", ua_researchinfo );
    addbutton ( "~P~lay time", ua_showPlayerSpeed );
+   addbutton ( "~R~esearch status", ua_showResearchStatus );
 
    // addbutton ( "vehicle ~I~mprovementõF7", ua_dispvehicleimprovement);
    // addbutton ( "show game ~P~arameters", ua_GameParameterInfo );
@@ -1564,6 +1566,57 @@ void execuseraction ( tuseractions action )
          break;
       case ua_showPlayerSpeed:
          showPlayerTime();
+         break;
+      case  ua_cancelResearch:
+         if ( actmap->player[actmap->actplayer].research.activetechnology ) {
+            ASCString s = "do you really want to cancel the current research project ?\n";
+            // s += strrr ( actmap->player[actmap->actplayer].research.progress );
+            // s += " research points will be lost.";
+            if (choice_dlg(s.c_str(),"~y~es","~n~o") == 1) {
+               actmap->player[actmap->actplayer].research.progress = 0;
+               actmap->player[actmap->actplayer].research.activetechnology = NULL;
+            }
+         } else
+            displaymessage("you are not researching anything", 3);
+         break;
+      case ua_showResearchStatus: {
+            ASCString s;
+            s += "Current technology:\n";
+            if ( actmap->player[actmap->actplayer].research.activetechnology )
+               s += actmap->player[actmap->actplayer].research.activetechnology->name;
+            else
+               s += " - none - ";
+            s += "\n\n";
+
+            s += "Research Points: \n";
+            s += actmap->player[actmap->actplayer].research.progress;
+            if ( actmap->player[actmap->actplayer].research.activetechnology )
+               s += ASCString(" / ") + strrr ( actmap->player[actmap->actplayer].research.activetechnology->researchpoints );
+            s += "\n\n";
+
+            s+= "Research Points Plus \n";
+            int p = 0;
+            for ( Player::BuildingList::iterator i = actmap->player[actmap->actplayer].buildingList.begin(); i != actmap->player[actmap->actplayer].buildingList.end(); ++i )
+               p += (*i)->researchpoints;
+
+
+            s += strrr ( p );
+
+            s += "\n\n";
+
+            s+= "Developed Technologies: \n";
+            for ( vector<int>::iterator i = actmap->player[actmap->actplayer].research.developedTechnologies.begin(); i != actmap->player[actmap->actplayer].research.developedTechnologies.end(); ++i ) {
+               Technology* t = technologyRepository.getObject_byID( *i );
+               if ( t )
+                  s += t->name + "\n";
+            }
+
+
+            tviewanytext vat ;
+            vat.init ( "Research Status", s.c_str(), 20, -1 , 450, 480 );
+            vat.run();
+            vat.done();
+         }
          break;
 #ifndef NO_PARAGUI
       case ua_reloadDlgTheme:

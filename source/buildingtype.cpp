@@ -59,7 +59,8 @@ const char*  cbuildingfunctions[cbuildingfunctionnum]  =
                 "construct units that cannot move out",
                 "resource sink",
                 "external resource transfer",
-                "external ammo transfer" };
+                "external ammo transfer",
+                "no object chaining" };
 
 
 BuildingType :: BuildingType ( void )

@@ -1,6 +1,10 @@
-//     $Id: newfont.h,v 1.11 2001-12-14 10:20:05 mbickel Exp $
+//     $Id: newfont.h,v 1.12 2004-05-20 14:01:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2001/12/14 10:20:05  mbickel
+//      Cleanup and enhancements to configure.in
+//      Removed last remains of octagonal version from source files
+//
 //     Revision 1.10  2001/07/15 21:00:25  mbickel
 //      Some cleanup in the vehicletype class
 //
@@ -172,7 +176,7 @@ extern void         showtext3c( const char *       txt,
                        word         xpos,
                        word         ypos);
 
-extern int gettextwdth ( char* txt, pfont font );
+extern int gettextwdth ( const char* txt, pfont font );
 extern void shrinkfont ( pfont font, int diff );
 
 

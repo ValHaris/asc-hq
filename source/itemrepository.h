@@ -87,7 +87,7 @@ extern TechAdapterContainer techAdapterContainer;
 
 class ItemFiltrationSystem {
       public:
-         typedef enum { Building, Vehicle, Object, Terrain } Category;
+         typedef enum { Building, Vehicle, Object, Terrain, Technology } Category;
 
          class ItemFilter {
                public:
@@ -97,6 +97,7 @@ class ItemFiltrationSystem {
                  IntRangeArray objects;
                  IntRangeArray units;
                  IntRangeArray terrain;
+                 IntRangeArray technologies;
                  bool isContained (IntRangeArray& arr, int id );
                  bool active;
                public:

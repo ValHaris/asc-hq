@@ -162,7 +162,8 @@ const char*  buildingFunctionTags[cbuildingfunctionnum]  =
                 "Produce_Units_that_cannot_leave",
                 "ResourceSink",
                 "ExternalResourceTransfer",
-                "ExternalAmmoTransfer" };
+                "ExternalAmmoTransfer",
+                "NoObjectChaining" };
 
 
  const char* weatherAbbrev[cwettertypennum]

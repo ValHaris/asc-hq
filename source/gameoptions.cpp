@@ -90,7 +90,7 @@ void CGameOptions::setDefaults ( void )
    mouse.singleClickAction=0;
 
    container.autoproduceammunition=1;
-   container.filleverything=1;
+   container.filleverything=2;
 
    onlinehelptime=100;
    smallguiiconopenaftermove=0;

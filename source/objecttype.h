@@ -120,9 +120,12 @@
 
      //! the images of the objects
      struct WeatherPicture {
+        WeatherPicture(){ gfxReference=false;};
         vector<void*> images;
         vector<int>   bi3pic;
         vector<int>   flip;
+        //! are the pictures referenced or copied when using GFX-system pics
+        bool gfxReference;
         void resize(int i) { flip.resize(i); bi3pic.resize(i); images.resize(i); };
      } weatherPicture [cwettertypennum];
 

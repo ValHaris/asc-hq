@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.146 2004-05-16 15:40:32 mbickel Exp $
+//     $Id: typen.h,v 1.147 2004-05-20 14:01:10 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -260,7 +260,7 @@ void writePointerContainer ( const C& c, tnstream& stream  )
 }
 
 template<typename BaseType>
-void readPointerContainer ( vector<BaseType*> v, tnstream& stream  )
+void readPointerContainer ( vector<BaseType*>& v, tnstream& stream  )
 {
    stream.readInt(); // version
    int num = stream.readInt();

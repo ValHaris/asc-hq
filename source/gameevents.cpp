@@ -56,12 +56,6 @@ const int EventActionNum = 21;
 const int EventTriggerNum = 18;
 
 
-int editInt( const ASCString& title, int defaultValue, int minValue = 0, int maxValue = maxint )
-{
-   return getid( title.c_str(), defaultValue, minValue, maxValue );
-}
-
-
 void    viewtextmessage ( int id, int player )
 {
    ASCString txt = readtextmessage( id );

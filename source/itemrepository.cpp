@@ -384,28 +384,34 @@ void ItemFiltrationSystem::ItemFilter::runTextIO ( PropertyContainer& pc )
     pc.addIntRangeArray ( "Vehicles", units );
     pc.addIntRangeArray ( "Objects", objects );
     pc.addIntRangeArray ( "Terrain", terrain );
+    if ( pc.find ( "Technologies"))
+      pc.addIntRangeArray ( "Technologies", technologies );
     pc.addBool ( "activated", active, false );
     pc.addString ( "name", name );
 }
 
 void ItemFiltrationSystem::ItemFilter::read ( tnstream& stream )
 {
-   stream.readInt();
+   int version = stream.readInt();
    readClassContainer ( buildings, stream );
    readClassContainer ( objects, stream );
    readClassContainer ( units, stream );
    readClassContainer ( terrain, stream );
+   if ( version >= 2 )
+      readClassContainer ( technologies, stream );
+
    active = stream.readInt();
    name = stream.readString();
 }
 
 void ItemFiltrationSystem::ItemFilter::write ( tnstream& stream )
 {
-   stream.writeInt ( 1 );
+   stream.writeInt ( 2 );
    writeClassContainer ( buildings, stream );
    writeClassContainer ( objects, stream );
    writeClassContainer ( units, stream );
    writeClassContainer ( terrain, stream );
+   writeClassContainer ( technologies, stream );
    stream.writeInt ( active );
    stream.writeString ( name );
 }
@@ -429,6 +435,7 @@ bool ItemFiltrationSystem::ItemFilter::isContained ( ItemFiltrationSystem::Categ
       case Vehicle: return isContained ( units, id );
       case Object: return isContained ( objects, id );
       case Terrain: return isContained ( terrain, id );
+      case Technology: return isContained ( technologies, id );
    };
    return false;
 }

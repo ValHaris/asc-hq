@@ -1282,17 +1282,28 @@ float WeapDist::getWeapStrength ( const SingleWeapon* weap, int dist, int attack
          reldiff = 0;
    }
 
-   int minstrength = 255 - 255 * weap->minstrength / weap->maxstrength;
+//   int minstrength = 255 - 255 * weap->minstrength / weap->maxstrength;
 
-   int relstrength = 255 - ( 255 - data[typ][reldiff] ) * minstrength / ( 255 - data[typ][255] );
+//   int relstrength = 255 - ( 255 - data[typ][reldiff] ) * minstrength / ( 255 - data[typ][255] );
 
-   float rel = relstrength;
+   float relpos = float(reldiff) / 255.0;
 
-   if ( attacker_height != -1 && defender_height!= -1 ) {
+/*   if ( weap->maxstrength && weap->minstrength )
+      relpos /= float(weap->maxstrength) / float(weap->minstrength);
+
+   return 1.0 - relpos;*/
+
+
+   float relstrength = weap->maxstrength - relpos * ( weap->maxstrength - weap->minstrength );
+
+   return relstrength / float(weap->maxstrength);
+
+/*   if ( attacker_height != -1 && defender_height!= -1 ) {
       int hd = getheightdelta ( log2 ( attacker_height ), log2 ( defender_height ));
-      return rel * weap->efficiency[6+hd] / 100 / 255;
+      return relstrength * weap->efficiency[6+hd] / 100 ;
    } else
-      return rel / 255 ;
+      return relstrength ;
+      */
 }
 
 WeapDist weapDist;

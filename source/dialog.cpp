@@ -1447,7 +1447,7 @@ void         tvehicleinfo::showclasses( void )
    activefontsettings.justify = lefttext;
 }
 
-
+const bool vehicleInfoFilterUnits = false;
 
 void         tvehicleinfo::buttonpressed( int id )
 {
@@ -1464,7 +1464,7 @@ void         tvehicleinfo::buttonpressed( int id )
             else
                i = vehicleTypeRepository.getNum() - 1;
             type = vehicleTypeRepository.getObject_byPos ( i );
-         } while ( !type || ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Vehicle, type->id ) ); /* enddo */
+         } while ( !type || (ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Vehicle, type->id ) && vehicleInfoFilterUnits )); /* enddo */
          markweap = 0;
       }
 
@@ -1475,7 +1475,7 @@ void         tvehicleinfo::buttonpressed( int id )
             else
                i = 0;
             type = vehicleTypeRepository.getObject_byPos ( i );
-         } while ( !type || ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Vehicle, type->id ) ); /* enddo */
+         } while ( !type || (ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Vehicle, type->id ) && vehicleInfoFilterUnits )); /* enddo */
 
          markweap = 0;
       }
@@ -1558,7 +1558,7 @@ void         tvehicleinfo::run(void)
    }
 
    pvehicletype type = actmap->getvehicletype_bypos ( i );
-   while ( !type || ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Vehicle, type->id ) ) {
+   while ( !type || (ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Vehicle, type->id ) && vehicleInfoFilterUnits )) {
       if ( i < vehicleTypeRepository.getNum() - 1 )
          i++;
       else {
@@ -1741,13 +1741,13 @@ end;  */
 class  tchoice_dlg : public tdialogbox {
                public:
                   int      result;
-                  void      init( char* a, char* b, char* c );
+                  void      init( const char* a, const char* b, const char* c );
                   virtual void buttonpressed( int id );
                   virtual void run( void );
                 };
 
 
-void         tchoice_dlg::init( char* a, char* b, char* c )
+void         tchoice_dlg::init( const char* a, const char* b, const char* c )
 {
   tdialogbox::init();
   windowstyle |= dlg_notitle;
@@ -1798,9 +1798,9 @@ void         tchoice_dlg::run(void)
 } 
 
 
-int         choice_dlg(char *       title,
-                        char *       s1,
-                        char *       s2, 
+int         choice_dlg( const char *       title,
+                        const char *       s1,
+                        const char *       s2,
                         ... )
 { 
 
@@ -4043,22 +4043,55 @@ void         tsetalliances::buttonpressed( int id )
               }
       break;
       case 116: {
+                    viewVisibilityStatistics();
+
+                    for ( int i = 0; i < 8; ++i )
+                       for ( Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); j++ )
+                           (*j)->resetMovement();
+
+
+                     vector<ASCString> buttonsP;
+                     buttonsP.push_back ( "Reset ~V~iew" );
+                     buttonsP.push_back ( "Reset ~R~es." );
+                     buttonsP.push_back ( "Reset ~P~rod." );
+                     buttonsP.push_back ( "~C~ontinue" );
+
+                     pair<int,int> playerRes;
+                     do {
+                        vector<ASCString> player;
+                        for ( int i = 0; i < 8; ++i ) {
+                           ASCString s = strrr(i);
+                           player.push_back ( s + " " + actmap->player[i].getName() );
+                        }
+
+                        playerRes = chooseString ( "Choose Player", player, buttonsP );
+                        if ( playerRes.first == 0 ) {
+                             for ( int x = 0; x < actmap->xsize; x++ )
+                                for ( int y = 0; y < actmap->ysize; y++ ) {
+                                   pfield fld = actmap->getField(x,y);
+                                   fld->setVisibility( visible_not, playerRes.second );
+                                   if ( fld->resourceview )
+                                      fld->resourceview->visible &= ~(1<<playerRes.second);
+                                }
+                        }
+                        if ( playerRes.first == 1 ) {
+                           actmap->player[playerRes.second].research.progress = 0;
+                           actmap->player[playerRes.second].research.activetechnology = NULL;
+                           actmap->player[playerRes.second].research.developedTechnologies.clear();
+                        }
+
+                        if ( playerRes.first == 2 ) {
+                           for ( Player::BuildingList::iterator i = actmap->player[playerRes.second].buildingList.begin(); i != actmap->player[playerRes.second].buildingList.end(); ++i ) 
+                              for ( int j = 0; j < 32; ++j )
+                                 (*i)->production[j] = NULL;
+                        }
+
+                     } while ( playerRes.first != 3 );
+
                     ASCString filename;
                     fileselectsvga(mapextension, filename, false);
-                    for ( int i = 0; i < 8; i++ )
-                       if ( actmap->player[i].stat != Player::off ) {
-                          if (choice_dlg("do you want to reset the view for player %d ?","~y~es","~n~o", i) == 1)
-                             for ( int x = 0; x < actmap->xsize; x++ )
-                                for ( int y = 0; y < actmap->ysize; y++ )
-                                   actmap->getField(x,y)->setVisibility( visible_not, i );
-                          for ( Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); j++ )
-                             (*j)->resetMovement(); 
-                       }
-
                     if ( !filename.empty() )
                        savemap( filename.c_str() );
-
-                    viewVisibilityStatistics();
 
                     delete actmap;
                     throw NoMapLoaded();
@@ -5948,3 +5981,18 @@ void selectgraphicset ( void )
       }
    }
 }
+
+int editInt( const ASCString& title, int defaultValue, int minValue, int maxValue )
+{
+   return getid( title.c_str(), defaultValue, minValue, maxValue );
+}
+
+
+void longWarning ( const ASCString& string )
+{
+   tviewanytext vat ;
+   vat.init ( "Warning", string.c_str(), 20, -1 , 450, 480 );
+   vat.run();
+   vat.done();
+}
+

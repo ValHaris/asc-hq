@@ -32,7 +32,7 @@
  #include "research.h"
 
 
-const int cbuildingfunctionnum = 21;
+const int cbuildingfunctionnum = 22;
 extern const char*  cbuildingfunctions[cbuildingfunctionnum];
  #define cghqn 0
  #define cghqb ( 1 << cghqn  )
@@ -68,6 +68,8 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
  #define cgexternalresourceloadingb ( 1 << cgexternalresourceloadingn )
  #define cgexternalammoloadingn 20
  #define cgexternalammoloadingb ( 1 << cgexternalammoloadingn )
+ #define cgnoobjectchainingn 21
+ #define cgnoobjectchainingb ( 1 << cgnoobjectchainingn )
 
 
  //! The class describing properties that are common to all buildings of a certain kind. \sa Building

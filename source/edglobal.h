@@ -1,6 +1,9 @@
-//     $Id: edglobal.h,v 1.17 2004-05-11 20:22:33 mbickel Exp $
+//     $Id: edglobal.h,v 1.18 2004-05-20 14:01:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2004/05/11 20:22:33  mbickel
+//      Readded research system to ASC
+//
 //     Revision 1.16  2004/01/21 14:43:00  mbickel
 //      Fixed: external loading not working
 //      Improved AI
@@ -106,7 +109,7 @@ extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 85;
+const int execactionscount = 87;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -195,6 +198,8 @@ enum tuseractions {
      act_readClipBoard,
      act_setTurnNumber,
      act_showPipeNet,
-     act_editResearch};
+     act_editResearch,
+     act_editResearchPoints,
+     act_generateTechTree};
 
 extern void         execaction(int code);

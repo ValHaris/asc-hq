@@ -1532,13 +1532,15 @@ int   cbuildingcontrols :: cproduceunit :: available (pvehicletype fzt, int* lac
    } else
       l |= 1 << 10;
 
-   if ( lack )
-      *lack = l;
+   if ( cc->baseContainer->vehicleUnloadable(fzt) || (cc_b->building->typ->special & cgproduceAllUnitsB )) {
+      if ( lack )
+         *lack = l;
 
-   if ( l == 0) {
-      for ( int i = 0; i < 32; i++ )
-         if ( !cc_b->building->loading[ i ] )
-            return 1;
+      if ( l == 0) {
+         for ( int i = 0; i < 32; i++ )
+            if ( !cc_b->building->loading[ i ] )
+               return 1;
+      }
    }
 
    return 0;
@@ -1569,7 +1571,7 @@ pvehicle cbuildingcontrols :: cproduceunit :: produce (pvehicletype fzt, bool fo
    cc->getenergy   ( fzt->productionCost.energy,   1 );
    cc->getmaterial ( fzt->productionCost.material, 1 );
 
-//   logtoreplayinfo( rpl_productionResourceUsage, fzt->id, cc_b->building->getPosition().x, cc_b->building->getPosition().y ); 
+//   logtoreplayinfo( rpl_productionResourceUsage, fzt->id, cc_b->building->getPosition().x, cc_b->building->getPosition().y );
 
    int i = 0;
    int n = 1;
@@ -1581,7 +1583,22 @@ pvehicle cbuildingcontrols :: cproduceunit :: produce (pvehicletype fzt, bool fo
          i++;
    } /* endwhile */
 
-   if ( CGameOptions::Instance()->container.filleverything || forceRefill )
+   Resources res;
+   for ( int i = 0; i < fzt->weapons.count; ++i )
+      if ( fzt->weapons.weapon[i].count )
+         if ( fzt->weapons.weapon[i].getScalarWeaponType() >= 0 )
+            for ( int r = 0; r < 3; ++r )
+               res.resource(r) += cwaffenproduktionskosten[fzt->weapons.weapon[i].getScalarWeaponType()][r] * fzt->weapons.weapon[i].count;
+
+   bool autoFill = false;
+   if ( CGameOptions::Instance()->container.filleverything == 1 )
+      autoFill = true;
+
+   if ( CGameOptions::Instance()->container.filleverything == 2 )
+      if ( res.material < fzt->productionCost.material/2 && res.energy < fzt->productionCost.energy/2 )
+         autoFill = true;
+
+   if ( autoFill || forceRefill )
       cc->refill.filleverything ( eht );
 
    return eht;
@@ -6202,20 +6219,21 @@ void ccontainer_b :: BuildProductionLine :: exec( )
 
 
          if ( cc_b->building->typ->vehicleFit ( veh ) && !found )
-            if ( veh->techDependency.available ( actmap->player[actmap->actplayer].research )) {
-               ASCString s;
-               if ( r < veh->productionCost * productionLineConstructionCostFactor  ) {
-                  s += "* ";
-                  idList.push_back ( -1 );
-               } else
-                  idList.push_back ( veh->id );
-               s += veh->getName() + " (E: ";
-               s += strrr ( int(productionLineConstructionCostFactor * veh->productionCost.energy ));
-               s += " M: ";
-               s += strrr ( int(productionLineConstructionCostFactor * veh->productionCost.material ));
-               s += ")";
-               list.push_back ( s );
-            }
+            if ( cc->baseContainer->vehicleUnloadable(veh) || (cc_b->building->typ->special & cgproduceAllUnitsB )) 
+               if ( veh->techDependency.available ( actmap->player[actmap->actplayer].research )) {
+                  ASCString s;
+                  if ( r < veh->productionCost * productionLineConstructionCostFactor  ) {
+                     s += "* ";
+                     idList.push_back ( -1 );
+                  } else
+                     idList.push_back ( veh->id );
+                  s += veh->getName() + " (E: ";
+                  s += strrr ( int(productionLineConstructionCostFactor * veh->productionCost.energy ));
+                  s += " M: ";
+                  s += strrr ( int(productionLineConstructionCostFactor * veh->productionCost.material ));
+                  s += ")";
+                  list.push_back ( s );
+               }
       }
    }
 

@@ -2,9 +2,14 @@
     \brief Interface for all the dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.h,v 1.25 2003-07-06 15:10:26 mbickel Exp $
+//     $Id: dialog.h,v 1.26 2004-05-20 14:01:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2003/07/06 15:10:26  mbickel
+//      Better configure messages
+//      code cleanup
+//      Replays update resources for constructing / removing objects
+//
 //     Revision 1.24  2002/11/20 20:00:53  mbickel
 //      New features: specify passwords when starting a game
 //      Better error messages when loading a game through command line parameters
@@ -126,9 +131,9 @@ extern void  statisticbuildings(void);
     \param s2 the text on the right button
     \returns 1 if the left button has been pressed; 2 if the right button has been pressed
 */
-extern int   choice_dlg(char *       title,
-                        char *       s1,
-                        char *       s2,
+extern int   choice_dlg(const char *       title,
+                        const char *       s1,
+                        const char *       s2,
                         ... );
    
 
@@ -359,6 +364,8 @@ class MultilineEdit : public tmessagedlg  {
        };
 
 extern void selectgraphicset ( void );
+
+extern int editInt( const ASCString& title, int defaultValue, int minValue = 0, int maxValue = maxint );
 
 
 #endif

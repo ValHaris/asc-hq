@@ -1251,7 +1251,9 @@ void doresearch ( tmap* actmap, int player )
          re.bld = bld;
 
          vre.push_back(re);
-      }
+      } else
+         if ( bld->researchpoints > 0 )
+            actmap->player[player].research.progress += bld->researchpoints;
    }
    sort( vre.begin(), vre.end());
 

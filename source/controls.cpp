@@ -2158,7 +2158,7 @@ void         generatevehicle_cl ( pvehicletype fztyp,
                height = h;
             }
       vehicle->height = 1 << height;
-      vehicle->setMovement ( vehicle->maxMovement() );
+      vehicle->setMovement ( 0 );
 
 
 

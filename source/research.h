@@ -46,6 +46,10 @@ class TechDependency: public LoadableItemType {
      void write ( tnstream& stream ) const;
      void runTextIO ( PropertyContainer& pc);
 
+     //! outputs the dependencies in text format for processing by GraphViz
+     void writeTreeOutput ( const ASCString& sourceTechName, tnstream& stream, bool reduce ) const;
+
+     int findInheritanceLevel( int id, vector<int>& stack, const ASCString& sourceTechName ) const;
 };
 
 class TechAdapter: public LoadableItemType {
@@ -117,13 +121,10 @@ class TechAdapterDependency {
      typedef std::map<ASCString,bool> TriggeredTechAdapter;
      TriggeredTechAdapter triggeredTechAdapter;
 
-   #ifdef karteneditor
    public:
-   #endif 
      vector<int> developedTechnologies;
 
 
-   public:
      bool techResearched ( int id ) const;
 
      enum AvailabilityStatus { researched, available, unavailable };

@@ -232,7 +232,7 @@ void         tchoosetechnology::run(void)
             for ( int i = firstshowntech; i < technum && i < firstshowntech + dispnum; i++ ) {
                int x = gx();
                int y = gy(i);
-               if ( mouseinrect ( x1 + xsize - 120, y, x1 + xsize - 20, y + 20  ) ) {
+               if ( mouseinrect ( x1 + xsize - 90, y, x1 + xsize - 50, y + 20  ) ) {
                   if ( techs[i]->relatedUnitID > 0 ) {
                      Vehicletype* vt = actmap->getvehicletype_byid( techs[i]->relatedUnitID );
                      if ( vt ) {

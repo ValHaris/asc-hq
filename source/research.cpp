@@ -69,6 +69,80 @@ bool TechDependency::available( const Research& research ) const
 }
 
 
+int TechDependency::findInheritanceLevel( int id, vector<int>& stack, const ASCString& sourceTechName ) const
+{
+   for ( RequiredTechnologies::const_iterator j = requiredTechnologies.begin(); j != requiredTechnologies.end(); ++j )
+      for ( int k = j->from; k <= j->to; ++k )
+         if ( k > 0 ) {
+            if ( find( stack.begin(), stack.end(), k ) != stack.end() ) {
+               ASCString s = "Cyclic reference for technology \n" + sourceTechName + "\n";
+               for ( vector<int>::iterator i = stack.begin(); i != stack.end(); ++i ) {
+                  Technology* t = technologyRepository.getObject_byID( *i );
+                  if ( t )
+                     s += t->name + "\n";
+               }
+               longWarning ( s );
+               return -1;
+            }
+
+            Technology* t = technologyRepository.getObject_byID( k );
+
+            if ( t ) {
+               // if ( requireAllListedTechnologies  )
+                  stack.push_back ( k );
+
+               int i = t->techDependency.findInheritanceLevel ( id, stack, sourceTechName );
+
+               // if ( requireAllListedTechnologies )
+                  stack.pop_back();
+               if ( i > 0 )
+                  return i+1;
+            }
+         }
+
+   for ( RequiredTechnologies::const_iterator j = requiredTechnologies.begin(); j != requiredTechnologies.end(); ++j )
+      for ( int k = j->from; k <= j->to; ++k )
+         if ( id == k && k > 0 )
+            return 1;
+
+   return -1;
+}
+
+
+void TechDependency::writeTreeOutput ( const ASCString& sourceTechName, tnstream& stream, bool reduce ) const
+{
+   map<int,int> ihl;
+   vector<int> stack;
+   for ( RequiredTechnologies::const_iterator j = requiredTechnologies.begin(); j != requiredTechnologies.end(); ++j )
+      for ( int k = j->from; k <= j->to; ++k ) {
+         ihl[k] = findInheritanceLevel( k , stack, sourceTechName);
+      }
+
+   for ( RequiredTechnologies::const_iterator j = requiredTechnologies.begin(); j != requiredTechnologies.end(); ++j )
+      for ( int k = j->from; k <= j->to; ++k ) {
+         const Technology* t = technologyRepository.getObject_byID( k );
+         if ( t && (ihl[k] == 1 || !reduce) ) {
+            ASCString s = "\"";
+            ASCString stn = sourceTechName;
+
+            while ( stn.find ( "\"" ) != ASCString::npos )
+               stn.erase ( stn.find ( "\"" ),1 );
+
+            s += stn;
+            s += "\" -> \"";
+
+            ASCString stn2 = t->name;
+            while ( stn2.find ( "\"" ) != ASCString::npos )
+               stn2.erase ( stn2.find ( "\"" ),1 );
+
+            s += stn2 + "\"\n";
+            stream.writeString ( s, false );
+
+            stream.writeString ( "\"" + stn + "\" [shape=box] \n", false );
+         }
+      }
+}
+
 
 
 

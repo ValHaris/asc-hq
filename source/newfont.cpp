@@ -296,7 +296,7 @@ void shrinkfont ( pfont font, int diff )
 
 }
 
-int gettextwdth ( char* txt, pfont font )
+int gettextwdth ( const char* txt, pfont font )
 {
    int i, result;
 

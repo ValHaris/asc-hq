@@ -649,12 +649,12 @@ void calculateforest( pmap actmap, pobjecttype woodObj )
                       }
                   }
 
-                  int found = 0;
+                  // int found = 0;
                   int dr;
                   for ( int j = 0; j < woodformnum; j++ )
                      if ( woodform[j] == c ) {
                         dr = j;
-                        found = 1;
+                        // found = 1;
                      }
 
 //                  if ( !found )
@@ -714,7 +714,7 @@ void         calculateobject( int       x,
             if ( fld2->typ->terraintype->id == obj->linkableTerrain[t] )
                c |=  1 << dir ;
 
-         if ( fld2->building ) {
+         if ( fld2->building && !(fld2->building->typ->special & cgnoobjectchainingb) ) {
             if ( (obj->netBehaviour & ObjectType::NetToBuildingEntry)  &&  (fld2->bdt & getTerrainBitType(cbbuildingentry) ).any() )
                c |= 1 << dir;
 
@@ -793,16 +793,16 @@ void         calculateallobjects( pmap actmap )
 
 
 
-const int object_version = 7;
+const int object_version = 9;
 
 void ObjectType :: read ( tnstream& stream )
 {
    int version = stream.readInt();
 
-   if ( version < 7 )
+   if ( version < 9 )
       fatalError ( "sorry, the old file format for objects cannot be loaded any more" );
 
-   if ( version <= object_version && version >= 7 ) {
+   if ( version <= object_version && version >= 9 ) {
 
        id = stream.readInt();
        groupID = stream.readInt();
@@ -824,6 +824,8 @@ void ObjectType :: read ( tnstream& stream )
           fieldModification[i].terrainaccess.read( stream );
           fieldModification[i].terrain_and.read ( stream );
           fieldModification[i].terrain_or.read ( stream );
+          fieldModification[i].movemalus_plus.read ( stream, 0 );
+          fieldModification[i].movemalus_abs.read ( stream, -1 );
        }
 
 
@@ -849,6 +851,8 @@ void ObjectType :: read ( tnstream& stream )
 
        netBehaviour = stream.readInt();
 
+       displayMethod = stream.readInt();
+
        int w;
        stream.readrlepict ( &buildicon,  false, &w);
        stream.readrlepict ( &removeicon, false, &w);
@@ -860,6 +864,7 @@ void ObjectType :: read ( tnstream& stream )
          if ( weather.test ( ww ) ) {
 
             int pictnum = stream.readInt();
+            weatherPicture[ww].gfxReference = stream.readInt(  );
 
             weatherPicture[ww].bi3pic.resize( pictnum );
             weatherPicture[ww].flip.resize( pictnum );
@@ -873,7 +878,8 @@ void ObjectType :: read ( tnstream& stream )
 
                   loadbi3pict_double ( weatherPicture[ww].bi3pic[n],
                                       &weatherPicture[ww].images[n],
-                                      1 );  // CGameOptions::Instance()->bi3.interpolate.objects
+                                      1,
+                                      weatherPicture[ww].gfxReference );  // CGameOptions::Instance()->bi3.interpolate.objects
                } else {
                   weatherPicture[ww].bi3pic[n] = -1;
                   weatherPicture[ww].flip[n] = 0;
@@ -961,6 +967,8 @@ void ObjectType :: write ( tnstream& stream ) const
        fieldModification[i].terrainaccess.write( stream );
        fieldModification[i].terrain_and.write ( stream );
        fieldModification[i].terrain_or.write ( stream );
+       fieldModification[i].movemalus_plus.write ( stream );
+       fieldModification[i].movemalus_abs.write ( stream );
     }
 
 
@@ -985,6 +993,8 @@ void ObjectType :: write ( tnstream& stream ) const
 
     stream.writeInt ( netBehaviour );
 
+    stream.writeInt ( displayMethod );
+
     stream.writedata( buildicon,  getpicsize2 ( buildicon ) );
     stream.writedata( removeicon, getpicsize2 ( removeicon ) );
 
@@ -994,6 +1004,7 @@ void ObjectType :: write ( tnstream& stream ) const
     for ( int ww = 0; ww < cwettertypennum; ww++ )
        if ( weather.test( ww ) ) {
           stream.writeInt( weatherPicture[ww].images.size() );
+          stream.writeInt( weatherPicture[ww].gfxReference );
 
           for ( int l = 0; l < weatherPicture[ww].images.size(); l++ ) {
              if ( weatherPicture[ww].bi3pic[l] >= 0 && weatherPicture[ww].flip[l] == 0 ) {
@@ -1118,17 +1129,17 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
             for ( int r = oldsize; r < weatherPicture[i].flip.size(); r++ )
                weatherPicture[i].flip[r] = 0;
 
-            bool reference = true;
+            weatherPicture[i].gfxReference = true;
             for ( int r = 0; r <  weatherPicture[i].flip.size(); r++ )
                if ( weatherPicture[i].flip[r] > 0 )
-                  reference = false;
+                  weatherPicture[i].gfxReference = false;
 
             if ( pc.isReading() )
                for ( int j = 0; j < weatherPicture[i].bi3pic.size(); j++ )
                    loadbi3pict_double (  weatherPicture[i].bi3pic[j],
                                         &weatherPicture[i].images[j],
                                         1,
-                                        reference );
+                                        weatherPicture[i].gfxReference );
 
          } else {
             ASCString s = extractFileName_withoutSuffix( filename );

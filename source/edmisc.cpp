@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.111 2004-05-12 20:05:52 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.112 2004-05-20 14:01:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.111  2004/05/12 20:05:52  mbickel
+//      Restructured file loading routines for upcoming data cache
+//
 //     Revision 1.110  2004/05/11 20:22:33  mbickel
 //      Readded research system to ASC
 //
@@ -1190,7 +1193,8 @@ void         pdsetup(void)
    pd.addbutton ( "set global ~w~eatherõctrl-W", act_setactweatherglobal );
    pd.addbutton ( "~C~reate ressourcesõctrl+F", act_createresources );
    pd.addbutton ( "~S~et turn number",        act_setTurnNumber );
-   pd.addbutton ( "~E~dit research",          act_editResearch );
+   pd.addbutton ( "~E~dit technologies",          act_editResearch );
+   pd.addbutton ( "~E~dit research points",          act_editResearchPoints );
 
   pd.addfield ("~T~ools");
    pd.addbutton ( "~V~iew mapõV",            act_viewmap );
@@ -1202,7 +1206,8 @@ void         pdsetup(void)
    pd.addbutton ( "~U~nitset transformation",    act_unitsettransformation );
    pd.addbutton ( "map ~t~ransformation",        act_transformMap );
    pd.addbutton ( "Com~p~are Resources ", act_displayResourceComparison );
-   pd.addbutton ( "Show Pipeline Net", act_showPipeNet ); 
+   pd.addbutton ( "Show Pipeline Net", act_showPipeNet );
+   pd.addbutton ( "Generate Tech Tree", act_generateTechTree );
 
    pd.addfield ("~O~ptions");
     pd.addbutton ( "~M~ap valuesõctrl+M",          act_changemapvals );
@@ -2465,8 +2470,10 @@ void         BuildingValues::init(void)
    addbutton("F~u~el-Plus",230,250,430,270,2,1,6,b);
    addeingabe(6,&plus.fuel, 0, mplus.fuel);
 
-   if ( (  ( gbde.typ->special & cgresearchb ) > 0) && ( gbde.typ->maxresearchpoints > 0)) b = true;
-   else b = false;
+   if ( ( gbde.typ->special & cgresearchb ) || ( gbde.typ->maxresearchpoints > 0))
+      b = true;
+   else
+      b = false;
 
    addbutton("~R~esearch-Points",15,210,215,230,2,1,9,b);
    addeingabe(9,&rs,0,gbde.typ->maxresearchpoints);
@@ -4946,10 +4953,11 @@ void editResearch()
                vector<int> techIds;
                for ( int i = 0; i < technologyRepository.getNum(); ++i ) {
                   const Technology* t = technologyRepository.getObject_byPos(i);
-                  if ( find ( devTech.begin(), devTech.end(), t->id ) == devTech.end() ) {
-                     techs.push_back ( printTech ( t->id ));
-                     techIds.push_back ( t->id );
-                  }
+                  if ( find ( devTech.begin(), devTech.end(), t->id ) == devTech.end() )
+                     if ( !ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Technology, t->id )) {
+                        techs.push_back ( printTech ( t->id ));
+                        techIds.push_back ( t->id );
+                     }
                }
                // sort (techs.begin(), techs.end() );
                pair<int,int> r = chooseString ( "Unresearched Technologies", techs, buttons2 );
@@ -4966,4 +4974,74 @@ void editResearch()
    } while ( playerRes.first != 1 );
 }
 
+void editResearchPoints()
+{
+   vector<ASCString> buttonsP;
+   buttonsP.push_back ( "~E~dit" );
+   buttonsP.push_back ( "~C~lose" );
 
+   pair<int,int> playerRes;
+   do {
+      vector<ASCString> player;
+      for ( int i = 0; i < 8; ++i ) {
+         ASCString s = strrr(i);
+         player.push_back ( s + " " + actmap->player[i].getName() + " (" + strrr(actmap->player[i].research.progress) + " Points)" );
+      }
+
+      playerRes = chooseString ( "Choose Player", player, buttonsP );
+      if ( playerRes.first == 0 )
+         actmap->player[playerRes.second].research.progress = editInt ( "Points", actmap->player[playerRes.second].research.progress );
+
+   } while ( playerRes.first != 1 );
+}
+
+
+void generateTechTree()
+{
+   ASCString filename;
+   fileselectsvga("*.dot", filename, false);
+   if ( !filename.empty() ) {
+
+      vector<ASCString> techs;
+      vector<int> techIds;
+      for ( int i = 0; i < technologyRepository.getNum(); ++i ) {
+         const Technology* t = technologyRepository.getObject_byPos(i);
+         if ( !ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Technology, t->id )) {
+            techs.push_back ( printTech ( t->id ));
+            techIds.push_back ( t->id );
+         }
+      }
+
+      vector<ASCString> buttons2;
+      buttons2.push_back ( "~O~k" );
+      buttons2.push_back ( "~C~ancel" );
+
+      // sort (techs.begin(), techs.end() );
+      pair<int,int> r = chooseString ( "Choose Base Technology", techs, buttons2 );
+      if ( r.first == 0 ) {
+
+
+         bool reduce = choice_dlg ( "generate sparce tree ?", "~y~es", "~n~o" ) == 1;
+
+         tn_file_buf_stream f ( filename, tnstream::writing );
+
+         f.writeString ( "digraph \"ASC Technology Tree\" { \n", false );
+
+         for ( int i = 0; i < technologyRepository.getNum(); ++i ) {
+            const Technology* t  = technologyRepository.getObject_byPos(i);
+            vector<int> stack;
+            if ( t->techDependency.findInheritanceLevel( techIds[r.second], stack, techs[r.second] ) > 0 )
+               t->techDependency.writeTreeOutput( t->name, f, reduce );
+
+         }
+
+         ASCString stn2 = technologyRepository.getObject_byID(techIds[r.second])->name;
+         while ( stn2.find ( "\"" ) != ASCString::npos )
+            stn2.erase ( stn2.find ( "\"" ),1 );
+
+         f.writeString ( "\"" + stn2 + "\" [shape=doublecircle] \n", false );
+         f.writeString ( "}\n", false );
+      }
+
+   }
+}

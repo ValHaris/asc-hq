@@ -1,6 +1,9 @@
-//     $Id: edmisc.h,v 1.32 2004-05-11 20:22:33 mbickel Exp $
+//     $Id: edmisc.h,v 1.33 2004-05-20 14:01:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2004/05/11 20:22:33  mbickel
+//      Readded research system to ASC
+//
 //     Revision 1.31  2004/01/16 15:33:46  mbickel
 //     Completely rewritten game event system
 //     TPWM-decoding-Patch
@@ -438,5 +441,7 @@ extern void saveClipboard();
 extern void readClipboard();
 extern void setweatherall ( int weather  );
 extern void editResearch();
+extern void editResearchPoints();
+extern void generateTechTree();
 
 #endif
