@@ -25,11 +25,11 @@ Another "historical" thing about the source code is the language (not the progra
 <H3>Required Tools</H3>
 
 <H4>for building the Windows version</H4>
-We are building ASC/win with Borland C++ Builder 5. It should be possible to build ASC with other Windows compilers too, if they have some sufficient understanding of the C++ language. Microsoft Visual C++ has not, at least not the version 5 which I tested. Don't invest any time trying to make ASC compilable with MSVC, I'm not going to restrict my programming to Microsofts subset of C++. Period. There are more capable Win32 compilers around, even some free ones. 
+We are building ASC/win with Borland C++ Builder 5. It should be possible to build ASC with any other Windows compiler too, if it has some sufficient understanding of the C++ language. Microsoft Visual C++ version 6 and older have not, it is absolutely impossible to compile ASC with these primitive compilers. But Visual Studio .NET is much improved and can compile ASC without any problems. The project files for Visual Studio .NET are included in the <tt>asc/source/win32/msvc</tt> directory, although they are not completed yet. But finishing them should be straight forward.
 
-<A HREF="http://www.borland.com">Borland</A> C++ for example. The command line version of compiler and debugger are available for free download. <P>
+It is also possible to compile ASC with the free <A HREF="http://www.borland.com">Borland</A> command line compiler. Makefiles for it are included <P>
 
-<H5>Borland C++ Builder / free commandline compiler</H5>
+<H5>Borland C++ Builder / free command line compiler</H5>
 
 <OL>
 <LI>Get the <A HREF="ftp://ftp.simtel.net/pub/simtelnet/msdos/graphics/jpegsr6.zip">JPEG-lib source code</A> by the <A HREF="http://www.ijg.org">Independant Jpeg Group</A>.
