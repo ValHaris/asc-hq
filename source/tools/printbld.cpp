@@ -64,7 +64,7 @@ main(int argc, char *argv[] )
    
          fprintf ( fp, " %10.10s %5d %6d %6d %3d %7d %7d %7d %7d %7d %7d %7d \n",
    
-         ft->name, ft->_armor, ft->productioncost.fuel, ft->productioncost.material, ft->id, ft->_tank.energy, ft->_tank.material, ft->_tank.fuel, ft->maxplus.energy, ft->maxplus.material, ft->maxplus.fuel, ft->maxresearchpoints );
+         ft->name, ft->_armor, ft->productionCost.fuel, ft->productionCost.material, ft->id, ft->_tank.energy, ft->_tank.material, ft->_tank.fuel, ft->maxplus.energy, ft->maxplus.material, ft->maxplus.fuel, ft->maxresearchpoints );
    
          fn = ff.getnextname();
       }

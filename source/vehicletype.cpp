@@ -20,6 +20,7 @@
 #include "viewcalculation.h"
 #include "errors.h"
 #include "loadbi3.h"
+#include "basegfx.h"
 
 #ifndef converter
  #include "basegfx.h"

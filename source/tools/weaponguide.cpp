@@ -217,7 +217,7 @@ int main(int argc, char *argv[] )
          // Abfrage noch unbefriedigend !!
          fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\" colspan=\"4\">Attack after move</td> <td>%d</td> </tr>\n", ft->wait );
          // Abfrage für MAM funktioniert nicht
-         fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\" colspan=\"4\">Move after Attack</td> <td>???</td></tr>\n" );
+         fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\" colspan=\"4\">Move after Attack</td> <td>? ? ?</td></tr>\n" );
          fprintf ( detailed1, "</table>\n" );
          fprintf ( detailed1, "</td>\n\n<td width=\"150\">" );
          if ( exist ( b2.c_str() ))
@@ -294,13 +294,13 @@ int main(int argc, char *argv[] )
          
     // Spalten gfx
          fprintf ( detailed2, "<td></td>" );
-         for ( int i = 0; i < cbodenartennum ; i++ ) 
+         for ( i = 0; i < cbodenartennum ; i++ ) 
              fprintf ( detailed2, " <TD><IMG src=\"../gfx%d.gif\"></TD>", i);
          fprintf( detailed2, "</TR>\n<TR>\n");
                   
     // Spaltenwerte befahrbare Bodentypen        
          fprintf ( detailed2, "<td>can&nbsp;drive&nbsp;on</td>" );
-         for ( int i = 0; i < cbodenartennum ; i++) {
+         for ( i = 0; i < cbodenartennum ; i++) {
             tterrainbits bts;
             if ( i < 32 )
                bts.set ( 1 << i, 0 );
@@ -316,7 +316,7 @@ int main(int argc, char *argv[] )
 
     // Spaltenwerte stirbt auf        
          fprintf ( detailed2, "<td>dies on</td>" );
-         for ( int i = 0; i < cbodenartennum ; i++) {
+         for ( i = 0; i < cbodenartennum ; i++) {
             tterrainbits bts;
             if ( i < 32 )
                bts.set ( 1 << i, 0 );
@@ -332,7 +332,7 @@ int main(int argc, char *argv[] )
 
    // Spaltenwerte can not drive on       
          fprintf ( detailed2, "<td>not drive on</td>" );
-         for ( int i = 0; i < cbodenartennum ; i++) {
+         for ( i = 0; i < cbodenartennum ; i++) {
             tterrainbits bts;
             if ( i < 32 )
                bts.set ( 1 << i, 0 );
@@ -348,7 +348,7 @@ int main(int argc, char *argv[] )
          fprintf ( detailed2, "</tr><tr>\n" );
    // Spaltenwerte can need terrain       
          fprintf ( detailed2, "<td>required</td>" );
-         for ( int i = 0; i < cbodenartennum ; i++) {
+         for ( i = 0; i < cbodenartennum ; i++) {
             tterrainbits bts;
             if ( i < 32 )
                bts.set ( 1 << i, 0 );
@@ -393,7 +393,7 @@ int main(int argc, char *argv[] )
          // Werte der Waffen
          for ( int w = 0; w < ft->weapons->count ; w++) {
             fprintf ( detailed3, "<tr><td>#%d</td>", w+1 );
-            fprintf ( detailed3, "    <td align=\"center\">??</td>" ); //Abfrage für AMMO funktioniert noch nicht
+            fprintf ( detailed3, "    <td align=\"center\">? ?</td>" ); //Abfrage für AMMO funktioniert noch nicht
             fprintf ( detailed3, "    <td align=\"center\">%d</td>", (ft->weapons->weapon[w].mindistance+9)/10 );
             fprintf ( detailed3, "    <td align=\"center\">%d</td>", ft->weapons->weapon[w].maxstrength ); 
             fprintf ( detailed3, "    <td align=\"center\">%d</td>", (ft->weapons->weapon[w].maxdistance)/10 );
@@ -425,7 +425,7 @@ int main(int argc, char *argv[] )
 
    // noch ungeordnet
    //fprintf ( detailed, "Number of weapons: %d <br>\n", ft->weapons->count );
-         for ( int w = 0; w < ft->weapons->count ; w++) {
+         for ( w = 0; w < ft->weapons->count ; w++) {
             // looping through all weapons; w will be increased from 0 until it reaches ft->weapons->count; 
             fprintf ( detailed3, "<table id=\"H2\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
             fprintf ( detailed3, "<tr><td id=\"h1\" colspan=\"3\"> Weapon #%d: </td></tr>\n", w+1 );
@@ -442,6 +442,10 @@ int main(int argc, char *argv[] )
                   fprintf ( detailed3, "<td><img src=\"../hacken.gif\"></td>" );
                else
                   fprintf ( detailed3, "<td></td>" );
+
+            for ( i = 0; i < 13; i++ ) 
+               fprintf(detailed3, "effizienz ber H”henstufendifferenz von %d ist %d%%", i-6, ft->weapons->weapon[w].efficiency[i] );
+
             fprintf ( detailed3, "</tr>\n");
             fprintf ( detailed3, "</table> \n" );
 

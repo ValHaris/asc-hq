@@ -160,8 +160,8 @@ WString
 1
 40
 WString
-23
-converter HEXAGON _DOS_
+31
+converter HEXAGON _DOS_ _NOASM_
 0
 41
 MRState

@@ -531,9 +531,9 @@ main ()
    
          printf ("\n    production costs : \n");
          printf ("\n       material :\n");
-         num_ed (bld->productioncost.material, 0, 65535);
+         num_ed (bld->productionCost.material, 0, 65535);
          printf ("\n       fuel : \n" );
-         num_ed (bld->productioncost.fuel, 0, 65535);
+         num_ed (bld->productionCost.fuel, 0, 65535);
    
    
          printf ("\n    armor  ");

@@ -3,7 +3,7 @@
 #include <malloc.h>
 #include <stdlib.h>
 
-#include "..\vesa.h"
+#include "..\basegfx.h"
 #include "..\basestrm.h"
 #include "..\typen.h"
 #include "..\misc.h"
@@ -140,6 +140,7 @@ void getpic ( int pos, int offset )
 
 int main(int argc, char *argv[] )
 {
+   opencontainer ( "*.con");
    {
       int i ;
       tnfilestream s ( "smallhex.raw", 1);
@@ -151,7 +152,7 @@ int main(int argc, char *argv[] )
       s.readrlepict ( &mask[1], false, & i );
    }
 
-   for ( int m = 0; m < 2000; m++ )
+   for ( int m = 0; m < p_count; m++ )
       picmode[m] = 0;
 
 
@@ -210,7 +211,7 @@ int main(int argc, char *argv[] )
       s.writedata2 ( magic );
 
       int id = 1;
-      printf ("\n    ID :  \n");
+      printf ("\n    ID :  \n ( 0 = original ASC graphics; 1 = BI3 graphics; >=2 : additional graphic sets)\n    ");
       num_ed ( id , 0, 65534);
 
 

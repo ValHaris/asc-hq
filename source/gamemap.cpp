@@ -298,13 +298,13 @@ void tmap :: read ( tnstream& stream )
        logtofile ( "loaders / tspfldloaders::readmap / vor alliances" );
        #endif
 
-    for ( int i = 0; i < 8; i++ )
-       if ( alliance_names_not_used_any_more[i] ) {
+    for ( int aa = 0; aa < 8; aa++ )
+       if ( alliance_names_not_used_any_more[aa] ) {
           char* tempname = NULL;
           stream.readpchar ( &tempname );
           delete[] tempname;
 
-          alliance_names_not_used_any_more[i] = 0;
+          alliance_names_not_used_any_more[aa] = 0;
        }
 
 
@@ -591,8 +591,8 @@ void tmap :: write ( tnstream& stream )
         if ( t )
            stream.writedata2 ( *tribute );
 
-        for ( int i = 0; i < 8; i++ )
-           if ( alliance_names_not_used_any_more[i] ) {
+        for ( int bb = 0; bb < 8; bb++ )
+           if ( alliance_names_not_used_any_more[bb] ) {
               char nl = 0;
               stream.writedata2 ( nl );
            }
@@ -645,8 +645,8 @@ void tmap :: cleartemps( int b, int value )
      return;
 
   int l = 0;
-  for ( int x = 0; x < actmap->xsize ; x++)
-     for ( int y = 0; y <  actmap->ysize ; y++) {
+  for ( int x = 0; x < xsize ; x++)
+     for ( int y = 0; y <  ysize ; y++) {
 
          if (b & 1 )
            field[l].a.temp = value;

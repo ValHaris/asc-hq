@@ -796,7 +796,7 @@ main (int argc, char *argv[] )
 
       {
          tn_file_buf_stream mainstream ( datfile.name, 2 );
-         writevehicle( ft, mainstream );
+         ft->write ( mainstream );
       }
 
    } /* endtry */

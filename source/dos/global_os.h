@@ -1,6 +1,10 @@
-//     $Id: global_os.h,v 1.3 2000-10-17 12:12:24 mbickel Exp $
+//     $Id: global_os.h,v 1.4 2000-11-08 21:58:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/10/17 12:12:24  mbickel
+//      Improved vehicletype loading/saving routines
+//      documented some global variables
+//
 //     Revision 1.2  2000/10/16 14:34:12  mbickel
 //      Win32 port is now running fine.
 //      Removed MSVC project files and put them into a zip file in
@@ -53,5 +57,7 @@
    #define UseMemAvail
    #define UseMemCheck
   #endif
+
+  #include <wchar.h>
 
 #endif
