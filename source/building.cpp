@@ -1,6 +1,13 @@
-//     $Id: building.cpp,v 1.40 2000-08-08 09:47:55 mbickel Exp $
+//     $Id: building.cpp,v 1.41 2000-08-09 13:18:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2000/08/08 09:47:55  mbickel
+//
+//      speed up of dialog boxes in linux
+//      fixed graphical errors in attack
+//      fixed graphical error in ammo transfer
+//      fixed reaction fire not allowing manual attack
+//
 //     Revision 1.39  2000/08/06 11:38:36  mbickel
 //      New map paramter: fuel globally available
 //      Mapeditor can now filter buildings too
@@ -1194,7 +1201,7 @@ int   cbuildingcontrols :: ctrainunit :: available ( pvehicle eht )
    if ( actmap->getgameparameter( cgp_bi3_training ) )
       return 0;
 
-   if ( eht->experience <= maxunitexperience - trainingexperienceincrease )  
+   if ( eht->experience <= actmap->getgameparameter ( cgp_maxtrainingexperience ) - trainingexperienceincrease )
      if ( !eht->attacked ) {
       if (  cc->getspecfunc ( mbuilding ) & cgtrainingb ) {
          int num = 0;
@@ -1223,6 +1230,9 @@ void  cbuildingcontrols :: ctrainunit :: trainunit ( pvehicle eht )
       for (int i = 0; i < eht->typ->weapons->count; i++ ) 
          if ( eht->typ->weapons->weapon[i].shootable() )
             eht->ammo[i]--;
+
+      if ( eht->experience > actmap->getgameparameter ( cgp_maxtrainingexperience ) )
+         eht->experience = actmap->getgameparameter ( cgp_maxtrainingexperience );
 
       eht->attacked = 1;
       eht->setMovement ( 0 ); 
@@ -5694,9 +5704,17 @@ void  ccontainer_b :: cmineralresources_subwindow :: display ( void )
    max = 0;
    for ( i = 0; i < maxminingrange; i++ )
       if ( mininginfo->max[ i ].resource[ 1 ] > max )
-         max = mininginfo->max[ i ].resource[ 2 ];
+         max = mininginfo->max[ i ].resource[ 1 ];
 
    max = max * 17 / 16;
+
+   int maxa = 0;
+   for ( i = 0; i < maxminingrange; i++ )
+      if ( mininginfo->avail[ i ].resource[ 1 ] > maxa )
+         maxa = mininginfo->avail[ i ].resource[ 1 ];
+
+   max = max * 17 / 16;
+   maxa = maxa * 17 / 16;
 
    for ( i = 0; i < maxminingrange; i++ ) {
       int y1 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource[ 1 ] / mininginfo->max[ i ].resource[ 1 ];
@@ -5706,11 +5724,15 @@ void  ccontainer_b :: cmineralresources_subwindow :: display ( void )
       bar ( hx1 + i * xd , y1, hx1 + i * xd + xd/2, hy2, materialcolor ); // 160 + 15 * mininginfo->avail[ i ].resource[ 1 ] / mininginfo->max[ i ].resource[ 1 ] );
       bar ( hx1 + i * xd + xd/2, y2, hx1 + (i+1) * xd, hy2, fuelcolor ); // 160 + 15 * mininginfo->avail[ i ].resource[ 2 ] / mininginfo->max[ i ].resource[ 2 ] );
 
-      y1 = hy2 - ( hy2 - hy1 ) * mininginfo->max[ i ].resource[ 1 ] / max;
-      y2 = hy2 - ( hy2 - hy1 ) * mininginfo->max[ i ].resource[ 2 ] / max;
+      y1 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource[ 1 ] / maxa;
+      y2 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource[ 2 ] / maxa;
 
-      line ( hx1 + i * xd , y1, hx1 + i * xd + xd/2, y1, materialcolor-1 ); // 160 + 15 * mininginfo->avail[ i ].resource[ 1 ] / mininginfo->max[ i ].resource[ 1 ] );
-      line ( hx1 + i * xd + xd/2, y2, hx1 + (i+1) * xd, y2, fuelcolor-1 ); // 160 + 15 * mininginfo->avail[ i ].resource[ 2 ] / mininginfo->max[ i ].resource[ 2 ] );
+      int ya = hy2 - ( hy2 - hy1 ) * mininginfo->max[ i ].resource[ 2 ] / maxa;
+
+      line ( hx1 + i * xd , y1, hx1 + i * xd + xd/2, y1, materialcolor-2 ); // 160 + 15 * mininginfo->avail[ i ].resource[ 1 ] / mininginfo->max[ i ].resource[ 1 ] );
+      line ( hx1 + i * xd + xd/2, y2, hx1 + (i+1) * xd, y2, fuelcolor-2 ); // 160 + 15 * mininginfo->avail[ i ].resource[ 2 ] / mininginfo->max[ i ].resource[ 2 ] );
+
+      // line ( hx1 + i * xd , ya, hx1 + (i+1) * xd, ya, 16 + 8 * 16 + 4 ); // the maximum absolute amount
 
    }
 

@@ -1,6 +1,13 @@
-//     $Id: unitctrl.cpp,v 1.24 2000-08-08 09:48:35 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.25 2000-08-09 13:18:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/08/08 09:48:35  mbickel
+//
+//      speed up of dialog boxes in linux
+//      fixed graphical errors in attack
+//      fixed graphical error in ammo transfer
+//      fixed reaction fire not allowing manual attack
+//
 //     Revision 1.23  2000/08/07 16:29:23  mbickel
 //      orbiting units don't consume fuel any more
 //      Fixed bug in attack formula; improved attack formula
@@ -689,7 +696,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, int noInterrupt )
       path.getFieldCoordinates ( i+1, &x2, &y2 );
 
       int mm1,mm2;
-      calcmovemalus( x, y, x2, y2, vehicle, 0 , mm1, mm2);
+      calcmovemalus( x, y, x2, y2, vehicle, -1 , mm1, mm2);
       movedist += mm2;
       fueldist += mm1;
 
