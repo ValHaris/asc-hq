@@ -668,25 +668,30 @@ int main(int argc, char *argv[] )
             if ( !names.empty() )
                printMainLine ( constructionPage, "Destructable Objects", names);
 
-            for ( vector<IntRange>::iterator  i = ft->objectGroupsBuildable.begin(); i != ft->objectGroupsBuildable.end(); ++i )
-               for ( int j = i->from; j <= i->to; j++ ) {
-                  ASCString s;
-                  s.format ( "%d <br>", j );
-                  names += s;
-                  ++size;
-               }
+            names = "";
+            for ( vector<IntRange>::iterator  i = ft->objectGroupsBuildable.begin(); i != ft->objectGroupsBuildable.end(); ++i ) {
+               ASCString s;
+               if ( i->from != i->to )
+                  s.format ( "%d - %d <br>", i->from, i->to );
+               else
+                  s.format ( "%d <br>", i->from );
+               names += s;
+               ++size;
+            }
             if ( !names.empty() )
                printMainLine ( constructionPage, "Constructable Object-Groups", names);
 
              // Objekte abreissbar
             names = "";
-            for ( vector<IntRange>::iterator i = ft->objectGroupsRemovable.begin(); i != ft->objectGroupsRemovable.end(); ++i )
-               for ( int j = i->from; j <= i->to; j++ ) {
-                  ASCString s;
-                  s.format ( "%d <br>", j );
-                  names += s;
-                  ++size;
-               }
+            for ( vector<IntRange>::iterator i = ft->objectGroupsRemovable.begin(); i != ft->objectGroupsRemovable.end(); ++i ) {
+               ASCString s;
+               if ( i->from != i->to ) 
+                  s.format ( "%d - %d <br>", i->from, i->to );
+               else
+                  s.format ( "%d <br>", i->from );
+               names += s;
+               ++size;
+            }
             if ( !names.empty() )
                printMainLine ( constructionPage, "Destructable Object-Groups", names);
 
@@ -859,7 +864,7 @@ int main(int argc, char *argv[] )
 
 
             if ( exist ( prefixDir + fileName + ".jpg" )) {
-               fprintf( infoPage, "<img src=\"%s\">\n", fileName.c_str() );
+               fprintf( infoPage, "<p>\n<img src=\"%s.jpg\"><p>\n", fileName.c_str() );
             }
 
             if ( !ft->infotext.empty() ) {
