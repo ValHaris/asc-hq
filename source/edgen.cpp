@@ -2,9 +2,14 @@
     \brief The random map generator
 */
 
-//     $Id: edgen.cpp,v 1.17 2002-04-17 22:41:34 mbickel Exp $
+//     $Id: edgen.cpp,v 1.18 2002-04-21 21:27:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2002/04/17 22:41:34  mbickel
+//      Updated build system to warn about missing music
+//      Updated build system to insert version information automatically
+//      edgen.cpp compiles with gcc 3.0.4 again
+//
 //     Revision 1.16  2002/04/05 09:25:09  mbickel
 //      Project files now for Borland C++ Builder 6
 //      Fixed: netcontrol not working
@@ -92,6 +97,7 @@
     Boston, MA  02111-1307  USA
 */
 
+#include "global.h"
 #include "edmisc.h"
 #include "edgen.h"
 #include "vehicletype.h"
@@ -931,7 +937,7 @@ int         mapgenerator(void)
    return 0;
 } 
 
-int random( int max)
+int random2( int max)
 {  
    if (max <= 1 ) return 0;
    int div = RAND_MAX;
@@ -1156,9 +1162,9 @@ void tplasma::generateplasma(char resettile)
                return 1;
             }*/
             if(blocksize == sblocksize) {
-               colour = random(memblock->maxset + 1);
-               if( random(5000) > 3500)
-                  colour = 1 + memblock->maxset - random(memblock->maxset / (1 + random(8)));
+               colour = random2(memblock->maxset + 1);
+               if( random2(5000) > 3500)
+                  colour = 1 + memblock->maxset - random2(memblock->maxset / (1 + random2(8)));
                colour %= (memblock->maxset + 1);
             }
             else {

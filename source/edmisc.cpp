@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.81 2002-04-14 17:21:18 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.82 2002-04-21 21:27:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.81  2002/04/14 17:21:18  mbickel
+//      Renamed global variable pf to pf2 due to name clash with SDL_mixer library
+//
 //     Revision 1.80  2002/04/09 22:19:06  mbickel
 //      Fixed AI bugs
 //      Fixed: invalid player name displayed in dashboard
@@ -675,16 +678,20 @@ int leftmousebox(void)
 
 void tputresources :: init ( int sx, int sy, int dst, int restype, int resmax, int resmin )
 {
-   initsearch( MapCoordinate(sx,sy),dst,0);
+   centerPos = MapCoordinate(sx,sy);
+   initsearch( centerPos, dst, 0);
    resourcetype = restype;
    maxresource = resmax;
    minresource = resmin;
+   maxdst = dst;
    startsearch();
 }
 
 void tputresources :: testfield ( const MapCoordinate& mc )
 {
-   int m = maxresource - dist * ( maxresource - minresource ) / lastDistance;
+   int dist = beeline ( mc, centerPos ) / 10;
+   int m = maxresource - dist * ( maxresource - minresource ) / maxdst;
+
    pfield fld = gamemap->getField ( mc );
    if ( resourcetype == 1 )
       fld->material = m;

@@ -1266,6 +1266,8 @@ void execuseraction ( tuseractions action )
       case ua_exitgame:
          if (choice_dlg("do you really want to quit ?","~y~es","~n~o") == 1)
             abortgame = 1;
+         else
+            exitprogram = 0;
          break;
 
       case ua_newcampaign:

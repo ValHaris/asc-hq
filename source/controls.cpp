@@ -3,9 +3,13 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.130 2002-04-05 19:01:45 mbickel Exp $
+//     $Id: controls.cpp,v 1.131 2002-04-21 21:27:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.130  2002/04/05 19:01:45  mbickel
+//      Fixed: reaction fire attackes being replayed twice
+//      Fixed: crash when reaction fire during landing on carrier
+//
 //     Revision 1.129  2002/04/05 09:25:05  mbickel
 //      Project files now for Borland C++ Builder 6
 //      Fixed: netcontrol not working
@@ -2919,6 +2923,7 @@ void runai( int playerView )
          actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
 
       actmap->player[ actmap->actplayer ].ai->run();
+      dashboard.x = 0xffff;
 
    } else {
       tlockdispspfld displock;

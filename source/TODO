@@ -19,13 +19,6 @@ Small tasks:
 
 -8- rewriting tdrawgettempline ( mapalgorithm.cpp ) which is way to slow
    
--7- writing a script that makes an RPM package of ASC
-    I don't have a clue how RPM packages are created, but it would be nice
-    if we could provide some...
-    Since the whole release-process is a big collection of scripts on my
-    system, the RPM creation process should be handled by some script which
-    I can plug into the process.
-
 -7- direct invocation of and from mail clients to automate email games
 
 -5- replacing those ugly dynamic_array templates by std::vector

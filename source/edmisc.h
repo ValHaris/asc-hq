@@ -1,6 +1,9 @@
-//     $Id: edmisc.h,v 1.24 2002-04-14 17:21:18 mbickel Exp $
+//     $Id: edmisc.h,v 1.25 2002-04-21 21:27:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2002/04/14 17:21:18  mbickel
+//      Renamed global variable pf to pf2 due to name clash with SDL_mixer library
+//
 //     Revision 1.23  2002/03/17 21:25:18  mbickel
 //      Fixed: View unit movement revealed the reaction fire status of enemy units
 //      Mapeditor: new function "resource comparison"
@@ -227,6 +230,8 @@
                               int resourcetype;
                               int maxresource;
                               int minresource;
+                              int maxdst;
+                              MapCoordinate centerPos;
                            public:
                                void            init ( int sx , int sy, int dst, int restype, int resmax, int resmin );
                                virtual void    testfield ( const MapCoordinate& mc );
