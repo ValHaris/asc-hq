@@ -916,7 +916,7 @@ void UnitTerrainPage::buildContent() {
   startTable(1, RELATIVE, 100, RELATIVE, 100);
   addTREntry("Fuel tank", vt.tank.fuel );
   addTREntry("Fuel Consumption", vt.fuelConsumption);
-  addTREntry("Range", vt.fuelConsumption ? strrr(vt.tank.fuel/vt.fuelConsumption) : "None");
+  addTREntry("Range", vt.fuelConsumption ? strrr(vt.tank.fuel/vt.fuelConsumption) : "None");   
   endTable();
   addHeadline("Speed", 4);
   startTable(1, RELATIVE, 100, NONE, 0);
@@ -930,7 +930,7 @@ void UnitTerrainPage::buildContent() {
   addTitle("max. Speed");
   for(int i =0; i < vt.movement.size(); i++) {
     if(vt.movement[i] > 0) {
-      addTDEntry(vt.movement[i] / 10);
+      addTDEntry(vt.movement[i]);
     } else {
       addTDEntry("n.a.");
     }
@@ -1016,6 +1016,16 @@ UnitWeaponPage::UnitWeaponPage(const VehicleType&  vt, ASCString filePath, UnitG
 
 void UnitWeaponPage::buildContent() {
   if(vt.weapons.count > 0) {
+    startTable(1, RELATIVE, 100, NONE, 100);
+    addHeadline("General", 3);
+    *buildingInfStream << "<tr>" << endl;
+    addTitle("Can shoot after movement");    
+    if(!vt.wait)
+      addTDEntry(constructImageLink(STDGFXPATH + ASCString("haken.gif"), "YES"));    
+    else
+      addTDEntry(constructImageLink(STDGFXPATH + ASCString("hakenrot.gif"), "NO"));    
+    *buildingInfStream << "</tr>";
+    endTable();
     IntVec iv;
     int k = div(100,  vt.weapons.count + 1).quot;
     for (int i = 0; i < vt.weapons.count + 1; i++) {
