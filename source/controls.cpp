@@ -1241,7 +1241,9 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, pve
    fld->vehicle = vehicle;
    vehicle->xpos = pos.x;
    vehicle->ypos = pos.y;
-   vehicle->height = pos.getBitmappedHeight();
+   int oldheight = vehicle->height;
+   if ( pos.getNumericalHeight() >= 0 )
+      vehicle->height = pos.getBitmappedHeight();
 
    for ( int i = 0; i < 8; i++ ) {
       evaluatevisibilityfield ( actmap, fld, i, -1, actmap->getgameparameter ( cgp_initialMapVisibility ) );
@@ -1320,6 +1322,8 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, pve
       }
    }
    npop ( fld->vehicle );
+
+   vehicle->height = oldheight;
 
    if ( result )
       vehicle = NULL;
