@@ -177,17 +177,25 @@ int main(int argc, char *argv[] )
 
    try {
 
-   
+      printf("Loading data for generating unit documentation. Please wait...");
       loadpalette();
+      printf(".");
       loadbi3graphics();
+      printf(".");
 
       loadalltextfiles();
+      printf(".");
       loadallobjecttypes();
+      printf(".");
       loadallbuildingtypes();
+      printf(".");
       loadallvehicletypes();
+      printf(".");
       loadUnitSets();
-      
+      printf(".");
+
       freetextdata();
+      printf(".\n");
 
 
       char* wildcard;
@@ -1030,7 +1038,7 @@ int main(int argc, char *argv[] )
       int counter = 0;
       for ( std::vector<SingleUnitSet*>::iterator i = unitSets.begin(); i != unitSets.end(); i++  ) {
          if ( (*i)->ID == cl.s() || !cl.s() ) {
-            
+
             printf(".");
             ASCString filename = prefixDir + "unitset";
             if ( cl.s() > 0 )
@@ -1111,11 +1119,11 @@ int main(int argc, char *argv[] )
                sort ( units.begin(), units.end());
                for ( int u = 0; u < units.size(); u++ )
                   fprintf(ff, "%s",units[u].c_str() );
-               
-            }   
+
+            }
 
             map<int,Vehicletype*> byID;
-            
+
             for ( int unit = 0; unit < vehicletypenum; unit++ ) {
                pvehicletype  ft = getvehicletype_forpos ( unit );
                if ( (*i)->isMember( ft->id ))
@@ -1132,13 +1140,22 @@ int main(int argc, char *argv[] )
 
                 fprintf(ff,"..%d (%s);asc.css;\"%s%s\" target=\"%s\";\n", j->second->id, j->second->getName().c_str(), linkpref.c_str(), unitFileName.c_str(), cl.f().c_str() );
             }
-            
-                        
+
+
             fclose(ff);
          }
-                     
+
       }
       printf("\n");
+
+      if ( cl.s() <= 0 ) {
+         ASCString filename = prefixDir + "allUnits.groups";
+         FILE* ff = fopen ( filename.c_str(), "w" );
+
+         for ( int i = 0; i < counter; i++ )
+            fprintf(ff, "#unitset%d.groups\n", i );
+         fclose (ff);
+      }
 
       
    } /* endtry */
