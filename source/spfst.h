@@ -1,6 +1,17 @@
-//     $Id: spfst.h,v 1.27 2000-10-11 14:26:50 mbickel Exp $
+//     $Id: spfst.h,v 1.28 2000-10-11 15:33:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/10/11 14:26:50  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.26  2000/09/27 16:08:30  mbickel
 //      AI improvements
 //
@@ -208,13 +219,6 @@
   extern char godview, tempsvisible; 
 
   extern int lasttick;   /*  f?r paintvehicleinfo  */ 
-
-/*!
-  \brief calculate the height difference between two levels of height
-
-  Since floating and ground based are assumed to be the same effective height, a simple subtraction isn't sufficient.
- */
-extern int getheightdelta ( int height1, int height2 );
 
 extern void  movecursor(tkey         ch);
 

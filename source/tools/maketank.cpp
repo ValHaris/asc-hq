@@ -24,12 +24,13 @@
 #include <graph.h>
 #include <string.h>
 
-#include "..\tpascal.inc"
 #include "..\typen.h"
 #include "..\basegfx.h"
 #include "..\loadpcx.h"
 #include "..\sgstream.h"
 #include "..\misc.h"
+#include "../buildingtype.h"
+#include "../vehicletype.h"
 #include "krkr.h"
 
 #ifdef HEXAGON
@@ -110,7 +111,7 @@ main (int argc, char *argv[] )
       loadpalette();
       loadbi3graphics();
    
-      ft = new tvehicletype;
+      ft = new Vehicletype;
 
       strcpy (datfile.name, "");
    
@@ -286,9 +287,9 @@ main (int argc, char *argv[] )
    
          printf ("\n    production cost : \n");
          printf ("\n       material :\n");
-         num_ed (ft->production.material, 0, 65535);
-         printf ("\n       energy  (%i) :\n", ft->production.material / 10 * 8);
-         num_ed (ft->production.energy, 0, 65535);
+         num_ed (ft->productionCost.material, 0, 65535);
+         printf ("\n       energy   :\n" );
+         num_ed (ft->productionCost.energy, 0, 65535);
    
    
          printf ("\n    Armor  ");
@@ -378,14 +379,14 @@ main (int argc, char *argv[] )
          num_ed (ft->fuelConsumption, 0, 65534);
                                                                                      
          printf ("\n    fuel tank    \n ");
-         num_ed (ft->tank, 0, maxint);
+         num_ed (ft->tank.fuel, 0, maxint);
                                                                        
                                     
          printf ("\n    energy tank  ( ONLY for generators !!!!! Every other unit must have a energy tank of 0)  : ");
-         num_ed (ft->energy, 0, maxint); 
+         num_ed (ft->tank.energy, 0, maxint); 
    
          printf ("\n    material tank   : \n"); 
-         num_ed (ft->material, 0, maxint );
+         num_ed (ft->tank.material, 0, maxint );
    
          clearscreen(); 
          printf ("\n    edit weapons ? : \n");
@@ -802,7 +803,7 @@ main (int argc, char *argv[] )
       printf("\nfatal error accessing file %s \n", err.filename );
       return 1;
    } /* endcatch */
-   catch ( terror ) {
+   catch ( ASCexception ) {
       printf("\na fatal exception occured\n" );
       return 2;
    } /* endcatch */

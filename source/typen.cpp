@@ -1,6 +1,17 @@
-//     $Id: typen.cpp,v 1.52 2000-10-11 14:26:51 mbickel Exp $
+//     $Id: typen.cpp,v 1.53 2000-10-11 15:33:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2000/10/11 14:26:51  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.51  2000/09/27 16:08:30  mbickel
 //      AI improvements
 //
@@ -322,6 +333,8 @@ const int directionangle [ sidenum ] =
 #else
  { 0, -45, -90, -135, -180, - 225, - 270, -315 };
 #endif
+
+const int resourceWeight[ resourceTypeNum ] = { 0, 4, 12 };
 
 
 const int gameparameterdefault [ gameparameternum ] = { 1, 2, 0, 100, 100, 1, 0, 0, 1, 0, 0, 0, 0, 100, 100, 100, 1, maxunitexperience, 0 };
@@ -1386,7 +1399,12 @@ void tmap :: calculateAllObjects ( void )
 {
    calculateallobjects();
 }
+#else
+void tmap :: calculateAllObjects ( void )
+{
+}
 #endif
+
 pfield  tmap :: getField(int x, int y)
 {
    if ((x < 0) || (y < 0) || (x >= xsize) || (y >= ysize))
@@ -1815,3 +1833,16 @@ AiThreat& AiThreat::operator+= ( const AiThreat& t )
 // is there any way to do this test at compile time ??
 structure_size_tester sst1;
 
+int getheightdelta ( int height1, int height2 )
+{
+   int ah = height1;
+   int dh = height2;
+   int hd = dh - ah;
+ 
+   if ( ah >= 3 && dh <= 2 ) 
+      hd++;
+   if (dh >= 3 && ah <= 2 )
+      hd--;
+ 
+   return hd;
+}

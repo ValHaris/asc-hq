@@ -18,7 +18,7 @@
 #include "typen.h"
 #include "containerbase.h"
 
-Resources ContainerBase :: putResource ( const Resources& res, int queryonly, int scope = 1 )
+Resources ContainerBase :: putResource ( const Resources& res, int queryonly, int scope  )
 {
    Resources result;
    for ( int i = 0; i < resourceNum; i++ )
@@ -27,7 +27,7 @@ Resources ContainerBase :: putResource ( const Resources& res, int queryonly, in
 }
 
 
-Resources ContainerBase :: getResource ( const Resources& res, int queryonly, int scope = 1 )
+Resources ContainerBase :: getResource ( const Resources& res, int queryonly, int scope  )
 {
    Resources result;
    for ( int i = 0; i < resourceNum; i++ )
@@ -37,7 +37,7 @@ Resources ContainerBase :: getResource ( const Resources& res, int queryonly, in
 
 
 
-int ContainerBase :: repairItem   ( ContainerBase* item, int newDamage = 0 )
+int ContainerBase :: repairItem   ( ContainerBase* item, int newDamage  )
 {
    if ( !canRepair() )
       return item->damage;

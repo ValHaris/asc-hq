@@ -205,15 +205,15 @@ bool Building::canRepair ( void )
 
 
 #ifdef converter
-int Building :: vehicleloadable ( pvehicle vehicle, int uheight )
-{
-   return 0;
-}
+//int Building :: vehicleloadable ( pvehicle vehicle, int uheight )
+//{
+//   return 0;
+//}
 
-void* Building :: getpicture ( int x, int y )
-{
-   return NULL;
-}
+//void* Building :: getpicture ( int x, int y )
+//{
+//   return NULL;
+//}
 
 #endif
 
@@ -482,7 +482,7 @@ int  Building :: unchainbuildingfromfield ( void )
 
                fld->bdt &= t2;
 
-               #ifndef karteneditor
+               #ifdef sgmain
                 if ( typ->destruction_objects[i][j] )
                    fld->addobject ( getobjecttype_forid ( typ->destruction_objects[i][j] ), -1, 1 );
 

@@ -172,14 +172,14 @@ class  Building : public ContainerBase {
     int  processmining ( int res, int abbuchen );
 
   public:
-    struct {
-       struct {
+    struct Work {
+       struct Mining {
           Resources touse;
           int did_something_atall;
           int did_something_lastpass;
           int finished;
        } mining;
-       struct {
+       struct Resource_production {
           Resources toproduce;
           int did_something_atall;
           int did_something_lastpass;

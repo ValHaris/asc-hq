@@ -1,6 +1,17 @@
-//     $Id: edmisc.cpp,v 1.31 2000-10-11 14:26:31 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.32 2000-10-11 15:33:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/10/11 14:26:31  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.30  2000/09/16 11:47:26  mbickel
 //      Some cleanup and documentation again
 //
@@ -3688,7 +3699,7 @@ void         UnitTypeTransformation :: TranslationTableSelection::run(void)
       redline = -1;
 } 
 
-pvehicletype UnitTypeTransformation :: transformvehicletype ( const pvehicletype type, int unitsetnum, int translationnum )
+pvehicletype UnitTypeTransformation :: transformvehicletype ( pvehicletype type, int unitsetnum, int translationnum )
 {
    for ( int i = 0; i < unitSets[unitsetnum]->transtab[translationnum]->translation.size(); i++ )
       if ( unitSets[unitsetnum]->transtab[translationnum]->translation[i].from == type->id ) {

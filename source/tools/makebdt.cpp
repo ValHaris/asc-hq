@@ -444,7 +444,7 @@ int main(int argc, char *argv[] )
       printf("\nfatal error accessing file %s \n", err.filename );
       return 1;
    } /* endcatch */
-   catch ( terror ) {
+   catch ( ASCexception ) {
       printf("\na fatal exception occured\n" );
       return 2;
    } /* endcatch */

@@ -308,10 +308,10 @@ main (int argc, char *argv[] )
       num_ed ( ft->height , 0, maxint);
    
       printf ("\n    production cost material : \n");
-      num_ed ( ft->buildcost.a.material , 0, maxint);
+      num_ed ( ft->buildcost.material , 0, maxint);
    
       printf ("\n    production cost fuel : \n");
-      num_ed ( ft->buildcost.a.fuel, 0, maxint);
+      num_ed ( ft->buildcost.fuel, 0, maxint);
    
      #ifdef HEXAGON
       printf ("\n    production cost movement : \n");
@@ -322,10 +322,10 @@ main (int argc, char *argv[] )
      #endif
    
       printf ("\n    removal cost material : \n");
-      num_ed ( ft->removecost.a.material , 0, maxint);
+      num_ed ( ft->removecost.material , 0, maxint);
    
       printf ("\n    removal cost  fuel : \n");
-      num_ed ( ft->removecost.a.fuel, 0, maxint);
+      num_ed ( ft->removecost.fuel, 0, maxint);
    
      #ifdef HEXAGON
       printf ("\n    removal cost  movement : \n");
@@ -403,8 +403,8 @@ main (int argc, char *argv[] )
          }
       }
    
-      ft->buildcost.a.energy = 0;
-      ft->removecost.a.energy = 0;
+      ft->buildcost.energy = 0;
+      ft->removecost.energy = 0;
    
      {
                 for (int j=0; j< cmovemalitypenum; j ++)
@@ -448,7 +448,7 @@ main (int argc, char *argv[] )
       printf("\nfatal error accessing file %s \n", err.filename );
       return 1;
    } /* endcatch */
-   catch ( terror ) {
+   catch ( ASCexception ) {
       printf("\na fatal exception occured\n" );
       return 2;
    } /* endcatch */

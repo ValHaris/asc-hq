@@ -31,6 +31,8 @@
 #include "..\basestrm.h"
 #include "..\basegfx.h"
 #include "..\loadbi3.h"
+#include "../buildingtype.h"
+#include "../vehicletype.h"
 
 #define vid(wildcard,structure,loader) printf("%s\n", wildcard );\
                                        maxid=0;\
@@ -173,14 +175,14 @@ int main ( void )
       printf("\n\n\n buildings  " );
       {
          didcounta id;
-         vid ("*.bld",tbuildingtype,loadbuildingtype);
+         vid ("*.bld",Buildingtype,loadbuildingtype);
          printresults( id );
       }
     
       printf("\n\n\n vehicles  " );
       {
          didcounta id;
-         vid ("*.veh",tvehicletype,loadvehicletype);
+         vid ("*.veh",Vehicletype,loadvehicletype);
          printresults( id );
       }
    
@@ -212,7 +214,7 @@ int main ( void )
       printf("\nfatal error accessing file %s \n", err.filename );
       return 1;
    } /* endcatch */
-   catch ( terror ) {
+   catch ( ASCexception ) {
       printf("\na fatal exception occured\n" );
       return 2;
    } /* endcatch */

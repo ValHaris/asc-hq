@@ -1,6 +1,17 @@
-//     $Id: spfst.cpp,v 1.62 2000-10-11 14:26:48 mbickel Exp $
+//     $Id: spfst.cpp,v 1.63 2000-10-11 15:33:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.62  2000/10/11 14:26:48  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.61  2000/09/27 16:08:27  mbickel
 //      AI improvements
 //
@@ -733,19 +744,6 @@ void         initmap( void )
 
 
 
-int getheightdelta ( int height1, int height2 )
-{
-   int ah = height1;
-   int dh = height2;
-   int hd = dh - ah;
- 
-   if ( ah >= 3 && dh <= 2 ) 
-      hd++;
-   if (dh >= 3 && ah <= 2 )
-      hd--;
- 
-   return hd;
-}
 
 
 

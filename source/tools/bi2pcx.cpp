@@ -26,6 +26,8 @@
 #include "..\loadpcx.h"
 #include "..\newfont.h"
 #include "..\misc.h"
+#include "../buildingtype.h"
+#include "../vehicletype.h"
 
 int background = 255;
 
@@ -400,7 +402,7 @@ int main(int argc, char *argv[] )
       printf("\nfatal error accessing file %s \n", err.filename );
       return 1;
    } /* endcatch */
-   catch ( terror ) {
+   catch ( ASCexception ) {
       printf("\na fatal exception occured\n" );
       return 2;
    } /* endcatch */

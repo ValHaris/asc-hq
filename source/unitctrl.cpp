@@ -1,6 +1,17 @@
-//     $Id: unitctrl.cpp,v 1.36 2000-10-11 14:26:52 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.37 2000-10-11 15:33:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2000/10/11 14:26:52  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.35  2000/09/27 16:08:31  mbickel
 //      AI improvements
 //
@@ -1932,9 +1943,9 @@ int VehicleService :: fillEverything ( pvehicle veh, int targetNWID )
 
    Target& t = i->second;
 
-   for ( int i = 0; i< t.service.size(); i++ )
-      if ( t.service[i].type != srv_repair )
-         execute ( veh, targetNWID, -1, 2, i, t.service[i].maxAmount );
+   for ( int j = 0; j< t.service.size(); j++ )
+      if ( t.service[j].type != srv_repair )
+         execute ( veh, targetNWID, -1, 2, j, t.service[j].maxAmount );
    return 0;
 }
 

@@ -37,9 +37,11 @@
  #ifdef __WATCOM_CPLUSPLUS__
   #define HAVE_STRICMP 
   #define HAVE_ITOA
-  #define HAVE_STDEXCEPTION
+  // #define HAVE_STDEXCEPTION
   #define HAVE_LIMITS
   #define StaticClassVariable static
+  namespace std {};
+
  #else
   #ifndef _NOASM_
    #define _NOASM_

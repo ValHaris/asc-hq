@@ -17,10 +17,6 @@
 #ifndef NAMED_H
 #define NAMED_H
 
-#ifdef __WATCOM_CPLUSPLUS__
- namespace std {};
-#endif
-
 /** 
 * A simple Interface-class for a named Thing 
 * @author Frank Landgraf

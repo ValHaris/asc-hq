@@ -18,6 +18,8 @@
     Boston, MA  02111-1307  USA
 */
 
+
+#include <stdarg.h>
 #include "krkr.h"
 #include "..\basestrm.h"
 
@@ -1339,3 +1341,16 @@ void terrainaccess_ed ( pterrainaccess ft, char* name  )
               "           most land based %ss should have the water-bits set here \n", name, name);
       bitselect (ft->terrainkill, cbodenarten, cbodenartennum);
 }
+
+void fatalError ( const char* formatstring, ... )
+{
+   va_list paramlist;
+   va_start ( paramlist, formatstring );
+
+   char tempbuf[1000];
+
+   int lng = vsprintf( tempbuf, formatstring, paramlist );
+   fprintf(stderr, tempbuf );
+   exit(1);
+}
+

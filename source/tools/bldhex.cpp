@@ -23,7 +23,6 @@
 
 #include "..\tpascal.inc"
 #include "..\typen.h"
-// #include "..\dos\vesa.h"
 #include "..\loadpcx.h"
 #include "krkr.h"
 #include "..\sgstream.h"
@@ -32,6 +31,8 @@
 #include "..\misc.h"
 #include "..\keybp.h"
 #include "..\basegfx.h"
+#include "../buildingtype.h"
+#include "../vehicletype.h"
 
 #ifdef HEXAGON
 #include "..\loadbi3.h"
@@ -131,7 +132,7 @@ char getbuildingfield ( int& x, int& y )
    return c;
 }
 
-
+/*
 char getbuildingfield ( int& x, int& y )
 {
    int x1 = x;
@@ -141,7 +142,7 @@ char getbuildingfield ( int& x, int& y )
    y = y1;
    return c;
 }
-
+*/
 
 void mount ( char* p1, char* p2, int size )
 {
@@ -336,7 +337,7 @@ main ()
       char   creat_edit = 0;
       yn_switch (" create ", " edit ", 0, 1, creat_edit);
       if (creat_edit==0) {                                            // creat new tank
-         bld = new tbuildingtype;
+         bld = new Buildingtype;
          memset ( bld, 0, sizeof ( *bld ));
          bld->terrain_access = &bld->terrainaccess;
          clearscreen ();
@@ -573,33 +574,33 @@ main ()
    
                                                                                      
          printf ("\n  ASC resource mode - fuel tank    \n");
-         num_ed (bld->_tank.a.fuel, 0, maxint );
+         num_ed (bld->_tank.fuel, 0, maxint );
                                                                        
          printf ("\n  ASC resource mode - material tank    \n");
-         num_ed (bld->_tank.a.material, 0, maxint );
+         num_ed (bld->_tank.material, 0, maxint );
                                                                        
          printf ("\n  ASC resource mode - energy tank    \n");
-         num_ed (bld->_tank.a.energy, 0, maxint );
+         num_ed (bld->_tank.energy, 0, maxint );
                                                                        
    
          printf ("\n  BI resource mode - fuel tank    \n");
-         num_ed (bld->_bi_maxstorage.a.fuel, 0, maxint );
+         num_ed (bld->_bi_maxstorage.fuel, 0, maxint );
                                                                        
          printf ("\n  BI resource mode - material tank    \n");
-         num_ed (bld->_bi_maxstorage.a.material, 0, maxint );
+         num_ed (bld->_bi_maxstorage.material, 0, maxint );
                                                                        
          printf ("\n  BI resource mode - energy tank    \n");
-         num_ed (bld->_bi_maxstorage.a.energy, 0, maxint );
+         num_ed (bld->_bi_maxstorage.energy, 0, maxint );
                                                                        
    
          printf ("\n    fuel maxplus    \n");
-         num_ed (bld->maxplus.a.fuel, minint, maxint );
+         num_ed (bld->maxplus.fuel, minint, maxint );
                                                                        
          printf ("\n    material maxplus    \n");
-         num_ed (bld->maxplus.a.material, minint, maxint );
+         num_ed (bld->maxplus.material, minint, maxint );
                                                                        
          printf ("\n    energy maxplus    \n");
-         num_ed (bld->maxplus.a.energy, minint, maxint );
+         num_ed (bld->maxplus.energy, minint, maxint );
    
    
          printf ("\n    efficiency material    \n");
@@ -671,7 +672,7 @@ main ()
       printf("\nfatal error accessing file %s \n", err.filename );
       return 1;
    } /* endcatch */
-   catch ( terror ) {
+   catch ( ASCexception ) {
       printf("\na fatal exception occured\n" );
       return 2;
    } /* endcatch */

@@ -30,6 +30,8 @@
 #include "..\misc.h"
 #include "..\sgstream.h"
 #include "..\loadbi3.h"
+#include "../buildingtype.h"
+#include "../vehicletype.h"
 
 const int maxvehicles = 1000;
 
@@ -98,7 +100,7 @@ main(int argc, char *argv[] )
          ft = loadvehicletype( cn );
    
          sprintf ( buf, " %12.12s %5d %6d %6d %3d %7d ",
-                  ft->description, ft->armor, ft->production.energy, ft->production.material, ft->id, ft->tank );
+                  ft->description, ft->armor, ft->productionCost.energy, ft->productionCost.material, ft->id, ft->tank );
          strcat ( text[num], buf );
    
          int max = 0;
@@ -135,16 +137,16 @@ main(int argc, char *argv[] )
          cat[1][num] = ft->view;
          cat[2][num] = ft->armor;
          // 3 : movement
-         cat[4][num] = ft->production.energy;
-         cat[5][num] = ft->production.material;
+         cat[4][num] = ft->productionCost.energy;
+         cat[5][num] = ft->productionCost.material;
          cat[6][num] = ft->fuelConsumption;
-         cat[7][num] = ft->tank;
+         cat[7][num] = ft->tank.fuel;
          cat[8][num] = maxattack;
          cat[9][num] = ft->weight;
    
          int dist = 0;
          if ( ft->fuelConsumption )
-            dist = ft->tank / ft->fuelConsumption;
+            dist = ft->tank.fuel / ft->fuelConsumption;
    
          cat[10][num] = dist;
    
@@ -209,7 +211,7 @@ main(int argc, char *argv[] )
       printf("\nfatal error accessing file %s \n", err.filename );
       return 1;
    } /* endcatch */
-   catch ( terror ) {
+   catch ( ASCexception ) {
       printf("\na fatal exception occured\n" );
       return 2;
    } /* endcatch */

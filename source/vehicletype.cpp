@@ -59,9 +59,6 @@ const char*  cvehiclefunctions[cvehiclefunctionsnum]  = {
                    "refuels energy" };
 
 
-extern int getheightdelta ( int height1, int height2 );
-
-
 Vehicletype :: Vehicletype ( void )
 {
    int i;
@@ -363,7 +360,7 @@ bool Vehicle :: canRepair( void )
    return functions & cfrepair;
 }
 
-int Vehicle :: putResource ( int amount, int resourcetype, int queryonly, int scope = 1 )
+int Vehicle :: putResource ( int amount, int resourcetype, int queryonly, int scope )
 {
    if ( amount < 0 ) {
       return -getResource( -amount, resourcetype, queryonly, scope );
@@ -376,7 +373,7 @@ int Vehicle :: putResource ( int amount, int resourcetype, int queryonly, int sc
    }
 }
 
-int Vehicle :: getResource ( int amount, int resourcetype, int queryonly, int scope = 1 )
+int Vehicle :: getResource ( int amount, int resourcetype, int queryonly, int scope )
 {
    if ( amount < 0 ) {
       return -putResource( -amount, resourcetype, queryonly, scope );
@@ -745,12 +742,6 @@ void Vehicle :: putimage ( int x, int y )
    #endif
 }
 
-#ifdef converter
-int  Vehicle :: vehicleloadable ( pvehicle vehicle,int uheight )
-{
-   return 0;
-}
-#endif
 
 void Vehicle :: setnewposition ( int x , int y )
 {

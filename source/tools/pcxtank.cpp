@@ -35,6 +35,8 @@
 #include "..\loadpcx.h"
 #include "..\basegfx.h"
 #include "..\loadbi3.h"
+#include "../buildingtype.h"
+#include "../vehicletype.h"
 
 char header[2][500];
 char text[200][500];

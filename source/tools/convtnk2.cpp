@@ -18,93 +18,42 @@
     Boston, MA  02111-1307  USA
 */
 
-#include <malloc.h>
-#include <stdio.h>
-#include <i86.h>
-#include <graph.h>
-#include <ctype.h>
-
-#include "..\tpascal.inc"
 #include "..\typen.h"
 #include "..\basestrm.h"
-#include "..\misc.h"
-#include "dos.h"
 #include "..\sgstream.h"
-#include "..\vesa.h"
+#include "krkr.h"
 
 
 main(int argc, char *argv[] )
 { 
-   t_carefor_containerstream cfcs;
-   int quantity=0;   
-
-   struct find_t  fileinfo;
-   unsigned rc;        /* return code */ 
+   opencontainer( "*.con");
 
    if ( argc < 2 ) {
       printf("syntax: convtank filename\n");
       return 1;
    }
 
-   rc = _dos_findfirst( argv[1], _A_NORMAL, &fileinfo );
+   int quantity=0;   
+
+   int armorfaktor = 10;
+   printf ("\n    Armor faktor ( in zehntel )");
+
+   num_ed (armorfaktor, 0, maxint);
+
+   tfindfile ff ( argv[1] );
+   char* n = ff.getnextname();
           
-   tterrainbits bts ( 0, 1 );
-
-
-   tterrainbits packeis ( 1 << 30, 0 );
-
-   while (rc == 0) {
+   while ( n ) {
       quantity++;
-      pvehicletype   ft;
-      ft = loadvehicletype(fileinfo.name);
-      printf (" converting <%15.15s>   ", fileinfo.name);
+      pvehicletype ft = loadvehicletype( n );
+      printf (" converting <%15.15s>  \n ", n);
 
-      if ( toupper ( fileinfo.name[0] ) == 'G' )
-        if ( ft->terrainaccess->terrain & cbsnow2 ) {
-            ft->terrainaccess->terrain |= bts;
-            printf(" G " );
-         }
+      ft->armor = ft->armor * armorfaktor / 10;
 
-      if ( toupper ( fileinfo.name[0] ) == 'S' || toupper ( fileinfo.name[0] ) == 'W') {
-        if ( ft->terrainaccess->terrainnot & cbsnow2 ) {
-            ft->terrainaccess->terrainnot |= bts;
-            printf(" S2 " );
-         }
-        if ( ft->terrainaccess->terrainnot & cbsnow1 ) {
-            ft->terrainaccess->terrainnot |= packeis;
-            ft->terrainaccess->terrainnot |= bts;
-            printf(" S1 " );
-         }
-      }
-
-
-      // converting .....
-
-//      ft->tank = ft->tank * 14 / 10;
-//      ft->movement[3] = ft->movement[3] * (11 + 4 * ( 100 - ft->movement[3]) / 100 ) / 10;
-//      for ( int i = 0; i < 8; i++ )
-//         ft->movement[i] = ft->movement[i] * 15 / 10;
-
-      // ft->production.material = ft->production.material * 11 / 10;
-      // ft->weight = ft->armor / 10 + ft->production.material / 20;
-/*
-     for ( int i = 0; i < ft->attack.weaponcount; i++ )
-         if ( ft->attack.waffe[i].maxdistance < 16 ) {
-            ft->attack.waffe[i].minstrength = ft->attack.waffe[i].maxstrength;
-         }
-*/ 
-
-      printf("\n");
-
-
-      // saving .....
-
-      {
-         tn_file_buf_stream stream ( fileinfo.name, 2 );
-         writevehicle ( ft, &stream );
+      tn_file_buf_stream stream ( n, 2 );
+      writevehicle ( ft, &stream );
       
-      }
-      rc = _dos_findnext( &fileinfo ); 
+      n = ff.getnextname();
    }
 
    printf ("\n %i files converted ! \n\n", quantity);

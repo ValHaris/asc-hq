@@ -29,6 +29,8 @@
 #include "..\misc.h"
 #include "..\sgstream.h"
 #include "..\loadbi3.h"
+#include "../buildingtype.h"
+#include "../vehicletype.h"
 
 main(int argc, char *argv[] )
 {
@@ -62,7 +64,7 @@ main(int argc, char *argv[] )
    
          fprintf ( fp, " %10.10s %5d %6d %6d %3d %7d %7d %7d %7d %7d %7d %7d \n",
    
-         ft->name, ft->_armor, ft->productioncost.fuel, ft->productioncost.material, ft->id, ft->_tank.a.energy, ft->_tank.a.material, ft->_tank.a.fuel, ft->maxplus.a.energy, ft->maxplus.a.material, ft->maxplus.a.fuel, ft->maxresearchpoints );
+         ft->name, ft->_armor, ft->productioncost.fuel, ft->productioncost.material, ft->id, ft->_tank.energy, ft->_tank.material, ft->_tank.fuel, ft->maxplus.energy, ft->maxplus.material, ft->maxplus.fuel, ft->maxresearchpoints );
    
          fn = ff.getnextname();
       }
@@ -74,7 +76,7 @@ main(int argc, char *argv[] )
       printf("\nfatal error accessing file %s \n", err.filename );
       return 1;
    } /* endcatch */
-   catch ( terror ) {
+   catch ( ASCexception ) {
       printf("\na fatal exception occured\n" );
       return 2;
    } /* endcatch */
