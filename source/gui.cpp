@@ -4,9 +4,14 @@
 */
 
 
-//     $Id: gui.cpp,v 1.66 2001-08-07 15:58:09 mbickel Exp $
+//     $Id: gui.cpp,v 1.67 2001-08-15 14:02:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.66  2001/08/07 15:58:09  mbickel
+//      Fixed crash in mail list
+//      Fixed crash in weapon info with mines
+//      Fixed cancel Button in object construction
+//
 //     Revision 1.65  2001/08/06 20:54:43  mbickel
 //      Fixed lots of crashes related to the new text files
 //      Fixed delayed events
@@ -2245,7 +2250,9 @@ int   tnsguiiconenablereactionfire::available    ( void )
 
 void  tnsguiiconenablereactionfire::exec         ( void ) 
 {
-   getactfield()->vehicle->reactionfire.enable();
+   int res = getactfield()->vehicle->reactionfire.enable();
+   if ( res < 0 )
+      dispmessage2 ( -res, NULL );
    dashboard.x = 0xffff;
    displaymap();
 }

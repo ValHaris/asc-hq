@@ -52,6 +52,10 @@ No units in vicinity that could be serviced
 Invalid service position
 212
 Invalid service amount
+213
+No weapons to attack from this height
+214
+No weapons to attack with
 301
 No place to construct building
 302

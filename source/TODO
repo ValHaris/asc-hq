@@ -4,7 +4,18 @@ TODO list for ASC, programming department.
 -9- is very low  priority
 
 
+Bugs:
+
+>- Eine Einheit, die nur auf einer bestimmten H”henstufe schieáen kann,
+>kann trotzdem auf einer anderen H”henstufe reactionfire aktivieren.
+>Bsp.: IOX aus SY-Units. Das drfte aus meiner Sicht nicht m”glich sein,
+>oder ist es gewollt?
+
+
+
 Small tasks:
+
+-5- Message of crashed airplanes when they run out of fuel
 
 -7- writing a TPWM decoder for Battle Isle maps
 

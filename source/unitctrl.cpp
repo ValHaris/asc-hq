@@ -1,6 +1,11 @@
-//     $Id: unitctrl.cpp,v 1.65 2001-08-09 15:58:59 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.66 2001-08-15 14:02:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.65  2001/08/09 15:58:59  mbickel
+//      Some usability improvements in the map editor
+//      More flexible BI3 map import
+//      Better textfile error messages
+//
 //     Revision 1.64  2001/08/09 10:28:23  mbickel
 //      Fixed AI problems
 //      Mapeditor can edit a units AI parameter
@@ -1738,6 +1743,22 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
          status = -101;
          return status;
       }
+
+      int weaponCount = 0;
+      int shootableWeaponCount = 0;
+      for ( int w = 0; w < vehicle->typ->weapons.count; w++ )
+         if ( vehicle->typ->weapons.weapon[w].shootable() ) {
+              weaponCount++;
+              if ( vehicle->typ->weapons.weapon[w].sourceheight & vehicle->height )
+                 shootableWeaponCount++;
+         }
+
+      if ( weaponCount == 0 )
+         return -214;
+
+      if ( shootableWeaponCount == 0 )
+         return -213;
+
 
       kamikaze = _kamikaze;
 

@@ -488,12 +488,27 @@ bool Vehicle :: canMove ( void )
 
 
 
-void Vehicle::ReactionFire::enable ( void )
+int Vehicle::ReactionFire::enable ( void )
 {
    #ifdef karteneditor
    status = ready;
    #else
    if ( status == off ) {
+      int weaponCount = 0;
+      int shootableWeaponCount = 0;
+      for ( int w = 0; w < unit->typ->weapons.count; w++ )
+         if ( unit->typ->weapons.weapon[w].shootable() ) {
+              weaponCount++;
+              if ( unit->typ->weapons.weapon[w].sourceheight & unit->height )
+                 shootableWeaponCount++;
+         }
+
+      if ( weaponCount == 0 )
+         return -214;
+
+      if ( shootableWeaponCount == 0 )
+         return -213;
+
       if ( unit->typ->wait ) {
          if ( unit->hasMoved())
             status = init1;
@@ -505,6 +520,7 @@ void Vehicle::ReactionFire::enable ( void )
       // unit->setMovement ( 0, 0 );
    }
    #endif
+   return 0;
 }
 
 void Vehicle::ReactionFire::disable ( void )

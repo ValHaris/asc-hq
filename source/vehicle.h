@@ -98,7 +98,8 @@
          int enemiesAttackable;
          Status getStatus()  { return status;};
 
-         void enable();
+         //! enables the reaction fire or returns an error code ( result < 0 = -errorNr ) 
+         int enable();
          void disable();
 
          //! hook that is called when a turn ends
