@@ -120,7 +120,8 @@ void SoundList::initialize(  )
    const ASCString separator = "=";
    const ASCString filename = "sounds.txt";
 
-   typedef map<ASCString, ASCString> SoundSetup;
+
+   typedef map<ASCString, SingleSound> SoundSetup;
    SoundSetup soundSetup;
    {
       tnfilestream list ( filename, tnstream::reading );
@@ -136,9 +137,17 @@ void SoundList::initialize(  )
             snd.toUpper();
             ASCString op = tok.getNextToken( );
             ASCString file = tok.getNextToken( );
-            if ( !file.empty() && op==separator )
-               soundSetup[snd] = file;
-            else
+            ASCString fadein = tok.getNextToken( );
+            if ( !file.empty() && op==separator ) {
+               SingleSound ss;
+               ss.filename = file;
+               if ( !fadein.empty() )
+                  ss.fadein = atoi ( fadein.c_str() );
+               else
+                  ss.fadein = 0;
+
+               soundSetup[snd] = ss;
+            } else
                if ( op.empty() )
                   warning( "error parsing file " + filename + " , line " + strrr (linenumber ));
          }
@@ -147,12 +156,12 @@ void SoundList::initialize(  )
 
    for ( SoundSetup::iterator i = soundSetup.begin(); i != soundSetup.end(); i++ ) {
       Sound* s = NULL;
-      if ( !i->second.empty() )
-         if ( soundFiles.find ( i->second ) == soundFiles.end() ) {
-            s = new Sound ( i->second );
-            soundFiles[i->second] = s;
+      if ( !i->second.filename.empty() )
+         if ( soundFiles.find ( i->second.filename ) == soundFiles.end() ) {
+            s = new Sound ( i->second.filename, i->second.fadein );
+            soundFiles[i->second.filename] = s;
          } else
-            s = soundFiles[i->second];
+            s = soundFiles[i->second.filename];
 
       for ( int n = 0; n < soundNum; n++ )
          if ( i->first == ASCString( sounds[n].name ) )

@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.53 2001-07-15 21:00:25 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.54 2001-07-15 21:31:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.53  2001/07/15 21:00:25  mbickel
+//      Some cleanup in the vehicletype class
+//
 //     Revision 1.52  2001/07/14 21:07:46  mbickel
 //      Sound works now under Win32 too
 //      Error reporting on Win32 during startup works again.
@@ -2080,7 +2083,7 @@ void displaymessage( const ASCString& text, int num  )
    } else {
       #ifdef _WIN32_
         if ( !gameStartupComplete && num==2 ) {
-           MessageBox(NULL, tempbuf, "Fatal Error", MB_ICONERROR | MB_OK | MB_TASKMODAL );
+           MessageBox(NULL, text.c_str(), "Fatal Error", MB_ICONERROR | MB_OK | MB_TASKMODAL );
            exit(1);
         }
       #endif

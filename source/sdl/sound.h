@@ -19,15 +19,18 @@ class Sound {
 public:
   /** Create a Sound from the .wav file specified by filename.
    *  If it's not possible to use the wave file for some reason, the
-   *  sound is set to silence
+   *  sound is set to silence.
+   *  \param fadeIn is a time in milliseconds
    */
-  Sound( const ASCString& filename );
+  Sound( const ASCString& filename, int fadeIn = 0 );
 
   void play(void);
   void playWait(void);
 
   void playLoop();
   void stop();
+
+  void fadeOut ( int ms );
 
   ~Sound(void);
 private:
@@ -36,6 +39,8 @@ private:
 
   //! the actual wave data
   Mix_Chunk *wave;
+
+  int fadeIn;
 
 };
 

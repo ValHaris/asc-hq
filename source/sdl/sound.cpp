@@ -120,7 +120,7 @@ Mix_Chunk* SoundSystem::loadWave ( const ASCString& name )
 
 
 
-Sound::Sound( const ASCString& filename ) : name ( filename ), wave(NULL)
+Sound::Sound( const ASCString& filename, int _fadeIn ) : name ( filename ), wave(NULL), fadeIn ( _fadeIn ) 
 {
    if ( !SoundSystem::instance )
       fatalError ( "Sound::Sound failed, because there is no SoundSystem initialized");
@@ -134,7 +134,11 @@ void Sound::play(void)
    if( SoundSystem::instance->isMuted() || !wave)
       return;
 
-   int channel = Mix_PlayChannel ( -1, wave, 0 );
+   int channel;
+   if ( fadeIn )
+      channel = Mix_FadeInChannel ( -1, wave, 0, fadeIn );
+   else
+      channel = Mix_PlayChannel ( -1, wave, 0 );
    SoundSystem::instance->channel[ channel ] = this;
 }
 
@@ -143,7 +147,12 @@ void Sound::playLoop()
    if( SoundSystem::instance->isMuted() || !wave)
       return;
 
-   int channel = Mix_PlayChannel ( -1, wave, -1 );
+   int channel;
+   if ( fadeIn )
+      channel = Mix_FadeInChannel ( -1, wave, -1, fadeIn );
+   else
+      channel = Mix_PlayChannel ( -1, wave, -1 );
+
    SoundSystem::instance->channel[ channel ] = this;
 }
 
@@ -167,6 +176,14 @@ void Sound::playWait(void)
       SDL_Delay(WAIT_SLEEP_MSEC);
    } while( SoundSystem::instance->channel[ channel ] == this  && Mix_Playing(channel)  );
 }
+
+void Sound :: fadeOut ( int ms )
+{
+   for ( int i = 0; i < MIX_CHANNELS; i++ )
+      if ( SoundSystem::instance->channel[ i ] == this  && Mix_Playing(i)  )
+          Mix_FadeOutChannel( i, ms );
+}
+
 
 Sound::~Sound(void)
 {

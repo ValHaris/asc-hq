@@ -386,28 +386,28 @@ int main(int argc, char *argv[] )
                               "</tr>\n" );
 
          // Werte der Waffen
-         for ( w = 0; w < ft->weapons->count ; w++) {
+         for ( w = 0; w < ft->weapons.count ; w++) {
             fprintf ( detailed3, "<tr><td>#%d</td>", w+1 );
             fprintf ( detailed3, "    <td align=\"center\">? ?</td>" ); //Abfrage für AMMO funktioniert noch nicht
-            fprintf ( detailed3, "    <td align=\"center\">%d</td>", (ft->weapons->weapon[w].mindistance+9)/10 );
-            fprintf ( detailed3, "    <td align=\"center\">%d</td>", ft->weapons->weapon[w].maxstrength ); 
-            fprintf ( detailed3, "    <td align=\"center\">%d</td>", (ft->weapons->weapon[w].maxdistance)/10 );
-            fprintf ( detailed3, "    <td align=\"center\">%d</td>", ft->weapons->weapon[w].minstrength ); 
+            fprintf ( detailed3, "    <td align=\"center\">%d</td>", (ft->weapons.weapon[w].mindistance+9)/10 );
+            fprintf ( detailed3, "    <td align=\"center\">%d</td>", ft->weapons.weapon[w].maxstrength ); 
+            fprintf ( detailed3, "    <td align=\"center\">%d</td>", (ft->weapons.weapon[w].maxdistance)/10 );
+            fprintf ( detailed3, "    <td align=\"center\">%d</td>", ft->weapons.weapon[w].minstrength ); 
             // Höhenstufenzeichen einfügen für shoot from und target
             for ( i = 0; i < 8; i++ ) 
-               if ( ft->weapons->weapon[w].sourceheight & ( 1 << i ) )
+               if ( ft->weapons.weapon[w].sourceheight & ( 1 << i ) )
                   fprintf ( detailed3, "<td><img src=\"../hacken.gif\"></td> " );
                else
                   fprintf ( detailed3, "<td></td>" );
             fprintf ( detailed3, "    <td></td>");
             for ( i = 0; i < 8; i++ ) 
-               if ( ft->weapons->weapon[w].targ & ( 1 << i ) )
+               if ( ft->weapons.weapon[w].targ & ( 1 << i ) )
                   fprintf ( detailed3, "<td><img src=\"../hacken.gif\"></td>" );
                else
                   fprintf ( detailed3, "<td></td>" );
             fprintf ( detailed3, "    <td>" );            
             for ( int i = 0; i < cwaffentypennum; i++ ) 
-               if ( ft->weapons->weapon[w].typ & ( 1 << i ) )
+               if ( ft->weapons.weapon[w].typ & ( 1 << i ) )
                   fprintf ( detailed3, "%s.", cwaffentypen[i] );
             fprintf ( detailed3, "</td></tr>\n" );
          }
@@ -419,9 +419,9 @@ int main(int argc, char *argv[] )
             // Aber die minimale Entfernung muá aufgerundet werden, deshalb benutze ich einen kleinen Trick: Ich addiere vor der Division 9 (also Quotient-1) dazu
 
    // noch ungeordnet
-   //fprintf ( detailed, "Number of weapons: %d <br>\n", ft->weapons->count );
-         for ( w = 0; w < ft->weapons->count ; w++) {
-            // looping through all weapons; w will be increased from 0 until it reaches ft->weapons->count; 
+   //fprintf ( detailed, "Number of weapons: %d <br>\n", ft->weapons.count );
+         for ( w = 0; w < ft->weapons.count ; w++) {
+            // looping through all weapons; w will be increased from 0 until it reaches ft->weapons.count; 
             fprintf ( detailed3, "<table id=\"H2\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
             fprintf ( detailed3, "<tr><td id=\"h1\" colspan=\"3\"> Weapon #%d: </td></tr>\n", w+1 );
             fprintf ( detailed3, "</table> \n" );
@@ -433,13 +433,13 @@ int main(int argc, char *argv[] )
                 fprintf ( detailed3, " <TD><IMG src=\"../typ%d.gif\" ></TD>", i);
             fprintf ( detailed3, "</TR>\n<TR>");
             for ( i = 0; i < cmovemalitypenum; i++ ) 
-               if ( !(ft->weapons->weapon[w].targets_not_hittable & ( 1 << i )) )
+               if ( !(ft->weapons.weapon[w].targets_not_hittable & ( 1 << i )) )
                   fprintf ( detailed3, "<td><img src=\"../hacken.gif\"></td>" );
                else
                   fprintf ( detailed3, "<td></td>" );
 
             for ( i = 0; i < 13; i++ ) 
-               fprintf(detailed3, "effizienz ber H”henstufendifferenz von %d ist %d%%", i-6, ft->weapons->weapon[w].efficiency[i] );
+               fprintf(detailed3, "effizienz ber H”henstufendifferenz von %d ist %d%%", i-6, ft->weapons.weapon[w].efficiency[i] );
 
             fprintf ( detailed3, "</tr>\n");
             fprintf ( detailed3, "</table> \n" );

@@ -21,6 +21,7 @@ class SoundLoopManager {
       SoundLoopManager ( Sound* snd, bool _active = true ) : sound( snd ), active ( _active ) {};
       // void setSound ( Sound* snd ) { sound = snd; };
       void activate ( ) { if ( !active && sound ) sound->playLoop(); active = true; };
+      int fadeOut ( int ms ) { if ( sound && active ) sound->fadeOut( ms ); };
       ~SoundLoopManager() { if ( sound && active ) sound->stop(); };
 };
 
@@ -30,6 +31,12 @@ class SoundLoopManager {
     It uses the singleton design pattern.
 */
 class SoundList {
+   class SingleSound {
+      public:
+         ASCString filename;
+         int fadein;
+   };
+   
     SoundList() {};
     static SoundList* instance;
 public:

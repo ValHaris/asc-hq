@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.58 2001-07-15 21:00:25 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.59 2001-07-15 21:31:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2001/07/15 21:00:25  mbickel
+//      Some cleanup in the vehicletype class
+//
 //     Revision 1.57  2001/07/14 19:13:16  mbickel
 //      Rewrote sound system
 //      Moveing units make sounds
@@ -239,6 +242,7 @@
 #include "viewcalculation.h"
 #include "replay.h"
 #include "dashboard.h"
+#include "gameoptions.h"
 
 PendingVehicleActions pendingVehicleActions;
 
@@ -754,7 +758,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
       oldfield->vehicle = NULL; 
    } else { 
       if ( oldfield->vehicle ) { 
-         int i = 0; 
+         int i = 0;
          while (oldfield->vehicle->loading[i] != vehicle) 
             i++; 
          oldfield->vehicle->loading[i] = NULL; 
@@ -776,7 +780,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
    int movedist = 0;
    int fueldist = 0;
 
-   while ( (x != xt1 || y != yt1) && vehicle && cancelmovement!=1 ) { 
+   while ( (x != xt1 || y != yt1) && vehicle && cancelmovement!=1 ) {
 
       if ( cancelmovement > 1 )
          cancelmovement--;
@@ -794,8 +798,11 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
 
 
 
-      if ( mapDisplay ) 
+      if ( mapDisplay ) {
+         if ( x2 == xt1 && y2 == yt1 ) // the unit will reach its destination
+            slm.fadeOut ( CGameOptions::Instance()->movespeed * 10 );
          mapDisplay->displayMovingUnit ( x, y, x2, y2, vehicle, vehicle->height, newheight, i, fieldnum, &slm );
+      }
 
       int dir;
       if (vehicle->functions & ( cffahrspur | cficebreaker ))  {
