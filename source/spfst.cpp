@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.60 2000-09-25 20:04:39 mbickel Exp $
+//     $Id: spfst.cpp,v 1.61 2000-09-27 16:08:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2000/09/25 20:04:39  mbickel
+//      AI improvements
+//
 //     Revision 1.59  2000/09/17 15:20:35  mbickel
 //      AI is now automatically invoked (depending on gameoptions)
 //      Some cleanup
@@ -1487,13 +1490,13 @@ void         initspfst( int x , int y)
   #endif
 }
 
-word         getxpos(void)
+int getxpos(void)
 { 
    return cursor.posx + actmap->xpos; 
 } 
 
 
-word         getypos(void)
+int getypos(void)
 { 
    return cursor.posy + actmap->ypos; 
 } 

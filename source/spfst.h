@@ -1,6 +1,9 @@
-//     $Id: spfst.h,v 1.25 2000-09-25 20:04:41 mbickel Exp $
+//     $Id: spfst.h,v 1.26 2000-09-27 16:08:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/09/25 20:04:41  mbickel
+//      AI improvements
+//
 //     Revision 1.24  2000/09/17 15:20:37  mbickel
 //      AI is now automatically invoked (depending on gameoptions)
 //      Some cleanup
@@ -247,10 +250,10 @@ extern void  getbuildingfieldcoordinates( const pbuilding    bld,
                                          int     &    yy);
 
 //! returns the x coordinate of the cursor location
-extern word  getxpos(void);
+extern int  getxpos(void);
 
 //!returns the y coordinate of the cursor location
-extern word  getypos(void);
+extern int  getypos(void);
 
 
 /*!

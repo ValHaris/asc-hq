@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.76 2000-09-17 15:20:29 mbickel Exp $
+//     $Id: controls.cpp,v 1.77 2000-09-27 16:08:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.76  2000/09/17 15:20:29  mbickel
+//      AI is now automatically invoked (depending on gameoptions)
+//      Some cleanup
+//
 //     Revision 1.75  2000/09/16 13:02:51  mbickel
 //      Put the AI in place
 //
@@ -5494,10 +5498,10 @@ void endTurn ( void )
                      }
 
                      // actvehicle->setMovement ( 0 );
-                     actvehicle->resetmovement();
+                     actvehicle->resetMovement();
                      actvehicle->attacked = false; 
                   } else {
-                     actvehicle->resetmovement();
+                     actvehicle->resetMovement();
                      actvehicle->attacked = false; 
                   }
                } 

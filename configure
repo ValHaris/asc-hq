@@ -1813,7 +1813,7 @@ EOF
 
 else
   echo "$ac_t""no" 1>&6
-{ echo "configure: error: ASC requires bz2-1.0.0 . You can get it from http://sourceware.cygnus.com/bzip2 " 1>&2; exit 1; }
+{ echo "configure: error: ASC requires bz2-1.0.0 . You can install the one in source/lib/bzlib/ or download the latest version from http://sourceware.cygnus.com/bzip2 " 1>&2; exit 1; }
 fi
 
 

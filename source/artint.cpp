@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.31 2000-09-26 18:05:12 mbickel Exp $
+//     $Id: artint.cpp,v 1.32 2000-09-27 16:08:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/09/26 18:05:12  mbickel
+//      Upgraded to bzlib 1.0.0 (which is incompatible to older versions)
+//
 //     Revision 1.30  2000/09/25 20:04:34  mbickel
 //      AI improvements
 //
@@ -519,7 +522,7 @@ void AI :: calculateFieldThreats ( void )
 
                   int move = fld->vehicle->getMovement() ;
 
-                  fld->vehicle->setMovement ( fld->vehicle->typ->movement [ log2 ( fld->vehicle->height )] );
+                  fld->vehicle->resetMovement ( );
 
                   VehicleMovement vm ( NULL, NULL );
                   if ( vm.available ( fld->vehicle )) {
@@ -539,7 +542,7 @@ void AI :: calculateFieldThreats ( void )
                         wr.run ( fld->vehicle, xp, yp, singleUnitThreat, this );
                      }
                   }
-                  fld->vehicle->setMovement ( move );
+                  fld->vehicle->setMovement ( move, 0 );
                } else
                   wr.run ( fld->vehicle, x, y, singleUnitThreat, this );
 
@@ -765,6 +768,9 @@ AI::Section* AI :: Sections :: getBest ( const pvehicle veh, int* xtogo, int* yt
    AI::Section* frst = NULL;
    for ( int y = 0; y < numY; y++ )
       for ( int x = 0; x < numX; x++ ) {
+          int xtogoSec = -1;
+          int ytogoSec = -1;
+
           AI::Section& sec = getForPos( x, y );
           float t = 0;
           for ( int i = 0; i < aiValueTypeNum; i++ )
@@ -784,26 +790,39 @@ AI::Section* AI :: Sections :: getBest ( const pvehicle veh, int* xtogo, int* yt
              int ac  = 0;
              int nac = 0;
              int mindist = maxint;
+             int targets = 0;
              for ( int yp = sec.y1; yp <= sec.y2; yp++ )
                 for ( int xp = sec.x1; xp <= sec.x2; xp++ ) {
                    pfield fld = getfield ( xp, yp );
                    if ( fld->a.temp == 1 ) {
-                      if ( xtogo && ytogo ) {
-                         int mandist = abs( sec.centerx - xp ) + 2*abs ( sec.centery - yp );
-                         if ( mandist < mindist ) {
-                            mindist = mandist;
-                            *xtogo = xp;
-                            *ytogo = yp;
-                         }
+                      int mandist = abs( sec.centerx - xp ) + 2*abs ( sec.centery - yp );
+                      if ( mandist < mindist ) {
+                         mindist = mandist;
+                         xtogoSec = xp;
+                         ytogoSec = yp;
                       }
+
                       ac++;
+                      tvehicle v ( veh, NULL );
+                      v.resetMovement(); // to make sure the wait-for-attack flag doesn't hinder the attack
+                      v.xpos = xp;
+                      v.ypos = yp;
+                      VehicleAttack va ( NULL, NULL );
+                      if ( va.available ( &v )) {
+                         va.execute ( &v, -1, -1, 0, 0, -1 );
+                         targets += va.attackableVehicles.getFieldNum();
+                      }
                    } else
                       nac++;
                 }
 
-             if ( 100 * nac / (nac+ac) < 70 ) {   // less than 80% of fields not accessible
+             if ( 100 * nac / (nac+ac) < 70  && targets ) {   // less than 70% of fields not accessible
                 d = f;
                 frst = &getForPos ( x, y );
+                if ( xtogo && ytogo ) {
+                   *xtogo = xtogoSec;
+                   *ytogo = xtogoSec;
+                }
              }
           }
       }
@@ -1200,7 +1219,7 @@ int AI::changeVehicleHeight ( pvehicle veh, VehicleMovement* vm, int preferredDi
                if ( preferredDirection == -1 ) {
                   tvehicle dummy ( veh, NULL );
                   dummy.height = newheight;
-                  dummy.setMovement ( dummy.typ->movement[ log2 ( newheight )] );
+                  dummy.resetMovement ( );
                   MapCoordinate mc = getDestination ( &dummy );
                   preferredDirection = getdirection ( dummy.xpos, dummy.ypos, mc.x, mc.y );
                }
@@ -1335,22 +1354,25 @@ AI::AiResult  AI :: container ( ccontainercontrols& cc )
       int simplyMove = 0;
       if ( getBestHeight ( *i ) != (*i)->height ) {
          VehicleMovement* vm = cc.movement ( *i );
-         int stat = changeVehicleHeight ( *i, vm );
-         if ( stat == -1 ) {
-            result.unitsWaiting++;
-            (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_wait;
-         } else {
-            if ( stat== -2 )
-               simplyMove = 1;
-            else {
-               result.unitsMoved++;
-               (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_nothing;
-               if ( (*i)->getMovement() >= minmalq && !(*i)->attacked && (*i)->weapexist() )
+         if ( vm ) {
+            auto_ptr<VehicleMovement> avm ( vm );
+            int stat = changeVehicleHeight ( *i, vm );
+            if ( stat == -1 ) {
+               result.unitsWaiting++;
+               (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_wait;
+            } else {
+               if ( stat== -2 )
                   simplyMove = 1;
                else {
-                  VehicleMovement vm ( mapDisplay, NULL );
-                  if ( vm.available ( *i ))
-                     moveToSavePlace ( *i, vm );
+                  result.unitsMoved++;
+                  (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_nothing;
+                  if ( (*i)->getMovement() >= minmalq && !(*i)->attacked && (*i)->weapexist() )
+                     simplyMove = 1;
+                  else {
+                     VehicleMovement vm ( mapDisplay, NULL );
+                     if ( vm.available ( *i ))
+                        moveToSavePlace ( *i, vm );
+                  }
                }
             }
          }
@@ -1361,6 +1383,7 @@ AI::AiResult  AI :: container ( ccontainercontrols& cc )
          VehicleMovement* vm = cc.movement ( *i );
          // auto_ptr<VehicleMovement> vm ( cc.movement ( *i ) );
          if ( vm ) {
+            vm->registerMapDisplay ( mapDisplay );
             auto_ptr<VehicleMovement> avm ( vm );
 
             VehicleAttack va ( NULL, NULL );
@@ -1445,8 +1468,7 @@ AI::AiResult AI::transports( int process )
       protected:
          virtual int getMoveCost ( int x1, int y1, int x2, int y2, const pvehicle vehicle )
          {
-            int cost;
-            // int cost = AStar::getMoveCost ( x1, y1, x2, y2, vehicle );
+            int cost = AStar::getMoveCost ( x1, y1, x2, y2, vehicle );
             if ( getfield ( x2, y2 )->vehicle && beeline ( vehicle->xpos, vehicle->ypos, x2, y2) < vehicle->getMovement())
                cost += 2;
             return cost;
@@ -1513,6 +1535,9 @@ AI::AiResult AI::strategy( void )
                   if ( xtogo != veh->xpos || ytogo != veh->ypos ) {
                      AiParameter& aip = *veh->aiparam[getPlayer()];
 
+                     aip.xtogo = x2;  // for debugging purposes
+                     aip.ytogo = y2;
+
                      vm.execute ( NULL, xtogo, ytogo, 2, -1, -1 );
                      if ( vm.getStatus() != 3 )
                         displaymessage ( "AI :: strategy \n error in movement step 2 with unit %d", 1, veh->networkid );
@@ -1556,6 +1581,8 @@ void AI::checkKeys ( void )
 
 void AI:: run ( void )
 {
+   AiResult res;
+
    cursor.hide();
 
    unitCounter = 0;
@@ -1567,7 +1594,9 @@ void AI:: run ( void )
 
    buildings( 3 );
    transports ( 3 );
-   tactics();
+   do {
+      res = tactics();
+   } while ( res.unitsMoved );
    strategy();
    buildings( 1 );
    transports ( 3 );
@@ -1585,7 +1614,7 @@ bool AI :: isRunning ( void )
 void AI :: showFieldInformation ( int x, int y )
 {
    if ( fieldThreats ) {
-      const char* fieldinfo = "#font02#Field Information#font01##aeinzug20##eeinzug10##crtp10#"
+      const char* fieldinfo = "#font02#Field Information (%d,%d)#font01##aeinzug20##eeinzug10##crtp10#"
                               "threat orbit: %d\n"
                               "threat high-level flight: %d\n"
                               "threat flight: %d\n"
@@ -1597,9 +1626,9 @@ void AI :: showFieldInformation ( int x, int y )
 
       char text[10000];
       int pos = x + y * activemap->xsize;
-      sprintf(text, fieldinfo, fieldThreats[pos].threat[7], fieldThreats[pos].threat[6], fieldThreats[pos].threat[5],
-                               fieldThreats[pos].threat[4], fieldThreats[pos].threat[3], fieldThreats[pos].threat[2],
-                               fieldThreats[pos].threat[1], fieldThreats[pos].threat[0] );
+      sprintf(text, fieldinfo, x,y,fieldThreats[pos].threat[7], fieldThreats[pos].threat[6], fieldThreats[pos].threat[5],
+                                   fieldThreats[pos].threat[4], fieldThreats[pos].threat[3], fieldThreats[pos].threat[2],
+                                   fieldThreats[pos].threat[1], fieldThreats[pos].threat[0] );
 
       pfield fld = getfield (x, y );
       if ( fld->vehicle && fieldvisiblenow ( fld )) {
@@ -1609,7 +1638,7 @@ void AI :: showFieldInformation ( int x, int y )
          AiParameter& aip = *fld->vehicle->aiparam[getPlayer()];
 
          if ( fld->vehicle->aiparam ) {
-            sprintf(text2, "\nunit value: %d", aip.value );
+            sprintf(text2, "\nunit value: %d; xtogo: %d, ytogo: %d;", aip.value, aip.xtogo, aip.ytogo );
             strcat ( text, text2 );
          }
 

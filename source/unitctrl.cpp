@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.34 2000-09-25 20:04:42 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.35 2000-09-27 16:08:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2000/09/25 20:04:42  mbickel
+//      AI improvements
+//
 //     Revision 1.33  2000/09/25 13:25:54  mbickel
 //      The AI can now change the height of units
 //      Heightchaning routines improved
@@ -1435,6 +1438,13 @@ PendingVehicleActions :: ~PendingVehicleActions ( )
 }
 
 
+
+
+
+
+
+
+
 VehicleAttack :: VehicleAttack ( MapDisplayInterface* md, PPendingVehicleActions _pva )
                : VehicleAction ( vat_attack, _pva )
 {
@@ -1656,6 +1666,78 @@ VehicleAttack :: ~VehicleAttack ( )
 {
    if ( pva )
       pva->attack = NULL;
+}
+
+
+
+
+
+
+VehicleService :: VehicleService ( MapDisplayInterface* md, PPendingVehicleActions _pva )
+               : VehicleAction ( vat_service, _pva )
+{
+   status = 0;
+   mapDisplay = md;
+   if ( pva )
+      pva->service = this;
+}
+
+
+int VehicleService :: available ( pvehicle eht ) const
+{
+/*
+   if (eht != NULL)
+      if (eht->attacked == false)
+         if ( eht->weapexist() )
+            if ( eht->reactionfire.status == tvehicle::ReactionFire::off ) {
+               if (eht->typ->wait == false  ||  !eht->hasMoved() )
+                  return 1;
+            } else {
+               // if ( reactionfire_active >= 3 )
+                  return 1;
+            }
+*/
+   return 0;
+}
+
+
+int VehicleService :: execute ( pvehicle veh, int x, int y, int step, int _kamikaze, int weapnum )
+{
+   if ( step != status )
+      return -1;
+
+   if ( status == 0 ) {
+      vehicle = veh ;
+      if ( !vehicle ) {
+         status = -101;
+         return status;
+      }
+
+
+      status = 2;
+      return status;
+  } else
+  if ( status == 2 ) {
+      status = 1000;
+  }
+  return status;
+}
+
+
+
+
+void VehicleService :: registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva )
+{
+   VehicleAction::registerPVA ( _actionType, _pva );
+   if ( pva )
+      pva->service = this;
+}
+
+
+VehicleService :: ~VehicleService ( )
+{
+   if ( pva )
+      pva->service = NULL;
 }
 
 

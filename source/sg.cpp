@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.96 2000-09-25 20:04:38 mbickel Exp $
+//     $Id: sg.cpp,v 1.97 2000-09-27 16:08:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.96  2000/09/25 20:04:38  mbickel
+//      AI improvements
+//
 //     Revision 1.95  2000/09/24 19:57:04  mbickel
 //      ChangeUnitHeight functions are now more powerful since they use
 //        UnitMovement on their own.
@@ -2445,7 +2448,6 @@ void  mainloop ( void )
                               AI* ai = (AI*) actmap->player[ actmap->actplayer].ai;
                               ai->showFieldInformation ( getxpos(), getypos() );
                          }
-                         displaymessage ( "%d", 1, &getactfield()->visible );
                break;
                
 

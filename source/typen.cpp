@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.50 2000-09-25 20:04:41 mbickel Exp $
+//     $Id: typen.cpp,v 1.51 2000-09-27 16:08:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2000/09/25 20:04:41  mbickel
+//      AI improvements
+//
 //     Revision 1.49  2000/09/25 15:06:00  mbickel
 //      Some fixes for Watcom
 //
@@ -1452,12 +1455,12 @@ void Vehicle :: endTurn( void )
 
    reactionfire.endTurn();
 
-   resetmovement();
+   resetMovement();
    attacked = false;
 
 }
 
-void Vehicle :: resetmovement ( void )
+void Vehicle :: resetMovement ( void )
 {
     int move = typ->movement[log2(height)];
     setMovement ( move, -1 );
@@ -1473,20 +1476,20 @@ void Vehicle :: resetmovement ( void )
     */
 }
 
-void Vehicle :: setMovement ( int newmove, int transp )
+void Vehicle :: setMovement ( int newmove, int cargoDivisor )
 {
    if ( newmove < 0 )
       newmove = 0;
 
-   if ( transp >= 0 && typ)
+   if ( cargoDivisor && typ)
       if ( typ->movement[ log2 ( height ) ] ) {
          int diff = _movement - newmove;
          int perc = 1000 * diff / typ->movement[ log2 ( height ) ] ;
          for ( int i = 0; i < 32; i++ ) {
             if ( loading[i] ) {
                int lperc = perc;
-               if ( !transp )
-                  lperc /= 2;
+               if ( cargoDivisor )
+                  lperc /= cargoDivisor;
 
                loading[i]->setMovement ( loading[i]->getMovement() - lperc * loading[i]->typ->movement[ log2 ( loading[i]->height)] / 1000 , 1 );
             }
@@ -1523,7 +1526,7 @@ void Vehicle::ReactionFire::enable ( void )
       } else {
          status = init2;
       }
-      // unit->setMovement ( 0, -1 );
+      // unit->setMovement ( 0, 0 );
    }
 }
 
@@ -1532,7 +1535,7 @@ void Vehicle::ReactionFire::disable ( void )
    if ( status != off ) {
        status = off;
        enemiesAttackable = 0;
-       unit->setMovement ( 0, -1 );
+       unit->setMovement ( 0, 0 );
    }
 }
 

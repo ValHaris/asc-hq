@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.56 2000-09-25 13:25:52 mbickel Exp $
+//     $Id: dialog.cpp,v 1.57 2000-09-27 16:08:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.56  2000/09/25 13:25:52  mbickel
+//      The AI can now change the height of units
+//      Heightchaning routines improved
+//
 //     Revision 1.55  2000/09/17 15:20:32  mbickel
 //      AI is now automatically invoked (depending on gameoptions)
 //      Some cleanup
@@ -5546,7 +5550,7 @@ void appendTerrainBits ( char* text, tterrainbits* bdt )
 void viewterraininfo ( void )
 {
    if ( fieldvisiblenow  ( getactfield() )) {
-      const char* terraininfo = "#font02#Field Information#font01##aeinzug20##eeinzug20##crtp10#"
+      const char* terraininfo = "#font02#Field Information (%d,%d)#font01##aeinzug20##eeinzug20##crtp10#"
                                             "direction: %d\n"
                                             "ID: %d\n"
                                             "attack bonus: %.1f\n"
@@ -5561,7 +5565,7 @@ void viewterraininfo ( void )
       float ab = fld->getattackbonus();
       float db = fld->getdefensebonus();
 
-      sprintf(text, terraininfo, fld->direction, fld->typ->terraintype->id, ab/8, db/8, fld->getjamming() );
+      sprintf(text, terraininfo, getxpos(), getypos(), fld->direction, fld->typ->terraintype->id, ab/8, db/8, fld->getjamming() );
 
       appendTerrainBits ( text, &fld->bdt );
 

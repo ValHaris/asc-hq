@@ -1,6 +1,9 @@
-//     $Id: unitctrl.h,v 1.11 2000-09-25 20:04:43 mbickel Exp $
+//     $Id: unitctrl.h,v 1.12 2000-09-27 16:08:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/09/25 20:04:43  mbickel
+//      AI improvements
+//
 //     Revision 1.10  2000/09/25 13:25:55  mbickel
 //      The AI can now change the height of units
 //      Heightchaning routines improved
@@ -117,7 +120,7 @@ typedef FieldList<AttackWeap> AttackFieldList;
 typedef class PendingVehicleActions* PPendingVehicleActions;
 
 
-enum VehicleActionType { vat_nothing, vat_move, vat_ascent, vat_descent, vat_attack };
+enum VehicleActionType { vat_nothing, vat_move, vat_ascent, vat_descent, vat_attack, vat_service };
 
 class VehicleAction {
            protected:
@@ -374,6 +377,56 @@ class VehicleAttack : public VehicleAction {
 
 
 
+class VehicleService : public VehicleAction {
+              pvehicle vehicle;
+              int status;
+
+           protected:
+              MapDisplayInterface* mapDisplay;
+           public:
+              enum Service { srv_repair, srv_fuel, srv_material, srv_ammo };
+              class Target {
+                 public:
+                    pvehicle veh;
+
+                    struct Service {
+                      VehicleService::Service type;
+                      int percentage;   //!< how much of the required service can be fullfilled
+                      int sourcePos;
+                      int targetPos;
+                    };
+                    vector<Service> service;
+              };
+              FieldList<Target> target;
+
+              vector<Service> availableServices;
+
+              int getStatus( void ) { return status; };
+              virtual int available ( pvehicle veh ) const;
+              virtual int execute ( pvehicle veh, int x, int y, int step, int _kamikaze, int weapnum );
+              virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
+              VehicleService ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
+              virtual ~VehicleService ( );
+         };
+
+
+
+/* VehicleAttack:
+ *
+ *   Step 0:   execute ( vehicle, -1, -1, step = 0 , kamikaze, -1 );
+ *                 kamikaze attack is not implemented yet. Always pass 0
+ *
+ *                 "attackableVehicles", "attackableBuildings", "attackableObjects" contains the possible targets of the
+ *                   unit, along with information about the weapon(s) which can be used for the attack
+ *
+ *   Step 2:   execute ( NULL, target-x, target-y, step = 2, -1, weapnum );
+ *                The target destination must be part of one of the "attackable*" fields.
+ *                weapnum may either be a specific weapon or -1 if the most powerful one should be used
+ */
+
+
+
+
 class PendingVehicleActions {
           public:
             int actionType;
@@ -384,6 +437,7 @@ class PendingVehicleActions {
             IncreaseVehicleHeight* ascent;
             DecreaseVehicleHeight* descent;
             VehicleAttack* attack;
+            VehicleService* service;
             ~PendingVehicleActions ( );
          };
 

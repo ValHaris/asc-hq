@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.54 2000-09-25 20:04:42 mbickel Exp $
+//     $Id: typen.h,v 1.55 2000-09-27 16:08:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.54  2000/09/25 20:04:42  mbickel
+//      AI improvements
+//
 //     Revision 1.53  2000/09/25 13:25:54  mbickel
 //      The AI can now change the height of units
 //      Heightchaning routines improved
@@ -619,14 +622,15 @@ class BaseAI {
 
        
 
-
+/*
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 ///    Now, these are the main structures ASC consists of
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
+*/
 
-
+//! Coordinate on the map
 class MapCoordinate {
          public:
             int x;
@@ -826,8 +830,13 @@ class Vehicle : public ContainerBase {
     AiParameter* aiparam[8];
   
     int getMovement ( void );
-    void setMovement ( int newmove, int transp = 0 );
+
+    /** sets a new distance that the unit can move
+        \param cargoDivisor : the cargo of this unit gets 1/cargodivisor the change that this unit is getting; if 0 the cargo is not touched
+    */
+    void setMovement ( int newmove, int cargoDivisor = 2 );
     int hasMoved ( void );
+    void resetMovement( void );
 
     void read ( pnstream stream );
     void write ( pnstream stream );
@@ -844,7 +853,6 @@ class Vehicle : public ContainerBase {
     void repairunit ( pvehicle vehicle, int maxrepair = 100 );
     void constructvehicle ( pvehicletype tnk, int x, int y );      // current cursor position will be used
     int  vehicleconstructable ( pvehicletype tnk, int x, int y );
-    void resetmovement( void );
     void putimage ( int x, int y );
     int  vehicleloadable ( pvehicle vehicle, int uheight = -1 );
     void setnewposition ( int x, int y );
