@@ -1,6 +1,14 @@
-//     $Id: edselfnt.cpp,v 1.11 2000-08-06 11:39:06 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.12 2000-08-06 13:14:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/08/06 11:39:06  mbickel
+//      New map paramter: fuel globally available
+//      Mapeditor can now filter buildings too
+//      Fixed unfreed memory in fullscreen image loading
+//      Fixed: wasted cpu cycles in building
+//      map parameters can be specified when starting a map
+//      map parameters are reported to all players in multiplayer games
+//
 //     Revision 1.10  2000/08/04 15:11:07  mbickel
 //      Moving transports costs movement for units inside
 //      refuelled vehicles now have full movement in the same turn
@@ -191,7 +199,7 @@ template<class T> void SelectAnything<T> :: init ( vect<T> &v, int x1, int y1, i
   int num = itemsavail.getlength() + 1; 
   if ( num <= 0 ) {
      displaymessage("no items available", 1 );
-     return;
+     // return;
   } 
 
 
@@ -1196,7 +1204,12 @@ void selbuilding ( tkey ench )
 
 void    showallchoices(void)
 {
+   static int shown = 0;
+   if (shown )
+      return;
+   shown++;
    selectitemcontainer.paintallselections( );
+   shown--;
 }
 
 

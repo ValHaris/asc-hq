@@ -1,6 +1,14 @@
-//     $Id: dlg_box.cpp,v 1.25 2000-08-06 11:38:57 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.26 2000-08-06 13:14:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/08/06 11:38:57  mbickel
+//      New map paramter: fuel globally available
+//      Mapeditor can now filter buildings too
+//      Fixed unfreed memory in fullscreen image loading
+//      Fixed: wasted cpu cycles in building
+//      map parameters can be specified when starting a map
+//      map parameters are reported to all players in multiplayer games
+//
 //     Revision 1.24  2000/08/03 13:12:04  mbickel
 //      Fixed: on/off switching of generator vehicle produced endless amounts of energy
 //      Repairing units now reduces their experience
@@ -1954,86 +1962,6 @@ void displaymessage( const char* formatstring, int num, ... )
    if ( lng >= 1000 )
       displaymessage ( "dlg_box.cpp / displaymessage:   string to long !\nPlease report this error",1 );
 
-   /*
-
-   while (*a != 0) {
-      if (*a == '%' ) {
-         switch (a[1]) {
-         case 'c': 
-            *b = va_arg ( paramlist, char );
-            b++;
-            break;
-         case 'd':
-         case 'i':
-         case 'u':
-            i = va_arg ( paramlist, int );
-            itoa ( i, c, 10 );
-            i=0;
-            while (c[i]) {
-               *b = c[i];
-               b++;
-               i++;
-            } 
-            break;
-         case 'o':
-            i = va_arg ( paramlist, int );
-            itoa ( i, c, 8 );
-            i=0;
-            while (c[i]) {
-               *b = c[i];
-               b++;
-               i++;
-            } 
-            break;
-         case 'p':
-         case 'x':
-            i = va_arg ( paramlist, int );
-            itoa ( i, c, 16 );
-            i=0;
-            while (c[i]) {
-               *b = c[i];
-               b++;
-               i++;
-            } 
-            break;
-         case 'X':
-            i = va_arg ( paramlist, int );
-            itoa ( i, c, 16 );
-            strupr ( c );
-            i=0;
-            while (c[i]) {
-               *b = c[i];
-               b++;
-               i++;
-            } 
-            break;
-         case 's':
-            d = va_arg ( paramlist, char* );
-            while (*d) {
-               *b = *d;
-               b++;
-               d++;
-            } 
-            break;
-         } 
-         a+=2;
-      } else {
-         if (*a == '\n') {
-            *b = 0;
-            linenum++;
-            stringtooutput[linenum] = new char[200];
-            b = stringtooutput[linenum];
-            *b = 0;
-         } else {
-           *b = *a;
-           b++;
-         }
-         a++;
-      }
-   } 
-
-   */
-
    char* a = tempbuf;
 
    tstringa stringtooutput;
@@ -2074,7 +2002,11 @@ void displaymessage( const char* formatstring, int num, ... )
      #endif
       exit ( 1 );
    } else {
+      static int messageboxopen = 0;
+      if ( messageboxopen )
+         return;
 
+      messageboxopen++;
       if ( messagebox ) {
         if ( messagebox->boxstatus )
            messagebox->done();
@@ -2092,6 +2024,8 @@ void displaymessage( const char* formatstring, int num, ... )
           delete messagebox;
           messagebox = NULL;
        }
+
+       messageboxopen--;
 
    } /* endif */
 
