@@ -23,7 +23,8 @@ objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp music.cpp
 messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp messagedlg.cpp \
 simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp weatherarea.cpp \
-guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp 
+guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp gamedialog.cpp \
+infopopup.cpp
 
 
 asc_LDADD   		= $(top_builddir)/source/libs/triangul/libtriangul.la \
