@@ -1,6 +1,10 @@
-//     $Id: loadbi3.cpp,v 1.13 2000-04-01 16:54:29 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.14 2000-04-02 21:51:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/04/01 16:54:29  mbickel
+//      Updated BI2PCX to use the new interchangeable graphic sets
+//      Tagged ASC1-0-0
+//
 //     Revision 1.12  2000/04/01 11:38:39  mbickel
 //      Updated the small editors
 //      Added version numbering
@@ -100,7 +104,10 @@ class ActiveGraphicPictures {
      int maxnum;
      int currentnum;
      void** bi3graphics;
-     int* bi3graphmode;
+     int* bi3graphmode;        // 0: no picture available ( should not happen ingame )
+                               // 1: picture has BI size
+                               // 2: picture has ASC size
+                               // +0xff : picture is dummy picture
      int absoluteMaxPicSize;
      int setActive ( int id );
 
@@ -334,6 +341,15 @@ void loadbi3graphics( void )
 
    int absoluteMaxPicSize = 0;
 
+   void* emptyfield;
+   {
+      int o;
+      tnfilestream s ( "emptyfld.raw", 1 );
+      s.readrlepict ( &emptyfield, false, &o );
+   }
+   int emptyfieldsize = getpicsize2 ( emptyfield );
+
+
    tfindfile ff ( "*.gfx" );
    char* filename = ff.getnextname();
    while ( filename ) {
@@ -362,14 +378,16 @@ void loadbi3graphics( void )
                void* p;
                s.readrlepict ( &p, false, &o );
                gs->pic[i] = p;
-            } 
-            gs->picmode[i] = picmode[i];
+               gs->picmode[i] = picmode[i];
+            } else {
+               void* p = asc_malloc ( emptyfieldsize );
+               memcpy ( p, emptyfield, emptyfieldsize );
+               gs->pic[i] = p;
+               gs->picmode[i] = 256 + 2;
+            }
          }
          if ( gs->picnum > highestPicNum )
             highestPicNum = gs->picnum;
-
-         if ( gs->picnum < bi3graphnum )
-            bi3graphnum = gs->picnum;
 
          delete[] picmode;
 
@@ -378,6 +396,20 @@ void loadbi3graphics( void )
 
       filename = ff.getnextname();
    }
+   
+   for ( int i = 0; i < graphicSetNum; i++ ) {
+       GraphicSet* gs = graphicSet[i];
+       for ( int j = gs->picnum; j < highestPicNum; j++ ) {
+           void* p = asc_malloc ( emptyfieldsize );
+           memcpy ( p, emptyfield, emptyfieldsize );
+           gs->pic[j] = p;
+           gs->picmode[j] = 256 + 2;
+       }
+       gs->picnum = highestPicNum;
+   }
+   bi3graphnum = highestPicNum;
+
+
    activeGraphicPictures.bi3graphics = new void*[highestPicNum]; 
    activeGraphicPictures.bi3graphmode = new int[highestPicNum];
    activeGraphicPictures.maxnum = highestPicNum;

@@ -1,6 +1,10 @@
-//     $Id: strtmesg.cpp,v 1.3 2000-04-01 11:38:39 mbickel Exp $
+//     $Id: strtmesg.cpp,v 1.4 2000-04-02 21:51:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/04/01 11:38:39  mbickel
+//      Updated the small editors
+//      Added version numbering
+//
 //     Revision 1.2  1999/11/16 03:42:39  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -32,7 +36,7 @@
 
 
 // These strings should be the same as the release tags in CVS !
-const char* asc_release="ASC1.0.0";
+const char* asc_release="ASC1.0.1";
 
 #include <stdio.h>
 
