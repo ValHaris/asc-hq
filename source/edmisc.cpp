@@ -2,9 +2,14 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.119 2004-07-23 20:33:56 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.120 2004-08-14 13:11:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.119  2004/07/23 20:33:56  mbickel
+//      Fixed invalid cache generation
+//      Objects now have a height
+//      Fixed: neutral units in mapeditor due to player exchange
+//
 //     Revision 1.118  2004/07/14 19:26:48  mbickel
 //      Fixed display glitches
 //      Rewrote some endian dependent parts
@@ -4017,8 +4022,7 @@ void         SelectUnitSet::init(void)
    title = "Disable Items";
    x1 = 90;
    xsize = 445;
-   y1 = 10;
-   ysize = 440;
+   ysize = 580;
    int w = (xsize - 60) / 2;
    action = 0;
 
@@ -4030,7 +4034,7 @@ void         SelectUnitSet::init(void)
    for ( int i = 0; i < ItemFiltrationSystem::itemFilters.size(); i++ ) {
      active[i]=  ItemFiltrationSystem::itemFilters[i]->isActive() ;
 
-     addbutton ( ItemFiltrationSystem::itemFilters[i]->name.c_str(), 30, 60 + i * 25, xsize - 50, 80 + i * 25, 3, 0, 10 + i, 1 );
+     addbutton ( ItemFiltrationSystem::itemFilters[i]->name.c_str(), 30, 60 + i * 20, xsize - 50, 80 + i * 20, 3, 0, 10 + i, 1 );
      addeingabe ( 10 + i, &active[i], black, dblue );
    }
 
@@ -4076,10 +4080,39 @@ void         SelectUnitSet::buttonpressed(int         id)
 void selectunitsetfilter ( void )
 {
    if ( ItemFiltrationSystem::itemFilters.size() > 0 ) {
-      SelectUnitSet sus;
-      sus.init();
-      sus.run();
-      sus.done();
+
+      vector<ASCString> buttons;
+      buttons.push_back ( "~H~ide items" );
+      buttons.push_back ( "~L~ist items" );
+      buttons.push_back ( "~O~k" );
+
+      pair<int,int> playerRes;
+      do {
+         vector<ASCString> filter;
+
+         for ( int i = 0; i < ItemFiltrationSystem::itemFilters.size(); i++ ) {
+            ASCString s;
+            if ( ItemFiltrationSystem::itemFilters[i]->isActive() )
+               s = "! ";
+
+            s += ItemFiltrationSystem::itemFilters[i]->name;
+
+            filter.push_back ( s );
+         }
+
+         playerRes = chooseString ( "Filter", filter, buttons );
+         if ( playerRes.first == 0 && playerRes.second >= 0)
+            ItemFiltrationSystem::itemFilters[playerRes.second]->setActive( true );
+
+         if ( playerRes.first == 1 && playerRes.second >= 0)
+            ItemFiltrationSystem::itemFilters[playerRes.second]->setActive( false );
+
+      } while ( playerRes.first != 2 );
+
+      resetvehicleselector();
+      resetbuildingselector();
+      resetterrainselector();
+      resetobjectselector();
    } else
       displaymessage ( " no Filters defined !", 1 );
 }
@@ -4845,7 +4878,7 @@ void editResearch()
          player.push_back ( ASCString ( strrr(i)) + " " + actmap->player[i].getName());
 
       playerRes = chooseString ( "Choose Player", player, buttonsP );
-      if ( playerRes.first == 0 ) {
+      if ( playerRes.first == 0 && playerRes.second >= 0 ) {
          int player = playerRes.second;
 
          pair<int,int> res;
@@ -4873,7 +4906,7 @@ void editResearch()
                }
                // sort (techs.begin(), techs.end() );
                pair<int,int> r = chooseString ( "Unresearched Technologies", techs, buttons2 );
-               if ( r.first == 0 )
+               if ( r.first == 0 && r.second >= 0 )
                   devTech.push_back ( techIds[r.second] );
             } else
             if ( res.first == 1 && res.second >= 0 ) {
@@ -4901,7 +4934,7 @@ void editResearchPoints()
       }
 
       playerRes = chooseString ( "Choose Player", player, buttonsP );
-      if ( playerRes.first == 0 )
+      if ( playerRes.first == 0 && playerRes.second >= 0 )
          actmap->player[playerRes.second].research.progress = editInt ( "Points", actmap->player[playerRes.second].research.progress );
 
    } while ( playerRes.first != 1 );
@@ -5031,7 +5064,7 @@ void editTechAdapter()
          player.push_back ( ASCString ( strrr(i)) + " " + actmap->player[i].getName());
 
       playerRes = chooseString ( "Choose Player", player, buttonsP );
-      if ( playerRes.first == 0 ) {
+      if ( playerRes.first == 0 && playerRes.second >= 0) {
          int player = playerRes.second;
 
          pair<int,int> res;
