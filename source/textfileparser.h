@@ -61,6 +61,7 @@ class TextPropertyGroup {
                ASCString value;
                Entry* parent;
                Entry ( const ASCString& propertyName_, Operator op_, const ASCString& value_ ) : propertyName ( propertyName_ ), op ( op_ ), value ( value_ ), parent ( NULL ) { propertyName.toLower(); };
+               ASCString toString() const;
          };
 
       private:
@@ -74,6 +75,7 @@ class TextPropertyGroup {
       protected:
          void error ( const ASCString& msg );
          bool processAlias( Entry& e, Entries& entriesToAdd, EntryPointerList& markAsResolved );
+         int findGeneration ( Entry* e );
       public:
          void addEntry( const Entry& entry );
          Entry* find( const ASCString& n );

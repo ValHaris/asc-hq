@@ -38,6 +38,15 @@ const char* TextFormatParser::whiteSpace = " \t";
 
 
 
+ASCString TextPropertyGroup::Entry::toString() const
+{
+   Operator o = op;
+   if ( o == alias_all_resolved )
+     o = alias_all;
+
+   ASCString s = propertyName + TextFormatParser::operations[o] + value ;
+   return s;
+}
 
 void TextPropertyList::buildIDs()
 {
@@ -68,21 +77,17 @@ void TextPropertyGroup :: error ( const ASCString& msg )
 
 void TextPropertyGroup :: print( int indent )
 {
-   for ( EntryCache::iterator i = entryCache.begin(); i != entryCache.end(); i++ ) {
+   for ( Entries::iterator i = entries.begin(); i != entries.end(); i++ ) {
       for ( int m = 0; m< indent; m++ )
-         printf("  " );
+         displayLogMessage(10, "  " );
 
-      Entry::Operator o = i->second->op;
-      if ( o == Entry::alias_all_resolved )
-        o = Entry::alias_all;
-
-      printf ( "  %s %s %s \n", i->second->propertyName.c_str(), TextFormatParser::operations[o], i->second->value.c_str());
+      displayLogMessage(10,  "  %s\n", i->toString().c_str());
    }
 
    for ( Parents::iterator i = parents.begin(); i != parents.end(); i++ ) {
       for ( int i = 0; i< indent; i++ )
          printf("  " );
-      printf("  is inheriting from %s\n" , (*i)->location.c_str() );
+      displayLogMessage(10, "  is inheriting from %s\n" , (*i)->location.c_str() );
       (*i)->print(indent+1 );
    }
 }
@@ -111,7 +116,9 @@ void TextPropertyGroup :: buildInheritance(TextPropertyList& tpl )
             TextPropertyGroup* p = tpl.get ( *i );
             if ( p ) {
                parents.push_back ( p );
+               displayLogMessage( 10, ASCString("  entering parent with ID ") + strrr(*i) + "\n" );
                p->buildInheritance( tpl );
+               displayLogMessage( 10, ASCString("  leaving parent with ID ") + strrr(*i) + "\n" );
             } else
                error ( location + " : no parent with ID " + strrr(*i) + " of type " + typeName + " could be found !" );
          }
@@ -173,7 +180,7 @@ void TextPropertyGroup :: resolveAllAlias( )
       }
 
       for ( Entries::iterator i = additionalEntries.begin(); i != additionalEntries.end(); i++ )
-         if ( find ( i->propertyName ) == NULL )
+         // if ( find ( i->propertyName ) == NULL )
             addEntry ( *i );
 
       for ( EntryPointerList::iterator i = toResolve.begin(); i != toResolve.end(); i++ )
@@ -188,6 +195,21 @@ void TextPropertyGroup :: resolveAllAlias( )
 }
 
 bool reallyVerbose = false;
+
+int TextPropertyGroup::findGeneration ( Entry* e )
+{
+   for ( Entries::iterator i = entries.begin(); i != entries.end(); i++ )
+      if ( &(*i) == e )
+         return 0;
+
+   for ( Parents::iterator i = parents.begin(); i != parents.end(); i++ ) {
+      int fg = (*i)->findGeneration( e );
+      if ( fg >= 0 )
+         return fg+1;
+   }
+   return -1;
+}
+
 
 bool TextPropertyGroup::processAlias( Entry& e, Entries& entriesToAdd, EntryPointerList& markAsResolved )
 {
@@ -231,19 +253,26 @@ bool TextPropertyGroup::processAlias( Entry& e, Entries& entriesToAdd, EntryPoin
          if ( (*i)->op != Entry::alias_all_resolved ) {
             Entry e = **i;
             e.propertyName.replace ( 0, ss.length(), newName );
-            if ( find ( e.propertyName ) == NULL )
+            TextPropertyGroup::Entry* existent = find ( e.propertyName );
+            // if ( existent == NULL || findGeneration(*i) <= findGeneration( existent ) ) {
+            if ( existent == NULL || findGeneration( existent ) > 0 ) {
+               /* if ( existent && findGeneration( existent ) == 0 ) {
+                  displayLogMessage(10, "    overwriting entry " + existent->toString() + " because it belongs to an older generation\n" );
+                  *existent = e;
+               } else */
                entriesToAdd.push_back ( e );
+               displayLogMessage(10, "   aliasing entry " + (*i)->toString() + " to " + e.propertyName + " \n" );
+            }
             counter++;
-            displayLogMessage(10, "   aliasing entry " + (*i)->propertyName + " to " + e.propertyName + " \n" );
          } else
-            displayLogMessage(10, "   skipping aliasing entry " + (*i)->propertyName + " to " + e.propertyName + " \n" );
+            displayLogMessage(10, "   skipping aliasing entry " + (*i)->toString() + " to " + e.propertyName + " because it is already resolved\n" );
 
       if ( !counter ) {
          displayLogMessage ( 9, "  could not successfully resolve alias " + ss + "* <- " + e.propertyName + "\n" );
          return false;
       } else {
          markAsResolved.push_back ( &e );
-         displayLogMessage ( 9, "  successfully resolved alias " + ss + "* <- " + e.propertyName + "\n" );
+         displayLogMessage ( 9, "  successfully resolved alias " + e.propertyName + " ->* " + ss + "\n" );
          return true;
       }
    }

@@ -2057,6 +2057,8 @@ int main(int argc, char *argv[] )
 
    verbosity = cl->r();
 
+   displayLogMessage( 1, getstartupmessage() );
+
    mapborderpainter = &backgroundpict;
 
    initmissions();

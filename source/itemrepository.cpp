@@ -260,7 +260,7 @@ void  loadalltextfiles ( )
 
    displayLogMessage ( 4, "Building inheritance...");
 
-   displayLogMessage ( 10, " Printing all .ASCTXT files after inheritance and aliases have been resolved");
+   displayLogMessage ( 10, " Printing all .ASCTXT files after inheritance and aliases have been resolved\n");
    for ( TextFileRepository::iterator i = textFileRepository.begin(); i != textFileRepository.end(); i++ ) {
       i->second.buildIDs();
       for ( TextPropertyList::iterator j = i->second.begin(); j != i->second.end(); j++ ) {

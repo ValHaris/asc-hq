@@ -153,7 +153,7 @@
 
   <FILES>
     <FILE type="override" value="..\..\astar2.cpp" translator="Auto">
-      <CFLAG1 value="-vi"/>
+      <CFLAG1 value=" -vi"/>
     </FILE>
   </FILES>
 
@@ -260,7 +260,7 @@ Item2=C:\Programme\ascsrc\games\asc\source\win32\borland
 DebugSourceDirs=c:\programme\borland\cbuilder5\source\vcl;C:\Programme\ascdev\paragui\include\
 
 [Parameters]
-RunParams=-w -q
+RunParams=-w -q -r 10
 Launcher=
 UseLauncher=0
 DebugCWD=

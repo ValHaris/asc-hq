@@ -726,7 +726,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
 {
 
    activefontsettings.font = schriften.monogui;
-   activefontsettings.background = 255;
+   activefontsettings.background = darkgray;
    activefontsettings.color = white;
    activefontsettings.length = 0;
    activefontsettings.justify = lefttext;

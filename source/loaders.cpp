@@ -5,9 +5,12 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.75 2002-11-24 10:54:19 mbickel Exp $
+//     $Id: loaders.cpp,v 1.76 2002-12-20 16:40:58 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.75  2002/11/24 10:54:19  mbickel
+//      made field allocation more robust
+//
 //     Revision 1.74  2002/11/23 18:36:24  mbickel
 //      Fixed crash when deleting map that contained rubble generating buildings
 //
@@ -1716,13 +1719,13 @@ int          tmaploaders::loadmap( const char *       name )
        throw tinvalidversion ( name, actmapversion, version );
    
 
-   displayLogMessage ( 10, "map, ");
+   displayLogMessage ( 8, "map, ");
    readmap ();
 
-   displayLogMessage ( 10, "eventsToCome, ");
+   displayLogMessage ( 8, "eventsToCome, ");
    readeventstocome ();
 
-   displayLogMessage ( 10, "fields, ");
+   displayLogMessage ( 8, "fields, ");
    readfields ();
 
 
@@ -1737,21 +1740,21 @@ int          tmaploaders::loadmap( const char *       name )
       throw tinvalidversion ( name, actmapversion, version );
    } 
 
-   displayLogMessage ( 10, "chainItems, ");
+   displayLogMessage ( 8, "chainItems, ");
    chainitems ( spfld );
 
    for ( int sp = 7; sp >= 0; sp--)
       if ( spfld->player[sp].exist() )
          spfld->actplayer = sp;
 
-   displayLogMessage ( 10, "setEventTriggers, ");
+   displayLogMessage ( 8, "setEventTriggers, ");
    seteventtriggers( spfld );
 
-   displayLogMessage ( 10, "calculateallobjects ");
+   displayLogMessage ( 8, "calculateallobjects ");
    calculateallobjects( spfld );
 
 
-   displayLogMessage ( 10, "~oldmap, ");
+   displayLogMessage ( 8, "~oldmap, ");
    delete oldmap;
    oldmap = NULL;
    
