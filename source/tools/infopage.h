@@ -41,7 +41,7 @@
 #define GROUPS ".groups"
 #define CSSPATH "asc.css"
 #define ALTIMAGETEXT "Building graphic"
-#define STDGFXPATH "http://asc-hq.de/asc/unitguide/"
+#define STDGFXPATH "../"
 #define TARGET "main"
 #define UNITINFOPICSUFFIX "u-big.jpg"
 
