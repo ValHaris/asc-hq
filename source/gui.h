@@ -1,6 +1,10 @@
-//     $Id: gui.h,v 1.3 1999-12-28 21:02:58 mbickel Exp $
+//     $Id: gui.h,v 1.4 2000-01-02 19:47:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/12/28 21:02:58  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.2  1999/11/16 03:41:49  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -194,7 +198,7 @@ class tnguiicon {
           char      filename[9];
           int       x,y;
 
-          char      infotextbuf[300];
+          // char      infotextbuf[300];
 
 
           virtual pnguiicon nxt      ( void )          = 0;

@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.4 2000-01-01 19:04:20 mbickel Exp $
+//     $Id: events.cpp,v 1.5 2000-01-02 19:47:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/01/01 19:04:20  mbickel
+//     /tmp/cvsVhJ4Z3
+//
 //     Revision 1.3  1999/12/30 20:30:44  mbickel
 //      Improved Linux port again.
 //
@@ -54,6 +57,7 @@ queue<Uint32> keybuffer_prnt;
 
 
 int eventthreadinitialized = 0;
+int closethread = 0;
 
 int mouse_in_off_area ( void )
 {
@@ -84,54 +88,55 @@ byte getmousestatus ()
 int eventhandler ( void* nothing )
 {
 	SDL_Event event;
-	while ( 1 ) {
-      SDL_WaitEvent ( &event );
-      switch ( event.type ) {
-         case SDL_MOUSEBUTTONUP:
-         case SDL_MOUSEBUTTONDOWN: {
-            int taste = event.button.button - 1;
-            int state = event.button.type == SDL_MOUSEBUTTONDOWN;
+	while ( !closethread ) {
+      if ( SDL_PollEvent ( &event ) == 1) {
+         switch ( event.type ) {
+            case SDL_MOUSEBUTTONUP:
+            case SDL_MOUSEBUTTONDOWN: {
+               int taste = event.button.button - 1;
+               int state = event.button.type == SDL_MOUSEBUTTONDOWN;
 
-            if ( state )
-               mouseparams.taste |= (1 << taste);
-            else
-               mouseparams.taste &= ~(1 << taste);
-            mouseparams.x = event.button.x;
-            mouseparams.y = event.button.y;
-         }
-         break;
+               if ( state )
+                  mouseparams.taste |= (1 << taste);
+               else
+                  mouseparams.taste &= ~(1 << taste);
+               mouseparams.x = event.button.x;
+               mouseparams.y = event.button.y;
+            }
+            break;
 
-         case SDL_MOUSEMOTION: {
-            mouseparams.x = event.motion.x;
-            mouseparams.y = event.motion.y;
-            mouseparams.taste = event.motion.state;
-         }
-         break;
-         case SDL_KEYDOWN: {
-         	int r = SDL_mutexP ( keyboardmutex );
-         	if ( !r ) {
-         	   tkey key = event.key.keysym.sym;
-         	   if ( event.key.keysym.mod & KMOD_ALT )
-         	      key |= ct_altp;
-         	   if ( event.key.keysym.mod & KMOD_CTRL )
-         	      key |= ct_stp;
-         	   if ( event.key.keysym.mod & KMOD_SHIFT )
-         	      key |= ct_shp;
-         	   keybuffer_sym.push ( key );
-         	   keybuffer_prnt.push ( event.key.keysym.unicode );
-         	   r = SDL_mutexV ( keyboardmutex );
-         	}
-         }
-         break;
-         case SDL_KEYUP: {
-         }
-         break;
+            case SDL_MOUSEMOTION: {
+               mouseparams.x = event.motion.x;
+               mouseparams.y = event.motion.y;
+               mouseparams.taste = event.motion.state;
+            }
+            break;
+            case SDL_KEYDOWN: {
+            	int r = SDL_mutexP ( keyboardmutex );
+            	if ( !r ) {
+            	   tkey key = event.key.keysym.sym;
+            	   if ( event.key.keysym.mod & KMOD_ALT )
+            	      key |= ct_altp;
+            	   if ( event.key.keysym.mod & KMOD_CTRL )
+            	      key |= ct_stp;
+            	   if ( event.key.keysym.mod & KMOD_SHIFT )
+            	      key |= ct_shp;
+            	   keybuffer_sym.push ( key );
+            	   keybuffer_prnt.push ( event.key.keysym.unicode );
+            	   r = SDL_mutexV ( keyboardmutex );
+            	}
+            }
+            break;
+            case SDL_KEYUP: {
+            }
+            break;
 
-         case SDL_QUIT: {
-                 printf("Quit requested, quitting.\n");
-                 exit(0);
+            case SDL_QUIT: {
+                    printf("Quit requested, quitting.\n");
+                    exit(0);
+            }
+            break;
          }
-         break;
       }
    }
    return 0;
@@ -149,10 +154,22 @@ int initeventthread ( void )
       }
       SDL_EnableUNICODE ( 1 );
       eventthread = SDL_CreateThread ( eventhandler, NULL );
-      eventthreadinitialized = 1;
+   }
+   eventthreadinitialized++;
+
+}
+
+int closeeventthread ( void )
+{
+   if ( eventthreadinitialized ) {
+      eventthreadinitialized--;
+      if ( !eventthreadinitialized ) {
+         closethread = 1;
+      }
    }
 
 }
+
 
 int initmousehandler ( void* pic )
 {
@@ -163,6 +180,7 @@ int initmousehandler ( void* pic )
 
 int removemousehandler ( void )
 {
+    closeeventthread();
     return(0);
 }
 
@@ -345,6 +363,7 @@ void initkeyb(void)
 
 void  closekeyb(void)
 {
+   closeeventthread();
 }
 
 

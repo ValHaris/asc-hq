@@ -8,7 +8,7 @@ AM_INIT_AUTOMAKE(asc,0.1)
 dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
-CXXFLAGS="$CXXFLAGS -I./ -DHEXAGON -Dsgmain -DFREEMAPZOOM -funsigned-char -I/usr/lib/SDL/include -D_NOASM_ -DNEWKEYB"
+CXXFLAGS="$CXXFLAGS -O0 -I./ -DHEXAGON -Dsgmain -DFREEMAPZOOM -funsigned-char -I/usr/lib/SDL/include -D_NOASM_ -DNEWKEYB"
 AC_PROG_RANLIB
 dnl Checks for libraries.
 

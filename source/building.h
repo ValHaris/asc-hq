@@ -1,6 +1,9 @@
-//     $Id: building.h,v 1.6 1999-12-30 20:30:23 mbickel Exp $
+//     $Id: building.h,v 1.7 2000-01-02 19:47:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/12/30 20:30:23  mbickel
+//      Improved Linux port again.
+//
 //     Revision 1.5  1999/12/28 21:02:42  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -309,6 +312,7 @@ class generalicon_c : public tnguiicon {       // fÅr Container //grundlage f¸r 
                         pgeneralicon_c next;
                         pgeneralicon_c *first;
                     protected:
+                        char infotextbuf[1000];
                         pcontainer main;
                         virtual pnguiicon nxt      ( void );
                         virtual void      setnxt   ( pnguiicon ts );

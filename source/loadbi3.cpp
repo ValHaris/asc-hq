@@ -1,6 +1,10 @@
-//     $Id: loadbi3.cpp,v 1.8 1999-12-28 21:03:01 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.9 2000-01-02 19:47:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  1999/12/28 21:03:01  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.7  1999/12/14 20:23:55  mbickel
 //      getfiletime now works on containerfiles too
 //      improved BI3 map import tables
@@ -1071,8 +1075,8 @@ void        tloadBImap ::   ReadACTNPart(void)
                       xlt[xl++] = objecttranslate[b][c];
          if ( xl == 0 ) {
             for ( int c = 0; c < terraintranslatenum; c++ )
-                if ( terraintranslate[b][0] == Line[X] )
-                   xlt[xl++] = terraintranslate[b][1];
+                if ( terraintranslate[c][0] == Line[X] )
+                   xlt[xl++] = terraintranslate[c][1];
 
             if ( xl == 0 )
                xl = 1;

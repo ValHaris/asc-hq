@@ -1,6 +1,9 @@
-//     $Id: gui.cpp,v 1.9 1999-12-29 17:38:14 mbickel Exp $
+//     $Id: gui.cpp,v 1.10 2000-01-02 19:47:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  1999/12/29 17:38:14  mbickel
+//      Continued Linux port
+//
 //     Revision 1.8  1999/12/29 12:50:45  mbickel
 //      Removed a fatal error message in GUI.CPP
 //      Made some modifications to allow platform dependant path delimitters
@@ -130,7 +133,7 @@ void setmouseongui( void )
 }
 
 #ifndef _NoStaticClassMembers_
-static void*    tguihost::background[30][30];
+StaticClassVariable void*    tguihost::background[30][30];
 #endif
 
 tguihost::tguihost ( void )
@@ -671,7 +674,7 @@ void      tguihost :: setfirsticon( pnguiicon ic )
 
 
 #ifndef _NoStaticClassMembers_
-static pnguiicon  tnguiicon::first = NULL;
+StaticClassVariable pnguiicon  tnguiicon::first = NULL;
 #endif
 
 
@@ -933,7 +936,7 @@ void tnguiicon::display      ( void )
 
 
 #ifndef _NoStaticClassMembers_
-static pnsguiicon tnsguiicon ::first = NULL;
+StaticClassVariable pnsguiicon tnsguiicon ::first = NULL;
 #endif
 
 tnsguiicon::tnsguiicon ( void )
@@ -2221,8 +2224,8 @@ void tguihost::reset ( void )
 }
 
 #ifndef _NoStaticClassMembers_
-static pnputbuildingguiicon tnputbuildingguiicon :: first    = NULL;
-static int             tnputbuildingguiicon :: buildnum = 0;
+StaticClassVariable pnputbuildingguiicon tnputbuildingguiicon :: first    = NULL;
+StaticClassVariable int             tnputbuildingguiicon :: buildnum = 0;
 #endif
 
 tnputbuildingguiicon :: tnputbuildingguiicon ( pbuildingtype bld )
@@ -2302,8 +2305,8 @@ void   tnputbuildingguiicon :: sethost      ( pselectbuildingguihost hst )
 }
 
 #ifndef _NoStaticClassMembers_
-static pnputobjectcontainerguiicon tnputobjectcontainerguiicon :: first    = NULL;
-static int             tnputobjectcontainerguiicon :: buildnum = 0;
+StaticClassVariable pnputobjectcontainerguiicon tnputobjectcontainerguiicon :: first    = NULL;
+StaticClassVariable int             tnputobjectcontainerguiicon :: buildnum = 0;
 #endif
 
 tnputobjectcontainerguiicon :: tnputobjectcontainerguiicon ( pobjecttype obj, int bld )
@@ -2414,8 +2417,8 @@ void   tnputobjectcontainerguiicon :: sethost      ( pselectobjectcontainerguiho
 }
 
 #ifndef _NoStaticClassMembers_
-static pnputvehiclecontainerguiicon tnputvehiclecontainerguiicon :: first    = NULL;
-static int                          tnputvehiclecontainerguiicon :: buildnum = 0;
+StaticClassVariable pnputvehiclecontainerguiicon tnputvehiclecontainerguiicon :: first    = NULL;
+StaticClassVariable int                          tnputvehiclecontainerguiicon :: buildnum = 0;
 #endif
 
 tnputvehiclecontainerguiicon :: tnputvehiclecontainerguiicon ( pvehicletype obj )
@@ -2606,7 +2609,7 @@ void      tselectvehiclecontainerguihost :: setfirsticon( pnguiicon ic )
 
 
 #ifndef _NoStaticClassMembers_
-static pnweapselguiicon tnweapselguiicon::first = NULL;
+StaticClassVariable pnweapselguiicon tnweapselguiicon::first = NULL;
 #endif
 
 tnweapselguiicon::tnweapselguiicon ( void )
@@ -2617,7 +2620,7 @@ tnweapselguiicon::tnweapselguiicon ( void )
    weapnum = -1;
    typ = -1;                   
    strength = -1;
-   infotext = &infotextbuf[0];
+   infotext = new char[100];
 }
 
 
@@ -2824,7 +2827,7 @@ void  tnweapselguiicon::setup        ( pattackweap atw, int n )
 }
 
 #ifndef _NoStaticClassMembers_
-static preplayguiicon treplayguiicon ::first = NULL;
+StaticClassVariable preplayguiicon treplayguiicon ::first = NULL;
 #endif
 
 treplayguiicon::treplayguiicon ( void )

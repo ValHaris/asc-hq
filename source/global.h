@@ -55,4 +55,10 @@
  void reset_keypress (void);
  #endif
 
+ #ifdef _DOS_
+  #define StaticClassVariable static
+ #else
+  #define StaticClassVariable
+ #endif
+
 #endif

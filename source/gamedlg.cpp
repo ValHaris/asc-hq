@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.11 2000-01-01 19:04:17 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.12 2000-01-02 19:47:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/01/01 19:04:17  mbickel
+//     /tmp/cvsVhJ4Z3
+//
 //     Revision 1.10  1999/12/30 20:30:33  mbickel
 //      Improved Linux port again.
 //
@@ -2320,10 +2323,10 @@ class  tparagraph {
       };
 
 #ifndef _NoStaticClassMembers_
-static int tparagraph :: winy1;
-static int tparagraph :: winy2;
-static int tparagraph :: winx1;
-static int tparagraph :: maxlinenum;
+StaticClassVariable int tparagraph :: winy1;
+StaticClassVariable int tparagraph :: winy2;
+StaticClassVariable int tparagraph :: winx1;
+StaticClassVariable int tparagraph :: maxlinenum;
 #endif
 
 tparagraph :: tparagraph ( void )

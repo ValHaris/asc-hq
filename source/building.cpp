@@ -1,6 +1,9 @@
-//     $Id: building.cpp,v 1.12 2000-01-01 19:04:14 mbickel Exp $
+//     $Id: building.cpp,v 1.13 2000-01-02 19:47:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/01/01 19:04:14  mbickel
+//     /tmp/cvsVhJ4Z3
+//
 //     Revision 1.11  1999/12/28 21:02:40  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -1470,9 +1473,12 @@ ccontainer :: ~ccontainer (void)
 
 void  ccontainer :: buildgraphics( void )
 {
-    int mss = getmousestatus();
 
    #ifdef HEXAGON
+    int h, w;
+    getpicsize (icons.container.container_window, h, w);
+    collategraphicoperations cgo ( containerxpos, containerypos, containerxpos+h, containerypos+w );
+    int mss = getmousestatus();
     putspriteimage ( containerxpos, containerypos, icons.container.container_window );
    #else
     try {
@@ -1527,7 +1533,8 @@ void  ccontainer :: showammo ( void )
    activefontsettings.length = 19;
    activefontsettings.justify = righttext;
    activefontsettings.font = schriften.guifont;
-   for (int i = 0; i < 8; i++) 
+   collategraphicoperations cgo ( nameposx - 12 , nameposy + 59, nameposx - 12 + 8 * 28, nameposy + 75 );
+   for (int i = 0; i < 8; i++)
       showtext2c ( strrr ( getammunition ( ammoorderxlat[i], maxint, 0 )), nameposx - 12 + i * 28, nameposy + 59 );
 
 }
@@ -1541,6 +1548,7 @@ void  ccontainer :: showresources ( void )
     activefontsettings.justify = righttext;
     activefontsettings.font = schriften.guifont;
 
+    collategraphicoperations cgo ( nameposx + 18 , nameposy + 27, nameposx + 164 + activefontsettings.length, nameposy + 40 );
     showtext2c ( strrr ( getenergy   ( maxint, 0 ) ), nameposx + 18, nameposy + 27 );
     showtext2c ( strrr ( getmaterial ( maxint, 0 ) ), nameposx + 91, nameposy + 27 );
     showtext2c ( strrr ( getfuel     ( maxint, 0 ) ), nameposx + 164, nameposy + 27 );
@@ -1671,17 +1679,22 @@ void  ccontainer :: run ()
          containeronlinemousehelp->removehelp ();
 
          if ( input == ct_tab ) {
-            setinvisiblemouserectanglestk ( tabmarkposx, tabmarkpos[keymode], tabmarkposx + 10, tabmarkpos[keymode] + 10 );
-            putrotspriteimage( tabmarkposx, tabmarkpos[keymode], icons.container.tabmark[0], actmap->actplayer*8 );
-            getinvisiblemouserectanglestk ();
+            {
+               collategraphicoperations cgo ( tabmarkposx, tabmarkpos[keymode], tabmarkposx + 10, tabmarkpos[keymode] + 10 );
+               setinvisiblemouserectanglestk ( tabmarkposx, tabmarkpos[keymode], tabmarkposx + 10, tabmarkpos[keymode] + 10 );
+               putrotspriteimage( tabmarkposx, tabmarkpos[keymode], icons.container.tabmark[0], actmap->actplayer*8 );
+               getinvisiblemouserectanglestk ();
+            }
 
             keymode++;
             if ( keymode >= 3 )
                keymode = 0;
-
-            setinvisiblemouserectanglestk ( tabmarkposx, tabmarkpos[keymode], tabmarkposx + 10, tabmarkpos[keymode] + 10 );
-            putrotspriteimage( tabmarkposx, tabmarkpos[keymode], icons.container.tabmark[1], actmap->actplayer*8 );
-            getinvisiblemouserectanglestk ();
+            {
+               collategraphicoperations cgo ( tabmarkposx, tabmarkpos[keymode], tabmarkposx + 10, tabmarkpos[keymode] + 10 );
+               setinvisiblemouserectanglestk ( tabmarkposx, tabmarkpos[keymode], tabmarkposx + 10, tabmarkpos[keymode] + 10 );
+               putrotspriteimage( tabmarkposx, tabmarkpos[keymode], icons.container.tabmark[1], actmap->actplayer*8 );
+               getinvisiblemouserectanglestk ();
+            }
          }
 
          if ( keymode == 2 )
@@ -2509,10 +2522,11 @@ void  ccontainer :: repairicon_c :: exec         ( void )
 
 char* ccontainer :: repairicon_c :: getinfotext  ( void )
 {
+   static char buf[200];
    checkto ( main->getmarkedunit() , 0 );
-   strcpy ( &infotextbuf[100], infotext );
-   sprintf ( &infotextbuf[100+strlen( &infotextbuf[100])], resourceusagestring, energycosts, materialcosts, fuelcosts );
-   return &infotextbuf[100];
+   strcpy ( buf, infotext );
+   sprintf ( &buf[strlen(buf)], resourceusagestring, energycosts, materialcosts, fuelcosts );
+   return buf;
 }
 
 
@@ -5543,14 +5557,14 @@ char* ccontainer_b :: produceuniticon_cb :: getinfotext  ( void )
          fu += fzt->tank;
          ma += fzt->material;
 
-         strcpy ( &infotextbuf[100], infotext );
-         sprintf ( &infotextbuf[100+strlen( &infotextbuf[100])], resourceusagestring, en, ma, fu );
-         sprintf ( &infotextbuf[100+strlen( &infotextbuf[100])], "(empty: %d energy, %d material, %d fuel)", en1, ma1, fu1 );
+         strcpy ( infotextbuf, infotext );
+         sprintf ( &infotextbuf[strlen( infotextbuf)], resourceusagestring, en, ma, fu );
+         sprintf ( &infotextbuf[strlen( infotextbuf)], "(empty: %d energy, %d material, %d fuel)", en1, ma1, fu1 );
       } else {
-         strcpy ( &infotextbuf[100], infotext );
-         sprintf ( &infotextbuf[100+strlen( &infotextbuf[100])], resourceusagestring, en, ma, fu );
+         strcpy ( infotextbuf, infotext );
+         sprintf ( &infotextbuf[strlen( infotextbuf)], resourceusagestring, en, ma, fu );
       }
-      return &infotextbuf[100];
+      return infotextbuf;
    } else {
       return infotext;
    }

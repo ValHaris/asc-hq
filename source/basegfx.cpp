@@ -1,6 +1,9 @@
-//     $Id: basegfx.cpp,v 1.8 2000-01-01 19:04:13 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.9 2000-01-02 19:47:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/01/01 19:04:13  mbickel
+//     /tmp/cvsVhJ4Z3
+//
 //     Revision 1.7  1999/12/28 22:04:24  mbickel
 //      Had to make some changes again to compile it for DOS...
 //
@@ -1141,10 +1144,23 @@ tvirtualdisplay :: ~tvirtualdisplay ( )
 collategraphicoperations :: collategraphicoperations ( void )
 {
    #ifndef _DOS_
+   x1 = -1; y1 = -1;
+   x2 = -1; y2 = -1;
    olddirectscreenaccess = agmp->directscreenaccess;
    agmp->directscreenaccess = 1;
    #endif
 }
+
+collategraphicoperations :: collategraphicoperations ( int _x1, int _y1, int _x2, int _y2 )
+{
+   #ifndef _DOS_
+   x1 = _x1; y1 = _y1;
+   x2 = _x2; y2 = _y2;
+   olddirectscreenaccess = agmp->directscreenaccess;
+   agmp->directscreenaccess = 1;
+   #endif
+}
+
 
 void collategraphicoperations :: on ( void )
 {
@@ -1157,7 +1173,9 @@ void collategraphicoperations :: off ( void )
 {
    #ifndef _DOS_
    agmp->directscreenaccess = 0;
-   CheckForDirectScreenAccess;
+   if (agmp->directscreenaccess == 0)
+      copy2screen( x1, y1, x2, y2 );
+
    #endif
 }
 
@@ -1165,13 +1183,21 @@ collategraphicoperations :: ~collategraphicoperations (  )
 {
    #ifndef _DOS_
    agmp->directscreenaccess = olddirectscreenaccess;
-   CheckForDirectScreenAccess;
+   if (agmp->directscreenaccess == 0)
+      copy2screen( x1, y1, x2, y2 );
    #endif
 }
 
 void copySurface2screen( void )
 {
-   CheckForDirectScreenAccess;
+   if (agmp->directscreenaccess == 0)
+      copy2screen( -1, -1, -1, -1 );
+}
+
+void copySurface2screen( int x1, int y1, int x2, int y2 )
+{
+   if (agmp->directscreenaccess == 0)
+      copy2screen( x1, y1, x2, y2 );
 }
 
 

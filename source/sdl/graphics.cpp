@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: graphics.cpp,v 1.2 2000-01-01 19:04:20 mbickel Exp $
+//     $Id: graphics.cpp,v 1.3 2000-01-02 19:47:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/01/01 19:04:20  mbickel
+//     /tmp/cvsVhJ4Z3
+//
 //     Revision 1.1  1999/12/28 21:03:31  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -99,6 +102,15 @@ int copy2screen( void )
 {
    SDL_UpdateRect ( screen , 0,0,0,0 );
 }
+
+int copy2screen( int x1, int y1, int x2, int y2 )
+{
+   if ( x1 == -1 || y1 == -1 || x2 == -1 || y2 == -1 )
+      SDL_UpdateRect ( screen , 0,0,0,0 );
+   else
+      SDL_UpdateRect ( screen , x1, y1, x2-x1+1, y2-y1 );
+}
+
 
 void setdisplaystart( int x, int y)
 {

@@ -366,14 +366,17 @@ class fatalgraphicserror {
 
 class collategraphicoperations {
          int olddirectscreenaccess;
+         int x1, y1, x2, y2;
        public:
          collategraphicoperations ( void );
+         collategraphicoperations ( int _x1, int _y1, int _x2, int _y2 );
          ~collategraphicoperations ();
          void on ( void );
          void off ( void );
 };
 
 extern void copySurface2screen( void );
+extern void copySurface2screen( int x1, int y1, int x2, int y2 );
 
 
 #pragma pack()

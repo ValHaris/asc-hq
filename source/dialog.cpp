@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.10 1999-12-30 20:30:27 mbickel Exp $
+//     $Id: dialog.cpp,v 1.11 2000-01-02 19:47:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  1999/12/30 20:30:27  mbickel
+//      Improved Linux port again.
+//
 //     Revision 1.9  1999/12/28 21:02:48  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -5224,7 +5227,7 @@ void tprogressbar :: lineto ( float pos )
    int newpos = (int)(x1 + ( x2 - x1 ) * pos);
    if ( newpos > lastpaintedpos ) {
 
-      collategraphicoperations cgo;
+      collategraphicoperations cgo ( lastpaintedpos+1, y1, newpos, y2 );
       for ( int x = lastpaintedpos+1; x <= newpos; x++ )
          for ( int y = y1; y <= y2; y++ )
             putpixel ( x, y, color );

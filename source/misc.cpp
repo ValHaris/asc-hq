@@ -1,6 +1,10 @@
-//     $Id: misc.cpp,v 1.4 1999-12-28 21:03:08 mbickel Exp $
+//     $Id: misc.cpp,v 1.5 2000-01-02 19:47:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/12/28 21:03:08  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.3  1999/11/18 17:31:15  mbickel
 //      Improved BI-map import translation tables
 //      Moved macros to substitute Watcom specific routines into global.h
@@ -38,6 +42,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "tpascal.inc"
 #include "misc.h"
 #include "global.h"

@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.13 2000-01-01 19:04:18 mbickel Exp $
+//     $Id: sg.cpp,v 1.14 2000-01-02 19:47:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/01/01 19:04:18  mbickel
+//     /tmp/cvsVhJ4Z3
+//
 //     Revision 1.12  1999/12/30 21:04:47  mbickel
 //      Restored DOS compatibility again.
 //
@@ -2894,7 +2897,6 @@ class tnewkeyb {
 int main(int argc, char *argv[] )
 {  
    // dont_use_linear_framebuffer = 1;
-
 
   
   if( sizeof(tvehicletype) != 601 || 
