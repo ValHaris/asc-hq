@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.14 2000-01-06 11:19:13 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.15 2000-01-31 16:34:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/01/06 11:19:13  mbickel
+//      Worked on the Linux-port again...
+//
 //     Revision 1.13  2000/01/04 19:43:51  mbickel
 //      Continued Linux port
 //
@@ -581,7 +584,7 @@ void  tsetupnetwork :: init ( tnetwork* nw, int edt, int playr )
    title = "setup network";
    addbutton ( "~O~k", 10, ysize - 40, xsize / 2 - 5, ysize - 10, 0, 1, 1, true );
    addkey ( 1, ct_enter );
-   addbutton ( "~e~xit", xsize / 2 + 5,  ysize - 40, xsize - 10, ysize - 10, 0, 1, 2, player == -1 );
+   addbutton ( "e~x~it", xsize / 2 + 5,  ysize - 40, xsize - 10, ysize - 10, 0, 1, 2, player == -1 );
    addkey ( 2, ct_esc );
 
    if ( edit  &  4) {
@@ -3262,13 +3265,13 @@ void tviewmessages :: init ( char* ttl, pmessagelist strt, int editable, int md 
 
      addbutton ( "~E~dit",    xsize / 3 + 5,   ysize - 30, 2*xsize / 3 - 5, ysize - 10 , 0, 1, 2, num > 0  );
 
-     addbutton ( "~C~ancel",  2*xsize / 3 + 5, ysize - 30, xsize - 10, ysize - 10 ,      0, 1, 3, true );
+     addbutton ( "e~x~it",  2*xsize / 3 + 5, ysize - 30, xsize - 10, ysize - 10 ,      0, 1, 3, true );
      addkey    ( 3, ct_esc );
    } else {
      addbutton ( "~V~iew",    10,            ysize - 30, xsize / 2 - 5, ysize - 10 ,   0, 1, 1, num > 0  );
      addkey    ( 1, ct_enter );
 
-     addbutton ( "~C~ancel",  xsize / 2 + 5, ysize - 30, xsize - 10, ysize - 10 ,      0, 1, 3, true );
+     addbutton ( "e~x~it",  xsize / 2 + 5, ysize - 30, xsize - 10, ysize - 10 ,      0, 1, 3, true );
      addkey    ( 3, ct_esc );
    }
 

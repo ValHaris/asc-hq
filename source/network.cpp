@@ -1,6 +1,10 @@
-//     $Id: network.cpp,v 1.4 1999-12-07 22:13:24 mbickel Exp $
+//     $Id: network.cpp,v 1.5 2000-01-31 16:34:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/12/07 22:13:24  mbickel
+//      Fixed various bugs
+//      Extended BI3 map import tables
+//
 //     Revision 1.3  1999/11/18 17:31:17  mbickel
 //      Improved BI-map import translation tables
 //      Moved macros to substitute Watcom specific routines into global.h
@@ -109,7 +113,7 @@ void tfiletransfernetworkconnection::tsetup::init ( void )
    if ( exitpossible ) {
       addbutton ( "~O~k", 10, ysize - 40, xsize / 2 - 5, ysize - 10, 0, 1, 3 , true);
       addkey ( 3, ct_enter );
-      addbutton ( "~E~xit", xsize / 2 + 5, ysize - 40, xsize - 10, ysize - 10, 0, 1, 4, true );
+      addbutton ( "e~x~it", xsize / 2 + 5, ysize - 40, xsize - 10, ysize - 10, 0, 1, 4, true );
       addkey ( 4, ct_esc );
    } else {
       addbutton ( "~O~k", 10, ysize - 40, xsize - 10, ysize - 10, 0, 1, 3 , true);

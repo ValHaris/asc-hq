@@ -1,6 +1,15 @@
-//     $Id: dialog.cpp,v 1.18 2000-01-25 19:28:12 mbickel Exp $
+//     $Id: dialog.cpp,v 1.19 2000-01-31 16:34:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/01/25 19:28:12  mbickel
+//      Fixed bugs:
+//        invalid mouse buttons reported when moving the mouse
+//        missing service weapon in weapon information
+//        invalid text displayed in ammo production
+//        undamaged units selected in repair vehicle function
+//
+//      speed up when playing weapon sound
+//
 //     Revision 1.17  2000/01/24 17:35:42  mbickel
 //      Added dummy routines for sound under DOS
 //      Cleaned up weapon specification
@@ -6166,7 +6175,7 @@ void tenterpassword :: init ( int* crc, int mode, char* ttl  )
          addbutton ( "~D~efault", xsize / 2 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1,7, true );
       } else {
          addbutton ( "~O~k", 10, ysize - 35, xsize / 2 - 5, ysize - 10, 0, 1, 1, reask );
-         addbutton ( "~E~xit", xsize / 2 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1,8, true );
+         addbutton ( "e~x~it", xsize / 2 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1,8, true );
       }
 
    } else {
