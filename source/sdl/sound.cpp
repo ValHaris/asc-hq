@@ -231,13 +231,19 @@ Mix_Chunk* SoundSystem::loadWave ( const ASCString& name )
       return NULL;
 
    if ( !exist ( name.c_str() )) {
-      warning ( "can't open " + name );
+      fatalError ( " can't open sound file: " + name );
       return NULL;
    }
 
    tnfilestream stream ( name, tnstream::reading );
 
-   return Mix_LoadWAV_RW( SDL_RWFromStream ( &stream ), 1);
+   Mix_Chunk* chunk = Mix_LoadWAV_RW( SDL_RWFromStream ( &stream ), 1);
+   if ( chunk )
+      displayLogMessage ( 10, " SoundSystem::loadWave - sound " + name + " loaded successfully\n");
+   else
+      displayLogMessage ( 10, " SoundSystem::loadWave - sound " + name + " loaded failed\n");
+
+   return chunk;
 }
 
 

@@ -74,7 +74,7 @@
     void setAttacked();
 
     //! the current level of height ( BITMAPPED ! )
-    char         height;
+    int          height;
 
     //! the direction in which the unit is facing
     char         direction;

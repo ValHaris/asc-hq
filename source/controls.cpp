@@ -1393,7 +1393,11 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
    } else
       if ( dest.getNumericalHeight() >= 0 ) {
         // moving out of container
-        movecost = getfield( dest.x, dest.y )->getmovemalus( vehicle );
+        if ( dest.getNumericalHeight() >= 4 )
+           // flying
+           movecost = maxmalq;
+        else
+           movecost = getfield( dest.x, dest.y )->getmovemalus( vehicle );
       } else {
         // moving from one container to another
         movecost = maxmalq;
