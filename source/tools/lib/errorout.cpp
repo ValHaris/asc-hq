@@ -49,3 +49,8 @@ void warning ( const ASCString& output )
    cerr << "ASC: " << output.c_str() << endl;
 }
 
+
+void longWarning ( const ASCString& output )
+{
+   cerr << "ASC: " << output.c_str() << endl;
+}
