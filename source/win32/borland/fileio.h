@@ -1,6 +1,10 @@
-//     $Id: fileio.h,v 1.5 2001-10-11 10:41:06 mbickel Exp $
+//     $Id: fileio.h,v 1.6 2002-01-29 20:42:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2001/10/11 10:41:06  mbickel
+//      Restructured platform fileio handling
+//      Added map archival information to mapeditor
+//
 //     Revision 1.4  2001/05/18 22:30:30  mbickel
 //      The data file is now installed in the correct directory
 //      If the installation directory is changed with configure, the new path
@@ -43,6 +47,9 @@
 #ifndef fileio_h_included
  #define fileio_h_included
 
+ #include <vector>
+ #include "../../ASCString.h"
+
  #include <direct.h>
  #include <dirent.h>
  #define direct dirent
@@ -53,7 +60,9 @@
  extern const char* filewritemodetext;
  extern const char pathdelimitter;
  extern const char* pathdelimitterstring;
- 
+ extern const char  foreignPathDelimitter;
+ extern const char* foreignPathDelimitterString;
+
  extern const int maxfilenamelength;
  extern const char* asc_configurationfile;
 

@@ -62,7 +62,7 @@ SoundSystem  :: SoundSystem ( bool mute, bool _off )
    Uint16 audio_format = MIX_DEFAULT_FORMAT;
    int audio_channels = 2;
 
-   if ( Mix_OpenAudio ( audio_rate, audio_format, audio_channels, 1024 ) < 0 ) {
+   if ( Mix_OpenAudio ( audio_rate, audio_format, audio_channels, 2048 ) < 0 ) {
       mix_initialized = false;
       warning("Couldn't initialize SDL_mixer !");
       off = true;

@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.43 2001-12-14 10:20:05 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.44 2002-01-29 20:42:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2001/12/14 10:20:05  mbickel
+//      Cleanup and enhancements to configure.in
+//      Removed last remains of octagonal version from source files
+//
 //     Revision 1.42  2001/10/31 18:34:31  mbickel
 //      Some adjustments and fixes for gcc 3.0.2
 //
@@ -322,11 +326,8 @@ int infomessage( char* formatstring, ... )
 {
    char stringtooutput[200];
    char* b;
-   char* a = formatstring;
    char* c = new char[200];
-   char* d;
    // int linenum = 0;
-   int i;
 
    memset (stringtooutput, 0, sizeof ( stringtooutput ));
 

@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: basestrm.h,v 1.49 2001-10-21 13:16:59 mbickel Exp $
+//     $Id: basestrm.h,v 1.50 2002-01-29 20:42:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2001/10/21 13:16:59  mbickel
+//      Cleanup and documentation
+//
 //     Revision 1.48  2001/10/08 14:44:22  mbickel
 //      Some cleanup
 //
@@ -654,6 +657,8 @@ class ContainerCollector : public ContainerIndexer {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//! Searching for files
 class tfindfile {
 
         vector<string> names;
@@ -664,8 +669,22 @@ class tfindfile {
         int act;
 
       public:
-        tfindfile ( ASCString name );
-        string getnextname ( int* loc = NULL, bool* inContainer = NULL, ASCString* location = NULL );
+        enum SearchPosition { Default, Current, Primary, All };
+
+        /** Searches for files matching the wildcard name in all search paths specified for ASC and inside the ASC archive files.
+
+            If name contains a relative directory entry ( like music / *.mp3 ), searchPosition specifies, which directories
+            will be searched for the file. Note that "Current" may be problemativ in unix environments, because the program may be
+            started from any directory.
+        */
+        tfindfile ( ASCString name, SearchPosition searchPosition = Default );
+
+        /** Returns the next entry of the internal file list. Optionally, some additional information about the file can be returned:
+           \param loc contains the number of the directory. ASC can search several directories for files. These directories are specified in the ASC configuration file and CGameOptions
+           \param inContainer returns whether the file is inside a ASC archive file ( like main.con )
+           \param location contains the directory this file resides in
+        */
+        ASCString getnextname ( int* loc = NULL, bool* inContainer = NULL, ASCString* location = NULL );
      };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -737,6 +756,9 @@ extern ASCString extractFileName ( const ASCString& filename );
 extern ASCString extractFileName_withoutSuffix ( const ASCString& filename );
 extern int createDirectory ( const char* name );
 extern ASCString getSearchPath ( int i );
+
+//! converts path delimitters from foreign operating systems to the ones used by the current operating system. On Linux, this function converts backslashes to slashes, on Windows vice versa
+extern void convertPathDelimitters ( ASCString& path );
 
 #ifdef _SDL_
  #include sdlheader

@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl AC_REVISION($Revision: 1.50 $)dnl
+dnl AC_REVISION($Revision: 1.51 $)dnl
 dnl AM_MAINTAINER_MODE
 AC_INIT(source/typen.h)
 
@@ -86,14 +86,14 @@ CXXFLAGS=$SAVE_CXXFLAGS
 CFLAGS=$SAVE_CFLAGS
 LIBS=$SAVE_LIBS
 
+
+
 dnl libbz2 stuff (should have a versionnr about 1.0.0)
 lib_bz2_static=no
-AC_ARG_ENABLE( libbz2-static, [ --enable-libbz2-static  compiles a static \
-libbz2 into the binary of asc.], [lib_bz2_static=$enableval], \
-[lib_bz2_usecache=yes] )
-AC_CHECK_LIB( bz2, BZ2_bzReadOpen, , [checklib_bz2_static=yes] )
-AC_CACHE_CHECK( [for static libbz2 flag state], [ac_cv_lib_bz2_static],
-[ ac_cv_lib_bz2_static=$lib_bz2_static ] )
+AC_ARG_ENABLE( libbz2-static, [ --enable-libbz2-static  compiles a static libbz2 into the binary of asc.], [lib_bz2_static=$enableval], [lib_bz2_usecache=yes] )
+AC_CHECK_LIB( bz2, BZ2_bzReadOpen,, [checklib_bz2_static=yes] )
+AC_CACHE_CHECK( [for static libbz2 flag state], [ac_cv_lib_bz2_static], [ ac_cv_lib_bz2_static=$lib_bz2_static ] )
+
 dnl ac_cv_lib_bz2_static holds cached flag state, checklib_bz2... holds check
 dnl now combine them with the current flag state if needed
 if test "x$lib_bz2_usecache" = "xyes"; then
@@ -113,6 +113,8 @@ if test "x$lib_bz2_static" = "xyes"; then
 else 
   LDADDLIBBZ2=-lbz2
 fi
+
+
 
 dnl *************************************************************************
 dnl Checks for header files.
@@ -260,6 +262,5 @@ AC_OUTPUT( Makefile source/Makefile source/docs/Makefile \
 	   source/tools/lib/Makefile \
            source/tools/linux/Makefile data/Makefile doc/Makefile
 	 )
-
 
 

@@ -2,9 +2,12 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.68 2001-10-31 18:34:30 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.69 2002-01-29 20:42:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.68  2001/10/31 18:34:30  mbickel
+//      Some adjustments and fixes for gcc 3.0.2
+//
 //     Revision 1.67  2001/10/21 13:16:59  mbickel
 //      Cleanup and documentation
 //
@@ -2132,33 +2135,73 @@ bool patimat (const char *pat, const char *str)
 
 
 
-tfindfile :: tfindfile ( ASCString _name )
+tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition )
 {
+   convertPathDelimitters ( name );
+
+   if ( searchPosition == Default )
+      searchPosition = All;
+
    found = 0;
    act = 0;
-   int dirshift = 0;
-   if ( _name.empty() )
+   if ( name.empty() )
       return;
 
-   char* directory[maxSearchDirNum];
+   ASCString directory[maxSearchDirNum];
    int dirNum;
-   char wildcard[ maxFileStringSize ];
+   ASCString wildcard;
 
-   char name[ maxFileStringSize ];
-   strcpy ( name, _name.c_str() );
+   int ppos = name.rfind ( pathdelimitterstring );
+   if ( ppos != name.npos ) {
+      // name contains a directory entry
 
-   if ( strchr ( name, pathdelimitter )) {
-      char name2[ maxFileStringSize ];
-      strcpy ( name2, name );
-      int i = strlen ( name2 )-1;
-      while ( name2[i] != pathdelimitter )
-         i--;
-      name2[i+1] = 0;
-      directory[0] = name2;
-      dirNum = 1;
-      dirshift = 1;
 
-      strcpy ( wildcard, &name[i+1] );
+      // checking if absolute or relative path
+      bool absolute = name[0] == pathdelimitter;
+
+      if ( absolute || searchPosition == Current ) {
+         directory[0].assign ( name, 0, ppos );
+         dirNum = 1;
+      } else {
+         ASCString strippedPath;
+         strippedPath.assign ( name, 0, ppos );
+         if ( name.find ( ASCString(".") + pathdelimitterstring ) == 0 )
+            strippedPath.erase( 0, 2);
+
+         int upDir = 0;
+         while ( name.find ( ASCString("..") + pathdelimitterstring ) == 0 ) {
+            upDir++;
+            strippedPath.erase ( 0, 3 );
+         }
+
+         int dirsToProcess;
+         if ( searchPosition == All )
+            dirsToProcess = searchDirNum;
+         else
+            dirsToProcess = 1;
+
+         dirNum = 0;
+         for ( int i = 0; i < dirsToProcess; i++ ) {
+            ASCString dir = ascDirectory[i];
+
+            // removing the trailing pathdelimitterstring
+            dir.erase ( dir.length() -1 );
+
+            for ( int j = 0; j < upDir; j++ ) {
+               int pos = dir.rfind ( pathdelimitterstring );
+               if ( pos > 0 && pos == dir.npos )
+                  dir.erase ( pos );
+            }
+
+            // append the trailing pathdelimitterstring again
+            dir += pathdelimitterstring;
+
+            directory[dirNum++] = dir + strippedPath;
+         }
+      }
+
+      wildcard.assign ( name, ppos+1, name.npos );
+
 
    } else {
       if ( searchDirNum ) {
@@ -2169,7 +2212,7 @@ tfindfile :: tfindfile ( ASCString _name )
          directory[0] = ".";
          dirNum = 1;
       }
-      strcpy ( wildcard, name );
+      wildcard = name;
    }
 
 
@@ -2177,21 +2220,21 @@ tfindfile :: tfindfile ( ASCString _name )
       DIR *dirp; 
       struct direct *direntp; 
   
-      dirp = opendir( directory[i] );   
+      dirp = opendir( directory[i].c_str() );
       if( dirp != NULL ) { 
         for(;;) { 
           direntp = readdir( dirp ); 
           if ( direntp == NULL ) 
              break; 
              
-          if ( patimat ( wildcard, direntp->d_name )) {
+          if ( patimat ( wildcard.c_str(), direntp->d_name )) {
              int localfound = 0;
              for ( int j = 0; j < found; j++ )
                 if ( strcmpi ( names[j].c_str(), direntp->d_name ) == 0 )
                    localfound++;
 
              if ( !localfound ) {
-                names.push_back ( string (  direntp->d_name ));
+                names.push_back ( ASCString (  direntp->d_name ));
                 directoryLevel.push_back ( i );
                 isInContainer.push_back ( false );
                 location.push_back ( directory[i] );
@@ -2208,7 +2251,7 @@ tfindfile :: tfindfile ( ASCString _name )
    {
       const ContainerCollector::FileIndex* c = containercollector.getfirstname();
       while ( c ) {
-          if ( patimat ( name, c->name ) ) {
+          if ( patimat ( name.c_str(), c->name ) ) {
              int f = 0;
              for ( int i = 0; i < found; i++ )
                 if ( stricmp ( c->name, names[i].c_str() ) == 0 ) {
@@ -2237,7 +2280,7 @@ tfindfile :: tfindfile ( ASCString _name )
 }
 
 
-string tfindfile :: getnextname ( int* loc, bool* inContainer, ASCString* location )
+ASCString tfindfile :: getnextname ( int* loc, bool* inContainer, ASCString* location )
 {
    if ( act < found ) {
       if ( loc )
@@ -2654,3 +2697,10 @@ ASCString FileName::suffix ( )
 }
 
 
+
+void convertPathDelimitters ( ASCString& path )
+{
+   int pos;
+   while ( (pos = path.find ( foreignPathDelimitterString )) != path.npos )
+      path.erase ( pos, strlen(foreignPathDelimitterString) );
+}

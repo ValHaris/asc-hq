@@ -35,8 +35,23 @@ void loadAllMusicPlayLists ( )
 
 void MusicPlayList :: runTextIO ( PropertyContainer& pc )
 {
+   TrackList files;
    pc.addString( "Name", name );
-   pc.addStringArray( "Tracks", fileNameList ).evaluate();
+   pc.addStringArray( "Tracks", files ).evaluate();
+
+   for ( TrackList::iterator i = files.begin(); i != files.end(); i++ ) {
+      tfindfile ff ( *i );
+      int loc;
+      bool incontainer;
+      ASCString location,name;
+      name = ff.getnextname ( &loc, &incontainer, &location );
+      while ( !name.empty()) {
+         if ( !incontainer ) {
+            fileNameList.push_back ( location + pathdelimitterstring + name );
+         }
+         name = ff.getnextname ( &loc, &incontainer, &location );
+      };
+   }
    reset();
 }
 

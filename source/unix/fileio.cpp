@@ -22,6 +22,8 @@
  const char* filewritemodetext = "w";
  const char pathdelimitter = '/';
  const char* pathdelimitterstring = "/";
+ const char  foreignPathDelimitter = '\\';
+ const char* foreignPathDelimitterString = "\\";
 
  const int maxfilenamelength = 255;
  const char* asc_configurationfile = "~/.asc/ascrc";
