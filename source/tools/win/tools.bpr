@@ -32,7 +32,7 @@
     <LISTFILE value=""/>
   </MACROS>
   <OPTIONS>
-    <CFLAG1 value="-Od -Q -Vx -Ve -X- -a1 -b -k -y -v -vi- -c -tW -tWM -K"/>
+    <CFLAG1 value="-Od -Q -Vx -Ve -X- -r- -a1 -b -k -y -v -vi- -c -tW -tWM -K"/>
     <PFLAGS value="-N2obj -N0obj -$YD -$W -$O- -v -JPHNE -M"/>
     <AFLAGS value="/mx /w2 /zd"/>
     <LFLAGS value="/P128 /0 /E"/>
@@ -70,28 +70,30 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=13
-Item0=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image
-Item1=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;C:\Programme\ascdev\SDL_image
-Item2=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src
-Item3=..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;C:\Programme\ascdev\SDLmm\src
-Item4=..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include
-Item5=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include
-Item6=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;C:\Programme\ascsrc\games\SDL\include
-Item7=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
-Item8=..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
-Item9=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
-Item10=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\asc\source\win32
-Item11=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
-Item12=..\..;$(BCB)\include;$(BCB)\include\vcl
+Count=14
+Item0=..\lib;..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image
+Item1=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image
+Item2=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;C:\Programme\ascdev\SDL_image
+Item3=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src
+Item4=..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;C:\Programme\ascdev\SDLmm\src
+Item5=..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include
+Item6=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include
+Item7=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;C:\Programme\ascsrc\games\SDL\include
+Item8=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
+Item9=..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
+Item10=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
+Item11=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\asc\source\win32
+Item12=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
+Item13=..\..;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=5
-Item0=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\lib\obj;$(BCB)\lib
-Item1=..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
-Item2=..\..;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
-Item3=..\..;$(BCB)\lib\obj;$(BCB)\lib
-Item4=..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
+Count=6
+Item0=..\lib;..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\lib\obj;$(BCB)\lib
+Item2=..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
+Item3=..\..;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
+Item4=..\..;$(BCB)\lib\obj;$(BCB)\lib
+Item5=..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1

@@ -76,5 +76,55 @@ Known problems as of 1.0pre8:
   combination.
 
 
-That's the end of the currently known compilation problems.
+* SunOS 4.1.X.
 
+  Amazingly, there are still people out there using this venerable old
+  banger.  I shouldn't be too rude -- I started life on SunOS, and
+  it was a pretty darn good OS, way back then.  Anyway:
+
+     SunOS doesn't seem to have strerror(), so you'll have to use
+     perror(), perhaps by doing adding this (warning: UNTESTED CODE):
+
+     char* strerror ( int errnum )
+     {
+        if (errnum < 0 || errnum >= sys_nerr)
+           return "Unknown error"; 
+        else
+           return sys_errlist[errnum];
+     }
+
+   Or you could comment out the relevant calls to strerror; they're
+   not mission-critical.  Or you could upgrade to Solaris.  Ha ha ha!
+   (what??  you think I've got Bad Attitude?) 
+
+
+* Making a shared library on Solaris.  (Not really a compilation
+  problem, but many people ask ...)  
+
+  Firstly, if you have Solaris 8, either you have libbz2.so already
+  on your system, or you can install it from the Solaris CD.  
+
+  Secondly, be aware that there are potential naming conflicts
+  between the .so file supplied with Solaris 8, and the .so file
+  which Makefile-libbz2_so will make.  Makefile-libbz2_so creates
+  a .so which has the names which I intend to be "official" as
+  of version 1.0.0 and onwards.  Unfortunately, the .so in
+  Solaris 8 appeared before I decided on the final names, so
+  the two libraries are incompatible.  We have since communicated
+  and I hope that the problems will have been solved in the next
+  version of Solaris, whenever that might appear.
+
+  All that said: you might be able to get somewhere
+  by finding the line in Makefile-libbz2_so which says
+
+  $(CC) -shared -Wl,-soname -Wl,libbz2.so.1.0 -o libbz2.so.1.0.2 $(OBJS)
+
+  and replacing with 
+
+  $(CC) -G -shared -o libbz2.so.1.0.2 -h libbz2.so.1.0 $(OBJS)
+  
+  If gcc objects to the combination -fpic -fPIC, get rid of
+  the second one, leaving just "-fpic".
+
+
+That's the end of the currently known compilation problems.

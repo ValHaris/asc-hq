@@ -8,8 +8,8 @@
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
-    <LIBFILES value="tools.lib ..\..\libs\bzlib\win\bzlib.lib ..\..\..\..\SDL\bin\Sdl.lib 
-      ..\..\libs\sdlmm\SDLmm.lib"/>
+    <LIBFILES value="tools.lib ..\..\..\..\SDL\bin\Sdl.lib ..\..\libs\sdlmm\SDLmm.lib 
+      ..\..\libs\bzlib\win\bzlib.lib"/>
     <LIBRARIES value=""/>
     <SPARELIBS value=""/>
     <PACKAGES value="VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi"/>
@@ -23,8 +23,8 @@
     <USERDEFINES value="_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="mount.bpf"/>
-    <INCLUDEPATH value="..\lib;..\;..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDL\include"/>
-    <LIBPATH value="..\lib;..\;..;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\..\libs\bzlib;..\..;..\lib;..\;..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDL\include"/>
+    <LIBPATH value="..\..\libs\bzlib;..\..;..\lib;..\;..;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
@@ -90,7 +90,7 @@ Item0=_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=
+RunParams=palette.pal test.con
 HostApplication=
 RemoteHost=
 RemotePath=

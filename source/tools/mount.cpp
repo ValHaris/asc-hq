@@ -313,7 +313,7 @@ void testcompress ( char* name, int size )
         fatalError ( "error executing rle1; errno is " + ASCString(strrr (errno)) );
         exit ( r );
       }
-      Uint16 rl = filesize ( "temp.rle" );
+      int rl = filesize ( "temp.rle" );
 
       fflush ( stdout );
       r = bzmain ( name, "temp.mzl" );
@@ -321,12 +321,12 @@ void testcompress ( char* name, int size )
         fatalError ( "error executing mbzip; errno is " + ASCString ( strrr ( errno)));
         exit ( r );
       }
-      Uint16 mz = filesize ( "temp.mzl" );
+      int mz = filesize ( "temp.mzl" );
 
 
       if ( verbose )
         printf ( "; rle: %3d%%; mzl: %3d%%", 100 * rl / size, 100 * mz / size );
-      Uint16 compr = MIN ( rl, mz );
+      int compr = MIN ( rl, mz );
 
       if ( compr * 120 / 100 > size ) {
         if ( verbose )
@@ -355,7 +355,7 @@ void testcompress ( char* name, int size )
 
 int main(int argc, char *argv[] )
 {
-   Uint32 i = 0;      /* loop var */
+   int i = 0;      /* loop var */
    Cmdline cl ( argc, argv );
 
    if ( cl.v() ) {
@@ -399,7 +399,7 @@ int main(int argc, char *argv[] )
                   strcmp ( direntp->d_name, "." ) != 0 &&
                   strcmp ( direntp->d_name, ".." ) != 0 ) {
                 int    fnd = 0;
-		Uint32 j   = 0;
+		int j   = 0;
 
 		while( !fnd && ( j < num ) ) {
 		  //                for ( int j = 0; j < num; j++ )

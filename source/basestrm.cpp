@@ -2,9 +2,13 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.69 2002-01-29 20:42:16 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.70 2002-03-03 18:52:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.69  2002/01/29 20:42:16  mbickel
+//      Improved finding of files with relative path
+//      Added wildcards to music playlist files
+//
 //     Revision 1.68  2001/10/31 18:34:30  mbickel
 //      Some adjustments and fixes for gcc 3.0.2
 //
@@ -1157,7 +1161,10 @@ tn_file_buf_stream::~tn_file_buf_stream()
    if (_mode == writing)
       writebuffer();
 
-   fclose( fp );
+   int res = fclose( fp );
+   if ( res != 0 )
+      throw  tfileerror ( getDeviceName() );
+      
    _mode = uninitialized;
 
 }

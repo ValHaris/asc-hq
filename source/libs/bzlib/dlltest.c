@@ -19,6 +19,8 @@
 
 #ifdef _WIN32
 
+#define BZ2_LIBNAME "libbz2-1.0.2.DLL" 
+
 #include <windows.h>
 static int BZ2DLLLoaded = 0;
 static HINSTANCE BZ2DLLhLib;
@@ -27,21 +29,28 @@ int BZ2DLLLoadLibrary(void)
    HINSTANCE hLib;
 
    if(BZ2DLLLoaded==1){return 0;}
-   hLib=LoadLibrary("libbz2.dll");
+   hLib=LoadLibrary(BZ2_LIBNAME);
    if(hLib == NULL){
-      puts("Can't load libbz2.dll");
+      fprintf(stderr,"Can't load %s\n",BZ2_LIBNAME);
+      return -1;
+   }
+   BZ2_bzlibVersion=GetProcAddress(hLib,"BZ2_bzlibVersion");
+   BZ2_bzopen=GetProcAddress(hLib,"BZ2_bzopen");
+   BZ2_bzdopen=GetProcAddress(hLib,"BZ2_bzdopen");
+   BZ2_bzread=GetProcAddress(hLib,"BZ2_bzread");
+   BZ2_bzwrite=GetProcAddress(hLib,"BZ2_bzwrite");
+   BZ2_bzflush=GetProcAddress(hLib,"BZ2_bzflush");
+   BZ2_bzclose=GetProcAddress(hLib,"BZ2_bzclose");
+   BZ2_bzerror=GetProcAddress(hLib,"BZ2_bzerror");
+
+   if (!BZ2_bzlibVersion || !BZ2_bzopen || !BZ2_bzdopen
+       || !BZ2_bzread || !BZ2_bzwrite || !BZ2_bzflush
+       || !BZ2_bzclose || !BZ2_bzerror) {
+      fprintf(stderr,"GetProcAddress failed.\n");
       return -1;
    }
    BZ2DLLLoaded=1;
    BZ2DLLhLib=hLib;
-   bzlibVersion=GetProcAddress(hLib,"bzlibVersion");
-   bzopen=GetProcAddress(hLib,"bzopen");
-   bzdopen=GetProcAddress(hLib,"bzdopen");
-   bzread=GetProcAddress(hLib,"bzread");
-   bzwrite=GetProcAddress(hLib,"bzwrite");
-   bzflush=GetProcAddress(hLib,"bzflush");
-   bzclose=GetProcAddress(hLib,"bzclose");
-   bzerror=GetProcAddress(hLib,"bzerror");
    return 0;
 
 }
@@ -67,9 +76,11 @@ int main(int argc,char *argv[])
 
 #ifdef _WIN32
    if(BZ2DLLLoadLibrary()<0){
-      puts("can't load dll");
+      fprintf(stderr,"Loading of %s failed.  Giving up.\n", BZ2_LIBNAME);
       exit(1);
    }
+   printf("Loading of %s succeeded.  Library version is %s.\n",
+          BZ2_LIBNAME, BZ2_bzlibVersion() );
 #endif
    while(++argv,--argc){
       if(**argv =='-' || **argv=='/'){
@@ -119,8 +130,8 @@ int main(int argc,char *argv[])
          }else{
             fp_w = stdout;
          }
-         if((BZ2fp_r == NULL && (BZ2fp_r = BZ2_bzdopen(fileno(stdin),"rb"))==NULL)
-            || (BZ2fp_r != NULL && (BZ2fp_r = BZ2_bzopen(fn_r,"rb"))==NULL)){
+         if((fn_r == NULL && (BZ2fp_r = BZ2_bzdopen(fileno(stdin),"rb"))==NULL)
+            || (fn_r != NULL && (BZ2fp_r = BZ2_bzopen(fn_r,"rb"))==NULL)){
             printf("can't bz2openstream\n");
             exit(1);
          }
