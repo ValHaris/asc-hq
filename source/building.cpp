@@ -2,9 +2,12 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.91 2003-01-14 22:21:23 mbickel Exp $
+//     $Id: building.cpp,v 1.92 2003-01-21 18:46:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.91  2003/01/14 22:21:23  mbickel
+//      Fixed: crash when refuelling a weapon with maximum amount of 0
+//
 //     Revision 1.90  2003/01/12 19:37:18  mbickel
 //      Rewrote resource production
 //
@@ -5854,7 +5857,7 @@ ccontainer_b :: cminingstation_subwindow :: cminingstation_subwindow ( void )
    objcoordinates[0].type = 17;
    mininginfoLoaded = false;
 
-   resourcecolor[0] = 16+4;
+   resourcecolor[0] = 16+3;
    resourcecolor[1] = 232;
    resourcecolor[2] = 27; // 125;
 

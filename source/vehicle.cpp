@@ -921,7 +921,8 @@ bool  Vehicle :: vehicleloadable ( pvehicle vehicle, int uheight ) const
          uheight |= (chschwimmend | chfahrend );  //these heights are effectively the same
 
 
-   if ( !(uheight & vehicle->height)  &&  !(uheight & height) )
+   if ( getheightdelta ( log2(uheight), log2(vehicle->height))
+        || getheightdelta ( log2(uheight), log2(height)) )
       return 0;
 
    if (( ( typ->loadcapability    & vehicle->height)   &&
@@ -948,7 +949,12 @@ bool  Vehicle :: vehicleloadable ( pvehicle vehicle, int uheight ) const
                        else
                           return 0;
                     else
-                       if (vehicle->height == chfahrend) {
+                       if ( getheightdelta ( log2(uheight), log2(vehicle->height)) == 0 )
+                          return 2;
+                       else
+                          return 0;
+                       /*
+                       if (vehicle->height == chfahrend || vehicle->height == chschwimmend) {
                            if ((height >= chschwimmend) &&
                                (height <= chfahrend))
                                return 2;
@@ -957,6 +963,7 @@ bool  Vehicle :: vehicleloadable ( pvehicle vehicle, int uheight ) const
                        } else
                           if ( vehicle->height == height )
                              return 2;
+                             */
                #endif
               }
 

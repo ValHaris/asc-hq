@@ -157,7 +157,7 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
         BuildingType ( void );
 
         //! can units of the given type be moved into this buildtype? This is a prerequisite, but not the only requirement, for a real unit to move into a real building
-        bool          vehicleloadable ( pvehicletype type ) const ;
+        bool          vehicleloadable ( const Vehicletype* type ) const ;
 
         /** returns the Mapcoordinate of a buildings field
             \param entryOnMap The location of the buildings entry on the map

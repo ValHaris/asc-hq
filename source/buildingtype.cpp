@@ -100,7 +100,7 @@ MapCoordinate  BuildingType :: getFieldCoordinate ( const MapCoordinate& entryPo
    return mc;
 }
 
-bool    BuildingType :: vehicleloadable ( pvehicletype fzt ) const
+bool    BuildingType :: vehicleloadable ( const Vehicletype* fzt ) const
 {
    if ( special & cgproduceAllUnitsB )
       return true;

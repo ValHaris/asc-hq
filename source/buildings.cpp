@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cmath>
 
 #include "vehicletype.h"
 #include "buildingtype.h"
@@ -170,7 +171,7 @@ void Building::regroupUnits ()
 }
 
 
-int Building :: vehicleloadable ( pvehicle vehicle, int uheight ) const
+int Building :: vehicleloadable ( const pvehicle vehicle, int uheight ) const
 {
    if ( uheight == -1 )
       uheight = vehicle->height;
@@ -179,7 +180,7 @@ int Building :: vehicleloadable ( pvehicle vehicle, int uheight ) const
       if ( uheight & (chschwimmend | chfahrend ))
          uheight |= (chschwimmend | chfahrend );  //these heights are effectively the same
 
-   if ( getCompletion() ==  typ->construction_steps - 1 )
+   if ( getCompletion() ==  typ->construction_steps - 1  && typ->vehicleloadable(vehicle->typ ) )
       if ( typ->loadcapability & uheight ) {
          if ( (( typ->loadcapacity >= vehicle->size())               // the unit is physically able to get "through the door"
            && (( typ->unitheightreq & vehicle->typ->height ) || !typ->unitheightreq)
@@ -434,13 +435,6 @@ void    Building :: produceAmmo ( int type, int num )
 
    ammo[type] += produceablePackages * 5;
 }
-/*
-void Building :: getpowerplantefficiency ( int* material, int* fuel )
-{
-   *material = typ->efficiencymaterial;
-   *fuel = typ->efficiencyfuel;
-}
-*/
 
 
 Building :: ~Building ()
@@ -745,7 +739,7 @@ Building::Work* Building::spawnWorkClasses( bool justQuery )
 
 
 
-int  getminingstationeficency ( int dist )
+float  getminingstationeficency ( int dist )
 {
   // f ( x ) = a / ( b * ( x + d ) ) - c
 
@@ -756,8 +750,7 @@ b          =     1.0710969 ;
 c          =     568.88887 ;
 d          =     6.1111109 ;
 
-   double f = a / ( b * (dist + d)) - c;
-  return (int)f;
+   return (a / ( b * (dist + d)) - c) / 1024;
 }
 
 
@@ -775,7 +768,7 @@ void GetMiningInfo :: testfield ( const MapCoordinate& mc )
 {
    pfield fld = gamemap->getField ( mc );
    if ( miningInfo.efficiency[ dist ] == 0 )
-      miningInfo.efficiency[ dist ] = getminingstationeficency ( dist );
+      miningInfo.efficiency[ dist ] = int(getminingstationeficency ( dist ) * 1024);
 
    miningInfo.avail[dist].material += fld->material * resource_material_factor;
    miningInfo.avail[dist].fuel     += fld->fuel     * resource_fuel_factor;
@@ -1126,22 +1119,31 @@ void Building::MiningStation :: testfield ( const MapCoordinate& mc )
 
    if ( cancelSearch == false ) {
       pfield fld = gamemap->getField ( mc );
-      int efficiency = getminingstationeficency ( dist );
+      float distefficiency = getminingstationeficency ( dist );
 
       for ( int r = 1; r < 3; r++ ) {
-         if ( toExtract_thisLoop.resource(r) ) {
-            int e = toExtract_thisLoop.resource(r) * efficiency / 1024;
-            int got;
+         if ( toExtract_thisLoop.resource(r) > 0 ) {
+            float e = toExtract_thisLoop.resource(r) * distefficiency;
+            float got = 0;
+            float buildingEfficiency;
+            if ( r == 1)
+               buildingEfficiency =  double(bld->typ->efficiencymaterial) / 1024;
+            else
+               buildingEfficiency =  double(bld->typ->efficiencyfuel) / 1024;
+
+            if ( resource_material_factor * buildingEfficiency == 0)
+               return;
+
             if ( r == 1 ) {
-               got = min( fld->material * resource_material_factor, e );
+               got = min( fld->material * resource_material_factor  * buildingEfficiency, e );
                if ( !justQuery )
-                  fld->material -= ( got + resource_material_factor - 1 ) / resource_material_factor;
+                  fld->material -= ceil( got / (resource_material_factor  * buildingEfficiency));
             } else {
-               got = min( fld->fuel * resource_fuel_factor, e );
+               got = min( fld->fuel * resource_fuel_factor  * buildingEfficiency, e );
                if ( !justQuery )
-                  fld->fuel -= ( got + resource_fuel_factor - 1 ) / resource_fuel_factor;
+                  fld->fuel -= ceil( got  / (resource_fuel_factor * buildingEfficiency));
             }
-            toExtract_thisLoop.resource(r) -= (got * 1024 + efficiency-1) / efficiency;
+            toExtract_thisLoop.resource(r) -= ceil(got / distefficiency);
             if ( toExtract_thisLoop.resource(r) < 0 )
                toExtract_thisLoop.resource(r) = 0;
 
