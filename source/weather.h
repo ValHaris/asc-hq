@@ -2,9 +2,12 @@
     \brief Interface for changing the weather and the terrain on the map
 */
 
-//     $Id: weather.h,v 1.7 2001-10-31 18:34:34 mbickel Exp $
+//     $Id: weather.h,v 1.8 2003-06-26 21:00:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2001/10/31 18:34:34  mbickel
+//      Some adjustments and fixes for gcc 3.0.2
+//
 //     Revision 1.6  2001/07/27 21:13:35  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -78,6 +81,12 @@ struct tpolygon {
                    tpunkt* vertex;
                 };
 
+class Poly_gon {
+   public:
+      vector<MapCoordinate> vertex;
+      void read ( tnstream& stream );
+      void write ( tnstream& stream );
+};
 
 
 class  tfillpolygon {

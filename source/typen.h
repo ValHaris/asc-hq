@@ -1,6 +1,13 @@
-//     $Id: typen.h,v 1.133 2003-06-22 17:41:22 mbickel Exp $
+//     $Id: typen.h,v 1.134 2003-06-26 21:00:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.133  2003/06/22 17:41:22  mbickel
+//      Updated campaign maps
+//      Fixed crash at 640*480
+//      Fixed: some units could not attack while reaction fire active
+//      Fixed: destruction of buildings not working
+//      New map parameters for customizing the effects of experience
+//
 //     Revision 1.132  2003/06/10 19:16:21  mbickel
 //      Fixed: dig icon not always working
 //      Fixed: attack-flag not set when moving only one field out of a transport
@@ -564,146 +571,52 @@ class LoadableItemType {
        virtual ~LoadableItemType() {};
 };
 
-
+//        .              .                 !              !                !               !
  enum { cemessage,   ceweatherchange, cenewtechnology, celosecampaign, cerunscript,     cenewtechnologyresearchable,
+//        .             !                 !                                 !                 .
         cemapchange, ceeraseevent,    cecampaignend,   cenextmap,      cereinforcement, ceweatherchangecomplete,
+//         !                      !                                         .
         cenewvehicledeveloped, cepalettechange, cealliancechange,      cewindchange,    cenothing,
+//        .                                              .                       .
         cegameparamchange, ceellipse, ceremoveellipse, cechangebuildingdamage, ceaddobject };
 
 
 extern const char*  ceventtrigger[];
+//         .                                     .                         .                        .                          .
  enum { ceventt_turn = 1 ,               ceventt_buildingconquered, ceventt_buildinglost,  ceventt_buildingdestroyed, ceventt_unitlost,
+//         !                                     .                          .                       .
         ceventt_technologyresearched,    ceventt_event,             ceventt_unitconquered, ceventt_unitdestroyed,
+//         .                                     .                          .
         ceventt_allenemyunitsdestroyed,  ceventt_allunitslost,      ceventt_allenemybuildingsdestroyed,
+//                .
         ceventt_allbuildingslost,        ceventt_energytribute,     ceventt_materialtribute, ceventt_fueltribute,
+//                                                                                    .
         ceventt_any_unit_enters_polygon, ceventt_specific_unit_enters_polygon, ceventt_building_seen, ceventt_irrelevant };
 
 
-// The new event system here is not yet functional
 
-class EventTrigger {
-      int triggerID;
-   protected:
-      EventTrigger ( int id ) : triggerID ( id ) {};
-   public:
-      enum State { unfulfilled, fulfilled, finally_failed, finally_fulfilled };
-      virtual State getState( int player ) = 0;
-      virtual void read ( tnstream& stream ) = 0;
-      virtual void write ( tnstream& stream ) = 0;
-      virtual const ASCString& getName() = 0;
-};
+template<typename C>
+void writeContainer ( C c, tnstream& stream  )
+{
+   stream.writeInt ( 1 );
+   stream.writeInt ( c.size() );
+   for ( C::iterator i = c.begin(); i != c.end(); ++i )
+      i->write ( stream );
+}
 
-
-class TurnPassed : public EventTrigger {
-    public:
-      TurnPassed();
-      int turn;
-      int move;
-
-      virtual State getState( int player );
-      virtual void read ( tnstream& stream ) ;
-      virtual void write ( tnstream& stream ) ;
-};
-
-class PositionTrigger : public EventTrigger {
-   protected:
-      PositionTrigger( int id ) : EventTrigger( id ) {};
-   public:
-      MapCoordinate3D pos;
-      virtual void read ( tnstream& stream ) ;
-      virtual void write ( tnstream& stream ) ;
-};
-
-class BuildingConquered : public PositionTrigger {
-    protected:
-      BuildingConquered( int id ) : PositionTrigger( id ) {};
-    public:
-      BuildingConquered() : PositionTrigger(ceventt_buildingconquered) {};
-      virtual State getState( int player );
-};
-
-class BuildingLost: public BuildingConquered  {
-   public:
-      BuildingLost ( ) : BuildingConquered( ceventt_buildinglost ) {};
-      virtual State getState( int player );
-};
-
-class BuildingDestroyed : public PositionTrigger {
-    public:
-      BuildingDestroyed() : PositionTrigger (ceventt_buildingdestroyed) {};
-      virtual State getState( int player );
-};
-
-class BuildingSeen : public PositionTrigger {
-    public:
-      BuildingSeen() : PositionTrigger (ceventt_building_seen) {};
-      virtual State getState( int player );
-};
+template<typename C>
+void readContainer ( C c, tnstream& stream  )
+{
+   int version = stream.readInt();
+   int num = stream.readInt();
+   for ( int i = 0; i < num; ++i ) {
+      C::value_type vt;
+      vt.read( stream );
+      c.push_back( vt );
+   }
+}
 
 
-class EventAction {
-      int actionID;
-   protected:
-      EventAction( int id ) : actionID ( id ) {};
-   public:
-
-      virtual void read ( tnstream& stream ) = 0;
-      virtual void write ( tnstream& stream ) = 0;
-      virtual ASCString getName();
-
-      virtual void execute() = 0;
-
-};
-
-class WindChange: public EventAction {
-   public:
-      WindChange() : EventAction(cewindchange),
-                     speed(-1),
-                     direction(-1){};
-
-      void read ( tnstream& stream );
-      void write ( tnstream& stream );
-
-      void execute();
-
-
-      int speed;
-      int direction;
-};
-
-class ChangeGameParameter: public EventAction {
-    public:
-     ChangeGameParameter(): EventAction(cegameparamchange),
-                            parameterNum(-1),
-                            parameterValue(0){};
-
-      void read ( tnstream& stream );
-      void write ( tnstream& stream );
-
-      void execute();
-
-      int parameterNum;
-      int parameterValue;
-};
-
-
-
-class Event {
-   public:
-      Event();
-
-      int triggerNum;
-      int id;
-      int player;
-      ASCString  description;
-      GameTime   triggerTime;
-      struct {
-         int turn;
-         int move;   // negative values allowed !!
-      } delayedexecution;
-
-      EventAction* action;
-};
 
 
 class tevent {

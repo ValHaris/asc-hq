@@ -251,6 +251,9 @@
     #ifdef _DOS_
      if ( tmp == NULL )
         new_new_handler();
+    #else
+     if ( tmp == NULL )
+        fatalError("Out of memory!");
     #endif
      return tmp;
   }

@@ -100,7 +100,7 @@
 #include "gui.h"
 #include "pd.h"
 #include "strtmesg.h"
-#include "weather.h"
+//#include "weather.h"
 #include "gamedlg.h"
 #include "network.h"
 #include "building.h"
@@ -2194,8 +2194,13 @@ int main(int argc, char *argv[] )
    }
 
 
-   // this starts the gamethread procedure, whichs will run the entire game
-   initializeEventHandling ( gamethread, &gtp, icons.mousepointer );
+   try {
+      // this starts the gamethread procedure, whichs will run the entire game
+      initializeEventHandling ( gamethread, &gtp, icons.mousepointer );
+   }
+   catch ( bad_alloc ) {
+      fatalError ("Out of memory");
+   }
 
    closegraphics();
 

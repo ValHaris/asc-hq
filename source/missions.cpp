@@ -1160,3 +1160,489 @@ int unit_in_polygon ( tevent::LargeTriggerData::PolygonEntered* trigger )
    }
    return found;
 }
+
+
+/////////////////////////////////////////////////////////////////////////////
+// new event system
+/////////////////////////////////////////////////////////////////////////////
+
+
+Event::Event()
+     : triggerNum ( 0 ), action(NULL)
+{
+   triggerTime.abstime = -1;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Trigger
+
+
+TurnPassed :: TurnPassed () : EventTrigger ( ceventt_turn ), turn( -1 ), move(-1)
+{
+}
+
+EventTrigger::State TurnPassed::getState( int player )
+{
+   if ( actmap->time.turn() > turn || (actmap->time.turn() == turn && actmap->time.move() >= move ))
+      return finally_fulfilled;
+   else
+      return unfulfilled;
+}
+
+void TurnPassed::read( tnstream& stream )
+{
+   int version = stream.readInt();
+   turn = stream.readInt();
+   move = stream.readInt();
+}
+
+void TurnPassed::write( tnstream& stream )
+{
+   stream.writeInt(1);
+   stream.writeInt( turn );
+   stream.writeInt( move );
+}
+
+
+
+EventTrigger::State BuildingConquered::getState( int player )
+{
+   pfield fld = actmap->getField ( pos );
+   if ( !fld->building )
+      return finally_failed;
+
+   if ( fld->building->getOwner() == player )
+      return fulfilled;
+   else
+      return unfulfilled;
+}
+
+
+
+EventTrigger::State BuildingLost::getState( int player )
+{
+   State s = BuildingConquered::getState ( player );
+   if ( s == fulfilled)
+      return unfulfilled;
+   if ( s == unfulfilled )
+      return fulfilled;
+   return s;
+}
+
+
+
+void PositionTrigger::read( tnstream& stream )
+{
+   int version = stream.readInt();
+   pos.read( stream );
+}
+
+
+void PositionTrigger::write( tnstream& stream )
+{
+   stream.writeInt(1);
+   pos.write( stream );
+}
+
+EventTrigger::State BuildingDestroyed::getState( int player )
+{
+   pfield fld = actmap->getField ( pos );
+   if ( !fld->building )
+      return finally_fulfilled;
+   else
+      return unfulfilled;
+}
+
+
+EventTrigger::State BuildingSeen::getState( int player )
+{
+   pbuilding bld = actmap->getField ( pos )->building;
+   if ( !bld )
+      return finally_failed;
+
+   int cnt = 0;
+   for ( int x = 0; x < 4; x++ )
+      for ( int y = 0; y < 6; y++ ) {
+         if ( bld->typ->getpicture ( BuildingType::LocalCoordinate(x, y) ) ) {
+            pfield fld = bld->getField ( BuildingType::LocalCoordinate( x, y) );
+            if ( fld ) {
+               int vis = (fld-> visible >> (player*2) ) & 3;
+               if ( bld->typ->buildingheight >= chschwimmend && bld->typ->buildingheight <= chhochfliegend ) {
+                  if ( vis >= visible_now )
+                     cnt++;
+               } else {
+                  if ( vis == visible_all )
+                     cnt++;
+               }
+            }
+         }
+      }
+
+   if ( cnt )
+      return fulfilled;
+   else
+      return unfulfilled;
+}
+
+
+
+EventTrigger::State AllBuildingsLost::getState( int player )
+{
+   if ( actmap->player[player].buildingList.empty() )
+      return fulfilled;
+   else
+      return unfulfilled;
+}
+
+EventTrigger::State AllUnitsLost::getState( int player )
+{
+   if ( actmap->player[player].vehicleList.empty() )
+      return fulfilled;
+   else
+      return unfulfilled;
+}
+
+
+void UnitTrigger::read ( tnstream& stream )
+{
+   int version = stream.readInt();
+   unitID = stream.readInt();
+}
+
+
+void UnitTrigger::write ( tnstream& stream )
+{
+   stream.writeInt(1);
+   stream.writeInt( unitID );
+}
+
+
+EventTrigger::State UnitLost::getState( int player )
+{
+  pvehicle veh = actmap->getUnit( unitID );
+  if ( !veh )
+     return finally_fulfilled;
+  if ( veh->getOwner() != player )
+     return fulfilled;
+  return unfulfilled;
+}
+
+EventTrigger::State UnitConquered::getState( int player )
+{
+  pvehicle veh = actmap->getUnit( unitID );
+  if ( !veh )
+     return finally_failed;
+  if ( veh->getOwner() == player )
+     return fulfilled;
+  return unfulfilled;
+}
+
+EventTrigger::State UnitDestroyed::getState( int player )
+{
+  pvehicle veh = actmap->getUnit( unitID );
+  if ( !veh )
+     return finally_fulfilled;
+  return unfulfilled;
+}
+
+
+EventTrigger::State EventTriggered::getState( int player )
+{
+  displaymessage("not implemented", 1 );
+  return unfulfilled;
+}
+
+void EventTriggered::read ( tnstream& stream )
+{
+   stream.readInt();
+   eventID = stream.readInt();
+}
+
+void EventTriggered::write ( tnstream& stream )
+{
+   stream.writeInt(1);
+   stream.writeInt( eventID );
+}
+
+
+
+EventTrigger::State AllEnemyUnitsDestroyed::getState( int player )
+{
+   for ( int i = 0; i < 8; i++ )
+      if ( getdiplomaticstatus2( player*8, i*8 ) == cawar )
+         if ( actmap->player[i].vehicleList.empty() )
+            return unfulfilled;
+
+    return fulfilled;
+}
+
+
+
+EventTrigger::State AllEnemyBuildingsDestroyed::getState( int player )
+{
+   for ( int i = 0; i < 8; i++ )
+      if ( getdiplomaticstatus2( player*8, i*8 ) == cawar )
+         if ( actmap->player[i].buildingList.empty() )
+            return unfulfilled;
+
+    return fulfilled;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Actions
+
+
+ASCString EventAction::getName()
+{
+  return ceventactions[actionID];
+}
+
+void WindChange::execute()
+{
+   if ( speed != -1 )
+      actmap->weather.windSpeed = speed;
+
+   if ( direction != -1 )
+      actmap->weather.windDirection = direction;
+
+   resetallbuildingpicturepointers();
+}
+
+void WindChange::read( tnstream& stream )
+{
+   int version = stream.readInt();
+   speed = stream.readInt();
+   direction = stream.readInt();
+}
+
+void WindChange::write( tnstream& stream )
+{
+   stream.writeInt(1);
+   stream.writeInt( speed );
+   stream.writeInt( direction );
+}
+
+
+void ChangeGameParameter::execute()
+{
+   if ( parameterNum >= 0 )
+      if ( gameParameterChangeableByEvent [ parameterNum ] )
+         actmap->setgameparameter( GameParameter(parameterNum) , parameterValue );
+}
+
+void ChangeGameParameter::read( tnstream& stream )
+{
+   int version = stream.readInt();
+   parameterNum = stream.readInt();
+   parameterValue = stream.readInt();
+}
+
+void ChangeGameParameter::write( tnstream& stream )
+{
+   stream.writeInt(1);
+   stream.writeInt( parameterNum );
+   stream.writeInt( parameterValue );
+}
+
+
+void DisplayMessage::execute()
+{
+   viewtextmessage ( messageNum , actmap->actplayer );
+}
+
+void DisplayMessage::read( tnstream& stream )
+{
+   int version = stream.readInt();
+   messageNum = stream.readInt();
+}
+
+void DisplayMessage::write( tnstream& stream )
+{
+   stream.writeInt(1);
+   stream.writeInt( messageNum );
+}
+
+
+
+void MapModificationEvent::operate (  )
+{
+   if ( addressingMode == singleField ) {
+      for ( Fields::iterator i = fields.begin(); i != fields.end(); ++i )
+         fieldOperator ( *i );
+   }
+   if ( addressingMode == poly ) {
+      /*
+      for ( Polygons::iterator i = polygons.begin(); i != polygons.end(); ++i )
+         fieldOperator ( *i );
+      */
+   }
+   if ( addressingMode == global ) {
+      for ( int y = 0; y < actmap->ysize; ++y )
+         for ( int x = 0; x < actmap->xsize; ++x )
+             fieldOperator ( MapCoordinate ( x, y ));
+   }
+
+}
+
+void MapModificationEvent::readMapModificationData ( tnstream& stream )
+{
+   int version = stream.readInt();
+   addressingMode = AddressingMode ( stream.readInt() );
+   if ( addressingMode == singleField )
+      readContainer( fields, stream );
+
+   if ( addressingMode == poly )
+      readContainer( polygons, stream );
+}
+
+void MapModificationEvent::writeMapModificationData ( tnstream& stream )
+{
+   stream.writeInt( 1000 );
+   stream.writeInt ( addressingMode );
+
+   if ( addressingMode == singleField )
+      writeContainer ( fields, stream );
+
+   if ( addressingMode == poly )
+      writeContainer ( polygons, stream );
+}
+
+void WeatherChange :: read ( tnstream& stream )
+{
+   int version = stream.readInt();
+   weather = stream.readInt();
+   readMapModificationData ( stream );
+}
+
+
+void WeatherChange :: write ( tnstream& stream )
+{
+   stream.writeInt( 1 );
+   stream.writeInt( weather );
+   writeMapModificationData ( stream );
+}
+
+void WeatherChange :: fieldOperator( const MapCoordinate& mc )
+{
+   pfield field = actmap->getField ( mc );
+   if ( field ) {
+     if ( field->typ->terraintype->weather[ weather ] )
+        field->typ = field->typ->terraintype->weather[ weather ];
+     else
+        field->typ = field->typ->terraintype->weather[ 0 ];
+
+     field->setparams();
+   }
+}
+
+
+void MapChange :: read ( tnstream& stream )
+{
+   int version = stream.readInt();
+   terrainID = stream.readInt();
+   readMapModificationData ( stream );
+}
+
+
+void MapChange :: write ( tnstream& stream )
+{
+   stream.writeInt( 1 );
+   stream.writeInt( terrainID );
+   writeMapModificationData ( stream );
+}
+
+void MapChange :: fieldOperator( const MapCoordinate& mc )
+{
+   TerrainType* typ = getterraintype_forid ( terrainID );
+   if ( !typ )
+      return;
+
+   pfield field = actmap->getField ( mc );
+   if ( field ) {
+      int w = field->getweather();
+      if (typ->weather[w] == NULL)
+         w = 0;
+
+      field->typ = typ->weather[ w ];
+      field->setparams();
+   }
+}
+
+
+void AddObject :: read ( tnstream& stream )
+{
+   int version = stream.readInt();
+   objectID = stream.readInt();
+   readMapModificationData ( stream );
+}
+
+
+void AddObject :: write ( tnstream& stream )
+{
+   stream.writeInt( 1 );
+   stream.writeInt( objectID );
+   writeMapModificationData ( stream );
+}
+
+
+void AddObject :: fieldOperator( const MapCoordinate& mc )
+{
+   ObjectType* obj = getobjecttype_forid ( objectID );
+   if ( !obj )
+      return;
+
+   pfield field = actmap->getField ( mc );
+   if ( field ) {
+      field->addobject ( obj, -1, true );
+      field->setparams();
+    }
+}
+
+
+
+void MapChangeCompleted :: execute()
+{
+   checkobjectsforremoval();
+   checkunitsforremoval ();
+
+   dashboard.x = 0xffff;
+   /*
+   if ( md )
+      md->displayMap();
+   */
+}
+
+
+void ChangeBuildingDamage::read ( tnstream& stream )
+{
+   int version = stream.readInt();
+   damage = stream.readInt();
+   position.read ( stream );
+}
+
+void ChangeBuildingDamage::write ( tnstream& stream )
+{
+   stream.writeInt( 1);
+   stream.writeInt( damage );
+   position.write ( stream );
+}
+
+void ChangeBuildingDamage::execute()
+{
+   pfield fld = actmap->getField ( position );
+   if ( fld && fld->building ) {
+      if ( damage >= 100 ) {
+         delete fld->building;
+         fld->building = NULL;
+         /*
+         if ( md )
+           md->displayMap();
+         */
+      } else
+         fld->building->damage  = damage;
+
+      dashboard.x = 0xffff;
+   }
+}
+

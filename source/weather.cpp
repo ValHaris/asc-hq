@@ -595,3 +595,18 @@ void displaywindspeed( void )
    displaymessage2("wind speed is %d which equals %s fields / turn", actmap->weather.windSpeed, strrrd8d ( actmap->weather.windSpeed * maxwindspeed / 256 ));
 }
 
+
+void Poly_gon::read ( tnstream& stream )
+{
+   int version = stream.readInt();
+   readContainer ( vertex, stream );
+}
+
+
+void Poly_gon::write ( tnstream& stream )
+{
+   stream.writeInt( 100 );
+   writeContainer ( vertex, stream );
+}
+
+

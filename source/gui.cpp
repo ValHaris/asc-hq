@@ -1613,7 +1613,7 @@ int   tnsguiiconputgroundmine::available    ( void )
 {
    if (moveparams.movestatus == 90) { 
       pfield fld = getactfield(); 
-      if ( (fld->typ->art & (getTerrainBitType( cbwater ).flip())).any() )
+      if ( (fld->bdt & (getTerrainBitType( cbwater ).flip())).any() )
          if ( fld->a.temp & 1)
             if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
                return true;

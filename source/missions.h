@@ -2,9 +2,15 @@
     \brief Interface to the event handling of ASC
 */
 
-//     $Id: missions.h,v 1.10 2003-05-01 18:02:22 mbickel Exp $
+//     $Id: missions.h,v 1.11 2003-06-26 21:00:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2003/05/01 18:02:22  mbickel
+//      Fixed: no movement decrease for cargo when transport moved
+//      Fixed: reactionfire not working when descending into range
+//      Fixed: objects not sorted
+//      New map event: add object
+//
 //     Revision 1.9  2003/01/28 17:48:42  mbickel
 //      Added sounds
 //      Rewrote soundsystem
@@ -85,6 +91,7 @@
 #define missionsH
 
 #include "controls.h"
+#include "weather.h"
 
 
 extern void  checkevents( MapDisplayInterface* md );
@@ -106,6 +113,309 @@ extern void  initmissions( void );
 
 extern void mark_polygon_fields_with_connection ( pmap gamemap, int* data, int mark );
 extern int unit_in_polygon ( tevent::LargeTriggerData::PolygonEntered* trigger );
+
+
+// The new event system here is not yet functional
+
+class EventTrigger {
+      int triggerID;
+   protected:
+      EventTrigger ( int id ) : triggerID ( id ) {};
+   public:
+      enum State { unfulfilled, fulfilled, finally_failed, finally_fulfilled };
+      virtual State getState( int player ) = 0;
+      virtual void read ( tnstream& stream ) = 0;
+      virtual void write ( tnstream& stream ) = 0;
+      virtual const ASCString& getName() = 0;
+};
+
+
+class TurnPassed : public EventTrigger {
+    public:
+      TurnPassed();
+      int turn;
+      int move;
+
+      virtual State getState( int player );
+      virtual void read ( tnstream& stream ) ;
+      virtual void write ( tnstream& stream ) ;
+};
+
+
+class UnitTrigger : public EventTrigger {
+    public:
+      UnitTrigger( int id ) : EventTrigger ( id ), unitID ( -1 ) {};
+      int unitID;
+
+      virtual void read ( tnstream& stream ) ;
+      virtual void write ( tnstream& stream ) ;
+};
+
+class UnitLost : public UnitTrigger {
+    public:
+      UnitLost() : UnitTrigger ( ceventt_unitlost ) {};
+      virtual State getState( int player );
+};
+
+class UnitConquered : public UnitTrigger {
+    public:
+      UnitConquered() : UnitTrigger ( ceventt_unitconquered ) {};
+      virtual State getState( int player );
+};
+
+class UnitDestroyed : public UnitTrigger {
+    public:
+      UnitDestroyed() : UnitTrigger ( ceventt_unitdestroyed ) {};
+      virtual State getState( int player );
+};
+
+
+
+class AllBuildingsLost : public EventTrigger {
+    public:
+      AllBuildingsLost() : EventTrigger ( ceventt_allbuildingslost ) {};
+
+      virtual State getState( int player );
+      virtual void read ( tnstream& stream ) { stream.readInt(); };
+      virtual void write ( tnstream& stream ) { stream.writeInt(1); };
+};
+
+class AllUnitsLost : public EventTrigger {
+    public:
+      AllUnitsLost() : EventTrigger ( ceventt_allunitslost ) {};
+
+      virtual State getState( int player );
+      virtual void read ( tnstream& stream ) { stream.readInt(); };
+      virtual void write ( tnstream& stream ) { stream.writeInt(1); };
+};
+
+
+class PositionTrigger : public EventTrigger {
+   protected:
+      PositionTrigger( int id ) : EventTrigger( id ) {};
+   public:
+      MapCoordinate3D pos;
+      virtual void read ( tnstream& stream ) ;
+      virtual void write ( tnstream& stream ) ;
+};
+
+class BuildingConquered : public PositionTrigger {
+    protected:
+      BuildingConquered( int id ) : PositionTrigger( id ) {};
+    public:
+      BuildingConquered() : PositionTrigger(ceventt_buildingconquered) {};
+      virtual State getState( int player );
+};
+
+class BuildingLost: public BuildingConquered  {
+   public:
+      BuildingLost ( ) : BuildingConquered( ceventt_buildinglost ) {};
+      virtual State getState( int player );
+};
+
+class BuildingDestroyed : public PositionTrigger {
+    public:
+      BuildingDestroyed() : PositionTrigger (ceventt_buildingdestroyed) {};
+      virtual State getState( int player );
+};
+
+class BuildingSeen : public PositionTrigger {
+    public:
+      BuildingSeen() : PositionTrigger (ceventt_building_seen) {};
+      virtual State getState( int player );
+};
+
+class EventTriggered : public EventTrigger {
+    public:
+      EventTriggered() : EventTrigger ( ceventt_event ), eventID(-1) {};
+
+      int eventID;
+      virtual State getState( int player );
+      virtual void read ( tnstream& stream );
+      virtual void write ( tnstream& stream );
+};
+
+class AllEnemyUnitsDestroyed : public EventTrigger {
+    public:
+      AllEnemyUnitsDestroyed() : EventTrigger ( ceventt_allenemyunitsdestroyed ) {};
+
+      virtual State getState( int player );
+      virtual void read ( tnstream& stream ) { stream.readInt(); };
+      virtual void write ( tnstream& stream ) { stream.writeInt(1); };
+};
+
+class AllEnemyBuildingsDestroyed : public EventTrigger {
+    public:
+      AllEnemyBuildingsDestroyed() : EventTrigger ( ceventt_allenemybuildingsdestroyed ) {};
+
+      virtual State getState( int player );
+      virtual void read ( tnstream& stream ) { stream.readInt(); };
+      virtual void write ( tnstream& stream ) { stream.writeInt(1); };
+};
+
+
+
+
+
+
+class EventAction {
+      int actionID;
+   protected:
+      EventAction( int id ) : actionID ( id ) {};
+   public:
+
+      virtual void read ( tnstream& stream ) = 0;
+      virtual void write ( tnstream& stream ) = 0;
+      virtual ASCString getName();
+
+      virtual void execute() = 0;
+
+};
+
+class WindChange: public EventAction {
+   public:
+      WindChange() : EventAction(cewindchange),
+                     speed(-1),
+                     direction(-1){};
+
+      void read ( tnstream& stream );
+      void write ( tnstream& stream );
+
+      void execute();
+
+
+      int speed;
+      int direction;
+};
+
+class ChangeGameParameter: public EventAction {
+    public:
+     ChangeGameParameter(): EventAction(cegameparamchange),
+                            parameterNum(-1),
+                            parameterValue(0){};
+
+      void read ( tnstream& stream );
+      void write ( tnstream& stream );
+
+      void execute();
+
+      int parameterNum;
+      int parameterValue;
+};
+
+class DisplayMessage: public EventAction {
+    public:
+      DisplayMessage(): EventAction(cegameparamchange),
+                        messageNum(-1) {};
+      int messageNum;
+
+      void read ( tnstream& stream );
+      void write ( tnstream& stream );
+
+      void execute();
+};
+
+class MapModificationEvent : public EventAction {
+   protected:
+      MapModificationEvent ( int id ) : EventAction ( id ), addressingMode( none ) {};
+      void readMapModificationData ( tnstream& stream );
+      void writeMapModificationData ( tnstream& stream );
+
+      void operate();
+      virtual void fieldOperator( const MapCoordinate& mc ) = 0;
+   public:
+
+      enum AddressingMode { none, singleField, poly, global };
+
+      AddressingMode addressingMode;
+      typedef vector<MapCoordinate> Fields;
+      Fields fields;
+
+      typedef vector< Poly_gon > Polygons;
+      Polygons polygons;
+
+      void execute() { operate(); };
+};
+
+class WeatherChange : public MapModificationEvent {
+   protected:
+      void fieldOperator( const MapCoordinate& mc );
+   public:
+      WeatherChange(): MapModificationEvent(ceweatherchange),
+                        weather(-1) {};
+      int weather;
+
+      void read ( tnstream& stream );
+      void write ( tnstream& stream );
+};
+
+class MapChange : public MapModificationEvent {
+   protected:
+      void fieldOperator( const MapCoordinate& mc );
+   public:
+      MapChange(): MapModificationEvent(cemapchange),
+                        terrainID(-1) {};
+      int terrainID;
+
+      void read ( tnstream& stream );
+      void write ( tnstream& stream );
+};
+
+class AddObject : public MapModificationEvent {
+   protected:
+      void fieldOperator( const MapCoordinate& mc );
+   public:
+      AddObject(): MapModificationEvent(ceaddobject),
+                        objectID(-1) {};
+      int objectID;
+
+      void read ( tnstream& stream );
+      void write ( tnstream& stream );
+};
+
+
+class MapChangeCompleted : public EventAction {
+    public:
+      MapChangeCompleted(): EventAction(ceweatherchangecomplete) {};
+
+      void read ( tnstream& stream ) {};
+      void write ( tnstream& stream ) {};
+
+      void execute();
+};
+
+
+class ChangeBuildingDamage: public EventAction {
+   public:
+      ChangeBuildingDamage() : EventAction(cechangebuildingdamage),
+                     damage(0) {};
+
+      void read ( tnstream& stream );
+      void write ( tnstream& stream );
+
+      void execute();
+
+      int damage;
+      MapCoordinate position;
+};
+
+
+class Event {
+   public:
+      Event();
+
+      int triggerNum;
+      int id;
+      int player;
+      ASCString  description;
+      GameTime   triggerTime;
+      struct {
+         int turn;
+         int move;   // negative values allowed !!
+      } delayedexecution;
+
+      EventAction* action;
+};
 
 
 #endif

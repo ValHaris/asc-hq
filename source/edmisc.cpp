@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.102 2003-06-03 19:55:37 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.103 2003-06-26 21:00:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.102  2003/06/03 19:55:37  mbickel
+//      Ground mines can be put onto bridges
+//      better AI production
+//
 //     Revision 1.101  2003/04/23 18:31:09  mbickel
 //      Fixed: AI problems
 //      Improved cheating detection in replay
@@ -1780,7 +1784,8 @@ void         placebuilding(int               colorr,
    gbde = getactfield()->building;
    if (gbde == NULL) return;
 
-   gbde->plus = gbde->maxplus;
+   // gbde->plus = gbde->maxplus;
+   gbde->maxplus = gbde->plus;
 
    activefontsettings.color = 1;
    activefontsettings.background = lightgray;
