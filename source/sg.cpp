@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.77 2000-08-12 09:17:32 gulliver Exp $
+//     $Id: sg.cpp,v 1.78 2000-08-12 12:52:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.77  2000/08/12 09:17:32  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.76  2000/08/08 13:22:03  mbickel
 //      Added unitCategoriesLoadable property to buildingtypes and vehicletypes
 //      Added option: showUnitOwner
@@ -463,7 +466,7 @@ int  abortgame;
 #define messagedisplaytime 300
 
 tkey         keyinput[keyinputbuffersize]; 
-byte         keyinputptr; 
+int         keyinputptr; 
 
 int              modenum8;
 
@@ -3309,8 +3312,7 @@ int main(int argc, char *argv[] )
    // dont_use_linear_framebuffer = 1;
 
   
-  if( sizeof(byte) != 1 ||
-      sizeof(word) != 2 || 
+  if( sizeof(word) != 2 || 
       sizeof(integer) != 2 ) {
       printf("\n ASC was compiled with invalid structure sizes! Pack all structures ! \n\n" );
       return 1;

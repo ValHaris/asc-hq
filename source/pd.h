@@ -1,6 +1,10 @@
-//     $Id: pd.h,v 1.5 2000-06-09 10:50:59 mbickel Exp $
+//     $Id: pd.h,v 1.6 2000-08-12 12:52:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/06/09 10:50:59  mbickel
+//      Repaired keyboard control of pulldown menu
+//      Fixed compile errors at fieldlist with gcc
+//
 //     Revision 1.4  2000/05/23 20:40:48  mbickel
 //      Removed boolean type
 //
@@ -53,7 +57,7 @@
 
    typedef struct tpdfield {
            char            name[maxnamelength];
-           byte            count;
+           int             count;
            dynamic_array<tpdbutton>  button;
            tkey            shortkey;
            word            rtextstart,xstart,xwidth,height;
@@ -63,15 +67,15 @@
    typedef struct pdbar {
            word    pdbreite;
            dynamic_array<tpdfield>   field;
-           byte    count;
+           int     count;
    } pdbar;
 
    class tpulldown {
          int pdfieldnr, buttonnr;
       public :
          char barstatus;
-         byte action,mousestat;
-         byte bkgcolor,textcolor,shortkeycolor,rcolor1,rcolor2;
+         int  action,mousestat;
+         int  bkgcolor,textcolor,shortkeycolor,rcolor1,rcolor2;
          int pdfieldtextdistance,textstart,righttextdifference,anf,ende;
          void *backgrnd,*barbackgrnd;
          char lt[100];
@@ -94,7 +98,7 @@
          virtual void lines(int x1,int y1,int x2,int y2);
          virtual void nolines(int x1,int y1,int x2,int y2);
          virtual void tpulldown::getleftrighttext(char *qtext, char *ltext, char *rtext);
-         virtual int getpdfieldheight(byte pdfieldnr,byte pos);
+         virtual int getpdfieldheight(int pdfieldnr, int pos);
          virtual void done(void);
          void addbutton ( char* name, int id );
          void addfield ( char* name );

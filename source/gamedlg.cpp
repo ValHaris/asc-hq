@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.38 2000-08-12 09:17:26 gulliver Exp $
+//     $Id: gamedlg.cpp,v 1.39 2000-08-12 12:52:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2000/08/12 09:17:26  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.37  2000/08/08 09:48:13  mbickel
 //
 //      speed up of dialog boxes in linux
@@ -221,7 +224,7 @@ class   tchoosetechnology : public tdialogbox {
                            int           firstshowntech;
                            int           markedtech;
                            void          disp ( void );
-                           void          buttonpressed ( char id  );
+                           void          buttonpressed ( int id  );
                            int           gx ( void );
                            int           gy ( int i );
                            void          check( void );
@@ -351,7 +354,7 @@ void         tchoosetechnology::disp(void)
    }
 }
 
-void         tchoosetechnology::buttonpressed ( char id )
+void         tchoosetechnology::buttonpressed ( int id )
 {
    if ( id == 1 )
       disp();
@@ -468,7 +471,7 @@ class tchoosetransfermethod : public tdialogbox {
                void init  ( int xx1 );
                void redraw ( void );
                void run   ( pbasenetworkconnection  *conn );
-               void buttonpressed ( char id );
+               void buttonpressed ( int id );
                int  getcapabilities ( void ) { return 1; };
            };
 
@@ -520,7 +523,7 @@ void  tchoosetransfermethod :: init ( int xx1 )
 
 }
 
-void tchoosetransfermethod :: buttonpressed ( char id )
+void tchoosetransfermethod :: buttonpressed ( int id )
 {
    tdialogbox::buttonpressed ( id );
    if ( id == 3 )
@@ -658,7 +661,7 @@ class  tsetupnetwork : public tdialogbox {
                int  getcapabilities ( void ) { return 1; };
                void init ( tnetwork* nw, int edt, int playr );
                void run  ( void );
-               void buttonpressed ( char id );
+               void buttonpressed ( int id );
                void redraw ( void );
            };
 
@@ -810,7 +813,7 @@ pbasenetworkconnection tsetupnetwork ::  getmethod ( tnetworkchannel chan )
    return *conn;
 }
 
-void tsetupnetwork :: buttonpressed ( char id )
+void tsetupnetwork :: buttonpressed ( int id )
 {
    tdialogbox::buttonpressed ( id );
    switch ( id ) {
@@ -1283,7 +1286,7 @@ void         tcontinuecampaign::init(void)
 } 
 
 
-void         tcontinuecampaign::buttonpressed(byte         id)
+void         tcontinuecampaign::buttonpressed(int         id)
 { 
 
    switch (id) {
@@ -1463,7 +1466,7 @@ void         tchoosenewmap::readmapinfo(void)
 
 } 
  
-void         tchoosenewmap::buttonpressed( char id )
+void         tchoosenewmap::buttonpressed( int id )
 { 
   char         t[100];
 
@@ -1702,7 +1705,7 @@ void         tchoosenewcampaign::init(void)
 
                     public:
                        void init ( void );
-                       void buttonpressed ( char id );
+                       void buttonpressed ( int id );
                        void run ( void );
                };
 
@@ -1842,7 +1845,7 @@ void  ttributepayments :: paintvalues ( void )
 }
 
 
-void  ttributepayments :: buttonpressed( char id )
+void  ttributepayments :: buttonpressed( int id )
 {
    tdialogbox::buttonpressed( id );
    if ( id == 1 )
@@ -1947,7 +1950,7 @@ void  tshownewtanks :: run ( void )
    } while ( status == 0 ); /* enddo */
 }
 
-void  tshownewtanks :: buttonpressed ( char id )
+void  tshownewtanks :: buttonpressed ( int id )
 {
    if (id == 1)
       status = 1;
@@ -1964,7 +1967,7 @@ class tresearchinfo: public tdialogbox {
                       tresearchinfo ( void );
                       void init ( void );
                       void count ( void ); 
-                      void buttonpressed ( char id );
+                      void buttonpressed ( int id );
                       void run ( void );
 
                   };
@@ -2042,7 +2045,7 @@ void tresearchinfo::count ( void )
    } /* endwhile */
 }
 
-void tresearchinfo::buttonpressed ( char id )
+void tresearchinfo::buttonpressed ( int id )
 {
    if ( id == 1 )
       status = 10;
@@ -2277,7 +2280,7 @@ class tchoosetechlevel : public tdialogbox {
                 int ok;
              public: 
                 void init ( void );
-                void buttonpressed ( char id );
+                void buttonpressed ( int id );
                 void run ( void );
          };
 
@@ -2300,7 +2303,7 @@ void tchoosetechlevel :: init ( void )
    buildgraphics();
 }
 
-void tchoosetechlevel :: buttonpressed ( char id )
+void tchoosetechlevel :: buttonpressed ( int id )
 {
    tdialogbox:: buttonpressed ( id );
    if ( id == 1 )
@@ -2388,12 +2391,10 @@ class  tparagraph {
           pparagraph prev;
       };
 
-#ifndef _NoStaticClassMembers_
-StaticClassVariable int tparagraph :: winy1;
-StaticClassVariable int tparagraph :: winy2;
-StaticClassVariable int tparagraph :: winx1;
-StaticClassVariable int tparagraph :: maxlinenum;
-#endif
+static int tparagraph :: winy1;
+static int tparagraph :: winy2;
+static int tparagraph :: winx1;
+static int tparagraph :: maxlinenum;
 
 tparagraph :: tparagraph ( void )
 {
@@ -3066,7 +3067,7 @@ class tnewmessage : public tmessagedlg  {
             public:
                tnewmessage( void );
                void init ( void );
-               void buttonpressed ( char id );
+               void buttonpressed ( int id );
                void run ( void );
        };
 
@@ -3116,7 +3117,7 @@ void tnewmessage :: init ( void )
 }
 
 
-void tnewmessage :: buttonpressed ( char id )
+void tnewmessage :: buttonpressed ( int id )
 {
    tmessagedlg :: buttonpressed ( id );
    if ( id == 1 )
@@ -3167,7 +3168,7 @@ class teditmessage : public tmessagedlg  {
                pmessage message;
             public:
                void init ( pmessage msg );
-               void buttonpressed ( char id );
+               void buttonpressed ( int id );
                void run ( void );
        };
 
@@ -3212,7 +3213,7 @@ void teditmessage :: init ( pmessage msg  )
 }
 
 
-void teditmessage :: buttonpressed ( char id )
+void teditmessage :: buttonpressed ( int id )
 {
    tmessagedlg :: buttonpressed ( id );
    if ( id == 1 )
@@ -3272,7 +3273,7 @@ class tviewmessages : public tdialogbox {
                int  getcapabilities ( void ) { return 1; };
                void redraw ( void );
                void run ( void );
-               void buttonpressed ( char id );
+               void buttonpressed ( int id );
                void paintmessages ( void );
                void checkforscroll ( void );
                ~tviewmessages();
@@ -3348,7 +3349,7 @@ void tviewmessages :: init ( char* ttl, pmessagelist strt, int editable, int md 
             
 }
 
-void tviewmessages :: buttonpressed ( char id )
+void tviewmessages :: buttonpressed ( int id )
 {
    if ( id == 1 )
       viewmessage ( message[ act ]->message );
@@ -3535,7 +3536,7 @@ void viewmessages ( char* title, pmessagelist strt, int editable, int md  )    /
 
                    void                 init( pmessage msg );
                    virtual void         run ( void );
-                   virtual void         buttonpressed( char id);
+                   virtual void         buttonpressed( int id);
                    void                 redraw ( void );
                    int                  getcapabilities ( void ) { return 1; };
                    void                 repaintscrollbar( void );
@@ -3667,7 +3668,7 @@ void         tviewmessage::redraw(void)
 } 
 
 
-void         tviewmessage::buttonpressed( char id )
+void         tviewmessage::buttonpressed( int id )
 { 
    tdialogbox::buttonpressed(id);
    if (id == 1) 
@@ -3713,7 +3714,7 @@ class teditjournal : public tmessagedlg  {
             public:
                void init ( void );
                void setup ( void );
-               void buttonpressed ( char id );
+               void buttonpressed ( int id );
                void run ( void );
        };
 
@@ -3775,7 +3776,7 @@ void teditjournal :: setup ( void )
 }
 
 
-void teditjournal :: buttonpressed ( char id )
+void teditjournal :: buttonpressed ( int id )
 {
    tmessagedlg :: buttonpressed ( id );
    if ( id == 1 )
@@ -3996,7 +3997,7 @@ class tgamepreferences : public tdialogbox {
                      public:
                         char checkvalue( char id, void* p)  ;
                         void init ( void );
-                        void buttonpressed ( char id );
+                        void buttonpressed ( int id );
                         void run ( void );
                         tgamepreferences ( ) 
 							: actoptions ( *CGameOptions::Instance() ) {};
@@ -4169,7 +4170,7 @@ char tgamepreferences :: checkvalue( char id, void* p)
 }
 
 
-void tgamepreferences :: buttonpressed ( char id )
+void tgamepreferences :: buttonpressed ( int id )
 {
    tdialogbox :: buttonpressed ( id );
 
@@ -4276,7 +4277,7 @@ class tmousepreferences : public tdialogbox {
 
                      public:
                         void init ( void );
-                        void buttonpressed ( char id );
+                        void buttonpressed ( int id );
                         void paintbutt ( char id );
                         void run ( void );
                         tmousepreferences ( ) : actoptions ( *CGameOptions::Instance()) {};
@@ -4423,7 +4424,7 @@ void tmousepreferences :: paintbutt ( char id )
 }
 
 
-void tmousepreferences :: buttonpressed ( char id )
+void tmousepreferences :: buttonpressed ( int id )
 {
    tdialogbox :: buttonpressed ( id );
 
@@ -4738,7 +4739,7 @@ class tmultiplayersettings : public tdialogbox {
               public:
                 void init ( void );
                 void run ( void );
-                void buttonpressed ( char id );
+                void buttonpressed ( int id );
 
                 ~tmultiplayersettings ( );
      };
@@ -5715,7 +5716,7 @@ int tmultiplayersettings :: checklimits ( void )         // 0 : alles ok;   1: G
 
 
 
-void tmultiplayersettings :: buttonpressed ( char id )
+void tmultiplayersettings :: buttonpressed ( int id )
 {
    tdialogbox :: buttonpressed ( id );
    if ( id == 125 )
@@ -6496,7 +6497,7 @@ class tgiveunitawaydlg : public tdialogbox {
            public:
              void init ( void );
              void run ( void );
-             void buttonpressed ( char id );
+             void buttonpressed ( int id );
        };
 
 
@@ -6575,7 +6576,7 @@ void         tgiveunitawaydlg :: init(void)
 
 } 
 
-void         tgiveunitawaydlg :: buttonpressed ( char id )
+void         tgiveunitawaydlg :: buttonpressed ( int id )
 {
    if ( id == 1 )
       if ( markedplayer >= 0 )

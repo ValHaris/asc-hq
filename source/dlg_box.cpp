@@ -1,6 +1,9 @@
-//     $Id: dlg_box.cpp,v 1.28 2000-08-12 09:17:24 gulliver Exp $
+//     $Id: dlg_box.cpp,v 1.29 2000-08-12 12:52:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/08/12 09:17:24  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.27  2000/08/08 09:48:02  mbickel
 //
 //      speed up of dialog boxes in linux
@@ -272,7 +275,7 @@ tscreensaverparameters screensaverparameters;
 
 void         checkscreensaver(void)
 { 
- byte         dpmss; 
+ int         dpmss; 
 
   if (getmousestatus() == 2) 
       if ((mouseparams.x != screensaverparameters.mx) || (mouseparams.y != screensaverparameters.my) || (mouseparams.taste != screensaverparameters.mt)) { 
@@ -587,7 +590,7 @@ void         tdialogbox::changecoordinates(void)
 } 
 
 
-void         tdlgengine::buttonpressed(byte         id)
+void         tdlgengine::buttonpressed(int         id)
 { 
   pbutton      pb; 
   word         w; 
@@ -679,9 +682,9 @@ void         tdlgengine::buttonpressed(byte         id)
 
 void         tdlgengine::addbutton( const char *       ltxt,
                        tmouserect   rect1,
-                       byte         lart,
-                       byte         lstyle,
-                       byte         lid,
+                       int         lart,
+                       int         lstyle,
+                       int         lid,
                        char      enabled)
 {
    addbutton ( ltxt, rect1.x1, rect1.y1, rect1.x2, rect1.y2, lart, lstyle, lid, enabled );
@@ -694,9 +697,9 @@ void         tdlgengine::addbutton(  const char *       ltxt,
                                  int          ly1,
                                  int          lx2,
                                  int          ly2,
-                                 byte         lart,
-                                 byte         lstyle,
-                                 byte         lid,
+                                 int         lart,
+                                 int         lstyle,
+                                 int         lid,
                                  char      enabled)
 { 
   pbutton      pb; 
@@ -749,8 +752,8 @@ void         tdlgengine::addscrollbar(tmouserect rec,
                           int*         numberofitems,
                           int          itemsvisible,
                           int*         actitem,
-                          byte         lid,
-                          byte         keys)
+                          int         lid,
+                          int         keys)
 {
    addscrollbar ( rec.x1, rec.y1, rec.x2, rec.y2, numberofitems, itemsvisible, actitem, lid, keys );
 }
@@ -773,8 +776,8 @@ void         tdlgengine::addscrollbar(int          lx1,
                           int*         numberofitems,
                           int          itemsvisible,
                           int*         actitem,
-                          byte         lid,
-                          byte         keys)
+                          int         lid,
+                          int         keys)
 { 
   pbutton      pb; 
 
@@ -892,10 +895,10 @@ void         tdialogbox::rebuildtaborder(void)
 } 
 
 
-void         tdialogbox::showbutton(byte         id)
+void         tdialogbox::showbutton(int         id)
 { 
   pbutton      pb; 
-  byte         c; 
+  int         c; 
   char mss = getmousestatus();
 
   if (mss == 2) 
@@ -927,7 +930,7 @@ void         tdialogbox::showbutton(byte         id)
 } 
 
 
-void         tdialogbox::hidebutton(byte         id)
+void         tdialogbox::hidebutton(int         id)
 { 
   pbutton      pb; 
 
@@ -959,7 +962,7 @@ void         tdlgengine::clearkey ( char id )
    } 
 } 
 
-void         tdlgengine::addkey( byte         id, tkey         key )
+void         tdlgengine::addkey( int         id, tkey         key )
 { 
    pbutton pb = firstbutton; 
    while ( pb ) { 
@@ -1017,7 +1020,7 @@ void         tdialogbox::setscrollspeed(char        id , int  speed)
 } 
 
 
-void         tdlgengine::addeingabe(byte         lid,
+void         tdlgengine::addeingabe(int         lid,
                                   void*      data,
                                   int      min,
                                   int      max)
@@ -1044,7 +1047,7 @@ void         tdlgengine::addeingabe(byte         lid,
 
 
 
-void         tdialogbox::enablebutton(byte         id)
+void         tdialogbox::enablebutton(int         id)
 { 
 
    pbutton pb = firstbutton; 
@@ -1187,7 +1190,7 @@ void         tdialogbox::enablebutton(byte         id)
 
 
 
-void         tdialogbox::disablebutton(byte         id)
+void         tdialogbox::disablebutton(int         id)
 { 
   pbutton      pb; 
   int      *pl; 
@@ -1592,7 +1595,7 @@ void         tdialogbox::execbutton( pbutton      pb, char      mouse )
 } 
 
 
-void         tdialogbox::showtabmark(byte         b)
+void         tdialogbox::showtabmark(int         b)
 { 
    if (b != 0) {
       setinvisiblemouserectanglestk ( x1 + taborder[b].x1 - 2,y1 + taborder[b].y1 - 2,x1 + taborder[b].x2 + 2,y1 + taborder[b].y2 + 2 );
@@ -1778,7 +1781,7 @@ void         tdialogbox::toggleswitch(pbutton      pb)
 } 
 
 
-char      tdialogbox::checkvalue(byte         id,
+char      tdialogbox::checkvalue(int         id,
                                   void*      p)
 { 
    return  true;
@@ -1857,7 +1860,7 @@ void         tdialogbox::rahmen3(char *       txt,
                      integer      y1,
                      integer      x2,
                      integer      y2,
-                     byte         style)
+                     int         style)
 { 
    collategraphicoperations cgs( x1, y1, x2, y2 );
 
@@ -1938,7 +1941,7 @@ void tdisplaymessage::init ( tstringa a, int md, int linenum )
    }
 }
 
-void tdisplaymessage::buttonpressed ( char id )
+void tdisplaymessage::buttonpressed ( int id )
 {
    if ( id == 1) {
       status = 1;
@@ -2077,7 +2080,7 @@ void         tdialogbox::stredit(char *       s,
 
    char         *ss, *ss2, *ss3;
    char      einfuegen; 
-   byte         position; 
+   int         position; 
    int          i;
 
   #ifdef _DOS_
@@ -3299,7 +3302,7 @@ char*  readtextmessage( int id )
                    void                 buildgraphics ( void );
                    virtual void         run ( void );
                    //void                 viewtext ( void );
-                   virtual void         buttonpressed( char id);
+                   virtual void         buttonpressed( int id);
                    void                 repaintscrollbar( void );
                    void                 done ( void );
                 };
@@ -3390,7 +3393,7 @@ void         thelpsystem::buildgraphics(void)
 } 
 
 
-void         thelpsystem::buttonpressed( char id )
+void         thelpsystem::buttonpressed( int id )
 { 
    tdialogbox::buttonpressed(id);
    if (id == 1) 
@@ -3460,7 +3463,7 @@ class  tviewtextquery : public thelpsystem {
                       char* st2;
                  public:
                       void  init( int id, char* titel, char* s1, char* s2);
-                      virtual void buttonpressed( char id);
+                      virtual void buttonpressed( int id);
                       void         setup( void );
                    };
 
@@ -3490,7 +3493,7 @@ void         tviewtextquery::init( int id, char* titel, char* s1, char* s2 )
 } 
 
 
-void         tviewtextquery::buttonpressed( char id)
+void         tviewtextquery::buttonpressed( int id)
 { 
    thelpsystem::buttonpressed(id);
    if (id == 12) 
@@ -3500,7 +3503,7 @@ void         tviewtextquery::buttonpressed( char id)
 } 
 
 
-byte         viewtextquery(word         id,
+int         viewtextquery(word         id,
                            char *       title,
                            char *       s1,
                            char *       s2)
@@ -3655,7 +3658,7 @@ void         tstringselect::setup(void)
 }
 
 
-void         tstringselect::buttonpressed(byte         id)
+void         tstringselect::buttonpressed(int         id)
 {
    tdialogbox::buttonpressed(id);
    if (id == 1) {
@@ -3670,7 +3673,7 @@ void         tstringselect::run(void)
 {
   char      view;
   integer      my;
-  byte         ms;
+  int         ms;
 
    tdialogbox::run();
    if (numberoflines > 0) {
@@ -3807,13 +3810,13 @@ void         tstringselect::done(void)
 
 class  tgetid : public tdialogbox {
           public :
-              byte action;
+              int action;
               int mid;
               char nt[200];
               void init(void);
               int max,min;
               virtual void run(void);
-              virtual void buttonpressed(byte id);
+              virtual void buttonpressed(int id);
               };
 
 void         tgetid::init(void)
@@ -3861,7 +3864,7 @@ void         tgetid::run(void)
 }
 
 
-void         tgetid::buttonpressed(byte         id)
+void         tgetid::buttonpressed(int         id)
 {
    tdialogbox::buttonpressed(id);
    switch (id) {

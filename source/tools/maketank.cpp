@@ -809,7 +809,7 @@ main (int argc, char *argv[] )
 void *       loadpcx2(char *       filestring)
 {      
   void         *p = NULL;
-  byte         b; 
+  int b; 
 
 
    bar ( 0, 0, 639, 479, 255 );

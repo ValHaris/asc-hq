@@ -1,6 +1,10 @@
-//     $Id: missions.cpp,v 1.9 2000-07-05 10:49:36 mbickel Exp $
+//     $Id: missions.cpp,v 1.10 2000-08-12 12:52:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/07/05 10:49:36  mbickel
+//      Fixed AI bugs
+//      setbuildingdamage event now updates the screen
+//
 //     Revision 1.8  2000/07/05 09:24:00  mbickel
 //      New event action: change building damage
 //
@@ -79,10 +83,10 @@
 #include "controls.h"
 #include "sg.h"
 
-const  byte    translatetriggerstatus[4]  = {0, 1, 1, 0};
+const  int    translatetriggerstatus[4]  = {0, 1, 1, 0};
 
 
-   byte         stt[4]; 
+   int         stt[4]; 
    int          quedevents[9];
    tgametime    nexttimedevent[8]; 
    char      eject; 
@@ -158,14 +162,14 @@ void         checktimedevents ( MapDisplayInterface* md )
 
 
 
-byte         evaluatetrigger(pevent       ev,
+int         evaluatetrigger(pevent       ev,
                              shortint *   bracketstoopen,
                              shortint     pos,
                              shortint *   mxpos)
 { 
   shortint     bto ; 
-  byte         stat, stat2; 
-  byte         conn; 
+  int         stat, stat2; 
+  int         conn; 
   shortint     mxp; 
 
    (*bracketstoopen)--;
@@ -241,7 +245,7 @@ byte         evaluatetrigger(pevent       ev,
 
 void         checksingleevent(pevent       ev, MapDisplayInterface* md )
 { 
-  byte         b; 
+  int         b; 
   word         i; 
   pevent       ev2; 
   peventstore  oldevent; 
@@ -516,7 +520,7 @@ void         releaseevent(pvehicle     eht,
                           pbuilding    bld,
                           int      action)
 { 
-  byte         b; 
+  int         b; 
 
    pevent ev1 = actmap->firsteventtocome; 
    while ( ev1 != NULL) { 

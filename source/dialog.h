@@ -1,7 +1,15 @@
-//     $Id: dialog.h,v 1.9 2000-08-06 11:38:48 mbickel Exp $
+//     $Id: dialog.h,v 1.10 2000-08-12 12:52:45 mbickel Exp $
 
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/08/06 11:38:48  mbickel
+//      New map paramter: fuel globally available
+//      Mapeditor can now filter buildings too
+//      Fixed unfreed memory in fullscreen image loading
+//      Fixed: wasted cpu cycles in building
+//      map parameters can be specified when starting a map
+//      map parameters are reported to all players in multiplayer games
+//
 //     Revision 1.8  2000/08/02 15:52:50  mbickel
 //      New unit set definition files
 //      demount accepts now more than one container file
@@ -89,7 +97,7 @@ class    tscrollbarn {
                    virtual void          scrollbutton( char    status, integer _pos );
                    void                  init( integer x1_,     integer y1_,    integer x2_, integer y2_,
                                                integer max_sel, integer ges_anz );
-                   void          buttonpressed( byte number );
+                   void          buttonpressed( int id );
                    void          calcnewposition( integer mousexpos, integer mouseypos );
                    void          button( byte number );
                    void          setnewcoordinates( integer x, integer y );
@@ -114,7 +122,7 @@ extern void  statisticarmies(void);
    
 extern void  statisticbuildings(void);
    
-extern byte  choice_dlg(char *       title,
+extern int   choice_dlg(char *       title,
                         char *       s1,
                         char *       s2,
                         ... );
@@ -127,7 +135,7 @@ class tenterfiledescription : public tdialogbox {
                        public:
                          char* description;
                          void init ( char* descrip = NULL );
-                         void buttonpressed ( char id );
+                         void buttonpressed ( int id );
                          void run ( void );
                        private:
                          char status;
@@ -160,7 +168,7 @@ class tviewanytext : public tdialogbox, public tviewtextwithscrolling {
                    virtual void         setup();
                    void                 buildgraphics ( void );
                    virtual void         run ( void );
-                   virtual void         buttonpressed( char id);
+                   virtual void         buttonpressed( int id);
                    void                 repaintscrollbar( void );
                 };
 */
@@ -179,7 +187,7 @@ class tviewanytext : public tdialogbox, public tviewtextwithscrolling {
 
                    void                 init( char* title, const char* text , int xx1 = 50, int yy1 = 50 , int xxsize = 360, int yysize = 360 );
                    virtual void         run ( void );
-                   virtual void         buttonpressed( char id);
+                   virtual void         buttonpressed( int id);
                    void                 redraw ( void );
                    int                  getcapabilities ( void ) { return 1; };
                    void                 repaintscrollbar ( void );
@@ -279,7 +287,7 @@ extern void choosezoomlevel ( void );
 extern void  verlademunition(pvehicle     vehicle,
                              pvehicle     vehicle2,
                              pbuilding    building,
-                             byte         fast);
+                             int          fast);
               /*  entweder muá vehicle2 oder building = NULL sein  */ 
      /* fast: */
      /*  0: innen dialog  */ 
@@ -312,7 +320,7 @@ class tenterpassword : public tdialogbox {
                int  getcapabilities ( void );
                void init ( int* crc, int mode, char* ttl = NULL );  // mode : 0 = es muá unbedingt ein passwort eingegeben werden; 1 = Eingabe kann abgebrochen werden
                void  run ( int* result );
-               void buttonpressed ( char id );
+               void buttonpressed ( int id );
            };
 
 

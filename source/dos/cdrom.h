@@ -1,6 +1,10 @@
-//     $Id: cdrom.h,v 1.1 2000-05-30 18:39:28 mbickel Exp $
+//     $Id: cdrom.h,v 1.2 2000-08-12 12:52:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2000/05/30 18:39:28  mbickel
+//      Added support for multiple directories
+//      Moved DOS specific files to a separate directory
+//
 //     Revision 1.4  2000/05/23 20:40:37  mbickel
 //      Removed boolean type
 //
@@ -56,22 +60,22 @@
 
      typedef char tdevname[8]; 
      struct trequestheader { 
-                       byte         len; 
-                       byte         subunit; 
-                       byte         commandcode; 
+                       pascal_byte         len; 
+                       pascal_byte         subunit; 
+                       pascal_byte         commandcode; 
                        word         status; 
                        tdevname  devname; 
                     } ;
 
 
      struct tgetdevheader {
-                     byte         controlblockcode; 
+                     pascal_byte         controlblockcode; 
                      void*      adress; 
                   } ;
 
      struct tioctlo { 
                 trequestheader requestheader; 
-                byte         mediadescriptor; 
+                pascal_byte         mediadescriptor; 
                 int            buffer;
                 word         buffersize; 
                 int      startsector; 
@@ -79,69 +83,69 @@
              };
 
      struct tlocatehead {
-                byte         controlblockcode;   /* 1 */ 
-                byte         adressingmode; 
+                pascal_byte         controlblockcode;   /* 1 */ 
+                pascal_byte         adressingmode; 
                 int      headlocation; 
              } ; 
 
      struct taudiochannel {   /* 4 */
-                      byte         controlblockcode; 
-                      byte         inputchannel0; 
-                      byte         volumechannel0; 
-                      byte         inputchannel1; 
-                      byte         volumechannel1; 
-                      byte         inputchannel2; 
-                      byte         volumechannel2; 
-                      byte         inputchannel3; 
-                      byte         volumechannel3; 
+                      pascal_byte         controlblockcode; 
+                      pascal_byte         inputchannel0; 
+                      pascal_byte         volumechannel0; 
+                      pascal_byte         inputchannel1; 
+                      pascal_byte         volumechannel1; 
+                      pascal_byte         inputchannel2; 
+                      pascal_byte         volumechannel2; 
+                      pascal_byte         inputchannel3; 
+                      pascal_byte         volumechannel3; 
                    } ;
 
       struct tdevicestatus {
-                      byte         controlblockcode;   /* 6 */ 
+                      pascal_byte         controlblockcode;   /* 6 */ 
                       int      status; 
                    };
 
       struct tcdsize {
-                byte         controlblockcode;   /* 8 */ 
+                pascal_byte         controlblockcode;   /* 8 */ 
                 int      size; 
              } ;
 
       struct tcdinfo {
-                byte         controlblockcode;   /* 10 */ 
-                byte         lowesttrack; 
-                byte         highesttrack; 
+                pascal_byte         controlblockcode;   /* 10 */ 
+                pascal_byte         lowesttrack; 
+                pascal_byte         highesttrack; 
                 int      leadout; 
              };
 
       struct ttrackinfo {
-                   byte         controlblockcode;   /* 11 */ 
-                   byte         tracknumber; 
+                   pascal_byte         controlblockcode;   /* 11 */ 
+                   pascal_byte         tracknumber; 
                    int      startpoint; 
-                   byte         controlinfo;
+                   pascal_byte         controlinfo;
                 } ;
 
       struct tqinfo {
-               byte         controlblockcode;   /* 12 */ 
-               byte         caab; 
-               byte         poi; 
-               byte         tracknumber; 
-               byte         min; 
-               byte         sec; 
-               byte         frame; 
-               byte         zero; 
-               byte         amin; 
-               byte         asec; 
-               byte         aframe; 
+               pascal_byte         controlblockcode;   /* 12 */ 
+               pascal_byte         caab; 
+               pascal_byte         poi; 
+               pascal_byte         tracknumber; 
+               pascal_byte         min; 
+               pascal_byte         sec; 
+               pascal_byte         frame; 
+               pascal_byte         zero; 
+               pascal_byte         amin; 
+               pascal_byte         asec; 
+               pascal_byte         aframe; 
             };
 
       struct tlockdoor {
-                  byte         controlblockcode;   /* 1 */ 
-                  byte         lockfunction; 
+                  pascal_byte         controlblockcode;   /* 1 */ 
+                  pascal_byte         lockfunction; 
                } ; 
 
       struct tseek {   /* 131 */
               trequestheader requestheader; 
-              byte         adressingmode; 
+              pascal_byte         adressingmode; 
               int      transferadress; 
               word         numberofsectors; 
               int      startsector; 
@@ -149,7 +153,7 @@
 
       struct tplayaudio {   /* 132 */
                    trequestheader requestheader; 
-                   byte         adressingmode; 
+                   pascal_byte         adressingmode; 
                    int      startsector; 
                    int      numberofsectors; 
                 } ; 
@@ -160,27 +164,27 @@
 
      struct ttrackinf {
             char name[30];
-            byte min,sec,frame;
+            pascal_byte min,sec,frame;
             int start;
-            byte smin,ssec,sframe;
+            pascal_byte smin,ssec,sframe;
             int size;
-            byte type;
+            pascal_byte type;
         };
 
      typedef ttrackinf *ptrackinfo;
      struct tcdinf {
-            byte min,sec,frame;
+            pascal_byte min,sec,frame;
             int size;
-            byte smin,ssec,sframe;
+            pascal_byte smin,ssec,sframe;
             int start;
-            byte firsttrack,lasttrack;
+            pascal_byte firsttrack,lasttrack;
             char name[50];
             ptrackinfo track[99];
         } ;
 
      struct taudioinfo {
-        byte volume[3];
-        byte channel[3];
+        pascal_byte volume[3];
+        pascal_byte channel[3];
      };
 
 #define tt2c 0
@@ -197,7 +201,7 @@ class tcdrom {
       tdevicestatus *ds;
    public :
       char activecdrom;
-      byte error;
+      pascal_byte error;
       char numberofdrives;
       char driveletter[16];
       taudioinfo ta;
@@ -208,8 +212,8 @@ class tcdrom {
 
       void* getdevheaderadress(void);
       char testcdromavailable(void);
-      byte geterror( void );
-      byte checkerror( void );
+      pascal_byte geterror( void );
+      pascal_byte checkerror( void );
       char testcdromopen(void);
       void getcdrominfo(void);
       void getcdromdrives(void);
@@ -217,17 +221,17 @@ class tcdrom {
       float get_mscdex_version(void);
       char openclosecdrom(void);
       char lockunlockcdrom(void);
-      void getsectortime(int sector,byte *m,byte *s,byte *f);
-      int getnormalsector(byte m,byte s,byte f);
+      void getsectortime(int sector,pascal_byte *m,pascal_byte *s,pascal_byte *f);
+      int getnormalsector(pascal_byte m,pascal_byte s,pascal_byte f);
       char checkbusy(void);
       int getheadlocation(void);
       void seeksector(int ss);
-      void getactivetimes(byte *min,byte *sec,byte *frame,byte *amin,byte *asec,byte *aframe);
+      void getactivetimes(pascal_byte *min,pascal_byte *sec,pascal_byte *frame,pascal_byte *amin,pascal_byte *asec,pascal_byte *aframe);
       int getcdsize(void);
-      void getcdlength(byte *min,byte *sec,byte *frame);
-      void getcdinfo(byte *l,byte *h,byte *min,byte *sec,byte *frame);
-      void gettracklength(byte tracknr,byte *min,byte *sec,byte *frame);
-      void gettrackinfo(byte tracknr,byte * min,byte * sec,byte * frame,byte * type);
+      void getcdlength(pascal_byte *min,pascal_byte *sec,pascal_byte *frame);
+      void getcdinfo(pascal_byte *l,pascal_byte *h,pascal_byte *min,pascal_byte *sec,pascal_byte *frame);
+      void gettracklength(pascal_byte tracknr,pascal_byte *min,pascal_byte *sec,pascal_byte *frame);
+      void gettrackinfo(pascal_byte tracknr,pascal_byte * min,pascal_byte * sec,pascal_byte * frame,pascal_byte * type);
       void getaudioinfo( void );
       void setaudiochannel( void );
       void playaudio(int ss,   int numbersectors);
@@ -235,7 +239,7 @@ class tcdrom {
       void resumeaudio(void);
 
       void readcdinfo( void );
-      void playtrack(byte nr);
-      void playtrackuntilend(byte nr);
+      void playtrack(pascal_byte nr);
+      void playtrackuntilend(pascal_byte nr);
 };
 

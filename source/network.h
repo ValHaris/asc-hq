@@ -1,6 +1,10 @@
-//     $Id: network.h,v 1.4 1999-12-28 21:03:12 mbickel Exp $
+//     $Id: network.h,v 1.5 2000-08-12 12:52:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/12/28 21:03:12  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.3  1999/12/07 22:13:25  mbickel
 //      Fixed various bugs
 //      Extended BI3 map import tables
@@ -94,7 +98,7 @@ class tfiletransfernetworkconnection : public tbasenetworkconnection {
                                    tsetup ( void );
                                    int  getcapabilities ( void ) { return 1; };
                                    void init ( void );
-                                   virtual void buttonpressed ( char id );
+                                   virtual void buttonpressed ( int id );
                                    void run ( void );
                                } ;
             class tsendsetup : public tsetup {

@@ -24,9 +24,11 @@
  #ifdef WIN32
   #define sdlheader "SDL.h"
 	#include "SDL.h"
-#else
-  #define sdlheader "SDL/SDL.h"
-  #include "SDL/SDL.h"
+ #else
+  #ifndef _DOS_
+   #define sdlheader "SDL/SDL.h"
+   #include sdlheader
+  #endif
  #endif
 
  #include "config.h"
@@ -66,16 +68,10 @@
  #endif
 
  #ifdef _DOS_
-  #define StaticClassVariable static
- #else
-  #define StaticClassVariable
- #endif
-
-
- #ifdef _DOS_
   #ifndef converter
    #define UseMemAvail
   #endif
  #endif
 
+ #define StaticClassVariable static
 #endif

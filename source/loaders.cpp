@@ -1,6 +1,10 @@
-//     $Id: loaders.cpp,v 1.22 2000-08-11 12:24:03 mbickel Exp $
+//     $Id: loaders.cpp,v 1.23 2000-08-12 12:52:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/08/11 12:24:03  mbickel
+//      Fixed: no movement after refuelling unit
+//      Restructured reading/writing of units
+//
 //     Revision 1.21  2000/08/07 16:29:21  mbickel
 //      orbiting units don't consume fuel any more
 //      Fixed bug in attack formula; improved attack formula
@@ -171,24 +175,14 @@
 */ 
 
 word fileterminator = 0xa01a;
-
-
-char*         cloaderrormsg[6]  = {"no error occured",
-                                   "could not open file",
-                                               "file not found", 
-                                               "invalid file version", 
-                                               "not enough memory",
-                                               "stream error" };
-
 ticons icons;
-
 int guiiconnum;
 
 
 
  const char* savegameextension = "*.sav";
  const char* mapextension = "*.map";
- const char* tournamentextension = "*.eml";
+ const char* tournamentextension = "*.asc";
 
 
 tinvalidid :: tinvalidid ( char* s, int iid ) 
@@ -200,20 +194,10 @@ tinvalidid :: tinvalidid ( char* s, int iid )
 }
 
 
-char *       loaderrormsg(byte         b)
-{ 
-/*   if (b < high(cloaderrormsg))  */
-      return cloaderrormsg[b-1]; 
-/*   else
-      return scat("io error %s",strr(b));  */
-} 
-
-
-
 
 void         setbuildingsonmap(void)         /*   prir test ok */
 { 
-   byte         i;
+   int         i;
    integer      dx, a, b;
    pbuilding    aktbuilding[9];   /*  leseposition der linearen liste der buildingen  */ 
    integer      orgx, orgy; 
@@ -3607,7 +3591,7 @@ void         erasemap( pmap spfld )
 { 
    if ( !spfld )
       return;
-  byte         i; 
+  int         i; 
   pvehicle     aktvehicle; 
   pbuilding    aktbuilding; 
   pevent       event;
@@ -3843,7 +3827,7 @@ void         erasemap_unchained( tmap* spfld )
       return;
 
 
-  byte         i; 
+  int         i; 
   pvehicle     aktvehicle; 
   pbuilding    aktbuilding; 
   pevent       event;

@@ -1,6 +1,10 @@
-//     $Id: edmisc.h,v 1.10 2000-05-30 18:39:24 mbickel Exp $
+//     $Id: edmisc.h,v 1.11 2000-08-12 12:52:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/05/30 18:39:24  mbickel
+//      Added support for multiple directories
+//      Moved DOS specific files to a separate directory
+//
 //     Revision 1.9  2000/05/23 20:40:45  mbickel
 //      Removed boolean type
 //
@@ -114,7 +118,7 @@
 
    typedef struct tpolystructure {
               ppolygon poly;
-              byte place;
+              pascal_byte place;
               int id;
               ppolystructure next;
         } tpolystruct; 
@@ -124,7 +128,7 @@
                  int polygonanz;
                  ppolystructure firstpolygon, lastpolygon;
                  tpolygon_management(void);
-                 void addpolygon(ppolygon *poly, byte place, int id);
+                 void addpolygon(ppolygon *poly, int place, int id);
                  void deletepolygon(ppolygon *poly);
                  };
 
@@ -139,23 +143,23 @@
    class  tchangepoly {
         public:
              ppolygon poly;
-             void setpolypoints(byte value);
-             void setpolytemps (byte value);
-             byte checkpolypoint(int x, int y);
+             void setpolypoints(int value);
+             void setpolytemps (int value);
+             int checkpolypoint(int x, int y);
              void deletepolypoint(int x, int y);
              void run(void);
    };
 
    class  tfillpolygonbodentyp : public tfillpolygonsquarecoord {
         public:
-             byte tempvalue;
+             int tempvalue;
              virtual void initevent ( void );
              virtual void setpointabs ( int x,  int y  );
    };
 
    class  tfillpolygonunit : public tfillpolygonsquarecoord {
         public:
-             byte tempvalue;
+             int tempvalue;
              virtual void initevent ( void );
              virtual void setpointabs ( int x,  int y  );
    };
@@ -179,7 +183,7 @@
             public:
                 void init ( void );
                 void run ( void );
-                void buttonpressed ( char id );
+                void buttonpressed ( int id );
     };
 
 
@@ -193,10 +197,10 @@
    extern pbuildingtype    auswahlb;
    extern int                 auswahls;
    extern pobjecttype      actobject;
-   extern byte                    auswahlm;
-   extern byte                    auswahlw;
-   extern byte                    auswahld;
-   extern byte                    farbwahl;
+   extern int auswahlm;
+   extern int auswahlw;
+   extern int auswahld;
+   extern int farbwahl;
    extern int                     altefarbwahl;
    extern tfontsettings         rsavefont;
    extern int                   lastselectiontype;
@@ -230,7 +234,7 @@ extern void         setstartvariables(void);
 extern void         pdbaroff(void);
 extern void         pulldown(void);
 extern void         exchg(word *a1,word *a2);
-extern void         placebuilding(byte colorr,pbuildingtype   buildingtyp,char choose);
+extern void         placebuilding(int colorr,pbuildingtype   buildingtyp,char choose);
 extern void         k_savemap(char saveas);
 extern void         k_loadmap(void);
 extern void         showcoordinates(void);
@@ -249,14 +253,14 @@ extern void         freevariables(void);
 extern int          selectfield(int * cx ,int  * cy);
 extern void 	playerchange(void);
 
-extern void         setpolytemps (byte value, ppolygon poly1); //* setzt in diesem Polygon den Tempvalue auf value
-extern void         createpolygon (ppolygon *poly, byte place, int id);
+extern void         setpolytemps (int value, ppolygon poly1); //* setzt in diesem Polygon den Tempvalue auf value
+extern void         createpolygon (ppolygon *poly, int place, int id);
 /*
   Place 0 : Event
               id  = event_action
 */
 extern void        changepolygon (ppolygon poly);
-extern byte        getpolygon(ppolygon *poly); //return Fehlerstatus
+extern int        getpolygon(ppolygon *poly); //return Fehlerstatus
 extern void        showpalette(void);
 extern void        pdsetup(void);
 

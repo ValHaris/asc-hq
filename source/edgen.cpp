@@ -1,6 +1,9 @@
-//     $Id: edgen.cpp,v 1.5 2000-05-23 20:40:44 mbickel Exp $
+//     $Id: edgen.cpp,v 1.6 2000-08-12 12:52:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/05/23 20:40:44  mbickel
+//      Removed boolean type
+//
 //     Revision 1.4  2000/05/10 19:55:48  mbickel
 //      Fixed empty loops when waiting for mouse events
 //
@@ -46,11 +49,11 @@
 
   class tmapgenerator : public tdialogbox {
         public :
-               byte action;
+               int action;
                void init(void);
                void showmap(void);
                void generatefinishmap(void); // Bodensch„tze werden nicht draufmontiert, damit keine Farbverf„lschung
-               void montlayer(byte layer);
+               void montlayer(int layer);
                void showmontlayer(word sx, word sy, word barsize);
                void setpfield(int number);
                void setmaterial(int number);
@@ -60,14 +63,14 @@
                void setmap(void);
                char checkland(int x, int y);
                virtual void run(void);
-               virtual void buttonpressed(byte  id);
+               virtual void buttonpressed(int  id);
        protected :
                char flip,showland,showdesert,showforest,showmaterial,showfuel,correctvalues,calculatevalues;
                char initialized[ layercount ];
-               byte *constructionlayer;
-               byte layer,actlayer;
-               byte barsize,maxbarsize;
-               byte whereland;
+               pascal_byte *constructionlayer;
+               int layer,actlayer;
+               int barsize,maxbarsize;
+               int whereland;
                word tileval,res,pres,overwritecolorcount;
                tplasma plasma;
                pmemoryblock mblocks[ layercount ];
@@ -107,15 +110,15 @@ void         tmapgenerator::init(void)
    actlayer = layer = 0;
  
 
-   byte xmax = 430 / plasma.maxx;
-   byte ymax = 340 / plasma.maxy;
+   int xmax = 430 / plasma.maxx;
+   int ymax = 340 / plasma.maxy;
 
    if (xmax > ymax ) maxbarsize = ymax;
    else maxbarsize = xmax;
 
    barsize = maxbarsize;
 
-   constructionlayer = new ( byte[plasma.maxx * plasma.maxy ]); // =blockcount
+   constructionlayer = new ( pascal_byte[plasma.maxx * plasma.maxy ]); // =blockcount
 
    addbutton("",480,80,510,100,0,1,7,true);
    addkey(7,ct_down);
@@ -212,7 +215,7 @@ void         tmapgenerator::init(void)
 } 
 
 
-void tmapgenerator::montlayer(byte layer)
+void tmapgenerator::montlayer(int layer)
 {
    int i,j;
    char found;
@@ -628,7 +631,7 @@ void         tmapgenerator::run(void)
 } 
 
 
-void         tmapgenerator::buttonpressed(byte id)
+void         tmapgenerator::buttonpressed(int id)
 { 
 
    switch (id ) {

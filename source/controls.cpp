@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.63 2000-08-12 09:17:19 gulliver Exp $
+//     $Id: controls.cpp,v 1.64 2000-08-12 12:52:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.63  2000/08/12 09:17:19  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.62  2000/08/08 13:38:32  mbickel
 //      Fixed: construction of buildings doesn't consume resources
 //      Fixed: no unit information visible for satellites
@@ -519,7 +522,7 @@ void         tsearchputbuildingfields::initputbuilding( word x, word y, pbuildin
 void         tsearchputbuildingfields::testfield(void)
 { 
   int          x2, y2;
-  byte         x1, y1; 
+  int         x1, y1; 
   pfield        fld; 
   char      b; 
 
@@ -804,6 +807,13 @@ void         trefuelvehicle::testfield(void)
                if ( actvehicle->typ->weapons->weapon[i].service() )
                   targheight = actvehicle->typ->weapons->weapon[i].targ;
 
+/*
+                  for ( int h = 0; h < 8; h++ )
+                     if ( actvehicle->typ->weapons->weapon[i].targ & ( 1 << h ))
+                        if ( actvehicle->typ->weapons->weapon[i].efficiency[ getheightdelta ( log2(actvehicle->height), h ) ] )
+                           targheight |= 1 << h;
+*/
+
 
          for (i = 0; i < actvehicle->typ->weapons->count ; i++) 
             if ( actvehicle->typ->weapons->weapon[i].sourceheight & actvehicle->height ) 
@@ -859,7 +869,7 @@ void         trefuelvehicle::testfield(void)
 
 void         trefuelvehicle::initrefuelling( word xp1, word yp1, char md )   /*  md: 1 reparieren    */ 
 {                                                                            /*      2 vollf?llen    */
-  byte         f, a;                                                         /*      3 dialogf?llen  */
+  int         f, a;                                                         /*      3 dialogf?llen  */
  
    mode = 0; 
    if (moveparams.movestatus == 0) { 
@@ -963,7 +973,7 @@ void         tputmine::testfield(void)
 
 void         tputmine::initpm(  char mt, const pvehicle eht )
 { 
-  byte         i; 
+  int         i; 
 
    numberoffields = 0; 
    mienenlegen = false; 
@@ -1062,7 +1072,7 @@ void  legemine( int typ, int delta )
 
 
 
-void         refuelvehicle(byte         b)
+void         refuelvehicle(int         b)
 { 
    pvehicle     actvehicle; 
 
@@ -2740,17 +2750,17 @@ void         calcmovemalus(int          x1,
                            int&         mm2 )             //  fuer movementdecrease
 { 
 #ifdef HEXAGON   
- static const  byte         movemalus[2][6]  = {{ 8, 6, 3, 0, 3, 6 }, {0, 0, 0, 0, 0, 0 }};
+ static const  int         movemalus[2][6]  = {{ 8, 6, 3, 0, 3, 6 }, {0, 0, 0, 0, 0, 0 }};
 #else
- static const  byte         movemalus[2][8]  = {{2, 4, 2, 8, 0, 8, 2, 4}, {4, 2, 5, 2, 0, 2, 5, 2}};
+ static const  int         movemalus[2][8]  = {{2, 4, 2, 8, 0, 8, 2, 4}, {4, 2, 5, 2, 0, 2, 5, 2}};
 #endif
 
   int          d;
   int           x, y;
-  byte         c; 
+  int         c; 
   pfield        fld;
   pfield        fld2;
-  byte         mode; 
+  int         mode; 
   pattackweap  atw; 
 
 
@@ -2986,7 +2996,7 @@ void         tdashboard::paintheight(void)
 void         tdashboard::painttank(void)
 { 
     word         w; 
-    byte         c; 
+    int         c; 
  
     int x1 = agmp->resolutionx - ( 640 - 520);
     int x2 = agmp->resolutionx - ( 640 - 573);
@@ -3054,7 +3064,7 @@ void         tdashboard::paintweaponammount(int h, int num, int max )
 } 
  
 
-void         tdashboard::paintweapon(byte         h, int num, int strength,  const SingleWeapon  *weap )
+void         tdashboard::paintweapon(int         h, int num, int strength,  const SingleWeapon  *weap )
 {
       if ( weap->getScalarWeaponType() >= 0 )
          if ( weap->canRefuel() )
@@ -3555,7 +3565,7 @@ void         tdashboard::paintdamage(void)
 
 
     int w = 0; 
-    byte         c; 
+    int         c; 
  
 
 
@@ -4131,7 +4141,7 @@ void   tdashboard :: paintvehicleinfo( const pvehicle     vehicle,
 { 
    collategraphicoperations cgo ( agmp->resolutionx - 800 + 610, 15, agmp->resolutionx - 800 + 783, 307 );
 
-   byte         ms; 
+   int         ms; 
  
    npush( activefontsettings );
    ms = getmousestatus();
@@ -5926,7 +5936,7 @@ void dissectvehicle ( pvehicle eht )
 
 
 void         generatevehicle_cl ( pvehicletype fztyp,
-                                  byte         col,
+                                  int         col,
                                   pvehicle &   vehicle,
                                   int          x,
                                   int          y )
@@ -6611,13 +6621,6 @@ void testnet ( void )
 }
 
 
-
-
-/*cmousecontrol :: cmousecontrol ( void )
-{
-   mousestat = 0;
-}
-*/
 
 int ReplayMapDisplay :: checkMapPosition ( int x, int y )
 {

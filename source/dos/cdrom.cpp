@@ -1,6 +1,10 @@
-//     $Id: cdrom.cpp,v 1.1 2000-05-30 18:39:28 mbickel Exp $
+//     $Id: cdrom.cpp,v 1.2 2000-08-12 12:52:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2000/05/30 18:39:28  mbickel
+//      Added support for multiple directories
+//      Moved DOS specific files to a separate directory
+//
 //     Revision 1.5  2000/05/23 20:40:37  mbickel
 //      Removed boolean type
 //
@@ -74,7 +78,7 @@ tcdrom::tcdrom( void )
 
 
 void tcdrom::readcdinfo( void )
-{  byte lt,ht,m,s,f,t,e;
+{  pascal_byte lt,ht,m,s,f,t,e;
 
    int i = 0;
    lt = 0;
@@ -118,14 +122,14 @@ void tcdrom::readcdinfo( void )
 
 }
 
-void tcdrom::playtrack(byte nr)
+void tcdrom::playtrack(pascal_byte nr)
 {
    if (cdinfo.track[nr]->type > 3) return;
    stopaudio();
    playaudio(cdinfo.track[nr]->start,cdinfo.track[nr]->size);
 }
 
-void tcdrom::playtrackuntilend(byte nr)
+void tcdrom::playtrackuntilend(pascal_byte nr)
 {
    if (cdinfo.track[nr]->type > 3) return;
    stopaudio();
@@ -149,7 +153,7 @@ char  tcdrom::testcdromavailable(void)
    else return true;
 } 
 
-byte tcdrom::geterror( void )
+pascal_byte tcdrom::geterror( void )
 
 { word       st;
 
@@ -160,7 +164,7 @@ byte tcdrom::geterror( void )
    else return 0;
 } 
 
-byte tcdrom::checkerror( void )
+pascal_byte tcdrom::checkerror( void )
 {  int e;
 
   if (ioctl == NULL) printf("\nError : IOCTL is NULL !!!\n\n");
@@ -337,7 +341,7 @@ int tcdrom::getcdsize(void)
    return cds->size;
 } 
 
-void tcdrom::getcdinfo(byte *l,byte *h,byte *min,byte *sec,byte *frame) 
+void tcdrom::getcdinfo(pascal_byte *l,pascal_byte *h,pascal_byte *min,pascal_byte *sec,pascal_byte *frame) 
 
 { tcdinfo       *cdi;
                
@@ -364,9 +368,9 @@ void tcdrom::getcdinfo(byte *l,byte *h,byte *min,byte *sec,byte *frame)
    *frame = cdi->leadout & 0x000000FF;
 } 
 
-void tcdrom::getcdlength(byte *min,byte *sec,byte *frame)
+void tcdrom::getcdlength(pascal_byte *min,pascal_byte *sec,pascal_byte *frame)
 
-{   byte         m, s, f, m1, s1, f1,ht,lt,t;
+{   pascal_byte         m, s, f, m1, s1, f1,ht,lt,t;
 
    getcdinfo(&lt,&ht,&m1,&s1,&f1);
    gettrackinfo(0,&m,&s,&f,&t);
@@ -386,9 +390,9 @@ void tcdrom::getcdlength(byte *min,byte *sec,byte *frame)
    else *frame = f1 - f; 
 } 
 
-void tcdrom::gettracklength(byte tracknr,byte *min,byte *sec,byte *frame)
+void tcdrom::gettracklength(pascal_byte tracknr,pascal_byte *min,pascal_byte *sec,pascal_byte *frame)
 
-{ byte         m, m1, s, s1, f, f1, l, h, m2, s2, f2,t;
+{ pascal_byte         m, m1, s, s1, f, f1, l, h, m2, s2, f2,t;
 
    getcdinfo(&l,&h,&m2,&s2,&f2); 
    gettrackinfo(tracknr,&m,&s,&f,&t); 
@@ -416,7 +420,7 @@ void tcdrom::gettracklength(byte tracknr,byte *min,byte *sec,byte *frame)
    else *frame = f1 - f; 
 } 
 
-void tcdrom::getactivetimes(byte *min,byte *sec,byte *frame,byte *amin,byte *asec,byte *aframe)
+void tcdrom::getactivetimes(pascal_byte *min,pascal_byte *sec,pascal_byte *frame,pascal_byte *amin,pascal_byte *asec,pascal_byte *aframe)
 { tqinfo        *qi;
 
    ioctl = ( tioctlo *) ri.protectedsegment;
@@ -490,7 +494,7 @@ void tcdrom::seeksector(int ss)
 } 
 
 
-void tcdrom::gettrackinfo(byte tracknr,byte * min,byte * sec,byte * frame,byte * type)  
+void tcdrom::gettrackinfo(pascal_byte tracknr,pascal_byte * min,pascal_byte * sec,pascal_byte * frame,pascal_byte * type)  
 
 {  ttrackinfo    *ti;
 
@@ -683,13 +687,13 @@ void tcdrom::changecdromdrive(char nr)
 
 
 
-int tcdrom::getnormalsector(byte m,byte s,byte f)
+int tcdrom::getnormalsector(pascal_byte m,pascal_byte s,pascal_byte f)
 { 
    return (int(m) * 60 * 75) + (int(s) * 75) + int(f) - 150; 
 } 
 
 
-void tcdrom::getsectortime(int sector,byte *m,byte *s,byte *f)
+void tcdrom::getsectortime(int sector,pascal_byte *m,pascal_byte *s,pascal_byte *f)
 
 { int      v; 
 

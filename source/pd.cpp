@@ -1,6 +1,10 @@
-//     $Id: pd.cpp,v 1.12 2000-06-09 10:50:59 mbickel Exp $
+//     $Id: pd.cpp,v 1.13 2000-08-12 12:52:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/06/09 10:50:59  mbickel
+//      Repaired keyboard control of pulldown menu
+//      Fixed compile errors at fieldlist with gcc
+//
 //     Revision 1.11  2000/05/23 20:40:48  mbickel
 //      Removed boolean type
 //
@@ -372,7 +376,7 @@ void tpulldown::baroff(void)
 } 
 
 
-int tpulldown::getpdfieldheight(byte pdfieldnr,byte pos)
+int tpulldown::getpdfieldheight(int pdfieldnr,int pos)
 { 
   int         i, j;
 

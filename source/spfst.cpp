@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.53 2000-08-12 09:17:34 gulliver Exp $
+//     $Id: spfst.cpp,v 1.54 2000-08-12 12:52:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.53  2000/08/12 09:17:34  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.52  2000/08/10 11:18:05  mbickel
 //      Fixed building: moveunitdown
 //      changed loadimage to use standard SDL_image
@@ -885,12 +888,12 @@ int  resizemap( int top, int bottom, int left, int right )  // positive: larger
 
 
 #ifdef HEXAGON
-  byte         ccmpheighchangemovedir[6]  = {0, 1, 5, 2, 4, 3 }; 
+  int         ccmpheighchangemovedir[6]  = {0, 1, 5, 2, 4, 3 }; 
   
   void         getnextfielddir(int&       x,
                                int&       y,
-                               byte       direc,
-                               byte       sdir)
+                               int       direc,
+                               int       sdir)
   { 
      int newdir = ccmpheighchangemovedir[direc] + sdir;
      if ( newdir >= 6 )
@@ -900,13 +903,13 @@ int  resizemap( int top, int bottom, int left, int right )  // positive: larger
   } 
 
 #else
-  byte         ccmpheighchangemovedir[8]  = {0, 1, 7, 2, 6, 3, 5, 4}; 
+  int         ccmpheighchangemovedir[8]  = {0, 1, 7, 2, 6, 3, 5, 4}; 
   
   
   void         getnextfielddir(int&       x,
                                int&       y,
-                               byte       direc,
-                               byte       sdir)
+                               int       direc,
+                               int       sdir)
   { 
      getnextfield( x, y, (ccmpheighchangemovedir[direc] + sdir) & 7); 
   } 
@@ -918,7 +921,7 @@ int  resizemap( int top, int bottom, int left, int right )  // positive: larger
 
 void         getnextfield(int&       x,
                           int&       y,
-                          byte       direc)
+                          int       direc)
 { 
    switch (direc) {
       
@@ -980,9 +983,9 @@ void         getnextfield(int&       x,
 
 
 
-byte      vehiclegeladen( pvehicle    eht)
+int      vehiclegeladen( pvehicle    eht)
 { 
-  byte         a, b; 
+  int         a, b; 
   
    a = 0; 
    if ((eht == NULL) || (eht->typ == NULL)) { 
@@ -998,9 +1001,9 @@ byte      vehiclegeladen( pvehicle    eht)
 } 
 
 
-byte         vehiclegeparkt(pbuilding    eht)
+int         vehiclegeparkt(pbuilding    eht)
 { 
-  byte         a, b; 
+  int         a, b; 
 
    a = 0; 
    if ((eht == NULL) || (eht->typ == NULL))  
@@ -1058,7 +1061,7 @@ int          terrainaccessible2 ( const pfield        field, const pvehicle     
 }
 
 
-byte         fieldaccessible( const pfield        field,
+int         fieldaccessible( const pfield        field,
                             const pvehicle     vehicle,
                             int  uheight )
 {
@@ -1138,7 +1141,7 @@ byte         fieldaccessible( const pfield        field,
 
 
 void         generate_vehicle(pvehicletype fztyp,
-                             byte         col,
+                             int         col,
                              pvehicle &   vehicle )
 {
    if ( col > 8 )
@@ -1202,7 +1205,7 @@ void         generate_vehicle(pvehicletype fztyp,
 
 
 void         generatevehicle_ka ( pvehicletype fztyp,
-                                  byte         col,
+                                  int         col,
                                   pvehicle &   vehicle)
 {
    generate_vehicle ( fztyp, col, vehicle );
@@ -1831,7 +1834,7 @@ void       tcursor::putimg ( void )
 }
 
 
-void         tcursor::setcolor( byte col )
+void         tcursor::setcolor( int col )
 { 
    color = col; 
 } 
@@ -1970,7 +1973,7 @@ int getmapposy ( void )
 
 
 
-byte         getdiplomaticstatus(byte         b)
+int         getdiplomaticstatus(int         b)
 { 
    if ( b & 7 ) 
      displaymessage("getdiplomaticstatus: \n parameter has to be in [0,8,16,..,64]",2);
@@ -1987,7 +1990,7 @@ byte         getdiplomaticstatus(byte         b)
 } 
 
 
-byte        getdiplomaticstatus2(byte    b, byte    c)
+int        getdiplomaticstatus2(int    b, int    c)
 { 
    if ( (b & 7) || ( c & 7 ) ) 
       displaymessage("getdiplomaticstatus: \n parameters have to be in [0,8,16,..,64]",2);
@@ -2356,7 +2359,7 @@ void         clearmovtemps2(void)
 void         removevehicle(pvehicle*   vehicle)
 { 
   pvehicle     p1; 
-  byte         b; 
+  int         b; 
 
    b = (*vehicle)->color; 
    if (b >= 8) 
@@ -2406,7 +2409,7 @@ void         removevehicle(pvehicle*   vehicle)
 void         removebuilding(pbuilding *  bld)
 { 
   pbuilding    p1; 
-  byte         b; 
+  int         b; 
   integer      i, j; 
 
    pbuilding building = *bld; 
@@ -2563,7 +2566,7 @@ void         putbuilding(int          x,
   pbuilding    gbde; 
   pfield        field; 
   integer      orgx, orgy; 
-  byte         dx; 
+  int         dx; 
 
 
 
@@ -2636,14 +2639,14 @@ void         putbuilding(int          x,
 
 void         putbuilding2(integer      x,
                           integer      y,
-                          byte         color,
+                          int         color,
                           pbuildingtype buildingtyp)
 { 
   integer      a, b; 
   pbuilding    gbde; 
   pfield        field; 
   integer      orgx, orgy; 
-  byte         dx; 
+  int         dx; 
 
 
   if ( actmap->objectcrc ) 
@@ -4504,7 +4507,7 @@ void         displaymap(  )
 
    activateGraphicSet ( actmap->graphicset );
 
-   byte         ms;   /*  mousestatus  */
+   int         ms;   /*  mousestatus  */
    char      bb;   /*  cursorstatus   */
 
    ms = getmousestatus(); 
@@ -4722,7 +4725,7 @@ void  tdisplaymap :: resetmovement ( void )
 
 void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, int height1, int height2, int fieldnum, int totalmove )
 { 
-   byte         dir; 
+   int         dir; 
 
    int ms = getmousestatus();
 

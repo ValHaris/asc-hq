@@ -1,6 +1,9 @@
-//     $Id: attack.cpp,v 1.28 2000-08-12 09:17:14 gulliver Exp $
+//     $Id: attack.cpp,v 1.29 2000-08-12 12:52:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/08/12 09:17:14  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.27  2000/08/08 09:47:52  mbickel
 //
 //      speed up of dialog boxes in linux
@@ -1321,7 +1324,7 @@ void WeapDist::loaddata(void)
 
 float WeapDist::getWeapStrength ( const SingleWeapon* weap, int dist, int attacker_height, int defender_height, int reldiff  )
 {
-  byte         translat[31]  = { 6, 255, 1, 3, 2, 4, 0, 5, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+  int         translat[31]  = { 6, 255, 1, 3, 2, 4, 0, 5, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
                                  255, 255, 255, 255, 255, 255}; 
 
    if ( !weap )

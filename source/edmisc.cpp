@@ -1,6 +1,13 @@
-//     $Id: edmisc.cpp,v 1.27 2000-08-08 09:48:12 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.28 2000-08-12 12:52:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/08/08 09:48:12  mbickel
+//
+//      speed up of dialog boxes in linux
+//      fixed graphical errors in attack
+//      fixed graphical error in ammo transfer
+//      fixed reaction fire not allowing manual attack
+//
 //     Revision 1.26  2000/08/07 21:10:20  mbickel
 //      Fixed some syntax errors
 //
@@ -166,10 +173,10 @@
    pobjecttype  actobject;
    pbuildingtype	auswahlb;
    int		auswahls;
-   byte		auswahlm;
-   byte		auswahlw;
-   byte		auswahld;
-   byte		farbwahl;
+   int		auswahlm;       
+   int		auswahlw;
+   int		auswahld;
+   int		farbwahl;
    int			altefarbwahl;
 
    tfontsettings	rsavefont;
@@ -475,7 +482,7 @@ void tputresourcesdlg :: init ( void )
 
 }
 
-void tputresourcesdlg :: buttonpressed ( char id )
+void tputresourcesdlg :: buttonpressed ( int id )
 {
    tdialogbox :: buttonpressed ( id );
 
@@ -809,7 +816,7 @@ void         pdsetup(void)
 /* class   tcolorsel : public tstringselect {
            public :
                  virtual void setup(void);
-                 virtual void buttonpressed(byte id);
+                 virtual void buttonpressed(int id);
                  virtual void run(void);
                  virtual void gettext(word nr);
                  };
@@ -829,7 +836,7 @@ void         tcolorsel::setup(void)
 } 
 
 
-void         tcolorsel::buttonpressed(byte         id)
+void         tcolorsel::buttonpressed(int         id)
 { 
    tstringselect::buttonpressed(id);
    switch (id) {
@@ -867,7 +874,7 @@ void         tcolorsel::run(void)
 } 
 
 
-byte         colorselect(void)
+int         colorselect(void)
 { 
   tcolorsel  sm; 
 
@@ -880,12 +887,12 @@ byte         colorselect(void)
 
 class  tplayerchange : public tdialogbox {
           public :
-              byte action;
-              byte sel1,sel2;
-              byte bkgcolor;
+              int action;
+              int sel1,sel2;
+              int bkgcolor;
               void init(void);
               virtual void run(void);
-              virtual void buttonpressed(byte id);
+              virtual void buttonpressed(int id);
               void anzeige(void);
               };
 
@@ -994,7 +1001,7 @@ void         tplayerchange::run(void)
 } 
 
 
-void         tplayerchange::buttonpressed(byte         id)
+void         tplayerchange::buttonpressed(int         id)
 { 
    tdialogbox::buttonpressed(id); 
    switch (id) {
@@ -1236,7 +1243,7 @@ void         pdbaroff(void)
 class   tcdplayer : public tstringselect {
            public :
                  virtual void setup(void);
-                 virtual void buttonpressed(byte id);
+                 virtual void buttonpressed(int id);
                  virtual void run(void);
                  virtual void gettext(word nr);
                  };
@@ -1259,7 +1266,7 @@ void         tcdplayer ::setup(void)
 } 
 
 
-void         tcdplayer ::buttonpressed(byte         id)
+void         tcdplayer ::buttonpressed(int         id)
 { 
    tstringselect::buttonpressed(id);
    switch (id) {
@@ -1435,7 +1442,7 @@ void         k_loadmap(void)
    mousevisible(true); 
 } 
 
-void         placebuilding(byte               colorr,
+void         placebuilding(int               colorr,
                           pbuildingtype   buildingtyp,
                           char            choose)
 
@@ -1615,7 +1622,7 @@ int  selectfield(int * cx ,int  * cy)
 
 class  tfillpolygonwevent : public tfillpolygonsquarecoord {
         public:
-             byte tempvalue;
+             int tempvalue;
              virtual void initevent ( void );
              virtual void setpointabs ( int x,  int y  );
            };
@@ -1633,7 +1640,7 @@ void tfillpolygonwevent::initevent ( void )
 {
 }
 
-void createpolygon (ppolygon *poly, byte place, int id)
+void createpolygon (ppolygon *poly, int place, int id)
 {
    polymanage.addpolygon(poly,place,id); 
    changepolygon(*poly);
@@ -1694,7 +1701,7 @@ void tfillpolygonunit::initevent ( void )
 //* õS ChangePoly
 
 
-void tchangepoly::setpolytemps (byte value)
+void tchangepoly::setpolytemps (int value)
 {
    tfillpolygonwevent fillpoly;
 
@@ -1708,7 +1715,7 @@ void tchangepoly::setpolytemps (byte value)
 }
 
 
-void tchangepoly::setpolypoints(byte value)
+void tchangepoly::setpolypoints(int value)
 {
    for (int i=0;i < poly->vertexnum ;i++ ) {
       pf = getfield(poly->vertex[i].x,poly->vertex[i].y);
@@ -1716,7 +1723,7 @@ void tchangepoly::setpolypoints(byte value)
    } /* endfor */
 }
 
-byte tchangepoly::checkpolypoint(int x, int y)
+int tchangepoly::checkpolypoint(int x, int y)
 {
    for (int i=0 ;i < poly->vertexnum ;i++ ) if ( (poly->vertex[i].x == x ) && ( poly->vertex[i].y == y ) ) return 1;
    return 0;
@@ -1787,7 +1794,7 @@ void changepolygon(ppolygon poly)
    
   class tnewmap : public tdialogbox {
         public :
-               byte action;
+               int action;
                char passwort[11], *sptitle;
                int sxsize,sysize;
                char valueflag,random,campaign;
@@ -1796,7 +1803,7 @@ void changepolygon(ppolygon poly)
                word auswahlw;
                void init(void);
                virtual void run(void);
-               virtual void buttonpressed(byte  id);
+               virtual void buttonpressed(int  id);
                void done(void);
                };
 
@@ -1942,7 +1949,7 @@ void         tnewmap::run(void)
 } 
 
 
-void         tnewmap::buttonpressed(byte id)
+void         tnewmap::buttonpressed(int id)
 { 
    if (id == 4) 
       action = 2; 
@@ -2037,7 +2044,7 @@ void         changemapvalues(void)
 
      class tsel : public tdialogbox {
            public :
-               byte action;
+               int action;
                pbuilding gbde;
                int rs,e,m,f,mrs;
                tresources plus,mplus, biplus;
@@ -2046,7 +2053,7 @@ void         changemapvalues(void)
                char name[260];
                void init(void);
                virtual void run(void);
-               virtual void buttonpressed(byte id);
+               virtual void buttonpressed(int id);
                int lockmaxproduction;
             };
 
@@ -2183,7 +2190,7 @@ void         tsel::run(void)
 } 
 
 
-void         tsel::buttonpressed(byte         id)
+void         tsel::buttonpressed(int         id)
 {
    switch(id) {
    case 4:            // energy, material & fuel plus
@@ -2314,7 +2321,7 @@ class   tclass_change: public tstringselect {
                  word tklasse,tarmor,tfunktion;
                  word tweapstr[8];
                  virtual void setup(void);
-                 virtual void buttonpressed(byte id);
+                 virtual void buttonpressed(int id);
                  virtual void run(void);
                  virtual void gettext(word nr);
                  };
@@ -2366,7 +2373,7 @@ void         tclass_change::setup(void)
 } 
 
 
-void         tclass_change::buttonpressed(byte         id)
+void         tclass_change::buttonpressed(int         id)
 { 
    tstringselect::buttonpressed(id);
    switch (id) {
@@ -2432,7 +2439,7 @@ class tpolygon_managementbox: public tstringselect {
               public:
                  ppolygon poly;
                  virtual void setup(void);
-                 virtual void buttonpressed(byte id);
+                 virtual void buttonpressed(int id);
                  virtual void run(void);
                  virtual void gettext(word nr);
                  };
@@ -2462,7 +2469,7 @@ void         tpolygon_managementbox::setup(void)
 } 
 
 
-void         tpolygon_managementbox::buttonpressed(byte         id)
+void         tpolygon_managementbox::buttonpressed(int         id)
 { 
    tstringselect::buttonpressed(id);
    switch (id) {
@@ -2479,7 +2486,7 @@ void         tpolygon_managementbox::gettext(word nr)
    ppolystructure pps;
    int i,vn;
 
-   const byte showmaxvertex = 5;
+   const int showmaxvertex = 5;
 
    pps = polymanage.firstpolygon;
    for (i=0 ;i<nr; i++ )
@@ -2521,7 +2528,7 @@ void         tpolygon_managementbox::run(void)
    } 
 } 
 
-void tpolygon_management::addpolygon(ppolygon *poly, byte place, int id)
+void tpolygon_management::addpolygon(ppolygon *poly, int place, int id)
 {
    (*poly) = new(tpolygon);
 
@@ -2548,7 +2555,7 @@ void tpolygon_management::deletepolygon(ppolygon *poly)
 }
 
 
-byte        getpolygon(ppolygon *poly) //return Fehlerstatus
+int        getpolygon(ppolygon *poly) //return Fehlerstatus
 {
    tpolygon_managementbox polymanagebox;
     
@@ -2569,14 +2576,14 @@ byte        getpolygon(ppolygon *poly) //return Fehlerstatus
 
      class tunit: public tdialogbox {
                 word        dirx,diry;
-                byte        action;
+                int        action;
                 pvehicle    unit, orgunit;
                 int         w2, heightxs;
               public:
                // char     checkvalue( char id, char* p );
                 void        init( pvehicle v );
                 void        run( void );
-                void        buttonpressed( char id );
+                void        buttonpressed( int id );
      };
 
 
@@ -2743,9 +2750,9 @@ void         tunit::run(void)
 } 
 
 
-void         tunit::buttonpressed(byte         id)
+void         tunit::buttonpressed(int         id)
 { 
-   byte ht;
+   int ht;
  
    switch (id) {
    case 3:  addeingabe(12,&unit->material, 0, unit->getmaxmaterialforweight() );
@@ -2825,11 +2832,11 @@ void         changeunitvalues(pvehicle ae)
 
      class tres: public tdialogbox {
             public :
-                byte action;
-                byte fuel,material;
+                int action;
+                int fuel,material;
                 void init(void);
                 virtual void run(void);
-                virtual void buttonpressed(byte id);
+                virtual void buttonpressed(int id);
                 };
 
 
@@ -2877,7 +2884,7 @@ void         tres::run(void)
 } 
 
 
-void         tres::buttonpressed(byte         id)
+void         tres::buttonpressed(int         id)
 { 
    if (id == 7) { 
       mapsaved = false;
@@ -2902,11 +2909,11 @@ void         changeresource(void)
 
      class tminestrength: public tdialogbox {
             public :
-                byte action;
-                byte strength;
+                int action;
+                int strength;
                 void init(void);
                 virtual void run(void);
-                virtual void buttonpressed(byte id);
+                virtual void buttonpressed(int id);
                 };
 
 
@@ -2951,7 +2958,7 @@ void         tminestrength::run(void)
 } 
 
 
-void         tminestrength::buttonpressed(byte         id)
+void         tminestrength::buttonpressed(int         id)
 { 
    if (id == 7) { 
       mapsaved = false;
@@ -3014,7 +3021,7 @@ class tladeraum : public tdialogbox {
                public :
                     void init( char* ttl );
                     virtual void run(void);
-                    virtual void buttonpressed(byte id);
+                    virtual void buttonpressed(int id);
                     void done(void);
                  };
 
@@ -3167,7 +3174,7 @@ void         tladeraum::run(void)
 } 
 
 
-void         tladeraum::buttonpressed( char id )
+void         tladeraum::buttonpressed( int id )
 { 
    if (id == 1) { 
       additem ();
@@ -3483,7 +3490,7 @@ class SelectUnitSet : public tdialogbox {
            public :
                void init(void);
                virtual void run(void);
-               virtual void buttonpressed(byte id);
+               virtual void buttonpressed(int id);
            };
 
 
@@ -3532,7 +3539,7 @@ void         SelectUnitSet::run(void)
 } 
 
 
-void         SelectUnitSet::buttonpressed(byte         id)
+void         SelectUnitSet::buttonpressed(int         id)
 {
    switch(id) {
        case 7: { 
@@ -3579,7 +3586,7 @@ class UnitTypeTransformation {
               class   UnitSetSelection : public tstringselect {
                        public :
                              virtual void setup(void);
-                             virtual void buttonpressed(byte id);
+                             virtual void buttonpressed(int id);
                              virtual void run(void);
                              virtual void gettext(word nr);
                          };
@@ -3588,7 +3595,7 @@ class UnitTypeTransformation {
                          public :
                                virtual void setup( void );
                                void setup2 ( int _unitset ) { unitsetnum = _unitset; };
-                               virtual void buttonpressed(byte id);
+                               virtual void buttonpressed(int id);
                                virtual void run(void);
                                virtual void gettext(word nr);
                            };
@@ -3617,7 +3624,7 @@ void         UnitTypeTransformation :: UnitSetSelection::setup(void)
    addkey(3,ct_esc);
 } 
 
-void         UnitTypeTransformation :: UnitSetSelection::buttonpressed(byte         id)
+void         UnitTypeTransformation :: UnitSetSelection::buttonpressed(int         id)
 { 
    tstringselect::buttonpressed(id);
    switch (id) {
@@ -3656,7 +3663,7 @@ void         UnitTypeTransformation :: TranslationTableSelection::setup( void )
    addkey(3,ct_esc);
 } 
 
-void         UnitTypeTransformation :: TranslationTableSelection::buttonpressed(byte         id)
+void         UnitTypeTransformation :: TranslationTableSelection::buttonpressed(int         id)
 { 
    tstringselect::buttonpressed(id);
    switch (id) {

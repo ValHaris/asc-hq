@@ -1,6 +1,9 @@
-//     $Id: dlg_box.h,v 1.13 2000-08-12 09:17:25 gulliver Exp $
+//     $Id: dlg_box.h,v 1.14 2000-08-12 12:52:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/08/12 09:17:25  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.12  2000/08/08 09:48:08  mbickel
 //
 //      speed up of dialog boxes in linux
@@ -110,26 +113,28 @@
   typedef struct tbutton* pbutton;
 
   struct tbutton { 
-                byte         art;                   /*  art:  0: normaler button  
+                int  art;                   /*  art:  0: normaler button  
                                                                    style:
                                                                      þ 1:   standard
                                                                      þ 2:   mit "dauerfeuer"  */
                                                                      
                 integer      x1, y1, x2, y2;              /*  1: texteingabefield  */
-                byte         id;                          /*  2: zahleingabefield  */
-                byte         style;                       /*  3: checkbox         
+                int id;                          /*  2: zahleingabefield  */
+                int style;                       /*  3: checkbox         
                                                                    style: 
                                                                       þ 10 : nur einschaltbar */
-                byte         status;                      /*  4: schieberegler    */
+                int status;                      /*  4: schieberegler    */
                 pbutton      next;                        /*  5: scrollbar        */
                 const char*  text;
                 void*      data;
                 void*      data2;
                 int      min, max;   // max = itemsvisible bei scrollbar
                 char      active; 
-                byte         keynum; 
+
+                int          keynum; 
                 tkey         key[6];
-                byte         markedkeynum; 
+
+                int          markedkeynum; 
                 tkey         markedkey[6]; 
                 int          scrollspeed;
                 char         pressed;
@@ -139,7 +144,7 @@
 
 
    struct ttaborder { 
-      byte         id; 
+      int         id; 
       pbutton      button; 
       integer      x1, y1, x2, y2; 
    }; 
@@ -161,15 +166,15 @@
                        int          ly1,
                        int          lx2,
                        int          ly2,
-                       byte         lart,
-                       byte         lstyle,
-                       byte         lid,
+                       int         lart,
+                       int         lstyle,
+                       int         lid,
                        char      enabled);
                      void         addbutton( const char *       ltxt,
                        tmouserect   rect1,
-                       byte         lart,
-                       byte         lstyle,
-                       byte         lid,
+                       int         lart,
+                       int         lstyle,
+                       int         lid,
                        char      enabled);
 
                                                        /********************************/
@@ -182,7 +187,7 @@
                                                        /********************************/
 
 
-                     void         addeingabe(byte         lid,
+                     void         addeingabe(int         lid,
                         void*      data,
                         int      min,
                         int      max);
@@ -194,21 +199,21 @@
                           int*         numberofitems,
                           int          itemsvisible,
                           int*         actitem,
-                          byte         lid,
-                          byte         keys);  /*   0 = keine tasten-, 1 = immer tasten-, 2= markiert tasten  */
+                          int         lid,
+                          int         keys);  /*   0 = keine tasten-, 1 = immer tasten-, 2= markiert tasten  */
                                    /*   !! a scrollbar needs the two ids following lid for internal usage !!   */ 
                      void         addscrollbar( tmouserect rec,
                           int*         numberofitems,
                           int          itemsvisible,
                           int*         actitem,
-                          byte         lid,
-                          byte         keys);  
+                          int         lid,
+                          int         keys);  
 
 
-                     virtual void         buttonpressed(byte         id) ;
-                     virtual void         showbutton(byte         id) = 0;
+                     virtual void         buttonpressed(int         id) ;
+                     virtual void         showbutton(int         id) = 0;
                       void                 clearkey ( char id );
-                      void                 addkey(byte         id, tkey         key);
+                      void                 addkey(int         id, tkey         key);
                       void                 addmarkedkey(word         id, tkey         key);
 
                      virtual ~tdlgengine() {};
@@ -217,17 +222,17 @@ typedef class tdialogbox* pdialogbox;
 
   class   tdialogbox : public tdlgengine  {
                  public:
-                     byte             textcolor;
+                     int             textcolor;
                      integer          starty;
-                     byte           ms;
+                     int           ms;
                      void*      tp;
                      char      imagesaved; 
                      char*        title;
                      word         windowstyle; 
                      ttaborder    taborder[100]; 
-                     byte         tabcount; 
-                     byte         markedtab; 
-                     byte         disablecolor; 
+                     int         tabcount; 
+                     int         markedtab; 
+                     int         disablecolor; 
                      int          boxstatus;
                      static collategraphicoperations* pcgo;
 
@@ -240,18 +245,18 @@ typedef class tdialogbox* pdialogbox;
                      void         done(void);
 
 
-                      virtual char      checkvalue(byte         id, void*      p)  ;
+                      virtual char      checkvalue(int         id, void*      p)  ;
                       void                 editfield(pbutton      pb);
                       void                 editfield( int id );
                       void                 toggleswitch(pbutton      pb);
-                      virtual void         enablebutton(byte         id)  ;
-                      virtual void         disablebutton(byte         id)  ;
+                      virtual void         enablebutton(int         id)  ;
+                      virtual void         disablebutton(int         id)  ;
                       virtual void         execbutton(pbutton      pb, char      mouse) ;
-                      void         showbutton(byte         id);
-                      void         hidebutton(byte         id);
+                      void         showbutton(int         id);
+                      void         hidebutton(int         id);
                       void         setscrollspeed(char        id , int  speed);
                       void         rebuildtaborder(void);
-                      void         showtabmark(byte         b);
+                      void         showtabmark(int         b);
 
 
                       virtual void setclipping ( void );
@@ -317,7 +322,7 @@ typedef class tdialogbox* pdialogbox;
                                            integer      y1,
                                            integer      x2,
                                            integer      y2,
-                                           byte         style);
+                                           int         style);
                       void         bar ( tmouserect rect, int color );
                       void         bar ( int x1, int y1, int x2, int y2, int color );
 
@@ -359,7 +364,7 @@ class tdisplaymessage : public tdialogbox {
                         int  mode;
                     public:
                         void init ( tstringa a, int md, int linenum );
-                        virtual void buttonpressed ( char id );
+                        virtual void buttonpressed ( int id );
                         virtual void run ( void );
                    };
 
@@ -376,7 +381,7 @@ extern void  help(word         id);
 // extern void  viewtextmessage( int id, int player );
 extern void         viewtext2 ( word         id);
 
-extern byte  viewtextquery(word         id,
+extern int  viewtextquery(word         id,
                            char *       title,
                            char *       s1,
                            char *       s2);
@@ -480,13 +485,13 @@ class   tstringselect : public tdialogbox {
                      char txt[2000];
                      char  ok;
                      int sy,ey,sx,ex,action,dx;
-                     byte dk;
+                     int dk;
                      int msel,mouseselect,redline,lnshown,numberoflines,firstvisibleline,startpos;
                      char scrollbarvisible;
                      void init(void);
                      virtual void setup(void);
                      virtual void run(void);
-                     virtual void buttonpressed(byte id);
+                     virtual void buttonpressed(int id);
                      void scrollbar_on(void);
                      void viewtext(void);
                      virtual void gettext(word nr);

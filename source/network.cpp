@@ -1,6 +1,9 @@
-//     $Id: network.cpp,v 1.10 2000-08-12 09:17:32 gulliver Exp $
+//     $Id: network.cpp,v 1.11 2000-08-12 12:52:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/08/12 09:17:32  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.9  2000/08/01 13:50:52  mbickel
 //      Chaning the height of airplanes is not affected by wind any more.
 //      Fixed: Airplanes could ascend onto buildings
@@ -145,7 +148,7 @@ void tfiletransfernetworkconnection::tsetup::init ( void )
    buildgraphics();
 }
 
-void  tfiletransfernetworkconnection::tsetup::buttonpressed ( char id )
+void  tfiletransfernetworkconnection::tsetup::buttonpressed ( int id )
 {
   char         s1[300];
 

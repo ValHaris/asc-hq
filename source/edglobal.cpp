@@ -1,6 +1,14 @@
-//     $Id: edglobal.cpp,v 1.17 2000-08-06 11:39:03 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.18 2000-08-12 12:52:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/08/06 11:39:03  mbickel
+//      New map paramter: fuel globally available
+//      Mapeditor can now filter buildings too
+//      Fixed unfreed memory in fullscreen image loading
+//      Fixed: wasted cpu cycles in building
+//      map parameters can be specified when starting a map
+//      map parameters are reported to all players in multiplayer games
+//
 //     Revision 1.16  2000/08/02 15:52:55  mbickel
 //      New unit set definition files
 //      demount accepts now more than one container file
@@ -277,11 +285,11 @@ void mc_check::off(void)
 
 class  GetString : public tdialogbox {
           public :
-              byte action;
+              int action;
               char* buf;
               void init(char* _title);
               virtual void run(void);
-              virtual void buttonpressed(byte id);
+              virtual void buttonpressed(int id);
            };
 
 void         GetString::init(char* _title)
@@ -330,7 +338,7 @@ void         GetString::run(void)
 } 
 
 
-void         GetString::buttonpressed(byte         id)
+void         GetString::buttonpressed(int         id)
 { 
    tdialogbox::buttonpressed(id); 
    switch (id) {
@@ -379,7 +387,7 @@ char* getbipath ( void )
       if ( res == NULL )
          return NULL;
 
-      gameoptions.changed = 1;
+      CGameOptions::Instance()->setChanged ( 1 );
 
       strcpy ( filename2, filename );
       appendbackslash( filename2 );
@@ -394,7 +402,7 @@ char* getbipath ( void )
    }
    appendbackslash( filename );
    char* buf = strdup ( filename );
-   gameoptions.bi3.dir.setName( filename );
+   CGameOptions::Instance()->bi3.dir.setName( filename );
 
    return buf;
 }

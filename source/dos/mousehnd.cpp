@@ -1,6 +1,9 @@
-//     $Id: mousehnd.cpp,v 1.1 2000-06-19 20:05:09 mbickel Exp $
+//     $Id: mousehnd.cpp,v 1.2 2000-08-12 12:52:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2000/06/19 20:05:09  mbickel
+//      Fixed crash when transfering ammo to vehicle with > 8 weapons
+//
 //     Revision 1.4  1999/12/07 22:13:21  mbickel
 //      Fixed various bugs
 //      Extended BI3 map import tables
@@ -256,7 +259,7 @@ void mousevisible( int an) {
   }
 }
 
-byte getmousestatus () {
+int getmousestatus () {
    return mouseparams.status;
 }
 

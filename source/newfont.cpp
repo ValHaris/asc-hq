@@ -1,6 +1,9 @@
-//     $Id: newfont.cpp,v 1.7 2000-01-04 19:43:53 mbickel Exp $
+//     $Id: newfont.cpp,v 1.8 2000-08-12 12:52:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/01/04 19:43:53  mbickel
+//      Continued Linux port
+//
 //     Revision 1.6  1999/12/29 17:38:18  mbickel
 //      Continued Linux port
 //
@@ -364,10 +367,10 @@ void         showtext3( const char *       txt,
    // collategraphicoperations cgo ( xpos, ypos, max ( activefontsettings.height, activefontsettings->font.height ),;
 
     char         *s, *s2, *s3;
-    byte         i, j,k;
+    int         i, j,k;
     word         newx; 
     signed char  cnt;
-    byte         orgjus; 
+    int         orgjus; 
 
 
    if (txt[0] == 0)
@@ -455,10 +458,10 @@ void         showtext3c( const char *       txt,
    // collategraphicoperations cgo;
 
     char         *s, *s2, *s3;
-    byte         i, j,k;
+    int         i, j,k;
     word         newx; 
     signed char  cnt;
-    byte         orgjus; 
+    int         orgjus; 
 
 
    npush( activefontsettings );

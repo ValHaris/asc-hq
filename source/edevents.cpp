@@ -1,6 +1,14 @@
-//     $Id: edevents.cpp,v 1.10 2000-08-06 11:39:02 mbickel Exp $
+//     $Id: edevents.cpp,v 1.11 2000-08-12 12:52:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/08/06 11:39:02  mbickel
+//      New map paramter: fuel globally available
+//      Mapeditor can now filter buildings too
+//      Fixed unfreed memory in fullscreen image loading
+//      Fixed: wasted cpu cycles in building
+//      map parameters can be specified when starting a map
+//      map parameters are reported to all players in multiplayer games
+//
 //     Revision 1.9  2000/07/05 09:24:00  mbickel
 //      New event action: change building damage
 //
@@ -72,7 +80,7 @@ class   tplayersel : public tstringselect {
            public :
                  int lastchoice;
                  virtual void setup(void);
-                 virtual void buttonpressed(byte id);
+                 virtual void buttonpressed(int id);
                  virtual void run(void);
                  virtual void gettext(word nr);
                  };
@@ -91,7 +99,7 @@ void         tplayersel::setup(void)
 } 
 
 
-void         tplayersel::buttonpressed(byte         id)
+void         tplayersel::buttonpressed(int         id)
 { 
    tstringselect::buttonpressed(id);
    switch (id) {
@@ -126,7 +134,7 @@ void         tplayersel::run(void)
 } 
 
 
-byte         playerselect(int lc)
+int         playerselect(int lc)
 { 
   tplayersel  sm; 
 
@@ -143,7 +151,7 @@ byte         playerselect(int lc)
 class   verknuepfsel : public tstringselect {
            public :
                  virtual void setup(void);
-                 virtual void buttonpressed(byte id);
+                 virtual void buttonpressed(int id);
                  virtual void run(void);
                  virtual void gettext(word nr);
                  };
@@ -161,7 +169,7 @@ void         verknuepfsel::setup(void)
 } 
 
 
-void         verknuepfsel::buttonpressed(byte         id)
+void         verknuepfsel::buttonpressed(int         id)
 { 
    tstringselect::buttonpressed(id);
    switch (id) {
@@ -188,7 +196,7 @@ void         verknuepfsel::run(void)
 } 
 
 
-byte         verknuepfselect(void)
+int         verknuepfselect(void)
 { 
   verknuepfsel  vm;
 
@@ -202,12 +210,12 @@ byte         verknuepfselect(void)
 
 class  tplayerselall : public tdialogbox {
           public :
-              byte action;
-              byte bkgcolor;
+              int action;
+              int bkgcolor;
               int playerbit;
               void init(void);
               virtual void run(void);
-              virtual void buttonpressed(byte id);
+              virtual void buttonpressed(int id);
               void anzeige(void);
               };
 
@@ -278,7 +286,7 @@ void         tplayerselall::run(void)
 } 
 
 
-void         tplayerselall::buttonpressed(byte         id)
+void         tplayerselall::buttonpressed(int         id)
 { 
    tdialogbox::buttonpressed(id); 
    switch (id) {
@@ -323,7 +331,7 @@ class   teventtype : public tstringselect {
            public :
                  int lastchoice;
                  virtual void setup(void);
-                 virtual void buttonpressed(byte id);
+                 virtual void buttonpressed(int id);
                  virtual void run(void);
                  virtual void gettext(word nr);
                  };
@@ -348,7 +356,7 @@ void teventtype::gettext(word nr)
 }
 
 
-void         teventtype::buttonpressed(byte         id)
+void         teventtype::buttonpressed(int         id)
 { 
    tstringselect::buttonpressed(id); 
    switch (id) {
@@ -368,7 +376,7 @@ void         teventtype::run(void)
 } 
 
 
-byte         eventtypeselect(int lc)
+int         eventtypeselect(int lc)
 { 
   teventtype   sm; 
 
@@ -384,9 +392,9 @@ byte         eventtypeselect(int lc)
 
 class   treason : public tstringselect {
            public :
-                 byte lastchoice;
+                 int lastchoice;
                  virtual void setup(void);
-                 virtual void buttonpressed(byte id);
+                 virtual void buttonpressed(int id);
                  virtual void run(void);
                  virtual void gettext(word nr);
                  };
@@ -411,7 +419,7 @@ void         treason::gettext(word nr)
 } 
 
 
-void         treason::buttonpressed(byte         id)
+void         treason::buttonpressed(int         id)
 { 
    tstringselect::buttonpressed(id); 
    switch (id) {
@@ -431,7 +439,7 @@ void         treason::run(void)
 } 
 
 
-byte         getreason(byte lc)
+int         getreason(int lc)
 { 
   treason      sm; 
 
@@ -447,12 +455,12 @@ byte         getreason(byte lc)
 
 class  tgetxy : public tdialogbox {
           public :
-              byte action;
+              int action;
               int x,y;
               void init(void);
               virtual void run(void);
-              virtual byte condition(void);
-              virtual void buttonpressed(byte id);
+              virtual int condition(void);
+              virtual void buttonpressed(int id);
               };
 
 void         tgetxy::init(void)
@@ -492,12 +500,12 @@ void         tgetxy::run(void)
    if ((action == 2) || (taste == ct_esc)) x = 50000; 
 } 
 
-byte         tgetxy::condition(void)
+int         tgetxy::condition(void)
 {
    return 1;
 }
 
-void         tgetxy::buttonpressed(byte         id)
+void         tgetxy::buttonpressed(int         id)
 { 
 
    tdialogbox::buttonpressed(id); 
@@ -542,11 +550,11 @@ void         getxy(word *x,word *y)
 
 class  tgetxyunit : public tgetxy {
           public :
-              virtual byte condition(void);
+              virtual int condition(void);
               };
 
 
-byte         tgetxyunit::condition(void)
+int         tgetxyunit::condition(void)
 {
    if ( getfield( x, y ) )
       if ( getfield(x,y)->vehicle ) 
@@ -568,13 +576,13 @@ void         getxy_unit(int *x,int *y)
 
 class  tgetxybuilding : public tgetxy {
           public :
-              virtual byte condition(void);
+              virtual int condition(void);
               };
 
 
 // ıS GetXYBuildingSel
 
-byte         tgetxybuilding::condition(void)
+int         tgetxybuilding::condition(void)
 {
    if ( getfield( x, y ) )
       if ( getfield(x,y)->building ) 
@@ -598,11 +606,11 @@ void         getxy_building(int *x,int *y)
 
 class  tgettm : public tdialogbox {
           public :
-              byte action;
+              int action;
               int x,y;
               void init(void);
               virtual void run(void);
-              virtual void buttonpressed(byte id);
+              virtual void buttonpressed(int id);
               };
 
 
@@ -647,7 +655,7 @@ void         tgettm::run(void)
 } 
 
 
-void         tgettm::buttonpressed(byte         id)
+void         tgettm::buttonpressed(int         id)
 { 
    tdialogbox::buttonpressed(id); 
    switch (id) {
@@ -686,7 +694,7 @@ class   tgeteventid : public tstringselect {
                  int mapid;
                  void rebuildlines(void);
                  virtual void setup(void);
-                 virtual void buttonpressed(byte id);
+                 virtual void buttonpressed(int id);
                  virtual void gettext(word nr);
                  virtual void run(void);
                  };
@@ -743,7 +751,7 @@ void   tgeteventid::gettext(word nr) //gibt in txt den string zurÅck
 }
 
 
-void         tgeteventid::buttonpressed(byte         id)
+void         tgeteventid::buttonpressed(int         id)
 {    
    tstringselect::buttonpressed(id);
    switch (id) {
@@ -806,7 +814,7 @@ class   tgettechnologyid : public tstringselect {
                  int ttechnologyid;
                  void rebuildlines(void);
                  virtual void setup(void);
-                 virtual void buttonpressed(byte id);
+                 virtual void buttonpressed(int id);
                  virtual void gettext(word nr);
                  virtual void run(void);
                  };
@@ -840,7 +848,7 @@ void   tgettechnologyid::gettext(word nr) //gibt in txt den string zurÅck
 }
                         
 
-void         tgettechnologyid::buttonpressed(byte         id)
+void         tgettechnologyid::buttonpressed(int         id)
 {    
    tstringselect::buttonpressed(id);
    switch (id) {
@@ -889,13 +897,13 @@ int         gettechnologyid(int lid)
      class twindchange: public tdialogbox {
               public:
                 word        heightxs,w2,dirx,diry;
-                byte         action,tsintensity,abort,activeheight;
+                int         action,tsintensity,abort,activeheight;
                 int            tdirect[3],tinten[3];
                 pevent      we;
                 void          init(void);
                 void          showdir_and_height(void);
                 virtual void        run(void);
-                virtual void        buttonpressed(byte         id);
+                virtual void        buttonpressed(int         id);
         };
 
 
@@ -1006,7 +1014,7 @@ void         twindchange::showdir_and_height(void)
 }
 
 
-void         twindchange::buttonpressed(byte         id)
+void         twindchange::buttonpressed(int         id)
 { 
    switch (id) {
       case 2:
@@ -1059,7 +1067,7 @@ void         twindchange::buttonpressed(byte         id)
 } 
 
 
-byte         changewind(pevent acte)
+int         changewind(pevent acte)
 { 
    twindchange        wc;
 
@@ -1082,12 +1090,12 @@ class  tcreateevent : public tdialogbox {
           public :
               pevent ae, orgevent;
               int reasonst;
-              byte action;
+              int action;
               char build;
               void init(void);
               virtual void run(void);
-              virtual void buttonpressed(byte id);
-              virtual void showreason(byte nr);
+              virtual void buttonpressed(int id);
+              virtual void showreason(int nr);
               virtual void showplayer(void);
               virtual void showeventtype(void);
               virtual void showeventid ( void );
@@ -1124,7 +1132,7 @@ void tcreateevent::showeventtype(void)
 
 }
 
-void tcreateevent::showreason(byte nr)
+void tcreateevent::showreason(int nr)
 {
    npush ( activefontsettings );
    activefontsettings.font = schriften.smallarial; 
@@ -1372,7 +1380,7 @@ pvehicle selectunit ( pvehicle unit )
 // I just want to get this trigger working....
 
 
-void         tcreateevent::buttonpressed(byte         id)
+void         tcreateevent::buttonpressed(int         id)
 {   int           nid, nr, rnr;
     pfield        pf; 
     char    abb; 
@@ -1385,8 +1393,8 @@ void         tcreateevent::buttonpressed(byte         id)
     teventtrigger_polygonentered etpe;
 
 
-   const byte         stringpriority[7]     = {32, 64, 1, 2, 4, 8, 16};
-   const byte         stringprioritynumber[7]     = {5, 6, 0, 1, 2, 3, 4};
+   const int         stringpriority[7]     = {32, 64, 1, 2, 4, 8, 16};
+   const int         stringprioritynumber[7]     = {5, 6, 0, 1, 2, 3, 4};
  
    switch (id) {
       
@@ -1852,10 +1860,10 @@ char      createevent(pevent ae, pevent orgevent )  /* True=Erfolgreich ausgefÅh
 class   teventsel : public tstringselect {
            public :        
                  pevent pe,ae;
-                 byte oi;
+                 int oi;
                  void rebuildlines(void);
                  virtual void setup(void);
-                 virtual void buttonpressed(byte id);
+                 virtual void buttonpressed(int id);
                  virtual void gettext(word nr);
                  virtual void run(void);
                  };
@@ -1911,9 +1919,9 @@ void   teventsel::gettext(word nr) //gibt in txt den string zurÅck
 }
 
 
-void         teventsel::buttonpressed(byte         id)
+void         teventsel::buttonpressed(int         id)
 {    pevent       e, ne;
-     byte         i; 
+     int         i; 
      char      b; 
 //     char         s[200];
      tevent         *en, *pen;

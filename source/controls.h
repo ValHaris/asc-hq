@@ -1,6 +1,9 @@
-//     $Id: controls.h,v 1.19 2000-08-12 09:17:21 gulliver Exp $
+//     $Id: controls.h,v 1.20 2000-08-12 12:52:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/08/12 09:17:21  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.18  2000/08/02 10:28:25  mbickel
 //      Fixed: generator vehicle not working
 //      Streams can now report their name
@@ -117,9 +120,9 @@
 
 
    struct tmoveview { 
-                        integer      x1, y1, x2, y2, x3, y3, x4, y4; 
-                        integer      xpos, ypos; 
-                        byte         viewweite; 
+                        int  x1, y1, x2, y2, x3, y3, x4, y4; 
+                        int  xpos, ypos; 
+                        int  viewweite; 
                      } ; 
   class tdashboard {
                 public:
@@ -143,7 +146,7 @@
                        void         putheight(integer      i,   integer      sel);
                        void         paintheight(void);
                        void         painttank(void);
-                       void         paintweapon(byte         h, int num, int strength, const SingleWeapon  *weap );
+                       void         paintweapon( int h, int num, int strength, const SingleWeapon  *weap );
                        void         paintweapons(void);
                        void         paintweaponammount( int h, int num, int max );
                        void         paintdamage(void);
@@ -221,8 +224,8 @@
 
                         word         movesx, movesy, moveerr; 
                         pvehicle     vehicletomove; 
-                        byte         newheight; 
-                        byte         oldheight; 
+                        int          newheight; 
+                        int          oldheight; 
                         char         heightdir; 
                         pbuildingtype buildingtobuild;   /*  nur bei movestatus = 111  */ 
                         int          movespeed;
@@ -347,7 +350,7 @@ extern int  object_removeable ( int x, int y, pobjecttype obj );
 extern void build_objects_reset( void );
 extern void build_vehicles_reset( void );
 
-extern void  refuelvehicle(byte         b);
+extern void  refuelvehicle( int b);
 
 extern void  legemine( int typ, int delta );
 
@@ -381,8 +384,8 @@ extern void dissectvehicle ( pvehicle eht );
 extern void getpowerplantefficiency ( const pbuilding bld, int* material, int* fuel );
 
 /*
-extern int putenergy(pbuilding    bld,    int      need,    byte         mode);
-extern int getenergy(pbuilding    bld,    int      need,    byte         mode);
+extern int putenergy(pbuilding    bld,    int      need,    int mode);
+extern int getenergy(pbuilding    bld,    int      need,    int mode);
 */
 
   /*   modes: 0 = energy   ohne abbuchen
@@ -481,10 +484,10 @@ extern trunreplay runreplay;
 extern void checkforreplay ( void );
 
 extern void   generatevehicle_cl ( pvehicletype fztyp,
-                                  byte         col,
-                                  pvehicle &   vehicle,
-                                  int          x, 
-                                  int          y );
+                                  int           col,
+                                  pvehicle &    vehicle,
+                                  int           x, 
+                                  int           y );
 // Generiert eine LEERE vehicle. MIT abfrage, ob dies M”glich ist, MIT auswerten der Klassen
 //  => Nur f?rs Spiel
 

@@ -1,6 +1,9 @@
-//     $Id: spfst.h,v 1.18 2000-08-12 09:17:36 gulliver Exp $
+//     $Id: spfst.h,v 1.19 2000-08-12 12:52:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/08/12 09:17:36  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.17  2000/08/02 10:28:27  mbickel
 //      Fixed: generator vehicle not working
 //      Streams can now report their name
@@ -127,14 +130,14 @@
 
    class tcursor { 
            public:
-              int          posx, posy;
+              int       posx, posy;
               char      an; 
-              byte         color; 
+              int       color; 
 
               int  gotoxy (int x, int y, int disp = 1 );     // result: 0: map wurde nicht neu angezeigt     1: map wurde neu angezeigt
               void show ( void );
               void hide ( void );
-              void setcolor ( byte col );
+              void setcolor ( int col );
               void init ( void );
               void display ( void );
               void reset ( void );
@@ -210,22 +213,21 @@ extern word  getypos(void);
 
 extern char fieldvisiblenow( const pfield        pe, int player = actmap->actplayer );
 
-extern byte  getdiplomaticstatus(byte         b);
+extern int getdiplomaticstatus( int b );
 
-extern byte  getdiplomaticstatus2(byte         c,
-                                  byte         b);
+extern int getdiplomaticstatus2( int c, int b);
 
 extern void  removevehicle(pvehicle *   vehicle);
 
 extern void  generatevehicle_ka(pvehicletype fztyp,
-                             byte         col,
+                             int col,
                              pvehicle &   vehicle);
 // Die Einheit wird automatisch vollgef?llt.
 //  => Nur f?r Karteneditor
 
 
 extern void         generate_vehicle(pvehicletype fztyp,
-                             byte         col,
+                             int col,
                              pvehicle &   vehicle);
 
 
@@ -238,7 +240,7 @@ extern void  putbuilding(int          x,
 
 extern void  putbuilding2(integer      x,
                           integer      y,
-                          byte         color,
+                          int color,
                           pbuildingtype buildingtyp);  // f?r Spiel
 
 
@@ -266,12 +268,12 @@ extern void  putstreets2( int          x1,
 
 extern void  getnextfield(int &    x,
                           int &    y,
-                          byte         direc);
+                          int direc);
 
 extern void  getnextfielddir(int &    x,
                              int &    y,
-                             byte         direc,
-                             byte         sdir);
+                             int direc,
+                             int sdir);
 
 extern int   getdirection(    int      x1,
                               int      y1,
@@ -286,7 +288,7 @@ extern void  initmap(void);
 
   /*  vehicle  */ 
 
-extern byte  fieldaccessible( const pfield        field,
+extern int fieldaccessible( const pfield        field,
                             const pvehicle     vehicle,
                             int  uheight = -1 );
 

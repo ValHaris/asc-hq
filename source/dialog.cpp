@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.45 2000-08-12 09:17:22 gulliver Exp $
+//     $Id: dialog.cpp,v 1.46 2000-08-12 12:52:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2000/08/12 09:17:22  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.44  2000/08/11 11:38:28  mbickel
 //      Enabled resource control subwindow in BI resource mode
 //
@@ -282,7 +285,7 @@ class  tstatistics : public tdialogbox {
 
                    void         init ( void );
                    void         paintgraph ( void );
-                   virtual void buttonpressed( char id );
+                   virtual void buttonpressed( int id );
                 };
                                     
 class  tstatisticbuildings : public tstatistics {
@@ -396,7 +399,7 @@ void         tstatistics::init(void)
 
 void         tstatisticarmies::init(void)
 { 
-  byte         i;
+  int         i;
 
    tstatistics::init();
    categories = 3; 
@@ -621,7 +624,7 @@ void         tstatisticbuildings::run(void)
 } 
 
 
-void         tstatistics::buttonpressed( char id )
+void         tstatistics::buttonpressed( int id )
 { 
    if (id == 1) { 
       paintmode = 1 - paintmode; 
@@ -692,7 +695,7 @@ class  tvehicleinfo : public tdialogbox , public tviewtextwithscrolling {
                    void         showclasses ( void );
                    void         showinfotext ( void );
                    void         paintmarkweap ( void );
-                   virtual void buttonpressed( char id ); 
+                   virtual void buttonpressed( int id ); 
                    void         checknextunit ( void );
 
                    void         repaintscrollbar ( void );
@@ -958,7 +961,7 @@ void         tvehicleinfo::lines(integer      xp1,
 void         tvehicleinfo::paintmarkweap(void)
 { 
   collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );
-  byte         mas;
+  int         mas;
   int ii;
   char strng[100];
 
@@ -1666,7 +1669,7 @@ void         tvehicleinfo::showclasses( void )
 
 
 
-void         tvehicleinfo::buttonpressed( char id )
+void         tvehicleinfo::buttonpressed( int id )
 { 
    tdialogbox::buttonpressed ( id );
    if (id == 1) 
@@ -1758,8 +1761,8 @@ void         tvehicleinfo::checknextunit(void)
 void         tvehicleinfo::run(void)
 { 
    tweaponinfo  weapinf; 
-   byte         k; 
-   byte         drk; 
+   int         k; 
+   int         drk; 
 
    i = 0; 
    if ( !aktvehicle ) {
@@ -2000,9 +2003,9 @@ end;  */
 
 class  tchoice_dlg : public tdialogbox {
                public:
-                  byte      result;
+                  int      result;
                   void      init( char* a, char* b, char* c );
-                  virtual void buttonpressed( byte id );
+                  virtual void buttonpressed( int id );
                   virtual void run( void );
                 };
 
@@ -2037,7 +2040,7 @@ void         tchoice_dlg::init( char* a, char* b, char* c )
 } 
 
 
-void         tchoice_dlg::buttonpressed( byte id )
+void         tchoice_dlg::buttonpressed( int id )
 { 
   if (id == 1) result = 1; 
   if (id == 2) result = 2; 
@@ -2055,7 +2058,7 @@ void         tchoice_dlg::run(void)
 } 
 
 
-byte         choice_dlg(char *       title,
+int         choice_dlg(char *       title,
                         char *       s1,
                         char *       s2, 
                         ... )
@@ -2071,7 +2074,7 @@ byte         choice_dlg(char *       title,
       displaymessage ( "dialog.cpp / choice_dlg:   string to long !\nPlease report this error",1 );
 
   tchoice_dlg  c; 
-  byte a;
+  int a;
 
   c.init(tempbuf,s1,s2); 
   c.run(); 
@@ -2165,7 +2168,7 @@ class   tfileselectsvga : public tdialogbox {
                         void            checkfsf( char lock);   
                         void            displayspeedsearch ( void );
 
-                        virtual void    buttonpressed( char id);
+                        virtual void    buttonpressed(int id);
                 };
 
 
@@ -2222,7 +2225,7 @@ void         tfileselectsvga::init( char sw  )
 
 
 
-void         tfileselectsvga::buttonpressed(pascal_byte         id)
+void         tfileselectsvga::buttonpressed( int id)
 { 
    tdialogbox::buttonpressed(id);
    switch (id) {
@@ -2851,7 +2854,7 @@ void tenterfiledescription::init ( char* descrip )
    status = 0;
 }
 
-void tenterfiledescription::buttonpressed ( char id )
+void tenterfiledescription::buttonpressed ( int id )
 {
    tdialogbox::buttonpressed ( id );
    if (id == 2)
@@ -3780,7 +3783,7 @@ class  tenternamestrings : public tdialogbox {
 
                        void             init( pnamestrings namestrings, char plyexistyte, char md);
                        virtual void     run ( void );
-                       virtual void     buttonpressed( char id );
+                       virtual void     buttonpressed( int id );
                        void             done ( void );
                        virtual int      getcapabilities ( void );
                     };
@@ -3813,7 +3816,7 @@ class  tsetalliances : public tdialogbox {
                      shortint            xp,yp,xa,ya,bx;  /* position der tastatur-markierungsrechtecke  */
 
                      void                init ( int supervis );
-                     virtual void        buttonpressed( char id);
+                     virtual void        buttonpressed( int id);
                      virtual void        run ( void );
                      virtual int         getcapabilities ( void );
                      void                click( char bxx, char x, char y);
@@ -3884,7 +3887,7 @@ void         tenternamestrings::done ( void )
 }
 
 
-void         tenternamestrings::buttonpressed( char id )
+void         tenternamestrings::buttonpressed( int id )
 { 
   inherited::buttonpressed(id);
   if (id == 30) status = 2; 
@@ -4105,8 +4108,8 @@ void         tsetalliances::buildhlgraphics(void)
 { 
    collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
 
-  byte         i, j;
-  byte         mss; 
+  int         i, j;
+  int         mss; 
 
    mss = getmousestatus(); 
    if (mss == 2)
@@ -4527,7 +4530,7 @@ void taskforsupervisorpassword :: init ( int* crc, int mode )
 
 #endif
 
-void         tsetalliances::buttonpressed( char id )
+void         tsetalliances::buttonpressed( int id )
 { 
   int i;
 
@@ -4637,7 +4640,7 @@ void         tsetalliances::buttonpressed( char id )
 
 void         tsetalliances::run(void)
 { 
-  byte         i, j; 
+  int         i, j; 
 
    mousevisible(true); 
    do { 
@@ -4907,7 +4910,7 @@ void         tviewanytext::buildgraphics(void)
 } 
 
 
-void         tviewanytext::buttonpressed( char id )
+void         tviewanytext::buttonpressed( int id )
 { 
    tdialogbox::buttonpressed(id);
    if (id == 1) 
@@ -5016,7 +5019,7 @@ void         tviewanytext::redraw(void)
 } 
 
 
-void         tviewanytext::buttonpressed( char id )
+void         tviewanytext::buttonpressed( int id )
 {     
    tdialogbox::buttonpressed(id);
    if (id == 1) 
@@ -5047,7 +5050,7 @@ class tbi3preferences : public tdialogbox {
 
                      public:
                         void init ( void );
-                        void buttonpressed ( char id );
+                        void buttonpressed ( int id );
                         void run ( void );
                         tbi3preferences ( ) : actoptions ( *CGameOptions::Instance() ) {};
                     };
@@ -5117,7 +5120,7 @@ void tbi3preferences :: init ( void )
 
 }
 
-void tbi3preferences :: buttonpressed ( char id )
+void tbi3preferences :: buttonpressed ( int id )
 {
    tdialogbox :: buttonpressed ( id );
 
@@ -5156,13 +5159,13 @@ class ResizeMap : public tdialogbox {
 
                      public:
                         void init ( void );
-                        void buttonpressed ( char id );
+                        void buttonpressed ( int id );
                         void run ( void );
-                        char checkvalue( byte         id, void*      p);
+                        char checkvalue( int         id, void*      p);
                     };
 
 
-char ResizeMap :: checkvalue(byte         id, void*      p)  
+char ResizeMap :: checkvalue(int         id, void*      p)  
 {
    if ( id >= 3 && id <= 6 ) {
       int* wp = (int*) p;
@@ -5244,7 +5247,7 @@ void ResizeMap :: init ( void )
    status = 0;
 }
 
-void ResizeMap :: buttonpressed ( char id )
+void ResizeMap :: buttonpressed ( int id )
 {
    tdialogbox :: buttonpressed ( id );
 
@@ -5423,7 +5426,7 @@ class tchoosezoomlevel : public tdialogbox {
                 int ok;
              public: 
                 void init ( void );
-                void buttonpressed ( char id );
+                void buttonpressed ( int id );
                 void run ( void );
          };
 
@@ -5446,7 +5449,7 @@ void tchoosezoomlevel :: init ( void )
    buildgraphics();
 }
 
-void tchoosezoomlevel :: buttonpressed ( char id )
+void tchoosezoomlevel :: buttonpressed ( int id )
 {
    tdialogbox:: buttonpressed ( id );
    if ( id == 1 )
@@ -5481,9 +5484,9 @@ void choosezoomlevel ( void )
 
 
     struct tvweapon { 
-                  byte         typ;   /*  position in cwaffentypen  */ 
-                  byte         sourcepos;   /*  position im munitionsarray des containers; cenergy .. g?ltig */ 
-                  byte         destpos;   /*  position im munitionsarray des gel. fahrzeugs  */ 
+                  int         typ;   /*  position in cwaffentypen  */ 
+                  int         sourcepos;   /*  position im munitionsarray des containers; cenergy .. g?ltig */ 
+                  int         destpos;   /*  position im munitionsarray des gel. fahrzeugs  */ 
                   int          sourceamount;
                   int          maxsourceamount;
                   int          destamount;
@@ -5493,8 +5496,8 @@ void choosezoomlevel ( void )
 
 
     struct tvweapons { 
-                   byte         count; 
-                   byte         mode; 
+                   int         count; 
+                   int         mode; 
                    tvweapon     weap[10]; 
                 } ;                 
                 
@@ -5537,7 +5540,7 @@ void choosezoomlevel ( void )
                           
                           void          init ( void );
                           virtual void  run ( void );
-                          virtual void  buttonpressed( char id ); 
+                          virtual void  buttonpressed( int id ); 
                           void          zeichneschieberegler( char b);
                           void          checkpossible( char b );
                           void          setloading ( void );
@@ -5591,7 +5594,7 @@ void         tverlademunition::init(void)
 } 
 
 
-void         tverlademunition::buttonpressed( char id)
+void         tverlademunition::buttonpressed( int id)
 { 
    if (id == 1) { 
       setloading(); 
@@ -5963,7 +5966,7 @@ void         tverlademunition::zeichneschieberegler(pascal_byte         b)
 //  collategraphicoperations cgo;
 
    int      l;
-   byte         r;
+   int         r;
 
    r = getmousestatus(); 
    if (r == 2) mousevisible(false); 
@@ -6005,7 +6008,7 @@ void         tverlademunition::checkpossible(pascal_byte         b)
 
 void         tverlademunition::setloading(void)
 { 
-   byte         b; 
+   int         b; 
 
    if (wp.count > 0) 
       for (b = 0; b < wp.count ; b++) {
@@ -6060,7 +6063,7 @@ void         tverlademunition::setloading(void)
 void         verlademunition(pvehicle     vehicle,
                              pvehicle     vehicle2,
                              pbuilding    building,
-                             byte         fast)
+                             int         fast)
 { 
    tverlademunition vlm; 
 
@@ -6426,7 +6429,7 @@ void tenterpassword :: init ( int* crc, int mode, char* ttl  )
 };
 
 
-void tenterpassword :: buttonpressed ( char id )
+void tenterpassword :: buttonpressed ( int id )
 {
    tdialogbox::buttonpressed ( id );
    if ( id == 1 )
@@ -6503,7 +6506,7 @@ class   tgameparamsel : public tstringselect {
            public :
                  int lastchoice;
                  virtual void setup(void);
-                 virtual void buttonpressed(byte id);
+                 virtual void buttonpressed(int id);
                  virtual void run(void);
                  virtual void gettext(word nr);
                  };
@@ -6523,7 +6526,7 @@ void         tgameparamsel ::setup(void)
 }
 
 
-void         tgameparamsel ::buttonpressed(byte         id)
+void         tgameparamsel ::buttonpressed(int         id)
 {
    tstringselect::buttonpressed(id);
    switch (id) {

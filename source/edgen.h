@@ -1,6 +1,9 @@
-//     $Id: edgen.h,v 1.4 2000-05-23 20:40:44 mbickel Exp $
+//     $Id: edgen.h,v 1.5 2000-08-12 12:52:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/05/23 20:40:44  mbickel
+//      Removed boolean type
+//
 //     Revision 1.3  2000/03/29 09:58:45  mbickel
 //      Improved memory handling for DOS version
 //      Many small changes I can't remember ;-)
@@ -75,7 +78,7 @@ struct tmemoryblock {
    char bordername[maxtilevals][20];
    char generated;
    word startblocksize;
-   byte tilevalcount,acttile;
+   pascal_byte tilevalcount,acttile;
    };
 
 typedef tmemoryblock *pmemoryblock;

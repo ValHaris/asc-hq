@@ -1,6 +1,9 @@
-//     $Id: mousehnd.h,v 1.7 2000-08-12 09:17:31 gulliver Exp $
+//     $Id: mousehnd.h,v 1.8 2000-08-12 12:52:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/08/12 09:17:31  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.6  2000/05/10 20:56:20  mbickel
 //      mouseparams and ticker now volatile under linux too
 //
@@ -65,7 +68,7 @@ class tmouserect {
 extern int initmousehandler ( void* pic = NULL );
 extern int removemousehandler ( void );
 extern void mousevisible( int an );
-extern pascal_byte getmousestatus ();
+extern int getmousestatus ();
 
 extern void setmouseposition ( int x, int y );
 

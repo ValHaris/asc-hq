@@ -1,6 +1,10 @@
-//     $Id: attack.h,v 1.11 2000-08-05 13:38:20 mbickel Exp $
+//     $Id: attack.h,v 1.12 2000-08-12 12:52:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/08/05 13:38:20  mbickel
+//      Rewrote height checking for moving units in and out of
+//        transports / building
+//
 //     Revision 1.10  2000/08/03 13:11:50  mbickel
 //      Fixed: on/off switching of generator vehicle produced endless amounts of energy
 //      Repairing units now reduces their experience
@@ -81,7 +85,7 @@
 
 
 struct   tattackresult {
-               byte adamage, ddamage, adifferenz, ddifferenz;
+               int adamage, ddamage, adifferenz, ddifferenz;
             };
 
 

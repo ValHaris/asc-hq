@@ -1,6 +1,10 @@
-//     $Id: flview.cpp,v 1.3 2000-03-29 09:58:45 mbickel Exp $
+//     $Id: flview.cpp,v 1.4 2000-08-12 12:52:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/03/29 09:58:45  mbickel
+//      Improved memory handling for DOS version
+//      Many small changes I can't remember ;-)
+//
 //     Revision 1.2  1999/11/16 03:41:42  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -34,7 +38,7 @@
 #include "flview.h"
 #include "timer.h"
 
-byte tflicview::loadflic(char *name)
+pascal_byte tflicview::loadflic(char *name)
 {
    int flc_size;
    tfliheader flc_head;
@@ -46,7 +50,7 @@ byte tflicview::loadflic(char *name)
          stream.readdata( &flc_head , sizeof(tfliheader) );
       }
       flc_size = flc_head.flicsize;
-      flcmem = new ( byte[flc_size]);
+      flcmem = new ( pascal_byte[flc_size]);
       {
          tnfilestream stream (name,1);
          stream.readdata( flcmem , flc_size);
@@ -56,7 +60,7 @@ byte tflicview::loadflic(char *name)
    return 0;
 }
 
-byte tflicview::loadconvtable(char *name)
+pascal_byte tflicview::loadconvtable(char *name)
 {
    {
       tnfilestream stream (name,1);
@@ -79,14 +83,14 @@ void tflicview::waitnextframe(void)
    lasttimer = ticker;
 }
 
-byte tflicview::viewflc(void)
+pascal_byte tflicview::viewflc(void)
 { 
    //FILE *flc_test;
 
    //flc_test = fopen("brun.txt","wt");
 
      endit = false; 
-     byte *chunkpart;
+     pascal_byte *chunkpart;
      long int chunksize;
      word chunktype;
 
@@ -110,7 +114,7 @@ byte tflicview::viewflc(void)
            memcpy(&frameheader, &flcmem[pos] ,sizeof(tframeheader));
            pos+= sizeof(tframeheader);
 
-           chunkpart = (byte *) new( byte[frameheader.framesize - sizeof(tframeheader)] );
+           chunkpart = (pascal_byte *) new( pascal_byte[frameheader.framesize - sizeof(tframeheader)] );
 
            memcpy(chunkpart, &flcmem[pos] , frameheader.framesize - sizeof(tframeheader) );
            pos+= frameheader.framesize - sizeof(tframeheader);
@@ -281,10 +285,10 @@ byte tflicview::viewflc(void)
 }
 
 
-byte tflicview::viewconvflc(void)
+pascal_byte tflicview::viewconvflc(void)
 { 
      endit = false; 
-     byte *chunkpart;
+     pascal_byte *chunkpart;
      long int chunksize;
      word chunktype;
 
@@ -308,7 +312,7 @@ byte tflicview::viewconvflc(void)
            memcpy(&frameheader, &flcmem[pos] ,sizeof(tframeheader));
            pos+= sizeof(tframeheader);
 
-           chunkpart = (byte *) new( byte[frameheader.framesize - sizeof(tframeheader)] );
+           chunkpart = (pascal_byte *) new( pascal_byte[frameheader.framesize - sizeof(tframeheader)] );
 
            memcpy(chunkpart, &flcmem[pos] , frameheader.framesize - sizeof(tframeheader) );
            pos+= frameheader.framesize - sizeof(tframeheader);

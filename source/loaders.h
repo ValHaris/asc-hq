@@ -1,6 +1,10 @@
-//     $Id: loaders.h,v 1.6 2000-08-11 12:24:04 mbickel Exp $
+//     $Id: loaders.h,v 1.7 2000-08-12 12:52:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/08/11 12:24:04  mbickel
+//      Fixed: no movement after refuelling unit
+//      Restructured reading/writing of units
+//
 //     Revision 1.5  2000/08/03 13:12:17  mbickel
 //      Fixed: on/off switching of generator vehicle produced endless amounts of energy
 //      Repairing units now reduces their experience
@@ -94,7 +98,7 @@ extern void  loadstreets(void);
 
 extern void  loadicons(void);
 
-extern char * loaderrormsg(byte         b);
+extern char * loaderrormsg( int  b);
 
 extern void loadallobjecttypes ( void );
 

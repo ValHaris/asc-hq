@@ -27,21 +27,21 @@
 #include "../misc.h"
 
 typedef struct tpcxheader{
-           byte     manufacturer;
-           byte     version     ;
-           byte     encoding    ;
-           byte     bitsperpixel;
+           char     manufacturer;
+           char     version     ;
+           char     encoding    ;
+           char     bitsperpixel;
            word     xmin,ymin   ;
            word     xmax,ymax   ;
            word     hdpi,vdpi   ;
-           byte     colormap[48];
-           byte     reserved    ;
-           byte     nplanes     ;
+           char     colormap[48];
+           char     reserved    ;
+           char     nplanes     ;
            word     bytesperline;
            word     paletteinfo ;
            word     hscreensize ;
            word     vscreensize ;
-           byte     dummy[50]   ;
+           char     dummy[50]   ;
            int      size;
        }tpcxheader;
 
@@ -83,7 +83,7 @@ char loadpcxxy(char *name, char setpal, word x, word y)
   word       b,c;
   int        m;
   fpos_t     l;
-  byte       colors;
+  int       colors;
 
 ///////////
 /// code

@@ -1,6 +1,9 @@
-//     $Id: flview.h,v 1.4 2000-05-23 20:40:45 mbickel Exp $
+//     $Id: flview.h,v 1.5 2000-08-12 12:52:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/05/23 20:40:45  mbickel
+//      Removed boolean type
+//
 //     Revision 1.3  2000/03/29 09:58:46  mbickel
 //      Improved memory handling for DOS version
 //      Many small changes I can't remember ;-)
@@ -41,14 +44,14 @@ typedef struct tfliheader {
      word         width, height, depth; 
      word         flags, speed; 
      int       next, frit;
-     byte          enhance[102];
+     pascal_byte          enhance[102];
 } tfliheader;
 
 typedef struct tframeheader {
      int      framesize; 
      word         magic; 
      word         chunkcount;
-     byte          enhance[8];
+     pascal_byte          enhance[8];
 } tframeheader;
 
 
@@ -57,23 +60,23 @@ class tflicview {
         tfliheader         fliheader;
         tframeheader    frameheader;
         dacpalette256   flcpal;
-        byte                *flcmem;
+        pascal_byte                *flcmem;
         char           endit,endatkey;
-        byte               playspeed;
+        pascal_byte               playspeed;
         word               flc_xpos,flc_ypos;
         int                  lasttimer,timerdiff;
         tkey                flkey;
-        byte                convtable[256];
+        pascal_byte                convtable[256];
         signed short int           p1, p2, p3, p4, p5, p6, pc;
         signed short int           x,y,skipcnt;
-        signed byte                szcnt,playcount;
+        signed pascal_byte                szcnt,playcount;
 
 
         void init(void);
-        byte loadflic(char *name);
-        byte loadconvtable(char *name);
-        byte viewflc(void);
-        byte viewconvflc(void);
+        pascal_byte loadflic(char *name);
+        pascal_byte loadconvtable(char *name);
+        pascal_byte viewflc(void);
+        pascal_byte viewconvflc(void);
         void waitnextframe(void);
         void done(void);
 };

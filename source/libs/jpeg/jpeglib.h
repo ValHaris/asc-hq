@@ -23,8 +23,10 @@
  * manual configuration options that most people need not worry about.
  */
 
-#ifdef __cplusplus
-extern "C" {
+#ifndef _DOS_
+ #ifdef __cplusplus
+  extern "C" {
+ #endif
 #endif
 
 #ifndef JCONFIG_INCLUDED	/* in case jinclude.h already did */
@@ -1100,7 +1102,10 @@ struct jpeg_color_quantizer { long dummy; };
 #include "jerror.h"		/* fetch error codes too */
 #endif
 
-#ifdef __cplusplus
-};
+#ifndef _DOS_
+ #ifdef __cplusplus
+ };
+ #endif
 #endif
+
 #endif /* JPEGLIB_H */

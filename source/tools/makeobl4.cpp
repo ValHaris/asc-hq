@@ -452,7 +452,7 @@ main (int argc, char *argv[] )
 void *       loadpcx2(char *       filestring)
 {      
   void         *p = NULL;
-  byte         b; 
+  int b; 
 
    activefontsettings.font = fnt; 
    activefontsettings.color = black; 

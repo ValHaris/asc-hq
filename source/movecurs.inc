@@ -19,7 +19,7 @@
       9
 */
 
-  byte         ms, strgjmp;
+  int         ms, strgjmp;
   int          cxp, cyp, sxp, syp;
 
    int lastdir;
