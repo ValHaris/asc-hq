@@ -204,17 +204,6 @@ const char* fileNameDelimitter = " =*/+<>,";
                ImageProperty ( void* &property_, const ASCString& fileName_ ) : PTIMG ( property_ ), fileName ( fileName_ ) {};
          };
 
-         typedef PropertyTemplate<Surface> PTIMG2;
-         class ASCImageProperty : public PTIMG2 {
-               typedef Surface PropertyType;
-               ASCString fileName;
-            protected:
-               PropertyType operation_eq ( const TextPropertyGroup::Entry& entry ) const ;
-               ASCString toString ( ) const;
-            public:
-               ASCImageProperty ( Surface &property_, const ASCString& fileName_ ) : PTIMG2 ( property_ ), fileName ( fileName_ ) {};
-         };
-
          typedef PropertyTemplate< vector<void*> > PTIMGA;
          class ImageArrayProperty : public PTIMGA {
                typedef vector<void*> PropertyType;
@@ -462,13 +451,6 @@ void PropertyContainer::addImage ( const ASCString& name, void* &property, const
    ImageProperty* ip = new ImageProperty ( property, filename );
    setup ( ip, name );
 }
-
-void PropertyContainer::addImage ( const ASCString& name, Surface &property, const ASCString& filename )
-{
-   ASCImageProperty* ip = new ASCImageProperty ( property, filename );
-   setup ( ip, name );
-}
-
 
 #endif
 
@@ -1121,7 +1103,7 @@ void* ImageProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) cons
             img = NULL;
       } else
          if ( fn.suffix() == "pcx" ) {
-            return loadImage ( fn, 1 )[0];
+            img = loadImage ( fn, 1 )[0];
          }
    }
    catch ( ASCexception ){
@@ -1141,66 +1123,6 @@ ASCString ImageProperty::toString() const
    writepcx ( valueToWrite, 0, 0, width-1, height-1, pal );
    return valueToWrite;
 }
-
-
-ASCImageProperty::PropertyType ASCImageProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
-{
-   try {
-      StringTokenizer st ( entry.value, fileNameDelimitter );
-      FileName fn = st.getNextToken();
-      fn.toLower();
-      if ( fn.suffix() == "png" ) {
-         SDLmm::Surface* s = NULL;
-         do {
-            tnfilestream fs ( fn, tnstream::reading );
-            SDLmm::Surface s2 ( IMG_LoadPNG_RW ( SDL_RWFromStream( &fs )));
-            s2.SetAlpha ( SDL_SRCALPHA, SDL_ALPHA_OPAQUE );
-            if ( !s )
-               s = new SDLmm::Surface ( s2 );
-            else {
-               int res = s->Blit ( s2 );
-               if ( res < 0 )
-                  propertyContainer->warning ( "ImageProperty::operation_eq - couldn't blit surface "+fn);
-            }
-
-            fn = st.getNextToken();
-         } while ( !fn.empty() );
-         if ( s )  {
-            Surface s3( *s );
-            delete s;
-            return s3;
-         } else
-            return Surface();
-
-      } else
-         if ( fn.suffix() == "pcx" ) {
-            tnfilestream fs ( fn, tnstream::reading );
-            Surface s ( IMG_LoadPCX_RW ( SDL_RWFromStream( &fs )));
-            s.SetColorKey( SDL_SRCCOLORKEY, 255 );
-            return s;
-         }
-   }
-   catch ( ASCexception ){
-      propertyContainer->error( "error accessing file " + entry.value );
-   }
-   return Surface();
-}
-
-ASCString ASCImageProperty::toString() const
-{
-   fatalError( "writing of Images not supported yet");
-   return "";
-   /*
-   int width, height;
-   getpicsize( property, width, height) ;
-   tvirtualdisplay vdp ( width+10, height+10, 255, 8 );
-   putimage ( 0, 0, property );
-   ASCString valueToWrite = extractFileName_withoutSuffix(fileName) + ".pcx";
-   writepcx ( valueToWrite, 0, 0, width-1, height-1, pal );
-   return valueToWrite;
-   */
-}
-
 
 
 ImageArrayProperty::PropertyType ImageArrayProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const

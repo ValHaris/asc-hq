@@ -1284,8 +1284,6 @@ void tvirtualdisplay :: init ( int x, int y, int color, int depth )
    agmp->bytesperscanline  = x * depth/8;
    agmp->byteperpix   = depth/8    ;
    agmp->linearaddress = (int) buf ;
-
-
    agmp->bitperpix          = depth;
    agmp->directscreenaccess = 1;
    if ( depth ==24 || depth==32 ) {
@@ -1295,9 +1293,7 @@ void tvirtualdisplay :: init ( int x, int y, int color, int depth )
       agmp->redfieldposition = 0;
       agmp->greenfieldposition = 8;
       agmp->bluefieldposition = 16;
-      agmp->surface = new Surface (  Surface::CreateSurface( buf, x, y, depth, 0xff, 0xff00, 0xff0000) );
-   } else
-      agmp->surface = new Surface ( Surface::CreateSurface( buf, x, y, depth, agmp->scanlinelength ) );
+   }
 
 }
 
@@ -1314,7 +1310,6 @@ tvirtualdisplay :: tvirtualdisplay ( int x, int y, int color, int depth )
 
 tvirtualdisplay :: ~tvirtualdisplay ( )
 {
-   delete agmp->surface;
    asc_free (  buf ) ;
    *agmp = oldparams;
 }

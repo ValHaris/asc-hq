@@ -16,14 +16,13 @@
  ***************************************************************************/
 
 
-#ifndef graphicsH
-#define graphicsH
+#ifndef sdlgraph_h
+#define sdlgraph_h
 
 #include "../global.h"
 #include "../tpascal.inc"
 #include "../palette.h"
 #include "../basegfx.h"
-#include "../graphics/surface.h"
 
 
 
@@ -54,7 +53,5 @@ extern int graphicinitialized;
 extern int isfullscreen ( void );
 
 extern SDL_Surface* getScreen();
-
-extern Surface& getActiveSurface();
 
 #endif

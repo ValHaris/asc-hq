@@ -405,7 +405,6 @@ AC_OUTPUT(  Makefile \
 	    source/libs/sdlmm/src/Makefile \
 	    source/libs/triangul/Makefile \
 	    source/sdl/Makefile \
-	    source/graphics/Makefile \
 	    source/tools/Makefile \
 	    source/tools/lib/Makefile \
 	    source/tools/linux/Makefile \

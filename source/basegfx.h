@@ -41,7 +41,6 @@
 #include "global.h"
 #include "palette.h"
 #include "sdl/graphics.h"
-#include "graphics/surface.h"
 
 #pragma pack(1)
 
@@ -69,7 +68,7 @@ struct  tgraphmodeparameters {
             char          bitperpix         ;      //!< the size of a pixel(?) in bits
             char          memorymodel;             //!< unused
             int           directscreenaccess;      //!< if 0 no call to an update function (which copies the buffer to the screen) is performed
-            Surface*      surface;
+            int           reserved[9];
     };
 
 

@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.125 2004-09-26 19:30:29 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.126 2004-09-26 19:53:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
 //     Revision 1.124  2004/09/25 12:37:51  mbickel
@@ -2270,9 +2270,9 @@ void         tnewmap::init(void)
       if ( ! random ) {
          mousevisible(false);
          if ( tauswahl->weather[auswahlw] )
-            tauswahl->weather[auswahlw]->paint ( x1 + 440,y1 + 182 );
+            putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[auswahlw]->pict );
          else
-            tauswahl->weather[0]->paint ( x1 + 440,y1 + 182 );
+            putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[0]->pict );
          mousevisible(true);
       }
    rahmen(true,x1 + 10,y1 + starty,x1 + xsize - 10,y1 + ysize - 45);
@@ -2373,9 +2373,9 @@ void         tnewmap::buttonpressed(int id)
       npop ( lastselectiontype );
 
       if ( tauswahl->weather[auswahlw] )
-         tauswahl->weather[auswahlw]->paint( x1 + 440,y1 + 182 );
+         putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[auswahlw]->pict );
       else
-         tauswahl->weather[0]->paint ( x1 + 440,y1 + 182 );
+         putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[0]->pict );
    }
    if (id == 11)
       if ( ! random) {

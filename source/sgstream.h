@@ -3,12 +3,9 @@
   
 */
 
-//     $Id: sgstream.h,v 1.31 2004-09-26 19:30:29 mbickel Exp $
+//     $Id: sgstream.h,v 1.32 2004-09-26 19:53:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
-//     Revision 1.30.2.1  2004/09/25 20:34:36  mbickel
-//     started replacement of old graphics system with SDLmm based one
-//
 //     Revision 1.30  2004/07/25 15:13:42  mbickel
 //      Updated weapon guide
 //
@@ -167,13 +164,11 @@
 #include "typen.h"
 #include "terraintype.h"
 #include "objecttype.h"
-#include "graphics/surface.h"
 
 
 
 extern void generatedirecpict ( void* orgpict, void* direcpict );
 FieldQuickView* generateAverageCol ( void* image );
-FieldQuickView* generateAverageCol ( const Surface& image );
 
 
 

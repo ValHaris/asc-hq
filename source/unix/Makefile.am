@@ -28,5 +28,5 @@ gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp
 
 asc_LDADD   		= $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-$(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/graphics/libgraphics.la @PARAGUI_LIBS@ \
+$(top_builddir)/source/sdl/libsdl.la @PARAGUI_LIBS@ \
 @LDADDLIBBZ2@  @SIGC_LIBS@

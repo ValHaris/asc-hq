@@ -511,7 +511,6 @@ void tdisplaymap :: init ( int x1, int y1, int x2, int y2 )
    vfb.parameters.linearaddress = (int) vfb.address;
    vfb.parameters.directscreenaccess = 1;
 
-   vfb.parameters.surface = new Surface ( Surface::CreateSurface( vfb.address, dispmapdata.vfbwidth, dispmapdata.vfbheight, 8, dispmapdata.vfbwidth ) );
 }
 
 
@@ -598,7 +597,7 @@ void tgeneraldisplaymap :: pnt_terrain ( void )
                    r = vfbleftspace + x * fielddistx;
 
                 yp = vfbtopspace + y * fielddisty;
-                fld->typ->paint ( r, yp );
+                putspriteimage ( r, yp, fld->typ->pict );
              }
           } else {
              int yp;

@@ -105,7 +105,7 @@ asc_version = @asc_version@
 install_sh = @install_sh@
 MAINTAINERCLEANFILES = Makefile.in
 
-SUBDIRS = @GENCL@ docs sdl libs ai graphics unix tools 
+SUBDIRS = @GENCL@ docs sdl libs ai unix tools
 
 EXTRA_DIST = *.cpp *.h *.inc
 subdir = source

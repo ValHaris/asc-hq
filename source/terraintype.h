@@ -18,7 +18,6 @@
 #ifndef terraintypeH
  #define terraintypeH
 
- #include "graphics/surface.h"
  #include "typen.h"
 
 //! the number of bits that specify the terrain of a field
@@ -86,7 +85,7 @@ const int cbodenartennum = 35;
           FieldQuickView* quickView;
         public:
           //! the image of the field
-          Surface        image;
+          void*          pict;
 
           //! the defense bonus for the unit standing on this field. \see AttackFormula::defense_defensebonus(int)
           int            defensebonus;
@@ -115,7 +114,7 @@ const int cbodenartennum = 35;
           const FieldQuickView* getQuickView();
           void readQuickView ( tnstream& stream );
 
-          Weather ( TerrainType* base ) : terraintype ( base ), quickView ( NULL ) {};
+          Weather ( TerrainType* base ) : pict( NULL ), terraintype ( base ), quickView ( NULL ) {};
           void runTextIO ( PropertyContainer& pc );
       };
      Weather*           weather[cwettertypennum];

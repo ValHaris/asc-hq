@@ -87,7 +87,6 @@ void initASCGraphicSubsystem ( SDL_Surface* _screen, SDLmm::Surface* icon )
   agmp->linearaddress = (int) screen->pixels;
   agmp->bitperpix = screen->format->BitsPerPixel;
   agmp->directscreenaccess = 0;
-  agmp->surface = new Surface ( _screen );
 
   *hgmp = *agmp;
 
@@ -106,10 +105,6 @@ SDL_Surface* getScreen()
    return screen;
 }
 
-Surface& getActiveSurface()
-{
-   return *agmp->surface;
-}   
 
 
 //*********** Misc ************
