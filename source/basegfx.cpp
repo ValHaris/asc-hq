@@ -2,9 +2,13 @@
     \brief Platform indepedant graphic functions. 
 */
 
-//     $Id: basegfx.cpp,v 1.28 2001-08-27 21:03:55 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.29 2001-09-28 17:43:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2001/08/27 21:03:55  mbickel
+//      Terraintype graphics can now be mounted from any number of PNG files
+//      Several AI improvements
+//
 //     Revision 1.27  2001/07/15 21:00:25  mbickel
 //      Some cleanup in the vehicletype class
 //
@@ -1479,8 +1483,8 @@ void putxlatfilter ( int x1, int y1, void* pic, char* xlattables )
    if ( agmp->windowstatus == 100 ) {
       char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
       trleheader*   hd = (trleheader*) pic;
-   
-      if ( hd->id == 16973 ) { 
+
+      if ( hd->id == 16973 ) {
          collategraphicoperations cgo ( x1, y1, x1+hd->x, y1+hd->y );
 
          int spacelength = agmp->scanlinelength - hd->x - 1;
@@ -1491,19 +1495,23 @@ void putxlatfilter ( int x1, int y1, void* pic, char* xlattables )
             if ( *src == hd->rle ) {
                x += src[1];
                for ( int i = src[1]; i > 0; i-- ) {
-                  *buf = xlattables[ src[2] * 256 + *buf ];
+                  if ( src[2] != 255 )
+                     *buf = xlattables[ src[2] * 256 + *buf ];
                   buf++;
                }
 
                src += 3;
                c+=2;
-   
+
             } else {
-               *buf = xlattables[ *(src++) * 256 + *buf ];
+               if ( *src != 255 )
+                  *buf = xlattables[ *(src++) * 256 + *buf ];
+               else
+                  src++;
                buf++;
                x++;
             }
-            
+
             if ( x > hd->x ) {
                buf += spacelength;
                x = 0;
@@ -1517,7 +1525,10 @@ void putxlatfilter ( int x1, int y1, void* pic, char* xlattables )
          src += 4;
          for ( int y = w[1] + 1; y > 0; y-- ) {
             for ( int x = w[0]+1; x > 0; x-- ) {
-               *buf = xlattables[ *(src++) * 256 + *buf ];
+               if ( *src != 255 )
+                  *buf = xlattables[ *(src++) * 256 + *buf ];
+               else
+                  src++;
                buf++;
             }
    

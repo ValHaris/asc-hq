@@ -72,8 +72,8 @@ blue Text !
 #font02##color004#Statistic Armies
 #font01##color000#
 This dialogbox informs you about the number
-of units that are visible, NOT the number of armies
-that exist on the map. The number is splited
+of units that are visible, NOT the number of units
+that exist on the map. The number is split
 into three categories: ships, tanks and planes.
 
 There are two display modes:
@@ -110,55 +110,49 @@ There are two display modes:
 #font01#
 The folowing function are also available by using the GUI:
 #aeinzug040#
-space #pos030#: movement / execute order;
-e  #pos030#: end turn
-r  #pos030#: start building roads, railroads, and other objects
-#pos010#r  #pos040#: build road
-#pos010#w  #pos040#: build railway
-#pos010#p  #pos040#: build pipeline
-#pos010#o  #pos040#: build powerline
-p  #pos030#: repair unit
-a  #pos030#: attack
-s  #pos030#: ascend
-d  #pos030#: descent
-f  #pos030#: refuel
-;#pos010#g  #pos040#: refuel via dialog 
-l  #pos030#: show loading
-i  #pos030#: information
-m  #pos030#: put any mine
-#pos010#t  #pos040#: put anti tank mine 
-#pos010#p  #pos040#: put anti personal mine 
-#pos010#m  #pos040#: put moored mine 
-#pos010#f  #pos040#: put floating mine 
-#pos010#r  #pos040#: remove mine 
-b  #pos030#: put building
-v  #pos030#: view map 
+space #pos030#: Movement / execute order;
+e  #pos030#: End turn
+r  #pos030#: Start building roads, railroads, and other objects
+#pos010#r  #pos040#: Build road
+#pos010#w  #pos040#: Build railway
+#pos010#p  #pos040#: Build pipeline
+#pos010#o  #pos040#: Build powerline
+p  #pos030#: Repair unit
+a  #pos030#: Attack
+s  #pos030#: Ascend
+d  #pos030#: Descend
+f  #pos030#: Refuel
+;#pos010#g  #pos040#: Refuel via dialog 
+l  #pos030#: Show loading
+i  #pos030#: Information
+m  #pos030#: Put any mine
+#pos010#t  #pos040#: Put anti tank mine 
+#pos010#p  #pos040#: Put anti personal mine 
+#pos010#m  #pos040#: Put moored mine 
+#pos010#f  #pos040#: Put floating mine 
+#pos010#r  #pos040#: Remove mine 
+b  #pos030#: Put building
+v  #pos030#: View map 
 
 ---------------------------
 
 F1 #pos030#: Help
 F2 #pos030#: Main Menu
 F3 #pos030#: Continue Network Game
-F7 #pos030#: view weapon research
-1 #pos030#: toggle view of resourcs
-2 #pos030#: toggle unit shading
-3 #pos030#: show weapon range of unit
-4 #pos030#: show movement range of unit
-7 #pos030#: terrain infos
-8 #pos030#: show weight of unit
-9 #pos030#: write whole map to PCX-File
-0 #pos030#: save screen to PCX-File
-strg x #pos030#: exit program
+F7 #pos030#: View weapon research
+1 #pos030#: Toggle view of resourcs
+2 #pos030#: Toggle unit shading
+3 #pos030#: Show weapon range of unit
+4 #pos030#: Show movement range of unit
+7 #pos030#: Terrain infos
+8 #pos030#: Show weight of unit
+9 #pos030#: Write whole map to PCX-File
+0 #pos030#: Save screen to PCX-File
+strg x #pos030#: Exit program
 
 ---------------------------
 
-These functions are mostly for developers:
-
-r  #pos030#: rePaintDisplay; (DOS)
-R  #pos030#: reinitialize and rePaintDisplay; (DOS)
-
-. #pos030#: scroll to debug page (DOS)
-, #pos030#: scroll to game page (DOS)
+r  #pos030#: repaint display (mainscreen only)
 
 #aeinzug0#
 
@@ -173,16 +167,16 @@ Don't let the sheer amount of text here discourage you. It really is quite easy 
 Select:
  #aeinzug50##eeinzug30#
 #color1#Game / New-Single Level #color0#from the Pulldown Menu#color1#
-select map
+Select map
 Start
-#aeinzug0##eeinzug0##color0#In the Alliance-Dialogbox:#aeinzug50##eeinzug30#
-- specify who is controlled by a human player ( first column )
-- set their positions (second column). If several players play on the same computer only a prompt for their passwords appears, but if they are assigned to different computers you have to specify a way for transmitting the data from one computer to another (only "direct file transfer" is implemented yet).
-- change the names of the players
-- setup alliances if necessary
+#aeinzug0##eeinzug0##color0#In the Alliance-Dialogbox you can:#aeinzug50##eeinzug30#
+- Specify which sides are controlled by human players (first column)
+- Set their positions (second column). If several players play on the same computer only a prompt for their passwords appears, but if they are assigned to different computers you have to specify a way for transmitting the data from one computer to another (only "direct file transfer" is implemented yet).
+- Change the names of the players
+- Setup alliances
 #color1#OK#color0#
  #aeinzug20##eeinzug0##color0#
-If the game is played on several computers a dialog box appears where you can choose which items are checked by checksums. Checksums prevent cheating by improving your units, but they also prevent using an updated unit set during the game. I personally don't use checksums at the moment. So you can just press OK.
+If the game is played on several computers, a dialog box appears where you can choose which items are checked by checksums. Checksums prevent cheating by improving your units, but they also prevent using an updated unit set during the game. I personally don't use checksums at the moment. So you can just press OK.
  #aeinzug0##eeinzug0#
 The game now asks for the password of the first player. If no password is entered the next time the program will only wait for any key to be pressed.
  #aeinzug20##eeinzug0#
@@ -191,20 +185,20 @@ At this point you play your turn. So you can read the rest after you have succes
 
 #font2#Sending the game to the next player#font1#
  #aeinzug00##eeinzug00#
-If the game is played on a single computer, ASC would just ask for the password of the next player.
+If the game is played on a single computer, ASC just asks for the password of the next player.
 
 ;But in an email- or other multi-computer game a dialogbox appears where you have to setup a connection to the next computer. The default and only transfer method for the game is direct file transfer. 
 ;To #color1#set#color0# it #color1#up#color0# you have to 
-Now enter or select a filename to which the game will be saved. If a % is used in the filename the current turn number will be inserted there. If you want to save to a different file after each turn this is quite handy. You will not be prompted to enter a filename after ending the following turns if the file that is going to be written does not exist. So using the % will avoid any unnecessary questions. To change the filename later you have to change it in #color1#Game / network / send parameters#color0#
+Now enter or select a filename to which the game will be saved. If a % is used in the filename the current turn number will be inserted there. If you want to save to a different file after each turn this is quite convenient. You will not be prompted to enter a filename after ending the following turns if the file that is to be written does not exist. So using the % will avoid any unnecessary questions. To change the filename later you have to change it in #color1#Game / Network / Send parameters#color0#
 
 ##0022
 #font2#Continuing a PbeM game#font1#
 
-You will have received a file ending with #color4#.EML#color0#. Place it in your ASC directory.
+You should have received a file ending with #color4#.EML#color0#. Place it in your ASC directory.
 
 In ASC select #color1#Game / Continue Network Game #color0#from the Pulldown Menu.
 
-Select the file you received. It will probably to first file in the list.
+Select the file you received. It will probably be the first file in the list since the list is sorted by date, by default.
 ;The only transfer method at the moment is direct file transfer which is the default. #color1#Set#color0# it #color1#up#color0# for receiving by selecting the 
 ;Choose a way for "receiving" the game and set it up:
 ;direct file transfer: choose a *.EML file to load.
@@ -213,7 +207,7 @@ Select the file you received. It will probably to first file in the list.
 
 After making your turn, press the #color1#end turn#color0# button.
 
-Then enter or select a filename to which the game will be saved. If a % is used in the filename the current turn number will be inserted there. If you want to save to a different file after each turn this is quite handy. You will not be prompted to enter a filename after ending the following turns if the file that is going to be written does not exist. So using the % will avoid any unnecessary questions. To change the filename later you have to change it in #color1#Game / network / send parameters#color0#
+Then enter or select a filename to which the game will be saved. If a % is used in the filename the current turn number will be inserted there. If you want to save to a different file after each turn this is quite convenient. You will not be prompted to enter a filename after ending the following turns if the file that is to be written does not exist. So using the % will avoid any unnecessary questions. To change the filename later you have to change it in #color1#Game / Network / Send parameters#color0#
 
 
 ##0030
@@ -221,9 +215,9 @@ Then enter or select a filename to which the game will be saved. If a % is used 
 #color004##font1#
 ADVANCED STRATEGIC COMMAND
 #color000##font0#
-(C) 1994 - 2000 by Martin Bickel and Marc Schellenberger.
+(C) 1994 - 2001 by Martin Bickel and Marc Schellenberger.
 
-Christian Mayer created most of ASC's graphics including the ASC unit set, the game interface and several terrain.
+Christian Mayer created most of ASC's graphics including the ASC unit set, the game interface and some terrain.
 
 The port to Linux was done by Tom Wilson, Simon Britnell and Martin Bickel
 
@@ -235,7 +229,7 @@ Many thanks go to Jörg Richter for giving us the source of his excellent BI2/3 m
 
 Steffen Fröhlich created the "Battle Isle" vehicle set and several buildings.
 
-The "Standard MKII" unit set was created by Bas Fournier
+The "Standard MKII" unit set was created by Bas Fournier.
 
 Many objects, terrain and buildings were contributed by Torsten Maekler.
 
@@ -280,27 +274,31 @@ There are several different building functions that are resource related, which 
 - mining stations
 - matter converter (was formerly called: 'conventional power plant')
 #aeinzug0#
-A single building must never have more than one of the above flags set!
+;This line belongs in the makebld documentatin ----> A single building must never have more than one of the above flags set!
 
-#color1#Solar power plants#color0# produce resources without consuming any other, usually (but not necessarily) energy. The amount of produced resources is the maxplus settings of the building multiplied with a factor for the weather. This factor is 100% for clear weather, 50% for rain, 25% for heavy rain, 75% for snow and 37.5% for much snow.
+#color1#Solar power plants#color0# produce resources without consuming any other, usually (but not necessarily) energy. The amount of produced resources is the maxplus setting of the building multiplied with a factor for the weather. This factor is 100% for clear weather, 50% for rain, 25% for heavy rain, 75% for snow and 37.5% for much snow.
 
-#color1#Wind power plants#color0# produce resources without consuming any other, usually (but not necessarily) energy. The amount of produced resources is the maxplus settings of the building multiplied with the power of the wind. At the max wind power of 255 it produces 100% of energy.
+#color1#Wind power plants#color0# produce resources without consuming any other, usually (but not necessarily) energy. The amount of produced resources is the maxplus setting of the building multiplied with the power of the wind. At the max wind power of 255 it produces 100% of energy.
 
-#color1#Mining stations#color0# extract resources from the ground around their entrance, the fields one after the other. Since only material and fuel can be are stored in the ground only these can be extracted. With increasing distance from the entrance the amount of extracted resources per turn gets less and less. The bars on the left side of the mineral resources page in the buildings window shows this. The maximum distance to extract resources from is 10 fields.
-Mining stations may consume other resource for their task. The resources they consume is set in the mapeditor in the #color6#max plus#color0# field as negative values. Positive values define the resources that are extracted. If a mining stations does not consume any resources it will always extract the maximum possible amount of the ground, that is the #color6#max plus#color0# value divided by the distance factor. If it does consume resources, the production rate is determined by the #color6# plus #color0#field. It must between 0 and maxplus and can be changed in the game on the mining page to reduce or increase output.
+#color1#Mining stations#color0# extract resources from the ground around their entrance, field-by-field. Since only material and fuel can be stored in the ground only these can be extracted. With increasing distance from the entrance the amount of extracted resources per turn gets less and less. The bars on the left side of the mineral resources page in the buildings window shows this. The maximum distance to extract resources from is 10 fields.
+
+Mining stations sometimes consume other resources in order to operate. If this resource is unavailable, the station cannot fulfill its task. If the resource is available, but you want to conserve it, you can adjust resource consumption in the mining dialog. Of course, setting lower a lower rate of consumption results in reduced efficiency.
+
+Mining stations may consume other resources for their task. The resources they consume is set in the mapeditor in the #color6#max plus#color0# field as negative values. Positive values define the resources that are extracted. If a mining stations does not consume any resources it will always extract the maximum possible amount of the ground, that is the #color6#max plus#color0# value divided by the distance factor. If it does consume resources, the production rate is determined by the #color6# plus #color0#field. It must between 0 and maxplus and can be changed in the game on the mining page to reduce or increase output.
 The #color6#efficiency#color0# ( = resources_stored * 1024 / extracted_resources ) is specified there also. The higher the efficiency, the less resources are extracted from the ground to produce a given output. Default value for effeciency should be 1024.
 You can find some additional notes about mining stations at the end of this text.
 
-#color1#Matter converter#color0# use some kind of resources to produce others. You can build quite a variety of different buildings. Power plants consume fuel to produce energy, a fusion power plant could use material for this. A refinery could convert material to fuel. It is also possible to produce two resources out of one, or vice versa cosume two resources to produce one.
+#color1#Matter converters#color0# use one kind of resources to produce another. You can build quite a variety of different converters. Power plants consume fuel to produce energy, a fusion power plant could use material for this. A refinery could convert material to fuel. It is also possible to produce two resources out of one, or vice versa cosume two resources to produce one.
+
 Like in mining stations the resources that are beeing produced are defined by using positive values in the various plus fields, while resources that are consumed are identified by negative values. The #color6#maxplus#color0# field of the building type defines the upper (or lower) limits. In the mapeditor the limits for the buildings may be decreased by settings the #color6#maxplus#color0# fields there. The #color6#plus#color0# field defines the initial production rate which can be changed in the game on the appropriate page of the building window.
 
 
 #font2#Notes on mining#font1#
-The relative amount of resources that is still in the ground is displayed in the right graph of the "mineral resources" page in the mining station. If every field of the ring that has a given distance contains the maximum possible resources, the bars have maximum height. Since there are more fields at a far distance, the absolute amount of resources in the greater distances is usually much greater. This is indicated by the single lines which display the absolute amount of resources. Not that the bars and the lines are differently scaled.
+The relative amount of resources that is still in the ground is displayed in the right graph of the "mineral resources" page in the mining station. If every field of the ring that has a given distance contains the maximum possible resources, the bars have maximum height. Since there are more fields at a far distance, the absolute amount of resources in the greater distances is usually much greater. This is indicated by the single lines which display the absolute amount of resources. Note that the bars and the lines are differently scaled.
 
-You can search mineral resources with some units, the radius for the search is specified in the vehicle type. There are two functions a unit can have: "drill for mineral resources manually" and "search for mineral resources automatically". When designing units the manual search should only be used with ships and vehicles, while the automatic search is possible with ships, airplanes and even satellites.
-
-At the moment we have only one unit that is capable of searching for mineral resources. This is the "surveyor" and it can only search manually.
+You can search mineral resources with some units, the radius for the search is specified in the vehicle type. There are two functions a unit can have: "drill for mineral resources manually" and "search for mineral resources automatically".
+;This kind of information is NOT relevant to players! -Bas
+;When designing units the manual search should only be used with ships and vehicles, while the automatic search is possible with ships, airplanes and even satellites.
 
 The mining stations can see the mineral resources to and at their current mining position too.
 
@@ -309,29 +307,28 @@ With the pull-down menu function #color6#Global#color0# / #color6#Toggle Resourc
 
 
 
-
 #font2#ASC internals#font1#
 The following variables exist to describe the resource system. Unless otherwise noted they all contain fields for each of the three resources: energy, material and fuel.
 
-#color1#building type#color0# (set by makebld):
+#color1#Building type#color0# (set by makebld):
 #aeinzug25# - ASC tank: the maximum storage capacity in ASC mode
  - BI tank: the maximum storage capacity in BI mode
  - maxplus: see above explanation
  - efficiency material: only for mining stations, see above explanation
  - efficiency fuel: only for mining stations, see above explanation
 
-#color1#building instance#color0# (set by edhex):
+#color1#Building instance#color0# (set by edhex):
  - plus: only used in ASC mode
  - maxplus: only used in ASC mode
  - current storage
  - BI plus: only used in BI mode
 
-#color1#each field on the map#color0#:
+#color1#Each field on the map#color0#:
  - material
  - fuel
  - resources visible: the amount of resources that is displayed is not necessarily the amount of resources in the ground, it is the amount that was there when you checked the field the last time.
 
-#color1#the map itself#color0#
+#color1#The map itself#color0#
  - energy and fuel for each player in BI resource mode
 #aeinzug0#
 
@@ -343,14 +340,14 @@ In mutliplayer games a player could potentially cheat by changing the parameters
 
 To avoid this, checksums of some or all items can be included in a multiplayer game. 
 The left large list shows the items of the selected category that are available in the game, and the right list shows the items which are protected by checksums. 
-Note that only the checksums are included, not the items themselves. So every player has to have all used buildings, units etc.
+Note that only the checksums are included, not the items themselves. This means that checking an item that isn't available to all players in the game will result in an error. See also below.
 
 There are 3 modes how the game can use the checksums:
 #color1#no limit, no include#color0#
-#aeinzug15##eeinzug15#The game is not limited to the items whose checksums are included. If ohter items are used, their checksums will not be included, so they are not checked in any way.
+#aeinzug15##eeinzug15#The game is not limited to the items whose checksums are included. If other items are used, their checksums will not be included, so they are not checked in any way.
 #aeinzug0##eeinzug0#
 #color1#no limit, include#color0#
-#aeinzug15##eeinzug15#The game is not limited to the items whose checksums are included. If ohter items are used, their checksums will be included, so the player who uses not included items first determines the parameters of these items.
+#aeinzug15##eeinzug15#The game is not limited to the items whose checksums are included. If other items are used, their checksums will be included, so the player who uses previously unincluded items first determines the parameters of these items.
 #aeinzug0##eeinzug0#
 #color1#limited#color0#
 #aeinzug15##eeinzug15#The game is limited to the items whose checksums are included. Other items may not be used.
@@ -375,7 +372,7 @@ To ally with another player set the status to a green dot. This player will get 
 The alliances can be set in the lower table of the alliance dialogbox. If two players are allied, a green X is set where the row of one player and the column of the other player intersect. A green eye is displayed when the players are allied and share their view. A red X indicates that they are at war.
 You can toggle between these three states by clicking on the item.
 
-If you want to setup a Play by Email Game you must assign the players to different computers.
+If you want to set up a Play by Email Game you must assign the players to different computers.
 
 ##0901
 There are 2 or more maps with the same ID and the same PrivID. 
@@ -395,7 +392,7 @@ To continue the campaign, press cancel, save the #color1#campaign recovery infor
 ##0904
 #font02##pos030# Congratulations
 #font01#
-You achived the mission goal(s) of
+You achieved the mission goal(s) of
 this level !
 
 ##0910
@@ -404,3 +401,4 @@ You have entered an empty password. In a multiplayer game, all other players cou
 It is highly recommended to use a password if you are playing a serious multiplayer game.
 
 However, you can use empty passwords for test games, or if your opponent is sitting right next to you and is reading this dialog as well :-)
+
