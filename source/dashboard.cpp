@@ -952,21 +952,25 @@ void         tdashboard::paintclasses ( void )
          activefontsettings.height = 9;
       } else
          bar ( agmp->resolutionx - ( 640 - 499), 42, agmp->resolutionx - ( 640 - 575), 50, 171 );
-   } else
-      if (vehicle) {
-         if ( !vehicle->typ->description.empty() ) {
-            activefontsettings.justify = lefttext;
-            activefontsettings.color = white;
-            activefontsettings.background = 171;
-            activefontsettings.font = schriften.guifont;
-            activefontsettings.length = 75;
-            activefontsettings.height = 0;
-            showtext2c( vehicle->typ->description ,agmp->resolutionx - ( 640 - 500 ), 42);
-            activefontsettings.height = 9;
-         } else
-            bar ( agmp->resolutionx - ( 640 - 499), 42, agmp->resolutionx - ( 640 - 575), 50, 171 );
-      } else
+   } else {
+      const Vehicletype* vt;
+      if ( vehicle )
+         vt = vehicle->typ;
+      else
+         vt = vehicletype;
+
+      if ( vt && !vt->description.empty() ) {
+         activefontsettings.justify = lefttext;
+         activefontsettings.color = white;
+         activefontsettings.background = 171;
+         activefontsettings.font = schriften.guifont;
+         activefontsettings.length = 75;
+         activefontsettings.height = 0;
+         showtext2c( vt->description ,agmp->resolutionx - ( 640 - 500 ), 42);
+         activefontsettings.height = 9;
+     } else
          bar ( agmp->resolutionx - ( 640 - 499), 42, agmp->resolutionx - ( 640 - 575), 50, 171 );
+   }
 }
 
 void         tdashboard::paintname ( void )
