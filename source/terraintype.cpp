@@ -116,7 +116,7 @@ void      TerrainType::Weather::paint ( int x1, int y1 )
    else {
       void* img;
       bool ref = loadbi3pict_double ( bi_pict, &img );
-      putimage ( x1, y1, img );
+      putspriteimage ( x1, y1, img );
       if ( !ref )
          asc_free( img );
    }

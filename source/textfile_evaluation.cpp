@@ -1176,7 +1176,10 @@ ASCImageProperty::PropertyType ASCImageProperty::operation_eq ( const TextProper
          if ( fn.suffix() == "pcx" ) {
             tnfilestream fs ( fn, tnstream::reading );
             Surface s ( IMG_LoadPCX_RW ( SDL_RWFromStream( &fs )));
-            //s.SetColorKey( SDL_SRCCOLORKEY, 255 );
+            if ( s.GetPixelFormat().BitsPerPixel() == 8)
+               s.SetColorKey( SDL_SRCCOLORKEY, 255 );
+            else 
+               s.SetColorKey( SDL_SRCCOLORKEY, 0xfefefe );
             return s;
          }
    }

@@ -1296,8 +1296,16 @@ void tvirtualdisplay :: init ( int x, int y, int color, int depth )
       agmp->greenfieldposition = 8;
       agmp->bluefieldposition = 16;
       agmp->surface = new Surface (  Surface::CreateSurface( buf, x, y, depth, 0xff, 0xff00, 0xff0000) );
-   } else
+   } else {
       agmp->surface = new Surface ( Surface::CreateSurface( buf, x, y, depth, agmp->scanlinelength ) );
+      for ( int i = 0; i < 256; ++i ) {
+         SDL_Color& c = agmp->surface->GetPixelFormat().palette()->colors[i];
+         c.r = pal[i][0];
+         c.g = pal[i][1];
+         c.b = pal[i][2];
+      }
+         
+   }
 
 }
 

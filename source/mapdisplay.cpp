@@ -512,6 +512,14 @@ void tdisplaymap :: init ( int x1, int y1, int x2, int y2 )
    vfb.parameters.directscreenaccess = 1;
 
    vfb.parameters.surface = new Surface ( Surface::CreateSurface( vfb.address, dispmapdata.vfbwidth, dispmapdata.vfbheight, 8, dispmapdata.vfbwidth ) );
+   for ( int i = 0; i < 256; ++i ) {
+        SDL_Color& c = vfb.parameters.surface->GetPixelFormat().palette()->colors[i];
+        c.r = pal[i][0];
+        c.g = pal[i][1];
+        c.b = pal[i][2];
+   }
+         
+   
 }
 
 
