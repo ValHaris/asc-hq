@@ -3,9 +3,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.112 2001-09-13 17:43:11 mbickel Exp $
+//     $Id: controls.cpp,v 1.113 2001-09-25 18:03:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.112  2001/09/13 17:43:11  mbickel
+//      Many, many bug fixes
+//
 //     Revision 1.111  2001/08/09 19:28:22  mbickel
 //      Started adding buildingtype text file functions
 //
@@ -2953,7 +2956,7 @@ void nextPlayer( void )
 
 void runai( int playerView )
 {
-   if ( CGameOptions::Instance()->runAI ) {
+   if ( CGameOptions::Instance()->runAI >= 0 ) {
       actmap->playerView = playerView;
 
       if ( !actmap->player[ actmap->actplayer ].ai )

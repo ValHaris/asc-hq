@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.99 2001-09-24 17:22:12 mbickel Exp $
+//     $Id: typen.h,v 1.100 2001-09-25 18:03:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.99  2001/09/24 17:22:12  mbickel
+//      Fixed crash in end of turn
+//      Improved documentation
+//
 //     Revision 1.98  2001/09/13 17:43:12  mbickel
 //      Many, many bug fixes
 //
@@ -1035,7 +1039,7 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 /////////////////////////////////////////////////////////////////////
 
 //! The movement decrease in percent of the total movemnt that is used for attacking; only used for units that can move after attacking
-const int attackmovecost = 20;  
+const int attackmovecost = 0;  
 
 #define movement_cost_for_repaired_unit 24
 #define movement_cost_for_repairing_unit 12
