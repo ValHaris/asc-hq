@@ -419,7 +419,7 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
       int xtogo = veh->xpos;
       int ytogo = veh->ypos;
 
-      for ( int i = 0; i < path.size(); i++ ) {
+      for ( unsigned int i = 0; i < path.size(); i++ ) {
          int x = path[i].x;
          int y = path[i].y;
 
@@ -641,47 +641,49 @@ void AI ::  runReconUnits ( )
 
 AI::UnitDistribution::Group AI::getUnitDistributionGroup ( pvehicletype vt )
 {
-         switch ( chooseJob ( vt, vt->functions ) ) {
-            case AiParameter::job_supply : return UnitDistribution::service;
-            case AiParameter::job_recon  : return UnitDistribution::recon;
-            case AiParameter::job_conquer: return UnitDistribution::conquer;
-            case AiParameter::job_fight:
-            case AiParameter::job_guard: {
-                                            bool range = false;
-                                            for ( int w = 0; w < vt->weapons.count; w++ )
-                                               if ( vt->weapons.weapon[w].offensive() )
-                                                  if ( vt->weapons.weapon[w].maxdistance >= 2 * minmalq )
-                                                     range = true;
-                                            if ( range )
-                                               return UnitDistribution::rangeattack;
-                                            else
-                                               return UnitDistribution::attack;
-                                          }
-          } //switch job
-          return UnitDistribution::other;
+   switch ( chooseJob ( vt, vt->functions ) ) {
+      case AiParameter::job_supply : return UnitDistribution::service;
+      case AiParameter::job_recon  : return UnitDistribution::recon;
+      case AiParameter::job_conquer: return UnitDistribution::conquer;
+      case AiParameter::job_fight:
+      case AiParameter::job_guard: {
+                                      bool range = false;
+                                      for ( int w = 0; w < vt->weapons.count; w++ )
+                                         if ( vt->weapons.weapon[w].offensive() )
+                                            if ( vt->weapons.weapon[w].maxdistance >= 2 * minmalq )
+                                               range = true;
+                                      if ( range )
+                                         return UnitDistribution::rangeattack;
+                                      else
+                                         return UnitDistribution::attack;
+                                    }
+      default:;
+    } //switch job
+    return UnitDistribution::other;
 }
 
 
 AI::UnitDistribution::Group AI::getUnitDistributionGroup ( pvehicle veh )
 {
-         switch ( veh->aiparam[getPlayerNum()]->job ) {
-            case AiParameter::job_supply : return UnitDistribution::service;
-            case AiParameter::job_recon  : return UnitDistribution::recon;
-            case AiParameter::job_conquer: return UnitDistribution::conquer;
-            case AiParameter::job_fight:
-            case AiParameter::job_guard: {
-                                            bool range = false;
-                                            for ( int w = 0; w < veh->typ->weapons.count; w++ )
-                                               if ( veh->typ->weapons.weapon[w].offensive() )
-                                                  if ( veh->typ->weapons.weapon[w].maxdistance >= 2 * minmalq )
-                                                     range = true;
-                                            if ( range )
-                                               return UnitDistribution::rangeattack;
-                                            else
-                                               return UnitDistribution::attack;
-                                          }
-          } //switch job
-          return UnitDistribution::other;
+   switch ( veh->aiparam[getPlayerNum()]->job ) {
+      case AiParameter::job_supply : return UnitDistribution::service;
+      case AiParameter::job_recon  : return UnitDistribution::recon;
+      case AiParameter::job_conquer: return UnitDistribution::conquer;
+      case AiParameter::job_fight:
+      case AiParameter::job_guard: {
+                                      bool range = false;
+                                      for ( int w = 0; w < veh->typ->weapons.count; w++ )
+                                         if ( veh->typ->weapons.weapon[w].offensive() )
+                                            if ( veh->typ->weapons.weapon[w].maxdistance >= 2 * minmalq )
+                                               range = true;
+                                      if ( range )
+                                         return UnitDistribution::rangeattack;
+                                      else
+                                         return UnitDistribution::attack;
+                                    }
+      default:;
+    } //switch job
+    return UnitDistribution::other;
 }
 
 void AI::UnitDistribution::read ( tnstream& stream )

@@ -1162,7 +1162,7 @@ else
   fi
 fi
 
-CXXFLAGS="$CXXFLAGS -DHEXAGON -funsigned-char -D_UNIX_ -D_SDL_ -D_NOASM_"
+CXXFLAGS="$CXXFLAGS -DHEXAGON -Wno-sign-compare -funsigned-char -D_UNIX_ -D_SDL_ -D_NOASM_"
 # Extract the first word of "ranlib", so it can be a program name with args.
 set dummy ranlib; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6

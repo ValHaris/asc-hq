@@ -54,7 +54,7 @@ class TextFormatParser {
          TextPropertyGroup* textPropertyGroup;
 
      public:
-        TextFormatParser( tnstream* stream_, const ASCString& primaryName_ = "" ) : stream ( stream_ ), primaryName ( primaryName_ ), levelDepth ( 0 ), textPropertyGroup ( NULL ) {};
+        TextFormatParser( tnstream* stream_, const ASCString& primaryName_ = "" ) : stream ( stream_ ), levelDepth ( 0 ), primaryName ( primaryName_ ), textPropertyGroup ( NULL ) {};
         TextPropertyGroup* run (  );
         ASCString readLine ( );
      protected:
@@ -85,7 +85,7 @@ class PropertyContainer {
                virtual void evaluate_rw ( ) = 0;
                ASCString valueToWrite;
             public:
-               Property () : evaluated(false), propertyContainer ( NULL ), entry ( NULL ) {};
+               Property () : propertyContainer ( NULL ), entry ( NULL ), evaluated(false) {};
                void evaluate ( );
                const ASCString& getName() { return name; };
                const ASCString& getLastName() { return lastName; };
@@ -211,7 +211,7 @@ class PropertyContainer {
          const ASCString& getFilename (  ) { return filename; };
          virtual ~PropertyContainer ( ) { };
       protected:
-         PropertyContainer ( const ASCString& baseName, TextPropertyGroup* tpg, bool reading_ ) : levelDepth ( 0 ), textPropertyGroup( tpg ), reading( reading_ ) { };
+         PropertyContainer ( const ASCString& baseName, TextPropertyGroup* tpg, bool reading_ ) : reading( reading_ ), levelDepth ( 0 ), textPropertyGroup( tpg ) { };
       private:
          void setup ( Property* p, const ASCString& name );
          virtual void writeProperty ( Property& p, const ASCString& value ) = 0;

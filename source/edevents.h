@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: edevents.h,v 1.6 2001-01-28 14:04:13 mbickel Exp $
+//     $Id: edevents.h,v 1.7 2001-08-09 10:28:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2001/01/28 14:04:13  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.5  2000/08/06 11:39:03  mbickel
 //      New map paramter: fuel globally available
 //      Mapeditor can now filter buildings too
@@ -56,3 +62,5 @@
 extern void         event(void);
 extern void setmapparameters( void );
 
+extern void         getxy(word *x,word *y);
+extern void         getxy( int *x, int *y);

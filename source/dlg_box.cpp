@@ -3,9 +3,14 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.57 2001-08-07 15:58:09 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.58 2001-08-09 10:28:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2001/08/07 15:58:09  mbickel
+//      Fixed crash in mail list
+//      Fixed crash in weapon info with mines
+//      Fixed cancel Button in object construction
+//
 //     Revision 1.56  2001/07/30 17:43:13  mbickel
 //      Added Microsoft Visual Studio .net project files
 //      Fixed some warnings
@@ -1149,7 +1154,7 @@ void         tdialogbox::enablebutton(int         id)
    if ( mss == 2 )
       setinvisiblemouserectanglestk ( x1 + pb->x1, y1 + pb->y1, x1 + pb->x2, y1 + pb->y2 );
 
-   collategraphicoperations cgo ( x1 + pb->x1, y1 + pb->y1, x1 + pb->x2, y1 + pb->y2 );
+   collategraphicoperations cgo ( x1 + pb->x1, max ( y1 + pb->y1 - 20, 0 ), x1 + pb->x2, y1 + pb->y2 );
 
 
    char strng[200];
@@ -1177,9 +1182,9 @@ void         tdialogbox::enablebutton(int         id)
       paintsurface( pb->x1 + 1, pb->y1 + 1, pb->x2 - 1, pb->y2 - 1 ); 
       if ( pb->text )  
          if (pb->text[0] )
-            if ( pb->style != 3 )
+            if ( pb->style != 3 ) {
                showtext3(pb->text,x1 + pb->x1,y1 + pb->y1 - activefontsettings.font->height);
-            else {
+            } else {
                npush ( activefontsettings.length );
                activefontsettings.length = 300;
                cgo.off();
@@ -3654,7 +3659,13 @@ void  loadtexture ( void )
 
 
 
-
+tstringselect :: tstringselect ( )
+{
+   numberoflines = 0;
+   firstvisibleline = 0;
+   redline = 0;
+   startpos = 0;
+}
 
 
 void         tstringselect::init(void)
@@ -3670,10 +3681,6 @@ void         tstringselect::init(void)
    title = "Text-Box";
    windowstyle = windowstyle ^ dlg_in3d;
    lnshown = 10;
-   numberoflines = 0;
-   firstvisibleline = 0;
-   redline = 0;
-   startpos = 0;
    ey = ysize - 50;
    ex = xsize - 30;
    setup();

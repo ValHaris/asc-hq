@@ -47,6 +47,9 @@ class AiThreat {
 
 
 class AiValue {
+        #ifdef karteneditor
+        public:
+        #endif
            int value;
            int addedValue;
         public:
@@ -67,6 +70,8 @@ class AiValue {
 class AiParameter : public AiValue {
            pvehicle unit;
         public:
+           static const int taskNum = 8;
+           static const int jobNum = 7;
            enum Task { tsk_nothing, tsk_tactics, tsk_tactwait, tsk_stratwait, tsk_wait, tsk_strategy, tsk_serviceRetreat, tsk_move } task;
            enum Job { job_undefined, job_fight, job_supply, job_conquer, job_build, job_recon, job_guard } job;
            int lastDamage;

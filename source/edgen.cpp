@@ -2,9 +2,13 @@
     \brief The random map generator
 */
 
-//     $Id: edgen.cpp,v 1.11 2001-07-28 11:19:10 mbickel Exp $
+//     $Id: edgen.cpp,v 1.12 2001-08-09 10:28:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2001/07/28 11:19:10  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.10  2001/07/27 21:13:34  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -566,7 +570,7 @@ int terrain_object_ids[numofbdts][2][2] = {{{ 299, -1 }, { 307, -1 }},  // water
    
 void tmapgenerator::setmap(void)
 {
-   const int id[numofbdts]={60,18,82,20,100,61,63,71,0,0,0};
+   // const int id[numofbdts]={60,18,82,20,100,61,63,71,0,0,0};
    int i,j;
 
    generatefinishmap();

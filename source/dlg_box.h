@@ -2,9 +2,12 @@
     \brief Interface for some basic classes from which all of ASC's dialogs are derived
 */
 
-//     $Id: dlg_box.h,v 1.23 2001-07-15 21:00:25 mbickel Exp $
+//     $Id: dlg_box.h,v 1.24 2001-08-09 10:28:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2001/07/15 21:00:25  mbickel
+//      Some cleanup in the vehicletype class
+//
 //     Revision 1.22  2001/07/14 21:07:46  mbickel
 //      Sound works now under Win32 too
 //      Error reporting on Win32 during startup works again.
@@ -530,6 +533,7 @@ class   tstringselect : public tdialogbox {
                      int msel,mouseselect,redline,lnshown,numberoflines,firstvisibleline,startpos;
                      char scrollbarvisible;
                      void init(void);
+                     tstringselect ( );
                      virtual void setup(void);
                      virtual void run(void);
                      virtual void buttonpressed(int id);
@@ -538,7 +542,7 @@ class   tstringselect : public tdialogbox {
                      virtual void gettext(word nr);
                      virtual void resettextfield(void);
                      void done(void);
-                     };
+                 };
 
 extern int getid( char* title, int lval, int min, int max );
 

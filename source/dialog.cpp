@@ -2,9 +2,13 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.93 2001-07-30 17:43:13 mbickel Exp $
+//     $Id: dialog.cpp,v 1.94 2001-08-09 10:28:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.93  2001/07/30 17:43:13  mbickel
+//      Added Microsoft Visual Studio .net project files
+//      Fixed some warnings
+//
 //     Revision 1.92  2001/07/28 21:09:08  mbickel
 //      Prepared vehicletype structure for textIO
 //
@@ -5197,7 +5201,7 @@ void viewUnitSetinfo ( void )
          }
 
          if ( unitSets.size() > 0 )
-            for ( int i = 0; i < unitSets.size(); i++ )
+            for ( unsigned int i = 0; i < unitSets.size(); i++ )
                if ( unitSets[i]->isMember ( typ->id )) {
                   s += "Unit is part of this unit set:";
                   if ( unitSets[i]->name.length()) {

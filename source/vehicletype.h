@@ -56,6 +56,10 @@ extern const char*  cvehiclefunctions[];
 
  #define cfvehiclefunctionsanzeige 0xFFFFFFFF
 
+extern const char* AItasks[];
+extern const char* AIjobs[];
+
+
  //! A single weapon of a #Vehicletype
  class SingleWeapon {
    #ifdef converter

@@ -77,7 +77,7 @@
           TerrainType*   terraintype;
           pquickview     quickview;
 
-          Weather ( TerrainType* base ) : terraintype ( base ), quickview ( NULL ), pict( NULL ) {};
+          Weather ( TerrainType* base ) : pict( NULL ), terraintype ( base ), quickview ( NULL ) {};
           void runTextIO ( PropertyContainer& pc );
       };
      int                id;

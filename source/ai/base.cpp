@@ -342,23 +342,8 @@ void AI :: showFieldInformation ( int x, int y )
       AiParameter& aip = *fld->vehicle->aiparam[getPlayerNum()];
 
       if ( fld->vehicle->aiparam ) {
-         static char* tasks[] = { "nothing",
-                                  "tactics",
-                                  "tactwait",
-                                  "stratwait",
-                                  "wait",
-                                  "strategy",
-                                  "serviceRetreat",
-                                  "move" };
-        static char* jobs[] = { "undefined",
-                                "fight",
-                                "supply",
-                                "conquer",
-                                "build",
-                                "recon",
-                                "guard" };
 
-         sprintf(text2, "\nunit value: %d; xtogo: %d, ytogo: %d; ztogo: %d;\njob %s ; task %s \n", aip.getValue(), aip.dest.x, aip.dest.y, aip.dest.z, jobs[aip.job], tasks[aip.task] );
+         sprintf(text2, "\nunit value: %d; xtogo: %d, ytogo: %d; ztogo: %d;\njob %s ; task %s \n", aip.getValue(), aip.dest.x, aip.dest.y, aip.dest.z, AIjobs[aip.job], AItasks[aip.task] );
          strcat ( text, text2 );
       }
 

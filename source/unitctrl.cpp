@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.63 2001-07-30 18:03:08 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.64 2001-08-09 10:28:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.63  2001/07/30 18:03:08  mbickel
+//      Fixed some more warnings
+//
 //     Revision 1.62  2001/07/28 11:19:12  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -755,6 +758,8 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
 
    pfield oldfield = getfield( vehicle->xpos, vehicle->ypos ); 
 
+   if ( oldfield == fld )
+      return 0;
 
    int x ;
    int y ;
@@ -791,6 +796,8 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
    } 
 
    SoundLoopManager slm ( SoundList::getInstance().getSound( SoundList::moving, vehicle->typ->movemalustyp ), false );
+
+   int nwid = vehicle->networkid;
 
    int i = 0;
    int cancelmovement = 0;

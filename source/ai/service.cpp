@@ -30,11 +30,12 @@ AI :: ServiceOrder :: ServiceOrder ( AI* _ai, VehicleService::Service _requiredS
    position = _pos;
    time = ai->getMap()->time;
 
-   MapCoordinate3D sb = ai->findServiceBuilding ( *this, &nextServiceBuildingDistance );
-   if ( sb.valid() )
-      nextServiceBuilding = ai->getMap()->getField( sb )->building;
-   else
-      nextServiceBuilding = NULL;
+   nextServiceBuilding = NULL;
+   if ( ai->getMap()->getUnit ( UnitID )->canMove()) {
+      MapCoordinate3D sb = ai->findServiceBuilding ( *this, &nextServiceBuildingDistance );
+      if ( sb.valid() )
+         nextServiceBuilding = ai->getMap()->getField( sb )->building;
+   }
 }
 
 AI :: ServiceOrder :: ServiceOrder ( AI* _ai, tnstream& stream )
@@ -114,7 +115,7 @@ int AI::ServiceOrder::possible ( pvehicle supplier )
    if ( i != vs.dest.end() ) {
       VehicleService::Target target = i->second;
       int serviceAmount = 0;
-      for ( int j = 0; j < target.service.size(); j++ ) {
+      for ( unsigned int j = 0; j < target.service.size(); j++ ) {
          serviceAmount += target.service[j].maxPercentage;
          if ( target.service[j].type == requiredService ) {
             bool enoughResources = false;
@@ -197,7 +198,7 @@ bool AI::ServiceOrder::execute1st ( pvehicle supplier )
                       VehicleService::TargetContainer::iterator i = vs.dest.find ( targetUnitID );
                       if ( i != vs.dest.end() ) {
                          VehicleService::Target target = i->second;
-                         for ( int j = 0; j < target.service.size(); j++ )
+                         for ( unsigned int j = 0; j < target.service.size(); j++ )
                             if ( target.service[j].type == requiredService )
                                result = true;
                       }

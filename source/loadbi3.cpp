@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.48 2001-07-28 21:09:08 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.49 2001-08-09 10:28:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2001/07/28 21:09:08  mbickel
+//      Prepared vehicletype structure for textIO
+//
 //     Revision 1.47  2001/07/28 11:19:12  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -808,7 +811,7 @@ void        tloadBImap ::   ReadACTNPart(void)
                   if ( obj ) 
                      for ( int ww = 0; ww < cwettertypennum; ww++ )
                         if ( obj->weather.test(ww) )
-                           for ( int j = 0; j < obj->weatherPicture[ww].images.size(); j++ )
+                           for ( unsigned int j = 0; j < obj->weatherPicture[ww].images.size(); j++ )
                               if ( obj->weatherPicture[ww].bi3pic[j] == xlt[m]  && !(found & 2)  && !( getActiveGraphicSet()->getMode(xlt[m]) & 256) ) {
                                  pfield fld = getfield ( newx, newy );
                                  if ( pass == 1 || obj->terrainaccess.accessible ( fld->bdt )) {

@@ -2,9 +2,13 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.25 2001-07-28 11:19:10 mbickel Exp $
+//     $Id: edevents.cpp,v 1.26 2001-08-09 10:28:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2001/07/28 11:19:10  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.24  2001/07/15 21:00:25  mbickel
 //      Some cleanup in the vehicletype class
 //
@@ -628,6 +632,19 @@ void         getxy(word *x,word *y)
    *y = ce.y; 
    ce.done(); 
 } 
+
+void         getxy( int *x, int *y)
+{ tgetxy       ce;
+
+   ce.x = *x ;
+   ce.y = *y ;
+   ce.init();
+   ce.run();
+   *x = ce.x;
+   *y = ce.y;
+   ce.done();
+}
+
 
 // õS GetXYUnitSel
 
@@ -1473,7 +1490,6 @@ void         tcreateevent::buttonpressed(int         id)
 {   int           nid, nr, rnr;
     pfield        pf; 
     char    abb; 
-    char         s[200];
     word        i;
     int           *puffer= NULL;
     int           x,y;
@@ -1482,8 +1498,8 @@ void         tcreateevent::buttonpressed(int         id)
     tevent::LargeTriggerData::PolygonEntered etpe;
 
 
-   const int         stringpriority[7]     = {32, 64, 1, 2, 4, 8, 16};
-   const int         stringprioritynumber[7]     = {5, 6, 0, 1, 2, 3, 4};
+   // const int         stringpriority[7]     = {32, 64, 1, 2, 4, 8, 16};
+   // const int         stringprioritynumber[7]     = {5, 6, 0, 1, 2, 3, 4};
  
    switch (id) {
       

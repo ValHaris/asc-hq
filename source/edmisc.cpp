@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.59 2001-07-28 21:09:08 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.60 2001-08-09 10:28:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.59  2001/07/28 21:09:08  mbickel
+//      Prepared vehicletype structure for textIO
+//
 //     Revision 1.58  2001/07/28 11:19:10  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -2678,6 +2681,162 @@ int        getpolygon(ppolygon *poly) //return Fehlerstatus
 // õS Unit-Values
 
 
+class   StringSelector : public tstringselect {
+                 const char** text;
+           public :
+                 int lastchoice;
+                 StringSelector ( char* title_, const char** text_, int itemNum_ ) : text ( text_ )  { lastchoice = 0; numberoflines = itemNum_; title = title_; };
+                 virtual void setup(void);
+                 virtual void buttonpressed(int id);
+                 virtual void run(void);
+                 virtual void gettext(word nr);
+                 };
+
+void         StringSelector ::setup(void)
+{
+   action = 0;
+   ey = ysize - 90;
+   startpos = lastchoice;
+   addbutton("~O~k",20,ysize - 50,xsize-20,ysize - 20,0,1,13,true);
+   addkey ( 13, ct_enter );
+}
+
+
+void         StringSelector ::buttonpressed(int         id)
+{
+   tstringselect::buttonpressed(id);
+   switch (id) {
+
+      case 12:  if ( redline >= 0 )
+                   action = id-10;
+                break;
+
+      case 13:   action = id-10;
+                 break;
+   }
+}
+
+
+void         StringSelector ::gettext(word nr)
+{
+   strcpy(txt, text[nr] );
+}
+
+
+void         StringSelector ::run(void)
+{
+   do {
+      tstringselect::run();
+      if ( taste == ct_enter )
+         if ( redline >= 0 )
+            action = 2;
+         else
+            action = 3;
+   }  while ( action == 0 );
+}
+
+
+int selectString( int lc, char* title, const char** text, int itemNum )
+{
+   StringSelector  ss ( title, text, itemNum );
+   ss.lastchoice = lc;
+   ss.init();
+   ss.run();
+   ss.done();
+   return ss.redline;
+}
+
+
+class EditAiParam : public tdialogbox {
+           pvehicle unit;
+           TemporaryContainerStorage tus;
+           int action;
+           AiParameter& aiv;
+        public:
+           EditAiParam ( pvehicle veh, int player ) : unit ( veh ), tus ( veh ), aiv ( *veh->aiparam[player] ) {};
+           void init ( );
+           void run ( );
+           void buttonpressed ( int id );
+           int  getcapabilities ( void ) { return 1; };
+};
+
+
+void         EditAiParam::init(  )
+{
+   tdialogbox::init();
+   action = 0;
+   title = "Unit AI Values";
+
+   windowstyle = windowstyle ^ dlg_in3d;
+
+   x1 = 20;
+   xsize = 600;
+   y1 = 40;
+   ysize = 400;
+   int w = (xsize - 60) / 2;
+   action = 0;
+
+   addbutton("dest ~X~",50,80,250,100,2,1,1,true);
+   addeingabe(1, &aiv.dest.x, minint, maxint);
+
+   addbutton("dest ~Y~",50,120,250,140,2,1,2,true);
+   addeingabe(2, &aiv.dest.y, minint, maxint);
+
+   addbutton("dest ~Z~",50,160,250,180,2,1,3,true);
+   addeingabe(3, &aiv.dest.z, minint, maxint);
+
+   addbutton("dest ~N~WID",50,200,250,220,2,1,4,true);
+   addeingabe(4, &aiv.dest_nwid, minint, maxint);
+
+   addbutton("~V~alue",410,80,570,100,2,1,10,true);
+   addeingabe( 10, &aiv.value, minint, maxint );
+
+   addbutton("~A~dded value",410,120,570,140,2,1,11,true);
+   addeingabe( 11, &aiv.addedValue, minint, maxint );
+
+
+   addbutton("~S~elect Dest",50,240,250,260,0,1,22,true);
+
+   addbutton("~T~ask",20,ysize - 70,20 + w,ysize - 50,0,1,20,true);
+   addbutton("~J~ob",40 + w,ysize - 70,40 + 2 * w,ysize - 50,0,1,21,true);
+
+   addbutton("~S~et Values",20,ysize - 40,20 + w,ysize - 10,0,1,30,true);
+   addkey(30,ct_enter );
+   addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,31,true);
+   addkey(31,ct_esc );
+
+   buildgraphics();
+   mousevisible(true);
+}
+
+
+void         EditAiParam::run(void)
+{
+   do {
+      tdialogbox::run();
+   }  while ( !action );
+}
+
+
+void         EditAiParam::buttonpressed(int         id)
+{
+   switch (id) {
+   case 20 : aiv.task = AiParameter::Task( selectString ( aiv.task, "Select Task", AItasks , AiParameter::taskNum) );
+             break;
+   case 21 : aiv.job = AiParameter::Job( selectString ( aiv.job, "Select Job", AIjobs , AiParameter::jobNum) );
+             break;
+   case 22 : getxy ( &aiv.dest.x, &aiv.dest.y );
+             redraw();
+             break;
+
+   case 30 : action = 1;
+             break;
+   case 31 : action = 1;
+              tus.restore();
+        break;
+   } /* endswitch */
+}
+
 
 
 
@@ -2737,6 +2896,7 @@ void         tunit::init(  )
    addbutton("~M~aterial",50,240,250,260,2,1,12,true);
    addeingabe(12,&unit->tank.material, 0, unit->typ->tank.material );
 
+   addbutton("AI Parameter", 50, 280, 250, 300, 0, 1, 115, true );
 
    int unitheights = 0;
    heightxs = 320;
@@ -2907,6 +3067,16 @@ void         tunit::buttonpressed(int         id)
         break;
     case 32: class_change( unit );
         break;
+    case 115: {
+                 static int player = 0;
+                 player = getid("player",player,0,7);
+                 if ( !unit->aiparam[player] )
+                    unit->aiparam[player] = new AiParameter ( unit );
+
+                 EditAiParam eap ( unit, player );
+                 eap.init();
+                 eap.run();
+              }
    } /* endswitch */
 }
 

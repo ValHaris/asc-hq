@@ -170,10 +170,15 @@ void AI :: checkConquer( )
    for ( BuildingCaptureContainer::iterator bi = buildingCapture.begin(); bi != buildingCapture.end(); ) {
       BuildingCaptureContainer::iterator nxt = bi;
       ++nxt;
-      if ( getdiplomaticstatus2( getMap()->getField( bi->first )->building->color, getPlayerNum()*8 ) != cawar ) {
-         pvehicle veh= getMap()->getUnit ( bi->second.unit );
-         if ( veh )
+      pvehicle veh= getMap()->getUnit ( bi->second.unit );
+      pbuilding bld = getMap()->getField( bi->first )->building;
+      if ( getdiplomaticstatus2( bld->color, getPlayerNum()*8 ) != cawar
+           || !( veh && fieldaccessible ( getMap()->getField( bi->first ), veh ) == 2 )) {
+
+         if ( veh ) {
             veh->aiparam[getPlayerNum()]->task = AiParameter::tsk_nothing;
+            veh->aiparam[getPlayerNum()]->job = AiParameter::job_undefined;
+         }
          buildingCapture.erase ( bi );
       }
       bi = nxt;

@@ -9,7 +9,7 @@ dnl Checks for programs.
 AC_PROG_CC
 CFLAGS="$CFLAGS -D_UNIX_ -D_SDL_ -D_NOASM_"
 AC_PROG_CXX
-CXXFLAGS="$CXXFLAGS -DHEXAGON -funsigned-char -D_UNIX_ -D_SDL_ -D_NOASM_"
+CXXFLAGS="$CXXFLAGS -DHEXAGON -Wno-sign-compare -funsigned-char -D_UNIX_ -D_SDL_ -D_NOASM_"
 AC_PROG_RANLIB
 
 AC_ARG_ENABLE( docbook2man, [  --enable-docbook2man    will build the man pages from the sgml source files.], SGML2MAN=manpages )

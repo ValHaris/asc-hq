@@ -382,6 +382,7 @@ int AI::changeVehicleHeight ( pvehicle veh, VehicleMovement* vm, int preferredDi
                int moveremain = minint;
 
                if ( preferredDirection == -1 ) {
+                 /*
                   // making a backup
                   TemporaryContainerStorage tus ( veh );
                   veh->height = newheight;
@@ -389,6 +390,8 @@ int AI::changeVehicleHeight ( pvehicle veh, VehicleMovement* vm, int preferredDi
                   MapCoordinate mc = getDestination ( veh );
                   preferredDirection = getdirection ( veh->xpos, veh->ypos, mc.x, mc.y );
                   tus.restore();
+                  */
+                  preferredDirection = getdirection ( veh->xpos, veh->ypos, getMap()->xsize/2, getMap()->ysize/2 );
                }
 
                for ( int i = 0; i < cvh->reachableFields.getFieldNum(); i++ ) {
