@@ -31,7 +31,6 @@ extern const char*  cvehiclefunctions[];
  #define cfsonar 1
  #define cfparatrooper 2
  #define cfminenleger 4
- #define cf_trooper 8
  #define cfrepair 16
  #define cf_conquer 32
  #define cf_moveafterattack 64

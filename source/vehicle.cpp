@@ -1009,7 +1009,14 @@ class tsearchforminablefields: public SearchFields {
       int run ( pvehicle     eht );
       virtual void testfield ( const MapCoordinate& mc );
       tsearchforminablefields ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
+      static bool available( pvehicle eht );
   };
+
+bool Vehicle::searchForMineralResourcesAvailable()
+{
+   return tsearchforminablefields::available( this );
+}
+
 
 
 void         tsearchforminablefields::testfield( const MapCoordinate& mc )
@@ -1030,14 +1037,21 @@ void         tsearchforminablefields::testfield( const MapCoordinate& mc )
 }
 
 
-
-int  tsearchforminablefields::run( pvehicle eht )
+bool tsearchforminablefields::available( pvehicle eht )
 {
    if ( (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger) )
       if ( eht->attacked ||
           (eht->typ->wait && eht->hasMoved() ) ||
           (eht->getMovement() < searchforresorcesmovedecrease ))
-          return -311;
+          return false;
+   return true;
+}
+
+
+int  tsearchforminablefields::run( pvehicle eht )
+{
+   if ( !available( eht ) )
+      return -311;
 
 
    shareview = 1 << ( eht->color / 8);

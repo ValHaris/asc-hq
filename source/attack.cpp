@@ -755,7 +755,7 @@ void tmineattacksunit :: setup ( pfield mineposition, int minenum, pvehicle &att
       for ( tfield::MineContainer::iterator m = mineposition->mines.begin(); m != mineposition->mines.end(); m++ )
          if ( m->attacksunit ( attackedunit )) {
             int strength = m->strength;
-            if ( m->type == cmantipersonnelmine   &&  (attackedunit->typ->functions & cf_trooper ) )
+            if ( m->type == cmantipersonnelmine   &&  (attackedunit->typ->movemalustyp ==  cmm_trooper ) )
                strength *= 2;
 
             for ( int j = 1; j < cnt; j++ )
@@ -767,7 +767,7 @@ void tmineattacksunit :: setup ( pfield mineposition, int minenum, pvehicle &att
    } else {
       Mine& m = mineposition->getMine ( minenum );
       av.strength = m.strength;
-      if ( m.type  == cmantipersonnelmine   &&  (attackedunit->typ->functions & cf_trooper ) )
+      if ( m.type  == cmantipersonnelmine   &&  (attackedunit->typ->movemalustyp ==  cmm_trooper ) )
          av.strength *= 2;
    }
 

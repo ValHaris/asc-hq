@@ -120,7 +120,7 @@ tmap :: tmap ( void )
 }
 
 
-const int tmapversion = 3;
+const int tmapversion = 4;
 
 void tmap :: read ( tnstream& stream )
 {
@@ -381,6 +381,17 @@ void tmap :: read ( tnstream& stream )
        int num = stream.readInt();
        for ( int ii = 0; ii < num; ++ii )
           unitProduction.idsAllowed.push_back ( stream.readInt() );
+
+       for ( int ii = 0; ii < 9; ii++ ) {
+          int num = stream.readInt( );
+          for ( int i = 0; i < num; i++ ) {
+             Player::PlayTime pt;
+             pt.turn = stream.readInt();
+             pt.date = stream.readInt();
+             player[ii].playTime.push_back ( pt );
+          }
+       }
+
     }
 
 }
@@ -569,11 +580,19 @@ void tmap :: write ( tnstream& stream )
     stream.writeString ( archivalInformation.requirements );
     stream.writeInt ( ::time ( &archivalInformation.modifytime ));
 
-/*
+
     stream.writeInt( unitProduction.idsAllowed.size() );
     for ( int ii = 0; ii < unitProduction.idsAllowed.size(); ++ii )
        stream.writeInt ( unitProduction.idsAllowed[ii] );
-*/
+
+
+    for ( int ii = 0; ii < 9; ii++ ) {
+       stream.writeInt( player[ii].playTime.size() );
+       for ( Player::PlayTimeContainer::iterator i = player[ii].playTime.begin(); i != player[ii].playTime.end(); ++i ) {
+          stream.writeInt( i->turn );
+          stream.writeInt( i->date );
+       }
+    }
 }
 
 
@@ -1266,7 +1285,7 @@ bool Mine :: attacksunit ( const pvehicle veh )
      if  (!( ( veh->typ->functions & cfmineimmune ) ||
               ( veh->height > chfahrend ) ||
               ( getdiplomaticstatus2 ( veh->color, player*8 ) == capeace ) ||
-              ( (veh->typ->functions & cf_trooper) && (type != cmantipersonnelmine)) || 
+              ( (veh->typ->movemalustyp ==  cmm_trooper) && (type != cmantipersonnelmine)) || 
               ( veh->height <= chgetaucht && type != cmmooredmine ) || 
               ( veh->height == chschwimmend && type != cmfloatmine ) ||
               ( veh->height == chfahrend && type != cmantipersonnelmine  && type != cmantitankmine )

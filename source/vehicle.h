@@ -80,7 +80,7 @@
     char         direction;
 
     //! the position on the map
-    Integer      xpos, ypos;
+    int          xpos, ypos;
 
     //! the resources that the unit is carrying
     Resources    tank;
@@ -246,6 +246,8 @@
         \returns > 0 on success ; < 0 on failure (error number is returned => message.txt )
     */
     int searchForMineralResources( void );
+
+    bool searchForMineralResourcesAvailable();
 
     //! returns the units position
     MapCoordinate3D getPosition ( ) const;

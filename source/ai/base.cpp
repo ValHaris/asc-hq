@@ -341,7 +341,7 @@ void AI :: showFieldInformation ( int x, int y )
 }
 
 
-const int currentAiStreamVersion = 103;
+const int currentAiStreamVersion = 104;
 
 void AI :: read ( tnstream& stream )
 {
@@ -401,6 +401,15 @@ void AI :: read ( tnstream& stream )
       }
    }
 
+   if ( version >= 104 ) {
+      int id = stream.readInt();
+      while ( id >= 0 ) {
+         float enemyValue = stream.readFloat();
+         float ownValue = stream.readFloat();
+         id = stream.readInt();
+      }
+   }
+
    int version2 = stream.readInt();
    if ( version != version2 )
       throw tinvalidversion ( "AI :: read", version, version2 );
@@ -448,6 +457,7 @@ void AI :: write ( tnstream& stream ) const
      stream.writeFloat( i->second.first );
      stream.writeFloat( i->second.second );
    }
+   stream.writeInt( -1 );
    stream.writeInt( -1 );
 
    stream.writeInt ( version );

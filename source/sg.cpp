@@ -23,7 +23,7 @@
 
 /*!
    \mainpage 
-   
+
    \section a short walk through the source
  
    THE central class of ASC is tmap in gamemap.h . 
@@ -48,7 +48,7 @@
    
    The primary contents of a map are its fields ( tfield). Each field has again a pointer 
    to a certain weather of a TerrainType. Each TerrainType has up to 5 
-   different weathers ("dry (standard)","light rain", "heavy rain", "few snow", 
+   different weathers ("dry (standard)","light rain", "heavy rain", "few snow",
    "lot of snow"). If there is a unit or a building standing on a field, the field
    has a pointer to it: tfield::vehicle and tfield::building . 
    
@@ -202,11 +202,11 @@ cmousecontrol* mousecontrol = NULL;
 
 #define mmaintainence
 
-int maintainencecheck( void )
+bool maintainencecheck( void )
 {
    int res = 0;
    if ( res )
-      return 1;
+      return true;
 
 #ifdef maintainence
    int num = 0;
@@ -227,7 +227,7 @@ int maintainencecheck( void )
       return 0;
 
 #else
-   return 0;
+   return false;
 #endif
 }
 
@@ -1644,10 +1644,11 @@ void  mainloop ( void )
             case ct_f11: execuseraction ( ua_mntnc_rotatewind );
                break;
             case ct_f12: {
-                   AStar3D::Path path;
-                   AStar3D ast ( actmap, getfield(16,80)->vehicle);
-                   ast.findPath ( path, MapCoordinate3D(38,54,1<<3));
-
+                   // if ( maintainencecheck() )
+                      if ( getactfield()->vehicle->attacked )
+                         displaymessage("attacked", 1);
+                      else
+                         displaymessage("not attacked", 1);
             }
             break;
                
@@ -1685,8 +1686,11 @@ void  mainloop ( void )
 
             case ct_9: {
                 pfield fld = getactfield();
-                // pobjecttype o = fld->objects.begin()->typ;
-                // displaymessage ( "%d", 1, o->groupID);
+                if ( fld->vehicle )
+                      if ( getactfield()->vehicle->attacked )
+                         displaymessage("attacked", 1);
+                      else
+                         displaymessage("not attacked", 1);
 
             }
                {
@@ -1784,7 +1788,7 @@ void  mainloop ( void )
 
    }  while ( !abortgame );
 
-   }
+}
 
 
 

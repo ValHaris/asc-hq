@@ -145,7 +145,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
       movedist += mm.first;
       fueldist += mm.second;
 
-      if ( pos->hasAttacked )
+      if ( next->hasAttacked )
          vehicle->setAttacked();
 
 

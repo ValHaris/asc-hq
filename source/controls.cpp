@@ -28,6 +28,7 @@
 #include <cstring>
 #include <math.h>
 #include <stdarg.h>
+#include <ctime>
 
 #include "buildingtype.h"
 #include "vehicletype.h"
@@ -1936,6 +1937,10 @@ void endTurn ( void )
       actmap->cursorpos.position[actmap->actplayer].sx = actmap->xpos;
       actmap->cursorpos.position[actmap->actplayer].sy = actmap->ypos;
       actmap->player[actmap->actplayer].ASCversion = getNumericVersion();
+      Player::PlayTime pt;
+      pt.turn = actmap->time.turn();
+      time ( &pt.date );
+      actmap->player[actmap->actplayer].playTime.push_back ( pt );
 
       tmap::Player::VehicleList toRemove;
       for ( tmap::Player::VehicleList::iterator v = actmap->player[actmap->actplayer].vehicleList.begin(); v != actmap->player[actmap->actplayer].vehicleList.end(); v++ ) {
@@ -2067,6 +2072,13 @@ void nextPlayer( void )
          endRound();
          runde++;
       }
+
+      if ( !actmap->player[actmap->actplayer].exist() )
+         if ( actmap->replayinfo->guidata[actmap->actplayer] ) {
+            delete actmap->replayinfo->guidata[actmap->actplayer];
+            actmap->replayinfo->guidata[actmap->actplayer] = NULL;
+         }
+
    }  while (!(actmap->player[actmap->actplayer].exist()  || (runde > 2) ));
 
    if (runde > 2) {

@@ -2111,10 +2111,8 @@ int   tnsguiicondig::available    ( void )
    if (fld->vehicle != NULL) 
       if (fld->vehicle->color == actmap->actplayer * 8) 
          if ( (fld->vehicle->typ->functions &  cfmanualdigger) && !(fld->vehicle->typ->functions &  cfautodigger) )
-            if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
-               if (   (fld->vehicle->typ->wait==false && fld->vehicle->getMovement() >= searchforresorcesmovedecrease ) 
-                   || !fld->vehicle->hasMoved() )
-                 return true;
+            if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
+               return fld->vehicle->searchForMineralResourcesAvailable();
    return 0;
 }
 

@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.131 2003-06-03 19:55:38 mbickel Exp $
+//     $Id: typen.h,v 1.132 2003-06-10 19:16:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.131  2003/06/03 19:55:38  mbickel
+//      Ground mines can be put onto bridges
+//      better AI production
+//
 //     Revision 1.130  2003/06/01 13:27:51  mbickel
 //      Removed unnecessary header file
 //
@@ -355,6 +359,7 @@ const int cmovemalitypenum  = 18;
 
 //! The movemalus type for a building. It is used for #SingleWeapon.targets_not_hittable .
 const int cmm_building = 11;
+const int cmm_trooper = 7;
 
 //! The number of levels of height
 const int choehenstufennum =  8;

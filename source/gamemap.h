@@ -408,6 +408,16 @@ class tmap {
 
             //! the version of ASC that this player has used to make his last turn 
             int ASCversion;
+
+            struct PlayTime {
+              int turn;
+              time_t date;
+            };
+            typedef list<PlayTime> PlayTimeContainer;
+
+            //! The time this player ended his turns. This is very informative in email games with > 2 players to find out who is delaying the game.
+            PlayTimeContainer playTime;
+
       } player[9];
 
       //! a container for events that were executed during previous maps of the campaign

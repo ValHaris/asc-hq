@@ -1056,9 +1056,6 @@ bool ccontainercontrols :: cmove_unit_in_container :: moveupavail ( pvehicle eht
 {
    if ( eht ) {
       if ( recursiondepth > 0 ) {
-         if ( eht->typ->functions & cf_trooper )
-            return 1;
-
          if ( buildingparamstack[recursiondepth-1].bld )
             return buildingparamstack[recursiondepth-1].bld->vehicleFit ( eht );
          else
