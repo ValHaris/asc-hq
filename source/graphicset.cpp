@@ -28,7 +28,7 @@
 #include "typen.h"
 #include "sgstream.h"
 
-
+#include "loadpcx.h"
 
 int bi3graphnum = 0;
 
@@ -140,6 +140,7 @@ int getGraphicSetIdFromFilename ( const char* filename )
          return 0;
 }
 
+
 void loadbi3graphics( void )
 {
    if ( activeGraphicPictures.activeId >= 0 )
@@ -153,6 +154,7 @@ void loadbi3graphics( void )
       if ( bi2asc_color_translation_table[0] == 254 )
          loadpalette();
 
+   loadpalette();
 
    int highestPicNum = 0;
    bi3graphnum = maxint;
@@ -166,6 +168,15 @@ void loadbi3graphics( void )
       s.readrlepict ( &emptyfield, false, &o );
    }
    int emptyfieldsize = getpicsize2 ( emptyfield );
+
+   #ifdef genimg
+   void* mask;
+   {
+      int i ;
+      tnfilestream s ( "largehex.raw", tnstream::reading );
+      s.readrlepict ( &mask, false, & i );
+   }
+   #endif
 
 
    tfindfile ff ( "*.gfx" );
@@ -197,6 +208,27 @@ void loadbi3graphics( void )
                s.readrlepict ( &p, false, &o );
                gs->pic[i] = p;
                gs->picmode[i] = picmode[i];
+   #ifdef genimg
+               if ( gs->id == 0 ) {
+                  if ( picmode[i] < 256 ) {
+                     tvirtualdisplay vdp ( 100, 100, 255 );
+                     /*
+                     putspriteimage ( 8, 8, p );
+                     putspriteimage ( 8, 12, p );
+                     putspriteimage ( 12, 8, p );
+                     putspriteimage ( 12, 12, p );
+                     */
+                     putspriteimage ( 10, 10, p );
+
+                     putmask ( 10, 10, mask, 0 );
+
+                     ASCString fn = "13/";
+                     fn+=strrr(i);
+                     fn+=".pcx";
+                     writepcx ( fn.c_str(), 10, 10, 10+fieldsizex-1, 10+fieldsizey-1, pal );
+                  }
+               }
+#endif
             } else {
                void* p = asc_malloc ( emptyfieldsize );
                memcpy ( p, emptyfield, emptyfieldsize );

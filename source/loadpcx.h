@@ -4,9 +4,12 @@
     There are two independant implementations of these routines: #loadpcx.cpp and #dos/pcx.asm are written in assembly, and #loadpcxc.cpp is written in c++
 */
 
-//     $Id: loadpcx.h,v 1.6 2001-02-11 11:39:39 mbickel Exp $
+//     $Id: loadpcx.h,v 1.7 2001-02-28 14:10:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2001/02/11 11:39:39  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.5  2001/01/25 23:45:00  mbickel
 //      Moved map displaying routins to own file (mapdisplay.cpp)
 //      Wrote program to create pcx images from map files (map2pcx.cpp)
@@ -60,6 +63,6 @@
 extern char loadpcxxy ( const char *name, char setpal, word x, word y);
 extern char loadpcxxy( pnstream stream, int x, int y, int setpalette = 0 );
 extern void writepcx ( const char* name, int x1, int y1, int x2, int y2, dacpalette256 pal );
-
+extern int pcxGetColorDepth ( const ASCString& name );
 
 #endif

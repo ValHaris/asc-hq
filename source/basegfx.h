@@ -56,7 +56,7 @@ struct  tgraphmodeparameters {
             int           actsetpage       ;       //!< only used in DOS where it may be necessary to access the graphic memory in 64 kB pages
             int           windowstatus     ;       //!< determines whether the memory is a linear (windowstatus==100) or paged. When using SDL, the memory is always linear addressable.
             int           granularity      ;       //!< the offset in graphics memory between two pages. Can be ignored nowadays
-            int           scanlinelength   ;       //!< the size of a line in pixel (may be larger than resolutionx due to offscreen memory)
+            int           scanlinelength   ;       //!< the size of a line in byte (may be larger than resolutionx due to offscreen memory)
             int           scanlinenumber   ;       //!< the number of lines (may be larger than resolutiony due to offscreen memory)
             int           bytesperscanline ;       //!< the size of a line in byte
             int           activegraphmode  ;       //!< the number of the active graphic mode. Can be ignored nowadays
@@ -361,13 +361,16 @@ class TrueColorImage {
          TrueColorImage ( int x, int y );
          trgbpixel getpix ( int x, int y );
          trgbpixel* getpix ( void );
-         void setpix ( int x, int y, int r, int g, int b, int alpha = alphabase );
+         void setpix ( int x, int y, int r, int g, int b, int alpha = 0 );
+         void setpix ( int x, int y, const trgbpixel& pix );
          int getxsize( void );
          int getysize( void );
 
          ~TrueColorImage();
 
    };
+
+#define TCalpha 0xfefefe
 
 //! changes an images size. The source image (in buf) is 8-bit with palette pal .
 extern TrueColorImage* zoomimage ( void* buf, int xsize, int ysize, dacpalette256 pal, int interpolate = 1, int proportional = 1 );
@@ -385,6 +388,12 @@ extern char truecolor2pal_table[262144];
 
 //! puts the image pointed to by tci to the screen. Both must be truecolor images. This function is a quick and unoptimized hack!
 extern void putimage ( int x1, int y1, TrueColorImage* tci );
+extern void putimage_noalpha ( int x1, int y1, TrueColorImage* tci );
+
+TrueColorImage* smoothimage ( TrueColorImage* src );
+
+
+extern TrueColorImage* getimage(int x1, int y1, int x2, int y2 );
 
 
 //! a class that is thrown as exception. Should be moved to error.h ...

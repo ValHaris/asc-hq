@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: basestrm.h,v 1.38 2001-02-26 22:03:18 mbickel Exp $
+//     $Id: basestrm.h,v 1.39 2001-02-28 14:10:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2001/02/26 22:03:18  mbickel
+//      Some adjustments for Watcom C++
+//
 //     Revision 1.37  2001/02/26 21:14:30  mbickel
 //      Added two small editors to the linux makefiles
 //      Added some more truecolor hacks to the graphics engine
@@ -682,6 +685,7 @@ extern int directoryExist ( const char* path );
 extern char* extractPath ( char* buf, const char* filename );
 extern char* extractFileName ( char* buf, const char* filename );
 extern int createDirectory ( const char* name );
+extern ASCString getSearchPath ( int i );
 
 #ifdef _SDL_
  #include sdlheader

@@ -2,9 +2,13 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.54 2001-02-26 13:49:34 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.55 2001-02-28 14:10:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.54  2001/02/26 13:49:34  mbickel
+//      Fixed bug in message loading
+//      readString can now read strings that container \n
+//
 //     Revision 1.53  2001/02/26 12:35:00  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -2476,6 +2480,15 @@ void addSearchPath ( const char* path )
    }
 }
 
+ASCString getSearchPath ( int i )
+{
+   if ( i < searchDirNum )
+      return ascDirectory[i];
+   else
+      return "";
+}
+
+
 char* extractPath ( char* buf, const char* filename )
 {
    if ( buf && filename ) {
@@ -2516,9 +2529,9 @@ void appendbackslash ( char* string )
 
 int createDirectory ( const char* name )
 {
-      #ifdef _UNIX_
-       return mkdir ( name, 0700 );
-      #else
-       return mkdir ( name );
-      #endif
+   #ifdef _UNIX_
+    return mkdir ( name, 0700 );
+   #else
+    return mkdir ( name );
+   #endif
 }

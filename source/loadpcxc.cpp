@@ -5,9 +5,15 @@
     which is called #loadpcx.cpp , but not used any more.
 */
 
-//     $Id: loadpcxc.cpp,v 1.13 2001-02-18 15:37:15 mbickel Exp $
+//     $Id: loadpcxc.cpp,v 1.14 2001-02-28 14:10:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2001/02/18 15:37:15  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.12  2001/02/11 11:39:39  mbickel
 //      Some cleanup and documentation
 //
@@ -134,6 +140,19 @@ typedef struct tpcxheader{
 
 #pragma pack()
 
+
+int pcxGetColorDepth ( const ASCString& filename )
+{
+   tnfilestream stream ( filename.c_str(), tnstream::reading );
+
+   tpcxheader header;
+
+   stream.readdata ( &header, sizeof(header) );
+
+   return header.nplanes * header.bitsperpixel;
+}
+
+
 char loadpcxxy( pnstream stream, int x, int y, int setpalette )
 {
    int read = 0;
@@ -223,13 +242,14 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
             }
             xpos = 0;
          }
-         if ( xpos < width )
+         if ( xpos < width ) {
             *dest = a;
+            pixels--;
+         }
          dest+= byteperpix;
          xpos++;
          ttlbytes++;
          count--;
-         pixels--;
       } /* endwhile */
 
    } /* endwhile */

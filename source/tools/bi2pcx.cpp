@@ -68,13 +68,6 @@ int main(int argc, char *argv[] )
                   if ( strcmpi ( &argv[i][1], "NOUSAGE" ) == 0 )
                      usage = 0;
                else
-                  if ( strcmpi ( &argv[i][1], "MAKEGFX" ) == 0 ) {
-                     usage = 0;
-                     scale = 2;
-                     keeporiginalpalette = 1;
-                     wide = 0;
-                  }
-               else
                   if ( strcmpi ( &argv[i][1], "DOUBLEI" ) == 0 )
                      scale = 2;
                else
@@ -97,7 +90,6 @@ int main(int argc, char *argv[] )
                                       "     /nouseage   output just the pictures\n"     
                                       "     /double     use scaled pictures without interpolation\n"     
                                       "     /doublei    use scaled pictures with interpolation\n"
-                                      "     /makegfx    use the settings required by makegfx\n"
                                       "     /id:x       use graphic set x\n\n"     );
                               return (0);
              
@@ -118,7 +110,9 @@ int main(int argc, char *argv[] )
    memset ( bipict, 0, sizeof ( 0 ) );
    try {
       if ( usage ) {
-         FILE* fp = fopen ("itemname.txt", filewritemodetext );
+         ASCString itemlistfile = getSearchPath(0) + "itemname.txt";
+         FILE* fp = fopen (itemlistfile.c_str(), filewritemodetext );
+         printf(" Printing graphics usage to text file %s \n\n", itemlistfile.c_str() );
 
          {
             for ( int i = 0; i < getterraintranslatenum(); i++ ) {

@@ -3,7 +3,6 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <map>
-#include <conio.h>
 
 #include "../basegfx.h"
 #include "../basestrm.h"
@@ -45,7 +44,9 @@ int lockpalette;
 
 typedef less<int> lessint ;
 typedef map<int, TrueColorImage*, lessint> TCI;
+typedef map<int, void*, lessint> TCI8;
 TCI tci;
+TCI8 tci8;
 
 void* doublepict ( void* vbuf, int interpolate )
 {
@@ -64,7 +65,7 @@ void* doublepict ( void* vbuf, int interpolate )
       wp[0] = width * 2 - 1;
       wp[1] = height * 2 - 1;
    
-     dest += 4;
+      dest += 4;
    
       for ( int y = 0; y < height*2; y++) 
          for ( int x = 0; x < width*2; x++ ) {
@@ -114,13 +115,16 @@ void getpic ( int pos, int offset )
 
    void* buf = asc_malloc ( 10000 );
 
-   // putmask ( xp, yp, mask[doublesize], 0 );
+   putmask (  xp, yp, mask[doublesize], 0 );
    getimage ( xp, yp, xp + fsx-1, yp + fsy-1, buf );
 
    if ( doublesize ) {
       tci[pos] = convertimage2tc ( buf, *activepalette256 );
-   } else
-      tci[pos] = zoomimage ( buf, fieldxsize, fieldysize, pal, 1 );
+   } else {
+      TrueColorImage* t = zoomimage ( buf, fieldxsize, fieldysize, *activepalette256, 0 );
+      // tci[pos] = t;
+      tci[pos] = smoothimage ( t ); delete t;
+   }
 
    if ( !lockpalette ) {
       TrueColorImage* img = zoomimage ( buf, fsx, fsy, *activepalette256, 0 );
@@ -172,6 +176,7 @@ int main(int argc, char *argv[] )
    for ( int m = 0; m < p_count; m++ )
       picmode[m] = 0;
 
+   int id;
 
    {
       tvirtualdisplay vdp ( 1000, 10000, 255 );
@@ -229,7 +234,7 @@ int main(int argc, char *argv[] )
          int magic = -1;
          s.writedata2 ( magic );
 
-         int id = 1;
+         id = 1;
          printf ("\n    ID :  \n ( 0 = original ASC graphics; 1 = BI3 graphics; >=2 : additional graphic sets)\n    ");
          scanf ( "%d", &id );
          // num_ed ( id , 0, 65534);
@@ -252,27 +257,30 @@ int main(int argc, char *argv[] )
                s.writedata ( pics[j], getpicsize2 ( pics[j] ) );
       }
    }
-   {
-      int maxy = 0;
-      int maxx = 0;
-      tvirtualdisplay vdp ( 2000, 30000, 255, 32 );
-      // initgraphics ( 1024, 768, 32 );
-      // bar ( 0, 0, 1024*4-1, 767, 0xffffffff );
-      for ( TCI::iterator ti = tci.begin(); ti != tci.end(); ti++ ) {
-         int x = ti->first % colnum;
-         int y = ti->first / colnum;
-         int xp = (x0 + x * xd) * 2;
-         int yp = (y0 + y * yd ) * 2;
-         putimage ( xp, yp, ti->second );
 
-         if ( yp > maxy )
-            maxy = yp;
+   ASCString dir = getSearchPath(0) + strrr ( id );
+   if ( !directoryExist ( dir.c_str() ))
+      createDirectory ( dir.c_str() );
 
-         if ( xp > maxx )
-            maxx = xp;
-           // getch();
+   /*
+   for ( TCI::iterator ti = tci.begin(); ti != tci.end(); ti++ ) {
+      if ( picmode[ti->first] == 2 ) {
+         tvirtualdisplay vdp ( 100, 100, 0xffffff, 32 );
+         putimage_noalpha ( 10, 10, ti->second );
+         ASCString fn = dir + pathdelimitterstring + strrr ( ti->first ) + ".pcx";
+         writepcx ( fn.c_str(), 10, 10, 10+fieldsizex-1, 10+fieldsizey-1, pal );
+
       }
-      writepcx ( "images.pcx", 0, 0, maxx+100, maxy+100, activepalette );
    }
+   */
+   for ( TCI8::iterator ti = tci8.begin(); ti != tci8.end(); ti++ ) {
+      if ( picmode[ti->first] == 2 ) {
+         tvirtualdisplay vdp ( 100, 100, 255 );
+         putimage ( 10, 10, ti->second );
+         ASCString fn = dir + pathdelimitterstring + strrr ( ti->first ) + ".pcx";
+         writepcx ( fn.c_str(), 10, 10, 10+fieldsizex-1, 10+fieldsizey-1, pal );
+      }
+   }
+
    return 0;
 }

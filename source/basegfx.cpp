@@ -2,9 +2,13 @@
     \brief Platform indepedant graphic functions. 
 */
 
-//     $Id: basegfx.cpp,v 1.25 2001-02-26 21:14:30 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.26 2001-02-28 14:10:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2001/02/26 21:14:30  mbickel
+//      Added two small editors to the linux makefiles
+//      Added some more truecolor hacks to the graphics engine
+//
 //     Revision 1.24  2001/02/18 15:37:00  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -740,6 +744,12 @@ void TrueColorImage :: setpix ( int x, int y, int r, int g, int b, int alpha )
    p->channel.a = alpha;
 }
 
+void TrueColorImage :: setpix ( int x, int y, const trgbpixel& _pix )
+{
+   pix[ x + y * xsize ] = _pix;
+}
+
+
 trgbpixel TrueColorImage :: getpix ( int x, int y )
 {
    return pix[ x + y * xsize ];
@@ -913,7 +923,7 @@ TrueColorImage* zoomimage ( void* buf, int xsize, int ysize, dacpalette256 pal, 
                }
             }
          } else {
-             int px = getpixelfromimage ( buf, f2i2(ox), f2i2(oy) );
+             int px = getpixelfromimage ( buf, f2i2(ox-0.01), f2i2(oy-0.01) );
              if ( px == 255 ) 
                 alpha += alphabase ;
              else {
@@ -928,6 +938,40 @@ TrueColorImage* zoomimage ( void* buf, int xsize, int ysize, dacpalette256 pal, 
    }
    
    return img;
+}
+
+
+TrueColorImage* smoothimage ( TrueColorImage* src )
+{
+  TrueColorImage* dst = new TrueColorImage ( src->getxsize(), src->getysize() );
+  for ( int y = 0; y < src->getysize(); y++ )
+     for ( int x = 0; x < src->getxsize(); x++ ) {
+        if ( src->getpix ( x, y ).channel.a < alphabase / 2 ) {
+           int cnt = 0;
+           int r = 0;
+           int g = 0;
+           int b = 0;
+           for ( int a = -1; a <= 1; a++ )
+              for ( int bb = -1; bb <= 1; bb++ ) {
+                  int nx = x+a;
+                  int ny = y+bb;
+                  if ( nx >= 0 && ny >= 0 && nx < src->getxsize() && ny < src->getysize()) {
+                     trgbpixel p = src->getpix( nx, ny );
+                     if ( p.channel.a < alphabase/2 ) {
+                        cnt++;
+                        r += p.channel.r;
+                        g += p.channel.g;
+                        b += p.channel.b;
+                     }
+                  }
+              }
+
+           dst->setpix ( x, y, r/cnt, g/cnt, b/cnt, 0 );
+        } else {
+           dst->setpix ( x, y, 0, 0, 0, alphabase );
+        }
+     }
+  return dst;
 }
 
 #define sqr(a) (a)*(a)
@@ -1162,13 +1206,13 @@ void tvirtualdisplay :: init ( int x, int y, int color, int depth )
       throw fatalgraphicserror ( "could not allocate memory !");
 
    buf = cbuf;
-   for ( int i = 0; i < (x*y); i++ )
+   for ( int i = 0; i < (x*y*depth/8); i++ )
       cbuf[i] = color;
 
    agmp->resolutionx   = x   ;
    agmp->resolutiony   = y   ;
    agmp->windowstatus  = 100 ;
-   agmp->scanlinelength  = x ;
+   agmp->scanlinelength  = x*depth/8 ;
    agmp->scanlinenumber  = y ;
    agmp->bytesperscanline  = x * depth/8;
    agmp->byteperpix   = depth/8    ;
@@ -1387,9 +1431,39 @@ void putimage ( int x1, int y1, void* img )
 void putimage ( int x1, int y1, TrueColorImage* tci )
 {
   for ( int y = 0; y < tci->getysize(); y++ )
-     for ( int x = 0; x < tci->getxsize(); x++ )
-        putpixel ( x1 + x, y1 + y, tci->getpix ( x,y ).rgb );
+     for ( int x = 0; x < tci->getxsize(); x++ ) {
+        trgbpixel t = tci->getpix ( x,y );
+        putpixel ( x1 + x, y1 + y, t.channel.r + 256*t.channel.g + 256*256*t.channel.b );
+     }
 }
+
+void putimage_noalpha ( int x1, int y1, TrueColorImage* tci )
+{
+  for ( int y = 0; y < tci->getysize(); y++ )
+     for ( int x = 0; x < tci->getxsize(); x++ ) {
+        trgbpixel t = tci->getpix ( x,y );
+        if (t.channel.a > alphabase * 2 / 3 )
+           putpixel ( x1 + x, y1 + y, TCalpha );
+        else
+           putpixel ( x1 + x, y1 + y, t.channel.r + 256*t.channel.g + 256*256*t.channel.b );
+     }
+}
+
+
+TrueColorImage* getimage ( int x1, int y1, int x2, int y2 )
+{
+  TrueColorImage* tci = new TrueColorImage ( x2-x1+1, y2-y1+1 );
+  for ( int y = 0; y < tci->getysize(); y++ )
+     for ( int x = 0; x < tci->getxsize(); x++ ) {
+        trgbpixel t;
+        t.rgb = getpixel ( x1 + x, y1 + y );
+        if ( t.rgb == TCalpha )
+           t.channel.a = alphabase;
+        tci->setpix ( x, y, t );
+     }
+  return tci;
+}
+
 
 void putxlatfilter ( int x1, int y1, void* pic, char* xlattables )
 {
