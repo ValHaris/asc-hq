@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.152 2004-08-01 09:44:12 mbickel Exp $
+//     $Id: typen.h,v 1.153 2004-08-19 19:19:52 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -362,6 +362,28 @@ inline void readClassContainer<> ( vector<pair<int,int> >& c, tnstream& stream  
 }
 
 
+
+class MoveMalusType {
+   public:
+      enum {  deflt,
+              light_tracked_vehicle,
+              medium_tracked_vehicle,
+              heavy_tracked_vehicle,
+              light_wheeled_vehicle,
+              medium_wheeled_vehicle,
+              heavy_wheeled_vehicle,
+              trooper,
+              rail_vehicle,
+              medium_aircraft,
+              medium_ship,
+              structure,
+              light_aircraft,
+              heavy_aircraft,
+              light_ship,
+              heavy_ship,
+              helicopter,
+              hoovercraft };
+   };
 
 
 

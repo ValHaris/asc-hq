@@ -128,7 +128,7 @@ ASCString InfoPage::getHeightImgString( int height ) {
 }
 
 void InfoPage::buildPage() {
-  createHTMLHeader(generator->getCSSPath());
+  createHTMLHeader(generator->getMainCSSPath());
   startBody();
   *buildingInfStream << "<p>" << endl;
   *buildingInfStream << "<a name=\"" << ANCHORTOP << "\"></a>" << endl;
@@ -1570,12 +1570,13 @@ void TechTreePage::buildContent() {}
 void TechTreePage::addSectionLinks() {}
 
 void TechTreePage::buildPage() {
-  createHTMLHeader(generator->getCSSPath());
+  createHTMLHeader(generator->getMainCSSPath());
   startBody();
   addImage(techPicPath, "Tech Tree");
   endBody();
   endHTML();
 
 }
+
 
 

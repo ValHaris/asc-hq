@@ -257,6 +257,7 @@ extern const char*  cvehiclefunctions[];
         void write ( tnstream& stream ) const ;
         void runTextIO ( PropertyContainer& pc );
         ~Vehicletype ( );
+        Resources calcProductionsCost();
      private:
         void setupPictures();
         void setupRemovableObjectsFromOldFileLayout();

@@ -192,6 +192,9 @@ const char*  buildingFunctionTags[cbuildingfunctionnum]  =
         "SpecialBiForest",
         "AutoBorder" };
 
+  const char* productionCostCalculationMethod[productionCostCalculationMethodNum] 
+    = { "manual", "auto", "add" };
+
 const char* AItasks[AiParameter::taskNum] = { "nothing",
                          "tactics",
                          "tactwait",

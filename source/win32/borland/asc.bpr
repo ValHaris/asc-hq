@@ -281,7 +281,7 @@ Item2=C:\Programme\ascsrc\games\asc\source\win32\borland
 DebugSourceDirs=c:\programme\borland\cbuilder5\source\vcl;C:\Programme\ascdev\paragui\include\
 
 [Parameters]
-RunParams=-w -r 2 
+RunParams=-w -r 5
 Launcher=
 UseLauncher=0
 DebugCWD=

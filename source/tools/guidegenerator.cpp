@@ -204,8 +204,12 @@ ASCString ImageConverter::constructImgFileName(const VehicleType&  vt) {
 
 GuideGenerator::GuideGenerator(ASCString fp, ASCString menuCss, int id, ASCString maCSSFile, ASCString techIDs, bool imgCreate, ASCString relativeMenuPath, bool upload, int imageSize):filePath(fp), menuCSSFile(menuCss), setID(id), mainCSSFile(maCSSFile), techTreeIDs(String2IntRangeVector(techIDs)), relMenuPath(relativeMenuPath), createImg(imgCreate), createUpload(upload), imageWidth(imageSize) 
 {
-   if ( relMenuPath.length() > 0  )
-        appendbackslash( relMenuPath );
+   if ( relMenuPath.length() > 0  ){
+     if(relMenuPath.find_last_of("/")!=relMenuPath.size()-1){
+        relMenuPath += "/";
+	//appendbackslash( relMenuPath );
+     }
+   }
 }
 
 const ASCString& GuideGenerator::getImagePath(int id) {

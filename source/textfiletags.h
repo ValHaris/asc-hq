@@ -29,6 +29,8 @@
  extern const char* objectNetMethod[];
  extern const char* entranceModes[];
 
+ const int productionCostCalculationMethodNum = 3;
+ extern const char* productionCostCalculationMethod[];
 
  extern const char* objectDisplayingMethodTags[];
 
