@@ -2,9 +2,14 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.85 2002-11-05 09:05:16 mbickel Exp $
+//     $Id: building.cpp,v 1.86 2002-11-30 18:04:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.85  2002/11/05 09:05:16  mbickel
+//      Fixed: mining stations produced not enough output
+//      Changed default building properties in mapeditor
+//      new autoborder object netting function
+//
 //     Revision 1.84  2002/10/02 20:21:00  mbickel
 //      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
 //
@@ -4575,8 +4580,15 @@ ccontainer_b :: cconventionelpowerplant_subwindow :: cconventionelpowerplant_sub
 int  ccontainer_b :: cconventionelpowerplant_subwindow :: subwin_available ( void )
 {
    if ( actmap->_resourcemode != 1 )
-      if ( ( hostcontainer->getspecfunc ( mbuilding ) & cgconventionelpowerplantb ) && ( cc_b->building->maxplus.energy ))
-         cbuildingsubwindow :: subwin_available ( );
+      if ( ( hostcontainer->getspecfunc ( mbuilding ) & cgconventionelpowerplantb ) && ( cc_b->building->maxplus.energy )) {
+         bool avail = false;
+         for ( int r = 0; r < 3; r++ )
+            if ( cc_b->building->maxplus.resource(r) < 0 )
+               avail = true;
+
+         if ( avail )
+            cbuildingsubwindow :: subwin_available ( );
+      }
 
    if ( next )
       next->subwin_available ();
