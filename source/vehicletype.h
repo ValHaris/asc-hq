@@ -65,15 +65,39 @@ extern const char* AIjobs[];
  class SingleWeapon {
      int          typ;
     public:
-     int          targ;           /*  BM      <= CHoehenstufen  */
-     int          sourceheight;   /*  BM  "  */
+     //! the weapon can attack targets at these levels of height (bitmapped)
+     int          targ;   
+
+     //! the weapon can be shot from these levels of height (bitmapped)
+     int          sourceheight;  
+
+     //! the maximum distance the weapon can shoot
      int          maxdistance;
+
+     //! the minimal distance the weapon can shoot
      int          mindistance;
+
+     //! amount of ammunition the unit having this weapon can carry
      int          count;
-     int          maxstrength;    // Wenn der Waffentyp == Mine ist, dann ist hier die Minenst„rke als Produkt mit der Bassi 64 abgelegt.
+
+     //! strength of the weapon when fired over the minimal distance 
+     int          maxstrength;
+
+     //! strength of the weapon when fired over the maximum distance 
      int          minstrength;
-     int          efficiency[13]; // floating and driving are the same ; 0-5 is lower ; 6 is same height ; 7-12 is higher
-     // int          targets_not_hittable; // BM   <=  cmovemalitypes
+
+     /** the targeting accuracy of the weapon over different height differences between the attacking unit and the target.
+         The levels "ground" and "floating" are assumed to be the same.
+         All values are in percent.
+         The index for this array is the height difference+6
+         Example: low flying airplane attacking a submerged submarine:
+                  height difference is -2 ; index here is 4 
+     */
+     int          efficiency[13]; 
+
+     /** the effectiveness of the weapon against different targets.
+         All values are in percent. \see cmovemalitypes
+     */
      int          targetingAccuracy[cmovemalitypenum];
     public:
      int          getScalarWeaponType(void) const;
@@ -100,31 +124,86 @@ extern const char* AIjobs[];
  //! The class describing properties that are common to all vehicles of a certain kind. \sa Vehicle
  class Vehicletype : public ContainerBaseType {
     public:
-        ASCString    name;          /* z.B. Exterminator  */
-        ASCString    description;   /* z.B. Jagdbomber    */
-        ASCString    infotext;      /* optional, kann sehr ausf?hrlich sein. Empfehlenswert ?ber eine Textdatei einzulesen */
+        //! name of the unit, for example "B-52"
+        ASCString    name;          
+
+        //! short description of the units role, for example "strategic bomber"
+        ASCString    description;   
+
+        //! an extensive information about the unit which may be several paragraphs long
+        ASCString    infotext;
+
         const ASCString&    getName() const;
+
         int armor;
 
-        void*        picture[8];    /*  0ø  ,  45ø   */
-        int          height;        /*  BM  Besteht die Moeglichkeit zum Hoehenwechseln  */
-        int          researchid;    // inzwischen ?berfl?ssig, oder ?
-        int          steigung;      /*  max. befahrbare Hoehendifferenz zwischen 2 fieldern  */
-        int          jamming;      /*  St„rke der Stoerstrahlen  */
-        int          view;         /*  viewweite  */
-        bool         wait;        /*  Kann vehicle nach movement sofort schiessen ?  */
-        int          loadcapacity;      /*  Transportmoeglichkeiten  */
-        int          maxunitweight; /*  maximales Gewicht einer zu ladenden vehicle */
-        int          loadcapability;     /*  BM     CHoehenStufen   die zu ladende vehicle muss sich auf einer dieser Hoehenstufen befinden */
-        int          loadcapabilityreq;  /*  eine vehicle, die geladen werden soll, muss auf eine diese Hoehenstufen kommen koennen */
-        int          loadcapabilitynot;  /*  eine vehicle, die auf eine dieser Hoehenstufen kann, darf NICHT geladen werden. Beispiel: Flugzeuge in Transportflieger */
-        int          id;
-        Resources    tank;
-        int          fuelConsumption;
-        int          functions;
-        vector<int>  movement;      /*  max. movementsstrecke  */
-        int          movemalustyp;     /*  wenn ein Bodentyp mehrere Movemali fuer unterschiedliche vehiclearten, wird dieser genommen.  <= cmovemalitypes */
+        //! the image of the unit. Only 6 images are used
+        void*        picture[8];    
 
+        //! the levels of height which this unit can enter
+        int          height;        
+
+        //! not used any more
+        int          researchid;  
+
+        //! if the unit can change the level of height, this is the number of fields the unit must move to go from one level to the next
+        int          steigung;   
+
+        //! the radar jamming power
+        int          jamming;      
+
+        //! the visibility range 
+        int          view;         
+
+        //! If the unit cannot attack in the same turn after it has moved, it has to wait
+        bool         wait;        
+  
+        /** @name Unit cargo
+            properties for specifying which units can be carried by this vehicletype and which not 
+        */
+        //@{
+        //! the maximum weight that the unit can carry
+        int          loadcapacity;
+
+        //! the maximum weight of a single unit that can be carried
+        int          maxunitweight; 
+
+        //! A unit that is going to be loaded must be on one of these levels of height (bitmapped)
+        int          loadcapability;
+
+        /** Additional levels of height that a unit must be able to enter to be allowed as cargo (bitmapped).
+            If 0 or 255 there are no restrictions
+         */   
+        int          loadcapabilityreq;
+
+        //! A unit that is able to enter one of these levels of height is not allowed to enter (bitmapped)  
+        int          loadcapabilitynot;
+
+        //! all unit categories whose bit is not set here may not enter (bitmapped) \see cmovemalitypes 
+        int          vehicleCategoriesLoadable;
+        //@}
+
+
+        //! the identification number of the unit  
+        int          id;
+
+        //! the resource storage capacity
+        Resources    tank;
+
+        //! the fuel consumption to move a single field 
+        int          fuelConsumption;
+
+        //! Special abilities of the unit (bitmapped). \see cvehiclefunctions
+        int          functions;
+
+        //! the distance a unit can travel each round. One value for each of the 8 levels of height
+        vector<int>  movement;      
+
+        //! The category of the unit. Original used only to distinguish only between different movement costs for a field, this categorization is now used for many more things. \see cmovemalitypes
+        int          movemalustyp;     
+
+        //@{ 
+        //! the system of classes for a unit is not used any more
         char         classnum;         /* Anzahl der Klassen, max 8, min 0 ;  Der EINZIGE Unterschied zwischen 0 und 1 ist der NAME ! */
         ASCString    classnames[8];    /* Name der einzelnen Klassen */
 
@@ -136,32 +215,60 @@ extern const char* AIjobs[];
          char         eventrequired;
          int          vehiclefunctions;
        } classbound[8];    /* untergrenze (minimum), die zum erreichen dieser Klasse notwendig ist, classbound[0] gilt fuer vehicletype allgemein*/
+      //@}
 
+        //! the maximum speed of the wind that the unit can survive when on open water without sinking
         int          maxwindspeedonwater;
-        int          digrange;        // Radius, um den nach bodensch„tzen gesucht wird.
-        int          initiative;      // 0 ist ausgeglichen // 256 ist verdoppelung
 
-        int           weight;           // basic weight, without fuel etc.
+        //! radius of the circle in which a unit can search for mineral resolures (measured in number of fields, not distance !) 
+        int          digrange;     
+
+        //! unused
+        int          initiative;      
+
+        //! the weight of the unit, without fuel or other cargo
+        int           weight;           
+
+        //! the terrain this unit can move to
         TerrainAccess terrainaccess;
+
+        //! the image index from the GraphicSet , or -1 if no graphics from graphic sets are used.
         int           bipicture;
 
+        //! the gui icon for selecting this unit by construction vehicles 
         void*        buildicon;
 
+        //! the ids of buildings this unit can construct
         vector<IntRange> buildingsBuildable;
+
+        //! the ids of units this unit can construct
         vector<IntRange> vehiclesBuildable;
+
+        //! the ids of objects this unit can construct
         vector<IntRange> objectsBuildable;
+
+        //! the ids of objects this unit can remove
         vector<IntRange> objectsRemovable;
 
+        //! The weapons
         UnitWeapon   weapons;
+
+        //! the damage this unit can repair itself automatically each turn.
         int          autorepairrate;
 
+        //! some information the AI stores about this unit
         AiValue* aiparam[8];
 
-        int          vehicleCategoriesLoadable;
 
-        int maxweight ( void ) const ;     // max. weight including fuel and material
-        int maxsize   ( void ) const ;     // without fuel and material
+        //! returns the maximum weight of this unit including maximum fuel and material
+        int maxweight ( void ) const ;     
+
+        //! returns the maximum weight of this unit without fuel and material
+        int maxsize   ( void ) const ;     
+
+        //! checks whether the given vehicletype can principially be loaded. 
         int vehicleloadable ( pvehicletype fzt ) const;
+
         Vehicletype ( void );
         void read ( tnstream& stream ) ;
         void write ( tnstream& stream ) const ;

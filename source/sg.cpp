@@ -2093,9 +2093,6 @@ int gamethread ( void* data )
       catch ( tfileerror err ) {
          displaymessage ( "unable to access file %s \n", 2, err.getFileName().c_str() );
       }
-      catch ( toutofmem ) {
-         displaymessage ( "loading of game failed due to insufficient memory", 2 );
-      }
       catch ( ParsingError err ) {
          displaymessage ( "Error parsing text file " + err.getMessage(), 2 );
       }

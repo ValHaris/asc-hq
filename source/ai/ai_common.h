@@ -58,7 +58,7 @@
 
 extern const int currentServiceOrderVersion;
 
-
+  //! A path finding algorithm which avoids units to jam; used by the AI's strategy module.
   class StratAStar : public AStar {
        AI* ai;
     protected:
@@ -73,6 +73,7 @@ extern const int currentServiceOrderVersion;
        StratAStar ( AI* _ai, pvehicle veh ) : AStar ( _ai->getMap(), veh ), ai ( _ai ) {};
  };
 
+  //! A 3D path finding algorithm which avoids units to jam; used by the AI's strategy module.
   class StratAStar3D : public AStar3D {
        AI* ai;
     protected:
@@ -88,6 +89,7 @@ extern const int currentServiceOrderVersion;
  };
 
 
+  //! A path finding algorithm which tries to keep the units hidden from view.
  class HiddenAStar : public AStar {
        AI* ai;
     protected:
@@ -114,6 +116,7 @@ extern const int currentServiceOrderVersion;
  };
 
 
+  //! A 3D path finding algorithm which tries to keep the units hidden from view.
  class HiddenAStar3D : public AStar3D {
        AI* ai;
     protected:

@@ -70,12 +70,9 @@ extern void  getnextfield(int &    x,
                           int &    y,
                           int direc);
 
+//! returns the coordinate of the field that is adjecent to the given field in the direction of direc
 extern MapCoordinate  getNeighbouringFieldCoordinate( const MapCoordinate& pos, int direc);
 
-extern void  getnextfielddir(int &    x,
-                             int &    y,
-                             int direc,
-                             int sdir);
 
 /** gets the direction from x1/y1 to x2/y2
   \returns -1 if the fields are identical
@@ -88,8 +85,10 @@ extern int   getdirection(    int      x1,
 //! returns the distance between (x1/y1) and (x2/y2)
 extern int beeline ( int x1, int y1, int x2, int y2 );
 
-//! returns the distance the units a and b
+//! returns the distance between the units a and b
 extern int beeline ( const pvehicle a, const pvehicle b );
+
+//! returns the distance between map positions a and b
 extern int beeline ( const MapCoordinate& a, const MapCoordinate& b );
 
 

@@ -26,10 +26,29 @@
 */
 
 
-enum trpl_actions { rpl_attack, rpl_move, rpl_changeheight, rpl_convert, rpl_remobj, rpl_buildobj, rpl_putbuilding,
-                    rpl_removebuilding, rpl_putmine, rpl_removemine, rpl_produceunit, rpl_removeunit, rpl_trainunit,
-                    rpl_reactionfire, rpl_finished, rpl_shareviewchange, rpl_alliancechange, rpl_move2, rpl_buildtnk,
-                    rpl_refuel, rpl_bldrefuel, rpl_move3, rpl_changeheight2 };
+enum trpl_actions { rpl_attack, 
+                    rpl_move, 
+                    rpl_changeheight, 
+                    rpl_convert, 
+                    rpl_remobj, 
+                    rpl_buildobj, 
+                    rpl_putbuilding,
+                    rpl_removebuilding, 
+                    rpl_putmine, 
+                    rpl_removemine, 
+                    rpl_produceunit, 
+                    rpl_removeunit, 
+                    rpl_trainunit,
+                    rpl_reactionfire, 
+                    rpl_finished, 
+                    rpl_shareviewchange, 
+                    rpl_alliancechange, 
+                    rpl_move2, 
+                    rpl_buildtnk,
+                    rpl_refuel, 
+                    rpl_bldrefuel, 
+                    rpl_move3, 
+                    rpl_changeheight2 };
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 
@@ -63,6 +82,7 @@ class trunreplay {
    };
 extern trunreplay runreplay;
 
+//! a hack to enable the replay in a game that was started without replays
 extern int startreplaylate;
 
 //! checks if there is replay information and -if there is any- runs the replay

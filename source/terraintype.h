@@ -28,7 +28,7 @@
    void write ( tnstream& stream ) const;
  };
 
- //! This class is used by buildings, vehicles and objects to specify which terrain it can move to
+ //! This class is used by buildings, vehicles and objects to specify which terrain it can move to / be built on
  class TerrainAccess {
     public:
        TerrainAccess ( void ) ;
@@ -63,25 +63,44 @@
  //! The type of a field
  class TerrainType : public LoadableItemType {
     public:
+      int                id;
+      ASCString          name;
+
       class  Weather {
         public:
+          //! the image of the field
           void*          pict;
+
+          //! the defense bonus for the unit standing on this field. \see AttackFormula::defense_defensebonus(int)
           int            defensebonus;
+
+          //! the attack bonus for the unit standing on this field. \see AttackFormula::strength_attackbonus(int)
           int            attackbonus;
+
+          //! the view obstraction of the field 
           int            basicjamming;
+
+          //! the movement cost for the various units to move across this field
           vector<int>    move_malus;
+          
+          //! displays the image on the screen coordinates x1/y1
           void           paint ( int x1, int y1 );
+
+          //! the image index from the graphic set. -1 if graphics is not from graphic set. \see  GraphicSet 
           int            bi_pict;
+
+          //! the properties defining which unit can move onto this field and which not 
           TerrainBits    art;
 
+          //! pointer to the outer structure
           TerrainType*   terraintype;
+
+          //! the color information for the small map
           pquickview     quickview;
 
           Weather ( TerrainType* base ) : pict( NULL ), terraintype ( base ), quickview ( NULL ) {};
           void runTextIO ( PropertyContainer& pc );
       };
-     int                id;
-     ASCString          name;
      Weather*           weather[cwettertypennum];
 
      TerrainType();

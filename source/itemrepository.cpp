@@ -5,6 +5,9 @@
     copyright            : (C) 2001 by Martin Bickel
     email                : bickel@asc-hq.org
  ***************************************************************************/
+/*! \file itemrepository.cpp
+    \brief Storage facility for all buildingtypes, vehicletypes etc 
+*/
 
 /***************************************************************************
  *                                                                         *
@@ -92,57 +95,58 @@ pobjecttype fahrspurobject = NULL;
 
    map< int, ptechnology>  technologymap;
 
-pterraintype getterraintype_forid ( int id, int crccheck )
+pterraintype getterraintype_forid ( int id )
 {
    return terrainmap[id];
 }
-pobjecttype getobjecttype_forid ( int id, int crccheck  )
+pobjecttype getobjecttype_forid ( int id )
 {
    return objectmap[id];
 }
-pvehicletype getvehicletype_forid ( int id, int crccheck  )
+pvehicletype getvehicletype_forid ( int id )
 {
    return vehiclemap[id];
 }
-pbuildingtype getbuildingtype_forid ( int id, int crccheck  )
+pbuildingtype getbuildingtype_forid ( int id )
 {
    return buildingmap[id];
 }
-ptechnology gettechnology_forid ( int id, int crccheck  )
+ptechnology gettechnology_forid ( int id )
 {
    return technologymap[id];
 }
 
 
-pterraintype getterraintype_forpos ( int pos, int crccheck  )
+pterraintype getterraintype_forpos ( int pos )
 {
    if ( pos < terraintypenum )
       return terrain[pos];
    else
       return NULL;
 }
-pobjecttype getobjecttype_forpos ( int pos, int crccheck  )
+pobjecttype getobjecttype_forpos ( int pos )
 {
    if ( pos < objecttypenum )
       return objecttypes[pos];
    else
       return NULL;
 }
-pvehicletype getvehicletype_forpos ( int pos, int crccheck  )
+pvehicletype getvehicletype_forpos ( int pos )
 {
    if ( pos < vehicletypenum )
       return vehicletypes[pos];
    else
       return NULL;
 }
-pbuildingtype getbuildingtype_forpos ( int pos, int crccheck  )
+pbuildingtype getbuildingtype_forpos ( int pos )
 {
    if ( pos < buildingtypenum )
       return buildingtypes[pos];
    else
       return NULL;
 }
-ptechnology gettechnology_forpos ( int pos, int crccheck  )
+
+ptechnology gettechnology_forpos ( int pos )
 {
    if ( pos < technologynum )
       return technology[pos];

@@ -6,6 +6,11 @@
     email                : bickel@asc-hq.org
  ***************************************************************************/
 
+/*! \file textfileparser.h
+    \brief Functions to parse the *.asctxt files
+*/
+
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -30,10 +35,14 @@ class ParsingError : public ASCmsgException {
 class TextPropertyGroup;
 typedef PointerList<TextPropertyGroup*> TextPropertyList;
 
+/** Class that stores all the (preparsed) entries of an .ASCTXT file. 
+    The entries consist of a PropertyName, an operator and a value, but don't have any type information 
+*/
 class TextPropertyGroup {
          bool inheritanceBuild;
       public:
           TextPropertyGroup() : inheritanceBuild ( false ) {};
+          
           class Entry {
             public:
                ASCString propertyName;
@@ -47,6 +56,8 @@ class TextPropertyGroup {
 
          ASCString fileName;
          ASCString location;
+
+         //! the name of the structure. For example "VehicleType"
          ASCString typeName;
 
          void buildInheritance( TextPropertyList& tpl );
@@ -54,7 +65,7 @@ class TextPropertyGroup {
 };
 
 
-
+//! Parses a .ASCTXT file and returns a TextPropertyGroup
 class TextFormatParser {
          tnstream *stream;
          typedef list<ASCString> Level;
@@ -75,7 +86,6 @@ class TextFormatParser {
         void error ( const ASCString& errmsg );
 };
 
-
 class PropertyContainer {
          bool reading;
          // ASCString filename;
@@ -87,7 +97,7 @@ class PropertyContainer {
          TextPropertyGroup* textPropertyGroup;
       public:
 
-
+         
          class Property {
             protected:
                ASCString name;

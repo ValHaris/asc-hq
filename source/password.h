@@ -25,7 +25,7 @@
  #include <string>
  #include "basestreaminterface.h"
  class Password {
-          string password;
+          ASCString password;
        protected:
          int encodepassword ( const char* pw ) const ;
          string encodedpassword2string ( int pwd ) const;

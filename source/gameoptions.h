@@ -88,26 +88,59 @@ class CGameOptions
       //! when an airplanes changes its height, should all accessible fields be found from which the height change can be started? May take some time on slower computers
       int heightChangeMovement;
 
+      //! not relevant any more
       int runAI;
+ 
+      //! force ASC to run in windowed mode (and not fullscreen, which is default)
       int forceWindowedMode;
+    
+
+      //! force the mapeditor to run in fullscreen mode (and not windowed, which is default)
       int mapeditForceFullscreenMode;
+
+      //! the horizontal resolution ASC uses
       int xresolution;
+
+      //! the vertical resolution ASC uses
       int yresolution;
+
+      //! the horizontal resolution the mapeditor uses
       int mapeditor_xresolution;
+
+      //! the vertical resolution the mapeditor uses
       int mapeditor_yresolution;
+
+      //! temporary variable
       int specialForestChaining;
 
 
+      //! the mouse configuration. Mouse button are: bit 0 = left button ; bit 1 = right button ; bit 2 = center button 
       struct Mouse
       {
          int scrollbutton;
+         //! the button to select a field without opening the menu 
          int fieldmarkbutton;
+         //! the button to select a field and open the menu there
          int smallguibutton;
+
+         //! the button to use the big icons on the right side 
          int largeguibutton;
-         int smalliconundermouse;  // 0: nie;  1: immer; 2: nur wenn vehicle, geb„ude, oder temp unter MAUS
-         int centerbutton;         
+
+         /** specifies the occasions when the small icons are positioned directly under the mouse pointer (instead of some pixel upwards)
+             0 = never
+             1 = always
+             2 = only if there is a building or a unit on the field or if the field is a destination for the current unit action (default)
+         */ 
+         int smalliconundermouse;  
+
+         //! the button to center the map around the selected field 
+         int centerbutton;
+
+         //! the button to display the vehicle information          
          int unitweaponinfo;
-         int dragndropmovement;
+
+         //! not used
+         int dragndropmovement;  
       } mouse;
 
       class Container

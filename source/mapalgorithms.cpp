@@ -264,17 +264,6 @@ void         SearchFields::startsearch(void)
 
 int         ccmpheighchangemovedir[6]  = {0, 1, 5, 2, 4, 3 };
 
-void         getnextfielddir(int&       x,
-                             int&       y,
-                             int       direc,
-                             int       sdir)
-{
-   int newdir = ccmpheighchangemovedir[direc] + sdir;
-   if ( newdir >= 6 )
-      newdir -= 6;
-
-   getnextfield( x, y, newdir );
-}
 
 MapCoordinate getNeighbouringFieldCoordinate( const MapCoordinate& pos, int direc)
 {

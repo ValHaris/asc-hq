@@ -26,17 +26,17 @@
 #include "objecttype.h"
 #include "buildingtype.h"
 
-extern pterraintype getterraintype_forid ( int id, int crccheck = 1 );
-extern pobjecttype getobjecttype_forid ( int id, int crccheck = 1 );
-extern pvehicletype getvehicletype_forid ( int id, int crccheck = 1 );
-extern pbuildingtype getbuildingtype_forid ( int id, int crccheck = 1 );
-extern ptechnology gettechnology_forid ( int id, int crccheck = 1 );
+extern pterraintype getterraintype_forid ( int id );
+extern pobjecttype getobjecttype_forid ( int id );
+extern pvehicletype getvehicletype_forid ( int id );
+extern pbuildingtype getbuildingtype_forid ( int id );
+extern ptechnology gettechnology_forid ( int id );
 
-extern pterraintype getterraintype_forpos ( int pos, int crccheck = 1 );
-extern pobjecttype getobjecttype_forpos ( int pos, int crccheck = 1 );
-extern pvehicletype getvehicletype_forpos ( int pos, int crccheck = 1 );
-extern pbuildingtype getbuildingtype_forpos ( int pos, int crccheck = 1 );
-extern ptechnology gettechnology_forpos ( int pos, int crccheck = 1 );
+extern pterraintype getterraintype_forpos ( int pos );
+extern pobjecttype getobjecttype_forpos ( int pos );
+extern pvehicletype getvehicletype_forpos ( int pos );
+extern pbuildingtype getbuildingtype_forpos ( int pos );
+extern ptechnology gettechnology_forpos ( int pos );
 
 extern void addterraintype ( pterraintype bdt );
 extern void addobjecttype ( pobjecttype obj );

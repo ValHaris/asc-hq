@@ -1,8 +1,12 @@
-/*! \file gamedlg.cpp    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
+/*! \file gamedlg.cpp    
+    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.86 2001-12-19 17:16:28 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.87 2002-01-06 09:50:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.86  2001/12/19 17:16:28  mbickel
+//      Some include file cleanups
+//
 //     Revision 1.85  2001/11/04 22:52:35  mbickel
 //      Fixed bug in wood net calculation
 //      Fixed broken refuel dialog

@@ -76,7 +76,7 @@ bool Building::canRepair ( void )
 }
 
 
-void Building :: convert ( int col )
+void Building :: convert ( int player )
 {
    if (col > 8)
       fatalError("convertbuilding: \n color muá im bereich 0..8 sein ");
@@ -418,13 +418,13 @@ void    Building :: produceAmmo ( int type, int num )
 
    ammo[type] += produceablePackages * 5;
 }
-
+/*
 void Building :: getpowerplantefficiency ( int* material, int* fuel )
 {
    *material = typ->efficiencymaterial;
    *fuel = typ->efficiencyfuel;
 }
-
+*/
 
 
 Building :: ~Building ()
