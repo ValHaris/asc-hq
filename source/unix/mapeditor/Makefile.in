@@ -113,7 +113,7 @@ INCLUDES = -I$(top_builddir) -I$(top_src_dir) \
 
 
 AM_CXXFLAGS = @SDL_CFLAGS@ @SDLMM_CXXFLAGS@ \
--Dkarteneditor -DFREEMAPZOOM -DNEWKEYB @PARAGUI_CFLAGS@
+-Dkarteneditor -DNEWKEYB @PARAGUI_CFLAGS@
 
 
 bin_PROGRAMS = asc_mapedit asc_map2pcx
