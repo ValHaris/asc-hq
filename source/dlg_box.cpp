@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.69 2002-10-02 20:21:00 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.70 2002-10-05 21:22:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.69  2002/10/02 20:21:00  mbickel
+//      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
+//
 //     Revision 1.68  2002/04/05 09:25:08  mbickel
 //      Project files now for Borland C++ Builder 6
 //      Fixed: netcontrol not working
@@ -3786,7 +3789,7 @@ void         tstringselect::resettextfield(void)
    rahmen(true,x1 + sx ,y1 + sy,x1 + ex,y1 + ey);
 }
 
-void   tstringselect::get_text(int nr) //gibt in txt den string zur?ck
+void   tstringselect::get_text(word nr) //gibt in txt den string zur?ck
 {
   strcpy(txt,"");
   nr = 0;

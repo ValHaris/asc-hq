@@ -164,6 +164,12 @@ PropertyContainer::BoolProperty& PropertyContainer::addBool ( const ASCString& n
    return *ip;
 }
 
+PropertyContainer::BoolProperty& PropertyContainer::addBool ( const ASCString& name, bool& property, bool defaultValue )
+{
+   BoolProperty* ip = new BoolProperty ( property, defaultValue );
+   setup ( ip, name );
+   return *ip;
+}
 
 PropertyContainer::StringProperty& PropertyContainer::addString ( const ASCString& name, ASCString& property )
 {
@@ -314,6 +320,46 @@ void PropertyContainer::Property::findEntry ()
       propertyContainer->error ( "entry " + name +" not found" );
 }
 
+/*
+int PropertyContainer::IntProperty::operation_mult_eq ( const TextPropertyGroup::Entry& entry )
+{
+   return parse ( entry.parent ) * operation_eq ( entry.value );
+}
+*/
+
+
+template <class T>
+T PropertyContainer::PropertyTemplate<T>::parse ( const TextPropertyGroup::Entry& entry )
+{
+   switch ( entry.op ) {
+      case TextPropertyGroup::Entry::eq : return operation_eq( entry );
+      case TextPropertyGroup::Entry::mult_eq : return operation_mult_eq ( entry );
+   }
+   propertyContainer->error ( "PropertyContainer::PropertyTemplate::parse - invalid opeartor !");
+   return defaultValue;
+}
+
+template <class T>
+void PropertyContainer::PropertyTemplate<T>::operation_not_defined()
+{
+   propertyContainer->error ( "PropertyContainer::PropertyTemplate::operation_eq - operator not defined for this type !");
+}
+
+
+template <class T>
+T PropertyContainer::PropertyTemplate<T>::operation_eq ( const TextPropertyGroup::Entry& entry )
+{
+   operation_not_defined();
+}
+
+template <class T>
+T PropertyContainer::PropertyTemplate<T>::operation_mult_eq ( const TextPropertyGroup::Entry& entry )
+{
+   operation_not_defined();
+}
+
+
+
 void PropertyContainer::Property::evaluate ()
 {
    if ( evaluated )
@@ -321,6 +367,13 @@ void PropertyContainer::Property::evaluate ()
 
    if ( propertyContainer->isReading() ) {
       findEntry();
+
+      /*
+      if ( entry ) {
+         property = parse ( *entry );
+      } else
+         property = defaultValue;
+       */
       evaluate_rw();
       evaluated = true;
    } else {
@@ -347,15 +400,19 @@ void PropertyContainer::IntProperty::evaluate_rw ( )
 void PropertyContainer::BoolProperty::evaluate_rw ( )
 {
    if ( propertyContainer->isReading() ) {
-      StringTokenizer st ( entry->value );
-      ASCString s = st.getNextToken();
-      if ( s.compare_ci ( "true" )==0 || s.compare_ci ( "1" )==0 )
-         property = true;
-      else
-         if ( s.compare_ci ( "false" )==0 || s.compare_ci ( "0" )==0 )
-            property = false;
-         else
-            propertyContainer->error ( name + ": token "+ s +" unknown" );
+      if ( entry ) {
+        StringTokenizer st ( entry->value );
+        ASCString s = st.getNextToken();
+        if ( s.compare_ci ( "true" )==0 || s.compare_ci ( "1" )==0 )
+           property = true;
+        else
+           if ( s.compare_ci ( "false" )==0 || s.compare_ci ( "0" )==0 )
+              property = false;
+           else
+              propertyContainer->error ( name + ": token "+ s +" unknown" );
+      } else {
+         property = defaultValue;
+      }
    } else
       if ( property )
          valueToWrite =  "true";
@@ -722,11 +779,13 @@ void TextPropertyGroup :: buildInheritance(TextPropertyList& tpl )
 
       callStack.push_back( this );
 
-      if ( find ( "parents") != NULL ) {
-         PropertyReadingContainer prc ( typeName, this );
+      PropertyReadingContainer prc ( typeName, this );
+      prc.addBool ( "abstract", abstract, false );
+
+      if ( find ( typeName+".parent") != NULL ) {
          typedef vector<int> ParentIDs;
          ParentIDs parentIDs;
-         prc.addIntegerArray ( "parents", parentIDs );
+         prc.addIntegerArray ( "parent", parentIDs );
          for ( ParentIDs::iterator i = parentIDs.begin(); i != parentIDs.end(); i++ ) {
             TextPropertyGroup* p = tpl.get ( *i );
             if ( p ) {
@@ -890,6 +949,7 @@ void TextFormatParser::startLevel ( const ASCString& levelName )
          if ( levelName.compare_ci ( primaryName )  )
             error ( "expecting group " + primaryName + " , found " + levelName );
       textPropertyGroup->typeName = levelName;
+      // printf(" %s  - %s \n", levelName.c_str(), textPropertyGroup->typeName.c_str() );
       textPropertyGroup->typeName.toLower();
    }
 
@@ -918,5 +978,6 @@ void TextFormatParser::error ( const ASCString& errmsg )
    else
       throw ParsingError ( " : " + errmsg );
 }
+
 
 

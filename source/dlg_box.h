@@ -2,9 +2,12 @@
     \brief Interface for some basic classes from which all of ASC's dialogs are derived
 */
 
-//     $Id: dlg_box.h,v 1.29 2002-10-02 20:21:00 mbickel Exp $
+//     $Id: dlg_box.h,v 1.30 2002-10-05 21:22:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2002/10/02 20:21:00  mbickel
+//      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
+//
 //     Revision 1.28  2002/03/19 20:38:56  mbickel
 //      Some cleanup and documentation in dlg_box
 //      Fixed some type assignment errors
@@ -162,8 +165,8 @@
     Boston, MA  02111-1307  USA
 */
 
-#ifndef dlg_box_h
-#define dlg_box_h
+#ifndef dlg_boxH
+#define dlg_boxH
 
 #include <cstring>
 
@@ -570,7 +573,7 @@ class   tstringselect : public tdialogbox {
                      void scrollbar_on(void);
                      void viewtext(void);
                      virtual void resettextfield(void);
-                     virtual void get_text( int nr);
+                     virtual void get_text( word nr);
                      void done(void);
                  };
 

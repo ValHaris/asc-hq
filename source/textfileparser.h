@@ -84,6 +84,7 @@ class TextPropertyGroup {
          int evalID();
 
          void buildInheritance( TextPropertyList& tpl );
+         bool isAbstract() { return abstract; };
 };
 
 
@@ -120,6 +121,7 @@ class PropertyContainer {
       public:
 
 
+         // template <class T>
          class Property {
             protected:
                ASCString name;
@@ -132,7 +134,7 @@ class PropertyContainer {
             public:
                Property () : propertyContainer ( NULL ), entry ( NULL ), evaluated(false) {};
                void evaluate ( );
-               const ASCString& getName() { return name; };
+               //const ASCString& getName() { return name; };
                const ASCString& getLastName() { return lastName; };
                void setName ( const ASCString& name_, const ASCString& lastName_ );
                void setPropertyContainer ( PropertyContainer* propertyContainer_ ) {  propertyContainer = propertyContainer_; };
@@ -143,11 +145,17 @@ class PropertyContainer {
          friend class Property;
 
          template <class T> class PropertyTemplate : public Property {
+               void operation_not_defined();
             protected:
                T& property;
                T defaultValue;
                bool defaultValueAvail;
                virtual bool hasDefault() { return defaultValueAvail; };
+
+               virtual T parse ( const TextPropertyGroup::Entry& entry );
+               virtual T operation_mult_eq ( const TextPropertyGroup::Entry& entry );
+               virtual T operation_eq ( const TextPropertyGroup::Entry& entry );
+
             public:
                PropertyTemplate ( T& property_ ) : property ( property_ ), defaultValueAvail ( false ) {};
                PropertyTemplate ( T& property_, const T& defaultValue_ ) : property ( property_ ), defaultValueAvail ( true ), defaultValue ( defaultValue_) {};
@@ -155,7 +163,6 @@ class PropertyContainer {
 
 
          typedef PropertyTemplate<int> PTI;
-
          class IntProperty : public PTI {
             protected:
               void evaluate_rw ( );
@@ -164,12 +171,13 @@ class PropertyContainer {
                IntProperty ( int& property_, int defaultValue_ ) : PTI ( property_, defaultValue_ ) {};
          };
 
-         class BoolProperty : public Property {
-              bool& property;
+         typedef PropertyTemplate<bool> PTB;
+         class BoolProperty : public PTB {
             protected:
               void evaluate_rw ( );
             public:
-               BoolProperty ( bool& property_ ) : property ( property_ ) {};
+               BoolProperty ( bool& property_ ) : PTB ( property_ ) {};
+               BoolProperty ( bool& property_, bool defaultValue_ ) : PTB ( property_, defaultValue_ ) {};
          };
 
          class StringProperty : public Property {
@@ -274,6 +282,7 @@ class PropertyContainer {
          ImageProperty&         addImage ( const ASCString& name, void* &property, const ASCString& fileName );
          ImageArrayProperty&    addImageArray ( const ASCString& name, vector<void*> &property, const ASCString& fileName );
          BoolProperty&          addBool  ( const ASCString& name, bool &property );
+         BoolProperty&          addBool  ( const ASCString& name, bool &property, bool defaultValue  );
 
          void run ( );
          bool isReading() { return reading; };

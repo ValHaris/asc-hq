@@ -308,15 +308,18 @@ void         loadallvehicletypes(void)
        if ( actprogressbar )
          actprogressbar->point();
 
-      PropertyReadingContainer pc ( "vehicletype", *i );
+       if ( !(*i)->isAbstract() ) {
 
-      Vehicletype* vt = new Vehicletype;
-      vt->runTextIO ( pc );
-      pc.run();
+        PropertyReadingContainer pc ( "vehicletype", *i );
 
-      vt->filename = (*i)->fileName;
-      vt->location = (*i)->location;
-      addvehicletype ( vt );
+        Vehicletype* vt = new Vehicletype;
+        vt->runTextIO ( pc );
+        pc.run();
+
+        vt->filename = (*i)->fileName;
+        vt->location = (*i)->location;
+        addvehicletype ( vt );
+     }
    }
    displayLogMessage ( 4, "loadallVehicleTypes completed\n");
 }
@@ -343,18 +346,20 @@ void         loadallobjecttypes (void)
        if ( actprogressbar )
          actprogressbar->point();
 
-      displayLogMessage ( 8, "parsing object type %s ", (*i)->location.c_str());
+       if ( !(*i)->isAbstract() ) {
+          displayLogMessage ( 8, "parsing object type %s ", (*i)->location.c_str());
 
-      PropertyReadingContainer pc ( "objecttype", *i );
+          PropertyReadingContainer pc ( "objecttype", *i );
 
-      ObjectType* ot = new ObjectType;
-      ot->runTextIO ( pc );
-      pc.run();
+          ObjectType* ot = new ObjectType;
+          ot->runTextIO ( pc );
+          pc.run();
 
-      ot->filename = (*i)->fileName;
-      ot->location = (*i)->location;
-      addobjecttype ( ot );
-      displayLogMessage ( 8, "done\n");
+          ot->filename = (*i)->fileName;
+          ot->location = (*i)->location;
+          addobjecttype ( ot );
+          displayLogMessage ( 8, "done\n");
+       }
    }
 
    displayLogMessage ( 4, "loadallObjectTypes completed\n");
@@ -413,15 +418,17 @@ void         loadallterraintypes(void)
       if ( actprogressbar )
         actprogressbar->point();
 
-      PropertyReadingContainer pc ( "terraintype", *i );
+      if ( !(*i)->isAbstract() ) {
+        PropertyReadingContainer pc ( "terraintype", *i );
 
-      TerrainType* tt = new TerrainType;
-      tt->runTextIO ( pc );
-      pc.run();
+        TerrainType* tt = new TerrainType;
+        tt->runTextIO ( pc );
+        pc.run();
 
-      tt->filename = (*i)->fileName;
-      tt->location = (*i)->location;
-      addterraintype ( tt );
+        tt->filename = (*i)->fileName;
+        tt->location = (*i)->location;
+        addterraintype ( tt );
+      }
    }
 
    displayLogMessage ( 4, "loadallTerrainTypes completed\n");
@@ -450,15 +457,17 @@ void         loadallbuildingtypes(void)
       if ( actprogressbar )
         actprogressbar->point();
 
-      PropertyReadingContainer pc ( "buildingtype", *i );
+      if ( !(*i)->isAbstract() ) {
+        PropertyReadingContainer pc ( "buildingtype", *i );
 
-      BuildingType* bt = new BuildingType;
-      bt->runTextIO ( pc );
-      pc.run();
+        BuildingType* bt = new BuildingType;
+        bt->runTextIO ( pc );
+        pc.run();
 
-      bt->filename = (*i)->fileName;
-      bt->location = (*i)->location;
-      addbuildingtype ( bt );
+        bt->filename = (*i)->fileName;
+        bt->location = (*i)->location;
+        addbuildingtype ( bt );
+      }
    }
 
    displayLogMessage ( 4, "loadallBuildingTypes completed\n");
