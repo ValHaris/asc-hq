@@ -1,6 +1,14 @@
-//     $Id: UnitEditor.java,v 1.4 2000-10-17 17:28:27 schelli Exp $
+//     $Id: UnitEditor.java,v 1.5 2000-10-29 21:06:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/10/17 17:28:27  schelli
+//     minor bugs fixed in lots of sources
+//     add & remove weapon works now
+//     revert to save button removed
+//     class-handling bugs fixed
+//     load & save routines fully implemented
+//     terrainacces added
+//
 //     Revision 1.3  2000/10/14 22:40:02  schelli
 //     AutoRepairRate added
 //     version will be updated to actual version when saved
@@ -131,7 +139,7 @@ public class UnitEditor extends javax.swing.JFrame {
         exitAction = exitAct;
         initComponents ();
 
-        if ( unitPath.endsWith("\\") == false ) unitPath = unitPath.concat("\\");
+        if ( unitPath.endsWith(java.io.File.separator ) == false ) unitPath = unitPath.concat(java.io.File.separator);
         String unitAbsoluteFileName = unitPath.concat(unitFileName);
         tUnit = new Unit(unitAbsoluteFileName);
         if (action == 0 ) tUnit.makeNew();

@@ -1,6 +1,10 @@
-//     $Id: MainWindow.java,v 1.5 2000-10-24 15:35:13 schelli Exp $
+//     $Id: MainWindow.java,v 1.6 2000-10-29 21:06:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/10/24 15:35:13  schelli
+//     MapEd FullScreen support added
+//     weapons ammo now editable in MapEd
+//
 //     Revision 1.4  2000/10/17 20:21:03  schelli
 //     App now remembers path
 //
@@ -120,7 +124,7 @@ public class MainWindow extends javax.swing.JFrame {
         jTextFieldPath.setBorder (new javax.swing.border.TitledBorder(
         new javax.swing.border.EtchedBorder(java.awt.Color.white, new java.awt.Color (134, 134, 134)),
         "Path", 4, 2, new java.awt.Font ("Arial", 0, 10), java.awt.Color.black));
-        jTextFieldPath.setText ("c:\\");
+        jTextFieldPath.setText (".");
         jTextFieldPath.addActionListener (new java.awt.event.ActionListener () {
             public void actionPerformed (java.awt.event.ActionEvent evt) {
                 jTextFieldPathActionPerformed (evt);
@@ -249,7 +253,12 @@ private void pathAction() {
 
 private String browsePath(String startPath) {
     javax.swing.JFileChooser jFileCh;
+    ExampleFileFilter filter = new ExampleFileFilter();
+    for (int j = 0; j < extensions.length; j ++) 
+       filter.addExtension ( extensions[j] );
+    
     jFileCh = new javax.swing.JFileChooser(startPath);
+    //jFileCh.setFileFilter ( filter );
     jFileCh.setFileSelectionMode(jFileCh.DIRECTORIES_ONLY);
     if ( jFileCh.showOpenDialog(jButtonBrowsePath) ==  jFileCh.APPROVE_OPTION ) {
         return jFileCh.getSelectedFile().getAbsolutePath();

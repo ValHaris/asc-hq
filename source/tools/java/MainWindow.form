@@ -52,7 +52,7 @@
             </TitledBorder>
           </Border>
         </Property>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.beaninfo.editors.StringEditor" value="c:\"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.beaninfo.editors.StringEditor" value="."/>
       </Properties>
 
       <Events>
