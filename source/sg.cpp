@@ -1113,7 +1113,7 @@ void viewPipeNet( tkey taste )
          for ( int y = 0; y < actmap->ysize; ++y ) {
              pfield fld = actmap->getField ( x, y );
              if ( fieldvisiblenow( fld ))
-                if ( (fld->bdt & tb).any() )
+                if ( (fld->bdt & tb).any() || fld->building )
                    fld->a.temp = 1;
          }
 
