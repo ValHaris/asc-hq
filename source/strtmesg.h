@@ -1,6 +1,11 @@
-//     $Id: strtmesg.h,v 1.5 2002-10-12 17:28:04 mbickel Exp $
+//     $Id: strtmesg.h,v 1.6 2003-08-28 18:08:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2002/10/12 17:28:04  mbickel
+//      Fixed "enemy unit loaded" bug.
+//      Changed map format
+//      Improved log messages
+//
 //     Revision 1.4  2001/07/18 16:05:47  mbickel
 //      Fixed: infinitive loop in displaying "player exterminated" msg
 //      Fixed: construction of units by units: wrong player
@@ -56,6 +61,7 @@ ASCString kgetaboutmessage (  );
 
 extern const char* getVersionString (  );
 extern const char* getFullVersionString (  );
+extern ASCString getVersionString ( int version );
 
 extern int getNumericVersion ( );
 

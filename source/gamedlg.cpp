@@ -57,6 +57,7 @@
 #include "viewcalculation.h"
 #include "replay.h"
 #include "itemrepository.h"
+#include "strtmesg.h"
 
 class   tchoosetechnology : public tdialogbox {
                            dynamic_array<ptechnology> techs;
@@ -3552,10 +3553,12 @@ void showPlayerTime()
    for ( int i = 0; i < 8; i++ ) {
        if ( actmap->player[p].exist() && actmap->player[p].playTime.size() ) {
           text += actmap->player[p].getName();
-          text += " completed turn no. " ;
+          text += " completed turn no. ";
           text += strrr(actmap->player[p].playTime.rbegin()->turn);
-          text += " on ";
+          text += " using ASC " + getVersionString( actmap->player[p].ASCversion );
+          text += "\non ";
           text += asctime ( localtime ( &actmap->player[p].playTime.rbegin()->date));
+          text += "\n";
        }
 
 
