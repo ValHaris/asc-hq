@@ -240,7 +240,7 @@ Item1=C:\Programme\ascsrc\games\asc\source\win32\borland
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=-c C:\Programme\ascdev\asc\source\win32\borland\asc2.ini
+RunParams=
 Launcher=
 UseLauncher=0
 DebugCWD=

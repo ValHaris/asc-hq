@@ -844,7 +844,7 @@ void AStar3D::findPath( Path& path, const MapCoordinate3D& dest )
 
 void AStar3D::findPath( Path& path, const vector<MapCoordinate3D>& dest )
 {
-  findPath ( MapCoordinate3D ( veh->xpos, veh->ypos, veh->height ), dest, path );
+  findPath ( veh->getPosition3D(), dest, path );
 }
 
 
