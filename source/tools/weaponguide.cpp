@@ -167,8 +167,13 @@ int main(int argc, char *argv[] )
    if ( !prefixDir.empty() )
       appendbackslash ( prefixDir );
 
+   #ifdef _WIN32_
    ASCString tempPath = getenv("temp");
    appendbackslash(tempPath);
+   #else
+   ASCString tempPath = "/tmp/";
+   #endif
+   
 
    try {
 
@@ -283,7 +288,7 @@ int main(int argc, char *argv[] )
                       "<BODY  class=\"%s\">\n";
 
             // UNIT GENERAL
-            fprintf ( generalPage, header, "general", cl.t().c_str(), "wgLEFT" );
+            fprintf ( generalPage, header, "general", cl.t().c_str(), "wgleft" );
 
             // UNIT TERRAIN
             fprintf ( movePage, header, "movement", cl.t().c_str(), "wg" );

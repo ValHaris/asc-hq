@@ -72,12 +72,12 @@ void BaseVehicleMovement :: PathFinder :: getMovementFields ( IntFieldList& reac
       if ( i->h.getNumericalHeight() >= 0 )
          if ( i->gval < minMovement ) {
             orgHeight = i->h.getNumericalHeight();
-            minMovement = i->gval;
+            minMovement = int (i->gval);
          }
    }
    for ( Fields::iterator i = fields.begin(); i != fields.end();  ) {
       int height = i->second->h.getNumericalHeight();
-      int move = i->second->gval;
+      int move = int(i->second->gval);
       Fields::key_type key = i->first;
       ++i;
       while ( i->first == key ) {
@@ -251,7 +251,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
       int newMovement = orgMovement - pos->dist;
 
       if ( vehicle->typ->movement[log2(orgHeight)] )
-         vehicle->setMovement ( floor(vehicle->maxMovement() * float(newMovement) / float(vehicle->typ->movement[log2(orgHeight)]) + 0.5) , 0 );
+         vehicle->setMovement ( int(floor(vehicle->maxMovement() * float(newMovement) / float(vehicle->typ->movement[log2(orgHeight)]) + 0.5)) , 0 );
 
 
       vehicle->tank.fuel -= fueldist * vehicle->typ->fuelConsumption / maxmalq;
