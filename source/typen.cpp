@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.38 2000-08-08 13:22:12 mbickel Exp $
+//     $Id: typen.cpp,v 1.39 2000-08-08 13:38:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2000/08/08 13:22:12  mbickel
+//      Added unitCategoriesLoadable property to buildingtypes and vehicletypes
+//      Added option: showUnitOwner
+//
 //     Revision 1.37  2000/08/08 09:48:30  mbickel
 //
 //      speed up of dialog boxes in linux
@@ -284,8 +288,8 @@ const int gameparameterdefault [ gameparameternum ] = { 1, 2, 0, 100, 100, 1, 0,
 const char* gameparametername[ gameparameternum ] = { "lifetime of tracks", 
                                                       "freezing time of broken ice cover ( icebreaker )",
                                                       "move vehicles from unaccessible fields",
-                                                      "building construction material factor ( in percent )",
-                                                      "building construction fuel factor ( in percent )",
+                                                      "building construction material factor (percent)",
+                                                      "building construction fuel factor (percent)",
                                                       "forbid construction of buildings",
                                                       "forbid units to build units",
                                                       "use BI3 style training factor ",

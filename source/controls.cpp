@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.61 2000-08-08 13:21:54 mbickel Exp $
+//     $Id: controls.cpp,v 1.62 2000-08-08 13:38:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2000/08/08 13:21:54  mbickel
+//      Added unitCategoriesLoadable property to buildingtypes and vehicletypes
+//      Added option: showUnitOwner
+//
 //     Revision 1.60  2000/08/08 09:48:00  mbickel
 //
 //      speed up of dialog boxes in linux
@@ -666,7 +670,12 @@ void         putbuildinglevel3(integer      x,
 
          int mf = actmap->getgameparameter ( cgp_building_material_factor );
          int ff = actmap->getgameparameter ( cgp_building_fuel_factor );
-      
+         if ( mf <= 0 )
+            mf = 100;
+
+         if ( ff <= 0 )
+            ff = 100;
+
          if (eht->material < bld->productioncost.material * mf / 100 ) { 
             displaymessage("not enough material!",1); 
             eht->material = 0; 

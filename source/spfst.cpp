@@ -1,6 +1,13 @@
-//     $Id: spfst.cpp,v 1.49 2000-08-08 09:48:25 mbickel Exp $
+//     $Id: spfst.cpp,v 1.50 2000-08-08 13:38:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2000/08/08 09:48:25  mbickel
+//
+//      speed up of dialog boxes in linux
+//      fixed graphical errors in attack
+//      fixed graphical error in ammo transfer
+//      fixed reaction fire not allowing manual attack
+//
 //     Revision 1.48  2000/08/07 21:10:21  mbickel
 //      Fixed some syntax errors
 //
@@ -1573,7 +1580,7 @@ char      fieldvisiblenow( const pfield        pe, int player  )
          c = visible_all; 
       if (c > visible_ago) { 
          if ( pe->vehicle ) { 
-            if ((c == visible_all) || ((pe->vehicle->height >= chschwimmend) && (pe->vehicle->height <= chhochfliegend))) 
+            if ((c == visible_all) || (pe->vehicle->color / 8 == player ) || ((pe->vehicle->height >= chschwimmend) && (pe->vehicle->height <= chhochfliegend)))
                return true; 
          } 
          else 
