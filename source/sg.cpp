@@ -105,7 +105,6 @@
 #include "password_dialog.h"
 #include "viewcalculation.h"
 #include "replay.h"
-#include "dashboard.h"
 #include "graphicset.h"
 #include "loadbi3.h"
 #include "itemrepository.h"
@@ -116,6 +115,8 @@
 #include "mapdisplay2.h"
 #include "guiiconhandler.h"
 #include "guifunctions.h"
+#include "iconrepository.h"
+#include "dashboard.h"
 
 // #define MEMCHK
 
@@ -269,7 +270,7 @@ class MainScreenWidget : public PG_Widget {
     PG_Application& app;
 public:
     MainScreenWidget( PG_Application& application );
-    enum Panels { ButtonPanel };
+    enum Panels { ButtonPanel, WindInfo, UnitInfo };
     void spawnPanel ( Panels panel );
 
 protected:
@@ -297,18 +298,6 @@ void         loadMoreData(void)
       for (int i=0;i<3 ;i++ )
          for ( int j=0; j<8; j++)
             stream.readrlepict( &icons.height2[i][j], false, &w );
-   }
-
-   {
-      tnfilestream stream ("windp.raw", tnstream::reading);
-      for (int i=0;i<9 ;i++ )
-         stream.readrlepict( &icons.wind[i], false, &w );
-
-   }
-
-   {
-      tnfilestream stream ("windpfei.raw",tnstream::reading);
-      stream.readrlepict( &icons.windarrow, false, &w );
    }
 
    {
@@ -628,7 +617,8 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_dispvehicleimpro
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
                     ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog, ua_reloadDlgTheme, ua_showPlayerSpeed, ua_renameunit,
-                    ua_statisticdialog, ua_viewPipeNet, ua_cancelResearch, ua_showResearchStatus, ua_exportUnitToFile, ua_viewButtonPanel };
+                    ua_statisticdialog, ua_viewPipeNet, ua_cancelResearch, ua_showResearchStatus, ua_exportUnitToFile, ua_viewButtonPanel, ua_viewWindPanel,
+                    ua_clearImageCache, ua_viewUnitInfoPanel };
 
 
 
@@ -695,7 +685,7 @@ void loadMap()
       }
 
       displaymap();
-      dashboard.x = 0xffff;
+      updateFieldInfo();
       moveparams.movestatus = 0;
    }
    mousevisible(true);
@@ -723,7 +713,7 @@ void loadGame()
 
       computeview( actmap );
       displaymap();
-      dashboard.x = 0xffff;
+      updateFieldInfo();
       moveparams.movestatus = 0;
    }
    mousevisible(true);
@@ -1156,7 +1146,7 @@ void execuseraction ( tuseractions action )
          if ((actmap->weather.windSpeed < 254) &&  maintainencecheck()) {
             actmap->weather.windSpeed+=2;
             displaywindspeed (  );
-            dashboard.x = 0xffff;
+            updateFieldInfo();
          }
          break;
 
@@ -1164,7 +1154,7 @@ void execuseraction ( tuseractions action )
          if ((actmap->weather.windSpeed > 1)  && maintainencecheck() ) {
             actmap->weather.windSpeed-=2;
             displaywindspeed (  );
-            dashboard.x = 0xffff;
+            updateFieldInfo();
          }
          break;
 
@@ -1175,7 +1165,7 @@ void execuseraction ( tuseractions action )
             else
                actmap->weather.windDirection = 0;
             displaymessage2("wind dir set to %d ", actmap->weather.windDirection);
-            dashboard.x = 0xffff;
+            updateFieldInfo();
             displaymap();
          }
          break;
@@ -1285,7 +1275,7 @@ void execuseraction ( tuseractions action )
             actmap->shareview->recalculateview = 0;
             displaymap();
          }
-         dashboard.x = 0xffff;
+         updateFieldInfo();
          break;
 
       case ua_settribute :
@@ -1540,10 +1530,15 @@ void execuseraction2 ( tuseractions action )
          break;
       case ua_reloadDlgTheme:
              getPGApplication().reloadTheme();
-             soundSettings();
+             // soundSettings();
          break;
       case ua_viewButtonPanel:  mainScreenWidget->spawnPanel( MainScreenWidget::ButtonPanel );
          break;
+      case ua_viewWindPanel:     mainScreenWidget->spawnPanel( MainScreenWidget::WindInfo );
+         break;
+      case ua_clearImageCache:  IconRepository::clear();
+         break;   
+      case ua_viewUnitInfoPanel: mainScreenWidget->spawnPanel( MainScreenWidget::UnitInfo );
       default:
          break;
    }
@@ -1570,12 +1565,6 @@ void mainloopgeneralmousecheck ( void )
 
    actgui->checkformouse();
 
-   dashboard.checkformouse();
-
-   if ((dashboard.x != getxpos()) || (dashboard.y != getypos())) {
-      dashboard.paint ( getactfield(), actmap->playerView );
-      actgui->painticons();
-   }
 
    if ( lastdisplayedmessageticker + messagedisplaytime < ticker )
       displaymessage2("");
@@ -1588,7 +1577,7 @@ void mainloopgeneralmousecheck ( void )
       int oldy = actmap->ypos;
       checkformousescrolling();
       if ( oldx != actmap->xpos || oldy != actmap->ypos )
-         dashboard.x = 0xffff;
+         updateFieldInfo();
    }
 
    if ( onlinehelp )
@@ -1715,10 +1704,14 @@ void Menu::setup()
    // addbutton ( "test memory integrity", ua_heapcheck );
    currentMenu->addSeparator();
    addbutton ( "select graphic set", ua_selectgraphicset );
-   addbutton ( "reload dialog theme", ua_reloadDlgTheme );
 
    addfield ( "~V~iew" );
    addbutton ( "Button Panel", ua_viewButtonPanel );
+   addbutton ( "Wind Panel", ua_viewWindPanel );
+   addbutton ( "Unit Info Panel", ua_viewUnitInfoPanel );
+   currentMenu->addSeparator();
+   addbutton ( "clear image cache", ua_clearImageCache );
+   addbutton ( "reload dialog theme", ua_reloadDlgTheme );
    
    
    addfield ( "~H~elp" );
@@ -1756,17 +1749,29 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
 {
    mapDisplay = new MapDisplayPG( this, PG_Rect(20,20,Width() - 200, Height() - 20));
    menu = new Menu(this, PG_Rect(0,0,Width(),20));
-   
+
+   SetID( 1 );
+      
    spawnPanel ( ButtonPanel );
+   spawnPanel ( WindInfo );
+   spawnPanel ( UnitInfo );
 }
 
 
 void MainScreenWidget::spawnPanel ( Panels panel )
 {
    if ( panel == ButtonPanel ) {
-      guiHost = new NewGuiHost( this, PG_Rect(Width()-180, 20, 170, Height()-60));
+      guiHost = new NewGuiHost( this, PG_Rect(Width()-180, 20, 170, 300));
       guiHost->pushIconHandler( &GuiFunctions::primaryGuiIcons );
       guiHost->Show();
+   }
+   if ( panel == WindInfo ) {
+      WindInfoPanel* wi = new WindInfoPanel( this, PG_Rect(Width()-180, 320, 170, 80));
+      wi->Show();
+   }
+   if ( panel == UnitInfo ) {
+      UnitInfoPanel* ui = new UnitInfoPanel( this, PG_Rect(Width()-180, 400, 170, 220));
+      ui->Show();
    }
 }
 
@@ -2024,8 +2029,6 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 
    if ( actprogressbar ) actprogressbar->startgroup();
 
-   dashboard.allocmem ();
-
    mousecontrol = new cmousecontrol;
 
    if ( actprogressbar ) {
@@ -2192,8 +2195,7 @@ int gamethread ( void* data )
             displayLogMessage ( 8, "done.\n" );
             mousevisible(true);
 
-            dashboard.x = 0xffff;
-            dashboard.y = 0xffff;
+            updateFieldInfo();
 
             displayLogMessage ( 5, "entering inner main loop.\n" );
             mainloop2();
@@ -2306,7 +2308,7 @@ int main(int argc, char *argv[] )
 
    
 
-   ASC_PG_App app ( "asc_dlg" );
+   ASC_PG_App app ( "asc2_dlg" );
 
   
    int flags = SDL_SWSURFACE;

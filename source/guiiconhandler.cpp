@@ -77,6 +77,12 @@ void GuiButton::unregisterFunc()
 void GuiIconHandler::eval()
 {
    MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
+   
+   if ( !mc.valid() )
+      return;
+     
+   if ( mc.x >= actmap->xsize || mc.y >= actmap->ysize )
+      return;
 
    int num = 0;
    for ( Functions::iterator i = functions.begin(); i != functions.end(); ++i ) {
@@ -112,7 +118,7 @@ GuiIconHandler::~GuiIconHandler()
 
 
 NewGuiHost :: NewGuiHost (PG_Widget *parent, const PG_Rect &r )
-         : Panel( parent, r ) , handler(NULL)
+         : Panel( parent, r, "GuiIcons", false ) , handler(NULL)
 {
    updateFieldInfo.connect ( SigC::slot( *this, &NewGuiHost::eval ));
 }

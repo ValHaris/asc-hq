@@ -34,7 +34,6 @@
 #include "gameoptions.h"
 #include "sg.h"
 #include "viewcalculation.h"
-#include "dashboard.h"
 #include "itemrepository.h"
 #include "building_controls.h"
 
@@ -951,7 +950,7 @@ void trunreplay :: execnextreplaymove ( void )
                                 if ( battle.av.damage < ad2 || battle.dv.damage > dd2 )
                                    error("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", battle.av.damage,ad2 ,battle.dv.damage, dd2);
                                 battle.setresult ();
-                                dashboard.x = 0xffff;
+                                updateFieldInfo();
                              } else
                              if ( targ->building ) {
                                 tunitattacksbuilding battle ( fld->vehicle, x2, y2 , wpnum );
@@ -969,7 +968,7 @@ void trunreplay :: execnextreplaymove ( void )
                                 if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
                                    error("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", battle.av.damage,ad2 ,battle.dv.damage, dd2);
                                 battle.setresult ();
-                                dashboard.x = 0xffff;
+                                updateFieldInfo();
                              } else
                              if ( !targ->objects.empty() ) {
                                 tunitattacksobject battle ( fld->vehicle, x2, y2, wpnum );
@@ -985,7 +984,7 @@ void trunreplay :: execnextreplaymove ( void )
                                 if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
                                    error("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", battle.av.damage,ad2 ,battle.dv.damage, dd2);
                                 battle.setresult ();
-                                dashboard.x = 0xffff;
+                                updateFieldInfo();
                              }
                              computeview( actmap );
                              displaymap();
@@ -1421,7 +1420,7 @@ void trunreplay :: execnextreplaymove ( void )
                                     for ( int b = 0; b < 8; b++ )
                                        actmap->alliances[a][b] = stream->readChar();
                                  readnextaction();
-                                 dashboard.x = 0xffff;
+                                 updateFieldInfo();
                               }
          break;
       case rpl_refuel :
@@ -1709,7 +1708,7 @@ void trunreplay :: execnextreplaymove ( void )
 
    } else {
       status = 10;
-      dashboard.x = -1;
+      updateFieldInfo();
    }
 
 }
@@ -1793,7 +1792,7 @@ int  trunreplay :: run ( int player, int viewingplayer )
    computeview( actmap );
    displaymap ();
 
-   dashboard.x = 0xffff;
+   updateFieldInfo();
    mousevisible( true );
 //   cursor.show();
 
@@ -1864,7 +1863,7 @@ int  trunreplay :: run ( int player, int viewingplayer )
    status = 0;
 
    cursor.gotoxy ( orgmap->cursorpos.position[ actplayer ].cx, orgmap->cursorpos.position[ actplayer ].cy );
-   dashboard.x = 0xffff;
+   updateFieldInfo();
 
    if ( st == 101 )
       return 1;

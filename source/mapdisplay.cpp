@@ -44,7 +44,6 @@
 #ifdef sgmain
  #include "controls.h"
  #include "gui.h"
- #include "dashboard.h"
 #endif
 
 #include "iconrepository.h"
@@ -2562,7 +2561,7 @@ void MapDisplay :: stopAction ( void )
 void MapDisplay :: updateDashboard ( void )
 {
 #ifdef sgmain
-   dashboard.paint ( getactfield(), actmap->playerView );
+   updateFieldInfo();
 #endif
 
 }
@@ -2670,13 +2669,14 @@ void tbackgroundpict :: init ( int reinit )
 void tbackgroundpict :: load ( void )
 {
    int w;
+   
    {
       tnfilestream stream ("amatur.raw", tnstream::reading);
       for ( int i = 0; i< 7; i++ )
          stream.readrlepict ( &dashboard[i], false, &w );
 #ifdef sgmain
 
-      ::dashboard.zoom.pic = dashboard[6];
+//      ::dashboard.zoom.pic = dashboard[6];
 #endif
 
    }
@@ -2780,7 +2780,7 @@ void  tbackgroundpict :: paint ( int resavebackground )
       gui.savebackground ( );
    }
    run++;
-   ::dashboard.repainthard = 1;
+//   ::dashboard.repainthard = 1;
 
 }
 

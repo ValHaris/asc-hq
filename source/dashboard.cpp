@@ -20,23 +20,119 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "graphics/blitter.h"
-#include "mapdisplay.h"
-#include "vehicletype.h"
-#include "buildingtype.h"
-#include "spfst.h"
-#include "typen.h"
-#include "loaders.h"
-#include "gameoptions.h"
-#include "dialog.h"
-#include "stack.h"
-#include "loadbi3.h"
-#include "mapalgorithms.h"
-#include "gamedlg.h"
-#include "attack.h"
 #include "dashboard.h"
-#include "viewcalculation.h"
+#include "graphics/blitter.h"
+#include "gamemap.h"
+#include "iconrepository.h"
+#include "spfst.h"
 
+
+WindInfoPanel::WindInfoPanel (PG_Widget *parent, const PG_Rect &r ) : Panel( parent, r, "WindInfo" ), dir(-1)
+{
+   updateFieldInfo.connect ( SigC::slot( *this, &WindInfoPanel::eval ));
+   
+   SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( "winddir", true ) );
+   if ( sdw )
+     sdw->display.connect( SigC::slot( *this, &WindInfoPanel::painter ));
+}
+
+// void WindInfoPanel::painter ( Surface& surf, const PG_Rect &area, int id, const PG_Rect &size)
+void WindInfoPanel::painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst)
+{
+   if ( actmap && actmap->weather.windSpeed > 0 ) {
+      Surface screen = Surface::Wrap( PG_Application::GetScreen() );
+
+      MegaBlitter<4,colorDepth,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Rotation> blitter; 
+      blitter.setAngle( directionangle[actmap->weather.windDirection] );
+      blitter.blit ( IconRepository::getIcon("wind-arrow.png"), screen, SPoint(dst.x, dst.y) );
+   } 
+}
+
+
+
+void WindInfoPanel::eval()
+{
+   Redraw(true);
+}
+
+WindInfoPanel::~WindInfoPanel()
+{
+
+}
+
+UnitInfoPanel::UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) : Panel( parent, r, "UnitInfo" )
+{
+   updateFieldInfo.connect ( SigC::slot( *this, &UnitInfoPanel::eval ));
+   
+   SpecialInputWidget* siw = dynamic_cast<SpecialInputWidget*>( FindChild( "weapinfo", true ) );
+   if ( siw ) {
+      siw->sigMouseButtonDown.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
+      siw->sigMouseButtonUp.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
+   }   
+}
+
+
+bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event )
+{
+   SpecialInputWidget* siw = dynamic_cast<SpecialInputWidget*>(obj);
+   if ( siw ) {
+      if ( event->button == SDL_BUTTON_RIGHT ) {
+         if ( event->type == SDL_MOUSEBUTTONDOWN  ) {
+            WeaponInfoPanel* wip = new WeaponInfoPanel( PG_Application::GetWidgetById( 1 ), PG_Rect( 200, 100, 200, 150 ));
+            wip->Show();
+            return true;
+         }
+         if ( event->type == SDL_MOUSEBUTTONUP ) {
+            bool result = false;
+            PG_Widget* wip;
+            do  {
+               wip = PG_Application::GetWidgetByName( WeaponInfoPanel::WIP_Name() );
+               if ( wip ) {
+                  delete wip;
+                  result = true;
+               }   
+            } while ( wip );
+            return result;
+         }
+      }
+   }
+   return false;
+}
+
+void UnitInfoPanel::eval()
+{
+   MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
+   if ( mc.valid() ) {
+      Vehicle* veh = actmap->getField(mc)->vehicle;
+      setLabelText( "unittypename", veh ? veh->typ->name : ""); 
+   }
+   Redraw(true);
+}
+
+
+ 
+WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const PG_Rect &r ) : Panel( parent, r, "WeaponInfo" )
+{
+   SetName(name);
+/*
+   updateFieldInfo.connect ( SigC::slot( *this, &UnitInfoPanel::eval ));
+   
+   SpecialInputWidget* siw = dynamic_cast<SpecialInputWidget*>( FindChild( "weapinfo", true ) );
+   if ( siw ) {
+      siw->sigMouseButtonDown.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
+      siw->sigMouseButtonUp.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
+   }   
+   */
+}
+
+ASCString WeaponInfoPanel::name = "WeaponInfoPanel";
+const ASCString& WeaponInfoPanel::WIP_Name()
+{
+   return name;
+}   
+
+
+#if 0
          tdashboard  dashboard;
 
 tdashboard::tdashboard ( void ) : vehicletype(NULL)
@@ -833,6 +929,7 @@ void         tdashboard::paintwind( int repaint )
    */
 
    if ( !CGameOptions::Instance()->smallmapactive ) {
+   #if 0
       static int lastdir = -1;
 
       if ( repaint ) {
@@ -896,7 +993,7 @@ void         tdashboard::paintwind( int repaint )
       } /* endfor */
       for (j = i; j < 8; j++ )
          bar ( agmp->resolutionx - ( 640 - 597), 282-j*7, agmp->resolutionx - ( 640 - 601), 284-j*7, black );
-
+#endif
    }
 }
 
@@ -1323,3 +1420,8 @@ void   tdashboard :: paintvehicleinfo(  Vehicle*     vehicle,
    }
    dashboard.paintzoom();
 }   /*  paintvehicleinfo  */
+
+
+#endif
+
+

@@ -39,6 +39,7 @@
 #include "pgspinnerbox.h"
 #include "pglog.h"
 #include "pgmenubar.h"
+#include "pgimage.h"
 
 #include "paradialog.h"
 #include "events.h"
@@ -47,7 +48,9 @@
 #include "sdl/sound.h"
 
 #include "resourceplacement.h"
+#include "textfile_evaluation.h"
 
+#include "iconrepository.h"
 
 
 ASC_PG_App* pgApp = NULL;
@@ -63,7 +66,7 @@ ASC_PG_App* pgApp = NULL;
    do {
       path = getSearchPath ( i++ );
       if ( !path.empty() ) {
-         AddArchive ( path.c_str() );
+         AddArchive ( path );
          if ( !themeFound )
              themeFound = AddArchive ( (path + themeName + ".zip").c_str() );
       }
@@ -96,7 +99,7 @@ bool ASC_PG_App:: InitScreen ( int w, int h, int depth, Uint32 flags )
 
 void ASC_PG_App :: reloadTheme()
 {
-   if ( !LoadTheme(themeName.c_str()))
+   if ( !LoadTheme(themeName ))
       fatalError ( "Could not load Paragui theme for ASC");
 }
 
@@ -327,31 +330,206 @@ void soundSettings( )
 
 
 
+const int widgetTypeNum = 6;
+const char* widgetTypes[widgetTypeNum]
+    = { "image",
+        "area",
+        "statictext",
+        "textoutput",
+        "specialDisplay",
+        "specialInput" };
 
+enum  WidgetTypes  { Image, 
+                     Area, 
+                     StaticLabel, 
+                     TextOutput, 
+                     SpecialDisplay, 
+                     SpecialInput };
+        
+const int imageModeNum = 5;        
+const char* imageModes[imageModeNum]
+    = { "tile", 
+        "stretch",
+        "tile3h",
+        "tile3v",
+        "tile9" };
+        
  
-void Panel::setup()
-{/*
-      tnfilestream s ( panelName + ".ascgui", tnstream::reading );
+void parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent )
+{
+      int widgetNum;
+      pc.addInteger( "WidgetNum", widgetNum, 0 );
+
+
+      for ( int i = 0; i < widgetNum; ++i) {
+         pc.openBracket( ASCString("Widget") + strrr(i));
+         
+         int x,y,w,h,x2,y2;
+         // pc.openBracket( "position" );
+         pc.addInteger( "x", x );
+         pc.addInteger( "y", y );
+         pc.addInteger( "width", w, 0 );
+         pc.addInteger( "height", h, 0 );
+         pc.addInteger( "x2", x2, 0 );
+         pc.addInteger( "y2", y2, 0 );
+         // pc.closeBracket();
+         
+         PG_Rect r ( x,y,w,h);
+         
+         if ( x < 0 ) 
+            r.x = parent->Width() - w + x;
+         
+         if ( r.y < 0 ) 
+            r.y = parent->Height() - h + y;
+
+         if ( x2 != 0 ) {
+            if ( x2 < 0 )
+               x2 = parent->Width() + x2;
+               
+            w = x2 - r.x;   
+         }
+
+         if ( y2 != 0 ) {
+            if ( y2 < 0 )
+               x2 = parent->Height() + y2;
+               
+            h = y2 - r.y;   
+         }
+         
+                     
+         if ( w <= 0 ) 
+            r.w = parent->Width() - r.x;
+         else
+            r.w = w;   
+         
+         if ( h <= 0 ) 
+            r.h = parent->Height() - r.y;
+         else   
+            r.h = h;   
+            
+                        
+         
+                 
+         int type;
+         pc.addNamedInteger( "type", type, widgetTypeNum, widgetTypes );
+         
+         if ( type == Image ) {
+            ASCString filename;
+            pc.addString( "FileName", filename );
+            int imgMode;
+            pc.addNamedInteger( "mode", imgMode, imageModeNum, imageModes, 0 );
+            
+            try {
+               Surface& surf = IconRepository::getIcon(filename);
+               
+               PG_Image* img = new PG_Image( parent, PG_Point(r.x, r.y ), surf.getBaseSurface(), false, PG_Draw::BkMode(imgMode) );
+               parsePanelASCTXT( pc, img );
+            }
+            catch ( tfileerror ) {
+               displaymessage( "unable to load " + filename, 1 );
+            }
+         }
+         if ( type == Area ) {
+            bool mode;
+            pc.addBool( "in", mode, true );
+
+            ASCString style;
+            pc.addString( "style", style, "Emboss" );
+            
+                        
+            PG_ThemeWidget* tw = new PG_ThemeWidget ( parent, r, style );
+            parsePanelASCTXT( pc, tw );
+         }
+         
+         if ( type == StaticLabel ) {
+            ASCString text;
+            pc.addString( "text", text );
+                       
+            PG_Label* lb = new PG_Label ( parent, r, text );
+            parsePanelASCTXT( pc, lb );
+         }
+         if ( type == TextOutput ) {
+           
+            ASCString name;
+            pc.addString( "name", name );
+                       
+            PG_Label* lb = new PG_Label ( parent, r );
+            lb->SetName( name );
+            parsePanelASCTXT( pc, lb );
+         }
+
+                  
+         if ( type == SpecialDisplay ) {
+            ASCString name;
+            pc.addString("name", name );
+            SpecialDisplayWidget* sw = new SpecialDisplayWidget ( parent, r );
+            sw->SetName( name );
+            
+            parsePanelASCTXT( pc, sw );
+         }
+         
+         if ( type == SpecialInput ) {
+            ASCString name;
+            pc.addString("name", name );
+            SpecialInputWidget* sw = new SpecialInputWidget ( parent, r );
+            sw->SetName( name );
+            
+            parsePanelASCTXT( pc, sw );
+         }
+
+                  
+         pc.closeBracket();
+      }      
+}
+        
+Panel::Panel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme )
+           : PG_Window ( parent, r, "", DEFAULT, "Panel", 9 ), panelName( panelName_ ) 
+{
+   if ( loadTheme )
+      setup();
+}
+
+        
+void Panel::setLabelText ( const ASCString& widgetName, const ASCString& text )
+{
+   PG_Label* l = dynamic_cast<PG_Label*>( FindChild( widgetName, true ) );
+   if ( l ) 
+     l->SetText( text );
+}
+
+
+bool Panel::setup()
+{
+     // LoadLayout( ASCString("asc/") + panelName.toLower() + ".xml" );
+
+   try {
+      
+      tnfilestream s ( panelName.toLower() + ".ascgui", tnstream::reading );
 
       TextFormatParser tfp ( &s );
-      TextPropertyGroup* tpg = tfp.run();
+      auto_ptr<TextPropertyGroup> tpg ( tfp.run());
 
-      PropertyReadingContainer pc ( "panel", tpg );
-      
-      int objectNum;
-      pc.addInteger( "ObjectNum", objectNum, 0 );
-      
-      int widgetNum;
-      pc.addInteger( "ObjectNum", objectNum, 0 );
-      
-      
-      pc.addIntegerArray ( "TerrainObjTranslation", terrainobjtranslation );
-      pc.addIntegerArray ( "ObjectTranslation", objecttranslation );
+      PropertyReadingContainer pc ( "panel", tpg.get() );
 
+      int w, h;
+      pc.addInteger( "width", w, 0 );
+      pc.addInteger( "height", h, 0 );
+      
+      if ( w > 0 && h > 0 )
+         SizeWidget( w, h, false );
+            
+      parsePanelASCTXT( pc, this );
       pc.run();
-
-      delete tpg;
-  */
+      return true;  
+   } 
+   catch ( ParsingError err ) {
+     displaymessage( ASCString("parsing error: ") + err.getMessage(), 1 );
+   }
+   catch ( tfileerror err ) {
+     displaymessage( ASCString("could not acces file: ") + err.getFileName(), 1 );
+   }
+   return false;
+      
 }
 
 

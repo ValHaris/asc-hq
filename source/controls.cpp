@@ -56,7 +56,6 @@
 #include "password_dialog.h"
 #include "viewcalculation.h"
 #include "replay.h"
-#include "dashboard.h"
 #include "resourcenet.h"
 #include "itemrepository.h"
 #include "strtmesg.h"
@@ -598,7 +597,7 @@ void         refuelvehicle(int         b)
                actmap->cleartemps(7);
                moveparams.movestatus = 0;
             }
-      dashboard.x = 0xffff;
+      updateFieldInfo();
    }
 
 }
@@ -930,7 +929,7 @@ void         setspec( pobjecttype obj )
 
          build_objects_reset();
       }
-      dashboard.x = 0xffff;
+      updateFieldInfo();
 
    }
 }
@@ -987,7 +986,7 @@ void         constructvehicle( pvehicletype tnk )
 
          build_vehicles_reset();
       }
-      dashboard.x = 0xffff;
+      updateFieldInfo();
 
    }
 }
@@ -1098,7 +1097,7 @@ int  treactionfirereplay :: checkfield ( const MapCoordinate3D& pos, Vehicle* &e
                 killed = 1;
 
              battle.setresult ();
-             dashboard.x = 0xffff;
+             updateFieldInfo();
 
              npop ( targ->vehicle );
 
@@ -1342,7 +1341,7 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, Veh
 
       //               logtoreplayinfo ( rpl_reactionfire, ulex, uley, x, y, ad1, ad2, dd1, dd2, atw->num[num] );
 
-                     dashboard.x = 0xffff;
+                     updateFieldInfo();
                   }
 
 
@@ -1680,7 +1679,7 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
               (actmap->lastjournalchange.turn() == actmap->time.turn()-1  &&  actmap->lastjournalchange.move() > actmap->actplayer ) )
                  viewjournal();
 
-      dashboard.x = 0xffff;
+      updateFieldInfo();
 
       moveparams.movestatus = 0;
 
@@ -1729,7 +1728,7 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
 
    cursor.gotoxy ( actmap->cursorpos.position[ actmap->actplayer ].cx, actmap->cursorpos.position[ actmap->actplayer ].cy , 0);
 
-   dashboard.x = 0xffff;
+   updateFieldInfo();
    transfer_all_outstanding_tribute();
 }
 
@@ -1893,7 +1892,7 @@ void runai( int playerView )
       actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
 
    actmap->player[ actmap->actplayer ].ai->run();
-   dashboard.x = 0xffff;
+   updateFieldInfo();
 }
 
 void next_turn ( int playerView )
@@ -2220,9 +2219,6 @@ void cmousecontrol :: chkmouse ( void )
                cursor.posy = y;
                cursor.show();
 
-               dashboard.paint( getactfield(), actmap-> playerView );
-               dashboard.x = -1;
-
                mousevisible(true);
             }
       }
@@ -2302,7 +2298,7 @@ void cmousecontrol :: chkmouse ( void )
                        cursor.posx = x;
                        cursor.posy = y;
                        bool mapRespositioned = cursor.show();
-                       dashboard.paint( getactfield(), actmap-> playerView );
+                       // dashboard.paint( getactfield(), actmap-> playerView );
                        if ( mapRespositioned )
                           while ( mouseparams.taste == CGameOptions::Instance()->mouse.smallguibutton ) {
                              releasetimeslice();
@@ -2364,8 +2360,8 @@ void cmousecontrol :: chkmouse ( void )
          }
          actgui->painticons();
          if ( getactfield()->vehicle ) {
-            dashboard.paintvehicleinfo( getactfield()->vehicle, NULL, NULL, NULL );
-            dashboard.paintlweaponinfo();
+//            dashboard.paintvehicleinfo( getactfield()->vehicle, NULL, NULL, NULL );
+  //          dashboard.paintlweaponinfo();
          }
       }
 

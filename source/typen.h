@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.154.2.5 2004-12-17 11:19:21 mbickel Exp $
+//     $Id: typen.h,v 1.154.2.6 2004-12-21 11:54:16 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -439,8 +439,8 @@ struct ticons {
    void*        selectweaponguicancel;
    void*        unitinfoguiweapons[14];
    void*        experience[maxunitexperience+1];
-   void*        wind[9];
-   void*        windarrow;
+ //  void*        wind[9];
+ //  void*        windarrow;
    void*        stellplatz;
    void*        guiknopf;   // reingedr?ckter knopf
    void*        computer;

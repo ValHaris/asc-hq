@@ -48,7 +48,6 @@
 #include "gameoptions.h"
 #include "replay.h"
 #include "gamedlg.h"
-#include "dashboard.h"
 #include "itemrepository.h"
 #include "viewcalculation.h"
 
@@ -1037,7 +1036,7 @@ void  tnsguiiconmove::exec         ( void )
 
      }
    }
-   dashboard.x = 0xffff;
+   updateFieldInfo();
 
 }
 
@@ -1199,7 +1198,7 @@ void  tnsguiiconascent::exec         ( void )
         if ( res < 0 ) {
            dispmessage2 ( -res, NULL );
            delete pendingVehicleActions.action;
-           dashboard.x = 0xffff;
+           updateFieldInfo();
            return;
         }
 
@@ -1213,7 +1212,7 @@ void  tnsguiiconascent::exec         ( void )
         }
      }
 
-   dashboard.x = 0xffff;
+   updateFieldInfo();
 }
 
 void  tnsguiiconascent::display      ( void )
@@ -1321,7 +1320,7 @@ void  tnsguiicondescent::exec         ( void )
         if ( res < 0 ) {
            dispmessage2 ( -res, NULL );
            delete pendingVehicleActions.action;
-           dashboard.x = 0xffff;
+           updateFieldInfo();
            return;
         }
 
@@ -1334,7 +1333,7 @@ void  tnsguiicondescent::exec         ( void )
            }
         }
      }
-   dashboard.x = 0xffff;
+   updateFieldInfo();
 }
 
 void  tnsguiicondescent::display      ( void )
@@ -1506,7 +1505,7 @@ void  tnsguiiconpoweron::exec         ( void )
    getactfield()->vehicle->setGeneratorStatus ( true );
    logtoreplayinfo ( rpl_setGeneratorStatus, getactfield()->vehicle->networkid, int(1) );
 
-   dashboard.x = 0xffff;
+   updateFieldInfo();
 }
 
 
@@ -1532,7 +1531,7 @@ void  tnsguiiconpoweroff::exec         ( void )
 {
    getactfield()->vehicle->setGeneratorStatus ( false );
    logtoreplayinfo ( rpl_setGeneratorStatus, getactfield()->vehicle->networkid, int(0) );
-   dashboard.x = 0xffff;
+   updateFieldInfo();
 }
 
 
@@ -1603,7 +1602,7 @@ int   tnsguiiconputmine::available    ( void )
 void  tnsguiiconputmine::exec         ( void )
 {
    legemine(0, 0);
-   dashboard.x = 0xffff;
+   updateFieldInfo();
    displaymap();
 }
 
@@ -1850,7 +1849,7 @@ void  tnsguiiconrepair::exec         ( void )
       delete pendingVehicleActions.service;
       actmap->cleartemps(7);
       displaymap();
-      dashboard.x = 0xffff;
+      updateFieldInfo();
    }
 }
 
@@ -1950,7 +1949,7 @@ void  tnsguiiconrefuel::exec         ( void )
       delete pendingVehicleActions.service;
       actmap->cleartemps(7);
       displaymap();
-      dashboard.x = 0xffff;
+      updateFieldInfo();
    }
 }
 
@@ -2006,7 +2005,7 @@ void  tnsguiiconrefueldialog::exec         ( void )
    delete pendingVehicleActions.service;
    actmap->cleartemps ( 7 );
    displaymap();
-   dashboard.x = 0xffff;
+   updateFieldInfo();
 }
 
 
@@ -2063,7 +2062,7 @@ void  tnsguiiconputbuilding::exec         ( void )
          if (moveparams.movestatus == 112) {
             putbuildinglevel3( getxpos(), getypos());
             displaymap();
-            dashboard.x = 0xffff;
+            updateFieldInfo();
          }
 }
 
@@ -2106,7 +2105,7 @@ void  tnsguiicondestructbuilding::exec         ( void )
    else
       if (moveparams.movestatus == 115) {
          destructbuildinglevel2( getxpos(), getypos());
-         dashboard.x = -1;
+         updateFieldInfo();
          displaymap();
       }
 }
@@ -2136,7 +2135,7 @@ void  tnsguiicondig::exec         ( void )
 {
     getactfield()->vehicle->searchForMineralResources( ) ;
     showresources = 1;
-    dashboard.x = 0xffff;
+    updateFieldInfo();
     displaymap();
 }
 
@@ -2194,7 +2193,7 @@ void  tnsguiiconenablereactionfire::exec         ( void )
    int res = getactfield()->vehicle->reactionfire.enable();
    if ( res < 0 )
       dispmessage2 ( -res, NULL );
-   dashboard.x = 0xffff;
+   updateFieldInfo();
    displaymap();
 }
 
@@ -2222,7 +2221,7 @@ int   tnsguiicondisablereactionfire::available    ( void )
 void  tnsguiicondisablereactionfire::exec         ( void )
 {
    getactfield()->vehicle->reactionfire.disable();
-   dashboard.x = 0xffff;
+   updateFieldInfo();
 }
 
 
@@ -2301,7 +2300,7 @@ void  tnsguiiconcancel::exec         ( void )
          delete pendingVehicleActions.action;
 
       actmap->cleartemps(7);
-      dashboard.x = 0xffff;
+      updateFieldInfo();
       displaymap();
    }
 }
@@ -2734,7 +2733,7 @@ void  tnweapselguiicon::exec         ( void )
       delete pendingVehicleActions.attack;
       actmap->cleartemps ( 0xff );
       displaymap();
-      dashboard.x = 0xffff;
+      updateFieldInfo();
 
       actgui = &gui;
       actgui->restorebackground();
@@ -2865,7 +2864,7 @@ int trguiicon_play :: available ( void )
 void trguiicon_play :: exec ( void )
 {
   runreplay.status = 2;
-  dashboard.x = -1;
+  updateFieldInfo();
 
 }
 
@@ -2885,7 +2884,7 @@ int trguiicon_pause :: available ( void )
 void trguiicon_pause :: exec ( void )
 {
    runreplay.status = 1;
-   dashboard.x = -1;
+   updateFieldInfo();
 }
 
 
@@ -2914,7 +2913,7 @@ void trguiicon_faster :: exec ( void )
 
    CGameOptions::Instance()->setChanged ( 1 );
    displaymessage2 ( "delay set to %d / 100 sec", CGameOptions::Instance()->replayspeed );
-   dashboard.x = -1;
+   updateFieldInfo();
 }
 
 
@@ -2936,7 +2935,7 @@ void trguiicon_slower :: exec ( void )
    CGameOptions::Instance()->replayspeed += 20;
    CGameOptions::Instance()->setChanged ( 1 );
    displaymessage2 ( "delay set to %d / 100 sec", CGameOptions::Instance()->replayspeed );
-   dashboard.x = -1;
+   updateFieldInfo();
 }
 
 

@@ -25,7 +25,45 @@
 #ifndef dashboardH
  #define dashboardH
 
+#include "paradialog.h"
+  
+class WindInfoPanel : public Panel {
+        Surface windArrow; 
+        int dir;
+     protected:
+        void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
+     public:
+        WindInfoPanel (PG_Widget *parent, const PG_Rect &r ) ;
+        void eval();
 
+        
+        ~WindInfoPanel();
+            
+};
+
+class UnitInfoPanel : public Panel {
+     protected:
+        bool onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event );
+     public:
+        UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) ;
+        void eval();
+};
+ 
+class WeaponInfoPanel : public Panel {
+        static ASCString name;
+     protected:
+        bool onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event );
+     public:
+        WeaponInfoPanel (PG_Widget *parent, const PG_Rect &r ) ;
+        
+        static const ASCString& WIP_Name();
+        // void eval();
+};
+
+ 
+#if 0
+
+ 
   //! The unit, weather and map information displayed on the right side of the screen
   class tdashboard {
                 public:
@@ -105,4 +143,5 @@
                     }; 
   extern tdashboard dashboard; 
 
+  #endif
 #endif

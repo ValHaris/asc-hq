@@ -51,7 +51,6 @@
 #include "unitctrl.h"
 #include "gameoptions.h"
 #include "replay.h"
-#include "dashboard.h"
 #include "resourcenet.h"
 #include "research.h"
 #include "itemrepository.h"
@@ -1966,8 +1965,6 @@ void   ccontainer :: checkformouse( void )
          if ( mousestat == 1 )
             mousestat = 2;
 
-   dashboard.checkformouse( 1 );
-
 }
 
 void ccontainer :: putFieldImage( int x, int y, void* image )
@@ -1985,13 +1982,15 @@ void ccontainer :: unitchanged( void )
 
 void  ccontainer :: paintvehicleinfo ( void )
 {
-   dashboard.paintvehicleinfo ( getmarkedunit(), NULL, NULL, NULL );
+   showContainerInfo( getmarkedunit() );
 }
+
+MapCoordinate dashboard;
+
 
 void  ccontainer :: run ()
 {
    end = 0;
-   dashboard.x = 0xffff;
    mousevisible(true);
    do {
       if (keypress () ) {
@@ -2066,6 +2065,8 @@ void  ccontainer :: run ()
          actsubwindow-> mousecheck ( 0 );
 
       checkformouse();
+
+      showContainerInfo( getmarkedunit() );
 
       if ((dashboard.x != mark.x ) || ( dashboard.y != mark.y )) {
          paintvehicleinfo ( );
@@ -3629,9 +3630,9 @@ Vehicle* ccontainer_b :: getloadedunit (int num)
 void  ccontainer_b :: paintvehicleinfo ( void )
 {
    if ( unitmode == mnormal )
-      dashboard.paintvehicleinfo ( getmarkedunit(), NULL, NULL, NULL );
+      showContainerInfo ( getmarkedunit() );
    else
-      :: dashboard.paintvehicleinfo ( NULL, NULL, NULL, getmarkedunittype () );
+      showVehicleTypeInfo( getmarkedunittype () );
 }
 
 

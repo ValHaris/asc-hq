@@ -31,7 +31,6 @@
 #include "buildingtype.h"
 #include "viewcalculation.h"
 #include "replay.h"
-#include "dashboard.h"
 #include "gameoptions.h"
 #include "itemrepository.h"
 #include "astar2.h"
@@ -231,7 +230,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
                   battle.calc();
 
                battle.setresult ();
-               dashboard.x = 0xffff;
+               updateFieldInfo();
                cancelmovement = 1;
            }
          }
@@ -307,8 +306,6 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
             attackedByReactionFire = true;
             vehicle = actmap->getUnit ( networkID );
          }
-
-         dashboard.x = 0xffff;
       }
    }
 

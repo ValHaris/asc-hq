@@ -239,6 +239,8 @@ extern int  rol ( int valuetorol, int rolwidth );
 extern SigC::Signal0<void> repaintMap;
 extern SigC::Signal0<void> repaintDisplay;
 extern SigC::Signal0<void> updateFieldInfo;
+extern SigC::Signal1<void,ContainerBase*> showContainerInfo;
+extern SigC::Signal1<void,Vehicletype*> showVehicleTypeInfo;
 
 #ifdef sgmain
 static void repaintdisplay() { repaintDisplay(); };

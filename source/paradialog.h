@@ -80,14 +80,59 @@ class ASC_PG_Dialog : public PG_Window {
 
 class Panel : public  PG_Window {
      ASCString panelName;     
-        
-   public:  
-      Panel ( PG_Widget *parent, const PG_Rect &r=PG_Rect::null, const ASCString& panelName_ = "" )
-           : PG_Window ( parent, r, "", DEFAULT, "Panel", 9 ), panelName( panelName_ ) {};
+   /*
+     class PrimitiveObject {
+        public:
+           ASCString name;
+           PG_Rect position;
+     };
+     
+     class Emboss: public PrimitiveObject {
+        public:
+           bool 
+     };
+     */
 
-      void setup();               
+      bool setup();               
+   protected:   
+      void setLabelText ( const ASCString& widgetName, const ASCString& text );
+              
+   public:  
+      Panel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme = true );
 
 };
+
+class SpecialDisplayWidget : public PG_Widget {
+   public:
+
+      typedef SigC::Signal3<void,const PG_Rect&, const ASCString&, const PG_Rect&> DisplayHook;
+      
+      DisplayHook display;
+      
+      SpecialDisplayWidget (PG_Widget *parent, const PG_Rect &rect ) : PG_Widget( parent, rect, false )
+      {
+      }
+      
+      
+      void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst) {
+         display( src, GetName(), dst );
+      };
+      /*
+      void eventDraw (SDL_Surface *surface, const PG_Rect &rect) {
+         Surface s = Surface::Wrap( surface );
+         display( s, rect, GetID(), *this );
+      };
+      */
+
+};
+
+class SpecialInputWidget : public PG_Widget {
+   public:
+     
+      SpecialInputWidget (PG_Widget *parent, const PG_Rect &rect ) : PG_Widget( parent, rect, false ) { };
+      void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst) { };
+};
+
 
  
  extern void soundSettings();

@@ -29,7 +29,7 @@
  class Surface: public SDLmm::Surface {
     public:
       static const Uint32 transparent = 0;
-      static const Uint32 opaque = 0xff;
+      static const Uint32 opaque = 255l;
       explicit Surface( SDL_Surface *surface);
       Surface(const SDLmm::Surface& other);
       Surface() : SDLmm::Surface(NULL) {};

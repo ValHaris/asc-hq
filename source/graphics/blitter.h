@@ -562,7 +562,7 @@
           if ( hasColorKey )
              return (src & ckmask) != colorKey;
           else   
-             return PixelType((src & amask ) >> ashift) >= PixelType(Surface::opaque/2);
+             return PixelType((src & amask ) >> ashift) >= 128;
        };
   };
 

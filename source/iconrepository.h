@@ -33,6 +33,7 @@ class IconRepository {
         static Repository repository;
      public:
         static Surface& getIcon( const ASCString& name );
+        static void clear() { repository.clear(); };
 
 };
 
