@@ -1,6 +1,11 @@
-//     $Id: typen.h,v 1.74 2001-01-04 15:14:09 mbickel Exp $
+//     $Id: typen.h,v 1.75 2001-01-21 12:48:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.74  2001/01/04 15:14:09  mbickel
+//      configure now checks for libSDL_image
+//      AI only conquers building that cannot be conquered back immediately
+//      tfindfile now returns strings instead of char*
+//
 //     Revision 1.73  2000/12/31 15:25:26  mbickel
 //      The AI now conqueres neutral buildings
 //      Removed "reset password" buttons when starting a game
@@ -112,7 +117,6 @@ typedef class tbasenetworkconnection* pbasenetworkconnection;
 typedef class tnetwork* pnetwork;
 typedef struct tquickview* pquickview;
 typedef struct tterraintype* pterraintype;
-typedef class  twterraintype* pwterraintype ;
 typedef class tfield* pfield ;
 typedef class tobjectcontainer* pobjectcontainer;
 typedef struct tresourceview* presourceview;
@@ -123,28 +127,15 @@ typedef class tshareview *pshareview;
 ///    Some miscellaneous defintions. Not very intersting...
 //////////////////////////////////////////////////////////////
 
-//! fractiton of the production cost is needed if a unit repairs something
+//! fraction of the production cost that is needed if a unit repairs something
 const int repairefficiency_unit = 2;
 
-//! fractiton of the production cost is needed if a building repairs something
+//! fraction of the production cost that is needed if a building repairs something
 const int repairefficiency_building = 3;
 
 
 enum tshareviewmode { sv_none, sv_shareview };
 
-/*
-  struct PreferredFilenames {
-    char* mapname[8];
-    char* mapdescription_not_used_any_more[8];
-    char* savegame[8];
-    char* savegamedescription_not_used_any_more[8];
-  };
-*/
-
-  struct PreferredFilenames {
-    string mapname[8];
-    string savegame[8];
-  };
 
   class  EllipseOnScreen {
   public:
@@ -193,7 +184,10 @@ const int cbodenartennum = 33;
 
 // typedef bitset<cbodenartennum> tterrainbits;
 
-
+/** the properties of a terrain describing which units can move onto this field and which can't
+     The operators are crap. But since they are used only by tterrainaccess.accessible, which knows
+     that they are crap, the system is working ...
+*/
 class tterrainbits {
 #ifdef converter
  public:
@@ -266,9 +260,6 @@ class tterrainbits {
 };
 
 
-/* These operators are crap. But since they are used only by tterrainaccess.accessible, which knows
-   that they are crap, the system is working ...
-*/
 
 
 extern tterrainbits& operator~ ( tterrainbits &tb );
@@ -276,20 +267,30 @@ extern tterrainbits& operator| ( tterrainbits tb2, tterrainbits tb3 ) ;
 extern int operator& ( tterrainbits tb2, tterrainbits tb3 ) ;
 extern tterrainbits& operator^ ( tterrainbits tb2, tterrainbits tb3 ) ;
 
+//! This class is used by buildings, vehicles and objects to specify which terrain it can move to
 class tterrainaccess {
    public:
       tterrainaccess ( void ) ;
-      tterrainbits  terrain;      /*  BM     befahrbare terrain: z.B. Schiene, Wasser, Wald, ...  ; es muss lediglich eins gesetzt sein */
-      tterrainbits  terrainreq;   /*  BM     diese Bits MšSSEN ALLE in gesetzt sein */
-      tterrainbits  terrainnot;   /*  BM     sobald eines dieser Bits gesetzt ist, kann die vehicle NICHT auf das field fahren  */
-      tterrainbits  terrainkill;  /* falls das aktuelle field nicht befahrbar ist, und bei field->typ->art eine dieser Bits gesetzt ist, verschwindet die vehicle */
+
+      //! at least one of these bits must match on of the terrain
+      tterrainbits  terrain;      
+
+      //! ALL these bits must be set in the terrain
+      tterrainbits  terrainreq;   
+
+      //! if one of these bits is set, the field will NOT be accessible
+      tterrainbits  terrainnot;   
+
+      //! if a terrain is not accessible AND one of these bits is matched, the unit will be destroyed
+      tterrainbits  terrainkill;  
+
       int dummy[10];
+
+      /** checks whether a field with the given terrainbits is accessible.
+           \returns 1 if the field is accessible;
+                     0 if it is not accessible
+                     -1 if it is not accessible and the unit is killed by it    */
       int accessible ( tterrainbits bts );
-      /*
-      int getcrc ( void ) {
-        return terrain.getcrc() + terrainreq.getcrc()*7 + terrainnot.getcrc()*97 + terrainkill.getcrc()*997;  
-      };
-      */
 
       void read ( tnstream& stream ) {
          terrain.read ( stream );
@@ -375,20 +376,8 @@ class ResourceMatrix {
            Resources operator* ( const Resources& r ) const;
 };
 
-// Resources operator* ( const ResourceMatrix& m, const Resources& r );
 
 
-class tbuildingtype_bi_picture {
- public:
-  int num [ maxbuildingpicnum ][4][6];
-
-  tbuildingtype_bi_picture ( void ) {
-    for ( int i = 0; i < maxbuildingpicnum; i++ )
-      for ( int j = 0; j < 4; j++ )
-        for ( int k = 0; j < 6; j++ )
-          num[i][j][k] = -1;
-  };
-};
 
 
 //! the image for a terraintype ( #tterraintype ) that is shown on the small map
@@ -403,9 +392,9 @@ struct tquickview {
 
 
 
-
   struct thexpic {
     void* picture;
+    //! the position of the image in a graphic set. < 0 if it is seperate pictureand not from a graphic set
     int   bi3pic;
     int   flip;  // Bit 1: Horizontal ; Bit 2: Vertikal
   };
@@ -476,42 +465,10 @@ struct teventstore {
     int getlistsize ( void );  // liefert 1 falls noch weitere Glieder in der Liste existieren, sonst 0;
   };
 
-/*
-  typedef class tspeedcrccheck* pspeedcrccheck;
-  typedef class tcrcblock* pcrcblock;
-
-  class tcrcblock {
-  public:
-    int  crcnum;
-    pcrc crc;
-    int restricted;
-    // restricted kennt 3 Zust„nde: 0 = nicht limitiert, neue vehicle werden nicht aufgenommen; 
-    //                              1 = nicht limitiert, neue vehicle werden aufgenommen
-    //                              2 = limitiert: es d?rfen nur vehicle verwendet werden, deren CRCs bekannt sind
-    tcrcblock ( void );
-  };
-
-
-  typedef class tobjectcontainercrcs *pobjectcontainercrcs;
-  class tobjectcontainercrcs {
-  public:
-    tcrcblock unit;
-    tcrcblock building;
-    tcrcblock object;
-    tcrcblock terrain;
-    tcrcblock technology;
-
-    pspeedcrccheck speedcrccheck;
-
-    tobjectcontainercrcs ( void );
-
-    int dummy[40];
-  };
-
-*/
 
 //! how many different target types are there?
 const int aiValueTypeNum = 8;  
+
 
 class AiThreat {
        public:
@@ -621,27 +578,28 @@ template <class T> class PointerList : public list<T> {
 */
 
 
-
-class  twterraintype {
-  public:
-    void*        picture[8];
-    void*        direcpict[8];
-    int            defensebonus;
-    int            attackbonus;
-    int            basicjamming;
-    char           movemaluscount;
-    char*          movemalus;
-    pterraintype  terraintype;
-    pquickview     quickview;
-    void           paint ( int x1, int y1 );
-    int            bi_picture[6]; 
-    tterrainbits   art; 
-};
-
-struct tterraintype {
+//! The type of a field
+class tterraintype {
+   public:
+     class  Weather {
+       public:
+         void*        picture[8];
+         void*        direcpict[8];
+         int            defensebonus;
+         int            attackbonus;
+         int            basicjamming;
+         char           movemaluscount;
+         char*          movemalus;
+         pterraintype  terraintype;
+         pquickview     quickview;
+         void           paint ( int x1, int y1 );
+         int            bi_picture[6]; 
+         tterrainbits   art; 
+         Weather ( tterraintype* base ) : terraintype ( base ) {};
+     };
     char*              name;
     int                id;
-    pwterraintype   weather[cwettertypennum];
+    Weather*         weather[cwettertypennum];
     int                neighbouringfield[8];   
 };
 
@@ -1428,7 +1386,12 @@ class tmap {
 
       //! in BI resource mode ( see #_resourcemode , #isResourceGlobal ) , this is where the globally available resources are stored. Note that not all resources are globally available.
       Resources     bi_resource[8];
-      PreferredFilenames preferredFileNames;
+
+      struct PreferredFilenames {
+        string mapname[8];
+        string savegame[8];
+      } preferredFileNames;
+
       EllipseOnScreen* ellipse;
       int           graphicset;
       int           gameparameter_num;

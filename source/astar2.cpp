@@ -1,3 +1,9 @@
+/*! \file astar2.cpp
+   Pathfinding routines using the A* algorithm. 
+*/
+
+
+
 #include <stack>
 #include <vector>
 #include <functional>

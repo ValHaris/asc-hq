@@ -1,6 +1,12 @@
-//     $Id: controls.h,v 1.34 2001-01-19 13:33:49 mbickel Exp $
+//     $Id: controls.h,v 1.35 2001-01-21 12:48:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2001/01/19 13:33:49  mbickel
+//      The AI now uses hemming
+//      Several bugfixes in Vehicle Actions
+//      Moved all view calculation to viewcalculation.cpp
+//      Mapeditor: improved keyboard support for item selection
+//
 //     Revision 1.33  2000/12/21 11:00:49  mbickel
 //      Added some code documentation
 //
@@ -329,9 +335,6 @@
     
                };
 
-// currently not used externally
-// extern int windmovement[8];
-
 
 /*! calculates the movement cost for moving vehicle from x1/y1 to x2/y2
 
@@ -496,15 +499,20 @@ class trunreplay {
 
    };
 extern trunreplay runreplay;
+
+//! checks if there is replay information and -if there is any- runs the replay
 extern void checkforreplay ( void );
 
+
+/** creates a new vehicle, setting up its class depending on the research. If this vehicletype is
+     not available (because it hasn't been researched, for example), vehicle will be set to NULL,
+     else it will contain a pointer to the newly created vehicle. The vehicle will be empty after
+     creation (no fuel, etc). The resources for the creation must be seperately 'consumed'. */
 extern void   generatevehicle_cl ( pvehicletype fztyp,
                                   int           col,
                                   pvehicle &    vehicle,
                                   int           x, 
                                   int           y );
-// Generiert eine LEERE vehicle. MIT abfrage, ob dies M”glich ist, MIT auswerten der Klassen
-//  => Nur f?rs Spiel
 
 
 

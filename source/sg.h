@@ -1,6 +1,9 @@
-//     $Id: sg.h,v 1.4 2000-08-05 20:18:03 mbickel Exp $
+//     $Id: sg.h,v 1.5 2001-01-21 12:48:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/08/05 20:18:03  mbickel
+//      Restructured Fullscreen Image loading
+//
 //     Revision 1.3  2000/05/22 15:40:37  mbickel
 //      Included patches for Win32 version
 //
@@ -46,9 +49,6 @@ extern void         repaintdisplay(void);
  #include "controls.h"
  extern cmousecontrol* mousecontrol;
 #endif
-
-// extern int modenum8;
-extern int cdrom;
 
 extern pprogressbar actprogressbar ;
 

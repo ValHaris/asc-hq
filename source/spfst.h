@@ -1,6 +1,12 @@
-//     $Id: spfst.h,v 1.33 2001-01-19 13:33:56 mbickel Exp $
+//     $Id: spfst.h,v 1.34 2001-01-21 12:48:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2001/01/19 13:33:56  mbickel
+//      The AI now uses hemming
+//      Several bugfixes in Vehicle Actions
+//      Moved all view calculation to viewcalculation.cpp
+//      Mapeditor: improved keyboard support for item selection
+//
 //     Revision 1.32  2000/11/21 20:27:10  mbickel
 //      Fixed crash in tsearchfields (used by object construction for example)
 //      AI improvements
@@ -12,140 +18,6 @@
 //      Fixed crash when entering damaged building
 //      Fixed crash in AI
 //      Removed item CRCs
-//
-//     Revision 1.30  2000/10/18 17:09:42  mbickel
-//      Fixed eventhandling for DOS
-//
-//     Revision 1.29  2000/10/18 14:14:21  mbickel
-//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
-//       fixed soon.
-//
-//     Revision 1.28  2000/10/11 15:33:46  mbickel
-//      Adjusted small editors to the new ASC structure
-//      Watcom compatibility
-//
-//     Revision 1.27  2000/10/11 14:26:50  mbickel
-//      Modernized the internal structure of ASC:
-//       - vehicles and buildings now derived from a common base class
-//       - new resource class
-//       - reorganized exceptions (errors.h)
-//      Split some files:
-//        typen -> typen, vehicletype, buildingtype, basecontainer
-//        controls -> controls, viewcalculation
-//        spfst -> spfst, mapalgorithm
-//      bzlib is now statically linked and sources integrated
-//
-//     Revision 1.26  2000/09/27 16:08:30  mbickel
-//      AI improvements
-//
-//     Revision 1.25  2000/09/25 20:04:41  mbickel
-//      AI improvements
-//
-//     Revision 1.24  2000/09/17 15:20:37  mbickel
-//      AI is now automatically invoked (depending on gameoptions)
-//      Some cleanup
-//
-//     Revision 1.23  2000/09/07 15:49:46  mbickel
-//      some cleanup and documentation
-//
-//     Revision 1.22  2000/09/02 15:36:50  mbickel
-//      Some minor cleanup and documentation
-//
-//     Revision 1.21  2000/09/02 13:59:50  mbickel
-//      Worked on AI
-//      Started using doxygen
-//
-//     Revision 1.20  2000/09/01 15:47:50  mbickel
-//      Added Astar path finding code
-//      Fixed: viewid crashed
-//      Fixed display error in ynswitch ( krkr.cpp )
-//
-//     Revision 1.19  2000/08/12 12:52:54  mbickel
-//      Made DOS-Version compile and run again.
-//
-//     Revision 1.18  2000/08/12 09:17:36  gulliver
-//     *** empty log message ***
-//
-//     Revision 1.17  2000/08/02 10:28:27  mbickel
-//      Fixed: generator vehicle not working
-//      Streams can now report their name
-//      Field information shows units filename
-//
-//     Revision 1.16  2000/07/23 17:59:53  mbickel
-//      various AI improvements
-//      new terrain information window
-//
-//     Revision 1.15  2000/07/16 14:57:44  mbickel
-//      Datafile versioning
-//
-//     Revision 1.14  2000/07/16 14:20:06  mbickel
-//      AI has now some primitive tactics implemented
-//      Some clean up
-//        moved weapon functions to attack.cpp
-//      Mount doesn't modify PCX files any more.
-//
-//     Revision 1.13  2000/07/06 11:07:29  mbickel
-//      More AI work
-//      Started modularizing the attack formula
-//
-//     Revision 1.12  2000/07/02 21:04:14  mbickel
-//      Fixed crash in Replay
-//      Fixed graphic errors in replay
-//
-//     Revision 1.11  2000/06/28 19:26:18  mbickel
-//      fixed bug in object generation by building removal
-//      Added artint.cpp to makefiles
-//      Some cleanup
-//
-//     Revision 1.10  2000/06/08 21:03:43  mbickel
-//      New vehicle action: attack
-//      wrote documentation for vehicle actions
-//
-//     Revision 1.9  2000/05/30 18:39:27  mbickel
-//      Added support for multiple directories
-//      Moved DOS specific files to a separate directory
-//
-//     Revision 1.8  2000/05/23 20:40:52  mbickel
-//      Removed boolean type
-//
-//     Revision 1.7  2000/04/27 16:25:30  mbickel
-//      Attack functions cleanup
-//      New vehicle categories
-//      Rewrote resource production in ASC resource mode
-//      Improved mine system: several mines on a single field allowed
-//      Added unitctrl.* : Interface for vehicle functions
-//        currently movement and height change included
-//      Changed timer to SDL_GetTicks
-//
-//     Revision 1.6  2000/04/17 16:27:23  mbickel
-//      Optimized vehicle movement for SDL version
-//
-//     Revision 1.5  1999/12/28 21:03:24  mbickel
-//      Continued Linux port
-//      Added KDevelop project files
-//
-//     Revision 1.4  1999/11/25 22:00:14  mbickel
-//      Added weapon information window
-//      Added support for primary offscreen frame buffers to graphics engine
-//      Restored file time handling for DOS version
-//
-//     Revision 1.3  1999/11/22 18:28:02  mbickel
-//      Restructured graphics engine:
-//        VESA now only for DOS
-//        BASEGFX should be platform independant
-//        new interface for initialization
-//      Rewrote all ASM code in C++, but it is still available for the Watcom
-//        versions
-//      Fixed bugs in RLE decompression, BI map importer and the view calculation
-//
-//     Revision 1.2  1999/11/16 03:42:35  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
 //
 /*                       
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -237,12 +109,13 @@
 
   extern int  terraintypenum, vehicletypenum, buildingtypenum, technologynum, objecttypenum;
 
+ //! Determines if fields that have a temp value != 0 are being marked when displaying the map
+ extern char tempsvisible;
 
-  extern char tempsvisible;
-
-extern void  movecursor(tkey         ch);
-
-extern void  displaymap(void);
+ extern void  movecursor(tkey         ch);
+ 
+ //! displays the map that #actmap points to
+ extern void  displaymap(void);
 
 
   /*  zugriffe auf map und andere strukturen  */ 
@@ -275,8 +148,10 @@ extern bool fieldvisiblenow( const pfield pe, int player = actmap->actplayer );
  */
 extern int fieldVisibility  ( const pfield pe, int player = actmap->actplayer );
 
+//! returns the diplomatic status between actmap->actplayer and the player with color b (note that the color is playernum*8 ) 
 extern int getdiplomaticstatus( int b );
 
+//! returns the diplomatic status between the players with color c and b (note that the color is playernum*8 ) 
 extern int getdiplomaticstatus2( int c, int b);
 
 extern void  removevehicle(pvehicle *   vehicle);
@@ -669,7 +544,6 @@ class tpaintmapborder {
 
 extern tpaintmapborder* mapborderpainter;
 extern void swapbuildings ( pbuilding orgbuilding, pbuilding building );
-// extern void swapvehicles ( pvehicle orgvehicle, pvehicle transport );
 
 extern void checkformousescrolling ( void );
 

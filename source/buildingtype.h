@@ -58,6 +58,7 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
  #define cgproduceAllUnitsB ( 1 << cgproduceAllUnitsN )
 
 
+
  class  Buildingtype : public ContainerBaseType {
    public:
         void*        w_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];

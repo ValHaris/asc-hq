@@ -46,33 +46,6 @@
                void  buttonpressed ( int id );
                tenterpassword ( Password& crc, bool _firstTime, bool _cancelAllowed, bool _defaultAllowed ) : password ( crc ), firstTime ( _firstTime ), cancelAllowed ( _cancelAllowed ), defaultAllowed ( _defaultAllowed ) {};
            };
-/*
- class taskforsupervisorpassword : public tenterpassword {
-                            virtual int checkforreask ( int crc );
-                          public:
-                            void init ( int* crc, int mode );
-                            tenterpassword ( Password& crc ) : password ( crc ) {};
-                         };
-
-
-
-int taskforsupervisorpassword :: checkforreask ( int crc )
-{
-   if ( crc == 0 || actmap->actplayer == -1 )
-      return 1;
-   else
-      return 0;
-
-}
-
-void taskforsupervisorpassword :: init ( int* crc, int mode )
-{
-   tenterpassword::init ( crc, mode, "supervisor password" );
-}
-
-*/
-
-
 
 int   tenterpassword :: gettextwdth_stredit ( char* txt, pfont font )
 {

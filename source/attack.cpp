@@ -1,166 +1,11 @@
-//     $Id: attack.cpp,v 1.35 2001-01-19 13:33:46 mbickel Exp $
+//     $Id: attack.cpp,v 1.36 2001-01-21 12:48:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
-//     Revision 1.34  2000/10/18 14:13:48  mbickel
-//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
-//       fixed soon.
-//
-//     Revision 1.33  2000/10/11 14:26:15  mbickel
-//      Modernized the internal structure of ASC:
-//       - vehicles and buildings now derived from a common base class
-//       - new resource class
-//       - reorganized exceptions (errors.h)
-//      Split some files:
-//        typen -> typen, vehicletype, buildingtype, basecontainer
-//        controls -> controls, viewcalculation
-//        spfst -> spfst, mapalgorithm
-//      bzlib is now statically linked and sources integrated
-//
-//     Revision 1.32  2000/09/16 11:47:21  mbickel
-//      Some cleanup and documentation again
-//
-//     Revision 1.31  2000/08/13 11:55:07  mbickel
-//      Attacking now decreases a units movement by 20% if it has the
-//        "move after attack" flag.
-//
-//     Revision 1.30  2000/08/12 15:03:18  mbickel
-//      Fixed bug in unit movement
-//      ASC compiles and runs under Linux again...
-//
-//     Revision 1.29  2000/08/12 12:52:41  mbickel
-//      Made DOS-Version compile and run again.
-//
-//     Revision 1.28  2000/08/12 09:17:14  gulliver
-//     *** empty log message ***
-//
-//     Revision 1.27  2000/08/08 09:47:52  mbickel
-//
-//      speed up of dialog boxes in linux
-//      fixed graphical errors in attack
-//      fixed graphical error in ammo transfer
-//      fixed reaction fire not allowing manual attack
-//
-//     Revision 1.26  2000/08/07 21:10:18  mbickel
-//      Fixed some syntax errors
-//
-//     Revision 1.25  2000/08/07 16:29:19  mbickel
-//      orbiting units don't consume fuel any more
-//      Fixed bug in attack formula; improved attack formula
-//      Rewrote reactionfire
-//
-//     Revision 1.24  2000/08/05 13:38:19  mbickel
-//      Rewrote height checking for moving units in and out of
-//        transports / building
-//
-//     Revision 1.23  2000/08/04 15:10:47  mbickel
-//      Moving transports costs movement for units inside
-//      refuelled vehicles now have full movement in the same turn
-//      terrain: negative attack / defensebonus allowed
-//      new mapparameters that affect damaging and repairing of building
-//
-//     Revision 1.22  2000/08/03 13:11:48  mbickel
-//      Fixed: on/off switching of generator vehicle produced endless amounts of energy
-//      Repairing units now reduces their experience
-//      negative attack- and defenseboni possible
-//      changed attackformula
-//
-//     Revision 1.21  2000/07/29 14:54:10  mbickel
-//      plain text configuration file implemented
-//
-//     Revision 1.20  2000/07/16 14:19:59  mbickel
-//      AI has now some primitive tactics implemented
-//      Some clean up
-//        moved weapon functions to attack.cpp
-//      Mount doesn't modify PCX files any more.
-//
-//     Revision 1.19  2000/07/06 11:07:25  mbickel
-//      More AI work
-//      Started modularizing the attack formula
-//
-//     Revision 1.18  2000/07/02 21:04:10  mbickel
-//      Fixed crash in Replay
-//      Fixed graphic errors in replay
-//
-//     Revision 1.17  2000/06/08 21:03:39  mbickel
-//      New vehicle action: attack
-//      wrote documentation for vehicle actions
-//
-//     Revision 1.16  2000/06/04 21:39:17  mbickel
-//      Added OK button to ViewText dialog (used in "About ASC", for example)
-//      Invalid command line parameters are now reported
-//      new text for attack result prediction
-//      Added constructors to attack functions
-//
-//     Revision 1.15  2000/05/30 18:39:19  mbickel
-//      Added support for multiple directories
-//      Moved DOS specific files to a separate directory
-//
-//     Revision 1.14  2000/05/07 18:21:21  mbickel
-//      Speed of attack animation can now be specified
-//
-//     Revision 1.13  2000/04/27 17:59:19  mbickel
-//      Updated Kdevelop project file
-//      Fixed some graphical errors
-//
-//     Revision 1.12  2000/04/27 16:25:14  mbickel
-//      Attack functions cleanup
-//      New vehicle categories
-//      Rewrote resource production in ASC resource mode
-//      Improved mine system: several mines on a single field allowed
-//      Added unitctrl.* : Interface for vehicle functions
-//        currently movement and height change included
-//      Changed timer to SDL_GetTicks
-//
-//     Revision 1.11  2000/03/11 19:51:12  mbickel
-//      Removed file name length limitation under linux
-//      No weapon sound for attacked units any more (only attacker)
-//
-//     Revision 1.10  2000/03/11 18:22:04  mbickel
-//      Added support for multiple graphic sets
-//
-//     Revision 1.9  2000/02/24 10:54:06  mbickel
-//      Some cleanup and bugfixes
-//
-//     Revision 1.8  2000/01/25 19:28:06  mbickel
-//      Fixed bugs:
-//        invalid mouse buttons reported when moving the mouse
-//        missing service weapon in weapon information
-//        invalid text displayed in ammo production
-//        undamaged units selected in repair vehicle function
-//
-//      speed up when playing weapon sound
-//
-//     Revision 1.7  2000/01/24 09:08:55  steb
-//     Tidied up configure.in to support SDL properly.  Added sounds to Makefile.am
-//     Tested.  It built ok for me. Still YMMV however :)
-//
-//     Revision 1.6  2000/01/24 08:16:49  steb
-//     Changes to existing files to implement sound.  This is the first munge into
-//     CVS.  It worked for me before the munge, but YMMV :)
-//
-//     Revision 1.5  2000/01/20 16:52:09  mbickel
-//      Added Kamikaze attack
-//
-//     Revision 1.4  2000/01/01 19:04:13  mbickel
-//     /tmp/cvsVhJ4Z3
-//
-//     Revision 1.3  1999/11/22 18:26:48  mbickel
-//      Restructured graphics engine:
-//        VESA now only for DOS
-//        BASEGFX should be platform independant
-//        new interface for initialization
-//      Rewrote all ASM code in C++, but it is still available for the Watcom
-//        versions
-//      Fixed bugs in RLE decompression, BI map importer and the view calculation
-//
-//     Revision 1.2  1999/11/16 03:41:02  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
+//     Revision 1.35  2001/01/19 13:33:46  mbickel
+//      The AI now uses hemming
+//      Several bugfixes in Vehicle Actions
+//      Moved all view calculation to viewcalculation.cpp
+//      Mapeditor: improved keyboard support for item selection
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -181,6 +26,11 @@
     Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
     Boston, MA  02111-1307  USA
 */
+
+/*! \file attack.cpp
+   eveything regarind . 
+*/
+
 
 #include <stdio.h>
 #include "tpascal.inc"

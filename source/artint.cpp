@@ -1,6 +1,12 @@
-//     $Id: artint.cpp,v 1.49 2001-01-19 13:33:45 mbickel Exp $
+//     $Id: artint.cpp,v 1.50 2001-01-21 12:48:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2001/01/19 13:33:45  mbickel
+//      The AI now uses hemming
+//      Several bugfixes in Vehicle Actions
+//      Moved all view calculation to viewcalculation.cpp
+//      Mapeditor: improved keyboard support for item selection
+//
 //     Revision 1.48  2001/01/11 15:28:01  mbickel
 //      AI: conquering units try to move on fields hidden to the enemy
 //
@@ -51,163 +57,6 @@
 //      Fixed crash in AI
 //      Removed item CRCs
 //
-//     Revision 1.36  2000/10/26 18:14:54  mbickel
-//      AI moves damaged units to repair
-//      tmap is not memory layout sensitive any more
-//
-//     Revision 1.35  2000/10/18 14:13:47  mbickel
-//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
-//       fixed soon.
-//
-//     Revision 1.34  2000/10/14 14:16:01  mbickel
-//      Cleaned up includes
-//      Added mapeditor to win32 watcom project
-//
-//     Revision 1.33  2000/10/11 14:26:14  mbickel
-//      Modernized the internal structure of ASC:
-//       - vehicles and buildings now derived from a common base class
-//       - new resource class
-//       - reorganized exceptions (errors.h)
-//      Split some files:
-//        typen -> typen, vehicletype, buildingtype, basecontainer
-//        controls -> controls, viewcalculation
-//        spfst -> spfst, mapalgorithm
-//      bzlib is now statically linked and sources integrated
-//
-//     Revision 1.32  2000/09/27 16:08:22  mbickel
-//      AI improvements
-//
-//     Revision 1.31  2000/09/26 18:05:12  mbickel
-//      Upgraded to bzlib 1.0.0 (which is incompatible to older versions)
-//
-//     Revision 1.30  2000/09/25 20:04:34  mbickel
-//      AI improvements
-//
-//     Revision 1.29  2000/09/25 15:05:59  mbickel
-//      Some fixes for Watcom
-//
-//     Revision 1.28  2000/09/25 13:25:51  mbickel
-//      The AI can now change the height of units
-//      Heightchaning routines improved
-//
-//     Revision 1.27  2000/09/24 19:57:02  mbickel
-//      ChangeUnitHeight functions are now more powerful since they use
-//        UnitMovement on their own.
-//
-//     Revision 1.26  2000/09/17 16:16:44  mbickel
-//      Some fixes for Watcom
-//
-//     Revision 1.25  2000/09/17 15:17:43  mbickel
-//      some restructuring; moving units out of buildings
-//
-//     Revision 1.24  2000/09/10 10:19:50  mbickel
-//      AI improvements
-//
-//     Revision 1.23  2000/09/07 16:42:27  mbickel
-//      Made some adjustments so that ASC compiles with Watcom again...
-//
-//     Revision 1.22  2000/09/07 15:42:09  mbickel
-//     *** empty log message ***
-//
-//     Revision 1.21  2000/09/02 13:59:47  mbickel
-//      Worked on AI
-//      Started using doxygen
-//
-//     Revision 1.20  2000/08/29 20:21:03  mbickel
-//      Tried to make source GCC compliant, but some problems still remain
-//
-//     Revision 1.19  2000/08/25 13:42:49  mbickel
-//      Fixed: zoom dialogbox in mapeditor was invisible
-//      Fixed: ammoproduction: no numbers displayed
-//      game options: produceammo and fillammo are now modified together
-//      Fixed: sub could not be seen when standing on a mine
-//      Some AI improvements
-//
-//     Revision 1.18  2000/08/12 09:17:13  gulliver
-//     *** empty log message ***
-//
-//     Revision 1.17  2000/08/08 09:47:52  mbickel
-//
-//      speed up of dialog boxes in linux
-//      fixed graphical errors in attack
-//      fixed graphical error in ammo transfer
-//      fixed reaction fire not allowing manual attack
-//
-//     Revision 1.16  2000/08/07 21:10:17  mbickel
-//      Fixed some syntax errors
-//
-//     Revision 1.15  2000/08/07 16:29:18  mbickel
-//      orbiting units don't consume fuel any more
-//      Fixed bug in attack formula; improved attack formula
-//      Rewrote reactionfire
-//
-//     Revision 1.14  2000/08/04 15:10:46  mbickel
-//      Moving transports costs movement for units inside
-//      refuelled vehicles now have full movement in the same turn
-//      terrain: negative attack / defensebonus allowed
-//      new mapparameters that affect damaging and repairing of building
-//
-//     Revision 1.13  2000/08/03 13:11:47  mbickel
-//      Fixed: on/off switching of generator vehicle produced endless amounts of energy
-//      Repairing units now reduces their experience
-//      negative attack- and defenseboni possible
-//      changed attackformula
-//
-//     Revision 1.12  2000/08/02 15:52:37  mbickel
-//      New unit set definition files
-//      demount accepts now more than one container file
-//      Unitset information dialog added
-//
-//     Revision 1.11  2000/07/29 14:54:07  mbickel
-//      plain text configuration file implemented
-//
-//     Revision 1.10  2000/07/23 17:59:50  mbickel
-//      various AI improvements
-//      new terrain information window
-//
-//     Revision 1.9  2000/07/16 14:19:58  mbickel
-//      AI has now some primitive tactics implemented
-//      Some clean up
-//        moved weapon functions to attack.cpp
-//      Mount doesn't modify PCX files any more.
-//
-//     Revision 1.8  2000/07/06 11:07:24  mbickel
-//      More AI work
-//      Started modularizing the attack formula
-//
-//     Revision 1.7  2000/07/05 13:26:06  mbickel
-//      AI
-//
-//     Revision 1.6  2000/07/05 10:49:35  mbickel
-//      Fixed AI bugs
-//      setbuildingdamage event now updates the screen
-//
-//     Revision 1.5  2000/06/28 18:30:56  mbickel
-//      Started working on AI
-//      Started making loaders independent of memory layout
-//      Destroyed buildings can now leave objects behind.
-//
-//     Revision 1.4  2000/06/19 20:05:01  mbickel
-//      Fixed crash when transfering ammo to vehicle with > 8 weapons
-//
-//     Revision 1.3  1999/11/22 18:26:43  mbickel
-//      Restructured graphics engine:
-//        VESA now only for DOS
-//        BASEGFX should be platform independant
-//        new interface for initialization
-//      Rewrote all ASM code in C++, but it is still available for the Watcom
-//        versions
-//      Fixed bugs in RLE decompression, BI map importer and the view calculation
-//
-//     Revision 1.2  1999/11/16 03:41:00  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -228,6 +77,10 @@
     Boston, MA  02111-1307  USA
 */
 
+
+/*! \file artint.cpp
+   The artificial intelligence of ASC. 
+*/
 
 
 #include <stdio.h>

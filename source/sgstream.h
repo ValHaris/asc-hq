@@ -1,6 +1,11 @@
-//     $Id: sgstream.h,v 1.14 2001-01-04 15:14:07 mbickel Exp $
+//     $Id: sgstream.h,v 1.15 2001-01-21 12:48:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2001/01/04 15:14:07  mbickel
+//      configure now checks for libSDL_image
+//      AI only conquers building that cannot be conquered back immediately
+//      tfindfile now returns strings instead of char*
+//
 //     Revision 1.13  2000/11/26 22:18:56  mbickel
 //      Added command line parameters for setting the verbosity
 //      Increased verbose output
@@ -86,83 +91,6 @@
 #include "typen.h"
 
 
-
-class tstream {
-        public:
-           virtual void writedata ( char* buf, int size ) = 0 ;
-           virtual void readdata  ( char* buf, int size ) = 0 ;
-           void writedata ( void* buf, int size );
-           void readdata ( void* buf, int size );
-           void writedata ( char buf );
-           void readdata ( char* buf );
-           void writedata ( word buf );
-           void readdata ( word* buf );
-           void writedata ( int buf );
-           void readdata ( int* buf );
-
-};
-
-
-
-class tbufstream  : public tstream {
-       public:
-           char* zeiger;
-           int   memsize;
-           int   actmempos;
-           int   datasize;
-           char  modus;
-           int   status;
-           char* devicename;
-           FILE* logfile;
-
-           void init ( void );
-           virtual void writedata ( char* buf, int size );
-           virtual void readdata  ( char* buf, int size );
-
-           virtual void readpchar(char** pc);
-           virtual void readbuffer( void ) = 0;
-           virtual void writepchar( char* pc);
-           virtual void writebuffer( void ) = 0;
-           virtual char getstatus( void );
-           void done ( void );
-      };
-
-#define pfilestream  *tfilestream
-
-class tfilestream : public tbufstream {
-        public:
-            void init ( void );
-            void openstream(char* name, char mode);            /*   1 : readdata; 2 : writedata   */
-            virtual void resetstream ( void );
-            void closestream ( void );
-            virtual void seekstream ( int newpos, int seekpos = SEEK_SET );
-            virtual void readbuffer( void );
-            virtual void writebuffer( void );
-            virtual int getstreamsize ( void );
-            void done ( void );
-
-        private:
-            /* fstream datei; */
-            FILE* fp;
-            int actfilepos;
-  };
-
-class tsfilestream : public tfilestream {
-               /*         virtual void seekstream ( int newpos );
-                        void openstream ( char* name; char mode );
-                        virtual void readbuffer( void* p, int size, char* result);
-                        virtual int getstreamsize( void );
-                     private:
-                        int startpos,stoppos;
-                 */
-                    };
-
-class tsrlefilestream : public tsfilestream {
-                        public:
-                           void readrlepict( char** pnter, char allocated, int* size);
-                           void writerlepict ( void* buf );
-                        };
-
 extern pvehicletype loadvehicletype( const char *       name);
 extern pvehicletype loadvehicletype( tnstream& stream );
 extern void writevehicle( pvehicletype ft, tnstream& stream );
@@ -186,19 +114,6 @@ void writeobject ( pobjecttype object, pnstream stream, int compressed = 0 );
 #ifndef converter
 extern pquickview generateaveragecol ( pwterraintype bdn );
 #endif
-
-#define streamwritedata(a,b) stream.writedata ( (char*) &(a), b )
-#define streamwritedata2(a) stream.writedata ( (char*) &(a), sizeof(a) )
-#define streamreaddata(a,b) stream.readdata( (char*) &(a), b )
-#define streamreaddata2(a) stream.readdata( (char*) &(a), sizeof(a) )
-
-
-
-
-
-
-
-
 
 
 extern void generatedirecpict ( void* orgpict, void* direcpict );

@@ -4,7 +4,7 @@
  #include <vector>
 
 /*! \file astar2.h
-    finding a path with the A* algorithm
+    Interface for the A* pathfinding algorithm
 */
 
 

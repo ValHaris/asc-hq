@@ -1,6 +1,11 @@
-//     $Id: dialog.h,v 1.14 2000-11-29 09:40:18 mbickel Exp $
+//     $Id: dialog.h,v 1.15 2001-01-21 12:48:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/11/29 09:40:18  mbickel
+//      The mapeditor has now two maps simultaneously active
+//      Moved memorychecking functions to its own file: memorycheck.cpp
+//      Rewrote password handling in ASC
+//
 //     Revision 1.13  2000/09/16 11:47:26  mbickel
 //      Some cleanup and documentation again
 //
@@ -279,20 +284,6 @@ extern void resizemap ( void );
 #endif
 
 extern void viewterraininfo ( void );
-
-
-
-
-
-/*! a dialog box for entering a password. 
-     If *cr == 0 , the user is asked to enter a new password, which is saved in *cr. 
-     If *cr != 0, the dialog box will only resume after the user has entered the correct password. 
-       Pressing the "exit" buttons erases the active map and throws a #tnomaploaded exception
-
-    \returns 1: ok, 
-              2: default (only if new password has been entered),
-             10: cancel (only if new password has been entered)
-*/
 
 extern void viewUnitSetinfo ( void );
 
