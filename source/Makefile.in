@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4 from Makefile.am
+# Makefile.in generated automatically by automake 1.4a from Makefile.am
 
 # Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
@@ -9,9 +9,6 @@
 # but WITHOUT ANY WARRANTY, to the extent permitted by law; without
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
-
-####### kdevelop will overwrite this part!!! (begin)##########
-
 
 SHELL = @SHELL@
 
@@ -48,9 +45,10 @@ AUTOMAKE = @AUTOMAKE@
 AUTOHEADER = @AUTOHEADER@
 
 INSTALL = @INSTALL@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
+INSTALL_STRIP_FLAG =
 transform = @program_transform_name@
 
 NORMAL_INSTALL = :
@@ -59,6 +57,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+AMTAR = @AMTAR@
+AMTARFLAGS = @AMTARFLAGS@
 CC = @CC@
 CXX = @CXX@
 MAKEINFO = @MAKEINFO@
@@ -66,13 +66,16 @@ PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 VERSION = @VERSION@
 
+####### kdevelop will overwrite this part!!! (begin)##########
+
+
 ####### kdevelop will overwrite this part!!! (end)############
 bin_PROGRAMS = asc
-asc_SOURCES = weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp pd.cpp palette.cpp newfont.cpp network.cpp missions.cpp misc.cpp loadpcxc.cpp loadjpg.cpp loaders.cpp loadbi3.cpp gui.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp building.cpp basestrm.cpp basegfx.cpp attack.cpp 
+asc_SOURCES = weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp pd.cpp palette.cpp newfont.cpp network.cpp missions.cpp misc.cpp loadpcxc.cpp loadjpg.cpp loaders.cpp loadbi3.cpp gui.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp building.cpp basestrm.cpp basegfx.cpp attack.cpp soundList.cpp
 asc_LDADD = ./sdl/libsdl.a ./libs/triangul/libtriangul.a -lSDL -lpthread -lbz2
 SUBDIRS = docs sdl libs 
 
-EXTRA_DIST = attack.cpp basegfx.cpp basestrm.cpp building.cpp controls.cpp dialog.cpp dlg_box.cpp gamedlg.cpp gui.cpp loadbi3.cpp loaders.cpp loadjpg.cpp loadpcxc.cpp misc.cpp missions.cpp network.cpp newfont.cpp palette.cpp pd.cpp sg.cpp sgstream.cpp spfst.cpp stack.cpp strtmesg.cpp typen.cpp weather.cpp attack.h basegfx.h basegui.h basestrm.h basetemp.h building.h controls.h dialog.h dlg_box.h gamedlg.h global.h gui.h keybp.h loadbi3.h loaders.h loadjpg.h loadpcx.h misc.h missions.h mousehnd.h network.h newfont.h palette.h pd.h sg.h sgstream.h spfldutl.h spfst.h stack.h strtmesg.h timer.h typen.h weather.h 
+EXTRA_DIST = attack.cpp basegfx.cpp basestrm.cpp building.cpp controls.cpp dialog.cpp dlg_box.cpp gamedlg.cpp gui.cpp loadbi3.cpp loaders.cpp loadjpg.cpp loadpcxc.cpp misc.cpp missions.cpp network.cpp newfont.cpp palette.cpp pd.cpp sg.cpp sgstream.cpp spfst.cpp stack.cpp strtmesg.cpp typen.cpp weather.cpp attack.h basegfx.h basegui.h basestrm.h basetemp.h building.h controls.h dialog.h dlg_box.h gamedlg.h global.h gui.h keybp.h loadbi3.h loaders.h loadjpg.h loadpcx.h misc.h missions.h mousehnd.h network.h newfont.h palette.h pd.h sg.h sgstream.h spfldutl.h spfst.h stack.h strtmesg.h timer.h typen.h weather.h soundList.cpp soundList.h
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
@@ -83,38 +86,40 @@ DEFS = @DEFS@ -I. -I$(srcdir) -I..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-asc_OBJECTS =  weather.o typen.o strtmesg.o stack.o spfst.o sgstream.o \
-sg.o pd.o palette.o newfont.o network.o missions.o misc.o loadpcxc.o \
-loadjpg.o loaders.o loadbi3.o gui.o gamedlg.o dlg_box.o dialog.o \
-controls.o building.o basestrm.o basegfx.o attack.o
+am_asc_OBJECTS =  weather.o typen.o strtmesg.o stack.o spfst.o \
+sgstream.o sg.o pd.o palette.o newfont.o network.o missions.o misc.o \
+loadpcxc.o loadjpg.o loaders.o loadbi3.o gui.o gamedlg.o dlg_box.o \
+dialog.o controls.o building.o basestrm.o basegfx.o attack.o \
+soundList.o
+asc_OBJECTS =  $(am_asc_OBJECTS)
 asc_DEPENDENCIES =  ./sdl/libsdl.a ./libs/triangul/libtriangul.a
 asc_LDFLAGS = 
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
-CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@
+CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+DIST_SOURCES =  $(asc_SOURCES)
 DIST_COMMON =  README AUTHORS COPYING ChangeLog Makefile.am Makefile.in \
 NEWS TODO
 
 
-DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
+DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = tar
 GZIP_ENV = --best
 DEP_FILES =  .deps/attack.P .deps/basegfx.P .deps/basestrm.P \
 .deps/building.P .deps/controls.P .deps/dialog.P .deps/dlg_box.P \
 .deps/gamedlg.P .deps/gui.P .deps/loadbi3.P .deps/loaders.P \
 .deps/loadjpg.P .deps/loadpcxc.P .deps/misc.P .deps/missions.P \
 .deps/network.P .deps/newfont.P .deps/palette.P .deps/pd.P .deps/sg.P \
-.deps/sgstream.P .deps/spfst.P .deps/stack.P .deps/strtmesg.P \
-.deps/typen.P .deps/weather.P
+.deps/sgstream.P .deps/soundList.P .deps/spfst.P .deps/stack.P \
+.deps/strtmesg.P .deps/typen.P .deps/weather.P
 SOURCES = $(asc_SOURCES)
-OBJECTS = $(asc_OBJECTS)
+OBJECTS = $(am_asc_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
-.SUFFIXES: .S .c .cpp .o .s
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+.SUFFIXES: .c .cpp .o
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/$(altdir)configure.in $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu source/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
@@ -136,22 +141,19 @@ install-binPROGRAMS: $(bin_PROGRAMS)
 	$(mkinstalldirs) $(DESTDIR)$(bindir)
 	@list='$(bin_PROGRAMS)'; for p in $$list; do \
 	  if test -f $$p; then \
-	    echo "  $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
-	     $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
+	    f="`echo $$p|sed -e 's/$(EXEEXT)$$//' -e '$(transform)' -e 's/$$/$(EXEEXT)/'`"; \
+	    echo "  $(INSTALL_PROGRAM) $(INSTALL_STRIP_FLAG) $$p $(DESTDIR)$(bindir)/$$f"; \
+	     $(INSTALL_PROGRAM) $(INSTALL_STRIP_FLAG) $$p $(DESTDIR)$(bindir)/$$f; \
 	  else :; fi; \
 	done
 
 uninstall-binPROGRAMS:
 	@$(NORMAL_UNINSTALL)
-	list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
+	@list='$(bin_PROGRAMS)'; for p in $$list; do \
+	  f="`echo $$p|sed -e 's/$(EXEEXT)$$//' -e '$(transform)' -e 's/$$/$(EXEEXT)/'`"; \
+	  echo " rm -f $(DESTDIR)$(bindir)/$$f"; \
+	  rm -f $(DESTDIR)$(bindir)/$$f; \
 	done
-
-.s.o:
-	$(COMPILE) -c $<
-
-.S.o:
-	$(COMPILE) -c $<
 
 mostlyclean-compile:
 	-rm -f *.o core *.core
@@ -162,12 +164,39 @@ distclean-compile:
 	-rm -f *.tab.c
 
 maintainer-clean-compile:
+weather.o:
+typen.o:
+strtmesg.o:
+stack.o:
+spfst.o:
+sgstream.o:
+sg.o:
+pd.o:
+palette.o:
+newfont.o:
+network.o:
+missions.o:
+misc.o:
+loadpcxc.o:
+loadjpg.o:
+loaders.o:
+loadbi3.o:
+gui.o:
+gamedlg.o:
+dlg_box.o:
+dialog.o:
+controls.o:
+building.o:
+basestrm.o:
+basegfx.o:
+attack.o:
+soundList.o:
 
 asc: $(asc_OBJECTS) $(asc_DEPENDENCIES)
 	@rm -f asc
 	$(CXXLINK) $(asc_LDFLAGS) $(asc_OBJECTS) $(asc_LDADD) $(LIBS)
 .cpp.o:
-	$(CXXCOMPILE) -c $<
+	$(CXXCOMPILE) -c -o $@ $<
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run `make' without going through this Makefile.
@@ -205,7 +234,7 @@ maintainer-clean-recursive:
 	dot_seen=no; \
 	rev=''; list='$(SUBDIRS)'; for subdir in $$list; do \
 	  rev="$$subdir $$rev"; \
-	  test "$$subdir" = "." && dot_seen=yes; \
+	  if test "$$subdir" = "."; then dot_seen=yes; else :; fi; \
 	done; \
 	test "$$dot_seen" = "no" && rev=". $$rev"; \
 	target=`echo $@ | sed s/-recursive//`; \
@@ -271,7 +300,7 @@ distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$/$$file $(distdir)/$$file; \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
@@ -302,43 +331,24 @@ distclean-depend:
 
 maintainer-clean-depend:
 
-%.o: %.c
-	@echo '$(COMPILE) -c $<'; \
-	$(COMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-cp .deps/$(*F).pp .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm .deps/$(*F).pp
-
-%.lo: %.c
-	@echo '$(LTCOMPILE) -c $<'; \
-	$(LTCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
-	  < .deps/$(*F).pp > .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
-	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm -f .deps/$(*F).pp
-
 %.o: %.cpp
 	@echo '$(CXXCOMPILE) -c $<'; \
-	$(CXXCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
-	@-cp .deps/$(*F).pp .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
+	$(CXXCOMPILE) -Wp,-MD,.deps/$(*D)/$(*F).pp -c $<
+	@-cp .deps/$(*D)/$(*F).pp .deps/$(*D)/$(*F).P; \
+	tr ' ' '\012' < .deps/$(*D)/$(*F).pp \
 	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm .deps/$(*F).pp
+	    >> .deps/$(*D)/$(*F).P; \
+	rm .deps/$(*D)/$(*F).pp
 
 %.lo: %.cpp
 	@echo '$(LTCXXCOMPILE) -c $<'; \
-	$(LTCXXCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
+	$(LTCXXCOMPILE) -Wp,-MD,.deps/$(*D)/$(*F).pp -c $<
 	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
-	  < .deps/$(*F).pp > .deps/$(*F).P; \
-	tr ' ' '\012' < .deps/$(*F).pp \
+	  < .deps/$(*D)/$(*F).pp > .deps/$(*D)/$(*F).P; \
+	tr ' ' '\012' < .deps/$(*D)/$(*F).pp \
 	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
-	    >> .deps/$(*F).P; \
-	rm -f .deps/$(*F).pp
+	    >> .deps/$(*D)/$(*F).P; \
+	rm -f .deps/$(*D)/$(*F).pp
 info-am:
 info: info-recursive
 dvi-am:
@@ -361,7 +371,7 @@ uninstall: uninstall-recursive
 all-am: Makefile $(PROGRAMS)
 all-redirect: all-recursive
 install-strip:
-	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
+	$(MAKE) $(AM_MAKEFLAGS) INSTALL_STRIP_FLAG=-s install
 installdirs: installdirs-recursive
 installdirs-am:
 	$(mkinstalldirs)  $(DESTDIR)$(bindir)
@@ -403,8 +413,8 @@ maintainer-clean: maintainer-clean-recursive
 .PHONY: mostlyclean-binPROGRAMS distclean-binPROGRAMS clean-binPROGRAMS \
 maintainer-clean-binPROGRAMS uninstall-binPROGRAMS install-binPROGRAMS \
 mostlyclean-compile distclean-compile clean-compile \
-maintainer-clean-compile install-data-recursive \
-uninstall-data-recursive install-exec-recursive \
+maintainer-clean-compile install-recursive uninstall-recursive \
+install-data-recursive uninstall-data-recursive install-exec-recursive \
 uninstall-exec-recursive installdirs-recursive uninstalldirs-recursive \
 all-recursive check-recursive installcheck-recursive info-recursive \
 dvi-recursive mostlyclean-recursive distclean-recursive clean-recursive \
@@ -414,9 +424,9 @@ mostlyclean-depend distclean-depend clean-depend \
 maintainer-clean-depend info-am info dvi-am dvi check check-am \
 installcheck-am installcheck install-exec-am install-exec \
 install-data-am install-data install-am install uninstall-am uninstall \
-all-redirect all-am all installdirs-am installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+all-redirect all-am all install-strip installdirs-am installdirs \
+mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

@@ -1,4 +1,4 @@
-#include "sdl/sound.hh"
+#include "sdl/sound.h"
 #define WEAPON_SOUND_COUNT 10
 #define WEAPON_SOUND_FILENAME_TEMPLATE "weapon%02u.wav"
 /** This class provides all the sounds required by the games user interface */

@@ -1,6 +1,10 @@
-//     $Id: attack.cpp,v 1.6 2000-01-24 08:16:49 steb Exp $
+//     $Id: attack.cpp,v 1.7 2000-01-24 09:08:55 steb Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/01/24 08:16:49  steb
+//     Changes to existing files to implement sound.  This is the first munge into
+//     CVS.  It worked for me before the munge, but YMMV :)
+//
 //     Revision 1.5  2000/01/20 16:52:09  mbickel
 //      Added Kamikaze attack
 //
@@ -60,7 +64,7 @@
 #include "mousehnd.h"
 #include "timer.h"
 #include "loaders.h"
-#include "soundList.hh"
+#include "soundList.h"
 
 #define DEBUG( msg ) fprintf( stderr, "DEBUG : %s\n", msg )
 

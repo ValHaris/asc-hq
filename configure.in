@@ -21,7 +21,10 @@ dnl Allow location of SDL install to be configured --with-SDL-prefix=
 dnl omitting this parameter will cause the files to be sought in /usr/lib and /usr/include
 dnl note that you need to have run make install in the SDL source for this to work, as the
 dnl SDL distribution source directory isn't layed out correctly even after a make.
-AC_ARG_WITH( SDL-prefix,[  --with-SDL-prefix=sdlp  Look for SDL libs in \${sdlp}/lib and headers in \${sdlp}/include/],CXXFLAGS="$CXXFLAGS -I$withval/include" ; LDFLAGS="$LDFLAGS -L$withval/lib" )
+AC_ARG_WITH( SDL-prefix,\
+[  --with-SDL-prefix=sdlp  Look for SDL libs in \${sdlp}/lib and headers in\
+ \${sdlp}/include/],\
+CXXFLAGS="$CXXFLAGS -I$withval/include/SDL" ; LDFLAGS="$LDFLAGS -L$withval/lib" )
 
 AC_CHECK_HEADER( SDL/SDL.h, , AC_MSG_ERROR( ASC requires SDL headers to be present ) )
 

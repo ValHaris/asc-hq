@@ -1,1 +1,9 @@
-
+- Change weapon sound timing so that instead of sound then damage bar movement we get:
+  1) show full damage bars
+  2) play attack sound
+  3) change defender damage to show effect
+  4) play defence sound
+  5) change attacker damage to show effect
+  6) pause *briefly*
+- Add motor sounds during movement
+- Tidy up code so that doxygen produces good output.
