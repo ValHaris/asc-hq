@@ -117,7 +117,25 @@ struct CommandBlock {
 };   
 
 
-MapDisplayPG* theMapDisplay = NULL;
+void benchMapDisplay()
+{
+   int t = ticker;
+   for ( int i = 0; i < 20; ++i )
+      repaintMap();
+      
+   int t2 = ticker;
+/*   
+   for ( int i = 0; i< 20; ++i)
+      theMapDisplay->Redraw();
+*/      
+   int t3 = ticker;
+   
+   ASCString s;
+   s.format("update map: %d \nupdate widget: %d \n%f fps", t2-t,t3-t2, 20.0 / float(t3-t) * 100 );
+   displaymessage(s, 1 );
+}   
+   
+
 
 MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
       : PG_Widget ( parent, r, false ) ,
@@ -129,14 +147,16 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
 {
    setNewZoom( zoom );
    readData();
+
+   repaintMap.connect( SigC::slot( *this, &MapDisplayPG::updateWidget ));
    
+      
    SDL_Surface* ws = GetWidgetSurface ();
    if ( ws ) {
       Surface s = Surface::Wrap( ws );
       s.assignDefaultPalette();
    }
    
-   theMapDisplay = this;
 }
 
 int fs[24][3] = {{ 16, 16, 16 },
@@ -407,7 +427,10 @@ void MapDisplayPG::paintTerrain( int playerView )
    }
 }
 
-template<int pixelSize> class PixSel : public SourcePixelSelector_CacheZoom<pixelSize, SourcePixelSelector_Rectangle<pixelSize> > {};
+
+template<int pixelSize> class PixSel : public SourcePixelSelector_CacheZoom<pixelSize, SourcePixelSelector_DirectRectangle<pixelSize> > {};
+// template<int pixelSize> class PixSel : public SourcePixelSelector_CacheZoom<pixelSize, SourcePixelSelector_Rectangle<pixelSize> > {};
+// template<int pixelSize> class PixSel : public SourcePixelSelector_Zoom<pixelSize, SourcePixelSelector_Rectangle<pixelSize> > {};
 
 
 void MapDisplayPG::updateMap(bool force )
@@ -417,23 +440,30 @@ void MapDisplayPG::updateMap(bool force )
   
 }
 
-void MapDisplayPG::eventDraw ( SDL_Surface* srf, const PG_Rect& rect)
+void MapDisplayPG::updateWidget()
 {
-   if ( dirty > Nothing )
-      updateMap();
-/*
-   PG_Rect icon_src;
-   PG_Rect icon_dst;
-   GetClipRects(icon_src, icon_dst, *this);
-   PG_Widget::eventBlit(surface->getBaseSurface(), icon_src, icon_dst);
-   */
+   updateMap(true);
+   Update(true);
+}
+
+
+void MapDisplayPG::blitInternalSurface( SDL_Surface* dest, const SPoint& pnt )
+{
    MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_PlainOverwrite,PixSel> blitter;
    blitter.setZoom( zoom );
    blitter.initSource( *surface );
    blitter.setRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), int(float(Width()) / zoom), int(float(Height()) / zoom));
-   Surface s = Surface::Wrap( srf );
-   // PG_Point pnt = ClientToScreen( 0,0 );
-   blitter.blit( *surface, s, SPoint(0,0));
+   Surface s = Surface::Wrap( dest );
+   blitter.blit( *surface, s, SPoint(pnt.x, pnt.y ));
+}
+
+
+void MapDisplayPG::eventDraw ( SDL_Surface* srf, const PG_Rect& rect)
+{
+   if ( dirty > Nothing )
+      updateMap();
+      
+   blitInternalSurface( srf, SPoint(0,0));
 }
 
 void MapDisplayPG::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& dst)
@@ -441,36 +471,26 @@ void MapDisplayPG::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect
    if ( !GetWidgetSurface ()) {
         if ( dirty > Nothing )
            updateMap();
-        /*
-        PG_Rect icon_src;
-        PG_Rect icon_dst;
-        GetClipRects(icon_src, icon_dst, *this);
-        PG_Widget::eventBlit(surface->getBaseSurface(), icon_src, icon_dst);
-        */
-        MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_PlainOverwrite,PixSel> blitter;
-        blitter.setZoom( zoom );
-        blitter.initSource( *surface );
-        blitter.setRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), int(float(Width()) / zoom), int(float(Height()) / zoom));
-        Surface s = Surface::Wrap( PG_Application::GetScreen() );
+           
         PG_Point pnt = ClientToScreen( 0,0 );
-        blitter.blit( *surface, s, SPoint(pnt.x, pnt.y ));
+        blitInternalSurface( PG_Application::GetScreen(), SPoint(pnt.x,pnt.y));
    } else {
       PG_Widget::eventBlit(srf,src,dst);
    }   
    
-      if ( cursor.visible ) {
-         int x = cursor.pos.x - offset.x;
-         int y = cursor.pos.y - offset.y;
-         if( x >= field.displayed.x1 && x < field.displayed.x2 && y >= field.displayed.y1 && y < field.displayed.y2 ) {
-            // surface->Blit( icons.cursor, getFieldPos(x,y));
-            MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Zoom,TargetPixelSelector_Valid> blitter;
-            blitter.setZoom( zoom );
-            
-            Surface s = Surface::Wrap( PG_Application::GetScreen() );
-                // PG_Point pnt = ClientToScreen( 0,0 );
-            blitter.blit( icons.cursor, s, widget2screen ( internal2widget( mapPos2internalPos( MapCoordinate(x,y)))) );
-         }   
-      }
+        if ( cursor.visible ) {
+                int x = actmap->player[actmap->playerView].cursorPos.x - offset.x;
+                int y = actmap->player[actmap->playerView].cursorPos.y - offset.y;
+                if( x >= field.displayed.x1 && x < field.displayed.x2 && y >= field.displayed.y1 && y < field.displayed.y2 ) {
+                // surface->Blit( icons.cursor, getFieldPos(x,y));
+                MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Zoom,TargetPixelSelector_Valid> blitter;
+                blitter.setZoom( zoom );
+
+                Surface s = Surface::Wrap( PG_Application::GetScreen() );
+                        // PG_Point pnt = ClientToScreen( 0,0 );
+                blitter.blit( icons.cursor, s, widget2screen ( internal2widget( mapPos2internalPos( MapCoordinate(x,y)))) );
+                }   
+        }
    
 }
 
@@ -524,7 +544,7 @@ bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
    if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == CGameOptions::Instance()->mouse.fieldmarkbutton ) {
       MapCoordinate mc = screenPos2mapPos( SPoint(button->x, button->y));
       if ( mc.valid() && mc.x < actmap->xsize && mc.y < actmap->ysize ) {
-         cursor.pos = mc;
+         actmap->player[actmap->playerView].cursorPos = mc;
          cursor.visible = true;
          dirty = Curs;
          Update();
@@ -1523,8 +1543,7 @@ void         displaymap(  )
 #else
          
 
-   theMapDisplay->updateMap( true );
-   theMapDisplay->Redraw();
+   repaintMap();
    
 #endif
       

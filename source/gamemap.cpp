@@ -127,7 +127,7 @@ tmap :: tmap ( void )
 }
 
 
-const int tmapversion = 7;
+const int tmapversion = 8;
 
 void tmap :: read ( tnstream& stream )
 {
@@ -200,6 +200,9 @@ void tmap :: read ( tnstream& stream )
          player[i].ASCversion = stream.readInt();
       else
          player[i].ASCversion = 0;
+         
+      if ( version >= 8 )
+         player[i].cursorPos.read( stream );
    }
 
 
@@ -472,6 +475,7 @@ void tmap :: write ( tnstream& stream )
       stream.writeInt( 1 );
       stream.writeInt( 1 );
       stream.writeInt ( player[i].ASCversion );
+      player[i].cursorPos.write( stream );
    }
 
    stream.writeInt( unitnetworkid );

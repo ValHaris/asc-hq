@@ -1129,8 +1129,74 @@ template<int pixelsize, class SourcePixelSelector = SourcePixelSelector_Plain<pi
        };   
       
  };
- 
- 
+
+template<int pixelsize>
+ class SourcePixelSelector_DirectRectangle {
+       typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+       int y,x1,y1;
+       int w,h;
+       
+       const PixelType* pointer;
+       const PixelType* startPointer;
+       int pitch;
+       int linelength;
+       const Surface* surface;
+    protected:
+       SourcePixelSelector_DirectRectangle() : y(0),x1(0),y1(0),w(0),h(0),pointer(NULL), surface(NULL) {};
+
+       int getWidth()  { return min(w, surface->w() -x1 ); };
+       int getHeight() { return min(h, surface->h()-y1 ); };
+                     
+
+       void init ( const Surface& srv )
+       {
+          surface = &srv; 
+          startPointer = pointer = (const PixelType*)(srv.pixels());
+          linelength = srv.pitch()/sizeof(PixelType);
+          pitch = linelength - w -1  ;
+          y = y1;
+          pointer += x1 + y1 * linelength;
+       };
+
+       PixelType getPixel(int x, int y)
+       {
+          x += x1; 
+          y += y1;
+          if ( x >= 0 && y >= 0 && x < surface->w() && y < surface->h() )
+             return surface->GetPixel(SPoint(x,y));
+          else
+             return surface->GetPixelFormat().colorkey();
+       };
+
+              
+       PixelType nextPixel() { return *(pointer++); };
+       
+       
+       void skipWholeLine() { pointer += linelength; ++y; };
+
+       void skipPixels( int pixNum ) { pointer += pixNum; };
+       
+       void nextLine() { pointer = startPointer + x1 + (y++) * linelength; };
+
+    public:
+       void setRectangle( SPoint pos, int width, int height )
+       {
+          x1 = pos.x;
+          y1 = pos.y;
+          w = width;
+          h = height;
+       };   
+       void setRectangle( const SDLmm::SRect& rect )
+       {
+          x1 = rect.x;
+          y1 = rect.y;
+          w = rect.w;
+          h = rect.h;
+       };   
+      
+ };
+
+
  
 /*
 

@@ -129,7 +129,7 @@ objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp music.cpp
 messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp messagedlg.cpp \
 simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp weatherarea.cpp \
-guidimension.cpp 
+guidimension.cpp guiiconhandler.cpp guifunctions.cpp
 
 
 asc_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
@@ -171,7 +171,8 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) typen.$(OBJEXT) \
 	gameevents.$(OBJEXT) gameeventsystem.$(OBJEXT) \
 	gameevent_dialogs.$(OBJEXT) statisticdialog.$(OBJEXT) \
 	clipboard.$(OBJEXT) geometry.$(OBJEXT) weatherarea.$(OBJEXT) \
-	guidimension.$(OBJEXT)
+	guidimension.$(OBJEXT) guiiconhandler.$(OBJEXT) \
+	guifunctions.$(OBJEXT)
 asc_OBJECTS = $(am_asc_OBJECTS)
 asc_DEPENDENCIES = $(top_builddir)/source/libs/triangul/libtriangul.la \
 	$(top_builddir)/source/ai/libai.la \
@@ -207,6 +208,8 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/gamemap.Po ./$(DEPDIR)/gameoptions.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/geometry.Po ./$(DEPDIR)/graphicset.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/gui.Po ./$(DEPDIR)/guidimension.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/guifunctions.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/guiiconhandler.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/itemrepository.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/loadbi3.Po ./$(DEPDIR)/loaders.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/loadpcxc.Po \
@@ -325,6 +328,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/graphicset.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gui.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guidimension.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guifunctions.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guiiconhandler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/itemrepository.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadbi3.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loaders.Po@am__quote@

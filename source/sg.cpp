@@ -114,6 +114,7 @@
 #include "statisticdialog.h"
 #include "clipboard.h"
 #include "mapdisplay2.h"
+#include "guiiconhandler.h"
 
 // #define MEMCHK
 
@@ -568,7 +569,7 @@ void         loadMoreData(void)
 
 }
 
-enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_dispvehicleimprovement, ua_mainmenu, ua_mntnc_morefog,
+enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_dispvehicleimprovement, ua_mainmenu, ua_mntnc_morefog,
                     ua_mntnc_lessfog,   ua_mntnc_morewind,   ua_mntnc_lesswind, ua_mntnc_rotatewind, ua_changeresourceview,
                     ua_benchgamewv,     ua_benchgamewov,     ua_viewterraininfo, ua_unitweightinfo,  ua_writemaptopcx,  ua_writescreentopcx,
                     ua_startnewsinglelevel, ua_changepassword, ua_gamepreferences, ua_bi3preferences,
@@ -708,26 +709,6 @@ void saveGame( bool as )
    }
    mousevisible(true);
 }
-
-
-void         showpalette(void)
-{
-   bar ( 0, 0, 639, 479, black );
-   int x=7;
-
-   for ( char a = 0; a <= 15; a++)
-      for ( char b = 0; b <= 15; b++) {
-         bar(     a * 40, b * 20,a * 40 +  x,b * 20 + 20, xlattables.a.light    [a * 16 + b]);
-         bar( x + a * 40, b * 20,a * 40 + 2*x,b * 20 + 20, xlattables.nochange [a * 16 + b]);
-         bar(2*x + a * 40, b * 20,a * 40 + 3*x,b * 20 + 20, xlattables.a.dark1    [a * 16 + b]);
-         bar(3*x + a * 40, b * 20,a * 40 + 4*x,b * 20 + 20, xlattables.a.dark2    [a * 16 + b]);
-         bar(4*x + a * 40, b * 20,a * 40 + 5*x,b * 20 + 20, xlattables.a.dark3    [a * 16 + b]);
-      }
-   wait();
-   repaintdisplay();
-}
-
-
 
 
 
@@ -1076,10 +1057,6 @@ void execuseraction ( tuseractions action )
          help(22);
          break;
 
-      case ua_showpalette  :
-         showpalette();
-         break;
-
       case ua_dispvehicleimprovement    :
       /*
          displaymessage("Research:\n%s %d \n%s %d \n%s %d \n"
@@ -1161,7 +1138,8 @@ void execuseraction ( tuseractions action )
          break;
 
       case ua_benchgamewov:
-         benchgame( 0 );
+         benchMapDisplay();
+         // benchgame( 0 );
          break;
 
       case ua_benchgamewv :
@@ -1729,12 +1707,9 @@ Menu::Menu ( PG_Widget *parent, const PG_Rect &rect)
 
 
 
-MapDisplayPG* mapDisplay = NULL;
-
-
 pfield        getactfield(void)
 {
-   return actmap->getField ( mapDisplay->getCursorPos() ); 
+   return actmap->getField( actmap->player[actmap->actplayer].cursorPos ); 
 } 
 
 
@@ -1746,30 +1721,25 @@ public:
 
 protected:
     MapDisplayPG* mapDisplay;
+    NewGuiHost* guiHost;
     Menu* menu;
 //    void eventDraw (SDL_Surface* surface, const PG_Rect& rect);
 //    void Blit ( bool recursive = true, bool restore = true );
-    ~MainScreenWidget() { ::mapDisplay = NULL; };
+    ~MainScreenWidget() { };
 };
 
 
 
 MainScreenWidget* mainScreenWidget = NULL;
 
-void         repaintdisplay(void)
-{
-   if ( mainScreenWidget )
-      mainScreenWidget->Update();
-}
-
-
 
 MainScreenWidget::MainScreenWidget( PG_Application& application )
               : PG_Widget(NULL, PG_Rect ( 0, 0, app.GetScreen()->w, app.GetScreen()->h ), false),
               app ( application ) 
 {
-   ::mapDisplay = mapDisplay = new MapDisplayPG( this, PG_Rect(20,20,Width() - 200, Height() - 20));
+   mapDisplay = new MapDisplayPG( this, PG_Rect(20,20,Width() - 200, Height() - 20));
    menu = new Menu(this, PG_Rect(0,0,Width(),20));
+   guiHost = new NewGuiHost( this, PG_Rect(Width()-180, 20, 170, Height()-60));
 }
 
 
@@ -2158,7 +2128,8 @@ int gamethread ( void* data )
 
    gameStartupComplete = true;
 
-
+   repaintDisplay.connect( repaintMap );
+   
    displayLogMessage ( 5, "entering outer main loop.\n" );
    do {
       try {

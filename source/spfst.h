@@ -27,6 +27,9 @@
 #ifndef spfstH
   #define spfstH
 
+ #include <sigc++/sigc++.h>
+  
+  
   #include "newfont.h"
   #include "basegfx.h"
   #include "typen.h"
@@ -233,6 +236,12 @@ class tdrawline8 : public tdrawline {
 
 extern int  rol ( int valuetorol, int rolwidth );
 
+extern SigC::Signal0<void> repaintMap;
+extern SigC::Signal0<void> repaintDisplay;
+
+#ifdef sgmain
+static void repaintdisplay() { repaintDisplay(); };
+#endif
 
 #endif
 

@@ -448,12 +448,11 @@ VehicleMovement :: ~VehicleMovement ( )
       pva->move = NULL;
 }
 
-int VehicleMovement :: available ( Vehicle* veh ) const
+bool VehicleMovement :: avail ( Vehicle* veh ) 
 {
-   if ( status == 0 )
-      if ( veh )
-         return veh->canMove();
-   return 0;
+   if ( veh )
+      return veh->canMove();
+   return false;
 }
 
 

@@ -439,6 +439,8 @@ class tmap {
             //! The time this player ended his turns. This is very informative in email games with > 2 players to find out who is delaying the game.
             PlayTimeContainer playTime;
 
+            MapCoordinate cursorPos;
+            
       } player[9];
 
       typedef map<int, Vehicle*> VehicleLookupCache;
@@ -484,7 +486,6 @@ class tmap {
           integer sy;
         } position[8];
       } cursorpos;
-
 
       /** The tribute can not only be used to demand resources from enemies but also to transfer resources to allies.
             tribute.avail[a][b].energy is the ammount of energy that player b may (still) extract from the net of player a

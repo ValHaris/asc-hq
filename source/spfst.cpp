@@ -60,6 +60,10 @@
 #include "buildings.h"
 
 
+SigC::Signal0<void> repaintMap;
+SigC::Signal0<void> repaintDisplay;
+
+
    tcursor            cursor;
    pmap              actmap;
 

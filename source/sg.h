@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: sg.h,v 1.10 2004-05-23 12:54:28 mbickel Exp $
+//     $Id: sg.h,v 1.10.2.1 2004-12-11 21:22:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2004/05/23 12:54:28  mbickel
+//      Updated campaign maps
+//      improved tech tree generation
+//
 //     Revision 1.9  2002/05/07 19:52:47  mbickel
 //      Updated documentation
 //      Dialog themes can be reloaded during runtime.
@@ -74,7 +78,6 @@
 
 extern void mainloopgeneralmousecheck ( void );
 extern void mainloopgeneralkeycheck ( tkey& ch );
-extern void repaintdisplay();
 
 #ifdef sgmain
  #include "mousecontrol.h"

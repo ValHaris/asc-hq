@@ -135,7 +135,7 @@ void AI::checkKeys ( void )
       if ( k == ct_esc ) {
          mapDisplay = NULL;
          tlockdispspfld a;
-         repaintdisplay();
+         repaintDisplay();
       }
    }
 }

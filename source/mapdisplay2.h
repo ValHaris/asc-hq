@@ -18,6 +18,9 @@
 #ifndef mapdisplay2H
  #define mapdisplay2H
 
+ #include <sigc++/sigc++.h>
+
+ 
 #include "typen.h"
 #include "basegfx.h"
 #include "events.h"
@@ -51,8 +54,7 @@ class MapDisplayPG: public PG_Widget {
       } field;   
       
       struct Cursor {
-         Cursor() : pos(0,0),visible(false) {};
-         MapCoordinate pos;
+         Cursor() : visible(false) {};
          bool visible;
       } cursor;   
       
@@ -102,14 +104,21 @@ class MapDisplayPG: public PG_Widget {
       SPoint mapPos2internalPos ( const MapCoordinate& pos );
       SPoint internal2widget( const SPoint& pos );
       SPoint widget2screen( const SPoint& pos );
+      
+      void blitInternalSurface( SDL_Surface* dest, const SPoint& pnt );
             
    public:
       MapDisplayPG ( PG_Widget *parent, const PG_Rect r );
-      
-      MapCoordinate getCursorPos() { return cursor.pos; };
-      
+
+      //! repaints to the internal surface, but does not blit this surface the screen
       void updateMap( bool force = false );
+      
+      //! update the internal surface and blits it to the screen
+      void updateWidget();
 
 };
+
+extern void benchMapDisplay();
+
 
 #endif

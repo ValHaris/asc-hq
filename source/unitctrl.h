@@ -1,4 +1,4 @@
-//     $Id: unitctrl.h,v 1.36.2.2 2004-11-27 23:20:54 mbickel Exp $
+//     $Id: unitctrl.h,v 1.36.2.3 2004-12-11 21:22:32 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -154,7 +154,8 @@ class VehicleMovement : public BaseVehicleMovement {
            public:
               IntFieldList reachableFields;
               IntFieldList reachableFieldsIndirect;
-              int available ( Vehicle* veh ) const;
+              int available ( Vehicle* veh ) const { return status==0 && avail(veh); };
+              static bool avail ( Vehicle* veh );
 
               enum  { NoInterrupt = 1, DisableHeightChange = 2 };
               int execute ( Vehicle* veh, int x, int y, int step, int height, int capabilities );
