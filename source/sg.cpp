@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.42 2000-05-23 20:40:48 mbickel Exp $
+//     $Id: sg.cpp,v 1.43 2000-06-01 15:03:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2000/05/23 20:40:48  mbickel
+//      Removed boolean type
+//
 //     Revision 1.41  2000/05/22 15:40:36  mbickel
 //      Included patches for Win32 version
 //
@@ -153,12 +156,12 @@
 //     Merged all the bug fixes in that I did last week
 //
 //     Revision 1.2  1999/11/16 03:42:25  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
+//        Added CVS keywords to most of the files.
+//        Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//        Wrote replacement routines for kbhit/getch for Linux
+//        Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//        Added autoconf/automake capabilities
+//        Added files used by 'automake --gnu'
 //
 //
 /*                                 
@@ -473,7 +476,7 @@ void tbackgroundpict :: init ( int reinit )
      const int mapborderwidth = 4;
 
      getpicsize ( borderpicture[2], width, height );
-
+   
      borderpos[0].x = borderx1 - mapborderwidth;
      borderpos[0].y = bordery1 - mapborderwidth;
 
@@ -1822,60 +1825,106 @@ void         startnewsinglelevelfromgame(void)
 
 
    
-void         ladestartkarte(void)
+void ladestartkarte( char *emailgame=NULL, char *mapname=NULL, 
+   char *savegame=NULL )
 {         
   char s[300];
+   if( emailgame != NULL ) {
+      if( validateemlfile( emailgame ) == 0 ) {
+         fprintf( stderr, "Email gamefile %s is invalid. Aborting.\n",
+            emailgame );
+         exit(-1);
+      }
 
-  if ( gameoptions.startupcount < 4 ) {
-     strcpy ( s , "tutor0" );
-  } else {
-     strcpy ( s , "railstat" );
-  }
-  strcat ( s, &mapextension[1] );
+      try {
+         tnfilestream gamefile ( emailgame, 1 );
+         tnetworkloaders nwl;
+         nwl.loadnwgame( &gamefile );
+      }
 
-  int maploadable;
-  {
+      catch ( tfileerror ) {
+         fprintf ( stderr, "%s is not a legal email game. \n", emailgame );
+         exit(-1);
+      }
 
-     tfindfile ff ( s );
-   
-     char* filename = ff.getnextname();
+   } else if( savegame != NULL ) {
+      if( validatesavfile( savegame ) == 0 ) {
+         fprintf( stderr, "The savegame %s is invalid. Aborting.\n", savegame );
+         exit( -1 );
+      }
+      try { loadgame( savegame ); }
 
-     maploadable = validatemapfile ( filename );
-  }
+      catch ( tfileerror ) {
+         fprintf ( stderr, "%s is not a legal savegame. \n", savegame );
+         exit(-1);
+      }
 
-  if ( !maploadable ) {
- 
-      tfindfile ff ( mapextension );
+   } else if( mapname != NULL ) {
+      if( validatemapfile( mapname ) == 0 ) {
+         fprintf( stderr, "Mapfile %s is invalid. Aborting.\n", mapname );
+         exit(-1);
+      }
 
-      char* filename = ff.getnextname();
+      try { loadmap( mapname ); }
 
-      if ( !filename )
-         displaymessage( "unable to load startup-map",2);
-         
-      while ( !validatemapfile ( filename ) ) {
-         filename = ff.getnextname();
+      catch ( tfileerror ) {
+         fprintf ( stderr, "%s is not a legal map. \n", mapname );
+         exit(-1);
+      }
+
+   } else {  // resort to loading defaults
+
+
+     if ( gameoptions.startupcount < 4 ) {
+        strcpy ( s , "tutor0" );
+     } else {
+        strcpy ( s , "railstat" );
+     }
+     strcat ( s, &mapextension[1] );
+
+     int maploadable;
+     {
+
+        tfindfile ff ( s );
+      
+        char* filename = ff.getnextname();
+
+        maploadable = validatemapfile ( filename );
+     }
+
+     if ( !maploadable ) {
+    
+         tfindfile ff ( mapextension );
+
+         char* filename = ff.getnextname();
+
          if ( !filename )
             displaymessage( "unable to load startup-map",2);
+            
+         while ( !validatemapfile ( filename ) ) {
+            filename = ff.getnextname();
+            if ( !filename )
+               displaymessage( "unable to load startup-map",2);
 
-      }
-      strcpy ( s , filename );
-   } 
+         }
+         strcpy ( s , filename );
+      } 
 
-   loadmap(s);
-   initmap(); 
-   #ifdef logging
-   logtofile("nach initmap");
-       {
-           for ( int jj = 0; jj < 8; jj++ ) {
-           char tmpcbuf[200];
-           sprintf(tmpcbuf,"humanplayername; address is %x", actmap->humanplayername[jj]);
-           logtofile ( tmpcbuf );
-           }
-       }
-  #endif     
-   if (loaderror != 0) 
-      displaymessage("loadmap: \n could not open startup map", 2);
-
+      loadmap(s);
+      initmap(); 
+#ifdef logging
+      logtofile("nach initmap");
+          {
+              for ( int jj = 0; jj < 8; jj++ ) {
+              char tmpcbuf[200];
+              sprintf(tmpcbuf,"humanplayername; address is %x", actmap->humanplayername[jj]);
+              logtofile ( tmpcbuf );
+              }
+          }
+#endif     
+      if (loaderror != 0) 
+         displaymessage("loadmap: \n could not open startup map", 2);
+   }
 } 
 
 
@@ -2057,12 +2106,12 @@ void execuseraction ( tuseractions action )
                              
             case ua_heapcheck: 
 #ifdef _DOS_
-	      if ( _heapchk() == _HEAPOK )
-		displaymessage(" Heap OK", 3 );
-	      else
-		displaymessage(" Heap not OK", 1 );
+         if ( _heapchk() == _HEAPOK )
+      displaymessage(" Heap OK", 3 );
+         else
+      displaymessage(" Heap not OK", 1 );
 #endif
-	      break;
+         break;
 #ifdef _DOS_
             case ua_benchgamewov:  benchgame( 0 );
 #else
@@ -2240,7 +2289,6 @@ void checkpulldown( tkey* ch )
 
 void mainloopgeneralkeycheck ( tkey& ch )
 {
-    // screensaverparameters.lasttick = ticker;
     ch = r_key();
     pd.key = ch;
     checkpulldown( &ch );
@@ -2249,20 +2297,8 @@ void mainloopgeneralkeycheck ( tkey& ch )
     if (keyinputptr >= keyinputbuffersize) 
        keyinputptr = 0;
 
-    if ( checkforcheats() ) {
-       if (checkinput("ALLMAP")) { 
-          godview = true; 
-          displaymap(); 
-          ch = ct_invvalue; 
-       } 
-    }
-
-
     movecursor(ch); 
-
     actgui->checkforkey ( ch ); 
-
-
 }
 
 
@@ -2648,141 +2684,133 @@ const char* progressbarfilename = "progress.8mn";
 
 
 
-void loaddata( int resolx, int resoly ) {
-                #ifdef logging
-                logtofile("initializing progress bar");
-                #endif
+void loaddata( int resolx, int resoly, 
+   char *emailgame=NULL, char *mapname=NULL, char *savegame=NULL ) 
+{
+#ifdef logging
+    logtofile("initializing progress bar");
+#endif
 
-                actprogressbar = new tprogressbar; 
-                if ( actprogressbar ) {
-                   tfindfile ff ( progressbarfilename );
-                   if ( ff.getnextname() ) {
-                      #ifdef logging
-                      logtofile("progress bar file found");
-                      #endif
-                      tnfilestream strm ( progressbarfilename, 1 );
-                      actprogressbar->start ( 255, 0, agmp->resolutiony-3, agmp->resolutionx-1, agmp->resolutiony-1, &strm );
-                   } else {
-                      #ifdef logging
-                      logtofile("progress bar file NOT found");
-                      #endif
-                      actprogressbar->start ( 255, 0, agmp->resolutiony-3, agmp->resolutionx-1, agmp->resolutiony-1, NULL );
-                   }
-                }
-                #ifdef logging
-                else
-                   logtofile("allocating of progress bar failed");
-                #endif
+   actprogressbar = new tprogressbar; 
+   if ( actprogressbar ) {
+      tfindfile ff ( progressbarfilename );
+      if ( ff.getnextname() ) {
+#ifdef logging
+         logtofile("progress bar file found");
+#endif
+         tnfilestream strm ( progressbarfilename, 1 );
+         actprogressbar->start ( 255, 0, 
+            agmp->resolutiony-3, agmp->resolutionx-1, 
+            agmp->resolutiony-1, &strm );
+      } else {
+#ifdef logging
+       logtofile("progress bar file NOT found");
+#endif
+         actprogressbar->start ( 255, 0, 
+            agmp->resolutiony-3, agmp->resolutionx-1, 
+            agmp->resolutiony-1, NULL );
+      }
+   }
+#ifdef logging
+   else logtofile("allocating of progress bar failed");
+#endif
 
-                weapdist = new tweapdist;
+   weapdist = new tweapdist;
 
-                schriften.smallarial = load_font("smalaril.fnt");
-                schriften.large = load_font("usablack.fnt");
-                schriften.arial8 = load_font("arial8.fnt");
-                schriften.smallsystem = load_font("msystem.fnt");
-                schriften.guifont = load_font("gui.fnt");
-                schriften.guicolfont = load_font("guicol.fnt");
-                schriften.monogui = load_font("monogui.fnt");
-                activefontsettings.markfont = schriften.guicolfont;
-                shrinkfont ( schriften.guifont, -1 );
-                shrinkfont ( schriften.guicolfont, -1 );
-                shrinkfont ( schriften.monogui, -1 );
-                pulldownfont = schriften.smallarial ;
+   schriften.smallarial = load_font("smalaril.fnt");
+   schriften.large = load_font("usablack.fnt");
+   schriften.arial8 = load_font("arial8.fnt");
+   schriften.smallsystem = load_font("msystem.fnt");
+   schriften.guifont = load_font("gui.fnt");
+   schriften.guicolfont = load_font("guicol.fnt");
+   schriften.monogui = load_font("monogui.fnt");
+   activefontsettings.markfont = schriften.guicolfont;
+   shrinkfont ( schriften.guifont, -1 );
+   shrinkfont ( schriften.guicolfont, -1 );
+   shrinkfont ( schriften.monogui, -1 );
+   pulldownfont = schriften.smallarial ;
 
-                if ( actprogressbar )
-                   actprogressbar->startgroup();
+   if ( actprogressbar ) actprogressbar->startgroup();
 
-                loadcursor();
+   loadcursor();
 
-                if ( actprogressbar )
-                   actprogressbar->startgroup();
-                loadguipictures();
-                loadallobjecttypes();
+   if ( actprogressbar ) actprogressbar->startgroup();
+   loadguipictures();
+   loadallobjecttypes();
 
-                if ( actprogressbar )
-                   actprogressbar->startgroup();
-                loadallvehicletypes();
+   if ( actprogressbar ) actprogressbar->startgroup();
+   loadallvehicletypes();
 
-                if ( actprogressbar )
-                   actprogressbar->startgroup();
-                loadallbuildingtypes();
+   if ( actprogressbar ) actprogressbar->startgroup();
+   loadallbuildingtypes();
 
-                if ( actprogressbar )
-                   actprogressbar->startgroup();
-                loadalltechnologies();
-
-
-                if ( actprogressbar )
-                   actprogressbar->startgroup();
-                loadstreets();
-
-                if ( actprogressbar )
-                   actprogressbar->startgroup();
-                loadallterraintypes();
-
-                if ( actprogressbar )
-                   actprogressbar->startgroup();
+   if ( actprogressbar ) actprogressbar->startgroup();
+   loadalltechnologies();
 
 
-                cursor.init();
-                selectbuildinggui.init( resolx, resoly );
-                selectobjectcontainergui.init( resolx, resoly );
-                selectvehiclecontainergui.init( resolx, resoly );
+   if ( actprogressbar ) actprogressbar->startgroup();
+   loadstreets();
 
-               #ifndef FREEMAPZOOM
-                idisplaymap.setup_map_mask ( );
-               #endif
+   if ( actprogressbar ) actprogressbar->startgroup();
+   loadallterraintypes();
 
-                if ( actprogressbar )
-                   actprogressbar->startgroup();
+   if ( actprogressbar ) actprogressbar->startgroup();
 
-                ladestartkarte();
-                // computeview();
 
-                if ( actprogressbar )
-                   actprogressbar->startgroup();
+   cursor.init();
+   selectbuildinggui.init( resolx, resoly );
+   selectobjectcontainergui.init( resolx, resoly );
+   selectvehiclecontainergui.init( resolx, resoly );
 
-                gui.starticonload();
+#ifndef FREEMAPZOOM
+   idisplaymap.setup_map_mask ( );
+#endif
 
-   #ifdef logging
+   if ( actprogressbar ) actprogressbar->startgroup();
+
+   ladestartkarte( emailgame, mapname, savegame );
+   // computeview();
+
+   if ( actprogressbar ) actprogressbar->startgroup();
+
+   gui.starticonload();
+
+#ifdef logging
    logtofile("nach gui.starticonload");
-       {
-           for ( int jj = 0; jj < 8; jj++ ) {
-           char tmpcbuf[200];
-           sprintf(tmpcbuf,"humanplayername; address is %x", actmap->humanplayername[jj]);
-           logtofile ( tmpcbuf );
-           }
-       }
-  #endif     
+   for ( int jj = 0; jj < 8; jj++ ) {
+     char tmpcbuf[200];
+     sprintf(tmpcbuf,"humanplayername; address is %x", 
+         actmap->humanplayername[jj]);
+     logtofile ( tmpcbuf );
+  }
+#endif     
 
-                if ( actprogressbar )
-                   actprogressbar->startgroup();
+   if ( actprogressbar ) actprogressbar->startgroup();
 
-                dashboard.allocmem ();
+   dashboard.allocmem ();
 
-   #ifdef logging
+#ifdef logging
    logtofile("vor mousecontrol");
-       {
-           for ( int jj = 0; jj < 8; jj++ ) {
-           char tmpcbuf[200];
-           sprintf(tmpcbuf,"humanplayername; address is %x", actmap->humanplayername[jj]);
-           logtofile ( tmpcbuf );
-           }
-       }
-  #endif     
-                mousecontrol = new cmousecontrol;
+   for ( int jj = 0; jj < 8; jj++ ) {
+      char tmpcbuf[200];
+      sprintf(tmpcbuf,"humanplayername; address is %x", 
+         actmap->humanplayername[jj]);
+      logtofile ( tmpcbuf );
+   }
+#endif     
+   mousecontrol = new cmousecontrol;
 
-                if ( actprogressbar ) {
-                   actprogressbar->end();
-                   try {
-                      tnfilestream strm ( progressbarfilename, 2 );
-                      actprogressbar->writetostream( &strm );
-                   } /* endtry */
-                   catch ( tfileerror ) {
-                   } /* endcatch */
-                   delete actprogressbar;
-                   actprogressbar = NULL;
-                }
+   if ( actprogressbar ) {
+      actprogressbar->end();
+      try {
+         tnfilestream strm ( progressbarfilename, 2 );
+         actprogressbar->writetostream( &strm );
+      } /* endtry */
+      catch ( tfileerror ) { } /* endcatch */
+      
+      delete actprogressbar;
+      actprogressbar = NULL;
+   }
 }
 
 void closemouse ( void )
@@ -3101,7 +3129,6 @@ class tnewkeyb {
                };
           };
 
-
 int main(int argc, char *argv[] )
 {  
    // dont_use_linear_framebuffer = 1;
@@ -3159,339 +3186,354 @@ int main(int argc, char *argv[] )
    #endif
 
 
-       int cntr = ticker;
+   int cntr = ticker;
+   char *emailgame = NULL, *mapname = NULL, *savegame = NULL;
+
+   for (i = 1; i<argc; i++ ) {
+      if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {
+#ifdef _DOS_
+      if ( strcmpi ( &argv[i][1], "V1" ) == 0 ) {
+         vesaerrorrecovery = 1; continue;
+      }
+
+      if ( strcmpi ( &argv[i][1], "SHOWMODES" ) == 0 ) {
+         showmodes = 1; continue;
+      }
+#else
+      // Added support for the -w and --window options
+      // (equivalent to -window), since -w and --window are more
+      // intuitive for *ux users (gnu option convention)
+      if ( strcmpi ( &argv[i][1], "WINDOW" ) == 0 ||
+          strcmpi ( &argv[i][1], "W" ) == 0 ||
+          strcmpi ( &argv[i][1], "-WINDOW" ) == 0 ) {
+        fullscreen = 0; continue;
+      }
+#endif
+      if ( strcmpi ( &argv[i][1], "NOCD" ) == 0 ) {
+         cdrom = 0; continue;
+      }
+
+      if ( strcmpi ( &argv[i][1], "8BITONLY" ) == 0 ) {
+         modenum24 = -2; continue;
+      }
+
+      if ( strnicmp ( &argv[i][1], "x=", 2 ) == 0 ) {
+           resolx = atoi ( &argv[i][3] ); continue;
+      }
+
+      if ( strnicmp ( &argv[i][1], "x:" ,2 ) == 0 ) {
+           resolx = atoi ( &argv[i][3] ); continue;
+      }
+
+      if ( strnicmp ( &argv[i][1], "y=" ,2 ) == 0 ) {
+           resoly = atoi ( &argv[i][3] ); continue;
+      }
+
+      if ( strnicmp ( &argv[i][1], "y:" ,2 ) == 0 ) {
+           resoly = atoi ( &argv[i][3] ); continue;
+      }
+
+      if ( strcmpi ( &argv[i][1], "emailgame" ) == 0 ||
+           strcmpi ( &argv[i][1], "eg" ) == 0 ) {
+         emailgame = argv[++i]; continue;
+      }
+
+      if ( strcmpi ( &argv[i][1], "savegame" ) == 0 ||
+            strcmpi( &argv[i][1], "sg" ) == 0 ) {
+         savegame = argv[++i]; continue;
+      }
+
+      if ( strcmpi ( &argv[i][1], "loadmap" ) == 0 ||
+            strcmpi( &argv[i][1], "lm" ) == 0 ) {
+         mapname = argv[++i]; continue;
+      }
+
+     if ( ( strcmpi ( &argv[i][1], "?" ) == 0 ) ||
+          ( strcmpi ( &argv[i][1], "h" ) == 0 ) ||
+          ( strcmpi ( &argv[i][1], "-help" ) == 0 ) ){
+        printf( " Parameters: \n"
+                "\t-h\t\tThis page\n"
+                "\t-eg file\n\t-emailgame file\tcontinue an email game\n"
+                "\t-sg file\n\t-savegame file\tcontinue a saved game\n"
+                "\t-lm file\n\t-loadmap file\tstart with a given map\n"
+                "\t-x:X\t\tSet horizontal resolution to X; default is 800 \n"
+                "\t-y:Y\t\tSet verticalal resolution to Y; default is 600 \n"
+#ifdef _DOS_
+                "\t-v1\t\tSet vesa error recovery level to 1 \n"
+                //"\t/nocd\t\tDisable music \n"
+                "\t-8bitonly\tDisable truecolor graphic mode \n"
+                "\t-showmodes\tDisplay list of available graphic modes \n" );
+#else
+                "\t-window\t\tDisable fullscreen mode \n" );
+#endif
+                //"\t/game:X\t\tSet gamepath to X \n\n");
+        exit (0);
+     }
+   } else {
+      printf ( "\nInvalid command line parameter: %s \n");
+      printf ( "Use /h to for help\n", argv[i] );
+      exit(1);
+   }
+  } /* endfor */
+
+
+   if ( resolx < 640 || resoly < 480 ) {
+      printf ( "Cannot run in resolution smaller than 640*480 !\n");
+      exit(1);
+   }
+
+#ifdef _DOS_
+   if ( showmodes ) {
+      showavailablemodes();
+      return 0;
+   }
+#endif
+
+#ifdef logging
+   logtofile ( "sg.cpp / main / allocating reserved memory ");
+#endif
+
+   mapborderpainter = &backgroundpict;
+   char truecoloravail;
+
+#ifdef logging
+   logtofile ( "sg.cpp / main / initmissions ");
+#endif
+   initmissions();
+
+   memset(exitmessage, 0, sizeof ( exitmessage ));
+   atexit ( dispmessageonexit );
+
+#ifdef logging
+   logtofile ( "sg.cpp / main / initmisc ");
+#endif
+   initmisc ();
 
 
 
-        for (i = 1; i<argc; i++ ) {
-           if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {
-             #ifdef _DOS_
-              if ( strcmpi ( &argv[i][1], "V1" ) == 0 ) 
-                 vesaerrorrecovery = 1;
-              else 
-             #endif
-                 if ( strcmpi ( &argv[i][1], "NOCD" ) == 0 )
-                    cdrom = 0;
-                 else
-                   #ifdef _DOS_
-                    if ( strcmpi ( &argv[i][1], "SHOWMODES" ) == 0 ) {
-                       showmodes = 1;
-                    } else
-                   #else
-                    if ( strcmpi ( &argv[i][1], "WINDOW" ) == 0 ) {
-                       fullscreen = 0;
-                    } else
-                   #endif
-                       if ( strcmpi ( &argv[i][1], "8BITONLY" ) == 0 )
-                          modenum24 = -2;
-                       else
-                          if ( strnicmp ( &argv[i][1], "x=", 2 ) == 0 ) {
-                             resolx = atoi ( &argv[i][3] );
-                          } else
-                          if ( strnicmp ( &argv[i][1], "x:" ,2 ) == 0 ) {
-                             resolx = atoi ( &argv[i][3] );
-                          } else
-                          if ( strnicmp ( &argv[i][1], "y=" ,2 ) == 0 ) {
-                             resoly = atoi ( &argv[i][3] );
-                          } else
-                          if ( strnicmp ( &argv[i][1], "y:" ,2 ) == 0 ) {
-                             resoly = atoi ( &argv[i][3] );
-                          }
-                          else 
-                             if ( ( strcmpi ( &argv[i][1], "?" ) == 0 ) ||
-                                  ( strcmpi ( &argv[i][1], "h" ) == 0 ) ||
-                                  ( strcmpi ( &argv[i][1], "-help" ) == 0 ) ){
-                                printf( " Parameters: \n"
-                                        "     -h          This page\n"
-                                       #ifdef _DOS_
-                                        "     -v1         Set vesa error recovery level to 1 \n"
-                                        // "     /nocd       Disable music \n"
-                                        "     -8bitonly   Disable truecolor graphic mode \n"
-                                       #endif
-                                        "     -x:X        Set horizontal resolution to X; default is 800 \n"
-                                        "     -y:Y        Set verticalal resolution to Y; default is 600 \n"
-                                       #ifdef _DOS_
-                                        "     -showmodes  Display list of available graphic modes \n" );
-                                       #else
-                                        "     -window Disable fullscreen mode \n" );
-                                       #endif
+#ifdef logging
+   logtofile ( "sg.cpp / main / initializing containerstream ");
+#endif
 
-                                        //"     /game:X     Set gamepath to X \n\n");
-                                exit (0);
-             
-                             } else {
-                                 printf ( "\nInvalid command line parameter: %s \nUse /h to for help\n", argv[i] );
-                                 exit(1);
-                             }
-           } else {
-               printf ( "\nInvalid command line parameter: %s \n", argv[i] );
-               exit(1);
-           }
-        } /* endfor */
+   try {
+     opencontainer ( "*.con" );
+   } 
+   catch ( tfileerror err ) {
+      displaymessage ( 
+         "a fatal error occured while mounting the container files \n", 2 );
+   } 
+   catch ( ... ) {
+      displaymessage ( 
+         "loading of game failed during pre graphic initializing", 2 );
+   }
 
 
-       if ( resolx < 640 || resoly < 480 ) {
-          printf ( "Cannot run in resolution smaller than 640*480 !\n");
-          exit(1);
-       }
-      #ifdef _DOS_
-       if ( showmodes ) {
-           showavailablemodes();
-           return 0;
-       }
-      #endif
+   try {
+      tnfilestream strm ( "palette.pal", 1 );
+      int a;
+      strm.readdata2 ( a );
+   }
+   catch ( tfileerror err ) {
+     displaymessage ( " unable to access palette.pal\nMake sure the data file 'main.con' is in the active directory !\nIf you don't have a file 'main.con' , get the data package from www.asc-hq.org\n ", 2 );
+   } 
 
-        #ifdef logging
-        logtofile ( "sg.cpp / main / allocating reserved memory ");
-        #endif
-
-        mapborderpainter = &backgroundpict;
-
-        char          truecoloravail;
-
-        #ifdef logging
-        logtofile ( "sg.cpp / main / initmissions ");
-        #endif
-        initmissions();
-
-        memset(exitmessage, 0, sizeof ( exitmessage ));
-        atexit ( dispmessageonexit );
-
-        #ifdef logging
-        logtofile ( "sg.cpp / main / initmisc ");
-        #endif
-        initmisc ();
+   try {
+      readgameoptions();
+      check_bi3_dir ();
+   } 
+   catch ( tfileerror err ) {
+      displaymessage ( "unable to access file %s \n", 2, err.filename );
+   }
+   catch ( ... ) {
+      displaymessage ( 
+         "loading of game failed during pre graphic initializing", 2 );
+   }
 
 
 
-        #ifdef logging
-        logtofile ( "sg.cpp / main / initializing containerstream ");
-        #endif
+#ifdef logging
+   logtofile ( "sg.cpp / main / searching for 8 bit graphic mode ");
+#endif
 
-        try {
-           opencontainer ( "*.con" );
-        } /* endtry */
-        catch ( tfileerror err ) {
-           displaymessage ( "a fatal error occured while mounting the container files \n", 2 );
-        } /* endcatch */
-        catch ( ... ) {
-           displaymessage ( "loading of game failed during pre graphic initializing", 2 );
-        } /* endcatch */
+   modenum8 = initgraphics ( resolx, resoly, 8 );
 
-        try {
-           tnfilestream strm ( "palette.pal", 1 );
-           int a;
-           strm.readdata2 ( a );
-        } /* endtry */
-        catch ( tfileerror err ) {
-           displaymessage ( " unable to access palette.pal\nMake sure the data file 'main.con' is in the active directory !\nIf you don't have a file 'main.con' , get the data package from www.asc-hq.org\n ", 2 );
-        } /* endcatch */
+   //Ok, everything working now...
+   // fprintf( stderr, "About to initSoundList()" );
+   initSoundList();
+   // fprintf( stderr, "Done it" );
+   // sound.boom->play();
+   // fprintf( stderr, "And played a sound!" );
 
-        try {
-           readgameoptions();
-           check_bi3_dir ();
-        } /* endtry */
-        catch ( tfileerror err ) {
-           displaymessage ( "unable to access file %s \n", 2, err.filename );
-        } /* endcatch */
-        catch ( ... ) {
-           displaymessage ( "loading of game failed during pre graphic initializing", 2 );
-        } /* endcatch */
- 
+   if ( modenum8 > 0 ) {
+      atexit ( returntotextmode );
 
-
-        #ifdef logging
-        logtofile ( "sg.cpp / main / searching for 8 bit graphic mode ");
-        #endif
-
-        modenum8 = initgraphics ( resolx, resoly, 8 );
-
-        //Ok, everything working now...
-        // fprintf( stderr, "About to initSoundList()" );
-        initSoundList();
-        // fprintf( stderr, "Done it" );
-        // sound.boom->play();
-        // fprintf( stderr, "And played a sound!" );
-
-        if ( modenum8 > 0 ) {
-           atexit ( returntotextmode );
+#ifdef HEXAGON
+      initspfst( -1, -1 ); // 6, 16 
+#else
+      initspfst();
+#endif
    
-           #ifdef HEXAGON
-           initspfst( -1, -1 ); // 6, 16 
-           #else
-           initspfst();
-           #endif
+      gui.init ( resolx, resoly );
+      virtualscreenbuf.init();
+
+      tnewkeyb nkb;
+
+      // modenum24 is -2 when the command line parameter /8bitonly is used
+      if ( modenum24 == -1 ) modenum24 = initgraphics ( 640, 480,32 );
+              
+      if ( modenum24 > 0 ) {
+
+         char pcx[300], jpg[300];
+         int md = getbestpictname ( "helisun", pcx, jpg );
    
-           gui.init ( resolx, resoly );
+         try {
+            if ( md & 1 ) { 
+               tnfilestream stream ( pcx , 1 );
+               loadpcxxy ( &stream, 0, 0 );
+            } else {
+               tnfilestream stream ( jpg, 1 );
+               read_JPEG_file ( &stream );
+            }
+
+            loaddata( resolx, resoly, emailgame, mapname, savegame );
+         } 
+         catch ( tfileerror err ) {
+            displaymessage ( "unable to access file %s \n", 2, err.filename );
+         } 
+         catch ( toutofmem err ) {
+            displaymessage ( 
+               "loading of game failed due to insufficient memory", 2 );
+         } 
+         catch ( terror err ) {
+            displaymessage ( "loading of game failed", 2 );
+         }
+
+         reinitgraphics( modenum8 );
+      
+      } else {
+         truecoloravail = false;
+
+         try {
+            tnfilestream stream ( "logo640.pcx", 1 );
+            loadpcxxy( &stream, 
+               (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 ); 
+#ifdef logging
+            logtofile ( "sg.cpp / main / loading data ");
+#endif
+            loaddata( resolx, resoly, emailgame, mapname, savegame );
+         } 
+         catch ( tfileerror err ) {
+            displaymessage ( "unable to access file %s \n", 2, err.filename );
+         }
+         catch ( toutofmem err ) {
+            displaymessage ( 
+               "loading of game failed due to insufficient memory", 2 );
+         }
+         catch ( terror err ) {
+            displaymessage ( "loading of game failed", 2 );
+         } 
    
-           virtualscreenbuf.init();
+      } /* endif */
 
-           tnewkeyb nkb;
-
-           if ( modenum24 == -1 )      // modenum24 is -2 when the command line parameter /8bitonly is used
-              modenum24 = initgraphics ( 640, 480,32 );
-           
-           if ( modenum24 > 0 ) {
-
-              char pcx[300];
-              char jpg[300];
-              int md = getbestpictname ( "helisun", pcx, jpg );
-
-              try {
-
-                  if ( md & 1 ) {
-                     tnfilestream stream ( pcx , 1 );
-                     loadpcxxy ( &stream, 0, 0 );
-                  } else {
-                     tnfilestream stream ( jpg, 1 );
-                     read_JPEG_file ( &stream );
-                  }
-
-                 #ifdef logging
-                 logtofile ( "sg.cpp / main / loading data ");
-                 #endif
+#ifdef logging
+      logtofile ( "sg.cpp / main / initializing keyboard handler ");
+      for ( int jj = 0; jj < 8; jj++ ) {
+         char tmpcbuf[200];
+         sprintf( tmpcbuf, "humanplayername; address is %x", 
+            actmap->humanplayername[jj]);
+         logtofile ( tmpcbuf );
+      }
+#endif
                  
-                 loaddata( resolx, resoly );
-                 // startcdaudio ( argv[0][0] );
-              } /* endtry */
+      if( initmousehandler( icons.mousepointer )) 
+         displaymessage("mouse required", 2 );
+      
+      atexit ( closemouse );
 
-              catch ( tfileerror err ) {
-                 displaymessage ( "unable to access file %s \n", 2, err.filename );
-              } /* endcatch */
-              catch ( toutofmem err ) {
-                 displaymessage ( "loading of game failed due to insufficient memory", 2 );
-              } /* endcatch */
-              catch ( terror err ) {
-                 displaymessage ( "loading of game failed", 2 );
-              } /* endcatch */
+      setvgapalette256(pal);
+      xlatpictgraytable = 
+         (ppixelxlattable) asc_malloc( sizeof(*xlatpictgraytable) );
+      generategrayxlattable( xlatpictgraytable, 160, 16 ); 
+      (*xlatpictgraytable)[255] = 255; 
 
-              reinitgraphics( modenum8 );
-           } else {
-              truecoloravail = false;
+#ifdef logging
+      logtofile ( "sg.cpp / main / initializing mouse handler ");
+#endif
+      addmouseproc ( &mousescrollproc );
 
-              try {
-                 {
-                    tnfilestream stream ( "logo640.pcx", 1 );
-                    loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 ); 
-                 } 
-                 #ifdef logging
-                 logtofile ( "sg.cpp / main / loading data ");
-                 #endif
-                 loaddata( resolx, resoly );
-                 
-                 // startcdaudio ( argv[0][0] );
-              } /* endtry */
+      loadtexture();
 
-              catch ( tfileerror err ) {
-                 displaymessage ( "unable to access file %s \n", 2, err.filename );
-              } /* endcatch */
-              catch ( toutofmem err ) {
-                 displaymessage ( "loading of game failed due to insufficient memory", 2 );
-              } /* endcatch */
-              catch ( terror err ) {
-                 displaymessage ( "loading of game failed", 2 );
-              } /* endcatch */
-   
-           } /* endif */
+      onlinehelp = new tsgonlinemousehelp;
+      onlinehelpwind = new tsgonlinemousehelpwind;
 
-           #ifdef logging
-           logtofile ( "sg.cpp / main / initializing keyboard handler ");
-           {
-               for ( int jj = 0; jj < 8; jj++ ) {
-                  char tmpcbuf[200];
-                  sprintf(tmpcbuf,"humanplayername; address is %x", actmap->humanplayername[jj]);
-                  logtofile ( tmpcbuf );
-               }
-           }    
-           #endif
-                 
-           if ( initmousehandler( icons.mousepointer )) 
-              displaymessage("mouse required", 2 );
+      pd.init();
 
-           atexit ( closemouse );
+      memset( keyinput, 0, sizeof(keyinput));
+      keyinputptr = 0;
+      abortgame = 0;
+      
+      do {
+         try {
+            if ( !actmap || actmap->xsize <= 0 || actmap->ysize <= 0 ) {
+               runmainmenu();
+            } else {
+               if ( actmap->actplayer == -1 ) next_turn();
 
-           setvgapalette256(pal);
-           xlatpictgraytable = (ppixelxlattable) asc_malloc( sizeof(*xlatpictgraytable) );
-           generategrayxlattable(xlatpictgraytable,160,16); 
-           (*xlatpictgraytable)[255] = 255; 
+               backgroundpict.paint(); 
+#ifdef logging
+               logtofile ( "sg.cpp / main / vor displaymap ");
+#endif
 
-           #ifdef logging
-           logtofile ( "sg.cpp / main / initializing mouse handler ");
-           #endif
-           addmouseproc ( &mousescrollproc );
+               displaymap();
+#ifdef logging
+               logtofile ( "sg.cpp / main / nach displaymap; vor cursor.show ");
+#endif
 
-           loadtexture();
+               cursor.show();
+#ifdef logging
+               logtofile ( "sg.cpp / main / vor painticons ");
+#endif
 
-           onlinehelp = new tsgonlinemousehelp;
-           onlinehelpwind = new tsgonlinemousehelpwind;
+               moveparams.movestatus = 0; 
 
-           pd.init();
+               actgui->painticons();
+               mousevisible(true); 
 
-           memset( keyinput, 0, sizeof(keyinput));
-           keyinputptr = 0;
-           abortgame = 0;
-           do {
-              try {
-                 if ( !actmap || actmap->xsize <= 0 || actmap->ysize <= 0 ) {
-                    runmainmenu();
-                 } else {
-                    if ( actmap->actplayer == -1 )
-                       next_turn();
+               dashboard.x = 0xffff; 
+               dashboard.y = 0xffff; 
+#ifdef logging
+               logtofile ( "sg.cpp / main / starting mainloop ");
+#endif
 
-                    backgroundpict.paint(); 
+               static int displayed = 0;
+               if ( !displayed ) 
+                  displaymessage2( "time for startup: %d * 1/100 sec", 
+                     ticker-cntr );
+               displayed = 1;
+                  
+               mainloop();
+               mousevisible ( false );
+            }
+         } /* endtry */
+         catch ( tnomaploaded ) { } /* endcatch */
+      } while ( abortgame == 0);
 
-                    #ifdef logging
-                    logtofile ( "sg.cpp / main / vor displaymap ");
-                    #endif
+      closegraphics();
+      writegameoptions ();
 
-                    displaymap();
-                    #ifdef logging
-                    logtofile ( "sg.cpp / main / nach displaymap ; vor cursor.show ");
-                    #endif
+      delete onlinehelp;
+      onlinehelp = NULL;
+      
+      delete onlinehelpwind;
+      onlinehelpwind = NULL;
+   } // if 8 bit initialization successfull
 
-                    cursor.show();
-                    #ifdef logging
-                    logtofile ( "sg.cpp / main / vor painticons ");
-                    #endif
-
-                    moveparams.movestatus = 0; 
-         
-                    actgui->painticons();
-   
-                    mousevisible(true); 
-                    dashboard.x = 0xffff; 
-                    dashboard.y = 0xffff; 
-                    #ifdef logging
-                    logtofile ( "sg.cpp / main / starting mainloop ");
-                    #endif
-                    static int displayed = 0;
-                    if ( !displayed ) 
-                       displaymessage2( "time for startup: %d * 1/100 sec", ticker-cntr );
-                    displayed = 1;
-                    mainloop();
-                    mousevisible ( false );
-                 }
-              } /* endtry */
-              catch ( tnomaploaded ) {
-              } /* endcatch */
-           } while ( abortgame == 0);
-
-           closegraphics();
-
-           writegameoptions ();
-
-           delete onlinehelp;
-           onlinehelp = NULL;
-           delete onlinehelpwind;
-           onlinehelpwind = NULL;
-        } // if 8 bit initialization successfull
-
-        #ifdef logging
-        logtofile ( "sg.cpp / main / returning ");
-        #endif
-        #ifdef MEMCHK
-        verifyallblocks();
-        #endif
-        return(0);
+#ifdef logging
+   logtofile ( "sg.cpp / main / returning ");
+#endif
+#ifdef MEMCHK
+   verifyallblocks();
+#endif
+   return(0);
 }
 
