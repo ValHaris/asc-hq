@@ -176,7 +176,8 @@ const char*  buildingFunctionTags[cbuildingfunctionnum]  =
         "NetToBuildingEntry",
         "NetToSelf",
         "NetToBorder",
-        "SpecialBiForest" };
+        "SpecialBiForest",
+        "AutoBorder" };
 
 const char* AItasks[AiParameter::taskNum] = { "nothing",
                          "tactics",

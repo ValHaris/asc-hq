@@ -1,4 +1,4 @@
-//     $Id: strtmesg.cpp,v 1.135 2002-11-02 14:13:18 mbickel Exp $
+//     $Id: strtmesg.cpp,v 1.136 2002-11-05 09:05:17 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -22,7 +22,7 @@
 
 
 // These strings should be the same as the release tags in CVS !
-const char* asc_release="ASC1.11.0.10";
+const char* asc_release="ASC1.11.0.13";
 
 #include <stdio.h>
 #include "strtmesg.h"

@@ -787,6 +787,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
 
    pc.addInteger( "Armor", armor );
    pc.addInteger("View", view );
+
    if ( view > 255 )
       view = 255;
 
@@ -823,6 +824,10 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    pc.addInteger( "FuelConsumption", fuelConsumption );
    pc.addTagInteger( "Abilities", functions, cvehiclefunctionsnum, vehicleAbilities );
    pc.addIntegerArray ( "Movement", movement );
+   for ( vector<int>::iterator i = movement.begin(); i != movement.end(); i++ )
+      if ( *i > 255 )
+         *i = 255;
+          
    pc.addNamedInteger ( "Category", movemalustyp, cmovemalitypenum, unitCategoryTags );
    pc.addInteger("MaxSurvivableStorm", maxwindspeedonwater );
    pc.addInteger("ResourceDrillingRange", digrange );

@@ -712,6 +712,20 @@ void         calculateobject( int       x,
       }
    }
 
+   if ( obj->netBehaviour & ObjectType::AutoBorder ) {
+      for ( int dir = 0; dir < sidenum; dir++) {
+         int a = x;
+         int b = y;
+         getnextfield( a, b, dir );
+         pfield fld2 = actmap->getField(a,b);
+         if ( !fld2 ) {
+            // if the field opposite of the border field is connected to, make a straight line out of the map.
+            if ( c & (1 << ((dir+sidenum/2) % sidenum )))
+               c |= 1 << dir;
+         }
+      }
+   }
+
    if ( oi2 ) {
      oi2->setdir ( c );
      fld->setparams();

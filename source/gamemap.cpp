@@ -708,10 +708,22 @@ pfield  tmap :: getField(const MapCoordinate& pos )
 
 bool tmap :: isResourceGlobal ( int resource )
 {
-   if ( resource != 1 && !(resource == 2 && getgameparameter(cgp_globalfuel)==0)  &&   _resourcemode == 1 )
-      return true;
-   else
+   if ( _resourcemode == 1 ) { // BI-Mode
+      if ( resource == 1 ) // material
+         return false;
+      else
+         return true;
+   } else {
       return false;
+      /*
+      if ( resource == 0 )
+         return getgameparameter(cgp_globalenergy);
+      if ( resource == 1 )
+         return false;
+      if ( resource == 2 )
+         return getgameparameter(cgp_globalfuel);
+      */
+   }
 }
 
 int tmap :: getgameparameter ( int num )
@@ -2088,7 +2100,7 @@ const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "building armor factor (percent)",
                                                       "max building damage repair / turn",
                                                       "building repair cost increase (percent)",
-                                                      "fuel globally available (BI resource mode)",
+                                                      "fuel globally available",
                                                       "maximum experience that can be gained by training",
                                                       "initial map visibility",
                                                       "attack power (EXPERIMENTAL!)",

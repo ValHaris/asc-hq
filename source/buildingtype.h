@@ -19,8 +19,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef buildingtype_h_included
- #define buildingtype_h_included
+#ifndef buildingtypeH
+ #define buildingtypeH
 
  #include "typen.h"
  #include "containerbase.h"

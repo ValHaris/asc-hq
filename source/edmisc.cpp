@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.89 2002-11-01 20:44:53 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.90 2002-11-05 09:05:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.89  2002/11/01 20:44:53  mbickel
+//      Added function to specify which units can be build by other units
+//
 //     Revision 1.88  2002/10/30 12:10:57  mbickel
 //      VehicleTypes can now be assigned a recommended AIJob
 //
@@ -2357,7 +2360,7 @@ void         BuildingValues::init(void)
    else b = false;
 
    addbutton("Energy-Max-Plus",230,50,430,70,2,1,13,b);
-   addeingabe(13,&mplus.energy,0,gbde.typ->maxplus.energy);
+   addeingabe(13,&mplus.energy,0,gbde.typ->maxplus.material);
 
    if ( gbde.typ->special & (cgconventionelpowerplantb | cgminingstationb )) b = true;
    else b = false;

@@ -3,9 +3,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.136 2002-11-01 20:44:52 mbickel Exp $
+//     $Id: controls.cpp,v 1.137 2002-11-05 09:05:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.136  2002/11/01 20:44:52  mbickel
+//      Added function to specify which units can be build by other units
+//
 //     Revision 1.135  2002/10/12 17:28:03  mbickel
 //      Fixed "enemy unit loaded" bug.
 //      Changed map format
@@ -2304,7 +2307,7 @@ int   tprocessminingfields :: setup ( pbuilding bld, int& mm, int cm, int& mf, i
    materialgot = 0;
    fuelgot = 0;
 
-   initsearch( bld->getEntry(), maxminingrange, 0 );
+   initsearch( bld->getEntry(), 0, maxminingrange );
    startsearch();
 
    mm = materialgot * bld->typ->efficiencymaterial / 1024;

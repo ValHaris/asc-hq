@@ -2,9 +2,12 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.84 2002-10-02 20:21:00 mbickel Exp $
+//     $Id: building.cpp,v 1.85 2002-11-05 09:05:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.84  2002/10/02 20:21:00  mbickel
+//      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
+//
 //     Revision 1.83  2002/10/01 09:23:41  mbickel
 //      Fixed many bugs
 //      Added inheritance to text files
@@ -4571,8 +4574,9 @@ ccontainer_b :: cconventionelpowerplant_subwindow :: cconventionelpowerplant_sub
 
 int  ccontainer_b :: cconventionelpowerplant_subwindow :: subwin_available ( void )
 {
-   if ( ( hostcontainer->getspecfunc ( mbuilding ) & cgconventionelpowerplantb ) && ( cc_b->building->maxplus.energy ))
-      cbuildingsubwindow :: subwin_available ( );
+   if ( actmap->_resourcemode != 1 )
+      if ( ( hostcontainer->getspecfunc ( mbuilding ) & cgconventionelpowerplantb ) && ( cc_b->building->maxplus.energy ))
+         cbuildingsubwindow :: subwin_available ( );
 
    if ( next )
       next->subwin_available ();
@@ -4838,8 +4842,9 @@ ccontainer_b :: cwindpowerplant_subwindow :: cwindpowerplant_subwindow ( void )
 
 int  ccontainer_b :: cwindpowerplant_subwindow :: subwin_available ( void )
 {
-   if ( hostcontainer->getspecfunc ( mbuilding ) & cgwindkraftwerkb )
-      cbuildingsubwindow :: subwin_available ( );
+   if ( actmap->_resourcemode != 1 )
+      if ( hostcontainer->getspecfunc ( mbuilding ) & cgwindkraftwerkb )
+         cbuildingsubwindow :: subwin_available ( );
    if ( next )
       next->subwin_available ();
 
@@ -4922,8 +4927,9 @@ ccontainer_b :: csolarpowerplant_subwindow :: csolarpowerplant_subwindow ( void 
 
 int  ccontainer_b :: csolarpowerplant_subwindow :: subwin_available ( void )
 {
-   if ( hostcontainer->getspecfunc ( mbuilding ) & cgsolarkraftwerkb )
-      cbuildingsubwindow :: subwin_available ( );
+   if ( actmap->_resourcemode != 1 )
+      if ( hostcontainer->getspecfunc ( mbuilding ) & cgsolarkraftwerkb )
+         cbuildingsubwindow :: subwin_available ( );
    if ( next )
       next->subwin_available ();
 
@@ -5821,9 +5827,9 @@ ccontainer_b :: cminingstation_subwindow :: cminingstation_subwindow ( void )
 
 int  ccontainer_b :: cminingstation_subwindow :: subwin_available ( void )
 {
-
-   if ( hostcontainer->getspecfunc ( mbuilding ) & cgminingstationb )
-      cbuildingsubwindow :: subwin_available ( );
+   if ( actmap->_resourcemode != 1 )
+      if ( hostcontainer->getspecfunc ( mbuilding ) & cgminingstationb )
+         cbuildingsubwindow :: subwin_available ( );
 
 
    if ( next )
@@ -6140,8 +6146,9 @@ ccontainer_b :: cmineralresources_subwindow :: cmineralresources_subwindow ( voi
 
 int  ccontainer_b :: cmineralresources_subwindow :: subwin_available ( void )
 {
-   if ( hostcontainer->getspecfunc ( mbuilding ) & cgminingstationb )
-      cbuildingsubwindow :: subwin_available ( );
+   if ( actmap->_resourcemode != 1 )
+      if ( hostcontainer->getspecfunc ( mbuilding ) & cgminingstationb )
+         cbuildingsubwindow :: subwin_available ( );
 
    if ( next )
       next->subwin_available ();

@@ -88,8 +88,8 @@
      //! The name of the object
      ASCString name;
 
-     static const int netBehaviourNum = 5;
-     enum NetBehaviour { NetToBuildings = 1, NetToBuildingEntry = 2, NetToSelf = 4, NetToBorder = 8, SpecialForest = 0x10 };
+     static const int netBehaviourNum = 6;
+     enum NetBehaviour { NetToBuildings = 1, NetToBuildingEntry = 2, NetToSelf = 4, NetToBorder = 8, SpecialForest = 0x10, AutoBorder = 0x20 };
 
      //! specifies how the object is going to connect to other things
      int netBehaviour;
