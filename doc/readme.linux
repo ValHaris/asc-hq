@@ -1,0 +1,61 @@
+The linux version of ASC is a direct port of the DOS version. It does not 
+have any Unix specific behaviour.
+
+To run ASC, ensure you're cded into the directory containing main.con and 
+type ./asc
+All savegames, maps and configuration files will be stored in this directory.
+
+There is help available on setting up email games under the help menu 
+available by moving your mouse to the top of the screen/window and
+clicking on help on the right hand side when the menu bar appears.
+
+Troubleshooting:
+
+1)  ASC complains it can find palette.pal
+    This happens if main.con are not in your current directory when you run asc.  
+    cd to the asc directory ( containing main.con ) and try again.
+
+2)  ASC complains it can't load libSDL-1.0.so.0
+    This happens if you haven't got version 1.0.2 or later of SDL installed
+    on your system.  Get it from :
+
+    http://www.devolution.com/~slouken/SDL/cvs/SDL-1.0.tar.gz
+
+    unpack it, and cd into it.  ./autogen.sh ; make
+    then become root and make install.
+
+3)  I have installed SDL, but ASC still can't load libSDL-1.0.so.0
+    You probably don't have /usr/local/lib in your LD_LIBRARY_PATH or
+    /etc/ld.so.conf.  The quick solution is to incant:
+    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+    or for csh derivatives:
+    setenv LD_LIBRARY_PATH /usr/local/lib:$LD_LIBRARY_PATH
+    a more permanent alternative is to add the line:
+    /usr/local/lib
+    to /etc/ld.so.conf (you must be root to do this).
+
+4)  ASC complains that it can't find SDL_EnableKeyRepeat
+    You're running an old version of SDL.  See fixes in 2 and 3 above.
+
+5)  ASC doesn't run and/or it crashes my X server.
+    try running it with the -window flag on the command line.
+    
+6)  ASC runs in fullscreen, but there is a big black border arount the
+    area of the screen that is beeing used:
+    You must add the resolution 800*600 to your xf86config, which is the 
+    resolution ASC uses by default.
+    Alternatively, you can run ASC in window mode ( -window on the command
+    line), or change the resolution it uses ( -x and -y command line options)
+    Type ASC --help for a summary of the command line parameters
+
+Some notes:
+ - to run under X in fullscreen mode you need DGA. You may need to upgrade
+   to the latest Xfree86 to use it.
+ - if it does not work, try running ASC as root. You may need write access
+   to /dev/mem .
+   The fullscreen code of SDL was recently enhanced to enable fullscreen
+   without beeing root. This runs on my system.
+ - frame buffer console usage is untested
+
+Martin Bickel
+martin@asc-hq.org
