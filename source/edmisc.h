@@ -1,6 +1,15 @@
-//     $Id: edmisc.h,v 1.7 2000-04-27 16:25:22 mbickel Exp $
+//     $Id: edmisc.h,v 1.8 2000-05-05 21:15:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/04/27 16:25:22  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.6  2000/03/16 14:06:56  mbickel
 //      Added unitset transformation to the mapeditor
 //
@@ -246,17 +255,16 @@ extern void        pdsetup(void);
 
 extern void cdplayer( void );
 
+extern int rightmousebox(void);
+extern int leftmousebox(void);
+extern void selectunitsetfilter ( void );
+extern void movebuilding();
+extern void unitsettransformation( void );
+extern void selectgraphicset(void);
+
 extern void placebodentyp(void);
 extern void placeunit(void);
 extern void placeobject(void);
 extern void placemine(void);
 extern void putactthing ( void );
 extern int isUnitNotFiltered ( int id ) ;
-
-extern int rightmousebox(void);
-extern int leftmousebox(void);
-extern void selectunitsetfilter ( void );
-extern void movebuilding();     
-extern void unitsettransformation( void );
-extern void selectgraphicset(void);
-

@@ -1,6 +1,14 @@
-//     $Id: edgen.cpp,v 1.2 1999-11-16 03:41:31 tmwilson Exp $
+//     $Id: edgen.cpp,v 1.3 2000-05-05 21:15:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:31  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -199,7 +207,7 @@ void         tmapgenerator::init(void)
 
 void tmapgenerator::montlayer(byte layer)
 {
-   register i,j;
+   int i,j;
    boolean found;
  
    if ( overwritecolorcount == 0 ){
@@ -266,7 +274,7 @@ void membar(word x1 ,word y1 ,word x2 ,word y2, word color )
 
 void tmapgenerator::showmontlayer(word sx, word sy, word barsize)
 {
-   register i;
+   int i;
 
    word prevx,prevy;
  
@@ -306,7 +314,7 @@ void tmapgenerator::showmontlayer(word sx, word sy, word barsize)
    } */
 
    
-   register x,y;
+   int x,y;
 
    x = sx;
    y = sy;
@@ -861,12 +869,12 @@ int         mapgenerator(void)
    return 0;
 } 
 
-word random(word max)
+int random( int max)
 {  
    if (max <= 1 ) return 0;
-   word div = RAND_MAX;
+   int div = RAND_MAX;
    div /= (max -1);
-   word r = rand();
+   int r = rand();
    return r / (div + 1);
 }
 
@@ -1124,7 +1132,4 @@ void tplasma::generateplasma(boolean resettile)
 
 
    //showmemory();
-}  
-
-
-
+}

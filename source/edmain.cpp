@@ -1,6 +1,15 @@
-//     $Id: edmain.cpp,v 1.9 2000-04-27 16:25:21 mbickel Exp $
+//     $Id: edmain.cpp,v 1.10 2000-05-05 21:15:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/04/27 16:25:21  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.8  2000/03/16 14:06:54  mbickel
 //      Added unitset transformation to the mapeditor
 //
@@ -56,7 +65,7 @@
     Boston, MA  02111-1307  USA
 */
 
-#include "edmisc.h";                                              
+#include "edmisc.h"
 #include "loadpcx.h"
 #include "timer.h"
 #include "loadbi3.h"
@@ -270,8 +279,10 @@ const char* progressbarfilename = "progress.8me";
   void* asc_malloc ( size_t size )
   {
      void* tmp = malloc ( size );
+    #ifdef _DOS_
      if ( tmp == NULL ) 
         new_new_handler();
+    #endif
      return tmp;
   }
 
@@ -762,6 +773,7 @@ void closesvgamode( void )
 
 void showmemory ( void )
 {
+/*
    npush ( activefontsettings );
    activefontsettings.length = 99;
    activefontsettings.background = 0;
@@ -781,7 +793,8 @@ void showmemory ( void )
       setinvisiblemouserectangle ( -1, -1, -1, -1 );
 
    npop  ( activefontsettings );
-};
+   */
+}
 
 //* õS Main-Program
 
@@ -818,9 +831,11 @@ int main(int argc, char *argv[] )
 
       for (i = 1; i<argc; i++ ) {
            if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {
+            #ifdef _DOS_
               if ( strcmpi ( &argv[i][1], "V1" ) == 0 ) 
                  vesaerrorrecovery = 1;
               else
+            #endif
               if ( strnicmp ( &argv[i][1], "x=", 2 ) == 0 ) {
                  resolx = atoi ( &argv[i][3] );
               } else

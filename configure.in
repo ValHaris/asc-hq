@@ -8,7 +8,6 @@ AM_INIT_AUTOMAKE(asc,0.1)
 dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
-CXXFLAGS="$CXXFLAGS -O0 -I./ -DHEXAGON -Dsgmain -DFREEMAPZOOM -funsigned-char -I/usr/lib/SDL/include -D_NOASM_ -DNEWKEYB"
 AC_PROG_RANLIB
 dnl Checks for libraries.
 
@@ -44,4 +43,4 @@ AC_CHECK_FUNCS(stricmp)
 AC_CHECK_FUNCS(kbhit)
 
 
-AC_OUTPUT(Makefile source/Makefile source/docs/Makefile source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile source/libs/Makefile )
+AC_OUTPUT(Makefile source/Makefile source/docs/Makefile source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile source/libs/Makefile source/tools/Makefile source/tools/linux/Makefile source/mapedit/Makefile )

@@ -10,7 +10,7 @@
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
 
-####### kdevelop will overwrite this part!!! (begin)##########
+######################################################################
 
 
 SHELL = @SHELL@
@@ -40,7 +40,7 @@ pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
-top_builddir = ..
+top_builddir = ../../..
 
 ACLOCAL = @ACLOCAL@
 AUTOCONF = @AUTOCONF@
@@ -66,58 +66,50 @@ PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 VERSION = @VERSION@
 
-####### kdevelop will overwrite this part!!! (end)############
-bin_PROGRAMS = asc
-asc_SOURCES = unitctrl.cpp soundList.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp pd.cpp palette.cpp newfont.cpp network.cpp missions.cpp misc.cpp loadpcxc.cpp loadjpg.cpp loaders.cpp loadbi3.cpp gui.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp building.cpp basestrm.cpp basegfx.cpp attack.cpp 
-asc_LDADD = ./sdl/libsdl.a ./libs/triangul/libtriangul.a -lSDL -lpthread -lbz2
+CXXFLAGS = @CXXFLAGS@ -Usgmain -Dconverter
 
-SUBDIRS = tools docs sdl libs mapedit
+bin_PROGRAMS = demount ascmount
 
-EXTRA_DIST = attack.cpp basegfx.cpp basestrm.cpp building.cpp controls.cpp dialog.cpp dlg_box.cpp gamedlg.cpp gui.cpp loadbi3.cpp loaders.cpp loadjpg.cpp loadpcxc.cpp misc.cpp missions.cpp network.cpp newfont.cpp palette.cpp pd.cpp sg.cpp sgstream.cpp spfst.cpp stack.cpp strtmesg.cpp typen.cpp weather.cpp attack.h basegfx.h basegui.h basestrm.h basetemp.h building.h controls.h dialog.h dlg_box.h gamedlg.h global.h gui.h keybp.h loadbi3.h loaders.h loadjpg.h loadpcx.h misc.h missions.h mousehnd.h network.h newfont.h palette.h pd.h sg.h sgstream.h spfldutl.h spfst.h stack.h strtmesg.h timer.h typen.h weather.h soundList.cpp soundList.h unitctrl.cpp unitctrl.h 
-CXXFLAGS = -Dsgmain -I./ -DHEXAGON -DFREEMAPZOOM -funsigned-char -D_NOASM_ -DNEWKEYB
+demount_SOURCES = demount.cpp basestrm.cpp misc.cpp
+
+ascmount_SOURCES = mount.cpp basestrm.cpp misc.cpp
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_HEADER = ../config.h
+CONFIG_HEADER = ../../../config.h
 CONFIG_CLEAN_FILES = 
 PROGRAMS =  $(bin_PROGRAMS)
 
 
-DEFS = @DEFS@ -I. -I$(srcdir) -I..
+DEFS = @DEFS@ -I. -I$(srcdir) -I../../..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-asc_OBJECTS =  unitctrl.o soundList.o weather.o typen.o strtmesg.o \
-stack.o spfst.o sgstream.o sg.o pd.o palette.o newfont.o network.o \
-missions.o misc.o loadpcxc.o loadjpg.o loaders.o loadbi3.o gui.o \
-gamedlg.o dlg_box.o dialog.o controls.o building.o basestrm.o basegfx.o \
-attack.o
-asc_DEPENDENCIES =  ./sdl/libsdl.a ./libs/triangul/libtriangul.a
-asc_LDFLAGS = 
+demount_OBJECTS =  demount.o basestrm.o misc.o
+demount_LDADD = $(LDADD)
+demount_DEPENDENCIES = 
+demount_LDFLAGS = 
+ascmount_OBJECTS =  mount.o basestrm.o misc.o
+ascmount_LDADD = $(LDADD)
+ascmount_DEPENDENCIES = 
+ascmount_LDFLAGS = 
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
 CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@
-DIST_COMMON =  AUTHORS COPYING ChangeLog Makefile.am Makefile.in NEWS \
-TODO
+DIST_COMMON =  Makefile.am Makefile.in
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DEP_FILES =  .deps/attack.P .deps/basegfx.P .deps/basestrm.P \
-.deps/building.P .deps/controls.P .deps/dialog.P .deps/dlg_box.P \
-.deps/gamedlg.P .deps/gui.P .deps/loadbi3.P .deps/loaders.P \
-.deps/loadjpg.P .deps/loadpcxc.P .deps/misc.P .deps/missions.P \
-.deps/network.P .deps/newfont.P .deps/palette.P .deps/pd.P .deps/sg.P \
-.deps/sgstream.P .deps/soundList.P .deps/spfst.P .deps/stack.P \
-.deps/strtmesg.P .deps/typen.P .deps/unitctrl.P .deps/weather.P
-SOURCES = $(asc_SOURCES)
-OBJECTS = $(asc_OBJECTS)
+DEP_FILES =  .deps/basestrm.P .deps/demount.P .deps/misc.P .deps/mount.P
+SOURCES = $(demount_SOURCES) $(ascmount_SOURCES)
+OBJECTS = $(demount_OBJECTS) $(ascmount_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .cpp .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu source/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu source/tools/linux/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
@@ -165,66 +157,15 @@ distclean-compile:
 
 maintainer-clean-compile:
 
-asc: $(asc_OBJECTS) $(asc_DEPENDENCIES)
-	@rm -f asc
-	$(CXXLINK) $(asc_LDFLAGS) $(asc_OBJECTS) $(asc_LDADD) $(LIBS)
+demount: $(demount_OBJECTS) $(demount_DEPENDENCIES)
+	@rm -f demount
+	$(CXXLINK) $(demount_LDFLAGS) $(demount_OBJECTS) $(demount_LDADD) $(LIBS)
+
+ascmount: $(ascmount_OBJECTS) $(ascmount_DEPENDENCIES)
+	@rm -f ascmount
+	$(CXXLINK) $(ascmount_LDFLAGS) $(ascmount_OBJECTS) $(ascmount_LDADD) $(LIBS)
 .cpp.o:
 	$(CXXCOMPILE) -c $<
-
-# This directory's subdirectories are mostly independent; you can cd
-# into them and run `make' without going through this Makefile.
-# To change the values of `make' variables: instead of editing Makefiles,
-# (1) if the variable is set in `config.status', edit `config.status'
-#     (which will cause the Makefiles to be regenerated when you run `make');
-# (2) otherwise, pass the desired values on the `make' command line.
-
-@SET_MAKE@
-
-all-recursive install-data-recursive install-exec-recursive \
-installdirs-recursive install-recursive uninstall-recursive  \
-check-recursive installcheck-recursive info-recursive dvi-recursive:
-	@set fnord $(MAKEFLAGS); amf=$$2; \
-	dot_seen=no; \
-	target=`echo $@ | sed s/-recursive//`; \
-	list='$(SUBDIRS)'; for subdir in $$list; do \
-	  echo "Making $$target in $$subdir"; \
-	  if test "$$subdir" = "."; then \
-	    dot_seen=yes; \
-	    local_target="$$target-am"; \
-	  else \
-	    local_target="$$target"; \
-	  fi; \
-	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
-	   || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
-	done; \
-	if test "$$dot_seen" = "no"; then \
-	  $(MAKE) $(AM_MAKEFLAGS) "$$target-am" || exit 1; \
-	fi; test -z "$$fail"
-
-mostlyclean-recursive clean-recursive distclean-recursive \
-maintainer-clean-recursive:
-	@set fnord $(MAKEFLAGS); amf=$$2; \
-	dot_seen=no; \
-	rev=''; list='$(SUBDIRS)'; for subdir in $$list; do \
-	  rev="$$subdir $$rev"; \
-	  test "$$subdir" = "." && dot_seen=yes; \
-	done; \
-	test "$$dot_seen" = "no" && rev=". $$rev"; \
-	target=`echo $@ | sed s/-recursive//`; \
-	for subdir in $$rev; do \
-	  echo "Making $$target in $$subdir"; \
-	  if test "$$subdir" = "."; then \
-	    local_target="$$target-am"; \
-	  else \
-	    local_target="$$target"; \
-	  fi; \
-	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
-	   || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
-	done && test -z "$$fail"
-tags-recursive:
-	list='$(SUBDIRS)'; for subdir in $$list; do \
-	  test "$$subdir" = . || (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) tags); \
-	done
 
 tags: TAGS
 
@@ -236,14 +177,9 @@ ID: $(HEADERS) $(SOURCES) $(LISP)
 	here=`pwd` && cd $(srcdir) \
 	  && mkid -f$$here/ID $$unique $(LISP)
 
-TAGS: tags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
 	tags=; \
 	here=`pwd`; \
-	list='$(SUBDIRS)'; for subdir in $$list; do \
-   if test "$$subdir" = .; then :; else \
-	    test -f $$subdir/TAGS && tags="$$tags -i $$here/$$subdir/TAGS"; \
-   fi; \
-	done; \
 	list='$(SOURCES) $(HEADERS)'; \
 	unique=`for i in $$list; do echo $$i; done | \
 	  awk '    { files[$$0] = 1; } \
@@ -262,14 +198,14 @@ maintainer-clean-tags:
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
-subdir = source
+subdir = source/tools/linux
 
 distdir: $(DISTFILES)
 	here=`cd $(top_builddir) && pwd`; \
 	top_distdir=`cd $(top_distdir) && pwd`; \
 	distdir=`cd $(distdir) && pwd`; \
 	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu source/Makefile
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu source/tools/linux/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
@@ -278,16 +214,6 @@ distdir: $(DISTFILES)
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
-	  fi; \
-	done
-	for subdir in $(SUBDIRS); do \
-	  if test "$$subdir" = .; then :; else \
-	    test -d $(distdir)/$$subdir \
-	    || mkdir $(distdir)/$$subdir \
-	    || exit 1; \
-	    chmod 777 $(distdir)/$$subdir; \
-	    (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) top_distdir=../$(top_distdir) distdir=../$(distdir)/$$subdir distdir) \
-	      || exit 1; \
 	  fi; \
 	done
 
@@ -342,30 +268,29 @@ maintainer-clean-depend:
 	    >> .deps/$(*F).P; \
 	rm -f .deps/$(*F).pp
 info-am:
-info: info-recursive
+info: info-am
 dvi-am:
-dvi: dvi-recursive
+dvi: dvi-am
 check-am: all-am
-check: check-recursive
+check: check-am
 installcheck-am:
-installcheck: installcheck-recursive
+installcheck: installcheck-am
 install-exec-am: install-binPROGRAMS
-install-exec: install-exec-recursive
+install-exec: install-exec-am
 
 install-data-am:
-install-data: install-data-recursive
+install-data: install-data-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
-install: install-recursive
+install: install-am
 uninstall-am: uninstall-binPROGRAMS
-uninstall: uninstall-recursive
+uninstall: uninstall-am
 all-am: Makefile $(PROGRAMS)
-all-redirect: all-recursive
+all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
-installdirs: installdirs-recursive
-installdirs-am:
+installdirs:
 	$(mkinstalldirs)  $(DESTDIR)$(bindir)
 
 
@@ -381,17 +306,17 @@ maintainer-clean-generic:
 mostlyclean-am:  mostlyclean-binPROGRAMS mostlyclean-compile \
 		mostlyclean-tags mostlyclean-depend mostlyclean-generic
 
-mostlyclean: mostlyclean-recursive
+mostlyclean: mostlyclean-am
 
 clean-am:  clean-binPROGRAMS clean-compile clean-tags clean-depend \
 		clean-generic mostlyclean-am
 
-clean: clean-recursive
+clean: clean-am
 
 distclean-am:  distclean-binPROGRAMS distclean-compile distclean-tags \
 		distclean-depend distclean-generic clean-am
 
-distclean: distclean-recursive
+distclean: distclean-am
 
 maintainer-clean-am:  maintainer-clean-binPROGRAMS \
 		maintainer-clean-compile maintainer-clean-tags \
@@ -400,26 +325,24 @@ maintainer-clean-am:  maintainer-clean-binPROGRAMS \
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
-maintainer-clean: maintainer-clean-recursive
+maintainer-clean: maintainer-clean-am
 
 .PHONY: mostlyclean-binPROGRAMS distclean-binPROGRAMS clean-binPROGRAMS \
 maintainer-clean-binPROGRAMS uninstall-binPROGRAMS install-binPROGRAMS \
 mostlyclean-compile distclean-compile clean-compile \
-maintainer-clean-compile install-data-recursive \
-uninstall-data-recursive install-exec-recursive \
-uninstall-exec-recursive installdirs-recursive uninstalldirs-recursive \
-all-recursive check-recursive installcheck-recursive info-recursive \
-dvi-recursive mostlyclean-recursive distclean-recursive clean-recursive \
-maintainer-clean-recursive tags tags-recursive mostlyclean-tags \
-distclean-tags clean-tags maintainer-clean-tags distdir \
-mostlyclean-depend distclean-depend clean-depend \
-maintainer-clean-depend info-am info dvi-am dvi check check-am \
-installcheck-am installcheck install-exec-am install-exec \
-install-data-am install-data install-am install uninstall-am uninstall \
-all-redirect all-am all installdirs-am installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+maintainer-clean-compile tags mostlyclean-tags distclean-tags \
+clean-tags maintainer-clean-tags distdir mostlyclean-depend \
+distclean-depend clean-depend maintainer-clean-depend info-am info \
+dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
+install-exec install-data-am install-data install-am install \
+uninstall-am uninstall all-redirect all-am all installdirs \
+mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
+
+vpath %.cpp ..:../..
+
+# vim: noexpandtab ai
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

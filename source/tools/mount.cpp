@@ -25,9 +25,11 @@
 #include "../misc.h"
 
 #ifdef _DOS_
- #include <direct.h> 
+#  include <direct.h> 
 #else
- #include <dirent.h>
+#  include <dirent.h>
+#  include <sys/stat.h>
+#  include <unistd.h>
 #endif
 
 
@@ -181,7 +183,7 @@ int rlemain ( char* argv1, char* argv2  )
 
 
 
-
+int
 bzmain( char *argv1, char* argv2  )
 {
     int bufsize = 1000000;
@@ -354,14 +356,16 @@ void testcompress ( char* name, int size )
 
 int main(int argc, char *argv[] )
 {
+
    if ( argc < 3 ) {
-      printf("usage: mount listfile containerfile");
+      printf("usage: mount listfile containerfile\n");
       return 1;
    }
 
    FILE* fp = fopen ( argv[1], "rt" );
 
    out = fopen ( argv[2], "wb" );
+
    int i = 0;
    pos += fwrite ( &containermagic, 1, 4, out );
    pos += fwrite ( &i, 1, 4, out );
@@ -375,10 +379,10 @@ int main(int argc, char *argv[] )
          name++;
       }
 
-
+// #ifdef _DOS_
       char* c = name;
       while ( *c ) {
-         if ( *c == '\n' )
+         if ( *c == '\n' || *c == '\r' )
             *c = 0;
          else
             c++;
@@ -388,30 +392,60 @@ int main(int argc, char *argv[] )
          DIR *dirp; 
          struct dirent *direntp; 
      
-         dirp = opendir( name ); 
+         dirp = opendir( "." );
          if( dirp != NULL ) { 
            for(;;) { 
              direntp = readdir( dirp ); 
              if ( direntp == NULL ) 
                 break; 
                 
-             int fnd = 0;
-             for ( int j = 0; j < num; j++ )
-                if ( strcmpi ( nindex[j].name, direntp->d_name ) == 0 )
-                   fnd = 1;
+             if ( patimat ( name , direntp->d_name ) ) {
+                int fnd = 0;
 
-             if ( !fnd ) 
-                if ( compress )
-                   testcompress ( direntp->d_name,  filesize(direntp->d_name) );
-                else {
-                   printf ( "file %14s is not compressed, ", direntp->d_name );
-                   copyfile ( direntp->d_name, direntp->d_name,  filesize(direntp->d_name)  );
-                }
+                for ( int j = 0; j < num; j++ )
+                   if ( strcmpi ( nindex[j].name, direntp->d_name ) == 0 )
+                      fnd = 1;
+
+                if ( !fnd )
+                   if ( compress )
+                      testcompress ( direntp->d_name,  filesize(direntp->d_name) );
+                   else {
+                      printf ( "file %14s is not compressed, ", direntp->d_name );
+                      copyfile ( direntp->d_name, direntp->d_name,  filesize(direntp->d_name)  );
+                   }
+             }
 
            } 
            closedir( dirp ); 
          } 
       }
+/*
+#else
+      char* c;
+      if ((c = index(name,'\n'))) { *c = 0 ; }
+      int fnd = 0;
+      for (int j = 0; j < num; j++ )
+        if (strcmp(nindex[j].name, name) == 0) {
+          fnd = 1;
+          break;
+        }
+      if (!fnd) {
+        struct stat s;
+        if (stat(name,&s) == 0) {
+          if (compress) {
+            testcompress(name,s.st_size);
+          }
+          else {
+            printf("file %14s is not compressed, ", name );
+            copyfile(name, name, s.st_size);
+          }
+        }
+        else {
+          printf("file %14s not found\n", name );
+        }
+      }
+#endif
+*/
 
 
    } /* endwhile */

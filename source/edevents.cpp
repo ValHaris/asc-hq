@@ -1,6 +1,15 @@
-//     $Id: edevents.cpp,v 1.4 2000-04-27 16:25:20 mbickel Exp $
+//     $Id: edevents.cpp,v 1.5 2000-05-05 21:15:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/04/27 16:25:20  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.3  2000/03/16 14:06:54  mbickel
 //      Added unitset transformation to the mapeditor
 //
@@ -410,7 +419,8 @@ void         tplayerselall::init(void)
 
    windowstyle = windowstyle ^ dlg_in3d; 
 
-   for (int i=0;i<8 ;i++ ) {
+   int i;
+   for (i=0;i<8 ;i++ ) {
       s1 = new(char[12]);
       strcpy(s1,"Player ~");
       strcat(s1,strrr(i+1));
@@ -425,7 +435,7 @@ void         tplayerselall::init(void)
 
    buildgraphics(); 
 
-   for (i=0;i<8 ;i++ ) bar(x1 + 170,y1 + 60 + i*30 ,x1 + 190 ,y1 + 70 + i * 30,20 + ( i << 3 ));
+   for ( i=0; i<8 ;i++ ) bar(x1 + 170,y1 + 60 + i*30 ,x1 + 190 ,y1 + 70 + i * 30,20 + ( i << 3 ));
 
    anzeige();
    
@@ -2405,4 +2415,4 @@ void setmapparameters ( void )
    } while ( param >= 0 && param < gameparameternum );      
 }
 
-
+
