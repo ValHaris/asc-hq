@@ -1,0 +1,321 @@
+; Lines that start with a semicolon are comments.
+; This file contains instructions to control the display of these messages.
+; Every control sequence starts with a '#' and ends with a '#' except the
+;   
+; steuern. Jeder Befehl beginnt mit einem # und muß auch (mit Ausnahme des
+; Befehls Abschnittseinleitung ##) mit einem # abgeschlossen
+; werden. Die Länge des Befehls ist egal, groß- und Kleinschreibung ebenfalls.
+;
+; Folgende Befehle werden momentan unterstützt:
+;  ##XXXX   Mit diesem Befehl beginnt ein Hilfethema. xxxx stellt eine
+;           Zahl im Bereich von 0000 bis 9999 dar und entspricht der ID,
+;           die der Prozedur HELP als Parameter übergeben wird. Das Hilfthema
+;           endet mit dem nächsten Auftreten von ## oder dem Ende der Datei
+;           Leerzeilen am Anfang und am Ende werden auch angezeigt. Dieser 
+;           Befehl MUSS genau 6 Zeichen lang sein.
+;
+;  #colorX#   Ändert die Textfarbe auf den Wert von x. Standardmäßig ist
+;           schwarz eingestellt. Gültige Werte von x sind 0 bis 255
+;           Empfohlene Werte sind:
+;           000: Schwarz   001: Blue         002: Green      003: Cyan
+;           004: Red       005: Magenta      006: Brown      007: LightGray
+;           008: DarkGray  009: LightBlue    010: LightGreen 011: LightCyan
+;           012: LightRed  013: LightMagenta 014: Yellow     015: White
+;           256: default
+;  #backgroundX#  Ändert die Hintergrundfarbe für die Textdarstellung. Die 
+;           Farbwerte sind die selben wie bei #color
+;
+;  #fontX#   Änter die Schriftart. Standardwert ist 01. Gültige Werte von
+;           x sind:
+;             01:  SmallArial
+;             02:  Arial8
+;          Bei Schriftartwechseln innerhalb einer Zeile ist zu beachten, daß
+;          die Schriften NICHT an der Grundlinie ausgerichtet werden, sondern an
+;          der Textoberkannte. Aus diesem Grund sollte eine Zeile immer nur eine
+;          Schriftart enthalten.
+;
+;  #tabX#  Setzt einen Tabulator der weite x. Damit wird die Xposition
+;          auf das nächste Vielfache von x gesetzt. 
+;  #posX#  Setzt die Xposition auf den Wert xxx. 
+;
+;  #aeinzugX#  Setzt den Absatzeinzug auf X Pixel. Die erste Zeile eines 
+;          Absatzes wird nicht mit diesem Befehl, sondern mit #eeinzug#
+;          eingerückt. aeinzug wirkt erst ab der nächsten Zeile.
+;  #eeinzugX#  Wie #aeinzug, nur dass jeweils die erste Zeile eines Absatzes
+;          eingezogen wird. Auch #eeinzug wirkt erst ab dem nächsten Absatz.
+;
+;  #crt#   führt einen Zeilenwechsel (=Absatzwechsel) durch. Hat die selbe 
+;          Wirkung wie ein Zeilenwechsel in der Textdatei. Von #crt# gibt es
+;          noch eine Variante, die zusätzlich den Zeilenabstand der nächsten 
+;          Zeile verändert:
+;  #crtpX# Setzt den Zeilenabstand auf X Pixel mehr als ein normales #crt# dies
+;          getan hat. Im Unterschied zu #crta braucht man also nicht den 
+;          aktuellen Zeilenabstand zu wissen, um beispielsweise einen um 10 Pixel
+;          vergrößerten zu erreichen.
+;
+;  #pictrnnnnnnnnXXXYYY  Lädt das Bild, das als RAW-Datei unter dem Namen
+;          nnnnnnnn vorliegt (der Name MUß 8 Zeichen lang sein, als Endung
+;          wird automatisch .RAW angehängt) und zeigt es an der Position
+;          XXX / aktuelleYposition-YYY an.
+;          Es ist zu beachten, daß der untere Rand des Bildes nicht in die
+;          nächste Zeile ragt, da sonst dieser Teil überschrieben wird. Bei
+;          Bildern, die höher als die Zeilenhöhe sind, muß YYY ein Wert
+;          zugewiesen werden, der mindestetens BildHöhe-Zeilenhöhe beträgt.
+;          Sollte in der selben Zeile noch Text stehen, empfiehlt es sich, den
+;          Picture-Befehl an das Ende der Zeile zu schreiben, um mögliche
+;          Überschneidungen mit dem Text zu vermeiden.
+;
+;  
+##0202
+Well, that had been an awacs. 
+But fortunatly you can win the map even without any awacs.
+
+##0205
+
+This was a weather-change-event, started due to the conquering of the shipyard with 2 turns delay.
+
+There are three types of weather :
+   standard(dry)
+   little rain
+   heavy rain
+   little snow
+   heavy snow
+
+Weatherchanges can take place either on the whole map or in regions defined by polygons.
+
+;Das war gerade ein Weather-Change-Event, durch das Erobern der Werft ausgelöst mit 3 Runden Verzögerung.
+;
+;Im Spiel gibt es 5 "Wetter":
+;  standard (trocken)
+;  leichter Regen
+;  starker Regen
+;  etwas Schnee
+;  viel Schnee
+;
+;Wetteränderungen können entweder global, also auf der ganzen Karte stattfinden, oder in durch beliebige Polygone eingegrenzten Flächen.
+
+##0208
+;Stratege ! 
+;
+;Sie sind Ihrem Ruf wieder mal gerecht geworden.  
+;
+;Herzlichen Glückwunsch zum erfolgreichem Abschluss Ihrer Mission!
+Congratulations !
+
+You have mastered the most difficult map that has even been made for Advaced Strategic Command :-)
+I hope you enjoyed it. You can further experiment with ASC by playing this or other maps in multiplayer mode.
+
+Or you can take the REAL challenge: 
+Mastering the editors !
+:-)
+
+##0310
+
+#font02#Welcome to Advanced Strategic Command !#font01#
+#aeinzug0##eeinzug20#
+This tutorial will guide you through the game and show some of the features we have implemented in ASC.
+But the emphasis in this map is not the armored conflict which is the central part of the game because such a conflict would be quite uninteresting without any opponent. And we don't have any working artificial intelligence yet.
+
+The event system of Advanced Strategic Command was designed a long time before we made this tutorial. That is the reason why these text messages the tutorial is based on are quite long and usually describe several actions to do at once.
+;The game can be playes as well with mouse as with keyboard but there are some parts where you have to use the keyboard. 
+;Das Spiel läßt sich zwar grundsätzlich sowohl mit Tastatur als auch mit Maus bedienen, es gibt allerdings noch einige wenige (und immer weniger werdende) Stellen, an denen die Tastatur von nöten ist. Dazu zählt beispielsweise das Beender dieser Dialog-Box sowie der Übersichtskarte.
+
+;Die Sprache ist auch nicht ganz einheitlich, teils Deutsch, teils Englisch, aber das Spiel ist ja auch noch nicht fertig.
+But these messages are beeing archived so you can always read them again. Move your mouse up to open the pull down menu, select #color1#messages#color0# / #color1#view received messages#color0# and then the message you want to read.
+
+OK, but now to the map.
+;Ok, nun aber endlich zu der Karte.
+
+##0320
+
+At the moment the cursor is over an oil rig. You can take a look at it from "the inside", but that‹s not relevant right now.
+;Im Augenblick befindet sich der Cursor über einer Bohrinsel. Sie können sie sich (auch von innen) ansehen, aber relevant ist sie im Augenblick noch nicht.
+
+Lets start with the two units at the very left. To get there use the #color1#view map#color0# function.
+;Beginnen wir mit den beiden Einheiten ganz am linken Rand der Karte. Um dahin zu gelangen, verwenden Sie am besten die Übersichtskarte (view map).
+
+One unit is a transport plane, the other an awacs.
+;Das eine ist ein Transportflugzeug, das andere ein Aufklärer. 
+The goal of this level is to capture a radar station that is just a little bit north of these two units.
+;Das ziel dieses Levels ist es, eine Radarstellung zu erobern, die sich nur wenig über diesen beiden Einheiten befindet.
+
+To conquer a building just enter it with a trooper.
+;Um solch ein Gebäude zu erobern, muß man lediglich mit einer Fusstruppe hineingehen.
+To show the units that are loaded in the transport plane select #color1#show loading#color0#. And accidentially there is a trooper.
+;Mit der Funktion "Show Loading" kann man sich den Inhalt eines Transporters oder eines Gebäudes ansehen. Und zufälligerweise steckt in dem Transporter eine Fusstruppe.
+Use the awacs to fly 3 fields to the north to see what's there. 
+;Fliegen Sie mal mit dem Aufklärer 3 Felder nach oben, um etwas mehr zu sehen. 
+
+
+
+##0330
+
+There are several blue units which attack.
+;Zum Vorschein kommen einige blaue Einheiten, die nichts besseres zu tun haben, als Sie anzugreifen.
+
+So there's nothing to do here. You should fly to the island where some other red (=your) units are. But the planes require more then one turn to get there. Use the #color1#next turn#color0#-button to advance one turn.
+;Also nichts wie weg, und zwar zu der Insel, auf der sich einige rote Einheiten befinden. In einer Runde schaffen's die Flieger aber nicht bis dahin, es sind 2 Rundenwechsel nötig. 
+Fly your transport plane over the lowest field with a runway and select #color1#descent#color0# to land. Use the tanker vehicle (#color6#algol#color0#) to refuel the transport plane and enter it with the paratrooper.
+;Stellen Sie den Trasportflieger auf das unterste Feld der Landebahn und landen Sie. Mit dem Tanklaster können Sie auftanken, und nehmen sie den Fallschirmspringer gleich mit.
+In the next turn you can start again (#color1#ascent#color0#). One of your radar vehicles spots a neutral vehicle factory named #color6#PZF1#color0# on the island just north east.
+Use your planes to conquer it. Since there is no runway you can't land with your transport plane (but there are some aircraft that can land on any road). So the trooper cannot leave the plane, but your paratrooper can.
+;Da nirgends eine Landebahn in der Nähe ist, kann das Transporflugzeug auch nicht landen (es gibt allerdings auch Flieger, die auf Straßen landen können). 
+;Die gewöhnliche Fusstruppe kann den Transportflieger also nicht verlassen, wohl aber der Paratrooper. 
+Conquer the factory by landing the paratrooper next to it and walk onto the central field.
+;Erobern Sie mit ihm die Fabrik, indem Sie die Einheit auf das zentrale Feld des Gebäudes bewegen. Das geht frühestens eine Runde nach dem Abspringen.
+
+##0203
+
+Well done. Your #color6#radar-vehicle#color0# has already spotted a shipyard (in German that's #color6#Werft#color0#). 
+;OK. In dieser Fahrzeugfabrik befinden sich einige Einheiten: Mit dem #color2#radar-vehicle#color0# läßt sich am rechten Rand eine Werft erkennen. 
+Take a #color6#Wiesel#color0# and conquer it. 
+;Nehmen Sie ein den Paratrooper und nichts wie hin. Dauert leider ein paar Runden.
+
+##0340
+  #font02#Weather forecast #font01#
+
+Increasing wind from south west to western direction arises. 
+;Zunehmender Wind aus südwest- bis westlicher Richtung kommt auf.
+
+##0204
+The wind is going to become even stronger.
+;Der Wind wird jetzt noch stärker. 
+Check which fields can be reached by your airplane and then move it just one field. 
+;Schauen Sie mal, welche Felder Sie mit einem ihrer Flugzeuge zur Zeit erreichen können und ziehen Sie das Flugzeug ein Feld weit.
+After that the direction of the wind will change. Then check again which fields are reachable !
+;Danach wird sich der Wind drehen. Testen Sie dann noch mal die Reichweite des Flugzeugs !
+
+An airplane that is not moved during a turn will consume as much fuel as it needs to travel the distance the wind covers per turn.
+;Wenn ein Flugzeug bei Wind auf der Stelle stehen bleiben soll, braucht es dazu soviel Treibstoff, wie es zum Überfliegen der Strecke benötigt, die der Wind pro Runde zurücklegt.
+
+##0350
+There‹s still one problem. The entrance is coverd with mines. Most units cannot see mines, but #color6#miners#color0# can and they can also remove them.
+;Das einzige Problem bei dem Versuch, die Werft zu erreichen: Die Zufahrt ist vermint! Die meisten Einheiten können Minen nicht sehen, wohl aber Minenleger und diese können die Minen auch gleich beseitigen. 
+You can produce them in your vehicle factory, but you will need energy and material.
+;In der Fabrik kann man sogar Minenleger produzieren, das einzige was dazu fehlt, ist Material und Energie.
+
+There are three types of resources : energy, material and fuel. You can distribute them with cable/pipe-nets. Pipelines for fuel and material and cables for energy.
+;Es gibt drei Arten an Resourcen: Energy, Material und Fuel heißen die im Spiel. Diese Resourcen kann man über Leitungsnetze verteilen. Wir haben 2 Sorten, einmal welche für Energy (Stromleitungen) und für Material und Fuel (Pipelines). 
+You should have already seen them next to your buildings.
+;Die müßten eigentlich neben der Panzerfabrik zu erkennen sein. 
+
+The oilrig is connected to your vehicle factory with a pipeline so there is enough fuel availabe.
+;Die Bohrinsel oben ist mit der Panzerfabrik über eine Pipeline verbunden, Fuel steht in ausreichender Menge zur Verfügung (müßte eigentlich über dem Waffenvorrat oben im Gebäude zu erkennen sein).
+
+Material is produced by mining stations like the one south of your vehicle factory. And power plants produce energy.
+;Für Material sorgen Bergwerke, wie z.B. direkt unter der Panzerfabrik eins; für Energie sind Kraftwerke zuständig. 
+A wind power plant is standing next to the mining station. Both can be conquered with a trooper or the #color6#Wiesel#color0#.
+;Ein Windkraftwerk steht rechts nebendran. Beide lassen mit dem  #color2#army-vehicle#color0# (dämliche Bezeichnung. Muß, wie so vieles, noch geändert werden)  erobern.
+
+Since there is some wind now the wind power plant is already producing energy.
+;Zum Glück ist inzwischen Wind aufgekommen, sodaß das Windkraftwerk kräftig Strom produziert. 
+
+##0360
+Now with the mining station and the wind power plant conquered there is nothing in the way of producing a miner.
+;Jetzt, wo sowohl das Windkraftwerk als auch das Bergwerk erobert sind, steht der Produktion des Minenlegers eigentlich nichts mehr im Weg.
+
+Perhaps it takes one or two turns until enough resources are available.
+;Vorher müssen nur noch 1 oder 2 Rundenwechsel gemacht werden, damit genügend Energie und Material erzeugt bzw. gefördert wird.
+
+##0380
+There is a transport ship in the shipyard. Drive with the transport next to the shipyard and move a trooper into it. Then cast off and travel east for several turns. On an island there two radar vehicles have spotted an interesting building.
+;In der Werft befindet sich ein Transportschiff. Fahren Sie das Schiff vor die Werft, laden sie eine Fusstruppe ein und fahren Richtung Osten, mehrere Runden lang.
+
+##0390
+But the weather changes.
+;Dummerweise bleibt das Wetter nicht konstant. 
+To free the freezed transport you need an icebreaker that can be built in the shipyard. But the wind power plant does not produce enough energy.
+;Um das festgefrorene Transportschiff zu befreien, muß ein Eisbrecher her, den die Werft herstellen kann. Allerdings liefert das Windkraftwerk dazu nicht die nötige Energie. 
+So you need to build a #color6#conventional power plant#color0# which burns the fuel that the oil rig has been producing all the time.
+;Also muß ein konventionelles Kraftwerk gebaut werden, das allerdings zur Energieproduktion Fuel verfeuert. Aber davon haben wir mehr als genug, die Bohrinsel schafft ja schon ne ganze weile. 
+
+Produce a #color6#building constructor#color0# in your vehicle factory. Build a #color6#construction vehicle#color0# too to connect the powerplant to your net if neccessary (the connectors are in the lower right corner of the powerplant).
+;Bauen Sie in der Panzerfabrik beide "Construction Vehicle". Mit dem einen das Kraftwerk bauen, mit dem anderen bei Bedarf das Kraftwerk an das übrige Leitungsnetz anschließen (die Anschlüsse sind im Kraftwerk ganz rechts). 
+Set the energy production to maximum. This can be done in the powerplant on the #color1#powerplant#color0#-subwindow (click on the lightning sign) by setting the white line to the very right. 
+;Im Kraftwerk dann auf der "Power-Plant"-Seite im Gebäude (unten die Spannungslasche anklicken) die Stromproduktion auf Maximum stellen (den weißen Strich im Diagramm ganz nach rechts. Später sollen da noch schöne Exponentialkurven rein, die linearen im Augenblick sind zugegebenermaßen etwas witzlos).
+
+Only one turn later you can produce the icebreaker and free the transport with it. Travel further east with both.
+;Eine Runde später läßt sich der Eisbrecher bauen und sich mit ihm der Transporter befreien. Weiter gehts nach Osten. 
+
+The blue battleships won't let your units come near. But there is another shipyard in the south. Conquer it!
+;Die blauen Schlachtschiffe dort lassen Ihre Einheiten nicht durch. Dann geht die Fahrt halt etwas nach Südwesten, wo sich eine weitere Werft befindet. Erobern Sie diese.
+
+##0391
+Load a trooper into the sub you just conquered with the shipyard. Dive under the ice and the blue battleships until you can't go any further because the water gets to shallow to stay submerged.
+;In das dort befindliche Uboot wieder eine Fusstruppe rein, getaucht und unter dem Eis und den blauen Schiffen durch schnurstracks zu dem hellblauen Gebäude, das die roten Radarfahrzeuge schon die ganze Zeit sehen können. 
+Here you can surface. Although the battleships could shoot at you they can't see that far.
+;Wenn das Wasser zu flach wird, um weiter getaucht zu fahren, muß das Uboot halt auftauchen. 
+;Die Schlachtschiffe könnten zwar so weit schießen, aber nicht sehen. 
+
+Move next to the coast, unload your trooer and conquer that building.
+;Also ab an die Küste, Fußtruppe ausgeladen und das Gebäude erobert.
+
+##0392
+The building turns out to be a research facility. The material that is needed for research is already there, but the energy has to produced by the wind power plant next to it which should be conquered too.
+;Das Gebäude entpuppt sich als Forschungszentrum. Das zum Forschen benötigte Material ist schon vorrätig, die Energie muß das Windkraftwerk nebendran liefern (sollte dazu erobert werden...). 
+Set the research to the max, that can be done analogous to the power plant.
+;Die Forschung von 0 auf Vollgas stellen, das geht analog zum Kraftwerk.
+
+The next turn a dialogbox asks what technology should be researched.
+;Beim nächsten Rundenwechsel erscheint eine Abfrage, welche Technologie erforscht werden soll. 
+Choose #color6#Air Cushion Vehicles#color0#, they will be quite handy for this mission.
+;Sinnvoll wären in dieser Karte vorallem Luftkissenboote, also "Air-Cushion-Vehicles" auswählen.
+
+While the research facility is busy reasearching ACVs take a look at the icebreaker again:
+;Während das Forschungszentrum vor sich hin forscht, lohnt sich nochmal ein Blick auf den Eisbrecher:
+It is so cold now that the channel freezes after only one turn!
+;Inzwischen ist es so kalt geworden, daß die Fahrrinne deutlich schneller zufriert als noch vorhin.
+
+On the main island with the vehicle factory you should explore the west of the island now.
+;Auf der Insel mit der Panzerfabrik kann nun ein "Army-Vehicle" den Westen der Insel erkunden. Dort befindet sich eine Fahrzeugfabrik (ACVF 1), die sich wieder erobern läßt.
+There is a factory named #color6#ACVF 1#color0# that can also be conquered.
+
+
+##0393
+Again the energy is missing to produce an ACV.
+;Diesmal fehlt die Energie dazu, diese sofort herzustellen. 
+Since the construction of a powerline across the continent is too time consuming, the #color6#mobile generator vehicles#color0# that are in the factory are just what we needed.
+;Da das Verlegen einer Stromleitung quer über den den gesamten Kontinent zu lange dauern würde, bieten sich die mobilen Generatorwagen an. 
+They are not as powerful as real power plants and are quite inefficient considering the fuel usage. but they are perfectly suited for a purpose like this: providing energy for distant factories.
+;Die sind zwar gegenüber Kraftwerken nicht so leistungsfähig und vorallem extrem ineffizient, was den Fuelverbrauch betrifft, aber hierfür eignen sie sich perfekt. 
+Move both #color6#generator vehicles#color0# out of the factory and next to the power plant connector (which cannot be seen on this temporary picture of the building, but it is on the lower right edge) and build an #color6#Air Cushion Vehicle#color0#.
+;Fahren Sie also die Generatorwagen neben die Fabrik (der Stromanschluß ist hier auch das rechte untere Feld) bauen Sie ein Luftkissenboot. 
+
+But there is not enough fuel in the building to fill it.
+;Allerdings reicht der Fuelvorrat nicht, das gute Stück auch vollzutanken. 
+Drive a generator vehicle into it and pump its fuel into the building (#color1#ammo-transfer#color0#-subwindow), and from there into the ACV
+;Also von einem Generatorwagen umpumpen, dazu muß einer wieder ins Gebäude rein. 
+;Auf der "Ammo-Transfer" Seite soviel Fuel wie möglich (ist leider nicht viel, weil die Fahrzeugfabrik nur sehr kleine Tanks hat. Deshalb muß man den ganzen Vorgang noch einmal wiederholen) aus dem Generatorwagen rauspumpen (nicht vergessen, "transfer" anzuklicken!), Luftkissenboot anwählen und da wieder reinpumpen.
+
+Again, load a trooper into it and head south.
+;Dann das ACV ein Feld rausfahren, Fusstruppe rein, und nichts wie ab. 
+Fortunatly the wind has ceased, since the ACV would not have survived a storm like that a few turns ago while over water.
+;Zum Glück ist der Wind abgeflaut, denn bei einem Sturm wie er noch vor wenigen Runden geherrscht hat hätte das Luftkissenboot auf dem Wasser nicht lange überlebt. 
+
+;Tank some fuel on the small island where we landed with the transport plane some time ago. Then to the island in the west where we started.
+;Auf der kleinen Insel unten noch mal volltanken und ab zu der Insel, auf der wir angefangen haben. 
+The air defense cannot do anything against troopers or ACVs, but the tanks on the entry are a real threat for your weak ACV.
+;Die Luftabwehr an der Radar-Anlage kann gegen Fusstruppen und Luftkissenboote nichts ausrichten, wohl aber die 5 Panzer vorm Eingang.
+
+So conquer the training camp that is not guarded instead.
+;Erobern Sie deshalb erstmal das Trainingslager, das nicht bewacht ist.
+
+##0394
+Inside the training camp there are the same tanks that are blocking the entry of the radar station.
+;In dem Trainingslager stehen zum Glück genau die gleichen Panzer zum Erobern bereit. 
+You may train your tanks, but since there is no luck anywere in the game it should be no problem to destroy the enemy tanks without any training (by blocking them and using range weapons).
+;Damit der Kampf auch ja zu unseren Gunsten ausgeht (wohlgemerkt, es gibt KEINEN Zufall im Spiel), sollte man sie erst etwas trainiren.
+;Das kostet zwar Munition, aber wofür steht dort auch ein randvoller Munitionstransporter?!. 
+
+;Dann raus mit den Panzern, den Gegner abgeschossen und die Radarstellung erobert.
+
+##0396
+;ACF-Lab conquered & ACF-Factory conquered & !ACF-researched
+The ACV-Technology should be researched in few turns. Select #color1#info#color0# / #color1#research#color0# from the pull down menu to check the progress of the research.
+(If you have'nt even selected which technology to research you should make sure if you conquered the #color6#wind power plant#color0# and if you have started the research inside the reserach facility)
+
+##0397
+Well, destroying the radar station was not exactly the goal of this map....
+But congratulations anyway for getting so far !
+
+

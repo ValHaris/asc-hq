@@ -1,0 +1,215 @@
+; Kommentarzeilen beginnen mit einem Semikolon
+; Diese Datei kann (muß) Befehle enthalten, die die Anzeige des Hilfetextes
+; steuern. Jeder Befehl beginnt mit einem # und muß auch (mit Ausnahme des
+; Befehls Abschnittseinleitung ##) und muß auch mit einem # abgeschlossen
+; werden. Die Länge des Befehls ist egal, groß- und Kleinschreibung ebenfalls.
+;
+; Folgende Befehle werden momentan unterstützt:
+;  ##XXXX   Mit diesem Befehl beginnt ein Hilfethema. xxxx stellt eine
+;           Zahl im Bereich von 0000 bis 9999 dar und entspricht der ID,
+;           die der Prozedur HELP als Parameter übergeben wird. Das Hilfthema
+;           endet mit dem nächsten Auftreten von ## oder dem Ende der Datei
+;           Leerzeilen am Anfang und am Ende werden auch angezeigt. Dieser
+;           Befehl MUSS genau 6 Zeichen lang sein.
+;
+;  #colorX#   Ändert die Textfarbe auf den Wert von x. Standardmäßig ist
+;           schwarz eingestellt. Gültige Werte von x sind 0 bis 255
+;           Empfohlene Werte sind:
+;           000: Schwarz   001: Blue         002: Green      003: Cyan
+;           004: Red       005: Magenta      006: Brown      007: LightGray
+;           008: DarkGray  009: LightBlue    010: LightGreen 011: LightCyan
+;           012: LightRed  013: LightMagenta 014: Yellow     015: White
+;           256: default
+;  #backgroundX#  Ändert die Hintergrundfarbe für die Textdarstellung. Die
+;           Farbwerte sind die selben wie bei #color
+;
+;  #fontX#   Änter die Schriftart. Standardwert ist 01. Gültige Werte von
+;           x sind:
+;             01:  SmallArial
+;             02:  Arial8
+;          Die Schriftartwechseln innerhalb einer Zeile ist zu beachten, daß
+;          die Schriften NICHT an der Grundlinie ausgerichtet werden, sondern an
+;          der Textoberkannte. Aus diesem Grund sollte eine Zeile immer nur eine
+;          Schriftart enthalten.
+;
+;  #tabX#  Setzt einen Tabulator der weite x. Damit wird die Xposition
+;          auf das nächste Vielfache von x gesetzt.
+;  #posX#  Setzt die Xposition auf den Wert xxx.
+;
+;  #aeinzugX#  Setzt den Absatzeinzug auf X Pixel. Die erste Zeile eines
+;          Absatzes wird nicht mit diesem Befehl, sondern mit #eeinzug#
+;          eingerückt. aeinzug wirkt erst ab der nächsten Zeile.
+;  #eeinzugX#  Wie #aeinzug, nur dass jeweils die erste Zeile eines Absatzes
+;          eingezogen wird. Auch #eeinzug wirkt erst ab dem nächsten Absatz.
+;
+;  #crt#   führt einen Zeilenwechsel (=Absatzwechsel) durch. Hat die selbe
+;          Wirkung wie ein Zeilenwechsel in der Textdatei. Von #crt# gibt es
+;          noch eine Variante, die zusätzlich den Zeilenabstand der nächsten
+;          Zeile verändert:
+;  #crtpX# Setzt den Zeilenabstand auf X Pixel mehr als ein normales #crt# dies
+;          getan hat. 
+;
+;  #pictrnnnnnnnnXXXYYY  Lädt das Bild, das als RAW-Datei unter dem Namen
+;          nnnnnnnn vorliegt (der Name MUß 8 Zeichen lang sein, als Endung
+;          wird automatisch .RAW angehängt) und zeigt es an der Position
+;          XXX / aktuelleYposition-YYY an.
+;          Es ist zu beachten, daß der untere Rand des Bildes nicht in die
+;          nächste Zeile ragt, da sonst dieser Teil überschrieben wird. Bei
+;          Bildern, die höher als die Zeilenhöhe sind, muß YYY ein Wert
+;          zugewiesen werden, der mindestetens BildHöhe-Zeilenhöhe beträgt.
+;          Sollte in der selben Zeile noch Text stehen, empfiehlt es sich, den
+;          Picture-Befehl an das Ende der Zeile zu schreiben, um mögliche
+;          Überschneidungen mit dem Text zu vermeiden.
+;
+;
+
+
+##1000
+
+#pos10# KartenEd-keys:
+#aeinzug80#
+#pos10# space #pos70#: Place last selected thing
+#pos10# tab #pos70#: toggle between primary and secondary map
+#pos10# 3  #pos70#: Place terrain
+#pos10# 4  #pos70#: Place unit
+#pos10# 6  #pos70#: Place building
+#pos10# 7  #pos70#: Place specObj
+#pos10# 8  #pos70#: Place mine
+#pos10# F1 #pos70#: Help
+#pos10# F2  #pos70#: Editor
+#pos10# F3  #pos70#: Choose terrain
+#pos10# F4  #pos70#: Choose unit
+#pos10# F5  #pos70#: Choose color
+#pos10# F6  #pos70#: Choose building
+#pos10# F7  #pos70#: Choose special object
+#pos10# F8  #pos70#: Choose mine
+#pos10# F9  #pos70#: Choose weather
+#pos10# F10  #pos70#: Exit
+#pos10# a  #pos70#: move building / vehicle
+#pos10# b  #pos70#: Edit resources
+#pos10# c  #pos70#: View/Change cargo
+#pos10# d  #pos70#: Change direction of act. field
+#pos10# shift-d #pos70#: Change direction of unit
+#pos10# ctrl-d #pos70#: Change direction of fields to place
+#pos10# e  #pos70#: edit Events
+#pos10# f  #pos70#: Fill-mode
+#pos10# g  #pos70#: Map-Generator (Preview)
+#pos10# h  #pos70#: select unit/terrain from cursor position
+#pos10# l  #pos70#: show pallette 
+#pos10# m  #pos70#: View/Change minestrength
+#pos10# p  #pos70#: View/Change production
+#pos10# s  #pos70#: Save map
+#pos10# v  #pos70#: View/Change values
+#pos10# x  #pos70#: goto opposite x position
+#pos10# y  #pos70#: goto opposite y position
+#pos10# y  #pos70#: set zoom level
+#pos10# Entf  #pos70#: Erase last selected thing
+#pos10# ctrl+A  #pos70#: Alliances
+#pos10# ctrl+B  #pos70#: toggle resource view
+#pos10# ctrl+D  #pos70#: Change direction
+#pos10# ctrl+E  #pos70#: Toggle Resourcemode
+#pos10# ctrl+F  #pos70#: fill with resources
+#pos10# ctrl+G  #pos70#: Write whole map to PCX-file
+#pos10# ctrl+H  #pos70#: set unit filters
+#pos10# ctrl+L  #pos70#: Load map
+#pos10# ctrl+M  #pos70#: Change mapvalues
+#pos10# ctrl+N  #pos70#: New map
+#pos10# ctrl+O  #pos70#: Polygon mode
+#pos10# ctrl+R  #pos70#: Repaint display
+#pos10# ctrl+U  #pos70#: View army-statistics
+#pos10# ctrl+V  #pos70#: View map
+#pos10# ctrl+W  #pos70#: set selected weather to whole map
+#pos10# Esc  #pos70#: Exit
+
+
+##1010
+
+#pos10# Map-Genrator Help
+
+Layer : You can choose between Land / Desert / Forest etc. layers.
+
+Resolution : This value alternates how rough your map is. The lower resolution is the rougher is your map.
+
+Precission : The heightvalues are from 0 to ( precission-1 ). This means if you choose precission higher you can define the water- and landlevel more precisely.
+
+#pos20# Additional information : Changing resolution or precission only takes effect if you regenerate the layer !
+
+Limit : Raising the limit will enlarge the area of your selected limit.
+
+Correct : If you raise a limit that high, that it exceeds the limit(s) above the limit(s) above will be raised to this limit. This also has effect if you're lowering a value.
+
+Calculated : If you raise a limit the limit(s) above will be calculated in even steps up to the maxvalue.
+
+With the small selectors on bottom of the map you can hide / show certain layers just the way you need it.
+( Only the shown layers will be used to generate the map. Hidden layers will be ignored )
+
+With the buttons from 1 to 5 (they appear if the resulution fits on the screen ) you can change the size of the displayed map.
+
+
+##1020
+
+Free Strategy Gaming Project
+#color004#
+ADVANCED STRATEGIC COMMAND
+#color000#
+Map Editor
+
+(C) 94 - 98 by Marc Schellenberger and  Martin Bickel.
+
+See README.TXT for details.
+
+##1030
+
+Polygon Selector
+
+This function makes it possible to select previously defined polygons and fill them with terrains or units.
+Just select your polygon and then place your selection.
+
+##1040
+
+Polygon Mode
+
+You are currently in polygom mode. 
+This means, that the next unit or terrain you place affects your currently selected polygon. It will be filled with your selection.
+During this mode your cursor is freezed because its position has no effect on the fill procedure of the polygon.
+On the bottom of the screen you will see "Polyfield fill mode", which shows you that polygonmode is active.
+
+You can exit this mode by pressing <Esc>.
+
+##1050
+
+Player Change
+
+With this function you can exchange players untis, merge two players or just change players.
+
+If you select a player you will see, that it will be marked with a red rectangle. If you choose another player it will be marked red and your previous selection will be marked blue, which indicates that this is your second selection.
+Players, that dont have any units have a red box in front of their switch.
+
+If you now choose "Change" you can assign the red marked players units to another not used player. (player with red box in front)
+
+With "Exch." you can exchange two players.
+
+With "Merge" the units of the blue marked player will be added to the red marked players units.
+
+
+##1060
+
+Player Select
+
+You can select the players the are affected by your previously selected event or you just specify all not allied.
+If you choose nothing and choose "my selection", it will automatically set to all not allied.
+<Enter> and <Esc> also select all not allied.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

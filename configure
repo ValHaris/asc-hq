@@ -2503,8 +2503,8 @@ ac_given_INSTALL="$INSTALL"
 
 trap 'rm -fr `echo "Makefile source/Makefile source/docs/Makefile \
 source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile \
-source/libs/Makefile source/ai/Makefile source/mapedit/Makefile \
-source/tools/Makefile source/tools/linux/Makefile config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
+source/libs/Makefile source/ai/Makefile source/unix/Makefile \
+source/unix/mapeditor/Makefile source/tools/Makefile source/tools/linux/Makefile config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
@@ -2599,8 +2599,8 @@ cat >> $CONFIG_STATUS <<EOF
 
 CONFIG_FILES=\${CONFIG_FILES-"Makefile source/Makefile source/docs/Makefile \
 source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile \
-source/libs/Makefile source/ai/Makefile source/mapedit/Makefile \
-source/tools/Makefile source/tools/linux/Makefile"}
+source/libs/Makefile source/ai/Makefile source/unix/Makefile \
+source/unix/mapeditor/Makefile source/tools/Makefile source/tools/linux/Makefile"}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then

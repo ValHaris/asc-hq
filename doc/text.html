@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+
+<META NAME="Generator" CONTENT="WebWriter/2 v1.2">
+<TITLE>ASC documentation: Textfiles</TITLE>
+	<LINK REL="stylesheet" TYPE="text/css" HREF="asc.css">
+</HEAD>
+
+<BODY text="#000000" bgcolor="#ffffff">
+
+<CENTER>
+<H1>Advanced Strategic Command</H1>
+<P>documentation<P>
+<H2>Textfiles</H2>
+</CENTER>
+
+Text files are used in ASC several cases. The most important are:
+<UL>
+<LI>description of vehicle types
+<LI>description of technologies
+<LI>the online help
+<LI>message events
+</UL>
+For vehicles and technologies the text files are embedded in the file of the vehicle type or the technology while the online help and message events load the textfiles at run time.<P>
+
+The textfiles may contain tags that control the format of the output. Tags start and end with the character <TT>#</TT>. The following tags are defined:<P>
+
+<DL>
+<DT><TT>#colorX#</TT></DT>
+<DD>
+changes the color to X. Available values are 0 to 255.  The colors are defined in the palette of ASC which is for example contained in every screenshot. The following colors are 'fixed' and recommended to be used:
+<UL>
+<TABLE>
+<TR>
+	<TD>0</TD>
+	<TD>black</TD>
+</TR>
+<TR>
+	<TD>1</TD>
+	<TD>blue</TD>
+</TR>
+<TR>
+	<TD>2</TD>
+	<TD>green</TD>
+</TR>
+<TR>
+	<TD>3</TD>
+	<TD>cyan</TD>
+</TR>
+<TR>
+	<TD>4</TD>
+	<TD>red</TD>
+</TR>
+<TR>
+	<TD>5</TD>
+	<TD>magenta</TD>
+</TR>
+<TR>
+	<TD>6</TD>
+	<TD>brown</TD>
+</TR>
+<TR>
+	<TD>7</TD>
+	<TD>light gray</TD>
+</TR>
+</TABLE>
+
+</UL>
+</DD>
+
+<DT><TT>#backgroundX#</TT></DT>  
+<DD>
+Changes the background color to X. The values are the same as for <TT>#colorX#</TT>.
+</DD>
+
+<DT><TT>#fontX#</TT></DT>
+<DD>Changes the font. The following fonts are available at the moment:
+<UL>
+<TABLE>
+<TR>
+	<TD>1</TD>
+	<TD>small Arial font (same as in Pull down menu)</TD>
+</TR>
+<TR>
+	<TD>2</TD>
+	<TD>large Arial font (for captions etc.)</TD>
+</TR>
+</TABLE>
+</UL>
+
+If you want to use different font sized in the same line please note that the fonts are not vertically justified by the base line but by their top line (so avoid it please).
+</DD>
+
+<DT><TT>#tabX#</TT></DT>
+<DD>
+Puts tabstops with a width of X. The horizontal text position will be set to the next multiple of X.
+</DD>
+
+<DT><TT>#posX#</TT></DT>
+<DD>
+Sets the horizontal position to X.
+</DD>
+
+<DT><TT>#aeinzugX#</TT></DT>
+<DD>
+Sets the left space to X (default is 0). The first line of a paragraph is not affected, the left space of it is set by <TT>#eeinzugX#</TT>
+</DD>
+
+<DT><TT>#eeinzugX#</TT></DT>
+<DD>
+Sets the left space of the first line of every paragraph to X (default is 0). 
+</DD>
+
+<DT><TT>#crt#</TT></DT>
+<DD>
+Stars a new paragraph. A EOL (end of line) in the textfile is internally converted to a #crt# too.
+</DD>
+
+
+<DT><TT>#crtpX#</TT></DT>
+<DD>
+Same as <TT>#crt#</TT> but makes a free space between both paragraphs of X pixel more than <TT>#crt#</TT> would do.
+</DD>
+</DL>
+
+<P>
+
+Since any EndOfLine in the textfile starts a new paragraph you have to write each paragraph in a single line !<P>
+
+<H3>Message events and help files</H3>
+
+The textfiles that are loaded at runtime have some enhancements: <P>
+<UL>
+<LI>They may contain comments. Each line that starts with the <TT>;</TT> character is not interpreted and ignored.
+<LI>A textfile may contain several sections. A section starts with the character sequence <TT>##xxxx</TT> with xxxx a number having 4 digits. This sequence must have exactly 6 characters and must have a line for its own! A section ends with the next <TT>##xxxx</TT> or the end of the file. The section is identified by its number <TT>xxxx</TT>. For message events this number must be entered in the mapeditor when defining the message event. Please note that any empty lines before a <TT>##xxxx</TT> will be visible as free space in the previous section.
+</UL>
+
+<P>
+A note at the end: Does anybody know of an easy to implement web browser? I would like to use plain HTML files for these texts but don't want to write a html interpreter myself...
+
+</BODY>
+</HTML>

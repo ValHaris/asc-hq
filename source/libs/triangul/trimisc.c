@@ -2,8 +2,8 @@
 #include <math.h>
 #include "../../global.h"
 
-#ifndef HAVE_LOG2
-double log2( double v )
+//#ifndef HAVE_LOG2
+double nlog2( double v )
 {
         static double tmp_log2 = -1.0;
 
@@ -13,7 +13,7 @@ double log2( double v )
 
         return(log(v) * tmp_log2);
 }
-#endif
+//#endif
 
 static int choose_idx;
 static int permute[SEGSIZE];
@@ -132,7 +132,7 @@ int math_logstar_n(n)
   double v;
   
   for (i = 0, v = (double) n; v >= 1; i++)
-    v = log2(v);
+    v = nlog2(v);
   
   return (i - 1);
 }
@@ -146,7 +146,7 @@ int math_N(n, h)
   double v;
 
   for (i = 0, v = (int) n; i < h; i++)
-    v = log2(v);
+    v = nlog2(v);
   
   return (int) ceil((double) 1.0*n/v);
 }

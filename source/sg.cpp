@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: sg.cpp,v 1.136 2001-03-30 12:43:16 mbickel Exp $
+//     $Id: sg.cpp,v 1.137 2001-05-15 09:54:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.136  2001/03/30 12:43:16  mbickel
+//      Added 3D pathfinding
+//      some cleanup and documentation
+//      splitted the ai into several files, now located in the ai subdirectory
+//      AI cares about airplane servicing and range constraints
+//
 //     Revision 1.135  2001/02/26 12:35:28  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -2551,7 +2557,7 @@ int main(int argc, char *argv[] )
       }
 
       if ( strcmpi ( &argv[i][1], "-configfile" ) == 0 ||
-           strcmpi ( &argv[i][1], "cf" ) == 0 ) {
+           strcmpi ( &argv[i][1], "c" ) == 0 ) {
          configfile = argv[++i]; continue;
       }
 
@@ -2565,16 +2571,17 @@ int main(int argc, char *argv[] )
           ( strcmpi ( &argv[i][1], "h" ) == 0 ) ||
           ( strcmpi ( &argv[i][1], "-help" ) == 0 ) ){
         printf( " Parameters: \n"
+                "\t--help\n"
                 "\t-h                 this page\n"
-                "\t-eg file\n"
+                "\t-e file\n"
                 "\t--emailgame file   continue an email game\n"
-                "\t-sg file\n"
+                "\t-s file\n"
                 "\t--savegame file    continue a saved game\n"
-                "\t-lm file\n"
+                "\t-m file\n"
                 "\t--loadmap file     start with a given map\n"
                 "\t-v x\n"
                 "\t--verbose x        set verbosity level to x (0..10)\n"
-                "\t-cf file\n"
+                "\t-c file\n"
                 "\t--configfile file  use given configuration file\n"
                 "\t-x:X               Set horizontal resolution to X; default is 800 \n"
                 "\t-y:Y               Set verticalal resolution to Y; default is 600 \n"
@@ -2586,9 +2593,9 @@ int main(int argc, char *argv[] )
 #else
                 "\t-w\n"
                 "\t--window           Disable fullscreen mode \n"
-                "\t-fs\n"
+                "\t-f\n"
                 "\t--fullscreen       Enable fullscreen mode (overriding config file)\n"
-                "\t-ns\n"
+                "\t-q\n"
                 "\t--nosound          Disable sound \n" );
 #endif
         exit (0);

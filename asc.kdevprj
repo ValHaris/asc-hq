@@ -66,9 +66,9 @@ install_location=
 type=DATA
 [Workspace_1]
 browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/about/intro.html
-cpp_file=/home/martin/asc/source/sg.cpp
-header_file=/home/martin/asc/source/strtmesg.h
-openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/tools/mount.cpp,/home/martin/asc/source/dos/global_os.h,/home/martin/asc/source/dos/fileio.h,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/strtmesg.h,/home/martin/asc/source/strtmesg.cpp
+cpp_file=/home/martin/asc/source/libs/triangul/trimisc.c
+header_file=/home/martin/asc/source/docs/en/index.html
+openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/docs/Makefile.am,/home/martin/asc/source/docs/en/Makefile.am,/home/martin/asc/source/docs/en/index.sgml,/home/martin/asc/source/docs/en/index.html,/home/martin/asc/source/libs/triangul/trimisc.c
 show_outputview=true
 show_treeview=true
 [asc.kdevprj]

@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+
+<META NAME="Generator" CONTENT="WebWriter/2 v1.2">
+<TITLE>ASC documentation: editor overview</TITLE>
+<LINK REL="stylesheet" TYPE="text/css" HREF="asc.css">
+</HEAD>
+
+<BODY text="#000000" bgcolor="#ffffff">
+
+<CENTER>
+<H1>Advanced Strategic Command</H1>
+<P>documentation<P>
+<H2>The Editors</H2>
+</CENTER>
+
+<HR>
+Not all editors are available for each platform !
+<HR>
+Important note for DOS and Windows users:
+<BLOCKQUOTE>
+<b>Make sure you call ALL programs from your game directory, NOT from your TOOLS directory although most editors reside there. <BR>
+Type <TT>tools\makeveh</TT> from your game directory to start the hexagonal vehicle editor for example.</b><P>
+Under Windows you can create shortcuts for the editors and set the working directory to ASC's main directory. If you don't like neither of the above methods, just move all files from your TOOLS directory to your game directory.<P>
+</BLOCKQUOTE>
+
+<HR>
+<P>
+
+During the development we never thought about proper names
+for everything that is in the game. This was not a problem
+until I started writing the documentation, when I realized
+that the most appropriate names where already used for other
+things. So there is some mess but I hope that it is clear
+what I'm trying to say :-)<P>
+
+The game is based upon a number of "categories":<P>
+<UL>
+<LI>terrain
+<LI>units
+<LI>buildings
+<LI>technologies
+<LI>objects
+</UL>
+<P>
+Each category is associated with a certain file extension
+and has several items:
+<P>
+
+
+<TABLE BORDER>
+<TR>
+	<TH>category</TH>
+	<TH>file extension</TH>
+	<TH>examples</TH>
+</TR>
+<TR>
+	<TH>terrain</TH>
+	<TD>*.trr</TD>
+	<TD>grassland, coast, water</TD>
+</TR>
+<TR>
+	<TH>vehicles</TH>
+	<TD>*.veh</TD>
+	<TD>transport plane, paratrooper, nuclear submarine</TD>
+</TR>
+<TR>
+	<TH>buildings</TH>
+	<TD>*.bld</TD>
+	<TD>vehicle factory, research facility, headquarter</TD>
+</TR>
+<TR>
+	<TH>technologies</TH>
+	<TD>*.tec</TD>
+	<TD>armor level 2, air cushion vehicles</TD>
+</TR>
+<TR>
+	<TH>objects</TH>
+	<TD>*.obl</TD>
+	<TD>wood, roads, pipelines</TD>
+</TR>
+</TABLE>
+<P>
+
+Each item is in its own file. All these files are loaded at
+startup of the game. So including a new building type is as
+simple as putting the appropriate file in the game
+directory.<P>
+A note for those who want to work with the source code: The classes representing these items are called <CODE>*type</CODE>, like <CODE>Vehicletype</CODE> or <CODE>Buildingtype</CODE> (except for the technologies).
+<P>
+
+Each item category has its own editor that is named after the fileextension, for example <TT>MAKEBLD.EXE</TT> is the editor for the buildings.<P>
+
+Documentation for the editors can be found here:<P>
+<UL>
+<!-- <LI><A HREF="maketrrn.html">terrain editor</A> -->
+<LI><A HREF="maketank.html">vehicle editor</A>
+<!-- <LI><A HREF="makebuld.html">building editor</A> -->
+<LI><A HREF="maketech.html">technology editor</A>
+<LI><A HREF="makeobject.html">object editor</A>
+</UL>
+<P>
+
+Walk throughs that describe the usage of these editors can be found here:
+<A HREF="biimport.html">Importing graphics from Battle Isle</A>. Although we no longer use the Battle Isle graphics and the Battle Isle vehicle set has been completely implemented in ASC (but it is not part of the distribution), this text should still be a useful introduction and guide to the editors.<P>
+
+<A NAME="ID"><H3>IDs</H3></A>
+The items of every category are identified by a ID that has
+to be unique for each category. When you're creating
+new items you should check which IDs are not used yet. This can be done using the programs <TT>VIEWID.EXE</TT>.
+
+(A note for those users who don't know how to work with a command line program: you can redirect the output to a file by starting <TT>VIEWID.EXE &gt; FILENAME</TT>).<P>
+
+To experiment you can just use any ID that is not used up to now. But if someone else makes items using the same IDs and publishes these items you can get into trouble if you want to use them too. If you make only a few items and don't build any maps using these items you can change the IDs 
+afterwards. But the best way to prevent all these problems is to contact us
+through the mailing lists and get your own set of IDs. The upper limit for some IDs is 2147483647 (signed 32 bit integer) and for others 65535 ( unsigned 16 bit) and there is no problem (or better there should not be problems....) using such large IDs. Some older versions of ASC had a problem with the memory requirements, but that is fixed now. IDs must be greater than 0.<P>
+
+Please do not use IDs below 100 for new objects !!<P>
+
+<P>
+
+<H3>Some hints</H3>
+
+The Editors (<TT>MAKE*.EXE</TT>) ask for the values of the properties
+one after another. With the key combinations <TT>&lt;Ctrl-C&gt;</TT> or
+<TT>&lt;Ctrl break&gt;</TT> they can be exited at any time if you entered
+wrong values and don't want them to be saved.
+Besides the first questions (make/load; picture; continue)
+the values can always be confirmed with <TT>&lt;Enter&gt;</TT> when editing
+an existing item. If for example only the first property
+shall be changed all further parameters can be confirmed
+simply by holding <TT>&lt;Enter&gt;</TT>.
+This does not seem to be correct on first sight for the
+classes of vehicle types but it really is.
+
+
+<P>
+The editor package contains additionally:<P>
+
+<UL>
+<LI><A HREF="mapedit.html"><TT>EDHEX.EXE</TT></A> map editor,  which has recently been moved to the main package. 
+
+<LI><A HREF="prnttank.html"><TT>PRNTVEH.EXE</TT></A> generates text files with list the parameters of the vehicle types.
+
+<LI><A HREF="mount.html"><TT>MOUNT.EXE</TT></A> builds container files.
+
+<LI><A HREF="demount.html"><TT>DEMOUNT.EXE</TT></A> extracts container files.
+
+<!-- <LI><A HREF="clearup.html"><TT>CLEARUP.EXE</TT></A> deletes unused files of older small updates after a  complete update. You should only use it when the use of it is stated as necessary in the documentation of an update for the game.<P>
+ -->
+
+</UL>
+
+
+</BODY>
+</HTML>
