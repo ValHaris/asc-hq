@@ -31,10 +31,7 @@
 #include "loadpcx.h"
 
 int bi3graphnum = 0;
-
 int keeporiginalpalette = 0;
-
-
 
 ActiveGraphicPictures activeGraphicPictures;
 
@@ -208,12 +205,21 @@ void loadbi3graphics( void )
                if ( gs->id == 1 ) {
                   if ( picmode[i] < 256 ) {
                      tvirtualdisplay vdp ( 100, 100, 255 );
-                     /*
-                     putspriteimage ( 8, 8, p );
-                     putspriteimage ( 8, 12, p );
-                     putspriteimage ( 12, 8, p );
-                     putspriteimage ( 12, 12, p );
-                     */
+
+                     bool fullimage = true;
+                     for ( int x = 0; x < 80; x++ )
+                        for ( int y = 0; y < 80; y++ )
+                           if ( getpixelfromimage ( mask, x, y ) == 0 )
+                              if ( getpixelfromimage ( p, x, y ) == 255 )
+                                 fullimage = false;
+
+                     if ( fullimage ) {
+                        putspriteimage ( 8, 8, p );
+                        putspriteimage ( 8, 12, p );
+                        putspriteimage ( 12, 8, p );
+                        putspriteimage ( 12, 12, p );
+                     }
+
                      putspriteimage ( 10, 10, p );
 
                      putmask ( 10, 10, mask, 0 );
@@ -222,6 +228,7 @@ void loadbi3graphics( void )
                      fn+=strrr(i);
                      fn+=".pcx";
                      writepcx ( fn.c_str(), 10, 10, 10+fieldsizex-1, 10+fieldsizey-1, pal );
+                     printf("image %s generated \n", fn.c_str() );
                   }
                }
 #endif
