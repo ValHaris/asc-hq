@@ -1634,8 +1634,7 @@ int   cbuildingcontrols :: cdissectunit :: available ( pvehicle eht )
 void   cbuildingcontrols :: cdissectunit :: dissectunit ( pvehicle eht )
 {
    if ( available ( eht ) ) {
-      if ( CGameOptions::Instance()->container.emptyeverything )
-         cc->refill.emptyeverything ( eht );
+      cc->refill.emptyeverything ( eht );
       dissectvehicle ( eht );
       cc_b->removevehicle ( &eht );
    }
@@ -2955,9 +2954,9 @@ void  ccontainer :: moveicon_c :: exec         ( void )
       for ( int i = 0; i < vehicleMovement->reachableFields.getFieldNum(); i++ )
          vehicleMovement->reachableFields.getField( i ) ->a.temp = 1;
 
-      if ( !CGameOptions::Instance()->dontMarkFieldsNotAccessible_movement )
-         for ( int j = 0; j < vehicleMovement->reachableFieldsIndirect.getFieldNum(); j++ )
-            vehicleMovement->reachableFieldsIndirect.getField( j ) ->a.temp2 = 2;
+      //if ( !CGameOptions::Instance()->dontMarkFieldsNotAccessible_movement )
+      for ( int j = 0; j < vehicleMovement->reachableFieldsIndirect.getFieldNum(); j++ )
+         vehicleMovement->reachableFieldsIndirect.getField( j ) ->a.temp2 = 2;
 
       displaymap();
 

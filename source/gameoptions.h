@@ -73,7 +73,7 @@ class CGameOptions
       int startupcount;
 
       //! are fields marked that a unit could move to if there was no other unit standing
-      int dontMarkFieldsNotAccessible_movement;
+      // int dontMarkFieldsNotAccessible_movement;
 
       //! first delay of attack display
       int attackspeed1;
@@ -83,12 +83,6 @@ class CGameOptions
 
       //! second delay in attack display
       int attackspeed3;
-
-      //! when an airplanes changes its height, should all accessible fields be found from which the height change can be started? May take some time on slower computers
-      int heightChangeMovement;
-
-      //! not relevant any more
-      int runAI;
 
       //! force ASC to run in windowed mode (and not fullscreen, which is default)
       int forceWindowedMode;
@@ -108,10 +102,6 @@ class CGameOptions
 
       //! the vertical resolution the mapeditor uses
       int mapeditor_yresolution;
-
-      //! temporary variable
-      int specialForestChaining;
-
 
       //! the mouse configuration. Mouse button are: bit 0 = left button ; bit 1 = right button ; bit 2 = center button
       struct Mouse
@@ -168,7 +158,6 @@ class CGameOptions
          public:
             int autoproduceammunition;
             int filleverything;
-            int emptyeverything;
       }
       container;
 

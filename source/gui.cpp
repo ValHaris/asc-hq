@@ -976,9 +976,9 @@ void  tnsguiiconmove::exec         ( void )
       for ( int i = 0; i < pendingVehicleActions.move->reachableFields.getFieldNum(); i++ ) 
          pendingVehicleActions.move->reachableFields.getField( i ) ->a.temp = 1;
 
-      if ( !CGameOptions::Instance()->dontMarkFieldsNotAccessible_movement )
-         for ( int j = 0; j < pendingVehicleActions.move->reachableFieldsIndirect.getFieldNum(); j++ )
-            pendingVehicleActions.move->reachableFieldsIndirect.getField( j ) ->a.temp2 = 2;
+      // if ( !CGameOptions::Instance()->dontMarkFieldsNotAccessible_movement )
+      for ( int j = 0; j < pendingVehicleActions.move->reachableFieldsIndirect.getFieldNum(); j++ )
+         pendingVehicleActions.move->reachableFieldsIndirect.getField( j ) ->a.temp2 = 2;
       displaymap();
 
    } else {
@@ -995,6 +995,7 @@ void  tnsguiiconmove::exec         ( void )
            res = pendingVehicleActions.move->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.move->getStatus(), -1, 0 );
         } else {
            if ( ms == 2 ) {
+              actmap->cleartemps(7);
               for ( int i = 0; i < pendingVehicleActions.move->path.size(); i++ )
                  actmap->getField( pendingVehicleActions.move->path[i]) ->a.temp = 1;
               displaymap();
@@ -1136,7 +1137,7 @@ int   tnsguiiconascent::available    ( void )
       if ( pendingVehicleActions.actionType == vat_ascent ) {
          switch ( pendingVehicleActions.ascent->getStatus() ) {
            case 2: return pendingVehicleActions.ascent->reachableFields.isMember ( getxpos(), getypos() );
-           case 3: return pendingVehicleActions.ascent->path.rbegin()->x == getxpos() && pendingVehicleActions.move->path.rbegin()->y == getypos();
+           case 3: return pendingVehicleActions.ascent->path.rbegin()->x == getxpos() && pendingVehicleActions.ascent->path.rbegin()->y == getypos();
          } /* endswitch */
       }
    return 0;
@@ -1179,8 +1180,9 @@ void  tnsguiiconascent::exec         ( void )
               res = pendingVehicleActions.ascent->execute ( NULL, xdst, ydst, pendingVehicleActions.ascent->getStatus(), -1, 0 );
         } else {
            actmap->cleartemps(7);
-           for ( int i = 0; i < pendingVehicleActions.ascent->path.size(); i++ )
-              actmap->getField( pendingVehicleActions.ascent->path[i]) ->a.temp = 1;
+           if ( res < 1000 )
+              for ( int i = 0; i < pendingVehicleActions.ascent->path.size(); i++ )
+                 actmap->getField( pendingVehicleActions.ascent->path[i]) ->a.temp = 1;
            displaymap();
         }
 
@@ -1257,7 +1259,7 @@ int   tnsguiicondescent::available    ( void )
       if ( pendingVehicleActions.actionType == vat_descent ) {
          switch ( pendingVehicleActions.descent->getStatus() ) {
            case 2: return pendingVehicleActions.descent->reachableFields.isMember ( getxpos(), getypos() );
-           case 3: return pendingVehicleActions.descent->path.rbegin()->x == getxpos() && pendingVehicleActions.move->path.rbegin()->y == getypos();
+           case 3: return pendingVehicleActions.descent->path.rbegin()->x == getxpos() && pendingVehicleActions.descent->path.rbegin()->y == getypos();
          } /* endswitch */
       }
    return 0;
@@ -1299,8 +1301,9 @@ void  tnsguiicondescent::exec         ( void )
               res = pendingVehicleActions.descent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.descent->getStatus(), -1, 0 );
         else {
            actmap->cleartemps(7);
-           for ( int i = 0; i < pendingVehicleActions.descent->path.size(); i++ )
-              actmap->getField( pendingVehicleActions.descent->path[i]) ->a.temp = 1;
+           if ( res < 1000 )
+              for ( int i = 0; i < pendingVehicleActions.descent->path.size(); i++ )
+                 actmap->getField( pendingVehicleActions.descent->path[i]) ->a.temp = 1;
            displaymap();
         }
 

@@ -717,7 +717,7 @@ int readgameoptions ( const char* filename )
             CGameOptions::Instance()->mapzoom = stream.readInt();
             CGameOptions::Instance()->mapzoomeditor = stream.readInt();
             CGameOptions::Instance()->startupcount = stream.readInt();
-            CGameOptions::Instance()->dontMarkFieldsNotAccessible_movement = stream.readInt();
+            stream.readInt(); // dontMarkFieldsNotAccessible_movement
             CGameOptions::Instance()->attackspeed1 = stream.readInt();
             CGameOptions::Instance()->attackspeed2 = stream.readInt();
             CGameOptions::Instance()->attackspeed3 = stream.readInt();
@@ -738,7 +738,7 @@ int readgameoptions ( const char* filename )
 
             CGameOptions::Instance()->container.autoproduceammunition = stream.readInt();
             CGameOptions::Instance()->container.filleverything = stream.readInt();
-            CGameOptions::Instance()->container.emptyeverything = stream.readInt();
+            stream.readInt(); // CGameOptions::Instance()->container.emptyeverything =
             for ( int k = 0; k < 10; k++ )
                stream.readInt();
 

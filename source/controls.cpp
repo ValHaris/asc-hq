@@ -2091,21 +2091,13 @@ void nextPlayer( void )
 
 void runai( int playerView )
 {
-   if ( CGameOptions::Instance()->runAI >= 0 ) {
-      actmap->playerView = playerView;
+   actmap->playerView = playerView;
 
-      if ( !actmap->player[ actmap->actplayer ].ai )
-         actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
+   if ( !actmap->player[ actmap->actplayer ].ai )
+      actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
 
-      actmap->player[ actmap->actplayer ].ai->run();
-      dashboard.x = 0xffff;
-
-   } else {
-      tlockdispspfld displock;
-      checkalliances_at_beginofturn ();
-      computeview( actmap );
-      displaymessage("no AI available yet", 1 );
-   }
+   actmap->player[ actmap->actplayer ].ai->run();
+   dashboard.x = 0xffff;
 }
 
 void next_turn ( int playerView )

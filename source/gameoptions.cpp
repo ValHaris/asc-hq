@@ -60,7 +60,6 @@ void CGameOptions::setDefaults ( void )
 {
    forceWindowedMode = 0;
    mapeditForceFullscreenMode = 0;
-   runAI = 0;
    fastmove	=	1;
    movespeed=15;
    endturnquestion=0;
@@ -69,7 +68,7 @@ void CGameOptions::setDefaults ( void )
    mapzoom=75;
    mapzoomeditor=60;
    startupcount=0;
-   dontMarkFieldsNotAccessible_movement=0;
+   // dontMarkFieldsNotAccessible_movement=0;
    attackspeed1=0;
    attackspeed2=0;
    attackspeed3=0;
@@ -78,8 +77,6 @@ void CGameOptions::setDefaults ( void )
    sound.muteMusic=0;
    sound.soundVolume=100;
    sound.musicVolume=100;
-   specialForestChaining = 1;
-   heightChangeMovement = 1;
 
    mouse.scrollbutton=0;
    mouse.fieldmarkbutton=2;
@@ -94,8 +91,6 @@ void CGameOptions::setDefaults ( void )
 
    container.autoproduceammunition=1;
    container.filleverything=1;
-
-   container.emptyeverything=1;
 
    onlinehelptime=100;
    smallguiiconopenaftermove=0;
@@ -142,7 +137,6 @@ for ( int i = 0; i < getSearchPathNum(); i++ )
 void CGameOptions::copy ( const CGameOptions& cgo )
 {
    fastmove	             = cgo.fastmove;
-   heightChangeMovement  = cgo.heightChangeMovement;
    movespeed             = cgo.movespeed;
    endturnquestion       = cgo.endturnquestion;
    smallmapactive        = cgo.smallmapactive;
@@ -150,7 +144,7 @@ void CGameOptions::copy ( const CGameOptions& cgo )
    mapzoom               = cgo.mapzoom;
    mapzoomeditor         = cgo.mapzoomeditor;
    startupcount          = cgo.startupcount;
-   dontMarkFieldsNotAccessible_movement=cgo.dontMarkFieldsNotAccessible_movement;
+   // dontMarkFieldsNotAccessible_movement=cgo.dontMarkFieldsNotAccessible_movement;
    attackspeed1          = cgo.attackspeed1;
    attackspeed2          = cgo.attackspeed2;
    attackspeed3          = cgo.attackspeed3;
@@ -172,8 +166,6 @@ void CGameOptions::copy ( const CGameOptions& cgo )
 
    container.autoproduceammunition = cgo.container.autoproduceammunition;
    container.filleverything = cgo.container.filleverything;
-
-   container.emptyeverything = cgo.container.emptyeverything;
 
    onlinehelptime            = cgo.onlinehelptime;
    smallguiiconopenaftermove = cgo.smallguiiconopenaftermove;

@@ -40,7 +40,6 @@ CLoadableGameOptions::CLoadableGameOptions(CGameOptions* pOptions)
    add(new IntProperty("Sound.MusicVolume"   						,&_pOptions->sound.musicVolume));
 
    add(new IntProperty("FastMove"								,&_pOptions->fastmove,3));
-   add(new IntProperty("HeightChangeMovement"	         ,&_pOptions->heightChangeMovement));
    add(new IntProperty("MovementSpeed"							,&_pOptions->movespeed));
    add(new IntProperty("EndTurnPrompt"							,&_pOptions->endturnquestion));
    add(new IntProperty("SmallMapVisible"						,&_pOptions->smallmapactive));
@@ -48,11 +47,10 @@ CLoadableGameOptions::CLoadableGameOptions(CGameOptions* pOptions)
    add(new IntProperty("MapZoom"									,&_pOptions->mapzoom));
    add(new IntProperty("MapZoomEditor"							,&_pOptions->mapzoomeditor));
    add(new IntProperty("StartupCount"							,&_pOptions->startupcount));
-   add(new IntProperty("dontMarkFieldsNotAccessible_movement"	,&_pOptions->dontMarkFieldsNotAccessible_movement));
+//   add(new IntProperty("dontMarkFieldsNotAccessible_movement"	,&_pOptions->dontMarkFieldsNotAccessible_movement));
    add(new IntProperty("AttackSpeed1"							,&_pOptions->attackspeed1));
    add(new IntProperty("AttackSpeed2"							,&_pOptions->attackspeed2));
    add(new IntProperty("AttackSpeed3"							,&_pOptions->attackspeed3));
-   add(new IntProperty("RunAI"									,&_pOptions->runAI));
    add(new IntProperty("ForceWindowedMode"   				,&_pOptions->forceWindowedMode));
    add(new IntProperty("MapeditForceFullscreenMode"   			,&_pOptions->mapeditForceFullscreenMode));
 
@@ -68,7 +66,6 @@ CLoadableGameOptions::CLoadableGameOptions(CGameOptions* pOptions)
 
    add(new IntProperty("Container.ProduceAmmoAutomatically"	,	&_pOptions->container.autoproduceammunition));
    add(new IntProperty("Container.FillUnitsAutomatically"	,	&_pOptions->container.filleverything));
-   add(new IntProperty("Container.EmptyUnitsAutomatically"	,	&_pOptions->container.emptyeverything));
 
    add(new IntProperty("ToolTipHelpDelay"					,	&_pOptions->onlinehelptime));
    add(new IntProperty("SmallGuiIconOpensAfterMove"	,	&_pOptions->smallguiiconopenaftermove));
@@ -76,7 +73,6 @@ CLoadableGameOptions::CLoadableGameOptions(CGameOptions* pOptions)
    add(new TextProperty("DefaultSupervisorPassword"					,	&_pOptions->defaultSuperVisorPassword));
    add(new IntProperty("ReplayDelay"						,	&_pOptions->replayspeed));
    add(new IntProperty("ShowUnitOwner"                ,  &_pOptions->showUnitOwner));
-   add(new IntProperty("SpecialForestChaining"        ,  &_pOptions->specialForestChaining));
 
    add(new TextProperty("BI3.path"							,	&_pOptions->bi3.dir	)	);
    add(new IntProperty("BI3.interpolate.terrain"		,	&_pOptions->bi3.interpolate.terrain));
