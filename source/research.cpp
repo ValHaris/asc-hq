@@ -103,6 +103,9 @@ int TechDependency::findInheritanceLevel( int id, vector<int>& stack, const ASCS
                   if ( t )
                      s += t->name + "\n";
                }
+               Technology* t = technologyRepository.getObject_byID( k );
+               if ( t )
+                  s += t->name + "\n";
                longWarning ( s );
                return -1;
             }
@@ -171,8 +174,31 @@ void TechDependency::writeTreeOutput ( const ASCString& sourceTechName, tnstream
       }
 }
 
+ASCString generateTechName( const Technology* tech )
+{
+   ASCString s = ASCString(strrr(tech->id)) + "-";
+   ASCString stn = tech->name;
 
-void TechDependency::writeInvertTreeOutput ( const Technology* tech, tnstream& stream, vector<int>& history, const vector<IntRange>* onlyWithBaseTechs ) const
+   while ( stn.find ( "\"" ) != ASCString::npos )
+      stn.erase ( stn.find ( "\"" ),1 );
+
+   return s + stn;
+}
+
+ASCString generateTechLabel ( const Technology* tech )
+{
+   ASCString s2 = tech->name;
+   while ( s2.find ( "\"" ) != ASCString::npos )
+      s2.erase ( s2.find ( "\"" ),1 );
+
+
+   ASCString s = "\"" + generateTechName(tech) + "\" [color=black label=\"" + s2 + "\\n";
+//  s += "ID " + ASCString(strrr( tech->id)) + "; ";
+   s += ASCString(strrr(tech->researchpoints)) + " RP\"] \n";
+   return s;
+}
+
+void TechDependency::writeInvertTreeOutput ( const Technology* tech, tnstream& stream, vector<int>& history, vector<pair<int,int> >& blockedPrintList, const vector<IntRange>* onlyWithBaseTechs ) const
 {
    if ( onlyWithBaseTechs && !onlyWithBaseTechs->empty() ) {
       vector<int> inheritanceStack;
@@ -181,29 +207,27 @@ void TechDependency::writeInvertTreeOutput ( const Technology* tech, tnstream& s
          for ( int j = i->from; j <= i->to; ++j )
             if ( findInheritanceLevel ( j, inheritanceStack, "" ) >= 0 )
                found = true;
-               
+
       if ( !found )
          return;
    }
+
+            for ( RequiredTechnologies::const_iterator i = blockingTechnologies.begin(); i != blockingTechnologies.end(); ++i ) {
+               for ( int l = i->from; l <= i->to; ++l ) {
+                  const Technology* block = technologyRepository.getObject_byID( l );
+                  if ( block && find ( blockedPrintList.begin(), blockedPrintList.end(), make_pair(tech->id,l)) == blockedPrintList.end() ) {
+                     ASCString b = "\"" + generateTechName( block )+ "\" -> \"" + generateTechName( tech ) + "\" [color=red label=\"blocks\" fontcolor=red fontsize=10]\n"; // arrowhead=inv
+                     stream.writeString ( b, false );
+                     blockedPrintList.push_back ( make_pair(tech->id,l) );
+                  }
+               }
+            }
 
    for ( RequiredTechnologies::const_iterator j = requiredTechnologies.begin(); j != requiredTechnologies.end(); ++j )
       for ( int k = j->from; k <= j->to; ++k ) {
          const Technology* t = technologyRepository.getObject_byID( k );
          if ( t ) {
-            ASCString s = "\"";
-            ASCString stn = tech->name;
-
-            while ( stn.find ( "\"" ) != ASCString::npos )
-               stn.erase ( stn.find ( "\"" ),1 );
-
-            s += stn;
-            s += "\" -> \"";
-
-            ASCString stn2 = t->name;
-            while ( stn2.find ( "\"" ) != ASCString::npos )
-               stn2.erase ( stn2.find ( "\"" ),1 );
-
-            s += stn2 + "\"";
+            ASCString s = "\"" + generateTechName( tech )+ "\" -> \"" + generateTechName( t ) + "\"";
 
             if ( !requireAllListedTechnologies )
                s += "[style=dotted]";
@@ -212,16 +236,19 @@ void TechDependency::writeInvertTreeOutput ( const Technology* tech, tnstream& s
 
             stream.writeString ( s, false );
 
-            stream.writeString ( "\"" + stn + "\" [color=black label=\"" + stn + "\\n" + strrr(tech->researchpoints) + " RP\"] \n", false );	    
+
+            stream.writeString ( generateTechLabel(tech), false );
+            stream.writeString ( generateTechLabel(t), false );
+
             if ( find ( history.begin(), history.end(), t->id) == history.end()) {
-               history.push_back ( t->id );	       
-               t->techDependency.writeInvertTreeOutput ( t, stream, history );
+               history.push_back ( t->id );
+               t->techDependency.writeInvertTreeOutput ( t, stream, history, blockedPrintList );
             }
          }
       }
 }
 
-void TechDependency::writeInvertTreeOutput ( const ASCString techName, tnstream& stream, vector<int>& history, const vector<IntRange>* onlyWithBaseTechs ) const
+void TechDependency::writeInvertTreeOutput ( const ASCString techName, tnstream& stream, vector<int>& history, vector<pair<int,int> >& blockedPrintList, const vector<IntRange>* onlyWithBaseTechs ) const
 {
    if ( onlyWithBaseTechs && !onlyWithBaseTechs->empty() ) {
       vector<int> inheritanceStack;
@@ -230,7 +257,7 @@ void TechDependency::writeInvertTreeOutput ( const ASCString techName, tnstream&
          for ( int j = i->from; j <= i->to; ++j )
             if ( findInheritanceLevel ( j, inheritanceStack, "" ) >= 0 )
                found = true;
-               
+
       if ( !found )
          return;
    }
@@ -242,15 +269,10 @@ void TechDependency::writeInvertTreeOutput ( const ASCString techName, tnstream&
             ASCString s = "\"";
             ASCString stn = techName;
 
-            while ( stn.find ( "\"" ) != ASCString::npos )
-               stn.erase ( stn.find ( "\"" ),1 );
-
             s += stn;
             s += "\" -> \"";
 
-            ASCString stn2 = t->name;
-            while ( stn2.find ( "\"" ) != ASCString::npos )
-               stn2.erase ( stn2.find ( "\"" ),1 );
+            ASCString stn2 = generateTechName( t );
 
             s += stn2 + "\"";
 
@@ -263,8 +285,8 @@ void TechDependency::writeInvertTreeOutput ( const ASCString techName, tnstream&
 
             stream.writeString ( "\"" + stn + "\" [color=black] \n", false );
             if ( find ( history.begin(), history.end(), t->id) == history.end()) {
-               history.push_back ( t->id );	       
-               t->techDependency.writeInvertTreeOutput ( t, stream, history );
+               history.push_back ( t->id );
+               t->techDependency.writeInvertTreeOutput ( t, stream, history, blockedPrintList );
             }
          }
       }
@@ -362,12 +384,13 @@ void TechAdapterDependency::runTextIO ( PropertyContainer& pc, const ASCString& 
 }
 
 void TechAdapterDependency::writeInvertTreeOutput ( const ASCString& tech, tnstream& stream, const vector<IntRange>* onlyWithBaseTechs ) const
-{   
+{
    vector<int> history;
+   vector<pair<int,int> > blockedPrintList;
    for ( RequiredTechAdapter::const_iterator r = requiredTechAdapter.begin(); r != requiredTechAdapter.end(); ++r )
       for ( TechAdapterContainer::iterator i = techAdapterContainer.begin(); i != techAdapterContainer.end(); ++i )
          if ( *r == (*i)->getName() )
-            (*i)->techDependency.writeInvertTreeOutput ( tech, stream, history, onlyWithBaseTechs );
+            (*i)->techDependency.writeInvertTreeOutput ( tech, stream, history, blockedPrintList, onlyWithBaseTechs );
 }
 
 

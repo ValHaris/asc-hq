@@ -787,7 +787,7 @@ void checkDataVersion( )
       tnfilestream s ( "mk1.version", tnstream::reading );
       ASCString str = s.readString();
       int v = atoi ( str.c_str() );
-      if ( v < 4 )
+      if ( v < 10 )
          dataOk = false;
       location = s.getLocation();
    } else
@@ -801,28 +801,28 @@ void checkDataVersion( )
       tnfilestream s ( "buildings.version", tnstream::reading );
       ASCString str = s.readString();
       int v = atoi ( str.c_str() );
-      if ( v < 2 || v >= 0xffff)
+      if ( v < 10 || v >= 0xffff)
          dataOk = false;
       location = s.getLocation();
    } else
       dataOk = false;
 
-//   if ( !dataOk )
-//      versionError ( "buildings.con", location );
+   if ( !dataOk )
+      versionError ( "buildings.con", location );
 
 
    if ( exist ( "trrobj.version" )) {
       tnfilestream s ( "trrobj.version", tnstream::reading );
       ASCString str = s.readString();
       int v = atoi ( str.c_str() );
-      if ( v < 7 )
+      if ( v < 10 )
          dataOk = false;
       location = s.getLocation();
    } else
       dataOk = false;
 
-//   if ( !dataOk )
-//      versionError ( "trrobj.con", location );
+   if ( !dataOk )
+      versionError ( "trrobj.con", location );
 
 }
 

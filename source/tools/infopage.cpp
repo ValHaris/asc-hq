@@ -1319,7 +1319,7 @@ void UnitResearchPage::buildContent() {
   if ( res != 0 ) {
     cerr << "ERROR encountered at: " << sysCommand.c_str() << endl;
   }
-  remove(dotFile.c_str());
+  // remove(dotFile.c_str());
 
   TechTreePage ttp(vt, techedFileName, filePath, generator, techPicPath);
   ttp.buildPage();

@@ -10,9 +10,8 @@ DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
 PROJECTS = bzlib.lib libjpeg.lib triangulation.lib tools.lib SDLmm.lib \
-  libsigcpp.lib mount.exe demount.exe viewid.exe makegfx.exe makepal.exe \
-  tank2pcx.exe weaponguide.exe pcx2raw.exe gfx2pcx.exe ai.lib Paragui.lib \
-  mapeditor.exe asc.exe
+  libsigcpp.lib mount.exe demount.exe makegfx.exe makepal.exe weaponguide.exe \
+  pcx2raw.exe ai.lib Paragui.lib mapeditor.exe asc.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -59,16 +58,8 @@ mount.exe: source\tools\win\mount.bpr
   $(ROOT)\bin\bpr2mak $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
-viewid.exe: source\tools\win\viewid.bpr
-  $(ROOT)\bin\bpr2mak $**
-  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
-
 ai.lib: source\ai\ai.bpr
   $(ROOT)\bin\bpr2mak -t$(ROOT)\bin\deflib.bmk $**
-  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
-
-tank2pcx.exe: SOURCE\TOOLS\WIN\tank2pcx.bpr
-  $(ROOT)\bin\bpr2mak $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
 SDLmm.lib: source\libs\sdlmm\SDLmm.bpr
@@ -81,10 +72,6 @@ makepal.exe: source\tools\win\makepal.bpr
 
 Paragui.lib: ..\paragui\borland\Paragui.bpr
   $(ROOT)\bin\bpr2mak -t$(ROOT)\bin\deflib.bmk $**
-  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
-
-gfx2pcx.exe: source\tools\win\gfx2pcx.bpr
-  $(ROOT)\bin\bpr2mak $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
 pcx2raw.exe: source\tools\win\pcx2raw.bpr

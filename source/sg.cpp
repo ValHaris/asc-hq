@@ -121,8 +121,6 @@
 #include "statisticdialog.h"
 #include "clipboard.h"
 
-#include "../../SDL_ttf/SDL_ttf.h"
-
 // #define MEMCHK
 
 #include "memorycheck.cpp"
@@ -1797,6 +1795,7 @@ void  mainloop ( void )
                break;
 
             case ct_f11: {
+            // computeview ( actmap );
             }
             break;
 

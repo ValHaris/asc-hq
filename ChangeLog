@@ -1,3 +1,489 @@
+2004-10-03 13:17  mbickel
+
+	* asc.bpg, source/controls.cpp, source/replay.cpp,
+	source/resourcenet.cpp, source/sgstream.cpp, source/strtmesg.cpp,
+	source/tools/win/weaponguide.bpr:  Fixed replay bug
+
+2004-10-02 10:38  mbickel
+
+	* source/: basegfx.cpp, itemrepository.cpp, mapdisplay.cpp,
+	graphics/surface.cpp, graphics/surface.h:  Fixed graphic errors
+
+2004-10-01 23:05  mbickel
+
+	* source/: basegfx.cpp, dlg_box.cpp, itemrepository.cpp,
+	mapdisplay.cpp, terraintype.cpp, textfile_evaluation.cpp:  Fixed
+	some graphics problems
+
+2004-10-01 21:05  mbickel
+
+	* Makefile.in, asc.kdevelop, config.h.in, configure, configure.in,
+	data/Makefile.in, data/dialog/Makefile.in, data/music/Makefile.in,
+	doc/Makefile.in, doc/manpages/Makefile.in, source/Makefile.in,
+	source/textfile_evaluation.cpp, source/ai/Makefile.in,
+	source/clparser/Makefile.in, source/docs/Makefile.in,
+	source/docs/en/Makefile.in, source/graphics/Makefile.in,
+	source/graphics/ascttfont.h, source/graphics/surface.cpp,
+	source/graphics/surface.h, source/libs/Makefile.in,
+	source/libs/sdlmm/Makefile.in, source/libs/sdlmm/src/Makefile.in,
+	source/libs/triangul/Makefile.in, source/sdl/Makefile.in,
+	source/tools/Makefile.in, source/tools/lib/Makefile.in,
+	source/tools/linux/Makefile.in, source/unix/Makefile.am,
+	source/unix/Makefile.in, source/unix/mapeditor/Makefile.am,
+	source/unix/mapeditor/Makefile.in:  Added SDL_ttf to make system
+	 Worked on new graphics engine
+
+2004-10-01 16:59  mbickel
+
+	* source/graphics/: ascttfont.cpp, ascttfont.h:  Updated font files
+
+2004-09-26 22:03  mbickel
+
+	* source/graphics/: Makefile.am, Makefile.in:  Added makefiles
+
+2004-09-26 22:02  mbickel
+
+	* configure.in, source/Makefile.am, source/Makefile.in,
+	source/edmisc.cpp, source/sgstream.cpp, source/sgstream.h,
+	source/textfile_evaluation.h, source/graphics/ascttfont.cpp,
+	source/graphics/ascttfont.h, source/tools/linux/Makefile.am,
+	source/tools/linux/Makefile.in, source/unix/Makefile.am,
+	source/unix/Makefile.in, source/unix/mapeditor/Makefile.am,
+	source/unix/mapeditor/Makefile.in:  Made branch compilable
+
+2004-09-26 21:53  mbickel
+
+	* configure, configure.in, source/Makefile.am, source/Makefile.in,
+	source/basegfx.cpp, source/basegfx.h, source/edmisc.cpp,
+	source/mapdisplay.cpp, source/sgstream.cpp, source/sgstream.h,
+	source/terraintype.cpp, source/terraintype.h,
+	source/textfile_evaluation.cpp, source/textfile_evaluation.h,
+	source/sdl/graphics.cpp, source/sdl/graphics.h,
+	source/tools/linux/Makefile.am, source/tools/linux/Makefile.in,
+	source/unix/Makefile.am, source/unix/Makefile.in,
+	source/unix/mapeditor/Makefile.am,
+	source/unix/mapeditor/Makefile.in, source/win32/borland/asc.bpr: 
+	Reversed merge of branch
+
+2004-09-26 21:30  mbickel
+
+	* TODO, configure, configure.in, source/Makefile.am,
+	source/Makefile.in, source/basegfx.cpp, source/basegfx.h,
+	source/edmisc.cpp, source/mapdisplay.cpp, source/sgstream.cpp,
+	source/sgstream.h, source/terraintype.cpp, source/terraintype.h,
+	source/textfile_evaluation.cpp, source/textfile_evaluation.h,
+	source/graphics/Makefile.am, source/graphics/Makefile.in,
+	source/graphics/ascttfont.cpp, source/graphics/ascttfont.h,
+	source/graphics/surface.cpp, source/graphics/surface.h,
+	source/sdl/graphics.cpp, source/sdl/graphics.h,
+	source/tools/linux/Makefile.am, source/tools/linux/Makefile.in,
+	source/unix/Makefile.am, source/unix/Makefile.in,
+	source/unix/mapeditor/Makefile.am,
+	source/unix/mapeditor/Makefile.in, source/win32/borland/asc.bpr: 
+	Made branch compilable under linux
+
+2004-09-26 20:57  mbickel
+
+	* asc.kdevelop:  Added Kdevelop project file
+
+2004-09-25 22:35  mbickel
+
+	* source/graphics/surface.cpp: file surface.cpp was initially added
+	on branch NewGraphics_branch.
+
+2004-09-25 22:35  mbickel
+
+	* source/graphics/surface.h: file surface.h was initially added on
+	branch NewGraphics_branch.
+
+2004-09-25 22:35  mbickel
+
+	* source/graphics/: ascttfont.cpp, ascttfont.h, surface.cpp,
+	surface.h:  Added new files
+
+2004-09-25 22:35  mbickel
+
+	* source/graphics/ascttfont.cpp: file ascttfont.cpp was initially
+	added on branch NewGraphics_branch.
+
+2004-09-25 22:35  mbickel
+
+	* source/graphics/ascttfont.h: file ascttfont.h was initially added
+	on branch NewGraphics_branch.
+
+2004-09-25 22:34  mbickel
+
+	* TODO, source/basegfx.cpp, source/basegfx.h,
+	source/mapdisplay.cpp, source/sgstream.cpp, source/sgstream.h,
+	source/terraintype.cpp, source/terraintype.h,
+	source/textfile_evaluation.cpp, source/textfile_evaluation.h,
+	source/sdl/graphics.cpp, source/sdl/graphics.h,
+	source/win32/borland/asc.bpr: started replacement of old graphics
+	system with SDLmm based one
+
+2004-09-25 22:30  mbickel
+
+	* README:  Testing branch
+
+2004-09-25 15:12  mbickel
+
+	* libtool, source/clipboard.h, source/unix/Makefile.in,
+	source/unix/mapeditor/Makefile.in:  Fixed compilation problems
+
+2004-09-25 14:37  mbickel
+
+	* source/: attack.cpp, buildingtype.cpp, buildingtype.h,
+	clipboard.cpp, clipboard.h, containerbase.cpp, dashboard.cpp,
+	edglobal.cpp, edmisc.cpp, edmisc.h, mapdisplay.cpp, replay.cpp,
+	replay.h, sg.cpp, strtmesg.cpp, vehicle.cpp, vehicle.h,
+	vehicletype.cpp, tools/infopage.cpp, tools/infopage.h,
+	unix/Makefile.am, unix/mapeditor/Makefile.am,
+	win32/borland/asc.bpr, win32/borland/mapeditor/mapeditor.bpr: 
+	Fixed crash in mapeditor
+	 fixed graphical glitches when moving from one field to an
+	invisible next
+	 ASC can create clipboard files
+	 units don't defend when attacker is not visible
+
+2004-09-25 13:32  mbickel
+
+	* data/: Adapter_asc014_AA-Ship.asctxt,
+	Adapter_asc014_Apogee.asctxt, Adapter_asc014_Argus.asctxt,
+	Adapter_asc014_Ark.asctxt, Adapter_asc014_Arrow.asctxt,
+	Adapter_asc014_Bang.asctxt, Adapter_asc014_Boomerang.asctxt,
+	Adapter_asc014_Bumblebee.asctxt, Adapter_asc014_Butterfly.asctxt,
+	Adapter_asc014_Clam.asctxt, Adapter_asc014_Cone.asctxt,
+	Adapter_asc014_Crab.asctxt, Adapter_asc014_Dominator.asctxt,
+	Adapter_asc014_EXP 21.asctxt, Adapter_asc014_EXP 43.asctxt,
+	Adapter_asc014_Eagle.asctxt, Adapter_asc014_Eel.asctxt,
+	Adapter_asc014_Fix.asctxt, Adapter_asc014_Gunboat.asctxt,
+	Adapter_asc014_Hawk.asctxt, Adapter_asc014_Impact.asctxt,
+	Adapter_asc014_Inca.asctxt, Adapter_asc014_Jellyfish.asctxt,
+	Adapter_asc014_Monster WIG.asctxt, Adapter_asc014_Nighcap.asctxt,
+	Adapter_asc014_Para Trooper.asctxt, Adapter_asc014_Predator.asctxt,
+	Adapter_asc014_Raven.asctxt, Adapter_asc014_Reha.asctxt,
+	Adapter_asc014_Relago.asctxt, Adapter_asc014_Scope.asctxt,
+	Adapter_asc014_Shark.asctxt, Adapter_asc014_Shine.asctxt,
+	Adapter_asc014_Squid.asctxt, Adapter_asc014_Streak.asctxt,
+	Adapter_asc014_Terror.asctxt, Adapter_asc014_Tide.asctxt,
+	Adapter_asc014_Timber.asctxt, Adapter_asc014_Tsunami.asctxt,
+	Adapter_asc014_Tupi.asctxt, Adapter_asc014_Vertic.asctxt,
+	Adapter_asc014_Wake.asctxt, Adapter_asc014_Wedge.asctxt,
+	Adapter_asc014_Zeppelin.asctxt, asc010b.map, asc014.map,
+	helpsyst.txt, tech_asc014_AA-Ship.asctxt,
+	tech_asc014_Apogee.asctxt, tech_asc014_Argus.asctxt,
+	tech_asc014_Ark.asctxt, tech_asc014_Arrow.asctxt,
+	tech_asc014_Bang.asctxt, tech_asc014_Boomerang.asctxt,
+	tech_asc014_Bumblebee.asctxt, tech_asc014_Butterfly.asctxt,
+	tech_asc014_Clam.asctxt, tech_asc014_Cone.asctxt,
+	tech_asc014_Crab.asctxt, tech_asc014_Dominator.asctxt,
+	tech_asc014_EXP 21.asctxt, tech_asc014_EXP 43.asctxt,
+	tech_asc014_Eagle.asctxt, tech_asc014_Eel.asctxt,
+	tech_asc014_Fix.asctxt, tech_asc014_Gunboat.asctxt,
+	tech_asc014_Hawk.asctxt, tech_asc014_Heli.asctxt,
+	tech_asc014_Impact.asctxt, tech_asc014_Inca.asctxt,
+	tech_asc014_Jellyfish.asctxt, tech_asc014_Monster WIG.asctxt,
+	tech_asc014_Nighcap.asctxt, tech_asc014_Para Trooper.asctxt,
+	tech_asc014_Predator.asctxt, tech_asc014_Raven.asctxt,
+	tech_asc014_Reha.asctxt, tech_asc014_Relago.asctxt,
+	tech_asc014_Scope.asctxt, tech_asc014_Shark.asctxt,
+	tech_asc014_Shine.asctxt, tech_asc014_Squid.asctxt,
+	tech_asc014_Streak.asctxt, tech_asc014_Terror.asctxt,
+	tech_asc014_Tide.asctxt, tech_asc014_Timber.asctxt,
+	tech_asc014_Tsunami.asctxt, tech_asc014_Tupi.asctxt,
+	tech_asc014_Vertic.asctxt, tech_asc014_Wake.asctxt,
+	tech_asc014_Wedge.asctxt, tech_asc014_Zeppelin.asctxt,
+	tech_asc014_air.asctxt, tech_asc014_base.asctxt,
+	tech_asc014_ship.asctxt, tech_asc014_sub.asctxt:  Updated campaign
+	maps
+
+2004-09-19 17:45  mbickel
+
+	* source/: containerbase.cpp, containerbase.h, edmisc.cpp,
+	research.cpp, strtmesg.cpp, vehicle.cpp, vehicletype.cpp,
+	win32/borland/mapeditor/mapeditor.bpr:	Fixed crashed in editor
+	 updated automatic vehicle cost calculation
+
+2004-09-13 19:25  mbickel
+
+	* source/gameevent_dialogs.cpp:  Fixed compilation problem
+	 prev revision: fixed generator vehicle
+
+2004-09-13 18:56  mbickel
+
+	* source/: attack.cpp, building.cpp, building_controls.h,
+	buildings.cpp, buildings.h, containerbase.cpp, containerbase.h,
+	controls.cpp, dashboard.cpp, dialog.cpp, dlg_box.cpp, edglobal.cpp,
+	edglobal.h, edmisc.cpp, edmisc.h, gamemap.cpp, gui.cpp,
+	itemrepository.cpp, objecttype.cpp, replay.cpp, research.cpp,
+	resourcenet.cpp, sg.cpp, strtmesg.cpp, textfile_evaluation.cpp,
+	textfile_evaluation.h, typen.h, unitctrl.cpp, vehicle.cpp,
+	vehicle.h, vehicletype.cpp, vehicletype.h, ai/misc.cpp,
+	ai/service.cpp:  Added many reset data functions to mapeditor
+	 cargomovecostdivisor for vehicles is now float
+	 Fixed: objects could not be attacked
+	 Filenames in cache
+
+2004-09-08 21:34  mbickel
+
+	* asc.bpg, data/railstations2.map, source/attack.cpp,
+	source/basestreaminterface.h, source/controls.cpp,
+	source/edmisc.cpp, source/edmisc.h, source/gameevent_dialogs.cpp,
+	source/itemrepository.cpp, source/resourcenet.h,
+	source/sgstream.cpp, source/strtmesg.cpp, source/vehicle.cpp,
+	source/vehicle.h, source/vehicletype.cpp, source/vehicletype.h,
+	source/ai/misc.cpp, source/tools/infopage.cpp:	Added multiple
+	reaction fire
+
+2004-09-05 17:38  mbickel
+
+	* data/: asc007.map, asc009.map:  Updated campaign maps
+
+2004-08-23 19:20  mbickel
+
+	* source/: building.cpp, buildingtype.cpp, itemrepository.cpp,
+	strtmesg.cpp:  Fixed: production not working
+
+2004-08-23 18:07  mbickel
+
+	* source/: buildingtype.cpp, itemrepository.cpp, strtmesg.cpp: 
+	Fixed crash at maps containing flying buildings
+
+2004-08-22 20:28  mbickel
+
+	* source/: gui.cpp, replay.cpp, replay.h, strtmesg.cpp,
+	unitctrl.cpp, vehicletype.cpp:	Fixed replay errors
+
+2004-08-22 16:36  mbickel
+
+	* source/tools/infopage.h:  Fixed absolute path usage in
+	weaponguide
+
+2004-08-19 21:19  mbickel
+
+	* Advanced Strategic Command.dev, Advanced Strategic
+	Command.layout, source/strtmesg.cpp, source/textfiletags.cpp,
+	source/textfiletags.h, source/typen.h, source/vehicletype.cpp,
+	source/vehicletype.h, source/tools/guidegenerator.cpp,
+	source/tools/infopage.cpp, source/tools/infopage.h,
+	source/win32/borland/asc.bpr:  Added automatic unitcost calculation
+	 Fixed weaponguide
+
+2004-08-14 17:13  mbickel
+
+	* source/: gameevents.cpp, sg.cpp, tools/guidegenerator.cpp,
+	tools/guidegenerator.h, tools/weaponguide.cpp:	Lots of bug fixes
+
+2004-08-14 15:11  mbickel
+
+	* source/: edmisc.cpp, strtmesg.cpp:  Fixed crash in mapeditor
+	 more item filters possible in mapeditor
+
+2004-08-14 11:01  mbickel
+
+	* source/: clparser/weaponguide.cpp, clparser/weaponguide.gp,
+	clparser/weaponguide.h, tools/guidegenerator.cpp,
+	tools/infopage.cpp, tools/infopage.h:  Updated weaponguide command
+	line params
+
+2004-08-14 10:15  mbickel
+
+	* source/: gamemap.cpp, resourcenet.h:	Fixed compilation problems
+
+2004-08-14 09:27  mbickel
+
+	* Advanced Strategic Command.dev, Advanced Strategic
+	Command.layout, source/dlg_box.cpp, source/gamemap.cpp,
+	source/research.cpp, source/research.h, source/resourcenet.h,
+	source/sg.cpp, source/strtmesg.cpp, source/textfile_evaluation.cpp,
+	source/textfileparser.cpp, source/tools/guidegenerator.cpp,
+	source/tools/guidegenerator.h, source/tools/infopage.cpp,
+	source/tools/infopage.h, source/tools/weaponguide.cpp,
+	source/tools/win/weaponguide.bpr:  Added project files for devc++
+	 Updated weapon guide
+	 Fixed crash when errors occur during startup
+
+2004-08-03 19:45  mbickel
+
+	* source/tools/: guidegenerator.cpp, guidegenerator.h,
+	infopage.cpp, infopage.h, weaponguide.cpp:  Updated weaponguide
+
+2004-08-01 22:13  mbickel
+
+	* data/railstations2.map, source/controls.cpp, source/replay.cpp,
+	source/strtmesg.cpp, source/unitctrl.cpp, source/unitctrl.h,
+	source/vehicletype.cpp, source/ai/valuation.cpp:  Updated
+	railstations
+	 Fixed replay bugs
+	 Fixed: resetting a units movement points
+
+2004-08-01 11:44  mbickel
+
+	* source/: attack.cpp, controls.cpp, gamedlg.cpp, gamemap.cpp,
+	mapdisplay.cpp, objecttype.cpp, objecttype.h, strtmesg.cpp,
+	textfiletags.cpp, typen.cpp, typen.h, vehicletype.cpp,
+	vehicletype.h:	Changed height system for object types
+
+2004-07-31 17:37  mbickel
+
+	* source/: clparser/weaponguide.cpp, clparser/weaponguide.h,
+	tools/weaponguide.cpp:	Updated weaponguide command line parameters
+
+2004-07-31 17:13  mbickel
+
+	* source/: research.cpp, research.h, textfile_evaluation.cpp,
+	typen.cpp, typen.h, clparser/weaponguide.gp, tools/groupfile.h,
+	tools/guidegenerator.cpp, tools/guidegenerator.h,
+	tools/infopage.cpp, tools/infopage.h, tools/weaponguide.cpp,
+	tools/win/weaponguide.bpr:  Updates to weaponguide
+
+2004-07-28 22:16  mbickel
+
+	* source/: building.cpp, buildings.cpp, controls.cpp, replay.cpp,
+	resourcenet.cpp, resourcenet.h, sg.cpp:  Fixed two replay bugs
+
+2004-07-27 22:04  mbickel
+
+	* source/: building.cpp, buildingtype.cpp, buildingtype.h,
+	textfiletags.cpp, viewcalculation.cpp, tools/guidegenerator.cpp,
+	tools/guidegenerator.h, tools/infopage.cpp, tools/infopage.h,
+	tools/weaponguide.cpp:	New building function: view sats
+	 buildings have new default techadapter-name
+	 Updated weaponguide
+
+2004-07-25 19:11  mbickel
+
+	* libtool, source/errors.h, source/clparser/weaponguide.cpp,
+	source/clparser/weaponguide.gp, source/clparser/weaponguide.h,
+	source/tools/linux/Makefile.am, source/tools/linux/Makefile.in: 
+	Updated makefiles for new weaponguide
+	 fixed wrong case for includefile in errors.h
+
+2004-07-25 17:13  mbickel
+
+	* source/: dialog.cpp, sgstream.cpp, sgstream.h,
+	tools/guidegenerator.cpp, tools/guidegenerator.h,
+	tools/infopage.cpp, tools/infopage.h, tools/weaponguide.cpp: 
+	Updated weapon guide
+
+2004-07-25 13:13  mbickel
+
+	* source/: research.cpp, research.h:  Added partial tech tree
+	generation
+
+2004-07-23 22:33  mbickel
+
+	* source/: attack.cpp, basestreaminterface.h, basestrm.cpp,
+	buildingtype.cpp, edmisc.cpp, objecttype.cpp, objecttype.h,
+	terraintype.cpp, vehicletype.cpp:  Fixed invalid cache generation
+	 Objects now have a height
+	 Fixed: neutral units in mapeditor due to player exchange
+
+2004-07-22 22:14  mbickel
+
+	* asc.bpg, data/asc008.map, data/asc010a.map, data/asc010b.map,
+	source/buildingtype.cpp, source/buildingtype.h,
+	source/containerbasetype.cpp, source/containerbasetype.h,
+	source/edselfnt.cpp, source/errors.h, source/research.cpp,
+	source/vehicletype.cpp, source/vehicletype.h,
+	source/tools/groupfile.cpp, source/tools/groupfile.h,
+	source/tools/guidegenerator.cpp, source/tools/guidegenerator.h,
+	source/tools/infopage.cpp, source/tools/infopage.h,
+	source/tools/weaponguide.cpp, source/tools/win/tools.bpr,
+	source/tools/win/weaponguide.bpr:  Updated campaign maps
+	 New weaponguide
+
+2004-07-14 21:26  mbickel
+
+	* asc.bpg, source/attack.cpp, source/attack.h, source/basestrm.cpp,
+	source/buildingtype.cpp, source/controls.cpp, source/dialog.cpp,
+	source/edmisc.cpp, source/gamemap.cpp, source/graphicset.cpp,
+	source/gui.cpp, source/loaders.cpp, source/loadpcxc.cpp,
+	source/mapdisplay.cpp, source/newfont.cpp, source/newfont.h,
+	source/objecttype.cpp, source/sg.cpp, source/spfst.cpp,
+	source/strtmesg.cpp, source/terraintype.cpp, source/typen.h,
+	source/unitctrl.cpp, source/vehicle.cpp, source/vehicletype.cpp,
+	source/viewcalculation.cpp:  Fixed display glitches
+	 Rewrote some endian dependent parts
+
+2004-07-14 14:53  mbickel
+
+	* data/: tech_asc013_Big Gun.asctxt, tech_asc013_CAD.asctxt,
+	tech_asc013_Crazy.asctxt, tech_asc013_Fort.asctxt,
+	tech_asc013_GRS.asctxt, tech_asc013_SAM Trooper.asctxt,
+	tech_asc013_SAM Turret.asctxt, tech_asc013_Spike.asctxt,
+	tech_asc013_Swatter 2.asctxt, tech_asc013_Swatter.asctxt,
+	tech_asc013_Vesuvius.asctxt, tech_asc013_ad1.asctxt,
+	tech_asc013_ad2.asctxt, tech_asc013_base.asctxt,
+	tech_asc013_tu1.asctxt, tech_asc013_tu2.asctxt:  Updated campaign
+
+2004-07-14 14:52  mbickel
+
+	* data/: Adapter_asc013_Big Gun.asctxt, Adapter_asc013_CAD.asctxt,
+	Adapter_asc013_Crazy.asctxt, Adapter_asc013_Fort.asctxt,
+	Adapter_asc013_GRS.asctxt, Adapter_asc013_SAM Trooper.asctxt,
+	Adapter_asc013_SAM Turret.asctxt, Adapter_asc013_Spike.asctxt,
+	Adapter_asc013_Swatter 2.asctxt, Adapter_asc013_Swatter.asctxt,
+	Adapter_asc013_Vesuvius.asctxt, asc013.map:  Added map13 to
+	campaign
+
+2004-07-14 14:50  mbickel
+
+	* data/: asc001.map, asc002.map, asc003.map, asc004.map,
+	asc005.map, asc006.map, asc007.map, asc008.map, asc009.map,
+	asc010a.map, asc010b.map, asc011.map, asc012.map,
+	campain_tech_filter.asctxt:  Updated campaign data
+
+2004-07-12 21:55  mbickel
+
+	* source/sdl/asc_IMG_jpg.c:  Fixed compilation problem
+
+2004-07-12 21:11  mbickel
+
+	* source/buildings.cpp:  Fixed bug in loading savegames
+
+2004-07-12 20:15  mbickel
+
+	* source/: ASCStringHelpers.h, Named.cpp, basegfx.cpp, basegfx.h,
+	basestreaminterface.h, basestrm.cpp, building.cpp, buildings.cpp,
+	controls.cpp, controls.h, dashboard.cpp, dialog.cpp, dialog.h,
+	dlg_box.cpp, dlg_box.h, edevents.cpp, edevents.h, edgen.cpp,
+	edgen.h, edmisc.cpp, edmisc.h, gamedlg.cpp, gamedlg.h,
+	gameevent_dialogs.cpp, gamemap.cpp, gamemap.h, loadbi3.cpp,
+	loaders.cpp, loaders.h, loadpcxc.cpp, mapevents.cpp, mapevents.h,
+	music.cpp, newfont.cpp, newfont.h, pd.cpp, pd.h,
+	prehistoricevents.cpp, sg.cpp, sgstream.cpp, spfst.cpp,
+	strtmesg.cpp, tpascal.inc, typen.h, vehicle.h, vehicletype.cpp,
+	vehicletype.h, ai/ai_common.h, libs/getopt/getopt.c,
+	sdl/asc_IMG_jpg.c, tools/bin2text.cpp, tools/makegfx.cpp,
+	tools/mntgraph.cpp, win32/fileio.h, win32/global_os.h,
+	win32/gcc/fileio.h, win32/gcc/global_os.h:  Lots of tweaks and
+	fixed for more portability and compilation with mingw
+
+2004-07-01 20:09  mbickel
+
+	* source/strtmesg.cpp:	Updated version number
+
+2004-07-01 19:42  mbickel
+
+	* source/: vehicle.cpp, ai/service.cpp:  Fixed AI crash
+
+2004-06-25 22:01  mbickel
+
+	* ChangeLog, libtool, source/clparser/weaponguide.cpp,
+	source/clparser/weaponguide.h:	Updated Changelog,
+	 weaponguide command line options
+
+2004-06-25 21:26  mbickel
+
+	* source/clparser/weaponguide.gp:  Updated commandline params for
+	weaponguide
+
+2004-06-25 20:46  mbickel
+
+	* source/: gameeventsystem.cpp, strtmesg.cpp:  Fixed: invalid
+	event-trigger connection
+
 2004-06-23 21:36  mbickel
 
 	* source/: controls.cpp, history.cpp, sg.cpp:  Fixed: bug in

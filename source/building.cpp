@@ -6098,6 +6098,9 @@ void ccontainer_b :: RemoveProductionLine :: loadspecifics( pnstream stream )
     priority = 10;
     int w;
     stream->readrlepict ( &picture[0], false, &w );
+    for ( int i = 0; i< 6; ++i)
+       for ( int j = 0; j < 6; ++j )
+         keys[i][j] = ct_invvalue;
     keys[0][0] = 'r' ;
 }
 

@@ -206,7 +206,9 @@ void MapNetwork :: start ( int x, int y )
                checkbuilding(*j);
 
             // if ( !searchfinished() )
+            actmap->cleartemps(7);
             searchAllVehiclesNextToBuildings ( i );
+            actmap->cleartemps(7);
 
          }
    } else 

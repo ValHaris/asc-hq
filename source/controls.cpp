@@ -471,7 +471,7 @@ int          tputmine::initpm(  char mt, const pvehicle eht )
 
    if (eht->typ->weapons.count > 0)
       for ( int i = 0; i <= eht->typ->weapons.count - 1; i++)
-         if ((eht->typ->weapons.weapon[i].getScalarWeaponType() == cwminen) && eht->typ->weapons.weapon[i].shootable() ) {
+         if ((eht->typ->weapons.weapon[i].getScalarWeaponType() == cwminen) && eht->typ->weapons.weapon[i].shootable() && (eht->typ->weapons.weapon[i].sourceheight & eht->height) ) {
             mienenraeumen = true;
             if (eht->ammo[i] > 0)
                mienenlegen = true;
@@ -926,7 +926,7 @@ void         setspec( pobjecttype obj )
 
          eht->getResource( cost, false );
 
-         eht->setMovement ( eht->getMovement() - movecost );
+         eht->decreaseMovement ( movecost );
 
          build_objects_reset();
       }
@@ -1647,7 +1647,7 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
 {
    checkalliances_at_beginofturn ();
    for ( int p = 0; p < 8; p++ )
-      actmap->player[p].existanceAtBeginOfTurn = actmap->player[p].exist();
+      actmap->player[p].existanceAtBeginOfTurn = actmap->player[p].exist() && actmap->player[p].stat != Player::off;
 
    if ( actmap->player[actmap->actplayer].stat == Player::human ) {
 

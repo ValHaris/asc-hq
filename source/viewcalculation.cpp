@@ -285,8 +285,9 @@ int  evaluateviewcalculation ( pmap actmap, int player_fieldcount_mask )
          int add = 0;
          if ( actmap->shareview )
             for ( int i = 0; i < 8; i++ )
-               if ( actmap->shareview->mode[i][player] )
-                  add |= 1 << i;
+               if ( actmap->player[i].exist() && i != player )
+                  if ( actmap->shareview->mode[i][player] )
+                     add |= 1 << i;
 
          int nm = actmap->xsize * actmap->ysize;
          if ( player_fieldcount_mask & (1 << player ))
@@ -325,8 +326,9 @@ int  evaluateviewcalculation ( pmap actmap, const MapCoordinate& pos, int distan
          int add = 0;
          if ( actmap->shareview )
             for ( int i = 0; i < 8; i++ )
-               if ( actmap->shareview->mode[i][player] )
-                  add |= 1 << i;
+               if ( actmap->player[i].exist() && i != player )
+                  if ( actmap->shareview->mode[i][player] )
+                     add |= 1 << i;
 
          for ( int yy = y1; yy <= y2; yy++ )
             for ( int xx = x1; xx <= x2; xx++ ) {
