@@ -1,6 +1,12 @@
-//     $Id: edmisc.cpp,v 1.37 2000-11-08 19:31:03 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.38 2000-11-14 20:36:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2000/11/08 19:31:03  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.36  2000/10/24 15:35:10  schelli
 //     MapEd FullScreen support added
 //     weapons ammo now editable in MapEd
@@ -2650,10 +2656,10 @@ void         tunit::init( pvehicle v )
    addeingabe(2, &unit->damage, 0, 100 );
  
    addbutton("~F~uel of Unit",50,200,250,220,2,1,3,true);
-   addeingabe( 3, &unit->tank.fuel, 0, unit->putResource(maxint, Resources::Fuel, 1 ) );
+   addeingabe( 3, &unit->tank.fuel, 0, unit->typ->tank.fuel );
 
    addbutton("~M~aterial",50,240,250,260,2,1,12,true);
-   addeingabe(12,&unit->tank.material, 0, unit->putResource(maxint, Resources::Material, 1 ) );
+   addeingabe(12,&unit->tank.material, 0, unit->typ->tank.material );
 
 
    int unitheights = 0;
@@ -2685,14 +2691,15 @@ void         tunit::init( pvehicle v )
    #define maxeditable 6
    
    for(i =0;i < unit->typ->weapons->count;i++) {   	
-   	if (i < maxeditable) {
-   	weaponammo = new(char[25]);
-   	strcpy(weaponammo,"Wpn Ammo ");
+     if (i < maxeditable) {
+        weaponammo = new(char[25]);
+        strcpy(weaponammo,"Wpn Ammo ");
         strcat(weaponammo,strrr(i+1));
         strcat(weaponammo," (0-255)");
-   	addbutton(weaponammo,410,80+i*40,570,100+i*40,2,1,33+i,true);
-   	addeingabe( 33+i, &unit->typ->weapons->weapon[i].count, 0, 255 );
-   	} else showtext2("6 weapons max at the moment",x1+410,y1+80+maxeditable*40);
+        addbutton(weaponammo,410,80+i*40,570,100+i*40,2,1,33+i,true);
+        addeingabe( 33+i, &unit->ammo[i], 0, 255 );
+   	} else
+   	    showtext2("6 weapons max at the moment",x1+410,y1+80+maxeditable*40);
    	
    }
 

@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.38 2000-11-11 11:05:15 mbickel Exp $
+//     $Id: artint.cpp,v 1.39 2000-11-14 20:36:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2000/11/11 11:05:15  mbickel
+//      started AI service functions
+//
 //     Revision 1.37  2000/11/08 19:30:53  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -249,16 +252,30 @@ void AiThreat :: reset ( void )
       threat[i] = 0;
 }
 
-void AiParameter :: reset ( void )
+
+AiParameter :: AiParameter ( pvehicle _unit ) : AiValue ( log2( _unit->height ))
 {
-   threat.reset ( );
+   reset( _unit );
+}
+
+void AiParameter :: resetTask ( )
+{
+   dest.y = -1;
+   dest.z = -1;
+   dest_nwid = 1;
+   task = tsk_nothing;
+}
+
+
+void AiParameter :: reset ( pvehicle _unit )
+{
+   unit = _unit;
+   AiValue::reset ( log2( _unit->height ) );
 
    value = 0;
-   xtogo = -1;
-   ytogo = -1;
-   id = 1;
-   task = tsk_nothing;
+   dest.x = -1;
    job = job_undefined;
+   resetTask();
 }
 
 AI :: AI ( pmap _map ) : activemap ( _map ) , sections ( this )
@@ -307,23 +324,35 @@ AI :: ServiceOrder :: ServiceOrder ( AI* _ai, VehicleService::Service _requiredS
    requiredService = _requiredService;
    serviceUnitID = 0;
    position = _pos;
+   time = ai->getMap()->time;
+}
+
+AI :: ServiceOrder :: ~ServiceOrder (  )
+{
+   pvehicle serv = getServiceUnit();
+   if ( serv )
+      serv->aiparam[ai->getPlayer()]->resetTask();
 }
 
 
 void AI :: issueServices ( )
 {
+   remove_if ( serviceOrders.begin(), serviceOrders.end(), ServiceOrder::targetDestroyed );
+
    pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
    while ( veh ) {
       if ( veh->damage > config.damageLimit )
-         serviceOrders.push_back ( new ServiceOrder ( this, VehicleService::srv_repair, veh->networkid ) );
+         serviceOrders.push_back ( ServiceOrder ( this, VehicleService::srv_repair, veh->networkid ) );
 
       for ( int i = 0; i< resourceTypeNum; i++ )
-         if ( veh->tank.resource(i) < veh->typ->tank.resource(i) * config.resourceLimit.resource(i) / 100 )
-            serviceOrders.push_back ( new ServiceOrder ( this, VehicleService::srv_resource, veh->networkid, i));
+         if ( veh->typ->movement[ log2( veh->height )] ) // stationary units are ignored
+            if ( veh->tank.resource(i) < veh->typ->tank.resource(i) * config.resourceLimit.resource(i) / 100 )
+               serviceOrders.push_back ( ServiceOrder ( this, VehicleService::srv_resource, veh->networkid, i));
 
       for ( int w = 0; w< veh->typ->weapons->count; w++ )
-         if ( veh->ammo[w] < veh->typ->weapons->weapon[w].count * config.ammoLimit / 100 )
-            serviceOrders.push_back ( new ServiceOrder ( this, VehicleService::srv_ammo, veh->networkid, w));
+         if ( veh->typ->weapons->weapon[w].count )
+            if ( veh->ammo[w] <= veh->typ->weapons->weapon[w].count * config.ammoLimit / 100 )
+               serviceOrders.push_back ( ServiceOrder ( this, VehicleService::srv_ammo, veh->networkid, w));
 
       veh = veh->next;
    }
@@ -398,7 +427,7 @@ pbuilding AI :: findServiceBuilding ( const ServiceOrder& so )
                                                              missing++;
                                                    }
                                                    Resources res2 = bld->getResource ( res, 1 );
-                                                   for ( int r = 0; r < waffenanzahl; r++ )
+                                                   for ( int r = 0; r < resourceTypeNum; r++ )
                                                       if ( res2.resource(r) < res.resource (r) )
                                                          missing++;
 
@@ -430,11 +459,13 @@ pbuilding AI :: findServiceBuilding ( const ServiceOrder& so )
 
 int AI::ServiceOrder::possible ( pvehicle supplier )
 {
+   bool result = false;
+
    VehicleService vs ( NULL, NULL);
    vs.fieldSearch.bypassChecks.distance = true;
    vs.fieldSearch.bypassChecks.height   = true;
    vs.fieldSearch.init ( supplier, NULL );
-   vs.fieldSearch.checkVehicle2Vehicle ( getTargetUnit() );
+   vs.fieldSearch.checkVehicle2Vehicle ( getTargetUnit(), getTargetUnit()->xpos, getTargetUnit()->ypos );
 
    VehicleService::TargetContainer::iterator i = vs.dest.find ( targetUnitID );
    if ( i != vs.dest.end() ) {
@@ -442,60 +473,206 @@ int AI::ServiceOrder::possible ( pvehicle supplier )
       int serviceAmount = 0;
       for ( int j = 0; j < target.service.size(); j++ ) {
          serviceAmount += target.service[j].maxPercentage;
-         if ( target.service[j].type == requiredService )
-            return serviceAmount;
+         if ( target.service[j].type == requiredService ) {
+            bool enoughResources = false;
+            if ( requiredService == VehicleService::srv_repair )
+               if ( target.service[j].maxAmount - target.service[j].curAmount > 5 )
+                  enoughResources = true;
+
+            if ( requiredService == VehicleService::srv_resource ) {
+               if ( target.service[j].targetPos == Resources::Fuel ) { // fuel
+                   if ( target.service[j].maxAmount - target.service[j].curAmount < target.service[j].orgSourceAmount - supplier->typ->fuelConsumption * 30 )
+                      enoughResources = true;
+               } else {
+                   if ( getTargetUnit()->aiparam[ai->getPlayer()]->job == AiParameter::job_supply ) {
+                      if ( target.service[j].orgSourceAmount > target.service[j].maxAmount - target.service[j].curAmount )
+                         enoughResources = true;
+                   } else
+                      if ( target.service[j].maxPercentage > 80 )
+                         enoughResources = true;
+               }
+            }
+            if ( requiredService == VehicleService::srv_ammo ) {
+               if ( getTargetUnit()->aiparam[ai->getPlayer()]->job == AiParameter::job_supply ) {
+                  if ( target.service[j].orgSourceAmount > target.service[j].maxAmount - target.service[j].curAmount )
+                     enoughResources = true;
+               } else
+                  if ( target.service[j].maxPercentage > 80 )
+                     enoughResources = true;
+            }
+
+            if ( enoughResources )
+               result = true;
+         }
       }
+
+      if( result )
+         return serviceAmount;
    }
    return 0;
+}
+
+
+bool AI::ServiceOrder::execute1st ( pvehicle supplier )
+{
+   bool result = false;
+
+   pvehicle targ = getTargetUnit();
+   MapCoordinate3D meet;
+   int xy_dist = maxint;
+   int z_dist = maxint;
+   int currentHeight = log2( supplier->height );
+   for ( int h = 0; h < 8; h++ )
+      if ( supplier->typ->height & ( 1<<h))
+         for ( int i = 0; i < sidenum; i++ ) {
+             int x = targ->xpos;
+             int y = targ->ypos;
+             getnextfield ( x, y, i );
+             pfield fld = getfield ( x, y );
+             if ( fld && fieldaccessible ( fld, supplier, 1<<h ) == 2 && !fld->building && !fld->vehicle ) {
+                int d = beeline ( x, y, supplier->xpos, supplier->ypos);
+                AStar ast;
+                vector<MapCoordinate> path;
+                ast.findPath( ai->getMap(), path, supplier, x, y );
+                if ( path.size() ) {
+                   if ( abs ( currentHeight - h) < z_dist || ( abs( currentHeight - h) == z_dist && d < xy_dist )) {
+                      tvehicle tmp ( supplier, NULL );
+                      supplier->xpos = x;
+                      supplier->ypos = y;
+                      supplier->height = 1 << h;
+
+                      VehicleService vs ( NULL, NULL);
+                      vs.fieldSearch.init ( supplier, NULL );
+                      vs.fieldSearch.checkVehicle2Vehicle ( targ, targ->xpos, targ->ypos );
+
+                      VehicleService::TargetContainer::iterator i = vs.dest.find ( targetUnitID );
+                      if ( i != vs.dest.end() ) {
+                         VehicleService::Target target = i->second;
+                         for ( int j = 0; j < target.service.size(); j++ )
+                            if ( target.service[j].type == requiredService )
+                               result = true;
+                      }
+                      supplier->clone ( &tmp, NULL );
+
+                      if ( result ) {
+                         meet.x = x;
+                         meet.y = y;
+                         meet.z = h;
+                         xy_dist = d;
+                         z_dist = abs ( currentHeight - h);
+                      }
+
+                   }
+                }
+             }
+         }
+
+
+   if ( xy_dist < maxint ) {
+      supplier->aiparam[ai->getPlayer()]->dest = meet;
+      supplier->aiparam[ai->getPlayer()]->task = AiParameter::tsk_move;
+      supplier->aiparam[ai->getPlayer()]->dest_nwid = targ->networkid;
+      setServiceUnit ( supplier );
+      return true;
+   } else
+      return false;
+
+}
+
+void AI::removeServiceOrdersForUnit ( const pvehicle veh )
+{
+   remove_if ( serviceOrders.begin(), serviceOrders.end(), ServiceTargetEquals( veh ) );
+}
+
+
+bool AI :: runUnitTask ( pvehicle veh )
+{
+   if ( veh->aiparam[getPlayer()]->task == AiParameter::tsk_move ) {
+      moveUnit ( veh, veh->aiparam[getPlayer()]->dest, false );
+      if ( veh->xpos == veh->aiparam[getPlayer()]->dest.x && veh->ypos == veh->aiparam[getPlayer()]->dest.y )
+         return true;
+      else
+         return false;
+   }
+   return false;
+}
+
+
+void AI :: runServiceUnit ( pvehicle supplyUnit )
+{
+   bool destinationReached = false;
+   typedef multimap<float,ServiceOrder*,lessfloat> ServiceMap;
+   ServiceMap serviceMap;
+
+   for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
+       if ( !i->getServiceUnit() ) {
+          int poss = i->possible( supplyUnit );
+          if ( poss ) {
+             float f =  i->getTargetUnit()->aiparam[getPlayer()]->value * poss/100 / beeline( i->getTargetUnit() ,supplyUnit );
+             serviceMap.insert(make_pair(f,&(*i)));
+          }
+  /*
+          veh->aiparam[getPlayer()]->task = AiParameter::tsk_serviceRetreat;
+          pbuilding bld = findServiceBuilding( **i );
+          if ( bld )
+             veh->aiparam[ getPlayer() ]->dest = bld->getEntry ( );
+  */
+       }
+   }
+   for ( ServiceMap::reverse_iterator ri = serviceMap.rbegin(); ri != serviceMap.rend(); ri++ )
+      if ( ri->second->execute1st( supplyUnit ) ) {
+         destinationReached = runUnitTask ( supplyUnit );
+         break;
+      }
+
+   if ( destinationReached ) {
+      VehicleService vs ( mapDisplay, NULL );
+      if ( !vs.available ( supplyUnit ))
+         displaymessage ("AI :: runServiceUnit ; inconsistency in VehicleService.availability",1 );
+
+      vs.execute ( supplyUnit, -1, -1, 0, -1, -1 );
+      int target = supplyUnit->aiparam[getPlayer()]->dest_nwid;
+      VehicleService::TargetContainer::iterator i = vs.dest.find ( target );
+      if ( i != vs.dest.end() ) {
+         vs.fillEverything ( target, true );
+         removeServiceOrdersForUnit ( getMap()->getUnit(target) );
+
+         // search for next unit to be serviced
+         runServiceUnit( supplyUnit );
+      } else
+         displaymessage ("AI :: runServiceUnit ; inconsistency in VehicleService.execution level 0",1 );
+
+   }
 }
 
 
 AI::AiResult AI :: executeServices ( )
 {
   AiResult res;
-  return res;
 
   pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
   while ( veh ) {
-     if ( veh->aiparam[getPlayer()]->job == AiParameter::job_supply ) {
-        multimap<float,ServiceOrder*,lessfloat> serviceMap;
+     if ( veh->aiparam[getPlayer()]->job == AiParameter::job_supply )
+        runServiceUnit ( veh );
 
-        for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
-            int poss = (*i)->possible( veh );
-            if ( poss ) {
-               float f =  (*i)->getTargetUnit()->aiparam[getPlayer()]->value * poss/100 / beeline( (*i)->getTargetUnit() ,veh );
-               serviceMap.insert(make_pair(f,*i));
-            }
-
-            veh->aiparam[getPlayer()]->task = AiParameter::tsk_serviceRetreat;
-            pbuilding bld = findServiceBuilding( **i );
-            if ( bld ) {
-               MapCoordinate entry = bld->getEntry ( );
-               veh->aiparam[ getPlayer() ]->xtogo = entry.x;
-               veh->aiparam[ getPlayer() ]->ytogo = entry.y;
-            }
-        }
-
-     }
      veh = veh->next;
   }
 
+  return res;
+
   for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
-      pvehicle veh = (*i)->getTargetUnit();
+      pvehicle veh = i->getTargetUnit();
       veh->aiparam[getPlayer()]->task = AiParameter::tsk_serviceRetreat;
-      pbuilding bld = findServiceBuilding( **i );
-      if ( bld ) {
-         MapCoordinate entry = bld->getEntry ( );
-         veh->aiparam[ getPlayer() ]->xtogo = entry.x;
-         veh->aiparam[ getPlayer() ]->ytogo = entry.y;
-      }
+      pbuilding bld = findServiceBuilding( *i );
+      if ( bld )
+         veh->aiparam[ getPlayer() ]->dest = bld->getEntry ( );
   }
 
   veh = getMap()->player[ getPlayer() ].firstvehicle;
   while ( veh ) {
      if ( veh->aiparam[getPlayer()]->task == AiParameter::tsk_serviceRetreat ) {
-        moveUnit ( veh, MapCoordinate ( veh->aiparam[ getPlayer() ]->xtogo, veh->aiparam[ getPlayer() ]->ytogo ), true);
-        if ( veh->xpos == veh->aiparam[ getPlayer() ]->xtogo && veh->ypos == veh->aiparam[ getPlayer() ]->ytogo ) {
+        moveUnit ( veh, MapCoordinate ( veh->aiparam[ getPlayer() ]->dest.x, veh->aiparam[ getPlayer() ]->dest.y ), true);
+        if ( veh->xpos == veh->aiparam[ getPlayer() ]->dest.x && veh->ypos == veh->aiparam[ getPlayer() ]->dest.y ) {
            VehicleService vc ( mapDisplay, NULL );
            pfield fld = getfield ( veh->xpos, veh->ypos );
            if ( fld->building ) {
@@ -517,7 +694,7 @@ AI::AiResult AI :: executeServices ( )
 
            ServiceOrderContainer::iterator i = serviceOrders.begin();
            while ( i != serviceOrders.end() ) {
-               if ( (*i)->getTargetUnit() == veh ) {
+               if ( i->getTargetUnit() == veh ) {
                   serviceOrders.erase ( i );
                   i = serviceOrders.begin();
                } else
@@ -602,7 +779,7 @@ void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( pvehiclety
 
 
    if ( !fzt->aiparam[ai->getPlayer()] )
-      fzt->aiparam[ ai->getPlayer() ] = new AiParameter;
+      fzt->aiparam[ ai->getPlayer() ] = new AiValue ( log2 ( fzt->height ));
 
    for ( int l = 0; l < 8; l++ )
       fzt->aiparam[ ai->getPlayer() ]->threat.threat[l] = weapthreat[l];
@@ -646,7 +823,7 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( pvehicle _eht )
    calc_threat_vehicletype ( eht->typ );
 
    if ( !eht->aiparam[ai->getPlayer()] )
-      eht->aiparam[ai->getPlayer()] = new AiParameter;
+      eht->aiparam[ai->getPlayer()] = new AiParameter ( eht );
 
    AiParameter* aip = eht->aiparam[ai->getPlayer()];
    for ( int l = 0; l < 8; l++ )
@@ -717,7 +894,7 @@ void  AI :: calculateThreat ( pvehicle eht )
 void  AI :: calculateThreat ( pbuilding bld )
 {
    if ( !bld->aiparam[ getPlayer() ] )
-      bld->aiparam[ getPlayer() ] = new AiParameter;
+      bld->aiparam[ getPlayer() ] = new AiValue ( log2 ( bld->typ->buildingheight ) );
 
    int b;
 
@@ -909,7 +1086,7 @@ void     AI :: calculateAllThreats( void )
          pvehicle eht = activemap->player[v].firstvehicle;
          while ( eht ) {
             if ( !eht->aiparam[ getPlayer() ] )
-               eht->aiparam[ getPlayer() ] = new AiParameter;
+               eht->aiparam[ getPlayer() ] = new AiParameter ( eht );
 
             calculateThreat ( eht );
             eht = eht->next;
@@ -1864,9 +2041,9 @@ AI::AiResult AI::strategy( void )
 
                      AiParameter& aip = *veh->aiparam[getPlayer()];
 
-                     aip.xtogo = x2;
-                     aip.ytogo = y2;
-
+                     aip.dest.x = x2;
+                     aip.dest.y = y2;
+                     aip.dest.z = -1;
                   }
                }
             }
@@ -1963,20 +2140,21 @@ void AI :: showFieldInformation ( int x, int y )
                                      "stratwait",
                                      "wait",
                                      "strategy",
-                                     "serviceRetreat" };
+                                     "serviceRetreat",
+                                     "move" };
            static char* jobs[] = { "undefined",
                                    "fight",
                                    "supply",
                                    "conquer",
                                    "build" };
 
-            sprintf(text2, "\nunit value: %d; xtogo: %d, ytogo: %d;\njob %s ; task %s \n", aip.value, aip.xtogo, aip.ytogo, jobs[aip.job], tasks[aip.task] );
+            sprintf(text2, "\nunit value: %d; xtogo: %d, ytogo: %d; ztogo: %d;\njob %s ; task %s \n", aip.value, aip.dest.x, aip.dest.y, aip.dest.z, jobs[aip.job], tasks[aip.task] );
             strcat ( text, text2 );
          }
 
-         if ( aip.xtogo >= 0 && aip.ytogo >= 0 ) {
+         if ( aip.dest.x >= 0 && aip.dest.y >= 0 ) {
             getMap()->cleartemps ( 1 );
-            getfield ( aip.xtogo, aip.ytogo )->a.temp = 1;
+            getfield ( aip.dest.x, aip.dest.y )->a.temp = 1;
             displaymap();
          }
 

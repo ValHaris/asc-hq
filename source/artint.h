@@ -1,6 +1,9 @@
-//     $Id: artint.h,v 1.18 2000-11-11 11:05:15 mbickel Exp $
+//     $Id: artint.h,v 1.19 2000-11-14 20:36:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/11/11 11:05:15  mbickel
+//      started AI service functions
+//
 //     Revision 1.17  2000/10/26 18:55:28  mbickel
 //      Fixed crash when editing the properties of a vehicle inside a building
 //      Added mapeditorFullscreen switch to asc.ini
@@ -124,14 +127,35 @@
 
                   //! if service == ammo: weapon number ; if service == resource : resource type
                   int position;
+                  tgametime time;
                public:
                   VehicleService::Service requiredService;
 
                   ServiceOrder ( AI* _ai, VehicleService::Service _requiredService, int UnitID, int _pos = -1 );
                   pvehicle getTargetUnit ( ) const { return ai->getMap()->getUnit ( targetUnitID );};
                   pvehicle getServiceUnit ( ) const { return ai->getMap()->getUnit ( serviceUnitID );};
+                  void setServiceUnit ( pvehicle veh ) { serviceUnitID = veh->networkid; };
                   int possible ( pvehicle supplier );
+                  bool execute1st ( pvehicle supplier );
+
+                  static bool targetDestroyed ( const ServiceOrder& so )
+                  {
+                     return !so.getTargetUnit();
+                  };
+
+                  ~ServiceOrder ();
            };
+
+           class ServiceTargetEquals : public unary_function<ServiceOrder,bool> {
+                 const pvehicle target;
+              public:
+                 explicit ServiceTargetEquals ( const pvehicle _target ) : target ( _target ) {};
+                 bool operator() (const ServiceOrder& so ) const { return !so.getTargetUnit(); };
+           };
+
+           void removeServiceOrdersForUnit ( const pvehicle veh );
+
+
            /*
            struct ServiceOrderRating {
              float val;
@@ -141,9 +165,13 @@
            std::greater<ServiceOrderRating> scomp;
            */
 
-           typedef PointerList<ServiceOrder*> ServiceOrderContainer;
+           // typedef PointerList<ServiceOrder*> ServiceOrderContainer;
+           typedef list<ServiceOrder> ServiceOrderContainer;
            ServiceOrderContainer serviceOrders;
            void issueServices ( );
+           void runServiceUnit ( pvehicle supplyUnit );
+
+           bool runUnitTask ( pvehicle veh );
            // void searchServices ( );
 
            AiThreat* fieldThreats;

@@ -1,6 +1,12 @@
-//     $Id: sgstream.cpp,v 1.41 2000-11-08 19:31:13 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.42 2000-11-14 20:36:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2000/11/08 19:31:13  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.40  2000/10/26 18:15:00  mbickel
 //      AI moves damaged units to repair
 //      tmap is not memory layout sensitive any more
@@ -1818,235 +1824,39 @@ pobjecttype   loadobjecttype(char *       name)
 
 
 pobjecttype   loadobjecttype( pnstream stream )
-{ 
-  int j;
-  int version;
-  
- stream->readdata2 ( version );
-   if ( version == object_version ) {
+{
+   pobjecttype fztn = new tobjecttype;
+   fztn->read ( *stream );
 
-      pobjecttype fztn = new tobjecttype;
-   
-      stream->readdata2( *fztn ); 
-   
-      int copycount = 0;
+   if ( fztn->id == 9 )
+      pathobject = fztn;
 
-      int w;
-      for ( int ww = 0; ww < cwettertypennum; ww++ )
-         if ( fztn->weather & ( 1 << ww )) 
-            if ( fztn->pictnum ) {
-               fztn->picture[ww] = new thexpic[fztn->pictnum];
-               for ( int n = 0; n < fztn->pictnum; n++ ) {
-                  stream->readdata2 ( fztn->picture[ww][n] );
-                  if ( fztn->picture[ww][n].bi3pic != -1 ) 
-                     loadbi3pict_double ( fztn->picture[ww][n].bi3pic,
-                                         &fztn->picture[ww][n].picture, 
-                                         CGameOptions::Instance()->bi3.interpolate.objects, 0 );
-                  else
-                     stream->readrlepict ( &fztn->picture[ww][n].picture, false, &w);
+   if ( fztn->id == 1 )
+      streetobjectcontainer = fztn;
 
-                  if ( fztn->picture[ww][n].flip == 1 ) {
-                     void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-                     flippict ( fztn->picture[ww][n].picture, buf , 1 );
-                     asc_free ( fztn->picture[ww][n].picture );
-                     fztn->picture[ww][n].picture = buf;
-                     copycount++;
-                  }
-      
-                  if ( fztn->picture[ww][n].flip == 2 ) {
-                     void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-                     flippict ( fztn->picture[ww][n].picture, buf , 2 );
-                     asc_free ( fztn->picture[ww][n].picture );
-                     fztn->picture[ww][n].picture = buf;
-                     copycount++;
-                  }
-      
-                  if ( fztn->picture[ww][n].flip == 3 ) {
-                     void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-                     flippict ( fztn->picture[ww][n].picture, buf , 2 );
-                     flippict ( buf, fztn->picture[ww][n].picture, 1 );
-                     delete[] buf;
-                     copycount++;
-                  }
+   if ( fztn->id == 2 )
+      railroadobject = fztn;
 
-                  if ( fztn->picture[ww][n].bi3pic == -1 ) 
-                     fztn->picture[ww][n].flip = 0;
-               }
-            }
+   if ( fztn->id == 6 )
+      eisbrecherobject = fztn;
 
-      if ( copycount == 0 ) 
-         for ( int ww = 0; ww < cwettertypennum; ww++ )
-            if ( fztn->weather & ( 1 << ww )) 
-               if ( fztn->pictnum ) 
-                  for ( int n = 0; n < fztn->pictnum; n++ ) 
-                     if ( fztn->picture[ww][n].bi3pic != -1 ) {
-                        asc_free ( fztn->picture[ww][n].picture );
-                        loadbi3pict_double (    fztn->picture[ww][n].bi3pic,
-                                                                                                &fztn->picture[ww][n].picture,
-                                                                                                CGameOptions::Instance()->bi3.interpolate.objects );
-                     }
+   if ( fztn->id == 7 )
+      fahrspurobject = fztn;
 
-     /*
-      #ifndef HEXAGON
-            if ( fztn->pictnum ) {
-               typedef void* pvoid;
-               fztn->picture = new pvoid[fztn->pictnum];
-               for ( int n = 0; n < fztn->pictnum; n++ )
-                  stream->readrlepict ( &fztn->picture[n], false, &w);
-            }
-      #endif
-     */
-
-       #ifndef converter
-       char mmcount = cmovemalitypenum;
+   #ifndef converter
+    fztn->buildicon = generate_object_gui_build_icon ( fztn, 0 );
+    fztn->removeicon = generate_object_gui_build_icon ( fztn, 1 );
+   #else
+    fztn->buildicon = NULL;
+    fztn->removeicon = NULL;
+   #endif
    
-       if (mmcount < fztn->movemalus_plus_count )
-          mmcount = fztn->movemalus_plus_count;
-       #else
-       char mmcount = fztn->movemalus_plus_count ;
-       #endif
-   
-       fztn->movemalus_plus = new char[ mmcount ] ;
-   
-       for (j=0; j< mmcount ; j++ ) {
-          if (j < fztn->movemalus_plus_count )
-             stream->readdata ( fztn->movemalus_plus + j, 1);
-          else
-             if( j > 0 )
-               fztn->movemalus_plus[j] = fztn->movemalus_plus[0];
-             else
-               fztn->movemalus_plus[j] = 0;
-   
-       }
-       fztn->movemalus_plus_count = mmcount;
-   
-   
-   
-       #ifndef converter
-       mmcount = cmovemalitypenum;
-   
-       if (mmcount < fztn->movemalus_abs_count )
-          mmcount = fztn->movemalus_abs_count;
-       #else
-       mmcount = fztn->movemalus_abs_count ;
-       #endif
-   
-       fztn->movemalus_abs = new char[ mmcount ] ;
-   
-       for (j=0; j< mmcount ; j++ ) {
-          if (j < fztn->movemalus_abs_count )
-             stream->readdata ( fztn->movemalus_abs + j, 1);
-          else
-             if( j > 0 )
-                fztn->movemalus_abs[j] = fztn->movemalus_abs[0];
-             else
-                fztn->movemalus_abs[j] = 0;
-   
-       }
-       fztn->movemalus_abs_count = mmcount;
-   
-       if ( fztn->name )
-          stream->readpchar ( &fztn->name );
-
-
-      if ( fztn->dirlistnum ) {
-         fztn->dirlist = new int[ fztn->dirlistnum ];
-         stream->readdata ( fztn->dirlist, fztn->dirlistnum* 4 );
-      } 
-
-
-      if ( fztn->objectslinkablenum ) {
-         fztn->objectslinkableid = new int[ fztn->objectslinkablenum ];
-         stream->readdata ( fztn->objectslinkableid, fztn->objectslinkablenum* 4 );
-      } 
-
-      #ifdef HEXAGON
-
-       if ( fztn->id == 9 )
-          pathobject = fztn;
-
-       if ( fztn->id == 1 )
-          streetobjectcontainer = fztn;
-   
-       if ( fztn->id == 2 )
-          railroadobject = fztn;
-   
-       if ( fztn->id == 6 )
-          eisbrecherobject = fztn;
-   
-       if ( fztn->id == 7 )
-          fahrspurobject = fztn;
-      #else
-       if ( fztn->id == 1 )
-          streetobjectcontainer = fztn;
-   
-       if ( fztn->id == 2 )
-          railroadobject = fztn;
-   
-       if ( fztn->id == 6 )
-          eisbrecherobject = fztn;
-   
-       if ( fztn->id == 7 )
-          fahrspurobject = fztn;
-      #endif
-      #ifndef converter
-       fztn->buildicon = generate_object_gui_build_icon ( fztn, 0 );
-       fztn->removeicon = generate_object_gui_build_icon ( fztn, 1 );
-      #else
-       fztn->buildicon = NULL;
-       fztn->removeicon = NULL;
-      #endif
-   
-       return fztn;
-   } else
-       return NULL;
-} 
+    return fztn;
+}
 
 void writeobject ( pobjecttype object, pnstream stream, int compressed )
 {
-    stream->writedata2 ( object_version ); 
-    stream->writedata2 ( *object );
- 
-    #ifdef HEXAGON
-    for ( int ww = 0; ww < cwettertypennum; ww++ )
-       if ( object->weather & ( 1 << ww ))
-          for ( int l = 0; l < object->pictnum; l++ ) {
-             stream->writedata2 ( object->picture[ww][l] );
-             if ( compressed ) {
-                if ( object->picture[ww][l].bi3pic == -1 )
-                   stream->writerlepict( object->picture[ww][l].picture );
-             } else
-                 if ( object->picture[ww][l].bi3pic == -1 )
-                    stream->writedata( object->picture[ww][l].picture, getpicsize2 ( object->picture[ww][l].picture) );
-          }
-   #else
-    if ( object->pictnum ) {     
-
-       if ( compressed ) {
-          for ( int i = 0; i < object->pictnum; i++ )
-             stream->writerlepict( object->picture[i] );
-       } else                                     
-          for ( int i = 0; i < object->pictnum; i++ )
-             stream->writedata( object->picture[i], getpicsize2 ( object->picture[i] ));
-    }
-   #endif
-
-    if ( object->movemalus_plus_count ) 
-       stream->writedata ( object->movemalus_plus, object->movemalus_plus_count );
-
-    if ( object->movemalus_abs_count ) 
-       stream->writedata ( object->movemalus_abs, object->movemalus_abs_count );
-
-    if ( object->name ) 
-       stream->writepchar ( object->name );
-
-    if ( object->dirlistnum ) 
-       stream->writedata ( object->dirlist, object->dirlistnum* 4 );
-
-    if ( object->objectslinkablenum ) 
-       stream->writedata ( object->objectslinkable, object->objectslinkablenum* 4 );
-
-
+   object->write ( *stream );
 }
 
 

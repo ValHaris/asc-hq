@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.40 2000-11-11 11:05:21 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.41 2000-11-14 20:36:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2000/11/11 11:05:21  mbickel
+//      started AI service functions
+//
 //     Revision 1.39  2000/11/08 19:31:17  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -1783,12 +1786,16 @@ int VehicleService :: getServices ( pvehicle veh ) const
 
 
 
-void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicle vehicle )
+void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicle targetUnit, int xp, int yp )
 {
    VehicleService::Target targ;
-   targ.dest = vehicle;
+   targ.dest = targetUnit;
 
-   int dist = beeline ( xp, yp , startx, starty );
+   int dist;
+   if ( bypassChecks.distance )
+      dist = maxmalq;
+   else
+      dist = beeline ( xp, yp , startx, starty );
 
    for (int i = 0; i < veh->typ->weapons->count ; i++) {
       SingleWeapon& sourceWeapon = veh->typ->weapons->weapon[i];
@@ -1801,21 +1808,21 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
                   if ( sourceWeapon.efficiency[ 6 + getheightdelta ( log2(veh->height), h ) ] )
                      targheight |= 1 << h;
 
-            if ( vehicle )
-               if ( !(vehicle->functions & cfnoairrefuel) || vehicle->height <= chfahrend )
-                  if (getdiplomaticstatus2(veh->color, vehicle->color) == capeace)
+            if ( targetUnit )
+               if ( !(targetUnit->functions & cfnoairrefuel) || targetUnit->height <= chfahrend )
+                  if (getdiplomaticstatus2(veh->color, targetUnit->color) == capeace)
                      if ( (sourceWeapon.maxdistance >= dist && sourceWeapon.mindistance <= dist) || bypassChecks.distance )
-                        if (   vehicle->height & targheight || ( bypassChecks.height && ( vehicle->typ->height & targheight) )) {
+                        if (   targetUnit->height & targheight || ( bypassChecks.height && ( targetUnit->typ->height & targheight) )) {
                            if ( sourceWeapon.canRefuel() ) {
-                              for ( int j = 0; j < vehicle->typ->weapons->count ; j++) {
-                                 SingleWeapon& targetWeapon = vehicle->typ->weapons->weapon[j];
+                              for ( int j = 0; j < targetUnit->typ->weapons->count ; j++) {
+                                 SingleWeapon& targetWeapon = targetUnit->typ->weapons->weapon[j];
                                  if ( targetWeapon.getScalarWeaponType() == sourceWeapon.getScalarWeaponType()
                                       && targetWeapon.requiresAmmo() ) {
                                     VehicleService::Target::Service s;
                                     s.type = VehicleService::srv_ammo;
                                     s.sourcePos = i;
                                     s.targetPos = j;
-                                    s.curAmount = vehicle->ammo[j];
+                                    s.curAmount = targetUnit->ammo[j];
                                     s.orgSourceAmount = veh->ammo[i];
                                     s.maxAmount = min ( targetWeapon.count, s.curAmount+s.orgSourceAmount );
                                     int sourceSpace = sourceWeapon.count - veh->ammo[i];
@@ -1829,14 +1836,14 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
                            if ( sourceWeapon.service() ) {
                               static int resourceVehicleFunctions[resourceTypeNum] = { cfenergyref, cfmaterialref, cffuelref };
                               for ( int r = 0; r < resourceTypeNum; r++ )
-                                 if ( veh->typ->tank.resource(r) && vehicle->typ->tank.resource(r) && (veh->functions & resourceVehicleFunctions[r])) {
+                                 if ( veh->typ->tank.resource(r) && targetUnit->typ->tank.resource(r) && (veh->functions & resourceVehicleFunctions[r])) {
                                     VehicleService::Target::Service s;
                                     s.type = VehicleService::srv_resource;
                                     s.sourcePos = r;
                                     s.targetPos = r;
-                                    s.curAmount = vehicle->tank.resource(r);
+                                    s.curAmount = targetUnit->tank.resource(r);
                                     s.orgSourceAmount = veh->tank.resource(r);
-                                    s.maxAmount = s.curAmount + min ( vehicle->putResource(maxint, r, 1) , s.orgSourceAmount );
+                                    s.maxAmount = s.curAmount + min ( targetUnit->putResource(maxint, r, 1) , s.orgSourceAmount );
                                     int sourceSpace = veh->putResource(maxint, r, 1);
                                     s.minAmount = max ( s.curAmount - sourceSpace, 0 );
                                     s.maxPercentage = 100 * s.maxAmount/ veh->typ->tank.resource(r);
@@ -1845,16 +1852,16 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
 
                               if ( veh->canRepair() )
                                  if ( veh->tank.fuel && veh->tank.material )
-                                    if ( vehicle->getMovement() >= movement_cost_for_repaired_unit )
-                                       if ( vehicle->damage ) {
+                                    if ( targetUnit->getMovement() >= movement_cost_for_repaired_unit )
+                                       if ( targetUnit->damage ) {
                                           VehicleService::Target::Service s;
                                           s.type = VehicleService::srv_repair;
                                           s.sourcePos = -1;
                                           s.targetPos = -1;
-                                          s.curAmount = vehicle->damage;
+                                          s.curAmount = targetUnit->damage;
                                           s.orgSourceAmount = 100;
-                                          s.maxAmount = vehicle->damage;
-                                          s.minAmount = veh->getMaxRepair ( vehicle );
+                                          s.maxAmount = targetUnit->damage;
+                                          s.minAmount = veh->getMaxRepair ( targetUnit );
                                           s.maxPercentage = 100 - s.minAmount;
                                           targ.service.push_back ( s );
                                        }
@@ -1872,31 +1879,31 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
 
 }
 
-void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehicle vehicle )
+void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehicle targetUnit )
 {
    VehicleService::Target targ;
    MapCoordinate pos = bld->getEntry();
-   int dist = beeline ( pos.x, pos.y, vehicle->xpos, vehicle->ypos );
+   int dist = beeline ( pos.x, pos.y, targetUnit->xpos, targetUnit->ypos );
    if ( dist > 0 )
-      if ( ! (vehicle->height & bld->typ->externalloadheight))
+      if ( ! (targetUnit->height & bld->typ->externalloadheight))
          return;
 
-   targ.dest = vehicle;
+   targ.dest = targetUnit;
 
-   for (int i = 0; i < vehicle->typ->weapons->count ; i++)
-      if ( vehicle->typ->weapons->weapon[i].requiresAmmo() ) {
-         int type = vehicle->typ->weapons->weapon[i].getScalarWeaponType();
+   for (int i = 0; i < targetUnit->typ->weapons->count ; i++)
+      if ( targetUnit->typ->weapons->weapon[i].requiresAmmo() ) {
+         int type = targetUnit->typ->weapons->weapon[i].getScalarWeaponType();
          if ( type >= 0 )
-            if ( bld->munition[type] || vehicle->ammo[i] || (bld->typ->special & cgammunitionproductionb)) {
-               SingleWeapon& destWeapon = vehicle->typ->weapons->weapon[i];
+            if ( bld->munition[type] || targetUnit->ammo[i] || (bld->typ->special & cgammunitionproductionb)) {
+               SingleWeapon& destWeapon = targetUnit->typ->weapons->weapon[i];
 
                VehicleService::Target::Service s;
                s.type = VehicleService::srv_ammo;
                s.sourcePos = type;
                s.targetPos = i;
-               s.curAmount = vehicle->ammo[i];
+               s.curAmount = targetUnit->ammo[i];
                s.orgSourceAmount = bld->munition[type];
-               int stillNeeded = destWeapon.count - vehicle->ammo[i] - s.orgSourceAmount;
+               int stillNeeded = destWeapon.count - targetUnit->ammo[i] - s.orgSourceAmount;
                int produceable;
                if ( stillNeeded > 0 ) {
                   stillNeeded = ((stillNeeded +4) / 5)*5;
@@ -1914,21 +1921,21 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
                } else
                   produceable = 0;
 
-               s.maxAmount = min ( destWeapon.count,  vehicle->ammo[i] + s.orgSourceAmount + produceable );
+               s.maxAmount = min ( destWeapon.count,  targetUnit->ammo[i] + s.orgSourceAmount + produceable );
                s.minAmount = 0;
                targ.service.push_back ( s );
             }
       }
 
    for ( int r = 0; r < resourceTypeNum; r++ )
-      if ( vehicle->typ->tank.resource(r) ) {
+      if ( targetUnit->typ->tank.resource(r) ) {
          VehicleService::Target::Service s;
          s.type = VehicleService::srv_resource;
          s.sourcePos = r;
          s.targetPos = r;
-         s.curAmount = vehicle->tank.resource(r);
+         s.curAmount = targetUnit->tank.resource(r);
          s.orgSourceAmount = bld->getResource (maxint, r, 1 );
-         s.maxAmount = s.curAmount + min ( vehicle->putResource(maxint, r, 1) , s.orgSourceAmount );
+         s.maxAmount = s.curAmount + min ( targetUnit->putResource(maxint, r, 1) , s.orgSourceAmount );
          int sourceSpace = bld->putResource(maxint, r, 1);
          s.minAmount = max ( s.curAmount - sourceSpace, 0 );
          targ.service.push_back ( s );
@@ -1936,15 +1943,15 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
 
 
    if ( bld->canRepair() )
-      if ( vehicle->damage ) {
+      if ( targetUnit->damage ) {
          VehicleService::Target::Service s;
          s.type = VehicleService::srv_repair;
          s.sourcePos = -1;
          s.targetPos = -1;
-         s.curAmount = vehicle->damage;
+         s.curAmount = targetUnit->damage;
          s.orgSourceAmount = 100;
-         s.maxAmount = vehicle->damage;
-         s.minAmount = bld->getMaxRepair ( vehicle );
+         s.maxAmount = targetUnit->damage;
+         s.minAmount = bld->getMaxRepair ( targetUnit );
          targ.service.push_back ( s );
       }
 
@@ -1963,10 +1970,10 @@ void  VehicleService :: FieldSearch :: testfield(void)
       if ( fld->vehicle == veh ) {
          for ( int i = 0; i < 32; i++ )
             if ( veh->loading[i] )
-              checkVehicle2Vehicle ( veh->loading[i] );
+              checkVehicle2Vehicle ( veh->loading[i], xp, yp );
       }
       if ( fld->vehicle )
-         checkVehicle2Vehicle ( fld->vehicle );
+         checkVehicle2Vehicle ( fld->vehicle, xp, yp );
    }
 
    if ( fld && bld ) {
@@ -2027,16 +2034,18 @@ void VehicleService :: FieldSearch :: init ( pvehicle _veh, pbuilding _bld )
 
    veh = _veh;
    bld = _bld;
-}
 
-void VehicleService :: FieldSearch :: run (  )
-{
    if ( veh )
       initrefuelling ( veh->xpos, veh->ypos );
    else {
       MapCoordinate mc = bld->getEntry();
       initrefuelling ( mc.x, mc.y );
    }
+
+}
+
+void VehicleService :: FieldSearch :: run (  )
+{
    startsuche();
 }
 

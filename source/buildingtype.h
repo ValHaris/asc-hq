@@ -141,7 +141,7 @@ class  Building : public ContainerBase {
 
     int           repairedThisTurn;
 
-    AiParameter*  aiparam[8];
+    AiValue*      aiparam[8];
 
     Building( pmap actmap = NULL );
     Building ( pbuilding src, pmap actmap );

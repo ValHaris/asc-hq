@@ -168,7 +168,7 @@ extern const char*  cvehiclefunctions[];
         UnitWeapon*  weapons;
         int          autorepairrate;
 
-        AiParameter* aiparam[8];
+        AiValue* aiparam[8];
         char*        filename;    // just for information purposes in the main program
         int          vehicleCategoriesLoadable;
 

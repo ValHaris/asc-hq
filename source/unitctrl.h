@@ -1,6 +1,9 @@
-//     $Id: unitctrl.h,v 1.17 2000-11-11 11:05:21 mbickel Exp $
+//     $Id: unitctrl.h,v 1.18 2000-11-14 20:36:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/11/11 11:05:21  mbickel
+//      started AI service functions
+//
 //     Revision 1.16  2000/11/08 19:31:18  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -423,7 +426,7 @@ class VehicleService : public VehicleAction {
                        bool height;
                      } bypassChecks;
                      virtual void     testfield ( void );
-                     void             checkVehicle2Vehicle ( pvehicle veh );
+                     void             checkVehicle2Vehicle ( pvehicle veh, int xp, int yp );
                      void             checkBuilding2Vehicle ( pvehicle veh );
                      void             initrefuelling( int xp1, int yp1 );
                      void             startsuche ( void );

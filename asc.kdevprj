@@ -35,11 +35,11 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/acinclude.m4,/home/martin/asc/aclocal.m4,/home/martin/asc/acconfig.h,/home/martin/asc/configure.in,/home/martin/asc/source/libs/bzlib/Makefile,
+openfiles=Unbenannt.h,/home/martin/asc/source/artint.cpp,/home/martin/asc/source/artint.h,/home/martin/asc/source/typen.h,/home/martin/asc/source/unitctrl.h,/home/martin/asc/configure.in,/home/martin/asc/source/vehicletype.h,/home/martin/asc/source/gamedlg.cpp,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/configure.in
-cpp_file=Unbenannt.cpp
+header_file=/home/martin/asc/source/typen.h
+cpp_file=/home/martin/asc/source/gamedlg.cpp
 browser_file=file:/home/martin/.kde/share/apps/kdevelop/search_result.html
 [source/astar2.h]
 install_location=

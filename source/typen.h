@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.66 2000-11-11 11:05:20 mbickel Exp $
+//     $Id: typen.h,v 1.67 2000-11-14 20:36:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.66  2000/11/11 11:05:20  mbickel
+//      started AI service functions
+//
 //     Revision 1.65  2000/11/08 19:37:40  mbickel
 //      Changed the terrain types (again): "lava" now replaces "small trench"
 //
@@ -307,6 +310,7 @@
 
 #include <time.h>
 #include <list>
+#include <bitset>
 
 #include "global.h"
 
@@ -418,6 +422,11 @@ const int maxobjectonfieldnum = 16;
 //! The maximum experience value of a #Vehicle
 const int maxunitexperience = 23;
 
+//! the number of bits that specify the terrain of a field
+const int cbodenartennum = 33;
+
+
+// typedef bitset<cbodenartennum> tterrainbits;
 
 
 class tterrainbits {
@@ -492,9 +501,11 @@ class tterrainbits {
 };
 
 
-/* These operators are crap. But since they are used only be tterrainaccess.accessible, which knows
+/* These operators are crap. But since they are used only by tterrainaccess.accessible, which knows
    that they are crap, the system is working ...
 */
+
+
 extern tterrainbits& operator~ ( tterrainbits &tb );
 extern tterrainbits& operator| ( tterrainbits tb2, tterrainbits tb3 ) ;
 extern int operator& ( tterrainbits tb2, tterrainbits tb3 ) ;
@@ -509,11 +520,13 @@ class tterrainaccess {
       tterrainbits  terrainkill;  /* falls das aktuelle field nicht befahrbar ist, und bei field->typ->art eine dieser Bits gesetzt ist, verschwindet die vehicle */
       int dummy[10];
       int accessible ( tterrainbits bts );
+      /*
       int getcrc ( void ) {
         return terrain.getcrc() + terrainreq.getcrc()*7 + terrainnot.getcrc()*97 + terrainkill.getcrc()*997;  
       };
+      */
 
-      void read ( tnstream& stream ) { 
+      void read ( tnstream& stream ) {
          terrain.read ( stream );
          terrainreq.read ( stream );
          terrainnot.read ( stream );
@@ -523,22 +536,18 @@ class tterrainaccess {
              stream.readInt( ); //dummy
       };
 
-      void write ( tnstream& stream ) { 
+      void write ( tnstream& stream ) {
          terrain.write ( stream );
          terrainreq.write ( stream );
          terrainnot.write ( stream );
          terrainkill.write ( stream );
-         
+
          for ( int a = 0; a < 10; a++ )
              stream.writeInt( 0 ); //dummy
       };
       
 };
 
-union tgametime {
-  struct { signed short move, turn; }a ;
-  int abstime;
-};
 
 struct tcrc {
   int id;
@@ -748,21 +757,58 @@ class AiThreat {
 };
 
 
-class AiParameter {
+union tgametime {
+  struct { signed short move, turn; }a ;
+  int abstime;
+};
+
+
+//! Coordinate on the twodimensional map
+class MapCoordinate {
+         public:
+            int x;
+            int y;
+            MapCoordinate ( ) : x(-1), y(-1 ) {};
+            MapCoordinate ( int _x, int _y) : x(_x), y(_y) {};
+      };
+
+//! Coordinate on the map including height
+class MapCoordinate3D : public MapCoordinate {
+         public:
+            int z;
+            int getBitmappedHeight ( ) { return 1<<z; };
+            int getNumericalHeight ( ) { return z; };
+            MapCoordinate3D ( ) : MapCoordinate(), z(-1) {};
+            MapCoordinate3D ( int _x, int _y, int _z) : MapCoordinate ( _x, _y ), z ( _z ) {};
+            MapCoordinate3D ( const MapCoordinate& mc ) : MapCoordinate ( mc ), z ( -1 ) {};
+      };
+
+
+class AiValue {
         public:
            AiThreat threat;
            int value;
            int valueType;
-           enum Task { tsk_nothing, tsk_tactics, tsk_tactwait, tsk_stratwait, tsk_wait, tsk_strategy, tsk_serviceRetreat } task;
-           enum Job { job_undefined, job_fight, job_supply, job_conquer, job_build } job;
+           void reset ( int _valueType ) { threat.reset(); value = 0; valueType = _valueType; };
 
-           int xtogo;
-           int ytogo;
-           int id;
+           AiValue ( int _valueType ) { reset( _valueType ); };
+        };
+
+class AiParameter : public AiValue {
+           pvehicle unit;
+        public:
+           enum Task { tsk_nothing, tsk_tactics, tsk_tactwait, tsk_stratwait, tsk_wait, tsk_strategy, tsk_serviceRetreat, tsk_move } task;
+           enum Job { job_undefined, job_fight, job_supply, job_conquer, job_build } job;
+           int lastDamage;
+           tgametime damageTime;
+
+           MapCoordinate3D dest;
+           int dest_nwid;
            int data;
 
-           void reset ( void );
-           AiParameter ( void ) { reset(); };
+           void reset ( pvehicle _unit );
+           void resetTask ( );
+           AiParameter ( pvehicle _unit );
            // AiParameter ( const AiParameter& aip );
  };
 
@@ -799,14 +845,6 @@ template <class T> class PointerList : public list<T> {
 //////////////////////////////////////////////////////////////
 */
 
-//! Coordinate on the map
-class MapCoordinate {
-         public:
-            int x;
-            int y;
-            MapCoordinate ( ) : x(-1), y(-1 ) {};
-            MapCoordinate ( int a, int b) : x(a), y(b ) {};
-      };
 
 
 class  twterraintype {
@@ -891,6 +929,8 @@ class tobjecttype {
     void* getpic ( int i, int weather = 0 );
     int  buildable ( pfield fld );
     int connectablewithbuildings ( void );
+    void read ( tnstream& stream );
+    void write ( tnstream& stream );
 };
 
 
@@ -1727,8 +1767,7 @@ extern  const char*  choehenstufen[8] ;
 
 
 
-#define cbodenartennum 33
-extern const char*  cbodenarten[]  ; 
+extern const char*  cbodenarten[]  ;
   extern tterrainbits cbwater0 ;
   extern tterrainbits cbwater1 ;
   extern tterrainbits cbwater2 ;

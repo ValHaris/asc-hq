@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.71 2000-11-09 18:39:00 mbickel Exp $
+//     $Id: spfst.cpp,v 1.72 2000-11-14 20:36:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.71  2000/11/09 18:39:00  mbickel
+//      Fix: mapeditor crashed at startup due to invalid map being generated
+//
 //     Revision 1.70  2000/11/08 19:31:14  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -1649,7 +1652,7 @@ int tcursor::gotoxy(int x, int y, int disp)
 
 void         tcursor::show(void)
 { 
-   if ( actmap->xsize == 0  || actmap->ysize == 0 )
+   if ( !actmap || actmap->xsize == 0  || actmap->ysize == 0 )
       return;
 
    int ms = getmousestatus (); 
@@ -4536,7 +4539,7 @@ int getcrc ( const pvehicletype fzt )
        fz.classnames[i] = NULL;
     }
     fz.buildicon = NULL;
-    int terr = fz.terrainaccess->getcrc();
+    int terr = 0; // fz.terrainaccess->getcrc();
     fz.terrainaccess = NULL;
     
     int crcob = 0;

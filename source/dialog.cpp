@@ -1,6 +1,12 @@
-//     $Id: dialog.cpp,v 1.63 2000-11-08 19:30:59 mbickel Exp $
+//     $Id: dialog.cpp,v 1.64 2000-11-14 20:36:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.63  2000/11/08 19:30:59  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.62  2000/10/18 14:13:58  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -4321,6 +4327,11 @@ void         tsetalliances::click(pascal_byte         bxx,
                                 pascal_byte         y)
 { 
 
+   #ifdef karteneditor
+   bool mapeditor = true;
+   #else
+   bool mapeditor = false;
+   #endif
    mousevisible(false);
    activefontsettings.color = 23 + y * 8; 
    activefontsettings.length = tsa_namelength; 
@@ -4328,7 +4339,7 @@ void         tsetalliances::click(pascal_byte         bxx,
    if (bxx == 0) { 
       if (x == 0  && ( y == actmap->actplayer || supervisor ) ) { 
          actmap->player[y].stat++;
-         if ( actmap->actplayer == -1 ) {
+         if ( actmap->actplayer == -1 || mapeditor ) {
             if (actmap->player[y].stat > 2)
                actmap->player[y].stat = ps_human;
          } else {

@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.59 2000-11-08 19:37:39 mbickel Exp $
+//     $Id: typen.cpp,v 1.60 2000-11-14 20:36:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.59  2000/11/08 19:37:39  mbickel
+//      Changed the terrain types (again): "lava" now replaces "small trench"
+//
 //     Revision 1.58  2000/11/08 19:31:16  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -282,6 +285,7 @@
 #include "global.h"
 #include "misc.h"
 #include "typen.h"
+#include "loadbi3.h"
 
 #ifndef converter
 #include "spfst.h"
@@ -1712,4 +1716,286 @@ int getheightdelta ( int height1, int height2 )
       hd--;
  
    return hd;
+}
+
+
+const int object_version = 1;
+
+void tobjecttype :: read ( tnstream& stream )
+{
+   int version = stream.readInt();
+
+   if ( version == object_version ) {
+
+       id = stream.readInt();
+       weather = stream.readInt();
+       visibleago = stream.readInt();
+       objectslinkablenum = stream.readInt();
+       bool _objectsLinkable = stream.readInt();
+       objectslinkable = NULL;
+       bool _oldpicture = stream.readInt();
+       oldpicture = NULL;
+
+       pictnum = stream.readInt();
+       armor = stream.readInt();
+
+       movemalus_plus_count = stream.readChar();
+       movemalus_plus = NULL; stream.readInt();
+
+       movemalus_abs_count = stream.readChar();
+       movemalus_abs = NULL; stream.readInt();
+
+       attackbonus_plus = stream.readInt();
+       attackbonus_abs  = stream.readInt();
+
+       defensebonus_plus = stream.readInt();
+       defensebonus_abs =  stream.readInt();
+
+       basicjamming_plus = stream.readInt();
+       basicjamming_abs = stream.readInt();
+
+       height = stream.readInt();
+
+       buildcost.read( stream );
+       removecost.read ( stream );
+       build_movecost = stream.readInt();
+       remove_movecost = stream.readInt();
+
+       bool _name = stream.readInt();
+       name = NULL;
+
+       no_autonet = stream.readInt();
+
+       terrainaccess.read( stream );
+       terrain_and.read ( stream );
+       terrain_or.read ( stream );
+
+       bool _buildicon = stream.readInt();
+       buildicon = NULL;
+       bool _removeicon = stream.readInt();
+       removeicon = NULL;
+
+       bool _dirlist = stream.readInt();
+       dirlist = NULL;
+
+       dirlistnum = stream.readInt();
+       bool _picture[cwettertypennum];
+       for ( int aa = 0; aa < cwettertypennum; aa++ ) {
+          _picture[aa] = stream.readInt();
+          picture[aa] = NULL;
+       }
+
+      int copycount = 0;
+
+      int w;
+      for ( int ww = 0; ww < cwettertypennum; ww++ )
+         if ( weather & ( 1 << ww ))
+            if ( pictnum ) {
+               picture[ww] = new thexpic[pictnum];
+               for ( int n = 0; n < pictnum; n++ ) {
+                  stream.readInt(); // dummy
+                  picture[ww][n].bi3pic = stream.readInt();
+                  picture[ww][n].flip = stream.readInt();
+
+                  if ( picture[ww][n].bi3pic != -1 )
+                     loadbi3pict_double ( picture[ww][n].bi3pic,
+                                         &picture[ww][n].picture,
+                                         1,  // CGameOptions::Instance()->bi3.interpolate.objects
+                                         0 );
+                  else
+                     stream.readrlepict ( &picture[ww][n].picture, false, &w);
+
+                  if ( picture[ww][n].flip == 1 ) {
+                     void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
+                     flippict ( picture[ww][n].picture, buf , 1 );
+                     asc_free ( picture[ww][n].picture );
+                     picture[ww][n].picture = buf;
+                     copycount++;
+                  }
+
+                  if ( picture[ww][n].flip == 2 ) {
+                     void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
+                     flippict ( picture[ww][n].picture, buf , 2 );
+                     asc_free ( picture[ww][n].picture );
+                     picture[ww][n].picture = buf;
+                     copycount++;
+                  }
+
+                  if ( picture[ww][n].flip == 3 ) {
+                     void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
+                     flippict ( picture[ww][n].picture, buf , 2 );
+                     flippict ( buf, picture[ww][n].picture, 1 );
+                     delete[] buf;
+                     copycount++;
+                  }
+
+                  if ( picture[ww][n].bi3pic == -1 )
+                     picture[ww][n].flip = 0;
+               }
+            }
+
+      if ( copycount == 0 )
+         for ( int ww = 0; ww < cwettertypennum; ww++ )
+            if ( weather & ( 1 << ww ))
+               if ( pictnum )
+                  for ( int n = 0; n < pictnum; n++ )
+                     if ( picture[ww][n].bi3pic != -1 ) {
+                        asc_free ( picture[ww][n].picture );
+                        loadbi3pict_double ( picture[ww][n].bi3pic,
+                                             &picture[ww][n].picture,
+                                             1 ); // CGameOptions::Instance()->bi3.interpolate.objects );
+                     }
+
+       #ifndef converter
+       int mmcount = cmovemalitypenum;
+
+       if (mmcount < movemalus_plus_count )
+          mmcount = movemalus_plus_count;
+       #else
+       int mmcount = movemalus_plus_count ;
+       #endif
+
+       movemalus_plus = new char[ mmcount ] ;
+
+       int j;
+       for (j=0; j< mmcount ; j++ ) {
+          if (j < movemalus_plus_count )
+             movemalus_plus[j] = stream.readChar();
+          else
+             if( j > 0 )
+               movemalus_plus[j] = movemalus_plus[0];
+             else
+               movemalus_plus[j] = 0;
+
+       }
+       movemalus_plus_count = mmcount;
+
+
+
+       #ifndef converter
+       mmcount = cmovemalitypenum;
+
+       if (mmcount < movemalus_abs_count )
+          mmcount = movemalus_abs_count;
+       #else
+       mmcount = movemalus_abs_count ;
+       #endif
+
+       movemalus_abs = new char[ mmcount ] ;
+
+       for (j=0; j< mmcount ; j++ ) {
+          if (j < movemalus_abs_count )
+             movemalus_abs[j] = stream.readChar();
+          else
+             if( j > 0 )
+                movemalus_abs[j] = movemalus_abs[0];
+             else
+                movemalus_abs[j] = 0;
+       }
+
+       movemalus_abs_count = mmcount;
+
+       if ( _name )
+          stream.readpchar ( &name );
+
+
+      if ( dirlistnum ) {
+         dirlist = new int[ dirlistnum ];
+         for ( int i = 0; i < dirlistnum; i++ )
+            dirlist[i] = stream.readInt();
+      }
+
+
+      if ( objectslinkablenum ) {
+         objectslinkableid = new int[ objectslinkablenum ];
+         for ( int i = 0; i < objectslinkablenum; i++ )
+             objectslinkableid[i] = stream.readInt();
+      }
+
+       buildicon = NULL;
+       removeicon = NULL;
+   } else
+       throw ASCmsgException ( "invalid object file format version");
+}
+
+void tobjecttype :: write ( tnstream& stream )
+{
+
+    stream.writeInt ( object_version );
+
+    stream.writeInt ( id);
+    stream.writeInt ( weather );
+    stream.writeInt ( visibleago );
+    stream.writeInt ( objectslinkablenum );
+    stream.writeInt ( -1 ); // was: objectslinkable
+    stream.writeInt ( -1 ); // was: oldpicture
+    stream.writeInt ( pictnum );
+    stream.writeInt ( armor );
+
+    stream.writeChar ( movemalus_plus_count );
+    stream.writeInt ( -1 ); // was movemalus_plus
+
+    stream.writeChar ( movemalus_abs_count );
+    stream.writeInt ( -1 ); // was movemalus_abs
+
+    stream.writeInt ( attackbonus_plus );
+    stream.writeInt ( attackbonus_abs );
+    stream.writeInt ( defensebonus_plus );
+    stream.writeInt ( defensebonus_abs );
+
+    stream.writeInt ( basicjamming_plus );
+    stream.writeInt ( basicjamming_abs );
+
+    stream.writeInt ( height );
+
+    buildcost.write( stream );
+    removecost.write ( stream );
+    stream.writeInt( build_movecost );
+    stream.writeInt( remove_movecost );
+
+    stream.writeInt ( -1 ); // was name
+    stream.writeInt ( no_autonet );
+
+    terrainaccess.write( stream );
+    terrain_and.write ( stream );
+    terrain_or.write ( stream );
+
+    stream.writeInt( -1 ); // was buildicon
+    stream.writeInt( -1 ); // was removeicon
+
+    stream.writeInt( -1 ); // was dirlist
+
+    stream.writeInt ( dirlistnum );
+    for ( int aa = 0; aa < cwettertypennum; aa++ )
+       stream.writeInt( -1 ); // was picture
+
+    for ( int ww = 0; ww < cwettertypennum; ww++ )
+       if ( weather & ( 1 << ww ))
+          for ( int l = 0; l < pictnum; l++ ) {
+             stream.writeInt ( -1 );
+             stream.writeInt ( picture[ww][l].bi3pic );
+             stream.writeInt ( picture[ww][l].flip );
+             if ( picture[ww][l].bi3pic == -1 )
+                stream.writedata( picture[ww][l].picture, getpicsize2 ( picture[ww][l].picture) );
+          }
+
+    if ( movemalus_plus_count )
+       for ( int i = 0; i < movemalus_plus_count; i++ )
+           stream.writeInt ( movemalus_plus[i] );
+
+    if ( movemalus_abs_count )
+       for ( int i = 0; i < movemalus_abs_count; i++ )
+           stream.writeInt ( movemalus_abs[i] );
+
+    if ( name )
+       stream.writepchar ( name );
+
+    if ( dirlistnum )
+       for ( int i = 0; i < dirlistnum; i++ )
+          stream.writeInt ( dirlist[i] );
+
+    if ( objectslinkablenum )
+       for ( int i = 0; i < objectslinkablenum; i++ )
+           stream.writeInt( objectslinkableid[i] );
+
 }

@@ -7,6 +7,7 @@ TODO list for ASC:
 3.  Clean up the transportcargo routines in mapeditor ( cancel function etc )
 5.  Optimize  int VehicleMovement :: getDistance ( int x, int y ) in unitctrl.cpp
 6.  Optimize beeline (shouldn't be iterative...)
+7.  Replace tterainaccess class by a bitset
 9.  Converting getfield()->vehicle == veh to getfield()->unitHere ( veh )
     grep "> *vehicle *==" *.cpp
 13.  Fix delete[] void warnings 
