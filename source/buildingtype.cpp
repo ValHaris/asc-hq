@@ -82,16 +82,16 @@ MapCoordinate  BuildingType :: getFieldCoordinate ( const MapCoordinate& entryPo
    return mc;
 }
 
-int    BuildingType :: vehicleloadable ( pvehicletype fzt ) const
+bool    BuildingType :: vehicleloadable ( pvehicletype fzt ) const
 {
    if ( special & cgproduceAllUnitsB )
-      return 1;
+      return true;
 
    if (    (loadcapacity >= fzt->maxsize()  &&  ((unitheightreq & fzt->height) || !unitheightreq) && !(unitheight_forbidden & fzt->height)  && (loadcapability & fzt->height))
         || ( fzt->functions & cf_trooper ) )
-        return 1;
+        return true;
 
-   return 0;
+   return false;
 }
 
 

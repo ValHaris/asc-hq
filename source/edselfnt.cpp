@@ -2,9 +2,12 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.24 2001-03-07 21:40:52 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.25 2001-03-23 16:02:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2001/03/07 21:40:52  mbickel
+//      Lots of bugfixes in the mapeditor
+//
 //     Revision 1.23  2001/02/11 11:39:33  mbickel
 //      Some cleanup and documentation
 //
@@ -835,10 +838,10 @@ int SelectBuildingType :: isavailable ( pbuildingtype item )
 
 string SelectBuildingType :: getItemName ( pbuildingtype item )
 {
-   if ( item->name && item->name[0] )
-      return item->name;
-   else
+   if ( item->name.empty() )
       return "-NONE-";
+   else
+      return item->name;
 }
 
 

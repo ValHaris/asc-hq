@@ -2,9 +2,14 @@
     \brief The artificial intelligence of ASC. 
 */
 
-//     $Id: artint.cpp,v 1.66 2001-03-05 20:57:20 mbickel Exp $
+//     $Id: artint.cpp,v 1.67 2001-03-23 16:02:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.66  2001/03/05 20:57:20  mbickel
+//      Fixed infinite loop in AI
+//      Fixed map resizing crash in mapaeditor
+//      Fixed speedsearch not working in fileselector
+//
 //     Revision 1.65  2001/03/02 13:24:45  mbickel
 //      AI fixes
 //
@@ -449,7 +454,7 @@ pbuilding AI :: findServiceBuilding ( const ServiceOrder& so, int* distance )
 
                                                    Resources needed;
                                                    for ( int  j = 0; j < waffenanzahl; j++ ) {
-                                                       int n = ammoNeeded[j] - bld->munition[j];
+                                                       int n = ammoNeeded[j] - bld->ammo[j];
                                                        if ( n > 0 )
                                                           if ( bld->typ->special & cgammunitionproductionb ) {
                                                              for ( int r = 0; r < resourceTypeNum; r++ )

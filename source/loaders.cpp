@@ -5,9 +5,13 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.46 2001-02-26 13:49:36 mbickel Exp $
+//     $Id: loaders.cpp,v 1.47 2001-03-23 16:02:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2001/02/26 13:49:36  mbickel
+//      Fixed bug in message loading
+//      readString can now read strings that container \n
+//
 //     Revision 1.45  2001/02/26 12:35:17  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -721,7 +725,7 @@ void      tspfldloaders:: writemessages ( void )
 
    writemessagelist ( spfld->unsentmessage );
 
-   stream->writedata2 ( j );
+   stream->writeInt ( j );
 
    if ( spfld->journal )
       stream->writepchar ( spfld->journal );
@@ -803,7 +807,7 @@ void      tspfldloaders:: readmessages ( void )
    if ( spfld->__loadunsentmessage )
       readmessagelist ( spfld->unsentmessage );
 
-   stream->readdata2 ( magic );
+   magic = stream->readInt();
 
    if ( spfld->journal )
       stream->readpchar ( &spfld->journal );
@@ -827,7 +831,7 @@ void   tspfldloaders::writeeventstocome ( void )
        event = event->next; 
     } 
  
-    stream->writedata2( j );
+    stream->writeInt( j );
  
     event = spfld->firsteventtocome; 
     while ( event ) {
@@ -1179,16 +1183,16 @@ void   tspfldloaders::writefields ( void )
       if ( b3 ) 
          b1 |= csm_b3; 
 
-      stream->writedata2( b1 );
+      stream->writeChar( b1 );
 
       if (b1 & csm_b3 ) 
-         stream->writedata2 ( b3 );
+         stream->writeChar ( b3 );
 
       if (b3 & csm_b4 )
-         stream->writedata2 ( b4 );
+         stream->writeChar ( b4 );
 
       if (b1 & csm_cnt2 ) 
-         stream->writedata2 ( cnt2 );
+         stream->writeInt ( cnt2 );
 
       if (b3 & csm_weather ) {
          int k = 1;
@@ -1200,18 +1204,16 @@ void   tspfldloaders::writefields ( void )
             k = 0;
             displaymessage ( "invalid terrain ( weather not found ) at position %d \n",1,l );
           }
-         stream->writedata2 ( k );
+         stream->writeInt ( k );
       }
 
       if (b1 & csm_typid32 )                  
-         stream->writedata2 ( fld->typ->terraintype->id );
-      else {  
-         char b2 = fld->typ->terraintype->id;
-         stream->writedata2 ( b2 );
-      } 
+         stream->writeInt ( fld->typ->terraintype->id );
+      else
+         stream->writeChar ( fld->typ->terraintype->id );
 
       if (b1 & csm_direction )                    
-         stream->writedata2 ( fld->direction );
+         stream->writeChar ( fld->direction );
 
       if (b1 & csm_vehicle ) 
          fld->vehicle->write ( *stream );
@@ -1221,15 +1223,16 @@ void   tspfldloaders::writefields ( void )
          fld->building->write ( *stream );
 
       if (b3 & csm_material ) 
-         stream->writedata2 ( fld->material );
+         stream->writeChar ( fld->material );
+
       if (b3 & csm_fuel ) 
-         stream->writedata2 ( fld->fuel );
+         stream->writeChar ( fld->fuel );
 
       if (b3 & csm_visible )
-         stream->writedata2( fld->visible );
+         stream->writeWord ( fld->visible );
 
       if ( b4 & csm_newobject ) {
-         stream->writedata2 ( objectstreamversion );
+         stream->writeInt ( objectstreamversion );
 
          stream->writeInt ( fld->mines.size() );
          for ( tfield::MineContainer::iterator m = fld->mines.begin(); m != fld->mines.end(); m++  ) {
@@ -1252,11 +1255,16 @@ void   tspfldloaders::writefields ( void )
          }
       }
 
-      if (b4 & csm_resources )
-         stream->writedata2 ( *fld->resourceview );
+      if (b4 & csm_resources ) {
+         stream->writeChar ( fld->resourceview->visible );
+         for ( int i = 0; i < 8; i++ )
+            stream->writeChar ( fld2->resourceview->fuelvisible[i] );
+         for ( int i = 0; i < 8; i++ )
+            stream->writeChar ( fld2->resourceview->materialvisible[i] );
+      }
 
       if ( b4 & csm_connection )
-         stream->writedata2 ( fld->connection );
+         stream->writeInt ( fld->connection );
 
       l += 1 + cnt2;
    }  while (l < cnt1);
@@ -1294,40 +1302,37 @@ void tspfldloaders::readfields ( void )
          fld2->bdt.set ( 0 , 0 );
 
          char b1, b3, b4;
-         stream->readdata2 ( b1 );
+         b1 = stream->readChar();
 
          if (b1 & csm_b3 ) 
-            stream->readdata2 ( b3 );
+            b3 = stream->readChar();
          else 
             b3 = 0; 
 
          if (b3 & csm_b4 )
-            stream->readdata2 ( b4 );
+            b4 = stream->readChar();
          else
             b4 = 0;
 
          if (b1 & csm_cnt2 ) 
-            stream->readdata2 ( cnt2 );
+            cnt2 = stream->readInt();
          else
             cnt2 = 0; 
 
          int weather;
          if (b3 & csm_weather )
-            stream->readdata2 ( weather );
+            weather = stream->readInt();
          else 
             weather = 0;
 
 
          int k;
-         char b2;
 
          if (b1 & csm_typid32 ) 
-            stream->readdata2 ( k );
-         else { 
-            stream->readdata2 ( b2 );
-            k = b2; 
-         } 
-       
+            k = stream->readInt();
+         else
+            k = stream->readChar();
+
          pterraintype trn = getterraintype_forid ( k, 0 );
          if ( !trn ) 
             throw InvalidID ( "terrain", k );
@@ -1337,7 +1342,7 @@ void tspfldloaders::readfields ( void )
             throw InvalidID ( "terrain", k );
 
          if (b1 & csm_direction )
-            stream->readdata2 ( fld2->direction );
+            fld2->direction = stream->readChar();
          else                                              
             fld2->direction = 0; 
 
@@ -1353,18 +1358,17 @@ void tspfldloaders::readfields ( void )
          }
 
          if (b3 & csm_material) 
-            stream->readdata2 ( fld2->material );
+            fld2->material = stream->readChar();
          else 
             fld2->material = 0; 
 
          if (b3 & csm_fuel) 
-            stream->readdata2 ( fld2->fuel );
+            fld2->fuel = stream->readChar();
          else 
-
-            fld2->fuel = 0; 
+            fld2->fuel = 0;
 
          if (b3 & csm_visible)
-            stream->readdata2 ( fld2->visible );
+            fld2->visible = stream->readWord();
          else
             fld2->visible = 0;
 
@@ -1387,8 +1391,7 @@ void tspfldloaders::readfields ( void )
          }
 
          if ( b4 & csm_newobject ) {
-            int objectversion;
-            stream->readdata2 ( objectversion );
+            int objectversion = stream->readInt();
 
             if ( objectversion != objectstreamversion )
                throw tinvalidversion ( "object", objectstreamversion, objectversion );
@@ -1430,11 +1433,15 @@ void tspfldloaders::readfields ( void )
 
          if (b4 & csm_resources ) {
             fld2->resourceview = new tfield::Resourceview;
-            stream->readdata2 ( *fld2->resourceview ); 
+            fld2->resourceview->visible = stream->readChar();
+            for ( int i = 0; i < 8; i++ )
+               fld2->resourceview->fuelvisible[i] = stream->readChar();
+            for ( int i = 0; i < 8; i++ )
+               fld2->resourceview->materialvisible[i] = stream->readChar();
          }
 
          if ( b4 & csm_connection ) 
-            stream->readdata2 ( fld2->connection );
+            fld2->connection = stream->readInt();
          
          if (b1 & csm_cnt2 )
             lfld = fld2;
@@ -1556,35 +1563,20 @@ int          tmaploaders::savemap( const char * name )
    /********************************************************************************/
    {
        stream->writepchar ( NULL );  // description is not used any more
-       stream->writedata2 ( fileterminator );
-       stream->writedata2 ( actmapversion  );
+       stream->writeWord ( fileterminator );
+       stream->writeInt ( actmapversion  );
 
        writemap ( );
    }
 
-   #ifdef logging
-   logtofile ( "loaders / tmaploaders::savemap / vor eventstocome" );
-   #endif
-
    writeeventstocome ();
-
-   #ifdef logging
-   logtofile ( "loaders / tmaploaders::savemap / vor writefields" );
-   #endif
-
    writefields ();
-
-   #ifdef logging
-   logtofile ( "loaders / tmaploaders::savemap / nach writefields" );
-   #endif
-
-   stream->writedata2 ( actmapversion );
+   stream->writeInt ( actmapversion );
 
    spfld = NULL;
 
    return 0;
 } 
-
 
 
 
@@ -1616,15 +1608,13 @@ int          tmaploaders::loadmap( const char *       name )
     stream->readpchar ( &description );
     delete[] description;
  
-    word w;
-    stream->readdata2 ( w );
+    word w = stream->readWord();
  
     if ( w != fileterminator ) 
        throw tinvalidversion ( name, fileterminator, (int) w );
 
 
-    int version;
-    stream->readdata2( version );
+    int version = stream->readInt();
  
     if ( version > actmapversion || version < minmapversion )
        throw tinvalidversion ( name, actmapversion, version );
@@ -1644,8 +1634,8 @@ int          tmaploaders::loadmap( const char *       name )
   /*   šberprfen,  Stream schlieáen                 ÿ                                                 */
   /*****************************************************************************************************/
 
-   stream->readdata( &version, sizeof(version)); 
-   if (version > actmapversion || version < minmapversion ) { 
+   version = stream->readInt();
+   if (version > actmapversion || version < minmapversion ) {
       delete spfld;
       spfld = NULL;
       throw tinvalidversion ( name, actmapversion, version );
@@ -1698,10 +1688,10 @@ void   tsavegameloaders::savegame( pnstream strm, pmap gamemap, bool writeReplay
    stream = strm;
    spfld = gamemap;
 
-   stream->writepchar ( NULL ); // description is not used any more
-   stream->writedata2 ( fileterminator );
+   stream->writepchar( NULL ); // description is not used any more
+   stream->writeWord( fileterminator );
 
-   stream->writedata2( actsavegameversion );
+   stream->writeInt( actsavegameversion );
    writemap ();
 
    writenetwork ( );
@@ -1724,11 +1714,11 @@ void   tsavegameloaders::savegame( pnstream strm, pmap gamemap, bool writeReplay
 
    writeAI();
 
-   stream->writedata2 ( actsavegameversion );
+   stream->writeInt( actsavegameversion );
 
    spfld = NULL;
-
 }
+
 
 void         tsavegameloaders::savegame( const char* name )
 { 
@@ -1876,9 +1866,9 @@ int          tnetworkloaders::savenwgame( pnstream strm )
    stream = strm;
 
    stream->writepchar ( NULL );  // description is not used any more
-   stream->writedata2 ( fileterminator );
+   stream->writeWord ( fileterminator );
  
-   stream->writedata2( actnetworkversion );
+   stream->writeInt ( actnetworkversion );
 
    writemap ();
 
@@ -1889,7 +1879,7 @@ int          tnetworkloaders::savenwgame( pnstream strm )
 
    writenetwork ( );
 
-   stream->writedata2 ( actnetworkversion );
+   stream->writeInt ( actnetworkversion );
 
    writeeventstocome ();
    writeeventspassed ();
@@ -1901,7 +1891,7 @@ int          tnetworkloaders::savenwgame( pnstream strm )
    writedissections();
    writereplayinfo ();
 
-   stream->writedata2 ( actnetworkversion );
+   stream->writeInt ( actnetworkversion );
 
    spfld = NULL;
 
@@ -1923,79 +1913,56 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
    stream->readpchar ( &description );
    delete[] description;
 
-   word w;
-   stream->readdata2 ( w );
+   word w = stream->readWord();
 
    if ( w != fileterminator ) 
       throw tinvalidversion ( name, fileterminator, (int) w );
 
 
-   int version;
-   stream->readdata2( version );
+   int version = stream->readInt();
 
    if (version > actnetworkversion || version < minnetworkversion ) 
       throw tinvalidversion ( name, actnetworkversion, version );
    
-   #ifdef logging 
-   logtofile ( "loaders / tnetworkloaders::loadnwgame / vor readmap" );
-   #endif
-
    readmap ();
 
    for ( int i = 0; i < 8; i++ )
       spfld->player[i].research.read_techs ( *stream );
 
 
-   #ifdef logging
-   logtofile ( "loaders / tnetworkloaders::loadnwgame / vor readmessages" );
-   #endif
    readmessages();
-
-   #ifdef logging
-   logtofile ( "loaders / tnetworkloaders::loadnwgame / vor readnetwork" );
-   #endif
    readnetwork ();
 
-
-   stream->readdata2( version );
+   version = stream->readInt();
 
    if (version > actnetworkversion || version < minnetworkversion ) 
       throw tinvalidversion ( name, actnetworkversion, version );
 
 
-   #ifdef logging
-   logtofile ( "loaders / tnetworkloaders::loadnwgame / vor readevents" );
-   #endif
    readeventstocome ();
    readeventspassed ();
    readoldevents    ();
                      
-   #ifdef logging
-   logtofile ( "loaders / tnetworkloaders::loadnwgame / vor readfields" );
-   #endif
    readfields ( );
  
    readdissections();
    readreplayinfo ();
 
-
    stream->readdata2( version );
    if (version > actnetworkversion || version < minnetworkversion )
       throw tinvalidversion ( name, actnetworkversion, version );
 
-  chainitems ( spfld );
+   chainitems ( spfld );
 
-  seteventtriggers( spfld );
+   seteventtriggers( spfld );
 
    delete actmap;
    actmap = spfld;
    spfld = NULL;
 
+   calculateallobjects();
 
-
-  calculateallobjects();
-
-  actmap->levelfinished = false;
+   actmap->levelfinished = false;
 
   #ifdef sgmain
    getnexteventtime();
@@ -2216,14 +2183,12 @@ bool validatemapfile ( const char* filename )
          description = NULL;
       }
 
-      word w;
-      stream.readdata2 ( w );
+      int w = stream.readWord();
       if ( w != fileterminator )
          throw tinvalidversion ( filename, fileterminator, (int) w );
 
-      int version;
-      stream.readdata2( version );
-   
+      int version = stream.readInt();
+
       if (version > actmapversion || version < minmapversion ) 
          throw tinvalidversion ( filename, actmapversion, version );
 
@@ -2242,7 +2207,6 @@ bool validatemapfile ( const char* filename )
 
 bool validateemlfile ( const char* filename )
 {
-
    char* description = NULL;
 
    try {
@@ -2253,14 +2217,12 @@ bool validateemlfile ( const char* filename )
          delete[]  description ;
          description = NULL;
       }
-      
-      word w;
-      stream.readdata2 ( w );
+
+      int w = stream.readWord();
       if ( w != fileterminator )
          throw tinvalidversion ( filename, fileterminator, (int) w );
 
-      int version;
-      stream.readdata2( version );
+      int version = stream.readInt();
    
       if (version > actnetworkversion || version < minnetworkversion ) 
          throw tinvalidversion ( filename, actnetworkversion, version );
@@ -2290,15 +2252,12 @@ bool validatesavfile ( const char* filename )
          description = NULL;
       }
 
-      word w;
-      stream.readdata2 ( w );
+      int w = stream.readWord();
       if ( w != fileterminator )
-         throw tinvalidversion ( filename, fileterminator, (int) w );
+         throw tinvalidversion ( filename, fileterminator, w );
 
-      int version;
-      stream.readdata2( version );
-   
-      if (version > actsavegameversion || version < minsavegameversion ) 
+      int version = stream.readInt();
+      if (version > actsavegameversion || version < minsavegameversion )
          throw tinvalidversion ( filename, actsavegameversion, version );
 
    } /* endtry */
@@ -2309,8 +2268,6 @@ bool validatesavfile ( const char* filename )
 
    return 1;
 } 
-
-
 
 
 
@@ -2387,29 +2344,13 @@ void         __erasemap_unchained( pmap& spfld )
 
 void         loadstreets(void)
 { 
-
-#ifdef HEXAGON
   int          w;
 
   tnfilestream stream ( "hexmines.raw", tnstream::reading );
   for ( int i = 0; i < 4; i++) 
       stream.readrlepict( &icons.mine[i], false, &w);
-  
-#else
 
-  int          w;
-  word         y;
-  void*        p;
-
-
-   tnfilestream stream ( "mines.dat", 1 ); 
-   stream.readdata2 ( y );
-   for ( int i = 0; i <= y; i++) { 
-      stream.readrlepict( &p,false,&w);
-      streets.mineposition[i].position = p; 
-   } 
-#endif
-} 
+}
 
 
 

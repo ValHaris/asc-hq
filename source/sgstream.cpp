@@ -5,9 +5,15 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.56 2001-02-18 15:37:19 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.57 2001-03-23 16:02:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.56  2001/02/18 15:37:19  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.55  2001/02/11 11:39:42  mbickel
 //      Some cleanup and documentation
 //
@@ -346,8 +352,7 @@ ptechnology       loadtechnology( pnstream stream )
 { 
    int          w;
 
-   int version;
-   stream->readdata2 ( version );
+   int version = stream->readInt();
    if ( version == technology_version ) {
 
       ptechnology pt =  new ttechnology;
@@ -355,10 +360,13 @@ ptechnology       loadtechnology( pnstream stream )
       stream->readdata ( pt, sizeof(*pt) ); 
       if ( pt->name )
          stream->readpchar( &pt->name );
+
       if ( pt->infotext )
          stream->readpchar( &pt->infotext );
+
       if ( pt->icon )
          stream->readrlepict ( &pt->icon,false,&w);
+
       if ( pt->pictfilename ) {
          stream->readpchar( &pt->pictfilename );
 
@@ -543,8 +551,10 @@ void loadguipictures( void )
 pbuildingtype       loadbuildingtype( const char *       name)
 {
    displayLogMessage ( 5, " loading building type %s ...", name );
+
    tnfilestream stream ( name, tnstream::reading );
    pbuildingtype bt = loadbuildingtype ( &stream );
+
    displayLogMessage ( 5, " done\n");
    return bt;
 }
@@ -574,13 +584,14 @@ pbuildingtype       loadbuildingtype( pnstream stream )
                
       pgbt->entry.x = stream->readInt( );
       pgbt->entry.y = stream->readInt( );
-      pgbt->powerlineconnect.x = stream->readInt( );
-      pgbt->powerlineconnect.y = stream->readInt( );
-      pgbt->pipelineconnect.x = stream->readInt( );
-      pgbt->pipelineconnect.y = stream->readInt( );
+
+      stream->readInt( ); // was: powerlineconnect.x
+      stream->readInt( ); // was: powerlineconnect.y
+      stream->readInt( ); // was: pipelineconnect.x
+      stream->readInt( ); // was: pipelineconnect.y
 
       pgbt->id = stream->readInt( );
-      pgbt->name = (char*) stream->readInt( );
+      bool __loadName = stream->readInt( );
       pgbt->_armor = stream->readInt( );
       pgbt->jamming = stream->readInt( );
       pgbt->view = stream->readInt( );
@@ -636,8 +647,8 @@ pbuildingtype       loadbuildingtype( pnstream stream )
                 pgbt->destruction_objects[x][y] = 0;
       }
 
-      if ( pgbt->name )
-         stream->readpchar ( &pgbt->name );
+      if ( __loadName )
+         pgbt->name = stream->readString();
    
       for ( int k = 0; k < maxbuildingpicnum ; k++)
          for ( int j = 0; j <= 5; j++) 
@@ -687,13 +698,13 @@ void writebuildingtype ( pbuildingtype bld, pnstream stream )
             
    stream->writeInt ( bld->entry.x );
    stream->writeInt ( bld->entry.y );
-   stream->writeInt ( bld->powerlineconnect.x );
-   stream->writeInt ( bld->powerlineconnect.y );
-   stream->writeInt ( bld->pipelineconnect.x );
-   stream->writeInt ( bld->pipelineconnect.y );
+   stream->writeInt ( -1 ); // was bld->powerlineconnect.x
+   stream->writeInt ( -1 ); // was bld->powerlineconnect.y
+   stream->writeInt ( -1 ); // was bld->pipelineconnect.x
+   stream->writeInt ( -1 ); // was bld->pipelineconnect.y
 
    stream->writeInt ( bld->id );
-   stream->writeInt ( (int) bld->name );
+   stream->writeInt ( !bld->name.empty() );
    stream->writeInt ( bld->_armor );
    stream->writeInt ( bld->jamming );
    stream->writeInt ( bld->view );
@@ -735,8 +746,8 @@ void writebuildingtype ( pbuildingtype bld, pnstream stream )
       for ( y = 0; y < 6; y++ )
           stream->writeInt ( bld->destruction_objects[x][y] );
 
-   if ( bld->name )
-      stream->writepchar ( bld->name );
+   if ( !bld->name.empty() )
+      stream->writeString ( bld->name );
 
     for (int k = 0; k < maxbuildingpicnum; k++)
        for (int j = 0; j <= 5; j++)

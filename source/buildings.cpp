@@ -43,15 +43,11 @@ Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const p
    _completion = 0;
    connection = 0;
 
-   lastenergyavail = 0;
-   lastmaterialavail = 0;
-   lastfuelavail = 0;
    lastmineddist= 0;
    maxresearchpoints = 0;
-   for ( i = 0; i < waffenanzahl; i++ ) {
-      munition[i] = 0;
-      munitionsautoproduction[i] = 0;
-   }
+   for ( i = 0; i < waffenanzahl; i++ )
+      ammo[i] = 0;
+
    netcontrol = 0;
 
    for ( i = 0; i< 32; i++ ) {
@@ -383,7 +379,7 @@ void        Building :: resetPicturePointers ( void )
 
 void    Building :: produceAmmo ( int type, int num )
 {
-   num = ((num +4) / 5)*5;
+   num = ((num + weaponpackagesize - 1) / weaponpackagesize)*weaponpackagesize;
    Resources res;
    for( int j = 0; j< resourceTypeNum; j++ )
       res.resource(j) = cwaffenproduktionskosten[type][j] * num / 5;
@@ -402,7 +398,7 @@ void    Building :: produceAmmo ( int type, int num )
 
    cb->getResource ( res, 0 );
 
-   munition[type] += produceablePackages * 5;
+   ammo[type] += produceablePackages * 5;
 }
 
 void Building :: getpowerplantefficiency ( int* material, int* fuel )
@@ -464,7 +460,7 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits )
     stream.writeWord ( getEntry().y );
     stream.writeChar ( getCompletion() );
     for ( i = 0; i < waffenanzahl; i++ )
-       stream.writeWord ( munitionsautoproduction[i] );
+       stream.writeWord ( 0 ); // was: ammoautoproduction
 
     for ( i = 0; i< resourceTypeNum; i++ )
        stream.writeInt ( plus.resource(i) );
@@ -476,7 +472,7 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits )
        stream.writeInt ( actstorage.resource(i) );
 
     for ( i = 0; i< waffenanzahl; i++ )
-       stream.writeWord ( munition[i] );
+       stream.writeWord ( ammo[i] );
 
     stream.writeWord ( maxresearchpoints );
     stream.writeWord ( researchpoints );
@@ -601,7 +597,7 @@ void Building :: readData ( tnstream& stream, int version )
 
     int i;
     for ( i = 0; i < waffenanzahl; i++)
-       munitionsautoproduction[i] = stream.readWord();
+       stream.readWord(); // was : ammoautoproduction
 
     for ( i = 0; i< 3; i++ )
        plus.resource(i) = stream.readInt();
@@ -613,7 +609,7 @@ void Building :: readData ( tnstream& stream, int version )
        actstorage.resource(i) = stream.readInt();
 
     for ( i = 0; i < waffenanzahl; i++)
-       munition[i] = stream.readWord();
+       ammo[i] = stream.readWord();
 
     maxresearchpoints = stream.readWord();
     researchpoints = stream.readWord();
@@ -662,4 +658,13 @@ void Building :: readData ( tnstream& stream, int version )
        for ( int l = c; l < 32; l++ )
           productionbuyable[l] = NULL;
     }
+}
+
+
+const ASCString& Building::getName ( ) const
+{
+   if ( name.empty())
+      return typ->name;
+   else
+      return name;
 }

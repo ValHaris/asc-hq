@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.51 2001-02-18 17:52:38 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.52 2001-03-23 16:02:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2001/02/18 17:52:38  mbickel
+//      Fixed some compilation problems on Linux
+//
 //     Revision 1.50  2001/02/18 15:37:23  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -1945,7 +1948,7 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
       if ( targetUnit->typ->weapons->weapon[i].requiresAmmo() ) {
          int type = targetUnit->typ->weapons->weapon[i].getScalarWeaponType();
          if ( type >= 0 )
-            if ( bld->munition[type] || targetUnit->ammo[i] || (bld->typ->special & cgammunitionproductionb)) {
+            if ( bld->ammo[type] || targetUnit->ammo[i] || (bld->typ->special & cgammunitionproductionb)) {
                SingleWeapon& destWeapon = targetUnit->typ->weapons->weapon[i];
 
                VehicleService::Target::Service s;
@@ -1953,7 +1956,7 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
                s.sourcePos = type;
                s.targetPos = i;
                s.curAmount = targetUnit->ammo[i];
-               s.orgSourceAmount = bld->munition[type];
+               s.orgSourceAmount = bld->ammo[type];
                int stillNeeded = destWeapon.count - targetUnit->ammo[i] - s.orgSourceAmount;
                int produceable;
                if ( stillNeeded > 0 ) {
@@ -2182,13 +2185,13 @@ int VehicleService :: execute ( pvehicle veh, int targetNWID, int dummy, int ste
                             break;
            case srv_ammo: delta = amount - serv.curAmount;
                           t.dest->ammo[ serv.targetPos ] += delta;
-                          building->munition[ serv.sourcePos ] -= delta;
-                          if ( building->munition[ serv.sourcePos ] < 0 ) {
-                             building->produceAmmo ( serv.sourcePos, -building->munition[ serv.sourcePos ] );
+                          building->ammo[ serv.sourcePos ] -= delta;
+                          if ( building->ammo[ serv.sourcePos ] < 0 ) {
+                             building->produceAmmo ( serv.sourcePos, -building->ammo[ serv.sourcePos ] );
                           }
                           logtoreplayinfo ( rpl_refuel, t.dest->xpos, t.dest->ypos, t.dest->networkid, serv.targetPos, t.dest->ammo[ serv.targetPos ] );
                           MapCoordinate mc = building->getEntry();
-                          logtoreplayinfo ( rpl_bldrefuel, mc.x, mc.y, serv.targetPos, building->munition[ serv.sourcePos ] );
+                          logtoreplayinfo ( rpl_bldrefuel, mc.x, mc.y, serv.targetPos, building->ammo[ serv.sourcePos ] );
                           break;
         }
      }

@@ -128,16 +128,13 @@ int ActiveGraphicPictures :: setActive ( int id )
 
 int getGraphicSetIdFromFilename ( const char* filename )
 {
-      tnfilestream s ( filename, tnstream::reading );
+    tnfilestream stream ( filename, tnstream::reading );
 
-      int magic;
-      s.readdata2 ( magic );
-      if ( magic == -1 ) {
-         int id;
-         s.readdata2 ( id );
-         return id;
-      } else
-         return 0;
+    int magic = stream.readInt();
+    if ( magic == -1 ) {
+       return stream.readInt();
+    } else
+       return 0;
 }
 
 
@@ -185,15 +182,14 @@ void loadbi3graphics( void )
 
       tnfilestream s ( filename.c_str(), tnstream::reading );
 
-      int magic;
-      s.readdata2 ( magic );
+      int magic = s.readInt();
       if ( magic == -1 ) {
 
          GraphicSet* gs = new GraphicSet;
 
-         s.readdata2 ( gs->id );
-         s.readdata2 ( gs->picnum );
-         s.readdata2 ( gs->maxPicSize );
+         gs->id = s.readInt();
+         gs->picnum = s.readInt();
+         gs->maxPicSize = s.readInt();
 
          if ( absoluteMaxPicSize < gs->maxPicSize )
             absoluteMaxPicSize = gs->maxPicSize;

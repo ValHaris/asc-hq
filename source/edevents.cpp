@@ -2,9 +2,15 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.21 2001-02-26 12:35:09 mbickel Exp $
+//     $Id: edevents.cpp,v 1.22 2001-03-23 16:02:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2001/02/26 12:35:09  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.20  2001/02/11 11:39:31  mbickel
 //      Some cleanup and documentation
 //
@@ -1360,10 +1366,7 @@ void         tcreateevent::run(void)
                     ae->trigger[i] == ceventt_building_seen  ||
                     ae->trigger[i] == ceventt_buildingdestroyed ) {
                     pbuilding building = ae->trigger_data[i]->building;
-                    if ( !building->name.empty() )
-                       displaymessage ( building->name.c_str(), 1 );
-                    else
-                       displaymessage ( building->typ->name, 1 );
+                    displaymessage ( building->getName().c_str(), 1 );
 
                }
                if ( ae->trigger[i] == ceventt_unitconquered  ||

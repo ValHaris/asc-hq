@@ -2,9 +2,15 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.65 2001-02-01 22:48:28 mbickel Exp $
+//     $Id: building.cpp,v 1.66 2001-03-23 16:02:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.65  2001/02/01 22:48:28  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.64  2001/01/28 17:18:52  mbickel
 //      The recent cleanup broke some source files; this is fixed now
 //
@@ -211,8 +217,8 @@ class   hosticons_c: public ContainerBaseGuiHost
 class    ccontainer : public virtual ccontainercontrols
 {
       void*  containerpicture;
-      string  name1;
-      char*  name2;
+      ASCString  name1;
+      ASCString  name2;
       int mousestat;
    public:
       //-------------------------------------------------------------------------icons
@@ -394,7 +400,7 @@ class    ccontainer : public virtual ccontainercontrols
 
       tunitmode unitmode;  // wird erst im Building-Container ben”tigt, aber damit die Icons darauf zugreifen k”nnen ist das teil schon hier ...
 
-      void     init ( void *pict, int col, const string& name, char *descr);
+      void     init ( void *pict, int col, const ASCString& name, const ASCString& descr);
       void     registersubwindow ( psubwindow subwin );
       void     run (void);
       void     done (void);
@@ -1346,7 +1352,7 @@ int   cbuildingcontrols :: putfuel (int f, int abbuchen )
 int   cbuildingcontrols :: putammunition ( int weapontype, int ammunition, int abbuchen)
 {
    if ( abbuchen )
-      building->munition[weapontype] += ammunition;
+      building->ammo[weapontype] += ammunition;
    return ammunition;
 };
 
@@ -1375,14 +1381,14 @@ int   cbuildingcontrols :: getfuel ( int need, int abbuchen )
 
 int    cbuildingcontrols :: getammunition ( int weapontype, int num, int abbuchen, int produceifrequired )
 {
-   if ( building->munition[ weapontype ] > num  ) {
+   if ( building->ammo[ weapontype ] > num  ) {
 
       if ( abbuchen )
-         building->munition[ weapontype ] -= num;
+         building->ammo[ weapontype ] -= num;
       return num;
 
    } else {
-      int toprod = num - building->munition[ weapontype ];
+      int toprod = num - building->ammo[ weapontype ];
       int prd;
       if ( produceifrequired )
          prd = weaponpackagesize * cc_b->produceammunition.checkavail ( weapontype, (toprod + weaponpackagesize - 1) / weaponpackagesize );
@@ -1393,19 +1399,19 @@ int    cbuildingcontrols :: getammunition ( int weapontype, int num, int abbuche
          if ( produceifrequired )
             cc_b->produceammunition.produce ( weapontype, (toprod + weaponpackagesize - 1) / weaponpackagesize );
 
-         if ( building->munition[ weapontype ] > num ) {
-            building->munition[ weapontype ] -= num;
+         if ( building->ammo[ weapontype ] > num ) {
+            building->ammo[ weapontype ] -= num;
             return num;
          } else {
-            int i = building->munition[ weapontype ];
-            building->munition[ weapontype ] = 0;
+            int i = building->ammo[ weapontype ];
+            building->ammo[ weapontype ] = 0;
             return i;
          }
       } else {
-         if ( building->munition[ weapontype ] + prd > num )
+         if ( building->ammo[ weapontype ] + prd > num )
             return num;
          else
-            return building->munition[ weapontype ] + prd;
+            return building->ammo[ weapontype ] + prd;
       }
 
    }
@@ -2179,8 +2185,8 @@ try {
    if ( !name1.empty() )
       showtext2c (name1.c_str(), nameposx, nameposy );
 
-   if ( name2 )
-      showtext2c (name2, nameposx+112, nameposy );
+   if ( !name2.empty() )
+      showtext2c (name2.c_str(), nameposx+112, nameposy );
 
    repaintresources = 1;
    showresources ();
@@ -2197,7 +2203,7 @@ try {
 }
 
 
-void  ccontainer :: init (void *pict, int col, const string& name, char *descr)
+void  ccontainer :: init (void *pict, int col, const ASCString& name, const ASCString& descr)
 {
    containerpicture = pict;
    name1 = name;
@@ -3908,7 +3914,7 @@ void  ccontainer_b :: init ( pbuilding bld )
       cursor.gotoxy ( mc.x , mc.y );
 
       ccontainer :: init ( building->getpicture ( building->typ->entry ),
-                           building->color, building->name.c_str(), building->typ->name);
+                           building->color, building->name.c_str(), building->typ->name.c_str());
       ccontainer :: displayloading ();
       ccontainer :: movemark (repaint);
 

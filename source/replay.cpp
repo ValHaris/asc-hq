@@ -1067,7 +1067,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  pbuilding bld = actmap->getField(x,y)->building;
                                  if ( bld ) {
                                     if ( pos < 16 )
-                                        bld->munition[pos] = amnt;
+                                        bld->ammo[pos] = amnt;
                                      else
                                         bld->getResource ( pos-1000, amnt, 0 );
                                  } else

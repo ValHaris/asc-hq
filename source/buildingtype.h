@@ -73,19 +73,34 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
         void*        w_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
         int          bi_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
         int          destruction_objects [4][6];
+
         LocalCoordinate entry;
-        LocalCoordinate powerlineconnect;
-        LocalCoordinate pipelineconnect;
+
         int          id;
-        char*        name;
+
+        ASCString    name;
+
         int          _armor;
+
         int          jamming;
         int          view;
+
+        //! the maximum size of a unit that may enter the building
         int          loadcapacity;
-        char         loadcapability;   /*  BM => CHoehenstufen; aktuelle Hoehe der reinzufahrenden vehicle
-                                                                muss hier enthalten sein  */
-        char         unitheightreq;   /*   "       , es d?rfen nur Fahrzeuge ,
-                                                     die in eine dieser Hoehenstufen koennen , geladen werden  */
+
+        //! bitmapped: only units on one of these levels of height may enter
+        char         loadcapability;
+
+        //! bitmapped: only units that are able to reach one of these levels of height may enter. For example, an airport may have "low level flight" set here. That does not mean that the units must FLY into the building!
+        char         unitheightreq;
+
+        //! bitmapped: units that are able to reach one of these levels of height may NEVER enter this building
+        int          unitheight_forbidden;
+
+        //! bitmapped: vehicle categories that may enter the building
+        int          vehicleCategoriesLoadable;
+
+
         int          special;   /*  HQ, Trainingslager, ...  */
 
         unsigned char         technologylevel;
@@ -96,20 +111,24 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
         int          construction_steps;  // 1 .. 8
         int          maxresearchpoints;
 
-        Resources   _tank;
-        Resources   maxplus;
+        Resources    _tank;
+        Resources    maxplus;
 
         int          efficiencyfuel;       // Basis 1024
         int          efficiencymaterial;   // dito
 
+        //! the picture for the GUI that is used for selecting a building that is going to be constructed by a unit
         void*        guibuildicon;
 
         pterrainaccess terrain_access;
         Resources    _bi_maxstorage;
+
+        //! bitmapped: the level of height that this building will reside on.
         int          buildingheight;
-        int          unitheight_forbidden;
+
+        //! bitmapped: units on these levels of height may be refuelled when standing next to the buildings entry
         int          externalloadheight;
-        int          vehicleCategoriesLoadable;
+
         void*        getpicture ( const LocalCoordinate& localCoordinate );
 
         BuildingType ( void ) {
@@ -117,7 +136,7 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
            vehicleCategoriesLoadable = -1;
         };
 
-        int          vehicleloadable ( pvehicletype fzt ) const ;
+        bool          vehicleloadable ( pvehicletype fzt ) const ;
         MapCoordinate getFieldCoordinate( const MapCoordinate& entryOnMap, const LocalCoordinate& localCoordinate );
 };
 

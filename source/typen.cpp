@@ -1,6 +1,12 @@
-//     $Id: typen.cpp,v 1.73 2001-02-26 12:35:33 mbickel Exp $
+//     $Id: typen.cpp,v 1.74 2001-03-23 16:02:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.73  2001/02/26 12:35:33  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.72  2001/02/18 15:37:21  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -19,7 +25,7 @@
 //
 //     Revision 1.68  2001/02/01 22:48:51  mbickel
 //      rewrote the storing of units and buildings
-//      Fixed bugs in bi3 map importing routines
+//      Fixed MapEventTriggerbugs in bi3 map importing routines
 //      Fixed bugs in AI
 //      Fixed bugs in mapeditor
 //

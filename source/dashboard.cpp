@@ -1004,13 +1004,9 @@ void         tdashboard::paintname ( void )
                else
                   bar ( agmp->resolutionx - ( 640 - 499 ), 27, agmp->resolutionx - ( 640 - 575 ), 35, 171 );
 
-      } else {
-         if ( !building->name.empty() )
-            showtext2c( building->name.c_str() , agmp->resolutionx - ( 640 - 500), 27);
-         else
-            showtext2c( building->typ->name , agmp->resolutionx - ( 640 - 500), 27);
+      } else
+         showtext2c( building->getName().c_str() , agmp->resolutionx - ( 640 - 500), 27);
 
-      }
       activefontsettings.height = 0;
    } else
       bar ( agmp->resolutionx - ( 640 - 499), 27, agmp->resolutionx - ( 640 - 575), 35, 171 );

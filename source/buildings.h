@@ -30,38 +30,76 @@
 
 
 class  Building : public ContainerBase {
-    int lastenergyavail;
-    int lastmaterialavail;
-    int lastfuelavail;
 
     int  processmining ( int res, int abbuchen );
 
     MapCoordinate entryPosition;
 
+    char         _completion;
+
+    //! a structure to hold temporary values when the building is executing its work at the end of a turn
+    struct Work {
+       struct Mining {
+          Resources touse;
+          int did_something_atall;
+          int did_something_lastpass;
+          int finished;
+       } mining;
+       struct Resource_production {
+          Resources toproduce;
+          int did_something_atall;
+          int did_something_lastpass;
+          int finished;
+       } resource_production;
+       int wind_done;
+       int solar_done;
+       int bimode_done;
+    } work;
+
+    friend class tprocessminingfields;
+
   public:
     const pbuildingtype typ;
-    int               munitionsautoproduction[waffenanzahl];
+
     pvehicletype      production[32];
 
+    //! the Resources that are produced each turn
     Resources   plus;
+
+    //! the maximum amount of Resources that the building can produce each turn in the ASC resource mode ; see also #bi_resourceplus
     Resources   maxplus;
 
+    //! the current storage of Resources
     Resources   actstorage;
 
-    int         munition[waffenanzahl];
+    //! the ammo that is stored in the building
+    int         ammo[waffenanzahl];
 
+    //! the maximum amount of research that the building can conduct every turn
     word         maxresearchpoints;
+
+    //! the current amount of research that the building conducts every turn
     word         researchpoints;
 
+    //! the building's name
     ASCString    name;
-    char         _completion;
+
+    //! a bitmapped variable containing the status of the resource-net connection
     int          netcontrol;
+
+    //! bitmapped: are there events that are triggered by actions affecting this building
     int          connection;
-    char         visible;
+
+    //! is the building visible? Building can be made invisible, but this feature should be used only in some very special cases
+    bool         visible;
+
+    //! the vehicletype that the building can produce
     pvehicletype  productionbuyable[32];
 
+    //! the maximum amount of Resources that the building can produce each turn in the BI resource mode ; see also #maxplus
     Resources    bi_resourceplus;
 
+    //! the percantage that this build has already been repaired this turn. The maximum percentage may be limited by a gameparameter
     int           repairedThisTurn;
 
     AiValue*      aiparam[8];
@@ -85,23 +123,6 @@ class  Building : public ContainerBase {
 
     bool canRepair ( void );
 
-    struct Work {
-       struct Mining {
-          Resources touse;
-          int did_something_atall;
-          int did_something_lastpass;
-          int finished;
-       } mining;
-       struct Resource_production {
-          Resources toproduce;
-          int did_something_atall;
-          int did_something_lastpass;
-          int finished;
-       } resource_production;
-       int wind_done;
-       int solar_done;
-       int bimode_done;
-    } work;
 
     static Building* newFromStream ( pmap gamemap, tnstream& stream );
     void write ( tnstream& stream, bool includeLoadedUnits = true );
@@ -133,8 +154,10 @@ class  Building : public ContainerBase {
     pfield getField( const BuildingType::LocalCoordinate& localCoordinates );
     MapCoordinate getFieldCoordinates( const BuildingType::LocalCoordinate& localCoordinates );
 
+    //! produces ammunition and stores it in #ammo
     void produceAmmo ( int type, int num );
 
+    //! updates the pointers to the pictures , which are part of tfield (to speed up displaying)
     void resetPicturePointers ( void );
     MapCoordinate getPosition ( ) { return getEntry(); };
     int  chainbuildingtofield ( const MapCoordinate& entryPos, bool setupImages = true );
@@ -144,6 +167,9 @@ class  Building : public ContainerBase {
 
     int getCompletion() const { return _completion; };
     void setCompletion ( int completion, bool setupImages = true  );
+
+    //! returns a name for the building. If the building itself has a name, it will be returned. If it doesn't, the name of the building type will be returned.
+    const ASCString& getName ( ) const;
 
     ~Building();
 

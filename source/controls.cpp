@@ -3,9 +3,15 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.99 2001-02-26 12:35:01 mbickel Exp $
+//     $Id: controls.cpp,v 1.100 2001-03-23 16:02:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.99  2001/02/26 12:35:01  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.98  2001/02/18 17:52:35  mbickel
 //      Fixed some compilation problems on Linux
 //
@@ -279,6 +285,7 @@ void         tsearchputbuildingfields::testfield(void)
                   b = false;
             }
       if (b) {
+
          numberoffields++;
          getfield(xp,yp)->a.temp = 20;
       }
@@ -351,6 +358,7 @@ void         putbuildinglevel2( const pbuildingtype bld,
 
    if (getfield(xp,yp)->a.temp == 20)
       if (moveparams.movestatus == 111) {
+
          actmap->cleartemps(7);
          for ( int y1 = 0; y1 <= 5; y1++)
             for ( int x1 = 0; x1 <= 3; x1++)
@@ -461,6 +469,7 @@ void         tsearchdestructbuildingfields::testfield(void)
    if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) {
       startfield = getfield(xp,yp);
       if (startfield->building) {
+
          numberoffields++;
          startfield->a.temp = 20;
       }
@@ -962,6 +971,7 @@ void         SearchVehicleConstructionFields::run(void)
    if (numberoffields > 0)
       moveparams.movestatus = 120;
 
+
 }
 
 
@@ -1196,6 +1206,7 @@ int  treactionfirereplay :: checkfield ( int x, int y, pvehicle &eht, MapDisplay
              targ->vehicle = eht;
              eht->xpos = x;
              eht->ypos = y;
+
 
              int attackvisible = fieldvisiblenow ( fld ) || fieldvisiblenow ( targ );
 
@@ -1586,6 +1597,7 @@ void         calcmovemalus(int          x1,
               npop( vehicle->xpos );
               npop( fld2->vehicle );
 
+
               delete atw ;
            }
         }
@@ -1774,6 +1786,7 @@ void    tprotfzt::evalbuffer( void )
 
    delete[] buf ;
 }
+
 
 
 
@@ -2056,6 +2069,7 @@ void tgetmininginfo :: testfield ( void )
         mininginfo->max[dist].material   += 255 * resource_material_factor;
         mininginfo->max[dist].fuel       += 255 * resource_fuel_factor;
   }
+
 }
 
 
@@ -2414,9 +2428,9 @@ void Building :: initwork ( void )
 {
    repairedThisTurn = 0;
 
-   lastmaterialavail = -1;
-   lastfuelavail = -1;
-   lastenergyavail = -1;
+   // lastmaterialavail = -1;
+   // lastfuelavail = -1;
+   // lastenergyavail = -1;
 
    Resources nul;
    nul.energy = 0; nul.material = 0; nul.fuel = 0;
@@ -2557,6 +2571,7 @@ void endRound ( void )
 
                 if ( (*j)->worktodo() )
                    buildingwaiting += (*j)->processwork();
+
 
                 buildingnum++;
              }
@@ -2746,6 +2761,7 @@ void sendnetworkgametonextplayer ( int oldplayer, int newplayer )
    actmap = NULL;
    displaymessage( " data transfer finished",1);
 
+
    throw NoMapLoaded ();
 
 }
@@ -2812,6 +2828,7 @@ void endTurn ( void )
               // Falls eine vehicle sich nicht bewegt hat, bekommt sie soviel Sprit abgezogen, wie sie zum zur?cklegen der Strecke,
               // die der Wind pro Runde zur?ckgelegt hat, fuelConsumptionen w?rde.
               // Wenn die vehicle sich schon bewegt hat, dann wurde dieser Abzug schon beim movement vorgenommen, so daá er hier nur
+
               // noch fuer das ?briggebliebene movement stattfinden muá.
               //
 
@@ -3105,6 +3122,7 @@ void continuenetworkgame ( void )
    } /* endcatch */
    if ( !actmap || actmap->xsize <= 0 || actmap->ysize <= 0 )
       throw NoMapLoaded();
+
 
    initNetworkGame( );
 }
