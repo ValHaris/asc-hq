@@ -1,6 +1,6 @@
 #ifndef astar2_h_included
  #define astar2_h_included
- 
+
  #include <vector>
 
 /*! \file astar2.h
@@ -25,11 +25,12 @@ class AStar {
            int gval;        // g in A* represents how far we've already gone
            int hval;        // h in A* represents an estimate of how far is left
            Node(): h(0,0), gval(0), hval(0) {}
+           bool operator< ( const Node& a );
        };
        int dist( HexCoord a, HexCoord b );
 
        typedef std::vector<Node> Container;
-       std::greater<Node> comp;
+       greater<Node> comp;
 
        inline void get_first( Container& v, Node& n );
 
@@ -44,7 +45,7 @@ class AStar {
        virtual ~AStar ( );
  };
 
-bool operator < ( const AStar::Node& a, const AStar::Node& b );
+//bool operator< ( const AStar::Node& a, const AStar::Node& b );
 
  //! finding a path for unit veh to position x, y on map actmap.
 extern void findPath( pmap actmap, std::vector<MapCoordinate>& path, pvehicle veh, int x, int y );

@@ -1,6 +1,10 @@
-//     $Id: global_os.h,v 1.3 2000-10-17 13:04:16 mbickel Exp $
+//     $Id: global_os.h,v 1.4 2000-11-26 14:39:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/10/17 13:04:16  mbickel
+//      New terrainaccess reading/writing
+//      Added Win32 project files
+//
 //     Revision 1.2  2000/10/14 10:52:56  mbickel
 //      Some adjustments for a Win32 port
 //
@@ -35,7 +39,7 @@
 // global.h
 
 #ifdef __BORLANDC__
- #include "borland/global_os.h"
+ #include "win32\borland\global_os.h"
 #else
  #ifdef __WATCOMC__
   #include "watcom/global_os.h"

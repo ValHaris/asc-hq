@@ -1,6 +1,12 @@
-//     $Id: artint.cpp,v 1.41 2000-11-21 20:26:50 mbickel Exp $
+//     $Id: artint.cpp,v 1.42 2000-11-26 14:39:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2000/11/21 20:26:50  mbickel
+//      Fixed crash in tsearchfields (used by object construction for example)
+//      AI improvements
+//      configure.in: added some debug output
+//                    fixed broken check for libbz2
+//
 //     Revision 1.40  2000/11/15 19:28:32  mbickel
 //      AI improvements
 //
@@ -211,8 +217,6 @@
 #include "typen.h"
 #include "vehicletype.h"
 #include "buildingtype.h"
-
-
 #include "misc.h"
 #include "newfont.h"
 #include "events.h"
@@ -229,7 +233,6 @@
 #include "sg.h"
 
 #include "building_controls.h"
-
 
 
 const int value_armorfactor = 100;
@@ -259,7 +262,6 @@ void AiThreat :: reset ( void )
    for ( int i = 0; i < aiValueTypeNum; i++ )
       threat[i] = 0;
 }
-
 
 AiParameter :: AiParameter ( pvehicle _unit ) : AiValue ( log2( _unit->height ))
 {
@@ -341,7 +343,6 @@ AI :: ServiceOrder :: ~ServiceOrder (  )
    if ( serv )
       serv->aiparam[ai->getPlayer()]->resetTask();
 }
-
 
 void AI :: issueServices ( )
 {
@@ -477,7 +478,7 @@ int AI::ServiceOrder::possible ( pvehicle supplier )
 
    VehicleService::TargetContainer::iterator i = vs.dest.find ( targetUnitID );
    if ( i != vs.dest.end() ) {
-      VehicleService::Target target = i->second;
+      VehicleService::Target target = (*i).second;
       int serviceAmount = 0;
       for ( int j = 0; j < target.service.size(); j++ ) {
          serviceAmount += target.service[j].maxPercentage;
@@ -555,7 +556,7 @@ bool AI::ServiceOrder::execute1st ( pvehicle supplier )
 
                       VehicleService::TargetContainer::iterator i = vs.dest.find ( targetUnitID );
                       if ( i != vs.dest.end() ) {
-                         VehicleService::Target target = i->second;
+                         VehicleService::Target target = (*i).second;
                          for ( int j = 0; j < target.service.size(); j++ )
                             if ( target.service[j].type == requiredService )
                                result = true;
@@ -613,10 +614,10 @@ void AI :: runServiceUnit ( pvehicle supplyUnit )
    ServiceMap serviceMap;
 
    for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
-       if ( !i->getServiceUnit() ) {
-          int poss = i->possible( supplyUnit );
+       if ( !(*i).getServiceUnit() ) {
+          int poss = (*i).possible( supplyUnit );
           if ( poss ) {
-             float f =  i->getTargetUnit()->aiparam[getPlayer()]->value * poss/100 / beeline( i->getTargetUnit() ,supplyUnit );
+             float f =  (*i).getTargetUnit()->aiparam[getPlayer()]->value * poss/100 / beeline( (*i).getTargetUnit() ,supplyUnit );
              serviceMap.insert(make_pair(f,&(*i)));
           }
   /*
@@ -628,7 +629,7 @@ void AI :: runServiceUnit ( pvehicle supplyUnit )
        }
    }
    for ( ServiceMap::reverse_iterator ri = serviceMap.rbegin(); ri != serviceMap.rend(); ri++ )
-      if ( ri->second->execute1st( supplyUnit ) ) {
+      if ( (*ri).second->execute1st( supplyUnit ) ) {
          destinationReached = runUnitTask ( supplyUnit );
          break;
       }
@@ -669,7 +670,7 @@ AI::AiResult AI :: executeServices ( )
   return res;
 
   for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
-      pvehicle veh = i->getTargetUnit();
+      pvehicle veh = (*i).getTargetUnit();
       veh->aiparam[getPlayer()]->task = AiParameter::tsk_serviceRetreat;
       pbuilding bld = findServiceBuilding( *i );
       if ( bld )
@@ -702,7 +703,7 @@ AI::AiResult AI :: executeServices ( )
 
            ServiceOrderContainer::iterator i = serviceOrders.begin();
            while ( i != serviceOrders.end() ) {
-               if ( i->getTargetUnit() == veh ) {
+               if ( (*i).getTargetUnit() == veh ) {
                   serviceOrders.erase ( i );
                   i = serviceOrders.begin();
                } else

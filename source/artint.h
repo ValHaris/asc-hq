@@ -1,6 +1,12 @@
-//     $Id: artint.h,v 1.21 2000-11-21 20:26:52 mbickel Exp $
+//     $Id: artint.h,v 1.22 2000-11-26 14:39:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/11/21 20:26:52  mbickel
+//      Fixed crash in tsearchfields (used by object construction for example)
+//      AI improvements
+//      configure.in: added some debug output
+//                    fixed broken check for libbz2
+//
 //     Revision 1.20  2000/11/15 19:28:33  mbickel
 //      AI improvements
 //
@@ -140,6 +146,7 @@
                public:
                   VehicleService::Service requiredService;
 
+                  ServiceOrder ( ) : ai ( NULL ), targetUnitID ( 0 ), serviceUnitID ( 0 ) {};
                   ServiceOrder ( AI* _ai, VehicleService::Service _requiredService, int UnitID, int _pos = -1 );
                   pvehicle getTargetUnit ( ) const { return ai->getMap()->getUnit ( targetUnitID );};
                   pvehicle getServiceUnit ( ) const { return ai->getMap()->getUnit ( serviceUnitID );};
@@ -151,6 +158,7 @@
                   {
                      return !so.getTargetUnit();
                   };
+                  bool operator==( const ServiceOrder& );
 
                   ~ServiceOrder ();
            };
@@ -201,19 +209,20 @@
            };
 
 
-           struct Config { 
-               // int movesearchshortestway;   /*  kÅrzesten oder nur irgendeinen  */ 
-               int lookIntoTransports;   /*  gegnerische transporter einsehen  */ 
-               int lookIntoBuildings; 
+           struct Config {
+               // int movesearchshortestway;   /*  kÅrzesten oder nur irgendeinen  */
+               int lookIntoTransports;   /*  gegnerische transporter einsehen  */
+               int lookIntoBuildings;
                int wholeMapVisible;
                float aggressiveness;   // 1: units are equally worth ; 2
                int damageLimit;
                Resources resourceLimit;
                int ammoLimit;
-            } config; 
+            } config;
 
-
-            struct MoveVariant {
+          public:
+            class MoveVariant {
+               public:
                int orgDamage;
                int damageAfterMove;
                int damageAfterAttack;
@@ -226,6 +235,7 @@
                int result;
                int moveDist;
             };
+         private:
 
             class AiResult {
                public:
@@ -329,7 +339,6 @@
             friend class Sections;
 
             void checkKeys ( void );
-
 
            AiThreat& getFieldThreat ( int x, int y );
 
