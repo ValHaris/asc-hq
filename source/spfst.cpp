@@ -1,6 +1,14 @@
-//     $Id: spfst.cpp,v 1.47 2000-08-06 11:39:17 mbickel Exp $
+//     $Id: spfst.cpp,v 1.48 2000-08-07 21:10:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2000/08/06 11:39:17  mbickel
+//      New map paramter: fuel globally available
+//      Mapeditor can now filter buildings too
+//      Fixed unfreed memory in fullscreen image loading
+//      Fixed: wasted cpu cycles in building
+//      map parameters can be specified when starting a map
+//      map parameters are reported to all players in multiplayer games
+//
 //     Revision 1.46  2000/08/05 13:38:39  mbickel
 //      Rewrote height checking for moving units in and out of
 //        transports / building
@@ -6076,10 +6084,7 @@ int  tbuilding :: get_energy ( int      need,    int resourcetype, int queryonly
 void tbuilding :: getresourceusage ( tresources* usage ) { usage->a.energy = 0;
                                                            usage->a.material =  0;
                                                            usage->a.fuel = 0;
-                                                         }
-int tvehicle::enablereactionfire( void ) { return 0; }
-int tvehicle::disablereactionfire ( void ) { return 0; }
-
+                                                        }
 #else
 void tbuilding :: changecompletion ( int d )
 {

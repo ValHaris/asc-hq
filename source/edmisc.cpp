@@ -1,6 +1,14 @@
-//     $Id: edmisc.cpp,v 1.25 2000-08-06 11:39:05 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.26 2000-08-07 21:10:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/08/06 11:39:05  mbickel
+//      New map paramter: fuel globally available
+//      Mapeditor can now filter buildings too
+//      Fixed unfreed memory in fullscreen image loading
+//      Fixed: wasted cpu cycles in building
+//      map parameters can be specified when starting a map
+//      map parameters are reported to all players in multiplayer games
+//
 //     Revision 1.24  2000/08/04 15:11:02  mbickel
 //      Moving transports costs movement for units inside
 //      refuelled vehicles now have full movement in the same turn
@@ -2657,8 +2665,6 @@ void         tunit::init( pvehicle v )
 */
    if ( unit->typ->classnum > 0 ) addbutton("C~h~ange Class",280,280,450,300,0,1,32,true);
 
-   addbutton("~R~eactionfire",350,250,450,260,3,1,22,true);
-   addeingabe(22,&unit->reactionfire_active, 0, lightgray);
    
    addbutton("~S~et Values",20,ysize - 40,20 + w,ysize - 10,0,1,30,true);
    addkey(30,ct_enter );
@@ -2780,10 +2786,6 @@ void         tunit::buttonpressed(byte         id)
    case 30 : {
          mapsaved = false;
          action = 1; 
-         if ( unit->reactionfire_active ) {
-            unit->reactionfire_active = 3;
-            unit->reactionfire = 0xff;
-         }
          
          orgunit->clone ( unit, NULL );
          delete unit ;

@@ -1,6 +1,11 @@
-//     $Id: artint.cpp,v 1.15 2000-08-07 16:29:18 mbickel Exp $
+//     $Id: artint.cpp,v 1.16 2000-08-07 21:10:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/08/07 16:29:18  mbickel
+//      orbiting units don't consume fuel any more
+//      Fixed bug in attack formula; improved attack formula
+//      Rewrote reactionfire
+//
 //     Revision 1.14  2000/08/04 15:10:46  mbickel
 //      Moving transports costs movement for units inside
 //      refuelled vehicles now have full movement in the same turn
@@ -3024,7 +3029,7 @@ void AI :: WeaponThreatRange :: testfield ( void )
             AttackFormula af;
             int strength = weapDist.getWeapStrength( &veh->typ->weapons->weapon[weap], dist*maxmalq, veh->height, 1 << height ) 
                          * veh->typ->weapons->weapon[weap].maxstrength              
-                         * 1 ( + af.strength_experience ( veh->experience ) + af.strength_attackbonus ( getfield(startx,starty)->getattackbonus() ))
+                         * (1 + af.strength_experience ( veh->experience ) + af.strength_attackbonus ( getfield(startx,starty)->getattackbonus() ))
                          * af.strength_damage ( veh->damage );
 
             if ( strength ) {

@@ -1,6 +1,11 @@
-//     $Id: attack.cpp,v 1.25 2000-08-07 16:29:19 mbickel Exp $
+//     $Id: attack.cpp,v 1.26 2000-08-07 21:10:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/08/07 16:29:19  mbickel
+//      orbiting units don't consume fuel any more
+//      Fixed bug in attack formula; improved attack formula
+//      Rewrote reactionfire
+//
 //     Revision 1.24  2000/08/05 13:38:19  mbickel
 //      Rewrote height checking for moving units in and out of
 //        transports / building
@@ -210,7 +215,6 @@ float AttackFormula :: strength_hemming ( int  ax,  int ay,  pvehicle d_eht )
 
 float AttackFormula :: strength_damage ( int damage )
 {
-   float a = damage;
    float a = (300 - 2 * damage) / 3;
    return a / 100;
 }
