@@ -72,7 +72,7 @@ class TextFormatParser {
 
 class PropertyContainer {
          bool reading;
-         ASCString filename;
+         // ASCString filename;
       protected:
          int levelDepth;
          typedef list<ASCString> Level;
@@ -214,12 +214,11 @@ class PropertyContainer {
          void warning ( const ASCString& errmsg );
          void error ( const ASCString& errmsg );
          bool find ( const ASCString& name );
-         void setFilename ( const ASCString& filename_ ) { filename= filename_; };
-         const ASCString& getFilename (  ) { return filename; };
+         virtual ASCString getFileName (  ) = 0;
          virtual ~PropertyContainer ( ) { };
       protected:
          PropertyContainer ( const ASCString& baseName, TextPropertyGroup* tpg, bool reading_ ) : reading( reading_ ), levelDepth ( 0 ), textPropertyGroup( tpg ) { };
-         virtual ASCString getFileName() = 0;
+         virtual ASCString getLocation() = 0;
       private:
          void setup ( Property* p, const ASCString& name );
          virtual void writeProperty ( Property& p, const ASCString& value ) = 0;
@@ -228,8 +227,9 @@ class PropertyContainer {
 
 class PropertyReadingContainer : public PropertyContainer {
    protected:
-         virtual ASCString getFileName() { return textPropertyGroup->location; };
+         virtual ASCString getLocation() { return textPropertyGroup->location; };
    public:
+         virtual ASCString getFileName (  ) { return textPropertyGroup->fileName; };
          PropertyReadingContainer ( const ASCString& baseName, TextPropertyGroup* tpg );
          ~PropertyReadingContainer (  );
          void writeProperty ( Property& p, const ASCString& value );
@@ -238,8 +238,9 @@ class PropertyReadingContainer : public PropertyContainer {
 class PropertyWritingContainer : public PropertyContainer {
          tn_file_buf_stream stream;
    protected:
-         virtual ASCString getFileName() { return stream.getLocation(); };
+         virtual ASCString getLocation() { return stream.getLocation(); };
    public:
+         virtual ASCString getFileName (  ) { return stream.getDeviceName(); };
          PropertyWritingContainer ( const ASCString& baseName, const ASCString& filename_ );
          ~PropertyWritingContainer();
 

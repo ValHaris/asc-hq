@@ -421,7 +421,6 @@ void ObjectType :: write ( tnstream& stream ) const
 
 void ObjectType :: runTextIO ( PropertyContainer& pc )
 {
-
    pc.addInteger  ( "ID", id ).evaluate();
    pc.addTagArray ( "Weather", weather, cwettertypennum-1, weatherTags ).evaluate();
    pc.addBool     ( "visible_in_fogOfWar", visibleago );

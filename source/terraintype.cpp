@@ -372,7 +372,8 @@ void TerrainType :: runTextIO ( PropertyContainer& pc )
          weatherBits.set(i);
 
    pc.addString( "Name", name );
-   pc.addInteger( "ID", id );
+   pc.addInteger( "ID", id ).evaluate();
+
    pc.addTagArray( "Weather", weatherBits, cwettertypennum-1, weatherTags ).evaluate();
 
    for ( int i = 0; i < cwettertypennum; i++ )
@@ -398,6 +399,7 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
 
    pc.addBool  ( "UseGFXpics", bi3pics ).evaluate();
    if ( !bi3pics ) {
+      bi_pict = -1;
       int w = cwettertypennum-1;
       for ( int i = 0; i < cwettertypennum-1; i++ )
          if ( terraintype->weather[i] == this )
@@ -409,6 +411,7 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
          s += strrr(terraintype->id);
       }
       pc.addImage ( "picture", pict, s + weatherAbbrev[w] ).evaluate();
+
    } else {
       pc.addInteger ( "GFX_Picture", bi_pict ).evaluate();
       loadbi3pict_double ( bi_pict,

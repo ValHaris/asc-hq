@@ -230,7 +230,7 @@ void PropertyContainer::warning ( const ASCString& errmsg )
 
 void PropertyContainer::error ( const ASCString& errmsg )
 {
-   throw ParsingError ( getFileName() + " : " + errmsg );
+   throw ParsingError ( getLocation() + " : " + errmsg );
 }
 
 bool PropertyContainer::find ( const ASCString& name )
@@ -263,7 +263,6 @@ PropertyReadingContainer :: ~PropertyReadingContainer (  )
 
 PropertyWritingContainer :: PropertyWritingContainer ( const ASCString& baseName, const ASCString& filename_ ) : PropertyContainer ( baseName, NULL, false ), stream ( filename_, tnstream::writing )
 {
-   setFilename ( filename_ );
    textPropertyGroup = new TextPropertyGroup();
    textPropertyGroup->fileName = stream.getDeviceName();
    textPropertyGroup->location = stream.getLocation();

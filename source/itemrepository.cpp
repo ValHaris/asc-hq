@@ -330,6 +330,8 @@ void         loadallobjecttypes (void)
        if ( actprogressbar )
          actprogressbar->point();
 
+      displayLogMessage ( 8, "parsing object type %s ", (*i)->location.c_str());
+
       PropertyReadingContainer pc ( "objecttype", *i );
 
       ObjectType* ot = new ObjectType;
@@ -339,6 +341,7 @@ void         loadallobjecttypes (void)
       ot->filename = (*i)->fileName;
       ot->location = (*i)->location;
       addobjecttype ( ot );
+      displayLogMessage ( 8, "done\n");
    }
 
    displayLogMessage ( 4, "loadallObjectTypes completed\n");

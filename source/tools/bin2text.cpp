@@ -80,7 +80,7 @@ int main(int argc, char *argv[] )
                Vehicletype* vt = getvehicletype_forpos ( j );
 
                PropertyWritingContainer pc ( "VehicleType", extractFileName_withoutSuffix ( vt->filename ) + "_generated.asctxt" );
-               cout << "Writing file " << pc.getFilename() << "... ";
+               cout << "Writing file " << pc.getFileName() << "... ";
                vt->runTextIO ( pc );
                pc.run();
 
@@ -92,7 +92,7 @@ int main(int argc, char *argv[] )
                ObjectType* ot = getobjecttype_forpos ( j );
 
                PropertyWritingContainer pc ( "ObjectType", extractFileName_withoutSuffix ( ot->filename ) + "_generated.asctxt" );
-               cout << "Writing file " << pc.getFilename() << "... ";
+               cout << "Writing file " << pc.getFileName() << "... ";
                ot->runTextIO ( pc );
                pc.run();
 
@@ -104,7 +104,7 @@ int main(int argc, char *argv[] )
                TerrainType* tt = getterraintype_forpos ( j );
 
                PropertyWritingContainer pc ( "TerrainType", extractFileName_withoutSuffix ( tt->filename ) + "_generated.asctxt" );
-               cout << "Writing file " << pc.getFilename() << "... ";
+               cout << "Writing file " << pc.getFileName() << "... ";
                tt->runTextIO ( pc );
                pc.run();
 
@@ -116,7 +116,7 @@ int main(int argc, char *argv[] )
                BuildingType* bt = getbuildingtype_forpos ( j );
 
                PropertyWritingContainer pc ( "BuildingType", extractFileName_withoutSuffix ( bt->filename ) + "_generated.asctxt" );
-               cout << "Writing file " << pc.getFilename() << "... ";
+               cout << "Writing file " << pc.getFileName() << "... ";
                bt->runTextIO ( pc );
                pc.run();
 
