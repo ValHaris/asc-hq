@@ -1,6 +1,14 @@
-//     $Id: typen.cpp,v 1.34 2000-08-06 11:39:21 mbickel Exp $
+//     $Id: typen.cpp,v 1.35 2000-08-06 12:18:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2000/08/06 11:39:21  mbickel
+//      New map paramter: fuel globally available
+//      Mapeditor can now filter buildings too
+//      Fixed unfreed memory in fullscreen image loading
+//      Fixed: wasted cpu cycles in building
+//      map parameters can be specified when starting a map
+//      map parameters are reported to all players in multiplayer games
+//
 //     Revision 1.33  2000/08/05 15:30:31  mbickel
 //      Fixed possible divisions by 0 in attack/defensebonus
 //
@@ -2099,6 +2107,7 @@ void tmap :: setgameparameter ( int num, int value )
 
 void tmap :: setupResources ( void )
 {
+  #ifndef converter
    for ( int n = 0; n< 8; n++ ) {
       actmap->bi_resource[n].a.energy = 0;
       actmap->bi_resource[n].a.material = 0;
@@ -2114,6 +2123,7 @@ void tmap :: setupResources ( void )
             }
      #endif
    }
+  #endif
 }
 
 void tmap :: chainunit ( pvehicle eht )

@@ -358,7 +358,7 @@ main (int argc, char *argv[] )
    
    
          printf ("\n    fuel consumption \n");
-         num_ed (ft->fuelconsumption, 0, 65534);
+         num_ed (ft->fuelConsumption, 0, 65534);
                                                                                      
          printf ("\n    fuel tank    \n ");
          num_ed (ft->tank, 0, maxint);
@@ -614,7 +614,7 @@ main (int argc, char *argv[] )
                }
    
                printf (" enter id of object  ( 0 to continue ): ");
-               num_ed (ft->objectsbuildableid[num],0,10000);
+               num_ed (ft->objectsbuildableid[num],minint,maxint);
                num++;
              } while ( ft->objectsbuildableid[num-1] ); /* enddo */
              ft->objectsbuildablenum = num-1;

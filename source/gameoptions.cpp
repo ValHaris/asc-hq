@@ -40,8 +40,8 @@ void CGameOptions::setDefaults ( void )
    endturnquestion=0;
    smallmapactive=1;
    units_gray_after_move=0;
-   mapzoom=0;
-   mapzoomeditor=0;
+   mapzoom=75;
+   mapzoomeditor=60;
    startupcount=0;
    dontMarkFieldsNotAccessible_movement=0;
    attackspeed1=0;
@@ -58,12 +58,12 @@ void CGameOptions::setDefaults ( void )
    mouse.unitweaponinfo=0;
    mouse.dragndropmovement=0;
 
-   container.autoproduceammunition=0;
-   container.filleverything=0;
+   container.autoproduceammunition=1;
+   container.filleverything=1;
 
-   container.emptyeverything=0;
+   container.emptyeverything=1;
 
-   onlinehelptime=0;
+   onlinehelptime=150;
    smallguiiconopenaftermove=0;
    defaultpassword=0;
    replayspeed=0;

@@ -1,6 +1,14 @@
-//     $Id: gamedlg.cpp,v 1.34 2000-08-06 11:39:09 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.35 2000-08-06 12:18:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2000/08/06 11:39:09  mbickel
+//      New map paramter: fuel globally available
+//      Mapeditor can now filter buildings too
+//      Fixed unfreed memory in fullscreen image loading
+//      Fixed: wasted cpu cycles in building
+//      map parameters can be specified when starting a map
+//      map parameters are reported to all players in multiplayer games
+//
 //     Revision 1.33  2000/08/05 20:17:57  mbickel
 //      Restructured Fullscreen Image loading
 //
@@ -1610,8 +1618,10 @@ void         tchoosenewsinglelevel::run(void)
 
             if ( human > 1 )
                multiplayersettings ();
-            else
+            else {
                choosetechlevel();
+               setmapparameters();
+            }
 
             actmap->setupResources();
 
