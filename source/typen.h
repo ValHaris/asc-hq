@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.35 2000-08-05 13:38:47 mbickel Exp $
+//     $Id: typen.h,v 1.36 2000-08-06 11:39:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2000/08/05 13:38:47  mbickel
+//      Rewrote height checking for moving units in and out of
+//        transports / building
+//
 //     Revision 1.34  2000/08/04 15:11:29  mbickel
 //      Moving transports costs movement for units inside
 //      refuelled vehicles now have full movement in the same turn
@@ -250,7 +254,7 @@ typedef class tshareview *pshareview;
 #define maxbuildingpicnum 8
 #define maxminesonfield 20
 
-const int gameparameternum = 16;
+const int gameparameternum = 17;
 
 #define maxobjectonfieldnum 16
 
@@ -1434,7 +1438,7 @@ class tmap {
          char dummy[12];
       } weather;
   
-      int resourcemode;  // 1 = Battle-Isle-Mode
+      int _resourcemode;  // 1 = Battle-Isle-Mode
   
                    
       char         alliances[8][8];
@@ -1512,6 +1516,8 @@ class tmap {
       int  getgameparameter ( int num );
       void setgameparameter ( int num, int value );
       void cleartemps( int b, int value = 0 );
+      int isResourceGlobal ( int resource );
+      void setupResources ( void );
    private:
       pvehicle getunit ( pvehicle eht, int nwid );
 
@@ -1788,7 +1794,7 @@ extern const int gameparameterdefault [ gameparameternum ];
 enum { cgp_fahrspur, cgp_eis, cgp_movefrominvalidfields, cgp_building_material_factor, cgp_building_fuel_factor,
        cgp_forbid_building_construction, cgp_forbid_unitunit_construction, cgp_bi3_training, cgp_maxminesonfield,
        cgp_antipersonnelmine_lifetime, cgp_antitankmine_lifetime, cgp_mooredmine_lifetime, cgp_floatingmine_lifetime,
-       cgp_buildingarmor, cgp_maxbuildingrepair, cgp_buildingrepairfactor };
+       cgp_buildingarmor, cgp_maxbuildingrepair, cgp_buildingrepairfactor, cgp_globalfuel };
 
 
 

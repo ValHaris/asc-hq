@@ -1,6 +1,12 @@
-//     $Id: edselfnt.cpp,v 1.10 2000-08-04 15:11:07 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.11 2000-08-06 11:39:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/08/04 15:11:07  mbickel
+//      Moving transports costs movement for units inside
+//      refuelled vehicles now have full movement in the same turn
+//      terrain: negative attack / defensebonus allowed
+//      new mapparameters that affect damaging and repairing of building
+//
 //     Revision 1.9  2000/08/03 19:21:22  mbickel
 //      Fixed: units had invalid height when produced in some buildings
 //      Fixed: units could not enter building if unitheightreq==0
@@ -677,7 +683,7 @@ void SelectObjectType :: showiteminfos ( pobjecttype item, int x1, int y1, int x
 class SelectBuildingType : public SelectAnything< pbuildingtype > {
                        int buildingfieldsdisplayedx, buildingfieldsdisplayedy;
                     protected:
-                       virtual int isavailable ( pbuildingtype item ) { return 1; };
+                       virtual int isavailable ( pbuildingtype item ); // { return 1; };
                        virtual void displaysingleitem ( pbuildingtype item, int x, int y );
                        virtual int getitemsizex ( void ) { return fieldsizex+(buildingfieldsdisplayedx-1)*fielddistx+fielddisthalfx; } ;
                        virtual int getitemsizey ( void ) { return fieldsizey+(buildingfieldsdisplayedy-1)*fielddisty; } ;
@@ -685,6 +691,12 @@ class SelectBuildingType : public SelectAnything< pbuildingtype > {
                     public:
                        SelectBuildingType( void ) { buildingfieldsdisplayedx = 4; buildingfieldsdisplayedy = 6; };
 };
+
+int SelectBuildingType :: isavailable ( pbuildingtype item )
+{
+   return isUnitNotFiltered ( item->id );
+}
+
 
 void SelectBuildingType :: displaysingleitem ( pbuildingtype item, int x, int y )
 {
@@ -1206,6 +1218,11 @@ void setnewvehicleselection ( pvehicletype v )
 void resetvehicleselector ( void )
 {
    selectitemcontainer.getvehicleselector()->init( getvehicletypevector() );
+}
+
+void resetbuildingselector ( void )
+{
+   selectitemcontainer.getbuildingselector()->init( getbuildingtypevector() );
 }
 
 

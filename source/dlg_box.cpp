@@ -1,6 +1,12 @@
-//     $Id: dlg_box.cpp,v 1.24 2000-08-03 13:12:04 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.25 2000-08-06 11:38:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/08/03 13:12:04  mbickel
+//      Fixed: on/off switching of generator vehicle produced endless amounts of energy
+//      Repairing units now reduces their experience
+//      negative attack- and defenseboni possible
+//      changed attackformula
+//
 //     Revision 1.23  2000/08/02 08:48:04  mbickel
 //      Fixed: Mineral resources where visible for all players
 //
@@ -3566,9 +3572,10 @@ tdisplaymessage* messagebox = NULL;
 
 int displaymessage2( const char* formatstring, ... )
 {
-   char stringtooutput[200];
+   const int maxlength = 2000;
+   char stringtooutput[maxlength];
    char* b;
-   char* c = new char[200];
+   char* c = new char[maxlength];
    // int linenum = 0;
 
    memset (stringtooutput, 0, sizeof ( stringtooutput ));
@@ -3579,83 +3586,10 @@ int displaymessage2( const char* formatstring, ... )
    va_start ( paramlist, formatstring );
 
    int lng = vsprintf( stringtooutput, formatstring, paramlist );
-   if ( lng >= 200 )
+   if ( lng >= maxlength )
       displaymessage ( "dlg_box.cpp / displaymessage2:   string to long !\nPlease report this error",1 );
 
-/*
-   while (*a != 0) {
-      if (*a == '%' ) {
-         switch (a[1]) {
-         case 'c': 
-            *b = va_arg ( paramlist, char );
-            b++;
-            break;
-         case 'd':
-         case 'i':
-         case 'u':
-            i = va_arg ( paramlist, int );
-            itoa ( i, c, 10 );
-            i=0;
-            while (c[i]) {
-               *b = c[i];
-               b++;
-               i++;
-            } 
-            break;
-         case 'o':
-            i = va_arg ( paramlist, int );
-            itoa ( i, c, 8 );
-            i=0;
-            while (c[i]) {
-               *b = c[i];
-               b++;
-               i++;
-            } 
-            break;
-         case 'p':
-         case 'x':
-            i = va_arg ( paramlist, int );
-            itoa ( i, c, 16 );
-            i=0;
-            while (c[i]) {
-               *b = c[i];
-               b++;
-               i++;
-            } 
-            break;
-         case 'X':
-            i = va_arg ( paramlist, int );
-            itoa ( i, c, 16 );
-            strupr ( c );
-            i=0;
-            while (c[i]) {
-               *b = c[i];
-               b++;
-               i++;
-            } 
-            break;
-         case 's':
-            d = va_arg ( paramlist, char* );
-            while (*d) {
-               *b = *d;
-               b++;
-               d++;
-            } 
-            break;
-         }
-         a+=2;
-      } else {
-         *b = *a;
-         b++;
-         a++;
-      } 
-   } 
-   *b = 0;
-   */
-
-
    va_end ( paramlist );
-
 
 
    npush ( activefontsettings );
@@ -3696,8 +3630,6 @@ int displaymessage2( const char* formatstring, ... )
 
 
 
-
-
 void  loadtexture ( void )
 {
    if ( exist ( "texture.pcx" )) {
@@ -3714,3 +3646,294 @@ void  loadtexture ( void )
    }
 }
 
+
+
+
+
+
+
+void         tstringselect::init(void)
+{
+   tdialogbox::init();
+   xsize = 570;
+   ysize = 320;
+   x1 = ( 640 -xsize ) / 2;
+   y1 = ( 480 -ysize ) / 2;
+   sy = 45;
+
+   sx = 20;
+   title = "Text-Box";
+   windowstyle = windowstyle ^ dlg_in3d;
+   lnshown = 10;
+   numberoflines = 0;
+   firstvisibleline = 0;
+   redline = 0;
+   startpos = 0;
+   ey = ysize - 50;
+   ex = xsize - 30;
+   setup();
+
+   if (startpos >= numberoflines ) startpos = numberoflines-1;
+   if (startpos > lnshown -1 ) {
+      firstvisibleline = startpos - ( lnshown - 1 );
+      redline = startpos;
+   } else {
+      redline = startpos;
+   } /* endif */
+
+   dk = 0;
+   action = 0;
+   dx = (ey - sy) / lnshown;
+   if (numberoflines > lnshown) {
+      scrollbarvisible = true;
+      addscrollbar(ex + 10 ,sy ,ex + 20,ey ,&numberoflines,lnshown,&firstvisibleline,1,0);
+   }
+   else scrollbarvisible = false;
+   buildgraphics();
+   rahmen(true,x1 + sx , y1 + sy,x1 + ex,y1 + ey);
+   mousevisible(true);
+   activefontsettings.font = schriften.smallarial;
+   activefontsettings.color = black;
+   activefontsettings.justify = lefttext;
+   activefontsettings.background = lightgray;
+   activefontsettings.height = 15;
+   viewtext();
+}
+
+
+void         tstringselect::setup(void)
+{
+}
+
+
+void         tstringselect::buttonpressed(byte         id)
+{
+   tdialogbox::buttonpressed(id);
+   if (id == 1) {
+      if (firstvisibleline > redline) redline = firstvisibleline;
+      if (firstvisibleline + lnshown - 1 < redline) redline = firstvisibleline + lnshown - 1;
+      viewtext();
+   }
+}
+
+
+void         tstringselect::run(void)
+{
+  char      view;
+  integer      my;
+  byte         ms;
+
+   tdialogbox::run();
+   if (numberoflines > 0) {
+      msel = 0;
+      if (getmousestatus() == 2) {
+         if ((( ms = mouseparams.taste ) == 0) && (dk == 1)) dk = 2;
+         if ((mouseparams.x > x1 + 10) & (mouseparams.x < x1 + xsize - 40) && (ms != 0)) {
+            my = mouseparams.y - y1 - sy;
+            my = my / dx;
+            if ((my >= 0) && (my <= lnshown - 1) && (my <= numberoflines - 1)) {
+               mouseselect = firstvisibleline + my;
+               if ((mouseselect == redline) && (dk == 2)) {
+                  msel = ms;
+                  dk = 0;
+               }
+               else {
+                  redline = mouseselect;
+                  dk = 1;
+                  ms =0;
+                  viewtext();
+               }
+            }
+         }
+      }
+      switch (taste) {
+
+         case ct_up:   {
+                   view = true;
+                   if (redline > 0) redline--;
+                   else view = false;
+                   if ((redline < firstvisibleline) && (firstvisibleline > 0)) {
+                      firstvisibleline--;
+                      showbutton( 1 );
+                   }
+                   if (view) viewtext();
+                }
+         break;
+         case ct_pos1:   {
+                   view = false;
+                   if  ( (redline > 0) || (firstvisibleline > 0) ) {
+                      view = true;
+                      redline = 0;
+                      firstvisibleline = 0;
+                   }
+                   if (view) viewtext();
+                }
+         break;
+
+         case ct_ende:   {
+                   view = false;
+                   if (redline < numberoflines -1 ) {
+                      view = true;
+                      redline = numberoflines -1 ;
+                      firstvisibleline = numberoflines - lnshown;
+                   }
+                   if (view) viewtext();
+                }
+         break;
+
+         case ct_down:   {
+                     view = true;
+                     if (redline < numberoflines - 1) redline++;
+                     else view = false;
+                     if ((redline > firstvisibleline + lnshown - 1) && (firstvisibleline + lnshown - 1 <= numberoflines)) {
+                        firstvisibleline++;
+                        showbutton( 1 );
+                     }
+                     if (view) viewtext();
+                  }
+      break;
+      }
+   }
+   else redline = 255;
+}
+
+
+void         tstringselect::resettextfield(void)
+{
+   bar(x1 + sx,y1 + sy,x1 + ex,y1 + ey,lightgray);
+   rahmen(true,x1 + sx ,y1 + sy,x1 + ex,y1 + ey);
+}
+
+void   tstringselect::gettext(word nr) //gibt in txt den string zurck
+{
+  strcpy(txt,"");
+  nr = 0;
+}
+
+void tstringselect::scrollbar_on(void)
+{
+   scrollbarvisible = true;
+   addscrollbar(ex + 10 ,sy - 10,ex + 30,ey + 10,&numberoflines,lnshown,&firstvisibleline,1,0);
+}
+
+
+void         tstringselect::viewtext(void)
+{
+  char         s1[200];
+  word         yp;
+  integer      l;
+
+   mousevisible(false);
+   //showbutton(1);
+   npush(activefontsettings.length);
+   activefontsettings.length = ex - sx - 10;
+   yp = y1 + sy + 5;
+   l = firstvisibleline;
+   if (numberoflines > 0) {
+         while ((l<numberoflines) && (l-firstvisibleline < lnshown)) {
+            gettext(l);
+            strcpy(s1,txt);
+            if (l == redline ) activefontsettings.color=red;
+            else activefontsettings.color=lightblue;
+            showtext2(s1,x1+ sx + 5,yp+( l-firstvisibleline ) * dx );
+            l++;
+         } /* endwhile */
+
+   }
+   else showtext2("No text available !",x1 + 50,yp + 50);
+
+   //rahmen(true,x1  + sx ,y1 + sy,x1  + ex ,y1 + ey );
+   npop(activefontsettings.length);
+   mousevisible(true);
+}
+
+
+void         tstringselect::done(void)
+{
+   tdialogbox::done();
+   while ( mouseparams.taste )
+     releasetimeslice();
+}
+
+
+class  tgetid : public tdialogbox {
+          public :
+              byte action;
+              int mid;
+              char nt[200];
+              void init(void);
+              int max,min;
+              virtual void run(void);
+              virtual void buttonpressed(byte id);
+              };
+
+void         tgetid::init(void)
+{
+   tdialogbox::init();
+   title = nt;
+   x1 = 200;
+   xsize = 220;
+   y1 = 150;
+   ysize = 140;
+   action = 0;
+
+   if ((mid < min) || (mid > max)) mid = 10;   /* ! */
+
+   windowstyle = windowstyle ^ dlg_in3d;
+
+
+   addbutton("~D~one",20,ysize - 40,100,ysize - 20,0,1,1,true);
+   addkey(1,ct_enter);
+   addbutton("~C~ancel",120,ysize - 40,200,ysize - 20,0,1,2,true);
+   addbutton("~I~D",20,60,xsize - 20,80,2,1,3,true);
+   addeingabe(3,&mid,min,max);
+
+   buildgraphics();
+
+   mousevisible(true);
+}
+
+
+void         tgetid::run(void)
+{
+   tdialogbox::run ();
+   pbutton pb = firstbutton;
+   while ( pb &&  (pb->id != 3))
+      pb = pb->next;
+
+   if ( pb )
+      if ( pb->id == 3 )
+         execbutton( pb , false );
+
+   do {
+      tdialogbox::run();
+   }  while (!((taste == ct_esc) || ((action == 1) || (action == 2))));
+   if ((action == 2) || (taste == ct_esc)) mid = 0;
+}
+
+
+void         tgetid::buttonpressed(byte         id)
+{
+   tdialogbox::buttonpressed(id);
+   switch (id) {
+
+      case 1:
+      case 2:   action = id;
+   break;
+   }
+}
+
+
+int      getid( char*  title, int lval,int min,int max)
+
+{ tgetid     gi;
+
+   strcpy( gi.nt, title );
+   gi.max = max;
+   gi.min = min;
+   gi.mid = lval;
+   gi.init();
+   gi.run();
+   gi.done();
+   return gi.mid;
+}

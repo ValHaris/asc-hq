@@ -1,6 +1,11 @@
-//     $Id: edglobal.cpp,v 1.16 2000-08-02 15:52:55 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.17 2000-08-06 11:39:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/08/02 15:52:55  mbickel
+//      New unit set definition files
+//      demount accepts now more than one container file
+//      Unitset information dialog added
+//
 //     Revision 1.15  2000/07/31 18:02:53  mbickel
 //      New configuration file handling
 //      ASC searches its data files in all directories specified in ascrc
@@ -467,12 +472,12 @@ void execaction(int code)
                                 }
        break;
     case act_asc_resource :   {
-                                  actmap->resourcemode = false;
+                                  actmap->_resourcemode = false;
                                   displaymessage ( "ASC Resource mode enabled", 3 );
                                 }
        break;
     case act_bi_resource :   {
-                                  actmap->resourcemode = true;
+                                  actmap->_resourcemode = true;
                                   displaymessage ( "Battle Isle Resource mode enabled", 3 );
                                }
        break;

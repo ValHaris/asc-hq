@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.46 2000-08-05 13:38:39 mbickel Exp $
+//     $Id: spfst.cpp,v 1.47 2000-08-06 11:39:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2000/08/05 13:38:39  mbickel
+//      Rewrote height checking for moving units in and out of
+//        transports / building
+//
 //     Revision 1.45  2000/08/04 15:11:20  mbickel
 //      Moving transports costs movement for units inside
 //      refuelled vehicles now have full movement in the same turn
@@ -643,23 +647,12 @@ void         initmap( void )
    while ( !actmap->player[i].existent )
       i++;
 
-
    for ( int n = 0; n< 8; n++ ) {
       actmap->bi_resource[n].a.energy = 0;
       actmap->bi_resource[n].a.material = 0;
       actmap->bi_resource[n].a.fuel = 0;
-     #ifdef sgmain
-      if ( actmap->resourcemode == 1 )
-         for ( pbuilding bld = actmap->player[n].firstbuilding; bld ; bld = bld->next ) {
-             actmap->bi_resource[n].a.energy += bld->actstorage.a.energy;
-             bld->actstorage.a.energy = 0;
-
-             actmap->bi_resource[n].a.fuel += bld->actstorage.a.fuel;
-             bld->actstorage.a.fuel = 0;
-   
-         } /* endfor */
-     #endif 
    }
+
 
    #ifndef karteneditor
    actmap->actplayer = -1;
@@ -1292,9 +1285,9 @@ void         generatemap( const pwterraintype   bt,
       actmap->setgameparameter(i, gameparameterdefault[i] );
 
    #ifdef HEXAGON
-   actmap->resourcemode = 1;
+   actmap->_resourcemode = 1;
    #else
-   actmap->resourcemode = 0;
+   actmap->_resourcemode = 0;
    #endif
 
 } 
@@ -2718,7 +2711,7 @@ void         putbuilding2(integer      x,
          }
 
          gbde->damage = 0; 
-         if ( actmap->resourcemode == 1 ) {
+         if ( actmap->_resourcemode == 1 ) {
             gbde->plus.a.energy = biplus.a.energy; 
             gbde->plus.a.material = biplus.a.material; 
             gbde->plus.a.fuel = biplus.a.fuel; 
@@ -6623,14 +6616,13 @@ void tbuilding :: convert ( int col )
    int oldcol = color >> 3; 
 
    #ifdef sgmain
-   if ( oldcol == 8 ) 
-      if ( actmap->resourcemode == 1 ) {
-          actmap->bi_resource[col].a.energy += actstorage.a.energy;
-          actstorage.a.energy = 0;
+   if ( oldcol == 8 )
+      for ( int r = 0; r < 3; r++ )
+         if ( actmap->isResourceGlobal( r )) {
+            actmap->bi_resource[col].resource[r] += actstorage.resource[r];
+            actstorage.resource[r] = 0;
+         }
 
-          actmap->bi_resource[col].a.fuel += actstorage.a.fuel;
-          actstorage.a.fuel = 0;
-      }
    #endif 
 
    if ( !prev && !next ) { 
@@ -6697,12 +6689,10 @@ int tvehicle :: getstrongestweapon( int aheight, int distance)
 
 int tbuildingtype :: gettank ( int resource )
 {
-   #ifdef HEXAGON
-   if ( actmap && actmap->resourcemode == 1 )
+   if ( actmap && actmap->_resourcemode == 1 )
       return _bi_maxstorage.resource[resource];
    else
-   #endif
-   return _tank.resource[resource];
+      return _tank.resource[resource];
 }
 
 

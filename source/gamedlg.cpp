@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.33 2000-08-05 20:17:57 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.34 2000-08-06 11:39:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2000/08/05 20:17:57  mbickel
+//      Restructured Fullscreen Image loading
+//
 //     Revision 1.32  2000/07/29 14:54:30  mbickel
 //      plain text configuration file implemented
 //
@@ -1100,7 +1103,8 @@ void         tnewcampaignlevel::loadcampaignmap(void)
    try {
       if (loadmap(mapname) == 0) {
          ::initmap();
-         
+         actmap->setupResources();
+
          do {
            next_turn();
            if ( actmap->time.a.turn == 2 ) {
@@ -1608,7 +1612,9 @@ void         tchoosenewsinglelevel::run(void)
                multiplayersettings ();
             else
                choosetechlevel();
-   
+
+            actmap->setupResources();
+
             do {
               next_turn();
               if ( actmap->time.a.turn == 2 ) {
@@ -4438,6 +4444,29 @@ void mousepreferences  ( void )
 
 
 
+void sendGameParameterAsMail ( void )
+{
+   string s = "The game has been set up with the following game parameters:\n";
+   s += "(black line: parameter has default value)\n\n";
+   for ( int i = 0; i< gameparameternum; i++ ) {
+      int d = actmap->getgameparameter(i) != gameparameterdefault[i];
+
+      if ( d )
+         s+= "#color4#";
+
+      s += gameparametername[i];
+      s += " = ";
+      s += strrr ( actmap->getgameparameter(i) );
+
+      if ( d )
+         s+= "#color0#";
+      s += "\n";
+
+   }
+
+   tmessage* msg = new tmessage ( strdup ( s.c_str()), 255 );
+
+}
 
 
 
@@ -5644,6 +5673,8 @@ int tmultiplayersettings :: checklimits ( void )         // 0 : alles ok;   1: G
 void tmultiplayersettings :: buttonpressed ( char id )
 {
    tdialogbox :: buttonpressed ( id );
+   if ( id == 125 )
+      setmapparameters();
 
    if ( id == 1 ) {             // OK
       int ck = checklimits() ;
@@ -5971,10 +6002,12 @@ void tmultiplayersettings :: init ( void )
    addkey ( 1, ct_enter );
    addbutton ( "help (~F1~)", xsize/2 + 5, ysize - 35, xsize -10, ysize - 10, 0, 1 , 2, true );
    addkey ( 2, ct_f1 );
-
+/*
    addbutton ( "use ~c~hecksums", 20, ysize - 80, 160, ysize - 65, 3, 0 , 5, true );
    addeingabe ( 5, &checksumsused, black, dblue );
    disablebutton ( 5 );
+*/
+   addbutton ( "modify game parameters", 20, ysize - 80, 160, ysize - 65, 0, 1 , 125, true );
 
    addbutton ( "enable ~r~eplays", 170, ysize - 80, xsize-5, ysize - 65, 3, 0 , 8, true );
    addeingabe ( 8, &replays, black, dblue );
@@ -6403,6 +6436,7 @@ void multiplayersettings ( void )
    mps.init();
    mps.run();
    mps.done();
+   sendGameParameterAsMail();
 }
 
 
@@ -6461,10 +6495,12 @@ void         tgiveunitawaydlg :: init(void)
    if ( fld->building )
       ply[num++] = 8;
 
+
    if ( !num ) {
-      displaymessage("You don't have anny allies", 1 );
+      displaymessage("You don't have any allies", 1 );
       return;
    }
+
 
    tdialogbox::init();
 

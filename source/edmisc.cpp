@@ -1,6 +1,12 @@
-//     $Id: edmisc.cpp,v 1.24 2000-08-04 15:11:02 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.25 2000-08-06 11:39:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/08/04 15:11:02  mbickel
+//      Moving transports costs movement for units inside
+//      refuelled vehicles now have full movement in the same turn
+//      terrain: negative attack / defensebonus allowed
+//      new mapparameters that affect damaging and repairing of building
+//
 //     Revision 1.23  2000/08/03 19:45:14  mbickel
 //      Fixed some bugs in DOS code
 //      Removed submarine.ascent != 0 hack
@@ -3523,7 +3529,8 @@ void         SelectUnitSet::buttonpressed(byte         id)
                   for ( int i = 0; i < unitSets.size(); i++ )
                       unitSets[i]->active = active[i];
                   resetvehicleselector();
-          } 
+                  resetbuildingselector();
+          }
           break;
        case 8: action = 2; 
           break;

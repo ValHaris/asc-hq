@@ -1,6 +1,10 @@
-//     $Id: edselfnt.h,v 1.3 1999-12-27 13:00:00 mbickel Exp $
+//     $Id: edselfnt.h,v 1.4 2000-08-06 11:39:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/12/27 13:00:00  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.2  1999/11/16 03:41:41  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -51,5 +55,6 @@ extern void setnewterrainselection ( pterraintype t );
 extern void setnewobjectselection  ( pobjecttype o );
 
 extern void resetvehicleselector ( void );
+extern void resetbuildingselector ( void );
 
 extern void checkselfontbuttons(void);

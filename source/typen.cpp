@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.33 2000-08-05 15:30:31 mbickel Exp $
+//     $Id: typen.cpp,v 1.34 2000-08-06 11:39:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2000/08/05 15:30:31  mbickel
+//      Fixed possible divisions by 0 in attack/defensebonus
+//
 //     Revision 1.32  2000/08/05 13:38:42  mbickel
 //      Rewrote height checking for moving units in and out of
 //        transports / building
@@ -253,7 +256,7 @@ const int directionangle [ sidenum ] =
 #endif
 
 
-const int gameparameterdefault [ gameparameternum ] = { 1, 2, 0, 100, 100, 1, 0, 0, 1, 0, 0, 0, 0, 100, 100, 100 };
+const int gameparameterdefault [ gameparameternum ] = { 1, 2, 0, 100, 100, 1, 0, 0, 1, 0, 0, 0, 0, 100, 100, 100, 1 };
 const char* gameparametername[ gameparameternum ] = { "lifetime of tracks", 
                                                       "freezing time of broken ice cover ( icebreaker )",
                                                       "move vehicles from unaccessible fields",
@@ -269,7 +272,8 @@ const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "lifetime of floating mine",
                                                       "building armor factor (percent)", 
                                                       "max building damage repair / turn",
-                                                      "building repair cost increase (percent)"};
+                                                      "building repair cost increase (percent)",
+                                                      "fuel globally available (BI resource mode)"};
 
 
 const int csolarkraftwerkleistung[cwettertypennum] = { 1024, 512, 256, 756, 384 }; // 1024 ist Maximum 
@@ -2038,6 +2042,14 @@ tmap :: ~tmap ( )
 }
 */
 
+int tmap :: isResourceGlobal ( int resource )
+{
+   if ( resource != 1 && !(resource == 2 && getgameparameter(cgp_globalfuel)==0)  &&   _resourcemode == 1 )
+      return 1;
+   else
+      return 0;
+}
+
 int tmap :: getgameparameter ( int num )
 {
   if ( game_parameter && num < gameparameter_num ) {
@@ -2082,6 +2094,25 @@ void tmap :: setgameparameter ( int num, int value )
              game_parameter[j] = 0;
        game_parameter[num] = value;
        gameparameter_num = num + 1;
+   }
+}
+
+void tmap :: setupResources ( void )
+{
+   for ( int n = 0; n< 8; n++ ) {
+      actmap->bi_resource[n].a.energy = 0;
+      actmap->bi_resource[n].a.material = 0;
+      actmap->bi_resource[n].a.fuel = 0;
+
+     #ifdef sgmain
+
+      for ( pbuilding bld = actmap->player[n].firstbuilding; bld ; bld = bld->next )
+         for ( int r = 0; r < 3; r++ )
+            if ( actmap->isResourceGlobal( r )) {
+               actmap->bi_resource[n].resource[r] += bld->actstorage.resource[r];
+               bld->actstorage.resource[r] = 0;
+            }
+     #endif
    }
 }
 

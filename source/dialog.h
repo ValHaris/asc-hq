@@ -1,7 +1,12 @@
-//     $Id: dialog.h,v 1.8 2000-08-02 15:52:50 mbickel Exp $
+//     $Id: dialog.h,v 1.9 2000-08-06 11:38:48 mbickel Exp $
 
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/08/02 15:52:50  mbickel
+//      New unit set definition files
+//      demount accepts now more than one container file
+//      Unitset information dialog added
+//
 //     Revision 1.7  2000/06/08 21:03:41  mbickel
 //      New vehicle action: attack
 //      wrote documentation for vehicle actions
@@ -324,6 +329,9 @@ class taskforsupervisorpassword : public tenterpassword {
 extern void enterpassword ( int* cr );
 extern int encodepassword ( char* pw );
 extern void viewUnitSetinfo ( void );
+extern int selectgameparameter( int lc );
+extern void setmapparameters ( void );
+
 
 
 #endif

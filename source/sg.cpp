@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.72 2000-08-05 20:17:59 mbickel Exp $
+//     $Id: sg.cpp,v 1.73 2000-08-06 11:39:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.72  2000/08/05 20:17:59  mbickel
+//      Restructured Fullscreen Image loading
+//
 //     Revision 1.71  2000/08/05 18:26:59  mbickel
 //      Added Fullscreen-JPG-Support
 //
@@ -1756,7 +1759,7 @@ void         ladekarte(void)
            erasemap();
            throw tnomaploaded();
         }
-      } while ( actmap->player[actmap->actplayer].stat != ps_human ); /* enddo */
+      } while ( actmap->player[actmap->actplayer].stat != ps_human );
 
       removemessage(); 
       if (actmap->campaign != NULL) { 
@@ -2042,7 +2045,9 @@ void ladestartkarte( char *emailgame=NULL, char *mapname=NULL, char *savegame=NU
       } 
 
       loadmap(s);
-      initmap(); 
+      initmap();
+      actmap->setupResources();
+
 #ifdef logging
       logtofile("nach initmap");
           {

@@ -1,6 +1,9 @@
-//     $Id: building.cpp,v 1.38 2000-08-05 15:30:26 mbickel Exp $
+//     $Id: building.cpp,v 1.39 2000-08-06 11:38:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2000/08/05 15:30:26  mbickel
+//      Fixed possible divisions by 0 in attack/defensebonus
+//
 //     Revision 1.37  2000/08/05 13:38:20  mbickel
 //      Rewrote height checking for moving units in and out of
 //        transports / building
@@ -1916,7 +1919,7 @@ void  ccontainer :: run ()
       } 
 
       containeronlinemousehelp->checkforhelp();
-
+      releasetimeslice();
    } while (end == 0); 
 }
 
@@ -3788,7 +3791,7 @@ ccontainer_b :: cnetcontrol_subwindow :: cnetcontrol_subwindow ( void )
 
 int  ccontainer_b :: cnetcontrol_subwindow :: subwin_available ( void )
 {
-   if ( actmap->resourcemode != 1 )
+   if ( actmap->_resourcemode != 1 )
       cbuildingsubwindow :: subwin_available ( );
 
    if ( next )
@@ -4403,7 +4406,7 @@ void  ccontainer_b :: csolarpowerplant_subwindow :: display ( void )
 
    showtext2c ( buf, subwinx1 + 117, subwiny1 + 62 );
 
-   if ( actmap->resourcemode == 1 )
+   if ( actmap->_resourcemode == 1 )
       showtext2c ( strrr ( cc_b->building->bi_resourceplus.a.energy ), subwinx1 + 117, subwiny1 + 86 );
    else
       showtext2c ( strrr ( cc_b->building->maxplus.a.energy ), subwinx1 + 117, subwiny1 + 86 );

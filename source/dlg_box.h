@@ -1,6 +1,12 @@
-//     $Id: dlg_box.h,v 1.10 2000-08-03 13:12:09 mbickel Exp $
+//     $Id: dlg_box.h,v 1.11 2000-08-06 11:38:58 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/08/03 13:12:09  mbickel
+//      Fixed: on/off switching of generator vehicle produced endless amounts of energy
+//      Repairing units now reduces their experience
+//      negative attack- and defenseboni possible
+//      changed attackformula
+//
 //     Revision 1.9  2000/05/23 20:40:42  mbickel
 //      Removed boolean type
 //
@@ -453,6 +459,27 @@ extern char*  strrrd8n(int  l);           // mathematisch korrekt runden
 extern char*  readtextmessage( int id );
 extern int isUnitNotFiltered ( int id ) ;
 
+
+class   tstringselect : public tdialogbox {
+                public :
+                     char txt[2000];
+                     char  ok;
+                     int sy,ey,sx,ex,action,dx;
+                     byte dk;
+                     int msel,mouseselect,redline,lnshown,numberoflines,firstvisibleline,startpos;
+                     char scrollbarvisible;
+                     void init(void);
+                     virtual void setup(void);
+                     virtual void run(void);
+                     virtual void buttonpressed(byte id);
+                     void scrollbar_on(void);
+                     void viewtext(void);
+                     virtual void gettext(word nr);
+                     virtual void resettextfield(void);
+                     void done(void);
+                     };
+
+extern int getid( char* title, int lval, int min, int max );
 
 
 #endif

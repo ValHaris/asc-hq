@@ -1,6 +1,12 @@
-//     $Id: dialog.cpp,v 1.40 2000-08-04 15:10:56 mbickel Exp $
+//     $Id: dialog.cpp,v 1.41 2000-08-06 11:38:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2000/08/04 15:10:56  mbickel
+//      Moving transports costs movement for units inside
+//      refuelled vehicles now have full movement in the same turn
+//      terrain: negative attack / defensebonus allowed
+//      new mapparameters that affect damaging and repairing of building
+//
 //     Revision 1.39  2000/08/03 13:11:57  mbickel
 //      Fixed: on/off switching of generator vehicle produced endless amounts of energy
 //      Repairing units now reduces their experience
@@ -6467,3 +6473,79 @@ void enterpassword ( int* cr )
    epw.done ();
 }
 
+
+
+class   tgameparamsel : public tstringselect {
+           public :
+                 int lastchoice;
+                 virtual void setup(void);
+                 virtual void buttonpressed(byte id);
+                 virtual void run(void);
+                 virtual void gettext(word nr);
+                 };
+
+void         tgameparamsel ::setup(void)
+{
+
+   action = 0;
+   title = "Select Gameparameter";
+   numberoflines = gameparameternum;
+   ey = ysize - 60;
+   startpos = lastchoice;
+   addbutton("~s~elect",20,ysize - 40,170,ysize - 20,0,1,12,true);
+   addkey(2,ct_enter);
+   addbutton("~c~lose",190,ysize - 40,340,ysize - 20,0,1,13,true);
+}
+
+
+void         tgameparamsel ::buttonpressed(byte         id)
+{
+   tstringselect::buttonpressed(id);
+   switch (id) {
+
+      case 12:
+      case 13:   action = id-10;
+   break;
+   }
+}
+
+
+void         tgameparamsel ::gettext(word nr)
+{
+   strcpy(txt,gameparametername[nr] );
+   strcat(txt, " (" );
+   strcat(txt, strrr ( actmap->getgameparameter( nr )));
+   strcat(txt,") ");
+}
+
+
+void         tgameparamsel ::run(void)
+{
+   do {
+      tstringselect::run();
+   }  while ( ! ( (taste == ct_esc) || ( (action == 2) || (action == 3) ) || (msel == 1)) );
+   if ( (action == 3) || (taste == ct_esc) ) redline = 255;
+}
+
+
+int selectgameparameter( int lc )
+{
+  tgameparamsel  gps;
+
+   gps.lastchoice = lc;
+   gps.init();
+   gps.run();
+   gps.done();
+   return gps.redline;
+}
+
+
+void setmapparameters ( void )
+{
+   int param;
+   do {
+      param = selectgameparameter( -1 );
+      if ( param >= 0 && param < gameparameternum )
+         actmap->setgameparameter( param , getid("Parameter Val",actmap->getgameparameter( param ),0,maxint));
+   } while ( param >= 0 && param < gameparameternum );
+}

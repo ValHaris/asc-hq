@@ -1,6 +1,12 @@
-//     $Id: loadbi3.cpp,v 1.23 2000-08-03 19:21:25 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.24 2000-08-06 11:39:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/08/03 19:21:25  mbickel
+//      Fixed: units had invalid height when produced in some buildings
+//      Fixed: units could not enter building if unitheightreq==0
+//      Started adding SDL_image support
+//      Upgraded to SDL1.1.3 (for SDL_image)
+//
 //     Revision 1.22  2000/08/02 10:28:27  mbickel
 //      Fixed: generator vehicle not working
 //      Streams can now report their name
@@ -1923,7 +1929,7 @@ void importbattleislemap ( char* path, char* filename, pwterraintype trrn  )
     activateGraphicSet ( 1 );
     ImportBiMap lbim;  
     lbim.LoadFromFile ( path, filename, trrn );
-    actmap->resourcemode = 1;
+    actmap->_resourcemode = 1;
     actmap->cleartemps ( 7 );
 }
 
@@ -1933,7 +1939,7 @@ void insertbattleislemap ( int x, int y, char* path, char* filename  )
     activateGraphicSet ( 1 );
     InsertBiMap lbim ( x, y );  
     lbim.LoadFromFile ( path, filename, NULL );
-    actmap->resourcemode = 1;
+    actmap->_resourcemode = 1;
     actmap->cleartemps ( 7 );
 }
 

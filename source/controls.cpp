@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.57 2000-08-05 15:30:27 mbickel Exp $
+//     $Id: controls.cpp,v 1.58 2000-08-06 11:38:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2000/08/05 15:30:27  mbickel
+//      Fixed possible divisions by 0 in attack/defensebonus
+//
 //     Revision 1.56  2000/08/05 13:38:21  mbickel
 //      Rewrote height checking for moving units in and out of
 //        transports / building
@@ -4327,7 +4330,7 @@ void returnresourcenuseforpowerplant (  const pbuilding bld, int prod, tresource
 
 void tbuilding :: execnetcontrol ( void ) 
 {
-   if ( actmap->resourcemode != 1 ) {
+   if ( actmap->_resourcemode != 1 ) {
       for ( int i = 0; i < 3; i++ ) {
          if (  netcontrol & (cnet_moveenergyout << i )) {
             npush (  netcontrol );
@@ -4379,7 +4382,7 @@ int  tbuilding :: getresourceplus( int mode, tresources* gplus, int queryonly )
    if ( !queryonly && (mode & 1))
       mode -= 1;
 
-   if ( actmap->resourcemode != 1 ) {
+   if ( actmap->_resourcemode != 1 ) {
       gplus->resource[0] = 0;
       gplus->resource[1] = 0;
       gplus->resource[2] = 0;
@@ -4969,7 +4972,7 @@ void tbuilding :: initwork ( void )
 
 
    if ( completion == typ->construction_steps - 1 ) {
-      if ( actmap->resourcemode == 0 ) {
+      if ( actmap->_resourcemode == 0 ) {
          if ( typ->special & cgwindkraftwerkb ) 
             work.wind_done = 0;
 
@@ -5005,7 +5008,7 @@ void tbuilding :: initwork ( void )
 
 int tbuilding :: worktodo ( void )
 {
-   if ( actmap->resourcemode == 1 ) {
+   if ( actmap->_resourcemode == 1 ) {
       return !work.bimode_done;
    }
    if ( !work.wind_done  || !work.solar_done )
@@ -5027,7 +5030,7 @@ int  tbuilding :: processwork ( void )
 {
    if ( (completion == typ->construction_steps - 1) ) {
 
-      if ( actmap->resourcemode == 1 ) {
+      if ( actmap->_resourcemode == 1 ) {
          tresources plus;
 
          int res = getresourceplus  ( -2, &plus, 0 );
@@ -6148,7 +6151,7 @@ int ResourceNet :: fieldavail ( int x, int y )
 
 int StaticResourceNet :: getresource ( int x, int y, int resource, int _need, int _queryonly, int _player, int _scope )
 {
-   if ( resource != 1   &&   actmap->resourcemode == 1 ) 
+   if ( actmap->isResourceGlobal ( resource ))
       scope = 3;
    else
       scope = _scope;
@@ -6385,7 +6388,7 @@ void transfer_all_outstanding_tribute ( void )
                         topay[ resourcetype ] = actmap->tribute->avail.resource[ resourcetype ][ player ][ targplayer ];
                         got[ resourcetype ] = 0;
 
-                        if ( resourcetype == 1 || actmap->resourcemode == 0 ) {
+                        if ( !actmap->isResourceGlobal (resourcetype) ) {
                            pbuilding bld = actmap->player[ player ].firstbuilding;
                            while ( bld  &&  topay[resourcetype] > got[resourcetype] ) {
                               PutTribute pt;
@@ -6497,7 +6500,7 @@ void GetResourceCapacity :: start ( int x, int y )
 
 int ResourceChangeNet :: getresource ( int x, int y, int resource, int _player, int _scope )
 {
-   if ( (_scope > 0)  &&  (actmap->resourcemode == 1)  &&  (resource != 1) ) 
+   if ( (_scope > 0)  &&  (actmap->isResourceGlobal ( resource )) )
       scope = 2;
    else
       scope = _scope;

@@ -18,12 +18,16 @@
 #include <SDL/SDL_image.h>
 #include "SDLStretch.h"
 #include "../basestrm.h"
+#include "../loadimage.h"
 
 
 int loadFullscreenImage ( const char* filename )
 {
    tnfilestream s ( filename, 1 );
-   SDL_Surface* convimg = IMG_LoadJPG_RW_D( SDL_RWFromStream ( &s ), 8 );
+   SDL_RWops *src = SDL_RWFromStream ( &s );
+   SDL_Surface* convimg = IMG_LoadJPG_RW_D( src, 8 );
+   SDL_RWclose(src);
+
    SDL_Surface* screen = SDL_GetVideoSurface();
                 	
    if ( convimg->format->palette )
@@ -40,3 +44,6 @@ int loadFullscreenImage ( const char* filename )
 void closeFullscreenImage ( void )
 {
 }
+
+void setFullscreenSetting ( FullscreenImageSettings setting, int value )
+{}
