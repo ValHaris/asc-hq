@@ -23,15 +23,15 @@ Not enough movement to descend
 112
 Invalid height
 113
-deep water required to submerge deep
+Deep water required to submerge deep
 114
-you cannot submerge in shallow water
+You cannot submerge in shallow water
 115
-not enough fuel to change height
+Not enough fuel to change height
 116
-no fields accessible
+No fields accessible
 117
-movement interrupted
+Movement interrupted
 201
 This # won't attack anything
 202
@@ -97,7 +97,7 @@ You have %s outstanding from %s; %s of it was transferred this turn#crt#
 20001
 name
 20002
-description
+class
 20003 
 experience
 20004
@@ -141,32 +141,33 @@ jamming
 20106
 view
 20107
-maximum size of units that can enter
+Maximum size of units that can enter
 20108
-units have to be on this height to enter
+Units have to be on this height to enter
 20109
-units have to be able to reach this height to enter
+Units have to be able to reach this height to enter
 20120
-maximum possible resource production
+Maximum possible resource production
 20121
-resource consumption at maximum production
+Resource consumption at maximum production
 20122
-current resource production
+Current resource production
 20123
-current resource consumption
+Current resource consumption
 20124
-the lower the efficiency, the more minerals have to be mined to produce a given amount of resources
+The lower the efficiency, the more minerals have to be mined to produce a given amount of resources
 20125
 x: distance $ y: extraction (solid line) $ y: consumption (dotted lines) 
 20128
-efficiency: the higher the distance between the position where the minerals are mined and the building, $ the fewer resources are extracted in a given time $ note: the resource consumption (if the building has any) is proportional to the time, not the resource production!
+Efficiency: the higher the distance between the position where the minerals are mined and the building, $ the fewer resources are extracted in a given time $ note: the resource consumption (if the building has any) is proportional to the time, not the resource production!
 20129
-the bars indicate the relative amount of resources that is available $ the single lines indicate the absolute amount of resources, which is relative amount * number of fields
+The bars indicate the relative amount of resources that is available $ the single lines indicate the absolute amount of resources, which is relative amount * number of fields
 20130
-units have to be on this height to enter
+Units have to be on this height to enter
 20131
-units have to be able to reach one of these heights to enter
+Units have to be able to reach one of these heights to enter
 20132
-units must NOT be able to reach this theight to enter
+Units must NOT be able to reach this theight to enter
 20133
-maximum weight of a single unit that can be loaded $/$ maximum weight of all loaded units
+Maximum weight of a single unit that can be loaded $/$ maximum weight of all loaded units
+

@@ -69,11 +69,11 @@
 #pos10# KartenEd-keys:
 #aeinzug80#
 #pos10# space #pos70#: Place last selected thing
-#pos10# tab #pos70#: toggle between primary and secondary map
+#pos10# tab #pos70#: Toggle between primary and secondary map
 #pos10# 3  #pos70#: Place terrain
 #pos10# 4  #pos70#: Place unit
 #pos10# 6  #pos70#: Place building
-#pos10# 7  #pos70#: Place specObj
+#pos10# 7  #pos70#: Place special object
 #pos10# 8  #pos70#: Place mine
 #pos10# F1 #pos70#: Help
 #pos10# F2  #pos70#: Editor
@@ -86,65 +86,65 @@
 #pos10# F8  #pos70#: Choose mine
 #pos10# F9  #pos70#: Choose weather
 #pos10# F10  #pos70#: Exit
-#pos10# a  #pos70#: move building / vehicle
+#pos10# a  #pos70#: Move building / vehicle
 #pos10# b  #pos70#: Edit resources
 #pos10# c  #pos70#: View/Change cargo
-#pos10# d  #pos70#: Change direction of act. field
+#pos10# d  #pos70#: Change direction of active field
 #pos10# shift-d #pos70#: Change direction of unit
 #pos10# ctrl-d #pos70#: Change direction of fields to place
-#pos10# e  #pos70#: edit Events
+#pos10# e  #pos70#: Edit events
 #pos10# f  #pos70#: Fill-mode
 #pos10# g  #pos70#: Map-Generator (Preview)
-#pos10# h  #pos70#: select unit/terrain from cursor position
-#pos10# l  #pos70#: show pallette 
+#pos10# h  #pos70#: Select unit/terrain from cursor position
+#pos10# l  #pos70#: Show pallette 
 #pos10# m  #pos70#: View/Change minestrength
 #pos10# p  #pos70#: View/Change production
 #pos10# s  #pos70#: Save map
 #pos10# v  #pos70#: View/Change values
-#pos10# x  #pos70#: goto opposite x position
-#pos10# y  #pos70#: goto opposite y position
-#pos10# y  #pos70#: set zoom level
+#pos10# x  #pos70#: Go to opposite x position
+#pos10# y  #pos70#: Go to opposite y position
+#pos10# y  #pos70#: Set zoom level
 #pos10# Entf  #pos70#: Erase last selected thing
 #pos10# ctrl+A  #pos70#: Alliances
-#pos10# ctrl+B  #pos70#: toggle resource view
+#pos10# ctrl+B  #pos70#: Toggle resource view
 #pos10# ctrl+D  #pos70#: Change direction
 #pos10# ctrl+E  #pos70#: Toggle Resourcemode
-#pos10# ctrl+F  #pos70#: fill with resources
+#pos10# ctrl+F  #pos70#: Fill with resources
 #pos10# ctrl+G  #pos70#: Write whole map to PCX-file
-#pos10# ctrl+H  #pos70#: set unit filters
+#pos10# ctrl+H  #pos70#: Set unit filters
 #pos10# ctrl+L  #pos70#: Load map
-#pos10# ctrl+M  #pos70#: Change mapvalues
+#pos10# ctrl+M  #pos70#: Change map values
 #pos10# ctrl+N  #pos70#: New map
 #pos10# ctrl+O  #pos70#: Polygon mode
 #pos10# ctrl+R  #pos70#: Repaint display
 #pos10# ctrl+U  #pos70#: View army-statistics
 #pos10# ctrl+V  #pos70#: View map
-#pos10# ctrl+W  #pos70#: set selected weather to whole map
+#pos10# ctrl+W  #pos70#: Set selected weather to whole map
 #pos10# Esc  #pos70#: Exit
 
 
 ##1010
 
-#pos10# Map-Genrator Help
+#pos10# Map-Generator Help
 
 Layer : You can choose between Land / Desert / Forest etc. layers.
 
-Resolution : This value alternates how rough your map is. The lower resolution is the rougher is your map.
+Resolution : This value determines how rough your map is. Lower resolutions result in rougher maps.
 
-Precission : The heightvalues are from 0 to ( precission-1 ). This means if you choose precission higher you can define the water- and landlevel more precisely.
+Precision : The height values range from 0 to ( precision-1 ). This means if you choose a higher precision, you can define the water- and land levels more precisely.
 
-#pos20# Additional information : Changing resolution or precission only takes effect if you regenerate the layer !
+#pos20# Additional information : Changing resolution or precision only takes effect if you regenerate the layer!
 
-Limit : Raising the limit will enlarge the area of your selected limit.
+Limit : Raising the limit will enlarge the area of your selected terrain type.
 
-Correct : If you raise a limit that high, that it exceeds the limit(s) above the limit(s) above will be raised to this limit. This also has effect if you're lowering a value.
+;This just doen't make any sense --> Correct : If you raise a limit that high, that it exceeds the limit(s) above the limit(s) above will be raised to this limit. This also has effect if you're lowering a value.
 
-Calculated : If you raise a limit the limit(s) above will be calculated in even steps up to the maxvalue.
+;Not really helpful --> Calculated : If you raise a limit the limit(s) above will be calculated in even steps up to the maxvalue.
 
 With the small selectors on bottom of the map you can hide / show certain layers just the way you need it.
 ( Only the shown layers will be used to generate the map. Hidden layers will be ignored )
 
-With the buttons from 1 to 5 (they appear if the resulution fits on the screen ) you can change the size of the displayed map.
+With the buttons from 1 to 5 (they appear if the resolution is high enough ) you can change the display size map. It does NOT alter the size of the map itself.
 
 
 ##1020
@@ -155,7 +155,7 @@ ADVANCED STRATEGIC COMMAND
 #color000#
 Map Editor
 
-(C) 94 - 98 by Marc Schellenberger and  Martin Bickel.
+(C) 1994 - 2001 by Marc Schellenberger and Martin Bickel.
 
 See README.TXT for details.
 
@@ -163,14 +163,14 @@ See README.TXT for details.
 
 Polygon Selector
 
-This function makes it possible to select previously defined polygons and fill them with terrains or units.
+This function makes it possible to select previously defined polygons and fill them with terrain or units.
 Just select your polygon and then place your selection.
 
 ##1040
 
 Polygon Mode
 
-You are currently in polygom mode. 
+You are currently in polygon mode. 
 This means, that the next unit or terrain you place affects your currently selected polygon. It will be filled with your selection.
 During this mode your cursor is freezed because its position has no effect on the fill procedure of the polygon.
 On the bottom of the screen you will see "Polyfield fill mode", which shows you that polygonmode is active.
@@ -181,12 +181,12 @@ You can exit this mode by pressing <Esc>.
 
 Player Change
 
-With this function you can exchange players untis, merge two players or just change players.
+With this function you can exchange players units, merge two players or just change players.
 
-If you select a player you will see, that it will be marked with a red rectangle. If you choose another player it will be marked red and your previous selection will be marked blue, which indicates that this is your second selection.
-Players, that dont have any units have a red box in front of their switch.
+When you select a player, you will notice that it is marked with a red rectangle. If you choose another player, that player will be marked red and your previous selection will be marked blue, which indicates that this is your second selection.
+Players that dont have any units have a red box in front of their switch.
 
-If you now choose "Change" you can assign the red marked players units to another not used player. (player with red box in front)
+If you now choose "Change" you can assign the red marked players units to another, unused player. (player with red box in front)
 
 With "Exch." you can exchange two players.
 
@@ -197,8 +197,8 @@ With "Merge" the units of the blue marked player will be added to the red marked
 
 Player Select
 
-You can select the players the are affected by your previously selected event or you just specify all not allied.
-If you choose nothing and choose "my selection", it will automatically set to all not allied.
+You can select the players that are affected by your previously selected event, or you can just specify all not allied.
+If you choose nothing and choose "my selection", it will automatically set all players to not allied.
 <Enter> and <Esc> also select all not allied.
 
 
@@ -214,3 +214,4 @@ If you choose nothing and choose "my selection", it will automatically set to al
 
 
 
+;EOF
