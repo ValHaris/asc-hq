@@ -1,6 +1,9 @@
-//     $Id: loaders.h,v 1.7 2000-08-12 12:52:49 mbickel Exp $
+//     $Id: loaders.h,v 1.8 2000-09-02 15:36:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/08/12 12:52:49  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.6  2000/08/11 12:24:04  mbickel
 //      Fixed: no movement after refuelling unit
 //      Restructured reading/writing of units
@@ -61,7 +64,7 @@
 
 extern   char*         cloaderrormsg[] ; 
 extern ticons icons;
-extern word fileterminator;
+extern const word fileterminator;
 
 extern const char* savegameextension;
 extern const char* mapextension;

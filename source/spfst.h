@@ -1,6 +1,10 @@
-//     $Id: spfst.h,v 1.21 2000-09-02 13:59:50 mbickel Exp $
+//     $Id: spfst.h,v 1.22 2000-09-02 15:36:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/09/02 13:59:50  mbickel
+//      Worked on AI
+//      Started using doxygen
+//
 //     Revision 1.20  2000/09/01 15:47:50  mbickel
 //      Added Astar path finding code
 //      Fixed: viewid crashed
@@ -117,7 +121,7 @@
   #define spfst_h
 
 /*! \file spfst.h
-\brief map accessing routines used by ASC and the mapeditor
+    \brief map accessing routines used by ASC and the mapeditor
 
 
 */
@@ -193,14 +197,16 @@
 
 
   extern int  terraintypenum, vehicletypenum, buildingtypenum, technologynum, objecttypenum;
-  extern int guiiconnum;
-
 
 
   extern char godview, tempsvisible; 
 
   extern int lasttick;   /*  f?r paintvehicleinfo  */ 
 
+/*!
+  \brief calculate the height difference between two levels of height
+  Since floating and ground based are assumed to be the same effective height, a simple subtraction isn't sufficient.
+ */
 extern int getheightdelta ( int height1, int height2 );
 
 extern void  movecursor(tkey         ch);
@@ -210,10 +216,15 @@ extern void  displaymap(void);
 
   /*  zugriffe auf map und andere strukturen  */ 
 
+/*!
+  \brief returns the field that is selected with the cursor
+ */
 extern pfield getactfield(void);
 
-extern pfield getfield(int          x,
-                     int          y);
+/*!
+  \brief returns the field at the given coordinates
+ */
+extern pfield getfield(int x, int y);
 
 extern pfield getbuildingfield( const pbuilding    bld,
                               shortint     x,
@@ -225,8 +236,14 @@ extern void  getbuildingfieldcoordinates( const pbuilding    bld,
                                          int     &    xx,
                                          int     &    yy);
 
+/*!
+  \brief returns the x coordinate of the cursor location
+ */
 extern word  getxpos(void);
 
+/*!
+  \brief returns the y coordinate of the cursor location
+ */
 extern word  getypos(void);
 
 
@@ -351,9 +368,10 @@ extern int          terrainaccessible2 ( const pfield        field, const pvehic
                             -3   unit cannot drive onto terrain
                */
 
-// extern tdisplaymovingunit displaymovingunit;
+//! return the screencoordinates of the upper left position of the displayed map
+extern int getmapposx ( void );  
 
-extern int getmapposx ( void );  // return the screencoordinates of the upper left position of the displayed map
+//! return the screencoordinates of the upper left position of the displayed map
 extern int getmapposy ( void );
 
 class tgeneraldisplaymapbase {

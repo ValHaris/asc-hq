@@ -1,6 +1,11 @@
-//     $Id: loaders.cpp,v 1.25 2000-08-28 15:58:58 mbickel Exp $
+//     $Id: loaders.cpp,v 1.26 2000-09-02 15:36:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/08/28 15:58:58  mbickel
+//      Fixed short displaying of map before password dialog when loading email
+//        games by command line parameter
+//      Fixed reaction fire not working when loading an old ( < ASC1.2.0 ) file
+//
 //     Revision 1.24  2000/08/21 17:50:59  mbickel
 //      Fixed: crash when unit reaching max experience
 //      Fixed: crash when displaying research image
@@ -183,10 +188,8 @@
 
 */ 
 
-word fileterminator = 0xa01a;
+const word fileterminator = 0xa01a;
 ticons icons;
-int guiiconnum;
-
 
 
  const char* savegameextension = "*.sav";
@@ -351,28 +354,6 @@ void         seteventtriggers(void)
 
 } 
 
-
-void         renumevents(void)
-{ 
-/* 
-  word         j, i;
-  pevent       event; 
-      j:=0;
-   event:=actmap->firsteventtocome;
-   while event <> NULL do begin
-      inc(j);
-      event^.diskid:=j;
-      event:=event^.next;
-   end;
-
-   j:=10000;
-   event:=actmap->firsteventpassed;
-   while event <> NULL do begin
-      inc(j);
-      event^.diskid:=j;
-      event:=event^.next;
-   end;  */ 
-} 
 
 
   #define csm_typid32 1      /*  b1  */

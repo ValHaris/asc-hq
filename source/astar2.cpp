@@ -1,7 +1,9 @@
 #include <stack>
 #include <vector>
 #include <functional>
-#include <heap.h>
+#ifndef __WATCOM_CPLUSPLUS__
+ #include <heap.h>
+#endif
 #include "spfst.h"
 #include "controls.h"
 
