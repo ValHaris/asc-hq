@@ -1,6 +1,10 @@
-//     $Id: gamedlg.cpp,v 1.3 1999-11-16 17:04:02 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.4 1999-11-18 17:31:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/16 17:04:02  mbickel
+//     Made ASC compilable for DOS again :-)
+//     Merged all the bug fixes in that I did last week
+//
 //     Revision 1.2  1999/11/16 03:41:44  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -63,28 +67,6 @@
 #include "loadpcx.h"
 #include "loadjpg.h"
 
-#ifndef HAVE_STRICMP
-#define stricmp strcasecmp
-#define strnicmp strncasecmp
-
-char *strupr (const char *a)
-{
-  int i;
-  int j;
-  char *b;
-
-  j = strlen (a);
-  b = (char *) malloc (j);
-  for (i = 0; i < j; i++)
-    b[i] = toupper (a[i]);
-  return (b);
-}
-
-#endif
-
-#ifndef HAVE_ITOA
-#define itoa(a, b, c) sprintf(b, "%##c##d", a)
-#endif
 
 class   tchoosetechnology : public tdialogbox {
                            dynamic_array<ptechnology> techs;

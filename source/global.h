@@ -18,8 +18,47 @@
     Boston, MA  02111-1307  USA
 */
 
+#ifndef global_h
+ #define global_h
 
-#ifdef __WATCOM_CPLUSPLUS__
- #define HAVE_STRICMP 
- #define HAVE_KBHIT
+ #ifdef __WATCOM_CPLUSPLUS__
+  #define HAVE_STRICMP 
+  #define HAVE_KBHIT
+  #define HAVE_ITOA
+ #endif
+
+ #ifndef HAVE_ITOA
+ #define itoa(a, b, c) sprintf(b, "%##c##d", a);
+ #endif
+
+
+
+ #ifndef HAVE_STRICMP
+ #define stricmp strcasecmp
+ #define strcmpi strcasecmp
+ #define strnicmp strncasecmp
+ #define strncmpi strncasecmp
+ 
+ char *strupr (const char *a)
+ {
+   int i;
+   int j;
+   char *b;
+ 
+   j = strlen (a);
+   b = (char *) malloc (j);
+   for (i = 0; i < j; i++)
+     b[i] = toupper (a[i]);
+   return (b);
+ }
+ #endif
+
+
+ #ifndef HAVE_KBHIT
+ extern int kbhit (void);
+ extern int getch (void);
+ void set_keypress (void);
+ void reset_keypress (void);
+ #endif
+
 #endif

@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.3 1999-11-16 17:04:09 mbickel Exp $
+//     $Id: sg.cpp,v 1.4 1999-11-18 17:31:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/16 17:04:09  mbickel
+//     Made ASC compilable for DOS again :-)
+//     Merged all the bug fixes in that I did last week
+//
 //     Revision 1.2  1999/11/16 03:42:25  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -73,11 +77,6 @@
 #include "sg.h"
 #include "artint.h"
 
-#ifndef HAVE_STRICMP
-#define strcmpi strcasecmp
-#define strncmpi strncasecmp
-#define strnicmp strncasecmp
-#endif
 
 #ifdef HEXAGON
 #include "loadbi3.h"

@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.3 1999-11-16 17:04:00 mbickel Exp $
+//     $Id: dialog.cpp,v 1.4 1999-11-18 17:31:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/16 17:04:00  mbickel
+//     Made ASC compilable for DOS again :-)
+//     Merged all the bug fixes in that I did last week
+//
 //     Revision 1.2  1999/11/16 03:41:20  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -66,14 +70,6 @@
 #include "gamedlg.h"
 #endif
 
-#ifndef HAVE_STRICMP
-#define strcmpi strcasecmp
-#define strnicmp strncasecmp
-#endif
-
-#ifndef HAVE_ITOA
-#define itoa(a, b, c) sprintf (b, "%##c##d", a)
-#endif
 
 #define markedlettercolor red  
 

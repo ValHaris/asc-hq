@@ -1,6 +1,10 @@
-//     $Id: loadbi3.cpp,v 1.3 1999-11-16 17:04:08 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.4 1999-11-18 17:31:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/16 17:04:08  mbickel
+//     Made ASC compilable for DOS again :-)
+//     Merged all the bug fixes in that I did last week
+//
 //     Revision 1.2  1999/11/16 03:41:54  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -531,12 +535,13 @@ char* getbi3path ( void )
 
 
 
-const int terraintranslatenum = 15;
+const int terraintranslatenum = 17;
 const int terraintranslate[terraintranslatenum][2] = {{ 574 , 526 } , { 575 , 1233 }, {577, 1244 }, 
                                                       { 581 ,1260 } , { 573 , 1226 }, {572, 1221 }, 
                                                       { 576 ,1238 } , { 578 , 1245 }, {579, 1249 }, 
                                                       { 580 ,1253 } , { 242 , 1135 }, {463,  449 },
-                                                      { 464,  450 } , { 465,  451  }, {466,  452 }};
+                                                      { 464,  450 } , { 465,  451  }, {466,  452 },
+                                                      { 237, 1284 } , { 233, 1094 }};
 
 const int terraincombixlatnum = 2;
 struct terraincombixlat {
@@ -548,7 +553,7 @@ struct terraincombixlat {
 const terraincombixlat terraincombixlat[terraincombixlatnum] = {{ 222, 1011, 0, 1 }, 
                                                                 { 223, 1012, 0, 1 }};
 
-const int objecttranslatenum = 20;
+const int objecttranslatenum = 26;
 const int objecttranslate[objecttranslatenum][5] = {{ 1264, 1470, 1500, -1, -1 }, 
                                                     { 1265, 1470, -1, 1560, -1 }, 
                                                     { 1266, 1470, -1, -1, 1530 }, 
@@ -568,7 +573,13 @@ const int objecttranslate[objecttranslatenum][5] = {{ 1264, 1470, 1500, -1, -1 }
                                                     { 460, 1191, -1, -1, -1 },
                                                     { 1329, 1296, -1, -1, -1 },
                                                     { 1330, 1300, -1, -1, -1 },
-                                                    { 1331, 1304, -1, -1, -1 }
+                                                    { 1331, 1304, -1, -1, -1 },
+                                                    {  234, 1098, -1, -1, -1 },
+                                                    {  235, 1101, -1, -1, -1 },
+                                                    {  236, 1102, -1, -1, -1 },
+                                                    { 1283, 1284, -1, -1, -1 },
+                                                    { 1334, 1325, -1, -1, -1 },
+                                                    { 1333, 1320, -1, -1, -1 }
                                                     };
 
 
@@ -1031,8 +1042,14 @@ void        tloadBImap ::   ReadACTNPart(void)
                 for ( int c = 1; c < 5; c++ )
                    if ( objecttranslate[b][c] != -1 )
                       xlt[xl++] = objecttranslate[b][c];
-         if ( xl == 0 )
-            xl = 1;
+         if ( xl == 0 ) {
+            for ( int c = 0; c < terraintranslatenum; c++ )
+                if ( terraintranslate[b][0] == Line[X] )
+                   xlt[xl++] = terraintranslate[b][1];
+
+            if ( xl == 0 )
+               xl = 1;
+         }
 
          for ( int m = 0; m < xl; m++ ) {
             int found_without_force = 0;

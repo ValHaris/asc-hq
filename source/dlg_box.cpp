@@ -1,6 +1,14 @@
-//     $Id: dlg_box.cpp,v 1.2 1999-11-16 03:41:22 tmwilson Exp $
+//     $Id: dlg_box.cpp,v 1.3 1999-11-18 17:31:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:22  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -55,21 +63,6 @@
  #include "building.h"
 #endif
 
-#ifndef HAVE_ITOA
-#define itoa(a, b, c) sprintf (b, "%##c##d", a)
-#endif
-
-#ifndef HAVE_STRICMP
-#define stricmp strcasecmp
-#define strnicmp strncasecmp
-#endif
-
-#ifndef HAVE_KBHIT
-extern int kbhit (void);
-extern int getch (void);
-void set_keypress (void);
-void reset_keypress (void);
-#endif
 
 char strrstring[200];
 

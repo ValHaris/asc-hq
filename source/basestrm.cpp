@@ -1,6 +1,10 @@
-//     $Id: basestrm.cpp,v 1.3 1999-11-16 17:03:54 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.4 1999-11-18 17:30:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/16 17:03:54  mbickel
+//     Made ASC compilable for DOS again :-)
+//     Merged all the bug fixes in that I did last week
+//
 //     Revision 1.2  1999/11/16 03:41:06  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -64,14 +68,6 @@
 # endif
 #endif
 
-#endif
-
-#ifndef HAVE_ITOA
-#define itoa(a, b, c) sprintf(b, "%##c##d", a);
-#endif
-
-#ifndef HAVE_STRICMP
-#define stricmp strcasecmp
 #endif
 
 // #define printexternfilenams

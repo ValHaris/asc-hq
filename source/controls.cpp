@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.3 1999-11-16 17:03:58 mbickel Exp $
+//     $Id: controls.cpp,v 1.4 1999-11-18 17:31:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/16 17:03:58  mbickel
+//     Made ASC compilable for DOS again :-)
+//     Merged all the bug fixes in that I did last week
+//
 //     Revision 1.2  1999/11/16 03:41:16  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -59,11 +63,6 @@
 #include "timer.h"
 #include "sg.h"
 #include "weather.h"
-
-#ifndef HAVE_STRICMP
-#define stricmp strcasecmp
-#define strnicmp strncasecmp
-#endif
 
 
          tdashboard  dashboard;
