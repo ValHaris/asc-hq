@@ -1,8 +1,13 @@
 /*! \file gamedlg.cpp    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.74 2001-07-18 18:15:52 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.75 2001-07-25 18:00:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.74  2001/07/18 18:15:52  mbickel
+//      Fixed: invalid sender of mails
+//      Fixed: unmoveable units are moved by AI
+//      Some reformatting of source files
+//
 //     Revision 1.73  2001/07/15 21:00:25  mbickel
 //      Some cleanup in the vehicletype class
 //
@@ -5173,6 +5178,8 @@ void         tverlademunition::run(void)
          case ct_left:
          case ct_right:   {
                             int step =  ( target->service[displayed[mp]].maxAmount - target->service[displayed[mp]].minAmount ) / 100;
+                            if ( step == 0 )
+                               step = 1;
                             step = int( pow ( 10, int ( log10 ( step ))));
 
                             oldpos[mp] = newpos[mp];

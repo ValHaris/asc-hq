@@ -3,7 +3,7 @@
                              -------------------
     begin                : Thu Jun 29 2000
     copyright            : (C) 2000 by frank landgraf
-    email                : 
+    email                :
  ***************************************************************************/
 
 /***************************************************************************
@@ -19,6 +19,7 @@
 #include <iomanip>
 
 #include "PropertyGroup.h"
+#include "errors.h"
 
 /////////////////////////////////////////////////////////////////
 // PropertyGroup
@@ -82,33 +83,30 @@ void PropertyGroup::setValueToDefault()
 bool	PropertyGroup::Load(std::istream& is)
 {
    char buffer[256];
-   char*	pszName;
-   char*	pszValue;
+   char* pszName;
+   char* pszValue;
 
    //set all values to default
    //
    // setValueToDefault();
 
-   while	(!is.eof() && is.good() )	{
+   while (!is.eof() && is.good() )	{
 
       is.getline(buffer,256);
 
-      pszName	=	strtok(buffer,SEPARATOR);
+      pszName = strtok(buffer,SEPARATOR);
 
       if (!pszName)
          continue;
 
-      pszValue	=	strtok(NULL,SEPARATOR);
+      pszValue = strtok(NULL,SEPARATOR);
 
-      PropertyIF* p	=	find(pszName);
+      PropertyIF* p = find(pszName);
 
-      if	(p)
+      if ( p )
          p->setValueString(pszValue);
       else
-         std::cerr	<<	"PropertyGroup::Load  Property "
-         <<	pszName
-         <<	" not found"
-         <<	std::endl;
+         warning (ASCString("PropertyGroup::Load  Property ") + pszName + " not found" );
    };
    return false;
 }

@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.59 2001-07-15 21:31:03 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.60 2001-07-25 18:00:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.59  2001/07/15 21:31:03  mbickel
+//      The movement sounds can now fade in and out
+//
 //     Revision 1.58  2001/07/15 21:00:25  mbickel
 //      Some cleanup in the vehicletype class
 //
@@ -898,8 +901,9 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
          if ( field3->vehicle || field3->building )
             cancelmovement++;
 
-      if ( (newheight != -1 && newheight != vehicle->height && cancelmovement) || ( noInterrupt > 0 ))
-         cancelmovement = 0;
+      if ( vehicle )
+         if ( (newheight != -1 && newheight != vehicle->height && cancelmovement) || ( noInterrupt > 0 ))
+            cancelmovement = 0;
 
 
 
@@ -1152,7 +1156,7 @@ int ChangeVehicleHeight :: moveheight( int allFields )
       for ( int i = 0; i < vmove->reachableFields.getFieldNum(); i++ ) {
           StartPosition sp;
           vmove->reachableFields.getFieldCoordinates( i, &sp.x, &sp.y );
-          if ( !getfield( sp.x, sp.y)->vehicle ) {
+          if ( !getfield( sp.x, sp.y)->vehicle && !getfield( sp.x, sp.y)->building ) {
              sp.dist = vmove->getDistance ( sp.x, sp.y);
              startpos.addField ( sp.x, sp.y, sp );
           }
@@ -1914,7 +1918,7 @@ int VehicleService :: available ( pvehicle veh ) const
 {
    int av = 0;
    if ( veh && !veh->attacked ) {
-      if ( veh->canRepair() )
+      if ( veh->canRepair() && (veh->functions & cfrepair))
          for ( int i = 0; i < veh->typ->weapons.count; i++ )
             if ( veh->typ->weapons.weapon[i].service() )
                av++;
@@ -1948,7 +1952,7 @@ int VehicleService :: getServices ( pvehicle veh ) const
 {
    int res = 0;
    if ( veh ) {
-      if ( veh->canRepair() )
+      if ( veh->canRepair() && (veh->functions & cfrepair))
          for ( int i = 0; i < veh->typ->weapons.count; i++ )
             if ( veh->typ->weapons.weapon[i].service() )
                if ( !veh->attacked )
@@ -2047,7 +2051,7 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
                                     targ.service.push_back ( s );
                                  }
 
-                              if ( veh->canRepair() )
+                              if ( veh->canRepair() && (veh->functions & cfrepair))
                                  if ( veh->tank.fuel && veh->tank.material )
                                    // if ( targetUnit->getMovement() >= movement_cost_for_repaired_unit )
                                        if ( targetUnit->damage ) {
