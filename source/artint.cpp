@@ -1,6 +1,11 @@
-//     $Id: artint.cpp,v 1.5 2000-06-28 18:30:56 mbickel Exp $
+//     $Id: artint.cpp,v 1.6 2000-07-05 10:49:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/06/28 18:30:56  mbickel
+//      Started working on AI
+//      Started making loaders independent of memory layout
+//      Destroyed buildings can now leave objects behind.
+//
 //     Revision 1.4  2000/06/19 20:05:01  mbickel
 //      Fixed crash when transfering ammo to vehicle with > 8 weapons
 //
@@ -2785,9 +2790,9 @@ void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( pvehiclety
                if ( fzt->weapons->weapon[i].targ & (1 << j) ) { 
                   int d = 0; 
                   int m = 0; 
-                  for ( int e = fzt->weapons->weapon[i].mindistance / maxmalq; e < fzt->weapons->weapon[i].maxdistance / maxmalq; e++ ) {    // the distance between two fields is maxmalq
+                  for ( int e = (fzt->weapons->weapon[i].mindistance + maxmalq - 1)/ maxmalq; e <= fzt->weapons->weapon[i].maxdistance / maxmalq; e++ ) {    // the distance between two fields is maxmalq
                      d++; 
-                     int n = weapdist->getweapstrength( &fzt->weapons->weapon[i], e ) * fzt->weapons->weapon[i].maxstrength * attackstrength(getdamage()) * (getexpirience() + 8) / (256 * 100 * 8);
+                     int n = weapdist->getweapstrength( &fzt->weapons->weapon[i], e*maxmalq ) * fzt->weapons->weapon[i].maxstrength * attackstrength(getdamage()) * (getexpirience() + 8) / (256 * 100 * 8);
                      m += n / (2*(1+d)); 
                   } 
                   if (getammunition(i) == 0) 

@@ -1,6 +1,9 @@
-//     $Id: missions.cpp,v 1.8 2000-07-05 09:24:00 mbickel Exp $
+//     $Id: missions.cpp,v 1.9 2000-07-05 10:49:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/07/05 09:24:00  mbickel
+//      New event action: change building damage
+//
 //     Revision 1.7  2000/05/23 20:40:47  mbickel
 //      Removed boolean type
 //
@@ -134,17 +137,17 @@ void         getnexteventtime(void)
 } 
 
 
-void         checktimedevents(void)
+void         checktimedevents ( MapDisplayInterface* md )
 { 
    eject = false; 
    if ( actmap->time.abstime >= nexttimedevent[actmap->actplayer].abstime ) { 
-      checkevents(); 
+      checkevents( md ); 
       if (eject) 
         return;
       getnexteventtime(); 
    } 
    if ( quedevents[actmap->actplayer] ) {
-      checkevents(); 
+      checkevents( md ); 
       if (eject) 
         return;
    }
@@ -236,7 +239,7 @@ byte         evaluatetrigger(pevent       ev,
 
 
 
-void         checksingleevent(pevent       ev)
+void         checksingleevent(pevent       ev, MapDisplayInterface* md )
 { 
   byte         b; 
   word         i; 
@@ -247,7 +250,7 @@ void         checksingleevent(pevent       ev)
    eject = false; 
 
   if ( ev->triggertime.abstime != -1 )
-     execevent ( ev );
+     execevent ( ev, md );
   else {
 
       for (b = 0; b <= 3; b++) { 
@@ -499,7 +502,7 @@ void         checksingleevent(pevent       ev)
    
       memset(stt, 0, sizeof(stt));
       if (evaluatetrigger(ev,&si1,-1,&si2) == 1) 
-         execevent(ev); 
+         execevent( ev, md ); 
 
   } // triggertime == -1
 
@@ -670,7 +673,7 @@ void         viewtextmessage ( int id, int player )
 
 
 
-void         executeevent(pevent       ev)
+void         executeevent ( pevent ev, MapDisplayInterface* md )
 { 
   pevent       ev2;
   ptechnology  tech; 
@@ -743,18 +746,15 @@ void         executeevent(pevent       ev)
    
       if (ev->a.action == cenextmap) { 
          if (actmap->campaign != NULL) { 
-         startnextcampaignmap(ev->a.saveas); 
-         eject = true; 
-         return;
+            startnextcampaignmap(ev->a.saveas); 
+            eject = true; 
+            return;
          } 
          else { 
            viewtext2(904); 
            actmap->levelfinished = true; 
-   
-   
          } 
       } 
-   
    
 
       if (ev->a.action == cewindchange) {
@@ -769,7 +769,9 @@ void         executeevent(pevent       ev)
          }
          dashboard.x = 0xffff;
          resetallbuildingpicturepointers();
-         displaymap();
+         if ( md )
+            md->displayMap();
+
       }
 
 
@@ -848,7 +850,10 @@ void         executeevent(pevent       ev)
       if (ev->a.action == ceweatherchangecomplete ) {
          checkobjectsforremoval();
          checkunitsforremoval ();
-         displaymap();
+
+         dashboard.x = 0xffff;
+         if ( md )
+            md->displayMap();
       }
        
       if ( ev->a.action == cegameparamchange ) {
@@ -879,23 +884,30 @@ void         executeevent(pevent       ev)
          actmap->ellipse->color = white;
          actmap->ellipse->precision = 0.15;
          actmap->ellipse->active = 1;
-         dashboard.paint( getactfield(), actmap->playerview );
-         actmap->ellipse->paint();
+         if ( md ) {
+            dashboard.paint( getactfield(), actmap->playerview );
+            actmap->ellipse->paint();
+         }
       }
 
       if ( ev->a.action == ceremoveellipse ) 
          if ( actmap->ellipse ) {
             actmap->ellipse->active = 0;
-           repaintdisplay();
+            if ( md ) 
+               repaintdisplay();
          }
 
       if ( ev->a.action == cechangebuildingdamage ) {
          pfield fld = getfield ( ev->intdata[0], ev->intdata[1] );
          if ( fld && fld->building ) {
-            if ( ev->intdata[2] >= 100 )
+            if ( ev->intdata[2] >= 100 ) {
                removebuilding ( &fld->building );
-            else
+               if ( md )
+                 md->displayMap();
+            } else
                fld->building->damage  = ev->intdata[2];
+
+            dashboard.x = 0xffff;
          }
       }
 
@@ -934,11 +946,11 @@ void         executeevent(pevent       ev)
 } 
 
 
-void execevent ( pevent ev )
+void execevent ( pevent ev, MapDisplayInterface* md )
 {
    if ( ev->triggertime.abstime != -1 ) {
       if ( actmap->time.abstime >= ev->triggertime.abstime ) 
-         executeevent ( ev );
+         executeevent ( ev, md );
 
    } else {
 
@@ -952,13 +964,13 @@ void execevent ( pevent ev )
          }
    
          if ( actmap->time.abstime >= ev->triggertime.abstime ) 
-            executeevent ( ev );
+            executeevent ( ev, md );
          else
             getnexteventtime();
    
    
       } else
-         executeevent ( ev );
+         executeevent ( ev, md );
 
    }
 }
@@ -966,7 +978,7 @@ void execevent ( pevent ev )
 
 
 
-void         checkevents(void)
+void         checkevents( MapDisplayInterface* md )
 { 
    eject = false; 
    quedevents[actmap->actplayer]++; 
@@ -976,7 +988,7 @@ void         checkevents(void)
    
       pevent ev = actmap->firsteventtocome; 
       while ( ev ) { 
-         checksingleevent(ev); 
+         checksingleevent(ev, md ); 
          if (eject) return;
              
          ev = ev->next; 

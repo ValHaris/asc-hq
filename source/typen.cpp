@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.25 2000-07-05 09:24:01 mbickel Exp $
+//     $Id: typen.cpp,v 1.26 2000-07-05 10:49:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/07/05 09:24:01  mbickel
+//      New event action: change building damage
+//
 //     Revision 1.24  2000/07/04 18:39:41  mbickel
 //      Added weapon information in buildings
 //      Made buried pipeline darker
@@ -852,6 +855,8 @@ void tvehicle :: init ( void )
    for ( int j = 0; j < 32; j++ )
        loading[j] = NULL;
 
+   for ( int a = 0; a < 8 ; a++ ) 
+      aiparam[a] = NULL;
 }
    
 

@@ -1,6 +1,11 @@
-//     $Id: sg.cpp,v 1.54 2000-06-28 18:31:00 mbickel Exp $
+//     $Id: sg.cpp,v 1.55 2000-07-05 10:49:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.54  2000/06/28 18:31:00  mbickel
+//      Started working on AI
+//      Started making loaders independent of memory layout
+//      Destroyed buildings can now leave objects behind.
+//
 //     Revision 1.53  2000/06/23 12:09:30  mbickel
 //      Graphicsets now selectable in ASC too.
 //
@@ -2690,9 +2695,9 @@ void  mainloop ( void )
       checkpulldown( &ch );
 
       while ( quedevents[ actmap->actplayer ] )
-        checkevents(); 
+        checkevents( &defaultMapDisplay ); 
 
-      checktimedevents();
+      checktimedevents( &defaultMapDisplay );
 
       checkforvictory();
 
