@@ -1,6 +1,9 @@
-//     $Id: timer.cpp,v 1.6 2000-05-10 19:55:58 mbickel Exp $
+//     $Id: timer.cpp,v 1.7 2000-05-10 20:56:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/05/10 19:55:58  mbickel
+//      Fixed empty loops when waiting for mouse events
+//
 //     Revision 1.5  2000/05/07 12:53:59  mbickel
 //      some minor adjustments
 //
@@ -53,7 +56,7 @@
 #define timerintr 0x08
 #define pit_freq 0x1234DD  
 
-int  ticker = 0; // was static, but I think this needs to be global somewhere
+volatile int  ticker = 0; // was static, but I think this needs to be global somewhere
 static int  clock_ticks, counter,tticker;
 char         init=0;
 

@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.12 2000-05-10 19:55:57 mbickel Exp $
+//     $Id: events.cpp,v 1.13 2000-05-10 20:56:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/05/10 19:55:57  mbickel
+//      Fixed empty loops when waiting for mouse events
+//
 //     Revision 1.11  2000/04/27 16:25:34  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -84,7 +87,7 @@
 */
 
 
-tmousesettings mouseparams; // was static, but not declared elsewhere
+volatile tmousesettings mouseparams = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0, 0, 0, 0 };
 
 SDL_mutex* keyboardmutex = NULL;
 
@@ -338,6 +341,8 @@ tmouserect tmouserect :: operator+ ( const tmouserect& b ) const
    return c;
 }
 
+#ifndef _NOASM_
+
 class tinitmousehandler {
         public:
            tinitmousehandler ( void );
@@ -347,6 +352,7 @@ tinitmousehandler :: tinitmousehandler ( void ) {
    memset ( &mouseparams, 0 , sizeof ( mouseparams ));
 };
 
+#endif
 
 
 int keypress( void )

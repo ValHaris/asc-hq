@@ -1,6 +1,9 @@
-//     $Id: timer.h,v 1.5 2000-05-07 12:53:59 mbickel Exp $
+//     $Id: timer.h,v 1.6 2000-05-10 20:56:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/05/07 12:53:59  mbickel
+//      some minor adjustments
+//
 //     Revision 1.4  1999/12/28 22:04:29  mbickel
 //      Had to make some changes again to compile it for DOS...
 //
@@ -40,7 +43,7 @@
 #ifdef _DOS_
     volatile extern long        ticker;
 #else
-    extern int ticker;
+    extern volatile int ticker;
 #endif
     extern void ndelay(int time);
     extern void inittimer(int frequence);

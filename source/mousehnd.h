@@ -1,6 +1,10 @@
-//     $Id: mousehnd.h,v 1.5 1999-12-28 21:03:10 mbickel Exp $
+//     $Id: mousehnd.h,v 1.6 2000-05-10 20:56:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/12/28 21:03:10  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.4  1999/12/07 22:13:23  mbickel
 //      Fixed various bugs
 //      Extended BI3 map import tables
@@ -113,7 +117,7 @@ class tsubmousehandler {
 
 #ifdef _NOASM_
  extern void mouseintproc2( void );
- extern tmousesettings mouseparams;
+ extern volatile tmousesettings mouseparams;
 
 #else
  extern "C" void            mouseintproc2( void );
