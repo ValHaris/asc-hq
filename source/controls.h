@@ -4,7 +4,7 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.55.2.3 2005-01-15 19:56:22 mbickel Exp $
+//     $Id: controls.h,v 1.55.2.4 2005-01-24 20:45:23 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -95,19 +95,6 @@ extern void  checkforvictory ( );
 /////////////////////////////////////////////////////////////////////
 ///// old vehicle actions
 /////////////////////////////////////////////////////////////////////
-
-
-//! An old procedure for building and removing objects with a unit.
-extern void  setspec( pobjecttype obj );
-
-//! A helper function for #setspec
-extern int  object_constructable ( int x, int y, pobjecttype obj );
-
-//! A helper function for #setspec
-extern int  object_removeable ( int x, int y, pobjecttype obj );
-
-//! A helper function for #setspec
-extern void build_objects_reset( void );
 
 
 //! An old procedure for building vehicle (like turrets) with a unit.

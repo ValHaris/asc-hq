@@ -54,8 +54,8 @@
 
 tguihoststandard          gui;
 tselectbuildingguihost    selectbuildinggui;
-tselectobjectcontainerguihost      selectobjectcontainergui;
-tselectvehiclecontainerguihost     selectvehiclecontainergui;
+// tselectobjectcontainerguihost      selectobjectcontainergui;
+// tselectvehiclecontainerguihost     selectvehiclecontainergui;
 tselectweaponguihost      selectweaponguihost;
 BasicGuiHost*        actgui = &gui;
 
@@ -1533,7 +1533,6 @@ void  tnsguiiconpoweroff::exec         ( void )
 
 
 
-#endif
 
 
 tnsguiiconconstructvehicle::tnsguiiconconstructvehicle ( void )
@@ -1570,6 +1569,7 @@ void  tnsguiiconconstructvehicle::exec         ( void )
 
 
 
+#endif
 
 
 
@@ -1770,7 +1770,7 @@ int   tnsguiiconbuildany::available    ( void )
 
 void  tnsguiiconbuildany::exec         ( void )
 {
-   setspec(0);
+//   setspec(0);
    displaymap();
 }
 
@@ -2310,7 +2310,7 @@ void  tnsguiiconcancel::exec         ( void )
 
 
 
-
+#if 0
 
 void    tselectobjectcontainerguihost :: init ( int resolutionx, int resolutiony )
 {
@@ -2367,8 +2367,7 @@ void tselectvehiclecontainerguihost ::reset ( Vehicle* _constructingvehicle )
 
 
 
-
-
+#endif
 
 
 tselectbuildingguihost :: tselectbuildingguihost( void )
@@ -2452,7 +2451,7 @@ int         tnputbuildingguiicon::available( void )
 
 
 
-
+#if 0
 
 #ifndef _NoStaticClassMembers_
 StaticClassVariable pnputobjectcontainerguiicon tnputobjectcontainerguiicon :: first    = NULL;
@@ -2506,15 +2505,17 @@ void        tnputobjectcontainerguiicon::setfrst  ( pnguiicon ts )
 
 void              tnputobjectcontainerguiicon::exec( void )
 {
+/*
    if ( object )
       setspec ( object );
    else
       build_objects_reset();
+      */
 }
 
 
 int         tnputobjectcontainerguiicon::available( void )
-{
+{/*
    if ( object ) {
       if ( build ) {
          if ( object_constructable ( getxpos(), getypos(), object ))
@@ -2525,7 +2526,7 @@ int         tnputobjectcontainerguiicon::available( void )
       }
 
       return false;
-   } else
+   } else*/
       return 1;
 }
 
@@ -2595,6 +2596,8 @@ int         tnputvehiclecontainerguiicon::available( void )
    } else
       return 1;
 }
+
+#endif
 
 
 tselectweaponguihost::tselectweaponguihost ( void )

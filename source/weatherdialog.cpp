@@ -13,6 +13,7 @@
 #include "weatherarea.h"
 #include "guidimension.h"
 #include "typen.h"
+#include "spfst.h"
 
 const int WeatherDialog::xsize = 400;
 const int WeatherDialog::ysize = 600;

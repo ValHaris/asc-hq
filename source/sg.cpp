@@ -2020,8 +2020,6 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 
    cursor.init();
    selectbuildinggui.init( resolx, resoly );
-   selectobjectcontainergui.init( resolx, resoly );
-   selectvehiclecontainergui.init( resolx, resoly );
 
    if ( actprogressbar ) actprogressbar->startgroup();
 

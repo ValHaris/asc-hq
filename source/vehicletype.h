@@ -134,7 +134,7 @@ extern const char*  cvehiclefunctions[];
  //! The class describing properties that are common to all vehicles of a certain kind. \sa Vehicle
  class Vehicletype : public ContainerBaseType {
         //! the image of the unit.
-        Surface8  image;
+        Surface  image;
     public:
         //! short description of the units role, for example "strategic bomber"
         ASCString    description;
@@ -262,8 +262,8 @@ extern const char*  cvehiclefunctions[];
         Resources calcProductionsCost();
 
         void  paint ( Surface& s, SPoint pos, int player, int direction = 0 ) const;
-        const Surface8&  getImage () const { return image;};
-        Surface8&  getImage () { return image;};
+        const Surface&  getImage () const { return image;};
+        Surface&  getImage () { return image;};
 
      private:
         void setupRemovableObjectsFromOldFileLayout();

@@ -27,7 +27,6 @@
   #include "paradialog.h"
   #include "events.h"
   #include "gameoptions.h"
-  #include "sg.h"
   #include "sdl/sound.h"  
 
 

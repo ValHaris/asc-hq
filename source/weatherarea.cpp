@@ -24,13 +24,11 @@ const char*  cdirections[WeatherSystem::WindDirNum] = {"North", "NorthEast", "Ea
 //****************************************************************************************************************************************
 const int WeatherArea::MAXVALUE = 200;
 const int WeatherArea::MAXOFFSET = 100;
-WeatherArea::WeatherArea(tmap* m, int xCenter, int yCenter, int w, int h, int d, FalloutType fallout, unsigned int sV): map(m), center(xCenter, yCenter), width(w), height(h), duration(d), ft(fallout), stepCount(0), seedValue(sV) {
-    int x =  0;
-    int y =  0;
+WeatherArea::WeatherArea(tmap* m, int xCenter, int yCenter, int w, int h, int d, FalloutType fallout, unsigned int sV): map(m), center(xCenter, yCenter), width(w), height(h), duration(d), ft(fallout), stepCount(0), seedValue(sV), verticalWindAccu(0), horizontalWindAccu(0) {    
     WeatherField* wf;
     for(int i = 0; i < width * height; i++) {
-        x =  i % width;
-        y =  i / width;
+        int x =  i % width;
+        int y =  i / width;
         wf = new WeatherField(Point2D(x + (center.getX() - width/2), y + (center.getY() - height/2)), this);
         area.push_back(wf);
     }
@@ -50,11 +48,11 @@ WeatherArea::~WeatherArea() {
     }
 }
 
+
 void WeatherArea::createWeatherFields() {
-    if(area.size()>0) {
-        counter = 0;
+    if(area.size()>0) {        
         WeatherField* wf;
-        srand(seedValue);
+        srand(seedValue);	
 
         wf = area[(width*height)/2];
         wf->setValue(MAXVALUE);
@@ -87,31 +85,39 @@ void WeatherArea::setFalloutType(FalloutType fallout) {
 FalloutType WeatherArea::getFalloutType(int value) const {
     if(ft > 0) {
     if(value < (MAXVALUE * 0.25)) {
-            return DRY;
+            return map->weatherSystem->getDefaultFalloutType();
         }
     }
 
     return ft;
 }
-void WeatherArea::updateMovementVector(unsigned int windspeed, Direction windDirection, double ratio) {
-
+void WeatherArea::updateMovementVector(unsigned int windspeed, Direction windDirection, double ratio) {    
     if(windDirection == N) {
-        currentMovement = Vector2D(0,static_cast<int>(-1 * ratio * windspeed));
+        verticalWindAccu += (-1 * ratio * windspeed);     
     } else if(windDirection == NE) {
-        currentMovement = Vector2D(static_cast<int>(ratio * windspeed), static_cast<int>(-1 * ratio * windspeed));
+        verticalWindAccu += (-1 * ratio * windspeed);
+	horizontalWindAccu += ratio * windspeed;        
     } else if(windDirection == SE) {
-        currentMovement = Vector2D(static_cast<int>(ratio * windspeed), static_cast<int>(ratio * windspeed));
+        verticalWindAccu += (ratio * windspeed);
+	horizontalWindAccu += ratio * windspeed;        
     } else if(windDirection == S) {
-        currentMovement = Vector2D(0,  static_cast<int>(ratio * windspeed));
+        verticalWindAccu += (ratio * windspeed);        
     } else if(windDirection == SW) {
-        currentMovement = Vector2D(static_cast<int>(-1 * ratio * windspeed), static_cast<int>( ratio * windspeed));
+        verticalWindAccu += (ratio * windspeed);
+	horizontalWindAccu += -1 *ratio * windspeed;        
     } else if(windDirection == NW) {
-        currentMovement = Vector2D(static_cast<int>(-1 * ratio * windspeed), static_cast<int>(-1 * ratio * windspeed));
+        verticalWindAccu += (-1 * ratio * windspeed);
+	horizontalWindAccu += -1 *ratio * windspeed;        
     } else if(windDirection == W) {
-        currentMovement = Vector2D(static_cast<int>(-1 * ratio * windspeed), 0);
-    } else if(windDirection == E) {
-        currentMovement = Vector2D(static_cast<int>(ratio * windspeed), 0);
-    }
+        horizontalWindAccu += -1 *ratio * windspeed;        
+    } else if(windDirection == E) {        
+	horizontalWindAccu += ratio * windspeed;
+    }    
+    int vMove = static_cast<int>(verticalWindAccu);    
+    verticalWindAccu -= vMove;
+    int hMove = static_cast<int>(horizontalWindAccu);
+    horizontalWindAccu -= hMove;
+    currentMovement = Vector2D(hMove,  2 * vMove);
 
 }
 
@@ -119,15 +125,17 @@ void WeatherArea::updateMovementVector(unsigned int windspeed, Direction windDir
 void WeatherArea::update(WeatherSystem* wSystem, FieldSet& processedFields) {
     duration--;
     if(!currentMovement.isZeroVector()) {
-
+        cout << "reseting area" << endl;
         for(int i = 0; i < area.size(); i++) {
             WeatherField* wf = area[i];
             if(wf->isOnMap(map)) {
                 wf->reset(processedFields);
             }
         }
+      center.move(getWindVector());
+      cout << "wa.update: center: " << center.getX() << ", " << center.getY() << endl;
     }
-    center.move(getWindVector());
+    cout << "updating area" << endl;
     for(int i = 0; i < area.size(); i++) {
         WeatherField* wf = area[i];
         wf->move(currentMovement);
@@ -141,11 +149,15 @@ void WeatherArea::write (tnstream& outputStream) const {
     outputStream.writeInt(seedValue);
     outputStream.writeInt(duration);
     outputStream.writeInt(width);
-    outputStream.writeInt(height);
+    outputStream.writeInt(height);  
+      cout << "wa.write: center: " << center.getX() << ", " << center.getY() << endl;      
     outputStream.writeInt(center.getX());
-    outputStream.writeInt(center.getY());
+    outputStream.writeInt(center.getY());        
+    outputStream.writeFloat(verticalWindAccu);
+    outputStream.writeFloat(horizontalWindAccu);
+    /*Version 1*/
     outputStream.writeInt(currentMovement.getXComponent());
-    outputStream.writeInt(currentMovement.getYComponent());
+    outputStream.writeInt(currentMovement.getYComponent());    
     outputStream.writeInt(ft);
     outputStream.writeInt ( area.size() );
     for ( WeatherFields::const_iterator i = area.begin(); i != area.end(); i++ ) {
@@ -158,18 +170,27 @@ void WeatherArea::read (tnstream& inputStream) {
     duration = inputStream.readInt();
     width = inputStream.readInt();
     height = inputStream.readInt();
-    center = Point2D(inputStream.readInt(), inputStream.readInt());
+    int x = inputStream.readInt();
+    int y = inputStream.readInt();
+    center = Point2D(x, y);
+    cout << "wa.read: center: " << center.getX() << ", " << center.getY() << endl;
+    verticalWindAccu = inputStream.readFloat();
+    horizontalWindAccu = inputStream.readFloat();
+    /* Version 1*/
     int xmov = inputStream.readInt();
-    int ymov = inputStream.readInt();
-    currentMovement = Vector2D(xmov, ymov );
+    int ymov = inputStream.readInt();    
+    currentMovement = Vector2D(xmov, ymov );    
     ft = static_cast<FalloutType>(inputStream.readInt());
     int size = inputStream.readInt();
     for ( int i = 0; i < size; i++ ) {
-        WeatherField* newWf = new WeatherField(map);
-        newWf->read(inputStream);
-        area.push_back(newWf);
+          int x =  i % width;
+          int y =  i / width;
+          WeatherField* wf = new WeatherField(Point2D(x + (center.getX() - width/2), y + (center.getY() - height/2)), this);         
+        /*WeatherField* newWf = new WeatherField(map);*/
+        wf->read(inputStream);
+        area.push_back(wf);
     }
-    createWeatherFields();
+    //createWeatherFields();
 }
 
 Vector2D WeatherArea::getWindVector() const {
@@ -211,8 +232,8 @@ void WeatherArea::setDuration(int d) {
 unsigned int WeatherArea::createRandomValue(int limit) {
     if(limit == 0) {
         return 1;
-    }
-    int random_integer = rand();
+    }    
+    int random_integer = rand();    
     return (random_integer % limit);
 }
 
@@ -353,6 +374,7 @@ bool WeatherField::isOnMap(const tmap* map) const {
         }
     }
 void WeatherField::update(const WeatherArea* area, FieldSet& processedFields) {
+    //cout << "Field: " << posInArea.getX() << "," << posInArea.getY() <<", " << value << endl;
     mapField = area->getMap()->getField(posInArea.getX(), posInArea.getY());
     mapField->setweather(area->getFalloutType(value));
     mapField->setparams();
@@ -360,19 +382,18 @@ void WeatherField::update(const WeatherArea* area, FieldSet& processedFields) {
 }
 
 void WeatherField::write (tnstream& outputStream) const {
-    outputStream.writeInt(posInArea.getX());
-    outputStream.writeInt(posInArea.getY());
-    //outputStream.writeInt(value);
+    //outputStream.writeInt(posInArea.getX());
+    //outputStream.writeInt(posInArea.getY());
+    outputStream.writeInt(value);
 
 }
 
 void  WeatherField::read(tnstream& inputStream) {
-    int x = inputStream.readInt();
-    int y = inputStream.readInt();
-    //value = inputStream.readInt();
-    posInArea.set(x,y);
-    if(isOnMap(map))
-        mapField = map->getField(x,y);
+ 
+    value = inputStream.readInt();
+    //posInArea.set(x,y);
+   // if(isOnMap(map))
+    //    mapField = map->getField(x,y);
 }
 
 void WeatherField::setValue(int v) {
@@ -384,7 +405,7 @@ int WeatherField::getValue() {
 }
 //******************************************************************************************************************************************
 
-WeatherSystem::WeatherSystem(tmap* map, int spawn, float ws2fr, unsigned int tInterval, WeatherSystemMode mode):timeInterval(tInterval), windspeed2FieldRatio(ws2fr), areaSpawnAmount(spawn), gameMap(map), currentMode(mode), windspeed(2), globalWindDirection(S), lowerRandomSize(0.25), upperRandomSize(0.8), access2RandCount(0) {
+WeatherSystem::WeatherSystem(tmap* map, int spawn, float ws2fr, unsigned int tInterval, WeatherSystemMode mode, FalloutType defaultFT):timeInterval(tInterval), windspeed2FieldRatio(ws2fr), areaSpawnAmount(spawn), maxForecast(5), gameMap(map), currentMode(mode), windspeed(0), globalWindDirection(S), lowerRandomSize(0.25), upperRandomSize(0.8), access2RandCount(0), defaultFallout(defaultFT), lowerRandomDuration(tInterval), upperRandomDuration(tInterval*3) {
     seedValue = time(0);
     srand(static_cast<unsigned int>(seedValue));
 
@@ -464,6 +485,9 @@ throw (IllegalValueException) {
     }
 }
 
+int WeatherSystem::getMaxForecast() const{
+  return maxForecast;
+}
 
 void WeatherSystem::setLikelihoodWindDirection(const Percentages&  wd) throw (IllegalValueException) {
     int sum = 0;
@@ -523,8 +547,7 @@ void WeatherSystem::removeWeatherArea(GameTime time, WeatherArea* area) {
 
 Direction WeatherSystem::randomWindChange(int currentTurn) {
     int newWindDirection = createRandomValue(100);
-    int newWindSpeed = createRandomValue(100);
-    cout << "new random windspeed 1: " << newWindSpeed << endl;
+    int newWindSpeed = createRandomValue(100);    
     Direction newDirection;
     int sum = 0;
     for(int i = 0; i < windDirPercentages.size(); i++) {
@@ -535,17 +558,14 @@ Direction WeatherSystem::randomWindChange(int currentTurn) {
         }
     }
     sum = 0;
-    for(int i = 0; i < windSpeedPercentages.size(); i++) {
-        cout << "sum: " << sum << endl;
+    for(int i = 0; i < windSpeedPercentages.size(); i++) {        
         sum += windSpeedPercentages[i];
-        if(newWindSpeed <= sum) {
-            cout << "sum 2: " << sum << endl;
+        if(newWindSpeed <= sum) {            
             newWindSpeed = i * (100 /WINDSPEEDDETAILLEVEL);
             break;
         }
-    }
-    cout << "new random windspeed: " << newWindSpeed << endl;
-    addGlobalWindChange(newWindSpeed, newDirection, currentTurn);
+    }    
+    addGlobalWindChange(newWindSpeed, newDirection, currentTurn + maxForecast);
     return newDirection;
 }
 
@@ -617,11 +637,26 @@ void WeatherSystem::randomWeatherChange(GameTime currentTime, Direction windDire
             break;
         }
     }
+    GameTime t;
+    t.set(currentTime.turn() + maxForecast, currentTime.move());
     newArea = new WeatherArea(gameMap, xpos, ypos, width, height, 6, ft, createRandomValue());
-    this->addWeatherArea(newArea, currentTime);
+    this->addWeatherArea(newArea, t);
 }
 
+WindData WeatherSystem::getWindDataOfTurn(int turn) const{
+  WindData wData;
+  wData.speed = this->windspeed;
+  wData.direction = globalWindDirection;
 
+  WindChanges::const_iterator itTr = windTriggers.find(turn);
+  if(itTr != windTriggers.end()){
+    wData.speed = itTr->second.speed;
+    wData.direction = itTr->second.direction;
+  }else if(turn != gameMap->time.turn()){
+    wData = getWindDataOfTurn(--turn);
+  }
+  return wData;
+}
 void WeatherSystem::update(GameTime currentTime) {
     GameTime startTime;
     startTime.set(0,0);
@@ -645,8 +680,9 @@ void WeatherSystem::update(GameTime currentTime) {
     WeatherAreas::iterator upper = weatherAreas.upper_bound(currentTime);
     WeatherAreas::iterator it;
     WindChanges::iterator itTr = windTriggers.find(currentTime.turn());
-    if(itTr != windTriggers.end()) {
+    if(itTr != windTriggers.end()) {        
         setGlobalWind(itTr->second.speed , itTr->second.direction );
+	windTriggers.erase(itTr);
     }
     for(it = lower; it != medium; it++) {
         if(it->second->getDuration()==0) {
@@ -654,9 +690,10 @@ void WeatherSystem::update(GameTime currentTime) {
             weatherAreas.erase(it);
             area2Delete->removeArea(processedFields);
             delete area2Delete;
-        } else {
-            it->second->update(this, processedFields);
-            it->second->updateMovementVector(windspeed, globalWindDirection, getWindspeed2FieldRatio());
+        } else {            
+	    it->second->update(this, processedFields);
+	    it->second->updateMovementVector(windspeed, globalWindDirection, getWindspeed2FieldRatio());
+            
         }
     }
     for(it = medium; it != upper; it++) {
@@ -676,6 +713,7 @@ void WeatherSystem::skipRandomValue() const {
     unsigned int random_integer = rand();
 }
 
+
 unsigned int WeatherSystem::createRandomValue(unsigned int limit) {
     ++access2RandCount;
     unsigned int random_integer = rand();
@@ -688,7 +726,9 @@ unsigned int WeatherSystem::createRandomValue(unsigned int limit) {
 float WeatherSystem::createRandomValue(float lowerLimit, float upperLimit) {
     ++access2RandCount;
     return (lowerLimit + (float)rand()/(float)RAND_MAX * (upperLimit - lowerLimit));
+
 }
+
 
 void WeatherSystem::addGlobalWindChange(int speed, Direction direction,  int turn) throw (IllegalValueException) {
     WindData data ={speed, direction};
@@ -725,15 +765,19 @@ void WeatherSystem::write(tnstream& outputStream) const {
     outputStream.writeInt(access2RandCount);
     outputStream.writeInt( timeInterval );
     outputStream.writeInt(areaSpawnAmount);
+    outputStream.writeInt(maxForecast);
     outputStream.writeInt(currentMode);
 
-
+    outputStream.writeInt(defaultFallout);
     outputStream.writeInt(windspeed );
     outputStream.writeFloat( windspeed2FieldRatio );
     outputStream.writeInt(globalWindDirection );
 
     outputStream.writeFloat(lowerRandomSize);
     outputStream.writeFloat(upperRandomSize);
+    
+    outputStream.writeInt(lowerRandomDuration);
+    outputStream.writeInt(upperRandomDuration);
 
     outputStream.writeInt(falloutPercentages.size());
     for (int i = 0; i < falloutPercentages.size(); i++ ) {
@@ -773,14 +817,19 @@ void WeatherSystem::read (tnstream& inputStream) {
     access2RandCount = inputStream.readInt();
     timeInterval = inputStream.readInt();
     areaSpawnAmount = inputStream.readInt();
+    maxForecast = inputStream.readInt();
     currentMode  = static_cast<WeatherSystemMode>(inputStream.readInt());
 
-    windspeed = inputStream.readInt();
+    defaultFallout = static_cast<FalloutType>(inputStream.readInt());
+    windspeed = inputStream.readInt();    
     windspeed2FieldRatio = inputStream.readFloat();
     globalWindDirection = static_cast<Direction>(inputStream.readInt());
 
     lowerRandomSize = inputStream.readFloat();
     upperRandomSize = inputStream.readFloat();
+    
+    lowerRandomDuration = inputStream.readInt();
+    upperRandomDuration = inputStream.readInt();
 
     int size = 0;
 
@@ -812,10 +861,13 @@ void WeatherSystem::read (tnstream& inputStream) {
     }
     size = inputStream.readInt();
     for(int i = 0; i < size; i++) {
+      cout << "windTrigger added" << endl;
         int turn = inputStream.readInt();
+	cout << "trigger of turn" << turn <<endl;
         WindData data;
         data.speed = inputStream.readInt();
         data.direction = static_cast<Direction>(inputStream.readInt());
+	cout << "windTrigger has speed" << data.speed << endl;
         pair<int, WindData>p(turn, data);
         windTriggers.insert(p);
     }
@@ -824,7 +876,9 @@ void WeatherSystem::read (tnstream& inputStream) {
         skipRandomValue();
 
     }
+    cout << "weathersystem loaded" << endl;
 }
+
 
 
 

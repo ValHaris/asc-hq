@@ -16,9 +16,9 @@
 #include "global.h"
 #include "paradialog.h"
 #include "weatherdialog.h"
+#include "weatherarea.h"
 #include "events.h"
 #include "gameoptions.h"
-#include "sg.h"
 #include "sdl/sound.h"
 
 /**

@@ -21,6 +21,7 @@
 #include "resourceplacement.h"
 // #include "notificationdialog.h"
 #include "resourceplacementdialog.h"
+#include "spfst.h"
 
 
 const int ResourcePlacementDialog::xsize = 400;

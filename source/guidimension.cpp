@@ -36,3 +36,15 @@ int GuiDimension::getLeftOffSet(){
 int GuiDimension::getLineEditWidth(){
   return getPGApplication().GetScreenWidth()/20;
 }
+
+int GuiDimension::getLineOffset(){
+   return getPGApplication().GetScreenWidth()/40;
+}
+
+int GuiDimension::getButtonHeight(){
+   return 40;
+}
+
+int GuiDimension::getButtonWidth(){
+   return 170;
+}

@@ -25,10 +25,14 @@ public:
     static int getLeftOffSet();
     
     static int getLineEditWidth();
+    static int getLineOffset();
+    static int getButtonHeight();
+    static int getButtonWidth();
 
     ~GuiDimension();
 
 };
 
 #endif
+
 

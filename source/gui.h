@@ -1,6 +1,9 @@
-//     $Id: gui.h,v 1.26.2.2 2004-12-16 18:48:29 mbickel Exp $
+//     $Id: gui.h,v 1.26.2.3 2005-01-24 20:45:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26.2.2  2004/12/16 18:48:29  mbickel
+//      Movement now working
+//
 //     Revision 1.26.2.1  2004/10/26 16:35:04  mbickel
 //      Replaced graphic storage in buildings and objects
 //      cleaned up some names: pvehicle, pbuilding
@@ -166,7 +169,7 @@ struct tnguiiconfiledata {
 typedef class tnguiicon* pnguiicon;
 
 typedef class tnputbuildingguiicon* pnputbuildingguiicon; 
-typedef class tnputobjectcontainerguiicon* pnputobjectcontainerguiicon; 
+// typedef class tnputobjectcontainerguiicon* pnputobjectcontainerguiicon; 
 typedef class tnweapselguiicon* pnweapselguiicon;
 
 class BasicGuiHost {
@@ -261,7 +264,7 @@ class tselectbuildingguihost : public SelectBuildingBaseGuiHost {
 
 
 
-
+#if 0
 typedef class tselectobjectcontainerguihost *pselectobjectcontainerguihost;
 
 class SelectObjectBaseGuiHost : public GuiHost<pnputobjectcontainerguiicon> {int foo;} ;
@@ -295,7 +298,7 @@ class tselectvehiclecontainerguihost : public SelectVehicleBaseGuiHost {
          void reset ( Vehicle* _constructingvehicle );
    };
 
-
+#endif
 
 
 
@@ -410,7 +413,7 @@ class tnputbuildingguiicon : public tnguiicon {
          };
 
 
-
+#if 0
 
 class tnputobjectcontainerguiicon : public tnguiicon {
             int build;
@@ -449,7 +452,7 @@ class tnputvehiclecontainerguiicon : public tnguiicon {
             void  exec         ( void );
             int forcedeneable;
          };
-
+#endif
 
 
 typedef class tnsguiicon* pnsguiicon; 
@@ -863,8 +866,8 @@ class ContainerBaseGuiHost : public GuiHost<generalicon_c*> {
 
 extern tguihoststandard          gui;
 extern tselectbuildingguihost    selectbuildinggui;
-extern tselectobjectcontainerguihost      selectobjectcontainergui;
-extern tselectvehiclecontainerguihost     selectvehiclecontainergui;
+// extern tselectobjectcontainerguihost      selectobjectcontainergui;
+// extern tselectvehiclecontainerguihost     selectvehiclecontainergui;
 extern tselectweaponguihost      selectweaponguihost;
 extern BasicGuiHost*                 actgui;
 extern void setguiposy ( int y );

@@ -92,10 +92,11 @@ int height;
 int radius;
 FalloutType ft;
 Vector2D currentMovement;
-int counter;
 int stepCount;
 static const int MAXVALUE;
 static const int MAXOFFSET;
+float horizontalWindAccu;
+float verticalWindAccu;
 
 int seedValue;
 WeatherArea &operator=(const WeatherArea&);
@@ -185,6 +186,7 @@ float seedValue;
 int timeInterval;
 int areaSpawnAmount;
 int access2RandCount;
+int maxForecast;
 
 
 float windspeed2FieldRatio;
@@ -194,7 +196,11 @@ Direction globalWindDirection;
 float lowerRandomSize;
 float upperRandomSize;
 
+int lowerRandomDuration;
+int upperRandomDuration;
+
 bool seedValueIsSet;
+FalloutType defaultFallout;
 
 WeatherAreas weatherAreas;
 WindChanges windTriggers;
@@ -219,7 +225,7 @@ public:
   static const int WindDirNum = 8;
   static const int WINDSPEEDDETAILLEVEL = 8;
   WeatherSystem(tmap* map);
-  WeatherSystem(tmap* map, int areaSpawns, float windspeed2FieldRatio, unsigned int timeInterval = 6, WeatherSystemMode mode = EVENTMODE);
+  WeatherSystem(tmap* map, int areaSpawns, float windspeed2FieldRatio, unsigned int timeInterval = 6, WeatherSystemMode mode = EVENTMODE, FalloutType defaultFallout = DRY);
   ~WeatherSystem();
   inline void setSeedValue();
   void setLikelihoodFallOut(const Percentages& fol) throw (IllegalValueException);
@@ -243,6 +249,21 @@ public:
 
   unsigned int createRandomValue(unsigned int limit = 1000);  
   void skipRandomValue() const;  
+  
+  FalloutType getDefaultFalloutType() const{
+    return defaultFallout;  
+  };
+  
+  inline int getCurrentWindSpeed() const{
+    return windspeed;
+  }
+  
+  inline Direction getCurrentWindDirection() const{
+    return globalWindDirection;
+  }
+  
+  int getMaxForecast() const;
+  
   bool isSeedValueSet(){
     return seedValueIsSet;
   }  
@@ -295,9 +316,12 @@ public:
   inline const float getUpperSizeLimit() const{
     return upperRandomSize;
   }
+  
+  WindData getWindDataOfTurn(int turn) const;
 };
 
 #endif
+
 
 
 

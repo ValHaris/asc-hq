@@ -37,6 +37,7 @@
 #include "attack.h"
 #include "sg.h"
 #include "graphics/blitter.h"
+#include "viewcalculation.h"
 
 namespace GuiFunctions
 {
@@ -545,7 +546,7 @@ class ObjectBuildingGui : public GuiIconHandler, public GuiFunction {
 bool ObjectBuildingGui::init( Vehicle* vehicle )
 {
    veh = vehicle;
-   int num;
+   int num = 0;
 
    for ( int i = 0; i< 6; ++i)
       search ( getNeighbouringFieldCoordinate(veh->getPosition(), i), num, 0 );
@@ -597,6 +598,31 @@ void ObjectBuildingGui::execute( const MapCoordinate& pos, int num )
    updateFieldInfo();
 }
 
+
+Surface buildGuiIcon( const Surface& image, bool remove = false )
+{
+   const Surface& cancelIcon = IconRepository::getIcon("cancel.png");
+   Surface s = Surface::createSurface( cancelIcon.w(), cancelIcon.h(), 32, 0 );
+
+   const Surface& o = image;
+   if ( o.GetPixelFormat().BitsPerPixel() == 32 ) {
+      MegaBlitter<4,4,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Zoom> blitter;
+      blitter.setSize( o.w(), o.h(), s.w(), s.h() );
+      blitter.blit( o, s, SPoint((s.w() - blitter.getZoom() * o.w())/2, (s.h() - blitter.getZoom() * o.h())/2));
+   } else {
+      MegaBlitter<1,4,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Zoom> blitter;
+      blitter.setSize( o.w(), o.h(), s.w(), s.h() );
+      blitter.blit( o, s, SPoint((s.w() - blitter.getZoom() * o.w())/2, (s.h() - blitter.getZoom() * o.h())/2));
+   }
+
+   if ( remove ) {
+      MegaBlitter<4,4,ColorTransform_None, ColorMerger_AlphaOverwrite> blitter;
+      Surface& removegui = IconRepository::getIcon( "cancel-addon.png" );
+      blitter.blit( removegui, s,  SPoint((s.w() - removegui.w())/2, (s.h() - removegui.h())/2));
+   }
+
+}
+
 Surface& ObjectBuildingGui::getImage( const MapCoordinate& pos, int num )
 {
    if ( num == 0 )
@@ -612,46 +638,14 @@ Surface& ObjectBuildingGui::getImage( const MapCoordinate& pos, int num )
    if ( removeIconRepository.find( num ) != removeIconRepository.end() )
       return removeIconRepository[num];
 
-
-   const Surface& cancelIcon = IconRepository::getIcon("cancel.png");
-   Surface s = Surface::createSurface( cancelIcon.w(), cancelIcon.h(), 32, 0 );
-
-   Surface& o = objtype->getPicture();
-   if ( o.GetPixelFormat().BitsPerPixel() == 32 ) {
-      MegaBlitter<4,4,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Zoom> blitter;
-      blitter.setSize( o.w(), o.h(), s.w(), s.h() );
-      blitter.blit( o, s, SPoint((s.w() - blitter.getZoom() * o.w())/2, (s.h() - blitter.getZoom() * o.h())/2));
-   } else {
-      MegaBlitter<1,4,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Zoom> blitter;
-      blitter.setSize( o.w(), o.h(), s.w(), s.h() );
-      blitter.blit( o, s, SPoint((s.w() - blitter.getZoom() * o.w())/2, (s.h() - blitter.getZoom() * o.h())/2));
-   }
-
-
-
-/*
-
-   Surface o = objtype->getPicture().Duplicate();
-   float ratio = min( float( cancelIcon.w()) / o.w(), float(cancelIcon.h()) / o.h() );
-   o.strech( int( ratio * o.w()), int( ratio * o.h() ));
-   Surface s = Surface::createSurface( cancelIcon.w(), cancelIcon.h(), 32, 0 );
-   s.Blit( o, SPoint((s.w() - o.w())/2, (s.h() - o.h())/2));
-*/
-
-   if ( num < 0 ) {
-      MegaBlitter<4,4,ColorTransform_None, ColorMerger_AlphaOverwrite> blitter;
-      Surface& removegui = IconRepository::getIcon( "cancel-addon.png" );
-      blitter.blit( removegui, s,  SPoint((s.w() - removegui.w())/2, (s.h() - removegui.h())/2));
-   }
-
-   removeIconRepository[num] = s;
+   removeIconRepository[num] = buildGuiIcon( objtype->getPicture(), num < 0 );
    return removeIconRepository[num];
 }
 
 
 ASCString ObjectBuildingGui::getName( const MapCoordinate& pos, int num )
 {
-   if ( num == -1 )
+   if ( num == 0 )
       return "cancel";
 
    pobjecttype objtype = objectTypeRepository.getObject_byID( abs(num) );
@@ -833,6 +827,200 @@ void BuildObject::execute(  const MapCoordinate& pos, int num )
 
 
 
+
+
+
+class VehicleBuildingGui : public GuiIconHandler, public GuiFunction {
+      Vehicle* veh;
+   protected:
+      bool available( const MapCoordinate& pos, int id  );
+      void execute( const MapCoordinate& pos, int id  );
+      Surface& getImage( const MapCoordinate& pos, int id  );
+      ASCString getName( const MapCoordinate& pos, int id  );
+//    bool checkObject( pfield fld, VehicleType* objtype, Mode mode );
+
+      void search ( const MapCoordinate& pos, int& num, int pass );
+
+      void addButton( int &num, const MapCoordinate& mc, int id );
+
+   public:
+      VehicleBuildingGui() : veh( NULL ) {};
+      bool init( Vehicle* vehicle );
+      void eval();
+
+};
+
+
+bool VehicleBuildingGui::init( Vehicle* vehicle )
+{
+   veh = vehicle;
+   int num = 0;
+
+   for ( int i = 0; i< 6; ++i)
+      search ( getNeighbouringFieldCoordinate(veh->getPosition(), i), num, 0 );
+
+   return num > 0;
+}
+
+
+bool VehicleBuildingGui::available( const MapCoordinate& pos, int id  )
+{
+   return true;
+}
+
+void VehicleBuildingGui::execute( const MapCoordinate& pos, int id  )
+{
+   if ( id ) {
+      Vehicletype* vt = vehicleTypeRepository.getObject_byID( id );
+      Vehicle* v = veh->constructvehicle ( vt, pos.x, pos.y );
+      logtoreplayinfo ( rpl_buildtnk4, pos.x, pos.y, vt->id, veh->getOwner(), veh->getPosition().x, veh->getPosition().y, int(v->height) );
+      evaluateviewcalculation( actmap );
+   }
+   moveparams.movestatus = 0;
+   actmap->cleartemps();
+   NewGuiHost::popIconHandler();
+   repaintMap();
+   updateFieldInfo();
+}
+
+Surface& VehicleBuildingGui::getImage( const MapCoordinate& pos, int id )
+{
+   if ( id == 0 )
+      return IconRepository::getIcon("cancel.png");
+
+   Vehicletype* vehtype = vehicleTypeRepository.getObject_byID( id );
+
+   if ( !vehtype )
+      return IconRepository::getIcon("cancel.png");
+
+   static map<int,Surface> removeIconRepository;
+
+   if ( removeIconRepository.find( id ) != removeIconRepository.end() )
+      return removeIconRepository[id];
+
+   removeIconRepository[id] = buildGuiIcon( vehtype->getImage() );
+
+   return removeIconRepository[id];
+}
+
+
+ASCString VehicleBuildingGui::getName( const MapCoordinate& pos, int id )
+{
+   if ( id == 0 )
+      return "cancel";
+
+   Vehicletype* vehtype = vehicleTypeRepository.getObject_byID( id );
+   if ( !vehtype )
+      return "";
+
+   ASCString result;
+   result.format( "Build %s (%d Material, %d Fuel)", vehtype->name.c_str(), vehtype->productionCost.material, vehtype->productionCost.fuel );
+
+   return result;
+}
+
+
+
+void VehicleBuildingGui::addButton( int &num, const MapCoordinate& mc, int id )
+{
+    GuiButton* b = host->getButton(num);
+    b->registerFunc( this, mc, id );
+    b->Show();
+    ++num;
+}
+
+void VehicleBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
+{
+   pfield fld =  actmap->getField(pos);
+   if ( fld->building || fld->vehicle || !fieldvisiblenow(fld) )
+      return;
+
+     for ( int i = 0; i < veh->typ->vehiclesBuildable.size(); i++ )
+       for ( int j = veh->typ->vehiclesBuildable[i].from; j <= veh->typ->vehiclesBuildable[i].to; j++ )
+         if ( actmap->getgameparameter(cgp_forbid_unitunit_construction) == 0 || actmap->unitProduction.check(j) ) {
+            Vehicletype* v = actmap->getvehicletype_byid ( j );
+            if ( v && veh->vehicleconstructable ( v, pos.x, pos.y )) {
+               if ( pass==1 )
+                  addButton(num, pos, v->id);
+               else
+                  fld->a.temp = 1;
+            }
+         }
+}
+
+
+void VehicleBuildingGui::eval()
+{
+   MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
+
+   if ( !mc.valid() )
+      return;
+
+   int num = 0;
+   if ( mc.x < actmap->xsize || mc.y < actmap->ysize )
+      if ( veh )
+         if ( beeline ( mc, veh->getPosition() ) == 10 )
+            search( mc, num, 1 );
+
+   GuiButton* b = host->getButton(num);
+   b->registerFunc( this, mc, 0 );
+   b->Show();
+   ++num;
+
+   host->disableButtons(num);
+}
+
+
+
+VehicleBuildingGui vehicleBuildingGui;
+
+
+class BuildVehicle : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num ) ;
+      void execute( const MapCoordinate& pos, int num );
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("constructunit.png");
+      };
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "Unit construction";
+      };
+};
+
+
+bool BuildVehicle::available( const MapCoordinate& pos, int num )
+{
+   pfield fld = actmap->getField(pos);
+   if ( fld && fld->vehicle )
+      if (fld->vehicle->color == actmap->actplayer * 8)
+         if ( fld->vehicle->typ->vehiclesBuildable.size() )
+            if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
+               if ( !fld->vehicle->attacked )
+                  return true;
+   return false;
+}
+
+void BuildVehicle::execute(  const MapCoordinate& pos, int num )
+{
+   if ( pendingVehicleActions.actionType == vat_nothing ) {
+      pfield fld = actmap->getField(pos);
+      if ( fld->vehicle )
+         if ( vehicleBuildingGui.init( fld->vehicle )) {
+            moveparams.movestatus = 73;
+            NewGuiHost::pushIconHandler( &vehicleBuildingGui );
+            repaintMap();
+            updateFieldInfo();
+         }
+   }
+}
+
+
+
+
+
 GuiIconHandler primaryGuiIcons;
 
 
@@ -849,4 +1037,5 @@ void registerGuiFunctions( GuiIconHandler& handler )
    handler.registerUserFunction( new GuiFunctions::EndTurn() );
    handler.registerUserFunction( new GuiFunctions::UnitInfo() );
    handler.registerUserFunction( new GuiFunctions::BuildObject() );
+   handler.registerUserFunction( new GuiFunctions::BuildVehicle() );
 }
