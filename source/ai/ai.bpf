@@ -2,14 +2,6 @@
 
 #include <vcl.h>
 #pragma hdrstop
-USEUNIT("valuation.cpp");
-USEUNIT("buildingcapture.cpp");
-USEUNIT("misc.cpp");
-USEUNIT("service.cpp");
-USEUNIT("strategy.cpp");
-USEUNIT("tactics.cpp");
-USEUNIT("base.cpp");
-//---------------------------------------------------------------------------
 #define Library
 
 // To add a file to the library use the Project menu 'Add to Project'.

@@ -4,9 +4,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.43 2001-09-13 17:43:12 mbickel Exp $
+//     $Id: controls.h,v 1.44 2003-01-12 19:37:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2001/09/13 17:43:12  mbickel
+//      Many, many bug fixes
+//
 //     Revision 1.42  2001/07/18 16:05:47  mbickel
 //      Fixed: infinitive loop in displaying "player exterminated" msg
 //      Fixed: construction of units by units: wrong player
@@ -100,8 +103,8 @@
 #endif
 
 
-#ifndef controls_h
-#define controls_h
+#ifndef controlsH
+#define controlsH
 #include "gui.h"
 #include "typen.h"
 #include "mousecontrol.h"
@@ -249,29 +252,8 @@ extern void continuenetworkgame ( void );
 //! Calculates the resources that are needed to research the given number of research
 extern void returnresourcenuseforresearch ( const pbuilding bld, int research, int* energy, int* material );
 
-//! Calculates the resources that are needed run a power plant
-extern void returnresourcenuseforpowerplant (  const pbuilding bld, int prod, Resources *usage, int percentagee_based_on_maxplus );
-
 //! dissects a vehicle; if you haven't researched this vehicle type you will get some research points for it.
 extern void dissectvehicle ( pvehicle eht );
-
-
-
-//! calculates some mining statistics for a mining station
-class tgetmininginfo : public SearchFields {
-          protected:
-             void testfield ( const MapCoordinate& mc );
-          public:
-             struct tmininginfo {
-                      Resources avail[maxminingrange+2];
-                      int efficiency[maxminingrange+2];
-                      Resources max[maxminingrange+2];            // the theoretical maximum of the mineral resources in the given distance
-             };                                          
-             tmininginfo* mininginfo;
-             tgetmininginfo ( pmap _gamemap );
-             void run ( const pbuilding bld );
-         };
-
 
 
 

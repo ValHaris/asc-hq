@@ -20,7 +20,7 @@
 #include "gamedlg.h"
 #include "gamemap.h"
 
-
+/*
 #ifndef sgmain
 
 Message :: Message ( pmap spfld )
@@ -43,7 +43,7 @@ Message :: Message ( const ASCString& , pmap gamemap, int rec, int from )
 }
 
 #else
-
+*/
 Message :: Message ( pmap spfld  )
 {
    from = 1 << spfld->actplayer;
@@ -75,7 +75,7 @@ Message :: Message ( const ASCString& msg, pmap gamemap, int rec, int _from )  /
 }
 
 
-#endif
+// #endif
 
 
 

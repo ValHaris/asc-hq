@@ -28,7 +28,8 @@
       ..\..\..\libs\triangul\win32\triangulation.lib 
       ..\..\..\libs\jpeg-6b\libjpeg.lib 
       ..\..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB 
-      ..\..\..\..\..\SDL_image\bin\SDL_image.lib ..\..\..\libs\sdlmm\SDLmm.lib"/>
+      ..\..\..\..\..\SDL_image\bin\SDL_image.lib ..\..\..\libs\sdlmm\SDLmm.lib 
+      ..\..\..\ai\ai.lib"/>
     <LIBRARIES value="vcl.lib rtl.lib"/>
     <SPARELIBS value="rtl.lib vcl.lib"/>
     <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi bcbsmp.bpi dclocx.bpi"/>
@@ -132,6 +133,7 @@
       <FILE FILENAME="..\..\..\messages.cpp" FORMNAME="" UNITNAME="messages" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\paradialog.cpp" FORMNAME="" UNITNAME="paradialog" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\textfile_evaluation.cpp" FORMNAME="" UNITNAME="textfile_evaluation" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\ai\ai.lib" FORMNAME="" UNITNAME="ai.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
@@ -237,7 +239,7 @@ Item1=C:\Programme\ascsrc\games\asc\source\win32\borland
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=
+RunParams=-l D:\asc-games\thali6b.sav
 Launcher=
 UseLauncher=0
 DebugCWD=

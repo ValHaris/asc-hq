@@ -105,8 +105,14 @@ bool    BuildingType :: vehicleloadable ( pvehicletype fzt ) const
    if ( special & cgproduceAllUnitsB )
       return true;
 
-   if (    (loadcapacity >= fzt->maxsize()  &&  ((unitheightreq & fzt->height) || !unitheightreq) && !(unitheight_forbidden & fzt->height)  && (loadcapability & fzt->height))
-        || ( fzt->functions & cf_trooper ) )
+   if ( fzt->functions & cf_trooper )
+      return true;
+
+   if (  loadcapacity >= fzt->maxsize()
+         && ((unitheightreq & fzt->height) || !unitheightreq)
+         && !(unitheight_forbidden & fzt->height)
+         && (loadcapability & fzt->height)
+         && (vehicleCategoriesLoadable & (1<<fzt->movemalustyp)) )
         return true;
 
    return false;

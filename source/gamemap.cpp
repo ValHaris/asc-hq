@@ -724,7 +724,10 @@ bool tmap :: isResourceGlobal ( int resource )
       if ( resource == 1 ) // material
          return false;
       else
-         return true;
+         if ( resource == 2 )
+            return getgameparameter(cgp_globalfuel);
+         else
+            return true;
    } else {
       /*
       if ( resource == 0 )
@@ -2077,8 +2080,7 @@ const int gameparameterdefault [ gameparameternum ] = { 1,
                                                         0,
                                                         40,
                                                         100,
-                                                        10,
-                                                        0 };
+                                                        10 };
 
 
 const bool gameParameterChangeableByEvent [ gameparameternum ] = { true,
@@ -2104,7 +2106,6 @@ const bool gameParameterChangeableByEvent [ gameparameternum ] = { true,
                                                                  true,
                                                                  true,
                                                                  false,
-                                                                 true,
                                                                  true };
 
 const int gameParameterLowerLimit [ gameparameternum ] = { 1,
@@ -2127,7 +2128,6 @@ const int gameParameterLowerLimit [ gameparameternum ] = { 1,
                                                            0,
                                                            0,
                                                            1,
-                                                           0,
                                                            0,
                                                            0,
                                                            0,
@@ -2156,7 +2156,6 @@ const int gameParameterUpperLimit [ gameparameternum ] = { maxint,
                                                            1000,
                                                            100,
                                                            1,
-                                                           1,
                                                            1 };
 
 const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
@@ -2175,13 +2174,12 @@ const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "building armor factor (percent)",
                                                       "max building damage repair / turn",
                                                       "building repair cost increase (percent)",
-                                                      "fuel globally available (currently not working)",
+                                                      "fuel globally available (BI Resource Mode)",
                                                       "maximum experience that can be gained by training",
                                                       "initial map visibility",
                                                       "attack power (EXPERIMENTAL!)",
                                                       "jamming amplifier (EXPERIMENTAL!)",
                                                       "jamming slope (EXPERIMENTAL!)",
                                                       "The Supervisor may save a game as new map (spying!!!)",
-                                                      "objects can be destroyed by terrain",
-                                                      "energy globally available (currently not working)" };
+                                                      "objects can be destroyed by terrain" };
 

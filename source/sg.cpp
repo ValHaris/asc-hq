@@ -886,10 +886,8 @@ void loadStartupMap ( const char *gameToLoad=NULL )
       try {
          if ( patimat ( tournamentextension, gameToLoad )) {
 
-            if( validateemlfile( gameToLoad ) == 0 ) {
-               fprintf( stderr, "Email gamefile %s is invalid. Aborting.\n", gameToLoad );
-               exit(-1);
-            }
+            if( validateemlfile( gameToLoad ) == 0 )
+               fatalError( "Email gamefile %s is invalid. Aborting.", gameToLoad );
 
             try {
                tnfilestream gamefile ( gameToLoad, tnstream::reading );
@@ -898,39 +896,32 @@ void loadStartupMap ( const char *gameToLoad=NULL )
                if ( actmap->network )
                   setallnetworkpointers ( actmap->network );
             } catch ( tfileerror ) {
-               fprintf ( stderr, "%s is not a legal email game. \n", gameToLoad );
-               exit(-1);
+               fatalError ( "%s is not a legal email game.", gameToLoad );
             }
          } else if( patimat ( savegameextension, gameToLoad )) {
-            if( validatesavfile( gameToLoad ) == 0 ) {
-               fprintf( stderr, "The savegame %s is invalid. Aborting.\n", gameToLoad );
-               exit( -1 );
-            }
+            if( validatesavfile( gameToLoad ) == 0 )
+               fatalError ( "The savegame %s is invalid. Aborting.", gameToLoad );
+
             try {
                loadgame( gameToLoad );
             } catch ( tfileerror ) {
-               fprintf ( stderr, "%s is not a legal savegame. \n", gameToLoad );
-               exit(-1);
+               fatalError ( "%s is not a legal savegame. ", gameToLoad );
             }
 
          } else if( patimat ( mapextension, gameToLoad )) {
-            if( validatemapfile( gameToLoad ) == 0 ) {
-               fprintf( stderr, "Mapfile %s is invalid. Aborting.\n", gameToLoad );
-               exit(-1);
-            }
+            if( validatemapfile( gameToLoad ) == 0 )
+               fatalError ( "Mapfile %s is invalid. Aborting.", gameToLoad );
 
             try {
                loadmap( gameToLoad );
                if ( actmap->network )
                   setallnetworkpointers ( actmap->network );
             } catch ( tfileerror ) {
-               fprintf ( stderr, "%s is not a legal map. \n", gameToLoad );
-               exit(-1);
+               fatalError ( "%s is not a legal map. ", gameToLoad );
             }
-         } else {
-            fprintf ( stderr, "Don't know how to handle the file %s \n", gameToLoad );
-            exit(-1);
-         }
+         } else
+            fatalError ( "Don't know how to handle the file %s ", gameToLoad );
+
       }
       catch ( InvalidID err ) {
          displaymessage( err.getMessage().c_str(), 2 );
@@ -953,7 +944,8 @@ void loadStartupMap ( const char *gameToLoad=NULL )
       s += &mapextension[1];
       */
 
-      int maploadable; {
+      int maploadable;
+      {
          tfindfile ff ( s );
          string filename = ff.getnextname();
          maploadable = validatemapfile ( filename.c_str() );

@@ -2,9 +2,16 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.89 2003-01-06 16:52:03 mbickel Exp $
+//     $Id: building.cpp,v 1.90 2003-01-12 19:37:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.89  2003/01/06 16:52:03  mbickel
+//      Fixed: units inside transports got wrong movement when moved out
+//      Fixed: wind not displayed correctly
+//      Fixed: tribute displaying wrong values
+//      Fixed: constructing units with untis consumed energy when pipeline near
+//      The movement cost for building objects is no longer terrain dependant
+//
 //     Revision 1.88  2002/12/12 20:36:05  mbickel
 //      Updated documentation
 //      Fixed: hotkey for gui icons not allways working
@@ -784,9 +791,11 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
             int materialcolor, energycolor, fuelcolor;
             int resourcecolor[3];
             void dispresources ( Resources* res, int ypos, int sign );
+            
+            GetMiningInfo::MiningInfo mininginfo;
+            bool mininginfoLoaded;
 
          public:
-            tgetmininginfo::tmininginfo* mininginfo;
             cminingstation_subwindow ( void );
             int  subwin_available ( void );
             void display ( void ) ;
@@ -794,7 +803,6 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
             void checkforkey ( tkey taste );
             void setnewextraction ( int res );
             void paintobj ( int num, int stat );
-            ~cminingstation_subwindow();
       };
       class  cmineralresources_subwindow : public cbuildingsubwindow
       {
@@ -809,7 +817,8 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
             void dispresources ( Resources* res, int ypos, int sign );
 
          public:
-            tgetmininginfo::tmininginfo* mininginfo;
+            GetMiningInfo::MiningInfo mininginfo;
+            bool mininginfoLoaded;
             cmineralresources_subwindow ( void );
             int  subwin_available ( void );
             void display ( void ) ;
@@ -817,7 +826,6 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
             void checkforkey ( tkey taste );
             void setnewextraction ( int res );
             void paintobj ( int num, int stat );
-            ~cmineralresources_subwindow();
       };
       class cammunitiontransferb_subwindow
                :	public ccontainer::cammunitiontransfer_subwindow
@@ -4745,8 +4753,8 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: displayvariables ( vo
    dispresources ( &cc_b->building->plus, 2, 1 );
 
 
-   Resources usage;
-   returnresourcenuseforpowerplant ( cc_b->building, 100,  &usage, 0 );
+   Building::MatterConverter matConv( cc_b->building );
+   Resources usage = matConv.getUsage();
 
    dispresources ( &usage, 3, 1 );
 
@@ -4906,11 +4914,10 @@ void  ccontainer_b :: cwindpowerplant_subwindow :: display ( void )
    activefontsettings.length = 53;
    activefontsettings.justify = righttext;
 
-   Resources plus;
-   cc_b->building->getresourceplus( -2, &plus, 1 );
+   Building::WindPowerplant windPowerPlant ( cc_b->building );
+   Resources plus = windPowerPlant.getPlus();
    int prod = plus.energy;
-   cc_b->building->getresourceplus( -1, &plus, 1 );
-   int storable = plus.energy;
+   int storable = cc_b->building->putResource( plus.energy, 0, 1 );
 
    showtext2c ( strrr ( prod ), subwinx1 + 117, subwiny1 + 38 );
 
@@ -4991,11 +4998,10 @@ void  ccontainer_b :: csolarpowerplant_subwindow :: display ( void )
    activefontsettings.length = 53;
    activefontsettings.justify = righttext;
 
-   Resources plus;
-   cc_b->building->getresourceplus( -2, &plus, 1 );
+   Building::SolarPowerplant solarPowerPlant ( cc_b->building );
+   Resources plus = solarPowerPlant.getPlus();
    int prod = plus.energy;
-   cc_b->building->getresourceplus( -1, &plus, 1 );
-   int storable = plus.energy;
+   int storable = cc_b->building->putResource( plus.energy, 0, 1 );
 
    showtext2c ( strrr ( prod ), subwinx1 + 117, subwiny1 + 38 );
 
@@ -5840,7 +5846,7 @@ ccontainer_b :: cminingstation_subwindow :: cminingstation_subwindow ( void )
    objcoordinates[0].x2 = subwinx1 + 344;
    objcoordinates[0].y2 = subwiny1 +  17;
    objcoordinates[0].type = 17;
-   mininginfo = NULL;
+   mininginfoLoaded = false;
 
    resourcecolor[0] = 16+4;
    resourcecolor[1] = 232;
@@ -5981,12 +5987,12 @@ void  ccontainer_b :: cminingstation_subwindow :: displayvariables ( void )
    dispresources ( &cc_b->building->maxplus, 0, 1 );
    dispresources ( &cc_b->building->maxplus, 1, -1 );
 
-   Resources plus;
-   cc_b->building->getresourceplus ( 16, &plus, 1 );
+   Building::MiningStation miningStation ( cc_b->building, true );
+
+   Resources plus = miningStation.getPlus();
    dispresources ( &plus, 2, 1 );
 
-   Resources usage;
-   cc_b->building->getresourceusage ( &usage );
+   Resources usage = miningStation.getUsage();
    dispresources ( &usage, 3, 1 );
 
    Resources effic;
@@ -6138,14 +6144,6 @@ void  ccontainer_b :: cminingstation_subwindow :: checkforkey ( tkey taste )
 
 }
 
-ccontainer_b :: cminingstation_subwindow :: ~cminingstation_subwindow ()
-{
-   if ( mininginfo ) {
-      delete mininginfo;
-      mininginfo = NULL;
-   }
-}
-
 
 //............................................................................................
 
@@ -6161,7 +6159,7 @@ ccontainer_b :: cmineralresources_subwindow :: cmineralresources_subwindow ( voi
    objcoordinates[0].x2 = subwinx1 + 344;
    objcoordinates[0].y2 = subwiny1 +  17;
    objcoordinates[0].type = 17;
-   mininginfo = NULL;
+   mininginfoLoaded = false;
 
    resourcecolor[0] = 16+4;
    resourcecolor[1] = 232;
@@ -6242,23 +6240,22 @@ void  ccontainer_b :: cmineralresources_subwindow :: display ( void )
    gy2 = subwiny1 + 104;
 
 
-   if ( !mininginfo ) {
+   if ( !mininginfoLoaded ) {
 
-      tgetmininginfo gmi ( actmap );
-
+      GetMiningInfo gmi ( actmap );
       gmi.run ( cc_b->building );
 
-      mininginfo = gmi.mininginfo;
+      mininginfo = gmi.getMiningInfo();
    }
 
 
-   int max = mininginfo->efficiency[0] * 11 / 10;
+   int max = mininginfo.efficiency[0] * 11 / 10;
    int i;
    for ( i = 0; i < maxminingrange; i++ ) {
-      int y = gy2 - ( gy2 - gy1 ) * mininginfo->efficiency[i] / max;
+      int y = gy2 - ( gy2 - gy1 ) * mininginfo.efficiency[i] / max;
       int xd = (gx2-gx1) / maxminingrange ;
-      bar ( gx1 + i * xd , y, gx1 + i * xd + xd/2, gy2, materialcolor ); // 160 + 15 * mininginfo->avail[ i ].resource[ 1 ] / mininginfo->max[ i ].resource[ 1 ] );
-      bar ( gx1 + i * xd + xd/2, y, gx1 + (i+1) * xd, gy2, fuelcolor ); // 160 + 15 * mininginfo->avail[ i ].resource( 2 ) / mininginfo->max[ i ].resource( 2 ) );
+      bar ( gx1 + i * xd , y, gx1 + i * xd + xd/2, gy2, materialcolor ); // 160 + 15 * mininginfo.avail[ i ].resource[ 1 ] / mininginfo.max[ i ].resource[ 1 ] );
+      bar ( gx1 + i * xd + xd/2, y, gx1 + (i+1) * xd, gy2, fuelcolor ); // 160 + 15 * mininginfo.avail[ i ].resource( 2 ) / mininginfo.max[ i ].resource( 2 ) );
    }
 
 
@@ -6271,35 +6268,35 @@ void  ccontainer_b :: cmineralresources_subwindow :: display ( void )
 
    max = 0;
    for ( i = 0; i < maxminingrange; i++ )
-      if ( mininginfo->max[ i ].resource( 1 ) > max )
-         max = mininginfo->max[ i ].resource( 1 );
+      if ( mininginfo.max[ i ].resource( 1 ) > max )
+         max = mininginfo.max[ i ].resource( 1 );
 
    max = max * 17 / 16;
 
    int maxa = 0;
    for ( i = 0; i < maxminingrange; i++ )
-      if ( mininginfo->avail[ i ].resource( 1 ) > maxa )
-         maxa = mininginfo->avail[ i ].resource( 1 );
+      if ( mininginfo.avail[ i ].resource( 1 ) > maxa )
+         maxa = mininginfo.avail[ i ].resource( 1 );
 
    max = max * 17 / 16;
    maxa = maxa * 17 / 16;
 
    for ( i = 0; i < maxminingrange; i++ ) {
-      int y1 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource( 1 ) / mininginfo->max[ i ].resource( 1 );
-      int y2 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource( 2 ) / mininginfo->max[ i ].resource( 2 );
+      int y1 = hy2 - ( hy2 - hy1 ) * mininginfo.avail[ i ].resource( 1 ) / mininginfo.max[ i ].resource( 1 );
+      int y2 = hy2 - ( hy2 - hy1 ) * mininginfo.avail[ i ].resource( 2 ) / mininginfo.max[ i ].resource( 2 );
 
       int xd = (hx2-hx1) / maxminingrange ;
-      bar ( hx1 + i * xd , y1, hx1 + i * xd + xd/2, hy2, materialcolor ); // 160 + 15 * mininginfo->avail[ i ].resource( 1 ) / mininginfo->max[ i ].resource( 1 ) );
-      bar ( hx1 + i * xd + xd/2, y2, hx1 + (i+1) * xd, hy2, fuelcolor ); // 160 + 15 * mininginfo->avail[ i ].resource( 2 ) / mininginfo->max[ i ].resource( 2 ) );
+      bar ( hx1 + i * xd , y1, hx1 + i * xd + xd/2, hy2, materialcolor ); // 160 + 15 * mininginfo.avail[ i ].resource( 1 ) / mininginfo.max[ i ].resource( 1 ) );
+      bar ( hx1 + i * xd + xd/2, y2, hx1 + (i+1) * xd, hy2, fuelcolor ); // 160 + 15 * mininginfo.avail[ i ].resource( 2 ) / mininginfo.max[ i ].resource( 2 ) );
 
       if ( maxa ) {
-         y1 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource( 1 ) / maxa;
-         y2 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource( 2 ) / maxa;
+         y1 = hy2 - ( hy2 - hy1 ) * mininginfo.avail[ i ].resource( 1 ) / maxa;
+         y2 = hy2 - ( hy2 - hy1 ) * mininginfo.avail[ i ].resource( 2 ) / maxa;
 
-         // int ya = hy2 - ( hy2 - hy1 ) * mininginfo->max[ i ].resource( 2 ) / maxa;
+         // int ya = hy2 - ( hy2 - hy1 ) * mininginfo.max[ i ].resource( 2 ) / maxa;
 
-         line ( hx1 + i * xd , y1, hx1 + i * xd + xd/2, y1, materialcolor-2 ); // 160 + 15 * mininginfo->avail[ i ].resource( 1 ) / mininginfo->max[ i ].resource( 1 ) );
-         line ( hx1 + i * xd + xd/2, y2, hx1 + (i+1) * xd, y2, fuelcolor-2 ); // 160 + 15 * mininginfo->avail[ i ].resource( 2 ) / mininginfo->max[ i ].resource( 2 ) );
+         line ( hx1 + i * xd , y1, hx1 + i * xd + xd/2, y1, materialcolor-2 ); // 160 + 15 * mininginfo.avail[ i ].resource( 1 ) / mininginfo.max[ i ].resource( 1 ) );
+         line ( hx1 + i * xd + xd/2, y2, hx1 + (i+1) * xd, y2, fuelcolor-2 ); // 160 + 15 * mininginfo.avail[ i ].resource( 2 ) / mininginfo.max[ i ].resource( 2 ) );
       }
       // line ( hx1 + i * xd , ya, hx1 + (i+1) * xd, ya, 16 + 8 * 16 + 4 ); // the maximum absolute amount
 
@@ -6354,7 +6351,7 @@ void  ccontainer_b :: cmineralresources_subwindow :: displayvariables ( void )
 
       int dist = 100;
       for (i = maxminingrange; i >= 0; i-- )
-         if ( mininginfo->avail[ i ].resource[ mode ] )
+         if ( mininginfo.avail[ i ].resource[ mode ] )
             dist = i;
 
       strcpy ( c, strrr ( cc_b->building->lastmineddist ));
@@ -6376,7 +6373,7 @@ void  ccontainer_b :: cmineralresources_subwindow :: displayvariables ( void )
    /*
       int t = 0;
       if ( i )
-          t = mininginfo->avail [ dist ].resource[ mode ] / i;         // in wieviel Runden wird n„chste Entfernung erreicht
+          t = mininginfo.avail [ dist ].resource[ mode ] / i;         // in wieviel Runden wird n„chste Entfernung erreicht
 
       showtext2c ( strrr ( t ),                                        subwinx1 + 63, subwiny1 + 61 );
 
@@ -6465,15 +6462,6 @@ void  ccontainer_b :: cmineralresources_subwindow :: paintobj ( int num, int sta
 
 void  ccontainer_b :: cmineralresources_subwindow :: checkforkey ( tkey taste )
 {}
-
-
-ccontainer_b :: cmineralresources_subwindow :: ~cmineralresources_subwindow ()
-{
-   if ( mininginfo ) {
-      delete mininginfo;
-      mininginfo = NULL;
-   }
-}
 
 
 // GUI

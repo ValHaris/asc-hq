@@ -3,9 +3,16 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.148 2003-01-06 16:52:03 mbickel Exp $
+//     $Id: controls.cpp,v 1.149 2003-01-12 19:37:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.148  2003/01/06 16:52:03  mbickel
+//      Fixed: units inside transports got wrong movement when moved out
+//      Fixed: wind not displayed correctly
+//      Fixed: tribute displaying wrong values
+//      Fixed: constructing units with untis consumed energy when pipeline near
+//      The movement cost for building objects is no longer terrain dependant
+//
 //     Revision 1.147  2002/12/15 23:54:46  mbickel
 //      New: system sends mail if units die
 //      Fixed: orbiting and submerged units could crash on water due to wind
@@ -481,7 +488,7 @@ void         tsearchputbuildingfields::testfield(const MapCoordinate& mc)
                   if (fld->vehicle != NULL)
                      b = false;
                   if ( bld->buildingheight <= chfahrend )
-                     if ( bld->terrainaccess.accessible ( fld->typ->art ) <= 0 )
+                     if ( bld->terrainaccess.accessible ( fld->bdt ) <= 0 )
                         b = false;
                   if (fld->building != NULL) {
                      if (fld->building->typ != bld)
@@ -511,7 +518,6 @@ void         tsearchputbuildingfields::testfield(const MapCoordinate& mc)
 void         putbuildinglevel1(void)
 {
 
-   tsearchputbuildingfields   spbf ( actmap );
    tkey                       taste;
    pvehicle                   eht;
 
@@ -555,8 +561,10 @@ void         putbuildinglevel1(void)
 
    actgui->painticons();
    
-   if ( selectbuildinggui.selectedbuilding )
+   if ( selectbuildinggui.selectedbuilding ) {
+      tsearchputbuildingfields   spbf ( actmap );
       spbf.initputbuilding( getxpos(), getypos(), selectbuildinggui.selectedbuilding );
+   }
 
    actgui->painticons();
 
@@ -1939,24 +1947,6 @@ void    tprotfzt::evalbuffer( void )
 
 
 
-
-void returnresourcenuseforpowerplant (  const pbuilding bld, int prod, Resources *usage, int percentagee_based_on_maxplus )
-{
-   Resources res;
-   if ( percentagee_based_on_maxplus )
-      res = bld->maxplus;
-   else
-      res = bld->plus;
-
-   for ( int r = 0; r < 3; r++ )
-      if ( res.resource(r) > 0 )
-         usage->resource(r) = 0;
-      else
-         usage->resource(r) = -res.resource(r) * prod / 100;
-}
-
-
-
 void Building :: execnetcontrol ( void )
 {
    for ( int i = 0; i < 3; i++ )
@@ -2000,460 +1990,6 @@ int  Building :: getResource ( int      need,    int resourcetype, int queryonly
 {
    GetResource gr ( scope );
    return gr.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, color/8, scope );
-}
-
-
-
-int  Building :: getresourceplus( int mode, Resources* gplus, int queryonly )
-{
-   int did_something = 0;
-
-   if ( !queryonly && (mode & 1))
-      mode -= 1;
-
-   if ( actmap->_resourcemode != 1 ) {
-      *gplus = Resources(0,0,0);
-
-      if ( (typ->special & cgwindkraftwerkb ) && ( mode & 2 ) )
-         for ( int r = 0; r < 3; r++ ) {
-            int eplus =  maxplus.resource(r) * actmap->weather.wind[0].speed / 255;
-            if ( ! (mode & 1 )) {
-               int putable = putResource ( eplus + gplus->resource(r)*queryonly, r, 1 ) - gplus->resource(r)*queryonly;
-               if ( putable < eplus )
-                  eplus = putable;
-            }
-            gplus->resource(r) += eplus;
-            if ( !queryonly && !work.wind_done ) {
-               putResource ( eplus, r, 0 );
-               work.wind_done = 1;
-               did_something++;
-            }
-         }
-
-
-      if ( (typ->special & cgsolarkraftwerkb) && ( mode & 4 ) ) {
-         int sum = 0;
-         int num = 0;
-         for ( int x = 0; x < 4; x++ )
-            for ( int y = 0; y < 6; y++)
-               if ( getpicture ( BuildingType::LocalCoordinate(x, y) ) ) {
-                  pfield fld = getField ( BuildingType::LocalCoordinate(x, y) );
-                  int weather = 0;
-                  while ( fld->typ != fld->typ->terraintype->weather[weather] )
-                     weather++;
-
-                  sum += csolarkraftwerkleistung[weather];
-                  num ++;
-               }
-
-         Resources rplus;
-         for ( int r = 0; r < 3; r++ ) {
-            rplus.resource(r) = maxplus.resource(r) * sum / ( num * 1024 );
-            if ( ! (mode & 1 )) {
-               int putable = putResource ( rplus.resource(r) + gplus->resource(r)*queryonly, r, 1 ) - gplus->resource(r)*queryonly;
-               if ( putable < rplus.resource(r) )
-                  rplus.resource(r) = putable;
-            }
-            gplus->resource(r) += rplus.resource(r);
-         }
-
-         if ( !queryonly && !work.solar_done ) {
-            for ( int s = 0; s < 3; s++ )
-               putResource ( rplus.resource(s), s, 0 );
-            work.solar_done = 1;
-            did_something++;
-         }
-      }
-
-
-
-      if ( (typ->special & cgconventionelpowerplantb) && ( mode & 8 ) ) {
-
-         int perc = 100;
-         Resources toproduce;
-         if ( !queryonly )
-            toproduce = work.resource_production.toproduce;
-         else
-            toproduce = plus;
-
-         int usageNum = 0;
-         for ( int r = 0; r < 3; r++ )
-            if ( plus.resource(r) < 0 )
-               ++usageNum;
-
-         if ( usageNum > 0 ) {
-            // if the resource generation requires other resources, don't waste anything
-            // by producing more than storage capacity available
-
-            for ( int r = 0; r < 3; r++ )
-               if ( plus.resource(r) > 0 ) {
-                  int p = plus.resource(r);
-                  if ( !(mode & 1))
-                     p = putResource ( plus.resource(r) + p, 0, 1 );
-
-                  if ( perc > 100 * p / maxplus.resource(r) )
-                     perc = 100 * p / maxplus.resource(r) ;
-               }
-         }
-
-         Resources usage;
-         returnresourcenuseforpowerplant ( this, perc, &usage, 0 );
-         int ena ;
-         int maa ;
-         int fua ;
-         if ( !queryonly ) {
-            ena = getResource ( usage.energy  , 0, 1 );
-            maa = getResource ( usage.material, 1, 1 );
-            fua = getResource ( usage.fuel    , 2, 1 );
-         } else {
-            ena = usage.energy;
-            maa = usage.material;
-            fua = usage.fuel;
-         }
-
-
-         // This calculation is done iteratively because the resourcenusage may be nonlinear
-         if ( maa < usage.material ||  fua < usage.fuel  || ena < usage.energy  ) {
-            int diff = perc / 2;
-            while ( maa < usage.material ||  fua < usage.fuel  || ena < usage.energy  || diff > 1) {
-               if ( maa < usage.material ||  fua < usage.fuel  || ena < usage.energy )
-                  perc -= diff;
-               else
-                  perc += diff;
-
-               if ( diff > 1 )
-                  diff /=2;
-               else
-                  diff = 1;
-
-               returnresourcenuseforpowerplant ( this, perc, &usage, 0 );
-            }
-         }
-
-         if ( maa < usage.material ||  fua < usage.fuel  || ena < usage.energy  )
-            displaymessage( "controls : int tbuilding :: getenergyplus( void ) : inconsistency in getting material or fuel for energyproduction", 2 );
-
-         if ( !queryonly ) {
-            work.resource_production.did_something_lastpass = 0;
-            work.resource_production.finished = 1;
-            for ( int r = 0; r < 3; r++ ) {
-               getResource ( usage.resource(r)  , r, 0 );
-               putResource ( toproduce.resource(r) * perc / 100, r, 0 );
-               work.resource_production.toproduce.resource(r) -= toproduce.resource(r) * perc / 100;
-               if ( toproduce.resource(r) * perc / 100  > 0 ) {
-                  work.resource_production.did_something_lastpass = 1;
-                  work.resource_production.did_something_atall = 1;
-                  did_something++;
-               }
-
-               if ( work.resource_production.toproduce.resource(r) > 0 )
-                  work.resource_production.finished = 0;
-            }
-         }
-
-
-         for ( int s = 0; s < 3; s++ )
-            if ( toproduce.resource(s) * perc / 100  > 0 )
-               gplus->resource(s) += toproduce.resource(s) * perc / 100;
-      }
-
-      if ( (typ->special & cgminingstationb) && ( mode & 16 ) )
-         if ( queryonly || work.mining.finished < 3 ) {
-            int mp = 0;
-            int fp = 0;
-            if ( queryonly )
-               initwork();
-            mp = processmining ( 1, !queryonly );
-            fp = processmining ( 2, !queryonly );
-            gplus->material += mp;
-            gplus->fuel     += fp;
-            if ( mp || fp )
-               did_something++;
-         }
-
-
-   } else {
-      *gplus = bi_resourceplus;
-      if ( !queryonly && !work.bimode_done ) {
-         work.bimode_done = 1;
-         for ( int r = 0; r < 3; r++ ) {
-            putResource ( bi_resourceplus.resource(r), r, 0 );
-            if ( bi_resourceplus.resource(r) > 0 )
-               did_something++;
-         }
-      }
-   }
-   return did_something;
-}
-
-
-
-int  getminingstationeficency ( int dist )
-{
-  // f ( x ) = a / ( b * ( x + d ) ) - c
-
-double a,b,c,d;
-
-a          =     10426.400 ;
-b          =     1.0710969 ;
-c          =     568.88887 ;
-d          =     6.1111109 ;
-
-   double f = a / ( b * (dist + d)) - c;
-  return (int)f;
-}
-
-
-
-tgetmininginfo :: tgetmininginfo ( pmap _gamemap ) : SearchFields ( _gamemap )
-{
-   mininginfo = new tmininginfo;
-   memset ( mininginfo, 0, sizeof ( *mininginfo ));
-}
-
-void tgetmininginfo :: testfield ( const MapCoordinate& mc )
-{
-   pfield fld = gamemap->getField ( mc );
-   if ( mininginfo->efficiency[ dist ] == 0 )
-      mininginfo->efficiency[ dist ] = getminingstationeficency ( dist );
-
-   mininginfo->avail[dist].material += fld->material * resource_material_factor;
-   mininginfo->avail[dist].fuel     += fld->fuel     * resource_fuel_factor;
-   mininginfo->max[dist].material   += 255 * resource_material_factor;
-   mininginfo->max[dist].fuel       += 255 * resource_fuel_factor;
-}
-
-
-void tgetmininginfo :: run (  const pbuilding bld )
-{
-   initsearch ( bld->getEntry(), maxminingrange, 0 );
-   startsearch();
-}
-
-class tprocessminingfields : public SearchFields {
-             int maxfuel;
-             int maxmaterial;
-             int materialtoget;
-             int fueltoget;
-             int worktodo;
-             int materialgot;
-             int fuelgot;
-             int range;
-             int abbuchen;
-             int color;
-
-          public:
-             void testfield ( const MapCoordinate& mc );
-             int  setup ( pbuilding bld, int& mm, int cm, int& mf, int cf, int abbuch, int resource );  // mm: maxmaterial, cm: capacity material
-             tprocessminingfields ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
-          };
-
-void tprocessminingfields :: testfield ( const MapCoordinate& mc )
-{
-   if ( worktodo == 0    ||  ( materialgot >= materialtoget && fuelgot >= fueltoget ) )
-      cancelSearch = true;
-   else {
-      pfield fld = gamemap->getField ( mc );
-      int efz = getminingstationeficency ( dist /* beeline ( startx, starty, xp, yp ) */ );
-
-
-      if ( materialtoget > materialgot ) {
-         range = dist;
-         int matavail = fld->material * resource_material_factor;
-         int wtg = (materialtoget - materialgot) * 1024 / efz;
-         if ( wtg > worktodo )
-            wtg = worktodo;
-         int mtg = (wtg * efz + 1023 ) / 1024;
-         if ( mtg > matavail )
-            mtg = matavail;
-
-         materialgot += mtg;
-         worktodo -= (mtg * 1024 + efz-1) / efz;
-         matavail -= mtg;
-         if ( matavail < 0 )
-            matavail = 0;
-         if ( worktodo < 0 )
-            worktodo = 0;
-         if( materialgot > materialtoget )
-            materialgot = materialtoget;
-
-         if ( abbuchen )
-            fld->material =  matavail / resource_material_factor;
-
-      }
-
-      if ( fueltoget > fuelgot ) {
-         range = dist;
-         int fuelavail = fld->fuel * resource_fuel_factor;
-         int wtg = (fueltoget - fuelgot) * 1024 / efz;
-         if ( wtg > worktodo )
-            wtg = worktodo;
-         int ftg = (wtg * efz + 1023 ) / 1024;
-         if ( ftg > fuelavail )
-            ftg = fuelavail;
-
-         fuelgot += ftg;
-         worktodo -= (ftg * 1024 + efz - 1) / efz;
-         fuelavail -= ftg;
-         if ( fuelavail < 0 )
-            fuelavail = 0;
-         if ( worktodo < 0 )
-            worktodo = 0;
-         if( fuelgot > fueltoget )
-            fuelgot = fueltoget;
-
-         if ( abbuchen )
-            fld->fuel =  fuelavail / resource_fuel_factor;
-      }
-
-      if ( abbuchen ) {
-         if ( !fld->resourceview )
-            fld->resourceview = new tfield::Resourceview;
-         fld->resourceview->visible |= 1 << color;
-         fld->resourceview->fuelvisible[color] = fld->fuel;
-         fld->resourceview->materialvisible[color] = fld->material;
-      }
-
-
-   }
-}
-
-
-int   tprocessminingfields :: setup ( pbuilding bld, int& mm, int cm, int& mf, int cf, int abbuch, int res )  // mm: maxmaterial, cm: capacity material
-{
-   if ( (bld->work.mining.finished & res) == res ) {
-      mm =0;
-      mf =0;
-      return 0;
-   }
-   // int oldmm = mm;
-   // int oldmf = mf;
-
-   color = bld->color/8;
-   abbuchen = abbuch;
-   range = 0;
-
-   maxmaterial = cm;
-   maxfuel = cf;
-
-   if ( bld->typ->efficiencymaterial )
-      materialtoget = maxmaterial * 1024 / bld->typ->efficiencymaterial ;
-   else
-      materialtoget = 0;
-
-   if ( bld->typ->efficiencyfuel )
-      fueltoget     = maxfuel     * 1024 / bld->typ->efficiencyfuel ;
-   else
-      fueltoget = 0;
-
-   worktodo = 0;
-   if ( bld->typ->efficiencymaterial )
-      worktodo += mm * 1024 / bld->typ->efficiencymaterial;
-   if ( bld->typ->efficiencyfuel )
-      worktodo += mf * 1024 / bld->typ->efficiencyfuel;
-
-
-   if ( !abbuchen ) {
-      for ( int r = 0; r < 3; r++ )
-         if ( bld->plus.resource(r) < 0 )
-            bld->work.mining.touse.resource(r) = -bld->plus.resource(r);
-         else
-            bld->work.mining.touse.resource(r) = 0;
-   }
-
-   int perc = 1000;
-   int resourcesrequired = 0;
-   if ( abbuch )
-      for ( int r = 0; r < 3; r++ )
-         if ( bld->work.mining.touse.resource(r) > 0 ) {
-            resourcesrequired = 1;
-            int g = bld->getResource ( bld->work.mining.touse.resource(r), r, 1 );
-            if ( g * 1000 / (-bld->plus.resource(r)) < perc )
-               perc = g * 1000 / (-bld->plus.resource(r));
-         }
-
-   if ( abbuch )
-      if ( perc ) {
-          bld->work.mining.did_something_atall = 1;
-          bld->work.mining.did_something_lastpass = 1;
-      } else
-          bld->work.mining.did_something_lastpass = 0;
-
-
-   int orgworktodo = worktodo;
-   worktodo = worktodo * perc/1000;
-   int workbeforestart = worktodo;
-
-   materialgot = 0;
-   fuelgot = 0;
-
-   initsearch( bld->getEntry(), 0, maxminingrange );
-   startsearch();
-
-   mm = materialgot * bld->typ->efficiencymaterial / 1024;
-   mf = fuelgot     * bld->typ->efficiencyfuel     / 1024;
-
-   if ( abbuch && orgworktodo ) {
-      int perc = 1000 * ( workbeforestart - worktodo ) / orgworktodo;
-      for ( int r = 0; r < 3; r++ )
-         if ( bld->plus.resource(r) < 0 ) {
-            int g = bld->getResource ( -bld->plus.resource(r) * perc / 1000, r, 0 );
-            bld->work.mining.touse.resource(r) -= g;
-         }
-      if ( !resourcesrequired || perc == 1000 )
-            bld->work.mining.finished |= res;
-
-
-   }
-   return range;
-}
-
-int  Building :: processmining ( int res, int abbuchen )
-{
-
-   int maxfuel = plus.fuel;
-   int maxmaterial = plus.material;
-  
-   int capfuel = 0;
-   int capmaterial = 0;
-
-   if ( abbuchen ) {
-      if ( res == 1 ) 
-         capmaterial = putResource ( plus.material, 1, 1 );
-      else 
-         capfuel = putResource ( plus.fuel, 2, 1 );
-   } else {
-      capmaterial = plus.material;
-      capfuel = plus.fuel;
-   }
-
-   tprocessminingfields pmf ( actmap );
-
-
-   lastmineddist = pmf.setup ( this, maxmaterial, capmaterial, maxfuel, capfuel, abbuchen, res );
-
-   if ( abbuchen ) {
-      putResource ( maxmaterial, 1 , 0 );
-      putResource ( maxfuel,     2 , 0 );
-   }
-   if ( res==1 )
-      return maxmaterial;
-   else
-      return maxfuel;
-
-}
-
-void Building :: getresourceusage ( Resources* usage )
-{
-   returnresourcenuseforpowerplant ( this, 100, usage, 0 );
-   if ( typ->special & cgresearchb ) {
-      int material;
-      int energy;
-      returnresourcenuseforresearch ( this, researchpoints, &energy, &material );
-      usage->material += material;
-      usage->energy   += energy;
-      usage->fuel  = 0;
-   }
 }
 
 
@@ -2513,7 +2049,7 @@ void doresearch ( int i )
       if ( ena < energy  ||  maa < material ) {
          int diff = bld->researchpoints / 2;
          while ( ena < energy  ||  maa < material  || diff > 1) {
-            if ( ena < energy  ||  maa < material ) 
+            if ( ena < energy  ||  maa < material )
                res -= diff;
             else
                res += diff;
@@ -2558,13 +2094,8 @@ void doresearch ( int i )
 
 
 }
-/*
-int Building :: getmininginfo ( int res )
-{
-   return processmining ( res, 0 );
-}
-*/
 
+/*
 void Building :: initwork ( void )
 {
    repairedThisTurn = 0;
@@ -2585,11 +2116,11 @@ void Building :: initwork ( void )
    work.resource_production.did_something_atall   = 0;
    work.resource_production.did_something_lastpass   = 0;
    work.resource_production.toproduce = nul;
-  /*
-   work.research.finished        = 1;
-   work.research.did_something   = 0;
-   work.research.toresearch = 0;
-  */
+
+   //work.research.finished        = 1;
+   //work.research.did_something   = 0;
+   //work.research.toresearch = 0;
+
    work.wind_done = 1;
    work.solar_done = 1;
    work.bimode_done = 1;
@@ -2597,10 +2128,10 @@ void Building :: initwork ( void )
 
    if ( getCompletion() == typ->construction_steps - 1 ) {
       if ( actmap->_resourcemode == 0 ) {
-         if ( typ->special & cgwindkraftwerkb ) 
+         if ( typ->special & cgwindkraftwerkb )
             work.wind_done = 0;
 
-         if ( typ->special & cgsolarkraftwerkb ) 
+         if ( typ->special & cgsolarkraftwerkb )
             work.solar_done = 0;
 
          if ( typ->special & cgminingstationb ) {
@@ -2623,33 +2154,15 @@ void Building :: initwork ( void )
             work.resource_production.finished = 0;
          }
 
-      } else 
+      } else
          work.bimode_done = 0;
 
 
    }
 }
+*/
 
-int Building :: worktodo ( void )
-{
-   if ( actmap->_resourcemode == 1 ) {
-      return !work.bimode_done;
-   }
-   if ( !work.wind_done  || !work.solar_done )
-      return 1;
-
-   if ( work.mining.finished < 3 )
-      return 1;
-
-   if ( !work.resource_production.finished  )
-      return 1;
-
-   return 0;
-}
-
-
-
-
+/*
 int  Building :: processwork ( void )
 {
    if ( (getCompletion() == typ->construction_steps - 1) ) {
@@ -2677,52 +2190,44 @@ int  Building :: processwork ( void )
 
          return res;
       }
- 
+
    }
    return 0;
-}      
-
+}
+*/
 
 
 void endRound ( void )
 {
-
     actmap->actplayer = 0;
     actmap->time.set ( actmap->time.turn()+1, 0 );
     clearfahrspuren();
 
-    for (int i = 0; i <= 7; i++) 
+    for (int i = 0; i <= 7; i++)
        if (actmap->player[i].exist() ) {
 
           for ( tmap::Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); j++ )
              (*j)->endRound();
 
-          for ( tmap::Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); j++ )
-             (*j)->initwork();
+          typedef PointerList<Building::Work*> BuildingWork;
+          BuildingWork buildingWork;
 
-          int pass = 0;
-          int buildingwaiting;
-          int buildingnum;  
+          for ( tmap::Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); j++ ) {
+             Building::Work* w = (*j)->spawnWorkClasses( false );
+             if ( w )
+                buildingWork.push_back ( w );
+          }
+
+          bool didSomething;
           do {
-             pass++;
-             buildingwaiting = 0;
-             buildingnum = 0;
-
-             for ( tmap::Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); j++ ) {
-
-                if ( (*j)->worktodo() )
-                   buildingwaiting += (*j)->processwork();
-
-
-                buildingnum++;
-             }
-   
-          } while ( buildingwaiting && pass < 2*buildingnum ); /* enddo */
-
+             didSomething = false;
+             for ( BuildingWork::iterator j = buildingWork.begin(); j != buildingWork.end(); j++ ) 
+                if ( ! (*j)->finished() )
+                   if ( (*j)->run() )
+                      didSomething = true;
+          } while ( didSomething );
           doresearch( i );
-
-       } 
-
+       }
 }
 
 

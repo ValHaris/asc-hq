@@ -2,9 +2,14 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.61 2002-10-12 17:28:03 mbickel Exp $
+//     $Id: edmain.cpp,v 1.62 2003-01-12 19:37:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2002/10/12 17:28:03  mbickel
+//      Fixed "enemy unit loaded" bug.
+//      Changed map format
+//      Improved log messages
+//
 //     Revision 1.60  2002/10/09 16:58:46  mbickel
 //      Fixed to GrafikSet loading
 //      New item filter for mapeditor
@@ -825,9 +830,19 @@ int mapeditorMainThread ( void* _mapname )
    try {
       loaddata();
 
-      if ( mapname && mapname[0] )
-         loadmap ( mapname );
-      else
+      if ( mapname && mapname[0] ) {
+         if( patimat ( savegameextension, mapname )) {
+            if( validatesavfile( mapname ) == 0 )
+               fatalError ( "The savegame %s is invalid. Aborting.", mapname );
+
+            try {
+               loadgame( mapname );
+            } catch ( tfileerror ) {
+               fatalError ( "%s is not a legal savegame. ", mapname );
+            }
+         } else
+            loadmap ( mapname );
+      } else
          buildemptymap();
 
       mapSwitcher.toggle();

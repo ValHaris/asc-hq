@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.116 2002-12-23 12:50:25 mbickel Exp $
+//     $Id: typen.h,v 1.117 2003-01-12 19:37:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.116  2002/12/23 12:50:25  mbickel
+//      Fixed AI crash
+//      Minimap now working with partially defined graphic sets
+//
 //     Revision 1.115  2002/11/15 20:54:11  mbickel
 //      Added third snow-weather
 //      Added aliase in text files
@@ -371,6 +375,8 @@ class Resources {
 
 extern Resources operator- ( const Resources& res1, const Resources& res2 );
 extern Resources operator+ ( const Resources& res1, const Resources& res2 );
+extern Resources operator* ( const Resources& res1, float a );
+extern Resources operator/ ( const Resources& res1, float a );
 
 
 /** A mathematical matrix that can be multiplied with a #Resources instance (which is mathematically a vector) 

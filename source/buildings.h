@@ -26,39 +26,101 @@
  #include "containerbase.h"
  #include "ascstring.h"
  #include "buildingtype.h"
+ #include "mapalgorithms.h"
 
  #pragma pack(1)
 
 //! An actual building on the map, which references a #BuildingType
 class  Building : public ContainerBase {
-    int  processmining ( int res, int abbuchen );
-
     MapCoordinate entryPosition;
 
     char         _completion;
 
-    //! a structure to hold temporary values when the building is executing its work at the end of a turn
-    struct Work {
-       struct Mining {
-          Resources touse;
-          int did_something_atall;
-          int did_something_lastpass;
-          int finished;
-       } mining;
-       struct Resource_production {
-          Resources toproduce;
-          int did_something_atall;
-          int did_something_lastpass;
-          int finished;
-       } resource_production;
-       int wind_done;
-       int solar_done;
-       int bimode_done;
-    } work;
-
     friend class tprocessminingfields;
 
   public:
+    class Work {
+        public:
+          virtual bool finished() = 0;
+          virtual bool run() = 0;
+          virtual Resources getPlus() = 0;
+          virtual Resources getUsage() = 0;
+    };
+
+
+    class MatterConverter : public Work {
+          Building* bld;
+          int percentage;
+        public:
+          MatterConverter( Building* _bld ) ;
+          virtual bool finished();
+          virtual bool run();
+          virtual Resources getPlus();
+          virtual Resources getUsage();
+    };
+
+    /*
+    class Research : public Work {
+          Building* bld;
+          int percentage;
+        public:
+          MatterConverter( Building* _bld ) ;
+          virtual bool finished();
+          virtual bool run();
+          virtual Resources getPlus() {return Resources; };
+          virtual Resources getUsage();
+    };
+    */
+
+
+    class RegenerativePowerPlant : public Work {
+        protected:
+          Building* bld;
+          Resources toProduce;
+        public:
+          RegenerativePowerPlant( Building* _bld ) ;
+          virtual bool finished();
+          virtual bool run();
+          virtual Resources getUsage();
+    };
+
+    class WindPowerplant : public RegenerativePowerPlant {
+        public:
+          WindPowerplant( Building* _bld ) : RegenerativePowerPlant ( _bld ) { toProduce = getPlus(); };
+          virtual Resources getPlus();
+    };
+
+    class SolarPowerplant : public RegenerativePowerPlant {
+        public:
+          SolarPowerplant( Building* _bld ) : RegenerativePowerPlant ( _bld ) { toProduce = getPlus(); };
+          virtual Resources getPlus();
+    };
+
+    class BiResourceGeneration: public RegenerativePowerPlant {
+        public:
+          BiResourceGeneration ( Building* bld_ ) : RegenerativePowerPlant ( bld_ ) { toProduce = getPlus(); };
+          virtual Resources getPlus();
+    };
+
+    class MiningStation : public Work, protected SearchFields {
+         Building* bld;
+         bool justQuery;
+         bool hasRun;
+         Resources toExtract_thisTurn;
+         Resources toExtract_thisLoop;
+         Resources extracted;
+         Resources consumed;
+      protected:
+          void testfield ( const MapCoordinate& mc );
+      public:
+          MiningStation( Building* _bld, bool justQuery_ ) ;
+          virtual bool finished();
+          virtual bool run();
+          virtual Resources getPlus();
+          virtual Resources getUsage();
+    };
+
+    Work* spawnWorkClasses( bool justQuery );
     const pbuildingtype typ;
 
     pvehicletype      production[32];
@@ -107,23 +169,8 @@ class  Building : public ContainerBase {
     Building( pmap map, const MapCoordinate& entryPosition, const pbuildingtype type , int player, bool setupImages = true );
 
     int lastmineddist;
-                                      /*
-                                       int  getenergyplus( int mode );  // mode ( bitmapped ) : 1 : maximale energieproduktion ( ansonsten das, was gerade ins netz reingeht )
-                                       //                      2 : windkraftwerk
-                                       //                      4 : solarkraftwerk
-                                       //                      8 : konventionelles Kraftwerk
-                                       //                     16 : mining station
-                                       int  getmaterialplus( int mode );  // mode ( bitmapped ) : 1 : maximale energieproduktion ( ansonsten das, was gerade ins netz reingeht )
-                                       int  getfuelplus( int mode );  // mode ( bitmapped )     : 1 : maximale energieproduktion ( ansonsten das, was gerade ins netz reingeht )
-                                      */
-    int  getresourceplus ( int mode, Resources* plus, int queryonly ); // returns a positive value when the building did actually something
-    void initwork ( void );
-    int  worktodo ( void );
-    int  processwork ( void );    // returns a positive value when the building did actually something
 
-    
     bool canRepair ( void );
-
 
     static Building* newFromStream ( pmap gamemap, tnstream& stream );
     void write ( tnstream& stream, bool includeLoadedUnits = true );
@@ -142,7 +189,9 @@ class  Building : public ContainerBase {
     Resources getResource ( const Resources& res, int queryonly, int scope = 1 ) { return ContainerBase::getResource ( res, queryonly, scope ); };
 
     //! returns the resource that the building consumes for its operation.
-    void getresourceusage ( Resources* usage );
+    Resources getResourceUsage ( );
+
+    Resources getResourcePlus ( );
 
     //! checks if the given unit can enter the building. If uheight != -1 the function assumes the unit is on this level of height regardless of its actual height
     int vehicleloadable ( pvehicle unit, int uheight = -1 ) const;
@@ -220,6 +269,29 @@ class  Building : public ContainerBase {
      const ResourceMatrix& getRepairEfficiency ( void ) { return repairEfficiency; };
      virtual void postRepair ( int oldDamage ) {};
 };
+
+
+//! calculates some mining statistics for a mining station
+class GetMiningInfo : public SearchFields {
+          protected:
+             void testfield ( const MapCoordinate& mc );
+          public:
+             class MiningInfo {
+                  public:
+                     MiningInfo ( );
+                     Resources avail[maxminingrange+2];
+                     int efficiency[maxminingrange+2];
+                     Resources max[maxminingrange+2];            // the theoretical maximum of the mineral resources in the given distance
+             };
+             GetMiningInfo ( pmap _gamemap );
+             const MiningInfo& getMiningInfo() {return miningInfo; };
+             void run ( const pbuilding bld );
+          protected:
+             MiningInfo miningInfo;
+         };
+
+
+
 
  #pragma pack()
 

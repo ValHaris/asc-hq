@@ -87,7 +87,7 @@ class ContainerBase {
       int repairItem   ( ContainerBase* item, int newDamage = 0 );
 
       //! returns the player this vehicle/building belongs to
-      int getOwner() { return color >> 3; }
+      int getOwner() const { return color >> 3; };
 
 
       virtual MapCoordinate3D getPosition ( ) = 0;

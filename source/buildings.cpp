@@ -243,13 +243,7 @@ int Building :: vehicleloadable ( pvehicle vehicle, int uheight ) const
 
 
 #ifndef sgmain
-int  Building :: getresourceplus ( int mode, Resources* plus, int queryonly ) { return 0;};
 void Building :: execnetcontrol ( void ) {}
-int  Building :: processmining ( int res, int abbuchen ) { return 0; }
-void Building :: getresourceusage ( Resources* usage ) {  usage->energy = 0;
-                                                           usage->material =  0;
-                                                           usage->fuel = 0;
-                                                         }
 int Building :: putResource ( int amount, int resourcetype, int queryonly, int scope ) { return 0; };
 int Building :: getResource ( int amount, int resourcetype, int queryonly, int scope ) { return 0; };
 #endif
@@ -707,7 +701,6 @@ void Building :: readData ( tnstream& stream, int version )
     }
 }
 
-
 const ASCString& Building::getName ( ) const
 {
    if ( name.empty())
@@ -725,4 +718,501 @@ Resources Building::netResourcePlus( ) const
    }
    return res;
 }
+
+
+
+Building::Work* Building::spawnWorkClasses( bool justQuery )
+{
+   if ( actmap->_resourcemode != 1 ) {
+      if ( typ->special & cgwindkraftwerkb )
+         return new WindPowerplant ( this );
+
+      if ( typ->special & cgsolarkraftwerkb )
+         return new SolarPowerplant ( this );
+
+      if ( typ->special & cgconventionelpowerplantb )
+         return new MatterConverter ( this );
+
+      if ( typ->special & cgminingstationb )
+         return new MiningStation ( this, justQuery );
+   } else {
+      return new BiResourceGeneration ( this );
+   }
+
+   return NULL;
+}
+
+
+
+
+int  getminingstationeficency ( int dist )
+{
+  // f ( x ) = a / ( b * ( x + d ) ) - c
+
+double a,b,c,d;
+
+a          =     10426.400 ;
+b          =     1.0710969 ;
+c          =     568.88887 ;
+d          =     6.1111109 ;
+
+   double f = a / ( b * (dist + d)) - c;
+  return (int)f;
+}
+
+
+GetMiningInfo::MiningInfo::MiningInfo()
+{
+   for ( int i = 0; i < maxminingrange+2; i++ )
+      efficiency[i] = 0;
+}
+
+GetMiningInfo :: GetMiningInfo ( pmap _gamemap ) : SearchFields ( _gamemap )
+{
+}
+
+void GetMiningInfo :: testfield ( const MapCoordinate& mc )
+{
+   pfield fld = gamemap->getField ( mc );
+   if ( miningInfo.efficiency[ dist ] == 0 )
+      miningInfo.efficiency[ dist ] = getminingstationeficency ( dist );
+
+   miningInfo.avail[dist].material += fld->material * resource_material_factor;
+   miningInfo.avail[dist].fuel     += fld->fuel     * resource_fuel_factor;
+   miningInfo.max[dist].material   += 255 * resource_material_factor;
+   miningInfo.max[dist].fuel       += 255 * resource_fuel_factor;
+}
+
+
+void GetMiningInfo :: run (  const pbuilding bld )
+{
+   initsearch ( bld->getEntry(), maxminingrange, 0 );
+   startsearch();
+}
+
+
+
+
+Building::MatterConverter :: MatterConverter( Building* _bld ) : bld ( _bld ), percentage ( 100 )
+{
+}
+
+bool Building::MatterConverter :: run()
+{
+   int perc = percentage;
+
+   int usageNum = 0;
+   for ( int r = 0; r < 3; r++ )
+      if ( bld->plus.resource(r) < 0 )
+         ++usageNum;
+
+   if ( usageNum > 0 ) {
+      // if the resource generation requires other resources, don't waste anything
+      // by producing more than storage capacity available
+
+      for ( int r = 0; r < 3; r++ )
+         if ( bld->plus.resource(r) > 0 ) {
+            int p = bld->putResource ( bld->plus.resource(r), 0, 1 );
+
+            if ( perc > 100 * p / bld->plus.resource(r) )
+               perc = 100 * p / bld->plus.resource(r) ;
+         }
+   }
+
+   Resources toGet = bld->plus * perc / 100  ;
+   for ( int r = 0; r < 3; r++ )
+      if ( toGet.resource(r) < 0 )
+         toGet.resource(r)  = - toGet.resource(r) ;
+      else
+         toGet.resource(r) = 0;
+
+
+   Resources avail = bld->getResource ( toGet, 1 );
+
+   for ( int r = 0; r < 3; r++ ) {
+      if ( bld->plus.resource(r) < 0 ) {
+         int p = 100 * avail.resource(r) / -bld->plus.resource(r);
+         if ( p < perc )
+            perc = p;
+      }
+   }
+
+
+   bool didSomething = false;
+
+   for ( int r = 0; r < 3; r++ )
+      if ( bld->plus.resource(r) > 0 ) {
+         bld->putResource( bld->plus.resource(r) * perc  / 100, r , 0);
+         if ( bld->plus.resource(r) * perc / 100  > 0)
+            didSomething = true;
+
+      } else {
+         if ( bld->plus.resource(r) < 0 )
+            bld->getResource( -bld->plus.resource(r) * perc  / 100, r , 0);
+      }
+
+   percentage -= perc;
+   return didSomething;
+}
+
+
+bool Building::MatterConverter :: finished()
+{
+   return percentage == 0;
+}
+
+Resources Building::MatterConverter :: getPlus()
+{
+  Resources r;
+  for ( int i = 0; i < 3; i++ )
+     if ( bld->plus.resource(i) > 0 )
+        r.resource(i) = bld->plus.resource(i);
+  return r;
+}
+
+Resources Building::MatterConverter :: getUsage()
+{
+  Resources r;
+  for ( int i = 0; i < 3; i++ )
+     if ( bld->plus.resource(i) < 0 )
+        r.resource(i) = -bld->plus.resource(i);
+  return r;
+}
+
+/*
+Research :: Research( Building* _bld ) : bld ( _bld ), percentage ( 100 )
+{
+}
+
+bool Research :: run()
+{
+   int perc = percentage;
+
+   int usageNum = 0;
+   for ( int r = 0; r < 3; r++ )
+      if ( plus.resource(r) < 0 )
+         ++usageNum;
+
+   if ( usageNum > 0 ) {
+      // if the resource generation requires other resources, don't waste anything
+      // by producing more than storage capacity available
+
+      for ( int r = 0; r < 3; r++ )
+         if ( bld->plus.resource(r) > 0 ) {
+            int p = putResource ( bld->plus.resource(r), 0, 1 );
+
+            if ( perc > 100 * p / bld->plus.resource(r) )
+               perc = 100 * p / bld->plus.resource(r) ;
+         }
+   }
+
+   Resources toGet = bld->plus * perc / 100  ;
+   for ( int r = 0; r < 3; r++ )
+      if ( toGet.resource(r) < 0 )
+         toGet.resource(r)  = - toGet.resource(r) ;
+      else
+         toGet.resource(r) = 0;
+
+
+   Resources avail = bld->getResource ( toGet, 1 );
+
+   for ( int r = 0; r < 3; r++ ) {
+      if ( bld->plus.resource(r) ) {
+         int p = 100 * avail.resource(r) / bld->plus.resource(r);
+         if ( p < perc )
+            perc = P;
+      }
+   }
+
+
+   bool didSomething = false;
+
+   for ( int r = 0; r < 3; r++ )
+      if ( bld->plus.resource(r) > 0 ) {
+         bld->putResource( bld->plus.resource(r) * perc  / 100, r , 0);
+         if ( bld->plus.resource(r) * perc / 100  > 0)
+            didSomething = true;
+
+      } else {
+         bld->getResource( -bld->plus.resource(r) * perc  / 100, r , 0);
+      }
+
+   percentage = perc;
+   return didSomething;
+}
+
+
+bool Research :: finished()
+{
+   return percentage == 0;
+}
+
+Resources Research :: getUsage()
+{
+  Resources r;
+  for ( int i = 0; i < 3; i++ 9
+     if ( bld->plus.resource(r) < 0 )
+        r.resource(r) = -bld->plus.resource(r)
+  return r;
+}
+   **/
+
+Building::RegenerativePowerPlant :: RegenerativePowerPlant( Building* _bld ) : bld ( _bld )
+{
+}
+
+bool Building::RegenerativePowerPlant :: finished()
+{
+   for( int r = 0; r < 3; r++ )
+      if ( toProduce.resource(r) > 0 )
+         return false;
+   return true;
+}
+
+bool Building::RegenerativePowerPlant :: run()
+{
+   Resources tp = bld->putResource( toProduce , 0 );
+   bool didSomething = false;
+   for  ( int r = 0; r < 3; r++ )
+      if ( tp.resource(r) ) {
+         didSomething = true;
+         toProduce.resource(r) -= tp.resource(r);
+      }
+   return didSomething;
+}
+
+Resources Building::RegenerativePowerPlant :: getUsage()
+{
+   return Resources();
+}
+
+Resources Building::WindPowerplant :: getPlus()
+{
+   Resources p;
+   for ( int r = 0; r < 3; r++ )
+      p.resource(r) =  bld->maxplus.resource(r) * actmap->weather.wind[0].speed / 255;
+   return p;
+}
+
+Resources Building::SolarPowerplant :: getPlus()
+{
+   int sum = 0;
+   int num = 0;
+   for ( int x = 0; x < 4; x++ )
+      for ( int y = 0; y < 6; y++)
+         if ( bld->getpicture ( BuildingType::LocalCoordinate(x, y) ) ) {
+            pfield fld = bld->getField ( BuildingType::LocalCoordinate(x, y) );
+            int weather = 0;
+            while ( fld->typ != fld->typ->terraintype->weather[weather] )
+               weather++;
+
+            sum += csolarkraftwerkleistung[weather];
+            num ++;
+         }
+
+   Resources rplus;
+   for ( int r = 0; r < 3; r++ )
+      rplus.resource(r) = bld->maxplus.resource(r) * sum / ( num * 1024 );
+   return rplus;
+}
+
+
+Resources Building::BiResourceGeneration::getPlus()
+{
+   return bld->bi_resourceplus;
+}
+
+
+
+
+Building::MiningStation :: MiningStation( Building* bld_  , bool justQuery_) : bld ( bld_ ), justQuery( justQuery_ ), SearchFields ( bld_->getMap() )
+{
+   for ( int r = 1; r < 3; r++ )
+      if ( bld->plus.resource(r) > 0 )
+         toExtract_thisTurn.resource(r) = bld->plus.resource(r);
+
+   if( justQuery ) {
+      hasRun = false;
+      run();
+      hasRun = true;
+   } else
+      hasRun = false;
+}
+
+bool Building::MiningStation :: run()
+{
+   if ( justQuery && hasRun )
+      return false;
+
+   extracted = Resources();
+   int perc = 100;
+   if ( !justQuery ) {
+      Resources netAvail = bld->putResource( toExtract_thisTurn, 1 );
+      for ( int r = 0 ; r < 3 ; r++ )
+         if ( toExtract_thisTurn.resource(r) > 0 )
+            perc = min ( perc, 100 * netAvail.resource(r) / toExtract_thisTurn.resource(r) );
+   }
+   toExtract_thisLoop = toExtract_thisTurn * perc / 100;
+
+   perc = 100;
+   if ( !justQuery ) {
+      Resources storable = bld->putResource( toExtract_thisLoop, 1 );
+      for ( int r = 0; r < 3; r++ )
+         if ( toExtract_thisLoop.resource(r) )
+            perc = min ( perc, 100 * storable.resource(r) / toExtract_thisLoop.resource(r) );
+   }
+
+   // check how much resources the production of toExtract_thisTurn would need
+   Resources toConsume;
+   int absperc;
+   for ( int r = 0; r < 3; r++ )
+      if ( bld->plus.resource(r) > 0 )
+         absperc = 1000 * toExtract_thisTurn.resource(r) / bld->plus.resource(r);
+
+   for ( int r = 0; r < 3; r++ )
+      if ( bld->plus.resource(r) < 0 )
+         toConsume.resource(r) = -bld->plus.resource(r) * absperc / 1000;
+
+   if ( !justQuery ) {
+   // how much of it is available ?
+      Resources avail = bld->getResource( toConsume, 1 );
+
+      for ( int r = 0; r < 3; r++ )
+         if ( toConsume.resource(r) )
+            perc = min ( perc, 100 * avail.resource(r) / toConsume.resource(r) );
+   }
+
+   // now all limitations have been considered...
+   for ( int r = 0; r < 3; r++ )
+      toExtract_thisLoop.resource(r) = toExtract_thisLoop.resource(r) * perc / 100;
+
+
+   initsearch( bld->getEntry(), 0, maxminingrange );
+   startsearch();
+
+   perc = 100;
+   for ( int r = 0 ; r < 3 ; r++ )
+      if ( bld->plus.resource(r) > 0 ) {
+         int p = 100 * extracted.resource(r) / bld->plus.resource(r);
+         if ( p < perc )
+            perc = p;
+      }
+
+   consumed = bld->plus * perc / -100;
+   for ( int r = 0; r < 3; r++ )
+     if ( consumed.resource(r) < 0 )
+        consumed.resource(r) = 0;
+
+   if ( !justQuery) {
+      bld->getResource(consumed, 0 );
+      bld->putResource(extracted, 0 );
+   }
+
+   toExtract_thisTurn -= extracted;
+
+   for ( int r = 0; r < 3; r++ )
+      if ( extracted.resource(r) > 0 )
+         return true;
+
+   return false;
+}
+
+void Building::MiningStation :: testfield ( const MapCoordinate& mc )
+{
+   cancelSearch = true;
+   for ( int r = 0; r < 3; r++ )
+      if ( toExtract_thisLoop.resource(r) > 0 )
+         cancelSearch = false;
+
+   if ( cancelSearch == false ) {
+      pfield fld = gamemap->getField ( mc );
+      int efficiency = getminingstationeficency ( dist );
+
+      for ( int r = 1; r < 3; r++ ) {
+         if ( toExtract_thisLoop.resource(r) ) {
+            int e = toExtract_thisLoop.resource(r) * efficiency / 1024;
+            int got;
+            if ( r == 1 ) {
+               got = min( fld->material * resource_material_factor, e );
+               if ( !justQuery )
+                  fld->material -= ( got + resource_material_factor - 1 ) / resource_material_factor;
+            } else {
+               got = min( fld->fuel * resource_fuel_factor, e );
+               if ( !justQuery )
+                  fld->fuel -= ( got + resource_fuel_factor - 1 ) / resource_fuel_factor;
+            }
+            toExtract_thisLoop.resource(r) -= (got * 1024 + efficiency-1) / efficiency;
+            if ( toExtract_thisLoop.resource(r) < 0 )
+               toExtract_thisLoop.resource(r) = 0;
+
+            extracted.resource(r) += got;
+
+            if ( !justQuery ) {
+               if ( !fld->resourceview )
+                  fld->resourceview = new tfield::Resourceview;
+               fld->resourceview->visible |= 1 << bld->getOwner();
+               fld->resourceview->fuelvisible[bld->getOwner()] = fld->fuel;
+               fld->resourceview->materialvisible[bld->getOwner()] = fld->material;
+            }
+         }
+      }
+   }
+}
+
+bool Building::MiningStation :: finished()
+{
+   for ( int r = 0; r < 3; r++ )
+      if ( toExtract_thisTurn.resource(r) )
+         return false;
+   return true;
+}
+
+Resources Building::MiningStation :: getPlus()
+{
+   return extracted;
+}
+
+Resources Building::MiningStation :: getUsage()
+{
+   return consumed;
+}
+
+
+
+
+Resources Building :: getResourcePlus( )
+{
+  Work* w = spawnWorkClasses ( true );
+  Resources r;
+  if ( w )
+    r = w->getPlus();
+  delete w;
+  return r;
+}
+
+Resources Building :: getResourceUsage( )
+{
+  Work* w = spawnWorkClasses ( true );
+  Resources r;
+  if ( w )
+    r = w->getUsage();
+  delete w;
+  return r;
+}
+
+
+/*
+void Building :: getresourceusage ( Resources* usage )
+{
+   returnresourcenuseforpowerplant ( this, 100, usage, 0 );
+   if ( typ->special & cgresearchb ) {
+      int material;
+      int energy;
+      returnresourcenuseforresearch ( this, researchpoints, &energy, &material );
+      usage->material += material;
+      usage->energy   += energy;
+      usage->fuel  = 0;
+   }
+}
+*/
 

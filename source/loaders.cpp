@@ -5,9 +5,13 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.76 2002-12-20 16:40:58 mbickel Exp $
+//     $Id: loaders.cpp,v 1.77 2003-01-12 19:37:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.76  2002/12/20 16:40:58  mbickel
+//      Fixed problems with inheritance of asctxt files
+//      Changed the displaying of resources on map
+//
 //     Revision 1.75  2002/11/24 10:54:19  mbickel
 //      made field allocation more robust
 //
@@ -478,8 +482,8 @@ void         seteventtriggers( pmap actmap )
                event->trigger_data[j]->xpos = -1;
                event->trigger_data[j]->ypos = -1;
             }
-	    displayLogMessage ( 10, "3 ");
-            if ((event->trigger[j] == ceventt_event)) {     
+	         displayLogMessage ( 10, "3 ");
+            if ((event->trigger[j] == ceventt_event)) {
               // int id = event->trigger_data[j]->id;
                pevent event1 = actmap->firsteventtocome; 
                if ( !event->trigger_data[j]->mapid )
@@ -492,33 +496,32 @@ void         seteventtriggers( pmap actmap )
                while (event1 != NULL) { 
                   if (event1->id == id) 
                      event->triggerdata[j].event = event1; 
-                  event1 = event1->next; 
-               }*/ 
-            }  
+                  event1 = event1->next;
+               }*/
+            }
            displayLogMessage ( 10, "4 ");
-           if (event->trigger[j] == ceventt_any_unit_enters_polygon || 
+           if (event->trigger[j] == ceventt_any_unit_enters_polygon ||
                event->trigger[j] == ceventt_specific_unit_enters_polygon) {
 
-	     displayLogMessage ( 10, "6 ");
+	            displayLogMessage ( 10, "6 ");
                if ( event->trigger_data[j]->unitpolygon->vehiclenetworkid ) {
                   Vehicle* v = actmap->getUnit ( event->trigger_data[j]->unitpolygon->vehiclenetworkid );
                   if ( v )
                      v->connection |= cconnection_areaentered_specificunit;
                }
-	       displayLogMessage ( 10, "7 ");
+	            displayLogMessage ( 10, "7 ");
               #ifndef karteneditor
-	       if ( event->trigger[j] == ceventt_any_unit_enters_polygon ) {
-		 displayLogMessage ( 10, "7-1 ");
+               if ( event->trigger[j] == ceventt_any_unit_enters_polygon ) {
+                  displayLogMessage ( 10, "7-1 ");
                   mark_polygon_fields_with_connection ( actmap, event->trigger_data[j]->unitpolygon->data, cconnection_areaentered_anyunit );
-	       }
-               else {
-		 displayLogMessage ( 10, "7-2 ");
+               } else {
+                  displayLogMessage ( 10, "7-2 ");
                   mark_polygon_fields_with_connection ( actmap, event->trigger_data[j]->unitpolygon->data, cconnection_areaentered_specificunit );
-	       }
-              #endif 
-	       displayLogMessage ( 10, "8 ");
+               }
+              #endif
+               displayLogMessage ( 10, "8 ");
            }
-         } 
+         }
          event = event->next; 
       } 
    }

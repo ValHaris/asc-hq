@@ -1,6 +1,11 @@
-//     $Id: typen.cpp,v 1.93 2002-12-19 20:22:46 mbickel Exp $
+//     $Id: typen.cpp,v 1.94 2003-01-12 19:37:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.93  2002/12/19 20:22:46  mbickel
+//      Fixed: solar power plant not producing energy when snow_and_ice
+//      Speed up of AI
+//      AStar can now search for a list of fields
+//
 //     Revision 1.92  2002/12/17 22:02:17  mbickel
 //      Enemy mines can now be crossed even if visible
 //      submerged mines can not be placed on shallow water
@@ -559,6 +564,21 @@ Resources operator+ ( const Resources& res1, const Resources& res2 )
    return res;
 }
 
+Resources operator* ( const Resources& res1, float a )
+{
+   Resources res = res1;
+   for ( int r = 0; r < resourceTypeNum; r++ )
+      res.resource(r) *= a;
+   return res;
+}
+
+Resources operator/ ( const Resources& res1, float a )
+{
+   Resources res = res1;
+   for ( int r = 0; r < resourceTypeNum; r++ )
+      res.resource(r) /= a;
+   return res;
+}
 
 Resources Resources::operator* ( double d )
 {

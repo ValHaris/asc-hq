@@ -641,11 +641,8 @@ void GetResourcePlus :: checkvehicle ( pvehicle v )
 
 void GetResourcePlus :: checkbuilding ( pbuilding bld )
 {
-   if ( bld->color/8 == player ) {
-      Resources plus;
-      bld->getresourceplus ( -1, &plus, 1 );
-      got += plus.resource(resourcetype);
-   }
+   if ( bld->color/8 == player )
+      got += bld->getResourcePlus().resource( resourcetype );
 }
 
 
@@ -654,10 +651,7 @@ void GetResourcePlus :: checkbuilding ( pbuilding bld )
 
 void GetResourceUsage :: checkbuilding ( pbuilding b )
 {
-   if ( b->color/8 == player ) {
-      Resources usage;
-      b->getresourceusage ( &usage );
-      got += usage.resource( resourcetype );
-   }
+   if ( b->color/8 == player ) 
+      got += b->getResourceUsage().resource( resourcetype );
 }
 

@@ -231,100 +231,6 @@ void AI:: run ( bool benchMark )
    checkforvictory();
 }
 
-const int currentAiStreamVersion = 102;
-
-void AI :: read ( tnstream& stream )
-{
-   int version = stream.readInt ( );
-   if ( version > currentServiceOrderVersion )
-      throw tinvalidversion ( "AI :: read", currentServiceOrderVersion, version );
-   _isRunning = stream.readInt ();
-   _vision = VisibilityStates(stream.readInt ( ));
-   unitCounter = stream.readInt ( );
-
-   int i = stream.readInt();
-   while ( i ) {
-      ServiceOrder so ( this, stream );
-      serviceOrders.push_back ( so );
-      i = stream.readInt();
-   }
-
-   for_each ( serviceOrders.begin(), serviceOrders.end(), ServiceOrder::activate );
-
-   i = stream.readInt();
-   while ( i ) {
-      MapCoordinate mc;
-      mc.read ( stream );
-
-      AI::BuildingCapture bc;
-      bc.read ( stream );
-
-      buildingCapture[mc] = bc;
-
-      i = stream.readInt();
-   }
-
-   config.lookIntoTransports = stream.readInt();
-   config.lookIntoBuildings = stream.readInt( );
-   config.wholeMapVisible = stream.readInt( );
-   config.aggressiveness = stream.readFloat( );
-   config.damageLimit = stream.readInt();
-   config.resourceLimit.read( stream );
-   config.ammoLimit = stream.readInt();
-   config.maxCaptureTime = stream.readInt();
-   if ( version >= 102 )
-      config.waitForResourcePlus = stream.readInt();
-
-   if ( version >= 101 )
-      config.maxTactTime = stream.readInt();
-
-   if ( version >= 102 )
-      originalUnitDistribution.read ( stream );
-
-   int version2 = stream.readInt();
-   if ( version != version2 )
-      throw tinvalidversion ( "AI :: read", version, version2 );
-
-
-}
-
-void AI :: write ( tnstream& stream ) const
-{
-   const int version = currentAiStreamVersion;
-   stream.writeInt ( version );
-   stream.writeInt ( _isRunning );
-   stream.writeInt ( _vision );
-   stream.writeInt ( unitCounter );
-
-   for ( ServiceOrderContainer::const_iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++) {
-      stream.writeInt ( 1 );
-      i->write ( stream );
-   }
-
-   stream.writeInt ( 0 );
-
-   for ( map<MapCoordinate,BuildingCapture>::const_iterator i = buildingCapture.begin(); i != buildingCapture.end(); i++ ) {
-      stream.writeInt ( 1 );
-      i->first.write ( stream );
-      i->second.write ( stream );
-   }
-   stream.writeInt ( 0 );
-
-   stream.writeInt( config.lookIntoTransports );   /*  gegnerische transporter einsehen  */
-   stream.writeInt( config.lookIntoBuildings );
-   stream.writeInt( config.wholeMapVisible );
-   stream.writeFloat( config.aggressiveness );   // 1: units are equally worth ; 2
-   stream.writeInt( config.damageLimit );
-   config.resourceLimit.write( stream );
-   stream.writeInt( config.ammoLimit );
-   stream.writeInt( config.maxCaptureTime );
-   stream.writeInt( config.maxTactTime );
-   stream.writeInt( config.waitForResourcePlus );
-
-   originalUnitDistribution.write( stream );
-   stream.writeInt ( version );
-}
-
 
 bool AI :: isRunning ( void )
 {
@@ -434,6 +340,99 @@ void AI :: showFieldInformation ( int x, int y )
 }
 
 
+const int currentAiStreamVersion = 102;
+
+void AI :: read ( tnstream& stream )
+{
+   int version = stream.readInt ( );
+   if ( version > currentServiceOrderVersion )
+      throw tinvalidversion ( "AI :: read", currentServiceOrderVersion, version );
+   _isRunning = stream.readInt ();
+   _vision = VisibilityStates(stream.readInt ( ));
+   unitCounter = stream.readInt ( );
+
+   int i = stream.readInt();
+   while ( i ) {
+      ServiceOrder so ( this, stream );
+      serviceOrders.push_back ( so );
+      i = stream.readInt();
+   }
+
+   for_each ( serviceOrders.begin(), serviceOrders.end(), ServiceOrder::activate );
+
+   i = stream.readInt();
+   while ( i ) {
+      MapCoordinate mc;
+      mc.read ( stream );
+
+      AI::BuildingCapture bc;
+      bc.read ( stream );
+
+      buildingCapture[mc] = bc;
+
+      i = stream.readInt();
+   }
+
+   config.lookIntoTransports = stream.readInt();
+   config.lookIntoBuildings = stream.readInt( );
+   config.wholeMapVisible = stream.readInt( );
+   config.aggressiveness = stream.readFloat( );
+   config.damageLimit = stream.readInt();
+   config.resourceLimit.read( stream );
+   config.ammoLimit = stream.readInt();
+   config.maxCaptureTime = stream.readInt();
+   if ( version >= 102 )
+      config.waitForResourcePlus = stream.readInt();
+
+   if ( version >= 101 )
+      config.maxTactTime = stream.readInt();
+
+   if ( version >= 102 )
+      originalUnitDistribution.read ( stream );
+
+   int version2 = stream.readInt();
+   if ( version != version2 )
+      throw tinvalidversion ( "AI :: read", version, version2 );
+
+
+}
+
+void AI :: write ( tnstream& stream ) const
+{
+   const int version = currentAiStreamVersion;
+   stream.writeInt ( version );
+   stream.writeInt ( _isRunning );
+   stream.writeInt ( _vision );
+   stream.writeInt ( unitCounter );
+
+   for ( ServiceOrderContainer::const_iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++) {
+      stream.writeInt ( 1 );
+      i->write ( stream );
+   }
+
+   stream.writeInt ( 0 );
+
+   for ( map<MapCoordinate,BuildingCapture>::const_iterator i = buildingCapture.begin(); i != buildingCapture.end(); i++ ) {
+      stream.writeInt ( 1 );
+      i->first.write ( stream );
+      i->second.write ( stream );
+   }
+   stream.writeInt ( 0 );
+
+   stream.writeInt( config.lookIntoTransports );   /*  gegnerische transporter einsehen  */
+   stream.writeInt( config.lookIntoBuildings );
+   stream.writeInt( config.wholeMapVisible );
+   stream.writeFloat( config.aggressiveness );   // 1: units are equally worth ; 2
+   stream.writeInt( config.damageLimit );
+   config.resourceLimit.write( stream );
+   stream.writeInt( config.ammoLimit );
+   stream.writeInt( config.maxCaptureTime );
+   stream.writeInt( config.maxTactTime );
+   stream.writeInt( config.waitForResourcePlus );
+
+   originalUnitDistribution.write( stream );
+   stream.writeInt ( version );
+}
 AI :: ~AI ( )
 {
    if ( fieldInformation ) {
