@@ -41,6 +41,7 @@ ContainerBaseType::TransportationIO::TransportationIO()
   dockingHeight_rel = 0;
   requireUnitFunction = 0;
   disableAttack = false;
+  movecost = -1;
 }
 
 
@@ -56,6 +57,8 @@ void ContainerBaseType :: TransportationIO :: runTextIO ( PropertyContainer& pc 
    pc.addTagInteger( "RequireUnitFunction", requireUnitFunction, cvehiclefunctionsnum, vehicleAbilities, 0 );
    pc.addBool( "DisableAttack", disableAttack, false );
    pc.addInteger( "MoveCost", movecost, -1 );
+   if ( movecost < 10 && movecost >= 0 )
+      fatalError ( "MoveCost for TransportationIO is lower than 10! file: " + pc.getFileName() );
 }
 
 
@@ -125,7 +128,7 @@ void ContainerBaseType :: write ( tnstream& stream ) const
       entranceSystems[i].write( stream );
 }
 
-const int containerBaseTypeTransportVersion = 1;
+const int containerBaseTypeTransportVersion = 2;
 
 
 void ContainerBaseType :: TransportationIO :: read ( tnstream& stream )
@@ -145,6 +148,10 @@ void ContainerBaseType :: TransportationIO :: read ( tnstream& stream )
    dockingHeight_rel = stream.readInt();
    requireUnitFunction = stream.readInt();
    disableAttack = stream.readInt();
+   if ( version >= 2 )
+      movecost = stream.readInt();
+   else
+      movecost = -1;
 }
 
 void ContainerBaseType :: TransportationIO :: write ( tnstream& stream ) const
@@ -159,6 +166,7 @@ void ContainerBaseType :: TransportationIO :: write ( tnstream& stream ) const
    stream.writeInt ( dockingHeight_rel );
    stream.writeInt ( requireUnitFunction );
    stream.writeInt ( disableAttack );
+   stream.writeInt ( movecost );
 }
 
 

@@ -178,20 +178,20 @@ void AI::getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBo
    for ( AStar3D::Container::iterator ff = vm.visited.begin(); ff != vm.visited.end(); ++ff ) {
       x1 = min ( x1, ff->h.x );
       y1 = min ( y1, ff->h.y );
-      x2 = min ( x2, ff->h.x );
-      y2 = min ( y2, ff->h.y );
+      x2 = max ( x2, ff->h.x );
+      y2 = max ( y2, ff->h.y );
    }
 
    int maxrange = 0;
    for ( int i = 0; i < veh->typ->weapons.count; ++i )
       maxrange = max ( maxrange, veh->typ->weapons.weapon[i].maxdistance );
 
-   maxrange += 20;
+   maxrange += 30;
 
    x1 = max ( 0, x1 - maxrange/10 );
    y1 = max ( 0, y1 - maxrange*2/10 );
-   x2 = min ( getMap()->xsize, x1 + maxrange/10 );
-   y2 = min ( getMap()->ysize, y1 + maxrange*2/10 );
+   x2 = min ( getMap()->xsize, x2 + maxrange/10 );
+   y2 = min ( getMap()->ysize, y2 + maxrange*2/10 );
 
    int enemycount = 0;
    for ( int y = y1; y <= y2 && !enemycount; ++y)

@@ -398,11 +398,15 @@ void Research :: read ( tnstream& stream )
 const int researchableWeaponImprovements = 8;
 
 
-const int researchVersion = -2;
+const int researchVersion = -3;
 
 void Research :: read_struct ( tnstream& stream )
 {
    int version = stream.readInt();
+   
+   if ( version < researchVersion )
+      throw tinvalidversion( stream.getLocation(), -researchVersion,  -version );
+
    if ( version >= 0 ) {
       progress = version;
       ___loadActiveTech = stream.readInt();
@@ -431,6 +435,8 @@ void Research :: read_struct ( tnstream& stream )
       else
          techsAvail = true;
 
+      if ( version <= -3 )
+         readClassContainer( predefinedTechAdapter, stream );
    }
 }
 
@@ -443,7 +449,7 @@ void Research :: write ( tnstream& stream ) {
        stream.writeInt( developedTechnologies[i] );
 
    stream.writeInt ( techsAvail );
-   // writeContainer( developedTechnologies, stream );
+   writeClassContainer( predefinedTechAdapter, stream );
 }
 
 
@@ -488,6 +494,9 @@ bool Research::techResearched ( int id ) const
 
 bool Research::techAdapterAvail( const ASCString& ta ) const
 {
+   if( find ( predefinedTechAdapter.begin(), predefinedTechAdapter.end(), ta ) != predefinedTechAdapter.end() )
+      return true; 
+
    return triggeredTechAdapter.find ( ta ) != triggeredTechAdapter.end();
 }
 
@@ -497,6 +506,17 @@ void Research::evalTechAdapter()
       if ( (*i)->available ( *this ))
          triggeredTechAdapter[(*i)->getName()] = true;
 }
+
+
+ASCString Research::listTriggeredTechAdapter() const
+{
+   ASCString s;
+   for ( TriggeredTechAdapter::const_iterator i = triggeredTechAdapter.begin(); i != triggeredTechAdapter.end(); ++i )
+      s += i->first + "\n";
+   
+   return s;
+}
+
 
 
 Research::AvailabilityStatus Research::techAvailable ( const Technology* tech )

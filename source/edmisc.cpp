@@ -2,9 +2,14 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.114 2004-05-29 15:07:37 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.115 2004-06-09 14:44:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.114  2004/05/29 15:07:37  mbickel
+//      Fixed maps
+//      Fixed crash with asc.cache
+//      ai speed up
+//
 //     Revision 1.113  2004/05/23 12:54:28  mbickel
 //      Updated campaign maps
 //      improved tech tree generation
@@ -4827,7 +4832,7 @@ void ClipBoard::place ( const MapCoordinate& pos )
      veh->setnewposition( pos.x, pos.y );
   }
   if ( type == ClipBuilding ) {
-     Building* bld = Building::newFromStream ( actmap, stream );
+     Building* bld = Building::newFromStream ( actmap, stream, false );
      pfield fld = actmap->getField ( pos );
 
      for ( int x = 0; x < 4; x++ )
@@ -5137,26 +5142,20 @@ void editTechAdapter()
 
          pair<int,int> res;
          do {
+
             Research::TriggeredTechAdapter& tta = actmap->player[player].research.triggeredTechAdapter;
-            vector<ASCString> ta;
-            for ( Research::TriggeredTechAdapter::iterator i = tta.begin(); i != tta.end(); ++i ) {
-               if ( i->second )
-                  ta.push_back ( i->first );
-            }
+            vector<ASCString>& ta = actmap->player[player].research.predefinedTechAdapter;
             res = chooseString ( "Registered TechAdapter", ta, buttons );
             if ( res.first == 0 ) {
                ASCString s = editString( "enter TechAdapter" );
                if ( !s.empty() ) {
                   s.toLower();
-                  tta[s] = true;
+                  ta.push_back ( s );
                }
             } else
-            if ( res.first == 1 && res.second >= 0 ) {
-               Research::TriggeredTechAdapter::iterator p = tta.begin();
-               while ( res.second-- )
-                  ++p;
-               tta.erase ( p );
-            }
+               if ( res.first == 1 && res.second >= 0 )
+                  ta.erase ( ta.begin() + res.second );
+
          } while ( res.first != 2 );
       }
    } while ( playerRes.first != 1 );

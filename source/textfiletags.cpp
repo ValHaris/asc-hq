@@ -163,7 +163,8 @@ const char*  buildingFunctionTags[cbuildingfunctionnum]  =
                 "ResourceSink",
                 "ExternalResourceTransfer",
                 "ExternalAmmoTransfer",
-                "NoObjectChaining" };
+                "NoObjectChaining",
+                "Selfdestruct_at_conquer" };
 
 
  const char* weatherAbbrev[cwettertypennum]
@@ -177,7 +178,9 @@ const char*  buildingFunctionTags[cbuildingfunctionnum]  =
  const char* objectDisplayingMethodTags[objectDisplayingMethodNum]
     = { "Normal",
         "Shadow",
-        "Translation" };
+        "Translation",
+        "MapEditorOnly",
+        "halftransparent" };
 
  const char* objectNetMethod[ObjectType::netBehaviourNum]
     = { "NetToBuilding",

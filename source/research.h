@@ -130,10 +130,14 @@ class TechAdapterDependency {
 
      typedef std::map<ASCString,bool> TriggeredTechAdapter;
      TriggeredTechAdapter triggeredTechAdapter;
+
+
+     vector<ASCString> predefinedTechAdapter;
    public:
 
      vector<int> developedTechnologies;
 
+     ASCString listTriggeredTechAdapter() const;
 
      bool techResearched ( int id ) const;
 

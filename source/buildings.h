@@ -181,13 +181,13 @@ class  Building : public ContainerBase {
 
     AiValue*      aiparam[8];
 
-    Building( pmap map, const MapCoordinate& entryPosition, const pbuildingtype type , int player, bool setupImages = true );
+    Building( pmap map, const MapCoordinate& entryPosition, const pbuildingtype type , int player, bool setupImages = true, bool chainToField = true);
 
     int lastmineddist;
 
     bool canRepair ( const ContainerBase* item );
 
-    static Building* newFromStream ( pmap gamemap, tnstream& stream );
+    static Building* newFromStream ( pmap gamemap, tnstream& stream, bool chainToField = true );
     void write ( tnstream& stream, bool includeLoadedUnits = true );
     void read ( tnstream& stream );
   private:

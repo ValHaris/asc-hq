@@ -213,9 +213,11 @@ Then enter or select a filename to which the game will be saved. If a % is used 
 #color004##font1#
 ADVANCED STRATEGIC COMMAND
 #color000##font0#
-(C) 1994 - 2004 by Martin Bickel and Marc Schellenberger.
+(C) 1994 - 2004 by Martin Bickel 
 
 Graphics by Christian Mayer, Steffen Fr”hlich, Daniel Korbely and Frank Fiedler.
+
+Campaign created by Daniel Korbely
 
 The port to Linux was done by Tom Wilson, Simon Britnell and Martin Bickel
 

@@ -1825,11 +1825,37 @@ void tresearchinfo::run ( void )
 
 
 void researchinfo ( void )
-{
-   tresearchinfo ri;
-   ri.init();
-   ri.run();
-   ri.done();
+{  {
+      tresearchinfo ri;
+      ri.init();
+      ri.run();
+      ri.done();
+   }
+   {
+
+   ASCString s;
+   for ( vector<int>::iterator i = actmap->player[actmap->actplayer].research.developedTechnologies.begin(); i != actmap->player[actmap->actplayer].research.developedTechnologies.end(); ++i ) {
+      Technology* t = technologyRepository.getObject_byID( *i );
+      if ( t )
+         s += t->name + "\n";
+   }
+
+
+   tviewanytext vat ;
+   vat.init ( "Developed Technologies", s.c_str(), 20, -1 , 450, 480 );
+   vat.run();
+   vat.done();
+
+   }
+   if ( skeypress( ct_lshift)) {
+      ASCString s = actmap->player[actmap->actplayer].research.listTriggeredTechAdapter();
+
+      tviewanytext vat ;
+      vat.init ( "Triggered TechAdapter", s.c_str(), 20, -1 , 450, 480 );
+      vat.run();
+      vat.done();
+   }
+
 }
 
 

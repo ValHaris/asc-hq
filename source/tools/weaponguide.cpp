@@ -307,6 +307,8 @@ int main(int argc, char *argv[] )
             // UNIT DESCRIPTION
             fprintf ( infoPage, header, "description", cl.t().c_str(), "wg" );
 
+            fprintf ( researchPage, header, "research", cl.t().c_str(), "wg" );
+
             // OVERVIEW LEFT
             fprintf ( overview, " <tr><td><A HREF=\"%s.html\">", fileName.c_str() );
             fprintf ( overview, "%s", ft->getName().c_str() );
@@ -1016,7 +1018,7 @@ int main(int argc, char *argv[] )
 
             fprintf ( researchPage, "<img src=\"%s_tech.png\">\n<p>", fileName.c_str() );
 
-            ASCString sysCommand = "dot " + temptechfilename + ".dot -Tpng -o" + temptechfilename + ".png";
+            ASCString sysCommand = "dot " + temptechfilename + ".dot  -Tpng -o" + temptechfilename + ".png";
             int res = system ( sysCommand.c_str() );
             if ( res != 0 )
                printf("error running command  %s \n", sysCommand.c_str() );

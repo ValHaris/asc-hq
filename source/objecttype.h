@@ -82,6 +82,13 @@
      //! basicjamming_abs replaces the current basicjamming of the field by a new one. A value < 0 won't affect the jamming of the field
      int basicjamming_abs;
 
+     //! units standing on this object will get a bonus to their view
+     int viewbonus_plus;
+     //! units standing on this object will get a bonus to their view
+     int viewbonus_abs;
+
+
+
      //! the level of height the object is on. This is not the simple system of 8 levels used for units and building, but one with 255 levels which are documented in docs/biimport.html
      int height;
 
@@ -115,6 +122,7 @@
      void* buildicon;
      //! the icon used for selecting the object when executing the "remove object" function of a unit. The image is automatically generated at load time
      void* removeicon;
+
 
      TechAdapterDependency techDependency;
 
@@ -156,7 +164,7 @@
 
  };
 
-const int objectDisplayingMethodNum = 3;
+const int objectDisplayingMethodNum = 5;
 
 namespace ForestCalculation {
   //! automatically adjusting the pictures of woods and coasts to form coherent structures

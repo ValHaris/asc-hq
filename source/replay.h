@@ -65,7 +65,8 @@ enum trpl_actions { rpl_attack,
                     rpl_buildProdLine,
                     rpl_removeProdLine,
                     rpl_setResearch,
-                    rpl_techResearched };
+                    rpl_techResearched,
+                    rpl_putbuilding2 };
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 
@@ -96,7 +97,7 @@ class trunreplay {
             trunreplay ( void );
             int status;
             void firstinit ( void );
-            int  run ( int player );
+            int  run ( int player, int viewingplayer );
    };
 
 class LockReplayRecording {
@@ -119,6 +120,9 @@ extern void initReplayLogging();
 
 //! Close the replay logging at the end of a players or the ai's turn.
 extern void closeReplayLogging();
+
+//! runs the replay for the given player
+extern void runSpecificReplay( int player, int viewingplayer );
 
 
 #endif

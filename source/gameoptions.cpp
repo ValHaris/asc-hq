@@ -96,6 +96,7 @@ void CGameOptions::setDefaults ( void )
    smallguiiconopenaftermove=0;
    replayspeed=0;
    showUnitOwner = 0;
+   debugReplay = 0;
 
 
    bi3.dir.setName( NULL );
@@ -144,6 +145,7 @@ void CGameOptions::copy ( const CGameOptions& cgo )
    mapzoom               = cgo.mapzoom;
    mapzoomeditor         = cgo.mapzoomeditor;
    startupcount          = cgo.startupcount;
+   debugReplay           = cgo.debugReplay;
    // dontMarkFieldsNotAccessible_movement=cgo.dontMarkFieldsNotAccessible_movement;
    attackspeed1          = cgo.attackspeed1;
    attackspeed2          = cgo.attackspeed2;

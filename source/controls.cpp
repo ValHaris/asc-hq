@@ -131,6 +131,7 @@ int searchexternaltransferfields ( pbuilding bld )
 
   class   tsearchdestructbuildingfields : public SearchFields {
                       public:
+                                pvehicle                vehicle;
                                 char                    numberoffields;
                                 pfield                  startfield;
                                 void                    initdestructbuilding( int x, int y );
@@ -142,8 +143,8 @@ int searchexternaltransferfields ( pbuilding bld )
 
 
 void         tsearchputbuildingfields::initputbuilding( word x, word y, pbuildingtype building )
-{ 
-   pvehicle eht = getfield(x,y)->vehicle; 
+{
+   pvehicle eht = getfield(x,y)->vehicle;
 
    if ( eht->attacked || (eht->typ->wait && eht->hasMoved() )) {
       dispmessage2(302,""); 
@@ -318,7 +319,7 @@ void         putbuildinglevel3(integer      x,
          eht = moveparams.vehicletomove;
          putbuilding2( MapCoordinate(x,y), eht->color,bld);
 
-         logtoreplayinfo ( rpl_putbuilding, (int) x, (int) y, (int) bld->id, (int) eht->color );
+         logtoreplayinfo ( rpl_putbuilding2, (int) x, (int) y, (int) bld->id, (int) eht->color, eht->networkid );
 
          int mf = actmap->getgameparameter ( cgp_building_material_factor );
          int ff = actmap->getgameparameter ( cgp_building_fuel_factor );
@@ -360,6 +361,7 @@ void         putbuildinglevel3(integer      x,
 void         tsearchdestructbuildingfields::initdestructbuilding( int x, int y )
 {
    pvehicle     eht = getfield(x,y)->vehicle;
+   vehicle = eht;
    if (eht->attacked || (eht->typ->wait && eht->hasMoved() )) {
       dispmessage2(305,NULL);
       return;
@@ -382,7 +384,7 @@ void         tsearchdestructbuildingfields::initdestructbuilding( int x, int y )
 void         tsearchdestructbuildingfields::testfield(const MapCoordinate& mc)
 {
    startfield = gamemap->getField(mc);
-   if (startfield->building) {
+   if (startfield->building && getheightdelta(log2(vehicle->height), log2(startfield->building->typ->buildingheight)) == 0 ) {
       numberoffields++;
       startfield->a.temp = 20;
    }
@@ -1780,13 +1782,12 @@ void sendnetworkgametonextplayer ( int oldplayer, int newplayer )
 
 void endTurn ( void )
 {
-   /* *********************  vehicle ********************  */
-
    mousevisible(false);
    if ( actmap->actplayer >= 0 )
       actmap->endTurn();
 
    closeReplayLogging();
+
 
      /* *********************  allianzen ********************  */
 
@@ -1852,6 +1853,14 @@ void nextPlayer( void )
       throw NoMapLoaded ();
    }
 
+   if ( CGameOptions::Instance()->debugReplay && oldplayer >= 0 && actmap->player[oldplayer].stat == Player::human && actmap->replayinfo)
+      if (choice_dlg("run replay of your turn ?","~y~es","~n~o") == 1) {
+         cursor.gotoxy( actmap->cursorpos.position[oldplayer].cx, actmap->cursorpos.position[oldplayer].cy );
+         runSpecificReplay ( oldplayer, oldplayer );
+      }
+
+
+
    int newplayer = actmap->actplayer;
    actmap->playerView = actmap->actplayer;
 
@@ -1908,6 +1917,7 @@ void next_turn ( int playerView )
    do {
      endTurn();
      nextPlayer();
+
      if ( actmap->player[actmap->actplayer].stat == Player::computer )
         runai( pv );
 

@@ -1621,6 +1621,7 @@ void tfield::init ()
    resourceview = NULL;
    connection = 0;
    gamemap = NULL;
+   viewbonus = 0;
 }
 
 
@@ -1954,6 +1955,8 @@ void tfield :: setparams ( void )
          fatalError ( "invalid movemalus for terraintype ID %d used on field %d / %d" , typ->terraintype->id, getx(), gety() );
    }
 
+   viewbonus = 0;
+
    for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
       if ( gamemap->getgameparameter ( cgp_objectsDestroyedByTerrain ))
          if ( o->typ->getFieldModification(getweather()).terrainaccess.accessible( bdt ) == -1 ) {
@@ -1972,6 +1975,10 @@ void tfield :: setparams ( void )
          if ( __movemalus[i] < minmalq )
             __movemalus[i] = minmalq;
       }
+
+      viewbonus += o->typ->viewbonus_plus;
+      if ( o->typ->viewbonus_abs != -1 )
+         viewbonus = o->typ->viewbonus_plus;
    }
 
    if ( building ) {
@@ -2030,7 +2037,15 @@ void Object :: display ( int x, int y, int weather )
      if ( typ->displayMethod == 2 ) // hillside
         putxlatfilter ( x, y,  typ->getpic( dir, weather ), xlattables.nochange );
      else
-        typ->display ( x, y, dir, weather );
+        if ( typ->displayMethod == 3 ) { // mapeditorOnly
+           #ifdef karteneditor
+           typ->display ( x, y, dir, weather );
+           #endif
+        } else
+           if ( typ->displayMethod == 4 ) {
+              putpicturemix ( x, y,  typ->getpic( dir, weather ),  0, (char*) colormixbuf );
+           } else
+              typ->display ( x, y, dir, weather );
 }
 
 

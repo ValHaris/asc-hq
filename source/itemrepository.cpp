@@ -152,6 +152,7 @@ class TechAdapterLoader : public TextFileDataLoader {
 
 void  loadalltextfiles ( );
 
+const int cacheVersion = 3;
 
 class FileCache {
       vector<tfindfile::FileInfo> actualFileInfo;
@@ -186,7 +187,10 @@ FileCache::FileCache( )
       stream = new tnfilestream ( "asc.cache", tnstream::reading );
       int version = stream->readInt();
 
-      current = checkForModification();
+      if ( version == cacheVersion )
+         current = checkForModification();
+      else
+         current = false;
    } else
       current = false;
 }
@@ -239,7 +243,7 @@ void FileCache::write()
 
    stream = new tn_file_buf_stream ( "asc.cache", tnstream::writing );
 
-   stream->writeInt ( 1 );
+   stream->writeInt ( cacheVersion );
    writeClassContainer ( actualFileInfo, *stream );
 
    for ( DataLoaders::iterator i = dataLoaders.begin(); i != dataLoaders.end(); ++i)

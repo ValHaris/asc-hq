@@ -60,7 +60,8 @@ const char*  cbuildingfunctions[cbuildingfunctionnum]  =
                 "resource sink",
                 "external resource transfer",
                 "external ammo transfer",
-                "no object chaining" };
+                "no object chaining",
+                "self destruct on conquer" };
 
 
 BuildingType :: BuildingType ( void )

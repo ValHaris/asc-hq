@@ -45,6 +45,8 @@ ObjectType :: ObjectType ( void )
    displayMethod = 0;
    canExistBeneathBuildings = false;
    netBehaviour = 0;
+   viewbonus_abs = -1;
+   viewbonus_plus = 0;
 }
 
 ObjectType::FieldModification&  ObjectType::getFieldModification ( int weather )
@@ -793,7 +795,7 @@ void         calculateallobjects( pmap actmap )
 
 
 
-const int object_version = 9;
+const int object_version = 10;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -837,6 +839,12 @@ void ObjectType :: read ( tnstream& stream )
 
        basicjamming_plus = stream.readInt();
        basicjamming_abs = stream.readInt();
+
+       if ( version >= 10 ) {
+          viewbonus_plus = stream.readInt();
+          viewbonus_abs = stream.readInt();
+       }
+
 
        height = stream.readInt();
 
@@ -980,6 +988,10 @@ void ObjectType :: write ( tnstream& stream ) const
     stream.writeInt ( basicjamming_plus );
     stream.writeInt ( basicjamming_abs );
 
+    stream.writeInt ( viewbonus_plus );
+    stream.writeInt ( viewbonus_abs );
+
+
     stream.writeInt ( height );
 
     buildcost.write( stream );
@@ -1085,6 +1097,8 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
    pc.addInteger  ( "Jamming_abs", basicjamming_abs );
    pc.addInteger  ( "Jammming_plus", basicjamming_plus );
    pc.addInteger  ( "Height", height );
+   pc.addInteger  ( "ViewBonus_abs", viewbonus_abs, -1 );
+   pc.addInteger  ( "ViewBonus_plus", viewbonus_plus, 0 );
 
    pc.openBracket ( "ConstructionCost" );
    buildcost.runTextIO ( pc );

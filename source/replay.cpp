@@ -44,6 +44,23 @@ trunreplay runreplay;
 int startreplaylate = 0;
 
 
+void runSpecificReplay( int player, int viewingplayer )
+{
+    if ( actmap->replayinfo->map[player] && actmap->replayinfo->guidata[player] ) {
+
+       npush ( lockdisplaymap );
+       lockdisplaymap = 0;
+
+       int t;
+
+       do {
+          t = runreplay.run ( player, viewingplayer );
+       } while ( t ); /* enddo */
+
+       npop ( lockdisplaymap );
+
+    }
+}
 
 void checkforreplay ( void )
 {
@@ -73,20 +90,9 @@ void checkforreplay ( void )
          while ( s != actmap->actplayer ) {
             if ( s >= 8 )
                s = 0;
-             if ( actmap->replayinfo->map[s] && actmap->replayinfo->guidata[s] ) {
 
-                npush ( lockdisplaymap );
-                lockdisplaymap = 0;
+             runSpecificReplay(s, actmap->actplayer );
 
-                int t;
-
-                do {
-                   t = runreplay.run ( s );
-                } while ( t ); /* enddo */
-
-                npop ( lockdisplaymap );
-
-             }
              if ( s < 7 )
                  s++;
               else
@@ -427,18 +433,23 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( va_arg ( paramlist, int ) );
          stream->writeInt ( va_arg ( paramlist, int ) );
       }
-      if ( action == rpl_putbuilding ) {
+      if ( action == rpl_putbuilding || action == rpl_putbuilding2 ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
          int id = va_arg ( paramlist, int );
          int col =  va_arg ( paramlist, int );
          stream->writeChar ( action );
-         int size = 4;
-         stream->writeInt ( size );
+         if ( action == rpl_putbuilding )
+            stream->writeInt ( 4 );
+         else
+            stream->writeInt ( 5 );
+
          stream->writeInt ( x );
          stream->writeInt ( y );
          stream->writeInt ( id );
          stream->writeInt ( col );
+         if ( action == rpl_putbuilding2 )
+            stream->writeInt ( va_arg ( paramlist, int ));
       }
       if ( action == rpl_putmine ) {
          int x =  va_arg ( paramlist, int );
@@ -1121,12 +1132,17 @@ void trunreplay :: execnextreplaymove ( void )
 
                        }
          break;
+      case rpl_putbuilding2:
       case rpl_putbuilding : {
-                               stream->readInt();  // size
+                               int size = stream->readInt();  // size
                                int x = stream->readInt();
                                int y = stream->readInt();
                                int id = stream->readInt();
                                int color = stream->readInt();
+                               int networkid = 0;
+                               if ( size == 5 )
+                                   networkid = stream->readInt();
+
                                readnextaction();
 
                                pfield fld = getfield ( x, y );
@@ -1137,11 +1153,28 @@ void trunreplay :: execnextreplaymove ( void )
                                   displayActionCursor ( x, y );
                                   putbuilding2( MapCoordinate(x, y), color, bld );
                                   computeview( actmap );
+                                  if ( networkid ) {
+                                     Vehicle* veh = actmap->getUnit( networkid );
+                                     if ( veh ) {
+                                       int mf = actmap->getgameparameter ( cgp_building_material_factor );
+                                       int ff = actmap->getgameparameter ( cgp_building_fuel_factor );
+                                       if ( mf <= 0 )
+                                          mf = 100;
+
+                                       if ( ff <= 0 )
+                                          ff = 100;
+
+                                       veh->getResource( bld->productionCost.material * mf / 100, 1, 0 );
+                                       veh->getResource( bld->productionCost.fuel * ff / 100 , 2, 0 );
+                                     } else
+                                        displaymessage("severe replay inconsistency:\nCannot find vehicle to build/remove building !", 1 );
+                                  }
+
                                   displaymap();
                                   wait(MapCoordinate(x,y));
                                   removeActionCursor();
                                } else
-                                  displaymessage("severe replay inconsistency:\nCannot find building to build/remove !", 1 );
+                                  displaymessage("severe replay inconsistency:\nCannot find building to build/remove building!", 1 );
                             }
          break;
       case rpl_putmine: {
@@ -1624,7 +1657,7 @@ preactionfire_replayinfo trunreplay::getnextreplayinfo ( void )
 }
 
 
-int  trunreplay :: run ( int player )
+int  trunreplay :: run ( int player, int viewingplayer )
 {
    if ( status < 0 )
       firstinit ( );
@@ -1638,7 +1671,7 @@ int  trunreplay :: run ( int player )
    orgmap = actmap;
    actmap = loadreplay ( orgmap->replayinfo->map[player]  );
 
-   actmap->playerView = actplayer;
+   actmap->playerView = viewingplayer;
 
    tmemorystream guidatastream ( orgmap->replayinfo->guidata [ player ], tnstream::reading );
    stream = &guidatastream;
@@ -1654,10 +1687,10 @@ int  trunreplay :: run ( int player )
    actgui = &gui;
    actgui->restorebackground();
 
-   actmap->xpos = orgmap->cursorpos.position[ actplayer ].sx;
-   actmap->ypos = orgmap->cursorpos.position[ actplayer ].sy;
+   actmap->xpos = orgmap->cursorpos.position[ viewingplayer ].sx;
+   actmap->ypos = orgmap->cursorpos.position[ viewingplayer ].sy;
 
-   cursor.gotoxy ( orgmap->cursorpos.position[ actplayer ].cx, orgmap->cursorpos.position[ actplayer ].cy , 0);
+   cursor.gotoxy ( orgmap->cursorpos.position[ viewingplayer ].cx, orgmap->cursorpos.position[ viewingplayer ].cy , 0);
 
 
    if ( stream->dataavail () )

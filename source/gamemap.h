@@ -152,6 +152,9 @@ class  tfield {
     //! in the old octagonal version of ASC it was possible to rotate the terraintype; this is not used in the hexagonal version any more
     char         direction;
 
+    //! units standing on this object will get a bonus to their view
+    int          viewbonus;
+
     void*      picture;
 
     //@{ 

@@ -37,6 +37,10 @@ SigC::Signal0<void> buildingSeen;
 void         tcomputeview::initviewcalculation(  int view, int jamming, int sx, int sy, int _mode, int _height  )  // mode: +1 = add view  ;  -1 = remove view
 {
    height = _height;
+
+   if ( view < 0 )
+      view = 0;
+
    if ( view > 255 )
       viewdist = 255;
    else
@@ -139,7 +143,12 @@ void         tcomputevehicleview::init( const pvehicle eht, int _mode  )   // mo
    if ( (eht->typ->functions & cfautodigger) && _mode == 1 )
       eht->searchForMineralResources();
 
-   tcomputeview::initviewcalculation( eht->typ->view+1, eht->typ->jamming, eht->xpos, eht->ypos, _mode, eht->height );
+   int view = eht->typ->view+1;
+   if ( eht->height <= chfahrend)
+      view += actmap->getField ( eht->getPosition() )->viewbonus;
+
+
+   tcomputeview::initviewcalculation( view, eht->typ->jamming, eht->xpos, eht->ypos, _mode, eht->height );
  //  testfield( eht->getPosition() );
 
 }
@@ -157,6 +166,8 @@ void         tcomputebuildingview::init( const pbuilding    bld,  int _mode )
 
    if (bld->getCompletion() == bld->typ->construction_steps - 1) {
       c = bld->typ->view + 1;
+      if ( bld->typ->buildingheight <= chfahrend )
+         c += actmap->getField ( bld->getEntry() )->viewbonus;
       j = bld->typ->jamming;
    } else {
       c = 15;

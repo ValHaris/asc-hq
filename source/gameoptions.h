@@ -87,6 +87,8 @@ class CGameOptions
       //! force ASC to run in windowed mode (and not fullscreen, which is default)
       int forceWindowedMode;
 
+      //! enables the option to review your own replay to find replay bugs
+      int debugReplay;
 
       //! force the mapeditor to run in fullscreen mode (and not windowed, which is default)
       int mapeditForceFullscreenMode;

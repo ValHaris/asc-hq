@@ -40,7 +40,7 @@ const float repairEfficiencyBuilding[resourceTypeNum*resourceTypeNum] = { 1./3.,
                                                                           0,     1./3., 0,
                                                                           0,     0,     0 };
 
-Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const pbuildingtype type, int player, bool setupImages )
+Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const pbuildingtype type, int player, bool setupImages, bool chainToField )
            : ContainerBase ( type, actmap, player ), typ ( type ), repairEfficiency ( repairEfficiencyBuilding )
 {
    int i;
@@ -53,7 +53,7 @@ Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const p
    lastmineddist= 0;
    maxresearchpoints = typ->defaultMaxResearchpoints;
    researchpoints = min ( maxresearchpoints, typ->nominalresearchpoints );
-   
+
    for ( i = 0; i < waffenanzahl; i++ )
       ammo[i] = 0;
 
@@ -73,7 +73,8 @@ Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const p
 
    gamemap->player[player].buildingList.push_back ( this );
 
-   chainbuildingtofield ( entryPosition, setupImages );
+   if ( chainToField )
+      chainbuildingtofield ( entryPosition, setupImages );
    /*
    #ifdef karteneditor
    plus = maxplus = typ->maxplus;
@@ -100,6 +101,13 @@ void Building :: convert ( int player )
 {
    if (player > 8)
       fatalError("convertbuilding: \n color muá im bereich 0..8 sein ");
+
+   #ifdef sgmain
+   if ( typ->special & cgselfdestruct_at_conquerb ) {
+      delete this;
+      return;
+   }
+   #endif
 
    int oldcol = getOwner();
 
@@ -467,7 +475,7 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits )
 }
 
 
-Building* Building::newFromStream ( pmap gamemap, tnstream& stream )
+Building* Building::newFromStream ( pmap gamemap, tnstream& stream, bool chainToField )
 {
     int version = stream.readInt();
     int xpos, ypos, color;
@@ -503,7 +511,7 @@ Building* Building::newFromStream ( pmap gamemap, tnstream& stream )
 
     ypos = stream.readWord();
 
-    Building* bld = new Building ( gamemap, MapCoordinate(xpos,ypos), typ, color/8, false );
+    Building* bld = new Building ( gamemap, MapCoordinate(xpos,ypos), typ, color/8, false, chainToField );
     bld->bi_resourceplus = res;
     bld->readData ( stream, version );
     return bld;

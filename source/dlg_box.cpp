@@ -1189,7 +1189,8 @@ void         tdialogbox::buildgraphics(void)
   if ( x1 == -1 ) 
      x1 = ( agmp->resolutionx - xsize ) / 2;
   else
-     x1 += (agmp->resolutionx - 640) / 2;
+    if ( x1 + xsize < 640 )
+       x1 += (agmp->resolutionx - 640) / 2;
 
   if ( y1 == -1 )
      y1 = ( agmp->resolutiony - ysize ) / 2;
@@ -1775,7 +1776,7 @@ void tdisplaymessage::init ( tstringa a, int md, int linenum, char* buttonText )
 
    for (i=0;i<=linenum ;i++ ) {
       j = gettextwdth ( a[i], schriften.smallarial );
-      while ( j > agmp->resolutionx - 100 ) {
+      while ( j > agmp->resolutionx ) {
          a[i][strlen(a[i])-1] = 0;
          j = gettextwdth ( a[i], schriften.smallarial );
       }
@@ -1789,6 +1790,12 @@ void tdisplaymessage::init ( tstringa a, int md, int linenum, char* buttonText )
      xsize = 200;
    else
      xsize = maxlength + 50;
+
+   if ( maxlength > agmp->resolutionx - 100 )
+      x1 = 0;
+
+   if ( xsize > agmp->resolutionx  )
+      xsize = agmp->resolutionx;
 
    ysize = 55 + linenum * 20;
    windowstyle |= dlg_notitle;
@@ -1894,16 +1901,22 @@ void displaymessage( const ASCString& text, int num  )
       displayInternally = false;
    #endif
 
+   if ( num == 2 )
+      displayLogMessage(1, text );
+
+
    if ( !displayInternally ) {
       for ( int i=0; i<= linenum ;i++ )
           fprintf(stderr,"%s\n",stringtooutput[i]);
    } else {
-      #ifdef _WIN32_
+      #ifdef _WIN322_
         if ( !gameStartupComplete && num==2 ) {
            MessageBox(NULL, text.c_str(), "Fatal Error", MB_ICONERROR | MB_OK | MB_TASKMODAL );
            exit(1);
         }
       #endif
+
+      setvgapalette256(pal);
 
       static int messageboxopen = 0;
       if ( messageboxopen )
@@ -1935,6 +1948,12 @@ void displaymessage( const ASCString& text, int num  )
    } /* endif */
 
    if ( num == 2 ) {
+      #ifdef _WIN32_
+        if ( !gameStartupComplete ) {
+           MessageBox(NULL, text.c_str(), "Fatal Error", MB_ICONERROR | MB_OK | MB_TASKMODAL );
+           exit(1);
+        }
+      #endif
       exit ( 1 );
    }
 
