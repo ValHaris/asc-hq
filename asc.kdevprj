@@ -15,10 +15,10 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/gui.cpp,/home/martin/asc/source/gui.h,/home/martin/asc/source/building.cpp,/home/martin/asc/source/building.h,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/controls.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/building.cpp,/home/martin/asc/source/building.h,/home/martin/asc/source/gui.h,/home/martin/asc/source/typen.h,/home/martin/asc/source/gui.cpp,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/building.h
+header_file=/home/martin/asc/source/gui.h
 cpp_file=/home/martin/asc/source/building.cpp
 browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/welcome/index.html
 [source/gui.h]

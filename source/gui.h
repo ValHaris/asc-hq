@@ -1,6 +1,9 @@
-//     $Id: gui.h,v 1.12 2000-08-29 20:21:07 mbickel Exp $
+//     $Id: gui.h,v 1.13 2000-08-30 14:45:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/08/29 20:21:07  mbickel
+//      Tried to make source GCC compliant, but some problems still remain
+//
 //     Revision 1.11  2000/08/29 17:42:44  mbickel
 //      Restructured GUI to make it compilable with VisualC.
 //
@@ -704,6 +707,25 @@ class treplayguiicon : public tnguiicon {
 
 
 
+typedef class ccontainer* pcontainer;
+typedef class generalicon_c*   pgeneralicon_c;
+class generalicon_c : public tnguiicon {       // f?r Container //grundlage für jedes einzelne icon
+                        pgeneralicon_c *first;
+                    protected:
+                        char infotextbuf[1000];
+                        pcontainer main;
+                        virtual void      setfrst  ( pnguiicon ts );
+
+                    public:
+                        virtual pnguiicon frst     ( void );
+                        void setmain ( pcontainer maintemp );
+                        generalicon_c ( void );
+                        ~generalicon_c ();
+                };
+
+
+
+
 class trguiicon_play : public treplayguiicon {
         public:
           virtual int   available    ( void ) ;
@@ -762,6 +784,7 @@ class trguiicon_cancel : public treplayguiicon {
        };
 
 
+
 class ReplayBaseGuiHost: public GuiHost<preplayguiicon> {int foo;} ;
 class treplayguihost : public ReplayBaseGuiHost {
    protected:
@@ -783,6 +806,11 @@ class treplayguihost : public ReplayBaseGuiHost {
    };
 
 
+class ContainerBaseGuiHost : public GuiHost<pgeneralicon_c> {
+         public:
+            int foo;
+            ContainerBaseGuiHost ( void ) {};
+    };
 
 
 extern tguihoststandard          gui;

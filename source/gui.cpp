@@ -1,6 +1,9 @@
-//     $Id: gui.cpp,v 1.36 2000-08-29 20:21:06 mbickel Exp $
+//     $Id: gui.cpp,v 1.37 2000-08-30 14:45:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2000/08/29 20:21:06  mbickel
+//      Tried to make source GCC compliant, but some problems still remain
+//
 //     Revision 1.35  2000/08/29 17:42:44  mbickel
 //      Restructured GUI to make it compilable with VisualC.
 //
@@ -3046,6 +3049,10 @@ int   trguiicon_cancel::available    ( void )
 void  trguiicon_cancel::exec         ( void ) 
 {
 }
+
+
+
+
 
 
 
