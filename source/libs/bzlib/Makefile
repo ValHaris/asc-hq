@@ -119,3 +119,5 @@ tarfile:
 	   $(DISTNAME)/unzcrash.c \
 	   $(DISTNAME)/spewG.c \
 	   $(DISTNAME)/Makefile-libbz2_so
+
+install:

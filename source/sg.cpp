@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: sg.cpp,v 1.166 2001-09-25 20:15:50 mbickel Exp $
+//     $Id: sg.cpp,v 1.167 2001-09-26 19:53:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.166  2001/09/25 20:15:50  mbickel
+//      Changed startup map to paybacktime
+//
 //     Revision 1.165  2001/09/13 17:43:12  mbickel
 //      Many, many bug fixes
 //
@@ -2412,7 +2415,7 @@ int gamethread ( void* data )
       virtualscreenbuf.init();
 
       try {
-         int fs = loadFullscreenImage ( "helisun.jpg" );
+         int fs = loadFullscreenImage ( "title.jpg" );
          if ( !fs ) {
             tnfilestream stream ( "logo640.pcx", tnstream::reading );
             loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 );

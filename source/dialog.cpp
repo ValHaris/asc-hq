@@ -2,9 +2,13 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.94 2001-08-09 10:28:22 mbickel Exp $
+//     $Id: dialog.cpp,v 1.95 2001-09-26 19:53:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.94  2001/08/09 10:28:22  mbickel
+//      Fixed AI problems
+//      Mapeditor can edit a units AI parameter
+//
 //     Revision 1.93  2001/07/30 17:43:13  mbickel
 //      Added Microsoft Visual Studio .net project files
 //      Fixed some warnings
@@ -2437,6 +2441,7 @@ void         tfileselectsvga::run(void)
       if (swtch == 1) {
          disablebutton ( 1 );
          addkey ( 2, ct_enter );
+         addkey ( 2, ct_esc );
          mousevisible ( true );
          do {
             tdialogbox::run ();
@@ -5154,6 +5159,15 @@ void viewterraininfo ( void )
 
          strcat ( text, "\n\nthe unit ist killed by:\n" );
          appendTerrainBits ( text, &typ->terrainaccess.terrainkill );
+      }
+
+      if ( !fld->objects.empty() )
+         strcat ( text, "#aeinzug0##eeinzug0#\n\n"
+                        "#font02#Object Information:#font01##aeinzug20##eeinzug20##crtp10#" );
+
+      for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ ) {
+         strcat ( text, i->typ->location.c_str() );
+         strcat ( text, "\n" );
       }
 
       tviewanytext vat;

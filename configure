@@ -2514,7 +2514,7 @@ done
 
 
 
-MAINCONDATA="palette.pal data.version *.gfx helisun.jpg \
+MAINCONDATA="palette.pal data.version *.gfx title.jpg \
  	progress.* smalaril.fnt usablack.fnt arial8.fnt \
  	msystem.fnt gui.fnt guicol.fnt monogui.fnt sounds.txt \
  	height2.raw windp.raw windpfei.raw farbe.raw \
@@ -2530,8 +2530,8 @@ MAINCONDATA="palette.pal data.version *.gfx helisun.jpg \
  	pwrplant.raw bldinfo.raw mining.raw tabmark.raw \
  	traninfo.raw attack.raw hexfeld.raw mapbkgr.raw \
  	hex2oct.raw weapinfo.raw amatur.raw hxborder.raw \
- 	leergui.raw guiremov.raw *.obl *.veh *.bld *.tec \
- 	hexmines.raw *.trr curshex2.raw curshex.raw \
+ 	leergui.raw guiremov.raw  *.tec \
+ 	hexmines.raw curshex2.raw curshex.raw \
  	railstat.map cancel.nic poweron.nic poweroff.nic \
  	extload.nic consttnk.nic reacfoff.nic reacfire.nic \
  	loading.nic viewmap.nic dig.nic abriss.nic \
@@ -2541,7 +2541,7 @@ MAINCONDATA="palette.pal data.version *.gfx helisun.jpg \
  	informat.nic ascent.nic descent.nic attack.nic \
  	movement.nic *.nic 640480.pcx *.raw *.scr *.fnt \
  	*.dat *.map helpsys?.txt message?.txt *.pcx lcac2.jpg \
- 	bkgr4.scr helpsys9.msg *.set *.wav bi3maptranslation.txt"
+ 	bkgr4.scr helpsys9.msg *.wav *.msg"
 
 
 
@@ -2646,7 +2646,8 @@ done
 ac_given_srcdir=$srcdir
 ac_given_INSTALL="$INSTALL"
 
-trap 'rm -fr `echo "Makefile data/Makefile doc/Makefile doc/manpages/Makefile \
+trap 'rm -fr `echo "Makefile data/Makefile data/moredata/Makefile doc/Makefile \
+doc/manpages/Makefile \
 source/Makefile source/docs/Makefile source/clparser/Makefile \
 source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile \
 source/libs/Makefile source/ai/Makefile source/unix/Makefile \
@@ -2748,7 +2749,8 @@ EOF
 
 cat >> $CONFIG_STATUS <<EOF
 
-CONFIG_FILES=\${CONFIG_FILES-"Makefile data/Makefile doc/Makefile doc/manpages/Makefile \
+CONFIG_FILES=\${CONFIG_FILES-"Makefile data/Makefile data/moredata/Makefile doc/Makefile \
+doc/manpages/Makefile \
 source/Makefile source/docs/Makefile source/clparser/Makefile \
 source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile \
 source/libs/Makefile source/ai/Makefile source/unix/Makefile \
