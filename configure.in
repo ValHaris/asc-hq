@@ -37,6 +37,10 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS(malloc.h strings.h sys/dirent.h)
 AC_HEADER_DIRENT
 AC_HEADER_TIME
+
+MY_EXPAND_DIR(game_datadir, "$datadir/games/$PACKAGE")
+AC_DEFINE_UNQUOTED( GAME_DATADIR, "$game_datadir")
+
 dnl Allow location of SDL install to be configured --with-SDL-prefix=
 dnl omitting this parameter will cause the files to be sought in /usr/lib and /usr/include
 dnl note that you need to have run make install in the SDL source for this to work, as the
@@ -46,10 +50,23 @@ AC_ARG_WITH( SDL-prefix,\
  \${sdlp}/include/],\
 CXXFLAGS="$CXXFLAGS -I$withval/include" ; CPPFLAGS="$CPPFLAGS -I$withval/include" ; LDFLAGS="$LDFLAGS -L$withval/lib" )
 
-MY_EXPAND_DIR(game_datadir, "$datadir/games/$PACKAGE")
-AC_DEFINE_UNQUOTED( GAME_DATADIR, "$game_datadir")
-
 AC_CHECK_HEADER( SDL/SDL.h, , AC_MSG_ERROR( ASC requires SDL headers to be present ) )
+
+
+CXXFLAGS=" $CXXFLAGS $SDL_CFLAGS"
+LIBS="$LIBS $SDL_LIBS"
+
+
+SDL_VERSION=1.1.3
+AM_PATH_SDL($SDL_VERSION,
+            :,
+            AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!])
+)
+
+CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
+CFLAGS="$CFLAGS $SDL_CFLAGS"
+
+
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -92,19 +109,11 @@ else
 fi
 
 
-
-
-SDL_VERSION=1.1.3
-AM_PATH_SDL($SDL_VERSION,
-            :,
-            AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!])
-)
-
-CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
+AC_LANG_CPLUSPLUS
 
 dnl AC_CHECK_LIB( SDLmm, SDLmm::WasInit,, AC_MSG_ERROR( ASC requires the SDLmm library. You can get it at http://sourceforge.net/projects/sdlmm/ ) )
 dnl AC_CHECK_HEADER( SDLmm/sdlmm.h, , AC_MSG_ERROR( ASC requires SDLmm headers to be present ) )
-AM_PATH_SDLMM(0.1.8)
+AM_PATH_SDLMM(0.1.8, :, AC_MSG_ERROR([*** SDLmm version 0.1.8 not found! Get it from http://sdlmm.sf.net ]))
 
 
 dnl Checks for library functions.
@@ -155,11 +164,11 @@ AC_SUBST([MAINCONDATA])
 
 AC_OUTPUT( Makefile source/Makefile source/docs/Makefile source/docs/en/Makefile \
            source/sdl/Makefile source/libs/triangul/Makefile \
-	   source/libs/Makefile source/ai/Makefile source/unix/Makefile doc/manpages/Makefile \
+           source/libs/Makefile source/ai/Makefile source/unix/Makefile doc/manpages/Makefile \
            source/Makefile source/docs/Makefile source/clparser/Makefile \
            source/docs/en/Makefile source/sdl/Makefile \
-	   source/libs/triangul/Makefile source/libs/Makefile \
-	   source/ai/Makefile source/unix/Makefile \
+           source/libs/triangul/Makefile source/libs/Makefile \
+           source/ai/Makefile source/unix/Makefile \
            source/unix/mapeditor/Makefile source/tools/Makefile \
-	   source/tools/linux/Makefile data/Makefile doc/Makefile )
+           source/tools/linux/Makefile data/Makefile doc/Makefile )
 

@@ -29,12 +29,7 @@ class MapNetwork {
              protected:
                 int pass;
 
-                struct tposition {
-                   int x, y ;
-                };
-
-                tposition startposition;
-
+                MapCoordinate startposition;
 
                 virtual int fieldavail ( int x, int y ) = 0;
                 virtual int searchfinished ( void ) = 0;
@@ -47,6 +42,7 @@ class MapNetwork {
                 virtual void searchfield ( int x, int y, int dir );
                 void searchAllVehiclesNextToBuildings ( int player );
              public:
+                enum Scope { singleField, net, wholeMap, globalPool };
                 virtual void start ( int x, int y );
                 MapNetwork ( int checkInstances = 1 );
                 virtual ~MapNetwork();

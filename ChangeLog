@@ -1,3 +1,178 @@
+2001-10-22 23:04  mbickel
+
+	* source/: strtmesg.cpp, win32/borland/asc.bpr:  Increased version
+	number
+
+2001-10-22 20:53  mbickel
+
+	* source/loadbi3.cpp:  Fixed BI3 map translation errors: wrong
+	order of table evaluation
+
+2001-10-22 20:22  mbickel
+
+	* source/: attack.cpp, controls.cpp, dashboard.cpp, dashboard.h,
+	resourcenet.cpp, resourcenet.h, vehicle.cpp, vehicle.h:  Reaction
+	fire doesn't prevent units with the wait attribute from attacking
+	  manually
+	 Fixed behaviour of generator vehicles on BI-mode maps
+
+2001-10-21 22:18  mbickel
+
+	* source/: CLoadable.cpp, gameoptions.cpp, gameoptions.h,
+	loadbi3.cpp, spfst.cpp:  Fixed non-empty table problem with BI3 map
+	import
+	 Added ini parameter to specify wood behaviour
+
+2001-10-21 22:00  mbickel
+
+	* Makefile.in, aclocal.m4, configure, configure.in,
+	data/Makefile.in, data/message1.txt, doc/Makefile.in,
+	doc/manpages/Makefile.in, source/Makefile.in, source/gamemap.cpp,
+	source/gui.cpp, source/mapdisplay.cpp, source/unitctrl.cpp,
+	source/ai/Makefile.in, source/ai/misc.cpp, source/ai/service.cpp,
+	source/clparser/Makefile.in, source/docs/Makefile.in,
+	source/docs/en/Makefile.in, source/libs/Makefile.in,
+	source/libs/triangul/Makefile.in, source/sdl/Makefile.in,
+	source/tools/Makefile.in, source/tools/linux/Makefile.in,
+	source/unix/Makefile.in, source/unix/mapeditor/Makefile.in:  Fixed
+	AI problems
+	 Fixed: wrong message when unit could not attack
+	 Fxied: invalid order in which objects were displayed
+	 Replay: moving units are only displayed if BOTH fields are visible
+
+2001-10-21 18:07  mbickel
+
+	* source/: oldlzw.cpp, textfiletags.cpp, vehicletype.cpp,
+	vehicletype.h, viewcalculation.cpp, viewcalculation.h,
+	win32/borland/asc.bpr:	New vehicle function: jam only own field
+	 Fixed compilation problem
+
+2001-10-21 15:16  mbickel
+
+	* doc/source.html, source/astar2.h, source/attack.h,
+	source/basestreaminterface.h, source/basestrm.cpp,
+	source/basestrm.h, source/buildingtype.h, source/containerbase.h,
+	source/gamemap.h, source/global.h, source/loadbi3.cpp,
+	source/loadbi3.h, source/loadpcxc.cpp, source/misc.cpp,
+	source/misc.h, source/oldai.cpp:  Cleanup and documentation
+
+2001-10-17 12:23  mbickel
+
+	* source/: itemrepository.cpp, strtmesg.cpp, win32/borland/asc.bpr,
+	win32/borland/mapeditor/mapeditor.bpr:	version now 1.9.4.1
+
+2001-10-17 00:11  mbickel
+
+	* config.h.in, configure, configure.in, doc/source.html,
+	source/buildingtype.h, source/objecttype.h, source/sg.cpp,
+	source/vehicletype.h, source/ai/service.cpp:  Fixed AI crashes
+	 Updated documentation
+
+2001-10-16 21:58  mbickel
+
+	* configure.in, data/title_mapeditor.jpg, doc/source.html,
+	doc/source_borland.html, source/attack.cpp, source/buildings.cpp,
+	source/edmain.cpp, source/edmisc.cpp, source/gamemap.cpp,
+	source/itemrepository.cpp, source/mapdisplay.cpp, source/misc.cpp,
+	source/misc.h, source/objecttype.cpp, source/objecttype.h,
+	source/pointers.h, source/sgstream.cpp, source/spfst.cpp,
+	source/textfileparser.cpp, source/textfileparser.h,
+	source/libs/triangul/triangulate.vcproj, source/sdl/sdl.vcproj,
+	source/tools/makegfx.cpp, source/tools/weaponguide.cpp,
+	source/tools/win/bin2text.vcproj, source/tools/win/demount.vcproj,
+	source/tools/win/gfx2pcx.vcproj, source/tools/win/makegfx.vcproj,
+	source/tools/win/mount.vcproj, source/tools/win/tools.vcproj,
+	source/tools/win/viewid.vcproj,
+	source/tools/win/weaponguide.vcproj, source/win32/borland/asc.bpr,
+	source/win32/borland/mapeditor/mapeditor.bpf,
+	source/win32/borland/mapeditor/mapeditor.bpr:  Added title screen
+	for mapeditor
+	 Updated source documentation
+
+2001-10-16 21:56  mbickel
+
+	* source/win32/msvc/: ASC.sln, ASC/ASC.sln, ASC/ASC.vcproj,
+	jpeglib/jpeglib.vcproj, libbzip2/libbzip2.vcproj,
+	mapeditor/mapeditor.vcproj:  Added MSVC project files
+
+2001-10-16 17:33  mbickel
+
+	* configure, configure.in, data/Makefile.am, data/Makefile.in,
+	data/icon_asc.gif, data/icon_mapeditor.gif,
+	data/moredata/buildings.con, data/moredata/mk1.con,
+	data/moredata/trrobj.con, source/buildingtype.cpp,
+	source/edmain.cpp, source/loadbi3.cpp, source/sg.cpp,
+	source/sdl/graphics.cpp, source/sdl/graphics.h:  Added icons to
+	data
+	 ASC displays icons
+	 Fixed crash when building icons
+	 Removed assembled datafiles
+
+2001-10-12 02:32  mbickel
+
+	* source/: loadbi3.cpp, tools/viewid.cpp, tools/win/viewid.bpf,
+	tools/win/viewid.bpr:  Fixed crash in loadbi3
+
+2001-10-12 02:18  mbickel
+
+	* source/strtmesg.cpp:	Version now 1.9.4
+
+2001-10-12 02:16  mbickel
+
+	* source/: itemrepository.cpp, objecttype.cpp, terraintype.cpp,
+	textfileparser.cpp, textfileparser.h, tools/bin2text.cpp,
+	tools/viewid.cpp, tools/linux/Makefile.am, tools/linux/Makefile.in,
+	unix/Makefile.am, unix/Makefile.in:  Some cleanup and bugfixes
+
+2001-10-11 12:41  mbickel
+
+	* asc.kdevprj, configure, configure.in, source/basestrm.cpp,
+	source/controls.cpp, source/dialog.cpp, source/dialog.h,
+	source/dlg_box.h, source/edglobal.cpp, source/edglobal.h,
+	source/edmisc.cpp, source/edmisc.h, source/gamedlg.cpp,
+	source/gamemap.cpp, source/gamemap.h, source/loadbi3.cpp,
+	source/loaders.cpp, source/loaders.h, source/map2pcx.cpp,
+	source/spfst.cpp, source/unix/Makefile.am, source/unix/Makefile.in,
+	source/unix/fileio.cpp, source/unix/fileio.h,
+	source/win32/fileio.cpp, source/win32/borland/fileio.h,
+	source/win32/msvc/fileio.h, source/win32/watcom/fileio.h: 
+	Restructured platform fileio handling
+	 Added map archival information to mapeditor
+
+2001-10-11 12:22  mbickel
+
+	* source/: building.cpp, edevents.cpp, edgen.cpp, edglobal.cpp,
+	edmisc.cpp, sgstream.cpp, tools/mount.cpp, win32/msvc/global_os.h: 
+	Some cleanup and fixes for Visual C++
+
+2001-10-08 16:44  mbickel
+
+	* asc.bpg, data/palette.map, source/basestrm.h,
+	source/controls.cpp, source/dialog.cpp, source/edmisc.cpp,
+	source/errors.h, source/gamedlg.cpp, source/mapalgorithms.cpp,
+	source/replay.cpp, source/sg.cpp, source/typen.h, source/ai/ai.bpr,
+	source/sdl/sound.cpp, source/tools/demount.cpp,
+	source/tools/weaponguide.cpp, source/tools/win/weaponguide.bpr,
+	source/win32/borland/asc.bpr,
+	source/win32/borland/mapeditor/mapeditor.bpr:  Some cleanup
+
+2001-10-08 16:12  mbickel
+
+	* data/moredata/mk1.con, source/basestrm.cpp, source/basestrm.h,
+	source/edglobal.cpp, source/edglobal.h, source/edmisc.cpp,
+	source/gamemap.cpp, source/loadbi3.cpp, source/map2pcx.cpp,
+	source/strtmesg.cpp, source/ai/misc.cpp, source/ai/service.cpp: 
+	Fixed crash in AI
+	 Speedup of AI
+	 Map2PCX improvements
+	 Mapeditor usability improvements
+
+2001-10-06 13:30  mbickel
+
+	* ChangeLog, data/legacy/A_BOMBER.VEH, source/itemrepository.cpp,
+	source/loadbi3.cpp, source/map2pcx.cpp, source/strtmesg.cpp,
+	source/typen.h:  Fixed bug in gametime calculation
+
 2001-10-03 22:56  mbickel
 
 	* data/bi3maptranslation.txt, data/helpsys2.txt, data/helpsyst.txt,
