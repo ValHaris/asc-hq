@@ -549,7 +549,8 @@ void Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
               if (   (startField->bdt & getTerrainBitType(cbicebreaking) ).any()
                    || startField->checkforobject ( eisbrecherobject ) ) {
                  startField->addobject ( eisbrecherobject, 1 << dir );
-                 startField->checkforobject ( eisbrecherobject )->time = gamemap->time.turn();
+                 if ( startField->checkforobject ( eisbrecherobject ) )
+                    startField->checkforobject ( eisbrecherobject )->time = gamemap->time.turn();
               }
 
      dir = (dir + sidenum/2) % sidenum;
@@ -564,7 +565,8 @@ void Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
               if (   (destField->bdt & getTerrainBitType(cbicebreaking) ).any()
                    || destField->checkforobject ( eisbrecherobject ) ) {
                  destField->addobject ( eisbrecherobject, 1 << dir );
-                 destField->checkforobject ( eisbrecherobject )->time = gamemap->time.turn();
+                 if ( destField->checkforobject ( eisbrecherobject ) )
+                    destField->checkforobject ( eisbrecherobject )->time = gamemap->time.turn();
               }
    }
 }
