@@ -66,7 +66,7 @@ SoundSystem  :: SoundSystem ( bool mute, bool off )
    } else {
       mix_initialized = true;
 		Mix_QuerySpec(&audio_rate, &audio_format, &audio_channels);
-      displayLogMessage ( 5, "Opened audio at %d Hz %d bit %s", audio_rate,
+      displayLogMessage ( 5, "Opened audio at %d Hz %d bit %s\n", audio_rate,
 			(audio_format&0xFF),
 			(audio_channels > 1) ? "stereo" : "mono");
    }

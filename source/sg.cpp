@@ -3,9 +3,18 @@
 */
 
 
-//     $Id: sg.cpp,v 1.150 2001-07-18 16:05:47 mbickel Exp $
+//     $Id: sg.cpp,v 1.151 2001-07-20 20:37:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.150  2001/07/18 16:05:47  mbickel
+//      Fixed: infinitive loop in displaying "player exterminated" msg
+//      Fixed: construction of units by units: wrong player
+//      Fixed: loading bug of maps with mines
+//      Fixed: invalid map parameter
+//      Fixed bug in game param edit dialog
+//      Fixed: cannot attack after declaring of war
+//      New: ffading of sounds
+//
 //     Revision 1.149  2001/07/15 21:00:25  mbickel
 //      Some cleanup in the vehicletype class
 //
@@ -1219,18 +1228,14 @@ void loadStartupMap ( const char *gameToLoad=NULL )
 
      int maploadable;
      {
-
         tfindfile ff ( s );
-
         string filename = ff.getnextname();
-
         maploadable = validatemapfile ( filename.c_str() );
      }
 
      if ( !maploadable ) {
 
          tfindfile ff ( mapextension );
-
          string filename = ff.getnextname();
 
          if ( filename.empty() )
@@ -1243,11 +1248,15 @@ void loadStartupMap ( const char *gameToLoad=NULL )
 
          }
          s = filename;
-      }
+     }
 
-      loadmap(s.c_str());
-      actmap->startGame();
-      actmap->setupResources();
+     loadmap(s.c_str());
+
+     displayLogMessage ( 6, "initializing map..." );
+     actmap->startGame();
+     displayLogMessage ( 6, "done\n Setting up Resources..." );
+     actmap->setupResources();
+     displayLogMessage ( 6, "done\n" );
    }
 }
 
@@ -2047,7 +2056,9 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 
    if ( actprogressbar ) actprogressbar->startgroup();
 
+   displayLogMessage ( 6, "loading gui icons..." );
    gui.starticonload();
+   displayLogMessage ( 6, "done\n" );
 
    if ( actprogressbar ) actprogressbar->startgroup();
 
@@ -2344,6 +2355,7 @@ int gamethread ( void* data )
          displaymessage ( "loading of game failed", 2 );
       }
 
+      displayLogMessage ( 5, "loaddata completed successfully.\n" );
       setvgapalette256(pal);
 
       addmouseproc ( &mousescrollproc );
@@ -2359,6 +2371,7 @@ int gamethread ( void* data )
       gameStartupComplete = true;
 
 
+      displayLogMessage ( 5, "entering outer main loop.\n" );
       do {
          try {
             if ( !actmap || actmap->xsize <= 0 || actmap->ysize <= 0 ) {
@@ -2369,7 +2382,9 @@ int gamethread ( void* data )
                backgroundpict.paint();
 
                if ( !gtp->filename.empty() && patimat ( tournamentextension, gtp->filename.c_str() ) ) {
+                  displayLogMessage ( 5, "Initializing network game..." );
                   initNetworkGame ( );
+                  displayLogMessage ( 5, "done\n" );
                }
 
                displaymap();
@@ -2387,10 +2402,11 @@ int gamethread ( void* data )
                static int displayed = 0;
                if ( !displayed )
                   displaymessage2( "time for startup: %d * 1/100 sec", ticker-cntr );
-                 
+
                displayed = 1;
                */
 
+               displayLogMessage ( 5, "entering inner main loop.\n" );
                mainloop();
                mousevisible ( false );
             }
