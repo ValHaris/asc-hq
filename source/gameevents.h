@@ -2,9 +2,13 @@
     \brief Interface to the event handling of ASC
 */
 
-//     $Id: gameevents.h,v 1.2 2004-02-01 13:39:53 mbickel Exp $
+//     $Id: gameevents.h,v 1.3 2004-02-07 12:34:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2004/02/01 13:39:53  mbickel
+//      New event action: set view sharing
+//      Fixed lots of bugs
+//
 //     Revision 1.1  2004/01/16 19:14:55  mbickel
 //      Adding files for new event system
 //
@@ -401,7 +405,7 @@ class AllEnemyBuildingsDestroyed : public EventTrigger, public SigC::Object {
       void triggered();
 };
 
-class SpecificUnitEntersPolygon : public EventTrigger, protected FieldAddressing, public SigC::Object {
+class SpecificUnitEntersPolygon : public EventTrigger, public FieldAddressing, public SigC::Object {
       int unitID;
       bool found;
       bool arming;
@@ -421,7 +425,7 @@ class SpecificUnitEntersPolygon : public EventTrigger, protected FieldAddressing
       ASCString getName() const;
 };
 
-class AnyUnitEntersPolygon : public EventTrigger, protected FieldAddressing, public SigC::Object {
+class AnyUnitEntersPolygon : public EventTrigger, public FieldAddressing, public SigC::Object {
       int player;
       bool found;
       bool arming;
@@ -529,7 +533,7 @@ class DisplayMessage: public EventAction {
 };
 
 
-class MapModificationEvent : public EventAction, protected FieldAddressing {
+class MapModificationEvent : public EventAction, public FieldAddressing {
    protected:
       MapModificationEvent ( EventActionID id ) : EventAction ( id ), FieldAddressing(gamemap) {};
    public:

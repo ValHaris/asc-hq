@@ -158,6 +158,7 @@ extern const char*  ceventtrigger[];
 
  */
 
+#pragma pack(1)
 
 
    class PrehistoricEventStructure {
@@ -244,6 +245,9 @@ extern const char*  ceventtrigger[];
 
    };
 
+#pragma pack()
+
+   
 extern  const char* cconnections[6];
  #define cconnection_destroy 1
  #define cconnection_conquer 2

@@ -32,7 +32,7 @@
  #include "basestrm.h"
  #include "time.h"
  #include "messages.h"
- #include "gameevents.h"
+ #include "gameeventsystem.h"
 
 //! The number of game paramters that can be specified for each map.
 const int gameparameternum = 28;

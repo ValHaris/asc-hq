@@ -28,7 +28,7 @@
 #include "errors.h"
 
 #ifdef sgmain
- #include "gameevents.h"
+// #include "gameevents.h"
 #endif
 
 SigC::Signal0<void> buildingSeen;
