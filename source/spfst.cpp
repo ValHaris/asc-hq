@@ -1,6 +1,12 @@
-//     $Id: spfst.cpp,v 1.70 2000-11-08 19:31:14 mbickel Exp $
+//     $Id: spfst.cpp,v 1.71 2000-11-09 18:39:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.70  2000/11/08 19:31:14  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.69  2000/10/31 10:42:44  mbickel
 //      Added building->vehicle service to vehicle controls
 //      Moved tmap methods to gamemap.cpp
@@ -1030,6 +1036,7 @@ void         generatemap( const pwterraintype   bt,
 
    delete actmap;
    actmap = new tmap;
+   actmap->playerView = 0;
 
    actmap->xsize = xsize;
    actmap->ysize = ysize; 
