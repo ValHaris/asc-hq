@@ -138,22 +138,9 @@ Larger Tasks:
 
 -2- adding inheritance to the text file formats
 
--3-  maintaining and improving the dialog engine together with the dialogs
-    themselves. The VehicleInfo dialog for example is really outdated...
-
-    Interesting gui libraries seem to be:
-    Paragui ( http://www.bms-austria.com/projects/paragui/ )
-    libu    ( http://www.rhrk.uni-kl.de/~klaux/libu.html )
-
-    The dialogs have long been neglected , because the basic class on which 
-    all dialogs are based is, well, not very well designed. Because of this,
-    creating dialogs is way to much work today.
-
-    Since ASC has tons of dialogs, building a special graphical dialog
-    designing program may be worth the effort. Perhaps it is possible to 
-    use an existing one (like QT Designer) and import its XML dialog 
-    description (implementing only a small subset of the functionality)
-
+-3- Paragui has been chosen to be the new dialog engine for ASC.
+    Now many old and outdated dialogs (like the VehicleInfo dialog)
+    should be rewritten (www.paragui.org)
 
 
 Requested features:

@@ -747,12 +747,15 @@ void         tdashboard::paintmovement(void)
        activefontsettings.length = 17;
        activefontsettings.height = 9;
        if ( vehicle->typ->fuelConsumption ) {
-          if ( (movedisp  &&  vehicle->typ->fuelConsumption ) || (minmalq*vehicle->tank.fuel / vehicle->typ->fuelConsumption  < vehicle->getMovement() ))
+          if ( movedisp  || (minmalq*vehicle->tank.fuel / vehicle->typ->fuelConsumption  < vehicle->getMovement() ))
              showtext2c( strrrd8d( minmalq*vehicle->tank.fuel / vehicle->typ->fuelConsumption ), agmp->resolutionx - ( 640 - 591), 59);
           else
              showtext2c( strrrd8d(vehicle->getMovement() ), agmp->resolutionx - ( 640 - 591), 59);
        } else
-          showtext2c( strrrd8d(0), agmp->resolutionx - ( 640 - 591), 59);
+          if ( movedisp )
+             showtext2c( "-", agmp->resolutionx - ( 640 - 591), 59);
+          else
+             showtext2c( strrrd8d( vehicle->getMovement() ), agmp->resolutionx - ( 640 - 591), 59);
     } else
        bar( agmp->resolutionx - ( 640 - 591), 59,agmp->resolutionx - ( 640 - 608), 67, 172);
 }

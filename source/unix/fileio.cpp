@@ -27,3 +27,4 @@
 
  const int maxfilenamelength = 255;
  const char* asc_configurationfile = "~/.asc/ascrc";
+ const bool has_drive_letters = false;

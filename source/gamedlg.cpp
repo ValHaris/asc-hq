@@ -1,9 +1,14 @@
 /*! \file gamedlg.cpp    
     \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.90 2002-03-03 22:19:33 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.91 2002-03-11 18:47:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.90  2002/03/03 22:19:33  mbickel
+//      Updated documentation
+//      Improved user interface
+//      Fixed AI bug
+//
 //     Revision 1.89  2002/03/02 23:04:01  mbickel
 //      Some cleanup of source code
 //      Improved Paragui Integration
@@ -3096,7 +3101,7 @@ void tmousepreferences :: init ( void )
    
    showtext2 ( "mousegui menu opens after movement",  x1 + 25, r2.y1 + dlgoffset.y1 );
 
-   showtext2 ( "single click for field select and menu",  x1 + 25, r2.y1 + dlgoffset.y1 + dlgoffset.y1 );
+   showtext2 ( "single click for field select and menu",  x1 + 25, r3.y1 + dlgoffset.y1  );
 
 
    status = 0;

@@ -2,9 +2,12 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.71 2002-03-04 20:00:00 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.72 2002-03-11 18:47:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.71  2002/03/04 20:00:00  mbickel
+//      Fixed broken convertPathDelimitters(ASCString)
+//
 //     Revision 1.70  2002/03/03 18:52:01  mbickel
 //      Updated bzlib to 1.0.2
 //      Fixed bug in mount that compressed only part of files
@@ -2168,7 +2171,12 @@ tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition )
 
 
       // checking if absolute or relative path
-      bool absolute = name[0] == pathdelimitter;
+      bool absolute = false;
+      if ( name[0] == pathdelimitter )
+         absolute = true;
+
+      if ( has_drive_letters && name.length() > 3 && name.find ( ":\\", 1 ) != name.npos )
+         absolute = true;
 
       if ( absolute || searchPosition == Current ) {
          directory[0].assign ( name, 0, ppos );

@@ -27,5 +27,5 @@
 
  const int maxfilenamelength = 255;
  const char* asc_configurationfile = "asc.ini";
-
+ const bool has_drive_letters = true;
 
