@@ -1897,7 +1897,8 @@ void displaymessage( const ASCString& text, int num  )
 
    bool displayInternally = true;
 
-   displayLogMessage ( 0, "fatal error" + text + "\n" );
+   if ( num == 2 )
+      displayLogMessage ( 0, "fatal error" + text + "\n" );
 
 
    #ifndef NoStdio

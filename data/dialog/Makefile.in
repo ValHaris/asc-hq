@@ -256,10 +256,10 @@ uninstall-am: uninstall-info-am uninstall-pkgdataDATA
 	uninstall-pkgdataDATA
 
 
-asc_dlg.zip: asc_dlg.theme
+asc_dlg.zip: asc_dlg.theme asc2_dlg.theme
 	chmod -R g-w asc*
 	chmod -R o-w asc*
-	(zip -9 -r asc_dlg.zip asc_dlg.theme ./asc/* -i *.png *.bmp *.ttf *.theme)
+	(zip -9 -r asc_dlg.zip asc_dlg.theme asc2_dlg.theme ./asc/* -i *.png *.bmp *.ttf *.theme)
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

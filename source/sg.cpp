@@ -120,6 +120,7 @@
 #include "messagedlg.h"
 #include "statisticdialog.h"
 #include "clipboard.h"
+#include "paradialog.h"
 
 
 // #define MEMCHK
@@ -934,6 +935,7 @@ void loadStartupMap ( const char *gameToLoad=NULL )
 
             try {
                loadgame( gameToLoad );
+	       computeview( actmap );
             } catch ( tfileerror ) {
                fatalError ( "%s is not a legal savegame. ", gameToLoad );
             }
