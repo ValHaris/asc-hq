@@ -11,42 +11,167 @@
 #endif
 
 #include "soundList.h"
-tSoundList sound;
+#include "basestrm.h"
 
-#ifdef _DOS_
- #define DEBUG( msg ) 
-#else
- #define DEBUG( msg ) printf( "%s\n", msg )
-#endif
+SoundList* SoundList::instance = NULL;
 
-void initSoundList(int silent) {
-  initSound(silent);
-  sound.init(WEAPON_SOUND_COUNT);
+const int soundNum = 28;
+
+struct {
+          SoundList::Sample sample;
+          int subType;
+          char* name;
+          Sound* snd;
+      } sounds[soundNum] = { { SoundList::shooting, 0, "SHOOT.CRUISEMISSILE", NULL },
+                             { SoundList::shooting, 1, "SHOOT.MINE", NULL },
+                             { SoundList::shooting, 2, "SHOOT.BOMB", NULL },
+                             { SoundList::shooting, 3, "SHOOT.AIRMISSILE", NULL },
+                             { SoundList::shooting, 4, "SHOOT.GROUNDMISSILE", NULL },
+                             { SoundList::shooting, 5, "SHOOT.TORPEDO", NULL },
+                             { SoundList::shooting, 6, "SHOOT.MACHINEGUN", NULL },
+                             { SoundList::shooting, 7, "SHOOT.CANNON", NULL },
+                             { SoundList::shooting, 10, "SHOOT.LASER", NULL },
+                             { SoundList::moving,   0, "MOVE.DEFAULT", NULL },
+                             { SoundList::moving,   1, "MOVE.LIGHT_TRACKED_VEHICLE", NULL },
+                             { SoundList::moving,   2, "MOVE.MEDIUM_TRACKED_VEHICLE", NULL },
+                             { SoundList::moving,   3, "MOVE.HEAVY_TRACKED_VEHICLE", NULL },
+                             { SoundList::moving,   4, "MOVE.LIGHT_WHEELED_VEHICLE", NULL},
+                             { SoundList::moving,   5, "MOVE.MEDIUM_WHEELED_VEHICLE", NULL },
+                             { SoundList::moving,   6, "MOVE.HEAVY_WHEELED_VEHICLE", NULL },
+                             { SoundList::moving,   7, "MOVE.TROOPER", NULL },
+                             { SoundList::moving,   8, "MOVE.RAIL_VEHICLE", NULL },
+                             { SoundList::moving,   9, "MOVE.MEDIUM_AIRCRAFT", NULL },
+                             { SoundList::moving,  10, "MOVE.MEDIUM_SHIP", NULL },
+                             { SoundList::moving,  11, "MOVE.TURRET", NULL },
+                             { SoundList::moving,  12, "MOVE.LIGHT_AIRCRAFT", NULL },
+                             { SoundList::moving,  13, "MOVE.HEAVY_AIRCRAFT", NULL },
+                             { SoundList::moving,  14, "MOVE.LIGHT_SHIP", NULL },
+                             { SoundList::moving,  15, "MOVE.HEAVY_SHIP", NULL },
+                             { SoundList::menu_ack,  0, "MENU.ACKNOWLEDGE", NULL },
+                             { SoundList::menu_fail, 0, "MENU.FAIL", NULL },
+                             { SoundList::building_conq,  0, "BUILDING.CONQUER", NULL }
+                           };
+
+
+
+class StringTokenizer {
+       ASCString& str;
+       int i;
+   private:
+       int CharSpace ( char c );
+   public:
+       StringTokenizer ( ASCString & _str ) : str( _str ), i ( 0 ) {};
+       ASCString getNextToken ( );
+};
+
+
+int StringTokenizer::CharSpace ( char c )
+{
+  if ( c <= ' ' )
+     return 0;
+
+  const char* ops = "=*/+-";
+  const char* d = ops;
+  do {
+     if( *d == c )
+        return 2;
+     if ( *d == 0 )
+        return 1;
+     d++;
+  } while ( true );
 }
 
-void tSoundList::init( unsigned weaponCount ) {
-  char weaponSoundFileName[128];
-  soundFail = new Sound("Fail.wav");
-  boom = new Sound("Boom.wav");
-  menuPopup = new Sound("Click.wav");
-  menuSelect = new Sound("Doink.wav");
-  menuAbort = new Sound("Bweep.wav");
-  weaponSoundCount=weaponCount;
-  weaponSoundArray=(Sound **)malloc(sizeof(*weaponSoundArray)*weaponCount);
-  for( unsigned u=0; u<weaponCount; ++u ) {
-    sprintf( weaponSoundFileName, WEAPON_SOUND_FILENAME_TEMPLATE, u );
-    weaponSoundArray[u]=new Sound(weaponSoundFileName);
-  }
+ASCString StringTokenizer::getNextToken( )
+{
+   while ( i < str.length() && !CharSpace(str[i]) )
+     i++;
+
+   if ( i == str.length() )
+      return "";
+
+   int begin = i;
+   int cs = CharSpace( str[i] );
+   do {
+      i++;
+   } while ( i < str.length() && CharSpace( str[i] ) == cs );
+   return str.substr(begin, i-begin);
 }
 
-/** This function exists primarily to safeguard against failure to supply
- *  enough weapon sounds.  It's guaranteed to return a valid sound (possibly
- *  silence.
- */
-Sound *tSoundList::weaponSound(unsigned weapon) {
-  // printf( "Fetching sound for weapon %u\n", weapon );
-  if( weaponSoundCount < weapon )
-    return soundFail;
 
-  return weaponSoundArray[weapon];
+SoundList& SoundList::getInstance()
+{
+   if ( !instance )
+      instance = new SoundList;
+   return *instance;
 }
+
+
+void SoundList::init( bool quiet )
+{
+   initSound( quiet );
+   noSound = quiet;
+   const ASCString separator = "=";
+   const ASCString filename = "sounds.txt";
+
+   typedef map<ASCString, ASCString> SoundSetup;
+   SoundSetup soundSetup;
+   tnfilestream list ( filename, tnstream::reading );
+   bool cont;
+   ASCString line;
+   int linenumber = 0;
+   do {
+      linenumber++;
+      cont = list.readTextString ( line );
+      if ( !line.empty() && line[0] != '#' && line[0] != ';' ) {
+         line.toUpper();
+         StringTokenizer tok ( line );
+         ASCString snd = tok.getNextToken( );
+         ASCString op = tok.getNextToken( );
+         ASCString file = tok.getNextToken( );
+         if ( !file.empty() && op==separator )
+            soundSetup[snd] = file;
+         else
+            if ( op.empty() )
+               warning( "error parsing file " + filename + " , line " + strrr (linenumber ));
+      }
+   } while ( cont );
+
+   for ( SoundSetup::iterator i = soundSetup.begin(); i != soundSetup.end(); i++ ) {
+      Sound* s = NULL;
+      if ( !i->second.empty() )
+         if ( soundFiles.find ( i->second ) == soundFiles.end() ) {
+            s = new Sound ( i->second );
+            soundFiles[i->second] = s;
+         }
+
+      for ( int n = 0; n < soundNum; n++ )
+         if ( i->first == ASCString( sounds[n].name ) )
+            sounds[n].snd =  s;
+   }
+}
+
+
+
+void SoundList::play( Sample snd, int subType  )
+{
+   if ( noSound )
+      return;
+
+   // once we have some more sounds this could be optimized to be faster than O(n)
+
+   for ( int i = 0; i < soundNum; i++ )
+      if ( snd == sounds[i].sample && subType == sounds[i].subType ) {
+         if ( sounds[i].snd )
+            sounds[i].snd->play();
+
+         return;
+      }
+}
+
+
+SoundList::~SoundList()
+{
+   for ( SoundFiles::iterator i = soundFiles.begin(); i != soundFiles.end(); i++ )
+      delete i->second;
+}
+

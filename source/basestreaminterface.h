@@ -63,7 +63,6 @@
            tnstream ( );
          protected:
            std::string devicename; // will just contain "abstract"
-
 };
 
 #endif // basestreaminterface_h_included

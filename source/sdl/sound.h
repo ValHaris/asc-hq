@@ -7,13 +7,16 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
+#include "../ascstring.h"
+
 class Sound {
 public:
   /** Create a Sound from the .wav file specified by filename.
    *  If it's not possible to use the wave file for some reason, the
    *  sound is set to silence
    */
-  Sound( const char *filename );
+  Sound( const ASCString& filename );
 
   void play(void);
   void playWait(void);
@@ -26,7 +29,7 @@ private:
   int converted;
 
   /** A name for this sound - mostly for debugging purposes */
-  const char *name;
+  const ASCString name;
 
   /* actual sound data and its length */
   Uint8  *data;

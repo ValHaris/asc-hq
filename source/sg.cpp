@@ -3,9 +3,14 @@
 */
 
 
-//     $Id: sg.cpp,v 1.145 2001-07-13 14:02:48 mbickel Exp $
+//     $Id: sg.cpp,v 1.146 2001-07-14 13:15:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.145  2001/07/13 14:02:48  mbickel
+//      Fixed inconsistency in replay (shareviewchange)
+//      Fixed sound initialization problem
+//      Speed up of movement
+//
 //     Revision 1.144  2001/07/11 20:44:37  mbickel
 //      Removed some vehicles from the data file.
 //      Put all legacy units in into the data/legacy directory
@@ -2525,7 +2530,7 @@ int main(int argc, char *argv[] )
 
    // initialize the sound only if neither the command line parameter q is specified
    // nor is the sound disabled in the game options
-   initSoundList( cl->q() || CGameOptions::Instance()->disablesound );
+   SoundList::getInstance().init( cl->q() || CGameOptions::Instance()->disablesound );
 
    if ( modenum8 > 0 ) {
       #ifdef _DOS_

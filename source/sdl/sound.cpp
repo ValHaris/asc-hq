@@ -30,9 +30,6 @@
 
 #include "../basestrm.h"
 
-#define DEBUG( msg ) if ( verbosity > 8 ) fprintf( stderr, "DEBUG SOUND: %s\n", msg )
-#define DEBUGS( msg ) if ( verbosity > 8 ) fprintf( stderr, "DEBUG SOUND %s: %s\n", name, msg )
-
 /** How long should this process sleep while waiting for a sound to play
  */
 #define WAIT_SLEEP_USEC 250000l // 0.25 seconds
@@ -73,53 +70,53 @@ static Sound          *currentSound=NULL;
 */
 static void fill_audio(void *udata, Uint8 *stream, int len)
 {
-  /* Only play if we have data left.  Stop callbacks if we're out of data. */
-  if ( audioDataLen == 0 ) {
-    SDL_PauseAudio(1);
-    currentSound=NULL;
-    return;
-  }
+   /* Only play if we have data left.  Stop callbacks if we're out of data. */
+   if ( audioDataLen == 0 ) {
+      SDL_PauseAudio(1);
+      currentSound=NULL;
+      return;
+   }
 
-  /* Mix as much data as possible */
-  len = ( len > audioDataLen ? audioDataLen : len );
-  SDL_MixAudio( stream, audioData, len, SDL_MIX_MAXVOLUME );
-  audioData += len;
-  audioDataLen -= len;
+   /* Mix as much data as possible */
+   len = ( len > audioDataLen ? audioDataLen : len );
+   SDL_MixAudio( stream, audioData, len, SDL_MIX_MAXVOLUME );
+   audioData += len;
+   audioDataLen -= len;
 }
 
-void initSound(int silent) {
-  if(!needInit)
-    return;
+void initSound(int silent)
+{
+   if(!needInit)
+      return;
 
-  if ( silent ) {
-     noAudio = true;
-     return;
-  }
+   if ( silent ) {
+      noAudio = true;
+      return;
+   }
 
-  DEBUG("initSound Start");
-  SDL_AudioSpec wanted;
-  
-  /* Set the audio format */
-  wanted.freq = 22050;
-  wanted.format = AUDIO_S16;
-  wanted.channels = 2;    /* 1 = mono, 2 = stereo */
-  wanted.samples = 1024;  /* Good low-latency value for callback */
-  wanted.callback = fill_audio;
-  wanted.userdata = NULL;
-  
-  /* Open the audio device, Adjusting to the hardware.
-   * flag no audio available if we can't open audio
-   */
-  noAudio=SDL_OpenAudio(&wanted, &actualAudioSpec) < 0;
-  needInit=false;
-  DEBUG("initSound Stop");
+   SDL_AudioSpec wanted;
+
+   /* Set the audio format */
+   wanted.freq = 22050;
+   wanted.format = AUDIO_S16;
+   wanted.channels = 2;    /* 1 = mono, 2 = stereo */
+   wanted.samples = 1024;  /* Good low-latency value for callback */
+   wanted.callback = fill_audio;
+   wanted.userdata = NULL;
+
+   /* Open the audio device, Adjusting to the hardware.
+    * flag no audio available if we can't open audio
+    */
+   noAudio=SDL_OpenAudio(&wanted, &actualAudioSpec) < 0;
+   needInit=false;
 }
 
-void closeSound(void) {
-  if(!needInit) {
-    SDL_CloseAudio();
-    needInit=true;
-  }
+void closeSound(void)
+{
+   if(!needInit) {
+      SDL_CloseAudio();
+      needInit=true;
+   }
 }
 
 
@@ -130,141 +127,135 @@ SDL_AudioSpec* loadWave ( const char* name, SDL_AudioSpec *spec, Uint8 **audio_b
       return NULL;
 
    tnfilestream stream ( name, tnstream::reading );
-   
+
    return SDL_LoadWAV_RW( SDL_RWFromStream ( &stream ), 1, spec, audio_buf, audio_len);
 }
 
 
-Sound::Sound( const char *filename ) {
-  SDL_AudioSpec  sampleAudioSpec;
-  Uint8         *tmpData;
-  Uint32         tmpLen;
+Sound::Sound( const ASCString& filename ) : name ( filename )
+{
+   SDL_AudioSpec  sampleAudioSpec;
+   Uint8         *tmpData;
+   Uint32         tmpLen;
 
-  name=strdup(filename);
-  DEBUGS("initialising");
+   /* Load wave file or set to silence on failure.  Also set for silence if
+    * There is noAudio.
+    */
+   if( noAudio || !loadWave( filename.c_str(), &sampleAudioSpec, &tmpData, &tmpLen ) ) {
+      data=NULL;
+      converted=0;
+      len=0;
+      return;
+   }
 
-  /* Load wave file or set to silence on failure.  Also set for silence if
-   * There is noAudio.
-   */
-  if( noAudio || !loadWave( filename, &sampleAudioSpec, &tmpData, &tmpLen ) ) {
-    data=NULL;
-    converted=0;
-    len=0;
-    DEBUGS( "set silent" );
-    return;
-  }
+   /* Determine if sample must be converted for the sound hardware.
+    * The converted flag is set so we use the correct free routine later.
+    */
+   converted=(sampleAudioSpec.format != actualAudioSpec.format)
+             ||      (sampleAudioSpec.freq != actualAudioSpec.freq)
+             ||      (sampleAudioSpec.channels != actualAudioSpec.channels);
 
-  /* Determine if sample must be converted for the sound hardware.
-   * The converted flag is set so we use the correct free routine later.
-   */
-  converted=(sampleAudioSpec.format != actualAudioSpec.format)
-    ||      (sampleAudioSpec.freq != actualAudioSpec.freq)
-    ||      (sampleAudioSpec.channels != actualAudioSpec.channels);
-  
-  /* Attempt conversion if required */
-  if( converted ) {
-    DEBUGS( "Converting!" );
-    SDL_AudioCVT converter;
+   /* Attempt conversion if required */
+   if( converted ) {
+      SDL_AudioCVT converter;
 
-    /* Setup the conversion and either convert or set silent if we can't
-     * create an adequate converter
-     */
-    if( SDL_BuildAudioCVT( &converter,
-			   sampleAudioSpec.format, sampleAudioSpec.channels,
-			   sampleAudioSpec.freq,
-			   actualAudioSpec.format, actualAudioSpec.channels,
-			   actualAudioSpec.freq ) >= 0 ) {
-
-      /* Perform conversion */
-      converter.len=tmpLen;
-      converter.buf=(Uint8 *)malloc( converter.len * converter.len_mult);
-
-      /* If we successfully allocated RAM, do conversion, otherwise
-       * set sound to silence
+      /* Setup the conversion and either convert or set silent if we can't
+       * create an adequate converter
        */
-      if( converter.buf ) {
-	memcpy( converter.buf, tmpData, tmpLen );
-	SDL_ConvertAudio( &converter );
+      if( SDL_BuildAudioCVT( &converter,
+                             sampleAudioSpec.format, sampleAudioSpec.channels,
+                             sampleAudioSpec.freq,
+                             actualAudioSpec.format, actualAudioSpec.channels,
+                             actualAudioSpec.freq ) >= 0 ) {
+
+         /* Perform conversion */
+         converter.len=tmpLen;
+         converter.buf=(Uint8 *)malloc( converter.len * converter.len_mult);
+
+         /* If we successfully allocated RAM, do conversion, otherwise
+          * set sound to silence
+          */
+         if( converter.buf ) {
+            memcpy( converter.buf, tmpData, tmpLen );
+            SDL_ConvertAudio( &converter );
+         } else {
+            converter.len=0;
+         }
+
+         data=converter.buf;
+         len=converter.len*converter.len_mult;
+
       } else {
-	converter.len=0;
+
+         /* Set sound to silence if we can't convert */
+         data=NULL;
+         len=0;
       }
 
-      DEBUGS( "Converted ok" );
-      data=converter.buf;
-      len=converter.len*converter.len_mult;
+      /* Free original sample */
+      SDL_FreeWAV( tmpData );
 
-    } else {
+   } else {
 
-      /* Set sound to silence if we can't convert */
-      data=NULL;
-      len=0;
-    }
-
-    /* Free original sample */
-    DEBUGS( "Freeing original sound memory" );
-    SDL_FreeWAV( tmpData );
-
-  } else {
-
-    /* Just use it if no conversion required */
-    data=tmpData;
-    len=tmpLen;
-  }
-  DEBUGS("initialised");
+      /* Just use it if no conversion required */
+      data=tmpData;
+      len=tmpLen;
+   }
 }
 
-void Sound::play(void) {
-  DEBUGS( "play" );
+void Sound::play(void)
+{
+   if( noAudio || setSilent )
+      return;
 
-  if( noAudio || setSilent )
-    return;
+   /* Set the sound buffer to play the current sound */
+   SDL_LockAudio();
+   audioData=data;
+   audioDataLen=len;
+   currentSound=this;
+   SDL_UnlockAudio();
 
-  /* Set the sound buffer to play the current sound */
-  SDL_LockAudio();
-  audioData=data;
-  audioDataLen=len;
-  currentSound=this;
-  SDL_UnlockAudio();
-
-  /* Ensure the playback loop is running */
-  SDL_PauseAudio(0);
+   /* Ensure the playback loop is running */
+   SDL_PauseAudio(0);
 }
 
 /** Play the sound, but don't return control to this thread until
  *  the sound has finished playing.
  */
-void Sound::playWait(void) {
-  if( noAudio || setSilent )
-    return;
+void Sound::playWait(void)
+{
+   if( noAudio || setSilent )
+      return;
 
-  play();
+   play();
 
-  // This is not a very efficent way to wait for the sound to end,
-  // but it's a lot simpler than setting up a semaphore.
-  do {
-    SDL_Delay(WAIT_SLEEP_USEC);
-  } while( currentSound==this );
+   // This is not a very efficent way to wait for the sound to end,
+   // but it's a lot simpler than setting up a semaphore.
+   do {
+      SDL_Delay(WAIT_SLEEP_USEC);
+   } while( currentSound==this );
 }
 
-Sound::~Sound(void) {
+Sound::~Sound(void)
+{
 
-  /* If this sound is playing, stop it before we free the buffer
-   */
-  SDL_LockAudio();
-  if( currentSound==this ) {
-    currentSound=NULL;
-    audioData=NULL;
-    audioDataLen=0;
-  }
-  SDL_UnlockAudio();
+   /* If this sound is playing, stop it before we free the buffer
+    */
+   SDL_LockAudio();
+   if( currentSound==this ) {
+      currentSound=NULL;
+      audioData=NULL;
+      audioDataLen=0;
+   }
+   SDL_UnlockAudio();
 
-  /* Free the audio data */
-  if( data ) {
-    if( converted )
-      free(data);
-    else
-      SDL_FreeWAV( data );
-  }
+   /* Free the audio data */
+   if( data ) {
+      if( converted )
+         free(data);
+      else
+         SDL_FreeWAV( data );
+   }
 }
 
 

@@ -4,9 +4,14 @@
 */
 
 
-//     $Id: basestrm.h,v 1.42 2001-06-14 14:46:46 mbickel Exp $
+//     $Id: basestrm.h,v 1.43 2001-07-14 13:15:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2001/06/14 14:46:46  mbickel
+//      The resolution of ASC can be specified in the configuration file
+//      The fileselect dialog box shows the file's location
+//      new ascmap2pcx param: outputdir
+//
 //     Revision 1.41  2001/05/18 22:30:30  mbickel
 //      The data file is now installed in the correct directory
 //      If the installation directory is changed with configure, the new path
@@ -549,12 +554,12 @@ class tn_c_lzw_filestream : public tnstream, protected tanycompression {
             tn_file_buf_stream *strm;
             pncontainerstream containerstream;
             int inp;
-            char* fname;
+            ASCString fname;
          protected:
             int  readcmpdata ( void* buf, int size, int excpt = 1 );
             void writecmpdata ( const void* buf, int size );
          public:
-            tn_c_lzw_filestream ( const char* name, IOMode mode );
+            tn_c_lzw_filestream ( const ASCString& name, IOMode mode );
             void writedata ( const void* buf, int size );
             int  readdata  ( void* buf, int size, int excpt = 1  );
             virtual ~tn_c_lzw_filestream  ( );

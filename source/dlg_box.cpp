@@ -3,9 +3,14 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.49 2001-07-09 17:01:44 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.50 2001-07-14 13:15:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2001/07/09 17:01:44  mbickel
+//      Small map can now be even smaller
+//      fixed redraw problems on windows
+//      fixed no-font crash
+//
 //     Revision 1.48  2001/05/21 12:46:19  mbickel
 //      Fixed infinite loop in AI::strategy
 //      Fixed bugs in mapeditor - event editing
@@ -3917,5 +3922,15 @@ void fatalError ( const char* formatstring, ... )
    if ( lng >= 1000 )
       displaymessage ( "dlg_box.cpp / fatalError:   string to long !\nPlease report this error",1 );
 
-   displaymessage ( tempbuf, 2 );
+   fatalError ( ASCString(tempbuf) );
+}
+
+void fatalError ( const ASCString& string )
+{
+   displaymessage ( string.c_str(), 2 );
+}
+
+void warning ( const ASCString& string )
+{
+   cerr << "ASC: " << string << endl;
 }

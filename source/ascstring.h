@@ -39,6 +39,9 @@
         ASCString& toUpper ( );
         ASCString  copyToLower ( ) const;
         ASCString  copyToUpper ( ) const;
+
+        //! compares two string case insensitive
+        int compare_cis ( const ASCString& s );
  };
 
 

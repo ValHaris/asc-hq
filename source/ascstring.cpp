@@ -100,3 +100,9 @@ int ASCString :: compare ( int pos, int n, const ASCString& s )
     return inherited::compare (  pos, n, s );
    #endif
 }
+
+int ASCString :: compare_cis ( const ASCString& s )
+{
+   // could be optimized a bit...
+   return copyToUpper().compare ( 0, npos, s.copyToUpper());
+}

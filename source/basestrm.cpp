@@ -2,9 +2,14 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.57 2001-06-14 14:46:46 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.58 2001-07-14 13:15:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2001/06/14 14:46:46  mbickel
+//      The resolution of ASC can be specified in the configuration file
+//      The fileselect dialog box shows the file's location
+//      new ascmap2pcx param: outputdir
+//
 //     Revision 1.56  2001/05/16 23:21:01  mbickel
 //      The data file is mounted using automake
 //      Added sgml documentation
@@ -1292,10 +1297,10 @@ struct FileLocation {
         int found;
      };
 
-void locateFile ( const char* filename, FileLocation* loc )
+void locateFile ( const ASCString& filename, FileLocation* loc )
 {
    loc->found = 0;
-   ContainerCollector::FileIndex* idx = containercollector.getfile ( filename );
+   ContainerCollector::FileIndex* idx = containercollector.getfile ( filename.c_str() );
    int maxnum;
    if ( idx ) {
       maxnum = idx->directoryLevel+1;
@@ -1312,7 +1317,7 @@ void locateFile ( const char* filename, FileLocation* loc )
       int localfound = 0;
       for ( int i = 0; i < maxnum && !localfound; i++ ) {
          char buf[2000];
-         FILE* fp = fopen ( constructFileName ( buf, i, NULL, filename), "r" );
+         FILE* fp = fopen ( constructFileName ( buf, i, NULL, filename.c_str()), "r" );
          if ( fp ) {
             localfound = loc->found = 1;
             fclose ( fp );
@@ -1322,7 +1327,7 @@ void locateFile ( const char* filename, FileLocation* loc )
       }
    } else {
       char buf[2000];
-      FILE* fp = fopen ( constructFileName ( buf, -1, ".", filename), "r" );
+      FILE* fp = fopen ( constructFileName ( buf, -1, ".", filename.c_str()), "r" );
       if ( fp ) {
          loc->found = 1;
          fclose ( fp );
@@ -1836,7 +1841,7 @@ tn_lzw_file_buf_stream :: ~tn_lzw_file_buf_stream()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-tn_c_lzw_filestream :: tn_c_lzw_filestream ( const char* name, IOMode mode ) : tanycompression ( mode )
+tn_c_lzw_filestream :: tn_c_lzw_filestream ( const ASCString& name, IOMode mode ) : tanycompression ( mode )
 {
    #ifdef logfiles
     FILE* fp = fopen ( "files.lst", "at" );
@@ -1845,7 +1850,6 @@ tn_c_lzw_filestream :: tn_c_lzw_filestream ( const char* name, IOMode mode ) : t
    #endif
 
    strm = NULL;
-   fname = 0;
    inp = 0;
    containerstream = NULL;
 
@@ -1865,24 +1869,20 @@ tn_c_lzw_filestream :: tn_c_lzw_filestream ( const char* name, IOMode mode ) : t
    if ( fl.container == NULL ) {
       char string[2000];
 
-      strm = new tn_file_buf_stream ( constructFileName ( string, fl.directoryLevel, NULL, name), mode );
+      strm = new tn_file_buf_stream ( constructFileName ( string, fl.directoryLevel, NULL, name.c_str()), mode );
       inp = 1;
       devicename = name;
 
    } else {
       containerstream = fl.container;
       if ( containerstream ) {
-         containerstream->opencontainerfile ( name );
-
-         devicename = name;
-         devicename += " located inside ";
-         devicename += containerstream->getDeviceName() ;
-
+         containerstream->opencontainerfile ( name.c_str() );
+         devicename = name + " located inside " + containerstream->getDeviceName();
          inp = 2;
       } else
          throw tfileerror ( name );
    }
-   fname = strdup ( name );
+   fname = name;
 
    tanycompression :: init (  ); 
 }
@@ -1946,11 +1946,6 @@ tn_c_lzw_filestream :: ~tn_c_lzw_filestream()
       strm = NULL;
    } else
       containerstream->closecontainerfile();
-
-   if ( fname ) {
-      delete[] fname;
-      fname = NULL;
-   }
 }
 
 
