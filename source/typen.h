@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.110 2002-03-27 00:18:21 mbickel Exp $
+//     $Id: typen.h,v 1.111 2002-04-05 09:25:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.110  2002/03/27 00:18:21  mbickel
+//      Changed the resource weight
+//
 //     Revision 1.109  2002/03/18 21:42:17  mbickel
 //      Some cleanup and documentation in the Mine class
 //      The number of mines is now displayed in the field information window
@@ -1042,7 +1045,7 @@ const int attackmovecost = 0;
 
 #define air_heightincmovedecrease 18  
 #define air_heightdecmovedecrease 0
-#define sub_heightincmovedecrease 12
+#define sub_heightincmovedecrease 0
 #define sub_heightdecmovedecrease 12
 #define helicopter_attack_after_ascent 1  // nach abheben angriff moeglich
 #define helicopter_attack_after_descent 1  // nach landen angriff moeglich

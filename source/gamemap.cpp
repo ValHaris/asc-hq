@@ -687,12 +687,12 @@ pfield  tmap :: getField(const MapCoordinate& pos )
 }
 
 
-int tmap :: isResourceGlobal ( int resource )
+bool tmap :: isResourceGlobal ( int resource )
 {
    if ( resource != 1 && !(resource == 2 && getgameparameter(cgp_globalfuel)==0)  &&   _resourcemode == 1 )
-      return 1;
+      return true;
    else
-      return 0;
+      return false;
 }
 
 int tmap :: getgameparameter ( int num )

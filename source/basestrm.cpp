@@ -2,9 +2,14 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.72 2002-03-11 18:47:36 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.73 2002-04-05 09:25:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.72  2002/03/11 18:47:36  mbickel
+//      Fixed: Remaining movement of troopers not displayed
+//      Fixed wrong text position in mouse options
+//      Fixed: absolute path names not recognized on windows
+//
 //     Revision 1.71  2002/03/04 20:00:00  mbickel
 //      Fixed broken convertPathDelimitters(ASCString)
 //
@@ -648,11 +653,15 @@ void         tnstream::readpchar(char** pc, int maxlength )
 
 
    char* pch2 = charbuf.buf;
-   pch2--;
+
+   int loop = 0;
 
    do {
      actpos2++;
-     pch2++;
+     if ( loop )
+        pch2++;
+        
+     loop++;
 
      readdata( pch2, 1 );
 
@@ -1742,15 +1751,15 @@ void tanycompression :: init ( void )
 
       if ( bufdatanum  == maxlen ) {
 
-         if ( strcmp ( &buf[1], LZ_SIGNATURE ) == 0  && !buf[0]) {
+         if ( strncmp ( &buf[1], LZ_SIGNATURE, 9 ) == 0  && !buf[0]) {
             status = 110;
             siglen = 0;
          } else
-         if ( strcmp ( &buf[1], RLE_SIGNATURE ) == 0 && !buf[0]) {
+         if ( strncmp ( &buf[1], RLE_SIGNATURE, 9 ) == 0 && !buf[0]) {
             status = 111;
             siglen = 0;
          } else
-         if ( strcmp ( buf, BZIP_SIGNATURE ) == 0 ) {
+         if ( strncmp ( buf, BZIP_SIGNATURE, 9 ) == 0 ) {
             status = 112;
             siglen = strlen ( BZIP_SIGNATURE ) + 1;
             bzip_decompress = new libbzip_decompression ( this );

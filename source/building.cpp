@@ -2,9 +2,12 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.80 2002-03-27 00:18:20 mbickel Exp $
+//     $Id: building.cpp,v 1.81 2002-04-05 09:25:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.80  2002/03/27 00:18:20  mbickel
+//      Changed the resource weight
+//
 //     Revision 1.79  2002/03/02 23:04:00  mbickel
 //      Some cleanup of source code
 //      Improved Paragui Integration
@@ -5357,7 +5360,7 @@ void  ccontainer_b :: cresourceinfo_subwindow :: display ( void )
    npop ( activefontsettings );
 
 }
-// fr?her X         fr?her: mode
+
 int  ccontainer_b :: cresourceinfo_subwindow :: getvalue ( int resourcetype, int y, int scope )
 {
    switch ( y ) {
@@ -5415,7 +5418,7 @@ void ccontainer_b :: cresourceinfo_subwindow :: displayvariables( void )
    for ( c = 0; c < 3; c++ )
       for ( int x = 0; x < 3; x++ )
          for ( int y = 0; y < 4; y++ )
-            if ( y != 1 || value[c][x][y] < mx*10 || value[c][x][y] < 1000000000 )   // don't show extremely high numbers
+            if ( (y != 1 || value[c][x][y] < mx*10 || value[c][x][y] < 1000000000 ) && ( !actmap->isResourceGlobal(x) || y!=0 ||c ==2))   // don't show extremely high numbers
                showtext2c ( int2string ( value[c][x][y], buf ), subwinx1 + 49 + ( c * 3 + x ) * 33, subwiny1 + 57 + y * 13 );
             else
                showtext2c ( "-", subwinx1 + 49 + ( c * 3 + x ) * 33, subwiny1 + 57 + y * 13 );

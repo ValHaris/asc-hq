@@ -4,9 +4,14 @@
 */
 
 
-//     $Id: gui.cpp,v 1.76 2002-03-26 22:23:09 mbickel Exp $
+//     $Id: gui.cpp,v 1.77 2002-04-05 09:25:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.76  2002/03/26 22:23:09  mbickel
+//      Fixed: music was started even if turned off in ini file
+//      Fixed: crash in reaction fire
+//      Fixed: reaction fire not occuring when changing height
+//
 //     Revision 1.75  2002/03/02 23:04:01  mbickel
 //      Some cleanup of source code
 //      Improved Paragui Integration
@@ -2639,7 +2644,7 @@ tnputvehiclecontainerguiicon :: tnputvehiclecontainerguiicon ( pvehicletype obj 
    if ( obj ) {
       priority = 100;
       buildnum++;
-      infotext      = new char[100];
+      infotext      = new char[1000];
       picture[0]    = vehicle->buildicon;
       char buf[10000];
       sprintf ( buf, "%s : %d material and %d fuel needed", vehicle->getName().c_str(), vehicle->productionCost.material, vehicle->productionCost.energy );

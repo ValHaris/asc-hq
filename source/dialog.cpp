@@ -2,9 +2,13 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.109 2002-03-18 21:42:17 mbickel Exp $
+//     $Id: dialog.cpp,v 1.110 2002-04-05 09:25:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.109  2002/03/18 21:42:17  mbickel
+//      Some cleanup and documentation in the Mine class
+//      The number of mines is now displayed in the field information window
+//
 //     Revision 1.108  2002/03/14 18:14:37  mbickel
 //      Improved messages for proposing peace
 //      Fixed display error when enterering passwords
@@ -1848,110 +1852,70 @@ void         vehicle_information( const Vehicletype* type )
    eif.init( type ); 
    eif.run(); 
    eif.done(); 
-} 
+}
 
 
+map<int,ASCString> messageStrings;
 
 
-  struct tmessagestrings { 
-                       word         number; 
-                       struct { 
-                                      word      id;
-                                      char*     txt;
-                               } data[100];
-                    }; 
-
-
-
-
-tmessagestrings messagestrings; 
-
-
-
-
-
-   #define klickconst 100
-   #define delayconst 10
-
-
-
-
+#define klickconst 100
+#define delayconst 10
 
 
 void   loadsinglemessagefile ( const char* name )
 {
-   tnfilestream stream ( name, tnstream::reading );
+   try {
+      tnfilestream stream ( name, tnstream::reading );
 
-   char* s1;
-   char* s2;
-   stream.readpnchar ( &s1 );
-   stream.readpnchar ( &s2 );
+      ASCString s1, s2;
+      s1 = stream.readString();
+      s2 = stream.readString();
 
-   while ( s1 && s2 ) {
-     int w = atoi ( s1 );
+      while ( !s1.empty() && !s2.empty() ) {
+         int w = atoi ( s1.c_str() );
 
-      char* t = strdup ( s2 );
+         messageStrings[w] = s2;
 
-      messagestrings.data[ messagestrings.number ].id  = w;
-      messagestrings.data[ messagestrings.number ].txt = t;
-      messagestrings.number++;
-
-      delete[] s1;
-      delete[] s2;
-      stream.readpnchar ( &s1 );
-      stream.readpnchar ( &s2 );
-   } 
-   if ( s1 )
-      delete[] s1;
-   if ( s2 )
-      delete[] s2;
+         s1 = stream.readString();
+         s2 = stream.readString();
+      }
+   }
+   catch ( treadafterend ) {
+   }
 }
 
 
 void         loadmessages(void)
-{ 
+{
+   tfindfile ff ( "message?.txt" );
+   ASCString filename = ff.getnextname();
 
-   messagestrings.number = 0; 
-
-   {
-      tfindfile ff ( "message?.txt" );
-      string filename = ff.getnextname();
-   
-      while( !filename.empty() ) {
-         loadsinglemessagefile ( filename.c_str() );
-         filename = ff.getnextname();
-      } 
+   while( !filename.empty() ) {
+      loadsinglemessagefile ( filename.c_str() );
+      filename = ff.getnextname();
    }
-
-} 
+}
 
 
 const char*        getmessage( int id)
 {
-   if ( messagestrings.number > 0 ) {
-
-      int w = 0;
-      while ((messagestrings.number > w) && (messagestrings.data[w].id != id))
-         w++;
-      if (messagestrings.data[w].id == id)
-         return messagestrings.data[w].txt;
-
-   }
+   if ( messageStrings.find ( id ) != messageStrings.end() )
+         return messageStrings[id].c_str();
 
    static const char* notfound = "message not found";
    return notfound;
-} 
+}
 
 
 
 int          dispmessage2(int          id,
                           char *       st)
-{ 
+{
    char          *s2;
 
    const char* sp = getmessage(id);
    const char* s1 = sp;
-   if (sp != NULL) { 
+   if (sp != NULL) {
       char s[200];
       s2 = s;
       while (*s1 !=0) {
@@ -5168,24 +5132,32 @@ void viewterraininfo ( void )
       }
 
       int mines[4] = { 0, 0, 0, 0 };
+      int mineDissolve[4] = { maxint, maxint, maxint, maxint };
 
       for ( tfield::MineContainer::iterator m = fld->mines.begin(); m != fld->mines.end(); ++m )
-         if ( m->player == actmap->actplayer || fieldVisibility  ( fld ) == visible_all )
+         if ( m->player == actmap->actplayer || fieldVisibility  ( fld ) == visible_all ) {
             mines[m->type-1]++;
+            mineDissolve[m->type-1] = min ( m->time, mineDissolve[m->type-1] );
+         }
 
       if ( mines[0] || mines[1] || mines[2] || mines[3] ) {
          strcat ( text, "#aeinzug0##eeinzug0#\n\n"
                         "#font02#Mine Information:#font01##aeinzug20##eeinzug20##crtp10#"
-                        "there are \n" );
+                        "On this field are #aeinzug50# \n" );
 
          for ( int i = 0; i < 4; i++ ) {
             strcat ( text, " " );
             strcat ( text, strrr ( mines[i] ));
             strcat ( text, " ");
             strcat ( text, MineNames[i] );
-            strcat ( text, "(s) \n" );
+            strcat ( text, "(s). " );
+            if ( mineDissolve[i] >= 0 && mineDissolve[i] < maxint ) {
+               strcat ( text, "Next mine will dissolve at turn " );
+               strcat ( text, strrr( mineDissolve[i]+actmap->getgameparameter(cgp_antipersonnelmine_lifetime+i) ));
+            }
+            strcat ( text, "\n" );
          }
-         strcat ( text, "on this field.");
+         strcat ( text, "#aeinzug0#\n");
       }
 
       if  ( getactfield()->vehicle ) {
@@ -5205,6 +5177,10 @@ void viewterraininfo ( void )
          char t3[1000];
          sprintf(t3, "\nUnit ID: %d \n", typ->id );
          strcat ( text, t3 );
+
+         sprintf(t3, "\nInternal Identification: %d \n", getactfield()->vehicle->networkid );
+         strcat ( text, t3 );
+
 
          if ( !typ->filename.empty() ) {
             sprintf(t3, "file name: %s\n", typ->filename.c_str() );

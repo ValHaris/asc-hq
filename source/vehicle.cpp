@@ -66,6 +66,26 @@ Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player )
    networkid = gamemap->unitnetworkid;
 }
 
+Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player, int networkID )
+          : ContainerBase ( t, actmap, player ), repairEfficiency ( repairEfficiencyVehicle ), typ ( t ), reactionfire ( this )
+{
+   viewOnMap = false;
+
+   if ( player > 8 )
+      fatalError ( "Vehicle :: Vehicle ; invalid player ");
+
+   init();
+
+   gamemap->player[player].vehicleList.push_back ( this );
+   if ( networkID == -1 ) {
+      gamemap->unitnetworkid++;
+      networkid = gamemap->unitnetworkid;
+   } else
+      if ( networkID >= 0 ) {
+         networkid = networkID;
+      }
+}
+
 
 Vehicle :: ~Vehicle (  )
 {
@@ -1476,7 +1496,7 @@ Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream )
 
    int color = stream.readChar ();
 
-   Vehicle* v = new Vehicle ( fzt, gamemap, color/8 );
+   Vehicle* v = new Vehicle ( fzt, gamemap, color/8, -2 );
 
    v->readData ( stream );
    return v;

@@ -2,9 +2,13 @@
     \brief The random map generator
 */
 
-//     $Id: edgen.cpp,v 1.15 2001-12-14 10:20:05 mbickel Exp $
+//     $Id: edgen.cpp,v 1.16 2002-04-05 09:25:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2001/12/14 10:20:05  mbickel
+//      Cleanup and enhancements to configure.in
+//      Removed last remains of octagonal version from source files
+//
 //     Revision 1.14  2001/10/31 18:34:31  mbickel
 //      Some adjustments and fixes for gcc 3.0.2
 //
@@ -1144,9 +1148,9 @@ void tplasma::generateplasma(char resettile)
                return 1;
             }*/
             if(blocksize == sblocksize) {
-               colour = ::random(memblock->maxset + 1);
-               if( ::random(5000) > 3500) 
-				   colour = 1 + memblock->maxset - ::random(memblock->maxset / (1 + ::random(8)));
+               colour = std::random(memblock->maxset + 1);
+               if( std::random(5000) > 3500)
+                  colour = 1 + memblock->maxset - std::random(memblock->maxset / (1 + std::random(8)));
                colour %= (memblock->maxset + 1);
             }
             else {

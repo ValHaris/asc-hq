@@ -546,7 +546,7 @@ class tmap {
       int  getgameparameter ( int num );
       void setgameparameter ( int num, int value );
       void cleartemps( int b, int value = 0 );
-      int isResourceGlobal ( int resource );
+      bool isResourceGlobal ( int resource );
       void setupResources ( void );
       const char* getPlayerName ( int playernum );
       pfield getField ( int x, int y );

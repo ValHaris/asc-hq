@@ -52,7 +52,7 @@ ASCString& ASCString::toLower ( )
     \return returns a reference on this ASCString.
 */
 ASCString& ASCString::toUpper ( )
-{ 
+{
     auto_ptr< charT > l_autopBuf ( new charT [ length () + sizeof ( charT ) ] );
     
     charT* l_pBuf = l_autopBuf.get();
@@ -76,7 +76,7 @@ ASCString& ASCString::toUpper ( )
 */
 ASCString& ASCString::format ( charT* pFormat, ... )
 {
-    va_list arg_ptr;
+    std::va_list arg_ptr;
     va_start ( arg_ptr, pFormat );
 
     int  l_iNbChar = 10000;

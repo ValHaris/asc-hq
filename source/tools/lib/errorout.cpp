@@ -11,6 +11,11 @@
 #include <cstdio>
 #include <cstdarg>
 
+#ifdef _WIN32_
+# include <windows.h>
+# include <winuser.h>
+#endif
+
 #include "../../global.h"
 #include "ascstring.h"
 

@@ -51,6 +51,8 @@
     bool generatoractive;
 
 
+    Vehicle ( const Vehicletype* t, pmap actmap, int player, int networkID  );
+
    public:
 
     Vehicle ( const Vehicletype* t, pmap actmap, int player );

@@ -3,9 +3,13 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.128 2002-03-18 21:42:17 mbickel Exp $
+//     $Id: controls.cpp,v 1.129 2002-04-05 09:25:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.128  2002/03/18 21:42:17  mbickel
+//      Some cleanup and documentation in the Mine class
+//      The number of mines is now displayed in the field information window
+//
 //     Revision 1.127  2002/03/14 18:14:37  mbickel
 //      Improved messages for proposing peace
 //      Fixed display error when enterering passwords
@@ -1817,8 +1821,8 @@ void returnresourcenuseforpowerplant (  const pbuilding bld, int prod, Resources
 
 void Building :: execnetcontrol ( void )
 {
-   if ( actmap->_resourcemode != 1 ) {
-      for ( int i = 0; i < 3; i++ ) {
+   for ( int i = 0; i < 3; i++ )
+      if ( !actmap->isResourceGlobal(i) ) {
          if (  netcontrol & (cnet_moveenergyout << i )) {
             npush (  netcontrol );
             netcontrol |= (cnet_stopenergyinput << i );
@@ -1832,7 +1836,7 @@ void Building :: execnetcontrol ( void )
                npop (  netcontrol );
             }
       }
-   }
+
 }
 
                     /*   modes: 0 = energy   ohne abbuchen
@@ -2922,7 +2926,7 @@ void next_turn ( int playerView )
 
    int pv;
    if ( playerView == -2 ) {
-      if ( actmap->time.turn() == 0 )  // the game has just been started
+      if ( actmap->time.turn() <= 0 || actmap->actplayer < 0 )
          pv = -1;
       else
          if ( actmap->player[actmap->actplayer].stat != Player::human )

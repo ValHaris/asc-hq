@@ -174,7 +174,7 @@ public:
     static charT*  _Strlwr    ( charT* pS );
     static charT*  _Strupr    ( charT* pS );
     static int     _Stricmp   ( const charT* pS1, const charT* pS2 );
-    static int     _Vsnprintf ( charT* buffer, size_t count, const charT* format, va_list argptr );
+    static int     _Vsnprintf ( charT* buffer, size_t count, const charT* format, std::va_list argptr );
     static int     _Printf    ( const charT* format, ... );
 
 #ifndef _UNICODE_BROKEN_
@@ -399,7 +399,7 @@ inline int ASCStringHelpers::_Stricmp ( const charT* pS1, const charT* pS2 )
     \remarks
     See standard system documentation for more information about \e vsnprintf.
 */
-inline int ASCStringHelpers::_Vsnprintf ( charT* buffer, size_t count, const charT* format, va_list argptr )
+inline int ASCStringHelpers::_Vsnprintf ( charT* buffer, size_t count, const charT* format, std::va_list argptr )
 {
     assert ( buffer != NULL );
     assert ( format != NULL );
@@ -434,7 +434,7 @@ inline int ASCStringHelpers::_Printf ( const charT* format, ... )
 {
     assert ( format != NULL );
 
-    va_list argptr;
+    std::va_list argptr;
     va_start ( argptr, format );
 
     int nRes = 0;
@@ -471,7 +471,7 @@ inline size_t ASCStringHelpers::_ConvertToCharT ( charT* pDest, const NoncharT* 
     #ifdef _UNICODE
         return ::mbstowcs( pDest, pSrc, count );
     #else
-        return ::wcstombs( pDest, pSrc, count );
+        return std::wcstombs( pDest, pSrc, count );
     #endif
 }
 

@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.67 2002-03-19 20:38:56 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.68 2002-04-05 09:25:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.67  2002/03/19 20:38:56  mbickel
+//      Some cleanup and documentation in dlg_box
+//      Fixed some type assignment errors
+//
 //     Revision 1.66  2002/03/02 23:04:01  mbickel
 //      Some cleanup of source code
 //      Improved Paragui Integration
@@ -325,6 +329,10 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <iostream.h>
+#ifdef _WIN32_
+ #include <windows.h>
+ #include <winuser.h>
+#endif
 
 #include "tpascal.inc"
 #include "typen.h"

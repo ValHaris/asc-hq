@@ -377,6 +377,16 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( id );
          stream->writeInt ( col );
       }
+      if ( action == rpl_buildtnk2 ) {
+         stream->writeChar ( action );
+         int size = 5;
+         stream->writeInt ( size );
+         stream->writeInt ( va_arg ( paramlist, int ) );
+         stream->writeInt ( va_arg ( paramlist, int ) );
+         stream->writeInt ( va_arg ( paramlist, int ) );
+         stream->writeInt ( va_arg ( paramlist, int ) );
+         stream->writeInt ( va_arg ( paramlist, int ) );
+      }
       if ( action == rpl_putbuilding ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
@@ -868,12 +878,17 @@ void trunreplay :: execnextreplaymove ( void )
 
                        }
          break;
-      case rpl_buildtnk: {
+      case rpl_buildtnk:
+      case rpl_buildtnk2: {
                            stream->readInt();  // size
                            int x = stream->readInt();
                            int y = stream->readInt();
                            int id = stream->readInt();
                            int col = stream->readInt();
+                           int nwid = -1;
+                           if ( nextaction == rpl_buildtnk2 )
+                              nwid == stream->readInt();
+
                            readnextaction();
 
                            pfield fld = getfield ( x, y );
