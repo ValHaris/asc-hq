@@ -437,7 +437,6 @@ void Vehicle :: setNewHeight( int newHeight )
      height = newHeight;
      warning("Internal error: unit has invalid height");
   }
-
 }
 
 
@@ -1380,6 +1379,7 @@ void   Vehicle::readData ( tnstream& stream )
              loading[k] = Vehicle::newFromStream ( gamemap, stream );
              if ( loading[k]->color != color )
                 loading[k]->convert( color/8 );
+
           }
 
           for ( int l = c; l < 32; l++ )

@@ -52,8 +52,13 @@ void TextPropertyList::buildIDs()
 {
    for ( iterator i = begin(); i != end(); i++ ) {
       int id = (*i)->evalID();
-      if ( id > 0 )
+      if ( id > 0 ) {
+
+         if ( identCache.find ( id ) != identCache.end() )
+            fatalError("Duplicate ID in text file group " + (*i)->typeName + ": " + (*i)->location + " and " + identCache.find ( id )->second->location + " both have ID " + strrr(id ) + "\n\nThis is NOT a bug in ASC, this is a conflict between two data files.");
+
          identCache[id] = *i;
+      }
    }
 }
 

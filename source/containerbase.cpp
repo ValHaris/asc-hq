@@ -205,7 +205,7 @@ bool  ContainerBase :: vehicleLoadable ( const Vehicle* vehicle, int uheight, co
       for ( ContainerBaseType::EntranceSystems::const_iterator i = baseType->entranceSystems.begin(); i != baseType->entranceSystems.end(); i++ )
          if ( (i->height_abs & uheight) || (i->height_abs == 0 ))
             if ( i->mode & ContainerBaseType::TransportationIO::In )
-               if ( i->height_rel == -100 || i->height_rel == getheightdelta ( log2(uheight), getPosition().getNumericalHeight() ) )
+               if ( i->height_rel == -100 || i->height_rel == getheightdelta ( getPosition().getNumericalHeight(), log2(uheight)  ) )
                   if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))
                      if ( (i->requireUnitFunction & vehicle->typ->functions) || i->requireUnitFunction == 0 )
                         if ( i->vehicleCategoriesLoadable & (1<<vehicle->typ->movemalustyp)) {
