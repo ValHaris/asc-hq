@@ -324,7 +324,7 @@ void BuildingType :: write ( tnstream& stream ) const
              for ( int w = 0; w < cwettertypennum; w++ )
                 if ( w_picture[w][k][i][j] )
                    if ( bi_picture[w][k][i][j] == -1 )
-                       stream.writerlepict( w_picture[w][k][i][j]);
+                       stream.writeImage( w_picture[w][k][i][j], false);
 
     ContainerBaseType::write ( stream );
 
