@@ -11244,7 +11244,7 @@ fi
 
 echo "$as_me:$LINENO: checking \"data files\"" >&5
 echo $ECHO_N "checking \"data files\"... $ECHO_C" >&6
-missingdata=`./checkfordata.pl data/buildings.con data/mk1.con data/trrobj.con data/trrobj2.con`
+missingdata=`./checkfordata.pl data/buildings.con data/mk1.con data/trrobj.con data/trrobj2.con data/units-mk3.con`
 if test "x$missingdata" = x ; then
   echo "$as_me:$LINENO: result: \"yes\"" >&5
 echo "${ECHO_T}\"yes\"" >&6

@@ -278,7 +278,7 @@ dnl *************************************************************************
 dnl Checking and assembling the data files
 
 AC_MSG_CHECKING("data files")
-missingdata=`./checkfordata.pl data/buildings.con data/mk1.con data/trrobj.con data/trrobj2.con`
+missingdata=`./checkfordata.pl data/buildings.con data/mk1.con data/trrobj.con data/trrobj2.con data/units-mk3.con`
 if test "x$missingdata" = x ; then
   AC_MSG_RESULT("yes")
 else

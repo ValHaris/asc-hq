@@ -1,2 +1,2 @@
 cd data
-wget http://www.asc-hq.org/mk1.con http://www.asc-hq.org/trrobj.con http://www.asc-hq.org/trrobj2.con http://www.asc-hq.org/buildings.con
+wget http://www.asc-hq.org/mk1.con http://www.asc-hq.org/trrobj.con http://www.asc-hq.org/trrobj2.con http://www.asc-hq.org/buildings.con http://www.asc-hq.org/units-mk3.con
