@@ -4,9 +4,13 @@
 */
 
 
-//     $Id: gui.cpp,v 1.61 2001-07-27 21:13:35 mbickel Exp $
+//     $Id: gui.cpp,v 1.62 2001-07-27 22:29:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2001/07/27 21:13:35  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.60  2001/07/15 21:00:25  mbickel
 //      Some cleanup in the vehicletype class
 //
@@ -2505,10 +2509,10 @@ tnputobjectcontainerguiicon :: tnputobjectcontainerguiicon ( pobjecttype obj, in
       char buf[10000];
       if ( bld ) {
          picture[0]    = object->buildicon;
-         sprintf ( buf, "%s : %d material and %d fuel needed", object->name, object->buildcost.material, object->buildcost.fuel );
+         sprintf ( buf, "%s : %d material and %d fuel needed", object->name.c_str(), object->buildcost.material, object->buildcost.fuel );
       } else {
          picture[0]    = object->removeicon;
-         sprintf ( buf, "%s : %d material and %d fuel needed", object->name, object->removecost.material, object->removecost.fuel );
+         sprintf ( buf, "%s : %d material and %d fuel needed", object->name.c_str(), object->removecost.material, object->removecost.fuel );
       }
       infotext = buf;
    } else {

@@ -11,7 +11,7 @@ BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
 PROJECTS = bzlib.lib libjpeg.lib triangulation.lib tools.lib mount.exe \
   demount.exe weaponguide.exe gfx2pcx.exe makegfx.exe viewid.exe tank2pcx.exe \
-  ai.lib mapeditor.exe asc.exe
+  bin2text.exe ai.lib mapeditor.exe asc.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -71,6 +71,10 @@ ai.lib: source\ai\ai.bpr
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
 tank2pcx.exe: SOURCE\TOOLS\WIN\tank2pcx.bpr
+  $(ROOT)\bin\bpr2mak $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+bin2text.exe: source\tools\win\bin2text.bpr
   $(ROOT)\bin\bpr2mak $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 

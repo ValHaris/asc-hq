@@ -44,7 +44,7 @@ int main(int argc, char *argv[] )
       loadpalette();
       loadbi3graphics();
 
-   
+
       char* wildcard;
    
       if ( argc == 2 ) {
@@ -275,7 +275,7 @@ int main(int argc, char *argv[] )
   // Einzelne Werte
     // Tabellenbeginn 
          fprintf( detailed2, "<TABLE id=\"H2\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">\n"
-                             "<TR><td bgcolor=\"#20483f\">Fuel tank</td>    <td align=\"center\">%d</td></tr>\n" 
+                             "<TR><td bgcolor=\"#20483f\">Fuel tank</td>    <td align=\"center\">%d</td></tr>\n"
                              "<TR><td bgcolor=\"#20483f\">Material tank</td><td align=\"center\">%d</td></tr>\n"
                              "<TR><td bgcolor=\"#20483f\">Energy tank</td>  <td align=\"center\">%d</td></tr>\n"
                              "<TR><td bgcolor=\"#20483f\">Consumption</td>  <td align=\"center\">%d</td></tr>\n"
@@ -296,29 +296,17 @@ int main(int argc, char *argv[] )
     // Spaltenwerte befahrbare Bodentypen        
          fprintf ( detailed2, "<td>can&nbsp;drive&nbsp;on</td>" );
          for ( i = 0; i < cbodenartennum ; i++) {
-            tterrainbits bts;
-            if ( i < 32 )
-               bts.set ( 1 << i, 0 );
-            else
-               bts.set ( 0, 1 << ( i - 32));
-
-            if ( ft->terrainaccess->terrain & bts) 
+            if ( ft->terrainaccess->terrain.test(i) )
                fprintf ( detailed2, "<td><img src=\"../hacken.gif\"></td>" );
             else
                fprintf ( detailed2, "<td></td>" );
          } /* endfor */
          fprintf( detailed2, "</TR>\n<TR>\n");
 
-    // Spaltenwerte stirbt auf        
+    // Spaltenwerte stirbt auf
          fprintf ( detailed2, "<td>dies on</td>" );
          for ( i = 0; i < cbodenartennum ; i++) {
-            tterrainbits bts;
-            if ( i < 32 )
-               bts.set ( 1 << i, 0 );
-            else
-               bts.set ( 0, 1 << ( i - 32));
-
-            if ( ft->terrainaccess->terrainkill & bts) 
+            if ( ft->terrainaccess->terrainkill.test(i))
                fprintf ( detailed2, "<td><img src=\"../hacken.gif\"></td>" );
             else
                fprintf ( detailed2, "<td></td>" );
@@ -328,41 +316,29 @@ int main(int argc, char *argv[] )
    // Spaltenwerte can not drive on
          fprintf ( detailed2, "<td>not drive on</td>" );
          for ( i = 0; i < cbodenartennum ; i++) {
-            tterrainbits bts;
-            if ( i < 32 )
-               bts.set ( 1 << i, 0 );
-            else
-               bts.set ( 0, 1 << ( i - 32));
-
-            if ( ft->terrainaccess->terrainnot & bts) 
+            if ( ft->terrainaccess->terrainnot.test(i) )
                fprintf ( detailed2, "<td><img src=\"../hacken.gif\"></td>" );
             else
                fprintf ( detailed2, "<td></td>" );
          } /* endfor */
 
          fprintf ( detailed2, "</tr><tr>\n" );
-   // Spaltenwerte can need terrain       
+   // Spaltenwerte can need terrain
          fprintf ( detailed2, "<td>required</td>" );
          for ( i = 0; i < cbodenartennum ; i++) {
-            tterrainbits bts;
-            if ( i < 32 )
-               bts.set ( 1 << i, 0 );
-            else
-               bts.set ( 0, 1 << ( i - 32));
-
-            if ( ft->terrainaccess->terrainreq & bts) 
+            if ( ft->terrainaccess->terrainreq.test(i) )
                fprintf ( detailed2, "<td><img src=\"../hacken.gif\"></td>" );
             else
                fprintf ( detailed2, "<td></td>" );
          } /* endfor */
-         fprintf ( detailed2, "</tr></table>\n" );   
+         fprintf ( detailed2, "</tr></table>\n" );
 // ENDE MOVEMENT
-   
+
 // BEGIN WEAPONS
    // Waffen NR-TYP-AMMO-DISTANCE-STRENGS-
          fprintf ( detailed3, "<table nowrap id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
          // Überschriften
-         fprintf ( detailed3, "<tr><td colspan=\"2\"></td>" 
+         fprintf ( detailed3, "<tr><td colspan=\"2\"></td>"
                               "    <td bgcolor=\"#20483f\" colspan=\"4\" align=\"center\">Distance</td>"
                               "    <td bgcolor=\"#20483f\" colspan=\"8\" align=\"center\"> can be shot from: </td>"
                               "    <td></td>"

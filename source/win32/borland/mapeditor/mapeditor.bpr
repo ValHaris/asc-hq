@@ -17,7 +17,8 @@
       obj\weather.obj obj\buildingtype.obj obj\research.obj obj\graphicset.obj 
       obj\ascstring.obj obj\mapdisplay.obj obj\viewcalculation.obj 
       obj\vehicle.obj obj\buildings.obj obj\networkdata.obj obj\getopt1.obj 
-      obj\getopt.obj"/>
+      obj\getopt.obj obj\objecttype.obj obj\terraintype.obj 
+      obj\textfileparser.obj obj\textfiletags.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>

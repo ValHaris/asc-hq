@@ -13,49 +13,41 @@ BCB = $(MAKEDIR)\..
 
 VERSION = BCB.05.03
 # ---------------------------------------------------------------------------
-PROJECT = tools.lib
-OBJFILES = obj\basegfx.obj obj\basestrm.obj obj\buildingtype.obj obj\gameoptions.obj \
-    obj\misc.obj obj\Named.obj obj\palette.obj obj\sgstream.obj obj\typen.obj \
-    obj\vehicletype.obj obj\graphicset.obj obj\ascstring.obj \
-    obj\graphicselector.obj obj\loadpcxc.obj obj\newfont.obj obj\CLoadable.obj \
-    obj\Property.obj obj\PropertyGroup.obj obj\graphics.obj obj\getopt1.obj \
-    obj\getopt.obj obj\strtmesg.obj obj\objecttype.obj obj\terraintype.obj \
-    obj\textfileparser.obj obj\textfiletags.obj
+PROJECT = bin2text.exe
+OBJFILES = ..\bin2text.obj
 RESFILES = 
-MAINSOURCE = tools.bpf
+MAINSOURCE = bin2text.bpf
 RESDEPEN = $(RESFILES)
-LIBFILES = ..\..\libs\bzlib\win\bzlib.lib ..\..\..\..\sdl\bin\sdl.lib
+LIBFILES = tools.lib ..\..\..\..\sdl\bin\sdl.lib ..\..\libs\bzlib\win\bzlib.lib
 IDLFILES = 
 IDLGENFILES = 
 LIBRARIES = 
-PACKAGES = 
+PACKAGES = VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi
 SPARELIBS = 
 DEFFILE = 
 # ---------------------------------------------------------------------------
-PATHCPP = .;..\..;..\..\sdl;..\..\LIBS\getopt
+PATHCPP = .;..
 PATHASM = .;
 PATHPAS = .;
 PATHRC = .;
-LINKER = TLib
-DEBUGLIBPATH = 
-RELEASELIBPATH = 
-USERDEFINES = _DEBUG;HEXAGON;_WIN32_;WIN32;converter;_NOASM_;_SDL_
-SYSDEFINES = _RTLDLL;NO_STRICT
-INCLUDEPATH = ..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include
-LIBPATH = ..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
-WARNINGS = -w-par -w-csu
-LISTFILE = 
+DEBUGLIBPATH = $(BCB)\lib\debug
+RELEASELIBPATH = $(BCB)\lib\release
+USERDEFINES = _DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_
+SYSDEFINES = NO_STRICT;_NO_VCL
+INCLUDEPATH = ..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt
+LIBPATH = ..\;..\..\tools;$(BCB)\lib\obj;$(BCB)\lib
+WARNINGS= -w-par
 # ---------------------------------------------------------------------------
-CFLAG1 = -Od -Q -Vx -Ve -X- -a1 -b -k -y -v -vi- -c -tW -tWM -K
+CFLAG1 = -Od -Q -Vx -Ve -X- -a1 -b -k -y -v -vi- -tWC -tWM -c -K
 IDLCFLAGS = 
-PFLAGS = -N2obj -N0obj -$YD -$W -$O- -v -JPHNE -M
+PFLAGS = -$YD -$W -$O- -v -JPHNE -M
 RFLAGS = 
 AFLAGS = /mx /w2 /zd
-LFLAGS = /P64 /0 /E
+LFLAGS = -D"" -ap -Tpe -x -Gn -v
 # ---------------------------------------------------------------------------
-ALLOBJ = $(OBJFILES)
-ALLRES = 
-ALLLIB = 
+ALLOBJ = c0x32.obj $(OBJFILES)
+ALLRES = $(RESFILES)
+ALLLIB = $(LIBFILES) $(LIBRARIES) import32.lib cw32mt.lib
 # ---------------------------------------------------------------------------
 !ifdef IDEOPTIONS
 
@@ -125,7 +117,7 @@ TASM32 = tasm32
 !endif
 
 !if !$d(LINKER)
-LINKER = TLib
+LINKER = ilink32
 !endif
 
 !if !$d(BRCC32)
@@ -151,16 +143,14 @@ BRCC32 = brcc32
 .PATH.RC  = $(PATHRC)
 !endif
 # ---------------------------------------------------------------------------
-!if "$(LISTFILE)" ==  ""
-COMMA =
-!else
-COMMA = ,
-!endif
-
 $(PROJECT): $(IDLGENFILES) $(OBJFILES) $(RESDEPEN) $(DEFFILE)
-    $(BCB)\BIN\$(LINKER) /u $@ @&&!
-    $(LFLAGS) $? $(COMMA) $(LISTFILE)
-
+    $(BCB)\BIN\$(LINKER) @&&!
+    $(LFLAGS) -L$(LIBPATH) +
+    $(ALLOBJ), +
+    $(PROJECT),, +
+    $(ALLLIB), +
+    $(DEFFILE), +
+    $(ALLRES)
 !
 # ---------------------------------------------------------------------------
 .pas.hpp:

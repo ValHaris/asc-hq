@@ -9,7 +9,8 @@
       obj\vehicletype.obj obj\graphicset.obj obj\ascstring.obj 
       obj\graphicselector.obj obj\loadpcxc.obj obj\newfont.obj obj\CLoadable.obj 
       obj\Property.obj obj\PropertyGroup.obj obj\graphics.obj obj\getopt1.obj 
-      obj\getopt.obj obj\strtmesg.obj"/>
+      obj\getopt.obj obj\strtmesg.obj obj\objecttype.obj obj\terraintype.obj 
+      obj\textfileparser.obj obj\textfiletags.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>

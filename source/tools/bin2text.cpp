@@ -54,6 +54,12 @@ int main(int argc, char *argv[] )
 
    initFileIO( cl.c().c_str() );  // passing the filename from the command line options
 
+   if ( cl.next_param() >= argc) {
+      cl.usage();
+      exit(0);
+   }
+
+
    try {
       loadpalette();
       loadbi3graphics();

@@ -483,9 +483,9 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                 if ( weatherPicture[i].bi3pic[j] >= 0 )
                    bi3pics = true;
 
-         pc.addBool  ( "UseBI3pics", bi3pics ).evaluate();
+         pc.addBool  ( "UseGFXpics", bi3pics ).evaluate();
          if ( bi3pics ) {
-            pc.addIntegerArray ( "Bi3pictures", weatherPicture[i].bi3pic ).evaluate();
+            pc.addIntegerArray ( "GFXpictures", weatherPicture[i].bi3pic ).evaluate();
             pc.addIntegerArray ( "FlipPictures", weatherPicture[i].flip ).evaluate();
             weatherPicture[i].images.resize( weatherPicture[i].bi3pic.size() );
 

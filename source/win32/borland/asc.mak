@@ -28,7 +28,9 @@ OBJFILES = obj\sg.obj obj\dlg_box.obj obj\attack.obj obj\basegfx.obj obj\basestr
     obj\graphics.obj obj\loadimage.obj obj\SDLStretch.obj obj\events.obj \
     obj\research.obj obj\replay.obj obj\graphicset.obj obj\dashboard.obj \
     obj\ascstring.obj obj\resourcenet.obj obj\mapdisplay.obj obj\vehicle.obj \
-    obj\buildings.obj obj\networkdata.obj obj\getopt1.obj obj\getopt.obj
+    obj\buildings.obj obj\networkdata.obj obj\getopt1.obj obj\getopt.obj \
+    obj\objecttype.obj obj\terraintype.obj obj\textfileparser.obj \
+    obj\textfiletags.obj
 RESFILES = 
 MAINSOURCE = asc.bpf
 RESDEPEN = $(RESFILES)

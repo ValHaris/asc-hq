@@ -25,6 +25,7 @@ make -fgfx2pcx.mak
 make -fdemount.mak
 make -fweaponguide.mak
 make -fmount.mak
+make -fbin2text.mak
 cd ..\..\..
 
 cd SOURCE\WIN32\BORLAND\mapeditor\

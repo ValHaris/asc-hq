@@ -26,6 +26,10 @@ USEUNIT("..\..\sdl\graphics.cpp");
 USEUNIT("..\..\LIBS\getopt\getopt1.c");
 USEUNIT("..\..\LIBS\getopt\getopt.c");
 USEUNIT("..\..\strtmesg.cpp");
+USEUNIT("..\..\objecttype.cpp");
+USEUNIT("..\..\terraintype.cpp");
+USEUNIT("..\..\textfileparser.cpp");
+USEUNIT("..\..\textfiletags.cpp");
 //---------------------------------------------------------------------------
 #define Library
 

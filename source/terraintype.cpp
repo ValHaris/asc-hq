@@ -390,9 +390,14 @@ void TerrainType :: runTextIO ( PropertyContainer& pc )
 
 void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
 {
+   bool bi3pics = false;
 
-   pc.addInteger ( "Bi_Picture", bi_pict ).evaluate();
-   if ( !pc.isReading() || bi_pict < 0 ) {
+   if ( !pc.isReading() )
+      if ( bi_pict >= 0 )
+         bi3pics = true;
+
+   pc.addBool  ( "UseGFXpics", bi3pics ).evaluate();
+   if ( !bi3pics ) {
       int w = cwettertypennum-1;
       for ( int i = 0; i < cwettertypennum-1; i++ )
          if ( terraintype->weather[i] == this )
@@ -405,10 +410,10 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
       }
       pc.addImage ( "picture", pict, s + weatherAbbrev[w] ).evaluate();
    } else {
-      if ( pc.isReading() && bi_pict >= 0 )
-         loadbi3pict_double ( bi_pict,
-                              &pict,
-                              CGameOptions::Instance()->bi3.interpolate.terrain );
+      pc.addInteger ( "GFX_Picture", bi_pict ).evaluate();
+      loadbi3pict_double ( bi_pict,
+                           &pict,
+                           CGameOptions::Instance()->bi3.interpolate.terrain );
    }
 
    if ( pc.isReading() )
