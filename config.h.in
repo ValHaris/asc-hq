@@ -56,6 +56,12 @@
 /* Define if you have the SDL_mixer library (-lSDL_mixer).  */
 #undef HAVE_LIBSDL_MIXER
 
+/* Define if you have the bz2 library (-lbz2).  */
+#undef HAVE_LIBBZ2
+
+/* Define if you have the pthread library (-lpthread).  */
+#undef HAVE_LIBPTHREAD
+
 /* Name of package */
 #undef PACKAGE
 

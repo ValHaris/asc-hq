@@ -22,7 +22,7 @@
  #include "terraintype.h"
 
 
- //! An object that can be placed on fields. Roads, pipelines and ditches are examples of objects.
+ //! An object that can be placed on fields. Roads, pipelines and ditches are examples of objects. \sa Object
  class ObjectType : public LoadableItemType {
    public:
      //! the id of the object, used when referencing objects in files

@@ -61,7 +61,6 @@ AC_CHECK_LIB( SDL_image, IMG_LoadJPG_RW,,  AC_MSG_ERROR( ASC requires the SDL_im
 AC_CHECK_LIB( SDL_mixer, Mix_PlayChannelTimed,, AC_MSG_ERROR( ASC requires the SDL_mixer library. You can get it at www.libsdl.org ) )
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
-dnl AC_CHECK_LIB( SDLmm, SDLmm::WasInit,, AC_MSG_ERROR( ASC requires the SDLmm library. You can get it at http://sourceforge.net/projects/sdlmm/ ) )
 AC_LANG_RESTORE
 
 dnl libbz2 stuff (should have a versionnr about 1.0.0)
@@ -96,12 +95,16 @@ fi
 
 
 SDL_VERSION=1.1.3
-      AM_PATH_SDL($SDL_VERSION,
-                  :,
-                  AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!])
-      )
+AM_PATH_SDL($SDL_VERSION,
+            :,
+            AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!])
+)
 
 CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
+
+dnl AC_CHECK_LIB( SDLmm, SDLmm::WasInit,, AC_MSG_ERROR( ASC requires the SDLmm library. You can get it at http://sourceforge.net/projects/sdlmm/ ) )
+dnl AC_CHECK_HEADER( SDLmm/sdlmm.h, , AC_MSG_ERROR( ASC requires SDLmm headers to be present ) )
+dnl AM_PATH_SDLMM(0.1.8)
 
 
 dnl Checks for library functions.
@@ -118,7 +121,7 @@ AC_SUBST(DOCBOOK2MAN)
 
 dnl what gehts packed into main.con (the data container file) and in which
 dnl order
-MAINCONDATA="palette.pal data.version *.gfx title.jpg \
+MAINCONDATA="palette.pal data.version *.gfx title.jpg title_mapeditor.jpg \
  	progress.* smalaril.fnt usablack.fnt arial8.fnt \
  	msystem.fnt gui.fnt guicol.fnt monogui.fnt sounds.txt \
  	height2.raw windp.raw windpfei.raw farbe.raw \

@@ -1,356 +1,60 @@
+/***************************************************************************
+                           sg.cpp  -  description
+                             -------------------
+    begin                : a long time ago...
+    copyright            : (C) 1994-2001 by Martin Bickel
+    email                : bickel@asc-hq.org
+ ***************************************************************************/
+
 /*! \file sg.cpp
     \brief THE main program: ASC
 */
 
 
-//     $Id: sg.cpp,v 1.173 2001-10-16 15:33:03 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.172  2001/10/08 14:44:23  mbickel
-//      Some cleanup
-//
-//     Revision 1.171  2001/10/03 20:56:06  mbickel
-//      Updated data files
-//      Updated online help
-//      Clean up of Pulldown menues
-//      Weapons can now have different efficiencies against different unit classes
-//
-//     Revision 1.170  2001/10/02 18:08:52  mbickel
-//      Changed parser error handling to use exceptions
-//      Removed gfx2pcx project
-//
-//     Revision 1.169  2001/10/02 14:06:28  mbickel
-//      Some cleanup and documentation
-//      Bi3 import tables now stored in .asctxt files
-//      Added ability to choose amoung different BI3 import tables
-//      Added map transformation tables
-//
-//     Revision 1.168  2001/09/28 19:36:11  mbickel
-//      New startup map
-//
-//     Revision 1.167  2001/09/26 19:53:27  mbickel
-//      Reorganized data files for coming ASC 1.9.0 release
-//      Improved field information dialog
-//
-//     Revision 1.166  2001/09/25 20:15:50  mbickel
-//      Changed startup map to paybacktime
-//
-//     Revision 1.165  2001/09/13 17:43:12  mbickel
-//      Many, many bug fixes
-//
-//     Revision 1.164  2001/08/27 21:03:55  mbickel
-//      Terraintype graphics can now be mounted from any number of PNG files
-//      Several AI improvements
-//
-//     Revision 1.163  2001/08/19 12:50:03  mbickel
-//      fixed event trigger allenemybuildings
-//
-//     Revision 1.162  2001/08/19 12:31:26  mbickel
-//      Fixed several bugs in event and campaign handling
-//
-//     Revision 1.161  2001/08/06 21:38:00  mbickel
-//      Fixed: ghost icons remained after vehicle construction canceled
-//
-//     Revision 1.160  2001/08/06 20:54:43  mbickel
-//      Fixed lots of crashes related to the new text files
-//      Fixed delayed events
-//      Fixed crash in terrin change event
-//      Fixed visibility of mines
-//      Fixed crashes in event loader
-//
-//     Revision 1.159  2001/08/06 15:35:09  mbickel
-//      Fixed wrong resulution from config file
-//      Added duplicate ID checking
-//
-//     Revision 1.158  2001/08/02 18:50:43  mbickel
-//      Corrected Error handling in Text parsers
-//      Improved version information
-//
-//     Revision 1.157  2001/08/02 15:33:01  mbickel
-//      Completed text based file formats
-//
-//     Revision 1.156  2001/07/30 17:43:13  mbickel
-//      Added Microsoft Visual Studio .net project files
-//      Fixed some warnings
-//
-//     Revision 1.155  2001/07/28 11:19:12  mbickel
-//      Updated weaponguide
-//      moved item repository from spfst to itemrepository
-//
-//     Revision 1.154  2001/07/27 21:13:35  mbickel
-//      Added text based file formats
-//      Terraintype and Objecttype restructured
-//
-//     Revision 1.153  2001/07/25 19:01:32  mbickel
-//      Started adding text file formats
-//
-//     Revision 1.152  2001/07/20 21:27:31  mbickel
-//      even more diagnostic messages
-//
-//     Revision 1.151  2001/07/20 20:37:48  mbickel
-//      Enhanced logging capabilities
-//
-//     Revision 1.150  2001/07/18 16:05:47  mbickel
-//      Fixed: infinitive loop in displaying "player exterminated" msg
-//      Fixed: construction of units by units: wrong player
-//      Fixed: loading bug of maps with mines
-//      Fixed: invalid map parameter
-//      Fixed bug in game param edit dialog
-//      Fixed: cannot attack after declaring of war
-//      New: ffading of sounds
-//
-//     Revision 1.149  2001/07/15 21:00:25  mbickel
-//      Some cleanup in the vehicletype class
-//
-//     Revision 1.148  2001/07/14 21:07:46  mbickel
-//      Sound works now under Win32 too
-//      Error reporting on Win32 during startup works again.
-//
-//     Revision 1.147  2001/07/14 19:13:16  mbickel
-//      Rewrote sound system
-//      Moveing units make sounds
-//      Added sound files to data
-//
-//     Revision 1.146  2001/07/14 13:15:17  mbickel
-//      Rewrote sound handling
-//
-//     Revision 1.145  2001/07/13 14:02:48  mbickel
-//      Fixed inconsistency in replay (shareviewchange)
-//      Fixed sound initialization problem
-//      Speed up of movement
-//
-//     Revision 1.144  2001/07/11 20:44:37  mbickel
-//      Removed some vehicles from the data file.
-//      Put all legacy units in into the data/legacy directory
-//
-//     Revision 1.143  2001/07/03 10:05:54  mbickel
-//      Added Makefiles for Borland C++ command line compiler
-//
-//     Revision 1.142  2001/06/14 14:46:47  mbickel
-//      The resolution of ASC can be specified in the configuration file
-//      The fileselect dialog box shows the file's location
-//      new ascmap2pcx param: outputdir
-//
-//     Revision 1.141  2001/05/21 12:46:19  mbickel
-//      Fixed infinite loop in AI::strategy
-//      Fixed bugs in mapeditor - event editing
-//      Fixed bugs in even loading / writing
-//      Fixed wrong build order AI <-> main program
-//
-//     Revision 1.140  2001/05/19 13:07:58  mbickel
-//      ASC now compiles with Borland C++ Builder again
-//      Added getopt for use with BCB
-//
-//     Revision 1.139  2001/05/17 14:23:19  mbickel
-//      Rewrote command line parameters of all programs
-//      Made manpages generation optional
-//
-//     Revision 1.138  2001/05/16 23:21:01  mbickel
-//      The data file is mounted using automake
-//      Added sgml documentation
-//      Added command line parsing functionality;
-//        integrated it into autoconf/automake
-//      Replaced command line parsing of ASC and ASCmapedit
-//
-//     Revision 1.137  2001/05/15 09:54:52  mbickel
-//      Added complete Data and documentaion to repository
-//      The unix programs are now build in the 'unix' subdirectory, not the
-//       source directory.
-//      The executable names of all ASC helper programs now start with 'asc_'
-//
-//     Revision 1.136  2001/03/30 12:43:16  mbickel
-//      Added 3D pathfinding
-//      some cleanup and documentation
-//      splitted the ai into several files, now located in the ai subdirectory
-//      AI cares about airplane servicing and range constraints
-//
-//     Revision 1.135  2001/02/26 12:35:28  mbickel
-//      Some major restructuing:
-//       new message containers
-//       events don't store pointers to units any more
-//       tfield class overhauled
-//
-//     Revision 1.134  2001/02/18 15:37:17  mbickel
-//      Some cleanup and documentation
-//      Restructured: vehicle and building classes into separate files
-//         tmap, tfield and helper classes into separate file (gamemap.h)
-//      basestrm : stream mode now specified by enum instead of int
-//
-//     Revision 1.133  2001/02/15 21:57:06  mbickel
-//      The AI doesn't try to attack with recon units any more
-//
-//     Revision 1.132  2001/02/11 11:39:41  mbickel
-//      Some cleanup and documentation
-//
-//     Revision 1.131  2001/02/04 21:26:58  mbickel
-//      The AI status is written to savegames -> new savegame revision
-//      Lots of bug fixes
-//
-//     Revision 1.130  2001/02/01 22:48:46  mbickel
-//      rewrote the storing of units and buildings
-//      Fixed bugs in bi3 map importing routines
-//      Fixed bugs in AI
-//      Fixed bugs in mapeditor
-//
-//     Revision 1.129  2001/01/31 14:52:41  mbickel
-//      Fixed crashes in BI3 map importing routines
-//      Rewrote memory consistency checking
-//      Fileselect dialog now uses ASCStrings
-//
-//     Revision 1.128  2001/01/28 20:42:14  mbickel
-//      Introduced a new string class, ASCString, which should replace all
-//        char* and std::string in the long term
-//      Split loadbi3.cpp into 3 different files (graphicselector, graphicset)
-//
-//     Revision 1.127  2001/01/28 17:19:13  mbickel
-//      The recent cleanup broke some source files; this is fixed now
-//
-//     Revision 1.126  2001/01/28 14:04:16  mbickel
-//      Some restructuring, documentation and cleanup
-//      The resource network functions are now it their own files, the dashboard
-//       as well
-//      Updated the TODO list
-//
-//     Revision 1.125  2001/01/25 23:45:02  mbickel
-//      Moved map displaying routins to own file (mapdisplay.cpp)
-//      Wrote program to create pcx images from map files (map2pcx.cpp)
-//      Fixed bug in repair function: too much resource consumption
-//      AI improvements and bug fixes
-//      The BI3 map import function now evaluates the player status (human/
-//       computer)
-//
-//     Revision 1.124  2001/01/21 16:37:18  mbickel
-//      Moved replay code to own file ( replay.cpp )
-//      Fixed compile problems done by cleanup
-//
-//     Revision 1.123  2001/01/19 13:33:52  mbickel
-//      The AI now uses hemming
-//      Several bugfixes in Vehicle Actions
-//      Moved all view calculation to viewcalculation.cpp
-//      Mapeditor: improved keyboard support for item selection
-//
-//     Revision 1.122  2001/01/04 15:14:03  mbickel
-//      configure now checks for libSDL_image
-//      AI only conquers building that cannot be conquered back immediately
-//      tfindfile now returns strings instead of char*
-//
-//     Revision 1.121  2000/12/29 16:33:53  mbickel
-//      The supervisor may now reset passwords
-//
-//     Revision 1.120  2000/12/28 16:58:37  mbickel
-//      Fixed bugs in AI
-//      Some cleanup
-//      Fixed crash in building construction
-//
-//     Revision 1.119  2000/12/28 11:12:46  mbickel
-//      Fixed: no redraw when restoring fullscreen focus in WIN32
-//      Better error message handing in WIN32
-//
-//     Revision 1.118  2000/12/27 22:23:13  mbickel
-//      Fixed crash in loading message text
-//      Remo functioved many unused variables
-//
-//     Revision 1.117  2000/12/26 21:04:36  mbickel
-//      Fixed: putimageprt not working (used for small map displaying)
-//      Fixed: mapeditor crashed on generating large maps
-//
-//     Revision 1.116  2000/12/26 14:46:00  mbickel
-//      Made ASC compilable (and runnable) with Borland C++ Builder
-//
-//     Revision 1.115  2000/12/23 15:58:38  mbickel
-//      Trying to get ASC to run with Borland C++ Builder...
-//
-//     Revision 1.114  2000/11/29 11:05:30  mbickel
-//      Improved userinterface of the mapeditor
-//      map::preferredfilenames uses now strings (instead of char*)
-//
-//     Revision 1.113  2000/11/29 09:40:24  mbickel
-//      The mapeditor has now two maps simultaneously active
-//      Moved memorychecking functions to its own file: memorycheck.cpp
-//      Rewrote password handling in ASC
-//
-//     Revision 1.112  2000/11/26 22:18:54  mbickel
-//      Added command line parameters for setting the verbosity
-//      Increased verbose output
-//
-//     Revision 1.111  2000/11/21 20:27:05  mbickel
-//      Fixed crash in tsearchfields (used by object construction for example)
-//      AI improvements
-//      configure.in: added some debug output
-//                    fixed broken check for libbz2
-//
-//     Revision 1.110  2000/11/15 19:28:33  mbickel
-//      AI improvements
-//
-//     Revision 1.109  2000/11/08 19:31:11  mbickel
-//      Rewrote IO for the tmap structure
-//      Fixed crash when entering damaged building
-//      Fixed crash in AI
-//      Removed item CRCs
-//
-//     Revision 1.108  2000/10/26 18:14:59  mbickel
-//      AI moves damaged units to repair
-//      tmap is not memory layout sensitive any more
-//
-//     Revision 1.107  2000/10/18 18:53:02  mbickel
-//      Added JPEG support to windows version
-//
-//     Revision 1.106  2000/10/18 17:09:39  mbickel
-//      Fixed eventhandling for DOS
-//
-//     Revision 1.105  2000/10/18 15:10:04  mbickel
-//      Fixed event handling for windows and dos
-//
-//     Revision 1.104  2000/10/18 14:14:16  mbickel
-//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
-//       fixed soon.
-//
-//     Revision 1.103  2000/10/18 12:40:46  mbickel
-//      Rewrite event handling for windows
-//
-//     Revision 1.102  2000/10/14 14:16:06  mbickel
-//      Cleaned up includes
-//      Added mapeditor to win32 watcom project
-//
-//     Revision 1.101  2000/10/14 10:52:52  mbickel
-//      Some adjustments for a Win32 port
-//
-//     Revision 1.100  2000/10/12 22:24:00  mbickel
-//      Made the DOS part of the new platform system work again
-//
-//     Revision 1.99  2000/10/12 21:37:53  mbickel
-//      Further restructured platform dependant routines
-//
-//     Revision 1.98  2000/10/11 14:26:44  mbickel
-//      Modernized the internal structure of ASC:
-//       - vehicles and buildings now derived from a common base class
-//       - new resource class
-//       - reorganized exceptions (errors.h)
-//      Split some files:
-//        typen -> typen, vehicletype, buildingtype, basecontainer
-//        controls -> controls, viewcalculation
-//        spfst -> spfst, mapalgorithm
-//      bzlib is now statically linked and sources integrated
-//
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
-/*
-    This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; see the file COPYING. If not, write to the
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
-    Boston, MA  02111-1307  USA
+/*!
+   \mainpage 
+   
+   \section a short walk through the source
+ 
+   THE central class of ASC is tmap in gamemap.h . 
+   It is the anchor where nearly all elements of ASC are chained to. The global 
+   variable #actmap is a pointer to the active map. There can be a maximum of 
+   8 players on a map, plus neutral units (which are handled like a 9th player). 
+   Hence the array of 9 tmap::Player classes in tmap. 
+   
+   Each player has units and buildings, which are stored in the lists 
+   tmap::Player::vehicleList and tmap::Player::buildingList . 
+   The terms units and vehicles are used synonymously in ASC. Since unit was a 
+   reserved word in Borland Pascal, we decided to use the term vehicle instead. 
+   But now, with ASC written in C++,  'unit' is also used.
+   
+   Every building and unit is of a certain 'type': Vehicletype and BuildingType .
+   These are stored in the data files which are loaded on startup and are globally 
+   available. They are not modified during runtime in any way and are referenced 
+   by the instances of Vehicle and Building. The Vehicletype has information that are shared
+   by all vehicles of this 'type', like speed, weapon systems, accessable 
+   terrain etc, while the vehicle stores things like remaining movement for this
+   turn, ammo, fuel and cargo.
+   
+   The primary contents of a map are its fields ( tfield). Each field has again a pointer 
+   to a certain weather of a TerrainType. Each TerrainType has up to 5 
+   different weathers ("dry (standard)","light rain", "heavy rain", "few snow", 
+   "lot of snow"). If there is a unit or a building standing on a field, the field
+   has a pointer to it: tfield::vehicle and tfield::building . 
+   
+   On the field can be several instances of Object. Objects are another central class of 
+   ASC. Roads, pipleines, trenches and woods are examples of objects.
+ 
 */
 
 
@@ -1418,6 +1122,8 @@ void viewunitweaponrange ( const pvehicle veh, tkey taste )
 
                while ( keypress() )
                   r_key();
+
+               releasetimeslice();
             }
          } else {
             int mb = mouseparams.taste;
@@ -1458,9 +1164,10 @@ void viewunitmovementrange ( pvehicle veh, tkey taste )
 
             if ( taste != ct_invvalue ) {
                while ( skeypress ( taste )) {
-
                   while ( keypress() )
                      r_key();
+
+                  releasetimeslice();
                }
             } else {
                int mb = mouseparams.taste;

@@ -63,7 +63,7 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
  #define cgproduceAllUnitsB ( 1 << cgproduceAllUnitsN )
 
 
- //! The class describing properties that are common to all buildings of a certain kind.
+ //! The class describing properties that are common to all buildings of a certain kind. \sa Building
  class  BuildingType : public ContainerBaseType {
    public:
         //! A local coordinate referencing a single field that a building covers.

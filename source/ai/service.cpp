@@ -224,7 +224,7 @@ bool AI::ServiceOrder::execute1st ( pvehicle supplier )
       if ( !canWait() )
          supplySpeed += targ->maxMovement();
 
-      if ( xy_dist / supplySpeed < nextServiceBuildingDistance/targ->maxMovement() || nextServiceBuildingDistance < 0 ) {
+      if ( !targ->maxMovement() || xy_dist / supplySpeed < nextServiceBuildingDistance/targ->maxMovement() || nextServiceBuildingDistance < 0 ) {
          supplier->aiparam[ai->getPlayerNum()]->dest = meet;
          supplier->aiparam[ai->getPlayerNum()]->setTask( AiParameter::tsk_move );
          supplier->aiparam[ai->getPlayerNum()]->dest_nwid = targ->networkid;
@@ -627,10 +627,12 @@ AI::AiResult AI :: executeServices ( )
   for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
       if ( !i->canWait() ) {
          pvehicle veh = i->getTargetUnit();
-         if ( i->getServiceUnit()) {
-            veh->aiparam[ getPlayerNum() ]->dest = i->getServiceUnit()->getPosition();
-            veh->aiparam[ getPlayerNum() ]->dest_nwid = i->getServiceUnit()->networkid;
-            veh->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_serviceRetreat );
+         if ( i->getServiceUnit() ) {
+            if ( veh->canMove() ) {
+               veh->aiparam[ getPlayerNum() ]->dest = i->getServiceUnit()->getPosition();
+               veh->aiparam[ getPlayerNum() ]->dest_nwid = i->getServiceUnit()->networkid;
+               veh->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_serviceRetreat );
+            }
          } else {
 
             //! not all service tasks are refuelling; don't land immediately
@@ -643,7 +645,7 @@ AI::AiResult AI :: executeServices ( )
                }
             } else {
                MapCoordinate3D dest = findServiceBuilding( *i );
-               if ( dest.valid() ) {
+               if ( dest.valid() && veh->canMove() ) {
                   veh->aiparam[ getPlayerNum() ]->dest = dest;
                   veh->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_serviceRetreat );
                } else {
@@ -663,7 +665,7 @@ AI::AiResult AI :: executeServices ( )
      pvehicle veh = *vi;
      checkKeys();
 
-     if ( veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat ) {
+     if ( veh->canMove() && veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat ) {
         int nwid = veh->networkid;
         moveUnit ( veh, veh->aiparam[ getPlayerNum() ]->dest, true );
 

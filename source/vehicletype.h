@@ -96,7 +96,7 @@ extern const char* AIjobs[];
  };
 
 
-
+ //! The class describing properties that are common to all vehicles of a certain kind. \sa Vehicle
  class Vehicletype : public ContainerBaseType {
     public:
         ASCString    name;          /* z.B. Exterminator  */
