@@ -148,11 +148,11 @@ class  Building : public ContainerBase {
     int  gettank ( int resource );
     int  getArmor( void );
 
-    pfield getEntryField ( );
-    MapCoordinate3D getEntry ( );
+    pfield getEntryField ( ) const;
+    MapCoordinate3D getEntry ( ) const;
 
-    pfield getField( const BuildingType::LocalCoordinate& localCoordinates );
-    MapCoordinate getFieldCoordinates( const BuildingType::LocalCoordinate& localCoordinates );
+    pfield getField( const BuildingType::LocalCoordinate& localCoordinates ) const;
+    MapCoordinate getFieldCoordinates( const BuildingType::LocalCoordinate& localCoordinates ) const;
 
     //! produces ammunition and stores it in #ammo
     void produceAmmo ( int type, int num );

@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.74 2001-03-23 16:02:56 mbickel Exp $
+//     $Id: typen.cpp,v 1.75 2001-04-03 11:54:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.74  2001/03/23 16:02:56  mbickel
+//      Some restructuring;
+//      started rewriting event system
+//
 //     Revision 1.73  2001/02/26 12:35:33  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -637,6 +641,14 @@ Resources operator- ( const Resources& res1, const Resources& res2 )
    res -= res2;
    return res;
 }
+
+Resources operator+ ( const Resources& res1, const Resources& res2 )
+{
+   Resources res = res1;
+   res += res2;
+   return res;
+}
+
 
 Resources Resources::operator* ( double d )
 {

@@ -2,9 +2,14 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.67 2001-04-01 12:59:35 mbickel Exp $
+//     $Id: building.cpp,v 1.68 2001-04-03 11:54:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.67  2001/04/01 12:59:35  mbickel
+//      Updated win32 project files to new ai file structure
+//      Added viewid win32-project
+//      Improved AI : production and service path finding
+//
 //     Revision 1.66  2001/03/23 16:02:55  mbickel
 //      Some restructuring;
 //      started rewriting event system
@@ -1653,7 +1658,7 @@ int   cbuildingcontrols :: cproduceunit :: available (pvehicletype fzt, int* lac
    if ( actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( fzt ) ) {
       for ( int r = 0; r < resourceTypeNum; r++ )
          if ( cc->getenergy( fzt->productionCost.resource(r), 0 ) < fzt->productionCost.resource(r) )
-            l |= 1;
+            l |= 1 << r;
    } else
       l |= 1 << 10;
 

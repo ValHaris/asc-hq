@@ -343,25 +343,25 @@ int Building :: gettank ( int resource )
 
 
 
-pfield        Building :: getField( const BuildingType::LocalCoordinate& lc )
+pfield        Building :: getField( const BuildingType::LocalCoordinate& lc ) const
 {
   return gamemap->getField ( getFieldCoordinates ( lc ));
 }
 
 
-pfield        Building :: getEntryField( )
+pfield        Building :: getEntryField( ) const
 {
   return getField ( typ->entry );
 }
 
-MapCoordinate3D Building :: getEntry( )
+MapCoordinate3D Building :: getEntry( ) const
 {
   return MapCoordinate3D( entryPosition, typ->buildingheight);
 }
 
 
 
-MapCoordinate Building :: getFieldCoordinates ( const BuildingType::LocalCoordinate& lc )
+MapCoordinate Building :: getFieldCoordinates ( const BuildingType::LocalCoordinate& lc ) const
 {
   return typ->getFieldCoordinate ( entryPosition, lc );
 }

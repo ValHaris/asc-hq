@@ -1795,6 +1795,7 @@ AiParameter :: AiParameter ( pvehicle _unit ) : AiValue ( log2( _unit->height ))
 
 void AiParameter :: resetTask ( )
 {
+   dest.x = -1;
    dest.y = -1;
    dest.z = -1;
    dest_nwid = 1;

@@ -22,13 +22,13 @@
 
 bool AI :: runUnitTask ( pvehicle veh )
 {
-   if ( veh->aiparam[getPlayerNum()]->task == AiParameter::tsk_move ) {
+   if ( veh->aiparam[getPlayerNum()]->task == AiParameter::tsk_move || veh->aiparam[getPlayerNum()]->task == AiParameter::tsk_serviceRetreat ) {
       bool moveIntoBuildings = false;
-      if ( veh->aiparam[getPlayerNum()]->job == AiParameter::job_conquer )
+      if ( veh->aiparam[getPlayerNum()]->job == AiParameter::job_conquer || veh->aiparam[getPlayerNum()]->task == AiParameter::tsk_serviceRetreat )
          moveIntoBuildings = true;
 
       moveUnit ( veh, veh->aiparam[getPlayerNum()]->dest, moveIntoBuildings );
-      if ( veh->xpos == veh->aiparam[getPlayerNum()]->dest.x && veh->ypos == veh->aiparam[getPlayerNum()]->dest.y ) {
+      if ( veh->getPosition() == veh->aiparam[getPlayerNum()]->dest ) {
          veh->aiparam[getPlayerNum()]->task = AiParameter::tsk_nothing;
          return true;
       } else
@@ -140,12 +140,17 @@ void AI::AirplaneLanding::findPath()
       ast = new AStar3D ( ai.getMap(), veh );
 
       int dist;
-      if ( veh->typ->fuelConsumption )
-         dist = veh->tank.fuel / veh->typ->fuelConsumption * maxmalq;
-      else
-         dist = maxint;
+      if ( maxMove == -1 ) {
+         if ( veh->typ->fuelConsumption )
+            dist = veh->tank.fuel / veh->typ->fuelConsumption * maxmalq;
+         else
+            dist = maxint;
 
-      ast->findAllAccessibleFields ( min( dist, veh->maxMovement() * 5) );
+         dist = min( dist, veh->maxMovement() * 5);
+      } else
+         dist = maxMove;
+
+      ast->findAllAccessibleFields ( dist );
       // tanker planes may have a very large range; that's why we top the distance at 5 times the turn-range
    }
 }
@@ -164,7 +169,8 @@ MapCoordinate3D AI::AirplaneLanding::getNearestLandingPosition ( bool buildingRe
              // aircraft carriers should be supported too....
 
              // we don't want to land in hostile territory
-             if ( getdiplomaticstatus2 ( ai.getFieldInformation ( x, y ).control * 8, ai.getPlayerNum()*8 ) == capeace )
+             FieldInformation& fi = ai.getFieldInformation ( x, y );
+             if ( fi.control == -1 || getdiplomaticstatus2 ( fi.control * 8, ai.getPlayerNum()*8 ) == capeace )
                  landingPositions[dist] = MapCoordinate3D( x,y,chfahrend);
 
           }
@@ -189,10 +195,13 @@ MapCoordinate3D AI::AirplaneLanding::getNearestLandingPosition ( bool buildingRe
       return MapCoordinate3D();
 }
 
-bool AI::AirplaneLanding::returnFromPositionPossible ( const MapCoordinate3D& pos )
+bool AI::AirplaneLanding::returnFromPositionPossible ( const MapCoordinate3D& pos, int theoreticalFuel )
 {
    if ( !veh->typ->fuelConsumption )
       return true;
+
+   if ( theoreticalFuel < 0 )
+      theoreticalFuel = veh->tank.fuel;
 
    findPath();
    if ( !positionsCalculated )
@@ -229,11 +238,21 @@ bool AI::AirplaneLanding::returnFromPositionPossible ( const MapCoordinate3D& po
          dist2 = maxint;
    }
 
-   if ( veh->tank.fuel - (dist + dist2) / maxmalq * veh->typ->fuelConsumption > 0.2 * veh->typ->tank.fuel )
+   if ( theoreticalFuel - (dist + dist2) / maxmalq * veh->typ->fuelConsumption > 0.2 * veh->typ->tank.fuel )
       return true;
    else
       return false;
 
+}
+
+bool AI::AirplaneLanding::canUnitCrash (const pvehicle veh )
+{
+   if ( !veh->typ->fuelConsumption )
+      return false;
+   if ( !(veh->height & (chtieffliegend | chfliegend | chhochfliegend)))
+      return false;
+
+   return true;
 }
 
 
@@ -435,9 +454,16 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
       }
       return false;
    } else {
-      AStar3D ast ( getMap(), veh );
+      AStar3D* ast = NULL;
+      if ( veh->aiparam[getPlayerNum()]->job == AiParameter::job_conquer )
+         ast = new HiddenAStar3D ( this, veh );
+      else
+         ast = new StratAStar3D ( this, veh );
+
+      auto_ptr<AStar3D> ap ( ast );
+
       AStar3D::Path path;
-      ast.findPath ( path, destination );
+      ast->findPath ( path, destination );
 
       return moveUnit ( veh, path ) == 1 ;
    }
@@ -451,15 +477,18 @@ int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path )
          VehicleMovement vm ( mapDisplay, NULL );
          vm.execute ( veh, -1, -1, 0, -1, -1 );
 
+         bool fieldFound = false;
          AStar3D::Path::const_iterator lastmatch = pi;
          AStar3D::Path::const_iterator i = pi;
          while ( i->z == veh->height && i != path.end() ) {
-            if ( vm.reachableFields.isMember ( i->x, i->y ))
+            if ( vm.reachableFields.isMember ( i->x, i->y )) {
                lastmatch = i;
+               fieldFound = true;
+            }
             i++;
          }
 
-         if ( lastmatch->x != veh->xpos || lastmatch->y != veh->ypos ) {
+         if ( (lastmatch->x != veh->xpos || lastmatch->y != veh->ypos) && fieldFound ) {
             if ( getfield ( lastmatch->x, lastmatch->y )->building )
                if ( checkReConquer ( getfield ( lastmatch->x, lastmatch->y )->building, veh ))
                   return false;
@@ -484,7 +513,7 @@ int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path )
          return 0;
       }
 
-      if ( ChangeVehicleHeight::getMoveCost ( veh, veh->getPosition(), getdirection( veh->xpos, veh->ypos, pi->x, pi->y), pi->z ).first > veh->getMovement() )
+      if ( ChangeVehicleHeight::getMoveCost ( veh, veh->getPosition(), getdirection( veh->xpos, veh->ypos, pi->x, pi->y), pi->z > veh->height ? 1 : -1 ).first > veh->getMovement() )
          return 0;
 
       ChangeVehicleHeight* cvh;
@@ -607,20 +636,6 @@ void AI ::  runReconUnits ( )
    }
 }
 
-AI::UnitDistribution AI::calcUnitDistribution ()
-{
-   UnitDistribution unitDistribution;
-   int unitCount = getPlayer().vehicleList.size();
-   if ( unitCount ) {
-      float inc = float(1) / float(unitCount);
-      for ( Player::VehicleList::iterator i = getPlayer().vehicleList.begin(); i != getPlayer().vehicleList.end(); i++ )
-         unitDistribution.group[ getUnitDistributionGroup ( *i )] += inc;
-
-   }
-   unitDistribution.calculated = true;
-   return unitDistribution;
-}
-
 AI::UnitDistribution::Group AI::getUnitDistributionGroup ( pvehicletype vt )
 {
          switch ( chooseJob ( vt, vt->functions ) ) {
@@ -688,6 +703,25 @@ void AI::UnitDistribution::write ( tnstream& stream ) const
    for ( int i = 0; i < groupCount; i++ )
       stream.writeFloat ( group[i] );
 }
+
+
+// avoiding a gcc 2.95.3 bug....
+typedef AI::UnitDistribution AIUD;
+AIUD AI::calcUnitDistribution ()
+//AI::UnitDistribution AI::calcUnitDistribution ()
+{
+   UnitDistribution unitDistribution;
+   int unitCount = getPlayer().vehicleList.size();
+   if ( unitCount ) {
+      float inc = float(1) / float(unitCount);
+      for ( Player::VehicleList::iterator i = getPlayer().vehicleList.begin(); i != getPlayer().vehicleList.end(); i++ )
+         unitDistribution.group[ getUnitDistributionGroup ( *i )] += inc;
+
+   }
+   unitDistribution.calculated = true;
+   return unitDistribution;
+}
+
 
 void AI::production()
 {
@@ -763,6 +797,8 @@ void AI::production()
 
    if ( !produceable.empty() ) {
 
+      GetConnectedBuildings::BuildingContainer lockedBuildings;
+
       bool produced;
       do {
           produced = false;
@@ -772,32 +808,34 @@ void AI::production()
                    if ( getUnitDistributionGroup ( p->second.vt) == i ) {
                       ProductionRating& pr = p->second;
 
-                      cbuildingcontrols bc;
-                      bc.init ( pr.bld );
-                      int lack;
-                      if  ( bc.produceunit.available( pr.vt, &lack ) ) {
-                          bc.produceunit.produce( pr.vt );
-                          container ( bc );
-                          currentUnitDistribution.group[i] += inc;
-                          produced = true;
-                          break;  // exit produceable llop
+                      if ( find ( lockedBuildings.begin(), lockedBuildings.end(), pr.bld ) == lockedBuildings.end()) {
+                         cbuildingcontrols bc;
+                         bc.init ( pr.bld );
+                         int lack;
+                         if  ( bc.produceunit.available( pr.vt, &lack ) ) {
+                             pvehicle veh = bc.produceunit.produce( pr.vt );
+                             calculateThreat ( veh );
+                             container ( bc );
+                             currentUnitDistribution.group[i] += inc;
+                             produced = true;
+                             break;  // exit produceable llop
+                         } else {
+
+                            // the ai will save for move expensive units
+                            if ( !(lack & ( 1<<10 ))) {
+                               if ( pr.bld->getResource ( pr.vt->productionCost, 1 ) + pr.bld->netResourcePlus( ) * config.waitForResourcePlus >= pr.vt->productionCost )
+                                  for ( int r = 0; r < resourceTypeNum; r++ )
+                                     if ( lack & (1 << r )) {
+                                        GetConnectedBuildings gcb ( lockedBuildings, getMap(), r );
+                                        gcb.start ( pr.bld->getEntry().x, pr.bld->getEntry().y );
+                                     }
+                               sort  ( lockedBuildings.begin(), lockedBuildings.end());
+                               unique( lockedBuildings.begin(), lockedBuildings.end());
+                            }
+                         }
                       }
-
-                      /*
-
-                      the ai may want to save for move expensive units
-
-                      else
-                         if ( !(lack & ( 1<<10 )) {
-                            if (
-                            for ( int r = 0; r < ResourceTypeNum; r++ )
-                               if ( lack & (1 << r ))
-                                  get buildings connected to this building by a resource net
-                                  add these building-list to a list of locked buildings
-
-                      */
-
-                   }
+                   } // else
+                     //  printf(" %s \n", p->second.vt->description );
                 }
              }
           }

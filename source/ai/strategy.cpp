@@ -50,18 +50,16 @@ AI::AiResult AI::strategy( void )
 
                VehicleMovement vm ( mapDisplay, NULL );
                if ( vm.available ( veh )) {
-                  int x2, y2;
+                  MapCoordinate3D dest;
 
-                  AI::Section* sec = sections.getBest ( 0, veh, &x2, &y2 );
+                  AI::Section* sec = sections.getBest ( 0, veh, &dest, true );
                   if ( sec ) {
-                     if ( moveUnit ( veh, MapCoordinate ( x2, y2 ), false))
+                     if ( moveUnit ( veh, dest, false))
                         localResult.unitsMoved++;
 
                      AiParameter& aip = *veh->aiparam[getPlayerNum()];
 
-                     aip.dest.x = x2;
-                     aip.dest.y = y2;
-                     aip.dest.z = -1;
+                     aip.dest = dest;
                   }
                }
             }

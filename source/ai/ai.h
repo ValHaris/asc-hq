@@ -3,9 +3,14 @@
 */
 
 
-//     $Id: ai.h,v 1.2 2001-04-01 12:59:35 mbickel Exp $
+//     $Id: ai.h,v 1.3 2001-04-03 11:54:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2001/04/01 12:59:35  mbickel
+//      Updated win32 project files to new ai file structure
+//      Added viewid win32-project
+//      Improved AI : production and service path finding
+//
 //     Revision 1.1  2001/03/30 12:43:16  mbickel
 //      Added 3D pathfinding
 //      some cleanup and documentation
@@ -74,23 +79,27 @@
                   int failure;
                   pbuilding nextServiceBuilding;
                   int nextServiceBuildingDistance;
+                  bool active;
                public:
                   VehicleService::Service requiredService;
                   int position;
 
-                  ServiceOrder ( ) : ai ( NULL ), targetUnitID ( 0 ), serviceUnitID ( 0 ), failure ( 0 ), nextServiceBuilding ( 0 ) {};
+                  ServiceOrder ( ) : ai ( NULL ), targetUnitID ( 0 ), serviceUnitID ( 0 ), failure ( 0 ), nextServiceBuilding ( 0 ), active ( false ) {};
                   ServiceOrder ( AI* _ai, VehicleService::Service _requiredService, int UnitID, int _pos = -1 );
                   ServiceOrder ( AI* _ai, tnstream& stream );
                   AStar3D::Path::iterator lastmatchServiceOrder ( AI* _ai, tnstream& stream );
                   pvehicle getTargetUnit ( ) const { return ai->getMap()->getUnit ( targetUnitID );};
                   pvehicle getServiceUnit ( ) const { return ai->getMap()->getUnit ( serviceUnitID );};
-                  void setServiceUnit ( pvehicle veh ) { serviceUnitID = veh->networkid; };
+                  void setServiceUnit ( pvehicle veh );
                   int possible ( pvehicle supplier );
                   bool execute1st ( pvehicle supplier );
                   bool timeOut ( );
                   bool canWait ( );
+
                   void serviceFailed() { failure++; };
                   bool completelyFailed();
+
+                  static void releaseServiceUnit ( ServiceOrder& so );
 
                   void write ( tnstream& stream ) const;
                   void read ( tnstream& read );
@@ -101,8 +110,11 @@
                   };
                   static bool invalid ( const ServiceOrder& so );
                   bool valid ( ) const;
+                  static void activate( ServiceOrder& so );
 
-                  bool operator==( const ServiceOrder& );
+                  bool operator==( const ServiceOrder& so ) const;
+                  bool operator!=( const ServiceOrder& so ) const;
+
 
                   ~ServiceOrder ();
            };
@@ -110,7 +122,7 @@
 
            void removeServiceOrdersForUnit ( const pvehicle veh );
 
-           class ServiceTargetEquals : public unary_function<ServiceOrder,bool> {
+           class ServiceTargetEquals : public unary_function<ServiceOrder&,bool> {
                  const pvehicle target;
               public:
                  explicit ServiceTargetEquals ( const pvehicle _target ) : target ( _target ) {};
@@ -118,12 +130,19 @@
            };
 
 
+
            static bool vehicleValueComp ( const pvehicle v1, const pvehicle v2 );
            static bool buildingValueComp ( const pbuilding v1, const pbuilding v2 );
 
            typedef list<ServiceOrder> ServiceOrderContainer;
            ServiceOrderContainer serviceOrders;
+           //! cycles through all units and checks for necessary services
            void issueServices ( );
+
+           //! issues a single service. If the same service-order already exists, it will not be issued a second time
+           ServiceOrder& issueService ( VehicleService::Service requiredService, int UnitID, int pos = -1 );
+
+           ServiceOrder& issueRefuelOrder ( pvehicle veh, bool returnImmediately );
            void runServiceUnit ( pvehicle supplyUnit );
 
            class AirplaneLanding {
@@ -135,12 +154,15 @@
 
                    typedef map<int, MapCoordinate3D> LandingPositions;
                    LandingPositions landingPositions;
-                   void findPath();
                    bool positionsCalculated;
+                   int maxMove;
                 public:
-                   AirplaneLanding ( AI& ai_, pvehicle veh_ ) : ai ( ai_ ), veh ( veh_ ), ast(NULL), positionsCalculated(false) {};
+                   AirplaneLanding ( AI& ai_, pvehicle veh_, int maxMove_ = -1 ) : ai ( ai_ ), veh ( veh_ ), ast(NULL), positionsCalculated(false), maxMove ( maxMove_ ) {};
                    MapCoordinate3D getNearestLandingPosition ( bool buildingRequired, bool refuel, bool repair );
-                   bool returnFromPositionPossible ( const MapCoordinate3D& pos );
+                   bool returnFromPositionPossible ( const MapCoordinate3D& pos, int theoreticalFuel = -1 );
+                   //! checks whether the unit can crash do to lack of fuel; this is usually true for airplanes. A unit that does not crash does not need to care about landing positions.
+                   void findPath();
+                   static bool canUnitCrash (const pvehicle veh );
                    ~AirplaneLanding() { if (ast) delete ast; };
            };
            friend class AirplaneLanding;
@@ -414,7 +436,9 @@
                   void calculate ( void );
                   Section& getForCoordinate ( int xc, int yc );         //!< returns the section whose center is nearest to x,y
                   Section& getForPos ( int xn, int yn );                //!< returns the xth and yth section
-                  Section* getBest ( int pass, const pvehicle veh, int* xtogo = NULL, int* ytogo = NULL );
+
+                  // secondRun should only be used when this function calls itself recursively
+                  Section* getBest ( int pass, const pvehicle veh, MapCoordinate3D* dest = NULL, bool allowRefuellOrder = false, bool secondRun = false );
                   Sections ( AI* _ai );
                   void reset( void );
             } sections;

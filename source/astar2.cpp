@@ -375,8 +375,9 @@ bool operator == ( const AStar3D::Node& a, const AStar3D::Node& b )
 
 
 
-AStar3D :: AStar3D ( pmap actmap_, pvehicle veh_ )
+AStar3D :: AStar3D ( pmap actmap_, pvehicle veh_, bool markTemps_ )
 {
+   markTemps = markTemps_;
    tempsMarked = NULL;
    _path = NULL;
    veh = veh_;
@@ -397,10 +398,12 @@ AStar3D :: AStar3D ( pmap actmap_, pvehicle veh_ )
    int cnt = actmap->xsize*actmap->ysize*8;
    posDirs = new HexDirection[cnt];
    posHHops = new int[cnt];
+   fieldAccess = new char[cnt];
 
    for ( int i = 0; i < cnt; i++ ) {
       posDirs[i] = DirNone;
       posHHops[i] = 0;
+      fieldAccess[i] = 0;
    }
 
 }
@@ -408,10 +411,12 @@ AStar3D :: AStar3D ( pmap actmap_, pvehicle veh_ )
 
 AStar3D :: ~AStar3D ( )
 {
-   if ( tempsMarked )
-      tempsMarked->cleartemps( 1 );
+   if( tempsMarked )
+      tempsMarked->cleartemps ( 1 );
+
    delete[] posDirs;
    delete[] posHHops;
+   delete[] fieldAccess;
 }
 
 int AStar3D::dist( const MapCoordinate3D& a, const MapCoordinate3D& b )
@@ -652,10 +657,13 @@ void AStar3D::findAllAccessibleFields ( int maxDist )
 
    Path dummy;
    findPath ( dummy, MapCoordinate3D(actmap->xsize, actmap->ysize, veh->height) );  //this field does not exist...
-   for ( Container::iterator i = visited.begin(); i != visited.end(); i++ )
-      actmap->getField ( i->h )->a.temp |= i->h.z;
-
-   tempsMarked = actmap;
+   for ( Container::iterator i = visited.begin(); i != visited.end(); i++ ) {
+      getFieldAccess( i->h ) |= i->h.z;
+      if ( markTemps )
+         actmap->getField ( i->h )->a.temp  |= i->h.z;
+   }
+   if ( markTemps )
+      tempsMarked = actmap;
 }
 
 AStar3D::Node* AStar3D::fieldVisited ( const MapCoordinate3D& pos )
@@ -665,4 +673,15 @@ AStar3D::Node* AStar3D::fieldVisited ( const MapCoordinate3D& pos )
           return &(*i);
 
    return NULL;
+}
+
+
+char& AStar3D::getFieldAccess ( int x, int y )
+{
+   return fieldAccess[x + y * actmap->xsize];
+}
+
+char& AStar3D::getFieldAccess ( const MapCoordinate& mc )
+{
+   return fieldAccess[mc.x + mc.y * actmap->xsize];
 }

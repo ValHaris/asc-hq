@@ -139,6 +139,7 @@ void MapNetwork :: searchbuilding ( int x, int y )
                   getnextfield ( xp2, yp2, d );
                   pfield newfield = getfield ( xp2, yp2 );
                   if ( newfield && newfield->building != bld  && !newfield->a.temp )
+
                      searchfield ( xp2, yp2, d );
 
                   searchvehicle ( xp2, yp2 );
@@ -180,6 +181,7 @@ void MapNetwork :: start ( int x, int y )
                checkbuilding(*j);
 
 
+
             if ( !searchfinished() ) {
                pass++;
                for ( tmap::Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); j++ )
@@ -210,6 +212,7 @@ void MapNetwork :: start ( int x, int y )
                      checkbuilding( fld->building );
                } else
                   if ( fld->vehicle )
+
                      if ( pass == 2 )
                         checkvehicle ( fld->vehicle );
          }
@@ -636,5 +639,4 @@ void GetResourceUsage :: checkbuilding ( pbuilding b )
       got += usage.resource( resourcetype );
    }
 }
-
 

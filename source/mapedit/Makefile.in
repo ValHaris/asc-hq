@@ -75,10 +75,10 @@ CXXFLAGS = @CXXFLAGS@ -Dkarteneditor -I./ -DFREEMAPZOOM -DNEWKEYB
 
 bin_PROGRAMS = ascmapedit ascmap2pcx
 
-ascmapedit_SOURCES = edevents.cpp edgen.cpp edglobal.cpp edmain.cpp edselfnt.cpp edmisc.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp Named.cpp buildingtype.cpp vehicletype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp vehicle.cpp buildings.cpp networkdata.cpp
+ascmapedit_SOURCES = edevents.cpp edgen.cpp edglobal.cpp edmain.cpp edselfnt.cpp edmisc.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp Named.cpp buildingtype.cpp vehicletype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp
 ascmapedit_LDADD = ../sdl/libsdl.a ../libs/triangul/libtriangul.a -lSDL -lpthread @LDADDLIBBZ2@
 
-ascmap2pcx_SOURCES = map2pcx.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp Named.cpp buildingtype.cpp vehicletype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp vehicle.cpp buildings.cpp networkdata.cpp
+ascmap2pcx_SOURCES = map2pcx.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp Named.cpp buildingtype.cpp vehicletype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp
 ascmap2pcx_LDADD = ../sdl/libsdl.a ../libs/triangul/libtriangul.a -lSDL -lpthread -lSDL_image @LDADDLIBBZ2@
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
@@ -97,7 +97,7 @@ dialog.o basestrm.o basegfx.o attack.o CLoadable.o Property.o \
 PropertyGroup.o gameoptions.o Named.o buildingtype.o vehicletype.o \
 containerbase.o mapalgorithms.o viewcalculation.o gamemap.o password.o \
 password_dialog.o research.o mapdisplay.o ascstring.o graphicset.o \
-vehicle.o buildings.o networkdata.o
+vehicle.o buildings.o networkdata.o resourcenet.o
 ascmapedit_DEPENDENCIES =  ../sdl/libsdl.a \
 ../libs/triangul/libtriangul.a
 ascmapedit_LDFLAGS = 
@@ -107,7 +107,8 @@ loadbi3.o dlg_box.o dialog.o basestrm.o basegfx.o attack.o CLoadable.o \
 Property.o PropertyGroup.o gameoptions.o Named.o buildingtype.o \
 vehicletype.o containerbase.o mapalgorithms.o viewcalculation.o \
 gamemap.o password.o password_dialog.o research.o mapdisplay.o \
-ascstring.o graphicset.o vehicle.o buildings.o networkdata.o
+ascstring.o graphicset.o vehicle.o buildings.o networkdata.o \
+resourcenet.o
 ascmap2pcx_DEPENDENCIES =  ../sdl/libsdl.a \
 ../libs/triangul/libtriangul.a
 ascmap2pcx_LDFLAGS = 
@@ -130,10 +131,10 @@ DEP_FILES =  .deps/CLoadable.P .deps/Named.P .deps/Property.P \
 .deps/loadbi3.P .deps/loaders.P .deps/loadpcxc.P .deps/map2pcx.P \
 .deps/mapalgorithms.P .deps/mapdisplay.P .deps/misc.P \
 .deps/networkdata.P .deps/newfont.P .deps/palette.P .deps/password.P \
-.deps/password_dialog.P .deps/pd.P .deps/research.P .deps/sgstream.P \
-.deps/spfst.P .deps/stack.P .deps/strtmesg.P .deps/typen.P \
-.deps/vehicle.P .deps/vehicletype.P .deps/viewcalculation.P \
-.deps/weather.P
+.deps/password_dialog.P .deps/pd.P .deps/research.P .deps/resourcenet.P \
+.deps/sgstream.P .deps/spfst.P .deps/stack.P .deps/strtmesg.P \
+.deps/typen.P .deps/vehicle.P .deps/vehicletype.P \
+.deps/viewcalculation.P .deps/weather.P
 SOURCES = $(ascmapedit_SOURCES) $(ascmap2pcx_SOURCES)
 OBJECTS = $(ascmapedit_OBJECTS) $(ascmap2pcx_OBJECTS)
 

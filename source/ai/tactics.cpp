@@ -137,12 +137,16 @@ void AI :: searchTargets ( pvehicle veh, int x, int y, TargetVector& tl, int mov
 
 bool operator > ( const AI::MoveVariant& mv1, const AI::MoveVariant& mv2 )
 {
-   return ( mv1.result > mv2.result || (mv1.result == mv2.result && mv1.positionThreat < mv2.positionThreat  ));  // mv1.moveDist < mv2.moveDist
+   return (     mv1.result > mv2.result
+            || (mv1.result == mv2.result && mv1.positionThreat < mv2.positionThreat  )
+            || (mv1.result == mv2.result && mv1.positionThreat == mv2.positionThreat && mv1.moveDist < mv2.moveDist) );  // mv1.moveDist < mv2.moveDist
 }
 
 bool operator < ( const AI::MoveVariant& mv1, const AI::MoveVariant& mv2 )
 {
-   return ( mv1.result < mv2.result || (mv1.result == mv2.result && mv1.positionThreat > mv2.positionThreat ));
+   return (     mv1.result < mv2.result
+            || (mv1.result == mv2.result && mv1.positionThreat > mv2.positionThreat )
+            || (mv1.result == mv2.result && mv1.positionThreat == mv2.positionThreat && mv1.moveDist > mv2.moveDist) );  // mv1.moveDist < mv2.moveDist
 }
 
 
@@ -169,21 +173,27 @@ void AI::getAttacks ( VehicleMovement& vm, pvehicle veh, TargetVector& tv, int h
          vm.execute ( veh, -1, -1, 0, -1, -1 );
 
       AirplaneLanding* apl = NULL;
-      if ( veh->height >= chtieffliegend && veh->typ->fuelConsumption )
+      if ( AirplaneLanding::canUnitCrash ( veh ))
         apl = new AirplaneLanding( *this, veh );
 
+      int fuelLacking = 0;
       for ( int f = 0; f < vm.reachableFields.getFieldNum(); f++ )
          if ( !vm.reachableFields.getField( f )->vehicle && !vm.reachableFields.getField( f )->building ) {
              int xp, yp;
              vm.reachableFields.getFieldCoordinates ( f, &xp, &yp );
              if ( !apl || apl->returnFromPositionPossible ( MapCoordinate3D(xp, yp, veh->height)))
                 searchTargets ( veh, xp, yp, tv, beeline ( xp, yp, orgxpos, orgypos ), vm, hemmingBonus );
+             else
+                fuelLacking++;
           }
 
       if ( apl ) {
          delete apl;
          apl = NULL;
       }
+
+      if ( !tv.size() && fuelLacking )
+         issueRefuelOrder( veh, true );
 
    }
 
@@ -471,22 +481,24 @@ AI::AiResult AI::tactics( void )
          if ( veh->typ->height & ( 1 << h ))
             maxMove = max ( veh->typ->movement[h], maxMove );
 
-      bool enemiesNear = false;
-      int ydist = (maxMove + maxWeapDist) / maxmalq;
-      int xdist = ydist / 2;
-      for ( int x = veh->xpos - xdist; x <= veh->xpos + xdist; x++ )
-         for ( int y = veh->ypos - ydist; y <= veh->ypos + ydist; y++ ) {
-            pfield fld = getMap()->getField(x,y );
-            if ( fld ) {
-               if ( fld->vehicle && getdiplomaticstatus2 ( veh->color, fld->vehicle->color ) == cawar )
-                  enemiesNear = true;
-               if ( fld->building && getdiplomaticstatus2 ( veh->color, fld->building->color ) == cawar )
-                  enemiesNear = true;
+      if ( maxWeapDist > 0 ) {
+         bool enemiesNear = false;
+         int ydist = (maxMove + maxWeapDist) / maxmalq * 2;
+         int xdist = ydist / 4;
+         for ( int x = veh->xpos - xdist; x <= veh->xpos + xdist; x++ )
+            for ( int y = veh->ypos - ydist; y <= veh->ypos + ydist; y++ ) {
+               pfield fld = getMap()->getField(x,y );
+               if ( fld ) {
+                  if ( fld->vehicle && getdiplomaticstatus2 ( veh->color, fld->vehicle->color ) == cawar )
+                     enemiesNear = true;
+                  if ( fld->building && getdiplomaticstatus2 ( veh->color, fld->building->color ) == cawar )
+                     enemiesNear = true;
+               }
             }
-         }
 
-      if ( unitUsable && enemiesNear)
-         tactVehicles.push_back ( veh );
+         if ( unitUsable && enemiesNear)
+            tactVehicles.push_back ( veh );
+      }
    }
 
    int hemmingBonus = 5;
@@ -557,7 +569,8 @@ AI::AiResult AI::tactics( void )
                   }
                } else {
                   // there is nothing the unit can do in tactics mode
-                  veh->aiparam[ getPlayerNum() ]->task = AiParameter::tsk_nothing;
+                  if ( veh->aiparam[ getPlayerNum() ]->task != AiParameter::tsk_serviceRetreat )
+                     veh->aiparam[ getPlayerNum() ]->task = AiParameter::tsk_nothing;
                   i = tactVehicles.erase ( i );
                }
             }
@@ -584,6 +597,13 @@ AI::AiResult AI::tactics( void )
          typedef list<MapCoordinate> AffectedFields;
          AffectedFields affectedFields;
 
+         /* to avoid recalculating the vision with every variant we are going to make it
+            easy...
+            Since all units now only attack the neighbouring fields, which is generally
+            visible, the AI does not cheat here.
+         */
+         npush ( _vision );
+         _vision = 3;
 
          /* we don't need to discard all the calculations made above after a single attack.
             Only the attacks that are near enough to be affected by the last movement and attack
@@ -679,6 +699,8 @@ AI::AiResult AI::tactics( void )
 
          } while ( currentTarget != targets.end() );
 
+         npop ( _vision );
+
       } else {
          // no attacks are possible
          tactVehicles.clear();
@@ -758,7 +780,11 @@ class UnitAttacksUnit_FakeHemming : public tunitattacksunit {
           UnitAttacksUnit_FakeHemming ( AI* ai, pvehicle attacker, pvehicle defender, pvehicle* _neighbours ) : tunitattacksunit ( attacker , defender )
           {
              for ( int i = 0; i < sidenum; i++ ) {
-                pvehicle v = ai->getMap()->getField ( getNeighbouringFieldCoordinate ( attacker->getPosition(), i ))->vehicle;
+                pfield fld = ai->getMap()->getField ( getNeighbouringFieldCoordinate ( attacker->getPosition(), i ));
+                pvehicle v = NULL;
+                if ( fld )
+                   pvehicle v = fld->vehicle;
+
                 if ( v && attackpossible2n ( v, defender ) )
                    neighbours[i] = true;
                 else

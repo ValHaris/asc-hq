@@ -1270,7 +1270,7 @@ pfieldlist generatelst ( int x1, int y1, int x2, int y2 )
 
      case 4: adddirpts ( x1, y1, list, 3 );
              adddirpts ( x1, y1, list, 5 );
-             adddirpts ( x1, y1, list, 2 );
+             adddirpts ( x1+1, y1, list, 2 );
              break;
 
      case 5: adddirpts ( x1, y1, list, 0 );

@@ -61,6 +61,18 @@ class ResourceNet : public MapNetwork {
                   virtual int globalsearch ( void ) { return scope; };
              };
 
+class GetConnectedBuildings : public ResourceNet {
+                protected:
+                   void checkvehicle ( pvehicle v ) {};
+                   void checkbuilding ( pbuilding b ) { buildingContainer.push_back ( b ); };
+                   int searchfinished ( void ) { return false; };
+
+                public:
+                   typedef vector<pbuilding> BuildingContainer;
+                   BuildingContainer& buildingContainer;
+                   GetConnectedBuildings ( BuildingContainer& buildingContainer_, pmap gamemap, int resourceType ) : ResourceNet ( gamemap->isResourceGlobal(resourceType)?2:1), buildingContainer ( buildingContainer_) {};
+};
+
 class StaticResourceNet : public ResourceNet {
                protected:
                   int need;

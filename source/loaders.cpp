@@ -5,9 +5,15 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.48 2001-03-30 12:43:16 mbickel Exp $
+//     $Id: loaders.cpp,v 1.49 2001-04-03 11:54:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2001/03/30 12:43:16  mbickel
+//      Added 3D pathfinding
+//      some cleanup and documentation
+//      splitted the ai into several files, now located in the ai subdirectory
+//      AI cares about airplane servicing and range constraints
+//
 //     Revision 1.47  2001/03/23 16:02:56  mbickel
 //      Some restructuring;
 //      started rewriting event system
@@ -1664,6 +1670,7 @@ int          tmaploaders::loadmap( const char *       name )
    actmap = spfld;
    spfld = NULL;
 
+
    cursor.posx = 0;
    cursor.posy = 0;
 
@@ -1744,6 +1751,9 @@ int   tsavegameloaders::loadgame( const char* filename )
    delete actmap;
    actmap = spfld;
    actmap->levelfinished = false;
+
+   cursor.posx = 0;
+   cursor.posy = 0;
 
    if ( actmap->replayinfo ) {
       if ( actmap->replayinfo->actmemstream )

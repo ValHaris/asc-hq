@@ -178,7 +178,7 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( pvehicle _eht )
       eht->threatvalue[b] = weapthreatvalue[b];
       if (weapthreatvalue[b] > l)
          l = weapthreatvalue[b];
-   }
+   }                         <Zwischenablage leer>
    eht->completethreatvalue = threatvalue2 + l;
    eht->completethreatvaluesurr = threatvalue2 + l;
    eht->threats = 0;
@@ -198,6 +198,14 @@ AiParameter::Job AI::chooseJob ( const Vehicletype* typ, int functions )
       if ( typ->weapons->weapon[w].offensive() )
          maxstrength= max (  typ->weapons->weapon[w].maxstrength, maxstrength );
 
+   bool service = false;
+   for ( int w = 0; w < typ->weapons->count; w++ )
+      if ( typ->weapons->weapon[w].service() )
+         service = true;
+   if ( ((functions & cfrepair) || service) && maxmove >= minmalq )
+      return AiParameter::job_supply;
+
+
    if ( functions & cf_conquer ) {
       if ( functions & cf_trooper )  {
          if ( typ->height & chfahrend )
@@ -208,25 +216,11 @@ AiParameter::Job AI::chooseJob ( const Vehicletype* typ, int functions )
       }
    }
 
-   int maxPunch = 0;
-   for ( int w = 0; w < typ->weapons->count; w++ )
-      if ( typ->weapons->weapon[w].offensive() )
-         maxPunch = max ( maxPunch, typ->weapons->weapon[w].maxstrength );
-
-
-   if ( (maxPunch < typ->view  || maxPunch < typ->jamming) && maxmove > minmalq )
+   if ( (maxstrength < typ->view  || maxstrength < typ->jamming) && maxmove > minmalq )
       return AiParameter::job_recon;
 
    if ( maxstrength > 0 )
       return AiParameter::job_fight;
-
-
-   bool service = false;
-   for ( int w = 0; w < typ->weapons->count; w++ )
-      if ( typ->weapons->weapon[w].service() )
-         service = true;
-   if ( ((functions & cfrepair) || service) && maxmove >= minmalq )
-      return AiParameter::job_supply;
 
    return AiParameter::job_undefined;
 }
@@ -620,7 +614,7 @@ AI::Section& AI :: Sections :: getForPos ( int xn, int yn )
    return section[xn+yn*numX];
 }
 
-AI::Section* AI :: Sections :: getBest ( int pass, const pvehicle veh, int* xtogo, int* ytogo )
+AI::Section* AI :: Sections :: getBest ( int pass, const pvehicle veh, MapCoordinate3D* dest, bool allowRefuellOrder, bool secondRun )
 {
    /*
       In the first pass wwe check were all the units would go if there wouldn't be
@@ -629,9 +623,19 @@ AI::Section* AI :: Sections :: getBest ( int pass, const pvehicle veh, int* xtog
       are going there
    */
 
+   AStar3D* ast = 0;
+   AirplaneLanding* apl = NULL;
+   if ( AirplaneLanding::canUnitCrash ( veh )) {
+      if ( secondRun )
+         apl = new AirplaneLanding ( *ai, veh, maxint );
+      else
+         apl = new AirplaneLanding ( *ai, veh );
 
-   AStar ast ( ai->getMap(), veh );
-   ast.findAllAccessibleFields (  );
+      apl->findPath();
+   } else {
+      ast = new AStar3D ( ai->getMap(), veh );
+      ast->findAllAccessibleFields (  );
+   }
 
 
    AiParameter& aip = *veh->aiparam[ ai->getPlayerNum() ];
@@ -650,88 +654,115 @@ AI::Section* AI :: Sections :: getBest ( int pass, const pvehicle veh, int* xtog
       }
 
 
-   for ( int y = 0; y < numY; y++ )
-      for ( int x = 0; x < numX; x++ ) {
-          int xtogoSec = -1;
-          int ytogoSec = -1;
+   TemporaryContainerStorage tus ( veh );
+   veh->resetMovement(); // to make sure the wait-for-attack flag doesn't hinder the attack
+   veh->attacked = 0;
 
-          AI::Section& sec = getForPos( x, y );
-          float t = 0;
-          for ( int i = 0; i < aiValueTypeNum; i++ )
-             t += aip.threat.threat[i] * sec.value[i];
+   int sectionsPossibleWithMaxFuell = 0;
 
-          float f = t;
+   for ( int h = 1; h < 0xff; h<<= 1 )
+      if ( veh->typ->height & h )
+         for ( int y = 0; y < numY; y++ )
+            for ( int x = 0; x < numX; x++ ) {
+                int xtogoSec = -1;
+                int ytogoSec = -1;
 
-          if ( sec.avgUnitThreat.threat[aip.valueType] ) {
-             int relThreat = int( 4*maxSectionThread / sec.avgUnitThreat.threat[aip.valueType] + 1);
-             f /= relThreat;
-          }
+                AI::Section& sec = getForPos( x, y );
+                float t = 0;
+                for ( int i = 0; i < aiValueTypeNum; i++ )
+                   t += aip.threat.threat[i] * sec.value[i];
 
-          /*
-          if ( sec.avgUnitThreat.threat[aip.valueType] >= 0 )
-             f = t / log( sec.avgUnitThreat.threat[aip.valueType] );
-          else
-             f = t;
-          */
+                float f = t;
 
-          int dist = beeline ( veh->xpos, veh->ypos, sec.centerx, sec.centery ) + 3 * veh->maxMovement();
-          if ( dist )
-             f /= log(dist);
-
-          if ( f > d ) {
-             int ac  = 0;
-             int nac = 0;
-             int mindist = maxint;
-             int targets = 0;
-             for ( int yp = sec.y1; yp <= sec.y2; yp++ )
-                for ( int xp = sec.x1; xp <= sec.x2; xp++ ) {
-                   pfield fld = getfield ( xp, yp );
-                   if ( fld->a.temp == 1 ) {
-                      int mandist = abs( sec.centerx - xp ) + 2*abs ( sec.centery - yp );
-                      if ( mandist < mindist ) {
-                         mindist = mandist;
-                         xtogoSec = xp;
-                         ytogoSec = yp;
-                      }
-
-                      ai->_vision = visible_all;
-
-                      ac++;
-
-                      TemporaryContainerStorage tus ( veh );
-
-                      veh->resetMovement(); // to make sure the wait-for-attack flag doesn't hinder the attack
-                      veh->attacked = 0;
-                      veh->xpos = xp;
-                      veh->ypos = yp;
-
-                      VehicleAttack va ( NULL, NULL );
-                      if ( va.available ( veh )) {
-                         va.execute ( veh, -1, -1, 0, 0, -1 );
-                         targets += va.attackableVehicles.getFieldNum();
-                      }
-                      tus.restore();
-                      ai->_vision = visible_ago;
-                   } else
-                      nac++;
+                if ( sec.avgUnitThreat.threat[ veh->getValueType(h) ] ) {
+                   int relThreat = int( 4*maxSectionThread / sec.avgUnitThreat.threat[veh->getValueType(h)] + 1);
+                   f /= relThreat;
                 }
 
-             int notAccessible = 100 * nac / (nac+ac);
-             if ( notAccessible < 85  && targets ) {   // less than 85% of fields not accessible
-                float nf = f * ( 100-notAccessible) / 100; // *  ( 100 - notAccessible );
-                if ( nf > d ) {
-                   d = nf;
-                   // nd = nf;
-                   frst = &getForPos ( x, y );
-                   if ( xtogo && ytogo ) {
-                      *xtogo = xtogoSec;
-                      *ytogo = ytogoSec;
-                   }
-                }
-             }
-          }
-      }
+                /*
+                if ( sec.avgUnitThreat.threat[aip.valueType] >= 0 )
+                   f = t / log( sec.avgUnitThreat.threat[aip.valueType] );
+                else
+                   f = t;
+                */
 
+                int dist = beeline ( veh->xpos, veh->ypos, sec.centerx, sec.centery ) + 3 * veh->maxMovement();
+                if ( dist )
+                   f /= log(dist);
+
+                if ( f > d ) {
+                   int ac  = 0;
+                   int nac = 0;
+                   int mindist = maxint;
+                   int targets = 0;
+
+
+                   for ( int yp = sec.y1; yp <= sec.y2; yp++ )
+                      for ( int xp = sec.x1; xp <= sec.x2; xp++ ) {
+                         pfield fld = ai->getMap()->getField(xp, yp );
+                         if ( fld->a.temp & h ) {
+                            int mandist = abs( sec.centerx - xp ) + 2*abs ( sec.centery - yp );
+                            if ( mandist < mindist ) {
+                               mindist = mandist;
+                               xtogoSec = xp;
+                               ytogoSec = yp;
+                            }
+
+                            ai->_vision = visible_all;
+
+                            ac++;
+
+                            veh->xpos = xp;
+                            veh->ypos = yp;
+                            veh->height = h;
+
+                            VehicleAttack va ( NULL, NULL );
+                            if ( va.available ( veh )) {
+                               va.execute ( veh, -1, -1, 0, 0, -1 );
+                               targets += va.attackableVehicles.getFieldNum();
+                            }
+                            ai->_vision = visible_ago;
+                         } else
+                            nac++;
+                      }
+
+                   if ( xtogoSec >= 0 && ytogoSec >= 0 )
+                      if ( !apl || apl->returnFromPositionPossible ( MapCoordinate3D( xtogoSec, ytogoSec, h ))) {
+                         int notAccessible = 100 * nac / (nac+ac);
+                         if ( notAccessible < 85  && targets ) {   // less than 85% of fields not accessible
+                            float nf = f * ( 100-notAccessible) / 100; // *  ( 100 - notAccessible );
+                            if ( nf > d ) {
+                               d = nf;
+                               // nd = nf;
+                               frst = &getForPos ( x, y );
+                               if ( dest ) {
+                                  dest->x = xtogoSec;
+                                  dest->y = ytogoSec;
+                                  dest->z = h;
+                               }
+                            }
+                         }
+                      } else
+                         if ( allowRefuellOrder ) {
+                            if ( apl && apl->returnFromPositionPossible ( MapCoordinate3D( xtogoSec, ytogoSec, h ), veh->typ->tank.fuel ))
+                               sectionsPossibleWithMaxFuell++;
+                         }
+
+                }
+            }
+
+   tus.restore();
+   delete ast;
+   delete apl;
+
+   if ( !frst ) {
+      if ( sectionsPossibleWithMaxFuell && allowRefuellOrder )
+         ai->issueRefuelOrder ( veh, false );
+      else
+        if ( AirplaneLanding::canUnitCrash ( veh ))
+           return getBest ( pass, veh, dest, allowRefuellOrder, true );
+
+   }
    return frst;
 
 }

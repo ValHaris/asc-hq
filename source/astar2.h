@@ -102,12 +102,14 @@ class AStar3D {
        pvehicle veh;
        pmap actmap;
        float vehicleSpeedFactor[8];
+       bool markTemps;
 
 
        virtual int getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const pvehicle vehicle );
 
        HexDirection* posDirs;
        int*          posHHops;
+       char*         fieldAccess;
        HexDirection& getPosDir ( const MapCoordinate3D& pos ) { return posDirs [(pos.y * actmap->xsize + pos.x) * 8 + log2(pos.z)]; };
        int& getPosHHop ( const MapCoordinate3D& pos )         { return posHHops[(pos.y * actmap->xsize + pos.x) * 8 + log2(pos.z)]; };
 
@@ -145,7 +147,10 @@ class AStar3D {
        //! checks weather the field fld was among the visited fields during the last search
        Node* fieldVisited ( const MapCoordinate3D& fld );
 
-       AStar3D ( pmap actmap, pvehicle veh );
+       char& getFieldAccess ( int x, int y );
+       char& getFieldAccess ( const MapCoordinate& mc );
+
+       AStar3D ( pmap actmap, pvehicle veh, bool markTemps_ = true );
        virtual ~AStar3D ( );
  };
 
