@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.6 2005-01-23 20:39:58 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.7 2005-02-07 20:10:11 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -21,7 +21,7 @@
 */
 
 #if defined(karteneditor) && !defined(pbpeditor)
-#error the mapeditor is not supposed the gui icons  !
+#error the mapeditor is not supposed to use the gui icons  !
 #endif
 
 
@@ -32,6 +32,7 @@
 #include "graphics/surface.h"
 
 #include "paradialog.h"
+#include "mapdisplay2.h"
 
 #include "typen.h"
 
@@ -81,22 +82,34 @@ class GuiButton : public PG_Button {
 
 class NewGuiHost;
 
+
+class SmallGuiButton : public PG_Button {
+          GuiButton* referenceButton;
+          SDL_Surface* smallIcon;
+       public:
+          SmallGuiButton( PG_Widget *parent, const PG_Rect &r, GuiButton* guiButton, NewGuiHost* host );
+          ~SmallGuiButton();
+};
+
+
+
+
 class GuiIconHandler {
 
        typedef list<GuiFunction*> Functions;
-       Functions functions;    
-     
+       Functions functions;
+
 
 
        friend class NewGuiHost;
        void registerHost( NewGuiHost* guiIconHost ) { host = guiIconHost; };
-     protected:  
+     protected:
         NewGuiHost* host;
-          
+
      public:
        GuiIconHandler() : host(NULL) {};
-     
-       /** registers a user function. Icons are displayed in the order that they were registered. 
+
+       /** registers a user function. Icons are displayed in the order that they were registered.
           By passing an object here, the GuiIconHandler wil obtain ownership of the object and delete it on his destruction */
        void registerUserFunction( GuiFunction* function );
 
@@ -109,22 +122,33 @@ class NewGuiHost : public Panel {
         GuiIconHandler* handler;
         static NewGuiHost* theGuiHost;
         list<GuiIconHandler*> iconHandlerStack;
+        MapDisplayPG* mapDisplay;
+     protected:
+        bool mapIconProcessing( const MapCoordinate& pos, const SDL_MouseButtonEvent* event, bool cursorChanged );
+
+        typedef vector<GuiButton*> Buttons;
+        Buttons buttons;
+
+        typedef vector<SmallGuiButton*> SmallButtons;
+        SmallButtons smallButtons;
+
+
+
      public:
-        NewGuiHost (PG_Widget *parent, const PG_Rect &r ) ;
+        NewGuiHost (PG_Widget *parent, MapDisplayPG* mapDisplay, const PG_Rect &r ) ;
         static void pushIconHandler( GuiIconHandler* iconHandler );
         static void popIconHandler();
         void eval();
 
-        typedef vector<GuiButton*> Buttons;
-        Buttons buttons;
-     
+        bool clearSmallIcons();
+
         GuiButton* getButton( int i );
-        
+
         //! disables all button from i onward
         void disableButtons( int i );
-        
+
         ~NewGuiHost();
-            
+
 };
 
 

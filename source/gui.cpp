@@ -56,7 +56,7 @@ tguihoststandard          gui;
 // tselectbuildingguihost    selectbuildinggui;
 // tselectobjectcontainerguihost      selectobjectcontainergui;
 // tselectvehiclecontainerguihost     selectvehiclecontainergui;
-tselectweaponguihost      selectweaponguihost;
+// tselectweaponguihost      selectweaponguihost;
 BasicGuiHost*        actgui = &gui;
 
 
@@ -1979,6 +1979,7 @@ void  tnsguiiconviewmap::exec         ( void )
     cursor.show();
 }
 
+#if 0
 
 
 tnsguiiconenablereactionfire::tnsguiiconenablereactionfire ( void )
@@ -2082,7 +2083,7 @@ void tnsguiiconcontainer :: exec         ( void )
 }
 
 
-
+#endif
 
 
 
@@ -2410,7 +2411,6 @@ int         tnputvehiclecontainerguiicon::available( void )
       return 1;
 }
 
-#endif
 
 
 tselectweaponguihost::tselectweaponguihost ( void )
@@ -2642,6 +2642,9 @@ void  tnweapselguiicon::setup        ( pattackweap atw, int n )
       ne->setup ( atw, ++n );
    }
 }
+
+#endif
+
 
 #ifndef _NoStaticClassMembers_
 StaticClassVariable preplayguiicon treplayguiicon ::first = NULL;

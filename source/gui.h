@@ -1,6 +1,9 @@
-//     $Id: gui.h,v 1.26.2.4 2005-01-30 15:48:30 mbickel Exp $
+//     $Id: gui.h,v 1.26.2.5 2005-02-07 20:10:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26.2.4  2005/01/30 15:48:30  mbickel
+//      Further extensions to gui
+//
 //     Revision 1.26.2.3  2005/01/24 20:45:23  mbickel
 //      Updated weathersystem
 //      Added vehicle construction to new gui
@@ -325,11 +328,11 @@ class tnguiicon {
           virtual pnguiicon nxt      ( void )          ;
           virtual void      setnxt   ( pnguiicon ts )  ;
           virtual void      setfrst  ( pnguiicon ts )  = 0;
-          
+
           // friend void template class<T> GuiHost::chainiconstohost ( pnguiicon icn  );
 
           void putpict ( void* buf );
-                                                    
+
 
         public:
           virtual pnguiicon frst     ( void )          = 0;
@@ -355,6 +358,7 @@ class tnguiicon {
           virtual ~tnguiicon ( );
 };
 
+#if 0
 class tnweapselguiicon : public tnguiicon {
         protected:
           static pnweapselguiicon first;
@@ -373,7 +377,7 @@ class tnweapselguiicon : public tnguiicon {
           virtual const char* getinfotext  ( void );
           virtual void  checkforkey  ( tkey key );
           virtual void  setup        ( pattackweap atw, int n );
-                                                                                       
+
           tnweapselguiicon ( void );
 };
 
@@ -392,10 +396,9 @@ class tselectweaponguihost : public SelectWeaponBaseGuiHost {
          virtual int       painticons ( void );
          virtual void      checkforkey ( tkey key, int keyprn );
          virtual void      checkformouse ( void );
-         virtual void      checkcoordinates ( void ); 
+         virtual void      checkcoordinates ( void );
    };
 
-#if 0
 class tnputbuildingguiicon : public tnguiicon {
             static int             buildnum;
           protected:
@@ -871,7 +874,7 @@ extern tguihoststandard          gui;
 // extern tselectbuildingguihost    selectbuildinggui;
 // extern tselectobjectcontainerguihost      selectobjectcontainergui;
 // extern tselectvehiclecontainerguihost     selectvehiclecontainergui;
-extern tselectweaponguihost      selectweaponguihost;
+// extern tselectweaponguihost      selectweaponguihost;
 extern BasicGuiHost*                 actgui;
 extern void setguiposy ( int y );
 

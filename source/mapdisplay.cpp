@@ -295,7 +295,6 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
       dirty(Map),
       additionalUnit(NULL)
 {
-
    readData();
    setNewZoom( zoom );
 
@@ -454,6 +453,22 @@ void MapDisplayPG::eventDraw ( SDL_Surface* srf, const PG_Rect& rect)
   };
 
 
+void MapDisplayPG::displayCursor()
+{
+   int x = actmap->player[actmap->playerView].cursorPos.x - offset.x;
+   int y = actmap->player[actmap->playerView].cursorPos.y - offset.y;
+   if( x >= field.viewPort.x1 && x < field.viewPort.x2 && y >= field.viewPort.y1 && y < field.viewPort.y2 ) {
+      // surface->Blit( icons.cursor, getFieldPos(x,y));
+      MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Zoom,TargetPixelSelector_Valid> blitter;
+      blitter.setZoom( zoom );
+
+      Surface s = Surface::Wrap( PG_Application::GetScreen() );
+      // PG_Point pnt = ClientToScreen( 0,0 );
+      blitter.blit( icons.cursor, s, widget2screen ( internal2widget( mapPos2internalPos( MapCoordinate(x,y)))) );
+   }
+}
+
+
 void MapDisplayPG::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& dst)
 {
    if ( !GetWidgetSurface ()) {
@@ -466,19 +481,9 @@ void MapDisplayPG::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect
       PG_Widget::eventBlit(srf,src,dst);
    }
 
-   if ( cursor.visible ) {
-      int x = actmap->player[actmap->playerView].cursorPos.x - offset.x;
-      int y = actmap->player[actmap->playerView].cursorPos.y - offset.y;
-      if( x >= field.viewPort.x1 && x < field.viewPort.x2 && y >= field.viewPort.y1 && y < field.viewPort.y2 ) {
-         // surface->Blit( icons.cursor, getFieldPos(x,y));
-         MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Zoom,TargetPixelSelector_Valid> blitter;
-         blitter.setZoom( zoom );
+   if ( !cursor.invisible )
+      displayCursor();
 
-         Surface s = Surface::Wrap( PG_Application::GetScreen() );
-         // PG_Point pnt = ClientToScreen( 0,0 );
-         blitter.blit( icons.cursor, s, widget2screen ( internal2widget( mapPos2internalPos( MapCoordinate(x,y)))) );
-      }
-   }
 
 }
 
@@ -529,46 +534,47 @@ MapCoordinate MapDisplayPG::widgetPos2mapPos( const SPoint& pos )
 
 bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
 {
-   if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == CGameOptions::Instance()->mouse.fieldmarkbutton ) {
-      MapCoordinate mc = screenPos2mapPos( SPoint(button->x, button->y));
-      if ( mc.valid() && mc.x < actmap->xsize && mc.y < actmap->ysize ) {
-         actmap->player[actmap->playerView].cursorPos = mc;
-         cursor.visible = true;
-         dirty = Curs;
-         Update();
+   MapCoordinate mc = screenPos2mapPos( SPoint(button->x, button->y));
+   if ( !(mc.valid() && mc.x < actmap->xsize && mc.y < actmap->ysize ))
+      return false;
 
-         updateFieldInfo();
-         return true;
-      }
+   if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == CGameOptions::Instance()->mouse.fieldmarkbutton ) {
+      bool changed = actmap->player[actmap->playerView].cursorPos != mc;
+      actmap->player[actmap->playerView].cursorPos = mc;
+      cursor.invisible = 0;
+      dirty = Curs;
+
+      updateFieldInfo();
+
+      bool exit = mouseButtonOnField( mc, button, changed );
+      Update();
+
+      return true;
    }
 
    if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == CGameOptions::Instance()->mouse.centerbutton ) {
-      MapCoordinate mc = screenPos2mapPos( SPoint(button->x, button->y));
-      if ( mc.valid() && mc.x < actmap->xsize && mc.y < actmap->ysize ) {
+      int newx = mc.x - field.numx / 2;
+      int newy = mc.y - field.numy / 2;
 
-         int newx = mc.x - field.numx / 2;
-         int newy = mc.y - field.numy / 2;
+      if ( newx < 0 )
+         newx = 0;
+      if ( newy < 0 )
+         newy = 0;
+      if ( newx > actmap->xsize - field.numx +1 )
+         newx = actmap->xsize - field.numx + 1;
+      if ( newy > actmap->ysize - field.numy +2 )
+         newy = actmap->ysize - field.numy +2;
 
-         if ( newx < 0 )
-            newx = 0;
-         if ( newy < 0 )
-            newy = 0;
-         if ( newx > actmap->xsize - field.numx +1 )
-            newx = actmap->xsize - field.numx + 1;
-         if ( newy > actmap->ysize - field.numy +2 )
-            newy = actmap->ysize - field.numy +2;
+      if ( newy & 1 )
+         newy--;
 
-         if ( newy & 1 )
-            newy--;
-
-         if ( newx != offset.x  || newy != offset.y ) {
-            offset.x = newx;
-            offset.y = newy;
-            dirty = Map;
-            Redraw();
-         }
-         return true;
+      if ( newx != offset.x  || newy != offset.y ) {
+         offset.x = newx;
+         offset.y = newy;
+         dirty = Map;
+         Redraw();
       }
+      return true;
    }
 
    return false;
@@ -579,6 +585,21 @@ bool MapDisplayPG::eventMouseButtonUp (const SDL_MouseButtonEvent *button)
    return false;
 }
 
+
+MapDisplayPG::CursorHiding::CursorHiding()
+{
+   if ( theMapDisplay )
+      ++theMapDisplay->cursor.invisible;
+}
+
+MapDisplayPG::CursorHiding::~CursorHiding()
+{
+   if ( theMapDisplay ) {
+      --theMapDisplay->cursor.invisible;
+      if ( !theMapDisplay->cursor.invisible )
+         theMapDisplay->displayCursor();
+   }
+}
 
 
 bool MapDisplayPG::fieldInView(const MapCoordinate& mc )

@@ -184,7 +184,7 @@ class WeatherSystem{
 private:
 
 static const int WEATHERVERSION = 1;
-float seedValue;
+unsigned int seedValue;
 int timeInterval;
 int areaSpawnAmount;
 int access2RandCount;
@@ -222,6 +222,7 @@ void randomWeatherChange(GameTime currentTime, Direction windDirection);
 Direction randomWindChange(int currentTurn);
 
 float createRandomValue(float lowerlimit, float upperlimit);
+Direction getNthTurnWindDirection(int turn, GameTime currentTime);
 
 public:
   static const int FallOutNum = 6;
@@ -324,6 +325,7 @@ public:
 };
 
 #endif
+
 
 
 

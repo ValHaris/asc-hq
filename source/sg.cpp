@@ -1771,7 +1771,7 @@ void MainScreenWidget::spawnPanel ( Panels panel )
       ui->Show();
    }
    if ( panel == ButtonPanel ) {
-      guiHost = new NewGuiHost( this, PG_Rect(Width()-180, 454, 170, 220));
+      guiHost = new NewGuiHost( this, mapDisplay, PG_Rect(Width()-180, 454, 170, 220));
       guiHost->pushIconHandler( &GuiFunctions::primaryGuiIcons );
       guiHost->Show();
    }

@@ -14,8 +14,9 @@
 #include "guidimension.h"
 #include "typen.h"
 #include "spfst.h"
+#include "ascstring.h"
 
-const int WeatherDialog::xsize = 400;
+const int WeatherDialog::xsize = 500;
 const int WeatherDialog::ysize = 600;
 
 
@@ -28,7 +29,7 @@ WeatherDialog::WeatherDialog() :  ASC_PG_Dialog(NULL, PG_Rect( 100, 100, xsize, 
         randomMode->SetPressed();
     }
 
-    int seedModeYPos = GuiDimension::getTopOffSet() + GetTextHeight();
+    int seedModeYPos = ScreenToClient(0, randomMode->y).y + GetTextHeight() + GuiDimension::getTopOffSet();
     seedMode = new PG_CheckButton(this, PG_Rect( GuiDimension::getLeftIndent(), seedModeYPos, xsize/3 , GetTextHeight()*2), "Seed is Set");
     seedMode->SetSizeByText();
     if(actmap->weatherSystem->isSeedValueSet()) {
@@ -45,7 +46,7 @@ WeatherDialog::WeatherDialog() :  ASC_PG_Dialog(NULL, PG_Rect( 100, 100, xsize, 
     areaSpawnsLabel->SetSizeByText();
 
     areaSpawnsValue = new PG_LineEdit(this, PG_Rect(valueXPos, areaSpawnsLabelYPos, GuiDimension::getLineEditWidth() , GetTextHeight()*2));
-    areaSpawnsValue->SetText(int2String(actmap->weatherSystem->getSpawnsAmount()));
+    areaSpawnsValue->SetText(ASCString::toString(actmap->weatherSystem->getSpawnsAmount()));
 
 
     //Weather-Update each nth turn
@@ -54,28 +55,28 @@ WeatherDialog::WeatherDialog() :  ASC_PG_Dialog(NULL, PG_Rect( 100, 100, xsize, 
                                 "Weather changes each nth Turn:");
     nthTurnLabel->SetSizeByText();
     nthTurnValue = new PG_LineEdit(this, PG_Rect(valueXPos, nthTurnLabelYPos, GuiDimension::getLineEditWidth() , GetTextHeight()*2));
-    nthTurnValue->SetText(int2String(actmap->weatherSystem->getTimeInterval()));
+    nthTurnValue->SetText(ASCString::toString(actmap->weatherSystem->getTimeInterval()));
 
     //Ratio windspeed to passed fields
     int windSpeedFieldRatioLabelYPos = nthTurnLabelYPos + GetTextHeight() * 2;
     windSpeedFieldRatioLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftIndent(), windSpeedFieldRatioLabelYPos, xsize/3 , GetTextHeight()*2), "WindSpeed to Fields Ratio:");
     windSpeedFieldRatioLabel->SetSizeByText();
     windSpeedFieldRatioValue = new PG_LineEdit(this, PG_Rect(valueXPos, windSpeedFieldRatioLabelYPos, GuiDimension::getLineEditWidth() , GetTextHeight()*2));
-    windSpeedFieldRatioValue->SetText(float2String(actmap->weatherSystem->getWindspeed2FieldRatio()));
+    windSpeedFieldRatioValue->SetText(ASCString::toString(actmap->weatherSystem->getWindspeed2FieldRatio()));
 
     //LowerSize
     int lowerSizeLimitsYPos = windSpeedFieldRatioLabelYPos + GetTextHeight() * 2;
     lowerSizeLimitsLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftIndent(), lowerSizeLimitsYPos, xsize/3 , GetTextHeight()*2), "Lower Area Size rel. to Mapsize:");
     lowerSizeLimitsLabel->SetSizeByText();
     lowerSizeLimitsValue = new PG_LineEdit(this, PG_Rect(valueXPos ,lowerSizeLimitsYPos, GuiDimension::getLineEditWidth() , GetTextHeight()*2));
-    lowerSizeLimitsValue->SetText(float2String(actmap->weatherSystem->getLowerSizeLimit()));
+    lowerSizeLimitsValue->SetText(ASCString::toString(actmap->weatherSystem->getLowerSizeLimit()));
 
     //UpperSize
     int upperSizeLimitsYPos =  lowerSizeLimitsYPos + GetTextHeight() * 2;
     upperSizeLimitsLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftIndent(), upperSizeLimitsYPos, xsize/3 , GetTextHeight()*2), "Upper Area Size rel. to Mapsize:");
     upperSizeLimitsLabel->SetSizeByText();
     upperSizeLimitsValue = new PG_LineEdit(this, PG_Rect(valueXPos ,upperSizeLimitsYPos, GuiDimension::getLineEditWidth() , GetTextHeight()*2));
-    upperSizeLimitsValue->SetText(float2String(actmap->weatherSystem->getUpperSizeLimit()));
+    upperSizeLimitsValue->SetText(ASCString::toString(actmap->weatherSystem->getUpperSizeLimit()));
 
     //FallOut
     int fallOutYPos = upperSizeLimitsYPos + GetTextHeight() * 2 + GuiDimension::getTopOffSet();
@@ -95,7 +96,7 @@ WeatherDialog::WeatherDialog() :  ASC_PG_Dialog(NULL, PG_Rect( 100, 100, xsize, 
     windSpeedButton->sigClick.connect(SigC::slot( *this, &WeatherDialog::editWindSpeed));
 
     //WindDirection
-    int windDirYPos =  windSpeedYPos + GetTextHeight() * 2;
+    int windDirYPos =  windSpeedYPos + GetTextHeight() + GuiDimension::getTopOffSet();
     windDirectionLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftIndent(), windDirYPos, xsize/3 , GetTextHeight()*2), "WindDirection Chances:");
     windDirectionLabel->SetSizeByText();
 
@@ -103,14 +104,14 @@ WeatherDialog::WeatherDialog() :  ASC_PG_Dialog(NULL, PG_Rect( 100, 100, xsize, 
     windDirectionButton->sigClick.connect(SigC::slot( *this, &WeatherDialog::editWindDirection));
 
     //eventAreas
-    int eventAreasYPos = windDirYPos + GetTextHeight() * 2 + GuiDimension::getTopOffSet();
+    int eventAreasYPos = windDirYPos + GetTextHeight() + GuiDimension::getTopOffSet();
     eventAreasLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftIndent(), eventAreasYPos, xsize/3 , GetTextHeight()*2), "Event driven weather:");
     eventAreasLabel->SetSizeByText();
     eventAreasButton = new PG_Button(this, PG_Rect(valueXPos, eventAreasYPos, (Width()- valueXPos)/2, 30), "Edit", 100);
     eventAreasButton->sigClick.connect(SigC::slot( *this, &WeatherDialog::editEventAreas));
 
     //eventWindChanges
-    int eventWindChangesYPos = eventAreasYPos + GetTextHeight() + 10;
+    int eventWindChangesYPos = eventAreasYPos + GetTextHeight() + GuiDimension::getTopOffSet();
     eventWindChangesLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftIndent(), eventWindChangesYPos, xsize/3 , GetTextHeight()*2), "Event driven wind changes:");
     eventWindChangesLabel->SetSizeByText();
     eventWindChangesButton = new PG_Button(this, PG_Rect(valueXPos, eventWindChangesYPos, (Width()- valueXPos)/2, 30), "Edit", 100);
@@ -290,10 +291,10 @@ WindData WindInformation::getWindData() const {
 
 std::string WindInformation::getInformation() const {
     string result = "turn: ";
-    result.append(WeatherDialog::int2String(turn));
+    result.append(ASCString::toString(turn));
     result.append(";");
     result.append("speed: ");
-    result.append(WeatherDialog::int2String(data.speed));
+    result.append(ASCString::toString(static_cast<int>(data.speed)));
     result.append(";");
     result.append("direction: ");
     result.append(cdirections[data.direction]);
@@ -458,15 +459,15 @@ FalloutType WeatherAreaInformation::getFalloutType() const {
 
 std::string WeatherAreaInformation::getInformation() const {
     std::string info = "turn ";
-    info += WeatherDialog::int2String(time.turn());
+    info += ASCString::toString(time.turn());
     info.append("; ");
     info.append(cwettertypen[weatherArea->getFalloutType()]);
     info.append("; ");
     info.append("x: ");
-    info.append(WeatherDialog::int2String(weatherArea->getCenterPos().getX()));
+    info.append(ASCString::toString(weatherArea->getCenterPos().getX()));
     info.append("; ");
     info.append("y: ");
-    info.append(WeatherDialog::int2String(weatherArea->getCenterPos().getY()));
+    info.append(ASCString::toString(weatherArea->getCenterPos().getY()));
 
     return info;
 }
@@ -581,7 +582,7 @@ void ChanceSettingsDialog::buildUpForm(const vector<string>& labelVec) {
         label->SetSizeByText();
         labels.push_back(label);
         PG_LineEdit* value = new PG_LineEdit(this, PG_Rect(valueXPos , yPos, GuiDimension::getLineEditWidth() , GetTextHeight()*2));
-        value->SetText(WeatherDialog::int2String(getNthChanceValue(i)));
+        value->SetText(ASCString::toString(getNthChanceValue(i)));
         chances.push_back(value);
     }
     int noteYPos = yPos + GuiDimension::getTopOffSet() + GetTextHeight()*2;
@@ -649,9 +650,9 @@ WindSpeedSettingsDialog::WindSpeedSettingsDialog():ChanceSettingsDialog("Windspe
     int slotSize = maxwindspeed / size;
     int value =0;
     for (int i = 0; i < size; i++) {
-        string label = WeatherDialog::int2String(value);
+        string label = ASCString::toString(value);
         label += " - ";
-        label += WeatherDialog::int2String(value + slotSize);
+        label += ASCString::toString(value + slotSize);
         labels.push_back(label);
         value+= slotSize;
     }
@@ -723,5 +724,6 @@ bool WindDirectionSettingsDialog::buttonEvent( PG_Button* button ) {
     quitModalLoop(2);
     return true;
 }
+
 
 

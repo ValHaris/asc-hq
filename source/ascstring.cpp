@@ -190,7 +190,7 @@ ASCString ASCString::toString(int i )
    return s;
 }
 
-ASCString toString(double d )
+ASCString ASCString::toString(double d )
 {
    ASCString s;
    s.format("%f",d);

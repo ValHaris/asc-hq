@@ -31,6 +31,8 @@
 #include "guiiconhandler.h"
 #include "spfst.h"
 #include "iconrepository.h"
+#include "mapdisplay2.h"
+
 
 const int guiIconSizeX = 49;
 const int guiIconSizeY = 35;
@@ -38,6 +40,10 @@ const int guiIconSpace = 5;
 const int guiIconColumnNum = 3;
 
 
+const int smallGuiIconSizeX = 30;
+const int smallGuiIconSizeY = 22;
+const int smallGuiIconSpace = 2;
+const float smallGuiIconSizeFactor = 0.6;
 
 
 GuiButton::GuiButton( PG_Widget *parent, const PG_Rect &r ) : PG_Button( parent, r, "", -1, "GuiButton"), func( NULL ), id(-1)
@@ -74,14 +80,43 @@ void GuiButton::unregisterFunc()
 }
 
 
+SmallGuiButton::SmallGuiButton( PG_Widget *parent, const PG_Rect &r, GuiButton* guiButton, NewGuiHost* host ) : PG_Button( parent, r, "", -1, "GuiButton"), referenceButton( guiButton )
+{
+  sigClick.connect ( SigC::slot( *host, &NewGuiHost::clearSmallIcons ));
+  sigClick.connect ( SigC::slot( *guiButton, &GuiButton::exec ));
+
+  SetBackground( PRESSED, IconRepository::getIcon("empty-small-pressed.png").getBaseSurface() );
+  SetBackground( HIGHLITED, IconRepository::getIcon("empty-small-high.png").getBaseSurface() );
+  SetBackground( UNPRESSED, IconRepository::getIcon("empty-small.png").getBaseSurface() );
+  SetBorderSize(0,0,0);
+  SetDirtyUpdate(true);
+
+  SetBehaviour( SIGNALONRELEASE );
+
+  SDL_Surface* icn = guiButton->GetIcon( UNPRESSED );
+  if ( icn ) {
+     smallIcon = PG_Draw::ScaleSurface( icn, smallGuiIconSizeFactor, smallGuiIconSizeFactor );
+     SetIcon( smallIcon );
+  } else
+     smallIcon = NULL;
+}
+
+
+SmallGuiButton::~SmallGuiButton()
+{
+   if ( smallIcon )
+      SDL_FreeSurface( smallIcon );
+}
+
+
 
 void GuiIconHandler::eval()
 {
    MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
-   
+
    if ( !mc.valid() )
       return;
-     
+
    if ( mc.x >= actmap->xsize || mc.y >= actmap->ysize )
       return;
 
@@ -118,9 +153,11 @@ GuiIconHandler::~GuiIconHandler()
 
 NewGuiHost* NewGuiHost::theGuiHost = NULL;
 
-NewGuiHost :: NewGuiHost (PG_Widget *parent, const PG_Rect &r )
+NewGuiHost :: NewGuiHost (PG_Widget *parent, MapDisplayPG* mapDisplay, const PG_Rect &r )
          : Panel( parent, r, "GuiIcons", false ) , handler(NULL)
 {
+   this->mapDisplay = mapDisplay;
+   mapDisplay->mouseButtonOnField.connect( SigC::slot( *this, &NewGuiHost::mapIconProcessing ));
    updateFieldInfo.connect ( SigC::slot( *this, &NewGuiHost::eval ));
    theGuiHost = this;
 }
@@ -138,7 +175,7 @@ void NewGuiHost::pushIconHandler( GuiIconHandler* iconHandler )
 
    if ( theGuiHost->handler )
       theGuiHost->iconHandlerStack.push_back( theGuiHost->handler );
-      
+
    theGuiHost->handler = iconHandler;
    iconHandler->registerHost( theGuiHost );
    updateFieldInfo();
@@ -150,9 +187,9 @@ void NewGuiHost::popIconHandler( )
       return;
 
    assert( theGuiHost->handler );
-   
+
    theGuiHost->handler->registerHost( NULL );
-   
+
    theGuiHost->handler = theGuiHost->iconHandlerStack.back();
    theGuiHost->iconHandlerStack.pop_back();
    updateFieldInfo();
@@ -179,6 +216,70 @@ void NewGuiHost::disableButtons( int i )
       b->unregisterFunc();
    }
 }
+
+bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SDL_MouseButtonEvent* event, bool cursorChanged )
+{
+   PG_Application::SetBulkMode(true);
+
+   clearSmallIcons();
+
+   PG_Point p = mapDisplay->ScreenToClient( event->x, event->y );
+
+   pfield fld = actmap->getField(pos);
+
+   bool positionedUnderCursor = false;
+   if ( ( fld->vehicle || fld->building) && fieldvisiblenow(fld) )
+      positionedUnderCursor = true;
+   if ( fld->a.temp ) {
+      positionedUnderCursor = true;
+      cursorChanged = false;
+   }
+
+   if ( positionedUnderCursor ) {
+      p.x -= smallGuiIconSizeX/2;
+      p.y -= smallGuiIconSizeY/2;
+   } else {
+      p.x += 2;
+      p.y += 2;
+   }
+
+   if ( !cursorChanged )
+      for ( int j = 0; j < buttons.size(); ++j) {
+         GuiButton* b = getButton(j);
+         if ( !b->IsHidden() ) {
+            SmallGuiButton* sgi = new SmallGuiButton( mapDisplay, PG_Rect( p.x, p.y, smallGuiIconSizeX, smallGuiIconSizeY ), b, this );
+            p.x += smallGuiIconSizeX + smallGuiIconSpace;
+            smallButtons.push_back ( sgi );
+         }
+      }
+
+   PG_Application::SetBulkMode(false);
+   for ( SmallButtons::iterator i = smallButtons.begin(); i != smallButtons.end(); ++i )
+      (*i)->Show();
+
+   return false;
+}
+
+
+bool NewGuiHost::clearSmallIcons()
+{
+   bool bulk = PG_Application::GetBulkMode();
+
+   if ( !bulk )
+      PG_Application::SetBulkMode(true);
+
+   for ( SmallButtons::iterator i = smallButtons.begin(); i != smallButtons.end(); ++i )
+      delete *i;
+   smallButtons.clear();
+
+   if ( !bulk ) {
+      PG_Application::SetBulkMode(false);
+      // mapDisplay->Update( true );
+   }
+
+   return true;
+}
+
 
 NewGuiHost::~NewGuiHost()
 {

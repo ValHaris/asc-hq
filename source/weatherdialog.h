@@ -242,22 +242,8 @@ class WeatherDialog :  public ASC_PG_Dialog {
 public:
   WeatherDialog();
   
-
   virtual ~WeatherDialog();
-
-  
-  
-   static const char* int2String(int i) {
-    stringstream s;
-    s << i;
-    return s.str().c_str();
-  }
-  
-   static const char* float2String(float f) {
-    stringstream s;
-    s << f;
-    return s.str().c_str();
-  }
+            
   
 private:
   static const int xsize;
@@ -313,5 +299,6 @@ private:
 extern void weatherConfigurationDialog();
 
 #endif
+
 
 

@@ -39,6 +39,7 @@
 #include "graphics/blitter.h"
 #include "viewcalculation.h"
 #include "spfst.h"
+#include "building.h"
 
 namespace GuiFunctions
 {
@@ -113,12 +114,12 @@ void AttackGui::execute( const MapCoordinate& pos, int num )
 
       }
    }   
-      setupWeapons( NULL );
-      delete pendingVehicleActions.attack;
-      actmap->cleartemps();
-      NewGuiHost::popIconHandler();
-      repaintMap();
-      updateFieldInfo();
+   setupWeapons( NULL );
+   delete pendingVehicleActions.attack;
+   actmap->cleartemps();
+   NewGuiHost::popIconHandler();
+   repaintMap();
+   updateFieldInfo();
 }
 
 Surface& AttackGui::getImage( const MapCoordinate& pos, int num )
@@ -278,6 +279,7 @@ void Movement::execute( const MapCoordinate& pos, int num )
          if ( res >= 0 && CGameOptions::Instance()->fastmove && ms == 2 ) {
             actmap->cleartemps(7);
             displaymap();
+            MapDisplayPG::CursorHiding ch;
             res = pendingVehicleActions.move->execute ( NULL, pos.x, pos.y, pendingVehicleActions.move->getStatus(), -1, 0 );
          } else {
             if ( ms == 2 ) {
@@ -609,6 +611,121 @@ class SearchForMineralResources : public GuiFunction
 };
 
 
+class OpenContainer : public GuiFunction
+{
+     static int containeractive;
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+        pfield fld = actmap->getField(pos);
+        if ( fieldvisiblenow ( fld ))
+           if ( !containeractive && !moveparams.movestatus && pendingVehicleActions.actionType == vat_nothing && !pendingVehicleActions.action )
+              if ( fld->building  &&  ((fld->building->color == actmap->actplayer * 8) || (fld->building->color == 8*8) ))
+                 if ( fld->building->getCompletion() == fld->building->typ->construction_steps-1 )
+                    return true;
+                 else
+                    return false;
+               else
+                 if ( fld->vehicle && fld->vehicle->typ->maxLoadableUnits  &&  fld->vehicle->color == actmap->actplayer * 8 )
+                    return true;
+                 else
+                    return false;
+
+        return false;
+      };
+
+      void execute( const MapCoordinate& pos, int num )
+      {
+          containeractive++;
+          pfield fld = actmap->getField(pos);
+          container( fld->vehicle, fld->building );
+          containeractive--;
+          updateFieldInfo();
+          repaintMap();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("container.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "open transport / building";
+      };
+};
+
+int OpenContainer::containeractive = 0;
+
+
+
+
+class EnableReactionfire : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+         Vehicle* eht = actmap->getField(pos)->vehicle;
+         if ( eht )
+            if ( eht->color == actmap->actplayer * 8)
+               if ( eht->reactionfire.getStatus() == Vehicle::ReactionFire::off )
+                  if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
+                     if ( eht->weapexist() )
+                        return true;
+
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, int num )
+      {
+         int res = actmap->getField(pos)->vehicle->reactionfire.enable();
+         if ( res < 0 )
+            dispmessage2 ( -res, NULL );
+         updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("enable-reactionfire.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "enable reaction fire";
+      };
+};
+
+class DisableReactionfire : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+         Vehicle* eht = actmap->getField(pos)->vehicle;
+         if ( eht )
+            if ( eht->color == actmap->actplayer * 8)
+               if ( eht->reactionfire.getStatus() != Vehicle::ReactionFire::off )
+                  if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
+                     return true;
+
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, int num )
+      {
+         getactfield()->vehicle->reactionfire.disable();
+         updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("disable-reactionfire.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "disable reaction fire";
+      };
+};
 
 
 
@@ -1568,5 +1685,8 @@ void registerGuiFunctions( GuiIconHandler& handler )
    handler.registerUserFunction( new GuiFunctions::ConstructBuilding() );
    handler.registerUserFunction( new GuiFunctions::DestructBuilding() );
    handler.registerUserFunction( new GuiFunctions::SearchForMineralResources() );
-
+   handler.registerUserFunction( new GuiFunctions::OpenContainer() );
+   handler.registerUserFunction( new GuiFunctions::EnableReactionfire() );
+   handler.registerUserFunction( new GuiFunctions::DisableReactionfire() );
 }
+

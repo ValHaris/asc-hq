@@ -189,7 +189,7 @@ void ContainerBase::paintField ( const Surface& img, Surface& dest, SPoint pos, 
     int height = getHeight();
     if ( height <= chgetaucht ) {
         if ( shaded ) {
-           MegaBlitter<1,colorDepth,ColorTransform_XLAT, ColorMerger_AlphaMixer, SourcePixelSelector_CacheRotation> blitter; 
+           MegaBlitter<1,colorDepth,ColorTransform_XLAT, ColorMerger_AlphaMixer, SourcePixelSelector_CacheRotation> blitter;
            blitter.setTranslationTable( *xlatpictgraytable );
            blitter.setAngle( img, directionangle[dir] );
            blitter.blit ( img, dest, pos );

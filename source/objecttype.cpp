@@ -119,13 +119,13 @@ void ObjectType :: display ( Surface& surface, SPoint pos, int dir, int weather 
 
 
 
-void ObjectType :: realDisplay ( Surface& surface, SPoint pos, int dir, int weather )
+void ObjectType::realDisplay ( Surface& surface, SPoint pos, int dir, int weather )
 {
  
       int flip = 0;
       if ( dir < weatherPicture[weather].flip.size() )
          flip = weatherPicture[weather].flip[dir];
-         
+
       if ( id == 7 || id == 30 || displayMethod==1 ) { // buried pipeline,
          megaBlitter<ColorTransform_None, ColorMerger_AlphaShadow, SourcePixelSelector_Flip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
       } else

@@ -106,9 +106,11 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       } field;   
       
       struct Cursor {
-         Cursor() : visible(false) {};
-         bool visible;
-      } cursor;   
+         Cursor() : invisible(1) {};
+         int invisible;
+      } cursor;
+
+      void displayCursor();
       
       enum Dirty { Nothing, Curs, Map } dirty;
       
@@ -132,13 +134,15 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       void fillSurface( int playerView );
 
 
+   public:
       MapCoordinate screenPos2mapPos( const SPoint& pos );
       MapCoordinate widgetPos2mapPos( const SPoint& pos );
 
       SPoint mapPos2internalPos ( const MapCoordinate& pos );
       SPoint internal2widget( const SPoint& pos );
       SPoint widget2screen( const SPoint& pos );
-      
+   protected:
+
       void blitInternalSurface( SDL_Surface* dest, const SPoint& pnt );
 
       
@@ -180,36 +184,53 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
          //! the area of the screen that is overwritten
          SPoint screenPos;
          SPoint screenUpdatePos;
-         
-         
+
+
          int screenWidth,screenHeight;
          int maxScreenWidth,maxScreenHeight;
-         
-         struct { 
+
+         struct {
             MapCoordinate mapPos;
             SPoint surfPos;
          } touchedFields[touchedFieldNum];
-      
-      };   
-            
+
+      };
+
       void initMovementStructure();
       Surface createMovementBufferSurface();
       void displayMovementStep( Movement& movement, int percentage );
-                  
+
    public:
+
+      class CursorHiding {
+          public:
+             CursorHiding();
+             ~CursorHiding();
+      };
+      friend class CursorHiding;
+
       MapDisplayPG ( PG_Widget *parent, const PG_Rect r );
-      
+
       void displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoordinate3D& from, const MapCoordinate3D& to );
 
       bool fieldInView(const MapCoordinate& mc );
 
       void registerAdditionalUnit ( Vehicle* veh );
-            
+
       //! repaints to the internal surface, but does not blit this surface the screen
       void updateMap( bool force = false );
-      
+
       //! update the internal surface and blits it to the screen
       void updateWidget();
+
+
+      /** Signal that is fired when the mouse is pressed on a valid field, after the cursor evaluation has been run.
+           \param MapCoordinate the Coordinate of the field that was clicked
+           \param SDL_MouseButtonEvent the Event structure of the click
+           \param bool true if the cursor had been repositioned
+      */
+      SigC::Signal3<bool,const MapCoordinate&, const SDL_MouseButtonEvent*, bool> mouseButtonOnField;
+
 
 };
 

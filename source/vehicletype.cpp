@@ -1093,7 +1093,7 @@ Resources Vehicletype :: calcProductionsCost()
 			// Zuschlag für Flugzeugträger / Start- und Landeeinrichtungen
 			for ( int T=0; T < entranceSystems.size(); ++T ) {
 				if ( entranceSystems[T].container_height == chfahrend && entranceSystems[T].height_abs == chtieffliegend && maxLoadableUnits > 2 ) {
-					typecoste += maxLoadableUnits*80;
+					typecoste += maxLoadableUnits*800;
 					typecostm += maxLoadableUnits*800;
 				}
 			}
