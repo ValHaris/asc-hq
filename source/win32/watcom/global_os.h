@@ -1,6 +1,11 @@
-//     $Id: global_os.h,v 1.3 2000-10-16 14:34:14 mbickel Exp $
+//     $Id: global_os.h,v 1.4 2000-10-17 13:04:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/10/16 14:34:14  mbickel
+//      Win32 port is now running fine.
+//      Removed MSVC project files and put them into a zip file in
+//        asc/source/win32/msvc/
+//
 //     Revision 1.2  2000/10/14 13:07:05  mbickel
 //      Moved DOS version into own subdirectories
 //      Win32 version with Watcom compiles and links ! But doesn't run yet...
@@ -47,7 +52,9 @@
   #define HAVE_LIMITS
   #define HAVE_LOG2
   #define StaticClassVariable static
+  #ifdef __WATCOM_CPLUSPLUS__      // and not Watcom C
   namespace std {};
+  #endif
 
   #define sdlheader "sdl.h"
 #endif

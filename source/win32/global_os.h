@@ -1,6 +1,9 @@
-//     $Id: global_os.h,v 1.2 2000-10-14 10:52:56 mbickel Exp $
+//     $Id: global_os.h,v 1.3 2000-10-17 13:04:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/10/14 10:52:56  mbickel
+//      Some adjustments for a Win32 port
+//
 //     Revision 1.1  2000/10/12 21:37:57  mbickel
 //      Further restructured platform dependant routines
 //
@@ -34,7 +37,7 @@
 #ifdef __BORLANDC__
  #include "borland/global_os.h"
 #else
- #ifdef __WATCOM_CPLUSPLUS__
+ #ifdef __WATCOMC__
   #include "watcom/global_os.h"
  #else
   #ifdef _MSC_VER

@@ -1,6 +1,10 @@
-//     $Id: sgstream.cpp,v 1.37 2000-10-17 12:12:22 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.38 2000-10-17 13:04:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2000/10/17 12:12:22  mbickel
+//      Improved vehicletype loading/saving routines
+//      documented some global variables
+//
 //     Revision 1.36  2000/10/14 14:16:08  mbickel
 //      Cleaned up includes
 //      Added mapeditor to win32 watcom project
@@ -1297,15 +1301,7 @@ pvehicletype   loadvehicletype( tnstream& stream )
    
       if ( fztn->terrainaccess ) {
          fztn->terrainaccess = new tterrainaccess;
-
-         fztn->terrainaccess->terrain.set ( stream.readInt(), stream.readInt() );
-         fztn->terrainaccess->terrainreq.set ( stream.readInt(), stream.readInt() );
-         fztn->terrainaccess->terrainnot.set ( stream.readInt(), stream.readInt() );
-         fztn->terrainaccess->terrainkill.set ( stream.readInt(), stream.readInt() );
-
-         for ( int a = 0; a < 10; a++ )
-            stream.readInt(); //dummy
-
+         fztn->terrainaccess->read ( stream );
       } else {
          fztn->terrainaccess = new tterrainaccess;
          fztn->terrainaccess->terrain.set ( fztn->_terrain, 0 );
@@ -1501,23 +1497,8 @@ void writevehicle( pvehicletype fztn, tnstream& stream )
       stream.writeInt(fztn->weapons->weapon[j].targets_not_hittable ); 
    }
 
-   if ( fztn->terrainaccess ) {
-      stream.writeInt ( fztn->terrainaccess->terrain.get32bit ( 0 ) );
-      stream.writeInt ( fztn->terrainaccess->terrain.get32bit ( 1 ) );
-
-      stream.writeInt ( fztn->terrainaccess->terrainreq.get32bit ( 0 ) );
-      stream.writeInt ( fztn->terrainaccess->terrainreq.get32bit ( 1 ) );
-
-      stream.writeInt ( fztn->terrainaccess->terrainnot.get32bit ( 0 ) );
-      stream.writeInt ( fztn->terrainaccess->terrainnot.get32bit ( 1 ) );
-
-      stream.writeInt ( fztn->terrainaccess->terrainkill.get32bit ( 0 ) );
-      stream.writeInt ( fztn->terrainaccess->terrainkill.get32bit ( 1 ) );
-
-      for ( int a = 0; a < 10; a++ )
-          stream.writeInt( 0 ); //dummy
-
-   }
+   if ( fztn->terrainaccess )
+      fztn->terrainaccess->write ( stream );
    
    for ( i = 0; i < fztn->buildingsbuildablenum; i++ ) {
       stream.writeInt( fztn->buildingsbuildable[i].from );
@@ -1788,7 +1769,7 @@ pbuildingtype       loadbuildingtype( pnstream stream )
       pgbt->technologylevel = stream->readChar( );
       pgbt->researchid = stream->readChar( );
 
-      stream->readdata2 ( pgbt->terrainaccess );    // !!!!byteorder!!!!
+      pgbt->terrainaccess.read ( *stream );
 
       pgbt->construction_steps = stream->readInt( );
       pgbt->maxresearchpoints = stream->readInt( );
@@ -1901,7 +1882,7 @@ void writebuildingtype ( pbuildingtype bld, pnstream stream )
    stream->writeChar ( bld->technologylevel );
    stream->writeChar ( bld->researchid );
 
-   stream->writedata2 ( bld->terrainaccess );    // !!!!byteorder!!!!
+   bld->terrainaccess.write ( *stream );
 
    stream->writeInt ( bld->construction_steps );
    stream->writeInt ( bld->maxresearchpoints );

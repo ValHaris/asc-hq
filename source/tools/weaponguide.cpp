@@ -59,7 +59,8 @@ int main(int argc, char *argv[] )
       fprintf(overview, "this is the header of the overview file\n"
                         "this is the second line of the header\n" );
       //  \n is the sequence to start a new line
-   
+
+      int num = 0;   
     
       tfindfile ff ( wildcard );
       char* cn = ff.getnextname();
@@ -67,10 +68,11 @@ int main(int argc, char *argv[] )
       	 // now we are cycling through all files that match wildcard
 
          
-         string s = cn;  
+         string s = strupr ( cn );  
          // this is a C++ string which is much more powerful than the standard C strings ( char* )
+         // cn is made uppercase with strupr
          
-         s.replace ( s.find ("veh"), 3, "html");
+         s.replace ( s.find ("VEH"), 3, "html");
          // we are replacing the 3 characters "veh" of the original string by "html"
          
          FILE* detailed = fopen ( s.c_str(), "w" );
@@ -112,14 +114,14 @@ int main(int argc, char *argv[] )
          fclose ( detailed );
          // closing the file
 
-         printf(" processed unit %s \n", ft->description );
+         num++;      
+         printf(" %d : processed unit %s \n", num, ft->description );
          // we are writing this not to a file, but the screen
          
          cn = ff.getnextname();
       }
       // getting the name of the next file and closing the loop
         
-      
       fprintf(overview, "some text at the end of the overview file\n");   
          
       fclose ( overview );

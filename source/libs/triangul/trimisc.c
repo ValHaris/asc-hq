@@ -28,7 +28,7 @@ int generate_random_ordering(n)
       m = rand() % (n + 1 - i) + 1;
       permute[i] = p[m];
       if (m != 1)
-	p[m] = p[1];
+        p[m] = p[1];
     }
   return 0;
 }
@@ -82,29 +82,29 @@ int read_segments(filename, genus)
       first = i;
       last = first + npoints - 1;
       for (j = 0; j < npoints; j++, i++)
-	{
-	  fscanf(infile, "%lf%lf", &seg[i].v0.x, &seg[i].v0.y);
-	  if (i == last)
-	    {
-	      seg[i].next = first;
-	      seg[i].prev = i-1;
-	      seg[i-1].v1 = seg[i].v0;
-	    }
-	  else if (i == first)
-	    {
-	      seg[i].next = i+1;
-	      seg[i].prev = last;
-	      seg[last].v1 = seg[i].v0;
-	    }
-	  else
-	    {
-	      seg[i].prev = i-1;
-	      seg[i].next = i+1;
-	      seg[i-1].v1 = seg[i].v0;
-	    }
-	  
-	  seg[i].is_inserted = FALSE;
-	}
+        {
+          fscanf(infile, "%lf%lf", &seg[i].v0.x, &seg[i].v0.y);
+          if (i == last)
+            {
+              seg[i].next = first;
+              seg[i].prev = i-1;
+              seg[i-1].v1 = seg[i].v0;
+            }
+          else if (i == first)
+            {
+              seg[i].next = i+1;
+              seg[i].prev = last;
+              seg[last].v1 = seg[i].v0;
+            }
+          else
+            {
+              seg[i].prev = i-1;
+              seg[i].next = i+1;
+              seg[i-1].v1 = seg[i].v0;
+            }
+          
+          seg[i].is_inserted = FALSE;
+        }
 
       ccount++;
     }
@@ -146,12 +146,12 @@ int math_N(n, h)
 #ifndef HAVE_LOG2
 double log2( double v )
 {
-	static double tmp_log2 = -1.0;
+        static double tmp_log2 = -1.0;
 
-	if (tmp_log2 < 0.0) {
-		tmp_log2 = 1.0 / log(2.0);
-	}
+        if (tmp_log2 < 0.0) {
+                tmp_log2 = 1.0 / log(2.0);
+        }
 
-	return(log(v) * tmp_log2);
+        return(log(v) * tmp_log2);
 }
 #endif

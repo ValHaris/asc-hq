@@ -50,8 +50,8 @@ WRect
 WFileName
 7
 asc.tgt
-0
-1
+28
+51
 13
 VComponent
 14
@@ -67,7 +67,7 @@ WFileName
 35
 ..\libs\triangul\win32\triangul.tgt
 0
-0
+4
 16
 VComponent
 17
@@ -100,4 +100,4 @@ WFileName
 mapedit\mapedit.tgt
 21
 30
-19
+10

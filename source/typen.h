@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.59 2000-10-17 12:12:23 mbickel Exp $
+//     $Id: typen.h,v 1.60 2000-10-17 13:04:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.59  2000/10/17 12:12:23  mbickel
+//      Improved vehicletype loading/saving routines
+//      documented some global variables
+//
 //     Revision 1.58  2000/10/14 10:52:54  mbickel
 //      Some adjustments for a Win32 port
 //
@@ -245,12 +249,12 @@
 //     Merged all the bug fixes in that I did last week
 //
 //     Revision 1.2  1999/11/16 03:42:45  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
+//      Added CVS keywords to most of the files.
+//      Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//      Wrote replacement routines for kbhit/getch for Linux
+//      Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//      Added autoconf/automake capabilities
+//      Added files used by 'automake --gnu'
 //
 //
 /*                                                           
@@ -416,6 +420,17 @@ class tterrainbits {
      terrain2 = j; 
   };
 
+  void read ( tnstream& stream ) { 
+     terrain1 = stream.readInt(); 
+     terrain2 = stream.readInt(); 
+  };
+
+  void write ( tnstream& stream ) { 
+     stream.writeInt( terrain1 );
+     stream.writeInt ( terrain2 ); 
+  };
+
+
   int get32bit ( int pos ) {
      if ( pos == 0 )
         return terrain1;
@@ -474,6 +489,27 @@ class tterrainaccess {
       int getcrc ( void ) {
         return terrain.getcrc() + terrainreq.getcrc()*7 + terrainnot.getcrc()*97 + terrainkill.getcrc()*997;  
       };
+
+      void read ( tnstream& stream ) { 
+         terrain.read ( stream );
+         terrainreq.read ( stream );
+         terrainnot.read ( stream );
+         terrainkill.read ( stream );
+         
+         for ( int a = 0; a < 10; a++ )
+             stream.readInt( ); //dummy
+      };
+
+      void write ( tnstream& stream ) { 
+         terrain.write ( stream );
+         terrainreq.write ( stream );
+         terrainnot.write ( stream );
+         terrainkill.write ( stream );
+         
+         for ( int a = 0; a < 10; a++ )
+             stream.writeInt( 0 ); //dummy
+      };
+      
 };
 
 union tgametime {
@@ -511,7 +547,7 @@ class Resources {
            case 2: return fuel;
            default: throw OutOfRange();
 #ifdef _MSC_VER
-			       return energy; // MSVC sucks
+                               return energy; // MSVC sucks
 #endif 
         }
      };
@@ -523,7 +559,7 @@ class Resources {
            case 2: return fuel;
            default: throw OutOfRange();
 #ifdef _MSC_VER
-			       return energy; // MSVC sucks
+                               return energy; // MSVC sucks
 #endif 
         }
      };
@@ -552,8 +588,8 @@ class tbuildingtype_bi_picture {
   tbuildingtype_bi_picture ( void ) {
     for ( int i = 0; i < maxbuildingpicnum; i++ )
       for ( int j = 0; j < 4; j++ )
-	for ( int k = 0; j < 6; j++ )
-	  num[i][j][k] = -1;
+        for ( int k = 0; j < 6; j++ )
+          num[i][j][k] = -1;
   };
 };
 
@@ -1003,9 +1039,9 @@ class tevent {
 
     pascal_byte         triggerconnect[4];   /*  CEventTriggerConn */ 
     pascal_byte         triggerstatus[4];   /*  Nur im Spiel: 0: noch nicht erf?llt
-					 1: erf?llt, kann sich aber noch „ndern
-					 2: unwiederruflich erf?llt
-					 3: unerf?llbar */ 
+                                         1: erf?llt, kann sich aber noch „ndern
+                                         2: unwiederruflich erf?llt
+                                         3: unerf?llbar */ 
     tgametime     triggertime;     // Im Karteneditor auf  -1 setzen !! 
     // Werte ungleich -1 bedeuten automatisch, dass das event bereits erf?llt ist und evt. nur noch die Zeit abzuwait ist
 
@@ -1082,9 +1118,9 @@ class tevent {
                        ID des zu loeschenden Events
              data[1] = mapid
 
-      Tweatherchange     	( je ein int , alles unter Data )
-              wetter     	( -> cwettertypen , Wind ist eigene eventaction )
-              fieldadressierung	     ( 1: gesamtes map     )
+      Tweatherchange            ( je ein int , alles unter Data )
+              wetter            ( -> cwettertypen , Wind ist eigene eventaction )
+              fieldadressierung      ( 1: gesamtes map     )
                       ³              ( 0: polygone               )
                       ³              
                       ÃÄÄÄÄÄ 0 ÄÄÄ>  polygonanzahl
