@@ -2,9 +2,13 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.27 2001-08-19 10:48:49 mbickel Exp $
+//     $Id: edevents.cpp,v 1.28 2001-08-19 12:31:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2001/08/19 10:48:49  mbickel
+//      Fixed display problems in event dlg in mapeditor
+//      Fixed error when starting campaign with AI as first player
+//
 //     Revision 1.26  2001/08/09 10:28:22  mbickel
 //      Fixed AI problems
 //      Mapeditor can edit a units AI parameter
@@ -344,7 +348,8 @@ void         tplayerselall::init(void)
 
    buildgraphics(); 
 
-   for ( i=0; i<8 ;i++ ) bar(x1 + 170,y1 + 60 + i*30 ,x1 + 190 ,y1 + 70 + i * 30,20 + ( i << 3 ));
+   for ( i=0; i<8 ;i++ )
+      bar(x1 + 170,y1 + 60 + i*30 ,x1 + 190 ,y1 + 70 + i * 30,20 + ( i << 3 ));
 
    anzeige();
    
@@ -355,8 +360,10 @@ void         tplayerselall::anzeige(void)
 {
    mousevisible(false); 
    for (int i=0;i<8 ;i++ ) {
-      if ( ( playerbit & ( 1 <<  ( i+2 ) ) ) > 0 ) rectangle (x1 + 16,y1+51+i*30,x1+154,y1+79+i*30, 20 );
-      else rectangle (x1 + 16,y1+51+i*30,x1+154,y1+79+i*30, bkgcolor );
+      if ( playerbit & ( 1 <<  ( i+2 ) ) )
+         rectangle (x1 + 16,y1+51+i*30,x1+154,y1+79+i*30, 20 );
+      else
+         rectangle (x1 + 16,y1+51+i*30,x1+154,y1+79+i*30, bkgcolor );
    }
    mousevisible(true); 
 }
@@ -369,7 +376,8 @@ void         tplayerselall::run(void)
       tdialogbox::run(); 
       if (taste == ct_f1) help ( 1060 );
    }  while (!((taste == ct_esc) || ((action == 1) || (action ==2)))); 
-   if ((action == 1) || (taste == ct_esc)) playerbit = 1;
+   if ((action == 1) || (taste == ct_esc))
+      playerbit = 1;
    else {
       playerbit = playerbit | 2; //bit 1 setzen;
       playerbit = playerbit &  (65535 ^  1); // bit 0 l”schen;
@@ -393,11 +401,7 @@ void         tplayerselall::buttonpressed(int         id)
       case 11:
       case 12:
       case 13: {
-         if ( ( playerbit & ( 1 << ( id-4 ) ) ) > 0 ) {
-            playerbit = playerbit &  (65535 ^ ( 1 << ( id-4 ) ) ) ; // bit x l”schen ^ = XOR
-         } else {
-            playerbit = playerbit | ( 1 << ( id-4 ) );
-         } /* endif */
+            playerbit ^=  1 << ( id-4 ) ;
          anzeige();
       }
    break; 

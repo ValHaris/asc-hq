@@ -1788,7 +1788,7 @@ void AiParameter :: resetTask ( )
    dest.x = -1;
    dest.y = -1;
    dest.z = -1;
-   dest_nwid = 1;
+   dest_nwid = -1;
    task = tsk_nothing;
 }
 
@@ -1797,7 +1797,6 @@ void AiParameter :: reset ( pvehicle _unit )
    unit = _unit;
    AiValue::reset ( log2( _unit->height ) );
 
-   dest.x = -1;
    job = job_undefined;
    resetTask();
 }

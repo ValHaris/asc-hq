@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: sg.cpp,v 1.161 2001-08-06 21:38:00 mbickel Exp $
+//     $Id: sg.cpp,v 1.162 2001-08-19 12:31:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.161  2001/08/06 21:38:00  mbickel
+//      Fixed: ghost icons remained after vehicle construction canceled
+//
 //     Revision 1.160  2001/08/06 20:54:43  mbickel
 //      Fixed lots of crashes related to the new text files
 //      Fixed delayed events
@@ -935,7 +938,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_vehicleinfo,     ua_researchinfo,     ua_unitstatistics, ua_buildingstatistics, ua_newmessage, ua_viewqueuedmessages,
                     ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
-                    ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo  };
+                    ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus  };
 
 
 class tsgpulldown : public tpulldown {
@@ -974,12 +977,14 @@ void         tsgpulldown :: init ( void )
 
   addfield ( "~I~nfo" );
    addbutton ( "~V~ehicle types", ua_vehicleinfo );
-   addbutton ( "~U~nit weightõ8", ua_unitweightinfo );
+   addbutton ( "~G~ame Statusõ5", ua_GameStatus );
+   addbutton ( "unit ~S~et informationõ6", ua_UnitSetInfo );
    addbutton ( "~T~errainõ7", ua_viewterraininfo );
+   addbutton ( "~U~nit weightõ8", ua_unitweightinfo );
    addbutton ( "seperator", -1 );
    addbutton ( "~R~esearch", ua_researchinfo );
-   addbutton ( "vehicle ~I~mprovementõF7", ua_dispvehicleimprovement);
-   addbutton ( "unit ~S~et informationõ6", ua_UnitSetInfo );
+
+   // addbutton ( "vehicle ~I~mprovementõF7", ua_dispvehicleimprovement);
    addbutton ( "show game ~P~arameters", ua_GameParameterInfo );
 
 
@@ -1642,6 +1647,8 @@ void execuseraction ( tuseractions action )
                        break;
         case ua_GameParameterInfo: showGameParameters();
                        break;
+        case ua_GameStatus: displaymessage ( "turn %d , move %d ", 3, actmap->time.a.turn, actmap->time.a.move );
+                       break;
     }
 
 
@@ -1900,6 +1907,9 @@ void  mainloop ( void )
                break;
 
             case ct_4:  viewunitmovementrange ( getactfield()->vehicle, ct_4 );
+               break;
+
+            case ct_5:  execuseraction ( ua_GameStatus );
                break;
 
             case ct_6:  execuseraction ( ua_UnitSetInfo );

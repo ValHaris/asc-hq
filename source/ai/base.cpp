@@ -107,6 +107,10 @@ void    AI :: setup (void)
     delete units;
    */
 
+   for ( int p = 0; p < 8; p++ )
+      actmap->player[p].existanceAtBeginOfTurn = actmap->player[p].exist();
+
+
    // showthreats("init: threatvals generated");
    displaymessage2("setup completed ... ");
 }

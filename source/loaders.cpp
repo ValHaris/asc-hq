@@ -5,9 +5,12 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.59 2001-08-15 13:47:51 mbickel Exp $
+//     $Id: loaders.cpp,v 1.60 2001-08-19 12:31:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.59  2001/08/15 13:47:51  mbickel
+//      Fixed crash when loading old vehicletypes
+//
 //     Revision 1.58  2001/08/09 19:28:22  mbickel
 //      Started adding buildingtype text file functions
 //
@@ -486,12 +489,12 @@ void         seteventtriggers( pmap actmap )
 /*     einzelnes Event schreiben / lesen                    ÿ */
 /**************************************************************/
 
+int eventversion = 2;
 
 void   tspfldloaders::writeevent ( pevent event )
 {
    int magic = -1;
    stream->writeInt ( magic );
-   int eventversion = 1;
    stream->writeInt ( eventversion );
 
    stream->writedata2( *event );
@@ -563,7 +566,9 @@ void   tspfldloaders::writeevent ( pevent event )
            stream->writedata2( yp );
            stream->writedata2( nwid );
        } 
-       if ((event->trigger[j] == ceventt_event) || (event->trigger[j] == ceventt_technologyresearched)) {
+       if ((event->trigger[j] == ceventt_event) ||
+           (event->trigger[j] == ceventt_technologyresearched) ||
+           (event->trigger[j] == ceventt_allenemyunitsdestroyed )) {
           stream->writedata2( event->trigger_data[j]->id );
        } 
        if (event->trigger[j] == ceventt_turn ) {
@@ -610,6 +615,9 @@ void    tspfldloaders::readevent ( pevent& event1 )
         stream->readdata ( pi, sizeof ( *event1) - sizeof ( int ));
         version = 0;
      }
+
+     if ( version > eventversion )
+        throw tinvalidversion ( "event", eventversion, version );
 
      event1->next = NULL; 
      event1->conn = 0;
@@ -660,8 +668,12 @@ void    tspfldloaders::readevent ( pevent& event1 )
            if ((event1->trigger[m] == ceventt_event) ||
                (event1->trigger[m] == ceventt_technologyresearched)) {
                stream->readdata2 ( event1->trigger_data[m]->id );
-           } 
-   
+           }
+
+           if ( version >=2 )
+              if (event1->trigger[m] == ceventt_allenemyunitsdestroyed )
+                 stream->readdata2 ( event1->trigger_data[m]->id );
+
            if (event1->trigger[m] == ceventt_turn) {
                stream->readdata2 ( event1->trigger_data[m]->time.abstime );
            } 

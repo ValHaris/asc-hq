@@ -2,9 +2,13 @@
     \brief The event handling of ASC
 */
 
-//     $Id: missions.cpp,v 1.25 2001-07-28 11:19:12 mbickel Exp $
+//     $Id: missions.cpp,v 1.26 2001-08-19 12:31:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2001/07/28 11:19:12  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.24  2001/02/26 12:35:22  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -482,15 +486,16 @@ void         checksingleevent(pevent       ev, MapDisplayInterface* md )
                                                      sp = actmap->actplayer;
    
                                                   for (i = 0; i <= 7; i++) 
-                                                     if ( ev->trigger_data[b]->id == 0 ) {
+                                                     if ( ev->trigger_data[b]->id == 1 ) {
                                                         if (i != sp ) 
                                                            if (getdiplomaticstatus2(sp * 8, i * 8) == cawar) 
                                                               if ( !actmap->player[i].vehicleList.empty() )
                                                                  ev->triggerstatus[b] = 0; 
                                                      } else {
                                                         if (i != sp ) 
-                                                           if ( !actmap->player[i].vehicleList.empty() )
-                                                              ev->triggerstatus[b] = 0; 
+                                                          if ( ev->trigger_data[b]->id & ( 1 << (2+i)))
+                                                              if ( !actmap->player[i].vehicleList.empty() )
+                                                                 ev->triggerstatus[b] = 0;
                                                      }
                                                } 
                break; 
@@ -1000,6 +1005,14 @@ void         executeevent ( pevent ev, MapDisplayInterface* md )
             if ( md ) 
                repaintdisplay();
          }
+
+      if ( ev->a.action == celosecampaign ) {
+         displaymessage ( "you have lost", 3 );
+         delete actmap;
+         actmap = NULL;
+         throw NoMapLoaded();
+      }
+
 
       if ( ev->a.action == cechangebuildingdamage ) {
          pfield fld = getfield ( ev->intdata[0], ev->intdata[1] );
