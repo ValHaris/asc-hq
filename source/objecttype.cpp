@@ -15,6 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <algorithm>
+
 #include "objecttype.h"
 #include "basegfx.h"
 #include "graphicset.h"

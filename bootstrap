@@ -1,11 +1,15 @@
 #! /bin/sh
 
-set -x
+if test "X$1" = X--force; then
+   set -x
 
-aclocal
-libtoolize --force --copy --automake
-aclocal
-autoheader
-automake --gnu --add-missing --copy
-autoconf
+   aclocal
+   libtoolize --force --copy --automake
+   aclocal
+   autoheader
+   automake --gnu --add-missing --copy
+   autoconf
 
+else
+   echo "You don't need to run bootstrap. Just run \"configure ; make\" "
+fi
