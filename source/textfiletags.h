@@ -27,6 +27,7 @@
  extern const char* unitCategoryTags[];
  extern const char* buildingFunctionTags[];
  extern const char* objectNetMethod[];
+ extern const char* entranceModes[];
 
 
  extern const char* objectDisplayingMethodTags[];

@@ -408,10 +408,12 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
 
    for ( Player::BuildingList::iterator bi = getPlayer().buildingList.begin(); bi != getPlayer().buildingList.end(); bi++ ) {
       pbuilding bld = *bi;
-      if ( astar.getFieldAccess( bld->getEntry()) & bld->typ->loadcapability ) {
+      if ( astar.getFieldAccess( bld->getEntry())  ) { // ####TRANS
          MapCoordinate3D buildingPos = bld->getEntry();
+         /*
          if ( !(bld->typ->loadcapability & buildingPos.z))
             buildingPos.z = 1 << log2 ( astar.getFieldAccess(bld->getEntry()) & bld->typ->loadcapability );
+         */
 
          bool loadable = true;
          if ( loadable ) {

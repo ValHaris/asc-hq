@@ -52,6 +52,7 @@ class ContainerBase {
 
       //! is called after a repair is perfored. Vehicles use this to reduce their experience.
       virtual void postRepair ( int oldDamage ) = 0;
+      virtual bool isBuilding() = 0;
    public:
       ContainerBase ( const ContainerBaseType* bt, pmap map, int player );
 
@@ -88,6 +89,18 @@ class ContainerBase {
 
       //! returns the player this vehicle/building belongs to
       int getOwner() const { return color >> 3; };
+
+      /** can the vehicle be loaded. If uheight is passed, it is assumed that vehicle is at
+          the height 'uheight' and not the actual level of height
+      */
+      bool vehicleLoadable ( const pvehicle vehicle, int uheight = -1 ) const;
+
+      /** Does the vehicle fit into the container? This does not include checking if it can reach the entry
+      */
+      bool vehicleFit ( const pvehicle vehicle ) const;
+
+      //! weight of all loaded units
+      int cargo ( void ) const;
 
 
       virtual MapCoordinate3D getPosition ( ) = 0;

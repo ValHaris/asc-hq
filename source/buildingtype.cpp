@@ -61,8 +61,6 @@ const char*  cbuildingfunctions[cbuildingfunctionnum]  =
 
 BuildingType :: BuildingType ( void )
 {
-   vehicleCategoriesLoadable = -1;
-
    for ( int x = 0; x < 4; x++ )
       for ( int y = 0; y < 6; y++ ) {
          for ( int w = 0; w < cwettertypennum; w++ )
@@ -100,25 +98,8 @@ MapCoordinate  BuildingType :: getFieldCoordinate ( const MapCoordinate& entryPo
    return mc;
 }
 
-bool    BuildingType :: vehicleloadable ( const Vehicletype* fzt ) const
-{
-   if ( special & cgproduceAllUnitsB )
-      return true;
 
-   if ( fzt->functions & cf_trooper )
-      return true;
-
-   if (  loadcapacity >= fzt->maxsize()
-         && ((unitheightreq & fzt->height) || !unitheightreq)
-         && !(unitheight_forbidden & fzt->height)
-         && (loadcapability & fzt->height)
-         && (vehicleCategoriesLoadable & (1<<fzt->movemalustyp)) )
-        return true;
-
-   return false;
-}
-
-const int building_version = 3;
+const int building_version = 4;
 
 #ifndef converter
 extern void* generate_building_gui_build_icon ( pbuildingtype bld );
@@ -154,9 +135,9 @@ void BuildingType :: read ( tnstream& stream )
       _armor = stream.readInt( );
       jamming = stream.readInt( );
       view = stream.readInt( );
-      loadcapacity = stream.readInt( );
-      loadcapability = stream.readChar( );
-      unitheightreq = stream.readChar( );
+      stream.readInt( ); // was: loadcapacity
+      stream.readChar( ); // was: loadcapability =
+      stream.readChar( ); // was: unitheightreq =
       productionCost.material = stream.readInt( );
       productionCost.fuel = stream.readInt( );
       special = stream.readInt( );
@@ -183,13 +164,11 @@ void BuildingType :: read ( tnstream& stream )
       _bi_maxstorage.fuel = stream.readInt( );
 
       buildingheight = 1 << log2 ( stream.readInt() );
-      unitheight_forbidden = stream.readInt( );
+      stream.readInt( ); // was: unitheight_forbidden =
       externalloadheight = stream.readInt( );
 
       if ( version >= 3)
-         vehicleCategoriesLoadable = stream.readInt();
-      else
-         vehicleCategoriesLoadable = -1;
+         stream.readInt(); // was: vehicleCategoriesLoadable =
 
 
       if ( version >= 2 ) {
@@ -221,6 +200,9 @@ void BuildingType :: read ( tnstream& stream )
                                              &w_picture[w][k][i][j],
                                              CGameOptions::Instance()->bi3.interpolate.buildings );
 
+
+      if ( version >= 4 )
+         ContainerBaseType::read ( stream );
 
      #ifdef converter
       guibuildicon = NULL;
@@ -264,9 +246,9 @@ void BuildingType :: write ( tnstream& stream ) const
    stream.writeInt ( _armor );
    stream.writeInt ( jamming );
    stream.writeInt ( view );
-   stream.writeInt ( loadcapacity );
-   stream.writeChar ( loadcapability );
-   stream.writeChar ( unitheightreq );
+   stream.writeInt ( 0 );
+   stream.writeChar ( 0);
+   stream.writeChar ( 0 );
    stream.writeInt ( productionCost.material );
    stream.writeInt ( productionCost.fuel );
    stream.writeInt ( special );
@@ -293,10 +275,10 @@ void BuildingType :: write ( tnstream& stream ) const
    stream.writeInt ( _bi_maxstorage.fuel );
 
    stream.writeInt ( buildingheight );
-   stream.writeInt ( unitheight_forbidden );
+   stream.writeInt ( 0 );
    stream.writeInt ( externalloadheight );
 
-   stream.writeInt ( vehicleCategoriesLoadable );
+   stream.writeInt ( 0 );
 
    for ( int x = 0; x < 4; x++ )
       for ( int y = 0; y < 6; y++ )
@@ -312,6 +294,8 @@ void BuildingType :: write ( tnstream& stream ) const
                 if ( w_picture[w][k][i][j] )
                    if ( bi_picture[w][k][i][j] == -1 )
                        stream.writedata( w_picture[w][k][i][j],fieldsize);
+
+    ContainerBaseType::write ( stream );
 }
 
 
@@ -497,14 +481,6 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
 
       pc.addInteger( "Jaming", jamming );
 
-      pc.openBracket ( "Cargo" );
-       pc.addInteger( "MaxUnitSize", loadcapacity );
-       pc.addTagInteger( "EnterHeight", loadcapability, choehenstufennum, heightTags );
-       pc.addTagInteger( "Cargo_ReachableHeightReq", unitheightreq, choehenstufennum, heightTags );
-       pc.addTagInteger( "Cargo_ReachableHeightNot", unitheight_forbidden, choehenstufennum, heightTags );
-       pc.addTagInteger ( "CategoriesNOT", vehicleCategoriesLoadable, cmovemalitypenum, unitCategoryTags, true );
-      pc.closeBracket();
-
       pc.addTagInteger ( "Functions", special, cbuildingfunctionnum, buildingFunctionTags );
 
       pc.addInteger ( "Techlevel", technologylevel );
@@ -539,6 +515,8 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
       pc.closeBracket ();
 
       pc.addTagInteger( "Height", buildingheight, choehenstufennum, heightTags );
+
+      ContainerBaseType::runTextIO ( pc );
 
       pc.addTagInteger( "ExternalLoading", externalloadheight, choehenstufennum, heightTags );
    }

@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.71 2002-11-23 18:36:24 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.72 2003-02-12 20:11:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.71  2002/11/23 18:36:24  mbickel
+//      Fixed crash when deleting map that contained rubble generating buildings
+//
 //     Revision 1.70  2002/10/29 19:00:27  mbickel
 //      Fixed crashes when inserting a BI3 map
 //
@@ -1328,7 +1331,7 @@ void       tloadBImap :: ReadSHOPPart( void )
                           fnd++;
 
                     if ( !fnd )
-                       if ( fld->building->typ->vehicleloadable( vt ))
+                       if ( fld->building->typ->vehicleFit( vt ))
                           fld->building->production [ prodnum++ ] = vt;
                  }
               }
@@ -1342,7 +1345,7 @@ void       tloadBImap :: ReadSHOPPart( void )
                              fnd++;
                        if ( !fnd )
                           if ( prodnum < 32 )
-                             if ( fld->building->typ->vehicleloadable( vt ))
+                             if ( fld->building->typ->vehicleFit( vt ))
                                  fld->building->production [ prodnum++ ] = vt;
                     }
                  }

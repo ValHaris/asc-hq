@@ -2,9 +2,14 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.117 2002-12-17 22:02:17 mbickel Exp $
+//     $Id: spfst.cpp,v 1.118 2003-02-12 20:11:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.117  2002/12/17 22:02:17  mbickel
+//      Enemy mines can now be crossed even if visible
+//      submerged mines can not be placed on shallow water
+//      new game parameter: objects destroyable by terrain
+//
 //     Revision 1.116  2002/12/15 23:54:46  mbickel
 //      New: system sends mail if units die
 //      Fixed: orbiting and submerged units could crash on water due to wind
@@ -373,54 +378,53 @@ int         fieldaccessible( const pfield        field,
       else
          return 0;
    } else {
-      int m1 = vehicle->weight(); 
-      int mx = vehicle->weight(); 
-      int b = 1; 
-      if ( vehicle->typ->loadcapacity > 0) 
-         for (int c = 0; c <= 31; c++) 
-            if ( vehicle->loading[c] ) { 
-               b++;
-               m1 += vehicle->loading[c]->weight();
-               if ( vehicle->loading[c]->weight() > mx )
-                  mx = vehicle->loading[c]->weight();
-            }
-
+   /*
+      int m1 = vehicle->weight();
+      int mx = vehicle->weight();
+      int b = 1;
+      for (int c = 0; c <= 31; c++)
+         if ( vehicle->loading[c] ) {
+            b++;
+            m1 += vehicle->loading[c]->weight();
+            if ( vehicle->loading[c]->weight() > mx )
+               mx = vehicle->loading[c]->weight();
+         }
+     */
 
       if (field->vehicle) {
          if (field->vehicle->color == vehicle->color) {
-            int ldbl = field->vehicle->vehicleloadable ( vehicle, uheight );
-            if ( ldbl )
+            if ( field->vehicle->vehicleLoadable ( vehicle, uheight ) )
                return 2;
             else
                if ( terrainaccessible ( field, vehicle, uheight ))
                   return 1;
-               else 
-                  return 0; 
-         } 
+               else
+                  return 0;
+         }
          else   ///////   keine eigene vehicle
            if ( terrainaccessible ( field, vehicle, uheight ) )
-              if (vehicleplattfahrbar(vehicle,field)) 
-                 return 2; 
-              else 
-                 if ((attackpossible28(field->vehicle,vehicle) == false) || (getdiplomaticstatus(field->vehicle->color) == capeace)) 
+              if (vehicleplattfahrbar(vehicle,field))
+                 return 2;
+              else
+                 if ((attackpossible28(field->vehicle,vehicle) == false) || (getdiplomaticstatus(field->vehicle->color) == capeace))
                    if ( terrainaccessible ( field, vehicle, uheight ) )
-                      return 1; 
-                   else 
-                      return 0; 
-             
-      } 
-      else {   /*  geb„ude  */ 
-        if ((field->bdt & getTerrainBitType(cbbuildingentry) ).any() && field->building->vehicleloadable ( vehicle, uheight ))
-           return 2; 
-        else 
+                      return 1;
+                   else
+                      return 0;
+
+      }
+      else {   // building
+        if ((field->bdt & getTerrainBitType(cbbuildingentry) ).any() && field->building->vehicleLoadable ( vehicle, uheight ))
+           return 2;
+        else
            if (uheight >= chtieffliegend)
               return 1;
-           else 
+           else
               return 0;
       }
-   } 
+   }
    return 0;
-} 
+}
 
 
 

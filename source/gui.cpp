@@ -4,9 +4,14 @@
 */
 
 
-//     $Id: gui.cpp,v 1.86 2003-01-28 17:48:42 mbickel Exp $
+//     $Id: gui.cpp,v 1.87 2003-02-12 20:11:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.86  2003/01/28 17:48:42  mbickel
+//      Added sounds
+//      Rewrote soundsystem
+//      Fixed: tank got stuck when moving from one transport ship to another
+//
 //     Revision 1.85  2003/01/06 16:52:04  mbickel
 //      Fixed: units inside transports got wrong movement when moved out
 //      Fixed: wind not displayed correctly
@@ -2412,7 +2417,7 @@ int tnsguiiconcontainer :: available    ( void )
            else
               return 0;
          else 
-           if ( fld->vehicle && fld->vehicle->typ->loadcapacity  &&  fld->vehicle->color == actmap->actplayer * 8 )
+           if ( fld->vehicle && fld->vehicle->typ->maxLoadableUnits  &&  fld->vehicle->color == actmap->actplayer * 8 )
               return 1;
            else
               return 0;

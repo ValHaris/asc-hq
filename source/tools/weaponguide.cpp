@@ -724,7 +724,7 @@ int main(int argc, char *argv[] )
 
 
 
-
+/*
             //BEGINN LOADING
             if ( ft->loadcapacity ) {
                fprintf ( detailed5, "<table align=\"left\" id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> " );
@@ -733,15 +733,15 @@ int main(int argc, char *argv[] )
 			   for ( int c = 0; c < cmovemalitypenum; c++ )
                if ( ft->vehicleCategoriesLoadable & (1 << c))
                   fprintf ( detailed5, "<tr><td align=\"center\" > %s </td></tr>", cmovemalitypes[c] );
-			   
+
                fprintf ( detailed5, "</table>" );
 
                fprintf ( detailed5, "<table id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">" );
                fprintf ( detailed5, "<tr><td align=\"center\" bgcolor=\"#20483f\">max. Zuladung</td> <td>%d</td> </tr>", ft->loadcapacity );
                fprintf ( detailed5, "<tr><td align=\"center\" bgcolor=\"#20483f\">max. Gewicht einer Einheit</td><td>%d</td> </tr>", ft->maxunitweight );
                fprintf ( detailed5, "</table>" );
-			   
-			   // Ladbar von H&ouml;henstufen 
+
+			   // Ladbar von H&ouml;henstufen
                fprintf ( detailed5, "<table id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
                // Überschriften
                fprintf ( detailed5,
@@ -771,22 +771,22 @@ int main(int argc, char *argv[] )
 				  fprintf ( detailed5, "></TD>" );
                }
 			   fprintf ( detailed5, "</tr>\n" );
-               
+
 			   // Höhenstufenzeichen einfügen für can load and unload from:
                fprintf ( detailed5, "<tr><td>UNIT muss auf dieser Stufe sein</td>" );
 			   for ( int h = 0; h < 8; h++ ) {
                   if ( ft->loadcapability & (1 << h))
-                     fprintf ( detailed5, "<td><img src=\"../hacken.gif\"></td> " );	
+                     fprintf ( detailed5, "<td><img src=\"../hacken.gif\"></td> " );
 			      else
                      fprintf ( detailed5, "<td></td>" );
 			   }
-	           fprintf ( detailed5,	"</tr>\n" );	   
-			   
+	           fprintf ( detailed5,	"</tr>\n" );
+
 			   // Höhenstufenzeichen einfügen für can load and unload from:
                fprintf ( detailed5, "<tr><td>UNIT muss diese Stufe selbst erreichen</td>" );
 			   for ( int h = 0; h < 8; h++ ) {
                   if ( ft->loadcapabilityreq & (1 << h))
-                     fprintf ( detailed5, "<td><img src=\"../hacken.gif\"></td> " );	
+                     fprintf ( detailed5, "<td><img src=\"../hacken.gif\"></td> " );
 			      else
                      fprintf ( detailed5, "<td></td>" );
 			   }
@@ -810,12 +810,12 @@ int main(int argc, char *argv[] )
                fprintf ( detailed5, "</table>" );
             }
             //ENDE LOADING
+*/
 
-			
 
-			
-			
-			
+
+
+
             //BEGINN DESCRIPTION
             fprintf ( detailed6, "<table align=\"left\" id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">" );
             fprintf ( detailed6, "<tr><td align=\"center\" bgcolor=\"#20483f\">Informationen zur Einheit</td></tr>" );

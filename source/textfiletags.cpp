@@ -19,6 +19,7 @@
 #include "typen.h"
 #include "vehicletype.h"
 #include "buildingtype.h"
+#include "containerbasetype.h"
 
 const char* weatherTags[cwettertypennum]
     = { "dry",
@@ -196,5 +197,10 @@ const char* AIjobs[AiParameter::jobNum] = { "undefined",
                        "build",
                        "recon",
                        "guard" };
+
+const char* entranceModes[ContainerBaseType::TransportationIO::entranceModeNum]
+                 = { "In",
+                     "Out",
+                     "Docking" };
 
 

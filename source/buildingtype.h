@@ -97,21 +97,6 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
         int          jamming;
         int          view;
 
-        //! the maximum size of a unit that may enter the building
-        int          loadcapacity;
-
-        //! bitmapped: only units on one of these levels of height may enter
-        int          loadcapability;
-
-        //! bitmapped: only units that are able to reach one of these levels of height may enter. For example, an airport may have "low level flight" set here. That does not mean that the units must FLY into the building!
-        int          unitheightreq;
-
-        //! bitmapped: units that are able to reach one of these levels of height may NEVER enter this building
-        int          unitheight_forbidden;
-
-        //! bitmapped: vehicle categories that may enter the building
-        int          vehicleCategoriesLoadable;
-
         //! bitmapped: functions the building can perfom. see #cbuildingfunctions
         int          special;
 
@@ -155,9 +140,6 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
         void*        getpicture ( const LocalCoordinate& localCoordinate );
 
         BuildingType ( void );
-
-        //! can units of the given type be moved into this buildtype? This is a prerequisite, but not the only requirement, for a real unit to move into a real building
-        bool          vehicleloadable ( const Vehicletype* type ) const ;
 
         /** returns the Mapcoordinate of a buildings field
             \param entryOnMap The location of the buildings entry on the map

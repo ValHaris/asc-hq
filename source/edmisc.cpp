@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.92 2003-01-19 20:27:24 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.93 2003-02-12 20:11:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.92  2003/01/19 20:27:24  mbickel
+//      Mapeditor: Fixed unjustified warning messages during map transformation
+//
 //     Revision 1.91  2002/11/11 08:26:53  mbickel
 //      Fixed: mapeditor buildproperties dialog: invalid range for energy maxplus
 //
@@ -643,14 +646,14 @@ int rightmousebox(void)
 
       if ( pf2->vehicle ) {
          tmb.additem(act_changeunitvals);
-         if ( pf2->vehicle->typ->loadcapacity > 0 )
+         if ( pf2->vehicle->typ->maxLoadableUnits > 0 )
             tmb.additem(act_changecargo);
          tmb.additem(act_deleteunit);
       }
       tmb.additem(act_seperator);
       if ( pf2->building ) {
          tmb.additem(act_changeunitvals);
-         if ( pf2->building->typ->loadcapacity > 0  )
+         if ( pf2->building->typ->maxLoadableUnits > 0  )
             tmb.additem(act_changecargo);
          if ( pf2->building->typ->special & cgvehicleproductionb )
             tmb.additem(act_changeproduction);
@@ -2901,6 +2904,7 @@ class EditAiParam : public tdialogbox {
            TemporaryContainerStorage tus;
            int action;
            AiParameter& aiv;
+           int z;
         public:
            EditAiParam ( pvehicle veh, int player ) : unit ( veh ), tus ( veh ), aiv ( *veh->aiparam[player] ) {};
            void init ( );
@@ -2931,8 +2935,9 @@ void         EditAiParam::init(  )
    addbutton("dest ~Y~",50,120,250,140,2,1,2,true);
    addeingabe(2, &aiv.dest.y, minint, maxint);
 
+   z = aiv.dest.getNumericalHeight();
    addbutton("dest ~Z~",50,160,250,180,2,1,3,true);
-   addeingabe(3, &aiv.dest.z, minint, maxint);
+   addeingabe(3, &z, minint, maxint);
 
    addbutton("dest ~N~WID",50,200,250,220,2,1,4,true);
    addeingabe(4, &aiv.dest_nwid, minint, maxint);
@@ -2983,6 +2988,7 @@ void         EditAiParam::buttonpressed(int         id)
              break;
 
    case 30 : action = 1;
+             aiv.dest.setnum ( aiv.dest.x, aiv.dest.y, z ); 
              break;
    case 31 : action = 1;
               tus.restore();
@@ -3778,7 +3784,7 @@ void tvehiclecargo :: finish ( int cancel )
 
 void         unit_cargo( pvehicle vh )
 {
-   if ( vh && vh->typ->loadcapacity ) {
+   if ( vh && vh->typ->maxLoadableUnits ) {
       tvehiclecargo laderaum ( vh );
       laderaum.init();
       laderaum.run();

@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.97 2003-02-07 09:53:03 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.98 2003-02-12 20:11:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.97  2003/02/07 09:53:03  mbickel
+//      Fixed: building could not repair themself
+//
 //     Revision 1.96  2003/01/28 17:48:42  mbickel
 //      Added sounds
 //      Rewrote soundsystem
@@ -1124,7 +1127,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
             fld->vehicle = vehicle;
             vehicle->addview();
          } else {
-            if ( fld->vehicle  &&  fld->vehicle->typ->loadcapacity ) {
+            if ( fld->vehicle  ) {
                i = 0;
                while ((fld->vehicle->loading[i] != NULL) && (i < 31))
                  i++;
@@ -1141,7 +1144,6 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
                      if ( fieldvisiblenow ( fld, actmap->playerView ) || actmap->playerView*8  == vehicle->color )
                         SoundList::getInstance().playSound ( SoundList::conquer_building, 0 );
                   }
-
                }
          }
 
@@ -1261,7 +1263,7 @@ int ChangeVehicleHeight :: moveHeightMoveCost( pvehicle vehicle, const MapCoordi
          ok = false;
       else {
          npush ( vehicle->height );
-         vehicle->height = pos.z;
+         vehicle->height = pos.getBitmappedHeight();
 
          int fuelcost, movecost;
 
@@ -1278,7 +1280,7 @@ int ChangeVehicleHeight :: moveHeightMoveCost( pvehicle vehicle, const MapCoordi
 
          pfield fld = getfield(x,y);
 
-         if ( fieldaccessible(fld, vehicle, pos.z ) < 1)
+         if ( fieldaccessible(fld, vehicle, pos.getBitmappedHeight() ) < 1)
             ok = false;
 
          if ( fieldaccessible(fld, vehicle, newheight ) < 1)
@@ -1298,7 +1300,7 @@ int ChangeVehicleHeight :: moveHeightMoveCost( pvehicle vehicle, const MapCoordi
          ok = false;
 */
 
-   if ( newheight > pos.z && pos.z != chfahrend )
+   if ( newheight > pos.getBitmappedHeight() && pos.getBitmappedHeight() != chfahrend )
       dist += air_heightincmovedecrease;
 
    if ( ok )
@@ -1458,9 +1460,9 @@ int ChangeVehicleHeight :: verticalHeightChangeMoveCost ( pvehicle vehicle, cons
 {
    pfield fld = getfield( pos.x, pos.y );
 
-   int oldheight = pos.z;
+   int oldheight = pos.getBitmappedHeight();
 
-   if ( pos.z & (chtieffliegend | chfliegend | chhochfliegend)) {
+   if ( pos.getBitmappedHeight() & (chtieffliegend | chfliegend | chhochfliegend)) {
       if ( (newheight < oldheight) && (newheight == chfahrend) ) {
          if ( !terrainaccessible ( fld, vehicle, newheight ))
             return -109;
@@ -1778,13 +1780,13 @@ pair<int,MapCoordinate3D> IncreaseVehicleHeight :: getMoveCost ( pvehicle veh, c
 {
    int dist = -1;
    MapCoordinate3D dest = pos;
-   if ( pos.z < 128) {
-      dest.z <<= 1;
-      if ( dest.z & veh->typ->height )
+   if ( pos.getBitmappedHeight() < 128) {
+      dest = MapCoordinate3D ( dest.x, dest.y, dest.getBitmappedHeight() << 1 );
+      if ( dest.getBitmappedHeight() & veh->typ->height )
          if ( veh->typ->steigung ) {
-            dist = moveHeightMoveCost ( veh, pos, dest.z, direc, dest.x, dest.y  );
+            dist = moveHeightMoveCost ( veh, pos, dest.getBitmappedHeight(), direc, dest.x, dest.y  );
          } else
-            dist = verticalHeightChangeMoveCost ( veh, pos, dest.z );
+            dist = verticalHeightChangeMoveCost ( veh, pos, dest.getBitmappedHeight() );
    }
    return make_pair( dist, dest );
 }
@@ -1835,13 +1837,13 @@ pair<int,MapCoordinate3D> DecreaseVehicleHeight :: getMoveCost ( pvehicle veh, c
 {
    int dist = -1;
    MapCoordinate3D dest = pos;
-   if ( pos.z ) {
-       dest.z >>= 1;
-       if ( dest.z & veh->typ->height )
+   if ( pos.getBitmappedHeight() ) {
+       dest = MapCoordinate3D ( dest.x, dest.y, dest.getBitmappedHeight() >> 1 );
+       if ( dest.getBitmappedHeight() & veh->typ->height )
           if ( veh->typ->steigung ) {
-             dist = moveHeightMoveCost ( veh, pos, dest.z, direc, dest.x, dest.y  );
+             dist = moveHeightMoveCost ( veh, pos, dest.getBitmappedHeight(), direc, dest.x, dest.y  );
           } else
-             dist = verticalHeightChangeMoveCost ( veh, pos, dest.z );
+             dist = verticalHeightChangeMoveCost ( veh, pos, dest.getBitmappedHeight() );
    }
 
    return make_pair( dist, dest );

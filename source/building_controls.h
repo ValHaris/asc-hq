@@ -5,9 +5,14 @@
 */
 
 
-//     $Id: building_controls.h,v 1.14 2003-01-28 17:48:42 mbickel Exp $
+//     $Id: building_controls.h,v 1.15 2003-02-12 20:11:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2003/01/28 17:48:42  mbickel
+//      Added sounds
+//      Rewrote soundsystem
+//      Fixed: tank got stuck when moving from one transport ship to another
+//
 //     Revision 1.13  2002/12/12 11:34:17  mbickel
 //      Fixed: ai crashing when weapon has no ammo
 //      Fixed: ASC crashed when loading game with ID not found
@@ -134,8 +139,8 @@ class    ccontainercontrols
       class   cmove_unit_in_container
       {
          public:
-            int      moveupavail ( pvehicle eht );
-            int      movedownavail ( pvehicle eht, pvehicle into );
+            bool     moveupavail ( pvehicle eht );
+            bool     movedownavail ( pvehicle eht, pvehicle into );
             void     moveup ( pvehicle eht );
             void     movedown ( pvehicle eht, pvehicle into );
             pvehicle unittomove;
@@ -173,7 +178,6 @@ class    ccontainercontrols
 
       virtual VehicleMovement*  movement ( pvehicle eht );
       virtual int    getHeight ( void ) = 0;
-      virtual int    getLoadCapability ( void ) = 0;
 
 
       virtual int    getspecfunc ( tcontainermode mode ) = 0;
@@ -214,7 +218,6 @@ class    cbuildingcontrols : public virtual ccontainercontrols
       int    getammunition ( int weapontype, int num, int abbuchen, int produceifrequired = 0 );
       int    ammotypeavail ( int type );
       int    getHeight ( void );
-      int    getLoadCapability ( void );
 
       pbuilding   building;
 
@@ -313,7 +316,6 @@ class    ctransportcontrols : public virtual ccontainercontrols
       int    getammunition ( int weapontype, int num, int abbuchen, int produceifrequired = 0 );
       int    ammotypeavail ( int type );
       int    getHeight ( void );
-      int    getLoadCapability ( void );
 
 
       pvehicle vehicle;

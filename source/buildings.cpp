@@ -171,78 +171,6 @@ void Building::regroupUnits ()
 }
 
 
-int Building :: vehicleloadable ( const pvehicle vehicle, int uheight ) const
-{
-   if ( uheight == -1 )
-      uheight = vehicle->height;
-
-   if ( vehicle->functions & cf_trooper )
-      if ( uheight & (chschwimmend | chfahrend ))
-         uheight |= (chschwimmend | chfahrend );  //these heights are effectively the same
-
-   if ( getCompletion() ==  typ->construction_steps - 1  && typ->vehicleloadable(vehicle->typ ) )
-      if ( typ->loadcapability & uheight ) {
-         if ( (( typ->loadcapacity >= vehicle->size())               // the unit is physically able to get "through the door"
-           && (( typ->unitheightreq & vehicle->typ->height ) || !typ->unitheightreq)
-           && !( typ->unitheight_forbidden & vehicle->typ->height) )
-                   ||
-             ( vehicle->functions & cf_trooper )
-           )
-           if ( (vehiclesLoaded()+1 < maxloadableunits ) || vehicle->color != color ) {
-
-         #ifdef karteneditor
-              return 2;
-         #else
-              if ( color == vehicle->color )
-                 return 2;
-              else
-                if ( !vehicle->attacked ) {
-                   if ( color == (8 << 3) )      // neutral building can be conquered by any unit
-                      return 2;
-                   else
-                      if ( (vehicle->functions & cf_conquer)  || ( damage >= mingebaeudeeroberungsbeschaedigung))
-                         if ( getdiplomaticstatus2(color, vehicle->color ) == cawar )
-                            return 2;
-                }
-         #endif
-         }
-      }
-
-/*
-&&
-         (
-         (( color == actmap->actplayer * 8)                              // ganz regul„r: eigenes geb„ude
-
-         || (( vehicle->functions & cftrooper )                // JEDES Geb„ude muá sich mit Fusstruppen erobern lassen
-         && (( uheight == typ->height ) || (typ->height >= chschwimmend && hgt == chfahrend))
-         && ( !vehicle->attacked ))
-         // && color != (8 << 3)) )
-         //&& ( typ->loadcapability & hgt ))
-         ||
-
-         ( (( damage >= mingebaeudeeroberungsbeschaedigung) || ( vehicle->functions & cfconquer ))    // bei Besch„digung oder cfconquer jedes Geb„ude mit fahrenden vehicle
-         && (vehicle->height == chfahrend)
-         // && ( color != (8 << 3))
-         && ( !vehicle->attacked )
-         && ( typ->loadcapability & hgt )
-         && ( typ->height & vehicle->typ->height ))
-         ||
-
-         (( color == )                               // neutrale Geb„ude lassen sich immer erobern
-         // && (vehicle->height == chfahrend)
-         && ( !vehicle->attacked )
-         && ( typ->loadcapability & hgt )
-         && ( typ->height & vehicle->typ->height ) ))
-       )
-
-          return 2;
-      else
-           return 0;
-*/
-   return 0;
-}
-
-
 #ifndef sgmain
 void Building :: execnetcontrol ( void ) {}
 int Building :: putResource ( int amount, int resourcetype, int queryonly, int scope ) { return 0; };
@@ -515,10 +443,9 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits )
     char c = 0;
 
     if ( includeLoadedUnits )
-       if (typ->loadcapacity )
-          for ( int k = 0; k <= 31; k++)
-             if (loading[k] )
-                c++;
+       for ( int k = 0; k <= 31; k++)
+          if (loading[k] )
+             c++;
 
     stream.writeChar ( c );
     if ( c )

@@ -745,11 +745,8 @@ AI::Section* AI :: Sections :: getBest ( int pass, const pvehicle veh, MapCoordi
                                d = nf;
                                // nd = nf;
                                frst = &getForPos ( x, y );
-                               if ( dest ) {
-                                  dest->x = xtogoSec;
-                                  dest->y = ytogoSec;
-                                  dest->z = h;
-                               }
+                               if ( dest )
+                                  *dest = MapCoordinate3D ( xtogoSec, ytogoSec, h );
                             }
                          }
                       } else

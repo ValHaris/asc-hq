@@ -443,7 +443,7 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
 {
    // are we operating in 3D space or 2D space? Pathfinding in 3D has not
    // been available at the beginning of the AI work; and it is faster anyway
-   if ( destination.z == -1 ) {
+   if ( destination.getNumericalHeight() == -1 ) {
 
       VehicleMovement vm ( mapDisplay, NULL );
       vm.execute ( veh, -1, -1, 0, -1, -1 );
@@ -528,14 +528,14 @@ int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path )
 
    while ( pi != path.end() ) {
       int nwid = veh->networkid;
-      if ( pi->z == veh->height ) {
+      if ( pi->getBitmappedHeight() == veh->height ) {
          VehicleMovement vm ( mapDisplay, NULL );
          vm.execute ( veh, -1, -1, 0, -1, -1 );
 
          bool fieldFound = false;
          AStar3D::Path::const_iterator lastmatch = pi;
          AStar3D::Path::const_iterator i = pi;
-         while ( i != path.end() && i->z == veh->height ) {
+         while ( i != path.end() && i->getBitmappedHeight() == veh->height ) {
             if ( vm.reachableFields.isMember ( i->x, i->y )) {
                // don't accidently conquer the buildings of your allies
                if ( !getfield ( i->x, i->y )->building || getdiplomaticstatus2 ( getfield ( i->x, i->y )->building->color, getPlayerNum()*8) == cawar ) {
@@ -574,22 +574,22 @@ int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path )
          return 1;
       }
 
-      if ( pi->z == veh->height ) {
+      if ( pi->getBitmappedHeight() == veh->height ) {
          // movement exhausted
          return 0;
       }
 
-      if ( ChangeVehicleHeight::getMoveCost ( veh, veh->getPosition(), getdirection( veh->xpos, veh->ypos, pi->x, pi->y), pi->z > veh->height ? 1 : -1 ).first > veh->getMovement() )
+      if ( ChangeVehicleHeight::getMoveCost ( veh, veh->getPosition(), getdirection( veh->xpos, veh->ypos, pi->x, pi->y), pi->getBitmappedHeight() > veh->height ? 1 : -1 ).first > veh->getMovement() )
          return 0;
 
       ChangeVehicleHeight* cvh;
-      if ( pi->z > veh->height )
+      if ( pi->getBitmappedHeight() > veh->height )
          cvh = new IncreaseVehicleHeight ( mapDisplay );
       else
          cvh = new DecreaseVehicleHeight ( mapDisplay );
 
       auto_ptr<ChangeVehicleHeight> ap ( cvh );
-      cvh->execute ( veh, -1, -1, 0, pi->z, 0 );
+      cvh->execute ( veh, -1, -1, 0, pi->getBitmappedHeight(), 0 );
       if ( cvh->getStatus() != 1000 ) {
           if ( cvh->getStatus() < 0 ) {
              displaymessage ( "AI :: moveUnit (path) \n error in changeHeight step 0 with unit %d", 1, veh->networkid );

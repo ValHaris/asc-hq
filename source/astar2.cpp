@@ -434,7 +434,7 @@ AStar3D :: ~AStar3D ( )
 
 int AStar3D::dist( const MapCoordinate3D& a, const MapCoordinate3D& b )
 {
-    return beeline ( a, b ) + abs ( log2(b.z) - log2(a.z) ) * minmalq;
+    return beeline ( a, b ) + abs ( b.getNumericalHeight() - a.getNumericalHeight() ) * minmalq;
 }
 
 int AStar3D::dist ( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b )
@@ -452,17 +452,17 @@ int AStar3D::getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& 
     // speeds at different levels of height, we must not optimize for distance, but for
     // travel time.
 
-    int fa = fieldaccessible ( actmap->getField ( dest ), vehicle, dest.z );
+    int fa = fieldaccessible ( actmap->getField ( dest ), vehicle, dest.getBitmappedHeight() );
 
     if ( !fa )
        return MAXIMUM_PATH_LENGTH;
 
     int movecost, fuelcost;
-    calcmovemalus ( start.x, start.y, dest.x, dest.y, vehicle, -1, fuelcost, movecost, dest.z );
-    if ( !vehicleSpeedFactor[log2(dest.z)] )
+    calcmovemalus ( start.x, start.y, dest.x, dest.y, vehicle, -1, fuelcost, movecost, dest.getBitmappedHeight() );
+    if ( !vehicleSpeedFactor[dest.getNumericalHeight()] )
        return MAXIMUM_PATH_LENGTH;
     else
-       return int(movecost / vehicleSpeedFactor[log2(dest.z)]);
+       return int(movecost / vehicleSpeedFactor[dest.getNumericalHeight()]);
 }
 
 
@@ -593,12 +593,12 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
             MapCoordinate3D hn = N.h;
             getnextfield ( hn.x, hn.y, d );
             // If it's off the end of the map, then don't keep scanning
-            if( hn.x < 0 || hn.y < 0 || hn.x >= actmap->xsize || hn.y >= actmap->ysize || !fieldaccessible ( actmap->getField ( hn ), veh, hn.z ))
+            if( hn.x < 0 || hn.y < 0 || hn.x >= actmap->xsize || hn.y >= actmap->ysize || !fieldaccessible ( actmap->getField ( hn ), veh, hn.getBitmappedHeight() ))
                 continue;
 
             // cursor.gotoxy ( hn.m, hn.n );
             int k = getMoveCost( N.h, hn, veh );
-            if ( k > veh->typ->movement[log2(hn.z)]  )
+            if ( k > veh->typ->movement[hn.getNumericalHeight()]  )
                k = MAXIMUM_PATH_LENGTH;
             Node N2;
             N2.h = hn;
@@ -616,7 +616,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
         // and now change the units' height. That's only possible on fields where the unit can stop it's movement
 
-        if ( fieldaccessible ( actmap->getField(N.h), veh, N.h.z ) == 2 ) {
+        if ( fieldaccessible ( actmap->getField(N.h), veh, N.h.getBitmappedHeight() ) == 2 ) {
            for ( int heightDelta = -1; heightDelta <= 1; heightDelta += 2 ) {
               for ( int dir = 0; (dir < 6 && veh->typ->steigung) || (dir < 1 && !veh->typ->steigung); dir++ ) {
                  pair<int, MapCoordinate3D> mcres = ChangeVehicleHeight::getMoveCost ( veh, N.h, dir, heightDelta );
@@ -655,9 +655,9 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                   getnextfield ( h.x, h.y, dir );
 
                if ( heightDelta > 0 )
-                  h.z >>= 1;
+                  h = MapCoordinate3D ( h.x, h.y, h.getBitmappedHeight() >> 1 ) ;
                else
-                  h.z <<= 1;
+                  h = MapCoordinate3D ( h.x, h.y, h.getBitmappedHeight() << 1 );
             } else
                getnextfield ( h.x, h.y, dir );
         }
@@ -676,10 +676,10 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
               getnextfield ( h.x, h.y, tempPath[i] );
 
            if ( heightHops[i] > 0 )
-              h.z <<= 1;
+              h = MapCoordinate3D ( h.x, h.y, h.getBitmappedHeight() << 1 );
            else
               if ( heightHops[i] < 0 )
-                 h.z >>= 1;
+                 h = MapCoordinate3D ( h.x, h.y, h.getBitmappedHeight() >> 1 );
 
            path.push_back ( h );
         }
@@ -712,9 +712,9 @@ void AStar3D::findAllAccessibleFields ( int maxDist )
    Path dummy;
    findPath ( dummy, MapCoordinate3D(actmap->xsize, actmap->ysize, veh->height) );  //this field does not exist...
    for ( Container::iterator i = visited.begin(); i != visited.end(); i++ ) {
-      getFieldAccess( i->h ) |= i->h.z;
+      getFieldAccess( i->h ) |= i->h.getBitmappedHeight();
       if ( markTemps )
-         actmap->getField ( i->h )->a.temp  |= i->h.z;
+         actmap->getField ( i->h )->a.temp  |= i->h.getBitmappedHeight();
    }
    if ( markTemps )
       tempsMarked = actmap;

@@ -157,32 +157,6 @@ extern const char*  cvehiclefunctions[];
         //! If the unit cannot attack in the same turn after it has moved, it has to wait
         bool         wait;
 
-        /** @name Unit cargo
-            properties for specifying which units can be carried by this vehicletype and which not
-        */
-        //@{
-        //! the maximum weight that the unit can carry
-        int          loadcapacity;
-
-        //! the maximum weight of a single unit that can be carried
-        int          maxunitweight;
-
-        //! A unit that is going to be loaded must be on one of these levels of height (bitmapped)
-        int          loadcapability;
-
-        /** Additional levels of height that a unit must be able to enter to be allowed as cargo (bitmapped).
-            If 0 or 255 there are no restrictions
-         */
-        int          loadcapabilityreq;
-
-        //! A unit that is able to enter one of these levels of height is not allowed to enter (bitmapped)
-        int          loadcapabilitynot;
-
-        //! all unit categories whose bit is not set here may not enter (bitmapped) \see cmovemalitypes
-        int          vehicleCategoriesLoadable;
-        //@}
-
-
         //! the identification number of the unit
         int          id;
 
@@ -196,12 +170,12 @@ extern const char*  cvehiclefunctions[];
         int          functions;
 
         //! the distance a unit can travel each round. One value for each of the 8 levels of height
-        vector<int>  movement;      
+        vector<int>  movement;
 
         //! The category of the unit. Original used only to distinguish only between different movement costs for a field, this categorization is now used for many more things. \see cmovemalitypes
-        int          movemalustyp;     
+        int          movemalustyp;
 
-        //@{ 
+        //@{
         //! the system of classes for a unit is not used any more
         char         classnum;         /* Anzahl der Klassen, max 8, min 0 ;  Der EINZIGE Unterschied zwischen 0 und 1 ist der NAME ! */
         ASCString    classnames[8];    /* Name der einzelnen Klassen */
@@ -223,10 +197,10 @@ extern const char*  cvehiclefunctions[];
         int          digrange;
 
         //! unused
-        int          initiative;      
+        int          initiative;
 
         //! the weight of the unit, without fuel or other cargo
-        int           weight;           
+        int           weight;
 
         //! the terrain this unit can move to
         TerrainAccess terrainaccess;
@@ -234,7 +208,7 @@ extern const char*  cvehiclefunctions[];
         //! the image index from the GraphicSet , or -1 if no graphics from graphic sets are used.
         int           bipicture;
 
-        //! the gui icon for selecting this unit by construction vehicles 
+        //! the gui icon for selecting this unit by construction vehicles
         void*        buildicon;
 
         //! the ids of buildings this unit can construct
@@ -276,9 +250,6 @@ extern const char*  cvehiclefunctions[];
 
         //! returns the maximum weight of this unit without fuel and material
         int maxsize   ( void ) const ;
-
-        //! checks whether the given vehicletype can principially be loaded. 
-        int vehicleloadable ( pvehicletype fzt ) const;
 
         //! this label can select a special sound to be played when moving
         ASCString    movementSoundLabel;

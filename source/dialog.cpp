@@ -2,9 +2,13 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.124 2003-02-12 14:33:02 mbickel Exp $
+//     $Id: dialog.cpp,v 1.125 2003-02-12 20:11:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.124  2003/02/12 14:33:02  mbickel
+//      Fixed: color problems in alliance dialog
+//      Fixed: Umlauts not working
+//
 //     Revision 1.123  2003/02/11 17:35:51  mbickel
 //      Added: reset mapparameters function
 //      AI now working better with guarding units
@@ -1231,6 +1235,7 @@ void  tvehicleinfo::showgeneralinfovariables( void )
    }
 
 
+   /* ####TRANS
    for (ii = 7; ii >= 0; ii--) {
       if (aktvehicle->loadcapability & (1 << ii) )
          q = icons.height[ii];
@@ -1240,6 +1245,7 @@ void  tvehicleinfo::showgeneralinfovariables( void )
       putimage(x1 + 155 + ii * 37,y1 + starty + 225,q);
 
    }
+   */
 
 
    activefontsettings.length = 150;
@@ -1263,7 +1269,7 @@ void  tvehicleinfo::showgeneralinfovariables( void )
    showtext2( strrr(aktvehicle->tank.material), column1x + 100, productioncosty + 90);
    showtext2( strrr(aktvehicle->tank.energy), column1x + 100, productioncosty + 110);
    showtext2( strrr(aktvehicle->tank.fuel), column1x + 100, productioncosty + 130);
-   showtext2( strrr(aktvehicle->loadcapacity), column1x + 100, productioncosty + 150);
+   // ####TRANS showtext2( strrr(aktvehicle->loadcapacity), column1x + 100, productioncosty + 150);
    showtext2( strrr(aktvehicle->fuelConsumption), column1x + 100,  productioncosty + 260 );
    showtext2( strrr(aktvehicle->steigung), column1x + 100, productioncosty + 280 );
 

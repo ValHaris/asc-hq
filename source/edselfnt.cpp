@@ -2,9 +2,12 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.41 2002-11-01 20:44:53 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.42 2003-02-12 20:11:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2002/11/01 20:44:53  mbickel
+//      Added function to specify which units can be build by other units
+//
 //     Revision 1.40  2002/10/09 16:58:46  mbickel
 //      Fixed to GrafikSet loading
 //      New item filter for mapeditor
@@ -1552,14 +1555,14 @@ bool SelectVehicleTypeForTransportCargo :: isavailable ( pvehicletype item )
     if ( transport->freeweight() < item->maxsize() )
        return false;
     else
-       return transport->typ->vehicleloadable ( item ) && SelectVehicleType::isavailable ( item ); 
+       return transport->typ->vehicleFit ( item ) && SelectVehicleType::isavailable ( item );
 }
 
 class SelectVehicleTypeForBuildingCargo : public SelectCargoVehicleType {
          pbuilding building;
       public:
          SelectVehicleTypeForBuildingCargo ( pbuilding _building ) { building = _building; };
-         bool isavailable ( pvehicletype item ) {    return building->typ->vehicleloadable ( item ) && SelectVehicleType::isavailable ( item ); };
+         bool isavailable ( pvehicletype item ) {    return building->typ->vehicleFit ( item ) && SelectVehicleType::isavailable ( item ); };
      };
 
 class SelectVehicleTypeForBuildingProduction : public SelectCargoVehicleType {
@@ -1570,7 +1573,7 @@ class SelectVehicleTypeForBuildingProduction : public SelectCargoVehicleType {
             for ( int i = 0; i < 32; i++ )
                if ( building->production[i] == item )
                   return 0;
-            return building->typ->vehicleloadable ( item ) && SelectVehicleType::isavailable ( item ); 
+            return building->typ->vehicleFit ( item ) && SelectVehicleType::isavailable ( item );
          };
      };
 
@@ -1589,7 +1592,7 @@ void selunitcargo( pvehicle transport )
       if ( transport )
          unit->setnewposition ( transport->getPosition() );
       // generatevehicle_ka ( newcargo, transport->color / 8, unit );
-    
+
       int match = 0;
       for ( int i = 0; i < 8; i++ )
          if ( unit->typ->height & ( 1 << i )) {
@@ -1597,7 +1600,7 @@ void selunitcargo( pvehicle transport )
             unit->tank.material = unit->typ->tank.material;
             unit->tank.fuel = unit->typ->tank.fuel;
 
-            if ( transport->vehicleloadable ( unit )) {
+            if ( transport->vehicleFit ( unit )) {
                int p = 0;
                while ( transport->loading[p] && p < 32)
                   p++;
@@ -1609,7 +1612,7 @@ void selunitcargo( pvehicle transport )
             } else {
                unit->tank.material = 0;
                unit->tank.fuel = 0;
-               if ( transport->vehicleloadable ( unit )) {
+               if ( transport->vehicleFit ( unit )) {
                   int p = 0;
                   while ( transport->loading[p] && p < 32 )
                      p++;
@@ -1661,7 +1664,7 @@ void selbuildingcargo( pbuilding bld )
          for ( int i = 0; i < 8; i++ )
             if ( unit->typ->height & ( 1 << i )) {
                unit->height = 1 << i;
-               if ( bld->vehicleloadable ( unit )) {
+               if ( bld->vehicleFit ( unit )) {
                   poss |= 1 << i;
                   match = 1;
                }
@@ -1670,7 +1673,6 @@ void selbuildingcargo( pbuilding bld )
           for ( int h2 = 0; h2<8; h2++ )
             if ( unit->typ->height & ( 1 << h2 ))
                if ( poss & ( 1 << h2 ))
-                  if ( bld->typ->loadcapability & ( 1 << h2))
                      unit->height = 1 << h2;
 
           for ( int h1 = 0; h1<8; h1++ )

@@ -114,7 +114,7 @@ void         SearchReconquerBuilding :: testfield(const MapCoordinate& mc)
             }
             else
                if (mode >= 2)
-                  if (eht->typ->loadcapacity > 0)
+                  if (eht->typ->maxLoadableUnits > 0)
                      for ( int w = 0; w <= 31; w++)
                         if ( eht->loading[w] )
                            if ( canUnitCapture ( eht->loading[w] ))

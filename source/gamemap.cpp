@@ -1879,7 +1879,7 @@ void AiParameter::write ( tnstream& stream )
    stream.writeInt ( damageTime.abstime );
    stream.writeInt ( dest.x );
    stream.writeInt ( dest.y );
-   stream.writeInt ( dest.z );
+   stream.writeInt ( dest.getNumericalHeight() );
    stream.writeInt ( dest_nwid );
    stream.writeInt ( data );
    AiValue::write( stream );
@@ -1896,9 +1896,10 @@ void AiParameter::read ( tnstream& stream )
    if ( version >= 3000 && version <= 3001 ) {
       lastDamage = stream.readInt();
       damageTime.abstime = stream.readInt();
-      dest.x = stream.readInt();
-      dest.y = stream.readInt();
-      dest.z = stream.readInt();
+      int x = stream.readInt();
+      int y = stream.readInt();
+      int z = stream.readInt();
+      dest.setnum ( x, y, z );
       dest_nwid = stream.readInt();
       data = stream.readInt();
       AiValue::read( stream );
@@ -1930,9 +1931,7 @@ AiParameter :: AiParameter ( pvehicle _unit ) : AiValue ( log2( _unit->height ))
 
 void AiParameter :: resetTask ( )
 {
-   dest.x = -1;
-   dest.y = -1;
-   dest.z = -1;
+   dest.setnum ( -1, -1, -1 );
    dest_nwid = -1;
    task = tsk_nothing;
 }

@@ -37,6 +37,8 @@ class  Building : public ContainerBase {
     char         _completion;
 
     friend class tprocessminingfields;
+  protected:
+    bool isBuilding() { return true; };
 
   public:
     class Work {
@@ -193,9 +195,6 @@ class  Building : public ContainerBase {
 
     Resources getResourcePlus ( );
 
-    //! checks if the given unit can enter the building. If uheight != -1 the function assumes the unit is on this level of height regardless of its actual height
-    int vehicleloadable ( const pvehicle unit, int uheight = -1 ) const;
-    
     //! returns the picture of the building. It may depend on the current weather of the fields the building is standing on 
     void* getpicture ( const BuildingType::LocalCoordinate& localCoordinate );
     

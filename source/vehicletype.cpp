@@ -75,11 +75,6 @@ Vehicletype :: Vehicletype ( void )
    jamming = 0;
    view = 0;
    wait = 0;
-   loadcapacity = 0;
-   maxunitweight = 0;
-   loadcapability = 0;
-   loadcapabilityreq = 0;
-   loadcapabilitynot = 0;
    id = 0;
    fuelConsumption = 0;
    functions = 0;
@@ -117,23 +112,6 @@ Vehicletype :: Vehicletype ( void )
    for ( i = 0; i < 8; i++ )
       aiparam[i] = NULL;
 
-   vehicleCategoriesLoadable = -1;
-}
-
-int Vehicletype :: vehicleloadable ( pvehicletype fzt ) const
-{
-   if ( vehicleCategoriesLoadable & ( 1 << fzt->movemalustyp))
-      if (( ( (loadcapabilityreq & fzt->height) || !loadcapabilityreq ) &&
-            !(loadcapabilitynot & fzt->height) &&
-            (loadcapability & fzt->height))
-           || (fzt->functions & cf_trooper))
-         if ( maxunitweight >= fzt->weight ) {
-            if ( loadcapability & (   chtiefgetaucht | chgetaucht | chschwimmend | chfahrend | chsatellit ))
-               return 1;
-            else
-               return fzt->steigung <= 2;
-         }
-   return 0;
 }
 
 
@@ -151,7 +129,7 @@ int Vehicletype::maxsize ( void ) const
 extern void* generate_vehicle_gui_build_icon ( pvehicletype tnk );
 #endif
 
-const int vehicle_version = 8;
+const int vehicle_version = 9;
 
 
 
@@ -173,11 +151,10 @@ void Vehicletype :: read ( tnstream& stream )
 {
    int version = stream.readInt();
    if ( version > vehicle_version || version < 1) {
-      string s = "invalid version for reading vehicle: ";
+      ASCString s = "invalid version for reading vehicle: ";
       s += strrr ( version );
       throw ASCmsgException ( s );
    }
-
 
    int   j;
 
@@ -225,11 +202,11 @@ void Vehicletype :: read ( tnstream& stream )
    if ( version <= 2 )
       stream.readChar (); // dummy
 
-   loadcapacity = stream.readWord();
-   maxunitweight = stream.readWord();
-   loadcapability = stream.readChar();
-   loadcapabilityreq = stream.readChar();
-   loadcapabilitynot = stream.readChar();
+   stream.readWord(); // dummy
+   stream.readWord(); // dummy
+   stream.readChar(); // dummy
+   stream.readChar(); // dummy
+   stream.readChar(); // dummy
    id = stream.readWord();
    tank.fuel = stream.readInt();
    fuelConsumption = stream.readWord();
@@ -317,9 +294,7 @@ void Vehicletype :: read ( tnstream& stream )
       stream.readInt( ); // dummy
 
    if ( version >= 4 )
-      vehicleCategoriesLoadable = stream.readInt();
-   else
-      vehicleCategoriesLoadable = -1;
+      stream.readInt(); // dummy
 
    if (___load_name)
       name = stream.readString( true );
@@ -471,6 +446,8 @@ void Vehicletype :: read ( tnstream& stream )
    filename = stream.getDeviceName();
    location = stream.getLocation();
 
+   if ( version >= 9 )
+     ContainerBaseType::read ( stream );
 }
 
 void Vehicletype::setupPictures()
@@ -478,7 +455,7 @@ void Vehicletype::setupPictures()
    #ifndef converter
       if ( !picture[0] )
          fatalError ( "The vehicletype " + getName() + " (ID: " + strrr( id ) + ") has an invalid picture" );
-         
+
       if ( bipicture <= 0 ) {
          TrueColorImage* zimg = zoomimage ( picture[0], fieldxsize, fieldysize, pal, 0 );
          void* pic = convertimage ( zimg, pal ) ;
@@ -533,11 +510,11 @@ void Vehicletype:: write ( tnstream& stream ) const
    stream.writeChar(jamming);
    stream.writeWord(view);
    stream.writeChar(wait);
-   stream.writeWord(loadcapacity);
-   stream.writeWord(maxunitweight);
-   stream.writeChar(loadcapability);
-   stream.writeChar(loadcapabilityreq);
-   stream.writeChar(loadcapabilitynot);
+   stream.writeWord(0);
+   stream.writeWord(0);
+   stream.writeChar(0);
+   stream.writeChar(0);
+   stream.writeChar(0);
    stream.writeWord(id );
    stream.writeInt(tank.fuel );
    stream.writeWord(fuelConsumption );
@@ -586,7 +563,7 @@ void Vehicletype:: write ( tnstream& stream ) const
    stream.writeInt( autorepairrate );
    stream.writeInt( wreckageObject );
 
-   stream.writeInt( vehicleCategoriesLoadable );
+   stream.writeInt( 0 );
 
    if ( !name.empty() )
       stream.writeString( name );
@@ -660,6 +637,8 @@ void Vehicletype:: write ( tnstream& stream ) const
       stream.writeInt( buildingsBuildable[i].from );
       stream.writeInt( buildingsBuildable[i].to );
    }                            
+
+   ContainerBaseType::write ( stream );
 
 }
 
@@ -826,16 +805,6 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    pc.addInteger("HeightChangeDist", steigung );
    pc.addInteger("Jamming", jamming );
    pc.addBool ( "WaitFortack", wait );
-   pc.openBracket("Transportation");
-    pc.addInteger ( "Capacity", loadcapacity );
-    pc.addInteger ( "MaxSingleWeight", maxunitweight );
-    pc.addTagInteger( "LoadingHeight", loadcapability, choehenstufennum, heightTags );
-    if ( loadcapabilityreq == 255 )
-       loadcapabilityreq = 0;
-    pc.addTagInteger( "Cargo_ReachableHeightReq", loadcapabilityreq, choehenstufennum, heightTags );
-    pc.addTagInteger( "Cargo_ReachableHeightNot", loadcapabilitynot, choehenstufennum, heightTags );
-    pc.addTagInteger ( "CategoriesNOT", vehicleCategoriesLoadable, cmovemalitypenum, unitCategoryTags, true );
-   pc.closeBracket();
    pc.openBracket( "Tank" );
      tank.runTextIO ( pc );
    pc.closeBracket();
@@ -890,7 +859,9 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    recommendedAIJob = AiParameter::Job(job);
 
    pc.addString("MovementSound", movementSoundLabel, "" );
-   pc.addString("KillSound", killSoundLabel, "" );         
+   pc.addString("KillSound", killSoundLabel, "" );
+
+   ContainerBaseType::runTextIO ( pc );
 
 
    setupPictures();
@@ -943,7 +914,6 @@ void SingleWeapon::runTextIO ( PropertyContainer& pc )
             pc.addInteger( unitCategoryTags[i], targetingAccuracy[i] );
       pc.closeBracket();
    }
-
 }
 
 

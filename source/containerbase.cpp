@@ -24,6 +24,7 @@
 #include "containerbase.h"
 #include "vehicletype.h"
 #include "vehicle.h"
+#include "spfst.h"
 
 ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, pmap map, int player ) : gamemap ( map ), baseType (bt)
 {
@@ -135,6 +136,58 @@ void ContainerBase :: removeEventHook ( const EventHook* eventHook )
       eventHooks.erase ( i );
 }
 
+int ContainerBase::cargo ( void ) const
+{
+   int w = 0;
+   for (int c = 0; c <= 31; c++)
+      if ( loading[c] )
+         w += loading[c]->weight();
+   return w;
+}
+
+
+bool ContainerBase :: vehicleFit ( const pvehicle vehicle ) const
+{
+   if ( baseType->vehicleFit ( vehicle->typ )) // checks size and type
+      if ( vehiclesLoaded() < min ( 32, baseType->maxLoadableUnits ) || (vehicle->color != color ))
+         if ( cargo() + vehicle->weight() < baseType->maxLoadableWeight )
+            return true;
+
+   return false;
+}
+
+
+bool  ContainerBase :: vehicleLoadable ( const pvehicle vehicle, int uheight ) const
+{
+   if ( uheight == -1 )
+      uheight = vehicle->height;
+
+   if ( vehicleFit ( vehicle ))
+      for ( ContainerBaseType::EntranceSystems::const_iterator i = baseType->entranceSystems.begin(); i != baseType->entranceSystems.end(); i++ )
+         if ( (i->height_abs & uheight) || (i->height_abs == 0 ))
+            if ( i->mode & ContainerBaseType::TransportationIO::In )
+               if ( i->height_rel == -100 || i->height_rel == getheightdelta ( log2(uheight), getPosition().getNumericalHeight() ) )
+                  if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))
+                     if ( i->vehicleCategoriesLoadable & (1<<vehicle->typ->movemalustyp)) {
+                        if ( isBuilding() ) {
+                           if ( getOwner() == vehicle->getOwner())
+                              return true;
+                           if ( !vehicle->attacked ) {
+                              if ( getOwner() == 8 )
+                                 return true;
+                              if ( getdiplomaticstatus2(color, vehicle->color ) == cawar  )
+                                 if (damage >= mingebaeudeeroberungsbeschaedigung  || (vehicle->functions & cf_conquer) )
+                                    return true;
+                           }
+                        } else {
+                           if ( getOwner() == vehicle->getOwner() )
+                              return true;
+                        }
+                     }
+   return false;
+}
+
+
 
 ContainerBase :: ~ContainerBase ( )
 {
@@ -169,4 +222,6 @@ void TemporaryContainerStorage :: receiveEvent ( Events ev, int data )
    if ( ev == removal )
       fatalError ( " TemporaryContainerStorage::restore - unit deleted");
 }
+
+
 

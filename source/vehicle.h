@@ -53,6 +53,9 @@
 
     Vehicle ( const Vehicletype* t, pmap actmap, int player, int networkID  );
 
+   protected:
+     bool isBuilding() { return false; };
+
    public:
 
     Vehicle ( const Vehicletype* t, pmap actmap, int player );
@@ -153,9 +156,6 @@
     //! weight of unit including cargo, fuel and material
     int weight( void ) const;
 
-    //! weight of all loaded units
-    int cargo ( void ) const;
-
     //! returns the units name or, if it does not exist, the unit type's name or description
     const ASCString&    getName() const;
 
@@ -198,11 +198,6 @@
 
     //! displays the unit at position x/y on the screen
     void putimage ( int x, int y );
-
-    /** can the vehicle be loaded. If uheight is passed, it is assumed that vehicle is at
-        the height 'uheight' and not the actual level of height
-    */
-    bool vehicleloadable ( pvehicle vehicle, int uheight = -1 ) const;
 
     //! sets the unit (and its cargo) the a new position (the unit will not be chained to a field)
     void setnewposition ( int x, int y );

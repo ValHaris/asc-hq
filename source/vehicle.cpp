@@ -307,15 +307,6 @@ void Vehicle :: setup_classparams_after_generation ( void )
 }
 
 
-int Vehicle::cargo ( void ) const
-{
-   int w = 0;
-   if ( typ->loadcapacity > 0)
-      for (int c = 0; c <= 31; c++)
-         if ( loading[c] )
-            w += loading[c]->weight();
-   return w;
-}
 
 int Vehicle::weight( void ) const
 {
@@ -640,7 +631,7 @@ void Vehicle :: setnewposition ( int x , int y )
 {
   xpos = x;
   ypos = y;
-  if ( typ->loadcapacity > 0)
+  if ( typ->maxLoadableUnits > 0)
      for ( int i = 0; i <= 31; i++)
         if ( loading[i] )
            loading[i]->setnewposition ( x , y );
@@ -808,10 +799,10 @@ int Vehicle :: searchstackforfreeweight ( pvehicle eht, int what )
       if ( what == 1 ) // material or fuel
          return maxint;
       else
-         return typ->loadcapacity - cargo();
+         return typ->maxLoadableWeight - cargo();
         // return typ->maxweight() + typ->loadcapacity - weight();
    } else {
-      int w1 = typ->maxweight() + typ->loadcapacity - weight();
+      int w1 = typ->maxweight() + typ->maxLoadableWeight - weight();
       int w2 = -1;
       for ( int i = 0; i < 32; i++ )
          if ( loading[i] ) {
@@ -903,73 +894,6 @@ int Vehicle::getmaxmaterialforweight ( void )
 }
 */
 
-
-bool  Vehicle :: vehicleloadable ( pvehicle vehicle, int uheight ) const
-{
-   #ifdef sgmain
-   if ( gamemap->getField ( xpos, ypos )->vehicle == this ) // not standing in some other transport / building
-      if ( height & (chtieffliegend | chfliegend | chhochfliegend ))
-         return 0;
-   #endif
-
-   if ( uheight == -1 )
-      uheight = vehicle->height;
-
-
-   if ( vehicle->functions & cf_trooper )
-      if ( uheight & (chschwimmend | chfahrend ))
-         uheight |= (chschwimmend | chfahrend );  //these heights are effectively the same
-
-
-   if ( (getheightdelta ( log2(uheight), log2(vehicle->height))
-        || getheightdelta ( log2(uheight), log2(height))) && (uheight != 255) )
-      return 0;
-
-   if (( ( typ->loadcapability    & vehicle->height)   &&
-         (( typ->loadcapabilityreq & vehicle->typ->height) || !typ->loadcapabilityreq ) &&
-         ((typ->loadcapabilitynot & vehicle->typ->height) == 0))
-        || (vehicle->functions & cf_trooper )) {
-
-      if ( typ->maxunitweight >= vehicle->weight() )
-         if ( (cargo() + vehicle->weight() <= typ->loadcapacity) &&
-              ( vehiclesLoaded() + 1 < maxloadableunits)) {
-
-                 if ( gamemap->getField ( xpos, ypos )->vehicle != this )
-                    return 2;
-               #ifdef karteneditor
-                  return 2;
-               #else
-                 if ( uheight != vehicle->height &&
-                      height == uheight)
-                      return 2;
-                 else
-                    if (vehicle->height == chtieffliegend)
-                       if (vehicle->typ->steigung <= flugzeugtraegerrunwayverkuerzung && vehicle->attacked == false )
-                          return 2;
-                       else
-                          return 0;
-                    else
-                       if ( getheightdelta ( log2(uheight), log2(vehicle->height)) == 0 )
-                          return 2;
-                       else
-                          return 0;
-                       /*
-                       if (vehicle->height == chfahrend || vehicle->height == chschwimmend) {
-                           if ((height >= chschwimmend) &&
-                               (height <= chfahrend))
-                               return 2;
-                           else
-                               return 0;
-                       } else
-                          if ( vehicle->height == height )
-                             return 2;
-                             */
-               #endif
-              }
-
-   }
-   return 0;
-}
 
 void Vehicle :: addview ( void )
 {
@@ -1514,11 +1438,7 @@ void   Vehicle::readData ( tnstream& stream )
 
 MapCoordinate3D Vehicle :: getPosition ( )
 {
-   MapCoordinate3D mc;
-   mc.x = xpos;
-   mc.y = ypos;
-   mc.z = height;
-   return mc;
+   return MapCoordinate3D ( xpos, ypos, height );
 }
 
 const ASCString&  Vehicle::getName() const

@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.117 2003-01-12 19:37:19 mbickel Exp $
+//     $Id: typen.h,v 1.118 2003-02-12 20:11:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.117  2003/01/12 19:37:19  mbickel
+//      Rewrote resource production
+//
 //     Revision 1.116  2002/12/23 12:50:25  mbickel
 //      Fixed AI crash
 //      Minimap now working with partially defined graphic sets
@@ -465,15 +468,16 @@ class MapCoordinate {
 
 //! Coordinate on the map including height
 class MapCoordinate3D : public MapCoordinate {
-         public:
             int z;
+         public:
             int getBitmappedHeight ( ) { return 1<<z; };
             int getNumericalHeight ( ) { return z; };
             // MapCoordinate3D& operator= ( const MapCoordinate& mc ) { x = mc.x; y = mc.y; z = -1 );
             MapCoordinate3D ( ) : MapCoordinate(), z(-1) {};
-            MapCoordinate3D ( int _x, int _y, int _z) : MapCoordinate ( _x, _y ), z ( _z ) {};
+            MapCoordinate3D ( int _x, int _y, int bitmappedz) : MapCoordinate ( _x, _y ), z ( log2(bitmappedz) ) {};
             MapCoordinate3D ( const MapCoordinate& mc ) : MapCoordinate ( mc ), z ( -1 ) {};
-            MapCoordinate3D ( const MapCoordinate& mc, int height ) : MapCoordinate ( mc ), z ( height ) {};
+            MapCoordinate3D ( const MapCoordinate& mc, int bitmappedHeight ) : MapCoordinate ( mc ), z ( log2(bitmappedHeight) ) {};
+            void setnum ( int _x, int _y, int numericalz ) { x = _x; y = _y; z = numericalz; };
             bool operator== ( const MapCoordinate3D& mc ) const { return y == mc.y && x == mc.x && (z == mc.z || z == -1 || mc.z == -1);};
             void write( tnstream& stream ) const { stream.writeInt ( 3500 ); stream.writeInt ( z ); MapCoordinate::write( stream ); };
             void read( tnstream& stream ) {

@@ -2,9 +2,12 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.93 2003-02-07 09:53:03 mbickel Exp $
+//     $Id: building.cpp,v 1.94 2003-02-12 20:11:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.93  2003/02/07 09:53:03  mbickel
+//      Fixed: building could not repair themself
+//
 //     Revision 1.92  2003/01/21 18:46:15  mbickel
 //      Fixed: ships could not enter spaceship
 //      Fixed: efficiency of mining stations not correctly working
@@ -1220,7 +1223,7 @@ void  ccontainercontrols :: crefill :: emptyeverything ( pvehicle eht )
 }
 
 
-int ccontainercontrols :: cmove_unit_in_container :: moveupavail ( pvehicle eht )
+bool ccontainercontrols :: cmove_unit_in_container :: moveupavail ( pvehicle eht )
 {
    if ( eht ) {
       if ( recursiondepth > 0 ) {
@@ -1228,20 +1231,20 @@ int ccontainercontrols :: cmove_unit_in_container :: moveupavail ( pvehicle eht 
             return 1;
 
          if ( buildingparamstack[recursiondepth-1].bld )
-            return buildingparamstack[recursiondepth-1].bld->vehicleloadable ( eht );
+            return buildingparamstack[recursiondepth-1].bld->vehicleFit ( eht );
          else
             if ( buildingparamstack[recursiondepth-1].eht )
-               return buildingparamstack[recursiondepth-1].eht->vehicleloadable ( eht );
+               return buildingparamstack[recursiondepth-1].eht->vehicleFit ( eht );
       }
    }
    return 0;
 }
 
-int ccontainercontrols :: cmove_unit_in_container :: movedownavail ( pvehicle eht, pvehicle into )
+bool ccontainercontrols :: cmove_unit_in_container :: movedownavail ( pvehicle eht, pvehicle into )
 {
    if ( eht )
       if ( into )
-         if ( into->vehicleloadable ( eht , 255 ))
+         if ( into->vehicleFit ( eht ))
             return 1;
    return 0;
 }
@@ -1340,6 +1343,7 @@ VehicleMovement*   ccontainercontrols :: movement (  pvehicle eht )
          heightToTest[heightToTestNum++] = getHeight();
    }
 
+   /*  ####TRANS
    if ( getLoadCapability() & getHeight() & eht->typ->height )
       heightToTest[heightToTestNum++] = getHeight();
 
@@ -1349,7 +1353,7 @@ VehicleMovement*   ccontainercontrols :: movement (  pvehicle eht )
          heightToTest[heightToTestNum++] = (1 << h);
 
 
-
+  */
 
    for ( int i = 0; i < heightToTestNum; i++ ) {
 
@@ -1540,15 +1544,10 @@ int    cbuildingcontrols :: getHeight ( void )
    return building->typ->buildingheight;
 }
 
-int    cbuildingcontrols :: getLoadCapability ( void )
-{
-   return building->typ->loadcapability;
-}
-
-
 
 int   cbuildingcontrols :: moveavail ( pvehicle eht, int height )
 {
+/* ####TRANS
    if ( height == -1 )
       height = eht->height;
 
@@ -1566,7 +1565,7 @@ int   cbuildingcontrols :: moveavail ( pvehicle eht, int height )
    else
       if ( eht->functions & cf_trooper )
          return 2;
-      else
+      else  */
          return 0;
 }
 
@@ -1772,6 +1771,7 @@ pvehicle cbuildingcontrols :: cproduceunit :: produce (pvehicletype fzt, bool fo
    pvehicle    eht;
    generatevehicle_cl ( fzt, cc->getactplayer() , eht, cc->getxpos(), cc->getypos() );
 
+   /* ####TRANS
    for ( int h2 = 0; h2<8; h2++ )
       if ( eht->typ->height & ( 1 << h2 ))
          if ( cc_b->building->typ->loadcapability & ( 1 << h2))
@@ -1783,6 +1783,8 @@ pvehicle cbuildingcontrols :: cproduceunit :: produce (pvehicletype fzt, bool fo
             eht->height = 1 << h1;
 
    eht->setMovement ( eht->typ->movement[log2( eht->height )]);
+
+   */
 
    cc->getenergy   ( fzt->productionCost.energy,   1 );
    cc->getmaterial ( fzt->productionCost.material, 1 );
@@ -1909,11 +1911,6 @@ void  ctransportcontrols :: init (pvehicle eht)
 int    ctransportcontrols :: getHeight ( void )
 {
    return vehicle->height;
-}
-
-int    ctransportcontrols :: getLoadCapability ( void )
-{
-   return vehicle->typ->loadcapability;
 }
 
 
@@ -2089,6 +2086,7 @@ int   ctransportcontrols :: getspecfunc ( tcontainermode mode )
 
 int   ctransportcontrols :: moveavail ( pvehicle eht, int height )
 {
+/* ####TRANS
    if ( height == -1 )
       height = eht->height;
 
@@ -2151,7 +2149,7 @@ int   ctransportcontrols :: moveavail ( pvehicle eht, int height )
                return 2;
             else
                return 0;
-
+*/
    return 0;
 }
 
@@ -3493,7 +3491,7 @@ int   ccontainer :: container_icon_c :: available    ( void )
 
    pvehicle eht = main->getmarkedunit();
    if ( eht && eht->color == actmap->actplayer * 8)
-      if ( eht->typ->loadcapacity > 0 )
+      if ( eht->typ->maxLoadableUnits > 0 )
          if ( recursiondepth +1 < maxrecursiondepth )
             return 1;
 
@@ -4046,7 +4044,7 @@ void  ccontainer_b :: setpictures ( void )
          for (i = 0; i < 32; i++ )
             if ( building->production[i]  &&
                   actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( building->production[i] )  &&
-                  building->typ->vehicleloadable( building->production[i] ) ) {
+                  building->typ->vehicleFit( building->production[i] ) ) {
                produceableunits[num] = building->production[i];
                picture[num] = building->production[i]->picture[0] ;
                int en = building->production[i]->productionCost.energy;
@@ -4265,7 +4263,7 @@ void  ccontainer_b :: crepairbuilding_subwindow :: display ( void )
    putimage ( subwinx1, subwiny1, icons.container.subwin.buildinginfo.start );
 
    csubwindow :: display();
-
+/* ####TRANS
    for ( int i = 0; i < 8; i++ ) {
       if ( cc_b->building->typ->loadcapability & ( 1 << ( 7 - i) ))
          putimage ( subwinx1 + 277, subwiny1 + 22 + i * 11, icons.container.subwin.buildinginfo.height1[i] );
@@ -4277,6 +4275,7 @@ void  ccontainer_b :: crepairbuilding_subwindow :: display ( void )
       else
          putimage ( subwinx1 + 308, subwiny1 + 22 + i * 11, icons.container.subwin.buildinginfo.height2[i] );
    }
+*/   
    activefontsettings.font = schriften.guifont;
    activefontsettings.length = 36;
    activefontsettings.justify = righttext;
@@ -4284,7 +4283,9 @@ void  ccontainer_b :: crepairbuilding_subwindow :: display ( void )
    showtext2c ( strrr ( cc_b->building->getArmor() ), subwinx1 + 53,  subwiny1 + 72 );
    showtext2c ( strrr ( cc_b->building->typ->jamming ),  subwinx1 + 53,  subwiny1 + 84 );
    showtext2c ( strrr ( cc_b->building->typ->view ),     subwinx1 + 53,  subwiny1 + 96 );
+   /* ####TRANS
    showtext2c ( strrr ( cc_b->building->typ->loadcapacity ),  subwinx1 + 140, subwiny1 + 72 );
+   */
 
    paintvariables();
 
@@ -6779,7 +6780,9 @@ void  ccontainer_t :: ctransportinfo_subwindow :: display ( void )
 
    csubwindow :: display();
 
+   /* ####TRANS
    for ( int i = 0; i < 8; i++ ) {
+
       if ( cc_t->vehicle->typ->loadcapability & ( 1 << ( 7 - i) ))
          putimage ( subwinx1 + 246, subwiny1 + 22 + i * 11, icons.container.subwin.transportinfo.height1[i] );
       else
@@ -6795,6 +6798,7 @@ void  ccontainer_t :: ctransportinfo_subwindow :: display ( void )
       else
          putimage ( subwinx1 + 308, subwiny1 + 22 + i * 11, icons.container.subwin.transportinfo.height2[i] );
    }
+   */
    activefontsettings.font = schriften.guifont;
    activefontsettings.justify = lefttext;
    activefontsettings.length = 0;
@@ -6828,12 +6832,12 @@ void ccontainer_t :: ctransportinfo_subwindow :: paintvariables ( void )
 
    pvehicle eht = cc_t->vehicle;
    int mass = eht->cargo();
-   int free = eht->typ->loadcapacity - mass;
+   int free = eht->typ->maxLoadableWeight - mass;
 
    activefontsettings.length = 40;
 
    char buf[50];
-   sprintf(buf, "%d / %d", cc_t->vehicle->typ->maxunitweight, cc_t->vehicle->typ->loadcapacity );
+   sprintf(buf, "%d / %d", cc_t->vehicle->typ->maxLoadableUnitSize, cc_t->vehicle->typ->maxLoadableWeight );
 
    showtext2c ( strrr ( mass ),                          subwinx1 + 170,  subwiny1 + 25 );
    showtext2c ( buf,                                     subwinx1 + 170,  subwiny1 + 33 );
