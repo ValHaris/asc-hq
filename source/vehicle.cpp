@@ -1150,8 +1150,9 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
        bm |= cem_attacked;
     if ( height != chfahrend )
        bm |= cem_height;
-    if ( _movement < typ->movement[log2(height)] )
-       bm |= cem_movement;
+
+//    if ( _movement < typ->movement[log2(height)] )
+    bm |= cem_movement;
 
     if ( direction )
        bm |= cem_direction;
@@ -1412,6 +1413,8 @@ void   Vehicle::readData ( tnstream& stream )
 
     if ( bm & cem_attacked )
        attacked = stream.readChar();
+    else
+       attacked = false;
 
     if ( bm & cem_name )
        name = stream.readString ( );
