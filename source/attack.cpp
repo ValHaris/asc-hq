@@ -1,6 +1,9 @@
-//     $Id: attack.cpp,v 1.4 2000-01-01 19:04:13 mbickel Exp $
+//     $Id: attack.cpp,v 1.5 2000-01-20 16:52:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/01/01 19:04:13  mbickel
+//     /tmp/cvsVhJ4Z3
+//
 //     Revision 1.3  1999/11/22 18:26:48  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -236,6 +239,9 @@ void tfight :: calc ( void )
            dv.experience++;
    } 
 
+   if ( av.kamikaze ) 
+      av.damage = 100;
+
 }
 
 
@@ -442,6 +448,7 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    av.weapcount  = attackingunit->ammo [ _weapon ];
    av.color      = attackingunit->color >> 3;
    av.initiative = attackingunit->typ->initiative;
+   av.kamikaze   = attackingunit->functions & cfkamikaze;
 
    pfield field = getfield ( attackingunit->xpos, attackingunit->ypos );
 
@@ -509,6 +516,7 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
 
    dv.color      = attackedunit->color >> 3;
    dv.initiative = attackedunit->typ->initiative;
+   dv.kamikaze = 0;
 
 
 }
@@ -588,6 +596,7 @@ void tunitattacksbuilding :: setup ( pvehicle attackingunit, int x, int y, int w
    av.weapcount  = attackingunit->ammo [ _weapon ];
    av.color      = attackingunit->color >> 3;
    av.initiative = attackingunit->typ->initiative;
+   av.kamikaze   = attackingunit->functions & cfkamikaze;
 
    pfield field = getfield ( attackingunit->xpos, attackingunit->ypos );
 
@@ -615,6 +624,7 @@ void tunitattacksbuilding :: setup ( pvehicle attackingunit, int x, int y, int w
    dv.defensebonus = 0; // getfield ( x, y ) -> getdefensebonus();
    dv.color      = _attackedbuilding->color >> 3;
    dv.initiative = 0;
+   dv.kamikaze = 0;
 
 
 }
@@ -687,6 +697,7 @@ void tmineattacksunit :: setup ( pfield mineposition, pvehicle &attackedunit )
    av.color = 8;
    av.initiative = 256;
    av.attackbonus = 8;
+   av.kamikaze = 0;
 
    dv.strength = 0;
    dv.armor = attackedunit->armor;
@@ -699,6 +710,8 @@ void tmineattacksunit :: setup ( pfield mineposition, pvehicle &attackedunit )
    dv.color = attackedunit->color >> 3;
    dv.initiative = attackedunit->typ->initiative;
    dv.attackbonus = 0;
+   dv.kamikaze = 0;
+
 
 }
 
@@ -780,6 +793,7 @@ void tunitattacksobject :: setup ( pvehicle attackingunit, int obj_x, int obj_y,
    av.experience = attackingunit->experience;
    av.weapnum    = _weapon;
    av.weapcount   = attackingunit->ammo [ _weapon ];
+   av.kamikaze   = attackingunit->functions & cfkamikaze;
 
    pfield field2 = getfield ( attackingunit->xpos, attackingunit->ypos );
 
@@ -805,6 +819,7 @@ void tunitattacksobject :: setup ( pvehicle attackingunit, int obj_x, int obj_y,
    dv.defensebonus = 0; // field  -> getdefensebonus();
    dv.einkeilung = 0;
    dv.color = 8 ;
+   dv.kamikaze = 0;
 
 }
 
