@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.20 2000-02-03 20:54:38 mbickel Exp $
+//     $Id: dialog.cpp,v 1.21 2000-02-03 21:15:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/02/03 20:54:38  mbickel
+//      Some cleanup
+//      getfiletime now works under Linux too
+//
 //     Revision 1.19  2000/01/31 16:34:43  mbickel
 //      now standard hotkeys in dialog boxes
 //
@@ -2323,7 +2327,7 @@ void         tfileselectsvga::fileausgabe(boolean     force , int dispscrollbar)
             activefontsettings.length = 120;
             showtext2( files[ii].name,x1 + 15,y1 + starty + jj * 20 + 20);
 
-            activefontsettings.length = 130;
+            activefontsettings.length = 200;
             activefontsettings.justify = righttext;
             if ( files[ii].sdate ) 
               showtext2( files[ii].sdate, x1 + 145,y1 + starty + jj * 20 + 20);
@@ -2331,11 +2335,11 @@ void         tfileselectsvga::fileausgabe(boolean     force , int dispscrollbar)
               bar ( x1 + 145,y1 + starty + jj * 20 + 20, x1 + 145 + activefontsettings.length, y1 + starty + jj * 20 + 20 + activefontsettings.font->height, activefontsettings.background );
 
             activefontsettings.justify = lefttext;
-            activefontsettings.length = 300;
+            activefontsettings.length = 230;
             if ( files[ii].description ) {
-               showtext2( files[ii].description, x1 + 290,y1 + starty + jj * 20 + 20);
+               showtext2( files[ii].description, x1 + 360,y1 + starty + jj * 20 + 20);
             } else
-               bar ( x1 + 290,y1 + starty + jj * 20 + 20, x1 + 290 + activefontsettings.length, y1 + starty + jj * 20 + 20 + activefontsettings.font->height, activefontsettings.background );
+               bar ( x1 + 360,y1 + starty + jj * 20 + 20, x1 + 360 + activefontsettings.length, y1 + starty + jj * 20 + 20 + activefontsettings.font->height, activefontsettings.background );
          } 
       } 
       else { 

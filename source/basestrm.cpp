@@ -1,6 +1,10 @@
-//     $Id: basestrm.cpp,v 1.15 2000-02-03 20:54:38 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.16 2000-02-03 21:15:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/02/03 20:54:38  mbickel
+//      Some cleanup
+//      getfiletime now works under Linux too
+//
 //     Revision 1.14  2000/01/25 19:28:06  mbickel
 //      Fixed bugs:
 //        invalid mouse buttons reported when moving the mouse
@@ -735,32 +739,11 @@ int tn_file_buf_stream::getstreamsize(void)
 
 time_t tn_file_buf_stream::get_time ( void )
 {
-   struct stat *buf;
-   if ( stat (devicename, buf) )
+   struct stat buf;
+   if ( stat (devicename, &buf) )
       return -1;
    else
-      return (buf->st_mtime);
-/*
-   int time = -1;
-   {
-      DIR *dirp; 
-      struct dirent *direntp; 
-  
-      dirp = opendir( devicename ); 
-      if( dirp != NULL ) { 
-        for(;;) { 
-          direntp = readdir( dirp ); 
-          if ( direntp == NULL ) 
-             break; 
-         #ifdef _DOS_    
-	  time =  ( direntp ->d_date << 16) + direntp ->d_time;
-         #endif
-        } 
-        closedir( dirp ); 
-      } 
-    }
-   return time;
-   */
+      return (buf.st_mtime);
 }
 
 
@@ -1967,9 +1950,9 @@ char* getnextfilenumname ( const char* first, const char* suffix, int num )
 
 time_t get_filetime ( char* devicename )
 {
-   struct stat *buf;
-   if ( !stat (devicename, buf) )
-      return (buf->st_mtime);
+   struct stat buf;
+   if ( !stat (devicename, &buf) )
+      return (buf.st_mtime);
    else {
       pncontainerstream strm = containercollector.getfile( devicename );
       if ( strm )
@@ -2001,10 +1984,10 @@ void opencontainer ( const char* wildcard )
 
 int filesize( char *name)
 {
-  struct stat *buf;
+  struct stat buf;
 
-  stat (name, buf);
-  return (buf->st_size);
+  stat (name, &buf);
+  return (buf.st_size);
 }
 
 
