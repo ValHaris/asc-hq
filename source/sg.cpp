@@ -1191,9 +1191,9 @@ void renameUnit()
 {
    if ( actmap ) {
       pfield fld = getactfield();
-      if ( fld && fld->vehicle )
+      if ( fld && fld->vehicle && fld->vehicle->getOwner() == actmap->actplayer )
          fld->vehicle->name = editString ( "unit name", fld->vehicle->name );
-      if ( fld && fld->building )
+      if ( fld && fld->building && fld->building->getOwner() == actmap->actplayer )
          fld->building->name = editString ( "building name", fld->building->name );
    }
 }

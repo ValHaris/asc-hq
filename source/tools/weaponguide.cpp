@@ -99,15 +99,17 @@ int main(int argc, char *argv[] ) {
   }
 
 
-  BuildingGuideGen gen(prefixDir, cl.m(), cl.s(), cl.roottech(), cl.i(), cl.l(), !cl.b(), !cl.writeall());
+
+  BuildingGuideGen gen(prefixDir, cl.m(), cl.s(),  cl.t(), cl.roottech(), cl.i(), cl.l(), !cl.b(), !cl.writeall());
   gen.processSubjects();
   cout << "*******Buildings done*******" << endl;
-  UnitGuideGen unitGen(prefixDir, cl.m(), cl.s(), cl.roottech(), cl.i(), cl.l(), !cl.writeall());
+  UnitGuideGen unitGen(prefixDir, cl.m(), cl.s(),  cl.t(), cl.roottech(), cl.i(), cl.l(), !cl.writeall());
   unitGen.processSubjects();
   cout << "*******Units done*******" << endl; 
   cout << "******Guide generated*******" << endl;
   return 0;
 };
+
 
 
 

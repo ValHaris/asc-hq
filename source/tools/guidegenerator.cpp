@@ -201,7 +201,8 @@ ASCString ImageConverter::constructImgFileName(const VehicleType&  vt) {
 
 //**************************************************************************************************************
 
-GuideGenerator::GuideGenerator(ASCString fp, ASCString css, int id, ASCString techIDs, bool imgCreate, ASCString relativeMenuPath, bool upload, int imageSize):filePath(fp), cssFile(css), setID(id), techTreeIDs(String2IntRangeVector(techIDs)), relMenuPath(relativeMenuPath), createImg(imgCreate), createUpload(upload), imageWidth(imageSize) 
+
+GuideGenerator::GuideGenerator(ASCString fp, ASCString menuCss, int id, ASCString maCSSFile, ASCString techIDs, bool imgCreate, ASCString relativeMenuPath, bool upload, int imageSize):filePath(fp), menuCSSFile(menuCss), setID(id), mainCSSFile(maCSSFile), techTreeIDs(String2IntRangeVector(techIDs)), relMenuPath(relativeMenuPath), createImg(imgCreate), createUpload(upload), imageWidth(imageSize) 
 {
    if ( relMenuPath.length() > 0  )
         appendbackslash( relMenuPath );
@@ -211,12 +212,14 @@ const ASCString& GuideGenerator::getImagePath(int id) {
   return graphicRefs[id];
 }
 
-const ASCString& GuideGenerator::getCSSPath() const {
-  return cssFile;
+const ASCString& GuideGenerator::getMainCSSPath() const {
+  return mainCSSFile;
 }
 //******************************************************************************************************
-BuildingGuideGen::BuildingGuideGen(ASCString fp, ASCString css, int id, ASCString techIDs, bool imgCreate,  ASCString relativeMenuPath, bool bUnique, bool upload, int imageSize): GuideGenerator(fp, css, id, techIDs,
+
+BuildingGuideGen::BuildingGuideGen(ASCString fp, ASCString css, int id, ASCString maCSSFile, ASCString techIDs, bool imgCreate,  ASCString relativeMenuPath, bool bUnique, bool upload, int imageSize): GuideGenerator(fp, css, id, maCSSFile, techIDs,
     imgCreate, relativeMenuPath, upload), buildingsUnique(bUnique) {}
+
 
 
 ASCString BuildingGuideGen::constructFileName(const BuildingType& bType) {
@@ -271,18 +274,18 @@ void BuildingGuideGen::generateCategories() const {
       SingleUnitSet* s = (*i);
       if((s->ID == setID)||(setID<=0)) {        
         ASCString fileName =  InfoPageUtil::getTmpPath() + "buildingset_id(" + strrr(s->ID) +")" + GROUPS;
-        Category set(s->name, cssFile);
+        Category set(s->name, menuCSSFile);
 	
-        Category* hqCat = new Category(HQ, cssFile);
-        Category* facCat = new Category(FACTORY, cssFile);
-        Category* researchCat = new Category(RESEARCHFAC, cssFile);
-        Category* windpowCat = new Category(WINDPOWERPLANT, cssFile);
-        Category* solarpowCat = new Category(SOLARPOWERPLANT, cssFile);
-        Category* mattconCat = new Category(MATTERCONVERTER, cssFile);
-        Category* trainCat = new Category(TRAININGCENTER, cssFile);
-        Category* noCat = new Category(NOCATEGORY, cssFile);
-        Category* mineCat = new Category(MININGSTATION, cssFile);
-        Category* idCat = new Category(SORTID, cssFile);
+        Category* hqCat = new Category(HQ, menuCSSFile);
+        Category* facCat = new Category(FACTORY, menuCSSFile);
+        Category* researchCat = new Category(RESEARCHFAC, menuCSSFile);
+        Category* windpowCat = new Category(WINDPOWERPLANT, menuCSSFile);
+        Category* solarpowCat = new Category(SOLARPOWERPLANT, menuCSSFile);
+        Category* mattconCat = new Category(MATTERCONVERTER, menuCSSFile);
+        Category* trainCat = new Category(TRAININGCENTER, menuCSSFile);
+        Category* noCat = new Category(NOCATEGORY, menuCSSFile);
+        Category* mineCat = new Category(MININGSTATION, menuCSSFile);
+        Category* idCat = new Category(SORTID, menuCSSFile);
 
         set.addEntry(hqCat);
         set.addEntry(facCat);
@@ -296,9 +299,9 @@ void BuildingGuideGen::generateCategories() const {
 
         for ( int building = 0; building < buildingTypeRepository.getNum(); building++ ) {
           BuildingType*  bt = buildingTypeRepository.getObject_byPos ( building );
-          if(s->isMember(bt->id, SingleUnitSet::building)) {
+          if(s->isMember(bt->id, SingleUnitSet::building)&&(processedBuildingIds.find(bt->id)!=processedBuildingIds.end())) {
             ASCString fileLink = relMenuPath + strrr(bt->id) + APPENDIX + ASCString(MAINLINKSUFFIX) + HTML;
-            CategoryMember* dataEntry = new CategoryMember(bt->name.toUpper(), cssFile, fileLink, TARGET);
+            CategoryMember* dataEntry = new CategoryMember(bt->name.toUpper(), menuCSSFile, fileLink, TARGET);
             if ( bt->special & cghqb ) {
               hqCat->addEntry(dataEntry);
             } else if ( bt->special & cgvehicleproductionb ) {
@@ -318,7 +321,7 @@ void BuildingGuideGen::generateCategories() const {
             } else {
               noCat->addEntry(dataEntry);
             }
-            CategoryMember* idEntry = new CategoryMember(ASCString(strrr(bt->id)) + "(" +  bt->name +")", cssFile, fileLink, TARGET);
+            CategoryMember* idEntry = new CategoryMember(ASCString(strrr(bt->id)) + "(" +  bt->name +")", menuCSSFile, fileLink, TARGET);
             idCat->addEntry(idEntry);
           }
         }
@@ -348,18 +351,22 @@ void BuildingGuideGen::processSubjects() {
         if((s->ID == setID) && (s->isMember(bt->id,SingleUnitSet::building))) {	  
           if(buildingNames.end() == buildingNames.find(strrr(s->ID) +bt->name)||(!buildingsUnique)) {
             processBuilding(*bt);
-            buildingNames.insert(strrr(s->ID) +bt->name);
+            buildingNames.insert(strrr(s->ID) +bt->name);	    
+	    processedBuildingIds.insert(bt->id);
           }
         }
       }
     } else {
       processBuilding(*bt);
+      processedBuildingIds.insert(bt->id);
     }
+    
   }
   generateCategories();
 }
 //UnitGuideGen****************************************************************************************************
-UnitGuideGen::UnitGuideGen(ASCString fp, ASCString css, int id, ASCString techIDs, bool imgCreate,  ASCString relativeMenuPath, bool upload, int imageSize): GuideGenerator(fp, css, id, techIDs, imgCreate, relativeMenuPath, upload, imageSize) {}
+UnitGuideGen::UnitGuideGen(ASCString fp, ASCString meCSSFile, int id, ASCString maCSSFile, ASCString techIDs, bool imgCreate,  ASCString relativeMenuPath, bool upload, int imageSize): GuideGenerator(fp, meCSSFile, id, maCSSFile, techIDs, imgCreate, relativeMenuPath, upload, imageSize) {}
+
 
 
 
@@ -435,15 +442,15 @@ void UnitGuideGen::generateCategories() const {
       SingleUnitSet* s = (*i);      
         if((s->ID == setID)||(setID<=0)) {
           ASCString fileName =  InfoPageUtil::getTmpPath() + "unitset_id(" + strrr(s->ID) +")" + GROUPS;
-          Category set(s->name, cssFile);
+          Category set(s->name, menuCSSFile);
 
-          Category* trooperCat = new Category(TROOPER, cssFile);
-          Category* groundCat = new Category(GROUNDUNIT, cssFile);
-          Category* airCat = new Category(AIRUNIT, cssFile);
-          Category* seaCat = new Category(SEAUNIT, cssFile);
-          Category* turretCat = new Category(TURRETUNIT, cssFile);
-          Category* miscCat = new Category(NOCATEGORY, cssFile);
-          Category* idCat = new Category(SORTID, cssFile);
+          Category* trooperCat = new Category(TROOPER, menuCSSFile);
+          Category* groundCat = new Category(GROUNDUNIT, menuCSSFile);
+          Category* airCat = new Category(AIRUNIT, menuCSSFile);
+          Category* seaCat = new Category(SEAUNIT, menuCSSFile);
+          Category* turretCat = new Category(TURRETUNIT, menuCSSFile);
+          Category* miscCat = new Category(NOCATEGORY, menuCSSFile);
+          Category* idCat = new Category(SORTID, menuCSSFile);
 
 
 
@@ -459,7 +466,7 @@ void UnitGuideGen::generateCategories() const {
             if(s->isMember(vt->id,SingleUnitSet::unit)) {
               ASCString fileLink = relMenuPath + strrr(vt->id) + APPENDIX + ASCString(MAINLINKSUFFIX) + HTML;
 
-              CategoryMember* dataEntry = new CategoryMember(vt->name.toUpper(), cssFile, fileLink, TARGET);
+              CategoryMember* dataEntry = new CategoryMember(vt->name.toUpper(), menuCSSFile, fileLink, TARGET);
               switch ( vt->movemalustyp ) {
               case 7:  //   "trooper"
                 trooperCat->addEntry(dataEntry);
@@ -495,7 +502,7 @@ void UnitGuideGen::generateCategories() const {
                 miscCat->addEntry(dataEntry);
                 break;
               };
-              CategoryMember* idEntry = new CategoryMember(ASCString(strrr(vt->id)) + "(" + vt->name + ")", cssFile, fileLink, TARGET);
+              CategoryMember* idEntry = new CategoryMember(ASCString(strrr(vt->id)) + "(" + vt->name + ")", menuCSSFile, fileLink, TARGET);
               idCat->addEntry(idEntry);
             }
           }
@@ -511,6 +518,7 @@ void UnitGuideGen::generateCategories() const {
     cout << e.getMessage() << endl;
   }
 }
+
 
 
 

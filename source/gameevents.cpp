@@ -146,7 +146,7 @@ ASCString TurnPassed::getName() const
 ASCString BuildingPositionTrigger::getName() const
 {
    ASCString s = "Building ";
-   if ( gamemap->getField(pos)->building )
+   if ( gamemap->getField(pos) && gamemap->getField(pos)->building )
       s += gamemap->getField(pos)->building->getName();
    else
       s += " <not found> ";
@@ -164,6 +164,11 @@ void BuildingPositionTrigger::setup()
 EventTrigger::State BuildingConquered::getState( int player )
 {
    pfield fld = gamemap->getField ( pos );
+   if( !fld ) {
+      displaymessage ("invalid event - map field not found!", 1);
+      return finally_failed;
+   }
+
    if ( !fld->building )
       return finally_failed;
 
@@ -175,6 +180,11 @@ EventTrigger::State BuildingConquered::getState( int player )
 
 void BuildingConquered::arm()
 {
+   if( !gamemap->getField ( pos ) ) {
+      displaymessage ("invalid event - map field not found!", 1);
+      return;
+   }
+
    pbuilding bld = gamemap->getField ( pos )->building;
    if ( bld )
       bld->conquered.connect( SigC::slot( *this, &BuildingConquered::triggered ));
@@ -200,6 +210,11 @@ EventTrigger::State BuildingLost::getState( int player )
 
 void BuildingLost::arm()
 {
+   if( !gamemap->getField ( pos ) ) {
+      displaymessage ("invalid event - map field not found!", 1);
+      return;
+   }
+
    pbuilding bld = gamemap->getField ( pos )->building;
    if ( bld ) {
       bld->conquered.connect( SigC::slot( *this, &BuildingConquered::triggered ));
@@ -224,6 +239,11 @@ void PositionTrigger::writeData( tnstream& stream )
 
 EventTrigger::State BuildingDestroyed::getState( int player )
 {
+   if( !gamemap->getField ( pos ) ) {
+      displaymessage ("invalid event - map field not found!", 1);
+      return finally_fulfilled;
+   }
+
    pfield fld = gamemap->getField ( pos );
    if ( !fld->building )
       return finally_fulfilled;
@@ -234,6 +254,11 @@ EventTrigger::State BuildingDestroyed::getState( int player )
 
 EventTrigger::State BuildingSeen::getState( int player )
 {
+   if( !gamemap->getField ( pos ) ) {
+      displaymessage ("invalid event - map field not found!", 1);
+      return finally_fulfilled;
+   }
+
    pbuilding bld = gamemap->getField ( pos )->building;
    if ( !bld )
       return finally_failed;
@@ -264,6 +289,11 @@ EventTrigger::State BuildingSeen::getState( int player )
 
 void BuildingSeen::arm()
 {
+   if( !gamemap->getField ( pos ) ) {
+      displaymessage ("invalid event - map field not found!", 1);
+      return;
+   }
+
    pbuilding bld = gamemap->getField ( pos )->building;
    if ( bld ) {
       bld->connection |= cconnection_seen;

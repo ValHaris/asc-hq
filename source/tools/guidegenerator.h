@@ -42,8 +42,9 @@
 #define RELATIVEBUILDINGSPATH "./"
 
 typedef map<int, ASCString> Int2String;
-typedef map<int, Category*> GroupFileEntriesMap;
+//typedef map<int, Category*> GroupFileEntriesMap;
 typedef set<ASCString> StringSet;
+typedef set<int> IntSet;
 
 
 class InfoPageUtil{
@@ -71,11 +72,14 @@ public:
   /**
   *@brief Constructor for creating a new GuideGenerator
   *@param filePath The path to which the generated files are stored
-  *@param cssPath  The full path to the used css-file
+  *@param menuCSSPath  The full path to the used css-file for the menu
   *@param setID The set of which the guide is created, if set to 0 guides for all sets will be created
+  *@param mainCSSPath  The full path to the used css-file for the pages
   *@param createImg Determines if images shall be created.
   */
-  GuideGenerator(ASCString filePath, ASCString cssPath, int setID, ASCString techIDs, bool createImg, ASCString relMenuPath, bool upload = false, int imageSize = 0);
+
+  GuideGenerator(ASCString filePath, ASCString menuCSSPath, int setID, ASCString mainCSSPath, ASCString techIDs, bool createImg, ASCString relMenuPath, bool upload = false, int imageSize = 0);
+
   /**
   *@brief Destructor
   */
@@ -95,7 +99,7 @@ public:
   *@brief Returns the path to the css-File used by generated pages
   *        void diffCopy( const ASCString& src, const ASCString& dst );
   */
-  const ASCString& getCSSPath() const;  
+  const ASCString& getMainCSSPath() const;  
   /*
   *@brief Gets the width for the unit image
   */
@@ -129,10 +133,14 @@ protected:
   */
   ASCString filePath;
   /**
-  *@brief The full path to the used css-file
+  *@brief The full path to the used css-file for the menu
   */
-  ASCString cssFile;
-  GroupFileEntriesMap gfEntriesMap;
+  ASCString menuCSSFile;
+  /**
+  *@brief The full path to the used css-file for the pages
+  */
+  ASCString mainCSSFile;
+   
   /**
   *@brief Determines if images should be created.
   */
@@ -186,7 +194,7 @@ public:
   *@param buildingsUnique Determines if the pages for a building shall be created only once or for each
   *       of its occurence in the set (different directions, different weather) 
   */
-  BuildingGuideGen(ASCString filePath, ASCString cssPath, int setID, ASCString techIDs, bool createImg,  ASCString relMenuPath, bool buildingsUnique = false, bool upload = false, int imageSize = 0);
+  BuildingGuideGen(ASCString filePath, ASCString menuCSSPath, int setID, ASCString mainCSSPath, ASCString techIDs, bool createImg,  ASCString relMenuPath, bool buildingsUnique = false, bool upload = false, int imageSize = 0);
   /*
   *@brief Destructor
   */
@@ -232,6 +240,8 @@ private:
   *       
   */
   StringSet buildingNames;
+  
+  IntSet processedBuildingIds;
 };
 
   /**
@@ -248,7 +258,7 @@ public:
   *@param createImg Determines if images shall be created.
   *@param imageSize Determines the width of the unit image in pix
   */
-  UnitGuideGen(ASCString filePath, ASCString cssPath, int setID, ASCString techIDs, bool createImg,  ASCString relMenuPath, bool upload = false, int imageSize = 0);
+  UnitGuideGen(ASCString filePath, ASCString menuCSSPath, int setID, ASCString mainCSSPath, ASCString techIDs, bool createImg,  ASCString relMenuPath, bool upload = false, int imageSize = 0);
   /**
   *@brief Destructor
   */
@@ -365,6 +375,7 @@ private:
 
 };
 #endif
+
 
 
 
