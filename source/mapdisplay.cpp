@@ -1697,7 +1697,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
 #endif
 
                // putspriteimage( r + unitrightshift , yp + unitdownshift , view.va8);
-               putshadow( r, yp, icons.view.nv8, &xlattables.a.dark2 );
+               // putshadow( r, yp, icons.view.nv8, &xlattables.a.dark2 );
                if ( fld->a.temp && tempsvisible )
                   putspriteimage(  r, yp, cursor.markfield);
                else
@@ -1714,7 +1714,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
             } else
                if (b == visible_not) {
-                  putspriteimage( r, yp, icons.view.nv8 );
+                  // putspriteimage( r, yp, icons.view.nv8 );
                   if ( ( fld->a.temp || fld->a.temp2 ) && tempsvisible )
                      putspriteimage(  r, yp, cursor.markfield);
 

@@ -16,7 +16,7 @@
 #include <map>
 #include <set>
 #include "gamemap.h"
-#include "error.h"
+//#include "error.h"
 #include "ascstring.h"
 #include "geometry.h"
 #include "basestreaminterface.h"

@@ -142,9 +142,9 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
          Surface mask;
          SPoint  startFieldPos;
       } movementMask[sidenum];
-      static const int touchedFieldNum = 10;
 
-    public:        
+    public:
+      static const int touchedFieldNum = 10;
     
       class TouchedField {
          public:

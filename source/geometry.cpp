@@ -56,7 +56,7 @@ int Vector2D::getYComponent() const {
   return yComponent;
 }
 double Vector2D::getLength() const{
-  return sqrt(pow(xComponent, 2) + pow(yComponent,2));
+  return std::sqrt(std::pow(double(xComponent), 2) + std::pow(double(yComponent),2));
 }
 
 bool Vector2D::isZeroVector() const {

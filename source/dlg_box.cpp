@@ -118,7 +118,7 @@ void tvirtualscreenbuf:: init ( void )
 
 tvirtualscreenbuf:: ~tvirtualscreenbuf ()
 {
-   asc_free( buf );
+   delete[] buf;
    buf = NULL;
 }
 

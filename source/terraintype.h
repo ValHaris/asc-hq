@@ -120,6 +120,7 @@ const int cbodenartennum = 35;
           void readQuickView ( tnstream& stream );
 
           Weather ( TerrainType* base ) : quickView ( NULL ), terraintype ( base ) {};
+          ~Weather() { delete quickView; };
           void runTextIO ( PropertyContainer& pc );
       };
      Weather*           weather[cwettertypennum];
@@ -128,6 +129,7 @@ const int cbodenartennum = 35;
      void runTextIO ( PropertyContainer& pc );
      void read ( tnstream& stream );
      void write ( tnstream& stream ) const;
+     ~TerrainType();
  };
 
 

@@ -69,6 +69,8 @@
      const FieldQuickView* getQuickView( int id );
      friend class Loki::CreateUsingNew<GraphicSetManager_Base>;
      // friend struct CreateUsingNew;
+
+     ~GraphicSetManager_Base();
  };
 
  typedef Loki::SingletonHolder<GraphicSetManager_Base> GraphicSetManager;

@@ -303,7 +303,7 @@ int  releasetimeslice( void )
    SDL_Delay(10);
    if ( redrawScreen ) {
       redrawScreen = false;
-      copy2screen();
+      // copy2screen();
    }
    return 0;
 }

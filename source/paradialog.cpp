@@ -355,9 +355,11 @@ enum  WidgetTypes  { Image,
 
 const int imageModeNum = 5;
 const char* imageModes[imageModeNum]
-=
-   { 
-   };
+    = { "tile",
+        "stretch",
+        "tile3h",
+        "tile3v",
+        "tile9" };
 
 
 const int textAlignNum = 3;

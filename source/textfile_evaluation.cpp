@@ -662,8 +662,10 @@ int IntegerProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) cons
    
    
    int res =  strtol ( value.c_str(), &p, 0  );    //   strtol(nptr, NULL, 10);
-   if ( *p != 0 && *p != ';' )
-      propertyContainer->error ( name + ": value "+ entry.value +" is no numerical value" );
+   if ( *p != 0 && *p != ';' ) {
+      ASCString s = name + ": value "+ entry.value +" is no numerical value \n" ;
+      fprintf(stderr, s.c_str()  );
+   }
    
    return res;
 }

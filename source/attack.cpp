@@ -604,8 +604,8 @@ void tunitattacksunit :: setresult ( void )
 
 void tunitattacksunit :: paintimages ( int xa, int ya, int xd, int yd )
 {
-   _attackingunit->paint( getActiveSurface(), SPoint(xa, ya));
-   _attackedunit->paint ( getActiveSurface(), SPoint(xd, yd));
+//    _attackingunit->paint( getActiveSurface(), SPoint(xa, ya));
+//    _attackedunit->paint ( getActiveSurface(), SPoint(xd, yd));
 };
 
 

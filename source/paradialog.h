@@ -22,13 +22,17 @@
 #ifndef paradialogH
  #define paradialogH
 
-  
+
 #include "global.h"
+
+#include <sigc++/sigc++.h>
 
 #include <paragui.h>
 #include <pgapplication.h>
 #include <pgmessagebox.h>
 #include <pgdropdown.h>
+#include <pgcolor.h>
+
 #include "pgbutton.h"
 #include "pgwidgetlist.h"
 #include "pglabel.h"

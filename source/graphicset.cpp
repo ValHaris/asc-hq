@@ -200,3 +200,9 @@ void GraphicSetManager_Base::loadData()
 }
 
 
+GraphicSetManager_Base::~GraphicSetManager_Base()
+{
+   for ( GraphicSets::iterator i = graphicSets.begin(); i != graphicSets.end(); ++i)
+      delete *i;
+}
+

@@ -4,8 +4,7 @@
   <MACROS>
     <VERSION value="BCB.06.00"/>
     <PROJECT value="..\mapeditor.exe"/>
-    <OBJFILES value="obj\SDL_main.obj obj\CLoadable.obj obj\getopt.obj obj\getopt1.obj 
-      obj\Named.obj obj\Property.obj obj\PropertyGroup.obj obj\ascstring.obj 
+    <OBJFILES value="obj\SDL_main.obj obj\getopt.obj obj\getopt1.obj obj\ascstring.obj 
       obj\attack.obj obj\basegfx.obj obj\basestrm.obj obj\buildings.obj 
       obj\buildingtype.obj obj\containerbase.obj obj\containerbasetype.obj 
       obj\dialog.obj obj\dlg_box.obj obj\edevents.obj obj\edgen.obj 
@@ -22,7 +21,10 @@
       obj\textfiletags.obj obj\typen.obj obj\vehicle.obj obj\vehicletype.obj 
       obj\viewcalculation.obj obj\soundList.obj obj\simplestream.obj 
       obj\prehistoricevents.obj obj\mappolygons.obj obj\gameeventsystem.obj 
-      obj\gameevent_dialogs.obj obj\music.obj obj\clipboard.obj"/>
+      obj\gameevent_dialogs.obj obj\music.obj obj\clipboard.obj 
+      obj\ascttfont.obj obj\blitter.obj obj\surface.obj obj\weatherdialog.obj 
+      obj\weatherarea.obj obj\guidimension.obj obj\SDL_loadso.obj 
+      obj\geometry.obj obj\resourceplacement.obj obj\resourceplacementdialog.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -31,7 +33,9 @@
       ..\..\..\ai\ai.lib ..\..\..\libs\bzlib\win\bzlib.lib 
       ..\..\..\libs\jpeg-6b\libjpeg.lib ..\..\..\libs\sdlmm\SDLmm.lib 
       ..\..\..\libs\triangul\win32\triangulation.lib 
-      ..\..\..\libs\libsigc++\libsigcpp.lib"/>
+      ..\..\..\libs\libsigc++\libsigcpp.lib 
+      ..\..\..\..\..\paragui-1.2\borland\Paragui.lib 
+      ..\..\..\..\..\Expat\Libs\exp.lib ..\..\..\..\..\freetype2\objs\freetype.lib"/>
     <LIBRARIES value="bcb2kaxserver.lib indy.lib dbxcds.lib dclocx.lib soaprtl.lib bcbie.lib 
       nmfast.lib dbexpress.lib inetdbxpress.lib inetdb.lib inetdbbde.lib 
       inet.lib xmlrtl.lib visualdbclx.lib ibxpress.lib teeqr.lib tee.lib 
@@ -43,7 +47,7 @@
       inetdbbde.lib inetdb.lib inetdbxpress.lib dbexpress.lib nmfast.lib 
       bcbie.lib soaprtl.lib dclocx.lib dbxcds.lib indy.lib bcb2kaxserver.lib"/>
     <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi bcbsmp.bpi dclocx.bpi"/>
-    <PATHCPP value=".;..\..\..\..\..\sdl\src\main\win32;..\..\..;..\..\..\LIBS\getopt;..\..\..\sdl"/>
+    <PATHCPP value=".;..\..\..\..\..\sdl\src\main\win32;..\..\..\LIBS\getopt;..\..\..;..\..\..\sdl;..\..\..\graphics;..\..\..\..\..\sdl\src"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
@@ -53,8 +57,8 @@
     <USERDEFINES value="karteneditor;HEXAGON;FREEMAPZOOM;_WIN32_;WIN32;_SDL_;_NOASM_;NEWKEYB;_DEBUG"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="mapeditor.bpf"/>
-    <INCLUDEPATH value="..\..\..\libs\loki;..\..\..\..\..\..\Borland\CBuilder6\Source\Clx;..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include;..\..\..\libs\libsigc++"/>
-    <LIBPATH value="..\..\..\libs\loki;..\..\..\..\..\..\Borland\CBuilder6\Source\Clx;..\..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\..\..\..\..\sdl\src;..\..\..\graphics;$(BCB)\include;$(BCB)\include\vcl;..\..\..\libs\loki;..\..\..\..\..\..\Borland\CBuilder6\Source\Clx;..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui-1.2\include;..\..\..\..\..\freetype2\include;..\..\..\libs\libsigc++;..\..\..\..\..\SDL_ttf"/>
+    <LIBPATH value="..\..\..\..\..\sdl\src;..\..\..\graphics;..\..\..\libs\loki;..\..\..\..\..\..\Borland\CBuilder6\Source\Clx;..\..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-pck -w-par -w-8027 -w-8026 -w-csu -w-big"/>
     <OTHERFILES value=""/>
   </MACROS>
@@ -78,12 +82,8 @@
       <FILE FILENAME="..\..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB" FORMNAME="" UNITNAME="SDL_mixer" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\..\..\sdl\bin\sdl.lib" FORMNAME="" UNITNAME="sdl" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\..\..\sdl\src\main\win32\SDL_main.c" FORMNAME="" UNITNAME="SDL_main" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\CLoadable.cpp" FORMNAME="" UNITNAME="CLoadable" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\LIBS\getopt\getopt.c" FORMNAME="" UNITNAME="getopt" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\LIBS\getopt\getopt1.c" FORMNAME="" UNITNAME="getopt1" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\Named.cpp" FORMNAME="" UNITNAME="Named" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\Property.cpp" FORMNAME="" UNITNAME="Property" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\PropertyGroup.cpp" FORMNAME="" UNITNAME="PropertyGroup" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\ai\ai.lib" FORMNAME="" UNITNAME="ai.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\ascstring.cpp" FORMNAME="" UNITNAME="ascstring" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\attack.cpp" FORMNAME="" UNITNAME="attack" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
@@ -154,6 +154,19 @@
       <FILE FILENAME="..\..\..\gameevent_dialogs.cpp" FORMNAME="" UNITNAME="gameevent_dialogs.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\music.cpp" FORMNAME="" UNITNAME="music" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\clipboard.cpp" FORMNAME="" UNITNAME="clipboard" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\..\..\paragui-1.2\borland\Paragui.lib" FORMNAME="" UNITNAME="Paragui.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\graphics\ascttfont.cpp" FORMNAME="" UNITNAME="ascttfont.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\graphics\blitter.cpp" FORMNAME="" UNITNAME="blitter.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\graphics\surface.cpp" FORMNAME="" UNITNAME="surface.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\weatherdialog.cpp" FORMNAME="" UNITNAME="weatherdialog.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\weatherarea.cpp" FORMNAME="" UNITNAME="weatherarea.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\guidimension.cpp" FORMNAME="" UNITNAME="guidimension" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\..\..\Expat\Libs\exp.lib" FORMNAME="" UNITNAME="exp.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\..\..\freetype2\objs\freetype.lib" FORMNAME="" UNITNAME="freetype.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\..\..\sdl\src\SDL_loadso.c" FORMNAME="" UNITNAME="SDL_loadso" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\geometry.cpp" FORMNAME="" UNITNAME="geometry" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\resourceplacement.cpp" FORMNAME="" UNITNAME="resourceplacement.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\resourceplacementdialog.cpp" FORMNAME="" UNITNAME="resourceplacementdialog.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
@@ -191,36 +204,36 @@ c:\programme\borland\cbuilder6\Bin\dclite60.bpl=Borland Integrierte Übersetzung
 
 [HistoryLists\hlIncludePath]
 Count=30
-Item0=..\..\..\libs\loki;..\..\..\..\..\..\Borland\CBuilder6\Source\Clx;..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include;..\..\..\libs\libsigc++
-Item1=..\..\..\libs\loki;..\..\..\..\..\..\Borland\CBuilder6\Source\Clx;..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include
-Item2=..\..\..\..\..\..\Borland\CBuilder6\Source\Clx;..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include
-Item3=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include
-Item4=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include\
-Item5=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include\freetype
-Item6=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;C:\Programme\ascdev\freetype2\include\freetype
-Item7=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include
-Item8=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;C:\Programme\ascdev\paragui\include
-Item9=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image
-Item10=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;C:\Programme\ascdev\SDL_image
-Item11=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src
-Item12=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;C:\Programme\ascdev\SDLmm\src
-Item13=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer
-Item14=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer
-Item15=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt
-Item16=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32;..\..\..\LIBS\getopt
-Item17=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32;C:\Programme\ASCSRC\GAMES\ASC\SOURCE\LIBS\getopt
-Item18=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
-Item19=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
-Item20=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
-Item21=..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
-Item22=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
-Item23=..\..\..\..\..\sdl\src\main\win32;..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
-Item24=..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
-Item25=..\..\..;..\..\..\sdl;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;C:\Programme\ascsrc\games\asc\source\win32
-Item26=..\..\..;..\..\..\sdl;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include
-Item27=..\..\..\sdl;..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\sdl\include
-Item28=..\..\..\sdl;..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
-Item29=..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
+Item0=$(BCB)\include;$(BCB)\include\vcl;..\..\..\libs\loki;..\..\..\..\..\..\Borland\CBuilder6\Source\Clx;..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui-1.2\include;..\..\..\..\..\freetype2\include;..\..\..\libs\libsigc++;..\..\..\..\..\SDL_ttf
+Item1=$(BCB)\include;$(BCB)\include\vcl;..\..\..\libs\loki;..\..\..\..\..\..\Borland\CBuilder6\Source\Clx;..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include;..\..\..\libs\libsigc++;..\..\..\..\..\SDL_ttf
+Item2=$(BCB)\include;$(BCB)\include\vcl;..\..\..\libs\loki;..\..\..\..\..\..\Borland\CBuilder6\Source\Clx;..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include;..\..\..\libs\libsigc++;..\..\..\..\SDL_ttf
+Item3=..\..\..\libs\loki;..\..\..\..\..\..\Borland\CBuilder6\Source\Clx;..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include;..\..\..\libs\libsigc++;..\..\..\SDL_ttf;C:\Programme\ascdev\SDL_ttf
+Item4=..\..\..\libs\loki;..\..\..\..\..\..\Borland\CBuilder6\Source\Clx;..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include;..\..\..\libs\libsigc++;..\..\..\SDL_ttf
+Item5=..\..\..\libs\loki;..\..\..\..\..\..\Borland\CBuilder6\Source\Clx;..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include;..\..\..\libs\libsigc++
+Item6=..\..\..\libs\loki;..\..\..\..\..\..\Borland\CBuilder6\Source\Clx;..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include
+Item7=..\..\..\..\..\..\Borland\CBuilder6\Source\Clx;..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include
+Item8=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include
+Item9=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include\
+Item10=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include\freetype
+Item11=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;C:\Programme\ascdev\freetype2\include\freetype
+Item12=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include
+Item13=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;C:\Programme\ascdev\paragui\include
+Item14=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image
+Item15=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;C:\Programme\ascdev\SDL_image
+Item16=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src
+Item17=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;C:\Programme\ascdev\SDLmm\src
+Item18=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer
+Item19=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer
+Item20=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt
+Item21=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32;..\..\..\LIBS\getopt
+Item22=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32;C:\Programme\ASCSRC\GAMES\ASC\SOURCE\LIBS\getopt
+Item23=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
+Item24=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
+Item25=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
+Item26=..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
+Item27=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
+Item28=..\..\..\..\..\sdl\src\main\win32;..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
+Item29=..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
 
 [HistoryLists\hlLibraryPath]
 Count=16

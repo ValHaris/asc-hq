@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.154.2.6 2004-12-21 11:54:16 mbickel Exp $
+//     $Id: typen.h,v 1.154.2.7 2004-12-28 19:47:48 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -562,11 +562,6 @@ struct ticons {
    void*        hex2octmask;
    void*        mapbackground;
    void*        mine[8]; // explosive mines
-   struct {                  
-               void*     nv8;
-               void*     va8;
-               void*     fog8;
-    } view;  
 };
 
 

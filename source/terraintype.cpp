@@ -319,6 +319,13 @@ void TerrainType::write ( tnstream& stream ) const
 }
 
 
+TerrainType::~TerrainType()
+{
+   for ( int i = 0; i< cwettertypennum; ++i) {
+      delete weather[i];
+      weather[i] = NULL;
+   }   
+}
 
 
 TerrainAccess :: TerrainAccess ( void )

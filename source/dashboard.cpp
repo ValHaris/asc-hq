@@ -104,7 +104,11 @@ void UnitInfoPanel::eval()
    MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
    if ( mc.valid() ) {
       Vehicle* veh = actmap->getField(mc)->vehicle;
-      setLabelText( "unittypename", veh ? veh->typ->name : ""); 
+      if ( veh )
+         setLabelText( "unittypename", veh->typ->name );
+      else
+         setLabelText( "unittypename", "" );
+         
       setBargraphValue( "unitfuel", veh && veh->typ->tank.fuel ? float( veh->getTank().fuel) / veh->typ->tank.fuel : 0  );
    }
    Redraw(true);

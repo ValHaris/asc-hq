@@ -326,6 +326,7 @@ void         loadMoreData(void)
          stream.readrlepict(   &icons.experience[i], false, &w );
    }
 
+   /*
    {
       tnfilestream stream ("hexinvi2.raw",tnstream::reading);
       stream.readrlepict(   &icons.view.va8, false, &w);
@@ -345,7 +346,7 @@ void         loadMoreData(void)
       tnfilestream stream ("fg8.raw",tnstream::reading);
       stream.readrlepict(   &icons.view.fog8, false, &w);
    }
-
+     */
    {
       tnfilestream stream ("windrose.raw",tnstream::reading);
       stream.readrlepict(   &icons.windbackground, false, &w);
@@ -2336,6 +2337,9 @@ int main(int argc, char *argv[] )
    catch ( bad_alloc ) {
       fatalError ("Out of memory");
    }
+
+   delete actmap;
+   actmap = NULL;
 
    closegraphics();
 
