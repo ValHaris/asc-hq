@@ -175,6 +175,7 @@ void Vehicle :: init ( void )
    networkid = -1;
    reactionfire.status = ReactionFire::off;
    reactionfire.enemiesAttackable = 0;
+
    generatoractive = 0;
 
    for ( int a = 0; a < 8 ; a++ )
@@ -559,6 +560,20 @@ void Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
 }
 
 
+Vehicle::ReactionFire::ReactionFire ( Vehicle* _unit ) : unit ( _unit )
+{
+   weaponShots.resize(unit->typ->weapons.count);
+   resetShotCount();
+}
+
+
+void Vehicle::ReactionFire::resetShotCount()
+{
+   for ( int i = 0; i < unit->typ->weapons.count; ++i )
+      weaponShots[i] = unit->typ->weapons.weapon[i].reactionFireShots;
+}
+
+
 int Vehicle::ReactionFire::enable ( void )
 {
    if ( unit->typ->functions & cfno_reactionfire )
@@ -623,6 +638,8 @@ void Vehicle::ReactionFire::endTurn ( void )
       else
          enemiesAttackable = 0;
    }
+   resetShotCount();
+   nonattackableUnits.clear();
 }
 
 bool Vehicle::ReactionFire::canMove() const
@@ -1132,18 +1149,19 @@ void Vehicle :: fillMagically( void )
 #define cem_energyUsed    0x200000
 #define cem_position      0x400000
 #define cem_aiparam       0x800000
+#define cem_version       0x1000000
 
 
 
 
-
+const int vehicleVersion = 2;
 
 void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 {
     stream.writeWord ( typ->id );
     stream.writeChar ( color );
 
-    int bm = 0;
+    int bm = cem_version;
 
     if ( experience )
        bm |= cem_experience;
@@ -1214,6 +1232,8 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 
 
     stream.writeInt( bm );
+
+    stream.writeInt( vehicleVersion );
 
     if ( bm & cem_experience )
          stream.writeChar ( experience );
@@ -1301,6 +1321,9 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 
        stream.writeInt( 0x23451234 );
     }
+
+    writeClassContainer( reactionfire.weaponShots, stream );
+    writeClassContainer( reactionfire.nonattackableUnits, stream );
 }
 
 void   Vehicle::read ( tnstream& stream )
@@ -1317,6 +1340,10 @@ void   Vehicle::readData ( tnstream& stream )
 {
 
     int bm = stream.readInt();
+
+    int version = 0;
+    if ( bm & cem_version )
+       version = stream.readInt();
 
     if ( bm & cem_experience )
        experience = stream.readChar();
@@ -1473,6 +1500,11 @@ void   Vehicle::readData ( tnstream& stream )
           bool b = stream.readInt ( );
           if ( b )
              aiparam[i] = new AiParameter ( this );
+          else
+             if ( aiparam[i] ) {
+               delete aiparam[i];
+               aiparam[i] = NULL;
+             }
        }
 
        for ( int i = 0; i < 8; i++ )
@@ -1490,6 +1522,11 @@ void   Vehicle::readData ( tnstream& stream )
           weapstrength[m] = typ->weapons.weapon[m].maxstrength;
        else
           weapstrength[m] = 0;
+
+    if ( version >= 1 )
+      readClassContainer( reactionfire.weaponShots, stream );
+    if ( version >= 2 )
+      readClassContainer( reactionfire.nonattackableUnits, stream );
 }
 
 MapCoordinate3D Vehicle :: getPosition ( ) const

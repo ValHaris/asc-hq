@@ -1216,12 +1216,6 @@ void UnitWeaponPage::buildContent() {
     }
     *buildingInfStream << "</tr>" << endl;
     *buildingInfStream << "<tr>" << endl;
-    addTitle("Punch @ Max Range");
-    for(int i = 0; i < vt.weapons.count; i++) {
-      addTDEntry(vt.weapons.weapon[i].minstrength);
-    }
-    *buildingInfStream << "</tr>" << endl;
-    *buildingInfStream << "<tr>" << endl;
     addTitle("Ammo");
     for(int i = 0; i < vt.weapons.count; i++) {
       addTDEntry(vt.weapons.weapon[i].count);
@@ -1256,6 +1250,12 @@ void UnitWeaponPage::buildContent() {
         }
         addTDEntry(s);
       }
+    }
+    *buildingInfStream << "</tr>" << endl;
+    *buildingInfStream << "<tr>" << endl;
+    addTitle("Reactionfire Shot Count");
+    for(int i = 0; i < vt.weapons.count; i++) {
+      addTDEntry(vt.weapons.weapon[i].reactionFireShots);
     }
     *buildingInfStream << "</tr>" << endl;
     *buildingInfStream << "<tr>" << endl;

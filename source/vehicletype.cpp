@@ -119,7 +119,7 @@ int Vehicletype::maxsize ( void ) const
 extern void* generate_vehicle_gui_build_icon ( pvehicletype tnk );
 #endif
 
-const int vehicle_version = 16;
+const int vehicle_version = 17;
 
 
 
@@ -386,6 +386,10 @@ void Vehicletype :: read ( tnstream& stream )
          weapons.weapon[j].maxstrength = stream.readInt();
          weapons.weapon[j].minstrength = stream.readInt();
 
+         if ( version >= 17 )
+            weapons.weapon[j].reactionFireShots = stream.readInt();
+
+
          /*
          if ( weapons.weapon[j].getScalarWeaponType() == cwminen )
             if ( weapons.weapon[j].mindistance < 8 )
@@ -633,6 +637,7 @@ void Vehicletype:: write ( tnstream& stream ) const
       stream.writeInt(weapons.weapon[j].count );
       stream.writeInt(weapons.weapon[j].maxstrength );
       stream.writeInt(weapons.weapon[j].minstrength );
+      stream.writeInt(weapons.weapon[j].reactionFireShots );
 
       for ( int k = 0; k < 13; k++ )
          stream.writeInt(weapons.weapon[j].efficiency[k] );
@@ -725,6 +730,8 @@ SingleWeapon::SingleWeapon()
     efficiency[i] = 0;
   for ( int i = 0; i < cmovemalitypenum; i++ )
     targetingAccuracy[i] = 100;
+
+  reactionFireShots = 1;
 }
 
 
@@ -928,6 +935,8 @@ void SingleWeapon::runTextIO ( PropertyContainer& pc )
     laserRechargeCost.runTextIO ( pc, Resources(0,0,0) );
    pc.closeBracket();
 
+   pc.addInteger("ReactionFireShots", reactionFireShots, 1 );
+
    pc.openBracket("HitAccuracy" ); {
      for ( int j = 0; j < 13; j++ )
         if ( j < 6 )
@@ -1128,7 +1137,7 @@ Resources Vehicletype :: calcProductionsCost()
 			typecostm += (movecostsize-200)*5;
 		}
 		
-// Part IV - weaponcost		
+// Part IV - weaponcost
 		if ( weapons.count > 0 ) {
 			for ( int W=0; W < weapons.count; ++W ) {
 				if (weapons.weapon[W].getScalarWeaponType() == cwmachinegunn && weapons.weapon[W].shootable() ) {

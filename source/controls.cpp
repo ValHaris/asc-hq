@@ -1284,79 +1284,91 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, pve
          punitlist ul  = unitlist[i];
          while ( ul  &&  !result ) {
             punitlist next = ul->next;
-            pattackweap atw = attackpossible ( ul->eht, pos.x, pos.y );
-            if ( atw->count && (ul->eht->reactionfire.enemiesAttackable & (1 << (vehicle->color / 8)))) {
+            if ( find ( ul->eht->reactionfire.nonattackableUnits.begin(), ul->eht->reactionfire.nonattackableUnits.end(), vehicle->networkid) == ul->eht->reactionfire.nonattackableUnits.end() ) {
+               pattackweap atw = attackpossible ( ul->eht, pos.x, pos.y );
+               if ( atw->count && (ul->eht->reactionfire.enemiesAttackable & (1 << (vehicle->color / 8)))) {
 
-               int ad1, ad2, dd1, dd2;
-               int ulex = ul->eht->xpos;
-               int uley = ul->eht->ypos;
+                  int ad1, ad2, dd1, dd2;
+                  int ulex = ul->eht->xpos;
+                  int uley = ul->eht->ypos;
 
-               int strength = 0;
-               int num;
-               for ( int j = 0; j < atw->count; j++ )
-                  if ( atw->strength[j]  > strength ) {
-                     strength = atw->strength[j];
-                     num = j;
+                  int strength = 0;
+                  int num = -1;
+                  for ( int j = 0; j < atw->count; j++ )
+                     if ( ul->eht->reactionfire.weaponShots[atw->num[j]] > 0 )
+                        if ( atw->strength[j]  > strength ) {
+                           strength = atw->strength[j];
+                           num = j;
+                        }
+
+                  if ( num >= 0 ) {
+
+                     int visibility = 0;
+                     if ( md ) {
+                        displaymessage2 ( "attacking with weapon %d ", atw->num[num] );
+                        cursor.setcolor ( 8 );
+
+                        if ( fieldvisiblenow ( getfield (ul->eht->xpos, ul->eht->ypos ), actmap->playerView)) {
+                           ++visibility;
+                           cursor.gotoxy ( ul->eht->xpos, ul->eht->ypos );
+                           int t = ticker;
+                           while ( t + 15 > ticker )
+                              releasetimeslice();
+                        }
+
+                        if ( fieldvisiblenow ( fld, actmap->playerView)) {
+                           ++visibility;
+                           cursor.gotoxy ( pos.x, pos.y );
+                           int t = ticker;
+                           while ( t + 15 > ticker )
+                              releasetimeslice();
+                        }
+
+                        cursor.setcolor ( 0 );
+                        cursor.hide();
+                     }
+
+                     pvehicle veh = ul->eht;
+                     tunitattacksunit battle ( veh, fld->vehicle, 0, atw->num[num] );
+                     int nwid = fld->vehicle->networkid;
+
+                     ad1 = battle.av.damage;
+                     dd1 = battle.dv.damage;
+
+                     if ( md && visibility)
+                        battle.calcdisplay ();
+                     else
+                        battle.calc();
+
+                     ad2 = battle.av.damage;
+                     dd2 = battle.dv.damage;
+
+                     attacks++;
+
+                     if ( battle.dv.damage >= 100 )
+                        result = 1;
+
+                     // ul->eht->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  (vehicle->color / 8) );
+
+                     ul->eht->reactionfire.weaponShots[atw->num[num]]--;
+                     ul->eht->reactionfire.nonattackableUnits.push_back ( nwid );
+
+                     removeunit ( ul->eht );
+
+                     battle.setresult();
+
+                     if ( ad2 < 100 )
+                        veh->attacked = false;
+
+      //               logtoreplayinfo ( rpl_reactionfire, ulex, uley, x, y, ad1, ad2, dd1, dd2, atw->num[num] );
+
+                     dashboard.x = 0xffff;
                   }
 
-               int visibility = 0;
-               if ( md ) {
-                  displaymessage2 ( "attacking with weapon %d ", atw->num[num] );
-                  cursor.setcolor ( 8 );
 
-                  if ( fieldvisiblenow ( getfield (ul->eht->xpos, ul->eht->ypos ), actmap->playerView)) {
-                     ++visibility;
-                     cursor.gotoxy ( ul->eht->xpos, ul->eht->ypos );
-                     int t = ticker;
-                     while ( t + 15 > ticker )
-                        releasetimeslice();
-                  }
-
-                  if ( fieldvisiblenow ( fld, actmap->playerView)) {
-                     ++visibility;
-                     cursor.gotoxy ( pos.x, pos.y );
-                     int t = ticker;
-                     while ( t + 15 > ticker )
-                        releasetimeslice();
-                  }
-
-                  cursor.setcolor ( 0 );
-                  cursor.hide();
                }
-
-               pvehicle veh = ul->eht;
-               tunitattacksunit battle ( veh, fld->vehicle, 0, atw->num[num] );
-
-               ad1 = battle.av.damage;
-               dd1 = battle.dv.damage;
-
-               if ( md && visibility)
-                  battle.calcdisplay ();
-               else
-                  battle.calc();
-
-               ad2 = battle.av.damage;
-               dd2 = battle.dv.damage;
-
-               attacks++;
-
-               if ( battle.dv.damage >= 100 )
-                  result = 1;
-
-               ul->eht->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  (vehicle->color / 8) );
-               removeunit ( ul->eht );
-
-               battle.setresult();
-
-               if ( ad2 < 100 )
-                  veh->attacked = false;
-
-//               logtoreplayinfo ( rpl_reactionfire, ulex, uley, x, y, ad1, ad2, dd1, dd2, atw->num[num] );
-
-               dashboard.x = 0xffff;
-
+               delete atw;
             }
-            delete atw;
             ul = next;
          } /* endwhile */
       }

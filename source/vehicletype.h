@@ -104,6 +104,8 @@ extern const char*  cvehiclefunctions[];
      //! the resources that recharging the laser for a single shot requires
      Resources    laserRechargeCost;
 
+     int          reactionFireShots;
+
      ASCString    soundLabel;
 
      int          getScalarWeaponType(void) const;
@@ -214,7 +216,7 @@ extern const char*  cvehiclefunctions[];
         //! the damage this unit can repair itself automatically each turn.
         int          autorepairrate;
 
-        //! if the unit is destroyed, it can leave an wreckage object behind ( < 0 to disable ) 
+        //! if the unit is destroyed, it can leave an wreckage object behind ( < 0 to disable )
         vector<int> wreckageObject;
 
         //! some information the AI stores about this unit

@@ -24,7 +24,9 @@ bool AI :: runUnitTask ( pvehicle veh )
 {
    if ( veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_move || veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat ) {
       bool moveIntoBuildings = false;
-      if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer || veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat )
+      if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer ||
+         veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat ||
+         veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_script )
          moveIntoBuildings = true;
 
       int nwid = veh->networkid;
@@ -350,7 +352,9 @@ AI::AiResult  AI :: container ( ccontainercontrols& cc )
    for ( int j= 0; j < 32; j++ ) {
       pvehicle veh = cc.getloadedunit ( j );
       if ( veh )
-         if ( veh->aiparam[ getPlayerNum() ]->getTask() == AiParameter::tsk_nothing && veh->canMove() )
+         if ( veh->canMove() )
+            if ( veh->aiparam[ getPlayerNum() ]->getTask() == AiParameter::tsk_nothing
+               || veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_script  )
             idleUnits.push_back ( veh );
    }
    // move the most important unit first, to get the best position

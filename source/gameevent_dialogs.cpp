@@ -58,6 +58,7 @@ int  selectfield(int * cx ,int  * cy)
 }
 void selweather( tkey ench ){};
 void editpolygon (Poly_gon& poly) {};
+Vehicle* selectUnitFromMap() { return NULL; };
 #endif
 
 // õS GetXYSel
@@ -104,30 +105,34 @@ bool chooseVehicleType( int& vehicleTypeID )
 
 
 class  tgetxy : public tdialogbox {
+              ASCString titlename;
           public :
               int action;
               int x,y;
               void init(void);
               virtual void run(void);
+              virtual ASCString getTitle() { return "X/Y Pos"; };
               virtual int condition(void);
               virtual void buttonpressed(int id);
               };
 
 void         tgetxy::init(void)
-{ 
-   tdialogbox::init(); 
-   title = "X/Y-Pos"; 
-   x1 = 150;
-   xsize = 320; 
-   y1 = 150; 
-   ysize = 140; 
-   action = 0; 
+{
+   tdialogbox::init();
 
-   windowstyle = windowstyle ^ dlg_in3d; 
+   titlename = getTitle();
+   title = titlename.c_str();
+   x1 = 150;
+   xsize = 320;
+   y1 = 150;
+   ysize = 140;
+   action = 0;
+
+   windowstyle = windowstyle ^ dlg_in3d;
 
 
    addbutton("~D~one",20,ysize - 40,100,ysize - 20,0,1,1,true);
-   addkey(1,ct_enter); 
+   addkey(1,ct_enter);
    addbutton("~C~ancel",120,ysize - 40,200,ysize - 20,0,1,2,true);
    addbutton("~M~ap",220,ysize - 40,300,ysize - 20,0,1,3,true);
    addbutton("~X~-Pos",20,60,150,80,2,1,4,true);
@@ -135,7 +140,7 @@ void         tgetxy::init(void)
    addbutton("~Y~-Pos",170,60,300,80,2,1,5,true);
    addeingabe(5,&y,0,actmap->ysize - 1);
 
-   buildgraphics(); 
+   buildgraphics();
 
    mousevisible(true); 
 } 
@@ -156,19 +161,19 @@ int         tgetxy::condition(void)
 }
 
 void         tgetxy::buttonpressed(int         id)
-{ 
+{
 
-   tdialogbox::buttonpressed(id); 
+   tdialogbox::buttonpressed(id);
    switch (id) {
-      
-      case 1:   
-      case 2:   action = id; 
-   break; 
+
+      case 1:
+      case 2:   action = id;
+   break;
       case 3: {
                   mousevisible(false);
-                  x = getxpos(); 
-                  y = getypos(); 
-                  displaymap(); 
+                  x = getxpos();
+                  y = getypos();
+                  displaymap();
                   mousevisible(true);
                   do {
                      if ( !selectfield(&x,&y) )
@@ -240,17 +245,21 @@ void selectFields( FieldAddressing::Fields& fields )
 
 class  tgetxyunit : public tgetxy {
           public :
+              ASCString getTitle() { return "Select Unit"; };
               virtual int condition(void);
+              virtual bool container( ContainerBase* cnt );
               };
 
 
 int         tgetxyunit::condition(void)
 {
    if ( getfield( x, y ) )
-      if ( getfield(x,y)->vehicle ) 
+      if ( getfield(x,y)->vehicle )
           return 1;
    return 0;
 }
+
+
 
 void         getxy_unit(int *x,int *y)
 { tgetxyunit       gu;
@@ -262,7 +271,7 @@ void         getxy_unit(int *x,int *y)
    *x = gu.x;
    *y = gu.y;
    gu.done();
-} 
+}
 
 class  tgetxybuilding : public tgetxy {
           public :
@@ -607,21 +616,8 @@ pvehicle selectunit ( pvehicle unit )
           y = 0;
        }
 
-       pfield pf2;
-
-       do {
-          getxy_unit(&x,&y);
-          if ((x != 50000)) {
-             pf2 = getfield(x,y);
-             abb = false;
-             if ( pf2 && pf2->vehicle )
-                abb = true;
-          }
-       }  while (!((x == 50000) || abb));
-       if ((x != 50000) && abb)
-          return pf2->vehicle;
-       else
-          return NULL;
+       cursor.gotoxy(x,y);
+       return selectUnitFromMap();
     } else {
        displaymessage("no vehicles on map !", 1 );
        return NULL;

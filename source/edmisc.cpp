@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.120 2004-08-14 13:11:03 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.121 2004-09-08 19:34:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.120  2004/08/14 13:11:03  mbickel
+//      Fixed crash in mapeditor
+//      more item filters possible in mapeditor
+//
 //     Revision 1.119  2004/07/23 20:33:56  mbickel
 //      Fixed invalid cache generation
 //      Objects now have a height
@@ -1942,6 +1946,8 @@ void         setstartvariables(void)
    atexit( freevariables );
 }
 
+
+
 int  selectfield(int * cx ,int  * cy)
 {
    // int oldposx = getxpos();
@@ -1953,43 +1959,7 @@ int  selectfield(int * cx ,int  * cy)
    do {
       if (keypress()) {
          ch = r_key();
-         switch (ch) {
-            #ifdef NEWKEYB
-            case ct_up:
-            case ct_down:
-            case ct_left:
-            case ct_right:
-            case ct_up + ct_stp:
-            case ct_down + ct_stp:
-            case ct_left + ct_stp:
-            case ct_right + ct_stp:
-            #endif
-            case ct_1k:
-            case ct_2k:
-            case ct_3k:
-            case ct_4k:
-            case ct_5k:
-            case ct_6k:
-            case ct_7k:
-            case ct_8k:
-            case ct_9k:
-            case ct_1k + ct_stp:
-            case ct_2k + ct_stp:
-            case ct_3k + ct_stp:
-            case ct_4k + ct_stp:
-            case ct_5k + ct_stp:
-            case ct_6k + ct_stp:
-            case ct_7k + ct_stp:
-            case ct_8k + ct_stp:
-            case ct_9k + ct_stp:   {
-                              mousevisible(false);
-                              movecursor(ch);
-                              cursor.show();
-                              showStatusBar();
-                              mousevisible(true);
-                           }
-                           break;
-             } /* endswitch */
+         movecursor( ch );
       } else
          releasetimeslice();
    } while ( ch!=ct_enter  &&  ch!=ct_space  && ch!=ct_esc); /* enddo */
@@ -2004,6 +1974,38 @@ int  selectfield(int * cx ,int  * cy)
          return 0;
       else
          return 2;
+}
+
+
+
+Vehicle*  selectUnitFromMap()
+{
+   displaymap();
+   cursor.show();
+   tkey ch = ct_invvalue;
+   Vehicle* veh = NULL;
+   do {
+      if (keypress()) {
+         ch = r_key();
+         movecursor( ch );
+         if( ch == 'c' &&  getactfield()->getContainer()  )
+            veh = selectUnitFromContainer( getactfield()->getContainer() );
+
+         if ( ch ==ct_enter  ||  ch==ct_space ) {
+            if ( getactfield()->vehicle )
+               veh = getactfield()->vehicle;
+         }
+      } else
+         releasetimeslice();
+
+
+   } while ( !veh  && ch!=ct_esc); /* enddo */
+   cursor.hide();
+
+   if ( ch == ct_enter || ct_space )
+      return veh;
+   else
+      return NULL;
 }
 
 
@@ -3427,7 +3429,6 @@ class tladeraum : public tdialogbox {
                     virtual void finish ( int cancel ) = 0;
                     int getcapabilities ( void ) { return 1; };
                     virtual void redraw ( void );
-
                public :
                     void init( char* ttl );
                     virtual void run(void);
@@ -3794,6 +3795,90 @@ void         unit_cargo( pvehicle vh )
       laderaum.done();
    }
 }
+
+
+
+class SelectFromContainer : public tladeraum {
+               protected:
+                    ContainerBase* transport;
+                    virtual const char* getinfotext ( int pos );
+                    virtual void additem ( void );
+                    virtual void removeitem ( int pos );
+                    virtual void checkforadditionalkeys ( tkey ch );
+                    void displaysingleitem ( int pos, int x, int y );
+                    virtual void finish ( int cancel );
+
+                public:
+                    SelectFromContainer ( ContainerBase* unit ) : transport ( unit ), unit(NULL) {};
+                    void init (  );
+                    Vehicle* unit;
+
+
+};
+
+
+const char* SelectFromContainer :: getinfotext ( int pos )
+{
+   if ( transport->loading[ pos ] )
+      if ( !transport->loading[ pos ]->name.empty() )
+         return transport->loading[ pos ]->name.c_str();
+      else
+         if ( !transport->loading[ pos ]->typ->name.empty() )
+            return transport->loading[ pos ]->typ->name.c_str();
+         else
+            return transport->loading[ pos ]->typ->description.c_str();
+   return NULL;
+}
+
+
+void SelectFromContainer :: init (  )
+{
+   tladeraum::init ( "select unit" );
+}
+
+void SelectFromContainer :: displaysingleitem ( int pos, int x, int y )
+{
+   if ( transport->loading[ pos ] )
+      putrotspriteimage ( x, y, transport->loading[ pos ]->typ->picture[0], farbwahl * 8 );
+}
+
+void SelectFromContainer :: additem  ( void )
+{
+}
+
+void SelectFromContainer :: removeitem ( int pos )
+{
+}
+
+void SelectFromContainer :: checkforadditionalkeys ( tkey ch )
+{
+   if ( transport->loading[ cursorpos ] ) {
+       if ( ch == ct_c )
+          unit = selectUnitFromContainer( transport->loading[ cursorpos ] );
+
+       if ( ch == ct_enter || ch == ct_space  )
+          if ( transport->loading[ cursorpos ] )
+             unit = transport->loading[ cursorpos ];
+
+       if ( unit )
+          action = 1;
+   }
+}
+
+
+void SelectFromContainer :: finish ( int cancel )
+{
+}
+
+Vehicle* selectUnitFromContainer( ContainerBase* container )
+{
+   SelectFromContainer sfc ( container );
+   sfc.init();
+   sfc.run();
+   sfc.done();
+   return sfc.unit;
+}
+
 
 
 //* õS Laderaum2 Building-Cargo
@@ -4885,11 +4970,12 @@ void editResearch()
          do {
             vector<int>& devTech = actmap->player[player].research.developedTechnologies;
             vector<ASCString> techs;
-            vector<int> techIds;
+            map<ASCString,int> techIds;
             for ( int i = 0; i < devTech.size(); ++i ) {
                int id = devTech[i];
-               techs.push_back ( printTech(id ) );
-               techIds.push_back  ( id );
+               ASCString s = printTech(id );
+               techs.push_back ( s );
+               techIds[s] = id;
             }
             sort (techs.begin(), techs.end() );
             res = chooseString ( "Available Technologies", techs, buttons );
@@ -4910,8 +4996,7 @@ void editResearch()
                   devTech.push_back ( techIds[r.second] );
             } else
             if ( res.first == 1 && res.second >= 0 ) {
-               vector<int>::iterator p = devTech.begin();
-               p += res.second;
+               vector<int>::iterator p = find ( devTech.begin(), devTech.end(), techIds[techs[res.second]]);
                devTech.erase ( p );
             }
          } while ( res.first != 2 );

@@ -51,7 +51,7 @@ class MapNetwork {
 
 class ResourceNet : public MapNetwork {
                public:
-                  ResourceNet ( pmap gamemap, int _scope = -1 ) : MapNetwork ( gamemap, _scope != 0 ) {};
+                  ResourceNet ( pmap gamemap, int _scope = -1 ) : MapNetwork ( gamemap, _scope != 0 ), scope(_scope) {};
                protected:
                   int resourcetype;
                   int scope;

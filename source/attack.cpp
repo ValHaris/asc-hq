@@ -571,8 +571,8 @@ void tunitattacksunit :: setresult ( void )
    _attackingunit->experience = av.experience;
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
-   if ( _attackingunit->reactionfire.getStatus() >= Vehicle::ReactionFire::ready )
-      _attackingunit->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  dv.color );
+//   if ( _attackingunit->reactionfire.getStatus() >= Vehicle::ReactionFire::ready )
+//      _attackingunit->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  dv.color );
 
    _attackingunit->postAttack();
 

@@ -100,7 +100,7 @@
 
          Vehicle* unit;
        public:
-         ReactionFire ( Vehicle* _unit ) : unit ( _unit ) {};
+         ReactionFire ( Vehicle* _unit );
          enum Status { off, init1a, init2, ready, init1b };
 
          //! for each player that can still be attacked one bit is set
@@ -111,12 +111,16 @@
          int enable();
          void disable();
 
+         vector<int> weaponShots;
+         vector<int> nonattackableUnits;
+
          //! hook that is called when a turn ends
          void endTurn ( void );
 
          bool canMove() const;
        private:
          Status status;
+         void resetShotCount();
 
     } reactionfire;
 

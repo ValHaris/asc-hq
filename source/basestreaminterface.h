@@ -89,9 +89,9 @@
            /** Reads and returns a string. Carriage Return character will be filtered. If the very first read
                operation fails because the end of the stream was already reached, a readafterend exception will 
                be thrown. If some data could be read before the end was reached, this data will be returned.
-               \param includeCR if true, the reading will stop only a 0 Bytes or the end of stream, 
+               \param includeCR if true, the reading will stop only at 0 Bytes or the end of stream, 
                                 so all newline character will be part of the text string. Useful for binary files.
-                                If false reading will stop and 0 Bytes and newline characters. The newline character will not be part of the resulting string.
+                                If false reading will stop at 0 Bytes and newline characters. The newline character will not be part of the resulting string.
            */
            virtual ASCString readString ( bool includeCR = false );
 
