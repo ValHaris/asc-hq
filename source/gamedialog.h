@@ -12,20 +12,25 @@
 #ifndef GAMEDIALOG_H
 #define GAMEDIALOG_H
 
+#include "gameoptions.h"
 #include "paradialog.h"
+#include "pgmultilineedit.h"
 /**
 @author Kevin Hirschmann
 */
 class GameDialog: public ASC_PG_Dialog{
-public:
-    GameDialog();
+public:    
 
     ~GameDialog();
-
+    
+    static bool gameDialog(const SDL_KeyboardEvent *key);    
+protected:
+  bool handleEventKeyUp (const SDL_KeyboardEvent *key);
 private:
   static const int xSize;
   static const int ySize;
   static const int buttonIndent;
+  static GameDialog* instance;
   PG_Button* singlePlayerButton;
   PG_Button* multiPlayerButton;
   PG_Button* loadGameButton;
@@ -33,6 +38,8 @@ private:
   PG_Button* optionsButton;
   PG_Button* exitButton;
   PG_Button* continueButton;
+  
+  GameDialog();
   
   bool closeWindow();
   bool singleGame(PG_Button* button);
@@ -42,35 +49,39 @@ private:
   bool showOptions(PG_Button* button);
   bool exitGame(PG_Button* button);
   
+  
+  
 };
 
-extern void gameDialog();
+
 
 class SinglePlayerDialog: public ASC_PG_Dialog{
 public:  
-  SinglePlayerDialog();
-  
+  static void singlePlayerDialog(PG_MessageObject* caller);
+    
   ~SinglePlayerDialog();
 private:
   static const int xSize;
   static const int ySize;
   static const int buttonIndent;
+  static SinglePlayerDialog* instance;
   
   PG_Button* campaignButton;
   PG_Button* singleLevelButton;
   PG_Button* cancelButton;
+  
+  SinglePlayerDialog(PG_MessageObject* parent);
   
   bool campaign(PG_Button* button);
   bool singleLevel(PG_Button* button);
   bool closeWindow();
 };
 
-extern void singlePlayerDialog();
+
 
 class MultiPlayerDialog: public ASC_PG_Dialog{
-public:  
-  MultiPlayerDialog();
-  
+public:    
+  static void multiPlayerDialog(PG_MessageObject* c);  
   ~MultiPlayerDialog();
 private:
   static const int xSize;
@@ -80,19 +91,24 @@ private:
   PG_Button* continueGameButton;
   PG_Button* superViseButton;
   PG_Button* setupNWButton;
+  PG_Button* changeMapPasswordButton;
   PG_Button* cancelButton;
+  
+  MultiPlayerDialog(PG_MessageObject* c);
   
   bool continueGame(PG_Button* button);
   bool superVise(PG_Button* button);
   bool setupNWGame(PG_Button* button);
+  bool changeMapPassword(PG_Button* button);
   bool closeWindow();
 };
 
-extern void multiPlayerDialog();
+
 
 class ConfirmExitDialog: public ASC_PG_Dialog{
 public:  
-  ConfirmExitDialog();
+  static void confirmExitDialog(PG_MessageObject* c);
+  
   
   ~ConfirmExitDialog();
 private:
@@ -102,16 +118,19 @@ private:
   PG_Button* okButton;
   PG_Button* cancelButton;
   
+  ConfirmExitDialog(PG_MessageObject* c);
+  
   bool exitGame(PG_Button* button);
   bool closeWindow();
 };
 
-extern void confirmExitDialog();
+
 
 class OptionsDialog: public ASC_PG_Dialog{
 public:  
-  OptionsDialog();
   
+  static void optionsDialog(PG_MessageObject* c);
+    
   ~OptionsDialog();
 private:
   static const int xSize;
@@ -122,13 +141,201 @@ private:
   PG_Button* soundButton;
   PG_Button* mouseButton;
   PG_Button* otherButton;
+  PG_Button* displayButton;
+  
+  OptionsDialog(PG_MessageObject* c);
   
   bool showSoundOptions(PG_Button* button);
   bool showMouseOptions(PG_Button* button);
   bool showOtherOptions(PG_Button* button);
+  bool showDisplayOptions(PG_Button* button);
   bool closeWindow();
 };
-extern void optionsDialog();
+
+
+
+class DisplayOptionsDialog: public ASC_PG_Dialog{
+public:  
+  static void displayOptionsDialog(PG_MessageObject* c);    
+  ~DisplayOptionsDialog();
+private:
+  static const int xSize;
+  static const int ySize;
+  static const int buttonIndent;
+    
+  
+  PG_Label* movementSpeedLabel;
+  PG_LineEdit* movementSpeedValue;
+  
+  PG_Label* mouseTipLabel;
+  PG_LineEdit* mouseTipValue;
+  
+  PG_Button* okButton;
+  PG_Button* cancelButton;
+  
+  DisplayOptionsDialog(PG_MessageObject* c);
+  
+  bool ok(PG_Button* button);
+  bool closeWindow();
+};
+
+
+
+
+class GameOptionsDialog: public ASC_PG_Dialog{
+public:    
+   static void GameOptionsDialog::gameOptionsDialog(PG_MessageObject* c);  
+  ~GameOptionsDialog();
+private:
+  static const int xSize;
+  static const int ySize;
+  static const int buttonIndent;    
+  
+  PG_Label* autoAmmunitionLabel;
+  PG_CheckButton* autoAmmunitionCButton;
+  
+  PG_Label* autoUnitTrainingLabel;
+  PG_CheckButton* autoUnitTrainingCButton;    
+  
+  PG_Label* promptEndOfTurnLabel;
+  PG_CheckButton* promptEndOfTurnCButton;
+  
+  PG_Button* okButton;
+  PG_Button* cancelButton;
+  
+  PG_Button* changePasswordButton;
+  
+  GameOptionsDialog(PG_MessageObject* c);
+  
+  bool changePassword(PG_Button* button);
+  
+  bool ok(PG_Button* button);
+  bool closeWindow();
+};
+
+class ChangePasswordDialog: public ASC_PG_Dialog{
+  public:    
+    virtual ~ChangePasswordDialog();
+    
+    protected:
+    PG_LineEdit* passwordValue;
+	
+    ChangePasswordDialog(PG_MessageObject* c);
+  private:  
+    static const int xSize;
+    static const int ySize;
+    static const int buttonIndent;
+    
+    PG_Button* okButton;
+    PG_Button* cancelButton;
+    PG_Label* passwordLabel;
+    
+    virtual bool ok(PG_Button* button) = 0;
+
+
+};
+
+class MousePreferencesDialog: public ASC_PG_Dialog{
+  public:
+   static void mousePreferencesDialog(PG_MessageObject* c);
+   virtual ~MousePreferencesDialog();
+private:
+   static const int xSize;
+   static const int ySize;
+    
+   MousePreferencesDialog(PG_MessageObject* c);
+   bool ok(PG_Button* button);
+};
+
+class ChangeDefaultPasswordDialog: public ChangePasswordDialog{
+public:
+   static void changeDefaultPasswordDialog(PG_MessageObject* c);
+   virtual ~ChangeDefaultPasswordDialog();
+private:
+   ChangeDefaultPasswordDialog(PG_MessageObject* c);
+   bool ok(PG_Button* button);
+};
+
+class ChangeMapPasswordDialog: public ChangePasswordDialog{
+public:
+   static void changeMapPasswordDialog(PG_MessageObject* c);
+   virtual ~ChangeMapPasswordDialog();
+private:
+   ChangeMapPasswordDialog(PG_MessageObject* c);
+   bool ok(PG_Button* button);
+};
+
+
+class SaveGameBaseDialog: public ASC_PG_Dialog{
+public:  
+  
+  virtual ~SaveGameBaseDialog();
+  
+protected:  
+PG_LineEdit* fileNameValue;
+PG_ScrollBar* slider;
+PG_ListBox* fileList;
+
+SaveGameBaseDialog(const ASCString& title, PG_MessageObject* c);
+
+private:
+  static const int xSize;
+  static const int ySize;
+  static const int buttonIndent;      
+    
+  PG_RadioButton* sortNameButton;
+  PG_RadioButton* sortDateButton;
+  
+  PG_Label* fileNameLabel;
+    
+  PG_Button* okButton;
+  PG_Button* cancelButton;
+  
+  virtual bool ok(PG_Button* button) = 0;
+  virtual bool handleSlider(long data);
+  virtual bool closeWindow();
+};
+
+class SaveGameDialog: public SaveGameBaseDialog{
+public:  
+  static void saveGameDialog(PG_MessageObject* caller);  
+  
+  virtual ~SaveGameDialog();
+private:
+  SaveGameDialog(PG_MessageObject* caller);
+    
+  bool ok(PG_Button* button);  
+};
+
+
+
+class LoadGameDialog: public SaveGameBaseDialog{
+public:  
+  
+  static void loadGameDialog(PG_MessageObject* caller);  
+  
+  virtual ~LoadGameDialog();
+private:
+  LoadGameDialog(PG_MessageObject* caller);  
+    
+  bool ok(PG_Button* button);  
+};
+
+class SoundSettings : public ASC_PG_Dialog
+{
+      CGameOptions::SoundSettings sSettings;
+      void updateSettings();
+   public:
+      SoundSettings(PG_Widget* parent, const PG_Rect& r, PG_MessageObject* caller);
+      static void soundSettings(PG_MessageObject* caller);      
+   protected:
+
+      bool radioButtonEvent( PG_RadioButton* button, bool state);
+      bool buttonEvent( PG_Button* button );
+      bool eventScrollTrack(PG_Slider* slider, long data);
+      
+
+};
 
 #endif
 

@@ -38,6 +38,7 @@
 #include "sg.h"
 #include "graphics/blitter.h"
 #include "viewcalculation.h"
+#include "spfst.h"
 
 namespace GuiFunctions
 {
@@ -430,7 +431,7 @@ class PowerOn : public GuiFunction
          }
          return false;
       };
-      
+
       void execute( const MapCoordinate& pos, int num )
       {
          Vehicle* veh = actmap->getField(pos)->vehicle;
@@ -438,12 +439,12 @@ class PowerOn : public GuiFunction
          logtoreplayinfo ( rpl_setGeneratorStatus, veh->networkid, int(1) );
          updateFieldInfo();
       }
-      
+
       Surface& getImage( const MapCoordinate& pos, int num )
       {
          return IconRepository::getIcon("poweron.png");
       };
-      
+
       ASCString getName( const MapCoordinate& pos, int num )
       {
          return "enable power generation";
@@ -475,7 +476,7 @@ class PowerOff : public GuiFunction
          logtoreplayinfo ( rpl_setGeneratorStatus, veh->networkid, int(0) );
          updateFieldInfo();
       }
-      
+
       Surface& getImage( const MapCoordinate& pos, int num )
       {
          return IconRepository::getIcon("poweron.png");
@@ -514,6 +515,102 @@ bool UnitInfo::available( const MapCoordinate& pos, int num )
                return true;
    return false;
 }
+
+
+
+
+
+
+
+
+class DestructBuilding : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num ) ;
+      void execute( const MapCoordinate& pos, int num );
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("destructbuilding.png");
+      };
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "destruct building";
+      };
+};
+
+
+bool DestructBuilding::available( const MapCoordinate& pos, int num )
+{
+    pfield fld = actmap->getField(pos);
+    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
+       if ( fld->vehicle )
+          if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() )
+             if (fld->vehicle->color == actmap->actplayer * 8)
+               if ((fld->vehicle->typ->functions & cfputbuilding) || !fld->vehicle->typ->buildingsBuildable.empty() )
+                  if ( fld->vehicle->getTank().fuel >= destruct_building_fuel_usage * fld->vehicle->typ->fuelConsumption )
+                     return true;
+    }
+    else
+       if (moveparams.movestatus == 115) {
+          if (fld->a.temp == 20)
+             return true;
+       }
+
+    return false;
+}
+
+void DestructBuilding::execute(  const MapCoordinate& pos, int num )
+{
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
+      destructbuildinglevel1( pos.x, pos.y );
+      displaymap();
+   }
+   else
+      if (moveparams.movestatus == 115) {
+         destructbuildinglevel2( pos.x, pos.y );
+         updateFieldInfo();
+         displaymap();
+      }
+}
+
+
+
+class SearchForMineralResources : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+         pfield fld = actmap->getField(pos);
+         if (fld->vehicle != NULL)
+            if (fld->vehicle->color == actmap->actplayer * 8)
+               if ( (fld->vehicle->typ->functions &  cfmanualdigger) && !(fld->vehicle->typ->functions &  cfautodigger) )
+                  if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
+                     return fld->vehicle->searchForMineralResourcesAvailable();
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, int num )
+      {
+          actmap->getField(pos)->vehicle->searchForMineralResources( ) ;
+          showresources = 1;
+          updateFieldInfo();
+          repaintMap();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("poweron.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "search for mineral resources";
+      };
+};
+
+
+
+
 
 
 
@@ -620,7 +717,7 @@ Surface buildGuiIcon( const Surface& image, bool remove = false )
       Surface& removegui = IconRepository::getIcon( "cancel-addon.png" );
       blitter.blit( removegui, s,  SPoint((s.w() - removegui.w())/2, (s.h() - removegui.h())/2));
    }
-
+   return s;
 }
 
 Surface& ObjectBuildingGui::getImage( const MapCoordinate& pos, int num )
@@ -712,8 +809,10 @@ void ObjectBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
        if ( checkObject( fld, actmap->getobjecttype_byid ( j ), Build ))
           if ( pass==1 )
             addButton(num, pos, j);
-          else
+          else {
+            ++num;
             fld->a.temp = 1;
+          }
 
 
    for ( int i = 0; i < veh->typ->objectGroupsBuildable.size(); i++ )
@@ -724,8 +823,10 @@ void ObjectBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
              if ( checkObject( fld, objtype, Build ))
                if ( pass==1 )
                   addButton(num, pos, objtype->id);
-               else
+                else {
+                  ++num;
                   fld->a.temp = 1;
+                }
        }
 
    for ( int i = 0; i < veh->typ->objectsRemovable.size(); i++ )
@@ -733,8 +834,10 @@ void ObjectBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
        if ( checkObject( fld, actmap->getobjecttype_byid ( j ), Remove ))
           if ( pass==1 )
             addButton(num, pos, -j);
-          else
+          else {
+            ++num;
             fld->a.temp = 1;
+          }
 
 
    for ( int i = 0; i < veh->typ->objectGroupsRemovable.size(); i++ )
@@ -745,8 +848,10 @@ void ObjectBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
              if ( checkObject( fld, objtype, Remove ))
                 if ( pass==1 )
                    addButton(num, pos, -objtype->id);
-                else
-                   fld->a.temp = 1;
+                else {
+                  ++num;
+                  fld->a.temp = 1;
+                }
        }
 
 }
@@ -837,7 +942,6 @@ class VehicleBuildingGui : public GuiIconHandler, public GuiFunction {
       void execute( const MapCoordinate& pos, int id  );
       Surface& getImage( const MapCoordinate& pos, int id  );
       ASCString getName( const MapCoordinate& pos, int id  );
-//    bool checkObject( pfield fld, VehicleType* objtype, Mode mode );
 
       void search ( const MapCoordinate& pos, int& num, int pass );
 
@@ -942,8 +1046,10 @@ void VehicleBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
             if ( v && veh->vehicleconstructable ( v, pos.x, pos.y )) {
                if ( pass==1 )
                   addButton(num, pos, v->id);
-               else
+               else {
+                  ++num;
                   fld->a.temp = 1;
+               }   
             }
          }
 }
@@ -1021,6 +1127,427 @@ void BuildVehicle::execute(  const MapCoordinate& pos, int num )
 
 
 
+
+
+
+
+
+
+
+class BuildingConstruction : public GuiIconHandler, public GuiFunction {
+      Vehicle* veh;
+      int bldid;
+      map<MapCoordinate,int> entryPos;
+   protected:
+      bool available( const MapCoordinate& pos, int id  );
+      void execute( const MapCoordinate& pos, int id  );
+      Surface& getImage( const MapCoordinate& pos, int id  );
+      ASCString getName( const MapCoordinate& pos, int id  );
+
+      void search ( const MapCoordinate& pos, int& num, int pass );
+
+      void addButton( int &num, const MapCoordinate& mc, int id );
+
+   public:
+      BuildingConstruction() : veh( NULL ), bldid(-1) {};
+      bool init( Vehicle* vehicle );
+      bool setup();
+      void eval();
+
+};
+
+
+bool BuildingConstruction::init( Vehicle* vehicle )
+{
+   entryPos.clear();
+   veh = vehicle;
+   bldid = -1;
+   int num = 0;
+
+   if ( moveparams.movestatus == 0 )
+      for ( int i = 0; i < buildingTypeRepository.getNum(); i++)
+         if ( veh->buildingconstructable ( buildingTypeRepository.getObject_byPos( i ) ))
+            ++num;
+
+   return num > 0;
+}
+
+
+bool BuildingConstruction::setup()
+{
+   int num = 0;
+
+   if ( moveparams.movestatus == 110 )
+      for ( int i = 0; i < buildingTypeRepository.getNum(); i++)
+         if ( veh->buildingconstructable ( buildingTypeRepository.getObject_byPos( i ) ))
+            addButton( num, veh->getPosition(), buildingTypeRepository.getObject_byPos( i )->id );
+
+
+   GuiButton* b = host->getButton(num);
+   b->registerFunc( this, veh->getPosition(), -1 );
+   b->Show();
+   ++num;
+
+   host->disableButtons(num);
+   return true;
+}
+
+
+bool BuildingConstruction::available( const MapCoordinate& pos, int id  )
+{
+   if ( id < 0 )
+      return true;
+
+   if ( moveparams.movestatus == 110 )
+      return true;
+
+   if ( moveparams.movestatus == 111 )
+      return (actmap->getField(pos)->a.temp == 20) && (id == bldid);
+
+   if ( moveparams.movestatus == 112 )
+      return ( entryPos[pos] == bldid ) && (id == bldid);
+
+   return false;
+}
+
+void BuildingConstruction::execute( const MapCoordinate& pos, int id  )
+{
+   bool close = false;
+   if ( id < 0 )
+      close  = true;
+
+   BuildingType* bld = buildingTypeRepository.getObject_byID( bldid );
+
+
+   if (moveparams.movestatus == 110 && !close ) {
+      entryPos.clear();
+      bldid = id;
+      actmap->cleartemps(7);
+
+      int num = 0;
+      for ( int i = 0; i< 6; ++i)
+         search ( getNeighbouringFieldCoordinate(veh->getPosition(), i), num, 0 );
+
+      if ( num ) {
+         moveparams.movestatus = 111;
+         repaintMap();
+         eval();
+      } else
+         close = true;
+   } else
+
+     if (moveparams.movestatus == 111 && !close ) {
+         entryPos.clear();
+         bool b = true;
+
+         if ( actmap->getField(pos)->a.temp == 20) {
+
+            actmap->cleartemps(7);
+            for ( int y1 = 0; y1 <= 5; y1++)
+               for ( int x1 = 0; x1 <= 3; x1++)
+                  if ( bld->fieldExists ( BuildingType::LocalCoordinate(x1, y1) ) ) {
+                     MapCoordinate mc = bld->getFieldCoordinate( pos,  BuildingType::LocalCoordinate(x1,y1));
+                     pfield fld = actmap->getField( mc );
+                     if ( fld ) {
+                         if ( fld->vehicle || (fld->building && fld->building->getCompletion() == fld->building->typ->construction_steps-1 ))
+                            b = false;
+
+                         if ( b ) {
+                           if ( x1 == bld->entry.x  && y1 == bld->entry.y ) {
+                              fld->a.temp = 23;
+                              entryPos[pos] = bldid;
+                           } else {
+                              fld->a.temp = 22;
+                           }
+                         } else
+                            displaymessage("severe error: \n inconsistency between level1 and level2 of putbuilding",2);
+                     } else
+                       b = false;
+                  }
+            if ( b ) {
+               moveparams.movestatus = 112;
+               repaintMap();
+               eval();
+            }
+         }
+     } else
+        if (moveparams.movestatus == 112 && !close ) {
+            actmap->cleartemps(7);
+            entryPos.clear();
+            putbuilding2( pos, veh->color, bld);
+
+            logtoreplayinfo ( rpl_putbuilding2, pos.x, pos.y, bldid, (int) veh->color, veh->networkid );
+
+            int mf = actmap->getgameparameter ( cgp_building_material_factor );
+            int ff = actmap->getgameparameter ( cgp_building_fuel_factor );
+            if ( mf <= 0 )
+               mf = 100;
+
+            if ( ff <= 0 )
+               ff = 100;
+
+            Resources cost = Resources ( 0, bld->productionCost.material * mf / 100, bld->productionCost.fuel * ff / 100);
+            if ( veh->getResource( cost, false ) < cost )
+               displaymessage("not enough resources!",1);
+
+            close = true;
+            veh->setMovement ( 0 );
+            veh->attacked = true;
+            computeview( actmap );
+         }
+
+   if ( close ) {
+      moveparams.movestatus = 0;
+      actmap->cleartemps();
+      NewGuiHost::popIconHandler();
+      repaintMap();
+      updateFieldInfo();
+   }
+}
+
+Surface generate_gui_build_icon ( BuildingType* bld )
+{
+   Surface s = Surface::createSurface(500,500);
+
+   int minx = 1000;
+   int miny = 1000;
+   int maxx = 0;
+   int maxy = 0;
+
+    for (int y = 0; y <= 5; y++)
+       for (int x = 0; x <= 3; x++)
+          if (bld->fieldExists( BuildingType::LocalCoordinate(x,y) ) ) {
+             int xp = fielddistx * x  + fielddisthalfx * ( y & 1);
+             int yp = fielddisty * y ;
+             if ( xp < minx )
+                minx = xp;
+             if ( yp < miny )
+                miny = yp;
+             if ( xp > maxx )
+                maxx = xp;
+             if ( yp > maxy )
+                maxy = yp;
+
+             s.Blit( bld->getPicture( BuildingType::LocalCoordinate(x,y)), SPoint(xp,yp) );
+          }
+   maxx += fieldxsize;
+   maxy += fieldysize;
+
+   Surface s2 = Surface::createSurface(maxx-minx+1,maxy-miny+1);
+   s2.Blit( s, SDLmm::SRect(SPoint(minx,miny), SPoint(maxx,maxy) ), SPoint(0,0));
+
+   return s2;
+
+   /*
+   Surface s3 = leergui.Duplicate();
+   MegaBlitter<1,1,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Zoom> blitter;
+
+   blitter.setSize( s2.w(), s2.h(), s3.w(), s3.h() );
+   blitter.initSource ( s2 );
+   blitter.blit ( s2, s3, SPoint((s3.w() - blitter.getWidth())/2, (s3.h() - blitter.getHeight())/2) );
+
+   return s3;
+   */
+}
+
+
+Surface& BuildingConstruction::getImage( const MapCoordinate& pos, int id )
+{
+   if ( id < 0 )
+      return IconRepository::getIcon("cancel.png");
+
+   BuildingType* bld = buildingTypeRepository.getObject_byID( id );
+
+   if ( !bld )
+      return IconRepository::getIcon("cancel.png");
+
+   static map<int,Surface> removeIconRepository;
+
+   if ( removeIconRepository.find( id ) != removeIconRepository.end() )
+      return removeIconRepository[id];
+
+   removeIconRepository[id] = buildGuiIcon( generate_gui_build_icon( bld) );
+
+   return removeIconRepository[id];
+}
+
+
+ASCString BuildingConstruction::getName( const MapCoordinate& pos, int id )
+{
+   if ( id < 0 )
+      return "cancel";
+
+   BuildingType* bld = buildingTypeRepository.getObject_byID( id );
+   if ( !bld )
+      return "";
+
+   ASCString result;
+   result.format( "Build %s (%d Material, %d Fuel)", bld->name.c_str(), bld->productionCost.material, bld->productionCost.fuel );
+
+   return result;
+}
+
+
+
+void BuildingConstruction::addButton( int &num, const MapCoordinate& mc, int id )
+{
+    GuiButton* b = host->getButton(num);
+    b->registerFunc( this, mc, id );
+    b->Show();
+    ++num;
+}
+
+void BuildingConstruction::search ( const MapCoordinate& pos, int& num, int pass )
+{
+   pfield entryfield =  actmap->getField(pos);
+   BuildingType* bld = buildingTypeRepository.getObject_byID( bldid );
+
+   if ( bld ) {
+      bool b = true;
+      for ( int y1 = 0; y1 <= 5; y1++)
+         for ( int x1 = 0; x1 <= 3; x1++)
+            if ( bld->fieldExists ( BuildingType::LocalCoordinate(x1, y1)) ) {
+               pfield fld = actmap->getField ( bld->getFieldCoordinate( pos, BuildingType::LocalCoordinate(x1,y1) ));
+               if (fld) {
+                  if (fld->vehicle != NULL)
+                     b = false;
+                  if ( bld->buildingheight <= chfahrend )
+                     if ( bld->terrainaccess.accessible ( fld->bdt ) <= 0 )
+                        b = false;
+                  if (fld->building != NULL) {
+                     if (fld->building->typ != bld)
+                        b = false;
+                     if (fld->building->getCompletion() == fld->building->typ->construction_steps - 1)
+                        b = false;
+                     if ( (entryfield->bdt & getTerrainBitType(cbbuildingentry) ).none() )
+                        b = false;
+                  }
+                  if (entryfield->building != fld->building)
+                     b = false;
+               } else
+                  b = false;
+            }
+      if (b) {
+         ++num;
+         entryfield->a.temp = 20;
+         entryPos[pos] = bldid;
+      }
+   }
+
+/*
+               if ( pass==1 )
+                  addButton(num, pos, v->id);
+               else
+                  fld->a.temp = 1;
+                  */
+}
+
+
+void BuildingConstruction::eval()
+{
+   if (moveparams.movestatus == 112 || moveparams.movestatus ==111 ) {
+      MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
+
+      if ( !mc.valid() )
+         return;
+
+      int num = 0;
+
+      if ( entryPos[mc] == bldid )
+         addButton( num, mc, bldid );
+
+      GuiButton* b = host->getButton(num);
+      b->registerFunc( this, mc, 0 );
+      b->Show();
+      ++num;
+
+      host->disableButtons(num);
+   }
+}
+
+
+
+BuildingConstruction buildingConstruction;
+
+
+class ConstructBuilding : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num ) ;
+      void execute( const MapCoordinate& pos, int num );
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("constructbuilding.png");
+      };
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "Unit construction";
+      };
+};
+
+
+bool ConstructBuilding::available( const MapCoordinate& pos, int num )
+{
+
+   if ( actmap->getgameparameter(cgp_forbid_building_construction) )
+      return false;
+
+    pfield fld = actmap->getField(pos);
+    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
+       if ( fld->vehicle )
+          if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() )
+             if (fld->vehicle->color == actmap->actplayer * 8)
+               if (fld->vehicle->typ->functions & (cfputbuilding | cfspecificbuildingconstruction))
+                  return true;
+    }
+    else
+       if (moveparams.movestatus == 111) {
+          if (fld->a.temp == 20)
+             return true;
+       }
+       else
+          if (moveparams.movestatus == 112)
+             if (fld->a.temp == 23)
+                return true;
+
+   return false;
+}
+
+void ConstructBuilding::execute(  const MapCoordinate& pos, int num )
+{
+   if ( pendingVehicleActions.actionType == vat_nothing ) {
+      pfield fld = actmap->getField(pos);
+      if ( fld->vehicle ) {
+         if ( fld->vehicle->attacked || (fld->vehicle->typ->wait && fld->vehicle->hasMoved() )) {
+            dispmessage2(302,"");
+            return;
+         }
+
+         int num = 0;
+         for ( int i = 0; i < buildingTypeRepository.getNum(); i++)
+            if ( fld->vehicle->buildingconstructable ( buildingTypeRepository.getObject_byPos( i ) ))
+               num++;
+
+         if ( num == 0 ) {
+            dispmessage2( 303, NULL );
+            return;
+         }
+
+
+         if ( buildingConstruction.init( fld->vehicle )) {
+            moveparams.movestatus = 110;
+            NewGuiHost::pushIconHandler( &buildingConstruction );
+            buildingConstruction.setup();
+            repaintMap();
+            updateFieldInfo();
+         }
+      }
+   }
+}
+
+
+
+
 GuiIconHandler primaryGuiIcons;
 
 
@@ -1038,4 +1565,8 @@ void registerGuiFunctions( GuiIconHandler& handler )
    handler.registerUserFunction( new GuiFunctions::UnitInfo() );
    handler.registerUserFunction( new GuiFunctions::BuildObject() );
    handler.registerUserFunction( new GuiFunctions::BuildVehicle() );
+   handler.registerUserFunction( new GuiFunctions::ConstructBuilding() );
+   handler.registerUserFunction( new GuiFunctions::DestructBuilding() );
+   handler.registerUserFunction( new GuiFunctions::SearchForMineralResources() );
+
 }

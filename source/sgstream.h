@@ -3,7 +3,7 @@
   
 */
 
-//     $Id: sgstream.h,v 1.30.2.8 2005-01-23 20:39:58 mbickel Exp $
+//     $Id: sgstream.h,v 1.30.2.9 2005-01-30 15:48:31 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -101,7 +101,6 @@ extern void displayLogMessage ( int msgVerbosity, const ASCString& message );
 extern int dataVersion;
 extern void checkDataVersion( );
 
-extern Surface generate_gui_build_icon ( pbuildingtype bld );
 extern Surface generate_gui_build_icon ( pvehicletype tnk );
 
 #endif

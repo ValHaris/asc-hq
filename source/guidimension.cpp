@@ -26,7 +26,7 @@ int GuiDimension::getLeftIndent() {
 }
 
 int GuiDimension::getTopOffSet(){
-  return getPGApplication().GetScreenHeight()/40;
+  return 20;
 }
 
 int GuiDimension::getLeftOffSet(){
@@ -48,3 +48,11 @@ int GuiDimension::getButtonHeight(){
 int GuiDimension::getButtonWidth(){
    return 170;
 }
+
+int GuiDimension::getSliderWidth(){
+   return 20;
+}
+
+
+
+

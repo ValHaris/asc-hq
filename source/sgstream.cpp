@@ -76,53 +76,6 @@ Surface generate_gui_build_icon ( pvehicletype tnk )
 }
 
 
-Surface generate_gui_build_icon ( pbuildingtype bld )
-{
-   Surface s = Surface::createSurface(500,500);
-
-   int minx = 1000;
-   int miny = 1000;
-   int maxx = 0;
-   int maxy = 0;
-
-   tvirtualdisplay vdsp ( 500, 500 );
-
-    bar ( 0, 0, 450, 450, 255 );
-  
-    for (int y = 0; y <= 5; y++)
-       for (int x = 0; x <= 3; x++)
-          if (bld->fieldExists( BuildingType::LocalCoordinate(x,y) ) ) {
-             int xp = fielddistx * x  + fielddisthalfx * ( y & 1);
-             int yp = fielddisty * y ;
-             if ( xp < minx )
-                minx = xp;
-             if ( yp < miny )
-                miny = yp;
-             if ( xp > maxx )
-                maxx = xp;
-             if ( yp > maxy )
-                maxy = yp;
-
-             s.Blit( bld->getPicture( BuildingType::LocalCoordinate(x,y)), SPoint(xp,yp) );
-          }
-   maxx += fieldxsize;
-   maxy += fieldysize;
-
-   Surface s2 = Surface::createSurface(maxx-minx+1,maxy-miny+1);
-   s2.Blit( s, SDLmm::SRect(SPoint(minx,miny), SPoint(maxx,maxy) ), SPoint(0,0));
-   
-   
-   Surface s3 = leergui.Duplicate();
-   MegaBlitter<1,1,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Zoom> blitter;
-   
-   blitter.setSize( s2.w(), s2.h(), s3.w(), s3.h() );
-   blitter.initSource ( s2 );
-   blitter.blit ( s2, s3, SPoint((s3.w() - blitter.getWidth())/2, (s3.h() - blitter.getHeight())/2) );
-   
-   return s3;
-}
-
-
 
 void loadguipictures( void )
 {

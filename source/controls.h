@@ -4,7 +4,7 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.55.2.4 2005-01-24 20:45:23 mbickel Exp $
+//     $Id: controls.h,v 1.55.2.5 2005-01-30 15:48:29 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -106,6 +106,7 @@ extern void build_vehicles_reset( void );
 //! An old procedure for putting and removing mines.
 extern void  legemine( int typ, int delta );
 
+#if 0
 //! An old procedure for constructing a building with a vehicle
 extern void  putbuildinglevel1(void);
 
@@ -114,6 +115,8 @@ extern void  putbuildinglevel2( const pbuildingtype bld, integer      xp, intege
 
 //! An old procedure for constructing a building with a vehicle
 extern void  putbuildinglevel3(integer      x, integer      y);
+
+#endif
 
 //! An old procedure for removing a building with a vehicle
 extern void         destructbuildinglevel2( int xp, int yp);

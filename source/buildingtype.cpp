@@ -92,7 +92,7 @@ int   BuildingType :: getBIPicture( const LocalCoordinate& localCoordinate, int 
 }
         
 
-const TypedSurface<1>&   BuildingType :: getPicture ( const LocalCoordinate& localCoordinate, int weather, int constructionStep ) const
+const Surface&   BuildingType :: getPicture ( const LocalCoordinate& localCoordinate, int weather, int constructionStep ) const
 {
    if( constructionStep >= construction_steps )
      constructionStep = construction_steps-1;
@@ -103,7 +103,7 @@ const TypedSurface<1>&   BuildingType :: getPicture ( const LocalCoordinate& loc
    if ( bi_picture [weather][constructionStep][localCoordinate.x][localCoordinate.y] <= 0 ) 
       return w_picture[weather][constructionStep][localCoordinate.x][localCoordinate.y];
    else 
-      return castSurface<1>(GraphicSetManager::Instance().getPic(bi_picture [weather][constructionStep][localCoordinate.x][localCoordinate.y]));
+      return GraphicSetManager::Instance().getPic(bi_picture [weather][constructionStep][localCoordinate.x][localCoordinate.y]);
    
 }
 
@@ -303,13 +303,6 @@ void BuildingType :: read ( tnstream& stream )
 
       if ( version >= 8 )
          infotext = stream.readString();
-
-
-
-         
-     #ifndef converter
-      guibuildicon = generate_gui_build_icon ( this );
-     #endif
 
    } else
       throw tinvalidversion  ( stream.getLocation(), building_version, version );
@@ -549,11 +542,6 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
          }
          pc.closeBracket();
       }
-
-      #ifndef converter
-      guibuildicon = generate_gui_build_icon ( this );
-      #endif
-
 
       bool rubble = false;
       for ( int i = 0; i < 4; i++ )

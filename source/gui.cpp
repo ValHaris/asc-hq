@@ -53,7 +53,7 @@
 
 
 tguihoststandard          gui;
-tselectbuildingguihost    selectbuildinggui;
+// tselectbuildingguihost    selectbuildinggui;
 // tselectobjectcontainerguihost      selectobjectcontainergui;
 // tselectvehiclecontainerguihost     selectvehiclecontainergui;
 tselectweaponguihost      selectweaponguihost;
@@ -1365,98 +1365,6 @@ void  tnsguiicondescent::display      ( void )
 
 
 
-#if 0
-
-tnsguiiconinformation::tnsguiiconinformation ( void )
-{
-   filename = "informat";
-}
-
-
-
-int   tnsguiiconinformation::available    ( void )
-{
-    Vehicle* eht = getactfield()->vehicle;
-    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
-    if (eht != NULL)
-       if (fieldvisiblenow(getactfield()))
-          return 1;
-   return 0;
-}
-
-void  tnsguiiconinformation::exec         ( void )
-{
-   vehicle_information();
-}
-
-void  tnsguiiconinformation::display      ( void )
-{
-   host->returncoordinates ( this, &x, &y );
-
-   if ( x == -1   ||    y == -1 )
-      return;
-
-   int h = getactfield()->vehicle->typ->height ;
-
-   if ( h >= chtieffliegend )
-      putpict ( picture[1] );
-
-   else
-      if ( h & ( chschwimmend | chgetaucht | chtiefgetaucht ) )
-         putpict ( picture[2] );
-      else
-         putpict ( picture[0] );
-
-}
-
-
-
-
-
-
-
-tnsguiiconendturn::tnsguiiconendturn ( void )
-{
-   filename = "endturn";
-}
-
-
-
-int   tnsguiiconendturn::available    ( void )
-{
-   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
-      if (actmap->levelfinished == false)
-         return 1;
-   return 0;
-}
-
-
-void  tnsguiiconendturn::exec         ( void )
-{
-   if ( !CGameOptions::Instance()->endturnquestion || (choice_dlg("do you really want to end your turn ?","~y~es","~n~o") == 1)) {
-
-      static int autosave = 0;
-
-      cursor.hide();
-
-      char name[100];
-      if ( autosave )
-         strcpy ( name, "autosav1");
-      else
-         strcpy ( name, "autosav2");
-
-      strcat ( name, &savegameextension[1] );
-      savegame ( name );
-
-      autosave = !autosave;
-
-      next_turn();
-
-      displaymap();
-      cursor.show();
-   }
-}
-#endif
 
 tnsguiiconexternalloading::tnsguiiconexternalloading ( void )
 {
@@ -1478,98 +1386,6 @@ void  tnsguiiconexternalloading::exec         ( void )
 }
 
 
-#if 0
-
-tnsguiiconpoweron::tnsguiiconpoweron ( void )
-{
-   filename = "poweron";
-}
-
-int   tnsguiiconpoweron::available    ( void )
-{
-   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing )
-      if ( getactfield()->vehicle )
-         if ( getactfield()->vehicle->color == actmap->actplayer*8  &&
-              (getactfield()->vehicle->typ->functions & cfgenerator))
-              if ( !getactfield()->vehicle->getGeneratorStatus() )
-                 return 1;
-
-  return 0;
-}
-
-void  tnsguiiconpoweron::exec         ( void )
-{
-   getactfield()->vehicle->setGeneratorStatus ( true );
-   logtoreplayinfo ( rpl_setGeneratorStatus, getactfield()->vehicle->networkid, int(1) );
-
-   updateFieldInfo();
-}
-
-
-
-tnsguiiconpoweroff::tnsguiiconpoweroff ( void )
-{
-   filename = "poweroff" ;
-}
-
-int   tnsguiiconpoweroff::available    ( void )
-{
-   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing )
-      if ( getactfield()->vehicle )
-         if ( getactfield()->vehicle->color == actmap->actplayer*8  &&
-              (getactfield()->vehicle->typ->functions & cfgenerator))
-              if ( getactfield()->vehicle->getGeneratorStatus() )
-                 return 1;
-
-  return 0;
-}
-
-void  tnsguiiconpoweroff::exec         ( void )
-{
-   getactfield()->vehicle->setGeneratorStatus ( false );
-   logtoreplayinfo ( rpl_setGeneratorStatus, getactfield()->vehicle->networkid, int(0) );
-   updateFieldInfo();
-}
-
-
-
-
-
-tnsguiiconconstructvehicle::tnsguiiconconstructvehicle ( void )
-{
-   filename = "consttnk" ;
-}
-
-
-
-int   tnsguiiconconstructvehicle::available    ( void )
-{
-  if ( actmap->getgameparameter(cgp_forbid_unitunit_construction) == 1 )
-      return 0;
-
-
-   pfield fld = getactfield();
-   if ( fld )
-      if ( fld->vehicle )
-         if (fld->vehicle->color == actmap->actplayer * 8)
-            if ( fld->vehicle->typ->vehiclesBuildable.size() )
-               if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
-                  if ( !fld->vehicle->attacked )
-                     return 1;
-
-   return 0;
-}
-
-void  tnsguiiconconstructvehicle::exec         ( void )
-{
-   constructvehicle( NULL );
-   displaymap();
-}
-
-
-
-
-#endif
 
 
 
@@ -1745,7 +1561,7 @@ void  tnsguiiconremovemine::exec         ( void )
 
 
 
-
+#if 0
 
 
 
@@ -1775,6 +1591,7 @@ void  tnsguiiconbuildany::exec         ( void )
 }
 
 
+#endif
 
 
 tnsguiiconrepair::tnsguiiconrepair ( void )
@@ -2011,7 +1828,7 @@ void  tnsguiiconrefueldialog::exec         ( void )
 
 
 
-
+#if 0
 tnsguiiconputbuilding::tnsguiiconputbuilding ( void )
 {
    filename = "building";
@@ -2064,8 +1881,6 @@ void  tnsguiiconputbuilding::exec         ( void )
 }
 
 
-
-
 tnsguiicondestructbuilding::tnsguiicondestructbuilding ( void )
 {
    filename = "abriss";
@@ -2109,7 +1924,6 @@ void  tnsguiicondestructbuilding::exec         ( void )
 
 
 
-
 tnsguiicondig::tnsguiicondig ( void )
 {
    filename =  "dig";
@@ -2137,6 +1951,7 @@ void  tnsguiicondig::exec         ( void )
 }
 
 
+#endif
 
 
 
@@ -2367,7 +2182,6 @@ void tselectvehiclecontainerguihost ::reset ( Vehicle* _constructingvehicle )
 
 
 
-#endif
 
 
 tselectbuildingguihost :: tselectbuildingguihost( void )
@@ -2451,7 +2265,6 @@ int         tnputbuildingguiicon::available( void )
 
 
 
-#if 0
 
 #ifndef _NoStaticClassMembers_
 StaticClassVariable pnputobjectcontainerguiicon tnputobjectcontainerguiicon :: first    = NULL;

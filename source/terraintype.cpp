@@ -416,7 +416,7 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
       if ( bi_pict >= 0 )
          bi3pics = true;
 
-   pc.addBool  ( "UseGFXpics", bi3pics );
+   pc.addBool  ( "UseGFXpics", bi3pics, false );
    if ( !bi3pics ) {
       bi_pict = -1;
       int w = cwettertypennum-1;

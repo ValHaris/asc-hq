@@ -122,7 +122,7 @@ public:
     inline tmap* getMap() const;
     
     Vector2D getWindVector() const;
-    void setWindVector(unsigned int speed, Direction windDirection);
+   // void setWindVector(unsigned int speed, Direction windDirection);
     void updateMovementVector(unsigned int speed, Direction windDirection, double ratio);
     void setFalloutType(FalloutType fallout);    
     FalloutType getFalloutType() const;
@@ -148,6 +148,7 @@ public:
 };
 
 typedef multimap<GameTime, WeatherArea*, ltGTime> WeatherAreas;
+typedef list<WeatherArea*> WeatherAreaList;
 
 enum WeatherSystemMode {
 EVENTMODE,
@@ -158,7 +159,6 @@ class WeatherField{
 private:
 tfield* mapField;
 tmap* map;
-Point2D posInArea;
 int counter;
 int value;
 
@@ -176,6 +176,8 @@ void write (tnstream& outputStream) const;
 void read (tnstream& inputStream);
 void setValue(int v);
 int getValue();
+
+Point2D posInArea;
 };
 
 class WeatherSystem{
@@ -203,6 +205,7 @@ bool seedValueIsSet;
 FalloutType defaultFallout;
 
 WeatherAreas weatherAreas;
+WeatherAreaList activeWeatherAreas;
 WindChanges windTriggers;
 FieldSet processedFields;
 
@@ -321,6 +324,7 @@ public:
 };
 
 #endif
+
 
 
 

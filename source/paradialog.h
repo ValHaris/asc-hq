@@ -57,6 +57,7 @@
  class ASC_PG_App : public PG_Application {
        ASCString themeName;
        int quitModalLoopValue;
+       
     public:
        ASC_PG_App ( const ASCString& themeName );
        bool InitScreen ( int w, int h, int depth = 0, Uint32 flags = SDL_SWSURFACE|SDL_HWPALETTE );
@@ -73,9 +74,12 @@
 class ASC_PG_Dialog : public PG_Window {
        SDL_Surface* background;
     private:
-       int quitModalLoopValue;
+       int quitModalLoopValue;       
     protected:
-       void quitModalLoop(int i = 1) { quitModalLoopValue = i; };    
+      PG_MessageObject* caller;
+      bool closeWindow();
+      void quitModalLoop(int i = 1) { quitModalLoopValue = i; };    
+      virtual bool eventKeyUp(const SDL_KeyboardEvent *key);
     public:
        ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCString& windowtext, WindowFlags flags=DEFAULT, const ASCString& style="Window", int heightTitlebar=25);
        int Run( );

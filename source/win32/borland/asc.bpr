@@ -27,7 +27,8 @@
       obj\statisticdialog.obj obj\clipboard.obj obj\surface.obj 
       obj\ascttfont.obj obj\SDL_ttf.obj obj\blitter.obj obj\iconrepository.obj 
       obj\guiiconhandler.obj obj\guifunctions.obj obj\weatherarea.obj 
-      obj\SDL_loadso.obj obj\geometry.obj obj\SmallObj.obj obj\drawing.obj"/>
+      obj\SDL_loadso.obj obj\geometry.obj obj\SmallObj.obj obj\drawing.obj 
+      obj\gamedialog.obj obj\guidimension.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -172,6 +173,8 @@
       <FILE FILENAME="..\..\geometry.cpp" FORMNAME="" UNITNAME="geometry" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\libs\loki\SmallObj.cpp" FORMNAME="" UNITNAME="SmallObj" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\graphics\drawing.cpp" FORMNAME="" UNITNAME="drawing" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\gamedialog.cpp" FORMNAME="" UNITNAME="gamedialog" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\guidimension.cpp" FORMNAME="" UNITNAME="guidimension" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

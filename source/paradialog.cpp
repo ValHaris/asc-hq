@@ -50,7 +50,7 @@
 #include "events.h"
 #include "gameoptions.h"
 #include "sg.h"
-#include "sdl/sound.h"
+
 
 #include "resourceplacement.h"
 #include "textfile_evaluation.h"
@@ -113,7 +113,15 @@ bool ASC_PG_App :: enableLegacyEventHandling( bool use )
 {
    return !setEventRouting ( !use, use );
 }
+/*
+bool ASC_PG_App::eventKeyUp (const SDL_KeyboardEvent *key){
+ if(key->keysym.sym == SDLK_ESCAPE){
+ GameDialog::gameDialog();
+ }
 
+return true;
+}
+*/
 
 int ASC_PG_App::Run ( )
 {
@@ -158,10 +166,11 @@ int ASC_PG_App::Run ( )
 
 ASC_PG_Dialog :: ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCString& windowtext, WindowFlags flags, const ASCString& style, int heightTitlebar )
       :PG_Window ( parent, r, windowtext, flags, style, heightTitlebar ),
-      quitModalLoopValue ( 0 )
+      quitModalLoopValue ( 0 ), caller(0)
 {
    //   mainScreenWidget->setDirty();
    //   SDL_mutexP ( eventHandlingMutex );
+   sigMouseButtonDown.connect(SigC::slot(*this, &ASC_PG_Dialog::eventMouseButtonDown));
 }
 
 ASC_PG_Dialog::~ASC_PG_Dialog ()
@@ -211,6 +220,12 @@ int ASC_PG_Dialog::Run ( )
    return quitModalLoopValue;
 }
 
+bool ASC_PG_Dialog::eventKeyUp(const SDL_KeyboardEvent *key){
+  if(key->keysym.sym == SDLK_ESCAPE) {
+        closeWindow();
+    }
+  return true;
+}
 
 
 int ASC_PG_Dialog::RunModal ( )
@@ -251,131 +266,45 @@ int ASC_PG_Dialog::RunModal ( )
    return quitModalLoopValue;
 }
 
-
-
-
-// A testwindow class
-
-class SoundSettings : public ASC_PG_Dialog
-{
-      CGameOptions::SoundSettings soundSettings;
-      void updateSettings();
-   public:
-      SoundSettings(PG_Widget* parent, const PG_Rect& r );
-   protected:
-
-      bool radioButtonEvent( PG_RadioButton* button, bool state);
-      bool buttonEvent( PG_Button* button );
-      bool eventScrollTrack(PG_Slider* slider, long data);
-      bool closeWindow()
-      {
-         quitModalLoop(1);
-         return true;
-      };
-
-};
-
-SoundSettings::SoundSettings(PG_Widget* parent, const PG_Rect& r ) :
-      ASC_PG_Dialog(parent, r, "Sound Settings", SHOW_CLOSE )
-{
-   soundSettings = CGameOptions::Instance()->sound;
-
-   PG_CheckButton* musb = new PG_CheckButton(this, PG_Rect( 30, 50, 200, 20 ), "Enable Music", 1 );
-   musb->sigClick.connect(SigC::slot( *this, &SoundSettings::radioButtonEvent ));
-   new PG_Label ( this, PG_Rect(30, 80, 150, 20), "Music Volume" );
-   PG_Slider* mus = new PG_Slider(this, PG_Rect(180, 80, 200, 20), PG_Slider::HORIZONTAL, 21);
-   mus->SetRange(0,100);
-   mus->SetPosition(soundSettings.musicVolume);
-   if ( soundSettings.muteMusic )
-      musb->SetUnpressed();
-   else
-      musb->SetPressed();
-
-
-   PG_CheckButton* sndb = new PG_CheckButton(this, PG_Rect( 30, 150, 200, 20 ), "Enable Sound", 2 );
-   sndb->sigClick.connect(SigC::slot( *this, &SoundSettings::radioButtonEvent ));
-   new PG_Label ( this, PG_Rect(30, 180, 150, 20), "Sound Volume" );
-   PG_Slider* snd = new PG_Slider(this, PG_Rect(180, 180, 200, 20), PG_Slider::HORIZONTAL, 31);
-   snd->SetRange(0,100);
-   snd->SetPosition(soundSettings.soundVolume);
-   if ( soundSettings.muteEffects )
-      sndb->SetUnpressed();
-   else
-      sndb->SetPressed();
-
-
-   PG_Button* b1 = new PG_Button(this, PG_Rect(30,r.h-40,(r.w-70)/2,30), "OK", 100);
-   b1->sigClick.connect(SigC::slot( *this, &SoundSettings::closeWindow ));
-
-   PG_Button* b2 = new PG_Button(this, PG_Rect(r.w/2+5,r.h-40,(r.w-70)/2,30), "Cancel", 101);
-   b2->sigClick.connect(SigC::slot( *this, &SoundSettings::buttonEvent ));
-
-   sigClose.connect( SigC::slot( *this, &SoundSettings::closeWindow ));
-}
-
-
-void SoundSettings::updateSettings()
-{
-   SoundSystem::getInstance()->setMusicVolume( CGameOptions::Instance()->sound.musicVolume );
-   SoundSystem::getInstance()->setEffectVolume( CGameOptions::Instance()->sound.soundVolume );
-   SoundSystem::getInstance()->setEffectsMute( CGameOptions::Instance()->sound.muteEffects );
-   if ( CGameOptions::Instance()->sound.muteMusic )
-      SoundSystem::getInstance()->pauseMusic();
-   else
-      SoundSystem::getInstance()->resumeMusic();
+/*
+bool ASC_PG_Dialog::eventKeyUp (const SDL_KeyboardEvent *key){
+if(key->keysym.sym == SDLK_ESCAPE){
+   closeWindow();
+ }
+ return true;
 
 }
 
-bool SoundSettings::radioButtonEvent( PG_RadioButton* button, bool state)
-{
-   if ( button->GetID() == 1 )
-      CGameOptions::Instance()->sound.muteMusic = !state;
-   if ( button->GetID() == 2 )
-      CGameOptions::Instance()->sound.muteEffects = !state;
-   updateSettings();
-   return true;
-}
+/*
+bool ASC_PG_Dialog::eventKeyUp (const SDL_KeyboardEvent *key){
+if(key->keysym.sym == SDLK_ESCAPE){
+   closeWindow();
+ }else if(key->keysym.sym == SDLK_DOWN){
+     
+ }else if(key->keysym.sym == SDLK_UP){
+     
+ }else if(key->keysym.sym == SDLK_RIGHT){
+     
+ }else if(key->keysym.sym == SDLK_LEFT){
+     
+ }
+ return true;
+
+}*/
 
 
-bool SoundSettings::eventScrollTrack(PG_Slider* slider, long data)
-{
-   if(slider->GetID() == 21) {
-      CGameOptions::Instance()->sound.musicVolume = data;
-      CGameOptions::Instance()->setChanged();
-      updateSettings();
-      return true;
-   }
-
-   if(slider->GetID() == 31) {
-      CGameOptions::Instance()->sound.soundVolume = data;
-      CGameOptions::Instance()->setChanged();
-      updateSettings();
-      return true;
-   }
-   return false;
+bool ASC_PG_Dialog::closeWindow(){
+  quitModalLoop(1);
+  if( caller != 0){     
+    caller->SetInputFocus();    
+  }
+  return true;
 }
 
 
 
-bool SoundSettings::buttonEvent( PG_Button* button )
-{
-   quitModalLoop(2);
-   CGameOptions::Instance()->sound = soundSettings;
-   updateSettings();
-   return true;
-}
 
 
-void soundSettings( )
-{
-   // printf("c1c %d \n", ticker );
-   SoundSettings wnd1(NULL, PG_Rect(50,50,500,300));
-   // printf("c2c %d \n", ticker );
-   wnd1.Show();
-   // printf("c3c %d \n", ticker );
-   wnd1.Run();
-   // printf("c4c %d \n", ticker );
-}
 
 
 
@@ -962,3 +891,4 @@ bool MessageDialog::handleButton(PG_Button* button) {
 	quitModalLoop(button->GetID());
 	return true;
 }
+

@@ -117,6 +117,7 @@
 #include "guifunctions.h"
 #include "iconrepository.h"
 #include "dashboard.h"
+#include "gamedialog.h"
 
 // #define MEMCHK
 
@@ -624,15 +625,15 @@ void         MainMenuPullDown :: init ( void )
    // addbutton ( "Select Music Play ~L~ist ", ua_selectPlayList );
    addbutton ( "~S~ound options", ua_soundDialog );
    addbutton ( "seperator", -1);
-   addbutton ( "E~x~itõctrl-x", ua_exitgame );
+   addbutton ( "E~x~it\tctrl-x", ua_exitgame );
 
 
    addfield ("~G~ame");
    addbutton ( "New ~C~ampaign", ua_newcampaign);
-   addbutton ( "~N~ew single Levelõctrl-n", ua_startnewsinglelevel );
+   addbutton ( "~N~ew single Level\tctrl-n", ua_startnewsinglelevel );
 
-   addbutton ( "~L~oad gameõctrl-l", ua_loadgame );
-   addbutton ( "Continue network gameõF3", ua_continuenetworkgame);
+   addbutton ( "~L~oad game\tctrl-l", ua_loadgame );
+   addbutton ( "Continue network game\tF3", ua_continuenetworkgame);
    addbutton ( "supervise network game", ua_networksupervisor );
 
    addfield ( "~H~elp" );
@@ -1507,11 +1508,11 @@ void execuseraction2 ( tuseractions action )
    switch ( action ) {
    
       case ua_soundDialog:
-         soundSettings();
+          SoundSettings::soundSettings( NULL );
          break;
       case ua_reloadDlgTheme:
              getPGApplication().reloadTheme();
-             // soundSettings();
+             SoundSettings::soundSettings( NULL );
          break;
       case ua_viewButtonPanel:  mainScreenWidget->spawnPanel( MainScreenWidget::ButtonPanel );
          break;
@@ -1619,24 +1620,24 @@ void Menu::addbutton( const char* name, int id )
 void Menu::setup()
 {
    addfield ( "Glo~b~al" );
-   addbutton ( "toggle ~R~esourceviewõ1", ua_changeresourceview );
-   addbutton ( "toggle unit shadingõ2", ua_toggleunitshading );
+   addbutton ( "toggle ~R~esourceview\t1", ua_changeresourceview );
+   addbutton ( "toggle unit shading\t2", ua_toggleunitshading );
    currentMenu->addSeparator();
    addbutton ( "~O~ptions", ua_gamepreferences );
    addbutton ( "~M~ouse options", ua_mousepreferences );
    addbutton ( "~S~ound options", ua_soundDialog );
    currentMenu->addSeparator();
-   addbutton ( "E~x~itõctrl-x", ua_exitgame );
+   addbutton ( "E~x~it\tctrl-x", ua_exitgame );
 
 
    addfield ("~G~ame");
    addbutton ( "New ~C~ampaign", ua_newcampaign);
-   addbutton ( "~N~ew single Levelõctrl-n", ua_startnewsinglelevel );
+   addbutton ( "~N~ew single Level\tctrl-n", ua_startnewsinglelevel );
    currentMenu->addSeparator();
-   addbutton ( "~L~oad gameõctrl-l", ua_loadgame );
-   addbutton ( "~S~ave gameõctrl-s", ua_savegame );
+   addbutton ( "~L~oad game\tctrl-l", ua_loadgame );
+   addbutton ( "~S~ave game\tctrl-s", ua_savegame );
    currentMenu->addSeparator();
-   addbutton ( "Continue network gameõF3", ua_continuenetworkgame);
+   addbutton ( "Continue network game\tF3", ua_continuenetworkgame);
    addbutton ( "setup Net~w~ork", ua_setupnetwork );
    addbutton ( "Change Passw~o~rd", ua_changepassword );
    addbutton ( "supervise network game", ua_networksupervisor );
@@ -1649,19 +1650,19 @@ void Menu::setup()
 
    addfield ( "~I~nfo" );
    addbutton ( "~V~ehicle types", ua_vehicleinfo );
-   addbutton ( "Unit ~w~eapon rangeõ3", ua_viewunitweaponrange );
-   addbutton ( "Unit ~m~ovement rangeõ4", ua_viewunitmovementrange );
-   addbutton ( "~G~ame Timeõ5", ua_GameStatus );
-   addbutton ( "unit ~S~et informationõ6", ua_UnitSetInfo );
-   addbutton ( "~T~errainõ7", ua_viewterraininfo );
-   addbutton ( "~U~nit weightõ8", ua_unitweightinfo );
-   addbutton ( "show ~P~ipeline netõ9", ua_viewPipeNet );
+   addbutton ( "Unit ~w~eapon range\t3", ua_viewunitweaponrange );
+   addbutton ( "Unit ~m~ovement range\t4", ua_viewunitmovementrange );
+   addbutton ( "~G~ame Time\t5", ua_GameStatus );
+   addbutton ( "unit ~S~et information\t6", ua_UnitSetInfo );
+   addbutton ( "~T~errain\t7", ua_viewterraininfo );
+   addbutton ( "~U~nit weight\t8", ua_unitweightinfo );
+   addbutton ( "show ~P~ipeline net\t9", ua_viewPipeNet );
    currentMenu->addSeparator();
    addbutton ( "~R~esearch", ua_researchinfo );
    addbutton ( "~P~lay time", ua_showPlayerSpeed );
    // addbutton ( "~R~esearch status", ua_showResearchStatus );
 
-   // addbutton ( "vehicle ~I~mprovementõF7", ua_dispvehicleimprovement);
+   // addbutton ( "vehicle ~I~mprovement\tF7", ua_dispvehicleimprovement);
    // addbutton ( "show game ~P~arameters", ua_GameParameterInfo );
 
 
@@ -1682,7 +1683,7 @@ void Menu::setup()
    addbutton ( "~a~ppend to journal", ua_editjournal );
 
    addfield ( "~T~ools" );
-   addbutton ( "save ~M~ap as PCXõ9", ua_writemaptopcx );
+   addbutton ( "save ~M~ap as PCX\t9", ua_writemaptopcx );
    addbutton ( "save ~S~creen as PCX", ua_writescreentopcx );
    addbutton ( "benchmark without view calc", ua_benchgamewov );
    addbutton ( "benchmark with view calc", ua_benchgamewv);
@@ -1753,6 +1754,9 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
    displayLogMessage ( 7, "done\n  UnitInfo ");
    spawnPanel ( UnitInfo );
    displayLogMessage ( 5, "done\nMainScreenWidget completed\n");
+
+
+   repaintDisplay.connect ( SigC::bind( SigC::slot( *this, &MainScreenWidget::Update ), true ));
 }
 
 
@@ -2019,7 +2023,7 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
    if ( actprogressbar ) actprogressbar->startgroup();
 
    cursor.init();
-   selectbuildinggui.init( resolx, resoly );
+   // selectbuildinggui.init( resolx, resoly );
 
    if ( actprogressbar ) actprogressbar->startgroup();
 
@@ -2309,8 +2313,9 @@ int main(int argc, char *argv[] )
    
 
    ASC_PG_App app ( "asc2_dlg" );
+   app.sigKeyUp.connect( SigC::slot(&GameDialog::gameDialog ));
 
-  
+
    int flags = SDL_SWSURFACE;
    if ( fullscreen )
       flags |= SDL_FULLSCREEN;

@@ -28,11 +28,15 @@ public:
     static int getLineOffset();
     static int getButtonHeight();
     static int getButtonWidth();
+    
+    static int getSliderWidth();
+
 
     ~GuiDimension();
 
 };
 
 #endif
+
 
 

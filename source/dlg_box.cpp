@@ -2562,7 +2562,7 @@ tdialogbox::~tdialogbox()
          prev->redrawall2( x1, y1, x1 + xsize, y1 + ysize );
    } else {
       first = NULL;
-      repaintdisplay();
+      repaintDisplay();
    }
    npop ( activefontsettings );
 }
@@ -3243,6 +3243,7 @@ void         thelpsystem::init(int id, char* titlet )
    setparams ( x1 + 13, y1 + textstart, x1 + xsize - 41, y1 + ysize - 40, txt.c_str(), black, dblue);
 
    tvt_dispactive = 0;
+   // buildgraphics();
    displaytext(  );
    textsizeycomplete = tvt_yp;
    tvt_dispactive = 1;

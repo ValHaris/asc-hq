@@ -1,6 +1,10 @@
-//     $Id: gui.h,v 1.26.2.3 2005-01-24 20:45:23 mbickel Exp $
+//     $Id: gui.h,v 1.26.2.4 2005-01-30 15:48:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26.2.3  2005/01/24 20:45:23  mbickel
+//      Updated weathersystem
+//      Added vehicle construction to new gui
+//
 //     Revision 1.26.2.2  2004/12/16 18:48:29  mbickel
 //      Movement now working
 //
@@ -168,7 +172,7 @@ struct tnguiiconfiledata {
 
 typedef class tnguiicon* pnguiicon;
 
-typedef class tnputbuildingguiicon* pnputbuildingguiicon; 
+// typedef class tnputbuildingguiicon* pnputbuildingguiicon; 
 // typedef class tnputobjectcontainerguiicon* pnputobjectcontainerguiicon; 
 typedef class tnweapselguiicon* pnweapselguiicon;
 
@@ -240,7 +244,7 @@ class GuiHost : public BasicGuiHost {
 
 
 
-
+#if 0
 typedef class tselectbuildingguihost* pselectbuildingguihost;
 extern tselectbuildingguihost    selectbuildinggui;
 
@@ -264,7 +268,6 @@ class tselectbuildingguihost : public SelectBuildingBaseGuiHost {
 
 
 
-#if 0
 typedef class tselectobjectcontainerguihost *pselectobjectcontainerguihost;
 
 class SelectObjectBaseGuiHost : public GuiHost<pnputobjectcontainerguiicon> {int foo;} ;
@@ -392,7 +395,7 @@ class tselectweaponguihost : public SelectWeaponBaseGuiHost {
          virtual void      checkcoordinates ( void ); 
    };
 
-
+#if 0
 class tnputbuildingguiicon : public tnguiicon {
             static int             buildnum;
           protected:
@@ -413,7 +416,6 @@ class tnputbuildingguiicon : public tnguiicon {
          };
 
 
-#if 0
 
 class tnputobjectcontainerguiicon : public tnguiicon {
             int build;
@@ -654,7 +656,7 @@ class tnsguiiconrefueldialog : public tnsguiicon {
           tnsguiiconrefueldialog ( void );
        };
 
-
+#if 0
 class tnsguiiconputbuilding : public tnsguiicon {
         public:
           virtual int   available    ( void ) ;
@@ -679,6 +681,7 @@ class tnsguiicondig : public tnsguiicon {
 
           tnsguiicondig ( void );
        };
+#endif
 
 class tnsguiiconviewmap : public tnsguiicon {
         public:
@@ -865,7 +868,7 @@ class ContainerBaseGuiHost : public GuiHost<generalicon_c*> {
     };
 
 extern tguihoststandard          gui;
-extern tselectbuildingguihost    selectbuildinggui;
+// extern tselectbuildingguihost    selectbuildinggui;
 // extern tselectobjectcontainerguihost      selectobjectcontainergui;
 // extern tselectvehiclecontainerguihost     selectvehiclecontainergui;
 extern tselectweaponguihost      selectweaponguihost;

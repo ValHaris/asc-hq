@@ -118,15 +118,6 @@ int searchexternaltransferfields ( Building* bld )
           
 // #define netdebug 
 
-  class   tsearchputbuildingfields : public SearchFields {
-                      public:
-                                pbuildingtype        bld;
-                                char                    numberoffields;
-                                pfield                   startfield;
-                                void                    initputbuilding( int x, int y, pbuildingtype building );
-                                virtual void            testfield ( const MapCoordinate& mc );
-                                tsearchputbuildingfields ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
-                             };
 
   class   tsearchdestructbuildingfields : public SearchFields {
                       public:
@@ -138,7 +129,17 @@ int searchexternaltransferfields ( Building* bld )
                                 tsearchdestructbuildingfields ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
                              };
 
+#if 0
 
+  class   tsearchputbuildingfields : public SearchFields {
+                      public:
+                                pbuildingtype        bld;
+                                char                    numberoffields;
+                                pfield                   startfield;
+                                void                    initputbuilding( int x, int y, pbuildingtype building );
+                                virtual void            testfield ( const MapCoordinate& mc );
+                                tsearchputbuildingfields ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
+                             };
 
 
 void         tsearchputbuildingfields::initputbuilding( int x, int y, pbuildingtype building )
@@ -341,7 +342,7 @@ void         putbuildinglevel3(integer      x,
 
 
 
-
+#endif
 
 
 
