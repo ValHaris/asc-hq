@@ -67,8 +67,8 @@ type=DATA
 [Workspace_1]
 browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/index.html
 cpp_file=/home/martin/asc/source/tools/weaponguide.cpp
-header_file=Untitled.h
-openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/tools/weaponguide.cpp
+header_file=/home/martin/asc/source/vehicletype.h
+openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/tools/weaponguide.cpp,/home/martin/asc/source/vehicletype.h
 show_outputview=true
 show_treeview=true
 [asc.kdevprj]
