@@ -1,6 +1,15 @@
-//     $Id: typen.cpp,v 1.10 2000-01-25 19:28:16 mbickel Exp $
+//     $Id: typen.cpp,v 1.11 2000-01-31 16:08:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/01/25 19:28:16  mbickel
+//      Fixed bugs:
+//        invalid mouse buttons reported when moving the mouse
+//        missing service weapon in weapon information
+//        invalid text displayed in ammo production
+//        undamaged units selected in repair vehicle function
+//
+//      speed up when playing weapon sound
+//
 //     Revision 1.9  2000/01/24 17:35:48  mbickel
 //      Added dummy routines for sound under DOS
 //      Cleaned up weapon specification
@@ -1707,6 +1716,9 @@ pvehicle tmap :: getunit ( int x, int y, int nwid )
 {
   #ifndef converter
    pfield fld  = getfield ( x, y );
+   if ( !fld )
+      return NULL;
+
    if ( !fld->vehicle )
       if ( fld->building ) {
          for ( int i = 0; i < 32; i++ ) {

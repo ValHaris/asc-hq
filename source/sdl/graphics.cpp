@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: graphics.cpp,v 1.7 2000-01-07 13:20:07 mbickel Exp $
+//     $Id: graphics.cpp,v 1.8 2000-01-31 16:08:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/01/07 13:20:07  mbickel
+//      DGA fullscreen mode now working
+//
 //     Revision 1.6  2000/01/06 14:11:22  mbickel
 //      Fixed a graphic bug in PD and disabled fullscreen mode
 //
@@ -135,7 +138,13 @@ int copy2screen( int x1, int y1, int x2, int y2 )
    if ( x1 == -1 || y1 == -1 || x2 == -1 || y2 == -1 )
       SDL_UpdateRect ( screen , 0,0,0,0 );
    else
-      SDL_UpdateRect ( screen , x1, y1, x2-x1+1, y2-y1+1 );
+      if ( x1 <= x2 && y1 <= y2 )
+         SDL_UpdateRect ( screen , x1, y1, x2-x1+1, y2-y1+1 );
+      else
+         if( x1 > x2 )
+            SDL_UpdateRect ( screen , x2, y1, x1-x2+1, y2-y1+1 );
+         else
+            SDL_UpdateRect ( screen , x1, y2, x2-x1+1, y1-y2+1 );
 }
 
 

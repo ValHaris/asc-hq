@@ -1,6 +1,9 @@
-//     $Id: controls.h,v 1.6 2000-01-01 19:04:16 mbickel Exp $
+//     $Id: controls.h,v 1.7 2000-01-31 16:08:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/01/01 19:04:16  mbickel
+//     /tmp/cvsVhJ4Z3
+//
 //     Revision 1.5  1999/12/28 21:02:47  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -394,6 +397,7 @@ typedef treactionfire_replayinfo* preactionfire_replayinfo;
 
 class trunreplay {
          protected:
+            int movenum;
             treplayguihost gui;
             void execnextreplaymove ( void );
             tmap orgmap;

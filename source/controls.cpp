@@ -1,6 +1,15 @@
-//     $Id: controls.cpp,v 1.18 2000-01-25 19:28:09 mbickel Exp $
+//     $Id: controls.cpp,v 1.19 2000-01-31 16:08:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/01/25 19:28:09  mbickel
+//      Fixed bugs:
+//        invalid mouse buttons reported when moving the mouse
+//        missing service weapon in weapon information
+//        invalid text displayed in ammo production
+//        undamaged units selected in repair vehicle function
+//
+//      speed up when playing weapon sound
+//
 //     Revision 1.17  2000/01/24 17:35:41  mbickel
 //      Added dummy routines for sound under DOS
 //      Cleaned up weapon specification
@@ -8109,6 +8118,7 @@ void logtoreplayinfo ( trpl_actions _action, ... )
 trunreplay :: trunreplay ( void )
 {
    status = -1;
+   movenum = 0;
 }
 
 int    trunreplay :: removeunit ( pvehicle eht, int nwid )
@@ -8188,6 +8198,9 @@ void trunreplay :: setcursorpos ( int x, int y )
 
 void trunreplay :: execnextreplaymove ( void )
 {
+   if ( verbosity >= 8 )
+     printf("executing replay move %d\n", movenum );
+   movenum++;
    int actaction = nextaction;
    if ( nextaction != rpl_finished ) {
       switch ( nextaction ) {
@@ -8281,7 +8294,7 @@ void trunreplay :: execnextreplaymove ( void )
                           pfield fld = getfield ( x1, y1 );
                           pfield targ = getfield ( x2, y2 );
                           int attackvisible = fieldvisiblenow ( fld, actmap->playerview ) || fieldvisiblenow ( targ, actmap->playerview );
-                          if ( fld->vehicle ) {
+                          if ( fld && targ && fld->vehicle ) {
    
                              if ( targ->vehicle ) {
                                 tunitattacksunit battle;
@@ -8328,8 +8341,8 @@ void trunreplay :: execnextreplaymove ( void )
                              }
                              computeview();
                              displaymap();
-                        } else 
-                           displaymessage("severe replay inconsistency:\nno vehicle for attack command !", 1);
+                          } else
+                             displaymessage("severe replay inconsistency:\nno vehicle for attack command !", 1);
 
                       }
          break;
@@ -8394,15 +8407,19 @@ void trunreplay :: execnextreplaymove ( void )
                            setcursorpos ( x, y );
                            wait();
                            pfield fld = getfield ( x, y );
-                           if ( fld->vehicle )
-                              fld->vehicle->convert ( col );
-                           else
-                              if ( fld->building )
-                                 fld->building->convert ( col );
+                           if ( fld ) {
+                              if ( fld->vehicle )
+                                 fld->vehicle->convert ( col );
+                              else
+                                 if ( fld->building )
+                                    fld->building->convert ( col );
 
-                           computeview();
-                           displaymap();
-                           wait();
+                              computeview();
+                              displaymap();
+                              wait();
+                           } else
+                              displaymessage("severe replay inconsistency:\nno vehicle for convert command !", 1);
+
 
                        }
          break;
@@ -8450,7 +8467,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                            pvehicletype tnk = getvehicletype_forid ( id );
 
-                           if ( tnk && !fld->vehicle ) {
+                           if ( fld && tnk && !fld->vehicle ) {
                               pvehicle v;
                               generate_vehicle ( tnk, col, v );
                               v->xpos = x;
@@ -8503,10 +8520,13 @@ void trunreplay :: execnextreplaymove ( void )
                            setcursorpos ( x, y );
                            wait();
                            pfield fld = getfield ( x, y );
-                           fld -> putmine ( col, typ, strength );
-                           computeview();
-                           displaymap();
-                           wait();
+                           if ( fld ) {
+                              fld -> putmine ( col, typ, strength );
+                              computeview();
+                              displaymap();
+                              wait();
+                           } else
+                              displaymessage("severe replay inconsistency:\nno field for putmine command !", 1);
 
                        }
          break;
@@ -8520,10 +8540,13 @@ void trunreplay :: execnextreplaymove ( void )
                            setcursorpos ( x, y );
                            wait();
                            pfield fld = getfield ( x, y );
-                           fld -> removemine ( );
-                           computeview();
-                           displaymap();
-                           wait();
+                           if ( fld ) {
+                              fld -> removemine ( );
+                              computeview();
+                              displaymap();
+                              wait();
+                           } else
+                              displaymessage("severe replay inconsistency:\nno field for remove mine command !", 1);
 
                        }
          break;
@@ -8538,7 +8561,7 @@ void trunreplay :: execnextreplaymove ( void )
                            wait();
                            pfield fld = getfield ( x, y );
                            pbuilding bb = fld->building;
-                           if ( bb ) {
+                           if ( bb && fld ) {
                               if ( bb->completion ) {
                                  bb->changecompletion ( -1 );
                               } else {
@@ -8570,7 +8593,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  pvehicle eht;
 
                                  pvehicletype tnk = getvehicletype_forid ( id );
-                                 if ( tnk ) {
+                                 if ( tnk && fld) {
                                     generate_vehicle ( tnk, col / 8, eht );
                                     eht->klasse = cl;
                                     eht->xpos = x;
@@ -8722,7 +8745,7 @@ int  trunreplay :: run ( int player )
 
 
    cursor.hide();
-
+   movenum = 0;
 
    actplayer = actmap->actplayer;
 
