@@ -2331,6 +2331,11 @@ int main(int argc, char *argv[] )
 #ifdef MEMCHK
    verifyallblocks();
 #endif
+
+   #ifdef NO_PARAGUI
+   SDL_Quit();
+   #endif
+
    return(0);
 }
 

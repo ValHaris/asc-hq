@@ -577,9 +577,23 @@ Vehicle::ReactionFire::ReactionFire ( Vehicle* _unit ) : unit ( _unit )
 }
 
 
+void Vehicle::ReactionFire::checkData ( )
+{
+   // the size could have changed because a unit was saved to disk with 1 weapon system, the type modified to 2 and the unit loaded again
+   if ( weaponShots.size() < unit->typ->weapons.count ) {
+      int oldsize = weaponShots.size();
+      weaponShots.resize( unit->typ->weapons.count );
+      for ( int i = oldsize; i < unit->typ->weapons.count; ++i )
+         weaponShots[i] = unit->typ->weapons.weapon[i].reactionFireShots;
+   }
+}
+
+
+
 void Vehicle::ReactionFire::resetShotCount()
 {
-   for ( int i = 0; i < unit->typ->weapons.count; ++i )
+   assert( unit->typ->weapons.count <= weaponShots.size() );
+   for ( int i = 0; i < unit->typ->weapons.count; ++i ) 
       weaponShots[i] = unit->typ->weapons.weapon[i].reactionFireShots;
 }
 
@@ -830,16 +844,19 @@ bool  Vehicle :: vehicleconstructable ( pvehicletype tnk, int x, int y )
    if ( !tnk->techDependency.available ( gamemap->player[getOwner()].research))
       return 0;
 
-   if ( terrainaccessible2( gamemap->getField(x,y), tnk->terrainaccess, height ) > 0 )
-//   tnk->terrainaccess.accessible ( gamemap->getField(x,y)->bdt ) > 0 || height >= chtieffliegend)
-      if ( tnk->productionCost.material <= tank.material &&
-           tnk->productionCost.energy   <= tank.fuel  )
-           if ( beeline (x, y, xpos, ypos) <= maxmalq )
 //              if ( getheightdelta( log2(tnk->height), log2(height) ) == 0 )
-                if( (tnk->height & height ) || (( tnk->height & (chfahrend | chschwimmend)) && (height & (chfahrend | chschwimmend))))
+   if( (tnk->height & height ) || (( tnk->height & (chfahrend | chschwimmend)) && (height & (chfahrend | chschwimmend)))) {
+      int hgt = height;
+      if ( !(tnk->height & height))
+         hgt = 1 << log2(tnk->height);
+      if ( terrainaccessible2( gamemap->getField(x,y), tnk->terrainaccess, hgt ) > 0 )
+   //   tnk->terrainaccess.accessible ( gamemap->getField(x,y)->bdt ) > 0 || height >= chtieffliegend)
+         if ( tnk->productionCost.material <= tank.material &&
+              tnk->productionCost.energy   <= tank.fuel  )
+              if ( beeline (x, y, xpos, ypos) <= maxmalq )
                  return 1;
 
-
+   }
    return 0;
 }
 
@@ -1497,8 +1514,10 @@ void   Vehicle::readData ( tnstream& stream )
        else
           weapstrength[m] = 0;
 
-    if ( version >= 1 )
+    if ( version >= 1 ) {
       readClassContainer( reactionfire.weaponShots, stream );
+      reactionfire.checkData();
+    }
     if ( version >= 2 )
       readClassContainer( reactionfire.nonattackableUnits, stream );
 }

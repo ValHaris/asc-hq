@@ -118,6 +118,7 @@
 
          //! hook that is called when a turn ends
          void endTurn ( void );
+         void checkData();
 
          bool canMove() const;
        private:
