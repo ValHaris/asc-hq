@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.46 2000-06-05 18:21:23 mbickel Exp $
+//     $Id: sg.cpp,v 1.47 2000-06-05 18:33:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2000/06/05 18:21:23  mbickel
+//      Fixed a security hole which was opened with the new method of loading
+//        mail games by command line parameters
+//
 //     Revision 1.45  2000/06/04 21:39:21  mbickel
 //      Added OK button to ViewText dialog (used in "About ASC", for example)
 //      Invalid command line parameters are now reported
@@ -1840,7 +1844,7 @@ void         startnewsinglelevelfromgame(void)
 
 
    
-void ladestartkarte( char *emailgame=NULL, char *mapname=NULL, char *savegame=NULL, char *password=NULL )
+void ladestartkarte( char *emailgame=NULL, char *mapname=NULL, char *savegame=NULL )
 {         
    char s[300];
    if( emailgame != NULL ) {
@@ -1860,13 +1864,15 @@ void ladestartkarte( char *emailgame=NULL, char *mapname=NULL, char *savegame=NU
          exit(-1);
       }
 
+     /*
       try {
          newturnforplayer ( -1, password );
-      } /* endtry */
+      } 
       catch ( tnomaploaded ) {
          fprintf ( stderr, "invalid password specified for %s\n", emailgame );
          exit(-1);
-      } /* endcatch */
+      } 
+    */
 
    } else if( savegame != NULL ) {
       if( validatesavfile( savegame ) == 0 ) {
@@ -2706,7 +2712,7 @@ const char* progressbarfilename = "progress.8mn";
 
 
 void loaddata( int resolx, int resoly, 
-   char *emailgame=NULL, char *mapname=NULL, char *savegame=NULL, char *password=NULL ) 
+   char *emailgame=NULL, char *mapname=NULL, char *savegame=NULL ) 
 {
    actprogressbar = new tprogressbar; 
    if ( actprogressbar ) {
@@ -3195,7 +3201,7 @@ int main(int argc, char *argv[] )
 
 
    int cntr = ticker;
-   char *emailgame = NULL, *mapname = NULL, *savegame = NULL, *password = NULL;
+   char *emailgame = NULL, *mapname = NULL, *savegame = NULL;
 
    for (i = 1; i<argc; i++ ) {
       if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {
@@ -3246,11 +3252,6 @@ int main(int argc, char *argv[] )
          emailgame = argv[++i]; continue;
       }
 
-      if ( strcmpi ( &argv[i][1], "password" ) == 0 ||
-           strcmpi ( &argv[i][1], "pw" ) == 0 ) {
-         password = argv[++i]; continue;
-      }
-
       if ( strcmpi ( &argv[i][1], "savegame" ) == 0 ||
             strcmpi( &argv[i][1], "sg" ) == 0 ) {
          savegame = argv[++i]; continue;
@@ -3267,7 +3268,6 @@ int main(int argc, char *argv[] )
         printf( " Parameters: \n"
                 "\t-h\t\tThis page\n"
                 "\t-eg file\n\t-emailgame file\tcontinue an email game\n"
-                "\t-pw phrase\n\t-password phrase\tuse phrase as password for the email game\n"
                 "\t-sg file\n\t-savegame file\tcontinue a saved game\n"
                 "\t-lm file\n\t-loadmap file\tstart with a given map\n"
                 "\t-x:X\t\tSet horizontal resolution to X; default is 800 \n"
@@ -3305,31 +3305,15 @@ int main(int argc, char *argv[] )
    }
 #endif
 
-#ifdef logging
-   logtofile ( "sg.cpp / main / allocating reserved memory ");
-#endif
-
    mapborderpainter = &backgroundpict;
    char truecoloravail;
 
-#ifdef logging
-   logtofile ( "sg.cpp / main / initmissions ");
-#endif
    initmissions();
 
    memset(exitmessage, 0, sizeof ( exitmessage ));
    atexit ( dispmessageonexit );
 
-#ifdef logging
-   logtofile ( "sg.cpp / main / initmisc ");
-#endif
    initmisc ();
-
-
-
-#ifdef logging
-   logtofile ( "sg.cpp / main / initializing containerstream ");
-#endif
 
    try {
      opencontainer ( "*.con" );
@@ -3366,19 +3350,9 @@ int main(int argc, char *argv[] )
    }
 
 
-
-#ifdef logging
-   logtofile ( "sg.cpp / main / searching for 8 bit graphic mode ");
-#endif
-
    modenum8 = initgraphics ( resolx, resoly, 8 );
 
-   //Ok, everything working now...
-   // fprintf( stderr, "About to initSoundList()" );
    initSoundList();
-   // fprintf( stderr, "Done it" );
-   // sound.boom->play();
-   // fprintf( stderr, "And played a sound!" );
 
    if ( modenum8 > 0 ) {
       atexit ( returntotextmode );
@@ -3411,7 +3385,7 @@ int main(int argc, char *argv[] )
                read_JPEG_file ( &stream );
             }
 
-            loaddata( resolx, resoly, emailgame, mapname, savegame, password );
+            loaddata( resolx, resoly, emailgame, mapname, savegame );
          } 
          catch ( tfileerror err ) {
             displaymessage ( "unable to access file %s \n", 2, err.filename );
@@ -3434,9 +3408,6 @@ int main(int argc, char *argv[] )
                tnfilestream stream ( "logo640.pcx", 1 );
                loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 );
             }
-#ifdef logging
-            logtofile ( "sg.cpp / main / loading data ");
-#endif
             loaddata( resolx, resoly, emailgame, mapname, savegame );
          } 
          catch ( tfileerror err ) {
@@ -3497,19 +3468,9 @@ int main(int argc, char *argv[] )
                if ( actmap->actplayer == -1 ) next_turn();
 
                backgroundpict.paint(); 
-#ifdef logging
-               logtofile ( "sg.cpp / main / vor displaymap ");
-#endif
 
                displaymap();
-#ifdef logging
-               logtofile ( "sg.cpp / main / nach displaymap; vor cursor.show ");
-#endif
-
                cursor.show();
-#ifdef logging
-               logtofile ( "sg.cpp / main / vor painticons ");
-#endif
 
                moveparams.movestatus = 0; 
 
@@ -3518,16 +3479,17 @@ int main(int argc, char *argv[] )
 
                dashboard.x = 0xffff; 
                dashboard.y = 0xffff; 
-#ifdef logging
-               logtofile ( "sg.cpp / main / starting mainloop ");
-#endif
 
                static int displayed = 0;
                if ( !displayed ) 
-                  displaymessage2( "time for startup: %d * 1/100 sec", 
-                     ticker-cntr );
+                  displaymessage2( "time for startup: %d * 1/100 sec", ticker-cntr );
                displayed = 1;
-                  
+
+               if ( emailgame ) {
+                  newturnforplayer ( 0 );
+                  checkforreplay();
+               }
+
                mainloop();
                mousevisible ( false );
             }
