@@ -35,5 +35,159 @@ Well, nothing special about that. We build ASC with the standard GNU development
 <H3>Porting ASC</H3>
 Porting ASC to any platform supported by SDL should be farely easy (as long as it is 32 bit and has Intel byte order). 
 
+<H3>The source files</H3>
+A short overview of the various source files ASC consists of.
+
+<DL>
+<DT><A HREF="../source/artint.cpp">artint.cpp</A>
+<DD>
+The artificial intelligence. The file is not compileable at them moment, but will be reactivated soon.
+<BR><I>used by: </I><I>used by: </I>main program
+
+<DT><A HREF="../source/attack.cpp">attack.cpp</A>
+<DD>The attack routines: unit vs. unit, unit vs. object, unit vs. building
+<BR><I>used by: </I>main program
+
+<DT><A HREF="../source/basegfx.cpp">basegfx.cpp</A>
+<DD>Platform independant graphic routines. Mostly modifying of raw images
+<BR><I>used by: </I>main program, map editor, small editors
+
+<DT><A HREF="../source/basestrm.cpp">basestrm.cpp</A>
+<DD>Basic file IO, absolutely platform- and ASC independant. Stream functions for accessing container files, memory, ...
+<BR><I>used by: </I>everything
+
+<DT><A HREF="../source/building.cpp">building.cpp</A>
+<DD>routines for buildings and transports (sometimes called "container"). Containercontrols offer the functionaligy, ccontainer_t/b the GUI 
+<BR><I>used by: </I>main program
+
+<DT><A HREF="../source/controls.cpp">controls.cpp</A>
+<DD>Originally designed to contain all routines for controlling units, but everything affecting the map, its units etc but is not used by the mapeditor was placed here, so it is quite a varied collection of routines. In contrast, everything that is used by 
+the mapeditor is placed in SPFST.CPP 
+<BR><I>used by: </I>main program
+
+<DT><A HREF="../source/dialog.cpp">dialog.cpp</A>
+<DD>All dialog boxes that are used by the mapeditor and the main program
+<BR><I>used by: </I>main program, mapeditor
+
+<DT><A HREF="../source/dlg_box.cpp">dlg_box.cpp</A>
+<DD>The dialogbox engine. Contains some fundamental dialog box, for displaying messages, larger texts (like the help texts), too
+<BR><I>used by: </I>main program, mapeditor
+
+
+<DT><A HREF="../source/edevents.cpp">edevents.cpp</A>
+<DD>editing the events 
+<BR><I>used by: </I>mapeditor
+
+<DT><A HREF="../source/edgen.cpp">edgen.cpp</A>
+<DD>generating random maps
+<BR><I>used by: </I>mapeditor
+
+<DT><A HREF="../source/edglobal.cpp">edglobal.cpp</A>, <A HREF="../source/edmain.cpp">edmain.cpp</A>, 
+<A HREF="../source/edmisc.cpp">edmisc.cpp</A>
+<DD>The central files of the mapeditor
+<BR><I>used by: </I>mapeditor
+
+<DT><A HREF="../source/edselfnt.cpp">edselfnt.cpp</A>
+<DD>Selecting units, buildings, objects, weather, ...
+<BR><I>used by: </I>mapeditor
+
+<DT><A HREF="../source/gamedlg.cpp">gamedlg.cpp</A>
+<DD>dialog boxes that are not used in the mapeditor
+<BR><I>used by: </I>main program
+
+<DT><A HREF="../source/gui.cpp">gui.cpp</A>
+<DD>The buttons for unit actions: movement, attack, ...
+<BR><I>used by: </I>main program
+
+<DT><A HREF="../source/history.cpp">history.cpp</A>
+<DD>Originally planed to provide history functions for ASC, but was never finished. Long derelicted.
+<BR><I>used by: </I>planned for use in the main program
+
+<DT><A HREF="../source/loadbi3.cpp">loadbi3.cpp</A>
+<DD>Routines for loading maps and graphics from Battle Isle 2 / 3 (Battle Isle 2200 / 2220 in the US)
+<BR><I>used by: </I>main program, mapeditor, small editors
+
+<DT><A HREF="../source/loaders.cpp">loaders.cpp</A>
+<DD>Loading and writing maps, save games, email files
+<BR><I>used by: </I>main program, mapeditor
+
+<DT><A HREF="../source/loadjpg.cpp">loadjpg.cpp</A>
+<DD>Loading of JPEG files (DOS only)
+
+
+<DT><A HREF="../source/loadpcxc.cpp">loadpcxc.cpp</A>
+<DD>Loading and writing PCX files, C code (in contrast to <A HREF="../source/dos/loadpcx.cpp">dos/loadpcx.cpp</A>, which uses ASM)
+<BR><I>used by: </I>main program, mapeditor
+
+<DT><A HREF="../source/misc.cpp">misc.cpp</A>
+<DD>Small miscellaneous functions
+<BR><I>used by: </I>main program, mapeditor, small editors
+
+<DT><A HREF="../source/missions.cpp">missions.cpp</A>
+<DD>Handling of map events
+<BR><I>used by: </I>main program
+
+<DT><A HREF="../source/network.cpp">network.cpp</A>
+<DD>currently only used for providing email game functionality, but designed for data transfer in general
+<BR><I>used by: </I>main program
+
+<DT><A HREF="../source/newfont.cpp">newfont.cpp</A>
+<DD>Font loading and displaying
+<BR><I>used by: </I>main program, mapeditor, some small editors
+
+<DT><A HREF="../source/objxlat.cpp">objxlat.cpp</A>
+<DD>included by loadpcx.cpp
+
+<DT><A HREF="../source/oldlzw.cpp">oldlzw.cpp</A>
+<DD>included by basestrm.cpp
+
+<DT><A HREF="../source/palette.cpp">palette.cpp</A>
+<DD>handling the 8bit palette
+<BR><I>used by: </I>main program, mapeditor, small editors
+
+<DT><A HREF="../source/pd.cpp">pd.cpp</A>
+<DD>The pulldown menu
+<BR><I>used by: </I>main program, mapeditor
+
+<DT><A HREF="../source/sg.cpp">sg.cpp</A>
+<DD>The main program of ASC
+<BR><I>used by: </I>main program
+
+<DT><A HREF="../source/sgstream.cpp">sgstream.cpp</A>
+<DD>ASC specific file IO, for loading and writing of vehicles, buildings, objects, ...
+<BR><I>used by: </I>main program, mapeditor, small editors
+
+<DT><A HREF="../source/soundList.cpp">soundList.cpp</A>
+<DD>Loading and handling of all sounds in ASC
+<BR><I>used by: </I>main program
+
+<DT><A HREF="../source/spfst.cpp">spfst.cpp</A>
+<DD>Name comes from german "Spielfeldsteuerung", english "map control". Contains everything arount the map that is used by the mapeditor and the main program. All routines that are only used in the main program are placed in controls.cpp
+<BR><I>used by: </I>main program, mapeditor
+
+<DT><A HREF="../source/stack.cpp">stack.cpp</A>
+<DD>A small, general purpose, not-type-save stack
+<BR><I>used by: </I>main program, mapeditor, small editors
+
+<DT><A HREF="../source/strtmesg.cpp">strtmesg.cpp</A>
+<DD>Contains the version number of ASC and the about start message of ASC and the mapeditor
+<BR><I>used by: </I>main program, mapeditor
+
+<DT><A HREF="../source/typen.h">typen.h</A>, <A HREF="../source/typen.cpp">typen.cpp</A>
+<DD>The definitions of the central ASC structures. 
+<BR><I>used by: </I>main program, mapeditor, small editors
+
+<DT><A HREF="../source/unitctrl.cpp">unitctrl.cpp</A>
+<DD>The new interface for controlling of the units. Foundation for the upcoming AI
+<BR><I>used by: </I>main program
+
+<DT><A HREF="../source/weather.cpp">weather.cpp</A>
+<DD>Weather change and mapchange events are executed here, as well as all polygon processing
+<BR><I>used by: </I>main program, mapeditor
+
+</DL>
+	
+<HR>
+<TT>$Id: source.htm,v 1.3 2000-06-08 21:00:59 mbickel Exp $
 </BODY>
 </HTML>
