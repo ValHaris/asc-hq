@@ -92,10 +92,10 @@ void initASCGraphicSubsystem ( SDL_Surface* _screen, SDLmm::Surface* icon )
      agmp->surface = new Surface ( _screen );
      dummyScreenPaletteSetup = true;
   } else {
-     agmp->surface = new Surface( Surface::createSurface(screen->w, screen->h, 8 ));   
+     agmp->surface = new Surface( Surface::createSurface(screen->w, screen->h, 8 ));
      dummyScreenPaletteSetup = false;
-  }   
-  agmp->linearaddress = (int) agmp->surface->pixels();
+  }
+  agmp->linearaddress = (PointerSizedInt) agmp->surface->pixels();
      
 
   *hgmp = *agmp;

@@ -806,7 +806,7 @@ bool  Vehicle :: vehicleconstructable ( pvehicletype tnk, int x, int y )
       if ( tnk->productionCost.material <= tank.material &&
            tnk->productionCost.energy   <= tank.fuel  )
            if ( beeline (x, y, xpos, ypos) <= maxmalq )
-              if ( tnk->height & height )
+              if ( getheightdelta( log2(tnk->height), log2(height) ) == 0 )
                  return 1;
 
 

@@ -554,6 +554,9 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
    } else
       respond = 0;
 
+   if ( attackedunit->typ->functions & cfkamikaze )
+      respond = 0;
+
    if ( respond ) {
       weap = attackedunit->getWeapon( dv.weapnum );
 

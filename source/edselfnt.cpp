@@ -2,8 +2,6 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.46.2.2 2004-10-26 16:35:04 mbickel Exp $
-
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -1091,15 +1089,16 @@ void SelectItemContainer :: paintselections ( int num, int act )
 
    if ( y2 < agmp->resolutiony ) {
       showtext2 ( selector[num].name, x1, y1 );
-   
+
       y1 += activefontsettings.font->height;
-   
-   
+
+
       selector[num].selector->showactiteminfos ( x1, y1, x2, y2 );
-      bar ( x2, y1, x2 + keywidth, y2, backgroundcol ); 
-                                 
+      bar ( x2, y1, x2 + keywidth, y2, backgroundcol );
+
       selectionypos += selector[num].selector->getiteminfoheight() + freespace;
-      bar ( x1, y2+1, x2 + keywidth, y2 + freespace, black );
+      if (y2 + freespace < agmp->resolutiony )
+         bar ( x1, y2+1, x2 + keywidth, y2 + freespace, black );
       activefontsettings.background  = 255;
       activefontsettings.color = black;
       activefontsettings.length = keywidth;

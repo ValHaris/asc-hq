@@ -66,7 +66,7 @@ struct  tgraphmodeparameters {
             int           activegraphmode  ;       //!< the number of the active graphic mode. Can be ignored nowadays
             int           videomemory      ;       //!< the amount of memory in the video card. Not used any more.
             int           byteperpix       ;       //!< the distance between two pixel
-            int           linearaddress    ;       //!< the pointer to the actual memory (typecast to char* )
+            PointerSizedInt linearaddress    ;       //!< the pointer to the actual memory (typecast to char* )
             int           pagetoset        ;       //!< only used in DOS with paged graphic memory
             char          redmasksize       ;      //!< RGB only: the number of bits in the red component
             char          redfieldposition  ;      //!< RGB only: the position of the first red bit relative to the start of the pixel

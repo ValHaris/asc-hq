@@ -92,11 +92,11 @@ Top=0
 Open=0
 Top=0
 [Editor_22]
-Open=0
-Top=0
+Open=1
+Top=1
 CursorCol=1
-CursorRow=910
-TopLine=899
+CursorRow=935
+TopLine=912
 LeftChar=1
 [Editor_23]
 Open=0
@@ -252,8 +252,8 @@ Top=0
 Open=0
 Top=0
 [Editor_66]
-Open=1
-Top=1
+Open=0
+Top=0
 CursorCol=2
 CursorRow=961
 TopLine=947

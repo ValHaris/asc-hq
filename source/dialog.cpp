@@ -4433,6 +4433,8 @@ void         tviewanytext::run(void)
    do { 
       tdialogbox::run();
       checkscrolling ( );
+      if ( prntkey == 's' )
+         printf("%s", txt);
    }  while (action < 10);
 } 
 
@@ -4573,13 +4575,14 @@ char ResizeMap :: checkvalue(int         id, void*      p)
             displaymessage ( "values must be even !", 1 );
             return 0;
          }
+         /*
       if ( (id == 3   &&  - ( *wp + bottom ) > actmap->ysize - idisplaymap.getscreenysize(1) ) ||
            (id == 6   &&  - ( top + *wp )    > actmap->ysize - idisplaymap.getscreenysize(1) ) ||
            (id == 4   &&  - ( *wp + right  ) > actmap->xsize - idisplaymap.getscreenxsize(1) ) ||
            (id == 5   &&  - ( left + *wp   ) > actmap->xsize - idisplaymap.getscreenxsize(1) ) ) {
          displaymessage ( "remaining size too small !", 1 );
          return 0;
-      }
+      }    */
 
       if ( (id == 3   &&   ( *wp + bottom ) + actmap->ysize > 32000 ) ||
            (id == 6   &&   ( top + *wp )    + actmap->ysize > 32000 ) ||
@@ -5025,8 +5028,10 @@ void viewterraininfo ( void )
                         "#font02#Building Information:#font01##aeinzug20##eeinzug20##crtp10#" );
          strcat ( text, fld->building->typ->location.c_str() );
          strcat ( text, "#crtp10#owner: " );
-         strcat ( text, actmap->player[fld->building->getOwner()].getName().c_str() );
-
+         if ( fld->building->getOwner() < 8 )
+            strcat ( text, actmap->player[fld->building->getOwner()].getName().c_str() );
+         else
+            strcat ( text, "neutral" );
       }
 
 

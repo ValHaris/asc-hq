@@ -4225,11 +4225,15 @@ void ccontainer_b :: cconventionelpowerplant_subwindow :: setnewpower ( int pwr 
          if ( bld->typ->special & cgconventionelpowerplantb )
             for ( int r = 0; r < 3; r++ )
                bld->plus.resource(r) = bld->maxplus.resource(r) * power/1024;
+
+         logtoreplayinfo( rpl_setResourceProcessingAmount, bld->getPosition().x, bld->getPosition().y, bld->plus.energy, bld->plus.material, bld->plus.fuel );      
       }
    } else {
       Building* bld = cc_b->building;
       for ( int r = 0; r < 3; r++ )
          bld->plus.resource(r) = bld->maxplus.resource(r) * power/1024;
+
+      logtoreplayinfo( rpl_setResourceProcessingAmount, bld->getPosition().x, bld->getPosition().y, bld->plus.energy, bld->plus.material, bld->plus.fuel );
    }
 
 }
@@ -5492,11 +5496,14 @@ void ccontainer_b :: cminingstation_subwindow :: setnewextraction ( int res )
             for ( int r = 0; r < 3; r++ )
                bld->plus.resource(r) = bld->maxplus.resource(r) * extraction/1024;
          }
+         logtoreplayinfo( rpl_setResourceProcessingAmount, bld->getPosition().x, bld->getPosition().y, bld->plus.energy, bld->plus.material, bld->plus.fuel );      
       }
    } else {
       Building* bld = cc_b->building;
       for ( int r = 0; r < 3; r++ )
          bld->plus.resource(r) = bld->maxplus.resource(r) * extraction/1024;
+         
+      logtoreplayinfo( rpl_setResourceProcessingAmount, bld->getPosition().x, bld->getPosition().y, bld->plus.energy, bld->plus.material, bld->plus.fuel );
    }
 }
 

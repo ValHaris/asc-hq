@@ -74,8 +74,10 @@ typedef vector<ASCString> ASCStringVec;
 typedef vector<int> IntVec;
 
 
-
+#undef RELATIVE
+#undef ABSOLUTE
 enum TableWidth{NONE, RELATIVE, ABSOLUTE};
+#undef VOID
 enum TableFrame{BOX, VOID, RHS};
 
 

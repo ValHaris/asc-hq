@@ -1058,6 +1058,35 @@ void renameUnit()
 }
 
 
+void calcCargoSummary( ContainerBase* cb, map<int,int>& summary )
+{
+   for ( int i = 0; i < 32; ++i )
+      if ( cb->loading[i] ) {
+         calcCargoSummary( cb->loading[i], summary );
+         summary[cb->loading[i]->typ->id] += 1;
+      }
+}
+
+void showCargoSummary()
+{
+   typedef map<int,int> Summary;
+   Summary summary;
+
+   pfield fld = getactfield();
+   if ( fld && fld->vehicle )
+      calcCargoSummary( fld->vehicle, summary );
+
+   ASCString s;
+   for ( Summary::iterator i = summary.begin(); i != summary.end(); ++i )
+      s += vehicleTypeRepository.getObject_byID( i->first )->name + ": " + strrr(i->second) + "\n";
+
+   tviewanytext vat ;
+   vat.init ( "Cargo information", s.c_str(), 20, -1 , 450, 480 );
+   vat.run();
+   vat.done();
+}
+
+
 // user actions using the old event system
 void execuseraction ( tuseractions action )
 {
@@ -1398,7 +1427,7 @@ void execuseraction ( tuseractions action )
          break;
 
       case ua_aibench:
-         if ( maintainencecheck() || 1 ) {
+         if ( maintainencecheck() && 0 ) {
             if ( !actmap->player[ actmap->actplayer ].ai )
                actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
 
@@ -1496,7 +1525,7 @@ void execuseraction ( tuseractions action )
             }
          }
          break;
-      default:
+      case ua_cargosummary: showCargoSummary();
          break;
    }
 }
@@ -1660,6 +1689,7 @@ void Menu::setup()
    currentMenu->addSeparator();
    addbutton ( "~R~esearch", ua_researchinfo );
    addbutton ( "~P~lay time", ua_showPlayerSpeed );
+   addbutton ( "~C~argo Summary", ua_cargosummary );
    // addbutton ( "~R~esearch status", ua_showResearchStatus );
 
    // addbutton ( "vehicle ~I~mprovement\tF7", ua_dispvehicleimprovement);
@@ -1880,8 +1910,7 @@ void  mainloop ( void )
                }
                break;
 
-            case ct_f11: {                        
-
+            case ct_f11: {
             // computeview ( actmap );
             }
             break;

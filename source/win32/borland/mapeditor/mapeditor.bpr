@@ -281,7 +281,7 @@ Item1=C:\Programme\ascsrc\games\asc\source\win32\borland
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=-r 6
+RunParams=-r 6 -x 1600 -y 1150
 Launcher=
 UseLauncher=0
 DebugCWD=

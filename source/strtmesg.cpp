@@ -1,4 +1,3 @@
-
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-2003  Martin Bickel  and  Marc Schellenberger
@@ -14,14 +13,14 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    along with this program; see the file COPYING. If not, write to the
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
 */
 
 
 // These strings should be the same as the release tags in CVS !
-const char* asc_release="ASC1.99.0.10";
+const char* asc_release="ASC1.99.0.11";
 
 #include <stdio.h>
 #include "strtmesg.h"

@@ -1,40 +1,3 @@
-//     $Id: global_os.h,v 1.8.2.1 2004-12-04 15:48:15 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.8  2003/06/01 15:03:16  mbickel
-//      Some updates to the build system for FreeBSD
-//
-//     Revision 1.7  2001/12/19 17:16:29  mbickel
-//      Some include file cleanups
-//
-//     Revision 1.6  2001/07/14 21:07:47  mbickel
-//      Sound works now under Win32 too
-//      Error reporting on Win32 during startup works again.
-//
-//     Revision 1.5  2001/05/18 22:30:30  mbickel
-//      The data file is now installed in the correct directory
-//      If the installation directory is changed with configure, the new path
-//       will now be compiled directly into ASC
-//
-//     Revision 1.4  2001/01/28 21:39:31  mbickel
-//      Updated Borland C++ Building project files
-//      Fixed some compilation problems with Borland
-//      Made weaponguide compilable again
-//
-//     Revision 1.3  2000/12/28 11:12:48  mbickel
-//      Fixed: no redraw when restoring fullscreen focus in WIN32
-//      Better error message handing in WIN32
-//
-//     Revision 1.2  2000/12/23 13:19:48  mbickel
-//      Made ASC compileable with Borland C++ Builder
-//
-//     Revision 1.1  2000/10/12 21:37:58  mbickel
-//      Further restructured platform dependant routines
-//
-//     Revision 1.1  2000/10/12 20:21:43  mbickel
-//      Restructuring operating system dependant files
-//
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -57,6 +20,8 @@
 
 #ifndef global_os_h_included
  #define global_os_h_included
+
+  typedef unsigned int PointerSizedInt;
 
   #ifndef minimalIO
    // #define sdlheader "SDL.h"

@@ -68,7 +68,10 @@ enum trpl_actions { rpl_attack,
                     rpl_techResearched,
                     rpl_putbuilding2,
                     rpl_setGeneratorStatus,
-                    rpl_cutFromGame };
+                    rpl_cutFromGame,
+                    rpl_removebuilding2,
+                    rpl_setResourceProcessingAmount,
+                    rpl_removebuilding3 };
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 

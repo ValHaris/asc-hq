@@ -78,119 +78,6 @@ void expand(void* p1, void* q1, int size)
 }
 
 
-#if 0
-pfont        loadfont(char *       filename)
-{
-   toldfont     *font1; 
-   FILE         *fp;
-   int          i; 
-   char *p;
-   void         *q;
-   int      ll, ll2;
-   Uint16*         pg;
-
-
-   fp = fopen(filename, filereadmode );
-   if ( !fp ) {
-      printf("error opening file %s \n error code is %d \n",filename,errno);
-      return(NULL);
-   } /* endif */
-
-   font1 = new ( toldfont ) ;
-
-
-   fread( (void*) font1,1,sizeof(*font1),fp);
-   if (ferror(fp) != 0) {
-      printf("error rading file %s \n errno is %d  ; ferror is %d\n ",filename,errno,ferror(fp));
-      return(NULL);
-   } /* endif */
-
-   font1->id[47] = 0;
-
-   if ( strncmp(font1->id,fontid, 46) )
-      return (NULL);
-
-   font1->useems = false;
-
-   if (font1->color) { 
-     if ( font1->palette ) {
-        fseek ( fp, sizeof(dacpalette256), SEEK_END );
-        font1->palette = (dacpalette256*) new char [ sizeof ( dacpalette256 ) ];
-        blockread(fp,*font1->palette,sizeof(dacpalette256));
-     }
-   } else  
-      font1->palette = NULL; 
-   
-   for (i = 0; i <= 255; i++) { 
-      if ( font1->character[i].size ) { 
-         ll2 = ( font1->character[i].size / 8 + 1) * 8; 
-         q = new char [ ll2+2 ];
-         font1->character[i].memposition = (char*) q; 
-        
-         if (font1->color == false) { 
-            ll = font1->character[i].size / 8 + 1;            
-            p = new char [ ll + 2 ]; 
-            seek(fp,font1->character[i].diskposition);
-            blockread(fp,p,ll + 2);
-            if (ferror(fp) != 0) {
-               printf("error rading file %s \n errno is %d  ; ferror is %d\n ",filename,errno,ferror(fp));
-               return(NULL);
-            } /* endif */
-            expand(p,q,font1->character[i].size);
-            delete[] p; 
-         } else {                                  
-            seek(fp,font1->character[i].diskposition); 
-            blockread(fp,q,font1->character[i].size + 2);
-         } 
-         pg = (Uint16*) q;
-         if (*pg != font1->character[i].size) {
-            printf("invalid size of character %c\n",i);
-         } /* endif */
-         *pg = font1->character[i].width;
-      } else {
-        if (i == 32) {
-           ll = font1->height * ( font1->character[spacewidthkey].width - 2 );
-           p = new char [ ll+2 ];
-           pg = (Uint16*) p;
-           memset(p,0,ll+2);
-           *pg = font1->character[spacewidthkey].width - 2;
-           font1->character[i].width = font1->character[spacewidthkey].width - 2;
-           font1->character[i].size = ll;
-           font1->character[i].memposition = (char*) p;
-        } /* endif */
-     }
-   }
-   fclose(fp);
-
-
-
-
-   pfont font2   = new ( tfont );
-   font2->name   = strdup ( font1->name );
-   font2->color  = font1->color;
-   font2->caps   = font1->caps ;
-   font2->height = font1->height;
-   font2->groundline = font1->groundline;
-   font2->palette    = font1->palette;
-   for (i = 0; i < 256 ;i++ ) {
-      font2->character[i].width     =  font1->character[i].width;
-      font2->character[i].size      =  font1->character[i].size;
-      font2->character[i].memposition =font1->character[i].memposition;
-      for (int j = 0; j < 256 ; j++ ) {
-          font2->kerning[j][i] = font1->kerning[font1->kernchartable[i]] [font1->kernchartable[j]];
-          if ( font2->kerning[j][i] > 10  ||  font2->kerning[j][i] < - 10 )
-             printf("fehler bei font %s ; kerning zwischen %c und %c \n",font2->name,i,j);
-      }
-
-   } /* endfor */
-
-   delete font1 ;
-
-   return font2;
-}
-#endif
-
-
 void toldfont::read ( tnstream& stream )
 {
    stream.readdata ( &id, sizeof ( id ));
@@ -224,7 +111,6 @@ pfont        loadfont( pnstream stream )
    char *p;
    void         *q;
    int      ll, ll2;
-   Uint16*         pg;
    int i;
 
    font1 = new toldfont;
@@ -247,13 +133,18 @@ pfont        loadfont( pnstream stream )
          if (font1->color == false) {
             ll = font1->character[i].size / 8 + 1;
             p = new char [ ll + 2 ];
-            stream->readdata ( p, ll + 2 );
+
+            *((Uint16*)p) = stream->readWord();
+
+            stream->readdata ( p +2, ll );
             expand( p, q, font1->character[i].size );
-            delete[] p; 
-         } else 
-            stream->readdata ( q, font1->character[i].size + 2 );
-          
-         pg = (Uint16*) q;
+            delete[] p;
+         } else {
+            *((Uint16*)q) = stream->readWord();
+            stream->readdata ( ((char*)q)+2, font1->character[i].size  );
+         }
+
+         Uint16* pg = (Uint16*) q;
          if (*pg != font1->character[i].size) {
             printf("invalid size of character %c\n",i);
          } /* endif */
@@ -262,7 +153,7 @@ pfont        loadfont( pnstream stream )
         if (i == 32) {
            ll = font1->height * ( font1->character[spacewidthkey].width - 2 );
            p = new char [ ll+2 ];
-           pg = (Uint16*) p;
+           Uint16* pg = (Uint16*) p;
            memset(p,0,ll+2);
            *pg = font1->character[spacewidthkey].width - 2;
            font1->character[i].width = font1->character[spacewidthkey].width - 2;

@@ -141,8 +141,6 @@ void MapNetwork :: searchbuilding ( int x, int y )
                   getnextfield ( xp2, yp2, d );
                   pfield newfield = actmap->getField ( xp2, yp2 );
                   if ( newfield && newfield->building != bld  && !newfield->a.temp )
-
-
                      searchfield ( xp2, yp2, d );
 
                   searchvehicle ( xp2, yp2 );
@@ -325,6 +323,12 @@ void GetResource :: checkbuilding ( Building* b )
    if ( b->color/8 == player ) {
       if ((b->netcontrol & (cnet_stopenergyoutput << resourcetype)) == 0) {
          int toget = need-got;
+         if ( b->actstorage.resource( resourcetype ) < 0 ) {
+            displaymessage("map corruption detected; building %s storage for %d/%d is negative!",1,resourceNames[resourcetype],b->getEntry().x, b->getEntry().y );
+            b->actstorage.resource( resourcetype ) = 0;
+         }
+
+
          if ( b->actstorage.resource( resourcetype ) < toget )
             toget = b->actstorage.resource( resourcetype );
 
@@ -394,6 +398,12 @@ void PutResource :: checkbuilding ( Building* b )
    if ( b->color/8 == player ) {
       if ((b->netcontrol & (cnet_stopenergyinput << resourcetype)) == 0) {
          int tostore = need-got;
+
+         if ( b->actstorage.resource( resourcetype ) < 0 ) {
+            displaymessage("map corruption detected; building %s storage for %d/%d is negative!",1,resourceNames[resourcetype],b->getEntry().x, b->getEntry().y );
+            b->actstorage.resource( resourcetype ) = 0;
+         }
+         
          if ( b->gettank ( resourcetype ) - b->actstorage.resource( resourcetype ) < tostore )
             tostore = b->gettank ( resourcetype ) - b->actstorage.resource( resourcetype );
       
@@ -578,11 +588,13 @@ void transfer_all_outstanding_tribute ( void )
 void GetResourceCapacity :: checkbuilding ( Building* b )
 {
    if ( b->color/8 == player ) {
-      int t = b->gettank ( resourcetype );
-      if ( t > maxint - got )
-         got = maxint;
-      else
-         got += t;
+      if ((b->netcontrol & (cnet_stopenergyinput << resourcetype)) == 0) {
+         int t = b->gettank ( resourcetype );
+         if ( t > maxint - got )
+            got = maxint;
+         else
+            got += t;
+      }
    }
 }
 

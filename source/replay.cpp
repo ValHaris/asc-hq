@@ -36,6 +36,7 @@
 #include "viewcalculation.h"
 #include "itemrepository.h"
 #include "building_controls.h"
+#include "resourcenet.h"
 
 
 trunreplay runreplay;
@@ -492,6 +493,31 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( x );
          stream->writeInt ( y );
       }
+      if ( action == rpl_removebuilding2 || action == rpl_removebuilding3) {
+         int x =  va_arg ( paramlist, int );
+         int y =  va_arg ( paramlist, int );
+         int nwid = va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         if ( action == rpl_removebuilding2 ) {
+            int size = 3;
+            stream->writeInt ( size );
+            stream->writeInt ( x );
+            stream->writeInt ( y );
+            stream->writeInt( nwid );
+         } else {
+            int size = 6;
+            stream->writeInt ( size );
+            stream->writeInt ( x );
+            stream->writeInt ( y );
+            stream->writeInt( nwid );
+            int e =  va_arg ( paramlist, int );
+            int m =  va_arg ( paramlist, int );
+            int f =  va_arg ( paramlist, int );
+            stream->writeInt( e );
+            stream->writeInt( m );
+            stream->writeInt( f );
+         }
+      }
 
       if ( action == rpl_produceunit ) {
          int id = va_arg ( paramlist, int );
@@ -708,7 +734,30 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( res.material );
          stream->writeInt ( res.fuel );
       }
-
+      if ( action == rpl_setResearch ) {
+         int bldid = va_arg ( paramlist, int );
+         int amount = va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         int size = 2;
+         stream->writeInt ( size );
+         stream->writeInt ( bldid );
+         stream->writeInt ( amount );
+      }
+      if ( action == rpl_setResourceProcessingAmount ) {
+         int x = va_arg ( paramlist, int );
+         int y = va_arg ( paramlist, int );
+         int e = va_arg ( paramlist, int );
+         int m = va_arg ( paramlist, int );
+         int f = va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         int size = 5;
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( e );
+         stream->writeInt ( m );
+         stream->writeInt ( f );
+      }
 
       va_end ( paramlist );
    }
@@ -1102,10 +1151,10 @@ void trunreplay :: execnextreplaymove ( void )
                               if ( unit > 0 ) {
                                  Vehicle* veh = actmap->getUnit(unit);
                                  if ( veh ) {
-                                    Resources res2 =  static_cast<ContainerBase*>(veh)->getResource( cost, 0, 1  );
                                     if ( veh->getMovement() < movecost )
                                        error("not enough movement to construct/remove object !");
                                     veh->decreaseMovement( movecost );
+                                    Resources res2 =  static_cast<ContainerBase*>(veh)->getResource( cost, 0, 1  );
                                     for ( int r = 0; r < 3; r++ )
                                        if ( res2.resource(r) < cost.resource(r)  && cost.resource(r) > 0 )
                                           error("Resource mismatch: not enough resources to construct/remove object !");
@@ -1279,16 +1328,40 @@ void trunreplay :: execnextreplaymove ( void )
 
                        }
          break;
+      case rpl_removebuilding2:
+      case rpl_removebuilding3:
       case rpl_removebuilding: {
                            stream->readInt();  // size
                            int x = stream->readInt();
                            int y = stream->readInt();
+                           int nwid = -1;
+                           if ( nextaction == rpl_removebuilding2 || nextaction == rpl_removebuilding3 )
+                              nwid = stream->readInt();
+
+                           Resources res;
+                           if ( nextaction == rpl_removebuilding3 ) {
+                              res.energy = stream->readInt();
+                              res.material = stream->readInt();
+                              res.fuel = stream->readInt();
+                           }
+
                            readnextaction();
 
                            pfield fld = getfield ( x, y );
                            if ( fld && fld->building ) {
                               displayActionCursor ( x, y );
                               Building* bb = fld->building;
+                              if ( nwid >=  0 ) {
+                                 Vehicle* veh = actmap->getUnit( nwid );
+                                 if ( veh ) {
+                                    Resources r = getDestructionCost ( bb, veh );
+                                    if ( !veh || veh->getResource(r,false) != res )
+                                       error("severe replay inconsistency:\nfailed to obtain vehicle resources for removebuilding command !");
+
+                                 } else
+                                   error("severe replay inconsistency:\nfailed to obtain vehicle for removebuilding command !");
+                              }
+
                               if ( bb->getCompletion() ) {
                                  bb->setCompletion( bb->getCompletion()-1);
                               } else {
@@ -1693,7 +1766,25 @@ void trunreplay :: execnextreplaymove ( void )
                                  error ( "resource mismatch at cut unit operation! ");
                            }
          break;
-
+         case rpl_setResourceProcessingAmount: {
+                 stream->readInt();
+                 int x = stream->readInt();
+                 int y = stream->readInt();
+                 Resources p;
+                 p.energy = stream->readInt();
+                 p.material = stream->readInt();
+                 p.fuel = stream->readInt();
+                 readnextaction();
+                 Building* bld = actmap->getField(x,y)->building;
+                 if ( bld ) {
+                    for ( int r = 0; r< 3; ++r )
+                       if ( abs(p.resource(r)) > abs(bld->typ->maxplus.resource(r)) )
+                          error ("Building can not produ ");
+                     bld->plus = p;
+                 } else
+                    error ("Building not found on for rpl_setResourceProcessingAmount ");
+         }
+         break;
 
       default:{
                  int size = stream->readInt();
@@ -1761,6 +1852,8 @@ int  trunreplay :: run ( int player, int viewingplayer )
 
    orgmap = actmap;
    actmap = loadreplay ( orgmap->replayinfo->map[player]  );
+
+   transfer_all_outstanding_tribute();   
 
    actmap->playerView = viewingplayer;
 

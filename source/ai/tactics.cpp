@@ -784,9 +784,6 @@ AI::AiResult AI::tactics( void )
                            VehicleAttack va ( mapDisplay, NULL );
                            if ( finalOrder[i] < 0 )
                               warning("!!!");
-                           int iiii = (int) finalPositions[finalOrder[i]];
-                           if ( iiii < 20 )
-                              warning("!!!");
 
                            va.execute ( finalPositions[finalOrder[i]], -1, -1, 0, 0, -1 );
                            if ( va.getStatus() != 2 && strictChecks )

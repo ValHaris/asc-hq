@@ -207,7 +207,7 @@ void          tdialogbox::repaintdisplay( void )
    npush ( *agmp );
    npush ( *hgmp );
 
-   hgmp->linearaddress = (int) virtualscreenbuf.buf;
+   hgmp->linearaddress = (PointerSizedInt) virtualscreenbuf.buf;
    hgmp->windowstatus = 100;
 
    *agmp = *hgmp;
@@ -258,7 +258,7 @@ pdialogbox tdialogbox::first = NULL;
 
 void          tdialogbox::setvirtualframebuf ( void )
 {
-   agmp->linearaddress = (int) virtualscreenbuf.buf;
+   agmp->linearaddress = (PointerSizedInt) virtualscreenbuf.buf;
    agmp->windowstatus = 100;
    agmp->scanlinelength = hgmp->scanlinelength;
 }
@@ -1904,7 +1904,10 @@ void displaymessage( const ASCString& text, int num  )
 
    bool displayInternally = true;
 
-   displayLogMessage ( 0, text + "\n" );
+   if ( num == 2 )
+      displayLogMessage ( 0, "fatal error" + text + "\n" );
+   else
+      displayLogMessage ( 0, text + "\n" );
 
 
    #ifndef NoStdio
@@ -2759,7 +2762,7 @@ void tviewtext::displaytext ( void )
       pw++;
       *pw = tvt_firstlinebufheight;
       pw++;
-      tvt_firstlinebufparm.linearaddress = (int) pw;
+      tvt_firstlinebufparm.linearaddress = (PointerSizedInt) pw;
    }
 
 
