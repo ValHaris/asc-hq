@@ -1,6 +1,9 @@
-//     $Id: UnitEditor.java,v 1.9 2000-11-07 22:14:33 mbickel Exp $
+//     $Id: UnitEditor.java,v 1.10 2000-11-08 19:37:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/11/07 22:14:33  mbickel
+//      Added terrain type "Lava"
+//
 //     Revision 1.8  2000/11/07 16:19:40  schelli
 //     Minor Memory-Functions & Problems changed
 //     Picture Support partly enabled
@@ -2001,14 +2004,39 @@ static String cVehicleFunctions[] = {"sonar",
 static String cWeaponType[] = {"cruise missile", "mine",    "bomb",       "air - missile", "ground - missile", "torpedo", "machine gun",
 "cannon",         "service", "ammunition refuel", "laser (not implemented yet!)", "shootable"};
 
-static String  cTerrainType[]  = {"shallow water , coast"       ,    "normal lowland",   "swamp thick",       "forest",
-    "high mountains",                  "road",             "railroad",    "entry of building (not to be used for terrain)" ,
-    "harbour (safe for ships at storm)",                         "runway"  ,         "pipeline",    "buried pipeline",
-    "water",                           "deep water",       "hard sand",   "soft sand",
-    "track possible",                  "small rocks",      "mud",         "snow",
-    "deep snow",                       "mountains",        "very shallow water",
-    "large rocks",                     "small trench",     "ditch",  "hillside",
-"turret foundation",               "swamp thin",       "Installation", "pack ice", "river", "frozen water", "Lava" };
+static String  cTerrainType[]  =  {"shallow water , coast"       ,
+                                   "normal lowland",
+                                   "swamp thick",
+                                   "forest",
+                                   "high mountains",
+                                   "road",
+                                   "railroad",
+                                   "entry of building (not to be used for terrain)" ,
+                                   "harbour (safe for ships at storm)",
+                                   "runway"  ,
+                                   "pipeline",
+                                   "buried pipeline",
+                                   "water",
+                                   "deep water",
+                                   "hard sand",
+                                   "soft sand",
+                                   "track possible",
+                                   "small rocks",
+                                   "mud",
+                                   "snow",
+                                   "deep snow",
+                                   "mountains",
+                                   "very shallow water",
+                                   "large rocks",
+                                   "lava",
+                                   "ditch",
+                                   "hillside",
+                                   "turret foundation",
+                                   "swamp thin",
+                                   "Installation",
+                                   "pack ice",
+                                   "river",
+                                   "frozen water" };
 
 static int cfsonar = 1;
 static int cfparatrooper = 2;

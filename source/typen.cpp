@@ -1,6 +1,12 @@
-//     $Id: typen.cpp,v 1.58 2000-11-08 19:31:16 mbickel Exp $
+//     $Id: typen.cpp,v 1.59 2000-11-08 19:37:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2000/11/08 19:31:16  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.57  2000/10/31 10:42:47  mbickel
 //      Added building->vehicle service to vehicle controls
 //      Moved tmap methods to gamemap.cpp
@@ -314,14 +320,39 @@ const char*  cminentypen[cminenum]  = {"antipersonnel mine", "antitank mine", "m
 const int cminestrength[cminenum]  = { 60, 120, 180, 180 };
 
 
-const char*  cbodenarten[cbodenartennum]  = {"shallow water , coast"       ,    "normal lowland",   "swamp thick",       "forest",
-                                             "high mountains",                  "road",             "railroad",    "entry of building (not to be used for terrain)" ,
-                                             "harbour (safe for ships at storm)",                         "runway"  ,         "pipeline",    "buried pipeline",        
-                                             "water",                           "deep water",       "hard sand",   "soft sand",  
-                                             "track possible",                  "small rocks",      "mud",         "snow", 
-                                             "deep snow",                       "mountains",        "very shallow water",
-                                             "large rocks",                     "small trench",     "ditch",  "hillside",
-                                             "turret foundation",               "swamp thin",       "Installation", "pack ice", "river", "frozen water", "lava" };
+const char*  cbodenarten[cbodenartennum]  = {"shallow water , coast"       ,
+                                             "normal lowland",
+                                             "swamp thick",
+                                             "forest",
+                                             "high mountains",
+                                             "road",
+                                             "railroad",
+                                             "entry of building (not to be used for terrain)" ,
+                                             "harbour (safe for ships at storm)",
+                                             "runway"  ,
+                                             "pipeline",
+                                             "buried pipeline",
+                                             "water",
+                                             "deep water",
+                                             "hard sand",
+                                             "soft sand",
+                                             "track possible",
+                                             "small rocks",
+                                             "mud",
+                                             "snow",
+                                             "deep snow",
+                                             "mountains",
+                                             "very shallow water",
+                                             "large rocks",
+                                             "lava",
+                                             "ditch",
+                                             "hillside",
+                                             "turret foundation",
+                                             "swamp thin",
+                                             "Installation",
+                                             "pack ice",
+                                             "river",
+                                             "frozen water" };
                                                              
 
 const char*  cwaffentypen[cwaffentypennum]  = {"cruise missile", "mine",    "bomb",       "air - missile", "ground - missile", "torpedo", "machine gun",

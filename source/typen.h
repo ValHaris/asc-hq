@@ -1,6 +1,12 @@
-//     $Id: typen.h,v 1.64 2000-11-08 19:31:16 mbickel Exp $
+//     $Id: typen.h,v 1.65 2000-11-08 19:37:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.64  2000/11/08 19:31:16  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.63  2000/10/31 10:42:47  mbickel
 //      Added building->vehicle service to vehicle controls
 //      Moved tmap methods to gamemap.cpp
@@ -1724,7 +1730,7 @@ extern  const char*  choehenstufen[8] ;
 
 
 
-#define cbodenartennum 34
+#define cbodenartennum 33
 extern const char*  cbodenarten[]  ; 
   extern tterrainbits cbwater0 ;
   extern tterrainbits cbwater1 ;
