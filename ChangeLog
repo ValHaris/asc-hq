@@ -1,3 +1,28 @@
+2001-11-29 18:34  mbickel
+
+	* source/: sg.cpp, strtmesg.cpp, ai/ai.h, ai/base.cpp,
+	ai/tactics.cpp, ai/valuation.cpp:  AI can be used as benchmark
+	 Improved AI unit job determination mechanism
+
+2001-11-28 15:55  mbickel
+
+	* source/: unitctrl.cpp, ai/tactics.cpp:  Fixed: airplane flying
+	out of building has wrong movement left
+	 Fixed: crash in AI
+
+2001-11-28 14:03  mbickel
+
+	* asc.bpg, source/attack.cpp, source/gui.cpp, source/unitctrl.cpp,
+	source/unitctrl.h, source/tools/bi2pcx.cpp:  Fixed: attack
+	selectable although 0% hit accuracy
+	 Fixed: refuelling not possible if weapon had wrong target height
+	 Fixed: repair icon displayed when refuelling
+
+2001-11-22 21:36  mbickel
+
+	* ChangeLog, INSTALL, asc.kdevprj:  Updated installation
+	instructions
+
 2001-11-22 16:08  mbickel
 
 	* source/: CLoadable.cpp, PropertyGroup.cpp, gameoptions.cpp,
