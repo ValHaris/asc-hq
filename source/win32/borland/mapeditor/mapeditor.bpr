@@ -19,7 +19,7 @@
       obj\vehicle.obj obj\buildings.obj obj\networkdata.obj obj\getopt1.obj 
       obj\getopt.obj obj\objecttype.obj obj\terraintype.obj 
       obj\textfileparser.obj obj\textfiletags.obj obj\itemrepository.obj 
-      obj\asc_IMG_jpg.obj"/>
+      obj\asc_IMG_jpg.obj obj\stringtokenizer.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>

@@ -27,6 +27,7 @@
 #include "gameoptions.h"
 #include "textfiletags.h"
 #include "basegfx.h"
+#include "stringtokenizer.h"
 
 #include "errors.h"
 

@@ -12,6 +12,7 @@
 
 #include "soundList.h"
 #include "basestrm.h"
+#include "stringtokenizer.h"
 
 SoundList* SoundList::instance = NULL;
 

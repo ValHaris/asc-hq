@@ -30,6 +30,7 @@ USEUNIT("..\..\objecttype.cpp");
 USEUNIT("..\..\terraintype.cpp");
 USEUNIT("..\..\textfileparser.cpp");
 USEUNIT("..\..\textfiletags.cpp");
+USEUNIT("..\..\stringtokenizer.cpp");
 //---------------------------------------------------------------------------
 #define Library
 

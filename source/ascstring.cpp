@@ -1,156 +1,168 @@
-/***************************************************************************
-                          ascstring.cpp  -  description
-                             -------------------
-    begin                : Sun Jan 28 2001
-    copyright            : (C) 2001 by Martin Bickel
-    email                : bickel@asc-hq.org
- ***************************************************************************/
 
-/*! \file ascstring.cpp
-    \brief Implementation of a string class that extends ansi C++ strings
+#include "ASCString.h"
 
-    The purpose of ASCString is to provide extra functionality, hide holes
-    of GNU's STL implementation and it should make a potential transition to 
-    unicode as easy as possible
+/*! \class ASCString ASCString.h
+
+    \brief The ASCString class provides an abstract way to manipulate strings.
+
+    Depending on the prepocessor definition _UNICODE, ASCString will use Unicode text or C-null 
+    terminated char array.
+
+    \warning
+    Be extremely carefull if you have to modify this class. No virtual destructor is provided. 
+    This may result in memory leaks if you modify this class to free dynamically allocated memory
+    in its destructor.
+    The same warning applies to classes deriving from ASCString ( if any ).
+
+    \code
+
+    ASCString* pStr = new ASCString( "My string" );
+
+    ASCInheritedString* pInherited = ( ASCInheritedString* ) pStr;
+
+    // pStr's destructor will not be called when deleting pInherited. 
+    // If ASCString has been modified to free memory in its destructor, 
+    // this memory will never be freed up.
+    delete pInherited;      
+
+    \endcode
 */
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+/*!
+    Convert this ASCString to lowercase.
 
-#include <cctype>
-#include <stdio.h>
-#include "ascstring.h"
-#include "errors.h"
-
-/*
-ASCString& ASCString::sprintf ( const std::string* s, ... )
-{
-   va_list argptr;
-   va_start(argptr, s );
-
-   int size = 10000;
-   bool finished = false;
-   while ( !finished ) {
-       int iLen;
-
-       char *buf = new char[size];
-       if ( buf )
-         iLen = vsnprintf(buf, size, s.c_str(), argptr);
-       else
-         throw ASCmsgException ( "ASCString::sprintf  -- memory allocation error");
-
-       if ( iLen != -1 ) {
-           // ok, there was enough space
-
-          *this = buf;
-           finished = true;
-       }
-       delete[] buf;
-
-       size *= 10;
-   }
-
-   va_end(argptr);
-   return *this;
-}
+    \return returns a reference on this ASCString.
 */
-
-ASCString& ASCString :: toLower ( )
+ASCString& ASCString::toLower ( )
 {
-   for ( int i = 0; i < length(); i++ )
-      (*this)[i] = tolower( (*this)[i] );
+    auto_ptr< charT > l_autopBuf ( new charT [ length () + sizeof ( charT ) ] );
 
-   return *this;
+    charT* l_pBuf = l_autopBuf.get();
+
+    ASCStringHelpers::_Strcpy ( l_pBuf, c_str () );
+    ASCStringHelpers::_Strlwr ( l_pBuf );
+    assign  ( l_pBuf );
+
+    return *this;
 }
 
-ASCString& ASCString :: toUpper ( )
-{
-   for ( int i = 0; i < length(); i++ )
-      (*this)[i] = toupper( (*this)[i] );
+/*!
+    Convert this ASCString to uppercase.
 
-   return *this;
+    \return returns a reference on this ASCString.
+*/
+ASCString& ASCString::toUpper ( )
+{ 
+    auto_ptr< charT > l_autopBuf ( new charT [ length () + sizeof ( charT ) ] );
+    
+    charT* l_pBuf = l_autopBuf.get();
+
+    ASCStringHelpers::_Strcpy ( l_pBuf, c_str () );
+    ASCStringHelpers::_Strupr ( l_pBuf );
+    assign  ( l_pBuf );
+    
+    return *this;
 }
 
-ASCString  ASCString :: copyToLower ( ) const
+/*!
+    Format this ASCString as sprintf does.
+
+    \param pFormat a format-control string.
+    \param ... Optional arguments
+
+    \return returns a reference on this ASCString.
+
+    See standard system documentation for more information on \e sprintf.
+*/
+ASCString& ASCString::format ( charT* pFormat, ... )
 {
-   ASCString s = *this;
-   s.toLower();
-   return s;
+    va_list arg_ptr;
+    va_start ( arg_ptr, pFormat );
+
+    int  l_iNbChar = 10000;
+    bool l_bIsDone = false;
+
+    while ( l_bIsDone == false ) 
+    {
+        charT* l_pBuf = new charT [ l_iNbChar ];    
+
+        int l_iNbCharWritten = ASCStringHelpers::_Vsnprintf ( l_pBuf, l_iNbChar, pFormat, arg_ptr );
+
+        if ( l_iNbCharWritten != -1 )
+        {
+            // ok, l_pBuf was large enough to hold the whole formated string
+            assign ( l_pBuf );
+            l_bIsDone = true;
+        }
+        else
+        {
+            // l_pBuf is not large enough to hold the whole formated string.
+            // Double the number of characters l_pBuf can hold and retry 
+            // to format the string.
+            l_iNbChar *= 2;
+        }
+
+        delete [] l_pBuf;
+    };
+
+    va_end ( arg_ptr );
+
+    return *this;
 }
 
-ASCString  ASCString :: copyToUpper ( ) const
+/*!
+    Print this ASCString to the standard output stream.
+
+    \note this function is provided for convenience. It is equivalent to :
+
+    \code
+    
+    ASCString strFoo ( "foo" );
+
+    printf ( "%s", strFoo.c_str () );
+
+    \endcode
+
+    See standard system documentation for more information on \e printf.
+*/
+void ASCString::printf ( )
 {
-   ASCString s = *this;
-   s.toUpper();
-   return s;
+    ASCStringHelpers::_Printf ( c_str () );
 }
 
-int ASCString :: compare ( int pos, int n, const ASCString& s )
+/*!
+    Duplicate and convert to lowercase.
+
+    \param String a const reference to an ASCString object which will be duplicated and converted to lowercase.
+
+    \return returns an ASCString object that contains a lowercased copy of \a String.
+
+    \relates ASCString
+
+*/
+ASCString copytoLower ( const ASCString& String )
 {
-   #ifdef _string_compare_broken_
-    return inherited::compare ( s, pos, n );
-   #else
-    return inherited::compare (  pos, n, s );
-   #endif
+    ASCString l_TempString ( String );
+    l_TempString.toLower ();
+
+    return l_TempString;
 }
 
-bool ASCString :: equal_ci ( const ASCString& s ) const
+/*!
+    Duplicate and convert to uppercase.
+
+    \param String a const reference to an ASCString object which will be duplicated and converted to uppercase.
+
+    \return returns an ASCString object that contains an uppercased copy of \a String.
+
+    \relates ASCString
+
+*/
+ASCString copytoUpper ( const ASCString& String )
 {
-   if ( length() != s.length() )
-      return false;
+    ASCString l_TempString ( String );
+    l_TempString.toUpper ();
 
-   for ( int i = 0; i < length(); i++  )
-      if ( s[i] != this->operator[] (i) )
-         if ( ! ( s[i] >= 'A' && s[i] <= 'Z' && s[i] == this->operator[](i)+'A'-'a' ||
-                  s[i] >= 'a' && s[i] <= 'z' && s[i] == this->operator[](i)+'a'-'A' ) )
-               return false;
-
-   return true;
+    return l_TempString;
 }
 
-
-
-int StringTokenizer::CharSpace ( char c )
-{
-  if ( c <= ' ' )
-     return 0;
-
-  const char* ops = "=*/+-";
-  const char* d = ops;
-  do {
-     if( *d == c && !includeOperators )
-        return 2;
-     if ( *d == 0 )
-        return 1;
-     d++;
-  } while ( true );
-}
-
-
-ASCString StringTokenizer::getNextToken( )
-{
-   while ( i < str.length() && !CharSpace(str[i]) )
-     i++;
-
-   if ( i == str.length() )
-      return "";
-
-   int begin = i;
-   int cs = CharSpace( str[i] );
-   do {
-      i++;
-   } while ( i < str.length() && CharSpace( str[i] ) == cs );
-   return str.substr(begin, i-begin);
-}
-
-
-ASCString StringTokenizer::getRemaining( )
-{
-   return str.substr(i);
-}

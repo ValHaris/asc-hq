@@ -10,7 +10,7 @@
       obj\graphicselector.obj obj\loadpcxc.obj obj\newfont.obj obj\CLoadable.obj 
       obj\Property.obj obj\PropertyGroup.obj obj\graphics.obj obj\getopt1.obj 
       obj\getopt.obj obj\strtmesg.obj obj\objecttype.obj obj\terraintype.obj 
-      obj\textfileparser.obj obj\textfiletags.obj"/>
+      obj\textfileparser.obj obj\textfiletags.obj obj\stringtokenizer.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -23,7 +23,7 @@
     <PATHASM value=".;"/>
     <LINKER value="TLib"/>
     <USERDEFINES value="_DEBUG;HEXAGON;_WIN32_;WIN32;converter;_NOASM_;_SDL_"/>
-    <SYSDEFINES value="_RTLDLL;NO_STRICT"/>
+    <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="tools.bpf"/>
     <INCLUDEPATH value="..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image"/>
     <LIBPATH value="..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\lib\obj;$(BCB)\lib"/>
@@ -34,7 +34,7 @@
     <CFLAG1 value="-Od -Q -Vx -Ve -X- -a1 -b -k -y -v -vi- -c -tW -tWM -K"/>
     <PFLAGS value="-N2obj -N0obj -$YD -$W -$O- -v -JPHNE -M"/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="/P64 /0 /E"/>
+    <LFLAGS value="/P128 /0 /E"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="$(OBJFILES)"/>
@@ -69,19 +69,20 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=12
-Item0=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;C:\Programme\ascdev\SDL_image
-Item1=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src
-Item2=..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;C:\Programme\ascdev\SDLmm\src
-Item3=..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include
-Item4=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include
-Item5=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;C:\Programme\ascsrc\games\SDL\include
-Item6=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
-Item7=..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
-Item8=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
-Item9=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\asc\source\win32
-Item10=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
-Item11=..\..;$(BCB)\include;$(BCB)\include\vcl
+Count=13
+Item0=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image
+Item1=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;C:\Programme\ascdev\SDL_image
+Item2=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src
+Item3=..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;C:\Programme\ascdev\SDLmm\src
+Item4=..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include
+Item5=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include
+Item6=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;C:\Programme\ascsrc\games\SDL\include
+Item7=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
+Item8=..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
+Item9=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
+Item10=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\asc\source\win32
+Item11=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
+Item12=..\..;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
 Count=5
@@ -109,11 +110,12 @@ Item1=C:\Programme\ascsrc\games\asc\source\tools\win\obj
 Item2=C:\Programme\ascsrc\games\asc\source\tools\win
 
 [HistoryLists\hlTlibPageSize]
-Count=4
-Item0=0x0040
-Item1=0x0020
-Item2=32
-Item3=0x0010
+Count=5
+Item0=0x0080
+Item1=0x0040
+Item2=0x0020
+Item3=32
+Item4=0x0010
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl

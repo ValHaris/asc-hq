@@ -53,9 +53,6 @@ CXXFLAGS="$CXXFLAGS -I$withval/include" ; CPPFLAGS="$CPPFLAGS -I$withval/include
 AC_CHECK_HEADER( SDL/SDL.h, , AC_MSG_ERROR( ASC requires SDL headers to be present ) )
 
 
-CXXFLAGS=" $CXXFLAGS $SDL_CFLAGS"
-LIBS="$LIBS $SDL_LIBS"
-
 
 SDL_VERSION=1.1.3
 AM_PATH_SDL($SDL_VERSION,
@@ -63,8 +60,10 @@ AM_PATH_SDL($SDL_VERSION,
             AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!])
 )
 
+
 CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
 CFLAGS="$CFLAGS $SDL_CFLAGS"
+LIBS="$LIBS $SDL_LIBS"
 
 
 

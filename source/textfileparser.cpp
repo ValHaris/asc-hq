@@ -24,7 +24,7 @@
 #include "objecttype.h"
 #include "textfileparser.h"
 #include "dlg_box.h"
-
+#include "stringtokenizer.h"
 #include "loadpcx.h"
 
 /*
@@ -331,10 +331,10 @@ void PropertyContainer::BoolProperty::evaluate_rw ( )
    if ( propertyContainer->isReading() ) {
       StringTokenizer st ( entry->value );
       ASCString s = st.getNextToken();
-      if ( s.equal_ci ( "true" ) || s.equal_ci ( "1" ) )
+      if ( s.compare_ci ( "true" )==0 || s.compare_ci ( "1" )==0 )
          property = true;
       else
-         if ( s.equal_ci ( "false" ) || s.equal_ci ( "0" ) )
+         if ( s.compare_ci ( "false" )==0 || s.compare_ci ( "0" )==0 )
             property = false;
          else
             propertyContainer->error ( name + ": token "+ s +" unknown" );
@@ -433,7 +433,7 @@ void PropertyContainer::TagArrayProperty::evaluate_rw ( )
       while ( !s.empty() ) {
          bool found = false;
          for ( int i = 0; i < tagNum; i++ )
-            if ( s.equal_ci ( tags[i] )  ) {
+            if ( s.compare_ci ( tags[i] )==0  ) {
                property.flip ( i );
                found = true;
                break;
@@ -464,7 +464,7 @@ void PropertyContainer::TagIntProperty::evaluate_rw ( )
       while ( !s.empty() ) {
          bool found = false;
          for ( int i = 0; i < tagNum; i++ )
-            if ( s.equal_ci ( tags[i] )  ) {
+            if ( s.compare_ci ( tags[i] )==0  ) {
                property ^= 1 << i;
                found = true;
                break;
@@ -491,7 +491,7 @@ void PropertyContainer::NamedIntProperty::evaluate_rw ( )
       if ( !s.empty() ) {
          bool found = false;
          for ( int i = 0; i < tagNum; i++ )
-            if ( s.equal_ci ( tags[i] )  ) {
+            if ( s.compare_ci ( tags[i] )==0  ) {
                property = i;
                found = true;
                break;
@@ -766,7 +766,7 @@ void TextFormatParser::startLevel ( const ASCString& levelName )
 
    if ( levelDepth == 0  ) {
       if ( !primaryName.empty() )
-         if ( ! levelName.equal_ci ( primaryName )  )
+         if ( levelName.compare_ci ( primaryName )  )
             error ( "expecting group " + primaryName + " , found " + levelName );
       textPropertyGroup->typeName = levelName;
       textPropertyGroup->typeName.toLower();

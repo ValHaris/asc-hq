@@ -2,9 +2,16 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.101 2001-11-12 18:28:34 mbickel Exp $
+//     $Id: dialog.cpp,v 1.102 2001-12-05 15:46:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.101  2001/11/12 18:28:34  mbickel
+//      Fixed graphical glitches when unit moves near border
+//      If max num of mines exceeded, no icon is displayed for placing a new one
+//      Fixed: some airplanes could not move after ascend
+//      Fixed: couldn't build satellites on fields no accessible if satellite was
+//        on ground level.
+//
 //     Revision 1.100  2001/10/31 18:34:30  mbickel
 //      Some adjustments and fixes for gcc 3.0.2
 //
@@ -2379,14 +2386,14 @@ char      tfileselectsvga::speedsearch(char         input)
 
    bool sps = false;
    int ii = markedfile;
-   if ( ii >= 0  && searchstring.compare ( 0, searchstring.length(), files[ii].name.copyToUpper() ) == 0) {
+   if ( ii >= 0  && searchstring.compare_ci ( 0, searchstring.length(), files[ii].name ) == 0) {
       sps = true;
    }
    else {
       ii = 0;
       while (ii < numberoffiles  &&  !sps ) {
-         if ( files[ii].name.copyToUpper().compare ( 0, searchstring.length(), searchstring ) == 0) {
-            sps = true; 
+         if ( files[ii].name.compare_ci ( 0, searchstring.length(), searchstring ) == 0) {
+            sps = true;
             markedfile = ii;
          } 
          ii++;
