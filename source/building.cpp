@@ -1,6 +1,9 @@
-//     $Id: building.cpp,v 1.44 2000-08-13 09:53:55 mbickel Exp $
+//     $Id: building.cpp,v 1.45 2000-08-25 13:42:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2000/08/13 09:53:55  mbickel
+//      Refuelling is now logged for replays
+//
 //     Revision 1.43  2000/08/12 09:17:16  gulliver
 //     *** empty log message ***
 //
@@ -4678,26 +4681,31 @@ void ccontainer_b :: cammunitionproduction_subwindow :: paintobj ( int num, int 
 {
    csubwindow :: paintobj ( num, stat );
    if ( objcoordinates[num].type == 3 ) {
-      setinvisiblemouserectanglestk ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2+10,   objcoordinates[num].y2 );
-      collategraphicoperations cgo  ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2+10,   objcoordinates[num].y2 );
-      putimage ( objcoordinates[num].x1,   objcoordinates[num].y1,  icons.container.subwin.ammoproduction.schiene );
+      {
+         setinvisiblemouserectanglestk ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2+10,   objcoordinates[num].y2 );
+         collategraphicoperations cgo  ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2+10,   objcoordinates[num].y2 );
+         putimage ( objcoordinates[num].x1,   objcoordinates[num].y1,  icons.container.subwin.ammoproduction.schiene );
 
-      int offs = 0;
-      if ( num == actschieber )
-         offs = 1;
+         int offs = 0;
+         if ( num == actschieber )
+            offs = 1;
 
-      if ( objcoordinates[num].y2 - objcoordinates[num].t1 - objcoordinates[num].t2 == objcoordinates[num].y1 )
-         putimage ( objcoordinates[num].x1,   objcoordinates[num].y2 - objcoordinates[num].t1 - objcoordinates[num].t2,  icons.container.subwin.ammoproduction.schieber[offs + 2] );
-      else
-         putimage ( objcoordinates[num].x1,   objcoordinates[num].y2 - objcoordinates[num].t1 - objcoordinates[num].t2,  icons.container.subwin.ammoproduction.schieber[offs] );
+         if ( objcoordinates[num].y2 - objcoordinates[num].t1 - objcoordinates[num].t2 == objcoordinates[num].y1 )
+            putimage ( objcoordinates[num].x1,   objcoordinates[num].y2 - objcoordinates[num].t1 - objcoordinates[num].t2,  icons.container.subwin.ammoproduction.schieber[offs + 2] );
+         else
+            putimage ( objcoordinates[num].x1,   objcoordinates[num].y2 - objcoordinates[num].t1 - objcoordinates[num].t2,  icons.container.subwin.ammoproduction.schieber[offs] );
 
+         getinvisiblemouserectanglestk ( );
+      }
       activefontsettings.color = white;
       activefontsettings.font = schriften.guifont;
       activefontsettings.length = 29;
       activefontsettings.justify = centertext;
       activefontsettings.background = bkgrcol;
+
+      setinvisiblemouserectanglestk ( subwinx1 + 6 + num * 37, subwiny1 + 96,   subwinx1 + 6 + num * 37 + activefontsettings.length, subwiny1 + 96 + activefontsettings.font->height );
       showtext2c ( strrr ( toproduce[num] * weaponpackagesize ), subwinx1 + 6 + num * 37, subwiny1 + 96 );
-      getinvisiblemouserectanglestk ( ); 
+      getinvisiblemouserectanglestk ( );
    }
    if ( objcoordinates[num].type == 5 ) {
       setinvisiblemouserectanglestk ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2+10,   objcoordinates[num].y2 );

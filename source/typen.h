@@ -1,6 +1,12 @@
-//     $Id: typen.h,v 1.44 2000-08-21 17:51:03 mbickel Exp $
+//     $Id: typen.h,v 1.45 2000-08-25 13:42:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2000/08/21 17:51:03  mbickel
+//      Fixed: crash when unit reaching max experience
+//      Fixed: crash when displaying research image
+//      Fixed: crash when events referenced a unit that has been shot down
+//      Fixed: screenshot being written to wrong directory
+//
 //     Revision 1.43  2000/08/13 11:55:10  mbickel
 //      Attacking now decreases a units movement by 20% if it has the
 //        "move after attack" flag.
@@ -1592,67 +1598,6 @@ class tmap {
 /////////////////////////////////////////////////////////////////////
 
 enum tnetworkchannel { TN_RECEIVE, TN_SEND };
-
-/*
-class tgameoptions {
-  public:
-    tgameoptions ( void );
-    void setdefaults ( void );
-    int version;
-    int fastmove;
-    int visibility_calc_algo;      // 0 sauber, 1 schnell;  
-    int movespeed;
-    int endturnquestion;
-    int smallmapactive;
-    int units_gray_after_move;
-    int mapzoom;
-    int mapzoomeditor;
-    int startupcount;
-    int dontMarkFieldsNotAccessible_movement;
-    int attackspeed1;
-    int attackspeed2;
-    int attackspeed3;
-    int disablesound;
-    int dummy[9];
-
-    struct {
-      int scrollbutton;
-      int fieldmarkbutton;
-      int smallguibutton;
-      int largeguibutton;
-      int smalliconundermouse;  // 0: nie;  1: immer; 2: nur wenn vehicle, geb„ude, oder temp unter MAUS
-      int centerbutton;    // Maustaste zum zentrieren des fielder, ?ber dem sich die Maus befindet;
-      int unitweaponinfo;
-      int dragndropmovement;
-      int dummy[7];
-    } mouse;
-    struct {
-      int autoproduceammunition;
-      int filleverything;
-      int emptyeverything;
-      int dummy[10];
-    } container;
-    int onlinehelptime;
-    int smallguiiconopenaftermove;
-    int defaultpassword;
-    int replayspeed;
-    struct {
-      char* dir;
-      struct {
-         int terrain;
-         int units;
-         int objects;
-         int buildings;
-      } interpolate;
-    } bi3;
-    int dummy2[41];
-    int changed;
-    char filename[20];
-};
-
-extern tgameoptions gameoptions;
-*/
-
 
 
 typedef struct tguiicon* pguiicon ;

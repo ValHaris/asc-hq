@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.18 2000-08-12 09:17:13 gulliver Exp $
+//     $Id: artint.cpp,v 1.19 2000-08-25 13:42:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/08/12 09:17:13  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.17  2000/08/08 09:47:52  mbickel
 //
 //      speed up of dialog boxes in linux
@@ -2770,7 +2773,7 @@ tartintconfig artintconfig;
 #define ccbt_hq 10000  
 #define ccbt_recycling 50  
 #define ccbt_training 150  
-#define attack_unitdestroyed_bonus 1.4
+#define attack_unitdestroyed_bonus 90
 
 
 void nop ( void )
@@ -3333,7 +3336,7 @@ void AI::tactics( void )
 
                mv->result = int ((mv->enemyDamage - mv->enemyOrgDamage) * mv->enemy->aiparam[getplayer()]->value - config.aggressiveness * (mv->damageAfterAttack - mv->orgDamage) * veh->aiparam[getplayer()]->value );
                if ( mv->enemyDamage >= 100 )
-                  mv->result = int( mv->result * attack_unitdestroyed_bonus);
+                  mv->result += mv->enemy->aiparam[getplayer()]->value * attack_unitdestroyed_bonus;
 
                if ( mv->result > bestres || (mv->result == bestres && bestmove > mv->moveDist )) {
                   bestres = mv->result;
@@ -3384,6 +3387,7 @@ void AI:: run ( void )
    tempsvisible = true; 
 
    tactics();
+   displaymap();
 }
 
 void AI :: showFieldInformation ( int x, int y )
@@ -3398,7 +3402,7 @@ void AI :: showFieldInformation ( int x, int y )
                               "threat floating: %d\n"
                               "threat submerged: %d\n"
                               "threat deep submerged: %d\n";
-   
+
       char text[1000];
       int pos = x + y * activemap->xsize;
       sprintf(text, fieldinfo, fieldThreats[pos].threat[7], fieldThreats[pos].threat[6], fieldThreats[pos].threat[5], 
@@ -3410,6 +3414,12 @@ void AI :: showFieldInformation ( int x, int y )
          char text2[1000];
          sprintf(text2, "\nunit nwid: %d ; typeid: %d", fld->vehicle->networkid, fld->vehicle->typ->id );
          strcat ( text, text2 );
+
+         if ( fld->vehicle->aiparam ) {
+            sprintf(text2, "\nunit value: %d", fld->vehicle->aiparam[getplayer()]->value );
+            strcat ( text, text2 );
+         }
+
       }
       tviewanytext vat;
       vat.init ( "AI information", text );

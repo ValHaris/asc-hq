@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.49 2000-08-13 14:09:28 mbickel Exp $
+//     $Id: dialog.cpp,v 1.50 2000-08-25 13:42:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2000/08/13 14:09:28  mbickel
+//      Removed debug output in unitset info
+//
 //     Revision 1.48  2000/08/13 09:53:59  mbickel
 //      Refuelling is now logged for replays
 //
@@ -5468,6 +5471,10 @@ void tchoosezoomlevel :: buttonpressed ( int id )
 
 void tchoosezoomlevel :: run ( void )
 {
+   if ( pcgo ) {
+      delete pcgo;
+      pcgo = NULL;
+   }
    editfield ( 2 );
    ok = 1;
    mousevisible ( true );

@@ -1,6 +1,12 @@
-//     $Id: gamedlg.cpp,v 1.42 2000-08-21 17:50:57 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.43 2000-08-25 13:42:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2000/08/21 17:50:57  mbickel
+//      Fixed: crash when unit reaching max experience
+//      Fixed: crash when displaying research image
+//      Fixed: crash when events referenced a unit that has been shot down
+//      Fixed: screenshot being written to wrong directory
+//
 //     Revision 1.41  2000/08/13 09:54:01  mbickel
 //      Refuelling is now logged for replays
 //
@@ -2196,6 +2202,9 @@ void         showtechnology(ptechnology  tech )
          } while ( t + 200 > ticker  &&  !keypress()  && !mouseparams.taste); /* enddo */
 
          int abrt = 0;
+         while ( keypress )
+           r_key();
+
 
          int fs = loadFullscreenImage ( tech->pictfilename );
          if ( fs ) {
@@ -4191,6 +4200,7 @@ void tgamepreferences :: buttonpressed ( int id )
    tdialogbox :: buttonpressed ( id );
 
    if ( id == 1 ) {
+      actoptions.container.filleverything = actoptions.container.autoproduceammunition;
       CGameOptions::Instance()->copy ( actoptions );
       status = 10;
    }

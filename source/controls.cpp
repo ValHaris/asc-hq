@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.67 2000-08-13 10:24:07 mbickel Exp $
+//     $Id: controls.cpp,v 1.68 2000-08-25 13:42:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.67  2000/08/13 10:24:07  mbickel
+//      Fixed: movement decrease when cloning units
+//      Fixed: refuel skipped next action in replay
+//
 //     Revision 1.66  2000/08/13 09:53:57  mbickel
 //      Refuelling is now logged for replays
 //
@@ -1614,26 +1618,17 @@ int  evaluatevisibilityfield ( pfield fld, int player, int add )
       if ( fld->building && (fld->building->connection & cconnection_seen))
          releaseevent ( NULL, fld->building, cconnection_seen );
 
-
-      if ( fld->object && fld->object->mine ) {
-         if ( mine  ||  fld->mineowner() == player) {
-            setvisibility(&fld->visible, visible_all, player);
-            return originalVisibility != visible_all;
-         } else {
-            setvisibility(&fld->visible,visible_now, player);
-            return originalVisibility != visible_now;
-         }
-      } else
-        if (( fld->vehicle  && ( fld->vehicle->color  == player * 8 )) ||
-            ( fld->vehicle  && ( fld->vehicle->height  < chschwimmend ) && sonar ) ||
-            ( fld->building && ( fld->building->typ->buildingheight < chschwimmend ) && sonar ) ||
-            ( fld->vehicle  && ( fld->vehicle->height  >= chsatellit )  && satellite )) {
-               setvisibility(&fld->visible,visible_all, player);
-               return originalVisibility != visible_all;
-        } else { 
-               setvisibility(&fld->visible,visible_now, player);
-               return originalVisibility != visible_now;
-        }
+      if (( fld->vehicle  && ( fld->vehicle->color  == player * 8 )) ||
+          ( fld->vehicle  && ( fld->vehicle->height  < chschwimmend ) && sonar ) ||
+          ( fld->building && ( fld->building->typ->buildingheight < chschwimmend ) && sonar ) ||
+          ( fld->object && fld->object->mine && ( mine  ||  fld->mineowner() == player)) ||
+          ( fld->vehicle  && ( fld->vehicle->height  >= chsatellit )  && satellite )) {
+             setvisibility(&fld->visible,visible_all, player);
+             return originalVisibility != visible_all;
+      } else {
+             setvisibility(&fld->visible,visible_now, player);
+             return originalVisibility != visible_now;
+      }
    }
    return 0;
 }
