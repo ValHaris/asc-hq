@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.73 2000-09-07 15:49:38 mbickel Exp $
+//     $Id: controls.cpp,v 1.74 2000-09-16 11:47:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.73  2000/09/07 15:49:38  mbickel
+//      some cleanup and documentation
+//
 //     Revision 1.72  2000/08/29 17:42:42  mbickel
 //      Restructured GUI to make it compilable with VisualC.
 //
@@ -5806,15 +5809,6 @@ void checkforreplay ( void )
 
 
 
-void initweather ( void )
-{
-   actmap->weather.fog = 0;
-   actmap->weather.wind[0].speed = actmap->weather.wind[1].speed = actmap->weather.wind[2].speed = 0;
-   actmap->weather.wind[0].direction = actmap->weather.wind[1].direction = actmap->weather.wind[2].direction = 0;
-}
-
-
-
 
 
 void returnresourcenuseforresearch ( const pbuilding bld, int research, int* energy, int* material )
@@ -6600,23 +6594,6 @@ void GetResourceUsage :: checkbuilding ( pbuilding b )
 }
 
 
-
-
-
-void testnet ( void )
-{
-  static int resource = 0;
-
-  GetResource net1;
-  displaymessage ( "%d %s available", 1, net1.getresource ( getxpos(), getypos(), resource, maxint, 0, actmap->actplayer, 1 ), resourceNames[resource]);
-
-  PutResource net2;
-  displaymessage ( "%d %s space available", 1, net2.getresource ( getxpos(), getypos(), resource, maxint, 0, actmap->actplayer, 1 ), resourceNames[resource]);
-
-  resource++;
-  if ( resource > 2 )
-     resource = 0;
-}
 
 
 

@@ -1,6 +1,9 @@
-//     $Id: attack.h,v 1.13 2000-09-07 15:49:38 mbickel Exp $
+//     $Id: attack.h,v 1.14 2000-09-16 11:47:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/09/07 15:49:38  mbickel
+//      some cleanup and documentation
+//
 //     Revision 1.12  2000/08/12 12:52:42  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -86,14 +89,12 @@
 
 #include "typen.h"
 
-/*
-struct   tattackresult {
-               int adamage, ddamage, adifferenz, ddifferenz;
-            };
 
-
-typedef struct tattackresult* pattackresult;
+/*! \file attack.h
+   Everything regarding fighting in ASC. 
 */
+
+
 
 class AttackFormula {
             int checkHemming ( pvehicle d_eht, int direc );
@@ -192,7 +193,7 @@ class tunitattacksobject : public tfight {
            virtual void calcdisplay(int ad = -1, int dd = -1);
       };
 
-
+   //! Some very old system to calculate the weapon efficiency over a given distance.
    class AttackWeap { 
                public:
                     int          count; 
@@ -202,23 +203,46 @@ class tunitattacksobject : public tfight {
 
                     enum Target { nothing, vehicle, building, object } target;
                  }; 
-
    typedef class AttackWeap* pattackweap ;
 
 
-extern pattackweap attackpossible( const pvehicle  angreifer, int x, int y);
+//! \brief Is attacker able to attack anything in field x/y ?
+extern pattackweap attackpossible( const pvehicle attacker, int x, int y);
 
-extern int attackpossible2u( const pvehicle     angreifer,
-                             const pvehicle     verteidiger, pattackweap attackweap = NULL);      // distance is not evaluated 
 
-extern int attackpossible28( const pvehicle     angreifer,
-                             const pvehicle     verteidiger, pattackweap attackweap = NULL);       // distance is fixed as 1 field
 
-extern int attackpossible2n( const pvehicle     angreifer,
-                             const pvehicle     verteidiger, pattackweap attackweap = NULL );       // actual distance is used 
+/*! \brief Is attacker able to attack target ? Distance is not evaluated.
 
-extern int vehicleplattfahrbar( const pvehicle     vehicle,
-                                const pfield        field );
+     The distance is not evaluated. The routine is used for the movement routines for example,
+     because the current distance of units A and B is not relevant for the check whether unit 
+     A can move across the field where B is standing.
+
+     \param attackweap if != NULL, detailed information about the weapons which can perform
+                          the attack are written to attackweap
+*/
+extern bool attackpossible2u( const pvehicle attacker, const pvehicle target, pattackweap attackweap = NULL);      // distance is not evaluated
+
+
+/*! \brief Is attacker able to attack target ? Distance is assumed one field.
+
+     The distance is assumed to be 1 field. The routine is used for the movement routines for 
+     example, because units moving next to enemies get a movement malus.
+
+     \param attackweap if != NULL, detailed information about the weapons which can perform
+                          the attack are written to attackweap
+*/
+extern bool attackpossible28( const pvehicle attacker, const pvehicle target, pattackweap attackweap = NULL);       // distance is fixed as 1 field
+
+
+/*! \brief Is attacker able to attack target ? Actual distance used.
+
+     \param attackweap if != NULL, detailed information about the weapons which can perform
+                          the attack are written to attackweap
+*/
+extern bool attackpossible2n( const pvehicle attacker, const pvehicle target, pattackweap attackweap = NULL );
+
+//! Can the vehicle drive across the field and destroy any unit there by moving over them?
+extern bool vehicleplattfahrbar( const pvehicle vehicle, const pfield field );
 
 
 class WeapDist { 

@@ -1,6 +1,9 @@
-//     $Id: misc.cpp,v 1.11 2000-09-07 15:49:44 mbickel Exp $
+//     $Id: misc.cpp,v 1.12 2000-09-16 11:47:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/09/07 15:49:44  mbickel
+//      some cleanup and documentation
+//
 //     Revision 1.10  2000/05/07 12:53:59  mbickel
 //      some minor adjustments
 //
@@ -185,9 +188,9 @@ static UNS_32_BITS crc_32_tab[] = { /* CRC polynomial 0xedb88320 */
 #define UPDC32(octet,crc) (crc_32_tab[((crc) ^ (octet)) & 0xff] ^ ((crc) >> 8))
 
 
-int  crc32buf(void *vbuf, int len)
+int  crc32buf(const void *vbuf, int len)
 {
-      char* buf = (char*) vbuf;
+      const char* buf = (const char*) vbuf;
 
       DWORD crc;
       DWORD oldcrc32;

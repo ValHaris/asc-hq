@@ -1,6 +1,10 @@
-//     $Id: attack.cpp,v 1.31 2000-08-13 11:55:07 mbickel Exp $
+//     $Id: attack.cpp,v 1.32 2000-09-16 11:47:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/08/13 11:55:07  mbickel
+//      Attacking now decreases a units movement by 20% if it has the
+//        "move after attack" flag.
+//
 //     Revision 1.30  2000/08/12 15:03:18  mbickel
 //      Fixed bug in unit movement
 //      ASC compiles and runs under Linux again...
@@ -1181,9 +1185,10 @@ pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
 } 
 
 
-int    attackpossible2u( const pvehicle     angreifer,
-                         const pvehicle     verteidiger, pattackweap atw )
+bool attackpossible2u( const pvehicle attacker, const pvehicle target, pattackweap atw )
 { 
+   pvehicle angreifer = attacker;
+   pvehicle verteidiger = target;
    int result = false;
    if ( atw ) 
       atw->count = 0;
@@ -1215,15 +1220,16 @@ int    attackpossible2u( const pvehicle     angreifer,
                            }
                         }
                   
-            
    return result; 
 } 
 
 
 
-int       attackpossible28( const pvehicle     angreifer,
-                            const pvehicle     verteidiger, pattackweap atw )
+bool attackpossible28( const pvehicle attacker, const pvehicle target, pattackweap atw )
 { 
+   pvehicle angreifer = attacker;
+   pvehicle verteidiger = target;
+
    int result = false;
    if ( atw ) 
       atw->count = 0;
@@ -1256,15 +1262,16 @@ int       attackpossible28( const pvehicle     angreifer,
                                     atw->count++;
                                  }
                               }
-                  
             
    return result; 
 } 
 
 
-int       attackpossible2n( const pvehicle     angreifer,
-                            const pvehicle     verteidiger, pattackweap atw )
+bool attackpossible2n( const pvehicle attacker, const pvehicle target, pattackweap atw )
 { 
+   pvehicle angreifer = attacker;
+   pvehicle verteidiger = target;
+
    int result = false;
    if ( atw ) 
       atw->count = 0;
@@ -1305,7 +1312,7 @@ int       attackpossible2n( const pvehicle     angreifer,
    return result; 
 } 
 
-int   vehicleplattfahrbar( const pvehicle     vehicle,
+bool vehicleplattfahrbar( const pvehicle     vehicle,
                            const pfield        field)
 { 
    return false;

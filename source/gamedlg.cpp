@@ -1,6 +1,10 @@
-//     $Id: gamedlg.cpp,v 1.44 2000-08-26 15:33:42 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.45 2000-09-16 11:47:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2000/08/26 15:33:42  mbickel
+//      Warning message displayed if empty password is entered
+//      pcxtank now displays error messages
+//
 //     Revision 1.43  2000/08/25 13:42:54  mbickel
 //      Fixed: zoom dialogbox in mapeditor was invisible
 //      Fixed: ammoproduction: no numbers displayed
@@ -6743,7 +6747,6 @@ void giveunitaway ( void )
                           void          setloading ( void );
                        };
 
-#define wpnum 8
 
 
 void tmunitionsbox::init ( void ) {

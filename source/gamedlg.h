@@ -1,6 +1,9 @@
-//     $Id: gamedlg.h,v 1.9 2000-08-13 09:54:02 mbickel Exp $
+//     $Id: gamedlg.h,v 1.10 2000-09-16 11:47:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/08/13 09:54:02  mbickel
+//      Refuelling is now logged for replays
+//
 //     Revision 1.8  2000/08/12 12:52:48  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -59,6 +62,11 @@
 
 #ifndef  gamedlg_h
 #define  gamedlg_h
+
+/*! \file gamedlg.h
+   A lot of dialog boxes that are only used by both ASC.
+*/
+
 
 #include "tpascal.inc"
 #include "typen.h"
@@ -162,13 +170,6 @@ extern int   setupnetwork ( tnetwork* nw, int edt = 7, int player = -1 );
 
 extern void  settributepayments ( void );
 
-/*
-extern void  producemunition( pmunition    munition,
-                             int *    energy,
-                             int *    material,
-                             int *    sprit,
-                             pmunition    autoprod);
-*/
 
 class   tshownewtanks : public tdialogbox {
                          public:
@@ -245,18 +246,18 @@ extern void giveunitaway ( void );
 extern void settechlevel ( int techlevel, int playerBM );
 extern void showGameParameters ( void );
 
+
+/*! a routine to transfer ammo, fuel and material from one unit to another. The ability to transfer to/from buildings is not used any more, since this functionality is in a subwindow of #ccontaier
+   \param vehicle the refuelling vehicle
+   \param vehicle2 the target vehicle
+   \param building should not be used any more
+   \param fast: 2 opens a dialog to select amount of resources; 3 fills target to maximum without any user information
+*/
 extern void  verlademunition(pvehicle     vehicle,
                              pvehicle     vehicle2,
                              pbuilding    building,
                              int          fast);
-              /*  entweder muá vehicle2 oder building = NULL sein  */ 
-     /* fast: */
-     /*  0: innen dialog  */ 
-     /*  1: innen fast  */ 
-     /*  2: auáen dialog  */ 
-     /*  3: auáen fast  */ 
 
-
-#endif
+#endif  // ifndef gamedlg_h
 
 

@@ -1,6 +1,11 @@
-//     $Id: controls.h,v 1.23 2000-08-28 19:49:40 mbickel Exp $
+//     $Id: controls.h,v 1.24 2000-09-16 11:47:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/08/28 19:49:40  mbickel
+//      Fixed: replay exits when moving satellite out of orbiter
+//      Fixed: airplanes being able to endlessly takeoff and land
+//      Fixed: buildings constructable by unit without resources
+//
 //     Revision 1.22  2000/08/28 14:37:14  mbickel
 //      Fixed: satellite not able to leave orbiter
 //      Restructured next-turn routines
@@ -114,7 +119,7 @@
 */
 
 #ifdef karteneditor
-#error eigentlich sollte der Karteneditor ohne die Controls auskommen k”nnen !
+ #error the mapeditor should not need to use controls.h !
 #endif
 
 
@@ -125,15 +130,13 @@
 #include "timer.h"
 #include "mousecontrol.h"
 
-/* unit header for: controls.c -- made by tptc - translate pascal to c */
+
+/*! \file attack.h
+   Everything regarding fighting in ASC. 
+*/
 
 
-
-   struct tmoveview { 
-                        int  x1, y1, x2, y2, x3, y3, x4, y4; 
-                        int  xpos, ypos; 
-                        int  viewweite; 
-                     } ; 
+  //! The unit, weather and map information displayed on the right side of the screen
   class tdashboard {
                 public:
                        pfont        font; 
@@ -212,7 +215,11 @@
 
 
                     }; 
+  extern tdashboard dashboard; 
 
+
+
+   //! some old system for keeping track which unit action is currently running. As units actions are moved to #unitctrl.cpp , this structure is beeing replaced by #pendingVehicleActions
    struct tmoveparams { 
                         unsigned char         movestatus;       /*  Folgende Modi sind definiert : 
                                                                              0:  garnichts, standard
@@ -241,28 +248,8 @@
                         int          movespeed;
                         int          uheight;
                      }; 
+  extern tmoveparams moveparams; 
 
-
-enum tvisibilitytempbuf { vsight, vjamming, vfeatures };
-
-           struct trectangle {
-                     int x1, y1, x2, y2;
-                     int xsize;
-                  };
-
-  typedef class tvirtualvisibilitybuffer*  pvirtualvisibilitybuffer;
-  class tvirtualvisibilitybuffer {
-        protected:
-           char* buf;
-
-        public:
-
-           trectangle innerrect;
-           trectangle outerrect;
-
-           char* value ( int x1, int y1, int player, tvisibilitytempbuf offs );
-           void init ( void );
-  };
 
 
 
@@ -319,72 +306,105 @@ enum tvisibilitytempbuf { vsight, vjamming, vfeatures };
                        void             run ( void );
               };
 
-    class tprotfzt   {          // ?berpr?ft, welche vehicletypeen neu verf?gbar sind
+    //! checks, which vehicle types are newly available 
+    class tprotfzt   {         
+                    char*  buf;
                 public:
+                    //! initializes an internal buffer and checks which vehicles are currently available
                     void initbuffer( void );
+
+                    //! checks, which vehicle are now available that where not available when initbuffer was called. The new ones are displayed by calling #tshownewtanks
                     void evalbuffer( void );
     
-                    char*  buf;
                };
 
 
+extern int windmovement[8];
 
 
-  extern tmoveparams moveparams; 
-  extern tmoveview moveview; 
-  extern tdashboard dashboard; 
-  extern int windmovement[8];
+/*! calculates the movement cost for moving vehicle from x1/y1 to x2/y2
 
-
-
-
-extern void  _td_movement(pvehicle     vehicle, int unitheight = -1);
-
-
-// extern void  attack(char      kamikaze, int  weapnum = 0);
-
+   \param direc If x2 and y2 are -1, they are assumend to be the field beeing next to x1/y1 in the direction of direc
+   \param fuelcost The fuelconsumption is written here
+   \param movecost The required movement points are written to this variable
+*/
+    
 extern void  calcmovemalus(int          x1,
                            int          y1,
                            int          x2,
                            int          y2,
                            pvehicle     vehicle,
                            shortint     direc,
-                           int&         fuelcost,               // f?r Spritfuelconsumption
-                           int&         movecost );            //  f?r movementdecrease
+                           int&         fuelcost,               
+                           int&         movecost );            
 
 
+
+//! Ends the turn of the current player
+extern void next_turn ( void );
+
+
+/////////////////////////////////////////////////////////////////////
+///// old vehicle actions
+/////////////////////////////////////////////////////////////////////
+
+
+//! An old procedure for building and removing objects with a unit.
 extern void  setspec( pobjecttype obj );
-extern void         constructvehicle( pvehicletype tnk );
+
+//! A helper function for #setspec
 extern int  object_constructable ( int x, int y, pobjecttype obj );
+
+//! A helper function for #setspec
 extern int  object_removeable ( int x, int y, pobjecttype obj );
+
+//! A helper function for #setspec
 extern void build_objects_reset( void );
+
+
+//! An old procedure for building vehicle (like turrets) with a unit.
+extern void  constructvehicle( pvehicletype tnk );
+
+//! A helper function for #constructvehicle
 extern void build_vehicles_reset( void );
 
 extern void  refuelvehicle( int b);
 
+//! An old procedure for putting and removing mines.
 extern void  legemine( int typ, int delta );
 
-
+//! An old procedure for constructing a building with a vehicle
 extern void  putbuildinglevel1(void);
 
-extern void  putbuildinglevel2( const pbuildingtype bld,
-                               integer      xp,
-                               integer      yp);
+//! An old procedure for constructing a building with a vehicle
+extern void  putbuildinglevel2( const pbuildingtype bld, integer      xp, integer      yp);
 
-extern void  putbuildinglevel3(integer      x,
-                               integer      y);
+//! An old procedure for constructing a building with a vehicle
+extern void  putbuildinglevel3(integer      x, integer      y);
 
+//! An old procedure for removing a building with a vehicle
+extern void         destructbuildinglevel2( int xp, int yp);
 
-// extern void  nextturn(void);
-extern void next_turn ( void );
+//! An old procedure for removing a building with a vehicle
+extern void         destructbuildinglevel1( int xp, int yp);
 
+//! Some unit can search for mineral resources
 extern void searchforminablefields ( pvehicle eht );
-extern void initweather ( void );
+
+//! Initializes the wind calculations for moving vehicle
 extern void initwindmovement( const pvehicle vehicle );
+
+//! return the distance between x1/y1 and x2/y2 using the power of the wind factors calculated for a specific unit with #initwindmovement
 extern int windbeeline ( int x1, int y1, int x2, int y2 );
+
 extern tselectbuildingguihost    selectbuildinggui;
+
 extern void continuenetworkgame ( void );
+
+//! Move the technology that is currently being reseached to the list of discovered technologies
 extern void addtechnology ( void );
+
+//! Calculates the resources that are needed to research the given number of research
 extern void returnresourcenuseforresearch ( const pbuilding bld, int research, int* energy, int* material );
 extern void returnresourcenuseforpowerplant (  const pbuilding bld, int prod, tresources *usage, int percentagee_based_on_maxplus );
 
@@ -393,21 +413,6 @@ extern void dissectvehicle ( pvehicle eht );
 
 extern void getpowerplantefficiency ( const pbuilding bld, int* material, int* fuel );
 
-/*
-extern int putenergy(pbuilding    bld,    int      need,    int mode);
-extern int getenergy(pbuilding    bld,    int      need,    int mode);
-*/
-
-  /*   modes: 0 = energy   ohne abbuchen
-              1 = material ohne abbuchen
-              2 = fuel     ohne abbuchen
-
-                +4         mit abbuchen                         /
-                +8         nur Tributzahlungen kassieren       /  
-               +16         plus zur?ckliefern                 <  diese Bits schlieáen sich gegenseitig aus
-               +32         usage zur?ckliefern                 \
-               +64         tank zur?ckliefern                   \
-               */
 
 
 struct tmininginfo {
@@ -438,8 +443,6 @@ enum trpl_actions { rpl_attack, rpl_move, rpl_changeheight, rpl_convert, rpl_rem
                     rpl_reactionfire, rpl_finished, rpl_shareviewchange, rpl_alliancechange, rpl_move2, rpl_buildtnk,
                     rpl_refuel }; 
 
-extern void         destructbuildinglevel2( int xp, int yp);
-extern void         destructbuildinglevel1( int xp, int yp);
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 
@@ -468,13 +471,6 @@ class trunreplay {
             int removeunit ( pvehicle eht, int nwid );
             void wait ( int t = ticker );
             int actplayer;
-           /*
-            void setcursorpos ( int x, int y );
-            struct {
-               int x;
-               int y;
-            } lastvisiblecursorpos;
-           */
 
             char nextaction;
 
@@ -502,7 +498,7 @@ extern void   generatevehicle_cl ( pvehicletype fztyp,
 // Generiert eine LEERE vehicle. MIT abfrage, ob dies M”glich ist, MIT auswerten der Klassen
 //  => Nur f?rs Spiel
 
-extern void testnet ( void );
+
 
 
 

@@ -1,6 +1,9 @@
-//     $Id: loadbi3.h,v 1.5 2000-07-29 14:54:37 mbickel Exp $
+//     $Id: loadbi3.h,v 1.6 2000-09-16 11:47:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/07/29 14:54:37  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.4  2000/04/01 11:38:39  mbickel
 //      Updated the small editors
 //      Added version numbering
@@ -40,6 +43,9 @@
 #ifndef loadbi3_h
 #define loadbi3_h
 
+/*! \file loadbi3.h
+   Loading Battle Isle 3 maps and graphics
+*/
 
 #include "sgstream.h"
 #include "typen.h"

@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.91 2000-09-07 15:49:44 mbickel Exp $
+//     $Id: sg.cpp,v 1.92 2000-09-16 11:47:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.91  2000/09/07 15:49:44  mbickel
+//      some cleanup and documentation
+//
 //     Revision 1.90  2000/09/05 19:57:06  gulliver
 //     namespace std added on vector
 //
@@ -1770,16 +1773,15 @@ void         repaintdisplayhard(void)
 
 void         ladekarte(void)
 { 
-  char         s1[30];
+  char         s1[300];
 
    mousevisible(false); 
-   char s2 [ 200 ];
-   fileselectsvga(mapextension, s1, 1, s2 );
+   fileselectsvga(mapextension, s1, 1 );
 
    if ( s1[0] ) {
       mousevisible(false); 
       cursor.hide(); 
-      displaymessage("loading map %s",0, s2 );
+      displaymessage("loading map %s",0, s1 );
       loadmap(s1); 
       initmap(); 
 
@@ -1814,16 +1816,15 @@ void         ladespiel(void)
   char         s1[300];
 
    mousevisible(false); 
-   char s2 [200];
    char temp[200];
    strcpy ( temp, savegameextension );
 
-   fileselectsvga(temp, s1, 1, s2 );
+   fileselectsvga(temp, s1, 1 );
 
    if ( s1[0] ) {
       mousevisible(false); 
       cursor.hide(); 
-      displaymessage("loading %s ",0, s2);
+      displaymessage("loading %s ",0, s1);
       loadgame(s1 );
       removemessage(); 
       if ( !actmap || actmap->xsize == 0 || actmap->ysize == 0 )

@@ -1,6 +1,9 @@
-//     $Id: edmisc.cpp,v 1.29 2000-09-07 15:49:41 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.30 2000-09-16 11:47:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/09/07 15:49:41  mbickel
+//      some cleanup and documentation
+//
 //     Revision 1.28  2000/08/12 12:52:46  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -1410,13 +1413,12 @@ void         k_savemap(char saveas)
 void         k_loadmap(void)
 { 
   char         s1[300];
-  char filedescription[500];
 
    mousevisible(false); 
-   fileselectsvga(mapextension, s1, 1, filedescription );
+   fileselectsvga(mapextension, s1, 1 );
    if ( s1[0] ) {
       cursor.hide(); 
-      displaymessage("loading map %s",0, filedescription );
+      displaymessage("loading map %s",0, s1 );
       loadmap(s1);
       initmap(); 
 

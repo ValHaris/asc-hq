@@ -1,6 +1,9 @@
-//     $Id: misc.h,v 1.9 2000-09-07 15:49:44 mbickel Exp $
+//     $Id: misc.h,v 1.10 2000-09-16 11:47:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/09/07 15:49:44  mbickel
+//      some cleanup and documentation
+//
 //     Revision 1.8  2000/08/02 10:28:27  mbickel
 //      Fixed: generator vehicle not working
 //      Streams can now report their name
@@ -94,7 +97,7 @@
 
    extern void beep( void );
 
-   extern int  crc32buf(void *vbuf, int len);
+   extern int  crc32buf( const void *vbuf, int len);
 
 
  #pragma pack(1)

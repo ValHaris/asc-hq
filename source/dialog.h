@@ -1,7 +1,10 @@
-//     $Id: dialog.h,v 1.12 2000-08-26 15:33:41 mbickel Exp $
-
+//     $Id: dialog.h,v 1.13 2000-09-16 11:47:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/08/26 15:33:41  mbickel
+//      Warning message displayed if empty password is entered
+//      pcxtank now displays error messages
+//
 //     Revision 1.11  2000/08/13 09:54:00  mbickel
 //      Refuelling is now logged for replays
 //
@@ -72,21 +75,28 @@
 #ifndef dialog_h
 #define dialog_h
 
+/*! \file dialog.h
+   A lot of dialog boxes, used by both ASC and the mapeditor.
+*/
+
+
 #include "dlg_box.h"
 #include "loaders.h"
 
-#define   dbluedark 248
+const int dbluedark = 248;
 
 #define maxstringlength 50  
 
+/*! Selects a file
+
+  \param ext the wildcard to search ( *.map for example )
+  \param filename A pointer to an array where the selected filename will be written to. If string is empty, the dialog was canceled.
+  \param mode 1: open file for loading   0: select filename to write to
+*/
 
 extern void  fileselectsvga(const char *       ext, 
-                            char *       filename,
-                            char         mode,
-                            char *       description = NULL );
-
-
-
+                             char *       filename,
+                             char         mode );
 
 
 
@@ -95,48 +105,37 @@ extern void  startnextcampaignmap(word         id);
 extern void  setupalliances( int supervisor = 0 );
 
 
-/*
-class    tscrollbarn {
-             public:
-                   integer               x1,x2,y1,y2,length,pos;
-                   integer               numberofitems,visibleitems;
-                   virtual void          scrollbutton( char    status, integer _pos );
-                   void                  init( integer x1_,     integer y1_,    integer x2_, integer y2_,
-                                               integer max_sel, integer ges_anz );
-                   void          buttonpressed( int id );
-                   void          calcnewposition( integer mousexpos, integer mouseypos );
-                   void          button( byte number );
-                   void          setnewcoordinates( integer x, integer y );
-                   void          run(  int* new_sel, int* new_pos );
-                   void          done ( void );
-                };
-
-*/
-
-
 
 
    
 extern void  vehicle_information ( pvehicletype type = NULL);
    
+//! displays a message in the message line
 extern int   dispmessage2(int          id,
                           char *       st = NULL );
    
+//! loads all messages from the files message?.txt
 extern void  loadmessages(void);
    
 extern void  statisticarmies(void);
    
 extern void  statisticbuildings(void);
    
+/*! displays a dialog with two buttons, to select one of them
+
+    \param title: the message text; printf style arguments allowed
+    \param s1 the text on the left button
+    \param s2 the text on the right button
+    \returns 1 if the left button has been pressed; 2 if the right button has been pressed
+*/
 extern int   choice_dlg(char *       title,
                         char *       s1,
                         char *       s2,
                         ... );
    
 
-extern void  checkscreensaver() ;
 
-
+/*
 class tenterfiledescription : public tdialogbox {
                        public:
                          char* description;
@@ -146,38 +145,20 @@ class tenterfiledescription : public tdialogbox {
                        private:
                          char status;
                       };
+*/
 
 
-
-
-extern void testdisptext ( void );
+//! shows a small overview map in a dialog box
 extern void showmap ( void );
+
 
 extern char mix3colors ( int p1, int p2, int p3 );
 extern char mix2colors ( int a, int b );
 extern char mix4colors ( int a, int b, int c, int d );
 
+//! returns a pointer to the message id. The messages must have been loaded with loadmessages
 extern char*        getmessage(word         id);
 
-/*
-
-class tviewanytext : public tdialogbox, public tviewtextwithscrolling {
-               public:
-                   char                 *txt;
-                   char              ok;
-                    
-                   char              scrollbarvisible;
-                   char                 action;
-                   int                  textstart;
-
-                   void                 init( char* titlet, char* texttoview );
-                   virtual void         setup();
-                   void                 buildgraphics ( void );
-                   virtual void         run ( void );
-                   virtual void         buttonpressed( int id);
-                   void                 repaintscrollbar( void );
-                };
-*/
 
   class   tviewanytext : public tdialogbox, public tviewtextwithscrolling {
                public:
@@ -198,11 +179,11 @@ class tviewanytext : public tdialogbox, public tviewtextwithscrolling {
                    int                  getcapabilities ( void ) { return 1; };
                    void                 repaintscrollbar ( void );
                 };
+
+//! the dialog box for setting up how to load bi3 graphics and maps. Since ASC now uses its own graphics, this dialog is not used any more.
 extern void bi3preferences  ( void );
 
 typedef class tprogressbar* pprogressbar;
-
-
 class tprogressbar {
        public:
          void start ( int _color, int _x1, int _y1, int _x2, int _y2, pnstream stream );
@@ -284,10 +265,13 @@ class tbasicshowmap {
 
             void setmapposition ( void );
     };
+
+
+//! a dialog box that lets a user resize the active map. Should only be used in the mapeditor
 extern void resizemap ( void );
 
 #ifdef FREEMAPZOOM
-extern void choosezoomlevel ( void );
+ extern void choosezoomlevel ( void );
 #endif
 
 extern void viewterraininfo ( void );
@@ -320,25 +304,33 @@ class tenterpassword : public tdialogbox {
 
 
 #ifndef karteneditor
-#include "network.h"
-class taskforsupervisorpassword : public tenterpassword {
-                           virtual int checkforreask ( int crc );
-                         public:
-                           void init ( int* crc, int mode );
-                        };
+ #include "network.h"
+ class taskforsupervisorpassword : public tenterpassword {
+                            virtual int checkforreask ( int crc );
+                          public:
+                            void init ( int* crc, int mode );
+                         };
 #endif
 
 
+/*! a dialog box for entering a password. 
+     If *cr == 0 , the user is asked to enter a new password, which is saved in *cr. 
+     If *cr != 0, the dialog box will only resume after the user has entered the correct password. 
+       Pressing the "exit" buttons erases the active map and throws a #tnomaploaded exception
+
+    \returns 1: ok, 
+              2: default (only if new password has been entered),
+             10: cancel (only if new password has been entered)
+*/
 extern int enterpassword ( int* cr );
-  /* returns: 1: OK
-              2: default
-              10: cancel
-  */
 
 
-extern int encodepassword ( char* pw );
+extern int encodepassword ( const char* pw );
+
 extern void viewUnitSetinfo ( void );
+
 extern int selectgameparameter( int lc );
+
 extern void setmapparameters ( void );
 
 

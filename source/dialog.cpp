@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.53 2000-08-29 10:36:47 mbickel Exp $
+//     $Id: dialog.cpp,v 1.54 2000-09-16 11:47:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.53  2000/08/29 10:36:47  mbickel
+//      Removed Debug code
+//      Fixed bug: movement left when changing height into buildings
+//
 //     Revision 1.52  2000/08/28 19:49:40  mbickel
 //      Fixed: replay exits when moving satellite out of orbiter
 //      Fixed: airplanes being able to endlessly takeoff and land
@@ -2151,7 +2155,6 @@ const char* fileswithdescrption[fileswithdescrptionnum] =  {"bla.bla"}; // { map
 
  struct tfiledata {
                 char*        name;
-                char*        description;
                 char*        sdate;
                 int          time;
 
@@ -2179,14 +2182,13 @@ class   tfileselectsvga : public tdialogbox {
                         int             markedfile;
 
                         char            wildcard[100];
-                        char*           descrip;
                         char            swtch;           /* 1: load        2: save */
                         char*           result;
                         char         sort_name;
                         char         sort_time;
 
                         void            init( char sw );
-                        void            setdata( const char* _wildcard,   char* b, char* description );   // result
+                        void            setdata( const char* _wildcard,   char* b );   // result
                         
                         void            readdirectory ( void );
                         void            fileausgabe( char force , int dispscrollbar);
@@ -2321,18 +2323,12 @@ void         tfileselectsvga::readdirectory(void)
 
    numberoffiles = 0; 
 
-   int searchfordescription = 0;
-   for (int i = 0; i < fileswithdescrptionnum; i++ ) 
-      if ( strcmpi ( &wildcard[ strlen( wildcard ) - strlen (fileswithdescrption[i]) ] , fileswithdescrption[i] ) == 0 )
-         searchfordescription++;
-
-   char* description = NULL;
-
 
    tfindfile ff ( fls );
    char* filename = ff.getnextname();
 
    while( filename ) {
+      /*
       if ( searchfordescription && !keypress()) {
    
             try {
@@ -2382,10 +2378,10 @@ void         tfileselectsvga::readdirectory(void)
    
                numberoffiles++;
    
-            } /* endtry */
+            }
    
             catch ( tfileerror ) {
-            } /* endcatch */
+            }
             
             if ( description ) {
                delete[]  description ;
@@ -2394,8 +2390,9 @@ void         tfileselectsvga::readdirectory(void)
    
           
       } else {
+         */
           files[numberoffiles].name = strdup ( filename );
-          files[numberoffiles].description = NULL;
+          // files[numberoffiles].description = NULL;
                  
           time_t tdate = get_filetime( filename );
 
@@ -2407,7 +2404,7 @@ void         tfileselectsvga::readdirectory(void)
           files[numberoffiles].time = tdate;
 
           numberoffiles++;
-      }
+       // }
 
 
       filename = ff.getnextname();
@@ -2476,9 +2473,9 @@ void         tfileselectsvga::fileausgabe(char     force , int dispscrollbar)
 
             activefontsettings.justify = lefttext;
             activefontsettings.length = 230;
-            if ( files[ii].description ) {
-               showtext2( files[ii].description, x1 + 360,y1 + starty + jj * 20 + 20);
-            } else
+            // if ( files[ii].description ) {
+            //   showtext2( files[ii].description, x1 + 360,y1 + starty + jj * 20 + 20);
+            // } else
                bar ( x1 + 360,y1 + starty + jj * 20 + 20, x1 + 360 + activefontsettings.length, y1 + starty + jj * 20 + 20 + activefontsettings.font->height, activefontsettings.background );
          } 
       } 
@@ -2763,11 +2760,13 @@ void         tfileselectsvga::run(void)
          if ( ( markedfile >= 0) || searchstring[0] ) {
             if ( (swtch == 1)  ||   (abrt == 3)   ||  (!searchstring[0]) ) {  // load
                strcpy ( result , files[markedfile].name );
+               /*
                if ( descrip ) 
                   if ( files[markedfile].description )
                      strcpy ( descrip, files[markedfile].description );
                   else
                      descrip[0] = 0;
+               */
             } else {
                char* aa = searchstring;
                while (*aa != 0  && *aa != '.') 
@@ -2807,8 +2806,8 @@ void         tfileselectsvga::run(void)
          delete[]  files[ii].name ;
       if ( files[ii].sdate )
          delete[]  files[ii].sdate ;
-      if ( files[ii].description )
-         delete[]  files[ii].description ;
+      // if ( files[ii].description )
+      //   delete[]  files[ii].description ;
    } /* endfor */
    delete[] files ;
 
@@ -2817,30 +2816,26 @@ void         tfileselectsvga::run(void)
 
 
 
-void         tfileselectsvga::setdata( const char * _wildcard, char *   b, char* description)
+void         tfileselectsvga::setdata( const char * _wildcard, char *   b)
 { 
    strcpy ( wildcard , _wildcard );
    result = b;
-   descrip = description;
-   if ( descrip ) 
-      descrip[0] = 0;
-
 } 
 
 
 void         fileselectsvga( const char*       ext,
                             char*       filename,
-                            char        swtch,
-                            char *      description )
+                            char        swtch )
 {                           
    tfileselectsvga tss; 
 
    tss.init(swtch); 
-   tss.setdata( ext, filename, description );
+   tss.setdata( ext, filename );
    tss.run();          
    tss.done(); 
 } 
 
+/*
 void testdisptext ( void )
 {
    tnfilestream stream ("tst.txt",1 );
@@ -2857,6 +2852,7 @@ void testdisptext ( void )
        delete[] cct;
     }
 }
+
 
 void tenterfiledescription::init ( char* descrip )
 {
@@ -2904,11 +2900,10 @@ void tenterfiledescription::run ( void )
    do {
       tdialogbox::run();
    } while ( status == 0 ); 
-   */
 
 }
 
-
+*/
 
 extern dacpalette256 pal;
 #define sqr(a) (a)*(a)
@@ -5706,7 +5701,7 @@ void viewUnitSetinfo ( void )
 }
 
 
-int encodepassword ( char* pw )
+int encodepassword ( const char* pw )
 {
    if ( !pw )
       return 0;
