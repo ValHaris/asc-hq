@@ -1,6 +1,11 @@
-//     $Id: spfst.h,v 1.20 2000-09-01 15:47:50 mbickel Exp $
+//     $Id: spfst.h,v 1.21 2000-09-02 13:59:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/09/01 15:47:50  mbickel
+//      Added Astar path finding code
+//      Fixed: viewid crashed
+//      Fixed display error in ynswitch ( krkr.cpp )
+//
 //     Revision 1.19  2000/08/12 12:52:54  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -111,6 +116,15 @@
 #ifndef spfst_h
   #define spfst_h
 
+/*! \file spfst.h
+\brief map accessing routines used by ASC and the mapeditor
+
+
+*/
+
+
+
+
   #include "newfont.h"
   #include "keybp.h"
   #include "basegfx.h"
@@ -215,7 +229,21 @@ extern word  getxpos(void);
 
 extern word  getypos(void);
 
-extern char fieldvisiblenow( const pfield        pe, int player = actmap->actplayer );
+
+/*!
+  evaluates the visibility of a field
+  \param pe the field to be evaluated
+  \param player the player who is 'looking'
+ */
+extern bool fieldvisiblenow( const pfield pe, int player = actmap->actplayer );
+
+/*!
+  evaluates the visibility of a field
+  \param pe the field to be evaluated
+  \param player the player who is 'looking'
+  \return visible_not .. visible_all
+ */
+extern int fieldVisibility  ( const pfield pe, int player = actmap->actplayer );
 
 extern int getdiplomaticstatus( int b );
 

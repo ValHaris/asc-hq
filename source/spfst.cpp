@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.57 2000-09-01 17:46:42 mbickel Exp $
+//     $Id: spfst.cpp,v 1.58 2000-09-02 13:59:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2000/09/01 17:46:42  mbickel
+//      Improved A* code
+//      Renamed tvehicle class to Vehicle
+//
 //     Revision 1.56  2000/08/28 19:49:42  mbickel
 //      Fixed: replay exits when moving satellite out of orbiter
 //      Fixed: airplanes being able to endlessly takeoff and land
@@ -1083,7 +1087,7 @@ int         fieldaccessible( const pfield        field,
    if ( uheight == -1 )
       uheight = vehicle->height;
 
-   int c = fieldvisiblenow ( field, vehicle->color/8 );
+   int c = fieldVisibility ( field, vehicle->color/8 );
 
    if (field == NULL) 
      return 0;
@@ -1597,12 +1601,17 @@ word         beeline(integer      x1,
 */
 
 
-char      fieldvisiblenow( const pfield        pe, int player  )
+bool fieldvisiblenow( const pfield pe, int player )
 { 
   if ( pe ) { 
       int c = (pe->visible >> ( player * 2)) & 3; 
       if ( godview ) 
-         c = visible_all; 
+         c = visible_all;
+
+      if ( actmap->player[player].ai && actmap->player[player].ai->isRunning() )
+         if ( c == visible_not )
+            c = visible_ago;
+
       if (c > visible_ago) { 
          if ( pe->vehicle ) { 
             if ((c == visible_all) || (pe->vehicle->color / 8 == player ) || ((pe->vehicle->height >= chschwimmend) && (pe->vehicle->height <= chhochfliegend)))
@@ -1621,12 +1630,28 @@ char      fieldvisiblenow( const pfield        pe, int player  )
 } 
 
 
+int fieldVisibility( const pfield pe, int player )
+{
+  if ( pe ) {
+      int c = (pe->visible >> ( player * 2)) & 3;
+      if ( godview )
+         c = visible_all;
+
+      if ( actmap->player[player].ai && actmap->player[player].ai->isRunning() )
+         if ( c == visible_not )
+            c = visible_ago;
+
+      return c;
+   } else
+      return visible_not;
+}
+
+
 #include "movecurs.inc"      
 
 
 pfield        getactfield(void)
-
-{ 
+{
    return getfield ( actmap->xpos + cursor.posx, actmap->ypos + cursor.posy ); 
 } 
 
@@ -1635,15 +1660,11 @@ pfield        getactfield(void)
 pfield        getfield(int          x,
                      int          y)
 { 
-  int      l; 
-
-   if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize)) 
+   if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize))
       return NULL; 
-   else {     
-      l = y * actmap->xsize + x; 
-      return (   &actmap->field[l] );
-   } 
-} 
+   else
+      return (   &actmap->field[y * actmap->xsize + x] );
+}
 
 
 #define compensatebuildingcoordinateorgx (a) (dx & (~a))
@@ -4222,9 +4243,9 @@ void tgeneraldisplaymap :: pnt_main ( void )
             fld = getfield ( actmap->xpos + x, actmap->ypos + y );
             if ( fld ) {
                b = (fld->visible >> (playerview << 1)) & 3;
-               if (godview) 
+               if (godview)
                   b = visible_all;
-   
+
                if (y & 1 )   /*  ungerade reihennummern  */
                   r = vfbleftspace + fielddisthalfx + x * fielddistx;
                else 

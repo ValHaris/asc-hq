@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.46 2000-09-01 17:46:44 mbickel Exp $
+//     $Id: typen.h,v 1.47 2000-09-02 13:59:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2000/09/01 17:46:44  mbickel
+//      Improved A* code
+//      Renamed tvehicle class to Vehicle
+//
 //     Revision 1.45  2000/08/25 13:42:56  mbickel
 //      Fixed: zoom dialogbox in mapeditor was invisible
 //      Fixed: ammoproduction: no numbers displayed
@@ -573,6 +577,7 @@ class AiParameter : public AiThreat {
 class BaseAI { 
        public: 
          virtual void run ( void ) = 0;
+         virtual bool isRunning ( void ) = 0;
          virtual ~BaseAI () {};
       };
 

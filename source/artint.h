@@ -1,6 +1,9 @@
-//     $Id: artint.h,v 1.9 2000-07-29 14:54:08 mbickel Exp $
+//     $Id: artint.h,v 1.10 2000-09-02 13:59:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/07/29 14:54:08  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.8  2000/07/23 17:59:51  mbickel
 //      various AI improvements
 //      new terrain information window
@@ -76,6 +79,7 @@
             map< int, AiParameter>  unitai;
            #endif
           */
+           bool _isRunning;
 
            int maxTrooperMove; 
            int maxTransportMove; 
@@ -143,6 +147,7 @@
            int getplayer ( void ) { return activemap->actplayer; };
            pmap getmap ( void ) { return activemap; };
            void showFieldInformation ( int x, int y );
+           bool isRunning ( void );
            ~AI ( );
     };
 

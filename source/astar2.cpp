@@ -291,9 +291,9 @@ void AStar( pmap actmap, HexCoord A, HexCoord B, std::vector<int>& path, pvehicl
 
 void AStar( pmap actmap, std::vector<int>& path, pvehicle veh, int x, int y )
 {
-   int og = godview;
-   godview = 1;
+//   int og = godview;
+//   godview = 1;
    AStar ( actmap, HexCoord ( veh->xpos, veh->ypos ), HexCoord ( x, y ), path, veh );
-   godview = og;
+//   godview = og;
 }
 

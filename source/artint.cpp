@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.20 2000-08-29 20:21:03 mbickel Exp $
+//     $Id: artint.cpp,v 1.21 2000-09-02 13:59:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/08/29 20:21:03  mbickel
+//      Tried to make source GCC compliant, but some problems still remain
+//
 //     Revision 1.19  2000/08/25 13:42:49  mbickel
 //      Fixed: zoom dialogbox in mapeditor was invisible
 //      Fixed: ammoproduction: no numbers displayed
@@ -2809,7 +2812,8 @@ void AiParameter :: reset ( void )
 }
 
 AI :: AI ( pmap _map ) 
-{ 
+{
+   _isRunning = false;
    fieldThreats = NULL;
 
    reset(); 
@@ -3247,8 +3251,12 @@ void AI :: searchTargets ( pvehicle veh, int x, int y, TargetList* tl, int moveD
 {
    npush ( veh->xpos );
    npush ( veh->ypos );
+
+   veh->removeview();
    veh->xpos = x;
    veh->ypos = y;
+   veh->addview();
+   evaluateviewcalculation ( 1 << actmap->playerview );
 
    VehicleAttack va ( NULL, NULL );
    if ( va.available ( veh )) {
@@ -3302,8 +3310,12 @@ void AI :: searchTargets ( pvehicle veh, int x, int y, TargetList* tl, int moveD
       }
    }
 
+   veh->removeview();
    npop ( veh->ypos );
    npop ( veh->xpos );
+
+   veh->addview();
+   evaluateviewcalculation ( 1 << actmap->playerview );
 }
 
 
@@ -3383,19 +3395,29 @@ void AI::tactics( void )
       }
       veh = veh->next;
    }
-   displaymessage2("threats completed ... "); 
+   displaymessage2("tactics completed ... ");
 }
 
 
 void AI:: run ( void )
 {
+   _isRunning = true;
+
    tempsvisible = false; 
    setup();
    tempsvisible = true; 
 
    tactics();
    displaymap();
+
+   _isRunning = false;
 }
+
+bool AI :: isRunning ( void )
+{
+  return _isRunning;
+}
+
 
 void AI :: showFieldInformation ( int x, int y )
 {
