@@ -253,7 +253,7 @@ int main(int argc, char *argv[] )
             fprintf ( infoPage, header, "description", "WG" );
 
             // OVERVIEW LEFT
-            fprintf ( overview, " <tr><td><A HREF=\"%s\">", fileName.c_str() );
+            fprintf ( overview, " <tr><td><A HREF=\"%s.html\">", fileName.c_str() );
             fprintf ( overview, "%s", ft->getName().c_str() );
             fprintf ( overview, " </A></td></tr>\n" );
 
@@ -863,7 +863,9 @@ int main(int argc, char *argv[] )
             fprintf ( infoPage, "<H2>Informationen about this Unit</H2>\n" );
 
 
-            if ( exist ( prefixDir + fileName + ".jpg" )) {
+            FILE* fp = fopen ( ASCString(prefixDir + fileName + ".jpg").c_str(), "r" );
+            if ( fp ) {
+               fclose ( fp );
                fprintf( infoPage, "<p>\n<img src=\"%s.jpg\"><p>\n", fileName.c_str() );
             }
 
@@ -927,10 +929,19 @@ int main(int argc, char *argv[] )
                pal[255][0] = 254;
                pal[255][1] = 253;
                pal[255][2] = 252;
-               writepcx ( "/tmp/weaponguide.pcx", 0, 0, fieldsizex, fieldsizey, pal );
+               #ifdef _WIN32_
+               ASCString tmp = getenv("temp");
+               appendbackslash(tmp);
+               ASCString command = "convert " + tmp + "weaponguide.pcx -transparent \"#f8f4f0\" "; // -transparent 255
+               command += prefixDir + fileName;
+               command += ".gif";
+               writepcx ( tmp+"weaponguide.pcx", 0, 0, fieldsizex, fieldsizey, pal );
+               #else
                ASCString command = "convert /tmp/weaponguide.pcx -transparent \"#f8f4f0\" "; // -transparent 255
                command += prefixDir + fileName;
                command += ".gif";
+               writepcx ( "/tmp/weaponguide.pcx", 0, 0, fieldsizex, fieldsizey, pal );
+               #endif
                // printf("%s\n", command.c_str() );
                printf("creating image...");
                system( command.c_str() );
@@ -1018,8 +1029,13 @@ int main(int argc, char *argv[] )
                      if ( group == j ) {
                         ASCString unitFileName = ASCString(extractFileName_withoutSuffix( ft->filename )) + ".html";
                         ASCString linkpref = cl.l();
+                        #ifndef _WIN32_
                         if ( !linkpref.empty() )
                            appendbackslash( linkpref );
+                        #else
+                        if ( !linkpref.empty()  && linkpref[ linkpref.length() -1] != '/' )
+                           linkpref += '/' ;
+                        #endif
                            
                         ASCString line;
                         line.format("..%s;asc.css;\"%s%s\" target=\"main\";\n", ft->getName().c_str(), linkpref.c_str(), unitFileName.c_str());
