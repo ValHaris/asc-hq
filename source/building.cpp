@@ -1,6 +1,13 @@
-//     $Id: building.cpp,v 1.18 2000-05-02 16:20:50 mbickel Exp $
+//     $Id: building.cpp,v 1.19 2000-05-10 19:55:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/05/02 16:20:50  mbickel
+//      Fixed bug with several simultaneous vehicle actions running
+//      Fixed graphic error at ammo transfer in buildings
+//      Fixed ammo loss at ammo transfer
+//      Movecost is now displayed for mines and repairs
+//      Weapon info now shows unhittable units
+//
 //     Revision 1.17  2000/04/27 16:25:15  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -2415,7 +2422,7 @@ void ccontainer_b :: cammunitiontransferb_subwindow :: execexternalload ( void )
             }
     
             mainloopgeneralmousecheck ();
-    
+
         } while ( moveparams.movestatus==130 ) ;
         removemouseproc ( &mousescrollproc );
         if ( mouseparams.pictpointer != icons.mousepointer ) 
@@ -3063,7 +3070,7 @@ int  csubwindow :: objpressedbymouse ( int num )
            mouseparams.y >= objcoordinates[num].y1  &&
            mouseparams.x <= objcoordinates[num].x2  &&
            mouseparams.y <= objcoordinates[num].y2  &&
-           mouseparams.taste == 1 );
+           mouseparams.taste == 1 ) releasetimeslice();
        paintobj ( num, 0 );
        if ( mouseparams.x >= objcoordinates[num].x1  &&  mouseparams.y >= objcoordinates[num].y1  &&  mouseparams.x <= objcoordinates[num].x2  &&  mouseparams.y <= objcoordinates[num].y2 ) 
           return 1;
@@ -3698,7 +3705,7 @@ void  ccontainer_b :: cnetcontrol_subwindow :: checkformouse ( void )
              mouseparams.y >= objcoordinates[i].y1  &&
              mouseparams.x <= objcoordinates[i].x2  &&
              mouseparams.y <= objcoordinates[i].y2  &&
-             mouseparams.taste == 1 );
+             mouseparams.taste == 1 ) releasetimeslice();
 //         objpressed ( i );
       }
    } /* endfor */

@@ -1,6 +1,12 @@
-//     $Id: dlg_box.cpp,v 1.17 2000-05-06 20:25:22 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.18 2000-05-10 19:55:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/05/06 20:25:22  mbickel
+//      Fixed: -recognition of a second mouse click when selection a pd menu item
+//             -movement: fields the unit can only pass, but not stand on them,
+//                        are marked darker
+//             -intedit/stredit: mouseclick outside is like hitting enter
+//
 //     Revision 1.16  2000/04/27 17:59:23  mbickel
 //      Updated Kdevelop project file
 //      Fixed some graphical errors
@@ -1430,7 +1436,8 @@ void         tdialogbox::execbutton( pbutton      pb, boolean      mouse )
                if (ticker - t > pb->scrollspeed ) {
                   t = ticker; 
                   buttonpressed(pb->id); 
-               } 
+               }
+               releasetimeslice();
             } 
             mousevisible(false); 
             newknopfdruck3(x1 + pb->x1,y1 + pb->y1,x1 + pb->x2,y1 + pb->y2); 
@@ -1442,7 +1449,8 @@ void         tdialogbox::execbutton( pbutton      pb, boolean      mouse )
       } 
       if (pb->art == 3) { 
          toggleswitch(pb); 
-         do { 
+         do {
+            releasetimeslice();
          }  while (!(mouseparams.taste == 0)); 
       } 
 
@@ -1496,6 +1504,7 @@ void         tdialogbox::execbutton( pbutton      pb, boolean      mouse )
                    }
                    mousevisible( true );
                 }
+                releasetimeslice();
             }
             mousevisible( false );
             showbutton( pb->id );
@@ -1520,7 +1529,8 @@ void         tdialogbox::execbutton( pbutton      pb, boolean      mouse )
 
       if ( pb->art > 10 ) {
          buttonpressed(pb->id); 
-         while ( mouseinrect ( x1 + pb->x1 ,  y1 + pb->y1 ,  x1 + pb->x2 ,  y1 + pb->y2 ) && ( mouseparams.taste & 1));
+         while ( mouseinrect ( x1 + pb->x1 ,  y1 + pb->y1 ,  x1 + pb->x2 ,  y1 + pb->y2 ) && ( mouseparams.taste & 1))
+            releasetimeslice();
       }
 
   /* 
@@ -1607,7 +1617,8 @@ void         tdialogbox::run(void)
                } 
                xp = mouseparams.x; 
                yp = mouseparams.y; 
-            } 
+            }
+            releasetimeslice();
          } 
 
          

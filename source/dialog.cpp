@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.26 2000-05-07 12:12:14 mbickel Exp $
+//     $Id: dialog.cpp,v 1.27 2000-05-10 19:55:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/05/07 12:12:14  mbickel
+//      New mouse option dialog
+//      weapon info can now be displayed by clicking on a unit
+//
 //     Revision 1.25  2000/04/27 17:59:21  mbickel
 //      Updated Kdevelop project file
 //      Fixed some graphical errors
@@ -255,7 +259,10 @@ void         tstatisticarmies ::newknopfdruck(integer      xx1,
               knopfsuccessful = false; 
               kn = false; 
            } 
-           if (mouseparams.taste != mt) kn = false; 
+           if (mouseparams.taste != mt)
+              kn = false;
+
+           releasetimeslice();
      }  while (kn == true);
 
      {
@@ -754,8 +761,9 @@ void         tweaponinfo::run(void)
    delete[]  strng ;
    delete[]  strng2;
 
-   do { 
-   }  while (!((mouseparams.taste == 0) || keypress) );
+   do {
+      releasetimeslice();
+   }  while (!((mouseparams.taste == 0) || keypress()) );
    mousevisible(true); 
    k = 0;                                  
 
@@ -763,7 +771,8 @@ void         tweaponinfo::run(void)
       tdialogbox::run();
    }  while (!((taste != ct_invvalue) || (mouseparams.taste == 1))); 
    if (taste == ct_invvalue) 
-      do { 
+      do {
+        releasetimeslice();
       }  while (!(mouseparams.taste == 0)); 
 
    mousevisible(false); 
@@ -1956,7 +1965,8 @@ void         tchoice_dlg::buttonpressed( byte id )
 
 void         tchoice_dlg::run(void)
 { 
-  while ( mouseparams.taste );
+  while ( mouseparams.taste )
+     releasetimeslice();
   mousevisible(true); 
   do { 
     tdialogbox::run();
@@ -2631,7 +2641,8 @@ void         tfileselectsvga::run(void)
          }
          if (mousebuttonreleased == 3) {
             abrt = 3;
-            while (mouseparams.taste & 1) ;
+            while (mouseparams.taste & 1)
+              releasetimeslice();
          }
       }  while ( abrt == 0);
       mousevisible(false); 
@@ -3483,7 +3494,8 @@ void tbasicshowmap::dispimage ( void )
    lastmapysize = ysize;
 
    if ( lastmapposx != xofs  ||  lastmapposy != yofs ) 
-      while ( ticker < lastmaptick + maxmapscrollspeed );
+      while ( ticker < lastmaptick + maxmapscrollspeed )
+         releasetimeslice();
 
    lastmaptick = ticker;
    lastmapposx = xofs;
@@ -4554,17 +4566,20 @@ void         tsetalliances::run(void)
             if (actmap->player[i].existent) { 
                if ((mouseparams.x > x1 + ply_x1) && (mouseparams.x <= x1 + ply_x1 + tsa_namelength) && (mouseparams.y > y1 + ply_y1 + i * ply_lineheight) && (mouseparams.y <= y1 + ply_y1 + (i + 1) * ply_lineheight)) {
                   click(0,0,i); 
-                  while ( mouseparams.taste != 0 ) ;
+                  while ( mouseparams.taste != 0 )
+                     releasetimeslice();
                }
 
                if ((mouseparams.x > x1 + ply_x1 + tsa_namelength + 30) && (mouseparams.x <= x1 + 30 + ply_x1 + 2 * tsa_namelength) && (mouseparams.y > y1 + ply_y1 + i * ply_lineheight) && (mouseparams.y <= y1 + ply_y1 + (i + 1) * ply_lineheight)) {
                   click(0,1,i); 
-                  while ( mouseparams.taste != 0 ) ;
+                  while ( mouseparams.taste != 0 )
+                     releasetimeslice();
                } 
 
                if ((mouseparams.x > x1 + 40 + ply_x1 + 2 * tsa_namelength) && (mouseparams.x <= x1 + 40 + ply_x1 + 3 * tsa_namelength) && (mouseparams.y > y1 + ply_y1 + i * ply_lineheight) && (mouseparams.y <= y1 + ply_y1 + (i + 1) * ply_lineheight)) {
                   click(0,2,i); 
-                  while ( mouseparams.taste != 0 ) ;
+                  while ( mouseparams.taste != 0 )
+                     releasetimeslice();
                } 
             } 
          } 
@@ -4572,7 +4587,8 @@ void         tsetalliances::run(void)
             for (j = 0; j <= 7; j++) 
                if ((mouseparams.x > x1 + ali_x1 - 5 + i * 30) && (mouseparams.x <= x1 + ali_x1 - 5 + (i + 1) * 30) && (mouseparams.y > y1 + ali_y1 + j * 22) && (mouseparams.y <= y1 + ali_y1 + (j + 1) * 22)) {
                   click(1,i,j); 
-                  while ( mouseparams.taste != 0 ) ;
+                  while ( mouseparams.taste != 0 )
+                     releasetimeslice();
                }
 
 

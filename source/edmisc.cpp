@@ -1,6 +1,9 @@
-//     $Id: edmisc.cpp,v 1.16 2000-05-06 19:57:08 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.17 2000-05-10 19:55:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/05/06 19:57:08  mbickel
+//      Mapeditor/linux is now running
+//
 //     Revision 1.15  2000/05/05 21:15:03  mbickel
 //      Added Makefiles for mount/demount and mapeditor
 //      mapeditor can now be compiled for linux, but is not running yet
@@ -98,6 +101,7 @@
 #include "edgen.h"
 #include "edselfnt.h"
 #include "edglobal.h"
+#include "timer.h"
 
 #ifdef _DOS_
  #include "dos\memory.h"
@@ -274,8 +278,11 @@ void tmousebuttonbox::done(void)
    mousevisible(true);
    asc_free(background);
    activefontsettings.font = savefont;
-   while (keypress()) ch = r_key();
-   while (mouseparams.taste != 0);
+   while (keypress())
+      ch = r_key();
+
+   while (mouseparams.taste != 0)
+      releasetimeslice();
    ch = ct_invvalue;
 }
 

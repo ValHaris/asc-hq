@@ -1,6 +1,10 @@
-//     $Id: edgen.cpp,v 1.3 2000-05-05 21:15:02 mbickel Exp $
+//     $Id: edgen.cpp,v 1.4 2000-05-10 19:55:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/05/05 21:15:02  mbickel
+//      Added Makefiles for mount/demount and mapeditor
+//      mapeditor can now be compiled for linux, but is not running yet
+//
 //     Revision 1.2  1999/11/16 03:41:31  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -1116,8 +1120,7 @@ void tplasma::generateplasma(boolean resettile)
          }
       }
       blocksize /= 2;
-   }
-   while(blocksize > 0);
+   } while(blocksize > 0);
 
   // ## MB 
    if ( ysymm )

@@ -1,6 +1,9 @@
-//     $Id: gui.cpp,v 1.17 2000-05-07 17:04:06 mbickel Exp $
+//     $Id: gui.cpp,v 1.18 2000-05-10 19:55:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/05/07 17:04:06  mbickel
+//      Fixed a bug in movement
+//
 //     Revision 1.16  2000/05/07 12:12:17  mbickel
 //      New mouse option dialog
 //      weapon info can now be displayed by clicking on a unit
@@ -389,7 +392,7 @@ void   tguihost::paintsmallicons ( int taste, int up )
 //      if ( /*mouseparams.taste != 1   &&*/   mouseparams.taste != 0   &&   (mouseparams.taste != taste  || mousestat == 1 ))
 //         mousestat = 102;
 
-
+      releasetimeslice();
    } while ( !keypress() &&  mousestat < 100 ); /* enddo */
 
 
@@ -479,7 +482,8 @@ void   tguihost :: runpressedmouse ( int taste  )
           }
           zx = xp;
           zy = yp;
-       } 
+       }
+       releasetimeslice();
    }
 
    if ( actshownicons[xp][yp] ) {
@@ -605,7 +609,8 @@ void   tguihost::bi2control (  )
                infotextshown = actshownicons[xp][yp];
                zx = xp;
                zy = yp;
-            } 
+            }
+            releasetimeslice();
       #ifdef NEWKEYB
       }  
       #else

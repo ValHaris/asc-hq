@@ -1,6 +1,11 @@
-//     $Id: controls.cpp,v 1.26 2000-05-08 20:39:00 mbickel Exp $
+//     $Id: controls.cpp,v 1.27 2000-05-10 19:55:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/05/08 20:39:00  mbickel
+//      Cleaned up makefiles
+//      Fixed bug in mount: crash when file > 1 MB
+//      Fixed bug in visibility calculation
+//
 //     Revision 1.25  2000/05/07 12:12:12  mbickel
 //      New mouse option dialog
 //      weapon info can now be displayed by clicking on a unit
@@ -2179,11 +2184,13 @@ int  treactionfirereplay :: checkfield ( int x, int y, pvehicle &eht, MapDisplay
 
                cursor.gotoxy ( rpli->x1, rpli->y1 );
                int t = ticker;
-               while ( t + 15 > ticker );
+               while ( t + 15 > ticker )
+                  releasetimeslice();
 
                cursor.gotoxy ( x, y );
                t = ticker;
-               while ( t + 15 > ticker );
+               while ( t + 15 > ticker )
+                  releasetimeslice();
 
                cursor.setcolor ( 0 );  
                cursor.hide();
@@ -2392,11 +2399,13 @@ int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
    
                   cursor.gotoxy ( ul->eht->xpos, ul->eht->ypos );
                   int t = ticker;
-                  while ( t + 15 > ticker );
+                  while ( t + 15 > ticker )
+                     releasetimeslice();
    
                   cursor.gotoxy ( x, y );
                   t = ticker;
-                  while ( t + 15 > ticker );
+                  while ( t + 15 > ticker )
+                     releasetimeslice();
    
                   cursor.setcolor ( 0 );  
                   cursor.hide();
@@ -3341,6 +3350,7 @@ void         tdashboard :: paintlargeweaponinfo ( void )
             lastpainted = topaint;
             first = 0;
          }
+         releasetimeslice();
       }
 
       setinvisiblemouserectanglestk ( x1, y1, x1 + 640, y1 + count * 25 + 40 );
@@ -3969,7 +3979,8 @@ void         tdashboard::checkformouse ( void )
        else
           dashboard.paintwind( 1 );
 
-       while ( mouseparams.taste == 2 );
+       while ( mouseparams.taste == 2 )
+          releasetimeslice();
     }
     /*
     if ( mouseinrect ( agmp->resolutionx - ( 800 - 620),  90, agmp->resolutionx - ( 800 - 735), 196 ) && (mouseparams.taste == 2)) {
@@ -3989,21 +4000,24 @@ void         tdashboard::checkformouse ( void )
     if ( !gameoptions.smallmapactive ) {
        if ( mouseparams.x >= agmp->resolutionx - ( 640 - 588 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 610 )  &&   mouseparams.y >= 227   &&   mouseparams.y <= 290  && (mouseparams.taste & 1) ) {
           displaywindspeed();
-          while ( mouseparams.x >= agmp->resolutionx - ( 640 - 588 )  &&   mouseparams.x <= agmp->resolutionx - ( 640 - 610 )  &&   mouseparams.y >= 227   &&   mouseparams.y <= 290  && (mouseparams.taste & 1) ) ;
+          while ( mouseparams.x >= agmp->resolutionx - ( 640 - 588 )  &&   mouseparams.x <= agmp->resolutionx - ( 640 - 610 )  &&   mouseparams.y >= 227   &&   mouseparams.y <= 290  && (mouseparams.taste & 1) )
+             releasetimeslice();
        }
        if ( mouseinrect ( agmp->resolutionx - ( 640 - 489 ), 284, agmp->resolutionx - ( 640 - 509 ), 294 ) && (mouseparams.taste & 1)) {
           dashboard.windheight++;
           if ( dashboard.windheight > 2 )
              dashboard.windheight = 0;
           dashboard.x = 0xffff;
-          while ( mouseinrect ( agmp->resolutionx - ( 640 - 489 ), 284, agmp->resolutionx - ( 640 - 509 ), 294 ) && (mouseparams.taste & 1) );
+          while ( mouseinrect ( agmp->resolutionx - ( 640 - 489 ), 284, agmp->resolutionx - ( 640 - 509 ), 294 ) && (mouseparams.taste & 1) )
+             releasetimeslice();
        }
     }
 
     if ( mouseparams.x >= agmp->resolutionx - ( 640 - 578 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 609 )  &&   mouseparams.y >=  59   &&   mouseparams.y <=  67  && (mouseparams.taste & 1) ) {
        dashboard.movedisp = !dashboard.movedisp;
        dashboard.x = 0xffff;
-       while ( mouseparams.x >= agmp->resolutionx - ( 640 - 578 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 609 )  &&   mouseparams.y >=  59   &&   mouseparams.y <=  67  && (mouseparams.taste & 1) ) ;
+       while ( mouseparams.x >= agmp->resolutionx - ( 640 - 578 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 609 )  &&   mouseparams.y >=  59   &&   mouseparams.y <=  67  && (mouseparams.taste & 1) )
+          releasetimeslice();
     }
 
     for ( int i = 0; i < 8; i++ ) {
@@ -4015,7 +4029,8 @@ void         tdashboard::checkformouse ( void )
              strcpy ( tmp2, strrrd8u ( dashboard.weaps[i].mindist ));
              displaymessage2 ( "min strength is %d at %s fields, max strength is %d at %s fields", dashboard.weaps[i].minstrength, tmp1, dashboard.weaps[i].maxstrength, tmp2 );
 
-             while ( mouseinrect ( agmp->resolutionx - ( 640 - 502 ), 92 + i * 13, agmp->resolutionx - ( 640 - 572 ), 102 + i * 13 ) && (mouseparams.taste == 1));
+             while ( mouseinrect ( agmp->resolutionx - ( 640 - 502 ), 92 + i * 13, agmp->resolutionx - ( 640 - 572 ), 102 + i * 13 ) && (mouseparams.taste == 1))
+                releasetimeslice();
           }
    }
 
@@ -6607,7 +6622,8 @@ void cmousecontrol :: chkmouse ( void )
                // cursor.gotoxy ( x, y );
                cursor.show();
             }
-            while ( mouseparams.taste == gameoptions.mouse.centerbutton );
+            while ( mouseparams.taste == gameoptions.mouse.centerbutton )
+               releasetimeslice();
          }
       }
 
@@ -7093,6 +7109,7 @@ void trunreplay :: wait ( int t )
            if ( input == ct_'+' )
        }
        */
+       releasetimeslice();
     }
 
 

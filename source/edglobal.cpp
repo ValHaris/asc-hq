@@ -1,6 +1,15 @@
-//     $Id: edglobal.cpp,v 1.10 2000-04-27 16:25:21 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.11 2000-05-10 19:55:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/04/27 16:25:21  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.9  2000/04/01 11:38:37  mbickel
 //      Updated the small editors
 //      Added version numbering
@@ -492,7 +501,8 @@ void execaction(int code)
        break;
     case act_viewmap :  
              {
-             while (mouseparams.taste != 0);             
+             while (mouseparams.taste != 0)
+                releasetimeslice();
              cursor.hide();
              showmap ();
              displaymap();

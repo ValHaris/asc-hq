@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.38 2000-05-08 20:56:27 mbickel Exp $
+//     $Id: sg.cpp,v 1.39 2000-05-10 19:55:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2000/05/08 20:56:27  mbickel
+//      Some cleanup
+//
 //     Revision 1.37  2000/05/07 12:12:17  mbickel
 //      New mouse option dialog
 //      weapon info can now be displayed by clicking on a unit
@@ -2192,7 +2195,9 @@ void execuseraction ( tuseractions action )
         case ua_toggleunitshading:     gameoptions.units_gray_after_move = !gameoptions.units_gray_after_move;
                                        gameoptions.changed = 1;
                                        displaymap();
-                                       while ( mouseparams.taste );
+                                       while ( mouseparams.taste )
+                                          releasetimeslice();
+
                                        if ( gameoptions.units_gray_after_move )
                                           displaymessage("units that can not move will now be displayed gray", 3);
                                        else
@@ -2284,7 +2289,8 @@ void mainloopgeneralmousecheck ( void )
           }
 
        }
-       while ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )  &&   mouseparams.y >= 71    &&   mouseparams.y <= 79   && (mouseparams.taste & 1) ) ;
+       while ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )  &&   mouseparams.y >= 71    &&   mouseparams.y <= 79   && (mouseparams.taste & 1) )
+          releasetimeslice();
     }
 
     if ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )   &&   mouseparams.y >= 59    &&   mouseparams.y <= 67   && (mouseparams.taste & 1) ) {
@@ -2293,7 +2299,8 @@ void mainloopgeneralmousecheck ( void )
           if ( fld->vehicle )
              displaymessage2("unit has %d fuel", fld->vehicle->fuel );
        }
-       while ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )   &&   mouseparams.y >= 59    &&   mouseparams.y <= 67   && (mouseparams.taste & 1) ) ;
+       while ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )   &&   mouseparams.y >= 59    &&   mouseparams.y <= 67   && (mouseparams.taste & 1) )
+          releasetimeslice();
     }
 
   if (lasttick + 5 < ticker) {
@@ -2404,7 +2411,8 @@ void viewunitweaponrange ( const pvehicle veh, tkey taste )
             }
          } else {
             int mb = mouseparams.taste;
-            while ( mouseparams.taste == mb );
+            while ( mouseparams.taste == mb )
+               releasetimeslice();
          }
          cleartemps ( 7 );
          displaymap();
@@ -2918,7 +2926,8 @@ void runmainmenu ( void )
           for (int i = 0; i < mainmenuitemnum; i++) 
              if ( mouseparams.x >  xz - xs && mouseparams.y > y1 + i * yd  && mouseparams.x < xz + xs && mouseparams.x < y1 + i * yd + ys ) {
                 stat = i;
-                while ( mouseparams.taste & 1 );
+                while ( mouseparams.taste & 1 )
+                   releasetimeslice();
              } /* endfor */
 
        if (keypress()) {

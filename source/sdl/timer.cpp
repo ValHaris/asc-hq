@@ -1,6 +1,9 @@
-//     $Id: timer.cpp,v 1.5 2000-05-07 12:53:59 mbickel Exp $
+//     $Id: timer.cpp,v 1.6 2000-05-10 19:55:58 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/05/07 12:53:59  mbickel
+//      some minor adjustments
+//
 //     Revision 1.4  2000/04/27 16:25:34  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -72,8 +75,9 @@ void ndelay(int time)
   long l;
 
    l = ticker; 
-   do { 
-   }  while ((ticker - l > time));
+   do {
+      releasetimeslice();
+   }  while (ticker - l > time);
 } 
 
 

@@ -1,6 +1,12 @@
-//     $Id: pd.cpp,v 1.9 2000-05-06 20:25:23 mbickel Exp $
+//     $Id: pd.cpp,v 1.10 2000-05-10 19:55:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/05/06 20:25:23  mbickel
+//      Fixed: -recognition of a second mouse click when selection a pd menu item
+//             -movement: fields the unit can only pass, but not stand on them,
+//                        are marked darker
+//             -intedit/stredit: mouseclick outside is like hitting enter
+//
 //     Revision 1.8  2000/01/06 14:11:22  mbickel
 //      Fixed a graphic bug in PD and disabled fullscreen mode
 //
@@ -67,6 +73,7 @@
 #include "mousehnd.h"
 #include "pd.h"
 #include "misc.h"
+#include "timer.h"
 
 
    pfont        pulldownfont;
@@ -241,7 +248,8 @@ void tpulldown::run(void)
             }
             break;
          } /* endswitch */
-      } 
+      }
+      releasetimeslice();
    }  while (cancel == false);
    if ( (mouseparams.y > pdb.pdbreite  + pdb.field[pdfieldnr].height ) || (mouseparams.x < anf ) || (mouseparams.x > ende ) ) { 
       pdfieldnr = 255;

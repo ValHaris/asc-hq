@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.22 2000-05-07 18:21:21 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.23 2000-05-10 19:55:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/05/07 18:21:21  mbickel
+//      Speed of attack animation can now be specified
+//
 //     Revision 1.21  2000/05/07 12:12:16  mbickel
 //      New mouse option dialog
 //      weapon info can now be displayed by clicking on a unit
@@ -321,7 +324,8 @@ void         tchoosetechnology::run(void)
                      oldmark = markedtech;
                   }
                   
-                  while ( mouseparams.taste );
+                  while ( mouseparams.taste )
+                     releasetimeslice();
                }
             }
         }
@@ -2113,9 +2117,10 @@ void         showtechnology(ptechnology  tech )
          showtext2 ( "A new technology" , 20, 200 );
          showtext2 ( "has been discovered", 20, 280 );
          int t = ticker;
-         while ( mouseparams.taste );
+         while ( mouseparams.taste )
+            releasetimeslice();
          do {
-
+            releasetimeslice();
          } while ( t + 200 > ticker  &&  !keypress()  && !mouseparams.taste); /* enddo */
 
          int abrt = 0;
@@ -2144,9 +2149,10 @@ void         showtechnology(ptechnology  tech )
    
    
             t = ticker;
-            while ( mouseparams.taste );
+            while ( mouseparams.taste )
+               releasetimeslice();
             do {
-   
+               releasetimeslice();
             } while ( t + 600 > ticker  &&  !keypress()  && !mouseparams.taste && !abrt ); /* enddo */
    
             reinitgraphics( modenum8 );
@@ -3896,7 +3902,8 @@ void tonlinemousehelp :: checklist ( tonlinehelplist* list )
            displayhelp( list->item[i].messagenum );
           #else
            displayhelp( list->item[i].messagenum );
-           while ( mouseinrect ( &list->item[i].rect ) && mouseparams.taste == mbut && !keypress());
+           while ( mouseinrect ( &list->item[i].rect ) && mouseparams.taste == mbut && !keypress())
+              releasetimeslice();
            removehelp();
           #endif
         }
@@ -5017,7 +5024,8 @@ void tmountpicture  :: processmouseclick ( void )
          if ( mouseinrect ( &r )) {
             i->marked = !i->marked;
             markitem ( i, s );
-            while ( mouseinrect ( &r ) && (mouseparams.taste == 1 ));
+            while ( mouseinrect ( &r ) && (mouseparams.taste == 1 ))
+               releasetimeslice();
          }
 
          i = i->next;
@@ -6488,7 +6496,8 @@ void tgiveunitawaydlg :: run ( void )
    if ( !num ) 
       return;
 
-   while ( mouseparams.taste );
+   while ( mouseparams.taste )
+      releasetimeslice();
 
    mousevisible ( true );
    do {
@@ -6534,7 +6543,9 @@ void giveunitaway ( void )
       gua.done ();
    } else {
       dispmessage2( 450, NULL );
-      while ( mouseparams.taste );
+      while ( mouseparams.taste )
+         releasetimeslice();
+
    }
 }
 

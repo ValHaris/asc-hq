@@ -15,9 +15,18 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.11 2000-04-27 16:25:34 mbickel Exp $
+//     $Id: events.cpp,v 1.12 2000-05-10 19:55:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/04/27 16:25:34  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.10  2000/02/05 12:13:46  steb
 //     Sundry tidying up to get a clean compile and run.  Presently tending to SEGV on
 //     startup due to actmap being null when trying to report errors.
@@ -369,7 +378,8 @@ tkey r_key(void)
     	}
     	if (!found ) {
       	int t = ticker;
-      	while ( t + 5 > ticker );
+      	while ( t + 5 > ticker )
+      	   releasetimeslice();
       }	
    } while ( !found ); 	
    return key;
@@ -392,7 +402,8 @@ int rp_key(void)
     	}
     	if (!found ) {
       	int t = ticker;
-      	while ( t + 5 > ticker );
+      	while ( t + 5 > ticker )
+      	   releasetimeslice();
       }	
    } while ( !found ); 	
    return key;
@@ -415,7 +426,8 @@ void getkeysyms ( tkey* keysym, int* keyprnt )
     	}
     	if (!found ) {
       	int t = ticker;
-      	while ( t + 5 > ticker );
+      	while ( t + 5 > ticker )
+      	   releasetimeslice();
       }	
    } while ( !found ); 	
 }

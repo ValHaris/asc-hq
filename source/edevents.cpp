@@ -1,6 +1,9 @@
-//     $Id: edevents.cpp,v 1.6 2000-05-07 12:53:58 mbickel Exp $
+//     $Id: edevents.cpp,v 1.7 2000-05-10 19:55:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/05/07 12:53:58  mbickel
+//      some minor adjustments
+//
 //     Revision 1.5  2000/05/05 21:15:02  mbickel
 //      Added Makefiles for mount/demount and mapeditor
 //      mapeditor can now be compiled for linux, but is not running yet
@@ -232,7 +235,6 @@ void         tstringselect::viewtext(void)
    yp = y1 + sy + 5;
    l = firstvisibleline; 
    if (numberoflines > 0) { 
-      { 
          while ((l<numberoflines) && (l-firstvisibleline < lnshown)) {
             gettext(l);
             strcpy(s1,txt);
@@ -241,7 +243,7 @@ void         tstringselect::viewtext(void)
             showtext2(s1,x1+ sx + 5,yp+( l-firstvisibleline ) * dx );
             l++;
          } /* endwhile */
-         }
+
    } 
    else showtext2("No text available !",x1 + 50,yp + 50);
   

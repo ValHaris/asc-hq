@@ -1,6 +1,9 @@
-//     $Id: edmain.cpp,v 1.11 2000-05-06 19:57:08 mbickel Exp $
+//     $Id: edmain.cpp,v 1.12 2000-05-10 19:55:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/05/06 19:57:08  mbickel
+//      Mapeditor/linux is now running
+//
 //     Revision 1.10  2000/05/05 21:15:02  mbickel
 //      Added Makefiles for mount/demount and mapeditor
 //      mapeditor can now be compiled for linux, but is not running yet
@@ -699,13 +702,15 @@ void         editor(void)
                        execcode = leftmousebox();
                        if (execcode != -1 ) execaction(execcode);
                        while ( mouseparams.taste != 0 );
-                  } 
+                  }
+                  releasetimeslice();
                }
                if (getfieldundermouse ( &mx, &my ) ) 
                   if ( ! time_elapsed(menutime)) {
                        if ( ! curposchanged ) { 
                           execaction(act_placething);
-                          while ( mouseparams.taste == 1 );
+                          while ( mouseparams.taste == 1 )
+                             releasetimeslice();
                        }
                   }
             }
@@ -727,8 +732,10 @@ void         editor(void)
                     execcode = rightmousebox();
                     if (execcode != -1) execaction(execcode);
       
-                    while ( mouseparams.taste != 0 );
+                    while ( mouseparams.taste != 0 )
+                       releasetimeslice();
                   }
+                  releasetimeslice();
                }
             }
       
