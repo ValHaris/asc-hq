@@ -41,6 +41,10 @@
 #include "pgmenubar.h"
 #include "pgimage.h"
 #include "pgmessagebox.h"
+#include "pgwindow.h"
+#include "pgrichedit.h"
+
+
 
 #include "paradialog.h"
 #include "events.h"
@@ -165,6 +169,7 @@ ASC_PG_Dialog::~ASC_PG_Dialog ()
    //   SDL_mutexV ( eventHandlingMutex );
 }
 
+
 int ASC_PG_Dialog::Run ( )
 {
 #ifndef sgmain
@@ -202,6 +207,46 @@ int ASC_PG_Dialog::Run ( )
 #ifndef sgmain
    setEventRouting ( eventQueue, !eventQueue );
 #endif
+
+   return quitModalLoopValue;
+}
+
+
+
+int ASC_PG_Dialog::RunModal ( )
+{
+   bool eventQueue = setEventRouting ( true, false );
+
+   while ( !quitModalLoopValue ) {
+      SDL_Event event;
+      int motionx = 0;
+      int motiony = 0;
+      if ( getQueuedEvent( event )) {
+         bool skipEvent = false;
+         if ( event.type == SDL_MOUSEMOTION ) {
+            SDL_Event nextEvent;
+            if ( peekEvent ( nextEvent ) )
+               if ( nextEvent.type == SDL_MOUSEMOTION ) {
+                  skipEvent = true;
+                  motionx += event.motion.xrel;
+                  motiony += event.motion.yrel;
+               }
+            if ( !skipEvent ) {
+               event.motion.xrel += motionx;
+               event.motion.yrel += motiony;
+               motionx = 0;
+               motiony = 0;
+            }
+         }
+
+         if ( !skipEvent )
+            ProcessEvent(&event, true);
+            // pgApp->PumpIntoEventQueue( &event );
+
+      } else
+         SDL_Delay ( 2 );
+   }
+   setEventRouting ( eventQueue, !eventQueue );
 
    return quitModalLoopValue;
 }
@@ -835,10 +880,77 @@ void BarGraphWidget::setFraction( float f )
 }
 
 
-
-void warningMessageDialog( const ASCString& message  )
+void errorMessageDialog( const ASCString& message )
 {
-//   PG_MessageBox msg( NULL, PG_Rect(100,100,500,150),"Error", message,PG_Rect(200,100,100,40),"OK" );
-//   msg.WaitForClick();
+               MessageDialog msg( mainScreenWidget, PG_Rect(100,100,500,150),"Error", message,PG_Rect(200,100,100,40),"OK" );
+               msg.Show();
+               msg.RunModal();
+}   
+
+void warningMessageDialog( const ASCString& message )
+{
+               MessageDialog msg( mainScreenWidget, PG_Rect(100,100,500,150),"Warning", message,PG_Rect(200,100,100,40),"OK" );
+               msg.Show();
+               msg.RunModal();
 }
 
+
+
+MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const PG_Rect& btn1, const std::string& btn1text, const PG_Rect& btn2, const std::string& btn2text, PG_Label::TextAlign textalign, const std::string& style) :
+ASC_PG_Dialog(parent, r, windowtitle, MODAL) {
+
+	my_btnok = new PG_Button(this, btn1, btn1text);
+	my_btnok->SetID(1);
+	my_btnok->sigClick.connect(slot(*this, &MessageDialog::handleButton));
+	
+	my_btncancel = new PG_Button(this, btn2, btn2text);
+	my_btncancel->SetID(2);
+	my_btncancel->sigClick.connect(slot(*this, &MessageDialog::handleButton));
+
+	Init(windowtext, textalign, style);
+}
+
+MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const PG_Rect& btn1, const std::string& btn1text, PG_Label::TextAlign textalign, const std::string& style) :
+ASC_PG_Dialog(parent, r, windowtitle, MODAL) {
+
+	my_btnok = new PG_Button(this, btn1, btn1text);
+	my_btnok->SetID(1);
+	my_btnok->sigClick.connect(slot(*this, &MessageDialog::handleButton));
+	my_btncancel = NULL;
+
+	Init(windowtext, textalign, style);
+}
+
+//Delete the Buttons
+MessageDialog::~MessageDialog() {
+	delete my_btnok;
+	delete my_btncancel;
+}
+
+void MessageDialog::Init(const std::string& windowtext, int textalign, const std::string& style) {
+
+	my_textbox = new PG_RichEdit(this, PG_Rect(10, 40, my_width-20, my_height-50));
+	my_textbox->SendToBack();
+	my_textbox->SetTransparency(255);
+	my_textbox->SetText(windowtext);
+
+	my_msgalign = textalign;
+
+	LoadThemeStyle(style);
+}
+
+void MessageDialog::LoadThemeStyle(const std::string& widgettype) {
+	PG_Window::LoadThemeStyle(widgettype);
+
+	my_btnok->LoadThemeStyle(widgettype, "Button1");
+	if(my_btncancel) {
+		my_btncancel->LoadThemeStyle(widgettype, "Button2");
+	}
+}
+
+//Event?
+bool MessageDialog::handleButton(PG_Button* button) {
+	//Set Buttonflag to ButtonID
+	quitModalLoop(button->GetID());
+	return true;
+}

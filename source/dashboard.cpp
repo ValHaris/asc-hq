@@ -77,6 +77,7 @@ UnitInfoPanel::UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) : Panel( par
    registerSpecialDisplay( "unit_pic" );
    for ( int i = 0; i < 10; ++i)
       registerSpecialDisplay( "symbol_weapon" + ASCString::toString(i) );
+   registerSpecialDisplay( "showplayercolor" );
 }
 
 void UnitInfoPanel::registerSpecialDisplay( const ASCString& name )
@@ -91,7 +92,6 @@ void UnitInfoPanel::registerSpecialDisplay( const ASCString& name )
 void UnitInfoPanel::painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst)
 {
    MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
-   int weaponsDisplayed = 0;
 
    if ( mc.valid() ) {
       Vehicle* veh = actmap->getField(mc)->vehicle;
@@ -128,7 +128,7 @@ void UnitInfoPanel::painter ( const PG_Rect &src, const ASCString& name, const P
       }
 
       if ( veh ) {
-         int &pos = 0;
+         int pos = 0;
          for ( int i = 0; i < veh->typ->weapons.count; ++i) {
             if ( !veh->typ->weapons.weapon[i].service() && pos < 10 ) {
                if ( name == "symbol_weapon" + ASCString::toString(pos))

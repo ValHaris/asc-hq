@@ -80,7 +80,7 @@ void BaseVehicleMovement :: PathFinder :: getMovementFields ( IntFieldList& reac
       int move = int(i->second->gval);
       Fields::key_type key = i->first;
       ++i;
-      while ( i->first == key && i != fields.end() ) {
+      while ( i != fields.end() && i->first == key ) {
          if ( i->second->gval  < move || ( i->second->gval == move && abs(i->second->h.getNumericalHeight()-orgHeight) < abs(height-orgHeight) ))
             height = i->second->h.getNumericalHeight();
          ++i;
@@ -198,8 +198,12 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
          if ( vehicle ) {
             // npush ( dest->vehicle );
             // dest->vehicle = vehicle;
+            
+            
             if ( mapDisplay )
-               mapDisplay->displayMap();
+               mapDisplay->displayMap( vehicle );
+            
+               
 
 
             // npop ( dest->vehicle );
@@ -210,12 +214,10 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
                vehicle = actmap->getUnit ( networkID );
             }
             if ( !vehicle && mapDisplay ) {
-               mapDisplay->deleteVehicle( vehicle );
                mapDisplay->displayMap();
             }
          } else
             if ( mapDisplay ) {
-               mapDisplay->deleteVehicle( vehicle );
                mapDisplay->displayMap();
             }
 

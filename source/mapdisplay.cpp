@@ -87,6 +87,12 @@ void MapRenderer::readData()
    18  view obstructions
 */
 
+int MapRenderer::bitmappedHeight2pass( int height )
+{
+   return log2(height) * 2 + 2;
+}
+
+
 void MapRenderer::paintSingleField( Surface& surf, int playerView, pfield fld, int layer, const SPoint& pos, const MapCoordinate& mc )
 {
 
@@ -249,7 +255,7 @@ void MapRenderer::paintTerrain( Surface& surf, tmap* actmap, int playerView, con
                   surf.Blit( icons.mapBackground, pos );
 
          }
-      // additionalItemDisplayHook( surf, pass, PositionCalculator(this, &MapRenderer::getFieldPos ));
+      additionalItemDisplayHook( surf, pass );
    }
 }
 
@@ -286,7 +292,8 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
       zoom( 0.75 ),
       surface(NULL),
       offset(0,0),
-      dirty(Map)
+      dirty(Map),
+      additionalUnit(NULL)
 {
 
    readData();
@@ -300,6 +307,8 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
       Surface s = Surface::Wrap( ws );
       s.assignDefaultPalette();
    }
+   
+   MapRenderer::additionalItemDisplayHook.connect( SigC::slot( *this, &MapDisplayPG::displayAddons ));
    
    theMapDisplay = this;
 }
@@ -693,7 +702,10 @@ void MapDisplayPG::displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoor
 
    int dir = getdirection( from, to );
    
-   veh->direction = dir;
+   if ( from.x == to.x && from.y == to.y )
+      dir = 0;  // changing height vertically
+   else   
+      veh->direction = dir;
    
    MapCoordinate tempStart;
    if ( dir >= 2 && dir <= 4 ) {
@@ -779,9 +791,22 @@ void MapDisplayPG::displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoor
    cout << (float(loopCounter) / float(ticker - loopStartTicker) * 100) << " / " << (float(loopCounter) / float(ticker - startTime) * 100) << " fps \n";
 }
 
+void MapDisplayPG::displayAddons( Surface& surf, int pass)
+{
+   if( additionalUnit ) 
+      if ( pass == bitmappedHeight2pass( additionalUnit->height ) )  {
+         SPoint p = mapPos2internalPos( additionalUnit->getPosition() - offset );
+         if ( p.x >= 0 && p.y >= 0 && p.x + fieldsizex < surf.w() && p.y + fieldsizey < surf.h() )
+            additionalUnit->paint( surf, p );
+      }
+        
+}
 
 
-
+void MapDisplayPG::registerAdditionalUnit( Vehicle* veh )
+{
+   additionalUnit = veh;
+}
 
 class PG_MapDisplay : public MapDisplayInterface {
            MapDisplayPG* mapDisplayWidget;
@@ -791,6 +816,7 @@ class PG_MapDisplay : public MapDisplayInterface {
            int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback soundStart );
            void deleteVehicle ( Vehicle* vehicle ) {};
            void displayMap ( void );
+           void displayMap ( Vehicle* vehicle );
            void displayPosition ( int x, int y );
            void resetMovement ( void ) {};
            void startAction ( void );
@@ -843,6 +869,14 @@ void PG_MapDisplay :: displayMap ( void )
 {
    ::repaintMap();
 }
+
+void PG_MapDisplay :: displayMap ( Vehicle* vehicle )
+{
+   mapDisplayWidget->registerAdditionalUnit( vehicle ); 
+   ::repaintMap();
+   mapDisplayWidget->registerAdditionalUnit( NULL ); 
+}
+
 
 void PG_MapDisplay :: displayPosition ( int x, int y )
 {
@@ -2516,10 +2550,6 @@ int  MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCo
    return result;
 }
 
-void MapDisplay :: deleteVehicle ( Vehicle* vehicle )
-{
-   idisplaymap.deletevehicle();
-}
 
 void MapDisplay :: displayMap ( void )
 {

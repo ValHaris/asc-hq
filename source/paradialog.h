@@ -79,6 +79,7 @@ class ASC_PG_Dialog : public PG_Window {
     public:
        ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCString& windowtext, WindowFlags flags=DEFAULT, const ASCString& style="Window", int heightTitlebar=25);
        int Run( );
+       int RunModal( );
        ~ASC_PG_Dialog();
 };
 
@@ -161,7 +162,69 @@ class SpecialInputWidget : public PG_Widget {
 };
 
 
+
+class  MessageDialog : public ASC_PG_Dialog {
+public:
+	/**
+	Creates a PopUp with 2 Buttons
+		
+	@param parent Parent widget
+	@param r rectangle of PopUp
+	@param windowtitle Title of window
+	@param windowtext Text to appear in window
+	@param btn1 Struct PG_Rect to create Button 1
+	@param btn1text Text to appear in Button 1
+	@param btn2 Struct PG_Rect to create Button 2
+	@param btn2text Text to appear in Button 2
+	@param textalign Alignment for windowtext
+	@param style widgetstyle to use (default "MessageBox")
+	*/
+	MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const PG_Rect& btn1, const std::string& btn1text, const PG_Rect& btn2, const std::string& btn2text, PG_Label::TextAlign textalign = PG_Label::CENTER, const std::string& style="MessageBox");
+
+	/**
+	Creates a PopUp with 1 Button
+
+	@param parent Parent widget
+	@param r rectangle of PopUp
+	@param windowtitle Title of window
+	@param windowtext Text to appear in window
+	@param btn1 Struct PG_Rect to create Button 1
+	@param btn1text Text to appear in Button 1
+	@param textalign Alignment for windowtext
+	@param style widgetstyle to use (default "MessageBox")
+	*/
+	MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const PG_Rect& btn1, const std::string& btn1text, PG_Label::TextAlign textalign = PG_Label::CENTER, const std::string& style="MessageBox");
+
+	/**
+	Destructor
+	*/
+	~MessageDialog();
+
+	void LoadThemeStyle(const std::string& widgettype);
+
+protected:
+
+	/**
+	Checks if button is pressed
+
+	@param button pointer to PG_BUtton
+	*/
+	virtual bool handleButton(PG_Button* button);
+
+	PG_Button* my_btnok;
+	PG_Button* my_btncancel;
+
+private:
+
+	PG_RichEdit* my_textbox;
+	int my_msgalign;
+
+	void Init(const std::string& windowtext, int textalign, const std::string& style) ;
+};
+
+
  extern void warningMessageDialog( const ASCString& message  );
+ extern void errorgMessageDialog( const ASCString& message  );
 
 
  extern void soundSettings();

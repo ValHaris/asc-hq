@@ -359,7 +359,7 @@ void AttackPanel::dispValue ( const ASCString& name, float value, float maxvalue
          setBarGraphValue( name + "bar", -value / maxvalue );
    }
    ASCString s;
-   s.format ( "%d\%", int(value * 100) );
+   s.format ( "%d%%", int(value * 100) );
    setLabelText( name, s );
 }
 
@@ -369,9 +369,6 @@ void tfight :: calcdisplay ( int ad, int dd )
 
 
    auto_ptr<AttackPanel> at ( new AttackPanel(*this));
-
-   int ac = 20 + av.color * 8;
-   int dc = 20 + dv.color * 8;
 
    float avd = float( 100 - av.damage )/100;
    float dvd = float( 100 - dv.damage )/100;
@@ -396,7 +393,7 @@ void tfight :: calcdisplay ( int ad, int dd )
    at->setBarGraphColor( "defender_hemmingbar", defendingColor );
 
    at->setLabelText( "defender_hemming", "-" );
-   at->setLabelText( "attacker_hemming", (dv.hemming-1) * 100 );
+   at->setLabelText( "attacker_hemming", int((dv.hemming-1) * 100 ));
 
    at->dispValue( "attacker_attackbonus", strength_attackbonus(av.attackbonus), maxattackshown, attackingColor );
    at->dispValue( "defender_attackbonus", strength_attackbonus(dv.attackbonus), maxattackshown, defendingColor );

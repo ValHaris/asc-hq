@@ -216,8 +216,8 @@ class MapDisplayInterface {
          public:
            typedef Loki::Functor<void, TYPELIST_1(int) > SoundStartCallback; 
            virtual int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback startSound ) = 0;
-           virtual void deleteVehicle ( Vehicle* vehicle ) = 0;
            virtual void displayMap ( void ) = 0;
+           virtual void displayMap ( Vehicle* additionalVehicle ) = 0;
            virtual void displayPosition ( int x, int y ) = 0;
            virtual void resetMovement ( void ) = 0;
            virtual void startAction ( void ) = 0;
@@ -234,8 +234,8 @@ class MapDisplay : public MapDisplayInterface {
            int cursorstatnum;
          public:
            int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback soundStart );
-           void deleteVehicle ( Vehicle* vehicle );
            void displayMap ( void );
+           void displayMap ( Vehicle* additionalVehicle ) {};
            void displayPosition ( int x, int y );
            void resetMovement ( void );
            void startAction ( void );

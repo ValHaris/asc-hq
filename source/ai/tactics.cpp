@@ -739,12 +739,13 @@ AI::AiResult AI::tactics( void )
                      if ( finalPositions[i] ) {
                         int nwid = finalPositions[i]->networkid;
                         _vision = org_vision;
+                        MapCoordinate affected =  MapCoordinate(finalPositions[i]->xpos, finalPositions[i]->ypos);
                         MapCoordinate3D dst = getNeighbouringFieldCoordinate( MapCoordinate3D( enemy->xpos, enemy->ypos, finalPositions[i]->height ), i);
                         dst.setnum ( dst.x, dst.y, -2 );
                         moveUnit ( finalPositions[i], dst );
                         _vision = visible_all;
 
-                        affectedFields.push_back ( MapCoordinate(finalPositions[i]->xpos, finalPositions[i]->ypos) );
+                        affectedFields.push_back ( affected );
                         // the unit may have been shot down due to reaction fire
 
                         if ( !getMap()->getUnit ( nwid ) ) {

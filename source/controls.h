@@ -4,7 +4,7 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.55.2.2 2004-12-16 18:48:28 mbickel Exp $
+//     $Id: controls.h,v 1.55.2.3 2005-01-15 19:56:22 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -220,7 +220,7 @@ class ReplayMapDisplay : public MapDisplayInterface {
            ReplayMapDisplay ( MapDisplayInterface* md ) { mapDisplay = md; cursorDelay = 20; };
            int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback startSound );
            void displayPosition ( int x, int y );
-           void deleteVehicle ( Vehicle* vehicle ) { mapDisplay->deleteVehicle ( vehicle ); };
+           void displayMap ( Vehicle* additionalVehicle ) { mapDisplay->displayMap( additionalVehicle ); };
            void displayMap ( void ) { mapDisplay->displayMap(); };
            void resetMovement ( void ) { mapDisplay->resetMovement(); };
            void startAction ( void ) { mapDisplay->startAction(); };

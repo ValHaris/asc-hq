@@ -75,6 +75,11 @@ class MapRenderer {
       
       void paintSingleField( Surface& surf, int playerView, pfield fld, int layer, const SPoint& pos, const MapCoordinate& mc );
       void paintTerrain( Surface& surf, tmap* actmap, int playerView, const ViewPort& viewPort, const MapCoordinate& offset );
+      
+      int bitmappedHeight2pass( int height );
+      
+      SigC::Signal2<void,Surface&,int> additionalItemDisplayHook;
+
 };
 
 
@@ -106,6 +111,8 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       } cursor;   
       
       enum Dirty { Nothing, Curs, Map } dirty;
+      
+      Vehicle* additionalUnit; 
       
    protected:
    
@@ -143,6 +150,9 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
          SPoint  startFieldPos;
       } movementMask[sidenum];
 
+      void displayAddons( Surface& surf, int pass);
+      
+      
     public:
       static const int touchedFieldNum = 10;
     
@@ -192,7 +202,9 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       void displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoordinate3D& from, const MapCoordinate3D& to );
 
       bool fieldInView(const MapCoordinate& mc );
-      
+
+      void registerAdditionalUnit ( Vehicle* veh );
+            
       //! repaints to the internal surface, but does not blit this surface the screen
       void updateMap( bool force = false );
       

@@ -819,6 +819,7 @@ void loadStartupMap ( const char *gameToLoad=NULL )
 
             try {
                loadmap( gameToLoad );
+               computeview( actmap );
                if ( actmap->network )
                   setallnetworkpointers ( actmap->network );
             } catch ( tfileerror ) {
@@ -1789,6 +1790,7 @@ void  mainloop2()
    mainScreenWidget->Show();
 
    displayLogMessage ( 7, "Entering mainloop\n");
+   
    getPGApplication().Run();
    displayLogMessage ( 7, "mainloop exited\n");
 }
@@ -1869,7 +1871,8 @@ void  mainloop ( void )
                }
                break;
 
-            case ct_f11: {
+            case ct_f11: {                        
+
             // computeview ( actmap );
             }
             break;
@@ -2288,7 +2291,7 @@ int main(int argc, char *argv[] )
    SDLmm::Surface* icon = NULL;
    try {
       tnfilestream iconl ( "icon_asc.gif", tnstream::reading );
-      SDL_Surface *icn = IMG_LoadGIF_RW( SDL_RWFromStream ( &iconl ));
+      SDL_Surface *icn = IMG_Load_RW ( SDL_RWFromStream( &iconl ), 1);
       SDL_SetColorKey(icn, SDL_SRCCOLORKEY, *((Uint8 *)icn->pixels));
       icon = new SDLmm::Surface ( icn );
    } catch ( ... ) {}

@@ -174,12 +174,12 @@ void Vehicle :: init ( void )
       for ( int m = 0; m < typ->weapons.count ; m++)
          weapstrength[m] = typ->weapons.weapon[m].maxstrength;
 
-      setMovement ( typ->movement[log2(height)] );
+      setMovement ( typ->movement[log2(height)], 0 );
    } else {
       height = 0;
       armor = 0;
 
-      setMovement ( 0 );
+      setMovement ( 0, 0 );
    }
 
    direction = 0;

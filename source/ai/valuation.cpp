@@ -432,8 +432,8 @@ void     AI :: calculateAllThreats( void )
          pvehicletype fzt = vehicleTypeRepository.getObject_byPos( v );
          if ( fzt )
             if ( fzt->functions & cf_conquer )
-               if ( fzt->movement[chfahrend] > maxTrooperMove )   // buildings can only be conquered on ground level, or by moving to adjecent field which is less
-                  maxTrooperMove = fzt->movement[chfahrend];
+               if ( fzt->movement[log2(chfahrend)] > maxTrooperMove )   // buildings can only be conquered on ground level, or by moving to adjecent field which is less
+                  maxTrooperMove = fzt->movement[log2(chfahrend)];
       }
    }
    if ( maxTransportMove == 0 ) {

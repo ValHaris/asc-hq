@@ -166,7 +166,7 @@ void InfoPage::startTable(int border, TableWidth interpretWAs, int width, TableW
   if(cols) {
     *buildingInfStream << "<colgroup>" << endl;
     for(int i=0; i< cols->size(); i++) {
-      *buildingInfStream << "<col width=\"" << (*cols)[i] <<"\%\">" << endl;
+      *buildingInfStream << "<col width=\"" << (*cols)[i] <<"%%\">" << endl;
     }
     *buildingInfStream << "</colgroup>" << endl;
   }
