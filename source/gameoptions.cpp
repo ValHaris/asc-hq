@@ -73,6 +73,7 @@ void CGameOptions::setDefaults ( void )
    attackspeed3=0;
    sound_off=0;
    sound_mute=0;
+   specialForestChaining = 1;
 
    mouse.scrollbutton=0;
    mouse.fieldmarkbutton=2;

@@ -2,9 +2,13 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.98 2001-10-16 19:58:20 mbickel Exp $
+//     $Id: spfst.cpp,v 1.99 2001-10-21 20:18:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.98  2001/10/16 19:58:20  mbickel
+//      Added title screen for mapeditor
+//      Updated source documentation
+//
 //     Revision 1.97  2001/10/11 10:41:06  mbickel
 //      Restructured platform fileio handling
 //      Added map archival information to mapeditor
@@ -1204,7 +1208,7 @@ class Smoothing {
 
            if ( what & 1 ) {
               pobjecttype obj = getobjecttype_forid ( woodid );
-              if ( obj ) {
+              if ( obj && CGameOptions::Instance()->specialForestChaining ) {
                 int count = 0;
                 while ( SmoothIt ( obj, SmoothTreesData0 ) && count < 20 ) {
                    ShowAgain = 1;
@@ -1444,7 +1448,7 @@ void         calculateobject( int       x,
                               pobjecttype obj,
                               pmap actmap )
 { 
-  if ( obj->id == woodid ) {
+  if ( obj->id == woodid && CGameOptions::Instance()->specialForestChaining ) {
      calculateforest( actmap );
      return;
   }
@@ -1530,7 +1534,7 @@ void         calculateallobjects( pmap actmap )
 
          for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ )
              if ( !i->typ->no_autonet )
-                if ( i->typ->id != woodid )
+                if ( i->typ->id != woodid || !CGameOptions::Instance()->specialForestChaining )
                    calculateobject( x, y, false, i->typ, actmap );
 
          fld->setparams();

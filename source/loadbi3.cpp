@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.61 2001-10-21 13:16:59 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.62 2001-10-21 20:18:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2001/10/21 13:16:59  mbickel
+//      Cleanup and documentation
+//
 //     Revision 1.60  2001/10/16 15:33:03  mbickel
 //      Added icons to data
 //      ASC displays icons
@@ -372,12 +375,14 @@ void Bi3MapTranslationTable :: runTextIO ( PropertyContainer& pc )
 
    if ( _terraintranslation.size() % 2 )
       fatalError ( "Bi3 map translation : terraintranslation - Invalid number of entries ");
+   terraintranslation.clear();
    for ( int i = 0; i < _terraintranslation.size()/2; i++ )
       terraintranslation.push_back ( make_pair( _terraintranslation[i*2], _terraintranslation[i*2+1] ));
 
 
    if ( _terrain2idtrans.size() % 3 )
       fatalError ( "Bi3 map translation : terrain2idTranslation - Invalid number of entries ");
+   terrain2idTranslation.clear();
    for ( int i = 0; i < _terrain2idtrans.size()/3; i++ ) {
       Terrain2id t2i;
       t2i.BIpic = _terrain2idtrans[i*3];
@@ -388,6 +393,7 @@ void Bi3MapTranslationTable :: runTextIO ( PropertyContainer& pc )
 
    if ( _terrainobjtranslation.size() % 4 )
       fatalError ( "Bi3 map translation : terrainobjtranslation - Invalid number of entries ");
+   terraincombixlat.clear();
    for ( int i = 0; i < _terrainobjtranslation.size()/4; i++ ) {
        Terraincombixlat tcx;
        tcx.bigraph = _terrainobjtranslation[i*4];
@@ -399,6 +405,7 @@ void Bi3MapTranslationTable :: runTextIO ( PropertyContainer& pc )
 
    if ( _objecttranslation.size() % 5 )
       fatalError ( "Bi3 map translation : objecttranslation - Invalid number of entries ");
+   objecttranslate.clear();
    for ( int i = 0; i < _objecttranslation.size()/5; i++ ) {
       Objecttranslataion ot;
       ot.BIpic = _objecttranslation[i*5];
@@ -410,6 +417,7 @@ void Bi3MapTranslationTable :: runTextIO ( PropertyContainer& pc )
 
    if ( _object2IDtranslation.size() % 2 )
       fatalError ( "Bi3 map translation : object2IDtranslation - Invalid number of entries ");
+   object2IDtranslate.clear();
    for ( int i = 0; i < _object2IDtranslation.size()/2; i++ )
       object2IDtranslate.push_back ( make_pair ( _object2IDtranslation[i*2], _object2IDtranslation[i*2+1] ));
 }

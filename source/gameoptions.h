@@ -64,6 +64,7 @@ class CGameOptions
       int yresolution;
       int mapeditor_xresolution;
       int mapeditor_yresolution;
+      int specialForestChaining;
 
 
       struct Mouse

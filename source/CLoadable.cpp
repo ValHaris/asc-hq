@@ -71,6 +71,7 @@ CLoadableGameOptions::CLoadableGameOptions(CGameOptions* pOptions)
    add(new TextProperty("DefaultSupervisorPassword"					,	&_pOptions->defaultSuperVisorPassword));
    add(new IntProperty("ReplayDelay"						,	&_pOptions->replayspeed));
    add(new IntProperty("ShowUnitOwner"                ,  &_pOptions->showUnitOwner));
+   add(new IntProperty("SpecialForestChaining"        ,  &_pOptions->specialForestChaining));
 
    add(new TextProperty("BI3.path"							,	&_pOptions->bi3.dir	)	);
    add(new IntProperty("BI3.interpolate.terrain"		,	&_pOptions->bi3.interpolate.terrain));
