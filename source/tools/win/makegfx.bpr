@@ -87,7 +87,7 @@ Item0=_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=
+RunParams=sgs.gfx E:\asccrash2\GFX\*.pcx
 HostApplication=
 RemoteHost=
 RemotePath=

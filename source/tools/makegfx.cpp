@@ -51,6 +51,8 @@ int main(int argc, char *argv[] )
       exit(1);
    }
 
+   try {
+
    initFileIO( cl.c().c_str() );
    addSearchPath ( "." );
    opencontainer ( "*.con");
@@ -135,5 +137,12 @@ int main(int argc, char *argv[] )
    for ( IMGS::iterator ii = images.begin(); ii != images.end(); ii++ )
       s.writedata ( ii->second, getpicsize2 ( ii->second ) );
 
+   }
+   catch ( tfileerror err ) {
+      fatalError( "file error accessing file %s ", err.getFileName().c_str() );
+   } /* endcatch */
+   catch ( ASCexception err) {
+      fatalError( "unspecified error" );
+   } /* endcatch */
    return 0;
 }
