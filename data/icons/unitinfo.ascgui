@@ -19,8 +19,8 @@ panel {
         Widget0 {
           type = SpecialDisplay
           name = unit_pic
-          x = 12
-          y = 11
+          x = 11
+          y = 9
         } widget0
      } widget0
 
@@ -50,10 +50,11 @@ panel {
            type = textoutput
            TextAlign = CENTER
            FontColor = 0xffffff
+           Fontsize = 11
            x = 5
-           y = 5
+           y = 3
 	   x2 = -5
-	   y2 = -5
+	   y2 = -7
            name = unittypename
         } Widget0
      } Widget2
@@ -68,20 +69,21 @@ panel {
         Widget0 {
            type = textoutput
            TextAlign = CENTER
+           Fontsize = 11
            x = 5
-           y = 5
+           y = 3
 	   x2 = -5
-	   y2 = -5
+	   y2 = -7
            name = unitname
         } Widget0
         Widget1 {
            type = SpecialInput
            TextAlign = CENTER
            FontColor = 0xffffff
-           x = 5
-           y = 5
-	   x2 = -5
-	   y2 = -5
+           x = 0
+           y = 0
+	   x2 = 0
+	   y2 = 0
            name = unitname
         } Widget1
      } Widget3
@@ -107,7 +109,7 @@ panel {
            name = movepoints
            x = 6
            y = 3
-           width = 12
+           width = 18
            height = 8
        } Widget0
      } widget0
@@ -126,7 +128,7 @@ panel {
             name = reduce_movepoints
             x = 6
             y = 3
-            width = 12
+            width = 18
             height = 8
          } Widget0
        } widget1
@@ -145,7 +147,7 @@ panel {
             name = result_reduce_movepoints
             x = 6
             y = 3
-            width = 12
+            width = 18
             height = 8
          } Widget0
        } widget2
@@ -181,8 +183,10 @@ panel {
       Widget0 {
         type = image
         Filename = damage+fuel_field.png
-        x = 10
+        x = 5
         y = 5
+        width = 90
+        height = 29
         
         WidgetNum = 4      
         Widget0 {
@@ -191,7 +195,7 @@ panel {
            name = unitdamage
            x = 23
            y = 4
-	   width = 51
+	   width = 63
            height = 9
            colors= 3
            color0 {
@@ -200,24 +204,24 @@ panel {
            } color0
            color1 {
              color = 0xfff000
-             fraction = 0.50
+             fraction = 0.40
            } color1
            color2 {
              color = 0xd6000f
-             fraction = 0.15
+             fraction = 0.11
            } color2
         } Widget0
 
         Widget1 {
            type = TextOutput
            textalign = Right
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = unitstatus
-           x = 0
+           x = 14
            y = 5
-           width = 73
-           height = 8
+           width = 71
+           height = 9
        } Widget1
 
 
@@ -227,7 +231,7 @@ panel {
            name = unitfuel
            x = 23
            y = 16
-	   width = 51
+	   width = 63
            height = 9
            colors= 3
            color0 {
@@ -236,45 +240,45 @@ panel {
            } color0
            color1 {
              color = 0xfff000
-             fraction = 0.5
+             fraction = 0.4
            } color1
            color2 {
              color = 0xd6000f
-             fraction = 0.15
+             fraction = 0.11
            } color2
         } Widget2
 
        Widget3 {
            type = TextOutput
            textalign = Right
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = unitfuelstatus
-           x = 0
+           x = 14
            y = 17
-           width = 73
-           height = 8
+           width = 71
+           height = 9
 	 } Widget3
       } widget0
 
      Widget1 {
         type = image
         Filename = bar_split.png
-        x = 40
+        x = 35
         y = 7
      } Widget1
   
      Widget2 {
         type = image
         Filename = bar_split.png
-        x = 40
+        x = 35
         y = 19
      } Widget2
   
      Widget3 {
         type = image
         Filename = material+energy_field.png
-        x = 90
+        x = 95
         y = 5
         
         WidgetNum = 4      
@@ -291,7 +295,7 @@ panel {
         Widget1 {
            type = Textoutput
            textalign = Right
-           FontSize = 7
+           FontSize = 8
            FontColor = 0xffffff
            name = unitmaterialstatus
            x = 0
@@ -313,7 +317,7 @@ panel {
          Widget3 {
            type = TextOutput
            textalign = Right
-           FontSize = 7
+           FontSize = 8
            FontColor = 0xffffff
            name = unitenergystatus
            x = 0
@@ -405,10 +409,10 @@ panel {
          Widget10 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = punch_weapon0
-           x = 28
+           x = 29
            y = 5
            width = 23
            height = 9
@@ -416,10 +420,10 @@ panel {
          Widget11 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = punch_weapon1
-           x = 28
+           x = 29
            y = 18
            width = 23
            height = 9
@@ -427,10 +431,10 @@ panel {
          Widget12 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = punch_weapon2
-           x = 28
+           x = 29
            y = 31
            width = 23
            height = 9
@@ -438,10 +442,10 @@ panel {
          Widget13 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = punch_weapon3
-           x = 28
+           x = 29
            y = 44
            width = 23
            height = 9
@@ -449,10 +453,10 @@ panel {
          Widget14 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = punch_weapon4
-           x = 28
+           x = 29
            y = 57
            width = 23
            height = 9
@@ -460,10 +464,10 @@ panel {
          Widget15 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = punch_weapon5
-           x = 28
+           x = 29
            y = 70
            width = 23
            height = 9
@@ -471,10 +475,10 @@ panel {
          Widget16 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = punch_weapon6
-           x = 28
+           x = 29
            y = 83
            width = 23
            height = 9
@@ -482,10 +486,10 @@ panel {
          Widget17 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = punch_weapon7
-           x = 28
+           x = 29
            y = 96
            width = 23
            height = 9
@@ -493,10 +497,10 @@ panel {
          Widget18 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = punch_weapon8
-           x = 28
+           x = 29
            y = 109
            width = 23
            height = 9
@@ -504,10 +508,10 @@ panel {
          Widget19 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = punch_weapon9
-           x = 28
+           x = 29
            y = 122
            width = 23
            height = 9
@@ -516,10 +520,10 @@ panel {
          Widget20 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = RF_weapon0
-           x = 58
+           x = 57
            y = 5
            width = 5
            height = 9
@@ -527,10 +531,10 @@ panel {
          Widget21 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = RF_weapon1
-           x = 58
+           x = 57
            y = 18
            width = 5
            height = 9
@@ -538,10 +542,10 @@ panel {
          Widget22 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = RF_weapon2
-           x = 58
+           x = 57
            y = 31
            width = 5
            height = 9
@@ -549,10 +553,10 @@ panel {
          Widget23 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = RF_weapon3
-           x = 58
+           x = 57
            y = 44
            width = 5
            height = 9
@@ -560,10 +564,10 @@ panel {
          Widget24 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = RF_weapon4
-           x = 58
+           x = 57
            y = 57
            width = 5
            height = 9
@@ -571,10 +575,10 @@ panel {
          Widget25 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = RF_weapon5
-           x = 58
+           x = 57
            y = 70
            width = 5
            height = 9
@@ -582,10 +586,10 @@ panel {
          Widget26 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = RF_weapon6
-           x = 58
+           x = 57
            y = 83
            width = 5
            height = 9
@@ -593,10 +597,10 @@ panel {
          Widget27 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = RF_weapon7
-           x = 58
+           x = 57
            y = 96
            width = 5
            height = 9
@@ -604,10 +608,10 @@ panel {
         Widget28 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = RF_weapon8
-           x = 58
+           x = 57
            y = 109
            width = 5
            height = 9
@@ -615,10 +619,10 @@ panel {
          Widget29 {
            type = TextOutput
            textalign = CENTER
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = RF_weapon9
-           x = 58
+           x = 57
            y = 122
            width = 5
            height = 9
@@ -636,7 +640,7 @@ panel {
         Widget31 {
            type = TextOutput
            textalign = Right
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = status_ammo0
            x = 75
@@ -656,7 +660,7 @@ panel {
         Widget33 {
            type = TextOutput
            textalign = Right
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = status_ammo1
            x = 75
@@ -676,7 +680,7 @@ panel {
         Widget35 {
            type = TextOutput
            textalign = Right
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = status_ammo2
            x = 75
@@ -696,7 +700,7 @@ panel {
         Widget37 {
            type = TextOutput
            textalign = Right
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = status_ammo3
            x = 75
@@ -716,7 +720,7 @@ panel {
         Widget39 {
            type = TextOutput
            textalign = Right
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = status_ammo4
            x = 75
@@ -736,7 +740,7 @@ panel {
         Widget41 {
            type = TextOutput
            textalign = Right
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = status_ammo5
            x = 75
@@ -756,7 +760,7 @@ panel {
         Widget43 {
            type = TextOutput
            textalign = Right
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = status_ammo6
            x = 75
@@ -776,7 +780,7 @@ panel {
         Widget45 {
            type = TextOutput
            textalign = Right
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = status_ammo7
            x = 75
@@ -796,7 +800,7 @@ panel {
         Widget47 {
            type = TextOutput
            textalign = Right
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = status_ammo8
            x = 75
@@ -816,7 +820,7 @@ panel {
         Widget49 {
            type = TextOutput
            textalign = Right
-           FontSize = 7
+           FontSize = 9
            FontColor = 0xffffff
            name = status_ammo9
            x = 75
@@ -825,7 +829,7 @@ panel {
            height = 9
        } Widget49
          widget50 {
-           type = specialdisplay
+           type = SpecialDisplay
            x = 72
            y = 40
            width = 3
@@ -833,7 +837,7 @@ panel {
            name = showplayercolor0
          } widget50
          widget51 {
-           type = specialdisplay
+           type = SpecialDisplay
            x = 72
            y = 70
            width = 3

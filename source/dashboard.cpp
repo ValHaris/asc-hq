@@ -22,6 +22,7 @@
 
 #include "dashboard.h"
 #include "graphics/blitter.h"
+#include "graphics/drawing.h"
 #include "gamemap.h"
 #include "iconrepository.h"
 #include "spfst.h"
@@ -77,7 +78,8 @@ UnitInfoPanel::UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) : Panel( par
    registerSpecialDisplay( "unit_pic" );
    for ( int i = 0; i < 10; ++i)
       registerSpecialDisplay( "symbol_weapon" + ASCString::toString(i) );
-   registerSpecialDisplay( "showplayercolor" );
+   registerSpecialDisplay( "showplayercolor0" );
+   registerSpecialDisplay( "showplayercolor1" );
 }
 
 void UnitInfoPanel::registerSpecialDisplay( const ASCString& name )
@@ -88,14 +90,53 @@ void UnitInfoPanel::registerSpecialDisplay( const ASCString& name )
 }
 
 
+  template<int pixelsize>
+  class ColorTransform_PlayerTrueCol {
+        typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+        PixelType refColor;
+    protected:
+        ColorTransform_PlayerTrueCol() : recfolor(0) {};
+
+        PixelType transform( PixelType col) {
+           int r = (col >> 16) & 0xff;
+           int g = (col >> 8) & 0xff;
+           int b = (col ) & 0xff;
+           if ( g==0 && b==0) {
+              return lightenColor( col, float(r)/255);
+           } else
+              if ( r==255 && g==b ) {
+                 return lightenColor( col, float(g)/16);
+
+              } else
+                 return col;
+        };
+
+     public:
+        ColorTransform_PlayerTrueCol( PixelType color ) { setColor(color); };
+        ColorTransform_PlayerTrueCol ( NullParamType npt ) : refColor(0) {};
+
+        void setColor( PixelType color )
+        {
+           refColor = color;
+        };
+ };
+
+
 
 void UnitInfoPanel::painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst)
 {
+   Surface screen = Surface::Wrap( PG_Application::GetScreen() );
+   
+   if( name == "showplayercolor0" || name == "showplayercolor1" ) {
+      screen.Blit( IconRepository::getIcon("show_playercolor.png"), SPoint(dst.x, dst.y) );
+      return;
+   }
+
+
    MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
 
    if ( mc.valid() ) {
       Vehicle* veh = actmap->getField(mc)->vehicle;
-      Surface screen = Surface::Wrap( PG_Application::GetScreen() );
 
       if ( name == "unitexp" ) {
          int experience = 0;

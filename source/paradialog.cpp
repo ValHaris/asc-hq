@@ -882,14 +882,14 @@ void BarGraphWidget::setFraction( float f )
 
 void errorMessageDialog( const ASCString& message )
 {
-               MessageDialog msg( mainScreenWidget, PG_Rect(100,100,500,150),"Error", message,PG_Rect(200,100,100,40),"OK" );
+               MessageDialog msg( NULL, PG_Rect(100,100,500,150),"Error", message,PG_Rect(200,100,100,40),"OK" );
                msg.Show();
                msg.RunModal();
-}   
+}
 
 void warningMessageDialog( const ASCString& message )
 {
-               MessageDialog msg( mainScreenWidget, PG_Rect(100,100,500,150),"Warning", message,PG_Rect(200,100,100,40),"OK" );
+               MessageDialog msg( NULL, PG_Rect(100,100,500,150),"Warning", message,PG_Rect(200,100,100,40),"OK" );
                msg.Show();
                msg.RunModal();
 }

@@ -23,8 +23,8 @@ panel {
         Widget0 {
           type = Specialdisplay
           name = attacker_unit_pic
-          x = 12
-          y = 11
+          x = 11
+          y = 9
         } widget0
      } widget0
       
@@ -37,8 +37,8 @@ panel {
         Widget0 {
           type = Specialdisplay
           name = defender_unit_pic
-          x = 12
-          y = 11
+          x = 11
+          y = 9
         } widget0
       } widget1 
 

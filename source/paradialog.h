@@ -94,7 +94,7 @@ class Panel : public  PG_Window {
      
      class Emboss: public PrimitiveObject {
         public:
-           bool 
+           bool
      };
      */
 

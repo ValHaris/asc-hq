@@ -224,12 +224,12 @@
   template<
      int BytesPerSourcePixel,
      int BytesPerTargetPixel,
-     class SourceColorTransform,
+     template<int> class SourceColorTransform,
      template<int> class ColorMerger,
      template<int> class SourcePixelSelector = SourcePixelSelector_Plain,
      class TargetPixelSelector = TargetPixelSelector_All
   >
-  class MegaBlitter : public SourceColorTransform,
+  class MegaBlitter : public SourceColorTransform<BytesPerSourcePixel>,
                       public ColorMerger<BytesPerTargetPixel>,
                       public SourcePixelSelector<BytesPerSourcePixel>,
                       public TargetPixelSelector {
@@ -237,8 +237,8 @@
         typedef typename PixelSize2Type<BytesPerTargetPixel>::PixelType TargetPixelType;
     public:
         MegaBlitter() { };
-        MegaBlitter( const SourceColorTransform& scm, const ColorMerger<BytesPerTargetPixel>& cm, const SourcePixelSelector<BytesPerSourcePixel>& sps, const TargetPixelSelector& tps ) :
-                     SourceColorTransform( scm ),
+        MegaBlitter( const SourceColorTransform<BytesPerSourcePixel>& scm, const ColorMerger<BytesPerTargetPixel>& cm, const SourcePixelSelector<BytesPerSourcePixel>& sps, const TargetPixelSelector& tps ) :
+                     SourceColorTransform<BytesPerSourcePixel>( scm ),
                      ColorMerger<BytesPerTargetPixel>( cm ),
                      SourcePixelSelector<BytesPerSourcePixel>( sps ),
                      TargetPixelSelector( tps ) { };
@@ -279,7 +279,7 @@
               for ( int x = 0; x < w; ++x ) {
                  int s = TargetPixelSelector::skipTarget(x,y);
                  if ( s==0 ) {
-                    ColorMerger<BytesPerTargetPixel>::assign ( colorConverter.convert( SourceColorTransform::transform( SourcePixelSelector<BytesPerSourcePixel>::nextPixel())), pix );
+                    ColorMerger<BytesPerTargetPixel>::assign ( colorConverter.convert( SourceColorTransform<BytesPerSourcePixel>::transform( SourcePixelSelector<BytesPerSourcePixel>::nextPixel())), pix );
                     ++pix;
                  } else {
                     if ( s > 0 ) {
@@ -299,7 +299,7 @@
 
  
   template<
-     class SourceColorTransform,
+     template<int> class SourceColorTransform,
      template<int> class ColorMerger,
      template<int> class SourcePixelSelector,
      class TargetPixelSelector,
@@ -327,7 +327,7 @@
                                             SourcePixelSelector,
                                             TargetPixelSelector
                                           >  blitter ( 
-                                                        (SourceColorTransform)( scmp ),
+                                                        (SourceColorTransform<1>)( scmp ),
                                                         (ColorMerger<1>)( cmp ), 
                                                         (SourcePixelSelector<1>)( spsp ),
                                                         TargetPixelSelector(tpsp)
@@ -343,9 +343,9 @@
                                             ColorMerger,
                                             SourcePixelSelector,
                                             TargetPixelSelector
-                                          >  blitter ( 
-                                                        (SourceColorTransform)( scmp ),
-                                                        (ColorMerger<4>)( cmp ), 
+                                          >  blitter (
+                                                        (SourceColorTransform<1>)( scmp ),
+                                                        (ColorMerger<4>)( cmp ),
                                                         (SourcePixelSelector<1>)( spsp ),
                                                         TargetPixelSelector(tpsp)
                                                       );
@@ -365,58 +365,77 @@
                                             ColorMerger,
                                             SourcePixelSelector,
                                             TargetPixelSelector
-                                          >  blitter ( 
-                                                        (SourceColorTransform)( scmp ),
-                                                        (ColorMerger<1>)( cmp ), 
+                                          >  blitter (
+                                                        (SourceColorTransform<4>)( scmp ),
+                                                        (ColorMerger<1>)( cmp ),
                                                         (SourcePixelSelector<4>)( spsp ),
                                                         TargetPixelSelector(tpsp)
                                                       );
                                blitter.blit( src, dst, pos );
-                             }   
+                             }
                              break;
-                     case 3:        
-                     case 4: { 
-                               MegaBlitter< 
+                     case 3:
+                     case 4: {
+                               MegaBlitter<
                                             4,4,
                                             SourceColorTransform,
                                             ColorMerger,
                                             SourcePixelSelector,
                                             TargetPixelSelector
-                                          >  blitter ( 
-                                                        (SourceColorTransform)( scmp ),
-                                                        (ColorMerger<4>)( cmp ), 
+                                          >  blitter (
+                                                        (SourceColorTransform<4>)( scmp ),
+                                                        (ColorMerger<4>)( cmp ),
                                                         (SourcePixelSelector<4>)( spsp ),
                                                         TargetPixelSelector(tpsp)
                                                       );
                            blitter.blit( src, dst, pos );
-                        }   
+                        }
                         break;
-                 };       
+                 };
               }
-              break; 
+              break;
    }
-}      
-    
-  
+}
+
+
 
 //////////////////// Color transformations ////////////////////////////////////
 
 
+ template<int pixelsize>
  class ColorTransform_None {
+        typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
      protected:
         ColorTransform_None(){};
-        Color transform( Color col) { return col; };
-     public:   
+        PixelType transform( PixelType col) { return col; };
+     public:
         ColorTransform_None ( NullParamType npt ) {};
  };
 
+  template<int pixelsize>
   class ColorTransform_PlayerCol {
+        typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+    protected:
+        ColorTransform_PlayerCol() : shift(0) {};
+
+        PixelType transform( PixelType col) { return col; };
+
+     public:
+        ColorTransform_PlayerCol( int player ) {};
+        ColorTransform_PlayerCol ( NullParamType npt ) : shift(0) {};
+
+        void setPlayer( int player ){};
+ };
+
+  template<>
+  class ColorTransform_PlayerCol<1> {
         int shift;
+        typedef PixelSize2Type<1>::PixelType PixelType;
 
     protected:
         ColorTransform_PlayerCol() : shift(0) {};
 
-        Color transform( Color col)
+        PixelType transform( PixelType col)
         {
            if ( col >= 16 && col < 24 )
               return col + shift;
@@ -429,15 +448,63 @@
         {
            setPlayer( player );
         };
-        
+
         ColorTransform_PlayerCol ( NullParamType npt ) : shift(0) {};
-        
+
         void setPlayer( int player )
         {
            shift = player*8;
         };
  };
+/*
+   template<int pixelSize>
+  class ColorTransform_PlayerCol {
+        typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+    protected:
+        ColorTransform_PlayerCol() : shift(0) {};
 
+        PixelType transform( PixelType col) { return col; };
+
+     public:
+        ColorTransform_PlayerCol( int player ) {};
+        ColorTransform_PlayerCol ( NullParamType npt ) : shift(0) {};
+
+        void setPlayer( int player ){};
+ };
+
+
+  template<>
+  class ColorTransform_PlayerCol<4> {
+        int color;
+        typedef PixelSize2Type<4>::PixelType PixelType;
+
+    protected:
+        ColorTransform_PlayerCol() : shift(0) {};
+
+        PixelType transform( PixelType col)
+        {
+           if ( col >= 16 && col < 24 )
+              return col + shift;
+           else
+              return col;
+        };
+
+     public:
+        ColorTransform_PlayerCol( int player )
+        {
+           setPlayer( player );
+        };
+
+        ColorTransform_PlayerCol ( NullParamType npt ) : shift(0) {};
+
+        void setPlayer( int player )
+        {
+           shift = player*8;
+        };
+ };
+*/
+
+ template<int pixelSize>
  class ColorTransform_XLAT {
         const char* table;
 
@@ -458,9 +525,9 @@
         {
            table = translationTable;
         };
-        
+
         ColorTransform_XLAT ( NullParamType npt ) : table(NULL) {};
-        
+
         ColorTransform_XLAT ( const char* t ) : table ( t ) {};
  };
 
