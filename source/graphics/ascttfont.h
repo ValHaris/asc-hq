@@ -24,7 +24,7 @@
 #include <SDL_ttf.h>
 #include <map>
 #include <iostream>
-#include "../ascstring.h"
+#include "ascstring.h"
 
 
 
@@ -81,7 +81,7 @@ class ASCTTFontRenderAlgorithm{
 public:
 ASCTTFontRenderAlgorithm(){};
 ~ASCTTFontRenderAlgorithm(){};
-virtual SDL_Surface* render(ASCTTFont* font, ASCString text, ASCRGBColor, ASCRGBColor = ASCRGBColor()) = 0;
+virtual SDL_Surface* render(const ASCTTFont* font, ASCString text, ASCRGBColor, ASCRGBColor = ASCRGBColor()) const = 0;
 
 };
 
@@ -93,7 +93,7 @@ class ASCTTFontRenderSolid : public ASCTTFontRenderAlgorithm{
 public:
 ASCTTFontRenderSolid(): ASCTTFontRenderAlgorithm(){};
 ~ASCTTFontRenderSolid(){};
-virtual SDL_Surface* render(ASCTTFont* font, ASCString text, ASCRGBColor, ASCRGBColor bgColor);
+virtual SDL_Surface* render(const ASCTTFont* font, ASCString text, ASCRGBColor, ASCRGBColor bgColor) const;
 };
 
 //***************************************************************************************************************************
@@ -101,7 +101,7 @@ class ASCTTFontRenderShaded : public ASCTTFontRenderAlgorithm{
 public:
 ASCTTFontRenderShaded(): ASCTTFontRenderAlgorithm(){};
 ~ASCTTFontRenderShaded(){};
-virtual SDL_Surface* render(ASCTTFont* font, ASCString text, ASCRGBColor fgCol, ASCRGBColor bgColor);
+virtual SDL_Surface* render(const ASCTTFont* font, ASCString text, ASCRGBColor fgCol, ASCRGBColor bgColor) const;
 };
 
 //***************************************************************************************************************************
@@ -109,7 +109,7 @@ class ASCTTFontRenderBlended : public ASCTTFontRenderAlgorithm{
 public:
 ASCTTFontRenderBlended(): ASCTTFontRenderAlgorithm(){};
 ~ASCTTFontRenderBlended(){};
-virtual SDL_Surface* render(ASCTTFont* font, ASCString text, ASCRGBColor fgCol, ASCRGBColor bgColor);
+virtual SDL_Surface* render(const ASCTTFont* font, ASCString text, ASCRGBColor fgCol, ASCRGBColor bgColor) const;
 };
 
 
@@ -122,33 +122,43 @@ friend class ASCTTFontRenderBlended;
 private:
   TTF_Font* myFont;
   const ASCRGBColor& defaultColor;  
-  ASCTTFont(ASCString file, int size, const ASCRGBColor& defaultColor = ASCRGBColor::BLACKCOLOR);
-  void output(ASCTTFontRenderAlgorithm& alg, const ASCString text, SDL_Surface *sDest, ASCRect rect, const ASCRGBColor& color, const ASCRGBColor& color, ASCFontStyle style = NORMAL);
+  ASCTTFont(const ASCString& file, int size, const ASCRGBColor& defaultColor = ASCRGBColor::BLACKCOLOR);  
   
-public:  
-  
+public:    
   ASCTTFont();    
   ~ASCTTFont();
-  void outputSolid(const ASCString text, SDL_Surface *sDest, ASCRect rect, const ASCRGBColor& color, ASCFontStyle style = NORMAL);
-  void outputSolid(const ASCString text, SDL_Surface *sDest, ASCRect rect, ASCFontStyle style = NORMAL);
-  void outputShaded(const ASCString text, SDL_Surface *sDest, ASCRect rect, const ASCRGBColor& fgColor,const ASCRGBColor& bgColor, ASCFontStyle style = NORMAL);
-  void outputShaded(const ASCString text, SDL_Surface *sDest, ASCRect rect, const ASCRGBColor& bgColor, ASCFontStyle style = NORMAL);
-  void outputBlended(const ASCString text, SDL_Surface *sDest, ASCRect rect, const ASCRGBColor&fgColor, ASCFontStyle style = NORMAL);
-  
-
+  SDL_Surface* output(const ASCTTFontRenderAlgorithm& alg, const ASCString& text, const ASCRGBColor& color, ASCFontStyle style = NORMAL) const;
 };
-
+//***************************************************************************************************************************
 class ASCTTFontFactory {
 private:
 FontMap fonts;
 public:
   ASCTTFontFactory();
-
-  ~ASCTTFontFactory();
-
+  ~ASCTTFontFactory();  
   const ASCTTFont& newFont(ASCString file, int size, const ASCRGBColor& defaultColor = ASCRGBColor::BLACKCOLOR);
 
 };
 
+//***************************************************************************************************************************
+enum ASCRenderStyle{
+  SOLID,
+  BLENDED  
+};
+
+//***************************************************************************************************************************
+class ASCLabel{
+public:
+  ASCLabel(const ASCTTFont& font, const ASCString& text, const ASCRGBColor& fColor, ASCRenderStyle rStyle = BLENDED, ASCFontStyle fStyle = NORMAL);
+  ~ASCLabel();
+inline  int getHeight();
+inline  int getWidth();
+
+void output(SDL_Surface* sDest, ASCRect rect);
+  
+private:
+SDL_Surface* labelSurface;
+
+};
 #endif
 

@@ -19,7 +19,7 @@
  ***************************************************************************/
 #include "ascttfont.h"
 #include <map>
-#include "../misc.h"
+//#include "misc.h"
 
 const ASCRGBColor ASCRGBColor::BLACKCOLOR(0,0,0);
 
@@ -28,7 +28,7 @@ ASCTTFont::ASCTTFont(): defaultColor(ASCRGBColor(0,0,0))
 {
 }
 
-ASCTTFont::ASCTTFont(ASCString file, int size, const ASCRGBColor& defColor): defaultColor(defColor){
+ASCTTFont::ASCTTFont(const ASCString& file, int size, const ASCRGBColor& defColor): defaultColor(defColor){
   myFont = TTF_OpenFont(file.c_str(), size);
 }
 
@@ -37,39 +37,12 @@ ASCTTFont::~ASCTTFont()
   TTF_CloseFont(myFont); 
 }
 
-void ASCTTFont::outputSolid(const ASCString text, SDL_Surface *dest, ASCRect rect, ASCFontStyle style){
-  outputSolid(text, dest, rect, defaultColor, style);
-}
 
-void ASCTTFont::outputSolid(const ASCString text, SDL_Surface *dest, ASCRect rect,const ASCRGBColor& color, ASCFontStyle style){
-  ASCTTFontRenderSolid solidAlg;
-  ASCRGBColor dummy;
-  output(solidAlg, text, dest, rect, color, dummy, style);
-  
-}
-void ASCTTFont::outputShaded(const ASCString text, SDL_Surface *dest, ASCRect rect, const ASCRGBColor& fgColor, const ASCRGBColor& bgColor, ASCFontStyle style){
-  ASCTTFontRenderShaded shadedAlg;
-  output(shadedAlg, text, dest, rect, fgColor, bgColor, style);
-}
-
-void ASCTTFont::outputShaded(const ASCString text, SDL_Surface *sDest, ASCRect rect, const ASCRGBColor& bgColor, ASCFontStyle style){
-  outputShaded(text, sDest, rect, defaultColor, bgColor, style);
-}
-
-void ASCTTFont::outputBlended(const ASCString text, SDL_Surface *dest, ASCRect rect, const ASCRGBColor& fgColor, ASCFontStyle style){
-  ASCTTFontRenderBlended blendedAlg;
-  ASCRGBColor dummy;
-  output(blendedAlg, text, dest, rect, fgColor, dummy, style);
-}
-
-
-void ASCTTFont::output(ASCTTFontRenderAlgorithm& alg, const ASCString text, SDL_Surface *sDest, ASCRect rect, const ASCRGBColor& fgColor, const ASCRGBColor& bgColor, ASCFontStyle style){ 
+SDL_Surface* ASCTTFont::output(const ASCTTFontRenderAlgorithm& alg, const ASCString& text, const ASCRGBColor& fgColor, ASCFontStyle style) const{ 
   TTF_SetFontStyle(myFont, style);
-  SDL_Surface* sdlText = alg.render(this, text, fgColor, bgColor);
-  TTF_SetFontStyle(myFont, style);
-  SDL_BlitSurface(sdlText, NULL, sDest, &rect);
-  SDL_UpdateRect(sDest, rect.x, rect.y, rect.w, rect.h);
-  SDL_FreeSurface( sdlText );
+  SDL_Surface* sdlText = alg.render(this, text, fgColor);
+  TTF_SetFontStyle(myFont, NORMAL);  
+  return sdlText;
 }
 //*****************************************************************************************************************************************
 ASCTTFontFactory::ASCTTFontFactory(){
@@ -84,9 +57,8 @@ ASCTTFontFactory::~ASCTTFontFactory(){
 }
 
 const ASCTTFont& ASCTTFontFactory::newFont(ASCString file, int size, const ASCRGBColor& defaultColor){
-  ASCString key(file+ strrr(size));
-  FontMap::iterator it = fonts.find(key);
-  //std::map<string,ASCTTFont*>::iterator it = fonts.find(key);
+  ASCString key(file /*+ strrr(size)*/);
+  FontMap::iterator it = fonts.find(key);  
   ASCTTFont* font;
   if(it != fonts.end()){
    font = it->second;
@@ -98,22 +70,50 @@ const ASCTTFont& ASCTTFontFactory::newFont(ASCString file, int size, const ASCRG
   return *font;
 }
 
+//*****************************************************************************************************************************************
+ASCLabel::ASCLabel(const ASCTTFont& font, const ASCString& text, const ASCRGBColor& fColor, ASCRenderStyle rStyle, ASCFontStyle fStyle){
+ASCTTFontRenderAlgorithm* algo;
+if(rStyle == SOLID)
+  algo = new ASCTTFontRenderSolid();
+else
+  algo = new ASCTTFontRenderBlended();  
+  
+  labelSurface = font.output(*algo, text, fColor, fStyle);
+};
+  
+int ASCLabel::getHeight(){
+  return labelSurface->h;
+}
+
+int ASCLabel::getWidth(){
+  return labelSurface->w;
+}
+
+
+void ASCLabel::output(SDL_Surface* sDest, ASCRect rect){
+  SDL_BlitSurface(labelSurface, NULL, sDest, &rect);
+  SDL_UpdateRect(sDest, rect.x, rect.y, rect.w, rect.h);    
+}
+  
+ASCLabel::~ASCLabel(){
+  SDL_FreeSurface( labelSurface );
+}
 
 //*****************************************************************************************************************************************
-SDL_Surface* ASCTTFontRenderSolid::render(ASCTTFont* font, ASCString text, ASCRGBColor col, ASCRGBColor bgCol){
+SDL_Surface* ASCTTFontRenderSolid::render(const ASCTTFont* font, ASCString text, ASCRGBColor col, ASCRGBColor bgCol)const {
   SDL_Color color ={col.getRedValue(), col.getGreenValue(), col.getBlueValue()};
   return TTF_RenderText_Solid(font->myFont, text.c_str(), color);
 }
 
 //*****************************************************************************************************************************************
-SDL_Surface* ASCTTFontRenderShaded::render(ASCTTFont* font, ASCString text, ASCRGBColor fgCol, ASCRGBColor bgCol){
+SDL_Surface* ASCTTFontRenderShaded::render(const ASCTTFont* font, ASCString text, ASCRGBColor fgCol, ASCRGBColor bgCol) const{
   SDL_Color fgColor ={fgCol.getRedValue(), fgCol.getGreenValue(), fgCol.getBlueValue()};
   SDL_Color bgColor ={bgCol.getRedValue(), bgCol.getGreenValue(), bgCol.getBlueValue()};  
   return TTF_RenderText_Shaded(font->myFont, text.c_str(), fgColor, bgColor);
 }
 
 //*****************************************************************************************************************************************
-SDL_Surface* ASCTTFontRenderBlended::render(ASCTTFont* font, ASCString text, ASCRGBColor col, ASCRGBColor bgCol){
+SDL_Surface* ASCTTFontRenderBlended::render(const ASCTTFont* font, ASCString text, ASCRGBColor col, ASCRGBColor bgCol) const{
   SDL_Color color ={col.getRedValue(), col.getGreenValue(), col.getBlueValue()};
   return TTF_RenderText_Blended(font->myFont, text.c_str(), color);
 }
