@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: sg.cpp,v 1.151 2001-07-20 20:37:48 mbickel Exp $
+//     $Id: sg.cpp,v 1.152 2001-07-20 21:27:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.151  2001/07/20 20:37:48  mbickel
+//      Enhanced logging capabilities
+//
 //     Revision 1.150  2001/07/18 16:05:47  mbickel
 //      Fixed: infinitive loop in displaying "player exterminated" msg
 //      Fixed: construction of units by units: wrong player
@@ -2375,10 +2378,16 @@ int gamethread ( void* data )
       do {
          try {
             if ( !actmap || actmap->xsize <= 0 || actmap->ysize <= 0 ) {
+               displayLogMessage ( 8, "gamethread :: starting main menu.\n" );
                runmainmenu();
             } else {
-               if ( actmap->actplayer == -1 ) next_turn();
+               if ( actmap->actplayer == -1 ) {
+                  displayLogMessage ( 8, "gamethread :: performing next_turn..." );
+                  next_turn();
+                  displayLogMessage ( 8, "done.\n" );
+               }
 
+               displayLogMessage ( 8, "gamethread :: Painting background pict..." );
                backgroundpict.paint();
 
                if ( !gtp->filename.empty() && patimat ( tournamentextension, gtp->filename.c_str() ) ) {
@@ -2387,12 +2396,16 @@ int gamethread ( void* data )
                   displayLogMessage ( 5, "done\n" );
                }
 
+               displayLogMessage ( 8, "gamethread :: displaying map..." );
                displaymap();
+               displayLogMessage ( 8, "done.\n" );
                cursor.show();
 
                moveparams.movestatus = 0;
 
+               displayLogMessage ( 8, "gamethread :: painting gui icons..." );
                actgui->painticons();
+               displayLogMessage ( 8, "done.\n" );
                mousevisible(true);
 
                dashboard.x = 0xffff;
