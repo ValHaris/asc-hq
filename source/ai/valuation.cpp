@@ -637,7 +637,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, const pvehicle veh, MapCoordi
    RefuelConstraint* rfc = NULL;
    if ( RefuelConstraint::necessary ( veh, *ai )) {
       if ( secondRun )
-         rfc = new RefuelConstraint ( *ai, veh, maxint );
+         rfc = new RefuelConstraint ( *ai, veh, veh->maxMovement()*5 );
       else
          rfc = new RefuelConstraint ( *ai, veh );
 

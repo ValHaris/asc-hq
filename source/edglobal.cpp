@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.51 2003-02-02 13:04:56 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.52 2003-03-20 10:08:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2003/02/02 13:04:56  mbickel
+//      Increased version of main.con
+//      Updated makefiles
+//
 //     Revision 1.50  2002/11/02 14:13:17  mbickel
 //      New net handling for objects
 //
@@ -347,7 +351,12 @@ mc_check mc;
         "transform map",
         "Edit Map Archival Information",
         "Display Resource Comparison",
-        "specify unit production" };
+        "specify unit production",
+        "Paste",
+        "Copy",
+        "Cut",
+        "Save Clipboard",
+        "Load Clipboard" };
 
 
 // õS Infomessage
@@ -735,7 +744,7 @@ void execaction(int code)
     case act_fillmode :   if ( polyfieldmode == false ) {   
                  if (tfill == true) tfill = false;
                  else tfill = true; 
-                 fillx1 = cursor.posx + actmap->xpos; 
+                 fillx1 = cursor.posx + actmap->xpos;
                  filly1 = cursor.posy + actmap->ypos; 
                  pdbaroff(); 
               } 
@@ -787,11 +796,11 @@ void execaction(int code)
                                      pf2->removemine( -1 );
                                   else
                                      pf2->removeobject( NULL );
-                                
+
                             mapsaved = false;
                             displaymap();
                          }
-                      } 
+                      }
         break;
     case act_deleteunit : {
                          pf2 = getactfield();
@@ -805,8 +814,8 @@ void execaction(int code)
         break;
      case act_deletebuilding : {
                          pf2 = getactfield();
-                         if (pf2 != NULL) 
-                            if (pf2->building != NULL) { 
+                         if (pf2 != NULL)
+                            if (pf2->building != NULL) {
                                delete pf2->building;
                                mapsaved = false;
                                displaymap();
@@ -1049,6 +1058,40 @@ void execaction(int code)
       break;
    case act_specifyunitproduction: unitProductionLimitation();
       break;
+   case act_pasteFromClipboard: if ( !getactfield()->getContainer() ) {
+                                   clipBoard.place( MapCoordinate(getxpos(), getypos() ));
+                                   mapsaved = false;
+                                   displaymap();
+                                }
+      break;
+   case act_copyToClipboard: if ( getactfield()->vehicle ) {
+                                clipBoard.clear();
+                                clipBoard.addUnit( getactfield()->vehicle );
+                             } else
+                                if ( getactfield()->building ) {
+                                   clipBoard.clear();
+                                   clipBoard.addBuilding( getactfield()->building );
+                                }
+      break;
+   case act_cutToClipboard: if ( getactfield()->vehicle ) {
+                                clipBoard.clear();
+                                clipBoard.addUnit( getactfield()->vehicle );
+                                execaction ( act_deleteunit );
+                                mapsaved = false;
+                             } else
+                                if ( getactfield()->building ) {
+                                   clipBoard.clear();
+                                   clipBoard.addBuilding( getactfield()->building );
+                                   execaction ( act_deletebuilding );
+                                   mapsaved = false;
+                                }
+      break;
+   case act_saveClipboard:  saveClipboard();
+      break;
+
+   case act_readClipBoard:  readClipboard();
+      break;
+
     }
 }
 

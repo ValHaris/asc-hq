@@ -1,6 +1,9 @@
-//     $Id: edmisc.h,v 1.27 2002-11-01 20:44:53 mbickel Exp $
+//     $Id: edmisc.h,v 1.28 2003-03-20 10:08:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2002/11/01 20:44:53  mbickel
+//      Added function to specify which units can be build by other units
+//
 //     Revision 1.26  2002/10/09 16:58:46  mbickel
 //      Fixed to GrafikSet loading
 //      New item filter for mapeditor
@@ -386,5 +389,25 @@ extern void resourceComparison ( );
 
 //! the function to edit the vehicle type that are allowed to be build by units
 extern void unitProductionLimitation();
+
+class ClipBoard {
+      tmemorystreambuf buf;
+      enum Type { ClipVehicle, ClipBuilding };
+      int objectNum; 
+   public:
+      ClipBoard();
+      void clear();
+      void addUnit ( pvehicle unit );
+      void addBuilding ( pbuilding bld );
+      void place ( const MapCoordinate& pos );
+
+      void write( tnstream& stream );
+      void read( tnstream& stream );
+};
+
+extern ClipBoard clipBoard;
+
+extern void saveClipboard();
+extern void readClipboard();
 
 #endif

@@ -1,6 +1,9 @@
-//     $Id: edglobal.h,v 1.13 2002-11-01 20:44:53 mbickel Exp $
+//     $Id: edglobal.h,v 1.14 2003-03-20 10:08:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2002/11/01 20:44:53  mbickel
+//      Added function to specify which units can be build by other units
+//
 //     Revision 1.12  2002/03/17 21:25:18  mbickel
 //      Fixed: View unit movement revealed the reaction fire status of enemy units
 //      Mapeditor: new function "resource comparison"
@@ -88,7 +91,7 @@ extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 77;
+const int execactionscount = 82;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -169,6 +172,11 @@ enum tuseractions {
      act_transformMap,
      act_editArchivalInformation,
      act_displayResourceComparison,
-     act_specifyunitproduction };
+     act_specifyunitproduction,
+     act_pasteFromClipboard,
+     act_copyToClipboard,
+     act_cutToClipboard,
+     act_saveClipboard,
+     act_readClipBoard };
 
 extern void         execaction(int code);

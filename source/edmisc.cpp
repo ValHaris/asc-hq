@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.95 2003-03-14 17:35:57 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.96 2003-03-20 10:08:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.95  2003/03/14 17:35:57  mbickel
+//      Fixed AI errors
+//
 //     Revision 1.94  2003/02/19 19:47:25  mbickel
 //      Completely rewrote Pathfinding code
 //      Wind not different any more on different levels of height
@@ -429,10 +432,12 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    along with this program; see the file COPYING. If not, write to the
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
 */
+
+// #include <QClipbrd.hpp>
 
 #include <string>
 #include <iostream>
@@ -702,6 +707,7 @@ int leftmousebox(void)
    tmb.additem(act_placebuilding);
    tmb.additem(act_placeobject);
    tmb.additem(act_placemine);
+   tmb.additem(act_pasteFromClipboard);
 
    tmb.additem(act_seperator);
 
@@ -851,7 +857,7 @@ void placebodentyp(void)
          if (fillx1 > fillx2) exchg(&fillx1,&fillx2);
          if (filly1 > filly2) exchg(&filly1,&filly2);
          for (i = filly1; i <= filly2; i++) 
-            for (j = fillx1; j <= fillx2; j++) { 
+            for (j = fillx1; j <= fillx2; j++) {
                pf2 = getfield(j,i); 
                if ( pf2 ) {
                   if ( auswahl->weather[auswahlw] ) 
@@ -1076,13 +1082,16 @@ void lines(int x1,int y1,int x2,int y2)
 // õS PDSetup
 
 void         pdsetup(void)
-{ 
+{
   pd.addfield ( "~F~ile" );
    pd.addbutton ( "~N~ew mapõctrl+N" , act_newmap    );
    pd.addbutton ( "~L~oad mapõctrl+L", act_loadmap   );
    pd.addbutton ( "~S~ave mapõS",      act_savemap   );
-   pd.addbutton ( "Save map ~a~s",     act_savemapas ); 
+   pd.addbutton ( "Save map ~a~s",     act_savemapas );
    pd.addbutton ( "Edit Map ~A~rchival Information", act_editArchivalInformation );
+   pd.addbutton ( "seperator",         -1            );
+   pd.addbutton ( "Load Clipboard",     act_readClipBoard );
+   pd.addbutton ( "Save Clipboard",     act_saveClipboard );
    pd.addbutton ( "seperator",         -1            );
    pd.addbutton ( "~W~rite map to PCX-Fileõctrl+G", act_maptopcx);
     pd.addbutton ( "~I~mport BI mapõctrl-i", act_import_bi_map );
@@ -1094,15 +1103,21 @@ void         pdsetup(void)
    pd.addbutton ( "seperator", -1 );
    pd.addbutton ( "E~x~itõEsc", act_end);
 
-  pd.addfield ("~T~ools");
-   pd.addbutton ( "~V~iew mapõctrl+V",          act_viewmap );
-   pd.addbutton ( "~S~how palette",           act_showpalette );
-   pd.addbutton ( "~R~ebuild displayõctrl+R",   act_repaintdisplay );
+  pd.addfield ("~E~dit");
+   pd.addbutton ( "~C~opy õctrl+C",          act_copyToClipboard );
+   pd.addbutton ( "Cu~t~",                   act_cutToClipboard );
+   pd.addbutton ( "~P~aste õctrl+V",         act_pasteFromClipboard );
    pd.addbutton ( "seperator",                  -1 );
-   pd.addbutton ( "~C~reate ressourcesõctrl+F", act_createresources );
-   pd.addbutton ( "~M~ap generatorõG",          act_mapgenerator );
    pd.addbutton ( "Resi~z~e mapõR",             act_resizemap );
    pd.addbutton ( "set global ~w~eatherõctrl-W", act_setactweatherglobal );
+   pd.addbutton ( "~C~reate ressourcesõctrl+F", act_createresources );
+
+  pd.addfield ("~T~ools");
+   pd.addbutton ( "~V~iew mapõV",            act_viewmap );
+   // pd.addbutton ( "~S~how palette",             act_showpalette );
+   pd.addbutton ( "~R~ebuild displayõctrl+R",   act_repaintdisplay );
+   pd.addbutton ( "seperator",                  -1 );
+   pd.addbutton ( "~M~ap generatorõG",          act_mapgenerator );
    pd.addbutton ( "Sm~o~oth coasts",          act_smoothcoasts );
    pd.addbutton ( "~U~nitset transformation",    act_unitsettransformation );
    pd.addbutton ( "map ~t~ransformation",        act_transformMap );
@@ -1119,7 +1134,7 @@ void         pdsetup(void)
     pd.addbutton ( "~B~I ResourceMode",            act_bi_resource );
     pd.addbutton ( "~A~sc ResourceMode",           act_asc_resource );
     pd.addbutton ( "edit map ~P~arameters",        act_setmapparameters );
-    pd.addbutton ( "setup unit ~F~iltersõctrl+h",  act_setunitfilter );
+    pd.addbutton ( "setup item ~F~iltersõctrl+h",  act_setunitfilter );
     pd.addbutton ( "select ~G~raphic set",         act_selectgraphicset );
 
    pd.addfield ("~H~elp");
@@ -1128,7 +1143,7 @@ void         pdsetup(void)
     pd.addbutton ( "~T~errain Information",        act_terraininfo );
     pd.addbutton ( "seperator",                    -1 );
     pd.addbutton ( "~H~elp SystemõF1",             act_help );
-    pd.addbutton ( "~A~bout",                      act_about ); 
+    pd.addbutton ( "~A~bout",                      act_about );
 
     pd.init();
     pd.setshortkeys();
@@ -4005,7 +4020,7 @@ void         SelectUnitSet::init(void)
 
    tdialogbox::init();
    action = 0;
-   title = "Select Item Filters";
+   title = "Disable Items";
    x1 = 90;
    xsize = 445;
    y1 = 10;
@@ -4638,5 +4653,135 @@ void resourceComparison ( )
    displaymessage ( s, 3 );
 }
 
+
+ClipBoard::ClipBoard()
+{
+   objectNum = 0;
+//   TClipboard* cb = Clipboard();
+}
+
+void ClipBoard::clear()
+{
+   buf.clear();
+   objectNum = 0;
+}
+
+
+void ClipBoard::addUnit ( pvehicle unit )
+{
+  tmemorystream stream ( &buf, tnstream::appending );
+  stream.writeInt( ClipVehicle );
+  unit->write ( stream );
+  objectNum++;
+}
+
+void ClipBoard::addBuilding ( pbuilding bld )
+{
+  tmemorystream stream ( &buf, tnstream::appending );
+  stream.writeInt( ClipBuilding );
+  bld->write ( stream );
+  objectNum++;
+}
+
+
+void ClipBoard::place ( const MapCoordinate& pos )
+{
+  if ( !objectNum )
+     return;
+
+  tmemorystream stream ( &buf, tnstream::reading );
+  Type type = stream.readInt();
+  if ( type == ClipVehicle ) {
+     Vehicle* veh = Vehicle::newFromStream( actmap, stream );
+     pfield fld = actmap->getField ( pos );
+
+     if ( !fieldAccessible ( fld, veh ) && !actmap->getgameparameter( cgp_movefrominvalidfields) ) {
+        delete veh;
+        return;
+     }
+
+     if ( fld->vehicle )
+        delete fld->vehicle;
+     fld->vehicle = veh;
+     veh->setnewposition( pos.x, pos.y );
+  }
+  if ( type == ClipBuilding ) {
+     Building* bld = Building::newFromStream ( actmap, stream );
+     pfield fld = actmap->getField ( pos );
+
+     for ( int x = 0; x < 4; x++ )
+        for ( int y = 0; y < 6; y++ )
+           if ( bld->typ->getpicture ( BuildingType::LocalCoordinate( x , y ) )) {
+              pfield field = actmap->getField( bld->typ->getFieldCoordinate( pos, BuildingType::LocalCoordinate( x, y) ));
+              if ( !field ) {
+                 delete bld;
+                 displaymessage("building does not fit here", 1 );
+                 return;
+              }
+
+              /*
+              if ( !bld->typ->terrainaccess.accessible ( field->bdt ) ) {
+                 delete bld;
+                 displaymessage("building does can not be build here", 1 );
+                 return;
+              }
+              */
+
+
+              if ( field->vehicle ) {
+                 delete field->vehicle;
+                 field->vehicle = NULL;
+              }
+              if ( field->building ) {
+                 delete field->building;
+                 field->building = NULL;
+              }
+           }
+
+
+     bld->chainbuildingtofield( pos );
+  }
+}
+
+static int clipboardVersion = 1;
+
+void ClipBoard::write( tnstream& stream )
+{
+   stream.writeInt( clipboardVersion );
+   stream.writeInt( objectNum );
+   buf.writetostream ( &stream );
+}
+
+void ClipBoard::read( tnstream& stream )
+{
+   stream.readInt(); // Version
+   objectNum = stream.readInt();
+   buf.readfromstream ( &stream );
+}
+
+ClipBoard clipBoard;
+
+
+const char* clipboardFileExtension = "*.ascclipboard";
+
+void readClipboard()
+{
+   ASCString filename;
+   fileselectsvga(clipboardFileExtension, filename, true);
+   if ( !filename.empty() ) {
+      tnfilestream stream ( filename, tnstream::reading );
+      clipBoard.read( stream );
+   }
+}
+
+void saveClipboard()
+{
+   ASCString filename;
+   fileselectsvga(clipboardFileExtension, filename, false);
+   if ( !filename.empty() ) {
+      tnfilestream stream ( filename, tnstream::writing );
+      clipBoard.write( stream );
+   }
+}
 
 

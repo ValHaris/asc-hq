@@ -99,15 +99,16 @@
 #pos10# h  #pos70#: Select unit/terrain from cursor position
 #pos10# l  #pos70#: Show pallette 
 #pos10# m  #pos70#: View/Change minestrength
-#pos10# p  #pos70#: View/Change production
+#pos10# p  #pos70#: Edit vehicle/building properties
 #pos10# s  #pos70#: Save map
-#pos10# v  #pos70#: View/Change values
+#pos10# v  #pos70#: View map
 #pos10# x  #pos70#: Go to opposite x position
 #pos10# y  #pos70#: Go to opposite y position
-#pos10# y  #pos70#: Set zoom level
+#pos10# z  #pos70#: Set zoom level
 #pos10# Entf  #pos70#: Erase last selected thing
 #pos10# ctrl+A  #pos70#: Alliances
 #pos10# ctrl+B  #pos70#: Toggle resource view
+#pos10# ctrl+C  #pos70#: Copy to Clipboard
 #pos10# ctrl+D  #pos70#: Change direction
 #pos10# ctrl+E  #pos70#: Toggle Resourcemode
 #pos10# ctrl+F  #pos70#: Fill with resources
@@ -117,9 +118,10 @@
 #pos10# ctrl+M  #pos70#: Change map values
 #pos10# ctrl+N  #pos70#: New map
 #pos10# ctrl+O  #pos70#: Polygon mode
+#pos10# ctrl+P  #pos70#: View/Change a building's production
 #pos10# ctrl+R  #pos70#: Repaint display
 #pos10# ctrl+U  #pos70#: View army-statistics
-#pos10# ctrl+V  #pos70#: View map
+#pos10# ctrl+V  #pos70#: Paste from clipboard
 #pos10# ctrl+W  #pos70#: Set selected weather to whole map
 #pos10# Esc  #pos70#: Exit
 

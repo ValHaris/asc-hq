@@ -356,7 +356,7 @@ int main(int argc, char *argv[] )
             printMainLine ( generalPage, "Radar Jamming", ft->jamming );
             printMainLine ( generalPage, "Production Cost Material", ft->productionCost.material );
             printMainLine ( generalPage, "Production Cost energy", ft->productionCost.energy );
-            printMainLine ( generalPage, "Unit can attack after moving", ft->wait ? "yes": "no" );
+            printMainLine ( generalPage, "Unit can attack after moving", ft->wait ? "no": "yes" );
             printMainLine ( generalPage, "Unit can move after attacking", ft->functions & cf_moveafterattack ? "yes": "no" );
             printMainLine ( generalPage, "Armor", ft->armor );
 

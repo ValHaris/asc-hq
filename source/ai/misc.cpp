@@ -166,10 +166,34 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
    x2 = min(veh->xpos + veh->tank.fuel / veh->typ->fuelConsumption, actmap->xsize );
    y2 = min(veh->ypos + veh->tank.fuel / veh->typ->fuelConsumption, actmap->ysize );
 
+   for ( AStar3D::Container::iterator i = ast->visited.begin(); i != ast->visited.end(); i++ ) {
+      int dist = int(i->gval );
+      if ( i->h.getNumericalHeight() == -1 ) {
+          pfield fld = getfield( i->h.x, i->h.y );
+          if ( fld->building && fld->building->color == veh->color )
+             reachableBuildings[ dist ] = fld->building;
+      }
+          // aircraft carriers should be supported too....
+          // external loading of buildings too....
+          // turrets too .....
+
+
+       // let's check for landing
+       if ((veh->height > chfahrend) && (i->h.getNumericalHeight() == chfahrend) ) {
+          // we don't want to land in hostile territory
+          FieldInformation& fi = ai.getFieldInformation ( i->h.x, i->h.y );
+          if ( fi.control == -1 || getdiplomaticstatus2 ( fi.control * 8, ai.getPlayerNum()*8 ) == capeace )
+              landingPositions[dist] = i->h;
+       }
+   }
+
+
+   /*
    for ( int x = x1; x < x2; x++ )
       for ( int y = y1; y < y2; y++ )
          for ( int h = 0; h < 8; h++ )
             if ( veh->typ->height & ( 1 << h)) {
+
                 pfield fld = getfield( x,y );
                 const AStar3D::Node* node = ast->fieldVisited( MapCoordinate3D( x,y, 1 << h));
                 if ( node ) {
@@ -191,7 +215,7 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
                    }
                 }
             }
-
+            */
 
    if ( buildingRequired ) {
       for ( ReachableBuildings::iterator rb = reachableBuildings.begin(); rb != reachableBuildings.end(); rb++  ) {

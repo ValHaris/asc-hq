@@ -29,8 +29,16 @@
       ..\..\..\ai\ai.lib ..\..\..\libs\bzlib\win\bzlib.lib 
       ..\..\..\libs\jpeg-6b\libjpeg.lib ..\..\..\libs\sdlmm\SDLmm.lib 
       ..\..\..\libs\triangul\win32\triangulation.lib"/>
-    <LIBRARIES value="vcl.lib rtl.lib"/>
-    <SPARELIBS value="rtl.lib vcl.lib"/>
+    <LIBRARIES value="bcb2kaxserver.lib indy.lib dbxcds.lib dclocx.lib soaprtl.lib bcbie.lib 
+      nmfast.lib dbexpress.lib inetdbxpress.lib inetdb.lib inetdbbde.lib 
+      inet.lib xmlrtl.lib visualdbclx.lib ibxpress.lib teeqr.lib tee.lib 
+      teedb.lib teeui.lib bdecds.lib cds.lib dsnap.lib vcldbx.lib bdertl.lib 
+      qrpt.lib adortl.lib dbrtl.lib vcldb.lib bcbsmp.lib vcl.lib rtl.lib"/>
+    <SPARELIBS value="rtl.lib vcl.lib bcbsmp.lib vcldb.lib dbrtl.lib adortl.lib qrpt.lib 
+      bdertl.lib vcldbx.lib dsnap.lib cds.lib bdecds.lib teeui.lib teedb.lib 
+      tee.lib teeqr.lib ibxpress.lib visualdbclx.lib xmlrtl.lib inet.lib 
+      inetdbbde.lib inetdb.lib inetdbxpress.lib dbexpress.lib nmfast.lib 
+      bcbie.lib soaprtl.lib dclocx.lib dbxcds.lib indy.lib bcb2kaxserver.lib"/>
     <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi bcbsmp.bpi dclocx.bpi"/>
     <PATHCPP value=".;..\..\..\..\..\sdl\src\main\win32;..\..\..;..\..\..\LIBS\getopt;..\..\..\sdl"/>
     <PATHPAS value=".;"/>
@@ -42,8 +50,8 @@
     <USERDEFINES value="karteneditor;HEXAGON;FREEMAPZOOM;_WIN32_;WIN32;_SDL_;_NOASM_;NEWKEYB;_DEBUG"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="mapeditor.bpf"/>
-    <INCLUDEPATH value="..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include"/>
-    <LIBPATH value="..\..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\..\..\..\..\..\Borland\CBuilder6\Source\Clx;..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include"/>
+    <LIBPATH value="..\..\..\..\..\..\Borland\CBuilder6\Source\Clx;..\..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-pck -w-par -w-8027 -w-8026 -w-csu"/>
     <OTHERFILES value=""/>
   </MACROS>

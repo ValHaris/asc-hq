@@ -52,7 +52,7 @@
     <OTHERFILES value=""/>
   </MACROS>
   <OPTIONS>
-    <CFLAG1 value="-Od -Q -Vx -Ve -X- -r- -a1 -5 -b -k -y -v -vi- -tW -tWM -c -K"/>
+    <CFLAG1 value="-O2 -Q -Vx -Ve -X- -r- -a1 -5 -b -k -y -v -vi- -tW -tWM -c -K"/>
     <PFLAGS value="-N2obj -N0obj -$Y+ -$W -$O- -$A8 -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zi"/>
@@ -156,6 +156,8 @@
   <FILES>
     <FILE type="override" value="..\..\astar2.cpp" translator="Auto">
       <CFLAG1 value=" -vi"/>
+    </FILE>
+    <FILE type="override" value="..\..\basestrm.cpp" translator="Auto">
     </FILE>
   </FILES>
 

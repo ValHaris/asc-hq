@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: basestrm.h,v 1.52 2002-10-02 20:21:00 mbickel Exp $
+//     $Id: basestrm.h,v 1.53 2003-03-20 10:08:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2002/10/02 20:21:00  mbickel
+//      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
+//
 //     Revision 1.51  2002/02/14 20:58:13  mbickel
 //      Started integration of paragui
 //
@@ -117,8 +120,8 @@
     Boston, MA  02111-1307  USA
 */
 
-#ifndef basestream_h
-#define basestream_h
+#ifndef basestreamH
+#define basestreamH
 
 
 #include <string>
@@ -286,16 +289,19 @@ class MemoryStreamCopy : public tnstream {
   #endif
 
 class tmemorystreambuf {
-        public:
+           friend class tmemorystream;
+
            bool initialized;
 
            int used;
            int allocated;
            int dummy[10];
            char* buf;
+        public:
            tmemorystreambuf ( void );
            void writetostream ( pnstream stream );
            void readfromstream ( pnstream stram );
+           void clear() { used= 0; };
            ~tmemorystreambuf ( );
       };
 

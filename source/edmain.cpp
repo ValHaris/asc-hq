@@ -2,9 +2,12 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.62 2003-01-12 19:37:18 mbickel Exp $
+//     $Id: edmain.cpp,v 1.63 2003-03-20 10:08:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.62  2003/01/12 19:37:18  mbickel
+//      Rewrote resource production
+//
 //     Revision 1.61  2002/10/12 17:28:03  mbickel
 //      Fixed "enemy unit loaded" bug.
 //      Changed map format
@@ -643,6 +646,8 @@ void         editor(void)
                      break;
                   case ct_b + ct_stp:  execaction(act_toggleresourcemode);
                      break;
+                  case ct_c + ct_stp:  execaction(act_copyToClipboard);
+                     break;
                   case ct_d + ct_stp : execaction(act_changeglobaldir);
                      break;
                   case ct_f + ct_stp: execaction(act_createresources);
@@ -661,11 +666,13 @@ void         editor(void)
                      break;
                   case ct_o + ct_stp: execaction(act_polymode);
                      break;
+                  case ct_p + ct_stp: execaction(act_changeproduction);
+                     break;
                   case ct_r + ct_stp: execaction(act_repaintdisplay);
                      break;
                   case ct_u + ct_stp : execaction(act_unitinfo);
                      break;
-                  case ct_v + ct_stp: execaction(act_viewmap);
+                  case ct_v + ct_stp: execaction(act_pasteFromClipboard);
                      break;
                   case ct_w + ct_stp : execaction(act_setactweatherglobal);
                      break;
@@ -697,13 +704,13 @@ void         editor(void)
                      break;
                   case ct_o: execaction(act_changeplayers);
                      break;
-                  case ct_p: execaction(act_changeproduction);
+                  case ct_p: execaction(act_changeunitvals);
                      break;
                   case ct_r: execaction(act_resizemap);
                      break;
                   case ct_s : execaction(act_savemap);
                      break;
-                  case ct_v:   execaction(act_changeunitvals); 
+                  case ct_v:   execaction(act_viewmap);
                      break;
                   case ct_x:   execaction(act_mirrorcursorx);
                      break;

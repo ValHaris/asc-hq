@@ -604,7 +604,7 @@ IncreaseVehicleHeight :: IncreaseVehicleHeight ( MapDisplayInterface* md, PPendi
 int IncreaseVehicleHeight :: available ( pvehicle veh ) const
 {
    if ( veh )
-      if ( veh->getMovement() )
+      // if ( veh->getMovement() )
          if ( veh->getHeightChange( +1 ))
             return 1;
    return 0;
@@ -628,7 +628,7 @@ DecreaseVehicleHeight :: DecreaseVehicleHeight ( MapDisplayInterface* md, PPendi
 int DecreaseVehicleHeight :: available ( pvehicle veh ) const
 {
    if ( veh )
-      if ( veh->getMovement() )
+      // if ( veh->getMovement() )
          if ( veh->getHeightChange( -1 ))
             return 1;
    return 0;
@@ -674,9 +674,9 @@ VehicleAttack :: VehicleAttack ( MapDisplayInterface* md, PPendingVehicleActions
 
 int VehicleAttack :: available ( pvehicle eht ) const
 {
-   if (eht != NULL) 
+   if (eht != NULL)
       if (eht->attacked == false)
-         if ( eht->weapexist() ) 
+         if ( eht->weapexist() )
             if ( eht->reactionfire.getStatus() == Vehicle::ReactionFire::off ) {
                if (eht->typ->wait == false  ||  !eht->hasMoved() )
                   return 1;
