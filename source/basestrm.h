@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: basestrm.h,v 1.55 2003-06-01 15:03:16 mbickel Exp $
+//     $Id: basestrm.h,v 1.56 2003-11-16 21:46:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2003/06/01 15:03:16  mbickel
+//      Some updates to the build system for FreeBSD
+//
 //     Revision 1.54  2003/05/01 18:02:22  mbickel
 //      Fixed: no movement decrease for cargo when transport moved
 //      Fixed: reactionfire not working when descending into range
@@ -126,8 +129,8 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    along with this program; see the file COPYING. If not, write to the
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
 */
 
@@ -146,6 +149,9 @@
 #include "lzw.h"
 #include "errors.h"
 #include "tpascal.inc"
+
+#include "simplestream.h"
+
 
 #ifdef USE_SYSTEM_BZ2
  #include <bzlib.h>
@@ -191,13 +197,6 @@ class tcompressionerror : public ASCmsgException {
      };
 };
 
-class tinternalerror: public ASCexception {
-   int linenum;
-   const char* sourcefilename;
-  public:
-   tinternalerror ( const char* filename, int l );
-};
-
 class toutofmem : public ASCexception {
   public:
    int required;
@@ -207,24 +206,6 @@ class toutofmem : public ASCexception {
 class tbufferoverflow : public ASCexception {
 };
 
-class tfileerror : public ASCexception {
-   ASCString _filename;
-  public:
-   tfileerror ( const ASCString& fileName ) ;
-   const ASCString& getFileName() const { return _filename; };
-   tfileerror ( void ) {};
-};
-
-class tinvalidmode : public tfileerror {
-  public:
-   int orgmode, requestmode;
-   tinvalidmode ( const ASCString& fileName, tnstream::IOMode org_mode, tnstream::IOMode requested_mode ) ;
-};
-
-class treadafterend : public tfileerror {
-  public:
-   treadafterend ( const ASCString& fileName );
-};
 
 class tinvalidversion : public tfileerror {
    public:
@@ -330,32 +311,6 @@ class tmemorystream : public tnstream {
            virtual void writedata ( const void* nbuf, int size );
            virtual int  readdata  ( void* nbuf, int size, bool excpt = true );
            int dataavail ( void );
-      };
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-class tnbufstream  : public tnstream {
-           char  minbuf;
-           int datalen;
-
-       protected:
-           char* zeiger;
-           IOMode  _mode;
-           int   actmempos;
-           int   memsize;
-           int   datasize;
-
-           virtual void readbuffer( void ) = 0;
-           virtual void writebuffer( void ) = 0;
-           virtual void close( void ) {};
-       public:
-           tnbufstream ( );
-           virtual void writedata ( const void* buf, int size );
-           virtual int  readdata  ( void* buf, int size, bool excpt = true  );
-
-           virtual ~tnbufstream ( );
-
       };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -506,27 +461,6 @@ class libbzip_decompression {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-class tn_file_buf_stream : public tnbufstream {
-            FILE* fp;
-            int actfilepos;
-
-        protected:
-            void readbuffer( void );
-            void writebuffer( void );
-
-
-        public:
-            tn_file_buf_stream ( const ASCString& _fileName, IOMode mode );
-            virtual void seek ( int newpos );
-            virtual int getstreamsize ( void );
-            virtual int getSize ( void ) { return getstreamsize(); };
-            virtual time_t get_time ( void );
-            virtual ~tn_file_buf_stream  ( );
-
-  };
 
 
 

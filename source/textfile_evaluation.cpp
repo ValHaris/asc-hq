@@ -16,18 +16,18 @@
  ***************************************************************************/
 
 #include <vector>
-#include <SDL_image.h>
 #include <algorithm>
+#include "global.h"
 #include "ascstring.h"
-#include "basegfx.h"
-#include "typen.h"
-#include "terraintype.h"
-#include "objecttype.h"
 #include "textfileparser.h"
 #include "textfile_evaluation.h"
-#include "dlg_box.h"
 #include "stringtokenizer.h"
-#include "loadpcx.h"
+#ifdef ParserLoadImages
+ #include <SDL_image.h>
+ #include "loadpcx.h"
+ #include "basegfx.h"
+ #include "typen.h"
+#endif
 
 
 const char* fileNameDelimitter = " =*/+<>,";
@@ -410,6 +410,7 @@ void PropertyContainer::addNamedInteger ( const ASCString& name, int& property, 
 }
 
 
+#ifdef ParserLoadImages
 
 void PropertyContainer::addImageArray ( const ASCString& name, vector<void*> &property, const ASCString& filename )
 {
@@ -424,14 +425,14 @@ void PropertyContainer::addImage ( const ASCString& name, void* &property, const
    setup ( ip, name );
 }
 
-
+#endif
 
 void PropertyContainer::warning ( const ASCString& errmsg )
 {
    #ifdef converter
    fatalError ( errmsg );
    #else
-   displaymessage( "file " + textPropertyGroup->fileName+ ": " + errmsg, 1 );
+   ::warning( "file " + textPropertyGroup->fileName+ ": " + errmsg );
    #endif
 }
 
@@ -465,7 +466,7 @@ PropertyReadingContainer :: ~PropertyReadingContainer (  )
       error ( "PropertyWritingContainer :: ~PropertyWritingContainer - still brackets open" );
 }
 
-PropertyWritingContainer :: PropertyWritingContainer ( const ASCString& baseName, const ASCString& filename_ ) : PropertyContainer ( baseName, NULL, false ), stream ( filename_, tnstream::writing )
+PropertyWritingContainer :: PropertyWritingContainer ( const ASCString& baseName, tnstream& stream ) : PropertyContainer ( baseName, NULL, false ), stream ( stream )
 {
    textPropertyGroup = new TextPropertyGroup();
    textPropertyGroup->fileName = stream.getDeviceName();
@@ -959,6 +960,7 @@ ASCString NamedIntProperty::toString() const
    return tags[property];
 }
 
+#ifdef ParserLoadImages
 void* getFieldMask()
 {
    static void* mask = NULL;
@@ -1112,8 +1114,6 @@ ASCString ImageArrayProperty::toString() const
    return valueToWrite;
 }
 
-
-
-
+#endif
 
 

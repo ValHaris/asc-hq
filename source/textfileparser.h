@@ -24,9 +24,11 @@
 #define textfileparserH
 
 #include <vector>
+#include <map>
+#include "basictypes.h"
 #include "ascstring.h"
 #include "errors.h"
-#include "typen.h"
+#include "basestreaminterface.h"
 
 
 class ParsingError : public ASCmsgException {

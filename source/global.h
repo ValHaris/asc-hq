@@ -38,5 +38,6 @@
   #endif
  #endif
 
+#define ParserLoadImages 
 
 #endif

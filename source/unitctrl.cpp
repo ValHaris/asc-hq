@@ -791,6 +791,10 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
 
       int ad2 = battle->av.damage;
       int dd2 = battle->dv.damage;
+
+      if ( !(vehicle->typ->functions & cf_moveafterattack) )
+         vehicle->setMovement ( 0 );
+
       battle->setresult ();
 
       logtoreplayinfo ( rpl_attack, xp1, yp1, x, y, ad1, ad2, dd1, dd2, weapnum );

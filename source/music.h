@@ -12,7 +12,7 @@
 #include "global.h"
 #include "sdl/sound.h"
 #include "ascstring.h"
-#include "textfileparser.h"
+#include "textfile_evaluation.h"
 
 
 /** A List containing several tracks of music.

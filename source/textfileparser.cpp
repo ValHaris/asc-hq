@@ -19,15 +19,9 @@
 #include <SDL_image.h>
 #include <algorithm>
 #include "ascstring.h"
-#include "sgstream.h"
-#include "basegfx.h"
-#include "typen.h"
-#include "terraintype.h"
-#include "objecttype.h"
+#include "basicmessages.h"
 #include "textfileparser.h"
-#include "dlg_box.h"
 #include "stringtokenizer.h"
-#include "loadpcx.h"
 #include "textfile_evaluation.h"
 
 

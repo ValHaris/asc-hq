@@ -147,7 +147,7 @@ void Vehicle :: init ( void )
    damage = 0;
 
    experience = 0;
-   attacked = 0;
+   attacked = false;
 
    if ( typ ) {
       height = 1 << log2( typ->height );
@@ -511,8 +511,8 @@ bool Vehicle::movementLeft() const
 
 bool Vehicle :: canMove ( void ) const
 {
-   if ( attacked && !(typ->functions & cf_moveafterattack))
-      return false; 
+   // if ( attacked && !(typ->functions & cf_moveafterattack))
+   //   return false;
 
    if ( movementLeft() && reactionfire.canMove() ) {
       pfield fld = gamemap->getField ( getPosition() );

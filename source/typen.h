@@ -1,6 +1,11 @@
-//     $Id: typen.h,v 1.137 2003-11-11 20:03:17 mbickel Exp $
+//     $Id: typen.h,v 1.138 2003-11-16 21:46:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.137  2003/11/11 20:03:17  mbickel
+//      No hemming for aircraft any more
+//      new vehicle type flag: move during ReactionFire
+//      movemalus 11 for all submerged units
+//
 //     Revision 1.136  2003/07/06 13:16:22  mbickel
 //      Updated maps
 //
@@ -338,6 +343,8 @@
  #include <limits.h>
 #endif
 
+#include "basictypes.h"
+
 // #include <values.h>
 
 #include "pointers.h"
@@ -389,21 +396,6 @@ const int maxbuildingpicnum  = 8;
 
 //! The maximum experience value of a #Vehicle
 const int maxunitexperience = 23;
-
-
-class IntRange {
-     public:
-           int from;
-           int to;
-           IntRange(): from(-1), to(-1) {};
-           IntRange( int from_, int to_ ): from(from_), to(to_) {};
-};
-
-
-typedef bitset<64> BitSet;
-
-
-
 
 
 //! The number of different resources that ASC uses
@@ -495,26 +487,6 @@ struct GameTime {
   int abstime;
 };
 
-
-
-//! A vector that stores pointers, but deletes the objects (and not only the pointers) on destruction. The erase method does NOT delete the objects !
-template <class T> class PointerVector : public std::vector<T> {
-   public:
-     ~PointerVector() {
-        for ( typename std::vector<T>::iterator it=begin(); it!=end(); it++ )
-            delete *it;
-     };
-};
-
-
-//! A list that stores pointers, but deletes the objects (and not only the pointers) on destruction. The erase method does NOT delete the objects !
-template <class T> class PointerList : public std::list<T> {
-   public:
-     ~PointerList() {
-        for ( typename std::list<T>::iterator it=begin(); it!=end(); it++ )
-            delete *it;
-     };
-};
 
 
 

@@ -26,7 +26,6 @@
 #include <vector>
 #include "ascstring.h"
 #include "errors.h"
-#include "typen.h"
 #include "textfileparser.h"
 
 
@@ -87,8 +86,10 @@ class PropertyContainer {
          void addTagInteger ( const ASCString& name, int& property, int tagNum, const char** tags, int defaultValue, bool inverted = false );
          void addNamedInteger ( const ASCString& name, int& property, int tagNum, const char** tags );
          void addNamedInteger ( const ASCString& name, int& property, int tagNum, const char** tags, int defaultValue );
+        #ifdef ParserLoadImages
          void addImage ( const ASCString& name, void* &property, const ASCString& fileName );
          void addImageArray ( const ASCString& name, vector<void*> &property, const ASCString& fileName );
+        #endif
          void addBool  ( const ASCString& name, bool &property );
          void addBool  ( const ASCString& name, bool &property, bool defaultValue  );
 
@@ -119,12 +120,12 @@ class PropertyReadingContainer : public PropertyContainer {
 };
 
 class PropertyWritingContainer : public PropertyContainer {
-         tn_file_buf_stream stream;
+         tnstream& stream;
    protected:
          virtual ASCString getLocation() { return stream.getLocation(); };
    public:
          virtual ASCString getFileName (  ) { return stream.getDeviceName(); };
-         PropertyWritingContainer ( const ASCString& baseName, const ASCString& filename_ );
+         PropertyWritingContainer ( const ASCString& baseName, tnstream& stream );
          ~PropertyWritingContainer();
 
          void writeProperty ( Property& p, const ASCString& value );
@@ -132,6 +133,8 @@ class PropertyWritingContainer : public PropertyContainer {
          virtual void closeBracket();
 };
 
+#ifdef ParserLoadImages
 extern void* getFieldMask();
+#endif
 
 #endif
