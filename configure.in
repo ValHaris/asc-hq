@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl AC_REVISION($Revision: 1.69 $)dnl
+dnl AC_REVISION($Revision: 1.70 $)dnl
 dnl AM_MAINTAINER_MODE
 AC_INIT(source/typen.h)
 
@@ -9,6 +9,7 @@ asc_version=`cat source/strtmesg.cpp | awk -F\" '/asc_release=/{print \$2}' | se
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE(asc,$asc_version)
+AM_MAINTAINER_MODE
 
 AC_DISABLE_SHARED
 AC_PROG_LIBTOOL
