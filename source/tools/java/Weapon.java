@@ -1,6 +1,9 @@
-//     $Id: Weapon.java,v 1.2 2000-10-13 13:15:48 schelli Exp $
+//     $Id: Weapon.java,v 1.3 2000-10-17 17:28:28 schelli Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/10/13 13:15:48  schelli
+//     Load&Save routines finished
+//
 
 /*
  * tWeapon.java

@@ -1,8 +1,15 @@
-//     $Id: UnitEditor.java,v 1.3 2000-10-14 22:40:02 schelli Exp $
+//     $Id: UnitEditor.java,v 1.4 2000-10-17 17:28:27 schelli Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/10/14 22:40:02  schelli
+//     AutoRepairRate added
+//     version will be updated to actual version when saved
+//     "vehicle must category" added
+//     Weapon pannel restructured + can.NOT.hit added
+//     data-arrays updated
+//
 //     Revision 1.2  2000/10/13 13:15:47  schelli
-//     *** empty log message ***
+//     Load&Save routines finished
 //
 
 /*
@@ -70,7 +77,7 @@ public class UnitEditor extends javax.swing.JFrame {
     private javax.swing.JCheckBox loadOnHeightTableCheckBox[];
     private javax.swing.JCheckBox loadAbleHeightTableCheckBox[];
     private javax.swing.JCheckBox loadNotHeightTableCheckBox[];
-    private javax.swing.JCheckBox mustCategoryCheckBox[];
+    private javax.swing.JCheckBox loadMustCategoryCheckBox[];
     //Functions-Table
     private MakeCheckIntRangeField jIntFieldResourceRadius;
     private MakeCheckIntRangeField jIntFieldAutoRepairRate;
@@ -99,8 +106,17 @@ public class UnitEditor extends javax.swing.JFrame {
     private MakeCheckIntRangeField jIntFieldMinDistanceStrength;
     private MakeCheckIntRangeField jIntFieldMaxDistanceStrength;
     private MakeCheckIntRangeField jIntFieldAmmo;
-    private javax.swing.JTextField jTxtFieldweaponEfficiencies[];
+    private javax.swing.JTextField jTextFieldEfficiencies[];
     private MakeCheckIntRangeField jIntFieldEfficiencies[];
+    //TerrainAccess-Table
+    private javax.swing.JLabel jLabelAccessAbleHeightTable;
+    private javax.swing.JLabel jLabelaccessNecessaryHeightTable;
+    private javax.swing.JLabel jLabelAccessNoneHeightTable;
+    private javax.swing.JLabel jLabelAccessDiesHeightTable;
+    private javax.swing.JCheckBox accessAbleHeightTableCheckBox[];
+    private javax.swing.JCheckBox accessNecessaryHeightTableTableCheckBox[];
+    private javax.swing.JCheckBox accessNoneHeightTableCheckBox[];
+    private javax.swing.JCheckBox accessDiesHeightTableCheckBox[];
 
 
 
@@ -114,13 +130,14 @@ public class UnitEditor extends javax.swing.JFrame {
         if (unitPath.length() == 0) return;
         exitAction = exitAct;
         initComponents ();
-        setTitle(unitFileName);
 
         if ( unitPath.endsWith("\\") == false ) unitPath = unitPath.concat("\\");
         String unitAbsoluteFileName = unitPath.concat(unitFileName);
         tUnit = new Unit(unitAbsoluteFileName);
         if (action == 0 ) tUnit.makeNew();
         else tUnit.load();
+
+        setTitle(unitFileName+" - "+tUnit.name+" - "+tUnit.description);
 
         errMsg = new ErrorMessage(jLabelErrorMessage);
         //*Int-Field-Settings*
@@ -292,18 +309,18 @@ public class UnitEditor extends javax.swing.JFrame {
             if ( (tUnit.loadcapabilitynot & (1 << i)) > 0 )
             loadNotHeightTableCheckBox[i].setSelected(true);
         }
-        
+
         jPanelMustCategory.setLayout (new java.awt.GridLayout (cMovemaliType.length, 1));
-        mustCategoryCheckBox = new javax.swing.JCheckBox[cMovemaliType.length];
-        
+        loadMustCategoryCheckBox = new javax.swing.JCheckBox[cMovemaliType.length];
+
         for (int i=0; i < cMovemaliType.length;i++) {
-            mustCategoryCheckBox[i] = new javax.swing.JCheckBox();
-            mustCategoryCheckBox[i].setText (cMovemaliType[i]);
-            
-            jPanelMustCategory.add (mustCategoryCheckBox[i]);
-            
+            loadMustCategoryCheckBox[i] = new javax.swing.JCheckBox();
+            loadMustCategoryCheckBox[i].setText (cMovemaliType[i]);
+
+            jPanelMustCategory.add (loadMustCategoryCheckBox[i]);
+
             if ( (tUnit.vehicleCategoriesLoadable & (1 << i)) > 0 )
-            mustCategoryCheckBox[i].setSelected(true);            
+            loadMustCategoryCheckBox[i].setSelected(true);
         }
 
         jTextFieldMaxLoad.addActionListener (new java.awt.event.ActionListener () {
@@ -437,11 +454,6 @@ public class UnitEditor extends javax.swing.JFrame {
         showClassValues(0);
 
         //Weapon-Table
-
-        for (int i = 0; i < tUnit.weapons.count;i++)
-        jComboBoxWeapons.addItem("Weapon ".concat(new java.lang.Integer(i+1).toString()));
-        jComboBoxWeapons.setSelectedIndex(0);
-
         jPanelWeaponType.setLayout
         (new java.awt.GridLayout (cWeaponType.length, 1));
 
@@ -489,20 +501,20 @@ public class UnitEditor extends javax.swing.JFrame {
         jPanelEfficiencies.setLayout
         (new java.awt.GridLayout (13, 1));
 
-        jTxtFieldweaponEfficiencies = new javax.swing.JTextField[13];
+        jTextFieldEfficiencies = new javax.swing.JTextField[13];
         jIntFieldEfficiencies = new MakeCheckIntRangeField[13];
 
         for (int i=0; i < 13;i++) {
-            jTxtFieldweaponEfficiencies[i] = new javax.swing.JTextField();
-            jTxtFieldweaponEfficiencies[i].setBorder (new javax.swing.border
+            jTextFieldEfficiencies[i] = new javax.swing.JTextField();
+            jTextFieldEfficiencies[i].setBorder (new javax.swing.border
             .TitledBorder(new javax.swing.border.EtchedBorder(),"height "
             .concat(new java.lang.Integer(i-6).toString()).concat(" (0-100)"), 1, 2,
             new java.awt.Font ("Arial", 0, 10)));
             jIntFieldEfficiencies[i] = new MakeCheckIntRangeField
-            (jTxtFieldweaponEfficiencies[i],errMsg,0,100);
+            (jTextFieldEfficiencies[i],errMsg,0,100);
             jIntFieldEfficiencies[i].setInt(100);
 
-            jPanelEfficiencies.add (jTxtFieldweaponEfficiencies[i]);
+            jPanelEfficiencies.add (jTextFieldEfficiencies[i]);
         }
 
         jTextFieldWeaponMaxDistance.addActionListener (new java.awt.event.ActionListener () {
@@ -518,9 +530,81 @@ public class UnitEditor extends javax.swing.JFrame {
         }
         );
 
+        if (tUnit.weapons.count > 0) {
+            for (int i = 0 ; i < tUnit.weapons.count; i++)
+            jComboBoxWeapons.addItem("Weapon ".concat(new java.lang.Integer(i+1).toString()));        
+        } else {
+            jComboBoxWeapons.addItem("No weapons");        
+        }
+        setUnitWeaponComboBox();
+
         showWeaponValues(0,WEAPON_NOSAVE);
 
         weaponMaxDistanceCheck();
+        
+        jTextFieldMaxLoad.addActionListener (new java.awt.event.ActionListener () {
+            public void actionPerformed (java.awt.event.ActionEvent evt) {
+                maxLoadCheck();
+            }
+        }
+        );
+        jTextFieldMaxLoad.addFocusListener (new java.awt.event.FocusAdapter () {
+            public void focusLost (java.awt.event.FocusEvent evt) {
+                maxLoadCheck();
+            }
+        }
+        );
+
+        maxLoadCheck();
+
+
+        //TerrainAccess-Table
+        jPanelTerrainAccess.setLayout (new java.awt.GridLayout (cTerrainType.length+1, 4));
+
+        jLabelAccessAbleHeightTable = new javax.swing.JLabel ();
+        jLabelaccessNecessaryHeightTable = new javax.swing.JLabel ();
+        jLabelAccessNoneHeightTable = new javax.swing.JLabel ();
+        jLabelAccessDiesHeightTable = new javax.swing.JLabel ();
+
+        jPanelTerrainAccess.add ( jLabelAccessAbleHeightTable );
+        jPanelTerrainAccess.add ( jLabelaccessNecessaryHeightTable );
+        jPanelTerrainAccess.add ( jLabelAccessNoneHeightTable );
+        jPanelTerrainAccess.add ( jLabelAccessDiesHeightTable );
+
+        jLabelAccessAbleHeightTable.setText("Terrain unit can drive on");
+        jLabelaccessNecessaryHeightTable.setText("ALL bits are necessary to drive on");
+        jLabelAccessNoneHeightTable.setText("NONE bits are necessary to drive on");
+        jLabelAccessDiesHeightTable.setText("Unit is destroyed on");
+
+        accessAbleHeightTableCheckBox = new javax.swing.JCheckBox[cTerrainType.length];
+        accessNecessaryHeightTableTableCheckBox = new javax.swing.JCheckBox[cTerrainType.length];
+        accessNoneHeightTableCheckBox = new javax.swing.JCheckBox[cTerrainType.length];
+        accessDiesHeightTableCheckBox = new javax.swing.JCheckBox[cTerrainType.length];
+
+        for (int i=0; i < cTerrainType.length;i++) {
+            accessAbleHeightTableCheckBox[i] = new javax.swing.JCheckBox();
+            accessAbleHeightTableCheckBox[i].setText (cTerrainType[i]);
+            accessNecessaryHeightTableTableCheckBox[i] = new javax.swing.JCheckBox();
+            accessNecessaryHeightTableTableCheckBox[i].setText (cTerrainType[i]);
+            accessNoneHeightTableCheckBox[i] = new javax.swing.JCheckBox();
+            accessNoneHeightTableCheckBox[i].setText (cTerrainType[i]);
+            accessDiesHeightTableCheckBox[i] = new javax.swing.JCheckBox();
+            accessDiesHeightTableCheckBox[i].setText (cTerrainType[i]);
+
+            jPanelTerrainAccess.add (accessAbleHeightTableCheckBox[i]);
+            jPanelTerrainAccess.add (accessNecessaryHeightTableTableCheckBox[i]);
+            jPanelTerrainAccess.add (accessNoneHeightTableCheckBox[i]);
+            jPanelTerrainAccess.add (accessDiesHeightTableCheckBox[i]);
+
+            if ( (tUnit._terrain & (1 << i)) > 0 )
+            accessAbleHeightTableCheckBox[i].setSelected(true);
+            if ( (tUnit._terrainreq & (1 << i)) > 0 )
+            accessNecessaryHeightTableTableCheckBox[i].setSelected(true);
+            if ( (tUnit._terrainnot & (1 << i)) > 0 )
+            accessNoneHeightTableCheckBox[i].setSelected(true);
+            if ( (tUnit._terrainkill & (1 << i)) > 0 )
+            accessDiesHeightTableCheckBox[i].setSelected(true);
+        }
 
         initDone = 1;
 
@@ -553,7 +637,6 @@ public class UnitEditor extends javax.swing.JFrame {
         jLabelEnergyMaterialTankBorder = new javax.swing.JLabel ();
         jLabelEnergyTankWarning = new javax.swing.JLabel ();
         jButtonSave = new javax.swing.JButton ();
-        jButtonRevertToSaved = new javax.swing.JButton ();
         jLabelVersion = new javax.swing.JLabel ();
         jPanelMovement = new javax.swing.JPanel ();
         jPanelMovementTable = new javax.swing.JPanel ();
@@ -614,6 +697,8 @@ public class UnitEditor extends javax.swing.JFrame {
         jPanelInfoText = new javax.swing.JPanel ();
         jScrollPaneInfoText = new javax.swing.JScrollPane ();
         jTextPaneInfoText = new javax.swing.JTextPane ();
+        jPanelTerrainAccess = new javax.swing.JPanel ();
+        jPanel2 = new javax.swing.JPanel ();
         jLabelErrorMessage = new javax.swing.JLabel ();
         getContentPane ().setLayout (new org.netbeans.lib.awtextra.AbsoluteLayout ());
         addWindowListener (new java.awt.event.WindowAdapter () {
@@ -638,7 +723,7 @@ public class UnitEditor extends javax.swing.JFrame {
             "Name", 4, 2, new java.awt.Font ("Arial", 0, 10), java.awt.Color.black));
             jTxtFieldName.setText ("Name");
     
-            jPanelMain.add (jTxtFieldName, new org.netbeans.lib.awtextra.AbsoluteConstraints (20, 20, 470, 40));
+            jPanelMain.add (jTxtFieldName, new org.netbeans.lib.awtextra.AbsoluteConstraints (20, 20, 590, 40));
     
             jTxtFieldDescription.setBorder (new javax.swing.border.TitledBorder(
             new javax.swing.border.EtchedBorder(java.awt.Color.white, new java.awt.Color (134, 134, 134)),
@@ -749,18 +834,7 @@ public class UnitEditor extends javax.swing.JFrame {
             }
             );
     
-            jPanelMain.add (jButtonSave, new org.netbeans.lib.awtextra.AbsoluteConstraints (500, 20, 110, 40));
-    
-            jButtonRevertToSaved.setForeground (java.awt.Color.red);
-            jButtonRevertToSaved.setText ("Revert to Saved");
-            jButtonRevertToSaved.addActionListener (new java.awt.event.ActionListener () {
-                public void actionPerformed (java.awt.event.ActionEvent evt) {
-                    jButtonRevertToSavedActionPerformed (evt);
-                }
-            }
-            );
-    
-            jPanelMain.add (jButtonRevertToSaved, new org.netbeans.lib.awtextra.AbsoluteConstraints (620, 20, 150, 40));
+            jPanelMain.add (jButtonSave, new org.netbeans.lib.awtextra.AbsoluteConstraints (620, 20, 140, 40));
     
             jLabelVersion.setText ("Version ???");
             jLabelVersion.setHorizontalAlignment (javax.swing.SwingConstants.CENTER);
@@ -865,6 +939,7 @@ public class UnitEditor extends javax.swing.JFrame {
       
               jLabelAbleHeight.setText ("Unit must be able to be on that height");
               jLabelAbleHeight.setFont (new java.awt.Font ("Dialog", 0, 10));
+              jLabelAbleHeight.setHorizontalTextPosition (javax.swing.SwingConstants.LEFT);
       
               jPanelLoadTabelTitle.add (jLabelAbleHeight);
       
@@ -905,10 +980,22 @@ public class UnitEditor extends javax.swing.JFrame {
             jPanelWeapons.add (jPanelEfficiencies, new org.netbeans.lib.awtextra.AbsoluteConstraints (570, 10, 200, 470));
     
             jButtonAddWeapon.setText ("Add");
+            jButtonAddWeapon.addActionListener (new java.awt.event.ActionListener () {
+                public void actionPerformed (java.awt.event.ActionEvent evt) {
+                    jButtonAddWeaponActionPerformed (evt);
+                }
+            }
+            );
     
             jPanelWeapons.add (jButtonAddWeapon, new org.netbeans.lib.awtextra.AbsoluteConstraints (270, 10, 140, 30));
     
             jButtonRemoveWeapon.setText ("Remove");
+            jButtonRemoveWeapon.addActionListener (new java.awt.event.ActionListener () {
+                public void actionPerformed (java.awt.event.ActionEvent evt) {
+                    jButtonRemoveWeaponActionPerformed (evt);
+                }
+            }
+            );
     
             jPanelWeapons.add (jButtonRemoveWeapon, new org.netbeans.lib.awtextra.AbsoluteConstraints (430, 10, 130, 30));
     
@@ -1106,6 +1193,13 @@ public class UnitEditor extends javax.swing.JFrame {
     
           jTabbedPaneMain.addTab ("InfoText", jPanelInfoText);
   
+          jPanelTerrainAccess.setLayout (new java.awt.GridLayout (15, 4));
+  
+          jTabbedPaneMain.addTab ("TerrainAccess", jPanelTerrainAccess);
+  
+  
+          jTabbedPaneMain.addTab ("not implemented yet", jPanel2);
+  
 
         getContentPane ().add (jTabbedPaneMain, new org.netbeans.lib.awtextra.AbsoluteConstraints (0, 0, 790, 510));
 
@@ -1116,9 +1210,42 @@ public class UnitEditor extends javax.swing.JFrame {
 
     }//GEN-END:initComponents
 
-  private void jButtonRevertToSavedActionPerformed (java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRevertToSavedActionPerformed
+  private void jButtonRemoveWeaponActionPerformed (java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveWeaponActionPerformed
+    // Add your handling code here:
+    if (initDone == 1) {
+        if  (tUnit.weapons.count == 0) return;
+        int pos = jComboBoxWeapons.getSelectedIndex();
+        for (int i = pos;i < tUnit.weapons.count-1;i++) {
+            tUnit.weapons.weapon[i]=tUnit.weapons.weapon[i+1];
+        }        
+        if (tUnit.weapons.count == 1) jComboBoxWeapons.addItem("No weapons");        
+        jComboBoxWeapons.removeItemAt(tUnit.weapons.count-1); 
+        errMsg.showMessage("Weapon removed from position "+(pos+1)+" !");
+        tUnit.weapons.count--;
+        setUnitWeaponComboBox();
+        showWeaponValues(pos,WEAPON_NOSAVE);
+    }
+  }//GEN-LAST:event_jButtonRemoveWeaponActionPerformed
 
-  }//GEN-LAST:event_jButtonRevertToSavedActionPerformed
+  private void jButtonAddWeaponActionPerformed (java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddWeaponActionPerformed
+    // Add your handling code here:
+    if (initDone == 1) {        
+        if  (tUnit.weapons.count == 16) return;
+        int pos = jComboBoxWeapons.getSelectedIndex();
+        if (pos > -1) {
+            for (int i = tUnit.weapons.count-1;i >= pos;i--) {
+                tUnit.weapons.weapon[i+1]=tUnit.weapons.weapon[i];
+            }
+            tUnit.weapons.weapon[pos] = new SingleWeapon();            
+        }        
+        jComboBoxWeapons.addItem("Weapon ".concat(new java.lang.Integer(tUnit.weapons.count+1).toString()));                
+        if (tUnit.weapons.count == 0 ) jComboBoxWeapons.removeItemAt(tUnit.weapons.count);        
+        tUnit.weapons.count++;
+        errMsg.showMessage("Weapon added at position "+(pos+1)+" !");
+        setUnitWeaponComboBox();
+        showWeaponValues(pos,WEAPON_NOSAVE);
+    }
+  }//GEN-LAST:event_jButtonAddWeaponActionPerformed
 
   private void jButtonSaveActionPerformed (java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
     setVariablesForSave();
@@ -1196,6 +1323,12 @@ private void jListClassesValueChanged (javax.swing.event.ListSelectionEvent evt)
 
     if (jListClasses.isSelectionEmpty() == true) return;
     int selection = jListClasses.getSelectedIndex();
+
+    if (selection > 7) { //max 8 classes
+        jListClasses.setSelectedIndex(7);
+        selection = 7;
+        return;
+    }
 
     setClassValues(CLASS_ORIGINAL,classLastIndex);
     classLastIndex = selection;
@@ -1276,7 +1409,7 @@ public void showWeaponValues(int index,int save) {  //Weapon-Panel
         for (int i=0; i < 13;i++) {
             tUnit.weapons.weapon[weaponLastIndex].efficiency[i] = jIntFieldEfficiencies[i].getInt();
         }
-        
+
         for (int i=0; i < cWeaponType.length;i++) {
             if (weaponTypeSelectCheckBox[i].isSelected() == true )
             tUnit.weapons.weapon[weaponLastIndex].typ |= (1 << i);
@@ -1295,7 +1428,7 @@ public void showWeaponValues(int index,int save) {  //Weapon-Panel
             if (weaponCanNotHitSelectCheckBox[i].isSelected() == true )
             tUnit.weapons.weapon[weaponLastIndex].targets_not_hittable |= (1 << i);
             else tUnit.weapons.weapon[weaponLastIndex].targets_not_hittable &= ~(1 << i);
-        }        
+        }
     }
 
     for (int i=0; i < cWeaponType.length;i++) {
@@ -1316,8 +1449,8 @@ public void showWeaponValues(int index,int save) {  //Weapon-Panel
         if ( (tUnit.weapons.weapon[index].targets_not_hittable & (1 << i)) > 0 )
         weaponCanNotHitSelectCheckBox[i].setSelected(true);
         else weaponCanNotHitSelectCheckBox[i].setSelected(false);
-    }    
-    
+    }
+
     jIntFieldMinDistance.setInt(tUnit.weapons.weapon[index].minDistance);
     jIntFieldMaxDistance.setInt(tUnit.weapons.weapon[index].maxDistance);
     jIntFieldMinDistanceStrength.setInt(tUnit.weapons.weapon[index].minStrength);
@@ -1328,6 +1461,50 @@ public void showWeaponValues(int index,int save) {  //Weapon-Panel
         jIntFieldEfficiencies[i].setInt(tUnit.weapons.weapon[index].efficiency[i]);
     }
     weaponLastIndex = index;
+}
+
+private void setUnitWeaponComboBox() { // Weapon-Panel    
+    if (tUnit.weapons.count > 0) {        
+        jComboBoxWeapons.setEnabled(true);
+        for (int i =0;i < tUnit.weapons.count;i++)        
+        if (tUnit.weapons.count == 16) jButtonAddWeapon.setEnabled(false);
+        else jButtonAddWeapon.setEnabled(true);
+        jButtonRemoveWeapon.setEnabled(true);
+        jTabbedPaneWeapons.setEnabled(true);
+        for (int i=0; i < 13;i++) jTextFieldEfficiencies[i].setEnabled(true);
+        jTextFieldWeaponMaxDistance.setEnabled(true);
+        jTextFieldWeaponMinDistance.setEnabled(true);
+        jTextFieldWeaponMaxStrength.setEnabled(true);
+        jTextFieldWeaponMinStrength.setEnabled(true);
+        jTextFieldWeaponAmmo.setEnabled(true);
+        for (int i=0; i < cWeaponType.length;i++) weaponTypeSelectCheckBox[i].setEnabled(true);
+        for (int i=0; i < cHeightLevel.length;i++) weaponAimSelectCheckBox[i].setEnabled(true);
+        for (int i=0; i < cHeightLevel.length;i++) weaponSourceSelectCheckBox[i].setEnabled(true);
+        for (int i=0; i < cMovemaliType.length;i++) weaponCanNotHitSelectCheckBox[i].setEnabled(true);
+        
+        for (int i=0; i < cHeightLevel.length;i++) {
+            if ( movementTableCheckBox[i].isSelected() == true ) {
+                weaponSourceSelectCheckBox[i].setEnabled(true);
+            } else weaponSourceSelectCheckBox[i].setEnabled(false);
+            //Check if Unit can move on this height !!
+            // if unit can move on this height it can fire from this height
+            // movement -> weapon panel
+        }
+    } else {        
+        jComboBoxWeapons.setEnabled(false);
+        jButtonRemoveWeapon.setEnabled(false);
+        jTabbedPaneWeapons.setEnabled(false);
+        for (int i=0; i < 13;i++) jTextFieldEfficiencies[i].setEnabled(false);
+        jTextFieldWeaponMaxDistance.setEnabled(false);
+        jTextFieldWeaponMinDistance.setEnabled(false);
+        jTextFieldWeaponMaxStrength.setEnabled(false);
+        jTextFieldWeaponMinStrength.setEnabled(false);
+        jTextFieldWeaponAmmo.setEnabled(false);
+        for (int i=0; i < cWeaponType.length;i++) weaponTypeSelectCheckBox[i].setEnabled(false);
+        for (int i=0; i < cHeightLevel.length;i++) weaponAimSelectCheckBox[i].setEnabled(false);
+        for (int i=0; i < cHeightLevel.length;i++) weaponSourceSelectCheckBox[i].setEnabled(false);
+        for (int i=0; i < cMovemaliType.length;i++) weaponCanNotHitSelectCheckBox[i].setEnabled(false);        
+    }
 }
 
 private void weaponMaxDistanceCheck() { //Load-Panel
@@ -1476,13 +1653,13 @@ private int setVariablesForSave() {
         if ( loadNotHeightTableCheckBox[j].isSelected() == true )
         tUnit.loadcapabilitynot |= (1 << j);
     }
-    
+
     tUnit.vehicleCategoriesLoadable = 0;
     for (int j=0; j < cMovemaliType.length;j++) {
-        if ( mustCategoryCheckBox[j].isSelected() == true )
-        tUnit.vehicleCategoriesLoadable |= (1 << j);        
+        if ( loadMustCategoryCheckBox[j].isSelected() == true )
+        tUnit.vehicleCategoriesLoadable |= (1 << j);
     }
-    
+
     //Functions-Panel
     tUnit.functions = 0;
     for (int j=0; j < cVehicleFunctions.length;j++) {
@@ -1499,6 +1676,22 @@ private int setVariablesForSave() {
     //Weapon-Panel
     //Values will be directly written into tUnit ! ; except last values with ->
     showWeaponValues(weaponLastIndex,WEAPON_SAVE);
+
+    //TerrainAccess-Panel
+    tUnit._terrain = 0;
+    tUnit._terrainreq = 0;
+    tUnit._terrainnot = 0;
+    tUnit._terrainkill = 0;
+    for (int j=0; j < cTerrainType.length;j++) {
+        if ( accessAbleHeightTableCheckBox[j].isSelected() == true )
+        tUnit._terrain |= (1 << j);
+        if ( accessNecessaryHeightTableTableCheckBox[j].isSelected() == true )
+        tUnit._terrainreq |= (1 << j);
+        if ( accessNoneHeightTableCheckBox[j].isSelected() == true )
+        tUnit._terrainnot |= (1 << j);
+        if ( accessDiesHeightTableCheckBox[j].isSelected() == true )
+        tUnit._terrainkill |= (1 << j);
+    }
 
     return i;
 }
@@ -1540,9 +1733,9 @@ private void maxLoadCheck() { //Load-Panel
             loadOnHeightTableCheckBox[j].setEnabled(true);
             loadAbleHeightTableCheckBox[j].setEnabled(true);
             loadNotHeightTableCheckBox[j].setEnabled(true);
-        }        
+        }
         for (int j=0; j < cMovemaliType.length;j++) {
-            mustCategoryCheckBox[j].setEnabled(true);            
+            loadMustCategoryCheckBox[j].setEnabled(true);
         }
     } else {
         jTextFieldMaxUnitWeight.setEnabled(false);
@@ -1552,7 +1745,7 @@ private void maxLoadCheck() { //Load-Panel
             loadNotHeightTableCheckBox[j].setEnabled(false);
         }
         for (int j=0; j < cMovemaliType.length;j++) {
-            mustCategoryCheckBox[j].setEnabled(false);            
+            loadMustCategoryCheckBox[j].setEnabled(false);
         }
     }
 }
@@ -1663,7 +1856,6 @@ private javax.swing.JLabel jLabelViewJammingBorder;
 private javax.swing.JLabel jLabelEnergyMaterialTankBorder;
 private javax.swing.JLabel jLabelEnergyTankWarning;
 private javax.swing.JButton jButtonSave;
-private javax.swing.JButton jButtonRevertToSaved;
 private javax.swing.JLabel jLabelVersion;
 private javax.swing.JPanel jPanelMovement;
 private javax.swing.JPanel jPanelMovementTable;
@@ -1724,17 +1916,22 @@ private javax.swing.JTextField jTextFieldTechLevel;
 private javax.swing.JPanel jPanelInfoText;
 private javax.swing.JScrollPane jScrollPaneInfoText;
 private javax.swing.JTextPane jTextPaneInfoText;
+private javax.swing.JPanel jPanelTerrainAccess;
+private javax.swing.JPanel jPanel2;
 private javax.swing.JLabel jLabelErrorMessage;
 // End of variables declaration//GEN-END:variables
 
 
-static String cHeightLevel[] = {"deep submerged", "submerged", "floating", "ground level", "low-level flight", "flight", "high-level flight", "orbit"};
+static String cHeightLevel[] = {"deep submerged", "submerged", "floating", "ground level",
+"low-level flight", "flight", "high-level flight", "orbit"};
+
 static String cMovemaliType[] = { "default",
     "light tracked vehicle", "medium tracked vehicle", "heavy tracked vehicle",
     "light wheeled vehicle", "medium wheeled vehicle", "heavy wheeled vehicle",
     "trooper",               "rail vehicle",           "medium aircraft",
     "medium ship",           "building / turret / object", "light aircraft",
 "heavy aircraft",        "light ship",             "heavy ship"};
+
 static String cVehicleFunctions[] = {"sonar",
     "paratrooper",
     "mine-layer",
@@ -1761,8 +1958,18 @@ static String cVehicleFunctions[] = {"sonar",
     "Kamikaze only",
     "immune to mines",
 "refuels energy"  };
+
 static String cWeaponType[] = {"cruise missile", "mine",    "bomb",       "air - missile", "ground - missile", "torpedo", "machine gun",
 "cannon",         "service", "ammunition refuel", "laser (not implemented yet!)", "shootable"};
+
+static String  cTerrainType[]  = {"shallow water , coast"       ,    "normal lowland",   "swamp thick",       "forest",
+    "high mountains",                  "road",             "railroad",    "entry of building (not to be used for terrain)" ,
+    "harbour (safe for ships at storm)",                         "runway"  ,         "pipeline",    "buried pipeline",
+    "water",                           "deep water",       "hard sand",   "soft sand",
+    "track possible",                  "small rocks",      "mud",         "snow",
+    "deep snow",                       "mountains",        "very shallow water",
+    "large rocks",                     "small trench",     "ditch",  "hillside",
+"turret foundation",               "swamp thin",       "Installation", "pack ice", "river", "frozen water" };
 
 static int cfsonar = 1;
 static int cfparatrooper = 2;

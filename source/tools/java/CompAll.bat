@@ -1,5 +1,6 @@
 javac org\netbeans\lib\awtextra\AbsoluteConstraints.java
 javac org\netbeans\lib\awtextra\AbsoluteLayout.java
+javac BuildRange.java
 javac RLEHeader.java
 javac RLEPackage.java
 javac SingleWeapon.java

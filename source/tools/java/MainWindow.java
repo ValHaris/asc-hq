@@ -1,6 +1,9 @@
-//     $Id: MainWindow.java,v 1.2 2000-10-13 13:15:46 schelli Exp $
+//     $Id: MainWindow.java,v 1.3 2000-10-17 17:28:26 schelli Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/10/13 13:15:46  schelli
+//     Load&Save routines finished
+//
 
 /*
  * MainWindow.java
@@ -81,7 +84,7 @@ private void initComponents () {//GEN-BEGIN:initComponents
   
         jTxtFieldUnitPath.setBorder (new javax.swing.border.TitledBorder(
         new javax.swing.border.EtchedBorder(java.awt.Color.white, new java.awt.Color (134, 134, 134)),
-        "UnitPath", 1, 2, new java.awt.Font ("Arial", 0, 10), java.awt.Color.black));
+        "UnitPath", 4, 2, new java.awt.Font ("Arial", 0, 10), java.awt.Color.black));
         jTxtFieldUnitPath.setText ("c:\\");
         jTxtFieldUnitPath.addActionListener (new java.awt.event.ActionListener () {
             public void actionPerformed (java.awt.event.ActionEvent evt) {

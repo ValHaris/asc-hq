@@ -70,7 +70,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints height="40" width="470" x="20" y="20"/>
+                  <AbsoluteConstraints height="40" width="590" x="20" y="20"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -417,24 +417,7 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints height="40" width="110" x="500" y="20"/>
-                </Constraint>
-              </Constraints>
-            </Component>
-            <Component class="javax.swing.JButton" name="jButtonRevertToSaved">
-              <Properties>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="0" green="0" id="red" palette="1" red="ff" type="palette"/>
-                </Property>
-                <Property name="text" type="java.lang.String" editor="org.netbeans.beaninfo.editors.StringEditor" value="Revert to Saved"/>
-              </Properties>
-
-              <Events>
-                <EventHandler event="actionPerformed" handler="jButtonRevertToSavedActionPerformed"/>
-              </Events>
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints height="40" width="150" x="620" y="20"/>
+                  <AbsoluteConstraints height="40" width="140" x="620" y="20"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -751,6 +734,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Dialog" size="10" style="0"/>
                     </Property>
+                    <Property name="horizontalTextPosition" type="int" editor="org.openide.util.SwingEditors$HorizontalPropertyEditor" value="2"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridLayout$GridConstraintsDescription"/>
@@ -845,6 +829,10 @@
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.beaninfo.editors.StringEditor" value="Add"/>
               </Properties>
+
+              <Events>
+                <EventHandler event="actionPerformed" handler="jButtonAddWeaponActionPerformed"/>
+              </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                   <AbsoluteConstraints height="30" width="140" x="270" y="10"/>
@@ -855,6 +843,10 @@
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.beaninfo.editors.StringEditor" value="Remove"/>
               </Properties>
+
+              <Events>
+                <EventHandler event="actionPerformed" handler="jButtonRemoveWeaponActionPerformed"/>
+              </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                   <AbsoluteConstraints height="30" width="130" x="430" y="10"/>
@@ -1361,6 +1353,27 @@
               </SubComponents>
             </Container>
           </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="jPanelTerrainAccess">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="TerrainAccess" toolTip=""/>
+            </Constraint>
+          </Constraints>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+            <Property name="rows" type="int" value="15"/>
+            <Property name="columns" type="int" value="4"/>
+          </Layout>
+        </Container>
+        <Container class="javax.swing.JPanel" name="jPanel2">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="not implemented yet" toolTip=""/>
+            </Constraint>
+          </Constraints>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
         </Container>
       </SubComponents>
     </Container>

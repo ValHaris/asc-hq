@@ -1,6 +1,9 @@
-//     $Id: SingleWeapon.java,v 1.2 2000-10-13 13:15:47 schelli Exp $
+//     $Id: SingleWeapon.java,v 1.3 2000-10-17 17:28:26 schelli Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/10/13 13:15:47  schelli
+//     Load&Save routines finished
+//
 
 /*
  * SingleWeapon.java
@@ -40,7 +43,11 @@ public class SingleWeapon extends Object {
 
   /** Creates new SingleWeapon */
   public SingleWeapon() {
-    efficiency = new int[13];    
+    efficiency = new int[13]; 
+    for (int i=0;i<13; i++) efficiency[i] = 100;   
+    sourceHeight = 1;
+    targ = 1;
+    typ = 1;
   }
   
 }

@@ -1,8 +1,15 @@
-//     $Id: Unit.java,v 1.3 2000-10-14 22:40:02 schelli Exp $
+//     $Id: Unit.java,v 1.4 2000-10-17 17:28:27 schelli Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/10/14 22:40:02  schelli
+//     AutoRepairRate added
+//     version will be updated to actual version when saved
+//     "vehicle must category" added
+//     Weapon pannel restructured + can.NOT.hit added
+//     data-arrays updated
+//
 //     Revision 1.2  2000/10/13 13:15:47  schelli
-//     *** empty log message ***
+//     Load&Save routines finished
 //
 
 /*
@@ -86,14 +93,11 @@ public class Unit {   /*  vehicleart: z.B. Schwere Fuátruppe  */
     int       vehiclesbuildableid[]; //int*
     int       buildicon; //void*
     int       buildingsbuildablenum;
-    int       buildingsbuildable;//pbuildrange
+    BuildRange      buildingsbuildable[];
     UnitWeapon weapons; //UnitWeapon*
     int       autorepairrate;
 
-    int       vehicleCategoriesLoadable;
-
-    byte      terrainAccessDummy[];
-    byte      buildingBuildableDummy[];
+    int       vehicleCategoriesLoadable;    
 
     private String fileLocation;
     private SgStream stream;
@@ -225,7 +229,7 @@ public class Unit {   /*  vehicleart: z.B. Schwere Fuátruppe  */
 
             buildicon = stream.readInt();
             buildingsbuildablenum = stream.readInt();
-            buildingsbuildable = stream.readInt();
+            stream.readInt(); //pBuildRange
 
             /*weapons*/ stream.readInt();
             // fuer weapons = stream.readInt(); , weil geht nicht wegen UnitWeapon
@@ -319,35 +323,22 @@ public class Unit {   /*  vehicleart: z.B. Schwere Fuátruppe  */
             }
 
             if ( terrainaccess != 0) {
-                terrainAccessDummy = stream.readByteArray(72);
+                _terrain = stream.readInt();
+                stream.readInt();
+                _terrainreq = stream.readInt();
+                stream.readInt();
+                _terrainnot= stream.readInt();
+                stream.readInt();
+                _terrainkill= stream.readInt();
+                stream.readInt();
+                for ( int a = 0; a < 10; a++ ) stream.readInt(); //dummy
             }
-            /*else {
-            fztn->terrainaccess = new tterrainaccess;
-            fztn->terrainaccess->terrain.set ( fztn->_terrain, 0 );
-            fztn->terrainaccess->terrainreq.set ( fztn->_terrainreq, 0 );
-            fztn->terrainaccess->terrainnot.set ( fztn->_terrainnot, 0 );
-            fztn->terrainaccess->terrainkill.set ( fztn->_terrainkill, 0 );
-            }*/
-            /*
-            if ( terrainaccess ) {
-            terrainaccess = new tterrainaccess;
-            stream.readdata2 ( *(terrainaccess) );
-            } else {
-            terrainaccess = new tterrainaccess;
-            terrainaccess.terrain.set ( _terrain, 0 );
-            terrainaccess.terrainreq.set ( _terrainreq, 0 );
-            terrainaccess.terrainnot.set ( _terrainnot, 0 );
-            terrainaccess.terrainkill.set ( _terrainkill, 0 );
-            }
-
-            if ( buildingsbuildablenum ) {
-            buildingsbuildable = new tbuildrange[buildingsbuildablenum];
-            for ( i = 0; i < buildingsbuildablenum; i++ )
-            stream.readdata2( buildingsbuildable[i] );
-            }*/
 
             if ( buildingsbuildablenum != 0 ) {
-                buildingBuildableDummy = stream.readByteArray(buildingsbuildablenum*8);
+                for ( int i = 0; i < buildingsbuildablenum; i++ ) {
+                    buildingsbuildable[i].from = stream.readInt();
+                    buildingsbuildable[i].to = stream.readInt();
+                }
             }
 
             return 0;
@@ -450,7 +441,7 @@ public class Unit {   /*  vehicleart: z.B. Schwere Fuátruppe  */
 
         stream.writeInt(buildingsbuildablenum );
 
-        if ( buildingsbuildable != 0) stream.writeInt( one );
+        if ( buildingsbuildablenum != 0) stream.writeInt( one );
         else stream.writeInt( zero );
 
         if ( weapons != null) stream.writeInt( one );
@@ -496,20 +487,28 @@ public class Unit {   /*  vehicleart: z.B. Schwere Fuátruppe  */
 
             stream.writeInt(weapons.weapon[j].targets_not_hittable );
         }
-
-        /*if ( terrainaccess )
-        stream.writeInt ( *(terrainaccess) );
-
-        for ( i = 0; i < buildingsbuildablenum; i++ ) {
-        stream.writeInt( buildingsbuildable[i].from );
-        stream.writeInt( buildingsbuildable[i].to );
-        }*/
+        
         if ( terrainaccess != 0) {
-            stream.writeByteArray(terrainAccessDummy);
+            stream.writeInt(_terrain);
+            stream.writeInt(_terrain);
+
+            stream.writeInt(_terrainreq);
+            stream.writeInt(_terrainreq);
+
+            stream.writeInt(_terrainnot);
+            stream.writeInt(_terrainnot);
+
+            stream.writeInt(_terrainkill);
+            stream.writeInt(_terrainkill);
+
+            for ( int a = 0; a < 10; a++ ) stream.writeInt( zero ); //dummy
         }
 
         if ( buildingsbuildablenum != 0 ) {
-            stream.writeByteArray(buildingBuildableDummy);
+            for ( int i = 0; i < buildingsbuildablenum; i++ ) {
+                stream.writeInt(buildingsbuildable[i].from);
+                stream.writeInt(buildingsbuildable[i].to);
+            }
         }
 
         version = vehicle_version;

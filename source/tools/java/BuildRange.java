@@ -1,14 +1,12 @@
-//     $Id: UnitWeapon.java,v 1.3 2000-10-17 17:28:28 schelli Exp $
+//     $Id: BuildRange.java,v 1.1 2000-10-17 17:28:26 schelli Exp $
 //
 //     $Log: not supported by cvs2svn $
-//     Revision 1.2  2000/10/13 13:15:48  schelli
-//     Load&Save routines finished
 //
 
 /*
- * UnitWeapon.java
+ * BuildRange.java
  *
- * Created on 5. Juni 2000, 13:37
+ * Created on 17. Oktober 2000, 18:54
   
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-2000  Martin Bickel  and  Marc Schellenberger
@@ -29,13 +27,13 @@
     Boston, MA  02111-1307  USA
 */
 
-public class UnitWeapon extends Object {
-  int count;
-  SingleWeapon weapon[]; //16  
+public class BuildRange extends Object {
+    
+    int from;
+    int to;
 
-  /** Creates new UnitWeapon */
-  public UnitWeapon() {
-    weapon = new SingleWeapon[16];    
-  }
-  
+    /** Creates new tBuildRange */
+    public BuildRange() {        
+    }
+
 }
