@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.25 2000-09-17 15:17:43 mbickel Exp $
+//     $Id: artint.cpp,v 1.26 2000-09-17 16:16:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/09/17 15:17:43  mbickel
+//      some restructuring; moving units out of buildings
+//
 //     Revision 1.24  2000/09/10 10:19:50  mbickel
 //      AI improvements
 //
@@ -1081,8 +1084,8 @@ void AI::buildings( int process )
 
       // move idle units out of building
       std::vector<pvehicle> idleUnits;
-      for ( int i= 0; i < 32; i++ ) {
-         pvehicle veh = bc.getloadedunit ( i );
+      for ( int j= 0; j < 32; j++ ) {
+         pvehicle veh = bc.getloadedunit ( j );
          if ( veh )
             if ( veh->aiparam[ getPlayer() ]->task == AiParameter::tsk_nothing && bc.moveavail ( veh ))
                idleUnits.push_back ( veh );

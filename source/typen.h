@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.50 2000-09-17 15:20:37 mbickel Exp $
+//     $Id: typen.h,v 1.51 2000-09-17 16:16:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2000/09/17 15:20:37  mbickel
+//      AI is now automatically invoked (depending on gameoptions)
+//      Some cleanup
+//
 //     Revision 1.49  2000/09/10 10:19:51  mbickel
 //      AI improvements
 //
@@ -238,7 +242,6 @@
 #define typen_h
 
 #include <time.h>
-#include <limits.h>
 #include "global.h"
 #include "tpascal.inc"
 #include "misc.h"
@@ -2063,19 +2066,25 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 #define unitsize tanksize
 
 
-/*
-#define maxint numeric_limits<int>::max()
-#define minint numeric_limits<int>::min()
+#ifdef __WATCOM_CPLUSPLUS__
 
-#define maxfloat numeric_limits<float>::max()
-#define minfloat numeric_limits<float>::min()
-*/
+ #include <limits>
 
-#define maxint INT_MAX
-#define minint INT_MIN
+ #define maxint numeric_limits<int>::max()
+ #define minint numeric_limits<int>::min()
+ 
+ #define maxfloat numeric_limits<float>::max()
+ #define minfloat numeric_limits<float>::min()
+#else
 
-#define maxfloat FLT_MAX
-#define minfloat FLT_MIN
+ #include <limits.h>
+
+ #define maxint INT_MAX
+ #define minint INT_MIN
+ 
+ #define maxfloat FLT_MAX
+ #define minfloat FLT_MIN
+#endif
 
 
 
