@@ -5,7 +5,6 @@ For information about running the Linux version of ASC refer to
 'doc/readme.linux'.
 
 Information about playing ASC (for example: 'how do mines work?') can be found
-in 'doc/asc.html'. That file is totally platform independant and is included
-in the seperate data package.
+in 'doc/asc.html'.
 
 If you want to improve ASC I recommend to read the file 'doc/source.htm'

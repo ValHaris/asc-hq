@@ -79,12 +79,18 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
 
         void*        w_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
         int          bi_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
+
+        //! when the building is destroyed, it can leave rubble objects behind. If set to 0 no objects are being created
         int          destruction_objects [4][6];
 
         LocalCoordinate entry;
 
         int          id;
 
+        /** the armor of the buildingtype.
+            This does not necessarily be equal to the armor of a specific building during the
+            game, since the map may modify the armor of buildings with a map parameter.
+            Use #Building::getArmor() to query the effective armor. */
         int          _armor;
 
         int          jamming;
@@ -105,8 +111,8 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
         //! bitmapped: vehicle categories that may enter the building
         int          vehicleCategoriesLoadable;
 
-
-        int          special;   /*  HQ, Trainingslager, ...  */
+        //! bitmapped: functions the building can perfom. see #cbuildingfunctions
+        int          special;
 
         int          technologylevel;
         int          researchid;

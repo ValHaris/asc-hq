@@ -391,8 +391,7 @@ int main(int argc, char *argv[] )
 
              if ( patimat ( argv[df] , direntp->d_name ) &&
                   strcmp ( direntp->d_name, "." ) != 0 &&
-                  strcmp ( direntp->d_name, ".." ) != 0 &&
-                  direntp-> ) {
+                  strcmp ( direntp->d_name, ".." ) != 0 ) {
                 int fnd = 0;
 
                 for ( int j = 0; j < num; j++ )

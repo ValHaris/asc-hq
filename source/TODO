@@ -6,8 +6,11 @@ TODO list for ASC, programming department.
 
 Bugs:
 
+ -  unit can only leave a transport on one level height
+    ( bigger-prob )
 
-
+ -  redraw problems with Win9x after task switch
+ 
 Small tasks:
 
 -5- Message of crashed airplanes when they run out of fuel
@@ -60,6 +63,10 @@ Small tasks:
 -8-  kamikaze weapon
 
 -4- add mine information to field info dialog
+
+-6- remove depenency to jpeg library in windows
+
+-6- resize graphics to contain all vehicle categories in weapon info
 
 Medium sized tasks
 
@@ -164,6 +171,11 @@ Requested features:
    and canceled by this way.
 
 - internationalization
+
+- infotext should be displayed by right clicking on the description in the main 
+  screen
+  
+  
 
 Requested features whos necessity should be discussed...
 

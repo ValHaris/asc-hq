@@ -1,3 +1,39 @@
+2001-09-14 13:34  mbickel
+
+	* source/: buildingtype.cpp, strtmesg.cpp, vehicletype.cpp:  Fixed
+	loadable-check for transports in mapeditor
+
+2001-09-13 21:34  mbickel
+
+	* ChangeLog, doc/source.html, source/ai/misc.cpp,
+	source/ai/service.cpp, source/ai/strategy.cpp,
+	source/ai/tactics.cpp, source/tools/bin2text.cpp:  Fixed several AI
+	problems
+
+2001-09-13 19:43  mbickel
+
+	* asc.bpg, data/message1.txt, source/CLoadable.cpp, source/TODO,
+	source/attack.cpp, source/basestrm.cpp, source/building.cpp,
+	source/buildingtype.cpp, source/controls.cpp, source/controls.h,
+	source/dashboard.cpp, source/edmain.cpp, source/edmisc.cpp,
+	source/gamedlg.cpp, source/gameoptions.cpp, source/gameoptions.h,
+	source/itemrepository.cpp, source/loadbi3.cpp, source/loaders.cpp,
+	source/replay.cpp, source/sg.cpp, source/textfiletags.cpp,
+	source/typen.cpp, source/typen.h, source/unitctrl.cpp,
+	source/vehicletype.cpp, source/vehicletype.h,
+	source/tools/win/bin2text.bpr, source/win32/borland/asc.bpf,
+	source/win32/borland/asc.bpr:  Many, many bug fixes
+
+2001-09-13 16:25  mbickel
+
+	* source/tools/weaponguide.cpp:  Improved elimination of text tags
+	in description
+
+2001-09-07 11:33  mbickel
+
+	* source/: strtmesg.cpp, textfileparser.cpp, vehicletype.cpp: 
+	Fixed broken PCX loading for ASCTXT files
+
 2001-08-28 15:24  mbickel
 
 	* asc.bpg, source/libs/sdlmm/SDLmm.bpf,

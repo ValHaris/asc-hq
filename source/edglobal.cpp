@@ -2,9 +2,16 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.36 2001-09-23 23:06:20 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.37 2001-09-24 12:05:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2001/09/23 23:06:20  mbickel
+//      Fixed:
+//       - ascent/descent during reactionfire
+//       - movement with nearly empty fuel tank
+//       - production icon displayed although unit could not be produced
+//       - invisible building becoming visible in fog of war
+//
 //     Revision 1.35  2001/08/09 15:58:59  mbickel
 //      Some usability improvements in the map editor
 //      More flexible BI3 map import
@@ -206,18 +213,76 @@
 mc_check mc;
 
 
-   const char* execactionnames[execactionscount] = {"End MapEdit","Help","Goto EditMode","Select terrain","Select unit",
-      "Select color","Select building","Select special object","Select mine","Select weather","Setup alliances",
-      "Toggle ResourceMode","Change UnitDirection","Asc-Resource Mode","Write Map2PCX","Load map",
-      "Change players","New map","Goto PolygonMode","Rebuild Display","Open UnitInfo","View map","About",
-      "Change GlobalDirection","Create resources","View/Change cargo","View/Change resources","Change TerrainDirection",
-      "View/Change Events","Toggle Fillmode","Mapgenerator","Use active field values as selection","Delete active thing","Show palette",
-      "View/Change minestrength","View/Change mapvalues","View/Change production","Save map","View/Change UnitValues",
-      "Mirror CX-Pos","Mirror CY-Pos","Place terrain","Place Unit","Place building","Place special object","Place mine",
-      "Place active thing","Delete Unit","Delete building","Delete special object","Delete mine","AboutBox","Save map as ...",
-      "End PolygonMode","Smooth coasts","Import BI-Map","SEPERATOR","BI-Resource Mode","Insert BI map", "Set zoom level", 
-      "Move Building", "set weather of whole map", "set map parameters", "terrain info", "set unit filter", "select graphic set",
-      "unitset transformation", "Unitset Information", "switch maps"};
+   const char* execactionnames[execactionscount] = {
+        "End MapEdit",
+        "Help",
+        "Goto EditMode",
+        "Select terrain",
+        "Select unit",
+        "Select color",
+        "Select building",
+        "Select special object",
+        "Select mine",
+        "Select weather",
+        "Setup alliances",
+        "Toggle ResourceMode",
+        "Change UnitDirection",
+        "Asc-Resource Mode",
+        "Write Map2PCX",
+        "Load map",
+        "Change players",
+        "New map",
+        "Goto PolygonMode",
+        "Rebuild Display",
+        "Open UnitInfo",
+        "View map",
+        "About",
+        "Change GlobalDirection",
+        "Create resources",
+        "View/Change cargo",
+        "View/Change resources",
+        "Change TerrainDirection",
+        "View/Change Events",
+        "Toggle Fillmode",
+        "Mapgenerator",
+        "Use active field values as selection",
+        "Delete active thing",
+        "Show palette",
+        "View/Change minestrength",
+        "View/Change mapvalues",
+        "View/Change production",
+        "Save map",
+        "View/Change UnitValues",
+        "Mirror CX-Pos",
+        "Mirror CY-Pos",
+        "Place terrain",
+        "Place Unit",
+        "Place building",
+        "Place special object",
+        "Place mine",
+        "Place active thing",
+        "Delete Unit",
+        "Delete building",
+        "Delete special object",
+        "Delete mine",
+        "AboutBox",
+        "Save map as ...",
+        "End PolygonMode",
+        "Smooth coasts",
+        "Import BI-Map",
+        "SEPERATOR",
+        "BI-Resource Mode",
+        "Insert BI map",
+        "Set zoom level",
+        "Move Building",
+        "set weather of whole map",
+        "set map parameters",
+        "terrain info",
+        "set unit filter",
+        "select graphic set",
+        "unitset transformation",
+        "Unitset Information",
+        "switch maps" };
 
 
 // õS Infomessage
@@ -844,9 +909,10 @@ void execaction(int code)
        }
        break;
     case act_end : {
-       if ( mapSwitcher.getDefaultAction() == MapSwitcher::select )
+       if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) {
           execaction(act_switchmaps);
-       else
+          ch = ct_invvalue;
+       } else
           if (choice_dlg("Do you really want to quit ?","~y~es","~n~o") == 2) ch = ct_invvalue;
              else {
                 ch = ct_esc; //Exit MapEdit

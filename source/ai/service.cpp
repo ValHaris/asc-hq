@@ -389,6 +389,12 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
       if ( !veh->canMove() )
          return MapCoordinate ( -1, -1 );
 
+   /*
+   RefuelConstraint* rc = NULL;
+   if ( RefuelConstraint::necessary  ( veh, this ))
+      rc = new RefuelConstraint ( veh, this );
+   */
+
    AStar3D astar ( getMap(), veh );
    astar.findAllAccessibleFields (  );
 
@@ -407,19 +413,6 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
          if ( !(bld->typ->loadcapability & buildingPos.z))
             buildingPos.z = 1 << log2 ( astar.getFieldAccess(bld->getEntry()) & bld->typ->loadcapability );
 
-         // the unit can reach the building
-
-         /*
-         the new 3D-Astar makes this obsolete
-         bool loadable = false;
-         if ( bld->vehicleloadable ( veh ))
-            loadable = true;
-         else
-            for ( int i = 0; i < 8; i++ )
-                if ( veh->typ->height & ( 1 << i))
-                   if ( bld->vehicleloadable ( veh, 1 << i ))
-                      loadable = true;
-         */
          bool loadable = true;
          if ( loadable ) {
             int fullfillableServices = 0;
@@ -633,7 +626,9 @@ AI::AiResult AI :: executeServices ( )
             veh->aiparam[ getPlayerNum() ]->dest_nwid = i->getServiceUnit()->networkid;
             veh->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_serviceRetreat );
          } else {
-            if ( (veh->height & ( chtieffliegend | chfliegend | chhochfliegend )) && veh->typ->fuelConsumption ) {
+
+            //! not all service tasks are refuelling; don't land immediately
+            if ( (veh->height & ( chtieffliegend | chfliegend | chhochfliegend )) && veh->typ->fuelConsumption && false ) {
                RefuelConstraint apl ( *this, veh );
                MapCoordinate3D dst = apl.getNearestRefuellingPosition( true, true, false );
                if ( dst.x != -1 ) {
