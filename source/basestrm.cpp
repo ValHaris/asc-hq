@@ -1,6 +1,10 @@
-//     $Id: basestrm.cpp,v 1.35 2000-08-12 15:03:18 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.36 2000-08-13 12:55:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2000/08/12 15:03:18  mbickel
+//      Fixed bug in unit movement
+//      ASC compiles and runs under Linux again...
+//
 //     Revision 1.34  2000/08/12 09:17:15  gulliver
 //     *** empty log message ***
 //
@@ -1575,12 +1579,14 @@ void tanycompression :: init ( void )
             siglen = strlen ( BZIP_SIGNATURE ) + 1;
             bzip_decompress = new libbzip_decompression ( this );
          } else
-         status= 109;
+            status= 109;
 
-         for ( int i = siglen; i < bufdatanum; i++ )
-            queue.putval ( buf[i] );
-      } else 
-         status = 108;
+      } else
+         status = 109;
+
+      for ( int i = siglen; i < bufdatanum; i++ )
+          queue.putval ( buf[i] );
+
 
    } else {
        status = 201;

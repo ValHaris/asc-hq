@@ -30,11 +30,11 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/sg.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/basestrm.cpp,
 show_outputview=true
 show_treeview=true
 header_file=Unbenannt.h
-cpp_file=/home/martin/asc/source/sg.cpp
+cpp_file=/home/martin/asc/source/basestrm.cpp
 browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/welcome/index.html
 [source/controls.cpp]
 install_location=
