@@ -207,6 +207,7 @@ class PropertyContainer {
          bool isReading() { return reading; };
          void warning ( const ASCString& errmsg );
          void error ( const ASCString& errmsg );
+         bool find ( const ASCString& name );
          void setFilename ( const ASCString& filename_ ) { filename= filename_; };
          const ASCString& getFilename (  ) { return filename; };
          virtual ~PropertyContainer ( ) { };

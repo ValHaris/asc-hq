@@ -144,7 +144,7 @@ void ObjectType :: read ( tnstream& stream )
 {
    int version = stream.readInt();
 
-   if ( version == object_version ) {
+   if ( version <= object_version && version >= 1 ) {
 
        id = stream.readInt();
 
@@ -210,6 +210,7 @@ void ObjectType :: read ( tnstream& stream )
             weatherPicture[ww].bi3pic.resize(___pictnum);
             weatherPicture[ww].flip.resize(___pictnum);
             weatherPicture[ww].images.resize(___pictnum);
+
             for ( int n = 0; n < ___pictnum; n++ ) {
                stream.readInt(); // dummy
                weatherPicture[ww].bi3pic[n] = stream.readInt();
@@ -226,7 +227,7 @@ void ObjectType :: read ( tnstream& stream )
             }
          }
 
-       setupBi3Images();
+       setupImages();
 
        #ifndef converter
        int mmcount = cmovemalitypenum;
@@ -298,7 +299,7 @@ void ObjectType :: read ( tnstream& stream )
 }
 
 
-void ObjectType :: setupBi3Images()
+void ObjectType :: setupImages()
 {
    int copycount = 0;
    #ifndef converter
@@ -510,13 +511,40 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                s += strrr(id);
             }
             pc.addImageArray ( "picture",   weatherPicture[i].images, s + weatherAbbrev[i] ).evaluate();
-            weatherPicture[i].bi3pic.resize( weatherPicture[i].images.size() );
-            weatherPicture[i].flip.resize( weatherPicture[i].images.size() );
-            for ( int u = 0; u < weatherPicture[i].images.size(); u++ ) {
-               weatherPicture[i].bi3pic[u] = -1;
-               weatherPicture[i].flip[u] = 0;
-            }
 
+            if ( pc.find ( "FlipPictures" ) ) {
+               vector<int>   imgReferences;
+               weatherPicture[i].bi3pic.resize( weatherPicture[i].images.size() );
+               weatherPicture[i].flip.resize( weatherPicture[i].images.size() );
+               imgReferences.resize ( weatherPicture[i].images.size() );
+
+               for ( int j = 0; j < weatherPicture[i].images.size(); j++ ) {
+                  weatherPicture[i].flip[j] = 0;
+                  imgReferences[j] = -1;
+               }
+
+               pc.addIntegerArray ( "FlipPictures", weatherPicture[i].flip ).evaluate();
+               pc.addIntegerArray ( "ImageReference", imgReferences ).evaluate();
+
+               for ( int j = 0; j < weatherPicture[i].images.size(); j++ )
+                  if ( imgReferences[j] >= 0 && imgReferences[j] < weatherPicture[i].images.size() ) {
+                     if ( weatherPicture[i].images[j] )
+                        asc_free ( weatherPicture[i].images[j] );
+                     int newimg = imgReferences[j];
+                     int size = getpicsize2( weatherPicture[i].images[newimg] );
+                     void* p = asc_malloc(size);
+                     memcpy ( p, weatherPicture[i].images[newimg], size );
+                     weatherPicture[i].images[j] = p;
+                  }
+
+            } else {
+               weatherPicture[i].bi3pic.resize( weatherPicture[i].images.size() );
+               weatherPicture[i].flip.resize( weatherPicture[i].images.size() );
+               for ( int u = 0; u < weatherPicture[i].images.size(); u++ ) {
+                  weatherPicture[i].bi3pic[u] = -1;
+                  weatherPicture[i].flip[u] = 0;
+               }
+            }
 
          }
 
@@ -524,7 +552,7 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
       }
 
    if ( pc.isReading() )
-      setupBi3Images();
+      setupImages();
 
 
    #ifndef converter

@@ -231,6 +231,19 @@ void PropertyContainer::error ( const ASCString& errmsg )
    fatalError ( getFileName() + " : " + errmsg );
 }
 
+bool PropertyContainer::find ( const ASCString& name )
+{
+   ASCString n;
+   for ( Level::iterator i = level.begin(); i != level.end(); i++ )
+      n += *i + ".";
+   n += name;
+   n.toLower();
+   for ( TextPropertyGroup::Entries::iterator i = textPropertyGroup->entries.begin(); i != textPropertyGroup->entries.end(); i++ )
+      if ( i->propertyName == n )
+         return true;
+         
+   return false;
+}
 
 
 

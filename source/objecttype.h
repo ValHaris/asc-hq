@@ -138,7 +138,8 @@
      void runTextIO ( PropertyContainer& pc );
 
    private:
-     void setupBi3Images();
+     //! the loading functions call this method to setup the objects images
+     void setupImages();
  };
 
 

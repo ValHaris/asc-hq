@@ -291,10 +291,8 @@ void testcompress ( char* name, int size )
       strcat ( newname, name );
 
       FILE* outfile = fopen ( newname, filewritemode );
-      if ( !outfile ) {
-         fprintf( stderr, " Unable to open %s for writing. \n\n", newname );
-         exit ( 1 );
-      }
+      if ( !outfile )
+         fatalError( "Unable to open " + ASCString(newname) + " for writing." );
 
       int size = filesize ( name );
       char* pc = (char*) malloc ( size );
@@ -304,23 +302,23 @@ void testcompress ( char* name, int size )
       int* ip = (int*) (pc + 124);
       *ip = size;
 
-      fwrite ( pc, 1, size, outfile );
+      int w = fwrite ( pc, 1, size, outfile );
       fclose ( outfile );
+      if ( w != size )
+         fatalError( "Could not write file " + ASCString(newname) );
+         
       name = newname;
    }
 
    uncompsize += size;
-   if ( verbose )
-      printf ( "file %14s ", name );
 
    int comp = 0;
    {
       char buf[100];
       FILE* in = fopen ( name, "rb" );
-      if ( !in ) {
-         printf("cannot access file %s \n", name );
-         exit(1);
-      }
+      if ( !in )
+         fatalError("cannot access file " + ASCString(name) );
+
       if ( fread ( buf, 1, 10, in ) == 10 ) {
          if ( strncmp ( &buf[1], "MBLZW16", 7) == 0 )
             comp = 1;
@@ -340,7 +338,7 @@ void testcompress ( char* name, int size )
 
    int r;
    fflush ( stdout );
-//   r = spawnl ( P_WAIT, "rle1.exe", "rle1.exe", name, "temp.rle",  NULL );
+
    r = rlemain( name, "temp.rle");
    if ( r ) {
       fprintf ( stderr, "\n\n error executing rle1.exe; errno is %d \n", errno );
@@ -444,26 +442,6 @@ int main(int argc, char *argv[] )
    pos += fwrite ( &i, 1, 4, out );
 
    for ( int df = cl.next_param(); df < argc-1; df++ ) {
-   /*
-   char buf[1000];
-   while ( fgets ( buf, 1000, fp )) {
-      char* name = buf;
-      int compress = 1;
-      if ( name[0] == '~' ) {
-         compress = 0;
-         name++;
-      }
-
-      char* c = name;
-      while ( *c ) {
-         if ( *c == '\n' || *c == '\r' )
-            *c = 0;
-         else
-            c++;
-      }
-
-      if ( name[0] ) {
-   */
          int compress = 1;
 
          DIR *dirp;
@@ -485,14 +463,17 @@ int main(int argc, char *argv[] )
                    if ( strcmpi ( nindex[j].name, direntp->d_name ) == 0 )
                       fnd = 1;
 
-                if ( !fnd )
+                if ( !fnd ) {
+                   if ( verbose )
+                      printf( direntp->d_name );
                    if ( compress )
                       testcompress ( direntp->d_name,  filesize(direntp->d_name) );
                    else {
                       if ( verbose )
-                         printf ( "file %14s is not compressed, ", direntp->d_name );
+                         printf ( " is not compressed, " );
                       copyfile ( direntp->d_name, direntp->d_name,  filesize(direntp->d_name)  );
                    }
+                }
              }
 
            }
