@@ -967,8 +967,15 @@ void         constructvehicle( pvehicletype tnk )
 
          int x = getxpos();
          int y = getypos();
+
+         int oldmat = eht->tank.material;
+         int oldfuel = eht->tank.fuel;
+
          eht->constructvehicle ( tnk, x, y );
          logtoreplayinfo ( rpl_buildtnk3, x, y, tnk->id, moveparams.vehicletomove->color/8, eht->getPosition().x, eht->getPosition().y );
+         logtoreplayinfo ( rpl_refuel2, eht->getPosition().x, eht->getPosition().y, eht->networkid, 1001, eht->tank.material, oldmat);
+         logtoreplayinfo ( rpl_refuel2, eht->getPosition().x, eht->getPosition().y, eht->networkid, 1002, eht->tank.fuel, oldfuel );
+
          computeview( actmap );
 
          build_vehicles_reset();
