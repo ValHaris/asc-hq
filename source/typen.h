@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.132 2003-06-10 19:16:21 mbickel Exp $
+//     $Id: typen.h,v 1.133 2003-06-22 17:41:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.132  2003/06/10 19:16:21  mbickel
+//      Fixed: dig icon not always working
+//      Fixed: attack-flag not set when moving only one field out of a transport
+//
 //     Revision 1.131  2003/06/03 19:55:38  mbickel
 //      Ground mines can be put onto bridges
 //      better AI production
@@ -1253,8 +1257,6 @@ const int attackmovecost = 0;
 #define autorepairdamagedecrease 10    // only for old units ; new one use autorepairrate
 
 #define weaponpackagesize 5
-
-#define trainingexperienceincrease 2
 
 #define brigde1buildcostincrease 12       // jeweils Basis 8; flaches Wasser
 #define brigde2buildcostincrease 16       // jeweils Basis 8; mitteltiefes Wasser

@@ -1310,7 +1310,7 @@ void         tchoosenewmap::init( char* ptitle )
    ysize = 440;
 
    addbutton("~p~assword",25,105,140,125,1,0,1,true);
-   addeingabe(1, password,10,10);
+   addeingabe(1, password,50,50);
 
    addbutton("se~a~rch map",150,100,360,125,0,1,5,true);
 

@@ -522,7 +522,7 @@ bool Vehicle :: canMove ( void ) const
          if ( cnt )
             for ( int i = 0; i < 32; i++ )
                if ( cnt->loading[i] == this )
-                  if ( cnt->vehicleUnloadable( this ) > 0 || cnt->vehicleDocking( this, true ) > 0 )
+                  if ( cnt->vehicleUnloadable( typ ) > 0 || cnt->vehicleDocking( this, true ) > 0 )
                      return true;
       }
    }

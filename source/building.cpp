@@ -839,7 +839,7 @@ tbuildingparamstack buildingparamstack[maxrecursiondepth];
 
 
 #define containerxpos 100
-#define containerypos 70
+#define containerypos 60
 
 
 const int repaint=0;
@@ -1574,7 +1574,7 @@ int   cbuildingcontrols :: ctrainunit :: available ( pvehicle eht )
    if ( actmap->getgameparameter( cgp_bi3_training ) )
       return 0;
 
-   if ( eht->experience <= actmap->getgameparameter ( cgp_maxtrainingexperience ) - trainingexperienceincrease )
+   if ( eht->experience < actmap->getgameparameter ( cgp_maxtrainingexperience ) )
       if ( !eht->attacked ) {
          if (  cc->getspecfunc ( mbuilding ) & cgtrainingb ) {
             int num = 0;
@@ -1599,7 +1599,7 @@ int   cbuildingcontrols :: ctrainunit :: available ( pvehicle eht )
 void  cbuildingcontrols :: ctrainunit :: trainunit ( pvehicle eht )
 {
    if ( available ( eht ) ) {
-      eht->experience+= trainingexperienceincrease;
+      eht->experience+= actmap->getgameparameter( cgp_trainingIncrement );
       for (int i = 0; i < eht->typ->weapons.count; i++ )
          if ( eht->typ->weapons.weapon[i].shootable() )
             eht->ammo[i]--;
@@ -3593,9 +3593,9 @@ void  cbuildingsubwindow :: sethostcontainer ( pcontainer_b cntn )
 
 ccontainer_b :: ccontainer_b ( void )
 {
+   actgui->restorebackground();
    oldguihost = actgui;
    actgui = &hosticons_cb;
-   actgui->restorebackground();
    unitmode = mnormal;
    memset ( &produceableunits, 0, sizeof ( produceableunits ));
 }

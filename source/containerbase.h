@@ -102,7 +102,7 @@ class ContainerBase {
       bool vehicleLoadable ( const Vehicle* vehicle, int uheight = -1, const bool* attacked = NULL ) const;
 
       //! returns the levels of height on which this unit can be unloaded; or 0 if no unloading is possible
-      int  vehicleUnloadable ( const Vehicle* vehicle ) const;
+      int  vehicleUnloadable ( const Vehicletype* vehicleType ) const;
 
       //! returns the unloading system
       const ContainerBaseType::TransportationIO* vehicleUnloadSystem ( const Vehicletype* vehicle, int height );

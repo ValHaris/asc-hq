@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: attack.h,v 1.21 2003-05-01 18:02:22 mbickel Exp $
+//     $Id: attack.h,v 1.22 2003-06-22 17:41:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2003/05/01 18:02:22  mbickel
+//      Fixed: no movement decrease for cargo when transport moved
+//      Fixed: reactionfire not working when descending into range
+//      Fixed: objects not sorted
+//      New map event: add object
+//
 //     Revision 1.20  2001/10/21 13:16:59  mbickel
 //      Cleanup and documentation
 //
@@ -127,8 +133,8 @@
 
 
 
-#ifndef attack_h
-#define attack_h
+#ifndef attackH
+#define attackH
 
 #include "typen.h"
 #include "vehicletype.h"

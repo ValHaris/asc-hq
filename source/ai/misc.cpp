@@ -852,7 +852,7 @@ void AI::production()
    for ( Player::BuildingList::iterator bli = getPlayer().buildingList.begin(); bli != getPlayer().buildingList.end(); bli ++ ) {
       pbuilding bld = *bli;
       for ( int i = 0; i < 32; i++ )
-         if ( bld->production[i] && bld->vehicleUnloadSystem ( bld->production[i], 255 )) {
+         if ( bld->production[i] && bld->vehicleUnloadable ( bld->production[i] )) {
             Vehicletype* typ = bld->production[i];
             float rating = 0;
             for ( int j = 0; j < aiValueTypeNum; j++ )

@@ -227,16 +227,16 @@ bool  ContainerBase :: vehicleLoadable ( const Vehicle* vehicle, int uheight, co
    return false;
 }
 
-int  ContainerBase :: vehicleUnloadable ( const Vehicle* vehicle ) const
+int  ContainerBase :: vehicleUnloadable ( const Vehicletype* vehicleType ) const
 {
    int height = 0;
 
-   if ( baseType->vehicleFit ( vehicle->typ ))
+   if ( baseType->vehicleFit ( vehicleType ))
       for ( ContainerBaseType::EntranceSystems::const_iterator i = baseType->entranceSystems.begin(); i != baseType->entranceSystems.end(); i++ )
          if ( i->mode & ContainerBaseType::TransportationIO::Out )
             if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))
-               if ( i->vehicleCategoriesLoadable & (1<<vehicle->typ->movemalustyp))
-                  if ( (i->requireUnitFunction & vehicle->typ->functions) || i->requireUnitFunction == 0 )
+               if ( i->vehicleCategoriesLoadable & (1<<vehicleType->movemalustyp))
+                  if ( (i->requireUnitFunction & vehicleType->functions) || i->requireUnitFunction == 0 )
                      if ( i->height_abs != 0 && i->height_rel != -100 )
                         height |= i->height_abs & (1 << (getPosition().getNumericalHeight() + i->height_rel ));
                      else
@@ -244,7 +244,7 @@ int  ContainerBase :: vehicleUnloadable ( const Vehicle* vehicle ) const
                           height |= 1 << (getPosition().getNumericalHeight() + i->height_rel) ;
                        else
                           height |= i->height_abs ;
-   return height & vehicle->typ->height;
+   return height & vehicleType->height;
 }
 
 const ContainerBaseType::TransportationIO* ContainerBase::vehicleUnloadSystem ( const Vehicletype* vehicleType, int height )

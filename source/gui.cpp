@@ -383,7 +383,7 @@ void   GuiHost<T> :: runpressedmouse ( int taste  )
              if ( ( mouseparams.x >= guixpos + i*(guiiconsizex + guigapx))    &&
                   ( mouseparams.y >= guiypos + j*(guiiconsizey + guigapy))    &&
                   ( mouseparams.x <= guixpos + i*(guiiconsizex + guigapx) + guiiconsizex)    &&
-                  ( mouseparams.y <= guiypos + j*(guiiconsizey + guigapy) + guiiconsizey) ) 
+                  ( mouseparams.y <= guiypos + j*(guiiconsizey + guigapy) + guiiconsizey) )
               {
                  xp = i;
                  yp = j;
@@ -408,7 +408,8 @@ void   GuiHost<T> :: runpressedmouse ( int taste  )
 
    if ( actshownicons[xp][yp] ) {
       actshownicons[zx][zy]->display();
-      actshownicons[xp][yp]->exec();
+      if ( actshownicons[xp][yp]->available() )
+         actshownicons[xp][yp]->exec();
    }
 
    mousevisible ( false );
@@ -535,7 +536,9 @@ void   GuiHost<T>::bi2control (  )
    
       actshownicons[xp][yp]->display();
       if ( ky != ct_esc )
-         actshownicons[xp][yp]->exec();
+         if ( actshownicons[xp][yp]->available() )
+            actshownicons[xp][yp]->exec();
+
 
       if ( msg == actdisplayedmessage )
          displaymessage2("");
@@ -761,7 +764,7 @@ void  tnguiicon::iconpressed ( void )
       
    } else {
       char* buf = new char [ imagesize ( 4,4, 20,13 )];
-   
+
       collategraphicoperations cgo ( x, y, x + guismalliconsizex, y + guismalliconsizey );
       getimage ( x+4, y+4, x+20, y+13, buf );
       putspriteimage ( x, y, halfpict ( icons.guiknopf ) );
@@ -810,7 +813,8 @@ int  tnguiicon::pressedbymouse( void )
      {
             host->cleanup();
             SoundList::getInstance().playSound( SoundList::menu_ack );
-            exec();
+            if ( available() )
+               exec();
             return 1;
      }
    }
@@ -824,7 +828,8 @@ void  tnguiicon::checkforkey  ( tkey key )
 
          if ( keys[0][i] && key )
            if ( tolower(char2key( keys[0][i] )) == tolower(key) ) {
-              exec();
+              if ( available() )
+                 exec();
               return;
             }
 
@@ -2069,7 +2074,7 @@ int   tnsguiicondestructbuilding::available    ( void )
        if ( fld->vehicle )
           if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() ) 
              if (fld->vehicle->color == actmap->actplayer * 8)
-               if (fld->vehicle->typ->functions & cfputbuilding )
+               if ((fld->vehicle->typ->functions & cfputbuilding) || !fld->vehicle->typ->buildingsBuildable.empty() )
                   if ( fld->vehicle->tank.fuel >= destruct_building_fuel_usage * fld->vehicle->typ->fuelConsumption )
                      return 1;
     } 
@@ -2090,7 +2095,8 @@ void  tnsguiicondestructbuilding::exec         ( void )
    }
    else 
       if (moveparams.movestatus == 115) {
-         destructbuildinglevel2( getxpos(), getypos()); 
+         destructbuildinglevel2( getxpos(), getypos());
+         dashboard.x = -1;
          displaymap();
       }
 }
@@ -2987,7 +2993,7 @@ int   trguiicon_cancel::available    ( void )
    return 0;
 }
 
-void  trguiicon_cancel::exec         ( void ) 
+void  trguiicon_cancel::exec         ( void )
 {
 }
 

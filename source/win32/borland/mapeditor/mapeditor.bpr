@@ -249,7 +249,7 @@ Item1=C:\Programme\ascsrc\games\asc\source\win32\borland
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=
+RunParams=-l ki-test.sav 
 Launcher=
 UseLauncher=0
 DebugCWD=

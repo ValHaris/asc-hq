@@ -859,7 +859,7 @@ int      VehicleAttack :: tsearchattackablevehicles::run( void )
    if (angreifer->typ->weapons.count == 0)
       return -204;
 
-   if ( angreifer->typ->wait && angreifer->hasMoved() )
+   if ( angreifer->typ->wait && angreifer->hasMoved() && angreifer->reactionfire.getStatus() != Vehicle::ReactionFire::ready )
          return -215;
 
 

@@ -1,6 +1,10 @@
-//     $Id: gamedlg.h,v 1.19 2002-02-21 17:06:51 mbickel Exp $
+//     $Id: gamedlg.h,v 1.20 2003-06-22 17:41:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2002/02/21 17:06:51  mbickel
+//      Completed Paragui integration
+//      Moved mail functions to own file (messages)
+//
 //     Revision 1.18  2001/07/18 18:15:52  mbickel
 //      Fixed: invalid sender of mails
 //      Fixed: unmoveable units are moved by AI
@@ -96,7 +100,7 @@ class   tnewcampaignlevel : public tdialogbox {
                          char           maptitle[100];
                          char           message1[100];
                          char           message2[100];
-                         char           password[10];
+                         char           password[100];
 
                          void           init ( void );
                          void           searchmapinfo ( void );

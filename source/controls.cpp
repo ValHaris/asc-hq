@@ -2475,6 +2475,7 @@ void cmousecontrol :: chkmouse ( void )
                cursor.show();
 
                dashboard.paint( getactfield(), actmap-> playerView );
+               dashboard.x = -1;
 
                mousevisible(true);
             } 

@@ -649,7 +649,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
         for ( vector<MapCoordinate3D>::const_iterator i = B.begin(); i != B.end(); i++ )
            if( N.h == *i ) {
               found = true;
-              endpos = *i;
+              endpos = N.h;
               break;
            }
         if ( found )
@@ -663,7 +663,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
              for ( int dir = 0; dir < 6; dir++ ) {
                 MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N.h, dir );
                 if ( actmap->getField(pos)) {
-                   int h = actmap->getField(N.h)->getContainer()->vehicleUnloadable(veh);
+                   int h = actmap->getField(N.h)->getContainer()->vehicleUnloadable(veh->typ);
                    for ( int i = 0; i < 8; i++ )
                       if ( h & (1<<i)) {
                          Node N2;

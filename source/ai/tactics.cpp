@@ -687,7 +687,7 @@ AI::AiResult AI::tactics( void )
                         int nwid = finalPositions[i]->networkid;
                         _vision = org_vision;
                         MapCoordinate3D dst = getNeighbouringFieldCoordinate( MapCoordinate3D( enemy->xpos, enemy->ypos, finalPositions[i]->height ), i);
-                        dst.setnum ( dst.x, dst.y, mvci->movePos.getNumericalHeight() );
+                        dst.setnum ( dst.x, dst.y, -2 );
                         moveUnit ( finalPositions[i], dst );
                         _vision = visible_all;
 

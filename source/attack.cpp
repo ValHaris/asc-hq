@@ -117,16 +117,16 @@ float AttackFormula :: strength_experience ( int experience )
 	float e =		(experience < 0)
 				?	0	
 				:	experience ;
-   return e/maxunitexperience * 2.875;
+   return e/maxunitexperience * 2.875 / actmap->getgameparameter( cgp_experienceDivisor );
 }
 
 float AttackFormula :: defense_experience ( int experience )
 {
    float e =		(experience < 0)
-				?	0	
+				?	0
 				:	experience ;
-   
-   return e/maxunitexperience * 1.15;
+
+   return e/maxunitexperience * 1.15 / actmap->getgameparameter( cgp_experienceDivisor );
 }
 
 float AttackFormula :: strength_attackbonus ( int abonus )
@@ -1167,7 +1167,7 @@ bool attackpossible2n( const pvehicle attacker, const pvehicle target, pattackwe
    int dist = beeline ( angreifer, verteidiger );
    if ( getdiplomaticstatus2 ( angreifer->color, verteidiger->color ) == cawar )
       if ( !angreifer->attacked )
-         if ( !angreifer->typ->wait || !angreifer->hasMoved() )
+         if ( !angreifer->typ->wait || !angreifer->hasMoved() || angreifer->reactionfire.getStatus() == Vehicle::ReactionFire::ready)
             for ( int i = 0; i < angreifer->typ->weapons.count ; i++)
                if (angreifer->typ->weapons.weapon[i].shootable() )
                   if (angreifer->typ->weapons.weapon[i].offensive() )
