@@ -1,6 +1,13 @@
-//     $Id: unitctrl.cpp,v 1.19 2000-07-31 19:16:50 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.20 2000-08-01 13:50:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/07/31 19:16:50  mbickel
+//      Improved handing of multiple directories
+//      Fixed: wind direction not displayed when cycling through wind heights
+//      Fixed: oil rig not working
+//      Fixed: resources becomming visible when checking mining station status
+//      Fixed: division by zero when moving unit without fuel consumption
+//
 //     Revision 1.18  2000/07/29 14:54:55  mbickel
 //      plain text configuration file implemented
 //
@@ -937,8 +944,8 @@ int ChangeVehicleHeight :: moveheight( void )
       while ( dist < vehicle->typ->steigung * minmalq  && mx > 0 ) {
          getnextfield( x, y, direc );
 
-         dist += minmalq - windmovement[direc];
-         mx -= minmalq - windmovement[direc];
+         dist += minmalq ;// - windmovement[direc];
+         mx -= minmalq ; //- windmovement[direc];
 
          if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize)) 
             ok = false; 

@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.41 2000-07-29 14:54:48 mbickel Exp $
+//     $Id: spfst.cpp,v 1.42 2000-08-01 13:50:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2000/07/29 14:54:48  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.40  2000/07/28 10:15:31  mbickel
 //      Fixed broken movement
 //      Fixed graphical artefacts when moving some airplanes
@@ -6287,7 +6290,7 @@ int tbuilding :: vehicleloadable ( pvehicle vehicle, int uheight )
       if ( completion ==  typ->construction_steps - 1 ) {
          if ( (( typ->loadcapacity >= vehicle->size())               // the unit is physically able to get "through the door"
            && (vehiclegeparkt(this)+1 < maxloadableunits )
-           && ( typ->loadcapability & vehicle->height )
+           && ( typ->loadcapability & hgt )
            && ( typ->unitheightreq & vehicle->typ->height )
            && !( typ->unitheight_forbidden & vehicle->typ->height) ) 
                    ||  

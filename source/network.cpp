@@ -1,6 +1,9 @@
-//     $Id: network.cpp,v 1.8 2000-07-29 14:54:39 mbickel Exp $
+//     $Id: network.cpp,v 1.9 2000-08-01 13:50:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/07/29 14:54:39  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.7  2000/05/30 18:39:25  mbickel
 //      Added support for multiple directories
 //      Moved DOS specific files to a separate directory
@@ -115,7 +118,11 @@ void tfiletransfernetworkconnection::tsetup::init ( void )
    x1 = -1;
    y1 = -1;
    addbutton ( "~f~ilename", 20, starty + 40, xsize - 160, starty + 70, 1 , 0, 1, true );
-   addeingabe ( 1, filename, 1, 12 );
+   #ifdef _DOS_
+    addeingabe ( 1, filename, 1, 8 );
+   #else
+    addeingabe ( 1, filename, 1, 255 );
+   #endif
 
    addbutton ( "~s~elect",   xsize - 140, starty + 40, xsize - 20, starty + 70, 0 , 1, 2, true );
 
