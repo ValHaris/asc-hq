@@ -1218,7 +1218,7 @@ void WeapDist::loaddata(void)
 
 float WeapDist::getWeapStrength ( const SingleWeapon* weap, int dist, int attacker_height, int defender_height, int reldiff  )
 {
-  int         translat[31]  = { 6, 255, 1, 3, 2, 4, 0, 5, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+  int         translat[31]  = { 6, 255, 1, 3, 2, 4, 0, 5, 255, 255, 6, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
                                  255, 255, 255, 255, 255, 255}; 
 
    if ( !weap )

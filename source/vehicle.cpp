@@ -162,7 +162,7 @@ void Vehicle :: init ( void )
       armor = typ->armor * typ->classbound[klasse].armor / 1024;
       functions = typ->functions & typ->classbound[klasse].vehiclefunctions;
       for ( int m = 0; m < typ->weapons.count ; m++)
-         weapstrength[m] = typ->weapons.weapon[m].maxstrength * typ->classbound[klasse].weapstrength[typ->weapons.weapon[m].getScalarWeaponType()] / 1024;
+         weapstrength[m] = typ->weapons.weapon[m].maxstrength; // * typ->classbound[klasse].weapstrength[typ->weapons.weapon[m].getScalarWeaponType()] / 1024;
 
       setMovement ( typ->movement[log2(height)] );
    } else {
@@ -220,52 +220,6 @@ int Vehicle :: getResource ( int amount, int resourcetype, int queryonly, int sc
 }
 
 
-/*
-void Vehicle :: clone ( pvehicle src, pmap actmap )
-{
-
-   typ = src->typ;
-   baseType = src->baseType;
-
-   color = src->color;
-   damage = src->damage;
-   tank = src->tank;
-   memcpy ( ammo , src->ammo, 16*sizeof ( int  ));
-   memcpy ( weapstrength , src->weapstrength, 16*sizeof ( int ));
-   experience = src->experience;
-   attacked = src->attacked;
-   height = src->height;
-   _movement = src->_movement;
-   direction = src->direction;
-   xpos = src->xpos;
-   ypos = src->ypos;
-   energyUsed = src->energyUsed;
-   connection = src->connection;
-   klasse = src->klasse;
-   armor = src->armor;
-   networkid = src->networkid;
-   name = src->name ;
-   functions = src->functions;
-   reactionfire.status = src->reactionfire.status;
-   reactionfire.enemiesAttackable = src->reactionfire.enemiesAttackable;
-   generatoractive = src->generatoractive;
-
-   for ( int i = 0; i < 32; i++ )
-     if ( src->loading[i] )
-        loading[i] = new Vehicle ( src->loading[i], NULL );
-     else
-        loading[i] = NULL;
-
-   for ( int j = 0; j < 8; j++ )
-      if ( src->aiparam[j] )
-         aiparam[j] = new AiParameter ( *src->aiparam[j] );
-      else
-         aiparam[j] = NULL;
-
-   if ( actmap )
-      actmap->chainunit ( this );
-}
-*/
 
 void Vehicle :: setGeneratorStatus ( bool status )
 {
@@ -293,8 +247,7 @@ void Vehicle :: setup_classparams_after_generation ( void )
       if ( typ->weapons.count ) {
          for ( int m = 0; m < typ->weapons.count ; m++) {
             ammo[m] = 0;
-            weapstrength[m] = typ->weapons.weapon[m].maxstrength *
-	      typ->classbound[klasse].weapstrength[typ->weapons.weapon[m].getScalarWeaponType()] / 1024;
+            weapstrength[m] = typ->weapons.weapon[m].maxstrength; // * typ->classbound[klasse].weapstrength[typ->weapons.weapon[m].getScalarWeaponType()] / 1024;
          }
       }
 
@@ -439,6 +392,19 @@ void Vehicle :: endTurn( void )
                height = 1 << h;
             }
    }
+
+   for ( int w = 0; w < typ->weapons.count; w++ )
+      if ( typ->weapons.weapon[w].gettype() & cwlaserb ) {
+         int cnt = 0;
+         while ( cnt < typ->weapons.weapon[w].laserRechargeRate  && ammo[w] < typ->weapons.weapon[w].count ) {
+            if ( ! (ContainerBase::getResource( typ->weapons.weapon[w].laserRechargeCost, 1 ) < typ->weapons.weapon[w].laserRechargeCost )) {
+               ContainerBase::getResource( typ->weapons.weapon[w].laserRechargeCost, 0 );
+               ammo[w] += 1;
+            }
+            ++cnt;
+         }
+      }
+
 
    resetMovement();
    attacked = false;
@@ -1524,7 +1490,7 @@ void   Vehicle::readData ( tnstream& stream )
        if (typ->weapons.count )
           for ( int m = 0; m < typ->weapons.count ; m++)
              if ( typ->weapons.weapon[m].getScalarWeaponType() >= 0 )
-                weapstrength[m] = typ->weapons.weapon[m].maxstrength * typ->classbound[klasse].weapstrength[ typ->weapons.weapon[m].getScalarWeaponType()] / 1024;
+                weapstrength[m] = typ->weapons.weapon[m].maxstrength; // * typ->classbound[klasse].weapstrength[ typ->weapons.weapon[m].getScalarWeaponType()] / 1024;
              else
                 weapstrength[m] = 0;
 

@@ -2790,17 +2790,20 @@ void  tnweapselguiicon::setup        ( pattackweap atw, int n )
       strength = atw->strength[n];
       weapnum  = atw->num[n];
       pvehicle eht = getfield ( moveparams.movesx, moveparams.movesy ) -> vehicle;
-      if ( eht->height >= chtieffliegend ) {
-         if ( typ == cwairmissilen )
-            picture[0]  = icons.selectweapongui[ 9 ];
-         else
-            picture[0]  = icons.selectweapongui[ typ ];
-      } else
-          if ( typ == cwgroundmissilen )
-             picture[0]  = icons.selectweapongui[ 10 ];
-          else
-             picture[0]  = icons.selectweapongui[ typ ];
-   } else 
+      if ( atw->typ[n] & cwlaserb )
+         picture[0]  = icons.selectweapongui[ 12 ];
+      else
+         if ( eht->height >= chtieffliegend ) {
+            if ( typ == cwairmissilen )
+               picture[0]  = icons.selectweapongui[ 9 ];
+            else
+               picture[0]  = icons.selectweapongui[ typ ];
+         } else
+             if ( typ == cwgroundmissilen )
+                picture[0]  = icons.selectweapongui[ 10 ];
+             else
+                picture[0]  = icons.selectweapongui[ typ ];
+   } else
       if ( (!atw && n == 0 ) || (atw && n == atw->count) ) {
         typ      = -2;
         strength = -1;

@@ -27,7 +27,7 @@
 #include "../stack.h"
 #include "../basegfx.h"
 #include "../global.h"
-
+#include "keysymbols.h"
 
 
 volatile tmousesettings mouseparams;

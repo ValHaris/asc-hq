@@ -20,28 +20,73 @@
 
 // #define automatic
 
-#include <malloc.h>
-#include <dos.h> 
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <fstream.h>
-#include <math.h>
 #include <conio.h>
-
 
 #include "..\tpascal.inc"
 #include "..\typen.h"
-#include "..\vesa.h"
 #include "..\misc.h"
 #include "..\sgstream.h"
 #include "..\stack.h"
 #include "..\loadpcx.h"
-#include "..\sgstream.h"
+#include "..\basestrm.h"
 #include "..\events.h"
 
-
 dacpalette256 pal;
+
+
+#undef main
+
+int pcx2raw( void* data )
+{
+   void* p = malloc ( 1000000 );
+
+   tn_file_buf_stream mainstream ("actimage.raw", tnstream::writing );
+
+
+//   if ( argc != 6 ) {
+     do {
+        if ( mouseparams.taste == 1 ) {
+          mousevisible(false);
+          int x = mouseparams.x;
+          int y = mouseparams.y;
+          int x1 = x;
+          while ( getpixel ( x1-1, y ) != 255 )
+             x1--;
+
+          int x2 = x;
+          while ( getpixel ( x2+1, y ) != 255 )
+             x2++;
+
+          int y1 = y;
+          while ( getpixel ( x, y1-1 ) != 255 )
+             y1--;
+
+          int y2 = y;
+          while ( getpixel ( x, y2+1 ) != 255 )
+             y2++;
+
+          getimage( x1,y1,x2,y2, p );
+
+         // mainstream.writerlepict( p );
+          mainstream.writedata ( p, getpicsize2 ( p ) );
+
+          rectangle( x1,y1,x2,y2, 14 );
+
+          while ( mouseparams.taste );
+
+          mousevisible(true);
+        }
+     } while ( mouseparams.taste < 2 ); /* enddo */
+/*   } else {
+      getimage( x1,y1,x2,y2, p );
+      mainstream.writerlepict( p );
+      // mainstream.writedata ( p, getpicsize2 ( p ) );
+   }
+*/
+}
 
 main(int argc, char *argv[], char *envp[])
 {
@@ -49,7 +94,9 @@ main(int argc, char *argv[], char *envp[])
       printf("\nmissing parameter. filename expected.");
       return 1;
    }
-      
+
+  fullscreen = SDL_FALSE;
+
    int x1, y1, x2, y2;
    if ( argc == 6 ) {
       x1 = atoi  ( argv[2] ) + 20;
@@ -58,84 +105,12 @@ main(int argc, char *argv[], char *envp[])
       y2 = atoi  ( argv[5] ) + 20;
    }
 
-   
-   pavailablemodes avm = searchformode ( 800, 600, 8 );
-   if (avm->num > 0) 
-      initsvga( avm->mode[0].num );
-   else {
-      avm = searchformode ( 640, 480, 8 );
-      if (avm->num > 0) 
-         initsvga( avm->mode[0].num );
-      else {
-         printf("no vesa modes available !\n" );
-         return 1;
-      }
+   initgraphics( 800, 600, 8 );
 
-   }
-
-
-   initsvga ( 0x105 );
    bar( 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, 255 );
    loadpcxxy( argv[1], 1, 20, 20 );
 
-   void* p = malloc ( 1000000 );
-   initmousehandler();
-   mousevisible( true );
-
-   tn_file_buf_stream mainstream ("actimage.raw",2);
-
-
-   if ( argc != 6 ) {
-     do {
-  #ifndef automatic
-        if ( mouseparams.taste == 1 ) {
-          mousevisible(false);
-          int x = mouseparams.x;
-          int y = mouseparams.y;
-          int x1 = x;
-          while ( getpixel ( x1-1, y ) != 255 )
-             x1--;
-  
-          int x2 = x;
-          while ( getpixel ( x2+1, y ) != 255 )
-             x2++;
-  
-          int y1 = y;
-          while ( getpixel ( x, y1-1 ) != 255 )
-             y1--;
-  
-          int y2 = y;
-          while ( getpixel ( x, y2+1 ) != 255 )
-             y2++;
-          
-          getimage( x1,y1,x2,y2, p );
-  
-         // mainstream.writerlepict( p );
-          mainstream.writedata ( p, getpicsize2 ( p ) );
-  
-          rectangle( x1,y1,x2,y2, 14 );
-  
-          while ( mouseparams.taste );
-  
-          mousevisible(true);
-  
-        }
-     } while ( !kbhit() ); /* enddo */
-  #else
-          getimage( 0, 0, 639, 479, p );
-//          mainstream.writerlepict( p );
-      mainstream.writedata ( p, getpicsize2 ( p ) );
-  
-     } while ( 0 ); /* enddo */
-  #endif 
-   } else {
-      getimage( x1,y1,x2,y2, p );
-//      mainstream.writerlepict( p );
-      mainstream.writedata ( p, getpicsize2 ( p ) );
-   }
-
-   getch();
-   settextmode(3);
+   initializeEventHandling (  pcx2raw, NULL, NULL );
    return 0;
 
 }

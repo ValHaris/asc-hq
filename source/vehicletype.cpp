@@ -135,7 +135,7 @@ int Vehicletype::maxsize ( void ) const
 extern void* generate_vehicle_gui_build_icon ( pvehicletype tnk );
 #endif
 
-const int vehicle_version = 10;
+const int vehicle_version = 11;
 
 
 
@@ -266,7 +266,7 @@ void Vehicletype :: read ( tnstream& stream )
    int _terrainnot = 0;
    if ( version <= 4 ) {
       _terrainnot = stream.readInt();
-      stream.readInt(); // _terrainreq1 
+      stream.readInt(); // _terrainreq1
    }
    int objectsbuildablenum = stream.readInt();
    if ( version <= 4 )
@@ -412,6 +412,11 @@ void Vehicletype :: read ( tnstream& stream )
          if ( version <= 2 )
             for ( int l = 0; l < 9; l++ )
                stream.readInt(); // dummy
+
+         if ( version >= 11 ) {
+            weapons.weapon[j].laserRechargeRate = stream.readInt();
+            weapons.weapon[j].laserRechargeCost.read( stream );
+         }
 
       }
 
@@ -643,6 +648,10 @@ void Vehicletype:: write ( tnstream& stream ) const
       stream.writeInt ( cmovemalitypenum );
       for ( int i = 0; i < cmovemalitypenum; i++ )
          stream.writeInt(weapons.weapon[j].targetingAccuracy[i] );
+
+      stream.writeInt( weapons.weapon[j].laserRechargeRate );
+      weapons.weapon[j].laserRechargeCost.write( stream );
+
    }
 
    terrainaccess.write ( stream );
@@ -713,6 +722,7 @@ SingleWeapon::SingleWeapon()
   count = 0;
   maxstrength= 0;
   minstrength = 0;
+  laserRechargeRate = 0;
   for ( int i = 0; i < 13; i++ )
     efficiency[i] = 0;
   for ( int i = 0; i < cmovemalitypenum; i++ )
@@ -733,7 +743,10 @@ int SingleWeapon::getScalarWeaponType(void) const {
 
 bool SingleWeapon::requiresAmmo(void) const
 {
-   return typ & ( cwweapon | cwmineb );
+   if ( typ & cwlaserb )
+      return false;
+   else
+      return typ & ( cwweapon | cwmineb );
 }
 
 bool SingleWeapon::shootable( void ) const
@@ -831,7 +844,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    for ( vector<int>::iterator i = movement.begin(); i != movement.end(); i++ )
       if ( *i > 255 )
          *i = 255;
-          
+
    pc.addNamedInteger ( "Category", movemalustyp, cmovemalitypenum, unitCategoryTags );
    pc.addInteger("MaxSurvivableStorm", maxwindspeedonwater, 255 );
    pc.addInteger("ResourceDrillingRange", digrange, 0 );
@@ -907,6 +920,11 @@ void SingleWeapon::runTextIO ( PropertyContainer& pc )
    pc.addInteger("Punch@MaxRange", minstrength );
    pc.addInteger("Punch@MinRange", maxstrength );
    pc.addString("Sound", soundLabel, "");
+   pc.addInteger("LaserRechargeRate", laserRechargeRate, 0 );
+   pc.openBracket( "laserRechargeCost" );
+    laserRechargeCost.runTextIO ( pc, Resources(0,0,0) );
+   pc.closeBracket();
+
    pc.openBracket("HitAccuracy" ); {
      for ( int j = 0; j < 13; j++ )
         if ( j < 6 )

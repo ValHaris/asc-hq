@@ -66,7 +66,7 @@ const char* ceventtrigger[ceventtriggernum]  = {"*NONE*", "turn/move >=", "build
 
 
 const char*  cwaffentypen[cwaffentypennum]  = {"cruise missile", "mine",    "bomb",       "air - missile", "ground - missile", "torpedo", "machine gun",
-                                               "cannon",         "service", "ammunition refuel", "laser (not implemented yet!)", "shootable"};
+                                               "cannon",         "service", "ammunition refuel", "laser", "shootable"};
 
 const char*  cmovemalitypes[cmovemalitypenum] = { "default",
                                                  "light tracked vehicle", "medium tracked vehicle", "heavy tracked vehicle",
@@ -84,7 +84,7 @@ const char* cgeneralnetcontrol[4] = {       "store",  "move out", "stop storing"
                                           // Functionen in Geb„uden ....
 
 const char*  cwettertypen[cwettertypennum] = {"dry (standard)","light rain", "heavy rain", "few snow", "lot of snow", "lot of snow + ice"};
-const char*  resourceNames[3]  = {"energy", "material", "fuel"}; 
+const char*  resourceNames[3]  = {"energy", "material", "fuel"};
 const int  cwaffenproduktionskosten[cwaffentypennum][3]    = {{20, 15, 10}, {2, 2, 0}, {3, 2, 0}, {3, 3, 2}, {3, 3, 2}, {4, 3, 2},
                                                               {1, 1, 0},    {1, 2, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}; // jeweils f?r weaponpackagesize Pack !
 
@@ -100,8 +100,6 @@ const int resourceWeight[ resourceTypeNum ] = { 0, 10, 4 };
 
 
 const int csolarkraftwerkleistung[cwettertypennum] = { 1024, 512, 256, 756, 384, 384 }; // 1024 ist Maximum
-
-
 
 
 
@@ -126,6 +124,11 @@ Resources ResourceMatrix :: operator* ( const Resources& r ) const
    return res;
 }
 
+
+const char* Resources::name( int r )
+{
+   return resourceNames[r];
+}
 
 void Resources :: read ( tnstream& stream )
 {

@@ -97,6 +97,12 @@ extern const char*  cvehiclefunctions[];
      */
      int          targetingAccuracy[cmovemalitypenum];
 
+     //! the number of shots that the laser is recharged each turn
+     int          laserRechargeRate;
+
+     //! the resources that recharging the laser for a single shot requires
+     Resources    laserRechargeCost;
+
      ASCString    soundLabel;
 
      int          getScalarWeaponType(void) const;

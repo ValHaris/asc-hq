@@ -229,6 +229,21 @@ int maintainencecheck( void )
 }
 
 
+void* loadpcx2raw( const ASCString& file )
+{
+   int pcxwidth,imgwidth;
+   int pcxheight,imgheight;
+   int depth = pcxGetColorDepth ( file, &pcxwidth, &pcxheight );
+   if ( depth > 8 )
+      fatalError(file + " could not be loaded: only 8 bit images supported");
+
+   tvirtualdisplay vdp ( pcxwidth, pcxheight, 255, 8 );
+   loadpcxxy ( file, 0, 0, 0, &imgwidth, &imgheight );
+   void* img = new char[imagesize (0, 0, imgheight-1, imgwidth-1)];
+   getimage ( 0, 0, imgwidth-1, imgheight-1, img );
+   return img;
+}
+
 void         loadMoreData(void)
 {
    int          w;
@@ -375,6 +390,7 @@ void         loadMoreData(void)
       for ( i = 0; i < num; i++ )
          stream.readrlepict(   &icons.selectweapongui[xlatselectweaponguiicons[i]], false, &w );
       stream.readrlepict(   &icons.selectweaponguicancel, false, &w );
+      stream.readrlepict(   &icons.selectweapongui[12], false, &w );
    }
 
    {

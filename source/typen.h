@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.126 2003-04-08 15:04:47 mbickel Exp $
+//     $Id: typen.h,v 1.127 2003-04-25 09:59:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.126  2003/04/08 15:04:47  mbickel
+//      Fixed: crash when loading certain events
+//
 //     Revision 1.125  2003/03/14 23:11:07  mbickel
 //      Fixes to the wind and Pathfinding algorithm
 //
@@ -402,6 +405,7 @@ class Resources {
      void write ( tnstream& stream ) const;
      void runTextIO ( PropertyContainer& pc );
      void runTextIO ( PropertyContainer& pc, const Resources& defaultValue );
+     static const char* name( int r );
 };
 
 extern Resources operator- ( const Resources& res1, const Resources& res2 );
@@ -761,9 +765,9 @@ struct ticons {
    void*        player[8];      // aktueller Spieler in der dashboard: FARBE.RAW 
    void*        allianz[8][3];  // Allianzen in der dashboard: ALLIANC.RAW 
    void*        diplomaticstatus[8]; 
-   void*        selectweapongui[12];
+   void*        selectweapongui[13];
    void*        selectweaponguicancel;
-   void*        unitinfoguiweapons[13];
+   void*        unitinfoguiweapons[14];
    void*        experience[maxunitexperience+1];
    void*        wind[9];
    void*        windarrow;
@@ -945,10 +949,12 @@ extern  const char*  choehenstufen[8] ;
  #define cwmachinegunb ( 1 << cwmachinegunn )
  #define cwcannonn 7  
  #define cwcannonb ( 1 << cwcannonn )
- #define cwweapon ( cwcruisemissileb | cwbombb | cwairmissileb | cwgroundmissileb | cwtorpedob | cwmachinegunb | cwcannonb )
+ #define cwweapon ( cwcruisemissileb | cwbombb | cwairmissileb | cwgroundmissileb | cwtorpedob | cwmachinegunb | cwcannonb | cwlaserb )
  #define cwshootablen 11  
  #define cwshootableb ( 1 << cwshootablen  )
- #define cwammunitionn 9  
+ #define cwlasern 10
+ #define cwlaserb ( 1 << cwlasern  )
+ #define cwammunitionn 9
  #define cwammunitionb ( 1 << cwammunitionn )
  #define cwservicen 8  
  #define cwserviceb ( 1 << cwservicen )

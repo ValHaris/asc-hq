@@ -176,12 +176,18 @@ void         tdashboard::paintweaponammount(int h, int num, int max, bool dash )
 
 void         tdashboard::paintweapon(int         h, int num, int strength,  const SingleWeapon  *weap )
 {
-      if ( weap->getScalarWeaponType() >= 0 )
-         if ( weap->canRefuel() )
-            putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, xlatpict ( &xlattables.a.light, icons.unitinfoguiweapons[ weap->getScalarWeaponType() ] ));
+      if ( weap->getScalarWeaponType() >= 0 ) {
+         void* img;
+         if ( weap->gettype() & cwlaserb )
+            img = icons.unitinfoguiweapons[ 13 ] ;
          else
-            putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, icons.unitinfoguiweapons[ weap->getScalarWeaponType() ] );
-      else
+            img = icons.unitinfoguiweapons[ weap->getScalarWeaponType() ] ;
+
+         if ( weap->canRefuel() )
+            putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, xlatpict ( &xlattables.a.light, img));
+         else
+            putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, img );
+      } else
          if ( weap->service() )
             putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, icons.unitinfoguiweapons[ cwservicen ] );
 

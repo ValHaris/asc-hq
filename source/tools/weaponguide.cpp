@@ -601,6 +601,35 @@ int main(int argc, char *argv[] )
                   printValue ( weaponPage, ft->weapons.weapon[w].count );
                printLineEnd ( weaponPage );
 
+               bool laser = false;
+               for ( int w = 0; w < ft->weapons.count ; w++)
+                  if ( ft->weapons.weapon[w].gettype() & cwlaserb )
+                     laser = true;
+
+               if ( laser ) {
+                  printIndex ( weaponPage, "Laser recharge rate");
+                  for ( int w = 0; w < ft->weapons.count ; w++)
+                     printValue ( weaponPage, ft->weapons.weapon[w].laserRechargeRate );
+                  printLineEnd ( weaponPage );
+
+                  printIndex ( weaponPage, "Resources to recharge laser");
+                  for ( int w = 0; w < ft->weapons.count ; w++) {
+                     ASCString s;
+                     for ( int r = 0; r < 3; r++ )
+                        if ( ft->weapons.weapon[w].laserRechargeCost.resource(r)) {
+                           if ( !s.empty() )
+                              s += "; ";
+                           s += strrr(ft->weapons.weapon[w].laserRechargeCost.resource(r));
+                           s += " " ;
+                           s += resourceNames[r] ;
+                        }
+                     printValue ( weaponPage, s );
+                  }
+                  printLineEnd ( weaponPage );
+                  
+               }
+
+
                printIndex ( weaponPage, "Can be fired");
                for ( int w = 0; w < ft->weapons.count ; w++)
                   if ( ft->weapons.weapon[w].shootable() )

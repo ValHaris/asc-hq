@@ -895,7 +895,7 @@ void checkDataVersion( )
    } else
       dataVersion = 0;
 
-   if ( dataVersion < 9 || dataVersion > 0xffff ) {
+   if ( dataVersion < 10 || dataVersion > 0xffff ) {
       fatalError("A newer version of the data file 'main.con' is required. \n"
                  "You can get a new data package at http://www.asc-hq.org", 2 );
    }
