@@ -34,6 +34,8 @@
 
 class Research;
 class Technology;
+class Building;
+class Vehicle;
 
 class TechDependency: public LoadableItemType {
      typedef vector<IntRange> RequiredTechnologies;
@@ -181,7 +183,7 @@ class TechAdapterDependency {
  };
 
 //! Calculates the resources that are needed to research the given number of research
-extern Resources returnResourcenUseForResearch ( const pbuilding bld, int research );
+extern Resources returnResourcenUseForResearch ( const Building* bld, int research );
 
 #endif
 

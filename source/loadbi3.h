@@ -35,8 +35,6 @@
 #endif
 
 
-//! checks wheather the path to a BI3 installtion stored in CGameOptions is valid
-extern void check_bi3_dir ( void );
 
 /** Imports a Battle Isle map 
   \param path the path to the BI3 installation

@@ -701,7 +701,7 @@ Research::~Research () {};
 
 
 
-Resources returnResourcenUseForResearch ( const pbuilding bld, int research )
+Resources returnResourcenUseForResearch ( const Building* bld, int research )
 {
    Resources res;
    if ( bld->typ->nominalresearchpoints == 0 )
@@ -730,7 +730,7 @@ Resources returnResourcenUseForResearch ( const pbuilding bld, int research )
 }
 
 #if 0
-void returnresourcenuseforresearch ( const pbuilding bld, int research, int* energy, int* material )
+void returnresourcenuseforresearch ( const Building* bld, int research, int* energy, int* material )
 {
    /*
    double esteigung = 55;

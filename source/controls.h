@@ -4,7 +4,7 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.55 2004-07-12 18:15:04 mbickel Exp $
+//     $Id: controls.h,v 1.55.2.1 2004-10-26 16:35:03 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -56,7 +56,7 @@
                                                                    */
 
                         int           movesx, movesy, moveerr; 
-                        pvehicle     vehicletomove;
+                        Vehicle*     vehicletomove;
                         int          newheight; 
                         int          oldheight; 
                         char         heightdir; 
@@ -74,7 +74,7 @@
 */
 extern pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
                                     const MapCoordinate3D& dest,
-                                    pvehicle     vehicle,
+                                    const Vehicle*     vehicle,
                                     WindMovement* wm = NULL,
                                     bool*  inhibitAttack = NULL,
                                     bool container2container  = false );
@@ -142,7 +142,7 @@ extern void continuenetworkgame ( void );
 
 
 //! dissects a vehicle; if you haven't researched this vehicle type you will get some research points for it.
-extern void dissectvehicle ( pvehicle eht );
+extern void dissectvehicle ( Vehicle* eht );
 
 
 
@@ -169,17 +169,17 @@ typedef treactionfire_replayinfo* preactionfire_replayinfo;
      creation (no fuel, etc). The resources for the creation must be seperately 'consumed'. */
 extern void   generatevehicle_cl ( pvehicletype fztyp,
                                                 int               col,
-                                                pvehicle &    vehicle,
+                                                Vehicle* &    vehicle,
                                                 int               x, 
                                                 int               y );
 
-extern int searchexternaltransferfields ( pbuilding bld );
+extern int searchexternaltransferfields ( Building* bld );
 
 
 class treactionfire {
           public:
-             virtual int  checkfield ( const MapCoordinate3D& pos, pvehicle &eht, MapDisplayInterface* md ) = 0;
-             virtual void init ( pvehicle eht, const AStar3D::Path&  fieldlist ) = 0;
+             virtual int  checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, MapDisplayInterface* md ) = 0;
+             virtual void init ( Vehicle* eht, const AStar3D::Path&  fieldlist ) = 0;
              virtual ~treactionfire() {};
         };
 
@@ -187,12 +187,12 @@ class treactionfirereplay : public treactionfire {
           protected:
              int num;
              dynamic_array<preactionfire_replayinfo> replay;
-             pvehicle unit;
+             Vehicle* unit;
           public:
              treactionfirereplay ( void );
              ~treactionfirereplay ( );
-             virtual int checkfield ( const MapCoordinate3D& pos, pvehicle &eht, MapDisplayInterface* md );
-             virtual void init ( pvehicle eht, const AStar3D::Path& fieldlist );
+             virtual int checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, MapDisplayInterface* md );
+             virtual void init ( Vehicle* eht, const AStar3D::Path& fieldlist );
    };
 
 class tsearchreactionfireingunits : public treactionfire {
@@ -200,13 +200,13 @@ class tsearchreactionfireingunits : public treactionfire {
 
 
                 static int maxshootdist[8];     // f?r jede H”henstufe eine
-                void addunit ( pvehicle vehicle );
-                void removeunit ( pvehicle vehicle );
+                void addunit ( Vehicle* vehicle );
+                void removeunit ( Vehicle* vehicle );
            public:
 
                 tsearchreactionfireingunits( void );
-                void init ( pvehicle eht, const AStar3D::Path& fieldlist );
-                int  checkfield ( const MapCoordinate3D& pos, pvehicle &eht, MapDisplayInterface* md );
+                void init ( Vehicle* eht, const AStar3D::Path& fieldlist );
+                int  checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, MapDisplayInterface* md );
                 ~tsearchreactionfireingunits();
       };
 
@@ -218,9 +218,9 @@ class ReplayMapDisplay : public MapDisplayInterface {
            void wait ( int minTime = 0 );
          public:
            ReplayMapDisplay ( MapDisplay* md ) { mapDisplay = md; cursorDelay = 20; };
-           int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, pvehicle vehicle, int fieldnum, int totalmove, SoundLoopManager* slm );
+           int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundLoopManager* slm );
            void displayPosition ( int x, int y );
-           void deleteVehicle ( pvehicle vehicle ) { mapDisplay->deleteVehicle ( vehicle ); };
+           void deleteVehicle ( Vehicle* vehicle ) { mapDisplay->deleteVehicle ( vehicle ); };
            void displayMap ( void ) { mapDisplay->displayMap(); };
            void resetMovement ( void ) { mapDisplay->resetMovement(); };
            void startAction ( void ) { mapDisplay->startAction(); };

@@ -276,8 +276,8 @@ class    ccontainer : public virtual ccontainercontrols
             int schiebpos[20];
             void checkformouse ( void );
             int num;
-            pvehicle eht;
-            void reset ( pvehicle veh = NULL );
+            Vehicle* eht;
+            void reset ( Vehicle* veh = NULL );
             int  gpres ( int i );
             void check ( int i );
             void transfer ( void );
@@ -353,7 +353,7 @@ class    ccontainer : public virtual ccontainercontrols
       void     run (void);
       void     done (void);
       void     movemark (int direction);
-      virtual pvehicle getmarkedunit (void) = 0;
+      virtual Vehicle* getmarkedunit (void) = 0;
       virtual pvehicletype getmarkedunittype ( void );
       void     displayloading ( int x, int y, int dx = 0, int dy = 0 );
       void     displayloading (void);
@@ -705,7 +705,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
 
       int    putammunition (int  weapontype, int  ammunition, int abbuchen);
       int    getammunition ( int weapontype, int num, int abbuchen, int produceifrequired = 0 );
-      pvehicle getloadedunit (int num);
+      Vehicle* getloadedunit (int num);
       virtual void     setpictures ( void );
 
       pvehicletype getmarkedunittype ( void );
@@ -732,9 +732,9 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
    public :
       virtual void paintvehicleinfo ( void );
       virtual void unitchanged( void );
-      void     init (pbuilding bld);
+      void     init (Building* bld);
 
-      pvehicle getmarkedunit (void);
+      Vehicle* getmarkedunit (void);
       ccontainer_b ( void );
       ~ccontainer_b ( void );
 
@@ -788,7 +788,7 @@ class    ccontainer_t : public ctransportcontrols , public ccontainer
       }
       hosticons_ct;
 
-      pvehicle getloadedunit (int num);
+      Vehicle* getloadedunit (int num);
 
       int    putammunition (int  weapontype, int  ammunition, int abbuchen);
       int    getammunition ( int weapontype, int num, int abbuchen, int produceifrequired = 0 );
@@ -814,9 +814,9 @@ class    ccontainer_t : public ctransportcontrols , public ccontainer
       subwindows;
 
    public :
-      void     init ( pvehicle eht );
+      void     init ( Vehicle* eht );
 
-      pvehicle getmarkedunit (void);
+      Vehicle* getmarkedunit (void);
       ccontainer_t ( void );
       ~ccontainer_t ( void );
 
@@ -837,8 +837,8 @@ struct tbuildingparamstack
    pbuildingsubwindow cbuildingsubwindow_firstb;
 
    char* name;
-   pbuilding bld;
-   pvehicle eht;
+   Building* bld;
+   Vehicle* eht;
 } ;
 
 
@@ -926,7 +926,7 @@ int getstepwidth ( int max )
 
 
 
-void  container ( pvehicle eht, pbuilding bld )
+void  container ( Vehicle* eht, Building* bld )
 {
    recursiondepth++;
    memset ( &buildingparamstack[recursiondepth], 0, sizeof ( buildingparamstack[recursiondepth] ));
@@ -970,7 +970,7 @@ ccontainercontrols :: ccontainercontrols (void)
 
 
 
-void  ccontainercontrols :: crefill :: resource (pvehicle eht, int resourcetype, int newamount)
+void  ccontainercontrols :: crefill :: resource (Vehicle* eht, int resourcetype, int newamount)
 {
    int oldamount = eht->getResource(maxint, resourcetype, true);
    int storable = eht->putResource(newamount - oldamount, resourcetype, true);
@@ -983,7 +983,7 @@ void  ccontainercontrols :: crefill :: resource (pvehicle eht, int resourcetype,
 
 
 
-void  ccontainercontrols :: crefill :: ammunition (pvehicle eht, char weapon, int newa )
+void  ccontainercontrols :: crefill :: ammunition (Vehicle* eht, char weapon, int newa )
 {
    if ( eht->typ->weapons.weapon[ weapon ].requiresAmmo() ) {
       if ( newa > eht->typ->weapons.weapon[ weapon ].count )
@@ -1002,7 +1002,7 @@ void  ccontainercontrols :: crefill :: ammunition (pvehicle eht, char weapon, in
 
 
 
-void  ccontainercontrols :: crefill :: filleverything ( pvehicle eht )
+void  ccontainercontrols :: crefill :: filleverything ( Vehicle* eht )
 {
    resource ( eht, 1, maxint );
    resource ( eht, 2, maxint );
@@ -1012,7 +1012,7 @@ void  ccontainercontrols :: crefill :: filleverything ( pvehicle eht )
 
 }
 
-void  ccontainercontrols :: crefill :: emptyeverything ( pvehicle eht )
+void  ccontainercontrols :: crefill :: emptyeverything ( Vehicle* eht )
 {
    resource ( eht, 1, 0 );
    resource ( eht, 2, 0 );
@@ -1026,7 +1026,7 @@ void  ccontainercontrols :: crefill :: emptyeverything ( pvehicle eht )
 }
 
 
-bool ccontainercontrols :: cmove_unit_in_container :: moveupavail ( pvehicle eht )
+bool ccontainercontrols :: cmove_unit_in_container :: moveupavail ( Vehicle* eht )
 {
    if ( eht ) {
       if ( recursiondepth > 0 ) {
@@ -1040,7 +1040,7 @@ bool ccontainercontrols :: cmove_unit_in_container :: moveupavail ( pvehicle eht
    return 0;
 }
 
-bool ccontainercontrols :: cmove_unit_in_container :: movedownavail ( pvehicle eht, pvehicle into )
+bool ccontainercontrols :: cmove_unit_in_container :: movedownavail ( Vehicle* eht, Vehicle* into )
 {
    if ( eht )
       if ( into )
@@ -1050,12 +1050,12 @@ bool ccontainercontrols :: cmove_unit_in_container :: movedownavail ( pvehicle e
 }
 
 
-void ccontainercontrols :: cmove_unit_in_container :: moveup ( pvehicle eht )
+void ccontainercontrols :: cmove_unit_in_container :: moveup ( Vehicle* eht )
 {
    if ( moveupavail( eht ) )
       if ( eht ) {
-         pvehicle targe = buildingparamstack[recursiondepth-1].eht;
-         pbuilding targb = buildingparamstack[recursiondepth-1].bld;
+         Vehicle* targe = buildingparamstack[recursiondepth-1].eht;
+         Building* targb = buildingparamstack[recursiondepth-1].bld;
 
          if ( targe ) {
             int i = 0;
@@ -1092,7 +1092,7 @@ void ccontainercontrols :: cmove_unit_in_container :: moveup ( pvehicle eht )
 }
 
 
-void ccontainercontrols :: cmove_unit_in_container :: movedown ( pvehicle eht, pvehicle into )
+void ccontainercontrols :: cmove_unit_in_container :: movedown ( Vehicle* eht, Vehicle* into )
 {
    if ( movedownavail(eht, into) ) {
 
@@ -1122,7 +1122,7 @@ void ccontainercontrols :: cmove_unit_in_container :: movedown ( pvehicle eht, p
    }
 }
 
-VehicleMovement*   ccontainercontrols :: movement (  pvehicle eht, bool simpleMode )
+VehicleMovement*   ccontainercontrols :: movement (  Vehicle* eht, bool simpleMode )
 {
    VehicleMovement* vehicleMovement = new VehicleMovement ( &defaultMapDisplay, NULL );
    int mode = 0;
@@ -1153,7 +1153,7 @@ cbuildingcontrols :: cbuildingcontrols (void)
    cc_t = NULL;
 }
 
-void  cbuildingcontrols :: init (pbuilding bldng)
+void  cbuildingcontrols :: init (Building* bldng)
 {
    building = bldng;
    baseContainer = bldng;
@@ -1254,7 +1254,7 @@ int    cbuildingcontrols :: getHeight ( void )
 
 
 
-void  cbuildingcontrols :: removevehicle ( pvehicle *peht )
+void  cbuildingcontrols :: removevehicle ( Vehicle* *peht )
 {
    for (int i=0; i<=31; i++) {
       if ( *peht == building->loading[i] )
@@ -1267,7 +1267,7 @@ void  cbuildingcontrols :: removevehicle ( pvehicle *peht )
 }
 
 
-Resources  cbuildingcontrols :: crecycling :: resourceuse (pvehicle eht)
+Resources  cbuildingcontrols :: crecycling :: resourceuse (Vehicle* eht)
 {
    int   output;
    if ( cc->getspecfunc( mbuilding ) & cgrecyclingplantb)
@@ -1287,7 +1287,7 @@ Resources  cbuildingcontrols :: crecycling :: resourceuse (pvehicle eht)
 }
 
 
-void  cbuildingcontrols :: crecycling :: recycle (pvehicle eht)
+void  cbuildingcontrols :: crecycling :: recycle (Vehicle* eht)
 {
       Resources res = resourceuse ( eht );
 
@@ -1448,9 +1448,9 @@ int   cbuildingcontrols :: cproduceunit :: available (pvehicletype fzt, int* lac
 
 
 
-pvehicle cbuildingcontrols :: cproduceunit :: produce (pvehicletype fzt, bool forceRefill)
+Vehicle* cbuildingcontrols :: cproduceunit :: produce (pvehicletype fzt, bool forceRefill)
 {
-   pvehicle    eht;
+   Vehicle*    eht;
    generatevehicle_cl ( fzt, cc->getactplayer() , eht, cc->getxpos(), cc->getypos() );
 
    /* ####TRANS
@@ -1503,9 +1503,9 @@ pvehicle cbuildingcontrols :: cproduceunit :: produce (pvehicletype fzt, bool fo
    return eht;
 };
 
-pvehicle cbuildingcontrols :: cproduceunit :: produce_hypothetically (pvehicletype fzt)
+Vehicle* cbuildingcontrols :: cproduceunit :: produce_hypothetically (pvehicletype fzt)
 {
-   pvehicle    eht;
+   Vehicle*    eht;
    generatevehicle_cl ( fzt, cc->getactplayer() , eht, cc->getxpos (), cc->getypos () );
 
 
@@ -1515,7 +1515,7 @@ pvehicle cbuildingcontrols :: cproduceunit :: produce_hypothetically (pvehiclety
 
 
 
-int   cbuildingcontrols :: ctrainunit :: available ( pvehicle eht )
+int   cbuildingcontrols :: ctrainunit :: available ( Vehicle* eht )
 {
    if ( actmap->getgameparameter( cgp_bi3_training ) )
       return 0;
@@ -1542,7 +1542,7 @@ int   cbuildingcontrols :: ctrainunit :: available ( pvehicle eht )
 
 
 
-void  cbuildingcontrols :: ctrainunit :: trainunit ( pvehicle eht )
+void  cbuildingcontrols :: ctrainunit :: trainunit ( Vehicle* eht )
 {
    if ( available ( eht ) ) {
       eht->experience+= actmap->getgameparameter( cgp_trainingIncrement );
@@ -1562,7 +1562,7 @@ void  cbuildingcontrols :: ctrainunit :: trainunit ( pvehicle eht )
 
 
 
-int   cbuildingcontrols :: cdissectunit :: available ( pvehicle eht )
+int   cbuildingcontrols :: cdissectunit :: available ( Vehicle* eht )
 {
    if ( eht )
       if (  cc->getspecfunc ( mbuilding ) & cgresearchb )
@@ -1571,7 +1571,7 @@ int   cbuildingcontrols :: cdissectunit :: available ( pvehicle eht )
    return 0;
 }
 
-void   cbuildingcontrols :: cdissectunit :: dissectunit ( pvehicle eht )
+void   cbuildingcontrols :: cdissectunit :: dissectunit ( Vehicle* eht )
 {
    if ( available ( eht ) ) {
       cc->refill.emptyeverything ( eht );
@@ -1638,7 +1638,7 @@ ctransportcontrols :: ctransportcontrols (void)
    cc_b = NULL;
 }
 
-void  ctransportcontrols :: init (pvehicle eht)
+void  ctransportcontrols :: init (Vehicle* eht)
 {
    vehicle = eht;
    baseContainer = eht;
@@ -1729,7 +1729,7 @@ int   ctransportcontrols :: getspecfunc ( tcontainermode mode )
 
 
 
-void  ctransportcontrols :: removevehicle ( pvehicle *peht )
+void  ctransportcontrols :: removevehicle ( Vehicle* *peht )
 {
    for (int i=0; i<=31; i++) {
       if ( *peht == vehicle->loading[i] )
@@ -2160,7 +2160,7 @@ void  ccontainer :: setpictures ( void )
       }
 
    for ( int i = 0; i < 32; i++ ) {
-      pvehicle unit = getloadedunit ( i );
+      Vehicle* unit = getloadedunit ( i );
       if ( unit ) {
          picture[i] = unit->typ->getImage() ;
          if ( unit->getMovement() > 0 )
@@ -2373,7 +2373,7 @@ void  ccontainer :: cammunitiontransfer_subwindow :: paintobj ( int numm, int st
 
 }
 
-void  ccontainer :: cammunitiontransfer_subwindow :: reset ( pvehicle veh )
+void  ccontainer :: cammunitiontransfer_subwindow :: reset ( Vehicle* veh )
 {
    int i;
 
@@ -2763,7 +2763,7 @@ void ccontainer_b :: cammunitiontransferb_subwindow :: execexternalload ( void )
             setnewmousepointer ( icons.mousepointer, 0,0 );
 
          mousevisible ( false );
-         pvehicle markedvehicle = NULL;
+         Vehicle* markedvehicle = NULL;
          if ( moveparams.movestatus == 131 ) {
             markedvehicle = getactfield()->vehicle ;
             externalloadingactive = 1;
@@ -2824,7 +2824,7 @@ int   ccontainer :: moveicon_c :: available    ( void )
    if ( main->unitmode != mnormal )
       return 0;
 
-   pvehicle eht = main->getmarkedunit();
+   Vehicle* eht = main->getmarkedunit();
 
    if ( eht && eht->color == actmap->actplayer * 8 )
       return eht->canMove();
@@ -2915,7 +2915,7 @@ int   ccontainer :: repairicon_c :: available    ( void )
    if ( main->unitmode != mnormal )
       return 0;
 
-   pvehicle eht = main->getmarkedunit();
+   Vehicle* eht = main->getmarkedunit();
    if ( eht && eht->color == actmap->actplayer * 8)
       if ( eht->damage > 0 )
          return cc->baseContainer->canRepair( eht );
@@ -2958,7 +2958,7 @@ int   ccontainer :: fill_dialog_icon_c :: available    ( void )
    if ( main->unitmode != mnormal )
       return 0;
 
-   pvehicle eht = main->getmarkedunit();
+   Vehicle* eht = main->getmarkedunit();
    if ( eht && eht->color == actmap->actplayer * 8)
       return 1;
 
@@ -3010,7 +3010,7 @@ ccontainer :: container_icon_c :: container_icon_c ( void )
 
 void  ccontainer :: container_icon_c :: exec         ( void )
 {
-   pvehicle eht = main->getmarkedunit();
+   Vehicle* eht = main->getmarkedunit();
    container ( eht, NULL );
    main->buildgraphics();
    main->displayloading ();
@@ -3024,7 +3024,7 @@ int   ccontainer :: container_icon_c :: available    ( void )
    if ( main->unitmode != mnormal )
       return 0;
 
-   pvehicle eht = main->getmarkedunit();
+   Vehicle* eht = main->getmarkedunit();
    if ( eht && eht->color == actmap->actplayer * 8)
       if ( eht->typ->maxLoadableUnits > 0 )
          if ( recursiondepth +1 < maxrecursiondepth )
@@ -3084,7 +3084,7 @@ int ccontainer :: cmovedown_icon_c :: available ( void )
 {
    if ( main->unitmode == mnormal ) {
       for ( int i = 0; i < maxloadableunits; i++ ) {
-         pvehicle eht = main->getloadedunit ( i );
+         Vehicle* eht = main->getloadedunit ( i );
          if ( eht )
             if ( eht != main->getmarkedunit ())
                if ( movedownavail ( main->getmarkedunit () , eht ))
@@ -3508,7 +3508,7 @@ ccontainer_b :: ccontainer_b ( void )
    memset ( &produceableunits, 0, sizeof ( produceableunits ));
 }
 
-void  ccontainer_b :: init ( pbuilding bld )
+void  ccontainer_b :: init ( Building* bld )
 {
    hosticons_cb.init ( hgmp->resolutionx, hgmp->resolutiony );
    hosticons_cb.seticonmains ( this );
@@ -3527,8 +3527,7 @@ void  ccontainer_b :: init ( pbuilding bld )
       MapCoordinate mc = building->getEntry();
       cursor.gotoxy ( mc.x , mc.y );
 
-      ccontainer :: init ( building->getpicture ( building->typ->entry ),
-                           building->color, building->name.c_str(), building->typ->name.c_str());
+      ccontainer :: init ( NULL, building->color, building->name.c_str(), building->typ->name.c_str());
       ccontainer :: displayloading ();
       ccontainer :: movemark (repaint);
 
@@ -3596,7 +3595,7 @@ void  ccontainer_b :: setpictures ( void )
 
 
 
-pvehicle    ccontainer_b :: getmarkedunit (void)
+Vehicle*    ccontainer_b :: getmarkedunit (void)
 {
    if ( unitmode == mnormal || unitmode == mloadintocontainer)
       return building->loading[mark.y*unitsshownx + mark.x];
@@ -3614,12 +3613,12 @@ pvehicletype ccontainer_b :: getmarkedunittype ( void )
 
 
 
-pvehicle cbuildingcontrols :: getloadedunit (int num)
+Vehicle* cbuildingcontrols :: getloadedunit (int num)
 {
    return building->loading[num];
 };
 
-pvehicle ccontainer_b :: getloadedunit (int num)
+Vehicle* ccontainer_b :: getloadedunit (int num)
 {
    if ( unitmode == mnormal || unitmode == mloadintocontainer )
       return building->loading[num];
@@ -4221,13 +4220,13 @@ void ccontainer_b :: cconventionelpowerplant_subwindow :: setnewpower ( int pwr 
 
    if ( allbuildings ) {
       for ( tmap::Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ ) {
-         pbuilding bld = *bi;
+         Building* bld = *bi;
          if ( bld->typ->special & cgconventionelpowerplantb )
             for ( int r = 0; r < 3; r++ )
                bld->plus.resource(r) = bld->maxplus.resource(r) * power/1024;
       }
    } else {
-      pbuilding bld = cc_b->building;
+      Building* bld = cc_b->building;
       for ( int r = 0; r < 3; r++ )
          bld->plus.resource(r) = bld->maxplus.resource(r) * power/1024;
    }
@@ -5167,7 +5166,7 @@ void ccontainer_b :: cresearch_subwindow :: setnewresearch ( int res )
 
    if ( allbuildings ) {
       for ( tmap::Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ ) {
-         pbuilding bld = *bi;
+         Building* bld = *bi;
          if ( bld->typ->special & cgresearchb ) {
             bld->researchpoints = bld->maxresearchpoints * research/1024;
             if ( bld->researchpoints > bld->maxresearchpoints )
@@ -5177,7 +5176,7 @@ void ccontainer_b :: cresearch_subwindow :: setnewresearch ( int res )
          }
       }
    } else {
-      pbuilding bld = cc_b->building;
+      Building* bld = cc_b->building;
       bld->researchpoints = bld->maxresearchpoints * research/1024;
       if ( bld->researchpoints > bld->maxresearchpoints )
          bld->researchpoints = bld->maxresearchpoints;
@@ -5487,14 +5486,14 @@ void ccontainer_b :: cminingstation_subwindow :: setnewextraction ( int res )
 
    if ( allbuildings ) {
       for ( tmap::Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ ) {
-         pbuilding bld = *bi;
+         Building* bld = *bi;
          if ( bld->typ->special & cgminingstationb ) {
             for ( int r = 0; r < 3; r++ )
                bld->plus.resource(r) = bld->maxplus.resource(r) * extraction/1024;
          }
       }
    } else {
-      pbuilding bld = cc_b->building;
+      Building* bld = cc_b->building;
       for ( int r = 0; r < 3; r++ )
          bld->plus.resource(r) = bld->maxplus.resource(r) * extraction/1024;
    }
@@ -5928,7 +5927,7 @@ void  ccontainer_b :: cmineralresources_subwindow :: displayvariables ( void )
       showtext2c ( "avail in:",        subwinx1 + 8, subwiny1 + 79 );
 
       int rppt = 0;
-      pbuilding bld = actmap->player[actmap->actplayer].firstbuilding;
+      Building* bld = actmap->player[actmap->actplayer].firstbuilding;
       while ( bld ) {
          rppt += bld->researchpoints;
          bld=bld->next;
@@ -6145,7 +6144,7 @@ int   ccontainer_b :: trainuniticon_cb :: available    ( void )
    if ( main->unitmode != mnormal )
       return 0;
 
-   pvehicle eht = main->getmarkedunit();
+   Vehicle* eht = main->getmarkedunit();
    if ( eht && eht->color == actmap->actplayer * 8 )
       return /*cbuildingcontrols ::*/ ctrainunit :: available ( eht );
 
@@ -6169,7 +6168,7 @@ ccontainer_b :: dissectuniticon_cb :: dissectuniticon_cb ( void )
 
 int   ccontainer_b :: dissectuniticon_cb :: available    ( void )
 {
-   pvehicle eht = main->getmarkedunit();
+   Vehicle* eht = main->getmarkedunit();
    if ( eht && eht->color == actmap->actplayer * 8)
       return /*cbuildingcontrols ::*/ cdissectunit :: available ( eht );
 
@@ -6178,7 +6177,7 @@ int   ccontainer_b :: dissectuniticon_cb :: available    ( void )
 
 void  ccontainer_b :: dissectuniticon_cb :: exec         ( void )
 {
-   pvehicle eht = main->getmarkedunit();
+   Vehicle* eht = main->getmarkedunit();
    dissectunit ( eht );
    main->movemark (repaint);
    dashboard.x = 0xffff;
@@ -6197,7 +6196,7 @@ void  ccontainer_b :: fill_dialog_icon_cb :: exec         ( void )
 
 int   ccontainer_b :: fill_icon_cb :: available    ( void )
 {
-   pvehicle eht = main->getmarkedunit();
+   Vehicle* eht = main->getmarkedunit();
    if ( eht && eht->color == actmap->actplayer * 8) {
       if ( eht->getTank().material < eht->typ->tank.material )
          return 1;
@@ -6229,7 +6228,7 @@ int   ccontainer_b :: produceuniticon_cb :: available    ( void )
             return 0;
 
          if ( main->getspecfunc ( mbuilding ) & cgvehicleproductionb ) {
-            pvehicle eht = main->getmarkedunit();
+            Vehicle* eht = main->getmarkedunit();
             if ( eht )
                return 0;
             else
@@ -6326,7 +6325,7 @@ ccontainer_b :: recyclingicon_cb :: recyclingicon_cb ( void )
 
 int  ccontainer_b :: recyclingicon_cb :: available ( void )
 {
-   pvehicle eht = main->getmarkedunit ();
+   Vehicle* eht = main->getmarkedunit ();
    if ( eht && eht->color == actmap->actplayer * 8 )
       return 1;
    else
@@ -6484,7 +6483,7 @@ void ccontainer_t :: ctransportinfo_subwindow :: paintvariables ( void )
    activefontsettings.justify = righttext;
    activefontsettings.background = 201;
 
-   pvehicle eht = cc_t->vehicle;
+   Vehicle* eht = cc_t->vehicle;
    int mass = eht->cargo();
    int free = eht->typ->maxLoadableWeight - mass;
 
@@ -6548,7 +6547,7 @@ ccontainer_t :: ccontainer_t ( void )
    unitmode = mnormal;
 }
 
-void  ccontainer_t :: init (pvehicle eht)
+void  ccontainer_t :: init (Vehicle* eht)
 {
    hosticons_ct.init ( hgmp->resolutionx, hgmp->resolutiony );
    hosticons_ct.seticonmains ( this );
@@ -6589,7 +6588,7 @@ void  ccontainer_t :: init (pvehicle eht)
 
 
 
-pvehicle    ccontainer_t :: getmarkedunit (void)
+Vehicle*    ccontainer_t :: getmarkedunit (void)
 {
    if ( unitmode == mnormal || unitmode == mloadintocontainer)
       return vehicle->loading[mark.y*unitsshownx + mark.x];
@@ -6599,12 +6598,12 @@ pvehicle    ccontainer_t :: getmarkedunit (void)
 
 
 
-pvehicle ctransportcontrols :: getloadedunit (int num)
+Vehicle* ctransportcontrols :: getloadedunit (int num)
 {
    return vehicle->loading[num];
 };
 
-pvehicle ccontainer_t :: getloadedunit (int num)
+Vehicle* ccontainer_t :: getloadedunit (int num)
 {
    if ( unitmode == mnormal || unitmode == mloadintocontainer )
       return vehicle->loading[num];
@@ -6677,7 +6676,7 @@ int   ccontainer_t :: fill_icon_ct :: available    ( void )
       return 0;
 
 
-   pvehicle eht = main->getmarkedunit();
+   Vehicle* eht = main->getmarkedunit();
    if ( eht && eht->color == actmap->actplayer * 8) {
       if ( eht->getTank().material < eht->typ->tank.material )
          return 1;

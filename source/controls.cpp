@@ -78,9 +78,9 @@ class InitControls {
 
   class   tsearchexternaltransferfields : public SearchFields {
                       public:
-                                pbuilding            bld;
+                                Building*            bld;
                                 char                    numberoffields;
-                                void                    searchtransferfields( pbuilding building );
+                                void                    searchtransferfields( Building* building );
                                 virtual void            testfield ( const MapCoordinate& mc );
                                 tsearchexternaltransferfields ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
                              };
@@ -96,7 +96,7 @@ void         tsearchexternaltransferfields :: testfield( const MapCoordinate& mc
 }
 
 
-void tsearchexternaltransferfields :: searchtransferfields( pbuilding building )
+void tsearchexternaltransferfields :: searchtransferfields( Building* building )
 {
    actmap->cleartemps( 7 );
    bld = building;
@@ -109,7 +109,7 @@ void tsearchexternaltransferfields :: searchtransferfields( pbuilding building )
       moveparams.movestatus = 130;
 }
 
-int searchexternaltransferfields ( pbuilding bld )
+int searchexternaltransferfields ( Building* bld )
 {
    tsearchexternaltransferfields setf ( actmap );
    setf.searchtransferfields ( bld );
@@ -131,7 +131,7 @@ int searchexternaltransferfields ( pbuilding bld )
 
   class   tsearchdestructbuildingfields : public SearchFields {
                       public:
-                                pvehicle                vehicle;
+                                Vehicle*                vehicle;
                                 char                    numberoffields;
                                 pfield                  startfield;
                                 void                    initdestructbuilding( int x, int y );
@@ -144,7 +144,7 @@ int searchexternaltransferfields ( pbuilding bld )
 
 void         tsearchputbuildingfields::initputbuilding( int x, int y, pbuildingtype building )
 {
-   pvehicle eht = getfield(x,y)->vehicle;
+   Vehicle* eht = getfield(x,y)->vehicle;
 
    if ( eht->attacked || (eht->typ->wait && eht->hasMoved() )) {
       dispmessage2(302,""); 
@@ -174,7 +174,7 @@ void         tsearchputbuildingfields::testfield(const MapCoordinate& mc)
       bool b = true;
       for ( int y1 = 0; y1 <= 5; y1++)
          for ( int x1 = 0; x1 <= 3; x1++)
-            if (bld->getpicture ( BuildingType::LocalCoordinate(x1, y1)) ) {
+            if (bld->fieldExists ( BuildingType::LocalCoordinate(x1, y1)) ) {
                pfield fld = actmap->getField ( bld->getFieldCoordinate( mc, BuildingType::LocalCoordinate(x1,y1) ));
                if (fld) {
                   if (fld->vehicle != NULL)
@@ -211,7 +211,7 @@ void         putbuildinglevel1(void)
 {
 
    tkey                       taste;
-   pvehicle                   eht;
+   Vehicle*                   eht;
 
    eht = getactfield()->vehicle;
 
@@ -278,7 +278,7 @@ void         putbuildinglevel2( const pbuildingtype bld,
          actmap->cleartemps(7);
          for ( int y1 = 0; y1 <= 5; y1++)
             for ( int x1 = 0; x1 <= 3; x1++)
-               if ( bld->getpicture ( BuildingType::LocalCoordinate(x1, y1) ) ) {
+               if ( bld->fieldExists ( BuildingType::LocalCoordinate(x1, y1) ) ) {
                   MapCoordinate mc = bld->getFieldCoordinate(MapCoordinate(xp,yp),  BuildingType::LocalCoordinate(x1,y1));
                   pfield fld = actmap->getField( mc );
                   if ( fld ) {
@@ -310,7 +310,7 @@ void         putbuildinglevel3(integer      x,
                                integer      y)
 {
   pbuildingtype bld;
-  pvehicle     eht;
+  Vehicle*     eht;
 
    if (getfield(x,y)->a.temp == 23)
       if (moveparams.movestatus == 112) {
@@ -349,7 +349,7 @@ void         putbuildinglevel3(integer      x,
 
 void         tsearchdestructbuildingfields::initdestructbuilding( int x, int y )
 {
-   pvehicle     eht = getfield(x,y)->vehicle;
+   Vehicle*     eht = getfield(x,y)->vehicle;
    vehicle = eht;
    if (eht->attacked || (eht->typ->wait && eht->hasMoved() )) {
       dispmessage2(305,NULL);
@@ -396,12 +396,12 @@ void         destructbuildinglevel2( int xp, int yp)
    if (fld->a.temp == 20)
       if (moveparams.movestatus == 115) {
          actmap->cleartemps(7);
-         pvehicle eht = moveparams.vehicletomove;
+         Vehicle* eht = moveparams.vehicletomove;
          pbuildingtype bld = fld->building->typ;
 
 
 
-         pbuilding bb = fld->building;
+         Building* bb = fld->building;
 
          eht->putResource( bld->productionCost.material * (100 - bb->damage) / destruct_building_material_get / 100, Resources::Material, false);
 
@@ -436,7 +436,7 @@ void         destructbuildinglevel2( int xp, int yp)
                        char             mienenlegen, mienenraeumen;
                        char             numberoffields;
                        virtual void     testfield ( const MapCoordinate& mc );
-                       int              initpm( char mt, const pvehicle eht );
+                       int              initpm( char mt, const Vehicle* eht );
                        void             run ( void );
                        tputmine ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
               };
@@ -461,7 +461,7 @@ void         tputmine::testfield(const MapCoordinate& mc)
 
 
 
-int          tputmine::initpm(  char mt, const pvehicle eht )
+int          tputmine::initpm(  char mt, const Vehicle* eht )
 {
    numberoffields = 0;
    mienenlegen = false;
@@ -512,7 +512,7 @@ void  legemine( int typ, int delta )
 {
    if (moveparams.movestatus == 0) {
       tputmine ptm ( actmap );
-      pvehicle eht = getactfield()->vehicle;
+      Vehicle* eht = getactfield()->vehicle;
       moveparams.vehicletomove = eht;
       if (eht == NULL)
          return;
@@ -525,7 +525,7 @@ void  legemine( int typ, int delta )
    }
    else
       if (moveparams.movestatus == 90) {
-         pvehicle eht = moveparams.vehicletomove;
+         Vehicle* eht = moveparams.vehicletomove;
          pfield fld = getactfield();
          if ( fld->a.temp ) {
 
@@ -572,7 +572,7 @@ void  legemine( int typ, int delta )
 /*
 void         refuelvehicle(int         b)
 {
-   pvehicle     actvehicle;
+   Vehicle*     actvehicle;
 
    if (moveparams.movestatus == 0) {
 
@@ -717,7 +717,7 @@ void build_objects_reset( void )
                        enum Mode { Build, Remove };
                        pobjectcontainers_buildable_on_field obj;
                 public:
-                       pvehicle         actvehicle;
+                       Vehicle*         actvehicle;
                        int              numberoffields;
 
                        virtual void     testfield ( const MapCoordinate& mc );
@@ -836,7 +836,7 @@ void         tbuildstreet::run(void)
 
 
 class SearchVehicleConstructionFields : public SearchFields {
-                       pvehicle         actvehicle;
+                       Vehicle*         actvehicle;
                 public:
                        int             numberoffields;
 
@@ -907,7 +907,7 @@ void         setspec( pobjecttype obj )
    }
    else {
       if (moveparams.movestatus == 72) {
-         pvehicle eht = getfield(moveparams.movesx,moveparams.movesy)->vehicle;
+         Vehicle* eht = getfield(moveparams.movesx,moveparams.movesy)->vehicle;
          pfield fld = getactfield();
 
          int movecost;
@@ -970,7 +970,7 @@ void         constructvehicle( pvehicletype tnk )
    }
    else {
       if (moveparams.movestatus == 120 ) {
-         pvehicle eht = moveparams.vehicletomove;
+         Vehicle* eht = moveparams.vehicletomove;
 
          int x = getxpos();
          int y = getypos();
@@ -1027,7 +1027,7 @@ treactionfirereplay :: treactionfirereplay ( void )
    unit = NULL;
 }
 
-void treactionfirereplay :: init ( pvehicle eht, const AStar3D::Path& fieldlist )
+void treactionfirereplay :: init ( Vehicle* eht, const AStar3D::Path& fieldlist )
 {
    if ( runreplay.status > 0 ) {
       preactionfire_replayinfo rpli;
@@ -1042,7 +1042,7 @@ void treactionfirereplay :: init ( pvehicle eht, const AStar3D::Path& fieldlist 
    }
 }
 
-int  treactionfirereplay :: checkfield ( const MapCoordinate3D& pos, pvehicle &eht, MapDisplayInterface* md )
+int  treactionfirereplay :: checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, MapDisplayInterface* md )
 {
    int attacks = 0;
 
@@ -1120,7 +1120,7 @@ treactionfirereplay :: ~treactionfirereplay ( )
 
                 typedef struct tunitlist* punitlist;
                 struct tunitlist {
-                        pvehicle eht;
+                        Vehicle* eht;
                         punitlist next;
                      };
 
@@ -1135,7 +1135,7 @@ tsearchreactionfireingunits :: tsearchreactionfireingunits ( void )
       unitlist[i] = NULL;
 }
 
-void tsearchreactionfireingunits :: init ( pvehicle vehicle, const AStar3D::Path& fieldlist )
+void tsearchreactionfireingunits :: init ( Vehicle* vehicle, const AStar3D::Path& fieldlist )
 {
    int x1 = maxint;
    int y1 = maxint;
@@ -1188,7 +1188,7 @@ void tsearchreactionfireingunits :: init ( pvehicle vehicle, const AStar3D::Path
 
    for ( int y = y1; y <= y2; y++ )
       for ( int x = x1; x <= x2; x++ ) {
-         pvehicle eht = getfield ( x, y )->vehicle;
+         Vehicle* eht = getfield ( x, y )->vehicle;
          if ( eht )
             if ( eht->color != vehicle->color )
                if ( eht->reactionfire.getStatus() >= Vehicle::ReactionFire::ready )
@@ -1215,7 +1215,7 @@ void tsearchreactionfireingunits :: init ( pvehicle vehicle, const AStar3D::Path
 
 }
 
-void  tsearchreactionfireingunits :: addunit ( pvehicle eht )
+void  tsearchreactionfireingunits :: addunit ( Vehicle* eht )
 {
    int c = eht->color / 8;
    punitlist ul = new tunitlist;
@@ -1225,7 +1225,7 @@ void  tsearchreactionfireingunits :: addunit ( pvehicle eht )
 }
 
 
-void tsearchreactionfireingunits :: removeunit ( pvehicle vehicle )
+void tsearchreactionfireingunits :: removeunit ( Vehicle* vehicle )
 {
    int c = vehicle->color / 8;
    punitlist ul = unitlist[c];
@@ -1245,7 +1245,7 @@ void tsearchreactionfireingunits :: removeunit ( pvehicle vehicle )
 }
 
 
-int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, pvehicle &vehicle, MapDisplayInterface* md )
+int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, Vehicle* &vehicle, MapDisplayInterface* md )
 {
 
    int attacks = 0;
@@ -1310,7 +1310,7 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, pve
                         cursor.hide();
                      }
 
-                     pvehicle veh = ul->eht;
+                     Vehicle* veh = ul->eht;
                      tunitattacksunit battle ( veh, fld->vehicle, 0, atw->num[num] );
                      int nwid = fld->vehicle->networkid;
 
@@ -1384,7 +1384,7 @@ tsearchreactionfireingunits :: ~tsearchreactionfireingunits()
 
 pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
                             const MapCoordinate3D& dest,
-                            pvehicle     vehicle,
+                            const Vehicle*     vehicle,
                             WindMovement* wm,
                             bool*  inhibitAttack,
                             bool container2container )
@@ -1472,16 +1472,10 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
 
            pfield fld = getfield(x,y);
            if ( fld->vehicle && dest.getNumericalHeight() >= 0 ) {
-              if ( getdiplomaticstatus(fld->vehicle->color) == cawar ) {
-
-                 npush( vehicle->height );
-
-                 vehicle->height = dest.getBitmappedHeight();
-                 if ( attackpossible28(fld->vehicle,vehicle ))
+              if ( getdiplomaticstatus(fld->vehicle->color) == cawar ) 
+                 if ( attackpossible28(fld->vehicle,vehicle, NULL, dest.getBitmappedHeight() ))
                     movecost += movemalus[d];
-                 npop( vehicle->height );
-
-              }
+              
            }
          }
       }
@@ -2073,7 +2067,7 @@ void continuenetworkgame ( void )
 
 
 
-void dissectvehicle ( pvehicle eht )
+void dissectvehicle ( Vehicle* eht )
 {
 /*
   int i,j,k;
@@ -2157,7 +2151,7 @@ void dissectvehicle ( pvehicle eht )
 
 void         generatevehicle_cl ( pvehicletype fztyp,
                                   int         col,
-                                  pvehicle &   vehicle,
+                                  Vehicle* &   vehicle,
                                   int          x,
                                   int          y )
 {

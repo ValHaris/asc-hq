@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.124.2.3 2004-10-11 18:14:03 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.124.2.4 2004-10-26 16:35:04 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -73,7 +73,7 @@
    int          fillx1, filly1;
 
    int                  i;
-   pbuilding            gbde;
+   Building*            gbde;
    char         mapsaved;
    tmycursor            mycursor;
 
@@ -588,7 +588,7 @@ void placeobject(void)
       pdbaroff(); 
    } else {
       pf2 = getactfield();
-      pvehicle eht = pf2->vehicle;
+      Vehicle* eht = pf2->vehicle;
       pf2->vehicle = NULL;
       pf2->addobject( actobject );
       pf2->vehicle = eht;
@@ -1316,7 +1316,7 @@ void         placebuilding(int               colorr,
    #define by   100
    #define sts  bx + 200
 
-   pbuilding    gbde;
+   Building*    gbde;
 
    mousevisible(false);
    cursor.hide();
@@ -1326,7 +1326,7 @@ void         placebuilding(int               colorr,
    if (choose == true) {
       for ( int x = 0; x < 4; x++ )
          for ( int y = 0; y < 6; y++ )
-            if ( buildingtyp->getpicture ( BuildingType::LocalCoordinate(x, y) )) {
+            if ( buildingtyp->fieldExists ( BuildingType::LocalCoordinate(x, y) )) {
                MapCoordinate mc = buildingtyp->getFieldCoordinate ( MapCoordinate (getxpos(), getypos()), BuildingType::LocalCoordinate (x, y) );
                if ( !actmap->getField (mc) )
                   return;
@@ -2361,13 +2361,13 @@ int selectString( int lc, char* title, const char** text, int itemNum )
 
 
 class EditAiParam : public tdialogbox {
-           pvehicle unit;
+           Vehicle* unit;
            TemporaryContainerStorage tus;
            int action;
            AiParameter& aiv;
            int z;
         public:
-           EditAiParam ( pvehicle veh, int player ) : unit ( veh ), tus ( veh ), aiv ( *veh->aiparam[player] ) {};
+           EditAiParam ( Vehicle* veh, int player ) : unit ( veh ), tus ( veh ), aiv ( *veh->aiparam[player] ) {};
            void init ( );
            void run ( );
            void buttonpressed ( int id );
@@ -2465,13 +2465,13 @@ void         EditAiParam::buttonpressed(int         id)
                 TemporaryContainerStorage tus;
                 int        dirx,diry;
                 int        action;
-                pvehicle    unit;
+                Vehicle*    unit;
                 int         w2, heightxs;
                 char        namebuffer[1000];
                 char        reactionfire;
               public:
                // char     checkvalue( char id, char* p );
-                tunit ( pvehicle v ) : tus ( v ), unit ( v ) {};
+                tunit ( Vehicle* v ) : tus ( v ), unit ( v ) {};
                 void        init( void );
                 void        run( void );
                 void        buttonpressed( int id );
@@ -2696,7 +2696,7 @@ void         tunit::buttonpressed(int         id)
 }
 
 
-void         changeunitvalues(pvehicle ae)
+void         changeunitvalues(Vehicle* ae)
 {
    if ( !ae )
       return;
@@ -3165,7 +3165,7 @@ void unitProductionLimitation(  )
 class tvehiclecargo : public tladeraum {
                     TemporaryContainerStorage tus;
                protected:
-                    pvehicle transport;
+                    Vehicle* transport;
                     virtual const char* getinfotext ( int pos );
                     virtual void additem ( void );
                     virtual void removeitem ( int pos );
@@ -3174,7 +3174,7 @@ class tvehiclecargo : public tladeraum {
                     virtual void finish ( int cancel );
 
                 public:
-                    tvehiclecargo ( pvehicle unit ) : tus ( unit, true ), transport ( unit ) {};
+                    tvehiclecargo ( Vehicle* unit ) : tus ( unit, true ), transport ( unit ) {};
                     void init (  );
 
 
@@ -3255,7 +3255,7 @@ void tvehiclecargo :: finish ( int cancel )
 }
 
 
-void         unit_cargo( pvehicle vh )
+void         unit_cargo( Vehicle* vh )
 {
    if ( vh && vh->typ->maxLoadableUnits ) {
       tvehiclecargo laderaum ( vh );
@@ -3355,10 +3355,10 @@ Vehicle* selectUnitFromContainer( ContainerBase* container )
 class tbuildingcargoprod : public tladeraum {
                     TemporaryContainerStorage tus;
                protected:
-                    pbuilding building;
+                    Building* building;
                     void finish ( int cancel );
                 public:
-                    tbuildingcargoprod ( pbuilding bld ) : tus ( bld, true ), building ( bld ) {};
+                    tbuildingcargoprod ( Building* bld ) : tus ( bld, true ), building ( bld ) {};
        };
 
 
@@ -3376,7 +3376,7 @@ class tbuildingcargo : public tbuildingcargoprod {
                     virtual void checkforadditionalkeys ( tkey ch );
                     void displaysingleitem ( int pos, int x, int y );
                public:
-                    tbuildingcargo ( pbuilding bld ) : tbuildingcargoprod ( bld ) {};
+                    tbuildingcargo ( Building* bld ) : tbuildingcargoprod ( bld ) {};
    };
 
 
@@ -3442,7 +3442,7 @@ const char* tbuildingcargo :: getinfotext ( int pos )
 }
 
 
-void         building_cargo( pbuilding bld )
+void         building_cargo( Building* bld )
 {
    if ( bld  ) {
       tbuildingcargo laderaum ( bld );
@@ -3461,7 +3461,7 @@ class tbuildingproduction : public tbuildingcargoprod {
                     virtual void removeitem ( int pos );
                     void displaysingleitem ( int pos, int x, int y );
                public:
-                    tbuildingproduction ( pbuilding bld ) : tbuildingcargoprod ( bld ) {};
+                    tbuildingproduction ( Building* bld ) : tbuildingcargoprod ( bld ) {};
    };
 
 void tbuildingproduction :: displaysingleitem ( int pos, int x, int y )
@@ -3491,7 +3491,7 @@ const char* tbuildingproduction :: getinfotext ( int pos )
 }
 
 
-void         building_production( pbuilding bld )
+void         building_production( Building* bld )
 {
    if ( bld  && (bld->typ->special & cgvehicleproductionb ) ) {
       tbuildingproduction laderaum ( bld );
@@ -3507,7 +3507,7 @@ void movebuilding ( void )
    mapsaved = false;
    pfield fld = getactfield();
    if ( fld->vehicle ) {
-      pvehicle v = fld->vehicle;
+      Vehicle* v = fld->vehicle;
       fld->vehicle = NULL;
 
       int x = v->xpos;
@@ -3529,7 +3529,7 @@ void movebuilding ( void )
 
    }
    if ( fld->building ) {
-      pbuilding bld = fld->building;
+      Building* bld = fld->building;
 
       bld->unchainbuildingfromfield ();
 
@@ -3695,7 +3695,7 @@ class UnitTypeTransformation {
                 int unitsnottransformed;
 
                 pvehicletype transformvehicletype ( const Vehicletype* type, int unitsetnum, int translationnum );
-                void transformvehicle ( pvehicle veh, int unitsetnum, int translationnum );
+                void transformvehicle ( Vehicle* veh, int unitsetnum, int translationnum );
                 dynamic_array<int> vehicleTypesNotTransformed;
                 int vehicleTypesNotTransformedNum ;
              public:
@@ -3799,7 +3799,7 @@ pvehicletype UnitTypeTransformation :: transformvehicletype ( const Vehicletype*
    return NULL;
 }
 
-void  UnitTypeTransformation ::transformvehicle ( pvehicle veh, int unitsetnum, int translationnum )
+void  UnitTypeTransformation ::transformvehicle ( Vehicle* veh, int unitsetnum, int translationnum )
 {
    for ( int i = 0; i < 32; i++ )
       if ( veh->loading[i] )

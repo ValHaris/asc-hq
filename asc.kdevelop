@@ -52,6 +52,7 @@
       <group pattern="AUTHORS;COPYING;ChangeLog;INSTALL;README;TODO;NEWS" name="GNU" />
       <group pattern="*" name="Andere" />
       <hidenonprojectfiles>false</hidenonprojectfiles>
+      <hidenonlocation>false</hidenonlocation>
     </groups>
     <tree>
       <hidepatterns>*.o,*.lo,CVS</hidepatterns>

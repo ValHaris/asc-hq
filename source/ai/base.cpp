@@ -81,7 +81,7 @@ void    AI :: setup (void)
 
 /*
    for ( i = 0; i <= 8; i++) {
-      pbuilding building = actmap->player[i].firstbuilding;
+      Building* building = actmap->player[i].firstbuilding;
       while (building != NULL) {
          generatethreatvaluebuilding(building);
          building = building->next;

@@ -101,7 +101,7 @@ bool AI :: ServiceOrder :: completelyFailed ()
 }
 
 
-int AI::ServiceOrder::possible ( pvehicle supplier )
+int AI::ServiceOrder::possible ( Vehicle* supplier )
 {
    if ( !ai->getMap()->getField( getTargetUnit()->getPosition())->unitHere ( getTargetUnit() ))
      return 0;
@@ -165,9 +165,9 @@ int AI::ServiceOrder::possible ( pvehicle supplier )
 }
 
 
-bool AI::ServiceOrder::execute1st ( pvehicle supplier )
+bool AI::ServiceOrder::execute1st ( Vehicle* supplier )
 {
-   pvehicle targ = getTargetUnit();
+   Vehicle* targ = getTargetUnit();
    MapCoordinate3D meet;
 
    vector<MapCoordinate3D> dest;
@@ -233,7 +233,7 @@ bool AI::ServiceOrder::execute1st ( pvehicle supplier )
    return false;
 }
 
-void AI::ServiceOrder::setServiceUnit ( pvehicle veh )
+void AI::ServiceOrder::setServiceUnit ( Vehicle* veh )
 {
    if ( veh )
       serviceUnitID = veh->networkid;
@@ -243,7 +243,7 @@ void AI::ServiceOrder::setServiceUnit ( pvehicle veh )
 
 void AI::ServiceOrder::releaseServiceUnit ( ServiceOrder& so )
 {
-   pvehicle veh = so.getServiceUnit();
+   Vehicle* veh = so.getServiceUnit();
    if ( veh ) {
       so.setServiceUnit ( NULL );
       veh->aiparam[so.ai->getPlayerNum()]->resetTask();
@@ -320,7 +320,7 @@ bool AI::ServiceOrder::operator!=( const ServiceOrder& so ) const
 AI :: ServiceOrder :: ~ServiceOrder (  )
 {
    if ( active ) {
-      pvehicle serv = getServiceUnit();
+      Vehicle* serv = getServiceUnit();
       if ( serv )
          serv->aiparam[ai->getPlayerNum()]->resetTask();
    }
@@ -347,7 +347,7 @@ void AI :: issueServices ( )
    serviceOrders.erase ( remove_if ( serviceOrders.begin(), serviceOrders.end(), ServiceOrder::targetDestroyed ), serviceOrders.end());
 
    for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
-      pvehicle veh = *vi;
+      Vehicle* veh = *vi;
       if ( getMap()->getField( veh->getPosition() )->unitHere( veh )) {
          if ( veh->damage > config.damageLimit )
             issueService ( VehicleService::srv_repair, veh->networkid ) ;
@@ -365,7 +365,7 @@ void AI :: issueServices ( )
    }
 }
 
-AI::ServiceOrder& AI :: issueRefuelOrder ( pvehicle veh, bool returnImmediately )
+AI::ServiceOrder& AI :: issueRefuelOrder ( Vehicle* veh, bool returnImmediately )
 {
    ServiceOrder& so = issueService ( VehicleService::srv_resource, veh->networkid, Resources::Fuel);
    if ( returnImmediately ) {
@@ -387,7 +387,7 @@ AI::ServiceOrder& AI :: issueRefuelOrder ( pvehicle veh, bool returnImmediately 
 
 MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distance )
 {
-   pvehicle veh = so.getTargetUnit();
+   Vehicle* veh = so.getTargetUnit();
    if ( getMap()->getField( veh->getPosition())->unitHere ( veh ))
       if ( !veh->canMove() )
          return MapCoordinate3D ( -1, -1, 1 );
@@ -405,16 +405,16 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
    AStar3D astar ( getMap(), veh, true, maxMovement*10 );
    astar.findAllAccessibleFields ( );
 
-   pbuilding bestBuilding = NULL;
+   Building* bestBuilding = NULL;
    int bestDistance = maxint;
    MapCoordinate3D bestPos;
 
-   pbuilding bestBuilding_p = NULL;
+   Building* bestBuilding_p = NULL;
    int bestDistance_p = maxint;
    MapCoordinate3D bestPos_p;
 
    for ( Player::BuildingList::iterator bi = getPlayer().buildingList.begin(); bi != getPlayer().buildingList.end(); bi++ ) {
-      pbuilding bld = *bi;
+      Building* bld = *bi;
       if ( astar.getFieldAccess( bld->getEntry())  ) { // ####TRANS
          MapCoordinate3D buildingPos = bld->getEntry();
          buildingPos.setnum ( buildingPos.x, buildingPos.y, -1 );
@@ -545,18 +545,18 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
 
 bool AI :: ServiceTargetEquals :: operator() (const ServiceOrder& so ) const
 {
-   pvehicle t = so.getTargetUnit();
+   Vehicle* t = so.getTargetUnit();
    return target== t;
 }
 
 
 
-void AI::removeServiceOrdersForUnit ( const pvehicle veh )
+void AI::removeServiceOrdersForUnit ( const Vehicle* veh )
 {
    serviceOrders.erase ( remove_if ( serviceOrders.begin(), serviceOrders.end(), ServiceTargetEquals( veh ) ), serviceOrders.end());
 }
 
-void AI :: runServiceUnit ( pvehicle supplyUnit )
+void AI :: runServiceUnit ( Vehicle* supplyUnit )
 {
    bool destinationReached = false;
    typedef multimap<float,ServiceOrder*> ServiceMap;
@@ -572,7 +572,7 @@ void AI :: runServiceUnit ( pvehicle supplyUnit )
           }
   /*
           veh->aiparam[getPlayerNum()]->getTask() = AiParameter::tsk_serviceRetreat;
-          pbuilding bld = findServiceBuilding( **i );
+          Building* bld = findServiceBuilding( **i );
           if ( bld )
              veh->aiparam[ getPlayerNum() ]->dest = bld->getEntry ( );
   */
@@ -598,7 +598,7 @@ void AI :: runServiceUnit ( pvehicle supplyUnit )
       VehicleService::TargetContainer::iterator i = vs.dest.find ( target );
       if ( i != vs.dest.end() ) {
          vs.fillEverything ( target, true );
-         pvehicle targetUnit = getMap()->getUnit(target);
+         Vehicle* targetUnit = getMap()->getUnit(target);
          if ( targetUnit->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat )
              targetUnit->aiparam[getPlayerNum()]->resetTask();
 
@@ -631,7 +631,7 @@ AI::AiResult AI :: executeServices ( )
   
   
   for ( vector<int>::iterator vi = unitIds.begin(); vi != unitIds.end(); ++vi ) {
-      pvehicle veh = getMap()->getUnit( *vi );
+      Vehicle* veh = getMap()->getUnit( *vi );
       if ( veh ) {
         checkKeys();
         int counter = 0;
@@ -646,7 +646,7 @@ AI::AiResult AI :: executeServices ( )
   for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
       if ( !i->canWait() ) {
          displaymessage2("executing priority service order %d", ++counter);
-         pvehicle veh = i->getTargetUnit();
+         Vehicle* veh = i->getTargetUnit();
          if ( i->getServiceUnit() ) {
             if ( veh->canMove() ) {
                veh->aiparam[ getPlayerNum() ]->dest = i->getServiceUnit()->getPosition();
@@ -685,7 +685,7 @@ AI::AiResult AI :: executeServices ( )
   
   counter = 0;
   for ( vector<int>::iterator vi = unitIds.begin(); vi != unitIds.end(); ++vi ) {
-     pvehicle veh = getMap()->getUnit( *vi );
+     Vehicle* veh = getMap()->getUnit( *vi );
      checkKeys();
 
      if ( veh && veh->canMove() && veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat ) {
@@ -724,9 +724,9 @@ AI::AiResult AI :: executeServices ( )
   /*
   for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
       if ( !i->timeOut() && i->requiredService == VehicleService::srv_repair ) {
-         pvehicle veh = i->getTargetUnit();
+         Vehicle* veh = i->getTargetUnit();
          veh->aiparam[getPlayerNum()]->getTask() = AiParameter::tsk_serviceRetreat;
-         pbuilding bld = findServiceBuilding( *i );
+         Building* bld = findServiceBuilding( *i );
          if ( bld )
             veh->aiparam[ getPlayerNum() ]->dest = bld->getEntry ( );
          else {

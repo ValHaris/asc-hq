@@ -40,6 +40,7 @@ queue<tkey>   keybuffer_sym;
 queue<Uint32> keybuffer_prnt;
 queue<SDL_Event> eventQueue;
 bool _queueEvents = false;
+bool _fillLegacyEventStructures = true;
 
 
 int exitprogram = 0;
@@ -378,7 +379,8 @@ int processEvents ( )
    SDL_Event event;
    int result;
    if ( SDL_PollEvent ( &event ) == 1) {
-      switch ( event.type ) {
+      if ( _fillLegacyEventStructures ) {
+        switch ( event.type ) {
          case SDL_MOUSEBUTTONUP:
          case SDL_MOUSEBUTTONDOWN:
             {
@@ -443,6 +445,7 @@ int processEvents ( )
                     redrawScreen = true;
             break;
 #endif
+        } 
       }
       result = 1;
       if ( _queueEvents ) {
@@ -519,12 +522,13 @@ void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mou
    SDL_WaitThread ( secondThreadHandle, NULL );
 }
 
-
-
-void queueEvents( bool active )
+void setEventRouting( bool queue, bool legacy )
 {
-   _queueEvents = active;
-   if ( !active ) {
+  _fillLegacyEventStructures = legacy;
+  
+  _queueEvents = queue;
+  if ( !queue ) {
+      // clear all waiting events in the queue
       SDL_mutexP( eventQueueMutex );
       while ( !eventQueue.empty())
          eventQueue.pop();

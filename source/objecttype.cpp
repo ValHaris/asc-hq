@@ -38,8 +38,6 @@ ObjectType :: FieldModification::FieldModification()
 
 ObjectType :: ObjectType ( void )
 {
-   buildicon = NULL;
-   removeicon = NULL;
    groupID = -1;
 
    displayMethod = 0;
@@ -78,7 +76,7 @@ int ObjectType :: getEffectiveHeight()
 }
 
 
-void* ObjectType :: getpic ( int i, int w )
+Surface& ObjectType :: getPicture ( int i, int w )
 {
    if ( !weather.test(w) )
       w = 0;
@@ -86,70 +84,56 @@ void* ObjectType :: getpic ( int i, int w )
    if ( weatherPicture[w].images.size() <= i )
       i = 0;
 
-   return weatherPicture[w].images[i];
+   if ( weatherPicture[w].bi3pic[i] > 0 )
+      return GraphicSetManager::Instance().getPic(weatherPicture[w].bi3pic[i]);
+   else
+      return weatherPicture[w].images[i];
 }
 
 
 
 
-void ObjectType :: display ( int x, int y, int dir, int weather )
+void ObjectType :: display ( Surface& surface, SPoint pos, int dir, int weather )
 {
    #ifndef converter
   if ( id == 1 || id == 2 ) {
-     putspriteimage ( x, y,  getpic( dir, weather ) );
+     surface.Blit( getPicture( dir, weather ), pos );
   } else
   if ( id == 4 ) {
      if ( dir == 68 )
-        putspriteimage ( x, y,  getpic ( 9, weather ) );
+        surface.Blit( getPicture ( 9, weather ), pos );
      else
      if ( dir == 34 )
-        putspriteimage ( x, y,  getpic ( 10, weather ) );
+        surface.Blit( getPicture ( 10, weather ), pos );
      else
      if ( dir == 17 )
-        putspriteimage ( x, y,  getpic ( 11, weather ) );
+        surface.Blit( getPicture ( 11, weather ), pos );
      else
      if ( dir == 136)
-        putspriteimage ( x, y,  getpic ( 12, weather ) );
+        surface.Blit( getPicture ( 12, weather ), pos );
      else
      if ( dir == 0)
-        putspriteimage ( x, y,  getpic ( 0, weather ) );
+        surface.Blit( getPicture ( 0, weather ), pos );
      else
         for (int i = 0; i <= 7; i++)
            if ( dir & (1 << i))
-              putspriteimage( x, y,  getpic ( i + 1, weather ) );
+              surface.Blit( getPicture ( i+1, weather ), pos );
+              
 
   } else
   if (  id == 5 ) {
-     putspriteimage  ( x, y,  getpic ( 0, weather ) );
+     surface.Blit( getPicture ( 0, weather ), pos );
   } else
-  /*
-      if ( dirlistnum ) {
-         for ( int i = 0; i < dirlistnum; i++ )
-            if ( dirlist [ i ] == dir ) {
-               putspriteimage ( x, y, getpic ( i, weather ) );
-               return;
-            }
-
-         for ( int j = 0; j < dirlistnum; j++ )
-            if ( dirlist [ j ] == 0 ) {
-               putspriteimage ( x, y, getpic ( j, weather ) );
-               return;
-            }
-
-         putspriteimage ( x, y, getpic ( 0, weather ) );
-
-      } else
-      */
-         putspriteimage ( x, y, getpic ( dir, weather ) );
+     surface.Blit( getPicture ( dir, weather ), pos );
 
   #endif
 }
 
 
 
-void ObjectType :: display ( int x, int y )
+void ObjectType :: display ( Surface& surface, SPoint pos )
 {
-   display ( x, y, 34, 0 );
+   display ( surface, pos, 34, 0 );
 }
 
 
@@ -802,7 +786,7 @@ void         calculateallobjects( pmap actmap )
 
 
 
-const int object_version = 11;
+const int object_version = 12;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -874,9 +858,8 @@ void ObjectType :: read ( tnstream& stream )
 
        displayMethod = stream.readInt();
 
-       int w;
-       stream.readrlepict ( &buildicon,  false, &w);
-       stream.readrlepict ( &removeicon, false, &w);
+       buildIcon.read( stream );
+       removeIcon.read( stream );
 
 
        techDependency.read ( stream );
@@ -885,7 +868,7 @@ void ObjectType :: read ( tnstream& stream )
          if ( weather.test ( ww ) ) {
 
             int pictnum = stream.readInt();
-            weatherPicture[ww].gfxReference = stream.readInt(  );
+            stream.readInt(  ); // weatherPicture[ww].gfxReference = 
 
             weatherPicture[ww].bi3pic.resize( pictnum );
             weatherPicture[ww].flip.resize( pictnum );
@@ -893,18 +876,13 @@ void ObjectType :: read ( tnstream& stream )
 
             for ( int n = 0; n < pictnum; n++ ) {
                int bi3 = stream.readInt();
+               weatherPicture[ww].flip[n] = 0;
                if ( bi3 == 1 ) {
                   weatherPicture[ww].bi3pic[n] = stream.readInt();
-                  weatherPicture[ww].flip[n] = 0;
-
-                  loadbi3pict_double ( weatherPicture[ww].bi3pic[n],
-                                      &weatherPicture[ww].images[n],
-                                      1,
-                                      weatherPicture[ww].gfxReference );  // CGameOptions::Instance()->bi3.interpolate.objects
+                  weatherPicture[ww].flip[n] = stream.readInt();
                } else {
                   weatherPicture[ww].bi3pic[n] = -1;
-                  weatherPicture[ww].flip[n] = 0;
-                  stream.readrlepict ( &weatherPicture[ww].images[n], false, &w);
+                  weatherPicture[ww].images[n].read ( stream );
                }
             }
          }
@@ -913,6 +891,7 @@ void ObjectType :: read ( tnstream& stream )
        throw tinvalidversion  ( stream.getLocation(), object_version, version );
 }
 
+#if 0
 void ObjectType :: setupImages()
 {
    int copycount = 0;
@@ -963,7 +942,7 @@ void ObjectType :: setupImages()
                }
    */
 }
-
+#endif
 
 void ObjectType :: write ( tnstream& stream ) const
 {
@@ -1021,8 +1000,8 @@ void ObjectType :: write ( tnstream& stream ) const
 
     stream.writeInt ( displayMethod );
 
-    stream.writerlepict( buildicon );
-    stream.writerlepict( removeicon );
+    buildIcon.write( stream );
+    removeIcon.write( stream );
 
     techDependency.write ( stream );
 
@@ -1030,15 +1009,16 @@ void ObjectType :: write ( tnstream& stream ) const
     for ( int ww = 0; ww < cwettertypennum; ww++ )
        if ( weather.test( ww ) ) {
           stream.writeInt( weatherPicture[ww].images.size() );
-          stream.writeInt( weatherPicture[ww].gfxReference );
+          stream.writeInt( 0 ); // weatherPicture[ww].gfxReference
 
           for ( int l = 0; l < weatherPicture[ww].images.size(); l++ ) {
-             if ( weatherPicture[ww].bi3pic[l] >= 0 && weatherPicture[ww].flip[l] == 0 ) {
+             if ( weatherPicture[ww].bi3pic[l] >= 0 ) {
                 stream.writeInt ( 1 );
                 stream.writeInt ( weatherPicture[ww].bi3pic[l] );
+                stream.writeInt ( weatherPicture[ww].flip[l] );
              } else {
                 stream.writeInt ( 2 );
-                stream.writeImage( weatherPicture[ww].images[l], false );
+                weatherPicture[ww].images[l].write( stream );
              }
           }
        }
@@ -1159,21 +1139,6 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
             int oldsize = weatherPicture[i].flip.size();
             weatherPicture[i].flip.resize( weatherPicture[i].bi3pic.size() );
             weatherPicture[i].images.resize( weatherPicture[i].bi3pic.size() );
-            for ( int r = oldsize; r < weatherPicture[i].flip.size(); r++ )
-               weatherPicture[i].flip[r] = 0;
-
-            weatherPicture[i].gfxReference = true;
-            for ( int r = 0; r <  weatherPicture[i].flip.size(); r++ )
-               if ( weatherPicture[i].flip[r] > 0 )
-                  weatherPicture[i].gfxReference = false;
-
-            if ( pc.isReading() )
-               for ( int j = 0; j < weatherPicture[i].bi3pic.size(); j++ )
-                   loadbi3pict_double (  weatherPicture[i].bi3pic[j],
-                                        &weatherPicture[i].images[j],
-                                        1,
-                                        weatherPicture[i].gfxReference );
-
          } else {
             ASCString s = extractFileName_withoutSuffix( filename );
             if ( s.empty() ) {
@@ -1181,11 +1146,11 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                s += strrr(id);
             }
             pc.addImageArray ( "picture",   weatherPicture[i].images, s + weatherAbbrev[i] );
+            weatherPicture[i].bi3pic.resize( weatherPicture[i].images.size() );
+            weatherPicture[i].flip.resize( weatherPicture[i].images.size() );
 
             if ( pc.find ( "FlipPictures" ) ) {
                vector<int>   imgReferences;
-               weatherPicture[i].bi3pic.resize( weatherPicture[i].images.size() );
-               weatherPicture[i].flip.resize( weatherPicture[i].images.size() );
                imgReferences.resize ( weatherPicture[i].images.size() );
 
                for ( int j = 0; j < weatherPicture[i].images.size(); j++ ) {
@@ -1198,19 +1163,10 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                pc.addIntegerArray ( "ImageReference", imgReferences );
 
                for ( int j = 0; j < weatherPicture[i].images.size(); j++ )
-                  if ( imgReferences[j] >= 0 && imgReferences[j] < weatherPicture[i].images.size() ) {
-                     if ( weatherPicture[i].images[j] )
-                        asc_free ( weatherPicture[i].images[j] );
-                     int newimg = imgReferences[j];
-                     int size = getpicsize2( weatherPicture[i].images[newimg] );
-                     void* p = asc_malloc(size);
-                     memcpy ( p, weatherPicture[i].images[newimg], size );
-                     weatherPicture[i].images[j] = p;
-                  }
+                  if ( imgReferences[j] >= 0 && imgReferences[j] < weatherPicture[i].images.size() ) 
+                     weatherPicture[i].images[j] = weatherPicture[i].images[imgReferences[j]];
 
             } else {
-               weatherPicture[i].bi3pic.resize( weatherPicture[i].images.size() );
-               weatherPicture[i].flip.resize( weatherPicture[i].images.size() );
                for ( int u = 0; u < weatherPicture[i].images.size(); u++ ) {
                   weatherPicture[i].bi3pic[u] = -1;
                   weatherPicture[i].flip[u] = 0;
@@ -1230,14 +1186,11 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
          pc.closeBracket (  );
       }
 
-   if ( pc.isReading() )
-      setupImages();
-
    techDependency.runTextIO( pc );
 
    #ifndef converter
-    buildicon = generate_object_gui_build_icon ( this, 0 );
-    removeicon = generate_object_gui_build_icon ( this, 1 );
+    buildIcon  = generate_gui_build_icon ( this, false );
+    removeIcon = generate_gui_build_icon ( this, true );
    #endif
 
 }

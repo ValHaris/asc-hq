@@ -89,7 +89,7 @@ class Object {
        // int dummy[4];
        Object ( void );
        Object ( pobjecttype t );
-       void display ( int x, int y, int weather = 0 );
+       void display ( Surface& surface, SPoint pos, int weather = 0 ) const;
        void setdir ( int dir );
        int  getdir ( void );
 };
@@ -115,7 +115,7 @@ class Mine {
       int player;
 
       //! can the mine attack this unit
-      bool attacksunit ( const pvehicle veh );
+      bool attacksunit ( const Vehicle* veh );
 };
 
 
@@ -155,7 +155,6 @@ class  tfield {
     //! units standing on this object will get a bonus to their view
     int          viewbonus;
 
-    void*      picture;
 
     //@{ 
     //! Various algorithms need to store some information in the fields they process. These variables are used for this.
@@ -170,8 +169,8 @@ class  tfield {
     int          temp4;
     //@}
 
-    pvehicle     vehicle;
-    pbuilding    building;
+    Vehicle*     vehicle;
+    Building*    building;
 
     struct Resourceview {
       Resourceview ( void );
@@ -235,11 +234,11 @@ class  tfield {
 
     //! the radar jamming that is on this field
     int getjamming ( void );
-    int getmovemalus ( const pvehicle veh );
+    int getmovemalus ( const Vehicle* veh );
     int getmovemalus ( int type );
 
     //! can any of the mines on this field attack this unit
-    int mineattacks ( const pvehicle veh );
+    int mineattacks ( const Vehicle* veh );
 
     //! the player who placed the mines on this field.
     int mineowner ( void );
@@ -280,11 +279,11 @@ class  tfield {
        visible ^= newval;
    };
 
+    int getx();
+    int gety();
 
     ~tfield();
   private:
-    int getx( void );
-    int gety( void );
     TerrainType::MoveMalus __movemalus;
 };
 
@@ -365,11 +364,11 @@ class tmap {
             //! did the player exist when the turn started? Required for checking if a player has been terminated
             bool existanceAtBeginOfTurn;
 
-            typedef list<pvehicle> VehicleList;
+            typedef list<Vehicle*> VehicleList;
             //! a list of all units
             VehicleList  vehicleList;
 
-            typedef list<pbuilding> BuildingList;
+            typedef list<Building*> BuildingList;
             //! a list of all units
             BuildingList  buildingList;
 
@@ -597,8 +596,8 @@ class tmap {
 
       tmap ( void );
 
-      pvehicle getUnit ( int x, int y, int nwid );
-      pvehicle getUnit ( int nwid );
+      Vehicle* getUnit ( int x, int y, int nwid );
+      Vehicle* getUnit ( int nwid );
       ContainerBase* getContainer ( int nwid );
       int  getgameparameter ( GameParameter num );
       void setgameparameter ( GameParameter num, int value );
@@ -655,7 +654,7 @@ class tmap {
       //! just a helper variable for loading the map; no function outside;
       bool loadOldEvents;
    private:
-      pvehicle getUnit ( pvehicle eht, int nwid );
+      Vehicle* getUnit ( Vehicle* eht, int nwid );
 };
 
 typedef tmap::Player Player;

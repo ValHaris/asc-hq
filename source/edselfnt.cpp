@@ -2,228 +2,8 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.46.2.1 2004-10-11 18:14:03 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.46  2004/07/22 20:14:51  mbickel
-//      Updated campaign maps
-//      New weaponguide
-//
-//     Revision 1.45  2004/05/12 20:05:52  mbickel
-//      Restructured file loading routines for upcoming data cache
-//
-//     Revision 1.44  2003/04/23 18:31:10  mbickel
-//      Fixed: AI problems
-//      Improved cheating detection in replay
-//
-//     Revision 1.43  2003/02/19 19:47:26  mbickel
-//      Completely rewrote Pathfinding code
-//      Wind not different any more on different levels of height
-//
-//     Revision 1.42  2003/02/12 20:11:53  mbickel
-//      Some significant changes to the Transportation code
-//
-//     Revision 1.41  2002/11/01 20:44:53  mbickel
-//      Added function to specify which units can be build by other units
-//
-//     Revision 1.40  2002/10/09 16:58:46  mbickel
-//      Fixed to GrafikSet loading
-//      New item filter for mapeditor
-//
-//     Revision 1.39  2002/03/18 21:42:17  mbickel
-//      Some cleanup and documentation in the Mine class
-//      The number of mines is now displayed in the field information window
-//
-//     Revision 1.38  2002/03/02 23:04:01  mbickel
-//      Some cleanup of source code
-//      Improved Paragui Integration
-//      Updated documentation
-//      Improved Sound System
-//
-//     Revision 1.37  2001/12/17 19:41:22  mbickel
-//      Reactionfire can now be deactivated without consequences if it has just
-//        been activated
-//      Mapeditor: Objects are selected on the palette map too
-//
-//     Revision 1.36  2001/11/22 13:49:32  mbickel
-//      Fixed crash in Mapeditor when selection color 9
-//      Fixed: turrets being displayed gray
-//      Fixed: division by 0 by AI movement
-//
-//     Revision 1.35  2001/10/29 20:24:56  mbickel
-//      Fixed AI crash when producing to much units
-//
-//     Revision 1.34  2001/10/02 14:06:28  mbickel
-//      Some cleanup and documentation
-//      Bi3 import tables now stored in .asctxt files
-//      Added ability to choose amoung different BI3 import tables
-//      Added map transformation tables
-//
-//     Revision 1.33  2001/09/20 15:36:09  mbickel
-//      New object displaying mode
-//
-//     Revision 1.32  2001/08/26 20:55:04  mbickel
-//      bin2text can now load text files too
-//      LoadableItemType interface class added
-//
-//     Revision 1.31  2001/08/09 17:06:10  mbickel
-//      Fixed some warnings
-//
-//     Revision 1.30  2001/08/09 14:50:37  mbickel
-//      Added palette.map to data directory
-//      Improved usability of terrain selection in mapeditor
-//      New terrain translation in bi3 import function
-//      Better error messages in text parser
-//      Better error message: duplicate ID
-//
-//     Revision 1.29  2001/08/07 21:24:36  mbickel
-//      Fixed invalid height of planes inside carriers (mapeditor)
-//      Added namespace std usage to unix config
-//      Updated vehicles (provided by gamer)
-//
-//     Revision 1.28  2001/07/28 11:19:10  mbickel
-//      Updated weaponguide
-//      moved item repository from spfst to itemrepository
-//
-//     Revision 1.27  2001/07/27 21:13:34  mbickel
-//      Added text based file formats
-//      Terraintype and Objecttype restructured
-//
-//     Revision 1.26  2001/07/15 21:00:25  mbickel
-//      Some cleanup in the vehicletype class
-//
-//     Revision 1.25  2001/03/23 16:02:56  mbickel
-//      Some restructuring;
-//      started rewriting event system
-//
-//     Revision 1.24  2001/03/07 21:40:52  mbickel
-//      Lots of bugfixes in the mapeditor
-//
-//     Revision 1.23  2001/02/11 11:39:33  mbickel
-//      Some cleanup and documentation
-//
-//     Revision 1.22  2001/02/01 22:48:39  mbickel
-//      rewrote the storing of units and buildings
-//      Fixed bugs in bi3 map importing routines
-//      Fixed bugs in AI
-//      Fixed bugs in mapeditor
-//
-//     Revision 1.21  2001/01/25 23:44:59  mbickel
-//      Moved map displaying routins to own file (mapdisplay.cpp)
-//      Wrote program to create pcx images from map files (map2pcx.cpp)
-//      Fixed bug in repair function: too much resource consumption
-//      AI improvements and bug fixes
-//      The BI3 map import function now evaluates the player status (human/
-//       computer)
-//
-//     Revision 1.20  2001/01/19 13:33:50  mbickel
-//      The AI now uses hemming
-//      Several bugfixes in Vehicle Actions
-//      Moved all view calculation to viewcalculation.cpp
-//      Mapeditor: improved keyboard support for item selection
-//
-//     Revision 1.19  2000/11/29 11:05:28  mbickel
-//      Improved userinterface of the mapeditor
-//      map::preferredfilenames uses now strings (instead of char*)
-//
-//     Revision 1.18  2000/11/21 20:27:02  mbickel
-//      Fixed crash in tsearchfields (used by object construction for example)
-//      AI improvements
-//      configure.in: added some debug output
-//                    fixed broken check for libbz2
-//
-//     Revision 1.17  2000/10/26 18:55:29  mbickel
-//      Fixed crash when editing the properties of a vehicle inside a building
-//      Added mapeditorFullscreen switch to asc.ini
-//
-//     Revision 1.16  2000/10/18 14:14:09  mbickel
-//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
-//       fixed soon.
-//
-//     Revision 1.15  2000/10/12 19:00:21  mbickel
-//      Fixed crash in building placement
-//      Replaced multi-character character constants by strings (there where
-//        problems with the byte order)
-//      Building ID and name are now correctly displayed in mapeditor
-//
-//     Revision 1.14  2000/10/11 14:26:34  mbickel
-//      Modernized the internal structure of ASC:
-//       - vehicles and buildings now derived from a common base class
-//       - new resource class
-//       - reorganized exceptions (errors.h)
-//      Split some files:
-//        typen -> typen, vehicletype, buildingtype, basecontainer
-//        controls -> controls, viewcalculation
-//        spfst -> spfst, mapalgorithm
-//      bzlib is now statically linked and sources integrated
-//
-//     Revision 1.13  2000/08/15 16:22:55  mbickel
-//      Fixed: crash in mapedit when selecting a unit as buildingcargo
-//
-//     Revision 1.12  2000/08/06 13:14:16  mbickel
-//      Fixed crashes in mapeditor
-//
-//     Revision 1.11  2000/08/06 11:39:06  mbickel
-//      New map paramter: fuel globally available
-//      Mapeditor can now filter buildings too
-//      Fixed unfreed memory in fullscreen image loading
-//      Fixed: wasted cpu cycles in building
-//      map parameters can be specified when starting a map
-//      map parameters are reported to all players in multiplayer games
-//
-//     Revision 1.10  2000/08/04 15:11:07  mbickel
-//      Moving transports costs movement for units inside
-//      refuelled vehicles now have full movement in the same turn
-//      terrain: negative attack / defensebonus allowed
-//      new mapparameters that affect damaging and repairing of building
-//
-//     Revision 1.9  2000/08/03 19:21:22  mbickel
-//      Fixed: units had invalid height when produced in some buildings
-//      Fixed: units could not enter building if unitheightreq==0
-//      Started adding SDL_image support
-//      Upgraded to SDL1.1.3 (for SDL_image)
-//
-//     Revision 1.8  2000/06/28 19:26:16  mbickel
-//      fixed bug in object generation by building removal
-//      Added artint.cpp to makefiles
-//      Some cleanup
-//
-//     Revision 1.7  2000/05/06 19:57:09  mbickel
-//      Mapeditor/linux is now running
-//
-//     Revision 1.6  2000/05/02 16:20:54  mbickel
-//      Fixed bug with several simultaneous vehicle actions running
-//      Fixed graphic error at ammo transfer in buildings
-//      Fixed ammo loss at ammo transfer
-//      Movecost is now displayed for mines and repairs
-//      Weapon info now shows unhittable units
-//
-//     Revision 1.5  2000/04/27 16:25:22  mbickel
-//      Attack functions cleanup
-//      New vehicle categories
-//      Rewrote resource production in ASC resource mode
-//      Improved mine system: several mines on a single field allowed
-//      Added unitctrl.* : Interface for vehicle functions
-//        currently movement and height change included
-//      Changed timer to SDL_GetTicks
-//
-//     Revision 1.4  2000/03/29 09:58:45  mbickel
-//      Improved memory handling for DOS version
-//      Many small changes I can't remember ;-)
-//
-//     Revision 1.3  1999/12/27 12:59:59  mbickel
-//      new vehicle function: each weapon can now be set to not attack certain
-//                            vehicles
-//
-//     Revision 1.2  1999/11/16 03:41:40  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
+//     $Id: edselfnt.cpp,v 1.46.2.2 2004-10-26 16:35:04 mbickel Exp $
+
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -394,6 +174,7 @@ template<class T> void SelectAnything<T> :: init ( vect<T> &v, int x1, int y1, i
 
 template<class T> void SelectAnything<T> :: _showiteminfos ( T item, int x1, int y1, int x2, int y2 )
 {
+   collategraphicoperations cgo ( x1, y1, x2, y2 );
    showiteminfos ( item, x1, y1, x2, y2 );
 }
 
@@ -431,6 +212,7 @@ template<class T> void SelectAnything<T> :: showiteminfos ( T item )
 
 template<class T> void SelectAnything<T> :: _displaysingleitem ( T item, int x, int y )
 {
+   collategraphicoperations cgo ( x, y, x + getitemsizex(), y + getitemsizey() );
    displaysingleitem ( item, x, y );
 }
 
@@ -439,9 +221,9 @@ template<class T> void SelectAnything<T> :: displayItem ( int itemx, int itemy, 
 {
    int pos = itemx + itemy * maxx;
    if ( pos < itemsavail.size() )
-      displaysingleitem ( itemsavail[ pos ], picx, picy );
+      _displaysingleitem ( itemsavail[ pos ], picx, picy );
    else
-      displaysingleitem ( NULL, picx, picy );
+      _displaysingleitem ( NULL, picx, picy );
 
    if ( itemx == actitemx  &&  itemy == actitemy ) 
       rectangle ( picx, picy, picx + getitemsizex(), picy + getitemsizey(), white );
@@ -873,7 +655,7 @@ void SelectObjectType :: displaysingleitem ( pobjecttype item, int x, int y )
 {
    bar ( x, y, x + getitemsizex(), y + getitemsizey(), black );
    if ( item )
-      item->display ( x, y );
+      item->display ( getActiveSurface(), SPoint(x, y) );
 }
 
 ASCString SelectObjectType :: getItemName ( pobjecttype item )
@@ -941,10 +723,7 @@ void SelectBuildingType :: displaysingleitem ( pbuildingtype item, int x, int y 
 {
    bar ( x, y, x + getitemsizex(), y + getitemsizey(), black );
    if ( item )
-      for ( int xp = 0; xp < buildingfieldsdisplayedx; xp++ )
-         for ( int yp = 0; yp < buildingfieldsdisplayedy; yp++ )
-            if ( item->getpicture ( BuildingType::LocalCoordinate(xp,yp) ) )
-               putrotspriteimage ( x + xp * fielddistx + ( yp & 1 ) * fielddisthalfx, y + yp * fielddisty, item->getpicture( BuildingType::LocalCoordinate( xp, yp) ), farbwahl*8 );
+      item->paint( getActiveSurface(), SPoint(x,y), farbwahl );
 }
 
 void SelectBuildingType :: showiteminfos ( pbuildingtype item, int x1, int y1, int x2, int y2 )
@@ -952,7 +731,7 @@ void SelectBuildingType :: showiteminfos ( pbuildingtype item, int x1, int y1, i
    rectangle ( x1, y1, x2, y2, lightgray );
    bar ( x1+1, y1+1, x2-1, y2-1, black );
    if ( item ) {
-      putrotspriteimage ( x1 + 10, y1 + (y2 - y1 - fieldsizey )/2, item->getpicture ( item->entry ), farbwahl*8 );
+      item->paintSingleField( getActiveSurface(), SPoint(x1 + 10, y1 + (y2 - y1 - fieldsizey )/2), item->entry , farbwahl );
       npush ( activefontsettings );
       activefontsettings.font = schriften.smallarial;
       activefontsettings.background  = 255;
@@ -1572,7 +1351,7 @@ bool SelectVehicleTypeForContainerCargo :: isavailable ( pvehicletype item )
 {
    bool result = false;
    if ( SelectVehicleType::isavailable ( item ) ) {
-      pvehicle unit = new Vehicle ( item, actmap, container->getOwner() );
+      Vehicle* unit = new Vehicle ( item, actmap, container->getOwner() );
       if ( container->vehicleFit ( unit ))
          result = true;
       delete unit;
@@ -1581,9 +1360,9 @@ bool SelectVehicleTypeForContainerCargo :: isavailable ( pvehicletype item )
 }
 
 class SelectVehicleTypeForBuildingProduction : public SelectCargoVehicleType {
-         pbuilding building;
+         Building* building;
       public:
-         SelectVehicleTypeForBuildingProduction ( pbuilding _building ) { building = _building; };
+         SelectVehicleTypeForBuildingProduction ( Building* _building ) { building = _building; };
          bool isavailable ( pvehicletype item ) {  
             for ( int i = 0; i < 32; i++ )
                if ( building->production[i] == item )
@@ -1604,7 +1383,7 @@ void selcargo( ContainerBase* container )
    pvehicletype newcargo = svtftc.selectitem ( NULL );
 
    if ( newcargo ) {
-      pvehicle unit = new Vehicle ( newcargo, actmap, container->getOwner() );
+      Vehicle* unit = new Vehicle ( newcargo, actmap, container->getOwner() );
       unit->fillMagically();
       unit->setnewposition ( container->getPosition() );
       unit->tank.material = 0;
@@ -1635,7 +1414,7 @@ void selcargo( ContainerBase* container )
 
 //* ıS Fahrzeuge fÅr GebÑude-Production
 
-void selbuildingproduction( pbuilding bld )
+void selbuildingproduction( Building* bld )
 {  
    SelectVehicleTypeForBuildingProduction svtfbc ( bld );
    svtfbc.init( vehicleTypeRepository.getVector() );

@@ -1045,7 +1045,7 @@ void benchgame ( int mode )
 class WeaponRange : public SearchFields
 {
    public:
-      int run ( const pvehicle veh );
+      int run ( const Vehicle* veh );
       void testfield ( const MapCoordinate& mc )
       {
          gamemap->getField( mc )->tempw = 1;
@@ -1055,7 +1055,7 @@ class WeaponRange : public SearchFields
       ;
 };
 
-int  WeaponRange :: run ( const pvehicle veh )
+int  WeaponRange :: run ( const Vehicle* veh )
 {
    int found = 0;
    if ( fieldvisiblenow ( getfield ( veh->xpos, veh->ypos )))
@@ -1070,7 +1070,7 @@ int  WeaponRange :: run ( const pvehicle veh )
 }
 
 
-void viewunitweaponrange ( const pvehicle veh, tkey taste )
+void viewunitweaponrange ( const Vehicle* veh, tkey taste )
 {
    if ( veh && !moveparams.movestatus  ) {
       actmap->cleartemps ( 7 );
@@ -1139,7 +1139,7 @@ void viewPipeNet( tkey taste )
 }
 
 
-void viewunitmovementrange ( pvehicle veh, tkey taste )
+void viewunitmovementrange ( Vehicle* veh, tkey taste )
 {
    if ( veh && !moveparams.movestatus && fieldvisiblenow ( getfield ( veh->xpos, veh->ypos ))) {
       actmap->cleartemps ( 7 );
@@ -1292,7 +1292,6 @@ void execuseraction ( tuseractions action )
                actmap->weather.windDirection = 0;
             displaymessage2("wind dir set to %d ", actmap->weather.windDirection);
             dashboard.x = 0xffff;
-            resetallbuildingpicturepointers();
             displaymap();
          }
          break;
@@ -1318,7 +1317,7 @@ void execuseraction ( tuseractions action )
 
       case ua_unitweightinfo:
          if ( fieldvisiblenow  ( getactfield() )) {
-            pvehicle eht = getactfield()->vehicle;
+            Vehicle* eht = getactfield()->vehicle;
             if ( eht && getdiplomaticstatus ( eht->color ) == capeace )
                displaymessage(" weight of unit: \n basic: %d\n+fuel: %d\n+material:%d\n+cargo:%d\n= %d",1 ,eht->typ->weight, eht->getTank().fuel * resourceWeight[Resources::Fuel] / 1000 , eht->getTank().material * resourceWeight[Resources::Material] / 1000, eht->cargo(), eht->weight() );
          }
@@ -1642,7 +1641,7 @@ void execuseraction ( tuseractions action )
          }
          break;
 
-
+/*
 #ifndef NO_PARAGUI
       case ua_reloadDlgTheme:
          if ( pgApp ) {
@@ -1651,6 +1650,7 @@ void execuseraction ( tuseractions action )
          }
          break;
 #endif
+*/
    }
 
 
@@ -1920,6 +1920,7 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
     }
 #endif
 
+   GraphicSetManager::Instance().loadData();
 
    activefontsettings.markfont = schriften.guicolfont;
    shrinkfont ( schriften.guifont, -1 );
@@ -2041,6 +2042,8 @@ void runmainmenu ( void )
 struct GameThreadParams
 {
    ASCString filename;
+   ASC_PG_App& application;
+   GameThreadParams( ASC_PG_App& app ) : application ( app ){};
 };
 
 int gamethread ( void* data )
@@ -2133,8 +2136,6 @@ int gamethread ( void* data )
             dashboard.x = 0xffff;
             dashboard.y = 0xffff;
 
-            setupMainScreenWidget();
-
             displayLogMessage ( 5, "entering inner main loop.\n" );
             mainloop();
             mousevisible ( false );
@@ -2205,7 +2206,7 @@ int main(int argc, char *argv[] )
 
    try {
       checkDataVersion();
-      check_bi3_dir ();
+      // check_bi3_dir ();
    } catch ( tfileerror err ) {
       displaymessage ( "unable to access file %s \n", 2, err.getFileName().c_str() );
    }
@@ -2216,11 +2217,6 @@ int main(int argc, char *argv[] )
    if ( CGameOptions::Instance()->forceWindowedMode && !cl->f() )  // cl->f == force fullscreen command line param
       fullscreen = SDL_FALSE;
 
-   #ifdef NO_PARAGUI
-   SDL_Init ( SDL_INIT_VIDEO );
-   #endif
-
-      
    SDLmm::Surface* icon = NULL;
    try {
       tnfilestream iconl ( "icon_asc.gif", tnstream::reading );
@@ -2251,9 +2247,7 @@ int main(int argc, char *argv[] )
 
    
 
-   #ifndef NO_PARAGUI
    ASC_PG_App app ( "asc_dlg" );
-   pgApp = &app;
 
    int flags = SDL_SWSURFACE;
    if ( fullscreen )
@@ -2263,17 +2257,12 @@ int main(int argc, char *argv[] )
    SDL_WM_SetIcon( icon->GetSurface(), NULL );
    app.InitScreen( xr, yr, 8, flags);
   
-   initASCGraphicSubsystem ( app.GetScreen(), icon );
+//   initASCGraphicSubsystem ( app.GetScreen(), icon );
 
-   #else
-   SDL_WM_SetIcon( icon->GetSurface(), NULL );
-   initgraphics ( xr, yr, 8, icon );
-   #endif
    
-
    setWindowCaption ( "Advanced Strategic Command" );
       
-   GameThreadParams gtp;
+   GameThreadParams gtp ( app );
    gtp.filename = cl->l();
 
    if ( cl->next_param() < argc )

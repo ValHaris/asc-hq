@@ -122,7 +122,7 @@ int          terrainaccessible2 ( const pfield        field, const Vehicle*     
 
 
 int         fieldAccessible( const pfield        field,
-                            const pvehicle     vehicle,
+                            const Vehicle*     vehicle,
                             int  uheight,
                             const bool* attacked,
                             bool ignoreVisibility )
@@ -638,7 +638,7 @@ void         putbuilding( const MapCoordinate& entryPosition,
 
    for ( int a = 0; a < 4; a++)
       for ( int b = 0; b < 6; b++ )
-         if ( buildingtyp->getpicture ( BuildingType::LocalCoordinate( a, b ) ) ) {
+         if ( buildingtyp->fieldExists ( BuildingType::LocalCoordinate( a, b ) ) ) {
             pfield field = actmap->getField( buildingtyp->getFieldCoordinate( entryPosition, BuildingType::LocalCoordinate(a,b) ));
             if (field == NULL) 
                return ;
@@ -651,7 +651,7 @@ void         putbuilding( const MapCoordinate& entryPosition,
          } 
 
 
-   pbuilding gbde = new Building ( actmap , entryPosition, buildingtyp, color/8 );
+   Building* gbde = new Building ( actmap , entryPosition, buildingtyp, color/8 );
 
    if (completion >= buildingtyp->construction_steps)
       completion = buildingtyp->construction_steps - 1;
@@ -669,7 +669,7 @@ void         putbuilding2( const MapCoordinate& entryPosition,
 
    for ( int a = 0; a < 4; a++)
       for ( int b = 0; b < 6; b++ )
-         if ( buildingtyp->getpicture ( BuildingType::LocalCoordinate( a, b ) ) ) {
+         if ( buildingtyp->fieldExists ( BuildingType::LocalCoordinate( a, b ) ) ) {
             pfield field = actmap->getField( buildingtyp->getFieldCoordinate( entryPosition, BuildingType::LocalCoordinate(a,b) ));
             if (field == NULL)
                return ;
@@ -680,7 +680,7 @@ void         putbuilding2( const MapCoordinate& entryPosition,
          }
 
    if ( !actmap->getField(entryPosition)->building ) {
-      pbuilding gbde = new Building ( actmap, entryPosition, buildingtyp, color/8 );
+      Building* gbde = new Building ( actmap, entryPosition, buildingtyp, color/8 );
 
       Resources maxplus;
       Resources actplus;
@@ -689,7 +689,7 @@ void         putbuilding2( const MapCoordinate& entryPosition,
       int maxresearch = 0;
       bool found = false;
       for ( tmap::Player::BuildingList::iterator i = actmap->player[color/8].buildingList.begin(); i != actmap->player[ color/8].buildingList.end(); i++ ) {
-         pbuilding bld = *i;
+         Building* bld = *i;
          if ( bld->typ == gbde->typ  && bld != gbde ) {
             found = true;
 
@@ -742,7 +742,7 @@ void         putbuilding2( const MapCoordinate& entryPosition,
       gbde->setCompletion ( 0 );
    }
    else {
-      pbuilding gbde = actmap->getField(entryPosition)->building;
+      Building* gbde = actmap->getField(entryPosition)->building;
       if (gbde->getCompletion() < gbde->typ->construction_steps-1)
          gbde->setCompletion( gbde->getCompletion()+1 );
 
@@ -750,15 +750,6 @@ void         putbuilding2( const MapCoordinate& entryPosition,
 }
 
 
-
-
-
-void         resetallbuildingpicturepointers ( void )
-{
-   for (int s = 0; s < 9; s++)
-      for ( tmap::Player::BuildingList::iterator i = actmap->player[s].buildingList.begin(); i != actmap->player[s].buildingList.end(); i++ )
-         (*i)->resetPicturePointers ();
-}
 
 
 void     putstreets2  ( int      x1,
@@ -833,7 +824,7 @@ void  checkunitsforremoval ( void )
       ASCString msg;
       for ( Player::VehicleList::iterator i = actmap->player[c].vehicleList.begin(); i != actmap->player[c].vehicleList.end();  ) {
 
-          pvehicle eht = *i;
+          Vehicle* eht = *i;
           pfield field = getfield(eht->xpos,eht->ypos);
           bool erase = false;
 
@@ -876,7 +867,7 @@ void  checkunitsforremoval ( void )
 }
 
 
-int  getwindheightforunit ( const pvehicle eht, int uheight )
+int  getwindheightforunit ( const Vehicle* eht, int uheight )
 {
    if ( uheight == -1 )
       uheight = eht->height;
@@ -890,7 +881,7 @@ int  getwindheightforunit ( const pvehicle eht, int uheight )
          return 0;
 }
 
-int  getmaxwindspeedforunit ( const pvehicle eht )
+int  getmaxwindspeedforunit ( const Vehicle* eht )
 {
    pfield field = getfield(eht->xpos,eht->ypos);
    if ( field->vehicle == eht) {

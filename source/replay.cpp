@@ -179,7 +179,7 @@ int ReplayMapDisplay :: checkMapPosition ( int x, int y )
 }
 
 
-int ReplayMapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, pvehicle vehicle, int fieldnum, int totalmove, SoundLoopManager* slc )
+int ReplayMapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundLoopManager* slc )
 {
    if ( actmap->playerView < 0 )
       return 0;
@@ -741,7 +741,7 @@ void trunreplay::error( const char* message, ... )
 }
 
 
-int    trunreplay :: removeunit ( pvehicle eht, int nwid )
+int    trunreplay :: removeunit ( Vehicle* eht, int nwid )
 {
    if ( !eht )
       return 0;
@@ -865,7 +865,7 @@ void trunreplay :: execnextreplaymove ( void )
                         int nwid = stream->readInt();
                         readnextaction();
 
-                        pvehicle eht = actmap->getUnit ( x1, y1, nwid );
+                        Vehicle* eht = actmap->getUnit ( x1, y1, nwid );
                         if ( eht ) {
                            ReplayMapDisplay rmd ( &defaultMapDisplay );
                            VehicleMovement vm ( &rmd, NULL );
@@ -902,7 +902,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                         readnextaction();
 
-                        pvehicle eht = actmap->getUnit ( x1, y1, nwid );
+                        Vehicle* eht = actmap->getUnit ( x1, y1, nwid );
                         if ( eht ) {
                            ReplayMapDisplay rmd( &defaultMapDisplay );
                            VehicleMovement vm ( &rmd );
@@ -1012,7 +1012,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                         readnextaction();
 
-                        pvehicle eht = actmap->getUnit ( x1, y1, nwid );
+                        Vehicle* eht = actmap->getUnit ( x1, y1, nwid );
                         if ( eht ) {
                            ReplayMapDisplay rmd( &defaultMapDisplay );
                            VehicleAction* va;
@@ -1157,7 +1157,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                            if ( fld && tnk && !fld->vehicle ) {
                               displayActionCursor ( x, y );
-                              pvehicle v = new Vehicle ( tnk, actmap, col );
+                              Vehicle* v = new Vehicle ( tnk, actmap, col );
                               v->xpos = x;
                               v->ypos = y;
                               fld->vehicle = v;
@@ -1289,7 +1289,7 @@ void trunreplay :: execnextreplaymove ( void )
                            pfield fld = getfield ( x, y );
                            if ( fld && fld->building ) {
                               displayActionCursor ( x, y );
-                              pbuilding bb = fld->building;
+                              Building* bb = fld->building;
                               if ( bb->getCompletion() ) {
                                  bb->setCompletion( bb->getCompletion()-1);
                               } else {
@@ -1323,7 +1323,7 @@ void trunreplay :: execnextreplaymove ( void )
                                     printf("produced unit: pos %d / %d; nwid %d; typ id %d; typ %s \n", x,y,nwid,id,tnk->description.c_str() );
                                     #endif
 
-                                    pvehicle eht = new Vehicle ( tnk, actmap, col / 8 );
+                                    Vehicle* eht = new Vehicle ( tnk, actmap, col / 8 );
                                     eht->xpos = x;
                                     eht->ypos = y;
                                     eht->networkid = nwid;
@@ -1361,7 +1361,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  if ( !fld->vehicle || fld->vehicle->networkid != nwid && fld->building ) {
                                     cbuildingcontrols bc;
                                     bc.init ( fld->building );
-                                    pvehicle veh = actmap->getUnit( nwid );
+                                    Vehicle* veh = actmap->getUnit( nwid );
                                     bc.recycling.recycle( veh );
                                  } else
                                     if ( !removeunit ( x, y, nwid ))
@@ -1376,8 +1376,8 @@ void trunreplay :: execnextreplaymove ( void )
                                  int nwid = stream->readInt();
                                  readnextaction();
 
-                                 pvehicle eht = actmap->getUnit ( x, y, nwid );
-                                 pbuilding bld = actmap->getField ( x, y )->building;
+                                 Vehicle* eht = actmap->getUnit ( x, y, nwid );
+                                 Building* bld = actmap->getField ( x, y )->building;
                                  if ( eht && bld ) {
                                     cbuildingcontrols bc;
                                     bc.init( bld );
@@ -1438,7 +1438,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                                  readnextaction();
 
-                                 pvehicle eht = actmap->getUnit ( x, y, nwid );
+                                 Vehicle* eht = actmap->getUnit ( x, y, nwid );
                                  if ( eht ) {
                                     if ( pos < 16 )
                                        eht->ammo[pos] = amnt;
@@ -1477,7 +1477,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  int amnt = stream->readInt();
                                  readnextaction();
 
-                                 pbuilding bld = actmap->getField(x,y)->building;
+                                 Building* bld = actmap->getField(x,y)->building;
                                  if ( bld ) {
                                     if ( pos < 16 )
                                         bld->ammo[pos] = amnt;
@@ -1497,7 +1497,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                                  readnextaction();
 
-                                 pvehicle eht = actmap->getUnit ( x, y, nwid_moving );
+                                 Vehicle* eht = actmap->getUnit ( x, y, nwid_moving );
 
                                  ContainerBase* from;
                                  if ( nwid_from >= 0 )
@@ -1547,8 +1547,8 @@ void trunreplay :: execnextreplaymove ( void )
 
                                  readnextaction();
 
-                                 pvehicle eht = actmap->getUnit ( nwid );
-                                 pvehicle dest = actmap->getUnit ( destnwid );
+                                 Vehicle* eht = actmap->getUnit ( nwid );
+                                 Vehicle* dest = actmap->getUnit ( destnwid );
                                  if ( eht && dest ) {
                                     eht->repairItem ( dest, amount );
                                     if ( eht->getTank().fuel != fuelremain || eht->getTank().material != matremain )
@@ -1566,8 +1566,8 @@ void trunreplay :: execnextreplaymove ( void )
 
                                  readnextaction();
 
-                                 pbuilding bld = getfield(x,y)->building;
-                                 pvehicle dest = actmap->getUnit ( destnwid );
+                                 Building* bld = getfield(x,y)->building;
+                                 Vehicle* dest = actmap->getUnit ( destnwid );
                                  if ( bld && dest ) {
                                     bld->repairItem ( dest, amount );
                                  } else
@@ -1581,7 +1581,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  int type = stream->readInt();
                                  int amount = stream->readInt();
                                  readnextaction();
-                                 pbuilding bld = getfield(x,y)->building;
+                                 Building* bld = getfield(x,y)->building;
                                  if ( bld ) {
                                     cbuildingcontrols bc;
                                     bc.init ( bld );
@@ -1665,7 +1665,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                                  readnextaction();
 
-                                 pvehicle eht = actmap->getUnit ( nwid );
+                                 Vehicle* eht = actmap->getUnit ( nwid );
                                  if ( eht )
                                     eht->setGeneratorStatus( status );
                                  else

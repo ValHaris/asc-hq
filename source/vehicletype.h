@@ -188,7 +188,7 @@ extern const char*  cvehiclefunctions[];
         int           bipicture;
 
         //! the gui icon for selecting this unit by construction vehicles
-        void*        buildicon;
+        Surface       buildicon;
 
         //! the ids of buildings this unit can construct
         vector<IntRange> buildingsBuildable;

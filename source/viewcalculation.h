@@ -45,14 +45,14 @@
   class tcomputevehicleview : public tcomputeview {
                            public:
                                tcomputevehicleview ( pmap actmap ) : tcomputeview ( actmap ) {};
-                               void          init( const pvehicle eht, int _mode  );   // mode: +1 = add view  ;  -1 = remove view );
+                               void          init( const Vehicle* eht, int _mode  );   // mode: +1 = add view  ;  -1 = remove view );
                            };
 
   class tcomputebuildingview : public tcomputeview  {
-                              pbuilding         building;
+                              const Building*         building;
                            public:
                               tcomputebuildingview ( pmap actmap ) : tcomputeview ( actmap ) {};
-                              void              init( const pbuilding    bld, int _mode );
+                              void              init( const Building*    bld, int _mode );
                            };
 
   /** completely computes the view

@@ -357,7 +357,7 @@ int          getdirection(    int      x1,
 }
 
 
-int beeline ( const pvehicle a, const pvehicle b )
+int beeline ( const Vehicle* a, const Vehicle* b )
 {
    return beeline ( a->xpos, a->ypos, b->xpos, b->ypos );
 }

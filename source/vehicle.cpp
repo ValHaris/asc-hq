@@ -281,7 +281,7 @@ void Vehicle :: postRepair ( int oldDamage )
 
 
 /*
-void Vehicle :: repairunit(pvehicle vehicle, int maxrepair )
+void Vehicle :: repairunit(Vehicle* vehicle, int maxrepair )
 {
    if ( vehicle->damage  &&  tank.fuel  &&  tank.material ) {
 
@@ -749,7 +749,7 @@ void Vehicle::convert ( int col )
 Vehicle* Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
 {
    if ( gamemap && vehicleconstructable( tnk, x, y )) {
-      pvehicle v = new Vehicle( tnk, gamemap, color/8 );
+      Vehicle* v = new Vehicle( tnk, gamemap, color/8 );
       v->xpos = x;
       v->ypos = y;
 
@@ -849,7 +849,7 @@ bool Vehicle :: buildingconstructable ( pbuildingtype building )
 }
 
 
-int Vehicle :: searchstackforfreeweight ( pvehicle eht, int what )
+int Vehicle :: searchstackforfreeweight ( Vehicle* eht, int what )
 {
    if ( eht == this ) {
       if ( what == 1 ) // material or fuel
@@ -964,10 +964,10 @@ class tsearchforminablefields: public SearchFields {
       int shareview;
     public:
       int numberoffields;
-      int run ( pvehicle     eht );
+      int run ( const Vehicle*     eht );
       virtual void testfield ( const MapCoordinate& mc );
       tsearchforminablefields ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
-      static bool available( pvehicle eht );
+      static bool available( const Vehicle* eht );
   };
 
 bool Vehicle::searchForMineralResourcesAvailable()
@@ -995,7 +995,7 @@ void         tsearchforminablefields::testfield( const MapCoordinate& mc )
 }
 
 
-bool tsearchforminablefields::available( pvehicle eht )
+bool tsearchforminablefields::available( const Vehicle* eht )
 {
    if ( (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger) )
       if ( eht->attacked ||
@@ -1006,7 +1006,7 @@ bool tsearchforminablefields::available( pvehicle eht )
 }
 
 
-int  tsearchforminablefields::run( pvehicle eht )
+int  tsearchforminablefields::run( const Vehicle* eht )
 {
    if ( !available( eht ) )
       return -311;
@@ -1025,8 +1025,8 @@ int  tsearchforminablefields::run( pvehicle eht )
    if ( eht->typ->digrange )
       startsearch();
 
-   if ( (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger) )
-      eht->setMovement ( eht->getMovement() - searchforresorcesmovedecrease );
+//   if ( (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger) )
+//      eht->setMovement ( eht->getMovement() - searchforresorcesmovedecrease );
 
    if ( !gamemap->mineralResourcesDisplayed && (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger))
       gamemap->mineralResourcesDisplayed = 1;
@@ -1035,12 +1035,12 @@ int  tsearchforminablefields::run( pvehicle eht )
 }
 
 
-int Vehicle::maxMovement ( void )
+int Vehicle::maxMovement ( void ) const
 {
    return typ->movement[log2(height)];
 }
 
-int Vehicle::searchForMineralResources ( void )
+int Vehicle::searchForMineralResources ( void ) const
 {
     tsearchforminablefields sfmf ( gamemap );
     return sfmf.run( this );
@@ -1481,7 +1481,7 @@ const ASCString&  Vehicle::getName() const
       return name;
 }
 
-void Vehicle::paint ( Surface& s, SPoint pos, int shadowDist )
+void Vehicle::paint ( Surface& s, SPoint pos, int shadowDist ) const
 {
 
   #ifdef sgmain

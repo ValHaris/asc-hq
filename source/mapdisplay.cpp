@@ -764,18 +764,9 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
                   /* display buildings */
 
-                   if ( fld->building  &&  (log2(fld->building->typ->buildingheight)+1 == hgt ) && fld->picture )
+                   if ( fld->building  &&  (log2(fld->building->typ->buildingheight)+1 == hgt ) )
                         if ((b == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerview*8 ))
-                           if (fld->building->visible)
-                              if ( fld->building->typ->buildingheight < chschwimmend )
-                                 putpicturemix ( r + buildingrightshift, yp + buildingdownshift ,fld->picture,fld->building->color, (char*) colormixbuf);
-                              else {
-                                 if ( fld->building->typ->buildingheight >= chtieffliegend ) {
-                                    int d = 6 * ( log2 ( fld->building->typ->buildingheight ) - log2 ( chfahrend ));
-                                    putshadow ( r + buildingrightshift + d, yp + buildingdownshift + d,fld->picture, &xlattables.a.dark3);
-                                 }
-                                 putrotspriteimage( r + buildingrightshift, yp + buildingdownshift ,fld->picture,fld->building->color);
-                              }
+                           fld->building->paintSingleField( getActiveSurface(), SPoint( r + buildingrightshift, yp + buildingdownshift ), fld->building->getLocalCoordinate( MapCoordinate(actmap->xpos + x, actmap->ypos + y)));
 
 
                   /* display units */
@@ -790,7 +781,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
                    int h = o->typ->imageHeight;
                    if (b > visible_ago || o->typ->visibleago )
                       if (  h >= hgt*30 && h < 30 + hgt*30 )
-                         o->display ( r - streetleftshift , yp - streettopshift, fld->getweather() );
+                         o->display ( getActiveSurface(), SPoint(r - streetleftshift , yp - streettopshift), fld->getweather() );
                 }
 
 
@@ -831,11 +822,10 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
                } else {
                   if (b == visible_ago) {
-                     if ( fld->building && fld->picture )
-                        if ( fld->building->visible )
-                           if ((b == visible_all) ||  (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerview*8 ))
-                              putrotspriteimage(r + buildingrightshift, yp + buildingdownshift, fld->picture, fld->building->color);
-
+                     if ( fld->building  &&  (log2(fld->building->typ->buildingheight)+1 == hgt ) )
+                        if ((b == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerview*8 ))
+                           fld->building->paintSingleField( getActiveSurface(), SPoint( r + buildingrightshift, yp + buildingdownshift ), fld->building->getLocalCoordinate( MapCoordinate(actmap->xpos + x, actmap->ypos + y)));
+                  
                   }
                }
 
@@ -998,7 +988,7 @@ void         displaymap(  )
    if ( !actmap->xsize  ||  !actmap->ysize   || lockdisplaymap )
       return;
 
-   activateGraphicSet ( actmap->graphicset );
+   GraphicSetManager::Instance().setActive ( actmap->graphicset );
 
    int         ms;   /*  mousestatus  */
    char      bb;   /*  cursorstatus   */
@@ -1177,7 +1167,7 @@ void  tdisplaymap :: resetmovement ( void )
 }
 
 
-void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, int height1, int height2, int fieldnum, int totalmove )
+void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, Vehicle* eht, int height1, int height2, int fieldnum, int totalmove )
 {
    int dir;
    if ( x1 != x2 || y1 != y2 ) {
@@ -1651,12 +1641,12 @@ void tmousescrollproc :: mouseaction ( void )
 /*
 class MapDisplay {
          public:
-           void displayMovingUnit ( int x1, int y1, int x2, int y2, pvehicle veh );
+           void displayMovingUnit ( int x1, int y1, int x2, int y2, Vehicle* veh );
 
     };
 */
 
-int  MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, pvehicle vehicle, int fieldnum, int totalmove, SoundLoopManager* slm )
+int  MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundLoopManager* slm )
 {
    if ( actmap->playerView < 0 )
       return 0;
@@ -1692,7 +1682,7 @@ int  MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCo
    return result;
 }
 
-void MapDisplay :: deleteVehicle ( pvehicle vehicle )
+void MapDisplay :: deleteVehicle ( Vehicle* vehicle )
 {
    idisplaymap.deletevehicle();
 }

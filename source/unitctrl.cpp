@@ -330,7 +330,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
 
 
-int BaseVehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int height, int noInterrupt )
+int BaseVehicleMovement :: execute ( Vehicle* veh, int x, int y, int step, int height, int noInterrupt )
 {
    if ( step != status )
       return -1;
@@ -378,7 +378,7 @@ int BaseVehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int h
 }
 
 
-int BaseVehicleMovement :: available ( pvehicle veh ) const
+int BaseVehicleMovement :: available ( Vehicle* veh ) const
 {
    if ( status == 0 )
       if ( veh )
@@ -448,7 +448,7 @@ VehicleMovement :: ~VehicleMovement ( )
       pva->move = NULL;
 }
 
-int VehicleMovement :: available ( pvehicle veh ) const
+int VehicleMovement :: available ( Vehicle* veh ) const
 {
    if ( status == 0 )
       if ( veh )
@@ -469,7 +469,7 @@ int VehicleMovement :: available ( pvehicle veh ) const
       };
 
 
-int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int height, int capabilities )
+int VehicleMovement :: execute ( Vehicle* veh, int x, int y, int step, int height, int capabilities )
 {
    if ( step != status )
       return -1;
@@ -570,7 +570,7 @@ ChangeVehicleHeight :: ChangeVehicleHeight ( MapDisplayInterface* md, PPendingVe
       };
 
 
-int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int noInterrupt, int disableMovement )
+int ChangeVehicleHeight :: execute ( Vehicle* veh, int x, int y, int step, int noInterrupt, int disableMovement )
 {
    if ( step != status )
       return -1;
@@ -639,7 +639,7 @@ IncreaseVehicleHeight :: IncreaseVehicleHeight ( MapDisplayInterface* md, PPendi
       pva->ascent = this;
 }
 
-int IncreaseVehicleHeight :: available ( pvehicle veh ) const
+int IncreaseVehicleHeight :: available ( Vehicle* veh ) const
 {
    if ( veh )
       // if ( veh->getMovement() )
@@ -663,7 +663,7 @@ DecreaseVehicleHeight :: DecreaseVehicleHeight ( MapDisplayInterface* md, PPendi
       pva->descent = this;
 }
 
-int DecreaseVehicleHeight :: available ( pvehicle veh ) const
+int DecreaseVehicleHeight :: available ( Vehicle* veh ) const
 {
    if ( veh )
       // if ( veh->getMovement() )
@@ -710,7 +710,7 @@ VehicleAttack :: VehicleAttack ( MapDisplayInterface* md, PPendingVehicleActions
 }
 
 
-int VehicleAttack :: available ( pvehicle eht ) const
+int VehicleAttack :: available ( Vehicle* eht ) const
 {
    if (eht != NULL)
       if (eht->attacked == false)
@@ -726,7 +726,7 @@ int VehicleAttack :: available ( pvehicle eht ) const
 }
 
 
-int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamikaze, int weapnum )
+int VehicleAttack :: execute ( Vehicle* veh, int x, int y, int step, int _kamikaze, int weapnum )
 {
    if ( step != status )
       return -1;
@@ -838,7 +838,7 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
 
 
 
-void     VehicleAttack :: tsearchattackablevehicles :: init( const pvehicle eht, int _kamikaze, VehicleAttack* _va )
+void     VehicleAttack :: tsearchattackablevehicles :: init( const Vehicle* eht, int _kamikaze, VehicleAttack* _va )
 { 
    angreifer = eht; 
    kamikaze = _kamikaze; 
@@ -867,7 +867,7 @@ void     VehicleAttack :: tsearchattackablevehicles::testfield( const MapCoordin
       } else {
           pfield fld = gamemap->getField(mc);
           if (fieldvisiblenow( fld )) {
-             pvehicle eht = fld->vehicle;
+             Vehicle* eht = fld->vehicle;
              if (eht != NULL) 
                 if (((angreifer->height >= chtieffliegend) && (eht->height <= angreifer->height) && (eht->height >= chschwimmend)) 
                   || ((angreifer->height == chfahrend) && (eht->height == chfahrend)) 
@@ -957,7 +957,7 @@ VehicleService :: VehicleService ( MapDisplayInterface* md, PPendingVehicleActio
 }
 
 
-int VehicleService :: available ( pvehicle veh ) const
+int VehicleService :: available ( Vehicle* veh ) const
 {
    int av = 0;
    if ( veh && !veh->attacked ) {
@@ -994,7 +994,7 @@ int VehicleService :: available ( pvehicle veh ) const
       return 0;
 }
 
-int VehicleService :: getServices ( pvehicle veh ) const
+int VehicleService :: getServices ( Vehicle* veh ) const
 {
    int res = 0;
    if ( veh ) {
@@ -1030,7 +1030,7 @@ int VehicleService :: getServices ( pvehicle veh ) const
 
 
 
-void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicle targetUnit, int xp, int yp )
+void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( Vehicle* targetUnit, int xp, int yp )
 {
    VehicleService::Target targ;
    targ.dest = targetUnit;
@@ -1139,7 +1139,7 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
 
 }
 
-void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehicle targetUnit )
+void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( Vehicle* targetUnit )
 {
    if ( getdiplomaticstatus2(bld->color, targetUnit->color) != capeace)
       return;
@@ -1288,7 +1288,7 @@ bool  VehicleService :: FieldSearch ::initrefuelling( int xp1, int yp1 )
 
 
 
-void VehicleService :: FieldSearch :: init ( pvehicle _veh, pbuilding _bld )
+void VehicleService :: FieldSearch :: init ( Vehicle* _veh, Building* _bld )
 {
    if ( !_veh && !_bld)
       return;
@@ -1316,7 +1316,7 @@ void VehicleService :: FieldSearch :: run (  )
 }
 
 
-int VehicleService :: execute ( pvehicle veh, int targetNWID, int dummy, int step, int pos, int amount )
+int VehicleService :: execute ( Vehicle* veh, int targetNWID, int dummy, int step, int pos, int amount )
 {
    if ( step != status )
       return -1;

@@ -24,6 +24,9 @@
  #define baseaiinterface_h_included
 
 
+ class Vehicle;
+ class Building;
+ 
 //! how many different target types are there?
 const int aiValueTypeNum = 8;
 
@@ -60,7 +63,6 @@ class AiValue {
 #endif
            int value;
            int addedValue;
-	 
         public:
            AiThreat threat;
            int valueType;
@@ -78,7 +80,7 @@ class AiValue {
 
 //! All parameters the AI stores persistently about a unit.
 class AiParameter : public AiValue {
-           pvehicle unit;
+           Vehicle* unit;
         public:
            static const int taskNum = 8;
            static const int jobNum = 8;
@@ -107,9 +109,9 @@ class AiParameter : public AiValue {
            int dest_nwid;
            int data;
 
-           void reset ( pvehicle _unit );
+           void reset ( Vehicle* _unit );
            void resetTask ( );
-           AiParameter ( pvehicle _unit );
+           AiParameter ( Vehicle* _unit );
 
            void read ( tnstream& stream );
            void write ( tnstream& stream );

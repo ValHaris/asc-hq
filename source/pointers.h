@@ -26,7 +26,6 @@
  #define pointers_h_included
 
  typedef class TerrainAccess *pterrainaccess;
- typedef class Vehicle* pvehicle ;
  typedef class ObjectType* pobjecttype;
  typedef class tmap*  pmap;
  typedef class tmap Map;
@@ -42,6 +41,5 @@
  class Vehicletype;
  class PropertyContainer;
  typedef class  Vehicletype*  pvehicletype ;
- typedef class  Building* pbuilding;
 
 #endif

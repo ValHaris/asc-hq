@@ -20,7 +20,7 @@
 
 
 
-bool AI :: runUnitTask ( pvehicle veh )
+bool AI :: runUnitTask ( Vehicle* veh )
 {
    if ( veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_move || veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat ) {
       bool moveIntoBuildings = false;
@@ -43,7 +43,7 @@ bool AI :: runUnitTask ( pvehicle veh )
 
 
 
-int  AI :: getBestHeight ( const pvehicle veh )
+int  AI :: getBestHeight (  Vehicle* veh )
 {
    int heightNum = 0;
    for ( int i = 0; i < 8; i++ )
@@ -116,9 +116,9 @@ int  AI :: getBestHeight ( const pvehicle veh )
 
 class SaveUnitMovement {
        int m;
-       pvehicle unit;
+       Vehicle* unit;
     public:
-       SaveUnitMovement ( pvehicle veh ) {
+       SaveUnitMovement ( Vehicle* veh ) {
           unit = veh;
           npush ( unit->xpos );
           npush ( unit->ypos );
@@ -297,7 +297,7 @@ bool AI::RefuelConstraint::returnFromPositionPossible ( const MapCoordinate3D& p
 
 }
 
-bool AI::RefuelConstraint::necessary (const pvehicle veh, AI& ai )
+bool AI::RefuelConstraint::necessary (const Vehicle* veh, AI& ai )
 {
    if ( !veh->typ->fuelConsumption )
       return false;
@@ -349,9 +349,9 @@ AI::AiResult  AI :: container ( ccontainercontrols& cc )
    AiResult result;
 
    // move idle units out
-   std::vector<pvehicle> idleUnits;
+   std::vector<Vehicle*> idleUnits;
    for ( int j= 0; j < 32; j++ ) {
-      pvehicle veh = cc.getloadedunit ( j );
+      Vehicle* veh = cc.getloadedunit ( j );
       if ( veh )
          if ( veh->canMove() )
             if ( veh->aiparam[ getPlayerNum() ]->getTask() == AiParameter::tsk_nothing
@@ -361,7 +361,7 @@ AI::AiResult  AI :: container ( ccontainercontrols& cc )
    // move the most important unit first, to get the best position
    sort ( idleUnits.begin(), idleUnits.end(), vehicleValueComp );
 
-   for ( std::vector<pvehicle>::iterator i = idleUnits.begin(); i != idleUnits.end(); i++ ) {
+   for ( std::vector<Vehicle*>::iterator i = idleUnits.begin(); i != idleUnits.end(); i++ ) {
 
       checkKeys();
 
@@ -432,7 +432,7 @@ AI::AiResult AI::buildings( int process )
       bc.init ( *bi );
 
       for ( int j= 0; j < 32; j++ ) {
-         pvehicle veh = bc.getloadedunit ( j );
+         Vehicle* veh = bc.getloadedunit ( j );
          if ( veh )
             if ( veh->aiparam[ getPlayerNum() ]->getJob() != AiParameter::job_supply )
                bc.refill.resource ( veh, Resources::Fuel, maxint );
@@ -458,7 +458,7 @@ AI::AiResult AI::transports( int process )
 
    int transportCounter = 0;
    for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
-      pvehicle veh = *vi;
+      Vehicle* veh = *vi;
       transportCounter++;
       displaymessage2("processing unit %d for transportation ", transportCounter );
 
@@ -476,7 +476,7 @@ AI::AiResult AI::transports( int process )
 
 
 
-bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool intoBuildings, bool intoTransports )
+bool AI :: moveUnit ( Vehicle* veh, const MapCoordinate3D& destination, bool intoBuildings, bool intoTransports )
 {
    // are we operating in 3D space or 2D space? Pathfinding in 3D has not
    // been available at the beginning of the AI work; and it is faster anyway
@@ -565,7 +565,7 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
 //   }
 }
 
-int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path, bool intoBuildings, bool intoTransports )
+int AI::moveUnit ( Vehicle* veh, const AStar3D::Path& path, bool intoBuildings, bool intoTransports )
 {
    AStar3D::Path::const_iterator pi = path.begin();
    if ( pi == path.end() )
@@ -690,7 +690,7 @@ void AI ::  runReconUnits ( )
       nvi = vi;
       ++nvi;
 
-      pvehicle veh = *vi;
+      Vehicle* veh = *vi;
 
       int maxUnitMovement = veh->typ->maxSpeed();
 
@@ -749,7 +749,7 @@ AI::UnitDistribution::Group AI::getUnitDistributionGroup ( pvehicletype vt )
 }
 
 
-AI::UnitDistribution::Group AI::getUnitDistributionGroup ( pvehicle veh )
+AI::UnitDistribution::Group AI::getUnitDistributionGroup ( Vehicle* veh )
 {
    switch ( veh->aiparam[getPlayerNum()]->getJob() ) {
       case AiParameter::job_supply : return UnitDistribution::service;
@@ -855,7 +855,7 @@ void AI::production()
    Produceable produceable;
 
    for ( Player::BuildingList::iterator bli = getPlayer().buildingList.begin(); bli != getPlayer().buildingList.end(); bli ++ ) {
-      pbuilding bld = *bli;
+      Building* bld = *bli;
       for ( int i = 0; i < 32; i++ )
          if ( bld->production[i] && bld->vehicleUnloadable ( bld->production[i] )) {
             Vehicletype* typ = bld->production[i];
@@ -914,7 +914,7 @@ void AI::production()
                          bc.init ( pr.bld );
                          int lack;
                          if  ( bc.produceunit.available( pr.vt, &lack ) && pr.bld->vehicleUnloadSystem ( pr.vt, 255 ) ) {
-                             pvehicle veh = bc.produceunit.produce( pr.vt, true );
+                             Vehicle* veh = bc.produceunit.produce( pr.vt, true );
                              calculateThreat ( veh );
                              container ( bc );
                              // currentUnitDistribution.group[i] += inc;

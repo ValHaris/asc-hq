@@ -56,18 +56,13 @@
        ASCString themeName;
     public:
        ASC_PG_App ( const ASCString& themeName );
+       bool InitScreen ( int w, int h, int depth = 0, Uint32 flags = SDL_SWSURFACE|SDL_HWPALETTE );
        void reloadTheme();
       // PG_Theme* LoadTheme(const char* xmltheme, bool asDefault = true, const char* searchpath = NULL );
  };
 
-
- extern ASC_PG_App* pgApp;
-
 #endif
 
  extern void soundSettings();
-
- extern void setupMainScreenWidget();
-
 
 #endif

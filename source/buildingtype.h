@@ -78,6 +78,9 @@ extern const char*  cbuildingfunctions[];
 
  //! The class describing properties that are common to all buildings of a certain kind. \sa Building
  class  BuildingType : public ContainerBaseType {
+        bool         field_Exists[4][6];
+        Surface      w_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
+        int          bi_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
    public:
         //! A local coordinate referencing a single field that a building covers.
         class LocalCoordinate {
@@ -86,11 +89,10 @@ extern const char*  cbuildingfunctions[];
               LocalCoordinate ( int _x, int _y ) : x(_x), y(_y) {};
               LocalCoordinate ( ) : x(-1), y(-1) {};
               LocalCoordinate ( const ASCString& s );
+              bool valid() const  { return x>=0 && y>=0; };
               ASCString toString ( ) const;
         };
 
-        void*        w_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
-        int          bi_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
 
         //! when the building is destroyed, it can leave rubble objects behind. If set to 0 no objects are being created
         int          destruction_objects [4][6];
@@ -138,7 +140,7 @@ extern const char*  cbuildingfunctions[];
         int          efficiencymaterial;
 
         //! the picture for the GUI that is used for selecting a building that is going to be constructed by a unit
-        void*        guibuildicon;
+        Surface      guibuildicon;
 
         //! the maximum resource storage in BI resource mode.
         Resources    _bi_maxstorage;
@@ -152,8 +154,15 @@ extern const char*  cbuildingfunctions[];
         //! bitmapped: units on these levels of height may be refuelled when standing next to the buildings entry
         int          externalloadheight;
 
-        void*        getpicture ( const LocalCoordinate& localCoordinate ) const;
+        const Surface& getPicture ( const LocalCoordinate& localCoordinate, int weather = 0, int constructionStep = 0 ) const;
+        void         paint ( Surface& s, SPoint pos, int player = 0, int weather = 0, int constructionStep = 0 ) const;
+        void         paintSingleField ( Surface& s, SPoint pos, const LocalCoordinate& localCoordinate, int player = 0, int weather = 0, int constructionStep = 0 ) const;
 
+        int          getBIPicture( const LocalCoordinate& localCoordinate, int weather = 0, int constructionStep = 0) const;
+        
+        
+        bool         fieldExists(const LocalCoordinate& localCoordinate) const { return field_Exists[localCoordinate.x][localCoordinate.y]; } ;
+        
         BuildingType ( void );
 
         /** returns the Mapcoordinate of a buildings field
@@ -162,6 +171,8 @@ extern const char*  cbuildingfunctions[];
         */
         MapCoordinate getFieldCoordinate( const MapCoordinate& entryOnMap, const LocalCoordinate& localCoordinate );
 
+        //! converts a global coordinate into a local coordinate.
+        LocalCoordinate getLocalCoordinate( const MapCoordinate& entryOnMap, const MapCoordinate& field ) const;
 
         void read ( tnstream& stream ) ;
         void write ( tnstream& stream ) const ;

@@ -26,6 +26,13 @@
 #define events_h_included
 
 
+/**
+  Defines what happens with the SDL events
+  \param queue   Events are queued to be extracted with getQueuedEvent
+  \param legacy  Events are evaluated and the global legacy structures updated
+*/    
+extern void setEventRouting( bool queue, bool legacy );
+
 extern void initializeEventHandling ( int (*fn)(void *) , void *data, void* mousepointer );
 
 extern SDL_mutex* eventHandlingMutex;

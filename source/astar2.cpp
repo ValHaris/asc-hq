@@ -60,7 +60,7 @@ HexDirection ReverseDirection( HexDirection d )
 }
 
 
-AStar :: AStar ( pmap actmap, pvehicle veh )
+AStar :: AStar ( pmap actmap, Vehicle* veh )
 {
    tempsMarked = NULL;
    _path = NULL;
@@ -102,7 +102,7 @@ int AStar::dist( HexCoord a, HexCoord b )
     return beeline ( a.m, a.n, b.m, b.n );
 }
 
-int AStar::getMoveCost ( int x1, int y1, int x2, int y2, const pvehicle vehicle )
+int AStar::getMoveCost ( int x1, int y1, int x2, int y2, const Vehicle* vehicle )
 {
     if ( !fieldAccessible ( getfield ( x2, y2 ), vehicle ))
        return MAXIMUM_PATH_LENGTH;
@@ -139,7 +139,7 @@ inline void AStar::get_first( Container& v, Node& n )
 void AStar::findPath( HexCoord A, HexCoord B, Path& path )
 {
     _path = &path;
-    pvehicle veh = _veh;
+    Vehicle* veh = _veh;
     pmap actmap = _actmap;
 
     if ( actmap->getField(A.m, A.n)->unitHere(veh) )
@@ -345,7 +345,7 @@ void AStar::findPath( Path& path, int x, int y )
 
 
 
-void findPath( pmap actmap, AStar::Path& path, pvehicle veh, int x, int y )
+void findPath( pmap actmap, AStar::Path& path, Vehicle* veh, int x, int y )
 {
   AStar as ( actmap, veh );
   as.findPath ( AStar::HexCoord ( veh->xpos, veh->ypos ), AStar::HexCoord ( x, y ), path );
@@ -427,7 +427,7 @@ AStar3D::Container::iterator AStar3D::Container::find ( const MapCoordinate3D& p
 
 
 
-AStar3D :: AStar3D ( pmap actmap_, pvehicle veh_, bool markTemps_, int maxDistance )
+AStar3D :: AStar3D ( pmap actmap_, Vehicle* veh_, bool markTemps_, int maxDistance )
          : operationLimiter ( NULL )
 {
    markTemps = markTemps_;
@@ -521,7 +521,7 @@ AStar3D::DistanceType AStar3D::dist ( const MapCoordinate3D& a, const vector<Map
 }
 
 
-AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const pvehicle vehicle, bool& canStop, bool& hasAttacked )
+AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& canStop, bool& hasAttacked )
 {
     // since we are operating at different levels of height and the unit has different
     // speeds at different levels of height, we must not optimize for distance, but for

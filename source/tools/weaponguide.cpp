@@ -78,9 +78,9 @@ int main(int argc, char *argv[] ) {
   printf("Loading data for generating unit documentation. Please wait...");
   loadpalette();
   printf(".");
-  loadbi3graphics();
-  printf(".");
 
+  GraphicSetManager::Instance().loadData();
+  
   loadAllData( false );
   printf(".");
   loadUnitSets();

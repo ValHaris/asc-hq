@@ -1,6 +1,12 @@
-//     $Id: edmisc.h,v 1.38 2004-09-25 12:37:51 mbickel Exp $
+//     $Id: edmisc.h,v 1.38.2.1 2004-10-26 16:35:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2004/09/25 12:37:51  mbickel
+//      Fixed crash in mapeditor
+//      fixed graphical glitches when moving from one field to an invisible next
+//      ASC can create clipboard files
+//      units don't defend when attacker is not visible
+//
 //     Revision 1.37  2004/09/13 16:56:54  mbickel
 //      Added many reset data functions to mapeditor
 //      cargomovecostdivisor for vehicles is now float
@@ -346,7 +352,7 @@
    // extern ppolygon               pfpoly;
    extern char                tfill,polyfieldmode;
    extern int                    fillx1, filly1;
-   extern pbuilding               gbde;
+   extern Building*               gbde;
    extern int                    variable;
    extern char                mapsaved;
    extern tmycursor             mycursor;
@@ -378,15 +384,15 @@ extern void         k_loadmap(void);
 extern void         showStatusBar(void);
 extern void         lines(int      x1,int      y,int      x2,int      y2);
 
-extern void         changeunitvalues(pvehicle ae);
+extern void         changeunitvalues(Vehicle* ae);
 extern void         changeresource(void);
 extern void         changebuildingvalues( Building& b);
 extern void         changeminestrength(void);
 extern void         newmap(void);
 extern void         changemapvalues(void);
-extern void         unit_cargo( pvehicle vh );
-extern void         building_cargo( pbuilding bld );
-extern void         building_production( pbuilding bld );
+extern void         unit_cargo( Vehicle* vh );
+extern void         building_cargo( Building* bld );
+extern void         building_production( Building* bld );
 extern void         freevariables(void);
 extern int          selectfield(int * cx ,int  * cy);
 extern void 	     playerchange(void);

@@ -1,6 +1,10 @@
-//     $Id: gui.h,v 1.26 2003-03-05 22:45:36 mbickel Exp $
+//     $Id: gui.h,v 1.26.2.1 2004-10-26 16:35:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2003/03/05 22:45:36  mbickel
+//      Fixed compilation problems
+//      Updated weaponguide
+//
 //     Revision 1.25  2003/01/28 17:48:42  mbickel
 //      Added sounds
 //      Rewrote soundsystem
@@ -245,9 +249,9 @@ class tselectbuildingguihost : public SelectBuildingBaseGuiHost {
          void              init ( int resolutionx, int resolutiony );
 
          pbuildingtype selectedbuilding;
-         pvehicle vehicle;
+         Vehicle* vehicle;
          int cancel;
-         void reset ( pvehicle v );
+         void reset ( Vehicle* v );
    };
 
 
@@ -280,11 +284,11 @@ class tselectvehiclecontainerguihost : public SelectVehicleBaseGuiHost {
          pnputvehiclecontainerguiicon*   icons;
 
        public:
-         pvehicle constructingvehicle;
+         Vehicle* constructingvehicle;
          void              init ( int resolutionx, int resolutiony );
 
          int cancel;
-         void reset ( pvehicle _constructingvehicle );
+         void reset ( Vehicle* _constructingvehicle );
    };
 
 

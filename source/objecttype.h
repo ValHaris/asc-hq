@@ -122,30 +122,27 @@
      ObjectType ( void );
 
      //! the icon used for selecting the object when executing the "build object" function of a unit. The image is automatically generated at load time
-     void* buildicon;
+     Surface buildIcon;
      //! the icon used for selecting the object when executing the "remove object" function of a unit. The image is automatically generated at load time
-     void* removeicon;
+     Surface removeIcon;
 
 
      TechAdapterDependency techDependency;
 
      //! the images of the objects
      struct WeatherPicture {
-        WeatherPicture(){ gfxReference=false;};
-        vector<void*> images;
+        vector<Surface> images;
         vector<int>   bi3pic;
         vector<int>   flip;
-        //! are the pictures referenced or copied when using GFX-system pics
-        bool gfxReference;
         void resize(int i) { flip.resize(i); bi3pic.resize(i); images.resize(i); };
      } weatherPicture [cwettertypennum];
 
      //! displays the objecttype at x/y on the screen
-     void display ( int x, int y );
-     void display ( int x, int y, int dir, int weather = 0 );
+     void display ( Surface& surface, SPoint pos );
+     void display ( Surface& surface, SPoint pos, int dir, int weather = 0 );
 
      //! returns the pointer to the image i
-     void* getpic ( int i, int weather = 0 );
+     Surface& getPicture ( int i = 0, int weather = 0 );
 
      //! can the object be build on the field fld
      bool buildable ( pfield fld );
@@ -163,11 +160,6 @@
 
      //! returns the level of height of this object in the normal 8 level scheme of asc (deep submerged, submerged, ... )
      int getEffectiveHeight();
-
-   private:
-     //! the loading functions call this method to setup the objects images
-     void setupImages();
-
  };
 
 const int objectDisplayingMethodNum = 5;

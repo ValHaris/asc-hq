@@ -26,14 +26,14 @@
        int MAXIMUM_PATH_LENGTH;
        pmap tempsMarked;
        Path *_path;
-       pvehicle _veh;
+       Vehicle* _veh;
        pmap _actmap;
 
 
        //! returns the movement cost for the unit to travel from x1/y1 to x2/y2
-       virtual int getMoveCost ( int x1, int y1, int x2, int y2, const pvehicle vehicle );
+       virtual int getMoveCost ( int x1, int y1, int x2, int y2, const Vehicle* vehicle );
     public:
-       AStar ( pmap actmap, pvehicle veh );
+       AStar ( pmap actmap, Vehicle* veh );
 
        //! A hexagonal Coordinate. This structure is used instead of MapCoordinate to reduce the amount of modifications to Amits path finding code.
        struct HexCoord{
@@ -87,7 +87,7 @@
 
 
  //! finding a path for unit veh to position x, y on map actmap.
-extern void findPath( pmap actmap, AStar::Path& path, pvehicle veh, int x, int y );
+extern void findPath( pmap actmap, AStar::Path& path, Vehicle* veh, int x, int y );
 
 
 
@@ -134,13 +134,13 @@ class AStar3D {
        int MAXIMUM_PATH_LENGTH;
        pmap tempsMarked;
        Path *_path;
-       pvehicle veh;
+       Vehicle* veh;
        pmap actmap;
        float vehicleSpeedFactor[8];
        bool markTemps;
        WindMovement* wind;
 
-       virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const pvehicle vehicle, bool& canStop, bool& hasAttacked );
+       virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& canStop, bool& hasAttacked );
 
        HexDirection* posDirs;
        int*          posHHops;
@@ -185,7 +185,7 @@ class AStar3D {
 
 
     public:
-       AStar3D ( pmap actmap, pvehicle veh, bool markTemps_ = true, int maxDistance = maxint );
+       AStar3D ( pmap actmap, Vehicle* veh, bool markTemps_ = true, int maxDistance = maxint );
 
 
        //! the search can be restricted to certain operations

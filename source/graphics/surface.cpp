@@ -110,6 +110,7 @@ void Surface::read ( tnstream& stream )
 
       SetSurface( SDL_CreateRGBSurfaceFrom(uncomp, hd.x, hd.y, 8, hd.x, 0, 0, 0, 0 ));
       SetColorKey( SDL_SRCCOLORKEY, 255 );
+      assignDefaultPalette();
    }
    else {
       if (hd.id == 16974) {
@@ -155,14 +156,24 @@ void Surface::read ( tnstream& stream )
 
          SetSurface( SDL_CreateRGBSurfaceFrom(q, hd.id+1, hd.size+1, 8, hd.id+1, 0, 0, 0, 0 ));
          SetColorKey( SDL_SRCCOLORKEY, 255 );
+         assignDefaultPalette();
       }
    }
 
 }
 
+Surface Surface::createSurface( int width, int height, SDLmm::Color color )
+{
+   Surface s ( SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0 ));
+   s.Fill(color);
+   s.SetColorKey( SDL_SRCCOLORKEY, 255 );
+   return s;
+}
+
+
 void Surface::assignDefaultPalette()
 {
-   if ( me ) {
+   if ( me && GetPixelFormat().BytesPerPixel() == 1 ) {
         SDL_Color spal[256];
         int col;
         for ( int i = 0; i < 256; i++ ) {
@@ -347,5 +358,20 @@ Surface rotateSurface( Surface& s, int degrees )
    }
 
    return dest;
+}
+
+
+void* Surface::toBGI() const
+{
+   void* p = asc_malloc( imagesize(1,1,w(),h()) );
+   char* c = (char*) p;
+   Uint16* ww = (Uint16*) p;
+   ww[0] = w()-1;
+   ww[1] = h()-1;
+   c += 4;
+   for ( int y = 0; y < h(); ++y )
+      for ( int x = 0; x < w(); ++x )
+          *c++ = GetPixel(x,y);
+   return p;
 }
 

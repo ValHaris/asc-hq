@@ -126,7 +126,7 @@ class tdisplaymap : public tgeneraldisplaymap {
          tgraphmodeparameters oldparameters;
         protected:
           struct {
-                    pvehicle eht;
+                    Vehicle* eht;
                     int xpos, ypos;
                     int dx,   dy;
                     int hgt;
@@ -153,7 +153,7 @@ class tdisplaymap : public tgeneraldisplaymap {
           virtual void cp_buf ( void );
           virtual void cp_buf ( int x1, int y1, int x2, int y2 );
 
-          void  movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, int height1, int height2, int fieldnum, int totalmove );
+          void  movevehicle( int x1,int y1, int x2, int y2, Vehicle* eht, int height1, int height2, int fieldnum, int totalmove );
           void  deletevehicle ( void );
 
           void resetmovement ( void );
@@ -228,8 +228,8 @@ extern ZoomLevel zoomlevel;
 
 class MapDisplayInterface {
          public:
-           virtual int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, pvehicle vehicle, int fieldnum, int totalmove, SoundLoopManager* slm ) = 0;
-           virtual void deleteVehicle ( pvehicle vehicle ) = 0;
+           virtual int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundLoopManager* slm ) = 0;
+           virtual void deleteVehicle ( Vehicle* vehicle ) = 0;
            virtual void displayMap ( void ) = 0;
            virtual void displayPosition ( int x, int y ) = 0;
            virtual void resetMovement ( void ) = 0;
@@ -246,8 +246,8 @@ class MapDisplay : public MapDisplayInterface {
            dynamic_array<int> cursorstat;
            int cursorstatnum;
          public:
-           int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, pvehicle vehicle, int fieldnum, int totalmove, SoundLoopManager* slm );
-           void deleteVehicle ( pvehicle vehicle );
+           int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundLoopManager* slm );
+           void deleteVehicle ( Vehicle* vehicle );
            void displayMap ( void );
            void displayPosition ( int x, int y );
            void resetMovement ( void );

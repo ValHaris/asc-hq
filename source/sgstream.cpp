@@ -52,6 +52,7 @@
 #include "gameoptions.h"
 #include "graphicset.h"
 #include "itemrepository.h"
+#include "graphics/blitter.h"
 
 #ifdef _WIN32_
  #include <windows.h>
@@ -65,69 +66,22 @@ int dataVersion = 0;
 const int object_version = 1;
 const int technology_version = 1;
 
-void* leergui = NULL;
-void* removegui = NULL;
+Surface leergui;
+Surface removegui;
 
 
-void* generate_vehicle_gui_build_icon ( pvehicletype tnk )
+Surface generate_gui_build_icon ( pvehicletype tnk )
 {
-
-   int wd;
-   int hg;
-   getpicsize ( leergui, wd, hg );
-
-   int minx = 0;
-   int miny = 0;
-   int maxx = 0;
-   int maxy = 0;
-
-   tvirtualdisplay vdsp ( 500, 500 );
-
-   bar ( 0, 0, 450, 450, 255 );
-
-   tnk->paint( getActiveSurface(), SPoint( 0, 0), 0 );
-   maxx= fieldxsize;
-   maxy= fieldysize;
-
-   int sze = imagesize ( minx, miny, maxx, maxy );
-   void* buf = new char [ sze ];
-   getimage ( minx, miny, maxx, maxy, buf );
-
-   while ( (maxx - minx + 1 > wd ) || ( maxy - miny + 1 > hg )) {
-      void* temp = halfpict ( buf );
-
-      char* dst = (char*) buf;
-      char* src = (char*) temp;
-
-      for ( int i = 0; i < sze; i++ )
-         *(dst++) = *(src++);
-
-      minx = 0;
-      miny = 0;
-      getpicsize ( buf, maxx, maxy );
-
-   } /* endwhile */
-
-   putimage ( 0, 0, leergui );
-   putspriteimage ( (wd - maxx) / 2, (hg - maxy) / 2, buf );
-
-   char* newbuildingpic = new char [ imagesize ( 0, 0, wd-1, hg-1 ) ];
-   getimage ( 0, 0, wd-1, hg-1, newbuildingpic );
-   asc_free ( buf );
-
-   return newbuildingpic;
+   Surface s = leergui.Duplicate();
+   s.Blit(tnk->getImage(), SPoint((s.w() - tnk->getImage().w())/2, (s.h() - tnk->getImage().h())/2));
+   return s;
 }
 
 
-
-
-
-void* generate_building_gui_build_icon ( pbuildingtype bld )
+Surface generate_gui_build_icon ( pbuildingtype bld )
 {
 
-   int wd;
-   int hg;
-   getpicsize ( leergui, wd, hg );
+   Surface s = Surface::createSurface(500,500);
 
    int minx = 1000;
    int miny = 1000;
@@ -140,7 +94,7 @@ void* generate_building_gui_build_icon ( pbuildingtype bld )
   
     for (int y = 0; y <= 5; y++)
        for (int x = 0; x <= 3; x++)
-          if (bld->getpicture( BuildingType::LocalCoordinate(x,y) ) ) {
+          if (bld->fieldExists( BuildingType::LocalCoordinate(x,y) ) ) {
              int xp = fielddistx * x  + fielddisthalfx * ( y & 1);
              int yp = fielddisty * y ;
              if ( xp < minx )
@@ -152,115 +106,46 @@ void* generate_building_gui_build_icon ( pbuildingtype bld )
              if ( yp > maxy )
                 maxy = yp;
 
-             putspriteimage ( xp, yp, bld->getpicture(BuildingType::LocalCoordinate(x,y)) );
+             s.Blit( bld->getPicture( BuildingType::LocalCoordinate(x,y)), SPoint(xp,yp) );
           }
    maxx += fieldxsize;
    maxy += fieldysize;
 
-   int sze = imagesize ( minx, miny, maxx, maxy );
-   char* buf = new char [ sze ];
-   getimage ( minx, miny, maxx, maxy, buf );
-
-/*
-   while ( (maxx - minx + 1 > wd ) || ( maxy - miny + 1 > hg )) {
-      void* temp = halfpict ( buf );
-
-      char* dst = (char*) buf;
-      char* src = (char*) temp;
-
-      for ( int i = 0; i < sze; i++ )
-         *(dst++) = *(src++);
-
-      minx = 0;
-      miny = 0;
-      getpicsize ( buf, maxx, maxy );
-
-   } 
-*/
-   TrueColorImage* img = zoomimage ( buf, wd, hg, pal, 1 );
-   delete[] buf;
-
-   buf = convertimage ( img, pal );
-   delete img;
-   getpicsize ( buf, maxx, maxy );
-
-   putimage ( 0, 0, leergui );
-   putspriteimage ( (wd - maxx) / 2, (hg - maxy) / 2, buf );
-
-   char* newbuildingpic = new char [ imagesize ( 0, 0, wd-1, hg-1 ) ];
-   getimage ( 0, 0, wd-1, hg-1, newbuildingpic );
-   delete[] buf;
-
-   return newbuildingpic;
-
-
+   Surface s2 = Surface::createSurface(maxx-minx,maxy-miny);
+   s2.Blit( s, SDLmm::SRect(SPoint(minx,miny), SPoint(maxx,maxy) ), SPoint(0,0));
+   
+   
+   Surface s3 = leergui.Duplicate();
+   MegaBlitter<1,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Zoom> blitter;
+   
+   blitter.setSize( s2.w(), s2.h(), s3.w(), s3.h() );
+   blitter.initSource ( s2 );
+   blitter.blit ( s2, s3, SPoint((s3.w() - blitter.getWidth())/2, (s3.h() - blitter.getHeight())/2) );
+   
+   return s3;
 }
 
 
 
-void* generate_object_gui_build_icon ( pobjecttype obj, int remove )
+Surface generate_gui_build_icon ( pobjecttype obj, int remove )
 {
-
-   int wd;
-   int hg;
-   getpicsize ( leergui, wd, hg );
-
-   int minx = 0;
-   int miny = 0;
-   int maxx = 0;
-   int maxy = 0;
-
-   tvirtualdisplay vdsp ( 500, 500 );
-
-   bar ( 0, 0, 450, 450, 255 );
-
-   obj->display( 0, 0 );
-   maxx= fieldxsize;
-   maxy= fieldysize;
-
-   int sze = imagesize ( minx, miny, maxx, maxy );
-   void* buf = new char [ sze ];
-   getimage ( minx, miny, maxx, maxy, buf );
-
-   while ( (maxx - minx + 1 > wd ) || ( maxy - miny + 1 > hg )) {
-      void* temp = halfpict ( buf );
-
-      char* dst = (char*) buf;
-      char* src = (char*) temp;
-
-      for ( int i = 0; i < sze; i++ )
-         *(dst++) = *(src++);
-
-      minx = 0;
-      miny = 0;
-      getpicsize ( buf, maxx, maxy );
-
-   } /* endwhile */
-
-   putimage ( 0, 0, leergui );
-   putspriteimage ( (wd - maxx) / 2, (hg - maxy) / 2, buf );
-
+   Surface s = leergui.Duplicate();
+   s.Blit(obj->getPicture(), SPoint((s.w() - obj->getPicture().w())/2, (s.h() - obj->getPicture().h())/2));
    if ( remove )
-     putspriteimage ( (wd-18)/2, (hg-18)/2, removegui );
-
-   void* newbuildingpic = new char [ imagesize ( 0, 0, wd-1, hg-1 ) ];
-   getimage ( 0, 0, wd-1, hg-1, newbuildingpic );
-   asc_free( buf );
-
-   return newbuildingpic;
+      s.Blit(removegui, SPoint((s.w() - removegui.w())/2, (s.h() - removegui.h())/2));
+   
+   return s;
 }
 
 void loadguipictures( void )
 {
-   if ( !leergui ) {
+   if ( !leergui.valid() ) {
       tnfilestream stream ( "leergui.raw", tnstream::reading );
-      int sze;
-      stream.readrlepict ( &leergui, 0, &sze );
+      leergui.read( stream );
    }
-   if ( !removegui ) {
+   if ( !removegui.valid() ) {
       tnfilestream stream ( "guiremov.raw", tnstream::reading );
-      int sze;
-      stream.readrlepict ( &removegui, 0, &sze );
+      removegui.read( stream );
    }
 }
 

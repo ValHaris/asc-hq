@@ -143,7 +143,7 @@
     bool hasMoved ( void ) const;
 
     //! the maximum distance that the unit can drive in a single turn on the current level of height
-    int maxMovement ( void );
+    int maxMovement ( ) const;
 
     /** reduces the movement by the given amount. Negative values are possible.
         Don't use something like "setmovement ( getmovement() - amount )", because getmovement may return a lower amount due to lack of fuel. */
@@ -178,7 +178,7 @@
     /** should not be called except from freeweight
         \param what: 0=cargo ; 1=material/fuel
     */
-    int searchstackforfreeweight( pvehicle eht, int what );
+    int searchstackforfreeweight( Vehicle* eht, int what );
 
     //! returns the maximum amount of the resource 'resourcetype' that the unit can carry
     int getMaxResourceStorageForWeight ( int resourcetype );
@@ -251,7 +251,7 @@
     /** searches for mineral resources.
         \returns > 0 on success ; < 0 on failure (error number is returned => message.txt )
     */
-    int searchForMineralResources( void );
+    int searchForMineralResources( ) const;
 
     bool searchForMineralResourcesAvailable();
 
@@ -286,7 +286,7 @@
     void write ( tnstream& stream, bool includeLoadedUnits = true );
 
     //! displays the unit at position spos on s
-    void paint ( Surface& s, SPoint pos, int shadowDist = -1 );
+    void paint ( Surface& s, SPoint pos, int shadowDist = -1 ) const;
 
 
   private:
@@ -294,10 +294,10 @@
   public:
 
     //! For the AI: calculating the ValueType if the unit was on the height uheight
-    int getValueType ( int uheight ) { return log2(uheight); };
+    int getValueType ( int uheight ) const { return log2(uheight); };
 
     //! For the AI: calculating the ValueType
-    int getValueType ( ) { return log2(height); };
+    int getValueType ( ) const { return log2(height); };
 
 
     //! to be used with EXTREME caution, and only in the mapeditor !!

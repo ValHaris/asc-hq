@@ -32,10 +32,13 @@
       Surface(const SDLmm::Surface& other) : SDLmm::Surface( other ) {};
       Surface() : SDLmm::Surface(NULL) {};
 
+      static Surface createSurface( int width, int height, SDLmm::Color color = 255 );
+      
       /**
          Creates an image from an BGI image structure.
       */
-      void newFromBGI( void* img );
+      void  newFromBGI( void* img );
+      void* toBGI() const;
 
       void read ( tnstream& stream ) ;
       void write ( tnstream& stream ) const;

@@ -1,6 +1,9 @@
-//     $Id: edselfnt.h,v 1.9 2004-05-12 20:05:52 mbickel Exp $
+//     $Id: edselfnt.h,v 1.9.2.1 2004-10-26 16:35:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2004/05/12 20:05:52  mbickel
+//      Restructured file loading routines for upcoming data cache
+//
 //     Revision 1.8  2003/02/19 19:47:26  mbickel
 //      Completely rewrote Pathfinding code
 //      Wind not different any more on different levels of height
@@ -69,7 +72,7 @@ extern void selmine( tkey ench );
 extern void selweather( tkey ench );
 extern void selbuilding ( tkey ench );
 extern void selcargo( ContainerBase* container );
-extern void selbuildingproduction( pbuilding eht );
+extern void selbuildingproduction( Building* eht );
 extern void showallchoices(void);
 
 extern void setnewvehicleselection ( pvehicletype v );

@@ -955,7 +955,7 @@ tnsguiiconmove::tnsguiiconmove  ( void )
 int   tnsguiiconmove::available    ( void ) 
 {
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
-      pvehicle eht = getactfield()->vehicle; 
+      Vehicle* eht = getactfield()->vehicle; 
       if ( eht ) 
          if ( eht->color == actmap->actplayer * 8) 
             if ( vehicleMovement.available ( eht ))
@@ -1086,7 +1086,7 @@ tnsguiiconattack::tnsguiiconattack ( void )
 int   tnsguiiconattack::available    ( void ) 
 {
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
-      pvehicle eht = getactfield()->vehicle; 
+      Vehicle* eht = getactfield()->vehicle; 
       if ( eht ) 
          if ( eht->color == actmap->actplayer * 8) 
             if ( vehicleAttack.available ( eht ))
@@ -1142,7 +1142,7 @@ tnsguiiconascent::tnsguiiconascent ( void )
 int   tnsguiiconascent::available    ( void ) 
 {
    if ( moveparams.movestatus == 0 && !pendingVehicleActions.action ) { 
-      pvehicle eht = getactfield()->vehicle;
+      Vehicle* eht = getactfield()->vehicle;
       if ( !eht )
          return 0;
       if (eht->color == actmap->actplayer * 8)
@@ -1263,7 +1263,7 @@ tnsguiicondescent::tnsguiicondescent ( void )
 int   tnsguiicondescent::available    ( void ) 
 {
    if ( moveparams.movestatus == 0 && !pendingVehicleActions.action ) {
-      pvehicle eht = getactfield()->vehicle;
+      Vehicle* eht = getactfield()->vehicle;
       if ( !eht )
          return 0;
 
@@ -1378,7 +1378,7 @@ tnsguiiconinformation::tnsguiiconinformation ( void )
 
 int   tnsguiiconinformation::available    ( void ) 
 {
-    pvehicle eht = getactfield()->vehicle; 
+    Vehicle* eht = getactfield()->vehicle; 
     if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
     if (eht != NULL)      
        if (fieldvisiblenow(getactfield()))
@@ -2179,7 +2179,7 @@ tnsguiiconenablereactionfire::tnsguiiconenablereactionfire ( void )
 
 int   tnsguiiconenablereactionfire::available    ( void ) 
 {
-   pvehicle eht = getactfield()->vehicle;
+   Vehicle* eht = getactfield()->vehicle;
    if ( eht )
       if ( eht->color == actmap->actplayer * 8) 
          if ( eht->reactionfire.getStatus() == Vehicle::ReactionFire::off )
@@ -2209,7 +2209,7 @@ tnsguiicondisablereactionfire::tnsguiicondisablereactionfire ( void )
 
 int   tnsguiicondisablereactionfire::available    ( void ) 
 {
-   pvehicle eht = getactfield()->vehicle;
+   Vehicle* eht = getactfield()->vehicle;
    if ( eht )
       if ( eht->color == actmap->actplayer * 8) 
          if ( eht->reactionfire.getStatus() != Vehicle::ReactionFire::off )
@@ -2364,7 +2364,7 @@ void    tselectvehiclecontainerguihost :: init ( int resolutionx, int resolution
                 
 }
 
-void tselectvehiclecontainerguihost ::reset ( pvehicle _constructingvehicle )
+void tselectvehiclecontainerguihost ::reset ( Vehicle* _constructingvehicle )
 {
    constructingvehicle = _constructingvehicle;
 
@@ -2399,7 +2399,7 @@ void    tselectbuildingguihost :: init ( int resolutionx, int resolutiony )
 
 }
 
-void tselectbuildingguihost ::reset ( pvehicle v )
+void tselectbuildingguihost ::reset ( Vehicle* v )
 {
    vehicle = v;
    SelectBuildingBaseGuiHost::reset();
@@ -2421,7 +2421,7 @@ tnputbuildingguiicon :: tnputbuildingguiicon ( pbuildingtype bld )
 
    building = bld;
    buildnum++;
-   picture[0]    = building->guibuildicon;
+   picture[0]  = building->guibuildicon.toBGI();
    char buf[10000];
    sprintf ( buf, "%s : %d material and %d fuel needed", building->name.c_str(), building->productionCost.material, building->productionCost.fuel );
    infotext = buf;
@@ -2480,10 +2480,10 @@ tnputobjectcontainerguiicon :: tnputobjectcontainerguiicon ( pobjecttype obj, in
 
       char buf[10000];
       if ( bld ) {
-         picture[0]    = object->buildicon;
+         picture[0]    = object->buildIcon.toBGI();
          sprintf ( buf, "%s : %d material and %d fuel needed", object->name.c_str(), object->buildcost.material, object->buildcost.fuel );
       } else {
-         picture[0]    = object->removeicon;
+         picture[0]    = object->removeIcon.toBGI();
          sprintf ( buf, "%s : %d material and %d fuel needed", object->name.c_str(), object->removecost.material, object->removecost.fuel );
       }
       infotext = buf;
@@ -2549,7 +2549,7 @@ tnputvehiclecontainerguiicon :: tnputvehiclecontainerguiicon ( pvehicletype obj 
    if ( obj ) {
       priority = 100;
       buildnum++;
-      picture[0]    = vehicle->buildicon;
+      picture[0]    = vehicle->buildicon.toBGI();
       infotext.format ( "%s : %d material and %d fuel needed", vehicle->getName().c_str(), vehicle->productionCost.material, vehicle->productionCost.energy );
    } else {
       picture[0] = icons.selectweaponguicancel;
@@ -2586,7 +2586,7 @@ int         tnputvehiclecontainerguiicon::available( void )
       if ( !fld->vehicle ) {
 
          tselectvehiclecontainerguihost* bldhost = (tselectvehiclecontainerguihost*) host;
-         pvehicle actvehicle = bldhost->constructingvehicle;
+         Vehicle* actvehicle = bldhost->constructingvehicle;
 
          for ( int i = 0; i < actvehicle->typ->vehiclesBuildable.size(); i++ )
            for ( int j = actvehicle->typ->vehiclesBuildable[i].from; j <= actvehicle->typ->vehiclesBuildable[i].to; j++ ) 
@@ -2609,7 +2609,7 @@ void tselectweaponguihost :: init ( int resolutionx, int resolutiony )
 {
     SelectWeaponBaseGuiHost :: init ( resolutionx, resolutiony );
    
-    // pvehicle eht = getfield(moveparams.movesx,moveparams.movesy)->vehicle;
+    // Vehicle* eht = getfield(moveparams.movesx,moveparams.movesy)->vehicle;
     // pattackweap atw = attackpossible(eht, getxpos(),getypos());
 
     pattackweap atw = NULL;
@@ -2691,7 +2691,7 @@ int         tnweapselguiicon::available    ( void )
 const char*       tnweapselguiicon::getinfotext  ( void )
 {
    if ( weapnum > -1 ) {
-      pvehicle eht = getfield ( moveparams.movesx, moveparams.movesy ) -> vehicle;
+      Vehicle* eht = getfield ( moveparams.movesx, moveparams.movesy ) -> vehicle;
 
       infotext = cwaffentypen[typ];
 
@@ -2797,7 +2797,7 @@ void  tnweapselguiicon::setup        ( pattackweap atw, int n )
       typ      = log2( atw->typ[n] );
       strength = atw->strength[n];
       weapnum  = atw->num[n];
-      pvehicle eht = getfield ( moveparams.movesx, moveparams.movesy ) -> vehicle;
+      Vehicle* eht = getfield ( moveparams.movesx, moveparams.movesy ) -> vehicle;
       if ( atw->typ[n] & cwlaserb )
          picture[0]  = icons.selectweapongui[ 12 ];
       else

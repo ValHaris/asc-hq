@@ -85,10 +85,6 @@ struct  TLIBFiles {
 
 int libs_to_load = 9;
 
-void check_bi3_dir ( void )
-{
-   loadbi3graphics();
-}
 
 void checkbi3dir ( void )
 {
@@ -563,7 +559,7 @@ class tloadBImap {
        void ReadACTNPart(void);
        void ReadSHOPPart(void);
        void ReadShopNames( char *txtdata, unsigned long txtsize );
-       pvehicle getunit ( int typ, int col );
+       Vehicle* getunit ( int typ, int col );
        pvehicletype getvehicletype ( int typ );
        char* GetStr ( int a, int b );
        int convcol ( int c );
@@ -687,7 +683,7 @@ pvehicletype  tloadBImap :: getvehicletype ( int tp )
    return NULL;
 }
 
-pvehicle tloadBImap :: getunit ( int tp, int col )
+Vehicle* tloadBImap :: getunit ( int tp, int col )
 {
    if ( tp != 0xffff && tp != 0xff && col != 0xff ) {
       pvehicletype vt = getvehicletype ( tp );
@@ -742,7 +738,7 @@ void InsertBiMap :: preparemap ( int x, int y  )
          getfield ( a, b ) -> deleteeverything();
 }
 
-void  stu_height ( pvehicle vehicle )
+void  stu_height ( Vehicle* vehicle )
 {
    char l;
    pfield fld = getfield ( vehicle->xpos, vehicle->ypos );
@@ -946,7 +942,7 @@ void        tloadBImap ::   ReadACTNPart(void)
                         for ( int ww = 0; ww < cwettertypennum; ww++ )
                            if ( obj->weather.test(ww) )
                               for ( unsigned int j = 0; j < obj->weatherPicture[ww].images.size(); j++ )
-                                 if ( obj->weatherPicture[ww].bi3pic[j] == xlt[m]  && !(found & 2)  && !( getActiveGraphicSet()->getMode(xlt[m]) & 256) ) {
+                                 if ( obj->weatherPicture[ww].bi3pic[j] == xlt[m]  && !(found & 2)  && !( GraphicSetManager::Instance().getMode(xlt[m]) & 256) ) {
                                     pfield fld = getfield ( newx, newy );
                                     if ( pass == 1 || obj->getFieldModification(fld->getweather()).terrainaccess.accessible ( fld->bdt )) {
                                        fld -> addobject ( obj, 0, true );
@@ -987,7 +983,7 @@ void        tloadBImap ::   ReadACTNPart(void)
 
                o->weatherPicture[0].resize(1);
 
-               loadbi3pict_double ( Line[X], &o->weatherPicture[0].images[0] );
+               // loadbi3pict_double ( Line[X], &o->weatherPicture[0].images[0] );
                o->weatherPicture[0].bi3pic[0] = Line[X];
 
                // addobjecttype ( o );
@@ -1028,7 +1024,7 @@ void        tloadBImap ::   ReadACTNPart(void)
       for (X = 0; X < Size.X ; X++) {
          int tp = Line[X] & 255;
          int cl = convcol(Line[X] >> 8);
-         pvehicle eht = getunit ( tp, cl );
+         Vehicle* eht = getunit ( tp, cl );
          if ( eht ) {
             pfield fld = getfield ( X / 2, Y * 2 + (X & 1) );
             fld->vehicle = eht;
@@ -1083,7 +1079,7 @@ void       tloadBImap :: ReadSHOPPart( void )
               if ( fld->vehicle ) 
                  for ( int j = 0; j < 8; j++ ) 
                     if ( FileShop.a.Content.Veh[j] >= 0 ) {
-                       pvehicle eht = getunit ( FileShop.a.Content.Veh[j], fld->vehicle->color/8 );
+                       Vehicle* eht = getunit ( FileShop.a.Content.Veh[j], fld->vehicle->color/8 );
                        if ( eht ) {
                           eht->xpos = xoffset + X / 2;
                           eht->ypos = yoffset + Y * 2 + (X & 1);
@@ -1110,8 +1106,7 @@ void       tloadBImap :: ReadSHOPPart( void )
                if ( bld )
                   for ( int w = 0; w < cwettertypennum; w++ ) 
                      for ( int p = 0; p < maxbuildingpicnum; p++ ) 
-                        if ( bld->w_picture[w][p][ bld->entry.x ] [ bld->entry.y ] )
-                           if ( bld->bi_picture[w][p][ bld->entry.x ] [ bld->entry.y ] == fld->tempw ) {
+                           if ( bld->getBIPicture(bld->entry, w, p) == fld->tempw ) {
                               bldlist[ bldlistnum ].bld = bld;
                               int cnt = 0;
                               int terrainmatch = 0;
@@ -1119,7 +1114,7 @@ void       tloadBImap :: ReadSHOPPart( void )
                               bool fail = false;
                               for ( int m = 0; m < 4; m++ )
                                  for ( int n = 0; n < 6; n++ )
-                                    if ( bld->getpicture( BuildingType::LocalCoordinate(m , n) ) ) {
+                                    if ( bld->fieldExists( BuildingType::LocalCoordinate(m , n) ) ) {
                                        MapCoordinate pos = bld->getFieldCoordinate ( MapCoordinate(newx, newy), BuildingType::LocalCoordinate(m, n) );
                                        pfield fld2 = getfield ( pos.x, pos.y );
                                        if ( !fld2 )
@@ -1127,7 +1122,7 @@ void       tloadBImap :: ReadSHOPPart( void )
                                        else {
                                           if ( bld->terrainaccess.accessible ( fld2->bdt ) > 0 )
                                              terrainmatch++;
-                                          if ( bld->bi_picture[w][p][m][n] == fld2->tempw )
+                                          if ( bld->getBIPicture( BuildingType::LocalCoordinate(m,n), w, p) == fld2->tempw )
                                              objmatch++;
                                        }
                                        cnt++;
@@ -1165,11 +1160,11 @@ void       tloadBImap :: ReadSHOPPart( void )
                             int match = 1;
                             for ( int m = 0; m < 4; m++ )
                                for ( int n = 0; n < 6; n++ )
-                                  if ( bld->w_picture[w][p][ m ] [ n ] )
-                                     if ( bld->getpicture( BuildingType::LocalCoordinate(m , n) ) ) {
+                                  if ( bld->fieldExists( BuildingType::LocalCoordinate(m , n) ) ) 
+                                     if ( bld->getPicture( BuildingType::LocalCoordinate(m , n), w, p ).valid() ) {
                                         MapCoordinate pos = bld->getFieldCoordinate ( MapCoordinate(newx, newy), BuildingType::LocalCoordinate(m, n) );
                                         pfield fld2 = getfield ( pos.x, pos.y );
-                                        if ( fld2->tempw != bld->bi_picture[w][p][ m ] [ n ] )
+                                        if ( fld2->tempw != bld->getBIPicture( BuildingType::LocalCoordinate(m , n), w, p ))
                                            match = 0;
                                      }
                             if ( match )
@@ -1185,7 +1180,7 @@ void       tloadBImap :: ReadSHOPPart( void )
                     
                     for ( int m = 0; m < 4; m++ )
                        for ( int n = 0; n < 6; n++ )
-                          if ( fld->building->getpicture( BuildingType::LocalCoordinate(m , n) ) ) {
+                          if ( fld->building->getPicture( BuildingType::LocalCoordinate(m , n) ).valid() ) {
                              fld->building->getField ( BuildingType::LocalCoordinate(m, n) )->temp3 = 0;
                           }
 
@@ -1215,7 +1210,7 @@ void       tloadBImap :: ReadSHOPPart( void )
 
               int unitnum = 0;
               for ( int j = 0; j < 16; j++ ) {
-                 pvehicle eht = getunit ( FileShop.a.Content.All[j], fld->building->color/8 );
+                 Vehicle* eht = getunit ( FileShop.a.Content.All[j], fld->building->color/8 );
                  if ( eht ) {
                     fld->building->loading[unitnum++] = eht;
                     eht->xpos = newx;
@@ -1668,7 +1663,7 @@ void importbattleislemap ( const char* path, const char* filename, TerrainType::
 {
     pmap oldmap = actmap;
     actmap = NULL;
-    activateGraphicSet ( 1 );
+    GraphicSetManager::Instance().setActive(1);
     try {
        ImportBiMap lbim ( chooseImportTable ( ) );
        if ( fakemap )
@@ -1688,7 +1683,7 @@ void importbattleislemap ( const char* path, const char* filename, TerrainType::
 
 void insertbattleislemap ( int x, int y, const char* path, const char* filename  )
 {
-    activateGraphicSet ( 1 );
+    GraphicSetManager::Instance().setActive ( 1 );
     InsertBiMap lbim ( x, y, chooseImportTable ( ) );
     lbim.LoadFromFile ( path, filename, NULL, NULL );
     actmap->_resourcemode = 1;

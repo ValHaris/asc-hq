@@ -226,6 +226,16 @@ const char* fileNameDelimitter = " =*/+<>,";
                ImageArrayProperty ( PropertyType &property_, const ASCString& fileName_ ) : PTIMGA ( property_ ), fileName ( fileName_ ) {};
          };
 
+         typedef PropertyTemplate< vector<Surface> > PTIMGA2;
+         class ASCImageArrayProperty : public PTIMGA2 {
+               typedef vector<Surface> PropertyType;
+               ASCString fileName;
+            protected:
+               PropertyType operation_eq ( const TextPropertyGroup::Entry& entry ) const ;
+               ASCString toString ( ) const;
+            public:
+               ASCImageArrayProperty ( PropertyType &property_, const ASCString& fileName_ ) : PTIMGA2 ( property_ ), fileName ( fileName_ ) {};
+         };
 
 
 
@@ -453,6 +463,12 @@ void PropertyContainer::addNamedInteger ( const ASCString& name, int& property, 
 void PropertyContainer::addImageArray ( const ASCString& name, vector<void*> &property, const ASCString& filename )
 {
    ImageArrayProperty* ip = new ImageArrayProperty ( property, filename );
+   setup ( ip, name );
+}
+
+void PropertyContainer::addImageArray ( const ASCString& name, vector<Surface> &property, const ASCString& filename )
+{
+   ASCImageArrayProperty* ip = new ASCImageArrayProperty ( property, filename );
    setup ( ip, name );
 }
 
@@ -1091,6 +1107,36 @@ vector<void*> loadImage ( const ASCString& file, int num )
 }
 
 
+vector<Surface> loadASCImage ( const ASCString& file, int num )
+{
+   vector<Surface> images;
+
+   int imgwidth = fieldsizex;
+   int imgheight = fieldsizey;
+
+   int xsize;
+   if ( num <= 10)
+      xsize = (num+1)* 100;
+   else
+      xsize = 1100;
+
+   
+   tnfilestream fs ( file, tnstream::reading );
+   
+   Surface s ( IMG_Load_RW ( SDL_RWFromStream( &fs ), 1));
+   for ( int i = 0; i < num; i++ ) {
+       int x1 = (i % 10) * 100;
+       int y1 = (i / 10) * 100;
+       Surface s2 = Surface::createSurface(fieldsizex,fieldsizey );
+       s2.Blit( s, SDLmm::SRect(SPoint(x1,y1),fieldsizex,fieldsizey), SPoint(0,0));
+       applyFieldMask(s2);
+       s2.assignDefaultPalette();
+       images.push_back ( s2 );
+   }
+   return images;
+}
+
+
 void* ImageProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {
    void* img;
@@ -1237,6 +1283,44 @@ ASCString ImageArrayProperty::toString() const
    writepcx ( extractFileName_withoutSuffix(fileName) + ".pcx", 0, 0, 1100 - 1, 100 * (num / 10 + 1) - 1, pal );
    return valueToWrite;
 }
+
+
+ASCImageArrayProperty::PropertyType ASCImageArrayProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
+{
+   try {
+      StringTokenizer st ( entry.value, fileNameDelimitter );
+      ASCString imgName = st.getNextToken();
+      ASCString imgNumS = st.getNextToken();
+      if ( imgNumS.empty() )
+         propertyContainer->error( name + ": image number missing" );
+      int imgNum = atoi ( imgNumS.c_str() );
+      return loadASCImage ( imgName, imgNum );
+   }
+   catch ( ASCexception ){
+      propertyContainer->error( "error accessing file " + entry.value );
+   }
+   return PropertyType();
+}
+
+
+ASCString ASCImageArrayProperty::toString() const
+{
+   fatalError( "writing of Images not supported yet");
+   return "";
+   /*
+   int num = property.size();
+   tvirtualdisplay vdp ( 1100, 100 * (num / 10 + 1), 255, 8 );
+   int cnt = 0;
+   for ( PropertyType::iterator i = property.begin(); i != property.end(); i++ ) {
+      putimage ( (cnt % 10) * 100, (cnt / 10) * 100, *i );
+      cnt++;
+   }
+   ASCString valueToWrite = extractFileName_withoutSuffix(fileName) + ".pcx" + " " + strrr( cnt );
+   writepcx ( extractFileName_withoutSuffix(fileName) + ".pcx", 0, 0, 1100 - 1, 100 * (num / 10 + 1) - 1, pal );
+   return valueToWrite;
+   */
+}
+
 
 #endif
 

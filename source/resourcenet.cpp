@@ -116,7 +116,7 @@ void MapNetwork :: searchvehicle ( int x, int y )
 
 void MapNetwork :: searchbuilding ( int x, int y )
 {
-   pbuilding bld = actmap->getField( x, y )->building;
+   Building* bld = actmap->getField( x, y )->building;
    if ( !bld )
       return;
 
@@ -183,7 +183,7 @@ void MapNetwork :: searchAllVehiclesNextToBuildings ( int player )
       for ( int s = 0; s < sidenum; s++ ) {
          pfield fld = actmap->getField ( getNeighbouringFieldCoordinate ( mc, s ));
          if ( fld ) {
-            pbuilding bld = fld->building;
+            Building* bld = fld->building;
             if ( bld && bld->color == (*j)->color ) {
                pfield fld2 = actmap->getField( (*j)->getPosition());
                if ( !fld2->a.temp2 ) {
@@ -313,14 +313,14 @@ GetResource :: GetResource ( pmap gamemap, int scope )
 }
 
 
-void GetResource :: checkvehicle ( pvehicle v )
+void GetResource :: checkvehicle ( Vehicle* v )
 {
    if ( v->color/8 == player && resourcetype == 0 )
       got += v->getResource( need-got, Resources::Energy, queryonly );
 }
 
 
-void GetResource :: checkbuilding ( pbuilding b )
+void GetResource :: checkbuilding ( Building* b )
 {
    if ( b->color/8 == player ) {
       if ((b->netcontrol & (cnet_stopenergyoutput << resourcetype)) == 0) {
@@ -389,7 +389,7 @@ void GetResource :: start ( int x, int y )
 
 
 
-void PutResource :: checkbuilding ( pbuilding b )
+void PutResource :: checkbuilding ( Building* b )
 {
    if ( b->color/8 == player ) {
       if ((b->netcontrol & (cnet_stopenergyinput << resourcetype)) == 0) {
@@ -424,7 +424,7 @@ void PutResource :: start ( int x, int y )
 
 
 
-void PutTribute :: checkbuilding ( pbuilding b )
+void PutTribute :: checkbuilding ( Building* b )
 {
    if ( b->color/8 == targplayer ) {
       if ((b->netcontrol & (cnet_stopenergyinput << resourcetype)) == 0) {
@@ -486,7 +486,7 @@ void PutTribute :: start ( int x, int y )
    } while ( targplayer < 8  && pl == -1 );
 }
 
-int PutTribute :: puttribute ( pbuilding start, int resource, int _queryonly, int _forplayer, int _fromplayer, int _scope )
+int PutTribute :: puttribute ( Building* start, int resource, int _queryonly, int _forplayer, int _fromplayer, int _scope )
 {
    startbuilding = start;
    targplayer = _forplayer;
@@ -576,7 +576,7 @@ void transfer_all_outstanding_tribute ( void )
 }
 
 
-void GetResourceCapacity :: checkbuilding ( pbuilding b )
+void GetResourceCapacity :: checkbuilding ( Building* b )
 {
    if ( b->color/8 == player ) {
       int t = b->gettank ( resourcetype );
@@ -622,7 +622,7 @@ int ResourceChangeNet :: getresource ( int x, int y, int resource, int _player, 
 
 
 
-void GetResourcePlus :: checkvehicle ( pvehicle v )
+void GetResourcePlus :: checkvehicle ( Vehicle* v )
 {/*
    if ( resourcetype == 0 )
       if ( v->getGeneratorStatus() )
@@ -631,7 +631,7 @@ void GetResourcePlus :: checkvehicle ( pvehicle v )
 }
 
 
-void GetResourcePlus :: checkbuilding ( pbuilding bld )
+void GetResourcePlus :: checkbuilding ( Building* bld )
 {
    if ( bld->color/8 == player )
       got += bld->getResourcePlus().resource( resourcetype );
@@ -641,7 +641,7 @@ void GetResourcePlus :: checkbuilding ( pbuilding bld )
 
 
 
-void GetResourceUsage :: checkbuilding ( pbuilding b )
+void GetResourceUsage :: checkbuilding ( Building* b )
 {
    if ( b->color/8 == player ) 
       got += b->getResourceUsage().resource( resourcetype );

@@ -142,11 +142,9 @@ ASCString ImageConverter::createPic(const BuildingType&  bt, ASCString filePath)
   int x=0; int y=0;
   for ( int xp = 0; xp < 4; xp++ ) {
     for ( int yp = 0; yp < 6; yp++ ) {
-      if ( bt.getpicture(BuildingType::LocalCoordinate(xp,yp) )) {
-        putspriteimage ( x + xp * fielddistx + ( yp & 1 ) *
-                         fielddisthalfx, y + yp * fielddisty, bt.getpicture(
-                           BuildingType::LocalCoordinate( xp, yp) ) );
-      }
+      if ( bt.fieldExists(BuildingType::LocalCoordinate(xp,yp) )) 
+        bt.paintSingleField( getActiveSurface(), SPoint(x + xp * fielddistx + ( yp & 1 ) * fielddisthalfx, y + yp * fielddisty), BuildingType::LocalCoordinate( xp, yp) ) ;
+      
     }
   }
   pal[255][0] = 254;

@@ -49,13 +49,13 @@ const int ccbt_training = 150;
 
   class CalculateThreat_Vehicle : public CalculateThreat_VehicleType {
                            protected:
-                                pvehicle          eht;
+                                Vehicle*          eht;
                                 virtual int       getdamage ( void );
                                 virtual int       getexpirience ( void );
                                 virtual int       getammunition( int i );
                                 virtual int       getheight ( void );
                            public:
-                              void              calc_threat_vehicle ( pvehicle _eht );
+                              void              calc_threat_vehicle ( Vehicle* _eht );
                               CalculateThreat_Vehicle ( AI* _ai ) : CalculateThreat_VehicleType ( _ai ) {};
                        };
 
@@ -143,7 +143,7 @@ int          CalculateThreat_Vehicle :: getexpirience(void)
 }
 
 
-void         CalculateThreat_Vehicle :: calc_threat_vehicle ( pvehicle _eht )
+void         CalculateThreat_Vehicle :: calc_threat_vehicle ( Vehicle* _eht )
 {
 
    eht = _eht;
@@ -245,20 +245,20 @@ void  AI :: calculateThreat ( pvehicletype vt)
 }
 
 
-void  AI :: calculateThreat ( pvehicle eht )
+void  AI :: calculateThreat ( Vehicle* eht )
 {
    CalculateThreat_Vehicle ctv ( this );
    ctv.calc_threat_vehicle( eht );
 }
 
 
-void  AI :: calculateThreat ( pbuilding bld )
+void  AI :: calculateThreat ( Building* bld )
 {
    calculateThreat ( bld, getPlayerNum());
 //   calculateThreat ( bld, 8 );
 }
 
-void  AI :: calculateThreat ( pbuilding bld, int player )
+void  AI :: calculateThreat ( Building* bld, int player )
 {
    if ( !bld->aiparam[ player ] )
       bld->aiparam[ player ] = new AiValue ( log2 ( bld->typ->buildingheight ) );
@@ -296,7 +296,7 @@ void  AI :: calculateThreat ( pbuilding bld, int player )
 
 
 
-void AI :: WeaponThreatRange :: run ( pvehicle _veh, int x, int y, AiThreat* _threat )
+void AI :: WeaponThreatRange :: run ( Vehicle* _veh, int x, int y, AiThreat* _threat )
 {
    threat = _threat;
    veh = _veh;
@@ -470,7 +470,7 @@ void     AI :: calculateAllThreats( void )
 
          // Now we cycle through all units of this player
          for ( Player::VehicleList::iterator vi = getPlayer(v).vehicleList.begin(); vi != getPlayer(v).vehicleList.end(); vi++ ) {
-            pvehicle veh = *vi;
+            Vehicle* veh = *vi;
             // if ( !veh->aiparam[ getPlayerNum() ] )
                calculateThreat ( veh );
          }
@@ -558,7 +558,7 @@ void AI :: Section :: init ( int _x, int _y, int xsize, int ysize, int _xp, int 
 
 }
 
-int AI :: Section :: numberOfAccessibleFields ( const pvehicle veh )
+int AI :: Section :: numberOfAccessibleFields ( const Vehicle* veh )
 {
    int num = 0;
    for ( int y = y1; y <= y2; y++ )
@@ -625,7 +625,7 @@ AI::Section& AI :: Sections :: getForPos ( int xn, int yn )
    return section[xn+yn*numX];
 }
 
-AI::Section* AI :: Sections :: getBest ( int pass, const pvehicle veh, MapCoordinate3D* dest, bool allowRefuellOrder, bool secondRun )
+AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D* dest, bool allowRefuellOrder, bool secondRun )
 {
    /*
       In the first pass wwe check were all the units would go if there wouldn't be

@@ -31,9 +31,9 @@
                 public:
                        pfont        font; 
                        int         x, y; 
-                       pvehicle     vehicle;
+                       Vehicle*     vehicle;
                        pvehicletype vehicletype;
-                       pbuilding    building;
+                       const Building*    building;
                        pfield       objfield;
 
                        void         allocmem ( void );
@@ -77,10 +77,10 @@
                        void         checkformouse ( int func = 0 );
                        void paint ( const pfield fld, int playerview );
                        tdashboard ( void );
-                       void paintvehicleinfo( const pvehicle     vehicle,
-                                              const pbuilding    building,
+                       void paintvehicleinfo( Vehicle*     vehicle,
+                                              const Building*    building,
                                               const pfield       _objfield,
-                                              const pvehicletype vehicletype );
+                                              pvehicletype vehicletype );
 
                        void         paintlweaponinfo ( void );
 

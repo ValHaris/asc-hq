@@ -1,5 +1,5 @@
-/*! \file gameevents.cpp
-    \brief The event handling of ASC
+/*! \file prehistoricevents.cpp
+    \brief The old event system of ASC, is only used to load old maps
 */
 
 /*
@@ -57,7 +57,7 @@ extern const char*  ceventtrigger[];
 
   /*  Datenaufbau des triggerData fieldes: [ hi 16 Bit ] [ low 16 Bit ] [ 32 bit Integer ] [ Pointer ]      [ low 24 Bit       ]  [ high 8 Bit ]
      'turn/move',                            move           turn
-     'building/unit     ',Kartened/Spiel                                                   PBuilding/Pvehicle
+     'building/unit     ',Kartened/Spiel                                                   Building/Vehicle
                           disk               ypos           xpos
      'technology researched',                                             Tech. ID
      'event',                                                             Event ID
@@ -206,7 +206,7 @@ extern const char*  ceventtrigger[];
            GameTime time;
            int xpos, ypos;
            int networkid;
-           pbuilding    building;
+           Building*    building;
            int         dummy;
            int          mapid;
            int          id;

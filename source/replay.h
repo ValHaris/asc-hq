@@ -81,7 +81,7 @@ class trunreplay {
             pmap orgmap;
             pmemorystream stream;
             int removeunit ( int x, int y, int nwid );
-            int removeunit ( pvehicle eht, int nwid );
+            int removeunit ( Vehicle* eht, int nwid );
             void wait ( int t = ticker );
             void wait ( MapCoordinate pos, int t = ticker );
             void wait ( MapCoordinate pos1, MapCoordinate pos2, int t = ticker );

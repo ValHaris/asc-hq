@@ -84,6 +84,15 @@
     public:
         MegaBlitter() { };
 
+        int getWidth()  { SourcePixelSelector<BytesPerTargetPixel>::getWidth(); };
+        int getHeight() { SourcePixelSelector<BytesPerTargetPixel>::getHeight(); };
+        
+        void initSource( const Surface& src )
+        {
+           SourcePixelSelector<BytesPerTargetPixel>::init( src );
+        }
+           
+        
         void blit( const Surface& src, Surface& dst, SPoint dstPos )
         {
            SurfaceLock sl( dst );
@@ -396,7 +405,7 @@
 
        PixelType getPixel(int x, int y)
        {
-         return SourcePixelSelector::getPixel( float(x) / zoomFactor, float(y) / zoomFactor);
+         return SourcePixelSelector::getPixel( int(float(x) / zoomFactor), int(float(y) / zoomFactor));
        };
 
        PixelType nextPixel()
@@ -411,11 +420,57 @@
        {
           this->zoomFactor = factor;
        };
+       void setSize( int sourceWidth, int sourceHeight, int targetWidth, int targetHeight )
+       {
+          float zw = float(targetWidth) / float(sourceWidth);
+          float zh = float(targetHeight)/ float(sourceHeight);
+          setZoom( min ( zw,zh));
+       };
 
  };
 
+template<int pixelsize, class SourcePixelSelector = SourcePixelSelector_Plain<pixelsize> >
+ class SourcePixelSelector_Flip: public SourcePixelSelector {
+       typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+       bool hflip;
+       bool vflip;
+       int x,y;
+       int w,h;
+    protected:
+       SourcePixelSelector_Flip() : hflip(false),vflip(false),x(0),y(0),w(0),h(0) {};
+
+       void init ( const Surface& srv )
+       {
+          SourcePixelSelector::init(srv);
+          w = SourcePixelSelector::getWidth()-1;
+          h = SourcePixelSelector::getHeight()-1;
+       };
+       
+       
+       PixelType getPixel(int x, int y)
+       {
+         return SourcePixelSelector::getPixel( hflip? w-x : x , vflip ? h-y : y );
+       };
+
+       PixelType nextPixel()
+       {
+          return getPixel(x++, y);
+       };
+
+       void nextLine() { x= 0; ++y;};
+
+    public:
+       void setFlipping( bool horizontal, bool vertical )
+       {
+          hflip = horizontal;
+          vflip = vertical;
+       };
+      
+ };
 
 
+ 
+ 
 
 /*
  template<class SourceColorTransform, class ColorMerger, class SourcePixelSelector>

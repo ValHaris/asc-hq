@@ -48,33 +48,6 @@
 #include "sg.h"
 #include "sdl/sound.h"
 
-ASC_PG_App* pgApp = NULL;
-
-
-ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
-{
-   this->themeName = themeName;
-   EnableSymlinks(true);
-   int i = 0;
-   bool themeFound = false;
-   ASCString path;
-   do {
-      path = getSearchPath ( i++ );
-      if ( !path.empty() ) {
-         AddArchive ( path.c_str() );
-         if ( !themeFound )
-             themeFound = AddArchive ( (path + themeName + ".zip").c_str() );
-      }
-   } while ( !path.empty() );
-   PG_LogConsole::SetLogLevel ( PG_LOG_ERR );
-   reloadTheme();
-}
-
-void ASC_PG_App :: reloadTheme()
-{
-   if ( !LoadTheme(themeName.c_str()))
-      fatalError ( "Could not load Paragui theme for ASC");
-}
 
 
 //! A Paragui widget that fills the whole screen and redraws it whenever Paragui wants to it.
@@ -96,7 +69,6 @@ protected:
     void Blit ( bool recursive = true, bool restore = true );
 };
 
-MainScreenWidget* mainScreenWidget = NULL;
 /*
 void MainScreenWidget::eventDraw (SDL_Surface* surface, const PG_Rect& rect)
 {
@@ -125,12 +97,50 @@ void MainScreenWidget::Blit ( bool recursive , bool restore )
 }
 
 
+ASC_PG_App* pgApp = NULL;
 
-void setupMainScreenWidget()
+ ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
 {
-   mainScreenWidget = new MainScreenWidget();
-   mainScreenWidget->gameReady();
+   this->themeName = themeName;
+   EnableSymlinks(true);
+   int i = 0;
+   bool themeFound = false;
+   ASCString path;
+   do {
+      path = getSearchPath ( i++ );
+      if ( !path.empty() ) {
+         AddArchive ( path.c_str() );
+         if ( !themeFound )
+             themeFound = AddArchive ( (path + themeName + ".zip").c_str() );
+      }
+   } while ( !path.empty() );
+   PG_LogConsole::SetLogLevel ( PG_LOG_ERR );
+   reloadTheme();
+   
+   pgApp = this;
 }
+
+
+bool ASC_PG_App:: InitScreen ( int w, int h, int depth, Uint32 flags )
+{
+   bool result = PG_Application::InitScreen ( w, h, depth, flags  );
+   if ( result ) {
+      initASCGraphicSubsystem ( GetScreen(), NULL );
+      new MainScreenWidget();
+   }
+   
+   return result;
+}
+
+
+void ASC_PG_App :: reloadTheme()
+{
+   if ( !LoadTheme(themeName.c_str()))
+      fatalError ( "Could not load Paragui theme for ASC");
+}
+
+
+
 
 
 //! Adapter class for using Paragui Dialogs in ASC. This class transfers the event control from ASC to Paragui and back. All new dialog classes should be derived from this class
@@ -150,7 +160,7 @@ ASC_PG_Dialog :: ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const char
        :PG_Window ( parent, r, windowtext, flags, style, heightTitlebar ),
         quitModalLoop ( 0 )
 {
-   mainScreenWidget->setDirty();
+//   mainScreenWidget->setDirty();
 //   SDL_mutexP ( eventHandlingMutex );
 }
 
@@ -161,7 +171,8 @@ ASC_PG_Dialog::~ASC_PG_Dialog ()
 
 int ASC_PG_Dialog::Run ( )
 {
-   queueEvents ( true );
+   setEventRouting ( true, false );
+   
    while ( !quitModalLoop ) {
       SDL_Event event;
       if ( getQueuedEvent( event ))
@@ -169,7 +180,7 @@ int ASC_PG_Dialog::Run ( )
       else
          SDL_Delay ( 2 );
    }
-   queueEvents ( false );
+   setEventRouting ( false, true );
    return quitModalLoop;
 }
 

@@ -185,7 +185,7 @@ void BuildingConquered::arm()
       return;
    }
 
-   pbuilding bld = gamemap->getField ( pos )->building;
+   Building* bld = gamemap->getField ( pos )->building;
    if ( bld )
       bld->conquered.connect( SigC::slot( *this, &BuildingConquered::triggered ));
 }
@@ -215,7 +215,7 @@ void BuildingLost::arm()
       return;
    }
 
-   pbuilding bld = gamemap->getField ( pos )->building;
+   Building* bld = gamemap->getField ( pos )->building;
    if ( bld ) {
       bld->conquered.connect( SigC::slot( *this, &BuildingConquered::triggered ));
       bld->destroyed.connect( SigC::slot( *this, &BuildingConquered::triggered ));
@@ -259,14 +259,14 @@ EventTrigger::State BuildingSeen::getState( int player )
       return finally_fulfilled;
    }
 
-   pbuilding bld = gamemap->getField ( pos )->building;
+   Building* bld = gamemap->getField ( pos )->building;
    if ( !bld )
       return finally_failed;
 
    int cnt = 0;
    for ( int x = 0; x < 4; x++ )
       for ( int y = 0; y < 6; y++ ) {
-         if ( bld->typ->getpicture ( BuildingType::LocalCoordinate(x, y) ) ) {
+         if ( bld->typ->fieldExists ( BuildingType::LocalCoordinate(x, y) ) ) {
             pfield fld = bld->getField ( BuildingType::LocalCoordinate( x, y) );
             if ( fld ) {
                int vis = (fld-> visible >> (player*2) ) & 3;
@@ -294,7 +294,7 @@ void BuildingSeen::arm()
       return;
    }
 
-   pbuilding bld = gamemap->getField ( pos )->building;
+   Building* bld = gamemap->getField ( pos )->building;
    if ( bld ) {
       bld->connection |= cconnection_seen;
       #ifdef sgmain
@@ -375,7 +375,7 @@ void UnitTrigger::triggered()
 
 void UnitLost::arm()
 {
-   pvehicle veh = gamemap->getUnit( unitID );
+   Vehicle* veh = gamemap->getUnit( unitID );
    if ( veh ) {
       veh->destroyed.connect( SigC::slot( *this, &UnitLost::triggered ));
       veh->conquered.connect( SigC::slot( *this, &UnitLost::triggered ));
@@ -385,7 +385,7 @@ void UnitLost::arm()
 
 EventTrigger::State UnitLost::getState( int player )
 {
-  pvehicle veh = gamemap->getUnit( unitID );
+  Vehicle* veh = gamemap->getUnit( unitID );
   if ( !veh )
      return finally_fulfilled;
   if ( veh->getOwner() != player )
@@ -404,7 +404,7 @@ ASCString UnitLost::getName() const
 
 EventTrigger::State UnitConquered::getState( int player )
 {
-  pvehicle veh = gamemap->getUnit( unitID );
+  Vehicle* veh = gamemap->getUnit( unitID );
   if ( !veh )
      return finally_failed;
   if ( veh->getOwner() == player )
@@ -420,7 +420,7 @@ ASCString UnitConquered::getName() const
 
 void UnitConquered::arm()
 {
-   pvehicle veh = gamemap->getUnit( unitID );
+   Vehicle* veh = gamemap->getUnit( unitID );
    if ( veh )
       veh->conquered.connect( SigC::slot( *this, &UnitConquered::triggered ));
 }
@@ -430,7 +430,7 @@ void UnitConquered::arm()
 
 EventTrigger::State UnitDestroyed::getState( int player )
 {
-  pvehicle veh = gamemap->getUnit( unitID );
+  Vehicle* veh = gamemap->getUnit( unitID );
   if ( !veh )
      return finally_fulfilled;
   return unfulfilled;
@@ -443,7 +443,7 @@ ASCString UnitDestroyed::getName() const
 
 void UnitDestroyed::arm()
 {
-  pvehicle veh = gamemap->getUnit( unitID );
+  Vehicle* veh = gamemap->getUnit( unitID );
   if ( veh )
      veh->destroyed.connect( SigC::slot( *this, &UnitDestroyed::triggered ));
 }
@@ -820,8 +820,6 @@ void WindChange::execute( MapDisplayInterface* md )
 
    if ( direction != -1 )
       gamemap->weather.windDirection = direction;
-
-   resetallbuildingpicturepointers();
 
    if ( md )
       md->updateDashboard();
@@ -1692,7 +1690,6 @@ void Reinforcements :: execute( MapDisplayInterface* md )
               }
          bld->chainbuildingtofield( pos );
          #endif
-         bld->resetPicturePointers ();
          gamemap->calculateAllObjects();
          bld->addview();
       }

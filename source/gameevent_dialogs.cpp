@@ -599,7 +599,7 @@ void  tshownewtanks :: buttonpressed ( int id )
 }
 
 
-pvehicle selectunit ( pvehicle unit )
+Vehicle* selectunit ( Vehicle* unit )
 {
     int x, y;
     int cnt = 0;
@@ -626,7 +626,7 @@ pvehicle selectunit ( pvehicle unit )
 
 int selectunit ( int unitnetworkid )
 {
-  pvehicle v = actmap->getUnit ( unitnetworkid );
+  Vehicle* v = actmap->getUnit ( unitnetworkid );
   v = selectunit ( v );
   if ( v )
      return v->networkid;

@@ -22,50 +22,55 @@
 #ifndef graphicsetH
  #define graphicsetH
 
+#include <map>
+#include "libs/loki/Singleton.h"
+
+#include "global.h" 
+#include "graphics/surface.h" 
 #include "typen.h"
 
- extern int getGraphicSetIdFromFilename ( const char* filename );
- extern int activateGraphicSet ( int id  );
+ extern int getGraphicSetIdFromFilename ( const ASCString& filename );
 
- //! initializes the subsystem and loads all available graphicSets
- extern void loadbi3graphics( void );
+ 
+ class GraphicSetManager_Base {
+ 
+        class GraphicSet {
+              public:
+                int id;
+                vector<Surface> image;
+                vector<int>     picmode;
+                map<int,FieldQuickView> quickViewImages;
 
- extern int keeporiginalpalette;
+                bool  picAvail ( int num ) const 
+                { 
+                   if ( picmode.size() > num ) 
+                      return picmode[num] < 256;
+                   else
+                      return false;
+                };        
+        };
 
- extern int  loadbi3pict_double ( int num, void** pict, int interpolate = 0, int reference = 1 );
-   // returns: 1 if picture is a reference
-   //          0 if picture is a copy
+ 
+     GraphicSet* activeSet;
+     typedef vector<GraphicSet*> GraphicSets;
+     GraphicSets graphicSets;
 
- extern void loadbi3pict ( int num, void** pict );
-
- class ActiveGraphicPictures {
-     int activeId;
-     int maxnum;
-     void** bi3graphics;
-     int* bi3graphmode;        // 0: no picture available ( should not happen ingame )
-                               // 1: picture has BI size
-                               // 2: picture has ASC size
-                               // +0xff : picture is dummy picture
-     int absoluteMaxPicSize;
-     FieldQuickView* emptyFieldQuickView;
+     GraphicSetManager_Base ();   // should be made private
    public:
      int setActive ( int id );
-     int getActiveID ( ) { return activeId; };
+     int getActiveID ( ) { if ( activeSet ) return activeSet->id; else return -1; };
 
-     ActiveGraphicPictures ( void ) {
-        activeId = -1;
-        emptyFieldQuickView = NULL;
-     };
-
-     void alloc ( int maxNum, int maxSize );
+     void loadData();
+     
+    
      bool picAvail ( int num ) const;
-     void* getPic ( int num );
-     int getMode ( int num ) const;
-     int getNum ( ) { return maxnum; };
+     int  getMode( int num ) const;
+     Surface& getPic ( int num );
      const FieldQuickView* getQuickView( int id );
+     friend class Loki::CreateUsingNew<GraphicSetManager_Base>;
+     // friend struct CreateUsingNew;
  };
 
- extern ActiveGraphicPictures* getActiveGraphicSet();
-
-
+ typedef Loki::SingletonHolder<GraphicSetManager_Base> GraphicSetManager;
+  
 #endif

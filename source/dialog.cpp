@@ -254,7 +254,7 @@ void         tstatisticarmies::count(void)
                b = 2;
 
       for ( tmap::Player::VehicleList::iterator i = actmap->player[j].vehicleList.begin(); i != actmap->player[j].vehicleList.end(); i++ ) {
-         pvehicle actvehicle = *i;
+         Vehicle* actvehicle = *i;
          if (fieldvisiblenow(getfield(actvehicle->xpos,actvehicle->ypos))) {
             if (actvehicle->typ->height & (chtieffliegend | chfliegend | chhochfliegend | chsatellit)) { 
                l[0][b]++; 
@@ -290,7 +290,7 @@ void         tstatisticbuildings::count(void)
             else 
                b = 2; 
       for ( tmap::Player::BuildingList::iterator i = actmap->player[j].buildingList.begin(); i != actmap->player[j].buildingList.end(); i++ ) {
-         pbuilding actbuilding = *i;
+         Building* actbuilding = *i;
          if (fieldvisiblenow( actbuilding->getEntryField() )) {
             l[0][b]++; 
             m[0][j]++; 
@@ -1543,7 +1543,7 @@ void         tvehicleinfo::run(void)
 
    i = 0;
    if ( !aktvehicle ) {
-      pvehicle eht = getactfield()->vehicle;
+      Vehicle* eht = getactfield()->vehicle;
       if ( !fieldvisiblenow(getactfield()) )
          eht = NULL;
       if ( eht ) {

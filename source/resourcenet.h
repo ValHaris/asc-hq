@@ -34,8 +34,8 @@ class MapNetwork {
 
                 virtual int fieldavail ( int x, int y ) = 0;
                 virtual int searchfinished ( void ) = 0;
-                virtual void checkvehicle ( pvehicle v ) = 0;
-                virtual void checkbuilding ( pbuilding b ) = 0;
+                virtual void checkvehicle ( Vehicle* v ) = 0;
+                virtual void checkbuilding ( Building* b ) = 0;
                 virtual int globalsearch ( void ) = 0;
 
                 virtual void searchbuilding ( int x, int y );
@@ -62,12 +62,12 @@ class ResourceNet : public MapNetwork {
 
 class GetConnectedBuildings : public ResourceNet {
                 protected:
-                   void checkvehicle ( pvehicle v ) {};
-                   void checkbuilding ( pbuilding b ) { buildingContainer.push_back ( b ); };
+                   void checkvehicle ( Vehicle* v ) {};
+                   void checkbuilding ( Building* b ) { buildingContainer.push_back ( b ); };
                    int searchfinished ( void ) { return false; };
 
                 public:
-                   typedef vector<pbuilding> BuildingContainer;
+                   typedef vector<Building*> BuildingContainer;
                    BuildingContainer& buildingContainer;
                    GetConnectedBuildings ( BuildingContainer& buildingContainer_, pmap gamemap, int resourceType ) : ResourceNet ( gamemap, gamemap->isResourceGlobal(resourceType)?2:1), buildingContainer ( buildingContainer_) {};
 };
@@ -93,8 +93,8 @@ class StaticResourceNet : public ResourceNet {
 class GetResource : public StaticResourceNet {
               protected:
                   int tributegot[3][8];
-                  virtual void checkvehicle ( pvehicle v );
-                  virtual void checkbuilding ( pbuilding b );
+                  virtual void checkvehicle ( Vehicle* v );
+                  virtual void checkbuilding ( Building* b );
                   virtual void start ( int x, int y );
               public:
                   GetResource ( pmap gamemap, int scope = -1 );
@@ -102,8 +102,8 @@ class GetResource : public StaticResourceNet {
 
 class PutResource : public StaticResourceNet {
               protected:
-                  virtual void checkbuilding ( pbuilding b );
-                  virtual void checkvehicle ( pvehicle v ) {};
+                  virtual void checkbuilding ( Building* b );
+                  virtual void checkvehicle ( Vehicle* v ) {};
                   virtual void start ( int x, int y );
                public:
                    PutResource ( pmap gamemap, int scope = -1 ) : StaticResourceNet ( gamemap, scope ) {};
@@ -112,20 +112,20 @@ class PutResource : public StaticResourceNet {
 class PutTribute : public StaticResourceNet {
               protected:
                   int targplayer;
-                  pbuilding startbuilding;
-                  virtual void checkbuilding ( pbuilding b );
-                  virtual void checkvehicle ( pvehicle v ) {};
+                  Building* startbuilding;
+                  virtual void checkbuilding ( Building* b );
+                  virtual void checkvehicle ( Vehicle* v ) {};
                   virtual void start ( int x, int y );
               public:
                   PutTribute ( pmap gamemap ) : StaticResourceNet( gamemap ) {};
-                  int puttribute ( pbuilding start, int resource, int _queryonly, int _forplayer, int _fromplayer, int _scope );
+                  int puttribute ( Building* start, int resource, int _queryonly, int _forplayer, int _fromplayer, int _scope );
    };
 
 
 class GetResourceCapacity : public StaticResourceNet {
               protected:
-                  virtual void checkbuilding ( pbuilding b );
-                  virtual void checkvehicle ( pvehicle v ) {};
+                  virtual void checkbuilding ( Building* b );
+                  virtual void checkvehicle ( Vehicle* v ) {};
                   virtual void start ( int x, int y );
                   virtual int searchfinished ( void ) { return 0; };
               public:
@@ -152,16 +152,16 @@ class ResourceChangeNet : public ResourceNet {
 
 class GetResourcePlus : public ResourceChangeNet {
               protected:
-                  virtual void checkbuilding ( pbuilding b );
-                  virtual void checkvehicle ( pvehicle v );
+                  virtual void checkbuilding ( Building* b );
+                  virtual void checkvehicle ( Vehicle* v );
               public:
                   GetResourcePlus ( pmap gamemap ) : ResourceChangeNet ( gamemap ) {};
    };
 
 class GetResourceUsage : public ResourceChangeNet {
               protected:
-                  virtual void checkbuilding ( pbuilding b );
-                  virtual void checkvehicle ( pvehicle v ) {};
+                  virtual void checkbuilding ( Building* b );
+                  virtual void checkvehicle ( Vehicle* v ) {};
               public:
                   GetResourceUsage ( pmap gamemap ) : ResourceChangeNet ( gamemap ) {};
    };

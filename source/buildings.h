@@ -70,21 +70,6 @@ class  Building : public ContainerBase {
           virtual Resources getUsage();
     };
 
-
-    /*
-    class Research : public Work {
-          Building* bld;
-          int percentage;
-        public:
-          MatterConverter( Building* _bld ) ;
-          virtual bool finished();
-          virtual bool run();
-          virtual Resources getPlus() {return Resources; };
-          virtual Resources getUsage();
-    };
-    */
-
-
     class RegenerativePowerPlant : public Work {
         protected:
           Building* bld;
@@ -212,13 +197,16 @@ class  Building : public ContainerBase {
 
 
     //! returns the picture of the building. It may depend on the current weather of the fields the building is standing on
-    void* getpicture ( const BuildingType::LocalCoordinate& localCoordinate );
+    const Surface& getPicture ( const BuildingType::LocalCoordinate& localCoordinate ) const;
+
+    void paintSingleField ( Surface& s, SPoint imgpos, BuildingType::LocalCoordinate pos ) const;
+    
     
     //! changes the building's owner. \param player range: 0 .. 8
     void convert ( int player );
 
     //! Adds the view and jamming of the building to the player's global radar field
-    void addview ( void );
+    void addview (  );
 
     //! Removes the view and jamming of the building from the player's global radar field
     void removeview ( void );
@@ -237,15 +225,17 @@ class  Building : public ContainerBase {
 
     //! returns the pointer to the field which the given part of the building is standing on
     pfield getField( const BuildingType::LocalCoordinate& localCoordinates ) const;
-
+    
     //! returns the absolute map coordinate of the given part of the building
     MapCoordinate getFieldCoordinates( const BuildingType::LocalCoordinate& localCoordinates ) const;
 
+    
+    //! converts a global coordinate into a local coordinate.
+    BuildingType::LocalCoordinate getLocalCoordinate( const MapCoordinate& field ) const;
+    
+    
     //! produces ammunition and stores it in #ammo
     void produceAmmo ( int type, int num );
-
-    //! updates the pointers to the pictures , which are part of tfield (to speed up displaying)
-    void resetPicturePointers ( void );
 
     //! returns the position of the buildings entry
     MapCoordinate3D getPosition ( ) const { return getEntry(); };
@@ -303,7 +293,7 @@ class GetMiningInfo : public SearchFields {
              };
              GetMiningInfo ( pmap _gamemap );
              const MiningInfo& getMiningInfo() {return miningInfo; };
-             void run ( const pbuilding bld );
+             void run ( const Building* bld );
           protected:
              MiningInfo miningInfo;
          };

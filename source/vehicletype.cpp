@@ -23,6 +23,7 @@
 #include <algorithm>
 #include "global.h"
 #include "vehicletype.h"
+#include "sgstream.h"
 #include "errors.h"
 #include "graphicset.h"
 #include "basicmessages.h" 
@@ -95,7 +96,6 @@ Vehicletype :: Vehicletype ( void )
    weight = 0;
    bipicture = -1;
 
-   buildicon = NULL;
    autorepairrate = 0;
 
    heightChangeMethodNum = 0;
@@ -273,7 +273,7 @@ void Vehicletype :: read ( tnstream& stream )
       stream.readInt(); // vehiclesbuildableid = (int*)
 
    if ( version <= 4 )
-      buildicon = (void*) stream.readInt();
+      stream.readInt(); // buildicon
 
    int buildingsbuildablenum = stream.readInt();
    if ( version <= 4 )
@@ -473,14 +473,11 @@ void Vehicletype :: read ( tnstream& stream )
    if ( version >= 12 )
       techDependency.read( stream );
 
-   if ( version >= 13 ) {
-      int w;
-      stream.readrlepict ( &buildicon,  false, &w);
-   } else {
+   if ( version >= 13 ) 
+      buildicon.read( stream );
+   else {
       #ifndef converter
-       buildicon = generate_vehicle_gui_build_icon ( this );
-      #else
-       buildicon = NULL;
+       buildicon = generate_gui_build_icon ( this );
       #endif
    }
 
@@ -638,7 +635,7 @@ void Vehicletype:: write ( tnstream& stream ) const
 
    techDependency.write( stream );
 
-   stream.writerlepict( buildicon );
+   buildicon.write(stream);
 
    stream.writeFloat ( cargoMovementDivisor );
 }
@@ -662,18 +659,11 @@ int Vehicletype :: maxSpeed ( ) const
 
 Vehicletype :: ~Vehicletype ( )
 {
-   if ( buildicon ) {
-      delete buildicon;
-      buildicon = NULL;
-   }
-
    for ( int i = 0; i < 8; i++ )
       if ( aiparam[i] ) {
          delete aiparam[i];
          aiparam[i] = NULL;
       }
-
-
 }
 
 
@@ -883,7 +873,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
 
 
    #ifndef converter
-   buildicon = generate_vehicle_gui_build_icon ( this );
+   buildicon = generate_gui_build_icon ( this );
    #endif
 }
 

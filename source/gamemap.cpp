@@ -32,6 +32,7 @@
 #include "dialog.h"
 #include "itemrepository.h"
 #include "strtmesg.h"
+#include "graphics/blitter.h"
 
 #ifdef sgmain
  #include "network.h"
@@ -791,7 +792,7 @@ int tmap :: eventpassed( int id, int mapid )
 }
 
 
-pvehicle tmap :: getUnit ( pvehicle eht, int nwid )
+Vehicle* tmap :: getUnit ( Vehicle* eht, int nwid )
 {
    if ( !eht )
       return NULL;
@@ -804,7 +805,7 @@ pvehicle tmap :: getUnit ( pvehicle eht, int nwid )
                if ( eht->loading[i]->networkid == nwid )
                   return eht->loading[i];
                else {
-                  pvehicle ld = getUnit ( eht->loading[i], nwid );
+                  Vehicle* ld = getUnit ( eht->loading[i], nwid );
                   if ( ld )
                      return ld;
                }
@@ -812,7 +813,7 @@ pvehicle tmap :: getUnit ( pvehicle eht, int nwid )
    }
 }
 
-pvehicle tmap :: getUnit ( int nwid )
+Vehicle* tmap :: getUnit ( int nwid )
 {
    for ( int p = 0; p < 9; p++ )
       for ( Player::VehicleList::iterator i = player[p].vehicleList.begin(); i != player[p].vehicleList.end(); i++ )
@@ -823,7 +824,7 @@ pvehicle tmap :: getUnit ( int nwid )
 }
 
 
-pvehicle tmap :: getUnit ( int x, int y, int nwid )
+Vehicle* tmap :: getUnit ( int x, int y, int nwid )
 {
    pfield fld  = getField ( x, y );
    if ( !fld )
@@ -832,7 +833,7 @@ pvehicle tmap :: getUnit ( int x, int y, int nwid )
    if ( !fld->vehicle )
       if ( fld->building ) {
          for ( int i = 0; i < 32; i++ ) {
-            pvehicle ld = getUnit ( fld->building->loading[i], nwid );
+            Vehicle* ld = getUnit ( fld->building->loading[i], nwid );
             if ( ld )
                return ld;
          }
@@ -1027,7 +1028,7 @@ void tmap::endTurn()
 
    tmap::Player::VehicleList toRemove;
    for ( tmap::Player::VehicleList::iterator v = player[actplayer].vehicleList.begin(); v != player[actplayer].vehicleList.end(); ++v ) {
-      pvehicle actvehicle = *v;
+      Vehicle* actvehicle = *v;
 
       // Bei Žnderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!
 
@@ -1162,7 +1163,7 @@ tmap :: ~tmap ()
             delete field[l].building;
 
 
-         pvehicle aktvehicle = field[l].vehicle;
+         Vehicle* aktvehicle = field[l].vehicle;
          if ( aktvehicle )
             delete aktvehicle;
 
@@ -1560,7 +1561,7 @@ void tmap::operator= ( const tmap& map )
   throw ASCmsgException ( "tmap::operator= undefined");
 }
 
-bool Mine :: attacksunit ( const pvehicle veh )
+bool Mine :: attacksunit ( const Vehicle* veh )
 {
      if  (!( ( veh->typ->functions & cfmineimmune ) ||
               ( veh->height > chfahrend ) ||
@@ -1592,7 +1593,6 @@ void tfield::init ()
 {
    bdt.set ( 0 );
    typ = NULL;
-   picture = NULL;
    vehicle = NULL;
    building = NULL;
    a.temp = 0;
@@ -1648,7 +1648,7 @@ void tfield :: checkminetime ( int time )
 }
 
 
-int tfield :: mineattacks ( const pvehicle veh )
+int tfield :: mineattacks ( const Vehicle* veh )
 {
    int i = 1;
    for ( MineContainer::iterator m = mines.begin(); m != mines.end(); m++, i++ )
@@ -1903,7 +1903,7 @@ int tfield :: getjamming ( void )
       return 0;
 }
 
-int tfield :: getmovemalus ( const pvehicle veh )
+int tfield :: getmovemalus ( const Vehicle* veh )
 {
    int mnum = mines.size();
    if ( mnum ) {
@@ -1966,17 +1966,10 @@ void tfield :: setparams ( void )
          viewbonus = o->typ->viewbonus_plus;
    }
 
-   if ( building ) {
+   if ( building ) 
       if ( this == building->getField( building->typ->entry ))
          bdt |= getTerrainBitType(cbbuildingentry);
-
-      if ( building )
-         for (int x = 0; x < 4; x++)
-            for ( int y = 0; y < 6; y++ )
-               if ( building->getField ( BuildingType::LocalCoordinate(x, y) ) == this )
-                  if ( building->getpicture ( BuildingType::LocalCoordinate(x, y) ) )
-                     picture = building->getpicture ( BuildingType::LocalCoordinate(x, y) );
-   }
+   
 }
 
 
@@ -2014,23 +2007,27 @@ int  Object :: getdir ( void )
    return dir;
 }
 
-void Object :: display ( int x, int y, int weather )
+void Object :: display ( Surface& surface, SPoint pos, int weather ) const
 {
-  if ( typ->id == 7 || typ->id == 30 || typ->displayMethod==1 ) // buried pipeline,
-      putshadow  ( x, y,  typ->getpic ( dir, weather ) , &xlattables.a.dark1);
-  else
-     if ( typ->displayMethod == 2 ) // hillside
-        putxlatfilter ( x, y,  typ->getpic( dir, weather ), xlattables.nochange );
-     else
+  if ( typ->id == 7 || typ->id == 30 || typ->displayMethod==1 ) { // buried pipeline,
+     MegaBlitter<1,ColorTransform_XLAT, ColorMerger_AlphaOverwrite> blitter; 
+     blitter.setTranslationTable( xlattables.a.dark1 );
+     blitter.blit ( typ->getPicture( dir, weather) , surface, pos );
+  } else
+     if ( typ->displayMethod == 2 ) {  // hillside
+        typ->display ( surface, pos, dir, weather );
+        // putxlatfilter ( x, y,  typ->getpic( dir, weather ), xlattables.nochange );
+     } else
         if ( typ->displayMethod == 3 ) { // mapeditorOnly
            #ifdef karteneditor
-           typ->display ( x, y, dir, weather );
+           typ->display ( surface, pos, dir, weather );
            #endif
         } else
            if ( typ->displayMethod == 4 ) {
-              putpicturemix ( x, y,  typ->getpic( dir, weather ),  0, (char*) colormixbuf );
+              MegaBlitter<1,ColorTransform_None, ColorMerger_AlphaMixer> blitter; 
+              blitter.blit ( typ->getPicture( dir, weather) , surface, pos );
            } else
-              typ->display ( x, y, dir, weather );
+              typ->display ( surface, pos, dir, weather );
 }
 
 
@@ -2179,7 +2176,7 @@ void AiThreat :: reset ( void )
       threat[i] = 0;
 }
 
-AiParameter :: AiParameter ( pvehicle _unit ) : AiValue ( log2( _unit->height ))
+AiParameter :: AiParameter ( Vehicle* _unit ) : AiValue ( log2( _unit->height ))
 {
    reset( _unit );
 }
@@ -2223,7 +2220,7 @@ bool AiParameter::hasJob ( AiParameter::Job j )
 }
 
 
-void AiParameter :: reset ( pvehicle _unit )
+void AiParameter :: reset ( Vehicle* _unit )
 {
    unit = _unit;
    AiValue::reset ( log2( _unit->height ) );

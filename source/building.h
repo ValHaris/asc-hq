@@ -6,9 +6,14 @@
    #building_controls.h
 */
 
-//     $Id: building.h,v 1.21 2003-01-28 17:48:42 mbickel Exp $
+//     $Id: building.h,v 1.21.2.1 2004-10-26 16:35:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2003/01/28 17:48:42  mbickel
+//      Added sounds
+//      Rewrote soundsystem
+//      Fixed: tank got stuck when moving from one transport ship to another
+//
 //     Revision 1.20  2002/09/19 20:20:04  mbickel
 //      Cleanup and various bug fixes
 //
@@ -56,7 +61,7 @@
 
 
  extern int recursiondepth;
- extern void  container ( pvehicle eht, pbuilding bld );
+ extern void  container ( Vehicle* eht, Building* bld );
 
 
 #endif

@@ -47,7 +47,7 @@ void ClipBoardBase::clear()
 }
 
 
-void ClipBoardBase::addUnit ( pvehicle unit )
+void ClipBoardBase::addUnit ( Vehicle* unit )
 {
   tmemorystream stream ( &buf, tnstream::appending );
   stream.writeInt( ClipVehicle );
@@ -55,7 +55,7 @@ void ClipBoardBase::addUnit ( pvehicle unit )
   objectNum++;
 }
 
-void ClipBoardBase::addBuilding ( pbuilding bld )
+void ClipBoardBase::addBuilding ( Building* bld )
 {
   tmemorystream stream ( &buf, tnstream::appending );
   stream.writeInt( ClipBuilding );
@@ -115,7 +115,7 @@ void ClipBoardBase::place ( const MapCoordinate& pos )
 
      for ( int x = 0; x < 4; x++ )
         for ( int y = 0; y < 6; y++ )
-           if ( bld->typ->getpicture ( BuildingType::LocalCoordinate( x , y ) )) {
+           if ( bld->typ->fieldExists ( BuildingType::LocalCoordinate( x , y ) )) {
               pfield field = actmap->getField( bld->typ->getFieldCoordinate( pos, BuildingType::LocalCoordinate( x, y) ));
               if ( !field ) {
                  delete bld;

@@ -92,7 +92,7 @@ void         seteventtriggers( pmap actmap )
                int xpos = event->trigger_data[j]->xpos; 
                int ypos = event->trigger_data[j]->ypos; 
                if ( xpos != -1  &&  ypos != -1  &&  event->triggerstatus[j] != 2 && actmap->getField(xpos,ypos)->building ) {
-                  pbuilding building = actmap->getField(xpos,ypos)->building;
+                  Building* building = actmap->getField(xpos,ypos)->building;
                   event->trigger_data[j]->building = building;
                   if ((event->trigger[j] == ceventt_buildingconquered))
                      building->connection |= cconnection_conquer;
@@ -114,7 +114,7 @@ void         seteventtriggers( pmap actmap )
                int xpos = event->trigger_data[j]->xpos;
                int ypos = event->trigger_data[j]->ypos;
                if ( xpos != -1 && ypos != -1  && event->triggerstatus[j] != 2 ) {
-                  pvehicle vehicle;
+                  Vehicle* vehicle;
                   if ( event->trigger_data[j]->networkid != -1 )
                      vehicle = actmap->getUnit ( xpos, ypos, event->trigger_data[j]->networkid );
                   else
@@ -877,7 +877,6 @@ void tspfldloaders::readfields ( void )
          spfld->field[l].fuel = lfld->material;
          spfld->field[l].visible = lfld->visible;
          spfld->field[l].direction = lfld->direction;
-         spfld->field[l].picture = NULL;
          spfld->field[l].tempw = 0;
          spfld->field[l].connection = lfld->connection;
          for ( int i = 0; i < 8; i++ )
@@ -902,8 +901,6 @@ void   tspfldloaders::chainitems ( pmap actmap )
       for (int x = 0; x < actmap->xsize; x++) {
           pfield fld = &actmap->field[i];
           fld->setparams();
-          if ( (fld->bdt & getTerrainBitType( cbbuildingentry )).any() )
-             fld->building->resetPicturePointers();
           i++;
       }
 }

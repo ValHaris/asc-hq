@@ -66,7 +66,7 @@ extern const int currentServiceOrderVersion;
   class StratAStar : public AStar {
        AI* ai;
     protected:
-       virtual int getMoveCost ( int x1, int y1, int x2, int y2, const pvehicle vehicle )
+       virtual int getMoveCost ( int x1, int y1, int x2, int y2, const Vehicle* vehicle )
        {
           int cost = AStar::getMoveCost ( x1, y1, x2, y2, vehicle );
           if ( getfield ( x2, y2 )->vehicle && beeline ( vehicle->xpos, vehicle->ypos, x2, y2) < vehicle->getMovement())
@@ -74,14 +74,14 @@ extern const int currentServiceOrderVersion;
           return cost;
        };
     public:
-       StratAStar ( AI* _ai, pvehicle veh ) : AStar ( _ai->getMap(), veh ), ai ( _ai ) {};
+       StratAStar ( AI* _ai, Vehicle* veh ) : AStar ( _ai->getMap(), veh ), ai ( _ai ) {};
  };
 
   //! A 3D path finding algorithm which avoids units to jam; used by the AI's strategy module.
   class StratAStar3D : public AStar3D {
        AI* ai;
     protected:
-       virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const pvehicle vehicle, bool& canStop, bool& hasAttacked )
+       virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& canStop, bool& hasAttacked )
        {
           DistanceType cost = AStar3D::getMoveCost ( start, dest, vehicle, canStop, hasAttacked );
           if ( ai->getMap()->getField ( dest )->vehicle && beeline ( vehicle->xpos, vehicle->ypos, dest.x, dest.y) < vehicle->getMovement())
@@ -89,7 +89,7 @@ extern const int currentServiceOrderVersion;
           return cost;
        };
     public:
-       StratAStar3D ( AI* _ai, pvehicle veh, bool markTemps_ = true ) : AStar3D ( _ai->getMap(), veh, markTemps_ ), ai ( _ai ) {};
+       StratAStar3D ( AI* _ai, Vehicle* veh, bool markTemps_ = true ) : AStar3D ( _ai->getMap(), veh, markTemps_ ), ai ( _ai ) {};
  };
 
 
@@ -97,7 +97,7 @@ extern const int currentServiceOrderVersion;
  class HiddenAStar : public AStar {
        AI* ai;
     protected:
-       virtual int getMoveCost ( int x1, int y1, int x2, int y2, const pvehicle vehicle )
+       virtual int getMoveCost ( int x1, int y1, int x2, int y2, const Vehicle* vehicle )
        {
           int cost = AStar::getMoveCost ( x1, y1, x2, y2, vehicle );
           int visibility = getfield ( x2, y2 )->visible;
@@ -116,7 +116,7 @@ extern const int currentServiceOrderVersion;
           return cost;
        };
     public:
-       HiddenAStar ( AI* _ai, pvehicle veh ) : AStar ( _ai->getMap(), veh ), ai ( _ai ) {};
+       HiddenAStar ( AI* _ai, Vehicle* veh ) : AStar ( _ai->getMap(), veh ), ai ( _ai ) {};
  };
 
 
@@ -124,7 +124,7 @@ extern const int currentServiceOrderVersion;
  class HiddenAStar3D : public AStar3D {
        AI* ai;
     protected:
-       virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const pvehicle vehicle, bool& canStop, bool& hasAttacked )
+       virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& canStop, bool& hasAttacked )
        {
           DistanceType cost = AStar3D::getMoveCost ( start, dest, vehicle, canStop, hasAttacked );
           int visibility = ai->getMap()->getField ( dest )->visible;
@@ -143,7 +143,7 @@ extern const int currentServiceOrderVersion;
           return cost;
        };
     public:
-       HiddenAStar3D ( AI* _ai, pvehicle veh, bool markTemps_ = true ) : AStar3D ( _ai->getMap(), veh, markTemps_ ), ai ( _ai ) {};
+       HiddenAStar3D ( AI* _ai, Vehicle* veh, bool markTemps_ = true ) : AStar3D ( _ai->getMap(), veh, markTemps_ ), ai ( _ai ) {};
  };
 
 

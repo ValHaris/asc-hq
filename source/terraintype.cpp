@@ -113,19 +113,14 @@ void      TerrainType::Weather::paint ( SPoint pos )
 {
    if ( bi_pict == -1 )
       getActiveSurface().Blit ( image, pos);
-   else {
-      void* img;
-      bool ref = loadbi3pict_double ( bi_pict, &img );
-      putspriteimage ( pos.x, pos.y, img );
-      if ( !ref )
-         asc_free( img );
-   }
+   else 
+      getActiveSurface().Blit ( GraphicSetManager::Instance().getPic( bi_pict), pos);
 }
 
 const FieldQuickView* TerrainType::Weather::getQuickView()
 {
    if  ( bi_pict >= 0 ) {
-      return getActiveGraphicSet()->getQuickView( bi_pict );
+      return GraphicSetManager::Instance().getQuickView( bi_pict );
    } else {
       if (!quickView ) {
          quickView = generateAverageCol( image );

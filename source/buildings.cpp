@@ -143,21 +143,33 @@ void Building :: convert ( int player )
 
 
 
-void* Building :: getpicture ( const BuildingType::LocalCoordinate& localCoordinate )
+const Surface& Building :: getPicture ( const BuildingType::LocalCoordinate& localCoordinate ) const
 {
-//                      if ( bld->typ->id == 8 ) {          // Windkraftwerk
-
+   static Surface emptySurface;
    pfield fld = getField ( localCoordinate );
    if ( fld ) {
-      int w = fld->getweather();
-
-       if ( typ->w_picture[w][_completion][localCoordinate.x][localCoordinate.y] )
-          return typ->w_picture[w][_completion][localCoordinate.x][localCoordinate.y];
-       else
-          return typ->w_picture[0][_completion][localCoordinate.x][localCoordinate.y];
+      return typ->getPicture(localCoordinate, fld->getweather(), _completion);
    } else
-      return NULL;
+      return emptySurface;
 }
+
+void Building::paintSingleField ( Surface& s, SPoint imgpos, BuildingType::LocalCoordinate pos ) const
+{
+/*
+                           if (fld->building->visible)
+                              if ( fld->building->typ->buildingheight < chschwimmend )
+                                 putpicturemix ( r + buildingrightshift, yp + buildingdownshift ,fld->buildingPicture,fld->building->color, (char*) colormixbuf);
+                              else {
+                                 if ( fld->building->typ->buildingheight >= chtieffliegend ) {
+                                    int d = 6 * ( log2 ( fld->building->typ->buildingheight ) - log2 ( chfahrend ));
+                                    putshadow ( r + buildingrightshift + d, yp + buildingdownshift + d,fld->buildingPicture, &xlattables.a.dark3);
+                                 }
+                                 putrotspriteimage(  ,fld->buildingPicture,fld->building->color);
+                              }
+                              */
+
+}
+
 
 
 #ifndef sgmain
@@ -169,8 +181,6 @@ int Building :: getResource ( int amount, int resourcetype, bool queryonly, int 
 void Building :: setCompletion ( int completion, bool setupImages )
 {
   _completion = completion;
-  if ( setupImages )
-     resetPicturePointers ( );
 }
 
 
@@ -184,7 +194,7 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
 
    for ( int a = 0; a < 4; a++)
       for ( int b = 0; b < 6; b++)
-         if ( typ->getpicture ( BuildingType::LocalCoordinate( a, b) )) {
+         if ( typ->fieldExists ( BuildingType::LocalCoordinate( a, b) )) {
             pfield f = getField( BuildingType::LocalCoordinate( a, b) );
             if ( !f || f->building ) {
                entryPosition = oldpos;
@@ -194,7 +204,7 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
 
    for ( int a = 0; a < 4; a++)
       for ( int b = 0; b < 6; b++)
-         if ( typ->getpicture ( BuildingType::LocalCoordinate( a , b ) )) {
+         if ( typ->fieldExists ( BuildingType::LocalCoordinate( a , b ) )) {
             pfield field = getField( BuildingType::LocalCoordinate( a, b) );
 
             tfield::ObjectContainer::iterator i = field->objects.begin();
@@ -222,7 +232,6 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
       field->bdt |= getTerrainBitType(cbbuildingentry) ;
 
    if ( setupImages ) {
-      resetPicturePointers ();
       gamemap->calculateAllObjects();
    }
 
@@ -235,14 +244,11 @@ int  Building :: unchainbuildingfromfield ( void )
    int set = 0;
    for (int i = 0; i <= 3; i++)
       for (int j = 0; j <= 5; j++)
-         if ( typ->getpicture ( BuildingType::LocalCoordinate(i,j) ) ) {
+         if ( typ->fieldExists ( BuildingType::LocalCoordinate(i,j) ) ) {
             pfield fld = getField( BuildingType::LocalCoordinate(i,j) );
             if ( fld && fld->building == this ) {
                set = 1;
                fld->building = NULL;
-               fld->picture = NULL;
-               // if ( fld->vehicle )
-               //   removevehicle( &fld->vehicle );
 
                TerrainBits t = getTerrainBitType(cbbuildingentry);
                t.flip();
@@ -323,18 +329,11 @@ MapCoordinate Building :: getFieldCoordinates ( const BuildingType::LocalCoordin
   return typ->getFieldCoordinate ( entryPosition, lc );
 }
 
-void        Building :: resetPicturePointers ( void )
+
+BuildingType::LocalCoordinate Building::getLocalCoordinate( const MapCoordinate& field ) const
 {
-   if ( visible )
-      for (int x = 0; x < 4; x++)
-         for ( int y = 0; y < 6; y++ ) {
-            BuildingType::LocalCoordinate lc ( x,y );
-            if ( getpicture (lc) )
-                getField ( lc )->picture = getpicture ( lc );
-         }
-
+  return typ->getLocalCoordinate( entryPosition, field );
 }
-
 
 void    Building :: produceAmmo ( int type, int num )
 {
@@ -758,7 +757,7 @@ void GetMiningInfo :: testfield ( const MapCoordinate& mc )
 }
 
 
-void GetMiningInfo :: run (  const pbuilding bld )
+void GetMiningInfo :: run (  const Building* bld )
 {
    initsearch ( bld->getEntry(), maxminingrange, 0 );
    startsearch();
@@ -1020,7 +1019,7 @@ Resources Building::SolarPowerplant :: getPlus()
    int num = 0;
    for ( int x = 0; x < 4; x++ )
       for ( int y = 0; y < 6; y++)
-         if ( bld->getpicture ( BuildingType::LocalCoordinate(x, y) ) ) {
+         if ( bld->typ->fieldExists ( BuildingType::LocalCoordinate(x, y) ) ) {
             pfield fld = bld->getField ( BuildingType::LocalCoordinate(x, y) );
             int weather = 0;
             while ( fld->typ != fld->typ->terraintype->weather[weather] )
@@ -1250,7 +1249,7 @@ void Building :: getresourceusage ( Resources* usage )
 
    struct  ResearchEfficiency {
                float eff;
-               pbuilding  bld;
+               Building*  bld;
                bool operator<( const ResearchEfficiency& re) const { return eff > re.eff; };
            };
 
@@ -1262,7 +1261,7 @@ void doresearch ( tmap* actmap, int player )
    VRE vre;
 
    for ( tmap::Player::BuildingList::iterator bi = actmap->player[player].buildingList.begin(); bi != actmap->player[player].buildingList.end(); bi++ ) {
-      pbuilding bld = *bi;
+      Building* bld = *bi;
       if ( bld->typ->special & cgresearchb ) {
          Resources res = returnResourcenUseForResearch ( bld, bld->researchpoints );
 
@@ -1284,7 +1283,7 @@ void doresearch ( tmap* actmap, int player )
    sort( vre.begin(), vre.end());
 
    for ( VRE::iterator i = vre.begin(); i != vre.end(); ++i ) {
-      pbuilding bld = i->bld;
+      Building* bld = i->bld;
       Resources r = returnResourcenUseForResearch ( bld, bld->researchpoints );
       Resources got = bld->getResource ( r, 1 );
 

@@ -155,7 +155,7 @@ extern void  clearfahrspuren(void);
    \retval 2 unit can stop its movement there
 */
 extern int fieldAccessible( const pfield        field,
-                            const pvehicle     vehicle,
+                            const Vehicle*     vehicle,
                             int  uheight = -2,
                             const bool* attacked = NULL,
                             bool ignoreVisibility = false );
@@ -171,17 +171,13 @@ extern void  checkunitsforremoval ( void );
 extern void checkobjectsforremoval ( void );
 
 //! returns the maximum wind speed that the unit can endure
-extern int          getmaxwindspeedforunit ( const pvehicle eht );
+extern int          getmaxwindspeedforunit ( const Vehicle* eht );
 
 /** Wind may be different at different heights. This function returns the index 
     for the wind array. If uheight != -1 it is assumed the unit was uheight instead
     the actual level of height */
-extern int          getwindheightforunit   ( const pvehicle eht, int uheight = -1 );
+extern int          getwindheightforunit   ( const Vehicle* eht, int uheight = -1 );
 
-/** Each field that has a building on it stores a pointer to the picture of the 
-    buildings' part for faster displaying. This function refreshes these pointers
-    on all fields */
-extern void         resetallbuildingpicturepointers ( void );
 
 /** Checks if the unit can drive on the field
     \param uheight if != -1, the unit is assumed to be on this height instead of the actual one.

@@ -32,138 +32,82 @@
 
 #include "loadpcx.h"
 
-int keeporiginalpalette = 0;
-void* emptyfield = NULL;
-int emptyfieldsize = 0;
-bool graphicsLoaded = false;
 
-ActiveGraphicPictures activeGraphicPictures;
 
-ActiveGraphicPictures* getActiveGraphicSet()
+GraphicSetManager_Base::GraphicSetManager_Base() : activeSet(NULL)
 {
-  return &activeGraphicPictures;
+
 }
 
 
-void ActiveGraphicPictures :: alloc ( int maxNum, int maxSize )
+bool GraphicSetManager_Base :: picAvail ( int num ) const
 {
-    maxnum = maxNum;
-    absoluteMaxPicSize = maxSize;
-
-    activeGraphicPictures.bi3graphics = new void*[maxNum];
-    activeGraphicPictures.bi3graphmode = new int[maxNum];
-
-    for ( int i = 0; i < maxnum; i++ )
-       bi3graphics[i] = asc_malloc ( absoluteMaxPicSize );
-}
-
-bool ActiveGraphicPictures :: picAvail ( int num ) const
-{
-   if ( bi3graphmode[num] && num < maxnum )
-      return true;
+   if ( activeSet )
+      return activeSet->picAvail(num);
    else
       return false;
 }
 
-void* ActiveGraphicPictures :: getPic ( int num )
-{
-   if ( picAvail ( num ))
-      return bi3graphics[num];
-   else
-      return NULL;
-}
 
-int ActiveGraphicPictures :: getMode ( int num ) const
+int GraphicSetManager_Base :: getMode ( int num ) const
 {
-   if ( picAvail ( num ))
-      return bi3graphmode[num];
+   if ( activeSet && activeSet->picmode.size() > num )
+      return activeSet->picmode[num];
    else
       return 0;
 }
 
 
 
-class GraphicSet {
-         public:
-           int id;
-           int picnum;
-           int singlepicsize;
-           int maxPicSize;
-           vector<void*> pic;
-           vector<int>   picmode;
-            map<int,FieldQuickView> quickViewImages;
-     };
-
-
-
-
-vector<GraphicSet*> graphicSet;
-int graphicSetNum = 0;
-
-
-int ActiveGraphicPictures :: setActive ( int id )
+Surface& GraphicSetManager_Base :: getPic ( int num )
 {
-   if ( id == activeId )
+   return activeSet->image[num];
+}
+
+
+
+
+int GraphicSetManager_Base :: setActive ( int id )
+{
+   if ( activeSet && id == activeSet->id )
       return id;
 
-   GraphicSet* gs = NULL;
-   int found = 0;
-   while ( !found ) {
-      for ( int i = 0; i < graphicSetNum; i++ )
-         if ( graphicSet[i]->id == id ) {
-            found++;
-            gs = graphicSet[i];
-         }
-
-      if ( !found && id== 0 )
-         fatalError ( "fatal error: no default graphic set ( id=0 ) found !" );
-
-      if ( !found )
-         id = 0;
-   }
-
-   if ( activeId != id ) {
-      for ( int i = 0; i < gs->picnum; i++ ) {
-         if ( absoluteMaxPicSize < getpicsize2 ( gs->pic[i] ) )
-            fatalError ( "ActiveGraphicPictures::setActive - image to large " );
-         memcpy ( bi3graphics[i], gs->pic[i], getpicsize2 ( gs->pic[i] ));
-         bi3graphmode[i] = gs->picmode[i];
+      
+   for ( GraphicSets::iterator i = graphicSets.begin(); i != graphicSets.end(); ++i )
+      if ( (*i)->id == id ) {
+         activeSet = *i;
+         return id;
       }
-
-      for ( int i = gs->picnum; i < maxnum; i++ ) {
-         memcpy ( bi3graphics[i], emptyfield, emptyfieldsize );
-         bi3graphmode[i] = 2+ 256;
-      }
-
-      activeId = id;
-   }
-   return id;
+   
+   activeSet = *graphicSets.begin();   
+   return 0;
 }
 
-const FieldQuickView* ActiveGraphicPictures::getQuickView( int id )
+const FieldQuickView* GraphicSetManager_Base::getQuickView( int id )
 {
    if ( picAvail ( id )) {
-      for ( int i = 0; i < graphicSetNum; i++ )
-         if ( graphicSet[i]->id == activeId ) {
-            GraphicSet* gs = graphicSet[i];
-            map<int, FieldQuickView>::iterator qv = gs->quickViewImages.find ( id );
-            if ( qv == gs->quickViewImages.end() ) {
-               FieldQuickView* fqv = generateAverageCol ( gs->pic[id] );
-               gs->quickViewImages[id] = *fqv;
-               return fqv;
-            } else
-               return &qv->second;
-         }
+      map<int,FieldQuickView>::iterator qv = activeSet->quickViewImages.find ( id );
+      if ( qv == activeSet->quickViewImages.end()) {
+         FieldQuickView* fqv = generateAverageCol ( getPic( id ) );
+         activeSet->quickViewImages[id] = *fqv;
+         delete fqv;
+         return &activeSet->quickViewImages[id];
+      } else
+         return &qv->second;
+      
    } else {
-      if ( !emptyFieldQuickView )
-         emptyFieldQuickView = generateAverageCol ( emptyfield );
+      static FieldQuickView* emptyFieldQuickView = NULL;
+      if ( !emptyFieldQuickView ) {
+         emptyFieldQuickView = new FieldQuickView;
+         memset( emptyFieldQuickView, 255, sizeof(FieldQuickView) );
+      }  
+      return emptyFieldQuickView;
    }
-   return emptyFieldQuickView;
 }
 
 
 
-int getGraphicSetIdFromFilename ( const char* filename )
+int getGraphicSetIdFromFilename ( const ASCString& filename )
 {
     tnfilestream stream ( filename, tnstream::reading );
 
@@ -175,9 +119,10 @@ int getGraphicSetIdFromFilename ( const char* filename )
 }
 
 
-void loadbi3graphics( void )
+
+void GraphicSetManager_Base::loadData()
 {
-   if ( activeGraphicPictures.getActiveID() >= 0 )
+   if ( activeSet )
       return;
 
    #ifdef logging
@@ -186,21 +131,14 @@ void loadbi3graphics( void )
 
    loadpalette();
 
-   int highestPicNum = 0;
-   int absoluteMaxPicSize = 0;
-
+   Surface emptyField;
    {
-      int o;
       tnfilestream s ( "emptyfld.raw", tnstream::reading );
-      s.readrlepict ( &emptyfield, false, &o );
-
-      void* p = uncompress_rlepict ( emptyfield );
-      if ( p ) {
-         asc_free ( emptyfield );
-         emptyfield  = p;
-      }
+      emptyField.read( s );
    }
-   emptyfieldsize = getpicsize2 ( emptyfield );
+   
+   
+   /*
 
    #ifdef genimg
    void* mask;
@@ -210,7 +148,7 @@ void loadbi3graphics( void )
       s.readrlepict ( &mask, false, & i );
    }
    #endif
-
+*/
 
    ASCString location;
    tfindfile ff ( "*.gfx" );
@@ -227,271 +165,38 @@ void loadbi3graphics( void )
          GraphicSet* gs = new GraphicSet;
 
          gs->id = s.readInt();
-         gs->picnum = s.readInt();
-         gs->maxPicSize = s.readInt();
+         int picnum = s.readInt();
+         int maxPicSize = s.readInt();
 
-         if ( absoluteMaxPicSize < gs->maxPicSize )
-            absoluteMaxPicSize = gs->maxPicSize;
-
-         int* picmode = new int[gs->picnum];
-         for ( int i = 0; i < gs->picnum; ++i )
+         int* picmode = new int[picnum];
+         for ( int i = 0; i < picnum; ++i )
             picmode[i] = s.readInt();
-         gs->pic.resize ( gs->picnum );
-         gs->picmode.resize ( gs->picnum );
-         for ( int i = 0; i < gs->picnum; i++ ) {
+            
+         gs->image.resize   ( picnum );
+         gs->picmode.resize ( picnum );
+         for ( int i = 0; i < picnum; i++ ) {
             if ( picmode[i] >= 1 ) {
-               int o;
-               void* p;
-               s.readrlepict ( &p, false, &o );
-               gs->pic[i] = p;
+               Surface& surf = gs->image[i];
+               surf.read ( s );
+               if ( surf.w() != fieldsizex || surf.h() != fieldsizey ) 
+                  surf.strech ( fieldsizex, fieldsizey );
                gs->picmode[i] = picmode[i];
-#ifdef genimg
-               if ( gs->id == 1 ) {
-                  if ( picmode[i] < 256 ) {
-                     tvirtualdisplay vdp ( 100, 100, 255 );
-
-                     bool fullimage = true;
-                     /*
-                     for ( int x = 0; x < 80; x++ )
-                        for ( int y = 0; y < 80; y++ )
-                           if ( getpixelfromimage ( mask, x, y ) == 0 )
-                              if ( getpixelfromimage ( p, x, y ) == 255 )
-                                 fullimage = false;
-                     */
-
-                     if ( fullimage ) {
-                        putspriteimage ( 8, 8, p );
-                        putspriteimage ( 8, 12, p );
-                        putspriteimage ( 12, 8, p );
-                        putspriteimage ( 12, 12, p );
-                     }
-
-                     putspriteimage ( 10, 10, p );
-
-                     putmask ( 10, 10, mask, 0 );
-
-                     ASCString fn = "15/";
-                     fn+=strrr(i);
-                     fn+=".pcx";
-                     writepcx ( fn.c_str(), 10, 10, 10+fieldsizex-1, 10+fieldsizey-1, pal );
-                     printf("image %s generated \n", fn.c_str() );
-                  }
-               }
-#endif
             } else {
-               void* p = asc_malloc ( emptyfieldsize );
-               memcpy ( p, emptyfield, emptyfieldsize );
-               gs->pic[i] = p;
                gs->picmode[i] = 256 + 2;
+               gs->image[i] = emptyField;
             }
+           gs->image[i].assignDefaultPalette();
          }
-         if ( gs->picnum > highestPicNum )
-            highestPicNum = gs->picnum;
 
          delete[] picmode;
 
-         graphicSet.push_back ( gs );
-         ++graphicSetNum;
+         graphicSets.push_back ( gs );
       }
 
       filename = ff.getnextname();
    }
 
-   activeGraphicPictures.alloc (highestPicNum, absoluteMaxPicSize );
-   activeGraphicPictures.setActive ( 0 );
-
-   graphicsLoaded = true;
-
-  /*
-
-   else {
-
-   if ( picsfound < 1673 ) {
-      checkbi3dir();
-      for ( int lib = 0; lib < libs_to_load; lib++ ) {
-         char filename[260];
-
-         strcpy ( filename, gameoptions.bi3.dir );
-         strcat ( filename, LIBFiles[ lib ].Name );
-
-         tfindfile ff ( filename );
-         if ( !ff.getnextname() ) {
-            strcpy ( filename, gameoptions.bi3.dir );
-            strcat ( filename, "LIB\\" );
-            strcat ( filename, LIBFiles[ lib ].Name );
-            tfindfile ff2 ( filename );
-            if ( !ff2.getnextname() )
-               throw tfileerror ( filename );
-         }
-
-
-
-         tn_file_buf_stream stream ( filename, 1 );
-         int p = 0;
-         p = p * LIBFiles[ lib ].RecSize + LIBFiles[ lib ].FirstRecO + LIBFiles[ lib ].DataInRecOfs;
-         stream.seekstream ( p );
-
-         for ( int i = 0; i < LIBFiles[ lib ].Anzahl; i++ ) {
-            if ( !bi3graphics[bi3graphnum] ) {
-               void* pic = new char[ LIBFiles[ lib ].DataSize + 4 ];
-               word* pw = (word*) pic;
-               pw[0] = 23;
-               pw[1] = 23;
-               unsigned char* pc = (unsigned char*) &pw[2];
-               stream.readdata ( pc, LIBFiles[ lib ].DataSize );
-               for ( int m = 0; m < LIBFiles[ lib ].DataSize; m++ ) {
-                  if ( lib == 1 ) {
-                     if (  pc [ m ] == 0 )
-                        pc [ m ] = 88;
-                     if ( pc [ m ] == 143 )
-                        pc [ m ] = 0;
-                  }
-                  if ( !keeporiginalpalette )
-                     pc[m] = bi2asc_color_translation_table [ pc [ m ]];
-                  else
-                     if ( pc[m] == 0 )
-                        pc[m] = 255;
-               }
-               bi3graphics[bi3graphnum] = pw;
-               bi3graphmode[bi3graphnum] = 1;
-            } else {
-               int blackhole[1000];
-               stream.readdata ( blackhole, LIBFiles[ lib ].DataSize );
-            }
-            bi3graphnum++;
-         }
-
-         while ( bi3graphnum % 10 )
-            bi3graphnum++;
-
-      }
-   }
-   #ifdef logging
-   logtofile("loading of bi3 graphics finished");
-   #endif
-  */
-
-}
-
-int activateGraphicSet ( int id  )
-{
-  return activeGraphicPictures.setActive ( id );
-}
-
-int  loadbi3pict_double ( int num, void** pict, int interpolate, int reference )
-{
-   if ( !graphicsLoaded )
-      loadbi3graphics();
-
-   if ( ! activeGraphicPictures.picAvail ( num ) ) {
-      if ( !emptyfield )
-         fatalError ( "referencing non existing GFX picture !" );
-
-      if ( reference == 1) {
-         *pict = emptyfield;
-         return 1;
-      } else {
-         int sz = getpicsize2 ( emptyfield );
-         void* buf = asc_malloc ( sz );
-         memcpy ( buf, emptyfield, sz );
-         *pict = buf;
-         return 0;
-      } /* endif */
-   }
-
-   if ( (activeGraphicPictures.getMode ( num ) & 0xff ) == 1 ) {
-
-      if( !interpolate ) {
-
-         void* buf = new char [ imagesize ( 100, 100, 99+fieldxsize, 99+fieldysize )];
-
-         char* src = (char*) activeGraphicPictures.getPic ( num );
-         char* dst = (char*) buf;
-         dst[0] = fieldxsize-1;
-         dst[1] = 0;
-         dst[2] = fieldysize-1;
-         dst[3] = 0;
-         dst+=4;
-
-         src+=4;
-
-         for ( int y = 0; y < fieldysize; y++ )
-           for ( int x = 0; x < fieldxsize; x++ )
-              dst[y * fieldxsize+x] = src[ (y/2)*(fieldxsize/2)+(x/2) ];
-
-         *pict = buf;
-         return 0;
-
-   /*
-         TrueColorImage* zimg = zoomimage ( bi3graphics[num], fieldxsize, fieldysize, pal, 1 );
-         void* pic = convertimage ( zimg, pal ) ;
-         delete zimg;
-     */
-     //    *pict = pic;
-
-      } else {
-
-         TrueColorImage* zimg = zoomimage ( activeGraphicPictures.getPic( num ), fieldxsize, fieldysize, pal, 1 );
-         void* pic = convertimage ( zimg, pal ) ;
-         delete zimg;
-         *pict = pic;
-         return 0;
-      }
-   } else
-      if ( (activeGraphicPictures.getMode( num ) & 0xff ) == 2 ) {
-         if ( reference == 1) {
-            *pict = activeGraphicPictures.getPic ( num );
-            return 1;
-         } else {
-            int sz = getpicsize2 ( activeGraphicPictures.getPic ( num ) );
-            void* buf = asc_malloc ( sz );
-            memcpy ( buf, activeGraphicPictures.getPic ( num ), sz );
-            *pict = buf;
-            return 0;
-         } /* endif */
-      } else {
-        *pict = NULL;
-        return -1;
-      }
-}
-
-void loadbi3pict ( int num, void** pict )
-{
-   if ( !graphicsLoaded )
-      loadbi3graphics();
-
-   if ( !activeGraphicPictures.picAvail( num ) ) {
-      *pict = NULL;
-      return;
-   }
-
-   if ( (activeGraphicPictures.getMode( num ) & 0xff ) == 1 ) {
-      char* buf = new char [ imagesize ( 100, 100, 99+fieldxsize/2, 99+fieldysize/2 )];
-
-      char* src = (char*) activeGraphicPictures.getPic( num );
-      char* dst = (char*) buf;
-      dst[0] = fieldxsize/2-1;
-      dst[1] = 0;
-      dst[2] = fieldysize/2-1;
-      dst[3] = 0;
-      dst+=4;
-
-      src+=4;
-
-      for ( int y = 0; y < fieldysize/2; y++ )
-        for ( int x = 0; x < fieldxsize/2; x++ )
-           dst[y * fieldxsize/2 + x] = src[ y*fieldxsize/2 + x ];
-
-      *pict = buf;
-   } else
-      if ( (activeGraphicPictures.getMode( num ) & 0xff ) == 2 ) {
-         void* buf2 = halfpict ( activeGraphicPictures.getPic( num ) );
-         int sz = getpicsize2 ( buf2 );
-         void* buf = asc_malloc ( sz );
-         memcpy ( buf, buf2, sz );
-         *pict = buf;
-      } else
-        *pict = NULL;
+   setActive ( 0 );
 }
 
 

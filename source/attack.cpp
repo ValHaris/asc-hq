@@ -51,9 +51,9 @@
 
 
 
-bool  AttackFormula :: checkHemming ( pvehicle     d_eht,  int     direc )
+bool  AttackFormula :: checkHemming ( Vehicle*     d_eht,  int     direc )
 { 
-   pvehicle     s_eht;
+   Vehicle*     s_eht;
 
    int x = d_eht->xpos;
    int y = d_eht->ypos; 
@@ -91,7 +91,7 @@ float AttackFormula :: getHemmingFactor ( int relDir )
 }
 
 
-float AttackFormula :: strength_hemming ( int  ax,  int ay,  pvehicle d_eht )
+float AttackFormula :: strength_hemming ( int  ax,  int ay,  Vehicle* d_eht )
 {
    float hemm = 0;
    int attackDir = getdirection(ax,ay,d_eht->xpos,d_eht->ypos);
@@ -445,12 +445,12 @@ void tfight :: calcdisplay ( int ad, int dd )
 
 
 
-tunitattacksunit :: tunitattacksunit ( pvehicle &attackingunit, pvehicle &attackedunit, bool respond, int weapon )
+tunitattacksunit :: tunitattacksunit ( Vehicle* &attackingunit, Vehicle* &attackedunit, bool respond, int weapon )
 {
    setup ( attackingunit, attackedunit, respond, weapon );
 }
 
-void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit, bool respond, int weapon )
+void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit, bool respond, int weapon )
 {
    _attackingunit = attackingunit;
    _attackedunit  = attackedunit;
@@ -611,13 +611,13 @@ void tunitattacksunit :: paintimages ( int xa, int ya, int xd, int yd )
 
 
 
-tunitattacksbuilding :: tunitattacksbuilding ( pvehicle attackingunit, int x, int y, int weapon )
+tunitattacksbuilding :: tunitattacksbuilding ( Vehicle* attackingunit, int x, int y, int weapon )
 {
    setup ( attackingunit, x, y, weapon );
 }
 
 
-void tunitattacksbuilding :: setup ( pvehicle attackingunit, int x, int y, int weapon )
+void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int weapon )
 {
    _attackingunit = attackingunit;
    _x = x;
@@ -730,18 +730,20 @@ void tunitattacksbuilding :: setresult ( void )
 void tunitattacksbuilding :: paintimages ( int xa, int ya, int xd, int yd )
 {
    _attackingunit->paint( getActiveSurface(), SPoint(xa, ya));
-   putrotspriteimage ( xd, yd, getfield ( _x, _y ) -> picture , _attackedbuilding->color  );
+   _attackedbuilding->paintSingleField( getActiveSurface(), SPoint(xd, yd), _attackedbuilding->getLocalCoordinate(MapCoordinate(_x,_y)));
+   // getActiveSurface().Blit( *getfield ( _x, _y ) -> buildingPicture, SPoint(xd,yd));
+   //putrotspriteimage ( xd, yd,  , _attackedbuilding->color  );
 };
 
 
 
 
-tmineattacksunit :: tmineattacksunit ( pfield mineposition, int minenum, pvehicle &attackedunit )
+tmineattacksunit :: tmineattacksunit ( pfield mineposition, int minenum, Vehicle* &attackedunit )
 {
    setup ( mineposition, minenum, attackedunit );
 }
 
-void tmineattacksunit :: setup ( pfield mineposition, int minenum, pvehicle &attackedunit )
+void tmineattacksunit :: setup ( pfield mineposition, int minenum, Vehicle* &attackedunit )
 {
    if ( mineposition->mines.empty() )
       displaymessage(" tmineattacksunit :: setup \n no mine to attack !\n",2 );
@@ -855,12 +857,12 @@ void tmineattacksunit :: paintimages ( int xa, int ya, int xd, int yd )
 
 
 
-tunitattacksobject :: tunitattacksobject ( pvehicle attackingunit, int obj_x, int obj_y, int weapon )
+tunitattacksobject :: tunitattacksobject ( Vehicle* attackingunit, int obj_x, int obj_y, int weapon )
 {
    setup ( attackingunit, obj_x, obj_y, weapon );
 }
 
-void tunitattacksobject :: setup ( pvehicle attackingunit, int obj_x, int obj_y, int weapon )
+void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y, int weapon )
 {
 
    _x = obj_x;
@@ -976,7 +978,7 @@ void tunitattacksobject :: setresult ( void )
 void tunitattacksobject :: paintimages ( int xa, int ya, int xd, int yd )
 {
    _attackingunit->paint( getActiveSurface(), SPoint(xa, ya));
-   _obji->typ->display ( xd - 5, yd - 5 );
+   _obji->typ->display ( getActiveSurface(), SPoint(xd - 5, yd - 5) );
 }
 
 
@@ -987,7 +989,7 @@ void tunitattacksobject :: paintimages ( int xa, int ya, int xd, int yd )
 
 
 
-pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
+pattackweap  attackpossible( const Vehicle*     angreifer, int x, int y)
 {
   pattackweap atw = new AttackWeap;
 
@@ -1086,13 +1088,13 @@ pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
 }
 
 
-bool attackpossible2u( const pvehicle attacker, const pvehicle target, pattackweap atw, int uheight )
+bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, pattackweap atw, int uheight )
 {
    if ( uheight == -1 )
       uheight = target->height;
 
-   pvehicle angreifer = attacker;
-   pvehicle verteidiger = target;
+   const Vehicle* angreifer = attacker;
+   const Vehicle* verteidiger = target;
    int result = false;
    if ( atw )
       atw->count = 0;
@@ -1132,11 +1134,14 @@ bool attackpossible2u( const pvehicle attacker, const pvehicle target, pattackwe
 
 
 
-bool attackpossible28( const pvehicle attacker, const pvehicle target, pattackweap atw )
+bool attackpossible28( const Vehicle* attacker, const Vehicle* target, pattackweap atw, int targetHeight )
 {
-   pvehicle angreifer = attacker;
-   pvehicle verteidiger = target;
+   const Vehicle* angreifer = attacker;
+   const Vehicle* verteidiger = target;
 
+   if ( targetHeight < 0 )
+      targetHeight = target->height;
+   
    int result = false;
    if ( atw )
       atw->count = 0;
@@ -1154,12 +1159,12 @@ bool attackpossible28( const pvehicle attacker, const pvehicle target, pattackwe
       for ( int i = 0; i < angreifer->typ->weapons.count ; i++)
          if (angreifer->typ->weapons.weapon[i].shootable() )
             if (angreifer->typ->weapons.weapon[i].offensive() )
-               if (verteidiger->height & angreifer->typ->weapons.weapon[i].targ )
+               if (targetHeight & angreifer->typ->weapons.weapon[i].targ )
                   if (minmalq <= angreifer->typ->weapons.weapon[i].maxdistance)
                      if (minmalq >= angreifer->typ->weapons.weapon[i].mindistance)
                         if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
                            if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp ] > 0)
-                              if ( angreifer->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( angreifer->height), log2(verteidiger->height))] )
+                              if ( angreifer->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( angreifer->height), log2(targetHeight))] )
                                  if (angreifer->ammo[i] > 0) {
                                     result =  true;
                                     if ( atw ) {
@@ -1175,10 +1180,10 @@ bool attackpossible28( const pvehicle attacker, const pvehicle target, pattackwe
 }
 
 
-bool attackpossible2n( const pvehicle attacker, const pvehicle target, pattackweap atw )
+bool attackpossible2n( const Vehicle* attacker, const Vehicle* target, pattackweap atw )
 {
-   pvehicle angreifer = attacker;
-   pvehicle verteidiger = target;
+   const Vehicle* angreifer = attacker;
+   const Vehicle* verteidiger = target;
 
    int result = false;
    if ( atw )
@@ -1221,7 +1226,7 @@ bool attackpossible2n( const pvehicle attacker, const pvehicle target, pattackwe
    return result;
 }
 
-bool vehicleplattfahrbar( const pvehicle     vehicle,
+bool vehicleplattfahrbar( const Vehicle*     vehicle,
                            const pfield        field)
 {
    return false;

@@ -19,6 +19,7 @@
  #define mapalgorithmsH
 
  #include "typen.h"
+ #include "vehicle.h"
 
   /** searches fields in hexagonal "circles" around a field and calls testfield for each field
   */
@@ -88,7 +89,7 @@ extern int   getdirection( const MapCoordinate& start, const MapCoordinate& dest
 extern int beeline ( int x1, int y1, int x2, int y2 );
 
 //! returns the distance between the units a and b
-extern int beeline ( const pvehicle a, const pvehicle b );
+extern int beeline ( const Vehicle* a, const Vehicle* b );
 
 //! returns the distance between map positions a and b
 extern int beeline ( const MapCoordinate& a, const MapCoordinate& b );

@@ -39,7 +39,7 @@
 
          tdashboard  dashboard;
 
-tdashboard::tdashboard ( void )
+tdashboard::tdashboard ( void ) : vehicletype(NULL)
 {
    fuelbkgr  = NULL;
    imagebkgr = NULL;
@@ -1269,10 +1269,10 @@ void         tdashboard::checkformouse ( int func )
 
 
 
-void   tdashboard :: paintvehicleinfo( const pvehicle     vehicle,
-                                       const pbuilding    building,
+void   tdashboard :: paintvehicleinfo(  Vehicle*     vehicle,
+                                       const Building*    building,
                                        const pfield       _objfield,
-                                       const pvehicletype vt )
+                                        pvehicletype vt )
 {
    {
       collategraphicoperations cgo ( agmp->resolutionx - 800 + 610, 15, agmp->resolutionx - 800 + 783, 307 );

@@ -5,9 +5,15 @@
 */
 
 
-//     $Id: building_controls.h,v 1.20 2004-09-13 16:56:53 mbickel Exp $
+//     $Id: building_controls.h,v 1.20.2.1 2004-10-26 16:35:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2004/09/13 16:56:53  mbickel
+//      Added many reset data functions to mapeditor
+//      cargomovecostdivisor for vehicles is now float
+//      Fixed: objects could not be attacked
+//      Filenames in cache
+//
 //     Revision 1.19  2004/05/23 17:05:47  mbickel
 //      Added research checking to replay
 //
@@ -145,21 +151,21 @@ class    ccontainercontrols
       class    crefill
       {
          public :
-            void     resource (pvehicle eht, int resourcetype, int newamount );
-            void     ammunition (pvehicle eht, char weapon, int ammun );
-            void     filleverything ( pvehicle eht );
-            void     emptyeverything ( pvehicle eht );
+            void     resource (Vehicle* eht, int resourcetype, int newamount );
+            void     ammunition (Vehicle* eht, char weapon, int ammun );
+            void     filleverything ( Vehicle* eht );
+            void     emptyeverything ( Vehicle* eht );
       }
       refill;
 
       class   cmove_unit_in_container
       {
          public:
-            bool     moveupavail ( pvehicle eht );
-            bool     movedownavail ( pvehicle eht, pvehicle into );
-            void     moveup ( pvehicle eht );
-            void     movedown ( pvehicle eht, pvehicle into );
-            pvehicle unittomove;
+            bool     moveupavail ( Vehicle* eht );
+            bool     movedownavail ( Vehicle* eht, Vehicle* into );
+            void     moveup ( Vehicle* eht );
+            void     movedown ( Vehicle* eht, Vehicle* into );
+            Vehicle* unittomove;
       }
       move_unit_in_container;
 
@@ -174,7 +180,7 @@ class    ccontainercontrols
       virtual int    getxpos (void) = 0;
       virtual int    getypos (void) = 0;
 
-      virtual VehicleMovement*  movement ( pvehicle eht, bool simpleMode = false );
+      virtual VehicleMovement*  movement ( Vehicle* eht, bool simpleMode = false );
       virtual int    getHeight ( void ) = 0;
 
       Resources getResource ( Resources res, bool queryOnly );
@@ -182,7 +188,7 @@ class    ccontainercontrols
 
       virtual int    getspecfunc ( tcontainermode mode ) = 0;
 
-      virtual pvehicle getloadedunit (int num) = 0;
+      virtual Vehicle* getloadedunit (int num) = 0;
 
       ContainerBase* baseContainer;
    protected:
@@ -209,21 +215,21 @@ class    cbuildingcontrols : public virtual ccontainercontrols
       int    ammotypeavail ( int type );
       int    getHeight ( void );
 
-      pbuilding   building;
+      Building*   building;
 
       class    crecycling
       {                           // RECYCLING
          public :
-            Resources resourceuse ( pvehicle eht );
-            void      recycle (pvehicle eht);
+            Resources resourceuse ( Vehicle* eht );
+            void      recycle (Vehicle* eht);
       }
       recycling;
 
       class    ctrainunit
       {
          public :
-            int  available  ( pvehicle eht );
-            void trainunit ( pvehicle eht );
+            int  available  ( Vehicle* eht );
+            void trainunit ( Vehicle* eht );
       }
       training;
 
@@ -232,16 +238,16 @@ class    cbuildingcontrols : public virtual ccontainercontrols
          public :
             //! lack : the reason why the unit is not produceable; bitmapped: bit 0 - 2  Resource N lacking; bit 10 : not researched yet
             int         available ( pvehicletype fzt, int* lack = NULL );
-            pvehicle    produce ( pvehicletype fzt, bool forceRefill = false );
-            pvehicle    produce_hypothetically ( pvehicletype fzt );
+            Vehicle*    produce ( pvehicletype fzt, bool forceRefill = false );
+            Vehicle*    produce_hypothetically ( pvehicletype fzt );
       }
       produceunit ;
 
       class    cdissectunit
       {
          public :
-            int  available  ( pvehicle eht );
-            void dissectunit ( pvehicle eht );
+            int  available  ( Vehicle* eht );
+            void dissectunit ( Vehicle* eht );
       }
       dissectunit;
 
@@ -286,12 +292,12 @@ class    cbuildingcontrols : public virtual ccontainercontrols
 
 
 
-      void  removevehicle ( pvehicle *peht );
+      void  removevehicle ( Vehicle* *peht );
 
-      pvehicle getloadedunit (int num);
+      Vehicle* getloadedunit (int num);
 
       cbuildingcontrols (void);
-      void  init (pbuilding bldng);
+      void  init (Building* bldng);
 };
 
 class    ctransportcontrols : public virtual ccontainercontrols
@@ -314,14 +320,14 @@ class    ctransportcontrols : public virtual ccontainercontrols
       int    getHeight ( void );
 
 
-      pvehicle vehicle;
+      Vehicle* vehicle;
 
-      void  removevehicle ( pvehicle *peht );
+      void  removevehicle ( Vehicle* *peht );
 
-      pvehicle getloadedunit (int num);
+      Vehicle* getloadedunit (int num);
 
       ctransportcontrols ( void );
-      void  init ( pvehicle eht );
+      void  init ( Vehicle* eht );
 };
 
 #endif // building_controls_h

@@ -72,24 +72,47 @@ BuildingType :: BuildingType ( void )
 {
    for ( int x = 0; x < 4; x++ )
       for ( int y = 0; y < 6; y++ ) {
-         for ( int w = 0; w < cwettertypennum; w++ )
-            for ( int i = 0; i < maxbuildingpicnum; i++ ) {
-               w_picture [w][i][x][y] = NULL;
-               bi_picture [w][i][x][y] = -1;
-            }
          destruction_objects [x][y] = 0;
+         field_Exists[x][y] = false;
+         for ( int w = 0; w < cwettertypennum; ++w )
+            for ( int c = 0; c < maxbuildingpicnum; ++c )
+                bi_picture[w][c][x][y] = -1;
       }
+      
    maxresearchpoints = 0;
    defaultMaxResearchpoints = 0;
    nominalresearchpoints = 0;
 }
 
 
-
-void*   BuildingType :: getpicture ( const LocalCoordinate& localCoordinate ) const
+int   BuildingType :: getBIPicture( const LocalCoordinate& localCoordinate, int weather , int constructionStep ) const
 {
-   return w_picture[0][0][localCoordinate.x][localCoordinate.y];
+   return bi_picture [weather][constructionStep][localCoordinate.x][localCoordinate.y];
 }
+        
+
+const Surface&   BuildingType :: getPicture ( const LocalCoordinate& localCoordinate, int weather, int constructionStep ) const
+{
+   if ( bi_picture [weather][constructionStep][localCoordinate.x][localCoordinate.y] <= 0 )
+      return w_picture[weather][constructionStep][localCoordinate.x][localCoordinate.y];
+   else
+      return GraphicSetManager::Instance().getPic(bi_picture [weather][constructionStep][localCoordinate.x][localCoordinate.y]);
+}
+
+void  BuildingType::paint ( Surface& s, SPoint pos, int player, int weather, int constructionStep ) const
+{
+   for ( int x = 0; x < 4; x++ )
+      for ( int y = 0; y < 6; y++ ) 
+         if ( fieldExists(LocalCoordinate(x,y) ))
+            paintSingleField(s,pos,LocalCoordinate(x,y),player,weather,constructionStep);
+     
+}
+
+void  BuildingType:: paintSingleField ( Surface& s, SPoint pos, const LocalCoordinate& localCoordinate, int player, int weather, int constructionStep ) const
+{
+   s.Blit( getPicture(localCoordinate,weather,constructionStep),SPoint( pos.x + localCoordinate.x * fielddistx + ( localCoordinate.y & 1 ) * fielddisthalfx, pos.y + localCoordinate.y * fielddisty));
+}
+
 
 
 #define compensatebuildingcoordinateorgx (a) (dx & (~a))
@@ -97,10 +120,10 @@ void*   BuildingType :: getpicture ( const LocalCoordinate& localCoordinate ) co
 
 
 
-MapCoordinate  BuildingType :: getFieldCoordinate ( const MapCoordinate& entryPosition, const LocalCoordinate& localCoordinates )
+MapCoordinate  BuildingType :: getFieldCoordinate ( const MapCoordinate& entryOnMap, const LocalCoordinate& localCoordinates )
 {
-   int orgx = entryPosition.x - entry.x - (entry.y & ~entryPosition.y & 1 );
-   int orgy = entryPosition.y - entry.y;
+   int orgx = entryOnMap.x - entry.x - (entry.y & ~entryOnMap.y & 1 );
+   int orgy = entryOnMap.y - entry.y;
 
    int dx = orgy & 1;
 
@@ -110,30 +133,56 @@ MapCoordinate  BuildingType :: getFieldCoordinate ( const MapCoordinate& entryPo
    return mc;
 }
 
+BuildingType::LocalCoordinate BuildingType::getLocalCoordinate( const MapCoordinate& entryOnMap, const MapCoordinate& field ) const
+{
+   int orgx = entryOnMap.x - entry.x - (entry.y & ~entryOnMap.y & 1 );
+   int orgy = entryOnMap.y - entry.y;
 
-const int building_version = 8;
+   int dx = orgy & 1;
 
-#ifndef converter
-extern void* generate_building_gui_build_icon ( pbuildingtype bld );
-#endif
+   
+   int ly = field.y - orgy;
+   int lx = field.x - orgx - (dx & ~ly );
+   
+   if ( lx >= 0 && lx < 4 && ly >= 0 && ly < 6 && fieldExists(LocalCoordinate(lx,ly)))
+      return LocalCoordinate(lx,ly);
+   else
+      return LocalCoordinate();  
+}
+
+
+
+const int building_version = 9;
+
 
 void BuildingType :: read ( tnstream& stream )
 {
    int version = stream.readInt();
    if ( version <= building_version && version >= 1) {
 
+      bool picsAvail[ cwettertypennum ][ maxbuildingpicnum ][4][6];
+   
       for ( int v = 0; v < cwettertypennum; v++ )
          for ( int w = 0; w < maxbuildingpicnum; w++ )
             for ( int x = 0; x < 4; x++ )
                for ( int y = 0; y < 6 ; y++ )
-                   w_picture[v][w][x][y] = (void*)stream.readInt( );
+                   picsAvail[v][w][x][y] = stream.readInt( );
 
       for ( int v = 0; v < cwettertypennum; v++ )
          for ( int w = 0; w < maxbuildingpicnum; w++ )
             for ( int x = 0; x < 4; x++ )
                for ( int y = 0; y < 6 ; y++ )
                    bi_picture[v][w][x][y] = stream.readInt( );
-
+/*
+      if ( version >= 9 ) 
+         for ( int x = 0; x < 4; x++ )
+            for ( int y = 0; y < 6 ; y++ )
+               field_Exists[x][y] = stream.readInt( );
+  */    
+     //@todo foobar
+     
+      
+                   
       entry.x = stream.readInt( );
       entry.y = stream.readInt( );
 
@@ -168,7 +217,7 @@ void BuildingType :: read ( tnstream& stream )
       maxplus.fuel = stream.readInt( );
       efficiencyfuel = stream.readInt( );
       efficiencymaterial = stream.readInt( );
-      guibuildicon = (char*) stream.readInt( );
+      stream.readInt( ); // guibuildicon
       stream.readInt( ); // terrain_access = (pterrainaccess)
 
       _bi_maxstorage.energy = stream.readInt( );
@@ -210,14 +259,11 @@ void BuildingType :: read ( tnstream& stream )
          for ( int j = 0; j <= 5; j++)
             for ( int i = 0; i <= 3; i++)
                for ( int w = 0; w < cwettertypennum; w++ )
-                 if ( w_picture[w][k][i][j] )
-                    if ( bi_picture[w][k][i][j] == -1 ) {
-                       int sz;
-                       stream.readrlepict ( &w_picture[w][k][i][j], false, &sz );
-                     } else
-                        loadbi3pict_double ( bi_picture[w][k][i][j],
-                                             &w_picture[w][k][i][j],
-                                             CGameOptions::Instance()->bi3.interpolate.buildings );
+                 if ( picsAvail[w][k][i][j] ) {
+                    if ( bi_picture[w][k][i][j] == -1 ) 
+                       w_picture[w][k][i][j].read(stream );
+                    field_Exists[i][j] = true;
+                 }   
 
 
       if ( version >= 4 )
@@ -236,10 +282,9 @@ void BuildingType :: read ( tnstream& stream )
 
 
 
-     #ifdef converter
-      guibuildicon = NULL;
-     #else
-      guibuildicon = generate_building_gui_build_icon ( this );
+         
+     #ifndef converter
+      guibuildicon = generate_gui_build_icon ( this );
      #endif
 
    } else
@@ -254,7 +299,7 @@ void BuildingType :: write ( tnstream& stream ) const
       for ( int w = 0; w < maxbuildingpicnum; w++ )
          for ( int x = 0; x < 4; x++ )
             for ( int y = 0; y < 6 ; y++ )
-                stream.writeInt ( w_picture[v][w][x][y] != NULL );
+                stream.writeInt ( w_picture[v][w][x][y].valid() );
 
    for ( int v = 0; v < cwettertypennum; v++ )
       for ( int w = 0; w < maxbuildingpicnum; w++ )
@@ -262,6 +307,13 @@ void BuildingType :: write ( tnstream& stream ) const
             for ( int y = 0; y < 6 ; y++ )
                 stream.writeInt ( bi_picture[v][w][x][y] );
 
+                /*
+   for ( int x = 0; x < 4; x++ )
+      for ( int y = 0; y < 6 ; y++ )
+         stream.writeInt( field_Exists[x][y] );
+         */
+                
+                
    stream.writeInt ( entry.x );
    stream.writeInt ( entry.y );
    stream.writeInt ( -1 ); // was powerlineconnect.x
@@ -295,7 +347,7 @@ void BuildingType :: write ( tnstream& stream ) const
    stream.writeInt ( maxplus.fuel );
    stream.writeInt ( efficiencyfuel );
    stream.writeInt ( efficiencymaterial );
-   stream.writeInt ( guibuildicon != NULL );
+   stream.writeInt ( 1 ); // guibuildicon
    stream.writeInt ( 1 );
 
    stream.writeInt ( _bi_maxstorage.energy );
@@ -323,9 +375,9 @@ void BuildingType :: write ( tnstream& stream ) const
        for (int j = 0; j <= 5; j++)
           for (int i = 0; i <= 3; i++)
              for ( int w = 0; w < cwettertypennum; w++ )
-                if ( w_picture[w][k][i][j] )
+                if ( w_picture[w][k][i][j].valid() )
                    if ( bi_picture[w][k][i][j] == -1 )
-                       stream.writeImage( w_picture[w][k][i][j], false);
+                      w_picture[w][k][i][j].write(stream);
 
     ContainerBaseType::write ( stream );
 
@@ -368,6 +420,9 @@ BuildingType :: LocalCoordinate :: LocalCoordinate ( const ASCString& s )
 void BuildingType :: runTextIO ( PropertyContainer& pc )
 {
    try {
+   
+      ContainerBaseType::runTextIO ( pc );
+   
       pc.addInteger ( "ConstructionStages", construction_steps );
 
       BitSet weatherBits;
@@ -375,7 +430,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
       for ( int i = 0; i < cwettertypennum; i++ )
          for ( int x = 0; x < 4; x++ )
             for ( int y = 0; y < 6; y++ )
-               if ( w_picture[i][0][x][y] )
+               if ( w_picture[i][0][x][y].valid() )
                   weatherBits.set(i);
 
       pc.addTagArray( "Weather", weatherBits, cwettertypennum, weatherTags );
@@ -384,7 +439,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
       ASCString fieldNames;
       for ( int a = 0; a < 4; a++ )
          for ( int b = 0; b < 6; b++ )
-            if ( w_picture[0][0][a][b] ) {
+            if ( w_picture[0][0][a][b].valid() ) {
                fieldNames += LocalCoordinate( a, b).toString();
                fieldNames += " ";
             }
@@ -396,16 +451,20 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
       StringTokenizer st ( fieldNames );
       ASCString t = st.getNextToken();
       while ( !t.empty() ) {
-         fields.push_back ( LocalCoordinate( t ));
+         LocalCoordinate lc ( t );
+         fields.push_back ( lc );
          t = st.getNextToken();
+         field_Exists[lc.x][lc.y] = true;
       }
 
 
+
+            
       bool bi3pics = false;
 
       for ( int i = 0; i < 4; i++ )
          for ( int j = 0; j < 6; j++ )
-            if ( w_picture[0][0][i][j] && bi_picture[0][0][i][j] >= 0 )
+            if ( bi_picture[0][0][i][j] >= 0 )
                bi3pics = true;
 
       pc.addBool  ( "UseGFXpics", bi3pics );
@@ -419,61 +478,44 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
                for ( int c = 0; c < construction_steps; c++ ) {
                   pc.openBracket ( ASCString("Stage")+strrr(c+1) );
 
-                  for ( Fields::iterator i = fields.begin(); i != fields.end(); i++ ) {
+                  for ( Fields::iterator i = fields.begin(); i != fields.end(); i++ ) 
                      pc.addInteger ( i->toString(), bi_picture[w][c][i->x][i->y] );
-                     if ( pc.isReading() )
-                        loadbi3pict_double ( bi_picture[w][c][i->x][i->y],
-                                             &w_picture[w][c][i->x][i->y],
-                                             CGameOptions::Instance()->bi3.interpolate.buildings );
-                  }
+                  
 
                   pc.closeBracket();
                }
                pc.closeBracket();
+               
             }
          pc.closeBracket();
       } else {
          pc.openBracket ( "Pictures");
          if ( !pc.isReading() ) {
-            tvirtualdisplay vdd( construction_steps*500, 250, 255 );
             for ( int w = 0; w < cwettertypennum; w++ )
                if ( weatherBits.test(w) ) {
+                  Surface s = Surface::createSurface( construction_steps*500, 250, 255 );
                   for ( int c = 0; c < construction_steps; c++ )
                      for ( int x = 0; x < 4; x++ )
                         for ( int y = 0; y < 6; y++ )
-                           if ( w_picture[w][c][x][y] )
-                              putspriteimage ( 500*c + x * fielddistx + (y&1)*fielddisthalfx, y * fielddisty, w_picture[w][c][x][y] );
+                           if ( w_picture[w][c][x][y].valid() )
+                              s.Blit( w_picture[w][c][x][y], SPoint( 500*c + x * fielddistx + (y&1)*fielddisthalfx, y * fielddisty) );
 
-                  void* img = asc_malloc ( imagesize ( 0, 0, construction_steps*500-1, 250-1 ));
-                  getimage ( 0, 0, construction_steps*500-1, 250-1, img );
-
-                  pc.addImage ( weatherTags[w], img, extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".pcx" );
-
-                  asc_free ( img );
+                  pc.addImage ( weatherTags[w], s, extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".pcx" );
                }
          } else {
             for ( int w = 0; w < cwettertypennum; w++ )
                if ( weatherBits.test(w) ) {
-                  void* img = NULL;
-                  pc.addImage ( weatherTags[w], img, extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".pcx" );
-                  tvirtualdisplay vd ( construction_steps*500, 250 );
-                  putimage ( 0, 0, img );
-                  asc_free ( img );
-
+                  Surface s;
+                  pc.addImage ( weatherTags[w], s, extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".pcx" );
 
                   for ( int c = 0; c < construction_steps; c++ )
                      for ( Fields::iterator i = fields.begin(); i != fields.end(); i++ ) {
-                        int x = i->x;
-                        int y = i->y;
-                        void* img = asc_malloc ( imagesize ( 0, 0, fieldsizex, fieldsizey ));
-                        int xx = 500*c + x * fielddistx + (y&1)*fielddisthalfx;
-                        int yy = y * fielddisty;
-                        getimage ( xx, yy, xx + fieldsizex-1, yy + fieldsizey-1, img );
-                        tvirtualdisplay vd ( fieldsizex, fieldsizey );
-                        putimage ( 0, 0, img );
-                        putmask ( 0, 0, getFieldMask(), 0 );
-                        getimage ( 0, 0, fieldsizex-1, fieldsizey-1, img );
-                        w_picture[w][c][x][y] = img;
+                        Surface& img = w_picture[w][c][i->x][i->y];
+                        img = Surface::createSurface(fieldsizex,fieldsizey);
+                        int xx = 500*c + i->x * fielddistx + (i->y&1)*fielddisthalfx;
+                        int yy = i->y * fielddisty;
+                        img.Blit( s, SDLmm::SRect(SPoint(xx,yy),fieldsizex,fieldsizey), SPoint(0,0));
+                        applyFieldMask(img);
                      }
 
                }
@@ -483,9 +525,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
       }
 
       #ifndef converter
-      guibuildicon = generate_building_gui_build_icon ( this );
-      #else
-      guibuildicon = NULL;
+      guibuildicon = generate_gui_build_icon ( this );
       #endif
 
 
@@ -554,8 +594,6 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
 
 
       pc.addTagInteger( "Height", buildingheight, choehenstufennum, heightTags );
-
-      ContainerBaseType::runTextIO ( pc );
 
       pc.addTagInteger( "ExternalLoading", externalloadheight, choehenstufennum, heightTags );
 

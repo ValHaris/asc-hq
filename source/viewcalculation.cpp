@@ -123,7 +123,7 @@ void         tcomputeview::testfield( const MapCoordinate& mc )
 
 
 
-void         tcomputevehicleview::init( const pvehicle eht, int _mode  )   // mode: +1 = add view  ;  -1 = remove view ); )
+void         tcomputevehicleview::init( const Vehicle* eht, int _mode  )   // mode: +1 = add view  ;  -1 = remove view ); )
 {
    player = eht->color / 8;
 
@@ -155,7 +155,7 @@ void         tcomputevehicleview::init( const pvehicle eht, int _mode  )   // mo
 
 
 
-void         tcomputebuildingview::init( const pbuilding    bld,  int _mode )
+void         tcomputebuildingview::init( const Building*    bld,  int _mode )
 {
    player = bld->color / 8;
 
@@ -184,7 +184,7 @@ void         tcomputebuildingview::init( const pbuilding    bld,  int _mode )
 
    for ( int a = 0; a < 4; a++)
       for (int b = 0; b < 6; b++)
-         if ( building->getpicture ( BuildingType::LocalCoordinate( a, b ) )) {
+         if ( building->typ->fieldExists ( BuildingType::LocalCoordinate( a, b ) )) {
             pfield efield = building->getField ( BuildingType::LocalCoordinate( a, b ) );
             if ( minenview )
                efield->view[player].mine += _mode;
@@ -355,7 +355,7 @@ int computeview( pmap actmap, int player_fieldcount_mask )
       if (actmap->player[a].exist() ) {
 
          for ( tmap::Player::VehicleList::iterator i = actmap->player[a].vehicleList.begin(); i != actmap->player[a].vehicleList.end(); i++ ) {
-            pvehicle actvehicle = *i;
+            Vehicle* actvehicle = *i;
             if ( actvehicle == actmap->getField(actvehicle->xpos,actvehicle->ypos)->vehicle)
                actvehicle->addview();
          }

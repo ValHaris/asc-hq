@@ -3025,7 +3025,7 @@ void giveunitaway ( void )
                           int llength;
                           int numlength;
                           VehicleService::Target* target;
-                          pvehicle      source;
+                          Vehicle*      source;
                           vector<int> oldpos;
                           vector<int> newpos;
                           vector<int> displayed;
@@ -3035,7 +3035,7 @@ void giveunitaway ( void )
 
                  public:
 
-                          void          init ( pvehicle src, int _targetNWID, VehicleService* _serviceAction );
+                          void          init ( Vehicle* src, int _targetNWID, VehicleService* _serviceAction );
                           virtual void  run ( void );
                           virtual void  buttonpressed( int id );
                           void          zeichneschieberegler( int pos);
@@ -3062,7 +3062,7 @@ char* tmunitionsbox::strr ( int a ) {
 }
 
 
-void         tverlademunition::init( pvehicle src, int _targetNWID, VehicleService* _serviceAction )
+void         tverlademunition::init( Vehicle* src, int _targetNWID, VehicleService* _serviceAction )
 {
    targetNWID = _targetNWID;
    serviceAction = _serviceAction;
