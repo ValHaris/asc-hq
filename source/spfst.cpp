@@ -1,6 +1,12 @@
-//     $Id: spfst.cpp,v 1.45 2000-08-04 15:11:20 mbickel Exp $
+//     $Id: spfst.cpp,v 1.46 2000-08-05 13:38:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2000/08/04 15:11:20  mbickel
+//      Moving transports costs movement for units inside
+//      refuelled vehicles now have full movement in the same turn
+//      terrain: negative attack / defensebonus allowed
+//      new mapparameters that affect damaging and repairing of building
+//
 //     Revision 1.44  2000/08/03 19:21:29  mbickel
 //      Fixed: units had invalid height when produced in some buildings
 //      Fixed: units could not enter building if unitheightreq==0
@@ -1000,6 +1006,11 @@ int          terrainaccessible2 ( const pfield        field, const pvehicle     
 { 
    if ( uheight == -1 )
       uheight = vehicle->height;
+
+   if ( !((uheight & vehicle->typ->height) || ((vehicle->functions & cfparatrooper) && (uheight & (chtieffliegend | chfliegend )))))
+      return 0;
+
+
    if ( uheight >= chtieffliegend) 
       return 2; 
    else {
@@ -1034,7 +1045,6 @@ byte         fieldaccessible( const pfield        field,
    if ( uheight == -1 )
       uheight = vehicle->height;
 
-//   int c = ((field->visible >> (actmap->actplayer << 1)) & 3);
    int c = ((field->visible >> (vehicle->color / 4 )) & 3);
    if ( godview ) 
        c = visible_all; 
@@ -1051,9 +1061,9 @@ byte         fieldaccessible( const pfield        field,
             return 0;
       
 
-   if ( !field->vehicle && !field->building ) 
+   if ( !field->vehicle && !field->building ) {
       return terrainaccessible ( field, vehicle, uheight );
-   else { 
+   } else {
       int m1 = vehicle->weight(); 
       int mx = vehicle->weight(); 
       int b = 1; 
@@ -1067,7 +1077,7 @@ byte         fieldaccessible( const pfield        field,
             } 
 
 
-      if (field->building == NULL) {   
+      if (field->vehicle) {
          if (field->vehicle->color == vehicle->color) { 
             int ldbl = field->vehicle->vehicleloadable ( vehicle, uheight );
             if ( ldbl )
@@ -6226,10 +6236,19 @@ int tvehicle::getmaxmaterialforweight ( void )
 
 int  tvehicle :: vehicleloadable ( pvehicle vehicle, int uheight )
 {
+   if ( height & (chtieffliegend | chfliegend | chhochfliegend ))
+      return 0;
+
    if ( uheight == -1 )
       uheight = vehicle->height;
 
-   if ( uheight != vehicle->height  &&  uheight != height )
+
+   if ( vehicle->functions & cf_trooper )
+      if ( uheight & (chschwimmend | chfahrend ))
+         uheight |= (chschwimmend | chfahrend );  //these heights are effectively the same
+
+
+   if ( !(uheight & vehicle->height)  &&  !(uheight & height) )
       return 0;
 
    if (( ( typ->loadcapability    & vehicle->height)   &&   
@@ -6300,31 +6319,34 @@ int tbuilding :: vehicleloadable ( pvehicle vehicle, int uheight )
    if ( uheight == -1 )
       uheight = vehicle->height;
 
-      int hgt = uheight; // vehicle->height;
+   if ( vehicle->functions & cf_trooper )
+      if ( uheight & (chschwimmend | chfahrend ))
+         uheight |= (chschwimmend | chfahrend );  //these heights are effectively the same
 
-      if ( completion ==  typ->construction_steps - 1 ) {
+   if ( completion ==  typ->construction_steps - 1 )
+      if ( typ->loadcapability & uheight ) {
          if ( (( typ->loadcapacity >= vehicle->size())               // the unit is physically able to get "through the door"
            && (vehiclegeparkt(this)+1 < maxloadableunits )
-           && ( typ->loadcapability & hgt )
            && (( typ->unitheightreq & vehicle->typ->height ) || !typ->unitheightreq)
-           && !( typ->unitheight_forbidden & vehicle->typ->height) ) 
-                   ||  
-             (( vehicle->functions & cf_trooper ) 
-           && ( (uheight == typ->buildingheight)  || (typ->buildingheight >= chschwimmend && hgt == chfahrend) ))) { 
-              
+           && !( typ->unitheight_forbidden & vehicle->typ->height) )
+                   ||
+             ( vehicle->functions & cf_trooper )
+           ) {
+         //  && ( (uheight == typ->buildingheight)  || (typ->buildingheight >= chschwimmend && hgt == chfahrend) ))) {
+
          #ifdef karteneditor
               return 2;
          #else
-              if ( color == actmap->actplayer * 8) 
+              if ( color == actmap->actplayer * 8)
                  return 2;
-              else 
+              else
                 if ( !vehicle->attacked ) {
                    if ( color == (8 << 3) )      // neutral building can be conquered by any unit
                       return 2;
                    else
                       if ( (vehicle->functions & cf_conquer)  || ( damage >= mingebaeudeeroberungsbeschaedigung))
                          return 2;
-                }    
+                }
          #endif
          }
       }

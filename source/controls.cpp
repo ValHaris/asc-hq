@@ -1,6 +1,12 @@
-//     $Id: controls.cpp,v 1.55 2000-08-04 15:10:50 mbickel Exp $
+//     $Id: controls.cpp,v 1.56 2000-08-05 13:38:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2000/08/04 15:10:50  mbickel
+//      Moving transports costs movement for units inside
+//      refuelled vehicles now have full movement in the same turn
+//      terrain: negative attack / defensebonus allowed
+//      new mapparameters that affect damaging and repairing of building
+//
 //     Revision 1.54  2000/08/03 13:11:53  mbickel
 //      Fixed: on/off switching of generator vehicle produced endless amounts of energy
 //      Repairing units now reduces their experience
@@ -4930,6 +4936,8 @@ int tbuilding :: getmininginfo ( int res )
 
 void tbuilding :: initwork ( void )
 {
+   repairedThisTurn = 0;
+
    lastmaterialavail = -1;
    lastfuelavail = -1;
    lastenergyavail = -1;
@@ -5430,7 +5438,8 @@ void         nextturn(void)
                         actvehicle->attacked = true; 
                      }
 
-                     actvehicle->setMovement ( 0 );
+                     // actvehicle->setMovement ( 0 );
+                     actvehicle->resetmovement();
                      actvehicle->attacked = false; 
 
                   } else {
@@ -5979,11 +5988,12 @@ void MapNetwork :: searchvehicle ( int x, int y )
 {
    if ( pass == 2 ) {
       pfield newfield = getfield ( x, y );
-      if ( !newfield->a.temp2 ) 
-        if ( newfield->vehicle ) {
-           checkvehicle ( newfield->vehicle );
-           newfield->a.temp2 = 1;
-        }
+      if ( newfield )
+         if ( !newfield->a.temp2 )
+           if ( newfield->vehicle ) {
+              checkvehicle ( newfield->vehicle );
+              newfield->a.temp2 = 1;
+           }
    }
 }
 
@@ -6570,6 +6580,7 @@ int tvehicle::disablereactionfire ( void )
    if (  reactionfire_active ) {
        reactionfire_active = 0;
        reactionfire = 0;
+       setMovement ( 0, -1 );
    }
    return 0;
 }

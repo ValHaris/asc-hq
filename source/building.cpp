@@ -1,6 +1,12 @@
-//     $Id: building.cpp,v 1.36 2000-08-04 15:10:49 mbickel Exp $
+//     $Id: building.cpp,v 1.37 2000-08-05 13:38:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2000/08/04 15:10:49  mbickel
+//      Moving transports costs movement for units inside
+//      refuelled vehicles now have full movement in the same turn
+//      terrain: negative attack / defensebonus allowed
+//      new mapparameters that affect damaging and repairing of building
+//
 //     Revision 1.35  2000/08/03 19:21:16  mbickel
 //      Fixed: units had invalid height when produced in some buildings
 //      Fixed: units could not enter building if unitheightreq==0
@@ -561,14 +567,18 @@ void  ccontainercontrols :: crefill :: emptyeverything ( pvehicle eht )
 
 int ccontainercontrols :: cmove_unit_in_container :: moveupavail ( pvehicle eht )
 {
-   if ( eht )
+   if ( eht ) {
       if ( recursiondepth > 0 ) {
+         if ( eht->functions & cf_trooper )
+            return 1;
+
          if ( buildingparamstack[recursiondepth-1].bld )
             return buildingparamstack[recursiondepth-1].bld->vehicleloadable ( eht );
          else
          if ( buildingparamstack[recursiondepth-1].eht )
             return buildingparamstack[recursiondepth-1].eht->vehicleloadable ( eht );
       }
+   }
    return 0;
 }
 
@@ -576,8 +586,8 @@ int ccontainercontrols :: cmove_unit_in_container :: movedownavail ( pvehicle eh
 {
    if ( eht )
       if ( into )
-         if ( into->vehicleloadable ( eht ))
-           return 1;
+         if ( into->vehicleloadable ( eht , 255 ))
+            return 1;
    return 0;
 }
 
@@ -804,81 +814,63 @@ VehicleMovement*   cbuildingcontrols :: movement (  pvehicle eht, int mode )
    if ( eht->getMovement() < minmalq )
       return NULL;
 
+
    movementparams.height   = eht->height;
    movementparams.movement = eht->getMovement();
    movementparams.attacked = eht->attacked;
-
-   int unitheight = -1;
-   if ( building->typ->buildingheight <= chgetaucht )
-      unitheight = building->typ->buildingheight;
-
-   moveparams.movestatus = 0;
-   int ma = moveavail( eht );
-   if ( ma == 3 ) 
-      eht->attacked = 1;
-
-   if ( ma < 2 )
-      return 0;
-
-   VehicleMovement* vehicleMovement = new VehicleMovement ( &defaultMapDisplay, NULL );
-   int res = vehicleMovement->execute ( eht, -1, -1, 0, unitheight, -1 );
-/*
-   if ( ma  >= 2 ) 
-     ::movement( eht, unitheight );
-*/
-
-   int check = 0;
+   int perc = eht->getMovement() * 1024 / eht->typ->movement[log2 ( eht->height ) ];
    int orgheight = eht->height;
    int orgmove = eht->getMovement();
 
-   int perc = eht->getMovement() * 1024 / eht->typ->movement[log2 ( eht->height ) ];
+   int heightToTest[10];
+   int heightToTestNum = 0;
 
-   // if the unit could not move, trying to increase and decrease its height
-   while ( vehicleMovement->getStatus() <= 0   && check < 2) {
-      if ( check == 0 ) {
-         int h = eht->height << 1;
-         if ( eht->typ->height & h ) {
-            eht->height = h;
-            eht->setMovement( eht->typ->movement[log2 ( eht->height ) ] * perc / 1024 );
-            ma = moveavail ( eht );
-            if ( ma == 3 ) 
-               eht->attacked = 1;
-           /*
-            if ( ma >= 2 ) 
-               ::movement( eht, unitheight );
-           */
-           res = vehicleMovement->execute ( eht, -1, -1, 0, unitheight, -1 );
-         } else
-            check = 1;
 
-      } else {
-         int h = eht->height >> 1;
-         if ( eht->typ->height & h ) {
-            eht->height = h;
-            eht->setMovement ( eht->typ->movement[log2 ( eht->height ) ] * perc / 1024 );
+   if ( eht->functions & cf_trooper ) {
+      if ( building->typ->buildingheight & (chfahrend | chschwimmend )) {
+         heightToTest[heightToTestNum++] = chfahrend;
+         heightToTest[heightToTestNum++] = chschwimmend;
+      } else
+         heightToTest[heightToTestNum++] = building->typ->buildingheight;
+   }
 
-            ma = moveavail ( eht );
-            if ( ma == 3 ) 
-               eht->attacked = 1;
-           /*
-            if ( ma >= 2 ) 
-               ::movement( eht, unitheight );
-            */
-           res = vehicleMovement->execute ( eht, -1, -1, 0, unitheight, -1 );
-            
-         } else
-            check = 2;
+   for ( int h = 0; h < 8; h++)
+      if ( building->typ->loadcapability & (1 << h) )
+         heightToTest[heightToTestNum++] = (1 << h);
 
+
+
+
+   for ( int i = 0; i < heightToTestNum; i++ ) {
+
+      if ( eht->height != heightToTest[i]  && eht->typ->height & heightToTest[i] ) {
+         eht->height = heightToTest[i];
+         eht->setMovement( eht->typ->movement[log2 ( eht->height ) ] * perc / 1024 );
       }
 
+      moveparams.movestatus = 0;
+      int ma = moveavail( eht );
+      if ( ma == 3 )
+         eht->attacked = 1;
+
+      if ( ma < 2 )
+         break;
+
+
+      VehicleMovement* vehicleMovement = new VehicleMovement ( &defaultMapDisplay, NULL );
+      int res = vehicleMovement->execute ( eht, -1, -1, 0, heightToTest[i], -1 );
+
+
+      if ( vehicleMovement->getStatus() > 0 )
+         return vehicleMovement;
+      else
+         delete vehicleMovement;
    }
-   if ( vehicleMovement->getStatus() <= 0 ) {
-     eht->height = orgheight;
-     eht->setMovement ( orgmove );
-     delete vehicleMovement;
-     return NULL;
-   } else
-     return vehicleMovement;
+
+   eht->height = orgheight;
+   eht->setMovement ( orgmove );
+   eht->attacked = movementparams.attacked;
+   return NULL;
 }
 
 int   cbuildingcontrols :: moveavail ( pvehicle eht )
@@ -1017,6 +1009,7 @@ int   cbuildingcontrols :: crepairbuilding :: repairto ( char newdamage)
    } else
       cc_b->building->damage = ndamage;
 
+   cc_b->building->repairedThisTurn = 1;
    return ndamage;
 }
 
@@ -1443,6 +1436,7 @@ int   ctransportcontrols :: moveavail ( pvehicle eht )
 {
    if ( recursiondepth > 0 )
       return 0;
+
    if ( eht->getMovement() < minmalq )
       return 0;
 
@@ -1468,17 +1462,19 @@ int   ctransportcontrols :: moveavail ( pvehicle eht )
          else
             return 0;
    } else      
-   if ( (vehicle->height <= chfliegend) && ( eht->functions & cfparatrooper)) {
+   if ( vehicle->height <= chfliegend)  {
       if (((eht->typ->height & vehicle->typ->loadcapabilityreq) || !vehicle->typ->loadcapabilityreq ) &&
-         ((eht->typ->height & vehicle->typ->loadcapabilitynot ) == 0 ))
+         ((eht->typ->height & vehicle->typ->loadcapabilitynot ) == 0 ) &&
+          ( eht->functions & cfparatrooper))
          return 3;
       else
          return 0;
    } else
-     if ( vehicle->height == eht->height  && ( eht->height & eht->typ->height) )  // to be sure...
-        return 2;
-     else
-        return 0;
+      if ( vehicle->height == chsatellit )
+         if ( (vehicle->height == eht->height  && ( eht->height & eht->typ->height)) || (eht->functions & cf_trooper) )  // to be sure...
+            return 2;
+         else
+            return 0;
 }
 
 
@@ -1492,7 +1488,7 @@ VehicleMovement*  ctransportcontrols :: movement (  pvehicle eht, int mode )
    movementparams.attacked = eht->attacked;
 
    int unitheight = -1;
-   if ( vehicle->height <= chgetaucht )
+   if ( vehicle->height <= chgetaucht || vehicle->height >= chtieffliegend )
       unitheight = vehicle->height;
 
    moveparams.movestatus = 0;
@@ -2746,7 +2742,9 @@ void  ccontainer :: moveicon_c :: exec         ( void )
 
        if (ms == 2) 
           mousevisible(true); 
-    }
+    } else
+       dispmessage2 ( 107, NULL );
+
 }
 
 
@@ -3590,10 +3588,7 @@ ccontainer_b :: crepairbuilding_subwindow :: crepairbuilding_subwindow ( void )
    objcoordinates[0].y2 = subwiny1 + 50;
    objcoordinates[0].type = 5;
 
-   ndamag = cc_b->building->damage - actmap->getgameparameter ( cgp_maxbuildingrepair );
-   if ( ndamag < 0 )
-      ndamag = 0;
-
+   ndamag = -1000;
 
    helplist.num = 10;
 
@@ -3623,6 +3618,17 @@ int  ccontainer_b :: crepairbuilding_subwindow :: subwin_available ( void )
 
 void  ccontainer_b :: crepairbuilding_subwindow :: display ( void )
 {
+   if ( ndamag == -1000 ) {
+      if ( cc_b->building->repairedThisTurn )
+         ndamag = cc_b->building->damage;
+      else
+         ndamag = cc_b->building->damage - actmap->getgameparameter ( cgp_maxbuildingrepair );
+
+      if ( ndamag < 0 )
+         ndamag = 0;
+      checkto ( ndamag );
+   }
+
    setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
    npush ( activefontsettings );
@@ -3708,7 +3714,7 @@ void ccontainer_b :: crepairbuilding_subwindow :: paintvariables ( void )
       if ( maxr > 100 )
          maxr = 100;
 
-      if ( w < 100 ) {
+      if ( w < 100 && !cc_b->building->repairedThisTurn) {
          line ( subwinx1 + 53 + w, subwiny1 + 26+3, subwinx1 + 53 + maxr, subwiny1 + 26+3, c );
          line ( subwinx1 + 53 + w, subwiny1 + 26+5, subwinx1 + 53 + maxr, subwiny1 + 26+5, c );
          line ( subwinx1 + 53 + maxr, subwiny1 + 26, subwinx1 + 53 + maxr, subwiny1 + 34, c );

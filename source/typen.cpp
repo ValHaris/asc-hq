@@ -1,6 +1,12 @@
-//     $Id: typen.cpp,v 1.31 2000-08-04 15:11:24 mbickel Exp $
+//     $Id: typen.cpp,v 1.32 2000-08-05 13:38:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/08/04 15:11:24  mbickel
+//      Moving transports costs movement for units inside
+//      refuelled vehicles now have full movement in the same turn
+//      terrain: negative attack / defensebonus allowed
+//      new mapparameters that affect damaging and repairing of building
+//
 //     Revision 1.30  2000/08/03 19:21:33  mbickel
 //      Fixed: units had invalid height when produced in some buildings
 //      Fixed: units could not enter building if unitheightreq==0
@@ -715,6 +721,7 @@ tresourceview :: tresourceview ( void )
 tbuilding :: tbuilding ( void )
 {
    lastmineddist= 0;
+   repairedThisTurn = 0;
    memset ( &bi_resourceplus, 0, sizeof ( bi_resourceplus ));
 }
 
@@ -757,6 +764,7 @@ tbuilding :: tbuilding ( pbuilding src, tmap* actmap )
    bi_resourceplus = src->bi_resourceplus;
 
    lastmineddist = src->lastmineddist;
+   repairedThisTurn = src->repairedThisTurn;
 
    for ( int i = 0; i < 32; i++ )
      if ( src->loading[i] )
@@ -1348,7 +1356,7 @@ void tvehicle :: setMovement ( int newmove, int transp )
    if ( newmove < 0 )
       newmove = 0;
 
-   if ( transp >= 0 ) 
+   if ( transp >= 0 && typ)
       if ( typ->movement[ log2 ( height ) ] ) {
          int diff = _movement - newmove;
          int perc = 1000 * diff / typ->movement[ log2 ( height ) ] ;

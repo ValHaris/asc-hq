@@ -1,6 +1,12 @@
-//     $Id: typen.h,v 1.34 2000-08-04 15:11:29 mbickel Exp $
+//     $Id: typen.h,v 1.35 2000-08-05 13:38:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2000/08/04 15:11:29  mbickel
+//      Moving transports costs movement for units inside
+//      refuelled vehicles now have full movement in the same turn
+//      terrain: negative attack / defensebonus allowed
+//      new mapparameters that affect damaging and repairing of building
+//
 //     Revision 1.33  2000/08/03 13:12:20  mbickel
 //      Fixed: on/off switching of generator vehicle produced endless amounts of energy
 //      Repairing units now reduces their experience
@@ -842,7 +848,7 @@ class  tbuilding {
 
     tresources    bi_resourceplus;
 
-    int           dummy2;
+    int           repairedThisTurn;
 
     AiParameter*  aiparam[8];
 

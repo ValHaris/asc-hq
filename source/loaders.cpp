@@ -1,6 +1,12 @@
-//     $Id: loaders.cpp,v 1.19 2000-08-04 15:11:12 mbickel Exp $
+//     $Id: loaders.cpp,v 1.20 2000-08-05 13:38:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/08/04 15:11:12  mbickel
+//      Moving transports costs movement for units inside
+//      refuelled vehicles now have full movement in the same turn
+//      terrain: negative attack / defensebonus allowed
+//      new mapparameters that affect damaging and repairing of building
+//
 //     Revision 1.18  2000/08/03 19:45:15  mbickel
 //      Fixed some bugs in DOS code
 //      Removed submarine.ascent != 0 hack
@@ -768,7 +774,7 @@ void         tspfldloaders::readunit ( pvehicle &eht )
 /**************************************************************/
 
 
-const int buildingstreamversion = -1;
+const int buildingstreamversion = -2;
 
 void         tspfldloaders::writebuilding ( pbuilding bld )
 {
@@ -794,6 +800,7 @@ void         tspfldloaders::writebuilding ( pbuilding bld )
     stream->writedata2 ( bld->netcontrol );
     stream->writepchar ( bld->name );
 
+    stream->writeInt ( bld->repairedThisTurn );
 
     char c = 0;
     char k;
@@ -847,7 +854,7 @@ void         tspfldloaders::readbuilding ( pbuilding &bld )
 
     int version;
     stream->readdata2 ( version );
-    if ( version == buildingstreamversion ) {
+    if ( version == buildingstreamversion || version == -1 ) {
 
        stream->readdata2 ( id );
        bld->typ = getbuildingtype_forid ( id, 0 );
@@ -905,6 +912,11 @@ void         tspfldloaders::readbuilding ( pbuilding &bld )
     stream->readdata2 ( bld->damage );
     stream->readdata2 ( bld->netcontrol );
     stream->readpchar ( &bld->name );
+    if ( version == -2 )
+       bld->repairedThisTurn = stream->readInt ( );
+    else
+       bld->repairedThisTurn = 0;
+
 
 
     char c;

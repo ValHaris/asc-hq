@@ -1,6 +1,12 @@
-//     $Id: attack.cpp,v 1.23 2000-08-04 15:10:47 mbickel Exp $
+//     $Id: attack.cpp,v 1.24 2000-08-05 13:38:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/08/04 15:10:47  mbickel
+//      Moving transports costs movement for units inside
+//      refuelled vehicles now have full movement in the same turn
+//      terrain: negative attack / defensebonus allowed
+//      new mapparameters that affect damaging and repairing of building
+//
 //     Revision 1.22  2000/08/03 13:11:48  mbickel
 //      Fixed: on/off switching of generator vehicle produced endless amounts of energy
 //      Repairing units now reduces their experience
@@ -360,13 +366,6 @@ void tfight :: paintline ( int num, int val, int col )
 #define maxattackshown 24
 
 void tunitattacksunit::calcdisplay( int ad, int dd ) {
-  /*
-  if ( dv.strength ) {
-     sound.weaponSound(_attackingunit->getWeapon(av.weapnum)->getScalarWeaponType())->playWait();
-     sound.weaponSound(_attackedunit->getWeapon(dv.weapnum)->getScalarWeaponType())->play();
-  } else
-     sound.weaponSound(_attackingunit->getWeapon(av.weapnum)->getScalarWeaponType())->play();
-  */
   #ifdef sgmain
   sound.weaponSound(_attackingunit->getWeapon(av.weapnum)->getScalarWeaponType())->play();
   #endif
@@ -375,11 +374,11 @@ void tunitattacksunit::calcdisplay( int ad, int dd ) {
    if ( av.damage >= 100 || dv.damage >= 100 )
       sound.boom->play();
   #endif
-
 }
   
 void tfight :: calcdisplay ( int ad, int dd )
 {
+
    collategraphicoperations cgo ( agmp->resolutionx - ( 640 - 450), 211, agmp->resolutionx - ( 640 - 623 ), 426 );
 
    setinvisiblemouserectanglestk ( agmp->resolutionx - ( 640 - 450), 211, agmp->resolutionx - ( 640 - 623 ), 426 );
@@ -522,6 +521,7 @@ void tfight :: calcdisplay ( int ad, int dd )
       cgo.off();
    }
 
+
    t = ticker;
    do {
       releasetimeslice();
@@ -568,7 +568,7 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
 
    SingleWeapon* weap = attackingunit->getWeapon(_weapon);
 
-   av.strength   = attackingunit->weapstrength[_weapon] * weapDist.getWeapStrength(weap, dist, attackingunit->height, attackedunit->height );
+   av.strength = int( attackingunit->weapstrength[_weapon] * weapDist.getWeapStrength(weap, dist, attackingunit->height, attackedunit->height ));
    av.armor  = attackingunit->armor;
    av.damage     = attackingunit->damage;
    av.experience  = attackingunit->experience;
@@ -615,7 +615,7 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    if ( respond ) {
       weap = attackedunit->getWeapon( dv.weapnum );
 
-      dv.strength  = attackedunit->weapstrength[ dv.weapnum ] * weapDist.getWeapStrength(weap, dist, attackedunit->height, attackingunit->height );
+      dv.strength  = int( attackedunit->weapstrength[ dv.weapnum ] * weapDist.getWeapStrength(weap, dist, attackedunit->height, attackingunit->height ));
       field = getfield ( attackedunit->xpos, attackedunit->ypos );
       dv.attackbonus  = field->getattackbonus();
       _respond = 1;
@@ -775,6 +775,16 @@ void tunitattacksbuilding :: setup ( pvehicle attackingunit, int x, int y, int w
 
 }
 
+void tunitattacksbuilding::calcdisplay( int ad, int dd ) {
+  #ifdef sgmain
+  sound.weaponSound(_attackingunit->getWeapon(av.weapnum)->getScalarWeaponType())->play();
+  #endif
+  tfight::calcdisplay(ad,dd);
+  #ifdef sgmain
+   if ( av.damage >= 100 || dv.damage >= 100 )
+      sound.boom->play();
+  #endif
+}
 
 
 void tunitattacksbuilding :: setresult ( void )
@@ -879,6 +889,17 @@ void tmineattacksunit :: setup ( pfield mineposition, int minenum, pvehicle &att
    dv.initiative = attackedunit->typ->initiative;
    dv.attackbonus = 0;
    dv.kamikaze = 0;
+}
+
+void tmineattacksunit::calcdisplay( int ad, int dd ) {
+  #ifdef sgmain
+  sound.boom->play();
+  #endif
+  tfight::calcdisplay(ad,dd);
+  #ifdef sgmain
+   if ( av.damage >= 100 || dv.damage >= 100 )
+      sound.boom->play();
+  #endif
 }
 
 
@@ -999,6 +1020,14 @@ void tunitattacksobject :: setup ( pvehicle attackingunit, int obj_x, int obj_y,
    dv.kamikaze = 0;
 
 }
+
+void tunitattacksobject::calcdisplay( int ad, int dd ) {
+  #ifdef sgmain
+  sound.weaponSound(_attackingunit->getWeapon(av.weapnum)->getScalarWeaponType())->play();
+  #endif
+  tfight::calcdisplay(ad,dd);
+}
+
 
 void tunitattacksobject :: setresult ( void )
 {

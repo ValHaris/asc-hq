@@ -1,6 +1,12 @@
-//     $Id: sg.cpp,v 1.69 2000-08-04 15:11:14 mbickel Exp $
+//     $Id: sg.cpp,v 1.70 2000-08-05 13:38:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.69  2000/08/04 15:11:14  mbickel
+//      Moving transports costs movement for units inside
+//      refuelled vehicles now have full movement in the same turn
+//      terrain: negative attack / defensebonus allowed
+//      new mapparameters that affect damaging and repairing of building
+//
 //     Revision 1.68  2000/08/03 19:45:18  mbickel
 //      Fixed some bugs in DOS code
 //      Removed submarine.ascent != 0 hack
@@ -2693,12 +2699,6 @@ void  mainloop ( void )
             case ct_4:  viewunitmovementrange ( getactfield()->vehicle, ct_4 );
                break;
 
-            case ct_5:  execuseraction ( ua_benchgamewov );
-               break;
-               
-            case ct_6:  execuseraction ( ua_benchgamewv );
-               break;
-               
             case ct_7:  execuseraction ( ua_viewterraininfo );
                break; 
             

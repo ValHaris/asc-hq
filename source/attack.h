@@ -1,6 +1,12 @@
-//     $Id: attack.h,v 1.10 2000-08-03 13:11:50 mbickel Exp $
+//     $Id: attack.h,v 1.11 2000-08-05 13:38:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/08/03 13:11:50  mbickel
+//      Fixed: on/off switching of generator vehicle produced endless amounts of energy
+//      Repairing units now reduces their experience
+//      negative attack- and defenseboni possible
+//      changed attackformula
+//
 //     Revision 1.9  2000/07/16 14:19:59  mbickel
 //      AI has now some primitive tactics implemented
 //      Some clean up
@@ -147,6 +153,7 @@ class tunitattacksbuilding : public tfight {
            tunitattacksbuilding ( pvehicle attackingunit, int x, int y, int weapon );
            void setup ( pvehicle attackingunit, int x, int y, int weapon );
            void setresult ( void );
+           virtual void calcdisplay(int ad = -1, int dd = -1);
 
       };
 
@@ -161,6 +168,7 @@ class tmineattacksunit : public tfight {
            tmineattacksunit ( pfield mineposition, int minenum, pvehicle &attackedunit );
            void setup ( pfield mineposition, int minenum, pvehicle &attackedunit );
            void setresult ( void );
+           virtual void calcdisplay(int ad = -1, int dd = -1);
 
       };
 
@@ -174,6 +182,7 @@ class tunitattacksobject : public tfight {
            tunitattacksobject ( pvehicle attackingunit, int obj_x, int obj_y, int weapon );
            void setup ( pvehicle attackingunit, int obj_x, int obj_y, int weapon );
            void setresult ( void );
+           virtual void calcdisplay(int ad = -1, int dd = -1);
       };
 
 

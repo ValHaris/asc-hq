@@ -1,6 +1,12 @@
-//     $Id: sgstream.cpp,v 1.25 2000-08-04 15:11:18 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.26 2000-08-05 13:38:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/08/04 15:11:18  mbickel
+//      Moving transports costs movement for units inside
+//      refuelled vehicles now have full movement in the same turn
+//      terrain: negative attack / defensebonus allowed
+//      new mapparameters that affect damaging and repairing of building
+//
 //     Revision 1.24  2000/08/02 18:18:09  mbickel
 //      Fixed broken Watcom Projectfiles for tools
 //      Makebld can now save a buildings image
@@ -1748,6 +1754,7 @@ pbuildingtype       loadbuildingtype( pnstream stream )
       pgbt->_bi_maxstorage.a.fuel = stream->readInt( );
 
       pgbt->buildingheight = stream->readInt( );
+      pgbt->buildingheight = 1 << log2 (pgbt->buildingheight); // to make sure just one bit is set
       pgbt->unitheight_forbidden = stream->readInt( );
       pgbt->externalloadheight = stream->readInt( );
 

@@ -1,6 +1,12 @@
-//     $Id: unitctrl.cpp,v 1.21 2000-08-04 15:11:31 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.22 2000-08-05 13:38:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/08/04 15:11:31  mbickel
+//      Moving transports costs movement for units inside
+//      refuelled vehicles now have full movement in the same turn
+//      terrain: negative attack / defensebonus allowed
+//      new mapparameters that affect damaging and repairing of building
+//
 //     Revision 1.20  2000/08/01 13:50:53  mbickel
 //      Chaning the height of airplanes is not affected by wind any more.
 //      Fixed: Airplanes could ascend onto buildings
@@ -201,7 +207,7 @@ int VehicleMovement :: available ( pvehicle veh ) const
 {
    if ( status == 0 )
      if ( veh ) 
-          if ( veh->getMovement() >= minmalq )
+          if ( veh->getMovement() >= minmalq && !veh->reactionfire_active )
              if ( terrainaccessible ( getfield ( veh->xpos, veh->ypos ), veh ) || actmap->getgameparameter( cgp_movefrominvalidfields) )
                 return 1; 
 
@@ -845,7 +851,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, int noInterrupt )
       } 
 
       vehicle->setnewposition ( x, y );
-      if ( newheight != -1 )
+      if ( newheight != -1 && vehicle->typ->height & newheight)
          vehicle->height = newheight;
 
       
