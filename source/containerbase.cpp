@@ -246,12 +246,12 @@ void ContainerBase::paintField ( const Surface& img, Surface& dest, SPoint pos, 
                       ( img, dest, pos, nullParam,nullParam, dirpair, nullParam);
         } else {
            if ( img.GetPixelFormat().BytesPerPixel() == 1 ) {
-               MegaBlitter<1,4,ColorTransform_PlayerCol, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation> blitter;
+               MegaBlitter<1,gamemapPixelSize,ColorTransform_PlayerCol, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation> blitter;
                blitter.setPlayer( getOwner() );
                blitter.setAngle( img, directionangle[dir] );
                blitter.blit( img, dest, pos );
            } else {
-               MegaBlitter<4,4,ColorTransform_PlayerTrueCol, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation> blitter;
+               MegaBlitter<4,gamemapPixelSize,ColorTransform_PlayerTrueCol, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation> blitter;
                blitter.setColor( gamemap->player[getOwner()].getColor() );
                blitter.setAngle( img, directionangle[dir] );
                blitter.blit( img, dest, pos );

@@ -46,9 +46,15 @@
 
 // #include "password.h"
 
+#ifdef karteneditor
 
 //! the color depth of the gamemap
 const int gamemapPixelSize = 1;
+#else
+
+//! the color depth of the gamemap
+const int gamemapPixelSize = 4;
+#endif
 
 //! the number of players that ASC can manage. This includes the neutral semi-played, which can't do anything
 const int playerNum = 9;
