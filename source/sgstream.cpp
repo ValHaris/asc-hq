@@ -27,7 +27,7 @@
 
 
 
-#include <malloc.h>
+#include <cstdlib>
 #include <cstring>
 #include <stdlib.h>
 #include <stdio.h>
@@ -36,12 +36,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fstream>
-
-#ifdef _WIN32_
- #include <windows.h>
- #include <winreg.h>
-#endif 
-
 
 #include "global.h"
 #include "CLoadable.h"
@@ -58,6 +52,12 @@
 #include "gameoptions.h"
 #include "graphicset.h"
 #include "itemrepository.h"
+
+#ifdef _WIN32_
+ #include <windows.h>
+ #include <winreg.h>
+#endif 
+
 
 const char* asc_EnvironmentName = "ASC_CONFIGFILE";
 int dataVersion = 0;
@@ -300,7 +300,7 @@ extern dacpalette256 pal;
 
 void generateaveragecolprt ( int x1, int y1, int x2, int y2, void* buf, char* pix1 )
 {
-   word *w = (word*) buf;
+   Uint16 *w = (Uint16*) buf;
    // int size = ( w[0] + 1) * (w[1] + 1);
 
 
@@ -485,7 +485,7 @@ int readgameoptions ( const char* filename )
              const int size = 2000;
              char  buf[size];
              DWORD size2 = size;
-             if ( RegQueryValueEx ( key, "InstallDir", NULL, &type, buf, &size2 ) == ERROR_SUCCESS ) {
+             if ( RegQueryValueEx ( key, "InstallDir", NULL, &type, (BYTE*)buf, &size2 ) == ERROR_SUCCESS ) {
                 if ( type == REG_SZ	 ) {
                    fn = buf;
                    appendbackslash ( fn );

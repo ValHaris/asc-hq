@@ -1,5 +1,5 @@
-#define word unsigned short int
-#define Word word
+//#define word unsigned short int
+//#define Word word
 #define pascal_byte char
 //#define Byte byte
 //#define Byte byte

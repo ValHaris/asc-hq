@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: pd.h,v 1.10 2002-01-19 22:39:19 mbickel Exp $
+//     $Id: pd.h,v 1.11 2004-07-12 18:15:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2002/01/19 22:39:19  mbickel
+//      Added music playing functions to ASC
+//
 //     Revision 1.9  2002/01/07 11:40:40  mbickel
 //      Fixed some syntax errors
 //
@@ -81,12 +84,12 @@
            int             count;
            dynamic_array<tpdbutton>  button;
            tkey            shortkey;
-           word            rtextstart,xstart,xwidth,height;
+           int             rtextstart,xstart,xwidth,height;
         } tpdfield;
    typedef tpdfield *ppdfield;
 
    typedef struct pdbar {
-           word    pdbreite;
+           int     pdbreite;
            dynamic_array<tpdfield>   field;
            int     count;
    } pdbar;

@@ -182,21 +182,6 @@ extern const char*  cvehiclefunctions[];
         //! The category of the unit. Original used only to distinguish only between different movement costs for a field, this categorization is now used for many more things. \see cmovemalitypes
         int          movemalustyp;
 
-        //@{
-        //! the system of classes for a unit is not used any more
-        char         classnum;         /* Anzahl der Klassen, max 8, min 0 ;  Der EINZIGE Unterschied zwischen 0 und 1 ist der NAME ! */
-        ASCString    classnames[8];    /* Name der einzelnen Klassen */
-
-        struct tclassbound {
-         word         weapstrength[8];
-         word         armor;
-         word         techlevel;             //  Techlevel ist eine ALTERNATIVE zu ( techrequired und envetrequired )
-         word         techrequired[4];
-         char         eventrequired;
-         int          vehiclefunctions;
-       } classbound[8];    /* untergrenze (minimum), die zum erreichen dieser Klasse notwendig ist, classbound[0] gilt fuer vehicletype allgemein*/
-      //@}
-
         //! the maximum speed of the wind that the unit can survive when on open water without sinking
         int          maxwindspeedonwater;
 

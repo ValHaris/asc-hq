@@ -786,32 +786,6 @@ int tmap :: eventpassed( int saveas, int action, int mapid )
 
 int tmap :: eventpassed( int id, int mapid )
 {
-/*
-  pevent       ev2;
-  peventstore  oldevent;
-  char      b;
-  word         i;
-
-   b = false;
-   if ( !mapid ) {
-      ev2 = firsteventpassed;
-      while (ev2 != NULL) {
-         if (ev2->id == id)
-            return 1;
-         ev2 = ev2->next;
-      }
-   }
-
-   if (b == false) {
-      oldevent = oldevents;
-      while ( oldevent ) {
-         if (oldevent->num > 0)
-            for (i = 0; i < oldevent->num ; i++)
-               if (oldevent->eventid[i] == id && oldevent->mapid[i] == mapid )
-                  return 1;
-      }
-   }
-   */
    return 0;
 }
 

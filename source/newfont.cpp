@@ -87,7 +87,7 @@ pfont        loadfont(char *       filename)
    char *p;
    void         *q;
    int      ll, ll2;
-   word*         pg;
+   Uint16*         pg;
 
 
    fp = fopen(filename, filereadmode );
@@ -142,7 +142,7 @@ pfont        loadfont(char *       filename)
             seek(fp,font1->character[i].diskposition); 
             blockread(fp,q,font1->character[i].size + 2);
          } 
-         pg = (word*) q;
+         pg = (Uint16*) q;
          if (*pg != font1->character[i].size) {
             printf("invalid size of character %c\n",i);
          } /* endif */
@@ -151,7 +151,7 @@ pfont        loadfont(char *       filename)
         if (i == 32) {
            ll = font1->height * ( font1->character[spacewidthkey].width - 2 );
            p = new char [ ll+2 ];
-           pg = (word*) p;
+           pg = (Uint16*) p;
            memset(p,0,ll+2);
            *pg = font1->character[spacewidthkey].width - 2;
            font1->character[i].width = font1->character[spacewidthkey].width - 2;
@@ -197,7 +197,7 @@ pfont        loadfont( pnstream stream )
    char *p;
    void         *q;
    int      ll, ll2;
-   word*         pg;
+   Uint16*         pg;
    int i;
 
    font1 = new toldfont;
@@ -227,7 +227,7 @@ pfont        loadfont( pnstream stream )
          } else 
             stream->readdata ( q, font1->character[i].size + 2 );
           
-         pg = (word*) q;
+         pg = (Uint16*) q;
          if (*pg != font1->character[i].size) {
             printf("invalid size of character %c\n",i);
          } /* endif */
@@ -236,7 +236,7 @@ pfont        loadfont( pnstream stream )
         if (i == 32) {
            ll = font1->height * ( font1->character[spacewidthkey].width - 2 );
            p = new char [ ll+2 ];
-           pg = (word*) p;
+           pg = (Uint16*) p;
            memset(p,0,ll+2);
            *pg = font1->character[spacewidthkey].width - 2;
            font1->character[i].width = font1->character[spacewidthkey].width - 2;
@@ -326,14 +326,14 @@ int gettextwdth ( const char* txt, pfont font )
 
 
 void         showtext3( const char *       txt,
-                       word         xpos,
-                       word         ypos)
+                       int         xpos,
+                       int         ypos)
 {
    // collategraphicoperations cgo ( xpos, ypos, max ( activefontsettings.height, activefontsettings->font.height ),;
 
     char         *s, *s2, *s3;
     int         i, j,k;
-    word         newx; 
+    int         newx; 
     signed char  cnt;
     int         orgjus; 
 
@@ -417,13 +417,13 @@ void         showtext3( const char *       txt,
 
 
 void         showtext3c( const char *       txt,
-                       word         xpos,
-                       word         ypos)
+                       int         xpos,
+                       int         ypos)
 {
    // collategraphicoperations cgo;
 
     int         i, j,k;
-    word         newx; 
+    int         newx;
     int          cnt;
     int         orgjus; 
 

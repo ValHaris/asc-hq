@@ -894,7 +894,7 @@ void         tnewcampaignlevel::searchmapinfo(void)
           // int desclen = strlen ( description.buf ) + 7;
           strncpy ( dateiinfo, description.buf, sizeof ( dateiinfo ) -2  );
 
-          word w = spfldloader.stream->readWord();
+          int w = spfldloader.stream->readWord();
 
           if ( w != fileterminator )
              throw tinvalidversion ( filename.c_str(), w, fileterminator );
@@ -929,7 +929,7 @@ void         tnewcampaignlevel::searchmapinfo(void)
 }
 
 
-void         tnewcampaignlevel::showmapinfo(word         ypos)
+void         tnewcampaignlevel::showmapinfo( int ypos)
 {
 
    activefontsettings.font = schriften.smallarial;
@@ -1024,13 +1024,13 @@ void         tnewcampaignlevel::done (void)
    tdialogbox::done();
 }
 
-void         tcontinuecampaign::setid(word         id)
+void         tcontinuecampaign::setid( int id)
 {
    idsearched = id;
 }
 
 
-void         tcontinuecampaign::showmapinfo(word         ypos)
+void         tcontinuecampaign::showmapinfo( int ypos)
 {
    collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + xsize );
    tnewcampaignlevel::showmapinfo(ypos);
@@ -1278,7 +1278,7 @@ void         tchoosenewmap::readmapinfo(void)
        // int desclen = strlen ( description.buf ) + 7;
        strncpy ( dateiinfo, description.buf, sizeof ( dateiinfo) - 2  );
 
-       word w = spfldloader.stream->readWord();
+       int w = spfldloader.stream->readWord();
 
        if ( w != fileterminator )
           throw tinvalidversion ( mapname, w, fileterminator );

@@ -2,9 +2,17 @@
     \brief Interface for all the dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.h,v 1.26 2004-05-20 14:01:09 mbickel Exp $
+//     $Id: dialog.h,v 1.27 2004-07-12 18:15:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2004/05/20 14:01:09  mbickel
+//      Many bugfixes and new features, among them:
+//        - Container.FillUnitsAutomatically = 2
+//        - generate Tech Tree
+//        - show research info
+//        - edit research in mapeditor
+//        - limit production to units that can leave a building
+//
 //     Revision 1.25  2003/07/06 15:10:26  mbickel
 //      Better configure messages
 //      code cleanup
@@ -103,7 +111,7 @@ const int dbluedark = 248;
 */
 extern void   fileselectsvga( const ASCString& ext, ASCString& filename, bool load );
 
-extern void  startnextcampaignmap(word         id);
+extern void  startnextcampaignmap( int id);
 
 extern void  setupalliances( int supervisor = 0 );
 

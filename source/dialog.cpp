@@ -63,10 +63,7 @@
 
 
 
-void         doubleline(word         x1,
-                        word         y1,
-                        word         x2,
-                        word         y2)
+void         doubleline(int x1, int y1, int x2, int y2)
 { 
    line(x1,y1,x2,y2,white);          
    line(x1 + 1,y1 + 1,x2 + 1,y2 + 1,dbluedark); 
@@ -75,7 +72,7 @@ void         doubleline(word         x1,
 
 class  tstatistics : public tdialogbox {
               public:
-                   word         linelength;
+                   int          linelength;
                    char         categories;
                    int          l[3][4];
                    int          m[3][9];
@@ -475,7 +472,7 @@ class  tvehicleinfo : public tdialogbox , public tviewtextwithscrolling {
                    pvehicletype aktvehicle;
                    signed char  markweap;
                    char         backgrnd2;
-                   word         wepx, wepy;
+                   int          wepx, wepy;
                    char         category;
                    char         action;
                    integer      i,j;
@@ -520,7 +517,7 @@ void         tweaponinfo::init( pvehicletype eht, char num  )
 
 void         tweaponinfo::run(void)
 { 
-  word         i;
+  int          i;
   integer      xa, ya; 
   char*        strng;
   char*        strng2;
@@ -1398,6 +1395,7 @@ void         tvehicleinfo::showclasses( void )
 
   int i, j;
 
+  #if 0
    if ( aktvehicle->classnum) {
       if (category == 10)
          paintsurface ( 40, starty + 60, 170, starty + 80);
@@ -1435,6 +1433,7 @@ void         tvehicleinfo::showclasses( void )
 
       category = 9;
    } else
+   #endif
      if (category != 10) {
         paintsurface( 20, starty + 55, xsize - 20, ysize - 65);
         activefontsettings.length = 0;
@@ -2892,7 +2891,7 @@ void tbasicshowmap::generatemap_var ( void )
       buffer = new unsigned char [ size + 1000 ] ;
    }
 
-   word* k = (word*) buffer;
+   Uint16* k = (Uint16*) buffer;
    *k = mxsize - 1;
    k++;
    *k = mysize - 1;
@@ -3107,7 +3106,7 @@ void tbasicshowmap::dispimage ( void )
 
 void tbasicshowmap :: saveimage ( void )
 {
-   word* pw = (word*) buffer;
+   Uint16* pw = (Uint16*) buffer;
    int width = pw[0] + 1;
    int height = pw[1] + 1;
 
@@ -5158,7 +5157,7 @@ class   tgameparamsel : public tstringselect {
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
-                 virtual void get_text(word nr);
+                 virtual void get_text( int nr);
                  };
 
 void         tgameparamsel ::setup(void)
@@ -5204,7 +5203,7 @@ void         tgameparamsel ::buttonpressed(int         id)
 }
 
 
-void         tgameparamsel ::get_text(word nr)
+void         tgameparamsel ::get_text( int nr)
 {
    strcpy(txt,gameparametername[nr] );
    strcat(txt, " (" );

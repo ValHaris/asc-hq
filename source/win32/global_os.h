@@ -1,6 +1,10 @@
-//     $Id: global_os.h,v 1.4 2000-11-26 14:39:04 mbickel Exp $
+//     $Id: global_os.h,v 1.5 2004-07-12 18:15:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/11/26 14:39:04  mbickel
+//      Added Project Files for Borland C++
+//      Some modifications to compile source with BCC
+//
 //     Revision 1.3  2000/10/17 13:04:16  mbickel
 //      New terrainaccess reading/writing
 //      Added Win32 project files
@@ -41,11 +45,15 @@
 #ifdef __BORLANDC__
  #include "win32\borland\global_os.h"
 #else
- #ifdef __WATCOMC__
-  #include "watcom/global_os.h"
+ #ifdef __GNUG__
+  #include "gcc/global_os.h"
  #else
-  #ifdef _MSC_VER
-   #include "msvc/global_os.h"
+  #ifdef __WATCOMC__
+   #include "watcom/global_os.h"
+  #else
+   #ifdef _MSC_VER
+    #include "msvc/global_os.h"
+   #endif
   #endif
  #endif
 #endif

@@ -147,7 +147,7 @@ class  tfield {
     char         fuel, material;
 
     //! can this field be seen be the player. Variable is bitmapped; two bits for each player. These two bits can have the states defined in ::VisibilityStates
-    Word         visible;
+    Uint16       visible;
 
     //! in the old octagonal version of ASC it was possible to rotate the terraintype; this is not used in the hexagonal version any more
     char         direction;
@@ -164,7 +164,7 @@ class  tfield {
         char         temp;
         char         temp2;
       }a;
-      word tempw;
+      Uint16 tempw;
     };
     int          temp3;
     int          temp4;
@@ -315,10 +315,10 @@ class tmap {
 
       struct Campaign {
           //! an identification for identifying a map in the chain of maps that make up a campaign
-          Word         id;
+          int         id;
 
           //! the id of the previous map in the campaign. This is only used as a fallback mechanism if the event based chaining fails. It will probably be discared sooner or later
-          word         prevmap;   
+          int         prevmap;   
 
           //! a campaign is usually designed to be played by a specific player
           unsigned char         player;   

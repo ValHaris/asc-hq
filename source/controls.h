@@ -4,7 +4,7 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.54 2004-05-23 12:54:28 mbickel Exp $
+//     $Id: controls.h,v 1.55 2004-07-12 18:15:04 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -55,7 +55,7 @@
                                                                              130: external loading
                                                                    */
 
-                        word         movesx, movesy, moveerr; 
+                        int           movesx, movesy, moveerr; 
                         pvehicle     vehicletomove;
                         int          newheight; 
                         int          oldheight; 

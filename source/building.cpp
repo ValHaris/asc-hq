@@ -2098,7 +2098,7 @@ int    ccontainer :: getfieldundermouse ( int* x, int* y )
 
             int xd = mouseparams.x - xp;
             int yd = mouseparams.y - yp;
-            short unsigned int* pw = (word*) icons.fieldshape;
+            Uint16* pw = (Uint16*) icons.fieldshape;
             unsigned char* pc = (unsigned char*) icons.fieldshape;
             pc+=4;
 

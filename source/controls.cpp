@@ -124,7 +124,7 @@ int searchexternaltransferfields ( pbuilding bld )
                                 pbuildingtype        bld;
                                 char                    numberoffields;
                                 pfield                   startfield;
-                                void                    initputbuilding( word x, word y, pbuildingtype building );
+                                void                    initputbuilding( int x, int y, pbuildingtype building );
                                 virtual void            testfield ( const MapCoordinate& mc );
                                 tsearchputbuildingfields ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
                              };
@@ -142,7 +142,7 @@ int searchexternaltransferfields ( pbuilding bld )
 
 
 
-void         tsearchputbuildingfields::initputbuilding( word x, word y, pbuildingtype building )
+void         tsearchputbuildingfields::initputbuilding( int x, int y, pbuildingtype building )
 {
    pvehicle eht = getfield(x,y)->vehicle;
 
@@ -726,7 +726,7 @@ void build_objects_reset( void )
                        pobjectcontainers_buildable_on_field obj;
                 public:
                        pvehicle         actvehicle;
-                       word             numberoffields;
+                       int              numberoffields;
 
                        virtual void     testfield ( const MapCoordinate& mc );
                        void             initbs ( void );
@@ -841,7 +841,7 @@ void         tbuildstreet::run(void)
 class SearchVehicleConstructionFields : public SearchFields {
                        pvehicle         actvehicle;
                 public:
-                       word             numberoffields;
+                       int             numberoffields;
 
                        virtual void     testfield ( const MapCoordinate& mc );
                        void             initbs ( void );

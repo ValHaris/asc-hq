@@ -24,7 +24,7 @@
 
 #include <cstring>
 #include <stdlib.h>
-#include <malloc.h>
+#include <cstdlib>
 #include <ctype.h>
 
 #include "tpascal.inc"

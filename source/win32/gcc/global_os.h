@@ -1,15 +1,6 @@
-//     $Id: fileio.h,v 1.4 2004-07-12 18:15:10 mbickel Exp $
+//     $Id: global_os.h,v 1.1 2004-07-12 18:15:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
-//     Revision 1.3  2003/11/21 19:25:44  mbickel
-//      Fixed: invisible own units when directview disabled
-//
-//     Revision 1.2  2000/10/14 10:52:56  mbickel
-//      Some adjustments for a Win32 port
-//
-//     Revision 1.1  2000/10/12 20:21:43  mbickel
-//      Restructuring operating system dependant files
-//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -31,23 +22,25 @@
     Boston, MA  02111-1307  USA
 */
 
-// this file takes care that the necessary header files for opendir / readdir
-// are being included in basestrm.cpp
+#ifndef global_os_h_included
+ #define global_os_h_included
 
-#ifdef __BORLANDC__
- #include "borland/fileio.h"
-#else
- #ifdef __GNUG__
-  #include "gcc/fileio.h"
- #else
-  #ifdef __WATCOM_CPLUSPLUS__
-   #include "watcom/fileio.h"
-  #else
-   #ifdef _MSC_VER
-    #include "msvc/fileio.h"
-   #endif
+  #ifndef minimalIO
+   // #define sdlheader "SDL.h"
+   // #define sdlmixerheader "SDL_mixer.h"
+   // #include sdlheader
   #endif
- #endif
-#endif
+//   #include <string>  // some Standard library include file to define the namespace std
+  using namespace std;
+  #define HAVE_STRICMP
+  #define HAVE_ITOA
+  #define HAVE_DIRENT_H
+  #define HAVE_STDIO_H
+  #define StaticClassVariable
+  #define NoStdio
 
- extern const bool has_drive_letters;
+ #define CASE_SENSITIVE_FILE_NAMES 0
+ #define USE_HOME_DIRECTORY 0
+
+
+#endif

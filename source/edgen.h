@@ -2,9 +2,15 @@
     \brief Interface for the random map generator
 */
 
-//     $Id: edgen.h,v 1.7 2001-01-28 14:04:13 mbickel Exp $
+//     $Id: edgen.h,v 1.8 2004-07-12 18:15:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2001/01/28 14:04:13  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.6  2000/12/23 13:19:46  mbickel
 //      Made ASC compileable with Borland C++ Builder
 //
@@ -80,14 +86,14 @@
 
 
 struct tmemoryblock {
-   word *mempointer;
-   word maxset,actpres;
-   word res;
-   word color[maxtilevals+1];
-   word tileval[maxtilevals];
+   int *mempointer;
+   int maxset,actpres;
+   int res;
+   int color[maxtilevals+1];
+   int tileval[maxtilevals];
    char bordername[maxtilevals][20];
    char generated;
-   word startblocksize;
+   int startblocksize;
    pascal_byte tilevalcount,acttile;
    };
 
@@ -95,22 +101,22 @@ typedef tmemoryblock *pmemoryblock;
 
 class tplasma {
     public :
-        word maxx,maxy,maxvalue;
+        int maxx,maxy,maxvalue;
         char flip;
         int blockcount;
         pmemoryblock memblock;
         tplasma(void);
-        void membar(word x1 ,word y1 ,word x2 ,word y2, word color );
-        word getmem(word x, word y);
+        void membar(int x1 ,int y1 ,int x2 ,int y2, int color );
+        int getmem(int x, int y);
         int creatememblock(void);
-        void setmemory(word x, word y, word color);
-        /*void preview(word sx, word sy,word barsize);
-        void process(word sx, word sy,word barsize);*/
+        void setmemory(int x, int y, int color);
+        /*void preview(int sx, int sy,int barsize);
+        void process(int sx, int sy,int barsize);*/
         void generateplasma(char resettile);
 
         int xsymm, ysymm;
    };
 
 
-extern word random(word max);
+extern int random(int max);
 extern int mapgenerator(void);

@@ -57,13 +57,13 @@
  
 */
 
-#include "global_os.h"
+#include "global.h"
 
 #include <stdio.h>
 #include <cstring>
 #include <stdlib.h>
 #include <new>
-#include <malloc.h>
+#include <cstdlib>
 #include <ctype.h>
 #include <signal.h>
 #include <algorithm>

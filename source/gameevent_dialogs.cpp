@@ -185,17 +185,6 @@ void         tgetxy::buttonpressed(int         id)
    } 
 } 
 
-void         getxy(word *x,word *y)
-{ tgetxy       ce;
-
-   ce.x = *x ; 
-   ce.y = *y ; 
-   ce.init(); 
-   ce.run(); 
-   *x = ce.x; 
-   *y = ce.y; 
-   ce.done(); 
-} 
 
 void         getxy( int *x, int *y)
 { tgetxy       ce;
@@ -366,7 +355,7 @@ void         tshowtechnology::showtec(void)
 { 
    const char         *wort1, *wort2;
    const char         *pc, *w2;
-   word         xp, yp, w;
+   int          xp, yp, w;
 
    activefontsettings.font = schriften.large; 
    activefontsettings.justify = centertext;

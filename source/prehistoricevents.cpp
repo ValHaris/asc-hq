@@ -164,7 +164,7 @@ extern const char*  ceventtrigger[];
    class PrehistoricEventStructure {
      public:
        union {
-         struct {  word         saveas; char action, num;  }a;  /*  CEventActions  */
+         struct {  Uint16         saveas; char action, num;  }a;  /*  CEventActions  */
          int      id;               /* Id-Nr      ==> Technology.Requireevent; Tevent.trigger; etc.  */
        } ;
 
@@ -182,7 +182,7 @@ extern const char*  ceventtrigger[];
        int          datasize;
        pevent       next;
        int          conn;   // wird nur im Spiel gebraucht, BIt 0 gibt an, das andere events abh"nging sind von diesem
-       word         trigger[4];   /*  CEventReason  */
+       Uint16       trigger[4];   /*  CEventReason  */
 
        class  LargeTriggerData {
          public:

@@ -1,6 +1,14 @@
-//     $Id: newfont.h,v 1.12 2004-05-20 14:01:10 mbickel Exp $
+//     $Id: newfont.h,v 1.13 2004-07-12 18:15:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2004/05/20 14:01:10  mbickel
+//      Many bugfixes and new features, among them:
+//        - Container.FillUnitsAutomatically = 2
+//        - generate Tech Tree
+//        - show research info
+//        - edit research in mapeditor
+//        - limit production to units that can leave a building
+//
 //     Revision 1.11  2001/12/14 10:20:05  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -83,7 +91,7 @@ typedef char charr[49];
 
 struct  toldcharacter {
            char    width;
-           word    size;
+           Uint16  size;
            int     diskposition;
            char*   memposition;
            char    dummy;
@@ -103,7 +111,7 @@ struct toldfont {
          integer          height;
          tkernchartable   kernchartable;
          tkerning         kerning;
-         word             dummy;
+         Uint16           dummy;
          char             useems;
          char             caps;
          dacpalette256*   palette;
@@ -113,8 +121,8 @@ struct toldfont {
 
 
 struct  tcharacter {
-           word    width;
-           word    size;
+           Uint16  width;
+           Uint16  size;
            char*   memposition;
         };
 
@@ -142,7 +150,7 @@ struct tfontsettings {
          char    background;
          char    markcolor;
          char colorfont;
-         word    length;
+         Uint16  length;
          char    direction;
          char    justify;
          signed char italic;
@@ -169,12 +177,8 @@ extern void showtext4 ( const char* TextToOutput, int x1, int y1, ... );
 extern void showtext4c ( const char* TextToOutput, int x1, int y1, ... );
 
 
-extern void         showtext3( const char *       txt,
-                       word         xpos,
-                       word         ypos);
-extern void         showtext3c( const char *       txt,
-                       word         xpos,
-                       word         ypos);
+extern void         showtext3( const char *       txt, int xpos, int  ypos);
+extern void         showtext3c( const char *       txt, int xpos, int ypos);
 
 extern int gettextwdth ( const char* txt, pfont font );
 extern void shrinkfont ( pfont font, int diff );

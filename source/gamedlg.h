@@ -1,6 +1,10 @@
-//     $Id: gamedlg.h,v 1.23 2004-01-25 19:44:16 mbickel Exp $
+//     $Id: gamedlg.h,v 1.24 2004-07-12 18:15:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2004/01/25 19:44:16  mbickel
+//      Many, many bugfixes
+//      Removed #pragma pack whereever possible
+//
 //     Revision 1.22  2004/01/16 15:33:46  mbickel
 //     Completely rewritten game event system
 //     TPWM-decoding-Patch
@@ -134,20 +138,20 @@ class   tnewcampaignlevel : public tdialogbox {
                          void           searchmapinfo ( void );
                          virtual void   evaluatemapinfo( const char* srname, tmap* spfld ) = 0;
                          void           loadcampaignmap ( void );
-                         void           showmapinfo( word ypos );
+                         void           showmapinfo( int ypos );
                          void           done ( void );
                      };
 
 class  tcontinuecampaign : public tnewcampaignlevel {
-                         word           idsearched;
+                         int           idsearched;
                          tmemorystreambuf memoryStreamBuffer;
                          Player::DissectionContainer dissectedunits[8];
                     public:
                          void           init ( void );
                          virtual void   evaluatemapinfo( const char* srname, tmap* spfld );
-                         void           showmapinfo( word ypos );
+                         void           showmapinfo( int ypos );
                          virtual void   run ( void );
-                         void           setid( word id );
+                         void           setid( int id );
                          virtual void   buttonpressed( int id );
                          void           regroupevents ( pmap map );
                       };

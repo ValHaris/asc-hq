@@ -24,7 +24,7 @@
 
 #include <stdio.h> 
 #include <ctype.h>
-#include <malloc.h>
+#include <cstdlib>
 #include <stdlib.h>
 #include <string>
 #include <list>
@@ -89,10 +89,6 @@ const char* BZIP_SIGNATURE = "MBZLB2X!";
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////        Watchpointer
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#ifndef word
-typedef unsigned short int word;
-#endif
 
 CharBuf :: CharBuf ( void )
          {
@@ -235,7 +231,7 @@ void tnstream :: writerlepict ( const void* buf )
       writedata ( tempbuf, size );
       delete[] tempbuf;
    } else {
-      word* pw = (word*) buf;
+      Uint16* pw = (Uint16*) buf;
       writedata ( buf, ( pw[0] + 1 ) * ( pw[1] + 1 ) + 4 );
    }
 }
@@ -258,9 +254,9 @@ int  tnstream::readInt  ( void )
    return SDL_SwapLE32( i );
 }
 
-word tnstream::readWord ( void )
+int tnstream::readWord ( void )
 {
-   word w;
+   Uint16 w;
    readdata2 ( w );
    return SDL_SwapLE16( w );
 }
@@ -272,12 +268,28 @@ char tnstream::readChar ( void )
    return c;
 }
 
+float SwapFloat( float f )
+{
+  union
+  {
+    float f;
+    unsigned char b[4];
+  } dat1, dat2;
+
+  dat1.f = f;
+  dat2.b[0] = dat1.b[3];
+  dat2.b[1] = dat1.b[2];
+  dat2.b[2] = dat1.b[1];
+  dat2.b[3] = dat1.b[0];
+  return dat2.f;
+}
+
 float tnstream::readFloat ( void )
 {
    float c;
    readdata2 ( c );
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    c = SwapFloat(c);
+   c = SwapFloat(c);
 #endif
    return c;
 }
@@ -290,10 +302,10 @@ void tnstream::writeInt  ( int i )
    writedata2 ( i );
 }
 
-void tnstream::writeWord ( word w )
+void tnstream::writeWord ( int w )
 {
-   w = SDL_SwapLE16(w);
-   writedata2 ( w );
+   Uint16 w2 = SDL_SwapLE16( Uint16(w) );
+   writedata2 ( w2 );
 }
 
 void tnstream::writeChar ( char c )
@@ -1496,10 +1508,10 @@ int    compressrle ( const void* p, void* q)
 
    trleheader* header = (trleheader*) q;
 
-   word x,y;
+   Uint16 x,y;
    int size;
    {
-      word* pw = (word*) s;
+      Uint16* pw = (Uint16*) s;
       x = pw[0];
       y = pw[1];
 

@@ -1,6 +1,6 @@
 #include <cstdio>
 #include <string.h>
-#include <malloc.h>
+#include <cstdlib>
 #include <stdlib.h>
 #include <map>
 

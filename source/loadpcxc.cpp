@@ -40,16 +40,16 @@ typedef struct tpcxheader{
            char     version     ;
            char     encoding    ;
            char     bitsperpixel;
-           word     xmin,ymin   ;
-           word     xmax,ymax   ;
-           word     hdpi,vdpi   ;
+           Uint16     xmin,ymin   ;
+           Uint16     xmax,ymax   ;
+           Uint16     hdpi,vdpi   ;
            char     colormap[48];
            char     reserved    ;
            char     nplanes     ;
-           word     bytesperline;
-           word     paletteinfo ;
-           word     hscreensize ;
-           word     vscreensize ;
+           Uint16     bytesperline;
+           Uint16     paletteinfo ;
+           Uint16     hscreensize ;
+           Uint16     vscreensize ;
            char     dummy[50]   ;
            int      size;            // patch to be able to read pcx files without seeking
        }tpcxheader;

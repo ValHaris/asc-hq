@@ -3,9 +3,27 @@
 */
 
 
-//     $Id: edevents.h,v 1.9 2004-01-16 15:33:46 mbickel Exp $
+//     $Id: edevents.h,v 1.10 2004-07-12 18:15:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2004/01/16 15:33:46  mbickel
+//     Completely rewritten game event system
+//     TPWM-decoding-Patch
+//     Fixed: swallog message: wrong coordinates
+//     Autotraining for units with max ammo only
+//     Movement required for clearing mines
+//     Unit names can be edited
+//     weather dependen object properties
+//     Unit swallowed by ground -> unified message
+//     units cannot enter enemy transports
+//     Building entry has constant movemalus
+//     Message for resource transfer for providing player
+//     increased ammo production cost
+//     Fixed: unit could attack after movement (with RF on) although "no attack after move" property was set
+//     Buildings: new properties: "ExternalResourceTransfer", "ExternalAmmoTransfer"
+//     Container: Movemalus override for unloading
+//     Startup map specified in ASC.INI
+//
 //     Revision 1.8  2003/04/23 18:31:09  mbickel
 //      Fixed: AI problems
 //      Improved cheating detection in replay
@@ -72,7 +90,6 @@
  extern void         event(void);
  extern void         setmapparameters( void );
 
- extern void         getxy(word *x,word *y);
  extern void         getxy( int *x, int *y);
 
 #endif

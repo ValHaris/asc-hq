@@ -96,7 +96,7 @@ using std::string;
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-    #ifdef _UNICODE
+    #ifdef ASC_UNICODE
 
         typedef wstring     ASCCharTString;
         typedef string      ASCAdaptatorString;
@@ -107,7 +107,7 @@ using std::string;
             #error "_T macro already defined."
         #endif
 
-    #else // _UNICODE
+    #else // ASC_UNICODE
 
         typedef string       ASCCharTString;
 
@@ -203,7 +203,7 @@ inline size_t ASCStringHelpers::_Strlen ( const charT* pS )
 {
     assert ( pS != NULL );
 
-    #ifdef _UNICODE
+    #ifdef ASC_UNICODE
         return ::wcslen ( pS );
     #else
         return ::strlen ( pS );
@@ -229,7 +229,7 @@ inline ASCStringHelpers::charT* ASCStringHelpers::_Strcpy ( charT* pDest, const 
     assert ( pSrc  != NULL );
     assert ( pDest != NULL );
 
-    #ifdef _UNICODE
+    #ifdef ASC_UNICODE
         return ::wcscpy ( pDest, pSrc );
     #else
         return ::strcpy ( pDest, pSrc );
@@ -254,7 +254,7 @@ inline ASCStringHelpers::charT* ASCStringHelpers::_Strlwr ( charT* pS )
 
 #ifndef _UNIX_
 
-    #ifdef _UNICODE
+    #ifdef ASC_UNICODE
         return ::_wcslwr ( pS );
     #else
         return :: strlwr ( pS );
@@ -266,7 +266,7 @@ inline ASCStringHelpers::charT* ASCStringHelpers::_Strlwr ( charT* pS )
 
     while ( *pTemp != _T( '\0' ) )
     {
-        #ifdef _UNICODE
+        #ifdef ASC_UNICODE
             *pTemp = towlower ( *pTemp );
         #else
             *pTemp = tolower  ( *pTemp );
@@ -298,7 +298,7 @@ inline ASCStringHelpers::charT* ASCStringHelpers::_Strupr ( charT* pS )
 
 #ifndef _UNIX_
 
-    #ifdef _UNICODE
+    #ifdef ASC_UNICODE
         return ::_wcsupr ( pS );
     #else
         return :: strupr ( pS );
@@ -310,7 +310,7 @@ inline ASCStringHelpers::charT* ASCStringHelpers::_Strupr ( charT* pS )
 
     while ( *pTemp != _T( '\0' ) )
     {
-        #ifdef _UNICODE
+        #ifdef ASC_UNICODE
             *pTemp = towupper ( *pTemp );
         #else
             *pTemp = toupper  ( *pTemp );
@@ -350,7 +350,7 @@ inline int ASCStringHelpers::_Stricmp ( const charT* pS1, const charT* pS2 )
 
 #ifndef _UNIX_
 
-    #ifdef _UNICODE
+    #ifdef ASC_UNICODE
         return ::wcsicmp ( pS1, pS2 );
     #else
         return ::stricmp ( pS1, pS2 );
@@ -358,7 +358,7 @@ inline int ASCStringHelpers::_Stricmp ( const charT* pS1, const charT* pS2 )
 
 #else // _UNIX_
 
-    #ifdef _UNICODE
+    #ifdef ASC_UNICODE
         // auto_ptr will release the memorey if an exception is raised
         auto_ptr< charT > l_autopS1 ( new charT [ _Strlen ( pS1 ) + sizeof ( charT ) ] );
         auto_ptr< charT > l_autopS2 ( new charT [ _Strlen ( pS2 ) + sizeof ( charT ) ] );
@@ -409,7 +409,7 @@ inline int ASCStringHelpers::_Vsnprintf ( charT* buffer, size_t count, const cha
     #define vsnprintf   _vsnprintf
 #endif
 
-    #ifdef _UNICODE
+    #ifdef ASC_UNICODE
         return ::vsnwprintf ( buffer, count, format, argptr );
     #else
         return ::vsnprintf ( buffer, count, format, argptr );
@@ -439,7 +439,7 @@ inline int ASCStringHelpers::_Printf ( const charT* format, ... )
 
     int nRes = 0;
 
-    #ifdef _UNICODE
+    #ifdef ASC_UNICODE
         nRes = ::wprintf ( format, argptr );
     #else
         nRes = ::printf ( format, argptr );
@@ -468,7 +468,7 @@ inline size_t ASCStringHelpers::_ConvertToCharT ( charT* pDest, const NoncharT* 
     assert ( pDest != NULL );
     assert ( pSrc  != NULL );
 
-    #ifdef _UNICODE
+    #ifdef ASC_UNICODE
         return ::mbstowcs( pDest, pSrc, count );
     #else
         return std::wcstombs( pDest, pSrc, count );

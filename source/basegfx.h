@@ -73,11 +73,11 @@ struct  tgraphmodeparameters {
 
 
 struct trleheader {
-   word id;
-   word size;
+   Uint16 id;
+   Uint16 size;
    pascal_byte rle;
-   word x;
-   word y;
+   Uint16 x;
+   Uint16 y;
 };
 
 const int black = 0;

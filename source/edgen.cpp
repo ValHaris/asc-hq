@@ -2,9 +2,12 @@
     \brief The random map generator
 */
 
-//     $Id: edgen.cpp,v 1.19 2004-05-12 20:05:52 mbickel Exp $
+//     $Id: edgen.cpp,v 1.20 2004-07-12 18:15:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2004/05/12 20:05:52  mbickel
+//      Restructured file loading routines for upcoming data cache
+//
 //     Revision 1.18  2002/04/21 21:27:00  mbickel
 //      Mapeditor: Fixed crash in "Put Resources"
 //      Updating the small map after AI
@@ -119,7 +122,7 @@
                void showmap(void);
                void generatefinishmap(void); // Bodensch„tze werden nicht draufmontiert, damit keine Farbverf„lschung
                void montlayer(int layer);
-               void showmontlayer(word sx, word sy, word barsize);
+               void showmontlayer( int sx, int sy, int barsize);
                void setpfield(int number);
                void setmaterial(int number);
                void setfuel(int number);
@@ -136,7 +139,7 @@
                int layer,actlayer;
                int barsize,maxbarsize;
                int whereland;
-               word tileval,res,pres,overwritecolorcount;
+               int tileval,res,pres,overwritecolorcount;
                tplasma plasma;
                pmemoryblock mblocks[ layercount ];
                pterraintype btyp[numofbdts];
@@ -149,7 +152,7 @@ const char* clayer[layercount]  = {"Land", "Forest", "Desert","Material","Fuel"}
 
 void         tmapgenerator::init(void)
 { 
-  word         w;
+  int w;
   char          s1[100],s2[100];
 
    tdialogbox::init();
@@ -347,11 +350,11 @@ void membar(word x1 ,word y1 ,word x2 ,word y2, word color )
 }*/
 
 
-void tmapgenerator::showmontlayer(word sx, word sy, word barsize)
+void tmapgenerator::showmontlayer(int sx, int sy, int barsize)
 {
    int i;
 
-   word prevx,prevy;
+   int prevx,prevy;
  
    //prevx = x1 + 15;
    //prevy = y1 + 45;
@@ -977,7 +980,7 @@ int tplasma::creatememblock(void)
 
    blockcount = maxx * maxy;
  
-   memblock->mempointer = (word * ) new ( word [ blockcount ]);
+   memblock->mempointer = new int[ blockcount ];
    return 0;
 }
 
@@ -1085,7 +1088,7 @@ void tplasma::process(word sx, word sy,word barsize)
    } while (ch != ct_esc ); 
 }*/
 
-word tplasma::getmem(word x, word y)
+int tplasma::getmem(int x, int y)
 {
    if (x >= maxx ) x -= maxx;
    if (y >= maxy ) y -= maxy;
@@ -1093,26 +1096,26 @@ word tplasma::getmem(word x, word y)
 }
 
 
-void tplasma::setmemory(word x, word y,word color)
+void tplasma::setmemory(int x, int y, int color)
 {
    if (x >= maxx ) x -= maxx;
    if (y >= maxy ) y -= maxy;
    memblock->mempointer[ x + (y * maxx ) ] = color;
 }
 
-void tplasma::membar(word x1 ,word y1 ,word x2 ,word y2, word color )
-{  word exc;
+void tplasma::membar( int x1 ,int y1 ,int x2 ,int y2, int color )
+{  int exc;
    if (x1 >x2) {
       exc = x1;
       x1 = x2;
       x2 = exc;
-   } 
+   }
 
    if (y1 >y2) {
       exc = y1 ;
       y1 = y2 ;
       y2 = exc ;
-   } 
+   }
 
    for (int j=y1;j<=y2;j++ ) {
       for (int i=x1;i<=x2;i++) {
@@ -1126,15 +1129,15 @@ void tplasma::membar(word x1 ,word y1 ,word x2 ,word y2, word color )
 
 void tplasma::generateplasma(char resettile)
 {
-   word colour;
-   word sblocksize;
+   int colour;
+   int sblocksize;
 
    if (memblock->startblocksize / 2 >= maxx) memblock->startblocksize = maxx / 2;
 
-   word blocksize = memblock->startblocksize;
- 
+   int blocksize = memblock->startblocksize;
+
    blocksize /= memblock->res;
- 
+
    sblocksize = blocksize;
 
    //memset(memblock->mempointer,0,blockcount * 2);
@@ -1143,21 +1146,21 @@ void tplasma::generateplasma(char resettile)
    memblock->generated = true;
 
    if (resettile == true ) {
-      for (word i=0;i<memblock->tilevalcount;i++ ) {
+      for (int i=0;i<memblock->tilevalcount;i++ ) {
          memblock->tileval[i] = ( memblock->maxset / ( memblock->tilevalcount +1 ) ) * (i +1 );
       } /* endfor */
    } else {
-      for (word i=0;i<memblock->tilevalcount;i++ ) {
+      for (int i=0;i<memblock->tilevalcount;i++ ) {
          if (memblock->tileval[i] > memblock->maxset) memblock->tileval[i] = memblock->maxset;
       } /* endfor */
    } /* endif */
 
 
-  // ## MB 
+  // ## MB
   int maxy_local = maxy;
   #ifdef cheatsymmetry
   maxy_local /= 2;
-  #endif 
+  #endif
 
    do {
       for(register int y = 0; y < (maxy_local / blocksize) + 1; y++) {
@@ -1182,7 +1185,7 @@ void tplasma::generateplasma(char resettile)
                //colour += memblock->mempointer[ (x * blocksize ) + ((y * blocksize < 2 * blocksize ? maxy_local : y * blocksize - blocksize)  * maxx ) ];
                //colour += memblock->mempointer[ (x * blocksize < 2 * blocksize ? maxx : x * blocksize - blocksize) + ((y * blocksize) * maxx ) ];
                //colour += memblock->mempointer[ (x * blocksize) + ((y * blocksize < 2 * blocksize ? maxy_local : y * blocksize - blocksize) * maxx ) ];
-               colour /= 4; 
+               colour /= 4;
             }
             if(blocksize != 1) membar(x * blocksize, y * blocksize, x * blocksize + blocksize - 1, y * blocksize + blocksize - 1,colour);
             else setmemory(x,y,colour);
@@ -1192,15 +1195,15 @@ void tplasma::generateplasma(char resettile)
       blocksize /= 2;
    } while(blocksize > 0);
 
-  // ## MB 
+  // ## MB
    if ( ysymm )
-      for(int y = maxy/2; y < maxy; y++) 
-         for(int x = 0; x < maxx ; x++) 
+      for(int y = maxy/2; y < maxy; y++)
+         for(int x = 0; x < maxx ; x++)
             setmemory(x , y, getmem ( x, maxy-y ));
 
    if ( xsymm )
-      for(int x = maxx/2; x < maxx ; x++) 
-         for(int y = 0; y < maxy; y++) 
+      for(int x = maxx/2; x < maxx ; x++)
+         for(int y = 0; y < maxy; y++)
             setmemory(x , y, getmem ( maxx-x, y ));
 
 

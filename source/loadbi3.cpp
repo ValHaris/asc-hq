@@ -432,24 +432,24 @@ class tloadBImap {
          int MapPos ;
          int ShopPos;
          int ACTNPos;
-         word DFNum ;
+         Uint16 DFNum ;
          int DFPos[32] ;                     // { Pos nach DFXX }
          int DFLength[32];                   // { +4B von DFXX }
        };
 
        struct TACTN {
          char ID[4];
-         word XSize, YSize;
+         Uint16 XSize, YSize;
        };
 
-       typedef word TStdProdRec[64];
+       typedef Uint16 TStdProdRec[64];
        typedef char TAllianzen[6];
 
 
        struct TMISSPart {
            char ID[4];
-           word Stuff1 [3];
-           word NextMiss;
+           Uint16 Stuff1 [3];
+           Uint16 NextMiss;
            char StartWeather;
            char WhoPlays;           // { jeder Mensch/Computer ein Bit }
            char PlayType;           // { jeder Computer ein Bit }
@@ -457,9 +457,9 @@ class tloadBImap {
            char Stuff2[3];
            char Landscape;
            TAllianzen Allianz;      // { Wer mit wem }
-           word Stuff3[65];
+           Uint16 Stuff3[65];
            TStdProdRec StdProd;
-           word Stuff4[24];
+           Uint16 Stuff4[24];
        };
           
        struct TMAPHead {
@@ -467,61 +467,61 @@ class tloadBImap {
        };
           
        struct TFileMap { 
-              word What1;
-              word Round, Move;
+              Uint16 What1;
+              Uint16 Round, Move;
               char Player, What2;
-              word Stuff2;
-              word Zero1;
-              word Nr1;
-              word Nr2;
-              word Nr3;
-              word Zero2[11];
+              Uint16 Stuff2;
+              Uint16 Zero1;
+              Uint16 Nr1;
+              Uint16 Nr2;
+              Uint16 Nr3;
+              Uint16 Zero2[11];
        };
           
        struct TSHOPHead {
               char ID[4];
-              word Num;
+              Uint16 Num;
        };
           
        typedef int TVehContent[8];
        typedef TVehContent *PVehContent;
           
           union TShopContent {
-             word XY[4][4];
-             word All[16];
+             Uint16 XY[4][4];
+             Uint16 All[16];
              TVehContent Veh;
           };
        typedef TShopContent *PShopContent;
          
-       typedef word TProduceRec[4];
+       typedef Uint16 TProduceRec[4];
 
        struct TFileShop {
-         word ID;
-         word Pos1;
+         Uint16 ID;
+         Uint16 Pos1;
          union  {
             struct {
-               word ShopType;
-               word Stuff06;  // { Zero }
-               word Name;
-               word Pos2;
-               word E, M;
+               Uint16 ShopType;
+               Uint16 Stuff06;  // { Zero }
+               Uint16 Name;
+               Uint16 Pos2;
+               Uint16 E, M;
                char EP, MP ;
                TShopContent Content;
-               word ShopType2;
+               Uint16 ShopType2;
                TProduceRec Produce;
-               word Stuff60 ; // { Zero }
-               word Prior;
-               word Owner;
-               word Stuff66[7];  // { Zero }
+               Uint16 Stuff60 ; // { Zero }
+               Uint16 Prior;
+               Uint16 Owner;
+               Uint16 Stuff66[7];  // { Zero }
             } a;
             struct {
                 char Zero2[6];
-                word W0A;
+                Uint16 W0A;
                 char Zero3[6];
-                word W48;
-                word W4A;
+                Uint16 W48;
+                Uint16 W4A;
                 char Zero4[2];
-                word W4E;
+                Uint16 W4E;
             } b;
             char raw[76];
          };
@@ -804,7 +804,7 @@ void        tloadBImap ::   ReadACTNPart(void)
     int missnum = 0;
     dynamic_array<int> miss;
 
-    Word*         Line = new word[Size.X]; 
+    Uint16*         Line = new Uint16[Size.X]; 
 
     for (Y = 0; Y < Size.Y ; Y++) { 
       MissFile->readdata( Line, Size.X * 2); 
@@ -1336,8 +1336,8 @@ char* tloadBImap :: GetStr( int a, int b )
     
 Boolean      SplitName(char *       S,
                        char *       Name,
-                       Word *       R1,
-                       Word *       R2)
+                       Uint16 *       R1,
+                       Uint16 *       R2)
       { 
         Integer      Code; 
       

@@ -2,9 +2,12 @@
     \brief Interface for some basic classes from which all of ASC's dialogs are derived
 */
 
-//     $Id: dlg_box.h,v 1.32 2004-05-11 20:22:33 mbickel Exp $
+//     $Id: dlg_box.h,v 1.33 2004-07-12 18:15:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2004/05/11 20:22:33  mbickel
+//      Readded research system to ASC
+//
 //     Revision 1.31  2004/01/16 15:33:45  mbickel
 //     Completely rewritten game event system
 //     TPWM-decoding-Patch
@@ -315,7 +318,7 @@ extern bool gameStartupComplete;
                      virtual void         showbutton(int         id) = 0;
                       void                 clearkey ( char id );
                       void                 addkey(int         id, tkey         key);
-                      void                 addmarkedkey(word         id, tkey         key);
+                      void                 addmarkedkey( int id, tkey         key);
                      pbutton getbutton ( int id );
 
                      virtual ~tdlgengine() {};
@@ -330,7 +333,7 @@ typedef class tdialogbox* pdialogbox;
                      void*      tp;
                      char      imagesaved; 
                      const char*        title;
-                     word         windowstyle; 
+                     int         windowstyle;
                      ttaborder    taborder[100]; 
                      int         tabcount; 
                      int         markedtab; 
@@ -490,7 +493,7 @@ extern void  help( int id);
 //! displays a dialogbog with the given message \sa help(int)
 extern void viewtext2 ( int id);
 
-extern int  viewtextquery(word         id,
+extern int  viewtextquery( int        id,
                            char *       title,
                            char *       s1,
                            char *       s2);
@@ -599,7 +602,7 @@ class   tstringselect : public tdialogbox {
                      void scrollbar_on(void);
                      void viewtext(void);
                      virtual void resettextfield(void);
-                     virtual void get_text( word nr);
+                     virtual void get_text( int nr);
                      void done(void);
                  };
 

@@ -33,7 +33,7 @@
 */
 
 #include <stdio.h>
-#include <cstring>
+#include <string.h>
 #include <stdlib.h>
 
 #define my_index strchr

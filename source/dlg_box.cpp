@@ -29,10 +29,6 @@
 #include <ctype.h>
 #include <cstring>
 #include <iostream>
-#ifdef _WIN32_
- #include <windows.h>
- #include <winuser.h>
-#endif
 
 #include "tpascal.inc"
 #include "typen.h"
@@ -49,6 +45,11 @@
 
 #ifdef sgmain
  #include "building.h"
+#endif
+
+#ifdef _WIN32_
+ #include <windows.h>
+ #include <winuser.h>
 #endif
 
 bool gameStartupComplete = false;
@@ -376,14 +377,14 @@ tdlgengine::pbutton tdlgengine :: getbutton ( int id )
 void         tdlgengine::buttonpressed(int         id)
 { 
   pbutton      pb; 
-  word         w; 
-  word         *pw, *pw2; 
+  int          w;
+  Uint16 *pw, *pw2;
 
-  pb = firstbutton; 
-  while ( pb ) { 
+  pb = firstbutton;
+  while ( pb ) {
     if ((pb->art == 5)) {       /* Scrollbar */
-      pw = (word*) pb->data; 
-      pw2 = (word*) pb->data2; 
+      pw = (Uint16*) pb->data;
+      pw2 = (Uint16*) pb->data2;
       w = *pw; 
       if ((pb->id + 1 == id)) { 
         if (taste == ct_pup) { 
@@ -799,7 +800,7 @@ void         tdlgengine::addkey( int         id, tkey         key )
 } 
 
 
-void         tdlgengine::addmarkedkey(word         id, tkey         key)
+void         tdlgengine::addmarkedkey(int   id, tkey         key)
 { 
   pbutton      pb; 
 
@@ -854,7 +855,7 @@ void         tdlgengine::addeingabe(int         lid,
             pb->max = min; 
          } else {
             pb->min = min; 
-            pb->max = max; 
+            pb->max = max;
          }
          addmarkedkey(pb->id,ct_enter); 
          addmarkedkey(pb->id,ct_space); 
@@ -892,7 +893,7 @@ void         tdialogbox::enablebutton(int         id)
    activefontsettings.background = 255;
 
 
-   if (pb->art == 0) { 
+   if (pb->art == 0) {
       if ((pb->style == 1) || (pb->style == 2))
          newknopf(x1 + pb->x1,y1 + pb->y1,x1 + pb->x2,y1 + pb->y2); 
                   
@@ -930,7 +931,7 @@ void         tdialogbox::enablebutton(int         id)
          } 
          else 
             if (pb->max <= 65535 && pb->min >= 0) { 
-               word* pw = (word*) pb->data;
+               Uint16* pw = (Uint16*) pb->data;
                itoa ( *pw, strng, 10 );
                showtext2(strng, x1 + pb->x1 + 5,y1 + pb->y1 + 2);
             }     
@@ -959,8 +960,8 @@ void         tdialogbox::enablebutton(int         id)
    } 
 
    if (pb->art == 5) {      // Scrollbar
-     word* pw = (word*) pb->data;
-     word* pw2 =(word*) pb->data2; 
+     Uint16* pw = (Uint16*) pb->data;
+     Uint16* pw2 =(Uint16*) pb->data2; 
      rahmen(true,x1 + pb->x1,y1 + pb->y1,x1 + pb->x2,y1 + pb->y2);
 
      paintsurface2(x1 + pb->x1 + 1,y1 + pb->y1 + 1,x1 + pb->x2 - 1,y1 + pb->y2 - 1 );
@@ -1001,7 +1002,7 @@ void         tdialogbox::disablebutton(int         id)
 { 
   pbutton      pb; 
   int      *pl; 
-  word         *pw, *pw2; 
+  Uint16         *pw, *pw2; 
   pascal_byte         *pbt; 
   char      *pbl;
   char*         s;
@@ -1071,7 +1072,7 @@ void         tdialogbox::disablebutton(int         id)
          } 
          else 
             if (pb->max <= 65535 && pb->min >= 0) { 
-               pw = (word*) pb->data;
+               pw = (Uint16*) pb->data;
                itoa ( *pw, s , 10);
                showtext2(s, x1 + pb->x1 + 5,y1 + pb->y1 + 2);
             } 
@@ -1094,8 +1095,8 @@ void         tdialogbox::disablebutton(int         id)
        line(x1 + pb->x1 + (pb->y2 - pb->y1),y1 + pb->y1,x1 + pb->x1,y1 + pb->y2, cl);
    } 
    if (pb->art == 5) { 
-     pw = (word*) pb->data;
-     pw2 = (word*) pb->data2;
+     pw = (Uint16*) pb->data;
+     pw2 = (Uint16*) pb->data2;
      // waitretrace(); 
      rectangle(x1 + pb->x1,y1 + pb->y1,x1 + pb->x2,y1 + pb->y2,disablecolor); 
 
@@ -1268,7 +1269,7 @@ void         tdialogbox::done(void)
 void         tdialogbox::execbutton( pbutton      pb, char      mouse )
 {
   int      t, l;
-  word         *pw, *pw2;
+  Uint16         *pw, *pw2;
 
 
    if (mouse == false) {
@@ -1318,8 +1319,8 @@ void         tdialogbox::execbutton( pbutton      pb, char      mouse )
       } 
 
       if (pb->art == 5) {         // Scrollbar
-         pw = (word*) pb->data;
-         pw2 = (word*) pb->data2; 
+         pw = (Uint16*) pb->data;
+         pw2 = (Uint16*) pb->data2; 
 
          l = pb->y2 - pb->y1 - 2;
 
@@ -1404,7 +1405,7 @@ void         tdialogbox::execbutton( pbutton      pb, char      mouse )
             activefontsettings.font = schriften.smallarial;
             activefontsettings.background = lightgray;
             activefontsettings.justify = lefttext;
-            activefontsettings.length = (word) (pb->x2 - pb->x1 - 20 );
+            activefontsettings.length = (Uint16) (pb->x2 - pb->x1 - 20 );
 
             void* buf = asc_malloc ( imagesize ( x1 + pb->x1, starty, x1 + pb->x2, starty + height ));
             getimage( x1 + pb->x1, starty, x1 + pb->x2, starty + height, buf );
@@ -1665,14 +1666,14 @@ void         tdialogbox::editfield(pbutton      pb)
 { 
   char         *ps;
   int      *pl; 
-  word         *pw; 
+  Uint16         *pw; 
   pascal_byte         *pbt; 
   int      l;
 
   activefontsettings.font = schriften.smallarial;
   activefontsettings.color = textcolor;
   activefontsettings.background = dblue;
-  activefontsettings.length = (word) (pb->x2 - pb->x1 - 10 );
+  activefontsettings.length = (Uint16) (pb->x2 - pb->x1 - 10 );
 
    if (pb->art == 1) {
       ps = (char*) pb->data;
@@ -1689,7 +1690,7 @@ void         tdialogbox::editfield(pbutton      pb)
       } 
       else 
          if (pb->max <= 65535 && pb->min >= 0) { 
-            pw = (word*)  pb->data;
+            pw = (Uint16*)  pb->data;
             l = *pw; 
          } 
          else { 
@@ -1726,7 +1727,7 @@ void         tdialogbox::rahmen3(char *       txt,
 { 
    collategraphicoperations cgs( x1, y1, x2, y2 );
 
-  word         w;
+  Uint16         w;
 
    npush( activefontsettings );
    activefontsettings.font = schriften.smallarial;
@@ -2733,7 +2734,7 @@ void tviewtext::displaytext ( void )
       tvt_firstlinebuf = new char [ ( tvt_x2 - tvt_x1) * ( tvt_firstlinebufheight + 5 ) ];
       memset ( tvt_firstlinebuf , tvt_background, (tvt_x2 - tvt_x1) * ( tvt_firstlinebufheight +  5 ) );
    
-      word* pw = (word*) tvt_firstlinebuf;
+      Uint16* pw = (Uint16*) tvt_firstlinebuf;
       *pw = (tvt_x2 - tvt_x1);
       pw++;
       *pw = tvt_firstlinebufheight;
@@ -3378,7 +3379,7 @@ void         tviewtextquery::buttonpressed( int id)
 } 
 
 
-int         viewtextquery(word         id,
+int         viewtextquery( int          id,
                            char *       title,
                            char *       s1,
                            char *       s2)
@@ -3607,7 +3608,7 @@ void         tstringselect::resettextfield(void)
    rahmen(true,x1 + sx ,y1 + sy,x1 + ex,y1 + ey);
 }
 
-void   tstringselect::get_text(word nr) //gibt in txt den string zur?ck
+void   tstringselect::get_text(int nr) //gibt in txt den string zur?ck
 {
   strcpy(txt,"");
   nr = 0;
@@ -3623,7 +3624,7 @@ void tstringselect::scrollbar_on(void)
 void         tstringselect::viewtext(void)
 {
   char         s1[200];
-  word         yp;
+  Uint16         yp;
   integer      l;
 
    mousevisible(false);
@@ -3790,7 +3791,7 @@ class   ChooseString : public tstringselect {
                  void setup( );
                  virtual void buttonpressed(int id);
                  void run(void);
-                 virtual void get_text(word nr);
+                 virtual void get_text(int nr);
               };
 
 ChooseString :: ChooseString ( const ASCString& _title, const vector<ASCString>& _strings, const vector<ASCString>& _buttons, int defaultEntry )
@@ -3821,7 +3822,7 @@ void         ChooseString ::buttonpressed(int         id)
 }
 
 
-void         ChooseString ::get_text(word nr)
+void         ChooseString ::get_text(int nr)
 {
    strcpy ( txt, strings[nr].c_str());
 }
@@ -3974,7 +3975,7 @@ class   StringSelect : public tdialogbox {
                      void scrollbar_on(void);
                      void viewtext(void);
                      virtual void resettextfield(void);
-                     virtual void get_text( word nr);
+                     virtual void get_text( Uint16 nr);
                      void done(void);
                  };
 
@@ -4138,7 +4139,7 @@ void         tstringselect::resettextfield(void)
    rahmen(true,x1 + sx ,y1 + sy,x1 + ex,y1 + ey);
 }
 
-void   tstringselect::get_text(word nr) //gibt in txt den string zur?ck
+void   tstringselect::get_text(Uint16 nr) //gibt in txt den string zur?ck
 {
   strcpy(txt,"");
   nr = 0;
@@ -4154,7 +4155,7 @@ void tstringselect::scrollbar_on(void)
 void         tstringselect::viewtext(void)
 {
   char         s1[200];
-  word         yp;
+  Uint16         yp;
   integer      l;
 
    mousevisible(false);

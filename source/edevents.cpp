@@ -2,7 +2,7 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.41 2004-05-12 20:05:52 mbickel Exp $
+//     $Id: edevents.cpp,v 1.42 2004-07-12 18:15:04 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -43,7 +43,7 @@ class   tplayersel : public tstringselect {
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
-                 virtual void get_text(word nr);
+                 virtual void get_text(int nr);
                  };
 
 void         tplayersel::setup(void)
@@ -72,7 +72,7 @@ void         tplayersel::buttonpressed(int         id)
 }
 
 
-void         tplayersel::get_text(word nr)
+void         tplayersel::get_text( int nr)
 {
    if (nr == 8) strcpy(txt,"Neutral");
    else {
@@ -115,7 +115,7 @@ class   treason : public tstringselect {
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
-                 virtual void get_text(word nr);
+                 virtual void get_text( int nr);
                  };
 
 void         treason::setup(void)
@@ -132,7 +132,7 @@ void         treason::setup(void)
 }
 
 
-void         treason::get_text(word nr)
+void         treason::get_text(int nr)
 {
    strcpy(txt, EventTriggerName[nr]);
 } 
@@ -264,7 +264,7 @@ class   tgettechnologyid : public tstringselect {
                  void rebuildlines(void);
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
-                 virtual void get_text(word nr);
+                 virtual void get_text(int nr);
                  virtual void run(void);
                  };
 
@@ -291,7 +291,7 @@ void         tgettechnologyid::setup(void)
    addbutton("~C~ancel",330,40,420,70,0,1,8,true);
 }
 
-void   tgettechnologyid::get_text(word nr) //gibt in txt den string zur…k
+void   tgettechnologyid::get_text(int nr) //gibt in txt den string zur…k
 {
    strcpy(txt,technologyRepository.getObject_byPos(nr)->name.c_str());
 }
@@ -343,7 +343,7 @@ int         gettechnologyid(int lid)
 #if 0
      class twindchange: public tdialogbox {
               public:
-                word        heightxs,w2,dirx,diry;
+                int         heightxs,w2,dirx,diry;
                 int         action,tsintensity,abort,activeheight;
                 int            tdirect[3],tinten[3];
                 pevent      we;
@@ -355,7 +355,7 @@ int         gettechnologyid(int lid)
 
 
 void         twindchange::init(void)
-{ word         w;
+{ int         w;
   int            i;
 
    tdialogbox::init();
@@ -857,7 +857,7 @@ class   teventsel : public tstringselect {
                  void rebuildlines(void);
                  void setup(void);
                  virtual void buttonpressed(int id);
-                 virtual void get_text(word nr);
+                 virtual void get_text(int nr);
                  virtual void run(void);
                  };
 
@@ -880,7 +880,7 @@ void         teventsel::setup(void)
    addbutton("~O~K",360,40,420,70,0,1,8,true);
 }
 
-void   teventsel::get_text(word nr) //gibt in txt den string zur…k
+void   teventsel::get_text(int nr) //gibt in txt den string zur…k
 {
    int count = 0;
    for ( tmap::Events::iterator i = actmap->events.begin(); i != actmap->events.end() && count <= nr; ++i, ++count )

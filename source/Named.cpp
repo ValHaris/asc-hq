@@ -18,7 +18,7 @@
 #include "Named.h"
 
 #include <cstring>
-#include <malloc.h>
+#include <cstdlib>
 
 Named::Named()
       :	_name(NULL)

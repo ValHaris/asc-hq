@@ -5,7 +5,7 @@
 
 */
 
-//     $Id: loaders.h,v 1.29 2004-05-12 20:05:53 mbickel Exp $
+//     $Id: loaders.h,v 1.30 2004-07-12 18:15:08 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -37,7 +37,7 @@
 
 
 extern ticons icons;
-extern const word fileterminator;
+extern const int fileterminator;
 
 extern const char* savegameextension;
 extern const char* mapextension;

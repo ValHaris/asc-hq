@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.116 2004-06-13 10:34:14 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.117 2004-07-12 18:15:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.116  2004/06/13 10:34:14  mbickel
+//      Fixed cut&paste in Mapeditor
+//
 //     Revision 1.115  2004/06/09 14:44:24  mbickel
 //      Replay fixes
 //      Updated maps
@@ -583,7 +586,7 @@
    selectrec            sr[10];
 
    char         tfill,polyfieldmode;
-   word         fillx1, filly1;
+   int          fillx1, filly1;
 
    int                  i;
    pbuilding            gbde;
@@ -931,8 +934,8 @@ void tputresourcesdlg :: run ( void )
 
 void placebodentyp(void)
 {
-   word         fillx2, filly2;
-   integer       i, j;
+   int fillx2, filly2;
+   int i, j;
 
    cursor.hide(); 
    mousevisible(false); 
@@ -1264,7 +1267,7 @@ void         pdsetup(void)
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
-                 virtual void get_text(word nr);
+                 virtual void get_text(int nr);
                  };
 
 void         tcolorsel::setup(void)
@@ -1294,7 +1297,7 @@ void         tcolorsel::buttonpressed(int         id)
 }
 
 
-void         tcolorsel::get_text(word nr)
+void         tcolorsel::get_text(int nr)
 {
    if (nr == 8) strcpy(txt,"Neutral");
    else {
@@ -1627,9 +1630,9 @@ void       tmycursor::putimg ( void )
 }
 
 
-void         exchg(word *       a1,
-                   word *       a2)
-{ word        ex;
+void         exchg(int *       a1,
+                   int *       a2)
+{ int ex;
 
    ex = *a1;
    *a1 = *a2;
@@ -1664,7 +1667,7 @@ class   tcdplayer : public tstringselect {
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
-                 virtual void get_text(word nr);
+                 virtual void get_text(int nr);
                  };
 
 void         tcdplayer ::setup(void)
@@ -1710,7 +1713,7 @@ void         tcdplayer ::buttonpressed(int         id)
 }
 
 
-void         tcdplayer ::get_text(word nr)
+void         tcdplayer ::get_text(int nr)
 {
     if (cdrom.cdinfo.track[nr]->type > 3) {
        strcpy(txt,"Data Track ");
@@ -2147,7 +2150,7 @@ void editpolygon(Poly_gon& poly)
                char valueflag,random,campaign;
                tmap::Campaign cmpgn;
                pterraintype         tauswahl;
-               word auswahlw;
+               int auswahlw;
                void init(void);
                virtual void run(void);
                virtual void buttonpressed(int  id);
@@ -2157,7 +2160,7 @@ void editpolygon(Poly_gon& poly)
 
 void         tnewmap::init(void)
 {
-  word         w;
+  int w;
   char      b;
 
    tdialogbox::init();
@@ -2675,121 +2678,6 @@ void         changebuildingvalues( Building& b )
 
 // õS Class-Change
 
-#if 0
-class   tclass_change: public tstringselect {
-           public :
-                 pvehicle unit;
-                 word tklasse,tarmor,tfunktion;
-                 word tweapstr[8];
-                 virtual void setup(void);
-                 virtual void buttonpressed(int id);
-                 virtual void run(void);
-                 virtual void get_text(word nr);
-                 };
-
-void         tclass_change::setup(void)
-{  int i,j;
-   char s[200], *s2;
-
-   action = 0;
-   title = "Change Class";
-
-   x1 = 50;
-   y1 = 30;
-   xsize = 540;
-   ysize = 420;
-   ex = 200;
-   ey = 150;
-   lnshown = 5;
-   numberoflines = unit->typ->classnum;
-
-   if (unit->klasse > unit->typ->classnum-1) unit->klasse = 0;
-      redline = unit->klasse;
-   tklasse = unit->klasse;
-   for (j = 0 ; j < unit->typ->weapons.count  ; j++ ) {
-       //tweapstr[j] = unit->weapstrength[j];
-       tweapstr[j] = unit->typ->weapons.weapon[j].maxstrength * unit->typ->classbound[tklasse].weapstrength[ unit->typ->weapons.weapon[j].getScalarWeaponType() ] / 1024;
-   }
-   //tarmor = unit->armor;
-   tarmor = unit->typ->armor * unit->typ->classbound[tklasse].armor / 1024;
-   addbutton("~A~rmor",220,210,420,230,2,1,4,true);
-   addeingabe(4,&tarmor,1,65535);
-   for (i = 0 ; i < unit->typ->weapons.count  ; i++ ) {
-      strcpy ( s, "" );
-
-      strcat( s, cwaffentypen[unit->typ->weapons.weapon[i].getScalarWeaponType() ] );
-      strcat( s, " ");
-
-      strcat(s,"(~");
-      strcat(s,strrr(i+1));
-      strcat(s,"~)");
-      s2 = (char * ) malloc( strlen(s) +1 );
-      strcpy(s2,s);
-      addbutton(s2,220,90+ i * 40 ,420,110 + i * 40,2,1,i+5,true);
-      addeingabe(i+5,&tweapstr[i],1,65535);
-   }
-   addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,20,true);
-   addkey(20,ct_enter);
-   addbutton("~C~ancel",190,ysize - 40,340,ysize - 20,0,1,21,true);
-}
-
-
-void         tclass_change::buttonpressed(int         id)
-{
-   tstringselect::buttonpressed(id);
-   switch (id) {
-
-      case 20:
-      case 21:   action = id-18;
-   break;
-   }
-}
-
-
-void         tclass_change::get_text(word nr)
-{
-   strcpy(txt,unit->typ->classnames[nr].c_str());
-}
-
-
-void         tclass_change::run(void)
-{
-   int j;
-
-   do {
-      tstringselect::run();
-      if ( (msel == 1 ) || ( taste == ct_enter ) ){
-         if (tklasse != redline) {
-            tklasse = redline;
-            for (j = 0 ; j < unit->typ->weapons.count  ; j++ ) {
-               tweapstr[j] = unit->typ->weapons.weapon[j].maxstrength * unit->typ->classbound[tklasse].weapstrength[ unit->typ->weapons.weapon[j].getScalarWeaponType() ] / 1024;
-               showbutton(j+5);
-            }
-            tarmor = unit->typ->armor * unit->typ->classbound[tklasse].armor / 1024;
-            tfunktion = unit->typ->functions  & unit->typ->classbound[tklasse].vehiclefunctions;
-
-            showbutton(4);
-         }
-      }
-   }  while ( ! ( (taste == ct_esc) || ( (action == 2) || (action == 3) ) ) );
-   if (action == 2) {
-      unit->klasse = tklasse;
-      for (j = 0 ; j < unit->typ->weapons.count  ; j++ ) unit->weapstrength[j] = tweapstr[j];
-      unit->armor = tarmor;
-   }
-}
-
-
-void         class_change(pvehicle p)
-{
-  tclass_change cc;
-
-   cc.unit = p;
-   cc.init();
-   cc.run();
-   cc.done();
-}
-#endif
 
 // õS Polygon-Management
 /*
@@ -2799,7 +2687,7 @@ class tpolygon_managementbox: public tstringselect {
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
-                 virtual void get_text(word nr);
+                 virtual void get_text(int nr);
                  };
 
 
@@ -2838,7 +2726,7 @@ void         tpolygon_managementbox::buttonpressed(int         id)
 }
 
 
-void         tpolygon_managementbox::get_text(word nr)
+void         tpolygon_managementbox::get_text(int nr)
 {
    char s[200];
    ppolystructure pps;
@@ -2937,7 +2825,7 @@ class   StringSelector : public tstringselect {
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
-                 virtual void get_text(word nr);
+                 virtual void get_text(int nr);
                  };
 
 void         StringSelector ::setup(void)
@@ -2965,7 +2853,7 @@ void         StringSelector ::buttonpressed(int         id)
 }
 
 
-void         StringSelector ::get_text(word nr)
+void         StringSelector ::get_text(int nr)
 {
    strcpy(txt, text[nr] );
 }
@@ -3098,7 +2986,7 @@ void         EditAiParam::buttonpressed(int         id)
 
      class tunit: public tdialogbox {
                 TemporaryContainerStorage tus;
-                word        dirx,diry;
+                int        dirx,diry;
                 int        action;
                 pvehicle    unit;
                 int         w2, heightxs;
@@ -3115,7 +3003,7 @@ void         EditAiParam::buttonpressed(int         id)
 
 void         tunit::init(  )
 {
-   word         w;
+   int         w;
    char *weaponammo;
 
    tdialogbox::init();
@@ -3169,8 +3057,6 @@ void         tunit::init(  )
       } /* endfor  Buttons 4-11*/
       npop ( unit->height );
    }
-
-   if ( unit->typ->classnum > 0 ) addbutton("C~h~ange Class",280,280,450,300,0,1,32,true);
 
    addbutton("~R~eactionfire",dirx-50,250,dirx+50,260,3,1,22,(unit->typ->functions & cfno_reactionfire) == 0 );
    reactionfire = unit->reactionfire.getStatus();
@@ -3359,7 +3245,7 @@ void         changeunitvalues(pvehicle ae)
 
 
 void         tres::init(void)
-{ word         w;
+{ int w;
 
    tdialogbox::init();
    action = 0;
@@ -3436,7 +3322,7 @@ void         changeresource(void)
 
 
 void         tminestrength::init(void)
-{ word         w;
+{ int w;
 
    tdialogbox::init();
    action = 0;
@@ -4205,7 +4091,7 @@ class UnitTypeTransformation {
                              virtual void setup(void);
                              virtual void buttonpressed(int id);
                              virtual void run(void);
-                             virtual void get_text(word nr);
+                             virtual void get_text(int nr);
                          };
               class   TranslationTableSelection : public tstringselect {
                               int unitsetnum;
@@ -4214,7 +4100,7 @@ class UnitTypeTransformation {
                                void setup2 ( int _unitset ) { unitsetnum = _unitset; };
                                virtual void buttonpressed(int id);
                                virtual void run(void);
-                               virtual void get_text(word nr);
+                               virtual void get_text(int nr);
                            };
 
                 int unitstransformed;
@@ -4251,7 +4137,7 @@ void         UnitTypeTransformation :: UnitSetSelection::buttonpressed(int      
    }
 }
 
-void         UnitTypeTransformation :: UnitSetSelection::get_text(word nr)
+void         UnitTypeTransformation :: UnitSetSelection::get_text(int nr)
 {
    strcpy(txt,unitSets[nr]->name.c_str() );
 }
@@ -4290,7 +4176,7 @@ void         UnitTypeTransformation :: TranslationTableSelection::buttonpressed(
    }
 }
 
-void         UnitTypeTransformation :: TranslationTableSelection::get_text(word nr)
+void         UnitTypeTransformation :: TranslationTableSelection::get_text(int nr)
 { 
    strcpy(txt, unitSets[unitsetnum]->transtab[nr]->name.c_str() );
 } 

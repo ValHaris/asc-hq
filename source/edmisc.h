@@ -1,6 +1,11 @@
-//     $Id: edmisc.h,v 1.34 2004-05-29 15:07:37 mbickel Exp $
+//     $Id: edmisc.h,v 1.35 2004-07-12 18:15:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2004/05/29 15:07:37  mbickel
+//      Fixed maps
+//      Fixed crash with asc.cache
+//      ai speed up
+//
 //     Revision 1.33  2004/05/20 14:01:10  mbickel
 //      Many bugfixes and new features, among them:
 //        - Container.FillUnitsAutomatically = 2
@@ -197,7 +202,7 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <malloc.h>
+#include <cstdlib>
 #include <ctype.h>
 
 #include "tpascal.inc"
@@ -222,10 +227,10 @@
 #endif
 
   typedef struct selectrec {
-                  word         srr;
-                  word         xpos, ypos;
-                  word         maxx,maxy,maxsr;
-                  word         maxanz;
+                  int         srr;
+                  int         xpos, ypos;
+                  int         maxx,maxy,maxsr;
+                  int         maxanz;
                   char     showall;
                } selectrec; 
 
@@ -254,7 +259,7 @@
 */
    class tmycursor : public tcursor {
          public :
-              word sx,sy,ix,iy;
+              int sx,sy,ix,iy;
               virtual void getimg  ( void );
               virtual void putimg  ( void );
               virtual void putbkgr ( void );
@@ -328,9 +333,9 @@
    extern selectrec              sr[10];
    // extern ppolygon               pfpoly;
    extern char                tfill,polyfieldmode;
-   extern word                    fillx1, filly1;
+   extern int                    fillx1, filly1;
    extern pbuilding               gbde;
-   extern word                    variable;
+   extern int                    variable;
    extern char                mapsaved;
    extern tmycursor             mycursor;
    extern tpulldown              pd;
@@ -354,7 +359,7 @@ extern void         repaintdisplay(void);
 extern void         setstartvariables(void);
 extern void         pdbaroff(void);
 extern void         pulldown(void);
-extern void         exchg(word *a1,word *a2);
+extern void         exchg(int *a1,int *a2);
 extern void         placebuilding(int colorr,pbuildingtype   buildingtyp,char choose);
 extern void         k_savemap(char saveas);
 extern void         k_loadmap(void);

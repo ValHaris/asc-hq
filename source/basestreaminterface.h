@@ -109,7 +109,7 @@
            virtual int  readInt  ( void );
 
            //! Reads a 16 bit unsigned Integer. In the stream little-endian byte order is used and a translation is performed, if necessary.
-           virtual word readWord ( void );
+           virtual int readWord ( void );
 
            //! Reads a 8 bit unsigned Integer. 
            virtual char readChar ( void );
@@ -121,7 +121,7 @@
            virtual void writeInt  ( int  i );
 
            //! Writes a 16 bit unsigned Integer. In the stream little-endian byte order is used and a translation is performed, if necessary.
-           virtual void writeWord ( word w );
+           virtual void writeWord ( int w );
 
            //! Writes a 8 bit unsigned Integer. 
            virtual void writeChar ( char c );

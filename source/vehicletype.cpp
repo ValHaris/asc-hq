@@ -88,20 +88,6 @@ Vehicletype :: Vehicletype ( void )
    for ( i = 0; i < 8; i++ )
       movement[i] = 0;
    movemalustyp = 0;
-   classnum = 0;
-   for ( i = 0; i < 8; i++ ) {
-      for ( int j = 0; j< 8; j++)
-         classbound[i].weapstrength[j] = 1024;
-
-      classbound[i].armor = 1024;
-      classbound[i].techlevel = 0;
-      classbound[i].techrequired[0] = 0;
-      classbound[i].techrequired[1] = 0;
-      classbound[i].techrequired[2] = 0;
-      classbound[i].techrequired[3] = 0;
-      classbound[i].eventrequired = 0;
-      classbound[i].vehiclefunctions = 0xFFFFFFF;
-   }
 
    maxwindspeedonwater = 0;
    digrange = 0;
@@ -135,7 +121,7 @@ int Vehicletype::maxsize ( void ) const
 extern void* generate_vehicle_gui_build_icon ( pvehicletype tnk );
 #endif
 
-const int vehicle_version = 15;
+const int vehicle_version = 16;
 
 
 
@@ -232,29 +218,31 @@ void Vehicletype :: read ( tnstream& stream )
       for ( j = 0; j < 9; j++ )
           stream.readWord( ); // dummy1
 
-   classnum = stream.readChar();
-
    bool ___load_classnames[8];
-   for ( j = 0; j < 8; j++ )
-       ___load_classnames[j] = stream.readInt();
+   if ( version <= 15 ) {
+      stream.readChar(); // classnum
 
-   for ( j = 0; j < 8; j++ ) {
-      int k;
-      for ( k = 0; k < 8; k++ )
-         classbound[j].weapstrength[k] = stream.readWord();
+      for ( j = 0; j < 8; j++ )
+          ___load_classnames[j] = stream.readInt();
 
-      if ( version <= 2 )
-         stream.readWord (  ); // dummy2
+      for ( j = 0; j < 8; j++ ) {
+         int k;
+         for ( k = 0; k < 8; k++ )
+            stream.readWord();
 
-      classbound[j].armor = stream.readWord();
-      classbound[j].techlevel = stream.readWord();
-      for ( k = 0; k < 4; k++ )
-         classbound[j].techrequired[k] = stream.readWord();
+         if ( version <= 2 )
+            stream.readWord (  ); // dummy2
 
-      classbound[j].eventrequired = stream.readChar();
-      classbound[j].vehiclefunctions = stream.readInt();
-      if ( version <= 2 )
-         stream.readChar( ); // dummy
+         stream.readWord();
+         stream.readWord();
+         for ( k = 0; k < 4; k++ )
+            stream.readWord();
+
+         stream.readChar();
+         stream.readInt();
+         if ( version <= 2 )
+            stream.readChar( ); // dummy
+      }
    }
 
    maxwindspeedonwater = stream.readChar();
@@ -314,9 +302,10 @@ void Vehicletype :: read ( tnstream& stream )
       infotext = stream.readString ( true );
 
    int i;
-   for ( i=0;i<8  ;i++ )
-      if ( ___load_classnames[i] )
-         classnames[i] = stream.readString ( true );
+   if ( version <= 15 )
+      for ( i=0;i<8  ;i++ )
+         if ( ___load_classnames[i] )
+            stream.readString ( true );
 
    if ( functions & cfautorepair )
       if ( !autorepairrate )
@@ -569,27 +558,6 @@ void Vehicletype:: write ( tnstream& stream ) const
 
 
    stream.writeChar(movemalustyp );
-   stream.writeChar(classnum );
-   for ( j = 0; j < 8; j++ )
-      if ( !classnames[j].empty() )
-          stream.writeInt( 1 );
-      else
-          stream.writeInt( 0 );
-
-
-   for ( j = 0; j < 8; j++ ) {
-      int k;
-      for ( k = 0; k < 8; k++ )
-         stream.writeWord(classbound[j].weapstrength[k]);
-
-      stream.writeWord(classbound[j].armor);
-      stream.writeWord(classbound[j].techlevel );
-      for ( k = 0; k < 4; k++ )
-         stream.writeWord(classbound[j].techrequired[k]);
-
-      stream.writeChar(classbound[j].eventrequired );
-      stream.writeInt(classbound[j].vehiclefunctions );
-   }
 
    stream.writeChar(maxwindspeedonwater );
    stream.writeChar(digrange );
@@ -616,10 +584,6 @@ void Vehicletype:: write ( tnstream& stream ) const
 
    if ( !infotext.empty() )
       stream.writeString( infotext );
-
-   for (i=0; i<8; i++)
-      if ( !classnames[i].empty() )
-         stream.writeString( classnames[i] );
 
    // if ( bipicture <= 0 )
       for (i=0;i<8  ;i++ )

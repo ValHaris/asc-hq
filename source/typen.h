@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.148 2004-05-23 12:54:28 mbickel Exp $
+//     $Id: typen.h,v 1.149 2004-07-12 18:15:09 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -377,7 +377,7 @@ struct tguiicon {
   char         txt[31];
   unsigned char         id;
   char         key[4];
-  word         realkey[4];
+  Uint16         realkey[4];
   unsigned char         order;
 };
 

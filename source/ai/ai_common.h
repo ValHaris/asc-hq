@@ -28,8 +28,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
-#include <malloc.h>
+#include <cstdlib>
 #include <math.h>
 #include <algorithm>
 #include <memory>

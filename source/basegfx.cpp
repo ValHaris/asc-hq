@@ -23,7 +23,7 @@
 */
 
 #include <cstring>
-#include <malloc.h>
+#include <cstdlib>
 #include <math.h>
 #include "global.h"
 #include "basegfx.h"
@@ -338,7 +338,7 @@ void* halfpict ( void* vbuf )
 {
    char* buf = (char*) vbuf;
 
-   word* wp = (word*) xlatbuffer;
+   Uint16* wp = (Uint16*) xlatbuffer;
    char* dest = (char*) xlatbuffer;
 
    trleheader*   hd = (trleheader*) vbuf; 
@@ -395,7 +395,7 @@ void* halfpict ( void* vbuf )
       int linecount = 0;
       int rowcount = 0;
 
-      word* wp2 = (word*) vbuf;
+      Uint16* wp2 = (Uint16*) vbuf;
 
       wp[0] = wp2[0] / 2;
       wp[1] = wp2[1] / 2;
@@ -426,7 +426,7 @@ void* halfpict ( void* vbuf )
 
 void putshadow ( int x1, int y1, void* ptr, ppixelxlattable xl )
 {
-   word* w = (word*) ptr;
+   Uint16* w = (Uint16*) ptr;
    char* c = (char*) ptr + 4;
    int spacelength = agmp->scanlinelength - *w - 1;
 
@@ -448,7 +448,7 @@ void putshadow ( int x1, int y1, void* ptr, ppixelxlattable xl )
 
 void putpicturemix ( int x1, int y1, void* ptr, int rotation, char* mixbuf )
 {
-   word* w = (word*) ptr;
+   Uint16* w = (Uint16*) ptr;
    char* c = (char*) ptr + 4;
    int spacelength = agmp->scanlinelength - *w - 1;
 
@@ -476,7 +476,7 @@ void putpicturemix ( int x1, int y1, void* ptr, int rotation, char* mixbuf )
 
 void putinterlacedrotimage ( int x1, int y1, void* ptr, int rotation )
 {
-   word* w = (word*) ptr;
+   Uint16* w = (Uint16*) ptr;
    char* c = (char*) ptr + 4;
    int spacelength = agmp->scanlinelength - *w - 1;
 
@@ -503,10 +503,10 @@ void putinterlacedrotimage ( int x1, int y1, void* ptr, int rotation )
 
 void rotatepict90 ( void* s, void* d )
 {
-   word* sw = (word*) s;
+   Uint16* sw = (Uint16*) s;
    char* sc = (char*) s + 4;
    
-   word* dw = (word*) d;
+   Uint16* dw = (Uint16*) d;
    char* dc = (char*) d + 4;
 
    dw[0] = sw[1];
@@ -674,10 +674,10 @@ char* rotatepict_grw ( void* image, int organgle )
 
 void flippict ( void* s, void* d, int dir )
 {
-   word* sw = (word*) s;
+   Uint16* sw = (Uint16*) s;
    char* sc = (char*) s + 4;
    
-   word* dw = (word*) d;
+   Uint16* dw = (Uint16*) d;
    char* dc = (char*) d + 4;
 
    dw[1] = sw[1];
@@ -794,7 +794,7 @@ TrueColorImage :: ~TrueColorImage (  )
 
 int getpixelfromimage ( void* buf, int x, int y )
 {
-   word* wp = (word*) buf;
+   Uint16* wp = (Uint16*) buf;
    if ( x > wp[0]  ||  y > wp[1] || x < 0 || y < 0 )
       return -1;
 
@@ -1104,7 +1104,7 @@ char* convertimage ( TrueColorImage* img, dacpalette256 pal )
    int size = imagesize ( 1, 1, img->getxsize(), img->getysize() );
    char* newimg = new char[ size ] ;
    char* start = newimg;
-   word* wp = (word*) newimg;
+   Uint16* wp = (Uint16*) newimg;
    wp[0] = img->getxsize()-1;
    wp[1] = img->getysize()-1;
 
@@ -1145,7 +1145,7 @@ void putmask ( int x1, int y1, void* vbuf, int newtransparence )
       // int linecount = 0;
       // int rowcount = 0;
 
-      word* wp = (word*) vbuf;
+      Uint16* wp = (Uint16*) vbuf;
 
       char* basemembuf = (char*) (agmp->linearaddress + y1 * agmp->bytesperscanline + x1 * agmp->byteperpix );
       char* img = (char*) vbuf + 4;
@@ -1176,7 +1176,7 @@ void* uncompress_rlepict ( void* pict )
       w++;
       h++;
       void* newbuf = asc_malloc ( w * h + 4 );
-      word* wp = (word*) newbuf;
+      Uint16* wp = (Uint16*) newbuf;
       char* dest = (char*) newbuf;
       wp[0] = w-1;
       wp[1] = h-1;
@@ -1423,7 +1423,7 @@ void getimage(int x1, int y1, int x2, int y2, void *buffer)
       char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
 
       char* cb = (char*) buffer;
-      word* wb = (word*) buffer;
+      Uint16* wb = (Uint16*) buffer;
    
       wb[0] = x2 - x1;
       wb[1] = y2 - y1;
@@ -1478,7 +1478,7 @@ void putimage ( int x1, int y1, void* img )
             }
          }
       } else {
-         word* w = (word*) img;
+         Uint16* w = (Uint16*) img;
          collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
          int spacelength = agmp->scanlinelength - *w - 1;
          src += 4;
@@ -1573,7 +1573,7 @@ void putxlatfilter ( int x1, int y1, void* pic, char* xlattables )
             }
          }
       } else {
-         word* w = (word*) pic;
+         Uint16* w = (Uint16*) pic;
          collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
          int spacelength = agmp->scanlinelength - *w - 1;
 
@@ -1633,7 +1633,7 @@ void putspriteimage ( int x1, int y1, void* pic )
             }
          }
       } else {
-         word* w = (word*) pic;
+         Uint16* w = (Uint16*) pic;
          collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
          int spacelength = agmp->scanlinelength - *w - 1;
          src += 4;
@@ -1700,7 +1700,7 @@ void putrotspriteimage(int x1, int y1, void *pic, int rotationvalue)
             }
          }
       } else {
-         word* w = (word*) pic;
+         Uint16* w = (Uint16*) pic;
          collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
          int spacelength = agmp->scanlinelength - *w - 1;
          src += 4;
@@ -1725,7 +1725,7 @@ void putrotspriteimage(int x1, int y1, void *pic, int rotationvalue)
 
 void putrotspriteimage90(int x1, int y1, void *pic, int rotationvalue)
 {
-   word* w = (word*) pic;
+   Uint16* w = (Uint16*) pic;
    // char* c = (char*) pic + 4;
    int spacelength = agmp->scanlinelength - w[1] - 1;
    collategraphicoperations cgo ( x1, y1, x1+w[1], y1+w[0] );
@@ -1752,7 +1752,7 @@ void putrotspriteimage90(int x1, int y1, void *pic, int rotationvalue)
 
 void putrotspriteimage180(int x1, int y1, void *pic, int rotationvalue)
 {
-   word* w = (word*) pic;
+   Uint16* w = (Uint16*) pic;
    collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
    // char* c = (char*) pic + 4;
    int spacelength = agmp->scanlinelength - *w - 1;
@@ -1779,7 +1779,7 @@ void putrotspriteimage180(int x1, int y1, void *pic, int rotationvalue)
 
 void putrotspriteimage270(int x1, int y1, void *pic, int rotationvalue)
 {
-   word* w = (word*) pic;
+   Uint16* w = (Uint16*) pic;
    collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
    // char* c = (char*) pic + 4;
    int spacelength = agmp->scanlinelength - *w - 1;
@@ -1893,7 +1893,7 @@ void* xlatpict ( ppixelxlattable xl, void* vbuf )
 
    char* buf = (char*) vbuf;
 
-   word* wp = (word*) xlatbuffer;
+   Uint16* wp = (Uint16*) xlatbuffer;
    char* dest = (char*) xlatbuffer;
 
    trleheader*   hd = (trleheader*) vbuf; 
@@ -1927,7 +1927,7 @@ void* xlatpict ( ppixelxlattable xl, void* vbuf )
          }
       
    } else {
-      word* wp2 = (word*) vbuf;
+      Uint16* wp2 = (Uint16*) vbuf;
 
       wp[0] = wp2[0];
       wp[1] = wp2[1];
@@ -2123,7 +2123,7 @@ void* convertSurface ( SDLmm::Surface& s, bool paletteTranslation )
   s.Lock();
 
   char* buf = new char[ imagesize ( 1, 1, s.w(), s.h())];
-  word* wp = (word*) buf;
+  Uint16* wp = (Uint16*) buf;
   wp[0] = s.w()-1;
   wp[1] = s.h()-1;
   SDLmm::PixelFormat fmt = s.GetPixelFormat();

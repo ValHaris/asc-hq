@@ -102,7 +102,7 @@ void         tdashboard::paintheight(void)
 
 void         tdashboard::painttank(void)
 {
-    word         w;
+    int         w;
     int         c;
 
     int x1 = agmp->resolutionx - ( 640 - 520);
@@ -153,7 +153,7 @@ char*         tdashboard:: str_2 ( int num )
 
 void         tdashboard::paintweaponammount(int h, int num, int max, bool dash )
 {
-      word         w;
+      int         w;
 
       w = 20 * num / max;
       if (w > 0)

@@ -232,102 +232,11 @@ int getxpos(void)
 
 
 int getypos(void)
-{ 
-   return cursor.posy + actmap->ypos; 
-} 
-
-
-
-
-/*
-
-word         beeline(integer      x1,
-                       integer      y1,
-                       integer      x2,
-                       integer      y2)
-{ 
-  word         ll; 
-  integer      max, min; 
-
-   ll = maxmalq; 
-      asm
-      shl x1,1
-      mov dx,y1
-      and dx,1
-      add x1,dx
-      
-      shl x2,1
-      mov dx,y2
-      and dx,1
-      add x2,dx
-      
-      mov ax,x1
-      sub ax,x2
-      cmp ax,0
-      jg @pos1
-      neg ax
-      @pos1:
-      
-      mov cx,y1
-      sub cx,y2
-      cmp cx,0
-      jg @pos2
-      neg cx
-      @pos2:
-      
-      cmp ax,cx
-      jna @aa
-      {      cmp ax,0
-      ja @weiter
-      
-      mov dx,y1
-      and dx,1
-      and y2,1
-      cmp dx,y2
-      jz @weiter
-      inc ax     
-      jmp @weiter
-      
-      @aa:
-      xchg ax,cx
-      {  cmp cx,0
-      ja @weiter
-      
-      mov dx,y1
-      and dx,1
-      and y2,1
-      cmp dx,y2
-      jz @weiter
-      inc cx
-      @weiter:
-      sub ax,cx
-      shr ax,1
-      mul ll
-      shl cx,3
-      add ax,cx
-      mov ll,ax
-   end;
-   beeline:=ll;  
-
-        x1:=x1 shl 1;
-   x2:=x2 shl 1;
-   if abs(x1 - x2) > abs(y1-y2) then begin
-   max:=abs(x1 -x2 );
-   if max = 0 then
-   if y1 and 1 <> y2 and 1 then inc(max);
-   min:=abs(y1-y2);
-   end
-   else begin
-   min:=abs(x1 -x2 );
-   if min = 0 then
-   if y1 and 1 <> y2 and 1 then inc(min);
-   max:=abs(y1-y2);
-   end;
-   ll:=min shl 3 + (max - min) * maxmalq shr 1;
-
+{
+   return cursor.posy + actmap->ypos;
 }
 
-*/
+
 
 
 #include "movecurs.inc"      

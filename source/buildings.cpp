@@ -394,7 +394,7 @@ Building :: ~Building ()
 }
 
 
-const int buildingstreamversion = -2;
+const int buildingstreamversion = -3;
 
 
 void Building :: write ( tnstream& stream, bool includeLoadedUnits )
@@ -457,7 +457,7 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits )
     if ( c )
        for (int k = 0; k <= 31; k++)
           if (production[k] )
-             stream.writeWord( production[k]->id );
+             stream.writeInt( production[k]->id );
 
 
     c = 0;
@@ -470,7 +470,7 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits )
     if ( c )
        for ( int k = 0; k <= 31; k++)
           if ( productionbuyable[k] )
-             stream.writeWord( productionbuyable[k]->id );
+             stream.writeInt( productionbuyable[k]->id );
 
 }
 
@@ -486,7 +486,7 @@ Building* Building::newFromStream ( pmap gamemap, tnstream& stream, bool chainTo
     if ( version < buildingstreamversion )
        throw tinvalidversion( stream.getDeviceName(), buildingstreamversion, version );
 
-    if ( version == buildingstreamversion || version == -1 ) {
+    if ( version >= buildingstreamversion && version <= -1 ) {
 
        int id = stream.readInt ();
        typ = gamemap->getbuildingtype_byid ( id );
@@ -597,7 +597,13 @@ void Building :: readData ( tnstream& stream, int version )
     c = stream.readChar();
     if ( c ) {
        for ( int k = 0; k < c ; k++) {
-           word id = stream.readWord();
+
+           int id;
+           if ( version <= -3 )
+              id = stream.readInt();
+           else
+              id = stream.readWord();
+
            production[k] = gamemap->getvehicletype_byid ( id ) ;
            if ( !production[k] )
               throw InvalidID ( "unit", id );
@@ -609,7 +615,12 @@ void Building :: readData ( tnstream& stream, int version )
     c = stream.readChar();
     if ( c ) {
        for ( int k = 0; k < c ; k++) {
-           word id = stream.readWord();
+           int id;
+           if ( version <= -3 )
+              id = stream.readInt();
+           else
+              id = stream.readWord();
+
            productionbuyable[k] = gamemap->getvehicletype_byid ( id );
 
            if ( !productionbuyable[k] )

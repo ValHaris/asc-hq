@@ -29,7 +29,6 @@
 #include <cstring>
 #include <stdlib.h>
 #include <stdio.h>
-#include <malloc.h>
 
 #include "typen.h"
 #include "misc.h"
@@ -57,7 +56,7 @@
 #endif
 
 
-const word fileterminator = 0xa01a;
+const int fileterminator = 0xa01a;
 ticons icons;
 
 
@@ -1036,7 +1035,7 @@ int          tmaploaders::loadmap( const char *       name )
     stream->readpchar ( &description );
     delete[] description;
  
-    word w = stream->readWord();
+    int w = stream->readWord();
  
     if ( w != fileterminator ) 
        throw tinvalidversion ( name, fileterminator, (int) w );
@@ -1313,7 +1312,7 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
    stream->readpchar ( &description );
    delete[] description;
 
-   word w = stream->readWord();
+   int w = stream->readWord();
 
    if ( w != fileterminator )
       throw tinvalidversion ( name, fileterminator, (int) w );
