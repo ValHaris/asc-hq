@@ -31,11 +31,11 @@ We are building ASC/win with Borland C++ Builder 5. It should be possible to bui
 
 <H5>Borland C++ Builder / free commandline compiler</H5>
 
-<UL>
+<OL>
 <LI>Get JPEG-lib by the <A HREF="http://www.ijg.org">Independant Jpeg Group</A>.
-<LI>Uncompress the JPEG-lib source code into asc/source/libs/jpeg-6b/
-<LI>Get SDL. It can be downloaded from <A HREF="http://www.libsdl.org">www.libsdl.org</A>. You need the source code and the DLL file (version 1.2 or newer). 
-<LI>Get SDL_mixer. It can be downloaded from <A HREF="http://www.libsdl.org/libraries.html">www.libsdl.org/libraries.html</A>. You need the source code and the DLL file (version 1.2 or newer). 
+<LI>Uncompress the JPEG-lib source code into asc/source/libs/jpeg-6b/ . 
+<LI>Get SDL 1.2 or newer. It can be downloaded from <A HREF="http://www.libsdl.org">www.libsdl.org</A>. You need the source code and the DLL file (the later is called: "binary runtime / win32"). 
+<LI>Get SDL_mixer. It can be downloaded from <A HREF="http://www.libsdl.org/projects/SDL_mixer/index.html">www.libsdl.org/projects/SDL_mixer/</A>. You need the source code and the DLL file (version 1.2 or newer). 
 <LI>The project files assume there is a <TT>SDL</TT> and a <TT>SDL_mixer</TT> directory located in the same directory where <TT>asc</TT> is placed. You need this directory structure:<BR>  
   <TT>
     asc\<BR>
@@ -46,26 +46,27 @@ We are building ASC/win with Borland C++ Builder 5. It should be possible to bui
     SDL\src\<BR>
     SDL_mixer\<BR>
   </TT>
+   After uncompressing the SDL and SDL_mixer source packages, move them so that this directory structure forms. You probably have to rename the directories from SDL-1.2 to SDL for example.
 <LI>Create a subdirectory called BIN in <TT>SDL\</TT> and put the SDL.DLL into it.
 <LI>Go to this directory and run: <TT>IMPLIB -a -c SDL.LIB SDL.DLL</TT> 
 <LI>Create a subdirectory called BIN in <TT>SDL_MIXER\</TT> and put the SDL_MIXER.DLL into it.
 <LI>Go to this directory and run: <TT>IMPLIB -a -c SDL_mixer.LIB SDL_mixer.DLL</TT> 
 
 <H6>Borland C++ Builder</H6>
-<UL>
+<OL start=10>
 <LI>Open <TT>asc/Asc.bpg</TT> and run "make all projects"
 <LI>If you want to run ASC from within Borland C++ Builder, place a file <TT>ASC.INI</TT> in <TT>asc\soure\win32\borland\</TT> that contains the following line: <BR>
 <TT>SearchPath0=c:\somewhere\</TT><BR>
 replace c:\somewhere by the directory where you want ASC to place its files (savegames, etc.). 
 <LI>Get the datafile (main.con) from the <A HREF="http://www.asc-hq.org/download.html">website</A> and put it in this directory.
-</UL>
+</OL>
 <H6>Free Borland C++ command line compiler</H6>
-<UL>
+<OL start=10>
 <LI>Execute <TT>asc/makebcc.bat</TT> <P>
 
-All files will be placed in the <TT>asc\game\</TT> directory that is going to be created.
-</UL>
-</UL>
+All major files will be placed in the <TT>asc\game\</TT> directory that is going to be created.
+</OL>
+</OL>
 
 
 
