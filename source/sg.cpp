@@ -1055,7 +1055,9 @@ void viewunitmovementrange ( pvehicle veh, tkey taste )
 {
    if ( veh && !moveparams.movestatus && fieldvisiblenow ( getfield ( veh->xpos, veh->ypos ))) {
       actmap->cleartemps ( 7 );
+      TemporaryContainerStorage tcs ( veh, true );
       int move = veh->getMovement();
+      veh->reactionfire.disable();
       veh->setMovement ( veh->typ->movement[log2(veh->height)]);
       VehicleMovement vm ( NULL, NULL );
       if ( vm.available ( veh )) {
@@ -1089,7 +1091,7 @@ void viewunitmovementrange ( pvehicle veh, tkey taste )
             displaymap();
          }
       }
-      veh->setMovement ( move );
+      tcs.restore();
    }
 }
 

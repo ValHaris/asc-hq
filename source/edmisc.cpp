@@ -2,9 +2,15 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.75 2002-03-02 23:04:01 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.76 2002-03-17 21:25:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.75  2002/03/02 23:04:01  mbickel
+//      Some cleanup of source code
+//      Improved Paragui Integration
+//      Updated documentation
+//      Improved Sound System
+//
 //     Revision 1.74  2002/02/21 17:06:50  mbickel
 //      Completed Paragui integration
 //      Moved mail functions to own file (messages)
@@ -1021,6 +1027,7 @@ void         pdsetup(void)
    pd.addbutton ( "Sm~o~oth coasts",          act_smoothcoasts );
    pd.addbutton ( "unitset transformation",    act_unitsettransformation );
    pd.addbutton ( "map transformation",        act_transformMap );
+   pd.addbutton ( "Compare Resources ", act_displayResourceComparison );
 
    pd.addfield ("~O~ptions");
     pd.addbutton ( "~M~ap valuesõctrl+M",          act_changemapvals );
@@ -4413,4 +4420,25 @@ void editArchivalInformation()
   eai.init();
   eai.run();
   eai.done();
+}
+
+void resourceComparison ( )
+{
+   ASCString s;
+   for ( int i = 0; i < 9; i++ ) {
+      s += ASCString("player ") + strrr ( i ) + " : ";
+      Resources plus;
+      Resources have;
+      for ( Player::BuildingList::iterator b = actmap->player[i].buildingList.begin(); b != actmap->player[i].buildingList.end(); ++b ) {
+         Resources res2;
+         (*b)->getresourceplus ( -1, &res2, 1 );
+         plus += res2;
+         have += (*b)->getResource ( Resources ( maxint, maxint, maxint), 1 );
+      }
+      for ( int r = 0; r < resourceTypeNum; r++ )
+         s += ASCString(resourceNames[r]) + " " + strrr ( have.resource(r)) + " +" + strrr(plus.resource(r)) + "; ";
+
+      s += "\n\n";
+   }
+   displaymessage ( s, 3 );
 }

@@ -2,9 +2,15 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.45 2002-03-02 23:04:01 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.46 2002-03-17 21:25:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2002/03/02 23:04:01  mbickel
+//      Some cleanup of source code
+//      Improved Paragui Integration
+//      Updated documentation
+//      Improved Sound System
+//
 //     Revision 1.44  2002/01/29 20:42:16  mbickel
 //      Improved finding of files with relative path
 //      Added wildcards to music playlist files
@@ -321,7 +327,8 @@ mc_check mc;
         "Unitset Information",
         "switch maps",
         "transform map",
-        "Edit Map Archival Information" };
+        "Edit Map Archival Information",
+        "Display Resource Comparison" };
 
 
 // õS Infomessage
@@ -1015,6 +1022,8 @@ void execaction(int code)
    case act_transformMap: transformMap();
       break;
    case act_editArchivalInformation: editArchivalInformation();
+      break;
+   case act_displayResourceComparison : resourceComparison();
       break;
     }
 }

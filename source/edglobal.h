@@ -1,6 +1,10 @@
-//     $Id: edglobal.h,v 1.11 2001-10-11 10:41:06 mbickel Exp $
+//     $Id: edglobal.h,v 1.12 2002-03-17 21:25:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2001/10/11 10:41:06  mbickel
+//      Restructured platform fileio handling
+//      Added map archival information to mapeditor
+//
 //     Revision 1.10  2001/10/08 14:12:20  mbickel
 //      Fixed crash in AI
 //      Speedup of AI
@@ -80,7 +84,7 @@ extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 75;
+const int execactionscount = 76;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -159,6 +163,7 @@ enum tuseractions {
      act_unitSetInformation,
      act_switchmaps,
      act_transformMap,
-     act_editArchivalInformation };
+     act_editArchivalInformation,
+     act_displayResourceComparison };
 
 extern void         execaction(int code);

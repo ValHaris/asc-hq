@@ -1,6 +1,10 @@
-//     $Id: edmisc.h,v 1.22 2002-02-21 17:06:50 mbickel Exp $
+//     $Id: edmisc.h,v 1.23 2002-03-17 21:25:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2002/02/21 17:06:50  mbickel
+//      Completed Paragui integration
+//      Moved mail functions to own file (messages)
+//
 //     Revision 1.21  2001/10/11 10:41:06  mbickel
 //      Restructured platform fileio handling
 //      Added map archival information to mapeditor
@@ -355,3 +359,8 @@ extern MapSwitcher mapSwitcher;
 extern void transformMap();
 
 extern void editArchivalInformation();
+
+//! displays a textmessage comparing the resources of all players 
+extern void resourceComparison ( );
+
+
