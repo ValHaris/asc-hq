@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.81 2000-08-13 12:35:16 mbickel Exp $
+//     $Id: sg.cpp,v 1.82 2000-08-13 15:22:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.81  2000/08/13 12:35:16  mbickel
+//
+//      Dataversion >= 3 is now required
+//
 //     Revision 1.80  2000/08/13 11:55:08  mbickel
 //      Attacking now decreases a units movement by 20% if it has the
 //        "move after attack" flag.
@@ -1262,7 +1266,7 @@ void         loadcursor(void)
 
    {
       tnfilestream stream ("expicons.raw",1);
-      for (i=0; i<16 ;i++ ) 
+      for (i=0; i<maxunitexperience ;i++ ) 
             stream.readrlepict(   &icons.experience[i], false, &w );
    }
 
@@ -3515,7 +3519,7 @@ int main(int argc, char *argv[] )
       } else
          dataVersion = 0;
 
-      if ( dataVersion < 3 )
+      if ( dataVersion < 3 || dataVersion > 0xffff )
          displaymessage("A newer version of the data files is required. \n"
                         "You can download a new data package from http://www.asc-hq.org", 2 );
            
