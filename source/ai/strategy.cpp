@@ -37,13 +37,14 @@ AI::AiResult AI::strategy( void )
       localResult.unitsWaiting = 0;
       stratloop++;
 
-      Player::VehicleList::iterator nvi;
-      for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end();  ) {
-         nvi = vi;
-         ++nvi;
+      vector<int> units;
+      for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); ++vi )
+         units.push_back( (*vi)->networkid );
 
-         pvehicle veh = *vi;
-         if ( veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_fight ) {
+      for ( vector<int>::iterator vi = units.begin(); vi != units.end(); ++vi ) {
+         pvehicle veh = getMap()->getUnit(*vi);
+         if ( veh )
+           if ( veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_fight ) {
             if ( veh->weapexist() && veh->aiparam[ getPlayerNum() ]->getTask() != AiParameter::tsk_tactics
                                   && veh->aiparam[ getPlayerNum() ]->getTask() != AiParameter::tsk_serviceRetreat ) {
                /*
@@ -73,19 +74,18 @@ AI::AiResult AI::strategy( void )
                   }
                }
             }
-         } else {
+          } else {
             int nwid = veh->networkid;
             if ( runUnitTask ( veh ) )
                if ( getMap()->getUnit( nwid ) ) {  // the unit still lives
                   if ( veh->aiparam[getPlayerNum()]->resetAfterJobCompletion )
                      veh->aiparam[getPlayerNum()]->reset( veh );
                }
-         }
+          }
 
          displaymessage2("strategy loop %d ; moved unit %d ... ", stratloop, localResult.unitsMoved );
 
          checkKeys();
-         vi = nvi;
 
       }
       result += localResult;
