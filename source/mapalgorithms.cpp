@@ -394,7 +394,7 @@ int square ( int i )
    return i*i;
 }
 
-float square ( float i )
+inline float square ( float i )
 {
    return i*i;
 }
@@ -413,25 +413,28 @@ WindMovement::WindMovement ( const Vehicle* vehicle )
 
 
    if ( movement ) {
-      for ( int direc = 0; direc < sidenum; direc++) {
-         float abswindspeed = ( vehicle->getMap()->weather.windSpeed * maxwindspeed * minmalq / 256 );
+      int wmn[7];
+      
+      int lastDir = 0;
+      
+      float abswindspeed = float( vehicle->getMap()->weather.windSpeed) * maxwindspeed / 255;
+      
+      for ( float direc = 0; direc < 360; direc++) {
+         static const float pi = 3.14159265;
+         float unitspeedx = movement * sin(direc/180*pi);
+         float unitspeedy = movement * cos(direc/180*pi);
 
-         float relwindspeed  =  abswindspeed / movement;
+         float angle = atan2( unitspeedx, unitspeedy + abswindspeed );
 
-         float pi = 3.14159265;
-
-         float relwindspeedx = 10 * relwindspeed * sin ( 2 * pi * vehicle->getMap()->weather.windDirection / sidenum );
-         float relwindspeedy = -10 * relwindspeed * cos ( 2 * pi * vehicle->getMap()->weather.windDirection / sidenum );
-
-         float xtg = 120 * sin ( 2 * pi * direc / sidenum );
-         float ytg = -120 * cos ( 2 * pi * direc / sidenum );
-
-         int disttofly = (int)sqrt ( square ( xtg - relwindspeedx) + square ( ytg - relwindspeedy ) );
-
-         wm[direc] =  (120 - disttofly) / 10;
-         if ( wm[direc] > 7 )
-            wm[direc] = 7;
+         if ( angle >= 60 * lastDir / (2*pi) ) {
+            float absspeed = sqrt ( square ( unitspeedy + abswindspeed)+ square ( unitspeedx) );
+            wmn[lastDir] = int( 10 - 10*movement/absspeed );
+            ++lastDir;
+         }
       }
+      
+      for ( int i = 0; i < 6; i++ )
+         wm[(i+vehicle->getMap()->weather.windDirection)%6] = wmn[i];
    }
 }
 

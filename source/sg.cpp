@@ -197,7 +197,7 @@ cmousecontrol* mousecontrol = NULL;
 
 
 
-#define maintainance
+#define maintainence
 
 int maintainencecheck( void )
 {

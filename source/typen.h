@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.123 2003-03-07 17:11:41 mbickel Exp $
+//     $Id: typen.h,v 1.124 2003-03-14 21:04:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.123  2003/03/07 17:11:41  mbickel
+//      AI improvements
+//
 //     Revision 1.122  2003/02/27 16:12:45  mbickel
 //      Restructuring of new pathfinding code completed
 //
@@ -1107,7 +1110,7 @@ const int attackmovecost = 0;
 #define destructoutput 5
 #define nowindplanefuelusage 1      // herrscht kein Wind, braucht ein Flugzeug pro Runde soviel Sprit wie das fliegend dieser Anzahl fielder
   //   #define maxwindplainfuelusage 32   // beim nextturn: tank -= fuelconsumption * (maxwindplainfuelusage*nowindplainfuelusage + windspeed) / maxwindplainfuelusage     
-#define maxwindspeed 128          // Wind der St„rke 256 legt pro Runde diese Strecke zur?ck: 128 entspricht 16 fieldern diagonal !
+#define maxwindspeed 120          // Wind with a strength of 255 means that the air moves 12 fields / turn
 
 
 #define generatortruckefficiency 2  // fuer jede vehicle Power wird soviel Sprit gebraucht !
