@@ -66,9 +66,9 @@ install_location=
 type=DATA
 [Workspace_1]
 browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/programming/index-11.html#ss11.1
-cpp_file=/home/martin/asc/source/soundList.cpp
-header_file=/home/martin/asc/data/sounds.txt
-openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/data/sounds.txt,/home/martin/asc/source/soundList.cpp
+cpp_file=/home/martin/asc/source/strtmesg.cpp
+header_file=Untitled.h
+openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/strtmesg.cpp
 show_outputview=true
 show_treeview=true
 [asc.kdevprj]
