@@ -22,6 +22,28 @@ We are going to improve this gradually. Don't hesitate to <A HREF="contact.html"
 
 Another "historical" thing about the source code is the language (not the programming language) that was used for it. Since we did not intend to release the source code we used a mixture of German and English for variable- and function names and avoided writing comments and those that we have are mostly in German. We have now run several translation passes through the code to translate it to English. The global interfaces should be completely in English now, but several local variables may still be in German. Since we run the translation through the code by a source code wide "search and replace" there are now some comments and perhaps a few code elements that were negatively affected by it and sound quite funny.<P>
 
+<H3>Required Tools</H3>
+<H4>for building the DOS version</H4>
+We are developing the project with Watcom C/C++ Version 11.0b. The project files for the Watcom IDE are included. It has been anounced that Watcom C/C++ is going to be released as Open Source. Check out <A HREF="http://www.openwatcom.org">www.openwatcom.org</A>.<P>
+The assembler files (with the exception of <TT>RDTSC.ASM</TT>) can not be assembled by WASM since it does not support the high level language interfaces that TASM ( we are using version 3.2) provides. The bach file <TT>asc\source\watcom.bat</TT> assembles all asm files that are needed, provided that TASM is in the path. <!-- It is principially possible to compile ASC without any assembler routines (the Linux version does this), but since the Assembler files are quite stable and usually do not need to be build again we also provide their assembled <TT>*.OBJ</TT> files to make the building of the project possible without having TASM. -->
+<P>
+
+Since Watcom C++ does not come with the STL, we use STLport 4.0 which can be obtained from <A HREF="http://www.stlport.org">www.stlport.org</A>. Some notes about installing STLPORT 4.0 :
+<UL>
+<LI>Include the stlport directory to your INCLUDE enivironment variable before the original watcom entries. 
+<LI>You may also need to edit the file stlport\stl_user_config.h and uncomment line <TT>#define __STL_NO_SGI_IOSTREAMS</TT>.
+<LI>Edit file stlport\stl\_alloc.h, line #879 and add an extra '0' argument:<BR>
+<TT>return __stl_alloc_rebind(__STATIC_CAST(_Base&.*this),(_Tp*)0).allocate(__n,0); </TT>
+</UL>
+
+Please read the <A HREF="../source/libs/readme.txt">library readme</A> file as well. There are the links for getting the JPEG sources.
+
+As host platform for the development we use OS/2 and as target platform (you should have already noticed that) DOS with DOS4GW as 32bit extender. It should be no problem to develop with Win9x as host platform with Watcom C/C++ except that debugging might be a bit problematic, but that's neither our not Watcom's fault (why is Microsoft not capable of implementing DPMI 1.0 ??).<P>
+
+<H4>for building the Linux version</H4>
+Well, nothing special about that. We build ASC with the standard GNU development tools. Refer to INSTALL for (generic) build instructions.
+
+
 <H3>Source code formatting</H3>
 Since there are many different source code formatting styles out there, it would be quite a mess if everybody used his own style and spends half his time undoing the formatting that others did. So we should agree on a common layout. 
 <A HREF="http://astyle.sourceforge.net/astyle/">Artistic Style</A> is a capable program for formatting source code.
@@ -34,28 +56,11 @@ But, as always, there are exceptions where it helps to break a command into seve
 <P>
 
 
-
-<H3>Required Tools</H3>
-<H4>for building the DOS version</H4>
-We are developing the project with Watcom C/C++ Version 11.0b. The project files for the Watcom IDE are included. It has been anounced that Watcom C/C++ is going to be released as Open Source. Check out <A HREF="http://www.openwatcom.org">www.openwatcom.org</A>.<P>
-The assembler files (with the exception of <TT>RDTSC.ASM</TT>) can not be assembled by WASM since it does not support the high level language interfaces that TASM ( we are using version 3.2) provides. The bach file <TT>asc\source\watcom.bat</TT> assembles all asm files that are needed, provided that TASM is in the path. <!-- It is principially possible to compile ASC without any assembler routines (the Linux version does this), but since the Assembler files are quite stable and usually do not need to be build again we also provide their assembled <TT>*.OBJ</TT> files to make the building of the project possible without having TASM. -->
-<P>
-
-Since Watcom C++ does not come with the STL, we use STLport 4.0 which can be obtained from <A HREF="http://www.stlport.org">www.stlport.org</A>. Include the stlport directory to your INCLUDE enivironment variable before the original watcom entries. You may also need to edit the file stlport\stl_user_config.h and uncomment line <TT>#define __STL_NO_SGI_IOSTREAMS</TT>.<P>
-
-Please read the <A HREF="../source/libs/readme.txt">library readme</A> file as well. There are the links for getting the JPEG sources.
-
-As host platform for the development we use OS/2 and as target platform (you should have already noticed that) DOS with DOS4GW as 32bit extender. It should be no problem to develop with Win9x as host platform with Watcom C/C++ except that debugging might be a bit problematic, but that's neither our not Watcom's fault (why is Microsoft too stupid to implement DPMI 1.0 ??).<P>
-
-<H4>for building the Linux version</H4>
-Well, nothing special about that. We build ASC with the standard GNU development tools. Refer to INSTALL for (generic) build instructions.
-
-
 <H3>Porting ASC</H3>
 Porting ASC to any platform supported by SDL should be farely easy (as long as it is 32 bit and has Intel byte order). 
 
 <H3>The source files</H3>
-A short overview of the various source files ASC consists of.
+A short overview of the various source files ASC consists of (outdated, I've started using doxygen for the source documentation)
 
 <DL>
 <DT><A HREF="../source/artint.cpp">artint.cpp</A>
