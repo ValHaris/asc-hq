@@ -2,9 +2,15 @@
     \brief The color palette and various color translation tables
 */
 
-//     $Id: palette.cpp,v 1.4 2001-01-28 14:04:15 mbickel Exp $
+//     $Id: palette.cpp,v 1.5 2001-01-28 20:42:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2001/01/28 14:04:15  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.3  2000/12/23 13:19:47  mbickel
 //      Made ASC compileable with Borland C++ Builder
 //
@@ -49,8 +55,9 @@ ppixelxlattable xlatpictgraytable;
 
 txlattables xlattables;
 tmixbuf *colormixbuf;
+tpixelxlattable bi2asc_color_translation_table;
 
-int asc_paletteloaded = 0;
+bool asc_paletteloaded = 0;
 
 char* borland_c_sucks ( void )
 {

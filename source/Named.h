@@ -17,8 +17,8 @@
 #ifndef NAMED_H
 #define NAMED_H
 
-#include <string>
 #include "global.h"
+#include "ascstring.h"
 
 /** 
 * A simple Interface-class for a named Thing 
@@ -40,7 +40,7 @@ class Named	{
 		* @param pszName 
 		*/
 		Named(const char* pszName);
-		Named(const string& pszName);
+		Named(const ASCString& pszName);
 		Named(const Named& n);
 		
 		Named& operator= (const Named& n);

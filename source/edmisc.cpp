@@ -1,6 +1,9 @@
-//     $Id: edmisc.cpp,v 1.45 2001-01-28 17:19:07 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.46 2001-01-28 20:42:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2001/01/28 17:19:07  mbickel
+//      The recent cleanup broke some source files; this is fixed now
+//
 //     Revision 1.44  2001/01/25 23:44:58  mbickel
 //      Moved map displaying routins to own file (mapdisplay.cpp)
 //      Wrote program to create pcx images from map files (map2pcx.cpp)
@@ -243,6 +246,7 @@
 #include "edglobal.h"
 #include "password_dialog.h"
 #include "mapdisplay.h"
+#include "graphicset.h"
 
 #ifdef _DOS_
  #include "dos\memory.h"

@@ -1,6 +1,13 @@
-//     $Id: typen.cpp,v 1.65 2001-01-23 21:05:22 mbickel Exp $
+//     $Id: typen.cpp,v 1.66 2001-01-28 20:42:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.65  2001/01/23 21:05:22  mbickel
+//      Speed up of AI
+//      Lot of bugfixes in AI
+//      Moved Research to own files (research.*)
+//      Rewrote storing of developed technologies
+//      Some cleanup and documentation
+//
 //     Revision 1.64  2001/01/22 20:00:10  mbickel
 //      Fixed bug that made savegamefrom campaign games unloadable
 //      Optimized the terrainAccess-checking
@@ -305,6 +312,7 @@
 #include "misc.h"
 #include "typen.h"
 #include "loadbi3.h"
+#include "graphicset.h"
 #include "basegfx.h" 
 
 #ifndef converter

@@ -1,10 +1,14 @@
 /***************************************************************************
-                          Named.cpp  -  description
+                          graphicselector.h  -  description
                              -------------------
-    begin                : Thu Jun 29 2000
-    copyright            : (C) 2000 by frank landgraf
-    email                : 
+    begin                : Sun Jan 28 2001
+    copyright            : (C) 2001 by Martin Bickel
+    email                : bickel@asc-hq.org
  ***************************************************************************/
+
+/*! \file graphicselector.h
+    \brief Functions for selecting an image from a graphic set
+*/
 
 /***************************************************************************
  *                                                                         *
@@ -14,46 +18,11 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#include "Named.h"
-
-#include <string.h>
-#include <malloc.h>
-
-Named::Named()	
-	:	_name(NULL)	
-{}
-
-Named::Named(const char* pszName)	
-{	this->setName(pszName);	}
 
 
-Named::Named(const Named& n)	
-{	
-   setName(n.getName());	
-}
-
-Named::Named(const ASCString& pszName)	
-{	this->setName(pszName.c_str());	}
-
-Named& Named::operator= (const Named& n)
-{
-   setName ( n.getName());
-   return *this;
-}
+extern void getbi3pict ( int* num, void** picture );
+extern void getbi3pict_double ( int* num, void** picture );
 
 
-Named::~Named()	
-{
-	if (_name!=NULL)
-		free(_name);
-}
 
-const char*	Named::getName() const	
-{	return _name;	}
-
-void	Named::setName(const char* pszName)
-{	
-	if (_name!=NULL)
-		free(_name);
-	_name	=	(pszName!=NULL && pszName[0])	?	strdup(pszName)	:	NULL;
-}
+// extern int bi3graphnum;

@@ -2,9 +2,15 @@
     \brief The color palette and various color translation tables
 */
 
-//     $Id: palette.h,v 1.4 2001-01-28 14:04:15 mbickel Exp $
+//     $Id: palette.h,v 1.5 2001-01-28 20:42:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2001/01/28 14:04:15  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.3  1999/12/28 21:03:15  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -75,8 +81,9 @@ extern tpixelxlattable light;
 extern tmixbuf *colormixbuf;
 extern dacpalette256 pal;
 
-extern int asc_paletteloaded;
+extern bool asc_paletteloaded;
 extern ppixelxlattable xlatpictgraytable;  
+extern tpixelxlattable bi2asc_color_translation_table;
 
 #pragma pack()
 

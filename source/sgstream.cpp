@@ -5,9 +5,15 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.50 2001-01-28 14:04:19 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.51 2001-01-28 20:42:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2001/01/28 14:04:19  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.49  2001/01/21 16:37:19  mbickel
 //      Moved replay code to own file ( replay.cpp )
 //      Fixed compile problems done by cleanup
@@ -96,6 +102,7 @@
 #include "basestrm.h"
 #include "palette.h"
 #include "gameoptions.h"
+#include "graphicset.h"
 
 #ifndef converter
  #include "dlg_box.h"

@@ -75,9 +75,9 @@ CXXFLAGS = @CXXFLAGS@ -Dconverter
 
 bin_PROGRAMS = ascdemount ascmount
 
-ascdemount_SOURCES = demount.cpp basestrm.cpp misc.cpp
+ascdemount_SOURCES = demount.cpp basestrm.cpp misc.cpp ascstring.cpp
 
-ascmount_SOURCES = mount.cpp basestrm.cpp misc.cpp
+ascmount_SOURCES = mount.cpp basestrm.cpp misc.cpp ascstring.cpp
 
 ascmount_LDADD = -lSDL -lpthread @LDADDLIBBZ2@
 ascdemount_LDADD = -lSDL -lpthread @LDADDLIBBZ2@
@@ -91,10 +91,10 @@ DEFS = @DEFS@ -I. -I$(srcdir) -I../../..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-ascdemount_OBJECTS =  demount.o basestrm.o misc.o
+ascdemount_OBJECTS =  demount.o basestrm.o misc.o ascstring.o
 ascdemount_DEPENDENCIES = 
 ascdemount_LDFLAGS = 
-ascmount_OBJECTS =  mount.o basestrm.o misc.o
+ascmount_OBJECTS =  mount.o basestrm.o misc.o ascstring.o
 ascmount_DEPENDENCIES = 
 ascmount_LDFLAGS = 
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -107,7 +107,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DEP_FILES =  .deps/basestrm.P .deps/demount.P .deps/misc.P .deps/mount.P
+DEP_FILES =  .deps/ascstring.P .deps/basestrm.P .deps/demount.P \
+.deps/misc.P .deps/mount.P
 SOURCES = $(ascdemount_SOURCES) $(ascmount_SOURCES)
 OBJECTS = $(ascdemount_OBJECTS) $(ascmount_OBJECTS)
 

@@ -24,6 +24,7 @@
 
  #include "typen.h"
  #include "containerbase.h"
+ #include "ascstring.h"
 
 
 const int cbuildingfunctionnum = 18;
@@ -133,7 +134,7 @@ class  Building : public ContainerBase {
     word         maxresearchpoints;
     word         researchpoints;
 
-    string       name;
+    ASCString    name;
     Integer      xpos, ypos;
     pbuilding    next;
     pbuilding    prev;

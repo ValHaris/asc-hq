@@ -1,6 +1,14 @@
-//     $Id: loadbi3.h,v 1.9 2001-01-25 23:45:00 mbickel Exp $
+//     $Id: loadbi3.h,v 1.10 2001-01-28 20:42:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2001/01/25 23:45:00  mbickel
+//      Moved map displaying routins to own file (mapdisplay.cpp)
+//      Wrote program to create pcx images from map files (map2pcx.cpp)
+//      Fixed bug in repair function: too much resource consumption
+//      AI improvements and bug fixes
+//      The BI3 map import function now evaluates the player status (human/
+//       computer)
+//
 //     Revision 1.8  2001/01/21 16:37:18  mbickel
 //      Moved replay code to own file ( replay.cpp )
 //      Fixed compile problems done by cleanup
@@ -62,19 +70,7 @@
 #include "sgstream.h"
 #include "palette.h"
 
-extern void loadbi3graphics( void );
-extern void getbi3pict ( int* num, void** picture );
-extern void getbi3pict_double ( int* num, void** picture );
-extern int  loadbi3pict_double ( int num, void** pict, int interpolate = 0, int reference = 1 );
-  // returns: 1 if picture is a reference
-  //          0 if picture is a copy
-             
-
-
-extern void loadbi3pict ( int num, void** pict );
-extern int bi3graphnum;
 extern void check_bi3_dir ( void );
-extern tpixelxlattable bi2asc_color_translation_table;
 extern void importbattleislemap ( const char* path, const char* filename, TerrainType::Weather* trrn, string* errorOutput = NULL );
 extern void insertbattleislemap ( int x, int y, const char* path, const char* filename  );
 
@@ -86,9 +82,5 @@ extern int getobjectcontainertranslatenum ( void );
 extern const int* getterraintranslate ( int pos );
 extern const int* getobjectcontainertranslate ( int pos );
 
-extern int keeporiginalpalette;
-
-extern int getGraphicSetIdFromFilename ( const char* filename );
-extern int activateGraphicSet ( int id  );
 
 #endif

@@ -28,6 +28,7 @@
 #include "loadbi3.h"
 #include "mapalgorithms.h"
 #include "loadpcx.h"
+#include "graphicset.h"
 
 #ifdef sgmain
  #include "controls.h"

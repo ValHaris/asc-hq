@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: sg.cpp,v 1.127 2001-01-28 17:19:13 mbickel Exp $
+//     $Id: sg.cpp,v 1.128 2001-01-28 20:42:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.127  2001/01/28 17:19:13  mbickel
+//      The recent cleanup broke some source files; this is fixed now
+//
 //     Revision 1.126  2001/01/28 14:04:16  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -199,6 +202,8 @@
 #include "viewcalculation.h"
 #include "replay.h"
 #include "dashboard.h"
+#include "graphicset.h"
+
 
 #ifdef HEXAGON
 #include "loadbi3.h"

@@ -21,6 +21,7 @@
 #include "errors.h"
 #include "loadbi3.h"
 #include "basegfx.h"
+#include "graphicset.h"
 
 #ifndef converter
  #include "basegfx.h"
@@ -1667,9 +1668,9 @@ void SingleWeapon::set ( int type )
    typ = type;
 }
 
-string SingleWeapon::getName ( void )
+ASCString SingleWeapon::getName ( void )
 {
-   string s;
+   ASCString s;
 
    int k = getScalarWeaponType();
    if ( k < cwaffentypennum && k >= 0 ) 
