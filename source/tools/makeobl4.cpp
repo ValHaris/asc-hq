@@ -169,83 +169,90 @@ main (int argc, char *argv[] )
               printf(" \n use which graphics ? \n");
               yn_switch (" BI3 ", " own ", 1, 0, graph );
 
+              char chnow = YES;
+              printf ("\n    change pictures for %s ? \n", cwettertypen[ww]);
+              yn_switch ("", "", YES, NO, chnow);
 
-               ft->picture[ww] = new thexpic[100];
-   
-               if ( first ) {
-                  do {
-                     if ( graph == 1 ) {
-                        initgraphics ( 640, 480, 8);
-                         
-                        loadpalette();
-                        setvgapalette256 ( pal );
-               
-                        getbi3pict_double ( &ft->picture[ww][ft->pictnum].bi3pic, &ft->picture[ww][ft->pictnum].picture );
-                        ft->picture[ww][ft->pictnum].flip = 0;
-                     } else {
-                        tfile    pictfile;
-                       
-                        fileselect ("*.PCX", _A_NORMAL, pictfile);
-                                                  
-                        initgraphics ( 640, 480, 8);
-                        ft->picture[ww][ft->pictnum].picture = loadpcx2(pictfile.name);
-                        ft->picture[ww][ft->pictnum].bi3pic = -1;
-                        ft->picture[ww][ft->pictnum].flip = 0;
-                     }
-                     ft->pictnum++;
-                                       
-                     closegraphics();
-                     settxt50mode();
-            
-                    /*
-                     if ( dirlist ) {
-                        printf ("\n    dir : \n");
-                        int d = 0;
-                        num_ed ( ft->dirlist[ ft->dirlistnum ] , 0, maxint);
-                        ft->dirlistnum++;
-                     }
-                    */
-            
-                     printf(" \n include more pictures ? \n\n");
-                     yn_switch (" YES ", " NO ", 1, 0, contin );
-               
-                  } while ( contin ); /* enddo */
-                  first = 0;
-               } else {
-                  printf("now the pictures for %s", cwettertypen[ww] );
-                  _wait();
-   
-                  if ( graph == 1 ) {
-                     initgraphics ( 640, 480, 8);
-                     tnfilestream mainstream ( "palette.pal" , 1);
-                     mainstream.readdata( (char*) pal, sizeof(pal)); 
-                     setvgapalette256 ( pal );
+              if ( chnow == YES ) {
 
-                     for ( int m = 0; m < ft->pictnum; m++ ) 
-                        getbi3pict_double ( &ft->picture[ww][m].bi3pic, &ft->picture[ww][m].picture );
-                     closegraphics();
-                     settxt50mode();
-                  } else {
-                     for ( int m = 0; m < ft->pictnum; m++ ) {
-                        tfile    pictfile;
-                       
-                        fileselect ("*.PCX", _A_NORMAL, pictfile);
-                                                  
-                        initgraphics ( 640, 480, 8);
-                        ft->picture[ww][m].picture = loadpcx2(pictfile.name);
-                        ft->picture[ww][m].bi3pic = -1;
-                        ft->picture[ww][m].flip = 0;
+                  ft->picture[ww] = new thexpic[100];
+      
+                  if ( first ) {
+                     do {
+                        if ( graph == 1 ) {
+                           initgraphics ( 640, 480, 8);
+                            
+                           loadpalette();
+                           setvgapalette256 ( pal );
+                  
+                           getbi3pict_double ( &ft->picture[ww][ft->pictnum].bi3pic, &ft->picture[ww][ft->pictnum].picture );
+                           ft->picture[ww][ft->pictnum].flip = 0;
+                        } else {
+                           tfile    pictfile;
+                          
+                           fileselect ("*.PCX", _A_NORMAL, pictfile);
+                                                     
+                           initgraphics ( 640, 480, 8);
+                           ft->picture[ww][ft->pictnum].picture = loadpcx2(pictfile.name);
+                           ft->picture[ww][ft->pictnum].bi3pic = -1;
+                           ft->picture[ww][ft->pictnum].flip = 0;
+                        }
+                        ft->pictnum++;
+                                          
                         closegraphics();
                         settxt50mode();
-                     } 
+               
+                       /*
+                        if ( dirlist ) {
+                           printf ("\n    dir : \n");
+                           int d = 0;
+                           num_ed ( ft->dirlist[ ft->dirlistnum ] , 0, maxint);
+                           ft->dirlistnum++;
+                        }
+                       */
+               
+                        printf(" \n include more pictures ? \n\n");
+                        yn_switch (" YES ", " NO ", 1, 0, contin );
+                  
+                     } while ( contin ); /* enddo */
+                     first = 0;
+                  } else {
+                     printf("now the pictures for %s", cwettertypen[ww] );
+                     _wait();
+      
+                     if ( graph == 1 ) {
+                        initgraphics ( 640, 480, 8);
+                        tnfilestream mainstream ( "palette.pal" , 1);
+                        mainstream.readdata( (char*) pal, sizeof(pal)); 
+                        setvgapalette256 ( pal );
+   
+                        for ( int m = 0; m < ft->pictnum; m++ ) 
+                           getbi3pict_double ( &ft->picture[ww][m].bi3pic, &ft->picture[ww][m].picture );
+                        closegraphics();
+                        settxt50mode();
+                     } else {
+                        for ( int m = 0; m < ft->pictnum; m++ ) {
+                           tfile    pictfile;
+                          
+                           fileselect ("*.PCX", _A_NORMAL, pictfile);
+                                                     
+                           initgraphics ( 640, 480, 8);
+                           ft->picture[ww][m].picture = loadpcx2(pictfile.name);
+                           ft->picture[ww][m].bi3pic = -1;
+                           ft->picture[ww][m].flip = 0;
+                           closegraphics();
+                           settxt50mode();
+                        } 
+                     }
                   }
-               }
-            }                                         
+               }                                         
+            }
    
       } else { 
-         initgraphics ( 640, 480, 8);
+         initgraphics ( 800, 600, 8);
    
-         putspriteimage( 50, 50, ft->picture[0][0].picture ); 
+         for ( int i = 0; i < ft->pictnum; i++ )
+            putspriteimage( 10 + i%8 * 50, 10 + i/8 * 50, ft->picture[0][i].picture ); 
    
          {
             tnfilestream mainstream ( "palette.pal" , 1);
@@ -253,7 +260,12 @@ main (int argc, char *argv[] )
          }
          setvgapalette256(pal);
    
-         wait();
+         int ch = getch();
+         if ( ch == 's' ) {
+            char* nm = getnextfilenumname ( "object", "pcx", 0 );
+            writepcx ( nm, 0, 0, 799, 599 , pal );
+         }
+
          closegraphics();
       } 
      
