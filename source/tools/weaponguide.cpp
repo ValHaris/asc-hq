@@ -58,6 +58,7 @@ int main(int argc, char *argv[] )
       loadpalette();
       loadbi3graphics();
 
+      loadalltextfiles();
       loadallobjecttypes();
       loadallbuildingtypes();
       loadallvehicletypes();

@@ -1,6 +1,11 @@
-//     $Id: edglobal.h,v 1.7 2000-11-29 09:40:19 mbickel Exp $
+//     $Id: edglobal.h,v 1.8 2001-08-02 15:33:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/11/29 09:40:19  mbickel
+//      The mapeditor has now two maps simultaneously active
+//      Moved memorychecking functions to its own file: memorycheck.cpp
+//      Rewrote password handling in ASC
+//
 //     Revision 1.6  2000/08/02 15:52:56  mbickel
 //      New unit set definition files
 //      demount accepts now more than one container file
@@ -70,6 +75,7 @@ enum tuseractions {
      
      act_seteditmode,
      act_selbodentyp,
+     act_selbodentypAll,
      act_selunit,
      act_selcolor,
      act_selbuilding,

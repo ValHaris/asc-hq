@@ -4,9 +4,13 @@
     There are two independant implementations of these routines: #loadpcx.cpp and #dos/pcx.asm are written in assembly, and #loadpcxc.cpp is written in c++
 */
 
-//     $Id: loadpcx.h,v 1.8 2001-07-27 21:13:35 mbickel Exp $
+//     $Id: loadpcx.h,v 1.9 2001-08-02 15:33:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2001/07/27 21:13:35  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.7  2001/02/28 14:10:05  mbickel
 //      Added some small editors to linux makefiles
 //      Added even more dirty hacks to basegfx: some more truecolor functions
@@ -65,8 +69,8 @@
 #include "basegfx.h"
 #include "ascstring.h"
 
-extern char loadpcxxy ( const ASCString& name, char setpal, word x, word y);
-extern char loadpcxxy( pnstream stream, int x, int y, int setpalette = 0 );
+extern char loadpcxxy ( const ASCString& name, bool setpal, int xpos, int ypos, int* xsize = NULL, int* ysize = NULL );
+extern char loadpcxxy( pnstream stream, int x, int y, bool setpalette = false, int* xsize = NULL, int* ysize = NULL );
 extern void writepcx ( const ASCString& name, int x1, int y1, int x2, int y2, dacpalette256 pal );
 extern int pcxGetColorDepth ( const ASCString& name );
 

@@ -5,9 +5,13 @@
     which is called #loadpcx.cpp , but not used any more.
 */
 
-//     $Id: loadpcxc.cpp,v 1.15 2001-07-27 21:13:35 mbickel Exp $
+//     $Id: loadpcxc.cpp,v 1.16 2001-08-02 15:33:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2001/07/27 21:13:35  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.14  2001/02/28 14:10:05  mbickel
 //      Added some small editors to linux makefiles
 //      Added even more dirty hacks to basegfx: some more truecolor functions
@@ -157,7 +161,7 @@ int pcxGetColorDepth ( const ASCString& filename )
 }
 
 
-char loadpcxxy( pnstream stream, int x, int y, int setpalette )
+char loadpcxxy( pnstream stream, int x, int y, bool setpalette, int* xsize, int* ysize )
 {
    int read = 0;
 
@@ -175,8 +179,15 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
          header.size = stream->getSize();
    }
 
-   int width = (header.xmax - header.xmin + 1 );
-   int pixels = width * (header.ymax - header.ymin + 1) * header.nplanes;
+   int width = header.xmax - header.xmin + 1 ;
+   int height = header.ymax - header.ymin + 1;
+   int pixels = width * height * header.nplanes;
+
+   if ( xsize )
+      *xsize = width;
+
+   if ( ysize )
+      *ysize = height;
 
    if ( header.manufacturer != 10 || 
         header.bitsperpixel != 8  || 
@@ -292,10 +303,10 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
 } 
 
 
-char loadpcxxy ( const ASCString& name, char setpal, word x, word y)
+char loadpcxxy ( const ASCString& name, bool setpal, int xpos, int ypos, int* xsize, int* ysize )
 {
    tnfilestream s ( name, tnstream::reading );
-   return loadpcxxy ( &s, x, y, setpal );
+   return loadpcxxy ( &s, xpos, ypos, setpal, xsize, ysize );
 }
 
 

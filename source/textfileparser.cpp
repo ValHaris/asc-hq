@@ -35,6 +35,7 @@ const int operationsNum = 1;
 const char* operations[operationsNum] =  { "=" };
 
 
+const char* whiteSpace = " \t";
 
 
 
@@ -57,13 +58,36 @@ void PropertyReadingContainer :: writeProperty ( Property& p, const ASCString& v
 
 void PropertyWritingContainer :: writeProperty ( Property& p, const ASCString& value )
 {
+   ASCString output;
    for ( int i = 0; i < levelDepth; i++ )
-      stream.writeString ( "   ", false );
+      output += "   ";
 
-   stream.writeString ( p.getLastName(), false );
-   stream.writeString ( " = " , false);
-   stream.writeString ( value, false );
-   stream.writeString ( "\n", false );
+   output += p.getLastName();
+   output +=  " = ";
+
+   int indent = output.length();
+   ASCString::size_type pos = value.find ( "\n" );
+   if ( pos != ASCString::npos ) {
+      output += "[";
+      ASCString::size_type oldpos = 0;
+      do {
+         output += value.substr( oldpos, pos-oldpos+1 );
+         oldpos = pos+1;
+         for ( int i = 0; i < indent; i++ )
+            output += " ";
+         if ( pos+1 < value.length() )
+            pos = value.find ( "\n", pos+1 );
+         else
+            pos = ASCString::npos;
+      } while ( pos != ASCString::npos );
+      output += value.substr( oldpos );
+      output += "]";
+   } else
+      output += value;
+
+   output += "\n";
+
+   stream.writeString ( output, false );
 }
 
 
@@ -146,6 +170,13 @@ PropertyContainer::IntegerArrayProperty&  PropertyContainer::addIntegerArray ( c
    return *ip;
 }
 
+PropertyContainer::IntRangeArrayProperty&  PropertyContainer::addIntRangeArray ( const ASCString& name, vector<IntRange>& property )
+{
+   IntRangeArrayProperty* ip = new IntRangeArrayProperty ( property );
+   setup ( ip, name );
+   return *ip;
+}
+
 
 PropertyContainer::TagArrayProperty&  PropertyContainer::addTagArray ( const ASCString& name, BitSet& property, int tagNum, const char** tags, bool inverted )
 {
@@ -153,6 +184,21 @@ PropertyContainer::TagArrayProperty&  PropertyContainer::addTagArray ( const ASC
    setup ( ip, name );
    return *ip;
 }
+
+PropertyContainer::TagIntProperty&  PropertyContainer::addTagInteger ( const ASCString& name, int& property, int tagNum, const char** tags, bool inverted )
+{
+   TagIntProperty* ip = new TagIntProperty ( property, tagNum, tags, inverted );
+   setup ( ip, name );
+   return *ip;
+}
+
+PropertyContainer::NamedIntProperty&  PropertyContainer::addNamedInteger ( const ASCString& name, int& property, int tagNum, const char** tags )
+{
+   NamedIntProperty* ip = new NamedIntProperty ( property, tagNum, tags );
+   setup ( ip, name );
+   return *ip;
+}
+
 
 PropertyContainer::ImageArrayProperty&   PropertyContainer::addImageArray ( const ASCString& name, vector<void*> &property, const ASCString& filename )
 {
@@ -294,8 +340,20 @@ void PropertyContainer::StringProperty::evaluate_rw ( )
 {
    if ( propertyContainer->isReading() )
       property = entry->value;
-   else
+   else {
       valueToWrite = property ;
+
+      ASCString::size_type pos = 0;
+      static const int linewidth = 60;
+      do {
+         if ( pos + linewidth < valueToWrite.length() ) {
+            pos = valueToWrite.find_first_of ( whiteSpace, pos + linewidth );
+            if ( pos != ASCString::npos )
+               valueToWrite[pos] = '\n';
+         } else
+            pos = ASCString::npos;
+      } while ( pos != ASCString::npos );
+   }
 }
 
 
@@ -316,6 +374,36 @@ void PropertyContainer::IntegerArrayProperty::evaluate_rw ( )
       }
    }
 }
+
+void PropertyContainer::IntRangeArrayProperty::evaluate_rw ( )
+{
+   if ( propertyContainer->isReading() ) {
+      property.clear();
+      StringTokenizer st ( entry->value );
+      ASCString s = st.getNextToken();
+      while ( !s.empty() ) {
+         if ( s.find ( "-" ) != ASCString::npos ) {
+            ASCString from = s.substr ( 0, s.find ( "-" )-1 );
+            ASCString to = s.substr ( s.find ( "-" )+1 );
+            property.push_back ( IntRange ( atoi ( from.c_str() ), atoi ( to.c_str() )));
+         } else {
+            property.push_back ( IntRange ( atoi ( s.c_str() ), atoi ( s.c_str() )));
+         }
+         s = st.getNextToken();
+      }
+   } else {
+      for ( PropertyType::iterator i = property.begin(); i != property.end(); i++ ) {
+         if ( i->from != i->to ) {
+            valueToWrite += strrr ( i->from );
+            valueToWrite += "-";
+            valueToWrite += strrr ( i->to );
+         } else
+            valueToWrite += strrr ( i->from );
+         valueToWrite += " ";
+      }
+   }
+}
+
 
 void PropertyContainer::TagArrayProperty::evaluate_rw ( )
 {
@@ -347,6 +435,59 @@ void PropertyContainer::TagArrayProperty::evaluate_rw ( )
          }
 }
 
+void PropertyContainer::TagIntProperty::evaluate_rw ( )
+{
+   if ( propertyContainer->isReading() ) {
+      if ( inverted )
+         property = -1;
+      else
+         property = 0;
+
+      StringTokenizer st ( entry->value );
+      ASCString s = st.getNextToken();
+      while ( !s.empty() ) {
+         bool found = false;
+         for ( int i = 0; i < tagNum; i++ )
+            if ( s.equal_ci ( tags[i] )  ) {
+               property ^= 1 << i;
+               found = true;
+               break;
+            }
+
+         if ( !found )
+            propertyContainer->error ( name + ": token "+ s +" unknown" );
+         s = st.getNextToken();
+      }
+   } else
+      for ( int i = 0; i < tagNum; i++ )
+         if ( !!(property & (1 << i)) != inverted ) {
+            valueToWrite += tags[i];
+            valueToWrite += " ";
+         }
+}
+
+void PropertyContainer::NamedIntProperty::evaluate_rw ( )
+{
+   if ( propertyContainer->isReading() ) {
+
+      StringTokenizer st ( entry->value );
+      ASCString s = st.getNextToken();
+      if ( !s.empty() ) {
+         bool found = false;
+         for ( int i = 0; i < tagNum; i++ )
+            if ( s.equal_ci ( tags[i] )  ) {
+               property = i;
+               found = true;
+               break;
+            }
+
+         if ( !found )
+            propertyContainer->error ( name + ": token "+ s +" unknown" );
+      }
+   } else
+       valueToWrite += tags[property];
+}
+
 
 
 vector<void*> loadImage ( const ASCString& file, int num )
@@ -360,37 +501,50 @@ vector<void*> loadImage ( const ASCString& file, int num )
       s.readrlepict ( &mask, false, & i );
    }
 
+   int imgwidth = fieldsizex;
+   int imgheight = fieldsizey;
+
    int xsize;
    if ( num <= 10)
       xsize = (num+1)* 100;
    else
       xsize = 1100;
 
-   int depth = pcxGetColorDepth ( file.c_str() );
+   int depth = pcxGetColorDepth ( file );
    if ( depth > 8 ) {
       tvirtualdisplay vdp ( xsize, (num/10+1)*100, TCalpha, 32 );
-      loadpcxxy ( file.c_str(), 0, 0, 0 );
+      if ( num == 1 )
+         loadpcxxy ( file, 0, 0, 0, &imgwidth, &imgheight );
+      else
+         loadpcxxy ( file, 0, 0, 0 );
+
       for ( int i = 0; i < num; i++ ) {
           int x1 = (i % 10) * 100;
           int y1 = (i / 10) * 100;
-          TrueColorImage* tci = getimage ( x1, y1, x1 + fieldxsize-1, y1 + fieldysize-1 );
+          TrueColorImage* tci = getimage ( x1, y1, x1 + imgwidth-1, y1 + imgheight-1 );
 
           tvirtualdisplay vdp ( 100, 100, 255 );
           void* img = convertimage ( tci, pal );
           putimage ( 0, 0, img );
           putmask ( 0, 0, mask, 0 );
-          getimage ( 0, 0, fieldsizex-1, fieldsizey-1, img );
+          getimage ( 0, 0, imgwidth-1, imgheight-1, img );
           images.push_back ( img );
       }
    } else {
       tvirtualdisplay vdp ( xsize, (num/10+1)*100, 255, 8 );
-      loadpcxxy ( file.c_str(), 0, 0, 0 );
+
+      if ( num == 1 )
+         loadpcxxy ( file, 0, 0, 0, &imgwidth, &imgheight );
+      else
+         loadpcxxy ( file, 0, 0, 0 );
+
       for ( int i = 0; i < num; i++ ) {
           int x1 = (i % 10) * 100;
           int y1 = (i / 10) * 100;
-          putmask ( x1, y1, mask, 0 );
-          void* img = new char[imagesize (0, 0, fieldsizex-1, fieldsizey-1)];
-          getimage ( x1, y1, x1+fieldsizex-1, y1+fieldsizey-1, img );
+          if ( num > 1 )
+             putmask ( x1, y1, mask, 0 );
+          void* img = new char[imagesize (0, 0, imgheight-1, imgwidth-1)];
+          getimage ( x1, y1, x1+imgwidth-1, y1+imgheight-1, img );
           images.push_back ( img );
       }
    }
@@ -402,7 +556,7 @@ void PropertyContainer::ImageProperty::evaluate_rw ( )
 {
    if ( propertyContainer->isReading() ) {
       try {
-         StringTokenizer st ( entry->value );
+         StringTokenizer st ( entry->value, true );
          property = loadImage ( st.getNextToken(), 1 )[0];
       }
       catch ( ASCexception ){
@@ -410,10 +564,12 @@ void PropertyContainer::ImageProperty::evaluate_rw ( )
          property = NULL;
       }
    } else {
+      int width, height;
+      getpicsize( property, width, height) ;
       tvirtualdisplay vdp ( 100, 100, 255, 8 );
       putimage ( 0, 0, property );
       valueToWrite = extractFileName_withoutSuffix(fileName) + ".pcx";
-      writepcx ( valueToWrite, 0, 0, fieldsizex-1, fieldsizey-1, pal );
+      writepcx ( valueToWrite, 0, 0, width-1, height-1, pal );
    }
 }
 
@@ -449,6 +605,47 @@ void PropertyContainer::ImageArrayProperty::evaluate_rw ( )
 
 
 ///////////////////// TextFormatParser //////////////////////////
+
+ASCString TextFormatParser::readLine ( )
+{
+   ASCString s;
+   int noCommentLines = 0;
+   int bracketsOpen = 0;
+   do {
+      ASCString t = stream->readString();
+      ASCString::size_type pos = t.find_first_not_of ( whiteSpace );
+      if ( pos != ASCString::npos ) {
+         if ( t[pos] != ';' ) {
+            noCommentLines++;
+            if ( !s.empty() )
+               s += " ";
+
+            s += t.substr ( pos );
+
+            if ( t.find ( "[" ) != t.npos )
+               bracketsOpen++;
+
+            if ( t.find ( "]" ) != t.npos )
+               bracketsOpen--;
+         }
+      } else {
+         // empty line
+         if ( bracketsOpen )
+            s += "\n";
+      }
+
+   } while ( noCommentLines == 0 || bracketsOpen > 0 );
+
+   ASCString::size_type pos = s.find ( "[" );
+   if ( pos != s.npos )
+      s.erase ( pos, 1 );
+
+   pos = s.rfind ( "]" );
+   if ( pos != s.npos )
+      s.erase ( pos, 1 );
+
+   return s;
+}
 
 
 
@@ -500,15 +697,19 @@ void TextFormatParser::parseLine ( const ASCString& line )
 void TextFormatParser::startLevel ( const ASCString& levelName )
 {
 
-   if ( levelDepth == 0 )
-      if ( ! levelName.equal_ci ( primaryName )  )
-         error ( "expecting group " + primaryName + " , found " + levelName );
-
+   if ( levelDepth == 0  ) {
+      if ( !primaryName.empty() )
+         if ( ! levelName.equal_ci ( primaryName )  )
+            error ( "expecting group " + primaryName + " , found " + levelName );
+      textPropertyGroup->typeName = levelName;
+      textPropertyGroup->typeName.toLower();
+   }
+   
    int curlevel = ++levelDepth;
    level.push_back ( levelName );
 
    do {
-       parseLine ( stream->readString() );
+       parseLine ( readLine() );
    } while ( levelDepth >= curlevel );
 }
 
@@ -518,7 +719,7 @@ TextPropertyGroup* TextFormatParser::run (  )
    textPropertyGroup = new TextPropertyGroup ;
    textPropertyGroup->fileName = stream->getDeviceName();
    textPropertyGroup->location = stream->getLocation();
-   parseLine ( stream->readString() );
+   parseLine ( readLine() );
    return textPropertyGroup;
 }
 
@@ -532,33 +733,3 @@ void TextFormatParser::error ( const ASCString& errmsg )
 }
 
 
-void testtext ( TerrainType* pt, ObjectType* po )
-{
-   {
-      tnfilestream s ( "terraintest.txt", tnstream::reading );
-      TextFormatParser tfp ( &s, "TerrainType" );
-
-      TextPropertyGroup* tpg = tfp.run();
-      PropertyReadingContainer pc ( "TerrainType", tpg );
-
-      TerrainType t;
-      t.runTextIO ( pc );
-      pc.run();
-      delete tpg;
-   }
-
-
-   {
-   PropertyWritingContainer pc2 ( "TerrainType", "test.txtbdt" );
-
-   pt->runTextIO ( pc2 );
-   pc2.run();
-   }
-   {
-   PropertyWritingContainer pc2 ( "ObjectType", "test.txtobj" );
-
-   po->runTextIO ( pc2 );
-   pc2.run();
-   }
-
-}

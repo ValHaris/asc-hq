@@ -57,12 +57,13 @@ extern BuildingTypeVector& getbuildingtypevector ( void );
 typedef dynamic_array<pobjecttype> ObjectTypeVector;
 extern ObjectTypeVector& getobjecttypevector ( void );
 
-
+extern void  loadalltextfiles();
 extern void  loadallbuildingtypes(void);
 extern void  loadallvehicletypes(void);
 extern void  loadallterraintypes(void);
 extern void  loadalltechnologies(void);
 extern void  loadallobjecttypes ( void );
+extern void  freetextdata();
 
 extern pobjecttype streetobjectcontainer ;
 extern pobjecttype pathobject;

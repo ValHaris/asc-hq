@@ -34,8 +34,10 @@ class TextPropertyGroup {
 
          typedef list<Entry> Entries;
          Entries entries;
+
          ASCString fileName;
          ASCString location;
+         ASCString typeName;
 };
 
 
@@ -52,8 +54,9 @@ class TextFormatParser {
          TextPropertyGroup* textPropertyGroup;
 
      public:
-        TextFormatParser( tnstream* stream_, const ASCString& primaryName_ ) : stream ( stream_ ), primaryName ( primaryName_ ), levelDepth ( 0 ), textPropertyGroup ( NULL ) {};
+        TextFormatParser( tnstream* stream_, const ASCString& primaryName_ = "" ) : stream ( stream_ ), primaryName ( primaryName_ ), levelDepth ( 0 ), textPropertyGroup ( NULL ) {};
         TextPropertyGroup* run (  );
+        ASCString readLine ( );
      protected:
         void startLevel ( const ASCString& levelName );
         void parseLine ( const ASCString& line );
@@ -124,6 +127,14 @@ class PropertyContainer {
             public:
                IntegerArrayProperty ( vector<int>& property_ ) : property ( property_ ) {};
          };
+         class IntRangeArrayProperty : public Property {
+              typedef vector<IntRange> PropertyType;
+              PropertyType& property;
+            protected:
+              void evaluate_rw ( );
+            public:
+               IntRangeArrayProperty ( vector<IntRange>& property_ ) : property ( property_ ) {};
+         };
          class TagArrayProperty : public Property {
               BitSet& property;
               int tagNum;
@@ -134,6 +145,27 @@ class PropertyContainer {
             public:
                TagArrayProperty ( BitSet& property_, int tagNum_, const char** tags_, bool inverted_  ) : property ( property_ ), tagNum (tagNum_), tags ( tags_ ), inverted ( inverted_ ) {};
          };
+         class TagIntProperty : public Property {
+              int& property;
+              int tagNum;
+              const char** tags;
+              bool inverted;
+            protected:
+              void evaluate_rw ( );
+            public:
+               TagIntProperty ( int& property_, int tagNum_, const char** tags_, bool inverted_  ) : property ( property_ ), tagNum (tagNum_), tags ( tags_ ), inverted ( inverted_ ) {};
+         };
+         class NamedIntProperty : public Property {
+              int& property;
+              int tagNum;
+              const char** tags;
+            protected:
+              void evaluate_rw ( );
+            public:
+               NamedIntProperty ( int& property_, int tagNum_, const char** tags_ ) : property ( property_ ), tagNum (tagNum_), tags ( tags_ ) {};
+         };
+
+
          class ImageProperty : public Property {
                void* &property;
                ASCString fileName;
@@ -163,7 +195,10 @@ class PropertyContainer {
          StringProperty&        addString ( const ASCString& name, ASCString& property );
          IntProperty&           addInteger ( const ASCString& name, int& property );
          IntegerArrayProperty&  addIntegerArray ( const ASCString& name, vector<int>& property );
+         IntRangeArrayProperty& addIntRangeArray ( const ASCString& name, vector<IntRange>& property );
          TagArrayProperty&      addTagArray ( const ASCString& name, BitSet& property, int tagNum, const char** tags, bool inverted = false );
+         TagIntProperty&        addTagInteger ( const ASCString& name, int& property, int tagNum, const char** tags, bool inverted = false );
+         NamedIntProperty&      addNamedInteger ( const ASCString& name, int& property, int tagNum, const char** tags );
          ImageProperty&         addImage ( const ASCString& name, void* &property, const ASCString& fileName );
          ImageArrayProperty&    addImageArray ( const ASCString& name, vector<void*> &property, const ASCString& fileName );
          BoolProperty&          addBool  ( const ASCString& name, bool &property );

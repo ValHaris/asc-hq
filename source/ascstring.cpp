@@ -125,7 +125,7 @@ int StringTokenizer::CharSpace ( char c )
   const char* ops = "=*/+-";
   const char* d = ops;
   do {
-     if( *d == c )
+     if( *d == c && !includeOperators )
         return 2;
      if ( *d == 0 )
         return 1;

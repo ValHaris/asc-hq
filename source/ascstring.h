@@ -47,10 +47,11 @@
  class StringTokenizer {
        const ASCString& str;
        int i;
+       bool includeOperators;
     private:
        int CharSpace ( char c );
     public:
-       StringTokenizer ( const ASCString & _str ) : str( _str ), i ( 0 ) {};
+       StringTokenizer ( const ASCString & _str, bool includeOperators_ = false ) : str( _str ), i ( 0 ), includeOperators ( includeOperators_ ) {};
        ASCString getNextToken ( );
        ASCString getRemaining ( );
  };

@@ -71,7 +71,7 @@ int main(int argc, char *argv[] )
             if ( patimat ( "*.obl", filename.c_str() )) {
                ObjectType* ot = loadobjecttype ( filename.c_str() );
 
-               PropertyWritingContainer pc ( "ObjectType", ot->fileName + ".oblt" );
+               PropertyWritingContainer pc ( "ObjectType", ot->fileName + ".asctxt" );
                cout << "Writing file " << pc.getFilename() << "... ";
                ot->runTextIO ( pc );
                pc.run();
@@ -83,7 +83,7 @@ int main(int argc, char *argv[] )
             if ( patimat ( "*.trr", filename.c_str() )) {
                TerrainType* tt = loadterraintype ( filename.c_str() );
 
-               PropertyWritingContainer pc ( "TerrainType", tt->fileName + ".trrt" );
+               PropertyWritingContainer pc ( "TerrainType", tt->fileName + ".asctxt" );
                cout << "Writing file " << pc.getFilename() << "... ";
                tt->runTextIO ( pc );
                pc.run();
@@ -91,6 +91,18 @@ int main(int argc, char *argv[] )
                cout << "done \n";
 
                delete tt;
+            }
+            if ( patimat ( "*.veh", filename.c_str() )) {
+               Vehicletype* vt = loadvehicletype ( filename.c_str() );
+
+               PropertyWritingContainer pc ( "VehicleType", vt->filename + ".asctxt" );
+               cout << "Writing file " << pc.getFilename() << "... ";
+               vt->runTextIO ( pc );
+               pc.run();
+
+               cout << "done \n";
+
+               delete vt;
             }
             filename = ff.getnextname();
          }

@@ -301,7 +301,7 @@ void testcompress ( char* name, int size )
       fread ( pc, size, 1, infile );
       fclose ( infile );
 
-      int* ip = (int*) (pc + size-124);
+      int* ip = (int*) (pc + 124);
       *ip = size;
 
       fwrite ( pc, 1, size, outfile );

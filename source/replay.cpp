@@ -1057,7 +1057,7 @@ void trunreplay :: execnextreplaymove ( void )
                                     if ( pos < 16 )
                                         bld->ammo[pos] = amnt;
                                      else
-                                        bld->getResource ( pos-1000, amnt, 0 );
+                                        bld->getResource ( amnt, pos-1000, 0 );
                                  } else
                                     displaymessage("severe replay inconsistency:\nno building for refuel-unit command !", 1);
                               }

@@ -84,6 +84,7 @@ extern const char*  cvehiclefunctions[];
      int          gettype ( void ) const { return typ; };
      bool         offensive( void ) const;
      ASCString    getName ( void );
+     void         runTextIO ( PropertyContainer& pc );
  };
 
  //! all the weapons of a #Vehicletype
@@ -165,7 +166,10 @@ extern const char*  cvehiclefunctions[];
         Vehicletype ( void );
         void read ( tnstream& stream ) ;
         void write ( tnstream& stream ) const ;
+        void runTextIO ( PropertyContainer& pc );
         ~Vehicletype ( );
+     private:
+        void setupPictures();
  };
 
 

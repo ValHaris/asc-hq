@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.62 2001-07-30 17:43:13 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.63 2001-08-02 15:33:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.62  2001/07/30 17:43:13  mbickel
+//      Added Microsoft Visual Studio .net project files
+//      Fixed some warnings
+//
 //     Revision 1.61  2001/07/28 11:19:12  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -345,6 +349,8 @@ pvehicletype   loadvehicletype( const char* name)
    displayLogMessage ( 5, " loading vehicle type %s ...", name );
    tnfilestream stream ( name, tnstream::reading );
    pvehicletype vt = loadvehicletype ( stream );
+   vt->filename = extractFileName_withoutSuffix ( name );
+   vt->location = name;
    displayLogMessage ( 5, " done\n");
    return vt;
 }

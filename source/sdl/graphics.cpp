@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: graphics.cpp,v 1.16 2000-10-18 12:40:48 mbickel Exp $
+//     $Id: graphics.cpp,v 1.17 2001-08-02 15:33:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/10/18 12:40:48  mbickel
+//      Rewrite event handling for windows
+//
 //     Revision 1.15  2000/10/16 14:34:13  mbickel
 //      Win32 port is now running fine.
 //      Removed MSVC project files and put them into a zip file in
@@ -119,9 +122,6 @@ int initgraphics ( int x, int y, int depth )
      fprintf(stderr, "Couldn't initialize SDL: %s\n", SDL_GetError());
      return -1;
   }
-
-  /* Clean up on exit */
-  atexit(SDL_Quit);
 
   setWindowCaption ( "Advanced Strategic Command" );
   /* Initialize the display in a 640x480 8-bit palettized mode */

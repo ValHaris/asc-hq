@@ -23,6 +23,8 @@
 #include "basegfx.h"
 #include "terraintype.h"
 #include "objecttype.h"
+#include "textfileparser.h"
+#include "textfiletags.h"
 
 
 const char*  cvehiclefunctions[cvehiclefunctionsnum]  = {
@@ -83,16 +85,16 @@ Vehicletype :: Vehicletype ( void )
    classnum = 0;
    for ( i = 0; i < 8; i++ ) {
       for ( int j = 0; j< 8; j++)
-         classbound[i].weapstrength[j] = 0;
+         classbound[i].weapstrength[j] = 1024;
 
-      classbound[i].armor = 0;
+      classbound[i].armor = 1024;
       classbound[i].techlevel = 0;
       classbound[i].techrequired[0] = 0;
       classbound[i].techrequired[1] = 0;
       classbound[i].techrequired[2] = 0;
       classbound[i].techrequired[3] = 0;
       classbound[i].eventrequired = 0;
-      classbound[i].vehiclefunctions = 0;
+      classbound[i].vehiclefunctions = 0xFFFFFFF;
    }
 
    maxwindspeedonwater = 0;
@@ -368,17 +370,7 @@ void Vehicletype :: read ( tnstream& stream )
    }
 
    #ifndef converter
-      if ( bipicture <= 0 ) {
-         TrueColorImage* zimg = zoomimage ( picture[0], fieldxsize, fieldysize, pal, 0 );
-         void* pic = convertimage ( zimg, pal ) ;
-         for (  i = 0; i < 6; i++ )
-             picture[i] = rotatepict ( pic, directionangle[i] ); // -2 * pi / 6 * i
-         delete[] pic;
-         delete zimg;
-      } else {
-         for (  i = 1; i < 6; i++ )
-            picture[i] = rotatepict ( picture[0], directionangle[i] ); // -2 * pi / 6 * i
-      }
+   setupPictures();
    #endif
 
    if ( ___loadterrainaccess || version >= 5 )
@@ -410,6 +402,23 @@ void Vehicletype :: read ( tnstream& stream )
 
 }
 
+void Vehicletype::setupPictures()
+{
+   #ifndef converter
+      if ( bipicture <= 0 ) {
+         TrueColorImage* zimg = zoomimage ( picture[0], fieldxsize, fieldysize, pal, 0 );
+         void* pic = convertimage ( zimg, pal ) ;
+         for ( int i = 1; i < 6; i++ )
+             picture[i] = rotatepict ( pic, directionangle[i] );
+         delete[] picture[0];
+         picture[0] = pic;
+         delete zimg;
+      } else {
+         for ( int i = 1; i < 6; i++ )
+            picture[i] = rotatepict ( picture[0], directionangle[i] );
+      }
+   #endif
+}
 
 
 
@@ -658,4 +667,109 @@ UnitWeapon :: UnitWeapon ( void )
 }
 
 
+void Vehicletype::runTextIO ( PropertyContainer& pc )
+{
+   pc.addString( "Name", name ).evaluate();
+   pc.addInteger( "ID", id );
+   pc.addString( "Description", description).evaluate();
+   ASCString it = infotext;
+
+   while ( it.find ( "\n" ) != ASCString::npos )
+      it.replace ( it.find ( "\n" ), 1, "#crt#" );
+   while ( it.find ( "\r" ) != ASCString::npos )
+      it.replace ( it.find ( "\r" ), 1, "" );
+
+   pc.addString( "Infotext", it ).evaluate();
+
+   if ( pc.isReading() )
+      infotext = it;
+
+   pc.addInteger( "Armor", armor );
+   pc.addInteger("View", view );
+
+   ASCString fn;
+   if ( filename.empty() ) {
+      fn += "vehicle";
+      fn += strrr(id);
+   } else
+      fn = filename;
+
+   pc.addImage( "Picture", picture[0], fn ).evaluate();
+
+   pc.addTagInteger( "Height", height, choehenstufennum, heightTags );
+   pc.addInteger("HeightChangeDist", steigung );
+   pc.addInteger("Jamming", jamming );
+   pc.addBool ( "WaitFortack", wait );
+   pc.openBracket("Transportation");
+    pc.addInteger ( "Capacity", loadcapacity );
+    pc.addInteger ( "MaxSingleWeight", maxunitweight );
+    pc.addTagInteger( "LoadingHeight", loadcapability, choehenstufennum, heightTags );
+    if ( loadcapabilityreq == 255 )
+       loadcapabilityreq = 0;
+    pc.addTagInteger( "Cargo_ReachableHeightReq", loadcapabilityreq, choehenstufennum, heightTags );
+    pc.addTagInteger( "Cargo_ReachableHeightNot", loadcapabilitynot, choehenstufennum, heightTags );
+    pc.addTagInteger ( "CategoriesNOT", vehicleCategoriesLoadable, cmovemalitypenum, unitCategoryTags, true );
+   pc.closeBracket();
+   pc.openBracket( "Tank" );
+     tank.runTextIO ( pc );
+   pc.closeBracket();
+   pc.addInteger( "FuelConsumption", fuelConsumption );
+   pc.addTagInteger( "Abilities", functions, cvehiclefunctionsnum, vehicleAbilities );
+   pc.addIntegerArray ( "Movement", movement );
+   pc.addNamedInteger ( "Category", movemalustyp, cmovemalitypenum, unitCategoryTags );
+   pc.addInteger("MaxSurvivableStorm", maxwindspeedonwater );
+   pc.addInteger("ResourceDrillingRange", digrange );
+   pc.addInteger("SelfRepairRate", autorepairrate );
+
+
+   pc.addInteger("Weight",  weight);
+   pc.openBracket("TerrainAccess" );
+    terrainaccess.runTextIO ( pc );
+   pc.closeBracket();
+
+  //        int           bipicture;
+
+   pc.openBracket ( "Construction" );
+    pc.addIntRangeArray ( "Buildings", buildingsBuildable );
+    pc.addIntRangeArray ( "Vehicles", vehiclesBuildable );
+    pc.addIntRangeArray ( "Objects", objectsBuildable );
+   pc.closeBracket();
+
+   pc.openBracket ( "Weapons");
+    pc.addInteger("Initiative", initiative );
+    pc.addInteger("Number", weapons.count ).evaluate();
+    for ( int i = 0; i < weapons.count; i++ ) {
+        pc.openBracket ( ASCString("Weapon")+strrr(i) );
+        weapons.weapon[i].runTextIO( pc );
+        pc.closeBracket();
+    }
+
+   pc.closeBracket();
+
+   setupPictures();
+}
+
+
+void SingleWeapon::runTextIO ( PropertyContainer& pc )
+{
+        pc.addTagInteger( "Type", typ, cwaffentypennum, weaponTags );
+        pc.addTagInteger( "targets", targ, choehenstufennum, heightTags );
+        pc.addTagInteger( "shotFrom", sourceheight, choehenstufennum, heightTags );
+        pc.addInteger("MaxRange", maxdistance );
+        pc.addInteger("MinRange", mindistance );
+        pc.addInteger("Ammo", count );
+        pc.addInteger("Punch@MaxRange", minstrength ).evaluate();
+        pc.addInteger("Punch@MinRange", maxstrength ).evaluate();
+        pc.openBracket("HitAccuracy" ); {
+           for ( int j = 0; j < 13; j++ )
+              if ( j < 6 )
+                 pc.addInteger( ASCString("d")+strrr(abs(j-6)), efficiency[j] );
+              else
+                 if ( j == 6 )
+                    pc.addInteger( "0", efficiency[j] );
+                 else
+                    pc.addInteger( ASCString("u")+strrr(j-6), efficiency[j] );
+        } pc.closeBracket();
+        pc.addTagInteger( "cantHit", targets_not_hittable, cmovemalitypenum, unitCategoryTags );
+}
 

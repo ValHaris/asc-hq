@@ -17,6 +17,7 @@
 
 #include "textfiletags.h"
 #include "typen.h"
+#include "vehicletype.h"
 
 const char* weatherTags[cwettertypennum-1]
     = { "dry",
@@ -28,7 +29,7 @@ const char* weatherTags[cwettertypennum-1]
 const char*  bodenarten[cbodenartennum]
     = { "Shallow_water",
         "Lowland",
-        "Swamp_thick",
+        "Swamp",
         "Forest",
         "High_mountains",
         "Road",
@@ -54,11 +55,85 @@ const char*  bodenarten[cbodenartennum]
         "Ditch",
         "Hillside",
         "Turret_foundation",
-        "Swamp_thin",
+        "Morass",
         "Installation",
         "Pack_ice",
         "River",
         "Frozen_water" };
+
+ const char* heightTags[choehenstufennum]
+    = { "deep_submerged",
+        "submerged",
+        "floating",
+        "ground_level",
+        "low_level_flight",
+        "medium_level_flight",
+        "high_level_flight",
+        "orbit" };
+
+ const char* vehicleAbilities[cvehiclefunctionsnum]
+     = {           "sonar",
+                   "paratrooper",
+                   "mine_layer",
+                   "trooper",
+                   "repair_vehicle",
+                   "conquer_buildings",
+                   "move_after_attack",
+                   "satelliteview",
+                   "construct_ALL_buildings",
+                   "view_mines",
+                   "construct_vehicles",
+                   "construct_specific_buildings",
+                   "fuel_transfer",
+                   "icebreaker",
+                   "no_midair_refuel",
+                   "material_transfer",
+                   "__UNUSED1__",
+                   "leaves_tracks",
+                   "manual_resource_drilling",
+                   "__UNUSED2__",
+                   "self_repairing",
+                   "resource_converter",
+                   "automatic_resource_searching",
+                   "Kamikaze_only",
+                   "immune_to_mines",
+                   "energy_transfer" };
+
+const char*  weaponTags[cwaffentypennum]
+   = {  "cruise_missile",
+        "mine",
+        "bomb",
+        "air_missile",
+        "ground_missile",
+        "torpedo",
+        "machinegun",
+        "cannon",
+        "service",
+        "ammo_transfer",
+        "laser",
+        "shootable" };
+
+const char*  unitCategoryTags[cmovemalitypenum] =
+   { "default",
+     "light_tracked_vehicle",
+     "medium_tracked_vehicle",
+     "heavy_tracked_vehicle",
+     "light_wheeled_vehicle",
+     "medium_wheeled_vehicle",
+     "heavy_wheeled_vehicle",
+     "trooper",
+     "rail_vehicle",
+     "medium_aircraft",
+     "medium_ship",
+     "building|turret|object",
+     "light_aircraft",
+     "heavy_aircraft",
+     "light_ship",
+     "heavy_ship",
+     "helicopter"
+   };
+
+
 
  const char* weatherAbbrev[cwettertypennum]
     = { "_dry",

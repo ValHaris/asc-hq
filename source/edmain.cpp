@@ -2,9 +2,13 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.46 2001-07-28 11:19:10 mbickel Exp $
+//     $Id: edmain.cpp,v 1.47 2001-08-02 15:33:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2001/07/28 11:19:10  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.45  2001/07/14 21:07:46  mbickel
 //      Sound works now under Win32 too
 //      Error reporting on Win32 during startup works again.
@@ -354,6 +358,12 @@ void loaddata( void )
       actprogressbar->startgroup();
 
    loadguipictures();
+
+   loadalltextfiles();
+
+   if ( actprogressbar )
+      actprogressbar->startgroup();
+
    loadallobjecttypes();
 
    if ( actprogressbar )
@@ -384,6 +394,8 @@ void loaddata( void )
   #endif
 
    loadUnitSets();
+
+   freetextdata();
 
    if ( actprogressbar ) {
       actprogressbar->end();
@@ -508,10 +520,11 @@ void         editor(void)
    do {
       try {
          do { 
-            if ( ( keypress() ) || ( ( ch >=ct_f3) && (ch<=ct_f9) ) ) {
-               if (! ( ( ch >=ct_f3) && (ch<=ct_f9) ) ) ch = r_key();
+            if ( keypress() ) {
+               ch = r_key();
+
                pd.key = ch;
-                  switch (ch) {
+               switch (ch) {
                   #ifdef NEWKEYB
                   case ct_up:
                   case ct_down:
@@ -522,34 +535,36 @@ void         editor(void)
                   case ct_left + ct_stp:
                   case ct_right + ct_stp:
                   #endif
-                  case ct_1k:   
-                  case ct_2k:   
-                  case ct_3k:   
-                  case ct_4k:   
-                  case ct_5k:   
-                  case ct_6k:   
-                  case ct_7k:   
+                  case ct_1k:
+                  case ct_2k:
+                  case ct_3k:
+                  case ct_4k:
+                  case ct_5k:
+                  case ct_6k:
+                  case ct_7k:
                   case ct_8k:
-                  case ct_9k:   
-                  case ct_1k + ct_stp:   
-                  case ct_2k + ct_stp:   
-                  case ct_3k + ct_stp:   
+                  case ct_9k:
+                  case ct_1k + ct_stp:
+                  case ct_2k + ct_stp:
+                  case ct_3k + ct_stp:
                   case ct_4k + ct_stp:
                   case ct_5k + ct_stp:
-                  case ct_6k + ct_stp:   
-                  case ct_7k + ct_stp:   
-                  case ct_8k + ct_stp:   
-                  case ct_9k + ct_stp:   if ( polyfieldmode == false ) { 
-                                                    mousevisible(false); 
-                                                    movecursor(ch); 
-                                                    cursor.show(); 
+                  case ct_6k + ct_stp:
+                  case ct_7k + ct_stp:
+                  case ct_8k + ct_stp:
+                  case ct_9k + ct_stp:   if ( polyfieldmode == false ) {
+                                                    mousevisible(false);
+                                                    movecursor(ch);
+                                                    cursor.show();
                                                     showStatusBar();
-                                                    mousevisible(true); 
+                                                    mousevisible(true);
                                                  }
                      break;
                   case ct_f1:   execaction(act_help);
                      break;
                   case ct_f3 : execaction(act_selbodentyp);
+                     break;
+                  case ct_f3 + ct_stp : execaction(act_selbodentypAll);
                      break;
                   case ct_f4 : execaction(act_selunit);
                      break;
@@ -571,20 +586,20 @@ void         editor(void)
                      break;
                   case ct_f + ct_stp: execaction(act_createresources);
                      break;
-                  case ct_g + ct_stp: execaction(act_maptopcx);  
+                  case ct_g + ct_stp: execaction(act_maptopcx);
                      break;
                   case ct_h + ct_stp : execaction(act_setunitfilter);
                      break;
                   case ct_i + ct_stp: execaction (act_import_bi_map );
                      break;
-                  case ct_l + ct_stp : execaction(act_loadmap); 
+                  case ct_l + ct_stp : execaction(act_loadmap);
                      break;
                   case ct_m + ct_stp: execaction(act_changemapvals);
                      break;
                   case ct_n + ct_stp: execaction(act_newmap);
                      break;
                   case ct_o + ct_stp: execaction(act_polymode);
-                     break;            
+                     break;
                   case ct_r + ct_stp: execaction(act_repaintdisplay);
                      break;
                   case ct_u + ct_stp : execaction(act_unitinfo);
@@ -601,19 +616,19 @@ void         editor(void)
                      break;
                   case ct_b:   execaction(act_changeresources);
                      break;
-                  case ct_c:   execaction(act_changecargo); 
+                  case ct_c:   execaction(act_changecargo);
                      break;
                   case ct_d : execaction(act_changeterraindir);
                      break;
                   case ct_e:  execaction(act_events);
                      break;
-                  case ct_f:  execaction(act_fillmode); 
+                  case ct_f:  execaction(act_fillmode);
                      break;
                   case ct_g: execaction(act_mapgenerator);
                      break;
                   case ct_h: execaction(act_setactivefieldvals);
                      break;
-                  case ct_entf: execaction(act_deletething); 
+                  case ct_entf: execaction(act_deletething);
                       break;
                   case ct_l : execaction(act_showpalette);
                      break;
@@ -647,7 +662,11 @@ void         editor(void)
                      break;
                   case ct_tab: execaction(act_switchmaps );
                      break;
-                  case ct_space : execaction(act_placething);
+                  case ct_enter :
+                  case ct_space : if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) 
+                                    execaction(act_setactivefieldvals);
+                                  else
+                                    execaction(act_placething);
                      break;
                   case ct_esc : {
                         if (polyfieldmode) execaction(act_endpolyfieldmode);

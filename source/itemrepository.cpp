@@ -195,33 +195,82 @@ void addtechnology ( ptechnology tech )
 }
 
 
-  
 
+
+typedef map<ASCString,TextPropertyList> TextFileRepository;
+TextFileRepository textFileRepository;
+
+void  loadalltextfiles ( )
+{
+      tfindfile ff ( "*.asctxt" );
+      ASCString c = ff.getnextname();
+
+      while( !c.empty() ) {
+         if ( actprogressbar )
+            actprogressbar->point();
+
+         tnfilestream s ( c, tnstream::reading );
+
+         displayLogMessage ( 5, "loadalltextfiles :: loading " + c + ", " );
+
+         TextFormatParser tfp ( &s );
+
+         displayLogMessage ( 5, "TFP running... " );
+
+         TextPropertyGroup* tpg = tfp.run();
+
+         textFileRepository[tpg->typeName].push_back ( tpg );
+
+         displayLogMessage ( 5, "done\n" );
+
+         c = ff.getnextname();
+      }
+}
+
+
+void  freetextdata()
+{
+   textFileRepository.clear();
+}
 
 
 
 void         loadallvehicletypes(void)
-{ 
-   {
+{
+
       tfindfile ff ( "*.veh" );
       string c = ff.getnextname();
-                       
+
       while ( !c.empty() ) {
           if ( actprogressbar )
              actprogressbar->point();
 
-          pvehicletype t = loadvehicletype( c.c_str() );
+          addvehicletype ( loadvehicletype( c.c_str() ) );
 
-          addvehicletype ( t );
           c = ff.getnextname();
        }
-   }
-} 
+
+       TextPropertyList& tpl = textFileRepository["vehicletype"];
+       for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
+          if ( actprogressbar )
+            actprogressbar->point();
+
+         PropertyReadingContainer pc ( "vehicletype", *i );
+
+         Vehicletype* vt = new Vehicletype;
+         vt->runTextIO ( pc );
+         pc.run();
+
+         vt->filename = (*i)->fileName;
+         vt->location = (*i)->location;
+         addvehicletype ( vt );
+      }
+}
 
 
 void         loadallobjecttypes (void)
 {
-  {
+
      tfindfile ff ( "*.obl" );
 
      string c = ff.getnextname();
@@ -230,43 +279,18 @@ void         loadallobjecttypes (void)
          if ( actprogressbar )
             actprogressbar->point();
 
-         if ( !exist ( extractFileName_withoutSuffix(c) + ".oblt") )
             addobjecttype ( loadobjecttype( c.c_str() ));
 
          c = ff.getnextname();
       }
-  }
-  {
-      TextPropertyList tpgl;
 
-      tfindfile ff ( "*.oblt" );
 
-      string c = ff.getnextname();
-
-      while( !c.empty() ) {
-         if ( actprogressbar )
+       TextPropertyList& tpl = textFileRepository["objecttype"];
+       for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
+          if ( actprogressbar )
             actprogressbar->point();
 
-         tnfilestream s ( c, tnstream::reading );
-
-         displayLogMessage ( 5, "loadallobjecttypes :: loading " + c + ", " );
-
-         TextFormatParser tfp ( &s, "ObjectType" );
-
-         displayLogMessage ( 5, "TFP running... " );
-
-         tpgl.push_back ( tfp.run() );
-
-         displayLogMessage ( 5, "done\n" );
-
-         c = ff.getnextname();
-      }
-
-      for ( TextPropertyList::iterator i = tpgl.begin(); i != tpgl.end(); i++ ) {
-         if ( actprogressbar )
-            actprogressbar->point();
-
-         PropertyReadingContainer pc ( "ObjectType", *i );
+         PropertyReadingContainer pc ( "objecttype", *i );
 
          ObjectType* ot = new ObjectType;
          ot->runTextIO ( pc );
@@ -276,13 +300,12 @@ void         loadallobjecttypes (void)
          ot->location = (*i)->location;
          addobjecttype ( ot );
       }
-   }
 }
 
 
 
 void         loadalltechnologies(void)
-{ 
+{
   int i;
 
   tfindfile ff ( "*.tec" );
@@ -295,9 +318,9 @@ void         loadalltechnologies(void)
       addtechnology ( loadtechnology( c.c_str() ));
 
       c = ff.getnextname();
-   } 
+   }
 
-   for (i = 0; i < technologynum; i++) 
+   for (i = 0; i < technologynum; i++)
       for (int l = 0; l < 6; l++) { 
          ptechnology tech = gettechnology_forpos ( i, 0 );
          int j = tech->requiretechnologyid[l]; 
@@ -305,7 +328,7 @@ void         loadalltechnologies(void)
             tech->requiretechnology[l] = gettechnology_forid ( j ); 
       } 
 
-   for (i = 0; i < technologynum; i++) 
+   for (i = 0; i < technologynum; i++)
       gettechnology_forpos ( i, 0 ) -> getlvl();
 
 } 
@@ -313,7 +336,7 @@ void         loadalltechnologies(void)
 
 void         loadallterraintypes(void)
 {
-   {
+
       tfindfile ff ( "*.trr" );
 
       string c = ff.getnextname();
@@ -322,45 +345,17 @@ void         loadallterraintypes(void)
          if ( actprogressbar )
             actprogressbar->point();
 
-         if ( !exist ( extractFileName_withoutSuffix(c) + ".trrt") )
-            addterraintype ( loadterraintype( c.c_str() ));
-
-         c = ff.getnextname();
-      }
-   }
-
-
-   {
-      TextPropertyList tpgl;
-
-      tfindfile ff ( "*.trrt" );
-
-      string c = ff.getnextname();
-
-      while( !c.empty() ) {
-         if ( actprogressbar )
-            actprogressbar->point();
-
-         tnfilestream s ( c, tnstream::reading );
-
-         displayLogMessage ( 5, "loadallterraintypes :: loading " + c + ", " );
-
-         TextFormatParser tfp ( &s, "TerrainType" );
-
-         displayLogMessage ( 5, "TFP running... " );
-
-         tpgl.push_back ( tfp.run() );
-
-         displayLogMessage ( 5, "done\n" );
+         addterraintype ( loadterraintype( c.c_str() ));
 
          c = ff.getnextname();
       }
 
-      for ( TextPropertyList::iterator i = tpgl.begin(); i != tpgl.end(); i++ ) {
-         if ( actprogressbar )
+       TextPropertyList& tpl = textFileRepository["terraintype"];
+       for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
+          if ( actprogressbar )
             actprogressbar->point();
 
-         PropertyReadingContainer pc ( "TerrainType", *i );
+         PropertyReadingContainer pc ( "terraintype", *i );
 
          TerrainType* tt = new TerrainType;
          tt->runTextIO ( pc );
@@ -371,14 +366,14 @@ void         loadallterraintypes(void)
          addterraintype ( tt );
       }
 
-    }
+
 }
 
 
 
 
 void         loadallbuildingtypes(void)
-{ 
+{
    tfindfile ff ( "*.bld" );
 
    string c = ff.getnextname();
@@ -392,4 +387,5 @@ void         loadallbuildingtypes(void)
       c = ff.getnextname();
    } 
 } 
+
 

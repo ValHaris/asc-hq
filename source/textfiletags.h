@@ -21,6 +21,10 @@
  extern const char* weatherTags[];
  extern const char* bodenarten[];
  extern const char* weatherAbbrev[];
+ extern const char* heightTags[];
+ extern const char* vehicleAbilities[];
+ extern const char* weaponTags[];
+ extern const char* unitCategoryTags[];
 
 #endif
  

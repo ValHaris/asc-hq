@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.32 2001-07-28 11:19:10 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.33 2001-08-02 15:33:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2001/07/28 11:19:10  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.31  2001/05/24 15:37:51  mbickel
 //      Fixed: reaction fire could not be disabled when unit out of ammo
 //      Fixed several AI problems
@@ -493,7 +497,7 @@ void execaction(int code)
     case act_help :   if ( polyfieldmode ) help ( 1040 );
                        else help(1000);
        break;
-    case act_selbodentyp : {
+    case act_selbodentypAll : {
                         ch = 0;
                         cursor.hide();
                         selterraintype( ct_f3 );
@@ -574,7 +578,7 @@ void execaction(int code)
                                if (choice_dlg("Map not saved ! Save now ?","~y~es","~n~o") == 1) 
                                   k_savemap(false);
 
-                             k_loadmap();   
+                             k_loadmap();
  
                              // actmap->player[8].firstvehicle = NULL;
  
@@ -628,7 +632,7 @@ void execaction(int code)
        break;
     case act_changeresources :   changeresource();
        break;
-    case act_createresources : { 
+    case act_createresources : {
                            tputresourcesdlg prd;
                            prd.init();
                            prd.run();
@@ -643,7 +647,7 @@ void execaction(int code)
                     if ( getactfield()->vehicle )
                        unit_cargo( getactfield()->vehicle );
                  cursor.show(); 
-              } 
+              }
        break;
     case act_changeterraindir : {
                       pf = getactfield();
@@ -658,7 +662,7 @@ void execaction(int code)
     case act_events :   event();
        break;
     case act_fillmode :   if ( polyfieldmode == false ) {   
-                 if (tfill == true) tfill = false; 
+                 if (tfill == true) tfill = false;
                  else tfill = true; 
                  fillx1 = cursor.posx + actmap->xpos; 
                  filly1 = cursor.posy + actmap->ypos; 
@@ -718,7 +722,7 @@ void execaction(int code)
         break;
     case act_deleteunit : {
                          pf = getactfield();
-                         if (pf != NULL) 
+                         if (pf != NULL)
                             if (pf->vehicle != NULL) {
                                delete pf->vehicle;
                                mapsaved = false;
@@ -748,7 +752,7 @@ void execaction(int code)
      case act_deletemine : {
                          pf = getactfield();
                          if (pf != NULL) {
-                            mapsaved = false; 
+                            mapsaved = false;
                             pf->removemine( -1 );
                             displaymap();
                          }
@@ -770,7 +774,7 @@ void execaction(int code)
                  pf = getactfield();
                  if ( pf  ) {
                     if ( pf->vehicle ) {
-                       changeunitvalues(pf->vehicle); 
+                       changeunitvalues(pf->vehicle);
                        displaymap();
                     }
                     else if ( pf->building ) {
@@ -931,6 +935,13 @@ void execaction(int code)
       break;
    case act_unitSetInformation: viewUnitSetinfo();
       break;
+   case act_selbodentyp: if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) {
+                            auswahl = getactfield()->typ->terraintype;
+                            setnewterrainselection ( auswahl );
+                            showallchoices();
+                         }
+                         execaction(act_switchmaps);
+                         break;
    case act_switchmaps: mapSwitcher.toggle();
                         displaymap();
                         showStatusBar();

@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: sg.cpp,v 1.156 2001-07-30 17:43:13 mbickel Exp $
+//     $Id: sg.cpp,v 1.157 2001-08-02 15:33:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.156  2001/07/30 17:43:13  mbickel
+//      Added Microsoft Visual Studio .net project files
+//      Fixed some warnings
+//
 //     Revision 1.155  2001/07/28 11:19:12  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -338,10 +342,12 @@
 #include "itemrepository.h"
 
 
+
 // #define MEMCHK
 
-
 #include "memorycheck.cpp"
+
+
 
 class tsgonlinemousehelp : public tonlinemousehelp {
    public:
@@ -1888,7 +1894,7 @@ void  mainloop ( void )
                break;
 
             case ct_9: {
-                          testtext ( getterraintype_forid ( 1011 ), getobjecttype_forid ( 1 ) );
+                          // testtext ( getterraintype_forid ( 1011 ), getobjecttype_forid ( 1 ) );
                                      /*
                           static pvehicle veh = 0;
                           if ( !veh ) {
@@ -2039,6 +2045,10 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
    loadcursor();
 
    if ( actprogressbar ) actprogressbar->startgroup();
+
+   loadalltextfiles();
+
+   if ( actprogressbar ) actprogressbar->startgroup();
    loadguipictures();
    loadallobjecttypes();
 
@@ -2062,6 +2072,7 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 
    if ( actprogressbar ) actprogressbar->startgroup();
 
+   freetextdata();
 
    cursor.init();
    selectbuildinggui.init( resolx, resoly );
@@ -2518,6 +2529,7 @@ int main(int argc, char *argv[] )
       fullscreen = 0;
 
 
+
    int xr = 800;
    int yr = 600;
    // determining the graphics resolution
@@ -2532,6 +2544,9 @@ int main(int argc, char *argv[] )
       yr = cl->y();
 
    modenum8 = initgraphics ( xr, yr, 8 );
+   
+   /* Clean up on exit */
+   atexit(SDL_Quit);
 
    SoundSystem soundSystem ( CGameOptions::Instance()->sound_mute, cl->q() || CGameOptions::Instance()->sound_off );
 
