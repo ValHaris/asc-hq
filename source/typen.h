@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.83 2001-02-11 11:39:45 mbickel Exp $
+//     $Id: typen.h,v 1.84 2001-02-15 21:57:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.83  2001/02/11 11:39:45  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.82  2001/02/06 16:27:42  mbickel
 //      bugfixes, bugfixes and bugfixes
 //
@@ -529,7 +532,7 @@ class AiParameter : public AiValue {
            pvehicle unit;
         public:
            enum Task { tsk_nothing, tsk_tactics, tsk_tactwait, tsk_stratwait, tsk_wait, tsk_strategy, tsk_serviceRetreat, tsk_move } task;
-           enum Job { job_undefined, job_fight, job_supply, job_conquer, job_build } job;
+           enum Job { job_undefined, job_fight, job_supply, job_conquer, job_build, job_recon, job_guard } job;
            int lastDamage;
            tgametime damageTime;
 

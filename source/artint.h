@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: artint.h,v 1.35 2001-02-08 21:21:02 mbickel Exp $
+//     $Id: artint.h,v 1.36 2001-02-15 21:57:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2001/02/08 21:21:02  mbickel
+//      AI attacks and services more sensibly
+//
 //     Revision 1.34  2001/02/06 16:27:41  mbickel
 //      bugfixes, bugfixes and bugfixes
 //
@@ -200,11 +203,38 @@
            bool runUnitTask ( pvehicle veh );
            // void searchServices ( );
 
-           AiThreat* fieldThreats;
+           class FieldInformation {
+               public:
+                  AiThreat threat;
+                  int control;
+                  int units[8];
+                  void reset ( );
+                  FieldInformation ( ) { reset(); };
+           };
+
+           FieldInformation* fieldInformation;
            int fieldNum;
+           AiThreat& getFieldThreat ( int x, int y );
+           FieldInformation& getFieldInformation ( int x, int y );
+
+           class CheckFieldRecon : public tsearchfields {
+                protected:
+                   void testfield ( ) ;
+                   int ownFields[3];
+                   int enemyFields[3];
+                   int player;
+                   AI* ai;
+                public:
+                   CheckFieldRecon ( AI* _ai );
+                   int run ( int x, int y);
+           };
+           friend class CheckFieldRecon;
+
+
            pbuilding findServiceBuilding ( const ServiceOrder& so, int* distance = NULL );
 
            void checkConquer( );
+           void runReconUnits();
 
            //! checks whether a building can be conquered by the enemy during the next turn
            bool checkReConquer ( pbuilding bld, pvehicle veh );
@@ -249,7 +279,7 @@
            BuildingCaptureContainer buildingCapture;
 
 
-           void calculateFieldThreats ( void );
+           void calculateFieldInformation ( void );
            void calculateFieldThreats_SinglePosition ( pvehicle eht, int x, int y );
            class WeaponThreatRange : public tsearchfields {
                      pvehicle veh;
@@ -274,6 +304,9 @@
                int ammoLimit;
                //! the maximum number of turns a unit may need to reach a town to capture
                int maxCaptureTime;
+
+               //! the maximum time in 1/100 sec that a the ai may try to optimize an attack
+               int maxTactTime;
             } config;
 
           public:
@@ -349,7 +382,7 @@
             void  calculateAllThreats( void );
             AiResult  tactics( void );
             void tactics_findBestAttackOrder ( pvehicle* units, int* attackOrder, pvehicle enemy, int depth, int damage, int& finalDamage, int* finalOrder, int& finalAttackNum );
-            void tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVariantContainer::iterator& m, pvehicle* positions, float value, pvehicle* finalposition, float& finalvalue, int unitsPositioned, int recursionDepth );
+            void tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVariantContainer::iterator& m, pvehicle* positions, float value, pvehicle* finalposition, float& finalvalue, int unitsPositioned, int recursionDepth, int startTime );
             /** a special path finding where fields occupied by units get an addidional movemalus.
                 This helps finding a path that is not thick with units and prevents units to queue all one after another
             */
@@ -363,6 +396,10 @@
             void  setup( void );
 
             void reset ( void );
+
+            typedef map<MapCoordinate,int> ReconPositions;
+            ReconPositions reconPositions;
+            void calcReconPositions();
 
             class Section {
                   AI* ai;
@@ -406,7 +443,6 @@
 
             void checkKeys ( void );
 
-           AiThreat& getFieldThreat ( int x, int y );
 
         public:
            AI ( pmap _map, int _player ) ;

@@ -1674,27 +1674,27 @@ int SingleWeapon::getScalarWeaponType(void) const {
 }
 
 
-int SingleWeapon::requiresAmmo(void) const
+bool SingleWeapon::requiresAmmo(void) const
 {
    return typ & ( cwweapon | cwmineb );
 }
 
-int SingleWeapon::shootable( void ) const
+bool SingleWeapon::shootable( void ) const
 {
    return typ & cwshootableb;
 }
 
-int SingleWeapon::offensive( void ) const
+bool SingleWeapon::offensive( void ) const
 {
    return typ & cwweapon;
 }
 
-int SingleWeapon::service( void ) const
+bool SingleWeapon::service( void ) const
 {
    return typ & cwserviceb;
 }
 
-int SingleWeapon::canRefuel( void ) const
+bool SingleWeapon::canRefuel( void ) const
 {
    return typ & cwammunitionb;
 }

@@ -74,13 +74,13 @@ extern const char*  cvehiclefunctions[];
      int          targets_not_hittable; // BM   <=  cmovemalitypes
     public:
      int          getScalarWeaponType(void) const;
-     int          requiresAmmo(void) const;
-     int          shootable( void ) const;
-     int          service( void ) const;
-     int          canRefuel ( void ) const;
+     bool          requiresAmmo(void) const;
+     bool          shootable( void ) const;
+     bool          service( void ) const;
+     bool          canRefuel ( void ) const;
      void         set ( int type );  // will be enhanced later ...
      int          gettype ( void ) { return typ; };
-     int          offensive( void ) const;
+     bool         offensive( void ) const;
      ASCString    getName ( void );
  };
 

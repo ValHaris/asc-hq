@@ -153,7 +153,7 @@ int mapeditorMainThread ( void* _mapname )
           while ( !s.empty () ) {
              string errormsg;
              importbattleislemap ( "data/", s.c_str(), getterraintype_forpos(0)->weather[0], &errormsg, true );
-             if ( !errormsg.empty() )
+             if ( !errormsg.empty() && 0 )
                 fprintf(stderr, "map %s : %s \n", s.c_str(), errormsg.c_str() );
              string fn = "data/images/pcx/"+s;
              fn.replace ( fn.find (".dat"), 4, ".pcx");

@@ -2,10 +2,12 @@
     \brief The artificial intelligence of ASC. 
 */
 
-
-//     $Id: artint.cpp,v 1.60 2001-02-11 11:39:26 mbickel Exp $
+//     $Id: artint.cpp,v 1.61 2001-02-15 21:57:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2001/02/11 11:39:26  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.59  2001/02/08 21:21:00  mbickel
 //      AI attacks and services more sensibly
 //
@@ -172,18 +174,6 @@ const int ccbt_training = 150;
 const int attack_unitdestroyed_bonus = 90;
 
 
-void nop ( void )
-{
-}
-
-int compareinteger ( const void* op1, const void* op2 )
-{
-   const int* a = (const int*) op1;
-   const int* b = (const int*) op2;
-   return *a > *b;
-}
-
-
  class HiddenAStar : public AStar {
        AI* ai;
     protected:
@@ -224,7 +214,7 @@ AI :: AI ( pmap _map, int _player ) : activemap ( _map ) , sections ( this )
    player = _player;
 
    _isRunning = false;
-   fieldThreats = NULL;
+   fieldInformation = NULL;
 
    reset(); 
    ReplayMapDisplay* r = new ReplayMapDisplay ( &defaultMapDisplay );
@@ -243,10 +233,10 @@ void AI :: reset ( void )
       maxWeapDist[i] = -1;  
    baseThreatsCalculated = 0;
 
-   if ( fieldThreats )
-      delete[] fieldThreats;
+   if ( fieldInformation )
+      delete[] fieldInformation;
 
-   fieldThreats = NULL;
+   fieldInformation = NULL;
    fieldNum = 0;
 
    config.wholeMapVisible = 1;
@@ -257,6 +247,7 @@ void AI :: reset ( void )
    config.resourceLimit = Resources ( 0, 5, 20 );
    config.ammoLimit= 10;
    config.maxCaptureTime = 15;
+   config.maxTactTime = 10*100;
 
    sections.reset();
 }
@@ -694,9 +685,10 @@ bool AI :: runUnitTask ( pvehicle veh )
          moveIntoBuildings = true;
 
       moveUnit ( veh, veh->aiparam[getPlayer()]->dest, moveIntoBuildings );
-      if ( veh->xpos == veh->aiparam[getPlayer()]->dest.x && veh->ypos == veh->aiparam[getPlayer()]->dest.y )
+      if ( veh->xpos == veh->aiparam[getPlayer()]->dest.x && veh->ypos == veh->aiparam[getPlayer()]->dest.y ) {
+         veh->aiparam[getPlayer()]->task = AiParameter::tsk_nothing;
          return true;
-      else
+      } else
          return false;
    }
 
@@ -997,6 +989,17 @@ void AI :: conquerBuilding ( pvehicle veh )
 
 void AI :: checkConquer( )
 {
+   // remove all capture orders for buildings which are no longer controlled by the enemy
+
+   for ( BuildingCaptureContainer::iterator bi = buildingCapture.begin(); bi != buildingCapture.end(); bi++)
+      if ( getdiplomaticstatus2( getMap()->getField( bi->first )->building->color, getPlayer()*8 ) != cawar ) {
+         pvehicle veh= getMap()->getUnit ( bi->second.unit );
+         if ( veh )
+            veh->aiparam[getPlayer()]->task = AiParameter::tsk_nothing;
+         buildingCapture.erase ( bi );
+      }
+
+
    displaymessage2("check for capturing enemy towns ... ");
 
    for ( Player::VehicleList::iterator vi = getMap()->player[ getPlayer() ].vehicleList.begin(); vi != getMap()->player[ getPlayer() ].vehicleList.end(); vi++ ) {
@@ -1128,6 +1131,7 @@ void AI :: checkConquer( )
          }
       } else
          buildingCapture.erase ( bi );
+      checkKeys();
    }
 
 }
@@ -1219,8 +1223,6 @@ void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( Vehicletyp
       } else
          s++;
 
-   // qsort ( weapthreat, 8, sizeof(int), compareinteger );
-
    for ( int k = 0; k < 8; k++ )
       value += weapthreat[k] * value_weaponfactor / (k+1);
 
@@ -1276,8 +1278,6 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( pvehicle _eht )
    aip->setValue ( value );
 
    if ( aip->job == AiParameter::job_undefined ) {
-      if ( eht->weapexist() )
-         aip->job = AiParameter::job_fight;
 
       if ( eht->functions & cf_conquer ) {
          if ( eht->functions & cf_trooper )  {
@@ -1298,6 +1298,23 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( pvehicle _eht )
 
          }
       }
+
+      if ( aip->job == AiParameter::job_undefined ) {
+         int maxPunch = 0;
+         for ( int w = 0; w < eht->typ->weapons->count; w++ )
+            if ( eht->typ->weapons->weapon[w].offensive() )
+               maxPunch = max ( maxPunch, eht->typ->weapons->weapon[w].maxstrength );
+
+         if ( (maxPunch < eht->typ->view  || maxPunch < eht->typ->jamming) && eht->typ->movement[log2(eht->height)] > minmalq )
+            aip->job = AiParameter::job_recon;
+      }
+
+      if ( aip->job == AiParameter::job_undefined ) {
+         if ( eht->weapexist() )
+            aip->job = AiParameter::job_fight;
+      }
+
+
    }
 
    bool service = false;
@@ -1414,19 +1431,19 @@ void AI :: WeaponThreatRange :: testfield ( void )
          }
 }
 
-void AI :: calculateFieldThreats ( void )
+void AI :: calculateFieldInformation ( void )
 {
    if ( fieldNum && fieldNum != activemap->xsize * activemap->ysize ) {
-      delete[] fieldThreats;
-      fieldThreats = NULL;
+      delete[] fieldInformation;
+      fieldInformation = NULL;
       fieldNum = 0;
    }
-   if ( !fieldThreats ) {
+   if ( !fieldInformation ) {
       fieldNum = activemap->xsize * activemap->ysize;
-      fieldThreats = new AiThreat[ fieldNum ];
+      fieldInformation = new FieldInformation[ fieldNum ];
    } else
       for ( int a = 0; a < fieldNum; a++ )
-         fieldThreats[ a ].reset();
+         fieldInformation[ a ].reset();
 
    AiThreat*  singleUnitThreat = new AiThreat[fieldNum];
 
@@ -1472,11 +1489,27 @@ void AI :: calculateFieldThreats ( void )
 
                for ( int a = 0; a < fieldNum; a++ ) {
                   for ( int b = 0; b < 8; b++ )
-                     fieldThreats[a].threat[b] += singleUnitThreat[a].threat[b];
+                     fieldInformation[a].threat.threat[b] += singleUnitThreat[a].threat[b];
 
                   singleUnitThreat[ a ].reset();
                }
             }
+
+         FieldInformation& fi = fieldInformation[y*getMap()->xsize+x];
+         for ( int i = 0; i< sidenum; i++ ) {
+            pfield f = getMap()->getField ( getNeighbouringFieldCoordinate ( MapCoordinate(x,y), i ));
+            if ( f && f->vehicle && f->vehicle->weapexist() && f->vehicle->color < 8*8 )
+               fi.units[f->vehicle->color/8] += 1;
+         }
+         int n = 0;
+         int c = -1;
+         for ( int i = 0; i < 8; i++ ) {
+            if ( fi.units[i] > n ) {
+               n = fi.units[i];
+               c = i;
+            }
+         }
+         fi.control = c;
       }
    }
 }
@@ -1551,11 +1584,27 @@ void     AI :: calculateAllThreats( void )
 
 }
 
+void AI :: FieldInformation :: reset ( )
+{
+   threat.reset();
+   for ( int i = 0; i< 8; i++ )
+      units[i] = 0;
+   control = -1;
+}
+
+
 AiThreat& AI :: getFieldThreat ( int x, int y )
 {
-   if ( !fieldThreats )
-      calculateFieldThreats ();
-   return fieldThreats[y * activemap->xsize + x ];
+   if ( !fieldInformation )
+      calculateFieldInformation ();
+   return fieldInformation[y * activemap->xsize + x ].threat;
+}
+
+AI::FieldInformation& AI :: getFieldInformation ( int x, int y )
+{
+   if ( !fieldInformation )
+      calculateFieldInformation ();
+   return fieldInformation[y * activemap->xsize + x ];
 }
 
 
@@ -1872,7 +1921,7 @@ void    AI :: setup (void)
    calculateAllThreats ();
 
    displaymessage2("calculating field threats ... ");
-   calculateFieldThreats();
+   calculateFieldInformation();
 
    displaymessage2("calculating sections ... ");
    sections.calculate();
@@ -2005,9 +2054,7 @@ void AI :: searchTargets ( pvehicle veh, int x, int y, TargetVector& tl, int mov
                hemmingFactor += AttackFormula::getHemmingFactor ( checkDir - attackerDirection );
          }
 
-         mv->result = int ((mv->enemyDamage - mv->enemyOrgDamage) * mv->enemy->aiparam[getPlayer()]->getValue() * hemmingFactor - 1/config.aggressiveness * (mv->damageAfterAttack - mv->orgDamage) * veh->aiparam[getPlayer()]->getValue() );
-         if ( mv->enemyDamage >= 100 )
-            mv->result += mv->enemy->aiparam[getPlayer()]->getValue() * attack_unitdestroyed_bonus;
+         mv->result = int( getAttackValue ( uau, mv->attacker, mv->enemy, hemmingFactor ));
 
          if ( mv->result > 0 )
             tl.push_back ( mv );
@@ -2482,53 +2529,55 @@ AI::AiResult AI::tactics( void )
                }
                float finalValue = 0;
 
-               tactics_findBestAttackUnits ( attacker, mvci, positions, 0, finalPositions, finalValue, 0, 0 );
+               tactics_findBestAttackUnits ( attacker, mvci, positions, 0, finalPositions, finalValue, 0, 0, ticker );
 
-               for ( int i = 0; i < sidenum; i++ )
-                  if ( finalPositions[i] ) {
-                     int nwid = finalPositions[i]->networkid;
-                     moveUnit ( finalPositions[i], getNeighbouringFieldCoordinate( MapCoordinate( enemy->xpos, enemy->ypos), i));
-                     affectedFields.push_back ( MapCoordinate(finalPositions[i]->xpos, finalPositions[i]->ypos) );
-                     // the unit may have been shot down due to reaction fire
+               if ( finalValue > 0 ) {
+                  for ( int i = 0; i < sidenum; i++ )
+                     if ( finalPositions[i] ) {
+                        int nwid = finalPositions[i]->networkid;
+                        moveUnit ( finalPositions[i], getNeighbouringFieldCoordinate( MapCoordinate( enemy->xpos, enemy->ypos), i));
+                        affectedFields.push_back ( MapCoordinate(finalPositions[i]->xpos, finalPositions[i]->ypos) );
+                        // the unit may have been shot down due to reaction fire
 
-                     if ( !getMap()->getUnit ( nwid ) ) {
-                        TactVehicles::iterator att = find ( tactVehicles.begin(), tactVehicles.end(), finalPositions[i] ) ;
+                        if ( !getMap()->getUnit ( nwid ) ) {
+                           TactVehicles::iterator att = find ( tactVehicles.begin(), tactVehicles.end(), finalPositions[i] ) ;
+                           tactVehicles.erase ( att );
+                           finalPositions[i] = NULL;
+                        }
+                     }
+
+                  int attackOrder[sidenum];
+                  int finalOrder[sidenum];
+                  for ( int i = 0; i< sidenum; i++ )
+                     attackOrder[i] = finalOrder[i] = -1;
+
+
+                  int finalDamage = -1;
+                  int finalAttackNum = maxint;
+                  tactics_findBestAttackOrder ( finalPositions, attackOrder, enemy, 0, enemy->damage, finalDamage, finalOrder, finalAttackNum );
+
+
+                  pfield enemyField = getMap()->getField(enemy->xpos, enemy->ypos);
+                  for ( int i = 0; i < finalAttackNum && enemyField->vehicle == enemy; i++ ) {
+                     checkKeys();
+                     // if ( i+1 < finalAttackNum ) {
+                     if ( i < finalAttackNum && finalPositions[finalOrder[i]] ) {
+                        VehicleAttack va ( mapDisplay, NULL );
+                        va.execute ( finalPositions[finalOrder[i]], -1, -1, 0, 0, -1 );
+                        if ( va.getStatus() != 2 )
+                           displaymessage("inconsistency #1 in AI::tactics attack", 1 );
+
+                        va.execute ( NULL, enemy->xpos, enemy->ypos, 2, 0, -1 );
+                        if ( va.getStatus() != 1000 )
+                           displaymessage("inconsistency #1 in AI::tactics attack", 1 );
+
+
+                        pvehicle a = finalPositions[finalOrder[i]];
+                        TactVehicles::iterator att = find ( tactVehicles.begin(), tactVehicles.end(), a ) ;
                         tactVehicles.erase ( att );
-                        finalPositions[i] = NULL;
                      }
                   }
-
-               int attackOrder[sidenum];
-               int finalOrder[sidenum];
-               for ( int i = 0; i< sidenum; i++ )
-                  attackOrder[i] = finalOrder[i] = -1;
-
-
-               int finalDamage = -1;
-               int finalAttackNum = maxint;
-               tactics_findBestAttackOrder ( finalPositions, attackOrder, enemy, 0, enemy->damage, finalDamage, finalOrder, finalAttackNum );
-
-
-               pfield enemyField = getMap()->getField(enemy->xpos, enemy->ypos);
-               for ( int i = 0; i < finalAttackNum && enemyField->vehicle == enemy; i++ ) {
-                  checkKeys();
-                  // if ( i+1 < finalAttackNum ) {
-                  if ( i < finalAttackNum ) {
-                     VehicleAttack va ( mapDisplay, NULL );
-                     va.execute ( finalPositions[finalOrder[i]], -1, -1, 0, 0, -1 );
-                     if ( va.getStatus() != 2 )
-                        displaymessage("inconsistency #1 in AI::tactics attack", 1 );
-
-                     va.execute ( NULL, enemy->xpos, enemy->ypos, 2, 0, -1 );
-                     if ( va.getStatus() != 1000 )
-                        displaymessage("inconsistency #1 in AI::tactics attack", 1 );
-
-
-                     pvehicle a = finalPositions[finalOrder[i]];
-                     TactVehicles::iterator att = find ( tactVehicles.begin(), tactVehicles.end(), a ) ;
-                     tactVehicles.erase ( att );
-                  }
-               }
+               } // else { // if finalValue > 0
 
             } // if enemy
 
@@ -2638,9 +2687,9 @@ class UnitAttacksUnit_FakeHemming : public tunitattacksunit {
 
 
 
-void AI :: tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVariantContainer::iterator& m, pvehicle* positions, float value, pvehicle* finalPosition, float& finalValue, int unitsPositioned, int recursionDepth )
+void AI :: tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVariantContainer::iterator& m, pvehicle* positions, float value, pvehicle* finalPosition, float& finalValue, int unitsPositioned, int recursionDepth, int startTime )
 {
-   if ( m == mvc.end() || unitsPositioned >= 6 || recursionDepth >= 8 ) {
+   if ( m == mvc.end() || unitsPositioned >= 6 || recursionDepth >= 8 || startTime + config.maxTactTime < ticker ) {
       float value = 0;
       pvehicle target = mvc.begin()->enemy;
       npush ( target->damage );
@@ -2676,13 +2725,13 @@ void AI :: tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVa
             else
                value += 1;
             m++;
-            tactics_findBestAttackUnits ( mvc, m, positions, value, finalPosition, finalValue, unitsPositioned+1, recursionDepth+1 );
+            tactics_findBestAttackUnits ( mvc, m, positions, value, finalPosition, finalValue, unitsPositioned+1, recursionDepth+1, startTime );
             m--;
             value -= m->result;
             positions[i] = NULL;
          } else {
             m++;
-            tactics_findBestAttackUnits ( mvc, m, positions, value, finalPosition, finalValue, unitsPositioned, recursionDepth+1 );
+            tactics_findBestAttackUnits ( mvc, m, positions, value, finalPosition, finalValue, unitsPositioned, recursionDepth+1, startTime );
             m--;
          }
       }
@@ -2916,7 +2965,8 @@ AI::AiResult AI::strategy( void )
       for ( Player::VehicleList::iterator vi = getMap()->player[ getPlayer() ].vehicleList.begin(); vi != getMap()->player[ getPlayer() ].vehicleList.end(); vi++ ) {
          pvehicle veh = *vi;
          if ( veh->aiparam[ getPlayer() ]->job == AiParameter::job_fight ) {
-            if ( veh->weapexist() && veh->aiparam[ getPlayer() ]->task != AiParameter::tsk_tactics ) {
+            if ( veh->weapexist() && veh->aiparam[ getPlayer() ]->task != AiParameter::tsk_tactics
+                                  && veh->aiparam[ getPlayer() ]->task != AiParameter::tsk_serviceRetreat ) {
                /*
                int orgmovement = veh->getMovement();
                int orgxpos = veh->xpos ;
@@ -2957,6 +3007,94 @@ AI::AiResult AI::strategy( void )
 }
 
 
+AI:: CheckFieldRecon :: CheckFieldRecon ( AI* _ai ) : tsearchfields ( _ai->getMap() ), player(_ai->getPlayer()), ai ( _ai )
+{
+   for( int i = 0; i < 3; i++ ) {
+      ownFields[i] = 0;
+      enemyFields[i] = 0;
+   }
+}
+
+int AI:: CheckFieldRecon :: run ( int x, int y)
+{
+   initsearch ( x, y, 1 , 2 );
+   startsearch();
+   if ( ownFields[1] && !enemyFields[1] ) {
+      if ( enemyFields[2] > ownFields[2] )
+         return 0;
+      else
+         if ( enemyFields[2] )
+            return 1;
+   }
+   return -1;
+}
+
+void AI::CheckFieldRecon :: testfield ( )
+{
+   if ( gamemap->getField ( xp, yp ))  {
+      FieldInformation& fi = ai->getFieldInformation ( xp, yp );
+      if( fi.control != -1 )
+         if ( getdiplomaticstatus2 ( player*8, fi.control*8 ) == capeace )
+            ownFields[dist]++;
+         else
+            enemyFields[dist]++;
+   }
+}
+
+void AI :: calcReconPositions()
+{
+   displaymessage2("calculating reconnaissance positions ... ");
+   for ( int y = 0; y < getMap()->ysize; y++ )
+      for ( int x = 0; x < getMap()->xsize; x++ ) {
+         FieldInformation& fi = getFieldInformation ( x, y );
+         pfield fld = getMap()->getField(x,y);
+         if ( fi.control == getPlayer() && !fld->building && ( !fld->vehicle || fld->vehicle->aiparam[getPlayer()]->job == AiParameter::job_recon )) {
+            CheckFieldRecon cfr ( this );
+            int qual = cfr.run(x,y);
+            if ( qual>= 0 )
+               reconPositions[MapCoordinate ( x, y )] = qual;
+
+         }
+      }
+}
+
+void AI ::  runReconUnits ( )
+{
+   for ( Player::VehicleList::iterator vi = getMap()->player[ getPlayer() ].vehicleList.begin(); vi != getMap()->player[ getPlayer() ].vehicleList.end(); vi++ ) {
+      pvehicle veh = *vi;
+
+      // the threat posed should be enemy units should be considered for position choosing too...
+      if ( veh->aiparam[getPlayer()]->job == AiParameter::job_recon ) {
+         if ( reconPositions.find ( veh->getPosition()) == reconPositions.end()) {
+            // the unit is not standing on a reconposition
+            int mindist = maxint;
+            MapCoordinate mc;
+            for ( ReconPositions::iterator i = reconPositions.begin(); i != reconPositions.end(); i++ ) {
+               pfield fld = getMap()->getField( i->first );
+               if ( !fld->vehicle && !fld->building ) {
+                  AStar ast ( getMap(), veh );
+                  ast.findAllAccessibleFields();
+                  if ( fld->a.temp ) {
+                     int vdist = beeline ( veh->getPosition(), i->first )*(1+i->second/2);
+                     if( vdist < mindist ) {
+                        mindist = vdist;
+                        mc = i->first;
+                     }
+                  }
+               }
+            }
+            if( mindist < maxint ) {
+               veh->aiparam[getPlayer()]->dest = mc;
+               veh->aiparam[getPlayer()]->task = AiParameter::tsk_move;
+               runUnitTask ( veh );
+            }
+         }
+      }
+   }
+}
+
+
+
 void AI::checkKeys ( void )
 {
    if ( keypress() ) {
@@ -2985,6 +3123,7 @@ void AI:: run ( void )
    int setupTime = ticker;
    tempsvisible = false;
    setup();
+   calcReconPositions();
    tempsvisible = true;
    setupTime = ticker-setupTime;
 
@@ -2996,6 +3135,8 @@ void AI:: run ( void )
    int conquerTime = ticker;
    checkConquer();
    conquerTime = ticker - conquerTime;
+
+   runReconUnits ( );
 
    int containerTime = ticker;
    buildings( 3 );
@@ -3035,12 +3176,18 @@ void AI:: run ( void )
               containerTime/100,
               tacticsTime/100,
               strategyTime/100 );
+
+   displaymessage2("AI completed in %d second", duration/100);
+
 }
 
+const int currentAiStreamVersion = 101;
 
 void AI :: read ( tnstream& stream )
 {
    int version = stream.readInt ( );
+   if ( version > currentServiceOrderVersion )
+      throw tinvalidversion ( "AI :: read", currentServiceOrderVersion, version );
    _isRunning = stream.readInt ();
    _vision = stream.readInt ( );
    unitCounter = stream.readInt ( );
@@ -3074,12 +3221,16 @@ void AI :: read ( tnstream& stream )
    config.resourceLimit.read( stream );
    config.ammoLimit = stream.readInt();
    config.maxCaptureTime = stream.readInt();
+   if ( version == 101 )
+      config.maxTactTime = stream.readInt();
    int version2 = stream.readInt();
+   if ( version != version2 )
+      throw tinvalidversion ( "AI :: read", version, version2 );
 }
 
 void AI :: write ( tnstream& stream ) const
 {
-   const int version = 100;
+   const int version = currentAiStreamVersion;
    stream.writeInt ( version );
    stream.writeInt ( _isRunning );
    stream.writeInt ( _vision );
@@ -3107,6 +3258,7 @@ void AI :: write ( tnstream& stream ) const
    config.resourceLimit.write( stream );
    stream.writeInt( config.ammoLimit );
    stream.writeInt( config.maxCaptureTime );
+   stream.writeInt( config.maxTactTime );
 
    stream.writeInt ( version );
 }
@@ -3125,8 +3277,8 @@ int AI :: getVision ( void )
 
 void AI :: showFieldInformation ( int x, int y )
 {
-   if ( !fieldThreats )
-      calculateFieldThreats();
+   if ( !fieldInformation )
+      calculateFieldInformation();
 
    const char* fieldinfo = "#font02#Field Information (%d,%d)#font01##aeinzug20##eeinzug10##crtp10#"
                            "threat orbit: %d\n"
@@ -3136,16 +3288,17 @@ void AI :: showFieldInformation ( int x, int y )
                            "threat ground level: %d\n"
                            "threat floating: %d\n"
                            "threat submerged: %d\n"
-                           "threat deep submerged: %d\n";
+                           "threat deep submerged: %d\n"
+                           "controlled by %d\n";
 
    char text[10000];
-   int pos = x + y * activemap->xsize;
-   sprintf(text, fieldinfo, x,y,fieldThreats[pos].threat[7], fieldThreats[pos].threat[6], fieldThreats[pos].threat[5],
-                                fieldThreats[pos].threat[4], fieldThreats[pos].threat[3], fieldThreats[pos].threat[2],
-                                fieldThreats[pos].threat[1], fieldThreats[pos].threat[0] );
+   AiThreat& threat = getFieldThreat ( x, y );
+   sprintf(text, fieldinfo, x,y,threat.threat[7], threat.threat[6], threat.threat[5],
+                                threat.threat[4], threat.threat[3], threat.threat[2],
+                                threat.threat[1], threat.threat[0], getFieldInformation(x,y).control );
 
    pfield fld = getfield (x, y );
-   if ( fld->vehicle && fieldvisiblenow ( fld )) {
+   if ( fld->vehicle && fieldvisiblenow ( fld ) && fld->vehicle->aiparam[getPlayer()] ) {
       char text2[1000];
       sprintf(text2, "\nunit nwid: %d ; typeid: %d", fld->vehicle->networkid, fld->vehicle->typ->id );
       strcat ( text, text2 );
@@ -3164,7 +3317,9 @@ void AI :: showFieldInformation ( int x, int y )
                                 "fight",
                                 "supply",
                                 "conquer",
-                                "build" };
+                                "build",
+                                "recon",
+                                "guard" };
 
          sprintf(text2, "\nunit value: %d; xtogo: %d, ytogo: %d; ztogo: %d;\njob %s ; task %s \n", aip.getValue(), aip.dest.x, aip.dest.y, aip.dest.z, jobs[aip.job], tasks[aip.task] );
          strcat ( text, text2 );
@@ -3173,10 +3328,17 @@ void AI :: showFieldInformation ( int x, int y )
       if ( aip.dest.x >= 0 && aip.dest.y >= 0 ) {
          getMap()->cleartemps ( 1 );
          getfield ( aip.dest.x, aip.dest.y )->a.temp = 1;
-         displaymap();
       }
 
+
    }
+
+   for ( ReconPositions::iterator i = reconPositions.begin(); i != reconPositions.end(); i++ )
+      getMap()->getField( i->first )->a.temp2 = 1;
+
+   displaymap();
+
+
    strcat ( text, "\n#font02#Section Information#font01##aeinzug20##eeinzug10##crtp10#");
    string s;
 
@@ -3227,9 +3389,9 @@ void AI :: showFieldInformation ( int x, int y )
 
 AI :: ~AI ( )
 {
-   if ( fieldThreats ) {
-      delete[] fieldThreats;
-      fieldThreats = NULL;
+   if ( fieldInformation ) {
+      delete[] fieldInformation;
+      fieldInformation = NULL;
       fieldNum = 0;
    }
 }

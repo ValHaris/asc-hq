@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: sg.cpp,v 1.132 2001-02-11 11:39:41 mbickel Exp $
+//     $Id: sg.cpp,v 1.133 2001-02-15 21:57:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.132  2001/02/11 11:39:41  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.131  2001/02/04 21:26:58  mbickel
 //      The AI status is written to savegames -> new savegame revision
 //      Lots of bug fixes
@@ -1536,18 +1539,20 @@ void execuseraction ( tuseractions action )
         case ua_viewaboutmessage:     {
                                          help(30);
                                          tviewanytext vat;
-                                         string s = getstartupmessage();
-                                         /*
+                                         ASCString s = getstartupmessage();
+
                                          #ifdef _SDL_
                                          char buf[1000];
                                          SDL_version compiled;
                                          SDL_VERSION(&compiled);
-                                         sprintf(buf, "Compiled with SDL version: %d.%d.%d\n", compiled.major, compiled.minor, compiled.patch);
+                                         sprintf(buf, "\nCompiled with SDL version: %d.%d.%d\n", compiled.major, compiled.minor, compiled.patch);
                                          s += buf;
+                                         // #endif
+
                                          sprintf(buf, "Linked with SDL version: %d.%d.%d\n", SDL_Linked_Version()->major, SDL_Linked_Version()->minor, SDL_Linked_Version()->patch);
                                          s += buf;
                                          #endif
-                                         */
+
                                          vat.init ( "about", s.c_str() );
                                          vat.run();
                                          vat.done();
