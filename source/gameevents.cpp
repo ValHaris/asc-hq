@@ -576,8 +576,13 @@ void SpecificUnitEntersPolygon::fieldOperator( const MapCoordinate& mc )
       if ( fld && fld->vehicle )
          if ( fld->vehicle->networkid == unitID || unitID == -1 )
             found = true;
+
+      Vehicle* veh = gamemap->getUnit( unitID );
+      if ( veh )
+         if ( mc.x == veh->getPosition().x && mc.y == veh->getPosition().y )
+            found = true;
    } else
-     fld->connection |= cconnection_areaentered_specificunit;
+      fld->connection |= cconnection_areaentered_specificunit;
 }
 
 void SpecificUnitEntersPolygon::readData ( tnstream& stream )
@@ -650,6 +655,13 @@ void AnyUnitEntersPolygon::fieldOperator( const MapCoordinate& mc )
       if ( fld && fld->vehicle )
          if ( (1 << fld->vehicle->getOwner()) & player )
             found = true;
+
+      if ( fld && fld->building )
+         for ( int i = 0; i < 32; ++i )
+            if ( fld->building->loading[i] )
+               if ( (1 << fld->building->loading[i]->getOwner()) & player )
+                  found = true;
+
    } else {
      fld->connection |= cconnection_areaentered_anyunit;
    }

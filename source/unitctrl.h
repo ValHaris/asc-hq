@@ -1,6 +1,24 @@
-//     $Id: unitctrl.h,v 1.34 2004-01-16 15:33:48 mbickel Exp $
+//     $Id: unitctrl.h,v 1.35 2004-03-27 21:48:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2004/01/16 15:33:48  mbickel
+//     Completely rewritten game event system
+//     TPWM-decoding-Patch
+//     Fixed: swallog message: wrong coordinates
+//     Autotraining for units with max ammo only
+//     Movement required for clearing mines
+//     Unit names can be edited
+//     weather dependen object properties
+//     Unit swallowed by ground -> unified message
+//     units cannot enter enemy transports
+//     Building entry has constant movemalus
+//     Message for resource transfer for providing player
+//     increased ammo production cost
+//     Fixed: unit could attack after movement (with RF on) although "no attack after move" property was set
+//     Buildings: new properties: "ExternalResourceTransfer", "ExternalAmmoTransfer"
+//     Container: Movemalus override for unloading
+//     Startup map specified in ASC.INI
+//
 //     Revision 1.33  2003/03/24 11:18:47  mbickel
 //      Fixed compilation problems with gcc 2.95
 //
@@ -446,6 +464,8 @@ class VehicleService : public VehicleAction {
                      VehicleService& vs;
                      pvehicle        veh;
                      pbuilding       bld;
+                     Resources       buildingResources;
+                     Resources       resourcesCapacity;
                   public:
                      struct {
                        bool distance;

@@ -776,6 +776,7 @@ bool Building::MatterConverter :: run()
    for ( int r = 0; r < 3; r++ )
       if ( bld->plus.resource(r) > 0 ) {
          bld->putResource( bld->plus.resource(r) * perc  / 100, r , 0);
+         printf ("building %s %d / %d : put mc res %d %d \n", bld->typ->name.c_str(), bld->getPosition().x, bld->getPosition().y, r, bld->plus.resource(r) * perc  / 100  );
          if ( bld->plus.resource(r) * perc / 100  > 0)
             didSomething = true;
 
@@ -951,6 +952,7 @@ bool Building::RegenerativePowerPlant :: finished()
 bool Building::RegenerativePowerPlant :: run()
 {
    Resources tp = bld->putResource( toProduce , 0 );
+   printf ("building %s %d / %d : put reg. %d %d %d \n", bld->typ->name.c_str(), bld->getPosition().x, bld->getPosition().y, tp.energy, tp.material, tp.fuel );
    bool didSomething = false;
    for  ( int r = 0; r < 3; r++ )
       if ( tp.resource(r) ) {
@@ -1085,6 +1087,7 @@ bool Building::MiningStation :: run()
    if ( !justQuery) {
       bld->getResource(consumed, 0 );
       bld->putResource(extracted, 0 );
+      printf ("building %s %d / %d : put mining %d %d %d \n", bld->typ->name.c_str(), bld->getPosition().x, bld->getPosition().y, extracted.energy, extracted.material, extracted.fuel );
    }
 
    toExtract_thisTurn -= extracted;
@@ -1175,6 +1178,8 @@ Resources Building :: getResourcePlus( )
   if ( w )
     r = w->getPlus();
   delete w;
+
+  printf ("building %s %d / %d : plus %d %d %d \n", typ->name.c_str(), getPosition().x, getPosition().y, r.energy, r.material, r.fuel );
 
   return r;
 }

@@ -105,7 +105,7 @@ void CGameOptions::setDefaults ( void )
    bi3.interpolate.buildings=0;
 
    defaultSuperVisorPassword.setName ( "" );
-   startupMap.setName ( "asc000.map" );
+   startupMap.setName ( "asc001.map" );
 
 
 #if USE_HOME_DIRECTORY == 0

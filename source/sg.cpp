@@ -50,7 +50,7 @@
    to a certain weather of a TerrainType. Each TerrainType has up to 5 
    different weathers ("dry (standard)","light rain", "heavy rain", "few snow",
    "lot of snow"). If there is a unit or a building standing on a field, the field
-   has a pointer to it: tfield::vehicle and tfield::building . 
+   has a pointer to it: tfield::vehicle and tfield::building .
    
    On the field can be several instances of Object. Objects are another central class of 
    ASC. Roads, pipleines, trenches and woods are examples of objects.
@@ -586,7 +586,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
                     ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog, ua_reloadDlgTheme, ua_showPlayerSpeed, ua_renameunit,
-                    ua_statisticdialog };
+                    ua_statisticdialog, ua_viewPipeNet };
 
 
 class tsgpulldown : public tpulldown
@@ -637,6 +637,7 @@ void         tsgpulldown :: init ( void )
    addbutton ( "unit ~S~et informationõ6", ua_UnitSetInfo );
    addbutton ( "~T~errainõ7", ua_viewterraininfo );
    addbutton ( "~U~nit weightõ8", ua_unitweightinfo );
+   addbutton ( "show ~P~ipeline netõ9", ua_viewPipeNet );
    addbutton ( "seperator", -1 );
    // addbutton ( "~R~esearch", ua_researchinfo );
    addbutton ( "~P~lay time", ua_showPlayerSpeed );
@@ -1062,6 +1063,7 @@ int  WeaponRange :: run ( const pvehicle veh )
    return found;
 }
 
+
 void viewunitweaponrange ( const pvehicle veh, tkey taste )
 {
    if ( veh && !moveparams.movestatus  ) {
@@ -1092,6 +1094,44 @@ void viewunitweaponrange ( const pvehicle veh, tkey taste )
       }
    }
 }
+
+
+void viewPipeNet( tkey taste )
+{
+
+   if ( !moveparams.movestatus ) {
+      actmap->cleartemps ( 7 );
+      TerrainBits tb = getTerrainBitType(cbpipeline);
+      for ( int x = 0; x < actmap->xsize; ++x )
+         for ( int y = 0; y < actmap->ysize; ++y ) {
+             pfield fld = actmap->getField ( x, y );
+             if ( fieldvisiblenow( fld ))
+                if ( (fld->bdt & tb).any() )
+                   fld->a.temp = 1;
+         }
+
+      displaymap();
+
+      if ( taste != ct_invvalue ) {
+         while ( skeypress ( taste )) {
+            while ( keypress() )
+               r_key();
+
+            releasetimeslice();
+         }
+      } else {
+         int mb = mouseparams.taste;
+         while ( mouseparams.taste == mb && !keypress() )
+            releasetimeslice();
+
+         while ( keypress() )
+            r_key();
+      }
+      actmap->cleartemps ( 7 );
+      displaymap();
+   }
+}
+
 
 void viewunitmovementrange ( pvehicle veh, tkey taste )
 {
@@ -1592,7 +1632,8 @@ void mainloopgeneralmousecheck ( void )
 }
 
 
-
+template<class T>
+kill (T* t ) { delete t; };
 
 void  mainloop ( void )
 {
@@ -1709,70 +1750,8 @@ void  mainloop ( void )
                execuseraction ( ua_unitweightinfo );
                break;
 
-            case ct_9: {
-
-            }
-               {
-                  // testtext ( getterraintype_forid ( 1011 ), getobjecttype_forid ( 1 ) );
-                  /*
-                  static pvehicle veh = 0;
-                  if ( !veh ) {
-                  veh = getactfield()->vehicle;
-               } else {
-                  actmap->cleartemps ( 15 );
-                  std::vector<MapCoordinate3D> path;
-                  AStar3D ast ( actmap, veh );
-                  ast.findAllAccessibleFields ( veh->tank.fuel / veh->typ->fuelConsumption * maxmalq );
-
-                  for ( int x = 0; x < actmap->xsize; x++ )
-                  for ( int y = 0; y < actmap->ysize; y++ )
-                  if ( !(getfield( x,y )->a.temp & chfahrend) )
-                     getfield( x,y )->a.temp = 0;
-                    */
-                  /*
-                                               int x = veh->xpos;
-                                               int y = veh->ypos;
-                                               actmap->cleartemps( 15 );
-                                               for ( int i = 0; i < path.size(); i++ )
-                                                  actmap->getField ( path[i] )->a.temp = 1;
-                   
-                                               AI ai ( actmap, actmap->actplayer );
-                                               int res = ai.moveUnit ( veh, path );
-                                               if ( res < 0 )
-                                                  displaymessage("error", 1 );
-                                                  */
-                  /*
-                     if ( !getfield ( x, y ))
-                        break;
-
-                     getfield ( x, y )->a.temp = 1;
-               } */
-
-                  /*
-                  for ( int xp = 0; xp < actmap->xsize; xp++ )
-                     for ( int yp = 0; yp < actmap->ysize; yp++ )
-                        if ( ast.fieldVisited ( xp, yp ))
-                           getfield ( xp, yp )->a.temp = 1;
-                  */
-                  /*
-                  displaymap();
-                  veh = NULL;
-
-               }  */
-                  /*
-                  static AStar* ast = 0;
-                  if ( ast ) {
-                     delete ast;
-                     ast =  NULL;
-               } else {
-                     ast = new AStar ( actmap, getactfield()->vehicle );
-                     ast->findAllAccessibleFields ( );
-                     displaymap();
-               } */
-                  // testland();
-               }
-
-
+            case ct_9:
+               viewPipeNet ( ct_9 );
                break;
 
             case ct_0:

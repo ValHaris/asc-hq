@@ -1162,8 +1162,12 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
                   for( int j = 0; j< resourceTypeNum; j++ )
                      res.resource(j) = cwaffenproduktionskosten[type][j] * stillNeeded / 5;
 
-                  ContainerBase* cb = bld;
-                  Resources res2 = cb->getResource ( res, 1 );
+                  // ContainerBase* cb = bld;
+                  // Resources res2 = cb->getResource ( res, 1 );
+                  Resources res2;
+                  for ( int r = 0; r < 2; r++ )
+                     res2.resource(r) = min ( buildingResources.resource(r), res.resource(r) );
+
                   int perc = 100;
                   for ( int i = 0; i< resourceTypeNum; i++ )
                       if ( res.resource(i) )
@@ -1188,9 +1192,11 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
             s.sourcePos = r;
             s.targetPos = r;
             s.curAmount = targetUnit->tank.resource(r);
-            s.orgSourceAmount = bld->getResource (maxint, r, 1 );
+            // s.orgSourceAmount = bld->getResource (maxint, r, 1 );
+            s.orgSourceAmount = buildingResources.resource(r);
             s.maxAmount = s.curAmount + min ( targetUnit->putResource(maxint, r, 1) , s.orgSourceAmount );
-            int sourceSpace = bld->putResource(maxint, r, 1);
+            // int sourceSpace = bld->putResource(maxint, r, 1);
+            int sourceSpace = resourcesCapacity.resource(r);
             s.minAmount = max ( s.curAmount - sourceSpace, 0 );
             targ.service.push_back ( s );
          }
@@ -1231,7 +1237,7 @@ void  VehicleService :: FieldSearch :: testfield( const MapCoordinate& mc )
    }
 
    if ( fld && bld ) {
-      if ( fld->building == bld ) {
+      if ( fld->building == bld && beeline( mc.x, mc.y, startPos.x, startPos.y)== 0) {
          for ( int i = 0; i < 32; i++ )
             if ( bld->loading[i] )
                checkBuilding2Vehicle ( bld->loading[i] );
@@ -1289,6 +1295,11 @@ void VehicleService :: FieldSearch :: init ( pvehicle _veh, pbuilding _bld )
 
 void VehicleService :: FieldSearch :: run (  )
 {
+   if ( bld )
+      for ( int r = 0; r < 3; ++r ) {
+         buildingResources.resource(r) = bld->getResource( maxint, r, 1 );
+         resourcesCapacity.resource(r) = bld->putResource( maxint, r, 1 );
+      }
    startsearch();
 }
 
