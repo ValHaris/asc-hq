@@ -2,9 +2,12 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.104 2001-12-19 17:16:28 mbickel Exp $
+//     $Id: dialog.cpp,v 1.105 2002-01-07 11:40:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.104  2001/12/19 17:16:28  mbickel
+//      Some include file cleanups
+//
 //     Revision 1.103  2001/12/14 10:20:05  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -2011,8 +2014,11 @@ void         tchoice_dlg::init( char* a, char* b, char* c )
   activefontsettings.font = schriften.arial8; 
   activefontsettings.justify = centertext; 
   activefontsettings.length = xsize - 20;
-  activefontsettings.background = 255; 
-  activefontsettings.color = actmap->actplayer * 8 + 20; 
+  activefontsettings.background = 255;
+  if ( actmap && actmap->actplayer >= 0 )
+     activefontsettings.color = actmap->actplayer * 8 + 20;
+  else
+     activefontsettings.color = 20;
   mousevisible ( false );
   showtext2(a,x1 + 10,y1 + 15);
   mousevisible ( true );

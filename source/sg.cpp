@@ -28,7 +28,7 @@
  
    THE central class of ASC is tmap in gamemap.h . 
    It is the anchor where nearly all elements of ASC are chained to. The global 
-   variable #actmap is a pointer to the active map. There can be a maximum of 
+   variable #actmap is a pointer to the active map. There can be a maximum of
    8 players on a map, plus neutral units (which are handled like a 9th player). 
    Hence the array of 9 tmap::Player classes in tmap. 
    
@@ -612,7 +612,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
-                    ua_aibench };
+                    ua_aibench, ua_networksupervisor };
 
 
 class tsgpulldown : public tpulldown {
@@ -644,6 +644,7 @@ void         tsgpulldown :: init ( void )
    addbutton ( "Continue network gameõF3", ua_continuenetworkgame);
    addbutton ( "setup Net~w~ork", ua_setupnetwork );
    addbutton ( "Change ~P~assword", ua_changepassword );
+   addbutton ( "supervise network game", ua_networksupervisor );
    addbutton ( "seperator", -1 );
    addbutton ( "~P~layers + Alliances", ua_setupalliances);
    addbutton ( "transfer ~U~nit control", ua_giveunitaway );
@@ -702,6 +703,42 @@ void         tsgpulldown :: init ( void )
 }
 
 
+class MainMenuPullDown : public tpulldown {
+          public:
+             void init ( void );
+} ;
+
+void         MainMenuPullDown :: init ( void )
+{
+  alwaysOpen = true;
+
+  addfield ( "Glo~b~al" );
+   addbutton ( "~O~ptions", ua_gamepreferences );
+   addbutton ( "~M~ouse options", ua_mousepreferences );
+   addbutton ( "seperator", -1);
+   addbutton ( "E~x~itõctrl-x", ua_exitgame );
+
+
+  addfield ("~G~ame");
+   addbutton ( "New ~C~ampaign", ua_newcampaign);
+   addbutton ( "~N~ew single Levelõctrl-n", ua_startnewsinglelevel );
+
+   addbutton ( "~L~oad gameõctrl-l", ua_loadgame );
+   addbutton ( "Continue network gameõF3", ua_continuenetworkgame);
+   addbutton ( "supervise network game", ua_networksupervisor );
+
+  addfield ( "~H~elp" );
+   addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );
+   addbutton ( "HowTo ~C~ontinue email games", ua_howtocontinuepbem );
+   addbutton ( "seperator", -1);
+   addbutton ( "~K~eys", ua_help );
+
+   addbutton ( "~A~bout", ua_viewaboutmessage );
+
+   tpulldown :: init();
+   setshortkeys();
+}
+
 
 void         repaintdisplay(void)
 {
@@ -735,8 +772,8 @@ void         repaintdisplay(void)
    dashboard.repainthard = 1;
    if ( actmap && actmap->ellipse )
       actmap->ellipse->paint();
-   if ( actgui && actmap && actmap->xsize>0)
 
+   if ( actgui && actmap && actmap->xsize>0)
       actgui->painticons();
 
 }
@@ -1128,6 +1165,143 @@ void selectgraphicset ( void )
 }
 
 
+void networksupervisor ( void )
+{
+   class tcarefordeletionofmap {
+            pmap tmp;
+          public:
+            tcarefordeletionofmap ()
+            {
+               tmp= actmap;
+               actmap = NULL;
+            }
+            ~tcarefordeletionofmap (  )
+            {
+                if ( actmap && (actmap->xsize > 0  ||  actmap->ysize > 0) )
+                     delete actmap;
+                actmap = tmp;
+            };
+         } carefordeletionofmap;
+
+
+   tlockdispspfld ldsf;
+
+   tnetwork network;
+/*
+   int stat;
+   do {
+      stat = setupnetwork( &network, 1+8 );
+      if ( stat == 1 )
+         return;
+
+   } while ( (network.computer[0].receive.transfermethod == 0) || (network.computer[0].receive.transfermethodid != network.computer[0].receive.transfermethod->getid()) ); 
+*/
+   int stat;
+   int go = 0;
+   do {
+      stat = network.computer[0].receive.transfermethod->setupforreceiving ( &network.computer[0].receive.data );
+      if ( stat == 0 )
+         return;
+
+      if ( network.computer[0].receive.transfermethod  &&
+           network.computer[0].receive.transfermethodid == network.computer[0].receive.transfermethod->getid()  &&
+           network.computer[0].receive.transfermethod->validateparams( &network.computer[0].receive.data, TN_RECEIVE ))
+           go = 1;
+   } while ( !go );
+
+   try {
+       displaymessage ( " starting data transfer ",0);
+
+       network.computer[0].receive.transfermethod->initconnection ( TN_RECEIVE );
+       network.computer[0].receive.transfermethod->inittransfer ( &network.computer[0].receive.data );
+
+       tnetworkloaders nwl;
+       nwl.loadnwgame ( network.computer[0].receive.transfermethod->stream );
+
+       network.computer[0].receive.transfermethod->closetransfer();
+       network.computer[0].receive.transfermethod->closeconnection();
+
+       removemessage();
+       if ( actmap->network )
+          setallnetworkpointers ( actmap->network );
+   } /* endtry */
+
+   catch ( tfileerror ) {
+      displaymessage ("a file error occured while loading game",1 );
+      delete actmap;
+      actmap = NULL;
+      return;
+   } /* endcatch */
+   catch ( ASCexception ) {
+      displaymessage ("error loading game",1 );
+      delete actmap;
+      actmap = NULL;
+      return;
+   } /* endcatch */
+
+
+   int ok = 0;
+   if ( !actmap->supervisorpasswordcrc.empty() ) {
+       ok = enterpassword ( actmap->supervisorpasswordcrc );
+   } else {
+      displaymessage ("no supervisor defined",1 );
+      delete actmap;
+      actmap = NULL;
+      return;
+   }
+
+   if ( ok ) {
+      npush ( actmap->actplayer );
+      actmap->actplayer = -1;
+      setupalliances( 1 );
+      npop ( actmap->actplayer );
+
+      do {
+         stat = setupnetwork( &network, 2+8 );
+         if ( stat == 1 ) {
+            displaymessage ("no changes were saved",1 );
+            delete actmap;
+            actmap = NULL;
+            return;
+         }
+
+      } while ( (network.computer[0].send.transfermethod == 0) || (network.computer[0].send.transfermethodid != network.computer[0].send.transfermethod->getid()) ); /* enddo */
+
+      tnetworkcomputer* compi = &network.computer[ 0 ];
+
+      displaymessage ( " starting data transfer ",0);
+
+      try {
+         compi->send.transfermethod->initconnection ( TN_SEND );
+         compi->send.transfermethod->inittransfer ( &compi->send.data );
+
+         tnetworkloaders nwl;
+         nwl.savenwgame ( compi->send.transfermethod->stream );
+
+         compi->send.transfermethod->closetransfer();
+         compi->send.transfermethod->closeconnection();
+      } /* endtry */
+      catch ( tfileerror ) {
+         displaymessage ( "a file error occured while saving file", 1 );
+      } /* endcatch */
+      catch ( ASCexception ) {
+         displaymessage ( "error saving file", 1 );
+      } /* endcatch */
+
+      delete actmap;
+      actmap = NULL;
+      displaymessage ( "data transfer finished",1);
+
+   } else {
+      displaymessage ("no supervisor defined or invalid password",1 );
+      delete actmap;
+      actmap = NULL;
+   }
+}
+
+
+
+
 void execuseraction ( tuseractions action )
 {
    switch ( action ) {
@@ -1446,15 +1620,18 @@ void execuseraction ( tuseractions action )
                             }
                          }
                        break;
+        case ua_networksupervisor: networksupervisor();
+                                   displaymap();
+        break;
 
     }
 
 
 }
 
-void checkpulldown( tkey* ch )
+void checkpulldown( tkey ch )
 {
-   pd.key = *ch;
+   pd.key = ch;
    pd.checkpulldown();
 
    if (pd.action2execute >= 0 ) {
@@ -1467,7 +1644,7 @@ void checkpulldown( tkey* ch )
 void mainloopgeneralkeycheck ( tkey& ch )
 {
     ch = r_key();
-    checkpulldown( &ch );
+    checkpulldown( ch );
 
     movecursor(ch);
     actgui->checkforkey ( ch );
@@ -1478,21 +1655,17 @@ void mainloopgeneralkeycheck ( tkey& ch )
 
 void mainloopgeneralmousecheck ( void )
 {
-    if ( exitprogram )
-       execuseraction ( ua_exitgame );
-    actgui->checkformouse();
+   if ( exitprogram )
+     execuseraction ( ua_exitgame );
 
-    dashboard.checkformouse();
+   actgui->checkformouse();
 
-//  if (lasttick + 5 < ticker)
-      if ((dashboard.x != getxpos()) || (dashboard.y != getypos())) {
-         mousevisible(false);
+   dashboard.checkformouse();
 
-         dashboard.paint ( getactfield(), actmap->playerView );
-         actgui->painticons();
-
-         mousevisible(true);
-      }
+   if ((dashboard.x != getxpos()) || (dashboard.y != getypos())) {
+      dashboard.paint ( getactfield(), actmap->playerView );
+      actgui->painticons();
+   }
 
    if ( lastdisplayedmessageticker + messagedisplaytime < ticker )
       displaymessage2("");
@@ -1510,6 +1683,7 @@ void mainloopgeneralmousecheck ( void )
 
    if ( onlinehelp )
       onlinehelp->checkforhelp();
+
    if ( onlinehelpwind && !CGameOptions::Instance()->smallmapactive )
       onlinehelpwind->checkforhelp();
 
@@ -1698,7 +1872,7 @@ void  mainloop ( void )
 /*        Pulldown Men?                                                                       . */
 /************************************************************************************************/
 
-      checkpulldown( &ch );
+      checkpulldown( ch );
 
       while ( actmap->player[ actmap->actplayer ].queuedEvents )
         checkevents( &defaultMapDisplay );
@@ -1828,238 +2002,41 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 
 
 
-void networksupervisor ( void )
-{
-   class tcarefordeletionofmap {
-          public:
-            ~tcarefordeletionofmap (  )
-            {
-                if ( actmap && (actmap->xsize > 0  ||  actmap->ysize > 0) ) {
-                     delete actmap;
-                     actmap = NULL;
-                }
-            };
-         } carefordeletionofmap;
-
-
-   tlockdispspfld ldsf;
-
-   tnetwork network;
-
-   int stat;
-   do {
-      stat = setupnetwork( &network, 1+8 );
-      if ( stat == 1 )
-         return;
-
-   } while ( (network.computer[0].receive.transfermethod == 0) || (network.computer[0].receive.transfermethodid != network.computer[0].receive.transfermethod->getid()) ); /* enddo */
-
-
-   try {
-       displaymessage ( " starting data transfer ",0);
-
-       network.computer[0].receive.transfermethod->initconnection ( TN_RECEIVE );
-       network.computer[0].receive.transfermethod->inittransfer ( &network.computer[0].receive.data );
-
-       tnetworkloaders nwl;
-       nwl.loadnwgame ( network.computer[0].receive.transfermethod->stream );
-
-       network.computer[0].receive.transfermethod->closetransfer();
-       network.computer[0].receive.transfermethod->closeconnection();
-
-       removemessage();
-       if ( actmap->network )
-          setallnetworkpointers ( actmap->network );
-   } /* endtry */
-
-   catch ( tfileerror ) {
-      displaymessage ("a file error occured while loading game",1 );
-      delete actmap;
-      actmap = NULL;
-      return;
-   } /* endcatch */
-   catch ( ASCexception ) {
-      displaymessage ("error loading game",1 );
-      delete actmap;
-      actmap = NULL;
-      return;
-   } /* endcatch */
-
-
-   int ok = 0;
-   if ( !actmap->supervisorpasswordcrc.empty() ) {
-       ok = enterpassword ( actmap->supervisorpasswordcrc );
-   } else {
-      displaymessage ("no supervisor defined",1 );
-      delete actmap;
-      actmap = NULL;
-      return;
-   }
-
-   if ( ok ) {
-      npush ( actmap->actplayer );
-      actmap->actplayer = -1;
-      setupalliances( 1 );
-      npop ( actmap->actplayer );
-
-      do {
-         stat = setupnetwork( &network, 2+8 );
-         if ( stat == 1 ) {
-            displaymessage ("no changes were saved",1 );
-            delete actmap;
-            actmap = NULL;
-            return;
-         }
-
-      } while ( (network.computer[0].send.transfermethod == 0) || (network.computer[0].send.transfermethodid != network.computer[0].send.transfermethod->getid()) ); /* enddo */
-
-      tnetworkcomputer* compi = &network.computer[ 0 ];
-
-      displaymessage ( " starting data transfer ",0);
-
-      try {
-         compi->send.transfermethod->initconnection ( TN_SEND );
-         compi->send.transfermethod->inittransfer ( &compi->send.data );
-
-         tnetworkloaders nwl;
-         nwl.savenwgame ( compi->send.transfermethod->stream );
-
-         compi->send.transfermethod->closetransfer();
-         compi->send.transfermethod->closeconnection();
-      } /* endtry */
-      catch ( tfileerror ) {
-         displaymessage ( "a file error occured while saving file", 1 );
-      } /* endcatch */
-      catch ( ASCexception ) {
-         displaymessage ( "error saving file", 1 );
-      } /* endcatch */
-
-      delete actmap;
-      actmap = NULL;
-      displaymessage ( "data transfer finished",1);
-
-   } else {
-      displaymessage ("no supervisor defined or invalid password",1 );
-      delete actmap;
-      actmap = NULL;
-   }
-
-}
-
-
 
 
 
 void runmainmenu ( void )
 {
-    const char* mainmenuitems[6] = { "new map", "new campaign", "load game", "continue network game", "network supervisor", "exit" };
-
-    int mainmenuitemnum = 6;
-
-    int unitsearched = 30;
-    pvehicletype unit = getvehicletype_forid ( unitsearched );
-    int xz = 228;
-    int xs = 100;
-    int ys = 25;
-    int yd = 35;
-    int y1 = 220;
-    int xud = 40;
-    int yud = -10;
-    mousevisible ( false );
+    MainMenuPullDown pd;
+    pd.init();
     backgroundpict.paint();
-    activefontsettings.font = schriften.arial8;
-    activefontsettings.background = 255;
-    activefontsettings.justify = centertext;
-    activefontsettings.height = 0;
-    activefontsettings.length = 2*xs;
-    for ( int i = 0; i < mainmenuitemnum; i++) {
-       bar ( xz - xs, y1 + i * yd, xz + xs, y1 + i * yd + ys, dblue );
-       showtext2 ( mainmenuitems[i], xz - xs, y1 + i * yd + ys/2 - activefontsettings.font->height / 2 );
-    } /* endfor */
-    int stat = -1;
-    int pos = -1;
-    int oldpos = -1;
-    void* bkgr[2] ;
-    int tnksize = imagesize ( 0, 0, fieldsizex, fieldsizey );
-    bkgr[0] = asc_malloc ( tnksize );
-    bkgr[1] = asc_malloc ( tnksize );
-    mousevisible( true );
+    pd.baron();
+    // loadFullscreenImage ( "title.jpg" );
+
     do {
-       if ( mouseparams.taste & 1 )
-          for (int i = 0; i < mainmenuitemnum; i++)
-             if ( mouseparams.x >  xz - xs && mouseparams.y > y1 + i * yd  && mouseparams.x < xz + xs && mouseparams.x < y1 + i * yd + ys ) {
-                stat = i;
-                while ( mouseparams.taste & 1 )
-                   releasetimeslice();
-             } /* endfor */
-
+       tkey ch = ct_invvalue;
        if (keypress()) {
-         tkey ch = r_key();
+         ch = r_key();
 
-         switch ( ch ) {
-            case ct_down: if ( pos < mainmenuitemnum-1 )
-                             pos++;
-                          else
-                             pos=0;
+         switch (ch) {
+            case 'R':   execuseraction ( ua_repainthard );
                break;
-            case ct_up: if ( pos > 0 )
-                            pos--;
-                        else
-                            pos = mainmenuitemnum-1;
-               break;
-            case ct_enter:
-            case ct_space: stat = pos;
-               break;
-         } /* endswitch */
+         };
        }
-       if ( pos != oldpos ) {
-          if ( oldpos != -1 ) {
-             setinvisiblemouserectanglestk ( xz - xs - xud - fieldsizex, y1 + oldpos * yd + yud,
-                                             xz - xs - xud            , y1 + oldpos * yd + yud + fieldsizey );
-             putimage ( xz - xs - xud - fieldsizex, y1 + oldpos * yd + yud,  bkgr[0] );
-             getinvisiblemouserectanglestk ();
 
-             setinvisiblemouserectanglestk ( xz + xs + xud,             y1 + oldpos * yd + yud,
-                                             xz + xs + xud + fieldsizex, y1 + oldpos * yd + yud + fieldsizey );
-             putimage ( xz + xs + xud, y1 + oldpos * yd + yud,  bkgr[1] );
-             getinvisiblemouserectanglestk ();
-          }
-          if ( pos != -1 ) {
-             setinvisiblemouserectanglestk ( xz - xs - xud - fieldsizex, y1 + pos * yd + yud,
-                                             xz - xs - xud            , y1 + pos * yd + yud + fieldsizey );
-             getimage ( xz - xs - xud - fieldsizex, y1 + pos * yd + yud,
-                        xz - xs - xud            , y1 + pos * yd + yud + fieldsizey,  bkgr[0] );
-             putrotspriteimage90  ( xz - xs - xud - fieldsizex, y1 + pos * yd + yud,  unit->picture[0], 0 );
-             getinvisiblemouserectanglestk ();
+      pd.key = ch;
+      pd.checkpulldown();
 
-             setinvisiblemouserectanglestk ( xz + xs + xud,             y1 + pos * yd + yud,
-                                             xz + xs + xud + fieldsizex, y1 + pos * yd + yud + fieldsizey );
-             getimage ( xz + xs + xud,             y1 + pos * yd + yud,
-                        xz + xs + xud + fieldsizex, y1 + pos * yd + yud + fieldsizey,  bkgr[1] );
-             putrotspriteimage270 ( xz + xs + xud,             y1 + pos * yd + yud,  unit->picture[0], 0 );
-             getinvisiblemouserectanglestk ();
-          }
-          oldpos = pos;
-       }
-    } while ( stat == -1 ); /* enddo */
+      if (pd.action2execute >= 0 ) {
+         tuseractions ua = (tuseractions) pd.action2execute;
+         pd.action2execute = -1;
+         execuseraction ( ua );
+      }
 
-    delete  ( bkgr[0] );
-    delete  ( bkgr[1] );
+       releasetimeslice();
+    } while ( !actmap  ); /* enddo */
 
-    switch ( stat ) {
-    case 0: newsinglelevel();
-       break;
-    case 1: newcampaign();
-       break;
-    case 2: ladespiel();
-       break;
-    case 3: continuenetworkgame (  );
-       break;
-    case 4: networksupervisor ( );
-       break;
-    case 5: abortgame = 1;
-       break;
-    } /* endswitch */
+    // backgroundpict.paint();
 }
 
 

@@ -5,9 +5,12 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.66 2001-12-19 17:16:29 mbickel Exp $
+//     $Id: loaders.cpp,v 1.67 2002-01-07 11:40:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.66  2001/12/19 17:16:29  mbickel
+//      Some include file cleanups
+//
 //     Revision 1.65  2001/12/14 10:20:05  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -1441,7 +1444,7 @@ void tspfldloaders::readfields ( void )
          else
             k = stream->readChar();
 
-         pterraintype trn = getterraintype_forid ( k, 0 );
+         pterraintype trn = getterraintype_forid ( k );
          if ( !trn ) 
             throw InvalidID ( "terrain", k );
 
@@ -1533,7 +1536,7 @@ void tspfldloaders::readfields ( void )
                   stream->readInt(); // dummy
 
                int id = stream->readInt();
-               o.typ = getobjecttype_forid ( id, 0 );
+               o.typ = getobjecttype_forid ( id );
 
                if ( !o.typ )
                   throw InvalidID ( "object", id );

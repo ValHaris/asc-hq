@@ -2,9 +2,12 @@
     \brief The implementation of the Pulldown Menu
 */
 
-//     $Id: pd.cpp,v 1.18 2001-12-19 17:16:29 mbickel Exp $
+//     $Id: pd.cpp,v 1.19 2002-01-07 11:40:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2001/12/19 17:16:29  mbickel
+//      Some include file cleanups
+//
 //     Revision 1.17  2001/07/30 17:43:13  mbickel
 //      Added Microsoft Visual Studio .net project files
 //      Fixed some warnings
@@ -111,6 +114,14 @@
    pfont        pulldownfont;
    tfontsettings      savefont;
 
+tpulldown :: tpulldown ( void )
+{
+   pdb.count = 0;
+   alwaysOpen = false;
+   barstatus = false;
+}
+
+
 void tpulldown::init(void)
 {
    int ml = 0;
@@ -162,10 +173,6 @@ void tpulldown::setvars(void)
 
 }
 
-tpulldown :: tpulldown ( void )
-{
-   pdb.count = 0;
-}
 
 void tpulldown::addbutton ( char* name, int id )
 {
@@ -386,23 +393,23 @@ void tpulldown::baron(void)
 
 void tpulldown::baroff(void)
 { 
-   if (barstatus == true) {
+   if (barstatus == true && !alwaysOpen) {
       collategraphicoperations cgo ( 0,0, agmp->resolutionx-1 ,pdb.pdbreite );
 
       mousevisible(false);
       putimage(0,0,barbackgrnd);
       asc_free( barbackgrnd );
-      mousevisible(true); 
+      mousevisible(true);
       barstatus = false;
    }
-} 
+}
 
 
 int tpulldown::getpdfieldheight(int pdfieldnr,int pos)
-{ 
+{
   int         i, j;
 
-   j = 0; 
+   j = 0;
    for (i = 0; i < pos; i++)
       if (strcmp(pdb.field[pdfieldnr].button[i].name,"seperator") == 0) j = j + 7;
       else j = j + pulldownfont->height + 6;

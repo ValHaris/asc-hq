@@ -78,7 +78,7 @@ bool Building::canRepair ( void )
 
 void Building :: convert ( int player )
 {
-   if (col > 8)
+   if (player > 8)
       fatalError("convertbuilding: \n color muá im bereich 0..8 sein ");
 
    int oldcol = color >> 3;
@@ -87,7 +87,7 @@ void Building :: convert ( int player )
    if ( oldcol == 8 )
       for ( int r = 0; r < 3; r++ )
          if ( gamemap->isResourceGlobal( r )) {
-            gamemap->bi_resource[col].resource(r) += actstorage.resource(r);
+            gamemap->bi_resource[player].resource(r) += actstorage.resource(r);
             actstorage.resource(r) = 0;
          }
 
@@ -95,20 +95,20 @@ void Building :: convert ( int player )
    removeview();
 
    gamemap->player[oldcol].queuedEvents++;
-   gamemap->player[col].queuedEvents++;
+   gamemap->player[player].queuedEvents++;
 
    tmap::Player::BuildingList::iterator i = find ( gamemap->player[oldcol].buildingList.begin(), gamemap->player[oldcol].buildingList.end(), this );
    if ( i != gamemap->player[oldcol].buildingList.end())
       gamemap->player[oldcol].buildingList.erase ( i );
 
-   gamemap->player[col].buildingList.push_back( this );
+   gamemap->player[player].buildingList.push_back( this );
 
-   color = col << 3;
+   color = player << 3;
 
    addview();
    for ( int i = 0; i < 32; i++)
       if ( loading[i] )
-         loading[i]->convert ( col );
+         loading[i]->convert ( player );
 
    /*
    if ( connection & cconnection_conquer ) {

@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: pd.h,v 1.8 2001-07-30 17:43:13 mbickel Exp $
+//     $Id: pd.h,v 1.9 2002-01-07 11:40:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2001/07/30 17:43:13  mbickel
+//      Added Microsoft Visual Studio .net project files
+//      Fixed some warnings
+//
 //     Revision 1.7  2001/01/28 14:04:15  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -86,6 +90,8 @@
 
    class tpulldown {
          int pdfieldnr, buttonnr;
+      protected:
+         bool alwaysOpen;
       public :
          bool barstatus;
          int  action,mousestat;

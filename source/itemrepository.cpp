@@ -379,14 +379,14 @@ void         loadalltechnologies(void)
 
    for (i = 0; i < technologynum; i++)
       for (int l = 0; l < 6; l++) {
-         ptechnology tech = gettechnology_forpos ( i, 0 );
+         ptechnology tech = gettechnology_forpos ( i );
          int j = tech->requiretechnologyid[l];
          if ( j > 0 )
             tech->requiretechnology[l] = gettechnology_forid ( j );
       }
 
    for (i = 0; i < technologynum; i++)
-      gettechnology_forpos ( i, 0 ) -> getlvl();
+      gettechnology_forpos ( i ) -> getlvl();
 
    displayLogMessage ( 4, "loadallTechnologies completed\n");
 }

@@ -3,9 +3,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.124 2001-12-19 17:16:28 mbickel Exp $
+//     $Id: controls.cpp,v 1.125 2002-01-07 11:40:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.124  2001/12/19 17:16:28  mbickel
+//      Some include file cleanups
+//
 //     Revision 1.123  2001/12/14 10:20:04  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -2387,12 +2390,12 @@ void doresearch ( int i )
 
 
 }
-
+/*
 int Building :: getmininginfo ( int res )
 {
    return processmining ( res, 0 );
 }
-
+*/
 
 void Building :: initwork ( void )
 {
