@@ -1,6 +1,11 @@
-//     $Id: sg.cpp,v 1.88 2000-09-01 15:47:49 mbickel Exp $
+//     $Id: sg.cpp,v 1.89 2000-09-01 17:46:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.88  2000/09/01 15:47:49  mbickel
+//      Added Astar path finding code
+//      Fixed: viewid crashed
+//      Fixed display error in ynswitch ( krkr.cpp )
+//
 //     Revision 1.87  2000/08/29 10:36:49  mbickel
 //      Removed Debug code
 //      Fixed bug: movement left when changing height into buildings
@@ -2782,15 +2787,21 @@ void  mainloop ( void )
                           if ( !veh ) {
                              veh = getactfield()->vehicle;
                           } else {
+                             actmap->cleartemps ( 7 );
                              vector<int> path;
                              AStar ( actmap, path, veh, getxpos(), getypos() );
                              int x = veh->xpos;
                              int y = veh->ypos;
-                             for ( int i = 0; i < path.size(); i++ ) {
+                             for ( int i = path.size()-1; i >= 0 ; i-- ) {
                                 getnextfield ( x, y, path[i] );
+
+                                if ( !getfield ( x, y ))
+                                   break;
+
                                 getfield ( x, y )->a.temp = 1;
                              }
                              displaymap();
+                             veh = NULL;
                           }
                         }
                break;

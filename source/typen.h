@@ -1,6 +1,13 @@
-//     $Id: typen.h,v 1.45 2000-08-25 13:42:56 mbickel Exp $
+//     $Id: typen.h,v 1.46 2000-09-01 17:46:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2000/08/25 13:42:56  mbickel
+//      Fixed: zoom dialogbox in mapeditor was invisible
+//      Fixed: ammoproduction: no numbers displayed
+//      game options: produceammo and fillammo are now modified together
+//      Fixed: sub could not be seen when standing on a mine
+//      Some AI improvements
+//
 //     Revision 1.44  2000/08/21 17:51:03  mbickel
 //      Fixed: crash when unit reaching max experience
 //      Fixed: crash when displaying research image
@@ -234,8 +241,8 @@
 
 typedef class tterrainaccess *pterrainaccess;
 typedef struct tcrc *pcrc;
-typedef class tvehicle* pvehicle ;
-typedef class tvehicle Vehicle;
+typedef class Vehicle  tvehicle ;
+typedef class Vehicle* pvehicle ;
 typedef class tvehicletype* pvehicletype ;
 typedef struct tbuildrange* pbuildrange;
 typedef class tobjecttype* pobjecttype;
@@ -706,8 +713,7 @@ class tvehicletype {    // This structure does not have a fixed layout any more 
        ~tvehicletype ( );
 }; 
 
-
-class tvehicle { /*** Bei Aenderungen unbedingt Save/LoadGame und Konstruktor korrigieren !!! ***/
+class Vehicle { /*** Bei Aenderungen unbedingt Save/LoadGame und Konstruktor korrigieren !!! ***/
   private:
     pmap gamemap;
   public:
@@ -721,7 +727,7 @@ class tvehicle { /*** Bei Aenderungen unbedingt Save/LoadGame und Konstruktor ko
     int*         weapstrength;
     int          moredummy[3];
     Word         dummy;     
-    tvehicle*    loading[32]; 
+    Vehicle*     loading[32];
     char         experience;    // 0 .. 15 
     char         attacked; 
     char         height;       /* BM */   /*  aktuelle Hoehe: z.B. Hochfliegend  */
@@ -734,8 +740,8 @@ class tvehicle { /*** Bei Aenderungen unbedingt Save/LoadGame und Konstruktor ko
     int          material;     /*  aktuelle loading an Material und  */
     int          energy;       /*  energy  */
     int          energyUsed;
-    pvehicle     next;
-    pvehicle     prev;         /*  fuer lineare Liste der vehicle */
+    Vehicle      *next;
+    Vehicle      *prev;         /*  fuer lineare Liste der vehicle */
                    
     short        dummy3;   
     word         dummy1[13]; 
@@ -747,9 +753,9 @@ class tvehicle { /*** Bei Aenderungen unbedingt Save/LoadGame und Konstruktor ko
     char*        name;
     int          functions;
     class  ReactionFire {
-         tvehicle* unit;
+         Vehicle* unit;
        public:
-         ReactionFire ( tvehicle* _unit ) : unit ( _unit ) {};
+         ReactionFire ( Vehicle* _unit ) : unit ( _unit ) {};
          enum Status { off, init1, init2, ready };
          int enemiesAttackable;     // BM   ; gibt an, gegen welche Spieler die vehicle noch reactionfiren kann.
          int status;
@@ -798,13 +804,13 @@ class tvehicle { /*** Bei Aenderungen unbedingt Save/LoadGame und Konstruktor ko
     int searchstackforfreeweight( pvehicle eht, int what ); // what: 0=cargo ; 1=material/fuel
     // should not be called except from freeweight
 
-    tvehicle ( void );
-    tvehicle ( pmap actmap );
-    tvehicle ( pvehicle src, pmap actmap ); // if actmap == NULL  ==> unit will not be chained
+    Vehicle ( void );
+    Vehicle ( pmap actmap );
+    Vehicle ( pvehicle src, pmap actmap ); // if actmap == NULL  ==> unit will not be chained
     void clone ( pvehicle src, pmap actmap ); // if actmap == NULL  ==> unit will not be chained
     void transform ( pvehicletype type );     // to be used with extreme caution, and only in the mapeditor !!
     int weapexist ( void );     // Is the unit able to shoot ?
-    ~tvehicle ( ); 
+    ~Vehicle ( );
   private:
     void init ( void );
 }; 

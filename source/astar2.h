@@ -3,6 +3,6 @@
  
  #include <vector>
  
- extern void AStar( pmap actmap, vector<int>& path, pvehicle veh, int x, int y );
+ extern void AStar( pmap actmap, std::vector<int>& path, pvehicle veh, int x, int y );
 
 #endif

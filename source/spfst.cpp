@@ -1,6 +1,11 @@
-//     $Id: spfst.cpp,v 1.56 2000-08-28 19:49:42 mbickel Exp $
+//     $Id: spfst.cpp,v 1.57 2000-09-01 17:46:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.56  2000/08/28 19:49:42  mbickel
+//      Fixed: replay exits when moving satellite out of orbiter
+//      Fixed: airplanes being able to endlessly takeoff and land
+//      Fixed: buildings constructable by unit without resources
+//
 //     Revision 1.55  2000/08/13 09:54:03  mbickel
 //      Refuelling is now logged for replays
 //
@@ -1078,9 +1083,7 @@ int         fieldaccessible( const pfield        field,
    if ( uheight == -1 )
       uheight = vehicle->height;
 
-   int c = ((field->visible >> (vehicle->color / 4 )) & 3);
-   if ( godview ) 
-       c = visible_all; 
+   int c = fieldvisiblenow ( field, vehicle->color/8 );
 
    if (field == NULL) 
      return 0;
@@ -6133,13 +6136,13 @@ void tbuilding :: changecompletion ( int d )
 /** Returns the SingleWeapon corresponding to the weaponNum for this
  *  vehicle.
  */
-SingleWeapon *tvehicle::getWeapon( unsigned weaponNum ) {
+SingleWeapon *Vehicle::getWeapon( unsigned weaponNum ) {
   // printf( "getWeapon(%u)\n", weaponNum );
   UnitWeapon *weapons=typ->weapons;
   return (weaponNum<=weapons->count)?weapons->weapon+weaponNum:NULL;;
 }
 
-int tvehicle :: buildingconstructable ( pbuildingtype building )
+int Vehicle :: buildingconstructable ( pbuildingtype building )
 {
    if ( !building )
       return 0;
@@ -6233,7 +6236,7 @@ int tvehicle :: freeweight ( int what )
    return -2;
 }
 
-int tvehicle::getmaxfuelforweight ( void )
+int Vehicle::getmaxfuelforweight ( void )
 {
    pfield fld = getfield ( xpos, ypos );
    if ( fld->vehicle  &&  fld->vehicle != this ) {
@@ -6251,7 +6254,7 @@ int tvehicle::getmaxfuelforweight ( void )
 }
 
 
-int tvehicle::getmaxmaterialforweight ( void )
+int Vehicle::getmaxmaterialforweight ( void )
 {
    pfield fld = getfield ( xpos, ypos );
    if ( fld->vehicle  &&  fld->vehicle != this ) {
@@ -6566,7 +6569,7 @@ void tfield :: deleteeverything ( void )
 
 
 
-void tvehicle::convert ( int col )
+void Vehicle::convert ( int col )
 {
   if ( col > 8)   
       displaymessage("convertvehicle: \n color muá im bereich 0..8 sein ",2);

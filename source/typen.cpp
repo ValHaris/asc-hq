@@ -1,6 +1,12 @@
-//     $Id: typen.cpp,v 1.45 2000-08-21 17:51:02 mbickel Exp $
+//     $Id: typen.cpp,v 1.46 2000-09-01 17:46:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2000/08/21 17:51:02  mbickel
+//      Fixed: crash when unit reaching max experience
+//      Fixed: crash when displaying research image
+//      Fixed: crash when events referenced a unit that has been shot down
+//      Fixed: screenshot being written to wrong directory
+//
 //     Revision 1.44  2000/08/13 10:24:09  mbickel
 //      Fixed: movement decrease when cloning units
 //      Fixed: refuel skipped next action in replay
@@ -892,13 +898,13 @@ void* tbuilding :: getpicture ( int x, int y )
 #endif
 
 
-tvehicle :: tvehicle ( void ) : reactionfire ( this )
+Vehicle :: Vehicle ( void ) : reactionfire ( this )
 {
    gamemap = NULL;
    init();
 }
 
-tvehicle :: tvehicle ( pmap actmap )
+Vehicle :: Vehicle ( pmap actmap )
           : reactionfire ( this )
 {
    gamemap = actmap;
@@ -906,7 +912,7 @@ tvehicle :: tvehicle ( pmap actmap )
 }
 
 
-tvehicle :: ~tvehicle (  )
+Vehicle :: ~Vehicle (  )
 {
    delete[] weapstrength;
    weapstrength = NULL;
@@ -916,7 +922,7 @@ tvehicle :: ~tvehicle (  )
 
 }
 
-tvehicle :: tvehicle ( pvehicle src, pmap actmap )
+Vehicle :: Vehicle ( pvehicle src, pmap actmap )
           : reactionfire ( this )
 {
    gamemap = actmap;
@@ -924,7 +930,7 @@ tvehicle :: tvehicle ( pvehicle src, pmap actmap )
    clone ( src, actmap );
 }
 
-void tvehicle :: init ( void )
+void Vehicle :: init ( void )
 {
    dummy = 0;
    moredummy[0] = 0;
@@ -978,17 +984,17 @@ void tvehicle :: init ( void )
 }
    
 
-void tvehicle :: clone ( pvehicle src, pmap actmap )
+void Vehicle :: clone ( pvehicle src, pmap actmap )
 {
 
-   typ = src->typ;          
-   color = src->color; 
-   damage = src->damage; 
-   fuel = src->fuel; 
-   memcpy ( ammo , src->ammo, 16*sizeof ( int  )); 
-   memcpy ( weapstrength , src->weapstrength, 16*sizeof ( int )); 
+   typ = src->typ;
+   color = src->color;
+   damage = src->damage;
+   fuel = src->fuel;
+   memcpy ( ammo , src->ammo, 16*sizeof ( int  ));
+   memcpy ( weapstrength , src->weapstrength, 16*sizeof ( int ));
    experience = src->experience;
-   attacked = src->attacked; 
+   attacked = src->attacked;
    height = src->height;
    _movement = src->_movement;
    direction = src->direction;
@@ -997,10 +1003,10 @@ void tvehicle :: clone ( pvehicle src, pmap actmap )
    material = src->material;
    energy = src->energy;
    energyUsed = src->energyUsed;
-   connection = src->connection; 
+   connection = src->connection;
    klasse = src->klasse;
-   armor = src->armor; 
-   networkid = src->networkid; 
+   armor = src->armor;
+   networkid = src->networkid;
    if ( src->name )
       name = strdup ( src->name );
    else
@@ -1020,7 +1026,7 @@ void tvehicle :: clone ( pvehicle src, pmap actmap )
       actmap->chainunit ( this );
 }
 
-void tvehicle :: setpower ( int status )
+void Vehicle :: setpower ( int status )
 {
    if ( functions & cfgenerator ) {
       generatoractive = status;
@@ -1030,7 +1036,7 @@ void tvehicle :: setpower ( int status )
          int endiff = typ->energy- energy - energyUsed;
          if ( fuel < endiff * generatortruckefficiency )
             endiff = fuel / generatortruckefficiency;
- 
+
          fuel -= endiff * generatortruckefficiency ;
          energyUsed += endiff;
          energy = 0;
@@ -1040,18 +1046,18 @@ void tvehicle :: setpower ( int status )
 }
 
 
-void tvehicle :: setup_classparams_after_generation ( void )
+void Vehicle :: setup_classparams_after_generation ( void )
 {
       armor = typ->armor * typ->classbound[klasse].armor / 1024;
-      if ( typ->weapons->count ) { 
+      if ( typ->weapons->count ) {
          for ( int m = 0; m < typ->weapons->count ; m++) {
             ammo[m] = 0;
             weapstrength[m] = typ->weapons->weapon[m].maxstrength *
 	      typ->classbound[klasse].weapstrength[typ->weapons->weapon[m].getScalarWeaponType()] / 1024;
-         } 
+         }
       }
 
-      if ( typ->classnum ) 
+      if ( typ->classnum )
         functions = typ->functions & typ->classbound[klasse].vehiclefunctions;
       else
         functions = typ->functions;
@@ -1061,27 +1067,27 @@ void tvehicle :: setup_classparams_after_generation ( void )
 }
 
 
-int tvehicle::cargo ( void )
+int Vehicle::cargo ( void )
 {
    int w = 0;
-   if ( typ->loadcapacity > 0) 
-      for (int c = 0; c <= 31; c++) 
-         if ( loading[c] ) 
+   if ( typ->loadcapacity > 0)
+      for (int c = 0; c <= 31; c++)
+         if ( loading[c] )
             w += loading[c]->weight();
    return w;
 }
 
-int tvehicle::weight( void ) 
+int Vehicle::weight( void )
 {
    return typ->weight + fuel * fuelweight / 1024 + material * materialweight / 1024 + cargo();
 }
 
-int tvehicle::size ( void ) 
-{ 
+int Vehicle::size ( void )
+{
    return typ->weight;
 }
 
-void tvehicle::transform ( pvehicletype type )
+void Vehicle::transform ( pvehicletype type )
 {
    typ = type;
 
@@ -1144,7 +1150,7 @@ void SingleWeapon::set ( int type )
 
 
 #ifdef converter
-void tvehicle::convert ( int color )
+void Vehicle::convert ( int color )
 {
 }
 
@@ -1152,15 +1158,15 @@ void tbuilding::convert ( int color )
 {
 }
 
-int tvehicle :: getstrongestweapon( int aheight, int distance)
-{ 
+int Vehicle :: getstrongestweapon( int aheight, int distance)
+{
    return 0;
-} 
+}
 
-void tvehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
+void Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
 {
 }
-int  tvehicle :: vehicleconstructable ( pvehicletype tnk, int x, int y )
+int  Vehicle :: vehicleconstructable ( pvehicletype tnk, int x, int y )
 {
    return 0;
 }
@@ -1172,9 +1178,9 @@ int tvehicletype::maxweight ( void )
 {
    return weight + tank * fuelweight / 1024 + material * materialweight / 1024;
 }
-   
-int tvehicletype::maxsize ( void ) 
-{ 
+
+int tvehicletype::maxsize ( void )
+{
    return weight;
 }
 
@@ -1183,20 +1189,20 @@ tvehicletype :: tvehicletype ( void )
 {
    int i;
 
-   name = NULL; 
+   name = NULL;
    description = NULL;
    infotext = NULL;
 
    memset ( &oldattack, 0, sizeof ( oldattack ));
 
-   production.energy = 0; 
-   production.material = 0; 
-   armor = 0; 
+   production.energy = 0;
+   production.material = 0;
+   armor = 0;
 
    for ( i = 0; i < 8; i++ )
-      picture[i] = NULL;    
+      picture[i] = NULL;
    height     = 0;
-   researchid = 0;    
+   researchid = 0;
    _terrain   = 0;
    _terrainreq = 0;
    _terrainkill = 0;
@@ -1204,25 +1210,25 @@ tvehicletype :: tvehicletype ( void )
    jamming = 0;
    view = 0;
    wait = 0;
-   loadcapacity = 0; 
+   loadcapacity = 0;
    maxunitweight = 0;
-   loadcapability = 0; 
+   loadcapability = 0;
    loadcapabilityreq = 0;
    loadcapabilitynot = 0;
-   id = 0; 
-   tank = 0; 
-   fuelConsumption = 0; 
-   energy = 0; 
-   material = 0; 
+   id = 0;
+   tank = 0;
+   fuelConsumption = 0;
+   energy = 0;
+   material = 0;
    functions = 0;
    for ( i = 0; i < 8; i++ )
-      movement[i] = 0; 
-   movemalustyp = 0; 
-   classnum = 0; 
+      movement[i] = 0;
+   movemalustyp = 0;
+   classnum = 0;
    for ( i = 0; i < 8; i++ ) {
-      classnames[i] = NULL; 
+      classnames[i] = NULL;
       for ( int j = 0; j< 8; j++)
-         classbound[i].weapstrength[j] = 0; 
+         classbound[i].weapstrength[j] = 0;
 
       classbound[i].armor = 0;
       classbound[i].techlevel = 0;
@@ -1238,15 +1244,15 @@ tvehicletype :: tvehicletype ( void )
    digrange = 0;
    initiative = 0;
    _terrainnot = 0;
-   _terrainreq1 = 0;  
+   _terrainreq1 = 0;
    objectsbuildablenum = 0;
    objectsbuildableid = NULL;
- 
+
    weight = 0;
    bipicture = -1;
    vehiclesbuildablenum = 0;
    vehiclesbuildableid = NULL;
- 
+
    buildicon = NULL;
    buildingsbuildablenum = 0;
    buildingsbuildable = NULL;
@@ -1318,7 +1324,7 @@ tvehicletype :: ~tvehicletype ( )
       weapons = NULL;
    }
 
-   for ( i = 0; i < 8; i++ ) 
+   for ( i = 0; i < 8; i++ )
       if ( aiparam[i] ) {
          delete aiparam[i];
          aiparam[i] = NULL;
@@ -1332,9 +1338,9 @@ UnitWeapon :: UnitWeapon ( void )
 }
 
 
-void tvehicle :: repairunit(pvehicle vehicle, int maxrepair )
-{ 
-   if ( vehicle->damage  &&  fuel  &&  material ) { 
+void Vehicle :: repairunit(pvehicle vehicle, int maxrepair )
+{
+   if ( vehicle->damage  &&  fuel  &&  material ) {
 
       int orgdam = vehicle->damage;
 
@@ -1344,21 +1350,21 @@ void tvehicle :: repairunit(pvehicle vehicle, int maxrepair )
       else
          dam = vehicle->damage;
 
-      int fkost = dam * vehicle->typ->production.energy / (100 * repairefficiency_unit ); 
-      int mkost = dam * vehicle->typ->production.material / (100 * repairefficiency_unit ); 
+      int fkost = dam * vehicle->typ->production.energy / (100 * repairefficiency_unit );
+      int mkost = dam * vehicle->typ->production.material / (100 * repairefficiency_unit );
       int w;
 
-      if (mkost <= material) 
-         w = 10000; 
-      else 
-         w = 10000 * material / mkost; 
+      if (mkost <= material)
+         w = 10000;
+      else
+         w = 10000 * material / mkost;
 
-      if (fkost > fuel) 
-         if (10000 * fuel / fkost < w) 
-            w = 10000 * fuel / fkost; 
+      if (fkost > fuel)
+         if (10000 * fuel / fkost < w)
+            w = 10000 * fuel / fkost;
 
 
-      vehicle->damage -= dam * w / 10000; 
+      vehicle->damage -= dam * w / 10000;
 
       for ( int i = 0; i < experienceDecreaseDamageBoundaryNum; i++)
          if ( orgdam > experienceDecreaseDamageBoundaries[i] && vehicle->damage < experienceDecreaseDamageBoundaries[i] )
@@ -1370,7 +1376,7 @@ void tvehicle :: repairunit(pvehicle vehicle, int maxrepair )
          if ( vehicle->getMovement() > movement_cost_for_repaired_unit )
             vehicle->setMovement ( vehicle->getMovement() -  movement_cost_for_repaired_unit );
          else
-            vehicle->setMovement ( 0 ); 
+            vehicle->setMovement ( 0 );
 
          if ( !attack_after_repair )
             vehicle->attacked = 0;
@@ -1379,21 +1385,21 @@ void tvehicle :: repairunit(pvehicle vehicle, int maxrepair )
          for ( int i = 0; i < 32; i++ )
             if ( loading[i] == vehicle )
                unitloaded = 1;
-   
-         if ( !unitloaded ) 
+
+         if ( !unitloaded )
             if ( getMovement() > movement_cost_for_repairing_unit )
                setMovement ( getMovement() - movement_cost_for_repairing_unit );
             else
                setMovement ( 0 );
       }
 
-      material -= w * mkost / 10000; 
-      fuel -= w * fkost / 10000; 
+      material -= w * mkost / 10000;
+      fuel -= w * fkost / 10000;
 
-   } 
-} 
+   }
+}
 
-void tvehicle :: turnwrap ( void )
+void Vehicle :: turnwrap ( void )
 {
    if ( energy < typ->energy - energyUsed  && generatoractive )
       if ( functions & cfgenerator ) {
@@ -1407,36 +1413,36 @@ void tvehicle :: turnwrap ( void )
       }
 }
 
-void tvehicle :: endTurn( void )
+void Vehicle :: endTurn( void )
 {
-   if ( typ->autorepairrate > 0 ) 
-      if ( damage ) 
+   if ( typ->autorepairrate > 0 )
+      if ( damage )
          repairunit ( this, typ->autorepairrate );
 
    reactionfire.endTurn();
 
    resetmovement();
-   attacked = false; 
+   attacked = false;
 
 }
 
-void tvehicle :: resetmovement ( void )
+void Vehicle :: resetmovement ( void )
 {
     int move = typ->movement[log2(height)];
     setMovement ( move, -1 );
     /*
-    if (actvehicle->typ->fuelconsumption == 0) 
+    if (actvehicle->typ->fuelconsumption == 0)
        actvehicle->movement = 0;
-    else { 
+    else {
        if ((actvehicle->fuel << 3) / actvehicle->typ->fuelconsumption < move)
           actvehicle->movement = (actvehicle->fuel << 3) / actvehicle->typ->fuelconsumption ;
-       else 
+       else
           actvehicle->movement = move;
-    } 
+    }
     */
 }
 
-void tvehicle :: setMovement ( int newmove, int transp )
+void Vehicle :: setMovement ( int newmove, int transp )
 {
    if ( newmove < 0 )
       newmove = 0;
@@ -1450,7 +1456,7 @@ void tvehicle :: setMovement ( int newmove, int transp )
                int lperc = perc;
                if ( !transp )
                   lperc /= 2;
-      
+
                loading[i]->setMovement ( loading[i]->getMovement() - lperc * loading[i]->typ->movement[ log2 ( loading[i]->height)] / 1000 , 1 );
             }
          } /* endfor */
@@ -1458,13 +1464,13 @@ void tvehicle :: setMovement ( int newmove, int transp )
    _movement = newmove;
 }
 
-int tvehicle::hasMoved ( void )
+int Vehicle::hasMoved ( void )
 {
    return _movement != typ->movement[ log2 ( height )];
 }
 
 
-int tvehicle :: getMovement ( void )
+int Vehicle :: getMovement ( void )
 {
    if ( typ->fuelConsumption ) {
       if ( fuel * minmalq / typ->fuelConsumption < _movement )
@@ -1475,7 +1481,7 @@ int tvehicle :: getMovement ( void )
       return _movement;
 }
 
-void tvehicle::ReactionFire::enable ( void ) 
+void Vehicle::ReactionFire::enable ( void )
 {
    if ( status == off ) {
       if ( unit->typ->wait ) {
@@ -1490,7 +1496,7 @@ void tvehicle::ReactionFire::enable ( void )
    }
 }
 
-void tvehicle::ReactionFire::disable ( void ) 
+void Vehicle::ReactionFire::disable ( void )
 {
    if ( status != off ) {
        status = off;
@@ -1501,33 +1507,33 @@ void tvehicle::ReactionFire::disable ( void )
 
 
 
-void tvehicle::ReactionFire::endTurn ( void ) 
+void Vehicle::ReactionFire::endTurn ( void )
 {
    if ( status >= init1 ) {
-      if ( status < ready ) 
+      if ( status < ready )
          status++;
 
-      if ( status == ready ) 
+      if ( status == ready )
          enemiesAttackable = 0xff;
-      else 
+      else
          enemiesAttackable = 0;
    }
 }
 
 
-int tvehicle :: weapexist( void )
-{ 
-   if ( typ->weapons->count > 0) 
-      for ( int b = 0; b < typ->weapons->count ; b++) 
-         if ( typ->weapons->weapon[b].shootable() ) 
-            if ( typ->weapons->weapon[b].offensive() ) 
-               if ( ammo[b] ) 
-                  return 1; 
+int Vehicle :: weapexist( void )
+{
+   if ( typ->weapons->count > 0)
+      for ( int b = 0; b < typ->weapons->count ; b++)
+         if ( typ->weapons->weapon[b].shootable() )
+            if ( typ->weapons->weapon[b].offensive() )
+               if ( ammo[b] )
+                  return 1;
     return 0;
-} 
+}
 
 
-void tvehicle :: putimage ( int x, int y )
+void Vehicle :: putimage ( int x, int y )
 {
  #ifndef converter
   #ifdef sgmain
@@ -1540,13 +1546,13 @@ void tvehicle :: putimage ( int x, int y )
              putpicturemix ( x, y, xlatpict(xlatpictgraytable,  typ->picture[  direction ]),  color, (char*) colormixbuf );
           else
              putpicturemix ( x, y,  typ->picture[ direction],  color, (char*) colormixbuf );
-          
+
     } else {
           if ( height >= chtieffliegend ) {
              int d = 6 * ( log2 ( height) - log2 ( chfahrend ));
              putshadow ( x + d, y + d, typ->picture[direction] , &xlattables.a.dark3);
           } else
-             if ( height == chfahrend ) 
+             if ( height == chfahrend )
                 putshadow ( x + 1, y + 1,  typ->picture[ direction] , &xlattables.a.dark3);
 
           if ( shaded )
@@ -1560,26 +1566,26 @@ void tvehicle :: putimage ( int x, int y )
 }
 
 #ifdef converter
-int  tvehicle :: vehicleloadable ( pvehicle vehicle,int uheight )
+int  Vehicle :: vehicleloadable ( pvehicle vehicle,int uheight )
 {
    return 0;
 }
 #endif
 
-void tvehicle :: setnewposition ( int x , int y )
+void Vehicle :: setnewposition ( int x , int y )
 {
-  xpos = x; 
-  ypos = y; 
-  if ( typ->loadcapacity > 0) 
-     for ( int i = 0; i <= 31; i++) 
-        if ( loading[i] ) 
+  xpos = x;
+  ypos = y;
+  if ( typ->loadcapacity > 0)
+     for ( int i = 0; i <= 31; i++)
+        if ( loading[i] )
            loading[i]->setnewposition ( x , y );
 }
 
 /*
 void tbuilding :: repairunit(pvehicle vehicle, int maxrepair )
-{ 
-   if ( vehicle->damage ) { 
+{
+   if ( vehicle->damage ) {
 
       int dam;
       if ( vehicle->damage > maxrepair )
@@ -1587,37 +1593,37 @@ void tbuilding :: repairunit(pvehicle vehicle, int maxrepair )
       else
          dam = vehicle->damage;
 
-      int fkost = dam * vehicle->typ->production.energy / (100 * repairefficiency_building ); 
-      int mkost = dam * vehicle->typ->production.material / (100 * repairefficiency_building ); 
+      int fkost = dam * vehicle->typ->production.energy / (100 * repairefficiency_building );
+      int mkost = dam * vehicle->typ->production.material / (100 * repairefficiency_building );
       int w;
 
-      if (mkost <= getenergy ( mkost material) 
-         w = 10000; 
-      else 
-         w = 10000 * material / mkost; 
+      if (mkost <= getenergy ( mkost material)
+         w = 10000;
+      else
+         w = 10000 * material / mkost;
 
-      if (fkost > fuel) 
-         if (10000 * fuel / fkost < w) 
-            w = 10000 * fuel / fkost; 
+      if (fkost > fuel)
+         if (10000 * fuel / fkost < w)
+            w = 10000 * fuel / fkost;
 
 
-      vehicle->damage = vehicle->damage * (1 - w / 10000); 
-      material -= w * mkost / 10000; 
-      fuel -= w * fkost / 10000; 
-   } 
-} 
+      vehicle->damage = vehicle->damage * (1 - w / 10000);
+      material -= w * mkost / 10000;
+      fuel -= w * fkost / 10000;
+   }
+}
 */
 
 
 #ifndef karteneditor
   #ifndef sgmain
 
-int tvehicle::getmaxfuelforweight (  )
+int Vehicle::getmaxfuelforweight (  )
 {
    return 0;
 }
 
-int tvehicle::getmaxmaterialforweight ( )
+int Vehicle::getmaxmaterialforweight ( )
 {
    return 0;
 }

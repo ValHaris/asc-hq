@@ -1,5 +1,7 @@
 #include <stack>
 #include <vector>
+#include <functional>
+#include <heap.h>
 #include "spfst.h"
 #include "controls.h"
 
@@ -129,6 +131,9 @@ int kost( HexCoord a, HexDirection d, HexCoord b, pvehicle vehicle )
     int rd = int(t == Road);
     return (2-rd) + (da>0?da:0);
     */
+    if ( !fieldaccessible ( getfield ( b.m, b.n ), vehicle ))
+       return MAXIMUM_PATH_LENGTH;
+
     int movecost, fuelcost;
     calcmovemalus ( a.m, a.n, b.m, b.n, vehicle, -1, movecost, fuelcost );
     return movecost;
@@ -138,8 +143,8 @@ int kost( HexCoord a, HexDirection d, HexCoord b, pvehicle vehicle )
 
 // greater(Node) is an STL thing to create a 'comparison' object out of
 // the greater-than operator, and call it comp.
-typedef vector<Node> Container;
-greater<Node> comp;
+typedef std::vector<Node> Container;
+std::greater<Node> comp;
 
 
 // I'm using a priority queue implemented as a heap.  STL has some nice
@@ -161,8 +166,11 @@ inline void get_first( Container& v, Node& n )
 
 
 
-void AStar( pmap actmap, HexCoord A, HexCoord B, vector<int>& path, pvehicle veh )
+void AStar( pmap actmap, HexCoord A, HexCoord B, std::vector<int>& path, pvehicle veh )
 {
+    for ( int y = actmap->xsize * actmap->ysize -1; y >= 0; y-- )
+       actmap->field[y].temp3 = DirNone;
+
     Node N;
     Container open;
     {
@@ -215,9 +223,10 @@ void AStar( pmap actmap, HexCoord A, HexCoord B, vector<int>& path, pvehicle veh
             HexCoord hn = N.h;
             getnextfield ( hn.m, hn.n, d );
             // If it's off the end of the map, then don't keep scanning
-            if( hn.m < 0 || hn.n < 0 || hn.m >= actmap->xsize || hn.n >= actmap->ysize )
+            if( hn.m < 0 || hn.n < 0 || hn.m >= actmap->xsize || hn.n >= actmap->ysize || !fieldaccessible ( getfield ( hn.m, hn.n ), veh ))
                 continue;
 
+            // cursor.gotoxy ( hn.m, hn.n );
             int k = kost( N.h, d, hn, veh );
             Node N2;
             N2.h = hn;
@@ -280,8 +289,11 @@ void AStar( pmap actmap, HexCoord A, HexCoord B, vector<int>& path, pvehicle veh
     actmap->cleartemps ( 4 ); 
 }
 
-void AStar( pmap actmap, vector<int>& path, pvehicle veh, int x, int y )
+void AStar( pmap actmap, std::vector<int>& path, pvehicle veh, int x, int y )
 {
+   int og = godview;
+   godview = 1;
    AStar ( actmap, HexCoord ( veh->xpos, veh->ypos ), HexCoord ( x, y ), path, veh );
+   godview = og;
 }
 
