@@ -190,6 +190,8 @@ cmousecontrol* mousecontrol = NULL;
 
 
 
+
+
 #define mmaintainence
 
 bool maintainencecheck( void )
@@ -617,43 +619,6 @@ void         MainMenuPullDown :: init ( void )
 
    tpulldown :: init();
    setshortkeys();
-}
-
-
-void         repaintdisplay(void)
-{
-   collategraphicoperations cgo;
-   int mapexist = actmap && (actmap->xsize > 0) && (actmap->ysize > 0);
-
-
-   int ms = getmousestatus();
-   if ( ms == 2 )
-      mousevisible ( false );
-
-   int cv = cursor.an;
-
-   if ( mapexist && cv )
-      cursor.hide();
-   backgroundpict.paint();
-   setvgapalette256(pal);
-
-   if ( mapexist ) {
-      displaymap();
-
-      if ( cv )
-         cursor.show();
-   }
-
-   if ( ms == 2 )
-      mousevisible ( true );
-   dashboard.x = 0xffff;
-   dashboard.repainthard = 1;
-   if ( actmap && actmap->ellipse )
-      actmap->ellipse->paint();
-
-   if ( actgui && actmap && actmap->xsize>0)
-      actgui->painticons();
-
 }
 
 
@@ -1760,7 +1725,6 @@ Menu::Menu ( PG_Widget *parent, const PG_Rect &rect)
    
 }    
 
-
 class MainScreenWidget : public PG_Widget {
     PG_Application& app;
 public:
@@ -1774,6 +1738,17 @@ protected:
 };
 
 
+
+MainScreenWidget* mainScreenWidget = NULL;
+
+void         repaintdisplay(void)
+{
+   if ( mainScreenWidget )
+      mainScreenWidget->Update();
+}
+
+
+
 MainScreenWidget::MainScreenWidget( PG_Application& application )
               : PG_Widget(NULL, PG_Rect ( 0, 0, app.GetScreen()->w, app.GetScreen()->h ), false),
               app ( application ) 
@@ -1783,40 +1758,11 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
 }
 
 
-/*
-void MainScreenWidget::eventDraw (SDL_Surface* surface, const PG_Rect& rect)
-{
-    PG_ThemeWidget::eventDraw(surface, rect);
-
-    if ( gameInitialized ) {
-       SDL_Surface* screen = ::getScreen();
-       initASCGraphicSubsystem( surface, NULL );
-       repaintdisplay();
-       initASCGraphicSubsystem( screen, NULL );
-    }
-}
-
-void MainScreenWidget::Blit ( bool recursive , bool restore )
-{
-
-    if ( gameInitialized && dirtyFlag ) {
-       SDL_Surface* screen = ::getScreen();
-       initASCGraphicSubsystem( srf, NULL );
-       repaintdisplay();
-       initASCGraphicSubsystem( screen, NULL );
-       dirtyFlag = false;
-    }
-    PG_ThemeWidget::eventBlit( srf, src, dst );
-    
-}
-
-*/
-
-
-
 void  mainloop2()
 {
-   (new MainScreenWidget( getPGApplication()))->Show();
+   mainScreenWidget = new MainScreenWidget( getPGApplication());
+   mainScreenWidget->Show();
+   
    getPGApplication().Run();
 }
 

@@ -117,6 +117,8 @@ struct CommandBlock {
 };   
 
 
+MapDisplayPG* theMapDisplay = NULL;
+
 MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
       : PG_Widget ( parent, r, true ) ,
       zoom( 0.75 ),
@@ -130,6 +132,8 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
    
    Surface s = Surface::Wrap( GetWidgetSurface () );
    s.assignDefaultPalette();
+   
+   theMapDisplay = this;
 }
 
 int fs[24][3] = {{ 16, 16, 16 },
@@ -383,10 +387,10 @@ void MapDisplayPG::paintTerrain( int playerView )
 template<int pixelSize> class PixSel : public SourcePixelSelector_Zoom<pixelSize, SourcePixelSelector_Rectangle<pixelSize> > {};
 
 
-void MapDisplayPG::updateMap()
+void MapDisplayPG::updateMap(bool force )
 {
-   if ( dirty > Curs )
-      fillSurface(0);
+   if ( dirty > Curs || force )
+      fillSurface( actmap->playerView );
   
 }
 
@@ -1130,7 +1134,7 @@ void tdisplaymap :: cp_buf ( int x1, int y1, int x2, int y2 )
 
 void tgeneraldisplaymap :: pnt_main ( void )
 {
-
+#ifndef sgmain
    activefontsettings.font = schriften.monogui;
    activefontsettings.background = darkgray;
    activefontsettings.color = white;
@@ -1359,6 +1363,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
          }
       }
    }
+   #endif
 }
 
 
@@ -1400,6 +1405,7 @@ void tdisplaymap :: displayadditionalunits ( int height )
 
 void         displaymap(  )
 {
+#ifndef sgmain
    if ( !actmap )
       return;
 
@@ -1460,7 +1466,14 @@ void         displaymap(  )
    if (bb)
       cursor.show();
 
+#else
+         
 
+   theMapDisplay->updateMap( true );
+   theMapDisplay->Redraw();
+   
+#endif
+      
 }
 
 

@@ -105,7 +105,7 @@ class MapDisplayPG: public PG_Widget {
       MapDisplayPG ( PG_Widget *parent, const PG_Rect r );
       
       
-      void updateMap();
+      void updateMap( bool force = false );
 
 };
 

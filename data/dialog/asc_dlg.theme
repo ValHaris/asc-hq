@@ -6,7 +6,7 @@
     <author value="Alexander Pipelka"/>
     <email value="pipelka@teleweb.at"/>
 
-    <font name="default" value="asc/font.ttf" size="12"/>
+    <font name="default" value="asc/font.ttf" size="14"/>
 
     <widget>
       <type value="Background"/>

@@ -697,8 +697,8 @@ void         pdsetup(void)
    pd.addbutton ( "~P~aste õctrl+V",         act_pasteFromClipboard );
    pd.addbutton ( "seperator",                  -1 );
    pd.addbutton ( "Resi~z~e mapõR",             act_resizemap );
-   pd.addbutton ( "set global ~w~eather‹¨«trl-W", act_setactweatherglobal );
-   pd.addbutton ( "new weather", act_setactnewweather );
+   pd.addbutton ( "set global uniform ~w~eather‹¨«trl-W", act_setactweatherglobal );
+   pd.addbutton ( "configure weather generator", act_setactnewweather );
    pd.addbutton ( "~C~reate regional ressources", act_createresources );
    pd.addbutton ( "~C~reate global ressourcesõctrl+F", act_createresources2 );
    pd.addbutton ( "~S~et turn number",        act_setTurnNumber );

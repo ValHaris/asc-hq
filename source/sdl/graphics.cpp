@@ -74,6 +74,8 @@ int initgraphics ( int x, int y, int depth, SDLmm::Surface* icon )
   return 1;
 }
 
+bool dummyScreenPaletteSetup = false;
+
 void initASCGraphicSubsystem ( SDL_Surface* _screen, SDLmm::Surface* icon )
 {
   screen = _screen;
@@ -82,12 +84,19 @@ void initASCGraphicSubsystem ( SDL_Surface* _screen, SDLmm::Surface* icon )
   agmp->windowstatus = 100;
   agmp->scanlinelength = screen->w;
   agmp->scanlinenumber = screen->h;
-  agmp->bytesperscanline = screen->w * screen->format->BytesPerPixel;
-  agmp->byteperpix = screen->format->BytesPerPixel ;
-  agmp->linearaddress = (int) screen->pixels;
-  agmp->bitperpix = screen->format->BitsPerPixel;
+  agmp->bytesperscanline = screen->w * 1;
+  agmp->byteperpix = 1 ;
+  agmp->bitperpix = 8;
   agmp->directscreenaccess = 0;
-  agmp->surface = new Surface ( _screen );
+  if ( _screen->format->BitsPerPixel == 8 ) {
+     agmp->surface = new Surface ( _screen );
+     dummyScreenPaletteSetup = true;
+  } else {
+     agmp->surface = new Surface( Surface::createSurface(screen->w, screen->h, 8 ));   
+     dummyScreenPaletteSetup = false;
+  }   
+  agmp->linearaddress = (int) agmp->surface->pixels();
+     
 
   *hgmp = *agmp;
 
@@ -120,6 +129,13 @@ int copy2screen( void )
   #ifdef _WIN32_  
    SDL_ShowCursor(0);
   #endif 
+   if ( !dummyScreenPaletteSetup ) {
+      hgmp->surface->assignDefaultPalette();
+      dummyScreenPaletteSetup = true;
+   }   
+  
+   if ( screen->format->BitsPerPixel > 8 ) 
+      SDL_BlitSurface( hgmp->surface->getBaseSurface() , NULL, screen, NULL );
    SDL_UpdateRect ( screen , 0,0,0,0 );
   #ifdef _WIN32_  
    SDL_ShowCursor(1);
@@ -132,10 +148,25 @@ int copy2screen( int x1, int y1, int x2, int y2 )
   #ifdef _WIN32_  
    SDL_ShowCursor(0);
   #endif 
+   if ( !dummyScreenPaletteSetup ) {
+      hgmp->surface->assignDefaultPalette();
+      dummyScreenPaletteSetup = true;
+   }   
+   
+   if ( screen->format->BitsPerPixel > 8 ) {
+      SDL_Rect r;
+      r.x = min(x1,x2);
+      r.y = min(y1,y2);
+      r.w = abs(x2-x1)+1;
+      r.h = abs(y2-y1)+1;
+      
+      SDL_BlitSurface( hgmp->surface->getBaseSurface() , &r, screen, &r );
+   }
+   
    if ( x1 == -1 || y1 == -1 || x2 == -1 || y2 == -1 )
       SDL_UpdateRect ( screen , 0,0,0,0 );
    else
-      if ( x1 <= x2 && y1 <= y2 )
+      if ( x1 <= x2 && y1 <= y2 ) 
          SDL_UpdateRect ( screen , x1, y1, x2-x1+1, y2-y1+1 );
       else
          if( x1 > x2 )

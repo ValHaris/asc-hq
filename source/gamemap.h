@@ -35,6 +35,9 @@
  #include "gameeventsystem.h"
  #include "research.h"
  #include "password.h"
+ #include "weatherarea.h"
+ 
+ class WeatherSystem;
 
 //! The number of game paramters that can be specified for each map.
 const int gameparameternum = 29;
@@ -345,6 +348,7 @@ class tmap {
          int windDirection;
       } weather;
 
+      WeatherSystem* weatherSystem;
       /** how are Resources handled on this map
              0= "ASC mode": complex system with mineral resources etc
              1= "BI mode": simpler system like in Battle Isle
@@ -667,3 +671,4 @@ typedef tmap::Player Player;
 
 
 #endif
+

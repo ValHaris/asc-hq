@@ -122,6 +122,7 @@ tmap :: tmap ( void )
    game_parameter = NULL;
    mineralResourcesDisplayed = 0;
 
+   weatherSystem  = new WeatherSystem(this, 1, 1.0557);
    setgameparameter( cgp_objectsDestroyedByTerrain, 1 );
 }
 
@@ -1040,7 +1041,7 @@ void tmap::endTurn()
    for ( tmap::Player::VehicleList::iterator v = player[actplayer].vehicleList.begin(); v != player[actplayer].vehicleList.end(); ++v ) {
       Vehicle* actvehicle = *v;
 
-      // Bei Žnderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!
+      // Bei nderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!
 
       if (( actvehicle->height >= chtieffliegend )   &&  ( actvehicle->height <= chhochfliegend ) && ( getfield(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) {
          if ( getmaxwindspeedforunit ( actvehicle ) < weather.windSpeed*maxwindspeed ){
@@ -1075,9 +1076,9 @@ void tmap::endTurn()
            //
            // Falls eine vehicle sich nicht bewegt hat, bekommt sie soviel Sprit abgezogen, wie sie zum zur?cklegen der Strecke,
            // die der Wind pro Runde zur?ckgelegt hat, fuelConsumptionen w?rde.
-           // Wenn die vehicle sich schon bewegt hat, dann wurde dieser Abzug schon beim movement vorgenommen, so daá er hier nur
+           // Wenn die vehicle sich schon bewegt hat, dann wurde dieser Abzug schon beim movement vorgenommen, so daï¿½er hier nur
 
-           // noch fuer das ?briggebliebene movement stattfinden muá.
+           // noch fuer das ?briggebliebene movement stattfinden muï¿½
            //
 
 
@@ -2499,4 +2500,5 @@ const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "disable direct View",
                                                       "disable transfering units/buildings to other players",
                                                       "experience effect divisor for defense" };
+
 

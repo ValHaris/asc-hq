@@ -159,7 +159,7 @@ tdialogbox::tdialogbox()
        setnewmousepointer ( icons.mousepointer, 0,0 );
 
    dlg_mode =  0;
-   int rdw = 1;
+   int rdw = 0;
 
    if ( first ) {
      pdialogbox rn = first;
@@ -196,7 +196,7 @@ extern void repaintdisplay ( void );
 
 
 void          tdialogbox::repaintdisplay( void )
-{
+{/*
    int ms = getmousestatus();
    if ( ms == 2 )
       mousevisible ( false );
@@ -227,6 +227,7 @@ void          tdialogbox::repaintdisplay( void )
 
    if ( ms == 2 )
       mousevisible ( true );
+      */
 
 }
 
@@ -344,7 +345,7 @@ void         tdialogbox::init(void)
    markedtab = 0; 
    disablecolor = darkgray; 
    boxstatus = 1;
-   dlg_mode |= getcapabilities();
+   dlg_mode = 0; // |= getcapabilities();
 } 
 
 
@@ -1255,7 +1256,10 @@ void         tdialogbox::done(void)
       }
 
       if (imagesaved) {
-         putimage(x1,y1,tp);
+         if ( first == this )
+            ::repaintdisplay();
+         else    
+            putimage(x1,y1,tp);
          asc_free ( tp );
       }
       npop( activefontsettings );
@@ -2553,8 +2557,7 @@ tdialogbox::~tdialogbox()
          prev->redrawall2( x1, y1, x1 + xsize, y1 + ysize );
    } else {
       first = NULL;
-      if ( dlg_mode & 2 )
-         repaintdisplay();
+      repaintdisplay();
    }
    npop ( activefontsettings );
 }
