@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.91 2002-11-11 08:26:53 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.92 2003-01-19 20:27:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.91  2002/11/11 08:26:53  mbickel
+//      Fixed: mapeditor buildproperties dialog: invalid range for energy maxplus
+//
 //     Revision 1.90  2002/11/05 09:05:17  mbickel
 //      Fixed: mining stations produced not enough output
 //      Changed default building properties in mapeditor
@@ -4466,7 +4469,7 @@ void transformMap ( )
                 TerrainType* tt = getterraintype_forid ( terrainobjtranslation[i*3+1] );
                 if ( tt ) {
                    fld->typ = tt->weather[fld->getweather()];
-                   fld->addobject ( getobjecttype_forid ( terrainobjtranslation[i*3+2] ), true );
+                   fld->addobject ( getobjecttype_forid ( terrainobjtranslation[i*3+2] ), -1, true );
                    fld->setparams();
                 }
              }

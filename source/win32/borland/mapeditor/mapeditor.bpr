@@ -239,7 +239,7 @@ Item1=C:\Programme\ascsrc\games\asc\source\win32\borland
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=-l D:\asc-games\thali6b.sav
+RunParams=
 Launcher=
 UseLauncher=0
 DebugCWD=

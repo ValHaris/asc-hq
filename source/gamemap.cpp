@@ -66,7 +66,7 @@ tmap :: tmap ( void )
 
    for ( i = 0; i < 8; i++ )
       for ( int j = 0; j < 8; j++ )
-          alliances[i][j] = 0;
+          alliances[i][j] = cawar;
 
    for ( i = 0; i< 9; i++ ) {
       player[i].ai = NULL;
