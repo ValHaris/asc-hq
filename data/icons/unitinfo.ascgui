@@ -65,28 +65,19 @@ panel {
         x = 10
         y = 91
         
-        WidgetNum = 2      
+        WidgetNum = 1    
         Widget0 {
            type = textoutput
            TextAlign = CENTER
-           Fontsize = 11
+           FontColor = 0xffffff
+           Fontsize = 9
            x = 5
            y = 3
 	   x2 = -5
 	   y2 = -7
            name = unitname
         } Widget0
-        Widget1 {
-           type = SpecialInput
-           TextAlign = CENTER
-           FontColor = 0xffffff
-           x = 0
-           y = 0
-	   x2 = 0
-	   y2 = 0
-           name = unitname
-        } Widget1
-     } Widget3
+      } Widget3
 
      widget4 {
         type = area
@@ -337,7 +328,8 @@ panel {
       y = 171
       width = 114
       height = 145
-      widgetnum = 1
+      widgetnum = 2
+      
       widget0 {
          type = image
          Filename = weapon_light.png
@@ -844,7 +836,16 @@ panel {
            height = 24
            name = showplayercolor1
          } widget51
-      } widget0   
+      } widget0
+
+       widget1 {
+        type = SpecialInput
+        x = 0
+        y = 0
+        name = weapinfo
+       } widget1
+    
+   
    } Widget2
 
    Widget3 {
