@@ -1,6 +1,6 @@
 FAQ :
 
-THE COMPILE COMPLAINS CAN'T FIND SDL.
+THE COMPILE COMPLAINS IT CAN'T FIND SDL.
 
 ./configure --with-SDL-prefix=<where>
 <where> should be the prefix you make installed SDL into.
