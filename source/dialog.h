@@ -2,9 +2,14 @@
     \brief Interface for all the dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.h,v 1.22 2002-03-03 14:13:48 mbickel Exp $
+//     $Id: dialog.h,v 1.23 2002-03-14 18:14:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2002/03/03 14:13:48  mbickel
+//      Some documentation updates
+//      Soundsystem update
+//      AI bug fixed
+//
 //     Revision 1.21  2002/02/21 17:06:50  mbickel
 //      Completed Paragui integration
 //      Moved mail functions to own file (messages)
@@ -128,7 +133,7 @@ extern char mix2colors ( int a, int b );
 extern char mix4colors ( int a, int b, int c, int d );
 
 //! returns a pointer to the message id. The messages must have been loaded with loadmessages
-extern char*        getmessage(word         id);
+extern const char* getmessage( int id );
 
 
   class   tviewanytext : public tdialogbox, public tviewtextwithscrolling {

@@ -1,9 +1,14 @@
 /*! \file gamedlg.cpp    
     \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.91 2002-03-11 18:47:36 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.92 2002-03-14 18:14:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.91  2002/03/11 18:47:36  mbickel
+//      Fixed: Remaining movement of troopers not displayed
+//      Fixed wrong text position in mouse options
+//      Fixed: absolute path names not recognized on windows
+//
 //     Revision 1.90  2002/03/03 22:19:33  mbickel
 //      Updated documentation
 //      Improved user interface
@@ -2538,7 +2543,7 @@ void tonlinemousehelp :: displayhelp ( int messagenum )
 {
    int i;
    if ( active == 1 ) {
-      char* str = getmessage ( messagenum );
+      const char* str = getmessage ( messagenum );
       if ( str ) {
 
          char strarr[maxonlinehelplinenum][10000];

@@ -85,11 +85,13 @@ No error message found for this error
 10001
 %s made a sneak attack against his ally %s
 10002
-%s deklares war 
+%s declares war 
 10003
 %s proposes peace
 10004
 peace has been negotiated between %s and %s
+10005
+%s accepts peace
 10010
 %s has been terminated !
 10011

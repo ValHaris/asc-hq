@@ -2,9 +2,15 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.107 2002-03-02 23:04:00 mbickel Exp $
+//     $Id: dialog.cpp,v 1.108 2002-03-14 18:14:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.107  2002/03/02 23:04:00  mbickel
+//      Some cleanup of source code
+//      Improved Paragui Integration
+//      Updated documentation
+//      Improved Sound System
+//
 //     Revision 1.106  2002/02/21 17:06:49  mbickel
 //      Completed Paragui integration
 //      Moved mail functions to own file (messages)
@@ -1916,18 +1922,20 @@ void         loadmessages(void)
 } 
 
 
-char*        getmessage(word         id)
-{ 
-  word         w; 
+const char*        getmessage( int id)
+{
+   if ( messagestrings.number > 0 ) {
 
-   if ( messagestrings.number == 0 ) 
-      return NULL;
-   w = 0;
-   while ((messagestrings.number > w) && (messagestrings.data[w].id != id)) 
-      w++;
-   if (messagestrings.data[w].id == id) 
-      return messagestrings.data[w].txt; 
-   return NULL;
+      int w = 0;
+      while ((messagestrings.number > w) && (messagestrings.data[w].id != id))
+         w++;
+      if (messagestrings.data[w].id == id)
+         return messagestrings.data[w].txt;
+
+   }
+
+   static const char* notfound = "message not found";
+   return notfound;
 } 
 
 
@@ -1935,11 +1943,10 @@ char*        getmessage(word         id)
 int          dispmessage2(int          id,
                           char *       st)
 { 
-   char*        sp;
-   char         *s1, *s2;
+   char          *s2;
 
-   sp = getmessage(id); 
-   s1 = sp;
+   const char* sp = getmessage(id);
+   const char* s1 = sp;
    if (sp != NULL) { 
       char s[200];
       s2 = s;

@@ -3,9 +3,14 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.126 2002-03-03 22:19:32 mbickel Exp $
+//     $Id: controls.cpp,v 1.127 2002-03-14 18:14:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.126  2002/03/03 22:19:32  mbickel
+//      Updated documentation
+//      Improved user interface
+//      Fixed AI bug
+//
 //     Revision 1.125  2002/01/07 11:40:40  mbickel
 //      Fixed some syntax errors
 //
@@ -1677,7 +1682,7 @@ void checkalliances_at_endofturn ( void )
                   to |= 1 << j;
 
             char txt[200];
-            char* sp = getmessage( 10001 );
+            const char* sp = getmessage( 10001 );
             sprintf ( txt, sp, actmap->player[act].getName().c_str(), actmap->player[i].getName().c_str() );
             new Message ( txt, actmap, to );
          }
@@ -1689,7 +1694,12 @@ void checkalliances_at_endofturn ( void )
                   to |= 1 << j;
 
             char txt[200];
-            char* sp = getmessage( 10003 );
+            const char* sp;
+            if ( actmap->alliances[act] [i] == capeaceproposal )
+               sp = getmessage( 10005 );  // accepts peace
+            else
+               sp = getmessage( 10003 );  // proposes peace
+
             sprintf ( txt, sp, actmap->player[act].getName().c_str() );
             new Message ( txt, actmap, to );
          }
@@ -1701,7 +1711,7 @@ void checkalliances_at_endofturn ( void )
                   to |= 1 << j;
 
             char txt[200];
-            char* sp = getmessage( 10002 );
+            const char* sp = getmessage( 10002 );
             sprintf ( txt, sp, actmap->player[act].getName().c_str() );
             new Message ( txt, actmap, to );
          }
@@ -3384,7 +3394,7 @@ void  checkforvictory ( )
 
 
             char txt[1000];
-            char* sp = getmessage( 10010 ); // Message "player has been terminated"
+            const char* sp = getmessage( 10010 ); // Message "player has been terminated"
 
             sprintf ( txt, sp, actmap->player[i].getName().c_str() );
             new Message ( txt, actmap, to  );

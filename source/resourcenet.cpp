@@ -568,7 +568,7 @@ void transfer_all_outstanding_tribute ( void )
                   if ( !txt_got[0] )
                      strcpy ( txt_got, "nothing" );
 
-                  char* sp = getmessage( 10020 );
+                  const char* sp = getmessage( 10020 );
                   sprintf ( txt1b, sp, txt_topay, actmap->player[player].getName().c_str(), txt_got );
                   strcat ( text, txt1b );
                }
