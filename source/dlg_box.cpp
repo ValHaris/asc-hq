@@ -1,6 +1,10 @@
-//     $Id: dlg_box.cpp,v 1.33 2000-10-14 14:16:03 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.34 2000-10-16 09:37:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2000/10/14 14:16:03  mbickel
+//      Cleaned up includes
+//      Added mapeditor to win32 watcom project
+//
 //     Revision 1.32  2000/10/14 10:52:48  mbickel
 //      Some adjustments for a Win32 port
 //
@@ -1693,10 +1697,8 @@ void         tdialogbox::run(void)
       } 
    } 
    if (keypress()) {
-      // taste = r_key ();
       getkeysyms ( &taste, &prntkey );
-      // screensaverparameters.lasttick = ticker; 
-   } 
+   }
    else {
       taste = ct_invvalue;
       prntkey = cto_invvalue;
@@ -1722,25 +1724,26 @@ void         tdialogbox::run(void)
          if (pb->markedkeynum > 0) 
             for (i = 0; i < pb->markedkeynum; i++)
               if (markedtab > 0) 
-               if ((pb->markedkey[i] == taste) && (taborder[markedtab].id == pb->id)) 
+               if ((pb->markedkey[i] == prntkey) && (taborder[markedtab].id == pb->id))
                   if (pb->active) 
                      if (pb->status == 1) { 
                         execbutton(pb,false); 
                         taste = ct_invvalue; 
-                     } 
+                        prntkey = ct_invvalue;
+                     }
          if (pb->keynum > 0) 
             for (i = 0; i < pb->keynum; i++)
-               if ((pb->key[i] == taste)) 
+               if (pb->key[i] == prntkey)
                   if (pb->active) 
                      if (pb->status == 1) { 
                         execbutton(pb,false); 
                         taste = ct_invvalue; 
-                     } 
+                        prntkey = ct_invvalue;
+                     }
          pb = pb->next; 
       } 
    } 
-   // checkscreensaver(); 
-} 
+}
 
 
 
