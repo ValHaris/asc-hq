@@ -1,10 +1,14 @@
-/*! \file dialog.cpp
+/*! \file dialog.h
     \brief Interface for all the dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.h,v 1.21 2002-02-21 17:06:50 mbickel Exp $
+//     $Id: dialog.h,v 1.22 2002-03-03 14:13:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2002/02/21 17:06:50  mbickel
+//      Completed Paragui integration
+//      Moved mail functions to own file (messages)
+//
 //     Revision 1.20  2001/10/11 10:41:06  mbickel
 //      Restructured platform fileio handling
 //      Added map archival information to mapeditor

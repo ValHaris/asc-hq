@@ -49,10 +49,16 @@
 
 #include "sdl/graphics.h"
 
+ class ASC_PG_App : public PG_Application {
+    public:
+       ASC_PG_App ();
+      // PG_Theme* LoadTheme(const char* xmltheme, bool asDefault = true, const char* searchpath = NULL );
+ };
+
  extern void soundSettings();
 
  extern void setupMainScreenWidget();
  
- extern PG_Application* pgApp;
+ extern ASC_PG_App* pgApp;
 
 #endif

@@ -107,8 +107,8 @@ class  tfield {
     //! mineral resources on this field (should be changed to #ResourcesType sometime...)
     char         fuel, material;
 
-    //! can this field be seen be the player. Variable is bitmapped; two bits for each player
-    Word         visible;   /*  BM  */
+    //! can this field be seen be the player. Variable is bitmapped; two bits for each player. These two bits can have the states defined in ::VisibilityStates
+    Word         visible;
 
     //! in the old octagonal version of ASC it was possible to rotate the terraintype; this is not used in the hexagonal version any more
     char         direction;

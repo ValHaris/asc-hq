@@ -44,8 +44,92 @@
 #include "events.h"
 #include "gameoptions.h"
 #include "sg.h"
+#include "sdl/sound.h"
 
-PG_Application* pgApp = NULL;
+ASC_PG_App* pgApp = NULL;
+
+
+ASC_PG_App :: ASC_PG_App ( )
+{
+   EnableSymlinks(true);
+   int i = 0;
+   ASCString path;
+   do {
+      getSearchPath ( i++ );
+      if ( !path.empty() )
+         AddArchive ( path.c_str() );
+   } while ( !path.empty() );
+   PG_LogConsole::SetLogLevel ( PG_LOG_ERR );
+}
+
+
+/*
+PG_Theme* ASC_PG_App::LoadTheme(const char* xmltheme, bool asDefault, const char* searchpath) {
+	PG_Theme* theme = NULL;
+
+	PG_LogDBG("Locating theme '%s' ...", xmltheme);
+
+	// MacOS does not use file path separator '/', instead ':' is used
+	// There could be clever solution for this, but for a while...
+	// let's assume that "data" directory must exist in working directory on MacOS.
+	// Masahiro Minami<elsur@aaa.letter.co.jp>
+	// 01/05/06
+
+	// add paths to the archive
+
+	//#ifndef macintosh
+
+	if(searchpath != NULL) {
+		if(AddArchive(searchpath)) {
+			PG_LogDBG("'%s' added to searchpath", searchpath);
+		}
+	}
+
+	theme = PG_Theme::Load(xmltheme);
+
+	if(theme && asDefault) {
+
+		const char* c = theme->FindDefaultFontName();
+		if(c == NULL) {
+			PG_LogWRN("Unable to load default font ...");
+			delete theme;
+			return NULL;
+		}
+
+		DefaultFont = new PG_Font(c, theme->FindDefaultFontSize());
+		DefaultFont->SetStyle(theme->FindDefaultFontStyle());
+
+		PG_LogMSG("defaultfont: %s", c);
+		PG_LogMSG("size: %i", DefaultFont->GetSize());
+
+		my_background = theme->FindSurface("Background", "Background", "background");
+		my_backmode = theme->FindProperty("Background", "Background", "backmode");
+		SDL_Color* bc = theme->FindColor("Background", "Background", "backcolor");
+		if(bc != NULL) {
+			my_backcolor = *bc;
+		}
+		if(my_scaled_background) {
+			// Destroyed scaled background if present
+			SDL_FreeSurface(my_scaled_background);
+			my_scaled_background = 0;
+		}
+	} else {
+
+		PG_LogWRN("Failed to load !");
+	}
+
+	if((my_Theme != NULL) && asDefault) {
+		delete my_Theme;
+		my_Theme = NULL;
+	}
+
+	if(asDefault && theme) {
+		my_Theme = theme;
+	}
+
+	return theme;
+}
+*/
 
 //! A Paragui widget that fills the whole screen and redraws it whenever Paragui wants to it.
 class MainScreenWidget : public PG_ThemeWidget, public PG_EventObject {
@@ -203,8 +287,6 @@ bool SoundSettings::eventScrollTrack(int id, PG_Widget* widget, unsigned long da
 }
 
 bool SoundSettings::eventButtonClick(int id, PG_Widget* widget) {
-	static int label=0;
-
 	if (id==PG_WINDOW_CLOSE ) {
            quitModalLoop = 1;
            return true;

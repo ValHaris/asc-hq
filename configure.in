@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl AC_REVISION($Revision: 1.54 $)dnl
+dnl AC_REVISION($Revision: 1.55 $)dnl
 dnl AM_MAINTAINER_MODE
 AC_INIT(source/typen.h)
 
@@ -102,7 +102,7 @@ AC_LANG_CPLUSPLUS
 
 AM_PATH_SDLMM(0.1.8, :, AC_MSG_ERROR([*** SDLmm version 0.1.8 not found! Get it from http://sdlmm.sf.net ]))
 
-AM_PATH_PARAGUI(1.0.0,
+AM_PATH_PARAGUI(1.0.1,
             :,
             AC_MSG_ERROR([*** PARAGUI version 1.0.0 not found!])
 )
@@ -260,7 +260,7 @@ pwrplant.raw bldinfo.raw mining.raw tabmark.raw \
 traninfo.raw attack.raw hexfeld.raw mapbkgr.raw \
 hex2oct.raw weapinfo.raw amatur.raw hxborder.raw \
 leergui.raw guiremov.raw  *.tec \
-hexmines.raw curshex2.raw curshex.raw \
+hexmines.raw curshex2.raw markedfield.png curshex.raw \
 railstat.map cancel.nic poweron.nic poweroff.nic \
 extload.nic consttnk.nic reacfoff.nic reacfire.nic \
 loading.nic viewmap.nic dig.nic abriss.nic \

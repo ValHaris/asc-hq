@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.107 2002-02-21 17:06:52 mbickel Exp $
+//     $Id: typen.h,v 1.108 2002-03-03 14:13:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.107  2002/02/21 17:06:52  mbickel
+//      Completed Paragui integration
+//      Moved mail functions to own file (messages)
+//
 //     Revision 1.106  2001/12/14 10:20:05  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -679,8 +683,8 @@ struct ticons {
    struct { 
      void      *pfeil1, *pfeil2; 
    } weapinfo; 
-   void*      statarmy[3]; 
-   void*      height[8];      // fuer vehicleinfo - DLG-Box
+   void*        statarmy[3];
+   void*        height[8];      // fuer vehicleinfo - DLG-Box
    void*        height2[3][8];  // fuer vehicleinfo am map
    void*        player[8];      // aktueller Spieler in der dashboard: FARBE.RAW 
    void*        allianz[8][3];  // Allianzen in der dashboard: ALLIANC.RAW 
@@ -841,7 +845,7 @@ extern const int cminestrength[cminenum]  ;
 
 
 enum { capeace, cawar, cawarannounce, capeaceproposal, canewsetwar1, canewsetwar2, canewpeaceproposal, capeace_with_shareview };
-enum { visible_not, visible_ago, visible_now, visible_all };
+enum VisibilityStates { visible_not, visible_ago, visible_now, visible_all };
 
 
   extern const char*  cwettertypen[];

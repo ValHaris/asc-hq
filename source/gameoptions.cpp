@@ -25,22 +25,25 @@
 
 CGameOptions* pStaticGameOptions=NULL;
 
-class Destroyer	{
-	public:
-		~Destroyer()	{
-			delete pStaticGameOptions;
-		};
-} destroyer;	
+class Destroyer
+{
+   public:
+      ~Destroyer()
+      {
+         delete pStaticGameOptions;
+      };
+}
+destroyer;
 
 CGameOptions* CGameOptions::Instance()
 {
-	 if (!pStaticGameOptions)
-		 pStaticGameOptions	=	new CGameOptions;
-	return pStaticGameOptions;
+   if (!pStaticGameOptions)
+      pStaticGameOptions	=	new CGameOptions;
+   return pStaticGameOptions;
 }
 
 const int CGameOptions::searchPathNum	=	10;
-	
+
 CGameOptions::CGameOptions( const CGameOptions& cgo )
 {
    searchPath = new Named[ searchPathNum ];
@@ -108,13 +111,13 @@ void CGameOptions::setDefaults ( void )
    defaultSuperVisorPassword.setName ( "" );
 
 
-  #if USE_HOME_DIRECTORY == 0
+#if USE_HOME_DIRECTORY == 0
    searchPath[0].setName ( ".\\" );
    for ( int i = 1; i < getSearchPathNum(); i++ )
       searchPath[i].setName ( NULL );
-  #else
-   for ( int i = 0; i < getSearchPathNum(); i++ )
-      searchPath[i].setName ( NULL );
+#else
+for ( int i = 0; i < getSearchPathNum(); i++ )
+   searchPath[i].setName ( NULL );
    searchPath[0].setName ( "~/.asc/" );
    searchPath[1].setName ( "/var/local/games/asc/" );
    searchPath[2].setName ( "/var/games/asc/" );
@@ -124,15 +127,15 @@ void CGameOptions::setDefaults ( void )
    s += pathdelimitterstring;
    if ( s != searchPath[3].getName() )
       searchPath[5].setName ( s.c_str() );
-  #endif
+#endif
 
-  xresolution = 1024;
-  yresolution = 768;
+   xresolution = 1024;
+   yresolution = 768;
 
-  mapeditor_xresolution = 1024;
-  mapeditor_yresolution = 768;
+   mapeditor_xresolution = 1024;
+   mapeditor_yresolution = 768;
 
-  setChanged();
+   setChanged();
 }
 
 void CGameOptions::copy ( const CGameOptions& cgo )
@@ -160,7 +163,7 @@ void CGameOptions::copy ( const CGameOptions& cgo )
    mouse.fieldmarkbutton = cgo.mouse.fieldmarkbutton;
    mouse.smallguibutton  = cgo.mouse.smallguibutton;
    mouse.largeguibutton  = cgo.mouse.largeguibutton;
-   mouse.smalliconundermouse = cgo.mouse.smalliconundermouse;  
+   mouse.smalliconundermouse = cgo.mouse.smalliconundermouse;
    mouse.centerbutton    = cgo.mouse.centerbutton;
    mouse.unitweaponinfo  = cgo.mouse.unitweaponinfo;
    mouse.dragndropmovement=cgo.mouse.dragndropmovement;

@@ -5,9 +5,15 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.79 2002-03-02 23:04:01 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.80 2002-03-03 14:13:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.79  2002/03/02 23:04:01  mbickel
+//      Some cleanup of source code
+//      Improved Paragui Integration
+//      Updated documentation
+//      Improved Sound System
+//
 //     Revision 1.78  2001/12/19 17:16:29  mbickel
 //      Some include file cleanups
 //
@@ -1001,7 +1007,7 @@ void checkDataVersion( )
       } else
          dataVersion = 0;
 
-      if ( dataVersion < 7 || dataVersion > 0xffff )
+      if ( dataVersion < 8 || dataVersion > 0xffff )
          fatalError("A newer version of the data files is required. \n"
                     "You can get a new data package at http://www.asc-hq.org", 2 );
 }

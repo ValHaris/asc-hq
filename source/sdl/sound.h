@@ -17,32 +17,31 @@
 
 
 class Sound {
-public:
-  /** Create a Sound from the .wav file specified by filename.
-   *  If it's not possible to use the wave file for some reason, the
-   *  sound is set to silence.
-   *  \param fadeIn is a time in milliseconds
-   */
-  Sound( const ASCString& filename, int fadeIn = 0 );
+   public:
+     /** Create a Sound from the .wav file specified by filename.
+      *  If it's not possible to use the wave file for some reason, the
+      *  sound is set to silence.
+      *  \param fadeIn is a time in milliseconds
+      */
+     Sound( const ASCString& filename, int fadeIn = 0 );
 
-  void play(void);
-  void playWait(void);
+     void play(void);
+     void playWait(void);
 
-  void playLoop();
-  void stop();
+     void playLoop();
+     void stop();
 
-  void fadeOut ( int ms );
+     void fadeOut ( int ms );
 
-  ~Sound(void);
-private:
-  /** A name for this sound - mostly for debugging purposes */
-  const ASCString name;
+     ~Sound(void);
+   private:
+     /** A name for this sound - mostly for debugging purposes */
+     const ASCString name;
 
-  //! the actual wave data
-  Mix_Chunk *wave;
+     //! the actual wave data
+     Mix_Chunk *wave;
 
-  int fadeIn;
-
+     int fadeIn;
 };
 
 

@@ -817,7 +817,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
                       if ( hgt == 8 ) {
 
                           if ( fld->a.temp && tempsvisible )
-                             putspriteimage(  r + unitrightshift , yp + unitdownshift ,cursor.markfield);
+                             putspriteimage(  r + unitrightshift , yp + unitdownshift , cursor.markfield);
                           else
                              if ( fld->a.temp2 && tempsvisible )
                                 putspriteimage(  r + unitrightshift , yp + unitdownshift , xlatpict ( &xlattables.a.dark2 , cursor.markfield));

@@ -48,7 +48,6 @@ extern int copy2screen( int x1, int y1, int x2, int y2 );
 extern void setdisplaystart( int x, int y);
 extern void set_vgapalette256 ( dacpalette256 pal );
 
-extern int dont_use_linear_framebuffer;
 extern int graphicinitialized;
 
 extern int isfullscreen ( void );

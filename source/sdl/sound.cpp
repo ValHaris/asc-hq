@@ -105,6 +105,9 @@ void SoundSystem :: trackFinished( void )
 
 void SoundSystem :: nextTrack( void )
 {
+   if ( off )
+      return;
+
   if ( musicBuf ) {
      Mix_FreeMusic( musicBuf );
      musicBuf = NULL;
@@ -131,6 +134,9 @@ void SoundSystem :: playMusic ( MusicPlayList* playlist )
 
 void SoundSystem :: pauseMusic()
 {
+   if ( off )
+      return;
+
    if ( musicState == playing ) {
       Mix_PauseMusic ();
       musicState = paused;
@@ -139,6 +145,9 @@ void SoundSystem :: pauseMusic()
 
 void SoundSystem :: resumeMusic()
 {
+   if ( off )
+      return;
+
    if ( musicState == paused ) {
       Mix_ResumeMusic ();
       musicState = playing;
@@ -156,23 +165,33 @@ void SoundSystem :: resumePauseMusic()
 void SoundSystem :: setMusicVolume( int volume )
 {
    musicVolume = volume * 128 / 100;
+
+   if ( off )
+      return;
+
    Mix_VolumeMusic ( musicVolume );
 }
 
 void SoundSystem :: setEffectVolume( int volume )
 {
    effectVolume = volume * 128 / 100;
+
+   if ( off )
+      return;
+
    Mix_Volume ( -1, effectVolume );
 }
 
 
 SoundSystem::~SoundSystem()
 {
-   Mix_HaltMusic();
+   if ( !off ) {
+      Mix_HaltMusic();
 
-   if ( musicBuf ) {
-      Mix_FreeMusic( musicBuf );
-      musicBuf = NULL;
+      if ( musicBuf ) {
+         Mix_FreeMusic( musicBuf );
+         musicBuf = NULL;
+      }
    }
 
    if( mix_initialized )

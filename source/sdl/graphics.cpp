@@ -15,9 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: graphics.cpp,v 1.20 2002-02-21 17:06:54 mbickel Exp $
+//     $Id: graphics.cpp,v 1.21 2002-03-03 14:13:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2002/02/21 17:06:54  mbickel
+//      Completed Paragui integration
+//      Moved mail functions to own file (messages)
+//
 //     Revision 1.19  2002/02/14 20:58:14  mbickel
 //      Started integration of paragui
 //
@@ -255,5 +259,4 @@ void set_vgapalette256 ( dacpalette256 pal )
         SDL_SetColors ( screen, spal, 0, 256 );
 }
 
-int dont_use_linear_framebuffer;
 

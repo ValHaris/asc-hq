@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: ai.h,v 1.10 2001-11-29 17:34:18 mbickel Exp $
+//     $Id: ai.h,v 1.11 2002-03-03 14:13:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2001/11/29 17:34:18  mbickel
+//      AI can be used as benchmark
+//      Improved AI unit job determination mechanism
+//
 //     Revision 1.9  2001/10/31 20:10:26  mbickel
 //      Circumvented a bug in gcc
 //
@@ -491,13 +495,22 @@
            //! starts the Ai. If benchmark is true, the AI might take longer since it is not time limited, it won't display any graphics and will output the time it needed to run completely
            void run ( bool benchmark );
 
-
+           //! returns the map this AI runson
            pmap getMap ( void ) { return activemap; };
+
+           //! returns the number of the player which is controlled by this ai
            int getPlayerNum ( void ) { return player; };
+
            Player& getPlayer ( void ) { return getMap()->player[player]; };
            Player& getPlayer ( int player ) { return getMap()->player[player]; };
            void showFieldInformation ( int x, int y );
            bool isRunning ( void );
+
+           /**  the AI uses a different vision than human player, to counter the fact
+                that a human player can "know" a map and take a look before starting to
+                play. This function returns the minimum visibility state of a field.
+                \sa tfield::visible , VisibilityStates
+           */
            int getVision ( void );
 
            void read ( tnstream& stream );

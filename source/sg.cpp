@@ -228,8 +228,7 @@ int maintainencecheck( void )
 void         loadMoreData(void)
 {
    int          w;
-   char         i;
-   {
+   char         i; {
       tnfilestream stream ( "height2.raw", tnstream::reading );
       for (i=0;i<3 ;i++ )
          for ( int j=0; j<8; j++)
@@ -302,15 +301,13 @@ void         loadMoreData(void)
 
    if ( actprogressbar )
       actprogressbar->point();
-
    {
       tnfilestream stream ("hexfld_a.raw",tnstream::reading);
       stream.readrlepict(   &icons.container.mark.active, false, &w);
    }
 
    if ( actprogressbar )
-      actprogressbar->point();
-   {
+      actprogressbar->point(); {
       tnfilestream stream ("hexfld.raw",tnstream::reading);
       stream.readrlepict(   &icons.container.mark.inactive, false, &w);
    }
@@ -364,8 +361,7 @@ void         loadMoreData(void)
    loadmessages();
 
    if ( actprogressbar )
-      actprogressbar->point();
-   {
+      actprogressbar->point(); {
       tnfilestream stream ("waffen.raw",tnstream::reading);
       int num;
 
@@ -419,8 +415,7 @@ void         loadMoreData(void)
    }
 
    if ( actprogressbar )
-      actprogressbar->point();
-   {
+      actprogressbar->point(); {
       tnfilestream stream ("resorinf.raw",tnstream::reading);
       stream.readrlepict(   &icons.container.subwin.resourceinfo.start, false, &w );
    }
@@ -474,8 +469,8 @@ void         loadMoreData(void)
 
 
 
-   int m;
-   {
+
+   int m; {
       tnfilestream stream ( "bldinfo.raw", tnstream::reading );
       stream.readrlepict( &icons.container.subwin.buildinginfo.start, false, &m );
       for ( i = 0; i < 8; i++ )
@@ -529,8 +524,7 @@ void         loadMoreData(void)
    }
 
    if ( actprogressbar )
-      actprogressbar->point();
-   {
+      actprogressbar->point(); {
       tnfilestream stream ("attack.raw", tnstream::reading);
       stream.readrlepict (   &icons.attack.bkgr, false, &w );
       icons.attack.orgbkgr = NULL;
@@ -897,8 +891,7 @@ void loadStartupMap ( const char *gameToLoad=NULL )
             tnfilestream gamefile ( gameToLoad, tnstream::reading );
             tnetworkloaders nwl;
             nwl.loadnwgame( &gamefile );
-         }
-         catch ( tfileerror ) {
+         } catch ( tfileerror ) {
             fprintf ( stderr, "%s is not a legal email game. \n", gameToLoad );
             exit(-1);
          }
@@ -909,8 +902,7 @@ void loadStartupMap ( const char *gameToLoad=NULL )
          }
          try {
             loadgame( gameToLoad );
-         }
-         catch ( tfileerror ) {
+         } catch ( tfileerror ) {
             fprintf ( stderr, "%s is not a legal savegame. \n", gameToLoad );
             exit(-1);
          }
@@ -1456,7 +1448,8 @@ void execuseraction ( tuseractions action )
          selectPlayList();
          break;
 
-      case ua_soundDialog: soundSettings();
+      case ua_soundDialog:
+         soundSettings();
          break;
 
    }
@@ -1506,8 +1499,7 @@ void mainloopgeneralmousecheck ( void )
       displaymessage2("");
 
    if ( mousecontrol )
-      mousecontrol->chkmouse();
-   {
+      mousecontrol->chkmouse(); {
       int oldx = actmap->xpos;
       int oldy = actmap->ypos;
       checkformousescrolling();
@@ -1523,16 +1515,6 @@ void mainloopgeneralmousecheck ( void )
 
    releasetimeslice();
 }
-
-
-
-
-
-
-
-//
-
-	
 
 
 
@@ -1698,6 +1680,7 @@ void  mainloop ( void )
                } */
                   // testland();
                }
+
 
                break;
 
@@ -2001,6 +1984,7 @@ int gamethread ( void* data )
       } /* endtry */
       catch ( NoMapLoaded ) { } /* endcatch */
 
+
    } while ( abortgame == 0);
    return 0;
 }
@@ -2068,6 +2052,7 @@ int main(int argc, char *argv[] )
 
 
 
+
    int xr = 800;
    int yr = 600;
    // determining the graphics resolution
@@ -2085,9 +2070,9 @@ int main(int argc, char *argv[] )
    soundSystem.setMusicVolume ( CGameOptions::Instance()->sound.musicVolume );
    soundSystem.setEffectVolume ( CGameOptions::Instance()->sound.soundVolume );
 
-   PG_Application app;
+   ASC_PG_App app;
    pgApp = &app;
-   app.EnableSymlinks(true);
+
    if ( !app.LoadTheme("asc_dlg"))
       fatalError ( "Could not load Paragui theme for ASC");
 
@@ -2103,8 +2088,7 @@ int main(int argc, char *argv[] )
    initASCGraphicSubsystem ( app.GetScreen(), icon );
 
    GameThreadParams gtp;
-   gtp.filename = cl->l();
-   {
+   gtp.filename = cl->l(); {
       int w;
       tnfilestream stream ("mausi.raw", tnstream::reading);
       stream.readrlepict(   &icons.mousepointer, false, &w );

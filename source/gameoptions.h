@@ -24,26 +24,29 @@
 class CGameOptions
 {
    public:
-		friend class CLoadableGameOptions;	
-	   static const int searchPathNum;
-		/** returns the only Instance */
-		static	CGameOptions* Instance();
+      friend class CLoadableGameOptions;
+      static const int searchPathNum;
+      /** returns the only Instance */
+      static	CGameOptions* Instance();
 
-		CGameOptions(void);
-		CGameOptions( const CGameOptions& cgo );
-	  
-		void setDefaults( void );
-		void copy ( const CGameOptions& cgo );
+      CGameOptions(void);
+      CGameOptions( const CGameOptions& cgo );
 
-		bool	isChanged();
-		void	setChanged(bool flag	=      true);
+      void setDefaults( void );
+      void copy ( const CGameOptions& cgo );
 
-		const char*	getSearchPath(int i)	{	return(searchPath+i)->getName();};
-	    int getSearchPathNum ( void );
-		
-		int version;
-		
-		//! the number of steps to perform a move: 0 -> 3 step; != 0 -> 2 steps
+      bool	isChanged();
+      void	setChanged(bool flag	=      true);
+
+      const char*	getSearchPath(int i)
+      {
+         return(searchPath+i)->getName();
+      };
+      int getSearchPathNum ( void );
+
+      int version;
+
+      //! the number of steps to perform a move: 0 -> 3 step; != 0 -> 2 steps
       int fastmove;
 
       //! 1/100 sec for a unit to move from one field to the next
@@ -84,10 +87,10 @@ class CGameOptions
 
       //! not relevant any more
       int runAI;
- 
+
       //! force ASC to run in windowed mode (and not fullscreen, which is default)
       int forceWindowedMode;
-    
+
 
       //! force the mapeditor to run in fullscreen mode (and not windowed, which is default)
       int mapeditForceFullscreenMode;
@@ -108,24 +111,24 @@ class CGameOptions
       int specialForestChaining;
 
 
-      //! the mouse configuration. Mouse button are: bit 0 = left button ; bit 1 = right button ; bit 2 = center button 
+      //! the mouse configuration. Mouse button are: bit 0 = left button ; bit 1 = right button ; bit 2 = center button
       struct Mouse
       {
          int scrollbutton;
-         //! the button to select a field without opening the menu 
+         //! the button to select a field without opening the menu
          int fieldmarkbutton;
          //! the button to select a field and open the menu there
          int smallguibutton;
 
-         //! the button to use the big icons on the right side 
+         //! the button to use the big icons on the right side
          int largeguibutton;
 
          /** specifies the occasions when the small icons are positioned directly under the mouse pointer (instead of some pixel upwards)
              0 = never
              1 = always
              2 = only if there is a building or a unit on the field or if the field is a destination for the current unit action (default)
-         */ 
-         int smalliconundermouse;  
+         */
+         int smalliconundermouse;
 
          //! the button to center the map around the selected field
          int centerbutton;
@@ -135,9 +138,11 @@ class CGameOptions
 
          //! not used
          int dragndropmovement;
-      } mouse;
+      }
+      mouse;
 
-      struct SoundSettings{
+      struct SoundSettings
+      {
          //! muted soud can be reactivated during the game
          int muteEffects;
 
@@ -148,9 +153,10 @@ class CGameOptions
          int off;
 
          int soundVolume;
-        
+
          int musicVolume;
-      } sound;
+      }
+      sound;
 
       class Container
       {
@@ -158,7 +164,8 @@ class CGameOptions
             int autoproduceammunition;
             int filleverything;
             int emptyeverything;
-      } container;
+      }
+      container;
 
       int onlinehelptime;
       int smallguiiconopenaftermove;
@@ -171,36 +178,39 @@ class CGameOptions
          Named dir;
          struct Interpolate
          {
-            Interpolate(){};
+            Interpolate()
+            {}
+            ;
             int terrain;
             int units;
             int objects;
             int buildings;
          }
          interpolate;
-      } bi3;
+      }
+      bi3;
 
       Named defaultPassword;
       Named defaultSuperVisorPassword;
       Password getDefaultPassword ( );
       Password getDefaultSupervisorPassword ( );
 
-	private:     
-	  bool	_changed;
+   private:
+      bool	_changed;
       Named* searchPath;
 };
 
 inline
 bool	CGameOptions::isChanged()
 {
-	return _changed;
+   return _changed;
 }
 
 inline
 void	CGameOptions::setChanged(bool flag	)
 {
-	_changed	=	flag;
-}		
-      
+   _changed	=	flag;
+}
+
 
 #endif //#ifndef GAMEOPTIONS_H
