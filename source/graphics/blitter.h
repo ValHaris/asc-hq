@@ -37,11 +37,48 @@
  template<> class PixelSize2Type<4> { public: typedef Uint32 PixelType; };
 
 
+ template<int pixelsize>
+ class SourcePixelSelector_Plain {
+       typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+       const PixelType* pointer;
+       int pitch;
+       const Surface* surface;
+    protected:
+       SourcePixelSelector_Plain() : pointer(NULL), surface(NULL) {};
 
-  template<int BytesPerTargetPixel, class SourceColorTransform, template<int> class ColorMerger, template<int> class SourcePixelSelector>
- class MegaBlitter : public SourceColorTransform,
-                     public ColorMerger<BytesPerTargetPixel>,
-                     public SourcePixelSelector<BytesPerTargetPixel> {
+       void init ( const Surface& srv )
+       {
+          surface = &srv; 
+          pointer = (const PixelType*)(srv.pixels());
+          pitch = srv.pitch()/sizeof(PixelType) - srv.w();
+       };
+
+       PixelType getPixel(int x, int y)
+       {
+          if ( x >= 0 && y >= 0 && x < surface->w() && y < surface->h() )
+             return surface->GetPixel(SPoint(x,y));
+          else
+             return surface->GetPixelFormat().colorkey();
+       };
+
+       PixelType nextPixel() { return *(pointer++); };
+       void nextLine() { pointer += pitch; };
+
+       int getWidth()  { return surface->w(); };
+       int getHeight() { return surface->h(); };
+ };
+
+
+
+  template<
+     int BytesPerTargetPixel,
+     class SourceColorTransform,
+     template<int> class ColorMerger,
+     template<int> class SourcePixelSelector = SourcePixelSelector_Plain
+  >
+  class MegaBlitter : public SourceColorTransform,
+                      public ColorMerger<BytesPerTargetPixel>,
+                      public SourcePixelSelector<BytesPerTargetPixel> {
         typedef typename PixelSize2Type<BytesPerTargetPixel>::PixelType PixelType;
     public:
         MegaBlitter() { };
@@ -64,8 +101,7 @@
 
            for ( int y = 0; y < h; ++y ) {
               for ( int x = 0; x < w; ++x ) {
-                  ColorMerger<BytesPerTargetPixel>::assign ( SourceColorTransform::transform( SourcePixelSelector<BytesPerTargetPixel>::getPixel(x,y)), pix );
-                  SourcePixelSelector<BytesPerTargetPixel>::nextPixel();
+                  ColorMerger<BytesPerTargetPixel>::assign ( SourceColorTransform::transform( SourcePixelSelector<BytesPerTargetPixel>::nextPixel()), pix );
                   ++pix;
                }
                SourcePixelSelector<BytesPerTargetPixel>::nextLine();
@@ -214,60 +250,41 @@
 //////////////////// Source Pixel Selector  ///////////////////////////////////
 
 
- template<int pixelsize>
- class SourcePixelSelector_Plain {
+
+ template<int pixelsize, class SourcePixelSelector = SourcePixelSelector_Plain<pixelsize> >
+ class SourcePixelSelector_Rotation: public SourcePixelSelector {
        typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
-       const PixelType* pointer;
-       int pitch;
-       const Surface* surface;
+       int degrees;
+       int x,y;
+       int w,h;
     protected:
-       SourcePixelSelector_Plain() : pointer(NULL), surface(NULL) {};
+       SourcePixelSelector_Rotation() : degrees(0),x(0),y(0),w(0),h(0) {};
 
        void init ( const Surface& srv )
        {
-          pointer = (const PixelType*)(srv.pixels());
-          pitch = srv.pitch()/sizeof(PixelType) - srv.w();
+          SourcePixelSelector::init(srv);
+          w = getWidth();
+          h = getHeight();
        };
 
-       PixelType getPixel(int x, int y) { return *pointer; };
-       void nextPixel() { ++pointer; };
-       void nextLine() { pointer += pitch; };
-
-       int getWidth()  { return surface->w(); };
-       int getHeight() { return surface->h(); };
- };
-
- template<int pixelsize>
- class SourcePixelSelector_Rotation {
-       typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
-       const Surface* surface;
-       int degrees;
-    protected:
-       SourcePixelSelector_Rotation() : surface(NULL), degrees(0) {};
-
-       void init ( const Surface& srv )  { surface = &srv; };
-
-       int getWidth()  { return surface->w(); };
-       int getHeight() { return surface->h(); };
 
        PixelType getPixel(int x, int y)
        {
-         SPoint newpos = getPixelRotationLocation( SPoint(x,y), surface->w(),surface->h(), degrees );
-
-         if ( newpos.x >= 0 && newpos.y >= 0 && newpos.x < surface->w() && newpos.y < surface->h() )
-            return surface->GetPixel ( newpos );
-         else
-            return surface->GetPixelFormat().colorkey();
-
+         SPoint newpos = getPixelRotationLocation( SPoint(x,y), w, h, degrees );
+         return SourcePixelSelector::getPixel ( newpos.x, newpos.y );
        };
 
-       void nextPixel() {};
-       void nextLine() {};
+       PixelType nextPixel()
+       {
+          return getPixel(x++, y);
+       };
+
+       void nextLine() { x = 0; y +=1; };
 
     public:
        void setAngle( int degrees )
        {
-          this->degress = degrees;
+          this->degrees = degrees;
        };
 
  };
@@ -279,7 +296,7 @@
        static int xsize;
        static int ysize;
  };
- 
+
  template<int pixelsize>
  class SourcePixelSelector_CacheRotation : public RotationCache {
        typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
@@ -306,23 +323,22 @@
           pitch = srv.pitch()/sizeof(PixelType) - srv.w();
        }
 
-       PixelType getPixel(int x, int y)
+       PixelType nextPixel()
        {
           if ( useCache && degrees != 0 ) {
+             ++currentPixel;
+
              assert ( cacheIndex );
-             int index = cacheIndex[tableIndex];
+             int index = cacheIndex[tableIndex++];
              if ( index >= 0 )
                 return pixelStart[index];
              else
                 return surface->GetPixelFormat().colorkey();
-          } else
-             return *currentPixel;
-       };
+          } else {
+             ++tableIndex;
+             return *(currentPixel++);
+          }
 
-       void nextPixel()
-       {
-          ++tableIndex;
-          ++currentPixel;
        };
 
        void nextLine()
@@ -366,31 +382,28 @@
  };
 
 
- template<int pixelsize>
- class SourcePixelSelector_Zoom {
+ template<int pixelsize, class SourcePixelSelector = SourcePixelSelector_Plain<pixelsize> >
+ class SourcePixelSelector_Zoom: public SourcePixelSelector {
        typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
-       const Surface* surface;
        float zoomFactor;
+       int x,y;
     protected:
-       SourcePixelSelector_Zoom() : surface(NULL), zoomFactor(1) {};
+       SourcePixelSelector_Zoom() : zoomFactor(1),x(0),y(0) {};
 
-       void init ( const Surface& srv )  { surface = &srv; };
-
-       int getWidth()  { return int( zoomFactor * surface->w() ); };
-       int getHeight() { return int( zoomFactor * surface->h() ); };
+       int getWidth()  { return int( zoomFactor * SourcePixelSelector::getWidth()  ); };
+       int getHeight() { return int( zoomFactor * SourcePixelSelector::getHeight() ); };
 
        PixelType getPixel(int x, int y)
        {
-         SPoint newpos = SPoint( float(x) / zoomFactor, float(y) / zoomFactor);
-
-         if ( newpos.x >= 0 && newpos.y >= 0 && newpos.x < surface->w() && newpos.y < surface->h() )
-            return surface->GetPixel ( newpos );
-         else
-            return surface->GetPixelFormat().colorkey();
+         return SourcePixelSelector::getPixel( float(x) / zoomFactor, float(y) / zoomFactor);
        };
 
-       void nextPixel() {};
-       void nextLine() {};
+       PixelType nextPixel()
+       {
+          return getPixel(x++, y);
+       };
+
+       void nextLine() { x= 0; ++y;};
 
     public:
        void setZoom( float factor )

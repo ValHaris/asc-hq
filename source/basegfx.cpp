@@ -2167,7 +2167,7 @@ void* convertSurface ( SDLmm::Surface& s, bool paletteTranslation )
 SPoint getPixelRotationLocation( SPoint pos, int width, int height, int degrees )
 {
    const float pi = 3.14159265;
-   double angle = double(degrees) / 360 * 2 * pi + pi;
+   double angle = double(-degrees) / 360 * 2 * pi;
 
    double dx = pos.x - width/2 ;
    double dy = height/2 - pos.y;
@@ -2181,21 +2181,22 @@ SPoint getPixelRotationLocation( SPoint pos, int width, int height, int degrees 
          ny = -dy;
       } else {
          float wnk ;
-         if ( dx  )
-            wnk = atan2 ( dy, dx );
+         if ( dy  )
+            wnk = atan2 ( -dx, dy );
          else
-            if ( dy > 0 )
+            if ( dx < 0 )
                wnk = pi/2;
             else
                wnk = -pi/2;
 
-            wnk -= angle;
-            float radius = sqrt ( dx * dx + dy * dy );
+         wnk += angle;
+         float radius = sqrt ( dx * dx + dy * dy );
 
-            nx = radius * cos ( wnk );
-            ny = -radius * sin ( wnk );
-        }
+         nx = -radius * sin ( wnk );
+         ny = radius * cos ( wnk );
+      }
 
    return SPoint( int( width/2 + nx), int ( -ny + height/2));
 }
+
 
