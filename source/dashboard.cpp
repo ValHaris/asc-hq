@@ -69,15 +69,15 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
    }
 
    if ( name == "field_weather" ) {
-      if ( actmap && mc.valid() ) {
+      if ( actmap && mc.valid() && fieldvisiblenow( actmap->getField(mc)) ) {
          MegaBlitter<4,colorDepth,ColorTransform_None, ColorMerger_AlphaOverwrite> blitter;
 
          static const char* weathernames[] = {"terrain_weather_dry.png",
-                                              "terrain_lightrain.png",
-                                              "terrain_heavyrain.png",
-                                              "terrain_fewsnow.png",
-                                              "terrain_heavysnow.png",
-                                              "terrain_ice.png" };
+                                              "terrain_weather_lightrain.png",
+                                              "terrain_weather_heavyrain.png",
+                                              "terrain_weather_lightsnow.png",
+                                              "terrain_weather_heavysnow.png",
+                                              "terrain_weather_ice.png" };
 
          blitter.blit ( IconRepository::getIcon(weathernames[actmap->getField(mc)->getweather()]), screen, SPoint(dst.x, dst.y) );
       }
@@ -164,7 +164,7 @@ void DashboardPanel::eval()
 
    if ( mc.valid() && fieldvisiblenow( fld )) {
       setLabelText( "terrain_harbour", fld->bdt.test(cbharbour) ? "YES" : "NO" );
-      setLabelText( "terrain_pipe", fld->bdt.test(cbpipeline) ? "YES" : "NO" );
+      setLabelText( "terrain_pipe", fld->bdt.test(cbpipeline) || fld->building ? "YES" : "NO" );
 
       setLabelText( "terrain_defencebonus", fld->getdefensebonus() );
       setLabelText( "terrain_attackbonus", fld->getattackbonus() );
@@ -180,12 +180,12 @@ void DashboardPanel::eval()
        int windspeed = actmap->weather.windSpeed*maxwindspeed ;
        if ( unitspeed < 255*256 )
           if ( windspeed > unitspeed*9/10 )
-             setBargraphValue( "winddisplay", 0xff0000  );
+             setBarGraphColor( "winddisplay", 0xff0000  );
           else
              if ( windspeed > unitspeed*66/100 )
-                setBargraphValue( "winddisplay", 0xffff00  );
+                setBarGraphColor( "winddisplay", 0xffff00  );
              else
-                setBargraphValue( "winddisplay", 0x00ff00  );
+                setBarGraphColor( "winddisplay", 0x00ff00  );
 
    } else {
       setLabelText( "terrain_harbour", "" );
@@ -195,7 +195,7 @@ void DashboardPanel::eval()
       setLabelText( "terrain_attackbonus", "" );
       setLabelText( "terrain_jam", "" );
       setLabelText( "terrain_name", "" );
-      setBargraphValue( "winddisplay", 0x00ff00  );
+      setBarGraphColor( "winddisplay", 0x00ff00  );
    }
 
    if ( mc.valid() ) {
@@ -230,10 +230,20 @@ void DashboardPanel::eval()
 
 
       } else {
-         setLabelText( "unittypename", "" );
-         setLabelText( "unitname", "" );
-         setBargraphValue( "unitdamage", 0  );
-         setLabelText( "unitstatus", "" );
+
+         Building* bld = fld->building;
+         if ( bld && fieldvisiblenow( fld ) ) {
+            setLabelText( "unittypename", bld->typ->name );
+            setLabelText( "unitname", bld->name );
+            setBargraphValue( "unitdamage", float(100-bld->damage) / 100  );
+            setLabelText( "unitstatus", 100-bld->damage );
+         } else {
+            setLabelText( "unittypename", "" );
+            setLabelText( "unitname", "" );
+            setBargraphValue( "unitdamage", 0  );
+            setLabelText( "unitstatus", "" );
+         }
+
          setBargraphValue( "unitfuel", 0  );
          setLabelText( "unitfuelstatus", "" );
          setBargraphValue( "unitmaterial",  0  );
