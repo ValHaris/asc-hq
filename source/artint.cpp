@@ -1,6 +1,13 @@
-//     $Id: artint.cpp,v 1.19 2000-08-25 13:42:49 mbickel Exp $
+//     $Id: artint.cpp,v 1.20 2000-08-29 20:21:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/08/25 13:42:49  mbickel
+//      Fixed: zoom dialogbox in mapeditor was invisible
+//      Fixed: ammoproduction: no numbers displayed
+//      game options: produceammo and fillammo are now modified together
+//      Fixed: sub could not be seen when standing on a mine
+//      Some AI improvements
+//
 //     Revision 1.18  2000/08/12 09:17:13  gulliver
 //     *** empty log message ***
 //
@@ -138,7 +145,7 @@
 #include "dialog.h"
 #include "timer.h"
 #include "gamedlg.h"
-#include "building.h"
+//#include "building.h"
 #include "attack.h"
 #include "gameoptions.h"
 

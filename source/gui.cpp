@@ -1,6 +1,9 @@
-//     $Id: gui.cpp,v 1.35 2000-08-29 17:42:44 mbickel Exp $
+//     $Id: gui.cpp,v 1.36 2000-08-29 20:21:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2000/08/29 17:42:44  mbickel
+//      Restructured GUI to make it compilable with VisualC.
+//
 //     Revision 1.34  2000/08/12 15:01:41  mbickel
 //      Restored old versions of GUI ; new ones were broken
 //
@@ -309,7 +312,7 @@ void   GuiHost<T>::chainiconstohost ( T icn )
 }
 
 
-template<class T> 
+template<class T>
 void   GuiHost<T>::savebackground ( void )
 {
    int size = imagesize ( 0, 0, guiiconsizex, guiiconsizey );
@@ -762,14 +765,14 @@ void GuiHost<T>::reset ( void )
 void   tguihoststandard     :: init ( int resolutionx, int resolutiony )
 {
    chainiconstohost ( &icons.movement );
-   GuiHost::init ( resolutionx, resolutiony );
+   StandardBaseGuiHost::init ( resolutionx, resolutiony );
 }
 
 
 void   tguihoststandard :: bi2control (  )
 {
    icons.cancel.display();
-   GuiHost::bi2control (  );
+   StandardBaseGuiHost::bi2control (  );
 }
 
 
@@ -2350,7 +2353,7 @@ void  tnsguiiconcancel::exec         ( void )
 
 void    tselectobjectcontainerguihost :: init ( int resolutionx, int resolutiony )
 {
-   GuiHost :: init ( resolutionx, resolutiony );
+   SelectObjectBaseGuiHost :: init ( resolutionx, resolutiony );
    icons = new pnputobjectcontainerguiicon[ 1 + objecttypenum * 2 ] ;
    icons[0] = new tnputobjectcontainerguiicon ( NULL, 1 );
    for (int i = 0; i < objecttypenum ; i++ ) 
@@ -2362,13 +2365,12 @@ void    tselectobjectcontainerguihost :: init ( int resolutionx, int resolutiony
 
    icons[0]->frst()->sethost ( this );
    setfirsticon ( (tnputobjectcontainerguiicon*) icons[0]->frst() );
-
-
 }
+
 
 void tselectobjectcontainerguihost ::reset ( void )
 {
-   GuiHost::reset();
+   SelectObjectBaseGuiHost::reset();
    cancel = 0;
 }  
 
@@ -2379,11 +2381,9 @@ void tselectobjectcontainerguihost ::reset ( void )
 
 
 
-
-
 void    tselectvehiclecontainerguihost :: init ( int resolutionx, int resolutiony )
 {
-   GuiHost :: init ( resolutionx, resolutiony );
+   SelectVehicleBaseGuiHost :: init ( resolutionx, resolutiony );
    icons = new pnputvehiclecontainerguiicon[ 1 + vehicletypenum ] ;
    icons[0] = new tnputvehiclecontainerguiicon ( NULL );
    for (int i = 0; i < vehicletypenum ; i++ ) 
@@ -2400,7 +2400,7 @@ void tselectvehiclecontainerguihost ::reset ( pvehicle _constructingvehicle )
 {
    constructingvehicle = _constructingvehicle;
 
-   GuiHost::reset();
+   SelectVehicleBaseGuiHost::reset();
    cancel = 0;
 }  
 
@@ -2418,7 +2418,7 @@ tselectbuildingguihost :: tselectbuildingguihost( void )
 
 void    tselectbuildingguihost :: init ( int resolutionx, int resolutiony )
 {                                      
-   GuiHost :: init ( resolutionx, resolutiony );
+   SelectBuildingBaseGuiHost :: init ( resolutionx, resolutiony );
    icons = new ( pnputbuildingguiicon[ buildingtypenum ] );
    for (int i = 0; i < buildingtypenum ; i++ ) 
       if ( getbuildingtype_forpos( i ) )
@@ -2433,7 +2433,7 @@ void    tselectbuildingguihost :: init ( int resolutionx, int resolutiony )
 void tselectbuildingguihost ::reset ( pvehicle v )
 {
    vehicle = v;
-   GuiHost::reset();
+   SelectBuildingBaseGuiHost::reset();
    selectedbuilding = NULL;
               
    cancel = 0;
@@ -2652,7 +2652,7 @@ tselectweaponguihost::tselectweaponguihost ( void )
 
 void tselectweaponguihost :: init ( int resolutionx, int resolutiony )
 {
-    GuiHost :: init ( resolutionx, resolutiony );
+    SelectWeaponBaseGuiHost :: init ( resolutionx, resolutiony );
    
     // pvehicle eht = getfield(moveparams.movesx,moveparams.movesy)->vehicle;
     // pattackweap atw = attackpossible(eht, getxpos(),getypos());
@@ -2673,19 +2673,19 @@ void tselectweaponguihost :: init ( int resolutionx, int resolutiony )
 int     tselectweaponguihost ::  painticons ( void )
 {
    checkcoordinates();
-   return GuiHost::painticons();
+   return SelectWeaponBaseGuiHost::painticons();
 }
 
 void    tselectweaponguihost ::  checkforkey ( tkey key )
 {
    checkcoordinates();
-   GuiHost::checkforkey( key );            
+   SelectWeaponBaseGuiHost::checkforkey( key );
 }
 
 void    tselectweaponguihost ::  checkformouse ( void )
 {
    checkcoordinates();        
-   GuiHost::checkformouse ( );
+   SelectWeaponBaseGuiHost::checkformouse ( );
 }
 
 void    tselectweaponguihost ::  checkcoordinates ( void )
@@ -3052,11 +3052,11 @@ void  trguiicon_cancel::exec         ( void )
 void   treplayguihost    :: init ( int resolutionx, int resolutiony )
 {
    chainiconstohost ( &icons.play );
-   GuiHost::init ( resolutionx, resolutiony );
+   ReplayBaseGuiHost::init ( resolutionx, resolutiony );
 }
 
 void   treplayguihost :: bi2control (  )
 {
    icons.cancel.display();
-   GuiHost::bi2control (  );
+   ReplayBaseGuiHost::bi2control (  );
 }

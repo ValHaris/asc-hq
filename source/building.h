@@ -1,6 +1,9 @@
-//     $Id: building.h,v 1.13 2000-08-29 17:42:41 mbickel Exp $
+//     $Id: building.h,v 1.14 2000-08-29 20:21:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/08/29 17:42:41  mbickel
+//      Restructured GUI to make it compilable with VisualC.
+//
 //     Revision 1.12  2000/08/28 19:49:38  mbickel
 //      Fixed: replay exits when moving satellite out of orbiter
 //      Fixed: airplanes being able to endlessly takeoff and land
@@ -347,13 +350,10 @@ typedef class generalicon_c*   pgeneralicon_c;
 
     //0 tncguiicon 
 class generalicon_c : public tnguiicon {       // f?r Container //grundlage für jedes einzelne icon
-                        pgeneralicon_c next;
                         pgeneralicon_c *first;
                     protected:
                         char infotextbuf[1000];
                         pcontainer main;
-                        virtual pnguiicon nxt      ( void );
-                        virtual void      setnxt   ( pnguiicon ts );
                         virtual void      setfrst  ( pnguiicon ts );
 
                     public:
@@ -363,8 +363,7 @@ class generalicon_c : public tnguiicon {       // f?r Container //grundlage für 
                         ~generalicon_c ();
                 };
 
-
-
+class ContainerBaseGuiHost : public GuiHost<generalicon_c*> { int foo; };
 
 
 
@@ -457,6 +456,11 @@ class tcontaineronlinemousehelp : public tonlinemousehelp {
 
 
 
+                        //0 cguihostcontainer
+                class   hosticons_c: public ContainerBaseGuiHost { // basis fuer icons ->struct mit allen icons
+                    public:
+                        void seticonmains ( pcontainer maintemp );
+                };
 
 
 
@@ -472,11 +476,6 @@ class    ccontainer : public virtual ccontainercontrols {
 //-------------------------------------------------------------------------icons
 
 
-                        //0 cguihostcontainer 
-                class   hosticons_c: public GuiHost<generalicon_c*> { // basis fuer icons ->struct mit allen icons
-                    public: 
-                        void seticonmains ( pcontainer maintemp );
-                };
 
 
                 class repairicon_c : public generalicon_c , 
@@ -762,7 +761,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
 
 
                         //0 cguihostcontainerb 
-                class   chosticons_cb : public ccontainer::hosticons_c {
+                class   chosticons_cb : public hosticons_c {
                     public: 
                         void init ( int resolutionx, int resolutiony );
                         struct I1 {
@@ -1026,7 +1025,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
 
 
             public :
-                virtual void unitchanged( void );
+               virtual void unitchanged( void );
                void     init (pbuilding bld);
 
                pvehicle getmarkedunit (void);
@@ -1085,9 +1084,7 @@ class    ccontainer_t : public ctransportcontrols , public ccontainer {
                         virtual int   available    ( void ) ;
                 };
 
-                class   chosticons_ct 
-					:	public ccontainer::hosticons_c 
-				{
+                class   chosticons_ct :	public hosticons_c	{
                     public: 
                         void init ( int resolutionx, int resolutiony );
                         struct I3 {

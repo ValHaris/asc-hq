@@ -1,6 +1,9 @@
-//     $Id: gui.h,v 1.11 2000-08-29 17:42:44 mbickel Exp $
+//     $Id: gui.h,v 1.12 2000-08-29 20:21:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/08/29 17:42:44  mbickel
+//      Restructured GUI to make it compilable with VisualC.
+//
 //     Revision 1.10  2000/08/12 15:01:42  mbickel
 //      Restored old versions of GUI ; new ones were broken
 //
@@ -104,6 +107,10 @@ class BasicGuiHost {
         virtual void   checkforkey ( tkey key ) = 0;
         virtual void   checkformouse ( void ) = 0;
         virtual void   runpressedmouse ( int taste ) = 0;
+        virtual void   savebackground ( void ) = 0;
+        virtual void   starticonload ( void ) = 0;
+        virtual void   init ( int resolutionx, int resolutiony ) = 0;
+        virtual ~BasicGuiHost ( ) {};
    };
 
 template <class T>
@@ -133,7 +140,6 @@ class GuiHost : public BasicGuiHost {
 
         virtual void   returncoordinates ( void* icn, int* x, int * y );
         GuiHost ( void );
-        virtual ~GuiHost ( ) {};
 
         void   starticonload ( void );
 
@@ -157,7 +163,8 @@ class GuiHost : public BasicGuiHost {
 
 typedef class tselectbuildingguihost* pselectbuildingguihost;
 
-class tselectbuildingguihost : public GuiHost<pnputbuildingguiicon> {
+class SelectBuildingBaseGuiHost: public GuiHost<pnputbuildingguiicon> { int foo; } ;
+class tselectbuildingguihost : public SelectBuildingBaseGuiHost {
 
        protected:
          pnputbuildingguiicon*   icons;
@@ -179,7 +186,8 @@ class tselectbuildingguihost : public GuiHost<pnputbuildingguiicon> {
 
 typedef class tselectobjectcontainerguihost *pselectobjectcontainerguihost;
 
-class tselectobjectcontainerguihost : public GuiHost<pnputobjectcontainerguiicon> {
+class SelectObjectBaseGuiHost : public GuiHost<pnputobjectcontainerguiicon> {int foo;} ;
+class tselectobjectcontainerguihost : public SelectObjectBaseGuiHost {
          pnputobjectcontainerguiicon*   icons;
 
        public:
@@ -196,7 +204,9 @@ typedef class tselectvehiclecontainerguihost *pselectvehiclecontainerguihost;
 typedef class tnputvehiclecontainerguiicon *pnputvehiclecontainerguiicon;
 
 
-class tselectvehiclecontainerguihost : public GuiHost<pnputvehiclecontainerguiicon> {
+class SelectVehicleBaseGuiHost: public GuiHost<pnputvehiclecontainerguiicon> {int foo;} ;
+
+class tselectvehiclecontainerguihost : public SelectVehicleBaseGuiHost {
          pnputvehiclecontainerguiicon*   icons;
 
        public:
@@ -284,8 +294,9 @@ class tnweapselguiicon : public tnguiicon {
 };
 
 
+class SelectWeaponBaseGuiHost : public GuiHost<pnweapselguiicon> {int foo;} ;
 
-class tselectweaponguihost : public GuiHost<pnweapselguiicon> {
+class tselectweaponguihost : public SelectWeaponBaseGuiHost {
          tnweapselguiicon   icon[20];
          pattackweap        atw;
          int                x,y;
@@ -630,8 +641,9 @@ class tnsguiiconcancel : public tnsguiicon {
 
 
 
+class StandardBaseGuiHost : public GuiHost<pnsguiicon> {int foo;} ;
 
-class tguihoststandard : public GuiHost<pnsguiicon> {
+class tguihoststandard : public StandardBaseGuiHost {
    protected:
         virtual void      bi2control (  );
 
@@ -750,15 +762,15 @@ class trguiicon_cancel : public treplayguiicon {
        };
 
 
-
-class treplayguihost : public GuiHost<preplayguiicon> {
+class ReplayBaseGuiHost: public GuiHost<preplayguiicon> {int foo;} ;
+class treplayguihost : public ReplayBaseGuiHost {
    protected:
         virtual void      bi2control (  );
 
    public: 
      void init ( int resolutionx, int resolutiony );
 
-     struct I {
+     struct {
         trguiicon_play   play;
         trguiicon_pause  pause;
         trguiicon_slower slower;
@@ -766,7 +778,8 @@ class treplayguihost : public GuiHost<preplayguiicon> {
         trguiicon_back   back;
         trguiicon_exit   exit;
         trguiicon_cancel cancel;
-     } icons;  
+     } icons;
+     treplayguihost ( ) {};
    };
 
 

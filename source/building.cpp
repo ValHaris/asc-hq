@@ -1,6 +1,9 @@
-//     $Id: building.cpp,v 1.48 2000-08-29 17:42:39 mbickel Exp $
+//     $Id: building.cpp,v 1.49 2000-08-29 20:21:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2000/08/29 17:42:39  mbickel
+//      Restructured GUI to make it compilable with VisualC.
+//
 //     Revision 1.47  2000/08/28 19:49:36  mbickel
 //      Fixed: replay exits when moving satellite out of orbiter
 //      Fixed: airplanes being able to endlessly takeoff and land
@@ -2727,7 +2730,7 @@ void ccontainer_b :: cammunitiontransferb_subwindow :: execexternalload ( void )
 // -------------------------------- ----------------------------------------------------------
 
 
-void  ccontainer :: hosticons_c :: seticonmains ( pcontainer maintemp )
+void  hosticons_c :: seticonmains ( pcontainer maintemp )
 {
     pgeneralicon_c t = (pgeneralicon_c) getfirsticon ();
     t->setmain ( maintemp );
@@ -3641,7 +3644,7 @@ int    ccontainer_b :: getfuel ( int need, int abbuchen )
 void  ccontainer_b :: chosticons_cb :: init ( int resolutionx, int resolutiony )
 {
    chainiconstohost ( &icons.movement );     //   muá erst eingesetzt werden !
-   GuiHost::init ( resolutionx, resolutiony );
+   GuiHost<generalicon_c*>::init ( resolutionx, resolutiony );
 }
 
 
@@ -6540,7 +6543,7 @@ int    ccontainer_t :: getfuel ( int need, int abbuchen )
 void  ccontainer_t :: chosticons_ct :: init ( int resolutionx, int resolutiony )
 {
    chainiconstohost ( &icons.movement );     //   muá erst eingesetzt werden !
-   GuiHost::init ( resolutionx, resolutiony );
+   GuiHost<generalicon_c*>::init ( resolutionx, resolutiony );
 }
 
 
@@ -6655,19 +6658,10 @@ generalicon_c::generalicon_c ( void )
 {
    first = &buildingparamstack[recursiondepth].generalicon_c__first;
 
-   next = *first;
+   setnxt( *first );
    *first = this;
 }
 
-
-pnguiicon   generalicon_c::nxt( void )
-{
-   return next;
-}
-void      generalicon_c::setnxt   ( pnguiicon ts )
-{
-   next = (pgeneralicon_c) ts ;
-}
 
 pnguiicon   generalicon_c::frst( void )
 {
@@ -6682,8 +6676,10 @@ void        generalicon_c::setfrst  ( pnguiicon ts )
 void        generalicon_c::setmain ( pcontainer maintemp )
 {
     main = maintemp;
-    if ( next )
-       next->setmain ( maintemp );
+    if ( nxt() ) {
+       generalicon_c* ne = (generalicon_c*) nxt();
+       ne->setmain ( maintemp );
+    }
 }
 
 generalicon_c:: ~generalicon_c ( )
@@ -6707,3 +6703,5 @@ tcontaineronlinemousehelp :: tcontaineronlinemousehelp ( pcontainer host )
 {
    hostcontainer = host;
 }
+
+ContainerBaseGuiHost blumpf;
