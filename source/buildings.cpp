@@ -1172,6 +1172,14 @@ void Building::MiningStation :: testfield ( const MapCoordinate& mc )
             int ex = int( ceil(toExtract_thisTurn.resource(r) * perc * distEfficiency));
             actuallyExtracted.resource(r) += ex;
             spaceAvail.resource(r) -= ex;
+            for ( int i = 0; i < 3; ++i) {
+               if ( spaceAvail.resource(i) < -2 )  // we allow for small deviations due to rounding errors
+                  warning("Warning: mining station inconsistency 2!\n");
+                  
+               if ( spaceAvail.resource(i) < 0 )
+                  spaceAvail.resource(i) = 0;
+            }
+                   
 
             for ( int i = 0; i < 3; i++ ) {
                float c = usageRatio[i] * toExtract_thisTurn.resource(r) * perc;

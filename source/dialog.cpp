@@ -1864,7 +1864,8 @@ const char* fileswithdescrption[fileswithdescrptionnum] =  {"bla.bla"}; // { map
 
 class   tfileselectsvga : public tdialogbox {
                    public:
-
+                       tfileselectsvga() : markedfile(-1) {};
+                       
                        class tfiledata {
                                    public:
                                       ASCString        name;
