@@ -1,6 +1,11 @@
-//     $Id: typen.h,v 1.115 2002-11-15 20:54:11 mbickel Exp $
+//     $Id: typen.h,v 1.116 2002-12-23 12:50:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.115  2002/11/15 20:54:11  mbickel
+//      Added third snow-weather
+//      Added aliase in text files
+//      Fixed bad pointer access in gui.cpp
+//
 //     Revision 1.114  2002/10/27 22:19:44  mbickel
 //      Added bridge terrain property
 //      Some restructuring of the graphic set code
@@ -382,12 +387,10 @@ class ResourceMatrix {
 
 
 //! the image for a terraintype ( #tterraintype ) that is shown on the small map
-struct tquickview {
-   struct {
+struct FieldQuickView {
       char p1;
       char p3[3][3];
       char p5[5][5];
-   } dir[8];
 };
 
 

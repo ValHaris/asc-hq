@@ -3,9 +3,13 @@
   
 */
 
-//     $Id: sgstream.h,v 1.25 2002-10-09 16:58:46 mbickel Exp $
+//     $Id: sgstream.h,v 1.26 2002-12-23 12:50:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2002/10/09 16:58:46  mbickel
+//      Fixed to GrafikSet loading
+//      New item filter for mapeditor
+//
 //     Revision 1.24  2002/03/25 18:48:15  mbickel
 //      Applications can now specify which data checks to perform
 //
@@ -164,7 +168,7 @@ extern pobjecttype   loadobjecttype( pnstream stream );
 void writeobject ( pobjecttype object, pnstream stream, int compressed = 0 );
 
 extern void generatedirecpict ( void* orgpict, void* direcpict );
-extern pquickview generateaveragecol ( TerrainType::Weather* bdn );
+FieldQuickView* generateAverageCol ( void* image );
 
 
 

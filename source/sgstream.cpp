@@ -5,9 +5,14 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.86 2002-11-09 19:10:50 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.87 2002-12-23 12:50:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.86  2002/11/09 19:10:50  mbickel
+//      Fixed: invalid data return after EOF if file very small
+//      Resourceproduction of matter converter now working if not all resources could be stored
+//      mk1 V3 required
+//
 //     Revision 1.85  2002/10/12 17:28:04  mbickel
 //      Fixed "enemy unit loaded" bug.
 //      Changed map format
@@ -669,27 +674,23 @@ void generateaveragecolprt ( int x1, int y1, int x2, int y2, void* buf, char* pi
 
 
 
-pquickview generateaveragecol ( TerrainType::Weather* bdn )
+FieldQuickView* generateAverageCol ( void* image )
 {
-   pquickview qv;
-   qv = new tquickview ;
-   for ( int dir = 0; dir < 1; dir++ )
-      if ( bdn->pict ) {
+   FieldQuickView* qv = new FieldQuickView ;
 
-         char* c = (char*) &qv->dir[dir].p1 ;
-         // int dx,dy;
+   char* c = &qv->p1 ;
+   // int dx,dy;
 
-         for ( int i=1; i<6 ;i+=2 ) {
-            // dx = fieldxsize / i;
-            // dy = fieldysize / i;
-            for ( int k=0;k<i ; k++) {
-               for ( int j=0 ; j<i ; j++) {
-                   generateaveragecolprt ( k * fieldxsize / i, j * fieldysize / i, (k+1) * fieldxsize / i, (j+1) * fieldysize / i, bdn->pict,  c );
-                   c++;
-               } /* endfor */
-            } /* endfor */
+   for ( int i=1; i<6 ;i+=2 ) {
+      // dx = fieldxsize / i;
+      // dy = fieldysize / i;
+      for ( int k=0;k<i ; k++) {
+         for ( int j=0 ; j<i ; j++) {
+             generateaveragecolprt ( k * fieldxsize / i, j * fieldysize / i, (k+1) * fieldxsize / i, (j+1) * fieldysize / i, image,  c );
+             c++;
          } /* endfor */
-      }
+      } /* endfor */
+   } /* endfor */
 
    return qv;
 }
@@ -1300,7 +1301,7 @@ void displayLogMessage ( int msgVerbosity, char* message, ... )
 void displayLogMessage ( int msgVerbosity, const ASCString& message )
 {
    if ( msgVerbosity <= verbosity ) {
-      fprintf ( stdout, message.c_str() );
+      fprintf ( stdout, "%s", message.c_str() );
       fflush ( stdout );
    }
 }

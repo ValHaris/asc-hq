@@ -55,12 +55,12 @@ void ActiveGraphicPictures :: alloc ( int maxNum, int maxSize )
        bi3graphics[i] = asc_malloc ( absoluteMaxPicSize );
 }
 
-int ActiveGraphicPictures :: picAvail ( int num ) const
+bool ActiveGraphicPictures :: picAvail ( int num ) const
 {
    if ( bi3graphmode[num] && num < maxnum )
-      return 1;
+      return true;
    else
-      return 0;
+      return false;
 }
 
 void* ActiveGraphicPictures :: getPic ( int num )
@@ -89,6 +89,7 @@ class GraphicSet {
            int maxPicSize;
            vector<void*> pic;
            vector<int>   picmode;
+            map<int,FieldQuickView> quickViewImages;
      };
 
 
@@ -136,6 +137,28 @@ int ActiveGraphicPictures :: setActive ( int id )
    }
    return id;
 }
+
+const FieldQuickView* ActiveGraphicPictures::getQuickView( int id )
+{
+   if ( picAvail ( id )) {
+      for ( int i = 0; i < graphicSetNum; i++ )
+         if ( graphicSet[i]->id == activeId ) {
+            GraphicSet* gs = graphicSet[i];
+            map<int, FieldQuickView>::iterator qv = gs->quickViewImages.find ( id );
+            if ( qv == gs->quickViewImages.end() ) {
+               FieldQuickView* fqv = generateAverageCol ( gs->pic[id] );
+               gs->quickViewImages[id] = *fqv;
+               return fqv;
+            } else
+               return &qv->second;
+         }
+   } else {
+      if ( !emptyFieldQuickView )
+         emptyFieldQuickView = generateAverageCol ( emptyfield );
+      return emptyFieldQuickView;
+   }
+}
+
 
 
 int getGraphicSetIdFromFilename ( const char* filename )
@@ -275,7 +298,7 @@ void loadbi3graphics( void )
    activeGraphicPictures.setActive ( 0 );
 
    graphicsLoaded = true;
-   
+
   /*
 
    else {
@@ -467,3 +490,5 @@ void loadbi3pict ( int num, void** pict )
       } else
         *pict = NULL;
 }
+
+

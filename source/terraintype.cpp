@@ -114,6 +114,17 @@ void      TerrainType::Weather::paint ( int x1, int y1 )
  #endif
 }
 
+const FieldQuickView* TerrainType::Weather::getQuickView()
+{
+   if  ( bi_pict >= 0 ) {
+      return getActiveGraphicSet()->getQuickView( bi_pict );
+   } else {
+      if (!quickView ) {
+         quickView = generateAverageCol( pict );
+      }
+      return quickView;
+   }
+}
 
 
 const int terrain_version = 2;
@@ -163,7 +174,7 @@ void TerrainType::read( tnstream& stream )
             int move_maluscount = stream.readChar();
             stream.readInt(); // pgbt->movemalus = (char*)
             stream.readInt(); // pgbt->terraintype
-            pgbt->quickview = (pquickview) stream.readInt();
+            bool readQuickView = stream.readInt();
 
             pgbt->bi_pict = stream.readInt();
             for ( j = 1; j < 6; j++ )
@@ -216,14 +227,8 @@ void TerrainType::read( tnstream& stream )
                                         CGameOptions::Instance()->bi3.interpolate.terrain );
 
 
-            if ( pgbt->quickview ) {
-               pgbt->quickview = new ( tquickview );
-               stream.readdata ( pgbt->quickview, sizeof ( *pgbt->quickview ));
-            }
-            #ifndef converter
-            else
-               pgbt->quickview = generateaveragecol ( pgbt );
-            #endif
+            if ( readQuickView )
+               pgbt->readQuickView( stream );
          } else
             weather[i] = NULL;
 
@@ -231,6 +236,17 @@ void TerrainType::read( tnstream& stream )
 
    } else
       throw tinvalidversion ( stream.getDeviceName(), terrain_version, version );
+}
+
+void TerrainType::Weather::readQuickView ( tnstream& stream )
+{
+   quickView = new FieldQuickView;
+
+   stream.readdata ( quickView, sizeof ( *quickView ));
+
+   FieldQuickView temp;
+   for ( int i = 1; i < 8; i++ )
+      stream.readdata ( &temp, sizeof ( *quickView ));
 }
 
 
@@ -263,7 +279,7 @@ void TerrainType::write ( tnstream& stream ) const
         stream.writeChar ( weather[i]->move_malus.size() );
         stream.writeInt ( 1 );
         stream.writeInt ( 1 );
-        stream.writeInt ( int( weather[i]->quickview ));
+        stream.writeInt ( 0); // was: quickview
         weather[i]->art.write ( stream );
 
         stream.writeInt ( weather[i]->bi_pict );
@@ -276,9 +292,6 @@ void TerrainType::write ( tnstream& stream ) const
         if ( weather[i]->pict && weather[i]->bi_pict == -1 )
            stream.writedata ( ( char*) weather[i]->pict, fieldsize );
 
-
-        if ( weather[i]->quickview )
-           stream.writedata ( ( char*) weather[i]->quickview, sizeof ( *weather[i]->quickview ));
      }
    }
 }
@@ -395,11 +408,7 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
                            &pict,
                            CGameOptions::Instance()->bi3.interpolate.terrain );
    }
-
-   if ( pc.isReading() )
-      quickview = generateaveragecol ( this );
-
-
+   
    pc.addInteger ( "DefenseBonus", defensebonus );
    pc.addInteger ( "AttackBonus",  attackbonus );
    pc.addInteger ( "BasicJamming", basicjamming );

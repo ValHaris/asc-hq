@@ -22,6 +22,8 @@
 #ifndef graphicsetH
  #define graphicsetH
 
+ #include "typen.h"
+
  extern int getGraphicSetIdFromFilename ( const char* filename );
  extern int activateGraphicSet ( int id  );
 
@@ -45,21 +47,25 @@
                                // 2: picture has ASC size
                                // +0xff : picture is dummy picture
      int absoluteMaxPicSize;
+     FieldQuickView* emptyFieldQuickView;
    public:
      int setActive ( int id );
      int getActiveID ( ) { return activeId; };
 
      ActiveGraphicPictures ( void ) {
         activeId = -1;
+        emptyFieldQuickView = NULL;
      };
 
      void alloc ( int maxNum, int maxSize );
-     int picAvail ( int num ) const;
+     bool picAvail ( int num ) const;
      void* getPic ( int num );
      int getMode ( int num ) const;
      int getNum ( ) { return maxnum; };
+     const FieldQuickView* getQuickView( int id );
  };
 
  extern const ActiveGraphicPictures* getActiveGraphicSet();
+
 
 #endif

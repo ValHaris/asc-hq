@@ -78,16 +78,16 @@ void TextPropertyGroup :: error ( const ASCString& msg )
 void TextPropertyGroup :: print( int indent )
 {
    for ( Entries::iterator i = entries.begin(); i != entries.end(); i++ ) {
-      for ( int m = 0; m< indent; m++ )
+      for ( int m = 0; m<= indent; m++ )
          displayLogMessage(10, "  " );
 
-      displayLogMessage(10,  "  %s\n", i->toString().c_str());
+      displayLogMessage(10,  i->toString());
    }
 
    for ( Parents::iterator i = parents.begin(); i != parents.end(); i++ ) {
       for ( int i = 0; i< indent; i++ )
          printf("  " );
-      displayLogMessage(10, "  is inheriting from %s\n" , (*i)->location.c_str() );
+      displayLogMessage(10, "  is inheriting from " + (*i)->location + "\n" );
       (*i)->print(indent+1 );
    }
 }

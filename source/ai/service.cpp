@@ -554,7 +554,7 @@ void AI :: runServiceUnit ( pvehicle supplyUnit )
 
    // building a list of all fullfillable service tasks
    for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
-       if ( !i->getServiceUnit() ) {
+       if ( !i->getServiceUnit() && i->getTargetUnit() ) {
           int poss = i->possible( supplyUnit );
           if ( poss ) {
              float f =  i->getTargetUnit()->aiparam[getPlayerNum()]->getValue() * poss/100 / beeline( i->getTargetUnit() ,supplyUnit );
@@ -629,6 +629,7 @@ AI::AiResult AI :: executeServices ( )
       vi = nvi;
   }
 
+  removeServiceOrdersForUnit ( NULL );
   int counter = 0;
   for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
       if ( !i->canWait() ) {

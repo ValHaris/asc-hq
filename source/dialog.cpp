@@ -2,9 +2,14 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.118 2002-12-17 22:02:17 mbickel Exp $
+//     $Id: dialog.cpp,v 1.119 2002-12-23 12:50:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.118  2002/12/17 22:02:17  mbickel
+//      Enemy mines can now be crossed even if visible
+//      submerged mines can not be placed on shallow water
+//      new game parameter: objects destroyable by terrain
+//
 //     Revision 1.117  2002/12/12 11:34:17  mbickel
 //      Fixed: ai crashing when weapon has no ammo
 //      Fixed: ASC crashed when loading game with ID not found
@@ -2850,58 +2855,7 @@ void tbasicshowmap :: init ( int x1, int y1, int xsize, int ysize )
 
 int  tbasicshowmap::generatemap ( int autosize )
 {
- #ifdef FREEZOOM
-                   
    generatemap_var ();
-
-#else
-
-   if (buffer == NULL) {
-      if ( autosize ) 
-         zoom = 4;
-      int size;
-      do {
-         do {
-            if ( autosize ) 
-               zoom--;
-            switch (zoom) {
-            case 0: return 1;
-            case 1: mysize = actmap->ysize + 2*border;
-                    mxsize = actmap->xsize * 2 + 2*border;
-               break;
-            case 2: mysize = actmap->ysize * 2 + 1 + 2*border;
-                    mxsize = actmap->xsize * 4 + 1 + 2*border;
-               break;
-            case 3: mysize = actmap->ysize * 3 + 2 + 2*border;
-                    mxsize = actmap->xsize * 6 + 2 + 2*border;
-               break;
-            } 
-   
-         } while ( (mxsize > txsize - 20) && ( zoom > 1 ) && autosize ); 
-   
-         size = mxsize * mysize + 4;
-   
-         buffer = new char [ size + 1000 ] ;
-         if (buffer == NULL) {
-            displaymessage ( "Not enoigh memory for displaybuffer !", 1 );
-            if ( autosize == 0 )
-               zoom--;
-         }
-      } while ( buffer == NULL );
-
-      memset ( buffer, 255, ( size + 1000 ));
-    }
-    switch (zoom) {
-    case 1: generatemap1();
-       break;
-    case 2: generatemap2();
-       break;
-    case 3: generatemap3();
-       break;
-    } 
-   interpolatemap ();
-
-#endif
    return 0;
 }
 
@@ -2964,7 +2918,7 @@ void tbasicshowmap::interpolatemap ( void )
 #define visiblenotcol darkgray
 #define buildingcoloroffset 3+16
 #define unitcoloroffset     6+16
-
+/*
 void tbasicshowmap::generatemap1 ( void )
 {
    // mxsize = actmap->xsize * 2;
@@ -3177,7 +3131,7 @@ void tbasicshowmap::generatemap3 ( void )
    }
 }
 
-
+*/
 int hexfieldform[] = { 16,16,14,14,14,14,12,12,10,10,8,8,8,8,6,6,4,4,2,2,2,2,0,0 };
 
 void tbasicshowmap::generatemap_var ( void )
@@ -3188,7 +3142,7 @@ void tbasicshowmap::generatemap_var ( void )
    mysize = actmap->ysize * zoom  * fielddisty / fielddistx;
 
    if ( mxsize > bufsizex || mysize > bufsizey || !buffer ) {
-      if ( buffer ) 
+      if ( buffer )
          delete[] buffer;
 
       if ( mxsize > bufsizex )
@@ -3196,7 +3150,7 @@ void tbasicshowmap::generatemap_var ( void )
       if ( mysize > bufsizey )
          bufsizey = mysize;
       int size = bufsizex * bufsizey + 4;
-  
+
       buffer = new unsigned char [ size + 1000 ] ;
    }
 
@@ -3262,7 +3216,7 @@ void tbasicshowmap::generatemap_var ( void )
                    *b = visiblenotcol;
                 else
                    if ( v == visible_ago)
-                      *b = xlattables.a.dark1[ fld1->typ->quickview->dir[fld1->direction].p5[ xo * 5 / fieldxsize ][ yo * 5 / fieldysize ] ];
+                      *b = xlattables.a.dark1[ fld1->typ->getQuickView()->p5[ xo * 5 / fieldxsize ][ yo * 5 / fieldysize ] ];
                    else
                       if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 ) )
                          *b = fld1->building->color + buildingcoloroffset;
@@ -3270,7 +3224,7 @@ void tbasicshowmap::generatemap_var ( void )
                          if ( fld1->vehicle && ((v == visible_all) || ((fld1->vehicle->height >= chschwimmend) && (fld1->vehicle->height <= chhochfliegend))))
                             *b = fld1->vehicle->color + unitcoloroffset;
                          else {
-                            *b = fld1->typ->quickview->dir[fld1->direction].p5[ xo * 5 / fieldxsize ][ yo * 5 / fieldysize ];
+                            *b = fld1->typ->getQuickView()->p5[ xo * 5 / fieldxsize ][ yo * 5 / fieldysize ];
                          }
     
             } else

@@ -77,6 +77,8 @@ const int cbodenartennum = 34;
       };
 
       class  Weather {
+          //! the color information for the small map
+          FieldQuickView* quickView;
         public:
           //! the image of the field
           void*          pict;
@@ -99,16 +101,16 @@ const int cbodenartennum = 34;
           //! the image index from the graphic set. -1 if graphics is not from graphic set. \see  GraphicSet
           int            bi_pict;
 
-          //! the properties defining which unit can move onto this field and which not 
+          //! the properties defining which unit can move onto this field and which not
           TerrainBits    art;
 
           //! pointer to the outer structure
           TerrainType*   terraintype;
 
-          //! the color information for the small map
-          pquickview     quickview;
+          const FieldQuickView* getQuickView();
+          void readQuickView ( tnstream& stream );
 
-          Weather ( TerrainType* base ) : pict( NULL ), terraintype ( base ), quickview ( NULL ) {};
+          Weather ( TerrainType* base ) : pict( NULL ), terraintype ( base ), quickView ( NULL ) {};
           void runTextIO ( PropertyContainer& pc );
       };
      Weather*           weather[cwettertypennum];
