@@ -171,7 +171,7 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( pvehicle _eht )
 
    if ( aip->getJob() == AiParameter::job_undefined )
       if ( eht->canMove() )
-         aip->setJob( AI::chooseJob ( eht->typ, eht->functions ));
+         aip->setJob( AI::chooseJob ( eht->typ, eht->typ->functions ));
 /*
    generatethreatvalue();
    int l = 0;

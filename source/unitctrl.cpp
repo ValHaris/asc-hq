@@ -919,7 +919,7 @@ int VehicleService :: available ( pvehicle veh ) const
 {
    int av = 0;
    if ( veh && !veh->attacked ) {
-      if ( veh->canRepair( NULL ) && (veh->functions & cfrepair))
+      if ( veh->canRepair( NULL ) && (veh->typ->functions & cfrepair))
          for ( int i = 0; i < veh->typ->weapons.count; i++ )
             if ( veh->typ->weapons.weapon[i].service() )
                av++;
@@ -929,15 +929,15 @@ int VehicleService :: available ( pvehicle veh ) const
       for ( int i = 0; i < fzt->weapons.count; i++ ) {
          if ( fzt->weapons.weapon[i].service() ) {
 
-            if ( veh->functions & cfenergyref )
+            if ( veh->typ->functions & cfenergyref )
                if ( fzt->tank.energy )
                   av++;
 
-            if ( veh->functions & cfmaterialref )
+            if ( veh->typ->functions & cfmaterialref )
                if ( fzt->tank.material )
                   av++;
 
-            if ( veh->functions & cffuelref )
+            if ( veh->typ->functions & cffuelref )
                if ( fzt->tank.fuel )
                   av++;
 
@@ -956,7 +956,7 @@ int VehicleService :: getServices ( pvehicle veh ) const
 {
    int res = 0;
    if ( veh ) {
-      if ( veh->canRepair( NULL ) && (veh->functions & cfrepair))
+      if ( veh->canRepair( NULL ) && (veh->typ->functions & cfrepair))
          for ( int i = 0; i < veh->typ->weapons.count; i++ )
             if ( veh->typ->weapons.weapon[i].service() )
                if ( !veh->attacked )
@@ -966,13 +966,13 @@ int VehicleService :: getServices ( pvehicle veh ) const
       const Vehicletype* fzt = veh->typ;
       for ( int i = 0; i < fzt->weapons.count; i++ ) {
          if ( fzt->weapons.weapon[i].service() ) {
-            if ( veh->functions & cfenergyref )
+            if ( veh->typ->functions & cfenergyref )
                if ( fzt->tank.energy )
                   res |= 1 << srv_resource;
-            if ( veh->functions & cfmaterialref )
+            if ( veh->typ->functions & cfmaterialref )
                if ( fzt->tank.material )
                   res |= 1 << srv_resource;
-            if ( veh->functions & cffuelref)
+            if ( veh->typ->functions & cffuelref)
                if ( fzt->tank.fuel )
                   res |= 1 << srv_resource;
          }
@@ -1022,7 +1022,7 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
             const SingleWeapon& sourceWeapon = veh->typ->weapons.weapon[i];
             if ( sourceWeapon.service() || sourceWeapon.canRefuel() ) {
                if ( targetUnit && serviceWeapon )
-                  if ( !(targetUnit->functions & cfnoairrefuel) || targetUnit->height <= chfahrend )
+                  if ( !(targetUnit->typ->functions & cfnoairrefuel) || targetUnit->height <= chfahrend )
                      if (getdiplomaticstatus2(veh->color, targetUnit->color) == capeace)
                         if ( (serviceWeapon->maxdistance >= dist && serviceWeapon->mindistance <= dist) || bypassChecks.distance )
                            if ( targetUnit->height & targheight || ( bypassChecks.height && ( targetUnit->typ->height & targheight) )) {
@@ -1052,7 +1052,7 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
                               if ( sourceWeapon.service() ) {
                                  static int resourceVehicleFunctions[resourceTypeNum] = { cfenergyref, cfmaterialref, cffuelref };
                                  for ( int r = 0; r < resourceTypeNum; r++ )
-                                    if ( veh->typ->tank.resource(r) && targetUnit->typ->tank.resource(r) && (veh->functions & resourceVehicleFunctions[r])) {
+                                    if ( veh->typ->tank.resource(r) && targetUnit->typ->tank.resource(r) && (veh->typ->functions & resourceVehicleFunctions[r])) {
                                        VehicleService::Target::Service s;
                                        s.type = VehicleService::srv_resource;
                                        s.sourcePos = r;
@@ -1066,7 +1066,7 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
                                        targ.service.push_back ( s );
                                     }
 
-                                 if ( veh->canRepair( targetUnit ) && (veh->functions & cfrepair))
+                                 if ( veh->canRepair( targetUnit ) && (veh->typ->functions & cfrepair))
                                     if ( veh->tank.fuel && veh->tank.material )
                                       // if ( targetUnit->getMovement() >= movement_cost_for_repaired_unit )
                                           if ( targetUnit->damage ) {

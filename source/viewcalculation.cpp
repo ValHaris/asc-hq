@@ -124,14 +124,14 @@ void         tcomputevehicleview::init( const pvehicle eht, int _mode  )   // mo
    if ( eht->height == chsatellit )
       satellitenview = 1;
    else
-      satellitenview = !!(eht->functions & cfsatellitenview);
+      satellitenview = !!(eht->typ->functions & cfsatellitenview);
 
-   sonar =           !!(eht->functions & cfsonar);
-   minenview =      !!(eht->functions & cfmineview);
-   if ( eht->functions & cfownFieldJamming )
+   sonar =           !!(eht->typ->functions & cfsonar);
+   minenview =      !!(eht->typ->functions & cfmineview);
+   if ( eht->typ->functions & cfownFieldJamming )
       rangeJamming = false;
 
-   if ( (eht->functions & cfautodigger) && _mode == 1 )
+   if ( (eht->typ->functions & cfautodigger) && _mode == 1 )
       eht->searchForMineralResources();
 
    tcomputeview::initviewcalculation( eht->typ->view+1, eht->typ->jamming, eht->xpos, eht->ypos, _mode, eht->height );

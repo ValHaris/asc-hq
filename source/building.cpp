@@ -1056,7 +1056,7 @@ bool ccontainercontrols :: cmove_unit_in_container :: moveupavail ( pvehicle eht
 {
    if ( eht ) {
       if ( recursiondepth > 0 ) {
-         if ( eht->functions & cf_trooper )
+         if ( eht->typ->functions & cf_trooper )
             return 1;
 
          if ( buildingparamstack[recursiondepth-1].bld )
@@ -1831,7 +1831,7 @@ int   ctransportcontrols :: getypos (void)
 int   ctransportcontrols :: getspecfunc ( tcontainermode mode )
 {
    if ( mode == mtransport )
-      return vehicle->functions;
+      return vehicle->typ->functions;
    else
       return 0;
 };

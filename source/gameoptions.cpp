@@ -112,17 +112,15 @@ void CGameOptions::setDefaults ( void )
    for ( int i = 1; i < getSearchPathNum(); i++ )
       searchPath[i].setName ( NULL );
 #else
-for ( int i = 0; i < getSearchPathNum(); i++ )
-   searchPath[i].setName ( NULL );
+   for ( int i = 0; i < getSearchPathNum(); i++ )
+      searchPath[i].setName ( NULL );
+
    searchPath[0].setName ( "~/.asc/" );
-   searchPath[1].setName ( "/var/local/games/asc/" );
-   searchPath[2].setName ( "/var/games/asc/" );
-   searchPath[3].setName ( "/usr/local/share/games/asc/" );
-   searchPath[4].setName ( "/usr/share/games/asc/" );
-   ASCString s = GAME_DATADIR;
-   s += pathdelimitterstring;
-   if ( s != searchPath[3].getName() )
-      searchPath[5].setName ( s.c_str() );
+   searchPath[1].setName ( GAME_DATADIR );
+   searchPath[2].setName ( "/var/local/games/asc/" );
+   searchPath[3].setName ( "/var/games/asc/" );
+   searchPath[4].setName ( "/usr/local/share/games/asc/" );
+   searchPath[5].setName ( "/usr/share/games/asc/" );
 #endif
 
    xresolution = 1024;

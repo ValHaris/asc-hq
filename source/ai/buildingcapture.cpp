@@ -93,7 +93,7 @@ void         SearchReconquerBuilding :: unitfound(pvehicle     eht)
 
 bool SearchReconquerBuilding :: canUnitCapture( pvehicle eht )
 {
-   return ((eht->functions & cf_conquer ))
+   return (eht->typ->functions & cf_conquer )
            && fieldAccessible ( buildingToCapture->getEntryField(), eht) == 2 ;
 
 }
@@ -299,7 +299,7 @@ void AI :: checkConquer( )
 
       if ( conquerer ) {
         BuildingCapture& bc = buildingCapture[ (*i)->getEntry() ];
-        if ( conquerer->functions & cf_conquer )
+        if ( conquerer->typ->functions & cf_conquer )
            bc.state = BuildingCapture::conq_conqUnit;
         else
            bc.state = BuildingCapture::conq_unitNotConq;

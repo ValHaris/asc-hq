@@ -339,7 +339,7 @@ void         tdashboard :: paintlargeweaponinfo ( void )
 
        int funcs;
        if ( vehicle )
-          funcs = vehicle->functions;
+          funcs = vehicle->typ->functions;
        else
           funcs  = vt->functions;
 

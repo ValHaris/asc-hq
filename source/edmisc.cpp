@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.101 2003-04-23 18:31:09 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.102 2003-06-03 19:55:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.101  2003/04/23 18:31:09  mbickel
+//      Fixed: AI problems
+//      Improved cheating detection in replay
+//
 //     Revision 1.100  2003/03/31 20:29:15  mbickel
 //      Fixed AI bugs
 //      Fixed clipboard in mapeditor
@@ -2736,7 +2740,6 @@ void         tclass_change::run(void)
       unit->klasse = tklasse;
       for (j = 0 ; j < unit->typ->weapons.count  ; j++ ) unit->weapstrength[j] = tweapstr[j];
       unit->armor = tarmor;
-      unit->functions = tfunktion;
    }
 }
 

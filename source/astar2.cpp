@@ -669,7 +669,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                          Node N2;
                          N2.h.setnum ( pos.x, pos.y, i );
                          N2.hasAttacked = N.hasAttacked;
-                         const ContainerBaseType::TransportationIO* tio = actmap->getField(N.h)->getContainer()->vehicleUnloadSystem( veh, 1<<i);
+                         const ContainerBaseType::TransportationIO* tio = actmap->getField(N.h)->getContainer()->vehicleUnloadSystem( veh->typ, 1<<i);
                          if ( tio && tio->disableAttack )
                             N2.hasAttacked = true;
 

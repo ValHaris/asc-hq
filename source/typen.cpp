@@ -350,7 +350,122 @@ tevent :: ~tevent ()
    }
 }
 
-/*
+
+
+///////////////////////////////////////////////////////////////////////////////
+// The new event system here is not yet functional
+
+TurnPassed :: TurnPassed () : EventTrigger ( ceventt_turn ), turn( -1 ), move(-1)
+{
+}
+
+EventTrigger::State TurnPassed::getState( int player )
+{
+   if ( actmap->time.turn() > turn || (actmap->time.turn() == turn && actmap->time.move() >= move ))
+      return finally_fulfilled;
+   else
+      return unfulfilled;
+}
+
+void TurnPassed::read( tnstream& stream )
+{
+   int version = stream.readInt();
+   turn = stream.readInt();
+   move = stream.readInt();
+}
+
+
+void TurnPassed::write( tnstream& stream )
+{
+   stream.writeInt(1);
+   stream.writeInt( turn );
+   stream.writeInt( move );
+}
+
+EventTrigger::State BuildingConquered::getState( int player )
+{
+   pfield fld = actmap->getField ( pos );
+   if ( !fld->building )
+      return finally_failed;
+
+   if ( fld->building->getOwner() == player )
+      return fulfilled;
+   else
+      return unfulfilled;
+}
+
+EventTrigger::State BuildingLost::getState( int player )
+{
+   State s = BuildingConquered::getState ( player );
+   if ( s == fulfilled)
+      return unfulfilled;
+   if ( s == unfulfilled )
+      return fulfilled;
+   return s;
+}
+
+
+void PositionTrigger::read( tnstream& stream )
+{
+   int version = stream.readInt();
+   pos.read( stream );
+}
+
+
+void PositionTrigger::write( tnstream& stream )
+{
+   stream.writeInt(1);
+   pos.write( stream );
+}
+
+EventTrigger::State BuildingDestroyed::getState( int player )
+{
+   pfield fld = actmap->getField ( pos );
+   if ( !fld->building )
+      return finally_fulfilled;
+   else
+      return unfulfilled;
+}
+
+
+EventTrigger::State BuildingSeen::getState( int player )
+{
+   pbuilding bld = actmap->getField ( pos )->building;
+   if ( !bld )
+      return finally_failed;
+
+   int cnt = 0;
+   for ( int x = 0; x < 4; x++ )
+      for ( int y = 0; y < 6; y++ ) {
+         if ( bld->typ->getpicture ( BuildingType::LocalCoordinate(x, y) ) ) {
+            pfield fld = bld->getField ( BuildingType::LocalCoordinate( x, y) );
+            if ( fld ) {
+               int vis = (fld-> visible >> (player*2) ) & 3;
+               if ( bld->typ->buildingheight >= chschwimmend && bld->typ->buildingheight <= chhochfliegend ) {
+                  if ( vis >= visible_now )
+                     cnt++;
+               } else {
+                  if ( vis == visible_all )
+                     cnt++;
+               }
+            }
+         }
+      }
+      
+   if ( cnt )
+      return fulfilled;
+   else
+      return unfulfilled;
+}
+
+
+
+
+ASCString EventAction::getName()
+{
+  return ceventactions[actionID];
+}
+
 void WindChange::execute()
 {
    if ( speed != -1 )
@@ -362,11 +477,39 @@ void WindChange::execute()
    resetallbuildingpicturepointers();
 }
 
+void WindChange::read( tnstream& stream )
+{
+   int version = stream.readInt();
+   speed = stream.readInt();
+   direction = stream.readInt();
+}
+
+void WindChange::write( tnstream& stream )
+{
+   stream.writeInt(1);
+   stream.writeInt( speed );
+   stream.writeInt( direction );
+}
+
+
 void ChangeGameParameter::execute()
 {
    if ( parameterNum >= 0 )
       if ( gameParameterChangeableByEvent [ parameterNum ] )
          actmap->setgameparameter( GameParameter(parameterNum) , parameterValue );
 }
-*/
+
+void ChangeGameParameter::read( tnstream& stream )
+{
+   int version = stream.readInt();
+   parameterNum = stream.readInt();
+   parameterValue = stream.readInt();
+}
+
+void ChangeGameParameter::write( tnstream& stream )
+{
+   stream.writeInt(1);
+   stream.writeInt( parameterNum );
+   stream.writeInt( parameterValue );
+}
 

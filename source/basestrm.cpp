@@ -2289,7 +2289,7 @@ int directoryExist ( const char* path )
 
 void addSearchPath ( const char* path )
 {
-   if ( path ) {
+   if ( path && path[0] ) {
       char buf[ maxFileStringSize ];
       char* string = new char[ strlen(path) +  maxFileStringSize ];
       strcpy ( string, constructFileName ( buf, -3, path, NULL ) );
@@ -2300,7 +2300,7 @@ void addSearchPath ( const char* path )
             if ( strcmp ( string, ascDirectory[i]) == 0 )
                found++;
    
-         if ( !found ) 
+         if ( !found )
             ascDirectory[ searchDirNum++ ] = string;
          else
             delete[] string;

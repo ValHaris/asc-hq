@@ -160,7 +160,6 @@ void Vehicle :: init ( void )
             height = chschwimmend;
 
       armor = typ->armor * typ->classbound[klasse].armor / 1024;
-      functions = typ->functions & typ->classbound[klasse].vehiclefunctions;
       for ( int m = 0; m < typ->weapons.count ; m++)
          weapstrength[m] = typ->weapons.weapon[m].maxstrength; // * typ->classbound[klasse].weapstrength[typ->weapons.weapon[m].getScalarWeaponType()] / 1024;
 
@@ -168,7 +167,6 @@ void Vehicle :: init ( void )
    } else {
       height = 0;
       armor = 0;
-      functions = 0;
 
       setMovement ( 0 );
    }
@@ -190,7 +188,7 @@ void Vehicle :: init ( void )
 
 bool Vehicle :: canRepair( const ContainerBase* item )
 {
-   return (functions & cfrepair) || (item == this && typ->autorepairrate ) ;
+   return (typ->functions & cfrepair) || (item == this && typ->autorepairrate ) ;
 }
 
 int Vehicle :: putResource ( int amount, int resourcetype, int queryonly, int scope )
@@ -227,7 +225,7 @@ int Vehicle :: getResource ( int amount, int resourcetype, int queryonly, int sc
 
 void Vehicle :: setGeneratorStatus ( bool status )
 {
-   if ( functions & cfgenerator ) {
+   if ( typ->functions & cfgenerator ) {
       generatoractive = status;
       if ( status )
          tank.energy = typ->tank.energy - energyUsed;
@@ -255,13 +253,7 @@ void Vehicle :: setup_classparams_after_generation ( void )
          }
       }
 
-      if ( typ->classnum )
-        functions = typ->functions & typ->classbound[klasse].vehiclefunctions;
-      else
-        functions = typ->functions;
-
       attacked = true;
-
 }
 
 
@@ -368,7 +360,7 @@ void Vehicle :: repairunit(pvehicle vehicle, int maxrepair )
 void Vehicle :: endRound ( void )
 {
    if ( tank.energy < typ->tank.energy - energyUsed  && generatoractive )
-      if ( functions & cfgenerator ) {
+      if ( typ->functions & cfgenerator ) {
          int endiff = typ->tank.energy - tank.energy - energyUsed;
          if ( tank.fuel < endiff * generatortruckefficiency )
             endiff = tank.fuel / generatortruckefficiency;
@@ -542,17 +534,17 @@ void Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
    if ( start == dest )
       return;
       
-   if ((functions & ( cffahrspur | cficebreaker )) && (height == chfahrend || height == chschwimmend))  {
+   if ((typ->functions & ( cffahrspur | cficebreaker )) && (height == chfahrend || height == chschwimmend))  {
      int dir = getdirection( start, dest );
 
      pfield startField = gamemap->getField(start);
      pfield destField = gamemap->getField(dest);
-     if ( functions & cffahrspur )
+     if ( typ->functions & cffahrspur )
         if ( fahrspurobject )
            if ( (startField->bdt & getTerrainBitType(cbfahrspur)).any() )
               startField->addobject ( fahrspurobject, 1 << dir );
 
-     if ( functions & cficebreaker )
+     if ( typ->functions & cficebreaker )
         if ( eisbrecherobject )
               if (   (startField->bdt & getTerrainBitType(cbicebreaking) ).any()
                    || startField->checkforobject ( eisbrecherobject ) ) {
@@ -562,12 +554,12 @@ void Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
 
      dir = (dir + sidenum/2) % sidenum;
 
-     if ( functions & cffahrspur )
+     if ( typ->functions & cffahrspur )
         if ( fahrspurobject )
            if ( (destField->bdt & getTerrainBitType(cbfahrspur)).any() )
               destField->addobject ( fahrspurobject, 1 << dir );
 
-     if ( functions & cficebreaker )
+     if ( typ->functions & cficebreaker )
         if ( eisbrecherobject )
               if (   (destField->bdt & getTerrainBitType(cbicebreaking) ).any()
                    || destField->checkforobject ( eisbrecherobject ) ) {
@@ -803,7 +795,7 @@ void Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
             for ( int j = 0; j < typ->weapons.count ; j++) {
                if ( typ->weapons.weapon[j].canRefuel() )
                   refuel = 1;
-               if ( functions & (cffuelref | cfmaterialref) )
+               if ( typ->functions & (cffuelref | cfmaterialref) )
                   refuel = 1;
             }
 
@@ -850,9 +842,9 @@ bool Vehicle :: buildingconstructable ( pbuildingtype building )
 
    if ( building->productionCost.material * mf / 100 <= tank.material   &&   building->productionCost.fuel * ff / 100 <= tank.fuel ) {
       int found = 0;
-      if ( functions & cfputbuilding )
+      if ( typ->functions & cfputbuilding )
          found = 1;
-      if ( functions & cfspecificbuildingconstruction )
+      if ( typ->functions & cfspecificbuildingconstruction )
          for ( int i = 0; i < typ->buildingsBuildable.size(); i++ )
             if ( typ->buildingsBuildable[i].from <= building->id &&
                  typ->buildingsBuildable[i].to   >= building->id )
@@ -993,7 +985,7 @@ void Vehicle :: removeview ( void )
 void Vehicle :: postAttack()
 {
    attacked = true;
-   if ( functions & cf_moveafterattack )
+   if ( typ->functions & cf_moveafterattack )
       decreaseMovement ( maxMovement() * attackmovecost / 100 );
    else
       if ( reactionfire.getStatus() == ReactionFire::off )
@@ -1041,7 +1033,7 @@ void         tsearchforminablefields::testfield( const MapCoordinate& mc )
 
 int  tsearchforminablefields::run( pvehicle eht )
 {
-   if ( (eht->functions & cfmanualdigger) && !(eht->functions & cfautodigger) )
+   if ( (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger) )
       if ( eht->attacked ||
           (eht->typ->wait && eht->hasMoved() ) ||
           (eht->getMovement() < searchforresorcesmovedecrease ))
@@ -1061,10 +1053,10 @@ int  tsearchforminablefields::run( pvehicle eht )
    if ( eht->typ->digrange )
       startsearch();
 
-   if ( (eht->functions & cfmanualdigger) && !(eht->functions & cfautodigger) )
+   if ( (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger) )
       eht->setMovement ( eht->getMovement() - searchforresorcesmovedecrease );
 
-   if ( !gamemap->mineralResourcesDisplayed && (eht->functions & cfmanualdigger) && !(eht->functions & cfautodigger))
+   if ( !gamemap->mineralResourcesDisplayed && (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger))
       gamemap->mineralResourcesDisplayed = 1;
 
    return 1;
@@ -1495,10 +1487,7 @@ void   Vehicle::readData ( tnstream& stream )
              else
                 break;
 
-
-          functions = typ->functions & typ->classbound[klasse].vehiclefunctions;
        } else {
-          functions = typ->functions ;
           klasse = 0;
        }
 
@@ -1510,11 +1499,6 @@ void   Vehicle::readData ( tnstream& stream )
              else
                 weapstrength[m] = 0;
 
-    } else {
-      if ( typ->classnum )
-         functions = typ->functions & typ->classbound[klasse].vehiclefunctions;
-      else
-         functions = typ->functions ;
     }
     #endif
 }

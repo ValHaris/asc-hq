@@ -485,7 +485,7 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    av.weapcount  = attackingunit->ammo [ _weapon ];
    av.color      = attackingunit->getOwner();
    av.initiative = attackingunit->typ->initiative;
-   av.kamikaze   = attackingunit->functions & cfkamikaze;
+   av.kamikaze   = attackingunit->typ->functions & cfkamikaze;
 
    pfield field = getfield ( attackingunit->xpos, attackingunit->ypos );
 
@@ -650,7 +650,7 @@ void tunitattacksbuilding :: setup ( pvehicle attackingunit, int x, int y, int w
    av.weapcount  = attackingunit->ammo [ _weapon ];
    av.color      = attackingunit->getOwner();
    av.initiative = attackingunit->typ->initiative;
-   av.kamikaze   = attackingunit->functions & cfkamikaze;
+   av.kamikaze   = attackingunit->typ->functions & cfkamikaze;
 
    pfield field = getfield ( attackingunit->xpos, attackingunit->ypos );
 
@@ -755,7 +755,7 @@ void tmineattacksunit :: setup ( pfield mineposition, int minenum, pvehicle &att
       for ( tfield::MineContainer::iterator m = mineposition->mines.begin(); m != mineposition->mines.end(); m++ )
          if ( m->attacksunit ( attackedunit )) {
             int strength = m->strength;
-            if ( m->type == cmantipersonnelmine   &&  (attackedunit->functions & cf_trooper ) )
+            if ( m->type == cmantipersonnelmine   &&  (attackedunit->typ->functions & cf_trooper ) )
                strength *= 2;
 
             for ( int j = 1; j < cnt; j++ )
@@ -767,7 +767,7 @@ void tmineattacksunit :: setup ( pfield mineposition, int minenum, pvehicle &att
    } else {
       Mine& m = mineposition->getMine ( minenum );
       av.strength = m.strength;
-      if ( m.type  == cmantipersonnelmine   &&  (attackedunit->functions & cf_trooper ) )
+      if ( m.type  == cmantipersonnelmine   &&  (attackedunit->typ->functions & cf_trooper ) )
          av.strength *= 2;
    }
 
@@ -900,7 +900,7 @@ void tunitattacksobject :: setup ( pvehicle attackingunit, int obj_x, int obj_y,
    av.experience = attackingunit->experience;
    av.weapnum    = _weapon;
    av.weapcount   = attackingunit->ammo [ _weapon ];
-   av.kamikaze   = attackingunit->functions & cfkamikaze;
+   av.kamikaze   = attackingunit->typ->functions & cfkamikaze;
 
    pfield field2 = getfield ( attackingunit->xpos, attackingunit->ypos );
 

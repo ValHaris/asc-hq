@@ -3555,7 +3555,7 @@ void         tsetalliances::init( int supervis )
             sv.mode[i][j] = actmap->shareview->mode[i][j];
          else
             sv.mode[i][j] = false;
-   } 
+   }
 
    if ( !supervisor )
      addbutton("~s~upervisor",400,200,xsize - 20,230,0,1,6, !actmap->supervisorpasswordcrc.empty() );
@@ -3910,9 +3910,9 @@ void         tsetalliances::click(pascal_byte         bxx,
       } 
       #endif
 
-      if (x == 2  &&  ( y != actmap->actplayer ) && actmap->actplayer>=0  &&  !oninit )
+      if (x == 2  &&  ( y != actmap->actplayer ) && actmap->actplayer>=0  &&  !oninit && !supervisor )
          if ( (actmap->alliances[actmap->actplayer][y] == capeace && actmap->alliances[y][actmap->actplayer] == capeace) ||  sv.mode[actmap->actplayer][y] ) {
-                                                 
+
             if ( sv.mode[actmap->actplayer][y] )
                sv.mode[actmap->actplayer][y] = false;
             else {
@@ -3922,18 +3922,18 @@ void         tsetalliances::click(pascal_byte         bxx,
               sv.mode[actmap->actplayer][y] += 1;
              #endif
             }
-   
-            activefontsettings.color = 23 + y * 8; 
+
+            activefontsettings.color = 23 + y * 8;
             activefontsettings.background = dblue;
             activefontsettings.length = tsa_namelength;
-   
-            activefontsettings.color = alliancecolors[location[y]]; 
-            showtext2(shareview_modenames[sv.mode[actmap->actplayer][y]],x1 + 40 + ply_x1 + 2 * tsa_namelength,y1 + ply_y1 + y * 22); 
-   
-         } 
 
-   } 
-   else { 
+            activefontsettings.color = alliancecolors[location[y]];
+            showtext2(shareview_modenames[sv.mode[actmap->actplayer][y]],x1 + 40 + ply_x1 + 2 * tsa_namelength,y1 + ply_y1 + y * 22);
+
+         }
+
+   }
+   else {
       if (x != y) { 
          if ( oninit ) {
             if (x < playernum  && y < playernum) {

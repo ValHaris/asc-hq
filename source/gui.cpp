@@ -1484,7 +1484,7 @@ int   tnsguiiconpoweron::available    ( void )
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) 
       if ( getactfield()->vehicle )
          if ( getactfield()->vehicle->color == actmap->actplayer*8  &&
-              (getactfield()->vehicle->functions & cfgenerator))
+              (getactfield()->vehicle->typ->functions & cfgenerator))
               if ( !getactfield()->vehicle->getGeneratorStatus() )
                  return 1;
 
@@ -1509,7 +1509,7 @@ int   tnsguiiconpoweroff::available    ( void )
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) 
       if ( getactfield()->vehicle )
          if ( getactfield()->vehicle->color == actmap->actplayer*8  &&
-              (getactfield()->vehicle->functions & cfgenerator))
+              (getactfield()->vehicle->typ->functions & cfgenerator))
               if ( getactfield()->vehicle->getGeneratorStatus() )
                  return 1;
 
@@ -1579,7 +1579,7 @@ int   tnsguiiconputmine::available    ( void )
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
       if ( fld->vehicle ) 
          if (fld->vehicle->color == actmap->actplayer * 8) 
-            if (fld->vehicle->functions & cfminenleger ) 
+            if (fld->vehicle->typ->functions & cfminenleger )
                if ( !fld->vehicle->attacked )
                   return true; 
    return 0;
@@ -1608,7 +1608,7 @@ int   tnsguiiconputgroundmine::available    ( void )
 {
    if (moveparams.movestatus == 90) { 
       pfield fld = getactfield(); 
-      if ( (fld->bdt & getTerrainBitType(cbwater)).none() )
+      if ( (fld->typ->art & (getTerrainBitType( cbwater ).flip())).any() )
          if ( fld->a.temp & 1)
             if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
                return true;
@@ -1953,10 +1953,10 @@ void  tnsguiiconrefuel::display      ( void )
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) { 
       pfield fld = getactfield(); 
       if ( fld->vehicle ) 
-         if ( fld->vehicle->functions & cffuelref  )
+         if ( fld->vehicle->typ->functions & cffuelref  )
             pict = 0; 
    } else 
-      if ( getfield(moveparams.movesx,moveparams.movesy)->vehicle->functions & cffuelref  )
+      if ( getfield(moveparams.movesx,moveparams.movesy)->vehicle->typ->functions & cffuelref  )
          pict = 0; 
    */
    putpict ( picture[pict] );
@@ -2018,7 +2018,7 @@ int   tnsguiiconputbuilding::available    ( void )
        if ( fld->vehicle )
           if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() ) 
              if (fld->vehicle->color == actmap->actplayer * 8)
-               if (fld->vehicle->functions & (cfputbuilding | cfspecificbuildingconstruction))
+               if (fld->vehicle->typ->functions & (cfputbuilding | cfspecificbuildingconstruction))
                   return 1;
     } 
     else 
@@ -2069,7 +2069,7 @@ int   tnsguiicondestructbuilding::available    ( void )
        if ( fld->vehicle )
           if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() ) 
              if (fld->vehicle->color == actmap->actplayer * 8)
-               if (fld->vehicle->functions & cfputbuilding )
+               if (fld->vehicle->typ->functions & cfputbuilding )
                   if ( fld->vehicle->tank.fuel >= destruct_building_fuel_usage * fld->vehicle->typ->fuelConsumption )
                      return 1;
     } 
@@ -2110,7 +2110,7 @@ int   tnsguiicondig::available    ( void )
    pfield fld = getactfield();
    if (fld->vehicle != NULL) 
       if (fld->vehicle->color == actmap->actplayer * 8) 
-         if ( (fld->vehicle->functions &  cfmanualdigger) && !(fld->vehicle->functions &  cfautodigger) )
+         if ( (fld->vehicle->typ->functions &  cfmanualdigger) && !(fld->vehicle->typ->functions &  cfautodigger) )
             if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
                if (   (fld->vehicle->typ->wait==false && fld->vehicle->getMovement() >= searchforresorcesmovedecrease ) 
                    || !fld->vehicle->hasMoved() )

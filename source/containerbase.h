@@ -105,7 +105,7 @@ class ContainerBase {
       int  vehicleUnloadable ( const Vehicle* vehicle ) const;
 
       //! returns the unloading system
-      const ContainerBaseType::TransportationIO* vehicleUnloadSystem ( const Vehicle* vehicle, int height );
+      const ContainerBaseType::TransportationIO* vehicleUnloadSystem ( const Vehicletype* vehicle, int height );
 
       //! returns the levels of height on which this unit can be transfered by docking; or 0 if no unloading is possible
       int  vehicleDocking ( const Vehicle* vehicle, bool out  ) const;

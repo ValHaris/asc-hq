@@ -97,7 +97,6 @@
     */
     int          networkid;
     ASCString    name;
-    int          functions;
 
     //! The class that manages the reaction fire which causes a unit to attack approaching enemies even if it is not the unit's turn
     class  ReactionFire {

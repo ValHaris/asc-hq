@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.130 2003-06-01 13:27:51 mbickel Exp $
+//     $Id: typen.h,v 1.131 2003-06-03 19:55:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.130  2003/06/01 13:27:51  mbickel
+//      Removed unnecessary header file
+//
 //     Revision 1.129  2003/05/06 19:01:06  mbickel
 //      Updated campaign maps
 //
@@ -553,36 +556,105 @@ class LoadableItemType {
 };
 
 
+ enum { cemessage,   ceweatherchange, cenewtechnology, celosecampaign, cerunscript,     cenewtechnologyresearchable,
+        cemapchange, ceeraseevent,    cecampaignend,   cenextmap,      cereinforcement, ceweatherchangecomplete,
+        cenewvehicledeveloped, cepalettechange, cealliancechange,      cewindchange,    cenothing,
+        cegameparamchange, ceellipse, ceremoveellipse, cechangebuildingdamage, ceaddobject };
+
+
+extern const char*  ceventtrigger[];
+ enum { ceventt_turn = 1 ,               ceventt_buildingconquered, ceventt_buildinglost,  ceventt_buildingdestroyed, ceventt_unitlost,
+        ceventt_technologyresearched,    ceventt_event,             ceventt_unitconquered, ceventt_unitdestroyed,
+        ceventt_allenemyunitsdestroyed,  ceventt_allunitslost,      ceventt_allenemybuildingsdestroyed,
+        ceventt_allbuildingslost,        ceventt_energytribute,     ceventt_materialtribute, ceventt_fueltribute,
+        ceventt_any_unit_enters_polygon, ceventt_specific_unit_enters_polygon, ceventt_building_seen, ceventt_irrelevant };
+
+
+// The new event system here is not yet functional
 
 class EventTrigger {
+      int triggerID;
+   protected:
+      EventTrigger ( int id ) : triggerID ( id ) {};
    public:
       enum State { unfulfilled, fulfilled, finally_failed, finally_fulfilled };
-      virtual State getState() = 0;
+      virtual State getState( int player ) = 0;
       virtual void read ( tnstream& stream ) = 0;
       virtual void write ( tnstream& stream ) = 0;
       virtual const ASCString& getName() = 0;
 };
 
-class EventAction {
+
+class TurnPassed : public EventTrigger {
+    public:
+      TurnPassed();
+      int turn;
+      int move;
+
+      virtual State getState( int player );
+      virtual void read ( tnstream& stream ) ;
+      virtual void write ( tnstream& stream ) ;
+};
+
+class PositionTrigger : public EventTrigger {
+   protected:
+      PositionTrigger( int id ) : EventTrigger( id ) {};
    public:
-   /*
+      MapCoordinate3D pos;
+      virtual void read ( tnstream& stream ) ;
+      virtual void write ( tnstream& stream ) ;
+};
+
+class BuildingConquered : public PositionTrigger {
+    protected:
+      BuildingConquered( int id ) : PositionTrigger( id ) {};
+    public:
+      BuildingConquered() : PositionTrigger(ceventt_buildingconquered) {};
+      virtual State getState( int player );
+};
+
+class BuildingLost: public BuildingConquered  {
+   public:
+      BuildingLost ( ) : BuildingConquered( ceventt_buildinglost ) {};
+      virtual State getState( int player );
+};
+
+class BuildingDestroyed : public PositionTrigger {
+    public:
+      BuildingDestroyed() : PositionTrigger (ceventt_buildingdestroyed) {};
+      virtual State getState( int player );
+};
+
+class BuildingSeen : public PositionTrigger {
+    public:
+      BuildingSeen() : PositionTrigger (ceventt_building_seen) {};
+      virtual State getState( int player );
+};
+
+
+class EventAction {
+      int actionID;
+   protected:
+      EventAction( int id ) : actionID ( id ) {};
+   public:
+
       virtual void read ( tnstream& stream ) = 0;
       virtual void write ( tnstream& stream ) = 0;
-      virtual const ASCString& getName() = 0;
-   */
+      virtual ASCString getName();
+
       virtual void execute() = 0;
 
 };
 
 class WindChange: public EventAction {
    public:
-      WindChange():speed(-1),direction(-1){};
+      WindChange() : EventAction(cewindchange),
+                     speed(-1),
+                     direction(-1){};
 
-   /*
       void read ( tnstream& stream );
       void write ( tnstream& stream );
-      const ASCString& getName();
-    */
+
       void execute();
 
 
@@ -592,12 +664,13 @@ class WindChange: public EventAction {
 
 class ChangeGameParameter: public EventAction {
     public:
-     ChangeGameParameter():parameterNum(-1),parameterValue(0){};
-   /*
+     ChangeGameParameter(): EventAction(cegameparamchange),
+                            parameterNum(-1),
+                            parameterValue(0){};
+
       void read ( tnstream& stream );
       void write ( tnstream& stream );
-      const ASCString& getName();
-    */
+
       void execute();
 
       int parameterNum;
@@ -1082,18 +1155,6 @@ extern const char* ceventtriggerconn[];
 
 #define ceventactionnum 22
 extern const char* ceventactions[ceventactionnum]; // not bitmapped
- enum { cemessage,   ceweatherchange, cenewtechnology, celosecampaign, cerunscript,     cenewtechnologyresearchable,
-        cemapchange, ceeraseevent,    cecampaignend,   cenextmap,      cereinforcement, ceweatherchangecomplete,
-        cenewvehicledeveloped, cepalettechange, cealliancechange,      cewindchange,    cenothing,
-        cegameparamchange, ceellipse, ceremoveellipse, cechangebuildingdamage, ceaddobject };
-
-
-extern const char*  ceventtrigger[];
- enum { ceventt_turn = 1 ,               ceventt_buildingconquered, ceventt_buildinglost,  ceventt_buildingdestroyed, ceventt_unitlost,
-        ceventt_technologyresearched,    ceventt_event,             ceventt_unitconquered, ceventt_unitdestroyed,
-        ceventt_allenemyunitsdestroyed,  ceventt_allunitslost,      ceventt_allenemybuildingsdestroyed,
-        ceventt_allbuildingslost,        ceventt_energytribute,     ceventt_materialtribute, ceventt_fueltribute,
-        ceventt_any_unit_enters_polygon, ceventt_specific_unit_enters_polygon, ceventt_building_seen, ceventt_irrelevant };
 
 
 extern const char*  cmovemalitypes[cmovemalitypenum];

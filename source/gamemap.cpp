@@ -1263,10 +1263,10 @@ void tmap::operator= ( const tmap& map )
 
 bool Mine :: attacksunit ( const pvehicle veh )
 {
-     if  (!( ( veh->functions & cfmineimmune ) || 
+     if  (!( ( veh->typ->functions & cfmineimmune ) ||
               ( veh->height > chfahrend ) ||
               ( getdiplomaticstatus2 ( veh->color, player*8 ) == capeace ) ||
-              ( (veh->functions & cf_trooper) && (type != cmantipersonnelmine)) || 
+              ( (veh->typ->functions & cf_trooper) && (type != cmantipersonnelmine)) || 
               ( veh->height <= chgetaucht && type != cmmooredmine ) || 
               ( veh->height == chschwimmend && type != cmfloatmine ) ||
               ( veh->height == chfahrend && type != cmantipersonnelmine  && type != cmantitankmine )

@@ -852,7 +852,7 @@ void AI::production()
    for ( Player::BuildingList::iterator bli = getPlayer().buildingList.begin(); bli != getPlayer().buildingList.end(); bli ++ ) {
       pbuilding bld = *bli;
       for ( int i = 0; i < 32; i++ )
-         if ( bld->production[i] ) {
+         if ( bld->production[i] && bld->vehicleUnloadSystem ( bld->production[i], 255 )) {
             Vehicletype* typ = bld->production[i];
             float rating = 0;
             for ( int j = 0; j < aiValueTypeNum; j++ )
@@ -865,6 +865,13 @@ void AI::production()
             }
 
             rating /= 1 + log ( double(danger) );
+
+            UnitTypeSuccess::iterator uts = unitTypeSuccess.find ( bld->production[i]->id  );
+            if ( uts != unitTypeSuccess.end() ) {
+               if ( uts->second.second >= 1 )
+                  rating *= uts->second.first / uts->second.second;
+            }
+
 
             int cost = 0;
             for ( int j = 0; j < resourceTypeNum; j++ )
@@ -895,7 +902,7 @@ void AI::production()
                          cbuildingcontrols bc;
                          bc.init ( pr.bld );
                          int lack;
-                         if  ( bc.produceunit.available( pr.vt, &lack ) ) {
+                         if  ( bc.produceunit.available( pr.vt, &lack ) && pr.bld->vehicleUnloadSystem ( pr.vt, 255 ) ) {
                              pvehicle veh = bc.produceunit.produce( pr.vt, true );
                              calculateThreat ( veh );
                              container ( bc );
