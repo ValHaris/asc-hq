@@ -4,9 +4,16 @@
 */
 
 
-//     $Id: gui.cpp,v 1.70 2001-11-12 18:28:34 mbickel Exp $
+//     $Id: gui.cpp,v 1.71 2001-11-18 19:31:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.70  2001/11/12 18:28:34  mbickel
+//      Fixed graphical glitches when unit moves near border
+//      If max num of mines exceeded, no icon is displayed for placing a new one
+//      Fixed: some airplanes could not move after ascend
+//      Fixed: couldn't build satellites on fields no accessible if satellite was
+//        on ground level.
+//
 //     Revision 1.69  2001/10/21 20:00:30  mbickel
 //      Fixed AI problems
 //      Fixed: wrong message when unit could not attack
@@ -1292,9 +1299,11 @@ void  tnsguiiconascent::exec         ( void )
    } else
      if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_ascent &&  (pendingVehicleActions.ascent->getStatus() == 2 || pendingVehicleActions.ascent->getStatus() == 3 )) {
         int res = pendingVehicleActions.ascent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.ascent->getStatus(), -1, 0 );
-        if ( res >= 0 && CGameOptions::Instance()->fastmove )
-           res = pendingVehicleActions.ascent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.ascent->getStatus(), -1, 0 );
-        else {
+        if ( res >= 0 && CGameOptions::Instance()->fastmove ) {
+           // if the status is 1000 at this position, the unit has been shot down by reactionfire before initiating the height change
+           if ( res < 1000 )
+              res = pendingVehicleActions.ascent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.ascent->getStatus(), -1, 0 );
+        } else {
            for ( int i = 0; i < pendingVehicleActions.ascent->path.getFieldNum(); i++ )
               pendingVehicleActions.ascent->path.getField( i ) ->a.temp = 1;
            displaymap();
@@ -1404,7 +1413,9 @@ void  tnsguiicondescent::exec         ( void )
      if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_descent &&  (pendingVehicleActions.descent->getStatus() == 2 || pendingVehicleActions.descent->getStatus() == 3 )) {
         int res = pendingVehicleActions.descent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.descent->getStatus(), -1, 0 );
         if ( res >= 0 && CGameOptions::Instance()->fastmove )
-           res = pendingVehicleActions.descent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.descent->getStatus(), -1, 0 );
+           // if the status is 1000 at this position, the unit has been shot down by reactionfire before initiating the height change
+           if ( res < 1000 )
+              res = pendingVehicleActions.descent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.descent->getStatus(), -1, 0 );
         else {
            for ( int i = 0; i < pendingVehicleActions.descent->path.getFieldNum(); i++ )
               pendingVehicleActions.descent->path.getField( i ) ->a.temp = 1;

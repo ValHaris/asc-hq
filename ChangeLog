@@ -1,3 +1,51 @@
+2001-11-15 21:46  mbickel
+
+	* source/: building.cpp, building_controls.h, strtmesg.cpp,
+	unitctrl.cpp, unitctrl.h:  Fixed: replay not working when moving
+	units out of carriers
+
+2001-11-15 21:16  mbickel
+
+	* source/: errors.h, loadbi3.cpp, unitctrl.cpp:  Added a new BI3
+	import table
+	 Fixed movement reduction changing height of a nearly empty unit
+	and
+	    refuelling it afterwards
+	 Better error message for "ID not found"
+
+2001-11-12 19:28  mbickel
+
+	* source/: TODO, controls.cpp, dialog.cpp, gui.cpp, mapdisplay.cpp,
+	unitctrl.cpp, vehicle.cpp, win32/borland/asc.bpr,
+	win32/borland/mapeditor/mapeditor.bpr:	Fixed graphical glitches
+	when unit moves near border
+	 If max num of mines exceeded, no icon is displayed for placing a
+	new one
+	 Fixed: some airplanes could not move after ascend
+	 Fixed: couldn't build satellites on fields no accessible if
+	satellite was
+	   on ground level.
+
+2001-11-08 18:58  mbickel
+
+	* source/: TODO, strtmesg.cpp, tools/weaponguide.cpp:  Changed
+	version number
+	 Added new revision of weaponguide
+
+2001-11-08 18:32  mbickel
+
+	* ChangeLog, Makefile.in, data/Makefile.in, doc/Makefile.in,
+	source/Makefile.in, source/controls.cpp, source/replay.cpp,
+	source/replay.h, source/unitctrl.cpp, source/ai/Makefile.in,
+	source/ai/ai_common.h, source/ai/base.cpp, source/ai/misc.cpp,
+	source/docs/Makefile.in, source/docs/en/Makefile.in,
+	source/libs/Makefile.in, source/libs/triangul/Makefile.in,
+	source/sdl/Makefile.in, source/tools/Makefile.in,
+	source/tools/linux/Makefile.in, source/unix/Makefile.in,
+	source/unix/mapeditor/Makefile.in:  Fixed AI crash
+	 Added Replay to AI
+	 New replay commands
+
 2001-11-05 22:50  mbickel
 
 	* source/: tools/win/makepal.bpf, tools/win/makepal.bpr,

@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES    = Makefile.in
 
-pkgdata_DATA = main.con 
+pkgdata_DATA = main.con buildings.con mk1.con trrobj.con trrobj2.con
 
 pkgdatadir = $(datadir)/games/@PACKAGE@
 

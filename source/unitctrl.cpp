@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.76 2001-11-15 20:46:05 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.77 2001-11-18 19:31:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.76  2001/11/15 20:46:05  mbickel
+//      Fixed: replay not working when moving units out of carriers
+//
 //     Revision 1.75  2001/11/15 20:16:01  mbickel
 //      Added a new BI3 import table
 //      Fixed movement reduction changing height of a nearly empty unit and
@@ -869,6 +872,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
 
    int movedist = 0;
    int fueldist = 0;
+   int networkID = vehicle->networkid;
 
    while ( (x != xt1 || y != yt1) && vehicle && cancelmovement!=1 ) {
 
@@ -950,8 +954,10 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
       else
          evaluateviewcalculation ( actmap, 0);
 
-      if ( rf->checkfield ( x, y, vehicle, mapDisplay ))
+      if ( rf->checkfield ( x, y, vehicle, mapDisplay )) {
          cancelmovement = 1;
+         vehicle = actmap->getUnit ( networkID );
+      }
 
       if ( mapDisplay ) {
          if ( !vehicle )
@@ -1290,10 +1296,14 @@ int ChangeVehicleHeight :: moveheight( int allFields )
 
 int ChangeVehicleHeight :: moveunitxy ( int xt1, int yt1, IntFieldList& pathToMove )
 {
+   int nwid = vehicle->height;
    int oldheight = vehicle->height;
    int res = BaseVehicleMovement :: moveunitxy ( xt1, yt1, pathToMove );
-   if ( res < 0 )
+   if ( res < 0 || res == 1000 )
       return res;
+
+   if ( !actmap->getUnit ( nwid ))
+      return 1000;
 
    if ( oldheight < newheight ) {
       if ( oldheight == chfahrend ) {
@@ -1552,6 +1562,7 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int h
          return status;
       }
 
+      int networkID = vehicle->networkid;
       StartPosition& sp = reachableFields.getData ( x, y );
       if ( sp.x != vehicle->xpos || sp.y != vehicle->ypos ) {
          vmove->registerMapDisplay ( mapDisplay );
@@ -1564,11 +1575,16 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int h
          if ( stat != 1000 )
             displaymessage ( "ChangeVehicleHeight :: execute / vmove step 3 failed !", 2 );
       }
-      modechangePosition = MapCoordinate ( sp.x, sp.y );
 
-      fieldReachableRek.run( x, y, vehicle, height, &path, vehicle->getMovement( false ) );
+      if ( actmap->getUnit ( networkID )) {
+         modechangePosition = MapCoordinate ( sp.x, sp.y );
 
-      status = 3;
+         fieldReachableRek.run( x, y, vehicle, height, &path, vehicle->getMovement( false ) );
+
+         status = 3;
+      } else
+         status = 1000;
+
       return status;
    } else
     if ( status == 3 ) {
@@ -1592,11 +1608,13 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int h
 
        npush ( newheight );
        newheight = vehicle->height;
+       int nwid = vehicle->networkid;
        StartPosition& sp = reachableFields.getData ( x, y );
        int stat = BaseVehicleMovement :: moveunitxy( sp.x, sp.y, path );
        npop ( newheight );
 
-       stat = moveunitxy ( x, y, path );
+       if ( actmap->getUnit ( nwid ))
+          stat = moveunitxy ( x, y, path );
 
        if ( mapDisplay ) {
           mapDisplay->displayMap();
