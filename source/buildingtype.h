@@ -31,7 +31,7 @@
  #include "textfileparser.h"
 
 
-const int cbuildingfunctionnum = 19;
+const int cbuildingfunctionnum = 21;
 extern const char*  cbuildingfunctions[cbuildingfunctionnum];
  #define cghqn 0
  #define cghqb ( 1 << cghqn  )
@@ -58,11 +58,15 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
  #define cgminingstationn 15
  #define cgminingstationb ( 1 << cgminingstationn )
  #define cgexternalloadingn 16
- #define cgexternalloadingb ( 1 << cgexternalloadingn )
+ #define cgexternalloadingb ( 1 << cgexternalresourceloadingn )
  #define cgproduceAllUnitsN 17
  #define cgproduceAllUnitsB ( 1 << cgproduceAllUnitsN )
  #define cgresourceSinkN 18
  #define cgresourceSinkB ( 1 << cgresourceSinkN )
+ #define cgexternalresourceloadingn 19
+ #define cgexternalresourceloadingb ( 1 << cgexternalresourceloadingn )
+ #define cgexternalammoloadingn 20
+ #define cgexternalammoloadingb ( 1 << cgexternalammoloadingn )
 
 
  //! The class describing properties that are common to all buildings of a certain kind. \sa Building

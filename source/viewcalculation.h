@@ -90,4 +90,6 @@
   */
   extern int  evaluateviewcalculation ( pmap actmap, const MapCoordinate& pos, int distance, int player_fieldcount_mask = 0 );
 
+  extern SigC::Signal0<void> buildingSeen;
+
 #endif

@@ -49,9 +49,7 @@
 #include "attack.h"
 #include "building.h"
 #include "gamedlg.h"
-#include "missions.h"
 #include "sg.h"
-#include "weather.h"
 #include "gameoptions.h"
 #include "ai/ai.h"
 #include "errors.h"
@@ -63,6 +61,7 @@
 #include "itemrepository.h"
 #include "strtmesg.h"
 #include "messagedlg.h"
+// #include "mission_dialog.h"
 
 tmoveparams moveparams;
 
@@ -439,6 +438,18 @@ void         destructbuildinglevel2( int xp, int yp)
 
 
 
+   //! looks up the fields a unit can put or remove a mine from
+   class tputmine : public SearchFields {
+                       int player;
+                public:
+                       char             mienentyp;
+                       char             mienenlegen, mienenraeumen;
+                       char             numberoffields;
+                       virtual void     testfield ( const MapCoordinate& mc );
+                       int              initpm( char mt, const pvehicle eht );
+                       void             run ( void );
+                       tputmine ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
+              };
 
 
 void         tputmine::testfield(const MapCoordinate& mc)
@@ -460,15 +471,13 @@ void         tputmine::testfield(const MapCoordinate& mc)
 
 
 
-void         tputmine::initpm(  char mt, const pvehicle eht )
+int          tputmine::initpm(  char mt, const pvehicle eht )
 {
-  int         i;
-
    numberoffields = 0;
    mienenlegen = false;
    mienenraeumen = false;
    if (eht->typ->weapons.count > 0)
-      for (i = 0; i <= eht->typ->weapons.count - 1; i++)
+      for ( int i = 0; i <= eht->typ->weapons.count - 1; i++)
          if ((eht->typ->weapons.weapon[i].getScalarWeaponType() == cwminen) && eht->typ->weapons.weapon[i].shootable() ) {
             mienenraeumen = true;
             if (eht->ammo[i] > 0)
@@ -479,9 +488,11 @@ void         tputmine::initpm(  char mt, const pvehicle eht )
    if (eht->getMovement() < mineputmovedecrease) {
       mienenlegen = false;
       mienenraeumen = false;
+      return -119;
    }
    if (mienenlegen || mienenraeumen)
       initsearch( MapCoordinate( getxpos(),getypos()), 1, 1 );
+   return 0;
 }
 
 
@@ -513,8 +524,10 @@ void  legemine( int typ, int delta )
          return;
       if (eht->color != (actmap->actplayer << 3))
          return;
-      ptm.initpm(typ,eht);
+      int res = ptm.initpm(typ,eht);
       ptm.run();
+      if ( res < 0 )
+         dispmessage2 ( -res );
    }
    else
       if (moveparams.movestatus == 90) {
@@ -545,6 +558,7 @@ void  legemine( int typ, int delta )
                int y = getypos();
                pfield fld = getactfield();
                fld -> removemine( -1 );
+               eht->setMovement ( eht->getMovement() - mineremovemovedecrease );
                logtoreplayinfo ( rpl_removemine, x, y );
             }
             actmap->cleartemps(7);
@@ -753,7 +767,7 @@ void tbuildstreet::checkObject( pfield fld, pobjecttype objtype, Mode mode )
        return;
 
     if ( mode == Build ) {
-       if ( objtype->terrainaccess.accessible( fld->bdt ) > 0 &&  !fld->checkforobject ( objtype ) ) {
+       if ( objtype->getFieldModification(fld->getweather()).terrainaccess.accessible( fld->bdt ) > 0 &&  !fld->checkforobject ( objtype ) ) {
           int movecost;
           Resources cost;
           getobjbuildcosts ( objtype, fld, &cost, &movecost );
@@ -1398,7 +1412,11 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
                checkWind = false;
             } else {
                // not flying
-               movecost = getfield( dest.x, dest.y )->getmovemalus( vehicle );
+               pfield fld = getfield( dest.x, dest.y );
+               if ( fld->building )
+                  movecost = maxmalq;
+               else
+                  movecost = fld->getmovemalus( vehicle );
                checkWind = false;
             }
 
@@ -1408,8 +1426,13 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
         if ( dest.getNumericalHeight() >= 4 )
            // flying
            movecost = maxmalq;
-        else
-           movecost = getfield( dest.x, dest.y )->getmovemalus( vehicle );
+        else {
+           int mm = getfield( start.x, start.y )->getContainer()->vehicleUnloadSystem( vehicle->typ, dest.getBitmappedHeight() )->movecost;
+           if ( mm > 0 )
+              movecost = mm;
+           else
+              movecost = getfield( dest.x, dest.y )->getmovemalus( vehicle );
+        }
       } else {
         // moving from one container to another
         movecost = maxmalq;
@@ -1551,43 +1574,6 @@ void checkalliances_at_beginofturn ( void )
 
 }
 
-
-
-
-
-void    tprotfzt::initbuffer( void )
-{
-   buf = new char[ vehicletypenum ];
-
-   int i;
-   for ( i=0; i < vehicletypenum ; i++ )
-      buf[i] = actmap->player[ actmap->actplayer ].research.vehicletypeavailable ( getvehicletype_forpos ( i ) );
-}
-
-
-
-void    tprotfzt::evalbuffer( void )
-{
-   int i, num = 0;
-   for ( i=0; i < vehicletypenum ;i++ ) {
-      if (buf[i] == 0) {
-          buf[i] = actmap->player[ actmap->actplayer ].research.vehicletypeavailable ( getvehicletype_forpos ( i ) );
-          if ( buf[i] )
-             num++;
-      } else
-          buf[i] = 0;
-
-   }
-
-   if ( num ) {
-      tshownewtanks snt;
-      snt.init ( buf );
-      snt.run  ();
-      snt.done ();
-   }
-
-   delete[] buf ;
-}
 
 
 
@@ -1847,10 +1833,10 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
                 {
                  int mx = actmap->player[actmap->actplayer].research.progress -
                       actmap->player[actmap->actplayer].research.activetechnology->researchpoints;
+                 #if 0
                  showtechnology(actmap->player[actmap->actplayer].research.activetechnology);
 
-                 tprotfzt   pfzt;
-                 pfzt.initbuffer ();
+                 NewVehicleTypeDetection pfzt;
 
                  actmap->player[actmap->actplayer].research.addtechnology();
 
@@ -1859,6 +1845,7 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
 
                  choosetechnology();
                  initchoosentechnology();
+                 #endif
 
                  actmap->player[actmap->actplayer].research.progress += mx;
          }

@@ -55,9 +55,11 @@ const char*  cbuildingfunctions[cbuildingfunctionnum]  =
                 "solar power plant",
                 "matter converter (was: power plant)",
                 "mining station",
-                "external loading",
+                "external resource transfer",
                 "construct units that cannot move out",
-                "resource sink" };
+                "resource sink",
+                "external resource transfer",
+                "external ammo transfer" };
 
 
 BuildingType :: BuildingType ( void )

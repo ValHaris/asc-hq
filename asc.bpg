@@ -10,9 +10,9 @@ DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
 PROJECTS = bzlib.lib libjpeg.lib triangulation.lib tools.lib SDLmm.lib \
-  mount.exe demount.exe weaponguide.exe bin2text.exe viewid.exe makegfx.exe \
-  makepal.exe tank2pcx.exe pcx2raw.exe gfx2pcx.exe ai.lib Paragui.lib \
-  pbpeditor.exe mapeditor.exe asc.exe
+  libsigcpp.lib mount.exe demount.exe weaponguide.exe bin2text.exe viewid.exe \
+  makegfx.exe makepal.exe tank2pcx.exe pcx2raw.exe gfx2pcx.exe ai.lib Paragui.lib \
+  pbpeditor.exe asc.exe mapeditor.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -97,6 +97,10 @@ pbpeditor.exe: source\win32\borland\pbpeditor\pbpeditor.bpr
 
 pcx2raw.exe: source\tools\win\pcx2raw.bpr
   $(ROOT)\bin\bpr2mak $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+libsigcpp.lib: source\libs\libsigc++\libsigcpp.bpr
+  $(ROOT)\bin\bpr2mak -t$(ROOT)\bin\deflib.bmk $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
 

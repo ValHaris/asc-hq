@@ -1,6 +1,9 @@
-//     $Id: gamedlg.h,v 1.21 2003-08-17 20:26:52 mbickel Exp $
+//     $Id: gamedlg.h,v 1.22 2004-01-16 15:33:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2003/08/17 20:26:52  mbickel
+//      Added function: show playing time
+//
 //     Revision 1.20  2003/06/22 17:41:22  mbickel
 //      Updated campaign maps
 //      Fixed crash at 640*480
@@ -175,17 +178,6 @@ extern int   setupnetwork ( tnetwork* nw, int edt = 7, int player = -1 );
 extern void  settributepayments ( void );
 
 
-class   tshownewtanks : public tdialogbox {
-                         public:
-                           void          init ( char*      buf2 );
-                           virtual void  run  ( void );
-                           virtual void  buttonpressed ( int id );
-                         protected:
-                           char*      buf;
-                           int           status;
-                        };
-
-extern void  showtechnology(ptechnology  t);
 extern void researchinfo ( void );
 extern void choosetechlevel ( void );
 
@@ -246,6 +238,7 @@ extern void showGameParameters ( void );
 extern void  verlademunition( VehicleService* serv, int targetNWID );
 
 extern void showPlayerTime();
+extern void displaywindspeed();
 
 
 #endif  // ifndef gamedlg_h

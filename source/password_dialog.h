@@ -29,7 +29,7 @@
                  ask for the password
       \param cancelAllowed Is there a cancel button (which will return false).
                  If there is no cancel button and firsttime is false, there will
-                 be a exit button which will throw a #tnomaploaded exception
+                 be a exit button which will throw a #NoMapLoaded exception
                  when pressed.   
       \param defaultAllowed If firstTime is also true, there will be default
                  button which copies the CGameoptions::defaultPassword to 

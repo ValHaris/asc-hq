@@ -93,14 +93,12 @@
 #include "loaders.h"
 #include "dlg_box.h"
 #include "stack.h"
-#include "missions.h"
 #include "controls.h"
 #include "dlg_box.h"
 #include "dialog.h"
 #include "gui.h"
 #include "pd.h"
 #include "strtmesg.h"
-//#include "weather.h"
 #include "gamedlg.h"
 #include "network.h"
 #include "building.h"
@@ -587,7 +585,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
-                    ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog, ua_reloadDlgTheme, ua_showPlayerSpeed };
+                    ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog, ua_reloadDlgTheme, ua_showPlayerSpeed, ua_renameunit };
 
 
 class tsgpulldown : public tpulldown
@@ -627,6 +625,7 @@ void         tsgpulldown :: init ( void )
    addbutton ( "seperator", -1 );
    addbutton ( "~P~layers + Alliances", ua_setupalliances);
    addbutton ( "transfer ~U~nit control", ua_giveunitaway );
+   addbutton ( "~r~ename unit", ua_renameunit );
    addbutton ( "~T~ransfer resources", ua_settribute);
 
    addfield ( "~I~nfo" );
@@ -697,7 +696,7 @@ void         MainMenuPullDown :: init ( void )
    addfield ( "Glo~b~al" );
    addbutton ( "~O~ptions", ua_gamepreferences );
    addbutton ( "~M~ouse options", ua_mousepreferences );
-   addbutton ( "Select Music Play ~L~ist ", ua_selectPlayList );
+   // addbutton ( "Select Music Play ~L~ist ", ua_selectPlayList );
    addbutton ( "~S~ound options", ua_soundDialog );
    addbutton ( "seperator", -1);
    addbutton ( "E~x~itõctrl-x", ua_exitgame );
@@ -959,15 +958,12 @@ void loadStartupMap ( const char *gameToLoad=NULL )
       }
    } else {  // resort to loading defaults
 
-      ASCString s = "first.map";
-      /*
-      if ( CGameOptions::Instance()->startupcount < 4 ) {
-         s = "tutor0" ;
-   } else {
-         s = "railstat";
-   }
-      s += &mapextension[1];
-      */
+      ASCString s;
+      if ( CGameOptions::Instance()->startupMap.getName() )
+         s= CGameOptions::Instance()->startupMap.getName();
+
+      if ( s.empty() )
+         s = "first.map";
 
       int maploadable;
       {
@@ -1001,6 +997,16 @@ void loadStartupMap ( const char *gameToLoad=NULL )
       actmap->setupResources();
       displayLogMessage ( 6, "done\n" );
    }
+}
+
+
+void         startnextcampaignmap( int id)
+{
+   tcontinuecampaign ncm;
+   ncm.init();
+   ncm.setid(id);
+   ncm.run();
+   ncm.done();
 }
 
 
@@ -1132,6 +1138,15 @@ void viewunitmovementrange ( pvehicle veh, tkey taste )
    }
 }
 
+
+void renameUnit()
+{
+   if ( actmap ) {
+      pfield fld = getactfield();
+      if ( fld && fld->vehicle )
+         fld->vehicle->name = editString ( "unit name", fld->vehicle->name );
+   }
+}
 
 
 void execuseraction ( tuseractions action )
@@ -1345,6 +1360,9 @@ void execuseraction ( tuseractions action )
          else
             displaymessage("Sorry, this function has been disabled when starting the map!", 1 );
          break;
+      case ua_renameunit:
+         renameUnit();
+         break;
 
       case ua_vehicleinfo:
          activefontsettings.font = schriften.smallarial;
@@ -1551,7 +1569,9 @@ void mainloopgeneralmousecheck ( void )
       displaymessage2("");
 
    if ( mousecontrol )
-      mousecontrol->chkmouse(); {
+      mousecontrol->chkmouse();
+
+   {
       int oldx = actmap->xpos;
       int oldy = actmap->ypos;
       checkformousescrolling();
@@ -1690,12 +1710,7 @@ void  mainloop ( void )
                break;
 
             case ct_9: {
-                pfield fld = getactfield();
-                if ( fld->vehicle )
-                      if ( getactfield()->vehicle->attacked )
-                         displaymessage("attacked", 1);
-                      else
-                         displaymessage("not attacked", 1);
+               displaymessage ( "tribute.avail[0][1] %d  tribute.paid[0][1] : %d \n tribute.avail[1][0] %d  tribute.paid[1][0] : %d", 1, actmap->tribute.avail[0][1].energy, actmap->tribute.paid[0][1].energy, actmap->tribute.avail[1][0].energy, actmap->tribute.paid[1][0].energy ); 
 
             }
                {
@@ -2064,8 +2079,24 @@ int gamethread ( void* data )
          }
       } /* endtry */
       catch ( NoMapLoaded ) { } /* endcatch */
-
-
+      catch ( LoadNextMap lnm ) {
+         if ( actmap->campaign ) {
+            startnextcampaignmap( lnm.id );
+         } else {
+           viewtext2(904);
+           if (choice_dlg("Do you want to continue playing ?","~y~es","~n~o") == 2) {
+              delete actmap;
+              actmap = NULL;
+              throw NoMapLoaded();
+           } else {
+              actmap->continueplaying = 1;
+              if ( actmap->replayinfo ) {
+                 delete actmap->replayinfo;
+                 actmap->replayinfo = NULL;
+              }
+           }
+         }
+      }
    } while ( abortgame == 0);
    return 0;
 }
@@ -2108,9 +2139,6 @@ int main(int argc, char *argv[] )
    displayLogMessage( 1, getstartupmessage() );
 
    mapborderpainter = &backgroundpict;
-
-   initmissions();
-
 
    initFileIO( cl->c().c_str() );  // passing the filename from the command line options
 

@@ -105,6 +105,7 @@ void CGameOptions::setDefaults ( void )
    bi3.interpolate.buildings=0;
 
    defaultSuperVisorPassword.setName ( "" );
+   startupMap.setName ( "asc000.map" );
 
 
 #if USE_HOME_DIRECTORY == 0
@@ -186,6 +187,7 @@ void CGameOptions::copy ( const CGameOptions& cgo )
    for ( int i = 0; i < getSearchPathNum(); i++ )
       searchPath[i].setName ( cgo.searchPath[i].getName() );
 
+   startupMap = cgo.startupMap;
    setChanged();
 }
 

@@ -23,6 +23,8 @@
 #ifndef containerbaseH
  #define containerbaseH
 
+ #include <sigc++/sigc++.h>
+
  #include "typen.h"
  #include "containerbasetype.h"
 
@@ -31,13 +33,6 @@
 const int maxloadableunits = 18;
 
 
-class EventHook {
-        public:
-          enum Events { removal, conversion };
-          virtual void receiveEvent ( Events ev, int data ) = 0;
-          virtual ~EventHook() {};
-       };
-
 
 
 /** \brief The parent class of Vehicle and Building;
@@ -45,7 +40,6 @@ class EventHook {
     was a container
 */
 class ContainerBase {
-      list<EventHook*> eventHooks;
    protected:
       const pmap gamemap;
       virtual const ResourceMatrix& getRepairEfficiency ( void ) = 0;
@@ -56,9 +50,6 @@ class ContainerBase {
       const ContainerBase* findUnit ( const Vehicle* veh ) const;
    public:
       ContainerBase ( const ContainerBaseType* bt, pmap map, int player );
-
-      void addEventHook ( EventHook* eventHook );
-      void removeEventHook ( const EventHook* eventHook );
 
       const ContainerBaseType*  baseType;
 
@@ -117,19 +108,22 @@ class ContainerBase {
       //! weight of all loaded units
       int cargo ( void ) const;
 
+      SigC::Signal0<void> conquered;
+      SigC::Signal0<void> destroyed;
+      static SigC::Signal0<void> anyContainerDestroyed;
+
 
       virtual MapCoordinate3D getPosition ( ) const = 0;
       virtual ~ContainerBase();
 };
 
-class TemporaryContainerStorage : public EventHook {
+class TemporaryContainerStorage  {
         ContainerBase* cb;
         tmemorystreambuf buf;
         bool _storeCargo;
      public:
         TemporaryContainerStorage ( ContainerBase* _cb, bool storeCargo = false );
         void restore();
-        void receiveEvent ( Events ev, int data );
 };
 
 

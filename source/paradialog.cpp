@@ -358,13 +358,13 @@ bool SoundSettings::eventButtonClick(int id, PG_Widget* widget) {
 
 void soundSettings( )
 {
-  printf("c1c %d \n", ticker );
+  // printf("c1c %d \n", ticker );
   SoundSettings wnd1(NULL, PG_Rect(50,50,500,300));
-  printf("c2c %d \n", ticker );
+  // printf("c2c %d \n", ticker );
   wnd1.Show();
-  printf("c3c %d \n", ticker );
+  // printf("c3c %d \n", ticker );
   wnd1.Run();
-  printf("c4c %d \n", ticker );
+  // printf("c4c %d \n", ticker );
 }
 
 #else

@@ -55,6 +55,7 @@ void ContainerBaseType :: TransportationIO :: runTextIO ( PropertyContainer& pc 
    pc.addInteger( "DockingHeightRel", dockingHeight_rel, -100 );
    pc.addTagInteger( "RequireUnitFunction", requireUnitFunction, cvehiclefunctionsnum, vehicleAbilities, 0 );
    pc.addBool( "DisableAttack", disableAttack, false );
+   pc.addInteger( "MoveCost", movecost, -1 );
 }
 
 
@@ -70,6 +71,9 @@ void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
       pc.closeBracket();
    }
    pc.addInteger ( "MaxLoadableUnits", maxLoadableUnits, 0 );
+   if ( maxLoadableUnits > 18 )
+      maxLoadableUnits = 18;
+
    pc.addInteger ( "MaxLoadableUnitSize", maxLoadableUnitSize, maxint );
    pc.addInteger ( "MaxLoadableMass", maxLoadableWeight, maxint );
    pc.addTagInteger( "CategoriesNOT", vehicleCategoriesStorable, cmovemalitypenum, unitCategoryTags, -1, true );

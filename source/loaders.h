@@ -5,9 +5,13 @@
 
 */
 
-//     $Id: loaders.h,v 1.24 2003-04-23 18:31:10 mbickel Exp $
+//     $Id: loaders.h,v 1.25 2004-01-16 15:33:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2003/04/23 18:31:10  mbickel
+//      Fixed: AI problems
+//      Improved cheating detection in replay
+//
 //     Revision 1.23  2003/04/09 17:39:10  mbickel
 //      Fixed: AI not moving units that can not be refuelled
 //      Fixed: AI parameters not saved in .ASC files
@@ -187,11 +191,11 @@ extern void  loadicons(void);
 
 extern void  savecampaignrecoveryinformation( const ASCString& filename, int id);
 
-const int actsavegameversion  = 0xff37;
+const int actsavegameversion  = 0xff38;
 const int minsavegameversion  = 0xff31;
-const int actmapversion       = 0xfe27;
+const int actmapversion       = 0xfe28;
 const int minmapversion       = 0xfe24;
-const int actnetworkversion   = 0x0009;
+const int actnetworkversion   = 0x0010;
 const int minnetworkversion   = 0x0004;
 const int actreplayversion    = 0x0003;
 const int minreplayversion    = 0x0001;
@@ -204,13 +208,7 @@ class  tspfldloaders {
            tmap*     spfld;
 
            void            writeevent  ( pevent event );
-           void            readevent ( pevent& event1 );
 
-           void            writeeventstocome ( void );
-           void            readeventstocome  ( void );
-           void            writeeventspassed ( void );
-           void            readeventspassed  ( void );
-           void            writeoldevents    ( void );
            void            readoldevents     ( void );
 
 

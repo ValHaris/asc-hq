@@ -34,6 +34,8 @@ ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, pmap map, int pla
    color = player*8;
 }
 
+SigC::Signal0<void> ContainerBase :: anyContainerDestroyed;
+
 
 Resources ContainerBase :: putResource ( const Resources& res, int queryonly, int scope  )
 {
@@ -124,17 +126,6 @@ int ContainerBase :: vehiclesLoaded ( void ) const
    return a;
 }
 
-void ContainerBase :: addEventHook ( EventHook* eventHook )
-{
-   eventHooks.push_back ( eventHook );
-}
-
-void ContainerBase :: removeEventHook ( const EventHook* eventHook )
-{
-   list<EventHook*>::iterator i = find ( eventHooks.begin(), eventHooks.end(), eventHook );
-   if ( i != eventHooks.end() )
-      eventHooks.erase ( i );
-}
 
 int ContainerBase::cargo ( void ) const
 {
@@ -299,8 +290,10 @@ int  ContainerBase :: vehicleDocking ( const Vehicle* vehicle, bool out ) const
 
 ContainerBase :: ~ContainerBase ( )
 {
-   for ( list<EventHook*>::iterator i = eventHooks.begin(); i != eventHooks.end(); i++ )
-      (*i)->receiveEvent( EventHook::removal, 0 );
+   if ( !gamemap->__mapDestruction ) {
+      destroyed();
+      anyContainerDestroyed();
+   }
 }
 
 
@@ -323,12 +316,6 @@ void TemporaryContainerStorage :: restore (  )
 
    tmemorystream stream ( &buf, tnstream::reading );
    cb->read ( stream );
-}
-
-void TemporaryContainerStorage :: receiveEvent ( Events ev, int data )
-{
-   if ( ev == removal )
-      fatalError ( " TemporaryContainerStorage::restore - unit deleted");
 }
 
 

@@ -470,12 +470,12 @@ class tloadBImap {
 
        dynamic_array<TTextItem> ShopNameList;
        void LoadTXTFile ( char* filename );
-       int TPWMtextfile;
+//       int TPWMtextfile;
 
        void ReadMISSPart(void);
        void ReadACTNPart(void);
        void ReadSHOPPart(void);
-       void ReadShopNames( FILE* fp );
+       void ReadShopNames( char *txtdata, unsigned long txtsize );
        pvehicle getunit ( int typ, int col );
        pvehicletype getvehicletype ( int typ );
        char* GetStr ( int a, int b );
@@ -843,7 +843,7 @@ void        tloadBImap ::   ReadACTNPart(void)
                      pobjecttype obj = getobjecttype_forid ( translationTable->object2IDtranslate[i].second );
                      if ( obj ) {
                         pfield fld = getfield ( newx, newy );
-                        if ( pass == 1 || obj->terrainaccess.accessible ( fld->bdt )) {
+                        if ( pass == 1 || obj->getFieldModification(fld->getweather()).terrainaccess.accessible ( fld->bdt )) {
                            fld -> addobject ( obj, 0, true );
                            found |= 1;
                            if ( pass == 0 )
@@ -861,7 +861,7 @@ void        tloadBImap ::   ReadACTNPart(void)
                               for ( unsigned int j = 0; j < obj->weatherPicture[ww].images.size(); j++ )
                                  if ( obj->weatherPicture[ww].bi3pic[j] == xlt[m]  && !(found & 2)  && !( getActiveGraphicSet()->getMode(xlt[m]) & 256) ) {
                                     pfield fld = getfield ( newx, newy );
-                                    if ( pass == 1 || obj->terrainaccess.accessible ( fld->bdt )) {
+                                    if ( pass == 1 || obj->getFieldModification(fld->getweather()).terrainaccess.accessible ( fld->bdt )) {
                                        fld -> addobject ( obj, 0, true );
                                        found |= 1;
                                        if ( pass == 0 )
@@ -1116,7 +1116,7 @@ void       tloadBImap :: ReadSHOPPart( void )
 
            if ( fld->building ) {
 
-              if ( battleisleversion == 3 )
+//              if ( battleisleversion == 3 )
                  fld->building->name = GetStr( ShopNum + 2,16);   /*  bi3 macht das so  */ 
               /*
               else
@@ -1196,8 +1196,8 @@ void       tloadBImap :: ReadSHOPPart( void )
       } 
       
    } 
-   if ( TPWMtextfile ) 
-      strcat ( missing, "\nThe names of the buildings could not be read because the text file is TPWM encoded. Please decode it first if you want to keep the names of the shops !\n");
+//   if ( TPWMtextfile ) 
+//      strcat ( missing, "\nThe names of the buildings could not be read because the text file is TPWM encoded. Please decode it first if you want to keep the names of the shops !\n");
    
 
    int missnum = 0;
@@ -1235,9 +1235,9 @@ void       tloadBImap :: ReadSHOPPart( void )
 
 char* tloadBImap :: GetStr( int a, int b )
 {
-   if ( TPWMtextfile )
-      return NULL;
-   else
+//   if ( TPWMtextfile )
+//      return NULL;
+//   else
       for ( int i = 0; i <= ShopNameList.getlength(); i++ )
          if ( ShopNameList[i].a == a && ShopNameList[i].b == b )
             return strdup ( ShopNameList[i].name );
@@ -1276,18 +1276,19 @@ Boolean      SplitName(char *       S,
 */    
 
 
-void    tloadBImap :: ReadShopNames( FILE* fp )
+void    tloadBImap :: ReadShopNames( char* databuf, unsigned long datasize )
 { 
+   unsigned long dptr=0;
    char buf[ 1000];
    int c;      
    do {
       do {
-         c = fgetc ( fp );
-      } while ( c != '#' && c!= EOF );
+         c = databuf[dptr++];
+      } while ( c != '#' && dptr<datasize );
       if ( c == '#' ) {
          int i;
          for ( i = 0; i < 4; i++ ) {
-            c = fgetc ( fp );
+            c = databuf[dptr++];
             if ( c < '0' || c > '9' )
                return;
 
@@ -1295,11 +1296,11 @@ void    tloadBImap :: ReadShopNames( FILE* fp )
          }
          buf[4] = 0;
          int a1 = atoi ( buf );
-         if ( fgetc ( fp ) != ':' )
+         if ( databuf[dptr++] != ':' )
             return;
 
          for ( i = 0; i < 4; i++ ) {
-            c = fgetc ( fp );
+            c = databuf[dptr++];
             if ( c < '0' || c > '9' )
                return;
 
@@ -1308,14 +1309,14 @@ void    tloadBImap :: ReadShopNames( FILE* fp )
          buf[4] = 0;
          int a2 = atoi ( buf );
 
-         if ( fgetc ( fp ) != '{' )
+         if ( databuf[dptr++] != '{' )
             return;
 
          i = 0;
          do {
-            c = fgetc ( fp );
+            c = databuf[dptr++];
             buf[i++] = c;
-         } while ( c != '}' && c != EOF ); /* enddo */
+         } while ( c != '}' && dptr<datasize ); /* enddo */
 
          if ( c == '}' ) {
             buf[i-1] = 0;
@@ -1325,7 +1326,7 @@ void    tloadBImap :: ReadShopNames( FILE* fp )
             strcpy ( ShopNameList[pos].name , buf );
          }
       }
-   } while ( c != EOF );
+   } while ( dptr<datasize );
 } 
 
 
@@ -1353,25 +1354,86 @@ void tloadBImap :: GetTXTName ( const char* path, const char* filename, char* bu
   
 void tloadBImap :: LoadTXTFile ( char* filename )
 {
-   FILE* fp = fopen ( filename, "r" );
+
+   FILE* fp = fopen ( filename, "rb" );
    if ( !fp )
       return;
 
+   // get file size
+   fseek(fp, 0, SEEK_END);
+   unsigned long txtsize=ftell(fp);
+   fseek(fp, 0, SEEK_SET);
+
+   // databuffer which holds the textdata 
+   char *txtbuffer=(char *)malloc(txtsize+1);
+   memset(txtbuffer, 0, txtsize+1);
 
    char buf[1000];
    fread ( buf, 1, 4, fp );
    if ( strncmp ( buf, "TPWM",4) == 0  ) {
-      TPWMtextfile = 1;
-      fclose ( fp );
-      return;
+      // The file is compressed.
+      unsigned long tpwmsize=txtsize; // store the size of the compressed file.
+      fread(&txtsize, 4, 1, fp); // this is the uncompressed size.
+      unsigned long outptr=0;
+      txtbuffer=(char *)realloc(txtbuffer, txtsize);
+
+      // the tpwm algorithm is quite simple:
+      // you have datablocks containing 1 codebyte and 8 values.
+      // the codebyte determines whether to copy a single char or
+      // to repeat a previous block. Each bit in the codebyte marks
+      // the meaning (and size) of one value. The MSB is linked to the 
+      // first value and the LSB to the last one.
+      // A cleared bit means: the value is 1 byte sized and gets copied directly.
+      // A set bit means: the value is a 2 byte pair and is interpreted as follows:
+      // The lower nibble (bits 0-3) in the 1st byte is the length of the block +3 
+      // (thus giving a min. block length of 3 and a max. of 18) and the second byte
+      // plus the high nibble of the first byte shifted left by 4 bits is an offset
+      // in reverse direction into the already decompressed data (thus giving a range
+      // from offset to offset-4095.
+      // or simply look at the code. could be easier to understand ;-)
+      
+      while (outptr<txtsize)
+      {
+         char code=0;
+         char inbuf[16]; // worst case buffer usage is 8*2
+         char inptr=0;
+         fread(&code, 1, 1, fp);
+         char bitsset=((code>>7)&1)+((code>>6)&1)+((code>>5)&1)+((code>>4)&1)+((code>>3)&1)+((code>>2)&1)+((code>>1)&1)+((code>>0)&1);
+         fread(&inbuf, 8+bitsset, 1, fp);
+         for (int i=0; (i<8)&&(outptr<txtsize); i++)
+         {
+            if ((code&(0x80>>i))==0)
+            {
+               // straight copy
+               txtbuffer[outptr]=inbuf[inptr];
+               outptr++; inptr++;
+            } else {
+               // repeat
+               char d0,d1;
+	       d0=inbuf[inptr]; inptr++;
+	       d1=inbuf[inptr]; inptr++;
+               int blklen=(d0&0xf)+3;
+               int blkofs=((d0&0xf0)<<4)+d1;
+               for (int j=0; (j<blklen)&&(outptr<txtsize); j++)
+               {
+                  txtbuffer[outptr]=txtbuffer[outptr-blkofs];
+                  outptr++;
+               }
+            }
+         }         
+      }
+   } else {
+      // The file is uncompressed.
+      fread(txtbuffer, txtsize, 1, fp);
    }
 
-   TPWMtextfile = 0;
-   fseek ( fp, 0, SEEK_SET );
-
-   ReadShopNames( fp );
+    txtbuffer[txtsize]=0;
 
    fclose ( fp );
+
+   ReadShopNames( txtbuffer, txtsize );
+
+   free(txtbuffer);
 
    /*
    LevelDescription:= GetStr(0, 0);

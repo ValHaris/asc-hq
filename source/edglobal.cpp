@@ -2,9 +2,14 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.54 2003-07-06 15:10:26 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.55 2004-01-16 15:33:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.54  2003/07/06 15:10:26  mbickel
+//      Better configure messages
+//      code cleanup
+//      Replays update resources for constructing / removing objects
+//
 //     Revision 1.53  2003/04/23 18:31:09  mbickel
 //      Fixed: AI problems
 //      Improved cheating detection in replay
@@ -691,6 +696,7 @@ void execaction(int code)
        break;
     case act_newmap :   newmap();
        break;
+       /*
     case act_polymode :   {
           getpolygon(&pfpoly);
           if (pfpoly != NULL ) {
@@ -702,12 +708,13 @@ void execaction(int code)
              cp.poly = pfpoly;
              cp.setpolytemps(1);
              cursor.gotoxy(1,1);
-             
+
              displaymap();
              pdbaroff();
           }
        }
-       break;            
+       break;
+       */
     case act_repaintdisplay :   repaintdisplay();
        break;
     case act_unitinfo :  vehicle_information();
@@ -937,6 +944,7 @@ void execaction(int code)
        break;
     case act_placething : putactthing();
        break;
+       /*
     case act_endpolyfieldmode : {
           if (polyfieldmode) {
              polyfieldmode = false;
@@ -944,13 +952,14 @@ void execaction(int code)
 
              cp.poly = pfpoly;
              cp.setpolytemps(0);
-             
+
              displaymap();
              pdbaroff();
              ch = 255;
           }
        }
        break;
+       */
     case act_end : {
        if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) {
           execaction(act_switchmaps);
@@ -1036,7 +1045,7 @@ void execaction(int code)
       break;
    case act_movebuilding: movebuilding();
       break;
-   case act_setactweatherglobal: setweatherall ( auswahlw, 1 );
+   case act_setactweatherglobal: setweatherall ( auswahlw );
                                  displaymap();
       break;
    case act_setmapparameters: setmapparameters();

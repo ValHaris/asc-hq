@@ -50,10 +50,10 @@
 #include "strtmesg.h"
 #include "textfileparser.h"
 #include "itemrepository.h"
+#include "prehistoricevents.h"
 
 #ifdef sgmain
 # include "ai/ai.h"
-# include "missions.h"
 #endif
 
 
@@ -68,7 +68,13 @@ ticons icons;
 
 
 void         seteventtriggers( pmap actmap )
-{ 
+{
+   #ifdef sgmain
+   for ( tmap::Events::iterator i = actmap->events.begin(); i != actmap->events.end(); ++i )
+       (*i)->arm();
+
+   #endif
+#if 0
   pevent       event;
 
   for ( int l = 0; l < 2; l++ ) {
@@ -118,7 +124,7 @@ void         seteventtriggers( pmap actmap )
                   event->trigger_data[j]->networkid = vehicle->networkid;
                   if ((event->trigger[j] == ceventt_unitconquered)) 
                      vehicle->connection |= cconnection_conquer;
-                  if ((event->trigger[j] == ceventt_unitlost)) 
+                  if ((event->trigger[j] == ceventt_unitlost))
                      vehicle->connection |= cconnection_lose;
                   if ((event->trigger[j] == ceventt_unitdestroyed)) 
                      vehicle->connection |= cconnection_destroy;
@@ -168,11 +174,13 @@ void         seteventtriggers( pmap actmap )
                displayLogMessage ( 10, "8 ");
            }
          }
-         event = event->next; 
-      } 
+         event = event->next;
+      }
    }
+#endif
    for ( int i = 0; i < 8; i++ )
       actmap->player[i].queuedEvents = 1;
+
 
 } 
 
@@ -201,245 +209,6 @@ void         seteventtriggers( pmap actmap )
 
 
 
-
-
-/**************************************************************/
-/*     einzelnes Event schreiben / lesen                    ÿ */
-/**************************************************************/
-
-int eventversion = 2;
-
-void   tspfldloaders::writeevent ( pevent event )
-{
-
-/////////////////////////////////////////////////////
-// don't change anything for Big-Endian compatibility
-// the whole event system will be rewritten
-/////////////////////////////////////////////////////
-
-   int magic = -1;
-   stream->writeInt ( magic );
-   stream->writeInt ( eventversion );
-
-   stream->writedata( event, 85 );
-
-/*
-   stream->writeInt ( event->id );
-   stream->writeChar ( event->player );
-   stream->writeSting ( event->description );
-   if ( event->intdata )
-      stream->writeInt ( 1 );
-   else
-      stream->writeInt ( 0 );
-
-   stream->writeInt ( event->datasize );
-   stream->writeInt ( event->next ? 1 : 0 );
-   stream->writeInt ( event->conn );
-   for ( int i = 0; i < 4; i++ )
-      stream->writeWord ( event->trigger[i] );
-
-   for ( int i = 0; i < 4; i++ )
-      stream->writeInt ( event->trigger_data ? 1 : 0 );
-
-   for ( int i = 0; i < 4; i++ )
-      stream->writeChar ( event->triggerconnect[i] );
-
-   for ( int i = 0; i < 4; i++ )
-      stream->writeChar ( event->triggerstatus[i] );
-
-   stream->writeInt ( event->triggertime.abs );
-
-   stream->writeInt ( event->delayedexecution.turn );
-   stream->writeInt ( event->delayedexecution.move );
-*/
-
-   if ( event->datasize  &&  event->rawdata )
-      stream->writedata( event->rawdata, event->datasize);
-   
-   for (char j = 0; j <= 3; j++) {
-      if ((event->trigger[j] == ceventt_buildingconquered) ||
-           (event->trigger[j] == ceventt_buildinglost) || 
-           (event->trigger[j] == ceventt_buildingdestroyed) || 
-           (event->trigger[j] == ceventt_building_seen )) { 
-             if ( event->triggerstatus[j] != 2 ) {
-                stream->writeWord( event->trigger_data[j]->building->getEntry().x );
-                stream->writeWord( event->trigger_data[j]->building->getEntry().y );
-             } else {
-                integer w = -1;
-                stream->writedata2( w );
-                stream->writedata2( w );
-             }
-       } 
-       if ((event->trigger[j] == ceventt_unitconquered) || 
-           (event->trigger[j] == ceventt_unitlost) ||
-           (event->trigger[j] == ceventt_unitdestroyed)) { 
-           int xp;
-           int yp;
-           int nwid;
-           if ( event->triggerstatus[j] == 2 ) {
-              xp = -1;
-              yp = -1;
-              nwid = -1;
-           } else {
-              nwid = event->trigger_data[j]->networkid;
-              pvehicle v = actmap->getUnit ( nwid );
-              xp = v->xpos;
-              yp = v->ypos;
-           }
-           stream->writedata2( xp );
-           stream->writedata2( yp );
-           stream->writedata2( nwid );
-       } 
-       if ((event->trigger[j] == ceventt_event) ||
-           (event->trigger[j] == ceventt_technologyresearched) ||
-           (event->trigger[j] == ceventt_allenemyunitsdestroyed ) ||
-           (event->trigger[j] == ceventt_allenemybuildingsdestroyed )) {
-          stream->writedata2( event->trigger_data[j]->id );
-       } 
-       if (event->trigger[j] == ceventt_turn ) {
-          stream->writedata2( event->trigger_data[j]->time.abstime );
-       }
-       if (event->trigger[j] == ceventt_any_unit_enters_polygon || 
-           event->trigger[j] == ceventt_specific_unit_enters_polygon) {
-              stream->writeInt(0x12345678);
-              stream->writedata2( *event->trigger_data[j]->unitpolygon );
-              stream->writedata( event->trigger_data[j]->unitpolygon->data, event->trigger_data[j]->unitpolygon->dataSize * sizeof(int) );
-              if ( event->trigger_data[j]->unitpolygon->vehiclenetworkid ) {
-                 int nwid = event->trigger_data[j]->unitpolygon->vehiclenetworkid;
-                 pvehicle v = actmap->getUnit ( nwid );
-                 if ( v ) {
-                    stream->writeInt( v->xpos );
-                    stream->writeInt( v->ypos );
-                 } else {
-                    stream->writeInt( -1 );
-                    stream->writeInt( -1 );
-                 }
-                 stream->writedata2( nwid );
-              }
-
-       }
-
-    }
-
-}
-
-
-
-void    tspfldloaders::readevent ( pevent& event1 )
-{
-
-/////////////////////////////////////////////////////
-// don't change anything for Big-Endian compatibility
-// the whole event system will be rewritten
-/////////////////////////////////////////////////////
-
-     int magic = stream->readInt();
-     int version;
-     if ( magic == -1 ) {
-        version = stream->readInt();
-        stream->readdata ( event1, 85 );
-     } else {
-        memcpy ( event1, &magic, sizeof ( magic ));
-        int* pi = (int*) event1;
-        pi++;
-        stream->readdata ( pi, 85 - sizeof ( int ));
-        version = 0;
-     }
-
-     if ( version > eventversion )
-        throw tinvalidversion ( "event", eventversion, version );
-
-     event1->next = NULL;
-     event1->conn = 0;
-     if ( event1->datasize && event1->rawdata ) {
-        event1->rawdata = asc_malloc ( event1->datasize );
-        stream->readdata ( event1->rawdata, event1->datasize );
-        #if 0
-        if ( event1->action == cewindchange ) {
-           event1->eventActionType = cewindchange;
-           EventWindChange* wc = new WindChange;
-           wc->speed = event1->intdata[0];
-           wc->direction = event1->intdata[3];
-           event1->eventAction = wc;
-        }
-        if ( event1->action == cegameparamchange ) {
-           event1->eventActionType = cegameparamchange;
-           ChangeGameParameter* cgp = new ChangeGameParameter;
-           cgp->parameterNum  = event1->intdata[0];
-           cgp->parameterValue = event1->intdata[1];
-           event1->eventAction = cgp;
-        }
-        #endif
-     }  else {
-        event1->datasize = 0;
-        event1->rawdata = NULL;
-     }
-
-     for (char m = 0; m <= 3; m++) {
-        event1->trigger_data[m] = new tevent::LargeTriggerData;
-        if ( event1->trigger[m] ) {
-           if ((event1->trigger[m] == ceventt_buildingconquered) ||
-              (event1->trigger[m] == ceventt_buildinglost) ||
-              (event1->trigger[m] == ceventt_buildingdestroyed) || 
-              (event1->trigger[m] == ceventt_building_seen )) {
-   
-              integer xpos, ypos;
-              stream->readdata2 ( xpos );
-              stream->readdata2 ( ypos );
-              event1->trigger_data[m]->xpos = xpos;
-              event1->trigger_data[m]->ypos = ypos;
-           } 
-   
-           if ((event1->trigger[m] == ceventt_unitconquered) || 
-              (event1->trigger[m] == ceventt_unitlost) ||
-              (event1->trigger[m] == ceventt_unitdestroyed)) {
-
-              if ( version == 0 ) {
-                 integer xpos, ypos;
-                 stream->readdata2 ( xpos );
-                 stream->readdata2 ( ypos );
-                 event1->trigger_data[m]->xpos = xpos;
-                 event1->trigger_data[m]->ypos = ypos;
-                 event1->trigger_data[m]->networkid = -1;
-              } else {
-                 stream->readdata2( event1->trigger_data[m]->xpos );
-                 stream->readdata2( event1->trigger_data[m]->ypos );
-                 stream->readdata2( event1->trigger_data[m]->networkid );
-              }
-           } 
-   
-           if ((event1->trigger[m] == ceventt_event) ||
-               (event1->trigger[m] == ceventt_technologyresearched)) {
-               stream->readdata2 ( event1->trigger_data[m]->id );
-           }
-
-           if ( version >=2 )
-              if (event1->trigger[m] == ceventt_allenemyunitsdestroyed ||
-                  event1->trigger[m] == ceventt_allenemybuildingsdestroyed )
-                 stream->readdata2 ( event1->trigger_data[m]->id );
-
-           if (event1->trigger[m] == ceventt_turn) {
-               stream->readdata2 ( event1->trigger_data[m]->time.abstime );
-           }
-           if (event1->trigger[m] == ceventt_any_unit_enters_polygon ||
-               event1->trigger[m] == ceventt_specific_unit_enters_polygon) {
-                  int i = stream->readInt();
-                  event1->trigger_data[m]->unitpolygon = new tevent::LargeTriggerData::PolygonEntered;
-                  stream->readdata2( *event1->trigger_data[m]->unitpolygon );
-                  event1->trigger_data[m]->unitpolygon->data = new int [ event1->trigger_data[m]->unitpolygon->dataSize ];
-                  stream->readdata( event1->trigger_data[m]->unitpolygon->data, event1->trigger_data[m]->unitpolygon->dataSize * sizeof(int) );
-                  if ( event1->trigger_data[m]->unitpolygon->vehiclenetworkid  ) { // || event1->trigger_data[m]->unitpolygon->dummy
-                     stream->readdata2( event1->trigger_data[m]->unitpolygon->tempxpos );
-                     stream->readdata2( event1->trigger_data[m]->unitpolygon->tempypos );
-                     stream->readdata2( event1->trigger_data[m]->unitpolygon->tempnwid );
-                     event1->trigger_data[m]->unitpolygon->vehiclenetworkid = event1->trigger_data[m]->unitpolygon->tempnwid;
-                  }
-
-           }
-        }
-
-     }
-}
 
 
 
@@ -639,153 +408,21 @@ void      tspfldloaders:: readmessages ( void )
 
 
 
-/**************************************************************/
-/*     Events  schreiben / lesen                            ÿ */
-/**************************************************************/
-
-void   tspfldloaders::writeeventstocome ( void )
-{
-/////////////////////////////////////////////////////
-// don't change anything for Big-Endian compatibility
-// the whole event system will be rewritten
-/////////////////////////////////////////////////////
-    int      j = 0;
-    pevent   event = spfld->firsteventtocome;
-    while ( event ) {
-       j++;
-       event = event->next;
-    }
-
-    stream->writeInt( j );
-
-    event = spfld->firsteventtocome;
-    while ( event ) {
-       writeevent ( event   );
-       event = event->next;
-    } ;
-}
 
 
-void         tspfldloaders::readeventstocome ( void )
-{
-/////////////////////////////////////////////////////
-// don't change anything for Big-Endian compatibility
-// the whole event system will be rewritten
-/////////////////////////////////////////////////////
-
-   pevent event1, event2;
-
-   int j = stream->readInt();
-
-   if ( j ) {
-      for (int k = 1; k <= j; k++) {
-         event1 = new tevent ;
-
-         readevent ( event1  );
-
-         if (k == 1)
-            spfld->firsteventtocome = event1;
-         else
-            event2->next = event1;
-
-
-         event2 = event1;
-      }
-
-      event1 = spfld->firsteventtocome;
-      while ( event1 ) {
-         for ( int k = 0; k < 4; k++ )
-            if ( event1->trigger[k] == ceventt_event ) {
-               event2 = spfld->firsteventtocome;
-               while ( event2 ) {
-                  if ( event2->id == event1->trigger_data[k]->id )
-                     event2->conn |= 1;
-                  event2 = event2->next;
-               } /* endwhile */
-            }
-
-         event1 = event1->next;
-      }
-   }
-}
-
-
-void   tspfldloaders::writeeventspassed ( void )
-{
-    pevent event = spfld->firsteventpassed;
-    int j = 0;
-    while ( event ) {
-       j++;
-       event = event->next; 
-    } 
-                        
-    stream->writedata2( j );
- 
-    event = spfld->firsteventpassed;
-    while ( event ) {
-       writeevent ( event  );
-       event = event->next;
-    } 
-}
-
-
-void   tspfldloaders::readeventspassed ( void )
-{                      
-   pevent event1, event2;
-   int j = stream->readInt();
-   if ( j ) {
-      for (int k = 1; k <= j; k++) {
-         event1 = new ( tevent );
-
-         readevent ( event1  );
-
-         if (k == 1)
-            spfld->firsteventpassed = event1;
-         else
-            event2->next = event1;
-
-         event2 = event1;
-      }
-   }
-}
-
-void   tspfldloaders::writeoldevents ( void )
-{
-     peventstore oldevent =  spfld->oldevents;
-     while ( oldevent ) {
-        stream->writeInt( oldevent->num );
-        if (oldevent->num) {
-           for ( int i = 0; i < oldevent->num; i++ )
-              stream->writeInt( oldevent->eventid[i] );
-           for ( int i = 0; i < oldevent->num; i++ )
-              stream->writeInt( oldevent->mapid[i] );
-        }
-
-        oldevent = oldevent->next;
-     }
-     if ( spfld->oldevents )
-        stream->writeInt( 0 );
-}
 
 void   tspfldloaders::readoldevents ( void )
 {
    if ( spfld->loadOldEvents ) {
       int  num = stream->readInt();
-      spfld->oldevents = NULL;
-      peventstore oldevt = NULL;
-
       while ( num ) {
-         oldevt = new teventstore ;
-         oldevt->num = num;
-         oldevt->next = spfld->oldevents;
          for ( int i = 0;i < num; i++ )
-            oldevt->eventid[i] = stream->readInt();
+            stream->readInt();
          for ( int i = 0;i < num; i++ )
-            oldevt->mapid[i] = stream->readInt();
+            stream->readInt();
 
          num  = stream->readInt();
       }
-      spfld->oldevents = oldevt;
    }
 }
 
@@ -806,9 +443,6 @@ void    tspfldloaders::writemap ( void )
 
 void     tmaploaders::initmap ( void )
 {
-    spfld->oldevents = NULL;
-    spfld->firsteventtocome = NULL; 
-    spfld->firsteventpassed = NULL; 
     spfld->network          = NULL;
     spfld->game_parameter = NULL;
 }
@@ -1364,7 +998,6 @@ int          tmaploaders::savemap( const ASCString& name )
        writemap ( );
    }
 
-   writeeventstocome ();
    writefields ();
    stream->writeInt ( actmapversion );
 
@@ -1418,8 +1051,10 @@ int          tmaploaders::loadmap( const char *       name )
    displayLogMessage ( 8, "map, ");
    readmap ();
 
-   displayLogMessage ( 8, "eventsToCome, ");
-   readeventstocome ();
+   if ( version <= 0xfe27 ) {
+      displayLogMessage ( 8, "eventsToCome, ");
+      readOldEventLists ( stream, false, spfld );
+   }
 
    displayLogMessage ( 8, "fields, ");
    readfields ();
@@ -1499,9 +1134,6 @@ void   tsavegameloaders::savegame( pnstream strm, pmap gamemap, bool writeReplay
       spfld->player[i].research.write_techs ( *stream );
 
    writemessages();
-   writeeventstocome ();
-   writeeventspassed ();
-   writeoldevents    ();
 
    writefields ( );
 
@@ -1584,9 +1216,10 @@ tmap*          tsavegameloaders::loadgame( pnstream strm )
 
    readmessages();
 
-   readeventstocome ();
-   readeventspassed ();
-   readoldevents    ();
+   if ( version <= 0xff37 ) {
+      readOldEventLists ( stream, true, spfld );
+      readoldevents ();
+   }
 
    readfields ( );
 
@@ -1653,11 +1286,6 @@ int          tnetworkloaders::savenwgame( pnstream strm )
 
    stream->writeInt ( actnetworkversion );
 
-   writeeventstocome ();
-   writeeventspassed ();
-   writeoldevents    ();
-
-
    writefields ( );
 
    writedissections();
@@ -1692,7 +1320,7 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
 
    word w = stream->readWord();
 
-   if ( w != fileterminator ) 
+   if ( w != fileterminator )
       throw tinvalidversion ( name, fileterminator, (int) w );
 
 
@@ -1700,7 +1328,7 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
 
    if (version > actnetworkversion || version < minnetworkversion )
       throw tinvalidversion ( name, actnetworkversion, version );
-   
+
    readmap ();
 
    for ( int i = 0; i < 8; i++ )
@@ -1716,9 +1344,11 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
       throw tinvalidversion ( name, actnetworkversion, version );
 
 
-   readeventstocome ();
-   readeventspassed ();
-   readoldevents    ();
+
+   if ( version < 10 ) {
+      readOldEventLists ( stream, true, spfld );
+      readoldevents    ();
+   }
 
    readfields ( );
 
@@ -1749,10 +1379,6 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
    calculateallobjects();
 
    actmap->levelfinished = false;
-
-  #ifdef sgmain
-   getnexteventtime();
-  #endif
 
   return 0;
 }
@@ -1871,9 +1497,6 @@ void  loadgame( const char *       name )
          throw NoMapLoaded();
    } /* endcatch */
 
-  #ifdef sgmain
-   getnexteventtime();
-  #endif
 }
 
 

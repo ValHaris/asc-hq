@@ -37,7 +37,7 @@ class SoundList {
     static SoundList* instance;
 public:
     static SoundList& getInstance();
-    enum Sample { shooting, unitExplodes, buildingCollapses, moving, menu_ack, conquer_building };
+    enum Sample { shooting, unitExplodes, buildingCollapses, moving, menu_ack, conquer_building, repair, refuel };
 
     static void init( );
     Sound* playSound ( Sample snd, int subType = 0, bool looping = false, const ASCString& label = "" );
@@ -58,7 +58,7 @@ private:
            Sound* defaultSound;
            map<ASCString,Sound*> snd;
       };
-     vector<SoundAssignment> soundAssignments; 
+     vector<SoundAssignment> soundAssignments;
      void readLine( PropertyContainer& pc, const ASCString& name, SoundList::Sample sample, int subtype = 0, int fadeIn = 0 );
 };
 

@@ -185,7 +185,7 @@ class CGameOptions
          interpolate;
       }
       bi3;
-
+      Named startupMap;
       Named defaultPassword;
       Named defaultSuperVisorPassword;
       Password getDefaultPassword ( );

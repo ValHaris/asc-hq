@@ -14,37 +14,47 @@ BCB = $(MAKEDIR)\..
 VERSION = BCB.06.00
 # ---------------------------------------------------------------------------
 PROJECT = ..\mapeditor.exe
-OBJFILES = obj\edmain.obj obj\vehicletype.obj obj\basegfx.obj obj\basestrm.obj \
-    obj\CLoadable.obj obj\containerbase.obj obj\dialog.obj obj\dlg_box.obj \
-    obj\edevents.obj obj\edgen.obj obj\edglobal.obj obj\edmisc.obj \
-    obj\edselfnt.obj obj\gamemap.obj obj\gameoptions.obj obj\loadbi3.obj \
-    obj\loaders.obj obj\loadpcxc.obj obj\mapalgorithms.obj obj\misc.obj \
-    obj\Named.obj obj\newfont.obj obj\palette.obj obj\password.obj \
-    obj\password_dialog.obj obj\pd.obj obj\Property.obj obj\PropertyGroup.obj \
-    obj\sgstream.obj obj\spfst.obj obj\stack.obj obj\strtmesg.obj \
-    obj\typen.obj obj\attack.obj obj\sound.obj obj\graphics.obj \
-    obj\loadimage.obj obj\SDLStretch.obj obj\events.obj obj\SDL_main.obj \
-    obj\weather.obj obj\buildingtype.obj obj\research.obj obj\graphicset.obj \
-    obj\ascstring.obj obj\mapdisplay.obj obj\viewcalculation.obj \
-    obj\vehicle.obj obj\buildings.obj obj\networkdata.obj obj\getopt1.obj \
-    obj\getopt.obj obj\objecttype.obj obj\terraintype.obj \
-    obj\textfileparser.obj obj\textfiletags.obj obj\itemrepository.obj \
-    obj\asc_IMG_jpg.obj obj\stringtokenizer.obj obj\messages.obj \
-    obj\paradialog.obj obj\textfile_evaluation.obj
+OBJFILES = obj\SDL_main.obj obj\CLoadable.obj obj\getopt.obj obj\getopt1.obj \
+    obj\Named.obj obj\Property.obj obj\PropertyGroup.obj obj\ascstring.obj \
+    obj\attack.obj obj\basegfx.obj obj\basestrm.obj obj\buildings.obj \
+    obj\buildingtype.obj obj\containerbase.obj obj\containerbasetype.obj \
+    obj\dialog.obj obj\dlg_box.obj obj\edevents.obj obj\edgen.obj \
+    obj\edglobal.obj obj\edmain.obj obj\edmisc.obj obj\edselfnt.obj \
+    obj\gameevents.obj obj\gamemap.obj obj\gameoptions.obj obj\graphicset.obj \
+    obj\itemrepository.obj obj\loadbi3.obj obj\loaders.obj obj\loadpcxc.obj \
+    obj\mapalgorithms.obj obj\mapdisplay.obj obj\messages.obj obj\misc.obj \
+    obj\networkdata.obj obj\newfont.obj obj\objecttype.obj obj\palette.obj \
+    obj\paradialog.obj obj\password.obj obj\password_dialog.obj obj\pd.obj \
+    obj\research.obj obj\SDLStretch.obj obj\asc_IMG_jpg.obj obj\events.obj \
+    obj\graphics.obj obj\loadimage.obj obj\sound.obj obj\sgstream.obj \
+    obj\spfst.obj obj\stack.obj obj\stringtokenizer.obj obj\strtmesg.obj \
+    obj\terraintype.obj obj\textfile_evaluation.obj obj\textfileparser.obj \
+    obj\textfiletags.obj obj\typen.obj obj\vehicle.obj obj\vehicletype.obj \
+    obj\viewcalculation.obj obj\missions.obj obj\mission_dialog.obj \
+    obj\soundList.obj obj\simplestream.obj obj\prehistoricevents.obj \
+    obj\mappolygons.obj
 RESFILES = 
 MAINSOURCE = mapeditor.bpf
 RESDEPEN = $(RESFILES)
-LIBFILES = ..\..\..\..\..\sdl\bin\sdl.lib ..\..\..\libs\bzlib\win\bzlib.lib \
+LIBFILES = ..\..\..\..\..\SDL_image\bin\SDL_image.lib \
+    ..\..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB ..\..\..\..\..\sdl\bin\sdl.lib \
+    ..\..\..\ai\ai.lib ..\..\..\libs\bzlib\win\bzlib.lib \
+    ..\..\..\libs\jpeg-6b\libjpeg.lib ..\..\..\libs\sdlmm\SDLmm.lib \
     ..\..\..\libs\triangul\win32\triangulation.lib \
-    ..\..\..\libs\jpeg-6b\libjpeg.lib \
-    ..\..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB \
-    ..\..\..\..\..\SDL_image\bin\SDL_image.lib ..\..\..\libs\sdlmm\SDLmm.lib \
-    ..\..\..\ai\ai.lib
+    ..\..\..\libs\libsigc++\libsigcpp.lib
 IDLFILES = 
 IDLGENFILES = 
-LIBRARIES = vcl.lib rtl.lib
+LIBRARIES = bcb2kaxserver.lib indy.lib dbxcds.lib dclocx.lib soaprtl.lib bcbie.lib \
+    nmfast.lib dbexpress.lib inetdbxpress.lib inetdb.lib inetdbbde.lib \
+    inet.lib xmlrtl.lib visualdbclx.lib ibxpress.lib teeqr.lib tee.lib \
+    teedb.lib teeui.lib bdecds.lib cds.lib dsnap.lib vcldbx.lib bdertl.lib \
+    qrpt.lib adortl.lib dbrtl.lib vcldb.lib bcbsmp.lib vcl.lib rtl.lib
 PACKAGES = rtl.bpi vcl.bpi vclx.bpi bcbsmp.bpi dclocx.bpi
-SPARELIBS = rtl.lib vcl.lib
+SPARELIBS = rtl.lib vcl.lib bcbsmp.lib vcldb.lib dbrtl.lib adortl.lib qrpt.lib \
+    bdertl.lib vcldbx.lib dsnap.lib cds.lib bdecds.lib teeui.lib teedb.lib \
+    tee.lib teeqr.lib ibxpress.lib visualdbclx.lib xmlrtl.lib inet.lib \
+    inetdbbde.lib inetdb.lib inetdbxpress.lib dbexpress.lib nmfast.lib \
+    bcbie.lib soaprtl.lib dclocx.lib dbxcds.lib indy.lib bcb2kaxserver.lib
 DEFFILE = 
 OTHERFILES = 
 # ---------------------------------------------------------------------------
@@ -52,10 +62,10 @@ DEBUGLIBPATH = $(BCB)\lib\debug
 RELEASELIBPATH = $(BCB)\lib\release
 USERDEFINES = karteneditor;HEXAGON;FREEMAPZOOM;_WIN32_;WIN32;_SDL_;_NOASM_;NEWKEYB;_DEBUG
 SYSDEFINES = NO_STRICT;_NO_VCL
-INCLUDEPATH = ..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include
-LIBPATH = ..\..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
-WARNINGS= -w-pck -w-par -w-8027 -w-8026 -w-csu
-PATHCPP = .;..\..\..;..\..\..\sdl;..\..\..\..\..\sdl\src\main\win32;..\..\..\LIBS\getopt
+INCLUDEPATH = ..\..\..\libs\loki;..\..\..\..\..\..\Borland\CBuilder6\Source\Clx;..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include;..\..\..\libs\libsigc++
+LIBPATH = ..\..\..\libs\loki;..\..\..\..\..\..\Borland\CBuilder6\Source\Clx;..\..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
+WARNINGS= -w-pck -w-par -w-8027 -w-8026 -w-csu -w-big
+PATHCPP = .;..\..\..\..\..\sdl\src\main\win32;..\..\..;..\..\..\LIBS\getopt;..\..\..\sdl
 PATHASM = .;
 PATHPAS = .;
 PATHRC = .;

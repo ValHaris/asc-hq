@@ -44,7 +44,6 @@
 
 #include "basegfx.h"
 #include "gamedlg.h"
-#include "missions.h"
 #include "events.h"
 #include "stack.h"
 #include "network.h"
@@ -58,6 +57,8 @@
 #include "replay.h"
 #include "itemrepository.h"
 #include "strtmesg.h"
+
+#if 0
 
 class   tchoosetechnology : public tdialogbox {
                            dynamic_array<ptechnology> techs;
@@ -107,7 +108,7 @@ void         tchoosetechnology::check(void)
 
    for (i = 0; i < technologynum; i++) {
        ptechnology tech = gettechnology_forpos( i );
-       if ( tech ) { 
+       if ( tech ) {
           if ( resrch->technologyresearched ( tech->id )) {
              bool fail = false;
              for (int j = 0; j < 6; j++) {
@@ -157,13 +158,13 @@ int          tchoosetechnology::gy ( int i )
 void         tchoosetechnology::disp(void)
 {
    activefontsettings.font = schriften.smallarial; 
-   activefontsettings.justify = lefttext; 
+   activefontsettings.justify = lefttext;
    activefontsettings.length = 300;
    for ( int i = firstshowntech; i < technum && i < firstshowntech + dispnum; i++ ) {
       if ( i == markedtech )
-          activefontsettings.background = markedbackgrnd; 
-      else 
-          activefontsettings.background = dblue; 
+          activefontsettings.background = markedbackgrnd;
+      else
+          activefontsettings.background = dblue;
 
       int x = gx();
       int y = gy(i);
@@ -180,16 +181,16 @@ void         tchoosetechnology::buttonpressed ( int id )
 
 
 void         tchoosetechnology::run(void)
-{ 
+{
   mousevisible(true);
-  if (technum == 0) { 
+  if (technum == 0) {
      showtext2("no further technologies to develop !", x1 + 20, y1 + starty + 30);
      actmap->player[actmap->actplayer].research.activetechnology = NULL;
      wait();
-  } 
-  else { 
+  }
+  else {
      int fertig = 0;
-     do { 
+     do {
         tdialogbox::run();
         int oldmark = markedtech;
         if ( mouseparams.taste == 1 ) {
@@ -206,7 +207,7 @@ void         tchoosetechnology::run(void)
                      disp();
                      oldmark = markedtech;
                   }
-                  
+
                   while ( mouseparams.taste )
                      releasetimeslice();
                }
@@ -255,16 +256,18 @@ void         tchoosetechnology::run(void)
   } 
 } 
 
-
+#endif
 
 void         choosetechnology(void)
-{ 
-         tchoosetechnology ct; 
+{
+#if 0
+         tchoosetechnology ct;
 
-   ct.init(); 
-   ct.run(); 
-   ct.done(); 
-} 
+   ct.init();
+   ct.run();
+   ct.done();
+   #endif
+}
 
 
 
@@ -865,7 +868,7 @@ void         tnewcampaignlevel::searchmapinfo(void)
             throw tinvalidversion ( filename.c_str(), version, actmapversion );
 
           spfldloader.readmap ();
-          spfldloader.readeventstocome();
+          // spfldloader.readeventstocome();
 
           evaluatemapinfo( filename.c_str(), spfldloader.spfld );
       }
@@ -1135,7 +1138,7 @@ void         tcontinuecampaign::regroupevents ( pmap map )
    if ( map->campaign )
       mapid = map->campaign->id;
 
-
+/*
    peventstore oev = oldevent = map->oldevents;
 
    if ( oev )
@@ -1169,7 +1172,7 @@ void         tcontinuecampaign::regroupevents ( pmap map )
       oev->num++;
       ev = ev->next;
    }
-
+*/
    tmemorystream  memoryStream ( &memoryStreamBuffer, tnstream::writing );
    for (int i = 0; i<8; i++) {
       map->player[i].research.write_struct ( memoryStream );
@@ -1195,10 +1198,11 @@ void         tcontinuecampaign::run(void)
 
       regroupevents( actmap );
 
-      actmap->oldevents = NULL;
+      tmap* oldmap = actmap;
+      actmap = NULL;
 
       loadcampaignmap();
-      actmap->oldevents = oldevent;
+      // actmap->oldevents = oldevent;
       tmemorystream  memoryStream ( &memoryStreamBuffer, tnstream::reading );
 
       for (i=0;i<8 ; i++) {
@@ -1682,59 +1686,6 @@ void settributepayments ( void )
    tpm.done();
 }
 
-void  tshownewtanks :: init ( char*      buf2 ) 
-{
-   tdialogbox::init();
-
-   title = "new units available";
-   xsize = 400;
-   x1 = 120;
-   y1 = 100;
-   ysize = 280;
-
-   addbutton("~o~k", 10, ysize - 35, xsize - 10, ysize - 10, 0, 1, 1 , true );
-   addkey(1, ct_enter);
-   addkey(1, ct_space);
-
-   buildgraphics();
-
-   activefontsettings.font = schriften.smallarial;
-   activefontsettings.color = black;
-   activefontsettings.background = 255;
-   activefontsettings.justify = lefttext;
-   activefontsettings.length = xsize - 80;
-
-   buf = buf2;
-   int i, num = 0;
-   for (i=0; i < vehicletypenum ;i++ ) {
-      if ( buf[i] ) {
-         pvehicletype tnk = getvehicletype_forpos ( i );
-         if ( tnk ) {
-            bar ( x1 + 25, y1 + 45 + num * 50, x1 + 65, y1 + 85 + num * 50, dblue );
-            putrotspriteimage (  x1 + 30, y1 + 50 + num * 50, tnk -> picture[0] , actmap->actplayer * 8);
-            showtext2( tnk -> name, x1 + 70, y1 + 45 + num * 50 );
-            showtext2( tnk -> description, x1 + 70, y1 + 45 + 40 + num * 50 - activefontsettings.font->height );
-            num++;
-         }
-      }
-
-   } /* endfor */
-}
-
-void  tshownewtanks :: run ( void )
-{
-   status = 0;
-   mousevisible(true);
-   do {
-      tdialogbox :: run ();
-   } while ( status == 0 ); /* enddo */
-}
-
-void  tshownewtanks :: buttonpressed ( int id )
-{
-   if (id == 1)
-      status = 1;
-}
 
 class tresearchinfo: public tdialogbox {
                     protected:
@@ -1847,199 +1798,6 @@ void researchinfo ( void )
 
 
 
- class   tshowtechnology : public tdialogbox {
-               public:
-                  ptechnology       tech;
-                  void              init( ptechnology acttech );
-                  virtual void      run ( void );
-                  void              showtec ( void );
-         };
-
-
-void         tshowtechnology::init(  ptechnology acttech  )
-{ 
-   tdialogbox::init();
-   title = "new technology";
-   buildgraphics();
-   tech = acttech;
-} 
-
-
-void         tshowtechnology::showtec(void)
-{ 
-   char         *wort1, *wort2;
-   char         *pc, *w2;
-   word         xp, yp, w;
-
-   activefontsettings.font = schriften.large; 
-   activefontsettings.justify = centertext;
-   activefontsettings.length = xsize - 40;
-   showtext2(tech->name,x1 + 20,y1 + starty + 10); 
-   activefontsettings.justify = lefttext; 
-
-   yp = 60; 
-
-   if (tech->icon) {
-      int xs,ys;
-      getpicsize ( (trleheader*) tech->icon, xs, ys );
-      putimage ( x1 + ( xsize - xs) / 2 , y1 + starty + 45 , tech->icon );
-      yp += ys + 10;
-   }
-
-
-
-   wort1 = new char[100];
-   wort2 = new char[100];
-   strcpy( wort1, "research points: " );
-   itoa ( tech->researchpoints, wort2, 10 );
-   strcat( wort1, wort2 );
-
-   activefontsettings.font = schriften.smallarial; 
-   showtext2(wort1, x1 + 30,y1 + yp);
-
-   if (tech->infotext != NULL) { 
-      activefontsettings.color = black; 
-      xp = 0; 
-      pc = tech->infotext; 
-      while (*pc ) {
-         w2 = wort1;
-         while ( *pc  && *pc != ' ' && *pc != '-' ) {
-            *w2 = *pc;
-            w2++;
-            pc++;
-         };
-         *w2 = *pc;
-         if (*pc) {
-            w2++;
-            pc++;
-         }
-         *w2=0;
-         
-         w = gettextwdth(wort1,NULL);
-         if (xp + w > xsize - 40) { 
-            yp = yp + 5 + activefontsettings.font->height; 
-            xp = 0; 
-         } 
-         showtext2(wort1,x1 + xp + 20,y1 + starty + yp);
-         xp += w;
-      } 
-   } 
-   delete[] wort1 ;
-   delete[] wort2 ;
-} 
-
-
-
-void         tshowtechnology::run(void)
-{ 
-   showtec(); 
-   do { 
-      tdialogbox::run();
-   }  while ( (taste != ct_esc) && (taste != ct_space) && (taste != ct_enter) );
-} 
-
-
-
-
-void         showtechnology(ptechnology  tech )
-{ 
-   if ( tech ) { 
-      if ( tech->pictfilename ) {
-         mousevisible(false);
-         bar ( 0,0, agmp->resolutionx-1, agmp->resolutiony-1, black );
-         activefontsettings.length = agmp->resolutionx - 40;
-         activefontsettings.justify = centertext;
-         activefontsettings.background = 255;
-         activefontsettings.height = 0;
-         activefontsettings.font = schriften.large;
-         activefontsettings.color = white;
-         showtext2 ( "A new technology" , 20, 200 );
-         showtext2 ( "has been discovered", 20, 280 );
-         int t = ticker;
-         while ( mouseparams.taste )
-            releasetimeslice();
-         do {
-            releasetimeslice();
-         } while ( t + 200 > ticker  &&  !keypress()  && !mouseparams.taste); /* enddo */
-
-         int abrt = 0;
-         while ( keypress() )
-           r_key();
-
-
-         int fs = loadFullscreenImage ( tech->pictfilename );
-         if ( fs ) {
-
-            t = ticker;
-            while ( mouseparams.taste )
-               releasetimeslice();
-
-            do {
-               releasetimeslice();
-            } while ( t + 600 > ticker  &&  !keypress()  && !mouseparams.taste && !abrt ); /* enddo */
-   
-            closeFullscreenImage();
-         }            
-         activefontsettings.length = agmp->resolutionx - 40;
-         activefontsettings.justify = centertext;
-         activefontsettings.background = 255;
-         activefontsettings.height = 0;
-         activefontsettings.font = schriften.large;
-         activefontsettings.color = white;
-         bar ( 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, 0 );
-         showtext2 ( tech->name, 20, 20 );
-
-         if ( tech->infotext ) {
-            tviewtext vt;
-            vt.setparams ( 20, 50, agmp->resolutionx - 20, agmp->resolutiony - 20, tech->infotext, white, black );
-            vt.tvt_dispactive = 0;
-            vt.displaytext ();
-
-            int textsizeycomplete = vt.tvt_yp;
-            int textsizey = agmp->resolutiony - 70 ;
-
-            vt.tvt_dispactive = 1;
-            vt.displaytext ();
-   
-            abrt = 0;
-            int scrollspeed = 10;
-            do {
-               tkey taste = r_key();
-
-               if ( textsizeycomplete > textsizey ) {
-                  int oldstarty = vt.tvt_starty;
-                  if ( taste == ct_down ) 
-                     if ( vt.tvt_starty + textsizey + scrollspeed < textsizeycomplete )
-                        vt.tvt_starty += scrollspeed;
-                     else
-                         vt.tvt_starty = textsizeycomplete - textsizey;
-
-                  if ( taste == ct_up ) 
-                     if ( vt.tvt_starty - scrollspeed > 0 )
-                        vt.tvt_starty -= scrollspeed;
-                     else
-                         vt.tvt_starty = 0;
-
-                  if ( oldstarty != vt.tvt_starty )
-                      vt.displaytext();
-
-               }
-
-               if ( taste == ct_esc || taste == ct_enter || taste == ct_space )
-                  abrt = 1;
-
-            } while ( !abrt ); /* enddo */
-
-            repaintdisplay();
-         }
-      } else {
-         tshowtechnology sh; 
-         sh.init( tech ); 
-         sh.run(); 
-         sh.done(); 
-      }
-   } 
-} 
 
 
 class tchoosetechlevel : public tdialogbox {
@@ -3184,25 +2942,8 @@ void giveunitaway ( void )
    }
 }
 
-    struct tvweapon { 
-                  int         typ;   /*  position in cwaffentypen  */ 
-                  int         sourcepos;   /*  position im munitionsarray des containers; cenergy .. g?ltig */ 
-                  int         destpos;   /*  position im munitionsarray des gel. fahrzeugs  */ 
-                  int          sourceamount;
-                  int          maxsourceamount;
-                  int          destamount;
-                  int          maxdestamount;
-                  int          newdestamount;
-               }; 
 
-
-    struct tvweapons { 
-                   int         count; 
-                   int         mode; 
-                   tvweapon     weap[10]; 
-                } ;                 
-                
-#define entervalue ct_space  
+#define entervalue ct_space
 
     class  tmunitionsbox : public tdialogbox {
                   public:
@@ -3234,7 +2975,7 @@ void giveunitaway ( void )
 
                           void          init ( pvehicle src, int _targetNWID, VehicleService* _serviceAction );
                           virtual void  run ( void );
-                          virtual void  buttonpressed( int id ); 
+                          virtual void  buttonpressed( int id );
                           void          zeichneschieberegler( int pos);
                           void          checkpossible( int pos );
                           void          setloading ( int pos );
@@ -3579,3 +3320,275 @@ void showPlayerTime()
    vat.done();
 }
 
+void displaywindspeed( void )
+{
+   displaymessage2("wind speed is %d which equals %s fields / turn", actmap->weather.windSpeed, strrrd8d ( actmap->weather.windSpeed * maxwindspeed / 256 ));
+}
+
+
+
+#if 0
+class SoundPreferences : public tdialogbox {
+                        int musicVolume;
+                        int effectsVolume;
+                        int music
+                        int status;
+
+                     public:
+                        void init ( void );
+                        void buttonpressed ( int id );
+                        void run ( void );
+                    };
+
+
+void SoundPreferences :: init ( void )
+{
+*CGameOptions::Instance()
+
+   tdialogbox::init();
+   title = "options";
+
+   xsize = 600;
+   ysize = 460;
+
+   x1 = -1;
+   y1 = -1;
+
+   addbutton ( "~O~K", 10, ysize - 35, xsize / 2 - 5, ysize - 10, 0, 1, 1, true );
+   addkey ( 1, ct_enter );
+
+   addbutton ( "~C~ancel", xsize / 2 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1, 2, true );
+   addkey ( 2, ct_esc );
+
+   addbutton ( "", xsize -35, starty + 20, xsize - 20, starty + 35, 3, 0, 3, true );
+   addeingabe ( 3, &actoptions.container.autoproduceammunition, 0, dblue );
+
+   addbutton ( "", xsize -35, starty + 50, xsize - 20, starty + 65, 3, 0, 4, true );
+   addeingabe ( 4, &actoptions.automaticTraining, 0, dblue );
+
+
+//   addbutton ( "", xsize -35, starty + 50, xsize - 20, starty + 65, 3, 0, 4, true );
+//   addeingabe ( 4, &actoptions.sound.Emute, 0, dblue );
+
+
+/*
+   r1.x1 = xsize - 150;
+   r1.y1 = starty + 45;
+   r1.x2 = xsize - 20;
+   r1.y2 = starty + 65;
+   addbutton ( "", r1, 11, 0, 4, true  );
+
+
+   r5.x1 = xsize - 150;
+   r5.y1 = starty + 75;
+   r5.x2 = xsize - 20;
+   r5.y2 = starty + 95;
+   addbutton ( "", r5, 11, 0, 5, true  );
+   
+
+   r6.x1 = xsize - 150;
+   r6.y1 = starty + 105;
+   r6.x2 = xsize - 20;
+   r6.y2 = starty + 125;
+   addbutton ( "", r6, 11, 0, 6, true  );
+
+
+   r7.x1 = xsize - 150;
+   r7.y1 = starty + 135;
+   r7.x2 = xsize - 20;
+   r7.y2 = starty + 155;
+   addbutton ( "", r7, 11, 0, 7, true  );
+*/
+
+   r8.x1 = xsize - 200;
+   r8.y1 = starty + 165;
+   r8.x2 = xsize - 20;
+   r8.y2 = starty + 185;
+//   addbutton ( "", r8, 11, 0, 8, true  );
+
+   addbutton ( "", r8.x1, r8.y1 + 30, r8.x2, r8.y2 + 30, 2, 1, 9, true );
+   addeingabe ( 9, &actoptions.onlinehelptime , 0, 10000 );
+
+   addbutton ( "delay1", r8.x1, r8.y1 , r8.x1 + (r8.x2 - r8.x1)/3 - 2, r8.y2, 2, 1, 91, true );
+   addeingabe ( 91, &actoptions.attackspeed1 , 0, 10000 );
+   addbutton ( "anim",   r8.x1 + (r8.x2 - r8.x1)/3 + 2, r8.y1 , r8.x1 + 2*(r8.x2 - r8.x1)/3 - 2, r8.y2, 2, 1, 92, true );
+   addeingabe ( 92, &actoptions.attackspeed2 , 0, 10000 );
+   addbutton ( "delay2", r8.x1 + 2*(r8.x2 - r8.x1)/3 + 2, r8.y1 , r8.x2, r8.y2, 2, 1, 93, true );
+   addeingabe ( 93, &actoptions.attackspeed3 , 0, 10000 );
+
+
+/*
+   addbutton ( "", xsize -35, r8.y1 + 60, r8.x2, r8.y2 + 60, 3, 0, 10, true );
+   addeingabe ( 10, &actoptions.smallguiiconopenaftermove , 0, dblue  );
+*/
+
+   addbutton ( "~E~nter default password", 25 , r8.y1 + 90, xsize - 20, r8.y2 + 90, 0, 1, 11, true );
+
+/*
+   addbutton ( "", xsize - 150 , r8.y1 + 120, xsize - 20, r8.y2 + 120, 1, 0, 12, true );
+   addeingabe ( 12, actgamepath, 0, 100 );
+*/
+
+   addbutton ( "", r8.x1, r8.y1 + 120, r8.x2, r8.y2 + 120, 2, 1, 20, true );
+   addeingabe ( 20, &actoptions.movespeed , 0, 10000 );
+
+
+   addbutton ( "", xsize - 35 , r8.y1 + 150, r8.x2, r8.y2 + 150, 3, 0, 13, true );
+   addeingabe ( 13, &actoptions.endturnquestion, black, dblue );
+
+   buildgraphics();
+
+   activefontsettings.font = schriften.smallarial;
+   activefontsettings.justify = lefttext;
+   activefontsettings.length = 0;
+   activefontsettings.background = 255;
+
+   showtext2 ( "automatic ammunition production in buildings", x1 + 25, y1 + starty + 20 );
+   showtext2 ( "automatic training of units", x1 + 25, y1 + starty + 50 );
+/*
+#ifndef _DOS_
+   showtext2 ( "disable sound",                                 x1 + 25, y1 + starty + 50 );
+#endif
+*/
+   dlgoffset.x1 = x1;
+   dlgoffset.y1 = y1;
+   dlgoffset.x2 = x1;
+   dlgoffset.y2 = y1;
+
+/*
+   showtext2 ( "small gui icons below mouse pointer", x1 + 25, y1 + r1.y1 );
+   rahmen ( true, r1 + dlgoffset );
+   paintbutt( 4 );
+
+   showtext2 ( "mouse key for small gui icons", x1 + 25, y1 + r5.y1 );
+   rahmen ( true, r5 + dlgoffset );
+   paintbutt( 5 );
+
+   showtext2 ( "mouse key to mark fields", x1 + 25, y1 + r6.y1 );
+   rahmen ( true, r6 + dlgoffset );
+   paintbutt( 6 );
+
+   showtext2 ( "mouse key to scroll", x1 + 25, y1 + r7.y1 );
+   rahmen ( true, r7 + dlgoffset );
+   paintbutt( 7 );
+
+   showtext2 ( "mouse key to center screen", x1 + 25, y1 + r8.y1 );
+   rahmen ( true, r8 + dlgoffset );
+   paintbutt( 8 );
+*/
+
+   showtext2 ( "mousetip help delay (in 1/100 sec)", x1 + 25, y1 + r8.y1 + 30);
+
+   showtext2 ( "speed of attack display (in 1/100 sec)",          x1 + 25, y1 + r8.y1 );
+
+//   showtext2 ( "mousegui menu opens after movement", x1 + 25, y1 + r8.y1 + 60);
+
+//   showtext2 ( "game path", x1 + 25, y1 + r8.y1 + 120);
+   showtext2 ( "movement speed in 1/100 sec", x1 + 25, y1 + r8.y1 + 120);
+
+   showtext2 ( "prompt for end of turn", x1 + 25, y1 + r8.y1 + 150 );
+   status = 0;
+
+
+}
+
+
+char tgamepreferences :: checkvalue( int id, void* p)  
+{
+   if ( id != 12 )
+      return true;
+   else {
+      char* cp = (char*) p;
+      if ( !cp[0] )
+         return 1;
+      else {
+         char temp[200];
+         strcpy ( temp, cp );
+         if ( temp[0] )
+            if ( temp[strlen(temp)-1] != '\\' )
+               strcat ( temp, "\\" );
+         return checkforvaliddirectory ( temp );
+      }
+  }
+}
+
+
+void tgamepreferences :: buttonpressed ( int id )
+{
+   tdialogbox :: buttonpressed ( id );
+
+   if ( id == 1 ) {
+      actoptions.container.filleverything = actoptions.container.autoproduceammunition;
+      CGameOptions::Instance()->copy ( actoptions );
+      status = 10;
+   }
+
+   if ( id == 2 ) 
+      status = 10;
+/*
+   if ( id == 4 ) {
+      actoptions.mouse.smalliconundermouse++;
+      if ( actoptions.mouse.smalliconundermouse > 2 )
+         actoptions.mouse.smalliconundermouse = 0;
+      paintbutt ( id );
+   }
+
+   if ( id >= 5  &&  id <= 7) {
+      int* pi;
+      if ( id == 5 ) 
+        pi = &actoptions.mouse.smallguibutton;
+      
+      if ( id == 6 ) 
+        pi = &actoptions.mouse.fieldmarkbutton;
+      
+      if ( id == 7 )
+        pi = &actoptions.mouse.scrollbutton;
+
+      if ( *pi )
+         *pi *= 2;
+      else
+         *pi = 1;
+
+      if ( *pi > 8 ) {
+         if ( id == 7 )
+            *pi = 0;
+         else
+            *pi = 1;
+      }
+
+      paintbutt ( id );
+   }
+
+   if ( id == 8 ) {
+      actoptions.mouse.centerbutton++;
+      if ( actoptions.mouse.centerbutton > 8 )
+         actoptions.mouse.centerbutton = 0;
+      paintbutt( 8 );
+   }
+*/
+
+   if ( id == 11 ) {
+      Password pwd = actoptions.getDefaultPassword();
+      bool success = enterpassword ( pwd, true, true, false );
+      if ( success )
+         actoptions.defaultPassword.setName ( pwd.toString().c_str() );
+   }
+}
+
+
+void tgamepreferences :: run ( void )
+{
+   mousevisible ( true );
+   do {
+      tdialogbox::run();
+   } while ( status < 10 ); /* enddo */
+}
+
+void gamepreferences  ( void )
+{
+   tgamepreferences prefs;
+   prefs.init();
+   prefs.run();
+   prefs.done();
+}
+#endif

@@ -27,7 +27,7 @@
     <USERDEFINES value="_DEBUG;HEXAGON;_WIN32_;WIN32;converter;_NOASM_;_SDL_"/>
     <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="tools.bpf"/>
-    <INCLUDEPATH value="..\lib;..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image"/>
+    <INCLUDEPATH value="..\lib;..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image;..\..\libs\libsigc++"/>
     <LIBPATH value="..\lib;..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par -w-csu"/>
     <LISTFILE value=""/>
@@ -112,21 +112,22 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=14
-Item0=..\lib;..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image
-Item1=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image
-Item2=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;C:\Programme\ascdev\SDL_image
-Item3=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src
-Item4=..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;C:\Programme\ascdev\SDLmm\src
-Item5=..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include
-Item6=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include
-Item7=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;C:\Programme\ascsrc\games\SDL\include
-Item8=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
-Item9=..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
-Item10=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
-Item11=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\asc\source\win32
-Item12=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
-Item13=..\..;$(BCB)\include;$(BCB)\include\vcl
+Count=15
+Item0=..\lib;..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image;..\..\libs\libsigc++
+Item1=..\lib;..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image
+Item2=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image
+Item3=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;C:\Programme\ascdev\SDL_image
+Item4=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src
+Item5=..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;C:\Programme\ascdev\SDLmm\src
+Item6=..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include
+Item7=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include
+Item8=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;C:\Programme\ascsrc\games\SDL\include
+Item9=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
+Item10=..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
+Item11=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
+Item12=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\asc\source\win32
+Item13=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
+Item14=..\..;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
 Count=6
@@ -181,10 +182,5 @@ RemoteDebug=0
 ShowInfoMsgs=1
 LinkDebugVcl=0
 LinkCGLIB=0
-
-[Language]
-ActiveLang=
-ProjectLang=
-RootDir=
   </IDEOPTIONS>
 </PROJECT>

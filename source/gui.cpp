@@ -1883,7 +1883,7 @@ int   tnsguiiconrefuel::available    ( void )
 
       if ( fld->building )
          if ( fld->building->color == actmap->actplayer * 8)
-             if ( fld->building->typ->special & cgexternalloadingb )
+             if ( fld->building->typ->special & (cgexternalloadingb | cgexternalresourceloadingb | cgexternalammoloadingb ))
                 return 1;
    } else
       if ( pendingVehicleActions.actionType == vat_service && pendingVehicleActions.service->guimode == 2) {

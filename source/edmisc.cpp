@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.106 2004-01-06 14:41:09 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.107 2004-01-16 15:33:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.106  2004/01/06 14:41:09  mbickel
+//      Fixed: resource sink not working
+//
 //     Revision 1.105  2003/12/27 18:27:01  mbickel
 //      New vehicle function: no reaction fire
 //      new map parameter: disable unit/building transfer
@@ -524,7 +527,6 @@
    int                  lastselectiontype;
    selectrec            sr[10];
 
-   ppolygon             pfpoly;
    char         tfill,polyfieldmode;
    word         fillx1, filly1;
 
@@ -533,7 +535,7 @@
    char         mapsaved;
    tmycursor            mycursor;
 
-   tpolygon_management  polymanage;
+//   tpolygon_management  polymanage;
    tpulldown            pd;
    // tcdrom            cdrom;
 
@@ -881,29 +883,31 @@ void placebodentyp(void)
    mousevisible(false); 
    mapsaved = false;
    if (polyfieldmode) {
+     /*
       tfillpolygonbodentyp fillpoly;
 
       fillpoly.tempvalue = 0;
 
-      if (fillpoly.paint_polygon ( pfpoly ) == 0) 
+      if (fillpoly.paint_polygon ( pfpoly ) == 0)
          displaymessage("Invalid Polygon !",1 );
-   
+
       polyfieldmode = false;
       pdbaroff();
       displaymap();
+      */
    } else {
       lastselectiontype = cselbodentyp;
-      pf2 = getactfield(); 
-      if (tfill) { 
-         filly2 = cursor.posy + actmap->ypos; 
+      pf2 = getactfield();
+      if (tfill) {
+         filly2 = cursor.posy + actmap->ypos;
          fillx2 = cursor.posx + actmap->xpos;
          if (fillx1 > fillx2) exchg(&fillx1,&fillx2);
          if (filly1 > filly2) exchg(&filly1,&filly2);
-         for (i = filly1; i <= filly2; i++) 
+         for (i = filly1; i <= filly2; i++)
             for (j = fillx1; j <= fillx2; j++) {
-               pf2 = getfield(j,i); 
+               pf2 = getfield(j,i);
                if ( pf2 ) {
-                  if ( auswahl->weather[auswahlw] ) 
+                  if ( auswahl->weather[auswahlw] )
                      pf2->typ = auswahl->weather[auswahlw]; 
                   else
                      pf2->typ = auswahl->weather[0]; 
@@ -944,8 +948,9 @@ void placebodentyp(void)
 void placeunit(void)
 {
    if (polyfieldmode) {
-      cursor.hide(); 
-      mousevisible(false); 
+   /*
+      cursor.hide();
+      mousevisible(false);
       mapsaved = false;
 
       tfillpolygonunit fillpoly;
@@ -954,18 +959,19 @@ void placeunit(void)
 
       if (fillpoly.paint_polygon ( pfpoly ) == 0)
          displaymessage("Invalid Polygon !",1 );
-   
+
       polyfieldmode = false;
       pdbaroff();
 
-      displaymap(); 
-      mousevisible(true); 
-      cursor.show(); 
+      displaymap();
+      mousevisible(true);
+      cursor.show();
+      */
    } else {
       lastselectiontype = cselunit;
       if (farbwahl < 8) {
-         cursor.hide(); 
-         mousevisible(false); 
+         cursor.hide();
+         mousevisible(false);
          mapsaved = false;
          pf2 = getactfield();
          int accessible = 1;
@@ -1867,7 +1873,6 @@ void         setstartvariables(void)
    atexit( freevariables );
 }
 
-
 int  selectfield(int * cx ,int  * cy)
 {
    // int oldposx = getxpos();
@@ -1932,36 +1937,32 @@ int  selectfield(int * cx ,int  * cy)
          return 2;
 }
 
+
+
 //* õS FillPolygonevent
 
-class  tfillpolygonwevent : public tfillpolygonsquarecoord {
+class  ShowPolygonUsingTemps : public PolygonPainerSquareCoordinate {
+        protected:
+             virtual void setpointabs ( int x,  int y  ) {
+                pfield ffield = getfield ( x , y );
+                if (ffield)
+                    ffield->a.temp2 = 1;
+             };
         public:
-             int tempvalue;
-             virtual void initevent ( void );
-             virtual void setpointabs ( int x,  int y  );
-           };
+             bool paintPolygon   (  const Poly_gon& poly ) {
+                bool res = PolygonPainerSquareCoordinate::paintPolygon ( poly );
+                for ( int i = 0; i < poly.vertex.size(); ++i ) {
+                   pfield ffield = actmap->getField ( poly.vertex[i] );
+                   if (ffield)
+                       ffield->a.temp = 1;
+                }
+                return res;
+             };
+};
 
-void tfillpolygonwevent::setpointabs    ( int x,  int y  )
-{
-       pfield ffield = getfield ( x , y );
-       if (ffield)
-           ffield->a.temp = tempvalue;
-}
-
-
-
-void tfillpolygonwevent::initevent ( void )
-{
-}
-
-void createpolygon (ppolygon *poly, int place, int id)
-{
-   polymanage.addpolygon(poly,place,id);
-   changepolygon(*poly);
-}
 
 //* õS FillPolygonbdt
-
+/*
 void tfillpolygonbodentyp::setpointabs    ( int x,  int y  )
 {
        pfield ffield = getfield ( x , y );
@@ -2028,94 +2029,50 @@ void tfillpolygonunit::initevent ( void )
 
 
 //* õS ChangePoly
+*/
 
-
-void tchangepoly::setpolytemps (int value)
+void PolygonEditor::display()
 {
-   tfillpolygonwevent fillpoly;
-
-   fillpoly.tempvalue = value ;
-
-   if (fillpoly.paint_polygon ( poly ) == 0) {
-      if ( value )
-         displaymessage("Invalid Polygon !",1 );
-      setpolypoints(0);
-   }
+   actmap->cleartemps();
+   ShowPolygonUsingTemps sput;
+   if ( !sput.paintPolygon ( poly ) )
+      displaymessage("Invalid Polygon !",1 );
+   displaymap();
 }
 
 
-void tchangepoly::setpolypoints(int value)
+
+
+void  PolygonEditor::run(void)
 {
-   for (int i=0;i < poly->vertexnum ;i++ ) {
-      pf2 = getfield(poly->vertex[i].x,poly->vertex[i].y);
-      pf2->a.temp = value;
-   } /* endfor */
-}
+   int x = 0;
+   int y = 0;
 
-int tchangepoly::checkpolypoint(int x, int y)
-{
-   for (int i=0 ;i < poly->vertexnum ;i++ ) if ( (poly->vertex[i].x == x ) && ( poly->vertex[i].y == y ) ) return 1;
-   return 0;
-}
+   display();
 
-void tchangepoly::deletepolypoint(int x, int y)
-{
-   if ( poly->vertexnum >= 3) setpolytemps(0);
-   else setpolypoints(0);
-   for (int i=0 ;i < poly->vertexnum ;i++ ) if ( (poly->vertex[i].x == x ) && ( poly->vertex[i].y == y ) ) {
-      for (int j = i ;j < poly->vertexnum - 1 ;j++ ) {
-         poly->vertex[j].x = poly->vertex[j+1].x;
-         poly->vertex[j].y = poly->vertex[j+1].y;
-      }
-      poly->vertexnum--;
-      if (poly->vertexnum > 1) ( poly->vertex ) = (tpunkt*) realloc (poly->vertex, poly->vertexnum * sizeof ( poly->vertex[0] ) );
-      if ( poly->vertexnum >= 3) setpolytemps(1);
-      setpolypoints(2);
-      return;
-   }
-}
-
-
-void  tchangepoly::run(void)
-{
-   int            x,y;
-
-   x=0;
-   y=0;
-   if ( poly->vertexnum >= 3) setpolytemps(1);
-   setpolypoints(2);
    int r;
+   savemap ( "_backup_polygoneditor.map" );
    displaymessage("use space to select the vertices of the polygon\nfinish the selection by pressing enter",3);
    do {
-      mousevisible(false);
-      displaymap();
-      mousevisible(true);
       r = selectfield(&x,&y);
       if ( r != 1   &&   (x != 50000) ) {
-         if ( checkpolypoint(x,y) == 0 ) {
-            if ( poly->vertexnum >= 3) setpolytemps(0);
-            else setpolypoints(0);
-            poly->vertexnum++;
-            if (poly->vertexnum > 1) ( poly->vertex ) = (tpunkt*) realloc (poly->vertex, poly->vertexnum * sizeof ( poly->vertex[0] ) );
-            poly->vertex[poly->vertexnum-1].x=x;
-            poly->vertex[ poly->vertexnum-1].y=y;
-            if ( poly->vertexnum >= 3) setpolytemps(1);
-            setpolypoints(2);
-         }
-         else deletepolypoint(x,y);
+         Poly_gon::VertexIterator i = find ( poly.vertex.begin(), poly.vertex.end(), MapCoordinate (x,y) );
+         if ( i != poly.vertex.end() )
+            poly.vertex.erase( i );
+         else
+            poly.vertex.push_back ( MapCoordinate( x, y ));
+
+         display();
       }
    } while ( r != 1 ); /* enddo */
-   if ( poly->vertexnum >= 3) setpolytemps(0);
-   else setpolypoints(0);
+   actmap->cleartemps();
+   displaymap();
 }
 
-void changepolygon(ppolygon poly)
+void editpolygon(Poly_gon& poly)
 {
-  tchangepoly cp;
-
-  cp.poly = poly;
+  PolygonEditor cp ( poly );
   cp.run();
-
 }
 
 
@@ -2773,7 +2730,7 @@ void         class_change(pvehicle p)
 
 
 // õS Polygon-Management
-
+/*
 class tpolygon_managementbox: public tstringselect {
               public:
                  ppolygon poly;
@@ -2846,7 +2803,7 @@ void         tpolygon_managementbox::get_text(word nr)
        strcat(s,"/");
        strcat(s,strrr(pps->poly->vertex[i].y));
        strcat(s,") ");
-   } /* endfor */
+   }
    if (vn < pps->poly->vertexnum )  strcat(s,"...");
    strcpy(txt,s);
 }
@@ -2906,7 +2863,7 @@ int        getpolygon(ppolygon *poly) //return Fehlerstatus
    if ( (polymanagebox.action == 2) || (polymanagebox.taste == ct_esc ) ) return 1;
    else return 0;
 }
-
+*/
 // õS Unit-Values
 
 
@@ -4894,4 +4851,10 @@ void saveClipboard()
    }
 }
 
+void setweatherall ( int weather  )
+{
+   for (int y=0; y < actmap->ysize; y++)
+     for (int x=0; x < actmap->xsize; x++)
+        actmap->getField(x,y)->setweather( weather );
+}
 

@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.15 2003-11-18 18:29:23 mbickel Exp $
+## $Id: Makefile.am,v 1.16 2004-01-16 15:33:49 mbickel Exp $
 
 vpath %.cpp ../..
 
@@ -25,7 +25,8 @@ password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \
 terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
-textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp
+textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
+mappolygons.cpp prehistoricevents.cpp gameevents.cpp
 
 asc_mapedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @SDLMM_LIBS@ @LDADDLIBBZ2@ $(PARAGUI_LIBS)
@@ -40,7 +41,8 @@ password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \
 terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
-textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp
+textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
+mappolygons.cpp prehistoricevents.cpp gameevents.cpp
 
 asc_map2pcx_LDADD   	= $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/sdl/libsdl.la @SDLMM_LIBS@ @LDADDLIBBZ2@ $(PARAGUI_LIBS)

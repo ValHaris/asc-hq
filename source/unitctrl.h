@@ -1,6 +1,9 @@
-//     $Id: unitctrl.h,v 1.33 2003-03-24 11:18:47 mbickel Exp $
+//     $Id: unitctrl.h,v 1.34 2004-01-16 15:33:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2003/03/24 11:18:47  mbickel
+//      Fixed compilation problems with gcc 2.95
+//
 //     Revision 1.32  2003/03/07 17:11:41  mbickel
 //      AI improvements
 //
@@ -199,6 +202,8 @@
 #error The mapeditor does not need any pathfinding
 #endif
 
+
+extern SigC::Signal0<void> fieldCrossed;
 
 
 template<class T>
@@ -658,6 +663,7 @@ template<class T> bool FieldList<T> :: isMember ( const MapCoordinate& mc )
          return true;
    return false;
 }
+
 
 #endif
 

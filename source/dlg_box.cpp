@@ -552,6 +552,40 @@ void         tdialogbox :: bar ( int x1, int y1, int x2, int y2, int color )
 }
 
 
+void         tdlgengine::addDropDown( int x1, int y1, int x2, int y2, int ID, const char** entries, int entrynum, int* pos )
+{
+   pbutton      pb = firstbutton;
+   if ( ID <= 0)
+      displaymessage("tdialogbox: id equal or less then 0", 2);
+   while (pb != NULL) {
+      if (pb->id == ID)
+         displaymessage("tdialogbox: duplicate button id: %d\n",2, ID);
+      pb = pb->next;
+   }
+   pb = new tbutton;
+   pb->x1 = x1;
+   pb->x2 = x2;
+   pb->y1 = y1;
+   pb->y2 = y2;
+   pb->style = 0;
+   pb->id = ID;
+   pb->next = firstbutton;
+   pb->text = NULL;
+   pb->art = 6;
+   pb->active = true;
+   pb->status = 1;
+   pb->keynum = 0;
+   pb->markedkeynum = 0;
+   pb->scrollspeed = 30;
+   pb->pressed = 0;
+   pb->newpressed = 0;
+   pb->entries = entries;
+   pb->entrynum = entrynum;
+   pb->data = pos;
+   firstbutton = pb;
+}
+
+
 void         tdlgengine::addscrollbar(int          lx1,
                           int          ly1,
                           int          lx2,
@@ -854,9 +888,9 @@ void         tdialogbox::enablebutton(int         id)
    activefontsettings.justify = lefttext; 
    activefontsettings.length =  pb->x2 - pb->x1 - 10;
    activefontsettings.markcolor = textcolor - 2; 
-   activefontsettings.color = textcolor; 
+   activefontsettings.color = textcolor;
    activefontsettings.background = 255;
-   
+
 
    if (pb->art == 0) { 
       if ((pb->style == 1) || (pb->style == 2))
@@ -900,7 +934,7 @@ void         tdialogbox::enablebutton(int         id)
                itoa ( *pw, strng, 10 );
                showtext2(strng, x1 + pb->x1 + 5,y1 + pb->y1 + 2);
             }     
-            else { 
+            else {
                int* pl = (int*) pb->data;
                itoa ( *pl, strng, 10 );
                showtext2(strng, x1 + pb->x1 + 5,y1 + pb->y1 + 2);
@@ -915,9 +949,9 @@ void         tdialogbox::enablebutton(int         id)
       char* pbl = (char*) pb->data;
 
       int cl;
-      if (*pbl) 
-         cl = pb->min; 
-      else 
+      if (*pbl)
+         cl = pb->min;
+      else
          cl = pb->max;
 
       line(x1 + pb->x1,y1 + pb->y1,x1 + pb->x1 + (pb->y2 - pb->y1),y1 + pb->y2, cl);
@@ -927,7 +961,7 @@ void         tdialogbox::enablebutton(int         id)
    if (pb->art == 5) {      // Scrollbar
      word* pw = (word*) pb->data;
      word* pw2 =(word*) pb->data2; 
-     rahmen(true,x1 + pb->x1,y1 + pb->y1,x1 + pb->x2,y1 + pb->y2); 
+     rahmen(true,x1 + pb->x1,y1 + pb->y1,x1 + pb->x2,y1 + pb->y2);
 
      paintsurface2(x1 + pb->x1 + 1,y1 + pb->y1 + 1,x1 + pb->x2 - 1,y1 + pb->y2 - 1 );
 
@@ -940,6 +974,20 @@ void         tdialogbox::enablebutton(int         id)
     //   rahmen(true,x1 + pb->x1 + 1,y1 + pb->y1 + 1,x1 + pb->x2 - 1,y1 + pb->y2 - 1);
 
     }
+
+   if ( pb->art == 6 ) {
+      bar ( x1 + pb->x1,y1 + pb->y1,x1 + pb->x2,y1 + pb->y2, lightgray );
+      rahmen(true,x1 + pb->x1,y1 + pb->y1,x1 + pb->x2,y1 + pb->y2);
+      int pos = *( (int*) pb->data );
+      if ( pos < 0 || pos >= pb->entrynum )
+         fatalError("invalid pos in dropdown",2);
+
+      showtext3(pb->entries[pos], x1 + pb->x1 + (pb->y2 - pb->y1) + 5, y1 + (pb->y1 + pb->y2 - activefontsettings.font->height) / 2);
+
+      line ( x1 + pb->x2 - 20, y1 + pb->y1 + 4, x1 + pb->x2 - 10, y1 + pb->y1 + 4, textcolor );
+      line ( x1 + pb->x2 - 20, y1 + pb->y1 + 4, x1 + pb->x2 - 15, y1 + pb->y1 + 14, textcolor );
+      line ( x1 + pb->x2 - 10, y1 + pb->y1 + 4, x1 + pb->x2 - 15, y1 + pb->y1 + 14, textcolor );
+   }
 
    pb->active = true;
    npop( activefontsettings ); 
@@ -955,7 +1003,7 @@ void         tdialogbox::disablebutton(int         id)
   int      *pl; 
   word         *pw, *pw2; 
   pascal_byte         *pbt; 
-  char      *pbl; 
+  char      *pbl;
   char*         s;
   char*         t;
   int      l; 
@@ -1195,64 +1243,64 @@ void         tdialogbox::done(void)
 
    if ( boxstatus ) {
       ms = getmousestatus();
-      if (ms == 2) 
-         mousevisible(false); 
-      pb = firstbutton; 
-      while (pb != NULL) { 
-         pb2 = pb->next; 
+      if (ms == 2)
+         mousevisible(false);
+      pb = firstbutton;
+      while (pb != NULL) {
+         pb2 = pb->next;
          delete ( pb );
-         pb = pb2; 
-      } 
-   
-      if (imagesaved) { 
-         putimage(x1,y1,tp); 
+         pb = pb2;
+      }
+
+      if (imagesaved) {
+         putimage(x1,y1,tp);
          asc_free ( tp );
-      } 
+      }
       npop( activefontsettings );
-      if (ms == 2) 
-         mousevisible(true); 
+      if (ms == 2)
+         mousevisible(true);
    }
    boxstatus = 0;
-} 
+}
 
 
 void         tdialogbox::execbutton( pbutton      pb, char      mouse )
-{ 
-  int      t, l; 
-  word         *pw, *pw2; 
+{
+  int      t, l;
+  word         *pw, *pw2;
 
 
-   if (mouse == false) { 
-      if (pb->art == 0) { 
+   if (mouse == false) {
+      if (pb->art == 0) {
          if ((pb->style == 1) || (pb->style == 2))
-            buttonpressed(pb->id); 
-      } 
-      if (pb->art == 3) 
-         toggleswitch(pb); 
-   } 
-   else { 
-      if (pb->art == 0) { 
-         if (pb->style == 1) { 
-            newknopfdruck(x1 + pb->x1,y1 + pb->y1,x1 + pb->x2,y1 + pb->y2); 
-            if (knopfsuccessful) 
-               buttonpressed(pb->id); 
-         } 
-         if (pb->style == 2) { 
-            mousevisible(false); 
+            buttonpressed(pb->id);
+      }
+      if (pb->art == 3)
+         toggleswitch(pb);
+   }
+   else {
+      if (pb->art == 0) {
+         if (pb->style == 1) {
+            newknopfdruck(x1 + pb->x1,y1 + pb->y1,x1 + pb->x2,y1 + pb->y2);
+            if (knopfsuccessful)
+               buttonpressed(pb->id);
+         }
+         if (pb->style == 2) {
+            mousevisible(false);
             pb->pressed = 1;
             pb->newpressed = 1;
-            newknopfdruck4(x1 + pb->x1,y1 + pb->y1,x1 + pb->x2,y1 + pb->y2); 
-            mousevisible(true); 
-            t = ticker; 
-            buttonpressed(pb->id); 
+            newknopfdruck4(x1 + pb->x1,y1 + pb->y1,x1 + pb->x2,y1 + pb->y2);
+            mousevisible(true);
+            t = ticker;
+            buttonpressed(pb->id);
             pb->newpressed = 2;
             while ((mouseparams.x >= x1 + pb->x1) && (mouseparams.x <= x1 + pb->x2) && (mouseparams.y >= y1 + pb->y1) && (mouseparams.y <= y1 + pb->y2) && (mouseparams.taste & 1)) {
                if (ticker - t > pb->scrollspeed ) {
-                  t = ticker; 
-                  buttonpressed(pb->id); 
+                  t = ticker;
+                  buttonpressed(pb->id);
                }
                releasetimeslice();
-            } 
+            }
             mousevisible(false); 
             newknopfdruck3(x1 + pb->x1,y1 + pb->y1,x1 + pb->x2,y1 + pb->y2); 
             pb->newpressed = 0;
@@ -1327,22 +1375,80 @@ void         tdialogbox::execbutton( pbutton      pb, char      mouse )
          } else {
 
             l = *pw; 
-            t = mouseparams.y - (pb->y1 + y1); 
-            *pw = (10 * t * (*pw2 - pb->max) / (pb->y2 - pb->y1 - 2) + 5) / 10; 
-            if (*pw != l) { 
-              l = getmousestatus(); 
-              if (l == 2) 
-                mousevisible(false); 
-              showbutton(pb->id); 
-              buttonpressed(pb->id); 
-              if (l == 2) 
-                mousevisible(true); 
+            t = mouseparams.y - (pb->y1 + y1);
+            *pw = (10 * t * (*pw2 - pb->max) / (pb->y2 - pb->y1 - 2) + 5) / 10;
+            if (*pw != l) {
+              l = getmousestatus();
+              if (l == 2)
+                mousevisible(false);
+              showbutton(pb->id);
+              buttonpressed(pb->id);
+              if (l == 2)
+                mousevisible(true);
             }
-         } 
-      } 
+         }
+      }
+
+      if (pb->art == 6) {
+
+            int height = pb->entrynum * 25 + 10;
+            int starty =  y1 + pb->y2;
+            if ( starty + height > agmp->resolutiony )
+               starty = agmp->resolutiony - height;
+
+            mousevisible(false);
+
+            int* pos = (int*) pb->data ;
+
+            activefontsettings.font = schriften.smallarial;
+            activefontsettings.background = lightgray;
+            activefontsettings.justify = lefttext;
+            activefontsettings.length = (word) (pb->x2 - pb->x1 - 20 );
+
+            void* buf = asc_malloc ( imagesize ( x1 + pb->x1, starty, x1 + pb->x2, starty + height ));
+            getimage( x1 + pb->x1, starty, x1 + pb->x2, starty + height, buf );
+
+            bar ( x1 + pb->x1, starty, x1 + pb->x2, starty + height, lightgray );
+            rectangle ( x1 + pb->x1, starty, x1 + pb->x2, starty + height, black );
+
+            bool first = true;
+            int oldpos = *pos;
+
+            mousevisible(true);
+            do {
+               int p = (mouseparams.y - starty - 5);
+               if ( p < 0 )
+                  p = -1;
+               else
+                  p /= 25;
+
+               if ( (p >= 0 && p < pb->entrynum ) || first )
+                  if ( p != *pos  || first ) {
+                     if ( p != *pos && p >= 0 && p < pb->entrynum )
+                        *pos = p;
+                     for ( int i = 0; i < pb->entrynum; ++i ) {
+                        if ( i == *pos )
+                           activefontsettings.color = textcolor;
+                        else
+                           activefontsettings.color = black ;
+                        showtext2 ( pb->entries[i], x1 + pb->x1 + 5, starty + i * 25 + 5 );
+                     }
+                  }
+               releasetimeslice();
+               first = false;
+            } while ((mouseparams.x >= x1 + pb->x1) && (mouseparams.x <= x1 + pb->x2) && (mouseparams.y >= min(starty, y1+pb->y1)) && (mouseparams.y <= starty + height) && (mouseparams.taste & 1)) ;
+            mousevisible(false);
+
+            putimage ( x1 + pb->x1, starty, buf );
+            asc_free ( buf );
+            mousevisible(true);
+            enablebutton( pb->id );
+            if ( oldpos != *pos )
+               buttonpressed( pb->id );
+      }
 
       if ( pb->art > 10 ) {
-         buttonpressed(pb->id); 
+         buttonpressed(pb->id);
          while ( mouseinrect ( x1 + pb->x1 ,  y1 + pb->y1 ,  x1 + pb->x2 ,  y1 + pb->y2 ) && ( mouseparams.taste & 1))
             releasetimeslice();
       }
@@ -1393,7 +1499,7 @@ void         tdialogbox::run(void)
          xm = mouseparams.x; 
          ym = mouseparams.y; 
          xp = xm; 
-         yp = ym; 
+         yp = ym;
 
          while (mouseparams.taste == 1) { 
             if ((mouseparams.x != xp) || (mouseparams.y != yp)) { 
@@ -1444,8 +1550,7 @@ void         tdialogbox::run(void)
 
          } 
 
-
-      } 
+      }
       if (mouseparams.taste == 1) { 
          pb = firstbutton; 
          while (pb != NULL) { 
@@ -1561,14 +1666,14 @@ void         tdialogbox::editfield(pbutton      pb)
   int      *pl; 
   word         *pw; 
   pascal_byte         *pbt; 
-  int      l; 
+  int      l;
 
-  activefontsettings.font = schriften.smallarial; 
-  activefontsettings.color = textcolor; 
-  activefontsettings.background = dblue; 
+  activefontsettings.font = schriften.smallarial;
+  activefontsettings.color = textcolor;
+  activefontsettings.background = dblue;
   activefontsettings.length = (word) (pb->x2 - pb->x1 - 10 );
-   
-   if (pb->art == 1) { 
+
+   if (pb->art == 1) {
       ps = (char*) pb->data;
       // mousevisible(false); 
       do { 
@@ -3517,7 +3622,7 @@ void         tstringselect::viewtext(void)
          } /* endwhile */
 
    }
-   else showtext2("No text available !",x1 + 50,yp + 50);
+   // else showtext2("No text available !",x1 + 50,yp + 50);
 
    //rahmen(true,x1  + sx ,y1 + sy,x1  + ex ,y1 + ey );
    npop(activefontsettings.length);
@@ -3564,7 +3669,7 @@ void         tgetid::init(void)
    addbutton("~D~one",20,ysize - 40,100,ysize - 20,0,1,1,true);
    addkey(1,ct_enter);
    addbutton("~C~ancel",120,ysize - 40,200,ysize - 20,0,1,2,true);
-   addbutton("~I~D",20,60,xsize - 20,80,2,1,3,true);
+   addbutton("",20,60,xsize - 20,80,2,1,3,true);
    addeingabe(3,&mid,min,max);
 
    buildgraphics();
@@ -3609,7 +3714,7 @@ void         tgetid::buttonpressed(int         id)
 }
 
 
-int      getid( char*  title, int lval,int min,int max)
+int      getid( const char*  title, int lval,int min,int max)
 
 { tgetid     gi;
    gi.onCancel = tgetid::ReturnOriginal;
@@ -3654,17 +3759,18 @@ class   ChooseString : public tstringselect {
                  const vector<ASCString>& strings;
                  char buf[10000];
            public :
-                 ChooseString ( const ASCString& _title, const vector<ASCString>& _strings );
+                 ChooseString ( const ASCString& _title, const vector<ASCString>& _strings , int defaultEntry );
                  void setup( );
                  virtual void buttonpressed(int id);
                  void run(void);
                  virtual void get_text(word nr);
               };
 
-ChooseString :: ChooseString ( const ASCString& _title, const vector<ASCString>& _strings )
+ChooseString :: ChooseString ( const ASCString& _title, const vector<ASCString>& _strings, int defaultEntry )
               : strings ( _strings )
 {
    strcpy ( buf, _title.c_str() );
+   startpos = defaultEntry;
 }
 
 
@@ -3706,13 +3812,105 @@ void         ChooseString ::run(void)
 }
 
 
-int chooseString ( const ASCString& title, const vector<ASCString>& entries )
+int chooseString ( const ASCString& title, const vector<ASCString>& entries, int defaultEntry  )
 {
-   ChooseString  gps ( title, entries );
+   ChooseString  gps ( title, entries, defaultEntry );
 
    gps.init();
    gps.run();
    gps.done();
    return gps.redline;
+}
+
+
+
+
+class  StringEdit : public tdialogbox {
+          public :
+              ASCString org;
+              char nt[200];
+              StringEdit () { onCancel = ReturnZero; };
+              enum { ReturnZero, ReturnOriginal } onCancel;
+              int action;
+              int mid;
+              char text[200];
+              void init(void);
+              int max,min;
+              virtual void run(void);
+              virtual void buttonpressed(int id);
+          };
+
+void         StringEdit::init(void)
+{
+   tdialogbox::init();
+   strcpy ( text, org.c_str() );
+   title = nt;
+   x1 = 200;
+   xsize = 220;
+   y1 = 150;
+   ysize = 140;
+   action = 0;
+
+   windowstyle = windowstyle ^ dlg_in3d;
+
+
+   addbutton("~D~one",20,ysize - 40,100,ysize - 20,0,1,1,true);
+   addkey(1,ct_enter);
+   addbutton("~C~ancel",120,ysize - 40,200,ysize - 20,0,1,2,true);
+   addbutton("",20,60,xsize - 20,80,1,1,3,true);
+   addeingabe(3,text,0,99);
+
+   buildgraphics();
+
+   mousevisible(true);
+}
+
+
+void         StringEdit::run(void)
+{
+   int orig = mid;
+   tdialogbox::run ();
+   pbutton pb = firstbutton;
+   while ( pb &&  (pb->id != 3))
+      pb = pb->next;
+
+   if ( pb )
+      if ( pb->id == 3 )
+         execbutton( pb , false );
+
+   do {
+      tdialogbox::run();
+   }  while (!((taste == ct_esc) || ((action == 1) || (action == 2))));
+   if ((action == 2) || (taste == ct_esc)){
+       if ( onCancel == ReturnZero )
+          text[0] = 0;
+       else
+           strcpy( text, org.c_str() );
+   }
+}
+
+
+void         StringEdit::buttonpressed(int         id)
+{
+   tdialogbox::buttonpressed(id);
+   switch (id) {
+
+      case 1:
+      case 2:   action = id;
+   break;
+   }
+}
+
+ASCString editString( const ASCString& title, const ASCString& defaultValue  )
+{
+   StringEdit     gi;
+   gi.org = defaultValue;
+   gi.onCancel = tgetid::ReturnOriginal;
+
+   strcpy( gi.nt, title.c_str() );
+   gi.init();
+   gi.run();
+   gi.done();
+   return gi.text;
 }
 

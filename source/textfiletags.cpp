@@ -158,9 +158,11 @@ const char*  buildingFunctionTags[cbuildingfunctionnum]  =
                 "Solar_Power_Plant",
                 "Matter_Converter",
                 "Mining_Station",
-                "External_Loading",
+                "External_loading",
                 "Produce_Units_that_cannot_leave",
-                "ResourceSink" };
+                "ResourceSink",
+                "ExternalResourceTransfer",
+                "ExternalAmmoTransfer" };
 
 
  const char* weatherAbbrev[cwettertypennum]

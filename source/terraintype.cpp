@@ -131,6 +131,45 @@ const FieldQuickView* TerrainType::Weather::getQuickView()
 const int terrain_version = 2;
 
 
+void TerrainType::MoveMalus::read( tnstream& stream, int defaultValue, int moveMalusCount )
+{
+   clear();
+
+   int version;
+   if ( moveMalusCount < 0 ) {
+      version = stream.readInt();
+      moveMalusCount = stream.readInt();
+   } else
+      version = 0;
+
+   #ifndef converter
+    char mmcount = moveMalusCount;
+    if (mmcount < moveMalusCount )
+       mmcount = moveMalusCount;
+   #else
+    char mmcount = moveMalusCount ;
+   #endif
+
+   for ( int j=0; j< mmcount ; j++ ) {
+      if (j < moveMalusCount )
+         push_back ( stream.readChar() );
+      else
+         if ( j == 0 )
+            push_back ( defaultValue );
+         else
+            push_back ( at(0) );
+   }
+}
+
+void TerrainType::MoveMalus::write ( tnstream& stream ) const
+{
+  stream.writeInt(1);
+  stream.writeInt( size() );
+  for ( int m = 0; m < size(); m++ )
+     stream.writeChar ( at(m) );
+}
+
+
 void TerrainType::read( tnstream& stream )
 {
    int version = stream.readInt();
@@ -182,29 +221,7 @@ void TerrainType::read( tnstream& stream )
                stream.readInt(); //pgbt->bi_picture[j] =
 
             pgbt->art.read ( stream );
-
-            #ifndef converter
-             char mmcount = cmovemalitypenum;
-             if (mmcount < move_maluscount )
-                mmcount = move_maluscount;
-            #else
-             char mmcount = move_maluscount ;
-            #endif
-
-            for (j=0; j< mmcount ; j++ ) {
-               if (j < move_maluscount )
-                  pgbt->move_malus.push_back ( stream.readChar() );
-               else
-                  pgbt->move_malus.push_back ( pgbt->move_malus[0] );
-
-               if ( pgbt->move_malus[j] == 0) {
-                  if (j == 0)
-                     pgbt->move_malus[j] = minmalq;
-                  else
-                     pgbt->move_malus[j] = pgbt->move_malus[0];
-               }
-            }
-//            pgbt->move_maluscount = mmcount;
+            pgbt->move_malus.read( stream, minmalq, move_maluscount );
 
 /*
             for ( j=0; j<8 ;j++ )
@@ -287,8 +304,8 @@ void TerrainType::write ( tnstream& stream ) const
         for ( m = 1; m< 6; m++ )
            stream.writeInt ( -1 );
 
-        for ( m = 0; m < weather[i]->move_malus.size(); m++ )
-           stream.writeChar ( weather[i]->move_malus[m] );
+
+        weather[i]->move_malus.write ( stream );
 
         if ( weather[i]->pict && weather[i]->bi_pict == -1 )
            stream.writedata ( ( char*) weather[i]->pict, fieldsize );

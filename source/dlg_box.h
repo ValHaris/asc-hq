@@ -2,9 +2,12 @@
     \brief Interface for some basic classes from which all of ASC's dialogs are derived
 */
 
-//     $Id: dlg_box.h,v 1.30 2002-10-05 21:22:09 mbickel Exp $
+//     $Id: dlg_box.h,v 1.31 2004-01-16 15:33:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2002/10/05 21:22:09  mbickel
+//      Added inheritance to textfiles
+//
 //     Revision 1.29  2002/10/02 20:21:00  mbickel
 //      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
 //
@@ -217,8 +220,10 @@ extern bool gameStartupComplete;
                                tkey         markedkey[6];
                                int          scrollspeed;
                                char         pressed;
-                               int          newpressed;     // nur f?r Maus-"Dauerfeuer"
+                               int          newpressed;    // nur f?r Maus-"Dauerfeuer"
                                int          lasttick;      //  nur f?r Maus-"Dauerfeuer"
+                               const char** entries;       // only for drop down
+                               int          entrynum;      // only for drop down
                             };
 
                     typedef tbutton* pbutton;
@@ -259,6 +264,7 @@ extern bool gameStartupComplete;
                                                        /*       3: CheckBox            */
                                                        /*       4: Schieberegler       */
                                                        /*       5: Scrollbar           */
+                                                       /*       6: Drop Down           */
                                                        /********************************/
 
 
@@ -282,7 +288,9 @@ extern bool gameStartupComplete;
                           int          itemsvisible,
                           int*         actitem,
                           int         lid,
-                          int         keys);  
+                          int         keys);
+
+                     void addDropDown( int x1, int y1, int x2, int y2, int ID, const char** entries, int entrynum, int* pos );
 
 
                      virtual void         buttonpressed(int         id) ;
@@ -577,7 +585,8 @@ class   tstringselect : public tdialogbox {
                      void done(void);
                  };
 
-extern int getid( char* title, int lval, int min, int max );
+extern int getid( const char* title, int lval, int min, int max );
+extern ASCString editString( const ASCString& title, const ASCString& defaultValue = "" );
 
 
 /** displays a dialogbox which lets you chose one of a number of strings.
@@ -585,7 +594,7 @@ extern int getid( char* title, int lval, int min, int max );
     \param entires the list of strings
     \returns the selected index or -1 if nothing was selected
 */
-extern int chooseString ( const ASCString& title, const vector<ASCString>& entries );
+extern int chooseString ( const ASCString& title, const vector<ASCString>& entries, int defaultEntry = -1 );
 
 #endif
 

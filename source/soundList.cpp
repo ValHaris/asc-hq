@@ -78,7 +78,8 @@ void SoundList::readLine( PropertyContainer& pc, const ASCString& name, SoundLis
 {
    vector<ASCString> labels;
    vector<ASCString> files;
-   pc.addStringArray ( name + ".files", files );
+   if ( pc.find ( name + ".files" ))
+      pc.addStringArray ( name + ".files", files );
    if ( pc.find ( name + ".labels" ))
       pc.addStringArray ( name + ".labels", labels );
 
@@ -148,6 +149,8 @@ void SoundList::initialize(  )
    readLine( pc, "CONQUER_BUILDING", SoundList::conquer_building );
    readLine( pc, "UNIT_EXPLODES", SoundList::unitExplodes );
    readLine( pc, "BUILDING_COLLAPSES", SoundList::buildingCollapses );
+   readLine( pc, "REFUEL", SoundList::refuel );
+   readLine( pc, "REPAIR", SoundList::repair );
 
    pc.run();
 

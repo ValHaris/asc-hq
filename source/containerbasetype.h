@@ -66,6 +66,8 @@ class ContainerBaseType: public LoadableItemType {
 
             int requireUnitFunction;
 
+            int movecost;
+
             bool disableAttack;
 
             void runTextIO ( PropertyContainer& pc );

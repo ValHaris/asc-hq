@@ -33,7 +33,6 @@
 #ifdef sgmain
  #include "network.h"
  #include "gameoptions.h"
- #include "missions.h"
 #endif
 
 
@@ -45,6 +44,8 @@ const int MineBasePunch[cminenum]  = { 60, 120, 180, 180 };
 
 tmap :: tmap ( void )
 {
+
+   eventID = 0;
 
    __mapDestruction = false;
    int i;
@@ -88,10 +89,6 @@ tmap :: tmap ( void )
       player[i].ASCversion = 0;
    }
 
-   oldevents = NULL;
-   firsteventtocome = NULL;
-   firsteventpassed = NULL;
-
    unitnetworkid = 0;
 
    levelfinished = 0;
@@ -124,7 +121,7 @@ tmap :: tmap ( void )
 }
 
 
-const int tmapversion = 4;
+const int tmapversion = 5;
 
 void tmap :: read ( tnstream& stream )
 {
@@ -195,12 +192,15 @@ void tmap :: read ( tnstream& stream )
          player[i].ASCversion = 0;
    }
 
-   oldevents = NULL;
 
+
+   if ( version <= 4 ) {
    //! practically dummy
-   loadOldEvents = stream.readInt();
-   stream.readInt(); // int loadeventstocome
-   stream.readInt(); // int loadeventpassed
+      loadOldEvents = stream.readInt();
+      stream.readInt(); // int loadeventstocome
+      stream.readInt(); // int loadeventpassed
+   }
+
 
    unitnetworkid = stream.readInt();
    levelfinished = stream.readChar();
@@ -398,6 +398,16 @@ void tmap :: read ( tnstream& stream )
 
     }
 
+    if ( version >= 5 ) {
+       eventID = stream.readInt();
+
+       int num = stream.readInt();
+       for ( int i = 0; i< num; ++i ) {
+          Event* ev = new Event ( *this );
+          ev->read ( stream );
+          events.push_back ( ev );
+       }
+    }
 }
 
 
@@ -454,9 +464,6 @@ void tmap :: write ( tnstream& stream )
       stream.writeInt ( player[i].ASCversion );
    }
 
-   stream.writeInt( oldevents != NULL );
-   stream.writeInt( firsteventtocome != NULL );
-   stream.writeInt( firsteventpassed != NULL );
    stream.writeInt( unitnetworkid );
    stream.writeChar( levelfinished );
    stream.writeInt( network != NULL );
@@ -597,6 +604,12 @@ void tmap :: write ( tnstream& stream )
           stream.writeInt( i->date );
        }
     }
+
+    stream.writeInt( eventID );
+
+    stream.writeInt ( events.size());
+    for ( Events::iterator i = events.begin(); i != events.end(); ++i )
+       (*i)->write( stream );
 }
 
 
@@ -766,6 +779,7 @@ int tmap :: eventpassed( int saveas, int action, int mapid )
 
 int tmap :: eventpassed( int id, int mapid )
 {
+/*
   pevent       ev2;
   peventstore  oldevent;
   char      b;
@@ -790,6 +804,7 @@ int tmap :: eventpassed( int id, int mapid )
                   return 1;
       }
    }
+   */
    return 0;
 }
 
@@ -877,25 +892,6 @@ tmap :: ~tmap ()
       }
    }
 
-
-   pevent       event;
-   pevent       event2;
-
-   event = firsteventtocome;
-   while (event != NULL) {
-      event2 = event;
-      event = event->next;
-      delete  event2;
-   }
-   firsteventtocome = NULL;
-
-   event = firsteventpassed;
-   while (event != NULL) {
-      event2 = event;
-      event = event->next;
-      delete event2;
-   }
-   firsteventpassed = NULL;
 
    if ( shareview ) {
       delete shareview;
@@ -1192,12 +1188,8 @@ void tmap :: startGame ( )
 
    for ( int j = 0; j < 8; j++ )
       player[j].queuedEvents = 1;
-   #ifndef karteneditor
-   getnexteventtime();
-   #endif
 
    levelfinished = false;
-   firsteventpassed = NULL;
    network = NULL;
    int num = 0;
    int cols[72];
@@ -1435,15 +1427,16 @@ void  tfield :: addobject( pobjecttype obj, int dir, bool force )
 }
 
 
-void tfield :: removeobject( pobjecttype obj )
+void tfield :: removeobject( pobjecttype obj , bool force)
 {
-   if ( building )
+   if ( !force && building )
       return;
 
    #ifndef karteneditor
-   if ( vehicle ) 
-      if ( vehicle->color != gamemap->actplayer << 3)
-        return;
+   if ( !force )
+      if ( vehicle )
+         if ( vehicle->color != gamemap->actplayer << 3)
+           return;
    #endif
 
    if ( !obj ) {
@@ -1461,7 +1454,7 @@ void tfield :: removeobject( pobjecttype obj )
    setparams();
    if ( obj )
       calculateobject( getx(), gety(), true, obj );
-} 
+}
 
 void tfield :: deleteeverything ( void )
 {
@@ -1497,6 +1490,17 @@ int tfield :: getweather ( void )
       if ( typ == typ->terraintype->weather[w] )
          return w;
    return -1;
+}
+
+void tfield :: setweather ( int weather )
+{
+     if (typ->terraintype->weather[ weather ] ) {
+        typ = typ->terraintype->weather[ weather ];
+        setparams();
+     } else {
+        typ = typ->terraintype->weather[ 0 ];
+        setparams();
+     }
 }
 
 bool compareObjectHeight ( const Object& o1, const Object& o2 )
@@ -1653,19 +1657,19 @@ void tfield :: setparams ( void )
 
    for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
       if ( gamemap->getgameparameter ( cgp_objectsDestroyedByTerrain ))
-         if ( o->typ->terrainaccess.accessible( bdt ) == -1 ) {
-            objects.erase(o);       
+         if ( o->typ->getFieldModification(getweather()).terrainaccess.accessible( bdt ) == -1 ) {
+            objects.erase(o);
             setparams();
             return;
          }
 
-      bdt  &=  o->typ->terrain_and;
-      bdt  |=  o->typ->terrain_or;
+      bdt  &=  o->typ->getFieldModification(getweather()).terrain_and;
+      bdt  |=  o->typ->getFieldModification(getweather()).terrain_or;
 
       for ( i = 0; i < cmovemalitypenum; i++ ) {
-         __movemalus[i] += o->typ->movemalus_plus[i];
-         if ( (o->typ->movemalus_abs[i] != 0) && (o->typ->movemalus_abs[i] != -1) )
-            __movemalus[i] = o->typ->movemalus_abs[i];
+         __movemalus[i] += o->typ->getFieldModification(getweather()).movemalus_plus[i];
+         if ( (o->typ->getFieldModification(getweather()).movemalus_abs[i] != 0) && (o->typ->getFieldModification(getweather()).movemalus_abs[i] != -1) )
+            __movemalus[i] = o->typ->getFieldModification(getweather()).movemalus_abs[i];
          if ( __movemalus[i] < minmalq )
             __movemalus[i] = minmalq;
       }

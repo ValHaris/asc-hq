@@ -109,9 +109,6 @@ void Building :: convert ( int player )
    if ( color < 8*8 )
       removeview();
 
-   gamemap->player[oldcol].queuedEvents++;
-   gamemap->player[player].queuedEvents++;
-
    tmap::Player::BuildingList::iterator i = find ( gamemap->player[oldcol].buildingList.begin(), gamemap->player[oldcol].buildingList.end(), this );
    if ( i != gamemap->player[oldcol].buildingList.end())
       gamemap->player[oldcol].buildingList.erase ( i );
@@ -127,18 +124,7 @@ void Building :: convert ( int player )
       if ( loading[i] )
          loading[i]->convert ( player );
 
-   /*
-   if ( connection & cconnection_conquer ) {
-      gamemap->player[oldcol].queuedEvents++;
-      gamemap->player[col].queuedEvents++;
-      // releaseevent(NULL,this,cconnection_conquer);
-   }
-
-   if ( connection & cconnection_lose ) {
-      gamemap->player[oldcol].queuedEvents++;
-      // releaseevent(NULL,this,cconnection_lose);
-      gamemap->player[col].queuedEvents++;
-   } */
+   conquered();
 }
 
 
@@ -369,9 +355,6 @@ Building :: ~Building ()
       tmap::Player::BuildingList::iterator i = find ( gamemap->player[c].buildingList.begin(), gamemap->player[c].buildingList.end(), this );
       if ( i != gamemap->player[c].buildingList.end() )
          gamemap->player[c].buildingList.erase ( i );
-
-      for ( int j = 0; j < 8; j++ )
-         gamemap->player[j].queuedEvents++;
    }
 
    for ( int i = 0; i < 32; i++ )
@@ -634,10 +617,19 @@ void Building::endTurn(  )
    if ( CGameOptions::Instance()->automaticTraining && (typ->special & cgtrainingb )) {
       for ( int i = 0; i < 32; ++i )
          if ( loading[i] ) {
-            cbuildingcontrols bc;
-            bc.init(this);
-            if ( bc.training.available( loading[i] ))
-               bc.training.trainunit( loading[i] );
+            bool ammoFull = true;
+            for ( int w = 0; w < loading[i]->typ->weapons.count; ++w )
+               if ( loading[i]->ammo[w] < loading[i]->typ->weapons.weapon[w].count )
+                  ammoFull = false;
+
+            if ( ammoFull ) {
+               cbuildingcontrols bc;
+               bc.init(this);
+               if ( bc.training.available( loading[i] )) {
+                  bc.training.trainunit( loading[i] );
+                  bc.refill.filleverything( loading[i] );
+               }
+            }
          }
    }
 #endif

@@ -31,9 +31,13 @@
 #endif
 
 
-ObjectType :: ObjectType ( void )
+ObjectType :: FieldModification::FieldModification()
 {
    terrain_and.flip();
+}
+
+ObjectType :: ObjectType ( void )
+{
    buildicon = NULL;
    removeicon = NULL;
    dirlist = NULL;
@@ -45,6 +49,13 @@ ObjectType :: ObjectType ( void )
    netBehaviour = 0;
 }
 
+ObjectType::FieldModification&  ObjectType::getFieldModification ( int weather )
+{
+   if ( this->weather.test( weather ))
+      return fieldModification[weather];
+   else
+      return fieldModification[0];
+}
 
 bool  ObjectType :: buildable ( pfield fld )
 {
@@ -52,7 +63,7 @@ bool  ObjectType :: buildable ( pfield fld )
    if ( fld->building )
       return false;
 
-   if ( terrainaccess.accessible ( fld->bdt ) <= 0 )
+   if ( getFieldModification( fld->getweather() ).terrainaccess.accessible ( fld->bdt ) <= 0 )
        return false;
 
    #endif
@@ -782,7 +793,7 @@ void         calculateallobjects( pmap actmap )
 
 
 
-const int object_version = 4;
+const int object_version = 5;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -833,9 +844,17 @@ void ObjectType :: read ( tnstream& stream )
 
        int no_autonet = stream.readInt();
 
-       terrainaccess.read( stream );
-       terrain_and.read ( stream );
-       terrain_or.read ( stream );
+       if ( version <= 4 ) {
+          fieldModification[0].terrainaccess.read( stream );
+          fieldModification[0].terrain_and.read ( stream );
+          fieldModification[0].terrain_or.read ( stream );
+       } else {
+          for ( int i = 0; i < cwettertypennum; ++i ) {
+             fieldModification[i].terrainaccess.read( stream );
+             fieldModification[i].terrain_and.read ( stream );
+             fieldModification[i].terrain_or.read ( stream );
+          }
+       }
 
        stream.readInt(); // ___buildicon
        stream.readInt(); // ___removeicon
@@ -878,50 +897,23 @@ void ObjectType :: read ( tnstream& stream )
 
        setupImages();
 
-       #ifndef converter
-       int mmcount = cmovemalitypenum;
-
-       if (mmcount < ___movemalus_plus_count )
-          mmcount = ___movemalus_plus_count;
-       #else
-       int mmcount = ___movemalus_plus_count ;
-       #endif
-
-       movemalus_plus.clear();
-       for ( int j=0; j < mmcount ; j++ ) {
-          if ( j < ___movemalus_plus_count )
-             movemalus_plus.push_back(  stream.readChar() );
-          else
-             if( j > 0 )
-               movemalus_plus.push_back ( movemalus_plus[0] );
-             else
-               movemalus_plus.push_back ( 0 );
-       }
-
-
-       #ifndef converter
-       mmcount = cmovemalitypenum;
-
-       if (mmcount < ___movemalus_abs_count )
-          mmcount = ___movemalus_abs_count;
-       #else
-       mmcount = ___movemalus_abs_count ;
-       #endif
-
-       movemalus_abs.clear();
-
-       for ( int j=0; j< mmcount ; j++ ) {
-          if (j < ___movemalus_abs_count )
-             movemalus_abs.push_back( stream.readChar() );
-          else
-             if( j > 0 )
-                movemalus_abs.push_back( movemalus_abs[0] );
-             else
-                movemalus_abs.push_back( 0 );
+       if ( version <= 4 ) {
+          fieldModification[0].movemalus_plus.read ( stream, 0, ___movemalus_plus_count );
+          fieldModification[0].movemalus_abs.read ( stream, 0, ___movemalus_abs_count );
+       } else {
+          for ( int i = 1; i < cwettertypennum; ++i ) {
+             fieldModification[i].movemalus_plus.read ( stream, 0 );
+             fieldModification[i].movemalus_abs.read ( stream, 0 );
+          }
        }
 
        if ( ___name )
           name = stream.readString ( );
+
+       if ( version <= 4 ) {
+          for ( int i = 1; i < cwettertypennum; ++i )
+             fieldModification[i] = fieldModification[0];
+       }
 
 
       if ( dirlistnum ) {
@@ -1034,10 +1026,10 @@ void ObjectType :: write ( tnstream& stream ) const
     stream.writeInt ( weatherPicture[0].images.size() );
     stream.writeInt ( armor );
 
-    stream.writeChar ( movemalus_plus.size() );
+    stream.writeChar ( 0 ); // was movemalus_plus_count
     stream.writeInt ( -1 ); // was movemalus_plus
 
-    stream.writeChar ( movemalus_abs.size() );
+    stream.writeChar ( 0 ); // was movemalus_abs_count
     stream.writeInt ( -1 ); // was movemalus_abs
 
     stream.writeInt ( attackbonus_plus );
@@ -1058,9 +1050,11 @@ void ObjectType :: write ( tnstream& stream ) const
     stream.writeInt ( -1 ); // was name
     stream.writeInt ( 0 );
 
-    terrainaccess.write( stream );
-    terrain_and.write ( stream );
-    terrain_or.write ( stream );
+    for ( int i = 0; i < cwettertypennum; i++ ) {
+       fieldModification[i].terrainaccess.write( stream );
+       fieldModification[i].terrain_and.write ( stream );
+       fieldModification[i].terrain_or.write ( stream );
+    }
 
     stream.writeInt( -1 ); // was buildicon
     stream.writeInt( -1 ); // was removeicon
@@ -1081,11 +1075,10 @@ void ObjectType :: write ( tnstream& stream ) const
                 stream.writedata( weatherPicture[ww].images[l], getpicsize2 ( weatherPicture[ww].images[l] ) );
           }
 
-    for ( int i = 0; i < movemalus_plus.size(); i++ )
-        stream.writeInt ( movemalus_plus[i] );
-
-    for ( int i = 0; i < movemalus_abs.size(); i++ )
-        stream.writeInt ( movemalus_abs[i] );
+    for ( int i = 0; i < cwettertypennum; i++ ) {
+       fieldModification[i].movemalus_plus.write(stream);
+       fieldModification[i].movemalus_abs.write(stream);
+    }
 
     stream.writeString ( name );
 
@@ -1105,19 +1098,8 @@ void ObjectType :: write ( tnstream& stream ) const
 }
 
 
-void ObjectType :: runTextIO ( PropertyContainer& pc )
+void ObjectType :: FieldModification :: runTextIO ( PropertyContainer& pc )
 {
-   pc.addInteger  ( "ID", id );
-   pc.addInteger  ( "GroupID", groupID, -1 );
-   pc.addTagArray ( "Weather", weather, cwettertypennum, weatherTags );
-   pc.addBool     ( "visible_in_fogOfWar", visibleago );
-   pc.addIntegerArray ( "LinkableObjects", linkableObjects );
-   if ( pc.find ( "LinkableTerrain" ) || !pc.isReading() )
-      pc.addIntegerArray ( "LinkableTerrain", linkableTerrain );
-
-   pc.addBool ( "canExistBeneathBuildings", canExistBeneathBuildings, false );
-
-   pc.addInteger  ( "Armor", armor );
    pc.addDFloatArray ( "Movemalus_plus", movemalus_plus );
    int mm = movemalus_plus.size();
    movemalus_plus.resize( cmovemalitypenum );
@@ -1138,6 +1120,42 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
       else
          movemalus_abs[i] = movemalus_abs[0];
    }
+
+   pc.openBracket ( "TerrainAccess" );
+   terrainaccess.runTextIO ( pc );
+   pc.closeBracket ();
+
+   pc.addTagArray ( "TerrainProperties_Filter", terrain_and, cbodenartennum, bodenarten, true );
+   pc.addTagArray ( "TerrainProperties_Add", terrain_or, cbodenartennum, bodenarten );
+}
+
+void ObjectType :: runTextIO ( PropertyContainer& pc )
+{
+   pc.addInteger  ( "ID", id );
+   pc.addInteger  ( "GroupID", groupID, -1 );
+   pc.addTagArray ( "Weather", weather, cwettertypennum, weatherTags );
+   pc.addBool     ( "visible_in_fogOfWar", visibleago );
+   pc.addIntegerArray ( "LinkableObjects", linkableObjects );
+   if ( pc.find ( "LinkableTerrain" ) || !pc.isReading() )
+      pc.addIntegerArray ( "LinkableTerrain", linkableTerrain );
+
+   pc.addBool ( "canExistBeneathBuildings", canExistBeneathBuildings, false );
+
+   pc.addInteger  ( "Armor", armor );
+
+   bool oldWeatherSpecification;
+
+   if ( pc.find ( "Movemalus_plus" )) {
+      oldWeatherSpecification = true;
+
+      fieldModification[0].runTextIO ( pc );
+
+      for ( int i = 1; i < cwettertypennum; ++i )
+         fieldModification[i] = fieldModification[0];
+
+   } else
+      oldWeatherSpecification= false;
+
 
    pc.addInteger  ( "AttackBonus_abs", attackbonus_abs );
    pc.addInteger  ( "AttackBonus_plus", attackbonus_plus );
@@ -1168,12 +1186,6 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
          netBehaviour |= NetToSelf;
    }
 
-   pc.openBracket ( "TerrainAccess" );
-   terrainaccess.runTextIO ( pc );
-   pc.closeBracket ();
-
-   pc.addTagArray ( "TerrainProperties_Filter", terrain_and, cbodenartennum, bodenarten, true );
-   pc.addTagArray ( "TerrainProperties_Add", terrain_or, cbodenartennum, bodenarten );
 
    for ( int i = 0; i < cwettertypennum; i++ )
       if ( weather.test(i) ) {
@@ -1250,7 +1262,7 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                   weatherPicture[i].flip[u] = 0;
                }
             }
-            
+
             if ( pc.find ( "DisplayMethod" ) )
                pc.addNamedInteger( "DisplayMethod", displayMethod, objectDisplayingMethodNum, objectDisplayingMethodTags );
             else
@@ -1258,6 +1270,9 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
 
          }
 
+         if ( !oldWeatherSpecification ) {
+            fieldModification[i].runTextIO( pc );
+         }
          pc.closeBracket (  );
       }
 

@@ -29,6 +29,8 @@
 #include "dialog.h"
 
 
+SigC::Signal0<void> tributeTransferred;
+
 void MapNetwork :: searchfield ( int x, int y, int dir )
 {
   int s;
@@ -354,6 +356,8 @@ void GetResource :: checkbuilding ( pbuilding b )
             if ( !queryonly ) {
                actmap->tribute.avail[ b->color / 8 ][ player ].resource( resourcetype ) -= found;
                actmap->tribute.paid [ b->color / 8 ][ player ].resource( resourcetype ) += found;
+               if ( found )
+                  tributeTransferred();
             }
 
             got += found;
@@ -495,8 +499,7 @@ void transfer_all_outstanding_tribute ( void )
    int targplayer = actmap->actplayer;
      // for ( int player = 0; player < 8; player++ )
    if ( actmap->player[targplayer].exist() ) {
-      char text[10000];
-      text[0] = 0;
+      ASCString text;
 
       for ( int player = 0; player < 8; player++ ) {
          if ( targplayer != player )
@@ -529,57 +532,44 @@ void transfer_all_outstanding_tribute ( void )
 
                }
                if ( topay[0] || topay[1] || topay[2] ) {
-                  char txt1b[1000];
-                  char txt_topay[100];
-                  txt_topay[0] = 0;
-                  int r;
-                  int cnt = 0;
-                  for ( r = 0; r < 3; r++ )
-                     if ( topay[r] )
-                        cnt++;
+                  Resources tp ( topay[0], topay[1], topay[2] );
+                  Resources gt ( got[0],   got[1],   got[2]   );
 
-                  int ps = 0;
-                  for ( r = 0; r < 3; r++ )
-                     if ( topay[r] ) {
-                        ps++;
-                        char txt3[100];
-                        sprintf( txt3, "%d %s", topay[r], resourceNames[r] );
-                        if ( ps>1 && ps < cnt )
-                           strcat ( txt_topay, ", ");
-                        if ( ps>1 && ps == cnt )
-                           strcat ( txt_topay, " and ");
-                        strcat ( txt_topay, txt3 );
-                     }
+                  ASCString topayStr = tp.toString();
 
-                  char txt_got[100];
-                  txt_got[0] = 0;
-                  cnt = 0;
-                  ps = 0;
-                  for ( r = 0; r < 3; r++ )
-                     if ( got[r] )
-                        cnt++;
+                  ASCString gotStr;
+                  if ( gt == tp )
+                     gotStr = "all";
+                  else {
+                     gotStr = gt.toString();
+                     if ( gotStr.empty() )
+                        gotStr = "nothing";
+                  }
 
-                  for ( r = 0; r < 3; r++ )
-                     if ( got[r] ) {
-                        ps++;
-                        char txt3[100];
-                        sprintf( txt3, "%d %s", got[r], resourceNames[r] );
-                        if ( ps>1  && ps < cnt )
-                           strcat ( txt_got, ", ");
-                        if ( ps>1 && ps == cnt )
-                           strcat ( txt_got, " and ");
-                        strcat ( txt_got, txt3 );
-                     }
-                  if ( !txt_got[0] )
-                     strcpy ( txt_got, "nothing" );
+                  ASCString msg;
+                  msg.format ( getmessage( 10020 ) , actmap->player[player].getName().c_str(), topayStr.c_str(), gotStr.c_str() );
 
-                  const char* sp = getmessage( 10020 );
-                  sprintf ( txt1b, sp, txt_topay, actmap->player[player].getName().c_str(), txt_got );
-                  strcat ( text, txt1b );
+                  text += msg;
+
+
+                  // next message, this time for the providing player
+
+                  if ( got[0] || got[1] || got[2] ) {
+                     msg = "";
+                     gotStr = gt.toString();
+                     msg.format ( getmessage( 10021 ) , gotStr.c_str(), actmap->player[targplayer].getName().c_str());
+                     new Message ( msg, actmap, 1 << player );
+                  }
+
+
                }
+
+               if ( got[0] || got[1] || got[2] )
+                 tributeTransferred();
+
             }
       }
-      if ( text[0] )
+      if ( !text.empty() )
          new Message ( text, actmap, 1 << targplayer );
 
    }

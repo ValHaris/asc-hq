@@ -21,7 +21,7 @@
     <USERDEFINES value="HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32;_DEBUG"/>
     <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="ai.bpf"/>
-    <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer;..\..\..\SDLmm\src"/>
+    <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer;..\..\..\SDLmm\src;..\libs\libsigc++"/>
     <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-pck -w-par -w-csu"/>
     <LISTFILE value=""/>
@@ -82,14 +82,16 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=7
-Item0=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer;..\..\..\SDLmm\src
-Item1=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer;C:\Programme\ascdev\SDLmm\src
-Item2=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer
-Item3=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer\
-Item4=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include
-Item5=$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\SDL\include
-Item6=$(BCB)\include;$(BCB)\include\vcl
+Count=9
+Item0=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer;..\..\..\SDLmm\src;..\libs\libsigc++
+Item1=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer;..\..\..\SDLmm\src;..\..\..\libs\libsigc++
+Item2=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer;..\..\..\SDLmm\src
+Item3=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer;C:\Programme\ascdev\SDLmm\src
+Item4=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer
+Item5=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer\
+Item6=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include
+Item7=$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\SDL\include
+Item8=$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
 Count=1
@@ -130,10 +132,5 @@ RemoteDebug=0
 ShowInfoMsgs=1
 LinkDebugVcl=0
 LinkCGLIB=0
-
-[Language]
-ActiveLang=
-ProjectLang=
-RootDir=
   </IDEOPTIONS>
 </PROJECT>

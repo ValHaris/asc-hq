@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: edevents.h,v 1.8 2003-04-23 18:31:09 mbickel Exp $
+//     $Id: edevents.h,v 1.9 2004-01-16 15:33:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2003/04/23 18:31:09  mbickel
+//      Fixed: AI problems
+//      Improved cheating detection in replay
+//
 //     Revision 1.7  2001/08/09 10:28:22  mbickel
 //      Fixed AI problems
 //      Mapeditor can edit a units AI parameter
@@ -60,11 +64,15 @@
     Boston, MA  02111-1307  USA
 */
 
+#ifndef edeventH
+ #define edeventH
 
-#define clear_and_or 124
+ #define clear_and_or 124
 
-extern void         event(void);
-extern void         setmapparameters( void );
+ extern void         event(void);
+ extern void         setmapparameters( void );
 
-extern void         getxy(word *x,word *y);
-extern void         getxy( int *x, int *y);
+ extern void         getxy(word *x,word *y);
+ extern void         getxy( int *x, int *y);
+
+#endif

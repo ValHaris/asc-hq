@@ -237,6 +237,8 @@ class MapDisplayInterface {
            virtual void stopAction ( void ) = 0;
            virtual void displayActionCursor ( int x1, int y1, int x2, int y2 ) = 0;
            virtual void removeActionCursor ( void ) = 0;
+           virtual void updateDashboard () = 0;
+           virtual void repaintDisplay () = 0;
            virtual ~MapDisplayInterface () {};
        };
 
@@ -253,6 +255,8 @@ class MapDisplay : public MapDisplayInterface {
            void stopAction ( void );
            void displayActionCursor ( int x1, int y1, int x2, int y2 ) {};
            void removeActionCursor ( void ) {};
+           void updateDashboard ();
+           void repaintDisplay ();
     };
 
 extern MapDisplay defaultMapDisplay;

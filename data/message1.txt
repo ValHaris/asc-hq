@@ -103,7 +103,9 @@ peace has been negotiated between %s and %s
 10011
 You don't have any units or buildings left !
 10020
-You have %s outstanding from %s; %s of it was transferred this turn#crt#
+%s provides you %s; %s of it was transferred to your net this turn#crt#
+10021
+%s of the resources you provided were transferred to %s 
 20001
 name
 20002

@@ -44,6 +44,7 @@
 
 bool tempsvisible;
 
+extern void repaintdisplay();
 
 // #define showtempnumber
 
@@ -1750,6 +1751,18 @@ void MapDisplay :: stopAction ( void )
    if ( b )
       cursor.show();
 
+}
+
+void MapDisplay :: updateDashboard ( void )
+{
+   #ifdef sgmain
+   dashboard.paint ( getactfield(), actmap->playerView );
+   #endif
+}
+
+void MapDisplay :: repaintDisplay ()
+{
+   ::repaintdisplay();
 }
 
 

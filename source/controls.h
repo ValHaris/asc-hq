@@ -4,9 +4,15 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.49 2003-05-01 18:02:22 mbickel Exp $
+//     $Id: controls.h,v 1.50 2004-01-16 15:33:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2003/05/01 18:02:22  mbickel
+//      Fixed: no movement decrease for cargo when transport moved
+//      Fixed: reactionfire not working when descending into range
+//      Fixed: objects not sorted
+//      New map event: add object
+//
 //     Revision 1.48  2003/04/15 20:06:49  mbickel
 //      Made readrlepict Endian independant
 //      Updated weaponguide
@@ -159,33 +165,6 @@
   //! see #tmoveparams
   extern tmoveparams moveparams; 
 
-
-
-
-   //! looks up the fields a unit can put or remove a mine from
-   class tputmine : public SearchFields {
-                       int player;
-                public:
-                       char             mienentyp;
-                       char             mienenlegen, mienenraeumen;
-                       char             numberoffields;
-                       virtual void     testfield ( const MapCoordinate& mc );
-                       void             initpm( char mt, const pvehicle eht );
-                       void             run ( void );
-                       tputmine ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
-              };
-
-    //! checks, which vehicle types are newly available 
-    class tprotfzt   {         
-                    char*  buf;
-                public:
-                    //! initializes an internal buffer and checks which vehicles are currently available
-                    void initbuffer( void );
-
-                    //! checks, which vehicle are now available that where not available when initbuffer was called. The new ones are displayed by calling #tshownewtanks
-                    void evalbuffer( void );
-
-               };
 
 
 /*! calculates the movement cost for moving vehicle from start to dest.
@@ -353,6 +332,9 @@ class ReplayMapDisplay : public MapDisplayInterface {
            void removeActionCursor ( void );
            int checkMapPosition ( int x, int y );
            void setCursorDelay  ( int time ) { cursorDelay = time; };
+           void updateDashboard() { mapDisplay->updateDashboard(); };
+           void repaintDisplay () { mapDisplay->repaintDisplay(); };
+
     };
 
 

@@ -27,7 +27,6 @@
 #include "dialog.h"
 #include "attack.h"
 #include "stack.h"
-#include "missions.h"
 #include "vehicletype.h"
 #include "buildingtype.h"
 #include "viewcalculation.h"
@@ -38,6 +37,8 @@
 #include "astar2.h"
 
 PendingVehicleActions pendingVehicleActions;
+
+SigC::Signal0<void> fieldCrossed;
 
 
 
@@ -233,10 +234,11 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
             npush ( dest->vehicle );
             dest->vehicle = vehicle;
             if ( dest->connection & cconnection_areaentered_anyunit )
-               releaseevent ( vehicle, NULL, cconnection_areaentered_anyunit );
+               fieldCrossed();
 
             if ((dest->connection & cconnection_areaentered_specificunit ) && ( vehicle->connection & cconnection_areaentered_specificunit ))
-               releaseevent ( vehicle, NULL, cconnection_areaentered_specificunit );
+               fieldCrossed();
+               
             npop ( dest->vehicle );
          }
       } while ( (to.x != next->x || to.y != next->y) && vehicle );
@@ -245,6 +247,8 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
    }
 
    pfield fld = getfield ( pos->x, pos->y );
+
+   actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
 
    if ( vehicle ) {
 
@@ -689,12 +693,12 @@ int VehicleAttack :: available ( pvehicle eht ) const
    if (eht != NULL)
       if (eht->attacked == false)
          if ( eht->weapexist() )
-            if ( eht->reactionfire.getStatus() == Vehicle::ReactionFire::off ) {
-               if (eht->typ->wait == false  ||  !eht->hasMoved() )
+            if (eht->typ->wait == false  ||  !eht->hasMoved() )
+//               if ( eht->reactionfire.getStatus() == Vehicle::ReactionFire::off ) {
                   return 1;
-            } else {
-               return 1;
-            }
+//               } else {
+//                  return 1;
+  //             }
 
    return 0;
 }
@@ -1130,7 +1134,7 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
       if ( targetUnit->typ->weapons.weapon[i].requiresAmmo() ) {
          int type = targetUnit->typ->weapons.weapon[i].getScalarWeaponType();
          if ( type >= 0 )
-            if ( bld->ammo[type] || targetUnit->ammo[i] || (bld->typ->special & cgammunitionproductionb)) {
+            if ( (bld->ammo[type] || targetUnit->ammo[i] || (bld->typ->special & cgammunitionproductionb)) && (bld->typ->special & (cgexternalloadingb | cgexternalammoloadingb ))) {
                const SingleWeapon& destWeapon = targetUnit->typ->weapons.weapon[i];
 
                VehicleService::Target::Service s;
@@ -1165,19 +1169,20 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
             }
       }
 
-   for ( int r = 1; r < resourceTypeNum; r++ )  // no energy !!
-      if ( targetUnit->typ->tank.resource(r) ) {
-         VehicleService::Target::Service s;
-         s.type = VehicleService::srv_resource;
-         s.sourcePos = r;
-         s.targetPos = r;
-         s.curAmount = targetUnit->tank.resource(r);
-         s.orgSourceAmount = bld->getResource (maxint, r, 1 );
-         s.maxAmount = s.curAmount + min ( targetUnit->putResource(maxint, r, 1) , s.orgSourceAmount );
-         int sourceSpace = bld->putResource(maxint, r, 1);
-         s.minAmount = max ( s.curAmount - sourceSpace, 0 );
-         targ.service.push_back ( s );
-      }
+   if ( bld->typ->special & (cgexternalloadingb | cgexternalresourceloadingb ))
+      for ( int r = 1; r < resourceTypeNum; r++ )  // no energy !!
+         if ( targetUnit->typ->tank.resource(r) ) {
+            VehicleService::Target::Service s;
+            s.type = VehicleService::srv_resource;
+            s.sourcePos = r;
+            s.targetPos = r;
+            s.curAmount = targetUnit->tank.resource(r);
+            s.orgSourceAmount = bld->getResource (maxint, r, 1 );
+            s.maxAmount = s.curAmount + min ( targetUnit->putResource(maxint, r, 1) , s.orgSourceAmount );
+            int sourceSpace = bld->putResource(maxint, r, 1);
+            s.minAmount = max ( s.curAmount - sourceSpace, 0 );
+            targ.service.push_back ( s );
+         }
 
 
    if ( bld->canRepair( targetUnit ) )
@@ -1241,7 +1246,7 @@ bool  VehicleService :: FieldSearch ::initrefuelling( int xp1, int yp1 )
    }
 
    if ( bld ) {
-      if ( bld->typ->special & cgexternalloadingb )
+      if ( bld->typ->special & (cgexternalloadingb | cgexternalresourceloadingb | cgexternalammoloadingb ))
          maxdist = 1;
       else
          maxdist = 0;
@@ -1332,6 +1337,11 @@ int VehicleService :: execute ( pvehicle veh, int targetNWID, int dummy, int ste
                               break;
            case srv_repair: vehicle->repairItem ( t.dest, amount );
                             logtoreplayinfo ( rpl_repairUnit, vehicle->networkid, t.dest->networkid, amount, vehicle->tank.material, vehicle->tank.fuel );
+                            /*
+                            if ( mapDisplay )
+                               if ( fieldvisiblenow ( fld, actmap->playerView ) || actmap->playerView*8  == vehicle->color )
+                                  SoundList::getInstance().playSound ( SoundList::conquer_building, 0 );
+                            */
                             break;
            case srv_ammo: delta = amount - serv.curAmount;
                           t.dest->ammo[ serv.targetPos ] += delta;

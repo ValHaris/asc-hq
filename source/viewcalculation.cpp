@@ -28,8 +28,10 @@
 #include "errors.h"
 
 #ifdef sgmain
- #include "missions.h"
+ #include "gameevents.h"
 #endif
+
+SigC::Signal0<void> buildingSeen;
 
 
 void         tcomputeview::initviewcalculation(  int view, int jamming, int sx, int sy, int _mode, int _height  )  // mode: +1 = add view  ;  -1 = remove view
@@ -244,7 +246,7 @@ int  evaluatevisibilityfield ( pmap actmap, pfield fld, int player, int add, int
    if ( sight > jamming   ||  direct  ) {
       #ifdef sgmain
       if ( fld->building && (fld->building->connection & cconnection_seen))
-         releaseevent ( NULL, fld->building, cconnection_seen );
+         buildingSeen();
       #endif
 
       if (( fld->vehicle  && ( fld->vehicle->color  == player * 8 )) ||

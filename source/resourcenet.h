@@ -159,4 +159,7 @@ class GetResourceUsage : public ResourceChangeNet {
 
 extern void transfer_all_outstanding_tribute( void );
 
+extern SigC::Signal0<void> tributeTransferred;
+
+
 #endif

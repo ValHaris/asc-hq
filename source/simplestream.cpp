@@ -23,7 +23,7 @@
 #include "simplestream.h"
 #include "errors.h"
 
-/* simplestream was intended to provide stream with any dependency on
+/* simplestream was intended to provide streams without any dependency on
    basestrm, but unknotting the two was never completed */
 #include "basestrm.h"
 

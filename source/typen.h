@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.139 2003-12-27 22:34:35 mbickel Exp $
+//     $Id: typen.h,v 1.140 2004-01-16 15:33:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.139  2003/12/27 22:34:35  mbickel
+//      Applied patch for improved AI building capturing (by Bernhard Oemer)
+//      Destructing buildings now gives 50% material back
+//
 //     Revision 1.138  2003/11/16 21:46:39  mbickel
 //      Some cleanup and restructuring
 //      Fixed: newly produced units could not leave building
@@ -438,6 +442,7 @@ class Resources {
      bool operator>= ( const Resources& res ) { return energy >= res.energy && material>=res.material && fuel>=res.fuel; };
      bool operator< ( const Resources& res ) { return !(*this >= res); };
      Resources operator* ( double d );
+     bool operator== ( const Resources& res ) { return energy==res.energy && material==res.material && fuel==res.fuel; };
      Resources& operator+= ( const Resources& res ) { energy+=res.energy; material+=res.material; fuel+=res.fuel; return *this;};
      enum { Energy, Material, Fuel };
      void read ( tnstream& stream );
@@ -445,6 +450,7 @@ class Resources {
      void runTextIO ( PropertyContainer& pc );
      void runTextIO ( PropertyContainer& pc, const Resources& defaultValue );
      static const char* name( int r );
+     ASCString toString();
 };
 
 extern Resources operator- ( const Resources& res1, const Resources& res2 );
@@ -485,12 +491,13 @@ struct teventstore {
 
 //! the time in ASC, measured in turns and moves
 struct GameTime {
-  int move() { return abstime & 0xffff; };
-  int turn() { return abstime >> 16; };
-  void set ( int turn, int move ) { abstime = (turn << 16) + move ; };
+  GameTime() { abstime = 0; };
+  int move() { return abstime % 0x10000; };
+  int turn() { return abstime / 0x10000; };
+  static bool comp ( const GameTime& a, const GameTime& b ) { return a.abstime > b.abstime; };
+  void set ( int turn, int move ) { abstime = (turn * 0x10000) + move ; };
   int abstime;
 };
-
 
 
 
@@ -556,42 +563,20 @@ class LoadableItemType {
        virtual ~LoadableItemType() {};
 };
 
-//        .              .                 !              .                !               !
- enum { cemessage,   ceweatherchange, cenewtechnology, celosecampaign, cerunscript,     cenewtechnologyresearchable,
-//        .             !                 !               .                 !                 .
-        cemapchange, ceeraseevent,    cecampaignend,   cenextmap,      cereinforcement, ceweatherchangecomplete,
-//         !                      !                  !                       .
-        cenewvehicledeveloped, cepalettechange, cealliancechange,      cewindchange,    cenothing,
-//        .                    .         .               .                       .
-        cegameparamchange, ceellipse, ceremoveellipse, cechangebuildingdamage, ceaddobject };
-
-
-extern const char*  ceventtrigger[];
-//         .                                     .                         .                        .                          .
- enum { ceventt_turn = 1 ,               ceventt_buildingconquered, ceventt_buildinglost,  ceventt_buildingdestroyed, ceventt_unitlost,
-//         !                                     .                          .                       .
-        ceventt_technologyresearched,    ceventt_event,             ceventt_unitconquered, ceventt_unitdestroyed,
-//         .                                     .                          .
-        ceventt_allenemyunitsdestroyed,  ceventt_allunitslost,      ceventt_allenemybuildingsdestroyed,
-//                .
-        ceventt_allbuildingslost,        ceventt_energytribute,     ceventt_materialtribute, ceventt_fueltribute,
-//                                                                                    .
-        ceventt_any_unit_enters_polygon, ceventt_specific_unit_enters_polygon, ceventt_building_seen, ceventt_irrelevant };
-
 
 
 template<typename C>
-void writeContainer ( C c, tnstream& stream  )
+void writeContainer ( const C& c, tnstream& stream  )
 {
    stream.writeInt ( 1 );
    stream.writeInt ( c.size() );
-   typedef typename C::iterator IT;
+   typedef typename C::const_iterator IT;
    for ( IT i = c.begin(); i != c.end(); ++i )
       i->write ( stream );
 }
 
 template<typename C>
-void readContainer ( C c, tnstream& stream  )
+void readContainer ( C& c, tnstream& stream  )
 {
    int version = stream.readInt();
    int num = stream.readInt();
@@ -606,194 +591,6 @@ void readContainer ( C c, tnstream& stream  )
 
 
 
-class tevent {
-  public:
-    union {
-      struct {  word         saveas; char action, num;  }a;  /*  CEventActions  */
-      int      id;               /* Id-Nr      ==> Technology.Requireevent; Tevent.trigger; etc.  */
-    } ;
-
-    pascal_byte         player;   // 0..7  fuer die normalen Spieler
-    // 8 wenn das Event unabh„ngig vom Spieler sofort auftreten soll
-
-    char         description[20];
-
-    union {
-      void*    rawdata;
-      char*    chardata;
-      int*     intdata;
-    };
-
-    int          datasize;
-    pevent       next;
-    int          conn;   // wird nur im Spiel gebraucht, BIt 0 gibt an, das andere events abh„nging sind von diesem
-    word         trigger[4];   /*  CEventReason  */
-
-    class  LargeTriggerData {
-      public:
-
-       class  PolygonEntered {
-         public:
-           int dataSize;
-           int dummy;
-           int vehiclenetworkid;
-           int* data;
-           int tempnwid;
-           int tempxpos;
-           int tempypos;
-           int color;                // bitmapped
-           int reserved[7];
-           PolygonEntered ( void );
-           PolygonEntered ( const PolygonEntered& poly );
-           ~PolygonEntered ( );
-        };
-
-        GameTime time;
-        int xpos, ypos;
-        int networkid;
-        pbuilding    building;
-        int         dummy;
-        int          mapid;
-        int          id;
-        tevent::LargeTriggerData::PolygonEntered* unitpolygon;
-        int reserved[32];
-        LargeTriggerData ( void );
-        LargeTriggerData ( const LargeTriggerData& data );
-        ~LargeTriggerData();
-    };
-
-    LargeTriggerData* trigger_data[4];
-
-    pascal_byte         triggerconnect[4];   /*  CEventTriggerConn */
-    pascal_byte         triggerstatus[4];   /*  Nur im Spiel: 0: noch nicht erf?llt
-                                         1: erf?llt, kann sich aber noch „ndern
-                                         2: unwiederruflich erf?llt
-                                         3: unerf?llbar */
-    GameTime     triggertime;     // Im Karteneditor auf  -1 setzen !!
-    // Werte ungleich -1 bedeuten automatisch, dass das event bereits erf?llt ist und evt. nur noch die Zeit abzuwait ist
-
-    struct {
-      int turn;
-      int move;   // negative Zahlen SIND hier zul„ssig !!!
-    } delayedexecution;
-
-    /* Funktionsweise der verzoegerten Events:
-       Sobald die Trigger erf?llt sind, wird triggertime[0] ausgef?llt. Dadurch wird das event ausgeloest,
-       sobald das Spiel diese Zeit erreicht ist, unabh„ngig vom Zustand des mapes
-       ( Trigger werden nicht erneut ausgewertet !)
-    */
-    tevent ( void );
-    tevent ( const tevent& event );
-    ~tevent ( void );
-
-    /*EventAction* eventAction;
-    int eventActionType;*/
-
-};
-
-
-  /*  Datenaufbau des triggerData fieldes: [ hi 16 Bit ] [ low 16 Bit ] [ 32 bit Integer ] [ Pointer ]      [ low 24 Bit       ]  [ high 8 Bit ]
-     'turn/move',                            move           turn
-     'building/unit     ',Kartened/Spiel                                                   PBuilding/Pvehicle
-                          disk               ypos           xpos
-     'technology researched',                                             Tech. ID
-     'event',                                                             Event ID
-     'tribut required'                                                                                         Hoehe des Tributes      Spieler, von dem Tribut gefordert wird
-     'all enemy *.*'                                                      Bit 0: alle nicht allierten
-                                                                          Bit 1: alle, die ?ber die folgenden Bits festgelegt werden, ob alliiert oder nicht
-                                                                            Bit 2 : Spieler 0
-                                                                            ...
-                                                                            Bit 9 : Spieler 7
-
-     'unit enters polygon'  pointer auf teventtrigger_polygonentered
-
-     der Rest benoetigt keine weiteren Angaben
-    */
-
-
-
-     /*  DatenAufbau des Event-Data-Blocks:
-
-      TLosecampaign, TEndCampaign, TWeatherchangeCompleted
-                 benoetigen keine weiteren Daten
-
-
-      TNewTechnologyEvent :
-                 data = NULL;
-                 SaveAs = TechnologyID;
-              Gilt fuer researched wie auch available
-
-      TMessageEvent
-             Data = NULL;
-             SaveAs: MessageID des Abschnittes in TextDatei
-
-      TNextMapEvent:
-             Data = NULL;
-             saveas: ID der n„chsten Karte;
-
-      TRunScript+NextMapEvent:
-             Data = pointer auf Dateinamen des Scriptes ( *.scr );
-             saveas: ID der n„chsten Karte;
-
-      TeraseEvent:
-             data[0] = ^int
-                       ID des zu loeschenden Events
-             data[1] = mapid
-
-      Tweatherchange            ( je ein int , alles unter Data )
-              wetter            ( -> cwettertypen , Wind ist eigene eventaction )
-              fieldadressierung      ( 1: gesamtes map     )
-                      ³              ( 0: polygone               )
-                      ³
-                      ÃÄÄÄÄÄ 0 ÄÄÄ>  polygonanzahl
-                      ³                   ÃÄÄ   eckenanzahl
-                      ³                             ÃÄÄ x position
-                      ³                                 y position
-                      ³
-                      ³
-                      ÀÄÄÄÄÄ 1 ÄÄÄ|
-
-+     Twindchange
-              intensit„t[3]         ( fuer tieffliegend, normalfliegend und hochfliegend ; -1 steht fuer keine Aenderung )
-              Richtung[3]           ( dito )
-
-
-      Tmapchange               ( je ein int , alles unter Data )        { wetter wird beibehalten ! }
-            numberoffields ( nicht die Anzahl fielder insgesamt,
-               ÃÄÄ>  bodentypid
-                     drehrichtung
-                     fieldadressierung   ( wie bei tweatherchange )
-
-
-      Treinforcements        ( alles unter DATA )
-             int num      // ein int , der die Anzahl der vehicle angibt. Die vehicle, die ein Transporter geladen hat, werden NICHT mitgez„hlt.
-                  ÃÄÄÄÄ > die vehicle, mit tspfldloaders::writeunit in einen memory-stream geschrieben.
-
-
-      TnewVehicleDeveloped
-            saveas  = ID des nun zur Verf?gung stehenden vehicletypes
-
-
-      Tpalettechange
-           Data =  Pointer auf String, der den Dateinamen der Palettendatei enth„lt.
-
-      Talliancechange
-           Data : Array[8][8] of int                      // status der Allianzen. Sollte vorerst symetrisch bleiben, also nur jeweils 7 Werte abfragen.
-                                                             Vorerst einfach Zahlwerte eingeben.
-                                                             256 steht fuer unver„ndert,
-                                                             257 fuer umkehrung
-
-+     TGameParameterchange
-           int nummer_des_parameters ( -> gameparametername[] )
-           int neuer_wert_des_parameters
-
-      Ellipse
-           int x1 , y1, x2, y2, x orientation , y orientation
-
-
-    Wenn Data != NULL ist, MUss datasize die Groesse des Speicherbereichs, auf den Data zeigt, beinhalten.
-
- */
 
 
 
@@ -1018,7 +815,7 @@ extern  const char*  choehenstufen[8] ;
  #define cwlaserb ( 1 << cwlasern  )
  #define cwammunitionn 9
  #define cwammunitionb ( 1 << cwammunitionn )
- #define cwservicen 8  
+ #define cwservicen 8
  #define cwserviceb ( 1 << cwservicen )
  extern const int cwaffenproduktionskosten[cwaffentypennum][3];  /*  Angabe: Waffentyp; energy - Material - Sprit ; jeweils fuer 5er Pack */
 
@@ -1030,40 +827,6 @@ extern  const char*  choehenstufen[8] ;
 
 
 extern const char*  resourceNames[3];
-
-
-
-extern  const char* cconnections[6];
- #define cconnection_destroy 1  
- #define cconnection_conquer 2  
- #define cconnection_lose 4
- #define cconnection_seen 8
- #define cconnection_areaentered_anyunit 16
- #define cconnection_areaentered_specificunit 32
- //   conquered = You conquered sth.      
- //   lost      = an enemy conquered sth. from you
-
-
-const int ceventtriggernum = 21;
-extern const char* ceventtriggerconn[]; 
- #define ceventtrigger_and 1  
- #define ceventtrigger_or 2  
- #define ceventtrigger_not 4  
- #define ceventtrigger_klammerauf 8  
- #define ceventtrigger_2klammerauf 16  
- #define ceventtrigger_2klammerzu 32  
- #define ceventtrigger_klammerzu 64  
-  /*  reihenfolgenpriorit„t: in der Reihenfolge von oben nach unten wird der TriggerCon ausgewertet
-               AND   OR
-               NOT
-               (
-               eigentliches event
-               )
-    */
-
-
-#define ceventactionnum 22
-extern const char* ceventactions[ceventactionnum]; // not bitmapped
 
 
 extern const char*  cmovemalitypes[cmovemalitypenum];
@@ -1148,8 +911,9 @@ const int submarineMovement = 11;
 #define movement_cost_for_repairing_unit 12
 #define attack_after_repair 1       // Can the unit that is beeing repaired attack afterwards?
 
-#define mineputmovedecrease 8  
-#define streetmovemalus 8  
+#define mineputmovedecrease 10
+#define mineremovemovedecrease 10
+#define streetmovemalus 8
 #define railroadmovemalus 8
 #define searchforresorcesmovedecrease 8
 

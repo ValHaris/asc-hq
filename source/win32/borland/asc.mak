@@ -14,34 +14,38 @@ BCB = $(MAKEDIR)\..
 VERSION = BCB.06.00
 # ---------------------------------------------------------------------------
 PROJECT = asc.exe
-OBJFILES = obj\sg.obj obj\dlg_box.obj obj\attack.obj obj\basegfx.obj obj\basestrm.obj \
-    obj\building.obj obj\buildingtype.obj obj\CLoadable.obj \
-    obj\containerbase.obj obj\controls.obj obj\dialog.obj obj\astar2.obj \
-    obj\weather.obj obj\gamemap.obj obj\gameoptions.obj obj\gui.obj \
-    obj\loadbi3.obj obj\loaders.obj obj\loadpcxc.obj obj\mapalgorithms.obj \
-    obj\misc.obj obj\missions.obj obj\Named.obj obj\network.obj \
-    obj\newfont.obj obj\palette.obj obj\password.obj obj\password_dialog.obj \
-    obj\pd.obj obj\Property.obj obj\PropertyGroup.obj obj\sgstream.obj \
-    obj\soundList.obj obj\spfst.obj obj\stack.obj obj\strtmesg.obj \
-    obj\typen.obj obj\unitctrl.obj obj\vehicletype.obj obj\viewcalculation.obj \
-    obj\gamedlg.obj obj\SDL_main.obj obj\asc_IMG_jpg.obj obj\sound.obj \
-    obj\graphics.obj obj\loadimage.obj obj\SDLStretch.obj obj\events.obj \
-    obj\research.obj obj\replay.obj obj\graphicset.obj obj\dashboard.obj \
-    obj\ascstring.obj obj\resourcenet.obj obj\mapdisplay.obj obj\vehicle.obj \
-    obj\buildings.obj obj\networkdata.obj obj\getopt1.obj obj\getopt.obj \
-    obj\objecttype.obj obj\terraintype.obj obj\textfileparser.obj \
-    obj\textfiletags.obj obj\itemrepository.obj obj\stringtokenizer.obj \
-    obj\music.obj obj\paradialog.obj obj\messages.obj \
-    obj\textfile_evaluation.obj
+OBJFILES = obj\SDL_main.obj obj\CLoadable.obj obj\getopt.obj obj\getopt1.obj \
+    obj\Named.obj obj\Property.obj obj\PropertyGroup.obj obj\astar2.obj \
+    obj\ascstring.obj obj\attack.obj obj\basegfx.obj obj\basestrm.obj \
+    obj\building.obj obj\buildings.obj obj\buildingtype.obj \
+    obj\containerbase.obj obj\containerbasetype.obj obj\controls.obj \
+    obj\dashboard.obj obj\dialog.obj obj\dlg_box.obj obj\gamedlg.obj \
+    obj\gamemap.obj obj\gameoptions.obj obj\graphicset.obj obj\gui.obj \
+    obj\itemrepository.obj obj\loadbi3.obj obj\loaders.obj obj\loadpcxc.obj \
+    obj\mapalgorithms.obj obj\mapdisplay.obj obj\messages.obj obj\misc.obj \
+    obj\missions.obj obj\music.obj obj\network.obj obj\networkdata.obj \
+    obj\newfont.obj obj\objecttype.obj obj\palette.obj obj\paradialog.obj \
+    obj\password.obj obj\password_dialog.obj obj\pd.obj obj\replay.obj \
+    obj\research.obj obj\resourcenet.obj obj\SDLStretch.obj \
+    obj\asc_IMG_jpg.obj obj\events.obj obj\graphics.obj obj\loadimage.obj \
+    obj\sound.obj obj\sg.obj obj\sgstream.obj obj\soundList.obj obj\spfst.obj \
+    obj\stack.obj obj\stringtokenizer.obj obj\strtmesg.obj obj\terraintype.obj \
+    obj\textfile_evaluation.obj obj\textfileparser.obj obj\textfiletags.obj \
+    obj\typen.obj obj\unitctrl.obj obj\vehicle.obj obj\vehicletype.obj \
+    obj\viewcalculation.obj obj\messagedlg.obj obj\mission_dialog.obj \
+    obj\simplestream.obj obj\gameevents.obj obj\Singleton.obj \
+    obj\prehistoricevents.obj obj\mappolygons.obj
 RESFILES = 
 MAINSOURCE = asc.bpf
 RESDEPEN = $(RESFILES)
-LIBFILES = ..\..\libs\bzlib\win\bzlib.lib ..\..\libs\triangul\win32\triangulation.lib \
-    ..\..\..\..\sdl\bin\sdl.lib ..\..\AI\ai.lib \
-    ..\..\..\..\SDL_image\bin\SDL_image.lib ..\..\libs\sdlmm\SDLmm.lib \
-    ..\..\libs\jpeg-6b\libjpeg.lib ..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB \
-    ..\..\..\..\paragui\borland\Paragui.lib \
-    ..\..\..\..\freetype2\objs\freetype.lib ..\..\..\..\Expat\Libs\exp.lib
+LIBFILES = ..\..\..\..\Expat\Libs\exp.lib ..\..\..\..\SDL_image\bin\SDL_image.lib \
+    ..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB \
+    ..\..\..\..\freetype2\objs\freetype.lib \
+    ..\..\..\..\paragui\borland\Paragui.lib ..\..\..\..\sdl\bin\sdl.lib \
+    ..\..\AI\ai.lib ..\..\libs\bzlib\win\bzlib.lib \
+    ..\..\libs\jpeg-6b\libjpeg.lib ..\..\libs\sdlmm\SDLmm.lib \
+    ..\..\libs\triangul\win32\triangulation.lib \
+    ..\..\libs\libsigc++\libsigcpp.lib
 IDLFILES = 
 IDLGENFILES = 
 LIBRARIES = vcl.lib rtl.lib
@@ -54,16 +58,16 @@ DEBUGLIBPATH = $(BCB)\lib\debug
 RELEASELIBPATH = $(BCB)\lib\release
 USERDEFINES = HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32;_DEBUG
 SYSDEFINES = NO_STRICT;_NO_VCL
-INCLUDEPATH = ..\..\..\..\..\Borland\CBuilder6\Projects;..\..;..\..\LIBS\getopt;..\..\AI;C:\BORLAND\CBuilder5\Projects;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl_mixer;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image;..\..\..\..\paragui\include;..\..\..\..\freetype2\include
-LIBPATH = ..\..\..\..\..\Borland\CBuilder6\Projects;..\..;..\..\LIBS\getopt;..\..\AI;C:\BORLAND\CBuilder5\Projects;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
-WARNINGS= -w-pck -w-par -w-8027 -w-8026 -w-csu
-PATHCPP = .;..\..;..\..\..\..\sdl\src\main\win32;..\..\sdl;..\..\LIBS\getopt
+INCLUDEPATH = ..\..\libs\loki;..\..\..\..\..\Borland\CBuilder6\Projects;..\..;..\..\LIBS\getopt;..\..\AI;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl_mixer;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image;..\..\..\..\paragui\include;..\..\..\..\freetype2\include;..\..\libs\libsigc++
+LIBPATH = ..\..\libs\loki;..\..\..\..\..\Borland\CBuilder6\Projects;..\..;..\..\LIBS\getopt;..\..\AI;C:\BORLAND\CBuilder5\Projects;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
+WARNINGS= -w-pck -w-par -w-8027 -w-8026 -w-csu -w-big
+PATHCPP = .;..\..\..\..\sdl\src\main\win32;..\..;..\..\LIBS\getopt;..\..\sdl;..\..\libs\loki
 PATHASM = .;
 PATHPAS = .;
 PATHRC = .;
 PATHOBJ = .;$(LIBPATH)
 # ---------------------------------------------------------------------------
-CFLAG1 = -Od -Q -Vx -Ve -X- -r- -a1 -5 -b -k -y -v -vi- -tW -tWM -c -K
+CFLAG1 = -O2 -Q -Vx -Ve -X- -r- -a1 -5 -b -k -y -v -vi- -tW -tWM -c -K
 IDLCFLAGS = 
 PFLAGS = -N2obj -N0obj -$Y+ -$W -$O- -$A8 -v -JPHNE -M
 RFLAGS = 
@@ -210,8 +214,8 @@ $(PROJECT): $(OTHERFILES) $(IDLGENFILES) $(OBJFILES) $(RESDEPEN) $(DEFFILE)
 
 # ---------------------------------------------------------------------------
 
-obj\astar2.obj: ..\..\astar2.cpp
-  $(BCB)\BIN\$(BCC32) $(CFLAG1) -vi  -I$(INCLUDEPATH) -D$(USERDEFINES) -D$(SYSDEFINES) -n$(@D) {$** }
+obj\basestrm.obj: ..\..\basestrm.cpp
+  $(BCB)\BIN\$(BCC32) $(CFLAG1)   -I$(INCLUDEPATH) -D$(USERDEFINES) -D$(SYSDEFINES) -n$(@D) {$** }
 
 
 

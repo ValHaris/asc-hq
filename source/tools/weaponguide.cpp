@@ -939,6 +939,17 @@ int main(int argc, char *argv[] )
                   }
 
                   printLineEnd( transportPage );
+
+
+
+                  printIndex ( transportPage, "Movement cost override" );
+                  for ( ContainerBaseType::EntranceSystems::iterator i = ft->entranceSystems.begin(); i != ft->entranceSystems.end(); i++ )
+                     if ( i->movecost >= 0 )
+                        printValue ( transportPage, strrr(i->movecost) );
+                     else
+                        printValue ( transportPage, "-" );
+
+                  printLineEnd( transportPage );
                }
             }
             fprintf ( transportPage, "</table>\n" );

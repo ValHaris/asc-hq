@@ -33,7 +33,6 @@
 
 
 
-
 const float repairEfficiencyVehicle[resourceTypeNum*resourceTypeNum] = { 0,  0,  0,
                                                                          0,  0.5, 0,
                                                                          0.5, 0,  1 };
@@ -112,9 +111,6 @@ Vehicle :: ~Vehicle (  )
       tmap::Player::VehicleList::iterator i = find ( gamemap->player[c].vehicleList.begin(), gamemap->player[c].vehicleList.end(), this );
       if ( i != gamemap->player[c].vehicleList.end() )
          gamemap->player[c].vehicleList.erase ( i );
-
-      for ( int i = 0; i < 8; i++ )
-         gamemap->player[i].queuedEvents++;
    }
 
    for ( int i = 0; i < 32; i++ )
@@ -766,16 +762,8 @@ void Vehicle::convert ( int col )
       if ( loading[i] )
          loading[i]->convert( col );
 
-   #ifndef karteneditor
-      if ( connection & cconnection_conquer )
-         gamemap->player[oldcol].queuedEvents++;
-         // releaseevent( this, NULL,cconnection_conquer) ;
-
-      if ( connection & cconnection_lose )
-         gamemap->player[oldcol].queuedEvents++;
-         // releaseevent( this, NULL,cconnection_lose);
-
-   #endif
+   // emit signal
+   conquered();
 }
 
 void Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )

@@ -1,6 +1,10 @@
-//     $Id: edmisc.h,v 1.30 2003-04-23 18:31:10 mbickel Exp $
+//     $Id: edmisc.h,v 1.31 2004-01-16 15:33:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2003/04/23 18:31:10  mbickel
+//      Fixed: AI problems
+//      Improved cheating detection in replay
+//
 //     Revision 1.29  2003/03/26 19:16:46  mbickel
 //      Fixed AI bugs
 //      Fixed clipboard bugs
@@ -170,7 +174,7 @@
 #include "tpascal.inc"
 #include "typen.h"
 #include "basegfx.h"
-#include "weather.h"
+#include "mappolygons.h"
 #include "misc.h"
 #include "newfont.h"
 #include "events.h"
@@ -200,7 +204,7 @@
            int      x, y; 
         } xy; 
 
- 
+/*
    typedef struct tpolystructure* ppolystructure;
 
    typedef struct tpolystructure {
@@ -208,7 +212,7 @@
               pascal_byte place;
               int id;
               ppolystructure next;
-        } tpolystruct; 
+        } tpolystruct;
 
    class   tpolygon_management {
            public :
@@ -217,8 +221,8 @@
                  tpolygon_management(void);
                  void addpolygon(ppolygon *poly, int place, int id);
                  void deletepolygon(ppolygon *poly);
-                 };
-
+            };
+*/
    class tmycursor : public tcursor {
          public :
               word sx,sy,ix,iy;
@@ -227,16 +231,14 @@
               virtual void putbkgr ( void );
    };
 
-   class  tchangepoly {
+   class  PolygonEditor {
+             Poly_gon& poly;
+             void display();
         public:
-             ppolygon poly;
-             void setpolypoints(int value);
-             void setpolytemps (int value);
-             int checkpolypoint(int x, int y);
-             void deletepolypoint(int x, int y);
+             PolygonEditor ( Poly_gon& polygon ) : poly( polygon ) {};
              void run(void);
    };
-
+/*
    class  tfillpolygonbodentyp : public tfillpolygonsquarecoord {
         public:
              int tempvalue;
@@ -250,7 +252,7 @@
              virtual void initevent ( void );
              virtual void setpointabs ( int x,  int y  );
    };
-
+*/
    class tputresources : public SearchFields {
                               int resourcetype;
                               int maxresource;
@@ -295,7 +297,7 @@
    extern tfontsettings         rsavefont;
    extern int                   lastselectiontype;
    extern selectrec              sr[10];
-   extern ppolygon               pfpoly;
+   // extern ppolygon               pfpoly;
    extern char                tfill,polyfieldmode;
    extern word                    fillx1, filly1;
    extern pbuilding               gbde;
@@ -343,14 +345,9 @@ extern void         freevariables(void);
 extern int          selectfield(int * cx ,int  * cy);
 extern void 	     playerchange(void);
 
-extern void         setpolytemps (int value, ppolygon poly1); //* setzt in diesem Polygon den Tempvalue auf value
-extern void         createpolygon (ppolygon *poly, int place, int id);
-/*
-  Place 0 : Event
-              id  = event_action
-*/
-extern void        changepolygon (ppolygon poly);
-extern int        getpolygon(ppolygon *poly); //return Fehlerstatus
+//extern void         setpolytemps (int value, ppolygon poly1); //* setzt in diesem Polygon den Tempvalue auf value
+extern void         editpolygon (Poly_gon& poly);
+// extern int        getpolygon(ppolygon *poly); //return Fehlerstatus
 extern void        showpalette(void);
 extern void        pdsetup(void);
 
@@ -421,5 +418,6 @@ extern ClipBoard clipBoard;
 
 extern void saveClipboard();
 extern void readClipboard();
+extern void setweatherall ( int weather  );
 
 #endif

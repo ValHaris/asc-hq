@@ -46,11 +46,25 @@
      //! if an object should not be attackable, set armor to 0
      int armor;
 
-     //! the movemalus_plus is added to the current movemalus of the field to form the new movemalus. Negative values are ok.
-     TerrainType::MoveMalus movemalus_plus;
+     struct FieldModification {
+        FieldModification();
 
-     //! The movemalus_abs replaces the current movemalus of the field by a new one. Values of 0 and -1 won't affect the movemalus of the field, and values ranging from 1 to 9 must not be used.
-     TerrainType::MoveMalus movemalus_abs;
+        //! the movemalus_plus is added to the current movemalus of the field to form the new movemalus. Negative values are ok.
+        TerrainType::MoveMalus movemalus_plus;
+
+        //! The movemalus_abs replaces the current movemalus of the field by a new one. Values of 0 and -1 won't affect the movemalus of the field, and values ranging from 1 to 9 must not be used.
+        TerrainType::MoveMalus movemalus_abs;
+
+        //! The terrain on which this object can be placed
+        TerrainAccess terrainaccess;
+
+        //! the terrain properties of the field will be AND-masked with this field and then OR-masked with terrain_or to form the new terrain properties
+        TerrainBits terrain_and;
+        TerrainBits terrain_or;
+        void runTextIO ( PropertyContainer& pc );
+     } fieldModification[cwettertypennum];
+
+     FieldModification& getFieldModification( int weather );
 
      //! this is added to the current attackbonus of the field to form the new attackbonus.
      int attackbonus_plus;
@@ -93,13 +107,6 @@
 
      //! specifies how the object is going to connect to other things
      int netBehaviour;
-
-     //! The terrain on which this object can be placed
-     TerrainAccess terrainaccess;
-
-     //! the terrain properties of the field will be AND-masked with this field and then OR-masked with terrain_or to form the new terrain properties
-     TerrainBits terrain_and;
-     TerrainBits terrain_or;
 
      ObjectType ( void );
 

@@ -2836,7 +2836,7 @@ void ccontainer :: cammunitiontransfer_subwindow :: resetresources ( int mode )
 
 int ccontainer_b :: cammunitiontransferb_subwindow :: externalloadavailable ( void )
 {
-   return cc_b->building->typ->special & cgexternalloadingb;
+   return cc_b->building->typ->special & (cgexternalloadingb | cgexternalresourceloadingb | cgexternalammoloadingb );
 }
 
 

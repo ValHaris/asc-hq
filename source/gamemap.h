@@ -32,6 +32,7 @@
  #include "basestrm.h"
  #include "time.h"
  #include "messages.h"
+ #include "gameevents.h"
 
 //! The number of game paramters that can be specified for each map.
 const int gameparameternum = 28;
@@ -115,6 +116,12 @@ class Mine {
 };
 
 
+class LoadNextMap {
+       public:
+          int id;
+          LoadNextMap( int ID ) : id(ID) {};
+};          
+
 
 
 //! a single field of the map
@@ -188,7 +195,7 @@ class  tfield {
     void addobject ( pobjecttype obj, int dir = -1, bool force = false );
 
     //! removes all objects of the given type from the field
-    void removeobject ( pobjecttype obj );
+    void removeobject ( pobjecttype obj, bool force = false );
 
     //! sorts the objects. Since objects can be on different levels of height, the lower one must be displayed first
     void sortobjects ( void );
@@ -218,6 +225,7 @@ class  tfield {
 
     //! the weather that is on this field
     int getweather ( void );
+    void setweather( int weather );
 
     //! the radar jamming that is on this field
     int getjamming ( void );
@@ -424,6 +432,15 @@ class tmap {
 
       } player[9];
 
+
+      int eventID;
+
+      typedef PointerList<Event*> Events;
+      Events events;
+
+      vector<GameTime> eventTimes;
+
+      /*
       //! a container for events that were executed during previous maps of the campaign
       peventstore  oldevents;
 
@@ -432,6 +449,7 @@ class tmap {
 
       //! the list of events that already have been triggered.
       pevent       firsteventpassed;
+      */
 
       // required for loading the old map file format; no usage outside the loading routine
       // bool loadeventstore,loadeventstocome,loadeventpassed;
@@ -444,7 +462,7 @@ class tmap {
       pnetwork     network;
       // int          alliance_names_not_used_any_more[8];
 
-      //! only to be used by units and buildings. To speed up map destruction, the view won't be recalculated 
+      //! only to be used by units and buildings. To speed up map destruction, the view won't be recalculated. No signals will be send when units & buildings are destroyed, either 
       bool __mapDestruction;
 
       struct tcursorpos {
@@ -459,7 +477,7 @@ class tmap {
 
       /** The tribute can not only be used to demand resources from enemies but also to transfer resources to allies.
             tribute.avail[a][b].energy is the ammount of energy that player b may (still) extract from the net of player a
-            tribute.paid[a][b].energy is the amount of energy that player b has already extracted from player a's net
+            tribute.paid[b][a].energy is the amount of energy that player b has already extracted from player a's net
             a is source player, b is destination player
        **/
       class ResourceTribute {
@@ -577,7 +595,7 @@ class tmap {
       pvehicle getUnit ( int nwid );
       int  getgameparameter ( GameParameter num );
       void setgameparameter ( GameParameter num, int value );
-      void cleartemps( int b, int value = 0 );
+      void cleartemps( int b = -1, int value = 0 );
       bool isResourceGlobal ( int resource );
       void setupResources ( void );
       const ASCString& getPlayerName ( int playernum );

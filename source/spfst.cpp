@@ -49,7 +49,6 @@
 #include "itemrepository.h"
 
 #ifndef karteneditor
-  #include "missions.h"
   #include "gamedlg.h"
 #endif
 
@@ -914,8 +913,8 @@ void checkobjectsforremoval ( void )
       for ( int x = 0; x < actmap->xsize; x++ ) {
          pfield fld = getfield ( x, y );
          for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end();  )
-            if ( i->typ->terrainaccess.accessible ( fld->bdt ) < 0 ) {
-               fld->removeobject ( i->typ );
+            if ( i->typ->getFieldModification(fld->getweather()).terrainaccess.accessible ( fld->bdt ) < 0 ) {
+               fld->removeobject ( i->typ, true );
                i = fld->objects.begin();
             } else
                i++;
@@ -924,8 +923,10 @@ void checkobjectsforremoval ( void )
 
 void  checkunitsforremoval ( void )
 {
-   for ( int c=0; c<=8 ;c++ )
+   for ( int c=0; c<=8 ;c++ ) {
+      ASCString msg;
       for ( Player::VehicleList::iterator i = actmap->player[c].vehicleList.begin(); i != actmap->player[c].vehicleList.end();  ) {
+
           pvehicle eht = *i;
           pfield field = getfield(eht->xpos,eht->ypos);
           bool erase = false;
@@ -944,8 +945,12 @@ void  checkunitsforremoval ( void )
                 }
           }
           if ( erase ) {
-             ASCString ident = "The unit " + (*i)->getName() + " at position ("+strrr((*i)->getPosition().x)+"/"+strrr((*i)->getPosition().y)+") ";
-             new Message ( ident+reason, actmap, 1<<(*i)->getOwner());
+             ASCString ident = "The unit " + (*i)->getName() + " at position ("+strrr((*i)->getPosition().x)+"/";
+             ident += strrr((*i)->getPosition().y)+ASCString(") ");
+
+             msg += ident + reason;
+             msg += "\n\n";
+
              Vehicle* pv = *i;
              actmap->player[c].vehicleList.erase ( i );
              delete pv;
@@ -958,6 +963,10 @@ void  checkunitsforremoval ( void )
           } else
              i++;
       }
+
+      if ( !msg.empty() )
+         new Message ( msg, actmap, 1<<c);
+   }
 }
 
 

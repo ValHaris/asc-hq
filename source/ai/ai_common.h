@@ -46,7 +46,6 @@
 #include "../spfst.h"
 #include "../dlg_box.h"
 #include "../stack.h"
-#include "../missions.h"
 #include "../controls.h"
 #include "../dialog.h"
 #include "../gamedlg.h"

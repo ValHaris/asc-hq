@@ -74,6 +74,9 @@ const int cbodenartennum = 35;
            #ifdef _vector_at_broken_
             int& at(size_t pos) { return operator[](pos); };
            #endif
+            // void read ( tnstream& stream ) { read ( stream, -1 ); };
+            void read ( tnstream& stream, int defaultValue, int moveMalusCount = -1 );
+            void write ( tnstream& stream ) const;
       };
 
       class  Weather {
