@@ -1,6 +1,9 @@
-//     $Id: edmisc.cpp,v 1.28 2000-08-12 12:52:46 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.29 2000-09-07 15:49:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/08/12 12:52:46  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.27  2000/08/08 09:48:12  mbickel
 //
 //      speed up of dialog boxes in linux
@@ -1374,12 +1377,6 @@ void         k_savemap(char saveas)
 
       mapsaved = true;
 
-      char filedescription[500];
-      if ( actmap->preferredfilenames && actmap->preferredfilenames->mapdescription[0] )
-         strcpy ( filedescription, actmap->preferredfilenames->mapdescription[0] );
-      else
-         filedescription[0] = 0;
-
       cursor.hide();
 
       #ifdef logging
@@ -1390,9 +1387,6 @@ void         k_savemap(char saveas)
          actmap->preferredfilenames = new PreferredFilenames;
          memset ( actmap->preferredfilenames, 0 , sizeof ( PreferredFilenames ));
       }
-      if ( actmap->preferredfilenames->mapdescription[0] )
-         asc_free ( actmap->preferredfilenames->mapdescription[0] );
-      actmap->preferredfilenames->mapdescription[0] = strdup ( filedescription );
 
       if ( actmap->preferredfilenames->mapname[0] )
          asc_free ( actmap->preferredfilenames->mapname[0] );
@@ -1402,7 +1396,7 @@ void         k_savemap(char saveas)
       #ifdef logging
       logtofile ( "edmisc / k_savemap /  vor savemap" );
       #endif
-      savemap(filename,filedescription);
+      savemap( filename );
       #ifdef logging
       logtofile ( "edmisc / k_savemap /  nach savemap " );
       #endif

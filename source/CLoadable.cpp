@@ -23,6 +23,7 @@
 CLoadableGameOptions::CLoadableGameOptions(CGameOptions* pOptions)
 	:	_pOptions(pOptions)
 {
+	add(new IntProperty("DisableSound"							,&_pOptions->disablesound));
 	add(new IntProperty("FastMove"								,&_pOptions->fastmove,3));
 	add(new IntProperty("VisibilityCalculationAlgorithm"	,&_pOptions->visibility_calc_algo));
 	add(new IntProperty("MovementSpeed"							,&_pOptions->movespeed));

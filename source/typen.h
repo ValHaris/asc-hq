@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.47 2000-09-02 13:59:50 mbickel Exp $
+//     $Id: typen.h,v 1.48 2000-09-07 15:49:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2000/09/02 13:59:50  mbickel
+//      Worked on AI
+//      Started using doxygen
+//
 //     Revision 1.46  2000/09/01 17:46:44  mbickel
 //      Improved A* code
 //      Renamed tvehicle class to Vehicle
@@ -281,9 +285,9 @@ typedef class tshareview *pshareview;
 
   struct PreferredFilenames {
     char* mapname[8];
-    char* mapdescription[8];
+    char* mapdescription_not_used_any_more[8];
     char* savegame[8];
-    char* savegamedescription[8];
+    char* savegamedescription_not_used_any_more[8];
   };
 
   class  EllipseOnScreen {
@@ -557,18 +561,28 @@ struct teventstore {
   };
 
 
+const int aiValueTypeNum = 8;  //!< how many different target types are there?
+
 class AiThreat {
        public:
-         int threat[8];
+         const int threatTypes;
+         int threat[aiValueTypeNum];
          void reset ( void );
-         AiThreat ( void ) { reset(); };
+         AiThreat ( void ) : threatTypes ( aiValueTypeNum ) { reset(); };
+         AiThreat& operator+= ( const AiThreat& t );
 };
 
 
-class AiParameter : public AiThreat {
+class AiParameter {
         public:
+           AiThreat threat;
            int value;
+           int valueType;
            enum { tsk_nothing } task;
+
+           int xtogo;
+           int ytogo;
+           int id;
 
            void reset ( void );
            AiParameter ( void ) { reset(); };
@@ -780,14 +794,14 @@ class Vehicle { /*** Bei Aenderungen unbedingt Save/LoadGame und Konstruktor kor
     void write ( pnstream stream );
 
 
-    int weight( void );   // weight of unit including cargo, fuel and material
-    int cargo ( void );   // return weight of all loaded units
+    int weight( void );   //!< weight of unit including cargo, fuel and material
+    int cargo ( void );   //!< return weight of all loaded units
     int getmaxfuelforweight ( void );       
     int getmaxmaterialforweight ( void );
     int freeweight ( int what = 0 );      // what: 0 = cargo ; 1 = material/fuel
     int size ( void );
-    void endTurn( void );    // is executed when the player hits "end turn"
-    void turnwrap ( void );   // is executed when the game starts a new turn ( player8 -> player1 )
+    void endTurn( void );    //!< is executed when the player hits "end turn"
+    void turnwrap ( void );   //!< is executed when the game starts a new turn ( player8 -> player1 )
     void repairunit ( pvehicle vehicle, int maxrepair = 100 );
     void constructvehicle ( pvehicletype tnk, int x, int y );      // current cursor position will be used
     int  vehicleconstructable ( pvehicletype tnk, int x, int y );
@@ -2042,8 +2056,11 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 #define unitsize tanksize
 
 
-#define maxint 0x7ffffffe
-#define minint -0x7ffffffe
+const int maxint = 0x7ffffffe;
+const int minint = -0x7ffffffe;
+
+const float maxfloat = 2E20;
+const float minfloat = -2E20;
 
 
 /////////////////////////////////////////////////////////////////////

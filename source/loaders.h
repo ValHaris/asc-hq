@@ -1,6 +1,9 @@
-//     $Id: loaders.h,v 1.8 2000-09-02 15:36:50 mbickel Exp $
+//     $Id: loaders.h,v 1.9 2000-09-07 15:49:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/09/02 15:36:50  mbickel
+//      Some minor cleanup and documentation
+//
 //     Revision 1.7  2000/08/12 12:52:49  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -62,7 +65,14 @@
 #include "sgstream.h"
 #include "spfst.h"
 
-extern   char*         cloaderrormsg[] ; 
+/*! \file loaders.h
+    \brief procedure for loading and writing savegames, maps etc.
+
+    IO for basic types like vehicletype, buildingtype etc which are also used by the small editors are found in sgstream
+
+*/
+
+
 extern ticons icons;
 extern const word fileterminator;
 
@@ -72,19 +82,26 @@ extern const char* tournamentextension;
 
 
 
-extern pguiicon loadguiicon(char *       name);
+extern pguiicon loadguiicon( const char *       name);
 
-extern void  savemap(char *       name,
-                     char *       description);
 
-extern void  loadmap(char *       name );
+//! saves the map located in #actmap to the map file name
+extern void  savemap( const char *       name );
 
-extern void  savegame(char *       name,
-                      char *       description);
+//! loads the map from the file name to #actmap
+extern void  loadmap( const char *       name );
 
-extern void  loadgame(char *       name );
+//! saves the game located in #actmap to the savegame file name
+extern void  savegame( const char *       name );
+
+//! loads the game from the file name to  #actmap
+extern void  loadgame( const char *       name );
+
+
 
 extern void  loadreplay( pmemorystreambuf streambuf );
+
+//! writes all replay relevant map information of player num to the replay variable of #actmap
 extern void  savereplay( int num );
 
 
@@ -100,8 +117,6 @@ extern void  loadalltechnologies(void);
 extern void  loadstreets(void);
 
 extern void  loadicons(void);
-
-extern char * loaderrormsg( int  b);
 
 extern void loadallobjecttypes ( void );
 
@@ -168,9 +183,6 @@ class  tspfldloaders {
            void            readmap  ( void );
            void            freespfld( void );
 
-         //  void            setcachingarrays ( void );
-         //  void            freecachingarrays ( void );
-
            void            writefields ( void );
            void            readfields  ( void );
 
@@ -192,8 +204,8 @@ class  tmaploaders : public tspfldloaders {
            pmap oldmap;
            void            initmap ( void );
          public:
-           int             loadmap ( char* name );
-           int             savemap ( char* name, char* description );
+           int             loadmap ( const char* name );
+           int             savemap ( const char* name );
            tmaploaders (void ) { oldmap = NULL; };
            ~tmaploaders();
 };
@@ -208,14 +220,14 @@ class  tgameloaders : public tspfldloaders {
 class tnetworkloaders : public tgameloaders {
         public:
            int             loadnwgame ( pnstream strm );
-           int             savenwgame ( pnstream strm , char* description );
+           int             savenwgame ( pnstream strm );
            void            checkcrcs ( void );
 };
 
 class tsavegameloaders : public tgameloaders {
         public:
-           int             loadgame ( char* name );
-           int             savegame ( char* name, char* description );
+           int             loadgame ( const char* name );
+           int             savegame ( const char* name );
 };
 
 
@@ -226,10 +238,14 @@ class treplayloaders : public tspfldloaders {
            void            savereplay ( int num );
 };
 
+//! checks, whether filename is a valid map file
+extern bool validatemapfile ( const char* filename );
 
-extern int validatemapfile ( char* s );       //
-extern int validatesavfile ( char* s );       // result:   0  file invalid 
-extern int validateemlfile ( char* s );       //         > 0  file valid
+//! checks, whether filename is a valid savegame
+extern bool validatesavfile ( const char* filename );
+
+//! checks, whether filename is a valid email game
+extern bool validateemlfile ( const char* filename );
 
 
 

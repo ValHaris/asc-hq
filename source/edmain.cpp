@@ -1,6 +1,12 @@
-//     $Id: edmain.cpp,v 1.20 2000-08-21 17:50:57 mbickel Exp $
+//     $Id: edmain.cpp,v 1.21 2000-09-07 15:49:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/08/21 17:50:57  mbickel
+//      Fixed: crash when unit reaching max experience
+//      Fixed: crash when displaying research image
+//      Fixed: crash when events referenced a unit that has been shot down
+//      Fixed: screenshot being written to wrong directory
+//
 //     Revision 1.19  2000/08/02 15:52:56  mbickel
 //      New unit set definition files
 //      demount accepts now more than one container file
@@ -898,7 +904,6 @@ int main(int argc, char *argv[] )
    memset(exitmessage, 0, sizeof ( exitmessage ));
    atexit ( dispmessageonexit );
 
-   initmisc ();
    initFileIO( configfile );
 
    #ifdef HEXAGON

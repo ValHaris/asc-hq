@@ -1,6 +1,11 @@
-//     $Id: misc.h,v 1.8 2000-08-02 10:28:27 mbickel Exp $
+//     $Id: misc.h,v 1.9 2000-09-07 15:49:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/08/02 10:28:27  mbickel
+//      Fixed: generator vehicle not working
+//      Streams can now report their name
+//      Field information shows units filename
+//
 //     Revision 1.7  2000/05/07 12:53:59  mbickel
 //      some minor adjustments
 //
@@ -50,6 +55,11 @@
     Boston, MA  02111-1307  USA
 */
 
+/*! \file misc.h
+    miscellaneous functions which are used ASC and all its tools
+*/
+
+
 #ifndef misc_h
    #define misc_h
    
@@ -62,38 +72,45 @@
    extern int memavail ( void );       // dummy function
   #endif
 
-   extern word log2(int zahl);
-   extern int filesize( char *name);
-   
+   extern int log2(int zahl);
+
+   /** converts a to a string.
+      \returns a pointer to a newly allocated array of characters, which must be freed with delete[]
+    */
    extern char* strr ( int a ) ;
    
    extern const char* digit[] ; 
    extern const char* letter[] ;
    
-   extern void initmisc ( void ) ;
+   /** converts a to a string.
+      \returns a pointer to a static array, which will be overwritten in the next call
+    */
    extern char* strrr ( int a ) ;
+
+   /** converts a to a string.
+      \returns a pointer to a static array, which will be overwritten in the next call
+    */
+   extern char* strrr ( double a ) ;
 
    extern void beep( void );
 
-   extern void passtring2cstring ( char* s );
-   
    extern int  crc32buf(void *vbuf, int len);
 
 
  #pragma pack(1)
 
-struct _test_structure {
-    char a;
-    char b;
-    int c;
-    char d;
-    void* e[10];
-};
 
 
 // is there any way to do this test at compile time ??
 class structure_size_tester {       
-     public: 
+        struct _test_structure {
+            char a;
+            char b;
+            int c;
+            char d;
+            void* e[10];
+        };
+     public:
        structure_size_tester ( void );
     };
 

@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.90 2000-09-05 19:57:06 gulliver Exp $
+//     $Id: sg.cpp,v 1.91 2000-09-07 15:49:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.90  2000/09/05 19:57:06  gulliver
+//     namespace std added on vector
+//
 //     Revision 1.89  2000/09/01 17:46:40  mbickel
 //      Improved A* code
 //      Renamed tvehicle class to Vehicle
@@ -535,65 +538,6 @@ cmousecontrol* mousecontrol = NULL;
 
 
 
-class tsgpulldown : public tpulldown {
-          protected:
-             void* menubackground;
-          public:
-//             int  barvisi;
-             tsgpulldown ( void );
-             void init ( void );
-//             void baron(void);
-//             void baroff(void);
-             void checkpulldown(void);
-} pd;
-
-
-tsgpulldown :: tsgpulldown ( void )
-{
-   menubackground = NULL;
-}
-/*
-void tsgpulldown :: baron ( void )
-
-{
-   if ( !barvisi ) {
-      if ( !menubackground ) 
-           menubackground = new char[ imagesize (0,0,agmp->resolutionx-1,pdb.pdbreite) ];
-      setinvisiblemouserectanglestk (0,0,agmp->resolutionx-1,pdb.pdbreite );
-      getimage (0,0,agmp->resolutionx-1,pdb.pdbreite, menubackground );
-      barvisi = 1;
-      getinvisiblemouserectanglestk ();
-      tpulldown :: baron();
-   }
-}
-
-void tsgpulldown :: baroff ( void )
-{
-   if ( barvisi ) {
-      setinvisiblemouserectanglestk (0,0,agmp->resolutionx-1,pdb.pdbreite );
-      putimage (0,0, menubackground );
-      getinvisiblemouserectanglestk ();
-      barvisi = 0;
-      barstatus = false;
-   }
-}
-*/
-void tsgpulldown :: checkpulldown(void)
-{
-/*
-   checkkeys();
-   if ( mouseparams.y <= pdb.pdbreite ) {
-      setvars();
-      baron();
-*/
-      tpulldown :: checkpulldown();
-/*
-   } else {
-      baroff();
-      fieldnr = 255;
-   } 
-*/
-}
 
 
 
@@ -1685,6 +1629,11 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo  };
 
 
+class tsgpulldown : public tpulldown {
+          public:
+             void init ( void );
+} pd;
+
 void         tsgpulldown :: init ( void )
 { 
   addfield ( "Glo~b~al" ); 
@@ -1894,7 +1843,7 @@ void         ladespiel(void)
 
 void         speicherspiel( int as )
 { 
-   char         s1[300], *s2;
+   char         s1[300];
 
    int nameavail = 0;
    if ( actmap->preferredfilenames && actmap->preferredfilenames->savegame[actmap->actplayer] )
@@ -1912,27 +1861,11 @@ void         speicherspiel( int as )
       strcpy ( s1, actmap->preferredfilenames->savegame[actmap->actplayer] );
 
    if ( s1[0] ) {
-      if ( !as && actmap->preferredfilenames && actmap->preferredfilenames->savegamedescription[actmap->actplayer] ) 
-         s2 = strdup ( actmap->preferredfilenames->savegamedescription[actmap->actplayer] );
-      else {
-         s2 = strdup ( "no description");
-         /*
-         tenterfiledescription efd;
-         efd.init();
-         efd.run();
-         
-         s2 = efd.description;
-         efd.done();
-         */
-      }
 
       if ( !actmap->preferredfilenames ) {
          actmap->preferredfilenames = new PreferredFilenames;
          memset ( actmap->preferredfilenames, 0 , sizeof ( PreferredFilenames ));
       }
-      if ( actmap->preferredfilenames->savegamedescription[actmap->actplayer] )
-         asc_free ( actmap->preferredfilenames->savegamedescription[actmap->actplayer] );
-      actmap->preferredfilenames->savegamedescription[actmap->actplayer] = strdup ( s2 );
 
       if ( actmap->preferredfilenames->savegame[actmap->actplayer] )
          asc_free ( actmap->preferredfilenames->savegame[actmap->actplayer] );
@@ -1941,13 +1874,12 @@ void         speicherspiel( int as )
       mousevisible(false);
       cursor.hide(); 
       displaymessage("saving %s", 0, s1);
-      savegame(s1,s2); 
+      savegame(s1);
 
       removemessage(); 
       displaymap(); 
       cursor.show(); 
-      delete  ( s2 );
-   } 
+   }
    mousevisible(true); 
 } 
 
@@ -2792,10 +2724,12 @@ void  mainloop ( void )
                              veh = getactfield()->vehicle;
                           } else {
                              actmap->cleartemps ( 7 );
-							 std::vector<int> path;
-                             AStar ( actmap, path, veh, getxpos(), getypos() );
+                             std::vector<int> path;
+                             AStar ast;
+                             ast.findPath ( actmap, path, veh, getxpos(), getypos() );
                              int x = veh->xpos;
                              int y = veh->ypos;
+                             /*
                              for ( int i = path.size()-1; i >= 0 ; i-- ) {
                                 getnextfield ( x, y, path[i] );
 
@@ -2804,6 +2738,12 @@ void  mainloop ( void )
 
                                 getfield ( x, y )->a.temp = 1;
                              }
+                             */
+                             for ( int xp = 0; xp < actmap->xsize; xp++ )
+                                for ( int yp = 0; yp < actmap->ysize; yp++ )
+                                   if ( ast.fieldVisited ( xp, yp ))
+                                      getfield ( xp, yp )->a.temp = 1;
+
                              displaymap();
                              veh = NULL;
                           }
@@ -3123,23 +3063,8 @@ void networksupervisor ( void )
          compi->send.transfermethod->initconnection ( TN_SEND );
          compi->send.transfermethod->inittransfer ( &compi->send.data );
    
-         char* description = NULL;
-         {  /*
-            tenterfiledescription efd;
-            efd.init();
-            efd.run();
-            desciption = efd.description;
-            efd.done();
-            */
-            description = strdup ( "no description" );
-         }
-   
-   
          tnetworkloaders nwl;
-         nwl.savenwgame ( compi->send.transfermethod->stream, description );
-   
-         if ( description ) 
-            delete description;
+         nwl.savenwgame ( compi->send.transfermethod->stream );
    
          compi->send.transfermethod->closetransfer();
          compi->send.transfermethod->closeconnection();
@@ -3552,8 +3477,6 @@ int main(int argc, char *argv[] )
 
    memset(exitmessage, 0, sizeof ( exitmessage ));
    atexit ( dispmessageonexit );
-
-   initmisc ();
 
    initFileIO( configfile );
 

@@ -1,6 +1,9 @@
-//     $Id: loaders.cpp,v 1.26 2000-09-02 15:36:49 mbickel Exp $
+//     $Id: loaders.cpp,v 1.27 2000-09-07 15:49:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/09/02 15:36:49  mbickel
+//      Some minor cleanup and documentation
+//
 //     Revision 1.25  2000/08/28 15:58:58  mbickel
 //      Fixed short displaying of map before password dialog when loading email
 //        games by command line parameter
@@ -146,7 +149,7 @@
 */
 
 #ifdef _DOS_               
-#include <dos.h> 
+ #include <dos.h>
 #endif
 #include "config.h"
 #include <string.h>
@@ -173,20 +176,6 @@
 #include "missions.h"
 #endif
 
-/* 
-  bei der n„chsten revision des map-formates zu „ndern:
-     cawar ... Konstanten  >> auch loadicons „ndern !
-
-  bei der n„chsten revision des sav-formates zu „ndern:
-     history
-
- bei der n„chsten „nderung des Tank-Formates zu „ndern:
-
- bei der n„chsten „nderung des Building-Formates zu „ndern:
-
- bei der n„chsten „nderung des Building-typ-Formates zu „ndern:
-
-*/ 
 
 const word fileterminator = 0xa01a;
 ticons icons;
@@ -207,7 +196,7 @@ tinvalidid :: tinvalidid ( char* s, int iid )
 
 
 
-void         setbuildingsonmap(void)         /*   prir test ok */
+void         setbuildingsonmap(void)
 { 
    int         i;
    integer      dx, a, b;
@@ -1599,12 +1588,12 @@ void    tspfldloaders::writemap ( void )
            for ( int i = 0; i < 8; i++ ) {
               if ( spfld->preferredfilenames->mapname[i] )
                  stream->writepchar ( spfld->preferredfilenames->mapname[i] );
-              if ( spfld->preferredfilenames->mapdescription[i] )
-                 stream->writepchar ( spfld->preferredfilenames->mapdescription[i] );
+              if ( spfld->preferredfilenames->mapdescription_not_used_any_more[i] )
+                 stream->writepchar ( spfld->preferredfilenames->mapdescription_not_used_any_more[i] );
               if ( spfld->preferredfilenames->savegame[i] )
                  stream->writepchar ( spfld->preferredfilenames->savegame[i] );
-              if ( spfld->preferredfilenames->savegamedescription[i] )
-                 stream->writepchar ( spfld->preferredfilenames->savegamedescription[i] );
+              if ( spfld->preferredfilenames->savegamedescription_not_used_any_more[i] )
+                 stream->writepchar ( spfld->preferredfilenames->savegamedescription_not_used_any_more[i] );
            }
         }
 
@@ -1823,12 +1812,12 @@ void     tspfldloaders::readmap ( void )
        for ( int i = 0; i < 8; i++ ) {
           if ( spfld->preferredfilenames->mapname[i] )
              stream->readpchar ( &spfld->preferredfilenames->mapname[i] );
-          if ( spfld->preferredfilenames->mapdescription[i] )
-             stream->readpchar ( &spfld->preferredfilenames->mapdescription[i] );
+          if ( spfld->preferredfilenames->mapdescription_not_used_any_more[i] )
+             stream->readpchar ( &spfld->preferredfilenames->mapdescription_not_used_any_more[i] );
           if ( spfld->preferredfilenames->savegame[i] )
              stream->readpchar ( &spfld->preferredfilenames->savegame[i] );
-          if ( spfld->preferredfilenames->savegamedescription[i] )
-             stream->readpchar ( &spfld->preferredfilenames->savegamedescription[i] );
+          if ( spfld->preferredfilenames->savegamedescription_not_used_any_more[i] )
+             stream->readpchar ( &spfld->preferredfilenames->savegamedescription_not_used_any_more[i] );
        }
     }
 
@@ -2520,8 +2509,7 @@ tspfldloaders::~tspfldloaders ( void )
 
 
 
-int          tmaploaders::savemap(char *       name,
-                                  char *       description)
+int          tmaploaders::savemap( const char * name )
 { 
    #ifdef logging
    logtofile ( "loaders / tmaploaders::savemap / started " );
@@ -2539,7 +2527,7 @@ int          tmaploaders::savemap(char *       name,
    /********************************************************************************/
    {
     
-       stream->writepchar ( description    );
+       stream->writepchar ( NULL );  // description is not used any more
        stream->writedata2 ( fileterminator );
        stream->writedata2 ( actmapversion  );
 
@@ -2582,7 +2570,7 @@ tmaploaders :: ~tmaploaders()
       erasemap ( oldmap );
 }
 
-int          tmaploaders::loadmap(char *       name )
+int          tmaploaders::loadmap( const char *       name )
 { 
     oldmap = actmap;
     actmap = NULL;
@@ -2732,8 +2720,7 @@ void         writehistory(pfilestream  stream);
 
 
 
-int          tsavegameloaders::savegame(char *       name,
-                                    char *       description)
+int          tsavegameloaders::savegame( const char* name )
 { 
 
    tnfilestream filestream ( name, 2 );
@@ -2744,7 +2731,7 @@ int          tsavegameloaders::savegame(char *       name,
 
  
 
-   stream->writepchar ( description );
+   stream->writepchar ( NULL ); // description is not used any more
    stream->writedata2 ( fileterminator );
 
    stream->writedata2( actsavegameversion );
@@ -2774,7 +2761,7 @@ int          tsavegameloaders::savegame(char *       name,
 
 
 
-int          tsavegameloaders::loadgame(char *       name )
+int          tsavegameloaders::loadgame( const char *       name )
 { 
 
    tnfilestream filestream ( name, 1 );
@@ -2928,13 +2915,13 @@ void         tnetworkloaders::checkcrcs ( void )
 
 
 
-int          tnetworkloaders::savenwgame( pnstream strm, char* description )
+int          tnetworkloaders::savenwgame( pnstream strm )
 { 
    spfld = actmap;
 
    stream = strm;
 
-   stream->writepchar ( description );
+   stream->writepchar ( NULL );  // description is not used any more
    stream->writedata2 ( fileterminator );
  
    stream->writedata2( actnetworkversion );
@@ -3130,8 +3117,7 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
 
 
 
-void  savemap(char *       name,
-              char *       description)
+void  savemap( const char * name )
 {
 
    #ifdef logging
@@ -3140,7 +3126,7 @@ void  savemap(char *       name,
 
    try {
      tmaploaders gl;
-     gl.savemap ( name, description );
+     gl.savemap ( name );
    } /* endtry */
 
    catch ( tfileerror err) {
@@ -3156,7 +3142,7 @@ void  savemap(char *       name,
 
 }             
 
-void  loadmap(char *       name )
+void  loadmap( const char *       name )
 {
    #ifdef logging
    logtofile ( "loaders.cpp / loadmap / loadmap started ");
@@ -3201,12 +3187,11 @@ void  loadmap(char *       name )
 }
 
 
-void  savegame(char *       name,
-               char *       description)
+void  savegame( const char *       name )
 {
    try {
       tsavegameloaders gl;
-      gl.savegame ( name, description );
+      gl.savegame ( name );
    }
    catch ( tfileerror err) {
       displaymessage( "error writing map to filename %s ", 1, err.filename );
@@ -3216,7 +3201,7 @@ void  savegame(char *       name,
    } /* endcatch */
 }
 
-void  loadgame(char *       name )
+void  loadgame( const char *       name )
 {
    #ifdef logging
    logtofile ( "loaders.cpp / loadgame / loadgame started ");
@@ -3448,14 +3433,14 @@ void treplayloaders :: savereplay ( int num )
 
 
 
-int validatemapfile ( char* s )
+bool validatemapfile ( const char* filename )
 {
 
    char* description = NULL;
 
    try {
 
-      tnfilestream stream ( s, 1 );
+      tnfilestream stream ( filename, 1 );
       stream.readpchar ( &description, 200 );
       if ( description ) {
          delete[]  description ;
@@ -3465,13 +3450,13 @@ int validatemapfile ( char* s )
       word w;
       stream.readdata2 ( w );
       if ( w != fileterminator )
-         throw tinvalidversion ( s, fileterminator, (int) w );
+         throw tinvalidversion ( filename, fileterminator, (int) w );
 
       int version;
       stream.readdata2( version );
    
       if (version > actmapversion || version < minmapversion ) 
-         throw tinvalidversion ( s, actmapversion, version );
+         throw tinvalidversion ( filename, actmapversion, version );
 
    } /* endtry */
 
@@ -3486,14 +3471,14 @@ int validatemapfile ( char* s )
 
 
 
-int validateemlfile ( char* s )
+bool validateemlfile ( const char* filename )
 {
 
    char* description = NULL;
 
    try {
 
-      tnfilestream stream ( s, 1 );
+      tnfilestream stream ( filename, 1 );
       stream.readpchar ( &description, 200 );
       if ( description ) {
          delete[]  description ;
@@ -3503,13 +3488,13 @@ int validateemlfile ( char* s )
       word w;
       stream.readdata2 ( w );
       if ( w != fileterminator )
-         throw tinvalidversion ( s, fileterminator, (int) w );
+         throw tinvalidversion ( filename, fileterminator, (int) w );
 
       int version;
       stream.readdata2( version );
    
       if (version > actnetworkversion || version < minnetworkversion ) 
-         throw tinvalidversion ( s, actnetworkversion, version );
+         throw tinvalidversion ( filename, actnetworkversion, version );
 
    } /* endtry */
 
@@ -3522,14 +3507,14 @@ int validateemlfile ( char* s )
 } 
 
 
-int validatesavfile ( char* s )
+bool validatesavfile ( const char* filename )
 {
 
    char* description = NULL;
 
    try {
 
-      tnfilestream stream ( s, 1 );
+      tnfilestream stream ( filename, 1 );
       stream.readpchar ( &description, 200 );
       if ( description ) {
          delete[]  description ;
@@ -3539,13 +3524,13 @@ int validatesavfile ( char* s )
       word w;
       stream.readdata2 ( w );
       if ( w != fileterminator )
-         throw tinvalidversion ( s, fileterminator, (int) w );
+         throw tinvalidversion ( filename, fileterminator, (int) w );
 
       int version;
       stream.readdata2( version );
    
       if (version > actsavegameversion || version < minsavegameversion ) 
-         throw tinvalidversion ( s, actsavegameversion, version );
+         throw tinvalidversion ( filename, actsavegameversion, version );
 
    } /* endtry */
 

@@ -166,7 +166,7 @@ extern "C" void*     xlatbuffer;
  
  extern "C" void getimage(int x1, int y1, int x2, int y2, void *buffer);
  #pragma aux getimage parm [ eax ] [ ebx ] [ ecx ] [ edx ] [ edi ] modify [ esi ];
- // !!
+ // !
  
  
  extern "C" void putimage(int x1, int y1, void *buffer);

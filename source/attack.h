@@ -1,6 +1,9 @@
-//     $Id: attack.h,v 1.12 2000-08-12 12:52:42 mbickel Exp $
+//     $Id: attack.h,v 1.13 2000-09-07 15:49:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/08/12 12:52:42  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.11  2000/08/05 13:38:20  mbickel
 //      Rewrote height checking for moving units in and out of
 //        transports / building
@@ -83,14 +86,14 @@
 
 #include "typen.h"
 
-
+/*
 struct   tattackresult {
                int adamage, ddamage, adifferenz, ddifferenz;
             };
 
 
 typedef struct tattackresult* pattackresult;
-
+*/
 
 class AttackFormula {
             int checkHemming ( pvehicle d_eht, int direc );

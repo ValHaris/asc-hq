@@ -1,6 +1,9 @@
-//     $Id: spfst.h,v 1.22 2000-09-02 15:36:50 mbickel Exp $
+//     $Id: spfst.h,v 1.23 2000-09-07 15:49:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/09/02 15:36:50  mbickel
+//      Some minor cleanup and documentation
+//
 //     Revision 1.21  2000/09/02 13:59:50  mbickel
 //      Worked on AI
 //      Started using doxygen
@@ -123,7 +126,8 @@
 /*! \file spfst.h
     \brief map accessing routines used by ASC and the mapeditor
 
-
+    spfst comes from german "Spielfeldsteuerung" :-)
+    Routines that are not used by the mapeditor can be found controls
 */
 
 
@@ -192,7 +196,9 @@
                  };
 
 
-  extern tcursor cursor; 
+  extern tcursor cursor;
+
+  //! this is the one and only map that is loaded by ASC
   extern pmap actmap; 
 
 
@@ -205,6 +211,7 @@
 
 /*!
   \brief calculate the height difference between two levels of height
+
   Since floating and ground based are assumed to be the same effective height, a simple subtraction isn't sufficient.
  */
 extern int getheightdelta ( int height1, int height2 );
@@ -216,14 +223,10 @@ extern void  displaymap(void);
 
   /*  zugriffe auf map und andere strukturen  */ 
 
-/*!
-  \brief returns the field that is selected with the cursor
- */
+//! returns the field that is selected with the cursor
 extern pfield getactfield(void);
 
-/*!
-  \brief returns the field at the given coordinates
- */
+//! returns the field at the given coordinates
 extern pfield getfield(int x, int y);
 
 extern pfield getbuildingfield( const pbuilding    bld,
@@ -236,14 +239,10 @@ extern void  getbuildingfieldcoordinates( const pbuilding    bld,
                                          int     &    xx,
                                          int     &    yy);
 
-/*!
-  \brief returns the x coordinate of the cursor location
- */
+//! returns the x coordinate of the cursor location
 extern word  getxpos(void);
 
-/*!
-  \brief returns the y coordinate of the cursor location
- */
+//!returns the y coordinate of the cursor location
 extern word  getypos(void);
 
 
@@ -335,11 +334,19 @@ extern void  clearfahrspuren(void);
 
 extern void  initmap(void);
 
-  /*  vehicle  */ 
 
+
+/*! tests if the vehicle can move onto the field
+
+   \param uheight the level of height for which the check should be done. Use -1 to use the current height of the unit
+   \retval 0 unit cannot move there
+   \retval 1 unit can pass over the field
+   \retval 2 unit can stop its movement there
+*/
 extern int fieldaccessible( const pfield        field,
                             const pvehicle     vehicle,
                             int  uheight = -1 );
+
 
   /*  sonstiges  */ 
 

@@ -1,6 +1,9 @@
-//     $Id: gui.cpp,v 1.37 2000-08-30 14:45:08 mbickel Exp $
+//     $Id: gui.cpp,v 1.38 2000-09-07 15:49:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2000/08/30 14:45:08  mbickel
+//      ASC compiles and links with GCC again...
+//
 //     Revision 1.36  2000/08/29 20:21:06  mbickel
 //      Tried to make source GCC compliant, but some problems still remain
 //
@@ -1571,17 +1574,15 @@ int   tnsguiiconendturn::available    ( void )
    return 0;
 }
 
-int autosave = 0;
 
 void  tnsguiiconendturn::exec         ( void ) 
 {
    if ( !CGameOptions::Instance()->endturnquestion || (choice_dlg("do you really want to end your turn ?","~y~es","~n~o") == 1)) {
 
+      static int autosave = 0;
+
       cursor.hide();
 
-      char s[100];
-      sprintf( s, "automatic savegame turn %d ; player %d; move %d ", actmap->time.a.turn, actmap->actplayer, actmap->time.a.move );
-  
       char name[100];
       if ( autosave )
          strcpy ( name, "autosav1");
@@ -1589,14 +1590,14 @@ void  tnsguiiconendturn::exec         ( void )
          strcpy ( name, "autosav2");
 
       strcat ( name, &savegameextension[1] );
-      savegame ( name, s );
+      savegame ( name );
   
       autosave = !autosave;
   
       next_turn();
   
-     displaymap();
-     cursor.show();
+      displaymap();
+      cursor.show();
    }
 }
 

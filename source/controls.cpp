@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.72 2000-08-29 17:42:42 mbickel Exp $
+//     $Id: controls.cpp,v 1.73 2000-09-07 15:49:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.72  2000/08/29 17:42:42  mbickel
+//      Restructured GUI to make it compilable with VisualC.
+//
 //     Revision 1.71  2000/08/28 19:49:38  mbickel
 //      Fixed: replay exits when moving satellite out of orbiter
 //      Fixed: airplanes being able to endlessly takeoff and land
@@ -5373,7 +5376,7 @@ void sendnetworkgametonextplayer ( int oldplayer, int newplayer )
       compi->send.transfermethod->inittransfer ( &compi->send.data );
 
       tnetworkloaders nwl;
-      nwl.savenwgame ( compi->send.transfermethod->stream, NULL );
+      nwl.savenwgame ( compi->send.transfermethod->stream );
 
       compi->send.transfermethod->closetransfer();
       compi->send.transfermethod->closeconnection();
@@ -5620,6 +5623,7 @@ void nextPlayer( void )
 
 void runai( void )
 {
+   tlockdispspfld displock;
    checkalliances_at_beginofturn ();
    computeview();
    displaymessage("no AI available yet", 1 );

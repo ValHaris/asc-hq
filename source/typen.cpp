@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.46 2000-09-01 17:46:43 mbickel Exp $
+//     $Id: typen.cpp,v 1.47 2000-09-07 15:49:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2000/09/01 17:46:43  mbickel
+//      Improved A* code
+//      Renamed tvehicle class to Vehicle
+//
 //     Revision 1.45  2000/08/21 17:51:02  mbickel
 //      Fixed: crash when unit reaching max experience
 //      Fixed: crash when displaying research image
@@ -2571,6 +2575,14 @@ tevent :: ~tevent ()
       chardata = NULL;
    }
 }
+
+AiThreat& AiThreat::operator+= ( const AiThreat& t )
+{
+   for ( int i = 0; i < threatTypes; i++ )
+      threat[i] += t.threat[i];
+   return *this;
+}
+
 
 // is there any way to do this test at compile time ??
 structure_size_tester sst1;

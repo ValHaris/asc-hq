@@ -1,6 +1,9 @@
-//     $Id: misc.cpp,v 1.10 2000-05-07 12:53:59 mbickel Exp $
+//     $Id: misc.cpp,v 1.11 2000-09-07 15:49:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/05/07 12:53:59  mbickel
+//      some minor adjustments
+//
 //     Revision 1.9  2000/05/06 20:25:23  mbickel
 //      Fixed: -recognition of a second mouse click when selection a pd menu item
 //             -movement: fields the unit can only pass, but not stand on them,
@@ -73,7 +76,7 @@ const char* letter[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", 
                          "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
 
 
-char* strstring;
+char strstring[1000];
 
 
 
@@ -88,7 +91,7 @@ int memavail ( void )
 
 /** Count the number of zero bits on the LSB side of "zahl"
  */
-word log2(int zahl)
+int log2(int zahl)
 {
    char log;
    log = 0;
@@ -115,22 +118,15 @@ char* strrr ( int a ) {
    return strstring;
 }
 
-void passtring2cstring ( char* s )
-{
-   strcpy( strstring, s );
-   memcpy( s, strstring + 1, strstring[0] );
-   s[strstring[0]] = 0;
-}
-
-void initmisc ( void )
-{
-   strstring = new char [ 200 ];
+char* strrr ( double f ) {
+   sprintf(strstring,"%f",f);
+   return strstring;
 }
 
 
 void beep ( void )
 {
-   printf("%c",7);
+   printf("\a");
 }
 
 
