@@ -1518,7 +1518,7 @@ const ASCString&  Vehicle::getName() const
 }
 
 
-Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream )
+Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream, int forceNetworkID )
 {
    int id = stream.readWord ();
    pvehicletype fzt = gamemap->getvehicletype_byid ( id );
@@ -1531,6 +1531,8 @@ Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream )
 
    v->readData ( stream );
 
+   if ( forceNetworkID > 0 )
+      v->networkid = forceNetworkID;
 
    tmap::VehicleLookupCache::iterator j = gamemap->vehicleLookupCache.find( v->networkid);
    if ( j != gamemap->vehicleLookupCache.end() ) {

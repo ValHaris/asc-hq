@@ -1650,11 +1650,7 @@ void Reinforcements :: execute( MapDisplayInterface* md )
    while ( cnt < objectNum ) {
       Type type = Type(stream.readInt());
       if ( type == ReinfVehicle ) {
-         Vehicle* veh = Vehicle::newFromStream( gamemap, stream );
-
-         gamemap->unitnetworkid++;
-         veh->networkid = gamemap->unitnetworkid;
-
+         Vehicle* veh = Vehicle::newFromStream( gamemap, stream, ++gamemap->unitnetworkid );
          FindUnitPlacementPos fupp( gamemap, veh );
       }
       if ( type == ReinfBuilding ) {
