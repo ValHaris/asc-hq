@@ -1,6 +1,10 @@
-//     $Id: weather.cpp,v 1.6 2000-10-18 14:14:22 mbickel Exp $
+//     $Id: weather.cpp,v 1.7 2000-11-21 19:13:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/10/18 14:14:22  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.5  2000/10/14 13:07:01  mbickel
 //      Moved DOS version into own subdirectories
 //      Win32 version with Watcom compiles and links ! But doesn't run yet...
@@ -45,7 +49,6 @@
     Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
     Boston, MA  02111-1307  USA
 */
-
 
 #include <math.h>
 #include <stdio.h>
