@@ -128,7 +128,7 @@ void         tcomputevehicleview::init( const pvehicle eht, int _mode  )   // mo
    if ( eht->functions & cfownFieldJamming )
       rangeJamming = false;
 
-   if ( (eht->functions & cfautodigger) && mode == 1 )
+   if ( (eht->functions & cfautodigger) && _mode == 1 )
       eht->searchForMineralResources();
 
    tcomputeview::initviewcalculation( eht->typ->view+1, eht->typ->jamming, eht->xpos, eht->ypos, _mode, eht->height );
