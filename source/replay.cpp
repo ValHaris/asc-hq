@@ -36,6 +36,7 @@
 #include "viewcalculation.h"
 #include "dashboard.h"
 #include "itemrepository.h"
+#include "building_controls.h"
 
 
 trunreplay runreplay;
@@ -376,18 +377,27 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( y );
          stream->writeInt ( id );
       }
-      if ( action == rpl_buildtnk ) {
+      if ( action == rpl_buildtnk || action == rpl_buildtnk3 ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
          int id =  va_arg ( paramlist, int );
          int col =  va_arg ( paramlist, int );
          stream->writeChar ( action );
-         int size = 4;
+         int size;
+         if ( action == rpl_buildtnk )
+            size = 4;
+         else
+            size = 6;
+
          stream->writeInt ( size );
          stream->writeInt ( x );
          stream->writeInt ( y );
          stream->writeInt ( id );
          stream->writeInt ( col );
+         if ( action == rpl_buildtnk3 ) {
+            stream->writeInt ( va_arg ( paramlist, int ) ); // constructor x
+            stream->writeInt ( va_arg ( paramlist, int ) ); // constructor x
+         }
       }
       if ( action == rpl_buildtnk2 ) {
          stream->writeChar ( action );
@@ -551,6 +561,21 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( nwid_from );
          stream->writeInt ( nwid_to );
          stream->writeInt ( nwid_moving );
+      }
+      if ( action == rpl_productionResourceUsage ) {
+         int en = va_arg ( paramlist, int );
+         int ma = va_arg ( paramlist, int );
+         int fu = va_arg ( paramlist, int );
+         int x = va_arg ( paramlist, int );
+         int y = va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         int size = 5;
+         stream->writeInt ( size );
+         stream->writeInt ( en );
+         stream->writeInt ( ma );
+         stream->writeInt ( fu );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
       }
 
       va_end ( paramlist );
@@ -765,13 +790,13 @@ void trunreplay :: execnextreplaymove ( void )
                                 battle.dv.damage = dd1;
                                 if ( attackvisible ) {
                                    displayActionCursor ( x1, y1, x2, y2, 0 );
-                                   battle.calcdisplay ( ad2, dd2 );
+                                   battle.calcdisplay ( );
                                    removeActionCursor();
                                 } else {
                                    battle.calc ();
-                                   battle.av.damage = ad2;
-                                   battle.dv.damage = dd2;
                                 }
+                                if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
+                                   displaymessage("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", 1, battle.av.damage,ad2 ,battle.dv.damage, dd2);
                                 battle.setresult ();
                                 dashboard.x = 0xffff;
                              } else
@@ -781,13 +806,15 @@ void trunreplay :: execnextreplaymove ( void )
                                 battle.dv.damage = dd1;
                                 if ( attackvisible ) {
                                    displayActionCursor ( x1, y1, x2, y2, 0 );
-                                   battle.calcdisplay ( ad2, dd2 );
+                                   battle.calcdisplay (  );
                                    removeActionCursor();
                                 } else {
                                    battle.calc ();
-                                   battle.av.damage = ad2;
-                                   battle.dv.damage = dd2;
+                                   /*battle.av.damage = ad2;
+                                   battle.dv.damage = dd2; */
                                 }
+                                if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
+                                   displaymessage("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", 1, battle.av.damage,ad2 ,battle.dv.damage, dd2);
                                 battle.setresult ();
                                 dashboard.x = 0xffff;
                              } else
@@ -795,13 +822,15 @@ void trunreplay :: execnextreplaymove ( void )
                                 tunitattacksobject battle ( fld->vehicle, x2, y2, wpnum );
                                 if ( attackvisible ) {
                                    displayActionCursor ( x1, y1, x2, y2, 0 );
-                                   battle.calcdisplay ( ad2, dd2 );
+                                   battle.calcdisplay (  );
                                    removeActionCursor();
                                 } else {
                                    battle.calc ();
-                                   battle.av.damage = ad2;
-                                   battle.dv.damage = dd2;
+                                   //battle.av.damage = ad2;
+                                   //battle.dv.damage = dd2;
                                 }
+                                if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
+                                   displaymessage("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", 1, battle.av.damage,ad2 ,battle.dv.damage, dd2);
                                 battle.setresult ();
                                 dashboard.x = 0xffff;
                              }
@@ -914,15 +943,23 @@ void trunreplay :: execnextreplaymove ( void )
                        }
          break;
       case rpl_buildtnk:
-      case rpl_buildtnk2: {
+      case rpl_buildtnk2:
+      case rpl_buildtnk3: {
                            stream->readInt();  // size
                            int x = stream->readInt();
                            int y = stream->readInt();
                            int id = stream->readInt();
                            int col = stream->readInt();
                            int nwid = -1;
+                           int constx = -1;
+                           int consty = -1;
                            if ( nextaction == rpl_buildtnk2 )
                               nwid == stream->readInt();
+
+                           if ( nextaction == rpl_buildtnk3 ) {
+                              constx == stream->readInt();
+                              consty == stream->readInt();
+                           }
 
                            readnextaction();
 
@@ -936,6 +973,20 @@ void trunreplay :: execnextreplaymove ( void )
                               v->xpos = x;
                               v->ypos = y;
                               fld->vehicle = v;
+
+                              if ( constx >= 0 && consty >= 0 ) {
+                                 pfield constructorField = getfield(constx, consty );
+                                 if ( constructorField->vehicle ) {
+                                    Resources r ( 0, tnk->productionCost.material, tnk->productionCost.energy );
+                                    Resources rr = constructorField->getContainer()->getResource( r, 0 );
+                                    if ( rr < r ) {
+                                       displayActionCursor ( x, y );
+                                       displaymessage("severe replay inconsistency: \nNot enough resources to produce unit %s !\nRequired: %d/%d/%d ; Available: %d/%d/%d", 1, v->typ->description.c_str(), r.energy, r.material, r.fuel, rr.energy, rr.material, rr.fuel);
+                                    }
+                                 } else
+                                    displaymessage("severe replay inconsistency: could not find constructor !", 1);
+
+                              }
 
                               computeview( actmap );
                               displaymap();
@@ -1057,10 +1108,14 @@ void trunreplay :: execnextreplaymove ( void )
                                     eht->xpos = x;
                                     eht->ypos = y;
                                     eht->setup_classparams_after_generation ();
-                                    eht->tank.fuel = eht->typ->tank.fuel;
                                     eht->networkid = nwid;
 
                                     if ( fld->building ) {
+                                       Resources r = fld->building->getResource( tnk->productionCost, 0 );
+                                       if ( r < tnk->productionCost ) {
+                                          displayActionCursor ( x, y );
+                                          displaymessage("severe replay inconsistency: \nNot enough resources to produce unit %s !\nRequired: %d/%d/%d ; Available: %d/%d/%d", 1, eht->typ->description.c_str(), tnk->productionCost.energy, tnk->productionCost.material, tnk->productionCost.fuel, r.energy, r.material, r.fuel);
+                                       }
                                        int i = 0;
                                        while ( fld->building->loading[i])
                                           i++;
@@ -1084,9 +1139,15 @@ void trunreplay :: execnextreplaymove ( void )
                                  int y = stream->readInt();
                                  int nwid = stream->readInt();
                                  readnextaction();
-
-                                 if ( !removeunit ( x, y, nwid ))
-                                    displaymessage ( "severe replay inconsistency:\nCould not remove unit %d!", 1, nwid );
+                                 pfield fld = getfield(x,y);
+                                 if ( !fld->vehicle || fld->vehicle->networkid != nwid && fld->building ) {
+                                    cbuildingcontrols bc;
+                                    bc.init ( fld->building );
+                                    pvehicle veh = actmap->getUnit( nwid );
+                                    bc.recycling.recycle( veh );
+                                 } else
+                                    if ( !removeunit ( x, y, nwid ))
+                                       displaymessage ( "severe replay inconsistency:\nCould not remove unit %d!", 1, nwid );
                               }
          break;
       case rpl_trainunit:{
@@ -1234,6 +1295,7 @@ void trunreplay :: execnextreplaymove ( void )
                                     displaymessage("severe replay inconsistency: container for moveUpDown !", 1);
                               }
                               break;
+
 
       default:{
                  int size = stream->readInt();

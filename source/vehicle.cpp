@@ -817,6 +817,7 @@ void Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
       tank.material -= tnk->productionCost.material;
       tank.fuel -= tnk->productionCost.energy;
 
+
       int refuel = 0;
       for ( int i = 0; i < typ->weapons.count; i++ )
          if ( typ->weapons.weapon[i].service()  )
@@ -826,10 +827,6 @@ void Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
                if ( functions & (cffuelref | cfmaterialref) )
                   refuel = 1;
             }
-#ifdef sgmain
-//      if ( refuel )
-  //       verlademunition( v, this ,NULL, 3 );
-#endif
 
       v->attacked = 1;
    }

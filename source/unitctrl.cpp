@@ -140,8 +140,8 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
       AStar3D::Path::iterator next = pos+1;
 
 
-
-      pair<int,int> mm = calcMoveMalus( pos->getRealPos(), next->getRealPos(), vehicle, wind, &inhibitAttack );
+      bool container2container = pos->getNumericalHeight()==-1 && next->getNumericalHeight() == -1;
+      pair<int,int> mm = calcMoveMalus( pos->getRealPos(), next->getRealPos(), vehicle, wind, &inhibitAttack, container2container );
       movedist += mm.first;
       fueldist += mm.second;
 

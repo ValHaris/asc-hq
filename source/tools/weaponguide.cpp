@@ -505,7 +505,7 @@ int main(int argc, char *argv[] )
                printIndex ( movePage, "Starting height");
                for ( int w = 0; w < ft->heightChangeMethodNum ; w++) {
                    ASCString hstring;
-                   for ( int h = 0; h < 8; h++ )
+                   for ( int h = 7; h >= 0; h-- )
                       if ( ft->heightChangeMethod[w].startHeight & (1 << h ) & ft->height ) {
                          ASCString s;
                          s.format ( "<IMG src=\"../hoehe%d.gif\" alt=\"%s\"> <br>", h, choehenstufen[h] );

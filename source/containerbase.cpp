@@ -191,6 +191,9 @@ bool ContainerBase :: vehicleFit ( const Vehicle* vehicle ) const
 
 bool  ContainerBase :: vehicleLoadable ( const Vehicle* vehicle, int uheight, const bool* attacked ) const
 {
+   if ( vehicle->attacked )
+      return false;
+
    bool hasAttacked = vehicle->attacked;
    if ( attacked )
       hasAttacked = *attacked;

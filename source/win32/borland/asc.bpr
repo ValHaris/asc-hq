@@ -5,8 +5,8 @@
     <VERSION value="BCB.06.00"/>
     <PROJECT value="asc.exe"/>
     <OBJFILES value="obj\SDL_main.obj obj\CLoadable.obj obj\getopt.obj obj\getopt1.obj 
-      obj\Named.obj obj\Property.obj obj\PropertyGroup.obj obj\ascstring.obj 
-      obj\astar2.obj obj\attack.obj obj\basegfx.obj obj\basestrm.obj 
+      obj\Named.obj obj\Property.obj obj\PropertyGroup.obj obj\astar2.obj 
+      obj\ascstring.obj obj\attack.obj obj\basegfx.obj obj\basestrm.obj 
       obj\building.obj obj\buildings.obj obj\buildingtype.obj 
       obj\containerbase.obj obj\containerbasetype.obj obj\controls.obj 
       obj\dashboard.obj obj\dialog.obj obj\dlg_box.obj obj\gamedlg.obj 
@@ -81,8 +81,8 @@
       <FILE FILENAME="..\..\Named.cpp" FORMNAME="" UNITNAME="Named" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Property.cpp" FORMNAME="" UNITNAME="Property" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\PropertyGroup.cpp" FORMNAME="" UNITNAME="PropertyGroup" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\ascstring.cpp" FORMNAME="" UNITNAME="ascstring" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\astar2.cpp" FORMNAME="" UNITNAME="astar2" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\ascstring.cpp" FORMNAME="" UNITNAME="ascstring" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\attack.cpp" FORMNAME="" UNITNAME="attack" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\basegfx.cpp" FORMNAME="" UNITNAME="basegfx" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\basestrm.cpp" FORMNAME="" UNITNAME="basestrm" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
@@ -155,9 +155,6 @@
   </BUILDTOOLS>
 
   <FILES>
-    <FILE type="override" value="..\..\astar2.cpp" translator="Auto">
-      <CFLAG1 value=" -Od -vi"/>
-    </FILE>
     <FILE type="override" value="..\..\basestrm.cpp" translator="Auto">
     </FILE>
   </FILES>

@@ -73,14 +73,6 @@ struct trleheader {
    unsigned short int y;
 };
 
-struct trleheader32 {
-    int id;
-    int size;
-    int rle;
-    int x;
-    int y;
-};
-
 #pragma pack()
 
 #define bzip_xor_byte 'M'
@@ -210,27 +202,31 @@ void         tnstream::readrlepict( void** pnter, bool allocated, int* size)
   int          w;
   char*        q;
 
-   readdata( &hd, sizeof( hd ));
+  hd.id = readWord();
+  hd.size = readWord();
+  hd.rle = readChar();
+  hd.x = readWord();
+  hd.y = readWord();
 
-   if (hd.id == 16973) { 
-      if (!allocated) 
+   if (hd.id == 16973) {
+      if (!allocated)
         *pnter = new char [ hd.size + sizeof(hd) ];
-      memcpy( *pnter, &hd, sizeof(hd)); 
+      memcpy( *pnter, &hd, sizeof(hd));
       q = (char*) (*pnter) + sizeof(hd);
 
       readdata( q, hd.size);
-      *size = hd.size + sizeof(hd); 
-   } 
-   else { 
+      *size = hd.size + sizeof(hd);
+   }
+   else {
       w =  (hd.id + 1) * (hd.size + 1) + 4 ;
-      if (!allocated) 
+      if (!allocated)
         *pnter = new char [ w ];
       memcpy ( *pnter, &hd, sizeof ( hd ));
       q = (char*) (*pnter) + sizeof(hd);
       readdata ( q, w - sizeof(hd) );
-      *size = w; 
-   } 
-} 
+      *size = w;
+   }
+}
 
 void tnstream :: writerlepict ( const void* buf )
 {

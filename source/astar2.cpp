@@ -681,7 +681,20 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
                          N2.hval = dist(N2.h,B);
 
-                         nodeVisited ( N2, HexDirection(dir), open, N.h.getNumericalHeight(), maxmalq );
+                         if ( N2.canStop && actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh) {
+                              // there's an container on the field that can be entered. This means, the unit can't stop 'over' the container...
+                              N2.canStop = false;
+                              nodeVisited ( N2, dir, open, N.h.getNumericalHeight(), maxmalq );
+
+                              // ... only inside it
+                              N2.canStop = true;
+                              N2.enterHeight = N2.h.getNumericalHeight() ;
+                              N2.h.setnum ( N2.h.x, N2.h.y, -1 );
+                              // N2.hasAttacked = true;
+                              nodeVisited ( N2, dir, open, N.h.getNumericalHeight(), maxmalq );
+                         } else
+                              nodeVisited ( N2, dir, open, N.h.getNumericalHeight(), maxmalq );
+
                       }
                 }
              }

@@ -4,9 +4,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.47 2003-02-27 16:11:00 mbickel Exp $
+//     $Id: controls.h,v 1.48 2003-04-15 20:06:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2003/02/27 16:11:00  mbickel
+//      Restructuring of new pathfinding code completed
+//
 //     Revision 1.46  2003/02/19 19:47:25  mbickel
 //      Completely rewrote Pathfinding code
 //      Wind not different any more on different levels of height
@@ -187,7 +190,8 @@ extern pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
                                     const MapCoordinate3D& dest,
                                     pvehicle     vehicle,
                                     WindMovement* wm = NULL,
-                                    bool*  inhibitAttack = NULL );
+                                    bool*  inhibitAttack = NULL,
+                                    bool container2container  = false );
 
 //! return the distance between x1/y1 and x2/y2 using the power of the wind factors calculated for a specific unit with #initwindmovement
 extern int windbeeline ( const MapCoordinate& start, const MapCoordinate& dest, WindMovement* wm );

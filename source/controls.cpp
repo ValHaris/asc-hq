@@ -967,7 +967,7 @@ void         constructvehicle( pvehicletype tnk )
          int x = getxpos();
          int y = getypos();
          eht->constructvehicle ( tnk, x, y );
-         logtoreplayinfo ( rpl_buildtnk, x, y, tnk->id, moveparams.vehicletomove->color/8 );
+         logtoreplayinfo ( rpl_buildtnk3, x, y, tnk->id, moveparams.vehicletomove->color/8, eht->getPosition().x, eht->getPosition().y );
          computeview( actmap );
 
          build_vehicles_reset();
@@ -1344,7 +1344,8 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
                             const MapCoordinate3D& dest,
                             pvehicle     vehicle,
                             WindMovement* wm,
-                            bool*  inhibitAttack )
+                            bool*  inhibitAttack,
+                            bool container2container )
 {
 
    static const  int         movemalus[6]  = { 8, 6, 3, 0, 3, 6 };
@@ -1360,7 +1361,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
 
    if ( start.getNumericalHeight() >= 0 && dest.getNumericalHeight() >= 0 ) {
       // changing height
-      if ( start.getNumericalHeight() != dest.getNumericalHeight() ) {
+      if ( (start.getNumericalHeight() != dest.getNumericalHeight()) && !container2container ) {
           const Vehicletype::HeightChangeMethod* hcm = vehicle->getHeightChange( start.getNumericalHeight() < dest.getNumericalHeight() ? 1 : -1, start.getBitmappedHeight());
           if ( !hcm || hcm->dist != beeline ( start, dest )/maxmalq )
              fatalError("Calcmovemalus called with invalid height change distance");

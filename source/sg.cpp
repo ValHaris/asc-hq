@@ -201,6 +201,10 @@ cmousecontrol* mousecontrol = NULL;
 
 int maintainencecheck( void )
 {
+   int res = 0;
+   if ( res )
+      return 1;
+
 #ifdef maintainence
    int num = 0;
 

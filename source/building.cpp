@@ -1358,7 +1358,6 @@ Resources  cbuildingcontrols :: crecycling :: resourceuse (pvehicle eht)
 
 void  cbuildingcontrols :: crecycling :: recycle (pvehicle eht)
 {
-   if (choice_dlg("do you really want to recycle this unit ?","~y~es","~n~o") == 1) {
       Resources res = resourceuse ( eht );
 
       // if ( CGameOptions::Instance()->container.emptyeverything )
@@ -1368,7 +1367,6 @@ void  cbuildingcontrols :: crecycling :: recycle (pvehicle eht)
       cc->putmaterial ( res.material );
 
       cc_b->removevehicle (&eht);
-   }
 };
 
 
@@ -1541,6 +1539,7 @@ pvehicle cbuildingcontrols :: cproduceunit :: produce (pvehicletype fzt, bool fo
    cc->getenergy   ( fzt->productionCost.energy,   1 );
    cc->getmaterial ( fzt->productionCost.material, 1 );
 
+//   logtoreplayinfo( rpl_productionResourceUsage, fzt->id, cc_b->building->getPosition().x, cc_b->building->getPosition().y ); 
 
    int i = 0;
    int n = 1;
@@ -6304,9 +6303,11 @@ int  ccontainer_b :: recyclingicon_cb :: available ( void )
 
 void    ccontainer_b :: recyclingicon_cb :: exec ( void )
 {
-   recycle ( main->getmarkedunit() );
-   main->movemark (repaint);
-   dashboard.x = 0xffff;
+   if (choice_dlg("do you really want to recycle this unit ?","~y~es","~n~o") == 1) {
+      recycle ( main->getmarkedunit() );
+      main->movemark (repaint);
+      dashboard.x = 0xffff;
+   }
 };
 
 
