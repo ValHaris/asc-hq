@@ -53,9 +53,9 @@ class TechDependency: public LoadableItemType {
      //! outputs the dependencies in text format for processing by GraphViz
      void writeTreeOutput ( const ASCString& sourceTechName, tnstream& stream, bool reduce ) const;
 
-     void writeInvertTreeOutput ( const Technology* tech, tnstream& stream, vector<int>& history, const vector<IntRange>* onlyWithBaseTechs = NULL ) const;
+     void writeInvertTreeOutput ( const Technology* tech,   tnstream& stream, vector<int>& history, vector<pair<int,int> >& blockedPrintList, const vector<IntRange>* onlyWithBaseTechs = NULL ) const;
 
-     void writeInvertTreeOutput ( const ASCString techName, tnstream& stream, vector<int>& history, const vector<IntRange>* onlyWithBaseTechs = NULL ) const;
+     void writeInvertTreeOutput ( const ASCString techName, tnstream& stream, vector<int>& history, vector<pair<int,int> >& blockedPrintList, const vector<IntRange>* onlyWithBaseTechs = NULL ) const;
 
      int findInheritanceLevel( int id, vector<int>& stack, const ASCString& sourceTechName ) const;
 };
