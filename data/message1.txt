@@ -71,7 +71,7 @@ No place to construct building
 302
 This unit cannot construct a building now
 303
-Not enough resources to construct any building
+No buildings constructable (either due to lack of resources or missing technologies)
 305
 Not enough movement left to destruct any building
 306
