@@ -282,7 +282,7 @@ void AI :: checkConquer( )
    for ( CaptureList::iterator i = captureList.begin(); i != captureList.end(); i++ ) {
       pbuilding bld = (*i)->bld;
       pvehicle veh = (*i)->veh;
-      float val = (*i)->val;
+//      float val = (*i)->val;
       delete (*i);
 
       // check whether bld and veh are still available

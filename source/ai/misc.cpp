@@ -314,7 +314,7 @@ bool AI::RefuelConstraint::necessary (const pvehicle veh, AI& ai )
 
 
 AI::VehicleTypeEfficiencyCalculator::VehicleTypeEfficiencyCalculator( AI& _ai, Vehicle* _attacker, Vehicle* _target )
-                                : ai ( _ai ), target( _target), attacker( _attacker )
+                                : ai ( _ai ), attacker( _attacker ), target( _target)
 {
    ownValue = attacker->aiparam[ai.getPlayerNum()]->getValue();
    ownTypeID = attacker->typ->id;

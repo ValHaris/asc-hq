@@ -603,7 +603,6 @@ pvehicle selectunit ( pvehicle unit )
 {
     int x, y;
     int cnt = 0;
-    int abb = 1;
     for ( int pp = 0; pp < 9; pp++ )
        if ( !actmap->player[pp].vehicleList.empty() )
           cnt++;

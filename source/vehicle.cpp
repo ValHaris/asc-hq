@@ -451,7 +451,7 @@ void Vehicle :: setMovement ( int newmove, double cargoDivisor )
                if ( cargoDivisor )
                   lperc /= cargoDivisor;
 
-               loading[i]->decreaseMovement ( lperc * loading[i]->typ->movement[ log2 ( loading[i]->height)] );
+               loading[i]->decreaseMovement ( int( lperc * loading[i]->typ->movement[ log2 ( loading[i]->height)] ));
             }
          } /* endfor */
    }

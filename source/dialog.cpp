@@ -1392,9 +1392,9 @@ void         tvehicleinfo::showclasses( void )
 {
   collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
 
-  int i, j;
 
   #if 0
+   int i, j;
    if ( aktvehicle->classnum) {
       if (category == 10)
          paintsurface ( 40, starty + 60, 170, starty + 80);

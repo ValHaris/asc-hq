@@ -2,9 +2,12 @@
     \brief Interface to the event handling of ASC
 */
 
-//     $Id: gameevents.h,v 1.4 2005-04-02 12:59:18 mbickel Exp $
+//     $Id: gameevents.h,v 1.5 2005-04-02 13:57:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2005/04/02 12:59:18  mbickel
+//      Fixes for MSVC compilation
+//
 //     Revision 1.3  2004/02/07 12:34:50  mbickel
 //      Fixed compilation problems
 //      Version now 1.14.0.0
@@ -168,9 +171,10 @@ class FieldAddressing: protected PolygonPainerSquareCoordinate  {
       void setField ( const MapCoordinate& pos );
       void setPolygon ( const Poly_gon& poly_gon );
       void setGlobal();
+      virtual ~FieldAddressing() {};
 
    protected:
-      FieldAddressing( pmap& gamemap ) : addressingMode( none ), gameMap(gamemap) {};
+      FieldAddressing( pmap& gamemap ) : gameMap(gamemap), addressingMode( none )  {};
       enum AddressingMode { none, singleField, poly, global };
 
       AddressingMode addressingMode;
@@ -603,7 +607,7 @@ class ChangeBuildingDamage: public EventAction {
       ChangeBuildingDamage() : EventAction( EventAction_ChangeBuildingDamage ),
                      damage(0) {};
       ChangeBuildingDamage( const MapCoordinate& pos, int dam ): EventAction( EventAction_ChangeBuildingDamage ),
-                     position(pos), damage(dam) {};
+                     damage(dam), position(pos) {};
 
       void readData ( tnstream& stream );
       void writeData ( tnstream& stream );

@@ -3,9 +3,12 @@
   
 */
 
-//     $Id: sgstream.h,v 1.32 2004-09-26 19:53:21 mbickel Exp $
+//     $Id: sgstream.h,v 1.33 2005-04-02 13:57:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2004/09/26 19:53:21  mbickel
+//      Reversed merge of branch
+//
 //     Revision 1.30  2004/07/25 15:13:42  mbickel
 //      Updated weapon guide
 //
@@ -209,7 +212,7 @@ class SingleUnitSet {
          std::vector<TranslationTable*> transtab;
          bool filterBuildings;
 
-         SingleUnitSet ( void ) : active ( 1 ), filterBuildings ( true ), ID(0) {};
+         SingleUnitSet ( void ) : active ( 1 ), ID(0), filterBuildings ( true ) {};
          bool isMember ( int id, Type type );
          void read ( pnstream stream );
          std::vector<IntRange> parseIDs ( const char* s );

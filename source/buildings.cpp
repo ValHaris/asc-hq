@@ -1046,7 +1046,7 @@ Resources Building::BiResourceGeneration::getPlus()
 
 
 
-Building::MiningStation :: MiningStation( Building* bld_  , bool justQuery_) : bld ( bld_ ), justQuery( justQuery_ ), SearchFields ( bld_->getMap() )
+Building::MiningStation :: MiningStation( Building* bld_  , bool justQuery_) : SearchFields ( bld_->getMap() ), bld ( bld_ ), justQuery( justQuery_ )
 {
    int counter = 0;
    for ( int r = 1; r < 3; r++ ) {

@@ -111,7 +111,6 @@ void ClipBoardBase::place ( const MapCoordinate& pos )
   }
   if ( type == ClipBuilding ) {
      Building* bld = Building::newFromStream ( actmap, stream, false );
-     pfield fld = actmap->getField ( pos );
 
      for ( int x = 0; x < 4; x++ )
         for ( int y = 0; y < 6; y++ )

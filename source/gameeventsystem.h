@@ -2,7 +2,7 @@
     \brief Interface to the event handling of ASC
 */
 
-//     $Id: gameeventsystem.h,v 1.2 2005-04-02 12:59:18 mbickel Exp $
+//     $Id: gameeventsystem.h,v 1.3 2005-04-02 13:57:06 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -67,7 +67,7 @@ class EventTrigger {
    public:
       enum State { unfulfilled, fulfilled, finally_fulfilled, finally_failed };
    protected:
-      EventTrigger ( EventTriggerID id ) : triggerID ( id ), invert(false), stateCache(unfulfilled), triggerFinal( false ), gamemap(NULL), event(NULL) {};
+      EventTrigger ( EventTriggerID id ) : triggerID ( id ), gamemap(NULL), event(NULL), stateCache(unfulfilled), triggerFinal( false ), invert(false) {};
       virtual State getState( int player ) = 0;
       tmap* gamemap;
       Event* event;

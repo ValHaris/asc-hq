@@ -1,6 +1,11 @@
-//     $Id: unitctrl.h,v 1.36 2004-08-01 20:13:29 mbickel Exp $
+//     $Id: unitctrl.h,v 1.37 2005-04-02 13:57:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2004/08/01 20:13:29  mbickel
+//      Updated railstations
+//      Fixed replay bugs
+//      Fixed: resetting a units movement points
+//
 //     Revision 1.35  2004/03/27 21:48:15  mbickel
 //      Added function ViewPipeNet to ASC
 //      Fixed: trigger specificunitenterespoly not working for fields with buildings
@@ -304,8 +309,8 @@ class BaseVehicleMovement : public VehicleAction {
               MapDisplayInterface* mapDisplay;
               int status;
            public:
-              BaseVehicleMovement ( VehicleActionType _actionType, PPendingVehicleActions _pva, MapDisplayInterface* md ) : VehicleAction ( _actionType, _pva ),attackedByReactionFire(false), mapDisplay(md), status(0) {};
-              BaseVehicleMovement ( MapDisplayInterface* md ) : VehicleAction ( vat_move, NULL ),attackedByReactionFire(false), mapDisplay(md), status(0) {};
+              BaseVehicleMovement ( VehicleActionType _actionType, PPendingVehicleActions _pva, MapDisplayInterface* md ) : VehicleAction ( _actionType, _pva ),mapDisplay(md), status(0), attackedByReactionFire(false)  {};
+              BaseVehicleMovement ( MapDisplayInterface* md ) : VehicleAction ( vat_move, NULL ),mapDisplay(md), status(0), attackedByReactionFire(false) {};
               AStar3D::Path path;
               int execute ( pvehicle veh, int x, int y, int step, int height, int noInterrupt );
               bool attackedByReactionFire;

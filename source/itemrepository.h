@@ -65,6 +65,7 @@ class ItemRepository: public TextFileDataLoader {
       ASCString getTypeName() { return typeName; };
 
       vector<T*>& getVector() { return container; };
+      virtual ~ItemRepository() {};
 
 };
 

@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.128 2004-11-14 16:30:40 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.129 2005-04-02 13:57:06 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -4495,7 +4495,7 @@ void editTechAdapter()
          pair<int,int> res;
          do {
 
-            Research::TriggeredTechAdapter& tta = actmap->player[player].research.triggeredTechAdapter;
+            // Research::TriggeredTechAdapter& tta = actmap->player[player].research.triggeredTechAdapter;
             vector<ASCString>& ta = actmap->player[player].research.predefinedTechAdapter;
             res = chooseString ( "Registered TechAdapter", ta, buttons );
             if ( res.first == 0 ) {
