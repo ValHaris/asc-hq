@@ -1,6 +1,10 @@
-//     $Id: sgstream.h,v 1.13 2000-11-26 22:18:56 mbickel Exp $
+//     $Id: sgstream.h,v 1.14 2001-01-04 15:14:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/11/26 22:18:56  mbickel
+//      Added command line parameters for setting the verbosity
+//      Increased verbose output
+//
 //     Revision 1.12  2000/11/21 20:27:07  mbickel
 //      Fixed crash in tsearchfields (used by object construction for example)
 //      AI improvements
@@ -159,23 +163,23 @@ class tsrlefilestream : public tsfilestream {
                            void writerlepict ( void* buf );
                         };
 
-extern pvehicletype loadvehicletype(char *       name);
+extern pvehicletype loadvehicletype( const char *       name);
 extern pvehicletype loadvehicletype( tnstream& stream );
 extern void writevehicle( pvehicletype ft, tnstream& stream );
 
-extern pterraintype loadterraintype(char *       name);
+extern pterraintype loadterraintype( const char *       name);
 extern pterraintype loadterraintype( pnstream stream );
 extern void writeterrain ( pterraintype bdt, pnstream stream );
 
-extern pbuildingtype loadbuildingtype(char *       name);
+extern pbuildingtype loadbuildingtype( const char *       name);
 extern pbuildingtype loadbuildingtype( pnstream stream );
 extern void writebuildingtype ( pbuildingtype bld, pnstream stream );
 
-extern ptechnology loadtechnology(char *       name);
+extern ptechnology loadtechnology( const char *       name);
 extern ptechnology loadtechnology( pnstream stream );
 extern void writetechnology ( ptechnology tech, pnstream stream );
 
-extern pobjecttype   loadobjecttype(char *       name);
+extern pobjecttype   loadobjecttype( const char *       name);
 extern pobjecttype   loadobjecttype( pnstream stream );
 void writeobject ( pobjecttype object, pnstream stream, int compressed = 0 );
 

@@ -66,12 +66,12 @@ HexDirection ReverseDirection( HexDirection d )
 }
 
 
-AStar :: AStar ( void )
+AStar :: AStar ( pmap actmap, pvehicle veh )
 {
    tempsMarked = NULL;
    _path = NULL;
-   _veh = NULL;
-   _actmap = NULL;
+   _veh = veh;
+   _actmap = actmap;
 }
 
 AStar :: ~AStar ( )
@@ -142,11 +142,11 @@ inline void AStar::get_first( Container& v, Node& n )
 
 
 
-void AStar::findPath( pmap actmap, HexCoord A, HexCoord B, Path& path, pvehicle veh )
+void AStar::findPath( HexCoord A, HexCoord B, Path& path )
 {
     _path = &path;
-    _veh = veh;
-    _actmap = actmap;
+    pvehicle veh = _veh;
+    pmap actmap = _actmap;
 
     for ( int y = actmap->xsize * actmap->ysize -1; y >= 0; y-- )
        actmap->field[y].temp3 = DirNone;
@@ -287,7 +287,7 @@ int AStar::getDistance ( )
    if ( _path->size() <= 0 )
       return -1;
 
-   int dist;
+   int dist = 0;
    for ( Path::iterator i = _path->begin(); i != _path->end(); i++ )
       dist += _actmap->getField ( *i )->getmovemalus ( _veh->typ->movemalustyp );
 
@@ -313,21 +313,21 @@ bool AStar::fieldVisited ( int x, int y)
    return false;
 }
 
-void AStar::findAllAccessibleFields ( pmap actmap, pvehicle veh )
+void AStar::findAllAccessibleFields ( )
 {
-   actmap->cleartemps ( 1 );
+   _actmap->cleartemps ( 1 );
    Path dummy;
-   findPath ( actmap, dummy, veh, actmap->xsize, actmap->ysize );  //this field does not exist...
+   findPath ( dummy, _actmap->xsize, _actmap->ysize );  //this field does not exist...
    for ( Container::iterator i = visited.begin(); i != visited.end(); i++ )
-      getfield ( (*i).h.m, (*i).h.n )->a.temp = 1;
+      _actmap->getField ( (*i).h.m, (*i).h.n )->a.temp = 1;
 
-   tempsMarked = actmap;
+   tempsMarked = _actmap;
 }
 
 
-void AStar::findPath( pmap actmap, Path& path, pvehicle veh, int x, int y )
+void AStar::findPath( Path& path, int x, int y )
 {
-  findPath ( actmap, AStar::HexCoord ( veh->xpos, veh->ypos ), AStar::HexCoord ( x, y ), path, veh );
+  findPath ( AStar::HexCoord ( _veh->xpos, _veh->ypos ), AStar::HexCoord ( x, y ), path );
 }
 
 
@@ -335,8 +335,8 @@ void AStar::findPath( pmap actmap, Path& path, pvehicle veh, int x, int y )
 
 void findPath( pmap actmap, AStar::Path& path, pvehicle veh, int x, int y )
 {
-  AStar as;
-  as.findPath ( actmap, AStar::HexCoord ( veh->xpos, veh->ypos ), AStar::HexCoord ( x, y ), path, veh );
+  AStar as ( actmap, veh );
+  as.findPath ( AStar::HexCoord ( veh->xpos, veh->ypos ), AStar::HexCoord ( x, y ), path );
 //   int og = godview;
 //   godview = 1;
 //   AStar ( actmap, HexCoord ( veh->xpos, veh->ypos ), HexCoord ( x, y ), path, veh );

@@ -1,6 +1,10 @@
-//     $Id: sgstream.cpp,v 1.46 2000-12-27 22:23:15 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.47 2001-01-04 15:14:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2000/12/27 22:23:15  mbickel
+//      Fixed crash in loading message text
+//      Removed many unused variables
+//
 //     Revision 1.45  2000/11/29 09:40:25  mbickel
 //      The mapeditor has now two maps simultaneously active
 //      Moved memorychecking functions to its own file: memorycheck.cpp
@@ -1101,7 +1105,7 @@ void* generate_vehicle_gui_build_icon ( pvehicletype tnk )
 
 
 
-pvehicletype   loadvehicletype( char* name)
+pvehicletype   loadvehicletype( const char* name)
 {
    displayLogMessage ( 5, " loading vehicle type %s ...", name );
    tnfilestream stream ( name, 1 );
@@ -1122,7 +1126,7 @@ pvehicletype   loadvehicletype( tnstream& stream )
 
 
 
-ptechnology       loadtechnology(char *       name)
+ptechnology       loadtechnology( const char *       name)
 {
    displayLogMessage ( 5, " loading technology %s ...", name );
    tnfilestream stream ( name, 1 );
@@ -1333,7 +1337,7 @@ void loadguipictures( void )
 }
 
 
-pbuildingtype       loadbuildingtype(char *       name)
+pbuildingtype       loadbuildingtype( const char *       name)
 {
    displayLogMessage ( 5, " loading building type %s ...", name );
    tnfilestream stream ( name, 1 );
@@ -1654,7 +1658,7 @@ pquickview generateaveragecol ( pwterraintype bdn )
 }
 
 
-pterraintype      loadterraintype(char *       name)
+pterraintype      loadterraintype( const char *       name)
 {
    displayLogMessage ( 5, " loading terrain type %s ...", name );
    tnfilestream stream ( name, 1 );
@@ -1829,7 +1833,7 @@ pobjecttype fahrspurobject = NULL;
 
 
 
-pobjecttype   loadobjecttype(char *       name)
+pobjecttype   loadobjecttype( const char *       name)
 {
    displayLogMessage ( 5, " loading object type %s ...", name );
    tnfilestream stream ( name, 1 );
@@ -2349,10 +2353,10 @@ void loadUnitSets ( void )
 {
    displayLogMessage ( 4, "loading unit set definition files\n" );
    tfindfile ff ( "*.set" );
-   char* n = ff.getnextname();
-   while ( n ) {
-      displayLogMessage ( 5, " loading unit set definition file %s ... ",n );
-      tnfilestream stream ( n, 1 );
+   string n = ff.getnextname();
+   while ( !n.empty() ) {
+      displayLogMessage ( 5, " loading unit set definition file %s ... ",n.c_str() );
+      tnfilestream stream ( n.c_str(), 1 );
 
       SingleUnitSet* set = new SingleUnitSet;
       set->read ( &stream );

@@ -1,6 +1,10 @@
-//     $Id: edmisc.cpp,v 1.42 2000-12-26 21:04:35 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.43 2001-01-04 15:13:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2000/12/26 21:04:35  mbickel
+//      Fixed: putimageprt not working (used for small map displaying)
+//      Fixed: mapeditor crashed on generating large maps
+//
 //     Revision 1.41  2000/11/29 11:05:27  mbickel
 //      Improved userinterface of the mapeditor
 //      map::preferredfilenames uses now strings (instead of char*)
@@ -735,8 +739,14 @@ void placeobject(void)
       displaymap(); 
       tfill = false; 
       pdbaroff(); 
-   } 
-   else pf->addobject( actobject ); 
+   } else {
+      pf = getactfield();
+      pvehicle eht = pf->vehicle;
+      pf->vehicle = NULL;
+      pf->addobject( actobject );
+      pf->vehicle = eht;
+   }
+
    lastselectiontype = cselobject;
    displaymap(); 
    mousevisible(true); 
@@ -771,13 +781,7 @@ void putactthing ( void )
           break;
        case cselbuilding:   placebuilding(farbwahl,auswahlb,true);
           break;
-       case cselobject:   {
-                              pf = getactfield();
-                              pvehicle eht = pf->vehicle;
-                              pf->vehicle = NULL;
-                              pf->addobject( actobject );
-                              pf->vehicle = eht;
-                           }
+       case cselobject:   placeobject();
           break;
        case cselmine:   if ( farbwahl < 8 ) getactfield()->putmine(farbwahl,auswahlm+1,cminestrength[auswahlm]);
           break;
@@ -1265,9 +1269,7 @@ void         exchg(word *       a1,
 
 void         pdbaroff(void)
 { 
-   char s[200];
- 
-   mousevisible(false); 
+   mousevisible(false);
    pd.baroff();
    rsavefont = activefontsettings; 
 

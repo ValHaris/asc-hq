@@ -1,6 +1,10 @@
-//     $Id: artint.h,v 1.25 2000-12-31 15:25:25 mbickel Exp $
+//     $Id: artint.h,v 1.26 2001-01-04 15:13:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/12/31 15:25:25  mbickel
+//      The AI now conqueres neutral buildings
+//      Removed "reset password" buttons when starting a game
+//
 //     Revision 1.24  2000/12/28 16:58:36  mbickel
 //      Fixed bugs in AI
 //      Some cleanup
@@ -138,7 +142,8 @@
            int unitCounter;
 
            int maxTrooperMove; 
-           int maxTransportMove; 
+           int maxTransportMove;
+           int maxUnitMove;
            int maxWeapDist[8]; 
            int baseThreatsCalculated;
 
@@ -210,6 +215,12 @@
            int fieldNum;
 
            void checkConquer( );
+
+           //! checks whether a building can be conquered by the enemy during the next turn
+           bool checkReConquer ( pbuilding bld, pvehicle veh );
+           void conquerBuilding ( pvehicle veh );
+           float getCaptureValue ( const pbuilding bld, int travelTime );
+           float getCaptureValue ( const pbuilding bld, const pvehicle veh );
 
            class BuildingCapture {
                   public:

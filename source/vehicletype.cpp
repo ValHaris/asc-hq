@@ -1065,7 +1065,7 @@ void Vehicle :: setMovement ( int newmove, int cargoDivisor )
    if ( newmove < 0 )
       newmove = 0;
 
-   if ( cargoDivisor && typ)
+   if ( cargoDivisor > 0 && typ)
       if ( typ->movement[ log2 ( height ) ] ) {
          int diff = _movement - newmove;
          int perc = 1000 * diff / typ->movement[ log2 ( height ) ] ;

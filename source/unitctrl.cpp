@@ -1,6 +1,12 @@
-//     $Id: unitctrl.cpp,v 1.42 2000-11-21 20:27:10 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.43 2001-01-04 15:14:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2000/11/21 20:27:10  mbickel
+//      Fixed crash in tsearchfields (used by object construction for example)
+//      AI improvements
+//      configure.in: added some debug output
+//                    fixed broken check for libbz2
+//
 //     Revision 1.41  2000/11/14 20:36:46  mbickel
 //      The AI can now use supply vehicles
 //      Rewrote objecttype IO routines to make the structure independant of
@@ -1016,6 +1022,10 @@ int ChangeVehicleHeight :: moveheight( int allFields )
 
          int dist = 0;
          int mx = vehicle->getMovement()- sp.dist;
+
+         if ( mx <= 0 )
+            ok = false;
+
          while ( dist < vehicle->typ->steigung * minmalq  && mx > 0 && ok) {
             int ox = x;
             int oy = y;

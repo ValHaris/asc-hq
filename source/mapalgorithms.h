@@ -35,6 +35,7 @@
                     virtual void testfield ( void ) = 0;
                     void initsearch ( int sx, int sy, int max, int min );
                     virtual void startsearch ( void );
+                    virtual ~tsearchfields() {};
                  };
 
   /** draws a straight line on the hexagonal map and calls putpix8 for each field.

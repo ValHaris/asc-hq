@@ -1,6 +1,10 @@
-//     $Id: gui.cpp,v 1.46 2000-12-27 22:23:10 mbickel Exp $
+//     $Id: gui.cpp,v 1.47 2001-01-04 15:13:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2000/12/27 22:23:10  mbickel
+//      Fixed crash in loading message text
+//      Removed many unused variables
+//
 //     Revision 1.45  2000/12/23 15:58:37  mbickel
 //      Trying to get ASC to run with Borland C++ Builder...
 //
@@ -3195,7 +3199,7 @@ void   treplayguihost :: bi2control (  )
 }
 
 #ifdef __BORLANDC__
-   // Borland C++ Builder forgets to instatiate these templates...
+   // Borland C++ Builder forgets to instantiate these templates...
    treplayguihost Borland_Cpp_builder_sucks;
    ContainerBaseGuiHost Borland_Cpp_builder_sucks2;
 #endif

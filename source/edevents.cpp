@@ -1,6 +1,12 @@
-//     $Id: edevents.cpp,v 1.14 2000-11-08 19:31:03 mbickel Exp $
+//     $Id: edevents.cpp,v 1.15 2001-01-04 15:13:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/11/08 19:31:03  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.13  2000/10/18 14:14:04  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -886,9 +892,7 @@ void         tgettechnologyid::buttonpressed(int         id)
 
 void         tgettechnologyid::run(void)
 { 
-   int count = 0;
-
-   do { 
+   do {
       tstringselect::run();
       if ( (msel == 1 ) || (taste == ct_enter ) ) {
          ttechnologyid = gettechnology_forpos(redline)->id;

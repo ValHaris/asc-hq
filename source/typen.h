@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.73 2000-12-31 15:25:26 mbickel Exp $
+//     $Id: typen.h,v 1.74 2001-01-04 15:14:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.73  2000/12/31 15:25:26  mbickel
+//      The AI now conqueres neutral buildings
+//      Removed "reset password" buttons when starting a game
+//
 //     Revision 1.72  2000/12/28 16:58:39  mbickel
 //      Fixed bugs in AI
 //      Some cleanup
@@ -549,13 +553,18 @@ class MapCoordinate3D : public MapCoordinate {
 
 
 class AiValue {
+           int value;
+           int addedValue;
         public:
            AiThreat threat;
-           int value;
            int valueType;
-           void reset ( int _valueType ) { threat.reset(); value = 0; valueType = _valueType; };
+           void reset ( int _valueType ) { threat.reset(); value = 0; valueType = _valueType; addedValue = 0; };
 
            AiValue ( int _valueType ) { reset( _valueType ); };
+           int getValue() { return value + addedValue; };
+           void setValue ( int _value ) { value = _value; };
+           void setAdditionalValue ( int _addedValue ) { addedValue = _addedValue; };
+           void resetAdditionalValue (  ) { addedValue = 0; };
         };
 
 class AiParameter : public AiValue {

@@ -1,6 +1,10 @@
-//     $Id: loaders.cpp,v 1.36 2000-11-29 11:05:29 mbickel Exp $
+//     $Id: loaders.cpp,v 1.37 2001-01-04 15:13:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2000/11/29 11:05:29  mbickel
+//      Improved userinterface of the mapeditor
+//      map::preferredfilenames uses now strings (instead of char*)
+//
 //     Revision 1.35  2000/11/26 22:18:53  mbickel
 //      Added command line parameters for setting the verbosity
 //      Increased verbose output
@@ -2864,13 +2868,13 @@ void         loadallvehicletypes(void)
 { 
    {
       tfindfile ff ( "*.veh" );
-      char *c = ff.getnextname();
+      string c = ff.getnextname();
                        
-      while ( c ) {
+      while ( !c.empty() ) {
           if ( actprogressbar )
              actprogressbar->point();
     
-          pvehicletype t = loadvehicletype( c );
+          pvehicletype t = loadvehicletype( c.c_str() );
 
           // if ( t->steigung && ((t->height & 6 ) == 6 )) 
           //   t->steigung = 0;
@@ -2887,13 +2891,13 @@ void         loadallobjecttypes (void)
 { 
   tfindfile ff ( "*.obl" );
 
-  char *c = ff.getnextname();
+  string c = ff.getnextname();
 
-  while ( c ) {
+  while ( !c.empty() ) {
       if ( actprogressbar )
          actprogressbar->point();
 
-      addobjecttype ( loadobjecttype( c )); 
+      addobjecttype ( loadobjecttype( c.c_str() ));
 
       c = ff.getnextname();
    }
@@ -2915,13 +2919,13 @@ void         loadalltechnologies(void)
   int i;
 
   tfindfile ff ( "*.tec" );
-  char *c = ff.getnextname();
+  string c = ff.getnextname();
 
-  while ( c ) {
+  while ( !c.empty() ) {
       if ( actprogressbar )
          actprogressbar->point();
 
-      addtechnology ( loadtechnology( c ));
+      addtechnology ( loadtechnology( c.c_str() ));
 
       c = ff.getnextname();
    } 
@@ -2944,13 +2948,13 @@ void         loadallterraintypes(void)
 { 
    tfindfile ff ( "*.trr" );
 
-   char *c = ff.getnextname();
+   string c = ff.getnextname();
 
-   while( c ) {
+   while( !c.empty() ) {
       if ( actprogressbar )
          actprogressbar->point();
 
-      addterraintype ( loadterraintype( c ));
+      addterraintype ( loadterraintype( c.c_str() ));
 
       c = ff.getnextname();
    } 
@@ -2963,13 +2967,13 @@ void         loadallbuildingtypes(void)
 { 
    tfindfile ff ( "*.bld" );
 
-   char *c = ff.getnextname();
+   string c = ff.getnextname();
 
-   while( c ) {
+   while( !c.empty() ) {
       if ( actprogressbar )
          actprogressbar->point();
 
-      addbuildingtype ( loadbuildingtype( c ));
+      addbuildingtype ( loadbuildingtype( c.c_str() ));
 
       c = ff.getnextname();
    } 

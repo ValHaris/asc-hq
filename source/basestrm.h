@@ -1,6 +1,9 @@
-//     $Id: basestrm.h,v 1.32 2000-12-21 11:00:44 mbickel Exp $
+//     $Id: basestrm.h,v 1.33 2001-01-04 15:13:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/12/21 11:00:44  mbickel
+//      Added some code documentation
+//
 //     Revision 1.31  2000/11/09 17:48:46  mbickel
 //      The size of a stream can now be queried
 //      PCX loader (in C) can now load unpatched images provided they are not
@@ -178,6 +181,7 @@
 #include <string>
 #include <stdio.h>
 #include <time.h>
+#include <vector>
 
 #include "global.h"
 #include "basestreaminterface.h"
@@ -728,29 +732,16 @@ class ContainerCollector : public ContainerIndexer {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class tfindfile {
-       /*
-        class Node {
-                char* name;
-                int deletename;
-                int directoryLevel;
-              public:
-                Node ( char* _name, int _deletename, int _dirLevel );
-               ~Node();
-            };
-       */
-                   
+
+        vector<string> names;
+        vector<int> directoryLevel;
+        vector<bool> isInContainer;
         int found;
         int act;
-        dynamic_array<char*> names;
-        dynamic_array<char>  namedupes;
-        dynamic_array<int>   directoryLevel;   
-        dynamic_array<int>   isInContainer;   
 
       public:
-        tfindfile ( const char* name );
-        char* getnextname ( int* loc = NULL, int* inContainer = NULL );
-        ~tfindfile();
-
+        tfindfile ( string name );
+        string getnextname ( int* loc = NULL, bool* inContainer = NULL );
      };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -775,7 +766,7 @@ extern char* getnextfilenumname ( const char* first, const char* suffix, int num
 #define readdata2(a)   readdata  ( &(a), sizeof(a) )
 
 extern int exist ( const char* s );
-extern time_t get_filetime ( char* devicename );
+extern time_t get_filetime ( const char* devicename );
 
 extern void opencontainer ( const char* wildcard );
 

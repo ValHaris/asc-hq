@@ -1,6 +1,10 @@
-//     $Id: dlg_box.cpp,v 1.43 2000-12-28 11:12:44 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.44 2001-01-04 15:13:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2000/12/28 11:12:44  mbickel
+//      Fixed: no redraw when restoring fullscreen focus in WIN32
+//      Better error message handing in WIN32
+//
 //     Revision 1.42  2000/12/27 22:23:07  mbickel
 //      Fixed crash in loading message text
 //      Removed many unused variables
@@ -3224,11 +3228,11 @@ char*  readtextmessage( int id )
 
      tfindfile* pff = ffa[m];
 
-     char* filefound = pff->getnextname();
+     string filefound = pff->getnextname();
 
-     while( filefound ) {
+     while( !filefound.empty() ) {
 
-         tnfilestream stream ( filefound, 1 );
+         tnfilestream stream ( filefound.c_str(), 1 );
 
          char *tempstr;
 

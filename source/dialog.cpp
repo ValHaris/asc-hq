@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.69 2000-12-31 15:25:25 mbickel Exp $
+//     $Id: dialog.cpp,v 1.70 2001-01-04 15:13:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.69  2000/12/31 15:25:25  mbickel
+//      The AI now conqueres neutral buildings
+//      Removed "reset password" buttons when starting a game
+//
 //     Revision 1.68  2000/12/29 16:33:51  mbickel
 //      The supervisor may now reset passwords
 //
@@ -1971,7 +1975,7 @@ tmessagestrings messagestrings;
 
 #include <malloc.h>
 
-void   loadsinglemessagefile ( char* name )
+void   loadsinglemessagefile ( const char* name )
 {
    tnfilestream stream ( name, 1 );
 
@@ -2008,10 +2012,10 @@ void         loadmessages(void)
  
    {
       tfindfile ff ( "message?.txt" );
-      char* filename = ff.getnextname();
+      string filename = ff.getnextname();
    
-      while( filename ) {
-         loadsinglemessagefile ( filename );
+      while( !filename.empty() ) {
+         loadsinglemessagefile ( filename.c_str() );
          filename = ff.getnextname();
       } 
    }
@@ -2371,8 +2375,8 @@ void         tfileselectsvga::readdirectory(void)
   {
      tfindfile ff ( fls );
 
-     char* filename = ff.getnextname();
-     while( filename ) {
+     string filename = ff.getnextname();
+     while( !filename.empty() ) {
         numberoffiles++;
         filename = ff.getnextname();
       }
@@ -2386,9 +2390,9 @@ void         tfileselectsvga::readdirectory(void)
 
 
    tfindfile ff ( fls );
-   char* filename = ff.getnextname();
+   string filename = ff.getnextname();
 
-   while( filename ) {
+   while( !filename.empty() ) {
       /*
       if ( searchfordescription && !keypress()) {
    
@@ -2452,10 +2456,10 @@ void         tfileselectsvga::readdirectory(void)
           
       } else {
          */
-          files[numberoffiles].name = strdup ( filename );
+          files[numberoffiles].name = strdup ( filename.c_str() );
           // files[numberoffiles].description = NULL;
                  
-          time_t tdate = get_filetime( filename );
+          time_t tdate = get_filetime( filename.c_str() );
 
           if ( tdate != -1 )
              files[numberoffiles].sdate = strdup ( ctime ( &tdate ) );
@@ -2952,7 +2956,7 @@ void tenterfiledescription::run ( void )
       pb = pb->next;
    execbutton( pb , false );
 
-   /*
+
    mousevisible(true);
    do {
       tdialogbox::run();

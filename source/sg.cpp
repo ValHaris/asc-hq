@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.121 2000-12-29 16:33:53 mbickel Exp $
+//     $Id: sg.cpp,v 1.122 2001-01-04 15:14:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.121  2000/12/29 16:33:53  mbickel
+//      The supervisor may now reset passwords
+//
 //     Revision 1.120  2000/12/28 16:58:37  mbickel
 //      Fixed bugs in AI
 //      Some cleanup
@@ -1511,27 +1514,27 @@ void ladestartkarte( char *emailgame=NULL, char *mapname=NULL, char *savegame=NU
 
         tfindfile ff ( s );
 
-        char* filename = ff.getnextname();
+        string filename = ff.getnextname();
 
-        maploadable = validatemapfile ( filename );
+        maploadable = validatemapfile ( filename.c_str() );
      }
 
      if ( !maploadable ) {
 
          tfindfile ff ( mapextension );
 
-         char* filename = ff.getnextname();
+         string filename = ff.getnextname();
 
-         if ( !filename )
+         if ( filename.empty() )
             displaymessage( "unable to load startup-map",2);
 
-         while ( !validatemapfile ( filename ) ) {
+         while ( !validatemapfile ( filename.c_str() ) ) {
             filename = ff.getnextname();
-            if ( !filename )
+            if ( filename.empty() )
                displaymessage( "unable to load startup-map",2);
 
          }
-         strcpy ( s , filename );
+         strcpy ( s , filename.c_str() );
       }
 
       loadmap(s);
@@ -2243,8 +2246,8 @@ void  mainloop ( void )
                              delete ast;
                              ast =  NULL;
                           } else {
-                             ast = new AStar;
-                             ast->findAllAccessibleFields ( actmap, getactfield()->vehicle );
+                             ast = new AStar ( actmap, getactfield()->vehicle );
+                             ast->findAllAccessibleFields ( );
                              displaymap();
                           }
                        }
@@ -2340,7 +2343,7 @@ void loaddata( int resolx, int resoly,
    actprogressbar = new tprogressbar;
    if ( actprogressbar ) {
       tfindfile ff ( progressbarfilename );
-      if ( ff.getnextname() ) {
+      if ( !ff.getnextname().empty() ) {
          tnfilestream strm ( progressbarfilename, 1 );
          actprogressbar->start ( 255, 0,
             agmp->resolutiony-3, agmp->resolutionx-1,

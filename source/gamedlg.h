@@ -1,6 +1,12 @@
-//     $Id: gamedlg.h,v 1.13 2000-11-08 19:31:07 mbickel Exp $
+//     $Id: gamedlg.h,v 1.14 2001-01-04 15:13:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/11/08 19:31:07  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.12  2000/10/18 14:14:11  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -125,7 +131,7 @@ class   tnewcampaignlevel : public tdialogbox {
 
                          void           init ( void );
                          void           searchmapinfo ( void );
-                         virtual void   evaluatemapinfo( char* srname, tmap* spfld ) = 0;
+                         virtual void   evaluatemapinfo( const char* srname, tmap* spfld ) = 0;
                          void           loadcampaignmap ( void );
                          void           showmapinfo( word ypos );
                          void           done ( void );
@@ -138,7 +144,7 @@ class  tcontinuecampaign : public tnewcampaignlevel {
                          pdissectedunit dissectedunits[8]; 
                     public:
                          void           init ( void );
-                         virtual void   evaluatemapinfo( char* srname, tmap* spfld );
+                         virtual void   evaluatemapinfo( const char* srname, tmap* spfld );
                          void           showmapinfo( word ypos );
                          virtual void   run ( void );
                          void           setid( word id );
@@ -159,7 +165,7 @@ class  tchoosenewcampaign : public tchoosenewmap {
                           void          init ( void );
                           virtual void  run ( void );
                           virtual void  checkforcampaign( tmap* spfld );
-                          virtual void  evaluatemapinfo( char* srname, tmap* spfld );
+                          virtual void  evaluatemapinfo( const char* srname, tmap* spfld );
                       };
 
 class  tchoosenewsinglelevel : public tchoosenewmap {
@@ -167,7 +173,7 @@ class  tchoosenewsinglelevel : public tchoosenewmap {
                           void          init ( void );
                           virtual void  run ( void );
                           virtual void  checkforcampaign( tmap* spfld );
-                          virtual void  evaluatemapinfo( char* srname, tmap* spfld );
+                          virtual void  evaluatemapinfo( const char* srname, tmap* spfld );
                       };
 
 

@@ -1,6 +1,9 @@
-//     $Id: basestrm.cpp,v 1.48 2000-12-26 14:46:00 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.49 2001-01-04 15:13:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2000/12/26 14:46:00  mbickel
+//      Made ASC compilable (and runnable) with Borland C++ Builder
+//
 //     Revision 1.47  2000/11/29 11:05:26  mbickel
 //      Improved userinterface of the mapeditor
 //      map::preferredfilenames uses now strings (instead of char*)
@@ -2019,19 +2022,19 @@ int patimat (const char *pat, const char *str)
 
 
 
-tfindfile :: tfindfile ( const char* name )
+tfindfile :: tfindfile ( string _name )
 {
    found = 0;
    act = 0;
-   if ( !name )
-      return;
-
-   if ( !name[0] )
+   if ( _name.empty() )
       return;
 
    char* directory[maxSearchDirNum];
    int dirNum;
    char wildcard[ maxFileStringSize ];
+
+   char name[ maxFileStringSize ];
+   strcpy ( name, _name.c_str() );
 
    if ( strchr ( name, pathdelimitter )) {
       char name2[ maxFileStringSize ];
@@ -2072,14 +2075,13 @@ tfindfile :: tfindfile ( const char* name )
           if ( patimat ( wildcard, direntp->d_name )) {
              int localfound = 0;
              for ( int j = 0; j < found; j++ )
-                if ( strcmpi ( names[j], direntp->d_name ) == 0 )
+                if ( strcmpi ( names[j].c_str(), direntp->d_name ) == 0 )
                    localfound++;
 
              if ( !localfound ) {
-                names[found] = strdup ( direntp->d_name );
-                namedupes[found] = 1;
-                directoryLevel[found] = i;
-                isInContainer[found] = 0;
+                names.push_back ( string (  direntp->d_name ));
+                directoryLevel.push_back ( i );
+                isInContainer.push_back ( false );
                 found++;
              }
           }
@@ -2096,25 +2098,21 @@ tfindfile :: tfindfile ( const char* name )
           if ( patimat ( name, c->name ) ) {
              int f = 0;
              for ( int i = 0; i < found; i++ )
-                if ( stricmp ( c->name, names[i] ) == 0 ) {
+                if ( stricmp ( c->name, names[i].c_str() ) == 0 ) {
                    if ( directoryLevel[i] <= c->directoryLevel ) 
                       f = 1;
                    else {
-                      if ( namedupes[i] )
-                         delete[] names[i];
-                      names[i] = strdup ( c->name );
-                      namedupes[i] = 1;
-                      isInContainer[i] = 1;
+                      names[i] = c->name ;
+                      isInContainer[i] = true;
                       directoryLevel[i] = c->directoryLevel;
                       f = 1;
                    }
                 }
                 
              if ( !f ) {
-                names[found] = c->name;
-                namedupes[found] = 0;
-                directoryLevel[found] = c->directoryLevel;
-                isInContainer[found] = 1;
+                names.push_back ( c->name );
+                directoryLevel.push_back ( c->directoryLevel );
+                isInContainer.push_back ( true );
                 found++;
              }
           }
@@ -2124,7 +2122,7 @@ tfindfile :: tfindfile ( const char* name )
 }
 
 
-char* tfindfile :: getnextname ( int* loc, int* inContainer )
+string tfindfile :: getnextname ( int* loc, bool* inContainer )
 {
    if ( act < found ) {
       if ( loc )
@@ -2137,20 +2135,11 @@ char* tfindfile :: getnextname ( int* loc, int* inContainer )
    } else {
       if ( loc )
          *loc = -1;
-      return NULL;
+
+      return "";
    }
 }
 
-
-tfindfile :: ~tfindfile()
-{
-   for ( int i = 0; i < found; i++ ) 
-      if ( namedupes[i] ) {
-         char* c = names[i];
-         if ( c )
-            delete[] c;
-      }
-}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2339,8 +2328,8 @@ char* getnextfilenumname ( const char* first, const char* suffix, int num )
       strcat ( tmp, suffix );
 
       tfindfile ff ( tmp );
-      char *c = ff.getnextname();
-      if ( !c ) {
+      string c = ff.getnextname();
+      if ( c.empty() ) {
          strcpy ( tempstringbuf, tmp );
          found = 1;
       }
@@ -2354,7 +2343,7 @@ char* getnextfilenumname ( const char* first, const char* suffix, int num )
 int exist ( const char* s )
 {
    tfindfile ff ( s );
-   return ff.getnextname() != NULL;
+   return !ff.getnextname().empty();
 }
 
 
@@ -2375,7 +2364,7 @@ void opencontainer ( const char* wildcard )
 
 
 
-time_t get_filetime ( char* fileName )
+time_t get_filetime ( const char* fileName )
 {
    FileLocation fl;
    locateFile ( fileName, &fl );

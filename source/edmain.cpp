@@ -1,6 +1,10 @@
-//     $Id: edmain.cpp,v 1.33 2000-11-29 11:05:27 mbickel Exp $
+//     $Id: edmain.cpp,v 1.34 2001-01-04 15:13:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2000/11/29 11:05:27  mbickel
+//      Improved userinterface of the mapeditor
+//      map::preferredfilenames uses now strings (instead of char*)
+//
 //     Revision 1.32  2000/11/29 09:40:20  mbickel
 //      The mapeditor has now two maps simultaneously active
 //      Moved memorychecking functions to its own file: memorycheck.cpp
@@ -263,7 +267,7 @@ void loaddata( void )
    actprogressbar = new tprogressbar; 
    {
       tfindfile ff ( progressbarfilename );
-      if ( ff.getnextname() ) {
+      if ( !ff.getnextname().empty() ) {
          tnfilestream strm ( progressbarfilename, 1 );
          actprogressbar->start ( 255, 0, agmp->resolutiony-2, agmp->resolutionx-1, agmp->resolutiony-1, &strm );
       } else
@@ -430,7 +434,6 @@ void         editor(void)
 {  int execcode;
    int lastx;
    int lasty;
-   char curposchanged;
 
    cursor.show();
    do {

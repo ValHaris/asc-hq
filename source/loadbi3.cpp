@@ -1,6 +1,9 @@
-//     $Id: loadbi3.cpp,v 1.31 2000-12-23 13:19:46 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.32 2001-01-04 15:13:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/12/23 13:19:46  mbickel
+//      Made ASC compileable with Borland C++ Builder
+//
 //     Revision 1.30  2000/11/08 19:31:08  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -465,10 +468,10 @@ void loadbi3graphics( void )
 
 
    tfindfile ff ( "*.gfx" );
-   char* filename = ff.getnextname();
-   while ( filename ) {
+   string filename = ff.getnextname();
+   while ( !filename.empty() ) {
 
-      tnfilestream s ( filename, 1 );
+      tnfilestream s ( filename.c_str(), 1 );
 
       int magic;
       s.readdata2 ( magic );
@@ -1641,7 +1644,8 @@ void       tloadBImap :: ReadSHOPPart( void )
                  fld->building->name = GetStr( ShopNum + 2,16);   /*  bi3 macht das so  */ 
               /*
               else
-                 ArrShop.NameStr = GetStr(FileShop.Name, 16);    /*  bi2 wahrscheinlich so  */ 
+                 ArrShop.NameStr = GetStr(FileShop.Name, 16);    //  bi2 wahrscheinlich so
+                 */
               int newcol = convcol ( FileShop.a.Owner );
               if ( newcol != fld->building->color/8 )
                  fld->building->convert ( newcol );

@@ -46,13 +46,13 @@ class AStar {
 
        Container visited;
 
-       void findPath( pmap actmap, HexCoord A, HexCoord B, Path& path, pvehicle veh );
-       void findPath( pmap actmap, Path& path, pvehicle veh, int x, int y );
-       void findAllAccessibleFields ( pmap actmap, pvehicle veh );  // all accessible fields will have a.temp set to 1
+       void findPath( HexCoord A, HexCoord B, Path& path );
+       void findPath( Path& path, int x, int y );
+       void findAllAccessibleFields ( );  // all accessible fields will have a.temp set to 1
        int getDistance( );
        int getTravelTime( );
        bool fieldVisited ( int x, int y);
-       AStar ( void );
+       AStar ( pmap actmap, pvehicle veh );
        virtual ~AStar ( );
  };
 

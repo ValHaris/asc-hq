@@ -1,6 +1,10 @@
-//     $Id: gamedlg.cpp,v 1.56 2000-12-27 22:23:08 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.57 2001-01-04 15:13:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.56  2000/12/27 22:23:08  mbickel
+//      Fixed crash in loading message text
+//      Removed many unused variables
+//
 //     Revision 1.55  2000/11/29 09:40:21  mbickel
 //      The mapeditor has now two maps simultaneously active
 //      Moved memorychecking functions to its own file: memorycheck.cpp
@@ -1043,7 +1047,7 @@ int  setupnetwork ( tnetwork* nw, int edt, int player )
 /*   Neuen Level starten                                                                               ÿ */
 /*********************************************************************************************************/
 
-void         tchoosenewcampaign::evaluatemapinfo( char* srname, tmap* spfld )
+void         tchoosenewcampaign::evaluatemapinfo( const char* srname, tmap* spfld )
 {
    if ( spfld->campaign &&  ( stricmp( spfld->codeword, password ) == 0 )) {
       strcat(message1, srname );
@@ -1064,7 +1068,7 @@ void         tchoosenewcampaign::evaluatemapinfo( char* srname, tmap* spfld )
 }
 
 
-void         tchoosenewsinglelevel::evaluatemapinfo( char* srname, tmap* spfld )
+void         tchoosenewsinglelevel::evaluatemapinfo( const char* srname, tmap* spfld )
 {
 
    if ( stricmp ( spfld->codeword, password ) == 0) {
@@ -1109,11 +1113,11 @@ void         tnewcampaignlevel::searchmapinfo(void)
 
 
    tfindfile ff ( mapextension );
-   char* filename = ff.getnextname();
-   while( filename ) {
+   string filename = ff.getnextname();
+   while( !filename.empty() ) {
 
        try {
-          tnfilestream filestream ( filename, 1 );
+          tnfilestream filestream ( filename.c_str(), 1 );
           tmaploaders spfldloader;
           spfldloader.stream = &filestream;
           // spfldloader.setcachingarrays ( );
@@ -1128,18 +1132,18 @@ void         tnewcampaignlevel::searchmapinfo(void)
           spfldloader.stream->readdata2 ( w );
 
           if ( w != fileterminator )
-             throw tinvalidversion ( filename, w, fileterminator );
+             throw tinvalidversion ( filename.c_str(), w, fileterminator );
 
           int version;
           spfldloader.stream->readdata2( version );
 
          if (version > actmapversion || version < minmapversion )
-            throw tinvalidversion ( filename, version, actmapversion );
+            throw tinvalidversion ( filename.c_str(), version, actmapversion );
 
           spfldloader.readmap ();
           spfldloader.readeventstocome();
 
-          evaluatemapinfo( filename, spfldloader.spfld );
+          evaluatemapinfo( filename.c_str(), spfldloader.spfld );
       }
       catch ( tfileerror ) {
       } /* endcatch */
@@ -1283,7 +1287,7 @@ void         tcontinuecampaign::showmapinfo(word         ypos)
 }
 
 
-void         tcontinuecampaign::evaluatemapinfo(char *       srname, tmap* spfld )
+void         tcontinuecampaign::evaluatemapinfo( const char *srname, tmap* spfld )
 {
 
    if ( spfld->campaign ) {
