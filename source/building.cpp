@@ -1,6 +1,9 @@
-//     $Id: building.cpp,v 1.59 2000-12-23 13:19:41 mbickel Exp $
+//     $Id: building.cpp,v 1.60 2001-01-21 16:37:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.59  2000/12/23 13:19:41  mbickel
+//      Made ASC compileable with Borland C++ Builder
+//
 //     Revision 1.58  2000/12/21 16:41:54  mbickel
 //      Fixed some compilation errors that were made during documentation
 //
@@ -149,6 +152,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+
 #include "typen.h"
 #include "vehicletype.h"
 #include "buildingtype.h"
@@ -159,7 +163,6 @@
 #include "dlg_box.h"
 #include "spfst.h"
 #include "stdio.h"
-#include "string.h"
 #include "dialog.h"
 #include "events.h"
 #include "building.h"
@@ -172,7 +175,7 @@
 #include "basestrm.h"
 #include "unitctrl.h"
 #include "gameoptions.h"
-
+#include "replay.h"
 
 
 

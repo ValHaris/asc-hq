@@ -1,6 +1,12 @@
-//     $Id: sg.cpp,v 1.123 2001-01-19 13:33:52 mbickel Exp $
+//     $Id: sg.cpp,v 1.124 2001-01-21 16:37:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.123  2001/01/19 13:33:52  mbickel
+//      The AI now uses hemming
+//      Several bugfixes in Vehicle Actions
+//      Moved all view calculation to viewcalculation.cpp
+//      Mapeditor: improved keyboard support for item selection
+//
 //     Revision 1.122  2001/01/04 15:14:03  mbickel
 //      configure now checks for libSDL_image
 //      AI only conquers building that cannot be conquered back immediately
@@ -168,6 +174,7 @@
 #include "password.h"
 #include "password_dialog.h"
 #include "viewcalculation.h"
+#include "replay.h"
 
 #ifdef HEXAGON
 #include "loadbi3.h"

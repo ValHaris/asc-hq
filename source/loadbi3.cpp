@@ -1,6 +1,11 @@
-//     $Id: loadbi3.cpp,v 1.32 2001-01-04 15:13:57 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.33 2001-01-21 16:37:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2001/01/04 15:13:57  mbickel
+//      configure now checks for libSDL_image
+//      AI only conquers building that cannot be conquered back immediately
+//      tfindfile now returns strings instead of char*
+//
 //     Revision 1.31  2000/12/23 13:19:46  mbickel
 //      Made ASC compileable with Borland C++ Builder
 //
@@ -1091,9 +1096,9 @@ class tloadBImap {
 
      protected:
         int xoffset, yoffset;
-        pwterraintype defaultterraintype;
+        TerrainType::Weather* defaultterraintype;
      public:
-       void LoadFromFile( char* path, char* AFileName, pwterraintype trrn );
+       void LoadFromFile( char* path, char* AFileName, TerrainType::Weather* trrn );
        tloadBImap ( void ) { 
           xoffset = 0;
           yoffset = 0;
@@ -1922,7 +1927,7 @@ void tloadBImap :: LoadTXTFile ( char* filename )
    */
 }
 
-void tloadBImap :: LoadFromFile( char* path, char* AFileName, pwterraintype trrn )
+void tloadBImap :: LoadFromFile( char* path, char* AFileName, TerrainType::Weather* trrn )
 {
    defaultterraintype = trrn;
    char temp[4000];
@@ -1985,7 +1990,7 @@ void tloadBImap :: LoadFromFile( char* path, char* AFileName, pwterraintype trrn
 }
 
 
-void importbattleislemap ( char* path, char* filename, pwterraintype trrn  )
+void importbattleislemap ( char* path, char* filename, TerrainType::Weather* trrn  )
 {
     activateGraphicSet ( 1 );
     ImportBiMap lbim;  

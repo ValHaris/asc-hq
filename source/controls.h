@@ -1,6 +1,9 @@
-//     $Id: controls.h,v 1.35 2001-01-21 12:48:35 mbickel Exp $
+//     $Id: controls.h,v 1.36 2001-01-21 16:37:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2001/01/21 12:48:35  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.34  2001/01/19 13:33:49  mbickel
 //      The AI now uses hemming
 //      Several bugfixes in Vehicle Actions
@@ -448,13 +451,8 @@ extern void addanytechnology ( ptechnology tech, int player );
 
 
 
-enum trpl_actions { rpl_attack, rpl_move, rpl_changeheight, rpl_convert, rpl_remobj, rpl_buildobj, rpl_putbuilding, 
-                    rpl_removebuilding, rpl_putmine, rpl_removemine, rpl_produceunit, rpl_removeunit, rpl_trainunit, 
-                    rpl_reactionfire, rpl_finished, rpl_shareviewchange, rpl_alliancechange, rpl_move2, rpl_buildtnk,
-                    rpl_refuel, rpl_bldrefuel };
 
 
-extern void logtoreplayinfo ( trpl_actions action, ... );
 
 struct treactionfire_replayinfo {
          int x1 ;
@@ -470,38 +468,6 @@ struct treactionfire_replayinfo {
 typedef treactionfire_replayinfo* preactionfire_replayinfo;
 
 
-class trunreplay {
-         protected:
-            int movenum;
-            treplayguihost gui;
-            void execnextreplaymove ( void );
-            pmap orgmap;
-            pmemorystream stream;
-            int removeunit ( int x, int y, int nwid );
-            int removeunit ( pvehicle eht, int nwid );
-            void wait ( int t = ticker );
-            int actplayer;
-
-            char nextaction;
-
-            void readnextaction ( void );
-            void displayActionCursor ( int x1, int y1, int x2 = -1, int y2 = -1, int secondWait = 0 );
-            void removeActionCursor( void );
-
-         public:
-
-            preactionfire_replayinfo getnextreplayinfo ( void );
-
-            trunreplay ( void );
-            int status;
-            void firstinit ( void );
-            int  run ( int player );
-
-   };
-extern trunreplay runreplay;
-
-//! checks if there is replay information and -if there is any- runs the replay
-extern void checkforreplay ( void );
 
 
 /** creates a new vehicle, setting up its class depending on the research. If this vehicletype is

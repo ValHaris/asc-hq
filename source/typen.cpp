@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.62 2000-12-26 14:46:02 mbickel Exp $
+//     $Id: typen.cpp,v 1.63 2001-01-21 16:37:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.62  2000/12/26 14:46:02  mbickel
+//      Made ASC compilable (and runnable) with Borland C++ Builder
+//
 //     Revision 1.61  2000/12/21 11:00:50  mbickel
 //      Added some code documentation
 //
@@ -1303,7 +1306,7 @@ tnetwork :: tnetwork ( void )
   globalparams.reaskpasswords = 0;
 }
 
-void      twterraintype  ::   paint ( int x1, int y1 )
+void      TerrainType::Weather::paint ( int x1, int y1 )
 {
  #ifndef converter
   #ifdef HEXAGON
@@ -1340,19 +1343,6 @@ void      twterraintype  ::   paint ( int x1, int y1 )
  #endif
 }
 
-/*
-tobjectcontainercrcs :: tobjectcontainercrcs ( void )
-{
-   speedcrccheck = NULL;
-}
-
-tcrcblock :: tcrcblock ( void )
-{
-   crcnum = 0;
-   crc = NULL;
-   restricted = 0;
-}
-*/
 
 treplayinfo :: treplayinfo ( void )
 {

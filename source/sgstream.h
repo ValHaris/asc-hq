@@ -1,6 +1,9 @@
-//     $Id: sgstream.h,v 1.15 2001-01-21 12:48:36 mbickel Exp $
+//     $Id: sgstream.h,v 1.16 2001-01-21 16:37:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2001/01/21 12:48:36  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.14  2001/01/04 15:14:07  mbickel
 //      configure now checks for libSDL_image
 //      AI only conquers building that cannot be conquered back immediately
@@ -111,13 +114,8 @@ extern pobjecttype   loadobjecttype( const char *       name);
 extern pobjecttype   loadobjecttype( pnstream stream );
 void writeobject ( pobjecttype object, pnstream stream, int compressed = 0 );
 
-#ifndef converter
-extern pquickview generateaveragecol ( pwterraintype bdn );
-#endif
-
-
 extern void generatedirecpict ( void* orgpict, void* direcpict );
-extern pquickview generateaveragecol ( pwterraintype bdn );
+extern pquickview generateaveragecol ( TerrainType::Weather* bdn );
 
 
 extern pobjecttype streetobjectcontainer ;

@@ -1,6 +1,12 @@
-//     $Id: unitctrl.cpp,v 1.44 2001-01-19 13:33:57 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.45 2001-01-21 16:37:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2001/01/19 13:33:57  mbickel
+//      The AI now uses hemming
+//      Several bugfixes in Vehicle Actions
+//      Moved all view calculation to viewcalculation.cpp
+//      Mapeditor: improved keyboard support for item selection
+//
 //     Revision 1.43  2001/01/04 15:14:12  mbickel
 //      configure now checks for libSDL_image
 //      AI only conquers building that cannot be conquered back immediately
@@ -172,6 +178,7 @@
 #include "vehicletype.h"
 #include "buildingtype.h"
 #include "viewcalculation.h"
+#include "replay.h"
 
 PendingVehicleActions pendingVehicleActions;
 

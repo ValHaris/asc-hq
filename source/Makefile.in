@@ -70,7 +70,7 @@ SDL_LIBS = @SDL_LIBS@
 VERSION = @VERSION@
 
 bin_PROGRAMS = asc
-asc_SOURCES = unitctrl.cpp soundList.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp pd.cpp palette.cpp newfont.cpp network.cpp missions.cpp misc.cpp loadpcxc.cpp loaders.cpp loadbi3.cpp gui.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp building.cpp basestrm.cpp basegfx.cpp attack.cpp artint.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp Named.cpp astar2.cpp vehicletype.cpp buildingtype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp password_dialog.cpp
+asc_SOURCES = unitctrl.cpp soundList.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp pd.cpp palette.cpp newfont.cpp network.cpp missions.cpp misc.cpp loadpcxc.cpp loaders.cpp loadbi3.cpp gui.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp building.cpp basestrm.cpp basegfx.cpp attack.cpp artint.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp Named.cpp astar2.cpp vehicletype.cpp buildingtype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp password_dialog.cpp replay.cpp
 
 asc_LDADD = ./sdl/libsdl.a ./libs/triangul/libtriangul.a -lSDL -lpthread -lSDL_image @LDADDLIBBZ2@
 
@@ -96,7 +96,7 @@ missions.o misc.o loadpcxc.o loaders.o loadbi3.o gui.o gamedlg.o \
 dlg_box.o dialog.o controls.o building.o basestrm.o basegfx.o attack.o \
 artint.o CLoadable.o Property.o PropertyGroup.o gameoptions.o Named.o \
 astar2.o vehicletype.o buildingtype.o containerbase.o mapalgorithms.o \
-viewcalculation.o gamemap.o password.o password_dialog.o
+viewcalculation.o gamemap.o password.o password_dialog.o replay.o
 asc_DEPENDENCIES =  ./sdl/libsdl.a ./libs/triangul/libtriangul.a
 asc_LDFLAGS = 
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -117,9 +117,10 @@ DEP_FILES =  .deps/CLoadable.P .deps/Named.P .deps/Property.P \
 .deps/loadbi3.P .deps/loaders.P .deps/loadpcxc.P .deps/mapalgorithms.P \
 .deps/misc.P .deps/missions.P .deps/network.P .deps/newfont.P \
 .deps/palette.P .deps/password.P .deps/password_dialog.P .deps/pd.P \
-.deps/sg.P .deps/sgstream.P .deps/soundList.P .deps/spfst.P \
-.deps/stack.P .deps/strtmesg.P .deps/typen.P .deps/unitctrl.P \
-.deps/vehicletype.P .deps/viewcalculation.P .deps/weather.P
+.deps/replay.P .deps/sg.P .deps/sgstream.P .deps/soundList.P \
+.deps/spfst.P .deps/stack.P .deps/strtmesg.P .deps/typen.P \
+.deps/unitctrl.P .deps/vehicletype.P .deps/viewcalculation.P \
+.deps/weather.P
 SOURCES = $(asc_SOURCES)
 OBJECTS = $(asc_OBJECTS)
 

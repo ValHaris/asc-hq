@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.75 2001-01-21 12:48:37 mbickel Exp $
+//     $Id: typen.h,v 1.76 2001-01-21 16:37:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.75  2001/01/21 12:48:37  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.74  2001/01/04 15:14:09  mbickel
 //      configure now checks for libSDL_image
 //      AI only conquers building that cannot be conquered back immediately
@@ -116,7 +119,7 @@ typedef char* pchar;
 typedef class tbasenetworkconnection* pbasenetworkconnection;
 typedef class tnetwork* pnetwork;
 typedef struct tquickview* pquickview;
-typedef struct tterraintype* pterraintype;
+typedef struct TerrainType* pterraintype;
 typedef class tfield* pfield ;
 typedef class tobjectcontainer* pobjectcontainer;
 typedef struct tresourceview* presourceview;
@@ -579,27 +582,27 @@ template <class T> class PointerList : public list<T> {
 
 
 //! The type of a field
-class tterraintype {
+class TerrainType {
    public:
      class  Weather {
        public:
-         void*        picture[8];
-         void*        direcpict[8];
+         void*          picture[8];
+         void*          direcpict[8];
          int            defensebonus;
          int            attackbonus;
          int            basicjamming;
          char           movemaluscount;
          char*          movemalus;
-         pterraintype  terraintype;
+         pterraintype   terraintype;
          pquickview     quickview;
          void           paint ( int x1, int y1 );
          int            bi_picture[6]; 
          tterrainbits   art; 
-         Weather ( tterraintype* base ) : terraintype ( base ) {};
+         Weather ( TerrainType* base ) : terraintype ( base ) {};
      };
     char*              name;
     int                id;
-    Weather*         weather[cwettertypennum];
+    Weather*           weather[cwettertypennum];
     int                neighbouringfield[8];   
 };
 
@@ -769,7 +772,7 @@ class  tobjectcontainer {
 class  tfield { 
   public:
     //! the terraintype (#pwterraintype) of the field
-    pwterraintype typ;   
+    TerrainType::Weather* typ;
 
     //! mineral resources on this field (should be changed to #ResourcesType sometime...)
     char         fuel, material; 

@@ -1,6 +1,10 @@
-//     $Id: edglobal.cpp,v 1.24 2000-12-26 21:04:34 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.25 2001-01-21 16:37:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/12/26 21:04:34  mbickel
+//      Fixed: putimageprt not working (used for small map displaying)
+//      Fixed: mapeditor crashed on generating large maps
+//
 //     Revision 1.23  2000/11/29 11:05:27  mbickel
 //      Improved userinterface of the mapeditor
 //      map::preferredfilenames uses now strings (instead of char*)
@@ -821,7 +825,7 @@ void execaction(int code)
             strcat ( filename2, "mis");
             strcat ( filename2, pathdelimitterstring );
             strcat ( filename2, filename);
-            pwterraintype t = auswahl->weather[auswahlw];
+            TerrainType::Weather* t = auswahl->weather[auswahlw];
             if ( !t )
                t = auswahl->weather[0];
             importbattleislemap ( path, filename, t );

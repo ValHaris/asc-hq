@@ -1,6 +1,9 @@
-//     $Id: sgstream.cpp,v 1.48 2001-01-21 12:48:36 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.49 2001-01-21 16:37:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2001/01/21 12:48:36  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.47  2001/01/04 15:14:06  mbickel
 //      configure now checks for libSDL_image
 //      AI only conquers building that cannot be conquered back immediately
@@ -339,6 +342,7 @@ int getimagepixel ( void* image, int x, int y )
    }
 }
 
+const float pi = 3.14159265;
 
 char* rotatepict ( void* image, int organgle )
 {
@@ -992,10 +996,10 @@ void generateaveragecolprt ( int x1, int y1, int x2, int y2, void* buf, char* pi
 
 
 
-pquickview generateaveragecol ( pwterraintype bdn )
+pquickview generateaveragecol ( TerrainType::Weather* bdn )
 {
    pquickview qv;
-   qv = new ( tquickview );
+   qv = new tquickview ;
    for ( int dir = 0; dir < sidenum; dir++ ) 
       if ( bdn->picture[dir] ) {
 
@@ -1033,14 +1037,14 @@ pterraintype      loadterraintype( pnstream stream )
    stream->readdata2 ( version );
    if ( version == terrain_version || version == 1) {
 
-      pwterraintype pgbt; 
+      TerrainType::Weather* pgbt;
 
-      pterraintype bbt = new (tterraintype);
+      pterraintype bbt = new TerrainType;
    
       bbt->name = (char*) stream->readInt();
       bbt->id   = stream->readInt();
       for ( int ww = 0; ww < cwettertypennum; ww++ )
-         bbt->weather[ww] = (pwterraintype) stream->readInt();
+         bbt->weather[ww] = (TerrainType::Weather*) stream->readInt();
       for ( int nf = 0; nf < 8; nf++ )
          bbt->neighbouringfield[nf] = stream->readInt();
 
@@ -1048,7 +1052,7 @@ pterraintype      loadterraintype( pnstream stream )
    
       for ( int i=0; i<cwettertypennum ;i++ ) {
          if (bbt->weather[i] ) {
-            bbt->weather[i] = new ( twterraintype );
+            bbt->weather[i] = new TerrainType::Weather (bbt);
             pgbt = bbt->weather[i];
 
             int j;

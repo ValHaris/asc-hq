@@ -1,6 +1,12 @@
-//     $Id: gamedlg.cpp,v 1.58 2001-01-19 13:33:50 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.59 2001-01-21 16:37:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2001/01/19 13:33:50  mbickel
+//      The AI now uses hemming
+//      Several bugfixes in Vehicle Actions
+//      Moved all view calculation to viewcalculation.cpp
+//      Mapeditor: improved keyboard support for item selection
+//
 //     Revision 1.57  2001/01/04 15:13:49  mbickel
 //      configure now checks for libSDL_image
 //      AI only conquers building that cannot be conquered back immediately
@@ -298,11 +304,9 @@
 #include "errors.h"
 #include "password_dialog.h"
 #include "viewcalculation.h"
+#include "replay.h"
 
-#ifdef _DOS_
- #include "dos/memory.h"
- #include "dos/sound.h"
-#else
+#ifdef _SDL_
  #include "sdl/sound.h"
 #endif
 

@@ -1,6 +1,12 @@
-//     $Id: spfst.cpp,v 1.77 2001-01-19 13:33:55 mbickel Exp $
+//     $Id: spfst.cpp,v 1.78 2001-01-21 16:37:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.77  2001/01/19 13:33:55  mbickel
+//      The AI now uses hemming
+//      Several bugfixes in Vehicle Actions
+//      Moved all view calculation to viewcalculation.cpp
+//      Mapeditor: improved keyboard support for item selection
+//
 //     Revision 1.76  2000/12/28 16:58:38  mbickel
 //      Fixed bugs in AI
 //      Some cleanup
@@ -947,7 +953,7 @@ void  stu_height ( pvehicle vehicle )
 }
 
 
-void         generatemap( const pwterraintype   bt,
+void         generatemap( TerrainType::Weather*   bt,
                                int                xsize,
                                int                ysize)
 { 
@@ -4567,7 +4573,7 @@ int getcrc ( const pterraintype bdn )
     int crc = bdn->id;
     for ( int i = 0; i < cwettertypennum; i++ ) 
        if ( bdn->weather[i] ) {
-          twterraintype b = *bdn->weather[i];
+          TerrainType::Weather b = *bdn->weather[i];
           for ( int j = 0; j < 8; j++) {
              b.picture[j] = NULL;
              b.direcpict[j]= NULL;
@@ -4966,7 +4972,7 @@ int SmoothIt( pobjecttype TerObj, int* SmoothData )
            }
         } else {
            pfield fld = getfield ( X, Y );
-           pwterraintype old = fld->typ;
+           TerrainType::Weather* old = fld->typ;
            int odir = fld->direction;
    
            if ( IsInSetOfWord( fld->typ->bi_picture[ fld->direction ], &SmoothData[P0] )) {    // Nur die "allesWald"-fielder werden gesmootht

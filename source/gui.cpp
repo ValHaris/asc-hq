@@ -1,6 +1,11 @@
-//     $Id: gui.cpp,v 1.47 2001-01-04 15:13:55 mbickel Exp $
+//     $Id: gui.cpp,v 1.48 2001-01-21 16:37:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2001/01/04 15:13:55  mbickel
+//      configure now checks for libSDL_image
+//      AI only conquers building that cannot be conquered back immediately
+//      tfindfile now returns strings instead of char*
+//
 //     Revision 1.46  2000/12/27 22:23:10  mbickel
 //      Fixed crash in loading message text
 //      Removed many unused variables
@@ -251,6 +256,7 @@
 #include "stack.h"
 #include "sg.h"
 #include "gameoptions.h"
+#include "replay.h"
 
 tguihoststandard          gui;
 tselectbuildingguihost    selectbuildinggui;

@@ -1,6 +1,9 @@
-//     $Id: spfst.h,v 1.34 2001-01-21 12:48:36 mbickel Exp $
+//     $Id: spfst.h,v 1.35 2001-01-21 16:37:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2001/01/21 12:48:36  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.33  2001/01/19 13:33:56  mbickel
 //      The AI now uses hemming
 //      Several bugfixes in Vehicle Actions
@@ -181,9 +184,9 @@ extern void  calculateobject(integer      x,
                               char      mof,
                               pobjecttype obj);
 
-extern void  generatemap( const pwterraintype bt,
-                               int          xsize,
-                               int          ysize);
+extern void  generatemap( TerrainType::Weather* bt,
+                          int          xsize,
+                          int          ysize);
 
 extern void  putstreets2( int          x1,
                           int          y1,
