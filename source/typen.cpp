@@ -22,6 +22,8 @@
 #include <cstring>
 
 #include "global.h"
+#include "ascstring.h"
+#include "stringtokenizer.h"
 #include "misc.h"
 #include "typen.h"
 #include "graphicset.h"
@@ -211,6 +213,27 @@ ASCString Resources::toString()
    return s;
 }
 
+
+
+vector<IntRange> String2IntRangeVector( const ASCString& t )
+{
+   vector<IntRange> irv;
+
+   StringSplit st ( t, ";, " );
+   ASCString s = st.getNextToken();
+   while ( !s.empty() ) {
+      // we have to take care about negative numbers , which have the - at index 0
+      if ( s.find ( "-",1 ) != ASCString::npos ) {
+         ASCString from = s.substr ( 0, s.find ( "-", 1 ) );
+         ASCString to = s.substr ( s.find ( "-",1 )+1 );
+         irv.push_back ( IntRange ( atoi ( from.c_str() ), atoi ( to.c_str() )));
+      } else {
+         irv.push_back ( IntRange ( atoi ( s.c_str() ), atoi ( s.c_str() )));
+      }
+      s = st.getNextToken();
+   }
+   return irv;
+}
 
 
 void IntRange::read ( tnstream& stream )

@@ -137,7 +137,7 @@ Item1=C:\Programme\ascsrc\games\asc\source\tools\win
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=-c C:\Programme\ascdev\asc\source\win32\borland\asc.ini  -i -d C:\wg-test\online\html -l html/ -z 48 -s 100 
+RunParams=-c C:\Programme\ascdev\asc\source\win32\borland\asc.ini  -i -d C:\wg-test\online\html -l html/ -z 48 -s 100 -h 101000,101913
 Launcher=
 UseLauncher=0
 DebugCWD=

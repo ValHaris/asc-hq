@@ -811,22 +811,7 @@ ASCString IntegerArrayProperty::toString ( ) const
 
 IntRangeArrayProperty::PropertyType IntRangeArrayProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {
-   PropertyType ira;
-
-   StringSplit st ( entry.value, ";, " );
-   ASCString s = st.getNextToken();
-   while ( !s.empty() ) {
-      // we have to take care about negative numbers , which have the - at index 0
-      if ( s.find ( "-",1 ) != ASCString::npos ) {
-         ASCString from = s.substr ( 0, s.find ( "-", 1 ) );
-         ASCString to = s.substr ( s.find ( "-",1 )+1 );
-         ira.push_back ( IntRange ( atoi ( from.c_str() ), atoi ( to.c_str() )));
-      } else {
-         ira.push_back ( IntRange ( atoi ( s.c_str() ), atoi ( s.c_str() )));
-      }
-      s = st.getNextToken();
-   }
-   return ira;
+   return String2IntRangeVector( entry.value );
 }
 
 ASCString IntRangeArrayProperty::toString() const

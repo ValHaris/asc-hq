@@ -100,50 +100,7 @@ ASCString getHeightImgString( int height ) {
   return s;
 }
 
-const int maxFileSize = 10000000;
-char s[maxFileSize];
-char d[maxFileSize];
 
-/*
-void copyFile( const ASCString& src, const ASCString& dst ) {
-  FILE* i = fopen ( src.c_str(), filereadmode );
-  FILE* o = fopen ( dst.c_str(), filereadmode );
-  bool copy = false;
-
-  if ( !i )
-    fatalError ("copyFile :: Could not open input file " + src);
-
-  if ( !o ) {
-    copy = true;
-    fclose ( i );
-  } else {
-
-    int s1 = fread ( s, 1, maxFileSize, i );
-    int s2 = fread ( d, 1, maxFileSize, o );
-    if ( s1 != s2 )
-      copy = true;
-    else {
-      for ( int i = 0; i < s1; i++ )
-        if ( s[i] != d[i] ) {
-          copy = true;
-          break;
-        }
-    }
-    fclose( o );
-    fclose( i );
-  }
-  if ( copy ) {
-    i = fopen ( src.c_str(), filereadmode );
-    o = fopen ( dst.c_str(), filewritemode );
-    int s1 = fread ( s, 1, maxFileSize, i );
-    fwrite ( s, 1, s1, o );
-    fclose( o );
-    fclose( i );
-    printf("*");
-  }
-  remove ( src.c_str() );
-}
-*/
 int main(int argc, char *argv[] ) {
   Cmdline cl ( argc, argv );
 
@@ -189,36 +146,36 @@ int main(int argc, char *argv[] ) {
     wildcard =  "*";
     // else use all verhicles
   }
-  if(true) {
+  if(false) {
     ASCString uploadDir = prefixDir + UPLOADDIR;
     ASCString command;
 #ifdef _WIN32_
     command = "md " + uploadDir;
     system(command.c_str());
-    command = "attrib -R " +uploadDir;    
+    command = "attrib -R " +uploadDir;
 #else
     command = "mkdir " + uploadDir;
     system(command.c_str());
-    command = "chmod 750 " +uploadDir;    
+    command = "chmod 750 " +uploadDir;
 #endif
   system(command.c_str());
   }
 
-  
-  BuildingGuideGen gen(prefixDir, cl.m(), cl.s(), cl.i(), false, true);
+
+  BuildingGuideGen gen(prefixDir, cl.m(), cl.s(), cl.h(), cl.i(), false, true);
   gen.processSubjects();
-  cout << "*******Buildings done*******" << endl; 
-  UnitGuideGen unitGen(prefixDir, cl.m(), cl.s(), cl.i(), true, false);
+  cout << "*******Buildings done*******" << endl;
+  UnitGuideGen unitGen(prefixDir, cl.m(), cl.s(), cl.h(), cl.i(), true, false);
   unitGen.processSubjects();
-  cout << "*******Units done*******" << endl;  
-  if(true) {
+  cout << "*******Units done*******" << endl;
+  if(false) {
     ASCString uploadDir = prefixDir + UPLOADDIR;
     ASCString command;
 #ifdef _WIN32_
     system(command.c_str());
-    command = "attrib +R " +uploadDir;    
-#else    
-    command = "chmod 550 " +uploadDir;    
+    command = "attrib +R " +uploadDir;
+#else
+    command = "chmod 550 " +uploadDir;
 #endif
   system(command.c_str());
   }
@@ -226,6 +183,7 @@ int main(int argc, char *argv[] ) {
   cout << "******Guide generated*******" << endl;
   return 0;
 };
+
 
 
 

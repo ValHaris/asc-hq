@@ -211,8 +211,8 @@ ASCString ImageConverter::constructImgFileName(const VehicleType&  vt) {
 
 //**************************************************************************************************************
 
-GuideGenerator::GuideGenerator(ASCString fp, ASCString css, int id, bool imgCreate, bool upload,
-                               int imageSize):filePath(fp), cssFile(css), setID(id), createImg(imgCreate), createUpload(upload), imageWidth(imageSize) {}
+GuideGenerator::GuideGenerator(ASCString fp, ASCString css, int id, ASCString techIDs, bool imgCreate, bool upload,
+                               int imageSize):filePath(fp), cssFile(css), setID(id), techTreeIDs(String2IntRangeVector(techIDs)), createImg(imgCreate), createUpload(upload), imageWidth(imageSize) {}
 
 const ASCString& GuideGenerator::getImagePath(int id) {
   return graphicRefs[id];
@@ -224,8 +224,8 @@ const ASCString& GuideGenerator::getCSSPath() const {
 
 
 //******************************************************************************************************
-BuildingGuideGen::BuildingGuideGen(ASCString fp, ASCString css, int id, bool imgCreate, bool bUnique,
-                                   bool upload, int imageSize): GuideGenerator(fp, css, id, upload, imgCreate), buildingsUnique(bUnique) {}
+BuildingGuideGen::BuildingGuideGen(ASCString fp, ASCString css, int id, ASCString techIDs, bool imgCreate, bool bUnique,
+                                   bool upload, int imageSize): GuideGenerator(fp, css, id, techIDs, upload, imgCreate), buildingsUnique(bUnique) {}
 
 
 ASCString BuildingGuideGen::constructFileName(const BuildingType& bType) {
@@ -262,9 +262,13 @@ void BuildingGuideGen::processBuilding(const BuildingType&  bt) {
   ipv.push_back(&ap);
   BuildingResourcePage rp(bt, target, this);
   ipv.push_back(&rp);
+  BuildingResearchPage rea(bt, target, this);
+  ipv.push_back(&rea);
   for(int i = 0; i < ipv.size(); i++) {
     ipv[i]->buildPage();
-    InfoPageUtil::updateFile(ipv[i]->getPageFileName(), filePath);
+    if(createUpload){          
+      InfoPageUtil::updateFile(ipv[i]->getPageFileName(), filePath);
+    }
   }
 }
 
@@ -366,7 +370,7 @@ void BuildingGuideGen::processSubjects() {
   generateCategories();
 }
 //UnitGuideGen****************************************************************************************************
-UnitGuideGen::UnitGuideGen(ASCString fp, ASCString css, int id, bool imgCreate, bool upload, int imageSize): GuideGenerator(fp, css, id, imgCreate, upload, imageSize) {}
+UnitGuideGen::UnitGuideGen(ASCString fp, ASCString css, int id, ASCString techIDs, bool imgCreate, bool upload, int imageSize): GuideGenerator(fp, css, id, techIDs, imgCreate, upload, imageSize) {}
 
 
 
@@ -516,5 +520,6 @@ void UnitGuideGen::generateCategories() const {
     cout << e.getMessage() << endl;
   }
 }
+
 
 

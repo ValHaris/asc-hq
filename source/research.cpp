@@ -171,11 +171,17 @@ void TechDependency::writeTreeOutput ( const ASCString& sourceTechName, tnstream
 }
 
 
-void TechDependency::writeInvertTreeOutput ( const ASCString& sourceTechName, tnstream& stream, vector<int>& history, int onlyWithBaseTech ) const
+void TechDependency::writeInvertTreeOutput ( const ASCString& sourceTechName, tnstream& stream, vector<int>& history, const vector<IntRange>* onlyWithBaseTechs ) const
 {
-   if ( onlyWithBaseTech > 0 ) {
+   if ( onlyWithBaseTechs && !onlyWithBaseTechs->empty() ) {
       vector<int> inheritanceStack;
-      if ( findInheritanceLevel ( onlyWithBaseTech, inheritanceStack, "" ) < 0 )
+      bool found = false;
+      for ( vector<IntRange>::const_iterator i = onlyWithBaseTechs->begin(); i != onlyWithBaseTechs->end(); ++i )
+         for ( int j = i->from; j <= i->to; ++j )
+            if ( findInheritanceLevel ( j, inheritanceStack, "" ) >= 0 )
+               found = true;
+               
+      if ( !found )
          return;
    }
 
@@ -305,13 +311,13 @@ void TechAdapterDependency::runTextIO ( PropertyContainer& pc, const ASCString& 
    pc.addBool( "RequireAllListedTechAdapter", requireAllListedTechAdapter, true );
 }
 
-void TechAdapterDependency::writeInvertTreeOutput ( const ASCString& sourceTechName, tnstream& stream, int onlyWithBaseTech ) const
+void TechAdapterDependency::writeInvertTreeOutput ( const ASCString& sourceTechName, tnstream& stream, const vector<IntRange>* onlyWithBaseTechs ) const
 {
    vector<int> history;
    for ( RequiredTechAdapter::const_iterator r = requiredTechAdapter.begin(); r != requiredTechAdapter.end(); ++r )
       for ( TechAdapterContainer::iterator i = techAdapterContainer.begin(); i != techAdapterContainer.end(); ++i )
          if ( *r == (*i)->getName() )
-            (*i)->techDependency.writeInvertTreeOutput ( sourceTechName, stream, history, onlyWithBaseTech );
+            (*i)->techDependency.writeInvertTreeOutput ( sourceTechName, stream, history, onlyWithBaseTechs );
 }
 
 

@@ -15,8 +15,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef INFOPAGE_H
-#define INFOPAGE_H
+#ifndef infopageH
+#define infopageH
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -513,6 +514,29 @@ public:
 };
 
 /**
+*@brief  Represents the page containing information about a units research properties
+*@author Kevin Hirschmann
+*/
+class BuildingResearchPage: public BuildingInfoPage {
+public:
+  /**
+  *@brief  Constructor for creating a new BuildingResearchPage.
+  *@brief bt The BuildingType for which the side is created
+  *@brief filePath The path to where the page is stored
+  *@brief generator The BuildingGuideGen constructing the page
+  */
+  BuildingResearchPage(const BuildingType&  bt, ASCString filePath, BuildingGuideGen* generator);
+  /**
+  *@brief  Adds the main content on the right side
+  */
+  virtual void buildContent();
+  /**
+  *@brief  The page title
+  */
+  static const ASCString TITLE;
+};
+
+/**
 *@brief  Abstract representation of one the vehicle information page 
 *@author Kevin Hirschmann
 */
@@ -698,7 +722,7 @@ public:
 };
 
 /**
-*@brief  Represents the page containing information about a units construction properties
+*@brief  Represents the page containing information about a units research properties
 *@author Kevin Hirschmann
 */
 class UnitResearchPage: public UnitInfoPage {
@@ -737,5 +761,6 @@ private:
 };
 
 #endif
+
 
 

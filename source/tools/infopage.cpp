@@ -43,6 +43,7 @@ const ASCString BuildingMainPage::TITLE = "Main info";
 const ASCString BuildingTerrainPage::TITLE = "Construction";
 const ASCString BuildingCargoPage::TITLE = "Cargo";
 const ASCString BuildingResourcePage::TITLE  = "Resource";
+const ASCString BuildingResearchPage::TITLE  = "Research";
 
 const ASCString BuildingMainPage::VEHICLEPROD = "Vehicle production";
 const ASCString BuildingMainPage::AMMUNITIONPROD = "Ammunition production";
@@ -288,7 +289,7 @@ ASCString InfoPage::constructLink(ASCString label, ASCString ref, ASCString cssC
   if(!cssClass.empty()) {
     result += "class =\"" + cssClass + "\" ";
   }
-  if(!target.empty()){
+  if(!target.empty()) {
     result += "target =\"" + target +"\" ";
   }
   return(result+= "href=\"" + ref + "\">" + label + "</a>&nbsp");
@@ -383,6 +384,7 @@ void BuildingInfoPage::addSectionLinks() {
   addLink (BuildingTerrainPage::TITLE, fileName + CONSTRUCTIONLINKSUFFIX + HTML);
   addLink (BuildingCargoPage::TITLE, fileName + CARGOLINKSUFFIX + HTML);
   addLink (BuildingResourcePage::TITLE, fileName + RESOURCELINKSUFFIX + HTML);
+  addLink (BuildingResearchPage::TITLE, fileName + RESEARCHLINKSUFFIX + HTML);
   *buildingInfStream << "</p>" << endl;
   *buildingInfStream << "<hr>" << endl;
   *buildingInfStream << "</td>" << endl;
@@ -552,9 +554,9 @@ void BuildingTerrainPage::buildContent() {
       if ( bt.terrainaccess.terrain.test(i) ) {
         addTREntry(terrain, constructImageLink(STDGFXPATH + ASCString("haken.gif"), "YES") + "<td class=\"wg\"></td><td class=\"wg\">" );
       } /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            if ( bt.terrainaccess.terrainreq.test(i) ){
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         addTREntry(terrain, constructImageLink("http://www.asc-hq.org/asc/unitguide/exkl.gif"));
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }*/
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  if ( bt.terrainaccess.terrainreq.test(i) ){
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               addTREntry(terrain, constructImageLink("http://www.asc-hq.org/asc/unitguide/exkl.gif"));
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  }*/
       if ( bt.terrainaccess.terrainnot.test(i) ) {
         addTREntry(terrain, "</td> <td class=\"wg\">" + constructImageLink(STDGFXPATH + ASCString("hakenrot.gif"), "YES") + "<td class=\"wg\">");
       }
@@ -1269,10 +1271,10 @@ void UnitWeaponPage::buildContent() {
           s = addTREntryln(s, (constructImageLink((STDGFXPATH + ASCString("hoehe") + strrr(h) +".gif"), choehenstufen[h] )));
           hstring += s;
         } /*else {
-                                                                                                                                  ASCString s;
-                                                                                                                                  s = addTREntryln(s, (constructImageLink((STDGFXPATH + ASCString("hoehetrans") + strrr(h) +".gif"), "None" )));
-                                                                                                                                  hstring += s;
-                                                                                                                                }*/
+                                                                                                                                        ASCString s;
+                                                                                                                                        s = addTREntryln(s, (constructImageLink((STDGFXPATH + ASCString("hoehetrans") + strrr(h) +".gif"), "None" )));
+                                                                                                                                        hstring += s;
+                                                                                                                                      }*/
       addTDEntry(hstring);
     }
     *buildingInfStream << "</tr>" << endl;
@@ -1286,10 +1288,10 @@ void UnitWeaponPage::buildContent() {
           s = addTREntryln(s, (constructImageLink((STDGFXPATH + ASCString("hoehe") + strrr(h) +".gif"), choehenstufen[h] )));
           hstring += s;
         } /*else {
-                                                                                                                                  ASCString s;
-                                                                                                                                  s = addTREntryln(s, (constructImageLink((STDGFXPATH + ASCString("hoehetrans") + strrr(h) +".gif"), "None" )));
-                                                                                                                                  hstring += s;
-                                                                                                                                }*/
+                                                                                                                                        ASCString s;
+                                                                                                                                        s = addTREntryln(s, (constructImageLink((STDGFXPATH + ASCString("hoehetrans") + strrr(h) +".gif"), "None" )));
+                                                                                                                                        hstring += s;
+                                                                                                                                      }*/
       addTDEntry(hstring);
     }
     *buildingInfStream << "</tr>" << endl;
@@ -1327,119 +1329,124 @@ void UnitWeaponPage::buildContent() {
 UnitConstructionPage::UnitConstructionPage(const VehicleType&  vt, ASCString filePath, UnitGuideGen* generator):UnitInfoPage(vt, filePath, CONSTRUCTIONLINKSUFFIX, TITLE, generator) {}
 
 void UnitConstructionPage::buildContent() {
-  addHeadline("Objects", 4);
-  ASCString names;
-  startTable(1, RELATIVE, 100);
-  for ( unsigned int i = 0; i < vt.objectsBuildable.size(); i++ ) {
-    for ( int b = 0; b < objectTypeRepository.getNum(); b++ ) {
-      pobjecttype obj = objectTypeRepository.getObject_byPos ( b );
-      if (     obj->id >= vt.objectsBuildable[i].from
-               && obj->id <= vt.objectsBuildable[i].to ) {
-        names = addTREntryln(names, obj->name.c_str() + ASCString("(") + strrr(obj->id )+ ")");
-      }
-
-    }
-  }
-  if(!names.empty()) {
-    *buildingInfStream << "<tr>" << endl;
-    addTitle("Constructable Objects");
-    addTDEntry(names);
-    *buildingInfStream << "</tr>" << endl;
-  }
-
-
-  names = "";
-  for ( unsigned int i = 0; i < vt.objectsRemovable.size(); i++ ) {
-    for ( int b = 0; b < objectTypeRepository.getNum(); b++ ) {
-      pobjecttype obj = objectTypeRepository.getObject_byPos ( b );
-      if (     obj->id >= vt.objectsRemovable[i].from
-               && obj->id <= vt.objectsRemovable[i].to ) {
-        ASCString s;
-        names = addTREntryln(names, obj->name.c_str() + ASCString("(") + strrr(obj->id )+ ")");
-      }
-    }
-  }
-  if ( !names.empty() ) {
-    *buildingInfStream << "<tr>" << endl;
-    addTitle("Destructable Objects");
-    addTDEntry(names);
-    *buildingInfStream << "</tr>" << endl;
-  }
-  names = "";
-  for ( vector<IntRange>::const_iterator i = vt.objectGroupsRemovable.begin(); i != vt.objectGroupsRemovable.end(); ++i ) {
-    if ( i->from != i->to ) {
-      for(int k = i->from; k < i->to; k++) {
-        names = addTREntryln(names, strrr(k));
-      }
-    } else {
-      names = addTREntryln(names, strrr(i->from));
-    }
-  }
-  if ( !names.empty() ) {
-    *buildingInfStream << "<tr>" << endl;
-    addTitle("Destructable Object-Groups");
-    addTDEntry(names);
-    *buildingInfStream << "</tr>" << endl;
-  }
-
-  names = "";
-  for ( vector<IntRange>::const_iterator i = vt.objectGroupsBuildable.begin(); i != vt.objectGroupsBuildable.end(); ++i ) {
-    if ( i->from != i->to ) {
-      for(int k = i->from; k < i->to; k++) {
-        names = addTREntryln(names, strrr(k));
-      }
-    } else {
-      names = addTREntryln(names, strrr(i->from));
-    }
-  }
-  if ( !names.empty() ) {
-    *buildingInfStream << "<tr>" << endl;
-    addTitle("Constructable Object-Groups");
-    addTDEntry(names);
-    *buildingInfStream << "</tr>" << endl;
-  }
-
-  names = "";
-  for ( unsigned int i = 0; i < vt.buildingsBuildable.size(); i++ ) {
-    for ( int b = 0; b < buildingTypeRepository.getNum(); b++ ) {
-      pbuildingtype bld = buildingTypeRepository.getObject_byPos ( b );
-      if (     bld->id >= vt.buildingsBuildable[i].from
-               && bld->id <= vt.buildingsBuildable[i].to ) {
-
-        names = addTREntryln(names, constructLink(bld->name.c_str() + ASCString("(") + strrr(bld->id )+ ")", filePath + BuildingGuideGen::constructFileName(*bld) + MAINLINKSUFFIX + HTML));
+  if((vt.objectsBuildable.size()==0) && (vt.objectsRemovable.size()==0)&&
+      (vt.objectGroupsRemovable.size()==0)&& vt.vehiclesBuildable.size()==0) {
+    addParagraph("n.a.");
+  } else {
+    addHeadline("Objects", 4);
+    ASCString names;
+    startTable(1, RELATIVE, 100);
+    for ( unsigned int i = 0; i < vt.objectsBuildable.size(); i++ ) {
+      for ( int b = 0; b < objectTypeRepository.getNum(); b++ ) {
+        pobjecttype obj = objectTypeRepository.getObject_byPos ( b );
+        if (     obj->id >= vt.objectsBuildable[i].from
+                 && obj->id <= vt.objectsBuildable[i].to ) {
+          names = addTREntryln(names, obj->name.c_str() + ASCString("(") + strrr(obj->id )+ ")");
+        }
 
       }
     }
-  }
-  if ( !names.empty() ) {
-    *buildingInfStream << "<tr>" << endl;
-    addTitle("Constructable Buildings");
-    addTDEntry(names);
-    *buildingInfStream << "</tr>" << endl;
-  }
+    if(!names.empty()) {
+      *buildingInfStream << "<tr>" << endl;
+      addTitle("Constructable Objects");
+      addTDEntry(names);
+      *buildingInfStream << "</tr>" << endl;
+    }
 
-  names = "";
-  for ( unsigned int i = 0; i < vt.vehiclesBuildable.size(); i++ ) {
-    for ( int b = 0; b < vehicleTypeRepository.getNum(); b++ ) {
-      pvehicletype veh = vehicleTypeRepository.getObject_byPos ( b );
-      if (     veh->id >= vt.vehiclesBuildable[i].from
-               && veh->id <= vt.vehiclesBuildable[i].to ) {
-        names = addTREntryln(names, constructLink(veh->name.c_str() + ASCString("(") + strrr(veh->id )+ ")", filePath + UnitGuideGen::constructFileName(*veh) + MAINLINKSUFFIX + HTML));
+
+    names = "";
+    for ( unsigned int i = 0; i < vt.objectsRemovable.size(); i++ ) {
+      for ( int b = 0; b < objectTypeRepository.getNum(); b++ ) {
+        pobjecttype obj = objectTypeRepository.getObject_byPos ( b );
+        if (     obj->id >= vt.objectsRemovable[i].from
+                 && obj->id <= vt.objectsRemovable[i].to ) {
+          ASCString s;
+          names = addTREntryln(names, obj->name.c_str() + ASCString("(") + strrr(obj->id )+ ")");
+        }
       }
     }
-  }
-  if ( !names.empty() ) {
-    *buildingInfStream << "<tr>" << endl;
-    addTitle("Constructable Buildings");
-    addTDEntry(names);
-    *buildingInfStream << "</tr>" << endl;
+    if ( !names.empty() ) {
+      *buildingInfStream << "<tr>" << endl;
+      addTitle("Destructable Objects");
+      addTDEntry(names);
+      *buildingInfStream << "</tr>" << endl;
+    }
+    names = "";
+    for ( vector<IntRange>::const_iterator i = vt.objectGroupsRemovable.begin(); i != vt.objectGroupsRemovable.end(); ++i ) {
+      if ( i->from != i->to ) {
+        for(int k = i->from; k < i->to; k++) {
+          names = addTREntryln(names, strrr(k));
+        }
+      } else {
+        names = addTREntryln(names, strrr(i->from));
+      }
+    }
+    if ( !names.empty() ) {
+      *buildingInfStream << "<tr>" << endl;
+      addTitle("Destructable Object-Groups");
+      addTDEntry(names);
+      *buildingInfStream << "</tr>" << endl;
+    }
+
+    names = "";
+    for ( vector<IntRange>::const_iterator i = vt.objectGroupsBuildable.begin(); i != vt.objectGroupsBuildable.end(); ++i ) {
+      if ( i->from != i->to ) {
+        for(int k = i->from; k < i->to; k++) {
+          names = addTREntryln(names, strrr(k));
+        }
+      } else {
+        names = addTREntryln(names, strrr(i->from));
+      }
+    }
+    if ( !names.empty() ) {
+      *buildingInfStream << "<tr>" << endl;
+      addTitle("Constructable Object-Groups");
+      addTDEntry(names);
+      *buildingInfStream << "</tr>" << endl;
+    }
+
+    names = "";
+    for ( unsigned int i = 0; i < vt.buildingsBuildable.size(); i++ ) {
+      for ( int b = 0; b < buildingTypeRepository.getNum(); b++ ) {
+        pbuildingtype bld = buildingTypeRepository.getObject_byPos ( b );
+        if (     bld->id >= vt.buildingsBuildable[i].from
+                 && bld->id <= vt.buildingsBuildable[i].to ) {
+
+          names = addTREntryln(names, constructLink(bld->name.c_str() + ASCString("(") + strrr(bld->id )+ ")", filePath + BuildingGuideGen::constructFileName(*bld) + MAINLINKSUFFIX + HTML));
+
+        }
+      }
+    }
+    if ( !names.empty() ) {
+      *buildingInfStream << "<tr>" << endl;
+      addTitle("Constructable Buildings");
+      addTDEntry(names);
+      *buildingInfStream << "</tr>" << endl;
+    }
+
+    names = "";
+    for ( unsigned int i = 0; i < vt.vehiclesBuildable.size(); i++ ) {
+      for ( int b = 0; b < vehicleTypeRepository.getNum(); b++ ) {
+        pvehicletype veh = vehicleTypeRepository.getObject_byPos ( b );
+        if (     veh->id >= vt.vehiclesBuildable[i].from
+                 && veh->id <= vt.vehiclesBuildable[i].to ) {
+          names = addTREntryln(names, constructLink(veh->name.c_str() + ASCString("(") + strrr(veh->id )+ ")", filePath + UnitGuideGen::constructFileName(*veh) + MAINLINKSUFFIX + HTML));
+        }
+      }
+    }
+    if ( !names.empty() ) {
+      *buildingInfStream << "<tr>" << endl;
+      addTitle("Constructable Buildings");
+      addTDEntry(names);
+      *buildingInfStream << "</tr>" << endl;
+    }
   }
   endTable();
 }
 
 
 
-//******************************************************************************************************
+
 //******************************************************************************************************
 UnitResearchPage::UnitResearchPage(const VehicleType&  vt, ASCString filePath, UnitGuideGen* generator):UnitInfoPage(vt, filePath, RESEARCHLINKSUFFIX, TITLE, generator) {}
 
@@ -1450,16 +1457,60 @@ void UnitResearchPage::buildContent() {
   startTable(0, RELATIVE, 100, RELATIVE, 100);
   *buildingInfStream << "<tr>" << endl;
   startTD();
-  ASCString techedFileName = fileName + "_tech";
+  ASCString techedFileName = UnitGuideGen::constructFileName(vt) + "_tech";
+  ASCString tempTechFileName = filePath + techedFileName;
+  {
+    tn_file_buf_stream f ( tempTechFileName + ".dot", tnstream::writing );
+    f.writeString ( "digraph  \"Tech Dependency\" { \nbgcolor=\"transparent\" \n", false );
+    f.writeString("node [bgcolor=\"blue\"]\n", false);
+    vt.techDependency.writeInvertTreeOutput( vt.getName() + " ", f, &generator->getTechTreeIDs() );
+    f.writeString ( "\"" + vt.getName() + " \" [shape=diamond] \n", false );
+    f.writeString ( "}\n", false );
+  }
+  ASCString techPicPath = RELATIVEIMGPATH + techedFileName + ".png";
+  ASCString dotFile = tempTechFileName + ".dot";
+  ASCString sysCommand = "dot " + dotFile + "  -Tpng -o" + tempTechFileName + ".png";
+  int res = system ( sysCommand.c_str() );
+  if ( res != 0 ) {
+    cerr << "ERROR encountered at: " << sysCommand.c_str() << endl;
+  }
+  remove(dotFile.c_str());
+
+  TechTreePage ttp(vt, techedFileName, filePath, generator, techPicPath);
+  ttp.buildPage();
+  if(generator->generatesUpload()) {
+    InfoPageUtil::updateFile(ttp.getPageFileName(), generator->getFilePath());
+    InfoPageUtil::updateFile(tempTechFileName + ".png", generator->getFilePath());
+  }
+  addLink(constructImageLink(RELATIVEIMGPATH + techedFileName + ".png", "TECH-TREE", "techtree"),  techedFileName + HTML, "", "External");
+  endTD();
+  addParagraph("(Click to enlarge)");
+  *buildingInfStream << "</tr>" << endl;
+  endTable();
+
+#endif
+}
+
+//******************************************************************************************************
+BuildingResearchPage::BuildingResearchPage(const BuildingType&  bt, ASCString filePath, BuildingGuideGen* generator):BuildingInfoPage(bt, filePath, RESEARCHLINKSUFFIX, TITLE, generator) {}
+
+
+
+void BuildingResearchPage::buildContent() {
+#ifdef USE_GRAPHVIZ
+  addHeadline("TechTree", 3);
+  startTable(0, RELATIVE, 100, RELATIVE, 100);
+  *buildingInfStream << "<tr>" << endl;
+  startTD();
+  ASCString techedFileName = BuildingGuideGen::constructFileName(bt) + "_tech";
   ASCString tempTechFileName = filePath + techedFileName;
   {
     tn_file_buf_stream f ( tempTechFileName + ".dot", tnstream::writing );
 
     f.writeString ( "digraph  \"Tech Dependency\" { \nbgcolor=\"transparent\" \n", false );
     f.writeString("node [bgcolor=\"blue\"]\n", false);
-
-    vt.techDependency.writeInvertTreeOutput( vt.getName() + " ", f );
-    f.writeString ( "\"" + vt.getName() + " \" [shape=diamond] \n", false );
+    bt.techDependency.writeInvertTreeOutput( bt.name + " ", f );
+    f.writeString ( "\"" + bt.name + " \" [shape=diamond] \n", false );
 
     f.writeString ( "}\n", false );
 
@@ -1471,23 +1522,24 @@ void UnitResearchPage::buildContent() {
   if ( res != 0 ) {
     cerr << "ERROR encountered at: " << sysCommand.c_str() << endl;
   }
-  
+
   remove(dotFile.c_str());
-  
-  TechTreePage ttp(vt, techedFileName, filePath, generator, techPicPath);
-  ttp.buildPage();  
+
+  TechTreePage ttp(bt, techedFileName, filePath, generator, techPicPath);
+  ttp.buildPage();
   if(generator->generatesUpload()) {
     InfoPageUtil::updateFile(ttp.getPageFileName(), generator->getFilePath());
-    InfoPageUtil::updateFile(tempTechFileName + ".png", generator->getFilePath());    
-  }    
+    InfoPageUtil::updateFile(tempTechFileName + ".png", generator->getFilePath());
+  }
   addLink(constructImageLink(RELATIVEIMGPATH + techedFileName + ".png", "TECH-TREE", "techtree"),  techedFileName + HTML, "", "External");
   endTD();
   addParagraph("(Click to enlarge)");
   *buildingInfStream << "</tr>" << endl;
   endTable();
-    
+
 #endif
 }
+
 
 //***************************************************************************************************************
 TechTreePage::TechTreePage(const ContainerBaseType& cbt, ASCString fn, ASCString filePath, GuideGenerator* generator, ASCString tPPath):
@@ -1495,8 +1547,7 @@ InfoPage(cbt, fn, filePath, "", TITLE, generator), techPicPath(tPPath) {}
 
 void TechTreePage::buildContent() {}
 
-void TechTreePage::addSectionLinks() {
-}
+void TechTreePage::addSectionLinks() {}
 
 void TechTreePage::buildPage() {
   createHTMLHeader(generator->getCSSPath());
@@ -1506,6 +1557,4 @@ void TechTreePage::buildPage() {
   endHTML();
 
 }
-
-
 

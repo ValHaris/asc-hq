@@ -16,8 +16,9 @@
  ***************************************************************************/
 
 
-#ifndef GUIDEGENERATOR_H
-#define GUIDEGENERATOR_H
+#ifndef guidegeneratorH
+#define guidegeneratorH
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -74,7 +75,7 @@ public:
   *@param setID The set of which the guide is created, if set to 0 guides for all sets will be created
   *@param createImg Determines if images shall be created.
   */
-  GuideGenerator(ASCString filePath, ASCString cssPath, int setID, bool createImg, bool upload = false, int imageSize = 0);
+  GuideGenerator(ASCString filePath, ASCString cssPath, int setID, ASCString techIDs, bool createImg, bool upload = false, int imageSize = 0);
   /**
   *@brief Destructor
   */
@@ -113,7 +114,10 @@ public:
   const ASCString getFilePath() const{
     return filePath;
   }
-   
+  
+  const vector<IntRange>& getTechTreeIDs() const{
+    return techTreeIDs;
+  }
 
 protected:
   /**
@@ -148,8 +152,14 @@ protected:
   */
   bool createUpload;
   /**
-  *@brief Default-Constructor
+  *@brief techTreeID Selects which branch of a technology is shown.
+  *Each unit/builing can have multiple ways to research them
+  *E.g. there is one branch for pbp and another for the asc campain
   */
+  vector<IntRange> techTreeIDs;
+  /**
+  *@brief Default-Constructor
+  */    
   GuideGenerator() {};  
 private:
 
@@ -170,7 +180,7 @@ public:
   *@param buildingsUnique Determines if the pages for a building shall be created only once or for each
   *       of its occurence in the set (different directions, different weather) 
   */
-  BuildingGuideGen(ASCString filePath, ASCString cssPath, int setID, bool createImg, bool buildingsUnique = false, bool upload = false, int imageSize = 0);
+  BuildingGuideGen(ASCString filePath, ASCString cssPath, int setID, ASCString techIDs, bool createImg, bool buildingsUnique = false, bool upload = false, int imageSize = 0);
   /*
   *@brief Destructor
   */
@@ -232,7 +242,7 @@ public:
   *@param createImg Determines if images shall be created.
   *@param imageSize Determines the width of the unit image in pix
   */
-  UnitGuideGen(ASCString filePath, ASCString cssPath, int setID, bool createImg, bool upload = false, int imageSize = 0);
+  UnitGuideGen(ASCString filePath, ASCString cssPath, int setID, ASCString techIDs, bool createImg, bool upload = false, int imageSize = 0);
   /**
   *@brief Destructor
   */
@@ -349,5 +359,6 @@ private:
 
 };
 #endif
+
 
 

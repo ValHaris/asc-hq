@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.150 2004-07-14 19:26:48 mbickel Exp $
+//     $Id: typen.h,v 1.151 2004-07-31 15:13:45 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -246,6 +246,7 @@ class IntRange {
            void write ( tnstream& stream ) const;
 };
 
+extern vector<IntRange> String2IntRangeVector( const ASCString& t );
 
 
 template<typename C>

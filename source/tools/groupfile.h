@@ -14,8 +14,8 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#ifndef GROUPFILE_H
-#define GROUPFILE_H
+#ifndef groupfileH
+#define groupfileH
 
 
 #include <list>
