@@ -350,14 +350,14 @@ void PropertyContainer::addDFloatArray ( const ASCString& name, vector<double>& 
 
 void PropertyContainer::addDFloatArray ( const ASCString& name, vector<int>& property )
 {
-   DoubleArrayProperty::PropertyType dproperty;
+   vector<double> dproperty;
    for ( vector<int>::iterator i = property.begin(); i != property.end(); i++ )
        dproperty.push_back (*i);
    DoubleArrayProperty* dp = new DoubleArrayProperty ( dproperty );
    setup ( dp, name );
 
    property.clear();
-   for ( DoubleArrayProperty::PropertyType::iterator i = dproperty.begin(); i != dproperty.end(); i++ )
+   for ( vector<double>::iterator i = dproperty.begin(); i != dproperty.end(); i++ )
        property.push_back ( int(*i) );
 }
 
