@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.36 2000-05-06 19:57:10 mbickel Exp $
+//     $Id: sg.cpp,v 1.37 2000-05-07 12:12:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2000/05/06 19:57:10  mbickel
+//      Mapeditor/linux is now running
+//
 //     Revision 1.35  2000/05/02 17:28:16  mbickel
 //      Linux: Added makefile for demount and mount(con)
 //
@@ -1445,7 +1448,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_exitgame,        ua_newcampaign,      ua_loadgame,  ua_savegame, ua_setupalliances, ua_settribute, ua_giveunitaway, 
                     ua_vehicleinfo,     ua_researchinfo,     ua_unitstatistics, ua_buildingstatistics, ua_newmessage, ua_viewqueuedmessages, 
                     ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
-                    ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem };
+                    ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences };
 
 
 void         tsgpulldown :: init ( void )
@@ -1455,6 +1458,7 @@ void         tsgpulldown :: init ( void )
    addbutton ( "toggle unit shadingõ2", ua_toggleunitshading ); 
    addbutton ( "seperator", -1); 
    addbutton ( "~O~ptions", ua_gamepreferences ); 
+   addbutton ( "~M~ouse options", ua_mousepreferences ); 
 /*
    #ifdef HEXAGON
     addbutton ( "~B~I options",ua_bi3preferences); 
@@ -2116,6 +2120,9 @@ void execuseraction ( tuseractions action )
                        break;
                        
          case ua_gamepreferences:     gamepreferences();
+                       break;
+                       
+         case ua_mousepreferences:    mousepreferences();
                        break;
                        
          case ua_bi3preferences:      bi3preferences();

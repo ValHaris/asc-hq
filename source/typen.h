@@ -1,6 +1,12 @@
-//     $Id: typen.h,v 1.18 2000-05-06 20:25:25 mbickel Exp $
+//     $Id: typen.h,v 1.19 2000-05-07 12:12:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/05/06 20:25:25  mbickel
+//      Fixed: -recognition of a second mouse click when selection a pd menu item
+//             -movement: fields the unit can only pass, but not stand on them,
+//                        are marked darker
+//             -intedit/stredit: mouseclick outside is like hitting enter
+//
 //     Revision 1.17  2000/04/27 16:25:30  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -1442,7 +1448,7 @@ class tgameoptions {
     int mapzoom;
     int mapzoomeditor;
     int startupcount;
-    int marcfielsnotaccessible_movement;
+    int dontMarkFieldsNotAccessible_movement;
     int dummy[13];
 
     struct {
@@ -1452,7 +1458,9 @@ class tgameoptions {
       int largeguibutton;
       int smalliconundermouse;  // 0: nie;  1: immer; 2: nur wenn vehicle, gebÑude, oder temp unter MAUS
       int centerbutton;    // Maustaste zum zentrieren des fielder, Åber dem sich die Maus befindet;
-      int dummy[9];
+      int unitweaponinfo;
+      int dragndropmovement;
+      int dummy[7];
     } mouse;
     struct {
       int autoproduceammunition;

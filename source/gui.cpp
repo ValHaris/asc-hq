@@ -1,6 +1,12 @@
-//     $Id: gui.cpp,v 1.15 2000-05-06 20:25:23 mbickel Exp $
+//     $Id: gui.cpp,v 1.16 2000-05-07 12:12:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/05/06 20:25:23  mbickel
+//      Fixed: -recognition of a second mouse click when selection a pd menu item
+//             -movement: fields the unit can only pass, but not stand on them,
+//                        are marked darker
+//             -intedit/stredit: mouseclick outside is like hitting enter
+//
 //     Revision 1.14  2000/05/02 16:20:54  mbickel
 //      Fixed bug with several simultaneous vehicle actions running
 //      Fixed graphic error at ammo transfer in buildings
@@ -1068,7 +1074,7 @@ void  tnsguiiconmove::exec         ( void )
       for ( int i = 0; i < pendingVehicleActions.move->reachableFields.getFieldNum(); i++ ) 
          pendingVehicleActions.move->reachableFields.getField( i ) ->a.temp = 1;
 
-      if ( gameoptions.marcfielsnotaccessible_movement )
+      if ( !gameoptions.dontMarkFieldsNotAccessible_movement )
          for ( int j = 0; j < pendingVehicleActions.move->reachableFields.getFieldNum(); j++ ) 
             pendingVehicleActions.move->reachableFieldsIndirect.getField( j ) ->a.temp2 = 2;
       displaymap();

@@ -1,6 +1,13 @@
-//     $Id: controls.cpp,v 1.24 2000-05-02 16:20:52 mbickel Exp $
+//     $Id: controls.cpp,v 1.25 2000-05-07 12:12:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/05/02 16:20:52  mbickel
+//      Fixed bug with several simultaneous vehicle actions running
+//      Fixed graphic error at ammo transfer in buildings
+//      Fixed ammo loss at ammo transfer
+//      Movecost is now displayed for mines and repairs
+//      Weapon info now shows unhittable units
+//
 //     Revision 1.23  2000/04/27 17:59:19  mbickel
 //      Updated Kdevelop project file
 //      Fixed some graphical errors
@@ -3128,6 +3135,10 @@ void         tdashboard::paintweapons(void)
     } 
 } 
  
+void         tdashboard :: paintlweaponinfo ( void )
+{
+   paintlargeweaponinfo();
+}
 
 void         tdashboard :: paintlargeweaponinfo ( void )
 {
@@ -6625,6 +6636,26 @@ void cmousecontrol :: chkmouse ( void )
          actgui->painticons();
 
          actgui->runpressedmouse ( mouseparams.taste );
+      }
+
+   if ( gameoptions.mouse.unitweaponinfo )
+      if ( mouseparams.taste == gameoptions.mouse.unitweaponinfo ) {
+         int x; 
+         int y;
+         int r = getfieldundermouse ( &x, &y );
+         if ( r && ( cursor.posx != x || cursor.posy != y) ) {
+            mousevisible(false);
+            cursor.hide();
+            cursor.posx = x;
+            cursor.posy = y;
+            cursor.show();
+            mousevisible(true);
+         }
+         actgui->painticons();
+         if ( getactfield()->vehicle ) {
+            dashboard.paintvehicleinfo( getactfield()->vehicle, NULL, NULL, NULL );
+            dashboard.paintlweaponinfo();
+         }
       }
 
 /*

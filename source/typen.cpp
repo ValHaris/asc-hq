@@ -1,6 +1,12 @@
-//     $Id: typen.cpp,v 1.15 2000-05-06 20:25:25 mbickel Exp $
+//     $Id: typen.cpp,v 1.16 2000-05-07 12:12:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/05/06 20:25:25  mbickel
+//      Fixed: -recognition of a second mouse click when selection a pd menu item
+//             -movement: fields the unit can only pass, but not stand on them,
+//                        are marked darker
+//             -intedit/stredit: mouseclick outside is like hitting enter
+//
 //     Revision 1.14  2000/05/06 19:57:11  mbickel
 //      Mapeditor/linux is now running
 //
@@ -1434,7 +1440,7 @@ void tgameoptions :: setdefaults ( void )
    bi3.interpolate.objects = 0;
    bi3.interpolate.buildings = 1; 
 
-   marcfielsnotaccessible_movement = 0;
+   dontMarkFieldsNotAccessible_movement = 0;
 
    mapzoom = 80;
 }

@@ -1,6 +1,15 @@
-//     $Id: gamedlg.cpp,v 1.20 2000-04-27 16:25:23 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.21 2000-05-07 12:12:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/04/27 16:25:23  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.19  2000/04/04 08:31:40  mbickel
 //      Fixed a bug that exited ASC when trying to give units to your allies.
 //
@@ -132,7 +141,7 @@
 #include "loadjpg.h"
 
 #ifdef _DOS_
- #include "dos\\memory.h"
+ #include "dos/memory.h"
 #endif
 
 class   tchoosetechnology : public tdialogbox {
@@ -3927,7 +3936,6 @@ void tonlinemousehelp :: invisiblerect ( tmouserect newoffarea )
 const char* smallguiiconsundermouse[3] = { "never", "always", "units, buildings, marked fields" };
 const char* mousekeynames[9] = { "none", "left", "right", "left + right", "center", "center + left", "center + right", "center + left + right", "disabled"};
 
-
 class tgamepreferences : public tdialogbox {
                         tgameoptions actoptions;
                         int status;
@@ -3939,7 +3947,6 @@ class tgamepreferences : public tdialogbox {
                         char checkvalue( char id, void* p)  ;
                         void init ( void );
                         void buttonpressed ( char id );
-                        void paintbutt ( char id );
                         void run ( void );
                     };
 
@@ -3966,7 +3973,7 @@ void tgamepreferences :: init ( void )
    addbutton ( "", xsize -35, starty + 20, xsize - 20, starty + 35, 3, 0, 3, true );
    addeingabe ( 3, &actoptions.container.autoproduceammunition, 0, dblue );
 
-
+/*
    r1.x1 = xsize - 150;
    r1.y1 = starty + 45;
    r1.x2 = xsize - 20;
@@ -3993,19 +4000,21 @@ void tgamepreferences :: init ( void )
    r7.x2 = xsize - 20;
    r7.y2 = starty + 155;
    addbutton ( "", r7, 11, 0, 7, true  );
+*/
 
    r8.x1 = xsize - 150;
    r8.y1 = starty + 165;
    r8.x2 = xsize - 20;
    r8.y2 = starty + 185;
-   addbutton ( "", r8, 11, 0, 8, true  );
-
+//   addbutton ( "", r8, 11, 0, 8, true  );
 
    addbutton ( "", r8.x1, r8.y1 + 30, r8.x2, r8.y2 + 30, 2, 1, 9, true );
    addeingabe ( 9, &actoptions.onlinehelptime , 0, 10000 );
 
+/*
    addbutton ( "", xsize -35, r8.y1 + 60, r8.x2, r8.y2 + 60, 3, 0, 10, true );
    addeingabe ( 10, &actoptions.smallguiiconopenaftermove , 0, dblue  );
+*/
 
    addbutton ( "~E~nter default password", 25 , r8.y1 + 90, xsize - 20, r8.y2 + 90, 0, 1, 11, true );
 
@@ -4035,6 +4044,7 @@ void tgamepreferences :: init ( void )
    dlgoffset.x2 = x1;
    dlgoffset.y2 = y1;
 
+/*
    showtext2 ( "small gui icons below mouse pointer", x1 + 25, y1 + r1.y1 );
    rahmen ( true, r1 + dlgoffset );
    paintbutt( 4 );
@@ -4054,10 +4064,11 @@ void tgamepreferences :: init ( void )
    showtext2 ( "mouse key to center screen", x1 + 25, y1 + r8.y1 );
    rahmen ( true, r8 + dlgoffset );
    paintbutt( 8 );
+*/
 
    showtext2 ( "onlinehelp-delay in 1/100 sec", x1 + 25, y1 + r8.y1 + 30);
 
-   showtext2 ( "mousegui menu opens after movement", x1 + 25, y1 + r8.y1 + 60);
+//   showtext2 ( "mousegui menu opens after movement", x1 + 25, y1 + r8.y1 + 60);
 
 //   showtext2 ( "game path", x1 + 25, y1 + r8.y1 + 120);
    showtext2 ( "movement speed in 1/100 sec", x1 + 25, y1 + r8.y1 + 120);
@@ -4066,53 +4077,6 @@ void tgamepreferences :: init ( void )
    status = 0;
 
 
-}
-
-void tgamepreferences :: paintbutt ( char id )
-{
-   if ( id == 4 ) {
-      tmouserect r2 = r1 + dlgoffset;
-
-      npush ( activefontsettings );
-      activefontsettings.font = schriften.smallarial; 
-      activefontsettings.justify = centertext; 
-      activefontsettings.length = r2.x2 - r2.x1 - 2;
-      activefontsettings.background = dblue;
-      setinvisiblemouserectanglestk( r2 );
-      showtext2 ( smallguiiconsundermouse[actoptions.mouse.smalliconundermouse], r2.x1 + 1, r2.y1 + 1 );
-      getinvisiblemouserectanglestk();
-      npop ( activefontsettings );
-   }
-   if ( id >= 5   &&  id <= 8 ) {
-      int pos;
-      tmouserect r2;
-      if ( id == 5 ) {
-        r2 = r5 + dlgoffset;
-        pos = actoptions.mouse.smallguibutton;
-      } 
-      if ( id == 6 ) {
-        r2 = r6 + dlgoffset;
-        pos = actoptions.mouse.fieldmarkbutton;
-      }
-      if ( id == 7 ) {
-        r2 = r7 + dlgoffset;
-        pos = actoptions.mouse.scrollbutton;
-      }
-      if ( id == 8 ) {
-        r2 = r8 + dlgoffset;
-        pos = actoptions.mouse.centerbutton;
-      }
-
-      npush ( activefontsettings );
-      activefontsettings.font = schriften.smallarial; 
-      activefontsettings.justify = centertext; 
-      activefontsettings.length = r2.x2 - r2.x1 - 2;
-      activefontsettings.background = dblue;
-      setinvisiblemouserectanglestk( r2 );
-      showtext2 ( mousekeynames[pos], r2.x1 + 1, r2.y1 + 1 );
-      getinvisiblemouserectanglestk();
-      npop ( activefontsettings );
-   }
 }
 
 
@@ -4152,7 +4116,7 @@ void tgamepreferences :: buttonpressed ( char id )
 
    if ( id == 2 ) 
       status = 10;
-
+/*
    if ( id == 4 ) {
       actoptions.mouse.smalliconundermouse++;
       if ( actoptions.mouse.smalliconundermouse > 2 )
@@ -4184,14 +4148,15 @@ void tgamepreferences :: buttonpressed ( char id )
       }
 
       paintbutt ( id );
-
    }
+
    if ( id == 8 ) {
       actoptions.mouse.centerbutton++;
       if ( actoptions.mouse.centerbutton > 8 )
          actoptions.mouse.centerbutton = 0;
       paintbutt( 8 );
    }
+*/
 
    if ( id == 11 ) {
       gameoptions.defaultpassword = 0;
@@ -4215,6 +4180,231 @@ void gamepreferences  ( void )
    prefs.run();
    prefs.done();
 }
+
+
+const int mousebuttonnum = 3;
+
+const char* mousebuttonnames[mousebuttonnum] = { "left", "right", "center" };
+
+
+class tmousepreferences : public tdialogbox {
+                        tgameoptions actoptions;
+                        int status;
+                        tmouserect r1, r2, ydelta;
+                        tmouserect dlgoffset;
+                        char actgamepath[200];
+                        int mouseActionNum;
+
+                        struct MouseAction {
+                           char* name;
+                           int unallowMouseButtons;
+                           int singleButton;
+                           int* optionAddress;
+                           int checkBoxStatus[3];
+                        };
+                        dynamic_array<MouseAction> mouseAction;
+
+                     public:
+                        void init ( void );
+                        void buttonpressed ( char id );
+                        void paintbutt ( char id );
+                        void run ( void );
+                    };
+
+
+void tmousepreferences :: init ( void )
+{
+   mouseActionNum = 5;
+
+   tdialogbox::init();
+
+   xsize = 600;
+   ysize = 460;
+
+   title = "mouse options";
+
+   actoptions = gameoptions;
+
+
+   mouseAction[0].name = "mouse button for small gui icons";
+   mouseAction[0].unallowMouseButtons = 0;
+   mouseAction[0].singleButton = 0;
+   mouseAction[0].optionAddress = &actoptions.mouse.smallguibutton;
+
+
+   mouseAction[1].name = "mouse button to set the cursor on a field";
+   mouseAction[1].unallowMouseButtons = 0;
+   mouseAction[1].singleButton = 0;
+   mouseAction[1].optionAddress = &actoptions.mouse.fieldmarkbutton;
+
+
+   mouseAction[2].name = "mouse button to scroll the map";
+   mouseAction[2].unallowMouseButtons = 0;
+   mouseAction[2].singleButton = 0;
+   mouseAction[2].optionAddress = &actoptions.mouse.scrollbutton;
+
+
+   mouseAction[3].name = "mouse button to center screen on field";
+   mouseAction[3].unallowMouseButtons = 0;
+   mouseAction[3].singleButton = 0;
+   mouseAction[3].optionAddress = &actoptions.mouse.centerbutton;
+
+
+   mouseAction[4].name = "mouse button to show unit weap information";
+   mouseAction[4].unallowMouseButtons = 0;
+   mouseAction[4].singleButton = 0;
+   mouseAction[4].optionAddress = &actoptions.mouse.unitweaponinfo;
+
+/*
+   mouseAction[5].name = "mouse button for drag'n'drop unit movement";
+   mouseAction[5].unallowMouseButtons = 0;
+   mouseAction[5].singleButton = 0;
+   mouseAction[5].optionAddress = &actoptions.mouse.dragndropmovement;
+*/
+
+   int lastypos;
+   for ( int i = 0; i < mouseActionNum; i++ ) {
+       for ( int j = 0; j < mousebuttonnum; j++ ) {
+          mouseAction[i].checkBoxStatus[j] = (*mouseAction[i].optionAddress >> j ) & 1;
+          addbutton ( "", xsize - (mousebuttonnum - j ) * 40,      starty + 45 + i * 30, 
+                          xsize - (mousebuttonnum - j ) * 40 + 15, starty + 60 + i * 30, 3, 0, 100 + i * 10 + j, true );
+          addeingabe ( 100 + i * 10 + j, &mouseAction[i].checkBoxStatus[j], 0, dblue  );
+       }
+       lastypos = starty + 45 + (i+1) * 30;
+   }
+
+
+   x1 = -1;
+   y1 = -1;
+
+
+   addbutton ( "~O~K", 10, ysize - 35, xsize / 2 - 5, ysize - 10, 0, 1, 1, true );
+   addkey ( 1, ct_enter );
+
+   addbutton ( "~C~ancel", xsize / 2 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1, 2, true );
+   addkey ( 2, ct_esc );
+
+
+   ydelta.x1 = 0;
+   ydelta.y1 = 30;
+   ydelta.x2 = 0;
+   ydelta.y2 = 30;
+
+   r1.x1 = xsize - 150;
+   r1.y1 = lastypos;
+   r1.x2 = xsize - 20;
+   r1.y2 = r1.y1 + 15;
+
+
+   addbutton ( "", r1, 11, 0, 4, true  );
+
+   r2 = r1 + ydelta;
+
+   addbutton ( "", xsize -35, r2.y1 , r2.x2, r2.y2, 3, 0, 10, true );
+   addeingabe ( 10, &actoptions.smallguiiconopenaftermove , 0, dblue  );
+
+
+   buildgraphics(); 
+
+   dlgoffset.x1 = x1;
+   dlgoffset.y1 = y1;
+   dlgoffset.x2 = x1;
+   dlgoffset.y2 = y1;
+
+   activefontsettings.font = schriften.smallarial; 
+   activefontsettings.justify = centertext; 
+   activefontsettings.length = 40;
+   activefontsettings.background = 255;
+
+   for ( int m = 0; m < mousebuttonnum; m++ )
+       showtext2 ( mousebuttonnames[m], dlgoffset.x1 + xsize - (mousebuttonnum - m ) * 40 - 13,  dlgoffset.y1 + starty + 25);
+
+   activefontsettings.justify = lefttext; 
+   activefontsettings.length = 0;
+
+   for ( int j = 0; j < mouseActionNum; j++ ) 
+       showtext2 ( mouseAction[j].name, x1 + 25, dlgoffset.y1 + starty + 45 + j * 30 );
+
+
+   showtext2 ( "small gui icons below mouse pointer", x1 + 25, r1.y1 + dlgoffset.y1 );
+   rahmen ( true, r1 + dlgoffset );
+   paintbutt( 4 );
+   
+   showtext2 ( "mousegui menu opens after movement",  x1 + 25, r2.y1 + dlgoffset.y1 );
+
+   status = 0;
+}
+
+
+
+void tmousepreferences :: paintbutt ( char id )
+{
+   if ( id == 4 ) {
+      tmouserect r2 = r1 + dlgoffset;
+
+      npush ( activefontsettings );
+      activefontsettings.font = schriften.smallarial; 
+      activefontsettings.justify = centertext; 
+      activefontsettings.length = r2.x2 - r2.x1 - 2;
+      activefontsettings.background = dblue;
+      setinvisiblemouserectanglestk( r2 );
+      showtext2 ( smallguiiconsundermouse[actoptions.mouse.smalliconundermouse], r2.x1 + 1, r2.y1 + 1 );
+      getinvisiblemouserectanglestk();
+      npop ( activefontsettings );
+   }
+}
+
+
+void tmousepreferences :: buttonpressed ( char id )
+{
+   tdialogbox :: buttonpressed ( id );
+
+   if ( id == 1 ) {
+      gameoptions = actoptions;
+      gameoptions.changed = 1;
+      status = 10;
+   }
+
+   if ( id == 2 ) 
+      status = 10;
+
+   if ( id == 4 ) {
+      actoptions.mouse.smalliconundermouse++;
+      if ( actoptions.mouse.smalliconundermouse > 2 )
+         actoptions.mouse.smalliconundermouse = 0;
+      paintbutt ( id );
+   }
+
+   for ( int i = 0; i < mouseActionNum; i++ ) 
+       for ( int j = 0; j < mousebuttonnum; j++ ) 
+          if ( id == 100 + i * 10 + j ) 
+             if ( mouseAction[i].checkBoxStatus[j] )
+                *mouseAction[i].optionAddress |= 1 << j;
+             else
+                *mouseAction[i].optionAddress &= ~(1 << j);
+}
+
+
+void tmousepreferences :: run ( void )
+{
+   mousevisible ( true );
+   do {
+      tdialogbox::run();
+   } while ( status < 10 ); /* enddo */
+}
+
+void mousepreferences  ( void )
+{
+   tmousepreferences prefs;
+   prefs.init();
+   prefs.run();
+   prefs.done();
+}
+
+
+
+
+
 
 
 typedef class tbaseitemlist* pbaseitemlist;

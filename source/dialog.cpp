@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.25 2000-04-27 17:59:21 mbickel Exp $
+//     $Id: dialog.cpp,v 1.26 2000-05-07 12:12:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/04/27 17:59:21  mbickel
+//      Updated Kdevelop project file
+//      Fixed some graphical errors
+//
 //     Revision 1.24  2000/04/27 16:25:19  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -1017,6 +1021,7 @@ void tvehicleinfo::showgeneralinfos ( void )
    showtext2("armor:", column2x + 10, productioncosty + 90 );
 
 
+   showtext2("category:", column2x - 50, productioncosty + 260 );
 
 
 
@@ -1100,6 +1105,10 @@ void  tvehicleinfo::showgeneralinfovariables( void )
 
    showtext2( strrr(aktvehicle->armor), column2x + 100, productioncosty + 90 );
    showtext2( strrr(aktvehicle->weight), column2x + 100, productioncosty + 110 );
+
+   activefontsettings.length = 70+50;
+   showtext2( cmovemalitypes[aktvehicle->movemalustyp], column2x + 50, productioncosty + 260 );
+
 
    npush ( activefontsettings );
 

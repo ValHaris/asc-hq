@@ -1,6 +1,15 @@
-//     $Id: gamedlg.h,v 1.3 1999-11-22 18:27:27 mbickel Exp $
+//     $Id: gamedlg.h,v 1.4 2000-05-07 12:12:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/22 18:27:27  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.2  1999/11/16 03:41:46  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -209,6 +218,7 @@ class tonlinemousehelp : public tsubmousehandler {
       };
 
 extern void gamepreferences  ( void );
+extern void mousepreferences ( void );
 
 extern void multiplayersettings ( void );
 
