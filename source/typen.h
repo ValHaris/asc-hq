@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.138 2003-11-16 21:46:39 mbickel Exp $
+//     $Id: typen.h,v 1.139 2003-12-27 22:34:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.138  2003/11/16 21:46:39  mbickel
+//      Some cleanup and restructuring
+//      Fixed: newly produced units could not leave building
+//
 //     Revision 1.137  2003/11/11 20:03:17  mbickel
 //      No hemming for aircraft any more
 //      new vehicle type flag: move during ReactionFire
@@ -1206,7 +1210,7 @@ const int maxwindspeed = 60;          // Wind with a strength of 255 means that 
 #define resource_fuel_factor 100         // die im boden liegenden Bodensch„tzen ergeben effektiv soviel mal mehr ( bei Bergwerkseffizienz 1024 )
 #define resource_material_factor 100     // "
 
-#define destruct_building_material_get 3 // beim Abreissen erh„lt man 1/3 des eingesetzten Materials zur?ck
+#define destruct_building_material_get 2 // beim Abreissen erh„lt man 1/2 des eingesetzten Materials zur?ck
 #define destruct_building_fuel_usage 10  // beim Abreissen wird 10 * fuelconsumption Fuel fuelconsumptiont
 
 

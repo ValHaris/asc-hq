@@ -18,19 +18,18 @@
 #include "ai_common.h"
 
 
-
-
-
-
 float AI :: getCaptureValue ( const pbuilding bld, const pvehicle veh  )
 {
    HiddenAStar ast ( this, veh );
    HiddenAStar::Path path;
    ast.findPath ( path, bld->getEntry().x, bld->getEntry().y );
    if ( ast.getTravelTime() >= 0 )
-      return getCaptureValue ( bld, ast.getTravelTime() );
+      // everything else being equal, prefer cheapest unit
+      // TODO: factor 0.0001 should be made configurable
+      return getCaptureValue ( bld, ast.getTravelTime() )-0.0001*veh->aiparam[getPlayerNum()]->getValue() ;
    else
-      return minfloat;
+      return -1;
+      // return minfloat; // this makes no sense as minfloat>0!
 }
 
 
@@ -151,7 +150,7 @@ bool AI :: checkReConquer ( pbuilding bld, pvehicle veh )
    srb.startsearch();
    bool enemyNear = srb.returnresult();
 
-   if ( enemyNear ) {
+   if ( enemyNear && veh ) {
       float f = 0;
       for ( int i = 0; i < 32; i++ )
          if ( bld->loading[i] )
@@ -167,6 +166,25 @@ bool AI :: checkReConquer ( pbuilding bld, pvehicle veh )
       return false;
 
 }
+
+
+struct CaptureTriple {
+  pbuilding bld;
+  pvehicle veh;
+  float val;
+};
+
+typedef struct CaptureTriple* pCaptureTriple;
+
+typedef vector<pCaptureTriple> CaptureList;
+
+class CaptureTripleComp : public binary_function<pCaptureTriple,pCaptureTriple,bool> {
+public:
+  explicit CaptureTripleComp() {};
+  bool operator() (const pCaptureTriple t1, const pCaptureTriple t2) const {
+    return t1->val > t2->val;
+  }
+};
 
 void AI :: checkConquer( )
 {
@@ -192,125 +210,94 @@ void AI :: checkConquer( )
       bi = nxt;
    }
 
-   displaymessage2("check for capturing enemy towns ... ");
+   displaymessage2("check for capturing buildings ... ");
 
-   for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
-      pvehicle veh = *vi;
-      if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer && veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_nothing && veh->canMove() ) {
-
-         HiddenAStar ast ( this, veh );
-         ast.findAllAccessibleFields( veh->maxMovement() * config.maxCaptureTime );
-
-         pbuilding bestBuilding = NULL;
-         float bestBuildingCaptureValue = minfloat;
-
-         for ( int c = 0; c <= 8; c++ )
-            if ( getPlayer(c).exist() && getdiplomaticstatus2 ( getPlayerNum()*8, c*8 ) == cawar ) {
-               for ( Player::BuildingList::iterator bi = getPlayer(c).buildingList.begin(); bi != getPlayer(c).buildingList.end(); bi++ ) {
-                  pbuilding bld = *bi;
-                  if ( bld->getEntryField()->a.temp  && buildingCapture[bld->getEntry()].state == BuildingCapture::conq_noUnit ) {
-                     float v = getCaptureValue ( bld, veh );
-                     if ( v > bestBuildingCaptureValue ) {
-                        bestBuildingCaptureValue = v;
-                        bestBuilding = bld;
-                     }
-                  }
-               }
-            }
-
-         if ( bestBuilding ) {
-            BuildingCapture& bc = buildingCapture[ bestBuilding->getEntry() ];
-
-            bc.captureValue = bestBuildingCaptureValue;
-            bc.state = BuildingCapture::conq_conqUnit;
-            bc.unit = veh->networkid;
-
-            veh->aiparam[getPlayerNum()]->addJob( AiParameter::job_conquer, true );
-            veh->aiparam[getPlayerNum()]->setTask( AiParameter::tsk_move );
-            veh->aiparam[getPlayerNum()]->dest = bestBuilding->getEntry();
-         } else
-            veh->aiparam[getPlayerNum()]->setNextJob();
-      }
+   // check for stagnation
+   int num_reachable_buildings=0;
+   for ( BuildingCaptureContainer::iterator bi = buildingCapture.begin(); bi != buildingCapture.end(); bi++ ) 
+      if ( bi->second.state!=BuildingCapture::conq_unreachable ) num_reachable_buildings++;
+   // if all blds are marked as unreachable, reevaluate in hope for a map-change
+   if ( buildingCapture.size()>0 && num_reachable_buildings==0 ) {
+      for ( BuildingCaptureContainer::iterator bi = buildingCapture.begin(); bi != buildingCapture.end(); bi++ ) 
+        bi->second.state=BuildingCapture::conq_noUnit;
    }
+   
+   CaptureList captureList;
 
-
-   // cycle through all neutral buildings which can be conquered by any unit
-   displaymessage2("check for capturing neutral towns ... ");
-
-   typedef vector<pbuilding> BuildingList;
-   BuildingList buildingList;
-
-   for ( Player::BuildingList::iterator bi = getPlayer(8).buildingList.begin(); bi != getPlayer(8).buildingList.end(); bi++ ) {
-      pbuilding bld = *bi;
-      if ( buildingCapture[ bld->getEntry() ].state == BuildingCapture::conq_noUnit ) {
-         buildingList.push_back ( bld );
-
-         int travelTime = maxint;
-         pvehicle conquerer = NULL;
-
+   for ( int c = 0; c <= 8; c++ ) {
+      if ( c<8 ) {
+         if ( !getPlayer(c).exist() ) continue;
+         if ( getdiplomaticstatus2 ( getPlayerNum()*8, c*8 ) != cawar ) continue;
+      }
+      for ( Player::BuildingList::iterator bi = getPlayer(c).buildingList.begin(); bi != getPlayer(c).buildingList.end(); bi++ ) {
+         pbuilding bld = *bi;
+         int reachable = 0;
+         if ( buildingCapture[ bld->getEntry() ].state != BuildingCapture::conq_noUnit ) continue;
+         bool enemyNear = checkReConquer ( bld, 0 );
+         
          for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
             pvehicle veh = *vi;
-            if ( veh->aiparam[getPlayerNum()]->getJob() != AiParameter::job_conquer || veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_nothing)
-               if ( fieldAccessible ( bld->getEntryField(), veh ) == 2 ) {
-                  HiddenAStar ast ( this, veh );
-                  vector<MapCoordinate> path;
-                  ast.findPath ( path, bld->getEntry().x, bld->getEntry().y );
-                  int time = ast.getTravelTime();
-                  if ( time >= 0 && time < travelTime ) {
-                     conquerer = veh;
-                     travelTime = time;
-                  }
-               }
-         }
-         if ( conquerer ) {
-            BuildingCapture& bc = buildingCapture[ bld->getEntry() ];
-
-            bc.nearestUnit  = conquerer->networkid;
-            if ( travelTime >= 0 )
-               bc.captureValue = getCaptureValue ( bld, travelTime );
-            else
-               bc.captureValue = 0;
-         }
-
-      }
-   }
-
-   sort ( buildingList.begin(), buildingList.end(), BuildingValueComp ( this ));
-
-   for ( BuildingList::iterator i = buildingList.begin(); i != buildingList.end(); i++ ) {
-
-      int travelTime = maxint;
-      pvehicle conquerer = NULL;
-
-      for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
-         pvehicle veh = *vi;
-         if ( veh->aiparam[getPlayerNum()]->getJob() != AiParameter::job_conquer || veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_nothing )
-            if ( fieldAccessible ( (*i)->getEntryField(), veh ) == 2 ) {
-               HiddenAStar ast ( this, veh ) ;
-               vector<MapCoordinate> path;
-               ast.findPath ( path, (*i)->getEntry().x, (*i)->getEntry().y );
-               int time = ast.getTravelTime();
-               if ( time >= 0 && time < travelTime ) {
-                  conquerer = veh;
-                  travelTime = time;
-               }
+            if ( !veh->canMove() ) continue;
+            if ( fieldAccessible ( bld->getEntryField(), veh ) != 2 ) continue;
+            if ( c!=8 && !(veh->typ->functions & cf_conquer) ) continue;
+            if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer && 
+                 veh->aiparam[getPlayerNum()]->getTask() != AiParameter::tsk_nothing ) continue;
+            
+            // here, units can be excluded from capturing
+            if ( c!=8 ) {
+                if( veh->aiparam[getPlayerNum()]->getJob() != AiParameter::job_conquer ) continue;
+                if( veh->aiparam[getPlayerNum()]->getTask() != AiParameter::tsk_nothing ) continue;
             }
+            
+            // any further factors should be incorporated into getCaptureValue
+            float val=getCaptureValue( bld, veh );
+            
+            // malus if enemy is near (relevant if we are short of capture-units
+            // or building is practically worthless)
+            // TODO: should be made an optional parameter to getCaptureValue
+            if ( val>0 && enemyNear ) val -= 0.1*veh->aiparam[getPlayerNum()]->getValue(); 
+
+
+            if ( val > 0 ) {
+               pCaptureTriple triple = new CaptureTriple;
+               triple->bld=bld;
+               triple->veh=veh;
+               triple->val=val;
+               captureList.push_back( triple );
+               reachable = true;
+            }
+         }
+         if ( reachable==0 ) 
+            buildingCapture[ bld->getEntry() ].state = BuildingCapture::conq_unreachable;
       }
-
-      if ( conquerer ) {
-        BuildingCapture& bc = buildingCapture[ (*i)->getEntry() ];
-        if ( conquerer->typ->functions & cf_conquer )
-           bc.state = BuildingCapture::conq_conqUnit;
-        else
-           bc.state = BuildingCapture::conq_unitNotConq;
-        bc.unit = conquerer->networkid;
-        conquerer->aiparam[getPlayerNum()]->addJob ( AiParameter::job_conquer, true );
-        conquerer->aiparam[getPlayerNum()]->setTask ( AiParameter::tsk_move );
-        conquerer->aiparam[getPlayerNum()]->dest = (*i)->getEntry();
-      } else
-        buildingCapture[ (*i)->getEntry() ].state = BuildingCapture::conq_unreachable;
    }
+      
+   sort ( captureList.begin(), captureList.end(), CaptureTripleComp() );  
+      
+   for ( CaptureList::iterator i = captureList.begin(); i != captureList.end(); i++ ) {
+      pbuilding bld = (*i)->bld;
+      pvehicle veh = (*i)->veh;
+      float val = (*i)->val;
+      delete (*i);
+      
+      // check whether bld and veh are still available
+      if ( buildingCapture[ bld->getEntry() ].state != BuildingCapture::conq_noUnit ) continue;
+      if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer && 
+           veh->aiparam[getPlayerNum()]->getTask() != AiParameter::tsk_nothing ) continue;
 
+      // dispatch capture order
+      BuildingCapture& bc = buildingCapture[ bld->getEntry() ];
+      if ( veh->typ->functions & cf_conquer )
+         bc.state = BuildingCapture::conq_conqUnit;
+      else
+         bc.state = BuildingCapture::conq_unitNotConq;
+      bc.unit = veh->networkid;
+      veh->aiparam[getPlayerNum()]->addJob ( AiParameter::job_conquer, true );
+      veh->aiparam[getPlayerNum()]->setTask ( AiParameter::tsk_move );
+      veh->aiparam[getPlayerNum()]->dest = bld->getEntry();
+   }     
+
+   // execute capture orders
    for ( BuildingCaptureContainer::iterator bi = buildingCapture.begin(); bi != buildingCapture.end(); ) {
       BuildingCaptureContainer::iterator nxt = bi;
       ++nxt;
@@ -328,7 +315,6 @@ void AI :: checkConquer( )
       checkKeys();
       bi = nxt;
    }
-
 }
 
 
