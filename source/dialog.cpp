@@ -2,9 +2,15 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.75 2001-02-01 22:48:34 mbickel Exp $
+//     $Id: dialog.cpp,v 1.76 2001-02-04 21:26:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.75  2001/02/01 22:48:34  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.74  2001/01/31 14:52:33  mbickel
 //      Fixed crashes in BI3 map importing routines
 //      Rewrote memory consistency checking
@@ -727,7 +733,11 @@ void         tweaponinfo::run(void)
 void         tvehicleinfo::init( const Vehicletype* type )
 { 
 
-   aktvehicle = getvehicletype_forid ( type->id);
+   if ( type )
+      aktvehicle = getvehicletype_forid ( type->id);
+   else
+      aktvehicle = NULL;
+
    tdialogbox::init();
    category = 0;
    x1 = 20; 

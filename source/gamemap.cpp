@@ -35,83 +35,83 @@
 
 tmap :: tmap ( void )
 {
-      int i;
+   int i;
 
-      xsize = 0;
-      ysize = 0;
-      xpos = 0;
-      ypos = 0;
-      field = NULL;
-      codeword[0] = 0;
-      title = 0;
-      campaign = NULL;
+   xsize = 0;
+   ysize = 0;
+   xpos = 0;
+   ypos = 0;
+   field = NULL;
+   codeword[0] = 0;
+   title = 0;
+   campaign = NULL;
 
-      actplayer = -1;
-      time.abstime = 0;
+   actplayer = -1;
+   time.abstime = 0;
 
-      weather.fog = 0;
+   weather.fog = 0;
 
-      _resourcemode = 0;
+   _resourcemode = 0;
 
-      for ( i = 0; i < 8; i++ )
-         for ( int j = 0; j < 8; j++ )
-             alliances[i][j] = 0;
+   for ( i = 0; i < 8; i++ )
+      for ( int j = 0; j < 8; j++ )
+          alliances[i][j] = 0;
 
-      for ( i = 0; i< 9; i++ ) {
-         player[i].ai = NULL;
+   for ( i = 0; i< 9; i++ ) {
+      player[i].ai = NULL;
 
-         if ( i == 0 )
-            player[i].stat = 0;
-         else
-            player[i].stat = 2;
+      if ( i == 0 )
+         player[i].stat = 0;
+      else
+         player[i].stat = 2;
 
-         player[i].dissectedunit = 0;
-         player[i].unreadmessage = NULL;
-         player[i].oldmessage = NULL;
-         player[i].sentmessage = NULL;
-         player[i].queuedEvents = 0;
-         player[i].humanname = "human ";
-         player[i].humanname += strrr( i );
-         player[i].computername = "computer ";
-         player[i].computername += strrr( i );
-         player[i].research.chainToMap ( this, i );
-      }
+      player[i].dissectedunit = 0;
+      player[i].unreadmessage = NULL;
+      player[i].oldmessage = NULL;
+      player[i].sentmessage = NULL;
+      player[i].queuedEvents = 0;
+      player[i].humanname = "human ";
+      player[i].humanname += strrr( i );
+      player[i].computername = "computer ";
+      player[i].computername += strrr( i );
+      player[i].research.chainToMap ( this, i );
+   }
 
-      oldevents = NULL;
-      firsteventtocome = NULL;
-      firsteventpassed = NULL;
+   oldevents = NULL;
+   firsteventtocome = NULL;
+   firsteventpassed = NULL;
 
-      unitnetworkid = 0;
+   unitnetworkid = 0;
 
-      levelfinished = 0;
+   levelfinished = 0;
 
-      network = 0;
+   network = 0;
 
-      for ( i = 0; i < 8; i++ ) {
-         cursorpos.position[i].cx = 0;
-         cursorpos.position[i].sx = 0;
-         cursorpos.position[i].cy = 0;
-         cursorpos.position[i].sy = 0;
-      }
+   for ( i = 0; i < 8; i++ ) {
+      cursorpos.position[i].cx = 0;
+      cursorpos.position[i].sx = 0;
+      cursorpos.position[i].cy = 0;
+      cursorpos.position[i].sy = 0;
+   }
 
-      unsentmessage = NULL;
-      message = NULL;
-      messageid = 0;
-      journal = NULL;
-      newjournal = NULL;
-      for ( i = 0; i< 8; i++ )
-         alliances_at_beginofturn[i] = 0;
+   unsentmessage = NULL;
+   message = NULL;
+   messageid = 0;
+   journal = NULL;
+   newjournal = NULL;
+   for ( i = 0; i< 8; i++ )
+      alliances_at_beginofturn[i] = 0;
 
-      shareview = NULL;
-      continueplaying = 0;
-      replayinfo = NULL;
-      playerView = -1;
-      lastjournalchange.abstime = 0;
-      ellipse = 0;
-      graphicset = 0;
-      gameparameter_num = 0;
-      game_parameter = NULL;
-      mineralResourcesDisplayed = 0;
+   shareview = NULL;
+   continueplaying = 0;
+   replayinfo = NULL;
+   playerView = -1;
+   lastjournalchange.abstime = 0;
+   ellipse = 0;
+   graphicset = 0;
+   gameparameter_num = 0;
+   game_parameter = NULL;
+   mineralResourcesDisplayed = 0;
 }
 
 

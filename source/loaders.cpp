@@ -1,6 +1,12 @@
-//     $Id: loaders.cpp,v 1.41 2001-02-01 22:48:43 mbickel Exp $
+//     $Id: loaders.cpp,v 1.42 2001-02-04 21:26:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2001/02/01 22:48:43  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.40  2001/01/31 14:52:39  mbickel
 //      Fixed crashes in BI3 map importing routines
 //      Rewrote memory consistency checking
@@ -238,6 +244,7 @@
 
 #ifdef sgmain
 #include "missions.h"
+#include "artint.h"
 #endif
 
 
@@ -915,6 +922,35 @@ void     tspfldloaders::readmap ( void )
 
 
 
+void tgameloaders :: writeAI ( )
+{
+   int a = 0;
+   for ( int i = 0; i< 8; i++ )
+      if ( spfld->player[i].ai )
+         a += 1 << i;
+
+   stream->writeInt ( a );
+   for ( int i = 0; i < 8; i++ )
+      if ( spfld->player[i].ai )
+         spfld->player[i].ai->write( *stream );
+}
+
+void tgameloaders :: readAI ( )
+{
+#ifdef sgmain
+   int a = stream->readInt();
+   for ( int i = 0; i< 8; i++ )
+      if ( a & ( 1 << i ) ) {
+         AI* ai = new AI ( spfld, i );
+         ai->read ( *stream );
+         spfld->player[i].ai = ai;
+      } else {
+         spfld->player[i].ai = NULL;
+      }
+#endif
+}
+
+
 /**************************************************************/
 /*     Network schreiben / lesen                            ÿ */
 /**************************************************************/
@@ -1583,21 +1619,6 @@ int          tmaploaders::loadmap( const char *       name )
   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  */ 
 
 
-/*
-void         readhistory(pfilestream  stream);
-
-void         writehistory(pfilestream  stream);
-*/
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1637,6 +1658,7 @@ int          tsavegameloaders::savegame( const char* name )
 
    writedissections();
    writereplayinfo ();
+   writeAI();
 
    stream->writedata2 ( actsavegameversion );
 
@@ -1651,11 +1673,9 @@ int          tsavegameloaders::savegame( const char* name )
 
 int          tsavegameloaders::loadgame( const char *       name )
 { 
-
    tnfilestream filestream ( name, 1 );
 
    stream = &filestream;
-
 
    char* description = NULL;
 
@@ -1689,23 +1709,15 @@ int          tsavegameloaders::loadgame( const char *       name )
    readeventspassed ();
    readoldevents    ();
 
-       #ifdef logging
-       logtofile ( "loaders / tsavegameloaders::loadgame / vor readfields" );
-       #endif
-                     
    readfields ( );
 
-       #ifdef logging
-       logtofile ( "loaders / tsavegameloaders::loadgame / vor readdissections" );
-       #endif
- 
    readdissections();
 
-       #ifdef logging
-       logtofile ( "loaders / tsavegameloaders::loadgame / vor readreplayinfo" );
-       #endif
    readreplayinfo ();
- 
+
+   if ( version >= 0xff34 )
+      readAI ();
+
    stream->readdata( &version, sizeof(version));
    if (version > actsavegameversion || version < minsavegameversion ) {
       delete spfld ;

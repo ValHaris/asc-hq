@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: artint.cpp,v 1.56 2001-02-01 22:48:25 mbickel Exp $
+//     $Id: artint.cpp,v 1.57 2001-02-04 21:26:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.56  2001/02/01 22:48:25  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.55  2001/01/28 14:04:00  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -254,6 +260,31 @@ AI :: ServiceOrder :: ServiceOrder ( AI* _ai, VehicleService::Service _requiredS
    serviceUnitID = 0;
    position = _pos;
    time = ai->getMap()->time;
+}
+
+AI :: ServiceOrder :: ServiceOrder ( AI* _ai, tnstream& stream )
+{
+  ai = _ai;
+  read ( stream );
+}
+
+
+void AI :: ServiceOrder :: read ( tnstream& stream )
+{
+  int version = stream.readInt( );
+  targetUnitID = stream.readInt (  );
+  serviceUnitID = stream.readInt (  );
+  position = stream.readInt (  );
+  time.abstime = stream.readInt (  );
+}
+
+void AI :: ServiceOrder :: write ( tnstream& stream ) const
+{
+  stream.writeInt( 10000 );
+  stream.writeInt ( targetUnitID );
+  stream.writeInt ( serviceUnitID );
+  stream.writeInt ( position );
+  stream.writeInt ( time.abstime );
 }
 
 AI :: ServiceOrder :: ~ServiceOrder (  )
@@ -611,6 +642,10 @@ AI::AiResult AI :: executeServices ( )
          pbuilding bld = findServiceBuilding( *i );
          if ( bld )
             veh->aiparam[ getPlayer() ]->dest = bld->getEntry ( );
+         else {
+            displaymessage("warning: no service building found!",1);
+         }
+
       }
   }
 
@@ -627,8 +662,12 @@ AI::AiResult AI :: executeServices ( )
               MapCoordinate mc = fld->building->getEntry();
               vc.execute ( NULL, mc.x, mc.y, 0, -1, -1 );
            } else
-              if ( fld->vehicle )
-                 vc.execute ( fld->vehicle, -1, -1, 0, -1, -1 );
+              if ( fld->vehicle ) {
+                 if ( !vc.available( fld->vehicle ))
+                    displaymessage("AI :: ExecuteService; inconsistency vehicleService.available ",1 );
+                 else
+                    vc.execute ( fld->vehicle, -1, -1, 0, -1, -1 );
+              }
 
            if ( vc.getStatus () == 2 ) {
               if ( vc.dest.find ( veh->networkid ) != vc.dest.end() )
@@ -663,6 +702,33 @@ float AI :: getCaptureValue ( const pbuilding bld, const pvehicle veh  )
 }
 
 
+void AI :: BuildingCapture :: write ( tnstream& stream ) const
+{
+  stream.writeInt( 20 );
+  stream.writeInt ( state );
+  stream.writeInt ( unit );
+  for ( vector<int>::const_iterator i = guards.begin(); i  != guards.end(); i++ ) {
+     stream.writeInt ( 1 );
+     stream.writeInt ( *i );
+  }
+  stream.writeInt ( 0 );
+  stream.writeFloat ( captureValue );
+  stream.writeInt ( nearestUnit );
+}
+
+void AI :: BuildingCapture :: read ( tnstream& stream )
+{
+  int version = stream.readInt();
+  state = BuildingCaptureState( stream.readInt ( ));
+  unit = stream.readInt ( );
+  int i = stream.readInt ();
+  while ( i ) {
+     guards.push_back ( stream.readInt() );
+     i = stream.readInt();
+  }
+  captureValue = stream.readFloat ();
+  nearestUnit = stream.readInt ();
+}
 
 
 
@@ -1687,11 +1753,11 @@ void AI :: searchTargets ( pvehicle veh, int x, int y, TargetVector& tl, int mov
    npush ( veh->ypos );
 
    veh->removeview();
-   int fieldsWithChangedVisibility = evaluateviewcalculation ( getMap(), veh->xpos, veh->ypos, veh->typ->view, 0xff );
+   // int fieldsWithChangedVisibility = evaluateviewcalculation ( getMap(), veh->xpos, veh->ypos, veh->typ->view, 0xff );
    veh->xpos = x;
    veh->ypos = y;
    veh->addview();
-   fieldsWithChangedVisibility += evaluateviewcalculation ( getMap(), veh->xpos, veh->ypos, veh->typ->view, 0xff );
+   int fieldsWithChangedVisibility = evaluateviewcalculation ( getMap(), veh->xpos, veh->ypos, veh->typ->view, 0xff );
 
 
    VehicleAttack va ( NULL, NULL );
@@ -1782,15 +1848,15 @@ void AI :: searchTargets ( pvehicle veh, int x, int y, TargetVector& tl, int mov
       }
    }
 
-   if ( fieldsWithChangedVisibility )
-      evaluateviewcalculation ( getMap(), veh->xpos, veh->ypos, veh->typ->view, 0xff );
+   // if ( fieldsWithChangedVisibility )
+   //   evaluateviewcalculation ( getMap(), veh->xpos, veh->ypos, veh->typ->view, 0xff );
    veh->removeview();
    npop ( veh->ypos );
    npop ( veh->xpos );
 
    veh->addview();
 
-   if ( fieldsWithChangedVisibility )
+   if ( fieldsWithChangedVisibility || 1 )  // viewbug.sav !!!!!
       evaluateviewcalculation ( getMap(), veh->xpos, veh->ypos, veh->typ->view, 0xff );
 }
 
@@ -2179,6 +2245,9 @@ AI::AiResult AI::tactics( void )
                   if ( freeNeighbouringFields <= 1 )
                      directAttack = true;
 
+                  if ( mv->enemyDamage >= 100 )
+                     directAttack = true;
+
                   if ( directAttack ) {
                      AiResult res = executeMoveAttack ( veh, tv );
                      i = tactVehicles.erase ( i );
@@ -2250,8 +2319,16 @@ AI::AiResult AI::tactics( void )
 
                for ( int i = 0; i < sidenum; i++ )
                   if ( finalPositions[i] ) {
+                     int nwid = finalPositions[i]->networkid;
                      moveUnit ( finalPositions[i], getNeighbouringFieldCoordinate( MapCoordinate( enemy->xpos, enemy->ypos), i));
                      affectedFields.push_back ( MapCoordinate(finalPositions[i]->xpos, finalPositions[i]->ypos) );
+                     // the unit may have been shot down due to reaction fire
+
+                     if ( !getMap()->getUnit ( nwid ) ) {
+                        TactVehicles::iterator att = find ( tactVehicles.begin(), tactVehicles.end(), finalPositions[i] ) ;
+                        tactVehicles.erase ( att );
+                        finalPositions[i] = NULL;
+                     }
                   }
 
                int attackOrder[sidenum];
@@ -2740,6 +2817,81 @@ void AI:: run ( void )
               strategyTime/100 );
 }
 
+
+void AI :: read ( tnstream& stream )
+{
+   int version = stream.readInt ( );
+   _isRunning = stream.readInt ();
+   _vision = stream.readInt ( );
+   unitCounter = stream.readInt ( );
+
+   int i = stream.readInt();
+   while ( i ) {
+      ServiceOrder so ( this, stream );
+      serviceOrders.push_back ( so );
+      i = stream.readInt();
+   }
+
+
+   i = stream.readInt();
+   while ( i ) {
+      MapCoordinate mc;
+      mc.read ( stream );
+
+      AI::BuildingCapture bc;
+      bc.read ( stream );
+
+      buildingCapture[mc] = bc;
+
+      i = stream.readInt();
+   }
+
+   config.lookIntoTransports = stream.readInt();
+   config.lookIntoBuildings = stream.readInt( );
+   config.wholeMapVisible = stream.readInt( );
+   config.aggressiveness = stream.readFloat( );
+   config.damageLimit = stream.readInt();
+   config.resourceLimit.read( stream );
+   config.ammoLimit = stream.readInt();
+   config.maxCaptureTime = stream.readInt();
+   int version2 = stream.readInt();
+}
+
+void AI :: write ( tnstream& stream ) const
+{
+   const int version = 100;
+   stream.writeInt ( version );
+   stream.writeInt ( _isRunning );
+   stream.writeInt ( _vision );
+   stream.writeInt ( unitCounter );
+
+   for ( ServiceOrderContainer::const_iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++) {
+      stream.writeInt ( 1 );
+      i->write ( stream );
+   }
+
+   stream.writeInt ( 0 );
+
+   for ( map<MapCoordinate,BuildingCapture>::const_iterator i = buildingCapture.begin(); i != buildingCapture.end(); i++ ) {
+      stream.writeInt ( 1 );
+      i->first.write ( stream );
+      i->second.write ( stream );
+   }
+   stream.writeInt ( 0 );
+
+   stream.writeInt( config.lookIntoTransports );   /*  gegnerische transporter einsehen  */
+   stream.writeInt( config.lookIntoBuildings );
+   stream.writeInt( config.wholeMapVisible );
+   stream.writeFloat( config.aggressiveness );   // 1: units are equally worth ; 2
+   stream.writeInt( config.damageLimit );
+   config.resourceLimit.write( stream );
+   stream.writeInt( config.ammoLimit );
+   stream.writeInt( config.maxCaptureTime );
+
+   stream.writeInt ( version );
+}
+
+
 bool AI :: isRunning ( void )
 {
    return _isRunning;
@@ -2753,102 +2905,103 @@ int AI :: getVision ( void )
 
 void AI :: showFieldInformation ( int x, int y )
 {
-   if ( fieldThreats ) {
-      const char* fieldinfo = "#font02#Field Information (%d,%d)#font01##aeinzug20##eeinzug10##crtp10#"
-                              "threat orbit: %d\n"
-                              "threat high-level flight: %d\n"
-                              "threat flight: %d\n"
-                              "threat low-level flight: %d\n"
-                              "threat ground level: %d\n"
-                              "threat floating: %d\n"
-                              "threat submerged: %d\n"
-                              "threat deep submerged: %d\n";
+   if ( !fieldThreats )
+      calculateFieldThreats();
 
-      char text[10000];
-      int pos = x + y * activemap->xsize;
-      sprintf(text, fieldinfo, x,y,fieldThreats[pos].threat[7], fieldThreats[pos].threat[6], fieldThreats[pos].threat[5],
-                                   fieldThreats[pos].threat[4], fieldThreats[pos].threat[3], fieldThreats[pos].threat[2],
-                                   fieldThreats[pos].threat[1], fieldThreats[pos].threat[0] );
+   const char* fieldinfo = "#font02#Field Information (%d,%d)#font01##aeinzug20##eeinzug10##crtp10#"
+                           "threat orbit: %d\n"
+                           "threat high-level flight: %d\n"
+                           "threat flight: %d\n"
+                           "threat low-level flight: %d\n"
+                           "threat ground level: %d\n"
+                           "threat floating: %d\n"
+                           "threat submerged: %d\n"
+                           "threat deep submerged: %d\n";
 
-      pfield fld = getfield (x, y );
-      if ( fld->vehicle && fieldvisiblenow ( fld )) {
-         char text2[1000];
-         sprintf(text2, "\nunit nwid: %d ; typeid: %d", fld->vehicle->networkid, fld->vehicle->typ->id );
+   char text[10000];
+   int pos = x + y * activemap->xsize;
+   sprintf(text, fieldinfo, x,y,fieldThreats[pos].threat[7], fieldThreats[pos].threat[6], fieldThreats[pos].threat[5],
+                                fieldThreats[pos].threat[4], fieldThreats[pos].threat[3], fieldThreats[pos].threat[2],
+                                fieldThreats[pos].threat[1], fieldThreats[pos].threat[0] );
+
+   pfield fld = getfield (x, y );
+   if ( fld->vehicle && fieldvisiblenow ( fld )) {
+      char text2[1000];
+      sprintf(text2, "\nunit nwid: %d ; typeid: %d", fld->vehicle->networkid, fld->vehicle->typ->id );
+      strcat ( text, text2 );
+      AiParameter& aip = *fld->vehicle->aiparam[getPlayer()];
+
+      if ( fld->vehicle->aiparam ) {
+         static char* tasks[] = { "nothing",
+                                  "tactics",
+                                  "tactwait",
+                                  "stratwait",
+                                  "wait",
+                                  "strategy",
+                                  "serviceRetreat",
+                                  "move" };
+        static char* jobs[] = { "undefined",
+                                "fight",
+                                "supply",
+                                "conquer",
+                                "build" };
+
+         sprintf(text2, "\nunit value: %d; xtogo: %d, ytogo: %d; ztogo: %d;\njob %s ; task %s \n", aip.getValue(), aip.dest.x, aip.dest.y, aip.dest.z, jobs[aip.job], tasks[aip.task] );
          strcat ( text, text2 );
-         AiParameter& aip = *fld->vehicle->aiparam[getPlayer()];
-
-         if ( fld->vehicle->aiparam ) {
-            static char* tasks[] = { "nothing",
-                                     "tactics",
-                                     "tactwait",
-                                     "stratwait",
-                                     "wait",
-                                     "strategy",
-                                     "serviceRetreat",
-                                     "move" };
-           static char* jobs[] = { "undefined",
-                                   "fight",
-                                   "supply",
-                                   "conquer",
-                                   "build" };
-
-            sprintf(text2, "\nunit value: %d; xtogo: %d, ytogo: %d; ztogo: %d;\njob %s ; task %s \n", aip.getValue(), aip.dest.x, aip.dest.y, aip.dest.z, jobs[aip.job], tasks[aip.task] );
-            strcat ( text, text2 );
-         }
-
-         if ( aip.dest.x >= 0 && aip.dest.y >= 0 ) {
-            getMap()->cleartemps ( 1 );
-            getfield ( aip.dest.x, aip.dest.y )->a.temp = 1;
-            displaymap();
-         }
-
       }
-      strcat ( text, "\n#font02#Section Information#font01##aeinzug20##eeinzug10##crtp10#");
-      string s;
 
-      Section& sec = sections.getForCoordinate ( x, y );
+      if ( aip.dest.x >= 0 && aip.dest.y >= 0 ) {
+         getMap()->cleartemps ( 1 );
+         getfield ( aip.dest.x, aip.dest.y )->a.temp = 1;
+         displaymap();
+      }
 
-      s += "xp = ";
-      s += strrr ( sec.xp );
-      s += " ; yp = ";
-      s += strrr ( sec.yp );
-      s += "\n";
-      const char* threattypes[4] = { "absUnitThreat", "avgUnitThreat", "absFieldThreat", "avgFieldThreat" };
+   }
+   strcat ( text, "\n#font02#Section Information#font01##aeinzug20##eeinzug10##crtp10#");
+   string s;
 
-      for ( int i = 0; i < 4; i++ ) {
-         for ( int h = 0; h < 8; h++ ) {
-            s += threattypes[i];
-            s += " ";
-            s += choehenstufen [h];
-            s += " ";
-            switch ( i ) {
-               case 0: s += strrr ( sec.absUnitThreat.threat[h] );
-                       break;
-               case 1: s += strrr ( sec.avgUnitThreat.threat[h] );
-                       break;
-               case 2: s += strrr ( sec.absFieldThreat.threat[h] );
-                       break;
-               case 3: s += strrr ( sec.avgFieldThreat.threat[h] );
-                       break;
-            }
-            s += "\n";
+   Section& sec = sections.getForCoordinate ( x, y );
+
+   s += "xp = ";
+   s += strrr ( sec.xp );
+   s += " ; yp = ";
+   s += strrr ( sec.yp );
+   s += "\n";
+   const char* threattypes[4] = { "absUnitThreat", "avgUnitThreat", "absFieldThreat", "avgFieldThreat" };
+
+   for ( int i = 0; i < 4; i++ ) {
+      for ( int h = 0; h < 8; h++ ) {
+         s += threattypes[i];
+         s += " ";
+         s += choehenstufen [h];
+         s += " ";
+         switch ( i ) {
+            case 0: s += strrr ( sec.absUnitThreat.threat[h] );
+                    break;
+            case 1: s += strrr ( sec.avgUnitThreat.threat[h] );
+                    break;
+            case 2: s += strrr ( sec.absFieldThreat.threat[h] );
+                    break;
+            case 3: s += strrr ( sec.avgFieldThreat.threat[h] );
+                    break;
          }
          s += "\n";
       }
-
-      for ( int j = 0; j < aiValueTypeNum; j++ ) {
-         s+= "\nvalue ";
-         s+= strrr ( j );
-         s+= " = ";
-         s+= strrr ( sec.value[j] );
-      }
-
-      strcat ( text, s.c_str() );
-      tviewanytext vat;
-      vat.init ( "AI information", text );
-      vat.run();
-      vat.done();
+      s += "\n";
    }
+
+   for ( int j = 0; j < aiValueTypeNum; j++ ) {
+      s+= "\nvalue ";
+      s+= strrr ( j );
+      s+= " = ";
+      s+= strrr ( sec.value[j] );
+   }
+
+   strcat ( text, s.c_str() );
+   tviewanytext vat;
+   vat.init ( "AI information", text );
+   vat.run();
+   vat.done();
 }
 
 

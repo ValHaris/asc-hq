@@ -65,6 +65,9 @@ class ContainerBase {
       virtual void write ( tnstream& stream, bool includeLoadedUnits = true ) = 0;
       virtual void read ( tnstream& stream ) = 0;
 
+      virtual void addview ( void ) = 0;
+      virtual void removeview ( void ) = 0;
+
 
       virtual int putResource ( int amount, int resourcetype, int queryonly, int scope = 1 ) = 0;
       virtual int getResource ( int amount, int resourcetype, int queryonly, int scope = 1 ) = 0;

@@ -1,6 +1,12 @@
-//     $Id: unitctrl.cpp,v 1.47 2001-02-01 22:48:53 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.48 2001-02-04 21:27:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2001/02/01 22:48:53  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.46  2001/01/28 17:19:16  mbickel
 //      The recent cleanup broke some source files; this is fixed now
 //
@@ -1678,11 +1684,10 @@ int      VehicleAttack :: tsearchattackablevehicles::run( void )
 
    if (angreifer == NULL) 
       return -201;
-   
 
-   moveparams.movesx = angreifer->xpos; 
-   moveparams.movesy = angreifer->ypos; 
-   if (fieldvisiblenow(getfield(moveparams.movesx,moveparams.movesy)) == false) 
+   moveparams.movesx = angreifer->xpos;  // this is currently still needed for wepselguihost
+   moveparams.movesy = angreifer->ypos;
+   if (fieldvisiblenow(getfield(angreifer->xpos,angreifer->ypos)) == false)
       return -1;
 
    if (angreifer->attacked) 
@@ -1702,19 +1707,15 @@ int      VehicleAttack :: tsearchattackablevehicles::run( void )
    for ( int a = 0; a < angreifer->typ->weapons->count; a++) 
       if (angreifer->ammo[a] > 0) {
          d++; 
-
-         if ((angreifer->typ->weapons->weapon[a].maxdistance >> 3) > maxdist) 
-            maxdist = (angreifer->typ->weapons->weapon[a].maxdistance >> 3);
-
-         if ((angreifer->typ->weapons->weapon[a].mindistance >> 3) < mindist) 
-            mindist = (angreifer->typ->weapons->weapon[a].mindistance >> 3);
+         maxdist = max( maxdist, angreifer->typ->weapons->weapon[a].maxdistance / maxmalq );
+         mindist = min ( mindist, (angreifer->typ->weapons->weapon[a].mindistance + maxmalq - 1) / maxmalq);
       }
    
 
    if (d == 0) 
       return -204;
    
-   initsearch( angreifer->xpos,angreifer->ypos, maxdist + 1, mindist );
+   initsearch( angreifer->xpos,angreifer->ypos, maxdist, mindist );
    startsearch();
 
    return 0;
@@ -1890,7 +1891,7 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
 
                               if ( veh->canRepair() )
                                  if ( veh->tank.fuel && veh->tank.material )
-                                    if ( targetUnit->getMovement() >= movement_cost_for_repaired_unit )
+                                   // if ( targetUnit->getMovement() >= movement_cost_for_repaired_unit )
                                        if ( targetUnit->damage ) {
                                           VehicleService::Target::Service s;
                                           s.type = VehicleService::srv_repair;
@@ -1953,7 +1954,9 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
                   Resources res2 = cb->getResource ( res, 1 );
                   int perc = 100;
                   for ( int i = 0; i< resourceTypeNum; i++ )
-                      perc = min ( perc, 100 * res2.resource(i) / res.resource(i) );
+                      if ( res.resource(i) )
+                         perc = min ( perc, 100 * res2.resource(i) / res.resource(i) );
+
                   produceable = stillNeeded * perc / 100 ;
                   produceable = (produceable / 5) * 5;
                } else
@@ -2026,7 +2029,7 @@ void  VehicleService :: FieldSearch :: testfield(void)
 }
 
 
-void  VehicleService :: FieldSearch ::initrefuelling( int xp1, int yp1 )
+bool  VehicleService :: FieldSearch ::initrefuelling( int xp1, int yp1 )
 {
    int mindist = maxint;
    int maxdist = minint;
@@ -2034,8 +2037,8 @@ void  VehicleService :: FieldSearch ::initrefuelling( int xp1, int yp1 )
       for ( int i = 0; i < veh->typ->weapons->count; i++ ) {
          SingleWeapon& w = veh->typ->weapons->weapon[i];
          if ( w.service() || w.canRefuel() ) {
-            mindist = min ( mindist, w.mindistance/minmalq );
-            maxdist = max ( maxdist, w.maxdistance/maxmalq );
+            maxdist = max( maxdist, w.maxdistance / maxmalq );
+            mindist = min ( mindist, (w.mindistance + maxmalq - 1) / maxmalq);
          }
       }
    }
@@ -2046,6 +2049,7 @@ void  VehicleService :: FieldSearch ::initrefuelling( int xp1, int yp1 )
    }
 
    initsearch(xp1,yp1,mindist,maxdist);
+   return true;
 
 }
 

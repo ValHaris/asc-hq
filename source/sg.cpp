@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: sg.cpp,v 1.130 2001-02-01 22:48:46 mbickel Exp $
+//     $Id: sg.cpp,v 1.131 2001-02-04 21:26:58 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.130  2001/02/01 22:48:46  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.129  2001/01/31 14:52:41  mbickel
 //      Fixed crashes in BI3 map importing routines
 //      Rewrote memory consistency checking
@@ -1686,7 +1692,7 @@ int  WeaponRange :: run ( const pvehicle veh )
    if ( fieldvisiblenow ( getfield ( veh->xpos, veh->ypos )))
       for ( int i = 0; i < veh->typ->weapons->count; i++ ) {
          if ( veh->typ->weapons->weapon[i].shootable() ) {
-            initsearch ( veh->xpos, veh->ypos, veh->typ->weapons->weapon[i].maxdistance/maxmalq, veh->typ->weapons->weapon[i].mindistance/maxmalq );
+            initsearch ( veh->xpos, veh->ypos, veh->typ->weapons->weapon[i].maxdistance/minmalq, (veh->typ->weapons->weapon[i].mindistance+maxmalq-1)/maxmalq );
             startsearch();
             found++;
          }

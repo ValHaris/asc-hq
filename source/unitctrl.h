@@ -1,6 +1,14 @@
-//     $Id: unitctrl.h,v 1.22 2001-01-25 23:45:06 mbickel Exp $
+//     $Id: unitctrl.h,v 1.23 2001-02-04 21:27:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2001/01/25 23:45:06  mbickel
+//      Moved map displaying routins to own file (mapdisplay.cpp)
+//      Wrote program to create pcx images from map files (map2pcx.cpp)
+//      Fixed bug in repair function: too much resource consumption
+//      AI improvements and bug fixes
+//      The BI3 map import function now evaluates the player status (human/
+//       computer)
+//
 //     Revision 1.21  2001/01/19 13:33:57  mbickel
 //      The AI now uses hemming
 //      Several bugfixes in Vehicle Actions
@@ -454,7 +462,7 @@ class VehicleService : public VehicleAction {
                      virtual void     testfield ( void );
                      void             checkVehicle2Vehicle ( pvehicle veh, int xp, int yp );
                      void             checkBuilding2Vehicle ( pvehicle veh );
-                     void             initrefuelling( int xp1, int yp1 );
+                     bool             initrefuelling( int xp1, int yp1 );
                      void             startsuche ( void );
                      void             init ( pvehicle _veh, pbuilding _bld );
                      void             run (  );

@@ -1,6 +1,12 @@
-//     $Id: gui.h,v 1.19 2001-01-28 14:04:14 mbickel Exp $
+//     $Id: gui.h,v 1.20 2001-02-04 21:26:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2001/01/28 14:04:14  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.18  2001/01/24 11:53:13  mbickel
 //      Fixed some compilation problems with gcc
 //
@@ -108,6 +114,7 @@
 #include "basestrm.h"
 #include "spfst.h"
 #include "unitctrl.h"
+#include "ascstring.h"
 
 const int guismalliconsizex = 24;
 const int guismalliconsizey = 17;
@@ -265,7 +272,7 @@ class tnguiicon {
 
           void*     picture[8];
           void*     picturepressed[8];
-          std::string    infotext;
+          ASCString    infotext;
           tkey      keys[6][6];
           int       priority;
           int       lasticonsize;

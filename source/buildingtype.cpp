@@ -538,7 +538,8 @@ void    Building :: produceAmmo ( int type, int num )
    Resources res2 = cb->getResource ( res, 1 );
    int perc = 100;
    for ( int i = 0; i< resourceTypeNum; i++ )
-       perc = min ( perc, 100 * res2.resource(i) / res.resource(i) );
+       if ( res.resource(i) )
+          perc = min ( perc, 100 * res2.resource(i) / res.resource(i) );
    int produceable = num * perc / 100 ;
    int produceablePackages = produceable / 5;
 

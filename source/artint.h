@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: artint.h,v 1.32 2001-02-01 22:48:27 mbickel Exp $
+//     $Id: artint.h,v 1.33 2001-02-04 21:26:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2001/02/01 22:48:27  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.31  2001/01/28 14:04:01  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -136,12 +142,16 @@
 
                   ServiceOrder ( ) : ai ( NULL ), targetUnitID ( 0 ), serviceUnitID ( 0 ) {};
                   ServiceOrder ( AI* _ai, VehicleService::Service _requiredService, int UnitID, int _pos = -1 );
+                  ServiceOrder ( AI* _ai, tnstream& stream );
                   pvehicle getTargetUnit ( ) const { return ai->getMap()->getUnit ( targetUnitID );};
                   pvehicle getServiceUnit ( ) const { return ai->getMap()->getUnit ( serviceUnitID );};
                   void setServiceUnit ( pvehicle veh ) { serviceUnitID = veh->networkid; };
                   int possible ( pvehicle supplier );
                   bool execute1st ( pvehicle supplier );
                   bool timeOut ( ) ;
+
+                  void write ( tnstream& stream ) const;
+                  void read ( tnstream& read );
 
                   static bool targetDestroyed ( const ServiceOrder& so )
                   {
@@ -162,17 +172,6 @@
            void removeServiceOrdersForUnit ( const pvehicle veh );
 
 
-           /*
-           struct ServiceOrderRating {
-             float val;
-             AI::ServiceOrder* so;
-             bool operator> ( const ServiceOrderRating& a ) { return val > a.val; };
-           };
-           std::greater<ServiceOrderRating> scomp;
-           */
-
-           // typedef PointerList<ServiceOrder*> ServiceOrderContainer;
-
            static bool vehicleValueComp ( const pvehicle v1, const pvehicle v2 );
            static bool buildingValueComp ( const pbuilding v1, const pbuilding v2 );
 
@@ -185,8 +184,8 @@
            // void searchServices ( );
 
            AiThreat* fieldThreats;
-           pbuilding findServiceBuilding ( const ServiceOrder& so );
            int fieldNum;
+           pbuilding findServiceBuilding ( const ServiceOrder& so );
 
            void checkConquer( );
 
@@ -208,6 +207,8 @@
                     float captureValue;
                     int nearestUnit;
 
+                    void write ( tnstream& stream ) const;
+                    void read ( tnstream& stream );
 
                     BuildingCapture ( ) {
                        state = conq_noUnit;
@@ -396,6 +397,9 @@
            void showFieldInformation ( int x, int y );
            bool isRunning ( void );
            int getVision ( void );
+
+           void read ( tnstream& stream );
+           void write ( tnstream& stream ) const ;
            ~AI ( );
     };
 

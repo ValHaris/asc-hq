@@ -188,8 +188,13 @@ void         tcomputebuildingview::init( const pbuilding    bld,  int _mode )
 
 void         clearvisibility( pmap actmap, int  reset )
 {
-  if ((actmap->xsize == 0) || (actmap->ysize == 0))
+   if (!actmap || (actmap->xsize <= 0) || (actmap->ysize <= 0))
      return;
+
+   for ( int p = 0; p < 8; p++ )
+      for ( tmap::Player::VehicleList::iterator i = actmap->player[p].vehicleList.begin(); i != actmap->player[p].vehicleList.end(); i++ )
+         if ( (*i)->isViewing())
+            (*i)->removeview();
 
    int l = 0;
    for ( int x = 0; x < actmap->xsize ; x++)
@@ -198,6 +203,8 @@ void         clearvisibility( pmap actmap, int  reset )
             memset ( fld->view, 0, sizeof ( fld->view ));
             l++;
          }
+
+
 }
 
 int  evaluatevisibilityfield ( pmap actmap, pfield fld, int player, int add, int initial )

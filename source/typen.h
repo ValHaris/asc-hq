@@ -1,6 +1,12 @@
-//     $Id: typen.h,v 1.80 2001-02-01 22:48:52 mbickel Exp $
+//     $Id: typen.h,v 1.81 2001-02-04 21:27:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.80  2001/02/01 22:48:52  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.79  2001/01/28 14:04:20  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -354,7 +360,7 @@ class Resources {
      bool operator>= ( const Resources& res ) { return energy >= res.energy && material>=res.material && fuel>=res.fuel; };
      enum { Energy, Material, Fuel };
      void read ( tnstream& stream );
-     void write ( tnstream& stream );
+     void write ( tnstream& stream ) const;
 };
 
 extern Resources operator- ( const Resources& res1, const Resources& res2 );
@@ -489,6 +495,12 @@ class MapCoordinate {
             MapCoordinate ( ) : x(-1), y(-1 ) {};
             MapCoordinate ( int _x, int _y) : x(_x), y(_y) {};
             bool operator< ( const MapCoordinate& mc ) const { return y < mc.y || ( y == mc.y && x < mc.x );};
+            void write( tnstream& stream ) const { stream.writeInt ( 3000 ); stream.writeInt ( x ); stream.writeInt ( y); };
+            void read( tnstream& stream ) {
+               int version = stream.readInt ( );
+               x = stream.readInt ( );
+               y = stream.readInt ( );
+            };
       };
 
 
@@ -547,6 +559,8 @@ class BaseAI {
          virtual void run ( void ) = 0;
          virtual bool isRunning ( void ) = 0;
          virtual int getVision ( void ) = 0;
+         virtual void read ( tnstream& stream ) = 0;
+         virtual void write ( tnstream& stream ) const = 0;
          virtual ~BaseAI () {};
       };
 

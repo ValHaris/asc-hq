@@ -1,6 +1,12 @@
-//     $Id: loaders.h,v 1.14 2001-02-01 22:48:45 mbickel Exp $
+//     $Id: loaders.h,v 1.15 2001-02-04 21:26:58 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2001/02/01 22:48:45  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.13  2001/01/31 14:52:41  mbickel
 //      Fixed crashes in BI3 map importing routines
 //      Rewrote memory consistency checking
@@ -154,7 +160,7 @@ extern void loadallobjecttypes ( void );
 
 extern void  savecampaignrecoveryinformation( const ASCString& filename, int id);
 
-const int actsavegameversion  = 0xff33;
+const int actsavegameversion  = 0xff34;
 const int minsavegameversion  = 0xff31;
 const int actmapversion       = 0xfe26;
 const int minmapversion       = 0xfe24;
@@ -224,6 +230,8 @@ class  tmaploaders : public tspfldloaders {
 class  tgameloaders : public tspfldloaders {
         protected:
            void            initmap ( void );
+           void            readAI( );
+           void            writeAI( );
 };
 
 class tnetworkloaders : public tgameloaders {

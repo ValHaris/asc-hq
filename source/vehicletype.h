@@ -186,6 +186,8 @@ extern const char*  cvehiclefunctions[];
  class Vehicle : public ContainerBase {
     Vehicle (  );
     Vehicle ( const Vehicle& v );
+    //! is  the vehicle currently viewing the map? if yes, the view has to be removed on destruction
+    bool viewOnMap;
    public:
     const Vehicletype* typ;          /*  vehicleart: z.B. Schwere Fusstruppe  */
     int*         ammo;
@@ -253,6 +255,7 @@ extern const char*  cvehiclefunctions[];
     void setpower( int status );
     void addview ( void );
     void removeview ( void );
+    bool isViewing ( ) const { return viewOnMap; };
     SingleWeapon *getWeapon( unsigned weaponNum );
     int buildingconstructable ( pbuildingtype bld );
     int searchForMineralResources( void );

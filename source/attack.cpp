@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: attack.cpp,v 1.38 2001-02-01 22:48:27 mbickel Exp $
+//     $Id: attack.cpp,v 1.39 2001-02-04 21:26:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2001/02/01 22:48:27  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.37  2001/01/28 14:04:01  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -436,7 +442,11 @@ void tfight :: calcdisplay ( int ad, int dd )
 
       cgo.off();
    }
+   for ( int i = 0; i <= av.damage; i++ )
+      paintline ( 4, 100 - i, bk );
 
+   for ( int i = 0; i <= dv.damage; i++ )
+      paintline ( 5, 100 - i, bk );
 
    t = ticker;
    do {

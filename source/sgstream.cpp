@@ -5,9 +5,15 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.53 2001-02-01 22:48:48 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.54 2001-02-04 21:26:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.53  2001/02/01 22:48:48  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.52  2001/01/28 23:00:40  mbickel
 //      Made the small editors compilable with Watcom again
 //
@@ -1485,17 +1491,17 @@ void SingleUnitSet::read ( pnstream stream )
    if ( !stream )
       return;
    const char separator = '=';
-   std::string s;
+   ASCString s;
    int data = stream->readTextString ( s );
    if ( s == "#V2#" ) {
       while ( data ) {
-         std::string s2;
+         ASCString s2;
          data = stream->readTextString ( s2 );
 
          int seppos = s2.find_first_of ( separator );
          if ( seppos >= 0 ) {
-            std::string b = s2.substr(0, seppos);
-            std::string e = s2.substr( seppos+1 );
+            ASCString b = s2.substr(0, seppos);
+            ASCString e = s2.substr( seppos+1 );
             if ( b == "NAME" )
                name = e;
 
@@ -1526,13 +1532,13 @@ void SingleUnitSet::read ( pnstream stream )
    } else {
       int seppos = s.find_first_of ( ';' );
       if ( seppos >= 0 ) {
-                  std::string b = s.substr(0, seppos);
-                  std::string e = s.substr( seppos+1 );
+         ASCString b = s.substr(0, seppos);
+         ASCString e = s.substr( seppos+1 );
          name = b;
          parseIDs ( e.c_str() );
 
          while ( data ) {
-                         std::string s2;
+            ASCString s2;
             data = stream->readTextString ( s2 );
             if ( s2.length() ) {
                TranslationTable* tt = new TranslationTable;

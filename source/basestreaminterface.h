@@ -27,7 +27,7 @@
  #include "global.h"
  #include "tpascal.inc"
 
- #include <string>
+ #include "ascstring.h"
 
  typedef class tnstream* pnstream;
  class tnstream {
@@ -37,18 +37,20 @@
 
            virtual void readpchar( char** pc, int maxlength = 0) ;
            virtual void readpnchar( char** pc, int maxlength = 0) ;
-           virtual int readTextString ( string& s ); // return 0 if end of file is reached
-           virtual string readString ( );
+           virtual bool readTextString ( ASCString& s ); // return 0 if end of file is reached
+           virtual ASCString readString ( );
            virtual void writepchar( const char* pc) ;
-           virtual void writeString( const string& pc) ;
+           virtual void writeString( const ASCString& pc) ;
 
            virtual int  readInt  ( void );
            virtual word readWord ( void );
            virtual char readChar ( void );
+           virtual float readFloat ( void );
 
            virtual void writeInt  ( int  i );
            virtual void writeWord ( word w );
            virtual void writeChar ( char c );
+           virtual void writeFloat ( float f );
 
            virtual void writerlepict ( const void* pnter );
            virtual void readrlepict( void** pnter, int allocated, int* size);

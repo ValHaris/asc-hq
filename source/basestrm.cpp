@@ -2,9 +2,15 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.50 2001-01-28 14:04:02 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.51 2001-02-04 21:26:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2001/01/28 14:04:02  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.49  2001/01/04 15:13:28  mbickel
 //      configure now checks for libSDL_image
 //      AI only conquers building that cannot be conquered back immediately
@@ -504,6 +510,14 @@ char tnstream::readChar ( void )
    return c;
 }
 
+float tnstream::readFloat ( void )
+{
+   float c;
+   readdata2 ( c );
+   return c;
+}
+
+
 
 void tnstream::writeInt  ( int i )
 {
@@ -520,6 +534,10 @@ void tnstream::writeChar ( char c )
    writedata2 ( c );
 }
 
+void tnstream::writeFloat ( float f )
+{
+   writedata2 ( f );
+}
 
 void         tnstream::readpchar(char** pc, int maxlength )
 { 
@@ -638,7 +656,7 @@ void         tnstream::readpnchar(char** pc, int maxlength )
 }
 
 
-int  tnstream::readTextString ( string& s )
+bool  tnstream::readTextString ( ASCString& s )
 {
   char c;
   int red = 1;
@@ -655,21 +673,21 @@ int  tnstream::readTextString ( string& s )
              s += c;
   } while ( red && !end );
   if ( end == 2)
-     return 0;
+     return false;
   else
-     return 1;
+     return true;
 }
 
 
-string  tnstream::readString ( )
+ASCString  tnstream::readString ( )
 {
-  string s;
+  ASCString s;
   readTextString ( s );
   return s;
 }
 
 
-void         tnstream::writeString(const string& pc)
+void         tnstream::writeString(const ASCString& pc)
 {
    writepchar ( pc.c_str() );
 }

@@ -1,6 +1,12 @@
-//     $Id: typen.cpp,v 1.68 2001-02-01 22:48:51 mbickel Exp $
+//     $Id: typen.cpp,v 1.69 2001-02-04 21:27:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.68  2001/02/01 22:48:51  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.67  2001/01/28 23:00:42  mbickel
 //      Made the small editors compilable with Watcom again
 //
@@ -943,7 +949,7 @@ void Resources :: read ( tnstream& stream )
       resource(i) = stream.readInt();
 }
 
-void Resources :: write ( tnstream& stream )
+void Resources :: write ( tnstream& stream ) const
 {
    for ( int i = 0; i< resourceTypeNum; i++ )
       stream.writeInt( resource(i) );

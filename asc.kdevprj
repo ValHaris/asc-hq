@@ -40,11 +40,11 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/unitctrl.cpp,/home/martin/asc/source/artint.cpp,/home/martin/asc/source/artint.h,/home/martin/asc/source/basestreaminterface.h,/home/martin/asc/source/basestrm.cpp,/home/martin/asc/source/typen.h,/home/martin/asc/source/sgstream.cpp,/home/martin/asc/source/gui.cpp,/home/martin/asc/source/gui.h,/home/martin/asc/source/typen.cpp,/home/martin/asc/source/loaders.cpp,/home/martin/asc/source/gamemap.cpp,/home/martin/asc/source/loaders.h,/home/martin/asc/source/buildingtype.h,/home/martin/asc/source/containerbase.h,/home/martin/asc/source/vehicletype.h,/home/martin/asc/source/vehicletype.cpp,/home/martin/asc/source/viewcalculation.cpp,/home/martin/asc/source/buildingtype.cpp,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/spfst.cpp,
 show_outputview=true
-show_treeview=false
-header_file=Unbenannt.h
-cpp_file=Unbenannt.cpp
+show_treeview=true
+header_file=/home/martin/asc/source/vehicletype.h
+cpp_file=/home/martin/asc/source/loaders.cpp
 browser_file=file:/home/martin/.kde/share/apps/kdevelop/search_result.html
 [source/astar2.h]
 install_location=

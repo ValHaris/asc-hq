@@ -701,6 +701,8 @@ Vehicle :: Vehicle ( const Vehicle& v )
 Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player )
           : ContainerBase ( t, actmap, player ), typ ( t ), reactionfire ( this ), repairEfficiency ( repairEfficiencyVehicle )
 {
+   viewOnMap = false;
+
    if ( player > 8 )
       fatalError ( "Vehicle :: Vehicle ; invalid player ");
 
@@ -709,6 +711,7 @@ Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player )
    gamemap->player[player].vehicleList.push_back ( this );
    gamemap->unitnetworkid++;
    networkid = gamemap->unitnetworkid;
+
 }
 /*
 Vehicle :: Vehicle ( pnstream strm, pmap actmap )
@@ -734,6 +737,11 @@ Vehicle :: Vehicle ( pvehicle src, pmap actmap )
 
 Vehicle :: ~Vehicle (  )
 {
+   if ( viewOnMap && gamemap ) {
+      removeview();
+      viewOnMap = false;
+   }
+
    delete[] weapstrength;
    weapstrength = NULL;
 
@@ -1535,6 +1543,10 @@ int  Vehicle :: vehicleloadable ( pvehicle vehicle, int uheight ) const
 
 void Vehicle :: addview ( void )
 {
+   if ( viewOnMap )
+      fatalError ("void Vehicle :: addview - the vehicle is already viewing the map");
+
+   viewOnMap = true;
    tcomputevehicleview bes ( gamemap );
    bes.init( this, +1 );
    bes.startsearch();
@@ -1542,9 +1554,14 @@ void Vehicle :: addview ( void )
 
 void Vehicle :: removeview ( void )
 {
+   if ( !viewOnMap )
+      fatalError ("void Vehicle :: removeview - the vehicle is not viewing the map");
+
    tcomputevehicleview bes ( gamemap );
    bes.init( this, -1 );
    bes.startsearch();
+
+   viewOnMap = false;
 }
 
 
