@@ -2,9 +2,13 @@
     \brief Interface for all the dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.h,v 1.23 2002-03-14 18:14:37 mbickel Exp $
+//     $Id: dialog.h,v 1.24 2002-11-20 20:00:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2002/03/14 18:14:37  mbickel
+//      Improved messages for proposing peace
+//      Fixed display error when enterering passwords
+//
 //     Revision 1.22  2002/03/03 14:13:48  mbickel
 //      Some documentation updates
 //      Soundsystem update
@@ -69,8 +73,8 @@
     Boston, MA  02111-1307  USA
 */
 
-#ifndef dialog_h
-#define dialog_h
+#ifndef dialogH
+#define dialogH
 
 #include "ascstring.h"
 #include "dlg_box.h"

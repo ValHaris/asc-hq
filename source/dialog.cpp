@@ -2,9 +2,12 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.115 2002-11-17 11:43:23 mbickel Exp $
+//     $Id: dialog.cpp,v 1.116 2002-11-20 20:00:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.115  2002/11/17 11:43:23  mbickel
+//      Fixed replay errors when replaying the AI moves
+//
 //     Revision 1.114  2002/11/11 08:38:24  mbickel
 //      Fixed: graphical errors in new message dialog if 8 players in game
 //
@@ -3713,9 +3716,51 @@ int               tenternamestrings::getcapabilities ( void )
 }
 
 
-  #define tsa_namelength 100  
-  #define ply_x1 25  
-  #define ply_y1 55  
+
+
+void viewVisibilityStatistics()
+{
+   ASCString msg;
+
+   for ( int i = 0; i < 8; i++ )
+      if ( actmap->player[i].exist() ) {
+         msg += ASCString("#font02#Player ") + strrr ( i ) + "#font01#\n" ;
+         int notVisible = 0;
+         int fogOfWar = 0;
+         int visible = 0;
+         for ( int x = 0; x < actmap->xsize; x++ )
+            for ( int y = 0; y < actmap->ysize; y++ ) {
+                VisibilityStates vs = fieldVisibility  ( actmap->getField ( x, y ), i );
+                switch ( vs ) {
+                   case visible_not: ++notVisible;
+                   break;
+                   case visible_ago: ++fogOfWar;
+                   break;
+                   default: ++visible;
+                }
+            }
+         msg += ASCString("  not visible: ") + strrr(notVisible ) + " fields\n";
+         msg += ASCString("  fog of war: ") + strrr(fogOfWar ) + " fields\n";
+         msg += ASCString("  visible: ") + strrr(visible ) + " fields\n\n";
+      }
+
+   tviewanytext vat;
+   vat.init ( "Visibility Statistics", msg.c_str() );
+   vat.run();
+   vat.done();
+}
+
+
+
+
+
+
+
+
+
+  #define tsa_namelength 100
+  #define ply_x1 25
+  #define ply_y1 55
   #define ply_lineheight 22  
   #define ali_x1 30 + tsa_namelength  
   #define ali_y1 275  
@@ -3754,7 +3799,7 @@ void         tsetalliances::init( int supervis )
    x1 = 30;
    y1 = 10; 
    xsize = 580; 
-   ysize = 460; 
+   ysize = 460;
    addbutton("~o~k",400,240,xsize - 20,280,0,1,1,true); 
    addkey(1,ct_enter); 
 
@@ -3804,6 +3849,14 @@ void         tsetalliances::init( int supervis )
                 int x = x1 + 10 + ply_x1 + 2 * tsa_namelength;
                 int y = y1 + ply_y1 + i * 22 - 10;
                 addbutton ("reset passw.", x, y, x+ 90, y + 15, 0, 1, 70+i, true );
+             }
+      }
+      if ( !mapeditor && oninit ) {
+          for ( int i = 0; i < 8; i++ )
+             if ( actmap->player[i].exist() ) {
+                int x = x1 + 10 + ply_x1 + 2 * tsa_namelength;
+                int y = y1 + ply_y1 + i * 22 - 10;
+                addbutton ("set passw.", x, y, x+ 90, y + 15, 0, 1, 80+i, true );
              }
       }
    }
@@ -3915,7 +3968,7 @@ void         tsetalliances::buildhlgraphics(void)
    }
 
    activefontsettings.background = dblue; 
-   for (i = 0; i < playernum ; i++) { 
+   for (i = 0; i < playernum ; i++) {
       activefontsettings.color = 20 + 8 * playerpos[i]; 
       showtext2( letter[i], x1 + ali_x1 + i * 30,y1 + ali_y1 - 25);
    } 
@@ -3938,7 +3991,7 @@ void         tsetalliances::buildhlgraphics(void)
    }
    displayplayernamesintable ( );
    paintkeybar(); 
-   if (mss == 2) 
+   if (mss == 2)
      mousevisible(true); 
 } 
 
@@ -3961,7 +4014,7 @@ void         tsetalliances::paintkeybar(void)
    }
    if (bx == 1) { 
       xorrectangle(x1 + ali_x1 - 5,y1 + ali_y1 - 3 + ya * 22,x1 + ali_x1 + (playernum) * 30 - 12,y1 + ali_y1 - 5 + (ya + 1) * 22,14); 
-      xorrectangle(x1 + ali_x1 - 5 + xa * 30,y1 + ali_y1 - 3,x1 + ali_x1 + (xa + 1) * 30 - 12,y1 + ali_y1 - 5 + playernum * 22,100); 
+      xorrectangle(x1 + ali_x1 - 5 + xa * 30,y1 + ali_y1 - 3,x1 + ali_x1 + (xa + 1) * 30 - 12,y1 + ali_y1 - 5 + playernum * 22,100);
    } 
 } 
 
@@ -4122,7 +4175,7 @@ void         tsetalliances::click(pascal_byte         bxx,
       if (x == 1 && ( y == actmap->actplayer || y == nextplayer || supervisor ) ) {
          location[y]++;
          if (location[y] >= playernum) 
-            location[y] = 0; 
+            location[y] = 0;
          activefontsettings.color = alliancecolors[location[y]]; 
          char temp[1000];
          sprintf(temp, "computer %d", location[y] );
@@ -4145,7 +4198,7 @@ void         tsetalliances::click(pascal_byte         bxx,
             }
    
             activefontsettings.color = 23 + y * 8; 
-            activefontsettings.background = dblue; 
+            activefontsettings.background = dblue;
             activefontsettings.length = tsa_namelength;
    
             activefontsettings.color = alliancecolors[location[y]]; 
@@ -4168,7 +4221,7 @@ void         tsetalliances::click(pascal_byte         bxx,
                      else
                         alliancedata[playerpos[x]][playerpos[y]] = cawar;
    
-                  alliancedata[playerpos[y]][playerpos[x]] = alliancedata[playerpos[x]][playerpos[y]]; 
+                  alliancedata[playerpos[y]][playerpos[x]] = alliancedata[playerpos[x]][playerpos[y]];
    
                   putimage(x1 + ali_x1 + x * 30,y1 + ali_y1 + y * 22,icons.diplomaticstatus[alliancedata[playerpos[x]][playerpos[y]]]); 
                   putimage(x1 + ali_x1 + y * 30,y1 + ali_y1 + x * 22,icons.diplomaticstatus[alliancedata[playerpos[x]][playerpos[y]]]); 
@@ -4237,7 +4290,7 @@ void         tsetalliances::buttonpressed( int id )
                  else
                     plx = 1 << actmap->actplayer;
                  enternamestrings.init( plx ,0);
-                 enternamestrings.run(); 
+                 enternamestrings.run();
                  enternamestrings.done(); 
                  buildhlgraphics();
            }
@@ -4283,6 +4336,8 @@ void         tsetalliances::buttonpressed( int id )
                     if ( !filename.empty() )
                        savemap( filename.c_str() );
 
+                    viewVisibilityStatistics();
+
                 }
       #endif
    }
@@ -4293,7 +4348,10 @@ void         tsetalliances::buttonpressed( int id )
       sprintf ( txt, sp, id-70, actmap->player[id-70].getName().c_str() );
       new Message ( txt, actmap, 255 );
    }
-} 
+
+   if ( id >= 80 && id <= 87 )
+      enterpassword ( actmap->player[id-80].passwordcrc, true, true, false );
+}
 
 
 void         tsetalliances::run(void)

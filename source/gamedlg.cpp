@@ -1,9 +1,12 @@
 /*! \file gamedlg.cpp    
     \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.97 2002-11-01 12:40:50 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.98 2002-11-20 20:00:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.97  2002/11/01 12:40:50  mbickel
+//      Added supervisor-save-map function
+//
 //     Revision 1.96  2002/10/12 17:28:03  mbickel
 //      Fixed "enemy unit loaded" bug.
 //      Changed map format
@@ -3408,7 +3411,7 @@ void tmultiplayersettings :: init ( void )
    addbutton ( "supervisor password (encoded)", 20 , 250, 150 , 270, 1, 3 , 11, false );
    addeingabe ( 11, &svpwd_enc, 0, 900 );
 
-   addbutton ( "~s~ave password as default",  20, 280, xsize / 2 - 5 , 300, 0, 1 , 12, false );
+   addbutton ( "~s~ave password as default supervisor passw.",  20, 280, xsize / 2 - 5 , 300, 0, 1 , 12, false );
 
    buildgraphics();
 

@@ -883,54 +883,64 @@ void         startnewsinglelevelfromgame(void)
 void loadStartupMap ( const char *gameToLoad=NULL )
 {
    if ( gameToLoad && gameToLoad[0] ) {
-      if ( patimat ( tournamentextension, gameToLoad )) {
+      try {
+         if ( patimat ( tournamentextension, gameToLoad )) {
 
-         if( validateemlfile( gameToLoad ) == 0 ) {
-            fprintf( stderr, "Email gamefile %s is invalid. Aborting.\n", gameToLoad );
-            exit(-1);
-         }
+            if( validateemlfile( gameToLoad ) == 0 ) {
+               fprintf( stderr, "Email gamefile %s is invalid. Aborting.\n", gameToLoad );
+               exit(-1);
+            }
 
-         try {
-            tnfilestream gamefile ( gameToLoad, tnstream::reading );
-            tnetworkloaders nwl;
-            nwl.loadnwgame( &gamefile );
-            if ( actmap->network )
-               setallnetworkpointers ( actmap->network );
-         } catch ( tfileerror ) {
-            fprintf ( stderr, "%s is not a legal email game. \n", gameToLoad );
-            exit(-1);
-         }
-      } else if( patimat ( savegameextension, gameToLoad )) {
-         if( validatesavfile( gameToLoad ) == 0 ) {
-            fprintf( stderr, "The savegame %s is invalid. Aborting.\n", gameToLoad );
-            exit( -1 );
-         }
-         try {
-            loadgame( gameToLoad );
-         } catch ( tfileerror ) {
-            fprintf ( stderr, "%s is not a legal savegame. \n", gameToLoad );
-            exit(-1);
-         }
+            try {
+               tnfilestream gamefile ( gameToLoad, tnstream::reading );
+               tnetworkloaders nwl;
+               nwl.loadnwgame( &gamefile );
+               if ( actmap->network )
+                  setallnetworkpointers ( actmap->network );
+            } catch ( tfileerror ) {
+               fprintf ( stderr, "%s is not a legal email game. \n", gameToLoad );
+               exit(-1);
+            }
+         } else if( patimat ( savegameextension, gameToLoad )) {
+            if( validatesavfile( gameToLoad ) == 0 ) {
+               fprintf( stderr, "The savegame %s is invalid. Aborting.\n", gameToLoad );
+               exit( -1 );
+            }
+            try {
+               loadgame( gameToLoad );
+            } catch ( tfileerror ) {
+               fprintf ( stderr, "%s is not a legal savegame. \n", gameToLoad );
+               exit(-1);
+            }
 
-      } else if( patimat ( mapextension, gameToLoad )) {
-         if( validatemapfile( gameToLoad ) == 0 ) {
-            fprintf( stderr, "Mapfile %s is invalid. Aborting.\n", gameToLoad );
-            exit(-1);
-         }
+         } else if( patimat ( mapextension, gameToLoad )) {
+            if( validatemapfile( gameToLoad ) == 0 ) {
+               fprintf( stderr, "Mapfile %s is invalid. Aborting.\n", gameToLoad );
+               exit(-1);
+            }
 
-         try {
-            loadmap( gameToLoad );
-            if ( actmap->network )
-               setallnetworkpointers ( actmap->network );
-         } catch ( tfileerror ) {
-            fprintf ( stderr, "%s is not a legal map. \n", gameToLoad );
+            try {
+               loadmap( gameToLoad );
+               if ( actmap->network )
+                  setallnetworkpointers ( actmap->network );
+            } catch ( tfileerror ) {
+               fprintf ( stderr, "%s is not a legal map. \n", gameToLoad );
+               exit(-1);
+            }
+         } else {
+            fprintf ( stderr, "Don't know how to handle the file %s \n", gameToLoad );
             exit(-1);
          }
-      } else {
-         fprintf ( stderr, "Don't know how to handle the file %s \n", gameToLoad );
-         exit(-1);
       }
-
+      catch ( InvalidID err ) {
+         displaymessage( err.getMessage().c_str(), 2 );
+      } /* endcatch */
+      catch ( tinvalidversion err ) {
+         if ( err.expected < err.found )
+            displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nPlease install the latest version from www.asc-hq.org", 2, err.getFileName().c_str(), err.expected, err.found );
+         else
+            displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nThis is a bug, please report it!", 2, err.getFileName().c_str(), err.expected, err.found );
+      }
    } else {  // resort to loading defaults
 
       ASCString s = "first.map";
@@ -1934,8 +1944,6 @@ int gamethread ( void* data )
       if ( fs )
          closeFullscreenImage ();
 
-   } catch ( tfileerror err ) {
-      displaymessage ( "unable to access file %s \n", 2, err.getFileName().c_str() );
    }
    catch ( ParsingError err ) {
       displaymessage ( "Error parsing text file " + err.getMessage(), 2 );

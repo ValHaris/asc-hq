@@ -3,9 +3,13 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.141 2002-11-18 10:47:36 mbickel Exp $
+//     $Id: controls.cpp,v 1.142 2002-11-20 20:00:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.141  2002/11/18 10:47:36  mbickel
+//      Fixed: units with reaction fire could not attack manually
+//      Fixed: crash at end of turn when airplane has maxmovement 0
+//
 //     Revision 1.140  2002/11/12 13:55:11  mbickel
 //      Fixed: invalid icons displayed when building construction failed
 //
@@ -2714,7 +2718,10 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
          backgroundpict.paint();
 
          bool firstRound = actmap->time.turn() == 1;
-         if ( (!actmap->player[actmap->actplayer].passwordcrc.empty() && actmap->player[actmap->actplayer].passwordcrc != CGameOptions::Instance()->getDefaultPassword() ) // && actmap->player[actmap->actplayer].passwordcrc != encodepassword ( password )
+         bool specifyPassword = firstRound && actmap->player[actmap->actplayer].passwordcrc.empty();
+         bool askForPassword = false;
+
+         if ( (!actmap->player[actmap->actplayer].passwordcrc.empty() && actmap->player[actmap->actplayer].passwordcrc != CGameOptions::Instance()->getDefaultPassword() )
             || firstRound || (actmap->network && actmap->network->globalparams.reaskpasswords) ) {
                if ( forcepasswordchecking < 0 ) {
                   delete actmap;
@@ -2723,7 +2730,7 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
                } else {
                   bool stat;
                   do {
-                     stat = enterpassword ( actmap->player[actmap->actplayer].passwordcrc, firstRound );
+                     stat = enterpassword ( actmap->player[actmap->actplayer].passwordcrc, specifyPassword );
                   } while ( actmap->player[actmap->actplayer].passwordcrc.empty() && stat && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
                }
          } else

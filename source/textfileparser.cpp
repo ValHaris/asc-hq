@@ -107,6 +107,8 @@ void TextPropertyGroup :: buildInheritance(TextPropertyList& tpl )
          }
       }
 
+      resolveAllAlias();
+
       callStack.pop_back();
       inheritanceBuild = true;
    }
