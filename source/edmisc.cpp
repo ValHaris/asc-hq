@@ -1,6 +1,11 @@
-//     $Id: edmisc.cpp,v 1.40 2000-11-29 09:40:20 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.41 2000-11-29 11:05:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2000/11/29 09:40:20  mbickel
+//      The mapeditor has now two maps simultaneously active
+//      Moved memorychecking functions to its own file: memorycheck.cpp
+//      Rewrote password handling in ASC
+//
 //     Revision 1.39  2000/11/21 20:27:01  mbickel
 //      Fixed crash in tsearchfields (used by object construction for example)
 //      AI improvements
@@ -1268,30 +1273,8 @@ void         pdbaroff(void)
    activefontsettings.length = 200;
    activefontsettings.justify = lefttext;
       
-   int y = agmp->resolutiony - 25;
-
-   if ( actmap ) {
-      strcpy(s,"Title : ");
-      showtext2(strcat(s,actmap->title),10,5);
-      strcpy(s,"X-Size : ");
-      showtext2(strcat(s,strrr(actmap->xsize)),10,y);
-      strcpy(s,"Y-Size : ");
-      showtext2(strcat(s,strrr(actmap->ysize)),100,y);
-   }
-   if (polyfieldmode) {
-      strcpy(s,"Polyfield fill mode");
-      showtext2(s,10,y-20);
-   }
-   if (tfill) {
-      strcpy(s,"Fill ( ");
-      strcat(s,strrr(fillx1));
-      strcat(s," / ");
-      strcat(s,strrr(filly1));
-      strcat(s," ) ");
-      strcat(s,auswahl->name);
-      showtext2(s,10,y-20);
-   }
-   activefontsettings = rsavefont; 
+   showStatusBar();
+   activefontsettings = rsavefont;
    mousevisible(true); 
 } 
 
@@ -1411,22 +1394,20 @@ void         k_savemap(char saveas)
    logtofile ( "edmisc / k_savemap /  started" );
    #endif
 
-   char filename[300];
+   char filename[1000];
 
    int nameavail = 0;
-   if ( actmap->preferredfilenames && actmap->preferredfilenames->mapname[0] ) {
+   if ( !actmap->preferredFileNames.mapname[0].empty() ) {
       nameavail = 1;
-      strcpy ( filename, actmap->preferredfilenames->mapname[0] );
+      strcpy ( filename, actmap->preferredFileNames.mapname[0].c_str() );
    } else
       filename[0] = 0;
-
 
    mousevisible(false);
    if ( saveas || !nameavail ) {
       fileselectsvga(mapextension,filename,0);
    } 
    if ( filename[0] ) {
-
 
       #ifdef logging
       logtofile ( "edmisc / k_savemap /  filename entered" );
@@ -1440,15 +1421,7 @@ void         k_savemap(char saveas)
       logtofile ( "edmisc / k_savemap /  description entered" );
       #endif
 
-      if ( !actmap->preferredfilenames ) {
-         actmap->preferredfilenames = new PreferredFilenames;
-         memset ( actmap->preferredfilenames, 0 , sizeof ( PreferredFilenames ));
-      }
-
-      if ( actmap->preferredfilenames->mapname[0] )
-         asc_free ( actmap->preferredfilenames->mapname[0] );
-      actmap->preferredfilenames->mapname[0] = strdup ( filename );
-
+      actmap->preferredFileNames.mapname[0] = filename;
 
       #ifdef logging
       logtofile ( "edmisc / k_savemap /  vor savemap" );
@@ -1600,21 +1573,6 @@ void         setstartvariables(void)
    atexit( freevariables );
 } 
 
-void showcoordinates(void)
-{
-   char       s[200];
- 
-   int y = agmp->resolutiony - 45;
-
-   activefontsettings.length = 95;
-   // waitretrace();
-   bar(0, y, 639, y+20, black);
-   bar(200, y+20, 400, y+40 ,black);
-   strcpy(s,"X-Pos : ");
-   showtext2(strcat(s,strrr(cursor.posx+actmap->xpos)),200,y+20);
-   strcpy(s,"Y-Pos : ");
-   showtext2(strcat(s,strrr(cursor.posy+actmap->ypos)),300,y+20);
-}
 
 int  selectfield(int * cx ,int  * cy)
 {
@@ -1649,7 +1607,7 @@ int  selectfield(int * cx ,int  * cy)
                                  mousevisible(false); 
                                  movecursor(ch); 
                                  cursor.show(); 
-                                 showcoordinates();
+                                 showStatusBar();
                                  mousevisible(true); 
                               } 
                               break; 
@@ -3844,4 +3802,91 @@ void MapSwitcher :: toggle ( )
       cursor.gotoxy( maps[active].cursorx, maps[active].cursory );
 }
 
+string MapSwitcher :: getName ()
+{
+  const char* name[2] = { "primary", "secondary" };
+  string s;
+  s = name[active];
+
+  if ( !actmap->preferredFileNames.mapname[0].empty() ) {
+     s += " ( ";
+     s += actmap->preferredFileNames.mapname[0];
+     s += " ) ";
+  }
+  return s;
+}
+
+MapSwitcher::Action MapSwitcher :: getDefaultAction ( )
+{
+   if ( active )
+      return select;
+   else
+      return set;
+}
+
+
 MapSwitcher mapSwitcher;
+
+
+void showStatusBar(void)
+{
+   npush ( activefontsettings );
+
+   char       s[200];
+   sprintf(s, "X:%d/%d Y:%d/%d", getxpos(), int(actmap->xsize), getypos(), int(actmap->ysize));
+
+   int y = agmp->resolutiony - 45;
+
+   activefontsettings.color = black;
+   activefontsettings.length = 150;
+   activefontsettings.background = lightgray;
+   activefontsettings.height = 20;
+   activefontsettings.font = schriften.smallarial;
+   activefontsettings.justify = centertext;
+
+   int x = 10;
+   showtext2(s,x,y+20);
+   x+=activefontsettings.length+2;
+
+   activefontsettings.length = 200;
+   showtext2(mapSwitcher.getName().c_str(),x,y+20);
+   x+=activefontsettings.length+2;
+
+/*
+   if ( actmap ) {
+      strcpy(s,"Title : ");
+      showtext2(strcat(s,actmap->title),10,5);
+      strcpy(s,"X-Size : ");
+      showtext2(strcat(s,strrr()),10,y);
+      strcpy(s,"Y-Size : ");
+      showtext2(strcat(s,strrr(actmap->ysize)),100,y);
+   }
+*/
+
+   string ss = "PolyFill: ";
+   if (polyfieldmode)
+      ss += "on";
+   else
+      ss += "off";
+
+   activefontsettings.length = 100;
+   showtext2(ss.c_str(),x,y+20);
+   x+=activefontsettings.length+2;
+
+
+   activefontsettings.length = 120;
+   ss = "RectFill: ";
+   if (tfill) {
+      ss += "on (";
+      ss += strrr ( fillx1 );
+      ss += "/";
+      ss += strrr ( filly1 );
+      ss += ")";
+   } else
+      ss += "off";
+
+   showtext2(ss.c_str(),x,y+20);
+   x+=activefontsettings.length+2;
+
+   npop ( activefontsettings );
+}

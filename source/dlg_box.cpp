@@ -1,6 +1,11 @@
-//     $Id: dlg_box.cpp,v 1.38 2000-11-29 09:40:19 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.39 2000-11-29 11:05:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2000/11/29 09:40:19  mbickel
+//      The mapeditor has now two maps simultaneously active
+//      Moved memorychecking functions to its own file: memorycheck.cpp
+//      Rewrote password handling in ASC
+//
 //     Revision 1.37  2000/11/21 20:27:00  mbickel
 //      Fixed crash in tsearchfields (used by object construction for example)
 //      AI improvements
@@ -3223,26 +3228,16 @@ char*  readtextmessage( int id )
 
   int wldcrdnum = 3;
 
-  char* tmpstr = NULL;
-  if ( actmap->preferredfilenames && actmap->preferredfilenames->mapname[0] ) {
-     tmpstr = new char[ strlen ( actmap->preferredfilenames->mapname[0] ) + 10 ];
-     strcpy ( tmpstr, actmap->preferredfilenames->mapname[0] );
-     char* ts = tmpstr;
-     while ( *ts != '.' &&  *ts )
-        ts++;
-     if ( *ts == '.' ) 
-        strcpy ( &ts[1], "MSG" );
-  }
+  string tmpstr = actmap->preferredFileNames.mapname[0];
+  tmpstr.replace ( tmpstr.find ( ".map"), 4, ".msg" );
+  tmpstr.replace ( tmpstr.find ( ".MAP"), 4, ".msg" );
 
-  tfindfile ff3 ( tmpstr );
+  tfindfile ff3 ( tmpstr.c_str() );
   tfindfile ff2 ( "*.msg" );
   tfindfile ff ( "helpsys?.txt" );
 
-  if ( tmpstr ) 
-     delete[] tmpstr;
 
   tfindfile* ffa[3] = { &ff3, &ff, &ff2 };
-
 
   for ( int m = 0; m < wldcrdnum; m++ ) {
 

@@ -1,6 +1,14 @@
-//     $Id: edselfnt.h,v 1.4 2000-08-06 11:39:09 mbickel Exp $
+//     $Id: edselfnt.h,v 1.5 2000-11-29 11:05:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/08/06 11:39:09  mbickel
+//      New map paramter: fuel globally available
+//      Mapeditor can now filter buildings too
+//      Fixed unfreed memory in fullscreen image loading
+//      Fixed: wasted cpu cycles in building
+//      map parameters can be specified when starting a map
+//      map parameters are reported to all players in multiplayer games
+//
 //     Revision 1.3  1999/12/27 13:00:00  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -53,6 +61,7 @@ extern void showallchoices(void);
 extern void setnewvehicleselection ( pvehicletype v );
 extern void setnewterrainselection ( pterraintype t );
 extern void setnewobjectselection  ( pobjecttype o );
+extern void setnewbuildingselection ( pbuildingtype v );
 
 extern void resetvehicleselector ( void );
 extern void resetbuildingselector ( void );

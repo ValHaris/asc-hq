@@ -109,7 +109,6 @@ tmap :: tmap ( void )
       replayinfo = NULL;
       playerView = -1;
       lastjournalchange.abstime = 0;
-      preferredfilenames = 0;
       ellipse = 0;
       graphicset = 0;
       gameparameter_num = 0;
@@ -223,7 +222,8 @@ void tmap :: read ( tnstream& stream )
    for ( i = 0; i< 8; i++ )
       bi_resource[i].read ( stream );
 
-   preferredfilenames = (PreferredFilenames*) stream.readInt();
+   int preferredfilenames = stream.readInt();
+
    ellipse = (EllipseOnScreen*) stream.readInt();
    graphicset = stream.readInt();
    gameparameter_num = stream.readInt();
@@ -362,17 +362,32 @@ void tmap :: read ( tnstream& stream )
     }
 
     if ( preferredfilenames ) {
-       preferredfilenames = new PreferredFilenames;
-       stream.readdata2 ( *(preferredfilenames) );
+       int p;
+       int mapname[8];
+       int mapdescription_not_used_any_more[8];
+       int savegame[8];
+       int savegamedescription_not_used_any_more[8];
+       for ( p = 0; p < 8; p++ )
+          mapname[p] = stream.readInt();
+       for ( p = 0; p < 8; p++ )
+          mapdescription_not_used_any_more[p] = stream.readInt();
+       for ( p = 0; p < 8; p++ )
+          savegame[p] = stream.readInt();
+       for ( p = 0; p < 8; p++ )
+          savegamedescription_not_used_any_more[p] = stream.readInt();
+
        for ( int i = 0; i < 8; i++ ) {
-          if ( preferredfilenames->mapname[i] )
-             stream.readpchar ( &preferredfilenames->mapname[i] );
-          if ( preferredfilenames->mapdescription_not_used_any_more[i] )
-             stream.readpchar ( &preferredfilenames->mapdescription_not_used_any_more[i] );
-          if ( preferredfilenames->savegame[i] )
-             stream.readpchar ( &preferredfilenames->savegame[i] );
-          if ( preferredfilenames->savegamedescription_not_used_any_more[i] )
-             stream.readpchar ( &preferredfilenames->savegamedescription_not_used_any_more[i] );
+          if ( mapname[i] )
+             preferredFileNames.mapname[i] = stream.readString ();
+
+          if ( mapdescription_not_used_any_more[i] )
+             stream.readString(); // dummy
+
+          if ( savegame[i] )
+             preferredFileNames.savegame[i] = stream.readString ();
+
+          if ( savegamedescription_not_used_any_more[i] )
+             stream.readString();
        }
     }
 
@@ -494,7 +509,7 @@ void tmap :: write ( tnstream& stream )
    for ( i = 0; i< 8; i++ )
       bi_resource[i].write ( stream );
 
-   stream.writeInt( preferredfilenames != NULL );
+   stream.writeInt( 1 );
    stream.writeInt( ellipse != NULL );
    stream.writeInt( graphicset );
    stream.writeInt( gameparameter_num );
@@ -579,19 +594,24 @@ void tmap :: write ( tnstream& stream )
        logtofile ( "loaders / tspfldloaders::writemap / shareview written" );
        #endif
 
-        if ( preferredfilenames ) {
-           stream.writedata2 ( *(preferredfilenames) );
-           for ( int i = 0; i < 8; i++ ) {
-              if ( preferredfilenames->mapname[i] )
-                 stream.writepchar ( preferredfilenames->mapname[i] );
-              if ( preferredfilenames->mapdescription_not_used_any_more[i] )
-                 stream.writepchar ( preferredfilenames->mapdescription_not_used_any_more[i] );
-              if ( preferredfilenames->savegame[i] )
-                 stream.writepchar ( preferredfilenames->savegame[i] );
-              if ( preferredfilenames->savegamedescription_not_used_any_more[i] )
-                 stream.writepchar ( preferredfilenames->savegamedescription_not_used_any_more[i] );
-           }
+        int p;
+        for ( p = 0; p < 8; p++ )
+           stream.writeInt( 1 );
+
+        for ( p = 0; p < 8; p++ )
+           stream.writeInt( 0 );
+
+        for ( p = 0; p < 8; p++ )
+           stream.writeInt( 1 );
+
+        for ( p = 0; p < 8; p++ )
+           stream.writeInt( 0 );
+
+        for ( int i = 0; i < 8; i++ ) {
+           stream.writeString ( preferredFileNames.mapname[i] );
+           stream.writeString ( preferredFileNames.savegame[i] );
         }
+
 
         if ( ellipse )
            stream.writedata2 ( *(ellipse) );

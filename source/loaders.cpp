@@ -1,6 +1,10 @@
-//     $Id: loaders.cpp,v 1.35 2000-11-26 22:18:53 mbickel Exp $
+//     $Id: loaders.cpp,v 1.36 2000-11-29 11:05:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2000/11/26 22:18:53  mbickel
+//      Added command line parameters for setting the verbosity
+//      Increased verbose output
+//
 //     Revision 1.34  2000/11/11 11:05:18  mbickel
 //      started AI service functions
 //
@@ -2349,13 +2353,7 @@ void  loadmap( const char *       name )
      tmaploaders gl;
      gl.loadmap ( name );
 
-      if ( !actmap->preferredfilenames ) {
-         actmap->preferredfilenames = new PreferredFilenames;
-         memset ( actmap->preferredfilenames, 0 , sizeof ( PreferredFilenames ));
-      }
-      if ( actmap->preferredfilenames->mapname[0] )
-         asc_free ( actmap->preferredfilenames->mapname[0] );
-      actmap->preferredfilenames->mapname[0] = strdup ( name );
+     actmap->preferredFileNames.mapname[0] = name ;
    }
    catch ( InvalidID err ) {
       displaymessage( err.getMessage().c_str(), 1 );

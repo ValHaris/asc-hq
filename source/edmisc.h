@@ -1,6 +1,11 @@
-//     $Id: edmisc.h,v 1.16 2000-11-29 09:40:21 mbickel Exp $
+//     $Id: edmisc.h,v 1.17 2000-11-29 11:05:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/11/29 09:40:21  mbickel
+//      The mapeditor has now two maps simultaneously active
+//      Moved memorychecking functions to its own file: memorycheck.cpp
+//      Rewrote password handling in ASC
+//
 //     Revision 1.15  2000/11/21 20:27:02  mbickel
 //      Fixed crash in tsearchfields (used by object construction for example)
 //      AI improvements
@@ -260,7 +265,7 @@ extern void         exchg(word *a1,word *a2);
 extern void         placebuilding(int colorr,pbuildingtype   buildingtyp,char choose);
 extern void         k_savemap(char saveas);
 extern void         k_loadmap(void);
-extern void         showcoordinates(void);
+extern void         showStatusBar(void);
 extern void         lines(int      x1,int      y,int      x2,int      y2);
 
 extern void         changeunitvalues(pvehicle ae);
@@ -312,7 +317,11 @@ class MapSwitcher {
               Mappntr ( ) : map ( NULL ), changed ( false ) { cursorx=cursory=0;};
         } maps[2];
      public:
+        enum Action { select, set };
+
+        Action getDefaultAction ( );
         void toggle ();
+        string getName ();
         MapSwitcher ( ) : active ( 0 ) {};
 };
 

@@ -1,6 +1,11 @@
-//     $Id: basestrm.cpp,v 1.46 2000-11-09 17:48:45 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.47 2000-11-29 11:05:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2000/11/09 17:48:45  mbickel
+//      The size of a stream can now be queried
+//      PCX loader (in C) can now load unpatched images provided they are not
+//        compressed
+//
 //     Revision 1.45  2000/11/08 19:30:53  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -2015,6 +2020,9 @@ tfindfile :: tfindfile ( const char* name )
    found = 0;
    act = 0;
    if ( !name )
+      return;
+
+   if ( !name[0] )
       return;
 
    char* directory[maxSearchDirNum];

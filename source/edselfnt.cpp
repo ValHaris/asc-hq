@@ -1,6 +1,12 @@
-//     $Id: edselfnt.cpp,v 1.18 2000-11-21 20:27:02 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.19 2000-11-29 11:05:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/11/21 20:27:02  mbickel
+//      Fixed crash in tsearchfields (used by object construction for example)
+//      AI improvements
+//      configure.in: added some debug output
+//                    fixed broken check for libbz2
+//
 //     Revision 1.17  2000/10/26 18:55:29  mbickel
 //      Fixed crash when editing the properties of a vehicle inside a building
 //      Added mapeditorFullscreen switch to asc.ini
@@ -1280,6 +1286,13 @@ void setnewterrainselection ( pterraintype t )
 void setnewobjectselection  ( pobjecttype o )
 {
    selectitemcontainer.getobjectselector()->setnewselection( o );
+}
+
+void setnewbuildingselection ( pbuildingtype v )
+{
+   selectitemcontainer.getbuildingselector()->setnewselection ( v );
+   selectitemcontainer.getcolorselector()->setnewselection( colorvector[farbwahl] );
+//   showallchoices();
 }
 
 

@@ -1,6 +1,11 @@
-//     $Id: typen.h,v 1.69 2000-11-29 09:40:25 mbickel Exp $
+//     $Id: typen.h,v 1.70 2000-11-29 11:05:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.69  2000/11/29 09:40:25  mbickel
+//      The mapeditor has now two maps simultaneously active
+//      Moved memorychecking functions to its own file: memorycheck.cpp
+//      Rewrote password handling in ASC
+//
 //     Revision 1.68  2000/11/15 19:28:36  mbickel
 //      AI improvements
 //
@@ -383,12 +388,18 @@ const int repairefficiency_building = 3;
 
 enum tshareviewmode { sv_none, sv_shareview };
 
-
+/*
   struct PreferredFilenames {
     char* mapname[8];
     char* mapdescription_not_used_any_more[8];
     char* savegame[8];
     char* savegamedescription_not_used_any_more[8];
+  };
+*/
+
+  struct PreferredFilenames {
+    string mapname[8];
+    string savegame[8];
   };
 
   class  EllipseOnScreen {
@@ -1481,7 +1492,7 @@ class tmap {
       int           playerView;
       tgametime     lastjournalchange;
       Resources     bi_resource[8];
-      PreferredFilenames* preferredfilenames;
+      PreferredFilenames preferredFileNames;
       EllipseOnScreen* ellipse;
       int           graphicset;
       int           gameparameter_num;

@@ -1,6 +1,11 @@
-//     $Id: edmain.cpp,v 1.32 2000-11-29 09:40:20 mbickel Exp $
+//     $Id: edmain.cpp,v 1.33 2000-11-29 11:05:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/11/29 09:40:20  mbickel
+//      The mapeditor has now two maps simultaneously active
+//      Moved memorychecking functions to its own file: memorycheck.cpp
+//      Rewrote password handling in ASC
+//
 //     Revision 1.31  2000/11/26 22:18:53  mbickel
 //      Added command line parameters for setting the verbosity
 //      Increased verbose output
@@ -329,6 +334,98 @@ void buildemptymap ( void )
 }
 
 
+void checkLeftMouseButton ( )
+{
+   static int buttonStat = 0;
+
+   int x,y;
+   if ( getfieldundermouse ( &x, &y ) ) {
+      x += actmap->xpos;
+      y += actmap->ypos;
+
+      if ( mouseparams.taste == 1 )
+         cursor.gotoxy ( x,y );
+
+      if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) {
+         if ( mouseparams.taste == 1 ) {
+            execaction(act_setactivefieldvals);
+            while ( mouseparams.taste == 1 )
+               releasetimeslice();
+         }
+
+      } else {
+
+         if ( mouseparams.taste == 1 ) {
+            if ( buttonStat < 2 ) {
+               execaction(act_placething);
+               if ( lastselectiontype == cselunit || lastselectiontype == cselcolor || lastselectiontype == cselbuilding )
+                  buttonStat = 2;
+               else {
+                 bool moved = false;
+                 do {
+                    int x1,y1;
+                    if ( getfieldundermouse ( &x1, &y1 ) ) {
+                       x1 += actmap->xpos;
+                       y1 += actmap->ypos;
+                       if ( x1 != x || y1 != y )
+                          moved = true;
+                    } else
+                       moved = true;
+
+                    if ( mouseparams.taste != 1 )
+                       moved = true;
+                 } while ( !moved );
+               }
+            }
+         } else
+            buttonStat = 0;
+      }
+   } else
+      buttonStat = 0;
+
+
+/*
+            if ( mouseparams.taste == 1 ) {
+               int mx, my;
+               starttimer();
+               curposchanged = false;
+               while ( mouseparams.taste == 1 ) {
+                 if ( getfieldundermouse ( &mx, &my ) )
+                    if ( ( mx != lastx ) || (my != lasty ) ) {
+                       mousevisible(false);
+                       cursor.hide();
+                       cursor.posx = mx;
+                       cursor.posy = my;
+                       cursor.show();
+                       mousevisible(true);
+
+                       lastx = mx;
+                       lasty = my;
+                       curposchanged = true;
+                       starttimer();
+                    }
+                    if (time_elapsed(menutime)) {
+                       execcode = -1;
+                       execcode = leftmousebox();
+                       if (execcode != -1 ) execaction(execcode);
+                       while ( mouseparams.taste != 0 );
+                  }
+                  releasetimeslice();
+               }
+               if (getfieldundermouse ( &mx, &my ) )
+                  if ( ! time_elapsed(menutime)) {
+                       if ( ! curposchanged ) {
+                          execaction(act_placething);
+                          while ( mouseparams.taste == 1 )
+                             releasetimeslice();
+                       }
+                  }
+            }
+*/
+
+}
+
+
 void         editor(void)
 {  int execcode;
    int lastx;
@@ -374,7 +471,7 @@ void         editor(void)
                                                     mousevisible(false); 
                                                     movecursor(ch); 
                                                     cursor.show(); 
-                                                    showcoordinates();
+                                                    showStatusBar();
                                                     mousevisible(true); 
                                                  }
                      break;
@@ -489,42 +586,7 @@ void         editor(void)
             } 
             pulldown();
             checkselfontbuttons();
-            if ( mouseparams.taste == 1 ) {
-               int mx, my;
-               starttimer();
-               curposchanged = false;
-               while ( mouseparams.taste == 1 ) {
-                 if ( getfieldundermouse ( &mx, &my ) ) 
-                    if ( ( mx != lastx ) || (my != lasty ) ) {
-                       mousevisible(false);
-                       cursor.hide();
-                       cursor.posx = mx;
-                       cursor.posy = my;
-                       cursor.show();
-                       mousevisible(true);
-      
-                       lastx = mx;
-                       lasty = my;
-                       curposchanged = true;
-                       starttimer();
-                    }
-                    if (time_elapsed(menutime)) {
-                       execcode = -1;
-                       execcode = leftmousebox();
-                       if (execcode != -1 ) execaction(execcode);
-                       while ( mouseparams.taste != 0 );
-                  }
-                  releasetimeslice();
-               }
-               if (getfieldundermouse ( &mx, &my ) ) 
-                  if ( ! time_elapsed(menutime)) {
-                       if ( ! curposchanged ) { 
-                          execaction(act_placething);
-                          while ( mouseparams.taste == 1 )
-                             releasetimeslice();
-                       }
-                  }
-            }
+            checkLeftMouseButton();
             if ( mouseparams.taste == 2 ) {
                int mx, my;
                while ( mouseparams.taste == 2 ) {
@@ -652,8 +714,7 @@ int mapeditorMainThread ( void* _mapname )
       else
          buildemptymap();
 
-      if ( actmap->preferredfilenames )
-         actmap->preferredfilenames->mapname[0] = 0;
+      actmap->preferredFileNames.mapname[0] = "";
 
       mapSwitcher.toggle();
 

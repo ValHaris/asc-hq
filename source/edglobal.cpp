@@ -1,6 +1,11 @@
-//     $Id: edglobal.cpp,v 1.22 2000-11-29 09:40:19 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.23 2000-11-29 11:05:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/11/29 09:40:19  mbickel
+//      The mapeditor has now two maps simultaneously active
+//      Moved memorychecking functions to its own file: memorycheck.cpp
+//      Rewrote password handling in ASC
+//
 //     Revision 1.21  2000/10/18 14:14:06  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -622,7 +627,13 @@ void execaction(int code)
                      lastselectiontype = cselunit;
                      setnewvehicleselection ( auswahlf );
                   } else
-
+                  if ( fld->building ) {
+                     auswahlb = fld->building->typ;
+                     altefarbwahl = farbwahl;
+                     farbwahl = fld->building->color/8;
+                     lastselectiontype = cselbuilding;
+                     setnewbuildingselection ( auswahlb );
+                  } else
                   if ( fld->object && fld->object->objnum ) {
                      actobject = fld->object->object[ fld->object->objnum -1 ]->typ ;
                      lastselectiontype = cselobject;
@@ -722,7 +733,7 @@ void execaction(int code)
                     farbwahl = altefarbwahl;
                     altefarbwahl = tmp;
                     showallchoices();
-                    showcoordinates();
+                    showStatusBar();
                  }
 
        break;
@@ -732,7 +743,7 @@ void execaction(int code)
                     farbwahl = altefarbwahl;
                     altefarbwahl = tmp;
                     showallchoices();
-                    showcoordinates();
+                    showStatusBar();
                  }
        break;
     case act_placebodentyp : placebodentyp();
@@ -870,6 +881,7 @@ void execaction(int code)
       break;
    case act_switchmaps: mapSwitcher.toggle();
                         displaymap();
+                        showStatusBar();
       break;
     }
 }

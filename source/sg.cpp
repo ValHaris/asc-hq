@@ -1,6 +1,11 @@
-//     $Id: sg.cpp,v 1.113 2000-11-29 09:40:24 mbickel Exp $
+//     $Id: sg.cpp,v 1.114 2000-11-29 11:05:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.113  2000/11/29 09:40:24  mbickel
+//      The mapeditor has now two maps simultaneously active
+//      Moved memorychecking functions to its own file: memorycheck.cpp
+//      Rewrote password handling in ASC
+//
 //     Revision 1.112  2000/11/26 22:18:54  mbickel
 //      Added command line parameters for setting the verbosity
 //      Increased verbose output
@@ -1467,7 +1472,7 @@ void         speicherspiel( int as )
    char         s1[300];
 
    int nameavail = 0;
-   if ( actmap->preferredfilenames && actmap->preferredfilenames->savegame[actmap->actplayer] )
+   if ( !actmap->preferredFileNames.savegame[actmap->actplayer].empty() )
       nameavail = 1;
 
 
@@ -1479,18 +1484,10 @@ void         speicherspiel( int as )
       fileselectsvga(temp, s1, 0);
 
    } else
-      strcpy ( s1, actmap->preferredfilenames->savegame[actmap->actplayer] );
+      strcpy ( s1, actmap->preferredFileNames.savegame[actmap->actplayer].c_str() );
 
    if ( s1[0] ) {
-
-      if ( !actmap->preferredfilenames ) {
-         actmap->preferredfilenames = new PreferredFilenames;
-         memset ( actmap->preferredfilenames, 0 , sizeof ( PreferredFilenames ));
-      }
-
-      if ( actmap->preferredfilenames->savegame[actmap->actplayer] )
-         asc_free ( actmap->preferredfilenames->savegame[actmap->actplayer] );
-      actmap->preferredfilenames->savegame[actmap->actplayer] = strdup ( s1 );
+      actmap->preferredFileNames.savegame[actmap->actplayer] = s1;
 
       mousevisible(false);
       cursor.hide();
