@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: gui.cpp,v 1.72 2001-11-22 15:08:23 mbickel Exp $
+//     $Id: gui.cpp,v 1.73 2001-11-28 13:03:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.72  2001/11/22 15:08:23  mbickel
+//      Added gameoption heightChangeMovement
+//
 //     Revision 1.71  2001/11/18 19:31:05  mbickel
 //      Fixed crash when reaction fire kills a unit during height change
 //
@@ -1873,17 +1876,17 @@ tnsguiiconrepair::tnsguiiconrepair ( void )
    filename = "repair" ;
 }
 
-int   tnsguiiconrepair::available    ( void ) 
+int   tnsguiiconrepair::available    ( void )
 {
-   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) { 
-      pfield fld = getactfield(); 
-      if ( fld->vehicle ) 
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
+      pfield fld = getactfield();
+      if ( fld->vehicle )
          if (fld->vehicle->color == actmap->actplayer * 8)
             if ( service.available ( fld->vehicle ))
                if ( service.getServices( fld->vehicle) & (1 << VehicleService::srv_repair ))
                   return 1;
    } else
-      if ( pendingVehicleActions.actionType == vat_service ) {
+      if ( pendingVehicleActions.actionType == vat_service && pendingVehicleActions.service->guimode == 1 ) {
          pfield fld = getactfield();
          if ( fld->vehicle ) {
             // if ( pendingVehicleActions.service->getServices ( fld->vehicle) & ( 1 << VehicleService::srv_repair) ) {
@@ -1898,10 +1901,11 @@ int   tnsguiiconrepair::available    ( void )
    return 0;
 }
 
-void  tnsguiiconrepair::exec         ( void ) 
+void  tnsguiiconrepair::exec         ( void )
 {
    if ( pendingVehicleActions.actionType == vat_nothing ) {
       VehicleService* vs = new VehicleService ( &defaultMapDisplay, &pendingVehicleActions );
+      vs->guimode = 1;
       int res = vs->execute ( getactfield()->vehicle, -1, -1, 0, -1, -1 );
       if ( res < 0 ) {
          dispmessage2 ( -res );
@@ -1965,7 +1969,7 @@ tnsguiiconrefuel::tnsguiiconrefuel ( void )
 
 
 
-int   tnsguiiconrefuel::available    ( void ) 
+int   tnsguiiconrefuel::available    ( void )
 {
 
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
@@ -1981,7 +1985,7 @@ int   tnsguiiconrefuel::available    ( void )
              if ( fld->building->typ->special & cgexternalloadingb )
                 return 1;
    } else
-      if ( pendingVehicleActions.actionType == vat_service ) {
+      if ( pendingVehicleActions.actionType == vat_service && pendingVehicleActions.service->guimode == 2) {
          pfield fld = getactfield();
          if ( fld->vehicle ) {
             VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.find(fld->vehicle->networkid);
@@ -1996,10 +2000,11 @@ int   tnsguiiconrefuel::available    ( void )
    return 0;
 }
 
-void  tnsguiiconrefuel::exec         ( void ) 
+void  tnsguiiconrefuel::exec         ( void )
 {
    if ( pendingVehicleActions.actionType == vat_nothing ) {
       VehicleService* vs = new VehicleService ( &defaultMapDisplay, &pendingVehicleActions );
+      pendingVehicleActions.service->guimode = 2;
       int res = vs->execute ( getactfield()->vehicle, getxpos(), getypos(), 0, -1, -1 );
       if ( res < 0 ) {
          dispmessage2 ( -res );
@@ -2075,16 +2080,16 @@ tnsguiiconrefueldialog::tnsguiiconrefueldialog ( void )
 
 
 
-int   tnsguiiconrefueldialog::available    ( void ) 
+int   tnsguiiconrefueldialog::available    ( void )
 {
    priority = 20; // !!
-   if ( pendingVehicleActions.service && getactfield()->a.temp && getactfield()->vehicle )
+   if ( pendingVehicleActions.service && pendingVehicleActions.service->guimode == 2 && getactfield()->a.temp && getactfield()->vehicle )
          return true;
 
    return 0;
 }
 
-void  tnsguiiconrefueldialog::exec         ( void ) 
+void  tnsguiiconrefueldialog::exec         ( void )
 {
    verlademunition( pendingVehicleActions.service, getactfield()->vehicle->networkid );
    delete pendingVehicleActions.service;

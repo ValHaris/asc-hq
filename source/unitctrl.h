@@ -1,6 +1,9 @@
-//     $Id: unitctrl.h,v 1.26 2001-11-15 20:46:05 mbickel Exp $
+//     $Id: unitctrl.h,v 1.27 2001-11-28 13:03:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2001/11/15 20:46:05  mbickel
+//      Fixed: replay not working when moving units out of carriers
+//
 //     Revision 1.25  2001/09/25 15:13:07  mbickel
 //      New version number
 //      Fixed crash when reaction fire during ascend
@@ -534,6 +537,9 @@ class VehicleService : public VehicleAction {
               virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
               VehicleService ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
               virtual ~VehicleService ( );
+
+              //! here the gui stores which icon initiated the service; thus preventing the occurance of an repair icon when a fuel transfer was initiated.
+              int guimode;
          };
 
 

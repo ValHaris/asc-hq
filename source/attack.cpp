@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: attack.cpp,v 1.55 2001-10-31 18:34:30 mbickel Exp $
+//     $Id: attack.cpp,v 1.56 2001-11-28 13:03:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2001/10/31 18:34:30  mbickel
+//      Some adjustments and fixes for gcc 3.0.2
+//
 //     Revision 1.54  2001/10/28 20:42:17  mbickel
 //      Fixed AI crashes
 //      Fixed problems when next campaign map could not be found.
@@ -1174,16 +1177,17 @@ bool attackpossible2u( const pvehicle attacker, const pvehicle target, pattackwe
                if (verteidiger->height & angreifer->typ->weapons.weapon[i].targ )
                   if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
                      if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp] > 0 )
-                        if (angreifer->ammo[i] > 0) {
-                           result = true;
-                           if ( atw ) {
-                              atw->strength[atw->count] = angreifer->weapstrength[i] * angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp] / 100;
-                              atw->num[atw->count ] = i;
-                              atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
-                              atw->target = AttackWeap::vehicle;
-                              atw->count++;
+                        if ( angreifer->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( angreifer->height), log2(verteidiger->height))] )
+                           if (angreifer->ammo[i] > 0) {
+                              result = true;
+                              if ( atw ) {
+                                 atw->strength[atw->count] = angreifer->weapstrength[i] * angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp] / 100;
+                                 atw->num[atw->count ] = i;
+                                 atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
+                                 atw->target = AttackWeap::vehicle;
+                                 atw->count++;
+                              }
                            }
-                        }
 
    return result;
 }
@@ -1217,16 +1221,17 @@ bool attackpossible28( const pvehicle attacker, const pvehicle target, pattackwe
                      if (minmalq >= angreifer->typ->weapons.weapon[i].mindistance)
                         if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
                            if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp ] > 0)
-                              if (angreifer->ammo[i] > 0) {
-                                 result =  true;
-                                 if ( atw ) {
-                                    atw->strength[atw->count] = angreifer->weapstrength[i] * angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp] / 100;
-                                    atw->num[atw->count ] = i;
-                                    atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
-                                    atw->target = AttackWeap::vehicle;
-                                    atw->count++;
+                              if ( angreifer->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( angreifer->height), log2(verteidiger->height))] )
+                                 if (angreifer->ammo[i] > 0) {
+                                    result =  true;
+                                    if ( atw ) {
+                                       atw->strength[atw->count] = angreifer->weapstrength[i] * angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp] / 100;
+                                       atw->num[atw->count ] = i;
+                                       atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
+                                       atw->target = AttackWeap::vehicle;
+                                       atw->count++;
+                                    }
                                  }
-                              }
 
    return result;
 }
@@ -1261,21 +1266,22 @@ bool attackpossible2n( const pvehicle attacker, const pvehicle target, pattackwe
                         if (dist <= angreifer->typ->weapons.weapon[i].maxdistance)
                            if (dist >= angreifer->typ->weapons.weapon[i].mindistance)
                               if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
-                                 if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp ] > 0)
-                                    if (angreifer->ammo[i] > 0) {
-                                       result = true;
-                                       if ( atw ) {
-                                          atw->strength[atw->count] = angreifer->weapstrength[i] * angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp ] / 100;
-                                          atw->num[atw->count ] = i;
-                                          atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
-                                          atw->target = AttackWeap::vehicle;
-                                          atw->count++;
+                                 if ( angreifer->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( angreifer->height), log2(verteidiger->height))] )
+                                    if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp ] > 0)
+                                       if (angreifer->ammo[i] > 0) {
+                                          result = true;
+                                          if ( atw ) {
+                                             atw->strength[atw->count] = angreifer->weapstrength[i] * angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp ] / 100;
+                                             atw->num[atw->count ] = i;
+                                             atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
+                                             atw->target = AttackWeap::vehicle;
+                                             atw->count++;
+                                          }
                                        }
-                                    }
-                     
-            
-   return result; 
-} 
+
+
+   return result;
+}
 
 bool vehicleplattfahrbar( const pvehicle     vehicle,
                            const pfield        field)
