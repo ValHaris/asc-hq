@@ -4,21 +4,19 @@
   <MACROS>
     <VERSION value="BCB.05.03"/>
     <PROJECT value="asc.exe"/>
-    <OBJFILES value="..\..\sg.obj ..\..\artint.obj ..\..\dlg_box.obj ..\..\attack.obj 
-      ..\..\basegfx.obj ..\..\basestrm.obj ..\..\building.obj 
-      ..\..\buildingtype.obj ..\..\CLoadable.obj ..\..\containerbase.obj 
-      ..\..\controls.obj ..\..\dialog.obj ..\..\astar2.obj ..\..\weather.obj 
-      ..\..\gamemap.obj ..\..\gameoptions.obj ..\..\gui.obj ..\..\loadbi3.obj 
-      ..\..\loaders.obj ..\..\loadpcxc.obj ..\..\mapalgorithms.obj 
-      ..\..\misc.obj ..\..\missions.obj ..\..\Named.obj ..\..\network.obj 
-      ..\..\newfont.obj ..\..\palette.obj ..\..\password.obj 
-      ..\..\password_dialog.obj ..\..\pd.obj ..\..\Property.obj 
-      ..\..\PropertyGroup.obj ..\..\sgstream.obj ..\..\soundList.obj 
-      ..\..\spfst.obj ..\..\stack.obj ..\..\strtmesg.obj ..\..\typen.obj 
-      ..\..\unitctrl.obj ..\..\vehicletype.obj ..\..\viewcalculation.obj 
-      ..\..\gamedlg.obj ..\..\..\..\sdl\src\main\win32\SDL_main.obj 
-      ..\..\sdl\asc_IMG_jpg.obj ..\..\sdl\sound.obj ..\..\sdl\graphics.obj 
-      ..\..\sdl\loadimage.obj ..\..\sdl\SDLStretch.obj ..\..\sdl\events.obj"/>
+    <OBJFILES value="obj\sg.obj obj\artint.obj obj\dlg_box.obj obj\attack.obj obj\basegfx.obj 
+      obj\basestrm.obj obj\building.obj obj\buildingtype.obj obj\CLoadable.obj 
+      obj\containerbase.obj obj\controls.obj obj\dialog.obj obj\astar2.obj 
+      obj\weather.obj obj\gamemap.obj obj\gameoptions.obj obj\gui.obj 
+      obj\loadbi3.obj obj\loaders.obj obj\loadpcxc.obj obj\mapalgorithms.obj 
+      obj\misc.obj obj\missions.obj obj\Named.obj obj\network.obj 
+      obj\newfont.obj obj\palette.obj obj\password.obj obj\password_dialog.obj 
+      obj\pd.obj obj\Property.obj obj\PropertyGroup.obj obj\sgstream.obj 
+      obj\soundList.obj obj\spfst.obj obj\stack.obj obj\strtmesg.obj 
+      obj\typen.obj obj\unitctrl.obj obj\vehicletype.obj obj\viewcalculation.obj 
+      obj\gamedlg.obj obj\SDL_main.obj obj\asc_IMG_jpg.obj obj\sound.obj 
+      obj\graphics.obj obj\loadimage.obj obj\SDLStretch.obj obj\events.obj 
+      obj\research.obj obj\replay.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -37,16 +35,16 @@
     <USERDEFINES value="HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL;USEPACKAGES"/>
     <MAINSOURCE value="asc.bpf"/>
-    <INCLUDEPATH value="..\..\..\source;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="..\..\..\source;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib"/>
-    <WARNINGS value="-w-par -w-csu"/>
+    <INCLUDEPATH value="..\..;..\..\..\source;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="..\..;..\..\..\source;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-par -w-8027 -w-8026 -w-csu"/>
   </MACROS>
   <OPTIONS>
     <CFLAG1 value="-O2 -Q -Vx -Ve -X- -a1 -5 -b -k- -vi -tW -tWM -c -K"/>
-    <PFLAGS value="-$Y- -$L- -$D- -v -JPHNE -M"/>
+    <PFLAGS value="-N2obj -N0obj -$Y- -$L- -$D- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="-D&quot;&quot; -aa -Tpe -GD -s -Gn -M"/>
+    <LFLAGS value="-Iobj -D&quot;&quot; -aa -Tpe -GD -s -Gn -M"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0w32.obj $(PACKAGES) $(OBJFILES)"/>
@@ -83,9 +81,9 @@ Comments=
 
 [HistoryLists\hlIncludePath]
 Count=8
-Item0=..\..;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
-Item1=..\..\..\source;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
-Item2=..\..;..\..\..\source;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
+Item0=..\..;..\..\..\source;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
+Item1=..\..;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
+Item2=..\..\..\source;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
 Item3=..\..;..\..\..\..\sdl\include;..\..\..\source;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
 Item4=C:\Programme\ascsrc\games\sdl\include;..\..;..\..\sdl;..\..\..\..\sdl\src\main\win32;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
 Item5=..\..;..\..\sdl;..\..\..\..\sdl\src\main\win32;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
@@ -94,9 +92,9 @@ Item7=..\..;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
 Count=6
-Item0=..\..;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
-Item1=..\..\..\source;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
-Item2=..\..;..\..\..\source;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
+Item0=..\..;..\..\..\source;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\..;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
+Item2=..\..\..\source;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
 Item3=..\..;..\..\sdl;..\..\..\..\sdl\src\main\win32;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
 Item4=..\..\sdl;..\..\..\..\sdl\src\main\win32;..\..;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
 Item5=..\..;$(BCB)\lib\obj;$(BCB)\lib
@@ -112,12 +110,17 @@ Item1=HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32;_DEBUG
 Item2=_DEBUG
 
 [HistoryLists\hlIntOutputDir]
-Count=1
-Item0=C:\Programme\ascsrc\games\asc\source\win32\borland
+Count=4
+Item0=obj
+Item1=1
+Item2=C:\Programme\ascsrc\games\asc\source\win32\borland\1
+Item3=C:\Programme\ascsrc\games\asc\source\win32\borland
 
 [HistoryLists\hlFinalOutputDir]
-Count=1
-Item0=C:\Programme\ascsrc\games\asc\source\win32\borland
+Count=3
+Item0=..\
+Item1=..
+Item2=C:\Programme\ascsrc\games\asc\source\win32\borland
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl

@@ -44,6 +44,7 @@ USELIB("..\..\..\libs\jpeg-6b\libjpeg.lib");
 USEUNIT("..\..\..\..\..\sdl\src\main\win32\SDL_main.c");
 USEUNIT("..\..\..\weather.cpp");
 USEUNIT("..\..\..\buildingtype.cpp");
+USEUNIT("..\..\..\research.cpp");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 

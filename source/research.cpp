@@ -17,7 +17,7 @@
 
 
 #include "research.h"
-#include "error.h"
+#include "errors.h"
 #include "typen.h"
 #include "vehicletype.h"
 

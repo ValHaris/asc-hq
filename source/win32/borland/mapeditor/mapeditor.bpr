@@ -4,21 +4,17 @@
   <MACROS>
     <VERSION value="BCB.05.03"/>
     <PROJECT value="..\mapeditor.exe"/>
-    <OBJFILES value="..\..\..\edmain.obj ..\..\..\vehicletype.obj ..\..\..\basegfx.obj 
-      ..\..\..\basestrm.obj ..\..\..\CLoadable.obj ..\..\..\containerbase.obj 
-      ..\..\..\dialog.obj ..\..\..\dlg_box.obj ..\..\..\edevents.obj 
-      ..\..\..\edgen.obj ..\..\..\edglobal.obj ..\..\..\edmisc.obj 
-      ..\..\..\edselfnt.obj ..\..\..\gamemap.obj ..\..\..\gameoptions.obj 
-      ..\..\..\loadbi3.obj ..\..\..\loaders.obj ..\..\..\loadpcxc.obj 
-      ..\..\..\mapalgorithms.obj ..\..\..\misc.obj ..\..\..\Named.obj 
-      ..\..\..\newfont.obj ..\..\..\palette.obj ..\..\..\password.obj 
-      ..\..\..\password_dialog.obj ..\..\..\pd.obj ..\..\..\Property.obj 
-      ..\..\..\PropertyGroup.obj ..\..\..\sgstream.obj ..\..\..\spfst.obj 
-      ..\..\..\stack.obj ..\..\..\strtmesg.obj ..\..\..\typen.obj 
-      ..\..\..\attack.obj ..\..\..\sdl\sound.obj ..\..\..\sdl\graphics.obj 
-      ..\..\..\sdl\loadimage.obj ..\..\..\sdl\SDLStretch.obj 
-      ..\..\..\sdl\events.obj ..\..\..\..\..\sdl\src\main\win32\SDL_main.obj 
-      ..\..\..\weather.obj ..\..\..\buildingtype.obj"/>
+    <OBJFILES value="obj\edmain.obj obj\vehicletype.obj obj\basegfx.obj obj\basestrm.obj 
+      obj\CLoadable.obj obj\containerbase.obj obj\dialog.obj obj\dlg_box.obj 
+      obj\edevents.obj obj\edgen.obj obj\edglobal.obj obj\edmisc.obj 
+      obj\edselfnt.obj obj\gamemap.obj obj\gameoptions.obj obj\loadbi3.obj 
+      obj\loaders.obj obj\loadpcxc.obj obj\mapalgorithms.obj obj\misc.obj 
+      obj\Named.obj obj\newfont.obj obj\palette.obj obj\password.obj 
+      obj\password_dialog.obj obj\pd.obj obj\Property.obj obj\PropertyGroup.obj 
+      obj\sgstream.obj obj\spfst.obj obj\stack.obj obj\strtmesg.obj 
+      obj\typen.obj obj\attack.obj obj\sound.obj obj\graphics.obj 
+      obj\loadimage.obj obj\SDLStretch.obj obj\events.obj obj\SDL_main.obj 
+      obj\weather.obj obj\buildingtype.obj obj\research.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -38,16 +34,16 @@
     <USERDEFINES value="karteneditor;HEXAGON;FREEMAPZOOM;_WIN32_;WIN32;_SDL_;_NOASM_;NEWKEYB"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL;USEPACKAGES"/>
     <MAINSOURCE value="mapeditor.bpf"/>
-    <INCLUDEPATH value="..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\.."/>
+    <INCLUDEPATH value="..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32"/>
     <LIBPATH value="..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib"/>
-    <WARNINGS value="-w-par -w-csu"/>
+    <WARNINGS value="-w-par -w-8027 -w-8026 -w-csu"/>
   </MACROS>
   <OPTIONS>
     <CFLAG1 value="-O2 -Q -Vx -Ve -X- -a1 -5 -b -k- -vi -tW -tWM -c -K"/>
-    <PFLAGS value="-$Y- -$L- -$D- -v -JPHNE -M"/>
+    <PFLAGS value="-N2obj -N0obj -$Y- -$L- -$D- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn"/>
+    <LFLAGS value="-Iobj -D&quot;&quot; -aa -Tpe -x -Gn"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0w32.obj $(PACKAGES) $(OBJFILES)"/>
@@ -83,19 +79,20 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=12
-Item0=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
-Item1=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
-Item2=..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
-Item3=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
-Item4=..\..\..\..\..\sdl\src\main\win32;..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
-Item5=..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
-Item6=..\..\..;..\..\..\sdl;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;C:\Programme\ascsrc\games\asc\source\win32
-Item7=..\..\..;..\..\..\sdl;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include
-Item8=..\..\..\sdl;..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\sdl\include
-Item9=..\..\..\sdl;..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
-Item10=..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
-Item11=..\..\..;$(BCB)\include;$(BCB)\include\vcl
+Count=13
+Item0=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
+Item1=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
+Item2=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
+Item3=..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
+Item4=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
+Item5=..\..\..\..\..\sdl\src\main\win32;..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
+Item6=..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
+Item7=..\..\..;..\..\..\sdl;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;C:\Programme\ascsrc\games\asc\source\win32
+Item8=..\..\..;..\..\..\sdl;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include
+Item9=..\..\..\sdl;..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\sdl\include
+Item10=..\..\..\sdl;..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
+Item11=..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
+Item12=..\..\..;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
 Count=10
@@ -121,8 +118,9 @@ Item1=_DEBUG;karteneditor;HEXAGON;FREEMAPZOOM;_WIN32_;WIN32;_SDL_;_NOASM_;NEWKEY
 Item2=_DEBUG
 
 [HistoryLists\hlIntOutputDir]
-Count=1
-Item0=C:\Programme\ascsrc\games\asc\source\win32\borland\mapeditor
+Count=2
+Item0=obj
+Item1=C:\Programme\ascsrc\games\asc\source\win32\borland\mapeditor
 
 [HistoryLists\hlFinalOutputDir]
 Count=2

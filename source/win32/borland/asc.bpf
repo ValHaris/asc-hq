@@ -51,6 +51,8 @@ USEUNIT("..\..\sdl\graphics.cpp");
 USEUNIT("..\..\sdl\loadimage.cpp");
 USEUNIT("..\..\sdl\SDLStretch.cpp");
 USEUNIT("..\..\sdl\events.cpp");
+USEUNIT("..\..\research.cpp");
+USEUNIT("..\..\replay.cpp");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 
