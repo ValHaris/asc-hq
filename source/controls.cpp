@@ -1374,6 +1374,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
    int dist = 1;
 
    if ( start.getNumericalHeight() >= 0 && dest.getNumericalHeight() >= 0 ) {
+
       // changing height
       if ( (start.getNumericalHeight() != dest.getNumericalHeight()) && !container2container ) {
           const Vehicletype::HeightChangeMethod* hcm = vehicle->getHeightChange( start.getNumericalHeight() < dest.getNumericalHeight() ? 1 : -1, start.getBitmappedHeight());
@@ -1389,13 +1390,17 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
              checkWind = false;
       } else
          // flying
-         if (start.getNumericalHeight() >= 4  )
+         if (start.getNumericalHeight() >= 4 )
             movecost = maxmalq;
-         else {
-            // not flying
-            movecost = getfield( dest.x, dest.y )->getmovemalus( vehicle );
-            checkWind = false;
-         }
+         else
+            if ( start.getNumericalHeight() <= 1 ) {
+               movecost = submarineMovement;
+               checkWind = false;
+            } else {
+               // not flying
+               movecost = getfield( dest.x, dest.y )->getmovemalus( vehicle );
+               checkWind = false;
+            }
 
    } else
       if ( dest.getNumericalHeight() >= 0 ) {

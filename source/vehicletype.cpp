@@ -60,7 +60,8 @@ const char*  cvehiclefunctions[cvehiclefunctionsnum]  = {
                    "Kamikaze only",
                    "immune to mines",
                    "refuels energy",
-                   "jams only own field" };
+                   "jams only own field",
+                   "move with reaction fire on" };
 
 
 

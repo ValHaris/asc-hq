@@ -470,7 +470,7 @@ bool Vehicle::hasMoved ( void ) const
 
 int Vehicle :: getMovement ( bool checkFuel ) const
 {
-   if ( reactionfire.getStatus() != ReactionFire::off )
+   if ( !reactionfire.canMove() )
       return 0;
 
    if ( typ->fuelConsumption && checkFuel ) {
@@ -511,7 +511,7 @@ bool Vehicle::movementLeft() const
 
 bool Vehicle :: canMove ( void ) const
 {
-   if ( movementLeft() && reactionfire.getStatus() == ReactionFire::off  ) {
+   if ( movementLeft() && reactionfire.canMove() ) {
       pfield fld = gamemap->getField ( getPosition() );
       if ( fld->unitHere ( this ) ) {
          if ( terrainaccessible ( fld, this ) || actmap->getgameparameter( cgp_movefrominvalidfields))
@@ -634,10 +634,19 @@ void Vehicle::ReactionFire::endTurn ( void )
    }
 }
 
+bool Vehicle::ReactionFire::canMove()
+{
+   if ( unit->typ->functions & cfmovewithRF )
+      return true;
+   if ( status == off )
+      return true;
+   return false;
+}
+
 
 const Vehicletype::HeightChangeMethod* Vehicle::getHeightChange( int dir, int height ) const
 {
-   if ( reactionfire.getStatus() != ReactionFire::off )
+   if ( !reactionfire.canMove() )
       return NULL;
 
    if ( height == 0 )

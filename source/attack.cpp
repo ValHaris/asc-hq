@@ -63,7 +63,13 @@ bool  AttackFormula :: checkHemming ( pvehicle     d_eht,  int     direc )
    if ( fld )
       s_eht = fld->vehicle;
    else 
-      s_eht = NULL; 
+      s_eht = NULL;
+
+   if ( !s_eht )
+      return false;
+
+   if ( s_eht->height >= chtieffliegend || d_eht->height >= chtieffliegend )
+      return false;
 
    return attackpossible2n ( s_eht, d_eht );
 } 

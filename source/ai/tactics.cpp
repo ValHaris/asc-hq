@@ -575,7 +575,7 @@ AI::AiResult AI::tactics( void )
                   // airplane landing constraints
 
                   bool directAttack = false;
-                  if ( beeline ( mv->movePos.x, mv->movePos.y, mv->attackx, mv->attacky ) > maxmalq )
+                  if ( beeline ( mv->movePos.x, mv->movePos.y, mv->attackx, mv->attacky ) > maxmalq || veh->height >= chtieffliegend || (mv->enemy && mv->enemy->height >= chtieffliegend) )
                      directAttack = true;
 
                   int freeNeighbouringFields = 0;

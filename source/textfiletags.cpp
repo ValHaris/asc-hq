@@ -103,7 +103,8 @@ const char*  bodenarten[cbodenartennum]
                    "Kamikaze_only",
                    "immune_to_mines",
                    "energy_transfer",
-                   "jam_only_own_field" };
+                   "jam_only_own_field",
+                   "MoveDuringReactionFire" };
 
 const char*  weaponTags[cwaffentypennum]
    = {  "cruise_missile",

@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.136 2003-07-06 13:16:22 mbickel Exp $
+//     $Id: typen.h,v 1.137 2003-11-11 20:03:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.136  2003/07/06 13:16:22  mbickel
+//      Updated maps
+//
 //     Revision 1.135  2003/06/30 19:56:38  mbickel
 //      Fixed compilation problems with GCC
 //
@@ -1161,6 +1164,9 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 
 //! The movement decrease in percent of the total movemnt that is used for attacking; only used for units that can move after attacking
 const int attackmovecost = 0;  
+
+//! the movemalus for all submerged units
+const int submarineMovement = 11;
 
 #define movement_cost_for_repaired_unit 24
 #define movement_cost_for_repairing_unit 12

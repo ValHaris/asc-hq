@@ -118,6 +118,7 @@
          //! hook that is called when a turn ends
          void endTurn ( void );
 
+         bool canMove();
        private:
          Status status;
 
