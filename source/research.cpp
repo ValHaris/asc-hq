@@ -171,12 +171,18 @@ void TechDependency::writeTreeOutput ( const ASCString& sourceTechName, tnstream
 }
 
 
-void TechDependency::writeInvertTreeOutput ( const ASCString& sourceTechName, tnstream& stream, vector<int>& history ) const
+void TechDependency::writeInvertTreeOutput ( const ASCString& sourceTechName, tnstream& stream, vector<int>& history, int onlyWithBaseTech ) const
 {
+   if ( onlyWithBaseTech > 0 ) {
+      vector<int> inheritanceStack;
+      if ( findInheritanceLevel ( onlyWithBaseTech, inheritanceStack, "" ) < 0 )
+         return;
+   }
+
    for ( RequiredTechnologies::const_iterator j = requiredTechnologies.begin(); j != requiredTechnologies.end(); ++j )
       for ( int k = j->from; k <= j->to; ++k ) {
          const Technology* t = technologyRepository.getObject_byID( k );
-         if ( t  ) {
+         if ( t ) {
             ASCString s = "\"";
             ASCString stn = sourceTechName;
 
@@ -194,7 +200,7 @@ void TechDependency::writeInvertTreeOutput ( const ASCString& sourceTechName, tn
 
             if ( !requireAllListedTechnologies )
                s += "[style=dotted]";
-               
+
             s += "\n";
 
             stream.writeString ( s, false );
@@ -299,13 +305,13 @@ void TechAdapterDependency::runTextIO ( PropertyContainer& pc, const ASCString& 
    pc.addBool( "RequireAllListedTechAdapter", requireAllListedTechAdapter, true );
 }
 
-void TechAdapterDependency::writeInvertTreeOutput ( const ASCString& sourceTechName, tnstream& stream ) const
+void TechAdapterDependency::writeInvertTreeOutput ( const ASCString& sourceTechName, tnstream& stream, int onlyWithBaseTech ) const
 {
    vector<int> history;
    for ( RequiredTechAdapter::const_iterator r = requiredTechAdapter.begin(); r != requiredTechAdapter.end(); ++r )
-      for ( TechAdapterContainer::iterator i = techAdapterContainer.begin(); i != techAdapterContainer.end(); ++i ) 
+      for ( TechAdapterContainer::iterator i = techAdapterContainer.begin(); i != techAdapterContainer.end(); ++i )
          if ( *r == (*i)->getName() )
-            (*i)->techDependency.writeInvertTreeOutput ( sourceTechName, stream, history );
+            (*i)->techDependency.writeInvertTreeOutput ( sourceTechName, stream, history, onlyWithBaseTech );
 }
 
 
