@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 95
+   ;Bezeichnung der verknüpften Technologie: GRS
+   TechnologiesRequired = 101095
+} TechAdapter

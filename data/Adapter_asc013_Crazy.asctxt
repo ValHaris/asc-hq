@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 97
+   ;Bezeichnung der verknüpften Technologie: Crazy
+   TechnologiesRequired = 101097
+} TechAdapter

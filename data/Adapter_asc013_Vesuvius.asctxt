@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 12
+   ;Bezeichnung der verknüpften Technologie: Vesuvius
+   TechnologiesRequired = 101012
+} TechAdapter

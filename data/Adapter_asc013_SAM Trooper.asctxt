@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 98
+   ;Bezeichnung der verknüpften Technologie: SAM Trooper
+   TechnologiesRequired = 101098
+} TechAdapter

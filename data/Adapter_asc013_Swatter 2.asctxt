@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 107
+   ;Bezeichnung der verknüpften Technologie: Swatter 2
+   TechnologiesRequired = 101107
+} TechAdapter
