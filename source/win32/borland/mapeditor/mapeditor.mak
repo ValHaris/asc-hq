@@ -36,7 +36,7 @@ LIBFILES = ..\..\..\..\..\sdl\bin\sdl.lib ..\..\..\libs\bzlib\win\bzlib.lib \
     ..\..\..\libs\jpeg-6b\libjpeg.lib
 IDLFILES = 
 IDLGENFILES = 
-LIBRARIES = 
+LIBRARIES = VCL50.lib
 PACKAGES = VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi
 SPARELIBS = VCL50.lib
 DEFFILE = 
@@ -48,9 +48,9 @@ PATHRC = .;
 DEBUGLIBPATH = $(BCB)\lib\debug
 RELEASELIBPATH = $(BCB)\lib\release
 USERDEFINES = karteneditor;HEXAGON;FREEMAPZOOM;_WIN32_;WIN32;_SDL_;_NOASM_;NEWKEYB;_DEBUG
-SYSDEFINES = NO_STRICT;_NO_VCL;USEPACKAGES
-INCLUDEPATH = ..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt
-LIBPATH = ..\..\..\LIBS\getopt;..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
+SYSDEFINES = NO_STRICT;_NO_VCL
+INCLUDEPATH = ..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32;..\..\..\LIBS\getopt
+LIBPATH = ..\..\..;..\..\..\LIBS\getopt;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
 WARNINGS= -w-par -w-8027 -w-8026 -w-csu
 # ---------------------------------------------------------------------------
 CFLAG1 = -Od -Q -Vx -Ve -X- -r- -a1 -5 -b -k -y -v -vi- -tW -tWM -c -K
@@ -60,7 +60,7 @@ RFLAGS =
 AFLAGS = /mx /w2 /zd
 LFLAGS = -Iobj -D"" -aa -Tpe -x -Gn -v
 # ---------------------------------------------------------------------------
-ALLOBJ = c0w32.obj $(PACKAGES) $(OBJFILES)
+ALLOBJ = c0w32.obj $(OBJFILES)
 ALLRES = $(RESFILES)
 ALLLIB = $(LIBFILES) $(LIBRARIES) import32.lib cw32mt.lib
 # ---------------------------------------------------------------------------

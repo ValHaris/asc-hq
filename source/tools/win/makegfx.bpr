@@ -20,7 +20,7 @@
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="tlink32"/>
     <USERDEFINES value="_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_"/>
-    <SYSDEFINES value="NO_STRICT;_NO_VCL;USEPACKAGES"/>
+    <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="makegfx.bpf"/>
     <INCLUDEPATH value="..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt"/>
     <LIBPATH value="..\;..\..\tools;$(BCB)\lib\obj;$(BCB)\lib"/>
@@ -34,7 +34,7 @@
     <LFLAGS value="-D&quot;&quot; -ap -Tpe -x -Gn -v"/>
   </OPTIONS>
   <LINKER>
-    <ALLOBJ value="c0x32.obj $(PACKAGES) $(OBJFILES)"/>
+    <ALLOBJ value="c0x32.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cw32mt.lib"/>
   </LINKER>
@@ -67,9 +67,10 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=2
-Item0=..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ASCSRC\GAMES\ASC\SOURCE\LIBS\getopt
-Item1=..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl
+Count=3
+Item0=..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt
+Item1=..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ASCSRC\GAMES\ASC\SOURCE\LIBS\getopt
+Item2=..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
 Count=1
