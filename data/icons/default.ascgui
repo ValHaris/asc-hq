@@ -1,0 +1,7 @@
+panel {
+   PanelBackgroundImage = dialog_background.png
+   BackgroundImage = 
+   TextAlign = left
+   FontColor = 0x000000
+   FontSize = 9
+} panel

@@ -129,11 +129,12 @@ void Movement::execute( const MapCoordinate& pos )
 
          if ( pendingVehicleActions.move->getStatus() == 1000 ) {
             delete pendingVehicleActions.move;
-
+/*
             if ( CGameOptions::Instance()->smallguiiconopenaftermove ) {
                actgui->painticons();
                actgui->paintsmallicons ( CGameOptions::Instance()->mouse.smallguibutton, 0 );
             }
+            */
          }
 
       }

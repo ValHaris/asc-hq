@@ -4479,22 +4479,22 @@ void tbi3preferences :: init ( void )
    delta.y2 = 30;
 
    addbutton ( "", r1, 3, 0, 3, true );
-   addeingabe ( 3, &actoptions.bi3.interpolate.terrain, 0, dblue );
+//   addeingabe ( 3, &actoptions.bi3.interpolate.terrain, 0, dblue );
 
    r2 = r1 + delta;
 
    addbutton ( "", r2,  3, 0, 4, true  );
-   addeingabe ( 4, &actoptions.bi3.interpolate.units, 0, dblue );
+  // addeingabe ( 4, &actoptions.bi3.interpolate.units, 0, dblue );
 
    r3 = r2 + delta;
 
    addbutton ( "", r3,  3, 0, 5, true  );
-   addeingabe ( 5, &actoptions.bi3.interpolate.buildings, 0, dblue );
+ //  addeingabe ( 5, &actoptions.bi3.interpolate.buildings, 0, dblue );
    
    r4 = r3 + delta;
 
    addbutton ( "", r4,  3, 0, 6, true  );
-   addeingabe ( 6, &actoptions.bi3.interpolate.objects, 0, dblue );
+//   addeingabe ( 6, &actoptions.bi3.interpolate.objects, 0, dblue );
 
    buildgraphics(); 
 
@@ -4523,7 +4523,7 @@ void tbi3preferences :: buttonpressed ( int id )
    tdialogbox :: buttonpressed ( id );
 
    if ( id == 1 ) {
-           CGameOptions::Instance()->copy ( actoptions );
+      *CGameOptions::Instance() = actoptions;
       status = 10;
    }
 

@@ -187,7 +187,6 @@ tsgonlinemousehelpwind* onlinehelpwind = NULL;
 
 
 pprogressbar actprogressbar = NULL;
-cmousecontrol* mousecontrol = NULL;
 
 #define messagedisplaytime 300
 
@@ -839,13 +838,7 @@ void loadStartupMap ( const char *gameToLoad=NULL )
       }
    } else {  // resort to loading defaults
 
-      ASCString s;
-      if ( CGameOptions::Instance()->startupMap.getName() ) {
-         if ( ASCString ( CGameOptions::Instance()->startupMap.getName() ) == "asc000.map" )
-            CGameOptions::Instance()->startupMap.setName( "asc001.map");
-
-         s= CGameOptions::Instance()->startupMap.getName();
-      }
+      ASCString s = CGameOptions::Instance()->startupMap; 
 
       if ( s.empty() )
          s = "asc001.map";
@@ -1569,8 +1562,6 @@ void mainloopgeneralmousecheck ( void )
    if ( lastdisplayedmessageticker + messagedisplaytime < ticker )
       displaymessage2("");
 
-   if ( mousecontrol )
-      mousecontrol->chkmouse();
 
    {
       int oldx = actmap->xpos;
@@ -1582,9 +1573,10 @@ void mainloopgeneralmousecheck ( void )
 
    if ( onlinehelp )
       onlinehelp->checkforhelp();
-
+/*
    if ( onlinehelpwind && !CGameOptions::Instance()->smallmapactive )
       onlinehelpwind->checkforhelp();
+      */
 }
 
 
@@ -1747,7 +1739,7 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
               : PG_Widget(NULL, PG_Rect ( 0, 0, app.GetScreen()->w, app.GetScreen()->h ), false),
               app ( application ) 
 {
-   mapDisplay = new MapDisplayPG( this, PG_Rect(20,20,Width() - 200, Height() - 20));
+   mapDisplay = new MapDisplayPG( this, PG_Rect(20,20,Width() - 200, Height() - 40));
    menu = new Menu(this, PG_Rect(0,0,Width(),20));
 
    SetID( 1 );
@@ -2028,8 +2020,6 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
    displayLogMessage ( 6, "done\n" );
 
    if ( actprogressbar ) actprogressbar->startgroup();
-
-   mousecontrol = new cmousecontrol;
 
    if ( actprogressbar ) {
       actprogressbar->end();

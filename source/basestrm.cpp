@@ -53,7 +53,7 @@
 
 
 
- const int maxSearchDirNum = 10;
+ const int maxSearchDirNum = 30;
  int searchDirNum = 0;
  char* ascDirectory[maxSearchDirNum] = { NULL, NULL, NULL, NULL, NULL,
                                          NULL, NULL, NULL, NULL, NULL };
@@ -797,8 +797,10 @@ char* constructFileName( char* buf, int directoryLevel, const char* path, const 
 
      appendbackslash ( buf );
 
-     char name2[ maxFileStringSize ];
      if ( filename && strchr ( filename, pathdelimitter )) {
+     
+        char name2[ maxFileStringSize ];
+        // filename contains directories
         strcpy ( name2, filename );
         int i = strlen ( name2 )-1;
         while ( name2[i] != pathdelimitter )
@@ -808,6 +810,9 @@ char* constructFileName( char* buf, int directoryLevel, const char* path, const 
 
         filename2 = &filename[i+1];
 
+        // filename2 is now the pure filename without directory
+        // name2 is the directory
+        
         if ( buf[0] && name2[0]==pathdelimitter )
            strcpy ( buf, name2+1);
         else
@@ -834,6 +839,68 @@ char* constructFileName( char* buf, int directoryLevel, const char* path, const 
 
   return buf;
 }
+
+bool isPathRelative( const ASCString& path )
+{
+  if ( path.length() < 2 )
+     return true;
+     
+  if ( path[0] == '~' && path[1] == pathdelimitter )
+     return false;
+     
+  if ( path[0] == pathdelimitter )
+     return false;
+
+  return true;     
+}
+
+ASCString constructFileName( int directoryLevel, const ASCString& path, ASCString filename )
+{
+     ASCString result;
+   
+     // filenames beginning with / or ~/ have an absolute path ; ignore variable path for them
+     if ( isPathRelative( filename )) {
+        if ( !path.empty() )
+           result += path;
+        else
+           if ( directoryLevel >= 0 && ascDirectory[ directoryLevel ] )
+              result += ascDirectory[ directoryLevel ];
+     }
+
+     appendbackslash ( result );
+
+     if ( !filename.empty() && filename.find( pathdelimitter )!= ASCString::npos ) {
+        ASCString dir = filename;
+        
+        dir.erase( dir.rfind( pathdelimitter ) + 1);
+
+        filename.erase( 0, filename.find( pathdelimitter ) + 1 );
+        
+        if ( dir.find( pathdelimitter ) == 0 )
+           dir.erase( 0, 1 );
+           
+        result = dir;   
+     }
+
+     if ( result.length() > 2 && result[0] == '~' && result[1] == pathdelimitter ) {
+        char* home = getenv ( "HOME" );
+        if ( home ) {
+           ASCString temp = result;
+           result = home;
+           appendbackslash ( result );
+           result += temp.substr( 2 );
+        }
+     }
+
+
+     appendbackslash ( result );
+
+     result += filename;
+
+     return result;
+}
+
+
 
 struct FileLocation {
         int directoryLevel;
@@ -2111,23 +2178,19 @@ int directoryExist ( const char* path )
    return existence;
 }
 
-void addSearchPath ( const char* path )
+void addSearchPath ( const ASCString& path )
 {
-   if ( path && path[0] ) {
-      char buf[ maxFileStringSize ];
-      char* string = new char[ strlen(path) +  maxFileStringSize ];
-      strcpy ( string, constructFileName ( buf, -3, path, NULL ) );
+   if ( !path.empty() ) {
+      ASCString s = constructFileName ( -3, path, "" );
 
-      if ( directoryExist( buf )) {
-         int found = 0;
+      if ( directoryExist( s.c_str() )) {
+         bool found = false;
          for ( int i = 0; i < searchDirNum; i++ )
-            if ( strcmp ( string, ascDirectory[i]) == 0 )
-               found++;
+            if ( s == ascDirectory[i] )
+               found = true;
    
          if ( !found )
-            ascDirectory[ searchDirNum++ ] = string;
-         else
-            delete[] string;
+            ascDirectory[ searchDirNum++ ] = strdup ( s.c_str() );
       }
    }
 }

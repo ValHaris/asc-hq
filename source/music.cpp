@@ -25,8 +25,7 @@ void PlayListLoader::readTextFiles ( PropertyReadingContainer& prc, const ASCStr
 {
    MusicPlayList* mpl = new MusicPlayList;
    mpl->runTextIO ( prc );
-   prc.run();
-
+   
    mpl->filename = fileName;
    mpl->location = location;
    playLists.push_back ( mpl );

@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.19.2.5 2004-12-12 19:58:46 mbickel Exp $
+## $Id: Makefile.am,v 1.19.2.6 2004-12-28 16:11:46 mbickel Exp $
 
 vpath %.cpp ../..
 
@@ -18,8 +18,8 @@ asc_mapedit_SOURCES 	= edevents.cpp edgen.cpp edglobal.cpp edmain.cpp \
 edselfnt.cpp edmisc.cpp typen.cpp strtmesg.cpp stack.cpp \
 spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp \
 loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp \
-attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp \
-Named.cpp buildingtype.cpp vehicletype.cpp containerbase.cpp \
+attack.cpp gameoptions.cpp \
+buildingtype.cpp vehicletype.cpp containerbase.cpp \
 mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp \
 password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \
@@ -39,8 +39,8 @@ $(top_builddir)/source/libs/loki/libloki.la
 #asc_map2pcx_SOURCES	= map2pcx.cpp typen.cpp strtmesg.cpp \
 #stack.cpp spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp \
 #loadpcxc.cpp loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp \
-#basegfx.cpp attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp \
-#gameoptions.cpp Named.cpp buildingtype.cpp vehicletype.cpp containerbase.cpp \
+#basegfx.cpp attack.cpp \
+#gameoptions.cpp buildingtype.cpp vehicletype.cpp containerbase.cpp \
 #mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp \
 #password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 #vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \

@@ -1936,7 +1936,7 @@ void   ccontainer :: checkformouse( void )
                mousestat = 1;
             }
       }
-
+/*
    if ( CGameOptions::Instance()->mouse.smallguibutton )
       if ( mouseparams.taste == CGameOptions::Instance()->mouse.smallguibutton ) {
          int x;
@@ -1964,7 +1964,7 @@ void   ccontainer :: checkformouse( void )
       } else
          if ( mousestat == 1 )
             mousestat = 2;
-
+*/
 }
 
 void ccontainer :: putFieldImage( int x, int y, void* image )

@@ -238,12 +238,12 @@ void   GuiHost<T>::paintsmallicons ( int taste, int up )
          smalliconpos.x = hgmp->resolutionx - smalliconpos.xsize;
       else
          smalliconpos.x = mouseparams.x - guismalliconsizex/2;
-
+/*
       if ( (CGameOptions::Instance()->mouse.smalliconundermouse == 0)  || ((CGameOptions::Instance()->mouse.smalliconundermouse == 2) && up ))
          smalliconpos.y = mouseparams.y - 5 - guismalliconsizey;
       else
          smalliconpos.y = mouseparams.y - guismalliconsizey / 2;
-
+*/
       if ( smalliconpos.y < 0 )
          smalliconpos.y = 0;
 
@@ -1205,10 +1205,11 @@ void  tnsguiiconascent::exec         ( void )
         if ( pendingVehicleActions.ascent->getStatus() == 1000 ) {
            delete pendingVehicleActions.ascent;
 
-           if ( CGameOptions::Instance()->smallguiiconopenaftermove ) {
+/*           if ( CGameOptions::Instance()->smallguiiconopenaftermove ) {
               actgui->painticons();
               actgui->paintsmallicons ( CGameOptions::Instance()->mouse.smallguibutton, 0 );
            }
+           */
         }
      }
 
@@ -1327,10 +1328,11 @@ void  tnsguiicondescent::exec         ( void )
         if ( pendingVehicleActions.descent->getStatus() == 1000 ) {
            delete pendingVehicleActions.descent;
 
-           if ( CGameOptions::Instance()->smallguiiconopenaftermove ) {
+/*           if ( CGameOptions::Instance()->smallguiiconopenaftermove ) {
               actgui->painticons();
               actgui->paintsmallicons ( CGameOptions::Instance()->mouse.smallguibutton, 0 );
            }
+           */
         }
      }
    updateFieldInfo();
@@ -2260,7 +2262,6 @@ int tnsguiiconcontainer :: available    ( void )
 void tnsguiiconcontainer :: exec         ( void )
 {
    containeractive++;
-   mousecontrol->reset();
    pfield fld = getactfield ();
    /*
    if ( fld->vehicle && fld->building )

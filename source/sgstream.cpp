@@ -38,7 +38,6 @@
 #include <fstream>
 
 #include "global.h"
-#include "CLoadable.h"
 #include "tpascal.inc"
 #include "typen.h"
 #include "buildingtype.h"
@@ -359,10 +358,13 @@ void loadpalette ( void )
 
 
 
-bool makeDirectory ( const char* path )
+bool makeDirectory ( const ASCString& path )
 {
+   if ( path.empty() )
+      return false;
+      
    char tmp[10000];
-   constructFileName( tmp, 0, path, NULL );
+   constructFileName( tmp, 0, path.c_str(), NULL );
 
    int existence = directoryExist ( tmp );
 
@@ -377,24 +379,13 @@ bool makeDirectory ( const char* path )
    return true;
 }
 
-char* configFileNameUsed = NULL;
-char* configFileNameToWrite = NULL;
 
-char* getConfigFileName ( char* buffer )
-{
-   if ( buffer ) {
-      if ( configFileNameUsed )
-         strcpy ( buffer, configFileNameUsed );
-      else
-         strcpy ( buffer, "-none- ; default values used" );
-   }
-   return buffer;
-}
+ASCString configFileName;
 
 
-CLoadableGameOptions* loadableGameOptions =     NULL;
 
-int readgameoptions ( const char* filename )
+
+int readgameoptions ( const ASCString& filename )
 {
    displayLogMessage ( 4, "loading game options ... " );
 
@@ -403,7 +394,7 @@ int readgameoptions ( const char* filename )
    ASCString fn;
    ASCString installDir;
 
-   if ( filename && filename[0] )
+   if ( !filename.empty() )
       fn = filename;
    else
       if ( getenv ( asc_EnvironmentName ))
@@ -444,98 +435,24 @@ int readgameoptions ( const char* filename )
    char completeFileName[10000];
    constructFileName ( completeFileName, -3, NULL, fn.c_str() );
 
-   configFileNameToWrite = strdup ( completeFileName );
+   configFileName = completeFileName;
 
    displayLogMessage ( 6, ASCString("Path is ") + completeFileName + "; " );
 
 
    if ( exist ( completeFileName )) {
-      configFileNameUsed = strdup ( completeFileName );
-
-      if ( !loadableGameOptions )
-         loadableGameOptions = new CLoadableGameOptions (CGameOptions::Instance());
-
-      std::ifstream is( completeFileName );
-      loadableGameOptions->Load(is);
-
+      CGameOptions::Instance()->load( completeFileName );
+      
       if ( registryKeyFound ) {
          ASCString primaryPath = CGameOptions::Instance()->getSearchPath(0);
          if ( primaryPath == "." || primaryPath == ".\\" || primaryPath == "./" )
-            CGameOptions::Instance()->setSearchPath(0, installDir.c_str() );
+            CGameOptions::Instance()->setSearchPath(0, installDir );
       }
-
    } else {
-      CGameOptions::Instance()->setChanged(); // to generate a configuration file
-      if ( exist ( "sg.cfg" ) ) {
-         tnfilestream stream ( "sg.cfg", tnstream::reading);
-         int version = stream.readInt ( );
-         if ( version == 102 ) {
-            CGameOptions::Instance()->fastmove = stream.readInt();
-            stream.readInt();
-            CGameOptions::Instance()->movespeed = stream.readInt();
-            CGameOptions::Instance()->endturnquestion = stream.readInt();
-            CGameOptions::Instance()->smallmapactive = stream.readInt();
-            CGameOptions::Instance()->units_gray_after_move = stream.readInt();
-            CGameOptions::Instance()->mapzoom = stream.readInt();
-            CGameOptions::Instance()->mapzoomeditor = stream.readInt();
-            CGameOptions::Instance()->startupcount = stream.readInt();
-            stream.readInt(); // dontMarkFieldsNotAccessible_movement
-            CGameOptions::Instance()->attackspeed1 = stream.readInt();
-            CGameOptions::Instance()->attackspeed2 = stream.readInt();
-            CGameOptions::Instance()->attackspeed3 = stream.readInt();
-            CGameOptions::Instance()->sound.muteEffects = stream.readInt();
-            for ( int i = 0; i < 9; i++ )
-               stream.readInt();  // dummy
-
-            CGameOptions::Instance()->mouse.scrollbutton = stream.readInt();
-            CGameOptions::Instance()->mouse.fieldmarkbutton = stream.readInt();
-            CGameOptions::Instance()->mouse.smallguibutton = stream.readInt();
-            CGameOptions::Instance()->mouse.largeguibutton = stream.readInt();
-            CGameOptions::Instance()->mouse.smalliconundermouse = stream.readInt();
-            CGameOptions::Instance()->mouse.centerbutton = stream.readInt();
-            CGameOptions::Instance()->mouse.unitweaponinfo = stream.readInt();
-            CGameOptions::Instance()->mouse.dragndropmovement = stream.readInt();
-            for ( int j = 0; j < 7; j++ )
-               stream.readInt();
-
-            CGameOptions::Instance()->container.autoproduceammunition = stream.readInt();
-            CGameOptions::Instance()->container.filleverything = stream.readInt();
-            stream.readInt(); // CGameOptions::Instance()->container.emptyeverything =
-            for ( int k = 0; k < 10; k++ )
-               stream.readInt();
-
-            CGameOptions::Instance()->onlinehelptime = stream.readInt();
-            CGameOptions::Instance()->smallguiiconopenaftermove = stream.readInt();
-            CGameOptions::Instance()->defaultPassword.setName ( strrr ( stream.readInt() ));
-            CGameOptions::Instance()->replayspeed = stream.readInt();
-            int bi3dir = stream.readInt();
-            CGameOptions::Instance()->bi3.interpolate.terrain = stream.readInt();
-            CGameOptions::Instance()->bi3.interpolate.units = stream.readInt();
-            CGameOptions::Instance()->bi3.interpolate.objects = stream.readInt();
-            CGameOptions::Instance()->bi3.interpolate.buildings = stream.readInt();
-
-            if ( bi3dir ) {
-               char* tmp;
-               stream.readpchar ( &tmp );
-               CGameOptions::Instance()->bi3.dir.setName( tmp );
-               delete[] tmp;
-            }
-
-         }
-      }
-
-      if ( registryKeyFound )
-         CGameOptions::Instance()->setSearchPath(0, installDir.c_str() );
-
-   }
-
-
-   #ifdef sgmain
-   if ( CGameOptions::Instance()->startupcount < 10 ) {
-      CGameOptions::Instance()->startupcount++;
-      CGameOptions::Instance()->setChanged();
-   }
-   #endif
+  
+     if ( registryKeyFound )
+        CGameOptions::Instance()->setSearchPath(0, installDir );
+   }     
 
    makeDirectory ( CGameOptions::Instance()->getSearchPath(0) );
 
@@ -545,56 +462,44 @@ int readgameoptions ( const char* filename )
 
 int writegameoptions ( void )
 {
-   if ( CGameOptions::Instance()->isChanged() && configFileNameToWrite ) {
+   if ( CGameOptions::Instance()->isChanged() && !configFileName.empty() ) {
       char buf[10000];
-      if ( makeDirectory ( extractPath ( buf, configFileNameToWrite ))) {
-         if ( !loadableGameOptions )
-            loadableGameOptions = new CLoadableGameOptions (CGameOptions::Instance());
-         std::ofstream os( configFileNameToWrite );
-         loadableGameOptions->Save(os);
+      if ( makeDirectory ( extractPath ( buf, configFileName.c_str() ))) {
+         CGameOptions::Instance()->save( configFileName );
          return 1;
       }
    }
    return 0;
 }
 
-void checkFileLoadability ( const char* filename )
+void checkFileLoadability ( const ASCString& filename )
 {
    try {
       tnfilestream strm ( filename, tnstream::reading );
       strm.readChar();
    }
    catch ( ASCexception ) {
-      ASCString pathSearched;
-      for ( int i = 0; i < 5; i++ )
-         if ( CGameOptions::Instance()->getSearchPath(i) ) {
-            pathSearched += " ";
-            pathSearched += CGameOptions::Instance()->getSearchPath(i);
-            pathSearched +=  "\n";
-         }
-
-      ASCString confName;
-      char temp3[1000];
-      temp3[0] = 0;
-      if ( !configFileNameUsed ) {
-         CGameOptions::Instance()->setChanged();
-         if ( writegameoptions())
-            sprintf(temp3, "A configuration file has been written to %s\n", configFileNameToWrite );
-      }
-
-      char temp5[10000];
-      char temp2[1000];
-      sprintf ( temp5, "Unable to access %s\n"
-                       "Make sure the data files are in one of the search paths specified in your \n"
+      ASCString msg = "Unable to access " + filename;
+      msg +=           "Make sure the data files are in one of the search paths specified in your \n"
                        "config file ! ASC requires these data files to be present:\n"
                        " main.con ; mk1.con ; buildings.con ; trrobj.con ; trrobj2.con \n"
                        "If you don't have these files , get and install them from http://www.asc-hq.org\n"
-                       "If you DO have these files, they are probably outdated. \n" 
-                       "The configuration file that is used is: %s \n%s"
-                       "These paths are being searched for data files:\n%s\n",
-                       filename, getConfigFileName(temp2), temp3, pathSearched.c_str() );
+                       "If you DO have these files, they are probably outdated. \n";
+      msg +=           "The configuration file that is used is: " + configFileName + "\n";
+      
+      if ( !configFileName.empty() ) {
+         CGameOptions::Instance()->setChanged();
+         if ( writegameoptions())
+            msg += "A configuration file has been written to " + configFileName + "\n";
+      }
+      
+      msg +=           "These paths are being searched for data files:\n ";
+      
+      for ( int i = 0; i < CGameOptions::Instance()->getSearchPathNum(); ++i )
+         if ( !CGameOptions::Instance()->getSearchPath(i).empty() ) 
+            msg += CGameOptions::Instance()->getSearchPath(i) + "\n ";
 
-     fatalError ( temp5 );
+     fatalError ( msg );
    }
    catch ( ... ) {
       fatalError ( "checkFileLoadability threw an unspecified exception\n" );
@@ -603,11 +508,11 @@ void checkFileLoadability ( const char* filename )
 
 void initFileIO ( const ASCString& configFileName, int skipChecks )
 {
-   readgameoptions( configFileName.c_str() );
+   readgameoptions( configFileName );
 
    for ( int i = 0; i < CGameOptions::Instance()->getSearchPathNum(); i++ )
-      if ( CGameOptions::Instance()->getSearchPath(i)   ) {
-         displayLogMessage ( 3, "adding search patch %s\n", CGameOptions::Instance()->getSearchPath(i));
+      if ( !CGameOptions::Instance()->getSearchPath(i).empty()   ) {
+         displayLogMessage ( 3, "adding search patch " + CGameOptions::Instance()->getSearchPath(i) + "\n" );
          addSearchPath ( CGameOptions::Instance()->getSearchPath(i) );
       }
    try {

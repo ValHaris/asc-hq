@@ -102,7 +102,7 @@ class PropertyContainer {
          void addBool  ( const ASCString& name, bool &property );
          void addBool  ( const ASCString& name, bool &property, bool defaultValue  );
 
-         void run ( );
+         // void run ( );
          bool isReading() { return reading; };
          void warning ( const ASCString& errmsg );
          void error ( const ASCString& errmsg );

@@ -126,12 +126,12 @@ bin_PROGRAMS = asc_demount \
 #			asc_raw2pcx
 asc_demount_SOURCES = demount.cpp      basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp strtmesg.cpp stringtokenizer.cpp
 asc_mount_SOURCES = mount.cpp        basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp strtmesg.cpp stringtokenizer.cpp
-asc_makegfx_SOURCES = makegfx.cpp      basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp CLoadable.cpp Named.cpp Property.cpp PropertyGroup.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp   terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
-#asc_viewid_SOURCES      = viewid.cpp       basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp CLoadable.cpp Named.cpp Property.cpp PropertyGroup.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
-#asc_bin2text_SOURCES    = bin2text.cpp     basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp CLoadable.cpp Named.cpp Property.cpp PropertyGroup.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
-asc_weaponguide_SOURCES = weaponguide.cpp  basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp CLoadable.cpp Named.cpp Property.cpp PropertyGroup.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp   terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp groupfile.cpp guidegenerator.cpp infopage.cpp
+asc_makegfx_SOURCES = makegfx.cpp      basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp  stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp   terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
+#asc_viewid_SOURCES      = viewid.cpp       basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
+#asc_bin2text_SOURCES    = bin2text.cpp     basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
+asc_weaponguide_SOURCES = weaponguide.cpp  basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp  stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp   terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp groupfile.cpp guidegenerator.cpp infopage.cpp
 
-#asc_raw2pcx_SOURCES     = raw2pcx.cpp      basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp CLoadable.cpp Named.cpp Property.cpp PropertyGroup.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
+#asc_raw2pcx_SOURCES     = raw2pcx.cpp      basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
 asc_mount_LDADD = @SDL_LIBS@  @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
 asc_demount_LDADD = @SDL_LIBS@  @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
 asc_makegfx_LDADD = $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/graphics/libgraphics.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la $(top_builddir)/source/sdl/libsdl.la
@@ -157,10 +157,9 @@ am_asc_makegfx_OBJECTS = makegfx.$(OBJEXT) basestrm.$(OBJEXT) \
 	simplestream.$(OBJEXT) misc.$(OBJEXT) ascstring.$(OBJEXT) \
 	loadpcxc.$(OBJEXT) palette.$(OBJEXT) sgstream.$(OBJEXT) \
 	newfont.$(OBJEXT) basegfx.$(OBJEXT) graphicset.$(OBJEXT) \
-	gameoptions.$(OBJEXT) CLoadable.$(OBJEXT) Named.$(OBJEXT) \
-	Property.$(OBJEXT) PropertyGroup.$(OBJEXT) stack.$(OBJEXT) \
-	buildingtype.$(OBJEXT) typen.$(OBJEXT) vehicletype.$(OBJEXT) \
-	password.$(OBJEXT) strtmesg.$(OBJEXT) textfileparser.$(OBJEXT) \
+	gameoptions.$(OBJEXT) stack.$(OBJEXT) buildingtype.$(OBJEXT) \
+	typen.$(OBJEXT) vehicletype.$(OBJEXT) password.$(OBJEXT) \
+	strtmesg.$(OBJEXT) textfileparser.$(OBJEXT) \
 	containerbasetype.$(OBJEXT) terraintype.$(OBJEXT) \
 	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
 	textfile_evaluation.$(OBJEXT) stringtokenizer.$(OBJEXT) \
@@ -182,10 +181,9 @@ am_asc_weaponguide_OBJECTS = weaponguide.$(OBJEXT) basestrm.$(OBJEXT) \
 	simplestream.$(OBJEXT) misc.$(OBJEXT) ascstring.$(OBJEXT) \
 	loadpcxc.$(OBJEXT) palette.$(OBJEXT) sgstream.$(OBJEXT) \
 	newfont.$(OBJEXT) basegfx.$(OBJEXT) graphicset.$(OBJEXT) \
-	gameoptions.$(OBJEXT) CLoadable.$(OBJEXT) Named.$(OBJEXT) \
-	Property.$(OBJEXT) PropertyGroup.$(OBJEXT) stack.$(OBJEXT) \
-	buildingtype.$(OBJEXT) typen.$(OBJEXT) vehicletype.$(OBJEXT) \
-	password.$(OBJEXT) strtmesg.$(OBJEXT) textfileparser.$(OBJEXT) \
+	gameoptions.$(OBJEXT) stack.$(OBJEXT) buildingtype.$(OBJEXT) \
+	typen.$(OBJEXT) vehicletype.$(OBJEXT) password.$(OBJEXT) \
+	strtmesg.$(OBJEXT) textfileparser.$(OBJEXT) \
 	containerbasetype.$(OBJEXT) terraintype.$(OBJEXT) \
 	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
 	textfile_evaluation.$(OBJEXT) stringtokenizer.$(OBJEXT) \
@@ -206,10 +204,7 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/CLoadable.Po ./$(DEPDIR)/Named.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/Property.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/PropertyGroup.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/ascstring.Po ./$(DEPDIR)/basegfx.Po \
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/ascstring.Po ./$(DEPDIR)/basegfx.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/basestrm.Po ./$(DEPDIR)/buildingtype.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/containerbasetype.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/demount.Po ./$(DEPDIR)/gameoptions.Po \
@@ -301,10 +296,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CLoadable.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Named.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Property.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PropertyGroup.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ascstring.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/basegfx.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/basestrm.Po@am__quote@

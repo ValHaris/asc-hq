@@ -21,7 +21,7 @@
       <type value="ThemeWidget"/>
 	   <object>
 	      <name value="ThemeWidget"/>
-	      <filename name="background" value="asc/dialog_background2.png"/>
+	      <filename name="background" value="asc/dialog_background.png"/>
 	      <color name="textcolor" value="0x00FFFFFF"/>
 	      <property name="backmode" value="TILE"/>
 	      <gradient name="gradient" color0="0x00FF7b56" color1="0x00737b56" color2="0x00737b56" color3="0x00737b56"/>
@@ -35,7 +35,7 @@
 	      <filename name="background" value="none"/>
 	      <color name="textcolor" value="0x00FFFFFF"/>
 	      <property name="backmode" value="TILE"/>
-	      <property name="blend" value="150"/>     
+	      <property name="blend" value="0"/>     
 	       <gradient name="gradient"
                                 color0="0x00B0B1B6"
                                 color1="0x0083838D"
@@ -51,7 +51,7 @@
 	      <filename name="background" value="none"/>
 	      <color name="textcolor" value="0x00FFFFFF"/>
 	      <property name="backmode" value="TILE"/>
-	      <property name="blend" value="150"/>     
+	      <property name="blend" value="0"/>     
 	      <property name="bordersize" value="1"/>
 	      <property name="bordercolor0" value="0x0000FF00"/>
 	      <property name="bordercolor1" value="0x00FFFFFF"/>

@@ -4036,8 +4036,6 @@ void transformMap ( )
       pc.addIntegerArray ( "TerrainObjTranslation", terrainobjtranslation );
       pc.addIntegerArray ( "ObjectTranslation", objecttranslation );
 
-      pc.run();
-
       delete tpg;
    }
    catch ( ParsingError err ) {

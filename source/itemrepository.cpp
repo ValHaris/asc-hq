@@ -72,7 +72,6 @@ void ItemRepository<T>::readTextFiles( PropertyReadingContainer& prc, const ASCS
 {
    T* t = new T;
    t->runTextIO ( prc );
-   prc.run();
 
    t->filename = fileName;
    t->location = location;
@@ -136,7 +135,6 @@ class TechAdapterLoader : public TextFileDataLoader {
       void readTextFiles(PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location ) {
            TechAdapter* ta = new TechAdapter;
            ta->runTextIO ( prc );
-           prc.run();
 
            ta->filename = fileName;
            ta->location = location;
@@ -484,7 +482,6 @@ void ItemFiltrationSystem::DataLoader::readTextFiles( PropertyReadingContainer& 
 {
    ItemFilter* itf = new ItemFilter;
    itf->runTextIO ( prc );
-   prc.run();
 
    // bmtt->filename = (*i)->fileName;
    // bmtt->location = (*i)->location;

@@ -2192,7 +2192,7 @@ void         generatevehicle_cl ( pvehicletype fztyp,
 
 
 
-
+#if 0
 
 
 void cmousecontrol :: reset ( void )
@@ -2376,7 +2376,7 @@ void cmousecontrol :: chkmouse ( void )
 */
 
 }
-
+#endif
 
 void  checkforvictory ( )
 {

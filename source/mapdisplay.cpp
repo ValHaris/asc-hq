@@ -51,8 +51,6 @@
 
 MapRenderer::Icons MapRenderer::icons;
 
-SigC::Signal3<void,Surface&, int, MapRenderer::PositionCalculator> MapRenderer::additionalItemDisplayHook;
-
 
 void MapRenderer::readData()
 {
@@ -2354,6 +2352,7 @@ const int mousehotspots[9][2] =
 
 void checkformousescrolling ( void )
 {
+#if 0
    if ( isfullscreen() )
       if ( !mouseparams.x  ||  !mouseparams.y   ||  mouseparams.x >= hgmp->resolutionx-1  ||   mouseparams.y >= hgmp->resolutiony-1 ) {
          if ( mouseparams.taste == CGameOptions::Instance()->mouse.scrollbutton ) {
@@ -2427,6 +2426,7 @@ void checkformousescrolling ( void )
             }
          }
       }
+#endif      
 }
 
 

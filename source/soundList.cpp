@@ -152,8 +152,6 @@ void SoundList::initialize(  )
    readLine( pc, "REFUEL", SoundList::refuel );
    readLine( pc, "REPAIR", SoundList::repair );
 
-   pc.run();
-
 }
 
 Sound* SoundList::getSound( const ASCString& filename, int fadeIn )

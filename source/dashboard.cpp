@@ -105,6 +105,7 @@ void UnitInfoPanel::eval()
    if ( mc.valid() ) {
       Vehicle* veh = actmap->getField(mc)->vehicle;
       setLabelText( "unittypename", veh ? veh->typ->name : ""); 
+      setBargraphValue( "unitfuel", veh && veh->typ->tank.fuel ? float( veh->getTank().fuel) / veh->typ->tank.fuel : 0  );
    }
    Redraw(true);
 }

@@ -1,5 +1,5 @@
 panel {
-   WidgetNum = 3
+   WidgetNum = 4
    Widget0 {
       type = area
       x = 10
@@ -42,6 +42,16 @@ panel {
       } Widget0
    } Widget2
 
+   Widget3 {
+      type = BarGraph
+      BackgroundColor = 0xff0000
+      name = unitfuel
+      x = 10
+      y = 130
+      x2 = -10
+      height = 20
+   } Widget3
+   
 
    
 } panel

@@ -240,7 +240,7 @@ const char* fileNameDelimitter = " =*/+<>,";
 
 
 
-
+/*
 void PropertyContainer :: run ( )
 {
    if ( isReading() )
@@ -248,6 +248,7 @@ void PropertyContainer :: run ( )
          if ( !(*i)->evaluated )
             (*i)->evaluate();
 }
+*/
 
 void PropertyReadingContainer :: writeProperty ( Property& p, const ASCString& value )
 {
@@ -649,7 +650,22 @@ void PropertyTemplate<T>::evaluate ()
 
 int IntegerProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {
-   return atoi ( entry.value.c_str() );    //   strtol(nptr, NULL, 10);
+   char* p = NULL;
+   
+   ASCString value = entry.value;
+   ASCString::size_type i;
+   while ( (i = value.find_first_of( " \t\n\r" )) != ASCString::npos ) 
+      value.erase( i, 1 );
+      
+   while ( value.find( "0") == 0 && value.find( "0x") != 0)  // removing leading zeroes 
+      value.erase(0,1);   
+   
+   
+   int res =  strtol ( value.c_str(), &p, 0  );    //   strtol(nptr, NULL, 10);
+   if ( *p != 0 && *p != ';' )
+      propertyContainer->error ( name + ": value "+ entry.value +" is no numerical value" );
+   
+   return res;
 }
 
 

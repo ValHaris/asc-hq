@@ -75,10 +75,6 @@ class MapRenderer {
       
       void paintSingleField( Surface& surf, int playerView, pfield fld, int layer, const SPoint& pos, const MapCoordinate& mc );
       void paintTerrain( Surface& surf, tmap* actmap, int playerView, const ViewPort& viewPort, const MapCoordinate& offset );
-
-    public:  
-      typedef Loki::Functor<SPoint, TYPELIST_2(int,int)> PositionCalculator;
-      static SigC::Signal3<void,Surface&, int, PositionCalculator> additionalItemDisplayHook;
 };
 
 

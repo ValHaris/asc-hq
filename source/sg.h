@@ -3,9 +3,14 @@
 */
 
 
-//     $Id: sg.h,v 1.10.2.1 2004-12-11 21:22:31 mbickel Exp $
+//     $Id: sg.h,v 1.10.2.2 2004-12-28 16:11:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10.2.1  2004/12/11 21:22:31  mbickel
+//      Integration of new gui
+//      Speedup of blitter
+//      using signals to reduce dependencies
+//
 //     Revision 1.10  2004/05/23 12:54:28  mbickel
 //      Updated campaign maps
 //      improved tech tree generation
@@ -78,11 +83,6 @@
 
 extern void mainloopgeneralmousecheck ( void );
 extern void mainloopgeneralkeycheck ( tkey& ch );
-
-#ifdef sgmain
- #include "mousecontrol.h"
- extern cmousecontrol* mousecontrol;
-#endif
 
 extern pprogressbar actprogressbar ;
 

@@ -2194,14 +2194,14 @@ void tgamepreferences :: init ( void )
 
    addbutton ( "", r8.x1, r8.y1 + 30, r8.x2, r8.y2 + 30, 2, 1, 9, true );
    addeingabe ( 9, &actoptions.onlinehelptime , 0, 10000 );
-
+/*
    addbutton ( "delay1", r8.x1, r8.y1 , r8.x1 + (r8.x2 - r8.x1)/3 - 2, r8.y2, 2, 1, 91, true );
    addeingabe ( 91, &actoptions.attackspeed1 , 0, 10000 );
    addbutton ( "anim",   r8.x1 + (r8.x2 - r8.x1)/3 + 2, r8.y1 , r8.x1 + 2*(r8.x2 - r8.x1)/3 - 2, r8.y2, 2, 1, 92, true );
    addeingabe ( 92, &actoptions.attackspeed2 , 0, 10000 );
    addbutton ( "delay2", r8.x1 + 2*(r8.x2 - r8.x1)/3 + 2, r8.y1 , r8.x2, r8.y2, 2, 1, 93, true );
    addeingabe ( 93, &actoptions.attackspeed3 , 0, 10000 );
-
+*/
 
 /*
    addbutton ( "", xsize -35, r8.y1 + 60, r8.x2, r8.y2 + 60, 3, 0, 10, true );
@@ -2305,7 +2305,7 @@ void tgamepreferences :: buttonpressed ( int id )
 
    if ( id == 1 ) {
       actoptions.container.filleverything = actoptions.container.autoproduceammunition;
-      CGameOptions::Instance()->copy ( actoptions );
+      *CGameOptions::Instance() = actoptions;
       status = 10;
    }
 
@@ -2357,7 +2357,7 @@ void tgamepreferences :: buttonpressed ( int id )
       Password pwd = actoptions.getDefaultPassword();
       bool success = enterpassword ( pwd, true, true, false );
       if ( success )
-         actoptions.defaultPassword.setName ( pwd.toString().c_str() );
+         actoptions.defaultPassword = pwd.toString();
    }
 }
 
@@ -2420,7 +2420,7 @@ void tmousepreferences :: init ( void )
    ysize = 460;
 
    title = "mouse options";
-
+/*
    mouseAction[0].name = "mouse button for small gui icons";
    mouseAction[0].unallowMouseButtons = 0;
    mouseAction[0].singleButton = 0;
@@ -2449,7 +2449,7 @@ void tmousepreferences :: init ( void )
    mouseAction[4].unallowMouseButtons = 0;
    mouseAction[4].singleButton = 0;
    mouseAction[4].optionAddress = &actoptions.mouse.unitweaponinfo;
-
+*/
 /*
    mouseAction[5].name = "mouse button for drag'n'drop unit movement";
    mouseAction[5].unallowMouseButtons = 0;
@@ -2494,7 +2494,7 @@ void tmousepreferences :: init ( void )
    addbutton ( "", r1, 11, 0, 4, true  );
 
    r2 = r1 + ydelta;
-
+/*
    addbutton ( "", xsize -35, r2.y1 , r2.x2, r2.y2, 3, 0, 10, true );
    addeingabe ( 10, &actoptions.smallguiiconopenaftermove , 0, dblue  );
 
@@ -2502,7 +2502,7 @@ void tmousepreferences :: init ( void )
 
    addbutton ( "", xsize -35, r3.y1 , r3.x2, r3.y2, 3, 0, 11, true );
    addeingabe ( 11, &actoptions.mouse.singleClickAction , 0, dblue  );
-
+*/
 
    buildgraphics(); 
 
@@ -2550,7 +2550,7 @@ void tmousepreferences :: paintbutt ( char id )
       activefontsettings.justify = centertext; 
       activefontsettings.length = r2.x2 - r2.x1 - 2;
       activefontsettings.background = dblue;
-      showtext2 ( smallguiiconsundermouse[actoptions.mouse.smalliconundermouse], r2.x1 + 1, r2.y1 + 1 );
+//      showtext2 ( smallguiiconsundermouse[actoptions.mouse.smalliconundermouse], r2.x1 + 1, r2.y1 + 1 );
       npop ( activefontsettings );
    }
 }
@@ -2561,20 +2561,20 @@ void tmousepreferences :: buttonpressed ( int id )
    tdialogbox :: buttonpressed ( id );
 
    if ( id == 1 ) {
-      CGameOptions::Instance()->copy ( actoptions );
+      *CGameOptions::Instance() = actoptions;
       status = 10;
    }
 
    if ( id == 2 ) 
       status = 10;
-
+/*
    if ( id == 4 ) {
       actoptions.mouse.smalliconundermouse++;
       if ( actoptions.mouse.smalliconundermouse > 2 )
          actoptions.mouse.smalliconundermouse = 0;
       paintbutt ( id );
    }
-
+*/
    for ( int i = 0; i < mouseActionNum; i++ ) 
        for ( int j = 0; j < mousebuttonnum; j++ ) 
           if ( id == 100 + i * 10 + j ) 
@@ -2745,7 +2745,7 @@ void tmultiplayersettings :: buttonpressed ( int id )
       }
    }
    if ( id == 12 ) {
-      CGameOptions::Instance()->defaultSuperVisorPassword.setName ( svpwd_enc );
+      CGameOptions::Instance()->defaultSuperVisorPassword = svpwd_enc;
       CGameOptions::Instance()->setChanged();
    }
 }

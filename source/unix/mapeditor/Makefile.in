@@ -122,8 +122,8 @@ asc_mapedit_SOURCES = edevents.cpp edgen.cpp edglobal.cpp edmain.cpp \
 edselfnt.cpp edmisc.cpp typen.cpp strtmesg.cpp stack.cpp \
 spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp \
 loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp \
-attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp \
-Named.cpp buildingtype.cpp vehicletype.cpp containerbase.cpp \
+attack.cpp gameoptions.cpp \
+buildingtype.cpp vehicletype.cpp containerbase.cpp \
 mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp \
 password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \
@@ -155,26 +155,25 @@ am_asc_mapedit_OBJECTS = edevents.$(OBJEXT) edgen.$(OBJEXT) \
 	palette.$(OBJEXT) newfont.$(OBJEXT) misc.$(OBJEXT) \
 	loadpcxc.$(OBJEXT) loaders.$(OBJEXT) loadbi3.$(OBJEXT) \
 	dlg_box.$(OBJEXT) dialog.$(OBJEXT) basestrm.$(OBJEXT) \
-	basegfx.$(OBJEXT) attack.$(OBJEXT) CLoadable.$(OBJEXT) \
-	Property.$(OBJEXT) PropertyGroup.$(OBJEXT) \
-	gameoptions.$(OBJEXT) Named.$(OBJEXT) buildingtype.$(OBJEXT) \
-	vehicletype.$(OBJEXT) containerbase.$(OBJEXT) \
-	mapalgorithms.$(OBJEXT) viewcalculation.$(OBJEXT) \
-	gamemap.$(OBJEXT) password.$(OBJEXT) password_dialog.$(OBJEXT) \
-	research.$(OBJEXT) mapdisplay.$(OBJEXT) ascstring.$(OBJEXT) \
-	graphicset.$(OBJEXT) vehicle.$(OBJEXT) buildings.$(OBJEXT) \
-	networkdata.$(OBJEXT) resourcenet.$(OBJEXT) \
-	textfileparser.$(OBJEXT) terraintype.$(OBJEXT) \
-	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
-	itemrepository.$(OBJEXT) stringtokenizer.$(OBJEXT) \
-	music.$(OBJEXT) messages.$(OBJEXT) paradialog.$(OBJEXT) \
-	textfile_evaluation.$(OBJEXT) containerbasetype.$(OBJEXT) \
-	soundList.$(OBJEXT) simplestream.$(OBJEXT) \
-	mappolygons.$(OBJEXT) prehistoricevents.$(OBJEXT) \
-	gameevents.$(OBJEXT) gameeventsystem.$(OBJEXT) \
-	gameevent_dialogs.$(OBJEXT) clipboard.$(OBJEXT) \
-	resourceplacement.$(OBJEXT) resourceplacementdialog.$(OBJEXT) \
-	geometry.$(OBJEXT) weatherarea.$(OBJEXT) guidimension.$(OBJEXT) \
+	basegfx.$(OBJEXT) attack.$(OBJEXT) gameoptions.$(OBJEXT) \
+	buildingtype.$(OBJEXT) vehicletype.$(OBJEXT) \
+	containerbase.$(OBJEXT) mapalgorithms.$(OBJEXT) \
+	viewcalculation.$(OBJEXT) gamemap.$(OBJEXT) password.$(OBJEXT) \
+	password_dialog.$(OBJEXT) research.$(OBJEXT) \
+	mapdisplay.$(OBJEXT) ascstring.$(OBJEXT) graphicset.$(OBJEXT) \
+	vehicle.$(OBJEXT) buildings.$(OBJEXT) networkdata.$(OBJEXT) \
+	resourcenet.$(OBJEXT) textfileparser.$(OBJEXT) \
+	terraintype.$(OBJEXT) objecttype.$(OBJEXT) \
+	textfiletags.$(OBJEXT) itemrepository.$(OBJEXT) \
+	stringtokenizer.$(OBJEXT) music.$(OBJEXT) messages.$(OBJEXT) \
+	paradialog.$(OBJEXT) textfile_evaluation.$(OBJEXT) \
+	containerbasetype.$(OBJEXT) soundList.$(OBJEXT) \
+	simplestream.$(OBJEXT) mappolygons.$(OBJEXT) \
+	prehistoricevents.$(OBJEXT) gameevents.$(OBJEXT) \
+	gameeventsystem.$(OBJEXT) gameevent_dialogs.$(OBJEXT) \
+	clipboard.$(OBJEXT) resourceplacement.$(OBJEXT) \
+	resourceplacementdialog.$(OBJEXT) geometry.$(OBJEXT) \
+	weatherarea.$(OBJEXT) guidimension.$(OBJEXT) \
 	weatherdialog.$(OBJEXT) iconrepository.$(OBJEXT)
 asc_mapedit_OBJECTS = $(am_asc_mapedit_OBJECTS)
 asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
@@ -191,10 +190,7 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/CLoadable.Po ./$(DEPDIR)/Named.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/Property.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/PropertyGroup.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/ascstring.Po ./$(DEPDIR)/attack.Po \
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/ascstring.Po ./$(DEPDIR)/attack.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/basegfx.Po ./$(DEPDIR)/basestrm.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/buildings.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/buildingtype.Po \
@@ -299,10 +295,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CLoadable.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Named.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Property.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PropertyGroup.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ascstring.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/attack.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/basegfx.Po@am__quote@
@@ -551,8 +543,8 @@ vpath %.cpp ../..
 #asc_map2pcx_SOURCES	= map2pcx.cpp typen.cpp strtmesg.cpp \
 #stack.cpp spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp \
 #loadpcxc.cpp loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp \
-#basegfx.cpp attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp \
-#gameoptions.cpp Named.cpp buildingtype.cpp vehicletype.cpp containerbase.cpp \
+#basegfx.cpp attack.cpp \
+#gameoptions.cpp buildingtype.cpp vehicletype.cpp containerbase.cpp \
 #mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp \
 #password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 #vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \

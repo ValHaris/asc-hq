@@ -3,7 +3,7 @@
   
 */
 
-//     $Id: sgstream.h,v 1.30.2.5 2004-11-27 23:20:53 mbickel Exp $
+//     $Id: sgstream.h,v 1.30.2.6 2004-12-28 16:11:45 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -45,12 +45,12 @@ FieldQuickView* generateAverageCol ( const Surface& image );
 
 
 
-extern void loadpalette ( void );
-extern int readgameoptions ( const char* filename = NULL );
-extern int writegameoptions ( void );
-extern char* getConfigFileName ( char* buffer );
+extern void loadpalette ( );
+extern int readgameoptions ( const ASCString& filename= "" );
+extern int writegameoptions ( );
+// extern ASCString getConfigFileName( const ASCString& filename );
 extern void loadguipictures( void );
-extern void checkFileLoadability ( const char* filename );
+extern void checkFileLoadability ( const ASCString& filename );
 
 extern void initFileIO ( const ASCString& configFileName, int skipChecks = 0 );
 

@@ -4,7 +4,7 @@
 */
 
 
-//     $Id: basestrm.h,v 1.59.2.1 2004-11-27 23:20:50 mbickel Exp $
+//     $Id: basestrm.h,v 1.59.2.2 2004-12-28 16:11:41 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -630,10 +630,11 @@ extern const char pathdelimitter;
 extern const char* pathdelimitterstring;
 extern int filesize( char *name);
 
-extern void addSearchPath ( const char* path );
+extern void addSearchPath ( const ASCString& path );
 extern void appendbackslash ( char* string );
 extern void appendbackslash ( ASCString& string );
 extern char* constructFileName( char* buf, int directoryLevel, const char* path, const char* filename );
+extern ASCString constructFileName( int directoryLevel, const ASCString& path, ASCString filename );
 extern int directoryExist ( const char* path );
 extern char* extractPath ( char* buf, const char* filename );
 extern char* extractFileName ( char* buf, const char* filename );

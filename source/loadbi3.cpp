@@ -88,9 +88,7 @@ int libs_to_load = 9;
 
 void checkbi3dir ( void )
 {
-   char temp[1000];
-
-   if ( !CGameOptions::Instance()->bi3.dir.getName() ) {
+   if ( CGameOptions::Instance()->bi3.dir.empty() ) {
       readgameoptions();
       /*
       if ( !gameoptions.bi3.dir.getName() ) {
@@ -100,30 +98,20 @@ void checkbi3dir ( void )
       */
    }
 
-   int notfound;
+   bool notfound;
    do {
-      notfound = 0;
+      notfound = false;
+      
+      ASCString filename;
 
       for ( int i = 0; i < libs_to_load ; i++ ) {
-		  if ( CGameOptions::Instance()->bi3.dir.getName() )
-            strcpy ( temp, CGameOptions::Instance()->bi3.dir.getName() );
-         else
-            temp[0] = 0;
-
-         strcat ( temp, LIBFiles[i].Name );
+         filename =  CGameOptions::Instance()->bi3.dir + LIBFiles[i].Name ;
          
-         if ( !exist ( temp ) ) {
-            if ( CGameOptions::Instance()->bi3.dir.getName() )
-               strcpy ( temp, CGameOptions::Instance()->bi3.dir.getName() );
-            else
-               temp[0] = 0;
-
-            strcat ( temp, "LIB" );
-            strcat ( temp, pathdelimitterstring );
-            strcat ( temp, LIBFiles[i].Name );
-            if ( !exist ( temp ) ) {
-               printf("Battle Isle file %s not found !\n", temp );
-               notfound++;
+         if ( !exist ( filename ) ) {
+            filename = CGameOptions::Instance()->bi3.dir + "LIB" + pathdelimitterstring + LIBFiles[i].Name;
+            if ( !exist ( filename ) ) {
+               printf("Battle Isle file %s not found !\n", filename.c_str() );
+               notfound = true;
             }
          }
       }
@@ -132,10 +120,9 @@ void checkbi3dir ( void )
             char bi3path[10000];
             printf("Enter Battle Isle directory:\n" );
             scanf ( "%s", bi3path );
-            if ( bi3path[ strlen ( bi3path )-1 ] != pathdelimitter )
-               strcat ( bi3path, pathdelimitterstring );
 
-            CGameOptions::Instance()->bi3.dir.setName ( bi3path );
+            CGameOptions::Instance()->bi3.dir = bi3path;
+            appendbackslash ( CGameOptions::Instance()->bi3.dir );
             CGameOptions::Instance()->setChanged();
          } else {
             closegraphics();
@@ -148,9 +135,9 @@ void checkbi3dir ( void )
 }
 
 
-const char* getbi3path ( void )
+ASCString getbi3path ( void )
 {
-	return CGameOptions::Instance()->bi3.dir.getName();
+   return CGameOptions::Instance()->bi3.dir;
 }
 
 
@@ -307,8 +294,6 @@ void Bi3MapTranslationTable :: runTextIO ( PropertyContainer& pc )
       pc.addIntegerArray ( "Object3Translation", object3translation );
 
 
-   pc.run();
-
    if ( _terraintranslation.size() % 2 )
       fatalError ( "Bi3 map translation : terraintranslation - Invalid number of entries ");
    terraintranslation.clear();
@@ -403,8 +388,6 @@ void BI3TranslationTableLoader::readTextFiles( PropertyReadingContainer& prc, co
 {
    Bi3MapTranslationTable* bmtt = new Bi3MapTranslationTable;
    bmtt->runTextIO ( prc );
-   prc.run();
-
    bmtt->filename = fileName;
    bmtt->location = location;
    bi3ImportTables.push_back ( bmtt );

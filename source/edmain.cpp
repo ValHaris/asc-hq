@@ -2,7 +2,7 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.67.2.6 2004-12-16 18:48:28 mbickel Exp $
+//     $Id: edmain.cpp,v 1.67.2.7 2004-12-28 16:11:43 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -637,7 +637,7 @@ int main(int argc, char *argv[] )
 
    initFileIO( cl->c().c_str() );
 
-   fullscreen = CGameOptions::Instance()->mapeditForceFullscreenMode;
+   fullscreen = !CGameOptions::Instance()->mapeditWindowedMode;
    if ( cl->f() )
       fullscreen = 1;
    if (  cl->w() )

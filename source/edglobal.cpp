@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.62.2.2 2004-12-07 21:11:19 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.62.2.3 2004-12-28 16:11:43 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -223,129 +223,38 @@ void mc_check::off(void)
 }
 
 
-
-class  GetString : public tdialogbox {
-          public :
-              int action;
-              char* buf;
-              void init(char* _title);
-              virtual void run(void);
-              virtual void buttonpressed(int id);
-           };
-
-void         GetString::init(char* _title)
-{ 
-   tdialogbox::init();
-   title = _title; 
-   x1 = 120;
-   xsize = 400; 
-   y1 = 150;
-   ysize = 140; 
-   action = 0; 
-
-   windowstyle = windowstyle ^ dlg_in3d; 
-
-   addbutton("~D~one",20,ysize - 40,100,ysize - 20,0,1,1,true); 
-   addkey(1,ct_enter); 
-   addbutton("~C~ancel",120,ysize - 40,200,ysize - 20,0,1,2,true); 
-   addkey(2, ct_esc );
-
-   addbutton("",20,60,xsize - 20,80,1,1,3,true);
-   addeingabe(3,buf,0,1000);
-
-   buildgraphics(); 
-
-   mousevisible(true); 
-} 
-
-
-void         GetString::run(void)
+ASCString getbipath ( void )
 {
-   if ( pcgo ) {
-      delete pcgo;
-      pcgo = NULL;
-   }
-   pbutton pb = firstbutton;
-   while ( pb &&  (pb->id != 3)) 
-      pb = pb->next;
-
-   if ( pb )
-      if ( pb->id == 3 )
-         execbutton( pb , false );
-
-   do { 
-      tdialogbox::run(); 
-   }  while ( !action );
-} 
-
-
-void         GetString::buttonpressed(int         id)
-{ 
-   tdialogbox::buttonpressed(id); 
-   switch (id) {
-      
-      case 1:   
-      case 2:   action = id;
-   break; 
-   } 
-}
-
-
-char*    getstring( char*  title, char* orgval )
-
-{ 
-   GetString     gi;
-
-   gi.buf = orgval;
-   gi.init( title );
-   gi.run();
-   gi.done();
-   if ( gi.action == 2 )
-      return NULL;
-   else
-      return gi.buf;
-} 
-
-char* getbipath ( void )
-{
-   char filename[1000];
-   if ( getbi3path() )
-      strcpy ( filename, getbi3path() );
-   else
-      filename[0] = 0;
-
-   char filename2[1000];
-   strcpy ( filename2, filename );
-   appendbackslash( filename2 );
-   strcat ( filename2, "mis");
-   strcat ( filename2, pathdelimitterstring );
-   strcat ( filename2, "*.dat");
+   ASCString filename = getbi3path();
+   appendbackslash( filename );
+   filename += "mis";
+   filename += pathdelimitterstring;
+   filename += "*.dat";
 
    int cnt = 0;
 
-   while ( !exist ( filename2 )) {
-      char* res = getstring("enter Battle Isle path", filename );
-      if ( res == NULL )
-         return NULL;
+   while ( !exist ( filename )) {
+      filename = editString("enter Battle Isle path", filename );
+      if ( filename.empty() )
+         return "";
 
+      appendbackslash(filename);
+      
+      CGameOptions::Instance()->bi3.dir = filename;
       CGameOptions::Instance()->setChanged ( 1 );
 
-      strcpy ( filename2, filename );
-      appendbackslash( filename2 );
-      strcat ( filename2, "mis");
-      strcat ( filename2, pathdelimitterstring );
-      strcat ( filename2, "*.dat");
+      filename += "mis";
+      filename += pathdelimitterstring;
+      filename += "*.dat";
+      
       cnt++;
       #if CASE_SENSITIVE_FILE_NAMES == 1
-      if (!exist ( filename2 ) && cnt == 1 )
+      if (!exist ( filename ) && cnt == 1 )
          displaymessage("The 'mis' and 'ger' / 'eng' directories must be lower case to import files from them !", 1 );
       #endif
    }
-   appendbackslash( filename );
-   char* buf = strdup ( filename );
-   CGameOptions::Instance()->bi3.dir.setName( filename );
 
-   return buf;
+   return getbi3path();
 }
 
 
@@ -777,51 +686,34 @@ void execaction(int code)
       }
       break;
    case act_import_bi_map : {
-         char filename2[260];
-         char* path = getbipath();
-         if ( !path )
+         ASCString path = getbipath();
+         if ( path.empty() )
             break;
-            
-         strcpy ( filename2, path );
-         strcat ( filename2, "mis");
-         strcat ( filename2, pathdelimitterstring );
-         strcat ( filename2, "*.dat");
+
+         ASCString wildcard = path + "mis" + pathdelimitterstring + "*.dat" ;
 
          ASCString filename;
-         fileselectsvga ( filename2, filename, true );
+         fileselectsvga ( wildcard, filename, true );
          if ( !filename.empty() ) {
-            strcpy ( filename2, path );
-            strcat ( filename2, "mis");
-            strcat ( filename2, pathdelimitterstring );
-            strcat ( filename2, filename.c_str());
             TerrainType::Weather* t = auswahl->weather[auswahlw];
             if ( !t )
                t = auswahl->weather[0];
-            importbattleislemap ( path, filename.c_str(), t );
+            importbattleislemap ( path.c_str(), filename.c_str(), t );
             displaymap();
          }
       }
       break;
    case act_insert_bi_map : {
-         char filename2[260];
-
-         char* path = getbipath();
-         if ( !path )
+         ASCString path = getbipath();
+         if ( path.empty() )
             break;
-            
-         strcpy ( filename2, path );
-         strcat ( filename2, "mis");
-         strcat ( filename2, pathdelimitterstring );
-         strcat ( filename2, "*.dat");
+
+         ASCString wildcard = path + "mis" + pathdelimitterstring + "*.dat" ;
 
          ASCString filename;
-         fileselectsvga ( filename2, filename, true );
+         fileselectsvga ( wildcard, filename, true );
          if ( !filename.empty() ) {
-            strcpy ( filename2, path );
-            strcat ( filename2, "mis");
-            strcat ( filename2, pathdelimitterstring );
-            strcat ( filename2, filename.c_str());
-            insertbattleislemap ( getxpos(), getypos(), path, filename.c_str() );
+            insertbattleislemap ( getxpos(), getypos(), path.c_str(), filename.c_str() );
             displaymap();
          }
       }
