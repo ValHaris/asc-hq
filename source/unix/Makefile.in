@@ -129,7 +129,7 @@ vehicle.cpp buildings.cpp networkdata.cpp textfileparser.cpp terraintype.cpp \
 objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp music.cpp \
 messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp messagedlg.cpp \
 simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
-gameevent_dialogs.cpp statisticdialog.cpp
+gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp
 
 
 asc_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
@@ -169,7 +169,8 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) typen.$(OBJEXT) \
 	messagedlg.$(OBJEXT) simplestream.$(OBJEXT) \
 	mappolygons.$(OBJEXT) prehistoricevents.$(OBJEXT) \
 	gameevents.$(OBJEXT) gameeventsystem.$(OBJEXT) \
-	gameevent_dialogs.$(OBJEXT) statisticdialog.$(OBJEXT)
+	gameevent_dialogs.$(OBJEXT) statisticdialog.$(OBJEXT) \
+	clipboard.$(OBJEXT)
 asc_OBJECTS = $(am_asc_OBJECTS)
 asc_DEPENDENCIES = $(top_builddir)/source/libs/triangul/libtriangul.la \
 	$(top_builddir)/source/ai/libai.la \
@@ -192,6 +193,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/basestrm.Po ./$(DEPDIR)/building.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/buildings.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/buildingtype.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/clipboard.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/containerbase.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/containerbasetype.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/controls.Po ./$(DEPDIR)/dashboard.Po \
@@ -308,6 +310,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/building.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildings.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildingtype.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/clipboard.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containerbase.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containerbasetype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/controls.Po@am__quote@

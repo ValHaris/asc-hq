@@ -36,7 +36,7 @@ class ClipBoardBase {
       enum Type { ClipVehicle, ClipBuilding };
       int objectNum;
 
-      friend Loki::CreateUsingNew<ClipBoardBase>;
+      friend class Loki::CreateUsingNew<ClipBoardBase>;
       ClipBoardBase();
       ~ClipBoardBase() {};
    public:
@@ -57,3 +57,4 @@ extern const char* clipboardFileExtension;
 
 
 #endif
+

@@ -130,7 +130,7 @@ terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
 textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
 mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
-gameevent_dialogs.cpp 
+gameevent_dialogs.cpp clipboard.cpp
 
 
 asc_mapedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
@@ -168,7 +168,7 @@ am_asc_mapedit_OBJECTS = edevents.$(OBJEXT) edgen.$(OBJEXT) \
 	soundList.$(OBJEXT) simplestream.$(OBJEXT) \
 	mappolygons.$(OBJEXT) prehistoricevents.$(OBJEXT) \
 	gameevents.$(OBJEXT) gameeventsystem.$(OBJEXT) \
-	gameevent_dialogs.$(OBJEXT)
+	gameevent_dialogs.$(OBJEXT) clipboard.$(OBJEXT)
 asc_mapedit_OBJECTS = $(am_asc_mapedit_OBJECTS)
 asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
 	$(top_builddir)/source/libs/triangul/libtriangul.la \
@@ -189,6 +189,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/basegfx.Po ./$(DEPDIR)/basestrm.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/buildings.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/buildingtype.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/clipboard.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/containerbase.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/containerbasetype.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/dialog.Po ./$(DEPDIR)/dlg_box.Po \
@@ -293,6 +294,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/basestrm.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildings.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildingtype.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/clipboard.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containerbase.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containerbasetype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dialog.Po@am__quote@
@@ -536,7 +538,7 @@ vpath %.cpp ../..
 #stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
 #textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
 #mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
-#gameevent_dialogs.cpp 
+#gameevent_dialogs.cpp clipboard.cpp
 
 #asc_map2pcx_LDADD   	= $(top_builddir)/source/libs/triangul/libtriangul.la \
 #$(top_builddir)/source/sdl/libsdl.la  @LDADDLIBBZ2@ $(PARAGUI_LIBS) \
