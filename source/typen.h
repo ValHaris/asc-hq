@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.134 2003-06-26 21:00:19 mbickel Exp $
+//     $Id: typen.h,v 1.135 2003-06-30 19:56:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.134  2003/06/26 21:00:19  mbickel
+//      Fixed: land mines could not be carried on bridges
+//
 //     Revision 1.133  2003/06/22 17:41:22  mbickel
 //      Updated campaign maps
 //      Fixed crash at 640*480
@@ -600,7 +603,8 @@ void writeContainer ( C c, tnstream& stream  )
 {
    stream.writeInt ( 1 );
    stream.writeInt ( c.size() );
-   for ( C::iterator i = c.begin(); i != c.end(); ++i )
+   typedef typename C::iterator IT;
+   for ( IT i = c.begin(); i != c.end(); ++i )
       i->write ( stream );
 }
 
@@ -610,7 +614,8 @@ void readContainer ( C c, tnstream& stream  )
    int version = stream.readInt();
    int num = stream.readInt();
    for ( int i = 0; i < num; ++i ) {
-      C::value_type vt;
+      typedef typename C::value_type VT;
+      VT vt;
       vt.read( stream );
       c.push_back( vt );
    }

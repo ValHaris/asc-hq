@@ -1,3 +1,114 @@
+2003-06-22 20:08  mbickel
+
+	* source/strtmesg.cpp:	Updated version number
+
+2003-06-22 19:41  mbickel
+
+	* source/: astar2.cpp, attack.cpp, attack.h, building.cpp,
+	containerbase.cpp, containerbase.h, controls.cpp, gamedlg.cpp,
+	gamedlg.h, gamemap.cpp, gamemap.h, gui.cpp, strtmesg.cpp,
+	textfiletags.cpp, typen.h, unitctrl.cpp, vehicle.cpp, ai/misc.cpp,
+	ai/tactics.cpp, win32/borland/mapeditor/mapeditor.bpr:	Updated
+	campaign maps
+	 Fixed crash at 640*480
+	 Fixed: some units could not attack while reaction fire active
+	 Fixed: destruction of buildings not working
+	 New map parameters for customizing the effects of experience
+
+2003-06-16 18:50  mbickel
+
+	* source/: controls.cpp, vehicle.cpp, ai/valuation.cpp:  Fixed
+	compilation problems
+
+2003-06-16 18:12  mbickel
+
+	* data/asc007.map, data/asc008.map, source/building.cpp,
+	source/strtmesg.cpp:  Updated campaign maps
+	 Fixed crash in mining window
+
+2003-06-10 21:16  mbickel
+
+	* source/: attack.cpp, building.cpp, controls.cpp, gamemap.cpp,
+	gamemap.h, gui.cpp, sg.cpp, strtmesg.cpp, textfiletags.cpp,
+	typen.h, unitctrl.cpp, vehicle.cpp, vehicle.h, vehicletype.h,
+	ai/base.cpp:  Fixed: dig icon not always working
+	 Fixed: attack-flag not set when moving only one field out of a
+	transport
+
+2003-06-04 18:57  mbickel
+
+	* source/typen.cpp:  Disabled uncompleted event system
+
+2003-06-03 21:55  mbickel
+
+	* source/: astar2.cpp, attack.cpp, basestrm.cpp, building.cpp,
+	containerbase.cpp, containerbase.h, dashboard.cpp, dialog.cpp,
+	edmisc.cpp, gamemap.cpp, gameoptions.cpp, gui.cpp, strtmesg.cpp,
+	typen.cpp, typen.h, unitctrl.cpp, vehicle.cpp, vehicle.h,
+	viewcalculation.cpp, ai/buildingcapture.cpp, ai/misc.cpp,
+	ai/valuation.cpp:  Ground mines can be put onto bridges
+	 better AI production
+
+2003-06-01 17:03  mbickel
+
+	* source/: basestrm.h, misc.cpp, soundList.cpp, sdl/Makefile.am,
+	sdl/Makefile.in, sdl/SDLStretch.h, sdl/asc_IMG_jpg.c,
+	sdl/graphics.cpp, sdl/keysymbols.h, sdl/sound.cpp,
+	tools/linux/Makefile.am, tools/linux/Makefile.in, unix/global_os.h,
+	win32/borland/global_os.h, win32/msvc/global_os.h:  Some updates to
+	the build system for FreeBSD
+
+2003-06-01 15:27  mbickel
+
+	* source/typen.h:  Removed unnecessary header file
+
+2003-05-29 21:08  mbickel
+
+	* asc.kdevprj, configure, configure.in, libtool,
+	source/paradialog.cpp, source/paradialog.h, source/sg.cpp:  Paragui
+	can be disabled by configure parameter
+
+2003-05-29 15:54  mbickel
+
+	* data/asc006.map, data/asc008.map, data/music1.asctxt,
+	data/railstat.map, source/building.cpp, source/containerbase.cpp,
+	source/mapdisplay.cpp, source/replay.cpp, source/replay.h,
+	source/strtmesg.cpp, source/terraintype.cpp, source/terraintype.h,
+	source/textfiletags.cpp, source/unitctrl.cpp, source/vehicle.cpp,
+	source/ai/ai.h, source/ai/base.cpp, source/ai/misc.cpp,
+	source/ai/tactics.cpp, source/win32/borland/asc.bpr:  Fixed: unit
+	could not enter container when having max size
+	 Added SDL_Delay() to movement loop (for FreeBSD)
+	 Added Lava_Barrier terrain bit
+	 AI logs unit success
+	 Replay have a much stricted consistency checking for refuelling
+
+2003-05-19 16:19  mbickel
+
+	* source/: astar2.cpp, buildings.cpp, containerbase.cpp,
+	containerbase.h, sg.cpp, strtmesg.cpp, vehicle.cpp, ai/tactics.cpp,
+	win32/borland/asc.bpr:	Fixed crash when moving unit through
+	container
+
+2003-05-09 12:10  mbickel
+
+	* source/: controls.cpp, strtmesg.cpp, vehicle.cpp,
+	win32/borland/asc.bpr:	Fixed crash when moving unit through a
+	building
+
+2003-05-08 14:41  mbickel
+
+	* data/asc007.map:  Fixed: invalid objects in asc007
+
+2003-05-07 19:20  mbickel
+
+	* source/vehicle.cpp:  Fixed: movement not always saved correctly
+
+2003-05-06 21:58  mbickel
+
+	* ChangeLog, libtool, source/basegfx.cpp, source/basestrm.cpp,
+	source/typen.cpp:  Fixed compilation problems
+
 2003-05-06 21:06  mbickel
 
 	* source/strtmesg.cpp:	Version now 1.13.5
