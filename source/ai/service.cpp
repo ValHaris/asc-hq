@@ -103,6 +103,8 @@ bool AI :: ServiceOrder :: completelyFailed ()
 
 int AI::ServiceOrder::possible ( pvehicle supplier )
 {
+   if ( !ai->getMap()->getField( getTargetUnit()->getPosition())->unitHere ( getTargetUnit() ))
+     return 0;
    bool result = false;
 
    VehicleService vs ( NULL, NULL);
@@ -348,19 +350,20 @@ void AI :: issueServices ( )
 
    for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
       pvehicle veh = *vi;
-      if ( veh->damage > config.damageLimit )
-         issueService ( VehicleService::srv_repair, veh->networkid ) ;
+      if ( getMap()->getField( veh->getPosition() )->unitHere( veh )) {
+         if ( veh->damage > config.damageLimit )
+            issueService ( VehicleService::srv_repair, veh->networkid ) ;
 
-      for ( int i = 0; i< resourceTypeNum; i++ )
-         if ( veh->maxMovement() ) // stationary units are ignored
-            if ( veh->tank.resource(i) < veh->typ->tank.resource(i) * config.resourceLimit.resource(i) / 100 )
-               issueService ( VehicleService::srv_resource, veh->networkid, i);
+         for ( int i = 0; i< resourceTypeNum; i++ )
+            if ( veh->maxMovement() ) // stationary units are ignored
+               if ( veh->tank.resource(i) < veh->typ->tank.resource(i) * config.resourceLimit.resource(i) / 100 )
+                  issueService ( VehicleService::srv_resource, veh->networkid, i);
 
-      for ( int w = 0; w< veh->typ->weapons.count; w++ )
-         if ( veh->typ->weapons.weapon[w].count )
-            if ( veh->ammo[w] <= veh->typ->weapons.weapon[w].count * config.ammoLimit / 100 )
-               issueService ( VehicleService::srv_ammo, veh->networkid, w);
-
+         for ( int w = 0; w< veh->typ->weapons.count; w++ )
+            if ( veh->typ->weapons.weapon[w].count )
+               if ( veh->ammo[w] <= veh->typ->weapons.weapon[w].count * config.ammoLimit / 100 )
+                  issueService ( VehicleService::srv_ammo, veh->networkid, w);
+      }
    }
 }
 

@@ -1,12 +1,15 @@
 /*! \file gui.cpp
-    \brief All the buttons of the user interface with which the unit action are
+    \brief All the buttons of the user interface with which the unit actions are
       controlled.
 */
 
 
-//     $Id: gui.cpp,v 1.68 2001-09-20 15:36:09 mbickel Exp $
+//     $Id: gui.cpp,v 1.69 2001-10-21 20:00:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.68  2001/09/20 15:36:09  mbickel
+//      New object displaying mode
+//
 //     Revision 1.67  2001/08/15 14:02:10  mbickel
 //      Updated message texts
 //

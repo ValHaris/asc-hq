@@ -104,7 +104,7 @@ CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
 
 dnl AC_CHECK_LIB( SDLmm, SDLmm::WasInit,, AC_MSG_ERROR( ASC requires the SDLmm library. You can get it at http://sourceforge.net/projects/sdlmm/ ) )
 dnl AC_CHECK_HEADER( SDLmm/sdlmm.h, , AC_MSG_ERROR( ASC requires SDLmm headers to be present ) )
-dnl AM_PATH_SDLMM(0.1.8)
+AM_PATH_SDLMM(0.1.8)
 
 
 dnl Checks for library functions.

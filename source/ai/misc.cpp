@@ -27,12 +27,13 @@ bool AI :: runUnitTask ( pvehicle veh )
       if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer || veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat )
          moveIntoBuildings = true;
 
+      int nwid = veh->networkid;
       moveUnit ( veh, veh->aiparam[getPlayerNum()]->dest, moveIntoBuildings );
-      if ( veh->getPosition() == veh->aiparam[getPlayerNum()]->dest ) {
-         veh->aiparam[getPlayerNum()]->resetTask ();
-         return true;
-      } else
-         return false;
+      if ( getMap()->getUnit( nwid ))
+         if ( veh->getPosition() == veh->aiparam[getPlayerNum()]->dest ) {
+            veh->aiparam[getPlayerNum()]->resetTask ();
+            return true;
+         }
    }
 
    return false;

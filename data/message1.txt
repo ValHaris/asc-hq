@@ -58,6 +58,8 @@ Invalid service amount
 No weapons to attack from this height
 214
 No weapons to attack with
+215
+This unit cannot attack after it has moved
 301
 No place to construct building
 302

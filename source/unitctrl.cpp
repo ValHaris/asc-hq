@@ -1,6 +1,12 @@
-//     $Id: unitctrl.cpp,v 1.71 2001-10-02 14:06:29 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.72 2001-10-21 20:00:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.71  2001/10/02 14:06:29  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.70  2001/09/25 15:13:07  mbickel
 //      New version number
 //      Fixed crash when reaction fire during ascend
@@ -1780,7 +1786,11 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
       kamikaze = _kamikaze;
 
       search.init( veh, kamikaze, this ); 
-      search.run(); 
+      int res = search.run();
+      if ( res < 0 ) {
+         status = res;
+         return status;
+      }
 
       if ( search.anzahlgegner <= 0 ) {
          status =  -206;
@@ -1913,7 +1923,7 @@ int      VehicleAttack :: tsearchattackablevehicles::run( void )
       return -204;
 
    if ( angreifer->typ->wait && angreifer->hasMoved() )
-         return -205;
+         return -215;
 
 
    int d = 0;
