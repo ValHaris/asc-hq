@@ -5,9 +5,13 @@
 
 */
 
-//     $Id: loaders.h,v 1.26 2004-01-23 18:29:56 mbickel Exp $
+//     $Id: loaders.h,v 1.27 2004-04-23 16:35:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2004/01/23 18:29:56  mbickel
+//      Fixed replay problems
+//      Fixed crash when landing with unit
+//
 //     Revision 1.25  2004/01/16 15:33:46  mbickel
 //     Completely rewritten game event system
 //     TPWM-decoding-Patch
@@ -209,11 +213,11 @@ extern void  loadicons(void);
 
 extern void  savecampaignrecoveryinformation( const ASCString& filename, int id);
 
-const int actsavegameversion  = 0xff38;
+const int actsavegameversion  = 0xff39;
 const int minsavegameversion  = 0xff31;
 const int actmapversion       = 0xfe28;
 const int minmapversion       = 0xfe24;
-const int actnetworkversion   = 0x0010;
+const int actnetworkversion   = 0x0011;
 const int minnetworkversion   = 0x0004;
 const int actreplayversion    = 0x0003;
 const int minreplayversion    = 0x0001;

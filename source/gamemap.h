@@ -33,9 +33,10 @@
  #include "time.h"
  #include "messages.h"
  #include "gameeventsystem.h"
+ #include "research.h"
 
 //! The number of game paramters that can be specified for each map.
-const int gameparameternum = 28;
+const int gameparameternum = 29;
 
 //! The names of the game paramter. \sa gameparameterdefault
 extern const char* gameparametername[ gameparameternum ];
@@ -71,9 +72,10 @@ enum GameParameter { cgp_fahrspur,
        cgp_superVisorCanSaveMap,
        cgp_objectsDestroyedByTerrain,
        cgp_trainingIncrement,
-       cgp_experienceDivisor,
+       cgp_experienceDivisorAttack,
        cgp_disableDirectView,
-       cgp_disableUnitTransfer };
+       cgp_disableUnitTransfer,
+       cgp_experienceDivisorDefense };
 
 
 //! an instance of an object type (#tobjecttype) on the map

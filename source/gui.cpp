@@ -2679,18 +2679,9 @@ int         tnweapselguiicon::available    ( void )
 const char*       tnweapselguiicon::getinfotext  ( void )
 {
    if ( weapnum > -1 ) {
-      infotext = "";
-
       pvehicle eht = getfield ( moveparams.movesx, moveparams.movesy ) -> vehicle;
-   
-      if ( typ == cwairmissilen   ||   typ == cwgroundmissilen ) {
-         if ( eht->height >= chtieffliegend ) 
-            infotext += "air-";
-         else 
-            infotext += "ground-";
-      } /* endif */
-   
-      infotext += cwaffentypen[typ];
+
+      infotext = cwaffentypen[typ];
 
       pfield fld = getactfield();
 

@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.141 2004-01-25 19:44:16 mbickel Exp $
+//     $Id: typen.h,v 1.142 2004-04-23 16:35:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.141  2004/01/25 19:44:16  mbickel
+//      Many, many bugfixes
+//      Removed #pragma pack whereever possible
+//
 //     Revision 1.140  2004/01/16 15:33:48  mbickel
 //     Completely rewritten game event system
 //     TPWM-decoding-Patch
@@ -380,7 +384,6 @@
 #include "errors.h"
 
 #include "password.h"
-#include "research.h"
 
 
 
@@ -934,7 +937,7 @@ const int submarineMovement = 11;
 
 #define autorepairdamagedecrease 10    // only for old units ; new one use autorepairrate
 
-#define weaponpackagesize 5
+#define weaponpackagesize 1
 
 #define brigde1buildcostincrease 12       // jeweils Basis 8; flaches Wasser
 #define brigde2buildcostincrease 16       // jeweils Basis 8; mitteltiefes Wasser

@@ -58,6 +58,7 @@
 #include "gameoptions.h"
 #include "graphicset.h"
 #include "itemrepository.h"
+#include "research.h"
 
 const char* asc_EnvironmentName = "ASC_CONFIGFILE";
 int dataVersion = 0;

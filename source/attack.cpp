@@ -123,7 +123,7 @@ float AttackFormula :: strength_experience ( int experience )
 	float e =		(experience < 0)
 				?	0	
 				:	experience ;
-   return e/maxunitexperience * 2.875 / actmap->getgameparameter( cgp_experienceDivisor );
+   return e/maxunitexperience * 2.875 / actmap->getgameparameter( cgp_experienceDivisorAttack );
 }
 
 float AttackFormula :: defense_experience ( int experience )
@@ -132,7 +132,7 @@ float AttackFormula :: defense_experience ( int experience )
 				?	0
 				:	experience ;
 
-   return e/maxunitexperience * 1.15 / actmap->getgameparameter( cgp_experienceDivisor );
+   return e/maxunitexperience * 1.15 / actmap->getgameparameter( cgp_experienceDivisorDefense );
 }
 
 float AttackFormula :: strength_attackbonus ( int abonus )

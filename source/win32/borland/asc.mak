@@ -23,18 +23,19 @@ OBJFILES = obj\SDL_main.obj obj\CLoadable.obj obj\getopt.obj obj\getopt1.obj \
     obj\gamemap.obj obj\gameoptions.obj obj\graphicset.obj obj\gui.obj \
     obj\itemrepository.obj obj\loadbi3.obj obj\loaders.obj obj\loadpcxc.obj \
     obj\mapalgorithms.obj obj\mapdisplay.obj obj\messages.obj obj\misc.obj \
-    obj\missions.obj obj\music.obj obj\network.obj obj\networkdata.obj \
-    obj\newfont.obj obj\objecttype.obj obj\palette.obj obj\paradialog.obj \
-    obj\password.obj obj\password_dialog.obj obj\pd.obj obj\replay.obj \
-    obj\research.obj obj\resourcenet.obj obj\SDLStretch.obj \
-    obj\asc_IMG_jpg.obj obj\events.obj obj\graphics.obj obj\loadimage.obj \
-    obj\sound.obj obj\sg.obj obj\sgstream.obj obj\soundList.obj obj\spfst.obj \
-    obj\stack.obj obj\stringtokenizer.obj obj\strtmesg.obj obj\terraintype.obj \
+    obj\music.obj obj\network.obj obj\networkdata.obj obj\newfont.obj \
+    obj\objecttype.obj obj\palette.obj obj\paradialog.obj obj\password.obj \
+    obj\password_dialog.obj obj\pd.obj obj\replay.obj obj\research.obj \
+    obj\resourcenet.obj obj\SDLStretch.obj obj\asc_IMG_jpg.obj obj\events.obj \
+    obj\graphics.obj obj\loadimage.obj obj\sound.obj obj\sg.obj \
+    obj\sgstream.obj obj\soundList.obj obj\spfst.obj obj\stack.obj \
+    obj\stringtokenizer.obj obj\strtmesg.obj obj\terraintype.obj \
     obj\textfile_evaluation.obj obj\textfileparser.obj obj\textfiletags.obj \
     obj\typen.obj obj\unitctrl.obj obj\vehicle.obj obj\vehicletype.obj \
-    obj\viewcalculation.obj obj\messagedlg.obj obj\mission_dialog.obj \
-    obj\simplestream.obj obj\gameevents.obj obj\Singleton.obj \
-    obj\prehistoricevents.obj obj\mappolygons.obj
+    obj\viewcalculation.obj obj\messagedlg.obj obj\simplestream.obj \
+    obj\gameevents.obj obj\Singleton.obj obj\prehistoricevents.obj \
+    obj\mappolygons.obj obj\gameeventsystem.obj obj\gameevent_dialogs.obj \
+    obj\statisticdialog.obj
 RESFILES = 
 MAINSOURCE = asc.bpf
 RESDEPEN = $(RESFILES)
@@ -67,7 +68,7 @@ PATHPAS = .;
 PATHRC = .;
 PATHOBJ = .;$(LIBPATH)
 # ---------------------------------------------------------------------------
-CFLAG1 = -O2 -Q -Vx -Ve -X- -r- -a1 -5 -b -k -y -v -vi- -tW -tWM -c -K
+CFLAG1 = -Od -Q -Vx -Ve -X- -r- -a1 -5 -b -k -y -v -vi- -tW -tWM -c -K
 IDLCFLAGS = 
 PFLAGS = -N2obj -N0obj -$Y+ -$W -$O- -$A8 -v -JPHNE -M
 RFLAGS = 

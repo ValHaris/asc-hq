@@ -20,6 +20,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <map>
+
 #include "basestrm.h"
 #include "misc.h"
 #include "graphicset.h"

@@ -45,7 +45,7 @@
 const char*  choehenstufen[choehenstufennum] = {"deep submerged", "submerged", "floating", "ground level", "low-level flight", "flight", "high-level flight", "orbit"};
 
 
-const char*  cwaffentypen[cwaffentypennum]  = {"cruise missile", "mine",    "bomb",       "air - missile", "ground - missile", "torpedo", "machine gun",
+const char*  cwaffentypen[cwaffentypennum]  = {"cruise missile", "mine",    "bomb",       "large missile", "small missile", "torpedo", "machine gun",
                                                "cannon",         "service", "ammunition refuel", "laser", "shootable"};
 
 const char*  cmovemalitypes[cmovemalitypenum] = { "default",
@@ -65,11 +65,11 @@ const char* cgeneralnetcontrol[4] = {       "store",  "move out", "stop storing"
 
 const char*  cwettertypen[cwettertypennum] = {"dry (standard)","light rain", "heavy rain", "few snow", "lot of snow", "lot of snow + ice"};
 const char*  resourceNames[3]  = {"energy", "material", "fuel"};
-const int  cwaffenproduktionskosten[cwaffentypennum][3]    = { {160,160,80},  // cruise missile
-                                                               {8, 8, 1},     // mine
-                                                               {10, 10, 1},     // bomb
-                                                               {50, 40, 30},     // air-missile
-                                                               {30, 40, 50},     // ground-missile
+const int  cwaffenproduktionskosten[cwaffentypennum][3]    = { {1500,1500,1500},  // cruise missile
+                                                               {10, 10, 10},     // mine
+                                                               {40, 40, 40},     // bomb
+                                                               {200, 200, 200},     // big missile
+                                                               {50, 50, 50},     // small missile
                                                                {20, 30, 40},     // torpedo
                                                                {1, 1, 1},     // machine gun
                                                                {5, 5, 1},     // cannon

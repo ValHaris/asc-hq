@@ -520,8 +520,7 @@ void         tweaponinfo::init( pvehicletype eht, char num  )
 
 void         tweaponinfo::run(void)
 { 
-  char* suffix;
-  word         i; 
+  word         i;
   integer      xa, ya; 
   char*        strng;
   char*        strng2;
@@ -586,14 +585,6 @@ void         tweaponinfo::run(void)
    activefontsettings.justify = lefttext;
    activefontsettings.length = 170;
 
-   if (aktvehicle->height >= chtieffliegend)
-      suffix = "air to ";
-   else
-      suffix = "ground to ";
-
-   if (!(aktvehicle->weapons.weapon[weapnum].getScalarWeaponType() == cwgroundmissilen ||
-         aktvehicle->weapons.weapon[weapnum].getScalarWeaponType() == cwairmissilen ))
-      suffix = "";
    activefontsettings.color = black;
    if ( !aktvehicle->weapons.weapon[weapnum].shootable() )
       showtext2("no",x1 + 50,y1 + starty + 205);
@@ -609,7 +600,7 @@ void         tweaponinfo::run(void)
       showtext2("no",x1 + 50,y1 + starty + 260);
 
    activefontsettings.length = 170;
-   strcpy ( strng, suffix );
+   strng[0] = 0;
    int k = aktvehicle->weapons.weapon[weapnum].getScalarWeaponType();
       if ( k < cwaffentypennum) {
          strcat( strng, cwaffentypen[k] );
@@ -781,14 +772,7 @@ void         tvehicleinfo::paintmarkweap(void)
          else
             activefontsettings.background = dblue;
 
-         if (aktvehicle->height >= chtieffliegend)
-            strcpy (strng,  "air to ");
-         else
-            strcpy(strng, "ground to ");
-
-         if (!(aktvehicle->weapons.weapon[ii].getScalarWeaponType() == cwgroundmissilen ||
-               aktvehicle->weapons.weapon[ii].getScalarWeaponType() == cwairmissilen ))
-            strng[0] = 0;
+         strng[0] = 0;
 
          activefontsettings.color = textcol;
          if ( !aktvehicle->weapons.weapon[ii].shootable() )

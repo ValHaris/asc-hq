@@ -553,6 +553,14 @@ void Building :: readData ( tnstream& stream, int version )
     for ( i = 0; i < waffenanzahl; i++)
        ammo[i] = stream.readWord();
 
+    /*
+    if ( ammo[cwairmissilen] > 20 )
+       ammo[cwairmissilen] = 20;
+
+    if ( ammo[cwcruisemissile] > 10 )
+       ammo[cwcruisemissile] = 10;
+    */
+
     maxresearchpoints = stream.readWord();
     researchpoints = stream.readWord();
 

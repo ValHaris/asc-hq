@@ -5327,6 +5327,9 @@ void ccontainer_b :: cresearch_subwindow :: setnewresearch ( int res )
 
 void  ccontainer_b :: cresearch_subwindow :: displayvariables ( void )
 {
+
+   return;
+   
    int x;
 
    npush ( activefontsettings );
@@ -5337,9 +5340,9 @@ void  ccontainer_b :: cresearch_subwindow :: displayvariables ( void )
    activefontsettings.height = 0;
    activefontsettings.background = 201;
 
-   int energy;
-   int material;
-   returnresourcenuseforresearch ( cc_b->building, cc_b->building->researchpoints, &energy, &material );
+   int energy = 0;
+   int material = 0;
+ //   returnresourcenuseforresearch ( cc_b->building, cc_b->building->researchpoints, &energy, &material );
 
    showtext2c ( strrr( cc_b->building->researchpoints ), subwinx1 + 115, subwiny1 + 25 );
 
@@ -5371,7 +5374,7 @@ void  ccontainer_b :: cresearch_subwindow :: displayvariables ( void )
 
 
    // ->typ ??
-   returnresourcenuseforresearch ( cc_b->building, cc_b->building->maxresearchpoints, &energy, &material );
+//   returnresourcenuseforresearch ( cc_b->building, cc_b->building->maxresearchpoints, &energy, &material );
    int max;
    if ( energy > material )
       max = energy * 17/16;
@@ -5381,7 +5384,7 @@ void  ccontainer_b :: cresearch_subwindow :: displayvariables ( void )
    int dist = gx2-gx1;
    for (x = dist; x >0 ; x--) {
       int res = cc_b->building->maxresearchpoints * x / dist;
-      returnresourcenuseforresearch ( cc_b->building, res, &energy, &material );
+      // returnresourcenuseforresearch ( cc_b->building, res, &energy, &material );
 
 
       if ( max ) {

@@ -1638,6 +1638,8 @@ int  Building :: getResource ( int      need,    int resourcetype, int queryonly
 
 void doresearch ( int i )
 {
+   return;
+
    // typedef struct tresbuild* presbuild;
 
    struct  tresbuild {
@@ -1653,7 +1655,7 @@ void doresearch ( int i )
       pbuilding bld = *bi;
       if ( bld->typ->special & cgresearchb ) {
          int energy, material;
-         returnresourcenuseforresearch ( bld, bld->researchpoints, &energy, &material );
+         // returnresourcenuseforresearch ( bld, bld->researchpoints, &energy, &material );
 
          tresbuild* a = new tresbuild;
          if ( energy )
@@ -1683,7 +1685,7 @@ void doresearch ( int i )
    while ( a ) {
       pbuilding bld = a->bld;
       int energy, material;
-      returnresourcenuseforresearch ( bld, bld->researchpoints, &energy, &material );
+      // returnresourcenuseforresearch ( bld, bld->researchpoints, &energy, &material );
       int ena = bld->getResource ( energy,   0, 1 );
       int maa = bld->getResource ( material, 1, 1 );
 
@@ -1701,15 +1703,15 @@ void doresearch ( int i )
             else
                diff = 1;
 
-            returnresourcenuseforresearch ( bld, res, &energy, &material );
+            // returnresourcenuseforresearch ( bld, res, &energy, &material );
          }
 
-         returnresourcenuseforresearch ( bld, res+1, &energy, &material );
+         // returnresourcenuseforresearch ( bld, res+1, &energy, &material );
 
          if ( ena >= energy  &&  maa >= material )
             res++;
-         else
-            returnresourcenuseforresearch ( bld, res, &energy, &material );
+         // else
+            //returnresourcenuseforresearch ( bld, res, &energy, &material );
          
       }
 
@@ -2170,35 +2172,6 @@ void continuenetworkgame ( void )
 
 
 
-
-
-void returnresourcenuseforresearch ( const pbuilding bld, int research, int* energy, int* material )
-{
-   /*
-   double esteigung = 55;
-   double msteigung = 40;
-   */
-
-   double res = research;
-   double deg = res / bld->typ->maxresearchpoints;
-
-   double m = 1 / log ( minresearchcost + maxresearchcost );
-
-   *energy   = (int)(researchenergycost   * research * ( exp ( deg / m ) - ( 1 - minresearchcost ) ) / 1000 * (researchcostdouble+res)/researchcostdouble);
-   *material = (int)(researchmaterialcost * research * ( exp ( deg / m ) - ( 1 - minresearchcost ) ) / 1000 * (researchcostdouble+res)/researchcostdouble);
-/*
-   if ( bld->typ->maxresearchpoints > 0 ) {
-      *material = researchmaterialcost * research * 
-      ( exp ( res / msteigung ) - 1 ) / ( exp ( (double)bld->typ->maxresearchpoints / (msteigung*2) ) - 1 ) * (10000+res)/10000 / 1000;
-      *energy   = researchenergycost   * ( exp ( res / esteigung ) - 1 ) / ( exp ( (double)bld->typ->maxresearchpoints / (esteigung*2) ) - 1 ) * (10000+res)/10000 / 1000;
-   } else {
-      *material = 0;
-      *energy = 0;
-   }
-  */
-}
-
-
 void dissectvehicle ( pvehicle eht )
 {
   int i,j,k;
@@ -2310,7 +2283,8 @@ void         generatevehicle_cl ( pvehicletype fztyp,
                height = h;
             }
       vehicle->height = 1 << height;
-      vehicle->setMovement ( vehicle->maxMovement() );
+      // vehicle->setMovement ( vehicle->maxMovement() );
+      vehicle->setMovement ( 0 );
 
 
 

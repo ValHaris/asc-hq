@@ -4,9 +4,27 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.50 2004-01-16 15:33:45 mbickel Exp $
+//     $Id: controls.h,v 1.51 2004-04-23 16:35:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2004/01/16 15:33:45  mbickel
+//     Completely rewritten game event system
+//     TPWM-decoding-Patch
+//     Fixed: swallog message: wrong coordinates
+//     Autotraining for units with max ammo only
+//     Movement required for clearing mines
+//     Unit names can be edited
+//     weather dependen object properties
+//     Unit swallowed by ground -> unified message
+//     units cannot enter enemy transports
+//     Building entry has constant movemalus
+//     Message for resource transfer for providing player
+//     increased ammo production cost
+//     Fixed: unit could attack after movement (with RF on) although "no attack after move" property was set
+//     Buildings: new properties: "ExternalResourceTransfer", "ExternalAmmoTransfer"
+//     Container: Movemalus override for unloading
+//     Startup map specified in ASC.INI
+//
 //     Revision 1.49  2003/05/01 18:02:22  mbickel
 //      Fixed: no movement decrease for cargo when transport moved
 //      Fixed: reactionfire not working when descending into range
@@ -238,9 +256,6 @@ extern void         destructbuildinglevel1( int xp, int yp);
 extern void continuenetworkgame ( void );
 
 
-
-//! Calculates the resources that are needed to research the given number of research
-extern void returnresourcenuseforresearch ( const pbuilding bld, int research, int* energy, int* material );
 
 //! dissects a vehicle; if you haven't researched this vehicle type you will get some research points for it.
 extern void dissectvehicle ( pvehicle eht );
