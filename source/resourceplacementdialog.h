@@ -1,12 +1,5 @@
-/***************************************************************************
-                          paradialog.h  -  description
-                             -------------------
-    begin                : Thu Feb 21 2002
-    copyright            : (C) 2002 by Martin Bickel
-    email                : bickel@asc-hq.org
- ***************************************************************************/
 
-/*! \file paradialog.h
+/*! \file resourcePlacementDialog.h
     \brief Dialog classes based on the Paragui library
 */
 
@@ -19,8 +12,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef paradialogH
- #define paradialogH
+#ifndef resourcePlacementDialogH
+ #define resourcePlacementDialogH
 
 extern void resourcePlacementDialog();
 
