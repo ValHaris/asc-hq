@@ -151,9 +151,15 @@ class AStar3D {
        DistanceType dist( const MapCoordinate3D& a, const MapCoordinate3D& b );
        DistanceType dist( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b );
 
-       typedef std::vector<Node> Container;
        greater<Node> comp;
 
+    public:   
+       typedef std::vector<Node> Container;
+       //! the reachable fields
+       Container visited;
+    protected:
+
+       
        void get_first( Container& v, Node& n );
 
        void nodeVisited ( const Node& n, HexDirection direc, Container& open, int prevHeight = -10, int heightChangeDist = 0 );
@@ -162,8 +168,6 @@ class AStar3D {
     public:
        AStar3D ( pmap actmap, pvehicle veh, bool markTemps_ = true, int maxDistance = maxint );
 
-       //! the reachable fields 
-       Container visited;
 
        //! the search can be restricted to certain operations
        void registerOperationLimiter( OperationLimiter* ol ) { operationLimiter = ol; };
