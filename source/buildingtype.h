@@ -208,6 +208,8 @@ class  Building : public ContainerBase {
     int  gettank ( int resource );
     int  getArmor( void );
     pfield getField( int  x, int y);
+    pfield getEntryField ( );
+    MapCoordinate getEntry ( );
     void  getFieldCoordinates( int x, int y, int &xx, int &yy);
 
     void resetPicturePointers ( void );

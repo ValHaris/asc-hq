@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.67 2000-10-18 17:09:41 mbickel Exp $
+//     $Id: spfst.cpp,v 1.68 2000-10-26 18:15:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.67  2000/10/18 17:09:41  mbickel
+//      Fixed eventhandling for DOS
+//
 //     Revision 1.66  2000/10/18 14:14:19  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -655,7 +658,7 @@ void         initmap( void )
    actmap->time.a.move = 0;
 
    for ( int j = 0; j < 8; j++ )
-      actmap->queuedEvents[j] = 1;
+      actmap->player[j].queuedEvents = 1;
    #ifndef karteneditor
    getnexteventtime();
    #endif
@@ -2073,7 +2076,7 @@ void         removevehicle(pvehicle*   vehicle)
       else {
          actmap->player[b].firstvehicle = NULL; 
          for ( int i = 0; i < 8; i++ )
-            actmap->queuedEvents[i]++;
+            actmap->player[i].queuedEvents++;
       }
    } 
 
@@ -2120,7 +2123,7 @@ void         removebuilding(pbuilding *  bld)
       else {
          actmap->player[b].firstbuilding = NULL; 
          for ( int i = 0; i < 8; i++ )
-            actmap->queuedEvents[i]++;
+            actmap->player[i].queuedEvents++;
       }
    } 
    int set = building->unchainbuildingfromfield();

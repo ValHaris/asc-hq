@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.107 2000-10-18 18:53:02 mbickel Exp $
+//     $Id: sg.cpp,v 1.108 2000-10-26 18:14:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.107  2000/10/18 18:53:02  mbickel
+//      Added JPEG support to windows version
+//
 //     Revision 1.106  2000/10/18 17:09:39  mbickel
 //      Fixed eventhandling for DOS
 //
@@ -2561,7 +2564,7 @@ void  mainloop ( void )
 
       checkpulldown( &ch );
 
-      while ( actmap->queuedEvents[ actmap->actplayer ] )
+      while ( actmap->player[ actmap->actplayer ].queuedEvents )
         checkevents( &defaultMapDisplay );
 
       checktimedevents( &defaultMapDisplay );

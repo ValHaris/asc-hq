@@ -1,6 +1,10 @@
-//     $Id: loaders.cpp,v 1.31 2000-10-18 14:14:14 mbickel Exp $
+//     $Id: loaders.cpp,v 1.32 2000-10-26 18:14:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/10/18 14:14:14  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.30  2000/10/14 13:07:00  mbickel
 //      Moved DOS version into own subdirectories
 //      Win32 version with Watcom compiles and links ! But doesn't run yet...
@@ -292,7 +296,7 @@ void         seteventtriggers(void)
                if ( xpos != -1 && ypos != -1  && event->triggerstatus[j] != 2 ) {
                   pvehicle vehicle;
                   if ( event->trigger_data[j]->networkid != -1 ) 
-                     vehicle = actmap->getunit ( xpos, ypos, event->trigger_data[j]->networkid );
+                     vehicle = actmap->getUnit ( xpos, ypos, event->trigger_data[j]->networkid );
                   else
                      vehicle = getfield(xpos,ypos)->vehicle;
 
@@ -331,7 +335,7 @@ void         seteventtriggers(void)
                event->trigger[j] == ceventt_specific_unit_enters_polygon) {
 
                if ( event->trigger_data[j]->unitpolygon->vehicle ) {
-                  event->trigger_data[j]->unitpolygon->vehicle = actmap->getunit ( event->trigger_data[j]->unitpolygon->tempxpos, event->trigger_data[j]->unitpolygon->tempypos, event->trigger_data[j]->unitpolygon->tempnwid );
+                  event->trigger_data[j]->unitpolygon->vehicle = actmap->getUnit ( event->trigger_data[j]->unitpolygon->tempxpos, event->trigger_data[j]->unitpolygon->tempypos, event->trigger_data[j]->unitpolygon->tempnwid );
                   event->trigger_data[j]->unitpolygon->vehicle->connection |= cconnection_areaentered_specificunit;
                }
               #ifndef karteneditor
@@ -346,7 +350,7 @@ void         seteventtriggers(void)
       } 
    }
    for ( int i = 0; i < 8; i++ )
-      actmap->queuedEvents[ i ] = 1;
+      actmap->player[i].queuedEvents = 1;
 
 } 
 
@@ -1106,7 +1110,7 @@ void    tspfldloaders::writemap ( void )
           spfld->player[v].name = NULL;
        }
 
-       stream->writedata2( *spfld );
+       spfld->write ( *stream );
     
        if ( spfld->title )
           stream->writepchar( spfld->title );
@@ -1259,7 +1263,7 @@ void     tspfldloaders::readmap ( void )
 {
     spfld = new tmap;
 
-    stream->readdata2 ( *spfld );
+    spfld->read ( *stream );
 
     initmap();
  
@@ -3196,12 +3200,29 @@ void         erasemap( pmap spfld )
   int         i; 
   pvehicle     aktvehicle; 
   pbuilding    aktbuilding; 
-  pevent       event;
-  pevent       event2;
   pdevelopedtechnologies devtech1, devtech2;
+
 
    if (spfld->xsize == 0) 
       return;
+
+   pevent       event;
+   pevent       event2;
+
+   event = spfld->firsteventtocome;
+   while (event != NULL) {
+      event2 = event;
+      event = event->next;
+      delete  event2;
+   }
+   event = spfld->firsteventpassed;
+   while (event != NULL) {
+      event2 = event;
+      event = event->next;
+      delete event2;
+   }
+
+
 
    for (i = 0; i <= 8; i++) { 
       #ifdef logging
@@ -3283,28 +3304,6 @@ void         erasemap( pmap spfld )
       }
       */
    }
-
-   /****************************************/
-   /*     Events l”schen                 ÿ */
-   /****************************************/
-
-
-   #ifdef logging
-   logtofile ( "loaders.cpp / erasemap / deleting events ");
-   #endif
-   event = spfld->firsteventtocome; 
-   while (event != NULL) { 
-      event2 = event; 
-      event = event->next; 
-      delete  event2; 
-   } 
-   event = spfld->firsteventpassed; 
-   while (event != NULL) { 
-      event2 = event; 
-      event = event->next; 
-      delete event2; 
-   } 
-
 
 
    /****************************************/

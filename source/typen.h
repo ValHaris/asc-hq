@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.60 2000-10-17 13:04:14 mbickel Exp $
+//     $Id: typen.h,v 1.61 2000-10-26 18:15:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2000/10/17 13:04:14  mbickel
+//      New terrainaccess reading/writing
+//      Added Win32 project files
+//
 //     Revision 1.59  2000/10/17 12:12:23  mbickel
 //      Improved vehicletype loading/saving routines
 //      documented some global variables
@@ -281,7 +285,7 @@
 #define typen_h
 
 #include <time.h>
-
+#include <list>
 
 #include "global.h"
 
@@ -546,9 +550,6 @@ class Resources {
            case 1: return material;
            case 2: return fuel;
            default: throw OutOfRange();
-#ifdef _MSC_VER
-                               return energy; // MSVC sucks
-#endif 
         }
      };
 
@@ -558,9 +559,6 @@ class Resources {
            case 1: return material;
            case 2: return fuel;
            default: throw OutOfRange();
-#ifdef _MSC_VER
-                               return energy; // MSVC sucks
-#endif 
         }
      };
 
@@ -569,6 +567,8 @@ class Resources {
      Resources& operator-= ( const Resources& res ) { energy-=res.energy; material-=res.material; fuel-=res.fuel; return *this;};
      bool operator>= ( const Resources& res ) { return energy >= res.energy && material>=res.material && fuel>=res.fuel; };
      enum { Energy, Material, Fuel };
+     void read ( tnstream& stream );
+     void write ( tnstream& stream );
 };
 
 class ResourceMatrix {
@@ -744,11 +744,12 @@ class AiParameter {
            AiThreat threat;
            int value;
            int valueType;
-           enum Task { tsk_nothing, tsk_tactics, tsk_tactwait, tsk_stratwait, tsk_wait, tsk_strategy } task;
+           enum Task { tsk_nothing, tsk_tactics, tsk_tactwait, tsk_stratwait, tsk_wait, tsk_strategy, tsk_serviceRetreat } task;
 
            int xtogo;
            int ytogo;
            int id;
+           int data;
 
            void reset ( void );
            AiParameter ( void ) { reset(); };
@@ -768,6 +769,16 @@ class BaseAI {
 
  typedef class  Building* pbuilding;
  typedef class  Vehicle*  pvehicle;
+
+
+template <class T> class PointerList : public list<T> {
+   public:
+     ~PointerList() {
+        for ( iterator it=begin(); it!=end(); it++ )
+            delete *it;
+     };
+};
+
 
 
 /*
@@ -1174,10 +1185,17 @@ class tevent {
  */
 
 
-struct tresearchdatachange { 
-    word         weapons[waffenanzahl];   /*  Basis 1024  */
-    word         armor;         /*  Basis 1024  */
-    unsigned char         dummy[20+(12-waffenanzahl)*2];
+class tresearchdatachange {
+   public:
+     word         weapons[waffenanzahl];   /*  Basis 1024  */
+     word         armor;         /*  Basis 1024  */
+     unsigned char         dummy[20+(12-waffenanzahl)*2];
+     tresearchdatachange ( void ) {
+        for ( int i = 0; i< waffenanzahl; i++ )
+           weapons[i] = 1024;
+        armor = 1024;
+        memset ( dummy, 0, sizeof(dummy ));
+     };
 }; 
 
 
@@ -1224,6 +1242,14 @@ class tresearch {
     int technologyresearched ( int id );
     int vehicletypeavailable ( const pvehicletype fztyp, pmap map );       // The map should be saved as a pointer in TRESEARCH, but this will change the size of TMAP and make all existing savegames and maps invalid ....
     int vehicleclassavailable ( const pvehicletype fztyp , int classnm, pmap map );
+    void read ( tnstream& stream );
+    void write ( tnstream& stream );
+    tresearch ( void ) {
+       progress = 0;
+       activetechnology = NULL;
+       techlevel = 0;
+       developedtechnologies = NULL;
+    };
 
 };
 
@@ -1242,6 +1268,7 @@ class twind {
     char speed;
     char direction;
     int operator== ( const twind& b ) const;
+    twind ( ) : speed ( 0 ), direction ( 0 ) {};
 };
 
 
@@ -1298,7 +1325,7 @@ class  tnetwork {
 
 class tmap { 
    public:
-      word         xsize, ysize;   /*  Groesse in fielder  */ 
+      word         xsize, ysize;   /*  Groesse in fielder  */
       word         xpos, ypos;     /*  aktuelle Dargestellte Position  */
       pfield        field;           /*  die fielder selber */
       char         codeword[11]; 
@@ -1311,7 +1338,7 @@ class tmap {
       struct tweather {
          char fog;
          twind wind[3];
-         char dummy[12];
+         // char dummy[12];
       } weather;
   
       int _resourcemode;  // 1 = Battle-Isle-Mode
@@ -1334,7 +1361,8 @@ class tmap {
          pmessagelist  unreadmessage;
          pmessagelist  oldmessage; 
          pmessagelist  sentmessage; 
-      } player[9]; 
+         int queuedEvents;
+      } player[9];
   
       peventstore  oldevents; 
       pevent       firsteventtocome; 
@@ -1349,7 +1377,6 @@ class tmap {
   
       pnetwork     network;
   
-      // char*        alliancenames[8];
       int           alliance_names_not_used_any_more[8];
   
       struct tcursorpos {
@@ -1385,12 +1412,16 @@ class tmap {
       int*          game_parameter;
     public:
       int           mineralResourcesDisplayed;
-      int           queuedEvents[9];
-      int           dummy[19];
+      // int           dummy[19];
       int           _oldgameparameter[ 8 ];
+
+
+      tmap ( void );
+
       void chainunit ( pvehicle unit );
       void chainbuilding ( pbuilding bld );
-      pvehicle getunit ( int x, int y, int nwid );
+      pvehicle getUnit ( int x, int y, int nwid );
+      pvehicle getUnit ( int nwid );
       int  getgameparameter ( int num );
       void setgameparameter ( int num, int value );
       void cleartemps( int b, int value = 0 );
@@ -1402,8 +1433,11 @@ class tmap {
       void calculateAllObjects ( void );
 
       pvehicletype getVehicleType_byId ( int id );
+      void read ( tnstream& stream );
+      void write ( tnstream& stream );
+      ~tmap();
    private:
-      pvehicle getunit ( pvehicle eht, int nwid );
+      pvehicle getUnit ( pvehicle eht, int nwid );
 
 }; 
 

@@ -242,7 +242,7 @@ void Building :: convert ( int col )
 
    if ( !prev && !next ) {
       gamemap->player[oldcol].firstbuilding = NULL;
-      gamemap->queuedEvents[oldcol]++;
+      gamemap->player[oldcol].queuedEvents++;
    }
    else {
 
@@ -271,11 +271,11 @@ void Building :: convert ( int col )
       }
 
       if ( connection & cconnection_conquer )
-         gamemap->queuedEvents[oldcol]++;
+         gamemap->player[oldcol].queuedEvents++;
          // releaseevent(NULL,this,cconnection_conquer);
 
       if ( connection & cconnection_lose )
-         gamemap->queuedEvents[oldcol]++;
+         gamemap->player[oldcol].queuedEvents++;
          // releaseevent(NULL,this,cconnection_lose);
 
 }
@@ -529,6 +529,19 @@ pfield        Building :: getField( int  x, int y)
   int      x1, y1;
   getFieldCoordinates ( x, y, x1, y1 );
   return gamemap->getField(x1,y1);
+}
+
+
+pfield        Building :: getEntryField( )
+{
+  return getField ( typ->entry.x, typ->entry.y );
+}
+
+MapCoordinate Building :: getEntry( )
+{
+  MapCoordinate e;
+  getFieldCoordinates ( typ->entry.x, typ->entry.y, e.x, e.y );
+  return e;
 }
 
 

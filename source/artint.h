@@ -1,6 +1,9 @@
-//     $Id: artint.h,v 1.15 2000-09-25 20:04:35 mbickel Exp $
+//     $Id: artint.h,v 1.16 2000-10-26 18:14:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/09/25 20:04:35  mbickel
+//      AI improvements
+//
 //     Revision 1.14  2000/09/25 13:25:52  mbickel
 //      The AI can now change the height of units
 //      Heightchaning routines improved
@@ -79,6 +82,7 @@
 #include <utility>
 #include <map>
 #include <vector>
+#include <list>
 
 #include "typen.h"
 #include "spfst.h"
@@ -91,14 +95,8 @@
 
 
 
+
     class AI : public BaseAI {
-          /*
-           #ifdef __WATCOM_CPLUSPLUS__
-            map< int, AiParameter, lessint>  unitai;
-           #else
-            map< int, AiParameter>  unitai;
-           #endif
-          */
            bool _isRunning;
            int unitCounter;
 
@@ -110,7 +108,27 @@
            pmap activemap;
            MapDisplayInterface* mapDisplay;
 
+           class ServiceOrder {
+                  AI* ai;
+                  int targetUnitID;
+                  int serviceUnitID;
+
+                  //! if service == ammo: weapon number ; if service == resource : resource type
+                  int position;
+               public:
+                  VehicleService::Service requiredService;
+
+                  ServiceOrder ( AI* _ai, VehicleService::Service _requiredService, int UnitID, int _pos = -1 );
+                  pvehicle getTargetUnit ( ) const { return ai->getMap()->getUnit ( targetUnitID );};
+                  pvehicle getServiceUnit ( ) const { return ai->getMap()->getUnit ( serviceUnitID );};
+           };
+           typedef PointerList<ServiceOrder*> ServiceOrderContainer;
+           ServiceOrderContainer serviceOrders;
+           void issueServices ( );
+           // void searchServices ( );
+
            AiThreat* fieldThreats;
+           pbuilding findServiceBuilding ( const ServiceOrder& so );
            int fieldNum;
 
            void calculateFieldThreats ( void );
@@ -132,10 +150,13 @@
                int lookIntoBuildings; 
                int wholeMapVisible;
                float aggressiveness;   // 1: units are equally worth ; 2
+               int damageLimit;
+               Resources resourceLimit;
+               int ammoLimit;
             } config; 
 
-          public:
-            struct MoveVariant { 
+
+            struct MoveVariant {
                int orgDamage;
                int damageAfterMove;
                int damageAfterAttack;
@@ -148,8 +169,6 @@
                int result;
                int moveDist;
             };
-
-          private:
 
             class AiResult {
                public:
@@ -174,6 +193,7 @@
                   };
             };
 
+            bool moveUnit ( pvehicle veh, const MapCoordinate& destination, bool intoContainers );
 
             void getAttacks ( VehicleMovement& vm, pvehicle veh, TargetVector& tv );
             void searchTargets ( pvehicle veh, int x, int y, TargetVector& tl, int moveDist );
@@ -207,6 +227,7 @@
             AiResult  buildings ( int process );
             AiResult  transports ( int process );
             AiResult  container ( ccontainercontrols& cc );
+            AiResult  executeServices ( void );
             void  setup( void );
 
             void reset ( void );

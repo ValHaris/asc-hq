@@ -1,6 +1,10 @@
-//     $Id: missions.cpp,v 1.14 2000-10-18 14:14:15 mbickel Exp $
+//     $Id: missions.cpp,v 1.15 2000-10-26 18:14:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/10/18 14:14:15  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.13  2000/10/11 14:26:44  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -174,7 +178,7 @@ void         checktimedevents ( MapDisplayInterface* md )
         return;
       getnexteventtime(); 
    } 
-   if ( actmap->queuedEvents[actmap->actplayer] ) {
+   if ( actmap->player[actmap->actplayer].queuedEvents ) {
       checkevents( md ); 
       if (eject) 
         return;
@@ -555,13 +559,13 @@ void         releaseevent(pvehicle     eht,
                   if (action == cconnection_destroy) {
                      if (ev1->trigger[b] == ceventt_buildingdestroyed) {
                         ev1->triggerstatus[b] = 2;
-                        actmap->queuedEvents[ev1->player]++;
+                        actmap->player[ev1->player].queuedEvents++;
                         ev1->trigger[b] = ceventt_irrelevant;
                      }
                      else
                         if ((ev1->trigger[b] == ceventt_buildingconquered) || (ev1->trigger[b] == ceventt_buildinglost)) {
                            ev1->triggerstatus[b] = 3;
-                           actmap->queuedEvents[ev1->player]++;
+                           actmap->player[ev1->player].queuedEvents++;
                            ev1->trigger[b] = ceventt_irrelevant;
                         }
                   }
@@ -571,7 +575,7 @@ void         releaseevent(pvehicle     eht,
                            ev1->triggerstatus[b] = 1;
                         else
                            ev1->triggerstatus[b] = 0;
-                        actmap->queuedEvents[ev1->player]++;
+                        actmap->player[ev1->player].queuedEvents++;
                      }
                      else
                         if (ev1->trigger[b] == ceventt_buildinglost) {
@@ -580,7 +584,7 @@ void         releaseevent(pvehicle     eht,
                            else
                               ev1->triggerstatus[b] = 1;
 
-                           actmap->queuedEvents[ev1->player]++;
+                           actmap->player[ev1->player].queuedEvents++;
                         }
                   }
 
@@ -590,7 +594,7 @@ void         releaseevent(pvehicle     eht,
                            ev1->triggerstatus[b] = 0;
                         else
                            ev1->triggerstatus[b] = 1;
-                        actmap->queuedEvents[ev1->player]++;
+                        actmap->player[ev1->player].queuedEvents++;
                      }
                      else
                         if (ev1->trigger[b] == ceventt_buildinglost) {
@@ -598,13 +602,13 @@ void         releaseevent(pvehicle     eht,
                               ev1->triggerstatus[b] = 1;
                            else
                               ev1->triggerstatus[b] = 0;
-                           actmap->queuedEvents[ev1->player]++;
+                           actmap->player[ev1->player].queuedEvents++;
                         }
                   }
 
                   if (action == cconnection_seen )
                      if (ev1->trigger[b] == ceventt_building_seen )
-                        actmap->queuedEvents[ev1->player]++;
+                        actmap->player[ev1->player].queuedEvents++;
 
 
                }
@@ -617,13 +621,13 @@ void         releaseevent(pvehicle     eht,
                   if (action == cconnection_destroy) {
                      if (ev1->trigger[b] == ceventt_unitdestroyed) {
                         ev1->triggerstatus[b] = 2;
-                        actmap->queuedEvents[ev1->player]++;
+                        actmap->player[ev1->player].queuedEvents++;
                         ev1->trigger[b] = ceventt_irrelevant;
                      }
                      else
                         if ((ev1->trigger[b] == ceventt_unitconquered) || (ev1->trigger[b] == ceventt_unitlost)) {
                            ev1->triggerstatus[b] = 3;
-                           actmap->queuedEvents[ev1->player]++;
+                           actmap->player[ev1->player].queuedEvents++;
                            ev1->trigger[b] = ceventt_irrelevant;
                         }
                   }
@@ -633,7 +637,7 @@ void         releaseevent(pvehicle     eht,
                            ev1->triggerstatus[b] = 1;
                         else
                            ev1->triggerstatus[b] = 0;
-                        actmap->queuedEvents[ev1->player]++;
+                        actmap->player[ev1->player].queuedEvents++;
                      }
                      else
                         if (ev1->trigger[b] == ceventt_unitlost) {
@@ -641,7 +645,7 @@ void         releaseevent(pvehicle     eht,
                               ev1->triggerstatus[b] = 0;
                            else
                               ev1->triggerstatus[b] = 1;
-                           actmap->queuedEvents[ev1->player]++;
+                           actmap->player[ev1->player].queuedEvents++;
                         }
                   }
 
@@ -651,7 +655,7 @@ void         releaseevent(pvehicle     eht,
                            ev1->triggerstatus[b] = 0;
                         else
                            ev1->triggerstatus[b] = 1;
-                        actmap->queuedEvents[ev1->player]++;
+                        actmap->player[ev1->player].queuedEvents++;
                      }
                      else
                         if (ev1->trigger[b] == ceventt_unitlost) {
@@ -659,7 +663,7 @@ void         releaseevent(pvehicle     eht,
                               ev1->triggerstatus[b] = 1;
                            else
                               ev1->triggerstatus[b] = 0;
-                           actmap->queuedEvents[ev1->player]++;
+                           actmap->player[ev1->player].queuedEvents++;
                         }
                   }
                }
@@ -670,7 +674,7 @@ void         releaseevent(pvehicle     eht,
                        int res = unit_in_polygon (  ev1->trigger_data[b]->unitpolygon );
                        if ( res ) {
                           ev1->triggerstatus[b] = 2;
-                          actmap->queuedEvents[ev1->player]++;
+                          actmap->player[ev1->player].queuedEvents++;
                        }
 
 
@@ -979,11 +983,11 @@ void         executeevent ( pevent ev, MapDisplayInterface* md )
       } 
 
       if ( ev->conn & 1 )
-         for ( int i = 0; i <= 8; i++ )
-            actmap->queuedEvents[i]++;
+         for ( int i = 0; i < 9; i++ )
+            actmap->player[i].queuedEvents++;
 
   } else
-     actmap->queuedEvents[ev->player]++;
+     actmap->player[ev->player].queuedEvents++;
 } 
 
 
@@ -1022,10 +1026,10 @@ void execevent ( pevent ev, MapDisplayInterface* md )
 void         checkevents( MapDisplayInterface* md )
 { 
    eject = false; 
-   actmap->queuedEvents[actmap->actplayer]++;
-   while ( actmap->queuedEvents[actmap->actplayer] ) {
+   actmap->player[actmap->actplayer].queuedEvents++;
+   while ( actmap->player[actmap->actplayer].queuedEvents ) {
 
-      actmap->queuedEvents[actmap->actplayer] = 0;
+      actmap->player[actmap->actplayer].queuedEvents = 0;
    
       pevent ev = actmap->firsteventtocome; 
       while ( ev ) { 

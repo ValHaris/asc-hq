@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.80 2000-10-18 14:13:53 mbickel Exp $
+//     $Id: controls.cpp,v 1.81 2000-10-26 18:14:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.80  2000/10/18 14:13:53  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.79  2000/10/14 10:52:45  mbickel
 //      Some adjustments for a Win32 port
 //
@@ -3471,7 +3475,7 @@ void addanytechnology ( ptechnology tech, int player )
          settechlevel ( tech->techlevelset, 1 << player );
 
 
-      actmap->queuedEvents[player]++;
+      actmap->player[player].queuedEvents++;
    }
 
 }
@@ -6242,7 +6246,7 @@ void trunreplay :: execnextreplaymove ( void )
                         stream->readdata2 ( nwid );
                         readnextaction();
 
-                        pvehicle eht = actmap->getunit ( x1, y1, nwid );
+                        pvehicle eht = actmap->getUnit ( x1, y1, nwid );
                         if ( eht ) {
                            ReplayMapDisplay rmd ( &defaultMapDisplay );
                            VehicleMovement vm ( &rmd, NULL );
@@ -6272,7 +6276,7 @@ void trunreplay :: execnextreplaymove ( void )
                         stream->readdata2 ( height );
                         readnextaction();
 
-                        pvehicle eht = actmap->getunit ( x1, y1, nwid );
+                        pvehicle eht = actmap->getUnit ( x1, y1, nwid );
                         if ( eht ) {
                            ReplayMapDisplay rmd( &defaultMapDisplay );
                            VehicleMovement vm ( &rmd, NULL );
@@ -6374,7 +6378,7 @@ void trunreplay :: execnextreplaymove ( void )
                         stream->readdata2 ( newheight );
                         readnextaction();
 
-                        pvehicle eht = actmap->getunit ( x1, y1, nwid );
+                        pvehicle eht = actmap->getUnit ( x1, y1, nwid );
                         if ( eht ) {
                            ReplayMapDisplay rmd( &defaultMapDisplay );
                            VehicleAction* va;
@@ -6648,7 +6652,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  readnextaction();
 
 
-                                 pvehicle eht = actmap->getunit ( x, y, nwid );
+                                 pvehicle eht = actmap->getUnit ( x, y, nwid );
                                  if ( eht ) {
                                     eht->experience = exp;
                                  } else 
@@ -6695,7 +6699,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  stream->readdata2 ( amnt );
                                  readnextaction();
 
-                                 pvehicle eht = actmap->getunit ( x, y, nwid );
+                                 pvehicle eht = actmap->getUnit ( x, y, nwid );
                                  if ( eht ) {
                                     if ( pos < 16 )
                                        eht->ammo[pos] = amnt;

@@ -176,6 +176,8 @@ extern const char*  cvehiclefunctions[];
         int maxsize   ( void );     // without fuel and material
         int vehicleloadable ( pvehicletype fzt ) const;
         Vehicletype ( void );
+        void read ( tnstream& stream );
+        void write ( tnstream& stream );
         ~Vehicletype ( );
  };
 

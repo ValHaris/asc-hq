@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.55 2000-10-18 17:09:42 mbickel Exp $
+//     $Id: typen.cpp,v 1.56 2000-10-26 18:15:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2000/10/18 17:09:42  mbickel
+//      Fixed eventhandling for DOS
+//
 //     Revision 1.54  2000/10/12 22:24:02  mbickel
 //      Made the DOS part of the new platform system work again
 //
@@ -857,7 +860,57 @@ Resources ResourceMatrix :: operator* ( const Resources& r ) const
 }
 
 
+void Resources :: read ( tnstream& stream )
+{
+   for ( int i = 0; i< resourceTypeNum; i++ )
+      resource(i) = stream.readInt();
+}
+
+void Resources :: write ( tnstream& stream )
+{
+   for ( int i = 0; i< resourceTypeNum; i++ )
+      stream.writeInt( resource(i) );
+}
+
+
 ////////////////////////////////////////////////////////////////////
+
+
+void tresearch :: read( tnstream& stream ) {
+   progress = stream.readInt();
+   activetechnology = (ptechnology) stream.readInt();
+
+   for ( int i = 0; i < waffenanzahl; i++ )
+      unitimprovement.weapons[i] = stream.readWord();
+   unitimprovement.armor = stream.readWord();
+   for ( int j = 0; j < 44-waffenanzahl*2; j++ )
+       stream.readChar(); // dummy
+
+   techlevel = stream.readInt();
+   developedtechnologies = (pdevelopedtechnologies) stream.readInt();
+
+}
+
+void tresearch :: write( tnstream& stream ) {
+   stream.writeInt( progress );
+   if ( activetechnology )
+      stream.writeInt( 1 );
+   else
+      stream.writeInt ( 0 );
+
+   for ( int i = 0; i < waffenanzahl; i++ )
+      stream.writeWord ( unitimprovement.weapons[i] );
+
+   stream.writeWord ( unitimprovement.armor );
+   for ( int j = 0; j < 44-waffenanzahl*2; j++ )
+       stream.writeChar( 0 ); // dummy
+
+   stream.writeInt ( techlevel );
+   if ( developedtechnologies )
+      stream.writeInt ( 1 );
+   else
+      stream.writeInt ( 0 );
+}
 
 
 
@@ -1577,7 +1630,7 @@ int tmap :: eventpassed( int id, int mapid )
 } 
 
 
-pvehicle tmap :: getunit ( pvehicle eht, int nwid )
+pvehicle tmap :: getUnit ( pvehicle eht, int nwid )
 {
    if ( !eht )
       return NULL;
@@ -1590,13 +1643,56 @@ pvehicle tmap :: getunit ( pvehicle eht, int nwid )
                if ( eht->loading[i]->networkid == nwid )
                   return eht->loading[i];
                else {
-                  pvehicle ld = getunit ( eht->loading[i], nwid );
+                  pvehicle ld = getUnit ( eht->loading[i], nwid );
                   if ( ld )
                      return ld;
                }
       return NULL;
    }
 }
+
+pvehicle tmap :: getUnit ( int nwid )
+{
+   for ( int i = 0; i < 9; i++ ) {
+      pvehicle veh = player[i].firstvehicle;
+      while ( veh ) {
+         if ( veh->networkid == nwid )
+            return veh;
+         veh = veh->next;
+      };
+   }
+   return NULL;
+}
+
+
+pvehicle tmap :: getUnit ( int x, int y, int nwid )
+{
+  #ifndef converter
+   pfield fld  = getfield ( x, y );
+   if ( !fld )
+      return NULL;
+
+   if ( !fld->vehicle )
+      if ( fld->building ) {
+         for ( int i = 0; i < 32; i++ ) {
+            pvehicle ld = getUnit ( fld->building->loading[i], nwid );
+            if ( ld )
+               return ld;
+         }
+         return NULL;
+      } else
+         return NULL;
+   else
+      if ( fld->vehicle->networkid == nwid )
+         return fld->vehicle;
+      else
+         return getUnit ( fld->vehicle, nwid );
+ #else
+  return NULL;
+ #endif
+}
+
+
 
 pvehicletype tmap :: getVehicleType_byId ( int id )
 {
@@ -1607,33 +1703,6 @@ pvehicletype tmap :: getVehicleType_byId ( int id )
    #endif
 }
 
-
-pvehicle tmap :: getunit ( int x, int y, int nwid )
-{
-  #ifndef converter
-   pfield fld  = getfield ( x, y );
-   if ( !fld )
-      return NULL;
-
-   if ( !fld->vehicle )
-      if ( fld->building ) {
-         for ( int i = 0; i < 32; i++ ) {
-            pvehicle ld = getunit ( fld->building->loading[i], nwid );
-            if ( ld )
-               return ld;
-         }
-         return NULL;
-      } else
-         return NULL;
-   else
-      if ( fld->vehicle->networkid == nwid )
-         return fld->vehicle;
-      else 
-         return getunit ( fld->vehicle, nwid );
- #else
-  return NULL;
- #endif
-}
 
 
 
