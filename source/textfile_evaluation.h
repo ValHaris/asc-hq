@@ -29,6 +29,10 @@
 #include "textfileparser.h"
 #include "typen.h"
 
+#ifdef ParserLoadImages
+#include "graphics/surface.h";
+#endif
+
 
 class PropertyContainer {
          bool reading;
@@ -91,6 +95,7 @@ class PropertyContainer {
          void addNamedInteger ( const ASCString& name, int& property, int tagNum, const char** tags, int defaultValue );
         #ifdef ParserLoadImages
          void addImage ( const ASCString& name, void* &property, const ASCString& fileName );
+         void addImage ( const ASCString& name, Surface& property, const ASCString& fileName );
          void addImageArray ( const ASCString& name, vector<void*> &property, const ASCString& fileName );
         #endif
          void addBool  ( const ASCString& name, bool &property );
