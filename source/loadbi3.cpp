@@ -1,6 +1,17 @@
-//     $Id: loadbi3.cpp,v 1.26 2000-10-11 14:26:41 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.27 2000-10-12 19:00:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/10/11 14:26:41  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.25  2000/08/12 09:17:30  gulliver
 //     *** empty log message ***
 //
@@ -925,19 +936,26 @@ const int* getobjectcontainertranslate ( int pos )
 #include "dialog.h"
 
 // backwards due to byte order
-
+/*
       int HeadID = 'NSSM';
       int ACTNID = 'NTCA';
       int SHOPID = 'POHS';
       int MAPID  = '\0PAM';
       int MISSID = 'SSIM';
+*/
+      char* HeadID = "MSSN";
+      char* ACTNID = "ACTN";
+      char* SHOPID = "SHOP";
+      char* MAPID  = "MAP\0";
+      char* MISSID = "MISS";
+
 
 #pragma pack(1)
 
 class tloadBImap {
      
        struct THeader {
-         int ID;                            // { 'MSSN' }
+         char ID[4];                            // { 'MSSN' }
          int MissPos;
          int MapPos ;
          int ShopPos;
@@ -948,7 +966,7 @@ class tloadBImap {
        };
 
        struct TACTN {
-         int ID;
+         char ID[4];
          word XSize, YSize;
        };
 
@@ -957,7 +975,7 @@ class tloadBImap {
 
 
        struct TMISSPart {
-           int ID;
+           char ID[4];
            word Stuff1 [3];
            word NextMiss;
            char StartWeather;
@@ -973,7 +991,7 @@ class tloadBImap {
        };
           
        struct TMAPHead {
-              int ID;
+              char ID[4];
        };
           
        struct TFileMap { 
@@ -989,7 +1007,7 @@ class tloadBImap {
        };
           
        struct TSHOPHead {
-              int ID;
+              char ID[4];
               word Num;
        };
           
@@ -1036,7 +1054,6 @@ class tloadBImap {
             char raw[76];
          };
        };
-
 
        dynamic_array<char*> names;
        int namenum;
@@ -1119,7 +1136,7 @@ void  tloadBImap ::  ReadMISSPart(void)
   MissFile->seek ( Header.MissPos );
 
   MissFile->readdata2 ( OrgMissRec ); 
-  if ( OrgMissRec.ID != MISSID ) {
+  if ( strncmp ( OrgMissRec.ID, MISSID, 4)  ) {
      strcat ( missing, "\nFatal error: No Battle Isle mission; invalid MissID\n"  );
      throw timporterror (); 
   }
@@ -1257,7 +1274,7 @@ void        tloadBImap ::   ReadACTNPart(void)
   
     MissFile->seek ( Header.ACTNPos );
     MissFile->readdata2( ACTNHead ); 
-    if ( ACTNHead.ID != ACTNID ) {
+    if ( strncmp ( ACTNHead.ID ,ACTNID,4 )) {
        strcat ( missing, "\nFatal error: No Battle Isle mission; invalid ACTNID\n"  );
        throw timporterror (); 
     }
@@ -1451,7 +1468,7 @@ void       tloadBImap :: ReadSHOPPart( void )
  
   MissFile->seek ( Header.ShopPos );
    MissFile->readdata2 ( SHOPHead ); 
-   if ( SHOPHead.ID != SHOPID ) {
+   if ( strncmp ( SHOPHead.ID, SHOPID, 4 )) {
       strcat ( missing, "\nFatal error: No Battle Isle mission; invalid ShopID\n"  );
       throw timporterror (); 
    }
@@ -1831,8 +1848,7 @@ void tloadBImap :: LoadTXTFile ( char* filename )
 
    char buf[1000];
    fread ( buf, 1, 4, fp );
-   int* pi = (int*) buf;
-   if ( *pi == 'MWPT' ) {
+   if ( strncmp ( buf, "TPWM",4) == 0  ) {
       TPWMtextfile = 1;
       fclose ( fp );
       return;
@@ -1897,7 +1913,7 @@ void tloadBImap :: LoadFromFile( char* path, char* AFileName, pwterraintype trrn
        tn_file_buf_stream stream ( completefilename, 1 );
        MissFile = &stream;
        MissFile->readdata2( Header );
-       if ( Header.ID != HeadID ) {
+       if ( strncmp ( Header.ID, HeadID, 4 )) {
           strcat ( missing, "\nFatal error: No Battle Isle mission; invalid HeadID\n"  );
           throw timporterror (); 
        }

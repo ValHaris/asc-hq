@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.63 2000-10-11 15:33:44 mbickel Exp $
+//     $Id: spfst.cpp,v 1.64 2000-10-12 19:00:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.63  2000/10/11 15:33:44  mbickel
+//      Adjusted small editors to the new ASC structure
+//      Watcom compatibility
+//
 //     Revision 1.62  2000/10/11 14:26:48  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -2214,7 +2218,7 @@ void         putbuilding(int          x,
          } 
 
 
-   gbde = new Building;
+   gbde = new Building ( actmap );
    gbde->color = color; 
 
    actmap->chainbuilding ( gbde );

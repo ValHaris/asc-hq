@@ -434,7 +434,7 @@ int  Building :: chainbuildingtofield ( int x, int y )
                field->vehicle = NULL;
             }
 
-            field = getField(a + compensatebuildingcoordinatex, b );
+            field = gamemap->getField(a + compensatebuildingcoordinatex, b );
             field->building = this;
 
             // field->picture = gbde->typ->picture[compl][a - orgx][b - orgy];

@@ -412,7 +412,7 @@ int main(int argc, char *argv[] )
    out = fopen ( argv[2], "wb" );
 
    int i = 0;
-   pos += fwrite ( &containermagic, 1, 4, out );
+   pos += fwrite ( containermagic, 1, 4, out );
    pos += fwrite ( &i, 1, 4, out );
 
    char buf[1000];

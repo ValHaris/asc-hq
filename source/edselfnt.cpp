@@ -1,6 +1,17 @@
-//     $Id: edselfnt.cpp,v 1.14 2000-10-11 14:26:34 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.15 2000-10-12 19:00:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/10/11 14:26:34  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.13  2000/08/15 16:22:55  mbickel
 //      Fixed: crash in mapedit when selecting a unit as buildingcargo
 //
@@ -737,7 +748,7 @@ void SelectBuildingType :: showiteminfos ( pbuildingtype item, int x1, int y1, i
       activefontsettings.justify = lefttext;
       activefontsettings.color = lightgray;
       activefontsettings.height = 0;
-      activefontsettings.length = x2 - x1 - 20 - getitemsizex();
+      activefontsettings.length = x2 - x1 - 20 - fieldsizex;
 
       if ( item->name && item->name[0] )
          showtext4 ( "Name: %s", x1 + 20 + fieldsizex, y1 + 10, item->name );

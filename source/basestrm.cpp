@@ -1,6 +1,17 @@
-//     $Id: basestrm.cpp,v 1.40 2000-10-11 14:26:16 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.41 2000-10-12 19:00:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2000/10/11 14:26:16  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.39  2000/09/26 18:05:13  mbickel
 //      Upgraded to bzlib 1.0.0 (which is incompatible to older versions)
 //
@@ -286,7 +297,7 @@ struct trleheader32 {
 
 #define bzip_xor_byte 'M'
 
-const int containermagic = 'MBCN';
+const char* containermagic = "NCBM";
 
 const char* LZ_SIGNATURE  =  "MBLZW16";
 const char* RLE_SIGNATURE =  "MBRLE1";
@@ -1030,9 +1041,9 @@ tncontainerstream :: tncontainerstream ( const char* containerfilename, Containe
 {
    int pos;
    num = 0;
-   int magic;
+   char magic[4];
    readdata ( &magic, sizeof(pos) );
-   if ( magic == containermagic ) {
+   if ( strncmp ( magic, containermagic, 4 ) == 0) {
       readdata ( &pos, sizeof(pos) );
       seek ( pos );
       readdata ( &num, sizeof (num) );

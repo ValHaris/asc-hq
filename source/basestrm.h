@@ -1,6 +1,17 @@
-//     $Id: basestrm.h,v 1.23 2000-10-11 14:26:17 mbickel Exp $
+//     $Id: basestrm.h,v 1.24 2000-10-12 19:00:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/10/11 14:26:17  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.22  2000/09/26 18:05:14  mbickel
 //      Upgraded to bzlib 1.0.0 (which is incompatible to older versions)
 //
@@ -760,7 +771,7 @@ extern time_t get_filetime ( char* devicename );
 
 extern void opencontainer ( const char* wildcard );
 
-extern const int containermagic;
+extern const char* containermagic;
 
 #pragma pack()
 
