@@ -359,6 +359,8 @@ int main(int argc, char *argv[] )
       return 1;
    }
 
+   addSearchPath(".");
+
    FILE* fp = fopen ( argv[1], "rt" );
 
    out = fopen ( argv[2], "wb" );
