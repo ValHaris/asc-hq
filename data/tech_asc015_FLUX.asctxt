@@ -1,0 +1,10 @@
+technology {
+   Name = FLUX
+   infotext = Reserach project finished! FLUX avialable!
+   id = 101072
+   RelatedUnitID = 72
+   parent = 101915
+   researchpoints *= 100
+   techlevel = 1
+   TechnologiesRequired = 101915 
+} Technology

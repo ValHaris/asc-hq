@@ -1,0 +1,10 @@
+technology {
+   Name = HORNET II
+   infotext = Reserach project finished! HORNET II avialable!
+   id = 101114
+   RelatedUnitID = 114
+   parent = 101915
+   researchpoints *= 160
+   techlevel = 3
+   TechnologiesRequired = 101915 
+} Technology

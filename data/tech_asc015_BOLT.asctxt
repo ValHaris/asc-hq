@@ -1,0 +1,10 @@
+technology {
+   Name = BOLT
+   infotext = Reserach project finished! BOLT avialable!
+   id = 101030
+   RelatedUnitID = 30
+   parent = 101915
+   researchpoints *= 160
+   techlevel = 3
+   TechnologiesRequired = 101915 
+} Technology
