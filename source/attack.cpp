@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: attack.cpp,v 1.48 2001-09-13 17:43:11 mbickel Exp $
+//     $Id: attack.cpp,v 1.49 2001-09-25 15:13:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2001/09/13 17:43:11  mbickel
+//      Many, many bug fixes
+//
 //     Revision 1.47  2001/08/07 15:58:09  mbickel
 //      Fixed crash in mail list
 //      Fixed crash in weapon info with mines
@@ -120,7 +123,7 @@ bool  AttackFormula :: checkHemming ( pvehicle     d_eht,  int     direc )
    pfield fld = getfield(x,y);
 
    if ( fld ) 
-      s_eht = fld->vehicle; 
+      s_eht = fld->vehicle;
    else 
       s_eht = NULL; 
 
@@ -601,8 +604,8 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    else
       dv.hemming = 1;
 
-   
-   if ( attackedunit->height <= chfahrend ) 
+
+   if ( attackedunit->height <= chfahrend )
       dv.defensebonus = getfield ( attackedunit->xpos, attackedunit->ypos ) -> getdefensebonus();
    else
       dv.defensebonus = 0;
@@ -622,34 +625,35 @@ void tunitattacksunit :: setresult ( void )
    if ( _attackingunit->reactionfire.getStatus() >= Vehicle::ReactionFire::ready )
       _attackingunit->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  dv.color );
 
-   _attackingunit->attacked = true; 
+   _attackingunit->attacked = true;
+   if ( _attackingunit->functions & cf_moveafterattack )
+      _attackingunit->decreaseMovement ( _attackingunit->maxMovement() * attackmovecost / 100 );
+   else
+      _attackingunit->setMovement ( 0 );
 
    _attackedunit->damage    = dv.damage;
    _attackingunit->damage    = av.damage;
 
    if ( _respond ) {
-
       _attackedunit->experience = dv.experience;
       _attackedunit->ammo[ dv.weapnum ] = dv.weapcount;
    }
 
    /* If the attacking vehicle was destroyed, remove it */
    if ( _attackingunit->damage >= 100 ) {
-     // DEBUG("Attacker Destroyed");
      delete *_pattackingunit;
      *_pattackingunit = NULL;
    }
 
    /* If the attacked vehicle was destroyed, remove it */
    if ( _attackedunit->damage >= 100 ) {
-     // DEBUG("Target Destroyed");
      delete *_pattackedunit;
      *_pattackedunit = NULL;
    }
    actmap->time.a.move++;
 }
 
-void tunitattacksunit :: paintimages ( int xa, int ya, int xd, int yd ) 
+void tunitattacksunit :: paintimages ( int xa, int ya, int xd, int yd )
 {
    putrotspriteimage ( xa, ya, _attackingunit->typ->picture[0], _attackingunit->color );
    putrotspriteimage ( xd, yd, _attackedunit ->typ->picture[0], _attackedunit->color  );
@@ -756,7 +760,7 @@ void tunitattacksbuilding :: setresult ( void )
 
    _attackingunit->attacked = true;
    if ( _attackingunit->functions & cf_moveafterattack )
-      _attackingunit->setMovement ( _attackingunit->getMovement() - _attackingunit->typ->movement[log2(_attackingunit->height)]*attackmovecost / 100 );
+      _attackingunit->decreaseMovement ( _attackingunit->maxMovement() * attackmovecost / 100 );
    else
       _attackingunit->setMovement ( 0 );
 
@@ -1002,7 +1006,7 @@ void tunitattacksobject :: setresult ( void )
    _attackingunit->attacked = true;
 
    if ( _attackingunit->functions & cf_moveafterattack )
-      _attackingunit->setMovement ( _attackingunit->getMovement() - _attackingunit->typ->movement[log2(_attackingunit->height)]*attackmovecost / 100 );
+      _attackingunit->decreaseMovement ( _attackingunit->maxMovement() * attackmovecost / 100 );
    else
       _attackingunit->setMovement ( 0 );
 

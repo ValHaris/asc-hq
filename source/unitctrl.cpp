@@ -1,6 +1,13 @@
-//     $Id: unitctrl.cpp,v 1.69 2001-09-23 23:06:20 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.70 2001-09-25 15:13:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.69  2001/09/23 23:06:20  mbickel
+//      Fixed:
+//       - ascent/descent during reactionfire
+//       - movement with nearly empty fuel tank
+//       - production icon displayed although unit could not be produced
+//       - invisible building becoming visible in fog of war
+//
 //     Revision 1.68  2001/09/13 17:43:12  mbickel
 //      Many, many bug fixes
 //
@@ -1452,9 +1459,9 @@ int ChangeVehicleHeight :: verticalHeightChange ( void )
       logtoreplayinfo ( rpl_changeheight, (int) vehicle->xpos, (int) vehicle->ypos,
                                           (int) vehicle->xpos, (int) vehicle->ypos, vehicle->networkid, (int) vehicle->height, (int) newheight );
 
-      vehicle->height = newheight; 
-     
-   } 
+      vehicle->height = newheight;
+
+   }
    return 0;
 }
 
@@ -1482,7 +1489,7 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int h
             status =  -107;
             return status;
          }
-   
+
          status = 2;
       } else {
          status = verticalHeightChange ();
@@ -1518,6 +1525,7 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int h
          if ( stat != 1000 )
             displaymessage ( "ChangeVehicleHeight :: execute / vmove step 3 failed !", 2 );
       }
+      modechangePosition = MapCoordinate ( sp.x, sp.y );
 
       fieldReachableRek.run( x, y, vehicle, height, &path );
 
@@ -1530,11 +1538,16 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int h
           return status;
        }
 
+       if ( vehicle->xpos != modechangePosition.x || vehicle->ypos != modechangePosition.y ) {
+          status = -117;
+          return status;
+       }
+
        int x1 = vehicle->xpos;
        int y1 = vehicle->ypos;
- 
+
        logtoreplayinfo ( rpl_changeheight, x1, y1, x, y, vehicle->networkid, (int) vehicle->height, (int) newheight );
- 
+
        if ( mapDisplay )
           mapDisplay->startAction();
 
@@ -1551,13 +1564,13 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int h
           mapDisplay->stopAction();
        }
 
-       if ( stat < 0 ) 
+       if ( stat < 0 )
           status = stat;
        else
           status = 1000;
 
        return status;
-      
+
     } else
        status = 0;
   return status;
@@ -1816,13 +1829,6 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
       int ad2 = battle->av.damage;
       int dd2 = battle->dv.damage;
       battle->setresult ();
-
-      if ( ad2 < 100 ) {
-         if ( vehicle->functions & cf_moveafterattack )
-            vehicle->decreaseMovement ( vehicle->typ->movement[log2(vehicle->height)]*attackmovecost / 100 );
-         else
-            vehicle->setMovement ( 0 );
-      }
 
       logtoreplayinfo ( rpl_attack, xp1, yp1, x, y, ad1, ad2, dd1, dd2, weapnum );
 

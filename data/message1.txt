@@ -30,6 +30,8 @@ you cannot submerge in shallow water
 not enough fuel to change height
 116
 no fields accessible
+117
+movement interrupted
 201
 This # won't attack anything
 202

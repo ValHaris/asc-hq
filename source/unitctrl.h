@@ -1,6 +1,12 @@
-//     $Id: unitctrl.h,v 1.24 2001-03-30 12:43:16 mbickel Exp $
+//     $Id: unitctrl.h,v 1.25 2001-09-25 15:13:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2001/03/30 12:43:16  mbickel
+//      Added 3D pathfinding
+//      some cleanup and documentation
+//      splitted the ai into several files, now located in the ai subdirectory
+//      AI cares about airplane servicing and range constraints
+//
 //     Revision 1.23  2001/02/04 21:27:02  mbickel
 //      The AI status is written to savegames -> new savegame revision
 //      Lots of bug fixes
@@ -340,7 +346,7 @@ class VehicleMovement : public BaseVehicleMovement {
 
 class ChangeVehicleHeight : public BaseVehicleMovement {
               int status;
-              // IntFieldList path1;
+              MapCoordinate modechangePosition;
            public:
               struct StartPosition {
                  int x;
