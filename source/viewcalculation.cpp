@@ -344,3 +344,5 @@ int computeview( pmap actmap, int player_fieldcount_mask )
    return evaluateviewcalculation ( actmap, player_fieldcount_mask );
 }
 
+
+

@@ -552,8 +552,6 @@ class tmap {
 
       tmap ( void );
 
-      // void chainunit ( pvehicle unit );
-      // void chainbuilding ( pbuilding bld );
       pvehicle getUnit ( int x, int y, int nwid );
       pvehicle getUnit ( int nwid );
       int  getgameparameter ( int num );
@@ -565,6 +563,8 @@ class tmap {
       pfield getField ( int x, int y );
       pfield getField ( const MapCoordinate& pos );
       void startGame ( );
+
+      VisibilityStates getInitialMapVisibility( int player );
 
       //! resizes the map. Positive numbers enlarge the map in that direction
       int  resize( int top, int bottom, int left, int right );

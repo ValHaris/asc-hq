@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: spfst.h,v 1.50 2002-11-02 14:13:18 mbickel Exp $
+//     $Id: spfst.h,v 1.51 2002-11-17 11:43:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2002/11/02 14:13:18  mbickel
+//      New net handling for objects
+//
 //     Revision 1.49  2002/10/09 16:58:46  mbickel
 //      Fixed to GrafikSet loading
 //      New item filter for mapeditor
@@ -182,8 +185,6 @@
   extern pmap actmap; 
 
 
-
-
  //! passes a key to the map-cursor
  extern void  movecursor(tkey         ch);
  
@@ -200,20 +201,6 @@ extern int  getxpos(void);
 //!returns the y coordinate of the cursor location
 extern int  getypos(void);
 
-
-/*!
-  evaluates the visibility of a field
-  \param pe the field to be evaluated
-  \param player the player who is 'looking'
- */
-extern bool fieldvisiblenow( const pfield pe, int player = actmap->actplayer );
-
-/*!
-  evaluates the visibility of a field
-  \param pe the field to be evaluated
-  \param player the player who is 'looking'
- */
-extern VisibilityStates fieldVisibility  ( const pfield pe, int player = actmap->actplayer );
 
 //! returns the diplomatic status between actmap->actplayer and the player with color b (note that the color is playernum*8 ) 
 extern int getdiplomaticstatus( int b );
@@ -327,6 +314,19 @@ extern int          terrainaccessible2 ( const pfield        field, const pvehic
  */
 extern int getheightdelta ( int height1, int height2 );
 
+  /*!
+    evaluates the visibility of a field
+    \param pe the field to be evaluated
+    \param player the player who is 'looking'
+  */
+  extern bool fieldvisiblenow( const pfield pe, int player = actmap->actplayer );
+
+  /*!
+    evaluates the visibility of a field
+    \param pe the field to be evaluated
+    \param player the player who is 'looking'
+   */
+  extern VisibilityStates fieldVisibility  ( const pfield pe, int player = actmap->actplayer );
 
 
 

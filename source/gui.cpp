@@ -4,9 +4,14 @@
 */
 
 
-//     $Id: gui.cpp,v 1.80 2002-11-15 20:54:11 mbickel Exp $
+//     $Id: gui.cpp,v 1.81 2002-11-17 11:43:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.80  2002/11/15 20:54:11  mbickel
+//      Added third snow-weather
+//      Added aliase in text files
+//      Fixed bad pointer access in gui.cpp
+//
 //     Revision 1.79  2002/11/01 20:44:53  mbickel
 //      Added function to specify which units can be build by other units
 //
@@ -216,6 +221,8 @@
 #include "gamedlg.h"
 #include "dashboard.h"
 #include "itemrepository.h"
+#include "viewcalculation.h"
+
 
 tguihoststandard          gui;
 tselectbuildingguihost    selectbuildinggui;

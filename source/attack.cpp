@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: attack.cpp,v 1.60 2002-09-19 20:20:04 mbickel Exp $
+//     $Id: attack.cpp,v 1.61 2002-11-17 11:43:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2002/09/19 20:20:04  mbickel
+//      Cleanup and various bug fixes
+//
 //     Revision 1.59  2002/04/21 21:50:29  mbickel
 //      ASC spec files: automatic versioning
 //      Some cleanup and documentation
@@ -156,6 +159,7 @@
 #include "events.h"
 #include "loaders.h"
 #include "gameoptions.h"
+#include "viewcalculation.h"
 
 #include "mapalgorithms.h"
 

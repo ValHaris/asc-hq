@@ -35,6 +35,7 @@
 #include "controls.h"
 #include "dashboard.h"
 #include "weather.h"
+#include "viewcalculation.h"
 
          tdashboard  dashboard;
 

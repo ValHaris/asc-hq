@@ -16,12 +16,13 @@
  ***************************************************************************/
 
 
-#ifndef viewcalculation_h_included
- #define viewcalculation_h_included
+#ifndef viewcalculationH
+ #define viewcalculationH
 
  #include "typen.h"
  #include "mapalgorithms.h"
  #include "gamemap.h"
+ #include "spfst.h"
 
   class tcomputeview : public SearchFields {
                 protected:
@@ -88,6 +89,5 @@
       \returns the number of fields which have a changed visibility status
   */
   extern int  evaluateviewcalculation ( pmap actmap, const MapCoordinate& pos, int distance, int player_fieldcount_mask = 0 );
-
 
 #endif

@@ -2,9 +2,12 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.113 2002-11-02 14:13:18 mbickel Exp $
+//     $Id: spfst.cpp,v 1.114 2002-11-17 11:43:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.113  2002/11/02 14:13:18  mbickel
+//      New net handling for objects
+//
 //     Revision 1.112  2002/11/01 14:06:53  mbickel
 //      Changing the height between floating and driving has no movecost any more
 //      submarines evalute the field properties, not the terrain type properties
@@ -539,67 +542,11 @@ word         beeline(integer      x1,
    if y1 and 1 <> y2 and 1 then inc(min);
    max:=abs(y1-y2);
    end;
-   ll:=min shl 3 + (max - min) * maxmalq shr 1; 
+   ll:=min shl 3 + (max - min) * maxmalq shr 1;
 
-} 
+}
 
 */
-
-
-bool fieldvisiblenow( const pfield pe, int player )
-{
-  if ( player < 0 ) {
-     #ifdef karteneditor
-     return true;
-     #else
-     return false;
-     #endif
-  }
-
-  if ( pe ) { 
-      int c = (pe->visible >> ( player * 2)) & 3;
-      #ifdef karteneditor
-         c = visible_all;
-      #endif
-
-      if ( actmap->player[player].ai && actmap->player[player].ai->isRunning() )
-         if ( c < actmap->player[player].ai->getVision() )
-            c = actmap->player[player].ai->getVision();
-
-      if (c > visible_ago) { 
-         if ( pe->vehicle ) { 
-            if ((c == visible_all) || (pe->vehicle->color / 8 == player ) || ((pe->vehicle->height >= chschwimmend) && (pe->vehicle->height <= chhochfliegend)))
-               return true; 
-         } 
-         else 
-            if (pe->building != NULL) { 
-               if ((c == visible_all) || (pe->building->typ->buildingheight >= chschwimmend) || (pe->building->color == player*8)) 
-                  return true; 
-            } 
-            else 
-               return true; 
-      } 
-   }
-   return false; 
-} 
-
-
-VisibilityStates fieldVisibility( const pfield pe, int player )
-{
-  if ( pe && player >= 0 ) {
-      VisibilityStates c = VisibilityStates((pe->visible >> ( player * 2)) & 3);
-      #ifdef karteneditor
-         c = visible_all;
-      #endif
-
-      if ( actmap->player[player].ai && actmap->player[player].ai->isRunning() )
-         if ( c < actmap->player[player].ai->getVision() )
-            c = actmap->player[player].ai->getVision();
-
-      return c;
-   } else
-      return visible_not;
-}
 
 
 #include "movecurs.inc"      
@@ -1474,3 +1421,57 @@ int getheightdelta ( int height1, int height2 )
 
    return hd;
 }
+
+bool fieldvisiblenow( const pfield pe, int player )
+{
+  if ( player < 0 ) {
+     #ifdef karteneditor
+     return true;
+     #else
+     return false;
+     #endif
+  }
+
+  if ( pe ) { 
+      int c = (pe->visible >> ( player * 2)) & 3;
+      #ifdef karteneditor
+         c = visible_all;
+      #endif
+
+      if ( c < actmap->getInitialMapVisibility( player ) )
+         c = actmap->getInitialMapVisibility( player );
+
+      if (c > visible_ago) { 
+         if ( pe->vehicle ) { 
+            if ((c == visible_all) || (pe->vehicle->color / 8 == player ) || ((pe->vehicle->height >= chschwimmend) && (pe->vehicle->height <= chhochfliegend)))
+               return true; 
+         } 
+         else 
+            if (pe->building != NULL) { 
+               if ((c == visible_all) || (pe->building->typ->buildingheight >= chschwimmend) || (pe->building->color == player*8)) 
+                  return true; 
+            } 
+            else
+               return true; 
+      } 
+   }
+   return false; 
+} 
+
+
+VisibilityStates fieldVisibility( const pfield pe, int player )
+{
+  if ( pe && player >= 0 ) {
+      VisibilityStates c = VisibilityStates((pe->visible >> ( player * 2)) & 3);
+      #ifdef karteneditor
+         c = visible_all;
+      #endif
+
+      if ( c < actmap->getInitialMapVisibility( player ) )
+         c = actmap->getInitialMapVisibility( player );
+
+      return c;
+   } else
+      return visible_not;
+}
+

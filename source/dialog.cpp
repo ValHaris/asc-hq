@@ -2,9 +2,12 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.114 2002-11-11 08:38:24 mbickel Exp $
+//     $Id: dialog.cpp,v 1.115 2002-11-17 11:43:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.114  2002/11/11 08:38:24  mbickel
+//      Fixed: graphical errors in new message dialog if 8 players in game
+//
 //     Revision 1.113  2002/11/01 12:40:50  mbickel
 //      Added supervisor-save-map function
 //
@@ -286,6 +289,7 @@
 #include "mapdisplay.h"
 #include "networkdata.h"
 #include "graphicset.h"
+#include "viewcalculation.h"
 
 #ifndef karteneditor
  #include "gamedlg.h"
