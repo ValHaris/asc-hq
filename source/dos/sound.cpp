@@ -21,7 +21,7 @@
 #include "sound.h"
 
 
-void initSound(void) {
+void initSound(int silent) {
 }
 
 void closeSound(void) {

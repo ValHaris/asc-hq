@@ -24,7 +24,7 @@ public:
 /** Initialise sound system.  If you don't call this, the first Sound
  *  created will call it for you.
  */
-void initSound();
+void initSound(int silent);
 
 /** Clean up after the sound system */
 void closeSound();

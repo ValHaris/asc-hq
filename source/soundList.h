@@ -1,5 +1,5 @@
 #ifdef _DOS_
- #include "dos\sound.h"
+ #include "dos/sound.h"
 #else
  #include "sdl/sound.h"
 #endif

@@ -1,6 +1,10 @@
-//     $Id: gamedlg.cpp,v 1.27 2000-06-06 20:03:17 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.28 2000-06-06 20:17:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/06/06 20:03:17  mbickel
+//      Fixed graphical error when transfering ammo in buildings
+//      Sound can now be disable by a command line parameter and the game options
+//
 //     Revision 1.26  2000/05/23 20:40:46  mbickel
 //      Removed boolean type
 //
@@ -131,8 +135,8 @@
 #include <stdlib.h>
 
 #ifdef _DOS_
-#include <dos.h>
-#include <conio.h>
+ #include <dos.h>
+ #include <conio.h>
 #endif
 
 #if TIME_WITH_SYS_TIME
@@ -161,6 +165,7 @@
 
 #ifdef _DOS_
  #include "dos/memory.h"
+ #include "dos/sound.h"
 #else
  #include "sdl/sound.h"
 #endif
