@@ -1,6 +1,9 @@
-//     $Id: global_os.h,v 1.5 2001-07-30 18:03:08 mbickel Exp $
+//     $Id: global_os.h,v 1.6 2001-10-11 10:22:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2001/07/30 18:03:08  mbickel
+//      Fixed some more warnings
+//
 //     Revision 1.4  2001/07/30 17:43:13  mbickel
 //      Added Microsoft Visual Studio .net project files
 //      Fixed some warnings
@@ -52,8 +55,10 @@
   #define sdlheader "SDL.h"
   #define sdlmixerheader "SDL_mixer.h"
 
-  #include <string>
-  using namespace std;
+  #ifdef __cplusplus 
+    #include <string>
+    using namespace std;
+  #endif
   #define HAVE_STRICMP 
   #define HAVE_ITOA
   #define HAVE_DIRENT_H 

@@ -2,9 +2,15 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.29 2001-10-02 14:06:28 mbickel Exp $
+//     $Id: edevents.cpp,v 1.30 2001-10-11 10:22:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2001/10/02 14:06:28  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.28  2001/08/19 12:31:26  mbickel
 //      Fixed several bugs in event and campaign handling
 //
@@ -896,8 +902,6 @@ void         tgeteventid::run(void)
             showbutton(5);
          }
       } 
-      switch (taste) {
-      } /* endswitch */
    }  while ((taste != ct_esc) && (action != 1));
    if (taste == ct_esc) teventid = 0;
 } 
@@ -984,8 +988,6 @@ void         tgettechnologyid::run(void)
          ttechnologyid = gettechnology_forpos(redline)->id;
          showbutton(5);
       }                            
-      switch (taste) {
-      } /* endswitch */
    }  while ((taste != ct_esc) && (action != 1));
 } 
 

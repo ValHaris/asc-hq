@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.67 2001-10-08 14:44:22 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.68 2001-10-11 10:22:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.67  2001/10/08 14:44:22  mbickel
+//      Some cleanup
+//
 //     Revision 1.66  2001/10/08 14:12:20  mbickel
 //      Fixed crash in AI
 //      Speedup of AI
@@ -328,7 +331,7 @@
 */
 
 #include <string>
-#include <iostream.h>
+#include <iostream>
 #include <math.h>
 
 #include "vehicletype.h"
@@ -1393,11 +1396,11 @@ void       tmycursor::putimg ( void )
 
 void         exchg(word *       a1,
                    word *       a2)
-{ word        * ex;
+{ word        ex;
 
-   *ex = *a1; 
+   ex = *a1; 
    *a1 = *a2; 
-   *a2 = *ex; 
+   *a2 = ex; 
 } 
 
 
@@ -2568,8 +2571,6 @@ void         tclass_change::run(void)
             showbutton(4);
          }
       }
-      switch (taste) {
-      } /* endswitch */
    }  while ( ! ( (taste == ct_esc) || ( (action == 2) || (action == 3) ) ) );
    if (action == 2) {
       unit->klasse = tklasse;
@@ -4258,7 +4259,7 @@ void transformMap ( )
       displaymessage ( "Error parsing file : " + err.getMessage() , 1 );
       return;
    }
-   catch ( ASCexception err ) {
+   catch ( ASCexception ) {
       displaymessage ( "Error reading file " + filename , 1 );
       return;
    }

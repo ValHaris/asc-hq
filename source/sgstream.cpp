@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.69 2001-08-26 20:55:04 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.70 2001-10-11 10:22:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.69  2001/08/26 20:55:04  mbickel
+//      bin2text can now load text files too
+//      LoadableItemType interface class added
+//
 //     Revision 1.68  2001/08/09 19:28:22  mbickel
 //      Started adding buildingtype text file functions
 //
@@ -165,7 +169,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <fstream.h>
 #include <math.h>
 #include <stdarg.h>
 #include <sys/types.h>

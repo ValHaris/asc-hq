@@ -2,9 +2,16 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.74 2001-09-23 23:06:20 mbickel Exp $
+//     $Id: building.cpp,v 1.75 2001-10-11 10:22:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.74  2001/09/23 23:06:20  mbickel
+//      Fixed:
+//       - ascent/descent during reactionfire
+//       - movement with nearly empty fuel tank
+//       - production icon displayed although unit could not be produced
+//       - invisible building becoming visible in fog of war
+//
 //     Revision 1.73  2001/09/13 17:43:11  mbickel
 //      Many, many bug fixes
 //
@@ -1090,6 +1097,7 @@ int   ccontainercontrols :: getResource ( int need, int resourceType, int abbuch
       case 2: return getfuel ( need, abbuchen );
       break;
    };
+   return 0;
 };
 
 

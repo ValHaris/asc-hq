@@ -25,12 +25,16 @@
 #include "../misc.h"
 #include "../strtmesg.h"
 
-#ifdef _DOS_
-#  include <direct.h> 
+#ifdef _DOS_ 
+ #include "../dos/fileio.h"
 #else
-#  include <dirent.h>
-#  include <sys/stat.h>
-// #  include <unistd.h>
+ #ifdef _WIN32_
+  #include "../win32/fileio.h"
+ #else
+  #ifdef _UNIX_
+   #include "../unix/fileio.h"
+  #endif
+ #endif
 #endif
 
 
@@ -380,7 +384,7 @@ int main(int argc, char *argv[] )
          int compress = 1;
 
          DIR *dirp;
-         struct dirent *direntp;
+         struct direct *direntp;
 
          dirp = opendir( "." );
          if( dirp != NULL ) {

@@ -2,9 +2,15 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.39 2001-10-08 14:12:20 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.40 2001-10-11 10:22:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2001/10/08 14:12:20  mbickel
+//      Fixed crash in AI
+//      Speedup of AI
+//      Map2PCX improvements
+//      Mapeditor usability improvements
+//
 //     Revision 1.38  2001/10/02 14:06:28  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -806,7 +812,7 @@ void execaction(int code)
                                if (pf->building != NULL)
                                   delete pf->building;
                                else {
-                                  pf->removeobject( actobject );
+                                  pf->removeobject( NULL );
                                   pf->removemine( -1 );
                                 }
                             mapsaved = false;

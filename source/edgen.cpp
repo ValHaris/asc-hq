@@ -2,9 +2,13 @@
     \brief The random map generator
 */
 
-//     $Id: edgen.cpp,v 1.12 2001-08-09 10:28:22 mbickel Exp $
+//     $Id: edgen.cpp,v 1.13 2001-10-11 10:22:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2001/08/09 10:28:22  mbickel
+//      Fixed AI problems
+//      Mapeditor can edit a units AI parameter
+//
 //     Revision 1.11  2001/07/28 11:19:10  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -1144,8 +1148,9 @@ void tplasma::generateplasma(char resettile)
                return 1;
             }*/
             if(blocksize == sblocksize) {
-               colour = std::random(memblock->maxset + 1);
-               if(std::random(5000) > 3500) colour = 1 + memblock->maxset - std::random(memblock->maxset / (1 + std::random(8)));
+               colour = ::random(memblock->maxset + 1);
+               if( ::random(5000) > 3500) 
+				   colour = 1 + memblock->maxset - ::random(memblock->maxset / (1 + ::random(8)));
                colour %= (memblock->maxset + 1);
             }
             else {
