@@ -1,10 +1,1 @@
-For information about compiling the Linux version of ASC refer to the file 
-'INSTALL' 
-
-For information about running the Linux version of ASC refer to 
-'doc/readme.linux'.
-
-Information about playing ASC (for example: 'how do mines work?') can be found
-in 'doc/asc.html'.
-
-If you want to improve ASC I recommend to read the file 'doc/source.htm'
+For an index of all ASC documentation please refer to the file doc/index.html

@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+
+<TITLE>ASC documentation: Linux FAQ</TITLE>
+<LINK REL="stylesheet" TYPE="text/css" HREF="asc.css">
+</HEAD>
+
+<BODY>
+
+<A HREF="index.html">Back to documentation index</A>
+<hr>
+
+<CENTER>
+<H1><A HREF="http://www.asc-hq.org">Advanced Strategic Command</A></H1>
+<P>documentation<P>
+<H2>Linux FAQ</H2>
+</CENTER>
+
+<p>
+
+This file describes how to solve potential problems when running the Linux version of
+Advanced Strategic Command. For information about compiling and installing the Linux
+version of ASC, refer to the <A HREF="install_linux.html">Linux installation</A>. <p>
+
+
+<HR>
+
+<H3> ASC complains it can't load libSDL-1.1.so.0 </h3>
+    This happens if you haven't got version 1.1.0 or later of SDL installed
+    on your system.  Get it from <A HREF="http://www.libsdl.org">www.libsdl.org</A>
+
+    unpack it, and cd into it.  ./autogen.sh ; make
+    then become root and make install.
+
+<H3>  ASC complains it can't load libSDL_image-1.0.so.0 </H3>
+    This happens if you haven't got version 1.1.0 or later of SDL installed
+    on your system.  Get it from :
+
+    http://www.libsdl.org/projects/SDL_image/index.html
+
+    unpack it, and cd into it.  ./autogen.sh ; make
+    then become root and make install.
+
+
+<H3>  I have installed SDL / SDL_image, but ASC still can't load  libSDL-1.1.so.0 or libSDL_image-1.0.so.0 </H3>
+    You probably don't have /usr/local/lib in your LD_LIBRARY_PATH or
+    /etc/ld.so.conf.  The quick solution is to incant:
+    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+    or for csh derivatives:
+    setenv LD_LIBRARY_PATH /usr/local/lib:$LD_LIBRARY_PATH
+    a more permanent alternative is to add the line:
+    /usr/local/lib
+    to /etc/ld.so.conf (you must be root to do this).
+
+<H3>  ASC still can't find some library </H3>
+    
+    Compile ASC from source. It's easy, more robust and has much better diagnostics! 
+    Some instructions (which should usually not be necessary) are <A HREF="install.html">here</A>.
+
+
+<H3>  ASC complains that it can't find SDL_EnableKeyRepeat </H3>
+    You're running an old version of SDL.  See fixes above.
+
+<H3>  ASC doesn't run and/or it crashes my X server. </H3>
+    try running it with the --window flag on the command line.
+    
+<H3>  ASC runs in fullscreen, but there is a big black border arount the area of the screen </H3>
+
+    You must add the resolution that ASC tries to run in (default is 800*600 at the time of writing) to your xf86config.
+    Your Linux distribution may have a more comfortable way to do this.
+    On SuSE Linux for example, this can be done with SAX on the
+    "extended desktop settings" (is this translation from the german SAX the one that is actually used?) page. <p>
+
+    Alternatively, you can run ASC in window mode ( --window on the command
+    line), or change the resolution it uses ( -x and -y command line options)
+    Type ASC --help for a summary of the command line parameters
+
+
+<H3>  ASC crashes. </H3>
+
+    Please send a backtrace to <A HREF="mailto:bugs@asc-hq.org">bugs@asc-hq.org</A>. You must compile ASC from source to do this.<p>
+    Run "gdb asc"<br>
+    Type "run" in gdb and reproduce the crash.<br>
+    type "backtrace" in gdb and send me its output.<p>
+
+    If gdb cant find the debug symbols, you must first turn them on and rebuild ASC: <br>
+    <BLOCKQUOTE><TT>
+     export CXXFLAGS="-O0 -g3"<br>
+     configure<br>
+     make<br>
+     make install </TT> <i>(if desired)</i>
+    </BLOCKQUOTE> <p>
+    
+    Any help about automating this task (like making ASC printing its own backtrace) are appreciated !
+
+<H3>  ASC crashes and does not restore the original screen resolution </H3>
+
+    To avoid this problem, you can run ASC in windowed mode:<p>
+    <BLOCKQUOTE><tt>
+      asc -w
+    </tt></BLOCKQUOTE><br>
+    
+    or run it in your default resolution, for example <p>
+    <BLOCKQUOTE><tt>
+      asc -x 1152 -y 864
+    </tt></BLOCKQUOTE><p>
+
+    If the resolution has already been changed by ASC crashing, there is a simple
+    way to restore it to your original settings. Start ASC in your preferred
+    resolution, like<p>
+    <BLOCKQUOTE><tt>
+      asc -x 1152 -y 864
+    </tt></BLOCKQUOTE><p>
+    and let it crash again. If it fails to crash, kill it!
+
+
+<hr>
+
+<h2>Some random notes: </h2>
+<ul>
+
+<li><b>Ugrading from versions &lt; 1.2.0 to recent versions:</b><p>
+
+<BLOCKQUOTE>
+Since version 1.2.0 ASC looks for all savegames, email files etc. in ~./asc
+and writes all files there. If you have previosly run ASC from a different
+directory, either move all your files to ~/.asc/ or specify your directory as 
+searchPath in ~/.asc/ascrc (this file is generated when the new ASC version 
+is run for the first time). searchPath0 there is the only directory ASC writes
+to. If you specify your old directory as searchPath0, all savegames etc. will
+still be written there, but if you specified your directory as searchPath5 for
+example, ASC will load the files there, but write new ones to searchPath0.
+</BLOCKQUOTE>
+ <li> to run under X in fullscreen mode you need DGA. You may need to upgrade
+   to the latest Xfree86 to use it.
+ <li> if it does not work, try running ASC as root. You may need write access
+   to /dev/mem . <p>
+   The fullscreen code of SDL was recently enhanced to enable fullscreen
+   without beeing root. This runs on my system.
+ <li> frame buffer console usage is entirely untested
+</ul>
+
+
+<hr>
+<i>
+$Id: linux_faq.html,v 1.1 2002-02-17 22:04:45 mbickel Exp $
+</i>
+</BODY>
+</HTML>

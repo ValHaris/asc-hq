@@ -7,7 +7,9 @@
 	<LINK REL="stylesheet" TYPE="text/css" HREF="asc.css">
 </HEAD>
 
-<BODY text="#000000" bgcolor="#ffffff">
+<BODY>
+<A HREF="index.html">Back to documentation index</A>
+<hr>
 
 <CENTER>
 <H1>Advanced Strategic Command</H1>
@@ -15,22 +17,17 @@
 <H2>Mount</H2>
 </CENTER>
 
-ASC uses Containerfiles to store many single files in them for easier handling. These Containerfiles can be generated with <TT>MOUNT.EXE</TT>. It can also be found as <TT>DOSMOUNT.EXE</TT>, <TT>WINMOUNT.EXE</TT> and <TT>OS2MOUNT.EXE</TT>, depending on the platform it runs on. The Win32 and OS2 versions are capable of processing long file names.<P>
+ASC uses archive files to store many single files in them for easier handling. The term Containerfiles will be used synonyously with archive file. <p>
 
-To generate a Containerfile, you start <TT>MOUNT listfile containerfile</TT>, where listfile contains all files to be included, containerfile is the name of the container and should end with <TT>.CON</TT> to be recognized by ASC.<P>
+The primary task of them is to make removing data files possible by a simple update which replaces archive files. 
 
-MOUNT is one of the few ASC tools that do not require any datafiles. So it can be run in any directory.<P>
+These Containerfiles can be created with <TT>mount</TT>. To do this, you simply run <TT>MOUNT datafiles [...] containerfile</TT>. The data file names may contain basic wildcards which <TT>Mount</TT> can resolve itself. Containerfile is the name of the archive that is going to be created (or overwritten if it already exists) and should end with <TT>.CON</TT> to be recognized by ASC.<P>
 
-The listfile is a simple Textfile with a filename on each line. Wildcards are allowed. Duplicate files are automatically removed. All files are automatically compressed. To suppress the compression of certain files, attach a <TT>~</TT> before the filename. Suppressing compression gives a speed increase for loading large files like fullscreen pictures. If compression does not gain any space benefits the file won't be compressed.<P>
+<TT>MOUNT</TT> and <TT>DEMOUNT</TT> are the only ASC tools that do not require any datafiles themself and who do not evaluate any search paths defined in the ASC configuration file.<P>
 
-Here is an example for a listfile:
+Example:
 <PRE>
-palette.pal
-~helisun.jpg
-progress.*
-hexfield.raw
-*.fnt
-*.raw
+mount palette.pal progress.* hexfield.raw data.con
 </PRE>
 
 </BODY>

@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl AC_REVISION($Revision: 1.52 $)dnl
+dnl AC_REVISION($Revision: 1.53 $)dnl
 dnl AM_MAINTAINER_MODE
 AC_INIT(source/typen.h)
 
@@ -11,6 +11,28 @@ dnl Checks for programs.
 dnl
 AC_PROG_CC
 AC_PROG_CXX
+
+
+gcc296test=yes
+AC_ARG_ENABLE( gcc296-detection, [  --disable-gcc296-detection  Do not perform gcc 2.96 detection test .], gcc296test=no )
+if test "X$gcc296test" = "Xyes"; then
+   if test "$GCC" = yes; then
+      gcc_version=`gcc --version`
+      gcc_version296=`echo $gcc_version | grep 2.96`
+      if test "X$gcc_version296" != "X"; then
+         AC_MSG_ERROR([
+**** GCC $gcc_version detected. This version of gcc is not an official release
+**** and does produce incorrect code. You may try to build ASC, but it will
+**** most likely NOT run.
+**** To build ASC, we recommend either GCC 2.95 or GCC 3.0
+**** You can bypass this test with --disable-gcc296-detection, so you can build
+**** ASC and see for yourself. And perhaps even rewrite some parts of ASC to
+**** make them Redhat compatible ;-) ])
+      fi
+   fi
+fi
+
+
 
 dnl AC_PROG_RANLIB
 AM_PROG_LIBTOOL
@@ -97,7 +119,7 @@ LIBS=$SAVE_LIBS
 
 dnl libbz2 stuff (should have a versionnr about 1.0.0)
 lib_bz2_static=no
-AC_ARG_ENABLE( libbz2-static, [ --enable-libbz2-static  compiles a static libbz2 into the binary of asc.], [lib_bz2_static=$enableval], [lib_bz2_usecache=yes] )
+AC_ARG_ENABLE( libbz2-static, [  --enable-libbz2-static  compiles a static libbz2 into the binary of asc.], [lib_bz2_static=$enableval], [lib_bz2_usecache=yes] )
 AC_CHECK_LIB( bz2, BZ2_bzReadOpen, :, [checklib_bz2_static=yes] )
 AC_CACHE_CHECK( [for static libbz2 flag state], [ac_cv_lib_bz2_static], [ ac_cv_lib_bz2_static=$lib_bz2_static ] )
 
@@ -207,9 +229,12 @@ if test "x$missingdata" = x ; then
 else
   AC_MSG_RESULT("no")
   AC_MSG_ERROR( [ 
-The following data files could not be found: $missingdata 
-These must be downloaded separately. This can be done automatically by calling
-the ./getdata script or you get them manually from  
+The following data files could not be found: $missingdata .
+If you got the ASC source from CVS it is absolutely normal that this error
+occurs, since many data files are not managed with CVS.
+
+These files must be downloaded separately. This can be done automatically by
+calling the ./getdata script , or you can get them manually from
 http://www.asc-hq.org/download_updates.html 
 ] )
 fi
@@ -269,4 +294,4 @@ AC_OUTPUT( Makefile source/Makefile source/docs/Makefile \
            source/tools/linux/Makefile data/Makefile doc/Makefile
 	 )
 
-
+	
