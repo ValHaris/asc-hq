@@ -45,8 +45,8 @@
            exit(2);
      }
 
-     reservememory = malloc ( reservememorysize );
-     emergencymemory = malloc ( emergencymemorysize );
+     reservememory = asc_malloc ( reservememorysize );
+     emergencymemory = asc_malloc ( emergencymemorysize );
      set_new_handler ( new_new_handler );
  }
 

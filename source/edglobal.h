@@ -1,6 +1,10 @@
-//     $Id: edglobal.h,v 1.3 1999-12-27 12:59:53 mbickel Exp $
+//     $Id: edglobal.h,v 1.4 2000-03-11 18:22:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/12/27 12:59:53  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.2  1999/11/16 03:41:35  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -45,7 +49,7 @@ extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
-#define execactionscount 65
+#define execactionscount 67
 
 extern const char*  execactionnames[execactionscount];
 
@@ -117,7 +121,8 @@ enum tuseractions {
      act_setactweatherglobal,
      act_setmapparameters, 
      act_terraininfo,
-     act_setunitfilter };
+     act_setunitfilter,
+     act_selectgraphicset };
 
 extern void         execaction(int code);
 

@@ -61,4 +61,11 @@
   #define StaticClassVariable
  #endif
 
+
+ #ifdef _DOS_
+  #ifndef converter
+   #define UseMemAvail
+  #endif
+ #endif
+
 #endif

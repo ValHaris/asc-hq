@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.25 2000-02-24 10:54:08 mbickel Exp $
+//     $Id: sg.cpp,v 1.26 2000-03-11 18:22:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/02/24 10:54:08  mbickel
+//      Some cleanup and bugfixes
+//
 //     Revision 1.24  2000/02/07 19:45:42  mbickel
 //      fixed map structure size bug
 //
@@ -167,7 +170,7 @@
 
 
 
-#define MEMCHK
+// #define MEMCHK
 
 
 class tsgonlinemousehelp : public tonlinemousehelp {
@@ -700,7 +703,10 @@ int tbackgroundpict :: getlastpaintmode ( void )
      for ( int i = 0; i < 25; i++ ) {
 
         if ( tmpi[3 + i] != 0x12345678)
-           error++;
+           if ( i == 1  &&  tmpi[3 + i] == -2)
+              error++;  // deallocated twice 
+           else
+              error++;
 
         if ( tmpi[3 + i + (amt+3)/4 + 25] != 0x87654321 )
            error++;
@@ -718,6 +724,12 @@ int tbackgroundpict :: getlastpaintmode ( void )
   {
      if ( removeblock ( buf )) {
         void* tmpi = verifyblock ( tp, buf );
+
+        int* tmpi2 = (int*) buf;
+        tmpi2 -= 28;
+        tmpi2[4] = -2;
+
+
         free ( tmpi );
      } else
        free ( buf );
@@ -2267,6 +2279,19 @@ void viewunreadmessages ( void )
       }
 }
 
+void selectgraphicset ( void )
+{
+   char filename[300];
+   fileselectsvga("*.gfx",filename,1);
+   if ( filename[0] ) {
+      int id = getGraphicSetIdFromFilename ( filename );
+      if ( id != actmap->graphicset ) {
+         actmap->graphicset = id;
+         displaymap();
+      }
+   }
+}
+
 void  mainloop ( void )
 {
    tkey ch;
@@ -2340,6 +2365,10 @@ void  mainloop ( void )
                break;
                
             case ct_3:  execuseraction ( ua_heapcheck );
+               break;
+
+            case ct_4:  selectgraphicset();
+                        displaymap();
                break;
 
             case ct_5:  execuseraction ( ua_benchgamewov );

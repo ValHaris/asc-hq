@@ -1,6 +1,10 @@
-//     $Id: edmisc.h,v 1.4 1999-12-27 12:59:57 mbickel Exp $
+//     $Id: edmisc.h,v 1.5 2000-03-11 18:22:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/12/27 12:59:57  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.3  1999/11/22 18:27:20  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -246,5 +250,5 @@ extern int rightmousebox(void);
 extern int leftmousebox(void);
 extern void selectunitsetfilter ( void );
 extern void movebuilding();
-
+extern void selectgraphicset(void);
 

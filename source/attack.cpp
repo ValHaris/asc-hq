@@ -1,6 +1,9 @@
-//     $Id: attack.cpp,v 1.9 2000-02-24 10:54:06 mbickel Exp $
+//     $Id: attack.cpp,v 1.10 2000-03-11 18:22:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/02/24 10:54:06  mbickel
+//      Some cleanup and bugfixes
+//
 //     Revision 1.8  2000/01/25 19:28:06  mbickel
 //      Fixed bugs:
 //        invalid mouse buttons reported when moving the mouse
@@ -79,14 +82,12 @@
 #include "loaders.h"
 #include "soundList.h"
 
-/*
+
 #ifdef _DOS_
  #define DEBUG( msg ) 
 #else
  #define DEBUG( msg ) fprintf( stderr, "DEBUG : %s\n", msg )
 #endif
-*/
- #define DEBUG( msg ) fprintf( stderr, "DEBUG : %s\n", msg )
 
    #define damagefaktor 4
    #define  verteidigungsfaktor  14     /* wird durch 8 geteilt */

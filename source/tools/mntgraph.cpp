@@ -10,14 +10,17 @@
 #include "..\loadpcx.h"
 #include "..\palette.h"
 #include "..\sgstream.h"
+#include "krkr.h"
+#include "..\basegfx.h"
 
 
 int interpol;
 
-const int pcount = 2000;
+const int p_count = 4000;
+int maxnum = 0;
 
-void* pics[pcount];
-int picmode[pcount];
+void* pics[p_count];
+int picmode[p_count];
 
 void* mask[2];
 
@@ -65,6 +68,9 @@ void* doublepict ( void* vbuf, int interpolate )
 
 void getpic ( int pos, int offset )
 {
+   if ( pos > maxnum )
+      maxnum = pos;
+
    doublesize = getpixel ( 0, 0) != getpixel( 1,0 );
    int colnum = 10;
    int x0 = 30;
@@ -191,11 +197,29 @@ int main(int argc, char *argv[] )
 
    {
       tnfilestream s ( "newgraph.dta", 2 );
-      s.writedata2 ( pcount );
-      s.writedata2 ( picmode );
-      for ( int i = 0; i < pcount; i++ ) 
+      int magic = -1;
+      s.writedata2 ( magic );
+
+      int id = 1;
+      printf ("\n    ID :  \n");
+      num_ed ( id , 0, 65534);
+
+
+      maxnum++;
+
+      int maxpicsize = 0;
+      for ( int i = 0; i < maxnum; i++ ) 
          if ( picmode[i] >= 1 )
-            s.writedata ( pics[i], getpicsize2 ( pics[i] ) );
+            if ( maxpicsize < getpicsize2 ( pics[i] ) )
+               maxpicsize = getpicsize2 ( pics[i] );
+
+      s.writedata2 ( id );
+      s.writedata2 ( maxnum );
+      s.writedata2 ( maxpicsize );
+      s.writedata ( picmode, maxnum * sizeof ( int ) );
+      for ( int j = 0; j < maxnum; j++ ) 
+         if ( picmode[j] >= 1 )
+            s.writedata ( pics[j], getpicsize2 ( pics[j] ) );
    }
    return 0;
 }

@@ -1,6 +1,10 @@
-//     $Id: sgstream.cpp,v 1.7 2000-02-03 20:54:41 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.8 2000-03-11 18:22:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/02/03 20:54:41  mbickel
+//      Some cleanup
+//      getfiletime now works under Linux too
+//
 //     Revision 1.6  2000/01/24 17:35:46  mbickel
 //      Added dummy routines for sound under DOS
 //      Cleaned up weapon specification
@@ -80,17 +84,12 @@
 #endif
 
 #ifdef HEXAGON
-#include "loadbi3.h"
+ #include "loadbi3.h"
 #endif
 
-/*
-#ifdef logging
-#ifdef sgmain
-#include "spfst.h"
-#include "loaders.h"
+#ifdef _DOS_
+ #include "dos\\memory.h"
 #endif
-#endif
-*/
 
 int loaderror; 
 
@@ -129,6 +128,7 @@ int checkcodemem ( void )
 }
 */
 
+#ifndef converter
 void logtofile ( char* strng )
 {
    int a = memavail();
@@ -155,7 +155,7 @@ void logtofile ( char* strng )
    fflush ( logfile );
 //   fclose ( f );
 }
-
+#endif
 
 
 char gamepath[200];
@@ -1798,18 +1798,17 @@ pobjecttype   loadobjecttype( pnstream stream )
    
       stream->readdata2( *fztn ); 
    
-   
+      int copycount = 0;
+
       int w;
-      #ifdef HEXAGON
       for ( int ww = 0; ww < cwettertypennum; ww++ )
          if ( fztn->weather & ( 1 << ww )) 
-// if ( ww == 0 )
             if ( fztn->pictnum ) {
                fztn->picture[ww] = new thexpic[fztn->pictnum];
                for ( int n = 0; n < fztn->pictnum; n++ ) {
                   stream->readdata2 ( fztn->picture[ww][n] );
                   if ( fztn->picture[ww][n].bi3pic != -1 ) 
-                     loadbi3pict_double ( fztn->picture[ww][n].bi3pic, &fztn->picture[ww][n].picture, gameoptions.bi3.interpolate.objects );
+                     loadbi3pict_double ( fztn->picture[ww][n].bi3pic, &fztn->picture[ww][n].picture, gameoptions.bi3.interpolate.objects, 0 );
                   else
                      stream->readrlepict ( &fztn->picture[ww][n].picture, false, &w);
 
@@ -1818,6 +1817,7 @@ pobjecttype   loadobjecttype( pnstream stream )
                      flippict ( fztn->picture[ww][n].picture, buf , 1 );
                      asc_free ( fztn->picture[ww][n].picture );
                      fztn->picture[ww][n].picture = buf;
+                     copycount++;
                   }
       
                   if ( fztn->picture[ww][n].flip == 2 ) {
@@ -1825,6 +1825,7 @@ pobjecttype   loadobjecttype( pnstream stream )
                      flippict ( fztn->picture[ww][n].picture, buf , 2 );
                      asc_free ( fztn->picture[ww][n].picture );
                      fztn->picture[ww][n].picture = buf;
+                     copycount++;
                   }
       
                   if ( fztn->picture[ww][n].flip == 3 ) {
@@ -1832,13 +1833,26 @@ pobjecttype   loadobjecttype( pnstream stream )
                      flippict ( fztn->picture[ww][n].picture, buf , 2 );
                      flippict ( buf, fztn->picture[ww][n].picture, 1 );
                      delete[] buf;
+                     copycount++;
                   }
 
                   if ( fztn->picture[ww][n].bi3pic == -1 ) 
                      fztn->picture[ww][n].flip = 0;
                }
             }
-      #else
+
+      if ( copycount == 0 ) 
+         for ( int ww = 0; ww < cwettertypennum; ww++ )
+            if ( fztn->weather & ( 1 << ww )) 
+               if ( fztn->pictnum ) 
+                  for ( int n = 0; n < fztn->pictnum; n++ ) 
+                     if ( fztn->picture[ww][n].bi3pic != -1 ) {
+                        asc_free ( fztn->picture[ww][n].picture );
+                        loadbi3pict_double ( fztn->picture[ww][n].bi3pic, &fztn->picture[ww][n].picture, gameoptions.bi3.interpolate.objects );
+                     }
+
+     /*
+      #ifndef HEXAGON
             if ( fztn->pictnum ) {
                typedef void* pvoid;
                fztn->picture = new pvoid[fztn->pictnum];
@@ -1846,6 +1860,7 @@ pobjecttype   loadobjecttype( pnstream stream )
                   stream->readrlepict ( &fztn->picture[n], false, &w);
             }
       #endif
+     */
 
        #ifndef converter
        char mmcount = cmovemalitypenum;

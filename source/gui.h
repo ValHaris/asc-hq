@@ -1,6 +1,10 @@
-//     $Id: gui.h,v 1.4 2000-01-02 19:47:07 mbickel Exp $
+//     $Id: gui.h,v 1.5 2000-03-11 18:22:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/01/02 19:47:07  mbickel
+//      Continued Linux port
+//      Fixed crash at program exit
+//
 //     Revision 1.3  1999/12/28 21:02:58  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -264,7 +268,7 @@ class tnweapselguiicon : public tnguiicon {
 class tselectweaponguihost : public tguihost {
        private:
          pnweapselguiicon   first_icon;
-         tnweapselguiicon   icon[9];
+         tnweapselguiicon   icon[20];
          pattackweap        atw;
          int                x,y;
        protected:

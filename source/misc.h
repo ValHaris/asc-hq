@@ -1,6 +1,10 @@
-//     $Id: misc.h,v 1.4 2000-02-03 20:54:41 mbickel Exp $
+//     $Id: misc.h,v 1.5 2000-03-11 18:22:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/02/03 20:54:41  mbickel
+//      Some cleanup
+//      getfiletime now works under Linux too
+//
 //     Revision 1.3  1999/12/28 21:03:09  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -42,7 +46,9 @@
    #define dblue lightgray
    //153
    
-   extern int memavail ( void );
+  #ifndef UseMemAvail 
+   extern int memavail ( void );       // dummy function
+  #endif
 
    extern word log2(int zahl);
    extern int filesize( char *name);

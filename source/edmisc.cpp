@@ -1,6 +1,10 @@
-//     $Id: edmisc.cpp,v 1.8 2000-02-03 20:54:39 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.9 2000-03-11 18:22:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/02/03 20:54:39  mbickel
+//      Some cleanup
+//      getfiletime now works under Linux too
+//
 //     Revision 1.7  2000/01/24 17:35:43  mbickel
 //      Added dummy routines for sound under DOS
 //      Cleaned up weapon specification
@@ -63,6 +67,9 @@
 #include "edselfnt.h"
 #include "edglobal.h"
 
+#ifdef _DOS_
+ #include "dos\memory.h"
+#endif
 
 // #define smallestweight 8 //gewicht der kleinsten vehicle fr selunitcargo
 
@@ -688,6 +695,7 @@ void         pdsetup(void)
     pd.addbutton ( "~A~sc ResourceMode",           act_asc_resource ); 
     pd.addbutton ( "edit map ~P~arameters",        act_setmapparameters );
     pd.addbutton ( "setup unit ~F~iltersõctrl+h",  act_setunitfilter );
+    pd.addbutton ( "select ~G~raphic set",         act_selectgraphicset );
 
    pd.addfield ("~H~elp"); 
     pd.addbutton ( "~U~nit Informationctrl+U",    act_unitinfo );
@@ -3481,3 +3489,15 @@ void selectunitsetfilter ( void )
       displaymessage ( " no unitsets defined !", 1 );
 }
 
+void selectgraphicset ( void )
+{
+   char filename[300];
+   fileselectsvga("*.gfx",filename,1);
+   if ( filename[0] ) {
+      int id = getGraphicSetIdFromFilename ( filename );
+      if ( id != actmap->graphicset ) {
+         actmap->graphicset = id;
+         displaymap();
+      }
+   }
+}

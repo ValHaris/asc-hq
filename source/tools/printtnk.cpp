@@ -31,11 +31,13 @@
 #include "..\sgstream.h"
 #include "..\vesa.h"
 
+const int maxvehicles = 1000;
+
 char header[2][500];
-char text[200][500];
+char text[maxvehicles][500];
 char buf[500];
 
-int cat[100][200];
+int cat[100][maxvehicles];
 
 main(int argc, char *argv[] )
 {
@@ -150,7 +152,8 @@ main(int argc, char *argv[] )
          sprintf( buf, "%4d %4d %2d %3d %3d %3d %2d %4d %4d\n", dist, ft->fuelconsumption, ft->steigung, ft->view, ft->jamming, ft->weight, ft->wait, ft->loadcapacity, ft->maxunitweight );
          strcat ( text[num], buf );
    
-   
+         printf("#%d %s\n", num, cn );
+
          cn = ff.getnextname();
    
          num++;
@@ -158,8 +161,8 @@ main(int argc, char *argv[] )
    
       for ( int c = 0; c < 11; c++ ) {
    
-         int srt[200];
-         for ( i = 0; i < 200; i++ )
+         int srt[maxvehicles];
+         for ( i = 0; i < maxvehicles; i++ )
             srt[i] = i;
       
          for ( i = 0; i < num; ) {

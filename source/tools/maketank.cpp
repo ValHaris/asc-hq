@@ -424,7 +424,7 @@ main (int argc, char *argv[] )
          bitselect (ft->functions, cvehiclefunctions, cvehiclefunctionsnum);
    
          if (ft->functions & (cfautodigger | cfmanualdigger)) {
-         	  printf ("\n    radius to check for resources : \n");
+         	  printf ("\n    radius to check for resources : \n The radius is specified in 'number of fields', not distance !\n For a radius of 5 fields enter 5 here.\n");
    	  num_ed (ft->digrange, 0,255);
          } else ft->digrange=0;
    

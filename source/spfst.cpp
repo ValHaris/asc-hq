@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.19 2000-02-24 10:54:09 mbickel Exp $
+//     $Id: spfst.cpp,v 1.20 2000-03-11 18:22:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/02/24 10:54:09  mbickel
+//      Some cleanup and bugfixes
+//
 //     Revision 1.18  2000/01/24 17:35:47  mbickel
 //      Added dummy routines for sound under DOS
 //      Cleaned up weapon specification
@@ -138,6 +141,7 @@
 #endif
 
 #include "dialog.h"
+#include "loadbi3.h"
 
 
 
@@ -4815,6 +4819,7 @@ void         displaymap(  )
    if ( !actmap->xsize  ||  !actmap->ysize   || lockdisplaymap ) 
       return;
 
+   activateGraphicSet ( actmap->graphicset );
 
    byte         ms;   /*  mousestatus  */
    boolean      bb;   /*  cursorstatus   */
@@ -6485,6 +6490,12 @@ int tvehicle :: buildingconstructable ( pbuildingtype building )
       if ( actmap->gameparameter[cgp_building_fuel_factor] )
          ff = actmap->gameparameter[cgp_building_fuel_factor];
    }
+
+   int hd = getheightdelta ( log2 ( height ), log2 ( building->buildingheight ));
+
+   if ( hd != 0 && !(hd ==-11 && (height == chschwimmend || height == chfahrend)))
+      return 0;
+
 
    if ( building->produktionskosten.material * mf / 100 <= material   &&   building->produktionskosten.sprit * ff / 100 <= fuel ) {
       int found = 0;

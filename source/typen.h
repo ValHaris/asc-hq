@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.13 2000-02-07 19:45:43 mbickel Exp $
+//     $Id: typen.h,v 1.14 2000-03-11 18:22:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/02/07 19:45:43  mbickel
+//      fixed map structure size bug
+//
 //     Revision 1.12  2000/02/05 12:13:46  steb
 //     Sundry tidying up to get a clean compile and run.  Presently tending to SEGV on
 //     startup due to actmap being null when trying to report errors.
@@ -1560,7 +1563,8 @@ class  tgeneral_old_building {
     tresources    bi_resource[8];
     PreferredFilenames* preferredfilenames;
     EllipseOnScreen* ellipse;
-    int           dummy[32];
+    int           graphicset;
+    int           dummy[31];
     int           gameparameter[ maxgameparameternum ];
     /*
       tmap ( void );

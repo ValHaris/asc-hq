@@ -1,6 +1,10 @@
-//     $Id: misc.cpp,v 1.7 2000-02-03 20:54:41 mbickel Exp $
+//     $Id: misc.cpp,v 1.8 2000-03-11 18:22:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/02/03 20:54:41  mbickel
+//      Some cleanup
+//      getfiletime now works under Linux too
+//
 //     Revision 1.6  2000/01/24 08:16:49  steb
 //     Changes to existing files to implement sound.  This is the first munge into
 //     CVS.  It worked for me before the munge, but YMMV :)
@@ -68,10 +72,11 @@ const char* letter[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", 
 char* strstring;
 
 
-#ifndef _DOS_
+
+#ifndef UseMemAvail 
 int memavail ( void )
 {
-   return 0x80000000 ;
+   return 0x7fffffff ;
 }
 #endif
 

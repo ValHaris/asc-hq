@@ -1,6 +1,14 @@
-//     $Id: loadbi3.h,v 1.2 1999-11-16 03:41:55 tmwilson Exp $
+//     $Id: loadbi3.h,v 1.3 2000-03-11 18:22:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:55  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -32,7 +40,12 @@
 extern void loadbi3graphics( void );
 extern void getbi3pict ( int* num, void** picture );
 extern void getbi3pict_double ( int* num, void** picture );
-extern void loadbi3pict_double ( int num, void** pict, int interpolate = 0 );
+extern int  loadbi3pict_double ( int num, void** pict, int interpolate = 0, int reference = 1 );
+  // returns: 1 if picture is a reference
+  //          0 if picture is a copy
+             
+
+
 extern void loadbi3pict ( int num, void** pict );
 extern int bi3graphnum;
 extern void check_bi3_dir ( void );
@@ -49,5 +62,8 @@ extern const int* getterraintranslate ( int pos );
 extern const int* getobjectcontainertranslate ( int pos );
 
 extern int keeporiginalpalette;
+
+extern int getGraphicSetIdFromFilename ( const char* filename );
+extern int activateGraphicSet ( int id  );
 
 #endif

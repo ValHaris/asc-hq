@@ -1,6 +1,10 @@
-//     $Id: gamedlg.cpp,v 1.16 2000-02-03 20:54:40 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.17 2000-03-11 18:22:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/02/03 20:54:40  mbickel
+//      Some cleanup
+//      getfiletime now works under Linux too
+//
 //     Revision 1.15  2000/01/31 16:34:43  mbickel
 //      now standard hotkeys in dialog boxes
 //
@@ -117,6 +121,9 @@
 #include "loadpcx.h"
 #include "loadjpg.h"
 
+#ifdef _DOS_
+ #include "dos\\memory.h"
+#endif
 
 class   tchoosetechnology : public tdialogbox {
                            dynamic_array<ptechnology> techs;

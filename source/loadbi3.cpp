@@ -1,6 +1,9 @@
-//     $Id: loadbi3.cpp,v 1.10 2000-01-04 19:43:52 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.11 2000-03-11 18:22:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/01/04 19:43:52  mbickel
+//      Continued Linux port
+//
 //     Revision 1.9  2000/01/02 19:47:08  mbickel
 //      Continued Linux port
 //      Fixed crash at program exit
@@ -75,18 +78,72 @@
 #include "misc.h"
 #include "stack.h"
 
+#ifndef converter
+ #include "dlg_box.h"
+#endif
+
 #ifndef HEXAGON
 #error This file should only by used in the hexagonal version
 #endif
 
+class ActiveGraphicPictures {
+   public:
+     int activeId;
+     int maxnum;
+     int currentnum;
+     void** bi3graphics;
+     int* bi3graphmode;
+     int absoluteMaxPicSize;
+     int setActive ( int id );
 
-void* bi3graphics[4000];
-int bi3graphmode[4000];
+     ActiveGraphicPictures ( void ) {
+        activeId = -1;
+     };
 
-int bi3graphnum = 0;
+     void alloc ( void );
+     int picAvail ( int num );
+     void* getPic ( int num );
+     int getMode ( int num );
+} activeGraphicPictures;
+
+
+void ActiveGraphicPictures :: alloc ( void ) 
+{
+    for ( int i = 0; i < maxnum; i++ )
+       bi3graphics[i] = asc_malloc ( absoluteMaxPicSize );
+}
+
+int ActiveGraphicPictures :: picAvail ( int num ) 
+{
+   if ( num < currentnum && bi3graphmode[num])
+      return 1;
+   else
+      return 0;
+}
+
+void* ActiveGraphicPictures :: getPic ( int num ) 
+{
+   if ( picAvail ( num ))
+      return bi3graphics[num];
+   else
+      return NULL;
+}
+
+int ActiveGraphicPictures :: getMode ( int num ) 
+{
+   if ( picAvail ( num ))
+      return bi3graphmode[num];
+   else
+      return 0;
+}
+
+
+
 int paletteloaded = 0;
 
 int marked = -1;
+int bi3graphnum = 0;
+
 int battleisleversion = -1;
 
 int keeporiginalpalette = 0;
@@ -96,6 +153,57 @@ class timporterror : public terror {
    };
 
 
+
+class GraphicSet {
+         public:
+           int id;
+           int picnum;
+           int singlepicsize;
+           int maxPicSize;
+           dynamic_array<void*> pic;
+           dynamic_array<int>   picmode;
+     };
+
+
+
+
+dynamic_array<GraphicSet*> graphicSet;
+int graphicSetNum = 0;
+
+
+int ActiveGraphicPictures :: setActive ( int id )
+{
+   if ( id == activeId )
+      return id;
+
+
+   GraphicSet* gs = NULL;
+   int found = 0;
+   while ( !found ) {
+      for ( int i = 0; i < graphicSetNum; i++ )
+         if ( graphicSet[i]->id == id ) {
+            found++;
+            gs = graphicSet[i];
+         }
+
+     #ifndef converter
+      if ( !found && id== 0 )
+         displaymessage2 ( "fatal error: no default graphic set ( id=0 ) found !", 2);
+     #endif
+
+      if ( !found )
+         id = 0;
+   }
+   if ( activeId != id ) {
+      for ( int i = 0; i < gs->picnum; i++ ) {
+         memcpy ( bi3graphics[i], gs->pic[i], getpicsize2 ( gs->pic[i] ));
+         bi3graphmode[i] = gs->picmode[i];
+      }
+      activeId = id;
+      currentnum = gs->picnum;
+   }
+   return id;
+}
 
 
 const int LIBFilesAnz  = 11;
@@ -185,16 +293,24 @@ class initloadbi3 {
       } LoadBi3init;
 
 
-void loadbi3graphics( void )
+int getGraphicSetIdFromFilename ( const char* filename )
 {
-   if ( bi3graphnum )
+      tnfilestream s ( filename, 1 );
+
+      int magic;
+      s.readdata2 ( magic );
+      if ( magic == -1 ) {
+         int id;
+         s.readdata2 ( id );
+         return id;
+      } else
+         return 0;
+}
+
+void loadbi3graphics( void )
+{                
+   if ( activeGraphicPictures.activeId >= 0 )
       return;
-
-   for ( int ii = 0; ii < 4000; ii++ ) {
-      bi3graphics[ii] = NULL;
-      bi3graphmode[ii] = -1;
-   }
-
 
    #ifdef logging
    logtofile("loadbi3graphics");
@@ -205,28 +321,65 @@ void loadbi3graphics( void )
          loadpalette();
 
 
+   int highestPicNum = 0;
+   bi3graphnum = maxint; 
 
-   int _bi3graphnum = 0;
-   int picsfound = 0;
-   if ( exist ( "newgraph.dta" )) {
-      tnfilestream s ( "newgraph.dta", 1 );
+   int absoluteMaxPicSize = 0;
 
-      int pcount;
-      s.readdata2 ( pcount );
+   tfindfile ff ( "*.gfx" );
+   char* filename = ff.getnextname();
+   while ( filename ) {
 
-      int* picmode = new int[pcount];
-      s.readdata ( picmode, pcount*sizeof( int ) );
+      tnfilestream s ( filename, 1 );
 
-      for ( int i = 0; i < pcount; i++ ) 
-         if ( picmode[i] >= 1 ) {
-            int o;
-            s.readrlepict ( &bi3graphics[i], false, &o );
-            _bi3graphnum = i;
-            bi3graphmode[i] = picmode[i];
-            picsfound++;
-         } 
-      delete[] picmode;
+      int magic;
+      s.readdata2 ( magic );
+      if ( magic == -1 ) {
+
+         GraphicSet* gs = new GraphicSet;
+
+         s.readdata2 ( gs->id );
+         s.readdata2 ( gs->picnum );
+         s.readdata2 ( gs->maxPicSize );
+
+         if ( absoluteMaxPicSize < gs->maxPicSize )
+            absoluteMaxPicSize = gs->maxPicSize;
+
+         int* picmode = new int[gs->picnum];
+         s.readdata ( picmode, gs->picnum * sizeof( int ) );
+   
+         for ( int i = 0; i < gs->picnum; i++ ) {
+            if ( picmode[i] >= 1 ) {
+               int o;
+               void* p;
+               s.readrlepict ( &p, false, &o );
+               gs->pic[i] = p;
+            } 
+            gs->picmode[i] = picmode[i];
+         }
+         if ( gs->picnum > highestPicNum )
+            highestPicNum = gs->picnum;
+
+         if ( gs->picnum < bi3graphnum )
+            bi3graphnum = gs->picnum;
+
+         delete[] picmode;
+
+         graphicSet[graphicSetNum++] = gs;
+      }
+
+      filename = ff.getnextname();
    }
+   activeGraphicPictures.bi3graphics = new void*[highestPicNum]; 
+   activeGraphicPictures.bi3graphmode = new int[highestPicNum];
+   activeGraphicPictures.maxnum = highestPicNum;
+   activeGraphicPictures.absoluteMaxPicSize = absoluteMaxPicSize;
+   activeGraphicPictures.alloc ( );
+   activeGraphicPictures.setActive ( 0 );
+
+  /*
+
+   else {
 
    if ( picsfound < 1673 ) {
       checkbi3dir();
@@ -287,13 +440,11 @@ void loadbi3graphics( void )
             bi3graphnum++;
             
       }
-   } else
-      bi3graphnum = picsfound;
-
-
+   } 
    #ifdef logging
    logtofile("loading of bi3 graphics finished");
    #endif
+  */
 
 }
 
@@ -352,7 +503,7 @@ void tgetbi3pict :: paint ( void )
          if ( marked == num ) 
             rectangle ( 50 + x * xs, 10 + y * ys, 80 + x * xs, 40 + y * ys, yellow );
 
-         if ( num < bi3graphnum  &&  bi3graphics[num] ) {
+         if ( num < bi3graphnum  &&  activeGraphicPictures.picAvail ( num ) ) {
             void* buf;
             loadbi3pict ( num, &buf );
             putspriteimage ( 50 + x * xs + 30/2 - picsize/2, 10 + y * ys + 30/2 - picsize/2, buf );
@@ -447,25 +598,25 @@ void getbi3pict_double ( int* num, void** picture )
 
    loadbi3pict_double ( *num, picture );
 
-}
-
-void loadbi3pict_double ( int num, void** pict, int interpolate )
+}        
+         
+int  loadbi3pict_double ( int num, void** pict, int interpolate, int reference )
 {
    if ( !bi3graphnum )
       loadbi3graphics();
 
-   if ( !bi3graphics[num] ) {
+   if ( ! activeGraphicPictures.picAvail ( num ) ) {
       *pict = NULL;
-      return;
+      return -1;
    } 
 
-   if ( (bi3graphmode[num] & 0xff ) == 1 ) {
+   if ( (activeGraphicPictures.getMode ( num ) & 0xff ) == 1 ) {
 
       if( !interpolate ) {
      
          void* buf = new char [ imagesize ( 100, 100, 99+fieldxsize, 99+fieldysize )];
       
-         char* src = (char*) bi3graphics[num];
+         char* src = (char*) activeGraphicPictures.getPic ( num );
          char* dst = (char*) buf;
          dst[0] = fieldxsize-1;
          dst[1] = 0;
@@ -480,6 +631,7 @@ void loadbi3pict_double ( int num, void** pict, int interpolate )
               dst[y * fieldxsize+x] = src[ (y/2)*(fieldxsize/2)+(x/2) ];
            
          *pict = buf;
+         return 0;
       
    /*
          TrueColorImage* zimg = zoomimage ( bi3graphics[num], fieldxsize, fieldysize, pal, 1 );
@@ -490,20 +642,28 @@ void loadbi3pict_double ( int num, void** pict, int interpolate )
    
       } else {
    
-         TrueColorImage* zimg = zoomimage ( bi3graphics[num], fieldxsize, fieldysize, pal, 1 );
+         TrueColorImage* zimg = zoomimage ( activeGraphicPictures.getPic( num ), fieldxsize, fieldysize, pal, 1 );
          void* pic = convertimage ( zimg, pal ) ;
          delete zimg;
          *pict = pic;
-   
+         return 0;
       }
    } else
-   if ( (bi3graphmode[num] & 0xff ) == 2 ) {
-      int sz = getpicsize2 ( bi3graphics[num] );
-      void* buf = asc_malloc ( sz );
-      memcpy ( buf, bi3graphics[num], sz );
-      *pict = buf;
-   } else
-     *pict = NULL;
+      if ( (activeGraphicPictures.getMode( num ) & 0xff ) == 2 ) {
+         if ( reference == 1) {
+            *pict = activeGraphicPictures.getPic ( num );
+            return 1;
+         } else {
+            int sz = getpicsize2 ( activeGraphicPictures.getPic ( num ) );
+            void* buf = asc_malloc ( sz );
+            memcpy ( buf, activeGraphicPictures.getPic ( num ), sz );
+            *pict = buf;
+            return 0;
+         } /* endif */
+      } else {
+        *pict = NULL;
+        return -1;
+      }
 }
 
 void loadbi3pict ( int num, void** pict )
@@ -511,15 +671,15 @@ void loadbi3pict ( int num, void** pict )
    if ( !bi3graphnum )
       loadbi3graphics();
 
-   if ( !bi3graphics[num] ) {
+   if ( !activeGraphicPictures.picAvail( num ) ) {
       *pict = NULL;
       return;
    } 
 
-   if ( (bi3graphmode[num] & 0xff ) == 1 ) {
+   if ( (activeGraphicPictures.getMode( num ) & 0xff ) == 1 ) {
       char* buf = new char [ imagesize ( 100, 100, 99+fieldxsize/2, 99+fieldysize/2 )];
    
-      char* src = (char*) bi3graphics[num];
+      char* src = (char*) activeGraphicPictures.getPic( num );
       char* dst = (char*) buf;
       dst[0] = fieldxsize/2-1;
       dst[1] = 0;
@@ -535,15 +695,14 @@ void loadbi3pict ( int num, void** pict )
    
       *pict = buf;
    } else 
-   if ( (bi3graphmode[num] & 0xff ) == 2 ) {
-      void* buf2 = halfpict ( bi3graphics[num] );
-      int sz = getpicsize2 ( buf2 );
-      void* buf = asc_malloc ( sz );
-      memcpy ( buf, buf2, sz );
-      *pict = buf;
-   } else
-     *pict = NULL;
-
+      if ( (activeGraphicPictures.getMode( num ) & 0xff ) == 2 ) {
+         void* buf2 = halfpict ( activeGraphicPictures.getPic( num ) );
+         int sz = getpicsize2 ( buf2 );
+         void* buf = asc_malloc ( sz );
+         memcpy ( buf, buf2, sz );
+         *pict = buf;
+      } else
+        *pict = NULL;
 }
 
 
@@ -1095,7 +1254,7 @@ void        tloadBImap ::   ReadACTNPart(void)
                      for ( int ww = 0; ww < cwettertypennum; ww++ )
                         if ( obj->weather & ( 1 << ww ))
                            for ( int j = 0; j < obj->pictnum; j++ )
-                              if ( obj->picture[ww][j].bi3pic == xlt[m]  && !(found & 2)  && !(bi3graphmode[xlt[m]] & 256) ) {
+                              if ( obj->picture[ww][j].bi3pic == xlt[m]  && !(found & 2)  && !(activeGraphicPictures.getMode(xlt[m]) & 256) ) {
                                  pfield fld = getfield ( newx, newy );
                                  if ( pass == 1 || obj->terrainaccess.accessible ( fld->bdt )) {
                                     fld -> addobject ( obj, 0, 1 );
@@ -1650,6 +1809,7 @@ void tloadBImap :: LoadFromFile( char* path, char* AFileName, pwterraintype trrn
 
 void importbattleislemap ( char* path, char* filename, pwterraintype trrn  )
 {
+    activateGraphicSet ( 1 );
     ImportBiMap lbim;  
     lbim.LoadFromFile ( path, filename, trrn );
     actmap->resourcemode = 1;
@@ -1659,6 +1819,7 @@ void importbattleislemap ( char* path, char* filename, pwterraintype trrn  )
 
 void insertbattleislemap ( int x, int y, char* path, char* filename  )
 {
+    activateGraphicSet ( 1 );
     InsertBiMap lbim ( x, y );  
     lbim.LoadFromFile ( path, filename, NULL );
     actmap->resourcemode = 1;
@@ -1666,6 +1827,10 @@ void insertbattleislemap ( int x, int y, char* path, char* filename  )
 }
 
 
+int activateGraphicSet ( int id  )
+{
+  return    activeGraphicPictures.setActive ( id );
+}
 
 
 #endif
