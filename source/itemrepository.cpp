@@ -98,8 +98,8 @@ void ItemRepository<T>::read( tnstream& stream )
       T* t = new T;
       t->read( stream );
 
-      t->filename = stream.getDeviceName();
-      t->location = stream.getLocation();
+      t->filename = stream.readString();
+      t->location = stream.readString();
 
       add ( t );
       // add ( T::newFromStream(stream ));
@@ -112,8 +112,11 @@ void ItemRepository<T>::write( tnstream& stream )
 {
    stream.writeInt( 1 );
    stream.writeInt( container.size() );
-   for ( typename vector<T*>::iterator i = container.begin(); i != container.end(); ++i )
+   for ( typename vector<T*>::iterator i = container.begin(); i != container.end(); ++i ) {
        (*i)->write( stream );
+       stream.writeString ( (*i)->filename );
+       stream.writeString ( (*i)->location );
+   }
 }
 
 
@@ -152,7 +155,7 @@ class TechAdapterLoader : public TextFileDataLoader {
 
 void  loadalltextfiles ( );
 
-const int cacheVersion = 7;
+const int cacheVersion = 8;
 
 class FileCache {
       vector<tfindfile::FileInfo> actualFileInfo;

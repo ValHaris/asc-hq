@@ -2,9 +2,14 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.60 2004-05-29 15:07:37 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.61 2004-09-13 16:56:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2004/05/29 15:07:37  mbickel
+//      Fixed maps
+//      Fixed crash with asc.cache
+//      ai speed up
+//
 //     Revision 1.59  2004/05/20 14:01:09  mbickel
 //      Many bugfixes and new features, among them:
 //        - Container.FillUnitsAutomatically = 2
@@ -414,7 +419,8 @@ mc_check mc;
         "Edit Technologies",
         "Edit ResearchPoints",
         "Generate TechTree",
-        "Edit TechAdapter" };
+        "Edit TechAdapter",
+        "Reset Player Data..." };
 
 
 // õS Infomessage
@@ -466,7 +472,7 @@ int infomessage( char* formatstring, ... )
 void mc_check::on(void)
 {
    if (mycursor.an == false ) {
-      int ms = getmousestatus(); 
+      int ms = getmousestatus();
       if (ms == 1) { 		//mouse off
          if (mstatus == 0) mousevisible(true);
          else mstatus++;
@@ -518,7 +524,7 @@ void         GetString::init(char* _title)
    title = _title; 
    x1 = 120;
    xsize = 400; 
-   y1 = 150; 
+   y1 = 150;
    ysize = 140; 
    action = 0; 
 
@@ -830,7 +836,7 @@ void execaction(int code)
                          if (pf2->direction>sidenum-1) pf2->direction = 0;
                          mapsaved = false;
                          displaymap();
-                      } 
+                      }
                    }
        break;
     case act_events :   event();
@@ -1196,6 +1202,8 @@ void execaction(int code)
    case act_generateTechTree: generateTechTree();
       break;
    case act_editTechAdapter: editTechAdapter();
+      break;
+   case act_resetPlayerData: resetPlayerData();
       break;
 
     }

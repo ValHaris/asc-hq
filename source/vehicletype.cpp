@@ -119,7 +119,7 @@ int Vehicletype::maxsize ( void ) const
 extern void* generate_vehicle_gui_build_icon ( pvehicletype tnk );
 #endif
 
-const int vehicle_version = 17;
+const int vehicle_version = 18;
 
 
 
@@ -477,8 +477,11 @@ void Vehicletype :: read ( tnstream& stream )
       #endif
    }
 
-   if ( version >= 14 )
+   if ( version >= 14 && version < 18)
       cargoMovementDivisor = stream.readInt();
+   else
+      if ( version >= 18 )
+         cargoMovementDivisor = stream.readFloat();
 }
 
 void Vehicletype::setupPictures()
@@ -669,7 +672,7 @@ void Vehicletype:: write ( tnstream& stream ) const
 
    stream.writerlepict( buildicon );
 
-   stream.writeInt ( cargoMovementDivisor );
+   stream.writeFloat ( cargoMovementDivisor );
 }
 
 const ASCString& Vehicletype::getName( ) const
@@ -827,7 +830,12 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    pc.openBracket ( "ConstructionCost" );
    productionCost.runTextIO ( pc );
    int costCalcMethod;
-   pc.addTagInteger( "CalculationMethod", costCalcMethod, productionCostCalculationMethodNum, productionCostCalculationMethod,  0, false );
+   pc.addNamedInteger( "CalculationMethod", costCalcMethod, productionCostCalculationMethodNum, productionCostCalculationMethod,  0 );
+   if ( pc.isReading() ) {
+      if ( !pc.find ( "material" ) && costCalcMethod == 0)
+         costCalcMethod = 1;
+   }
+
    if ( costCalcMethod == 1 )
       productionCost = calcProductionsCost();
    if ( costCalcMethod == 2 )
@@ -860,7 +868,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    if ( pc.find ( "WreckageObject" ) || !pc.isReading() )
       pc.addIntegerArray("WreckageObject", wreckageObject );
 
-   pc.addInteger("CargoMovementDivisor", cargoMovementDivisor, 2 );
+   pc.addDFloat("CargoMovementDivisor", cargoMovementDivisor, 2 );
 
    pc.addInteger("Weight",  weight);
    pc.openBracket("TerrainAccess" );
@@ -1001,7 +1009,7 @@ void Vehicletype :: HeightChangeMethod :: read ( tnstream& stream )
    dist = stream.readInt();
 }
 
-void Vehicletype :: HeightChangeMethod :: write ( tnstream& stream ) const 
+void Vehicletype :: HeightChangeMethod :: write ( tnstream& stream ) const
 {
    stream.writeInt ( vehicleHeightChangeMethodVersion );
    stream.writeInt ( startHeight );
@@ -1021,7 +1029,7 @@ void Vehicletype :: HeightChangeMethod :: write ( tnstream& stream ) const
 
  vehicletype {
    constructioncost {
-   	calculationMode = [calc](default)[add][set]
+   	calculationMode = [auto](default)[add][manual]
    	energy = 0
    	material = 0
    	fuel = 0
@@ -1034,11 +1042,12 @@ Part III -typecost
 part IV  -weaponcost
 Part V   -specialcost
 Part VI  -addierung
-Part VII -Abschläge 
+Part VII -Abschläge
 
  ***************************************************************************/
 
 //Part II beginn calculation
+
 
 Resources Vehicletype :: calcProductionsCost()
 {
@@ -1058,29 +1067,37 @@ Resources Vehicletype :: calcProductionsCost()
 		
 
 // Part III typecost
-//Frage: korrekter syntax bei "trooper,light_tracked_vehicle, usw." ??
 
 		if ( movemalustyp == MoveMalusType::trooper) {
 			typecoste += armor;
 			typecostm += armor;
 		}
-		if ( movemalustyp == MoveMalusType::light_tracked_vehicle || movemalustyp == MoveMalusType::medium_tracked_vehicle || movemalustyp == MoveMalusType::heavy_tracked_vehicle || movemalustyp == MoveMalusType::light_wheeled_vehicle || movemalustyp == MoveMalusType::medium_wheeled_vehicle || movemalustyp == MoveMalusType::heavy_wheeled_vehicle || movemalustyp == MoveMalusType::rail_vehicle || movemalustyp == MoveMalusType::hoovercraft) {
+		if ( movemalustyp == MoveMalusType::light_tracked_vehicle || movemalustyp == MoveMalusType::medium_tracked_vehicle || movemalustyp == MoveMalusType::heavy_tracked_vehicle || movemalustyp == MoveMalusType::light_wheeled_vehicle || movemalustyp == MoveMalusType::medium_wheeled_vehicle || movemalustyp == MoveMalusType::heavy_wheeled_vehicle || movemalustyp == MoveMalusType::rail_vehicle || movemalustyp == MoveMalusType::structure) {
 			typecoste += armor*8;
 			typecostm += armor*8;
 		}
-		if ( movemalustyp == MoveMalusType::light_aircraft || movemalustyp == MoveMalusType::medium_aircraft || movemalustyp == MoveMalusType::heavy_aircraft || movemalustyp == MoveMalusType::helicopter ) {
-			typecoste += armor*16;
-			typecostm += armor*16;
+		if ( movemalustyp == movemalustyp == MoveMalusType::hoovercraft) {
+			typecoste += armor*9;
+			typecostm += armor*9;
 		}
 		if ( movemalustyp == MoveMalusType::light_ship || movemalustyp == MoveMalusType::medium_ship || movemalustyp == MoveMalusType::heavy_ship ) {
 			typecoste += armor*10;
 			typecostm += armor*10;
 		}
-		if ( movemalustyp == MoveMalusType::structure || movemalustyp == MoveMalusType::deflt) {
-			typecoste += armor*7;
-			typecostm += armor*7;
+		if ( movemalustyp == MoveMalusType::light_aircraft || movemalustyp == MoveMalusType::medium_aircraft || movemalustyp == MoveMalusType::heavy_aircraft || movemalustyp == MoveMalusType::helicopter ) {
+			typecoste += armor*16;
+			typecostm += armor*16;
+		}
+		if ( movemalustyp == movemalustyp == MoveMalusType::deflt) {
+			typecoste += armor*5;
+			typecostm += armor*5;
 		}
 
+		// Zuschlag für Eisbrecher
+		if ( functions & cficebreaker ) {
+			typecoste += armor *2;
+			typecostm += armor *2;  
+		}
 		// Zuschlag für U-Boote / Druckhülle
 		if ( height & chgetaucht ) {
 			typecoste += armor*2;
@@ -1088,13 +1105,13 @@ Resources Vehicletype :: calcProductionsCost()
 		}
 		// Zuschlag für orbitalfähige Einheiten / Druckhülle
 		if ( height & chsatellit ) {
-			typecoste += armor*4;
-			typecostm += armor*3;
+			typecoste += armor*3;
+			typecostm += armor*2;
 		}
 		// Zuschlag für hochfliegende Einheiten / Extra starke Triebwerke
 		if ( height & chhochfliegend ) {
-			typecoste += armor*3;
-			typecostm += armor*2;
+			typecoste += armor*2;
+			typecostm += armor*1;
 		}
 		// Zuschlag für Transportkapazität
 		if ( entranceSystems.size() > 0 ) {
@@ -1103,9 +1120,9 @@ Resources Vehicletype :: calcProductionsCost()
 
 			// Zuschlag für Flugzeugträger / Start- und Landeeinrichtungen
 			for ( int T=0; T < entranceSystems.size(); ++T ) {
-				if ( entranceSystems[T].container_height == chfahrend && entranceSystems[T].height_abs == chtieffliegend ) {
-					typecoste += maxLoadableUnits*500;
-					typecostm += maxLoadableUnits*500;
+				if ( entranceSystems[T].container_height == chfahrend && entranceSystems[T].height_abs == chtieffliegend && maxLoadableUnits > 2 ) {
+					typecoste += maxLoadableUnits*1000;
+					typecostm += maxLoadableUnits*1000;
 				}
 			}
 		}
@@ -1126,18 +1143,20 @@ Resources Vehicletype :: calcProductionsCost()
 			typecoste += (movecostsize-120)*10;
 			typecostm += (movecostsize-120)*5;
 		}
-		// Zuschalg für Hochleistungsflugzeugtriebwerke
+		// Zuschlag für Hochleistungsflugzeugtriebwerke
 		if (movecostsize > 170 ) {
 			typecoste += (movecostsize-170)*5;
 			typecostm += (movecostsize-170)*5;
 		}
-		// Zuschalg für Spezialflugzeugtriebwerke
+		// Zuschlag für Spezialflugzeugtriebwerke
 		if (movecostsize > 200 ) {
-			typecoste += (movecostsize-200)*5;
-			typecostm += (movecostsize-200)*5;
+			typecoste += (movecostsize-200)*10;
+			typecostm += (movecostsize-200)*10;
 		}
+
+
 		
-// Part IV - weaponcost
+// Part IV - weaponcost		
 		if ( weapons.count > 0 ) {
 			for ( int W=0; W < weapons.count; ++W ) {
 				if (weapons.weapon[W].getScalarWeaponType() == cwmachinegunn && weapons.weapon[W].shootable() ) {
@@ -1161,8 +1180,8 @@ Resources Vehicletype :: calcProductionsCost()
 					weaponcostm += weapons.weapon[W].maxstrength*12;
 				}
 				if (weapons.weapon[W].getScalarWeaponType() == cwcruisemissile && weapons.weapon[W].shootable() ) {
-					weaponcoste += weapons.weapon[W].maxstrength*50;
-					weaponcostm += weapons.weapon[W].maxstrength*50;
+					weaponcoste += weapons.weapon[W].maxstrength*30;
+					weaponcostm += weapons.weapon[W].maxstrength*30;
 				}
 				if (weapons.weapon[W].getScalarWeaponType() == cwtorpedon && weapons.weapon[W].shootable() ) {
 					weaponcoste += weapons.weapon[W].maxstrength*11;
@@ -1192,17 +1211,17 @@ Resources Vehicletype :: calcProductionsCost()
 			// Waffenreichweitenzuschlag Kurzstrecke
 			if (rangecostsize > 19 ) {
 				weaponcoste += (rangecostsize-10)*80;
-				weaponcostm += (rangecostsize-10)*20;
+				weaponcostm += (rangecostsize-10)*50;
 			}
 			// Waffenreichweitenzuschlag Mittelstrecke
 			if (rangecostsize > 69 ) {
-				weaponcoste += (rangecostsize-60)*20;
-				weaponcostm += (rangecostsize-60)*20;
+				weaponcoste += (rangecostsize-60)*100;
+				weaponcostm += (rangecostsize-60)*80;
 			}
 			// Waffenreichweitenzuschlag Langstrecke
 			if (rangecostsize > 99 ) {
-				weaponcoste += (rangecostsize-90)*20;
-				weaponcostm += (rangecostsize-90)*20;
+				weaponcoste += (rangecostsize-90)*110;
+				weaponcostm += (rangecostsize-90)*100;
 			}
 		}
 		
@@ -1235,67 +1254,65 @@ Resources Vehicletype :: calcProductionsCost()
 			specialcoste += 1000;
 			specialcostm += 500;  
 		}
+      // Res Search
 		if ( (functions & cfmanualdigger) || (functions & cfautodigger) ) {
-			specialcoste += 0;
-			specialcostm += 0;  
+			specialcoste += digrange*150;
+			specialcostm += digrange*100;
 		}
+      // Generator
 		if ( functions & cfgenerator ) {
-			specialcoste += 0;
-			specialcostm += 0;  
+			specialcoste += 1000;
+			specialcostm += 500;
 		}
+      //ParaTrooper
 		if ( functions & cfparatrooper ) {
-			specialcoste += 0;
-			specialcostm += 0;  
+			specialcoste += armor*2 ;
+			specialcostm += armor ;
 		}
 		// Reparaturfahrzeug
 		if ( functions & cfrepair ) {
-			specialcoste += 0;
-			specialcostm += 0;  
+			specialcoste += 1000;
+			specialcostm += 500;
+		}
+		// Selbstreparatur / Heilung
+		if ( functions & cfautorepair ) {
+			specialcoste += autorepairrate*50;
+			specialcostm += autorepairrate*50;
 		}
 		// Radar
 		if ( view > 40 ) {
 			specialcoste += (view-40)*50;
-			specialcostm += (view-40)*20;  
+			specialcostm += (view-40)*20;
 		}
 		if (view > 100 ) {
 			specialcoste += (view-100)*100;
 			specialcostm += (view-100)*100;
 		}
-		// Selbsreparatur / Heilung
-		if ( functions & cfautorepair ) {
-			specialcoste += autorepairrate*50;
-			specialcostm += autorepairrate*50;  
+      // Satview
+		if ( functions & cfsatellitenview ) {
+			specialcoste += view*20;
+			specialcostm += view*8;
 		}
 		//Sonar
 		if ( (functions & cfsonar) && (movemalustyp == MoveMalusType::trooper) ) {
-			specialcoste += 300;
-			specialcostm += 100;  
-		} else { 
+			specialcoste += view*10;
+			specialcostm += view*4;
+		} else {
 			if (functions & cfsonar) {
-				specialcoste += 500;
-				specialcostm += 300;  
+				specialcoste += view*20;
+				specialcostm += view*10;
 			}
 		}
 		//Move during reaction fire
-		if ( (functions & cfmovewithRF) && (movemalustyp == MoveMalusType::trooper) ) {
+		if ( functions & cfmovewithRF ) {
 			specialcoste += weapons.count * 100;
-			specialcostm += weapons.count * 50;  
-		} else {
-			if (functions & cfmovewithRF) {
-				specialcoste += weapons.count * 200;
-				specialcostm += weapons.count * 100;  
-			}
+			specialcostm += weapons.count * 50;
 		}
-		
+
 		//move after attack
-		if ( (functions & cf_moveafterattack) && (movemalustyp == MoveMalusType::trooper) ) {
-			specialcoste += 300;
-			specialcostm += 100;  
-		} else {
-			if (functions & cf_moveafterattack) {
-				specialcoste += 500;
-				specialcostm += 200;  
-			}
+		if ( functions & cf_moveafterattack ) {
+			specialcoste += movecostsize*10;
+			specialcostm += movecostsize*5;
 		}
 
 // Part VI - Addition
@@ -1316,8 +1333,8 @@ Resources Vehicletype :: calcProductionsCost()
 		}
 
 		// low movement
-		if (movecostsize < 20) {
-			res.energy -= typecoste/3;
+		if (movecostsize < 20 ) {
+			res.energy -= typecoste/4;
 			res.material -= typecostm/5;
 		}
 		
@@ -1325,6 +1342,4 @@ Resources Vehicletype :: calcProductionsCost()
 
 	return res;
 }
-
-
 

@@ -74,7 +74,7 @@ bool  ObjectType :: buildable ( pfield fld )
 
 int ObjectType :: getEffectiveHeight()
 {
-  return physicalHeight;
+  return 1 << physicalHeight;
 }
 
 

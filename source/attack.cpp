@@ -1052,9 +1052,9 @@ pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
                           angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwlasern ||
                           angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwcruisemissile ||
                           angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwairmissilen ||
+                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwgroundmissilen ||
                           angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwbombn ) {
                         if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[cmm_building] )
-                           if (chfahrend & angreifer->typ->weapons.weapon[i].targ ) {
                               if (fieldvisiblenow(efield, angreifer->color/8)) {
                                  int d = beeline(angreifer->xpos,angreifer->ypos,x,y);
                                  if (d <= angreifer->typ->weapons.weapon[i].maxdistance)
@@ -1073,7 +1073,7 @@ pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
 
                                     }
                               }
-                           }
+
                      }
                if ( found )
                   return atw;

@@ -4057,44 +4057,6 @@ void         tsetalliances::buttonpressed( int id )
                            (*j)->resetMovement();
 
 
-                     vector<ASCString> buttonsP;
-                     buttonsP.push_back ( "Reset ~V~iew" );
-                     buttonsP.push_back ( "Reset ~R~es." );
-                     buttonsP.push_back ( "Reset ~P~rod." );
-                     buttonsP.push_back ( "~C~ontinue" );
-
-                     pair<int,int> playerRes;
-                     do {
-                        vector<ASCString> player;
-                        for ( int i = 0; i < 8; ++i ) {
-                           ASCString s = strrr(i);
-                           player.push_back ( s + " " + actmap->player[i].getName() );
-                        }
-
-                        playerRes = chooseString ( "Choose Player", player, buttonsP );
-                        if ( playerRes.first == 0 ) {
-                             for ( int x = 0; x < actmap->xsize; x++ )
-                                for ( int y = 0; y < actmap->ysize; y++ ) {
-                                   pfield fld = actmap->getField(x,y);
-                                   fld->setVisibility( visible_not, playerRes.second );
-                                   if ( fld->resourceview )
-                                      fld->resourceview->visible &= ~(1<<playerRes.second);
-                                }
-                        }
-                        if ( playerRes.first == 1 ) {
-                           actmap->player[playerRes.second].research.progress = 0;
-                           actmap->player[playerRes.second].research.activetechnology = NULL;
-                           actmap->player[playerRes.second].research.developedTechnologies.clear();
-                        }
-
-                        if ( playerRes.first == 2 ) {
-                           for ( Player::BuildingList::iterator i = actmap->player[playerRes.second].buildingList.begin(); i != actmap->player[playerRes.second].buildingList.end(); ++i ) 
-                              for ( int j = 0; j < 32; ++j )
-                                 (*i)->production[j] = NULL;
-                        }
-
-                     } while ( playerRes.first != 3 );
-
                     ASCString filename;
                     fileselectsvga(mapextension, filename, false);
                     if ( !filename.empty() )

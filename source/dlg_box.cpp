@@ -3816,6 +3816,8 @@ void         ChooseString ::setup( )
    title = buf;
    numberoflines = strings.size();
    ey = ysize - 50;
+   if ( buttons.size() > 4 )
+      xsize = 640;
    int width = (xsize-40)/buttons.size();
    for ( int i = 0; i< buttons.size(); ++i )
       addbutton( buttons[i].c_str(),25 + i*width,ysize - 45,15 + (i+1)*width,ysize - 20,0,1,20+i,true);

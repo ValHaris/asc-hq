@@ -334,6 +334,7 @@ class    ccontainer : public virtual ccontainercontrols
       int      keymode;   // mit tab wird umgeschaltet. 0 : Laderaum ; 1 : Subwin ; 2 : Laschen
       int      repaintammo;
       int      repaintresources;
+      void repaintResources() { repaintresources = 1;};
 
       void     setactunittogray ( void );
       void     buildgraphics();
@@ -702,12 +703,6 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
             virtual void execexternalload ( void );
       };
 
-      int    putenergy (int e, int abbuchen = 1 );
-      int    putmaterial (int m, int abbuchen = 1 );
-      int    putfuel (int f, int abbuchen = 1 );
-      int    getenergy ( int need, int abbuchen );
-      int    getmaterial ( int need, int abbuchen );
-      int    getfuel ( int need, int abbuchen );
       int    putammunition (int  weapontype, int  ammunition, int abbuchen);
       int    getammunition ( int weapontype, int num, int abbuchen, int produceifrequired = 0 );
       pvehicle getloadedunit (int num);
@@ -795,11 +790,6 @@ class    ccontainer_t : public ctransportcontrols , public ccontainer
 
       pvehicle getloadedunit (int num);
 
-      int    putmaterial (int m, int abbuchen = 1 );
-      int    putfuel (int f, int abbuchen = 1 );
-      int    getenergy ( int need, int abbuchen );
-      int    getmaterial ( int need, int abbuchen );
-      int    getfuel ( int need, int abbuchen );
       int    putammunition (int  weapontype, int  ammunition, int abbuchen);
       int    getammunition ( int weapontype, int num, int abbuchen, int produceifrequired = 0 );
 
@@ -980,61 +970,16 @@ ccontainercontrols :: ccontainercontrols (void)
 
 
 
-
-
-int   ccontainercontrols :: getResource ( int need, int resourceType, int abbuchen )
+void  ccontainercontrols :: crefill :: resource (pvehicle eht, int resourcetype, int newamount)
 {
-   switch ( resourceType ) {
-      case 0: return getenergy ( need, abbuchen );
-      case 1: return getmaterial ( need, abbuchen );
-      case 2: return getfuel ( need, abbuchen );
-   };
-   return 0;
+   int oldamount = eht->getResource(maxint, resourcetype, true);
+   int storable = eht->putResource(newamount - oldamount, resourcetype, true);
+
+   eht->putResource( cc->getResource ( storable, resourcetype, false ), resourcetype, false );
+
+   logtoreplayinfo ( rpl_refuel2, eht->xpos, eht->ypos, eht->networkid, int(1000+resourcetype), eht->getTank().resource(resourcetype), oldamount );
+   logtoreplayinfo ( rpl_refuel3, cc->baseContainer->getIdentification(), int(1000+resourcetype), eht->getTank().resource(resourcetype) - oldamount );
 };
-
-
-
-void  ccontainercontrols :: crefill :: fuel (pvehicle eht, int newfuel)
-{
-   if ( newfuel > eht->typ->tank.fuel )
-      newfuel = eht->typ->tank.fuel;
-
-   newfuel = min ( newfuel, eht->getResource ( maxint, Resources::Fuel, 1 ) + eht->putResource(maxint, Resources::Fuel, 1));
-   int oldfuel = eht->tank.fuel;
-
-   if ( newfuel > eht->tank.fuel ) {
-      eht->tank.fuel += cc->getfuel ( newfuel - eht->tank.fuel, 1 );
-   } else {
-      int delta = eht->tank.fuel - newfuel;
-      delta = cc->putfuel ( delta );
-      eht->tank.fuel -= delta;
-   }
-
-   // logtoreplayinfo ( rpl_refuel, eht->xpos, eht->ypos, eht->networkid, int(1002), newfuel );
-   logtoreplayinfo ( rpl_refuel2, eht->xpos, eht->ypos, eht->networkid, int(1002), eht->tank.fuel, oldfuel );
-   logtoreplayinfo ( rpl_refuel3, cc->baseContainer->getIdentification(), int(1002), eht->tank.fuel - oldfuel );
-};
-
-
-void  ccontainercontrols :: crefill :: material (pvehicle eht, int newmaterial)
-{
-   if ( newmaterial > eht->typ->tank.material )
-      newmaterial = eht->typ->tank.material;
-
-   newmaterial = min ( newmaterial, eht->getResource ( maxint, Resources::Material, 1 ) + eht->putResource(maxint, Resources::Material, 1));
-   int oldmaterial = eht->tank.material;
-
-   if ( newmaterial > eht->tank.material ) {
-      eht->tank.material += cc->getmaterial ( newmaterial - eht->tank.material, 1 );
-   } else {
-      int delta = eht->tank.material - newmaterial;
-      delta = cc->putmaterial ( delta );
-      eht->tank.material -= delta;
-   }
-   logtoreplayinfo ( rpl_refuel2, eht->xpos, eht->ypos, eht->networkid, int(1001), eht->tank.material, oldmaterial );
-   logtoreplayinfo ( rpl_refuel3, cc->baseContainer->getIdentification(), int(1001), eht->tank.material - oldmaterial );
-};
-
 
 
 
@@ -1059,8 +1004,8 @@ void  ccontainercontrols :: crefill :: ammunition (pvehicle eht, char weapon, in
 
 void  ccontainercontrols :: crefill :: filleverything ( pvehicle eht )
 {
-   fuel     ( eht, maxint );
-   material ( eht, maxint );
+   resource ( eht, 1, maxint );
+   resource ( eht, 2, maxint );
    for (int i = 0; i < eht->typ->weapons.count; i++)
       if ( eht->typ->weapons.weapon[ i ].requiresAmmo() )
          ammunition ( eht, i, maxint );
@@ -1069,8 +1014,8 @@ void  ccontainercontrols :: crefill :: filleverything ( pvehicle eht )
 
 void  ccontainercontrols :: crefill :: emptyeverything ( pvehicle eht )
 {
-   fuel     ( eht, 0 );
-   material ( eht, 0 );
+   resource ( eht, 1, 0 );
+   resource ( eht, 2, 0 );
    for (int i = 0; i < eht->typ->weapons.count; i++)
       if ( eht->typ->weapons.weapon[ i ].requiresAmmo() )
          ammunition ( eht, i, 0 );
@@ -1222,29 +1167,6 @@ char  cbuildingcontrols :: getactplayer (void)
 };
 
 
-int   cbuildingcontrols :: putenergy (int e, int abbuchen )
-{
-   return building->putResource( e, 0, !abbuchen );
-};
-
-
-int   cbuildingcontrols :: putmaterial (int m, int abbuchen )
-{
-   return building->putResource( m, 1 , !abbuchen );
-};
-
-
-
-int   cbuildingcontrols :: putfuel (int f, int abbuchen )
-{
-   return building->putResource( f, 2, !abbuchen );
-};
-
-
-
-
-
-
 
 int   cbuildingcontrols :: putammunition ( int weapontype, int ammunition, int abbuchen)
 {
@@ -1253,26 +1175,6 @@ int   cbuildingcontrols :: putammunition ( int weapontype, int ammunition, int a
    return ammunition;
 };
 
-
-
-int   cbuildingcontrols :: getenergy ( int need, int abbuchen )
-{
-   return building->getResource ( need, 0,  !abbuchen );
-};
-
-
-
-int   cbuildingcontrols :: getmaterial ( int need, int abbuchen )
-{
-   return building->getResource ( need, 1, !abbuchen );
-};
-
-
-
-int   cbuildingcontrols :: getfuel ( int need, int abbuchen )
-{
-   return building->getResource ( need, 2, !abbuchen );
-};
 
 
 
@@ -1393,7 +1295,7 @@ void  cbuildingcontrols :: crecycling :: recycle (pvehicle eht)
       cc->refill.emptyeverything ( eht );
 
 
-      cc->putmaterial ( res.material );
+      cc->getResource ( -res.material, Resources::Material, false );
 
       cc_b->removevehicle (&eht);
 };
@@ -1453,9 +1355,9 @@ int  cbuildingcontrols :: cproduceammunition :: checkavail ( int weaptype, int n
       int neededm = cwaffenproduktionskosten[weaptype][1] * num;
       int neededf = cwaffenproduktionskosten[weaptype][2] * num;
 
-      int   availae = cc->getenergy  ( baseenergyusage   + needede, 0 ) - baseenergyusage;
-      int   availam = cc->getmaterial( basematerialusage + neededm, 0 ) - basematerialusage;
-      int   availaf = cc->getfuel    ( basefuelusage     + neededf, 0 ) - basefuelusage;
+      int   availae = cc->getResource ( baseenergyusage   + needede, Resources::Energy, true ) - baseenergyusage;
+      int   availam = cc->getResource ( basematerialusage + neededm, Resources::Material, true ) - basematerialusage;
+      int   availaf = cc->getResource ( basefuelusage     + neededf, Resources::Fuel, true ) - basefuelusage;
 
       int   eperc;
       if ( needede )
@@ -1509,9 +1411,7 @@ int  cbuildingcontrols :: cproduceammunition :: checkavail ( int weaptype, int n
 void cbuildingcontrols :: cproduceammunition :: produce ( int weaptype, int num )
 {
    int n = checkavail( weaptype, num );
-   cc->getenergy   ( energyneeded,   1 );
-   cc->getmaterial ( materialneeded, 1 );
-   cc->getfuel     ( fuelneeded,     1 );
+   cc->getResource ( Resources( energyneeded, materialneeded, fuelneeded ), false );
    cc->putammunition ( weaptype, n*weaponpackagesize, 1 );
 
    logtoreplayinfo ( rpl_produceAmmo, cc_b->building->getPosition().x, cc_b->building->getPosition().y, weaptype, n );
@@ -1527,7 +1427,7 @@ int   cbuildingcontrols :: cproduceunit :: available (pvehicletype fzt, int* lac
    int l = 0;
    if ( actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( fzt ) ) {
       for ( int r = 0; r < resourceTypeNum; r++ )
-         if ( cc->getResource( fzt->productionCost.resource(r), r, 0 ) < fzt->productionCost.resource(r) )
+         if ( cc->getResource( fzt->productionCost.resource(r), r, true ) < fzt->productionCost.resource(r) )
             l |= 1 << r;
    } else
       l |= 1 << 10;
@@ -1568,8 +1468,7 @@ pvehicle cbuildingcontrols :: cproduceunit :: produce (pvehicletype fzt, bool fo
 
    */
 
-   cc->getenergy   ( fzt->productionCost.energy,   1 );
-   cc->getmaterial ( fzt->productionCost.material, 1 );
+   cc->getResource( Resources ( fzt->productionCost.energy, fzt->productionCost.material, 0 ), false );
 
 //   logtoreplayinfo( rpl_productionResourceUsage, fzt->id, cc_b->building->getPosition().x, cc_b->building->getPosition().y );
 
@@ -1758,49 +1657,6 @@ char  ctransportcontrols :: getactplayer (void)
 
 
 
-int   ctransportcontrols :: putmaterial (int m, int abbuchen )
-{
-   if ( vehicle->typ->tank.material < vehicle->tank.material + m ) {
-      int dif = vehicle->typ->tank.material - vehicle->tank.material;
-      if ( abbuchen )
-         vehicle->tank.material += dif;
-      return dif;
-   } else {
-      if ( abbuchen )
-         vehicle->tank.material += m;
-      return m;
-   }
-};
-
-
-
-int   ctransportcontrols :: putfuel (int f, int abbuchen)
-{
-   if ( vehicle->typ->functions & cffuelref) {
-      if ( vehicle->typ->tank.fuel < vehicle->tank.fuel + f ) {
-         int dif = vehicle->typ->tank.fuel - vehicle->tank.fuel;
-         if ( abbuchen )
-            vehicle->tank.fuel += dif;
-         return dif;
-      } else {
-         if ( abbuchen )
-            vehicle->tank.fuel += f;
-         return f;
-      }
-   } else
-      return 0;
-
-};
-
-
-
-int   ctransportcontrols :: putenergy (int e, int abbuchen )
-{
-   return 0;
-};
-
-
-
 
 int   ctransportcontrols :: putammunition ( int weapontype, int ammunition, int abbuchen)
 {
@@ -1817,56 +1673,6 @@ int   ctransportcontrols :: putammunition ( int weapontype, int ammunition, int 
    return ammo;
 };
 
-
-
-int   ctransportcontrols :: getenergy ( int need, int abbuchen )
-{
-   if ( need < vehicle->tank.energy ) {
-      if ( abbuchen )
-         vehicle->tank.energy-=need;
-      return need;
-   } else {
-      int e = vehicle->tank.energy;
-      if ( abbuchen )
-         vehicle->tank.energy = 0;
-      return e;
-   }
-};
-
-
-
-int   ctransportcontrols :: getmaterial ( int need, int abbuchen )
-{
-   if ( need < vehicle->tank.material ) {
-      if ( abbuchen )
-         vehicle->tank.material-=need;
-      return need;
-   } else {
-      int m = vehicle->tank.material;
-      if ( abbuchen )
-         vehicle->tank.material = 0;
-      return m;
-   }
-};
-
-
-
-int   ctransportcontrols :: getfuel ( int need, int abbuchen )
-{
-   if ( vehicle->typ->functions & cffuelref) {
-      if ( need < vehicle->tank.fuel ) {
-         if ( abbuchen )
-            vehicle->tank.fuel-=need;
-         return need;
-      } else {
-         int f = vehicle->tank.fuel;
-         if ( abbuchen )
-            vehicle->tank.fuel = 0;
-         return f;
-      }
-   } else
-      return 0;
-};
 
 
 
@@ -2079,9 +1885,8 @@ void  ccontainer :: showresources ( void )
 
       collategraphicoperations cgo ( nameposx + 18 , nameposy + 27, nameposx + 164 + activefontsettings.length, nameposy + 40 );
       char buf[1000];
-      showtext2c ( int2string ( getenergy   ( maxint, 0 ), buf ), nameposx + 18, nameposy + 27 );
-      showtext2c ( int2string ( getmaterial ( maxint, 0 ), buf ), nameposx + 91, nameposy + 27 );
-      showtext2c ( int2string ( getfuel     ( maxint, 0 ), buf ), nameposx + 164, nameposy + 27 );
+      for ( int r = 0; r < 3; ++r )
+         showtext2c ( int2string ( getResource ( maxint, r, true ), buf ), nameposx + 18 + r * (91-18), nameposy + 27 );
 
       repaintresources = 0;
    }
@@ -2598,9 +2403,9 @@ void  ccontainer :: cammunitiontransfer_subwindow :: reset ( pvehicle veh )
       if ( eht->typ->tank.material ) {
          weaps[num].name = resourceNames [ 1 ];
          weaps[num].maxnum = eht->typ->tank.material;
-         weaps[num].orgnum = eht->tank.material;
+         weaps[num].orgnum = eht->getTank().material;
          weaps[num].actnum = weaps[num].orgnum;
-         weaps[num].buildnum = cc->getmaterial ( maxint, 0 );
+         weaps[num].buildnum = cc->getResource ( maxint, Resources::Material, true );
          weaps[num].pos  = 101;
          weaps[num].type = 101;
          num++;
@@ -2608,9 +2413,9 @@ void  ccontainer :: cammunitiontransfer_subwindow :: reset ( pvehicle veh )
       if ( eht->typ->tank.fuel ) {
          weaps[num].name = resourceNames [ 2 ];
          weaps[num].maxnum = eht->typ->tank.fuel;
-         weaps[num].orgnum = eht->tank.fuel;
+         weaps[num].orgnum = eht->getTank().fuel;
          weaps[num].actnum = weaps[num].orgnum;
-         weaps[num].buildnum = cc->getfuel ( maxint, 0 );
+         weaps[num].buildnum = cc->getResource ( maxint, Resources::Fuel, true );
          weaps[num].pos  = 102;
          weaps[num].type = 102;
          num++;
@@ -2642,20 +2447,13 @@ int   ccontainer :: cammunitiontransfer_subwindow :: gpres ( int i )
          n = -cc->putammunition ( weaps[i].type, -diff, 0 );
    } else
       if ( weaps[i].pos == 101 ) {
-         if ( diff > 0 )
-            n = cc->getmaterial ( diff, 0 );
-         else
-            n = -cc->putmaterial ( -diff, 0 );
+         n = cc->getResource ( diff, Resources::Material, true );
       } else
          if ( weaps[i].pos == 102 ) {
-            if ( diff > 0 )
-               n = cc->getfuel ( diff, 0 );
-            else
-               n = -cc->putfuel ( -diff, 0 );
+            n = cc->getResource ( diff, Resources::Fuel, true  );
 
             // hostcontainer->setpictures();
             // hostcontainer->displayloading();
-
          };
 
    return n;
@@ -2740,10 +2538,10 @@ void  ccontainer :: cammunitiontransfer_subwindow :: transfer ( void )
          ammunition ( eht, weaps[i].pos, weaps[i].actnum );
 
       if ( weaps[i].pos == 101 )
-         material ( eht, weaps[i].actnum );
+         resource ( eht, Resources::Material, weaps[i].actnum );
 
       if ( weaps[i].pos == 102 ) {
-         fuel ( eht, weaps[i].actnum );
+         resource ( eht, Resources::Fuel, weaps[i].actnum );
          hostcontainer->setpictures();
          hostcontainer->displayloading();
       }
@@ -3130,7 +2928,7 @@ void  ccontainer :: repairicon_c :: exec         ( void )
    cc->baseContainer->repairItem ( main->getmarkedunit() , 0 );
    Vehicle* v = dynamic_cast<Vehicle*>(cc->baseContainer);
    if ( v )
-      logtoreplayinfo ( rpl_repairUnit, v->networkid, main->getmarkedunit()->networkid, 0, v->tank.material, v->tank.fuel );
+      logtoreplayinfo ( rpl_repairUnit, v->networkid, main->getmarkedunit()->networkid, 0, v->getTank().material, v->getTank().fuel );
    Building* b = dynamic_cast<Building*>(cc->baseContainer);
    if ( b )
       logtoreplayinfo ( rpl_repairUnit2, b->getPosition().x, b->getPosition().y, main->getmarkedunit()->networkid, 0 );
@@ -3779,7 +3577,7 @@ void  ccontainer_b :: setpictures ( void )
                picture[num] = building->production[i]->picture[0] ;
                int en = building->production[i]->productionCost.energy;
                int ma = building->production[i]->productionCost.material;
-               if ( getenergy ( en, 0 ) < en  ||  getmaterial ( ma, 0 ) < ma )
+               if ( getResource ( en, Resources::Energy, true ) < en  ||  getResource(  ma, Resources::Material, true ) < ma )
                   pictgray[num] = 1;
                else
                   pictgray[num] = 0;
@@ -3864,46 +3662,21 @@ int    ccontainer_b :: getammunition ( int weapontype, int num, int abbuchen, in
 }
 
 
-int    ccontainer_b :: putenergy (int e, int abbuchen  )
+Resources ccontainercontrols :: getResource ( Resources res, bool queryOnly )
 {
-   if ( abbuchen )
-      repaintresources = 1;
-   return cbuildingcontrols :: putenergy ( e, abbuchen );
+
+   Resources r =  baseContainer->getResource(res, queryOnly );
+   if ( !queryOnly )
+      repaintResources();
+   return r;
 }
 
-int    ccontainer_b :: putmaterial (int m, int abbuchen  )
+int  ccontainercontrols :: getResource ( int amount, int resourceType, bool queryOnly )
 {
-   if ( abbuchen )
-      repaintresources = 1;
-   return cbuildingcontrols :: putmaterial ( m, abbuchen );
-}
-
-int    ccontainer_b :: putfuel (int f, int abbuchen  )
-{
-   if ( abbuchen )
-      repaintresources = 1;
-   return cbuildingcontrols :: putfuel ( f, abbuchen );
-}
-
-int    ccontainer_b :: getenergy ( int need, int abbuchen )
-{
-   if ( abbuchen )
-      repaintresources = 1;
-   return cbuildingcontrols :: getenergy ( need, abbuchen );
-}
-
-int    ccontainer_b :: getmaterial ( int need, int abbuchen )
-{
-   if ( abbuchen )
-      repaintresources = 1;
-   return cbuildingcontrols :: getmaterial ( need, abbuchen );
-}
-
-int    ccontainer_b :: getfuel ( int need, int abbuchen )
-{
-   if ( abbuchen )
-      repaintresources = 1;
-   return cbuildingcontrols :: getfuel ( need, abbuchen );
+   int r = baseContainer->getResource(amount, resourceType, queryOnly );
+   if ( !queryOnly )
+      repaintResources();
+   return r;
 }
 
 
@@ -6423,9 +6196,9 @@ int   ccontainer_b :: fill_icon_cb :: available    ( void )
 {
    pvehicle eht = main->getmarkedunit();
    if ( eht && eht->color == actmap->actplayer * 8) {
-      if ( eht->tank.material < eht->typ->tank.material )
+      if ( eht->getTank().material < eht->typ->tank.material )
          return 1;
-      if ( eht->tank.fuel < eht->typ->tank.fuel )
+      if ( eht->getTank().fuel < eht->typ->tank.fuel )
          return 1;
       for (int i = 0; i < eht->typ->weapons.count; i++)
          if ( eht->typ->weapons.weapon[ i ].requiresAmmo() )
@@ -6724,8 +6497,8 @@ void ccontainer_t :: ctransportinfo_subwindow :: paintvariables ( void )
    eht = hostcontainer->getmarkedunit();
    if ( eht ) {
       showtext2c ( strrr ( eht->typ->weight ),                       subwinx1 + 170,  subwiny1 +  62 );
-      showtext2c ( strrr ( eht->tank.material * resourceWeight[Resources::Material] / 1000 ),  subwinx1 + 170,  subwiny1 +  70 );
-      showtext2c ( strrr ( eht->tank.fuel     * resourceWeight[Resources::Fuel]     / 1000 ),  subwinx1 + 170,  subwiny1 +  78 );
+      showtext2c ( strrr ( eht->getTank().material * resourceWeight[Resources::Material] / 1000 ),  subwinx1 + 170,  subwiny1 +  70 );
+      showtext2c ( strrr ( eht->getTank().fuel     * resourceWeight[Resources::Fuel]     / 1000 ),  subwinx1 + 170,  subwiny1 +  78 );
       showtext2c ( strrr ( eht->cargo() ),                           subwinx1 + 170,  subwiny1 +  86 );
       showtext2c ( strrr ( eht->weight() ),                          subwinx1 + 170,  subwiny1 +  96 );
    } else {
@@ -6861,43 +6634,6 @@ int    ccontainer_t :: getammunition ( int weapontype, int num, int abbuchen, in
    return ctransportcontrols :: getammunition ( weapontype, num, abbuchen, produceifrequired  );
 }
 
-int    ccontainer_t :: putmaterial (int m, int abbuchen  )
-{
-   if ( abbuchen )
-      repaintresources = 1;
-   return ctransportcontrols :: putmaterial ( m, abbuchen );
-}
-
-int    ccontainer_t :: putfuel (int f, int abbuchen  )
-{
-   if ( abbuchen )
-      repaintresources = 1;
-   return ctransportcontrols :: putfuel ( f, abbuchen );
-}
-
-int    ccontainer_t :: getenergy ( int need, int abbuchen )
-{
-   if ( abbuchen )
-      repaintresources = 1;
-   return ctransportcontrols :: getenergy ( need, abbuchen );
-}
-
-int    ccontainer_t :: getmaterial ( int need, int abbuchen )
-{
-   if ( abbuchen )
-      repaintresources = 1;
-   return ctransportcontrols :: getmaterial ( need, abbuchen );
-}
-
-int    ccontainer_t :: getfuel ( int need, int abbuchen )
-{
-   if ( abbuchen )
-      repaintresources = 1;
-   return ctransportcontrols :: getfuel ( need, abbuchen );
-}
-
-
-
 // Gui
 
 
@@ -6940,9 +6676,9 @@ int   ccontainer_t :: fill_icon_ct :: available    ( void )
 
    pvehicle eht = main->getmarkedunit();
    if ( eht && eht->color == actmap->actplayer * 8) {
-      if ( eht->tank.material < eht->typ->tank.material )
+      if ( eht->getTank().material < eht->typ->tank.material )
          return 1;
-      if ( eht->tank.fuel < eht->typ->tank.fuel )
+      if ( eht->getTank().fuel < eht->typ->tank.fuel )
          return 1;
       for (int i = 0; i < eht->typ->weapons.count; i++)
          if ( eht->typ->weapons.weapon[ i ].requiresAmmo() )

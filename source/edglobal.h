@@ -1,6 +1,11 @@
-//     $Id: edglobal.h,v 1.19 2004-05-29 15:07:37 mbickel Exp $
+//     $Id: edglobal.h,v 1.20 2004-09-13 16:56:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2004/05/29 15:07:37  mbickel
+//      Fixed maps
+//      Fixed crash with asc.cache
+//      ai speed up
+//
 //     Revision 1.18  2004/05/20 14:01:09  mbickel
 //      Many bugfixes and new features, among them:
 //        - Container.FillUnitsAutomatically = 2
@@ -117,7 +122,7 @@ extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 88;
+const int execactionscount = 89;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -209,6 +214,7 @@ enum tuseractions {
      act_editResearch,
      act_editResearchPoints,
      act_generateTechTree,
-     act_editTechAdapter};
+     act_editTechAdapter,
+     act_resetPlayerData};
 
 extern void         execaction(int code);

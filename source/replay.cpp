@@ -1423,20 +1423,11 @@ void trunreplay :: execnextreplaymove ( void )
                                     if ( pos < 16 )
                                        eht->ammo[pos] = amnt;
                                      else {
-                                        switch ( pos ) {
-                                        case 1000: if ( eht->tank.energy != old && old >= 0 )
-                                                      error("severe replay inconsistency:\nthe resources of unit not matching. \nrecorded: %d , expected: %d !", old, eht->tank.energy);
-                                                   eht->tank.energy = amnt;
-                                           break;
-                                        case 1001: if ( eht->tank.material != old && old >= 0 )
-                                                      error("severe replay inconsistency:\nthe resources of unit not matching. \nrecorded: %d , expected: %d !", old, eht->tank.material);
-                                                   eht->tank.material = amnt;
-                                           break;
-                                        case 1002: if ( eht->tank.fuel != old && old >= 0 )
-                                                      error("severe replay inconsistency:\nthe resources of unit not matching. \nrecorded: %d , expected: %d !", old, eht->tank.fuel);
-                                                   eht->tank.fuel = amnt;
-                                           break;
-                                        } /* endswitch */
+                                        int res = pos - 1000;
+                                        int avl = eht->getTank().resource(res);
+                                        if ( avl != old && old >= 0 )
+                                            error("severe replay inconsistency:\nthe resources of unit not matching. \nrecorded: %d , expected: %d !", old, avl);
+                                        eht->getResource ( avl - amnt, res, false );
                                      }
                                  } else
                                     error("severe replay inconsistency:\nno vehicle for refuel-unit command !");
@@ -1540,7 +1531,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  pvehicle dest = actmap->getUnit ( destnwid );
                                  if ( eht && dest ) {
                                     eht->repairItem ( dest, amount );
-                                    if ( eht->tank.fuel != fuelremain || eht->tank.material != matremain )
+                                    if ( eht->getTank().fuel != fuelremain || eht->getTank().material != matremain )
                                          error("severe replay inconsistency:\nthe resources of unit not matching for repair operation!");
                                  } else
                                     error("severe replay inconsistency:\nno vehicle for repair-unit command !");

@@ -70,11 +70,11 @@ class ContainerBase {
       virtual void removeview ( void ) = 0;
 
 
-      virtual int putResource ( int amount, int resourcetype, int queryonly, int scope = 1 ) = 0;
-      virtual int getResource ( int amount, int resourcetype, int queryonly, int scope = 1 ) = 0;
+      virtual int putResource ( int amount, int resourcetype, bool queryonly, int scope = 1 ) = 0;
+      virtual int getResource ( int amount, int resourcetype, bool queryonly, int scope = 1 ) = 0;
 
-      Resources putResource ( const Resources& res, int queryonly, int scope = 1 );
-      Resources getResource ( const Resources& res, int queryonly, int scope = 1 );
+      Resources putResource ( const Resources& res, bool queryonly, int scope = 1 );
+      Resources getResource ( const Resources& res, bool queryonly, int scope = 1 );
 
       virtual bool canRepair( const ContainerBase* item ) = 0;
       pmap getMap ( ) { return gamemap; };

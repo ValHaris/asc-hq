@@ -329,20 +329,9 @@ void         putbuildinglevel3(integer      x,
          if ( ff <= 0 )
             ff = 100;
 
-         if (eht->tank.material < bld->productionCost.material * mf / 100 ) {
-            displaymessage("not enough material!",1);
-            eht->tank.material = 0;
-         }
-         else
-            eht->tank.material -= bld->productionCost.material * mf / 100;
-
-
-         if (eht->tank.fuel < bld->productionCost.fuel * ff / 100) {
+         Resources cost = Resources ( 0, bld->productionCost.material * mf / 100, bld->productionCost.fuel * ff / 100);
+         if ( eht->getResource( cost, false ) < cost )
             displaymessage("not enough fuel!",1);
-            eht->tank.fuel = 0;
-         }
-         else
-            eht->tank.fuel -= bld->productionCost.fuel * ff / 100;
 
          moveparams.movestatus = 0;
          eht->setMovement ( 0 );
@@ -414,13 +403,12 @@ void         destructbuildinglevel2( int xp, int yp)
 
          pbuilding bb = fld->building;
 
-         eht->tank.material += bld->productionCost.material * (100 - bb->damage) / destruct_building_material_get / 100;
-         if ( eht->tank.material > eht->typ->tank.material )
-            eht->tank.material = eht->typ->tank.material;
+         eht->putResource( bld->productionCost.material * (100 - bb->damage) / destruct_building_material_get / 100, Resources::Material, false);
 
          eht->setMovement ( 0 );
          eht->attacked = 1;
-         eht->tank.fuel -= destruct_building_fuel_usage * eht->typ->fuelConsumption;
+         eht->getResource( destruct_building_fuel_usage * eht->typ->fuelConsumption, Resources::Fuel, false );
+
          if ( bb->getCompletion() ) {
             bb->setCompletion ( bb->getCompletion()-1 );
          } else {
@@ -781,7 +769,7 @@ void tbuildstreet::checkObject( pfield fld, pobjecttype objtype, Mode mode )
           int movecost;
           Resources cost;
           getobjbuildcosts ( objtype, fld, &cost, &movecost );
-          if ( actvehicle->tank >= cost && actvehicle->getMovement() >= movecost ) {
+          if ( actvehicle->getResource(cost, true) >= cost && actvehicle->getMovement() >= movecost ) {
              obj->objects_buildable[ obj->objects_buildable_num++ ] = objtype;
 
              fld->a.temp = 1;
@@ -794,7 +782,7 @@ void tbuildstreet::checkObject( pfield fld, pobjecttype objtype, Mode mode )
           int movecost;
           Resources cost;
           getobjbuildcosts ( objtype, fld, &cost, &movecost );
-          if ( actvehicle->tank >= cost && actvehicle->getMovement() >= movecost ) {
+          if ( actvehicle->getResource(cost, true) >= cost && actvehicle->getMovement() >= movecost ) {
              obj->objects_removable[ obj->objects_removable_num++ ] = objtype;
              fld->a.temp = 1;
              numberoffields++;
@@ -936,13 +924,7 @@ void         setspec( pobjecttype obj )
             logtoreplayinfo ( rpl_remobj2, x, y, obj->id, eht->networkid );
          }
 
-         eht->tank -= cost;
-         for ( int i = 0; i < 3; i++ ) {
-            if ( eht->tank.resource(i) > eht->typ->tank.resource(i) )
-               eht->tank.resource(i) = eht->typ->tank.resource(i);
-            if ( eht->tank.resource(i) < 0 )
-               eht->tank.resource(i) = 0;
-         }
+         eht->getResource( cost, false );
 
          eht->setMovement ( eht->getMovement() - movecost );
 
@@ -993,8 +975,8 @@ void         constructvehicle( pvehicletype tnk )
          int x = getxpos();
          int y = getypos();
 
-         int oldmat = eht->tank.material;
-         int oldfuel = eht->tank.fuel;
+//         int oldmat = eht->tank.material;
+//         int oldfuel = eht->tank.fuel;
 
          Vehicle* v = eht->constructvehicle ( tnk, x, y );
          logtoreplayinfo ( rpl_buildtnk4, x, y, tnk->id, moveparams.vehicletomove->color/8, eht->getPosition().x, eht->getPosition().y, int(v->height) );
@@ -1646,14 +1628,14 @@ void Building :: execnetcontrol ( void )
                                  */
 
 
-int  Building :: putResource ( int      need,    int resourcetype, int queryonly, int scope  )
+int  Building :: putResource ( int      need,    int resourcetype, bool queryonly, int scope  )
 {
    PutResource putresource ( getMap(), scope );
    return putresource.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, color/8, scope );
 }
 
 
-int  Building :: getResource ( int      need,    int resourcetype, int queryonly, int scope )
+int  Building :: getResource ( int      need,    int resourcetype, bool queryonly, int scope )
 {
    GetResource gr ( getMap(), scope );
    return gr.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, color/8, scope );

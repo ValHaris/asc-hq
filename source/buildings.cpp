@@ -162,8 +162,8 @@ void* Building :: getpicture ( const BuildingType::LocalCoordinate& localCoordin
 
 #ifndef sgmain
 void Building :: execnetcontrol ( void ) {}
-int Building :: putResource ( int amount, int resourcetype, int queryonly, int scope ) { return 0; };
-int Building :: getResource ( int amount, int resourcetype, int queryonly, int scope ) { return 0; };
+int Building :: putResource ( int amount, int resourcetype, bool queryonly, int scope ) { return 0; };
+int Building :: getResource ( int amount, int resourcetype, bool queryonly, int scope ) { return 0; };
 #endif
 
 void Building :: setCompletion ( int completion, bool setupImages )

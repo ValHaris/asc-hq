@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: building_controls.h,v 1.19 2004-05-23 17:05:47 mbickel Exp $
+//     $Id: building_controls.h,v 1.20 2004-09-13 16:56:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2004/05/23 17:05:47  mbickel
+//      Added research checking to replay
+//
 //     Revision 1.18  2004/05/16 15:40:32  mbickel
 //      Fixed compilation problems with gcc
 //      Included SDLmm library
@@ -142,8 +145,7 @@ class    ccontainercontrols
       class    crefill
       {
          public :
-            void     fuel (pvehicle eht, int newfuel);                     // der neue Werte darf durchaus ?ber dem Maximum liegen. Eine entsprechende Pr?fung wird durchgef?hrt.
-            void     material (pvehicle eht, int newmaterial);
+            void     resource (pvehicle eht, int resourcetype, int newamount );
             void     ammunition (pvehicle eht, char weapon, int ammun );
             void     filleverything ( pvehicle eht );
             void     emptyeverything ( pvehicle eht );
@@ -165,16 +167,6 @@ class    ccontainercontrols
 
       virtual char   getactplayer (void) = 0;
 
-      
-      virtual int    putenergy (int e, int abbuchen = 1 ) = 0;
-      virtual int    putmaterial (int m, int abbuchen = 1 ) = 0;
-      virtual int    putfuel (int f, int abbuchen = 1) = 0;
-
-      int            getResource ( int need, int resourceType, int abbuchen );
-      virtual int    getenergy ( int need, int abbuchen ) = 0;
-      virtual int    getmaterial ( int need, int abbuchen ) = 0;
-      virtual int    getfuel ( int need, int abbuchen ) = 0;
-
       virtual int    putammunition (int  weapontype, int  ammunition, int abbuchen) = 0;
       virtual int    getammunition ( int weapontype, int num, int abbuchen, int produceifrequired = 0 ) = 0;
       virtual int    ammotypeavail ( int type ) = 0;
@@ -185,12 +177,16 @@ class    ccontainercontrols
       virtual VehicleMovement*  movement ( pvehicle eht, bool simpleMode = false );
       virtual int    getHeight ( void ) = 0;
 
+      Resources getResource ( Resources res, bool queryOnly );
+      int  getResource ( int amount, int resourceType, bool queryOnly );
 
       virtual int    getspecfunc ( tcontainermode mode ) = 0;
 
       virtual pvehicle getloadedunit (int num) = 0;
 
       ContainerBase* baseContainer;
+   protected:
+      virtual void repaintResources() {};
 };
 
 
@@ -207,12 +203,6 @@ class    cbuildingcontrols : public virtual ccontainercontrols
 
 
    public :
-      int    putenergy (int e , int abbuchen = 1);
-      int    putmaterial (int m, int abbuchen = 1 );
-      int    putfuel (int f, int abbuchen = 1 );
-      int    getenergy ( int need, int abbuchen );
-      int    getmaterial ( int need, int abbuchen );
-      int    getfuel ( int need, int abbuchen );
       int    putammunition ( int weapontype, int  ammunition, int abbuchen);
       int    getspecfunc ( tcontainermode mode );
       int    getammunition ( int weapontype, int num, int abbuchen, int produceifrequired = 0 );
@@ -317,12 +307,6 @@ class    ctransportcontrols : public virtual ccontainercontrols
 
 
    public :
-      int    putenergy (int e, int abbuchen = 1 );
-      int    putmaterial (int m, int abbuchen = 1 );
-      int    putfuel (int f, int abbuchen = 1 );
-      int    getenergy ( int need, int abbuchen );
-      int    getmaterial ( int need, int abbuchen );
-      int    getfuel ( int need, int abbuchen );
       int    putammunition ( int weapontype, int  ammunition, int abbuchen);
       int    getspecfunc ( tcontainermode mode );
       int    getammunition ( int weapontype, int num, int abbuchen, int produceifrequired = 0 );

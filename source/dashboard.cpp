@@ -112,7 +112,7 @@ void         tdashboard::painttank(void)
 
     if ( vehicle )
        if ( vehicle->typ->tank.fuel )
-          w = ( x2 - x1 + 1) * vehicle->tank.fuel / vehicle->typ->tank.fuel;
+          w = ( x2 - x1 + 1) * vehicle->getTank().fuel / vehicle->typ->tank.fuel;
        else
           w = 0;
     else
@@ -260,7 +260,7 @@ void         tdashboard::paintweapons(void)
                    if ( materialdisplayed )
                       if ( vt->tank.fuel ) {
                          putimage ( xp, 93 + k * 13, xlatpict ( &xlattables.a.light, icons.unitinfoguiweapons[ 8 ] ));
-                         paintweaponammount ( k, ( vehicle ? vehicle->tank.fuel : vt->tank.fuel ), vt->tank.fuel );
+                         paintweaponammount ( k, ( vehicle ? vehicle->getTank().fuel : vt->tank.fuel ), vt->tank.fuel );
                          k--;
                       }
                 }
@@ -273,7 +273,7 @@ void         tdashboard::paintweapons(void)
                 putimage ( xp, 93 + k * 13, xlatpict ( &xlattables.a.light, icons.unitinfoguiweapons[ 11 ] ));
              else
                 putimage ( xp, 93 + k * 13, icons.unitinfoguiweapons[ 11 ] );
-              paintweaponammount ( k, ( vehicle ? vehicle->tank.material : vt->tank.material ), vt->tank.material );
+              paintweaponammount ( k, ( vehicle ? vehicle->getTank().material : vt->tank.material ), vt->tank.material );
               k--;
           }
           if ( vt->tank.energy ) {
@@ -283,7 +283,7 @@ void         tdashboard::paintweapons(void)
                 putimage ( xp, 93 + k * 13, icons.unitinfoguiweapons[ 9 ] );
 
               if ( vehicle && vehicle->getGeneratorStatus() )
-                  paintweaponammount ( k, ( vehicle ? vehicle->tank.energy : vt->tank.energy ), vt->tank.energy );
+                  paintweaponammount ( k, ( vehicle ? vehicle->getTank().energy : vt->tank.energy ), vt->tank.energy );
               else
                   paintweaponammount ( k, 0, vt->tank.energy, true );
               k--;
@@ -386,18 +386,18 @@ void         tdashboard :: paintlargeweaponinfo ( void )
           i++;
        }
        if ( vt->tank.energy ) {
-          paintlargeweapon(i, resourceNames[ 0 ], ( vehicle ? vehicle->tank.energy : vt->tank.energy ), vt->tank.energy, -1, -1, -1, -1, -1, -1, -1, -1 );
+          paintlargeweapon(i, resourceNames[ 0 ], ( vehicle ? vehicle->getTank().energy : vt->tank.energy ), vt->tank.energy, -1, -1, -1, -1, -1, -1, -1, -1 );
           largeWeaponsDisplayPos[i] = -1;
           i++;
        }
 
        if ( (serv>= 0 || (funcs & cfmaterialref)) && vt->tank.material ) {
-          paintlargeweapon(i, resourceNames[ 1 ], ( vehicle ? vehicle->tank.material : vt->tank.material ), vt->tank.material, -1, -1, -1, -1, -1, -1, -1, -1 );
+          paintlargeweapon(i, resourceNames[ 1 ], ( vehicle ? vehicle->getTank().material : vt->tank.material ), vt->tank.material, -1, -1, -1, -1, -1, -1, -1, -1 );
           largeWeaponsDisplayPos[i] = -1;
           i++;
        }
        if ( (serv>= 0 || (funcs & cffuelref)) && vt->tank.fuel ) {
-          paintlargeweapon(i, resourceNames[ 2 ], ( vehicle ? vehicle->tank.fuel : vt->tank.fuel ), vt->tank.fuel, -1, -1, -1, -1, -1, -1, -1, -1 );
+          paintlargeweapon(i, resourceNames[ 2 ], ( vehicle ? vehicle->getTank().fuel : vt->tank.fuel ), vt->tank.fuel, -1, -1, -1, -1, -1, -1, -1, -1 );
           largeWeaponsDisplayPos[i] = -1;
           i++;
        }
@@ -759,8 +759,8 @@ void         tdashboard::paintmovement(void)
        activefontsettings.length = 17;
        activefontsettings.height = 9;
        if ( vehicle->typ->fuelConsumption ) {
-          if ( movedisp  || (minmalq*vehicle->tank.fuel / vehicle->typ->fuelConsumption  < vehicle->getMovement() ))
-             showtext2c( strrrd8d( minmalq*vehicle->tank.fuel / vehicle->typ->fuelConsumption ), agmp->resolutionx - ( 640 - 591), 59);
+          if ( movedisp  || (minmalq*vehicle->getTank().fuel / vehicle->typ->fuelConsumption  < vehicle->getMovement() ))
+             showtext2c( strrrd8d( minmalq*vehicle->getTank().fuel / vehicle->typ->fuelConsumption ), agmp->resolutionx - ( 640 - 591), 59);
           else
              showtext2c( strrrd8d(vehicle->getMovement() ), agmp->resolutionx - ( 640 - 591), 59);
        } else
@@ -1256,7 +1256,7 @@ void         tdashboard::checkformouse ( int func )
        }
        */
        if ( vehicle )
-          displaymessage2("unit has %d fuel", vehicle->tank.fuel );
+          displaymessage2("unit has %d fuel", vehicle->getTank().fuel );
        while ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )   &&   mouseparams.y >= 59    &&   mouseparams.y <= 67   && (mouseparams.taste & 1) )
           releasetimeslice();
    }

@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.153 2004-08-19 19:19:52 mbickel Exp $
+//     $Id: typen.h,v 1.154 2004-09-13 16:56:54 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -264,6 +264,7 @@ void readPointerContainer ( vector<BaseType*>& v, tnstream& stream  )
 {
    stream.readInt(); // version
    int num = stream.readInt();
+   v.clear();
    for ( int i = 0; i < num; ++i ) {
       BaseType* bt = new BaseType;
       bt->read( stream );
@@ -288,6 +289,7 @@ void readClassContainer ( C& c, tnstream& stream  )
 {
    int version = stream.readInt();
    int num = stream.readInt();
+   c.clear();
    for ( int i = 0; i < num; ++i ) {
       typedef typename C::value_type VT;
       VT vt;
@@ -312,6 +314,7 @@ inline void readClassContainer<> ( vector<ASCString>& c, tnstream& stream  )
 {
    stream.readInt(); // version
    int num = stream.readInt();
+   c.clear();
    for ( int i = 0; i < num; ++i )
       c.push_back( stream.readString() );
 }
@@ -332,8 +335,9 @@ inline void readClassContainer<> ( vector<int>& c, tnstream& stream  )
 {
    stream.readInt(); // version
    int num = stream.readInt();
+   c.clear();
    for ( int i = 0; i < num; ++i )
-      c.push_back( stream.readInt() );
+      c.push_back ( stream.readInt() );
 }
 
 template<>
@@ -354,10 +358,11 @@ inline void readClassContainer<> ( vector<pair<int,int> >& c, tnstream& stream  
 {
    stream.readInt(); // version
    int num = stream.readInt();
+   c.clear();
    for ( int i = 0; i < num; ++i ) {
        int first = stream.readInt();
        int second = stream.readInt();
-       c.push_back( make_pair(first,second) );
+       c.push_back ( make_pair(first,second) );
    }
 }
 

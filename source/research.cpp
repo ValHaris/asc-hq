@@ -684,10 +684,21 @@ Resources returnResourcenUseForResearch ( const pbuilding bld, int research )
    if ( bld->typ->nominalresearchpoints == 0 )
       return res;
 
+   int num = 0;
+   /*
+   for ( Player::BuildingList::iterator i = bld->getMap()->player[bld->getOwner()].buildingList.begin(); i != bld->getMap()->player[bld->getOwner()].buildingList.end(); ++i )
+      if ( (*i)->typ->special & cgresearchb)
+         if ( (*i)->researchpoints > 0 )
+            ++num;
+   */
+   num = 1;
+
+
+
    for ( int r = 0; r < 3; ++r )
       if ( bld->typ->maxplus.resource(r) < 0 ) {
          float a = -bld->typ->maxplus.resource(r) / pow(double(bld->typ->nominalresearchpoints),2);
-         res.resource(r) = int(pow(double(research),2) * a );
+         res.resource(r) = int( pow(pow(double(research),2) * a, 0.98 + double(num)/50) );
       }
 
    return res;

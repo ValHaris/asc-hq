@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.121 2004-09-08 19:34:31 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.122 2004-09-13 16:56:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.121  2004/09/08 19:34:31  mbickel
+//      Added multiple reaction fire
+//
 //     Revision 1.120  2004/08/14 13:11:03  mbickel
 //      Fixed crash in mapeditor
 //      more item filters possible in mapeditor
@@ -1236,6 +1239,7 @@ void         pdsetup(void)
    pd.addbutton ( "~E~dit technologies",          act_editResearch );
    pd.addbutton ( "edit ~R~search points",          act_editResearchPoints );
    pd.addbutton ( "edit ~T~ech adapter",          act_editTechAdapter );
+   pd.addbutton ( "reset player data...",   act_resetPlayerData );
 
   pd.addfield ("~T~ools");
    pd.addbutton ( "~V~iew mapõV",            act_viewmap );
@@ -5173,3 +5177,74 @@ void editTechAdapter()
    } while ( playerRes.first != 1 );
 }
 
+
+void resetPlayerData()
+{
+   vector<ASCString> buttonsP;
+   buttonsP.push_back ( "~V~iew" );
+   buttonsP.push_back ( "r~E~search" );
+   buttonsP.push_back ( "~P~roduction" );
+   buttonsP.push_back ( "~U~nits" );
+   buttonsP.push_back ( "~B~uildings" );
+   buttonsP.push_back ( "~R~esource" );
+   buttonsP.push_back ( "~c~lose" );
+
+   pair<int,int> playerRes;
+   do {
+      vector<ASCString> player;
+      for ( int i = 0; i < 8; ++i ) {
+         ASCString s = strrr(i);
+         player.push_back ( s + " " + actmap->player[i].getName() );
+      }
+      player.push_back ( "all" );
+
+      playerRes = chooseString ( "Choose Player", player, buttonsP );
+
+      for ( int player = 0; player < 8; ++player )
+         if ( playerRes.second == player || playerRes.second == 8 ) {
+            if ( playerRes.first == 0 ) {
+                 for ( int x = 0; x < actmap->xsize; x++ )
+                    for ( int y = 0; y < actmap->ysize; y++ ) {
+                       pfield fld = actmap->getField(x,y);
+                       fld->setVisibility( visible_not, player );
+                       if ( fld->resourceview )
+                          fld->resourceview->visible &= ~(1<<player);
+                    }
+            }
+            if ( playerRes.first == 1 ) {
+               actmap->player[player].research.progress = 0;
+               actmap->player[player].research.activetechnology = NULL;
+               actmap->player[player].research.developedTechnologies.clear();
+            }
+
+            if ( playerRes.first == 2 ) {
+               for ( Player::BuildingList::iterator i = actmap->player[player].buildingList.begin(); i != actmap->player[player].buildingList.end(); ++i )
+                  for ( int j = 0; j < 32; ++j )
+                     (*i)->production[j] = NULL;
+            }
+
+            if ( playerRes.first == 3 ) {
+               while ( actmap->player[player].vehicleList.begin() != actmap->player[player].vehicleList.end() )
+                  delete *actmap->player[player].vehicleList.begin();
+            }
+
+            if ( playerRes.first == 4 ) {
+               while ( actmap->player[player].buildingList.begin() != actmap->player[player].buildingList.end() )
+                  delete *actmap->player[player].buildingList.begin();
+            }
+
+            if ( playerRes.first == 5 ) {
+               for ( Player::BuildingList::iterator i = actmap->player[player].buildingList.begin(); i != actmap->player[player].buildingList.end(); ++i ) {
+                  for ( int j = 0; j < waffenanzahl; ++j )
+                     (*i)->ammo[j] = 0;
+
+                  (*i)->actstorage = Resources();
+               }
+               actmap->bi_resource[player] = Resources();
+
+            }
+         }
+
+
+   } while ( playerRes.first != 6 );
+}

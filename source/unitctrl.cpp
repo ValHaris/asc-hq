@@ -277,9 +277,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
       }
 
 
-      vehicle->tank.fuel -= fueldist * vehicle->typ->fuelConsumption / maxmalq;
-      if ( vehicle->tank.fuel < 0 )
-         vehicle->tank.fuel = 0;
+      vehicle->getResource ( fueldist * vehicle->typ->fuelConsumption / maxmalq, Resources::Fuel, false );
 
       if ( fld->vehicle || fld->building ) {
          vehicle->setMovement ( 0 );
@@ -1102,8 +1100,8 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
                                           s.type = VehicleService::srv_resource;
                                           s.sourcePos = r;
                                           s.targetPos = r;
-                                          s.curAmount = targetUnit->tank.resource(r);
-                                          s.orgSourceAmount = veh->tank.resource(r);
+                                          s.curAmount = targetUnit->getTank().resource(r);
+                                          s.orgSourceAmount = veh->getTank().resource(r);
                                           s.maxAmount = s.curAmount + min ( targetUnit->putResource(maxint, r, 1) , s.orgSourceAmount );
                                           int sourceSpace = veh->putResource(maxint, r, 1);
                                           s.minAmount = max ( s.curAmount - sourceSpace, 0 );
@@ -1112,7 +1110,7 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
                                        }
 
                                     if ( veh->canRepair( targetUnit ) && (veh->typ->functions & cfrepair))
-                                       if ( veh->tank.fuel && veh->tank.material )
+                                       if ( veh->getTank().fuel && veh->getTank().material )
                                          // if ( targetUnit->getMovement() >= movement_cost_for_repaired_unit )
                                              if ( targetUnit->damage ) {
                                                 VehicleService::Target::Service s;
@@ -1205,7 +1203,7 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
             s.type = VehicleService::srv_resource;
             s.sourcePos = r;
             s.targetPos = r;
-            s.curAmount = targetUnit->tank.resource(r);
+            s.curAmount = targetUnit->getTank().resource(r);
             // s.orgSourceAmount = bld->getResource (maxint, r, 1 );
             s.orgSourceAmount = buildingResources.resource(r);
             s.maxAmount = s.curAmount + min ( targetUnit->putResource(maxint, r, 1) , s.orgSourceAmount );
@@ -1365,14 +1363,14 @@ int VehicleService :: execute ( pvehicle veh, int targetNWID, int dummy, int ste
            case srv_resource: {
                                  delta = amount - serv.curAmount;
                                  int put = t.dest->putResource ( delta, serv.targetPos, 0 );
-                                 int oldavail = vehicle->tank.resource(serv.sourcePos);
+                                 int oldavail = vehicle->getTank().resource(serv.sourcePos);
                                  vehicle->getResource ( put, serv.sourcePos, 0 );
                                  logtoreplayinfo ( rpl_refuel2, t.dest->xpos, t.dest->ypos, t.dest->networkid, int(1000+serv.targetPos), amount, serv.curAmount );
-                                 logtoreplayinfo ( rpl_refuel2, vehicle->xpos, vehicle->ypos, vehicle->networkid, int(1000+serv.sourcePos), vehicle->tank.resource(serv.sourcePos), oldavail );
+                                 logtoreplayinfo ( rpl_refuel2, vehicle->xpos, vehicle->ypos, vehicle->networkid, int(1000+serv.sourcePos), vehicle->getTank().resource(serv.sourcePos), oldavail );
                               }
                               break;
            case srv_repair: vehicle->repairItem ( t.dest, amount );
-                            logtoreplayinfo ( rpl_repairUnit, vehicle->networkid, t.dest->networkid, amount, vehicle->tank.material, vehicle->tank.fuel );
+                            logtoreplayinfo ( rpl_repairUnit, vehicle->networkid, t.dest->networkid, amount, vehicle->getTank().material, vehicle->getTank().fuel );
                             /*
                             if ( mapDisplay )
                                if ( fieldvisiblenow ( fld, actmap->playerView ) || actmap->playerView*8  == vehicle->color )

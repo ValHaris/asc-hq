@@ -39,9 +39,6 @@
     */
     int  _movement;
 
-    //! the amount of energy that the unit has spent this turn
-    int   energyUsed;
-
     void init ( void );
 
     ResourceMatrix repairEfficiency;
@@ -79,9 +76,12 @@
 
     //! the position on the map
     int          xpos, ypos;
-
+#ifndef karteneditor
+  private:
+#endif  
     //! the resources that the unit is carrying
     Resources    tank;
+  public:
 
     //! if events are triggered by this unit (if it is lost for example), this will set connection != 0
     int          connection;
@@ -135,7 +135,7 @@
     /** sets a new distance that the unit can move
         \param cargoDivisor : the cargo of this unit gets 1/cargodivisor the change that this unit is getting; if 0 the cargo is not touched ; -1 is default
     */
-    void setMovement ( int newmove, int cargoDivisor = -1 );
+    void setMovement ( int newmove, double cargoDivisor = -1 );
 
     //! did the unit move this turn
     bool hasMoved ( void ) const;
@@ -156,8 +156,13 @@
     //! add the objects like tracks or broken ice
     void spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest );
 
-    int putResource ( int amount, int resourcetype, int queryonly, int scope = 1 );
-    int getResource ( int amount, int resourcetype, int queryonly, int scope = 1 );
+    int putResource ( int amount, int resourcetype, bool queryonly, int scope = 1 );
+    int getResource ( int amount, int resourcetype, bool queryonly, int scope = 1 );
+
+    Resources putResource ( const Resources& res, bool queryonly, int scope = 1 ) { return ContainerBase::putResource ( res, queryonly, scope ); };
+    Resources getResource ( const Resources& res, bool queryonly, int scope = 1 ) { return ContainerBase::getResource ( res, queryonly, scope ); };
+
+    Resources getTank() { return ContainerBase::getResource(typ->tank,true);};
 
 
     //! weight of unit including cargo, fuel and material

@@ -170,7 +170,6 @@ void Vehicle :: init ( void )
    direction = 0;
    xpos = -1;
    ypos = -1;
-   energyUsed = 0;
    connection = 0;
    networkid = -1;
    reactionfire.status = ReactionFire::off;
@@ -188,13 +187,16 @@ bool Vehicle :: canRepair( const ContainerBase* item )
    return (typ->functions & cfrepair) || (item == this && typ->autorepairrate ) ;
 }
 
-int Vehicle :: putResource ( int amount, int resourcetype, int queryonly, int scope )
+int Vehicle :: putResource ( int amount, int resourcetype, bool queryonly, int scope )
 {
    //  if units start using/storing resources that will not be stored in the unit itself, the replays will fail !
 
    if ( amount < 0 ) {
       return -getResource( -amount, resourcetype, queryonly, scope );
    } else {
+      if ( resourcetype == 0 )  // no energy storable
+         return 0;
+
       int tostore = min ( getMaxResourceStorageForWeight ( resourcetype ) - tank.resource(resourcetype), amount);
       if ( !queryonly )
          tank.resource(resourcetype) += tostore;
@@ -203,16 +205,20 @@ int Vehicle :: putResource ( int amount, int resourcetype, int queryonly, int sc
    }
 }
 
-int Vehicle :: getResource ( int amount, int resourcetype, int queryonly, int scope )
+int Vehicle :: getResource ( int amount, int resourcetype, bool queryonly, int scope )
 {
    //  if units start using/storing resources that will not be stored in the unit itself, the replays will fail !
 
    if ( amount < 0 ) {
       return -putResource( -amount, resourcetype, queryonly, scope );
    } else {
+      if ( resourcetype == 0 && !getGeneratorStatus() )
+         return 0;
+
       int toget = min ( tank.resource(resourcetype), amount);
       if ( !queryonly )
          tank.resource(resourcetype) -= toget;
+
 
       return toget;
    }
@@ -224,17 +230,6 @@ void Vehicle :: setGeneratorStatus ( bool status )
 {
    if ( typ->functions & cfgenerator ) {
       generatoractive = status;
-      if ( status )
-         tank.energy = typ->tank.energy - energyUsed;
-      else {
-         int endiff = typ->tank.energy- tank.energy - energyUsed;
-         if ( tank.fuel < endiff * generatortruckefficiency )
-            endiff = tank.fuel / generatortruckefficiency;
-
-         tank.fuel -= endiff * generatortruckefficiency ;
-         energyUsed += endiff;
-         tank.energy = 0;
-      }
    } else
      generatoractive = 0;
 }
@@ -341,16 +336,14 @@ void Vehicle :: repairunit(pvehicle vehicle, int maxrepair )
 
 void Vehicle :: endRound ( void )
 {
-   if ( tank.energy < typ->tank.energy - energyUsed  && generatoractive )
-      if ( typ->functions & cfgenerator ) {
-         int endiff = typ->tank.energy - tank.energy - energyUsed;
-         if ( tank.fuel < endiff * generatortruckefficiency )
-            endiff = tank.fuel / generatortruckefficiency;
+   if ( typ->functions & cfgenerator ) {
+      int endiff = typ->tank.energy - tank.energy;
+      if ( tank.fuel < endiff * generatortruckefficiency )
+         endiff = tank.fuel / generatortruckefficiency;
 
-         tank.energy += endiff;
-         tank.fuel -= endiff * generatortruckefficiency ;
-         energyUsed = 0;
-      }
+      tank.energy += endiff;
+      tank.fuel -= endiff * generatortruckefficiency ;
+   }
 }
 
 void Vehicle :: endTurn( void )
@@ -422,7 +415,7 @@ void Vehicle :: setNewHeight( int newHeight )
 }
 
 
-void Vehicle :: setMovement ( int newmove, int cargoDivisor )
+void Vehicle :: setMovement ( int newmove, double cargoDivisor )
 {
 
    if ( cargoDivisor < 0 )
@@ -433,15 +426,15 @@ void Vehicle :: setMovement ( int newmove, int cargoDivisor )
 
    if ( cargoDivisor > 0 && typ)
       if ( typ->movement[ log2 ( height ) ] ) {
-         int diff = _movement - newmove;
-         int perc = 1000 * diff / typ->movement[ log2 ( height ) ] ;
+         double diff = _movement - newmove;
+         double perc = diff / typ->movement[ log2 ( height ) ] ;
          for ( int i = 0; i < 32; i++ ) {
             if ( loading[i] ) {
-               int lperc = perc;
+               double lperc = perc;
                if ( cargoDivisor )
                   lperc /= cargoDivisor;
 
-               loading[i]->setMovement ( loading[i]->getMovement(false) - lperc * loading[i]->typ->movement[ log2 ( loading[i]->height)] / 1000 , 1 );
+               loading[i]->decreaseMovement ( lperc * loading[i]->typ->movement[ log2 ( loading[i]->height)] );
             }
          } /* endfor */
    }
@@ -923,6 +916,9 @@ int Vehicle :: freeweight ( int what )
 
 int Vehicle::getMaxResourceStorageForWeight ( int resourcetype )
 {
+   if( resourcetype == 0) // no storage of energy
+      return 0;
+
    pfield fld = gamemap->getField ( xpos, ypos );
    if ( fld->vehicle  &&  fld->vehicle != this && resourceWeight[resourcetype] ) {
       int fw = freeweight( 1 );
@@ -937,44 +933,6 @@ int Vehicle::getMaxResourceStorageForWeight ( int resourcetype )
    } else
       return typ->tank.resource(resourcetype);
 }
-
-/*
-int Vehicle::getmaxfuelforweight ( void )
-{
-   pfield fld = gamemap->getField ( xpos, ypos );
-   if ( fld->vehicle  &&  fld->vehicle != this ) {
-      int fw = freeweight( 1 );
-      if ( fw >= 0 ) {
-         int maxf = fw * 1024 / fuelweight;
-         if ( maxf > typ->tank.fuel || maxf < 0 )
-            return typ->tank.fuel;
-         else
-            return maxf;
-      } else
-         return typ->tank.fuel;
-   } else
-      return typ->tank.fuel;
-}
-
-
-int Vehicle::getmaxmaterialforweight ( void )
-{
-   pfield fld = gamemap->getField ( xpos, ypos );
-   if ( fld->vehicle  &&  fld->vehicle != this ) {
-      int fw = freeweight( 1 );
-      if ( fw >= 0 ) {
-         int maxm = fw * 1024 / materialweight;
-         if ( maxm > typ->tank.material )
-            return typ->tank.material;
-         else
-            return maxm;
-      } else
-         return typ->tank.material;
-
-  } else
-      return typ->tank.material;
-}
-*/
 
 
 void Vehicle :: addview ( void )
@@ -1168,8 +1126,9 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
     if ( damage    )
        bm |= cem_damage;
 
-//    if ( tank.fuel < typ->tank.fuel )
-       bm |= cem_fuel;
+    bm |= cem_energy;
+    bm |= cem_fuel;
+    bm |= cem_material;
 
     if ( typ->weapons.count )
        for (char m = 0; m < typ->weapons.count ; m++) {
@@ -1195,14 +1154,6 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
     if ( direction )
        bm |= cem_direction;
 
-//    if ( tank.material < typ->tank.material )
-       bm |= cem_material  ;
-
-//    if ( tank.energy   < typ->tank.energy   )
-       bm |= cem_energy;
-
-    if ( energyUsed )
-       bm |= cem_energyUsed;
 
     if ( armor != typ->armor )
        bm |= cem_armor;
@@ -1301,9 +1252,6 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 
     if ( bm & cem_poweron )
        stream.writeInt ( generatoractive );
-
-    if ( bm & cem_energyUsed )
-       stream.writeInt ( energyUsed );
 
     if ( bm & cem_position ) {
        stream.writeInt ( xpos );
@@ -1432,7 +1380,7 @@ void   Vehicle::readData ( tnstream& stream )
        tank.material = typ->tank.material;
 
     if ( bm & cem_energy ) {
-       tank.energy = stream.readInt();
+       tank.energy = min ( stream.readInt(), typ->tank.energy);
        if ( tank.energy < 0 )
           tank.energy = 0;
     } else
@@ -1481,9 +1429,7 @@ void   Vehicle::readData ( tnstream& stream )
        generatoractive = 0;
 
     if ( bm & cem_energyUsed )
-       energyUsed =  stream.readInt ();
-    else
-       energyUsed = 0;
+       stream.readInt ();
 
     if ( bm & cem_position ) {
        int x = stream.readInt ( );

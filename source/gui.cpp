@@ -2087,7 +2087,7 @@ int   tnsguiicondestructbuilding::available    ( void )
           if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() ) 
              if (fld->vehicle->color == actmap->actplayer * 8)
                if ((fld->vehicle->typ->functions & cfputbuilding) || !fld->vehicle->typ->buildingsBuildable.empty() )
-                  if ( fld->vehicle->tank.fuel >= destruct_building_fuel_usage * fld->vehicle->typ->fuelConsumption )
+                  if ( fld->vehicle->getTank().fuel >= destruct_building_fuel_usage * fld->vehicle->typ->fuelConsumption )
                      return 1;
     } 
     else 

@@ -144,7 +144,7 @@ void AI::RefuelConstraint::findPath()
       int dist;
       if ( maxMove == -1 ) {
          if ( veh->typ->fuelConsumption )
-            dist = veh->tank.fuel / veh->typ->fuelConsumption * maxmalq;
+            dist = veh->getResource(maxint, 2, true)  / veh->typ->fuelConsumption * maxmalq;
          else
             dist = maxint;
 
@@ -162,11 +162,12 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
 {
    findPath();
 
+   int fuel = veh->getResource(maxint, 2, true);
    int x1,y1,x2,y2;
-   x1 = max(veh->xpos - veh->tank.fuel / veh->typ->fuelConsumption, 0 );
-   y1 = max(veh->ypos - veh->tank.fuel / veh->typ->fuelConsumption, 0 );
-   x2 = min(veh->xpos + veh->tank.fuel / veh->typ->fuelConsumption, actmap->xsize );
-   y2 = min(veh->ypos + veh->tank.fuel / veh->typ->fuelConsumption, actmap->ysize );
+   x1 = max(veh->xpos - fuel / veh->typ->fuelConsumption, 0 );
+   y1 = max(veh->ypos - fuel / veh->typ->fuelConsumption, 0 );
+   x2 = min(veh->xpos + fuel / veh->typ->fuelConsumption, actmap->xsize );
+   y2 = min(veh->ypos + fuel / veh->typ->fuelConsumption, actmap->ysize );
 
    for ( AStar3D::Container::iterator i = ast->visited.begin(); i != ast->visited.end(); i++ ) {
       int dist = int(i->gval );
@@ -244,7 +245,7 @@ bool AI::RefuelConstraint::returnFromPositionPossible ( const MapCoordinate3D& p
       return true;
 
    if ( theoreticalFuel < 0 )
-      theoreticalFuel = veh->tank.fuel;
+      theoreticalFuel = veh->getResource(maxint, 2, true );
 
    findPath();
    if ( !positionsCalculated ) {
@@ -434,7 +435,7 @@ AI::AiResult AI::buildings( int process )
          pvehicle veh = bc.getloadedunit ( j );
          if ( veh )
             if ( veh->aiparam[ getPlayerNum() ]->getJob() != AiParameter::job_supply )
-               bc.refill.fuel ( veh, maxint );
+               bc.refill.resource ( veh, Resources::Fuel, maxint );
             else
                bc.refill.filleverything( veh );
       }

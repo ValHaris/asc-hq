@@ -68,6 +68,19 @@ const char* fileNameDelimitter = " =*/+<>,";
                IntegerProperty ( int& property_, int defaultValue_ ) : PTI ( property_, defaultValue_ ) {};
          };
 
+         typedef PropertyTemplate<double> PTD;
+         class FloatProperty : public PTD {
+            protected:
+              ASCString toString ( ) const ;
+              double operation_eq  ( const TextPropertyGroup::Entry& entry ) const;
+              double operation_add ( const TextPropertyGroup::Entry& entry ) const;
+              double operation_mult ( const TextPropertyGroup::Entry& entry ) const;
+            public:
+               FloatProperty ( double& property_ ) : PTD ( property_ ) {};
+               FloatProperty ( double& property_, double defaultValue_ ) : PTD ( property_, defaultValue_ ) {};
+         };
+
+
          typedef PropertyTemplate<bool> PTB;
          class BoolProperty : public PTB {
             protected:
@@ -313,6 +326,19 @@ void PropertyContainer::addInteger ( const ASCString& name, int& property, int d
    IntegerProperty* ip = new IntegerProperty ( property, defaultValue );
    setup ( ip, name );
 }
+
+void PropertyContainer::addDFloat ( const ASCString& name, double& property )
+{
+   FloatProperty* ip = new FloatProperty ( property );
+   setup ( ip, name );
+}
+
+void PropertyContainer::addDFloat ( const ASCString& name, double& property, double defaultValue )
+{
+   FloatProperty* ip = new FloatProperty ( property, defaultValue );
+   setup ( ip, name );
+}
+
 
 
 void PropertyContainer::addBool ( const ASCString& name, bool& property )
@@ -604,6 +630,32 @@ int IntegerProperty::operation_mult ( const TextPropertyGroup::Entry& entry ) co
 ASCString IntegerProperty::toString ( ) const
 {
    return strrr ( property );
+}
+
+
+
+double FloatProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
+{
+   return atof ( entry.value.c_str() );    //   strtol(nptr, NULL, 10);
+}
+
+
+double FloatProperty::operation_add ( const TextPropertyGroup::Entry& entry ) const
+{
+   return parse ( *entry.parent ) + operation_eq ( entry );
+}
+
+double FloatProperty::operation_mult ( const TextPropertyGroup::Entry& entry ) const
+{
+   return double ( parse ( *entry.parent )) *  atof ( entry.value.c_str() );
+}
+
+
+ASCString FloatProperty::toString ( ) const
+{
+   ASCString s;
+   s.format("%f", property );
+   return s;
 }
 
 

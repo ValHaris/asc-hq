@@ -198,10 +198,10 @@ class  Building : public ContainerBase {
     void execnetcontrol ( void );
     // int  getmininginfo ( int res );
 
-    int  putResource ( int amount,    int resourcetype, int queryonly, int scope = 1 );
-    int  getResource ( int amount,    int resourcetype, int queryonly, int scope = 1 );
-    Resources putResource ( const Resources& res, int queryonly, int scope = 1 ) { return ContainerBase::putResource ( res, queryonly, scope ); };
-    Resources getResource ( const Resources& res, int queryonly, int scope = 1 ) { return ContainerBase::getResource ( res, queryonly, scope ); };
+    int  putResource ( int amount,    int resourcetype, bool queryonly, int scope = 1 );
+    int  getResource ( int amount,    int resourcetype, bool queryonly, int scope = 1 );
+    Resources putResource ( const Resources& res, bool queryonly, int scope = 1 ) { return ContainerBase::putResource ( res, queryonly, scope ); };
+    Resources getResource ( const Resources& res, bool queryonly, int scope = 1 ) { return ContainerBase::getResource ( res, queryonly, scope ); };
 
     //! returns the resource that the building consumes for its operation.
     Resources getResourceUsage ( );

@@ -1320,7 +1320,7 @@ void execuseraction ( tuseractions action )
          if ( fieldvisiblenow  ( getactfield() )) {
             pvehicle eht = getactfield()->vehicle;
             if ( eht && getdiplomaticstatus ( eht->color ) == capeace )
-               displaymessage(" weight of unit: \n basic: %d\n+fuel: %d\n+material:%d\n+cargo:%d\n= %d",1 ,eht->typ->weight, eht->tank.fuel * resourceWeight[Resources::Fuel] / 1000 , eht->tank.material * resourceWeight[Resources::Material] / 1000, eht->cargo(), eht->weight() );
+               displaymessage(" weight of unit: \n basic: %d\n+fuel: %d\n+material:%d\n+cargo:%d\n= %d",1 ,eht->typ->weight, eht->getTank().fuel * resourceWeight[Resources::Fuel] / 1000 , eht->getTank().material * resourceWeight[Resources::Material] / 1000, eht->cargo(), eht->weight() );
          }
          break;
 

@@ -1,6 +1,9 @@
-//     $Id: edmisc.h,v 1.36 2004-09-08 19:34:31 mbickel Exp $
+//     $Id: edmisc.h,v 1.37 2004-09-13 16:56:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2004/09/08 19:34:31  mbickel
+//      Added multiple reaction fire
+//
 //     Revision 1.35  2004/07/12 18:15:05  mbickel
 //      Lots of tweaks and fixed for more portability and compilation with mingw
 //
@@ -462,6 +465,7 @@ extern void generateTechTree();
 extern void editTechAdapter();
 extern Vehicle* selectUnitFromContainer( ContainerBase* container );
 extern Vehicle*  selectUnitFromMap();
+extern void resetPlayerData();
 
 
 

@@ -1038,7 +1038,7 @@ void tmap::endTurn()
             toRemove.push_back ( *v );
          } else {
 
-            int j = actvehicle->tank.fuel - actvehicle->typ->fuelConsumption * nowindplanefuelusage;
+            int j = actvehicle->getTank().fuel - actvehicle->typ->fuelConsumption * nowindplanefuelusage;
 
             if ( actvehicle->height <= chhochfliegend ) {
                int mo = actvehicle->typ->movement[log2(actvehicle->height)];
@@ -1078,7 +1078,7 @@ void tmap::endTurn()
                // logtoreplayinfo( rpl_removeunit, actvehicle->getPosition().x, actvehicle->getPosition().y, actvehicle->networkid );
             } else {
                // logtoreplayinfo( rpl_refuel2, actvehicle->getPosition().x, actvehicle->getPosition().y, actvehicle->networkid, 1002, j, actvehicle->tank.fuel );
-               actvehicle->tank.fuel = j;
+               actvehicle->getResource( actvehicle->getTank().fuel - j, Resources::Fuel, false);
             }
          }
       }

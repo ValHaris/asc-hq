@@ -293,7 +293,7 @@ bool AI::ServiceOrder::valid (  ) const
    switch ( requiredService ) {
       case VehicleService::srv_repair     : return getTargetUnit()->damage > 0;
       case VehicleService::srv_ammo       : return getTargetUnit()->ammo[position] < getTargetUnit()->typ->weapons.weapon[position].count;
-      case VehicleService::srv_resource   : return getTargetUnit()->tank.resource(position) < getTargetUnit()->typ->tank.resource(position);
+      case VehicleService::srv_resource   : return getTargetUnit()->getResource(getTargetUnit()->typ->tank.resource(position), position, 1) < getTargetUnit()->typ->tank.resource(position);
       default: return false;
    }
 }
@@ -354,7 +354,7 @@ void AI :: issueServices ( )
 
          for ( int i = 0; i< resourceTypeNum; i++ )
             if ( veh->maxMovement() ) // stationary units are ignored
-               if ( veh->tank.resource(i) < veh->typ->tank.resource(i) * config.resourceLimit.resource(i) / 100 )
+               if ( veh->getResource(maxint, i, 1) < veh->typ->tank.resource(i) * config.resourceLimit.resource(i) / 100 )
                   issueService ( VehicleService::srv_resource, veh->networkid, i);
 
          for ( int w = 0; w< veh->typ->weapons.count; w++ )
@@ -439,7 +439,7 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
                                                  }
                                                  break;
                case VehicleService::srv_resource:  {
-                                                     Resources needed =  veh->typ->tank - veh->tank;
+                                                     Resources needed =  veh->typ->tank - veh->getResource(Resources(maxint,maxint,maxint), true);
                                                      Resources avail = bld->getResource ( needed, 1 );
                                                      if ( avail < needed )
                                                         avail += bld->netResourcePlus( ) * config.waitForResourcePlus;

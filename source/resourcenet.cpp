@@ -184,8 +184,13 @@ void MapNetwork :: searchAllVehiclesNextToBuildings ( int player )
          pfield fld = actmap->getField ( getNeighbouringFieldCoordinate ( mc, s ));
          if ( fld ) {
             pbuilding bld = fld->building;
-            if ( bld && bld->color == (*j)->color )
-               checkvehicle ( *j );
+            if ( bld && bld->color == (*j)->color ) {
+               pfield fld2 = actmap->getField( (*j)->getPosition());
+               if ( !fld2->a.temp2 ) {
+                  fld2->a.temp2 = 1;
+                  checkvehicle ( *j );
+               }
+            }
          }
       }
    }
@@ -308,15 +313,8 @@ GetResource :: GetResource ( pmap gamemap, int scope )
 
 void GetResource :: checkvehicle ( pvehicle v )
 {
-   if ( v->color/8 == player && resourcetype == 0 ) {
-      int toget = need-got;
-      if ( v->tank.energy < toget )
-         toget = v->tank.energy;
-   
-      if ( !queryonly )
-         v->tank.energy -= toget;
-      got += toget;
-   }
+   if ( v->color/8 == player && resourcetype == 0 )
+      got += v->getResource( need-got, Resources::Energy, queryonly );
 }
 
 

@@ -37,7 +37,7 @@ ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, pmap map, int pla
 SigC::Signal0<void> ContainerBase :: anyContainerDestroyed;
 
 
-Resources ContainerBase :: putResource ( const Resources& res, int queryonly, int scope  )
+Resources ContainerBase :: putResource ( const Resources& res, bool queryonly, int scope  )
 {
    Resources result;
    for ( int i = 0; i < resourceNum; i++ )
@@ -46,7 +46,7 @@ Resources ContainerBase :: putResource ( const Resources& res, int queryonly, in
 }
 
 
-Resources ContainerBase :: getResource ( const Resources& res, int queryonly, int scope  )
+Resources ContainerBase :: getResource ( const Resources& res, bool queryonly, int scope  )
 {
    Resources result;
    for ( int i = 0; i < resourceNum; i++ )
