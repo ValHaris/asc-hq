@@ -1,6 +1,15 @@
-//     $Id: edmisc.cpp,v 1.3 1999-11-22 18:27:17 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.4 1999-12-07 22:05:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/22 18:27:17  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.2  1999/11/16 03:41:37  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -629,7 +638,7 @@ void         pdsetup(void)
    pd.addbutton ( "seperator",         -1            ); 
    pd.addbutton ( "~W~rite map to PCX-Filectrl+G", act_maptopcx); 
    #ifdef HEXAGON
-    pd.addbutton ( "~I~mport BI map", act_import_bi_map );
+    pd.addbutton ( "~I~mport BI mapõctrl-i", act_import_bi_map );
     pd.addbutton ( "Insert ~B~I map", act_insert_bi_map );
    #endif
    #ifdef FREEMAPZOOM
@@ -1287,7 +1296,9 @@ void         repaintdisplay(void)
    mousevisible(false);
    cursor.hide();
    bar(0,0,agmp->resolutionx-1,agmp->resolutiony-1,0);
-   displaymap(); 
+   if ( !lockdisplaymap )
+      displaymap(); 
+
    pdbaroff(); 
    showallchoices(); 
    cursor.show();
@@ -1383,10 +1394,15 @@ void         k_loadmap(void)
       displaymessage("loading map %s",0, filedescription );
       loadmap(s1);
       initmap(); 
-      removemessage(); 
-      if (loaderror > 0) { 
-         displaymessage("error nr %d",1, loaderror );
-      } 
+
+      if ( actmap->campaign && !actmap->campaign->directaccess && actmap->codeword[0]) {
+         tlockdispspfld ldsf;
+         removemessage(); 
+         int cr = encodepassword ( actmap->codeword );
+         enterpassword ( &cr );
+      } else
+         removemessage(); 
+   
 
       displaymap(); 
       cursor.show(); 

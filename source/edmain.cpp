@@ -1,6 +1,15 @@
-//     $Id: edmain.cpp,v 1.3 1999-11-22 18:27:16 mbickel Exp $
+//     $Id: edmain.cpp,v 1.4 1999-12-07 22:05:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/22 18:27:16  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.2  1999/11/16 03:41:36  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -448,6 +457,8 @@ void         editor(void)
                   case ct_d + ct_stp : execaction(act_changeglobaldir);
                      break;
                   case ct_g + ct_stp: execaction(act_maptopcx);  
+                     break;
+                  case ct_i + ct_stp: execaction (act_import_bi_map );
                      break;
                   case ct_l + ct_stp : execaction(act_loadmap); 
                      break;
