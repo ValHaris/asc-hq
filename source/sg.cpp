@@ -1811,12 +1811,7 @@ void  mainloop ( void )
                viewPipeNet ( ct_9 );
                break;
 
-            case ct_0: {
-                  getactfield()->objects.clear();
-                  getactfield()->setparams();
-                  displaymap();
-               }
-
+            case ct_0: execuseraction( ua_writescreentopcx );
                break;
 
             case ct_x + ct_stp:

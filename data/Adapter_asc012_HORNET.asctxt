@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 7
+   ;Bezeichnung der verknüpften Technologie: HORNET
+   TechnologiesRequired = 101007
+} TechAdapter

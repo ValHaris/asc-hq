@@ -324,9 +324,10 @@ void  readOldEventLists ( pnstream stream, bool passedEvents, pmap spfld )
       if ( j )
          for (int k = 1; k <= j; k++) {
             Event* ev = readOldEvent ( stream, spfld, eventTranslation, eventTriggerEvents );
-            ev->status = Event::Executed;
-            if ( ev )
+            if ( ev ) {
+               ev->status = Event::Executed;
                spfld->events.push_back ( ev );
+            }
          }
    }
 

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 4
+   ;Bezeichnung der verknüpften Technologie: ARMADILLO
+   TechnologiesRequired = 101104
+} TechAdapter

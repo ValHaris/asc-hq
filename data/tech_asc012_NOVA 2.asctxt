@@ -1,0 +1,10 @@
+technology {
+   Name = NOVA 2
+   infotext = Reserach project finished! NOVA 2 avialable!
+   id = 101100
+   RelatedUnitID = 100
+   parent = 101000
+   researchpoints *= 140
+   techlevel = 2
+   TechnologiesRequired = 101000,101902,101066 
+} Technology

@@ -90,12 +90,14 @@ Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player, int networkI
 Vehicle :: ~Vehicle (  )
 {
    #ifndef karteneditor
-   if ( typ->wreckageObject >= 0 && gamemap && !gamemap->__mapDestruction ) {
+   if ( !typ->wreckageObject.empty() && gamemap && !gamemap->__mapDestruction ) {
       pfield fld = getMap()->getField(getPosition());
       if ( fld->vehicle ==  this ) {
-         pobjecttype obj = getMap()->getobjecttype_byid( typ->wreckageObject );
-         if ( obj )
-            getMap()->getField(getPosition()) -> addobject ( obj );
+         for ( vector<int>::const_iterator i = typ->wreckageObject.begin(); i != typ->wreckageObject.end(); ++i ) {
+            pobjecttype obj = getMap()->getobjecttype_byid( *i );
+            if ( obj )
+               getMap()->getField(getPosition()) -> addobject ( obj );
+         }
       }
    }
    #endif

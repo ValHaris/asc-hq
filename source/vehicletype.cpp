@@ -83,7 +83,6 @@ Vehicletype :: Vehicletype ( void )
    id = 0;
    fuelConsumption = 0;
    functions = 0;
-   wreckageObject = -1;
 
    movement.resize(8);
    for ( i = 0; i < 8; i++ )
@@ -136,7 +135,7 @@ int Vehicletype::maxsize ( void ) const
 extern void* generate_vehicle_gui_build_icon ( pvehicletype tnk );
 #endif
 
-const int vehicle_version = 14;
+const int vehicle_version = 15;
 
 
 
@@ -290,8 +289,13 @@ void Vehicletype :: read ( tnstream& stream )
 
    bool load_weapons = stream.readInt();
    autorepairrate = stream.readInt();
-   if ( version >= 8 )
-      wreckageObject = stream.readInt();
+   if ( version >= 15 )
+      readClassContainer ( wreckageObject, stream );
+   else
+      if ( version >= 8 ) {
+         wreckageObject.clear();
+         wreckageObject.push_back ( stream.readInt() );
+      }
 
 
    if ( version <= 2 )
@@ -600,7 +604,7 @@ void Vehicletype:: write ( tnstream& stream ) const
    stream.writeInt( 1 ); // weapons
 
    stream.writeInt( autorepairrate );
-   stream.writeInt( wreckageObject );
+   writeClassContainer( wreckageObject, stream );
 
    stream.writeInt( 0 );
 
@@ -875,7 +879,8 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    pc.addInteger("MaxSurvivableStorm", maxwindspeedonwater, 255 );
    pc.addInteger("ResourceDrillingRange", digrange, 0 );
    pc.addInteger("SelfRepairRate", autorepairrate, 0 );
-   pc.addInteger("WreckageObject", wreckageObject, -1 );
+   if ( pc.find ( "WreckageObject" ) || !pc.isReading() )
+      pc.addIntegerArray("WreckageObject", wreckageObject );
 
    pc.addInteger("CargoMovementDivisor", cargoMovementDivisor, 2 );
 

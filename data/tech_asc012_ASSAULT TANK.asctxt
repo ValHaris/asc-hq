@@ -1,0 +1,10 @@
+technology {
+   Name = ASSAULT TANK
+   infotext = Reserach project finished! ASSAULT TANK avialable!
+   id = 101103
+   RelatedUnitID = 3
+   parent = 101000
+   researchpoints *= 140
+   techlevel = 2
+   TechnologiesRequired = 101000,101902,101101 
+} Technology

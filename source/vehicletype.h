@@ -244,7 +244,7 @@ extern const char*  cvehiclefunctions[];
         int          autorepairrate;
 
         //! if the unit is destroyed, it can leave an wreckage object behind ( < 0 to disable ) 
-        int wreckageObject;
+        vector<int> wreckageObject;
 
         //! some information the AI stores about this unit
         AiValue* aiparam[8];
