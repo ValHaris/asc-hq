@@ -92,7 +92,10 @@ void AI :: searchTargets ( pvehicle veh, int x, int y, TargetVector& tl, int mov
          for ( int nf = 0; nf < sidenum; nf++ ) {
             MapCoordinate mc = getNeighbouringFieldCoordinate ( MapCoordinate ( mv->attackx, mv->attacky), nf );
             pfield fld = getMap()->getField(mc);
-            mv->neighbouringFieldsReachable[nf] = (vm.reachableFields.isMember( mc ) || ( veh->xpos == mc.x && veh->ypos == mc.y )) && !fld->building && (!fld->vehicle || fld->unitHere(veh));
+            if ( fld )
+               mv->neighbouringFieldsReachable[nf] = (vm.reachableFields.isMember( mc ) || ( veh->xpos == mc.x && veh->ypos == mc.y )) && !fld->building && (!fld->vehicle || fld->unitHere(veh));
+            else
+               mv->neighbouringFieldsReachable[nf] = false;
          }
 
          int attackerDirection = getdirection ( xp, yp, x,y );
@@ -544,8 +547,9 @@ AI::AiResult AI::tactics( void )
                   int freeNeighbouringFields = 0;
                   for ( int j = 0; j < sidenum; j++ ) {
                      pfield fld = getMap()->getField ( getNeighbouringFieldCoordinate ( MapCoordinate(mv->attackx, mv->attacky), j));
-                     if ( !fld->building && !fld->vehicle )
-                        freeNeighbouringFields++;
+                     if ( fld )
+                        if ( !fld->building && !fld->vehicle )
+                           freeNeighbouringFields++;
                   }
 
                   if ( freeNeighbouringFields <= 1 )
