@@ -18,11 +18,16 @@
     Boston, MA  02111-1307  USA
 */
 
-#include <dos.h>
+#ifdef _DOS_
+#  include <dos.h>
+#else
+#  include <string.h>
+#endif
+
+#include "../basestrm.h"
 #include <stdio.h>
 #include <malloc.h>
 
-#include "..\basestrm.h"
 
 int main(int argc, char *argv[] )
 {
@@ -33,9 +38,15 @@ int main(int argc, char *argv[] )
       return 2;
    }
    FILE* fp = fopen ( argv[1], "rb" );
+#ifdef _DOS_
    int magic;
    fread ( &magic, 1, 4, fp );
    if ( magic != 'MBCN' ) {
+#else
+   char magic[4];
+   fread(&magic,1,sizeof(magic),fp);
+   if (strncmp(magic,"NCBM",4) != 0) {
+#endif
       printf("invalid containerfile\n");
       return 1;
    }
@@ -44,7 +55,8 @@ int main(int argc, char *argv[] )
 
    fread ( &num, 1, 4, fp );
    tcontainerindex* index = new tcontainerindex[num];
-   for ( int i = 0; i < num; i++ ) {
+   int i;
+   for (i = 0; i < num; i++ ) {
       fread ( &index[i], 1, sizeof ( index[i] ) , fp );
       if ( index[i].name ) {
          int p = -1;

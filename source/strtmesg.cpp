@@ -1,37 +1,5 @@
-//     $Id: strtmesg.cpp,v 1.10 2000-04-27 16:25:30 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.9  2000/04/17 18:30:47  mbickel
-//      Even more SDL speed improvements
-//
-//     Revision 1.8  2000/04/17 16:27:23  mbickel
-//      Optimized vehicle movement for SDL version
-//
-//     Revision 1.7  2000/04/06 09:07:48  mbickel
-//      Fixed a bug in the mapeditor that prevented transports from being loaded
-//
-//     Revision 1.6  2000/04/04 08:31:41  mbickel
-//      Fixed a bug that exited ASC when trying to give units to your allies.
-//
-//     Revision 1.5  2000/04/03 09:52:16  mbickel
-//      Fixed crash in mine strength calculation
-//
-//     Revision 1.4  2000/04/02 21:51:09  mbickel
-//      Fixed bugs graphic set loading routines
-//
-//     Revision 1.3  2000/04/01 11:38:39  mbickel
-//      Updated the small editors
-//      Added version numbering
-//
-//     Revision 1.2  1999/11/16 03:42:39  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
+//     $Id: strtmesg.cpp,v 1.11 2000-05-02 17:28:17 mbickel Exp $
+
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -54,7 +22,7 @@
 
 
 // These strings should be the same as the release tags in CVS !
-const char* asc_release="ASC1.1.0beta1";
+const char* asc_release="ASC1.1.0";
 
 #include <stdio.h>
 

@@ -1,6 +1,13 @@
-//     $Id: sg.cpp,v 1.34 2000-05-02 16:20:54 mbickel Exp $
+//     $Id: sg.cpp,v 1.35 2000-05-02 17:28:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2000/05/02 16:20:54  mbickel
+//      Fixed bug with several simultaneous vehicle actions running
+//      Fixed graphic error at ammo transfer in buildings
+//      Fixed ammo loss at ammo transfer
+//      Movecost is now displayed for mines and repairs
+//      Weapon info now shows unhittable units
+//
 //     Revision 1.33  2000/04/27 17:59:23  mbickel
 //      Updated Kdevelop project file
 //      Fixed some graphical errors
@@ -3186,8 +3193,6 @@ int main(int argc, char *argv[] )
            return 0;
        }
       #endif
-
-fullscreen = 0;
 
         #ifdef logging
         logtofile ( "sg.cpp / main / allocating reserved memory ");

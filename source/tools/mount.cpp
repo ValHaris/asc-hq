@@ -18,63 +18,17 @@
     Boston, MA  02111-1307  USA
 */
 
-#include <process.h>
-#include <string.h>
-#include <direct.h>
 #include <errno.h>
-#include "..\basestrm.h"
+#include <string.h>
+#include "../global.h"
+#include "../basestrm.h"
+#include "../misc.h"
 
-/*       
-
-       long int filesize( FILE *fp ) 
-         { 
-           long int save_pos, size_of_file; 
-       
-           save_pos = ftell( fp ); 
-           fseek( fp, 0L, SEEK_END ); 
-           size_of_file = ftell( fp ); 
-           fseek( fp, save_pos, SEEK_SET ); 
-           return( size_of_file ); 
-         } 
-       long int filesize( char* name ) 
-         { 
-           FILE *fp; 
-       
-           fp = fopen( name, "r" ); 
-           if( fp != NULL ) { 
-             int sz = filesize( fp ); 
-             fclose( fp ); 
-             return sz;
-           } 
-           return -1;
-         } 
-
-
-
-
-
-int filesize ( char* name )
-{
-   DIR *dirp; 
-   struct dirent *direntp; 
-
-   dirp = opendir( name ); 
-   int sze = -1;
-   if( dirp != NULL ) { 
-     for(;;) { 
-       direntp = readdir( dirp ); 
-       if ( direntp == NULL ) 
-          break; 
-          
-       sze = direntp->d_size ;
-     } 
-     closedir( dirp ); 
-   } 
-   int e = errno;
-   return sze;
-}
-
-*/
+#ifdef _DOS_
+ #include <direct.h> 
+#else
+ #include <dirent.h>
+#endif
 
 
 
@@ -249,7 +203,7 @@ bzmain( char *argv1, char* argv2  )
 
 
 
-dynamic_array<tcontainerindex> index;
+dynamic_array<tcontainerindex> nindex;
 int num = 0;
 int pos = 0;
 
@@ -276,10 +230,10 @@ void copyfile ( const char* name, const char* orgname, int size )
       printf( "error writing file %s \n", name );
       exit(1);
    }
-   index[num].name = strdup ( orgname );
-   index[num].start = pos;
+   nindex[num].name = strdup ( orgname );
+   nindex[num].start = pos;
    pos += s;
-   index[num].end = pos-1;
+   nindex[num].end = pos-1;
    num++;
    printf ( " ; written \n" );
    compsize += size;
@@ -443,15 +397,15 @@ int main(int argc, char *argv[] )
                 
              int fnd = 0;
              for ( int j = 0; j < num; j++ )
-                if ( strcmpi ( index[j].name, direntp->d_name ) == 0 )
+                if ( strcmpi ( nindex[j].name, direntp->d_name ) == 0 )
                    fnd = 1;
 
              if ( !fnd ) 
                 if ( compress )
-                   testcompress ( direntp->d_name,  direntp->d_size );
+                   testcompress ( direntp->d_name,  filesize(direntp->d_name) );
                 else {
                    printf ( "file %14s is not compressed, ", direntp->d_name );
-                   copyfile ( direntp->d_name, direntp->d_name,  direntp->d_size  );
+                   copyfile ( direntp->d_name, direntp->d_name,  filesize(direntp->d_name)  );
                 }
 
            } 
@@ -467,9 +421,9 @@ int main(int argc, char *argv[] )
    fwrite ( &num, 4, 1, out );
 
    for ( i = 0; i < num; i++) {
-      fwrite ( &index[i], sizeof ( tcontainerindex ), 1, out );
-      if ( index[i].name )
-         fwrite ( index[i].name, 1, strlen ( index[i].name ) + 1, out );
+      fwrite ( &nindex[i], sizeof ( tcontainerindex ), 1, out );
+      if ( nindex[i].name )
+         fwrite ( nindex[i].name, 1, strlen ( nindex[i].name ) + 1, out );
 
    } /* endfor */
 
