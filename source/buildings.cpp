@@ -75,7 +75,10 @@ Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const p
 
 bool Building::canRepair ( void )
 {
-   return typ->special & cgrepairfacilityn;
+   if ( typ->special & cgrepairfacilityb )
+      return true;
+   else
+      return false;
 }
 
 
