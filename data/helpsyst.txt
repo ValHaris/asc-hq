@@ -386,7 +386,7 @@ The next level for the campaign could #color004#not#color000# be loaded.
 
 You can continue playing this level as a normal non-campaign level. But in this case you #color4#do not#color0# have a chance to continue the campaign !
 
-To continue the campaign, press cancel, save the #color1#campaign recovery information#color0#, correct the problem, and continue by loading the #color001#campaign recovery information#color0# again.
+To resume the campaign, switch to your operating system and make a backup of #color1#autosav1.sav#color0# and #color1#autosav2.sav#color0# (for example by renaming them to #color1#campaign_end.sav#color0#). Once you have obtained the missing maps, you can load these savegames and try again.
 
 ##0904
 #font02##pos030# Congratulations
@@ -497,3 +497,17 @@ x = 0 : the map is completely invisible and must be explored first
 x = 1 : the map is covered with fog of war, so you can see the terrain, but no units
 x = 2 : the whole map is visible, with all units, satellites, mines and subs and will stay so for the remaining game.
 
+##0819
+With this parameter you can modify the attack formula. The higher the value the less damage an attack will cause.
+Possible values: 1 <= x <= 100
+Default is 40
+
+##0820
+The jamming power of ECM units can be modified with this parameter. A value of 200 doubles the jamming of all units.
+Possible values: 0 <= x <= 1000
+Default is 100
+
+##0821
+The jamming slope specifies the amount of jamming points that the jamming field loses for each field of distance from the ECM unit.
+Possible values: 0 <= x <= 100
+Default is 10

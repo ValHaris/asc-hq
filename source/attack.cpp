@@ -3,9 +3,14 @@
 */
 
 
-//     $Id: attack.cpp,v 1.53 2001-10-22 18:22:47 mbickel Exp $
+//     $Id: attack.cpp,v 1.54 2001-10-28 20:42:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.53  2001/10/22 18:22:47  mbickel
+//      Reaction fire doesn't prevent units with the wait attribute from attacking
+//       manually
+//      Fixed behaviour of generator vehicles on BI-mode maps
+//
 //     Revision 1.52  2001/10/16 19:58:19  mbickel
 //      Added title screen for mapeditor
 //      Updated source documentation
@@ -235,7 +240,7 @@ tfight :: tfight ( void )
 
 void tfight :: calc ( void )
 {
-   const float damagefactor = 4;
+   int damagefactor = actmap->getgameparameter ( cgp_attackPower );
    const float armordivisor = 5;
 
 
@@ -248,7 +253,7 @@ void tfight :: calc ( void )
       float absdefense = float(dv.armor / armordivisor )
                           * ( 1 + defense_defensebonus ( dv.defensebonus ) + defense_experience ( dv.experience ) );
 
-      int w = int(dv.damage + absstrength / absdefense * 100 / damagefactor );
+      int w = int(dv.damage + absstrength / absdefense * 1000 / damagefactor );
 
       if (dv.damage > w ) 
          displaymessage("fatal error at attack: \ndecrease of damage d!",1);
@@ -284,7 +289,7 @@ void tfight :: calc ( void )
       float absdefense = float(av.armor / armordivisor)
                           * ( 1 + defense_defensebonus ( av.defensebonus )+ defense_experience ( av.experience ));
 
-      int w = int(av.damage + absstrength / absdefense * 100 / damagefactor );
+      int w = int(av.damage + absstrength / absdefense * 1000 / damagefactor );
 
       if (av.damage > w ) 
          displaymessage("fatal error at attack: \ndecrease of damage a!",1);

@@ -33,7 +33,7 @@
  #include "time.h"
 
 //! The number of game paramters that can be specified for each map.
-const int gameparameternum = 19;
+const int gameparameternum = 22;
 
 //! The names of the game paramter. \sa gameparameterdefault
 extern const char* gameparametername[ gameparameternum ];
@@ -61,7 +61,10 @@ enum { cgp_fahrspur,
        cgp_buildingrepairfactor,
        cgp_globalfuel,
        cgp_maxtrainingexperience,
-       cgp_initialMapVisibility };
+       cgp_initialMapVisibility,
+       cgp_attackPower,
+       cgp_jammingAmplifier,
+       cgp_jammingSlope };
 
 
 //! an instance of an object type (#tobjecttype) on the map

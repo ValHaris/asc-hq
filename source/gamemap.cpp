@@ -1900,7 +1900,10 @@ const int gameparameterdefault [ gameparameternum ] = { 1,
                                                         100,
                                                         1,
                                                         maxunitexperience,
-                                                        0 };
+                                                        0,
+                                                        40,
+                                                        100,
+                                                        10 };
 const int gameParameterLowerLimit [ gameparameternum ] = { 1,
                                                            1,
                                                            0,
@@ -1918,6 +1921,9 @@ const int gameParameterLowerLimit [ gameparameternum ] = { 1,
                                                            0,
                                                            1,
                                                            0,
+                                                           0,
+                                                           0,
+                                                           1,
                                                            0,
                                                            0 };
 const int gameParameterUpperLimit [ gameparameternum ] = { maxint,
@@ -1938,7 +1944,10 @@ const int gameParameterUpperLimit [ gameparameternum ] = { maxint,
                                                            maxint,
                                                            1,
                                                            maxunitexperience,
-                                                           2 };
+                                                           2,
+                                                           100,
+                                                           1000,
+                                                           100 };
 const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "freezing time of icebreaker fairway",
                                                       "move vehicles from unaccessible fields",
@@ -1957,5 +1966,8 @@ const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "building repair cost increase (percent)",
                                                       "fuel globally available (BI resource mode)",
                                                       "maximum experience that can be gained by training",
-                                                      "initial map visibility"};
+                                                      "initial map visibility",
+                                                      "attack power (EXPERIMENTAL!)",
+                                                      "jamming amplifier (EXPERIMENTAL!)",
+                                                      "jamming slope (EXPERIMENTAL!)" };
 

@@ -95,6 +95,7 @@ void Building :: convert ( int col )
    removeview();
 
    gamemap->player[oldcol].queuedEvents++;
+   gamemap->player[col].queuedEvents++;
 
    tmap::Player::BuildingList::iterator i = find ( gamemap->player[oldcol].buildingList.begin(), gamemap->player[oldcol].buildingList.end(), this );
    if ( i != gamemap->player[oldcol].buildingList.end())
@@ -109,6 +110,7 @@ void Building :: convert ( int col )
       if ( loading[i] )
          loading[i]->convert ( col );
 
+   /*
    if ( connection & cconnection_conquer ) {
       gamemap->player[oldcol].queuedEvents++;
       gamemap->player[col].queuedEvents++;
@@ -119,7 +121,7 @@ void Building :: convert ( int col )
       gamemap->player[oldcol].queuedEvents++;
       // releaseevent(NULL,this,cconnection_lose);
       gamemap->player[col].queuedEvents++;
-   }
+   } */
 }
 
 

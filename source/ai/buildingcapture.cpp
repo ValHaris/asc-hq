@@ -309,8 +309,9 @@ void AI :: checkConquer( )
       pvehicle veh = getMap()->getUnit ( bi->second.unit );
       if ( veh ) {
          MapCoordinate dest = veh->aiparam[getPlayerNum()]->dest;
+         int nwid = veh->networkid;
          moveUnit ( veh, dest, true );
-         if ( veh->getPosition() == dest ) {
+         if ( getMap()->getUnit ( nwid ) && veh->getPosition() == dest ) {
             veh->aiparam[getPlayerNum()]->resetTask ();
             buildingCapture.erase ( bi );
          }

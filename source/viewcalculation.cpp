@@ -95,8 +95,12 @@ void         tcomputeview::testfield( const MapCoordinate& mc )
          efield->view[player].mine += mode;
    }
 
-   if ( jamdist >= f && ( rangeJamming || !f ))
-      efield->view[player].jamming += (jamdist - f) * mode;
+   if ( rangeJamming || !f ) {
+      int jamloss = f * gamemap->getgameparameter ( cgp_jammingSlope ) / 10;
+      int jamstrength = jamdist * gamemap->getgameparameter ( cgp_jammingAmplifier ) / 100;
+      if ( jamstrength >= jamloss )
+         efield->view[player].jamming += (jamstrength - jamloss) * mode;
+   }
 
    #ifdef DEBUGVIEW
      if ( efield->view[player].view      < 0 ||

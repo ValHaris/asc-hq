@@ -13,8 +13,6 @@ Bugs:
  
 Small tasks:
 
--3- add check for SDLmm to configure.in
-
 -5- Message of crashed airplanes when they run out of fuel
 
 -7- writing a TPWM decoder for Battle Isle maps
@@ -98,6 +96,7 @@ Medium sized tasks
      sets even when they were generated on runtime (mirroring)
 
 
+
 -5-  displaying objects on the small map
 
 -8-  embedding of units/objects/... in map
@@ -135,9 +134,11 @@ Larger Tasks:
 -2- adding inheritance to the text file formats
 
 -3-  maintaining and improving the dialog engine together with the dialogs
-    themselves. The VehicleInfo dialog for example is really outdated... 
-    libu ( http://www.rhrk.uni-kl.de/~klaux/libu.html ) could be an 
-    interesting GUI library for this.
+    themselves. The VehicleInfo dialog for example is really outdated...
+
+    Interesting gui libraries seem to be:
+    Paragui ( http://www.bms-austria.com/projects/paragui/ )
+    libu    ( http://www.rhrk.uni-kl.de/~klaux/libu.html )
 
     The dialogs have long been neglected , because the basic class on which 
     all dialogs are based is, well, not very well designed. Because of this,

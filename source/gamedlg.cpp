@@ -1,8 +1,12 @@
 /*! \file gamedlg.cpp    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.83 2001-10-11 10:41:06 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.84 2001-10-28 20:42:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.83  2001/10/11 10:41:06  mbickel
+//      Restructured platform fileio handling
+//      Added map archival information to mapeditor
+//
 //     Revision 1.82  2001/10/08 14:44:22  mbickel
 //      Some cleanup
 //
@@ -1442,12 +1446,12 @@ void         tcontinuecampaign::init(void)
    y1 = 100;
    ysize = 350;
 
-   addbutton("~s~ave recovery information",leftspace,270,xsize - leftspace,290,0,1,2,true);
-   disablebutton ( 2 );
+/*   addbutton("~s~ave recovery information",leftspace,270,xsize - leftspace,290,0,1,2,true);
+   disablebutton ( 2 ); */
 
-   addbutton("~g~o !",leftspace,300,( xsize - leftspace ) /2 , 330,0,1,1,true);
+   addbutton("~g~o !",leftspace,300, xsize - leftspace, 330,0,1,1,true);
 
-   addbutton("~q~uit~ !", ( xsize + leftspace ) /2 ,300, xsize - leftspace , 330,0,1,3,true);
+//   addbutton("~q~uit~ !", ( xsize + leftspace ) /2 ,300, xsize - leftspace , 330,0,1,3,true);
 
    buildgraphics();
 
@@ -1574,7 +1578,12 @@ void         tcontinuecampaign::run(void)
          actmap->player[ i ].dissections = dissectedunits[i];
       }
 
-   }
+   } else
+      if ( status == 21 ) {
+         delete actmap->campaign;
+         actmap->campaign = NULL;
+         actmap->continueplaying = 1;
+      }
    if (status == 50)
       exit( 0 );
 }

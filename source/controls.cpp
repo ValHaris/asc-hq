@@ -3,9 +3,14 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.118 2001-10-22 18:22:47 mbickel Exp $
+//     $Id: controls.cpp,v 1.119 2001-10-28 20:42:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.118  2001/10/22 18:22:47  mbickel
+//      Reaction fire doesn't prevent units with the wait attribute from attacking
+//       manually
+//      Fixed behaviour of generator vehicles on BI-mode maps
+//
 //     Revision 1.117  2001/10/11 10:41:05  mbickel
 //      Restructured platform fileio handling
 //      Added map archival information to mapeditor
@@ -340,8 +345,9 @@ void         tsearchputbuildingfields::testfield(const MapCoordinate& mc)
                if (fld) {
                   if (fld->vehicle != NULL)
                      b = false;
-                  if ( bld->terrainaccess.accessible ( fld->typ->art ) <= 0 )
-                     b = false;
+                  if ( bld->buildingheight <= chfahrend )
+                     if ( bld->terrainaccess.accessible ( fld->typ->art ) <= 0 )
+                        b = false;
                   if (fld->building != NULL) {
                      if (fld->building->typ != bld)
                         b = false;
@@ -356,7 +362,6 @@ void         tsearchputbuildingfields::testfield(const MapCoordinate& mc)
                   b = false;
             }
       if (b) {
-
          numberoffields++;
          gamemap->getField(mc)->a.temp = 20;
       }

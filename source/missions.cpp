@@ -2,9 +2,15 @@
     \brief The event handling of ASC
 */
 
-//     $Id: missions.cpp,v 1.28 2001-10-02 14:06:28 mbickel Exp $
+//     $Id: missions.cpp,v 1.29 2001-10-28 20:42:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2001/10/02 14:06:28  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.27  2001/08/19 12:50:03  mbickel
 //      fixed event trigger allenemybuildings
 //
@@ -850,25 +856,27 @@ void         executeevent ( pevent ev, MapDisplayInterface* md )
          displaymessage("the eraseevent action has been removed !", 1 );
       } 
    
-      if (ev->a.action == cenextmap) { 
-         if (actmap->campaign != NULL) { 
-            startnextcampaignmap(ev->a.saveas); 
-            eject = true; 
-            return;
-         } 
-         else { 
-           viewtext2(904); 
-           if (choice_dlg("Do you want to continue playing ?","~y~es","~n~o") == 2) {
-              delete actmap;
-              actmap = NULL;
-              throw NoMapLoaded();
-           } else {
-              actmap->continueplaying = 1;
-              if ( actmap->replayinfo ) {
-                 delete actmap->replayinfo;
-                 actmap->replayinfo = 0;
+      if (ev->a.action == cenextmap) {
+         if ( !actmap->continueplaying ) {
+            if (actmap->campaign != NULL) {
+               startnextcampaignmap(ev->a.saveas);
+               eject = true;
+               return;
+            }
+            else {
+              viewtext2(904);
+              if (choice_dlg("Do you want to continue playing ?","~y~es","~n~o") == 2) {
+                 delete actmap;
+                 actmap = NULL;
+                 throw NoMapLoaded();
+              } else {
+                 actmap->continueplaying = 1;
+                 if ( actmap->replayinfo ) {
+                    delete actmap->replayinfo;
+                    actmap->replayinfo = 0;
+                 }
               }
-           }
+            }
          }
       }
    
