@@ -36,9 +36,11 @@ class Research;
 
 class TechDependency: public LoadableItemType {
      typedef vector<IntRange> RequiredTechnologies;
+     RequiredTechnologies blockingTechnologies;
+     
      RequiredTechnologies requiredTechnologies;
      bool         requireAllListedTechnologies;
-     RequiredTechnologies blockingTechnologies;
+     //! if one of these technologies has been researched, this tech will be never be researchable. This allows exclusive technology branches
    public:
      TechDependency(){ requireAllListedTechnologies = true; };
      bool available( const Research& research ) const;
@@ -101,11 +103,11 @@ class TechAdapterDependency {
 
      TechDependency techDependency;
 
-     //! if one of these technologies has been researched, this tech will be never be researchable. This allows exclusive technology branches
-     vector<IntRange> blockingTechnologies;
 
+     typedef vector<IntRange> BlockingOtherTechnologies;
+     //! if this Technology has been researched, it will not be possible to research the technologies given here. Only available for root technologies!
+     BlockingOtherTechnologies blockingOtherTechnologies;
 
-//     static Technology* newFromStream ( tnstream& stream );
 
      void read ( tnstream& stream );
      void write ( tnstream& stream ) const;

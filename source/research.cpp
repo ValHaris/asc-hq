@@ -59,7 +59,13 @@ void TechDependency::runTextIO ( PropertyContainer& pc )
 
 bool TechDependency::available( const Research& research ) const
 {
-   if ( requiredTechnologies.size() )
+   for ( vector<IntRange>::const_iterator j = blockingTechnologies.begin(); j != blockingTechnologies.end(); ++j )
+       for ( int k = j->from; k <= j->to; ++k )
+          if ( research.techResearched ( k ))
+             return false;
+
+
+   if ( requiredTechnologies.size() ) {
       for ( RequiredTechnologies::const_iterator j = blockingTechnologies.begin(); j != blockingTechnologies.end(); ++j )
          for ( int k = j->from; k <= j->to; ++k )
             if ( research.techResearched( k ))
@@ -78,6 +84,7 @@ bool TechDependency::available( const Research& research ) const
                   return true;
          return false;
       }
+   }
 
    return true;
 }
@@ -149,7 +156,13 @@ void TechDependency::writeTreeOutput ( const ASCString& sourceTechName, tnstream
             while ( stn2.find ( "\"" ) != ASCString::npos )
                stn2.erase ( stn2.find ( "\"" ),1 );
 
-            s += stn2 + "\"\n";
+            s += stn2 + "\"";
+
+            if ( !requireAllListedTechnologies )
+               s += "[style=dashed]";
+               
+            s += "\n";
+            
             stream.writeString ( s, false );
 
             stream.writeString ( "\"" + stn + "\" [color=black] \n", false );
@@ -177,7 +190,13 @@ void TechDependency::writeInvertTreeOutput ( const ASCString& sourceTechName, tn
             while ( stn2.find ( "\"" ) != ASCString::npos )
                stn2.erase ( stn2.find ( "\"" ),1 );
 
-            s += stn2 + "\"\n";
+            s += stn2 + "\"";
+
+            if ( !requireAllListedTechnologies )
+               s += "[style=dotted]";
+               
+            s += "\n";
+
             stream.writeString ( s, false );
 
             stream.writeString ( "\"" + stn + "\" [color=black] \n", false );
@@ -299,7 +318,7 @@ Technology::Technology()
    techlevel = 0;
 }
 
-const int technologyVersion = 2;
+const int technologyVersion = 3;
 
 void Technology::read( tnstream& stream )
 {
@@ -317,6 +336,10 @@ void Technology::read( tnstream& stream )
       relatedUnitID = stream.readInt();
    else
       relatedUnitID = -1;
+
+   if ( version >= 3 )
+      readClassContainer( blockingOtherTechnologies, stream );
+
 }
 
 void Technology::write( tnstream& stream ) const
@@ -330,6 +353,7 @@ void Technology::write( tnstream& stream ) const
    stream.writeString( infotext );
    techDependency.write( stream );
    stream.writeInt ( relatedUnitID );
+   writeClassContainer( blockingOtherTechnologies, stream );
 }
 
 void Technology::runTextIO ( PropertyContainer& pc )
@@ -345,8 +369,8 @@ void Technology::runTextIO ( PropertyContainer& pc )
 
    techDependency.runTextIO( pc );
 
-   if ( pc.find ( "BlockingTechnologies" ) || !pc.isReading() )
-      pc.addIntRangeArray ( "BlockingTechnologies", blockingTechnologies );
+   if ( pc.find ( "BlockingOtherTechnologies" ) || !pc.isReading() )
+      pc.addIntRangeArray ( "BlockingOtherTechnologies", blockingOtherTechnologies );
 
 
    pc.addInteger( "RelatedUnitID", relatedUnitID, 0 );
@@ -481,10 +505,15 @@ Research::AvailabilityStatus Research::techAvailable ( const Technology* tech )
       return researched;
 
    if ( tech->techDependency.available( *this ) ) {
-      for ( vector<IntRange>::const_iterator j = tech->blockingTechnologies.begin(); j != tech->blockingTechnologies.end(); ++j )
-          for ( int k = j->from; k <= j->to; ++k )
-             if ( techResearched ( k ))
-                return unavailable;
+      for ( int i = 0; i < developedTechnologies.size(); ++i ) {
+         Technology* t = technologyRepository.getObject_byID( developedTechnologies[i] );
+         if ( t && !t->techDependency.available ( *this ) ) {
+            // this is a root technology
+            for ( Technology::BlockingOtherTechnologies::iterator j = t->blockingOtherTechnologies.begin(); j != t->blockingOtherTechnologies.end(); ++j)
+                if ( j->from <= tech->id && tech->id <= j->to )
+                    return unavailable;
+         }
+      }
 
       return available;
    } else

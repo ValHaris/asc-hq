@@ -189,9 +189,9 @@ void AI::getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBo
    maxrange += 20;
 
    x1 = max ( 0, x1 - maxrange/10 );
-   y1 = max ( 0, y1 - maxrange/10 );
+   y1 = max ( 0, y1 - maxrange*2/10 );
    x2 = min ( getMap()->xsize, x1 + maxrange/10 );
-   y2 = min ( getMap()->ysize, y1 + maxrange/10 );
+   y2 = min ( getMap()->ysize, y1 + maxrange*2/10 );
 
    int enemycount = 0;
    for ( int y = y1; y <= y2 && !enemycount; ++y)
