@@ -1,6 +1,10 @@
-//     $Id: basestrm.h,v 1.6 1999-12-29 12:50:42 mbickel Exp $
+//     $Id: basestrm.h,v 1.7 2000-02-03 20:54:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/12/29 12:50:42  mbickel
+//      Removed a fatal error message in GUI.CPP
+//      Made some modifications to allow platform dependant path delimitters
+//
 //     Revision 1.5  1999/12/28 21:02:38  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -46,6 +50,7 @@
 #define basestream_h
 
 #include <stdio.h>
+#include <time.h>
 
 #include "global.h"
 #include "lzw.h"
@@ -465,7 +470,7 @@ class tn_file_buf_stream : public tnbufstream {
             virtual void seekstream ( int newpos );
             virtual int getstreamsize ( void );
             virtual ~tn_file_buf_stream  ( );
-            virtual int gettime ( void );
+            virtual time_t get_time ( void );
 
   };
 
@@ -541,7 +546,7 @@ class tn_c_lzw_filestream : public tnstream, protected tanycompression {
             void writedata ( const void* buf, int size );
             int  readdata  ( void* buf, int size, int excpt = 1  );
             virtual ~tn_c_lzw_filestream  ( );
-            virtual int gettime ( void );
+            virtual time_t get_time ( void );
      };
 
 typedef tn_c_lzw_filestream tnfilestream ;
@@ -649,7 +654,7 @@ extern char* getnextfilenumname ( const char* first, const char* suffix, int num
 #define readdata2(a)   readdata  ( &(a), sizeof(a) )
 
 extern int exist ( char* s );
-extern int getfiletime ( char* devicename );
+extern time_t get_filetime ( char* devicename );
 
 extern void opencontainer ( const char* wildcard );
 

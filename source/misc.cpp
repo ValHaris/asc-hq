@@ -1,6 +1,10 @@
-//     $Id: misc.cpp,v 1.6 2000-01-24 08:16:49 steb Exp $
+//     $Id: misc.cpp,v 1.7 2000-02-03 20:54:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/01/24 08:16:49  steb
+//     Changes to existing files to implement sound.  This is the first munge into
+//     CVS.  It worked for me before the munge, but YMMV :)
+//
 //     Revision 1.5  2000/01/02 19:47:08  mbickel
 //      Continued Linux port
 //      Fixed crash at program exit
@@ -51,13 +55,10 @@
 #include "misc.h"
 #include "global.h"
 
-#ifdef _DOS_
-#include <i86.h>
-#include <dos.h>
-#else
-#include <sys/stat.h>
+/*
 #include <unistd.h>
 #endif
+*/
 
 const char* digit[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 const char* letter[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", 
@@ -67,30 +68,14 @@ const char* letter[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", 
 char* strstring;
 
 
-int filesize( char *name)
+#ifndef _DOS_
+int memavail ( void )
 {
-/*
-   long ipos, length;
-   fgetpos( fp, &ipos );
-   fseek( fp, 0, SEEK_END);
-   fgetpos( fp, &length );
-   fseek( fp, ipos, SEEK_SET );
-   return(length);
-*/
-#ifdef _DOS_
-  find_t  fileinfo;
-  unsigned rc;       
-
-  rc = _dos_findfirst( name, _A_NORMAL, &fileinfo );
-
-  return fileinfo.size;
-#else
-  struct stat *buf;
-
-  stat (name, buf);
-  return (buf->st_size);
-#endif
+   return 0x80000000 ;
 }
+#endif
+
+
 
 /** Count the number of zero bits on the LSB side of "zahl"
  */
@@ -108,55 +93,6 @@ word log2(int zahl)
 }
 
 
-struct tmeminfo {
-    unsigned LargestBlockAvail;
-    unsigned MaxUnlockedPage;
-    unsigned LargestLockablePage;
-    unsigned LinAddrSpace;
-    unsigned NumFreePagesAvail;
-    unsigned NumPhysicalPagesFree;
-    unsigned TotalPhysicalPages;
-    unsigned FreeLinAddrSpace;
-    unsigned SizeOfPageFile;
-    unsigned Reserved[3];
-} meminfo;
-
-#define DPMI_INT	0x31
-
-
-
-void getmeminfo( void )
-{
-#ifdef _DOS_
-    union REGS regs;
-    struct SREGS sregs;
-
-    regs.x.eax = 0x00000500;
-    memset( &sregs, 0, sizeof(sregs) );
-    sregs.es = FP_SEG( &meminfo );
-    regs.x.edi = FP_OFF( &meminfo );
-
-    int386x( DPMI_INT, &regs, &regs, &sregs );
-#endif
-}
-
-
-
-
-int maxavail()
-{
-   getmeminfo();
-   return meminfo. LargestBlockAvail;
-}
-
-
-int memavail()
-{
-   getmeminfo();
-   return meminfo. NumFreePagesAvail;
-}
-
-
 char* strr ( int a ) {
    char* s;
    s = new char [33];
@@ -169,19 +105,6 @@ char* strrr ( int a ) {
    itoa ( a, strstring, 10 );
    return strstring;
 }
-
-/*
-boolean exist ( char* s )
-{
-  find_t  fileinfo;
-  unsigned rc;        
-  rc = _dos_findfirst( s, _A_NORMAL, &fileinfo );
-  if (rc == 0)
-     return true;
-  else
-     return false;
-};
-*/
 
 void passtring2cstring ( char* s )
 {

@@ -1,6 +1,10 @@
-//     $Id: sgstream.cpp,v 1.6 2000-01-24 17:35:46 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.7 2000-02-03 20:54:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/01/24 17:35:46  mbickel
+//      Added dummy routines for sound under DOS
+//      Cleaned up weapon specification
+//
 //     Revision 1.5  1999/12/28 21:03:20  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -127,7 +131,7 @@ int checkcodemem ( void )
 
 void logtofile ( char* strng )
 {
-   int a = maxavail();
+   int a = memavail();
 
    if ( !logfile )
      logfile = fopen ( "SGLOG.TXT", "at+" );
@@ -281,17 +285,17 @@ void         tbufstream::init(void)
 
    devicename = "abstract"; 
 
-  if (maxavail() > maxmemsize)
+  if (memavail() > maxmemsize)
       memsize = maxmemsize; 
    else 
-      memsize = maxavail(); 
+      memsize = memavail(); 
 
 
    zeiger = (char*) asc_malloc( memsize );
 
    #ifdef dlg_box_h
    if (zeiger == NULL) 
-      displaymessage("tbufstream::init \ncould not allocate memory !\nmaxavail = %d \n",2,maxavail());
+      displaymessage("tbufstream::init \ncould not allocate memory !\nmemavail = %d \n",2,memavail());
    #endif
 
    datasize = 0; 
@@ -354,8 +358,8 @@ void         tbufstream::readpchar(char** pc)
       displaymessage("attempt to read pchar from a file opened only for writing\nfile: %s\n", 2,devicename);
    #endif
 
-   if (maxavail() < 0xffff)
-      ms = maxavail(); 
+   if (memavail() < 0xffff)
+      ms = memavail(); 
    else  
       ms = 0xffff; 
 

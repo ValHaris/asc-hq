@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.21 2000-02-02 19:18:18 mbickel Exp $
+//     $Id: sg.cpp,v 1.22 2000-02-03 20:54:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/02/02 19:18:18  mbickel
+//      Enhanced sound loading routines to use the ASC stream io functions
+//
 //     Revision 1.20  2000/01/24 17:35:45  mbickel
 //      Added dummy routines for sound under DOS
 //      Cleaned up weapon specification
@@ -147,11 +150,14 @@
 #include "loadbi3.h"
 #endif
 
+#ifdef _DOS_
+ #include "dos\memory.h"
+#endif
+
 
 
 // #define MEMCHK
 
-extern int startreplaylate;
 
 class tsgonlinemousehelp : public tonlinemousehelp {
 public:
@@ -337,9 +343,7 @@ int checkforcheats( void )
 
 
 
-#define mapborderwidth 4
-
- tbackgroundpict backgroundpict;
+tbackgroundpict backgroundpict;
 
 tbackgroundpict :: tbackgroundpict ( void )
 {
@@ -387,6 +391,8 @@ void tbackgroundpict :: init ( int reinit )
 
     #ifdef HEXAGON
      int height, width;
+     const int mapborderwidth = 4;
+
      getpicsize ( borderpicture[2], width, height );
 
      borderpos[0].x = borderx1 - mapborderwidth;
@@ -591,26 +597,6 @@ int tbackgroundpict :: getlastpaintmode ( void )
    return lastpaintmode;
 }
 
-
-#ifdef _DOS_
- void* reservememory = NULL;
- void* emergencymemory = NULL;
- #define reservememorysize 300000
- #define emergencymemorysize 4000
-
- void emergency_new_handler ( void )
- {
-    displaymessage("run out of memory while in new_new_handler.\n please contact authors.\n",2 );
- }
-
- void new_new_handler ( void )
- {
-    delete  ( reservememory );
-    set_new_handler ( emergency_new_handler );
-    savegame("rescue.sav","game saved while exiting game due to a lack of memory ");
-    displaymessage("Not enough memory. Saved game to emergncy.sav. ",2 );
- }
-#endif
 
 
 #ifdef MEMCHK
@@ -1654,20 +1640,6 @@ void         showpalette(void)
    repaintdisplay();
 } 
 
-/*
-void    generatesub ( void )
-{
-    for (int kl = 0; kl <= vehicletypeenanz; kl++)
-        if (vehicletypeen[kl]->id == 34) {
-           generatevehicle_cl ( vehicletypeen[kl],0 ,getactfield()->vehicle );
-           computeview();
-           displaymap();
-           dashboard.x = 0xffff;
-        }
-}
-*/
-
-
 
 
 
@@ -2331,35 +2303,6 @@ void  mainloop ( void )
             case ct_f4:  execuseraction ( ua_computerturn );
                break;
                
-/*            case ct_oe:  execuseraction ( ua_showpalette );
-               break; 
-                              
-            case ct_f6: ellipse ( 100, 100, 140, 120, yellow, 0.1 );
-               break; */
-/*
-            case ct_f12:  {
-                            pvehicle v = getactfield()->vehicle;
-                            if ( v ) {
-                               if ( v->experience==0 ) {
-                                  for ( int i= 0; i < v->typ->attack.weaponcount; i++ )
-                                     if ( v->typ->attack.waffe[i].typ & cwweapon )
-                                        v->munition[i] = v->typ->attack.waffe[i].count;
-                                  char text[1000];
-                                  sprintf ( text, "%s refueled his %s", actmap->player[actmap->actplayer].name, v->typ->description );
-                                  char* sp = strdup ( text );
-                                  pmessage msg = new tmessage ( sp, 255 );
-                                  dashboard.x = 0xffff;
-                               } else {
-                                  char text[1000];
-                                  sprintf ( text, "%s tried to refuel his %s, but it failed somehow ;->", actmap->player[actmap->actplayer].name, v->typ->description );
-                                  char* sp = strdup ( text );
-                                  pmessage msg = new tmessage ( sp, 255^( 1 << actmap->actplayer) );
-                               }
-
-                            }
-                         }
-               break;
-*/
             case ct_f7:  execuseraction ( ua_dispvehicleimprovement );
                break;
                            
@@ -2427,10 +2370,6 @@ void  mainloop ( void )
 /************************************************************************************************/
 
       checkpulldown( &ch );
-
-
-      // checkscreensaver(); 
-
 
       while ( quedevents[ actmap->actplayer ] )
         checkevents(); 
@@ -3044,27 +2983,8 @@ int main(int argc, char *argv[] )
            showavailablemodes();
            return 0;
        }
+       initmemory();
       #endif
-
-       // The following code is DOS only.  Unix machines will swap to make
-       // room for the memory needed.  Only need to make sure we check all
-       // dynamic allocation calls for failure.
-
-#ifdef _DOS_
-       int memneeded = 20000000;
-       int ma = maxavail() + _memavl();
-
-       printf(" \n memory avaiable: %d \n ", ma );
-       if ( ma < memneeded ) {
-	 printf(" Not enough momory available, at least %d MB recommended.\n"
-		" You may try to run the game, but unpredictable results can happen.\n"
-		" Press R to start the game anyway or any other key to quit\n", memneeded/1000000 );
-	 
-	 int ch = getch();
-	 if ( toupper ( ch ) != 'R' )
-	   exit(2);
-       }
-#endif
 
 
         #ifdef logging
@@ -3074,12 +2994,6 @@ int main(int argc, char *argv[] )
         mapborderpainter = &backgroundpict;
 
         boolean          truecoloravail;
-
-       #ifdef _DOS_
-        reservememory = malloc ( reservememorysize );
-        emergencymemory = malloc ( emergencymemorysize );
-        set_new_handler ( new_new_handler );
-       #endif
 
         #ifdef logging
         logtofile ( "sg.cpp / main / initmissions ");
@@ -3122,11 +3036,13 @@ int main(int argc, char *argv[] )
         #endif
 
         modenum8 = initgraphics ( resolx, resoly, 8 );
-        fprintf( stderr, "About to initSoundList()" );
+
+        //Ok, everything working now...
+        // fprintf( stderr, "About to initSoundList()" );
         initSoundList();
-        fprintf( stderr, "Done it" );
-        sound.boom->play();
-        fprintf( stderr, "And played a sound!" );
+        // fprintf( stderr, "Done it" );
+        // sound.boom->play();
+        // fprintf( stderr, "And played a sound!" );
 
         if ( modenum8 > 0 ) {
            atexit ( returntotextmode );

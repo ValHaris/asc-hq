@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.15 2000-01-31 16:34:43 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.16 2000-02-03 20:54:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/01/31 16:34:43  mbickel
+//      now standard hotkeys in dialog boxes
+//
 //     Revision 1.14  2000/01/06 11:19:13  mbickel
 //      Worked on the Linux-port again...
 //
@@ -4653,7 +4656,7 @@ void tmountpicture  :: newbuf ( int ys )
 
    bufsize = imagesize ( 1, 1, xsize, ys );
 
-   if ( bufsize > maxavail()   ||  outofmem ) {
+   if ( bufsize > memavail()   ||  outofmem ) {
       outofmem = 1;
       removeallitems();
       return;

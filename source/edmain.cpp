@@ -1,6 +1,10 @@
-//     $Id: edmain.cpp,v 1.5 1999-12-27 12:59:54 mbickel Exp $
+//     $Id: edmain.cpp,v 1.6 2000-02-03 20:54:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/12/27 12:59:54  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.4  1999/12/07 22:05:08  mbickel
 //      Added password verification for loading maps
 //
@@ -51,6 +55,10 @@
 #include <signal.h>
 #include <new.h>
 
+#ifdef _DOS_
+ #include "dos\memory.h"
+#endif
+
 // #define backgroundpict1 "BKGR2.PCX"  
 #define menutime 35
 
@@ -67,24 +75,6 @@ const char* progressbarfilename = "progress.8me";
 
 
 // #define MEMCHK
-
-void* reservememory = NULL;
-void* emergencymemory = NULL;
-#define reservememorysize 300000
-#define emergencymemorysize 4000 
-
-void emergency_new_handler ( void )
-{
-   displaymessage("run out of memory while in new_new_handler.\n please contact authors.\n",2 );
-}
-
-void new_new_handler ( void )
-{
-   delete  ( reservememory );
-   set_new_handler ( emergency_new_handler );
-   savegame("rescue.sav","game saved while exiting game due to a lack of memory "); 
-   displaymessage("Not enough memory. Saved game to emergncy.sav. ",2 );
-}
 
 
 #ifdef MEMCHK
@@ -804,6 +794,9 @@ int main(int argc, char *argv[] )
       return 1;
    atexit ( closesvgamode ); 
 
+   #ifdef _DOS_
+    initmemory();
+   #endif
 
    inittimer(100);
    atexit ( closetimer );

@@ -1,6 +1,10 @@
-//     $Id: misc.h,v 1.3 1999-12-28 21:03:09 mbickel Exp $
+//     $Id: misc.h,v 1.4 2000-02-03 20:54:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/12/28 21:03:09  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.2  1999/11/16 03:42:07  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -34,23 +38,19 @@
    #define misc_h
    
    #include "tpascal.inc"
-   #include <string.h>
    
    #define dblue lightgray
    //153
    
+   extern int memavail ( void );
+
    extern word log2(int zahl);
    extern int filesize( char *name);
-   
-   extern int maxavail();
-   extern int memavail();
    
    extern char* strr ( int a ) ;
    
    extern const char* digit[] ; 
    extern const char* letter[] ;
-   
-//   extern boolean exist ( char* s );
    
    extern void initmisc ( void ) ;
    extern char* strrr ( int a ) ;

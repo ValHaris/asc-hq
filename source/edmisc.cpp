@@ -1,6 +1,10 @@
-//     $Id: edmisc.cpp,v 1.7 2000-01-24 17:35:43 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.8 2000-02-03 20:54:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/01/24 17:35:43  mbickel
+//      Added dummy routines for sound under DOS
+//      Cleaned up weapon specification
+//
 //     Revision 1.6  1999/12/29 12:50:44  mbickel
 //      Removed a fatal error message in GUI.CPP
 //      Made some modifications to allow platform dependant path delimitters
@@ -1892,7 +1896,8 @@ void         tnewmap::run(void)
             action = 0; 
          } 
          if (action != 4) 
-            if ( sxsize * sysize * sizeof( tfield ) > maxavail() ) {
+            if ( sxsize * sysize * sizeof( tfield ) > memavail() ) {
+
                displaymessage("Not enough memory for map.\nGenerate smaller map or free more memory",1); 
                action = 0; 
             } 
@@ -2250,7 +2255,7 @@ class   tclass_change: public tstringselect {
                  };
 
 void         tclass_change::setup(void)
-{  int i,j,k;
+{  int i,j;
    char s[200], *s2;
 
    action = 0;

@@ -1,6 +1,15 @@
-//     $Id: basestrm.cpp,v 1.14 2000-01-25 19:28:06 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.15 2000-02-03 20:54:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/01/25 19:28:06  mbickel
+//      Fixed bugs:
+//        invalid mouse buttons reported when moving the mouse
+//        missing service weapon in weapon information
+//        invalid text displayed in ammo production
+//        undamaged units selected in repair vehicle function
+//
+//      speed up when playing weapon sound
+//
 //     Revision 1.13  2000/01/06 11:19:11  mbickel
 //      Worked on the Linux-port again...
 //
@@ -85,6 +94,13 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef _DOS_
+ #include <sys\stat.h>
+#else
+ #include <sys/stat.h>
+#endif
+
 #include "basestrm.h"
 
 #ifdef _DOS_
@@ -717,8 +733,14 @@ int tn_file_buf_stream::getstreamsize(void)
 
 }                 
 
-int tn_file_buf_stream::gettime ( void )
+time_t tn_file_buf_stream::get_time ( void )
 {
+   struct stat *buf;
+   if ( stat (devicename, buf) )
+      return -1;
+   else
+      return (buf->st_mtime);
+/*
    int time = -1;
    {
       DIR *dirp; 
@@ -738,6 +760,7 @@ int tn_file_buf_stream::gettime ( void )
       } 
     }
    return time;
+   */
 }
 
 
@@ -1503,12 +1526,12 @@ int tn_c_lzw_filestream :: readdata  ( void* buf, int size, int excpt  )
 };
 
 
-int tn_c_lzw_filestream :: gettime ( void )
+time_t tn_c_lzw_filestream :: get_time ( void )
 {
    if ( inp == 2 )
-      return containerstream->gettime();
+      return containerstream->get_time();
    else
-      return strm->gettime();
+      return strm->get_time();
 }
 
 tn_c_lzw_filestream :: ~tn_c_lzw_filestream()
@@ -1942,33 +1965,18 @@ char* getnextfilenumname ( const char* first, const char* suffix, int num )
 }
 
 
-int getfiletime ( char* devicename )
+time_t get_filetime ( char* devicename )
 {
-   int time = -1;
-   {
-      DIR *dirp; 
-      struct dirent *direntp; 
-  
-      dirp = opendir( devicename ); 
-      if( dirp != NULL ) { 
-        for(;;) { 
-          direntp = readdir( dirp ); 
-          if ( direntp == NULL ) 
-             break; 
-         #ifdef _DOS_
-          time =  ( direntp ->d_date << 16) + direntp ->d_time;
-         #endif
-        } 
-        closedir( dirp ); 
-      } 
-   }
-   if ( time == -1 ) {
+   struct stat *buf;
+   if ( !stat (devicename, buf) )
+      return (buf->st_mtime);
+   else {
       pncontainerstream strm = containercollector.getfile( devicename );
       if ( strm )
-         return strm->gettime();
+         return strm->get_time();
 
    }
-   return time;
+   return -1;
 }
 
 
@@ -1988,6 +1996,15 @@ void  tnbufstream :: writebuffer( void ) {
 void opencontainer ( const char* wildcard )
 {
    containercollector.init ( wildcard );
+}
+
+
+int filesize( char *name)
+{
+  struct stat *buf;
+
+  stat (name, buf);
+  return (buf->st_size);
 }
 
 

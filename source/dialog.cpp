@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.19 2000-01-31 16:34:43 mbickel Exp $
+//     $Id: dialog.cpp,v 1.20 2000-02-03 20:54:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/01/31 16:34:43  mbickel
+//      now standard hotkeys in dialog boxes
+//
 //     Revision 1.18  2000/01/25 19:28:12  mbickel
 //      Fixed bugs:
 //        invalid mouse buttons reported when moving the mouse
@@ -2201,10 +2204,11 @@ void         tfileselectsvga::readdirectory(void)
                   if ( description[0] )
                       files[numberoffiles].description = strdup ( description );
    
-               int date = stream.gettime();
-               if ( date != -1 ) {
-                  files[numberoffiles].time = date;
+               time_t tdate = stream.get_time();
+               if ( tdate != -1 ) {
+                  files[numberoffiles].time = tdate;
       
+                 /*
                   int year, month, day, hour, min, sec;
                   unpack_date ( date >> 16 , day, month, year );
                   unpack_time ( date & 0xffff, sec, min, hour );
@@ -2215,6 +2219,8 @@ void         tfileselectsvga::readdirectory(void)
                      sprintf( s, "%i.%i.%i ; %i:%i", day, month, year, hour, min );
       
                   files[numberoffiles].sdate = strdup (  s );
+                 */
+                  files[numberoffiles].sdate = strdup ( ctime ( &tdate ) );
                }
    
    
@@ -2234,12 +2240,11 @@ void         tfileselectsvga::readdirectory(void)
       } else {
           files[numberoffiles].name = strdup ( filename );
           files[numberoffiles].description = NULL;
+                 
+          time_t tdate = get_filetime( filename );
 
-          int date = 0;
-          
-          date = getfiletime( filename );
-
-          if ( date != -1 ) {
+          if ( tdate != -1 ) {
+             /*
              int year, month, day, hour, min, sec;
              unpack_date ( date >> 16 , day, month, year );
              unpack_time ( date & 0xffff, sec, min, hour );
@@ -2250,10 +2255,12 @@ void         tfileselectsvga::readdirectory(void)
                 sprintf( s, "%i.%i.%i ; %i:%i", day, month, year, hour, min );
              
              files[numberoffiles].sdate = strdup (  s );
+             */
+             files[numberoffiles].sdate = strdup ( ctime ( &tdate ) );
           } else
              files[numberoffiles].sdate = NULL;
 
-          files[numberoffiles].time = date;
+          files[numberoffiles].time = tdate;
 
           numberoffiles++;
       }
