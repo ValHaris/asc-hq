@@ -169,7 +169,7 @@ void tmap :: read ( tnstream& stream )
    oldevents = NULL;
 
    //! practically dummy
-   stream.readInt(); // int loadeventstore 
+   loadOldEvents = stream.readInt();
    stream.readInt(); // int loadeventstocome
    stream.readInt(); // int loadeventpassed
 

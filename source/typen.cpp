@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.63 2001-01-21 16:37:22 mbickel Exp $
+//     $Id: typen.cpp,v 1.64 2001-01-22 20:00:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.63  2001/01/21 16:37:22  mbickel
+//      Moved replay code to own file ( replay.cpp )
+//      Fixed compile problems done by cleanup
+//
 //     Revision 1.62  2000/12/26 14:46:02  mbickel
 //      Made ASC compilable (and runnable) with Borland C++ Builder
 //
@@ -1373,7 +1377,7 @@ treplayinfo :: ~treplayinfo ( )
   #endif
 }
 
-int tterrainbits :: toand ( tterrainbits bts )
+bool tterrainbits :: toand ( const tterrainbits& bts ) const
 {
    return ( (bts.terrain1 & terrain1) || (bts.terrain2 & terrain2));
 }
@@ -1394,7 +1398,7 @@ tterrainaccess :: tterrainaccess ( void )
    */
 }
 
-int tterrainaccess :: accessible ( tterrainbits bts )
+int tterrainaccess :: accessible ( const tterrainbits& bts )
 {
    if ( terrain.toand ( bts )
          &&
@@ -1440,20 +1444,14 @@ tterrainbits cbsmallrocks ( 1<<17, 0 );
 tterrainbits cblargerocks ( 1<<23, 0 );
 
 
-               tterrainbits& operator~ ( tterrainbits &tb ) 
+               tterrainbits operator~ ( const tterrainbits &tb )
                { 
-                  tterrainbits tb2 = tb;
-                  tterrainbits tbs  ( ~(tb2.terrain1), ~(tb2.terrain2) );
-                  // tterrainbits tbs2 ( ~tb.terrain1, ~tb.terrain2 );
-                  #if (__WATCOM_CPLUSPLUS__ >= 1100 )
-                     return tbs; 
-                  #else
-                     return tbs |= tbs;
-                  #endif
+                  tterrainbits tbs  ( ~(tb.terrain1), ~(tb.terrain2) );
+                  return tbs;
                };
 
 
-               tterrainbits& operator| ( tterrainbits tb2, tterrainbits tb3 ) 
+               tterrainbits operator| ( const tterrainbits& tb2, const tterrainbits& tb3 )
                { 
                   tterrainbits tb = tb2;
                   return tb |=tb3;
@@ -1465,11 +1463,12 @@ tterrainbits cblargerocks ( 1<<23, 0 );
                   return tb &=tb3;
                };
 */
-               int operator& ( tterrainbits tb2, tterrainbits tb3 ) 
+               bool operator& ( const tterrainbits& tb2, const tterrainbits& tb3 )
                { 
                   return tb2.toand ( tb3 ) ;
                };
-               tterrainbits& operator^ ( tterrainbits tb2, tterrainbits tb3 ) 
+
+               tterrainbits operator^ ( const tterrainbits& tb2, const tterrainbits& tb3 )
                { 
                   tterrainbits tb = tb2;
                   return tb ^=tb3;

@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.76 2001-01-21 16:37:22 mbickel Exp $
+//     $Id: typen.h,v 1.77 2001-01-22 20:00:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.76  2001/01/21 16:37:22  mbickel
+//      Moved replay code to own file ( replay.cpp )
+//      Fixed compile problems done by cleanup
+//
 //     Revision 1.75  2001/01/21 12:48:37  mbickel
 //      Some cleanup and documentation
 //
@@ -205,7 +209,7 @@ class tterrainbits {
       terrain1 = i; 
       terrain2 = j; 
   };
-  tterrainbits ( tterrainbits &bts ) { 
+  tterrainbits ( const tterrainbits &bts ) {
       terrain1 = bts.terrain1; 
       terrain2 = bts.terrain2; 
   };
@@ -219,7 +223,7 @@ class tterrainbits {
      terrain2 = stream.readInt(); 
   };
 
-  void write ( tnstream& stream ) { 
+  void write ( tnstream& stream ) const {
      stream.writeInt( terrain1 );
      stream.writeInt ( terrain2 ); 
   };
@@ -233,42 +237,38 @@ class tterrainbits {
   };
 
 
-  int toand ( tterrainbits bts );
-  int existall ( tterrainbits bdt ) {
+  bool toand ( const tterrainbits& bts ) const;
+
+  bool existall ( const tterrainbits& bdt ) const {
       return  ((terrain1 & bdt.terrain1) == bdt.terrain1) && ((terrain2 & bdt.terrain2) == bdt.terrain2);
   };
 
-  tterrainbits& operator|= ( tterrainbits tb )  { 
+  tterrainbits& operator|= ( const tterrainbits& tb )  {
     terrain1 |= tb.terrain1; 
     terrain2 |= tb.terrain2; 
     return *this;
   };
 
-  tterrainbits& operator&= ( tterrainbits tb ) { 
+  tterrainbits& operator&= ( const tterrainbits& tb ) {
     terrain1 &= tb.terrain1; 
     terrain2 &= tb.terrain2; 
     return *this;
   };
 
-  tterrainbits& operator^= ( tterrainbits tb ) { 
+  tterrainbits& operator^= ( const tterrainbits& tb ) {
     terrain1 ^= tb.terrain1; 
     terrain2 ^= tb.terrain2; 
     return *this;
   };
 
-  friend tterrainbits& operator~ ( tterrainbits &tb );
-  int getcrc ( void ) {
-    return crc32buf ( &terrain1, 2 * sizeof ( int ));
-  }
+  friend tterrainbits operator~ ( const tterrainbits &tb );
 };
 
 
-
-
-extern tterrainbits& operator~ ( tterrainbits &tb );
-extern tterrainbits& operator| ( tterrainbits tb2, tterrainbits tb3 ) ;
-extern int operator& ( tterrainbits tb2, tterrainbits tb3 ) ;
-extern tterrainbits& operator^ ( tterrainbits tb2, tterrainbits tb3 ) ;
+extern tterrainbits operator~ ( const tterrainbits &tb );
+extern tterrainbits operator| ( const tterrainbits& tb2, const tterrainbits& tb3 ) ;
+extern bool operator& ( const tterrainbits& tb2, const tterrainbits& tb3 ) ;
+extern tterrainbits operator^ ( const tterrainbits& tb2, const tterrainbits& tb3 ) ;
 
 //! This class is used by buildings, vehicles and objects to specify which terrain it can move to
 class tterrainaccess {
@@ -293,7 +293,7 @@ class tterrainaccess {
            \returns 1 if the field is accessible;
                      0 if it is not accessible
                      -1 if it is not accessible and the unit is killed by it    */
-      int accessible ( tterrainbits bts );
+      int accessible ( const tterrainbits& bts );
 
       void read ( tnstream& stream ) {
          terrain.read ( stream );
@@ -1423,8 +1423,13 @@ class tmap {
       void read ( tnstream& stream );
       void write ( tnstream& stream );
       ~tmap();
+
+
+      //! just a helper variable for loading the map; no function outside;
+      bool loadOldEvents;
    private:
       pvehicle getUnit ( pvehicle eht, int nwid );
+
 
 }; 
 

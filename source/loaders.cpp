@@ -1,6 +1,11 @@
-//     $Id: loaders.cpp,v 1.37 2001-01-04 15:13:59 mbickel Exp $
+//     $Id: loaders.cpp,v 1.38 2001-01-22 20:00:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2001/01/04 15:13:59  mbickel
+//      configure now checks for libSDL_image
+//      AI only conquers building that cannot be conquered back immediately
+//      tfindfile now returns strings instead of char*
+//
 //     Revision 1.36  2000/11/29 11:05:29  mbickel
 //      Improved userinterface of the mapeditor
 //      map::preferredfilenames uses now strings (instead of char*)
@@ -1097,7 +1102,7 @@ void   tspfldloaders::writeoldevents ( void )
 
 void   tspfldloaders::readoldevents ( void )
 {
-   if ( spfld->oldevents ) {
+   if ( spfld->loadOldEvents ) {
       int  num;
       stream->readdata2 ( num );
       spfld->oldevents = NULL;
