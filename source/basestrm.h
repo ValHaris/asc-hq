@@ -4,9 +4,14 @@
 */
 
 
-//     $Id: basestrm.h,v 1.41 2001-05-18 22:30:30 mbickel Exp $
+//     $Id: basestrm.h,v 1.42 2001-06-14 14:46:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2001/05/18 22:30:30  mbickel
+//      The data file is now installed in the correct directory
+//      If the installation directory is changed with configure, the new path
+//       will now be compiled directly into ASC
+//
 //     Revision 1.40  2001/05/16 23:21:01  mbickel
 //      The data file is mounted using automake
 //      Added sgml documentation
@@ -640,12 +645,13 @@ class tfindfile {
         vector<string> names;
         vector<int> directoryLevel;
         vector<bool> isInContainer;
+        vector<ASCString> location;
         int found;
         int act;
 
       public:
         tfindfile ( ASCString name );
-        string getnextname ( int* loc = NULL, bool* inContainer = NULL );
+        string getnextname ( int* loc = NULL, bool* inContainer = NULL, ASCString* location = NULL );
      };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

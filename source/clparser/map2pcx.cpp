@@ -2,7 +2,7 @@
 **
 ** map2pcx.cpp
 **
-** Thu May 17 15:59:29 2001
+** Tue Jun 12 20:17:34 2001
 ** Linux 2.4.4 (#1 SMP Sam Apr 28 13:21:30 CEST 2001) i686
 ** martin@linux. (Martin Bickel)
 **
@@ -37,6 +37,7 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
   {
     {"configfile", 1, 0, 'c'},
     {"verbose", 1, 0, 'r'},
+    {"outdir", 1, 0, 'd'},
     {"help", 0, 0, 'h'},
     {"version", 0, 0, 'v'},
     {0, 0, 0, 0}
@@ -46,10 +47,11 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
 
   /* default values */
   _r = 0;
+  _d = "data/";
   _h = false;
   _v = false;
 
-  while ((c = getopt_long(argc, argv, "c:r:hv", long_options, &option_index)) != EOF)
+  while ((c = getopt_long(argc, argv, "c:r:d:hv", long_options, &option_index)) != EOF)
     {
       switch(c)
         {
@@ -71,6 +73,10 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
               s += "parameter range error: r must be <= 10";
               throw(s);
             }
+          break;
+
+        case 'd': 
+          _d = optarg;
           break;
 
         case 'h': 
@@ -102,7 +108,7 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
 void Cmdline::usage()
 {
   cout << "generates PCX images of ASC and Battle Isle maps " << endl;
-  cout << "usage: " << _executable << " [ -crhv ]  FILE [...]" << endl;
+  cout << "usage: " << _executable << " [ -crdhv ]  FILE [...]" << endl;
   cout << "  [ -c ] ";
   cout << "[ --configfile ]  ";
   cout << "(";
@@ -119,6 +125,14 @@ void Cmdline::usage()
   cout << " default=0";
   cout << ")\n";
   cout << "         Set verbosity level to x (0..10)\n";
+  cout << "  [ -d ] ";
+  cout << "[ --outdir ]  ";
+  cout << "(";
+  cout << "type=";
+  cout << "STRING,";
+  cout << " default=data/";
+  cout << ")\n";
+  cout << "         Place images in given directory\n";
   cout << "  [ -h ] ";
   cout << "[ --help ]  ";
   cout << "(";

@@ -2,7 +2,7 @@
 **
 ** map2pcx.h
 **
-** Thu May 17 15:59:29 2001
+** Tue Jun 12 20:17:34 2001
 ** Linux 2.4.4 (#1 SMP Sam Apr 28 13:21:30 CEST 2001) i686
 ** martin@linux. (Martin Bickel)
 **
@@ -34,6 +34,7 @@ private:
   /* parameters */
   string _c;
   int _r;
+  string _d;
   bool _h;
   bool _v;
 
@@ -56,6 +57,7 @@ public:
 
   string c() { return _c; }
   int r() { return _r; }
+  string d() { return _d; }
   bool h() { return _h; }
   bool v() { return _v; }
 };

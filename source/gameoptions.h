@@ -59,6 +59,8 @@ class CGameOptions
       int runAI;
       int forceWindowedMode;
       int mapeditForceFullscreenMode;
+      int xresolution;
+      int yresolution;
 
       struct Mouse
       {

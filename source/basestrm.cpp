@@ -2,9 +2,16 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.56 2001-05-16 23:21:01 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.57 2001-06-14 14:46:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.56  2001/05/16 23:21:01  mbickel
+//      The data file is mounted using automake
+//      Added sgml documentation
+//      Added command line parsing functionality;
+//        integrated it into autoconf/automake
+//      Replaced command line parsing of ASC and ASCmapedit
+//
 //     Revision 1.55  2001/02/28 14:10:04  mbickel
 //      Added some small editors to linux makefiles
 //      Added even more dirty hacks to basegfx: some more truecolor functions
@@ -2131,6 +2138,7 @@ tfindfile :: tfindfile ( ASCString _name )
                 names.push_back ( string (  direntp->d_name ));
                 directoryLevel.push_back ( i );
                 isInContainer.push_back ( false );
+                location.push_back ( directory[i] );
                 found++;
              }
           }
@@ -2154,6 +2162,7 @@ tfindfile :: tfindfile ( ASCString _name )
                       names[i] = c->name ;
                       isInContainer[i] = true;
                       directoryLevel[i] = c->directoryLevel;
+                      location[i] = c->container->getDeviceName();
                       f = 1;
                    }
                 }
@@ -2162,6 +2171,7 @@ tfindfile :: tfindfile ( ASCString _name )
                 names.push_back ( c->name );
                 directoryLevel.push_back ( c->directoryLevel );
                 isInContainer.push_back ( true );
+                location.push_back ( c->container->getDeviceName() );
                 found++;
              }
           }
@@ -2171,7 +2181,7 @@ tfindfile :: tfindfile ( ASCString _name )
 }
 
 
-string tfindfile :: getnextname ( int* loc, bool* inContainer )
+string tfindfile :: getnextname ( int* loc, bool* inContainer, ASCString* location )
 {
    if ( act < found ) {
       if ( loc )
@@ -2179,6 +2189,9 @@ string tfindfile :: getnextname ( int* loc, bool* inContainer )
 
       if ( inContainer )
          *inContainer = isInContainer[act];
+
+      if ( location )
+         *location = this->location[act];
 
       return names[act++];
    } else {

@@ -121,6 +121,8 @@ void CGameOptions::setDefaults ( void )
       searchPath[5].setName ( s.c_str() );
   #endif
 
+  xresolution = 800;
+  yresolution = 600;
   setChanged();
 }
 
@@ -163,6 +165,8 @@ void CGameOptions::copy ( const CGameOptions& cgo )
    replayspeed               = cgo.replayspeed;
    showUnitOwner             = cgo.showUnitOwner;
 
+   xresolution               = cgo.xresolution;
+   yresolution               = cgo.yresolution;
 
    bi3.dir.setName( cgo.bi3.dir.getName() );
    bi3.interpolate.terrain = cgo.bi3.interpolate.terrain;

@@ -6,3 +6,4 @@
 #mandatoryq "FILE [...]"
 c / configfile  string           "Use given configuration file"
 r / verbose     int 0 [0..10]    "Set verbosity level to x (0..10)"
+d / outdir      string {"data/"}  "Place images in given directory"

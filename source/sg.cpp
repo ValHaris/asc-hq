@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: sg.cpp,v 1.141 2001-05-21 12:46:19 mbickel Exp $
+//     $Id: sg.cpp,v 1.142 2001-06-14 14:46:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.141  2001/05/21 12:46:19  mbickel
+//      Fixed infinite loop in AI::strategy
+//      Fixed bugs in mapeditor - event editing
+//      Fixed bugs in even loading / writing
+//      Fixed wrong build order AI <-> main program
+//
 //     Revision 1.140  2001/05/19 13:07:58  mbickel
 //      ASC now compiles with Borland C++ Builder again
 //      Added getopt for use with BCB
@@ -2527,7 +2533,21 @@ int main(int argc, char *argv[] )
    if ( CGameOptions::Instance()->forceWindowedMode && !cl->f() )  // cl->f == force fullscreen command line param
       fullscreen = 0;
 
-   modenum8 = initgraphics ( cl->x(), cl->y(), 8 );
+
+   int xr = 800;
+   int yr = 600;
+   // determining the graphics resolution
+   if ( CGameOptions::Instance()->xresolution != 800 )
+      xr = CGameOptions::Instance()->xresolution;
+   if ( cl->x() != 800 )
+      xr = cl->x();
+
+   if ( CGameOptions::Instance()->yresolution != 600 )
+      yr = CGameOptions::Instance()->xresolution;
+   if ( cl->y() != 600 )
+      yr = cl->y();
+
+   modenum8 = initgraphics ( xr, yr, 8 );
 
    // initialize the sound only if neither the command line parameter q is specified
    // nor is the sound disabled in the game options

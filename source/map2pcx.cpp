@@ -129,7 +129,7 @@ pfont load_font(char* name)
    return loadfont ( &stream );
 }
 
-
+string outputDir;
 
 
 int mapeditorMainThread ( const void* _mapname )
@@ -153,15 +153,15 @@ int mapeditorMainThread ( const void* _mapname )
           string s = ff.getnextname();
           while ( !s.empty () ) {
              string errormsg;
-             importbattleislemap ( "data/", s.c_str(), getterraintype_forpos(0)->weather[0], &errormsg, true );
+             importbattleislemap ( outputDir.c_str(), s.c_str(), getterraintype_forpos(0)->weather[0], &errormsg, true );
              if ( !errormsg.empty() && 0 )
                 fprintf(stderr, "map %s : %s \n", s.c_str(), errormsg.c_str() );
-             string fn = "data/images/pcx/"+s;
+             string fn = outputDir+"images/pcx/"+s;
              fn.replace ( fn.find (".dat"), 4, ".pcx");
 
              int width, height;
 
-             string t = "data/mis/"+s;
+             string t = outputDir+"mis/"+s;
              int maptime = get_filetime ( t.c_str());
              int pcxtime = get_filetime ( fn.c_str() );
              if ( maptime > pcxtime || pcxtime < 0 )
@@ -224,6 +224,8 @@ int main(int argc, char *argv[] )
       cout << argv[0] << " " << getVersionString() << endl;
       exit(0);
    }
+
+   outputDir = cl->d();
 
    for ( int i = cl->next_param(); i < argc; i++ )
        filesToLoad.push_back ( argv[i] );

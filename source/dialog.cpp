@@ -2,9 +2,16 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.83 2001-05-16 23:21:01 mbickel Exp $
+//     $Id: dialog.cpp,v 1.84 2001-06-14 14:46:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.83  2001/05/16 23:21:01  mbickel
+//      The data file is mounted using automake
+//      Added sgml documentation
+//      Added command line parsing functionality;
+//        integrated it into autoconf/automake
+//      Replaced command line parsing of ASC and ASCmapedit
+//
 //     Revision 1.82  2001/03/05 20:57:22  mbickel
 //      Fixed infinite loop in AI
 //      Fixed map resizing crash in mapaeditor
@@ -2024,6 +2031,7 @@ class   tfileselectsvga : public tdialogbox {
                                       ASCString        name;
                                       ASCString        sdate;
                                       int              time;
+                                      ASCString        location;
                                    } ;
 
                         vector<tfiledata>  files;
@@ -2162,7 +2170,9 @@ void         tfileselectsvga::readdirectory(void)
    numberoffiles = 0; 
 
    tfindfile ff ( wildcard );
-   string filename = ff.getnextname();
+
+   ASCString location;
+   string filename = ff.getnextname(NULL, NULL, &location );
 
    while( !filename.empty() ) {
       tfiledata f;
@@ -2173,11 +2183,13 @@ void         tfileselectsvga::readdirectory(void)
       if ( tdate != -1 )
          f.sdate = ctime ( &tdate );
 
+      f.location = location;
+
       files.push_back ( f );
 
       numberoffiles++;
 
-      filename = ff.getnextname();
+      filename = ff.getnextname(NULL, NULL, &location );
    } 
    firstshownfile = 0;
 
@@ -2236,10 +2248,10 @@ void         tfileselectsvga::fileausgabe(char     force , int dispscrollbar)
 
             activefontsettings.justify = lefttext;
             activefontsettings.length = 230;
-            // if ( files[ii].description ) {
-            //   showtext2( files[ii].description, x1 + 360,y1 + starty + jj * 20 + 20);
-            // } else
-               bar ( x1 + 360,y1 + starty + jj * 20 + 20, x1 + 360 + activefontsettings.length, y1 + starty + jj * 20 + 20 + activefontsettings.font->height, activefontsettings.background );
+            // if ( files[ii].location ) {
+              showtext2( files[ii].location.c_str(), x1 + 360,y1 + starty + jj * 20 + 20);
+            ///} else
+            //   bar ( x1 + 360,y1 + starty + jj * 20 + 20, x1 + 360 + activefontsettings.length, y1 + starty + jj * 20 + 20 + activefontsettings.font->height, activefontsettings.background );
          } 
       } 
       else { 
@@ -5115,7 +5127,7 @@ void viewterraininfo ( void )
 
 void viewUnitSetinfo ( void )
 {
-        std::string s;
+   ASCString s;
    pfield fld = getactfield();
    if ( fieldvisiblenow  ( fld ) && fld->vehicle ) {
 
