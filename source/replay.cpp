@@ -416,11 +416,12 @@ void logtoreplayinfo ( trpl_actions _action, ... )
       if ( action == rpl_shareviewchange ) {
          stream->writeChar ( action );
          if ( actmap->shareview ) {
-            int size = sizeof ( tmap::Shareview ) / sizeof ( int );
+            int size = 8*8/4+1;
             stream->writeInt ( size );
             for ( int a = 0; a < 8; a++ )
                for ( int b = 0; b < 8; b++ )
                    stream->writeChar ( actmap->shareview->mode[a][b] );
+            stream->writeInt ( actmap->shareview->recalculateview );
          } else {
             int size = 0;
             stream->writeInt ( size );

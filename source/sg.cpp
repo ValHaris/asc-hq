@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: sg.cpp,v 1.144 2001-07-11 20:44:37 mbickel Exp $
+//     $Id: sg.cpp,v 1.145 2001-07-13 14:02:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.144  2001/07/11 20:44:37  mbickel
+//      Removed some vehicles from the data file.
+//      Put all legacy units in into the data/legacy directory
+//
 //     Revision 1.143  2001/07/03 10:05:54  mbickel
 //      Added Makefiles for Borland C++ command line compiler
 //
@@ -2521,7 +2525,7 @@ int main(int argc, char *argv[] )
 
    // initialize the sound only if neither the command line parameter q is specified
    // nor is the sound disabled in the game options
-   initSoundList( !cl->q() && !CGameOptions::Instance()->disablesound );
+   initSoundList( cl->q() || CGameOptions::Instance()->disablesound );
 
    if ( modenum8 > 0 ) {
       #ifdef _DOS_

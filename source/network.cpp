@@ -7,9 +7,13 @@
 */
 
 
-//     $Id: network.cpp,v 1.20 2001-07-11 20:44:37 mbickel Exp $
+//     $Id: network.cpp,v 1.21 2001-07-13 14:02:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2001/07/11 20:44:37  mbickel
+//      Removed some vehicles from the data file.
+//      Put all legacy units in into the data/legacy directory
+//
 //     Revision 1.19  2001/07/09 17:38:52  mbickel
 //      New default email filename
 //      removed limitation for 8 character long email filenames
@@ -186,7 +190,9 @@ void tfiletransfernetworkconnection::tsetup::init ( void )
       addkey ( 3, ct_enter );
    }
    if ( !filename[0] ) {
-      ASCString fn = actmap->preferredFileNames.mapname[0];
+      ASCString fn;
+      if ( actmap )
+         fn = actmap->preferredFileNames.mapname[0];
       if ( fn.find ( "." ) != ASCString::npos )
          fn.erase ( fn.find ( "." ) );
 

@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.54 2001-07-13 12:53:01 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.55 2001-07-13 14:02:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.54  2001/07/13 12:53:01  mbickel
+//      Fixed duplicate icons in replay
+//      Fixed crash in tooltip help
+//
 //     Revision 1.53  2001/03/30 12:43:16  mbickel
 //      Added 3D pathfinding
 //      some cleanup and documentation
@@ -839,14 +843,14 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
       if ( mapDisplay ) {
          if ( !vehicle )
             mapDisplay->deleteVehicle( vehicle );
-   
+
          if ( fieldschanged > 0 )
-            mapDisplay->displayMap(); 
+            mapDisplay->displayMap();
      }
 
       /*
-      if ( vehicle ) 
-         if ( vehicleplattfahrbar(vehicle,field3) ) 
+      if ( vehicle )
+         if ( vehicleplattfahrbar(vehicle,field3) )
             bulldoze_trooper.fight( &vehicle, &field3->vehicle);
       */
 
@@ -884,32 +888,32 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
             releaseevent ( vehicle, NULL, cconnection_areaentered_specificunit );
          npop ( field3->vehicle );
       }
-   }                           
+   }
 
    fld = getfield ( x, y );
 
-   if ( vehicle ) { 
+   if ( vehicle ) {
       if ((fld->vehicle == NULL) && (fld->building == NULL)) {
-         fld->vehicle = vehicle; 
+         fld->vehicle = vehicle;
          vehicle->addview();
-      } else { 
-         if ( fld->vehicle  &&  fld->vehicle->typ->loadcapacity ) { 
-            i = 0; 
-            while ((fld->vehicle->loading[i] != NULL) && (i < 31)) 
-              i++; 
-            fld->vehicle->loading[i] = vehicle; 
-         }                                                           
-         else 
-            if ( fld->building ) { 
-               i = 0; 
-               while ( fld->building->loading[i]  && (i < 31)) 
-                  i++; 
-               fld->building->loading[i] = vehicle; 
+      } else {
+         if ( fld->vehicle  &&  fld->vehicle->typ->loadcapacity ) {
+            i = 0;
+            while ((fld->vehicle->loading[i] != NULL) && (i < 31))
+              i++;
+            fld->vehicle->loading[i] = vehicle;
+         }
+         else
+            if ( fld->building ) {
+               i = 0;
+               while ( fld->building->loading[i]  && (i < 31))
+                  i++;
+               fld->building->loading[i] = vehicle;
                if (fld->building->color != vehicle->color )
                   fld->building->convert( vehicle->color / 8 );
 
-            } 
-      } 
+            }
+      }
 
 
       vehicle->tank.fuel -= fueldist * vehicle->typ->fuelConsumption / 8;
@@ -917,11 +921,11 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
          vehicle->tank.fuel = 0;
 
 
-      if (fld->vehicle == vehicle) { 
+      if (fld->vehicle == vehicle) {
          i = vehicle->getMovement() - movedist;
-         if (i > 0) 
+         if (i > 0)
            vehicle->setMovement ( i );
-         else 
+         else
            vehicle->setMovement ( 0 );
 
         /*
@@ -929,32 +933,32 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
            if ( (vehicle->getMovement() >> 3) > (vehicle->fuel / vehicle->typ->fuelconsumption) )
               vehicle->movement = (vehicle->fuel << 3) / vehicle->typ->fuelconsumption;
         */
-      } 
-      else { 
+      }
+      else {
          vehicle->setMovement ( 0 );
-         vehicle->attacked = true; 
-         if (vehicle->height == chtieffliegend) 
-            vehicle->height = chfahrend; 
-      } 
+         vehicle->attacked = true;
+         if (vehicle->height == chtieffliegend)
+            vehicle->height = chfahrend;
+      }
 
       vehicle->setnewposition ( x, y );
       if ( newheight != -1 && vehicle->typ->height & newheight)
          vehicle->height = newheight;
 
-      
-      dashboard.x = 0xffff; 
-   } 
+
+      dashboard.x = 0xffff;
+   }
 
    int fieldschanged;
    if ( actmap->playerView >= 0 )
-      fieldschanged = computeview( actmap, 1 << actmap->playerView );
+      fieldschanged = evaluateviewcalculation ( actmap, 1 << actmap->playerView );
    else
-      fieldschanged = 0;
+      fieldschanged = evaluateviewcalculation ( actmap, 0 );
 
    if ( mapDisplay ) {
       mapDisplay->resetMovement();
       if ( fieldschanged > 0 )
-         mapDisplay->displayMap(); 
+         mapDisplay->displayMap();
       else
          mapDisplay->displayPosition ( x, y );
    }
