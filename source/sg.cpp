@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.9 1999-12-28 22:04:27 mbickel Exp $
+//     $Id: sg.cpp,v 1.10 1999-12-29 17:38:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  1999/12/28 22:04:27  mbickel
+//      Had to make some changes again to compile it for DOS...
+//
 //     Revision 1.8  1999/12/28 21:03:19  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -1412,7 +1415,7 @@ void         tsgpulldown :: init ( void )
 void         repaintdisplay(void)
 {
    collategraphicoperations cgo;
-   int mapexist = !( actmap->xsize == 0  || actmap->ysize == 0 );
+   int mapexist = actmap && actmap->xsize > 0  && actmap->ysize >= 0 ;
 
 
    int ms = getmousestatus();
@@ -2334,10 +2337,7 @@ void  mainloop ( void )
                
             case ct_3:  execuseraction ( ua_heapcheck );
                break;
-#ifdef FREEMAPZOOM               
-            case ct_4: choosezoomlevel();
-               break;
-#endif               
+
             case ct_5:  execuseraction ( ua_benchgamewov );
                break;
                

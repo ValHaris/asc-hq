@@ -15,9 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.1 1999-12-28 21:03:31 mbickel Exp $
+//     $Id: events.cpp,v 1.2 1999-12-29 17:38:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  1999/12/28 21:03:31  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 
 
 #include <queue>
@@ -61,8 +65,12 @@ int mouse_in_off_area ( void )
 void mousevisible( int an) {
 }
 
-byte getmousestatus () {
-   return mouseparams.status;
+byte getmousestatus ()
+{
+   if ( eventthreadinitialized )
+      return 2;
+   else
+      return 0;
 }
 
 

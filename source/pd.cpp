@@ -1,6 +1,10 @@
-//     $Id: pd.cpp,v 1.4 1999-12-28 21:03:17 mbickel Exp $
+//     $Id: pd.cpp,v 1.5 1999-12-29 17:38:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/12/28 21:03:17  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.3  1999/11/22 18:27:48  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -258,7 +262,9 @@ void tpulldown::checkpulldown(void)
       baron();
       if (mouseparams.taste == 1 ) {
          pdfieldnr = 0;
-         for (int i=0;i < pdb.count-1  ;i++ ) if (mouseparams.x > pdb.field[i+1].xstart) pdfieldnr++;
+         for (int i=0;i < pdb.count-1  ;i++ )
+            if (mouseparams.x > pdb.field[i+1].xstart)
+               pdfieldnr++;
          openpdfield();
          run();
          done();
@@ -292,6 +298,8 @@ void tpulldown::done(void)
 void tpulldown::baron(void)
 { 
    if (barstatus == false ) {
+      collategraphicoperations cgo;
+
       savefont = activefontsettings; 
       setvars();
       mousevisible(false);
@@ -318,7 +326,9 @@ void tpulldown::baron(void)
 void tpulldown::baroff(void)
 { 
    if (barstatus == true) {
-      mousevisible(false); 
+      collategraphicoperations cgo;
+
+      mousevisible(false);
       putimage(0,0,barbackgrnd);
       asc_free( barbackgrnd );
       mousevisible(true); 
@@ -340,7 +350,9 @@ int tpulldown::getpdfieldheight(byte pdfieldnr,byte pos)
 
 
 void         tpulldown::openpdfield(void)
-{ 
+{
+   collategraphicoperations cgo;
+
    int zw;
    setvars();
 
@@ -357,43 +369,43 @@ void         tpulldown::openpdfield(void)
          anf -= zw;
       } 
 
-         mousevisible(false); 
-         backgrnd = asc_malloc( imagesize(anf - 3, 0 ,ende + 3,pdb.pdbreite + 6 + pdb.field[pdfieldnr].height) );
-         getimage(anf - 3, 0 ,ende + 3, pdb.pdbreite + 6 + pdb.field[pdfieldnr].height,backgrnd);
+   mousevisible(false);
+   backgrnd = asc_malloc( imagesize(anf - 3, 0 ,ende + 3,pdb.pdbreite + 6 + pdb.field[pdfieldnr].height) );
+   getimage(anf - 3, 0 ,ende + 3, pdb.pdbreite + 6 + pdb.field[pdfieldnr].height,backgrnd);
 
-         bar(anf - 3,pdb.pdbreite,ende + 3,pdb.pdbreite + 6 + pdb.field[pdfieldnr].height,bkgcolor); 
-         lines(anf - 3,pdb.pdbreite,ende + 3,pdb.pdbreite + 6 + pdb.field[pdfieldnr].height); 
-         int lang = gettextwdth(pdb.field[pdfieldnr].name,pulldownfont) + 13;
-         if (umbau == true)
-            { 
-               line(anf - 2, pdb.pdbreite, anf + lang -1 + zw , pdb.pdbreite,bkgcolor);
-               line(anf - 3,1,anf - 3,pdb.pdbreite + 1,rcolor1); 
-               line(anf - 3,1,anf + lang + zw ,1,rcolor1);
-               line(anf +  lang + zw ,1,anf + lang + zw ,pdb.pdbreite ,rcolor2);
-            } 
-         else 
-            { 
-               line(anf - 2, pdb.pdbreite, anf + lang -1, pdb.pdbreite,bkgcolor);
-               line(anf - 3,1,anf - 3,pdb.pdbreite + 1,rcolor1); 
-               line(anf - 3,1,anf + lang,1,rcolor1); 
-               line(anf +  lang,1,anf + lang,pdb.pdbreite ,rcolor2); 
+   bar(anf - 3,pdb.pdbreite,ende + 3,pdb.pdbreite + 6 + pdb.field[pdfieldnr].height,bkgcolor);
+   lines(anf - 3,pdb.pdbreite,ende + 3,pdb.pdbreite + 6 + pdb.field[pdfieldnr].height);
+   int lang = gettextwdth(pdb.field[pdfieldnr].name,pulldownfont) + 13;
+   if (umbau == true)
+      {
+         line(anf - 2, pdb.pdbreite, anf + lang -1 + zw , pdb.pdbreite,bkgcolor);
+         line(anf - 3,1,anf - 3,pdb.pdbreite + 1,rcolor1);
+         line(anf - 3,1,anf + lang + zw ,1,rcolor1);
+         line(anf +  lang + zw ,1,anf + lang + zw ,pdb.pdbreite ,rcolor2);
+      }
+   else
+      {
+         line(anf - 2, pdb.pdbreite, anf + lang -1, pdb.pdbreite,bkgcolor);
+         line(anf - 3,1,anf - 3,pdb.pdbreite + 1,rcolor1);
+         line(anf - 3,1,anf + lang,1,rcolor1);
+         line(anf +  lang,1,anf + lang,pdb.pdbreite ,rcolor2);
+      }
+   for (int i = 0; i < pdb.field[pdfieldnr].count; i++)
+      {
+         if (strcmp(pdb.field[pdfieldnr].button[i].name,"seperator") != 0) {
+            getleftrighttext(pdb.field[pdfieldnr].button[i].name,lt,rt);
+            activefontsettings.justify = lefttext;
+            activefontsettings.length = gettextwdth(lt,pulldownfont);
+            showtext3( lt ,anf + textstart ,pdb.pdbreite + 7 + getpdfieldheight(pdfieldnr,i));
+            if (rt[0]) {
+               activefontsettings.justify = lefttext;
+               activefontsettings.length = gettextwdth(rt,pulldownfont);
+               showtext3(rt, anf + pdb.field[pdfieldnr].rtextstart,pdb.pdbreite + 7 + getpdfieldheight(pdfieldnr,i));
             }
-         for (int i = 0; i < pdb.field[pdfieldnr].count; i++)
-            { 
-               if (strcmp(pdb.field[pdfieldnr].button[i].name,"seperator") != 0) {
-                  getleftrighttext(pdb.field[pdfieldnr].button[i].name,lt,rt);
-                  activefontsettings.justify = lefttext;
-                  activefontsettings.length = gettextwdth(lt,pulldownfont);
-                  showtext3( lt ,anf + textstart ,pdb.pdbreite + 7 + getpdfieldheight(pdfieldnr,i));
-                  if (rt[0]) {
-                     activefontsettings.justify = lefttext;
-                     activefontsettings.length = gettextwdth(rt,pulldownfont);
-                     showtext3(rt, anf + pdb.field[pdfieldnr].rtextstart,pdb.pdbreite + 7 + getpdfieldheight(pdfieldnr,i));
-                  }
-               } 
-               else 
-                  line(anf,pdb.pdbreite + 7 + getpdfieldheight(pdfieldnr,i),ende + 1,pdb.pdbreite + 7 + getpdfieldheight(pdfieldnr,i),rcolor2); 
-            } 
+         }
+         else
+            line(anf,pdb.pdbreite + 7 + getpdfieldheight(pdfieldnr,i),ende + 1,pdb.pdbreite + 7 + getpdfieldheight(pdfieldnr,i),rcolor2);
+      }
    buttonnr = 0;
    showbutton();
 
@@ -402,6 +414,8 @@ void         tpulldown::openpdfield(void)
 
 void         tpulldown::closepdfield(void)
 {
+   collategraphicoperations cgo;
+
    mousevisible(false);
    putimage(anf - 3,0,backgrnd);
    asc_free(backgrnd); 
@@ -410,6 +424,8 @@ void         tpulldown::closepdfield(void)
 
 void tpulldown::hidebutton(void)
 { 
+   collategraphicoperations cgo;
+
    if (strcmp(pdb.field[pdfieldnr].button[buttonnr].name,"seperator") == 0) return;
    mousevisible(false); 
    nolines(anf,pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr),ende,pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr+1));
@@ -418,6 +434,8 @@ void tpulldown::hidebutton(void)
 
 void tpulldown::showbutton(void)
 { 
+   collategraphicoperations cgo;
+
    if (strcmp(pdb.field[pdfieldnr].button[buttonnr].name,"seperator") == 0) return;
    mousevisible(false); 
    lines(anf,pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr),ende,pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr+1));

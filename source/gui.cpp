@@ -1,6 +1,10 @@
-//     $Id: gui.cpp,v 1.8 1999-12-29 12:50:45 mbickel Exp $
+//     $Id: gui.cpp,v 1.9 1999-12-29 17:38:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  1999/12/29 12:50:45  mbickel
+//      Removed a fatal error message in GUI.CPP
+//      Made some modifications to allow platform dependant path delimitters
+//
 //     Revision 1.7  1999/12/28 21:02:57  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -228,7 +232,8 @@ void tguihost :: putbackground ( int xx , int yy )
 
 int    tguihost::painticons ( void )
 {
-   int oldnumpainted = numpainted;
+   collategraphicoperations cgo;
+   // int oldnumpainted = numpainted;
    numpainted = 0;
 
    firstpaint = 1;
@@ -266,49 +271,54 @@ void   tguihost :: cleanup ( void )    // wird zum entfernen der kleinen guiicon
 
 void   tguihost::paintsmallicons ( int taste, int up )
 {
-   npush ( paintsize );
-
-   paintsize = 1;
-
-   int num = getfirsticon()->count();
-
-   smalliconpos.xsize = num * guismalliconsizex + ( num - 1 ) * guismallicongap;
-
-   if ( mouseparams.x + smalliconpos.xsize - guismalliconsizex/2 > hgmp->resolutionx )
-      smalliconpos.x = hgmp->resolutionx - smalliconpos.xsize;
-   else 
-      smalliconpos.x = mouseparams.x - guismalliconsizex/2;
-
-
+   int num;
    {
+      collategraphicoperations cgo;
+
+      npush ( paintsize );
+
+      paintsize = 1;
+
+      num = getfirsticon()->count();
+
+      smalliconpos.xsize = num * guismalliconsizex + ( num - 1 ) * guismallicongap;
+
+      if ( mouseparams.x + smalliconpos.xsize - guismalliconsizex/2 > hgmp->resolutionx )
+         smalliconpos.x = hgmp->resolutionx - smalliconpos.xsize;
+      else
+         smalliconpos.x = mouseparams.x - guismalliconsizex/2;
+
+
+
       if ( (gameoptions.mouse.smalliconundermouse == 0)  || ((gameoptions.mouse.smalliconundermouse == 2) && up ))
          smalliconpos.y = mouseparams.y - 5 - guismalliconsizey;
       else
          smalliconpos.y = mouseparams.y - guismalliconsizey / 2;
+
+
+
+      if ( smalliconpos.y < 0 )
+         smalliconpos.y = 0;
+
+      setinvisiblemouserectanglestk ( smalliconpos.x, smalliconpos.y, smalliconpos.x + smalliconpos.xsize, smalliconpos.y + guismalliconsizey );
+
+      smalliconpos.buf = new char[ imagesize ( smalliconpos.x, smalliconpos.y, smalliconpos.x + smalliconpos.xsize, smalliconpos.y + guismalliconsizey )];
+
+      getimage ( smalliconpos.x, smalliconpos.y, smalliconpos.x + smalliconpos.xsize, smalliconpos.y + guismalliconsizey, smalliconpos.buf );
+
+      numpainted = 0;
+
+      firstpaint = 1;
+
+      getfirsticon()->paintifavail();
+
+      firstpaint = 0;
+
+      getinvisiblemouserectanglestk ( );
    }
-
-
-   if ( smalliconpos.y < 0 )
-      smalliconpos.y = 0;
-
-   setinvisiblemouserectanglestk ( smalliconpos.x, smalliconpos.y, smalliconpos.x + smalliconpos.xsize, smalliconpos.y + guismalliconsizey );
-
-   smalliconpos.buf = new char[ imagesize ( smalliconpos.x, smalliconpos.y, smalliconpos.x + smalliconpos.xsize, smalliconpos.y + guismalliconsizey )];
-
-   getimage ( smalliconpos.x, smalliconpos.y, smalliconpos.x + smalliconpos.xsize, smalliconpos.y + guismalliconsizey, smalliconpos.buf );
-
-   numpainted = 0;
-
-   firstpaint = 1;
-
-   getfirsticon()->paintifavail();
-
-   firstpaint = 0;
    int mousestat = 0;
 
    int msg = 0;
-
-   getinvisiblemouserectanglestk ( );
 
    do {
       if ( mouseparams.taste != taste  &&  !mousestat )
@@ -2486,7 +2496,6 @@ int         tnputvehiclecontainerguiicon::available( void )
       pfield fld = getactfield();
       if ( !fld->vehicle ) {
 
-         int r = 0;
          pvehicle actvehicle = bldhost->constructingvehicle;
 
          for ( int i = 0; i < actvehicle->typ->vehiclesbuildablenum; i++ ) 

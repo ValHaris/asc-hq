@@ -1,6 +1,10 @@
-//     $Id: newfont.cpp,v 1.5 1999-12-28 21:03:13 mbickel Exp $
+//     $Id: newfont.cpp,v 1.6 1999-12-29 17:38:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/12/28 21:03:13  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.4  1999/11/25 22:00:06  mbickel
 //      Added weapon information window
 //      Added support for primary offscreen frame buffers to graphics engine
@@ -56,6 +60,7 @@
 #include "stack.h"
 #include "basestrm.h"
 #include "misc.h"
+#include "basegfx.h"
 
 #define blockread(a,b,c) fread(b,1,c,a)
 #define seek(a,b) fseek(a,b,SEEK_SET)
@@ -352,7 +357,10 @@ int gettextwdth ( char* txt, pfont font )
 void         showtext3( const char *       txt,
                        word         xpos,
                        word         ypos)
-{  char         *s, *s2, *s3;
+{
+   collategraphicoperations cgo;
+
+    char         *s, *s2, *s3;
     byte         i, j,k;
     word         newx; 
     signed char  cnt;
@@ -440,7 +448,10 @@ void         showtext3( const char *       txt,
 void         showtext3c( const char *       txt,
                        word         xpos,
                        word         ypos)
-{  char         *s, *s2, *s3;
+{
+   collategraphicoperations cgo;
+
+    char         *s, *s2, *s3;
     byte         i, j,k;
     word         newx; 
     signed char  cnt;

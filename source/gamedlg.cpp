@@ -1,6 +1,10 @@
-//     $Id: gamedlg.cpp,v 1.8 1999-12-28 21:02:53 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.9 1999-12-29 17:38:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  1999/12/28 21:02:53  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.7  1999/12/27 13:00:01  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -1032,22 +1036,22 @@ void         tnewcampaignlevel::loadcampaignmap(void)
    } /* endtry */
    catch ( tinvalidid err ) {
       displaymessage( err.msg, 1 );
-      if ( actmap->xsize <= 0)
+      if ( !actmap || actmap->xsize <= 0)
          throw tnomaploaded();
    } /* endcatch */
    catch ( tinvalidversion err ) {
       displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.filename, err.expected, err.found );
-      if ( actmap->xsize <= 0)
+      if ( !actmap || actmap->xsize <= 0)
          throw tnomaploaded();
    } /* endcatch */
    catch ( tfileerror err) {
       displaymessage( "error reading map filename %s ", 1, err.filename );
-      if ( actmap->xsize <= 0)
+      if ( !actmap || actmap->xsize <= 0)
          throw tnomaploaded();
    } /* endcatch */
    catch ( terror ) {
       displaymessage( "error loading map", 1 );
-      if ( actmap->xsize <= 0)
+      if ( !actmap || actmap->xsize <= 0)
          throw tnomaploaded();
    } /* endcatch */
 
@@ -1070,7 +1074,7 @@ void         tcontinuecampaign::setid(word         id)
 
 void         tcontinuecampaign::showmapinfo(word         ypos)
 { 
-
+   collategraphicoperations cgo;
    tnewcampaignlevel::showmapinfo(ypos);
    push(activefontsettings,sizeof(activefontsettings)); 
 
@@ -1152,6 +1156,8 @@ void         tcontinuecampaign::evaluatemapinfo(char *       srname)
 void         tcontinuecampaign::init(void)
 { 
   #define leftspace 25  
+
+   collategraphicoperations cgo;
 
    tnewcampaignlevel::init();
    title = "next campaign level";
@@ -2880,7 +2886,6 @@ void tmessagedlg :: run ( void )
 {
    tdialogbox::run ( );
    if ( taste != cto_invvalue ) {
-      int line = actparagraph->linenum;
       if ( taste == cto_bspace )
          actparagraph = actparagraph->erasechar ( 1 );
       else
@@ -3047,7 +3052,6 @@ void tnewmessage :: run ( void )
 
    mousevisible ( true );
 
-   int firstdisplayedline = 0;
    do {
 
       tmessagedlg::run ( );
@@ -3144,7 +3148,6 @@ void teditmessage :: run ( void )
 
    mousevisible ( true );
 
-   int firstdisplayedline = 0;
    do {
 
       tmessagedlg::run ( );
@@ -3708,7 +3711,6 @@ void teditjournal :: run ( void )
 
    mousevisible ( true );
 
-   int firstdisplayedline = 0;
    do {
 
       tmessagedlg::run ( );
@@ -4184,6 +4186,7 @@ typedef class tbaseitemlist* pbaseitemlist;
 class tbaseitemlist {
              public:
                 virtual void additem2 ( void* item ) = 0;
+                virtual ~tbaseitemlist() {};
          };
 
 

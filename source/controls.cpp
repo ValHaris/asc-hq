@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.11 1999-12-28 21:02:43 mbickel Exp $
+//     $Id: controls.cpp,v 1.12 1999-12-29 17:38:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  1999/12/28 21:02:43  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.10  1999/12/27 12:59:45  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -2305,11 +2309,6 @@ void         tcomputeview::testfield(void)
 { 
 
    if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) { 
-      if ( xp == 15 && yp == 52 ) {
-         int a = 3;
-         int b = 4;
-         int c = a * b;
-         }
 
       int f = beeline(startx,starty,xp,yp);
       pfield efield = getfield(xp,yp); 
@@ -4833,6 +4832,7 @@ void   tdashboard :: paintvehicleinfo( const pvehicle     vehicle,
                                        const pvehicletype vt )
 { 
 
+   collategraphicoperations cgo;
 
    byte         ms; 
  
@@ -6949,12 +6949,12 @@ void dissectvehicle ( pvehicle eht )
          pdissectedunit du = actmap->player[ actmap->actplayer ].dissectedunit;
          while ( du ) {
             if ( du->fzt == eht->typ ) 
-               if ( du->tech = techs[i] )
+               if ( du->tech == techs[i] )
                   found |= 4;
                else
                   found |= 2;
             
-            if ( du->tech = techs[i] )
+            if ( du->tech == techs[i] )
                found |= 1;
       
             du = du->next;
@@ -6964,7 +6964,7 @@ void dissectvehicle ( pvehicle eht )
             du = actmap->player[ actmap->actplayer ].dissectedunit;
             while ( du ) {
                if ( du->fzt == eht->typ ) 
-                  if ( du->tech = techs[i] ) {
+                  if ( du->tech == techs[i] ) {
                      du->points += du->orgpoints / ( 1 << du->num);
                      du->num++;
                   }
@@ -8368,7 +8368,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                            setcursorpos ( x, y );
                            wait();
-                           pfield fld = getfield ( x, y );
+                           // pfield fld = getfield ( x, y );
 
                            pobjecttype obj = getobjecttype_forid ( id );
 
@@ -8428,7 +8428,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                                setcursorpos ( x, y );
                                wait();
-                               pfield fld = getfield ( x, y );
+                               // pfield fld = getfield ( x, y );
     
                                pbuildingtype bld = getbuildingtype_forid ( id );
     
@@ -8454,7 +8454,7 @@ void trunreplay :: execnextreplaymove ( void )
                            setcursorpos ( x, y );
                            wait();
                            pfield fld = getfield ( x, y );
-                           getfield ( x, y ) -> putmine ( col, typ, strength );
+                           fld -> putmine ( col, typ, strength );
                            computeview();
                            displaymap();
                            wait();
@@ -8471,7 +8471,7 @@ void trunreplay :: execnextreplaymove ( void )
                            setcursorpos ( x, y );
                            wait();
                            pfield fld = getfield ( x, y );
-                           getfield ( x, y ) -> removemine ( );
+                           fld -> removemine ( );
                            computeview();
                            displaymap();
                            wait();
@@ -8557,7 +8557,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  readnextaction();
 
 
-                                 pfield fld = getfield ( x, y );
+                                 // pfield fld = getfield ( x, y );
 
 
                                  if ( !removeunit ( x, y, nwid ))  

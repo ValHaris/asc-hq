@@ -1,10 +1,10 @@
 # KDE Config File
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/mousehnd.h,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/building.h,/home/martin/asc/source/basestrm.cpp,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/mousehnd.h
-cpp_file=Unbenannt.cpp
+header_file=/home/martin/asc/source/building.h
+cpp_file=/home/martin/asc/source/basestrm.cpp
 browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/reference/C/cref.html
 [asc/loaders.cpp]
 install_location=

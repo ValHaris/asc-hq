@@ -1,6 +1,10 @@
-//     $Id: dlg_box.cpp,v 1.6 1999-12-28 21:02:50 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.7 1999-12-29 17:38:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/12/28 21:02:50  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.5  1999/11/23 21:07:29  mbickel
 //      Many small bugfixes
 //
@@ -1278,6 +1282,7 @@ void         tdialogbox::redraw(void)
 
 void         tdialogbox::buildgraphics(void)
 { 
+  collategraphicoperations cgo;
 
   if ( x1 == -1 ) 
      x1 = ( agmp->resolutionx - xsize ) / 2;
@@ -2631,6 +2636,7 @@ void tviewtext::setparams ( int xx1, int yy1, int xx2, int yy2, char* ttxt, char
 
 void tviewtext::displaytext ( void )
 {
+  collategraphicoperations cgo;
 
    tvt_color = defaulttextcolor;
    tvt_maxlineheight = activefontsettings.font->height + 5;
@@ -3358,7 +3364,7 @@ int displaymessage2( char* formatstring, ... )
    char* b;
    char* a = formatstring;
    char* c = new char[200];
-   int linenum = 0;
+   // int linenum = 0;
 
    memset (stringtooutput, 0, sizeof ( stringtooutput ));
 

@@ -1,6 +1,10 @@
-//     $Id: basestrm.cpp,v 1.10 1999-12-29 12:50:40 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.11 1999-12-29 17:38:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  1999/12/29 12:50:40  mbickel
+//      Removed a fatal error message in GUI.CPP
+//      Made some modifications to allow platform dependant path delimitters
+//
 //     Revision 1.9  1999/12/28 21:02:37  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -841,6 +845,16 @@ tncontainerstream :: tncontainerstream ( const char* containerfilename, Containe
          readdata ( &index[i], sizeof ( index[i] ) );
          if ( index[i].name ) {
             readpchar ( &index[i].name );
+
+           #ifndef _DOS_
+            // quick hack to be able to use existing CON files.
+            char *c = index[i].name;
+            while ( *c ) {
+               *c = tolower( *c );
+               c++;
+            }
+           #endif
+
             indexer->addfile ( index[i].name, this );
          }
       }

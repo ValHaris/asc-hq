@@ -1,6 +1,9 @@
-//     $Id: missions.cpp,v 1.4 1999-11-23 21:07:34 mbickel Exp $
+//     $Id: missions.cpp,v 1.5 1999-12-29 17:38:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/11/23 21:07:34  mbickel
+//      Many small bugfixes
+//
 //     Revision 1.3  1999/11/22 18:27:40  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -500,127 +503,129 @@ void         releaseevent(pvehicle     eht,
    pevent ev1 = actmap->firsteventtocome; 
    while ( ev1 != NULL) { 
       if (bld != NULL) 
-         for (b = 0; b <= 3; b++) { 
-            if (ev1->trigger_data[b]->building == bld) { 
-               if (action == cconnection_destroy) { 
-                  if (ev1->trigger[b] == ceventt_buildingdestroyed) { 
-                     ev1->triggerstatus[b] = 2; 
-                     quedevents[ev1->player]++; 
-                  } 
-                  else 
-                     if ((ev1->trigger[b] == ceventt_buildingconquered) || (ev1->trigger[b] == ceventt_buildinglost)) { 
-                        ev1->triggerstatus[b] = 3; 
-                        quedevents[ev1->player]++; 
-                     } 
-               } 
-               if (action == cconnection_conquer) { 
-                  if (ev1->trigger[b] == ceventt_buildingconquered) { 
-                     if (ev1->player == bld->color / 8)   /*  eventuell allies  */ 
-                        ev1->triggerstatus[b] = 1; 
-                     else 
-                        ev1->triggerstatus[b] = 0; 
-                     quedevents[ev1->player]++; 
-                  } 
-                  else 
-                     if (ev1->trigger[b] == ceventt_buildinglost) { 
-                        if (ev1->player == bld->color / 8)   /*  eventuell allies  */ 
-                           ev1->triggerstatus[b] = 0; 
-                        else 
-                           ev1->triggerstatus[b] = 1; 
+         for (b = 0; b <= 3; b++)
+            if ( ev1->trigger_data[b] ) {
+               if (ev1->trigger_data[b]->building == bld) {
+                  if (action == cconnection_destroy) {
+                     if (ev1->trigger[b] == ceventt_buildingdestroyed) {
+                        ev1->triggerstatus[b] = 2;
+                        quedevents[ev1->player]++;
+                     }
+                     else
+                        if ((ev1->trigger[b] == ceventt_buildingconquered) || (ev1->trigger[b] == ceventt_buildinglost)) {
+                           ev1->triggerstatus[b] = 3;
+                           quedevents[ev1->player]++;
+                        }
+                  }
+                  if (action == cconnection_conquer) {
+                     if (ev1->trigger[b] == ceventt_buildingconquered) {
+                        if (ev1->player == bld->color / 8)   /*  eventuell allies  */
+                           ev1->triggerstatus[b] = 1;
+                        else
+                           ev1->triggerstatus[b] = 0;
+                        quedevents[ev1->player]++;
+                     }
+                     else
+                        if (ev1->trigger[b] == ceventt_buildinglost) {
+                           if (ev1->player == bld->color / 8)   /*  eventuell allies  */
+                              ev1->triggerstatus[b] = 0;
+                           else
+                              ev1->triggerstatus[b] = 1;
 
-                        quedevents[ev1->player]++; 
-                     } 
-               } 
+                           quedevents[ev1->player]++;
+                        }
+                  }
 
-               if (action == cconnection_lose) { 
-                  if (ev1->trigger[b] == ceventt_buildingconquered) { 
-                     if (ev1->player == bld->color / 8)   /*  eventuell allies  */ 
-                        ev1->triggerstatus[b] = 0; 
-                     else 
-                        ev1->triggerstatus[b] = 1; 
-                     quedevents[ev1->player]++; 
-                  } 
-                  else 
-                     if (ev1->trigger[b] == ceventt_buildinglost) { 
-                        if (ev1->player == bld->color / 8)   /*  eventuell allies  */ 
-                           ev1->triggerstatus[b] = 1; 
-                        else 
-                           ev1->triggerstatus[b] = 0; 
-                        quedevents[ev1->player]++; 
-                     } 
-               } 
+                  if (action == cconnection_lose) {
+                     if (ev1->trigger[b] == ceventt_buildingconquered) {
+                        if (ev1->player == bld->color / 8)   /*  eventuell allies  */
+                           ev1->triggerstatus[b] = 0;
+                        else
+                           ev1->triggerstatus[b] = 1;
+                        quedevents[ev1->player]++;
+                     }
+                     else
+                        if (ev1->trigger[b] == ceventt_buildinglost) {
+                           if (ev1->player == bld->color / 8)   /*  eventuell allies  */
+                              ev1->triggerstatus[b] = 1;
+                           else
+                              ev1->triggerstatus[b] = 0;
+                           quedevents[ev1->player]++;
+                        }
+                  }
 
-               if (action == cconnection_seen ) 
-                  if (ev1->trigger[b] == ceventt_building_seen ) 
-                     quedevents[ev1->player]++; 
-                  
-                
-            } 
-         } 
+                  if (action == cconnection_seen )
+                     if (ev1->trigger[b] == ceventt_building_seen )
+                        quedevents[ev1->player]++;
+
+
+               }
+            }
 
       if (eht != NULL) 
-         for (b = 0; b <= 3; b++) { 
-            if (ev1->trigger_data[b]->vehicle == eht) { 
-               if (action == cconnection_destroy) { 
-                  if (ev1->trigger[b] == ceventt_unitdestroyed) { 
-                     ev1->triggerstatus[b] = 2; 
-                     quedevents[ev1->player]++; 
-                  } 
-                  else 
-                     if ((ev1->trigger[b] == ceventt_unitconquered) || (ev1->trigger[b] == ceventt_unitlost)) { 
-                        ev1->triggerstatus[b] = 3;    
-                        quedevents[ev1->player]++; 
-                     } 
-               } 
-               if (action == cconnection_conquer) { 
-                  if (ev1->trigger[b] == ceventt_unitconquered) { 
-                     if (ev1->player == eht->color / 8)   /*  eventuell allies  */ 
-                        ev1->triggerstatus[b] = 1; 
-                     else 
-                        ev1->triggerstatus[b] = 0; 
-                     quedevents[ev1->player]++; 
-                  } 
-                  else 
-                     if (ev1->trigger[b] == ceventt_unitlost) { 
-                        if (ev1->player == eht->color / 8)   /*  eventuell allies  */ 
-                           ev1->triggerstatus[b] = 0; 
-                        else 
-                           ev1->triggerstatus[b] = 1; 
-                        quedevents[ev1->player]++; 
-                     } 
-               } 
+         for (b = 0; b <= 3; b++)
+            if ( ev1->trigger_data[b] ) {
+               if (ev1->trigger_data[b]->vehicle == eht) {
+                  if (action == cconnection_destroy) {
+                     if (ev1->trigger[b] == ceventt_unitdestroyed) {
+                        ev1->triggerstatus[b] = 2;
+                        quedevents[ev1->player]++;
+                     }
+                     else
+                        if ((ev1->trigger[b] == ceventt_unitconquered) || (ev1->trigger[b] == ceventt_unitlost)) {
+                           ev1->triggerstatus[b] = 3;
+                           quedevents[ev1->player]++;
+                        }
+                  }
+                  if (action == cconnection_conquer) {
+                     if (ev1->trigger[b] == ceventt_unitconquered) {
+                        if (ev1->player == eht->color / 8)   /*  eventuell allies  */
+                           ev1->triggerstatus[b] = 1;
+                        else
+                           ev1->triggerstatus[b] = 0;
+                        quedevents[ev1->player]++;
+                     }
+                     else
+                        if (ev1->trigger[b] == ceventt_unitlost) {
+                           if (ev1->player == eht->color / 8)   /*  eventuell allies  */
+                              ev1->triggerstatus[b] = 0;
+                           else
+                              ev1->triggerstatus[b] = 1;
+                           quedevents[ev1->player]++;
+                        }
+                  }
 
-               if (action == cconnection_lose) { 
-                  if (ev1->trigger[b] == ceventt_unitconquered) { 
-                     if (ev1->player == eht->color / 8)   /*  eventuell allies  */ 
-                        ev1->triggerstatus[b] = 0; 
-                     else 
-                        ev1->triggerstatus[b] = 1; 
-                     quedevents[ev1->player]++; 
-                  } 
-                  else 
-                     if (ev1->trigger[b] == ceventt_unitlost) { 
-                        if (ev1->player == eht->color / 8)   /*  eventuell allies  */ 
-                           ev1->triggerstatus[b] = 1; 
-                        else 
-                           ev1->triggerstatus[b] = 0; 
-                        quedevents[ev1->player]++; 
-                     } 
-               } 
-            } 
-            if ( (ev1->trigger[b] == ceventt_any_unit_enters_polygon  &&
-                 action          == cconnection_areaentered_anyunit ) || 
-                 (ev1->trigger[b] == ceventt_specific_unit_enters_polygon  &&
-                 action          == cconnection_areaentered_specificunit )) {
-                    int res = unit_in_polygon (  ev1->trigger_data[b]->unitpolygon );
-                    if ( res ) {
-                       ev1->triggerstatus[b] = 2; 
-                       quedevents[ev1->player]++; 
-                    }
+                  if (action == cconnection_lose) {
+                     if (ev1->trigger[b] == ceventt_unitconquered) {
+                        if (ev1->player == eht->color / 8)   /*  eventuell allies  */
+                           ev1->triggerstatus[b] = 0;
+                        else
+                           ev1->triggerstatus[b] = 1;
+                        quedevents[ev1->player]++;
+                     }
+                     else
+                        if (ev1->trigger[b] == ceventt_unitlost) {
+                           if (ev1->player == eht->color / 8)   /*  eventuell allies  */
+                              ev1->triggerstatus[b] = 1;
+                           else
+                              ev1->triggerstatus[b] = 0;
+                           quedevents[ev1->player]++;
+                        }
+                  }
+               }
+               if ( (ev1->trigger[b] == ceventt_any_unit_enters_polygon  &&
+                    action          == cconnection_areaentered_anyunit ) ||
+                    (ev1->trigger[b] == ceventt_specific_unit_enters_polygon  &&
+                    action          == cconnection_areaentered_specificunit )) {
+                       int res = unit_in_polygon (  ev1->trigger_data[b]->unitpolygon );
+                       if ( res ) {
+                          ev1->triggerstatus[b] = 2;
+                          quedevents[ev1->player]++;
+                       }
 
 
+               }
             }
-         } 
 
 
       ev1 = ev1->next; 
