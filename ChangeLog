@@ -1,3 +1,77 @@
+2002-03-19 21:38  mbickel
+
+	* source/: baseaiinterface.h, dlg_box.cpp, dlg_box.h,
+	gameoptions.cpp, sg.cpp, spfst.cpp, ai/ai.h, ai/base.cpp,
+	ai/tactics.cpp:  Some cleanup and documentation in dlg_box
+	 Fixed some type assignment errors
+
+2002-03-19 20:29  mbickel
+
+	* doc/install.html, source/loadbi3.cpp, source/loadbi3.h,
+	source/map2pcx.cpp:  Changed BI3 map import to work in map2pcx
+	without user intervention
+
+2002-03-19 19:42  mbickel
+
+	* source/: edmisc.cpp, replay.cpp, strtmesg.cpp, vehicle.cpp,
+	vehicle.h:  Fixed bug introduced by fixing the MAA-reaction-fire
+	bug
+
+2002-03-18 22:42  mbickel
+
+	* asc.bpg, source/TODO, source/controls.cpp, source/dialog.cpp,
+	source/edmisc.cpp, source/edselfnt.cpp, source/gamemap.cpp,
+	source/gamemap.h, source/loaders.cpp, source/paradialog.cpp,
+	source/spfst.cpp, source/spfst.h, source/typen.cpp, source/typen.h:
+	 Some cleanup and documentation in the Mine class
+	 The number of mines is now displayed in the field information
+	window
+
+2002-03-18 10:31  mbickel
+
+	* asc.bpg, source/edmisc.cpp, source/vehicle.cpp, source/vehicle.h,
+	source/win32/borland/mapeditor/mapeditor.bpr:  Fixed: canceling
+	Reactionfire enabled units that can not attack after
+		moving to move in the same turn
+
+2002-03-17 22:25  mbickel
+
+	* source/: edglobal.cpp, edglobal.h, edmisc.cpp, edmisc.h, sg.cpp: 
+	Fixed: View unit movement revealed the reaction fire status of
+	enemy units
+	 Mapeditor: new function "resource comparison"
+
+2002-03-14 19:14  mbickel
+
+	* data/message1.txt, source/controls.cpp, source/dialog.cpp,
+	source/dialog.h, source/gamedlg.cpp, source/password_dialog.cpp,
+	source/resourcenet.cpp:  Improved messages for proposing peace
+	 Fixed display error when enterering passwords
+
+2002-03-11 19:47  mbickel
+
+	* source/: TODO, basestrm.cpp, dashboard.cpp, gamedlg.cpp,
+	unix/fileio.cpp, win32/fileio.cpp, win32/borland/asc.bpr:  Fixed:
+	Remaining movement of troopers not displayed
+	 Fixed wrong text position in mouse options
+	 Fixed: absolute path names not recognized on windows
+
+2002-03-05 00:30  mbickel
+
+	* doc/: install.html, linux_faq.html:  Updated documentation about
+	music
+
+2002-03-04 21:00  mbickel
+
+	* data/music1.asctxt, source/basestrm.cpp:  Fixed broken
+	convertPathDelimitters(ASCString)
+
+2002-03-04 01:32  mbickel
+
+	* ChangeLog, source/paradialog.cpp, source/paradialog.h,
+	source/sg.cpp:	Updated Paragui theme loading to search in search
+	paths
+
 2002-03-03 23:57  mbickel
 
 	* source/: strtmesg.cpp, win32/borland/asc.bpr,
