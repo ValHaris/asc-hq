@@ -2354,11 +2354,11 @@ int main(int argc, char *argv[] )
       fatalError ("Out of memory");
    }
 
-   delete actmap;
-   actmap = NULL;
-
    closegraphics();
 
+   delete actmap;
+   actmap = NULL;
+   
    writegameoptions ( );
 
    delete onlinehelp;

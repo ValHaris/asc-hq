@@ -313,7 +313,9 @@ void  loadAllData( bool useCache )
             if ( !(*i)->isAbstract() ) {
                PropertyReadingContainer pc ( (*dl)->getTypeName(), *i );
 
+               displayLogMessage ( 5, "loading " + (*i)->location );
                (*dl)->readTextFiles( pc, (*i)->fileName, (*i)->location );
+               displayLogMessage ( 5, " done\n");
             }
          }
 

@@ -39,14 +39,23 @@ Surface& IconRepository::getIcon( const ASCString& name )
   if ( i != repository.end() ) 
      return *i->second;
   else {
-     tnfilestream fs ( name, tnstream::reading );
-     if ( name.endswith(".raw") ) {
-        repository[name] = new Surface();
-        repository[name]->read( fs );
-     } else {
-        repository[name] = new Surface ( IMG_Load_RW ( SDL_RWFromStream( &fs ), 1));
+     try {
+        tnfilestream fs ( name, tnstream::reading );
+        if ( name.endswith(".raw") ) {
+           repository[name] = new Surface();
+           repository[name]->read( fs );
+        } else {
+           repository[name] = new Surface ( IMG_Load_RW ( SDL_RWFromStream( &fs ), 1));
+        }
+        return *repository[name];
      }
-     return *repository[name];
-  }   
+     catch ( tfileerror err ) {
+        errorMessage("could not load " + err.getFileName() );
+        if ( name != "dummy.png" )
+           return getIcon( "dummy.png" );
+        else
+           throw;
+     }
+  }
 }
 
