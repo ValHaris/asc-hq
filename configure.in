@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl AC_REVISION($Revision: 1.67 $)dnl
+dnl AC_REVISION($Revision: 1.68 $)dnl
 dnl AM_MAINTAINER_MODE
 AC_INIT(source/typen.h)
 
@@ -12,6 +12,7 @@ AM_INIT_AUTOMAKE(asc,$asc_version)
 
 AC_DISABLE_SHARED
 AC_PROG_LIBTOOL
+AM_PROG_LIBTOOL
 
 
 dnl *************************************************************************
