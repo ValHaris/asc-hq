@@ -16,7 +16,6 @@
  ***************************************************************************/
 
 #include "objecttype.h"
-#include "gamemap.h"
 #include "basegfx.h"
 #include "graphicset.h"
 #include "textfileparser.h"
@@ -24,6 +23,10 @@
 #include "sgstream.h"
 #include "textfile_evaluation.h"
 #include "mapalgorithms.h"
+
+#ifndef converter
+#include "gamemap.h"
+#endif
 
 
 ObjectType :: ObjectType ( void )
@@ -130,6 +133,7 @@ void ObjectType :: display ( int x, int y )
 
 
 
+#ifndef converter
 
 namespace ForestCalculation {
 
@@ -760,6 +764,11 @@ void         calculateallobjects( pmap actmap )
 
 
 
+#else // ifdef converter
+
+
+
+#endif
 
 
 
