@@ -57,7 +57,8 @@ AC_TYPE_SIZE_T
 
 dnl Checks for libraries.
 AC_CHECK_LIB( pthread, pthread_create, [ ] )
-AC_CHECK_LIB( SDL_image, IMG_LoadJPG_RW,, AC_MSG_ERROR( ASC requires the SDL_image library. You can get it at www.libsdl.org ) )
+AC_CHECK_LIB( SDL_image, IMG_LoadJPG_RW,,  AC_MSG_ERROR( ASC requires the SDL_image library. You can get it at www.libsdl.org ) )
+AC_CHECK_LIB( SDL_mixer, Mix_PlayChannelTimed,, AC_MSG_ERROR( ASC requires the SDL_mixer library. You can get it at www.libsdl.org ) )
 
 dnl libbz2 stuff (should have a versionnr about 1.0.0)
 lib_bz2_static=no
@@ -112,7 +113,7 @@ dnl what gehts packed into main.con (the data container file) and in which
 dnl order
 MAINCONDATA="palette.pal data.version *.gfx helisun.jpg \
  	progress.* smalaril.fnt usablack.fnt arial8.fnt \
- 	msystem.fnt gui.fnt guicol.fnt monogui.fnt \
+ 	msystem.fnt gui.fnt guicol.fnt monogui.fnt sounds.txt \
  	height2.raw windp.raw windpfei.raw farbe.raw \
  	allianc.raw weapicon.raw expicons.raw hexinvi2.raw \
  	hexinvis.raw fg8.raw windrose.raw hexfld_a.raw \

@@ -1,6 +1,12 @@
-//     $Id: unitctrl.cpp,v 1.56 2001-07-13 19:33:30 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.57 2001-07-14 19:13:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.56  2001/07/13 19:33:30  mbickel
+//      Fixed crashes in the dashboards experience display
+//      Fixed inconsistent movement cost calculation (which caused
+//            AI and replay warnings)
+//      Fixed crash when starting network game from main menu
+//
 //     Revision 1.55  2001/07/13 14:02:48  mbickel
 //      Fixed inconsistency in replay (shareviewchange)
 //      Fixed sound initialization problem
@@ -757,6 +763,8 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
          } 
    } 
 
+   SoundLoopManager slm ( SoundList::getInstance().getSound( SoundList::moving, vehicle->typ->movemalustyp ), false );
+
    int i = 0;
    int cancelmovement = 0;
 
@@ -782,7 +790,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
 
 
       if ( mapDisplay ) 
-         mapDisplay->displayMovingUnit ( x, y, x2, y2, vehicle, vehicle->height, newheight, i, fieldnum );
+         mapDisplay->displayMovingUnit ( x, y, x2, y2, vehicle, vehicle->height, newheight, i, fieldnum, &slm );
 
       int dir;
       if (vehicle->functions & ( cffahrspur | cficebreaker ))  {

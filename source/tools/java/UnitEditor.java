@@ -1,6 +1,9 @@
-//     $Id: UnitEditor.java,v 1.11 2001-05-10 16:24:03 mbickel Exp $
+//     $Id: UnitEditor.java,v 1.12 2001-07-14 19:13:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2001/05/10 16:24:03  mbickel
+//      Fixed crash in Java-Uniteditor when palette not available
+//
 //     Revision 1.10  2000/11/08 19:37:41  mbickel
 //      Changed the terrain types (again): "lava" now replaces "small trench"
 //
@@ -1979,7 +1982,7 @@ static String cMovemaliType[] = { "default",
     "light wheeled vehicle", "medium wheeled vehicle", "heavy wheeled vehicle",
     "trooper",               "rail vehicle",           "medium aircraft",
     "medium ship",           "building / turret / object", "light aircraft",
-"heavy aircraft",        "light ship",             "heavy ship"};
+    "heavy aircraft",        "light ship",             "heavy ship", "helicopter"};
 
 static String cVehicleFunctions[] = {"sonar",
     "paratrooper",

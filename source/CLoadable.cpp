@@ -29,7 +29,8 @@ CLoadableGameOptions::CLoadableGameOptions(CGameOptions* pOptions)
 {
 	add(new IntProperty("XResolution"							,&_pOptions->xresolution));
 	add(new IntProperty("YResolution" 							,&_pOptions->yresolution));
-	add(new IntProperty("DisableSound"							,&_pOptions->disablesound));
+	add(new IntProperty("SoundMuted"	   						,&_pOptions->sound_mute));
+	add(new IntProperty("SoundOff"   							,&_pOptions->sound_off));
 	add(new IntProperty("FastMove"								,&_pOptions->fastmove,3));
 	add(new IntProperty("VisibilityCalculationAlgorithm"	,&_pOptions->visibility_calc_algo));
 	add(new IntProperty("MovementSpeed"							,&_pOptions->movespeed));

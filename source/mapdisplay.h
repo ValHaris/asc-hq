@@ -21,7 +21,7 @@
 #include "typen.h"
 #include "basegfx.h"
 #include "events.h"
-
+#include "soundList.h"
 
 #if 0
  class ScreenInterface {
@@ -230,7 +230,7 @@ extern ZoomLevel zoomlevel;
 
 class MapDisplayInterface {
          public:
-           virtual int displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove ) = 0;
+           virtual int displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove, SoundLoopManager* slm ) = 0;
            virtual void deleteVehicle ( pvehicle vehicle ) = 0;
            virtual void displayMap ( void ) = 0;
            virtual void displayPosition ( int x, int y ) = 0;
@@ -246,7 +246,7 @@ class MapDisplay : public MapDisplayInterface {
            dynamic_array<int> cursorstat;
            int cursorstatnum;
          public:
-           int displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove );
+           int displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove, SoundLoopManager* slm );
            void deleteVehicle ( pvehicle vehicle );
            void displayMap ( void );
            void displayPosition ( int x, int y );

@@ -1,8 +1,12 @@
 /*! \file gamedlg.cpp    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.71 2001-07-13 12:53:01 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.72 2001-07-14 19:13:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.71  2001/07/13 12:53:01  mbickel
+//      Fixed duplicate icons in replay
+//      Fixed crash in tooltip help
+//
 //     Revision 1.70  2001/07/11 20:44:37  mbickel
 //      Removed some vehicles from the data file.
 //      Put all legacy units in into the data/legacy directory
@@ -4108,7 +4112,7 @@ void tgamepreferences :: init ( void )
 
 #ifndef _DOS_
    addbutton ( "", xsize -35, starty + 50, xsize - 20, starty + 65, 3, 0, 4, true );
-   addeingabe ( 4, &actoptions.disablesound, 0, dblue );
+   addeingabe ( 4, &actoptions.sound_mute, 0, dblue );
 #endif
 
 
@@ -4325,16 +4329,13 @@ void tgamepreferences :: run ( void )
 
 void gamepreferences  ( void )
 {
-   int oldSoundStat = CGameOptions::Instance()->disablesound;
+   int oldSoundStat = CGameOptions::Instance()->sound_mute;
    tgamepreferences prefs;
    prefs.init();
    prefs.run();
    prefs.done();
-   if ( oldSoundStat != CGameOptions::Instance()->disablesound )
-      if ( CGameOptions::Instance()->disablesound )
-         disableSound();
-      else
-         enableSound();
+   if ( oldSoundStat != CGameOptions::Instance()->sound_mute )
+      SoundSystem::getInstance()->setMute( CGameOptions::Instance()->sound_mute );
 }
 
 

@@ -55,7 +55,8 @@ class CGameOptions
       int attackspeed1;
       int attackspeed2;
       int attackspeed3;
-      int disablesound;
+      int sound_mute;
+      int sound_off;
       int runAI;
       int forceWindowedMode;
       int mapeditForceFullscreenMode;

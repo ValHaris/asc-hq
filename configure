@@ -1954,6 +1954,54 @@ else
 { echo "configure: error: ASC requires the SDL_image library. You can get it at www.libsdl.org " 1>&2; exit 1; } 
 fi
 
+echo $ac_n "checking for Mix_PlayChannelTimed in -lSDL_mixer""... $ac_c" 1>&6
+echo "configure:1959: checking for Mix_PlayChannelTimed in -lSDL_mixer" >&5
+ac_lib_var=`echo SDL_mixer'_'Mix_PlayChannelTimed | sed 'y%./+-%__p_%'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-lSDL_mixer  $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 1967 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char Mix_PlayChannelTimed();
+
+int main() {
+Mix_PlayChannelTimed()
+; return 0; }
+EOF
+if { (eval echo configure:1978: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+    ac_tr_lib=HAVE_LIB`echo SDL_mixer | sed -e 's/[^a-zA-Z0-9_]/_/g' \
+    -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/'`
+  cat >> confdefs.h <<EOF
+#define $ac_tr_lib 1
+EOF
+
+  LIBS="-lSDL_mixer $LIBS"
+
+else
+  echo "$ac_t""no" 1>&6
+{ echo "configure: error: ASC requires the SDL_mixer library. You can get it at www.libsdl.org " 1>&2; exit 1; } 
+fi
+
 
 lib_bz2_static=no
 # Check whether --enable-libbz2-static or --disable-libbz2-static was given.
@@ -1966,7 +2014,7 @@ lib_bz2_usecache=yes
 fi
 
 echo $ac_n "checking for BZ2_bzReadOpen in -lbz2""... $ac_c" 1>&6
-echo "configure:1970: checking for BZ2_bzReadOpen in -lbz2" >&5
+echo "configure:2018: checking for BZ2_bzReadOpen in -lbz2" >&5
 ac_lib_var=`echo bz2'_'BZ2_bzReadOpen | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -1974,7 +2022,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lbz2  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 1978 "configure"
+#line 2026 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -1985,7 +2033,7 @@ int main() {
 BZ2_bzReadOpen()
 ; return 0; }
 EOF
-if { (eval echo configure:1989: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2037: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -2007,7 +2055,7 @@ checklib_bz2_static=yes
 fi
 
 echo $ac_n "checking for static libbz2 flag state""... $ac_c" 1>&6
-echo "configure:2011: checking for static libbz2 flag state" >&5
+echo "configure:2059: checking for static libbz2 flag state" >&5
 if eval "test \"`echo '$''{'ac_cv_lib_bz2_static'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -2078,7 +2126,7 @@ fi
   # Extract the first word of "sdl-config", so it can be a program name with args.
 set dummy sdl-config; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:2082: checking for $ac_word" >&5
+echo "configure:2130: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_SDL_CONFIG'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -2113,7 +2161,7 @@ fi
 
   min_sdl_version=$SDL_VERSION
   echo $ac_n "checking for SDL - version >= $min_sdl_version""... $ac_c" 1>&6
-echo "configure:2117: checking for SDL - version >= $min_sdl_version" >&5
+echo "configure:2165: checking for SDL - version >= $min_sdl_version" >&5
   no_sdl=""
   if test "$SDL_CONFIG" = "no" ; then
     no_sdl=yes
@@ -2137,7 +2185,7 @@ echo "configure:2117: checking for SDL - version >= $min_sdl_version" >&5
   echo $ac_n "cross compiling; assumed OK... $ac_c"
 else
   cat > conftest.$ac_ext <<EOF
-#line 2141 "configure"
+#line 2189 "configure"
 #include "confdefs.h"
 
 #include <stdio.h>
@@ -2198,7 +2246,7 @@ int main (int argc, char *argv[])
 
 
 EOF
-if { (eval echo configure:2202: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+if { (eval echo configure:2250: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
 then
   :
 else
@@ -2232,7 +2280,7 @@ fi
           CFLAGS="$CFLAGS $SDL_CFLAGS"
           LIBS="$LIBS $SDL_LIBS"
           cat > conftest.$ac_ext <<EOF
-#line 2236 "configure"
+#line 2284 "configure"
 #include "confdefs.h"
 
 #include <stdio.h>
@@ -2242,7 +2290,7 @@ int main() {
  return 0; 
 ; return 0; }
 EOF
-if { (eval echo configure:2246: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2294: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
    echo "*** The test program compiled, but did not run. This usually means"
           echo "*** that the run-time linker is not finding SDL or finding the wrong"
@@ -2280,12 +2328,12 @@ rm -f conftest*
 for ac_func in select
 do
 echo $ac_n "checking for $ac_func""... $ac_c" 1>&6
-echo "configure:2284: checking for $ac_func" >&5
+echo "configure:2332: checking for $ac_func" >&5
 if eval "test \"`echo '$''{'ac_cv_func_$ac_func'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 2289 "configure"
+#line 2337 "configure"
 #include "confdefs.h"
 /* System header to define __stub macros and hopefully few prototypes,
     which can conflict with char $ac_func(); below.  */
@@ -2308,7 +2356,7 @@ $ac_func();
 
 ; return 0; }
 EOF
-if { (eval echo configure:2312: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2360: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_func_$ac_func=yes"
 else
@@ -2335,12 +2383,12 @@ done
 for ac_func in itoa
 do
 echo $ac_n "checking for $ac_func""... $ac_c" 1>&6
-echo "configure:2339: checking for $ac_func" >&5
+echo "configure:2387: checking for $ac_func" >&5
 if eval "test \"`echo '$''{'ac_cv_func_$ac_func'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 2344 "configure"
+#line 2392 "configure"
 #include "confdefs.h"
 /* System header to define __stub macros and hopefully few prototypes,
     which can conflict with char $ac_func(); below.  */
@@ -2363,7 +2411,7 @@ $ac_func();
 
 ; return 0; }
 EOF
-if { (eval echo configure:2367: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2415: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_func_$ac_func=yes"
 else
@@ -2390,12 +2438,12 @@ done
 for ac_func in stricmp
 do
 echo $ac_n "checking for $ac_func""... $ac_c" 1>&6
-echo "configure:2394: checking for $ac_func" >&5
+echo "configure:2442: checking for $ac_func" >&5
 if eval "test \"`echo '$''{'ac_cv_func_$ac_func'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 2399 "configure"
+#line 2447 "configure"
 #include "confdefs.h"
 /* System header to define __stub macros and hopefully few prototypes,
     which can conflict with char $ac_func(); below.  */
@@ -2418,7 +2466,7 @@ $ac_func();
 
 ; return 0; }
 EOF
-if { (eval echo configure:2422: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2470: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_func_$ac_func=yes"
 else
@@ -2450,7 +2498,7 @@ done
 
 MAINCONDATA="palette.pal data.version *.gfx helisun.jpg \
  	progress.* smalaril.fnt usablack.fnt arial8.fnt \
- 	msystem.fnt gui.fnt guicol.fnt monogui.fnt \
+ 	msystem.fnt gui.fnt guicol.fnt monogui.fnt sounds.txt \
  	height2.raw windp.raw windpfei.raw farbe.raw \
  	allianc.raw weapicon.raw expicons.raw hexinvi2.raw \
  	hexinvis.raw fg8.raw windrose.raw hexfld_a.raw \

@@ -142,7 +142,7 @@ int ReplayMapDisplay :: checkMapPosition ( int x, int y )
 }
 
 
-int  ReplayMapDisplay :: displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove )
+int  ReplayMapDisplay :: displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove, SoundLoopManager* slc )
 {
    if ( actmap->playerView < 0 )
       return 0;
@@ -151,7 +151,7 @@ int  ReplayMapDisplay :: displayMovingUnit ( int x1,int y1, int x2, int y2, pveh
       if ( checkMapPosition  ( x1, y1 ))
          displayMap();
 
-      int fc = mapDisplay->displayMovingUnit ( x1, y1, x2, y2, vehicle, height1, height2, fieldnum, totalmove );
+      int fc = mapDisplay->displayMovingUnit ( x1, y1, x2, y2, vehicle, height1, height2, fieldnum, totalmove, slc );
       if ( fc == 1 ) {
          mapDisplay->resetMovement();
          mapDisplay->displayMap();
@@ -580,7 +580,7 @@ void trunreplay :: execnextreplaymove ( void )
    if ( nextaction != rpl_finished ) {
       switch ( nextaction ) {
       case rpl_move: {
-                        int size = stream->readInt();
+                        stream->readInt(); // size
                         int x1 = stream->readInt();
                         int y1 = stream->readInt();
                         int x2 = stream->readInt();
@@ -608,7 +608,7 @@ void trunreplay :: execnextreplaymove ( void )
                      }
          break;
       case rpl_move2: {
-                        int size = stream->readInt();
+                        stream->readInt(); // size
                         int x1 = stream->readInt();
                         int y1  = stream->readInt();
                         int x2 = stream->readInt();
@@ -637,7 +637,7 @@ void trunreplay :: execnextreplaymove ( void )
                      }
          break;
       case rpl_attack: {
-                          int size = stream->readInt();
+                          stream->readInt();  // size
                           int x1 = stream->readInt();
                           int y1 = stream->readInt();
                           int x2 = stream->readInt();
@@ -707,7 +707,7 @@ void trunreplay :: execnextreplaymove ( void )
                       }
          break;
       case rpl_changeheight: {
-                        int size = stream->readInt();
+                        stream->readInt();  // size
                         int x1 = stream->readInt();
                         int y1 = stream->readInt();
                         int x2 = stream->readInt();
@@ -746,7 +746,7 @@ void trunreplay :: execnextreplaymove ( void )
                      }
          break;
       case rpl_convert: {
-                           int size = stream->readInt();
+                           stream->readInt();  // size
                            int x = stream->readInt();
                            int y = stream->readInt();
                            int col = stream->readInt();
@@ -774,7 +774,7 @@ void trunreplay :: execnextreplaymove ( void )
          break;
       case rpl_remobj:
       case rpl_buildobj: {
-                           int size = stream->readInt();
+                           stream->readInt();  // size
                            int x = stream->readInt();
                            int y = stream->readInt();
                            int id = stream->readInt();
@@ -801,7 +801,7 @@ void trunreplay :: execnextreplaymove ( void )
                        }
          break;
       case rpl_buildtnk: {
-                           int size = stream->readInt();
+                           stream->readInt();  // size
                            int x = stream->readInt();
                            int y = stream->readInt();
                            int id = stream->readInt();
@@ -829,7 +829,7 @@ void trunreplay :: execnextreplaymove ( void )
                        }
          break;
       case rpl_putbuilding : {
-                               int size = stream->readInt();
+                               stream->readInt();  // size
                                int x = stream->readInt();
                                int y = stream->readInt();
                                int id = stream->readInt();
@@ -852,7 +852,7 @@ void trunreplay :: execnextreplaymove ( void )
                             }
          break;
       case rpl_putmine: {
-                           int size = stream->readInt();
+                           stream->readInt();  // size
                            int x = stream->readInt();
                            int y = stream->readInt();
                            int col = stream->readInt();
@@ -874,7 +874,7 @@ void trunreplay :: execnextreplaymove ( void )
                        }
          break;
       case rpl_removemine: {
-                           int size = stream->readInt();
+                           stream->readInt();  // size
                            int x = stream->readInt();
                            int y = stream->readInt();
                            readnextaction();
@@ -893,7 +893,7 @@ void trunreplay :: execnextreplaymove ( void )
                        }
          break;
       case rpl_removebuilding: {
-                           int size = stream->readInt();
+                           stream->readInt();  // size
                            int x = stream->readInt();
                            int y = stream->readInt();
                            readnextaction();
@@ -917,7 +917,7 @@ void trunreplay :: execnextreplaymove ( void )
                        }
          break;
       case  rpl_produceunit : {
-                                 int size = stream->readInt();
+                                 stream->readInt();  // size
                                  int id = stream->readInt();
                                  int col = stream->readInt();
                                  int x = stream->readInt();
@@ -957,7 +957,7 @@ void trunreplay :: execnextreplaymove ( void )
                               }
          break;
       case rpl_removeunit : {
-                                 int size = stream->readInt();
+                                 stream->readInt();  // size
                                  int x = stream->readInt();
                                  int y = stream->readInt();
                                  int nwid = stream->readInt();
@@ -968,7 +968,7 @@ void trunreplay :: execnextreplaymove ( void )
                               }
          break;
       case rpl_trainunit:{
-                                 int size = stream->readInt();
+                                 stream->readInt();  // size
                                  int x = stream->readInt();
                                  int y = stream->readInt();
                                  int exp = stream->readInt();
@@ -1009,7 +1009,7 @@ void trunreplay :: execnextreplaymove ( void )
                               }
          break;
       case rpl_alliancechange: {
-                                 int size = stream->readInt();
+                                 stream->readInt();  // size
                                  for ( int a = 0; a < 8; a++ )
                                     for ( int b = 0; b < 8; b++ )
                                        actmap->alliances[a][b] = stream->readChar();
@@ -1018,7 +1018,7 @@ void trunreplay :: execnextreplaymove ( void )
                               }
          break;
       case rpl_refuel : {
-                                 int size = stream->readInt();
+                                 stream->readInt();  // size
                                  int x = stream->readInt();
                                  int y = stream->readInt();
                                  int nwid = stream->readInt();
@@ -1045,7 +1045,7 @@ void trunreplay :: execnextreplaymove ( void )
                               }
          break;
       case rpl_bldrefuel : {
-                                 int size = stream->readInt();
+                                 stream->readInt();  // size
                                  int x = stream->readInt();
                                  int y = stream->readInt();
                                  int pos = stream->readInt();
@@ -1093,7 +1093,7 @@ preactionfire_replayinfo trunreplay::getnextreplayinfo ( void )
 {
    if ( nextaction == rpl_reactionfire ) {
       preactionfire_replayinfo reac = new treactionfire_replayinfo;
-      int size = stream->readInt();
+      stream->readInt(); // size
 
       reac->x1 = stream->readInt();
       reac->y1 = stream->readInt( );

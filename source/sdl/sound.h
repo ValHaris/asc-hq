@@ -8,7 +8,12 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef sound_h_included
+#define sound_h_included
+
+#include "SDL/SDL_mixer.h"
 #include "../ascstring.h"
+
 
 class Sound {
 public:
@@ -22,31 +27,54 @@ public:
   void playWait(void);
 
   void playLoop();
-  void stopLoop();
+  void stop();
 
   ~Sound(void);
 private:
-  /* used to indicate that we converted the sound so that ~Sound uses the
-   * correct free routine.
-   */
-  int converted;
-
   /** A name for this sound - mostly for debugging purposes */
   const ASCString name;
 
-  /* actual sound data and its length */
-  Uint8  *data;
-  Uint32  len;
+  //! the actual wave data
+  Mix_Chunk *wave;
+
 };
 
-/** Initialise sound system.  If you don't call this, the first Sound
- *  created will call it for you.
- */
-void initSound(int silent);
 
-/** Clean up after the sound system */
-void closeSound();
+class SoundSystem {
+      int mute;
+      int off;
+      bool sdl_initialized;
+      bool mix_initialized;
 
+      static SoundSystem* instance;
 
-void disableSound ( void );
-void enableSound ( void );
+      Sound* channel[MIX_CHANNELS];
+
+   protected:
+
+      //! loads a sound from the wave file called name to an Mix_buffer.
+      Mix_Chunk* SoundSystem::loadWave ( const ASCString& name );
+      friend class Sound;
+
+   public:
+      /** Sets up ASC's sound system.
+         \param mute The sound is going to be initialized, but no sounds played. Sounds can be enabled at runtime
+         \param off  The sound system is not even going to be initiliazed. Can only be restartet by restarting ASC
+      */
+      SoundSystem ( bool mute, bool off );
+
+      //! Turns the sound on and off
+      void setMute ( bool mute );
+
+      //! can sounds be played right now ?
+      bool isMuted ( ) { return mute || off; };
+
+      //! is the soundsystem completely disabled ?
+      bool isOff ( ) { return off; };
+
+      static SoundSystem* getInstance() { return instance; };
+
+      ~SoundSystem();
+};
+
+#endif

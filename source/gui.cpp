@@ -4,9 +4,13 @@
 */
 
 
-//     $Id: gui.cpp,v 1.58 2001-07-13 12:53:01 mbickel Exp $
+//     $Id: gui.cpp,v 1.59 2001-07-14 19:13:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2001/07/13 12:53:01  mbickel
+//      Fixed duplicate icons in replay
+//      Fixed crash in tooltip help
+//
 //     Revision 1.57  2001/05/24 15:37:51  mbickel
 //      Fixed: reaction fire could not be disabled when unit out of ammo
 //      Fixed several AI problems
@@ -299,9 +303,7 @@ void   GuiHost<T>::paintsmallicons ( int taste, int up )
       npush ( paintsize );
 
       paintsize = 1;
-
       num = getfirsticon()->count();
-
       smalliconpos.xsize = num * guismalliconsizex + ( num - 1 ) * guismallicongap;
 
       if ( mouseparams.x + smalliconpos.xsize - guismalliconsizex/2 > hgmp->resolutionx )
@@ -309,14 +311,10 @@ void   GuiHost<T>::paintsmallicons ( int taste, int up )
       else
          smalliconpos.x = mouseparams.x - guismalliconsizex/2;
 
-
-
       if ( (CGameOptions::Instance()->mouse.smalliconundermouse == 0)  || ((CGameOptions::Instance()->mouse.smalliconundermouse == 2) && up ))
          smalliconpos.y = mouseparams.y - 5 - guismalliconsizey;
       else
          smalliconpos.y = mouseparams.y - guismalliconsizey / 2;
-
-
 
       if ( smalliconpos.y < 0 )
          smalliconpos.y = 0;
@@ -329,11 +327,8 @@ void   GuiHost<T>::paintsmallicons ( int taste, int up )
       getimage ( smalliconpos.x, smalliconpos.y, smalliconpos.x + smalliconpos.xsize, smalliconpos.y + guismalliconsizey, smalliconpos.buf );
 
       numpainted = 0;
-
       firstpaint = 1;
-
       getfirsticon()->paintifavail();
-
       firstpaint = 0;
 
       getinvisiblemouserectanglestk ( );
@@ -395,8 +390,6 @@ void   GuiHost<T>::paintsmallicons ( int taste, int up )
       releasetimeslice();
    } while ( !keypress() &&  mousestat < 100 ); /* enddo */
 
-
-
    cleanup();
 
    npop ( paintsize );
@@ -405,7 +398,6 @@ void   GuiHost<T>::paintsmallicons ( int taste, int up )
       displaymessage2 ( "" );
 
    infotextshown = NULL;
-   
 }
 
 
@@ -895,6 +887,7 @@ int  tnguiicon::pressedbymouse( void )
           mouseparams.taste != taste )
      {
             host->cleanup();
+            SoundList::getInstance().play( SoundList::menu_ack );
             exec();
             return 1;
      }

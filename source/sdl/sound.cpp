@@ -1,14 +1,3 @@
-/** This file provides a simple way to play sounds.  If the last sound is still
- *  playing when the next sound is called for, the last sound is stopped.
- *  Parts of this code were shamelessly copied from the SDL Audio examples.
- *
- *  Implements the Sound class.  To load a wave file:
- *      Sound *s=new Sound( filename ).
- *  To play the sound : 
- *      s.play();
- *  To release the sound :
- *      delete s;
- */
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -20,263 +9,170 @@
 
 #include <string.h>
 #include <stdlib.h>
-//#include <unistd.h>
-//#include <SDL/SDL_audio.h>
-//#include <SDL/SDL_error.h>
+
+#include <SDL/SDL.h>
+#include <SDL/SDL_mixer.h>
 
 #include "../global.h"
-#include sdlheader
 #include "sound.h"
 
 #include "../basestrm.h"
+#include "../sgstream.h"
 
 /** How long should this process sleep while waiting for a sound to play
  */
-#define WAIT_SLEEP_USEC 250000l // 0.25 seconds
+const int WAIT_SLEEP_MSEC = 50;
 
-/* The actual audio spec of the hardware we have */
-static SDL_AudioSpec   actualAudioSpec;
 
-/* The sound data currently being played.  The pointer advabces through the
- * buffer as each part of the sound is played.
- */
-static Uint8          *audioData=NULL;
 
-/* The number of bytes remaining to be played pointed to by audioData */
-static Uint32          audioDataLen=0;
 
-/* This flag exists to shortcircuit all sound logic when
- * the SDL sound module didn't initialise
- */
-static bool            noAudio=false;
+SoundSystem* SoundSystem::instance = NULL;
 
-/* To disable any sound during the game
- */
-static bool            setSilent=false;
-
-/* This flag exists to ensure that the sound module is
- * initialised once and only once before use.
- */
-static bool            needInit=true;
-
-/* Current sound is remembered soley to ensure that the
- * sound data isn't freed while it's playing
- */
-static Sound          *currentSound=NULL;
-
-/* The audio function callback takes the following parameters:
-   stream:  A pointer to the audio buffer to be filled
-   len:     The length (in bytes) of the audio buffer
-*/
-static void fill_audio(void *udata, Uint8 *stream, int len)
+SoundSystem  :: SoundSystem ( bool mute, bool off )
 {
-   /* Only play if we have data left.  Stop callbacks if we're out of data. */
-   if ( audioDataLen == 0 ) {
-      SDL_PauseAudio(1);
-      currentSound=NULL;
-      return;
-   }
+   this->mute = mute;
+   this->off = off;
 
-   /* Mix as much data as possible */
-   len = ( len > audioDataLen ? audioDataLen : len );
-   SDL_MixAudio( stream, audioData, len, SDL_MIX_MAXVOLUME );
-   audioData += len;
-   audioDataLen -= len;
+   for ( int i = 0; i < MIX_CHANNELS; i++ )
+       channel[i] = NULL;
+
+
+   if ( instance )
+      fatalError ( "Only one instance of SoundSystem possible !");
+
+   instance = this;
+
+   if( off )
+      return;
+
+   if ( SDL_Init ( SDL_INIT_AUDIO ) < 0 ) {
+      warning("Couldn't initialize SDL audio interface !");
+      off = true;
+      sdl_initialized = false;
+      return;
+   } else
+      sdl_initialized = true;
+
+   int audio_rate = MIX_DEFAULT_FREQUENCY;
+   Uint16 audio_format = MIX_DEFAULT_FORMAT;
+   int audio_channels = 2;
+
+   if ( Mix_OpenAudio ( audio_rate, audio_format, audio_channels, 1024 ) < 0 ) {
+      mix_initialized = false;
+      warning("Couldn't initialize SDL_mixer !");
+      off = true;
+      return;
+   } else {
+      mix_initialized = true;
+		Mix_QuerySpec(&audio_rate, &audio_format, &audio_channels);
+      displayLogMessage ( 5, "Opened audio at %d Hz %d bit %s", audio_rate,
+			(audio_format&0xFF),
+			(audio_channels > 1) ? "stereo" : "mono");
+   }
 }
 
-void initSound(int silent)
+
+void SoundSystem::setMute ( bool mute )
 {
-   if(!needInit)
+   if ( off )
       return;
 
-   if ( silent ) {
-      noAudio = true;
-      return;
+   if ( mute != this->mute ) {
+      if ( mute ) {
+         for ( int i = 0; i < MIX_CHANNELS; i++ )
+            if ( Mix_Playing(i)  )
+                Mix_HaltChannel( i );
+
+      }
+      this->mute = mute;
    }
-
-   SDL_AudioSpec wanted;
-
-   /* Set the audio format */
-   wanted.freq = 22050;
-   wanted.format = AUDIO_S16;
-   wanted.channels = 2;    /* 1 = mono, 2 = stereo */
-   wanted.samples = 1024;  /* Good low-latency value for callback */
-   wanted.callback = fill_audio;
-   wanted.userdata = NULL;
-
-   /* Open the audio device, Adjusting to the hardware.
-    * flag no audio available if we can't open audio
-    */
-   noAudio=SDL_OpenAudio(&wanted, &actualAudioSpec) < 0;
-   needInit=false;
 }
 
-void closeSound(void)
+
+SoundSystem::~SoundSystem()
 {
-   if(!needInit) {
+   if( mix_initialized )
+      Mix_CloseAudio();
+
+   if( sdl_initialized )
       SDL_CloseAudio();
-      needInit=true;
-   }
+
+   instance = NULL;
 }
 
 
 
-SDL_AudioSpec* loadWave ( const char* name, SDL_AudioSpec *spec, Uint8 **audio_buf, Uint32 *audio_len)
+Mix_Chunk* SoundSystem::loadWave ( const ASCString& name )
 {
-   if ( !exist ( name ))
+   if ( off )
       return NULL;
+
+   if ( !exist ( name.c_str() )) {
+      warning ( "can't open " + name );
+      return NULL;
+   }
 
    tnfilestream stream ( name, tnstream::reading );
 
-   return SDL_LoadWAV_RW( SDL_RWFromStream ( &stream ), 1, spec, audio_buf, audio_len);
+   return Mix_LoadWAV_RW( SDL_RWFromStream ( &stream ), 1);
 }
 
 
-Sound::Sound( const ASCString& filename ) : name ( filename )
+
+Sound::Sound( const ASCString& filename ) : name ( filename ), wave(NULL)
 {
-   SDL_AudioSpec  sampleAudioSpec;
-   Uint8         *tmpData;
-   Uint32         tmpLen;
+   if ( !SoundSystem::instance )
+      fatalError ( "Sound::Sound failed, because there is no SoundSystem initialized");
 
-   /* Load wave file or set to silence on failure.  Also set for silence if
-    * There is noAudio.
-    */
-   if( noAudio || !loadWave( filename.c_str(), &sampleAudioSpec, &tmpData, &tmpLen ) ) {
-      data=NULL;
-      converted=0;
-      len=0;
-      return;
-   }
-
-   /* Determine if sample must be converted for the sound hardware.
-    * The converted flag is set so we use the correct free routine later.
-    */
-   converted=(sampleAudioSpec.format != actualAudioSpec.format)
-             ||      (sampleAudioSpec.freq != actualAudioSpec.freq)
-             ||      (sampleAudioSpec.channels != actualAudioSpec.channels);
-
-   /* Attempt conversion if required */
-   if( converted ) {
-      SDL_AudioCVT converter;
-
-      /* Setup the conversion and either convert or set silent if we can't
-       * create an adequate converter
-       */
-      if( SDL_BuildAudioCVT( &converter,
-                             sampleAudioSpec.format, sampleAudioSpec.channels,
-                             sampleAudioSpec.freq,
-                             actualAudioSpec.format, actualAudioSpec.channels,
-                             actualAudioSpec.freq ) >= 0 ) {
-
-         /* Perform conversion */
-         converter.len=tmpLen;
-         converter.buf=(Uint8 *)malloc( converter.len * converter.len_mult);
-
-         /* If we successfully allocated RAM, do conversion, otherwise
-          * set sound to silence
-          */
-         if( converter.buf ) {
-            memcpy( converter.buf, tmpData, tmpLen );
-            SDL_ConvertAudio( &converter );
-         } else {
-            converter.len=0;
-         }
-
-         data=converter.buf;
-         len=converter.len*converter.len_mult;
-
-      } else {
-
-         /* Set sound to silence if we can't convert */
-         data=NULL;
-         len=0;
-      }
-
-      /* Free original sample */
-      SDL_FreeWAV( tmpData );
-
-   } else {
-
-      /* Just use it if no conversion required */
-      data=tmpData;
-      len=tmpLen;
-   }
+   wave = SoundSystem::instance->loadWave( filename );
 }
+
 
 void Sound::play(void)
 {
-   if( noAudio || setSilent )
+   if( SoundSystem::instance->isMuted() || !wave)
       return;
 
-   /* Set the sound buffer to play the current sound */
-   SDL_LockAudio();
-   audioData=data;
-   audioDataLen=len;
-   currentSound=this;
-   SDL_UnlockAudio();
-
-   /* Ensure the playback loop is running */
-   SDL_PauseAudio(0);
+   int channel = Mix_PlayChannel ( -1, wave, 0 );
+   SoundSystem::instance->channel[ channel ] = this;
 }
 
 void Sound::playLoop()
 {
-
-}
-
-void Sound::stopLoop()
-{
-
-}
-
-
-/** Play the sound, but don't return control to this thread until
- *  the sound has finished playing.
- */
-void Sound::playWait(void)
-{
-   if( noAudio || setSilent )
+   if( SoundSystem::instance->isMuted() || !wave)
       return;
 
-   play();
+   int channel = Mix_PlayChannel ( -1, wave, -1 );
+   SoundSystem::instance->channel[ channel ] = this;
+}
 
-   // This is not a very efficent way to wait for the sound to end,
-   // but it's a lot simpler than setting up a semaphore.
+void Sound::stop()
+{
+   for ( int i = 0; i < MIX_CHANNELS; i++ )
+      if ( SoundSystem::instance->channel[ i ] == this  && Mix_Playing(i)  )
+          Mix_HaltChannel( i );
+}
+
+
+void Sound::playWait(void)
+{
+   if( SoundSystem::instance->isMuted() || !wave)
+      return;
+
+   int channel = Mix_PlayChannel ( -1, wave, 0 );
+   SoundSystem::instance->channel[ channel ] = this;
+
    do {
-      SDL_Delay(WAIT_SLEEP_USEC);
-   } while( currentSound==this );
+      SDL_Delay(WAIT_SLEEP_MSEC);
+   } while( SoundSystem::instance->channel[ channel ] == this  && Mix_Playing(channel)  );
 }
 
 Sound::~Sound(void)
 {
+   stop();
 
-   /* If this sound is playing, stop it before we free the buffer
-    */
-   SDL_LockAudio();
-   if( currentSound==this ) {
-      currentSound=NULL;
-      audioData=NULL;
-      audioDataLen=0;
-   }
-   SDL_UnlockAudio();
-
-   /* Free the audio data */
-   if( data ) {
-      if( converted )
-         free(data);
-      else
-         SDL_FreeWAV( data );
-   }
+   if ( wave )
+      Mix_FreeChunk ( wave );
 }
 
-
-void disableSound ( void )
-{
-   setSilent = true;
-}
-
-void enableSound ( void )
-{
-   setSilent = false;
-}
 

@@ -71,7 +71,8 @@ void CGameOptions::setDefaults ( void )
    attackspeed1=0;
    attackspeed2=0;
    attackspeed3=0;
-   disablesound=0;
+   sound_off=0;
+   sound_mute=0;
 
    mouse.scrollbutton=0;
    mouse.fieldmarkbutton=2;
@@ -141,7 +142,8 @@ void CGameOptions::copy ( const CGameOptions& cgo )
    attackspeed1          = cgo.attackspeed1;
    attackspeed2          = cgo.attackspeed2;
    attackspeed3          = cgo.attackspeed3;
-   disablesound          = cgo.disablesound;
+   sound_off             = cgo.sound_off;
+   sound_mute            = cgo.sound_mute;
 
    mouse.scrollbutton    = cgo.mouse.scrollbutton;
    mouse.fieldmarkbutton = cgo.mouse.fieldmarkbutton;

@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: sg.cpp,v 1.146 2001-07-14 13:15:17 mbickel Exp $
+//     $Id: sg.cpp,v 1.147 2001-07-14 19:13:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.146  2001/07/14 13:15:17  mbickel
+//      Rewrote sound handling
+//
 //     Revision 1.145  2001/07/13 14:02:48  mbickel
 //      Fixed inconsistency in replay (shareviewchange)
 //      Fixed sound initialization problem
@@ -293,23 +296,14 @@
 #include "replay.h"
 #include "dashboard.h"
 #include "graphicset.h"
-
-
-
-#ifdef HEXAGON
 #include "loadbi3.h"
-#endif
 
-#ifdef _DOS_
- #include "dos\memory.h"
-#endif
 
 
 // #define MEMCHK
 
 
 #include "memorycheck.cpp"
-
 
 class tsgonlinemousehelp : public tonlinemousehelp {
    public:
@@ -2049,6 +2043,10 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 
    if ( actprogressbar ) actprogressbar->startgroup();
 
+   SoundList::getInstance().init();
+
+   if ( actprogressbar ) actprogressbar->startgroup();
+
    loadcursor();
 
    if ( actprogressbar ) actprogressbar->startgroup();
@@ -2496,9 +2494,9 @@ int main(int argc, char *argv[] )
       } else
          dataVersion = 0;
 
-      if ( dataVersion < 3 || dataVersion > 0xffff )
+      if ( dataVersion < 4 || dataVersion > 0xffff )
          displaymessage("A newer version of the data files is required. \n"
-                        "You can download a new data package from http://www.asc-hq.org", 2 );
+                        "You can get a new data package at http://www.asc-hq.org", 2 );
 
       check_bi3_dir ();
    }
@@ -2528,9 +2526,7 @@ int main(int argc, char *argv[] )
 
    modenum8 = initgraphics ( xr, yr, 8 );
 
-   // initialize the sound only if neither the command line parameter q is specified
-   // nor is the sound disabled in the game options
-   SoundList::getInstance().init( cl->q() || CGameOptions::Instance()->disablesound );
+   SoundSystem soundSystem ( CGameOptions::Instance()->sound_mute, cl->q() || CGameOptions::Instance()->sound_off );
 
    if ( modenum8 > 0 ) {
       #ifdef _DOS_

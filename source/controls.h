@@ -4,9 +4,15 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.40 2001-03-30 12:43:15 mbickel Exp $
+//     $Id: controls.h,v 1.41 2001-07-14 19:13:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2001/03/30 12:43:15  mbickel
+//      Added 3D pathfinding
+//      some cleanup and documentation
+//      splitted the ai into several files, now located in the ai subdirectory
+//      AI cares about airplane servicing and range constraints
+//
 //     Revision 1.39  2001/02/26 12:35:04  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -85,6 +91,7 @@
 #include "gui.h"
 #include "typen.h"
 #include "mousecontrol.h"
+#include "soundList.h"
 
 
 
@@ -323,7 +330,7 @@ class ReplayMapDisplay : public MapDisplayInterface {
            void wait ( void );
          public:
            ReplayMapDisplay ( MapDisplay* md ) { mapDisplay = md; cursorDelay = 20; };
-           int displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove );
+           int displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove, SoundLoopManager* slc );
            void displayPosition ( int x, int y );
            void deleteVehicle ( pvehicle vehicle ) { mapDisplay->deleteVehicle ( vehicle ); };
            void displayMap ( void ) { mapDisplay->displayMap(); };

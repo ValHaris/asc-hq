@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.91 2001-07-13 12:53:01 mbickel Exp $
+//     $Id: typen.h,v 1.92 2001-07-14 19:13:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.91  2001/07/13 12:53:01  mbickel
+//      Fixed duplicate icons in replay
+//      Fixed crash in tooltip help
+//
 //     Revision 1.90  2001/07/11 20:44:37  mbickel
 //      Removed some vehicles from the data file.
 //      Put all legacy units in into the data/legacy directory
@@ -192,7 +196,7 @@ const int waffenanzahl = 8;
 const int cwettertypennum = 6;
 
 //! The number of vehicle categories; Each category has its own move malus
-const int cmovemalitypenum  = 16;
+const int cmovemalitypenum  = 17;
 
 //! The movemalus type for a building. It is used for #SingleWeapon.targets_not_hittable .
 const int cmm_building = 11;

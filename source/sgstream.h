@@ -3,9 +3,15 @@
   
 */
 
-//     $Id: sgstream.h,v 1.17 2001-01-28 14:04:19 mbickel Exp $
+//     $Id: sgstream.h,v 1.18 2001-07-14 19:13:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2001/01/28 14:04:19  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.16  2001/01/21 16:37:20  mbickel
 //      Moved replay code to own file ( replay.cpp )
 //      Fixed compile problems done by cleanup
@@ -192,5 +198,6 @@ extern void loadUnitSets ( void );
 
 //! displays a message on the log. If msgVerbosity is greater than the game verbosity, the message is NOT printed
 extern void displayLogMessage ( int msgVerbosity, char* message, ... );
+extern void displayLogMessage ( int msgVerbosity, const ASCString& message );
 
 #endif

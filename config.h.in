@@ -53,6 +53,9 @@
 /* Define if you have the SDL_image library (-lSDL_image).  */
 #undef HAVE_LIBSDL_IMAGE
 
+/* Define if you have the SDL_mixer library (-lSDL_mixer).  */
+#undef HAVE_LIBSDL_MIXER
+
 /* Name of package */
 #undef PACKAGE
 

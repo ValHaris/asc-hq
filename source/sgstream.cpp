@@ -5,9 +5,16 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.58 2001-05-16 23:21:02 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.59 2001-07-14 19:13:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2001/05/16 23:21:02  mbickel
+//      The data file is mounted using automake
+//      Added sgml documentation
+//      Added command line parsing functionality;
+//        integrated it into autoconf/automake
+//      Replaced command line parsing of ASC and ASCmapedit
+//
 //     Revision 1.57  2001/03/23 16:02:56  mbickel
 //      Some restructuring;
 //      started rewriting event system
@@ -1238,7 +1245,7 @@ int readgameoptions ( const char* filename )
             CGameOptions::Instance()->attackspeed1 = stream.readInt();
             CGameOptions::Instance()->attackspeed2 = stream.readInt();
             CGameOptions::Instance()->attackspeed3 = stream.readInt();
-            CGameOptions::Instance()->disablesound = stream.readInt();
+            CGameOptions::Instance()->sound_mute = stream.readInt();
             for ( int i = 0; i < 9; i++ )
                stream.readInt();  // dummy
 
@@ -1557,8 +1564,15 @@ void displayLogMessage ( int msgVerbosity, char* message, ... )
       char buf[10000];
       vsprintf ( buf, message, arglist );
 
-      fprintf ( stdout, buf );
-      fflush ( stdout );
+      displayLogMessage( msgVerbosity, ASCString(buf) );
    }
    va_end ( arglist );
+}
+
+void displayLogMessage ( int msgVerbosity, const ASCString& message )
+{
+   if ( msgVerbosity <= verbosity ) {
+      fprintf ( stdout, message.c_str() );
+      fflush ( stdout );
+   }
 }

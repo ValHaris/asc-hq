@@ -1868,7 +1868,7 @@ class MapDisplay {
     };
 */
 
-int  MapDisplay :: displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove )
+int  MapDisplay :: displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove, SoundLoopManager* slm )
 {
    if ( actmap->playerView < 0 )
       return 0;
@@ -1883,8 +1883,10 @@ int  MapDisplay :: displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle v
    int view2 = fieldVisibility ( fld2, actmap->playerView );
 
    if (  view1 >= visible_now  ||  view2 >= visible_now )
-      if ( ((vehicle->height >= chschwimmend) && (vehicle->height <= chhochfliegend)) || (( view1 == visible_all) && ( view2 == visible_all )) || ( actmap->actplayer == actmap->playerView ))
+      if ( ((vehicle->height >= chschwimmend) && (vehicle->height <= chhochfliegend)) || (( view1 == visible_all) && ( view2 == visible_all )) || ( actmap->actplayer == actmap->playerView )) {
+         slm->activate(  );
          idisplaymap.movevehicle( x1, y1, x2, y2, vehicle, height1, height2, fieldnum, totalmove );
+      }
 
 
    int result = 0;

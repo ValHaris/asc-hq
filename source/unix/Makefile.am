@@ -13,7 +13,7 @@ mapdisplay.cpp resourcenet.cpp dashboard.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp 
 
 asc_LDADD   = ../ai/libai.a ../sdl/libsdl.a ../libs/triangul/libtriangul.a \
--lSDL -lpthread -lSDL_image @LDADDLIBBZ2@
+-lSDL -lpthread -lSDL_image -lSDL_mixer @LDADDLIBBZ2@
 
 SUBDIRS = mapeditor
 

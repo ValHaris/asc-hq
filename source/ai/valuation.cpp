@@ -641,7 +641,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, const pvehicle veh, MapCoordi
    AiParameter& aip = *veh->aiparam[ ai->getPlayerNum() ];
 
    float d = minfloat;
-   float nd = minfloat;
+   // float nd = minfloat;
    AI::Section* frst = NULL;
 
    float maxSectionThread = 0;

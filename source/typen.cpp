@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.77 2001-07-13 12:53:01 mbickel Exp $
+//     $Id: typen.cpp,v 1.78 2001-07-14 19:13:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.77  2001/07/13 12:53:01  mbickel
+//      Fixed duplicate icons in replay
+//      Fixed crash in tooltip help
+//
 //     Revision 1.76  2001/07/11 20:44:37  mbickel
 //      Removed some vehicles from the data file.
 //      Put all legacy units in into the data/legacy directory
@@ -443,7 +447,7 @@ const char*  cmovemalitypes[cmovemalitypenum] = { "default",
                                                  "light wheeled vehicle", "medium wheeled vehicle", "heavy wheeled vehicle",
                                                  "trooper",               "rail vehicle",           "medium aircraft",
                                                  "medium ship",           "building / turret / object", "light aircraft",
-                                                 "heavy aircraft",        "light ship",             "heavy ship" };
+                                                 "heavy aircraft",        "light ship",             "heavy ship",  "helicopter" };
 
 const char* cnetcontrol[cnetcontrolnum] = { "store energy",           "store material",           "store fuel",           
                                             "move out all energy",           "move out all material",           "move out all fuel", 

@@ -101,40 +101,50 @@ ASCString StringTokenizer::getNextToken( )
 SoundList& SoundList::getInstance()
 {
    if ( !instance )
-      instance = new SoundList;
+      fatalError("SoundList::getInstance() - Soundlist not initialized");
+
    return *instance;
 }
 
 
-void SoundList::init( bool quiet )
+void SoundList::init( )
 {
-   initSound( quiet );
-   noSound = quiet;
+   if ( instance )
+      fatalError("SoundList::init() - Soundlist already initialized");
+
+   instance = new SoundList;
+   instance->initialize ( );
+}
+
+void SoundList::initialize(  )
+{
    const ASCString separator = "=";
    const ASCString filename = "sounds.txt";
 
    typedef map<ASCString, ASCString> SoundSetup;
    SoundSetup soundSetup;
-   tnfilestream list ( filename, tnstream::reading );
-   bool cont;
-   ASCString line;
-   int linenumber = 0;
-   do {
-      linenumber++;
-      cont = list.readTextString ( line );
-      if ( !line.empty() && line[0] != '#' && line[0] != ';' ) {
-         line.toUpper();
-         StringTokenizer tok ( line );
-         ASCString snd = tok.getNextToken( );
-         ASCString op = tok.getNextToken( );
-         ASCString file = tok.getNextToken( );
-         if ( !file.empty() && op==separator )
-            soundSetup[snd] = file;
-         else
-            if ( op.empty() )
-               warning( "error parsing file " + filename + " , line " + strrr (linenumber ));
-      }
-   } while ( cont );
+   {
+      tnfilestream list ( filename, tnstream::reading );
+      bool cont;
+      ASCString line;
+      int linenumber = 0;
+      do {
+         linenumber++;
+         cont = list.readTextString ( line );
+         if ( !line.empty() && line[0] != '#' && line[0] != ';' ) {
+            StringTokenizer tok ( line );
+            ASCString snd = tok.getNextToken( );
+            snd.toUpper();
+            ASCString op = tok.getNextToken( );
+            ASCString file = tok.getNextToken( );
+            if ( !file.empty() && op==separator )
+               soundSetup[snd] = file;
+            else
+               if ( op.empty() )
+                  warning( "error parsing file " + filename + " , line " + strrr (linenumber ));
+         }
+      } while ( cont );
+   }
 
    for ( SoundSetup::iterator i = soundSetup.begin(); i != soundSetup.end(); i++ ) {
       Sound* s = NULL;
@@ -152,22 +162,34 @@ void SoundList::init( bool quiet )
 
 
 
-void SoundList::play( Sample snd, int subType  )
+Sound* SoundList::getSound( Sample snd, int subType )
 {
-   if ( noSound )
-      return;
+   if ( SoundSystem::getInstance()->isOff() )
+      return NULL;
 
    // once we have some more sounds this could be optimized to be faster than O(n)
 
    for ( int i = 0; i < soundNum; i++ )
-      if ( snd == sounds[i].sample && subType == sounds[i].subType ) {
+      if ( snd == sounds[i].sample && subType == sounds[i].subType )
          if ( sounds[i].snd )
-            sounds[i].snd->play();
+            return sounds[i].snd;
 
-         return;
-      }
+   return NULL;
 }
 
+Sound* SoundList::play( Sample snd, int subType , bool looping )
+{
+   Sound* sound = getSound ( snd, subType );
+   if ( !sound )
+      return NULL;
+
+   if ( looping )
+      sound->playLoop();
+   else
+      sound->play();
+
+   return sound;
+}
 
 SoundList::~SoundList()
 {
