@@ -67,7 +67,7 @@ class GetConnectedBuildings : public ResourceNet {
                    int searchfinished ( void ) { return false; };
 
                 public:
-                   typedef list<pbuilding> BuildingContainer;
+                   typedef vector<pbuilding> BuildingContainer;
                    BuildingContainer& buildingContainer;
                    GetConnectedBuildings ( BuildingContainer& buildingContainer_, pmap gamemap, int resourceType ) : ResourceNet ( gamemap, gamemap->isResourceGlobal(resourceType)?2:1), buildingContainer ( buildingContainer_) {};
 };

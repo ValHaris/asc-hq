@@ -859,6 +859,7 @@ ContainerBase* tmap::getContainer ( int nwid )
 
 bool tmap :: compareResources( tmap* replaymap, int player, ASCString* log )
 {
+  #ifdef sgmain   
    ASCString s;
    bool diff  = false;
    for ( int r = 0; r < 3; ++r ) {
@@ -895,7 +896,7 @@ bool tmap :: compareResources( tmap* replaymap, int player, ASCString* log )
                   GetConnectedBuildings::BuildingContainer cbl;
                   GetConnectedBuildings gcb ( cbl, b1->getMap(), r );
                   gcb.start ( b1->getPosition().x, b1->getPosition().y );
-                  cb.splice ( cb.begin(), cbl );
+                  cb.insert ( cb.end(), cbl.begin(), cbl.end() );
                }
             }
          }
@@ -1005,6 +1006,7 @@ bool tmap :: compareResources( tmap* replaymap, int player, ASCString* log )
    }
 
    return diff;
+   #endif
 }
 
 
