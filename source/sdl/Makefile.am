@@ -8,4 +8,4 @@ EXTRA_DIST = events.cpp graphics.cpp graphics.h timer.cpp sound.cpp sound.h
 
 ####### kdevelop will overwrite this part!!! (end)############
 
-CXXFLAGS = -DHEXAGON -DFREEMAPZOOM -funsigned-char -D_NOASM_ -DNEWKEYB
+CXXFLAGS = -g -DHEXAGON -DFREEMAPZOOM -funsigned-char -D_NOASM_ -DNEWKEYB

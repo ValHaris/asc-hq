@@ -9,4 +9,4 @@ EXTRA_DIST = attack.cpp basegfx.cpp basestrm.cpp building.cpp controls.cpp dialo
 
 ####### kdevelop will overwrite this part!!! (end)############
 
-CXXFLAGS = -Dsgmain -I./ -DHEXAGON -DFREEMAPZOOM -funsigned-char -D_NOASM_ -DNEWKEYB
+CXXFLAGS = -O3 -g -I./ -Dsgmain -DHEXAGON -DFREEMAPZOOM -funsigned-char -D_NOASM_ -DNEWKEYB

@@ -1,6 +1,12 @@
-//     $Id: unitctrl.cpp,v 1.4 2000-05-06 20:25:26 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.5 2000-05-07 17:04:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/05/06 20:25:26  mbickel
+//      Fixed: -recognition of a second mouse click when selection a pd menu item
+//             -movement: fields the unit can only pass, but not stand on them,
+//                        are marked darker
+//             -intedit/stredit: mouseclick outside is like hitting enter
+//
 //     Revision 1.3  2000/05/02 16:20:56  mbickel
 //      Fixed bug with several simultaneous vehicle actions running
 //      Fixed graphic error at ammo transfer in buildings
@@ -88,9 +94,15 @@ void FieldList :: getFieldCoordinates ( int num, int* x, int* y )
 
 void FieldList :: addField ( int x, int y )
 {
-   xpos[fieldnum] = x;
-   ypos[fieldnum] = y;
-   fieldnum++;
+   int found = 0;
+   for( int i = 0; i < fieldnum; i++ )
+      if ( xpos[i] == x && ypos[i] == y )
+         found = 1;
+   if ( !found ) {
+      xpos[fieldnum] = x;
+      ypos[fieldnum] = y;
+      fieldnum++;
+   }
 }
 
 void FieldList :: setMap ( pmap map )

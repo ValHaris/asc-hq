@@ -1,6 +1,10 @@
-//     $Id: gui.cpp,v 1.16 2000-05-07 12:12:17 mbickel Exp $
+//     $Id: gui.cpp,v 1.17 2000-05-07 17:04:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/05/07 12:12:17  mbickel
+//      New mouse option dialog
+//      weapon info can now be displayed by clicking on a unit
+//
 //     Revision 1.15  2000/05/06 20:25:23  mbickel
 //      Fixed: -recognition of a second mouse click when selection a pd menu item
 //             -movement: fields the unit can only pass, but not stand on them,
@@ -888,7 +892,7 @@ int  tnguiicon::pressedbymouse( void )
               mouseparams.x <= x+xs   &&
               mouseparams.y <= y+ys   &&
               mouseparams.taste == taste ) {
-
+                 releasetimeslice();
      }
      display();
      if ( mouseparams.x >= x   &&
@@ -1075,7 +1079,7 @@ void  tnsguiiconmove::exec         ( void )
          pendingVehicleActions.move->reachableFields.getField( i ) ->a.temp = 1;
 
       if ( !gameoptions.dontMarkFieldsNotAccessible_movement )
-         for ( int j = 0; j < pendingVehicleActions.move->reachableFields.getFieldNum(); j++ ) 
+         for ( int j = 0; j < pendingVehicleActions.move->reachableFieldsIndirect.getFieldNum(); j++ )
             pendingVehicleActions.move->reachableFieldsIndirect.getField( j ) ->a.temp2 = 2;
       displaymap();
 
