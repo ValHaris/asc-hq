@@ -588,11 +588,13 @@ void transfer_all_outstanding_tribute ( void )
 void GetResourceCapacity :: checkbuilding ( pbuilding b )
 {
    if ( b->color/8 == player ) {
-      int t = b->gettank ( resourcetype );
-      if ( t > maxint - got )
-         got = maxint;
-      else
-         got += t;
+      if ((b->netcontrol & (cnet_stopenergyinput << resourcetype)) == 0) {
+         int t = b->gettank ( resourcetype );
+         if ( t > maxint - got )
+            got = maxint;
+         else
+            got += t;
+      }
    }
 }
 
