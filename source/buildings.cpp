@@ -27,6 +27,7 @@
 #include "viewcalculation.h"
 #include "errors.h"
 #include "spfst.h"
+#include "resourcenet.h"
 
 
 const float repairEfficiencyBuilding[resourceTypeNum*resourceTypeNum] = { 1./3., 0,     1. / 3. ,
@@ -668,3 +669,14 @@ const ASCString& Building::getName ( ) const
    else
       return name;
 }
+
+Resources Building::netResourcePlus( ) const
+{
+   Resources res;
+   for ( int resourcetype = 0; resourcetype < resourceTypeNum; resourcetype++ ) {
+      GetResourcePlus grp;
+      res.resource(resourcetype) += grp.getresource ( getEntry().x, getEntry().y, resourcetype, color/8, 1 );
+   }
+   return res;
+}
+

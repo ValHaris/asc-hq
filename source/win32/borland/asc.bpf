@@ -1,5 +1,4 @@
 USEUNIT("..\..\sg.cpp");
-USEUNIT("..\..\artint.cpp");
 USEUNIT("..\..\dlg_box.cpp");
 USEUNIT("..\..\attack.cpp");
 USEUNIT("..\..\basegfx.cpp");
@@ -61,6 +60,7 @@ USEUNIT("..\..\mapdisplay.cpp");
 USEUNIT("..\..\vehicle.cpp");
 USEUNIT("..\..\buildings.cpp");
 USEUNIT("..\..\networkdata.cpp");
+USELIB("..\..\AI\ai.lib");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 

@@ -29,7 +29,7 @@ AI :: ServiceOrder :: ServiceOrder ( AI* _ai, VehicleService::Service _requiredS
    position = _pos;
    time = ai->getMap()->time;
 
-   nextServiceBuilding = ai->findServiceBuilding ( *this, &nextServiceBuildingDistance );
+   nextServiceBuilding = ai->getMap()->getField( ai->findServiceBuilding ( *this, &nextServiceBuildingDistance ))->building;
 }
 
 AI :: ServiceOrder :: ServiceOrder ( AI* _ai, tnstream& stream )
@@ -113,25 +113,32 @@ void AI :: issueServices ( )
 }
 
 
-pbuilding AI :: findServiceBuilding ( const ServiceOrder& so, int* distance )
+MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distance )
 {
    pvehicle veh = so.getTargetUnit();
 
-   AStar astar ( getMap(), veh );
+   AStar3D astar ( getMap(), veh );
    astar.findAllAccessibleFields (  );
 
    pbuilding bestBuilding = NULL;
    int bestDistance = maxint;
+   MapCoordinate3D bestPos;
 
    pbuilding bestBuilding_p = NULL;
    int bestDistance_p = maxint;
+   MapCoordinate3D bestPos_p;
 
    for ( Player::BuildingList::iterator bi = getPlayer().buildingList.begin(); bi != getPlayer().buildingList.end(); bi++ ) {
       pbuilding bld = *bi;
-      if ( bld->getEntryField()->a.temp ) {
+      if ( bld->getEntryField()->a.temp & bld->typ->loadcapability ) {
+         MapCoordinate3D buildingPos = bld->getEntry();
+         if ( !(bld->typ->loadcapability & buildingPos.z))
+            buildingPos.z = 1 << log2 ( bld->getEntryField()->a.temp & bld->typ->loadcapability );
+
          // the unit can reach the building
 
-
+         /*
+         the new 3D-Astar makes this obsolete
          bool loadable = false;
          if ( bld->vehicleloadable ( veh ))
             loadable = true;
@@ -140,7 +147,8 @@ pbuilding AI :: findServiceBuilding ( const ServiceOrder& so, int* distance )
                 if ( veh->typ->height & ( 1 << i))
                    if ( bld->vehicleloadable ( veh, 1 << i ))
                       loadable = true;
-
+         */
+         bool loadable = true;
          if ( loadable ) {
             int fullfillableServices = 0;
             int partlyFullfillabelServices = 0;
@@ -158,11 +166,9 @@ pbuilding AI :: findServiceBuilding ( const ServiceOrder& so, int* distance )
                case VehicleService::srv_resource:  {
                                                      Resources needed =  veh->typ->tank - veh->tank;
                                                      Resources avail = bld->getResource ( needed, 1 );
-                                                     if ( avail < needed ) {
-                                                        Resources plus;
-                                                        bld->getresourceplus ( -1, &plus, 1 );
-                                                        avail += plus*2;
-                                                     }
+                                                     if ( avail < needed )
+                                                        avail += bld->netResourcePlus( ) * config.waitForResourcePlus;
+
                                                      int missing = 0;
                                                      int pmissing = 0;
                                                      for ( int r = 0; r < resourceTypeNum; r++ ) {
@@ -201,11 +207,8 @@ pbuilding AI :: findServiceBuilding ( const ServiceOrder& so, int* distance )
                                                              missing++;
                                                    }
                                                    Resources avail = bld->getResource ( needed, 1 );
-                                                   if ( avail < needed ) {
-                                                      Resources plus;
-                                                      bld->getresourceplus ( -1, &plus, 1 );
-                                                      avail += plus*2;
-                                                   }
+                                                   if ( avail < needed )
+                                                      avail += bld->netResourcePlus( ) * config.waitForResourcePlus;
 
                                                    for ( int r = 0; r < resourceTypeNum; r++ ) {
                                                       if ( avail.resource(r) < needed.resource (r) )
@@ -226,23 +229,19 @@ pbuilding AI :: findServiceBuilding ( const ServiceOrder& so, int* distance )
             };
 
             if ( fullfillableServices ) {
-               MapCoordinate entry = bld->getEntry ( );
-               AStar ast ( getMap(), veh );
-               vector<MapCoordinate> path;
-               ast.findPath (  path, entry.x, entry.y );
-               if ( path.size() < bestDistance ) {
-                  bestDistance = path.size();
+               int dist = astar.fieldVisited(buildingPos)->gval;
+               if ( dist < bestDistance ) {
+                  bestDistance = dist;
                   bestBuilding = bld;
+                  bestPos = buildingPos;
                }
             } else
                if ( partlyFullfillabelServices ) {
-                  MapCoordinate entry = bld->getEntry ( );
-                  AStar ast ( getMap(), veh );
-                  vector<MapCoordinate> path;
-                  ast.findPath (  path, entry.x, entry.y );
-                  if ( path.size() < bestDistance_p ) {
-                     bestDistance_p = path.size();
+                  int dist = astar.fieldVisited(buildingPos)->gval;
+                  if ( dist < bestDistance_p ) {
+                     bestDistance_p = dist;
                      bestBuilding_p = bld;
+                     bestPos_p = buildingPos;
                   }
                }
          }
@@ -252,11 +251,11 @@ pbuilding AI :: findServiceBuilding ( const ServiceOrder& so, int* distance )
    if ( bestBuilding && (bestDistance < bestDistance_p*3)) {
       if ( distance )
          *distance = bestDistance * maxmalq;
-      return bestBuilding;
+      return bestPos;
    } else {
       if ( distance )
          *distance = bestDistance_p * maxmalq;
-      return bestBuilding_p;
+      return bestPos_p;
    }
 }
 
@@ -528,9 +527,9 @@ AI::AiResult AI :: executeServices ( )
                   veh->aiparam[ getPlayerNum() ]->dest = dst;
                }
             } else {
-               pbuilding bld = findServiceBuilding( *i );
-               if ( bld )
-                  veh->aiparam[ getPlayerNum() ]->dest = bld->getEntry ( );
+               MapCoordinate3D dest = findServiceBuilding( *i );
+               if ( dest.valid() )
+                  veh->aiparam[ getPlayerNum() ]->dest = dest;
                else {
                   // displaymessage("warning: no service building found found for unit %s - %d!",1, veh->typ->description, veh->typ->id);
                }
@@ -549,7 +548,6 @@ AI::AiResult AI :: executeServices ( )
         if ( veh->getPosition() == veh->aiparam[ getPlayerNum() ]->dest ) {
            VehicleService vc ( mapDisplay, NULL );
            pfield fld = getfield ( veh->xpos, veh->ypos );
-           bool avail = true;
            if ( fld->building ) {
               MapCoordinate mc = fld->building->getEntry();
               vc.execute ( NULL, mc.x, mc.y, 0, -1, -1 );

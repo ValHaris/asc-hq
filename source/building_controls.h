@@ -5,9 +5,15 @@
 */
 
 
-//     $Id: building_controls.h,v 1.6 2001-01-28 14:04:06 mbickel Exp $
+//     $Id: building_controls.h,v 1.7 2001-04-01 12:59:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2001/01/28 14:04:06  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.5  2001/01/24 11:53:13  mbickel
 //      Fixed some compilation problems with gcc
 //
@@ -193,7 +199,8 @@ class    cbuildingcontrols : public virtual ccontainercontrols
       class    cproduceunit
       {                         // PRODUCEUNIT
          public :
-            int         available ( pvehicletype fzt );
+            //! lack : the reason why the unit is not produceable; bitmapped: bit 0 - 2  Resource N lacking; bit 10 : not researched yet
+            int         available ( pvehicletype fzt, int* lack = NULL );
             pvehicle    produce ( pvehicletype fzt );
             pvehicle    produce_hypothetically ( pvehicletype fzt );
       }

@@ -168,53 +168,9 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( pvehicle _eht )
 
    aip->setValue ( value );
 
-   if ( aip->job == AiParameter::job_undefined ) {
 
-      if ( eht->functions & cf_conquer ) {
-         if ( eht->functions & cf_trooper )  {
-            if ( eht->typ->height & chfahrend )
-               aip->job = AiParameter::job_conquer;
-         } else {
-            int maxmove = minint;
-            for ( int i = 0; i< 8; i++ )
-               if ( eht->typ->height & ( 1 << i ))
-                  maxmove = max ( eht->typ->movement[i] , maxmove );
-
-            int maxstrength = minint;
-            for ( int w = 0; w < eht->typ->weapons->count; w++ )
-                maxstrength= max (  eht->typ->weapons->weapon[w].maxstrength, maxstrength );
-
-            if ( maxstrength < maxmove )
-               aip->job = AiParameter::job_conquer;
-
-         }
-      }
-
-      if ( aip->job == AiParameter::job_undefined ) {
-         int maxPunch = 0;
-         for ( int w = 0; w < eht->typ->weapons->count; w++ )
-            if ( eht->typ->weapons->weapon[w].offensive() )
-               maxPunch = max ( maxPunch, eht->typ->weapons->weapon[w].maxstrength );
-
-         if ( (maxPunch < eht->typ->view  || maxPunch < eht->typ->jamming) && eht->maxMovement() > minmalq )
-            aip->job = AiParameter::job_recon;
-      }
-
-      if ( aip->job == AiParameter::job_undefined ) {
-         if ( eht->weapexist() )
-            aip->job = AiParameter::job_fight;
-      }
-
-
-   }
-
-   bool service = false;
-   for ( int w = 0; w < eht->typ->weapons->count; w++ )
-      if ( eht->typ->weapons->weapon[w].service() )
-         service = true;
-   if ( ((eht->functions & cfrepair) || service) && eht->maxMovement() >= minmalq )
-      aip->job = AiParameter::job_supply;
-
+   if ( aip->job == AiParameter::job_undefined )
+      aip->job = AI::chooseJob ( eht->typ, eht->functions );
 /*
    generatethreatvalue();
    int l = 0;
@@ -228,6 +184,53 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( pvehicle _eht )
    eht->threats = 0;
 */
 }
+
+AiParameter::Job AI::chooseJob ( const Vehicletype* typ, int functions )
+{
+
+   int maxmove = minint;
+   for ( int i = 0; i< 8; i++ )
+      if ( typ->height & ( 1 << i ))
+         maxmove = max ( typ->movement[i] , maxmove );
+
+   int maxstrength = minint;
+   for ( int w = 0; w < typ->weapons->count; w++ )
+      if ( typ->weapons->weapon[w].offensive() )
+         maxstrength= max (  typ->weapons->weapon[w].maxstrength, maxstrength );
+
+   if ( functions & cf_conquer ) {
+      if ( functions & cf_trooper )  {
+         if ( typ->height & chfahrend )
+            return AiParameter::job_conquer;
+      } else {
+         if ( maxstrength < maxmove )
+            return AiParameter::job_conquer;
+      }
+   }
+
+   int maxPunch = 0;
+   for ( int w = 0; w < typ->weapons->count; w++ )
+      if ( typ->weapons->weapon[w].offensive() )
+         maxPunch = max ( maxPunch, typ->weapons->weapon[w].maxstrength );
+
+
+   if ( (maxPunch < typ->view  || maxPunch < typ->jamming) && maxmove > minmalq )
+      return AiParameter::job_recon;
+
+   if ( maxstrength > 0 )
+      return AiParameter::job_fight;
+
+
+   bool service = false;
+   for ( int w = 0; w < typ->weapons->count; w++ )
+      if ( typ->weapons->weapon[w].service() )
+         service = true;
+   if ( ((functions & cfrepair) || service) && maxmove >= minmalq )
+      return AiParameter::job_supply;
+
+   return AiParameter::job_undefined;
+}
+
 
 
 void  AI :: calculateThreat ( pvehicletype vt)

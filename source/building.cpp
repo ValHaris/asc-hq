@@ -2,9 +2,13 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.66 2001-03-23 16:02:55 mbickel Exp $
+//     $Id: building.cpp,v 1.67 2001-04-01 12:59:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.66  2001/03/23 16:02:55  mbickel
+//      Some restructuring;
+//      started rewriting event system
+//
 //     Revision 1.65  2001/02/01 22:48:28  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -1643,14 +1647,23 @@ void cbuildingcontrols :: cproduceammunition :: produce ( int weaptype, int num 
 
 
 
-int   cbuildingcontrols :: cproduceunit :: available (pvehicletype fzt)
+int   cbuildingcontrols :: cproduceunit :: available (pvehicletype fzt, int* lack )
 {
-   if ( actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( fzt ) )
-      if (( cc->getenergy( fzt->productionCost.energy, 0 )     >= fzt->productionCost.energy)  &&
-            ( cc->getmaterial( fzt->productionCost.material, 0 ) >= fzt->productionCost.material))
-         return 1;
+   int l = 0;
+   if ( actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( fzt ) ) {
+      for ( int r = 0; r < resourceTypeNum; r++ )
+         if ( cc->getenergy( fzt->productionCost.resource(r), 0 ) < fzt->productionCost.resource(r) )
+            l |= 1;
+   } else
+      l |= 1 << 10;
 
-   return 0;
+   if ( lack )
+      *lack = l;
+
+   if ( l == 0)
+      return 1;
+   else
+      return 0;
 }
 
 

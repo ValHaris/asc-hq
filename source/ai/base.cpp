@@ -57,6 +57,7 @@ void AI :: reset ( void )
    config.ammoLimit= 10;
    config.maxCaptureTime = 15;
    config.maxTactTime = 10*100;
+   config.waitForResourcePlus = 2;
 
    sections.reset();
 }
@@ -139,6 +140,10 @@ void AI:: run ( void )
    int setupTime = ticker;
    tempsvisible = false;
    setup();
+
+   if ( !originalUnitDistribution.calculated )
+      originalUnitDistribution = calcUnitDistribution();
+
    calcReconPositions();
    tempsvisible = true;
    setupTime = ticker-setupTime;
@@ -200,7 +205,7 @@ void AI:: run ( void )
 
 }
 
-const int currentAiStreamVersion = 101;
+const int currentAiStreamVersion = 102;
 
 void AI :: read ( tnstream& stream )
 {
@@ -240,8 +245,15 @@ void AI :: read ( tnstream& stream )
    config.resourceLimit.read( stream );
    config.ammoLimit = stream.readInt();
    config.maxCaptureTime = stream.readInt();
-   if ( version == 101 )
+   if ( version >= 102 )
+      config.waitForResourcePlus = stream.readInt();
+
+   if ( version >= 101 )
       config.maxTactTime = stream.readInt();
+
+   if ( version >= 102 )
+      originalUnitDistribution.read ( stream );
+
    int version2 = stream.readInt();
    if ( version != version2 )
       throw tinvalidversion ( "AI :: read", version, version2 );
@@ -278,7 +290,9 @@ void AI :: write ( tnstream& stream ) const
    stream.writeInt( config.ammoLimit );
    stream.writeInt( config.maxCaptureTime );
    stream.writeInt( config.maxTactTime );
+   stream.writeInt( config.waitForResourcePlus );
 
+   originalUnitDistribution.write( stream );
    stream.writeInt ( version );
 }
 

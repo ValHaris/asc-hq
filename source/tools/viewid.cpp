@@ -23,13 +23,12 @@
 #include <string.h>
 #include <map>
 
-#include "..\tpascal.inc"
-#include "..\typen.h"
-#include "krkr.h"
-#include "..\sgstream.h"
-#include "..\misc.h"
-#include "..\basestrm.h"
-#include "..\basegfx.h"
+#include "../tpascal.inc"
+#include "../typen.h"
+#include "../sgstream.h"
+#include "../misc.h"
+#include "../basestrm.h"
+#include "../basegfx.h"
 #include "../buildingtype.h"
 #include "../vehicletype.h"
 #include "../graphicset.h"
@@ -38,7 +37,7 @@
 #define vid(wildcard,structure,loader) printf("%s\n", wildcard );\
                                        maxid=0;\
                                        for ( int j = 0; j < 60; j++ )\
-                                           printf("=");\ 
+                                           printf("=");\
                                        tfindfile ff ( wildcard );\
                                        string c = ff.getnextname();\
                                        structure *data;\

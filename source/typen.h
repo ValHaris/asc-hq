@@ -1,6 +1,12 @@
-//     $Id: typen.h,v 1.87 2001-03-30 12:43:16 mbickel Exp $
+//     $Id: typen.h,v 1.88 2001-04-01 12:59:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.87  2001/03/30 12:43:16  mbickel
+//      Added 3D pathfinding
+//      some cleanup and documentation
+//      splitted the ai into several files, now located in the ai subdirectory
+//      AI cares about airplane servicing and range constraints
+//
 //     Revision 1.86  2001/02/26 12:35:34  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -463,6 +469,7 @@ class MapCoordinate {
                x = stream.readInt ( );
                y = stream.readInt ( );
             };
+            bool valid() { return x >= 0 && y >= 0 ; };
       };
 
 

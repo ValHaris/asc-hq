@@ -4,9 +4,15 @@
 */
 
 
-//     $Id: gui.cpp,v 1.55 2001-02-26 12:35:15 mbickel Exp $
+//     $Id: gui.cpp,v 1.56 2001-04-01 12:59:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2001/02/26 12:35:15  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.54  2001/02/18 17:52:38  mbickel
 //      Fixed some compilation problems on Linux
 //
@@ -2431,7 +2437,7 @@ tnputbuildingguiicon :: tnputbuildingguiicon ( pbuildingtype bld )
    buildnum++;
    picture[0]    = building->guibuildicon;
    char buf[10000];
-   sprintf ( buf, "%s : %d material and %d fuel needed", building->name, building->productionCost.material, building->productionCost.fuel );
+   sprintf ( buf, "%s : %d material and %d fuel needed", building->name.c_str(), building->productionCost.material, building->productionCost.fuel );
    infotext = buf;
    if ( building->construction_steps > 1 ) {
       sprintf(buf, " ; %d turns required", building->construction_steps );

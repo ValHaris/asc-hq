@@ -203,13 +203,11 @@ bool AI::AirplaneLanding::returnFromPositionPossible ( const MapCoordinate3D& po
    if ( !reachableBuildings.empty() ) {
       ReachableBuildings::iterator rb = reachableBuildings.begin();
       dist2 = beeline ( pos, rb->second->getPosition() );
-      pbuilding bld = rb->second;
       rb++;
       while ( rb != reachableBuildings.end() ) {
          int d = beeline ( pos, rb->second->getPosition() );
          if ( d < dist2 ) {
             dist2 = d;
-            bld = rb->second;
          }
          rb++;
       }
@@ -382,7 +380,7 @@ AI::AiResult AI::transports( int process )
 bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool intoBuildings, bool intoTransports )
 {
    // are we operating in 3D space or 2D space? Pathfinding in 3D has not
-   // been available at the beginning of the AI work
+   // been available at the beginning of the AI work; and it is faster anyway
    if ( destination.z == -1 ) {
 
       VehicleMovement vm ( mapDisplay, NULL );
@@ -441,7 +439,7 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
       AStar3D::Path path;
       ast.findPath ( path, destination );
 
-      moveUnit ( veh, path );
+      return moveUnit ( veh, path ) == 1 ;
    }
 }
 
@@ -609,8 +607,102 @@ void AI ::  runReconUnits ( )
    }
 }
 
+AI::UnitDistribution AI::calcUnitDistribution ()
+{
+   UnitDistribution unitDistribution;
+   int unitCount = getPlayer().vehicleList.size();
+   if ( unitCount ) {
+      float inc = float(1) / float(unitCount);
+      for ( Player::VehicleList::iterator i = getPlayer().vehicleList.begin(); i != getPlayer().vehicleList.end(); i++ )
+         unitDistribution.group[ getUnitDistributionGroup ( *i )] += inc;
+
+   }
+   unitDistribution.calculated = true;
+   return unitDistribution;
+}
+
+AI::UnitDistribution::Group AI::getUnitDistributionGroup ( pvehicletype vt )
+{
+         switch ( chooseJob ( vt, vt->functions ) ) {
+            case AiParameter::job_supply : return UnitDistribution::service;
+            case AiParameter::job_recon  : return UnitDistribution::recon;
+            case AiParameter::job_conquer: return UnitDistribution::conquer;
+            case AiParameter::job_fight:
+            case AiParameter::job_guard: {
+                                            bool range = false;
+                                            for ( int w = 0; w < vt->weapons->count; w++ )
+                                               if ( vt->weapons->weapon[w].offensive() )
+                                                  if ( vt->weapons->weapon[w].maxdistance >= 2 * minmalq )
+                                                     range = true;
+                                            if ( range )
+                                               return UnitDistribution::rangeattack;
+                                            else
+                                               return UnitDistribution::attack;
+                                          }
+          } //switch job
+          return UnitDistribution::other;
+}
+
+
+AI::UnitDistribution::Group AI::getUnitDistributionGroup ( pvehicle veh )
+{
+         switch ( veh->aiparam[getPlayerNum()]->job ) {
+            case AiParameter::job_supply : return UnitDistribution::service;
+            case AiParameter::job_recon  : return UnitDistribution::recon;
+            case AiParameter::job_conquer: return UnitDistribution::conquer;
+            case AiParameter::job_fight:
+            case AiParameter::job_guard: {
+                                            bool range = false;
+                                            for ( int w = 0; w < veh->typ->weapons->count; w++ )
+                                               if ( veh->typ->weapons->weapon[w].offensive() )
+                                                  if ( veh->typ->weapons->weapon[w].maxdistance >= 2 * minmalq )
+                                                     range = true;
+                                            if ( range )
+                                               return UnitDistribution::rangeattack;
+                                            else
+                                               return UnitDistribution::attack;
+                                          }
+          } //switch job
+          return UnitDistribution::other;
+}
+
+void AI::UnitDistribution::read ( tnstream& stream )
+{
+   int version = stream.readInt();
+   if ( version == 15000 ) {
+      int gc = stream.readInt();
+      calculated = stream.readInt();
+      for ( int i = 0; i<  gc; i++ )
+         group[i] = stream.readFloat();
+
+      for ( int i = gc; i < groupCount; i++ )
+         group[i] = 0;
+   }
+}
+
+void AI::UnitDistribution::write ( tnstream& stream ) const
+{
+   stream.writeInt ( 15000 );
+   stream.writeInt ( groupCount );
+   stream.writeInt ( calculated );
+   for ( int i = 0; i < groupCount; i++ )
+      stream.writeFloat ( group[i] );
+}
+
 void AI::production()
 {
+   float inc;
+   int unitCount = getPlayer().vehicleList.size();
+   if ( unitCount ) 
+      inc = float(1) / float(unitCount);
+   else
+      inc = 1;
+
+   UnitDistribution currentUnitDistribution = calcUnitDistribution();
+
+   // we can't have enough attacking units
+   currentUnitDistribution.group[ UnitDistribution::attack ] = 0;
+   
    displaymessage2("producing units ... ");
 
    AiThreat enemyThreat;
@@ -637,7 +729,8 @@ void AI::production()
 
 
 
-   multimap<float,ProductionRating> produceable;
+   typedef multimap<float,ProductionRating> Produceable;
+   Produceable produceable;
 
    for ( Player::BuildingList::iterator bli = getPlayer().buildingList.begin(); bli != getPlayer().buildingList.end(); bli ++ ) {
       pbuilding bld = *bli;
@@ -669,15 +762,48 @@ void AI::production()
    }
 
    if ( !produceable.empty() ) {
-      ProductionRating& pr = produceable.rbegin()->second;
 
-      cbuildingcontrols bc;
-      bc.init ( pr.bld );
-      while ( bc.produceunit.available( pr.vt ) )
-         bc.produceunit.produce( pr.vt );
+      bool produced;
+      do {
+          produced = false;
+          for ( int i = 0; i < UnitDistribution::groupCount; i++ ) {
+             if ( currentUnitDistribution.group[i] < originalUnitDistribution.group[i] ) {
+                for ( Produceable::reverse_iterator p = produceable.rbegin(); p != produceable.rend(); p++ ) {
+                   if ( getUnitDistributionGroup ( p->second.vt) == i ) {
+                      ProductionRating& pr = p->second;
 
-      container ( bc );
+                      cbuildingcontrols bc;
+                      bc.init ( pr.bld );
+                      int lack;
+                      if  ( bc.produceunit.available( pr.vt, &lack ) ) {
+                          bc.produceunit.produce( pr.vt );
+                          container ( bc );
+                          currentUnitDistribution.group[i] += inc;
+                          produced = true;
+                          break;  // exit produceable llop
+                      }
+
+                      /*
+
+                      the ai may want to save for move expensive units
+
+                      else
+                         if ( !(lack & ( 1<<10 )) {
+                            if (
+                            for ( int r = 0; r < ResourceTypeNum; r++ )
+                               if ( lack & (1 << r ))
+                                  get buildings connected to this building by a resource net
+                                  add these building-list to a list of locked buildings
+
+                      */
+
+                   }
+                }
+             }
+          }
+      } while ( produced );
    }
 
 }
+
 

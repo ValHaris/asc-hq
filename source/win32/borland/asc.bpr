@@ -4,8 +4,8 @@
   <MACROS>
     <VERSION value="BCB.05.03"/>
     <PROJECT value="asc.exe"/>
-    <OBJFILES value="obj\sg.obj obj\artint.obj obj\dlg_box.obj obj\attack.obj obj\basegfx.obj 
-      obj\basestrm.obj obj\building.obj obj\buildingtype.obj obj\CLoadable.obj 
+    <OBJFILES value="obj\sg.obj obj\dlg_box.obj obj\attack.obj obj\basegfx.obj obj\basestrm.obj 
+      obj\building.obj obj\buildingtype.obj obj\CLoadable.obj 
       obj\containerbase.obj obj\controls.obj obj\dialog.obj obj\astar2.obj 
       obj\weather.obj obj\gamemap.obj obj\gameoptions.obj obj\gui.obj 
       obj\loadbi3.obj obj\loaders.obj obj\loadpcxc.obj obj\mapalgorithms.obj 
@@ -23,7 +23,8 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
     <LIBFILES value="..\..\libs\bzlib\win\bzlib.lib ..\..\libs\jpeg-6b\libjpeg.lib 
-      ..\..\libs\triangul\win32\triangulation.lib ..\..\..\..\sdl\bin\sdl.lib"/>
+      ..\..\libs\triangul\win32\triangulation.lib ..\..\..\..\sdl\bin\sdl.lib 
+      ..\..\AI\ai.lib"/>
     <LIBRARIES value=""/>
     <SPARELIBS value="VCL50.lib"/>
     <PACKAGES value="VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi"/>
@@ -37,8 +38,8 @@
     <USERDEFINES value="HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32;_DEBUG"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL;USEPACKAGES"/>
     <MAINSOURCE value="asc.bpf"/>
-    <INCLUDEPATH value="..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par -w-8027 -w-8026 -w-csu"/>
   </MACROS>
   <OPTIONS>

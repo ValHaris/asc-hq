@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: ai.h,v 1.1 2001-03-30 12:43:16 mbickel Exp $
+//     $Id: ai.h,v 1.2 2001-04-01 12:59:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2001/03/30 12:43:16  mbickel
+//      Added 3D pathfinding
+//      some cleanup and documentation
+//      splitted the ai into several files, now located in the ai subdirectory
+//      AI cares about airplane servicing and range constraints
+//
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -170,7 +176,7 @@
            friend class CheckFieldRecon;
 
 
-           pbuilding findServiceBuilding ( const ServiceOrder& so, int* distance = NULL );
+           MapCoordinate3D findServiceBuilding ( const ServiceOrder& so, int* distance = NULL );
 
            void checkConquer( );
            void runReconUnits();
@@ -245,6 +251,7 @@
 
                //! the maximum time in 1/100 sec that a the ai may try to optimize an attack
                int maxTactTime;
+               int waitForResourcePlus;
             } config;
 
           public:
@@ -295,6 +302,11 @@
             };
 
             bool moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool intoBuildings = false, bool intoTransports = false );
+
+            /** \returns 1 = destination reached;
+                         0 = everything ok, but not enough movement to reach destination;
+                         -1 = error
+             */
             int moveUnit ( pvehicle veh, const AStar3D::Path& path );
 
             void getAttacks ( VehicleMovement& vm, pvehicle veh, TargetVector& tv, int hemmingBonus );
@@ -319,6 +331,10 @@
             void  calculateThreat ( pbuilding bld );
             void  calculateThreat ( pbuilding bld, int player );
 
+            static AiParameter::Job chooseJob ( const Vehicletype* typ, int functions );
+            friend class CalculateThreat_Vehicle;
+
+
             void  calculateAllThreats( void );
             AiResult  tactics( void );
             void tactics_findBestAttackOrder ( pvehicle* units, int* attackOrder, pvehicle enemy, int depth, int damage, int& finalDamage, int* finalOrder, int& finalAttackNum );
@@ -329,7 +345,20 @@
             */
             void findStratPath ( vector<MapCoordinate>& path, pvehicle veh, int x2, int y2 );
 
+            class  UnitDistribution {
+               public:
+                  static const int groupCount = 6;
+                  enum Group { other, recon, service, attack, rangeattack, conquer };
+                  bool calculated;
+                  float group[groupCount];
+                  UnitDistribution( ) : calculated ( false ) { for ( int i = 0; i < groupCount; i++ ) group[i] = 0; };
+                  void read( tnstream& stream );
+                  void write ( tnstream& stream ) const;
+            } originalUnitDistribution;
+            UnitDistribution::Group getUnitDistributionGroup ( pvehicle veh );
+            UnitDistribution::Group getUnitDistributionGroup ( pvehicletype veh );
 
+            UnitDistribution calcUnitDistribution();
             struct ProductionRating {
                Vehicletype* vt;
                pbuilding    bld;
