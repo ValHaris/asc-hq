@@ -96,7 +96,7 @@ const char*  bodenarten[cbodenartennum]
                    "__UNUSED1__",
                    "leaves_tracks",
                    "manual_resource_drilling",
-                   "__UNUSED2__",
+                   "no_reactionfire",
                    "self_repairing",
                    "resource_converter",
                    "automatic_resource_searching",

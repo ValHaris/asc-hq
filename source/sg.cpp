@@ -1340,7 +1340,10 @@ void execuseraction ( tuseractions action )
          break;
 
       case ua_giveunitaway:
-         giveunitaway ();
+         if ( actmap && actmap->getgameparameter( cgp_disableUnitTransfer ) == 0 )
+            giveunitaway ();
+         else
+            displaymessage("Sorry, this function has been disabled when starting the map!", 1 );
          break;
 
       case ua_vehicleinfo:

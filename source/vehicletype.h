@@ -45,7 +45,7 @@ extern const char*  cvehiclefunctions[];
  #define cfmaterialref 32768
  #define cffahrspur ( 1 << 17 )
  #define cfmanualdigger ( 1 << 18 )
- #define cfwindantrieb ( 1 << 19 )
+ #define cfno_reactionfire ( 1 << 19 )
  #define cfautorepair ( 1 << 20 )
  #define cfgenerator ( 1 << 21 )
  #define cfautodigger ( 1 << 22 )

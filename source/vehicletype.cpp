@@ -53,7 +53,7 @@ const char*  cvehiclefunctions[cvehiclefunctionsnum]  = {
                    "! (unused) !",
                    "makes tracks",
                    "drill for mineral resources manually",
-                   "sailing",
+                   "no reactionfire",
                    "auto repair",
                    "generator",
                    "search for mineral resources automatically",

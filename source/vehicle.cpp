@@ -576,6 +576,9 @@ void Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
 
 int Vehicle::ReactionFire::enable ( void )
 {
+   if ( unit->typ->functions & cfno_reactionfire )
+      return -216;
+      
    #ifdef karteneditor
    status = ready;
    #else

@@ -62,6 +62,8 @@ No weapons to attack from this height
 No weapons to attack with
 215
 This unit cannot attack after it has moved
+216
+This unit cannot do reaction fire.
 301
 No place to construct building
 302

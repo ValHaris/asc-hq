@@ -2,9 +2,14 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.104 2003-07-06 15:10:26 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.105 2003-12-27 18:27:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.104  2003/07/06 15:10:26  mbickel
+//      Better configure messages
+//      code cleanup
+//      Replays update resources for constructing / removing objects
+//
 //     Revision 1.103  2003/06/26 21:00:18  mbickel
 //      Fixed: land mines could not be carried on bridges
 //
@@ -3141,7 +3146,7 @@ void         tunit::init(  )
 
    if ( unit->typ->classnum > 0 ) addbutton("C~h~ange Class",280,280,450,300,0,1,32,true);
 
-   addbutton("~R~eactionfire",dirx-50,250,dirx+50,260,3,1,22,true);
+   addbutton("~R~eactionfire",dirx-50,250,dirx+50,260,3,1,22,(unit->typ->functions & cfno_reactionfire) == 0 );
    reactionfire = unit->reactionfire.getStatus();
    addeingabe(22, &reactionfire, 0, lightgray);
 

@@ -75,11 +75,15 @@ tmap :: tmap ( void )
          player[i].stat = Player::off;
 
       player[i].queuedEvents = 0;
-      player[i].humanname = "human ";
+      if ( i < 8 ) {
+         player[i].humanname = "human ";
+         player[i].humanname += strrr( i );
+         player[i].computername = "computer ";
+         player[i].computername += strrr( i );
+      } else
+         player[i].humanname = player[i].computername = "neutral";
 
-      player[i].humanname += strrr( i );
-      player[i].computername = "computer ";
-      player[i].computername += strrr( i );
+
       player[i].research.chainToMap ( this, i );
       player[i].ASCversion = 0;
    }
@@ -2023,7 +2027,8 @@ const int gameparameterdefault [ gameparameternum ] = { 1,                      
                                                         1,                       //       cgp_objectsDestroyedByTerrain,      
                                                         2,                       //       cgp_trainingIncrement,              
                                                         1,                       //       cgp_experienceDivisor };
-                                                        0 };                     //       cgp_disableDirectView
+                                                        0,                       //       cgp_disableDirectView
+                                                        0 };                     //       cgp_disableUnitTransfer
 
 
 const bool gameParameterChangeableByEvent [ gameparameternum ] = { true,   //       cgp_fahrspur
@@ -2051,8 +2056,9 @@ const bool gameParameterChangeableByEvent [ gameparameternum ] = { true,   //   
                                                                  false,    //       cgp_superVisorCanSaveMap,
                                                                  true,     //       cgp_objectsDestroyedByTerrain,
                                                                  true,     //       cgp_trainingIncrement,
-                                                                 false,   //       cgp_experienceDivisor };
-                                                                 false };  //        cgp_disableDirectView
+                                                                 false,    //       cgp_experienceDivisor };
+                                                                 false,    //       cgp_disableDirectView
+                                                                 false };  //       cgp_disableUnitTransfer
 
 const int gameParameterLowerLimit [ gameparameternum ] = { 1,    //       cgp_fahrspur
                                                            1,    //       cgp_eis,
@@ -2079,8 +2085,9 @@ const int gameParameterLowerLimit [ gameparameternum ] = { 1,    //       cgp_fa
                                                            0,    //       cgp_superVisorCanSaveMap,
                                                            0,    //       cgp_objectsDestroyedByTerrain,
                                                            1,    //       cgp_trainingIncrement,
-                                                           1,  //       cgp_experienceDivisor };
-                                                           0 }; // cgp_disableDirectView
+                                                           1,    //       cgp_experienceDivisor };
+                                                           0,    //       cgp_disableDirectView
+                                                           0 };  //       cgp_disableUnitTransfer
 
 const int gameParameterUpperLimit [ gameparameternum ] = { maxint,                //       cgp_fahrspur
                                                            maxint,                //       cgp_eis,
@@ -2107,8 +2114,9 @@ const int gameParameterUpperLimit [ gameparameternum ] = { maxint,              
                                                            1,                     //       cgp_superVisorCanSaveMap,
                                                            1,                     //       cgp_objectsDestroyedByTerrain,
                                                            maxunitexperience,     //       cgp_trainingIncrement,
-                                                           10,                   //       cgp_experienceDivisor };
-                                                           1 }; // cgp_disableDirectView
+                                                           10,                    //       cgp_experienceDivisor };
+                                                           1,                     //       cgp_disableDirectView
+                                                           1 };                   //       cgp_disableUnitTransfer
 
 const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "freezing time of icebreaker fairway",
@@ -2136,5 +2144,6 @@ const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "objects can be destroyed by terrain",
                                                       "training centers: training increment",
                                                       "experience effect divisor",
-                                                      "disable direct View" };
+                                                      "disable direct View",
+                                                      "disable transfering units/buildings to other players" };
 

@@ -35,7 +35,10 @@
 void         tcomputeview::initviewcalculation(  int view, int jamming, int sx, int sy, int _mode, int _height  )  // mode: +1 = add view  ;  -1 = remove view
 {
    height = _height;
-   viewdist = view;
+   if ( view > 255 )
+      viewdist = 255;
+   else
+      viewdist = view;
    jamdist  = jamming;
    mode = _mode;
 

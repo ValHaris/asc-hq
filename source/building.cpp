@@ -316,6 +316,8 @@ class    ccontainer : public virtual ccontainercontrols
       void*    activefield;
       void*    inactivefield;
 
+      void putFieldImage( int x, int y, void* image );
+
       void     checkformouse();
       int      getfieldundermouse ( int* x, int* y );
 
@@ -1947,6 +1949,10 @@ void  ccontainer :: buildgraphics( void )
    for (int i = 0; i < 3; i++)
       putrotspriteimage( tabmarkposx, tabmarkpos[i], icons.container.tabmark[i == keymode], actmap->actplayer*8 );
 
+   for ( int x = 0; x < 6; x++ )
+      for ( int y = 0; y < 3; y++ )
+         putFieldImage(x,y,inactivefield);
+
    if ( actsubwindow )  {
       actsubwindow->display();
       actsubwindow->paintalllaschen( 1 );
@@ -2032,11 +2038,11 @@ void   ccontainer :: checkformouse( void )
          int i,j;
          if ( getfieldundermouse ( &i, &j ))
             if ( i != mark.x  ||  j != mark.y ) {
-               putspriteimage ( unitposx[mark.x], unitposy[mark.y], inactivefield);
+               putFieldImage ( mark.x, mark.y, inactivefield);
                displayloading ( mark.x, mark.y );
                mark.x = i;
                mark.y = j;
-               putspriteimage ( unitposx[mark.x], unitposy[mark.y], activefield);
+               putFieldImage ( mark.x, mark.y, activefield);
                displayloading ( mark.x, mark.y, 0, 1 );
                mousestat = 1;
             }
@@ -2050,11 +2056,11 @@ void   ccontainer :: checkformouse( void )
 
          if ( r )
             if ( (mark.x != x || mark.y != y) ) { // && ( moveparams.movestatus == 0   ||  getfield(actmap->xpos + x , actmap->ypos + y)->temp == 0) ) {
-               putspriteimage ( unitposx[mark.x], unitposy[mark.y], inactivefield);
+               putFieldImage ( mark.x, mark.y, inactivefield);
                displayloading ( mark.x, mark.y );
                mark.x = x;
                mark.y = y;
-               putspriteimage ( unitposx[mark.x], unitposy[mark.y], activefield);
+               putFieldImage ( mark.x, mark.y, activefield);
                displayloading ( mark.x, mark.y, 0, 1 );
                mousestat = 1;
             } else
@@ -2073,6 +2079,15 @@ void   ccontainer :: checkformouse( void )
    dashboard.checkformouse( 1 );
 
 }
+
+void ccontainer :: putFieldImage( int x, int y, void* image )
+{
+   if ( y * 6 + x >= baseContainer->baseType->maxLoadableUnits )
+      putspriteimage ( unitposx[x], unitposy[y], xlatpict ( xlatpictgraytable, image));
+   else
+      putspriteimage ( unitposx[x], unitposy[y], image);
+}
+
 
 void ccontainer :: unitchanged( void )
 {}
@@ -2194,7 +2209,7 @@ void  ccontainer :: movemark (int direction)
    collategraphicoperations cgo ( containerxpos, containerypos, containerxpos+windowwidth, containerypos+windowheight );
    if (direction != repaint  &&  direction != repaintall ) {
 
-      putspriteimage ( unitposx[mark.x], unitposy[mark.y], inactivefield);
+      putFieldImage ( mark.x, mark.y, inactivefield);
       displayloading ( mark.x, mark.y );
 
    } else {
@@ -2203,7 +2218,7 @@ void  ccontainer :: movemark (int direction)
 
          for ( int y = 0; y < unitsshowny; y++ )
             for ( int x = 0; x < unitsshownx; x++ )
-               putspriteimage (unitposx [x], unitposy[y], inactivefield);
+               putFieldImage ( mark.x, mark.y, inactivefield);
          displayloading();
       }
    }
@@ -2229,7 +2244,7 @@ void  ccontainer :: movemark (int direction)
    };
 
 
-   putspriteimage (unitposx[mark.x], unitposy[mark.y], activefield);
+   putFieldImage ( mark.x, mark.y, activefield);
    displayloading ( mark.x, mark.y, 0, 1 );
 
    cgo.off();
