@@ -21,12 +21,10 @@
 
 class CGameOptions
 {
+      const int searchPathNum;
    public:
       CGameOptions(void);
-      CGameOptions( const CGameOptions& cgo )
-      {
-         copy ( cgo );
-      };
+      CGameOptions( const CGameOptions& cgo );
 
       void setDefaults( void );
       void copy ( const CGameOptions& cgo );
@@ -89,7 +87,8 @@ class CGameOptions
          interpolate;
       } bi3;
       int changed;
-      Named searchPath[5];
+      Named* searchPath;
+      int getSearchPathNum ( void );
 };
 
 extern CGameOptions gameoptions;

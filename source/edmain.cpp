@@ -1,6 +1,13 @@
-//     $Id: edmain.cpp,v 1.17 2000-07-31 19:16:42 mbickel Exp $
+//     $Id: edmain.cpp,v 1.18 2000-08-01 10:39:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/07/31 19:16:42  mbickel
+//      Improved handing of multiple directories
+//      Fixed: wind direction not displayed when cycling through wind heights
+//      Fixed: oil rig not working
+//      Fixed: resources becomming visible when checking mining station status
+//      Fixed: division by zero when moving unit without fuel consumption
+//
 //     Revision 1.16  2000/07/31 18:02:53  mbickel
 //      New configuration file handling
 //      ASC searches its data files in all directories specified in ascrc
@@ -903,12 +910,12 @@ int main(int argc, char *argv[] )
            resoly = atoi ( &argv[i][3] ); continue;
       }
 
-      if ( strcmpi ( &argv[i][1], "loadmap" ) == 0 ||
+      if ( strcmpi ( &argv[i][1], "-loadmap" ) == 0 ||
             strcmpi( &argv[i][1], "lm" ) == 0 ) {
          mapname = argv[++i]; continue;
       }
 
-      if ( strcmpi ( &argv[i][1], "configfile" ) == 0 ||
+      if ( strcmpi ( &argv[i][1], "-configfile" ) == 0 ||
            strcmpi ( &argv[i][1], "cf" ) == 0 ) {
          configfile = argv[++i]; continue;
       }
@@ -917,15 +924,18 @@ int main(int argc, char *argv[] )
           ( strcmpi ( &argv[i][1], "h" ) == 0 ) ||
           ( strcmpi ( &argv[i][1], "-help" ) == 0 ) ){
         printf( " Parameters: \n"
-                "\t-h\t\tThis page\n"
-                "\t-lm file\n\t-loadmap file\tstart with a given map\n"
-                "\t-cf file\n\t-configfile file\tuse given configuration file\n"
-                "\t-x:X\t\tSet horizontal resolution to X; default is 800 \n"
-                "\t-y:Y\t\tSet verticalal resolution to Y; default is 600 \n"
+                "\t-h                 this page\n"
+                "\t-lm file\n"
+                "\t--loadmap file     start with a given map\n"
+                "\t-cf file\n"
+                "\t--configfile file  use given configuration file\n"
+                "\t-x:X               Set horizontal resolution to X; default is 800 \n"
+                "\t-y:Y               Set verticalal resolution to Y; default is 600 \n"
 #ifdef _DOS_
-                "\t-v1\t\tSet vesa error recovery level to 1 \n"
-                "\t-8bitonly\tDisable truecolor graphic mode \n"
-                "\t-showmodes\tDisplay list of available graphic modes \n" );
+                "\t-v1                Set vesa error recovery level to 1 \n"
+                //"\t/nocd\t\tDisable music \n"
+                //"\t-8bitonly          Disable truecolor graphic mode \n"
+                "\t-showmodes         Display list of available graphic modes \n" );
 #else
                 // "\t-window\t\tDisable fullscreen mode \n"
                 );

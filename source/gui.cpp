@@ -1,6 +1,9 @@
-//     $Id: gui.cpp,v 1.26 2000-07-29 14:54:31 mbickel Exp $
+//     $Id: gui.cpp,v 1.27 2000-08-01 10:39:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/07/29 14:54:31  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.25  2000/07/16 14:20:02  mbickel
 //      AI has now some primitive tactics implemented
 //      Some clean up
@@ -1124,16 +1127,24 @@ void  tnsguiiconmove::exec         ( void )
             pendingVehicleActions.move->reachableFieldsIndirect.getField( j ) ->a.temp2 = 2;
       displaymap();
 
-   } else
-     if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_move &&  (pendingVehicleActions.move->getStatus() == 2 || pendingVehicleActions.move->getStatus() == 3 )) {
+   } else {
+     int ms = pendingVehicleActions.move->getStatus();
+     if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_move &&  (ms == 2 || ms == 3 )) {
         int res;
         res = pendingVehicleActions.move->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.move->getStatus(), -1, 0 );
-        if ( res >= 0 && gameoptions.fastmove )
-           res = pendingVehicleActions.move->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.move->getStatus(), -1, 0 );
-        else {
-           for ( int i = 0; i < pendingVehicleActions.move->path.getFieldNum(); i++ )
-              pendingVehicleActions.move->path.getField( i ) ->a.temp = 1;
+        if ( res >= 0 && gameoptions.fastmove && ms == 2 ) {
+           actmap->cleartemps(7);
            displaymap();
+           res = pendingVehicleActions.move->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.move->getStatus(), -1, 0 );
+        } else {
+           if ( ms == 2 ) {
+              for ( int i = 0; i < pendingVehicleActions.move->path.getFieldNum(); i++ )
+                 pendingVehicleActions.move->path.getField( i ) ->a.temp = 1;
+              displaymap();
+           } else {
+              actmap->cleartemps(7);
+              displaymap();
+           }
         }
 
 
@@ -1153,7 +1164,7 @@ void  tnsguiiconmove::exec         ( void )
         }
 
      }
-
+   }
    dashboard.x = 0xffff;
 
 }

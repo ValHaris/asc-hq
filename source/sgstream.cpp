@@ -1,6 +1,13 @@
-//     $Id: sgstream.cpp,v 1.19 2000-07-31 19:16:48 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.20 2000-08-01 10:39:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/07/31 19:16:48  mbickel
+//      Improved handing of multiple directories
+//      Fixed: wind direction not displayed when cycling through wind heights
+//      Fixed: oil rig not working
+//      Fixed: resources becomming visible when checking mining station status
+//      Fixed: division by zero when moving unit without fuel consumption
+//
 //     Revision 1.18  2000/07/31 18:02:54  mbickel
 //      New configuration file handling
 //      ASC searches its data files in all directories specified in ascrc
@@ -177,7 +184,7 @@
 #endif
 
 
-const char* asc_EnvironmentName = "asc_configfile";
+const char* asc_EnvironmentName = "ASC_CONFIGFILE";
 
 #if defined(_DOS_) | defined(WIN32)
  const char* asc_configurationfile = "asc.ini";
@@ -2447,7 +2454,7 @@ t_carefor_containerstream :: t_carefor_containerstream ( void )
 }
 
 
-bool MakeDirectory ( const char* path )
+bool makeDirectory ( const char* path )
 {
    char tmp[10000];
    constructFileName( tmp, 0, path, NULL );
@@ -2461,7 +2468,7 @@ bool MakeDirectory ( const char* path )
        int res = mkdir ( tmp, 0700 );
       #endif
       if ( res ) {
-         fprintf(stderr, "could neither access nor create work directory %s\n", tmp );
+         fprintf(stderr, "could neither access nor create directory %s\n", tmp );
          return false;
       }
    }
@@ -2481,11 +2488,13 @@ char* getConfigFileName ( char* buffer )
       if ( configFileNameUsed )
          strcpy ( buffer, configFileNameUsed );
       else
-         strcpy ( buffer, "-none-" );
+         strcpy ( buffer, "-none- ; default values used" );
    }
    return buffer;
 }
 
+
+CLoadableGameOptions* loadableGameOptions = NULL;
 
 int readgameoptions ( const char* filename )
 {
@@ -2507,9 +2516,11 @@ int readgameoptions ( const char* filename )
    if ( exist ( completeFileName )) {
       configFileNameUsed = strdup ( completeFileName );
 
-      CLoadableGameOptions* loadable = new CLoadableGameOptions (&gameoptions);
+      if ( !loadableGameOptions )
+         loadableGameOptions = new CLoadableGameOptions (&gameoptions);
+
       std::ifstream is( completeFileName );
-      loadable->Load(is);	
+      loadableGameOptions->Load(is);	
    } else {
       gameoptions.changed = 1; // to generate a configuration file
       if ( exist ( "sg.cfg" ) ) {
@@ -2569,7 +2580,6 @@ int readgameoptions ( const char* filename )
 
          }
       }
-      configFileNameUsed = strdup ( "-none- ; default values used" );
    }
    #ifdef sgmain
    if ( gameoptions.startupcount < 10 ) {
@@ -2578,17 +2588,22 @@ int readgameoptions ( const char* filename )
    }
    #endif
 
-   MakeDirectory ( gameoptions.searchPath[0].getName() );
+   makeDirectory ( gameoptions.searchPath[0].getName() );
 
    return 0;
 }
 
-int writegameoptions ( const char* filename )
+int writegameoptions ( void )
 {
    if ( gameoptions.changed && configFileNameToWrite ) {
-      CLoadableGameOptions* loadable = new CLoadableGameOptions (&gameoptions);
-      std::ofstream os( configFileNameToWrite );
-      loadable->Save(os);
+      char buf[10000];
+      if ( makeDirectory ( extractPath ( buf, configFileNameToWrite ))) {
+         if ( !loadableGameOptions )
+            loadableGameOptions = new CLoadableGameOptions (&gameoptions);
+         std::ofstream os( configFileNameToWrite );
+         loadableGameOptions->Save(os);
+         return 1;
+      }
    }
    return 0;
 }
@@ -2609,13 +2624,23 @@ void checkFileLoadability ( const char* filename )
             strcat ( temp, "\n" );
          }
 
+      char temp3[1000];
+      temp3[0] = 0;
+      if ( !configFileNameUsed ) {
+         gameoptions.changed = 1;
+         if ( writegameoptions())
+            sprintf(temp3, "A configuration file has been written to %s\n", configFileNameToWrite );
+      }
+
       char temp2[1000];
       displaymessage ( "Unable to access %s\n"
-                       "Make sure the data file 'main.con' is in one of the search paths specified in your config file !\n"
-                       "The configuration file that is used is: %s \n"
+                       "Make sure the data file 'main.con' is in one of the search paths specified\n"
+                       "in your config file !\n"
+                       "The configuration file that is used is: %s \n%s"
                        "These pathes are being searched:\n%s\n"
-                       "If you don't have a file 'main.con' , get and install the data package from www.asc-hq.org\n",
-                       2, filename, getConfigFileName(temp2), temp );
+                       "If you don't have a file 'main.con' , get and install the data package from\n"
+                       "http://www.asc-hq.org\n",
+                       2, filename, getConfigFileName(temp2), temp3, temp );
    }
 }
 
@@ -2623,7 +2648,7 @@ void initFileIO ( const char* configFileName )
 {
    readgameoptions( configFileName );
 
-   for ( int i = 0; i < 5; i++ )
+   for ( int i = 0; i < gameoptions.getSearchPathNum(); i++ )
       if ( gameoptions.searchPath[i].getName() ) {
          if ( verbosity > 2 )
             printf("adding search patch %s\n", gameoptions.searchPath[i].getName() );

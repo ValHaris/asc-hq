@@ -1,23 +1,27 @@
 This file describes how to run the Linux version of Advanced Strategic Command.
 
-For information about compiling the Linux version of ASC refer to the file 
-'INSTALL' which is distributed with the source code.
+For information about compiling and installing the Linux version of ASC refer 
+to the file 'INSTALL'
 
 Information about playing ASC (for example: 'how do mines work?') can be found
 in 'doc/asc.html'. That file is totally platform independant.
 
-If you want to improve ASC I recommend to read the file 'doc/source.htm'
+If you want to improve ASC I recommend to read the file 'doc/source.htm' that 
+is distributed with the source code.
+
+The project's website is http://www.asc-hq.org
 
 ------------------------------------------------------------------------------
 
-The linux version of ASC is a direct port of the DOS version. It does not yet
-have any Unix specific behaviour.
+Since version 1.1.11 ASC looks for all savegames, email files etc. in ~./asc
+and writes all files there. If you have previosly run ASC from a different
+directory, either move all your files to ~/.asc/ or specify your directory as 
+searchPath in ~/.asc/ascrc (this file is generated when the new ASC version 
+is run for the first time). searchPath0 there is the only directory ASC writes
+to. If you specify your old directory as searchPath0, all savegames etc. will
+still be written there, but if you specified your directory as searchPath5 for
+example, ASC will load the files there, but write new ones to searchPath0.
 
-To run ASC, ensure you're cded into the directory containing main.con and 
-type ./asc
-All savegames, maps and configuration files will be stored in this directory.
-If you don't have the file 'main.con', get the ASC data package from 
-www.asc-hq.org 
 
 There is help available on setting up email games under the help menu 
 available by moving your mouse to the top of the screen/window and

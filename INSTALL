@@ -1,4 +1,5 @@
-This file is a generic description how to compile Advanced Strategic Command. 
+This file is a generic description how to compile and install 
+Advanced Strategic Command. 
 
 For information about running the Linux version of ASC refer to 
 'doc/readme.linux'.
@@ -6,9 +7,47 @@ For information about running the Linux version of ASC refer to
 Information about playing ASC (for example: 'how do mines work?') can be found
 in 'doc/asc.html'. That file is totally platform independant.
 
-If you want to improve ASC I recommend to read the file 'doc/source.htm'
+If you want to improve ASC I recommend to read the file 'doc/source.htm' that 
+is distributed with the source code.
+
+The project's website is http://www.asc-hq.org
+
+
 
 ------------------------------------------------------------------------------
+
+
+
+An ASC installation consists of the executables and data files:
+
+Installing the data file(s)
+===========================
+
+The basic data is stored in a file called main.con . If you don't have it, get 
+the data package from http://www.asc-hq.org 
+By default, ASC searches for its files in these directories:
+  ~/.asc/
+  /var/local/games/asc/
+  /var/games/asc/
+  /usr/local/share/games/asc/
+  /usr/share/games/asc/
+Place the file main.con (and optional data files too) in one of them. 
+If you want ASC to use another directory:
+  1) run ASC. It will complain about not finding the data and writes a 
+     configuration file ~/.asc/ascrc
+  2) edit it and specify your path there (searchPath1 to searchPathN).
+  
+The variable searchPath0 points to the directory where all savegames, modified 
+maps etc. will be stored, which is by default ~/.asc/
+
+If you don't even want ASC to use the ~/.asc/ directory, you can either run
+  asc --configfile filename  
+with filename being the path and name of a configuration file, or set the
+environment variable ASC_CONFIGFILE to the path of your config file.
+
+
+Building and installing the games executables (source code required)
+====================================================================
 
 FAQ :
 
@@ -17,12 +56,9 @@ THE COMPILE COMPLAINS IT CAN'T FIND SDL.
 ./configure --with-SDL-prefix=<where>
 <where> should be the prefix you make installed SDL into.
 
-------------------------------------------------------------------------------
+--------------------------------------------------------------------
 
-
-Basic Installation
-==================
-
+   These are generic installation instructions.
 
    The `configure' shell script attempts to guess correct values for
 various system-dependent variables used during compilation.  It uses
@@ -57,9 +93,14 @@ The simplest way to compile this package is:
 
   2. Type `make' to compile the package.
 
+  3. Type `make install' to install the programs and any data files and
+     documentation.
+
+  4. You can remove the program binaries and object files from the
+     source code directory by typing `make clean'.  
 
 Compilers and Options
-=====================
+---------------------
 
    Some systems require unusual options for compilation or linking that
 the `configure' script does not know about.  You can give `configure'
@@ -72,7 +113,7 @@ Or on systems that have the `env' program, you can do it like this:
      env CPPFLAGS=-I/usr/local/include LDFLAGS=-s ./configure
 
 Compiling For Multiple Architectures
-====================================
+------------------------------------
 
    You can compile the package for more than one kind of computer at the
 same time, by placing the object files for each architecture in their
@@ -89,7 +130,7 @@ one architecture, use `make distclean' before reconfiguring for another
 architecture.
 
 Installation Names
-==================
+------------------
 
    By default, `make install' will install the package's files in
 `/usr/local/bin', `/usr/local/man', etc.  You can specify an
@@ -107,7 +148,7 @@ with an extra prefix or suffix on their names by giving `configure' the
 option `--program-prefix=PREFIX' or `--program-suffix=SUFFIX'.
 
 Optional Features
-=================
+-----------------
 
    Some packages pay attention to `--enable-FEATURE' options to
 `configure', where FEATURE indicates an optional part of the package.
@@ -122,7 +163,7 @@ you can use the `configure' options `--x-includes=DIR' and
 `--x-libraries=DIR' to specify their locations.
 
 Specifying the System Type
-==========================
+--------------------------
 
    There may be some features `configure' can not figure out
 automatically, but needs to determine by the type of host the package
@@ -142,7 +183,7 @@ produce code for and the `--build=TYPE' option to select the type of
 system on which you are compiling the package.
 
 Sharing Defaults
-================
+----------------
 
    If you want to set default values for `configure' scripts to share,
 you can create a site shell script called `config.site' that gives
@@ -153,7 +194,7 @@ default values for variables like `CC', `cache_file', and `prefix'.
 A warning: not all `configure' scripts look for a site script.
 
 Operation Controls
-==================
+------------------
 
    `configure' recognizes the following options to control how it
 operates.

@@ -1,6 +1,11 @@
-//     $Id: sgstream.h,v 1.6 2000-07-31 18:02:54 mbickel Exp $
+//     $Id: sgstream.h,v 1.7 2000-08-01 10:39:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/07/31 18:02:54  mbickel
+//      New configuration file handling
+//      ASC searches its data files in all directories specified in ascrc
+//      Renamed all tools so they begin with asc
+//
 //     Revision 1.5  2000/07/29 14:54:46  mbickel
 //      plain text configuration file implemented
 //
@@ -183,7 +188,7 @@ extern void logtofile ( char* strng, ... );
 
 extern void loadpalette ( void );
 extern int readgameoptions ( const char* filename = NULL );
-extern int writegameoptions ( const char* filename = NULL );
+extern int writegameoptions ( void );
 extern char* getConfigFileName ( char* buffer );
 extern void loadguipictures( void );
 extern void checkFileLoadability ( const char* filename );

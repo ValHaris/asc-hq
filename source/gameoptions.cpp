@@ -17,16 +17,24 @@
 #include "gameoptions.h"
 #include "CLoadable.h"
 
+CGameOptions::CGameOptions( const CGameOptions& cgo )
+             : searchPathNum ( 10 )
+{
+   searchPath = new Named[ searchPathNum ];
+   copy ( cgo );
+}
 
 
 CGameOptions::CGameOptions(void)
+             : searchPathNum ( 10 )
 {
+   searchPath = new Named[ searchPathNum ];
    setDefaults();
 }
 
 void CGameOptions::setDefaults ( void )
 {
-   fastmove	=	0;
+   fastmove	=	1;
    visibility_calc_algo=0;      // 0 sauber, 1 schnell=0;
    movespeed=20;
    endturnquestion=0;
@@ -69,7 +77,7 @@ void CGameOptions::setDefaults ( void )
 
   #if defined ( _DOS_ ) | defined ( WIN32 )
    searchPath[0].setName ( ".\\" );
-   for ( int i = 1; i < 5; i++ )
+   for ( int i = 1; i < getSearchPathNum(); i++ )
       searchPath[i].setName ( NULL );
   #else
    searchPath[0].setName ( "~/.asc/" );
@@ -77,6 +85,8 @@ void CGameOptions::setDefaults ( void )
    searchPath[2].setName ( "/var/games/asc/" );
    searchPath[3].setName ( "/usr/local/share/games/asc/" );
    searchPath[4].setName ( "/usr/share/games/asc/" );
+   for ( int i = 5; i < getSearchPathNum(); i++ )
+      searchPath[i].setName ( NULL );
   #endif
 
    changed	=	0;
@@ -124,10 +134,15 @@ void CGameOptions::copy ( const CGameOptions& cgo )
    bi3.interpolate.units   = cgo.bi3.interpolate.units;
    bi3.interpolate.objects = cgo.bi3.interpolate.objects;
    bi3.interpolate.buildings = cgo.bi3.interpolate.buildings;
-   for ( int i = 0; i < 5; i++ )
+   for ( int i = 0; i < getSearchPathNum(); i++ )
       searchPath[i].setName ( cgo.searchPath[i].getName() );
 
    changed = 1;
+}
+
+int CGameOptions :: getSearchPathNum ( void )
+{
+   return searchPathNum;
 }
 
 

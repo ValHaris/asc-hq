@@ -30,12 +30,12 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/gameoptions.h,/home/martin/asc/source/gameoptions.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/gameoptions.cpp,/home/martin/asc/source/sgstream.cpp,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/strtmesg.cpp,/home/martin/asc/source/basestrm.cpp,/home/martin/asc/source/basestrm.h,/home/martin/asc/source/sgstream.h,/home/martin/asc/source/edmain.cpp,/home/martin/asc/source/gameoptions.h,/home/martin/asc/source/CLoadable.h,/home/martin/asc/source/CLoadable.cpp,/home/martin/asc/source/edglobal.cpp,/home/martin/asc/source/controls.cpp,/home/martin/asc/source/gui.cpp,/home/martin/asc/source/unitctrl.cpp,/home/martin/asc/source/spfst.h,/home/martin/asc/source/spfst.cpp,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/gameoptions.h
-cpp_file=/home/martin/asc/source/gameoptions.cpp
-browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/reference/C/glossary.html#keyword
+header_file=/home/martin/asc/source/spfst.h
+cpp_file=/home/martin/asc/source/gui.cpp
+browser_file=
 [source/controls.cpp]
 install_location=
 dist=true

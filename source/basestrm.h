@@ -1,6 +1,13 @@
-//     $Id: basestrm.h,v 1.15 2000-07-31 19:16:32 mbickel Exp $
+//     $Id: basestrm.h,v 1.16 2000-08-01 10:39:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/07/31 19:16:32  mbickel
+//      Improved handing of multiple directories
+//      Fixed: wind direction not displayed when cycling through wind heights
+//      Fixed: oil rig not working
+//      Fixed: resources becomming visible when checking mining station status
+//      Fixed: division by zero when moving unit without fuel consumption
+//
 //     Revision 1.14  2000/07/31 18:02:53  mbickel
 //      New configuration file handling
 //      ASC searches its data files in all directories specified in ascrc
@@ -727,6 +734,7 @@ extern void addSearchPath ( const char* path );
 extern void appendbackslash ( char* string );
 extern char* constructFileName( char* buf, int directoryLevel, const char* path, const char* filename );
 extern int directoryExist ( const char* path );
+extern char* extractPath ( char* buf, const char* filename );
 
 #endif
 
