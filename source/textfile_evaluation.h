@@ -30,7 +30,7 @@
 #include "typen.h"
 
 #ifdef ParserLoadImages
-#include "graphics/surface.h";
+#include "graphics/surface.h"
 #endif
 
 

@@ -360,7 +360,7 @@ char generateaveragecolprt ( int x1, int y1, int x2, int y2, const Surface& img 
    int r=0, g=0, b=0;
    for (j=y1; j< y2 ; j++ ) {
        for (i=x1; i< x2 ; i++ ) {
-          int rr,gg,bb,aa;
+          Uint8 rr,gg,bb,aa;
           img.GetPixelFormat().GetRGBA( img.GetPixel( i, j ), rr,gg,bb,aa);
           if ( aa > 0x80) {
              r+=rr;

@@ -19,7 +19,7 @@
  ***************************************************************************/
 #include "ascttfont.h"
 #include <map>
-#include "misc.h"
+#include "../misc.h"
 
 const ASCRGBColor ASCRGBColor::BLACKCOLOR(0,0,0);
 

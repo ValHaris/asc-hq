@@ -2,9 +2,18 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.124 2004-09-25 12:37:51 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.124.2.1 2004-09-26 20:02:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.125  2004/09/26 19:30:29  mbickel
+//      Made branch compilable under linux
+//
+//     Revision 1.124  2004/09/25 12:37:51  mbickel
+//      Fixed crash in mapeditor
+//      fixed graphical glitches when moving from one field to an invisible next
+//      ASC can create clipboard files
+//      units don't defend when attacker is not visible
+//
 //     Revision 1.123  2004/09/19 15:45:02  mbickel
 //      Fixed crashed in editor
 //      updated automatic vehicle cost calculation
@@ -2264,9 +2273,9 @@ void         tnewmap::init(void)
       if ( ! random ) {
          mousevisible(false);
          if ( tauswahl->weather[auswahlw] )
-            putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[auswahlw]->pict );
+            tauswahl->weather[auswahlw]->paint ( x1 + 440,y1 + 182 );
          else
-            putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[0]->pict );
+            tauswahl->weather[0]->paint ( x1 + 440,y1 + 182 );
          mousevisible(true);
       }
    rahmen(true,x1 + 10,y1 + starty,x1 + xsize - 10,y1 + ysize - 45);
@@ -2367,9 +2376,9 @@ void         tnewmap::buttonpressed(int id)
       npop ( lastselectiontype );
 
       if ( tauswahl->weather[auswahlw] )
-         putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[auswahlw]->pict );
+         tauswahl->weather[auswahlw]->paint( x1 + 440,y1 + 182 );
       else
-         putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[0]->pict );
+         tauswahl->weather[0]->paint ( x1 + 440,y1 + 182 );
    }
    if (id == 11)
       if ( ! random) {

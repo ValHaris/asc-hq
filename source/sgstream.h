@@ -3,9 +3,15 @@
   
 */
 
-//     $Id: sgstream.h,v 1.30.2.1 2004-09-25 20:34:36 mbickel Exp $
+//     $Id: sgstream.h,v 1.30.2.2 2004-09-26 20:02:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2004/09/26 19:30:29  mbickel
+//      Made branch compilable under linux
+//
+//     Revision 1.30.2.1  2004/09/25 20:34:36  mbickel
+//     started replacement of old graphics system with SDLmm based one
+//
 //     Revision 1.30  2004/07/25 15:13:42  mbickel
 //      Updated weapon guide
 //

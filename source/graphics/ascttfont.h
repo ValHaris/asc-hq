@@ -24,7 +24,7 @@
 #include <SDL_ttf.h>
 #include <map>
 #include <iostream>
-#include "ascstring.h"
+#include "../ascstring.h"
 
 
 
