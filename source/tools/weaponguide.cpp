@@ -472,12 +472,51 @@ int main(int argc, char *argv[] )
             //Weapon can hit:
             fprintf ( detailed3, "<table id=\"H9\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
             // Ueberschrift
-            fprintf ( detailed3, "<tr><td></td><td align=\"center\" colspan=\"17\" bgcolor=\"#20483f\">Waffe schiesst auf: </td></tr>" );
+            fprintf ( detailed3, "<tr><td></td><td align=\"center\" colspan=\"18\" bgcolor=\"#20483f\">Waffe schiesst auf: </td></tr>" );
             // Spalten GFX
             fprintf ( detailed3, "<tr><td></td>" );
             for ( i = 0; i < cmovemalitypenum; i++ )
-               fprintf ( detailed3, " <TD><IMG src=\"../typ%d.gif\"></TD>", i);
-            fprintf ( detailed3, "</TR>\n");
+               fprintf ( detailed3, " <TD><IMG src=\"../typ%d.gif\" ", i);
+
+            if ( i==0 )
+                 fprintf (detailed3, " alt=\"default/undefiniert\" " );
+            if ( i==1 )
+                 fprintf (detailed3, " alt=\"light tracked vehicle / leichte Kettenfahrzeuge\" ");
+            if ( i==2 )
+                 fprintf (detailed3, " alt=\"medium tracked vehicle / mittlere Kettenfahrzeuge\" ");
+            if ( i==3 )
+                 fprintf (detailed3, " alt=\"heavy tracked vehicle / schwere Kettenfahrzeuge\" ");
+            if ( i==4 )
+                 fprintf (detailed3, " alt=\"light wheeled vehicle / leichte Radfahrzeuge\" ");
+            if ( i==5 )
+                 fprintf (detailed3, " alt=\"medium wheeled vehicle / mittlere Radfahrzeuge\" ");
+            if ( i==6 )
+                 fprintf (detailed3, " alt=\"heavy wheeled vehicle / schwere Radfahrzeuge\" ");
+            if ( i==7 )
+                 fprintf (detailed3, " alt=\"trooper / Soldaten-Roboter\" ");
+            if ( i==8 )
+                 fprintf (detailed3, " alt=\"rail vehicle / Schienenfahrzeuge\" ");
+            if ( i==9 )
+                 fprintf (detailed3, " alt=\"medium aircraft \" ");
+            if ( i==10 )
+                 fprintf (detailed3, " alt=\"medium ship \" ");
+            if ( i==11 )
+                 fprintf (detailed3, " alt=\"building turret object / Geb&auml;ude-Bunker-Objekte\" ");
+            if ( i==12 )
+                 fprintf (detailed3, " alt=\"light aircraft\" ");
+            if ( i==13 )
+                 fprintf (detailed3, " alt=\"heavy aircraft\" ");
+            if ( i==14 )
+                 fprintf (detailed3, " alt=\"light ship\" ");
+            if ( i==15 )
+                 fprintf (detailed3, " alt=\"heavy ship\" ");
+            if ( i==16 )
+                 fprintf (detailed3, " alt=\"helicopter\" ");
+            if ( i==17 )
+                 fprintf (detailed3, " alt=\"hoovercraft\" ");
+
+            fprintf ( detailed3, "></TD>" );
+         fprintf ( detailed3, "</TR>\n");
             // Spaltenwerte
             for ( int w = 0; w < ft->weapons.count ; w++) {
                fprintf ( detailed3, "<TR><td>#%d</td>", w+1 );
@@ -556,8 +595,11 @@ int main(int argc, char *argv[] )
             }
             fprintf ( detailed4, "</table>\n" );
 
-            for ( unsigned int i = 0; i < ft->objectsRemovable.size(); i++ ) {
-//               fprintf( detailed4, "<tr><td>es können die Objekte mit ids von %d bis %d gebaut werden</td></tr>\n", ft->objectsBuildable[i].from, ft->objectsBuildable[i].to );
+             // Objekte abreissbar
+            fprintf ( detailed4, "<table align=\"left\" id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">\n" );
+            // Ueberschrift abreissbare Objekte
+            fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\" colspan=\"2\">abreissbare OBJEKTE</td></tr>\n" );
+           for ( unsigned int i = 0; i < ft->objectsRemovable.size(); i++ ) {
                for ( int b = 0; b < objecttypenum; b++ ) {
                   pobjecttype obj = getobjecttype_forpos ( b );
                   if (     obj->id >= ft->objectsRemovable[i].from
@@ -566,7 +608,7 @@ int main(int argc, char *argv[] )
                   }
                }
             }
-
+            fprintf ( detailed4, "</table>\n" );
 
 			// UNITS
             fprintf ( detailed4, "<table align=\"left\" id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">\n" );

@@ -27,5 +27,7 @@
  extern const char* unitCategoryTags[];
  extern const char* buildingFunctionTags[];
 
+ extern const char* objectDisplayingMethodTags[];
+
 #endif
  

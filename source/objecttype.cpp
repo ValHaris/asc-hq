@@ -32,6 +32,7 @@ ObjectType :: ObjectType ( void )
    dirlist = NULL;
    dirlistnum = 0;
 
+   displayMethod = 0;
 }
 
 
@@ -69,12 +70,7 @@ void ObjectType :: display ( int x, int y, int dir, int weather )
   if ( id == 1 || id == 2 ) {
      putspriteimage ( x, y,  getpic( dir, weather ) );
   } else
-#ifdef HEXAGON
   if ( id == 4 ) {
-#else
-  if ( id == 3 ||  id == 4 ) {
-#endif
-
      if ( dir == 68 )
         putspriteimage ( x, y,  getpic ( 9, weather ) );
      else
@@ -98,14 +94,6 @@ void ObjectType :: display ( int x, int y, int dir, int weather )
   if (  id == 5 ) {
      putspriteimage  ( x, y,  getpic ( 0, weather ) );
   } else
-  #ifndef HEXAGON
-  if (  id == 6  ||  id == 7 || id == 8 ) {
-     for (int i = 0; i <= 7; i++)
-        if ( dir & (1 << i))
-           putspriteimage( x, y,  getpic ( i, weather ) );
-  } else
-  #endif
-
       if ( dirlistnum ) {
          for ( int i = 0; i < dirlistnum; i++ )
             if ( dirlist [ i ] == dir ) {
@@ -447,8 +435,8 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
          movemalus_plus[i] = 0;
       else
          movemalus_plus[i] = movemalus_plus[0];
-   }  
-    
+   }
+
 
    pc.addIntegerArray ( "Movemalus_abs", movemalus_abs ).evaluate();
    mm = movemalus_abs.size();
@@ -554,6 +542,11 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                   weatherPicture[i].flip[u] = 0;
                }
             }
+            
+            if ( pc.find ( "DisplayMethod" ) )
+               pc.addNamedInteger( "DisplayMethod", displayMethod, objectDisplayingMethodNum, objectDisplayingMethodTags );
+            else
+               displayMethod = 0;
 
          }
 

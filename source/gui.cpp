@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: gui.cpp,v 1.67 2001-08-15 14:02:10 mbickel Exp $
+//     $Id: gui.cpp,v 1.68 2001-09-20 15:36:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.67  2001/08/15 14:02:10  mbickel
+//      Updated message texts
+//
 //     Revision 1.66  2001/08/07 15:58:09  mbickel
 //      Fixed crash in mail list
 //      Fixed crash in weapon info with mines
@@ -2445,11 +2448,12 @@ void    tselectbuildingguihost :: init ( int resolutionx, int resolutiony )
 {                                      
    SelectBuildingBaseGuiHost :: init ( resolutionx, resolutiony );
    icons = new ( pnputbuildingguiicon[ buildingtypenum ] );
-   for (int i = 0; i < buildingtypenum ; i++ ) 
+   for (int i = 0; i < buildingtypenum ; i++ )
       if ( getbuildingtype_forpos( i ) )
          icons[i] = new tnputbuildingguiicon ( getbuildingtype_forpos( i ) );
 
-
+   if ( !buildingtypenum )
+      fatalError ( "No buildings found !");
    icons[0]->frst()->sethost ( this );
    setfirsticon ( pnputbuildingguiicon( icons[0]->frst() ));
 

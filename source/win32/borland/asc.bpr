@@ -150,7 +150,7 @@ Item2=C:\Programme\ascsrc\games\asc\source\win32\borland
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=
+RunParams=-r 10
 HostApplication=
 RemoteHost=
 RemotePath=

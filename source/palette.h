@@ -2,9 +2,14 @@
     \brief The color palette and various color translation tables
 */
 
-//     $Id: palette.h,v 1.5 2001-01-28 20:42:14 mbickel Exp $
+//     $Id: palette.h,v 1.6 2001-09-20 15:36:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2001/01/28 20:42:14  mbickel
+//      Introduced a new string class, ASCString, which should replace all
+//        char* and std::string in the long term
+//      Split loadbi3.cpp into 3 different files (graphicselector, graphicset)
+//
 //     Revision 1.4  2001/01/28 14:04:15  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -73,11 +78,12 @@ typedef char dacpalettefst[256][4];
    
    extern txlattables xlattables;
 
-
+/*
 extern tpixelxlattable nochange;
 extern tpixelxlattable dark1;
 extern tpixelxlattable dark2;
 extern tpixelxlattable light;
+*/
 extern tmixbuf *colormixbuf;
 extern dacpalette256 pal;
 

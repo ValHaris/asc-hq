@@ -1651,18 +1651,12 @@ int  Object :: getdir ( void )
 
 void Object :: display ( int x, int y, int weather )
 {
-  if ( typ->id == 7 ) {
-        if ( dir < typ->weatherPicture[weather].images.size() )
-           putshadow  ( x, y,  typ->getpic ( dir, weather ) , &xlattables.a.dark1);
-        else
-           putshadow  ( x, y,  typ->getpic ( 0, weather ) , &xlattables.a.dark1);
-  } else
-     if ( typ->id == 30 ) {   // pipeline
-           if ( dir < typ->weatherPicture[weather].images.size() )
-              putshadow  ( x, y,  typ->getpic ( dir, weather ) , &xlattables.a.dark1);
-           else
-              putshadow  ( x, y,  typ->getpic ( 0, weather ) , &xlattables.a.dark1);
-     } else
+  if ( typ->id == 7 || typ->id == 30 || typ->displayMethod==1 ) // buried pipeline,
+      putshadow  ( x, y,  typ->getpic ( dir, weather ) , &xlattables.a.dark1);
+  else
+     if ( typ->displayMethod == 2 ) // hillside
+        putxlatfilter ( x, y,  typ->getpic( dir, weather ), xlattables.nochange );
+     else
         typ->display ( x, y, dir, weather );
 }
 

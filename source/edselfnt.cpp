@@ -2,9 +2,13 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.32 2001-08-26 20:55:04 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.33 2001-09-20 15:36:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2001/08/26 20:55:04  mbickel
+//      bin2text can now load text files too
+//      LoadableItemType interface class added
+//
 //     Revision 1.31  2001/08/09 17:06:10  mbickel
 //      Fixed some warnings
 //
@@ -192,8 +196,6 @@
 #include "edglobal.h"
 #include "mapdisplay.h"
 #include "itemrepository.h"
-
-
 
 
 

@@ -130,12 +130,16 @@
      //! reads or writes the objecttype to the text stream pc
      void runTextIO ( PropertyContainer& pc );
 
+     //! some objects require special displaying methods, for example shading the terrain they are build on
+     int displayMethod;
+
    private:
      //! the loading functions call this method to setup the objects images
      void setupImages();
+
  };
 
-
+const int objectDisplayingMethodNum = 3; 
 
 
 #endif

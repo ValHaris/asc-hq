@@ -2,9 +2,12 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.63 2001-09-13 17:43:11 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.64 2001-09-20 15:36:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.63  2001/09/13 17:43:11  mbickel
+//      Many, many bug fixes
+//
 //     Revision 1.62  2001/08/09 14:50:37  mbickel
 //      Added palette.map to data directory
 //      Improved usability of terrain selection in mapeditor
@@ -741,7 +744,7 @@ ASCString  tnstream::readString ( bool includeCR )
 {
   ASCString s;
   bool data = readTextString ( s, includeCR );
-  if ( !data )
+  if ( !data && s.empty() )
      throw treadafterend ( getDeviceName() );
   return s;
 }

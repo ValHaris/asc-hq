@@ -164,4 +164,9 @@ const char*  buildingFunctionTags[cbuildingfunctionnum]  =
         "_ms",
         "" };
 
+ const char* objectDisplayingMethodTags[objectDisplayingMethodNum]
+    = { "Normal",
+        "Shadow",
+        "Translation" };
+
 
