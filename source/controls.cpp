@@ -3,9 +3,14 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.138 2002-11-07 18:42:57 mbickel Exp $
+//     $Id: controls.cpp,v 1.139 2002-11-09 19:10:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.138  2002/11/07 18:42:57  mbickel
+//      Fixed crash in reaction fire
+//      Improved autoborder object netification
+//      Fixed crash when mail game was loaded by command line parameters
+//
 //     Revision 1.137  2002/11/05 09:05:16  mbickel
 //      Fixed: mining stations produced not enough output
 //      Changed default building properties in mapeditor
@@ -2011,16 +2016,25 @@ int  Building :: getresourceplus( int mode, Resources* gplus, int queryonly )
          else
             toproduce = plus;
 
+         int usageNum = 0;
          for ( int r = 0; r < 3; r++ )
-            if ( plus.resource(r) > 0 ) {
-               int p = plus.resource(r);
-               if ( !(mode & 1))
-                  p = putResource ( plus.resource(r) + p, 0, 1 );
+            if ( plus.resource(r) < 0 )
+               ++usageNum;
 
-               if ( perc > 100 * p / maxplus.resource(r) )
-                  perc = 100 * p / maxplus.resource(r) ;
-            }
+         if ( usageNum > 0 ) {
+            // if the resource generation requires other resources, don't waste anything
+            // by producing more than storage capacity available
 
+            for ( int r = 0; r < 3; r++ )
+               if ( plus.resource(r) > 0 ) {
+                  int p = plus.resource(r);
+                  if ( !(mode & 1))
+                     p = putResource ( plus.resource(r) + p, 0, 1 );
+
+                  if ( perc > 100 * p / maxplus.resource(r) )
+                     perc = 100 * p / maxplus.resource(r) ;
+               }
+         }
 
          Resources usage;
          returnresourcenuseforpowerplant ( this, perc, &usage, 0 );

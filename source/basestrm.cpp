@@ -2,9 +2,12 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.76 2002-10-19 16:11:31 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.77 2002-11-09 19:10:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.76  2002/10/19 16:11:31  mbickel
+//      Made listing of directories more portable
+//
 //     Revision 1.75  2002/10/12 17:28:03  mbickel
 //      Fixed "enemy unit loaded" bug.
 //      Changed map format
@@ -1284,7 +1287,9 @@ int tncontainerstream :: readcontainerdata ( void* buf, int size, bool excpt  )
       if ( excpt ) 
          throw treadafterend ( actfile->name );
       else {
-         return readdata ( buf, (actfile->end+1 - actfile->start) - containerfilepos  , excpt );
+         int got = readdata ( buf, (actfile->end+1 - actfile->start) - containerfilepos  , excpt );
+         containerfilepos+=got;
+         return got;
 
       }
    }

@@ -104,7 +104,7 @@ Item0=_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=palette.pal test.con
+RunParams=1 2.con
 Launcher=
 UseLauncher=0
 DebugCWD=

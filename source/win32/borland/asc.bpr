@@ -254,7 +254,7 @@ Item2=C:\Programme\ascsrc\games\asc\source\win32\borland
 DebugSourceDirs=c:\programme\borland\cbuilder5\source\vcl;C:\Programme\ascdev\paragui\include\
 
 [Parameters]
-RunParams=-w -q -l CETAPRIME001-C-2.asc 
+RunParams=-w -q
 Launcher=
 UseLauncher=0
 DebugCWD=

@@ -920,6 +920,8 @@ void loadStartupMap ( const char *gameToLoad=NULL )
 
          try {
             loadmap( gameToLoad );
+            if ( actmap->network )
+               setallnetworkpointers ( actmap->network );
          } catch ( tfileerror ) {
             fprintf ( stderr, "%s is not a legal map. \n", gameToLoad );
             exit(-1);

@@ -1,9 +1,3 @@
-USEUNIT("..\demount.cpp");
-USELIB("tools.lib");
-USELIB("..\..\libs\bzlib\win\bzlib.lib");
-USELIB("..\..\..\..\SDL\bin\Sdl.lib");
-USELIB("..\..\libs\sdlmm\SDLmm.lib");
-//---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 
 main

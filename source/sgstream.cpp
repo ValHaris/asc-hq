@@ -5,9 +5,14 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.85 2002-10-12 17:28:04 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.86 2002-11-09 19:10:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.85  2002/10/12 17:28:04  mbickel
+//      Fixed "enemy unit loaded" bug.
+//      Changed map format
+//      Improved log messages
+//
 //     Revision 1.84  2002/10/09 16:58:46  mbickel
 //      Fixed to GrafikSet loading
 //      New item filter for mapeditor
@@ -1088,15 +1093,30 @@ void initFileIO ( const ASCString& configFileName, int skipChecks )
 
 void checkDataVersion( )
 {
-      if ( exist ( "data.version" )) {
-         tnfilestream s ( "data.version", tnstream::reading );
-         dataVersion = s.readInt();
-      } else
-         dataVersion = 0;
+   bool dataOk = true;
+   if ( exist ( "data.version" )) {
+      tnfilestream s ( "data.version", tnstream::reading );
+      dataVersion = s.readInt();
+   } else
+      dataVersion = 0;
 
-      if ( dataVersion < 8 || dataVersion > 0xffff )
-         fatalError("A newer version of the data files is required. \n"
-                    "You can get a new data package at http://www.asc-hq.org", 2 );
+   if ( dataVersion < 8 || dataVersion > 0xffff ) {
+      fatalError("A newer version of the data file 'main.con' is required. \n"
+                 "You can get a new data package at http://www.asc-hq.org", 2 );
+   }
+
+   if ( exist ( "mk1.version" )) {
+      tnfilestream s ( "mk1.version", tnstream::reading );
+      char v = s.readChar();
+      if ( v < '3' )
+         dataOk = false;
+   } else
+      dataOk = false;
+
+
+   if ( !dataOk )
+      fatalError("A newer version of the data file 'mk1.con' is required. \n"
+                 "You can get a new data package at http://www.asc-hq.org", 2 );
 }
 
 //===================================================================================

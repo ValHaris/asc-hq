@@ -23,8 +23,8 @@
     <USERDEFINES value="_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="demount.bpf"/>
-    <INCLUDEPATH value="..\;..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDL\include"/>
-    <LIBPATH value="..\;..;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\..;..\;..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDL\include"/>
+    <LIBPATH value="..\..;..\;..;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
     <OTHERFILES value=""/>
   </MACROS>
@@ -106,7 +106,7 @@ Item0=_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=
+RunParams=C:\Programme\ascdev\asc\source\tools\win\2.con
 Launcher=
 UseLauncher=0
 DebugCWD=
