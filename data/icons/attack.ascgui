@@ -5,14 +5,13 @@ panel {
    y = 100
  
    BackgroundColor = 0xffffff
-
    WidgetNum = 1
    Widget0 {
       type = area
       x = 5
       y = 10
       width = 162
-      height = 210  
+      height = 216  
             
       widgetnum = 13
       Widget0 {
@@ -52,7 +51,7 @@ panel {
           Widget0 {
            type = Textoutput
            textalign = CENTER
-           FontSize = 10
+           FontSize = 8
            FontColor = 0xffffff
            name = attacker_unitstatus
            x = 6
@@ -70,7 +69,7 @@ panel {
           Widget0 {
            type = Textoutput
            textalign = CENTER
-           FontSize = 10
+           FontSize = 8
            FontColor = 0xffffff
            name = defender_unitstatus
            x = 6
@@ -90,7 +89,7 @@ panel {
            type = BarGraph
            direction = top2buttom
            BackgroundColor = 0x808080
-           name = attacker_damage
+           name = attacker_unitstatusbar
            x = 3
            y = 3
 	   width = 20
@@ -107,7 +106,7 @@ panel {
            type = BarGraph
            direction = top2buttom
            BackgroundColor = 0x808080
-           name = defender_damage
+           name = defender_unitstatusbar
            x = 3
            y = 3
 	   width = 20
@@ -154,9 +153,9 @@ panel {
         WidgetNum = 1      
         Widget0 {
            type = SpecialDisplay
-           x = 2
-           y = 2
-	   name = attacker_level
+           x = 4
+           y = 4
+	   name = attacker_weaponsymbol
         } Widget0
      } Widget8
 
@@ -169,9 +168,9 @@ panel {
         WidgetNum = 1      
         Widget0 {
            type = SpecialDisplay
-           x = 2
-           y = 2
-	   name = defender_level
+           x = 3
+           y = 3
+	   name = attacker_level
         } Widget0
      } Widget9
 
@@ -184,9 +183,9 @@ panel {
         WidgetNum = 1      
         Widget0 {
            type = SpecialDisplay
-           x = 2
-           y = 2
-	   name = attacker_weaponsymbol
+           x = 4
+           y = 4
+	   name = defender_weaponsymbol
         } Widget0
      } Widget10
 
@@ -199,19 +198,139 @@ panel {
         WidgetNum = 1      
         Widget0 {
            type = SpecialDisplay
-           x = 2
-           y = 2
-	   name = defender_weaponsymbol
+           x = 3
+           y = 3
+	   name = defender_level
         } Widget0
      } Widget11
 
-    Widget12 {
+   Widget12 {
         type = image
         Filename = attack_defence_hemming.png
         x = 5
         y = 165
-        
-     } Widget12
+        widgetnum = 2
+        widget0 {
+           type = dummy
+           x = 0
+           y = 0
+           BackgroundColor = 0x000000
+           textalign = Center
+           FontSize = 8
+           FontColor = 0xffffff
+           direction = right2left
+           widgetnum = 6
+           Widget0 {
+             type = BarGraph
+             name = attacker_attackbonusbar
+             x = 5
+             y = 4
+	     width = 41
+             height = 11                  
+           } Widget0
+           Widget1 {
+             type = BarGraph
+             name = attacker_defencebonusbar
+             x = 5
+             y = 18
+	     width = 41
+             height = 11                  
+           } Widget1
+           Widget2 {
+             type = BarGraph
+             name = attacker_hemmingbar
+             x = 5
+             y = 32
+	     width = 41
+             height = 11                  
+           } Widget2
+           Widget3 {
+             type = Textoutput
+             name = attacker_attackbonus
+             x = 50
+             y = 4
+	     width = 14
+             height = 11                  
+           } Widget3
+           Widget4 {
+             type = Textoutput
+             name = attacker_defencebonus
+             x = 50
+             y = 18
+	     width = 14
+             height = 11                  
+           } Widget4           
+           Widget5 {
+             type = Textoutput
+             name = attacker_hemming
+             x = 50
+             y = 32
+	     width = 14
+             height = 11                  
+           } Widget5
+        } widget0
+
+        widget1 {
+           type = dummy
+           x = 0
+           y = 0
+           BackgroundColor = 0x000000
+           textalign = Center
+           FontSize = 8
+           FontColor = 0xffffff
+           direction = left2right
+           widgetnum = 6
+           Widget0 {
+             type = BarGraph
+             name = defender_attackbonusbar
+             x = 106
+             y = 4
+	     width = 41
+             height = 11                  
+           } Widget0
+           Widget1 {
+             type = BarGraph
+             name = defender_defencebonusbar
+             x = 106
+             y = 18
+	     width = 41
+             height = 11                  
+           } Widget1
+           Widget2 {
+             type = BarGraph
+             name = defender_hemmingbar
+             x = 106
+             y = 32
+	     width = 41
+             height = 11                  
+           } Widget2
+           Widget3 {
+             type = Textoutput
+             name = defender_attackbonus
+             x = 88
+             y = 4
+	     width = 14
+             height = 11                  
+           } Widget3
+           Widget4 {
+             type = Textoutput
+             name = defender_defencebonus
+             x = 88
+             y = 18
+	     width = 14
+             height = 11                  
+           } Widget4           
+           Widget5 {
+             type = Textoutput
+             name = defender_hemming
+             x = 88
+             y = 32
+	     width = 14
+             height = 11                  
+           } Widget5
+        } widget1
+     } Widget12   
+    
    } Widget0
    
 } panel

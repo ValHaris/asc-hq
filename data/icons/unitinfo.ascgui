@@ -14,13 +14,13 @@ panel {
         type = image
         Filename = unit-hole.png
         x = 48
-        y = 2
+        y = 4
         WidgetNum = 1
         Widget0 {
-          type = Specialdisplay
+          type = SpecialDisplay
           name = unit_pic
-          x = 14
-          y = 13
+          x = 13
+          y = 8
         } widget0
      } widget0
 

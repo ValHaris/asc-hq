@@ -298,12 +298,33 @@ class AttackPanel : public Panel {
                bgw->setColor( color );
         };
       void setLabelText ( const ASCString& widgetName, int i ) { Panel::setLabelText ( widgetName, i ); };
+      void setLabelText ( const ASCString& widgetName, const ASCString& i ) { Panel::setLabelText ( widgetName, i ); };
+      void dispValue ( const ASCString& name, float value, float maxvalue );
 };
 
 
 AttackPanel::AttackPanel ( ) : Panel( PG_Application::GetWidgetById(1), PG_Rect(0,0,170,200), "Attack" )
 {
 
+}
+
+void AttackPanel::dispValue ( const ASCString& name, float value, float maxvalue )
+{
+   if ( value > 0 ) {
+      if ( value > maxvalue )
+         setBarGraphValue( name + "bar", 1 );
+      else
+         setBarGraphValue( name + "bar", value / maxvalue );
+   } else {
+      setBarGraphColor( name + "bar", PG_Colormap::yellow );
+      if ( value < -maxvalue )
+         setBarGraphValue( name + "bar", 1 );
+      else
+         setBarGraphValue( name + "bar", -value / maxvalue );
+   }
+   ASCString s;
+   s.format ( "%d\%", int(value * 100) );
+   setLabelText( name, s );
 }
 
 
@@ -320,69 +341,27 @@ void tfight :: calcdisplay ( int ad, int dd )
    float dvd = float( 100 - dv.damage )/100;
 
 
-   at->setBarGraphValue( "attacker_damage", avd );
-   at->setBarGraphValue( "defender_damage", dvd );
+   at->setBarGraphValue( "attacker_unitstatusbar", avd );
+   at->setBarGraphValue( "defender_unitstatusbar", dvd );
 
    at->setLabelText( "attacker_unitstatus", 100 - av.damage );
    at->setLabelText( "defender_unitstatus", 100 - dv.damage );
 
 
 
-   at->setBarGraphValue( "attacker_hemming", (dv.hemming -1) / 1.4 );
+   at->setBarGraphValue( "attacker_hemmingbar", (dv.hemming -1) / 1.4 );
 //   at->setBarGraphValue( "defender_hemming", float( 100 - dv.damage )/100 );
 
-   if ( av.attackbonus > 0 ) {
-      if ( av.attackbonus > maxattackshown )
-         at->setBarGraphValue( "attacker_attackbonus", 1 );
-      else
-         at->setBarGraphValue( "attacker_attackbonus", av.attackbonus / maxattackshown );
-   } else {
-     at->setBarGraphColor( "attacker_attackbonus", PG_Colormap::yellow );
-      if ( av.attackbonus < -maxattackshown )
-         at->setBarGraphValue( "attacker_attackbonus", 1 );
-      else
-         at->setBarGraphValue( "attacker_attackbonus", -av.attackbonus / maxattackshown );
-   }
+   at->setLabelText( "defender_hemming", "-" );
+   at->setLabelText( "attacker_hemming", (dv.hemming-1) * 100 );
 
-   if ( dv.attackbonus > 0 ) {
-      if ( dv.attackbonus > maxattackshown )
-         at->setBarGraphValue( "defender_attackbonus", 1 );
-      else
-         at->setBarGraphValue( "defender_attackbonus", dv.attackbonus / maxattackshown );
-   } else {
-     at->setBarGraphColor( "defender_attackbonus", PG_Colormap::yellow );
-      if ( dv.attackbonus < -maxattackshown )
-         at->setBarGraphValue( "defender_attackbonus", 1 );
-      else
-         at->setBarGraphValue( "defender_attackbonus", -dv.attackbonus / maxattackshown );
-   }
+   at->dispValue( "attacker_attackbonus", strength_attackbonus(av.attackbonus), maxattackshown );
+   at->dispValue( "defender_attackbonus", strength_attackbonus(dv.attackbonus), maxattackshown );
 
 
-   if ( av.defensebonus > 0 ) {
-      if ( av.defensebonus > maxdefenseshown )
-         at->setBarGraphValue( "attacker_defensebonus", 1 );
-      else
-         at->setBarGraphValue( "attacker_defensebonus", av.defensebonus / maxattackshown );
-   } else {
-     at->setBarGraphColor( "attacker_defensebonus", PG_Colormap::yellow );
-      if ( av.defensebonus < -maxdefenseshown )
-         at->setBarGraphValue( "attacker_defensebonus", 1 );
-      else
-         at->setBarGraphValue( "attacker_defensebonus", -av.defensebonus / maxattackshown );
-   }
+   at->dispValue( "attacker_defencebonus", defense_defensebonus(av.defensebonus), maxattackshown );
+   at->dispValue( "defender_defencebonus", defense_defensebonus(dv.defensebonus), maxattackshown );
 
-   if ( dv.defensebonus > 0 ) {
-      if ( dv.defensebonus > maxdefenseshown )
-         at->setBarGraphValue( "defender_defensebonus", 1 );
-      else
-         at->setBarGraphValue( "defender_defensebonus", dv.defensebonus / maxattackshown );
-   } else {
-     at->setBarGraphColor( "defender_defensebonus", PG_Colormap::yellow );
-      if ( dv.defensebonus < -maxdefenseshown )
-         at->setBarGraphValue( "defender_defensebonus", 1 );
-      else
-         at->setBarGraphValue( "defender_defensebonus", -dv.defensebonus / maxattackshown );
-   }
 
    int t = ticker;
    calc();
@@ -428,8 +407,8 @@ void tfight :: calcdisplay ( int ad, int dd )
    while ( ticker < starttime + time2 ) {
       float p = float(ticker - starttime ) / time2;
 
-      at->setBarGraphValue( "attacker_damage", avd + (avd2-avd) * p );
-      at->setBarGraphValue( "defender_damage", dvd + (dvd2-dvd) * p );
+      at->setBarGraphValue( "attacker_unitstatusbar", avd + (avd2-avd) * p );
+      at->setBarGraphValue( "defender_unitstatusbar", dvd + (dvd2-dvd) * p );
 
       at->setLabelText( "attacker_unitstatus", int( 100.0 * (avd + (avd2-avd) * p )) );
       at->setLabelText( "defender_unitstatus", int( 100.0 * (dvd + (dvd2-dvd) * p )) );
