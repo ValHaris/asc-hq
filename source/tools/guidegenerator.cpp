@@ -201,7 +201,11 @@ ASCString ImageConverter::constructImgFileName(const VehicleType&  vt) {
 
 //**************************************************************************************************************
 
-GuideGenerator::GuideGenerator(ASCString fp, ASCString css, int id, ASCString techIDs, bool imgCreate, ASCString relativeMenuPath, bool upload, int imageSize):filePath(fp), cssFile(css), setID(id), techTreeIDs(String2IntRangeVector(techIDs)), relMenuPath(relativeMenuPath), createImg(imgCreate), createUpload(upload), imageWidth(imageSize) {}
+GuideGenerator::GuideGenerator(ASCString fp, ASCString css, int id, ASCString techIDs, bool imgCreate, ASCString relativeMenuPath, bool upload, int imageSize):filePath(fp), cssFile(css), setID(id), techTreeIDs(String2IntRangeVector(techIDs)), relMenuPath(relativeMenuPath), createImg(imgCreate), createUpload(upload), imageWidth(imageSize) 
+{
+   if ( relMenuPath.length() > 0  )
+        appendbackslash( relMenuPath );
+}
 
 const ASCString& GuideGenerator::getImagePath(int id) {
   return graphicRefs[id];

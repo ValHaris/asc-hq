@@ -2,7 +2,7 @@
 **
 ** weaponguide.cpp
 **
-** Sat Jul 31 17:34:09 2004
+** Sat Aug 14 10:57:18 2004
 ** Linux 2.4.21-198-default (#1 Thu Mar 11 17:43:56 UTC 2004) i686
 ** martin@linux. (Martin Bickel)
 **
@@ -61,7 +61,7 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
   _i = false;
   _z = 48;
   _f = "main";
-  _t = "../../ug.css";
+  _t = "asc.css";
   _m = "asc.css";
   _b = false;
   _writeall = false;
@@ -246,7 +246,7 @@ void Cmdline::usage()
   cout << "(";
   cout << "type=";
   cout << "STRING,";
-  cout << " default=../../ug.css";
+  cout << " default=asc.css";
   cout << ")\n";
   cout << "         name of the main pages' stylesheet\n";
   cout << "  [ -m ] ";

@@ -359,7 +359,7 @@ void InfoPage::addMainText() {
 
     addParagraph(text.c_str() );
   } else {
-    addParagraph("No information available: Do you  want to write an info text? Send it to gamer@gamershall.de" );
+    addParagraph("No information available: Do you  want to write an info text? Send it to unitguide@asc-hq.org" );
   }
 }
 ofstream* InfoPage::openOFileStream(const ASCString& fileName) {

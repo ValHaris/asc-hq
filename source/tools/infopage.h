@@ -39,7 +39,7 @@
 
 #define HTML ".html"
 #define GROUPS ".groups"
-#define CSSPATH "./asc.css"
+#define CSSPATH "asc.css"
 #define ALTIMAGETEXT "Building graphic"
 #define STDGFXPATH "http://asc-hq.de/asc/unitguide/"
 #define TARGET "main"

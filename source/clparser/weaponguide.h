@@ -2,7 +2,7 @@
 **
 ** weaponguide.h
 **
-** Sat Jul 31 17:34:09 2004
+** Sat Aug 14 10:57:18 2004
 ** Linux 2.4.21-198-default (#1 Thu Mar 11 17:43:56 UTC 2004) i686
 ** martin@linux. (Martin Bickel)
 **
