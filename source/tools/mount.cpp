@@ -18,25 +18,44 @@
     Boston, MA  02111-1307  USA
 */
 
-#include <errno.h>
-#include <string.h>
+#if HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
+#ifdef HAVE_STRING_H
+#  include <string.h>
+#elif #ifdef HAVE_STRINGS_H
+#  include <strings.h>
+#endif
+
+#ifdef HAVE_ERRNO_H
+#  include <errno.h>
+#endif
+
+#ifdef HAVE_STDIO_H
+#  include <stdio.h>
+#endif
+#ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+#endif
+
+#include <SDL_types.h>
+
 #include "../global.h"
 #include "../basestrm.h"
 #include "../misc.h"
 #include "../strtmesg.h"
 
-#ifdef _DOS_ 
- #include "../dos/fileio.h"
+/* this could be eliminated by a @OS_TYPE@ include in Makefile.am */
+#ifdef _WIN32_
+#  include "../win32/fileio.h"
 #else
- #ifdef _WIN32_
-  #include "../win32/fileio.h"
- #else
-  #ifdef _UNIX_
-   #include "../unix/fileio.h"
-  #endif
- #endif
+#  ifdef _UNIX_
+#    include "../unix/fileio.h"
+#  endif
 #endif
 
+/* some really generic stuff - perhaps to put into a really generic header? */
 
 #ifndef MAX
  #define MAX(a,b)		((a) >= (b) ? (a) : (b))
@@ -47,6 +66,12 @@
 #define MAX3(a,b,c)		((a) >= (b) ? MAX(a,c) : MAX(b,c))
 #define MIN3(a,b,c)		((a) <= (b) ? MIN(a,c) : MIN(b,c))
 
+#define Sentinel    0xF0   /* the sentinel flag */
+#define BUFFER_SIZE 30000
+
+#define WriteCode(a,b,c) \
+            fprintf( outfile, "%c%c%c", a, b, c )
+
 
 
 FILE* out;
@@ -56,15 +81,6 @@ int verbose = 1;
  *  Run-Length Encoding for files of all types
  *
  *-------------------------------------------------------------*/
-
-#include <stdio.h>
-#include <stdlib.h>
-
-#define Sentinel    0xF0   /* the sentinel flag */
-#define BUFFER_SIZE 30000
-
-#define WriteCode(a,b,c) \
-            fprintf( outfile, "%c%c%c", a, b, c )
 
 FILE *infile,
      *outfile;
@@ -200,8 +216,8 @@ bzmain( char *argv1, char* argv2  )
 
 
 dynamic_array<tcontainerindex> nindex;
-int num = 0;
-int pos = 0;
+Uint32 num = 0; /* number of files in the container ? */
+Uint32 pos = 0; /* starting offset in container file ? */
 
 int uncompsize = 0;
 int   compsize = 0;
@@ -236,6 +252,7 @@ void copyfile ( const char* name, const char* orgname, int size )
 
 char buf2[10000];
 
+/* mikem: seems to test a file for asc compression */
 void testcompress ( char* name, int size )
 {
    char newname[1000];
@@ -311,7 +328,7 @@ void testcompress ( char* name, int size )
         fatalError ( "error executing rle1; errno is " + ASCString(strrr (errno)) );
         exit ( r );
       }
-      int rl = filesize ( "temp.rle" );
+      Uint16 rl = filesize ( "temp.rle" );
 
       fflush ( stdout );
       r = bzmain ( name, "temp.mzl" );
@@ -319,12 +336,12 @@ void testcompress ( char* name, int size )
         fatalError ( "error executing mbzip; errno is " + ASCString ( strrr ( errno)));
         exit ( r );
       }
-      int mz = filesize ( "temp.mzl" );
+      Uint16 mz = filesize ( "temp.mzl" );
 
 
       if ( verbose )
         printf ( "; rle: %3d%%; mzl: %3d%%", 100 * rl / size, 100 * mz / size );
-      int compr = MIN ( rl, mz );
+      Uint16 compr = MIN ( rl, mz );
 
       if ( compr * 120 / 100 > size ) {
         if ( verbose )
@@ -353,6 +370,7 @@ void testcompress ( char* name, int size )
 
 int main(int argc, char *argv[] )
 {
+   Uint32 i = 0;      /* loop var */
    Cmdline cl ( argc, argv );
 
    if ( cl.v() ) {
@@ -376,7 +394,6 @@ int main(int argc, char *argv[] )
       exit(1);
    }
 
-   int i = 0;
    pos += fwrite ( containermagic, 1, 4, out );
    pos += fwrite ( &i, 1, 4, out );
 
@@ -396,11 +413,14 @@ int main(int argc, char *argv[] )
              if ( patimat ( argv[df] , direntp->d_name ) &&
                   strcmp ( direntp->d_name, "." ) != 0 &&
                   strcmp ( direntp->d_name, ".." ) != 0 ) {
-                int fnd = 0;
+                int    fnd = 0;
+		Uint32 j   = 0;
 
-                for ( int j = 0; j < num; j++ )
-                   if ( strcmpi ( nindex[j].name, direntp->d_name ) == 0 )
+		while( !fnd && ( j < num ) ) {
+		  //                for ( int j = 0; j < num; j++ )
+                   if ( strcmpi ( nindex[j++].name, direntp->d_name ) == 0 )
                       fnd = 1;
+		}
 
                 if ( !fnd ) {
                    if ( verbose )
@@ -422,7 +442,7 @@ int main(int argc, char *argv[] )
    if ( verbose )
       printf ( "ftell: %d ; pos : %d ; num : %d \n ", int( ftell ( out )), pos, num );
 
-   fwrite ( &num, 4, 1, out );
+   fwrite ( &num, sizeof(num), 1, out );
 
    for ( i = 0; i < num; i++) {
       fwrite ( &nindex[i], sizeof ( tcontainerindex ), 1, out );
@@ -432,7 +452,7 @@ int main(int argc, char *argv[] )
    } /* endfor */
 
    fseek ( out, 4, SEEK_SET );
-   fwrite ( &pos, 4, 1, out );
+   fwrite ( &pos, sizeof(pos), 1, out );
    fclose ( out );
 
    if ( verbose ) {

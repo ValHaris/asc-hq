@@ -23,16 +23,15 @@
 #include "sgstream.h"
 
 #ifndef converter
- #include "dialog.h"
- #include "sg.h"
+#  include "dialog.h"
+#  include "sg.h"
 #else
  class ProgressBar {
     public:
        void point() {};
  };
 ProgressBar* actprogressbar = NULL;
-
-#endif
+#endif 
 
 pobjecttype streetobjectcontainer = NULL;
 pobjecttype pathobject = NULL;

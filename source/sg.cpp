@@ -2201,19 +2201,12 @@ int main(int argc, char *argv[] )
    }
 
    if ( cl->w() )
-      fullscreen = 0;
+      fullscreen = SDL_FALSE;
 
    if ( cl->f() )
-      fullscreen = 1;
+      fullscreen = SDL_TRUE;
 
    verbosity = cl->r();
-
-#ifdef _DOS_
-   if ( showmodes ) {
-      showavailablemodes();
-      return 0;
-   }
-#endif
 
    mapborderpainter = &backgroundpict;
 
@@ -2233,7 +2226,7 @@ int main(int argc, char *argv[] )
    }
 
    if ( CGameOptions::Instance()->forceWindowedMode && !cl->f() )  // cl->f == force fullscreen command line param
-      fullscreen = 0;
+      fullscreen = SDL_FALSE;
 
    SDLmm::Surface* icon = NULL;
    try {

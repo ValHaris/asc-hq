@@ -2,9 +2,12 @@
     miscellaneous functions which are used by ASC and all its tools
 */
 
-//     $Id: misc.h,v 1.19 2001-10-21 13:16:59 mbickel Exp $
+//     $Id: misc.h,v 1.20 2001-12-19 11:46:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2001/10/21 13:16:59  mbickel
+//      Cleanup and documentation
+//
 //     Revision 1.18  2001/10/16 19:58:19  mbickel
 //      Added title screen for mapeditor
 //      Updated source documentation
@@ -126,6 +129,7 @@
       \returns a pointer to a static array, which will be overwritten in the next call
     */
    extern char* strrr ( int a ) ;
+   extern char* strrr ( Uint32 a );
 
    /** converts a to a string.
       \returns a pointer to a static array, which will be overwritten in the next call

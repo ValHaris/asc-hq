@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.76 2001-12-14 10:20:05 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.77 2001-12-19 11:46:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.76  2001/12/14 10:20:05  mbickel
+//      Cleanup and enhancements to configure.in
+//      Removed last remains of octagonal version from source files
+//
 //     Revision 1.75  2001/11/22 15:08:24  mbickel
 //      Added gameoption heightChangeMovement
 //
@@ -211,131 +215,8 @@
 #include "gameoptions.h"
 #include "graphicset.h"
 
-#ifndef converter
- #include "dlg_box.h"
- #include "dialog.h"
-#endif
-
-
 const char* asc_EnvironmentName = "ASC_CONFIGFILE";
 int dataVersion = 0;
-
-#ifdef logging
-FILE* logfile = NULL;
-
-#ifndef converter
-void logtofile ( char* strng, ... )
-{
-   char buf[10000];
-   va_list arglist;
-   va_start ( arglist, strng );
-   vsprintf ( buf, strng, arglist );
-
-   if ( !logfile )
-     logfile = fopen ( "SGLOG.TXT", "at+" );
-
-#ifdef UseMemCheck
-   if ( _heapchk() != _HEAPOK  )
-     fprintf( logfile, "HEAP DAMAGED!!" );
-#endif
-   fprintf ( logfile, buf );
-   fprintf ( logfile, "\n" );
-   fflush ( logfile );
-   va_end ( arglist );
-}
-#endif //converter
-#endif //logging
-
-
-
-#ifndef converter
-
-union tpix {
-  struct { char r,g,b,a; } s;
-  int all;
-};
-
-typedef tpix timage[ fieldxsize ][ fieldysize ];
-
-int getimagepixel ( void* image, int x, int y )
-{
-   int xs, ys;
-   getpicsize ( image, xs, ys );
-
-
-   y += ys/2;
-   x += xs/2;
-   if ( x < 0  || x >= xs || y < 0 || y >= ys )
-      return -1;
-   else {
-      char* pc = (char*) image;
-      return pc[ 4 + y * xs + x];
-   }
-}
-
-const float pi = 3.14159265;
-
-char* rotatepict ( void* image, int organgle )
-{
-   float angle = ((float)organgle) / 360 * 2 * pi + pi;
-
-   char* dst = new char[ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-   dst[0] = fieldxsize-1;   
-   dst[1] = 0;
-
-   dst[2] = fieldysize-1;
-   dst[3] = 0;
-  
-   char* pnt  = dst + 4;
-
-   for ( int y = 0; y < fieldysize; y++ ) {
-      for ( int x = 0; x < fieldxsize; x++ ) {
-         int dx = x - fieldxsize/2 ;
-         int dy = fieldysize/2 - y;
-         float nx, ny;
-         if ( organgle != 0 && organgle != -180 && organgle != 180) {
-            float wnk ;
-            if ( dx  ) 
-               wnk = atan2 ( dy, dx );
-            else
-               if ( dy > 0 )
-                  wnk = pi/2;
-               else
-                  wnk = -pi/2;
-   
-            wnk -= angle;
-            float radius = sqrt ( dx * dx + dy * dy );
-   
-            nx = radius * cos ( wnk );
-            ny = radius * sin ( wnk );
-         } else 
-            if ( organgle == 0 ) {
-               nx = -dx;
-               ny = -dy;
-            } else
-               if ( organgle == 180 || organgle == -180) {
-                  nx = dx;
-                  ny = dy;
-               }
-         
-
-         int newpix = getimagepixel ( image, (int)-nx, (int)ny );
-         if ( newpix == -1 )
-            *pnt = 255;
-         else
-            *pnt = newpix;
-
-         pnt++;
-      }
-   }
-
-   return dst;
-}
-
-
-#endif
-
-
 
 const int object_version = 1;
 const int technology_version = 1;

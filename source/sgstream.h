@@ -3,9 +3,16 @@
   
 */
 
-//     $Id: sgstream.h,v 1.22 2001-08-06 20:54:43 mbickel Exp $
+//     $Id: sgstream.h,v 1.23 2001-12-19 11:46:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2001/08/06 20:54:43  mbickel
+//      Fixed lots of crashes related to the new text files
+//      Fixed delayed events
+//      Fixed crash in terrin change event
+//      Fixed visibility of mines
+//      Fixed crashes in event loader
+//
 //     Revision 1.21  2001/08/02 18:50:43  mbickel
 //      Corrected Error handling in Text parsers
 //      Improved version information
@@ -156,8 +163,6 @@ class t_carefor_containerstream {       // not necessary any more, now that we h
        public:
          t_carefor_containerstream ( void );
        };
-
-extern void logtofile ( char* strng, ... );
 
 
 extern void loadpalette ( void );

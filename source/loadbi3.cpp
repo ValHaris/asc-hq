@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.65 2001-12-14 10:20:05 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.66 2001-12-19 11:46:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.65  2001/12/14 10:20:05  mbickel
+//      Cleanup and enhancements to configure.in
+//      Removed last remains of octagonal version from source files
+//
 //     Revision 1.64  2001/11/15 20:16:01  mbickel
 //      Added a new BI3 import table
 //      Fixed movement reduction changing height of a nearly empty unit and
@@ -202,9 +206,9 @@
 #include "dialog.h"
 #include "itemrepository.h"
 
-#ifdef converter
- #error The small editors should not need to use LoadBi3
-#endif
+/*#ifdef convert/er
+  #error The small editors should not need to use LoadBi3
+  #endif*/
 
 
 #pragma pack(1)

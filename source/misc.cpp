@@ -1,6 +1,9 @@
-//     $Id: misc.cpp,v 1.22 2001-10-31 18:34:31 mbickel Exp $
+//     $Id: misc.cpp,v 1.23 2001-12-19 11:46:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2001/10/31 18:34:31  mbickel
+//      Some adjustments and fixes for gcc 3.0.2
+//
 //     Revision 1.21  2001/10/21 13:16:59  mbickel
 //      Cleanup and documentation
 //
@@ -208,6 +211,11 @@ char* strrr ( int a ) {
    return strstring;
 }
 
+char* strrr ( Uint32 a ) {
+  sprintf(strstring, "%d", a);
+  return strstring;
+}
+
 char* strrr ( double f ) {
    sprintf(strstring,"%f",f);
    return strstring;
@@ -313,38 +321,4 @@ char* itoa ( int a, char* b, int c)
    sprintf(b, "%d", a );
    return b;
 }
-#endif
-
-#ifdef converter
-
-void fatalError ( const ASCString& text )
-{
-   fprintf ( stderr, text.c_str() );
-
-   #ifdef _WIN32_
-   MessageBox(NULL, text.c_str(), "Fatal Error", MB_ICONERROR | MB_OK | MB_TASKMODAL );
-   #endif
-
-   exit ( 1 );
-}
-
-
-void fatalError ( const char* formatstring, ... )
-{
-   va_list paramlist;
-   va_start ( paramlist, formatstring );
-
-   char buf[10000];
-   vsprintf ( buf, formatstring, paramlist );
-   va_end ( paramlist );
-   fatalError ( ASCString ( buf ));
-}
-
-
-
-void warning ( const ASCString& output )
-{
-   cerr << "ASC: " << output.c_str() << endl;
-}
-
 #endif

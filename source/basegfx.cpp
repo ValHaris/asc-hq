@@ -2,9 +2,13 @@
     \brief Platform indepedant graphic functions. 
 */
 
-//     $Id: basegfx.cpp,v 1.30 2001-12-14 10:20:04 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.31 2001-12-19 11:46:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2001/12/14 10:20:04  mbickel
+//      Cleanup and enhancements to configure.in
+//      Removed last remains of octagonal version from source files
+//
 //     Revision 1.29  2001/09/28 17:43:53  mbickel
 //      Fixed bug: wrong graphics with hillside
 //      Fixed bug: crash when vehicle function not found
@@ -109,6 +113,7 @@
 
 #include <string.h>
 #include <malloc.h>
+#include <math.h>
 #include "global.h"
 #include "basegfx.h"
 #include "newfont.h"
@@ -605,6 +610,91 @@ void rotatepict90 ( void* s, void* d )
    for (int y = 0; y <= dw[1]; y++) 
      for (int x = 0; x <= dw[0]; x++) 
          dc[ y * dl + x] = sc[ ( sh - x - 1 ) * sl + y];
+}
+  union tpix {
+  struct { char r,g,b,a; } s;
+  int all;
+};
+
+
+typedef tpix timage[ 100 ][ 100 ];
+
+int getimagepixel ( void* image, int x, int y )
+{
+   int xs, ys;
+   getpicsize ( image, xs, ys );
+
+
+   y += ys/2;
+   x += xs/2;
+   if ( x < 0  || x >= xs || y < 0 || y >= ys )
+      return -1;
+   else {
+      char* pc = (char*) image;
+      return pc[ 4 + y * xs + x];
+   }
+}
+
+const float pi = 3.14159265;
+
+char* rotatepict ( void* image, int organgle )
+{
+   int fieldxsize, fieldysize;
+   getpicsize(image, fieldxsize, fieldysize );
+
+   float angle = ((float)organgle) / 360 * 2 * pi + pi;
+
+   char* dst = new char[ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
+   dst[0] = fieldxsize-1;
+   dst[1] = 0;
+
+   dst[2] = fieldysize-1;
+   dst[3] = 0;
+
+   char* pnt  = dst + 4;
+
+   for ( int y = 0; y < fieldysize; y++ ) {
+      for ( int x = 0; x < fieldxsize; x++ ) {
+         int dx = x - fieldxsize/2 ;
+         int dy = fieldysize/2 - y;
+         float nx, ny;
+         if ( organgle != 0 && organgle != -180 && organgle != 180) {
+            float wnk ;
+            if ( dx  )
+               wnk = atan2 ( dy, dx );
+            else
+               if ( dy > 0 )
+                  wnk = pi/2;
+               else
+                  wnk = -pi/2;
+
+            wnk -= angle;
+            float radius = sqrt ( dx * dx + dy * dy );
+
+            nx = radius * cos ( wnk );
+            ny = radius * sin ( wnk );
+         } else
+            if ( organgle == 0 ) {
+               nx = -dx;
+               ny = -dy;
+            } else
+               if ( organgle == 180 || organgle == -180) {
+                  nx = dx;
+                  ny = dy;
+               }
+
+
+         int newpix = getimagepixel ( image, (int)-nx, (int)ny );
+         if ( newpix == -1 )
+            *pnt = 255;
+         else
+            *pnt = newpix;
+
+         pnt++;
+      }
+   }
+
+   return dst;
 }
 
 void flippict ( void* s, void* d, int dir )
