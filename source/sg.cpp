@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: sg.cpp,v 1.167 2001-09-26 19:53:27 mbickel Exp $
+//     $Id: sg.cpp,v 1.168 2001-09-28 19:36:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.167  2001/09/26 19:53:27  mbickel
+//      Reorganized data files for coming ASC 1.9.0 release
+//      Improved field information dialog
+//
 //     Revision 1.166  2001/09/25 20:15:50  mbickel
 //      Changed startup map to paybacktime
 //
@@ -1280,7 +1284,7 @@ void loadStartupMap ( const char *gameToLoad=NULL )
 
    } else {  // resort to loading defaults
 
-     ASCString s = "paybacktime.map";
+     ASCString s = "first.map";
      /*
      if ( CGameOptions::Instance()->startupcount < 4 ) {
         s = "tutor0" ;
