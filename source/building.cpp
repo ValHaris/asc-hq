@@ -2,9 +2,12 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.90 2003-01-12 19:37:18 mbickel Exp $
+//     $Id: building.cpp,v 1.91 2003-01-14 22:21:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.90  2003/01/12 19:37:18  mbickel
+//      Rewrote resource production
+//
 //     Revision 1.89  2003/01/06 16:52:03  mbickel
 //      Fixed: units inside transports got wrong movement when moved out
 //      Fixed: wind not displayed correctly
@@ -2927,7 +2930,10 @@ void  ccontainer :: cammunitiontransfer_subwindow :: check ( int i )
    int ii = i - page*8;
    if ( ii >= 0 && ii < 8 ) {
       int length = objcoordinates[ii].y2 - objcoordinates[ii].y1 - objcoordinates[ii].t2;
-      schiebpos[i] = length * weaps[i].actnum / weaps[i].maxnum;
+      if ( weaps[i].maxnum )
+         schiebpos[i] = length * weaps[i].actnum / weaps[i].maxnum;
+      else
+         schiebpos[i] = 0;
    }
 }
 
