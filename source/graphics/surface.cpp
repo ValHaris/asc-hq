@@ -262,7 +262,7 @@ void Surface::read ( tnstream& stream )
          stream.readdata ( q, w - sizeof(hd) + 4 ); // endian ok ?
 
          SDL_Surface* s = SDL_CreateRGBSurfaceFrom(pntr, hd.id+1, hd.size+1, 8, hd.id+1, 0, 0, 0, 0 );
-         s->flags &= ~SDL_PREALLOC;
+//         s->flags &= ~SDL_PREALLOC;
          
          SetSurface( s );
          SetColorKey( SDL_SRCCOLORKEY, 255 );
