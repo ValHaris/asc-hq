@@ -2130,6 +2130,7 @@ int gamethread ( void* data )
 
             displayLogMessage ( 8, "gamethread :: Painting background pict..." );
             backgroundpict.paint();
+            displayLogMessage ( 8, "done\n" );
 
             if ( !gtp->filename.empty() && patimat ( tournamentextension, gtp->filename.c_str() ) ) {
                displayLogMessage ( 5, "Initializing network game..." );
