@@ -280,10 +280,10 @@ bool AI::RefuelConstraint::returnFromPositionPossible ( const MapCoordinate3D& p
             }
             lp++;
          }
-      } else
+      } else /*
          if ( veh->height > chfahrend )
             dist2 = maxint;
-         else
+         else  */
             return true;
    }
 

@@ -201,6 +201,7 @@ cmousecontrol* mousecontrol = NULL;
 
 int maintainencecheck( void )
 {
+return 1;
 #ifdef maintainence
    int num = 0;
 
@@ -1748,7 +1749,8 @@ void  mainloop ( void )
       releasetimeslice();
 
    }  while ( !abortgame );
-}
+
+   }
 
 
 

@@ -5,9 +5,13 @@
 
 */
 
-//     $Id: loaders.h,v 1.22 2002-12-08 21:53:39 mbickel Exp $
+//     $Id: loaders.h,v 1.23 2003-04-09 17:39:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2002/12/08 21:53:39  mbickel
+//      Fixed: mining station produces twice the resources
+//      Updated file version numbers
+//
 //     Revision 1.21  2002/09/19 20:20:05  mbickel
 //      Cleanup and various bug fixes
 //
@@ -183,7 +187,7 @@ const int actsavegameversion  = 0xff37;
 const int minsavegameversion  = 0xff31;
 const int actmapversion       = 0xfe27;
 const int minmapversion       = 0xfe24;
-const int actnetworkversion   = 0x0008;
+const int actnetworkversion   = 0x0009;
 const int minnetworkversion   = 0x0004;
 const int actreplayversion    = 0x0003;
 const int minreplayversion    = 0x0001;

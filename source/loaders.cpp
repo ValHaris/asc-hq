@@ -1676,6 +1676,8 @@ int          tnetworkloaders::savenwgame( pnstream strm )
    if ( spfld->replayinfo )
       spfld->replayinfo->write ( *stream );
 
+   writeAI();
+
    stream->writeInt ( actnetworkversion );
 
    spfld = NULL;
@@ -1706,7 +1708,7 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
 
    int version = stream->readInt();
 
-   if (version > actnetworkversion || version < minnetworkversion ) 
+   if (version > actnetworkversion || version < minnetworkversion )
       throw tinvalidversion ( name, actnetworkversion, version );
    
    readmap ();
@@ -1720,22 +1722,25 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
 
    version = stream->readInt();
 
-   if (version > actnetworkversion || version < minnetworkversion ) 
+   if (version > actnetworkversion || version < minnetworkversion )
       throw tinvalidversion ( name, actnetworkversion, version );
 
 
    readeventstocome ();
    readeventspassed ();
    readoldevents    ();
-                     
+
    readfields ( );
- 
+
    readdissections();
 
    if ( spfld->__loadreplayinfo ) {
       spfld->replayinfo = new tmap::ReplayInfo;
       spfld->replayinfo->read ( *stream );
    }
+
+   if ( version > 8 )
+      readAI();
 
    stream->readdata2( version );
    if (version > actnetworkversion || version < minnetworkversion )

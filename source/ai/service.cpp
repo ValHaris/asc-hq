@@ -372,8 +372,10 @@ AI::ServiceOrder& AI :: issueRefuelOrder ( pvehicle veh, bool returnImmediately 
       if ( RefuelConstraint::necessary ( veh, *this )) {
          RefuelConstraint apl ( *this, veh );
          veh->aiparam[getPlayerNum()]->dest = apl.getNearestRefuellingPosition ( true, true, false );
-         veh->aiparam[getPlayerNum()]->setTask( AiParameter::tsk_serviceRetreat );
-         runUnitTask ( veh );
+         if ( veh->aiparam[getPlayerNum()]->dest.valid() ) {
+            veh->aiparam[getPlayerNum()]->setTask( AiParameter::tsk_serviceRetreat );
+            runUnitTask ( veh );
+         }
       } else {
 
       }
