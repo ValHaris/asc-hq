@@ -955,6 +955,13 @@ void tunitattacksobject :: setresult ( void )
      getfield ( _x, _y )-> removeobject ( _obji->typ );
    }
 
+   /* Remove the attacking unit if it was destroyed */
+   if ( _attackingunit->damage >= 100 ) {
+      delete _attackingunit;
+      _attackingunit = NULL;
+   }
+
+
    actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
 
 }

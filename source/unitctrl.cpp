@@ -176,9 +176,9 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
          }
          pathStep++;
 
-         vehicle->spawnMoveObjects( from, to );
 
          if ( vehicle ) {
+            vehicle->spawnMoveObjects( from, to );
             vehicle->xpos = to.x;
             vehicle->ypos = to.y;
             if ( inhibitAttack )
@@ -239,7 +239,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
                releaseevent ( vehicle, NULL, cconnection_areaentered_specificunit );
             npop ( dest->vehicle );
          }
-      } while ( to.x != next->x || to.y != next->y );
+      } while ( (to.x != next->x || to.y != next->y) && vehicle );
 
       pos = next;
    }

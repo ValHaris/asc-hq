@@ -279,7 +279,7 @@ int main(int argc, char *argv[] )
                       "<HEAD>\n"
                       "<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\">"
                       "<TITLE>UNITGUIDE FRAME</TITLE>\n"
-                      "<frameset  cols=\"50%%,*\" border=0 >\n"
+                      "<frameset  cols=\"40%%,*\" border=0 >\n"
                       "<frame name=\"over\" src=\"%s1.html\" marginheight=\"0\">\n"
                       "<frame name=\"under\" src=\"%s6.html\" marginheight=\"2\">\n"
                       "<noframes><body class=\"wg\"><p><A HREF=\"%s1.html\">General Information</A><p>\n<A HREF=\"%s2.html\">Movement </A><p>\n<A HREF=\"%s3.html\">Weapon systems</A><p>\n<A HREF=\"%s4.html\">Construction</A><p>\n<A HREF=\"%s5.html\">Transportation</A><p>\n<A HREF=\"%s6.html\">Infotext</A><p>\n </body></noframes>\n"
@@ -366,7 +366,6 @@ int main(int argc, char *argv[] )
             printMainLine ( generalPage, "Production Cost energy", ft->productionCost.energy );
             printMainLine ( generalPage, "Unit can attack after moving", ft->wait ? "no": "yes" );
             printMainLine ( generalPage, "Unit can move after attacking", ft->functions & cf_moveafterattack ? "yes": "no" );
-            printMainLine ( generalPage, "Armor", ft->armor );
 
             ASCString funcs;
             for ( int i = 0; i<cvehiclefunctionsnum; i++)

@@ -158,7 +158,7 @@ ADVANCED STRATEGIC COMMAND
 #color000#
 Map Editor
 
-(C) 1994 - 2001 by Marc Schellenberger and Martin Bickel.
+(C) 1994 - 2003 by Marc Schellenberger and Martin Bickel.
 
 See README.TXT for details.
 

@@ -55,7 +55,7 @@ void         tcomputeview::testfield( const MapCoordinate& mc )
    int f = beeline(startPos, mc);
    pfield efield = gamemap->getField(mc);
 
-   if ( viewdist && ( f <= 15 ))
+   if ( viewdist && ( f <= 15 ) && gamemap->getgameparameter( cgp_disableDirectView) == 0 )
       efield->view[player].direct += mode;
 
    int str = viewdist;

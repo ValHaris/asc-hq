@@ -522,7 +522,7 @@ T PropertyTemplate<T>::parse ( const TextPropertyGroup::Entry& entry ) const
       operation_not_defined( entry );
 
    if ( !entry.parent )
-      propertyContainer->error ( ASCString("PropertyContainer::PropertyTemplate::parse - no parent for operator ") + TextFormatParser::operations[entry.op] + " !");
+      propertyContainer->error ( ASCString("PropertyContainer::PropertyTemplate::parse - no parent for operator ") + TextFormatParser::operations[entry.op] + " at entry " + entry.propertyName + " !");
 
    switch ( entry.op ) {
       case TextPropertyGroup::Entry::mult_eq : return operation_mult ( entry );

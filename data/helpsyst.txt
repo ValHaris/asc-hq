@@ -175,7 +175,6 @@ Start
 - Setup alliances
 #color1#OK#color0#
  #aeinzug20##eeinzug0##color0#
-If the game is played on several computers, a dialog box appears where you can choose which items are checked by checksums. Checksums prevent cheating by improving your units, but they also prevent using an updated unit set during the game. I personally don't use checksums at the moment. So you can just press OK.
  #aeinzug0##eeinzug0#
 The game now asks for the password of the first player. If no password is entered the next time the program will only wait for any key to be pressed.
  #aeinzug20##eeinzug0#
@@ -341,23 +340,6 @@ The following variables exist to describe the resource system. Unless otherwise 
 #font02# Muliplayer Settings
 #font01#
 #aeinzug0##eeinzug0#
-In mutliplayer games a player could potentially cheat by changing the parameters of some items in the game, for example he could increase the strength of his units.
-
-To avoid this, checksums of some or all items can be included in a multiplayer game. 
-The left large list shows the items of the selected category that are available in the game, and the right list shows the items which are protected by checksums. 
-Note that only the checksums are included, not the items themselves. This means that checking an item that isn't available to all players in the game will result in an error. See also below.
-
-There are 3 modes how the game can use the checksums:
-#color1#no limit, no include#color0#
-#aeinzug15##eeinzug15#The game is not limited to the items whose checksums are included. If other items are used, their checksums will not be included, so they are not checked in any way.
-#aeinzug0##eeinzug0#
-#color1#no limit, include#color0#
-#aeinzug15##eeinzug15#The game is not limited to the items whose checksums are included. If other items are used, their checksums will be included, so the player who uses previously unincluded items first determines the parameters of these items.
-#aeinzug0##eeinzug0#
-#color1#limited#color0#
-#aeinzug15##eeinzug15#The game is limited to the items whose checksums are included. Other items may not be used.
-
-These settings have to be specified for EACH category!
 
 ##0060
 

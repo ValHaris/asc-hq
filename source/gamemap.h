@@ -34,7 +34,7 @@
  #include "messages.h"
 
 //! The number of game paramters that can be specified for each map.
-const int gameparameternum = 26;
+const int gameparameternum = 27;
 
 //! The names of the game paramter. \sa gameparameterdefault
 extern const char* gameparametername[ gameparameternum ];
@@ -70,7 +70,8 @@ enum GameParameter { cgp_fahrspur,
        cgp_superVisorCanSaveMap,
        cgp_objectsDestroyedByTerrain,
        cgp_trainingIncrement,
-       cgp_experienceDivisor };
+       cgp_experienceDivisor,
+       cgp_disableDirectView };
 
 
 //! an instance of an object type (#tobjecttype) on the map
