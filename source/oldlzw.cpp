@@ -6,9 +6,15 @@
     which should still be loaded.
 */
 
-//     $Id: oldlzw.cpp,v 1.7 2001-02-18 15:37:16 mbickel Exp $
+//     $Id: oldlzw.cpp,v 1.8 2001-10-21 16:07:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2001/02/18 15:37:16  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.6  2001/01/28 14:04:15  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -348,7 +354,7 @@ void tlzwstreamcompression  :: LZWOut ( CodeType code )
 
 
 
-int tlzwstreamcompression  :: readdata ( void* buf, int size, int excpt  )
+int tlzwstreamcompression  :: readdata ( void* buf, int size, bool excpt  )
 {
    if ( !initread )
       initreading();

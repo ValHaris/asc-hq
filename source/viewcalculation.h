@@ -29,6 +29,7 @@
                       int player;
                       int mode;
                       int height;
+                      bool rangeJamming;
 
                       int sonar,satellitenview,minenview;
                       int        viewdist;
@@ -37,7 +38,7 @@
                       virtual void  testfield ( const MapCoordinate& mc );
 
                 public:
-                      tcomputeview ( pmap _actmap ) : SearchFields ( _actmap ) { actView = _actmap->playerView; };
+                      tcomputeview ( pmap _actmap ) : SearchFields ( _actmap ), rangeJamming ( true ) { actView = _actmap->playerView; };
                  };
 
   class tcomputevehicleview : public tcomputeview {

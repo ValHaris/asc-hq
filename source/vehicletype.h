@@ -26,7 +26,7 @@
 
 
 //! The number of 'special' vehicle functions
-const int cvehiclefunctionsnum = 26;
+const int cvehiclefunctionsnum = 27;
 extern const char*  cvehiclefunctions[];
  #define cfsonar 1
  #define cfparatrooper 2
@@ -53,6 +53,7 @@ extern const char*  cvehiclefunctions[];
  #define cfkamikaze ( 1 << 23 )
  #define cfmineimmune ( 1 << 24 )
  #define cfenergyref ( 1 << 25 )
+ #define cfownFieldJamming ( 1 << 26 )
 
  #define cfvehiclefunctionsanzeige 0xFFFFFFFF
 

@@ -53,7 +53,8 @@ const char*  cvehiclefunctions[cvehiclefunctionsnum]  = {
                    "search for mineral resources automatically",
                    "Kamikaze only",
                    "immune to mines",
-                   "refuels energy" };
+                   "refuels energy",
+                   "jams only own field" };
 
 
 const char* AItasks[AiParameter::taskNum] = { "nothing",
