@@ -20,7 +20,7 @@
     <USERDEFINES value="HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32;_DEBUG"/>
     <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="ai.bpf"/>
-    <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include"/>
+    <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer"/>
     <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
     <LISTFILE value=""/>
@@ -65,10 +65,11 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=3
-Item0=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include
-Item1=$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\SDL\include
-Item2=$(BCB)\include;$(BCB)\include\vcl
+Count=4
+Item0=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer\
+Item1=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include
+Item2=$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\SDL\include
+Item3=$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
 Count=1

@@ -11,7 +11,7 @@
 #ifndef sound_h_included
 #define sound_h_included
 
-#include "SDL/SDL_mixer.h"
+#include sdlmixerheader
 #include "../ascstring.h"
 
 

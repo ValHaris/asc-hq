@@ -1,6 +1,11 @@
-//     $Id: global_os.h,v 1.2 2001-05-18 22:30:30 mbickel Exp $
+//     $Id: global_os.h,v 1.3 2001-07-14 21:07:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2001/05/18 22:30:30  mbickel
+//      The data file is now installed in the correct directory
+//      If the installation directory is changed with configure, the new path
+//       will now be compiled directly into ASC
+//
 //     Revision 1.1  2000/10/12 21:37:57  mbickel
 //      Further restructured platform dependant routines
 //
@@ -36,6 +41,7 @@
 
   #ifndef minimalIO
    #define sdlheader "SDL/SDL.h"
+   #define sdlmixerheader "SDL/SDL_mixer.h"
    #include sdlheader
   #endif 
 

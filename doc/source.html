@@ -32,19 +32,24 @@ We are building ASC/win with Borland C++ Builder 5. It should be possible to bui
 <H5>Borland C++ Builder / free commandline compiler</H5>
 
 <UL>
-<LI>JPEG-lib by the <A HREF="http://www.ijg.org">Independant Jpeg Group</A>. On their homepage are links where you can download the source code.
+<LI>Get JPEG-lib by the <A HREF="http://www.ijg.org">Independant Jpeg Group</A>. On their homepage are links where you can download the source code.
 <LI>Uncompress the JPEG-lib source code into asc/source/libs/jpeg-6b/
-<LI>SDL. It can be downloaded from <A HREF="http://www.libsdl.org">www.libsdl.org</A>. You need the source code and the DLL file (version 1.2 or newer). 
-<LI>The project files assume there is a <TT>SDL</TT> directory located in the same directory where <TT>asc</TT> is placed. You need this directory structure:<BR>  <TT>
+<LI>Get SDL. It can be downloaded from <A HREF="http://www.libsdl.org">www.libsdl.org</A>. You need the source code and the DLL file (version 1.2 or newer). 
+<LI>Get SDL_mixer. It can be downloaded from <A HREF="http://www.libsdl.org/libraries.html">www.libsdl.org/libraries.html</A>. You need the source code and the DLL file (version 1.2 or newer). 
+<LI>The project files assume there is a <TT>SDL</TT> and a <TT>SDL_mixer</TT> directory located in the same directory where <TT>asc</TT> is placed. You need this directory structure:<BR>  
+  <TT>
     asc\<BR>
     asc\source\<BR>
     asc\doc\<BR>
     SDL\<BR>
     SDL\include\<BR>
-    SDL\src\
-    </TT>
+    SDL\src\<BR>
+    SDL_mixer<BR>
+  </TT>
 <LI>Create a subdirectory called BIN in <TT>SDL\</TT> and put the SDL.DLL into it.
 <LI>Go to this directory and run: <TT>IMPLIB -a -c SDL.LIB SDL.DLL</TT> 
+<LI>Create a subdirectory called BIN in <TT>SDL_MIXER\</TT> and put the SDL_MIXER.DLL into it.
+<LI>Go to this directory and run: <TT>IMPLIB -a -c SDL_mixer.LIB SDL_mixer.DLL</TT> 
 
 <H6>Borland C++ Builder</H6>
 <UL>

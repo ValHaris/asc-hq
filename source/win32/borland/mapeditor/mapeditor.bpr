@@ -23,7 +23,7 @@
     <RESDEPEN value="$(RESFILES)"/>
     <LIBFILES value="..\..\..\..\..\sdl\bin\sdl.lib ..\..\..\libs\bzlib\win\bzlib.lib 
       ..\..\..\libs\triangul\win32\triangulation.lib 
-      ..\..\..\libs\jpeg-6b\libjpeg.lib"/>
+      ..\..\..\libs\jpeg-6b\libjpeg.lib ..\..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB"/>
     <LIBRARIES value="VCL50.lib"/>
     <SPARELIBS value="VCL50.lib"/>
     <PACKAGES value="VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi"/>
@@ -37,8 +37,8 @@
     <USERDEFINES value="karteneditor;HEXAGON;FREEMAPZOOM;_WIN32_;WIN32;_SDL_;_NOASM_;NEWKEYB;_DEBUG"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="mapeditor.bpf"/>
-    <INCLUDEPATH value="..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt"/>
-    <LIBPATH value="..\..\..;..\..\..\..\source;..\..\..\LIBS\getopt;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer"/>
+    <LIBPATH value="..\..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par -w-8027 -w-8026 -w-csu"/>
   </MACROS>
   <OPTIONS>
@@ -82,38 +82,40 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=16
-Item0=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32;..\..\..\LIBS\getopt
+Count=17
+Item0=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer
 Item1=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt
-Item2=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32;C:\Programme\ASCSRC\GAMES\ASC\SOURCE\LIBS\getopt
-Item3=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
-Item4=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
-Item5=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
-Item6=..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
-Item7=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
-Item8=..\..\..\..\..\sdl\src\main\win32;..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
-Item9=..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
-Item10=..\..\..;..\..\..\sdl;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;C:\Programme\ascsrc\games\asc\source\win32
-Item11=..\..\..;..\..\..\sdl;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include
-Item12=..\..\..\sdl;..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\sdl\include
-Item13=..\..\..\sdl;..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
-Item14=..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
-Item15=..\..\..;$(BCB)\include;$(BCB)\include\vcl
+Item2=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32;..\..\..\LIBS\getopt
+Item3=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32;C:\Programme\ASCSRC\GAMES\ASC\SOURCE\LIBS\getopt
+Item4=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
+Item5=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
+Item6=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
+Item7=..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
+Item8=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
+Item9=..\..\..\..\..\sdl\src\main\win32;..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
+Item10=..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
+Item11=..\..\..;..\..\..\sdl;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;C:\Programme\ascsrc\games\asc\source\win32
+Item12=..\..\..;..\..\..\sdl;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include
+Item13=..\..\..\sdl;..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\sdl\include
+Item14=..\..\..\sdl;..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
+Item15=..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
+Item16=..\..\..;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=12
-Item0=..\..\..;..\..\..\LIBS\getopt;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
-Item1=..\..\..\LIBS\getopt;..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
-Item2=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
-Item3=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
-Item4=..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
-Item5=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\..\source;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
-Item6=..\..\..\..\..\sdl\src\main\win32;..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
-Item7=..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
-Item8=..\..\..;..\..\..\sdl;..\..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
-Item9=..\..\..\sdl;..\..\..;..\..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
-Item10=..\..\..;..\..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
-Item11=..\..\..;$(BCB)\lib\obj;$(BCB)\lib
+Count=13
+Item0=..\..\..;..\..\..\..\source;..\..\..\LIBS\getopt;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\..\..;..\..\..\LIBS\getopt;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
+Item2=..\..\..\LIBS\getopt;..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
+Item3=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
+Item4=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
+Item5=..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
+Item6=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\..\source;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
+Item7=..\..\..\..\..\sdl\src\main\win32;..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
+Item8=..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
+Item9=..\..\..;..\..\..\sdl;..\..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
+Item10=..\..\..\sdl;..\..\..;..\..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
+Item11=..\..\..;..\..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
+Item12=..\..\..;$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1

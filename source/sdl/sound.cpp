@@ -10,10 +10,11 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_mixer.h>
 
 #include "../global.h"
+#include sdlheader
+#include sdlmixerheader
+
 #include "sound.h"
 
 #include "../basestrm.h"

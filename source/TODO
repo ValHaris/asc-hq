@@ -6,8 +6,6 @@ TODO list for ASC, programming department.
 
 Small tasks:
 
--3- fatalError() doesn't work on windows during the startup of ASC
-
 -7- writing a TPWM decoder for Battle Isle maps
 
 -5- writing a platform independant wrapper around vsnprintf (used in

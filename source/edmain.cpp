@@ -2,9 +2,15 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.44 2001-05-21 12:46:19 mbickel Exp $
+//     $Id: edmain.cpp,v 1.45 2001-07-14 21:07:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2001/05/21 12:46:19  mbickel
+//      Fixed infinite loop in AI::strategy
+//      Fixed bugs in mapeditor - event editing
+//      Fixed bugs in even loading / writing
+//      Fixed wrong build order AI <-> main program
+//
 //     Revision 1.43  2001/05/19 13:07:58  mbickel
 //      ASC now compiles with Borland C++ Builder again
 //      Added getopt for use with BCB
@@ -781,6 +787,7 @@ int mapeditorMainThread ( void* _mapname )
    mousevisible(true);
    cursor.show();
 
+   gameStartupComplete = true;
    editor();
    return 0;
 }

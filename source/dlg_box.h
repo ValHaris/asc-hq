@@ -2,9 +2,15 @@
     \brief Interface for some basic classes from which all of ASC's dialogs are derived
 */
 
-//     $Id: dlg_box.h,v 1.21 2001-05-21 12:46:19 mbickel Exp $
+//     $Id: dlg_box.h,v 1.22 2001-07-14 21:07:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2001/05/21 12:46:19  mbickel
+//      Fixed infinite loop in AI::strategy
+//      Fixed bugs in mapeditor - event editing
+//      Fixed bugs in even loading / writing
+//      Fixed wrong build order AI <-> main program
+//
 //     Revision 1.20  2001/02/26 12:35:08  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -143,6 +149,10 @@
   #define dlg_3dtitle 8
 
 
+/** This variable is set to true after the game is finished loading and is operational.
+    It is used for the fatal error message dialog box on win32, which will be the
+    standard Win32 dialog during startup, while during game it will use ASCs dialog system */
+extern bool gameStartupComplete;
 
 
   typedef word* pword ;

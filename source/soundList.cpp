@@ -15,7 +15,7 @@
 
 SoundList* SoundList::instance = NULL;
 
-const int soundNum = 29;
+const int soundNum = 27;
 
 struct {
           SoundList::Sample sample;
@@ -48,9 +48,7 @@ struct {
                              { SoundList::moving,  14, "MOVE.LIGHT_SHIP", NULL },
                              { SoundList::moving,  15, "MOVE.HEAVY_SHIP", NULL },
                              { SoundList::moving,  16, "MOVE.HELICOPTER", NULL },
-                             { SoundList::menu_ack,  0, "MENU.ACKNOWLEDGE", NULL },
-                             { SoundList::menu_fail, 0, "MENU.FAIL", NULL },
-                             { SoundList::building_conq,  0, "BUILDING.CONQUER", NULL }
+                             { SoundList::menu_ack,  0, "MENU.ACKNOWLEDGE", NULL }
                            };
 
 
@@ -168,8 +166,6 @@ Sound* SoundList::getSound( Sample snd, int subType )
 {
    if ( SoundSystem::getInstance()->isOff() )
       return NULL;
-
-   // once we have some more sounds this could be optimized to be faster than O(n)
 
    for ( int i = 0; i < soundNum; i++ )
       if ( snd == sounds[i].sample && subType == sounds[i].subType )

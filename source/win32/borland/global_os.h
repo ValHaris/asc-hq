@@ -1,6 +1,11 @@
-//     $Id: global_os.h,v 1.5 2001-05-18 22:30:30 mbickel Exp $
+//     $Id: global_os.h,v 1.6 2001-07-14 21:07:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2001/05/18 22:30:30  mbickel
+//      The data file is now installed in the correct directory
+//      If the installation directory is changed with configure, the new path
+//       will now be compiled directly into ASC
+//
 //     Revision 1.4  2001/01/28 21:39:31  mbickel
 //      Updated Borland C++ Building project files
 //      Fixed some compilation problems with Borland
@@ -45,6 +50,7 @@
 
   #ifndef minimalIO
    #define sdlheader "SDL.h"
+   #define sdlmixerheader "SDL_mixer.h"
    #include sdlheader
   #endif
   #ifdef __cplusplus

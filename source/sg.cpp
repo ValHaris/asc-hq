@@ -3,9 +3,14 @@
 */
 
 
-//     $Id: sg.cpp,v 1.147 2001-07-14 19:13:16 mbickel Exp $
+//     $Id: sg.cpp,v 1.148 2001-07-14 21:07:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.147  2001/07/14 19:13:16  mbickel
+//      Rewrote sound system
+//      Moveing units make sounds
+//      Added sound files to data
+//
 //     Revision 1.146  2001/07/14 13:15:17  mbickel
 //      Rewrote sound handling
 //
@@ -2043,7 +2048,7 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 
    if ( actprogressbar ) actprogressbar->startgroup();
 
-   SoundList::getInstance().init();
+   SoundList::init();
 
    if ( actprogressbar ) actprogressbar->startgroup();
 
@@ -2398,6 +2403,8 @@ int gamethread ( void* data )
       pd.init();
 
       abortgame = 0;
+      gameStartupComplete = true;
+
 
       do {
          try {

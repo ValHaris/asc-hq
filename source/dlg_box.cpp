@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.51 2001-07-14 14:26:10 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.52 2001-07-14 21:07:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2001/07/14 14:26:10  mbickel
+//      Some cleanup
+//
 //     Revision 1.50  2001/07/14 13:15:17  mbickel
 //      Rewrote sound handling
 //
@@ -275,6 +278,9 @@
 #ifdef sgmain
  #include "building.h"
 #endif
+
+bool gameStartupComplete = false;
+
 
 char strrstring[200];
 
@@ -2023,17 +2029,6 @@ void displaymessage( const char* formatstring, int num, ... )
    if ( lng >= 1000 )
       displaymessage ( "dlg_box.cpp / displaymessage:   string to long !\nPlease report this error",1 );
 
-/*
-   #ifdef _WIN32_
-   if ( num == 2 ) {
-      MessageBox( NULL, tempbuf,
-                        "Fatal Error",
-                        MB_ICONERROR | MB_OK | MB_TASKMODAL );
-      exit ( 1 );
-   }
-   #endif
-*/
-
    char* a = tempbuf;
 
    tstringa stringtooutput;
@@ -2073,6 +2068,13 @@ void displaymessage( const char* formatstring, int num, ... )
       for ( int i=0; i<= linenum ;i++ )
           fprintf(stderr,"%s\n",stringtooutput[i]);
    } else {
+      #ifdef _WIN32_
+        if ( !gameStartupComplete && num==2 ) {
+           MessageBox(NULL, tempbuf, "Fatal Error", MB_ICONERROR | MB_OK | MB_TASKMODAL );
+           exit(1);
+        }
+      #endif
+
       static int messageboxopen = 0;
       if ( messageboxopen )
          return;
