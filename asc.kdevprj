@@ -67,8 +67,8 @@ type=DATA
 [Workspace_1]
 browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/index.html
 cpp_file=/home/martin/asc/source/buildingtype.cpp
-header_file=Untitled.h
-openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/buildingtype.cpp
+header_file=/home/martin/asc/source/errors.h
+openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/unix/mapeditor/Makefile.am,/home/martin/asc/source/tools/weaponguide.cpp,/home/martin/asc/source/textfileparser.cpp,/home/martin/asc/source/itemrepository.cpp,/home/martin/asc/source/buildingtype.cpp,/home/martin/asc/source/buildingtype.h,/home/martin/asc/source/errors.h
 show_outputview=true
 show_treeview=true
 [asc.kdevprj]

@@ -60,6 +60,16 @@ const char*  cbuildingfunctions[cbuildingfunctionnum]  =
 BuildingType :: BuildingType ( void )
 {
    vehicleCategoriesLoadable = -1;
+
+   for ( int x = 0; x < 4; x++ )
+      for ( int y = 0; y < 6; y++ ) {
+         for ( int w = 0; w < cwettertypennum; w++ )
+            for ( int i = 0; i < maxbuildingpicnum; i++ ) {
+               w_picture [w][i][x][y] = NULL;
+               bi_picture [w][i][x][y] = -1;
+            }
+         destruction_objects [x][y] = 0;
+      }
 }
 
 
@@ -309,6 +319,8 @@ ASCString BuildingType :: LocalCoordinate :: toString ( ) const
   return s;
 }
 
+class InvalidString : public ASCexception {};
+
 BuildingType :: LocalCoordinate :: LocalCoordinate ( const ASCString& s )
 {
   ASCString s2 = s;
@@ -316,189 +328,204 @@ BuildingType :: LocalCoordinate :: LocalCoordinate ( const ASCString& s )
   if ( s2.length() < 2 ) {
      x = -1;
      y = -1;
+     throw InvalidString();
   } else {
      x = s2[0] - 'A';
      y = s2[1] - '1';
+     if ( x < 0 || x > 5 || y < 0 || y > 7 )
+        throw InvalidString();
   }
 }
 
 
 void BuildingType :: runTextIO ( PropertyContainer& pc )
 {
-   pc.addString( "Name", name );
-   pc.addInteger ( "ConstructionStages", construction_steps ).evaluate();
+   try {
+      pc.addString( "Name", name );
+      pc.addInteger ( "ConstructionStages", construction_steps ).evaluate();
 
-   BitSet weatherBits;
+      BitSet weatherBits;
 
-   for ( int i = 0; i < cwettertypennum; i++ )
-      for ( int x = 0; x < 4; x++ )
-         for ( int y = 0; y < 6; y++ )
-            if ( w_picture[i][0][x][y] )
-               weatherBits.set(i);
+      for ( int i = 0; i < cwettertypennum; i++ )
+         for ( int x = 0; x < 4; x++ )
+            for ( int y = 0; y < 6; y++ )
+               if ( w_picture[i][0][x][y] )
+                  weatherBits.set(i);
 
-   pc.addTagArray( "Weather", weatherBits, cwettertypennum-1, weatherTags ).evaluate();
-
-
-   ASCString fieldNames;
-   for ( int a = 0; a < 4; a++ )
-      for ( int b = 0; b < 6; b++ )
-         if ( w_picture[0][0][a][b] ) {
-            fieldNames += LocalCoordinate( a, b).toString();
-            fieldNames += " ";
-         }
-
-   pc.addString( "Fields", fieldNames ).evaluate();
-
-   typedef vector<LocalCoordinate> Fields;
-   Fields fields;
-   StringTokenizer st ( fieldNames );
-   ASCString t = st.getNextToken();
-   while ( !t.empty() ) {
-      fields.push_back ( LocalCoordinate( t ));
-      t = st.getNextToken();
-   }
+      pc.addTagArray( "Weather", weatherBits, cwettertypennum-1, weatherTags ).evaluate();
 
 
-   bool bi3pics = false;
+      ASCString fieldNames;
+      for ( int a = 0; a < 4; a++ )
+         for ( int b = 0; b < 6; b++ )
+            if ( w_picture[0][0][a][b] ) {
+               fieldNames += LocalCoordinate( a, b).toString();
+               fieldNames += " ";
+            }
 
-   for ( int i = 0; i < 4; i++ )
-      for ( int j = 0; j < 6; j++ )
-         if ( w_picture[0][0][i][j] && bi_picture[0][0][i][j] >= 0 )
-            bi3pics = true;
+      pc.addString( "Fields", fieldNames ).evaluate();
 
-   pc.addBool  ( "UseGFXpics", bi3pics ).evaluate();
+      typedef vector<LocalCoordinate> Fields;
+      Fields fields;
+      StringTokenizer st ( fieldNames );
+      ASCString t = st.getNextToken();
+      while ( !t.empty() ) {
+         fields.push_back ( LocalCoordinate( t ));
+         t = st.getNextToken();
+      }
 
-   if ( bi3pics ) {
-      pc.openBracket ( "GFXpictures");
-      for ( int w = 0; w < cwettertypennum; w++ )
-         if ( weatherBits.test(w) ) {
-            pc.openBracket (weatherTags[w] );
 
-            for ( int c = 0; c < construction_steps; c++ ) {
-               pc.openBracket ( ASCString("Stage")+strrr(c+1) );
+      bool bi3pics = false;
 
-               for ( Fields::iterator i = fields.begin(); i != fields.end(); i++ )
-                  pc.addInteger ( i->toString(), bi_picture[w][c][i->x][i->y] );
+      for ( int i = 0; i < 4; i++ )
+         for ( int j = 0; j < 6; j++ )
+            if ( w_picture[0][0][i][j] && bi_picture[0][0][i][j] >= 0 )
+               bi3pics = true;
 
+      pc.addBool  ( "UseGFXpics", bi3pics ).evaluate();
+
+      if ( bi3pics ) {
+         pc.openBracket ( "GFXpictures");
+         for ( int w = 0; w < cwettertypennum; w++ )
+            if ( weatherBits.test(w) ) {
+               pc.openBracket (weatherTags[w] );
+
+               for ( int c = 0; c < construction_steps; c++ ) {
+                  pc.openBracket ( ASCString("Stage")+strrr(c+1) );
+
+                  for ( Fields::iterator i = fields.begin(); i != fields.end(); i++ ) {
+                     pc.addInteger ( i->toString(), bi_picture[w][c][i->x][i->y] ).evaluate();
+                     if ( pc.isReading() )
+                        loadbi3pict_double ( bi_picture[w][c][i->x][i->y],
+                                             &w_picture[w][c][i->x][i->y],
+                                             CGameOptions::Instance()->bi3.interpolate.buildings );
+                  }
+
+                  pc.closeBracket();
+               }
                pc.closeBracket();
             }
-            pc.closeBracket();
-         }
-      pc.closeBracket();
-   } else {
-      pc.openBracket ( "Pictures");
-      if ( !pc.isReading() ) {
-         tvirtualdisplay vdd( construction_steps*500, 250 );
-         for ( int w = 0; w < cwettertypennum; w++ )
-            if ( weatherBits.test(w) ) {
-               for ( int c = 0; c < construction_steps; c++ )
-                  for ( int x = 0; x < 4; x++ )
-                     for ( int y = 0; y < 6; y++ )
-                        if ( w_picture[w][c][x][y] )
-                           putspriteimage ( 500*c + x * fielddistx + (y&1)*fielddisthalfx, y * fielddisty, w_picture[w][c][x][y] );
-
-               void* img = asc_malloc ( imagesize ( 0, 0, construction_steps*500-1, 250-1 ));
-               getimage ( 0, 0, construction_steps*500-1, 250-1, img );
-
-               pc.addImage ( weatherTags[w], img, extractFileName_withoutSuffix ( fileName )+weatherAbbrev[w]+".pcx" ).evaluate();
-
-               asc_free ( img );
-            }
+         pc.closeBracket();
       } else {
-         for ( int w = 0; w < cwettertypennum; w++ )
-            if ( weatherBits.test(w) ) {
-               void* img = NULL;
-               pc.addImage ( weatherTags[w], img, extractFileName_withoutSuffix ( fileName )+weatherAbbrev[w]+".pcx" ).evaluate();
-               tvirtualdisplay ( construction_steps*500, 250 );
-               putimage ( 0, 0, img );
-               asc_free ( img );
+         pc.openBracket ( "Pictures");
+         if ( !pc.isReading() ) {
+            tvirtualdisplay vdd( construction_steps*500, 250 );
+            for ( int w = 0; w < cwettertypennum; w++ )
+               if ( weatherBits.test(w) ) {
+                  for ( int c = 0; c < construction_steps; c++ )
+                     for ( int x = 0; x < 4; x++ )
+                        for ( int y = 0; y < 6; y++ )
+                           if ( w_picture[w][c][x][y] )
+                              putspriteimage ( 500*c + x * fielddistx + (y&1)*fielddisthalfx, y * fielddisty, w_picture[w][c][x][y] );
+
+                  void* img = asc_malloc ( imagesize ( 0, 0, construction_steps*500-1, 250-1 ));
+                  getimage ( 0, 0, construction_steps*500-1, 250-1, img );
+
+                  pc.addImage ( weatherTags[w], img, extractFileName_withoutSuffix ( fileName )+weatherAbbrev[w]+".pcx" ).evaluate();
+
+                  asc_free ( img );
+               }
+         } else {
+            for ( int w = 0; w < cwettertypennum; w++ )
+               if ( weatherBits.test(w) ) {
+                  void* img = NULL;
+                  pc.addImage ( weatherTags[w], img, extractFileName_withoutSuffix ( fileName )+weatherAbbrev[w]+".pcx" ).evaluate();
+                  tvirtualdisplay vd ( construction_steps*500, 250 );
+                  putimage ( 0, 0, img );
+                  asc_free ( img );
 
 
-               for ( int c = 0; c < construction_steps; c++ )
-                  for ( int x = 0; x < 4; x++ )
-                     for ( int y = 0; y < 6; y++ )
-                        if ( w_picture[w][c][x][y] ) {
-                           void* img = asc_malloc ( imagesize ( 0, 0, fieldsizex, fieldsizey ));
-                           int xx = 500*c + x * fielddistx + (y&1)*fielddisthalfx;
-                           int yy = y * fielddisty;
-                           getimage ( xx, yy, xx + fieldsizex-1, yy + fieldsizey-1, img );
-                           tvirtualdisplay vd ( fieldsizex, fieldsizey );
-                           putimage ( 0, 0, img );
-                           putmask ( 0, 0, getFieldMask(), 0 );
-                           getimage ( 0, 0, fieldsizex-1, fieldsizey-1, img );
-                           w_picture[w][c][x][y] = img;
-                        }
+                  for ( int c = 0; c < construction_steps; c++ )
+                     for ( Fields::iterator i = fields.begin(); i != fields.end(); i++ ) {
+                        int x = i->x;
+                        int y = i->y;
+                        void* img = asc_malloc ( imagesize ( 0, 0, fieldsizex, fieldsizey ));
+                        int xx = 500*c + x * fielddistx + (y&1)*fielddisthalfx;
+                        int yy = y * fielddisty;
+                        getimage ( xx, yy, xx + fieldsizex-1, yy + fieldsizey-1, img );
+                        tvirtualdisplay vd ( fieldsizex, fieldsizey );
+                        putimage ( 0, 0, img );
+                        putmask ( 0, 0, getFieldMask(), 0 );
+                        getimage ( 0, 0, fieldsizex-1, fieldsizey-1, img );
+                        w_picture[w][c][x][y] = img;
+                     }
 
-            }
+               }
 
+         }
+         pc.closeBracket();
       }
+
+
+      bool rubble = false;
+      for ( int i = 0; i < 4; i++ )
+         for ( int j = 0; j < 6; j++ )
+            if ( destruction_objects[i][j] > 0 )
+               rubble = true;
+
+      pc.addBool ( "RubbleObjects", rubble ).evaluate();
+      if ( rubble ) {
+         pc.openBracket ( "Rubble");
+         for ( Fields::iterator i = fields.begin(); i != fields.end(); i++ )
+            pc.addInteger ( i->toString(), destruction_objects[i->x][i->y] );
+         pc.closeBracket();
+      }
+
+
+      ASCString entryString = entry.toString();
+      pc.addString ( "Entry", entryString ).evaluate();
+      if ( pc.isReading() ) {
+         StringTokenizer st ( entryString );
+         entry = LocalCoordinate ( st.getNextToken() );
+      }
+
+      pc.addInteger( "ID", id );
+      pc.addInteger( "Armor", _armor );
+      pc.addInteger( "View", view );
+      pc.addInteger( "Jaming", jamming );
+
+      pc.openBracket ( "Cargo" );
+       pc.addInteger( "MaxUnitSize", loadcapacity );
+       pc.addTagInteger( "EnterHeight", loadcapability, choehenstufennum, heightTags );
+       pc.addTagInteger( "Cargo_ReachableHeightReq", unitheightreq, choehenstufennum, heightTags );
+       pc.addTagInteger( "Cargo_ReachableHeightNot", unitheight_forbidden, choehenstufennum, heightTags );
+       pc.addTagInteger ( "CategoriesNOT", vehicleCategoriesLoadable, cmovemalitypenum, unitCategoryTags, true );
       pc.closeBracket();
-   }
 
+      pc.addTagInteger ( "Functions", special, cbuildingfunctionnum, buildingFunctionTags );
 
-   bool rubble = false;
-   for ( int i = 0; i < 4; i++ )
-      for ( int j = 0; j < 6; j++ )
-         if ( destruction_objects[i][j] > 0 )
-            rubble = true;
+      pc.addInteger ( "Techlevel", technologylevel );
 
-   pc.addBool ( "RubbleObjects", rubble ).evaluate();
-   if ( rubble ) {
-      pc.openBracket ( "Rubble");
-      for ( Fields::iterator i = fields.begin(); i != fields.end(); i++ )
-         pc.addInteger ( i->toString(), destruction_objects[i->x][i->y] );
+      pc.openBracket("TerrainAccess" );
+       terrainaccess.runTextIO ( pc );
       pc.closeBracket();
+
+
+      pc.addInteger ( "MaxResearch", maxresearchpoints );
+
+      pc.openBracket ( "ConstructionCost" );
+       productionCost.runTextIO ( pc );
+      pc.closeBracket ();
+
+      pc.openBracket ( "MaxResourceProduction" );
+       maxplus.runTextIO ( pc );
+      pc.closeBracket ();
+
+      pc.openBracket ( "StorageCapacity" );
+       pc.openBracket( "BImode" );
+        _bi_maxstorage.runTextIO ( pc );
+       pc.closeBracket();
+       pc.openBracket ( "ASCmode" );
+        _tank.runTextIO ( pc );
+       pc.closeBracket();
+      pc.closeBracket ();
+
+      pc.addTagInteger( "Height", buildingheight, choehenstufennum, heightTags );
+
+      pc.addTagInteger( "ExternalLoading", externalloadheight, choehenstufennum, heightTags );
    }
-
-
-   ASCString entryString = entry.toString();
-   pc.addString ( "Entry", entryString ).evaluate();
-   if ( pc.isReading() )
-      entry = LocalCoordinate ( entry );
-
-   pc.addInteger( "ID", id );
-   pc.addInteger( "Armor", _armor );
-   pc.addInteger( "View", view );
-   pc.addInteger( "Jaming", jamming );
-
-   pc.openBracket ( "Cargo" );
-    pc.addInteger( "MaxUnitSize", loadcapacity );
-    pc.addTagInteger( "EnterHeight", loadcapability, choehenstufennum, heightTags );
-    pc.addTagInteger( "Cargo_ReachableHeightReq", unitheightreq, choehenstufennum, heightTags );
-    pc.addTagInteger( "Cargo_ReachableHeightNot", unitheight_forbidden, choehenstufennum, heightTags );
-    pc.addTagInteger ( "CategoriesNOT", vehicleCategoriesLoadable, cmovemalitypenum, unitCategoryTags, true );
-   pc.closeBracket();
-
-   pc.addTagInteger ( "Functions", special, cbuildingfunctionnum, buildingFunctionTags );
-
-   pc.addInteger ( "Techlevel", technologylevel );
-
-   pc.openBracket("TerrainAccess" );
-    terrainaccess.runTextIO ( pc );
-   pc.closeBracket();
-
-
-   pc.addInteger ( "MaxResearch", maxresearchpoints );
-
-   pc.openBracket ( "ConstructionCost" );
-    productionCost.runTextIO ( pc );
-   pc.closeBracket ();
-
-   pc.openBracket ( "MaxResourceProduction" );
-    maxplus.runTextIO ( pc );
-   pc.closeBracket ();
-
-   pc.openBracket ( "StorageCapacity" );
-    pc.openBracket( "BImode" );
-     _bi_maxstorage.runTextIO ( pc );
-    pc.closeBracket();
-    pc.openBracket ( "ASCmode" );
-     _tank.runTextIO ( pc );
-    pc.closeBracket();
-   pc.closeBracket ();
-
-   pc.addTagInteger( "Height", buildingheight, choehenstufennum, heightTags );
-
-   pc.addTagInteger( "ExternalLoading", externalloadheight, choehenstufennum, heightTags );
+   catch ( InvalidString ) {
+      pc.error ( "Could not parse building field coordinate");
+   }
 }
 

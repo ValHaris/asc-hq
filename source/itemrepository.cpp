@@ -313,35 +313,35 @@ void         loadallvehicletypes(void)
 void         loadallobjecttypes (void)
 {
 
-     tfindfile ff ( "*.obl" );
+   tfindfile ff ( "*.obl" );
 
-     string c = ff.getnextname();
+   string c = ff.getnextname();
 
-     while ( !c.empty() ) {
-         if ( actprogressbar )
-            actprogressbar->point();
+   while ( !c.empty() ) {
+       if ( actprogressbar )
+          actprogressbar->point();
 
-            addobjecttype ( loadobjecttype( c.c_str() ));
+          addobjecttype ( loadobjecttype( c.c_str() ));
 
-         c = ff.getnextname();
-      }
+       c = ff.getnextname();
+    }
 
 
-       TextPropertyList& tpl = textFileRepository["objecttype"];
-       for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
-          if ( actprogressbar )
-            actprogressbar->point();
+    TextPropertyList& tpl = textFileRepository["objecttype"];
+    for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
+       if ( actprogressbar )
+         actprogressbar->point();
 
-         PropertyReadingContainer pc ( "objecttype", *i );
+      PropertyReadingContainer pc ( "objecttype", *i );
 
-         ObjectType* ot = new ObjectType;
-         ot->runTextIO ( pc );
-         pc.run();
+      ObjectType* ot = new ObjectType;
+      ot->runTextIO ( pc );
+      pc.run();
 
-         ot->fileName = (*i)->fileName;
-         ot->location = (*i)->location;
-         addobjecttype ( ot );
-      }
+      ot->fileName = (*i)->fileName;
+      ot->location = (*i)->location;
+      addobjecttype ( ot );
+   }
 }
 
 
@@ -378,37 +378,34 @@ void         loadalltechnologies(void)
 
 void         loadallterraintypes(void)
 {
+   tfindfile ff ( "*.trr" );
 
-      tfindfile ff ( "*.trr" );
+   string c = ff.getnextname();
 
-      string c = ff.getnextname();
+   while( !c.empty() ) {
+      if ( actprogressbar )
+         actprogressbar->point();
 
-      while( !c.empty() ) {
-         if ( actprogressbar )
-            actprogressbar->point();
+      addterraintype ( loadterraintype( c.c_str() ));
 
-         addterraintype ( loadterraintype( c.c_str() ));
+      c = ff.getnextname();
+   }
 
-         c = ff.getnextname();
-      }
+   TextPropertyList& tpl = textFileRepository["terraintype"];
+   for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
+      if ( actprogressbar )
+        actprogressbar->point();
 
-       TextPropertyList& tpl = textFileRepository["terraintype"];
-       for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
-          if ( actprogressbar )
-            actprogressbar->point();
+      PropertyReadingContainer pc ( "terraintype", *i );
 
-         PropertyReadingContainer pc ( "terraintype", *i );
+      TerrainType* tt = new TerrainType;
+      tt->runTextIO ( pc );
+      pc.run();
 
-         TerrainType* tt = new TerrainType;
-         tt->runTextIO ( pc );
-         pc.run();
-
-         tt->fileName = (*i)->fileName;
-         tt->location = (*i)->location;
-         addterraintype ( tt );
-      }
-
-
+      tt->fileName = (*i)->fileName;
+      tt->location = (*i)->location;
+      addterraintype ( tt );
+   }
 }
 
 
@@ -427,7 +424,24 @@ void         loadallbuildingtypes(void)
       addbuildingtype ( loadbuildingtype( c.c_str() ));
 
       c = ff.getnextname();
-   } 
+   }
+
+   TextPropertyList& tpl = textFileRepository["buildingtype"];
+   for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
+      if ( actprogressbar )
+        actprogressbar->point();
+
+      PropertyReadingContainer pc ( "buildingtype", *i );
+
+      BuildingType* bt = new BuildingType;
+      bt->runTextIO ( pc );
+      pc.run();
+
+      bt->fileName = (*i)->fileName;
+      bt->location = (*i)->location;
+      addbuildingtype ( bt );
+   }
+
 } 
 
 

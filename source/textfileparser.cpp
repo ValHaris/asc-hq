@@ -573,7 +573,7 @@ void PropertyContainer::ImageProperty::evaluate_rw ( )
    } else {
       int width, height;
       getpicsize( property, width, height) ;
-      tvirtualdisplay vdp ( 100, 100, 255, 8 );
+      tvirtualdisplay vdp ( width+10, height+10, 255, 8 );
       putimage ( 0, 0, property );
       valueToWrite = extractFileName_withoutSuffix(fileName) + ".pcx";
       writepcx ( valueToWrite, 0, 0, width-1, height-1, pal );

@@ -1,3 +1,63 @@
+2001-08-09 21:48  mbickel
+
+	* asc.kdevprj, source/buildingtype.cpp:  Improved building text
+	files
+
+2001-08-09 21:28  mbickel
+
+	* source/: buildingtype.cpp, buildingtype.h, controls.cpp,
+	edmisc.cpp, loadbi3.cpp, loaders.cpp, sgstream.cpp,
+	textfiletags.cpp, textfiletags.h, tools/bin2text.cpp:  Started
+	adding buildingtype text file functions
+
+2001-08-09 19:06  mbickel
+
+	* asc.bpg, source/edselfnt.cpp, source/mapdisplay.cpp,
+	source/mapdisplay.h, source/ai/ai.bpr,
+	source/ai/buildingcapture.cpp:	Fixed some warnings
+
+2001-08-09 17:58  mbickel
+
+	* asc.kdevprj, data/bi3maptranslation.txt, data/data.version,
+	source/edglobal.cpp, source/loadbi3.cpp, source/objxlat.cpp,
+	source/sgstream.cpp, source/textfileparser.cpp,
+	source/unitctrl.cpp:  Some usability improvements in the map editor
+	 More flexible BI3 map import
+	 Better textfile error messages
+
+2001-08-09 16:50  mbickel
+
+	* asc.bpg, data/bi3maptranslation.txt, data/g_bpipe.veh,
+	data/palette.map, data/legacy/g_bpipe.veh, source/basestrm.cpp,
+	source/edglobal.cpp, source/edselfnt.cpp,
+	source/itemrepository.cpp, source/loadbi3.cpp, source/misc.cpp,
+	source/objxlat.cpp, source/sgstream.cpp, source/textfileparser.cpp,
+	source/textfileparser.h, source/tools/win/gfx2pcx.bpr,
+	source/tools/win/makegfx.bpr, source/tools/win/viewid.bpr:  Added
+	palette.map to data directory
+	 Improved usability of terrain selection in mapeditor
+	 New terrain translation in bi3 import function
+	 Better error messages in text parser
+	 Better error message: duplicate ID
+
+2001-08-09 12:28  mbickel
+
+	* asc.kdevprj, configure, configure.in, source/baseaiinterface.h,
+	source/dialog.cpp, source/dlg_box.cpp, source/dlg_box.h,
+	source/edevents.cpp, source/edevents.h, source/edgen.cpp,
+	source/edmisc.cpp, source/loadbi3.cpp, source/strtmesg.cpp,
+	source/terraintype.h, source/textfileparser.h, source/unitctrl.cpp,
+	source/vehicletype.cpp, source/vehicletype.h, source/ai/base.cpp,
+	source/ai/buildingcapture.cpp, source/ai/misc.cpp,
+	source/ai/service.cpp, source/ai/tactics.cpp:  Fixed AI problems
+	 Mapeditor can edit a units AI parameter
+
+2001-08-08 00:11  mbickel
+
+	* ChangeLog, asc.kdevprj, data/helpsys2.txt,
+	source/unix/global_os.h:  Unix build now uses namespace
+	 Fixed typo in tutorial
+
 2001-08-07 23:24  mbickel
 
 	* data/s_aa-shi.veh, data/s_battle.veh, data/s_cruisr.veh,
