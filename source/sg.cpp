@@ -113,6 +113,7 @@
 #include "messagedlg.h"
 #include "statisticdialog.h"
 #include "clipboard.h"
+#include "mapdisplay2.h"
 
 // #define MEMCHK
 
@@ -1089,6 +1090,7 @@ void renameUnit()
 }
 
 
+// user actions using the old event system
 void execuseraction ( tuseractions action )
 {
    switch ( action ) {
@@ -1453,9 +1455,6 @@ void execuseraction ( tuseractions action )
          statisticDialog();
          break;
 
-      case ua_soundDialog:
-         soundSettings();
-         break;
       case ua_showPlayerSpeed:
          showPlayerTime();
          break;
@@ -1532,16 +1531,29 @@ void execuseraction ( tuseractions action )
             }
          }
          break;
+      default:
+         break;
+   }
+}
 
 
+// user actions using the new event system
+void execuseraction2 ( tuseractions action )
+{
+   switch ( action ) {
+   
+      case ua_soundDialog:
+         soundSettings();
+         break;
       case ua_reloadDlgTheme:
              getPGApplication().reloadTheme();
              soundSettings();
          break;
-
+      default:
+         break;
    }
-}
 
+}
 
 
 void mainloopgeneralkeycheck ( tkey& ch )
@@ -1597,6 +1609,7 @@ bool execUserActionI  (PG_PopupMenu::MenuItem* menuItem )
    getPGApplication().enableLegacyEventHandling ( true );
    execuseraction( tuseractions( menuItem->getId() ) );
    getPGApplication().enableLegacyEventHandling ( false );
+   execuseraction2( tuseractions( menuItem->getId() ));
    return true;
 }
 
@@ -1632,16 +1645,24 @@ Menu::~Menu()
 
 void Menu::addfield( const char* name )
 {
+   ASCString s = name;
+   while ( s.find ( "~") != ASCString::npos )
+      s.erase( s.find( "~"),1 );
+      
    currentMenu = new PG_PopupMenu( NULL, -1, -1, "" );
    categories.push_back ( currentMenu );
-   Add ( name, currentMenu );
+   Add ( s, currentMenu );
    currentMenu->sigSelectMenuItem.connect( SigC::slot( execUserActionI));
 
 }
 
 void Menu::addbutton( const char* name, int id )
 {
-   currentMenu->addMenuItem( name, id );
+   ASCString s = name;
+   while ( s.find ( "~") != ASCString::npos )
+      s.erase( s.find( "~"),1 );
+      
+   currentMenu->addMenuItem( s, id );
 }
 
 
@@ -2334,7 +2355,7 @@ int main(int argc, char *argv[] )
 
 
    SDL_WM_SetIcon( icon->GetSurface(), NULL );
-   app.InitScreen( xr, yr, 8, flags);
+   app.InitScreen( xr, yr, 32, flags);
   
 //   initASCGraphicSubsystem ( app.GetScreen(), icon );
 

@@ -1310,7 +1310,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  int col = stream->readInt();
                                  int x = stream->readInt();
                                  int y = stream->readInt();
-                                 int cl = stream->readInt();
+                                 stream->readInt(); // class
                                  int nwid = stream->readInt();
                                  readnextaction();
 
@@ -1372,7 +1372,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  stream->readInt();  // size
                                  int x = stream->readInt();
                                  int y = stream->readInt();
-                                 int exp = stream->readInt();
+                                 stream->readInt(); // experience
                                  int nwid = stream->readInt();
                                  readnextaction();
 

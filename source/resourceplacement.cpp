@@ -1,4 +1,3 @@
-/
 // C++ Implementation: resourceplacement
 //
 // Description:

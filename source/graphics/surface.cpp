@@ -26,11 +26,19 @@
 #include "../basegfx.h"
 #include "../basestrm.h"
 #include "../sdl/SDLStretch.h"
+#include "../misc.h"
 
  SDLmm::PixelFormat* Surface::default8bit  = NULL;
  SDLmm::PixelFormat* Surface::default32bit = NULL;
 
+void Surface::SetScreen( SDL_Surface* screen )
+{
+  if ( screen && screen->format->BitsPerPixel == 32 )
+     default32bit = new SDLmm::PixelFormat ( screen->format );
+}
 
+ 
+ 
  void writeDefaultPixelFormat ( SDLmm::PixelFormat pf, tnstream& stream )
  {
     stream.writeInt( 1 );
@@ -254,7 +262,18 @@ Surface Surface::createSurface( int width, int height, SDLmm::Color color )
 Surface Surface::createSurface( int width, int height, int depth, SDLmm::Color color )
 {
    assert ( depth == 32 || depth == 8 );
-   Surface s ( SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, depth, 0xff, 0xff00, 0xff0000, 0xff000000 ));
+
+   SDL_Surface* surf = NULL;   
+   if ( depth == 32 && default32bit ) {
+      int rmask = default32bit->Rmask();
+      int gmask = default32bit->Gmask();
+      int bmask = default32bit->Bmask();
+      int amask = ~(rmask | gmask | bmask );
+      surf = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, depth, rmask, gmask, bmask, amask );
+   } else
+      surf = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, depth, 0xff, 0xff00, 0xff0000, 0xff000000 );
+   
+   Surface s ( surf );
    if ( depth == 32 )
       s.Fill(color);
    else {
@@ -421,10 +440,6 @@ void colorShift ( Surface& s, int startcolor, int colNum, int shift )
 
 Surface rotateSurface( Surface& s, int degrees )
 {
-   const float pi = 3.14159265;
-
-   // float angle = degrees / 360 * 2 * pi + pi;
-
    SurfaceLock sl1 ( s );
 
    Surface dest = s.Duplicate();

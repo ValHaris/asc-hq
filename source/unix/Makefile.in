@@ -111,138 +111,12 @@ INCLUDES = -I$(top_builddir) -I$(top_src_dir) \
 			  -I$(top_builddir)/source -I$(top_src_dir)/source
 
 
-SUBDIRS = mapeditor
-
-AM_CXXFLAGS = @SDL_CFLAGS@ -Dsgmain  -DNEWKEYB @PARAGUI_CFLAGS@  @SIGC_CFLAGS@
-
-bin_PROGRAMS = asc
-
-asc_SOURCES = unitctrl.cpp soundList.cpp typen.cpp \
-strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp pd.cpp palette.cpp \
-newfont.cpp network.cpp misc.cpp loadpcxc.cpp loaders.cpp \
-loadbi3.cpp gui.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp \
-building.cpp basestrm.cpp basegfx.cpp attack.cpp CLoadable.cpp Property.cpp \
-PropertyGroup.cpp gameoptions.cpp Named.cpp astar2.cpp vehicletype.cpp \
-buildingtype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp \
-gamemap.cpp password.cpp password_dialog.cpp replay.cpp research.cpp \
-mapdisplay.cpp resourcenet.cpp dashboard.cpp ascstring.cpp graphicset.cpp \
-vehicle.cpp buildings.cpp networkdata.cpp textfileparser.cpp terraintype.cpp \
-objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp music.cpp \
-messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp messagedlg.cpp \
-simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
-gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp
-
-
-asc_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
-$(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-$(top_builddir)/source/sdl/libsdl.la @PARAGUI_LIBS@ \
-@LDADDLIBBZ2@  @SIGC_LIBS@ $(top_builddir)/source/graphics/libgraphics.la @SDL_TTF_LDADD@
-
+SUBDIRS = asc mapeditor
 subdir = source/unix
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-bin_PROGRAMS = asc$(EXEEXT)
-PROGRAMS = $(bin_PROGRAMS)
-
-am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) typen.$(OBJEXT) \
-	strtmesg.$(OBJEXT) stack.$(OBJEXT) spfst.$(OBJEXT) \
-	sgstream.$(OBJEXT) sg.$(OBJEXT) pd.$(OBJEXT) palette.$(OBJEXT) \
-	newfont.$(OBJEXT) network.$(OBJEXT) misc.$(OBJEXT) \
-	loadpcxc.$(OBJEXT) loaders.$(OBJEXT) loadbi3.$(OBJEXT) \
-	gui.$(OBJEXT) gamedlg.$(OBJEXT) dlg_box.$(OBJEXT) \
-	dialog.$(OBJEXT) controls.$(OBJEXT) building.$(OBJEXT) \
-	basestrm.$(OBJEXT) basegfx.$(OBJEXT) attack.$(OBJEXT) \
-	CLoadable.$(OBJEXT) Property.$(OBJEXT) PropertyGroup.$(OBJEXT) \
-	gameoptions.$(OBJEXT) Named.$(OBJEXT) astar2.$(OBJEXT) \
-	vehicletype.$(OBJEXT) buildingtype.$(OBJEXT) \
-	containerbase.$(OBJEXT) mapalgorithms.$(OBJEXT) \
-	viewcalculation.$(OBJEXT) gamemap.$(OBJEXT) password.$(OBJEXT) \
-	password_dialog.$(OBJEXT) replay.$(OBJEXT) research.$(OBJEXT) \
-	mapdisplay.$(OBJEXT) resourcenet.$(OBJEXT) dashboard.$(OBJEXT) \
-	ascstring.$(OBJEXT) graphicset.$(OBJEXT) vehicle.$(OBJEXT) \
-	buildings.$(OBJEXT) networkdata.$(OBJEXT) \
-	textfileparser.$(OBJEXT) terraintype.$(OBJEXT) \
-	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
-	itemrepository.$(OBJEXT) stringtokenizer.$(OBJEXT) \
-	music.$(OBJEXT) messages.$(OBJEXT) paradialog.$(OBJEXT) \
-	textfile_evaluation.$(OBJEXT) containerbasetype.$(OBJEXT) \
-	messagedlg.$(OBJEXT) simplestream.$(OBJEXT) \
-	mappolygons.$(OBJEXT) prehistoricevents.$(OBJEXT) \
-	gameevents.$(OBJEXT) gameeventsystem.$(OBJEXT) \
-	gameevent_dialogs.$(OBJEXT) statisticdialog.$(OBJEXT) \
-	clipboard.$(OBJEXT)
-asc_OBJECTS = $(am_asc_OBJECTS)
-asc_DEPENDENCIES = $(top_builddir)/source/libs/triangul/libtriangul.la \
-	$(top_builddir)/source/ai/libai.la \
-	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-	$(top_builddir)/source/sdl/libsdl.la \
-	$(top_builddir)/source/graphics/libgraphics.la
-asc_LDFLAGS =
-
-DEFS = @DEFS@
-DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
-CPPFLAGS = @CPPFLAGS@
-LDFLAGS = @LDFLAGS@
-LIBS = @LIBS@
-depcomp = $(SHELL) $(top_srcdir)/depcomp
-am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/CLoadable.Po ./$(DEPDIR)/Named.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/Property.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/PropertyGroup.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/ascstring.Po ./$(DEPDIR)/astar2.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/attack.Po ./$(DEPDIR)/basegfx.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/basestrm.Po ./$(DEPDIR)/building.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/buildings.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/buildingtype.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/clipboard.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/containerbase.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/containerbasetype.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/controls.Po ./$(DEPDIR)/dashboard.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/dialog.Po ./$(DEPDIR)/dlg_box.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/gamedlg.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/gameevent_dialogs.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/gameevents.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/gameeventsystem.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/gamemap.Po ./$(DEPDIR)/gameoptions.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/graphicset.Po ./$(DEPDIR)/gui.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/itemrepository.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/loadbi3.Po ./$(DEPDIR)/loaders.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/loadpcxc.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/mapalgorithms.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/mapdisplay.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/mappolygons.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/messagedlg.Po ./$(DEPDIR)/messages.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/misc.Po ./$(DEPDIR)/music.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/network.Po ./$(DEPDIR)/networkdata.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/newfont.Po ./$(DEPDIR)/objecttype.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/palette.Po ./$(DEPDIR)/paradialog.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/password.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/password_dialog.Po ./$(DEPDIR)/pd.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/prehistoricevents.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/replay.Po ./$(DEPDIR)/research.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/resourcenet.Po ./$(DEPDIR)/sg.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/sgstream.Po ./$(DEPDIR)/simplestream.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/soundList.Po ./$(DEPDIR)/spfst.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/stack.Po ./$(DEPDIR)/statisticdialog.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/stringtokenizer.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/strtmesg.Po ./$(DEPDIR)/terraintype.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/textfile_evaluation.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/textfileparser.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/textfiletags.Po ./$(DEPDIR)/typen.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/unitctrl.Po ./$(DEPDIR)/vehicle.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/vehicletype.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/viewcalculation.Po
-CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
-LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
-	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
-	$(AM_CXXFLAGS) $(CXXFLAGS)
-CXXLD = $(CXX)
-CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
-	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-CXXFLAGS = @CXXFLAGS@
-DIST_SOURCES = $(asc_SOURCES)
+DIST_SOURCES =
 
 RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	uninstall-info-recursive all-recursive install-data-recursive \
@@ -250,147 +124,14 @@ RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	uninstall-recursive check-recursive installcheck-recursive
 DIST_COMMON = Makefile.am Makefile.in
 DIST_SUBDIRS = $(SUBDIRS)
-SOURCES = $(asc_SOURCES)
-
 all: all-recursive
 
 .SUFFIXES:
-.SUFFIXES: .cpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am  $(top_srcdir)/configure.in $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  source/unix/Makefile
 Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
-binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
-install-binPROGRAMS: $(bin_PROGRAMS)
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(bindir)
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  if test -f $$p \
-	     || test -f $$p1 \
-	  ; then \
-	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
-	   echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) $$p $(DESTDIR)$(bindir)/$$f"; \
-	   $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) $$p $(DESTDIR)$(bindir)/$$f; \
-	  else :; fi; \
-	done
-
-uninstall-binPROGRAMS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  f=`echo "$$p" | sed 's,^.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/'`; \
-	  echo " rm -f $(DESTDIR)$(bindir)/$$f"; \
-	  rm -f $(DESTDIR)$(bindir)/$$f; \
-	done
-
-clean-binPROGRAMS:
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  echo " rm -f $$p $$f"; \
-	  rm -f $$p $$f ; \
-	done
-asc$(EXEEXT): $(asc_OBJECTS) $(asc_DEPENDENCIES) 
-	@rm -f asc$(EXEEXT)
-	$(CXXLINK) $(asc_LDFLAGS) $(asc_OBJECTS) $(asc_LDADD) $(LIBS)
-
-mostlyclean-compile:
-	-rm -f *.$(OBJEXT) core *.core
-
-distclean-compile:
-	-rm -f *.tab.c
-
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CLoadable.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Named.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Property.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PropertyGroup.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ascstring.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/astar2.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/attack.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/basegfx.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/basestrm.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/building.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildings.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildingtype.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/clipboard.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containerbase.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containerbasetype.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/controls.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dashboard.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dialog.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dlg_box.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamedlg.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameevent_dialogs.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameevents.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameeventsystem.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamemap.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameoptions.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/graphicset.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gui.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/itemrepository.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadbi3.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loaders.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadpcxc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapalgorithms.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapdisplay.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mappolygons.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messagedlg.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messages.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/music.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/network.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/networkdata.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/newfont.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/objecttype.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/palette.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/paradialog.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password_dialog.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pd.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/prehistoricevents.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/replay.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/research.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/resourcenet.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sg.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sgstream.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/simplestream.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/soundList.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spfst.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stack.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/statisticdialog.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stringtokenizer.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strtmesg.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/terraintype.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textfile_evaluation.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textfileparser.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textfiletags.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/typen.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitctrl.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicle.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicletype.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/viewcalculation.Po@am__quote@
-
-distclean-depend:
-	-rm -rf ./$(DEPDIR)
-
-.cpp.o:
-@AMDEP_TRUE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXXCOMPILE) -c -o $@ `test -f '$<' || echo '$(srcdir)/'`$<
-
-.cpp.obj:
-@AMDEP_TRUE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(CXXCOMPILE) -c -o $@ `cygpath -w $<`
-
-.cpp.lo:
-@AMDEP_TRUE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' @AMDEPBACKSLASH@
-@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(LTCXXCOMPILE) -c -o $@ `test -f '$<' || echo '$(srcdir)/'`$<
-CXXDEPMODE = @CXXDEPMODE@
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -538,10 +279,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-recursive
-all-am: Makefile $(PROGRAMS)
+all-am: Makefile
 installdirs: installdirs-recursive
 installdirs-am:
-	$(mkinstalldirs) $(DESTDIR)$(bindir)
 
 install: install-recursive
 install-exec: install-exec-recursive
@@ -570,12 +310,12 @@ maintainer-clean-generic:
 	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
 clean: clean-recursive
 
-clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
+clean-am: clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-recursive
 
-distclean-am: clean-am distclean-compile distclean-depend \
-	distclean-generic distclean-libtool distclean-tags
+distclean-am: clean-am distclean-generic distclean-libtool \
+	distclean-tags
 
 dvi: dvi-recursive
 
@@ -587,7 +327,7 @@ info-am:
 
 install-data-am:
 
-install-exec-am: install-binPROGRAMS
+install-exec-am:
 
 install-info: install-info-recursive
 
@@ -601,28 +341,25 @@ maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-recursive
 
-mostlyclean-am: mostlyclean-compile mostlyclean-generic \
-	mostlyclean-libtool
+mostlyclean-am: mostlyclean-generic mostlyclean-libtool
 
-uninstall-am: uninstall-binPROGRAMS uninstall-info-am
+uninstall-am: uninstall-info-am
 
 uninstall-info: uninstall-info-recursive
 
 .PHONY: $(RECURSIVE_TARGETS) GTAGS all all-am check check-am clean \
-	clean-binPROGRAMS clean-generic clean-libtool clean-recursive \
-	distclean distclean-compile distclean-depend distclean-generic \
-	distclean-libtool distclean-recursive distclean-tags distdir \
-	dvi dvi-am dvi-recursive info info-am info-recursive install \
-	install-am install-binPROGRAMS install-data install-data-am \
+	clean-generic clean-libtool clean-recursive distclean \
+	distclean-generic distclean-libtool distclean-recursive \
+	distclean-tags distdir dvi dvi-am dvi-recursive info info-am \
+	info-recursive install install-am install-data install-data-am \
 	install-data-recursive install-exec install-exec-am \
 	install-exec-recursive install-info install-info-am \
 	install-info-recursive install-man install-recursive \
 	install-strip installcheck installcheck-am installdirs \
 	installdirs-am installdirs-recursive maintainer-clean \
 	maintainer-clean-generic maintainer-clean-recursive mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	mostlyclean-recursive tags tags-recursive uninstall \
-	uninstall-am uninstall-binPROGRAMS uninstall-info-am \
+	mostlyclean-generic mostlyclean-libtool mostlyclean-recursive \
+	tags tags-recursive uninstall uninstall-am uninstall-info-am \
 	uninstall-info-recursive uninstall-recursive
 
 vpath %.cpp ..

@@ -27,23 +27,60 @@
  #include "../libs/sdlmm/src/sdlmm.h"
  #include "surface.h"
 
+ #include "../misc.h"
  #include "../palette.h"
  #include "../basegfx.h"
-
+ 
  typedef SDLmm::Color Color;
 
  class NullParamType {};
  extern NullParamType nullParam;
 
- extern void skipGCCBug( int w );  
- 
+
  template<int BytesPerPixel> class PixelSize2Type;
 
  template<> class PixelSize2Type<1> { public: typedef Uint8  PixelType; };
  template<> class PixelSize2Type<2> { public: typedef Uint16 PixelType; };
  template<> class PixelSize2Type<4> { public: typedef Uint32 PixelType; };
 
+ 
+ 
+ class TargetPixelSelector_All {
+     protected:
+        int skipTarget( int x, int y ) { return 0; };
+        void init( const Surface& srv ) {};
+     public:
+        TargetPixelSelector_All ( NullParamType npt = nullParam ) {};   
+  };
 
+  class TargetPixelSelector_Valid {
+        int w,h;
+     protected:
+        int skipTarget( int x, int y ) 
+        { 
+           if ( x >= 0 && y >= 0 && x < w && y < h )
+              return 0; 
+           else
+              if ( x < 0 )
+                 return -x;
+              else
+                 return 1;     
+        };
+        void init( const Surface& srv ) 
+        {
+           w = srv.w();
+           h = srv.h();
+        };
+     public:
+        TargetPixelSelector_Valid ( NullParamType npt = nullParam ) :w(0xffffff),h(0xffffff) {};   
+  };
+
+  
+  
+  
+  
+  
+  
  template<int pixelsize>
  class SourcePixelSelector_Plain {
        typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
@@ -70,6 +107,7 @@
 
        PixelType nextPixel() { return *(pointer++); };
        void nextLine() { pointer += pitch; };
+       void skipPixels( int pixNum ) { pointer += pixNum; };
 
        int getWidth()  { return surface->w(); };
        int getHeight() { return surface->h(); };
@@ -136,7 +174,7 @@
  template<>
  class ColorConverter<1,4> {
        SDL_Color* palette;
-       int rshift, gshift, bshift;
+       int rshift, gshift, bshift,ashift;
      public:
        typedef  PixelSize2Type<1>::PixelType SourcePixelType;
        typedef  PixelSize2Type<4>::PixelType TargetPixelType;
@@ -146,10 +184,21 @@
           rshift = targetSurface.GetPixelFormat().Rshift();
           gshift = targetSurface.GetPixelFormat().Gshift();
           bshift = targetSurface.GetPixelFormat().Bshift();
+          if ( targetSurface.GetPixelFormat().Amask() )
+             ashift = targetSurface.GetPixelFormat().Ashift();
+          else 
+             ashift = firstBit( ~( targetSurface.GetPixelFormat().Rmask() | targetSurface.GetPixelFormat().Gmask() | targetSurface.GetPixelFormat().Bmask()));
+          
        };
        
        TargetPixelType convert ( SourcePixelType sp ) { 
-            return (palette[sp].r << rshift) + (palette[sp].g << gshift) + (palette[sp].b << bshift);
+            if ( sp == 0xff ) 
+               return Surface::transparent << ashift;
+            else {
+               TargetPixelType a = Surface::opaque;
+               a <<= ashift;
+               return TargetPixelType(palette[sp].r << rshift) + TargetPixelType(palette[sp].g << gshift) + TargetPixelType(palette[sp].b << bshift) + a;
+            }   
        };
            
   };   
@@ -161,19 +210,22 @@
      int BytesPerTargetPixel,
      class SourceColorTransform,
      template<int> class ColorMerger,
-     template<int> class SourcePixelSelector = SourcePixelSelector_Plain
+     template<int> class SourcePixelSelector = SourcePixelSelector_Plain,
+     class TargetPixelSelector = TargetPixelSelector_All
   >
   class MegaBlitter : public SourceColorTransform,
                       public ColorMerger<BytesPerTargetPixel>,
-                      public SourcePixelSelector<BytesPerSourcePixel> {
+                      public SourcePixelSelector<BytesPerSourcePixel>,
+                      public TargetPixelSelector {
         typedef typename PixelSize2Type<BytesPerSourcePixel>::PixelType SourcePixelType;
         typedef typename PixelSize2Type<BytesPerTargetPixel>::PixelType TargetPixelType;
     public:
         MegaBlitter() { };
-        MegaBlitter( const SourceColorTransform& scm, const ColorMerger<BytesPerTargetPixel>& cm, const SourcePixelSelector<BytesPerSourcePixel>& sps) :
+        MegaBlitter( const SourceColorTransform& scm, const ColorMerger<BytesPerTargetPixel>& cm, const SourcePixelSelector<BytesPerSourcePixel>& sps, const TargetPixelSelector& tps ) :
                      SourceColorTransform( scm ),
                      ColorMerger<BytesPerTargetPixel>( cm ),
-                     SourcePixelSelector<BytesPerSourcePixel>( sps ) { };
+                     SourcePixelSelector<BytesPerSourcePixel>( sps ),
+                     TargetPixelSelector( tps ) { };
 
         int getWidth()  { return SourcePixelSelector<BytesPerTargetPixel>::getWidth(); };
         int getHeight() { return SourcePixelSelector<BytesPerTargetPixel>::getHeight(); };
@@ -193,6 +245,7 @@
 
            ColorMerger<BytesPerTargetPixel>::init( BytesPerSourcePixel == BytesPerTargetPixel ? src : dst );
            SourcePixelSelector<BytesPerSourcePixel>::init( src );
+           TargetPixelSelector::init( dst );
            
            ColorConverter<BytesPerSourcePixel,BytesPerTargetPixel> colorConverter( src, dst );
 
@@ -208,8 +261,14 @@
            typedef SourcePixelSelector<BytesPerTargetPixel> SPS;
            for ( int y = 0; y < h; ++y ) {
               for ( int x = 0; x < w; ++x ) {
-                  ColorMerger<BytesPerTargetPixel>::assign ( colorConverter.convert( SourceColorTransform::transform( SourcePixelSelector<BytesPerSourcePixel>::nextPixel())), pix );
-                  ++pix;
+                 int s = TargetPixelSelector::skipTarget(x,y);
+                 if ( !s ) {
+                    ColorMerger<BytesPerTargetPixel>::assign ( colorConverter.convert( SourceColorTransform::transform( SourcePixelSelector<BytesPerSourcePixel>::nextPixel())), pix );
+                    ++pix;
+                 } else {
+                    SourcePixelSelector<BytesPerSourcePixel>::skipPixels( s );   
+                    pix += s;
+                 }   
               }
               SourcePixelSelector<BytesPerSourcePixel>::nextLine();
               pix += pitch;
@@ -218,7 +277,7 @@
 
 };
 
-
+/*
   template<
      class Src, 
      class Dst,
@@ -250,7 +309,7 @@
            blit( src, dst, dstPos );
         };   
   };      
-
+*/
 /*
    template<
      class Src, 
@@ -284,16 +343,19 @@
      class SourceColorTransform,
      template<int> class ColorMerger,
      template<int> class SourcePixelSelector,
+     class TargetPixelSelector,
      typename SourceColorTransformParameter,
      typename ColorMergerParameter,
-     typename SourcePixelSelectorParameter
+     typename SourcePixelSelectorParameter,
+     typename TargetPixelSelectorParameter
   >
   void megaBlitter  ( const Surface& src, 
                       Surface& dst, 
                       const SPoint& pos,
                       const SourceColorTransformParameter& scmp = nullParam, 
                       const ColorMergerParameter& cmp  = nullParam, 
-                      const SourcePixelSelectorParameter spsp  = nullParam )
+                      const SourcePixelSelectorParameter spsp  = nullParam,
+                      const TargetPixelSelectorParameter tpsp  = nullParam )
 {
    switch ( src.GetPixelFormat().BytesPerPixel() ) {
       case 1: {   
@@ -303,11 +365,13 @@
                                             1,1,
                                             SourceColorTransform,
                                             ColorMerger,
-                                            SourcePixelSelector
+                                            SourcePixelSelector,
+                                            TargetPixelSelector
                                           >  blitter ( 
                                                         (SourceColorTransform)( scmp ),
                                                         (ColorMerger<1>)( cmp ), 
-                                                        (SourcePixelSelector<1>)( spsp )
+                                                        (SourcePixelSelector<1>)( spsp ),
+                                                        TargetPixelSelector(tpsp)
                                                       );
                                blitter.blit( src, dst, pos );
                              }   
@@ -318,11 +382,13 @@
                                             1,4,
                                             SourceColorTransform,
                                             ColorMerger,
-                                            SourcePixelSelector
+                                            SourcePixelSelector,
+                                            TargetPixelSelector
                                           >  blitter ( 
                                                         (SourceColorTransform)( scmp ),
                                                         (ColorMerger<4>)( cmp ), 
-                                                        (SourcePixelSelector<1>)( spsp )
+                                                        (SourcePixelSelector<1>)( spsp ),
+                                                        TargetPixelSelector(tpsp)
                                                       );
                            blitter.blit( src, dst, pos );
                         }   
@@ -338,11 +404,13 @@
                                             4,1,
                                             SourceColorTransform,
                                             ColorMerger,
-                                            SourcePixelSelector
+                                            SourcePixelSelector,
+                                            TargetPixelSelector
                                           >  blitter ( 
                                                         (SourceColorTransform)( scmp ),
                                                         (ColorMerger<1>)( cmp ), 
-                                                        (SourcePixelSelector<4>)( spsp )
+                                                        (SourcePixelSelector<4>)( spsp ),
+                                                        TargetPixelSelector(tpsp)
                                                       );
                                blitter.blit( src, dst, pos );
                              }   
@@ -353,20 +421,20 @@
                                             4,4,
                                             SourceColorTransform,
                                             ColorMerger,
-                                            SourcePixelSelector
+                                            SourcePixelSelector,
+                                            TargetPixelSelector
                                           >  blitter ( 
                                                         (SourceColorTransform)( scmp ),
                                                         (ColorMerger<4>)( cmp ), 
-                                                        (SourcePixelSelector<4>)( spsp )
+                                                        (SourcePixelSelector<4>)( spsp ),
+                                                        TargetPixelSelector(tpsp)
                                                       );
                            blitter.blit( src, dst, pos );
                         }   
                         break;
                  };       
-      
               }
               break; 
-      
    }
 }      
     
@@ -473,12 +541,72 @@
                   colorKey = 0xfefefe00;
        };
        
-       bool isNotAlpha( PixelType src ) 
+       bool isOpaque( PixelType src ) 
        {
           return (src & mask ) != colorKey;
        }
   };
 
+ 
+ template<>
+ class ColorMerger_AlphaHandler<1> {
+       typedef PixelSize2Type<1>::PixelType PixelType;
+       int colorKey;
+       int mask;
+    protected:
+       ColorMerger_AlphaHandler() : mask ( -1 ) {};
+       
+       void init( const Surface& srf )
+       {
+            if ( srf.flags() & SDL_SRCCOLORKEY ) {
+               colorKey = srf.GetPixelFormat().colorkey();
+            } else
+               colorKey = 0xff;
+       };
+       
+       bool isOpaque( PixelType src ) 
+       {
+          return (src & mask ) != colorKey;
+       }
+  };
+
+ template<>
+ class ColorMerger_AlphaHandler<4> {
+       typedef PixelSize2Type<4>::PixelType PixelType;
+       int amask, ashift;
+       PixelType colorKey;
+       bool hasColorKey;
+       int ckmask;
+    protected:
+       ColorMerger_AlphaHandler() : amask ( -1 ), ashift(0), hasColorKey(false) {};
+       
+       void init( const Surface& srf )
+       {
+            if ( srf.flags() & SDL_SRCCOLORKEY ) {
+               hasColorKey = true;
+               colorKey = srf.GetPixelFormat().colorkey();
+               ckmask = srf.GetPixelFormat().Rmask() | srf.GetPixelFormat().Gmask() | srf.GetPixelFormat().Bmask();
+            } else {
+               if ( srf.GetPixelFormat().Amask() ) {
+                  amask = srf.GetPixelFormat().Amask();
+                  ashift = srf.GetPixelFormat().Ashift();
+               } else {
+                  amask = ~( srf.GetPixelFormat().Rmask() | srf.GetPixelFormat().Gmask() | srf.GetPixelFormat().Bmask() );
+                  ashift = firstBit(amask);
+               }   
+            }
+       };
+       
+       bool isOpaque( PixelType src ) 
+       {
+          if ( hasColorKey )
+             return (src & ckmask) != colorKey;
+          else   
+             return PixelType((src & amask ) >> ashift) >= PixelType(Surface::opaque/2);
+       };
+  };
+
+  
  template<int pixelsize>
  class ColorMerger_AlphaOverwrite : public ColorMerger_AlphaHandler<pixelsize> {
          typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
@@ -486,7 +614,7 @@
 
          void assign ( PixelType src, PixelType* dest )
          {
-            if ( isNotAlpha(src ) ) {
+            if ( isOpaque(src ) ) {
                *dest = src;
             }   
          };
@@ -495,16 +623,35 @@
          ColorMerger_AlphaOverwrite( NullParamType npt = nullParam ) {};
  };
 
+ 
+ 
   template<int pixelsize>
-  class ColorMerger_AlphaShadow : public ColorMerger_AlphaHandler<pixelsize> {
+  class ColorMerger_AlphaShadow {}; /* : public ColorMerger_AlphaHandler<pixelsize> {
+  
          typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+      protected:
+         void assign ( PixelType src, PixelType* dest )
+         {
+            if ( isNotAlpha(src ) ) 
+               *dest = src;
+         };
+      public:
+         ColorMerger_AlphaShadow ( NullParamType npt = nullParam) : table ( xlattables.a.dark1 ) {};   
+         
+ };
+*/
+ 
+ 
+  template<>
+  class ColorMerger_AlphaShadow<1> : public ColorMerger_AlphaHandler<1> {
+         typedef PixelSize2Type<1>::PixelType PixelType;
          const char* table;
       protected:
 
          void assign ( PixelType src, PixelType* dest )
          {
             // STATIC_CHECK ( pixelsize == 1, wrong_pixel_size );
-            if ( isNotAlpha(src ) ) {
+            if ( isOpaque(src ) ) {
                *dest = table[*dest];
             }   
          };
@@ -513,8 +660,34 @@
          ColorMerger_AlphaShadow ( const char* translationTable ) : table ( translationTable ) {};   
  };
 
+  template<>
+  class ColorMerger_AlphaShadow<4> : public ColorMerger_AlphaHandler<4> {
+         typedef PixelSize2Type<4>::PixelType PixelType;
+      protected:
+
+         void init( const Surface& srf )
+         {
+             ColorMerger_AlphaHandler<4>::init(srf);
+         };
+      
+      
+         void assign ( PixelType src, PixelType* dest )
+         {
+            if ( isOpaque(src ) ) {
+               *dest = (*dest >> 1) & 0x8f8f8f8f;
+            }   
+         };
+      public:
+         ColorMerger_AlphaShadow ( NullParamType npt = nullParam) {};   
+         ColorMerger_AlphaShadow ( const char* translationTable ) {};   
+ };
+ 
+ 
+ 
+
  template<int pixelsize>
- class ColorMerger_AlphaMixer : public ColorMerger_AlphaHandler<pixelsize> {
+ class ColorMerger_AlphaMixer {}; /* : public ColorMerger_AlphaHandler<pixelsize> {
+ 
          typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
       protected:
          void assign ( PixelType src, PixelType* dest )
@@ -526,8 +699,39 @@
          };
       public:
          ColorMerger_AlphaMixer ( NullParamType npt = nullParam ) {};   
+         
+ };
+ */
+
+template<>
+ class ColorMerger_AlphaMixer<1> : public ColorMerger_AlphaHandler<1> {
+         typedef  PixelSize2Type<1>::PixelType PixelType;
+      protected:
+         void assign ( PixelType src, PixelType* dest )
+         {
+            if ( isOpaque(src ) ) 
+               *dest = colormixbufchar[*dest + src*256 ];
+         };
+      public:
+         ColorMerger_AlphaMixer ( NullParamType npt = nullParam ) {};   
  };
 
+ template<>
+ class ColorMerger_AlphaMixer<4> : public ColorMerger_AlphaHandler<4> {
+         typedef  PixelSize2Type<4>::PixelType PixelType;
+      protected:
+         void assign ( PixelType src, PixelType* dest )
+         {
+            // STATIC_CHECK ( pixelsize == 1, wrong_pixel_size );
+            if ( isOpaque(src ) ) {
+               *dest = ((*dest >> 1) & 0x8f8f8f8f) + (src >> 1) & 0x8f8f8f8f;
+            }   
+         };
+      public:
+         ColorMerger_AlphaMixer ( NullParamType npt = nullParam ) {};   
+ };
+ 
+ 
 
  template<int pixelsize>
  class ColorMerger_Alpha_XLAT_TableShifter : public ColorMerger_AlphaHandler<pixelsize> {
@@ -537,7 +741,7 @@
          void assign ( PixelType src, PixelType* dest )
          {
             // STATIC_CHECK ( pixelsize == 1, wrong_pixel_size );
-            if ( isNotAlpha(src ) ) {
+            if ( isOpaque(src ) ) {
                *dest = table[ *dest + src*256 ];
             }   
          };
@@ -584,6 +788,8 @@
        {
           return getPixel(x++, y);
        };
+       
+       void skipPixels( int pixNum ) { x += pixNum; };
 
        void nextLine() { x = 0; y +=1; };
 
@@ -646,9 +852,11 @@
              ++tableIndex;
              return *(currentPixel++);
           }
-
        };
 
+       void skipPixels( int pixNum ) { currentPixel += pixNum; tableIndex += pixNum; };
+       
+       
        void nextLine()
        {
           currentPixel += pitch;
@@ -704,24 +912,11 @@
        int x,y;
     protected:
 
-       int getWidth()  { 
-          int w = SourcePixelSelector::getWidth();
-          // skipGCCBug(w);
-          return int( zoomFactor * w  ); 
-       };
-       
-       int getHeight() { 
-          int h = SourcePixelSelector::getHeight();
-          // skipGCCBug(h);
-          return int( zoomFactor * h ); 
-       };
+       int getWidth()  { return int( zoomFactor * SourcePixelSelector::getWidth()  );  };
+       int getHeight() { return int( zoomFactor * SourcePixelSelector::getHeight() );  };
 
        PixelType getPixel(int x, int y)
        {
-         //int nx  = int(float(x) / zoomFactor);
-         //int ny  = int(float(y) / zoomFactor);
-         // fprintf(stderr, "Zoom-blit: x=%d/%d, y=%d/%d \n",x,nx,y,ny);
-         //return SourcePixelSelector::getPixel( nx, ny);
           return SourcePixelSelector::getPixel( int(float(x) / zoomFactor), int(float(y) / zoomFactor));
        };
 
@@ -729,6 +924,8 @@
        {
           return getPixel(x++, y);
        };
+       
+       void skipPixels( int pixNum ) { x += pixNum; };
 
        void nextLine() { x= 0; ++y;};
 
@@ -748,6 +945,9 @@
        
  };
 
+ 
+ 
+ 
 template<int pixelsize, class SourcePixelSelector = SourcePixelSelector_Plain<pixelsize> >
  class SourcePixelSelector_Flip: public SourcePixelSelector {
        typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
@@ -776,6 +976,8 @@ template<int pixelsize, class SourcePixelSelector = SourcePixelSelector_Plain<pi
           return getPixel(x++, y);
        };
 
+       void skipPixels( int pixNum ) { x += pixNum; };
+       
        void nextLine() { x= 0; ++y;};
 
     public:
@@ -814,6 +1016,8 @@ template<int pixelsize, class SourcePixelSelector = SourcePixelSelector_Plain<pi
           return getPixel(x++, y);
        };
 
+       void skipPixels( int pixNum ) { x += pixNum; };
+       
        void nextLine() { x= 0; ++y;};
 
     public:

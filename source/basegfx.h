@@ -45,6 +45,14 @@
 
 #pragma pack(1)
 
+#ifdef sgmain
+const int colorDepth = 4;
+#else
+const int colorDepth = 1;
+#endif
+
+
+
 //! a graphical surface.
 struct  tgraphmodeparameters {
             int           resolutionx      ;       //!< the number of visible pixels in x direction

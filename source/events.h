@@ -153,12 +153,12 @@ extern void popallmouseprocs ( void );
     extern int  releasetimeslice( void );
 
 
-    //! should the SDL Events be queued
-    extern void queueEvents( bool active );
-
     //! if the events are being queue, get one. \returns false if no event available
     extern bool getQueuedEvent ( SDL_Event& event );
 
+    //! gets the next event without removing it from the queue. \returns false if no event available
+    extern bool peekEvent ( SDL_Event& event );
 
+    
 
 #endif

@@ -26,6 +26,7 @@
 #include "global.h"
 
 #include "mapdisplay.h"
+#include "mapdisplay2.h"
 #include "vehicletype.h"
 #include "buildingtype.h"
 #include "spfst.h"
@@ -38,6 +39,7 @@
 #include "mapalgorithms.h"
 #include "loadpcx.h"
 #include "graphicset.h"
+#include "graphics/blitter.h"
 
 #ifdef sgmain
  #include "controls.h"
@@ -45,32 +47,153 @@
  #include "dashboard.h"
 #endif
 
+#if 0
+       class ZoomCache {
+           public:
+              int width;
+              int* buffer
+       
+              ZoomCache() : buff(NULL) {};
+              
+              void setZoom( float factor ) {
+              
+              };
+              
+              ~ZoomCache() { delete buffer; };
+       };
+
+
+
+  template<int pixelsize, class SourcePixelSelector = SourcePixelSelector_Plain<pixelsize> >
+ class SourcePixelSelector_CacheZoom: public SourcePixelSelector {
+       typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+       float zoomFactor;
+       int x,y;
+       int cachePos;
+    public:
+    
+       
+       
+    protected:
+
+       int getWidth()  { return int( zoomFactor * SourcePixelSelector::getWidth()  );  };
+       int getHeight() { return int( zoomFactor * SourcePixelSelector::getHeight() );  };
+
+       PixelType getPixel(int x, int y)
+       {
+          return SourcePixelSelector::getPixel( int(float(x) / zoomFactor), int(float(y) / zoomFactor));
+       };
+
+       PixelType nextPixel()
+       {
+          return getPixel(x++, y);
+       };
+
+       void nextLine() { x= 0; ++y;};
+
+    public:
+       void setZoom( float factor )
+       {
+          this->zoomFactor = factor;
+       };
+       void setSize( int sourceWidth, int sourceHeight, int targetWidth, int targetHeight )
+       {
+          float zw = float(targetWidth) / float(sourceWidth);
+          float zh = float(targetHeight)/ float(sourceHeight);
+          setZoom( min ( zw,zh));
+       };
+
+       SourcePixelSelector_Zoom( NullParamType npt = nullParam) : zoomFactor(1),x(0),y(0) {};
+       
+ };
+
+#endif
+
+
+
+struct CommandBlock {
+   int targetPixels;
+   int fx,fy;
+};   
 
 
 MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
-      : Panel ( parent, r ) ,
+      : PG_Widget ( parent, r, true ) ,
       zoom( 0.75 ),
       offset(0,0),
       surface(NULL),
-      surfaceBorder(20)
+      surfaceBorder(80),
+      dirty(Map)
 {
    setNewZoom( zoom );
    readData();
+   
+   Surface s = Surface::Wrap( GetWidgetSurface () );
+   s.assignDefaultPalette();
 }
 
+int fs[24][3] = {{ 16, 16, 16 },
+                 { 14, 20, 14 },
+                 { 12, 24, 12 }, 
+                 { 10, 28, 10 }, 
+                 {  8, 32,  8 }, 
+                 {  6, 36,  6 }, 
+                 {  4, 40,  4 }, 
+                 {  2, 44,  2 }, 
+                 {  0, 48,  0 }, 
+                 {  0, 48,  0 }, 
+                 {  2, 44,  2 }, 
+                 {  4, 40,  4 }, 
+                 {  6, 36,  6 }, 
+                 {  8, 32,  8 }, 
+                 { 10, 28, 10 }, 
+                 { 12, 24, 12 }, 
+                 { 14, 20, 14 },
+                 { 16, 16, 16 }};
+                
+                
+void setupFastBlitterCommands()
+{
+   #if 0 
+   // prefixes: f = field 
+   //           t = targetSurface
+   //           s = sourceSurface
+   //           sm = targetSurface modulo 
+
+   for ( int ty = 0; ty < int((fieldsizey + fielddisty) * zoom); ++ty) {
+      int sy = int( float(ty) / zoom);
+     
+      int sx = 0;
+      enum { pre,main,post} state = pre;
+      for ( int tx = 0; tx < Width(); ++tx ) {
+         sx = int( float (tx) / zoom );
+         
+         int smx = sx % fieldsizex;
+         if ( smx < 
+         
+         #endif
+}
 
 void MapDisplayPG::setNewZoom( float zoom )
 {
 
    this->zoom = zoom;
 
-   fieldNumX = int( ceil(float(Width())  / zoom / fielddistx) );
-   fieldNumY = int( ceil(float(Height()) / zoom / fielddisty) );
-   if ( fieldNumY & 1 )
-      fieldNumY += 1;
+   field.numx = int( ceil(float(Width())  / zoom / fielddistx) );
+   field.numy = int( ceil(float(Height()) / zoom / fielddisty) );
+   
+   field.displayed.x1 = -1;
+   field.displayed.y1 = -1;
+   field.displayed.x2 = field.numx + 1;
+   field.displayed.y2 = field.numy + 1;
+   
+   if ( field.numy & 1 )
+      field.numy += 1;
 
    delete surface;
-   surface = new Surface( Surface::createSurface ( fieldNumX * fielddistx + 2 * surfaceBorder, (fieldNumY - 1) * fielddisty + fieldysize +  2 * surfaceBorder ));
+   surface = new Surface( Surface::createSurface ( field.numx * fielddistx + 2 * surfaceBorder, (field.numy - 1) * fielddisty + fieldysize +  2 * surfaceBorder, colorDepth*8 ));
+   
+   dirty = Map;
 }
 
 MapDisplayPG::Icons MapDisplayPG::icons;
@@ -86,27 +209,25 @@ void MapDisplayPG::readData()
       } {
          tnfilestream stream ("hexinvis.raw",tnstream::reading);
          icons.notVisible.read( stream );
+      } {
+         tnfilestream stream ("curshex.raw",tnstream::reading);
+         icons.cursor.read( stream );
       }
    }
-
 }
 
 
 void MapDisplayPG::fillSurface( int playerView )
 {
    paintTerrain ( playerView );
+   dirty = Curs;
 }
 
 
 void MapDisplayPG::paintTerrain( int playerView )
 {
-   int x1 = 0;
-   int y1 = 0;
-   int x2 = fieldNumX;
-   int y2 = fieldNumY;
-
-   for (int y= y1; y < y2; ++y )
-      for ( int x=x1; x < x2; ++x ) {
+   for (int y= field.displayed.y1; y < field.displayed.y2; ++y )
+      for ( int x=field.displayed.x1; x < field.displayed.x2; ++x ) {
          pfield fld = getfield ( offset.x + x, offset.y + y );
          if ( fld ) {
             if ( fieldVisibility ( fld, playerView ) != visible_not )
@@ -122,8 +243,8 @@ void MapDisplayPG::paintTerrain( int playerView )
       if ( pass > 0 )
          binaryheight = 1 << ( pass-1);
 
-      for (int y= y1; y < y2; ++y )
-         for ( int x=x1; x < x2; ++x ) {
+      for (int y= field.displayed.y1; y < field.displayed.y2; ++y )
+         for ( int x=field.displayed.x1; x < field.displayed.x2; ++x ) {
             SPoint pos = getFieldPos(x,y);
             pfield fld = getfield ( offset.x + x, offset.y + y );
             if ( fld ) {
@@ -259,18 +380,135 @@ void MapDisplayPG::paintTerrain( int playerView )
    }
 }
 
+template<int pixelSize> class PixSel : public SourcePixelSelector_Zoom<pixelSize, SourcePixelSelector_Rectangle<pixelSize> > {};
 
 
-
-void MapDisplayPG::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& dst)
+void MapDisplayPG::updateMap()
 {
-   fillSurface(0);
+   if ( dirty > Curs )
+      fillSurface(0);
+  
+}
 
-
+void MapDisplayPG::eventDraw ( SDL_Surface* srf, const PG_Rect& rect)
+{
+   if ( dirty > Nothing )
+      updateMap();
+/*
    PG_Rect icon_src;
    PG_Rect icon_dst;
    GetClipRects(icon_src, icon_dst, *this);
    PG_Widget::eventBlit(surface->getBaseSurface(), icon_src, icon_dst);
+   */
+   MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_PlainOverwrite,PixSel> blitter;
+   blitter.setZoom( zoom );
+   blitter.initSource( *surface );
+   blitter.setRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), int(float(Width()) / zoom), int(float(Height()) / zoom));
+   Surface s = Surface::Wrap( srf );
+   // PG_Point pnt = ClientToScreen( 0,0 );
+   blitter.blit( *surface, s, SPoint(0,0));
+}
+
+void MapDisplayPG::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& dst)
+{
+   PG_Widget::eventBlit(srf,src,dst);
+   
+      if ( cursor.visible ) {
+         int x = cursor.pos.x - offset.x;
+         int y = cursor.pos.y - offset.y;
+         if( x >= field.displayed.x1 && x < field.displayed.x2 && y >= field.displayed.y1 && y < field.displayed.y2 ) {
+            // surface->Blit( icons.cursor, getFieldPos(x,y));
+            MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Zoom,TargetPixelSelector_Valid> blitter;
+            blitter.setZoom( zoom );
+            
+            Surface s = Surface::Wrap( PG_Application::GetScreen() );
+                // PG_Point pnt = ClientToScreen( 0,0 );
+            blitter.blit( icons.cursor, s, widget2screen ( internal2widget( mapPos2internalPos( MapCoordinate(x,y)))) );
+         }   
+      }
+   
+#if 0
+   if ( dirty > Nothing )
+      updateMap();
+/*
+   PG_Rect icon_src;
+   PG_Rect icon_dst;
+   GetClipRects(icon_src, icon_dst, *this);
+   PG_Widget::eventBlit(surface->getBaseSurface(), icon_src, icon_dst);
+   */
+   MegaBlitter<1,1,ColorTransform_None,ColorMerger_PlainOverwrite,PixSel> blitter;
+   blitter.setZoom( zoom );
+   blitter.initSource( *surface );
+   blitter.setRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), int(float(Width()) / zoom), int(float(Height()) / zoom));
+   Surface s = Surface::Wrap( PG_Application::GetScreen() );
+   PG_Point pnt = ClientToScreen( 0,0 );
+   blitter.blit( *surface, s, SPoint(pnt.x, pnt.y ));
+   #endif
+}
+
+
+SPoint MapDisplayPG::mapPos2internalPos ( const MapCoordinate& pos )
+{
+   return getFieldPos( pos.x, pos.y );
+}
+
+SPoint MapDisplayPG::internal2widget( const SPoint& pos )
+{
+   return SPoint( int(float(pos.x - surfaceBorder) * zoom), int(float(pos.y - surfaceBorder) * zoom));
+}
+
+SPoint MapDisplayPG::widget2screen( const SPoint& pos )
+{
+   PG_Point p = ClientToScreen ( pos.x, pos.y );
+   return SPoint ( p.x, p.y );
+}
+
+
+MapCoordinate MapDisplayPG::screenPos2mapPos( const SPoint& pos )
+{
+   PG_Point pnt = ScreenToClient( pos.x, pos.y );
+   if ( pnt.x >= 0 && pnt.y >= 0 && pnt.x < Width() && pnt.y < Height() )
+      return widgetPos2mapPos ( SPoint( pnt.x, pnt.y ));
+   else
+      return MapCoordinate();
+}
+
+MapCoordinate MapDisplayPG::widgetPos2mapPos( const SPoint& pos )
+{
+   int x = int( float(pos.x) / zoom ) + surfaceBorder;
+   int y = int( float(pos.y) / zoom ) + surfaceBorder;
+
+   for (int yy= field.displayed.y1; yy < field.displayed.y2; ++yy )
+      for ( int xx=field.displayed.x1; xx < field.displayed.x2; ++xx ) {
+         int x1 = getFieldPosX(xx,yy);
+         int y1 = getFieldPosY(xx,yy);
+         if ( x >= x1 && x < x1+ fieldsizex && y >= y1 && y < y1+fieldsizey ) 
+            if ( icons.notVisible.GetPixel(x-x1,y-y1) != 255 )
+               return MapCoordinate(xx+offset.x,yy+offset.y); 
+      }
+      
+   return MapCoordinate();     
+}
+
+
+bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
+{
+   if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == SDL_BUTTON_LEFT ) {
+      MapCoordinate mc = screenPos2mapPos( SPoint(button->x, button->y));
+      if ( mc.valid() && mc.x < actmap->xsize && mc.y < actmap->ysize ) {
+         cursor.pos = mc;
+         cursor.visible = true;
+         dirty = Curs;
+         Update();
+         return true;
+      }
+   }      
+   return false;
+}
+
+bool MapDisplayPG::eventMouseButtonUp (const SDL_MouseButtonEvent *button)
+{
+   return false;
 }
 
 

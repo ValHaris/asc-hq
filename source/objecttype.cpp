@@ -121,13 +121,13 @@ void ObjectType :: display ( Surface& surface, SPoint pos, int dir, int weather 
          flip = weatherPicture[weather].flip[*i];
          
       if ( id == 7 || id == 30 || displayMethod==1 ) { // buried pipeline,
-         megaBlitter<ColorTransform_None, ColorMerger_AlphaShadow, SourcePixelSelector_Flip>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip); 
+         megaBlitter<ColorTransform_None, ColorMerger_AlphaShadow, SourcePixelSelector_Flip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
       } else
          if ( displayMethod == 2 ) {  // translation
-            megaBlitter<ColorTransform_None, ColorMerger_Alpha_XLAT_TableShifter, SourcePixelSelector_Flip>(getPicture( dir, weather), surface, pos, nullParam, xlattables.nochange, flip); 
+            megaBlitter<ColorTransform_None, ColorMerger_Alpha_XLAT_TableShifter, SourcePixelSelector_Flip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam, xlattables.nochange, flip, nullParam); 
          } else
             if ( displayMethod == 4 ) {
-               megaBlitter<ColorTransform_None, ColorMerger_AlphaMixer, SourcePixelSelector_Flip>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip); 
+               megaBlitter<ColorTransform_None, ColorMerger_AlphaMixer, SourcePixelSelector_Flip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
             } else {
                bool disp = true;
                #ifndef karteneditor
@@ -136,9 +136,9 @@ void ObjectType :: display ( Surface& surface, SPoint pos, int dir, int weather 
                #endif
                if ( disp ) {
                   if ( flip )
-                     megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Flip>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip); 
+                     megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Flip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
                   else   
-                     megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam); 
+                     megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
                      // surface.Blit(getPicture(dir,weather),pos );
                }
             }   

@@ -28,14 +28,18 @@
 
  class Surface: public SDLmm::Surface {
     public:
-      static const int transparent = 0;
-      static const int opaque = 0xff;
+      static const Uint32 transparent = 0;
+      static const Uint32 opaque = 0xff;
       explicit Surface( SDL_Surface *surface);
       Surface(const SDLmm::Surface& other);
       Surface() : SDLmm::Surface(NULL) {};
 
       static Surface createSurface( int width, int height, SDLmm::Color color = 255 );
       static Surface createSurface( int width, int height, int depth, SDLmm::Color color = 0xff0000ff );
+      
+      static Surface Wrap( SDL_Surface *surface) { surface->refcount++; return Surface(surface);};
+      
+      static void SetScreen( SDL_Surface* screen );
       
       /**
          Creates an image from an BGI image structure.

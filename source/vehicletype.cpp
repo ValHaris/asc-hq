@@ -878,7 +878,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
 
 void  Vehicletype::paint ( Surface& s, SPoint pos, int player, int direction ) const
 {
-   megaBlitter<ColorTransform_PlayerCol,ColorMerger_AlphaOverwrite,SourcePixelSelector_Plain>( getImage(), s, pos, player, nullParam, nullParam );
+   megaBlitter<ColorTransform_PlayerCol,ColorMerger_AlphaOverwrite,SourcePixelSelector_Plain,TargetPixelSelector_All>( getImage(), s, pos, player, nullParam, nullParam, nullParam );
 }
 
 

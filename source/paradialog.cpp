@@ -84,8 +84,10 @@ ASC_PG_App* pgApp = NULL;
 bool ASC_PG_App:: InitScreen ( int w, int h, int depth, Uint32 flags )
 {
    bool result = PG_Application::InitScreen ( w, h, depth, flags  );
-   if ( result ) 
+   if ( result ) {
       initASCGraphicSubsystem ( GetScreen(), NULL );
+      Surface::SetScreen( GetScreen() );
+   }   
    
    
    return result;
@@ -111,9 +113,30 @@ int ASC_PG_App::Run ( )
    
    while ( !quitModalLoopValue ) {
       SDL_Event event;
-      if ( getQueuedEvent( event ))
-         pgApp->PumpIntoEventQueue( &event );
-      else
+      int motionx = 0;
+      int motiony = 0;
+      if ( getQueuedEvent( event )) {
+         bool skipEvent = false;
+         if ( event.type == SDL_MOUSEMOTION ) {
+            SDL_Event nextEvent;
+            if ( peekEvent ( nextEvent ) )
+               if ( nextEvent.type == SDL_MOUSEMOTION ) {
+                  skipEvent = true;
+                  motionx += event.motion.xrel;
+                  motiony += event.motion.yrel;
+               }  
+            if ( !skipEvent ) {
+               event.motion.xrel += motionx;   
+               event.motion.yrel += motiony;   
+               motionx = 0;
+               motiony = 0;
+            }   
+         }
+         
+         if ( !skipEvent ) 
+            pgApp->PumpIntoEventQueue( &event );
+            
+       }else
          SDL_Delay ( 2 );
    }
    enableLegacyEventHandling ( true );
@@ -140,16 +163,41 @@ ASC_PG_Dialog::~ASC_PG_Dialog ()
 
 int ASC_PG_Dialog::Run ( )
 {
+#ifndef sgmain
    setEventRouting ( true, false );
+#endif   
    
    while ( !quitModalLoopValue ) {
       SDL_Event event;
-      if ( getQueuedEvent( event ))
-         pgApp->PumpIntoEventQueue( &event );
-      else
+      int motionx = 0;
+      int motiony = 0;
+      if ( getQueuedEvent( event )) {
+         bool skipEvent = false;
+         if ( event.type == SDL_MOUSEMOTION ) {
+            SDL_Event nextEvent;
+            if ( peekEvent ( nextEvent ) )
+               if ( nextEvent.type == SDL_MOUSEMOTION ) {
+                  skipEvent = true;
+                  motionx += event.motion.xrel;
+                  motiony += event.motion.yrel;
+               }  
+            if ( !skipEvent ) {
+               event.motion.xrel += motionx;   
+               event.motion.yrel += motiony;   
+               motionx = 0;
+               motiony = 0;
+            }   
+         }
+         
+         if ( !skipEvent ) 
+            pgApp->PumpIntoEventQueue( &event );
+            
+       }else
          SDL_Delay ( 2 );
    }
+#ifndef sgmain
    setEventRouting ( false, true );
+#endif   
    return quitModalLoopValue;
 }
 

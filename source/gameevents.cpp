@@ -962,7 +962,7 @@ void FieldAddressing::setGlobal()
 
 void FieldAddressing::readMapModificationData ( tnstream& stream )
 {
-   versionTest(stream,1,1);
+   versionTest(stream,1000,1000);
    addressingMode = AddressingMode ( stream.readInt() );
    if ( addressingMode == singleField )
       readClassContainer( fields, stream );

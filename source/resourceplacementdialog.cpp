@@ -19,7 +19,7 @@
 
 #include <iostream>
 #include "resourceplacement.h"
-#include "notificationdialog.h"
+// #include "notificationdialog.h"
 #include "resourceplacementdialog.h"
 
 

@@ -549,4 +549,17 @@ bool getQueuedEvent ( SDL_Event& event )
    SDL_mutexV( eventQueueMutex );
    return false;
 }
+    
+bool peekEvent ( SDL_Event& event )
+{
+   SDL_mutexP( eventQueueMutex );
+   if ( !eventQueue.empty() ) {
+      event = eventQueue.front();
+      SDL_mutexV( eventQueueMutex );
+      return true;
+   }
+   SDL_mutexV( eventQueueMutex );
+   return false;
+}
+
 
