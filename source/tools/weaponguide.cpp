@@ -162,22 +162,22 @@ int main(int argc, char *argv[] )
                 "<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\">"
                 "<TITLE>UNITGUIDE OVERVIEW LEFT</TITLE>\n"
                 "<base target=\"base\">\n"
-                "<LINK REL=\"stylesheet\" TYPE=\"text/css\" HREF=\"../../ug.css\">\n"
+                "<LINK REL=\"stylesheet\" TYPE=\"text/css\" HREF=\"%s\">\n"
                 "</HEAD>\n"
                 "\n"
                 "<BODY class=\"WG\">\n"
                 "<table width=\"100%\"  class=\"WG\" >\n"
-                "<tr><td><a href=\"overview1.html\">SEE PICTURES</a></td></tr><tr><td></td></tr>\n" );
+                "<tr><td><a href=\"overview1.html\">SEE PICTURES</a></td></tr><tr><td></td></tr>\n", cl.t().c_str() );
 
       fprintf ( overview1 , "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n"
                 "<html>\n"
                 "<HEAD>\n"
                 "<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\">"
                 "<TITLE>WEAPONGUIDE OVERVIEW PICTURES</TITLE>\n"
-                "<LINK REL=\"stylesheet\" TYPE=\"text/css\" HREF=\"../../ug.css\">\n"
+                "<LINK REL=\"stylesheet\" TYPE=\"text/css\" HREF=\"%s\">\n"
                 "</HEAD>\n"
                 "\n"
-                "<BODY class=\"WG\">\n" );
+                "<BODY class=\"WG\">\n", cl.t().c_str() );
 
       for ( int unit = 0; unit < vehicletypenum; unit++ ) {
          pvehicletype  ft = getvehicletype_forpos ( unit );
@@ -229,28 +229,28 @@ int main(int argc, char *argv[] )
                       "<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\">"
                       "<TITLE>%s</TITLE>\n"
                       "<base target=\"under\"> \n"
-                      "<LINK REL=\"stylesheet\" TYPE=\"text/css\" HREF=\"../../ug.css\">\n"
+                      "<LINK REL=\"stylesheet\" TYPE=\"text/css\" HREF=\"%s\">\n"
                       "</HEAD>\n"
                       "\n"
                       "<BODY  class=\"%s\">\n";
 
             // UNIT GENERAL
-            fprintf ( generalPage, header, "general", "WGLEFT" );
+            fprintf ( generalPage, header, "general", cl.t().c_str(), "WGLEFT" );
 
             // UNIT TERRAIN
-            fprintf ( movePage, header, "movement", "WG" );
+            fprintf ( movePage, header, "movement", cl.t().c_str(), "WG" );
 
             // UNIT WEAPONS
-            fprintf ( weaponPage, header, "terrain", "WG" );
+            fprintf ( weaponPage, header, "terrain", cl.t().c_str(), "WG" );
 
             // UNIT FUNCTIONS
-            fprintf ( constructionPage, header, "unitguide functions", "WG" );
+            fprintf ( constructionPage, header, "unitguide functions", cl.t().c_str(), "WG" );
 
             // UNIT LOADING
-            fprintf ( transportPage, header, "transportation", "WG" );
+            fprintf ( transportPage, header, "transportation", cl.t().c_str(), "WG" );
 
             // UNIT DESCRIPTION
-            fprintf ( infoPage, header, "description", "WG" );
+            fprintf ( infoPage, header, "description", cl.t().c_str(), "WG" );
 
             // OVERVIEW LEFT
             fprintf ( overview, " <tr><td><A HREF=\"%s.html\">", fileName.c_str() );
@@ -292,7 +292,8 @@ int main(int argc, char *argv[] )
             fprintf ( generalPage, "<table %s> \n", tableParam );
 
             printMainLine ( generalPage, "Name", ft->name );
-            printMainLine ( generalPage, "Image", ASCString("<img src=\"") + fileName + ".gif\" width=\"96\" height=\"96\" alt=\"image of unit\">" );
+            ASCString sze = strrr( cl.z() );
+            printMainLine ( generalPage, "Image", ASCString("<img src=\"") + fileName + ".gif\" width=\""+sze+"\" height=\""+sze+"\" alt=\"image of unit\">" );
             printMainLine ( generalPage, "Description", ft->description );
             printMainLine ( generalPage, "ID", ft->id );
             printMainLine ( generalPage, "Empty weight", ft->weight );
@@ -1037,8 +1038,9 @@ int main(int argc, char *argv[] )
                            linkpref += '/' ;
                         #endif
                            
-                        ASCString line;
-                        line.format("..%s;asc.css;\"%s%s\" target=\"main\";\n", ft->getName().c_str(), linkpref.c_str(), unitFileName.c_str());
+                        ASCString line = "..";
+                        line += ft->getName() + ";" + cl.m() + ";\"" + linkpref + unitFileName + "\" target = \"" + cl.f() + "\";\n"; 
+                        // line.format("..%s;%s;\"%s%s\" target=\"%s\";\n", ft->getName().c_str(), cl.m.c_str(), linkpref.c_str(), unitFileName.c_str(), );
                         units.push_back(line);
                      }
                   }

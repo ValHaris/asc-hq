@@ -2,7 +2,7 @@
 **
 ** weaponguide.h
 **
-** Wed Feb 12 23:57:57 2003
+** Mon Mar 10 17:10:21 2003
 ** Linux 2.4.19-4GB (#1 Fri Sep 13 13:14:56 UTC 2002) i686
 ** martin@linux. (Martin Bickel)
 **
@@ -38,6 +38,10 @@ private:
   string _l;
   int _s;
   bool _i;
+  int _z;
+  string _f;
+  string _t;
+  string _m;
   bool _h;
   bool _v;
 
@@ -64,6 +68,10 @@ public:
   string l() { return _l; }
   int s() { return _s; }
   bool i() { return _i; }
+  int z() { return _z; }
+  string f() { return _f; }
+  string t() { return _t; }
+  string m() { return _m; }
   bool h() { return _h; }
   bool v() { return _v; }
 };

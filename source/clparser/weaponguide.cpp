@@ -2,7 +2,7 @@
 **
 ** weaponguide.cpp
 **
-** Wed Feb 12 23:57:57 2003
+** Mon Mar 10 17:10:21 2003
 ** Linux 2.4.19-4GB (#1 Fri Sep 13 13:14:56 UTC 2002) i686
 ** martin@linux. (Martin Bickel)
 **
@@ -41,6 +41,10 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
     {"linkdir", 1, 0, 'l'},
     {"set", 1, 0, 's'},
     {"image", 0, 0, 'i'},
+    {"imgsize", 1, 0, 'z'},
+    {"framename", 1, 0, 'f'},
+    {"style", 1, 0, 't'},
+    {"menustyle", 1, 0, 'm'},
     {"help", 0, 0, 'h'},
     {"version", 0, 0, 'v'},
     {0, 0, 0, 0}
@@ -52,10 +56,14 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
   _r = 0;
   _s = 0;
   _i = false;
+  _z = 48;
+  _f = "main";
+  _t = "../../ug.css";
+  _m = "asc.css";
   _h = false;
   _v = false;
 
-  while ((c = getopt_long(argc, argv, "c:r:d:l:s:ihv", long_options, &option_index)) != EOF)
+  while ((c = getopt_long(argc, argv, "c:r:d:l:s:iz:f:t:m:hv", long_options, &option_index)) != EOF)
     {
       switch(c)
         {
@@ -101,6 +109,28 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
           _i = true;
           break;
 
+        case 'z': 
+          _z = atoi(optarg);
+          if (_z < 0)
+            {
+              string s;
+              s += "parameter range error: z must be >= 0";
+              throw(s);
+            }
+          break;
+
+        case 'f': 
+          _f = optarg;
+          break;
+
+        case 't': 
+          _t = optarg;
+          break;
+
+        case 'm': 
+          _m = optarg;
+          break;
+
         case 'h': 
           _h = true;
           this->usage();
@@ -130,7 +160,7 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
 void Cmdline::usage()
 {
   cout << "generates html files that document ASCs units " << endl;
-  cout << "usage: " << _executable << " [ -crdlsihv ]  vehicleFiles" << endl;
+  cout << "usage: " << _executable << " [ -crdlsizftmhv ]  vehicleFiles" << endl;
   cout << "  [ -c ] ";
   cout << "[ --configfile ]  ";
   cout << "(";
@@ -177,6 +207,39 @@ void Cmdline::usage()
   cout << "FLAG";
   cout << ")\n";
   cout << "         generate images for units (Linux only)\n";
+  cout << "  [ -z ] ";
+  cout << "[ --imgsize ]  ";
+  cout << "(";
+  cout << "type=";
+  cout << "INTEGER,";
+  cout << " range=0...,";
+  cout << " default=48";
+  cout << ")\n";
+  cout << "         size of unit images\n";
+  cout << "  [ -f ] ";
+  cout << "[ --framename ]  ";
+  cout << "(";
+  cout << "type=";
+  cout << "STRING,";
+  cout << " default=main";
+  cout << ")\n";
+  cout << "         name of the main frame\n";
+  cout << "  [ -t ] ";
+  cout << "[ --style ]  ";
+  cout << "(";
+  cout << "type=";
+  cout << "STRING,";
+  cout << " default=../../ug.css";
+  cout << ")\n";
+  cout << "         name of the main pages' stylesheet\n";
+  cout << "  [ -m ] ";
+  cout << "[ --menustyle ]  ";
+  cout << "(";
+  cout << "type=";
+  cout << "STRING,";
+  cout << " default=asc.css";
+  cout << ")\n";
+  cout << "         name of the menu stylesheed\n";
   cout << "  [ -h ] ";
   cout << "[ --help ]  ";
   cout << "(";

@@ -10,3 +10,7 @@ d / directory   string            "place all output files in different directory
 l / linkdir     string            "relative directory for the menu links"
 s / set         int 0 [0...]      "only use unitset with given ID"
 i / image       flag              "generate images for units (Linux only)"
+z / imgsize     int 48 [0...]     "size of unit images"
+f / framename   string {"main"}   "name of the main frame"
+t / style       string {"../../ug.css"} "name of the main pages' stylesheet"
+m / menustyle   string {"asc.css"} "name of the menu stylesheed"
