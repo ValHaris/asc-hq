@@ -218,7 +218,7 @@ AiParameter::JobList AI::chooseJob ( const Vehicletype* typ, int functions )
       }
    }
 
-   if ( (maxstrength < typ->view  || maxstrength < typ->jamming) && maxmove > minmalq )
+   if ( (maxstrength*1.5 < typ->view  || maxstrength*1.5 < typ->jamming) && maxmove > minmalq )
       jobList.push_back (  AiParameter::job_recon );
 
    if ( maxstrength > 0 )
