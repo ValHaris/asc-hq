@@ -182,7 +182,7 @@ bool ContainerBase :: vehicleFit ( const Vehicle* vehicle ) const
 
    if ( baseType->vehicleFit ( vehicle->typ )) // checks size and type
       if ( vehiclesLoaded() < min ( 32, baseType->maxLoadableUnits ) || (vehicle->color != color ) )
-         if ( cargo() + vehicle->weight() < baseType->maxLoadableWeight || findUnit ( vehicle )) // if the unit is already  loaded, the container already bears its weight
+         if ( cargo() + vehicle->weight() <= baseType->maxLoadableWeight || findUnit ( vehicle )) // if the unit is already  loaded, the container already bears its weight
             return true;
 
    return false;

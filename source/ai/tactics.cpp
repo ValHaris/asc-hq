@@ -243,9 +243,13 @@ AI::AiResult AI::executeMoveAttack ( pvehicle veh, TargetVector& tv )
    if ( va.getStatus() != 2 )
       displaymessage ( "AI :: executeMoveAttack \n error in attack step 2 with unit %d", 1, veh->networkid );
 
+   VehicleTypeEfficiencyCalculator vtec( *this, veh, mv->enemy );
+
    va.execute ( NULL, mv->attackx, mv->attacky, 2 , -1, mv->weapNum );
    if ( va.getStatus() != 1000 )
       displaymessage ( "AI :: executeMoveAttack \n error in attack step 3 with unit %d", 1, veh->networkid );
+
+   vtec.calc();
 
    result.unitsMoved ++;
 
@@ -729,13 +733,17 @@ AI::AiResult AI::tactics( void )
                            int iiii = (int) finalPositions[finalOrder[i]];
                            if ( iiii < 20 )
                               warning("!!!");
+
                            va.execute ( finalPositions[finalOrder[i]], -1, -1, 0, 0, -1 );
                            if ( va.getStatus() != 2 && strictChecks )
                               displaymessage("inconsistency #1 in AI::tactics attack", 1 );
 
+                           VehicleTypeEfficiencyCalculator vtec (*this, finalPositions[finalOrder[i]], enemy );
                            va.execute ( NULL, enemy->xpos, enemy->ypos, 2, 0, -1 );
                            if ( va.getStatus() != 1000 && strictChecks )
                              displaymessage("inconsistency #1 in AI::tactics attack", 1 );
+
+                           vtec.calc();
 
                            TactVehicles::iterator att = find ( tactVehicles.begin(), tactVehicles.end(), a ) ;
                            tactVehicles.erase ( att );

@@ -21,7 +21,7 @@
  #include "typen.h"
 
 //! the number of bits that specify the terrain of a field
-const int cbodenartennum = 34;
+const int cbodenartennum = 35;
 
 
   //! the properties of a terrain describing which units can move onto this field and which can't

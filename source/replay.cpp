@@ -519,20 +519,23 @@ void logtoreplayinfo ( trpl_actions _action, ... )
             for ( int b = 0; b < 8; b++ )
                stream->writeChar ( actmap->alliances[a][b] );
       }
-      if ( action == rpl_refuel ) {
+      if ( action == rpl_refuel || action == rpl_refuel2 ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
          int nwid = va_arg ( paramlist, int );
          int pos = va_arg ( paramlist, int );
          int amnt = va_arg ( paramlist, int );
          stream->writeChar ( action );
-         int size = 5;
-         stream->writeInt ( size );
+         stream->writeInt ( action==rpl_refuel ? 5 : 6 );
          stream->writeInt ( x );
          stream->writeInt ( y );
          stream->writeInt ( nwid );
          stream->writeInt ( pos );
          stream->writeInt ( amnt );
+         if ( action == rpl_refuel2 ) {
+             int old = va_arg ( paramlist, int );
+             stream->writeInt( old );
+         }
       }
       if ( action == rpl_bldrefuel ) {
          int x =  va_arg ( paramlist, int );
@@ -1103,6 +1106,11 @@ void trunreplay :: execnextreplaymove ( void )
 
                                  pvehicletype tnk = getvehicletype_forid ( id );
                                  if ( tnk && fld) {
+                                 
+                                    #if 0
+                                    printf("produced unit: pos %d / %d; nwid %d; typ id %d; typ %s \n", x,y,nwid,id,tnk->description.c_str() );
+                                    #endif
+
                                     pvehicle eht = new Vehicle ( tnk, actmap, col / 8 );
                                     eht->klasse = cl;
                                     eht->xpos = x;
@@ -1199,13 +1207,18 @@ void trunreplay :: execnextreplaymove ( void )
                                  dashboard.x = 0xffff;
                               }
          break;
-      case rpl_refuel : {
+      case rpl_refuel :
+      case rpl_refuel2 : {
                                  stream->readInt();  // size
                                  int x = stream->readInt();
                                  int y = stream->readInt();
                                  int nwid = stream->readInt();
                                  int pos = stream->readInt();
                                  int amnt = stream->readInt();
+                                 int old = -2;
+                                 if ( nextaction == rpl_refuel2 )
+                                    old = stream->readInt();
+                                    
                                  readnextaction();
 
                                  pvehicle eht = actmap->getUnit ( x, y, nwid );
@@ -1214,11 +1227,17 @@ void trunreplay :: execnextreplaymove ( void )
                                        eht->ammo[pos] = amnt;
                                      else {
                                         switch ( pos ) {
-                                        case 1000: eht->tank.energy = amnt;
+                                        case 1000: if ( eht->tank.energy != old && old >= 0 )
+                                                      displaymessage("severe replay inconsistency:\nthe resources of unit not matching. \nrecorded: %d , expected: %d !", 1, old, eht->tank.energy);
+                                                   eht->tank.energy = amnt;
                                            break;
-                                        case 1001: eht->tank.material = amnt;
+                                        case 1001: if ( eht->tank.material != old && old >= 0 )
+                                                      displaymessage("severe replay inconsistency:\nthe resources of unit not matching. \nrecorded: %d , expected: %d !", 1, old, eht->tank.material);
+                                                   eht->tank.material = amnt;
                                            break;
-                                        case 1002: eht->tank.fuel = amnt;
+                                        case 1002: if ( eht->tank.fuel != old && old >= 0 )
+                                                      displaymessage("severe replay inconsistency:\nthe resources of unit not matching. \nrecorded: %d , expected: %d !", 1, old, eht->tank.fuel);
+                                                   eht->tank.fuel = amnt;
                                            break;
                                         } /* endswitch */
                                      }

@@ -1308,9 +1308,10 @@ int VehicleService :: execute ( pvehicle veh, int targetNWID, int dummy, int ste
            case srv_resource: {
                                  delta = amount - serv.curAmount;
                                  int put = t.dest->putResource ( delta, serv.targetPos, 0 );
+                                 int oldavail = vehicle->tank.resource(serv.sourcePos);
                                  vehicle->getResource ( put, serv.sourcePos, 0 );
-                                 logtoreplayinfo ( rpl_refuel, t.dest->xpos, t.dest->ypos, t.dest->networkid, int(1000+serv.targetPos), amount );
-                                 logtoreplayinfo ( rpl_refuel, vehicle->xpos, vehicle->ypos, vehicle->networkid, int(1000+serv.sourcePos), vehicle->tank.resource(serv.sourcePos) );
+                                 logtoreplayinfo ( rpl_refuel2, t.dest->xpos, t.dest->ypos, t.dest->networkid, int(1000+serv.targetPos), amount, serv.curAmount );
+                                 logtoreplayinfo ( rpl_refuel2, vehicle->xpos, vehicle->ypos, vehicle->networkid, int(1000+serv.sourcePos), vehicle->tank.resource(serv.sourcePos), oldavail );
                               }
                               break;
            case srv_repair: vehicle->repairItem ( t.dest, amount );
@@ -1330,7 +1331,7 @@ int VehicleService :: execute ( pvehicle veh, int targetNWID, int dummy, int ste
                                  delta = amount - serv.curAmount;
                                  int put = t.dest->putResource ( delta, serv.targetPos, 0 );
                                  building->getResource ( put, serv.sourcePos, 0 );
-                                 logtoreplayinfo ( rpl_refuel, t.dest->xpos, t.dest->ypos, t.dest->networkid, int(1000+serv.targetPos), amount );
+                                 logtoreplayinfo ( rpl_refuel2, t.dest->xpos, t.dest->ypos, t.dest->networkid, int(1000+serv.targetPos), amount, serv.curAmount );
                                  MapCoordinate mc = building->getEntry();
                                  logtoreplayinfo ( rpl_bldrefuel, mc.x, mc.y, int(1000+serv.sourcePos), put );
                               }

@@ -63,7 +63,8 @@ const char*  bodenarten[cbodenartennum]
         "Pack_ice",
         "River",
         "Frozen_water",
-        "bridge" };
+        "bridge",
+        "lava_barrier" };
 
  const char* heightTags[choehenstufennum]
     = { "deep_submerged",

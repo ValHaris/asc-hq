@@ -341,7 +341,7 @@ void AI :: showFieldInformation ( int x, int y )
 }
 
 
-const int currentAiStreamVersion = 102;
+const int currentAiStreamVersion = 103;
 
 void AI :: read ( tnstream& stream )
 {
@@ -391,6 +391,16 @@ void AI :: read ( tnstream& stream )
    if ( version >= 102 )
       originalUnitDistribution.read ( stream );
 
+   if ( version >= 103 ) {
+      int id = stream.readInt();
+      while ( id >= 0 ) {
+         float enemyValue = stream.readFloat();
+         float ownValue = stream.readFloat();
+         unitTypeSuccess[id] = make_pair ( enemyValue, ownValue );
+         id = stream.readInt();
+      }
+   }
+
    int version2 = stream.readInt();
    if ( version != version2 )
       throw tinvalidversion ( "AI :: read", version, version2 );
@@ -432,8 +442,18 @@ void AI :: write ( tnstream& stream ) const
    stream.writeInt( config.waitForResourcePlus );
 
    originalUnitDistribution.write( stream );
+
+   for ( UnitTypeSuccess::const_iterator i = unitTypeSuccess.begin(); i != unitTypeSuccess.end(); ++i ) {
+     stream.writeInt( i->first );
+     stream.writeFloat( i->second.first );
+     stream.writeFloat( i->second.second );
+   }
+   stream.writeInt( -1 );
+
    stream.writeInt ( version );
 }
+
+
 AI :: ~AI ( )
 {
    if ( fieldInformation ) {

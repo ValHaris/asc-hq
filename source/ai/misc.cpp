@@ -310,8 +310,36 @@ bool AI::RefuelConstraint::necessary (const pvehicle veh, AI& ai )
 }
 
 
+AI::VehicleTypeEfficiencyCalculator::VehicleTypeEfficiencyCalculator( AI& _ai, Vehicle* _attacker, Vehicle* _target )
+                                : ai ( _ai ), target( _target), attacker( _attacker )
+{
+   ownValue = attacker->aiparam[ai.getPlayerNum()]->getValue();
+   ownTypeID = attacker->typ->id;
+   enemyValue = target->aiparam[ai.getPlayerNum()]->getValue();
+   orgOwnDamage = attacker->damage;
+   orgEnemyDamage = target->damage;
+   enemyID = target->networkid;
+   ownID = attacker->networkid;
+}
 
 
+void AI::VehicleTypeEfficiencyCalculator::calc()
+{
+   int newOwnDamage;
+   if ( ai.getMap()->getUnit(ownID) )
+      newOwnDamage = attacker->damage;
+   else
+      newOwnDamage = 100;
+
+   int newEnemyDamage;
+   if ( ai.getMap()->getUnit(enemyID) )
+      newEnemyDamage = target->damage;
+   else
+      newEnemyDamage = 100;
+
+   ai.unitTypeSuccess[ownTypeID].first  += enemyValue * (newEnemyDamage - orgEnemyDamage) * 0.01;
+   ai.unitTypeSuccess[ownTypeID].second += ownValue   * (newOwnDamage   - orgOwnDamage  ) * 0.01;
+}
 
 AI::AiResult  AI :: container ( ccontainercontrols& cc )
 {

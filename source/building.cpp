@@ -973,6 +973,7 @@ void  ccontainercontrols :: crefill :: fuel (pvehicle eht, int newfuel)
       newfuel = eht->typ->tank.fuel;
 
    newfuel = min ( newfuel, eht->getResource ( maxint, Resources::Fuel, 1 ) + eht->putResource(maxint, Resources::Fuel, 1));
+   int oldfuel = eht->tank.fuel;
 
    if ( newfuel > eht->tank.fuel ) {
       eht->tank.fuel += cc->getfuel ( newfuel - eht->tank.fuel, 1 );
@@ -982,7 +983,8 @@ void  ccontainercontrols :: crefill :: fuel (pvehicle eht, int newfuel)
       eht->tank.fuel -= delta;
    }
 
-   logtoreplayinfo ( rpl_refuel, eht->xpos, eht->ypos, eht->networkid, int(1002), newfuel );
+   // logtoreplayinfo ( rpl_refuel, eht->xpos, eht->ypos, eht->networkid, int(1002), newfuel );
+   logtoreplayinfo ( rpl_refuel2, eht->xpos, eht->ypos, eht->networkid, int(1002), newfuel, oldfuel );
 };
 
 
@@ -992,6 +994,7 @@ void  ccontainercontrols :: crefill :: material (pvehicle eht, int newmaterial)
       newmaterial = eht->typ->tank.material;
 
    newmaterial = min ( newmaterial, eht->getResource ( maxint, Resources::Material, 1 ) + eht->putResource(maxint, Resources::Material, 1));
+   int oldmaterial = eht->tank.material;
 
    if ( newmaterial > eht->tank.material ) {
       eht->tank.material += cc->getmaterial ( newmaterial - eht->tank.material, 1 );
@@ -1000,7 +1003,7 @@ void  ccontainercontrols :: crefill :: material (pvehicle eht, int newmaterial)
       delta = cc->putmaterial ( delta );
       eht->tank.material -= delta;
    }
-   logtoreplayinfo ( rpl_refuel, eht->xpos, eht->ypos, eht->networkid, int(1001), newmaterial );
+   logtoreplayinfo ( rpl_refuel2, eht->xpos, eht->ypos, eht->networkid, int(1001), newmaterial, oldmaterial );
 };
 
 

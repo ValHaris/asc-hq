@@ -195,6 +195,8 @@ bool Vehicle :: canRepair( const ContainerBase* item )
 
 int Vehicle :: putResource ( int amount, int resourcetype, int queryonly, int scope )
 {
+   //  if units start using/storing resources that will not be stored in the unit itself, the replays will fail !
+
    if ( amount < 0 ) {
       return -getResource( -amount, resourcetype, queryonly, scope );
    } else {
@@ -208,6 +210,8 @@ int Vehicle :: putResource ( int amount, int resourcetype, int queryonly, int sc
 
 int Vehicle :: getResource ( int amount, int resourcetype, int queryonly, int scope )
 {
+   //  if units start using/storing resources that will not be stored in the unit itself, the replays will fail !
+
    if ( amount < 0 ) {
       return -putResource( -amount, resourcetype, queryonly, scope );
    } else {

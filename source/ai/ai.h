@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: ai.h,v 1.18 2003-04-23 18:31:11 mbickel Exp $
+//     $Id: ai.h,v 1.19 2003-05-29 13:54:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2003/04/23 18:31:11  mbickel
+//      Fixed: AI problems
+//      Improved cheating detection in replay
+//
 //     Revision 1.17  2003/03/31 20:29:16  mbickel
 //      Fixed AI bugs
 //      Fixed clipboard in mapeditor
@@ -464,6 +468,27 @@
                float        rating;
                bool operator< ( const ProductionRating& pr ) { return rating < pr.rating; };
             };
+
+            typedef map<int,pair<float,float> > UnitTypeSuccess; // first: enemy value, second: own value
+            UnitTypeSuccess unitTypeSuccess;
+
+            class VehicleTypeEfficiencyCalculator {
+                  AI& ai;
+                  float ownValue;
+                  int ownTypeID;
+                  float enemyValue;
+                  int orgOwnDamage;
+                  int orgEnemyDamage;
+                  int enemyID;
+                  int ownID;
+                  Vehicle* attacker;
+                  Vehicle* target;
+               public:
+                  VehicleTypeEfficiencyCalculator ( AI& _ai, Vehicle* _attacker, Vehicle* _target );
+                  void calc();
+            };
+            friend class VehicleTypeEfficiencyCalculator;
+
             void      production();
 
             AiResult  strategy();

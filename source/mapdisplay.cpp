@@ -1372,6 +1372,9 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
          if ( tick < 0 )
             tick = 0;
 
+         SDL_Delay(1);
+
+
          displaymovingunit.xpos = x2;
          displaymovingunit.ypos = y2;
          displaymovingunit.dx = 0 ;// -dx;

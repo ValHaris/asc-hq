@@ -2,7 +2,7 @@ playlist {
 
    Name = Track 1 by Michael Kievernagel
 
-   tracks = music/*.mp3
+   tracks = music/*.mp3 music/*.mid
 
 } playlist
 
