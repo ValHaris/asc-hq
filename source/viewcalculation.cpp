@@ -156,7 +156,7 @@ void         tcomputebuildingview::init( const pbuilding    bld,  int _mode )
    int  c, j ;
 
    if (bld->getCompletion() == bld->typ->construction_steps - 1) {
-      c = bld->typ->view;
+      c = bld->typ->view + 1;
       j = bld->typ->jamming;
    } else {
       c = 15;
