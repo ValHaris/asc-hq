@@ -145,7 +145,7 @@ void UnitInfoPanel::painter ( const PG_Rect &src, const ASCString& name, const P
 
    MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
 
-   if ( mc.valid() ) {
+   if ( mc.valid() && fieldvisiblenow( actmap->getField(mc)) ) {
       Vehicle* veh = actmap->getField(mc)->vehicle;
 
       if ( name == "unitexp" ) {
@@ -231,7 +231,7 @@ void UnitInfoPanel::eval()
 
    if ( mc.valid() ) {
       Vehicle* veh = actmap->getField(mc)->vehicle;
-      if ( veh ) {
+      if ( veh && fieldvisiblenow( actmap->getField(mc)) ) {
          setLabelText( "unittypename", veh->typ->name );
          setLabelText( "unitname", veh->name );
          setBargraphValue( "unitdamage", float(100-veh->damage) / 100  );
@@ -297,7 +297,7 @@ WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const PG_Rect &r ) : Panel(
    if ( siw ) {
       siw->sigMouseButtonDown.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
       siw->sigMouseButtonUp.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
-   }   
+   }
    */
 }
 

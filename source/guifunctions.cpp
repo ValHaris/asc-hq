@@ -303,6 +303,7 @@ void Movement::execute( const MapCoordinate& pos, int num )
             }
             */
          }
+         updateFieldInfo();
 
       }
    }

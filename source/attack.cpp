@@ -359,7 +359,7 @@ void AttackPanel::dispValue ( const ASCString& name, float value, float maxvalue
          setBarGraphValue( name + "bar", -value / maxvalue );
    }
    ASCString s;
-   s.format ( "%d%%", int(value * 100) );
+   s.format ( "%d", int(value * 100) );
    setLabelText( name, s );
 }
 
