@@ -31,7 +31,7 @@
 #include "resourcenet.h"
 #include "itemrepository.h"
 
-#ifndef converter
+#ifdef sgmain
 # include "gameoptions.h"
 # include "building_controls.h"
 #endif
@@ -630,7 +630,7 @@ const ASCString& Building::getName ( ) const
 
 void Building::endTurn(  )
 {
-#ifndef converter
+#ifdef sgmain
    if ( CGameOptions::Instance()->automaticTraining && (typ->special & cgtrainingb )) {
       for ( int i = 0; i < 32; ++i )
          if ( loading[i] ) {
@@ -640,7 +640,7 @@ void Building::endTurn(  )
                bc.training.trainunit( loading[i] );
          }
    }
-#endif   
+#endif
 }
 
 
