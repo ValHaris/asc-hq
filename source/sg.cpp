@@ -1,6 +1,12 @@
-//     $Id: sg.cpp,v 1.109 2000-11-08 19:31:11 mbickel Exp $
+//     $Id: sg.cpp,v 1.110 2000-11-15 19:28:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.109  2000/11/08 19:31:11  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.108  2000/10/26 18:14:59  mbickel
 //      AI moves damaged units to repair
 //      tmap is not memory layout sensitive any more
@@ -2233,7 +2239,7 @@ void execuseraction ( tuseractions action )
                                              if ( !actmap->player[ actmap->actplayer ].ai )
                                                 actmap->player[ actmap->actplayer ].ai = new AI ( actmap );
 
-                                             savegame ( "aistart.map" );
+                                             savegame ( "aistart.sav" );
                                              actmap->player[ actmap->actplayer ].ai->run();
                                           }
                                        }
@@ -2513,7 +2519,7 @@ void  mainloop ( void )
             case ct_8:  execuseraction ( ua_unitweightinfo );
                break;
 
-            case ct_9: {
+            case ct_9: {  /*
                           static pvehicle veh = 0;
                           if ( !veh ) {
                              veh = getactfield()->vehicle;
@@ -2533,7 +2539,7 @@ void  mainloop ( void )
 
                                 getfield ( x, y )->a.temp = 1;
                              }
-                             */
+
                              for ( int xp = 0; xp < actmap->xsize; xp++ )
                                 for ( int yp = 0; yp < actmap->ysize; yp++ )
                                    if ( ast.fieldVisited ( xp, yp ))
@@ -2541,8 +2547,17 @@ void  mainloop ( void )
 
                              displaymap();
                              veh = NULL;
+                          }*/
+                          static AStar* ast = 0;
+                          if ( ast ) {
+                             delete ast;
+                             ast =  NULL;
+                          } else {
+                             ast = new AStar;
+                             ast->findAllAccessibleFields ( actmap, getactfield()->vehicle );
+                             displaymap();
                           }
-                        }
+                       }
                break;
 
             case ct_0:  execuseraction ( ua_writescreentopcx );

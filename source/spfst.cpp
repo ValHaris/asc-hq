@@ -1,6 +1,11 @@
-//     $Id: spfst.cpp,v 1.72 2000-11-14 20:36:42 mbickel Exp $
+//     $Id: spfst.cpp,v 1.73 2000-11-15 19:28:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.72  2000/11/14 20:36:42  mbickel
+//      The AI can now use supply vehicles
+//      Rewrote objecttype IO routines to make the structure independant of
+//       the memory layout
+//
 //     Revision 1.71  2000/11/09 18:39:00  mbickel
 //      Fix: mapeditor crashed at startup due to invalid map being generated
 //
@@ -1351,8 +1356,8 @@ bool fieldvisiblenow( const pfield pe, int player )
       #endif
 
       if ( actmap->player[player].ai && actmap->player[player].ai->isRunning() )
-         if ( c == visible_not )
-            c = visible_ago;
+         if ( c < actmap->player[player].ai->getVision() )
+            c = actmap->player[player].ai->getVision();
 
       if (c > visible_ago) { 
          if ( pe->vehicle ) { 
@@ -1381,8 +1386,8 @@ int fieldVisibility( const pfield pe, int player )
       #endif
 
       if ( actmap->player[player].ai && actmap->player[player].ai->isRunning() )
-         if ( c == visible_not )
-            c = visible_ago;
+         if ( c < actmap->player[player].ai->getVision() )
+            c = actmap->player[player].ai->getVision();
 
       return c;
    } else
@@ -1708,6 +1713,9 @@ int         getdiplomaticstatus(int         b)
    if ( b/8 == actmap->actplayer )
       return capeace;
 
+   if ( b == 64 )  // neutral
+      return capeace;
+
    char *d = &actmap->alliances[ b/8 ][ actmap->actplayer ] ;
 
    if ( *d == capeace || *d == canewsetwar1 || *d == cawarannounce )
@@ -1724,6 +1732,10 @@ int        getdiplomaticstatus2(int    b, int    c)
 
    if ( b == c )
       return capeace;
+
+   if ( b == 64 || c == 64 )  // neutral
+      return capeace;
+
 
    char *d = &actmap->alliances [ b/8][ c/8 ];
 

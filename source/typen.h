@@ -1,6 +1,11 @@
-//     $Id: typen.h,v 1.67 2000-11-14 20:36:45 mbickel Exp $
+//     $Id: typen.h,v 1.68 2000-11-15 19:28:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.67  2000/11/14 20:36:45  mbickel
+//      The AI can now use supply vehicles
+//      Rewrote objecttype IO routines to make the structure independant of
+//       the memory layout
+//
 //     Revision 1.66  2000/11/11 11:05:20  mbickel
 //      started AI service functions
 //
@@ -816,6 +821,7 @@ class BaseAI {
        public: 
          virtual void run ( void ) = 0;
          virtual bool isRunning ( void ) = 0;
+         virtual int getVision ( void ) = 0;
          virtual ~BaseAI () {};
       };
 

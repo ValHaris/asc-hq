@@ -1,6 +1,11 @@
-//     $Id: artint.h,v 1.19 2000-11-14 20:36:38 mbickel Exp $
+//     $Id: artint.h,v 1.20 2000-11-15 19:28:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/11/14 20:36:38  mbickel
+//      The AI can now use supply vehicles
+//      Rewrote objecttype IO routines to make the structure independant of
+//       the memory layout
+//
 //     Revision 1.18  2000/11/11 11:05:15  mbickel
 //      started AI service functions
 //
@@ -110,6 +115,7 @@
 
     class AI : public BaseAI {
            bool _isRunning;
+           int _vision;
            int unitCounter;
 
            int maxTrooperMove; 
@@ -330,6 +336,7 @@
            int getPlayer ( void ) { return activemap->actplayer; };
            void showFieldInformation ( int x, int y );
            bool isRunning ( void );
+           int getVision ( void );
            ~AI ( );
     };
 

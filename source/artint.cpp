@@ -1,6 +1,11 @@
-//     $Id: artint.cpp,v 1.39 2000-11-14 20:36:37 mbickel Exp $
+//     $Id: artint.cpp,v 1.40 2000-11-15 19:28:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2000/11/14 20:36:37  mbickel
+//      The AI can now use supply vehicles
+//      Rewrote objecttype IO routines to make the structure independant of
+//       the memory layout
+//
 //     Revision 1.38  2000/11/11 11:05:15  mbickel
 //      started AI service functions
 //
@@ -1268,16 +1273,22 @@ AI::Section* AI :: Sections :: getBest ( const pvehicle veh, int* xtogo, int* yt
                          ytogoSec = yp;
                       }
 
+                      ai->_vision = visible_all;
+
                       ac++;
                       tvehicle v ( veh, NULL );
-                      v.resetMovement(); // to make sure the wait-for-attack flag doesn't hinder the attack
-                      v.xpos = xp;
-                      v.ypos = yp;
+                      veh->resetMovement(); // to make sure the wait-for-attack flag doesn't hinder the attack
+                      veh->attacked = 0;
+                      veh->xpos = xp;
+                      veh->ypos = yp;
+
                       VehicleAttack va ( NULL, NULL );
-                      if ( va.available ( &v )) {
-                         va.execute ( &v, -1, -1, 0, 0, -1 );
+                      if ( va.available ( veh )) {
+                         va.execute ( veh, -1, -1, 0, 0, -1 );
                          targets += va.attackableVehicles.getFieldNum();
                       }
+                      veh->clone ( &v, NULL );
+                      ai->_vision = visible_ago;
                    } else
                       nac++;
                 }
@@ -1287,7 +1298,7 @@ AI::Section* AI :: Sections :: getBest ( const pvehicle veh, int* xtogo, int* yt
                 frst = &getForPos ( x, y );
                 if ( xtogo && ytogo ) {
                    *xtogo = xtogoSec;
-                   *ytogo = xtogoSec;
+                   *ytogo = ytogoSec;
                 }
              }
           }
@@ -1771,7 +1782,31 @@ AI::AiResult AI::tactics( void )
             if ( veh->aiparam[ getPlayer() ]->task == tasks[j] )
                unitUsable = true;
 
-      if ( unitUsable ) {
+      int maxWeapDist = minint;
+      for ( int w = 0; w < veh->typ->weapons->count; w++ )
+         if ( veh->typ->weapons->weapon[w].shootable() )
+            maxWeapDist = max ( veh->typ->weapons->weapon[w].maxdistance , maxWeapDist );
+
+      int maxMove = minint;
+      for ( int h = 0; h < 8; h++ )
+         if ( veh->typ->height & ( 1 << h ))
+            maxMove = max ( veh->typ->movement[h], maxMove );
+
+      bool enemiesNear = false;
+      int ydist = (maxMove + maxWeapDist) / maxmalq;
+      int xdist = ydist / 2;
+      for ( int x = veh->xpos - xdist; x <= veh->xpos + xdist; x++ )
+         for ( int y = veh->ypos - ydist; y <= veh->ypos + ydist; y++ ) {
+            pfield fld = getMap()->getField(x,y );
+            if ( fld ) {
+               if ( fld->vehicle && getdiplomaticstatus2 ( veh->color, fld->vehicle->color ) == cawar )
+                  enemiesNear = true;
+               if ( fld->building && getdiplomaticstatus2 ( veh->color, fld->building->color ) == cawar )
+                  enemiesNear = true;
+            }
+         }
+
+      if ( unitUsable && enemiesNear) {
          unitCounter++;
          displaymessage2("tact: unit %d moved", unitCounter );
 
@@ -2081,6 +2116,7 @@ void AI:: run ( void )
 
    unitCounter = 0;
    _isRunning = true;
+   _vision = visible_ago;
 
    tempsvisible = false;
    setup();
@@ -2103,9 +2139,14 @@ void AI:: run ( void )
 
 bool AI :: isRunning ( void )
 {
-  return _isRunning;
+   return _isRunning;
 }
 
+
+int AI :: getVision ( void )
+{
+   return _vision;
+}
 
 void AI :: showFieldInformation ( int x, int y )
 {
