@@ -1,6 +1,11 @@
-//     $Id: typen.h,v 1.5 1999-11-25 22:00:15 mbickel Exp $
+//     $Id: typen.h,v 1.6 1999-12-07 22:02:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/11/25 22:00:15  mbickel
+//      Added weapon information window
+//      Added support for primary offscreen frame buffers to graphics engine
+//      Restored file time handling for DOS version
+//
 //     Revision 1.4  1999/11/23 21:07:41  mbickel
 //      Many small bugfixes
 //
@@ -1827,6 +1832,7 @@ struct thexpic {
    #define cfspecificbuildingconstruction 2048  
    #define cffuelref 4096  
    #define cficebreaker 8192  
+   #define cfnoairrefuel 16384
    #define cfmaterialref 32768  
    // #define cfenergyref 65536  
    #define cffahrspur ( 1 << 17 )   /*  !!  */

@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.4 1999-11-23 21:07:38 mbickel Exp $
+//     $Id: typen.cpp,v 1.5 1999-12-07 22:02:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/11/23 21:07:38  mbickel
+//      Many small bugfixes
+//
 //     Revision 1.3  1999/11/16 17:04:17  mbickel
 //     Made ASC compilable for DOS again :-)
 //     Merged all the bug fixes in that I did last week
@@ -74,8 +77,8 @@ const char*  cbuildingfunctions[cbuildingfunctionnum]  = {"HQ",                "
                                                       "mining station (req. material or fuel production)",    "external loading" };
 
 const char*  cvehiclefunctions[cvehiclefunctionsnum]  = {"sonar",             "paratrooper",       "mine-layer",        "trooper",               "repair vehicle",
-                                                         "conquer buildings", "move after attack","view satellites",   "construct ALL buildings",   "view mines", 
-                                                         "construct vehicles","construct specific buildings", "refuel units",      "icebreaker",            "!", 
+                                                         "conquer buildings", "move after attack","view satellites",   "construct ALL buildings", "view mines", 
+                                                         "construct vehicles","construct specific buildings", "refuel units",      "icebreaker",  "no refueling in air", 
                                                             "refuels material", "!",               "makes tracks",   "drill for mineral resources manually",  "sailing",
                                                                                                     // ?? Fahrspurenleger 
                                                             "auto repair",        "generator",        "search for mineral resources automatically", "Kamikaze only"  };
