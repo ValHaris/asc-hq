@@ -1958,8 +1958,12 @@ void endTurn ( void )
       time ( &pt.date );
       actmap->player[actmap->actplayer].playTime.push_back ( pt );
 
+      for ( tmap::Player::BuildingList::iterator b = actmap->player[actmap->actplayer].buildingList.begin(); b != actmap->player[actmap->actplayer].buildingList.end(); ++b )
+         (*b)->endTurn();
+
+
       tmap::Player::VehicleList toRemove;
-      for ( tmap::Player::VehicleList::iterator v = actmap->player[actmap->actplayer].vehicleList.begin(); v != actmap->player[actmap->actplayer].vehicleList.end(); v++ ) {
+      for ( tmap::Player::VehicleList::iterator v = actmap->player[actmap->actplayer].vehicleList.begin(); v != actmap->player[actmap->actplayer].vehicleList.end(); ++v ) {
          pvehicle actvehicle = *v;
 
          // Bei Žnderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!

@@ -31,6 +31,10 @@
 #include "resourcenet.h"
 #include "itemrepository.h"
 
+#ifndef converter
+# include "gameoptions.h"
+# include "building_controls.h"
+#endif
 
 const float repairEfficiencyBuilding[resourceTypeNum*resourceTypeNum] = { 1./3., 0,     1. / 3. ,
                                                                           0,     1./3., 0,
@@ -623,6 +627,22 @@ const ASCString& Building::getName ( ) const
    else
       return name;
 }
+
+void Building::endTurn(  )
+{
+#ifndef converter
+   if ( CGameOptions::Instance()->automaticTraining && (typ->special & cgtrainingb )) {
+      for ( int i = 0; i < 32; ++i )
+         if ( loading[i] ) {
+            cbuildingcontrols bc;
+            bc.init(this);
+            if ( bc.training.available( loading[i] ))
+               bc.training.trainunit( loading[i] );
+         }
+   }
+#endif   
+}
+
 
 Resources Building::netResourcePlus( ) const
 {

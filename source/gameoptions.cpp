@@ -128,6 +128,7 @@ void CGameOptions::setDefaults ( void )
 
    mapeditor_xresolution = 1024;
    mapeditor_yresolution = 768;
+   automaticTraining = 1;
 
    setChanged();
 }
@@ -175,6 +176,7 @@ void CGameOptions::copy ( const CGameOptions& cgo )
 
    xresolution               = cgo.xresolution;
    yresolution               = cgo.yresolution;
+   automaticTraining         = cgo.automaticTraining;
 
    bi3.dir.setName( cgo.bi3.dir.getName() );
    bi3.interpolate.terrain = cgo.bi3.interpolate.terrain;

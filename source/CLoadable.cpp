@@ -52,7 +52,8 @@ CLoadableGameOptions::CLoadableGameOptions(CGameOptions* pOptions)
    add(new IntProperty("AttackSpeed2"							,&_pOptions->attackspeed2));
    add(new IntProperty("AttackSpeed3"							,&_pOptions->attackspeed3));
    add(new IntProperty("ForceWindowedMode"   				,&_pOptions->forceWindowedMode));
-   add(new IntProperty("MapeditForceFullscreenMode"   			,&_pOptions->mapeditForceFullscreenMode));
+   add(new IntProperty("MapeditForceFullscreenMode"   	,&_pOptions->mapeditForceFullscreenMode));
+   add(new IntProperty("AutomaticTraining"               ,&_pOptions->automaticTraining ));
 
    add(new IntProperty("Mouse.ScrollButton"					,&_pOptions->mouse.scrollbutton));
    add(new IntProperty("Mouse.SelectFieldButton"			,&_pOptions->mouse.fieldmarkbutton));

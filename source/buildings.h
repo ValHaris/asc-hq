@@ -267,6 +267,9 @@ class  Building : public ContainerBase {
     **/
     void setCompletion ( int completion, bool setupImages = true  );
 
+    //! hook that is called when a turn ends
+    void endTurn( void );
+
     //! returns a name for the building. If the building itself has a name, it will be returned. If it doesn't, the name of the building type will be returned.
     const ASCString& getName ( ) const;
 

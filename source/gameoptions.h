@@ -103,6 +103,8 @@ class CGameOptions
       //! the vertical resolution the mapeditor uses
       int mapeditor_yresolution;
 
+      int automaticTraining;
+
       //! the mouse configuration. Mouse button are: bit 0 = left button ; bit 1 = right button ; bit 2 = center button
       struct Mouse
       {

@@ -1165,7 +1165,7 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
             }
       }
 
-   for ( int r = 0; r < resourceTypeNum; r++ )
+   for ( int r = 1; r < resourceTypeNum; r++ )  // no energy !!
       if ( targetUnit->typ->tank.resource(r) ) {
          VehicleService::Target::Service s;
          s.type = VehicleService::srv_resource;

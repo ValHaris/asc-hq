@@ -2325,6 +2325,10 @@ void tgamepreferences :: init ( void )
    addbutton ( "", xsize -35, starty + 20, xsize - 20, starty + 35, 3, 0, 3, true );
    addeingabe ( 3, &actoptions.container.autoproduceammunition, 0, dblue );
 
+   addbutton ( "", xsize -35, starty + 50, xsize - 20, starty + 65, 3, 0, 4, true );
+   addeingabe ( 4, &actoptions.automaticTraining, 0, dblue );
+
+
 //   addbutton ( "", xsize -35, starty + 50, xsize - 20, starty + 65, 3, 0, 4, true );
 //   addeingabe ( 4, &actoptions.sound.Emute, 0, dblue );
 
@@ -2402,6 +2406,7 @@ void tgamepreferences :: init ( void )
    activefontsettings.background = 255;
 
    showtext2 ( "automatic ammunition production in buildings", x1 + 25, y1 + starty + 20 );
+   showtext2 ( "automatic training of units", x1 + 25, y1 + starty + 50 );
 /*
 #ifndef _DOS_
    showtext2 ( "disable sound",                                 x1 + 25, y1 + starty + 50 );
@@ -2416,7 +2421,7 @@ void tgamepreferences :: init ( void )
    showtext2 ( "small gui icons below mouse pointer", x1 + 25, y1 + r1.y1 );
    rahmen ( true, r1 + dlgoffset );
    paintbutt( 4 );
-   
+
    showtext2 ( "mouse key for small gui icons", x1 + 25, y1 + r5.y1 );
    rahmen ( true, r5 + dlgoffset );
    paintbutt( 5 );

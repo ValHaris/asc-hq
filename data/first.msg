@@ -1,5 +1,5 @@
 ##0100
-Welcome to Advanced Strategic Command 1.9 !
+Welcome to Advanced Strategic Command !
 
 This version features the first levels of a campaign. Neither the campaign, the levels themselves, the graphics nor the AI are completed. Once all four tasks are done, ASC2 will be released.
 
