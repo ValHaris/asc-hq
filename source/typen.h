@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.19 2000-05-07 12:12:18 mbickel Exp $
+//     $Id: typen.h,v 1.20 2000-05-07 18:21:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/05/07 12:12:18  mbickel
+//      New mouse option dialog
+//      weapon info can now be displayed by clicking on a unit
+//
 //     Revision 1.18  2000/05/06 20:25:25  mbickel
 //      Fixed: -recognition of a second mouse click when selection a pd menu item
 //             -movement: fields the unit can only pass, but not stand on them,
@@ -1449,7 +1453,10 @@ class tgameoptions {
     int mapzoomeditor;
     int startupcount;
     int dontMarkFieldsNotAccessible_movement;
-    int dummy[13];
+    int attackspeed1;
+    int attackspeed2;
+    int attackspeed3;
+    int dummy[10];
 
     struct {
       int scrollbutton;

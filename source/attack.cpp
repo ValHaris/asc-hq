@@ -1,6 +1,10 @@
-//     $Id: attack.cpp,v 1.13 2000-04-27 17:59:19 mbickel Exp $
+//     $Id: attack.cpp,v 1.14 2000-05-07 18:21:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/04/27 17:59:19  mbickel
+//      Updated Kdevelop project file
+//      Fixed some graphical errors
+//
 //     Revision 1.12  2000/04/27 16:25:14  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -417,9 +421,24 @@ void tfight :: calcdisplay ( int ad, int dd )
    int t = ticker;
    calc();
 
+
+   int time1 = gameoptions.attackspeed1;
+   if ( time1 <= 0 )
+      time1 = 30;
+
+   int time2 = gameoptions.attackspeed2;
+   if ( time2 <= 0 )
+      time2 = 50;
+
+   int time3 = gameoptions.attackspeed3;
+   if ( time3 <= 0 )
+      time3 = 30;
+
+
+
    do {
       releasetimeslice();
-   } while ( t + 50 > ticker ); /* enddo */
+   } while ( t + time1 > ticker ); /* enddo */
 
 
 
@@ -431,24 +450,19 @@ void tfight :: calcdisplay ( int ad, int dd )
 
 
 
+
    int steps;
    if ( av.damage - avd > dv.damage - dvd )
       steps = av.damage - avd ;
    else
       steps = dv.damage - dvd;
 
-   int tme = 1;
-   if ( steps < 20 )
-      tme = 2;
-      
-   int time = 50 + steps;
-
    int d1 = avd;
    int d2 = dvd;
 
    int starttime = ticker;
-   while ( ticker < starttime + time ) {
-      int finished = 1000 * (ticker - starttime) / time;
+   while ( ticker < starttime + time2 ) {
+      int finished = 1000 * (ticker - starttime) / time2;
       int newpos1 = avd + steps * finished / 1000;
       int newpos2 = dvd + steps * finished / 1000;
       cgo.on();
@@ -475,7 +489,7 @@ void tfight :: calcdisplay ( int ad, int dd )
    t = ticker;
    do {
       releasetimeslice();
-   } while ( t + 70 > ticker ); /* enddo */
+   } while ( t + time3 > ticker ); /* enddo */
    putimage ( agmp->resolutionx - ( 640 - 451 ), 211, icons.attack.orgbkgr );
    getinvisiblemouserectanglestk ( );
 }

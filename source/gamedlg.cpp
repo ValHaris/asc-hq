@@ -1,6 +1,10 @@
-//     $Id: gamedlg.cpp,v 1.21 2000-05-07 12:12:16 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.22 2000-05-07 18:21:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/05/07 12:12:16  mbickel
+//      New mouse option dialog
+//      weapon info can now be displayed by clicking on a unit
+//
 //     Revision 1.20  2000/04/27 16:25:23  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -4002,7 +4006,7 @@ void tgamepreferences :: init ( void )
    addbutton ( "", r7, 11, 0, 7, true  );
 */
 
-   r8.x1 = xsize - 150;
+   r8.x1 = xsize - 200;
    r8.y1 = starty + 165;
    r8.x2 = xsize - 20;
    r8.y2 = starty + 185;
@@ -4010,6 +4014,14 @@ void tgamepreferences :: init ( void )
 
    addbutton ( "", r8.x1, r8.y1 + 30, r8.x2, r8.y2 + 30, 2, 1, 9, true );
    addeingabe ( 9, &actoptions.onlinehelptime , 0, 10000 );
+
+   addbutton ( "delay1", r8.x1, r8.y1 , r8.x1 + (r8.x2 - r8.x1)/3 - 2, r8.y2, 2, 1, 91, true );
+   addeingabe ( 91, &actoptions.attackspeed1 , 0, 10000 );
+   addbutton ( "anim",   r8.x1 + (r8.x2 - r8.x1)/3 + 2, r8.y1 , r8.x1 + 2*(r8.x2 - r8.x1)/3 - 2, r8.y2, 2, 1, 92, true );
+   addeingabe ( 92, &actoptions.attackspeed2 , 0, 10000 );
+   addbutton ( "delay2", r8.x1 + 2*(r8.x2 - r8.x1)/3 + 2, r8.y1 , r8.x2, r8.y2, 2, 1, 93, true );
+   addeingabe ( 93, &actoptions.attackspeed3 , 0, 10000 );
+
 
 /*
    addbutton ( "", xsize -35, r8.y1 + 60, r8.x2, r8.y2 + 60, 3, 0, 10, true );
@@ -4066,7 +4078,9 @@ void tgamepreferences :: init ( void )
    paintbutt( 8 );
 */
 
-   showtext2 ( "onlinehelp-delay in 1/100 sec", x1 + 25, y1 + r8.y1 + 30);
+   showtext2 ( "mousetip help delay (in 1/100 sec)", x1 + 25, y1 + r8.y1 + 30);
+
+   showtext2 ( "speed of attack display (in 1/100 sec)",          x1 + 25, y1 + r8.y1 );
 
 //   showtext2 ( "mousegui menu opens after movement", x1 + 25, y1 + r8.y1 + 60);
 
