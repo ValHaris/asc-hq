@@ -1,6 +1,12 @@
-//     $Id: basestrm.cpp,v 1.37 2000-08-21 17:50:57 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.38 2000-09-05 19:55:57 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2000/08/21 17:50:57  mbickel
+//      Fixed: crash when unit reaching max experience
+//      Fixed: crash when displaying research image
+//      Fixed: crash when events referenced a unit that has been shot down
+//      Fixed: screenshot being written to wrong directory
+//
 //     Revision 1.36  2000/08/13 12:55:57  mbickel
 //      Fixed IO errors with very small files
 //
@@ -923,7 +929,7 @@ time_t tn_file_buf_stream::get_time ( void )
 tn_file_buf_stream::tn_file_buf_stream( const char* name, char mode)
 {
    char buf[10000];
-   string s;
+   std::string s;
    if ( strchr ( name, pathdelimitter ) == NULL )
       s = constructFileName ( buf, 0, NULL, name);
    else
