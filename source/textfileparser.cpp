@@ -338,9 +338,12 @@ void PropertyContainer::BoolProperty::evaluate_rw ( )
 
 void PropertyContainer::StringProperty::evaluate_rw ( )
 {
-   if ( propertyContainer->isReading() )
+   if ( propertyContainer->isReading() ) {
       property = entry->value;
-   else {
+      ASCString::size_type pos = property.find_first_not_of ( whiteSpace );
+      if ( pos == ASCString::npos )
+         property.erase();
+   } else {
       valueToWrite = property ;
 
       ASCString::size_type pos = 0;

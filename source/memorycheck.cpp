@@ -40,6 +40,7 @@
   void memchkError ( )
   {
      errorNum++;
+     fprintf(stderr, "memchkError !\n");
   }
 
   class Block {

@@ -2,9 +2,13 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.49 2001-08-02 18:50:43 mbickel Exp $
+//     $Id: edmain.cpp,v 1.50 2001-08-06 20:54:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2001/08/02 18:50:43  mbickel
+//      Corrected Error handling in Text parsers
+//      Improved version information
+//
 //     Revision 1.48  2001/08/02 18:18:02  mbickel
 //      BI3 map translation tables now in textfile too
 //
@@ -886,9 +890,9 @@ int main(int argc, char *argv[] )
 
    setWindowCaption ( "Advanced Strategic Command : map editor ");
 
-   schriften.smallarial = load_font("smalaril.FNT");
-   schriften.large = load_font("USABLACK.FNT");
-   schriften.arial8 = load_font("ARIAL8.FNT");
+   schriften.smallarial = load_font("smalaril.fnt");
+   schriften.large = load_font("usablack.fnt");
+   schriften.arial8 = load_font("arial8.fnt");
    schriften.smallsystem = load_font("msystem.fnt");
    schriften.monogui = load_font("monogui.fnt");
    

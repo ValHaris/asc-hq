@@ -1,6 +1,9 @@
-//     $Id: misc.cpp,v 1.17 2001-07-25 19:01:32 mbickel Exp $
+//     $Id: misc.cpp,v 1.18 2001-08-06 20:54:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2001/07/25 19:01:32  mbickel
+//      Started adding text file formats
+//
 //     Revision 1.16  2001/01/28 23:19:55  mbickel
 //      Finally, the linux version compiles again too...
 //
@@ -303,6 +306,13 @@ void fatalError ( const char* formatstring, ... )
    vfprintf ( stderr, formatstring, paramlist );
    exit ( 1 );
 }
+
+void fatalError ( const ASCString& text )
+{
+   fprintf ( stderr, text.c_str() );
+   exit ( 1 );
+}
+
 
 void warning ( const ASCString& output )
 {

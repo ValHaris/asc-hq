@@ -51,16 +51,10 @@ int main(int argc, char *argv[] )
    int pos;
    int num = 0;
    for ( int a = cl.next_param(); a < argc; a++ ) {
-      FILE* fp = fopen ( argv[a], "rb" );
-   #ifdef _DOS_
-      int magic;
-      fread ( &magic, 1, 4, fp );
-      if ( magic != 'MBCN' ) {
-   #else
+      FILE* fp = fopen ( argv[a], filereadmode );
       char magic[4];
       fread(&magic,1,sizeof(magic),fp);
       if (strncmp(magic,"NCBM",4) != 0) {
-   #endif
          printf("invalid containerfile\n");
          return 1;
       }
@@ -88,23 +82,28 @@ int main(int argc, char *argv[] )
 
       for ( i = 0; i < num; i++ ) {
          try {
-            tnfilestream instream ( index[i].name, tnstream::reading );
-            char namebuf[ maxFileStringSize ];
-            int j = -1;
-            do {
-               j++;
-               namebuf[j] = tolower ( index[i].name[j] );
-            } while ( namebuf[j] );
+            tfindfile ff ( index[i].name );
+            bool incontainer;
+            ff.getnextname ( NULL, &incontainer );
+            if ( incontainer ) {
+               tnfilestream instream ( index[i].name, tnstream::reading );
+               char namebuf[ maxFileStringSize ];
+               int j = -1;
+               do {
+                  j++;
+                  namebuf[j] = tolower ( index[i].name[j] );
+               } while ( namebuf[j] );
 
-            if ( !cl.q() )
-               printf("writing %s \n", namebuf );
+               if ( !cl.q() )
+                  printf("writing %s \n", namebuf );
 
-            tn_file_buf_stream outstream ( namebuf, tnstream::writing );
-            int size ;
-            do {
-               size = instream.readdata ( buf, bufsize, 0 );
-               outstream.writedata ( buf, size );
-            } while ( size == bufsize );
+               tn_file_buf_stream outstream ( namebuf, tnstream::writing );
+               int size ;
+               do {
+                  size = instream.readdata ( buf, bufsize, 0 );
+                  outstream.writedata ( buf, size );
+               } while ( size == bufsize );
+            }
          } /* endtry */
          catch ( tfileerror err) {
             printf( "error writing file %s ", err.getFileName().c_str() );

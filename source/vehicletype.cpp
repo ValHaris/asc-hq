@@ -751,6 +751,9 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    pc.closeBracket();
 
    setupPictures();
+   #ifndef converter
+   buildicon = generate_vehicle_gui_build_icon ( this );
+   #endif
 }
 
 

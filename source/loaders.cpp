@@ -5,9 +5,13 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.56 2001-07-28 11:19:12 mbickel Exp $
+//     $Id: loaders.cpp,v 1.57 2001-08-06 20:54:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.56  2001/07/28 11:19:12  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.55  2001/07/27 21:13:35  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -421,7 +425,9 @@ void         seteventtriggers( pmap actmap )
                event->trigger[j] == ceventt_specific_unit_enters_polygon) {
 
                if ( event->trigger_data[j]->unitpolygon->vehiclenetworkid ) {
-                  actmap->getUnit ( event->trigger_data[j]->unitpolygon->vehiclenetworkid )->connection |= cconnection_areaentered_specificunit;
+                  Vehicle* v = actmap->getUnit ( event->trigger_data[j]->unitpolygon->vehiclenetworkid );
+                  if ( v )
+                     v->connection |= cconnection_areaentered_specificunit;
                }
               #ifndef karteneditor
                if ( event->trigger[j] == ceventt_any_unit_enters_polygon )
@@ -561,10 +567,13 @@ void   tspfldloaders::writeevent ( pevent event )
               if ( event->trigger_data[j]->unitpolygon->vehiclenetworkid ) {
                  int nwid = event->trigger_data[j]->unitpolygon->vehiclenetworkid;
                  pvehicle v = actmap->getUnit ( nwid );
-                 int x = v->xpos;
-                 int y = v->ypos;
-                 stream->writedata2( x );
-                 stream->writedata2( y );
+                 if ( v ) {
+                    stream->writeInt( v->xpos );
+                    stream->writeInt( v->ypos );
+                 } else {
+                    stream->writeInt( -1 );
+                    stream->writeInt( -1 );
+                 }
                  stream->writedata2( nwid );
               }
               

@@ -92,6 +92,7 @@ void Building :: convert ( int col )
          }
 
    #endif
+   removeview();
 
    gamemap->player[oldcol].queuedEvents++;
 
@@ -103,17 +104,22 @@ void Building :: convert ( int col )
 
    color = col << 3;
 
+   addview();
    for ( int i = 0; i < 32; i++)
       if ( loading[i] )
          loading[i]->convert ( col );
 
-   if ( connection & cconnection_conquer )
+   if ( connection & cconnection_conquer ) {
       gamemap->player[oldcol].queuedEvents++;
+      gamemap->player[col].queuedEvents++;
       // releaseevent(NULL,this,cconnection_conquer);
+   }
 
-   if ( connection & cconnection_lose )
+   if ( connection & cconnection_lose ) {
       gamemap->player[oldcol].queuedEvents++;
       // releaseevent(NULL,this,cconnection_lose);
+      gamemap->player[col].queuedEvents++;
+   }
 }
 
 

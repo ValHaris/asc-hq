@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.64 2001-08-02 18:50:43 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.65 2001-08-06 20:54:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.64  2001/08/02 18:50:43  mbickel
+//      Corrected Error handling in Text parsers
+//      Improved version information
+//
 //     Revision 1.63  2001/08/02 15:33:02  mbickel
 //      Completed text based file formats
 //
@@ -951,15 +955,7 @@ pobjecttype   loadobjecttype( pnstream stream )
    pobjecttype fztn = new ObjectType;
    fztn->read ( *stream );
 
-   #ifndef converter
-    fztn->buildicon = generate_object_gui_build_icon ( fztn, 0 );
-    fztn->removeicon = generate_object_gui_build_icon ( fztn, 1 );
-   #else
-    fztn->buildicon = NULL;
-    fztn->removeicon = NULL;
-   #endif
-   
-    return fztn;
+   return fztn;
 }
 
 void writeobject ( pobjecttype object, pnstream stream, int compressed )

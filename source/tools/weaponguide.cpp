@@ -75,8 +75,8 @@ int main(int argc, char *argv[] )
          // for example: weaponguide s*.veh
       }
       else {
-         wildcard =  "*.*";
-         // else use *.veh
+         wildcard =  "*";
+         // else use all verhicles
       }
 
 

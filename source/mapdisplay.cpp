@@ -907,7 +907,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
                   /* display mines */
                       if ( b == visible_all )
-                           if ( !fld->mines.empty() && hgt == 2 ) {
+                           if ( !fld->mines.empty() && hgt == 3 ) {
                               if ( fld->mines.begin()->type != cmmooredmine )
                                  putspriteimage( r + unitrightshift , yp + unitdownshift ,getmineadress(fld->mines.begin()->type) );
                               else

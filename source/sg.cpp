@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: sg.cpp,v 1.159 2001-08-06 15:35:09 mbickel Exp $
+//     $Id: sg.cpp,v 1.160 2001-08-06 20:54:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.159  2001/08/06 15:35:09  mbickel
+//      Fixed wrong resulution from config file
+//      Added duplicate ID checking
+//
 //     Revision 1.158  2001/08/02 18:50:43  mbickel
 //      Corrected Error handling in Text parsers
 //      Improved version information
@@ -350,7 +354,7 @@
 
 
 
-// #define MEMCHK
+#define MEMCHK
 
 #include "memorycheck.cpp"
 
@@ -736,7 +740,7 @@ void         loadcursor(void)
    }
 
    {
-      tnfilestream stream ("pfeil-A0.raw",tnstream::reading);
+      tnfilestream stream ("pfeil-a0.raw",tnstream::reading);
       for (i=0; i<8 ;i++ ) {
             stream.readrlepict(   &icons.pfeil2[i], false, &w );
       } /* endfor */

@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: gui.cpp,v 1.64 2001-07-28 21:09:08 mbickel Exp $
+//     $Id: gui.cpp,v 1.65 2001-08-06 20:54:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.64  2001/07/28 21:09:08  mbickel
+//      Prepared vehicletype structure for textIO
+//
 //     Revision 1.63  2001/07/28 11:19:12  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -2560,22 +2563,10 @@ int         tnputobjectcontainerguiicon::available( void )
    if ( object ) {
       if ( build ) {
          if ( object_constructable ( getxpos(), getypos(), object ))
-            /*
-            if ( actmap->objectcrc ) {
-               if ( actmap->objectcrc->speedcrccheck->checkobj2 ( object, 0 ))
-                  return true;                          
-            } else
-            */
-               return true;
+            return true;
       } else {
          if ( object_removeable ( getxpos(), getypos(), object ))
-         /*
-            if ( actmap->objectcrc ) {
-               if ( actmap->objectcrc->speedcrccheck->checkobj2 ( object, 0 ))
-                  return true;
-            } else
-         */
-               return true;
+            return true;
       }     
    
       return false;
@@ -2600,14 +2591,8 @@ tnputvehiclecontainerguiicon :: tnputvehiclecontainerguiicon ( pvehicletype obj 
       buildnum++;
       infotext      = new char[100];
       picture[0]    = vehicle->buildicon;
-      const char* c;
-      if ( !vehicle->name.empty()  )
-         c = vehicle->name.c_str();
-      else
-         c = vehicle->description.c_str();
-
       char buf[10000];
-      sprintf ( buf, "%s : %d material and %d fuel needed", c, vehicle->productionCost.material, vehicle->productionCost.energy );
+      sprintf ( buf, "%s : %d material and %d fuel needed", vehicle->getName().c_str(), vehicle->productionCost.material, vehicle->productionCost.energy );
       infotext = buf;
    } else {
       picture[0] = icons.selectweaponguicancel;

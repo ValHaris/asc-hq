@@ -3,9 +3,13 @@
   
 */
 
-//     $Id: sgstream.h,v 1.21 2001-08-02 18:50:43 mbickel Exp $
+//     $Id: sgstream.h,v 1.22 2001-08-06 20:54:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2001/08/02 18:50:43  mbickel
+//      Corrected Error handling in Text parsers
+//      Improved version information
+//
 //     Revision 1.20  2001/07/28 11:19:12  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -212,5 +216,6 @@ extern void displayLogMessage ( int msgVerbosity, const ASCString& message );
 extern int dataVersion;
 extern void checkDataVersion( );
 
+extern void* generate_object_gui_build_icon ( pobjecttype obj, int remove );
 
 #endif

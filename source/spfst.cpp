@@ -2,9 +2,13 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.92 2001-08-02 18:50:43 mbickel Exp $
+//     $Id: spfst.cpp,v 1.93 2001-08-06 20:54:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.92  2001/08/02 18:50:43  mbickel
+//      Corrected Error handling in Text parsers
+//      Improved version information
+//
 //     Revision 1.91  2001/07/28 21:09:08  mbickel
 //      Prepared vehicletype structure for textIO
 //
@@ -1752,15 +1756,18 @@ void checkobjectsforremoval ( void )
    for ( int y = 0; y < actmap->ysize; y++ )
       for ( int x = 0; x < actmap->xsize; x++ ) {
          pfield fld = getfield ( x, y );
-         for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ )
-            if ( i->typ->terrainaccess.accessible ( fld->bdt ) < 0 )
+         for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end();  )
+            if ( i->typ->terrainaccess.accessible ( fld->bdt ) < 0 ) {
                fld->removeobject ( i->typ );
+               i = fld->objects.begin();
+            } else
+               i++;
       }
 }
 
 void  checkunitsforremoval ( void )
 {
-   for ( int c=0; c<8 ;c++ )
+   for ( int c=0; c<=8 ;c++ )
       for ( tmap::Player::VehicleList::iterator i = actmap->player[c].vehicleList.begin(); i != actmap->player[c].vehicleList.end();  ) {
           pvehicle eht = *i;
           pfield field = getfield(eht->xpos,eht->ypos);
@@ -1774,9 +1781,11 @@ void  checkunitsforremoval ( void )
                 if ( getmaxwindspeedforunit( eht ) < actmap->weather.wind[getwindheightforunit ( eht )].speed*maxwindspeed )
                    erase = true;
           }
-          if ( erase )
+          if ( erase ) {
+             Vehicle* pv = *i;
              i = actmap->player[c].vehicleList.erase ( i );
-          else
+             delete pv;
+          } else
              i++;
       }
 }

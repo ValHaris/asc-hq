@@ -21,6 +21,7 @@
 #include "graphicset.h"
 #include "textfileparser.h"
 #include "textfiletags.h"
+#include "sgstream.h"
 
 
 ObjectType :: ObjectType ( void )
@@ -286,6 +287,12 @@ void ObjectType :: read ( tnstream& stream )
              linkableObjects.push_back ( stream.readInt() );
       }
 
+   #ifndef converter
+    buildicon = generate_object_gui_build_icon ( this, 0 );
+    removeicon = generate_object_gui_build_icon ( this, 1 );
+   #endif
+
+
    } else
        throw ASCmsgException ( "invalid object file format version");
 }
@@ -518,4 +525,11 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
 
    if ( pc.isReading() )
       setupBi3Images();
+
+
+   #ifndef converter
+    buildicon = generate_object_gui_build_icon ( this, 0 );
+    removeicon = generate_object_gui_build_icon ( this, 1 );
+   #endif
+
 }
