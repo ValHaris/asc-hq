@@ -1,6 +1,12 @@
-//     $Id: MainWindow.java,v 1.9 2000-11-07 16:19:39 schelli Exp $
+//     $Id: MainWindow.java,v 1.10 2000-11-08 19:50:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/11/07 16:19:39  schelli
+//     Minor Memory-Functions & Problems changed
+//     Picture Support partly enabled
+//     New Funktion partly implemented
+//     Buildings partly implemented
+//
 //     Revision 1.8  2000/11/01 11:41:04  mbickel
 //      Fixed: Selection in MainWindow-List not being evaluated, the first list
 //       entry was always edited.
@@ -91,8 +97,7 @@ public class MainWindow extends javax.swing.JFrame {
             paths[i] = input.readPChar();
         }
 
-        jTextFieldPath.setText (paths[selection]);
-
+        
         fileList = new javax.swing.JList();
         fileList.setSelectionMode(new javax.swing.DefaultListSelectionModel().SINGLE_SELECTION);
         jScrollPaneFiles.getViewport().setView(fileList);
@@ -101,6 +106,8 @@ public class MainWindow extends javax.swing.JFrame {
 
         selFiles();
 
+        jTextFieldPath.setText (paths[selection]);
+        
         initDone = 1;
 
         pack ();
@@ -305,6 +312,11 @@ private void selFiles() {
     int i = 0;
 
     f = new java.io.File(paths[selection]);
+    if ( !f.isDirectory() ) {
+        paths[selection] = ".";
+        f = new java.io.File(paths[selection]);
+    }
+        
     allFiles = f.list();
 
     for (int j = 0; j < allFiles.length; j ++) {
