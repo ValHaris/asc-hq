@@ -1,6 +1,15 @@
-//     $Id: controls.cpp,v 1.22 2000-04-27 16:25:16 mbickel Exp $
+//     $Id: controls.cpp,v 1.23 2000-04-27 17:59:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/04/27 16:25:16  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.21  2000/03/16 14:06:51  mbickel
 //      Added unitset transformation to the mapeditor
 //
@@ -6684,7 +6693,9 @@ int ReplayMapDisplay :: checkMapPosition ( int x, int y )
 void ReplayMapDisplay :: displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove )
 {
    if ( fieldvisiblenow ( getfield ( x1, y1 ), actmap->playerview) || fieldvisiblenow ( getfield ( x2, y2 ), actmap->playerview)) {
-      checkMapPosition  ( x1, y1 );
+      if ( checkMapPosition  ( x1, y1 ))
+         displayMap();
+
       mapDisplay->displayMovingUnit ( x1, y1, x2, y2, vehicle, height1, height2, fieldnum, totalmove );
    }
 }
@@ -7021,6 +7032,8 @@ void trunreplay :: execnextreplaymove ( void )
 {
    if ( verbosity >= 8 )
      printf("executing replay move %d\n", movenum );
+
+   displaymessage2("executing replay move %d\n", movenum );
    movenum++;
    int actaction = nextaction;
    if ( nextaction != rpl_finished ) {
@@ -7597,8 +7610,10 @@ int  trunreplay :: run ( int player )
    do {
        if ( status == 2 ) {
           execnextreplaymove ( );
+         /*
           if ( getxpos () != lastvisiblecursorpos.x || getypos () != lastvisiblecursorpos.y )
              setcursorpos ( lastvisiblecursorpos.x, lastvisiblecursorpos.y );
+         */
        }
 
        if ( nextaction == rpl_finished   &&  !cursor.an )

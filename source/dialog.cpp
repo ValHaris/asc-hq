@@ -1,6 +1,15 @@
-//     $Id: dialog.cpp,v 1.24 2000-04-27 16:25:19 mbickel Exp $
+//     $Id: dialog.cpp,v 1.25 2000-04-27 17:59:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/04/27 16:25:19  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.23  2000/03/29 09:58:42  mbickel
 //      Improved memory handling for DOS version
 //      Many small changes I can't remember ;-)
@@ -3690,7 +3699,7 @@ class  tsetalliances : public tdialogbox {
                      // tnamestrings        alliancename;
                      char                location[8];
                      int                 playerpos[8];  // Beispiel: Es existieren Spieler 0 und Spieler 6; dann ist playerpos[0] = 0 und playerpos[1] = 6
-                     tplayerstat         playermode[8];    /*  0: player
+                     int                 playermode[8];    /*  0: player
                                                                1: ai
                                                                2: off  */
 
@@ -4279,7 +4288,7 @@ void         tsetalliances::click(byte         bxx,
         #ifdef __WATCOM_CPLUSPLUS__
          playermode[y]++;
         #else
-	 (int)playermode[y] += 1; 
+	 playermode[y] += 1;
         #endif
          if ( actmap->actplayer == -1 ) {
             if (playermode[y] > 2) 
@@ -4332,7 +4341,7 @@ void         tsetalliances::click(byte         bxx,
              #ifdef __WATCOM_CPLUSPLUS__
               sv.mode[actmap->actplayer][y] ++;
              #else
-              (int)sv.mode[actmap->actplayer][y] += 1;
+              sv.mode[actmap->actplayer][y] += 1;
              #endif
             }
    
@@ -6133,7 +6142,7 @@ void         tenterpassword ::lne(int          x1,
   i = x1 + gettextwdth(ss2,activefontsettings.font);
   int j = y1; 
   int k = y1 + activefontsettings.font->height; 
-  collategraphicoperations cgo ( i-1, j, i+1, j );
+  collategraphicoperations cgo ( i-1, j, i+1, k );
   xorline(i,j,i,k,3);
   if (einfuegen == false) { 
      xorline(i + 1,j,i + 1,k,3); 

@@ -1,6 +1,15 @@
-//     $Id: attack.cpp,v 1.12 2000-04-27 16:25:14 mbickel Exp $
+//     $Id: attack.cpp,v 1.13 2000-04-27 17:59:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/04/27 16:25:14  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.11  2000/03/11 19:51:12  mbickel
 //      Removed file name length limitation under linux
 //      No weapon sound for attacked units any more (only attacker)
@@ -409,7 +418,7 @@ void tfight :: calcdisplay ( int ad, int dd )
    calc();
 
    do {
-
+      releasetimeslice();
    } while ( t + 50 > ticker ); /* enddo */
 
 
@@ -465,7 +474,7 @@ void tfight :: calcdisplay ( int ad, int dd )
 
    t = ticker;
    do {
-
+      releasetimeslice();
    } while ( t + 70 > ticker ); /* enddo */
    putimage ( agmp->resolutionx - ( 640 - 451 ), 211, icons.attack.orgbkgr );
    getinvisiblemouserectanglestk ( );

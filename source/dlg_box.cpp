@@ -1,6 +1,15 @@
-//     $Id: dlg_box.cpp,v 1.15 2000-04-27 16:25:20 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.16 2000-04-27 17:59:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/04/27 16:25:20  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.14  2000/03/29 09:58:44  mbickel
 //      Improved memory handling for DOS version
 //      Many small changes I can't remember ;-)
@@ -2124,8 +2133,10 @@ void         tdialogbox::stredit(char *       s,
    do {
      if ( keypress() ) {
        cc = rp_key();
-     } else
+     } else {
         cc = cto_invvalue;
+        releasetimeslice();
+     }
 
      if (cc != cto_invvalue ) {
        lne(x1,y1,ss,position,einfuegen);
@@ -2330,8 +2341,10 @@ void         tdialogbox::intedit(int *    st,
       do {
          if ( keypress() ) {
            cc = rp_key();
-         } else
+         } else {
             cc = cto_invvalue;
+            releasetimeslice();
+         }
 
          if (cc != cto_invvalue ) {
             collategraphicoperations cgo ( x1, y1, x1 + wdth, y1 + activefontsettings.height );

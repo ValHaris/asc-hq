@@ -1,6 +1,15 @@
-//     $Id: unitctrl.cpp,v 1.1 2000-04-27 16:25:31 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.2 2000-04-27 17:59:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2000/04/27 16:25:31  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -795,6 +804,8 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1 )
       } 
 
       vehicle->setnewposition ( x, y );
+      if ( newheight != -1 )
+         vehicle->height = newheight;
 
       
       dashboard.x = 0xffff; 

@@ -1,6 +1,15 @@
-//     $Id: sg.cpp,v 1.32 2000-04-27 16:25:26 mbickel Exp $
+//     $Id: sg.cpp,v 1.33 2000-04-27 17:59:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/04/27 16:25:26  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.31  2000/04/17 18:55:23  mbickel
 //      Fixed the DOS version
 //
@@ -1486,7 +1495,7 @@ void         tsgpulldown :: init ( void )
    addbutton ( "save ~S~creen as PCXõ0", ua_writescreentopcx ); 
    addbutton ( "benchmark without view calcõ5", ua_benchgamewov ); 
    addbutton ( "benchmark with view calcõ6", ua_benchgamewv); 
-   addbutton ( "test memory integrityõ3", ua_heapcheck ); 
+   addbutton ( "test memory integrity", ua_heapcheck );
 
   addfield ( "~H~elp" );
    addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem ); 
@@ -3172,6 +3181,8 @@ int main(int argc, char *argv[] )
            return 0;
        }
       #endif
+
+fullscreen = 0;
 
         #ifdef logging
         logtofile ( "sg.cpp / main / allocating reserved memory ");
