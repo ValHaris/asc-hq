@@ -1,6 +1,10 @@
-//     $Id: edmisc.cpp,v 1.34 2000-10-18 14:14:07 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.35 2000-10-19 11:40:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2000/10/18 14:14:07  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.33  2000/10/14 15:31:53  mbickel
 //      Moved key symbols to separate files
 //      Moved tnstream to its own file
@@ -147,12 +151,12 @@
 //      Fixed bugs in RLE decompression, BI map importer and the view calculation
 //
 //     Revision 1.2  1999/11/16 03:41:37  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
+//      Added CVS keywords to most of the files.
+//      Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//      Wrote replacement routines for kbhit/getch for Linux
+//      Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//      Added autoconf/automake capabilities
+//      Added files used by 'automake --gnu'
 //
 //
 /*
@@ -194,36 +198,36 @@
 
 // #define smallestweight 8 //gewicht der kleinsten vehicle fr selunitcargo
 
-   tkey		ch;
-   pfield		pf;
+   tkey         ch;
+   pfield               pf;
 
-   pterraintype	auswahl;
-   pvehicletype	auswahlf;
+   pterraintype auswahl;
+   pvehicletype auswahlf;
    pobjecttype  actobject;
-   pbuildingtype	auswahlb;
-   int		auswahls;
-   int		auswahlm;       
-   int		auswahlw;
-   int		auswahld;
-   int		farbwahl;
-   int			altefarbwahl;
+   pbuildingtype        auswahlb;
+   int          auswahls;
+   int          auswahlm;       
+   int          auswahlw;
+   int          auswahld;
+   int          farbwahl;
+   int                  altefarbwahl;
 
-   tfontsettings	rsavefont;
+   tfontsettings        rsavefont;
    int                  lastselectiontype;
-   selectrec		sr[10];
+   selectrec            sr[10];
 
-   ppolygon		pfpoly;
-   char		tfill,polyfieldmode;
-   word		fillx1, filly1;
+   ppolygon             pfpoly;
+   char         tfill,polyfieldmode;
+   word         fillx1, filly1;
 
-   int			i;
-   pbuilding		gbde;
-   char		mapsaved;
-   tmycursor		mycursor;
+   int                  i;
+   pbuilding            gbde;
+   char         mapsaved;
+   tmycursor            mycursor;
 
-   tpolygon_management	polymanage;
-   tpulldown		pd;
-   // tcdrom		cdrom;
+   tpolygon_management  polymanage;
+   tpulldown            pd;
+   // tcdrom            cdrom;
 
 // õS Checkobject
 
@@ -656,6 +660,7 @@ void placeunit(void)
                }
                if ((auswahlf != NULL) && set ) {
                   pf->vehicle = new Vehicle ( auswahlf, actmap, farbwahl );
+                  pf->vehicle->setnewposition ( getxpos(), getypos() );
                   pf->vehicle->fillMagically();
                   pf->vehicle->height=1;
                   while ( ! ( ( ( ( pf->vehicle->height & pf->vehicle->typ->height ) > 0) && (terrainaccessible(pf,pf->vehicle) == 2) ) ) && (pf->vehicle->height != 0) )
@@ -2608,8 +2613,8 @@ int        getpolygon(ppolygon *poly) //return Fehlerstatus
 
 void         tunit::init( pvehicle v )
 { 
-   unit = new tvehicle ( v, NULL );
-   orgunit = v;
+   orgunit = new tvehicle ( v, NULL );
+   unit = v;
 
    word         w;
 
@@ -2822,12 +2827,12 @@ void         tunit::buttonpressed(int         id)
             unit->reactionfire.enemiesAttackable = 0xff;
          }
 
-         orgunit->clone ( unit, NULL );
-         delete unit ;
+         delete orgunit ;
         }
         break;
     case 31 : action = 1;
-          delete unit;
+          unit->clone ( orgunit, actmap );
+          delete orgunit;
         break;
     case 32: class_change( unit );
         break;
