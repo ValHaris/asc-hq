@@ -2,6 +2,10 @@ TODO list for ASC, programming department:
 
 Small tasks:
 
+-   extending the A* path finding algorithm to work in 3-dimensional space.
+    This is an interesting task that requires practically no knowlegde of
+    ASC.
+
 -   writing a TPWM decoder for Battle Isle maps
 
 -   writing a platform independant wrapper around vsnprintf (used in
@@ -9,11 +13,6 @@ Small tasks:
 
 -   rewriting tdrawgettempline ( mapalgorithm.cpp ) which is way to slow
    
--   Clean up the transportcargo routines in mapeditor ( cancel function etc )
-    Making copies for backup purposes is problematic because pointers (in the 
-    events, for example) may be left dangling if cancel is pressed
-    This can be resolved by the copy constructor of tvehicle
-
 -   Replace tterainaccess class by a bitset
     The terrainbits and terrainaccess operators are quite a mess. Replacing 
     the system by a bitset (from STL) is probably the best solution

@@ -1634,6 +1634,11 @@ int  tsearchforminablefields::run( pvehicle eht )
 }
 
 
+int Vehicle::maxMovement ( void )
+{
+   return typ->movement[log2(height)];
+}
+
 int Vehicle::searchForMineralResources ( void )
 {
     tsearchforminablefields sfmf ( gamemap );

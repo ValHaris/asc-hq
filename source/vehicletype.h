@@ -231,6 +231,7 @@ extern const char*  cvehiclefunctions[];
     */
     void setMovement ( int newmove, int cargoDivisor = 2 );
     int hasMoved ( void );
+    int maxMovement ( void );
     void resetMovement( void );
 
 

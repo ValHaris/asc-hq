@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: artint.h,v 1.34 2001-02-06 16:27:41 mbickel Exp $
+//     $Id: artint.h,v 1.35 2001-02-08 21:21:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2001/02/06 16:27:41  mbickel
+//      bugfixes, bugfixes and bugfixes
+//
 //     Revision 1.33  2001/02/04 21:26:53  mbickel
 //      The AI status is written to savegames -> new savegame revision
 //      Lots of bug fixes
@@ -139,12 +142,15 @@
                   int serviceUnitID;
 
                   //! if service == ammo: weapon number ; if service == resource : resource type
-                  int position;
                   tgametime time;
+                  int failure;
+                  pbuilding nextServiceBuilding;
+                  int nextServiceBuildingDistance;
                public:
                   VehicleService::Service requiredService;
+                  int position;
 
-                  ServiceOrder ( ) : ai ( NULL ), targetUnitID ( 0 ), serviceUnitID ( 0 ) {};
+                  ServiceOrder ( ) : ai ( NULL ), targetUnitID ( 0 ), serviceUnitID ( 0 ), failure ( 0 ), nextServiceBuilding ( 0 ) {};
                   ServiceOrder ( AI* _ai, VehicleService::Service _requiredService, int UnitID, int _pos = -1 );
                   ServiceOrder ( AI* _ai, tnstream& stream );
                   pvehicle getTargetUnit ( ) const { return ai->getMap()->getUnit ( targetUnitID );};
@@ -153,6 +159,9 @@
                   int possible ( pvehicle supplier );
                   bool execute1st ( pvehicle supplier );
                   bool timeOut ( );
+                  bool canWait ( );
+                  void serviceFailed() { failure++; };
+                  bool completelyFailed();
 
                   void write ( tnstream& stream ) const;
                   void read ( tnstream& read );
@@ -168,15 +177,16 @@
 
                   ~ServiceOrder ();
            };
+           friend class ServiceOrder;
+
+           void removeServiceOrdersForUnit ( const pvehicle veh );
 
            class ServiceTargetEquals : public unary_function<ServiceOrder,bool> {
                  const pvehicle target;
               public:
                  explicit ServiceTargetEquals ( const pvehicle _target ) : target ( _target ) {};
-                 bool operator() (const ServiceOrder& so ) const { return !so.getTargetUnit(); };
+                 bool operator() (const ServiceOrder& so ) const;
            };
-
-           void removeServiceOrdersForUnit ( const pvehicle veh );
 
 
            static bool vehicleValueComp ( const pvehicle v1, const pvehicle v2 );
@@ -192,7 +202,7 @@
 
            AiThreat* fieldThreats;
            int fieldNum;
-           pbuilding findServiceBuilding ( const ServiceOrder& so );
+           pbuilding findServiceBuilding ( const ServiceOrder& so, int* distance = NULL );
 
            void checkConquer( );
 
@@ -321,6 +331,7 @@
             MapCoordinate getDestination ( const pvehicle veh );
             AiResult moveToSavePlace ( pvehicle veh, VehicleMovement& vm );
             int  getBestHeight ( const pvehicle veh );
+            float getAttackValue ( const tfight& battle, const pvehicle attackingUnit, const pvehicle attackedUnit, float factor = 1 );
 
             /** chenges a vehicles height
                 \returns 1 = height change successful ;

@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: attack.cpp,v 1.39 2001-02-04 21:26:53 mbickel Exp $
+//     $Id: attack.cpp,v 1.40 2001-02-08 21:21:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2001/02/04 21:26:53  mbickel
+//      The AI status is written to savegames -> new savegame revision
+//      Lots of bug fixes
+//
 //     Revision 1.38  2001/02/01 22:48:27  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -76,15 +80,9 @@
 
 bool  AttackFormula :: checkHemming ( pvehicle     d_eht,  int     direc )
 { 
-   pvehicle     s_eht; 
+   pvehicle     s_eht;
 
-   if (direc < 0) 
-      direc += sidenum;
-
-   if (direc >= sidenum) 
-      direc -= sidenum;
-
-   int x = d_eht->xpos; 
+   int x = d_eht->xpos;
    int y = d_eht->ypos; 
    getnextfield(x, y, direc);
    pfield fld = getfield(x,y);
@@ -119,10 +117,18 @@ float AttackFormula :: strength_hemming ( int  ax,  int ay,  pvehicle d_eht )
 {
    float hemm = 0;
    int attackDir = getdirection(ax,ay,d_eht->xpos,d_eht->ypos);
-   for ( int i = 0; i < sidenum-1; i++)
-      if ( checkHemming (d_eht,i+1 + (attackDir-sidenum/2) ))
-         hemm += getHemmingFactor(i);
+   for ( int i = 0; i < sidenum-1; i++) {
 
+      int direc = i+1 + (attackDir-sidenum/2);
+      if (direc < 0)
+         direc += sidenum;
+
+      if (direc >= sidenum)
+         direc -= sidenum;
+
+      if ( checkHemming (d_eht,direc ))
+         hemm += getHemmingFactor(i);
+   }
 
    return  hemm + 1;
 }

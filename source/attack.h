@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: attack.h,v 1.17 2001-01-28 14:04:02 mbickel Exp $
+//     $Id: attack.h,v 1.18 2001-02-08 21:21:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2001/01/28 14:04:02  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.16  2001/01/19 13:33:46  mbickel
 //      The AI now uses hemming
 //      Several bugfixes in Vehicle Actions
@@ -120,7 +126,7 @@
 
 
 class AttackFormula {
-            bool checkHemming ( pvehicle d_eht, int direc );
+            virtual bool checkHemming ( pvehicle d_eht, int direc );
          public:
             float strength_experience ( int experience );
             float strength_damage ( int damage );
