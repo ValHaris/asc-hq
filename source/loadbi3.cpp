@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.62 2001-10-21 20:18:39 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.63 2001-10-22 18:53:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.62  2001/10/21 20:18:39  mbickel
+//      Fixed non-empty table problem with BI3 map import
+//      Added ini parameter to specify wood behaviour
+//
 //     Revision 1.61  2001/10/21 13:16:59  mbickel
 //      Cleanup and documentation
 //
@@ -869,19 +873,6 @@ void        tloadBImap ::   ReadACTNPart(void)
          }
 
          if ( !found )
-            for ( int i = 0; i < terraintypenum; i++ ) {
-               pterraintype trrn = getterraintype_forpos ( i );
-               if ( trrn )
-                  for ( int j = 0; j < cwettertypennum; j++ )
-                     if ( trrn->weather[j] )
-                        if ( trrn->weather[j]->bi_pict == Line[X] ) {
-                           fld->typ = trrn->weather[j];
-                           fld->setparams();
-                           found = 1;
-                        }
-            }
-
-         if ( !found )
             for ( int j = 0; j < translationTable->terraincombixlat.size(); j++ )
                if ( Line[X] == translationTable->terraincombixlat[j].bigraph ) {
                   pterraintype trrn = getterraintype_forid ( translationTable->terraincombixlat[j].terrainid );
@@ -895,8 +886,20 @@ void        tloadBImap ::   ReadACTNPart(void)
                      fld->setparams();
                      found = 1;
                   }
-
                }
+
+         if ( !found )
+            for ( int i = 0; i < terraintypenum; i++ ) {
+               pterraintype trrn = getterraintype_forpos ( i );
+               if ( trrn )
+                  for ( int j = 0; j < cwettertypennum; j++ )
+                     if ( trrn->weather[j] )
+                        if ( trrn->weather[j]->bi_pict == Line[X] ) {
+                           fld->typ = trrn->weather[j];
+                           fld->setparams();
+                           found = 1;
+                        }
+            }
 
 
          if ( !found ) {
