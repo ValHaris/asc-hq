@@ -1,6 +1,9 @@
-//     $Id: basestrm.h,v 1.27 2000-10-12 21:37:51 mbickel Exp $
+//     $Id: basestrm.h,v 1.28 2000-10-12 22:24:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/10/12 21:37:51  mbickel
+//      Further restructured platform dependant routines
+//
 //     Revision 1.26  2000/10/12 20:21:41  mbickel
 //      Restructuring operating system dependant files
 //
@@ -159,6 +162,7 @@
 #include "global.h"
 #include "lzw.h"
 #include "errors.h"
+#include "tpascal.inc"
 
 #include "libs/bzlib/bzlib.h"
 
@@ -802,6 +806,7 @@ extern char* constructFileName( char* buf, int directoryLevel, const char* path,
 extern int directoryExist ( const char* path );
 extern char* extractPath ( char* buf, const char* filename );
 extern char* extractFileName ( char* buf, const char* filename );
+extern int createDirectory ( const char* name );
 
 #ifdef _SDL_
  #include sdlheader

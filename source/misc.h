@@ -1,6 +1,9 @@
-//     $Id: misc.h,v 1.12 2000-10-12 21:37:53 mbickel Exp $
+//     $Id: misc.h,v 1.13 2000-10-12 22:24:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/10/12 21:37:53  mbickel
+//      Further restructured platform dependant routines
+//
 //     Revision 1.11  2000/10/11 14:26:43  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -80,7 +83,7 @@
 #ifndef misc_h
    #define misc_h
    
-   #include "tpascal.inc"
+   #include "global.h"
    
    #define dblue lightgray
    //153

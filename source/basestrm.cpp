@@ -1,6 +1,9 @@
-//     $Id: basestrm.cpp,v 1.43 2000-10-12 20:21:40 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.44 2000-10-12 22:24:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2000/10/12 20:21:40  mbickel
+//      Restructuring operating system dependant files
+//
 //     Revision 1.42  2000/10/12 19:51:43  mbickel
 //      Added a stub program for generating a weapon guide
 //      Added makefiles to compile this weaponguide with the free borland C++
@@ -2287,7 +2290,7 @@ char* getnextfilenumname ( const char* first, const char* suffix, int num )
    char tmp[260];
    do {
       strcpy ( tmp, first );
-      std::itoa ( num, tempstringbuf, 10 );
+      itoa ( num, tempstringbuf, 10 );
       while ( strlen ( tmp ) + strlen ( tempstringbuf ) < 8 )
          strcat ( tmp, "0" );
       strcat ( tmp, tempstringbuf );
@@ -2436,4 +2439,13 @@ void appendbackslash ( char* string )
 {
    if ( strlen ( string ) && string[strlen ( string ) -1] != pathdelimitter )
       strcat ( string, pathdelimitterstring );
+}
+
+int createDirectory ( const char* name )
+{
+      #ifdef _UNIX_
+       return mkdir ( name, 0700 );
+      #else
+       return mkdir ( name );
+      #endif
 }

@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.53 2000-10-11 15:33:46 mbickel Exp $
+//     $Id: typen.cpp,v 1.54 2000-10-12 22:24:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.53  2000/10/11 15:33:46  mbickel
+//      Adjusted small editors to the new ASC structure
+//      Watcom compatibility
+//
 //     Revision 1.52  2000/10/11 14:26:51  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -255,7 +259,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "tpascal.inc"
+#include "global.h"
 #include "misc.h"
 #include "typen.h"
 

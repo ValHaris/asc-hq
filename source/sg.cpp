@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.99 2000-10-12 21:37:53 mbickel Exp $
+//     $Id: sg.cpp,v 1.100 2000-10-12 22:24:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.99  2000/10/12 21:37:53  mbickel
+//      Further restructured platform dependant routines
+//
 //     Revision 1.98  2000/10/11 14:26:44  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -2577,7 +2580,7 @@ void dispmessageonexit ( void ) {
        scanf("%c", &tmp );
       #endif
    } else {
-      #ifdef(_DOS_)
+      #ifdef _DOS_
        printf( getstartupmessage() );
       #endif
        printf("exiting ... \n \n");

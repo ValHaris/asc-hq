@@ -1,6 +1,9 @@
-//     $Id: sgstream.cpp,v 1.33 2000-10-12 21:37:55 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.34 2000-10-12 22:24:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2000/10/12 21:37:55  mbickel
+//      Further restructured platform dependant routines
+//
 //     Revision 1.32  2000/10/12 19:51:45  mbickel
 //      Added a stub program for generating a weapon guide
 //      Added makefiles to compile this weaponguide with the free borland C++
@@ -179,11 +182,6 @@
 
                                                
 #include <malloc.h>
-/*
-#ifdef _DOS_
-#include <dos.h> 
-#endif
-*/
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -193,35 +191,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fstream>
-
-
-/*
-#if defined(_DOS_) | defined(WIN32)
- #include <direct.h> 
-#else
-
- #ifdef HAVE_SYS_DIRENT_H
-  #include <sys/dirent.h>
- #endif
-
- #if HAVE_DIRENT_H
-  #include <dirent.h>
-  #define NAMLEN(dirent) strlen((dirent)->d_name)
- #else
-  #define dirent direct
-  #define NAMLEN(dirent) (dirent)->d_namlen
-  #if HAVE_SYS_NDIR_H
-   #include <sys/ndir.h>
-  #endif
-  #if HAVE_SYS_DIR_H
-   #include <sys/dir.h>
-  #endif
-  #if HAVE_NDIR_H
-   #include <ndir.h>
-  #endif
- #endif
-#endif
-*/
 
 
 #include "global.h"
@@ -2509,11 +2478,7 @@ bool makeDirectory ( const char* path )
    int existence = directoryExist ( tmp );
 
    if ( !existence ) {
-      #ifdef _UNIX_
-       int res = mkdir ( tmp, 0700 );
-      #else
-       int res = _mkdir ( tmp );
-      #endif
+      int res = createDirectory( tmp ); 
       if ( res ) {
          fprintf(stderr, "could neither access nor create directory %s\n", tmp );
          return false;
