@@ -447,6 +447,6 @@ fi
 
 AC_MSG_NOTICE( [ configure completed successfully. Now run "make" do build ASC.
 If the build process fails for any reason, take a look at
-http://asc-hq.sourceforge.net/show.php?ID=58
+http://asc-hq.sourceforge.net/browse.php?topic=linux
 ] )
 
