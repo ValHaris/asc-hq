@@ -45,7 +45,7 @@ PendingVehicleActions pendingVehicleActions;
 void BaseVehicleMovement :: PathFinder :: getMovementFields ( IntFieldList& reachableFields, IntFieldList& reachableFieldsIndirect, int height )
 {
    Path dummy;
-   findPath ( dummy, MapCoordinate3D(actmap->xsize, actmap->ysize, veh->height) );  //this field does not exist...
+   findPath ( dummy, MapCoordinate3D(-1, -1, veh->height) );  //this field does not exist...
 
    int unitHeight = veh->getPosition().getNumericalHeight();
    if ( !actmap->getField ( veh->getPosition())->unitHere ( veh ))

@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.94 2003-02-19 19:47:25 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.95 2003-03-14 17:35:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.94  2003/02/19 19:47:25  mbickel
+//      Completely rewrote Pathfinding code
+//      Wind not different any more on different levels of height
+//
 //     Revision 1.93  2003/02/12 20:11:53  mbickel
 //      Some significant changes to the Transportation code
 //
@@ -4617,6 +4621,20 @@ void resourceComparison ( )
 
       s += "\n\n";
    }
+
+   Resources res;
+   for ( int x = 0; x < actmap->xsize; x++)
+      for ( int y = 0; y < actmap->ysize; y++ ) {
+          res.material += actmap->getField(x,y)->material;
+          res.fuel     += actmap->getField(x,y)->fuel;
+      }
+
+   s += "Mineral Resources: ";
+   s += strrr(res.material );
+   s += " Material, ";
+   s += strrr(res.material );
+   s += " Fuel";
+
    displaymessage ( s, 3 );
 }
 

@@ -687,7 +687,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                    for ( int dir = 0; dir < 6; dir++ ) {
                       MapCoordinate3D pos = getNeighbouringFieldCoordinate ( A, dir );
                       pfield fld = actmap->getField( pos );
-                      if ( fld->getContainer() && ( fld->getContainer() != actmap->getField(A)->getContainer() ))
+                      if ( fld && fld->getContainer() && ( fld->getContainer() != actmap->getField(A)->getContainer() ))
                          if ( fld->getContainer()->vehicleDocking(veh) & dock )
                             if ( !fld->building || (fld->bdt & getTerrainBitType(cbbuildingentry) ).any()) {
                                Node N2;

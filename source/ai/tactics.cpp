@@ -220,11 +220,11 @@ AI::AiResult AI::executeMoveAttack ( pvehicle veh, TargetVector& tv )
       VisibilityStates org_vision =  _vision ;
       _vision = visible_now;
 
-      vm2.execute ( veh, mv->movePos.x, mv->movePos.y, 0, mv->movePos.getNumericalHeight(), -1 );
+      vm2.execute ( veh, mv->movePos.x, mv->movePos.y, 0, mv->movePos.getNumericalHeight(), 1 );
       if ( vm2.getStatus() != 3 )
          displaymessage ( "AI :: executeMoveAttack \n error in movement step 0 with unit %d", 1, veh->networkid );
 
-      vm2.execute ( NULL, mv->movePos.x, mv->movePos.y, 3, mv->movePos.getNumericalHeight(), -1 );
+      vm2.execute ( NULL, mv->movePos.x, mv->movePos.y, 3, mv->movePos.getNumericalHeight(), 1 );
       if ( vm2.getStatus() != 1000 )
          displaymessage ( "AI :: executeMoveAttack \n error in movement step 2 with unit %d", 1, veh->networkid );
 
