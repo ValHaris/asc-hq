@@ -393,7 +393,7 @@ void Vehicle :: endTurn( void )
 void Vehicle :: resetMovement ( void )
 {
     int move = typ->movement[log2(height)];
-    setMovement ( move, -1 );
+    setMovement ( move, 0 );
     /*
     if (actvehicle->typ->fuelconsumption == 0)
        actvehicle->movement = 0;
@@ -422,6 +422,10 @@ void Vehicle :: setNewHeight( int newHeight )
 
 void Vehicle :: setMovement ( int newmove, int cargoDivisor )
 {
+
+   if ( cargoDivisor < 0 )
+      cargoDivisor = typ->cargoMovementDivisor;
+
    if ( newmove < 0 )
       newmove = 0;
 
@@ -1439,7 +1443,7 @@ void   Vehicle::readData ( tnstream& stream )
     if ( reactionfirestatus >= 8 && reactionfire.enemiesAttackable <= 4 ) { // for transition from the old reactionfire system ( < ASC1.2.0 ) to the new one ( >= ASC1.2.0 )
        reactionfire.status = ReactionFire::Status ( reactionfire.enemiesAttackable );
        reactionfire.enemiesAttackable = reactionfirestatus;
-       setMovement ( typ->movement [ log2 ( height ) ], -1 );
+       setMovement ( typ->movement [ log2 ( height ) ], 0 );
     } else
        reactionfire.status = ReactionFire::Status ( reactionfirestatus );
 

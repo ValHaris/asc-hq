@@ -129,9 +129,9 @@
     int getMovement ( bool checkFuel = true ) const ;
 
     /** sets a new distance that the unit can move
-        \param cargoDivisor : the cargo of this unit gets 1/cargodivisor the change that this unit is getting; if 0 the cargo is not touched
+        \param cargoDivisor : the cargo of this unit gets 1/cargodivisor the change that this unit is getting; if 0 the cargo is not touched ; -1 is default
     */
-    void setMovement ( int newmove, int cargoDivisor = 2 );
+    void setMovement ( int newmove, int cargoDivisor = -1 );
 
     //! did the unit move this turn
     bool hasMoved ( void ) const;

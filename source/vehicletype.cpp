@@ -76,7 +76,7 @@ Vehicletype :: Vehicletype ( void )
    for ( i = 0; i < 8; i++ )
       picture[i] = NULL;
    height     = 0;
-   researchid = 0;
+   cargoMovementDivisor = 2;
    jamming = 0;
    view = 0;
    wait = 0;
@@ -136,7 +136,7 @@ int Vehicletype::maxsize ( void ) const
 extern void* generate_vehicle_gui_build_icon ( pvehicletype tnk );
 #endif
 
-const int vehicle_version = 13;
+const int vehicle_version = 14;
 
 
 
@@ -157,11 +157,8 @@ void Vehicletype::setupRemovableObjectsFromOldFileLayout ( )
 void Vehicletype :: read ( tnstream& stream )
 {
    int version = stream.readInt();
-   if ( version > vehicle_version || version < 1) {
-      ASCString s = "invalid version for reading vehicle: ";
-      s += strrr ( version );
-      throw ASCmsgException ( s );
-   }
+   if ( version > vehicle_version || version < 1)
+      throw tinvalidversion ( stream.getLocation(), vehicle_version, version );
 
    int   j;
 
@@ -192,7 +189,7 @@ void Vehicletype :: read ( tnstream& stream )
        picture[j] = (void*)  stream.readInt();
 
    height = stream.readChar();
-   researchid = stream.readWord();
+   stream.readWord(); // was: researchID
    int _terrain = 0;
    int _terrainreq = 0;
    int _terrainkill = 0;
@@ -478,6 +475,9 @@ void Vehicletype :: read ( tnstream& stream )
        buildicon = NULL;
       #endif
    }
+
+   if ( version >= 14 )
+      cargoMovementDivisor = stream.readInt();
 }
 
 void Vehicletype::setupPictures()
@@ -544,7 +544,7 @@ void Vehicletype:: write ( tnstream& stream ) const
          stream.writeInt( 0 );
 
    stream.writeChar( height );
-   stream.writeWord(researchid);
+   stream.writeWord(0); // researchid
    stream.writeChar(0); // steigung
    stream.writeChar(jamming);
    stream.writeWord(view);
@@ -692,6 +692,7 @@ void Vehicletype:: write ( tnstream& stream ) const
 
    stream.writedata( buildicon, getpicsize2 ( buildicon ) );
 
+   stream.writeInt ( cargoMovementDivisor );
 }
 
 const ASCString& Vehicletype::getName( ) const
@@ -876,6 +877,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    pc.addInteger("SelfRepairRate", autorepairrate, 0 );
    pc.addInteger("WreckageObject", wreckageObject, -1 );
 
+   pc.addInteger("CargoMovementDivisor", cargoMovementDivisor, 2 );
 
    pc.addInteger("Weight",  weight);
    pc.openBracket("TerrainAccess" );

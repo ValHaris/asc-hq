@@ -897,7 +897,7 @@ void ObjectType :: read ( tnstream& stream )
          }
 
    } else
-       throw ASCmsgException ( "invalid object file format version");
+       throw tinvalidversion  ( stream.getLocation(), object_version, version );
 }
 
 void ObjectType :: setupImages()

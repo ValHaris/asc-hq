@@ -291,10 +291,14 @@ void  loadAllData( bool useCache )
 
 
    if ( cache.isCurrent() && useCache ) {
-      cache.load();
+      try {
+         cache.load();
+      }
+      catch ( tinvalidversion err ) {
+         fatalError("the cache seems to have been generated with a newer version of ASC than this one.\nPlease upgrade to that version, or delete asc.cache and try again");
+      }
       displayLogMessage ( 4, "loading of cache completed\n");
    } else {
-
       loadalltextfiles();
 
       for ( DataLoaders::iterator dl = dataLoaders.begin(); dl != dataLoaders.end(); ++dl) {
@@ -314,8 +318,14 @@ void  loadAllData( bool useCache )
 
       }
 
-      if ( useCache )
-         cache.write();
+      if ( useCache ) {
+         try {
+            cache.write();
+         }
+         catch ( tfileerror err ) {
+            fatalError("error writing cache file");
+         }
+      }
 
       textFileRepository.clear();
    }

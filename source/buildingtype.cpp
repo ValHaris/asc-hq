@@ -235,12 +235,8 @@ void BuildingType :: read ( tnstream& stream )
       guibuildicon = generate_building_gui_build_icon ( this );
      #endif
 
-   } else {
-      ASCString s = "invalid version for reading buildingtype: ";
-      s += strrr ( version );
-      throw ASCmsgException ( s );
-   }
-
+   } else
+      throw tinvalidversion  ( stream.getLocation(), building_version, version );
 }
 
 void BuildingType :: write ( tnstream& stream ) const

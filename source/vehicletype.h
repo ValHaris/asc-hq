@@ -149,8 +149,8 @@ extern const char*  cvehiclefunctions[];
         //! the levels of height which this unit can enter
         int          height;
 
-        //! not used any more
-        int          researchid;
+        //! if a transport moves the movement for the units inside a transport is decreased by 1/n of the tranport's distance
+        int     cargoMovementDivisor;
 
         // if the unit can change the level of height, this is the number of fields the unit must move to go from one level to the next
         // int          steigung;
