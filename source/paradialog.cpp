@@ -53,7 +53,6 @@
 
 
 #include "resourceplacement.h"
-#include "textfile_evaluation.h"
 
 #include "iconrepository.h"
 #include "graphics/drawing.h"
@@ -307,7 +306,7 @@ if(key->keysym.sym == SDLK_ESCAPE){
 bool ASC_PG_Dialog::closeWindow(){
   quitModalLoop(1);
   if( caller != 0){     
-    caller->SetInputFocus();    
+    caller->SetInputFocus();
   }
   return true;
 }
@@ -390,33 +389,13 @@ const char* barDirections[barDirectionNum]
    };
 
 
-class WidgetParameters
-{
-   public:
-      WidgetParameters();
-      ASCString backgroundImage;
-      PG_Draw::BkMode backgroundMode;
-      PG_Label::TextAlign textAlign;
-      int fontColor;
-      ASCString fontName;
-      int fontAlpha;
-      int fontSize;
-      int backgroundColor;
-      int transparency;
 
-      void assign( PG_Widget* widget );
-      void assign( BarGraphWidget* widget );
-      void assign( PG_ThemeWidget* widget );
-      void assign( PG_Label* widget );
-      void runTextIO ( PropertyReadingContainer& pc );
-};
-
-WidgetParameters::WidgetParameters()
+Panel::WidgetParameters::WidgetParameters()
       : backgroundMode(PG_Draw::TILE),  textAlign( PG_Label::LEFT ), fontAlpha(255), fontSize(8), transparency(0)
 {
 }
 
-void  WidgetParameters::runTextIO ( PropertyReadingContainer& pc )
+void  Panel::WidgetParameters::runTextIO ( PropertyReadingContainer& pc )
 {
    pc.addString( "BackgroundImage", backgroundImage, backgroundImage );
    int i = backgroundMode;
@@ -437,7 +416,7 @@ void  WidgetParameters::runTextIO ( PropertyReadingContainer& pc )
 }
 
 
-void  WidgetParameters::assign( BarGraphWidget* widget )
+void  Panel::WidgetParameters::assign( BarGraphWidget* widget )
 {
    if ( !widget )
       return;
@@ -449,7 +428,7 @@ void  WidgetParameters::assign( BarGraphWidget* widget )
 }
 
 
-void  WidgetParameters::assign( PG_ThemeWidget* widget )
+void  Panel::WidgetParameters::assign( PG_ThemeWidget* widget )
 {
    if ( !widget )
       return;
@@ -465,7 +444,7 @@ void  WidgetParameters::assign( PG_ThemeWidget* widget )
 
 }
 
-void  WidgetParameters::assign( PG_Label* widget )
+void  Panel::WidgetParameters::assign( PG_Label* widget )
 {
    if ( !widget )
       return;
@@ -477,7 +456,7 @@ void  WidgetParameters::assign( PG_Label* widget )
 }
 
 
-void  WidgetParameters::assign( PG_Widget* widget )
+void  Panel::WidgetParameters::assign( PG_Widget* widget )
 {
    if ( !widget )
       return;
@@ -493,11 +472,14 @@ void  WidgetParameters::assign( PG_Widget* widget )
 
 
 
-void parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams )
+void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams )
 {
+   ASCString name;
+   pc.addString( "name", name, "" );
+   parent->SetName( name );
+
    int widgetNum;
    pc.addInteger( "WidgetNum", widgetNum, 0 );
-
 
    for ( int i = 0; i < widgetNum; ++i) {
       pc.openBracket( ASCString("Widget") + strrr(i));
@@ -590,20 +572,11 @@ void parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, WidgetP
          parsePanelASCTXT( pc, lb, widgetParams );
       }
       if ( type == TextOutput ) {
-
-         ASCString name;
-         pc.addString( "name", name );
-
          PG_Label* lb = new PG_Label ( parent, r );
          widgetParams.assign ( lb );
-         lb->SetName( name );
          parsePanelASCTXT( pc, lb, widgetParams );
       }
       if ( type == BarGraph ) {
-         ASCString name;
-         pc.addString( "name", name );
-
-
          int dir;
          pc.addNamedInteger( "direction", dir, barDirectionNum, barDirections, 0 );
 
@@ -623,26 +596,19 @@ void parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, WidgetP
          BarGraphWidget* bg = new BarGraphWidget ( parent, r, BarGraphWidget::Direction(dir) );
          bg->setColor( colorRange );
          widgetParams.assign ( bg );
-         bg->SetName( name );
          parsePanelASCTXT( pc, bg, widgetParams );
       }
 
 
       if ( type == SpecialDisplay ) {
-         ASCString name;
-         pc.addString("name", name );
          SpecialDisplayWidget* sw = new SpecialDisplayWidget ( parent, r );
-         sw->SetName( name );
          widgetParams.assign ( sw );
 
          parsePanelASCTXT( pc, sw, widgetParams );
       }
 
       if ( type == SpecialInput ) {
-         ASCString name;
-         pc.addString("name", name );
          SpecialInputWidget* sw = new SpecialInputWidget ( parent, r );
-         sw->SetName( name );
 
          parsePanelASCTXT( pc, sw, widgetParams );
       }
@@ -658,24 +624,27 @@ void parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, WidgetP
 }
 
 Panel::Panel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme )
-      : PG_Window ( parent, r, "", DEFAULT, "Panel", 9 ), panelName( panelName_ )
+      : PG_Window ( parent, r, "", DEFAULT, "Panel", 9 ), panelName( panelName_ ), textPropertyGroup(NULL)
 {
    if ( loadTheme )
       setup();
 }
 
 
-void Panel::setLabelText ( const ASCString& widgetName, const ASCString& text )
+void Panel::setLabelText ( const ASCString& widgetName, const ASCString& text, PG_Widget* parent )
 {
-   PG_Label* l = dynamic_cast<PG_Label*>( FindChild( widgetName, true ) );
+   if ( !parent )
+      parent = this;
+
+   PG_Label* l = dynamic_cast<PG_Label*>( parent->FindChild( widgetName, true ) );
    if ( l )
       l->SetText( text );
 }
 
-void Panel::setLabelText ( const ASCString& widgetName, int i )
+void Panel::setLabelText ( const ASCString& widgetName, int i, PG_Widget* parent )
 {
    ASCString s = ASCString::toString(i);
-   setLabelText ( widgetName, s );
+   setLabelText ( widgetName, s, parent );
 }
 
 
@@ -695,32 +664,38 @@ void Panel::setBarGraphColor( const ASCString& widgetName, PG_Color color )
 }
 
 
+Panel::WidgetParameters Panel::getDefaultWidgetParams()
+{
+    static WidgetParameters defaultWidgetParameters;
+    static ASCString panelBackgroundImage;
+    static bool defaultsLoaded = false;
+    if ( !defaultsLoaded ) {
+       tnfilestream s ( "default.ascgui", tnstream::reading );
+
+       TextFormatParser tfp ( &s );
+       auto_ptr<TextPropertyGroup> tpg ( tfp.run());
+
+       PropertyReadingContainer pc ( "panel", tpg.get() );
+
+       defaultWidgetParameters.runTextIO ( pc );
+       pc.addString("PanelBackgroundImage", panelBackgroundImage );
+       defaultsLoaded = true;
+    }
+    return defaultWidgetParameters;
+}
+
+
 bool Panel::setup()
 {
    try {
 
-      static WidgetParameters defaultWidgetParameters;
-      static ASCString panelBackgroundImage;
-      static bool defaultsLoaded = false;
-      if ( !defaultsLoaded ) {
-         tnfilestream s ( "default.ascgui", tnstream::reading );
-
-         TextFormatParser tfp ( &s );
-         auto_ptr<TextPropertyGroup> tpg ( tfp.run());
-
-         PropertyReadingContainer pc ( "panel", tpg.get() );
-
-         defaultWidgetParameters.runTextIO ( pc );
-         pc.addString("PanelBackgroundImage", panelBackgroundImage );
-         defaultsLoaded = true;
-      }
 
       tnfilestream s ( panelName.toLower() + ".ascgui", tnstream::reading );
 
       TextFormatParser tfp ( &s );
-      auto_ptr<TextPropertyGroup> tpg ( tfp.run());
+      textPropertyGroup = tfp.run();
 
-      PropertyReadingContainer pc ( "panel", tpg.get() );
+      PropertyReadingContainer pc ( "panel", textPropertyGroup );
 
       int w, h;
       pc.addInteger( "width", w, 0 );
@@ -753,7 +728,7 @@ bool Panel::setup()
 
 
 
-      WidgetParameters widgetParameters = defaultWidgetParameters;
+      WidgetParameters widgetParameters = getDefaultWidgetParams();
 
       widgetParameters.runTextIO( pc );
       widgetParameters.assign ( this );
@@ -770,7 +745,11 @@ bool Panel::setup()
 
 }
 
-
+Panel::~Panel()
+{
+   if ( textPropertyGroup )
+      delete textPropertyGroup;
+}
 
 
 BarGraphWidget:: BarGraphWidget (PG_Widget *parent, const PG_Rect &rect, Direction direction ) : PG_ThemeWidget( parent, rect, false ), fraction(1), dir(direction)

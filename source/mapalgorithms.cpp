@@ -453,4 +453,11 @@ int WindMovement::getDist ( int dir )
 }
 
 
+/*
+Wenn Du Wind aus Westen hast und willst nach norden fliegen, dann darf der Flieger nicht Kurs auf Norden nehmen, denn dann wrde er abgetrieben. Er muss stattdessen etwas gegen den Wind fliegen. 
+
+Diesen Winkel ermittel' ich durch plumpes ausprobieren, in WindMovement::WindMovement
+
+Solange die Sollrichtung der Einheitenbewegung und die WindRichtungen bereinstimmen, brauche ich nur den Fall fr 1 Windrichtung berechnen. Ich ermittel' dann fr die 6 Einheitenrichtungen den Malus. Fr andere Windrichtungen verschiebe ich einfach nur die Werte in die Tabelle (die letzten beiden Anweisungen in WindMovement), da das entscheidende ja nur der Winkelunterschied zwischen Wind- und Sollbewegungsrichtung ist.
+*/
 

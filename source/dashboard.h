@@ -27,13 +27,15 @@
 
 #include "paradialog.h"
 
+class Vehicletype;
+class Vehicle;
+
 
 class DashboardPanel : public Panel {
     protected:
       DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme );
 
       void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
-
       void registerSpecialDisplay( const ASCString& name );
 
     public:
@@ -58,11 +60,14 @@ class UnitInfoPanel : public DashboardPanel {
 };
 
 class WeaponInfoPanel : public Panel {
+        int weaponCount;
         static ASCString name;
      protected:
         bool onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event );
+        void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
+
      public:
-        WeaponInfoPanel (PG_Widget *parent, const PG_Rect &r ) ;
+        WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const Vehicletype* vt ) ;
 
         static const ASCString& WIP_Name();
         // void eval();
@@ -71,7 +76,7 @@ class WeaponInfoPanel : public Panel {
 
 #if 0
 
- 
+
   //! The unit, weather and map information displayed on the right side of the screen
   class tdashboard {
                 public:

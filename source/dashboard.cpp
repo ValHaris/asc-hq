@@ -26,6 +26,7 @@
 #include "gamemap.h"
 #include "iconrepository.h"
 #include "spfst.h"
+#include "pgimage.h"
 
 
 
@@ -50,7 +51,7 @@ void DashboardPanel::registerSpecialDisplay( const ASCString& name )
 {
    SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( name, true ) );
    if ( sdw )
-     sdw->display.connect( SigC::slot( *this, &UnitInfoPanel::painter ));
+     sdw->display.connect( SigC::slot( *this, &DashboardPanel::painter ));
 }
 
 
@@ -138,7 +139,7 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
          int pos = 0;
          for ( int i = 0; i < veh->typ->weapons.count; ++i) {
             if ( !veh->typ->weapons.weapon[i].service() && pos < 10 ) {
-               if ( name == "symbol_weapon" + ASCString::toString(pos))
+               if ( name == "symbol_weapon" + ASCString::toString(pos) )
                   screen.Blit( IconRepository::getIcon(SingleWeapon::getIconFileName( veh->typ->weapons.weapon[i].getScalarWeaponType()) + "-small.png"), SPoint(dst.x, dst.y));
 
                ++pos;
@@ -299,7 +300,16 @@ bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent*
    if ( siw ) {
       if ( event->button == SDL_BUTTON_RIGHT ) {
          if ( event->type == SDL_MOUSEBUTTONDOWN  ) {
-            WeaponInfoPanel* wip = new WeaponInfoPanel( PG_Application::GetWidgetById( 1 ), PG_Rect( 200, 100, 200, 150 ));
+
+            pfield fld = actmap->getField( actmap->player[actmap->actplayer].cursorPos );
+            const Vehicletype* vt = NULL;
+            const Vehicle* veh = NULL;
+            if ( fld && fld->vehicle ) {
+               vt = fld->vehicle->typ;
+               veh = fld->vehicle;
+            }
+
+            WeaponInfoPanel* wip = new WeaponInfoPanel( PG_Application::GetWidgetById( 1 ), veh, vt );
             wip->Show();
             return true;
          }
@@ -320,20 +330,101 @@ bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent*
    return false;
 }
 
+class WeaponInfoLine: public PG_Image {
+      const SingleWeapon* weapon;
+   public:
+      WeaponInfoLine( PG_Widget* parent, const PG_Point& p, SDL_Surface* image, const SingleWeapon* weap )
+           : PG_Image( parent, p, image, false ), weapon(weap)
+      {
+      };
 
-WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const PG_Rect &r ) : Panel( parent, r, "WeaponInfo" )
+      void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst)
+      {
+         Surface screen = Surface::Wrap( PG_Application::GetScreen() );
+         if ( name == "weapon_symbol1" )
+            screen.Blit( IconRepository::getIcon(SingleWeapon::getIconFileName( weapon->getScalarWeaponType()) + "-small.png"), SPoint(dst.x, dst.y));
+
+         if ( name == "weapon_targets" || name == "weapon_shootfrom" ) {
+            int& height = (name == "weapon_targets") ? weapon->targ : weapon->sourceheight;
+
+            for ( int i = 0; i < 8; ++i )
+               if ( height & (1 << i )) {
+                  Surface& tick = IconRepository::getIcon("tick.png");
+                  screen.Blit( tick, SPoint(dst.x + (7-i) * tick.w(), dst.y  ) );
+               }
+         }
+
+      };
+
+      void registerSpecialDisplay( const ASCString& name )
+      {
+         SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( name, true ) );
+         if ( sdw )
+            sdw->display.connect( SigC::slot( *this, &WeaponInfoLine::painter ));
+      };
+
+};
+
+WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const Vehicletype* vt ) : Panel( parent, PG_Rect::null, "WeaponInfo" ), weaponCount(0)
 {
    SetName(name);
-/*
-   updateFieldInfo.connect ( SigC::slot( *this, &UnitInfoPanel::eval ));
 
-   SpecialInputWidget* siw = dynamic_cast<SpecialInputWidget*>( FindChild( "weapinfo", true ) );
-   if ( siw ) {
-      siw->sigMouseButtonDown.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
-      siw->sigMouseButtonUp.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
+   vector<const SingleWeapon*> displayedWeapons;
+   vector<int> displayedWeaponNum;
+
+   for ( int j = 0; j < vt->weapons.count ; j++)
+      if ( vt->weapons.weapon[j].getScalarWeaponType() >= 0 ) {
+         ++weaponCount;
+         displayedWeapons.push_back( &vt->weapons.weapon[j] );
+         displayedWeaponNum.push_back(j);
+      }
+
+
+   Surface& head = IconRepository::getIcon("weapon_large_top.png");
+   Surface& line = IconRepository::getIcon("weapon_large_line.png");
+   Surface& foot = IconRepository::getIcon("weapon_large_bottom.png");
+   int height = head.h() + foot.h() + weaponCount * line.h() + GetTitlebarHeight();
+
+   SizeWidget( head.w(), height, false );
+
+   PG_Widget* footWidget = FindChild( "bottom", true );
+   assert( footWidget != NULL );
+   footWidget->MoveWidget(0,  GetTitlebarHeight() + head.h() + line.h() * weaponCount, false );
+
+   for ( int i = 0; i < weaponCount; ++i ) {
+      WidgetParameters widgetParams = getDefaultWidgetParams();
+      WeaponInfoLine* lineWidget = new WeaponInfoLine ( this, PG_Point( 0,  GetTitlebarHeight() + head.h() + i * line.h() ), line.getBaseSurface(), displayedWeapons[i] );
+
+      PropertyReadingContainer pc ( "panel", textPropertyGroup );
+
+      pc.openBracket("LineWidget");
+      parsePanelASCTXT( pc, lineWidget, widgetParams );
+      pc.closeBracket();
+
+
+      lineWidget->registerSpecialDisplay( "weapon_symbol1" );
+      lineWidget->registerSpecialDisplay( "weapon_shootfrom" );
+      lineWidget->registerSpecialDisplay( "weapon_targets" );
+
+      setLabelText( "weapon_text1", displayedWeapons[i]->getName(), lineWidget );
+      setLabelText( "weapon_reactionfire", displayedWeapons[i]->reactionFireShots, lineWidget );
+      if ( veh )
+         setLabelText( "weapon_currentammo", veh->ammo[displayedWeaponNum[i]], lineWidget );
+      setLabelText( "weapon_maxammo", displayedWeapons[i]->count, lineWidget );
+      setLabelText( "weapon_canshoot", displayedWeapons[i]->offensive()? "yes" : "no", lineWidget );
+      setLabelText( "weapon_canrefuel", displayedWeapons[i]->canRefuel()? "yes" : "no", lineWidget );
+      setLabelText( "weapon_strenghtmax", displayedWeapons[i]->maxstrength, lineWidget );
+      setLabelText( "weapon_strenghtmin", displayedWeapons[i]->minstrength, lineWidget );
+      setLabelText( "weapon_distancemin", displayedWeapons[i]->mindistance, lineWidget );
+      setLabelText( "weapon_distancemax", displayedWeapons[i]->maxdistance, lineWidget );
+// weapon_shootfrom
+// weapon_targets
+
+
    }
-   */
 }
+
+
 
 ASCString WeaponInfoPanel::name = "WeaponInfoPanel";
 const ASCString& WeaponInfoPanel::WIP_Name()

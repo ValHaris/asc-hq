@@ -1,6 +1,590 @@
 panel {
-   width = 50
-   height = 300
-   WidgetNum = 0
+   width = 810
+   height = 550
+   BackgroundImage = transparent-bg.png
+   WidgetNum = 2
+   Widget0 {
+      type = image
+      Filename = weapon_large_top.png
+      name = top
+      x = 0
+      y = 8
+   } widget0
+
+    LineWidget {
+      type = image
+      Filename = weapon_large_line.png
+      name = line
+      x = 0
+      y = 61
+      widgetnum = 1
+
+      widget0 {
+      type = SpecialDisplay
+      name = general_info
+      x = 0      
+      y = 0
+      FontSize = 8
+      FontColor = 0xfac914
+      widgetnum = 13
+      widget0 {
+        type = specialdisplay
+        x = 31
+        y = 1
+        height = 9
+        width = 20
+        name = weapon_symbol1
+      } widget0
+       widget1 {
+        type = TextOutput
+        textalign = CENTER        
+        x = 55
+        y = 1
+        height = 9
+        width = 64
+        name = weapon_text1
+      } widget1 
+       widget2 {
+        type = TextOutput
+        textalign = CENTER        
+        x = 137
+        y = 1
+        height = 9
+        width = 22
+        name = weapon_reactionfire
+      } widget2
+       widget3 {
+        type = TextOutput
+        textalign = LEFT        
+        x = 177
+        y = 1
+        height = 9
+        width = 35
+        name = weapon_currentammo
+      } widget3
+       widget4 {
+        type = Textoutput
+        textalign = Right        
+        x = 177
+        y = 1
+        height = 9
+        width = 35
+        name = weapon_maxammo
+      } widget4
+       widget5 {
+        type = TextOutput
+        textalign = CENTER       
+        x = 222
+        y = 1
+        height = 9
+        width = 22
+        name = weapon_canshoot
+      } widget5
+       widget6 {
+        type = TextOutput
+        textalign = CENTER        
+        x = 254
+        y = 1
+        height = 9
+        width = 23
+        name = weapon_canrefuel
+      } widget6
+       widget7 {
+        type = TextOutput
+        textalign = LEFT       
+        x = 286
+        y = 1
+        height = 9
+        width = 49
+        name = weapon_strenghtmax
+      } widget7
+       widget8 {
+        type = TextOutput
+        textalign = RIGHT        
+        x = 286
+        y = 1
+        height = 9
+        width = 49
+        name = weapon_strenghtmin
+      } widget8
+       widget9 {
+        type = TextOutput
+        textalign = LEFT       
+        x = 348
+        y = 1
+        height = 9
+        width = 46
+        name = weapon_distancemax
+      } widget9
+       widget10 {
+        type = TextOutput
+        textalign = RIGHT        
+        x = 348
+        y = 1
+        height = 9
+        width = 46
+        name = weapon_distancemin
+      } widget10
+       widget11 {
+        type = SpecialDisplay
+        x = 404
+        y = 1
+        height = 9
+        width = 180
+        name = weapon_shootfrom
+      } widget11
+       widget12 {
+        type = SpecialDisplay
+        x = 594
+        y = 1
+        height = 9
+        width = 180
+        name = weapon_targets
+      } widget12
+     } widget0
+   } LineWidget
+
+   Widget1 {
+      type = image
+      Filename = weapon_large_bottom.png
+      name = bottom
+      x = 5
+      y = 74
+      FontSize = 8
+      FontColor = 0xfac914
+      widgetnum = 2
+      widget0 {
+        type = SpecialDisplay
+        name = move_shoot
+        x = 0
+        y = 0
+        widgetnum = 2
+        widget0 {
+          type = TextOutput
+          textalign = CENTER        
+          x = 305
+          y = 6
+          height = 7
+          width = 21
+          name = weapon_shootaftermove
+        } widget0
+       widget1 {
+         type = TextOutput
+         textalign = CENTER        
+         x = 573
+         y = 6
+         height = 7
+         width = 21
+         name = weapon_moveaftershoot
+       } widget1
+      } widget0
+
+       widget1 {
+        type = SpecialDisplay
+        name = Effictiency_info
+        x = 0
+        y = 0
+        widgetnum = 5
+        widget0 {
+          type = specialdisplay
+          x = 343
+          y = 70
+          height = 9
+          width = 20
+          name = weapon_symbol2
+        } widget0
+         widget1 {
+          type = TextOutput
+          textalign = CENTER        
+          x = 367
+          y = 70
+          height = 9
+          width = 64
+          name = weapon_text2
+         } widget1 
+         widget2 {
+           type = SpecialDisplay
+           name = height_difference
+           FontColor = 0xcfcfcf
+           x = 0
+           y = 0
+           widgetnum = 13
+           widget0 {
+             type = TextOutput
+             x = 227
+             y = 85
+             height = 9
+             width = 28
+             name = weapon_distance_-6 
+           } widget0
+           widget1 {
+             type = TextOutput
+             x = 258
+             y = 85
+             height = 9
+             width = 28
+             name = weapon_distance_-5 
+           } widget1
+           widget2 {
+             type = TextOutput
+             x = 289
+             y = 85
+             height = 9
+             width = 28
+             name = weapon_distance_-4 
+           } widget2
+           widget3 {
+             type = TextOutput
+             x = 320
+             y = 85
+             height = 9
+             width = 28
+             name = weapon_distance_-3 
+           } widget3
+           widget4 {
+             type = TextOutput
+             x = 351
+             y = 85
+             height = 9
+             width = 28
+             name = weapon_distance_-2
+           } widget4
+           widget5 {
+             type = TextOutput
+             x = 382
+             y = 85
+             height = 9
+             width = 28
+             name = weapon_distance_-1 
+           } widget5
+           widget6 {
+             type = TextOutput
+             x = 413
+             y = 85
+             height = 9
+             width = 28
+             name = weapon_distance_0 
+           } widget6
+           widget7 {
+             type = TextOutput
+             x = 444
+             y = 85
+             height = 9
+             width = 28
+             name = weapon_distance_1 
+           } widget7
+           widget8 {
+             type = TextOutput
+             x = 475
+             y = 85
+             height = 9
+             width = 28
+             name = weapon_distance_2 
+           } widget8
+           widget9 {
+             type = TextOutput
+             x = 506
+             y = 85
+             height = 9
+             width = 28
+             name = weapon_distance_3 
+           } widget9
+           widget10 {
+             type = TextOutput
+             x = 537
+             y = 85
+             height = 9
+             width = 28
+             name = weapon_distance_4 
+           } widget10
+           widget11 {
+             type = TextOutput
+             x = 568
+             y = 85
+             height = 9
+             width = 28
+             name = weapon_distance_5 
+           } widget11
+           widget12 {
+             type = TextOutput
+             x = 599
+             y = 85
+             height = 9
+             width = 28
+             name = weapon_distance_6 
+           } widget12
+          } widget2
   
+         widget3 {
+           type = SpecialDisplay
+           name = height_efficiency
+           FontColor = 0xfac914
+           x = 0
+           y = 0
+           widgetnum = 13
+           widget0 {
+             type = TextOutput
+             x = 227
+             y = 97
+             height = 9
+             width = 28
+             name = weapon_efficiency_-6 
+           } widget0
+           widget1 {
+             type = TextOutput
+             x = 258
+             y = 97
+             height = 9
+             width = 28
+             name = weapon_efficiency_-5 
+           } widget1
+           widget2 {
+             type = TextOutput
+             x = 289
+             y = 97
+             height = 9
+             width = 28
+             name = weapon_efficiency_-4 
+           } widget2
+           widget3 {
+             type = TextOutput
+             x = 320
+             y = 97
+             height = 9
+             width = 28
+             name = weapon_efficiency_-3 
+           } widget3
+           widget4 {
+             type = TextOutput
+             x = 351
+             y = 97
+             height = 9
+             width = 28
+             name = weapon_efficiency_-2
+           } widget4
+           widget5 {
+             type = TextOutput
+             x = 382
+             y = 97
+             height = 9
+             width = 28
+             name = weapon_efficiency_-1 
+           } widget5
+           widget6 {
+             type = TextOutput
+             x = 413
+             y = 97
+             height = 9
+             width = 28
+             name = weapon_efficiency_0 
+           } widget6
+           widget7 {
+             type = TextOutput
+             x = 444
+             y = 97
+             height = 9
+             width = 28
+             name = weapon_efficiency_1 
+           } widget7
+           widget8 {
+             type = TextOutput
+             x = 475
+             y = 97
+             height = 9
+             width = 28
+             name = weapon_efficiency_2 
+           } widget8
+           widget9 {
+             type = TextOutput
+             x = 506
+             y = 97
+             height = 9
+             width = 28
+             name = weapon_efficiency_3 
+           } widget9
+           widget10 {
+             type = TextOutput
+             x = 537
+             y = 97
+             height = 9
+             width = 28
+             name = weapon_efficiency_4 
+           } widget10
+           widget11 {
+             type = TextOutput
+             x = 568
+             y = 97
+             height = 9
+             width = 28
+             name = weapon_efficiency_5 
+           } widget11
+           widget12 {
+             type = TextOutput
+             x = 599
+             y = 97
+             height = 9
+             width = 28
+             name = weapon_efficiency_6 
+           } widget12
+          } widget3  
+
+ 
+          widget4 {
+            type = SpecialDisplay
+            name = target_efficiency
+            x = 0
+            y = 0
+            textalign = CENTER     
+            widgetnum = 18
+            widget0 {
+              type = TextOutput 
+              x = 255
+              y = 133
+              height = 9
+              width = 28
+              name = weapon_efficiency_default
+            } widget0
+            widget1 {
+              type = TextOutput 
+              x = 255
+              y = 145
+              height = 9
+              width = 28
+              name = weapon_efficiency_trooper
+            } widget1
+            widget2 {
+              type = TextOutput 
+              x = 255
+              y = 157
+              height = 9
+              width = 28
+              name = weapon_efficiency_rail_vehicle
+            } widget2
+            widget3 {
+              type = TextOutput 
+              x = 255
+              y = 169
+              height = 9
+              width = 28
+              name = weapon_efficiency_building|turret|object
+            } widget3
+            widget4 {
+              type = TextOutput 
+              x = 255
+              y = 181
+              height = 9
+              width = 28
+              name = weapon_efficiency_hoovercraft
+            } widget4
+            widget5 {
+              type = TextOutput 
+              x = 255
+              y = 193
+              height = 9
+              width = 28
+              name = weapon_efficiency_helicopter
+            } widget5
+            widget6 {
+              type = TextOutput 
+              x = 433
+              y = 133
+              height = 9
+              width = 28
+              name = weapon_efficiency_light_wheeled_vehicle
+            } widget6
+            widget7 {
+              type = TextOutput 
+              x = 433
+              y = 145
+              height = 9
+              width = 28
+              name = weapon_efficiency_light_tracked_vehicle
+            } widget7
+            widget8 {
+              type = TextOutput 
+              x = 433
+              y = 157
+              height = 9
+              width = 28
+              name = weapon_efficiency_medium_wheeled_vehicle
+            } widget8
+            widget9 {
+              type = TextOutput 
+              x = 433
+              y = 169
+              height = 9
+              width = 28
+              name = weapon_efficiency_medium_tracked_vehicle
+            } widget9
+            widget10 {
+              type = TextOutput 
+              x = 433
+              y = 181
+              height = 9
+              width = 28
+              name = weapon_efficiency_heavy_wheeled_vehicle
+            } widget10
+            widget11 {
+              type = TextOutput 
+              x = 433
+              y = 193
+              height = 9
+              width = 28
+              name = weapon_efficiency_heavy_tracked_vehicle
+            } widget11
+
+            widget12 {
+              type = TextOutput 
+              x = 595
+              y = 133
+              height = 9
+              width = 28
+              name = weapon_efficiency_light_aircraft
+            } widget12
+            widget13 {
+              type = TextOutput 
+              x = 595
+              y = 145
+              height = 9
+              width = 28
+              name = weapon_efficiency_medium_aircraft
+            } widget13
+            widget14 {
+              type = TextOutput
+              x = 595
+              y = 157
+              height = 9
+              width = 28
+              name = weapon_efficiency_heavy_aircraft
+            } widget14
+            widget15 {
+              type = TextOutput
+              x = 595
+              y = 169
+              height = 9
+              width = 28
+              name = weapon_efficiency_light_ship
+            } widget15
+            widget16 {
+              type = TextOutput
+              x = 595
+              y = 181
+              height = 9
+              width = 28
+              name = weapon_efficiency_medium_ship
+            } widget16
+            widget17 {
+              type = TextOutput
+              x = 595
+              y = 193
+              height = 9
+              width = 28
+              name = weapon_efficiency_heavy_ship
+            } widget17
+          } widget4
+
+       } widget1
+
+   } widget1
+
 } panel

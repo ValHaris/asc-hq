@@ -53,11 +53,12 @@
 
 #include "sdl/graphics.h"
 #include "ascstring.h"
+#include "textfile_evaluation.h"
 
  class ASC_PG_App : public PG_Application {
        ASCString themeName;
        int quitModalLoopValue;
-       
+
     public:
        ASC_PG_App ( const ASCString& themeName );
        bool InitScreen ( int w, int h, int depth = 0, Uint32 flags = SDL_SWSURFACE|SDL_HWPALETTE );
@@ -88,18 +89,47 @@ class ASC_PG_Dialog : public PG_Window {
        ~ASC_PG_Dialog();
 };
 
+class BarGraphWidget;
+
 class Panel : public  PG_Window {
-      ASCString panelName;     
+      ASCString panelName;
       bool setup();
-   protected:   
-      void setLabelText ( const ASCString& widgetName, const ASCString& text );
-      void setLabelText ( const ASCString& widgetName, int i );
+   protected:
+
+      class WidgetParameters
+      {
+         public:
+            WidgetParameters();
+            ASCString backgroundImage;
+            PG_Draw::BkMode backgroundMode;
+            PG_Label::TextAlign textAlign;
+            int fontColor;
+            ASCString fontName;
+            int fontAlpha;
+            int fontSize;
+            int backgroundColor;
+            int transparency;
+
+            void assign( PG_Widget* widget );
+            void assign( BarGraphWidget* widget );
+            void assign( PG_ThemeWidget* widget );
+            void assign( PG_Label* widget );
+            void runTextIO ( PropertyReadingContainer& pc );
+      };
+
+      WidgetParameters getDefaultWidgetParams();
+
+      TextPropertyGroup* textPropertyGroup;
+      void setLabelText ( const ASCString& widgetName, const ASCString& text, PG_Widget* parent = NULL );
+      void setLabelText ( const ASCString& widgetName, int i, PG_Widget* parent = NULL );
       void setBargraphValue( const ASCString& widgetName, float fraction );
       void setBarGraphColor( const ASCString& widgetName, PG_Color color );
 
-   public:  
-      Panel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme = true );
+      static void parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams );
 
+   public:
+      Panel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme = true );
+      ~Panel();
 };
 
 class SpecialDisplayWidget : public PG_Widget {
