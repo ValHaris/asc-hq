@@ -30,12 +30,15 @@ const int WAIT_SLEEP_MSEC = 50;
 
 SoundSystem* SoundSystem::instance = NULL;
 
-SoundSystem  :: SoundSystem ( bool mute, bool _off )
+SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
 {
    musicState = uninitialized;
    currentPlaylist = NULL;
    musicBuf = NULL;
-   this->mute = mute;
+
+
+   this->effectsMuted = muteEffects;
+   this->musicMuted = muteMusic;
    this->off = _off;
 
    for ( int i = 0; i < MIX_CHANNELS; i++ )
@@ -78,19 +81,19 @@ SoundSystem  :: SoundSystem ( bool mute, bool _off )
 }
 
 
-void SoundSystem::setMute ( bool mute )
+void SoundSystem::setEffectsMute ( bool mute )
 {
    if ( off )
       return;
 
-   if ( mute != this->mute ) {
+   if ( mute != this->effectsMuted ) {
       if ( mute ) {
          for ( int i = 0; i < MIX_CHANNELS; i++ )
             if ( Mix_Playing(i)  )
                 Mix_HaltChannel( i );
 
       }
-      this->mute = mute;
+      this->effectsMuted = mute;
    }
 }
 
@@ -150,6 +153,18 @@ void SoundSystem :: resumePauseMusic()
       resumeMusic();
 }
 
+void SoundSystem :: setMusicVolume( int volume )
+{
+   musicVolume = volume * 128 / 100;
+   Mix_VolumeMusic ( musicVolume );
+}
+
+void SoundSystem :: setEffectVolume( int volume )
+{
+   effectVolume = volume * 128 / 100;
+   Mix_Volume ( -1, effectVolume );
+}
+
 
 SoundSystem::~SoundSystem()
 {
@@ -200,7 +215,7 @@ Sound::Sound( const ASCString& filename, int _fadeIn ) : name ( filename ), wave
 
 void Sound::play(void)
 {
-   if( SoundSystem::instance->isMuted() || !wave)
+   if( SoundSystem::instance->areEffectsMuted() || !wave)
       return;
 
    int channel;
@@ -208,14 +223,14 @@ void Sound::play(void)
       channel = Mix_FadeInChannel ( -1, wave, 0, fadeIn );
    else {
       channel = Mix_PlayChannel ( -1, wave, 0 );
-      Mix_Volume ( channel, 128 );
+      Mix_Volume ( channel, SoundSystem::instance->getEffectVolume() );
    }
    SoundSystem::instance->channel[ channel ] = this;
 }
 
 void Sound::playLoop()
 {
-   if( SoundSystem::instance->isMuted() || !wave)
+   if( SoundSystem::instance->areEffectsMuted() || !wave)
       return;
 
    int channel;
@@ -237,7 +252,7 @@ void Sound::stop()
 
 void Sound::playWait(void)
 {
-   if( SoundSystem::instance->isMuted() || !wave)
+   if( SoundSystem::instance->areEffectsMuted() || !wave)
       return;
 
    int channel = Mix_PlayChannel ( -1, wave, 0 );

@@ -49,8 +49,10 @@
 
 #include "sdl/graphics.h"
 
- extern void paraguiTest();
+ extern void soundSettings();
 
  extern void setupMainScreenWidget();
+ 
+ extern PG_Application* pgApp;
 
 #endif

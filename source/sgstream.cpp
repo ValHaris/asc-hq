@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.78 2001-12-19 17:16:29 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.79 2002-03-02 23:04:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.78  2001/12/19 17:16:29  mbickel
+//      Some include file cleanups
+//
 //     Revision 1.77  2001/12/19 11:46:36  mbickel
 //      Applied patches from Michael Moerz:
 //       - 64bit cleanup of demount.cpp, mount.cpp
@@ -843,7 +846,7 @@ int readgameoptions ( const char* filename )
             CGameOptions::Instance()->attackspeed1 = stream.readInt();
             CGameOptions::Instance()->attackspeed2 = stream.readInt();
             CGameOptions::Instance()->attackspeed3 = stream.readInt();
-            CGameOptions::Instance()->sound_mute = stream.readInt();
+            CGameOptions::Instance()->sound.muteEffects = stream.readInt();
             for ( int i = 0; i < 9; i++ )
                stream.readInt();  // dummy
 

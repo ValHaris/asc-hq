@@ -47,10 +47,13 @@ private:
 
 
 class SoundSystem {
-      bool mute;
+      bool effectsMuted;
+      bool musicMuted;
       int off;
       bool sdl_initialized;
       bool mix_initialized;
+      int musicVolume;
+      int effectVolume;
 
       static SoundSystem* instance;
       Mix_Music *musicBuf;
@@ -75,13 +78,13 @@ class SoundSystem {
          \param mute The sound is going to be initialized, but no sounds played. Sounds can be enabled at runtime
          \param off  The sound system is not even going to be initiliazed. Can only be restartet by restarting ASC
       */
-      SoundSystem ( bool mute, bool off );
+      SoundSystem ( bool muteEffects, bool muteMusic, bool off );
 
       //! Turns the sound on and off
-      void setMute ( bool mute );
+      void setEffectsMute ( bool mute );
 
       //! can sounds be played right now ?
-      bool isMuted ( ) { return mute || off; };
+      bool areEffectsMuted ( ) { return effectsMuted || off; };
 
       //! is the soundsystem completely disabled ?
       bool isOff ( ) { return off; };
@@ -98,6 +101,14 @@ class SoundSystem {
       //! resumes or resumes the music, depending whether is music is paused or playing
       void resumePauseMusic();
 
+      //! Sets the music volume. Range is 0 .. 100
+      void setMusicVolume( int Volume );
+
+      //! Sets the sound effect volume. Range is 0 .. 100
+      void setEffectVolume( int Volume );
+
+      //! Returns the sound effect volume. This is already normalized to the 0 .. 128 range of SDL_Mixer !
+      int getEffectVolume( ) { return effectVolume; };
 
       static SoundSystem* getInstance() { return instance; };
 

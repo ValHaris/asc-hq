@@ -360,54 +360,50 @@ void tviewmessages :: buttonpressed ( int id )
 
 void tviewmessages :: paintmessages ( void )
 {
-       setinvisiblemouserectanglestk ( x1 + 10, y1 + starty, x1 + xsize - 30, y1 + ysize - 40 );
+    MsgVec::iterator a = firstdisplayed;
+    activefontsettings.font = schriften.smallarial;
+    activefontsettings.background = dblue;
+    activefontsettings.justify = lefttext;
+    int displayed = 0;
+    while ( a != msg.end()  &&  displayed < dispnum ) {
+       if ( a == marked )
+          activefontsettings.color= white;
+       else
+          activefontsettings.color= black;
 
-       MsgVec::iterator a = firstdisplayed;
-       activefontsettings.font = schriften.smallarial;
-       activefontsettings.background = dblue;
-       activefontsettings.justify = lefttext;
-       int displayed = 0;
-       while ( a != msg.end()  &&  displayed < dispnum ) {
-          if ( a == marked )
-             activefontsettings.color= white;
+       activefontsettings.length = 190;
+
+       tm *tmbuf;
+       tmbuf = localtime ( &( (*a)->time ) );
+       int y = y1 + starty + 10 + ( a - firstdisplayed ) * 20 ;
+
+       showtext2 (asctime (tmbuf), x1 + 20, y);
+
+       activefontsettings.length = 100;
+       if ( mode ) {
+          int fr = log2 ( (*a)->from );
+          if ( fr < 8 )
+             showtext2 ( actmap->player[ fr ].getName().c_str(), x1 + 220, y );
           else
-             activefontsettings.color= black;
+             showtext2 ( "system", x1 + 220, y );
+       } else {
+          for ( int i = 0; i < 8; i++ )
+             if ( player[i] >= 0 ) {
+                int x = x1 + 220 + player[i] * 15;
+                int color;
+                if ( (*a)->to & ( 1 << i ) )
+                   color = 20 + i * 8;
+                else
+                   color = dblue ;
 
-          activefontsettings.length = 190;
+                bar ( x, y, x + 10, y + 10, color );
 
-          tm *tmbuf;
-          tmbuf = localtime ( &( (*a)->time ) );
-          int y = y1 + starty + 10 + ( a - firstdisplayed ) * 20 ;
-
-          showtext2 (asctime (tmbuf), x1 + 20, y);
-
-          activefontsettings.length = 100;
-          if ( mode ) {
-             int fr = log2 ( (*a)->from );
-             if ( fr < 8 )
-                showtext2 ( actmap->player[ fr ].getName().c_str(), x1 + 220, y );
-             else
-                showtext2 ( "system", x1 + 220, y );
-          } else {
-             for ( int i = 0; i < 8; i++ )
-                if ( player[i] >= 0 ) {
-                   int x = x1 + 220 + player[i] * 15;
-                   int color;
-                   if ( (*a)->to & ( 1 << i ) )
-                      color = 20 + i * 8;
-                   else
-                      color = dblue ;
-
-                   bar ( x, y, x + 10, y + 10, color );
-
-                }
-          }
-
-          a++;
-          displayed++;
+             }
        }
 
-       getinvisiblemouserectanglestk();
+       a++;
+       displayed++;
+    }
 }
 
 void tviewmessages :: checkforscroll ( bool mouse )

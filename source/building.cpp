@@ -2,9 +2,13 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.78 2001-12-14 10:20:04 mbickel Exp $
+//     $Id: building.cpp,v 1.79 2002-03-02 23:04:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.78  2001/12/14 10:20:04  mbickel
+//      Cleanup and enhancements to configure.in
+//      Removed last remains of octagonal version from source files
+//
 //     Revision 1.77  2001/11/15 20:46:05  mbickel
 //      Fixed: replay not working when moving units out of carriers
 //
@@ -1059,11 +1063,8 @@ int   ccontainercontrols :: getResource ( int need, int resourceType, int abbuch
 {
    switch ( resourceType ) {
       case 0: return getenergy ( need, abbuchen );
-      break;
       case 1: return getmaterial ( need, abbuchen );
-      break;
       case 2: return getfuel ( need, abbuchen );
-      break;
    };
    return 0;
 };
@@ -2315,16 +2316,12 @@ void   ccontainer :: checkformouse( void )
          int i,j;
          if ( getfieldundermouse ( &i, &j ))
             if ( i != mark.x  ||  j != mark.y ) {
-               setinvisiblemouserectanglestk ( unitposx[mark.x], unitposy[mark.y], unitposx[mark.x+1], unitposy[mark.y+1] );
                putspriteimage ( unitposx[mark.x], unitposy[mark.y], inactivefield);
                displayloading ( mark.x, mark.y );
-               getinvisiblemouserectanglestk ();
                mark.x = i;
                mark.y = j;
-               setinvisiblemouserectanglestk ( unitposx[mark.x], unitposy[mark.y], unitposx[mark.x+1], unitposy[mark.y+1] );
                putspriteimage ( unitposx[mark.x], unitposy[mark.y], activefield);
                displayloading ( mark.x, mark.y, 0, 1 );
-               getinvisiblemouserectanglestk ();
                mousestat = 1;
             }
       }
@@ -2337,16 +2334,12 @@ void   ccontainer :: checkformouse( void )
 
          if ( r )
             if ( (mark.x != x || mark.y != y) ) { // && ( moveparams.movestatus == 0   ||  getfield(actmap->xpos + x , actmap->ypos + y)->temp == 0) ) {
-               setinvisiblemouserectanglestk ( unitposx[mark.x], unitposy[mark.y], unitposx[mark.x+1], unitposy[mark.y+1] );
                putspriteimage ( unitposx[mark.x], unitposy[mark.y], inactivefield);
                displayloading ( mark.x, mark.y );
-               getinvisiblemouserectanglestk ();
                mark.x = x;
                mark.y = y;
-               setinvisiblemouserectanglestk ( unitposx[mark.x], unitposy[mark.y], unitposx[mark.x+1], unitposy[mark.y+1] );
                putspriteimage ( unitposx[mark.x], unitposy[mark.y], activefield);
                displayloading ( mark.x, mark.y, 0, 1 );
-               getinvisiblemouserectanglestk ();
                mousestat = 1;
             } else
                if ( mousestat == 2 ) { //  ||  mousestat == 0 ||  (moveparams.movestatus && getfield( actmap->xpos + x, actmap->ypos + y)->temp )  ) {
@@ -2387,18 +2380,14 @@ void  ccontainer :: run ()
          if ( input == ct_tab ) {
             {
                collategraphicoperations cgo ( tabmarkposx, tabmarkpos[keymode], tabmarkposx + 10, tabmarkpos[keymode] + 10 );
-               setinvisiblemouserectanglestk ( tabmarkposx, tabmarkpos[keymode], tabmarkposx + 10, tabmarkpos[keymode] + 10 );
                putrotspriteimage( tabmarkposx, tabmarkpos[keymode], icons.container.tabmark[0], actmap->actplayer*8 );
-               getinvisiblemouserectanglestk ();
             }
 
             keymode++;
             if ( keymode >= 3 )
                keymode = 0; {
                collategraphicoperations cgo ( tabmarkposx, tabmarkpos[keymode], tabmarkposx + 10, tabmarkpos[keymode] + 10 );
-               setinvisiblemouserectanglestk ( tabmarkposx, tabmarkpos[keymode], tabmarkposx + 10, tabmarkpos[keymode] + 10 );
                putrotspriteimage( tabmarkposx, tabmarkpos[keymode], icons.container.tabmark[1], actmap->actplayer*8 );
-               getinvisiblemouserectanglestk ();
             }
          }
 
@@ -2486,22 +2475,18 @@ void  ccontainer :: movemark (int direction)
 {
    collategraphicoperations cgo ( containerxpos, containerypos, containerxpos+windowwidth, containerypos+windowheight );
    if (direction != repaint  &&  direction != repaintall ) {
-      setinvisiblemouserectanglestk ( unitposx[mark.x], unitposy[mark.y], unitposx[mark.x+1], unitposy[mark.y+1] );
 
       putspriteimage ( unitposx[mark.x], unitposy[mark.y], inactivefield);
       displayloading ( mark.x, mark.y );
 
-      getinvisiblemouserectanglestk ();
    } else {
       if ( direction == repaintall ) {
          setpictures();
 
-         setinvisiblemouserectanglestk ( unitposx[0], unitposy[0], unitposx[unitsshownx-1], unitposy[unitsshowny-1] );
          for ( int y = 0; y < unitsshowny; y++ )
             for ( int x = 0; x < unitsshownx; x++ )
                putspriteimage (unitposx [x], unitposy[y], inactivefield);
          displayloading();
-         getinvisiblemouserectanglestk ( );
       }
    }
 
@@ -2525,12 +2510,9 @@ void  ccontainer :: movemark (int direction)
          break;
    };
 
-   setinvisiblemouserectanglestk ( unitposx[mark.x], unitposy[mark.y], unitposx[mark.x+1], unitposy[mark.y+1] );
 
    putspriteimage (unitposx[mark.x], unitposy[mark.y], activefield);
    displayloading ( mark.x, mark.y, 0, 1 );
-
-   getinvisiblemouserectanglestk ( );
 
    cgo.off();
 
@@ -2684,7 +2666,6 @@ void  ccontainer :: cammunitiontransfer_subwindow :: paintobj ( int numm, int st
 
    if ( objcoordinates[numm].type == 3 ) {
       int nnumm = numm + page * 8;
-      setinvisiblemouserectanglestk ( subwinx1 + 31 + numm * 40,   subwiny1 + 25,   subwinx1 + 31 + numm * 40 + 30,   subwiny1 + 96 + 10);
       collategraphicoperations cgo  ( subwinx1 + 31 + numm * 40,   subwiny1 + 25,   subwinx1 + 31 + numm * 40 + 30,   subwiny1 + 96 + 10 );
       if ( nnumm < num ) {
          putimage ( objcoordinates[numm].x1-1,   objcoordinates[numm].y1-1,  icons.container.subwin.ammotransfer.schiene );
@@ -2711,10 +2692,8 @@ void  ccontainer :: cammunitiontransfer_subwindow :: paintobj ( int numm, int st
          bar ( subwinx1 + 31 + numm * 40, subwiny1 + 96, subwinx1 + 61 + numm * 40, subwiny1 +106, bkgrcol );
          bar ( subwinx1 + 31 + numm * 40, subwiny1 + 38, subwinx1 + 45 + numm * 40, subwiny1 + 93, bkgrcol );
       }
-      getinvisiblemouserectanglestk ( );
    }
    if ( objcoordinates[numm].type == 5  && externalloadavailable() ) {
-      setinvisiblemouserectanglestk ( objcoordinates[numm].x1,   objcoordinates[numm].y1,   objcoordinates[numm].x2+10,   objcoordinates[numm].y2 );
       collategraphicoperations cgo  ( objcoordinates[numm].x1,   objcoordinates[numm].y1,   objcoordinates[numm].x2+10,   objcoordinates[numm].y2 );
       if ( externalloadingactive )
          activefontsettings.font = schriften.guicolfont;
@@ -2731,10 +2710,8 @@ void  ccontainer :: cammunitiontransfer_subwindow :: paintobj ( int numm, int st
          putimage ( objcoordinates[numm].x1, objcoordinates[numm].y1, icons.container.subwin.ammotransfer.buttonpressed );
          showtext2c ( txtptr, objcoordinates[numm].x1 + 2, objcoordinates[numm].y1 + 2 );
       }
-      getinvisiblemouserectanglestk ( );
    }
    if ( objcoordinates[numm].type == 6 ) {
-      setinvisiblemouserectanglestk ( objcoordinates[numm].x1,   objcoordinates[numm].y1,   objcoordinates[numm].x2+10,   objcoordinates[numm].y2 );
       collategraphicoperations cgo  ( objcoordinates[numm].x1,   objcoordinates[numm].y1,   objcoordinates[numm].x2+10,   objcoordinates[numm].y2 );
       if ( dataVersion < 2 ) {
          activefontsettings.font = schriften.guifont;
@@ -2769,7 +2746,6 @@ void  ccontainer :: cammunitiontransfer_subwindow :: paintobj ( int numm, int st
                putimage ( objcoordinates[numm].x1, objcoordinates[numm].y1, icons.container.subwin.ammotransfer.plus[stat] );
          }
       }
-      getinvisiblemouserectanglestk ( );
    }
 
 }
@@ -2881,7 +2857,6 @@ void  ccontainer :: cammunitiontransfer_subwindow :: display ( void )
       reset();
 
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
-   setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    npush ( activefontsettings );
    putimage ( subwinx1, subwiny1, icons.container.subwin.ammotransfer.start );
 
@@ -2895,14 +2870,10 @@ void  ccontainer :: cammunitiontransfer_subwindow :: display ( void )
 
 
    npop ( activefontsettings );
-   getinvisiblemouserectanglestk (  );
-
 }
 
 void  ccontainer :: cammunitiontransfer_subwindow :: displayvariables ( void )
 {
-   setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
-
    paintobj ( 20, 0 );
    paintobj ( 21, 0 );
 
@@ -2936,7 +2907,6 @@ void  ccontainer :: cammunitiontransfer_subwindow :: displayvariables ( void )
          paintobj ( i, 0 );
    }
 
-   getinvisiblemouserectanglestk ( );
 }
 
 void  ccontainer :: cammunitiontransfer_subwindow :: transfer ( void )
@@ -3644,13 +3614,11 @@ void csubwindow :: paintlasche ( void )
    getinvisiblemouserectanglestk (  );
 
    */
-   setinvisiblemouserectanglestk ( laschxpos + laschx1 * laschdist, laschypos, laschxpos + laschx1 * laschdist + 45, laschypos + 22 );
    collategraphicoperations cgo ( laschxpos + laschx1 * laschdist, laschypos, laschxpos + laschx1 * laschdist + 45, laschypos + 22 );
    if ( hostcontainer->actsubwindow == this )
       putimage ( laschxpos + laschx1 * laschdist, laschypos, laschpic1 );
    else
       putimage ( laschxpos + laschx1 * laschdist, laschypos, laschpic2 );
-   getinvisiblemouserectanglestk (  );
 }
 
 
@@ -3786,7 +3754,6 @@ void csubwindow :: setactive ( void )
 
 void csubwindow :: paintobj ( int num, int stat )
 {
-   setinvisiblemouserectanglestk ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2,   objcoordinates[num].y2 );
    collategraphicoperations cgo  ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2,   objcoordinates[num].y2 );
    if ( objcoordinates[num].type == 1 ) {
       if ( stat != 2 ) {
@@ -3809,7 +3776,6 @@ void csubwindow :: paintobj ( int num, int stat )
       else
          rahmen ( true, objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2,   objcoordinates[num].y2  );
    }
-   getinvisiblemouserectanglestk ( );
 }
 
 
@@ -4199,7 +4165,6 @@ void  ccontainer_b :: crepairbuilding_subwindow :: display ( void )
       // checkto ( ndamag );
    }
 
-   setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
    npush ( activefontsettings );
    putimage ( subwinx1, subwiny1, icons.container.subwin.buildinginfo.start );
@@ -4254,8 +4219,6 @@ void  ccontainer_b :: crepairbuilding_subwindow :: display ( void )
       showtext2c ( "repair !", objcoordinates[0].x1 + 1 , ( objcoordinates[0].y1 + objcoordinates[0].y2 - activefontsettings.font->height ) / 2 );
    */
    npop ( activefontsettings );
-   getinvisiblemouserectanglestk (  );
-
 }
 
 void ccontainer_b :: crepairbuilding_subwindow :: paintvariables ( void )
@@ -4316,13 +4279,11 @@ void  ccontainer_b :: crepairbuilding_subwindow :: paintobj ( int num, int stat 
 {
    csubwindow::paintobj( num, stat );
    if ( objcoordinates[num].type == 5 ) {
-      setinvisiblemouserectanglestk ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2,   objcoordinates[num].y2 );
       collategraphicoperations cgo  ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2,   objcoordinates[num].y2 );
       if ( stat == 0 )
          putrotspriteimage ( objcoordinates[num].x1, objcoordinates[num].y1, icons.container.subwin.buildinginfo.repair, actmap->actplayer * 8  );
       else
          putrotspriteimage ( objcoordinates[num].x1, objcoordinates[num].y1, icons.container.subwin.buildinginfo.repairpressed, actmap->actplayer * 8  );
-      getinvisiblemouserectanglestk (  );
    }
 }
 
@@ -4367,20 +4328,17 @@ void  ccontainer_b :: cnetcontrol_subwindow :: paintobj ( int num, int stat )
 {
    csubwindow::paintobj( num, stat );
    if ( objcoordinates[num].type == 10 ) {
-      setinvisiblemouserectanglestk ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2+10,   objcoordinates[num].y2 );
       collategraphicoperations cgo  ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2+10,   objcoordinates[num].y2 );
       if ( stat == 1 )
          putrotspriteimage ( objcoordinates[num].x1, objcoordinates[num].y1, icons.container.subwin.netcontrol.active, actmap->actplayer * 8  );
       else
          putrotspriteimage ( objcoordinates[num].x1, objcoordinates[num].y1, icons.container.subwin.netcontrol.inactive, actmap->actplayer * 8  );
-      getinvisiblemouserectanglestk (  );
    }
 }
 
 
 void  ccontainer_b :: cnetcontrol_subwindow :: display ( void )
 {
-   setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
    putimage ( subwinx1, subwiny1, icons.container.subwin.netcontrol.start );
 
@@ -4410,8 +4368,6 @@ void  ccontainer_b :: cnetcontrol_subwindow :: display ( void )
    }
 
    npop ( activefontsettings );
-   getinvisiblemouserectanglestk ( );
-
 }
 
 int ccontainer_b :: cnetcontrol_subwindow :: getstatus ( int num )
@@ -4592,8 +4548,6 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: display ( void )
    else
       power = 0;
 
-
-   setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
 
    npush ( activefontsettings );
@@ -4633,8 +4587,6 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: display ( void )
    npop ( activefontsettings );
 
    displayvariables();
-   getinvisiblemouserectanglestk();
-
 }
 
 int ccontainer_b :: cconventionelpowerplant_subwindow :: allbuildings = 0;
@@ -4755,23 +4707,18 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: checkformouse ( void 
             newpower = 1024;
 
          if ( newpower != power ) {
-            setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
             collategraphicoperations cgo  ( subwinx1, subwiny1, subwinx2, subwiny2 );
 
             setnewpower( newpower );
 
             displayvariables();
 
-            getinvisiblemouserectanglestk ( );
-
          }
       }
       if ( objpressedbymouse(0) ) {
          allbuildings = !allbuildings;
-         setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
          collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
          displayvariables();
-         getinvisiblemouserectanglestk ( );
       }
    }
 }
@@ -4781,7 +4728,6 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: paintobj ( int num, i
 {
    if ( objcoordinates[0].type == 17 ) {
 
-      setinvisiblemouserectanglestk ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2+10,   objcoordinates[num].y2 );
       collategraphicoperations cgo  ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2+10,   objcoordinates[num].y2 );
 
       activefontsettings.font = schriften.guifont;
@@ -4804,7 +4750,6 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: paintobj ( int num, i
                  showtext2c ( "no",  subwinx1+319, subwiny1 +  6 );
            }
       */
-      getinvisiblemouserectanglestk ( );
    }
 }
 
@@ -4814,15 +4759,12 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: checkforkey ( tkey ta
    /*
    if ( taste == ct_space  ||  taste == ct_a ) {
      allbuildings = !allbuildings;
-     setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
      collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
      displayvariables();
-     getinvisiblemouserectanglestk ( );
 }
    */
    int keyspeed = 50;
    if ( (taste == ct_left || taste==ct_4k) && power > 0 ) {
-      setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
       collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
 
       if ( power > keyspeed )
@@ -4831,10 +4773,8 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: checkforkey ( tkey ta
          setnewpower ( 0 );
 
       displayvariables();
-      getinvisiblemouserectanglestk ( );
    }
    if ( (taste == ct_right  || taste==ct_6k) && power < 1024 ) {
-      setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
       collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
 
       if ( power+keyspeed < 1024 )
@@ -4843,7 +4783,6 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: checkforkey ( tkey ta
          setnewpower ( 1024 );
 
       displayvariables();
-      getinvisiblemouserectanglestk ( );
    }
 }
 
@@ -4870,7 +4809,6 @@ int  ccontainer_b :: cwindpowerplant_subwindow :: subwin_available ( void )
 void  ccontainer_b :: cwindpowerplant_subwindow :: display ( void )
 {
    npush ( activefontsettings );
-   setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
    putimage ( subwinx1, subwiny1, icons.container.subwin.windpower.start );
 
@@ -4904,7 +4842,6 @@ void  ccontainer_b :: cwindpowerplant_subwindow :: display ( void )
    showtext2c ( buf, subwinx1 + 117, subwiny1 + 62 );
    showtext2c ( strrr ( cc_b->building->maxplus.energy ), subwinx1 + 117, subwiny1 + 86 );
 
-   getinvisiblemouserectanglestk (  );
    npop ( activefontsettings );
 
 }
@@ -4956,7 +4893,6 @@ int  ccontainer_b :: csolarpowerplant_subwindow :: subwin_available ( void )
 void  ccontainer_b :: csolarpowerplant_subwindow :: display ( void )
 {
    npush ( activefontsettings );
-   setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
    putimage ( subwinx1, subwiny1, icons.container.subwin.solarpower.start );
    csubwindow :: display();
@@ -4995,7 +4931,6 @@ void  ccontainer_b :: csolarpowerplant_subwindow :: display ( void )
       showtext2c ( strrr ( cc_b->building->maxplus.energy ), subwinx1 + 117, subwiny1 + 86 );
 
 
-   getinvisiblemouserectanglestk (  );
    npop ( activefontsettings );
 }
 
@@ -5106,7 +5041,6 @@ void  ccontainer_b :: cammunitionproduction_subwindow :: display ( void )
    int i;
 
    npush ( activefontsettings );
-   setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
    putimage ( subwinx1, subwiny1, icons.container.subwin.ammoproduction.start );
    csubwindow :: display();
@@ -5150,9 +5084,7 @@ void  ccontainer_b :: cammunitionproduction_subwindow :: display ( void )
 
    displayusage();
 
-   getinvisiblemouserectanglestk (  );
    npop ( activefontsettings );
-
 }
 
 void ccontainer_b :: cammunitionproduction_subwindow :: produce( void )
@@ -5232,7 +5164,6 @@ void ccontainer_b :: cammunitionproduction_subwindow :: paintobj ( int num, int 
    csubwindow :: paintobj ( num, stat );
    if ( objcoordinates[num].type == 3 ) {
       {
-         setinvisiblemouserectanglestk ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2+10,   objcoordinates[num].y2 );
          collategraphicoperations cgo  ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2+10,   objcoordinates[num].y2 );
          putimage ( objcoordinates[num].x1,   objcoordinates[num].y1,  icons.container.subwin.ammoproduction.schiene );
 
@@ -5245,7 +5176,6 @@ void ccontainer_b :: cammunitionproduction_subwindow :: paintobj ( int num, int 
          else
             putimage ( objcoordinates[num].x1,   objcoordinates[num].y2 - objcoordinates[num].t1 - objcoordinates[num].t2,  icons.container.subwin.ammoproduction.schieber[offs] );
 
-         getinvisiblemouserectanglestk ( );
       }
       activefontsettings.color = white;
       activefontsettings.font = schriften.guifont;
@@ -5253,12 +5183,9 @@ void ccontainer_b :: cammunitionproduction_subwindow :: paintobj ( int num, int 
       activefontsettings.justify = centertext;
       activefontsettings.background = bkgrcol;
 
-      setinvisiblemouserectanglestk ( subwinx1 + 6 + num * 37, subwiny1 + 96,   subwinx1 + 6 + num * 37 + activefontsettings.length, subwiny1 + 96 + activefontsettings.font->height );
       showtext2c ( strrr ( toproduce[num] * weaponpackagesize ), subwinx1 + 6 + num * 37, subwiny1 + 96 );
-      getinvisiblemouserectanglestk ( );
    }
    if ( objcoordinates[num].type == 5 ) {
-      setinvisiblemouserectanglestk ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2+10,   objcoordinates[num].y2 );
       collategraphicoperations cgo  ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2+10,   objcoordinates[num].y2 );
       activefontsettings.font = schriften.guifont;
       activefontsettings.background = 255;
@@ -5272,8 +5199,6 @@ void ccontainer_b :: cammunitionproduction_subwindow :: paintobj ( int num, int 
          putimage ( subwinx1 + 217, subwiny1 + 4, icons.container.subwin.ammoproduction.buttonpressed );
          showtext2c ( txtptr, subwinx1 + 229, subwiny1 + 6 );
       }
-      getinvisiblemouserectanglestk ( );
-
    }
 }
 
@@ -5403,7 +5328,6 @@ void  ccontainer_b :: cresourceinfo_subwindow :: display ( void )
    int y;
 
    npush ( activefontsettings );
-   setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
    putimage ( subwinx1, subwiny1, icons.container.subwin.resourceinfo.start );
    csubwindow :: display();
@@ -5424,7 +5348,6 @@ void  ccontainer_b :: cresourceinfo_subwindow :: display ( void )
 
    displayvariables ();
 
-   getinvisiblemouserectanglestk (  );
    npop ( activefontsettings );
 
 }
@@ -5569,7 +5492,6 @@ void  ccontainer_b :: cresearch_subwindow :: display ( void )
    else
       research = 0;
 
-   setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
 
    npush ( activefontsettings );
@@ -5613,7 +5535,6 @@ void  ccontainer_b :: cresearch_subwindow :: display ( void )
    npop ( activefontsettings );
 
    displayvariables();
-   getinvisiblemouserectanglestk();
 }
 
 
@@ -5735,7 +5656,6 @@ void  ccontainer_b :: cresearch_subwindow :: checkformouse ( void )
          if ( newresearch > 1024 )
             newresearch = 1024;
          if ( newresearch != research ) {
-            setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
             collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
 
             int x = gx1 + ( gx2 - gx1 ) * research/ 1024;
@@ -5753,17 +5673,12 @@ void  ccontainer_b :: cresearch_subwindow :: checkformouse ( void )
             setnewresearch( newresearch );
 
             displayvariables();
-
-            getinvisiblemouserectanglestk ( );
-
          }
       }
       if ( objpressedbymouse(0) ) {
          allbuildings = !allbuildings;
-         setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
          collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
          displayvariables();
-         getinvisiblemouserectanglestk ( );
       }
    }
 }
@@ -5772,7 +5687,6 @@ void  ccontainer_b :: cresearch_subwindow :: paintobj ( int num, int stat )
 {
    if ( objcoordinates[0].type == 17 ) {
 
-      setinvisiblemouserectanglestk ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2+10,   objcoordinates[num].y2 );
       collategraphicoperations cgo  ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2+10,   objcoordinates[num].y2 );
 
       activefontsettings.font = schriften.guifont;
@@ -5794,8 +5708,6 @@ void  ccontainer_b :: cresearch_subwindow :: paintobj ( int num, int stat )
          else
             showtext2c ( "no",  subwinx1+121, subwiny1 + 99 );
       }
-
-      getinvisiblemouserectanglestk ( );
    }
 }
 
@@ -5804,14 +5716,11 @@ void  ccontainer_b :: cresearch_subwindow :: checkforkey ( tkey taste )
 {
    if ( taste == ct_space  ||  taste == ct_a ) {
       allbuildings = !allbuildings;
-      setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
       collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
       displayvariables();
-      getinvisiblemouserectanglestk ( );
    }
    int keyspeed = 50;
    if ( (taste == ct_left || taste==ct_4k ) && research > 0 ) {
-      setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
       collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
       if ( research > keyspeed )
          setnewresearch ( research - keyspeed );
@@ -5819,10 +5728,8 @@ void  ccontainer_b :: cresearch_subwindow :: checkforkey ( tkey taste )
          setnewresearch ( 0 );
 
       displayvariables();
-      getinvisiblemouserectanglestk ( );
    }
    if ( (taste == ct_right  || taste==ct_6k) && research < 1024 ) {
-      setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
       collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
       if ( research+keyspeed < 1024 )
          setnewresearch ( research + keyspeed );
@@ -5830,7 +5737,6 @@ void  ccontainer_b :: cresearch_subwindow :: checkforkey ( tkey taste )
          setnewresearch ( 1024 );
 
       displayvariables();
-      getinvisiblemouserectanglestk ( );
    }
 }
 
@@ -5919,7 +5825,6 @@ void  ccontainer_b :: cminingstation_subwindow :: display ( void )
          extraction = 1024 * cc_b->building->plus.fuel / cc_b->building->maxplus.fuel;
 
 
-   setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
 
    npush ( activefontsettings );
@@ -5948,8 +5853,6 @@ void  ccontainer_b :: cminingstation_subwindow :: display ( void )
    displayvariables();
 
    npop ( activefontsettings );
-   getinvisiblemouserectanglestk ( );
-
 }
 
 
@@ -6051,8 +5954,6 @@ void  ccontainer_b :: cminingstation_subwindow :: checkformouse ( void )
          if ( newresearch > 1024 )
             newresearch = 1024;
          if ( newresearch != extraction ) {
-            setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
-
             int x = gx1 + ( gx2 - gx1 ) * extraction/ 1024;
 
             int cl ;
@@ -6068,8 +5969,6 @@ void  ccontainer_b :: cminingstation_subwindow :: checkformouse ( void )
             setnewextraction( newresearch );
 
             displayvariables();
-
-            getinvisiblemouserectanglestk ( );
 
          }
       }
@@ -6089,8 +5988,6 @@ void  ccontainer_b :: cminingstation_subwindow :: paintobj ( int num, int stat )
 {
    /*
    if ( objcoordinates[0].type == 17 ) {
-
-     setinvisiblemouserectanglestk ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2+10,   objcoordinates[num].y2 );
 
      activefontsettings.font = schriften.guifont;
      activefontsettings.height = 0;
@@ -6121,7 +6018,6 @@ void  ccontainer_b :: cminingstation_subwindow :: paintobj ( int num, int stat )
         else
            showtext2c ( "this", subwinx1+x, subwiny1 + y );
 
-     getinvisiblemouserectanglestk ( );
 }
    */
 }
@@ -6141,24 +6037,20 @@ void  ccontainer_b :: cminingstation_subwindow :: checkforkey ( tkey taste )
 
    int keyspeed = 50;
    if ( (taste == ct_left || taste==ct_4k)  && extraction > 0 ) {
-      setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
       if ( extraction > keyspeed )
          setnewextraction ( extraction - keyspeed );
       else
          setnewextraction ( 0 );
 
       displayvariables();
-      getinvisiblemouserectanglestk ( );
    }
    if ( (taste == ct_right || taste==ct_6k) && extraction < 1024 ) {
-      setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
       if ( extraction+keyspeed < 1024 )
          setnewextraction ( extraction + keyspeed );
       else
          setnewextraction ( 1024 );
 
       displayvariables();
-      getinvisiblemouserectanglestk ( );
    }
 
 }
@@ -6250,7 +6142,6 @@ void  ccontainer_b :: cmineralresources_subwindow :: display ( void )
          extraction = 1024 * cc_b->building->plus.fuel / cc_b->building->maxplus.fuel;
 
 
-   setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
 
    npush ( activefontsettings );
@@ -6343,8 +6234,6 @@ void  ccontainer_b :: cmineralresources_subwindow :: display ( void )
    showtext2c ( "dist", subwinx1 + 341-19, subwiny1 + 96 );
 
    npop ( activefontsettings );
-
-   getinvisiblemouserectanglestk();
 
 }
 
@@ -6797,7 +6686,6 @@ int  ccontainer_t :: ctransportinfo_subwindow :: subwin_available ( void )
 
 void  ccontainer_t :: ctransportinfo_subwindow :: display ( void )
 {
-   setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
 
    npush ( activefontsettings );
@@ -6841,8 +6729,6 @@ void  ccontainer_t :: ctransportinfo_subwindow :: display ( void )
    paintvariables();
 
    npop ( activefontsettings );
-   getinvisiblemouserectanglestk (  );
-
 }
 
 void ccontainer_t :: ctransportinfo_subwindow :: paintvariables ( void )
@@ -6889,10 +6775,8 @@ void ccontainer_t :: ctransportinfo_subwindow :: paintvariables ( void )
 
 void ccontainer_t :: ctransportinfo_subwindow :: unitchanged ( void )
 {
-   setinvisiblemouserectanglestk ( subwinx1 + 199, subwiny1 + 72, subwinx1 + 230, subwiny1 + 110 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
    paintvariables();
-   getinvisiblemouserectanglestk (  );
 }
 
 void ccontainer_t :: ctransportinfo_subwindow :: checkformouse ( void )

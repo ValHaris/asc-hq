@@ -1,9 +1,13 @@
 /*! \file gamedlg.cpp    
     \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.88 2002-02-21 17:06:50 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.89 2002-03-02 23:04:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.88  2002/02/21 17:06:50  mbickel
+//      Completed Paragui integration
+//      Moved mail functions to own file (messages)
+//
 //     Revision 1.87  2002/01/06 09:50:59  mbickel
 //      Some cleanup and documentation
 //
@@ -553,10 +557,8 @@ void         tchoosetechnology::disp(void)
 
       int x = gx();
       int y = gy(i);
-      setinvisiblemouserectanglestk ( x,y,x+300,y+20 );
 
       showtext2(techs[i]->name, x,y ) ;
-      getinvisiblemouserectanglestk ();
    }
 }
 
@@ -752,7 +754,6 @@ void tchoosetransfermethod :: viewdata ( void )
    linelength = xsize - 50;
    liney1 = y1 + starty + 10;
 
-   setinvisiblemouserectanglestk ( linex1, liney1, linex1 + linelength, liney1 + linedist * linenum );
    activefontsettings.font = schriften.smallarial;
    activefontsettings.length = linelength;
    activefontsettings.justify = lefttext;
@@ -776,7 +777,6 @@ void tchoosetransfermethod :: viewdata ( void )
 
       i++;
    }
-   getinvisiblemouserectanglestk();
 }
 
 
@@ -1979,27 +1979,19 @@ void  ttributepayments :: paintactplayer ( void )
    int xx2 = x1 + 145;
    int yy1 = y1 + starty + 25 + oldplayer * 30;
    int yy2 = yy1 + 30;
-   if ( oldplayer != -1 ) { 
-      setinvisiblemouserectanglestk ( xx1, yy1, xx2, yy2 );
+   if ( oldplayer != -1 )  
       xorrectangle ( xx1, yy1, xx2, yy2, 14 );
-      getinvisiblemouserectanglestk ();
-   }
 
    yy1 = y1 + starty + 25 + player * 30;
    yy2 = yy1 + 30;
-   if ( player != -1 ) {
-      setinvisiblemouserectanglestk ( xx1, yy1, xx2, yy2 );
+   if ( player != -1 )
       xorrectangle ( xx1, yy1, xx2, yy2, 14 );
-      getinvisiblemouserectanglestk ();
-   }
 
    oldplayer = player;
 }
 
 void  ttributepayments :: paintvalues ( void )
 {
-   setinvisiblemouserectanglestk ( x1 + 10,  y1 + starty,      x1 + xsize - 10, y1 + ysize - 50 );
- 
    activefontsettings.font = schriften.smallarial;
    activefontsettings.color = textcolor;
    activefontsettings.justify = lefttext;
@@ -2017,8 +2009,6 @@ void  ttributepayments :: paintvalues ( void )
       activefontsettings.length = wind2x - wind1x - 35;
       showtext2 ( strrr ( trib.avail[players[player]][actmap->actplayer].resource(i)), x1 + wind1x + 5, y1 + wind2y + 16 + i * 40 );
    } /* endfor */
-
-   getinvisiblemouserectanglestk ();
 }
 
 
@@ -2722,10 +2712,8 @@ void tgamepreferences :: init ( void )
    addbutton ( "", xsize -35, starty + 20, xsize - 20, starty + 35, 3, 0, 3, true );
    addeingabe ( 3, &actoptions.container.autoproduceammunition, 0, dblue );
 
-#ifndef _DOS_
-   addbutton ( "", xsize -35, starty + 50, xsize - 20, starty + 65, 3, 0, 4, true );
-   addeingabe ( 4, &actoptions.sound_mute, 0, dblue );
-#endif
+//   addbutton ( "", xsize -35, starty + 50, xsize - 20, starty + 65, 3, 0, 4, true );
+//   addeingabe ( 4, &actoptions.sound.Emute, 0, dblue );
 
 
 /*
@@ -2793,18 +2781,19 @@ void tgamepreferences :: init ( void )
    addbutton ( "", xsize - 35 , r8.y1 + 150, r8.x2, r8.y2 + 150, 3, 0, 13, true );
    addeingabe ( 13, &actoptions.endturnquestion, black, dblue );
 
-   buildgraphics(); 
+   buildgraphics();
 
-   activefontsettings.font = schriften.smallarial; 
-   activefontsettings.justify = lefttext; 
+   activefontsettings.font = schriften.smallarial;
+   activefontsettings.justify = lefttext;
    activefontsettings.length = 0;
    activefontsettings.background = 255;
 
    showtext2 ( "automatic ammunition production in buildings", x1 + 25, y1 + starty + 20 );
+/*
 #ifndef _DOS_
    showtext2 ( "disable sound",                                 x1 + 25, y1 + starty + 50 );
 #endif
-
+*/
    dlgoffset.x1 = x1;
    dlgoffset.y1 = y1;
    dlgoffset.x2 = x1;
@@ -2941,13 +2930,10 @@ void tgamepreferences :: run ( void )
 
 void gamepreferences  ( void )
 {
-   int oldSoundStat = CGameOptions::Instance()->sound_mute;
    tgamepreferences prefs;
    prefs.init();
    prefs.run();
    prefs.done();
-   if ( oldSoundStat != CGameOptions::Instance()->sound_mute )
-      SoundSystem::getInstance()->setMute( CGameOptions::Instance()->sound_mute );
 }
 
 
@@ -3114,9 +3100,7 @@ void tmousepreferences :: paintbutt ( char id )
       activefontsettings.justify = centertext; 
       activefontsettings.length = r2.x2 - r2.x1 - 2;
       activefontsettings.background = dblue;
-      setinvisiblemouserectanglestk( r2 );
       showtext2 ( smallguiiconsundermouse[actoptions.mouse.smalliconundermouse], r2.x1 + 1, r2.y1 + 1 );
-      getinvisiblemouserectanglestk();
       npop ( activefontsettings );
    }
 }
@@ -3427,8 +3411,6 @@ void tgiveunitawaydlg :: paintplayer ( int i )
    if ( i < 0 ) 
       return;
 
-   setinvisiblemouserectanglestk ( x1 + 20, y1 + starty + xs + i * 40, x1 + xsize - 20, y1 + starty + 60 + i * 40 );
-
    if ( i == markedplayer ) {
       bar ( x1 + 20, y1 + starty + xs + i * 40, x1 + xsize - 20, y1 + starty + 60 + i * 40, 20 + ply[i] * 8 );
    } else {
@@ -3443,8 +3425,6 @@ void tgiveunitawaydlg :: paintplayer ( int i )
       showtext2 ( actmap->player[ply[i]].getName().c_str(), x1 + 60, y1 + starty + xs+17 + i * 40 - activefontsettings.font->height / 2 );
    else
       showtext2 ( "neutral", x1 + 60, y1 + starty + xs+17 + i * 40 - activefontsettings.font->height / 2 );
-
-   getinvisiblemouserectanglestk ();
 }
 
 void         tgiveunitawaydlg :: init(void)

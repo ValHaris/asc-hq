@@ -42,9 +42,10 @@
 
 #include "paradialog.h"
 #include "events.h"
-
+#include "gameoptions.h"
 #include "sg.h"
 
+PG_Application* pgApp = NULL;
 
 //! A Paragui widget that fills the whole screen and redraws it whenever Paragui wants to it.
 class MainScreenWidget : public PG_ThemeWidget, public PG_EventObject {
@@ -60,6 +61,7 @@ protected:
     void eventDraw (SDL_Surface* surface, const PG_Rect& rect);
 };
 
+MainScreenWidget* mainScreenWidget = NULL;
 
 void MainScreenWidget::eventDraw (SDL_Surface* surface, const PG_Rect& rect) {
     PG_ThemeWidget::eventDraw(surface, rect);
@@ -76,235 +78,171 @@ void MainScreenWidget::eventDraw (SDL_Surface* surface, const PG_Rect& rect) {
 
 void setupMainScreenWidget()
 {
-   MainScreenWidget* mainScreenWidget = new MainScreenWidget();
+   mainScreenWidget = new MainScreenWidget();
    mainScreenWidget->gameReady();
 }
 
 
 //! Adapter class for using Paragui Dialogs in ASC. This class transfers the event control from ASC to Paragui and back. All new dialog classes should be derived from this class
-class ASC_PG_Dialog : public PG_Window, public PG_EventObject {
+class ASC_PG_Dialog : public PG_Window {
        SDL_Surface* background;
     protected:
+       int quitModalLoop;
+    public:
        ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const char *windowtext, Uint32 flags=WF_DEFAULT, const char *style="Window", int heightTitlebar=25);
+       int Run( );
        ~ASC_PG_Dialog();
 };
 
 
 
 ASC_PG_Dialog :: ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const char *windowtext, Uint32 flags, const char *style, int heightTitlebar )
-       :PG_Window ( parent, r, windowtext, flags, style, heightTitlebar )
+       :PG_Window ( parent, r, windowtext, flags, style, heightTitlebar ),
+        quitModalLoop ( 0 )
 {
-   SDL_mutexP ( eventHandlingMutex );
+   mainScreenWidget->Redraw();
+//   SDL_mutexP ( eventHandlingMutex );
 }
 
 ASC_PG_Dialog::~ASC_PG_Dialog ()
 {
-   SDL_mutexV ( eventHandlingMutex );
+//   SDL_mutexV ( eventHandlingMutex );
 }
+
+int ASC_PG_Dialog::Run ( )
+{
+   queueEvents ( true );
+   while ( !quitModalLoop ) {
+      SDL_Event event;
+      if ( getQueuedEvent( event ))
+         pgApp->PumpIntoEventQueue( &event );
+      else
+         SDL_Delay ( 2 );
+   }
+   queueEvents ( false );
+   return quitModalLoop;
+}
+
 
 
 
    // A testwindow class
 
- class TestWindow : public ASC_PG_Dialog {
+ class SoundSettings : public ASC_PG_Dialog {
+        CGameOptions::SoundSettings soundSettings;
+        void updateSettings();
  public:
-
- 	TestWindow(PG_Widget* parent, const PG_Rect& r, char* windowtext);
- 	virtual ~TestWindow() {};
-
- 	void Dummy() {};
-
- 	/** a new style callback member */
- 	PARAGUI_CALLBACK(handle_show_window) {
- 		Show(true);
- 		return true;
- 	}
-
- 	/** callback handler in another flavor */
- 	PARAGUI_CALLBACK(handler_slider_btntrans) {
- 		PG_Button* b = (PG_Button*)clientdata;
- 	
- 		// set transparency of passed in button
- 		b->SetTransparency(data, data, data);
- 		b->Update();
-
- 		// set transparency of class member (progress)
- 		progress->SetTransparency(data);
- 		progress->Update();
- 		return true;
- 	}
-
+ 	SoundSettings(PG_Widget* parent, const PG_Rect& r );
  protected:
-
  	bool eventButtonClick(int id, PG_Widget* widget);
  	bool eventScrollPos(int id, PG_Widget* widget, unsigned long data);
  	bool eventScrollTrack(int id, PG_Widget* widget, unsigned long data);
-
- private:
- 	PG_ProgressBar* progress;
- 	PG_WidgetList* WidgetList;
  };
 
-TestWindow::TestWindow(PG_Widget* parent, const PG_Rect& r, char* windowtext) :
-ASC_PG_Dialog(parent, r, windowtext, WF_SHOW_CLOSE | WF_SHOW_MINIMIZE)
+SoundSettings::SoundSettings(PG_Widget* parent, const PG_Rect& r ) :
+ASC_PG_Dialog(parent, r, "Sound Settings", WF_SHOW_CLOSE )
 {
-/*
-	WidgetList = new PG_WidgetList(this, PG_Rect(30, 40, 220, 250));
-	WidgetList->SetTransparency(255);
-	WidgetList->EnableScrollBar(true, PG_SB_VERTICAL);
-	WidgetList->EnableScrollBar(true, PG_SB_HORIZONTAL);
-		
-	new PG_Button(this, 100, PG_Rect(260,130,110,30), "<< ADD");
-	new PG_Button(this, 101, PG_Rect(260,165,110,30), ">> REMOVE");
-	
-	PG_Button* b = new PG_Button(NULL, BTN_ID_YES, PG_Rect(0,0, 400,50), "YES");
-	b->SetTransparency(128,128,128);
-	WidgetList->AddWidget(b);
+        soundSettings = CGameOptions::Instance()->sound;
 
-	PG_Slider* s = new PG_Slider(NULL, 20, PG_Rect(0, 0, 200,20), PG_SB_HORIZONTAL);
-	s->SetRange(0,255);
-	s->SetTransparency(200);
-	s->SetPosition(50);
+        PG_CheckButton* musb = new PG_CheckButton(this, 20, PG_Rect( 30, 50, 200, 20 ), "Enable Music" );
+        new PG_Label ( this, PG_Rect(30, 80, 150, 20), "Music Volume" );
+	PG_Slider* mus = new PG_Slider(this, 21, PG_Rect(180, 80, 200, 20), PG_SB_HORIZONTAL);
+	mus->SetRange(0,100);
+	mus->SetPosition(soundSettings.musicVolume);
+        if ( soundSettings.muteMusic )
+           musb->SetUnpressed();
+        else
+           musb->SetPressed();
 
-	s->SetEventObject(MSG_SLIDE, this, (MSG_CALLBACK_OBJ)&TestWindow::handler_slider_btntrans, b);
+        PG_CheckButton* sndb = new PG_CheckButton(this, 30, PG_Rect( 30, 150, 200, 20 ), "Enable Sound" );
+        new PG_Label ( this, PG_Rect(30, 180, 150, 20), "Sound Volume" );
+	PG_Slider* snd = new PG_Slider(this, 31, PG_Rect(180, 180, 200, 20), PG_SB_HORIZONTAL);
+	snd->SetRange(0,100);
+	snd->SetPosition(soundSettings.soundVolume);
+        if ( soundSettings.muteEffects )
+           sndb->SetUnpressed();
+        else
+           sndb->SetPressed();
 
-	WidgetList->AddWidget(s);
-		
-	WidgetList->AddWidget(new PG_LineEdit(NULL, PG_Rect(0,0,80,30)));
-
-	PG_CheckButton* check = new PG_CheckButton(NULL, 10, PG_Rect(0,0,200,25), "CheckButton 2");
-	WidgetList->AddWidget(check);
-
-	progress = new PG_ProgressBar(this, PG_Rect(260, 90, 150, 25));
-	progress->SetTransparency(128);
-	progress->SetName("MyProgressBar");
-	progress->SetID(1001);
-	progress->SetFontAlpha(128);
-		
-	PG_ScrollBar* scroll = new PG_ScrollBar(this, 1, PG_Rect(415,90,20,150));
-	scroll->SetRange(0, 100);
-
-	PG_ScrollBar* scroll1 = new PG_ScrollBar(this, 2, PG_Rect(435,90,20,150));
-	scroll1->SetRange(0, 255);
-
-	PG_DropDown* drop = new PG_DropDown(this, 15, PG_Rect(260, 60, 200,25));
-	drop->SetIndent(5);
-	drop->AddItem("Under construction");
-	drop->AddItem("Item 1");
-	drop->AddItem("Item 2");
-	drop->AddItem("Item 3");
-	drop->AddItem("Item 4");
-	drop->AddItem("Item 5");
-	drop->AddItem("Item 6");
-  */
+	new PG_Button(this, 100, PG_Rect(30,r.h-40,(r.w-70)/2,30), "OK");
+	new PG_Button(this, 101, PG_Rect(r.w/2+5,r.h-40,(r.w-70)/2,30), "Cancel");
 }
 
-bool TestWindow::eventScrollPos(int id, PG_Widget* widget, unsigned long data){
-	if(id == 1){
-		progress->SetProgress(data);
-		return true;
-	}
 
-	if(id == 2){
-		SetTransparency((unsigned char)data);
-		Update();
-		return true;
-	}
+void SoundSettings::updateSettings()
+{
+   SoundSystem::getInstance()->setMusicVolume( CGameOptions::Instance()->sound.musicVolume );
+   SoundSystem::getInstance()->setEffectVolume( CGameOptions::Instance()->sound.soundVolume );
+   SoundSystem::getInstance()->setEffectsMute( CGameOptions::Instance()->sound.muteEffects );
+   if ( CGameOptions::Instance()->sound.muteMusic )
+      SoundSystem::getInstance()->pauseMusic();
+   else
+      SoundSystem::getInstance()->resumeMusic();
 
+}
+
+bool SoundSettings::eventScrollPos(int id, PG_Widget* widget, unsigned long data){
 	return false;
 }
 
-bool TestWindow::eventScrollTrack(int id, PG_Widget* widget, unsigned long data) {
-	if(id == 1){
-		progress->SetProgress(data);
+bool SoundSettings::eventScrollTrack(int id, PG_Widget* widget, unsigned long data) {
+	if(id == 21){
+                CGameOptions::Instance()->sound.musicVolume = data;
+                CGameOptions::Instance()->setChanged();
+                updateSettings();
 		return true;
 	}
 
-	if(id == 2){
-		SetTransparency((unsigned char)data);
-		Update();
+	if(id == 31){
+                CGameOptions::Instance()->sound.soundVolume = data;
+                CGameOptions::Instance()->setChanged();
+                updateSettings();
 		return true;
 	}
-
 	return false;
 }
 
-bool TestWindow::eventButtonClick(int id, PG_Widget* widget) {
+bool SoundSettings::eventButtonClick(int id, PG_Widget* widget) {
 	static int label=0;
 
 	if (id==PG_WINDOW_CLOSE ) {
-	   //hide();
-	   eventQuitModal(0,NULL,0);
-	   return true;
+           quitModalLoop = 1;
+           return true;
 	}
-	
+
 	if(id == 100) {
-		PG_Label* l = new PG_Label(NULL, PG_Rect(0,0,220,25), "");
-		l->SetAlignment(PG_TA_CENTER);
-		l->SetTextFormat("Label %i", ++label);
-		WidgetList->AddWidget(l);
-	
-		return true;
+           quitModalLoop = 1;
+           return true;
 	}
 
 	if(id == 101) {
-		PG_Widget* w = WidgetList->FindWidget(4);
-		if(w != NULL) {
-			WidgetList->RemoveWidget(w, true, true);
-			delete w;
-		}
-		
-		return true;
+           quitModalLoop = 2;
+           CGameOptions::Instance()->sound = soundSettings;
+           updateSettings();
+           return true;
 	}
-	
+
+        //music
+        if ( id == 20 ) {
+           CGameOptions::Instance()->sound.muteMusic = !(static_cast<PG_CheckButton*>(widget))-> GetPressed();
+           updateSettings();
+           return true;
+        }
+
+        //sound effects
+        if ( id == 30 ) {
+           CGameOptions::Instance()->sound.muteEffects = !(static_cast<PG_CheckButton*>(widget))-> GetPressed();
+           updateSettings();
+           return true;
+        }
+
 	return PG_Window::eventButtonClick(id, widget);
 }
 
-PARAGUI_CALLBACK_SELECTMENUITEM(handle_menu_click) {
-	std::cout << "menu item '" << id << "' (\""
-		<< item->getCaption() << "\") clicked" << std::endl;
 
-	switch (id) {
-		case 5:
-			static_cast<TestWindow*>(clientdata)->Show();
-			break;
-
-		case 6:
-			static_cast<PG_Application*>(clientdata)->Quit();
-			break;
-	}
-
-	return true;
-}
-
-void paraguiTest( )
-{               /*
-            SDL_mutexP ( eventHandlingMutex );
-            PG_MessageBox *msgbox =new PG_MessageBox(
-                                      NULL,
-                                      PG_Rect(200,50,240,200),
-                                      "Modal Messagebox", "Click \"Ok\" to close me",
-                                      PG_Rect(90, 120, 50, 50),
-                                      "Ok",
-                                      PG_TA_CENTER);
-
-            PG_DropDown* drop = new PG_DropDown(msgbox, 15, PG_Rect(5, 60, 200,25));
-            drop->SetIndent(5);
-            drop->AddItem("Under construction");
-            drop->AddItem("Item 1");
-            drop->AddItem("Item 2");
-            drop->AddItem("Item 3");
-
-            msgbox->Show();
-            msgbox->WaitForClick();
-
-            delete msgbox;
-            SDL_mutexV ( eventHandlingMutex );
-            */
-  TestWindow wnd1(NULL, PG_Rect(50,50,500,300), "My 2nd Testwindow");
-/*	wnd1.SetTransparency(0);
-	wnd1.SetName("WindowTwo");
-	wnd1.SetID(101);   	*/
-	wnd1.Show();
-	wnd1.RunModal();
+void soundSettings( )
+{
+  SoundSettings wnd1(NULL, PG_Rect(50,50,500,300));
+  wnd1.Show();
+  wnd1.Run();
 }

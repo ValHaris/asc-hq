@@ -2,9 +2,14 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.37 2001-12-17 19:41:22 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.38 2002-03-02 23:04:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2001/12/17 19:41:22  mbickel
+//      Reactionfire can now be deactivated without consequences if it has just
+//        been activated
+//      Mapeditor: Objects are selected on the palette map too
+//
 //     Revision 1.36  2001/11/22 13:49:32  mbickel
 //      Fixed crash in Mapeditor when selection color 9
 //      Fixed: turrets being displayed gray
@@ -355,9 +360,7 @@ template<class T> void SelectAnything<T> :: init ( vect<T> &v, int x1, int y1, i
 
 template<class T> void SelectAnything<T> :: _showiteminfos ( T item, int x1, int y1, int x2, int y2 )
 {
-   setinvisiblemouserectanglestk ( x1, y1, x2, y2 );
    showiteminfos ( item, x1, y1, x2, y2 );
-   getinvisiblemouserectanglestk ();
 }
 
 
@@ -394,16 +397,12 @@ template<class T> void SelectAnything<T> :: showiteminfos ( T item )
 
 template<class T> void SelectAnything<T> :: _displaysingleitem ( T item, int x, int y )
 {
-   setinvisiblemouserectanglestk ( x, y, x + getitemsizex(), y + getitemsizey() );
    displaysingleitem ( item, x, y );
-   getinvisiblemouserectanglestk ();
 }
 
 
 template<class T> void SelectAnything<T> :: displayItem ( int itemx, int itemy, int picx, int picy )
 {
-   setinvisiblemouserectanglestk ( picx, picy, picx + getitemsizex(), picy + getitemsizey() );
-
    int pos = itemx + itemy * maxx;
    if ( pos <= itemsavail.getlength() )
       displaysingleitem ( itemsavail[ pos ], picx, picy );
@@ -413,7 +412,6 @@ template<class T> void SelectAnything<T> :: displayItem ( int itemx, int itemy, 
    if ( itemx == actitemx  &&  itemy == actitemy ) 
       rectangle ( picx, picy, picx + getitemsizex(), picy + getitemsizey(), white );
    
-   getinvisiblemouserectanglestk ();
 }
 
 template<class T> int SelectAnything<T> :: getxposforitempos ( int itemx )
@@ -485,10 +483,7 @@ template<class T> T SelectAnything<T> :: selectitem( T previtem, tkey neutralkey
 
    addmouseproc ( &selfntmousescrollproc );
 
-   setinvisiblemouserectanglestk ( position.x1, position.y1-getiteminfoheight(), position.x2, position.y2 );
    bar ( position.x1, position.y1-getiteminfoheight(), position.x2, position.y2, black );
-   getinvisiblemouserectanglestk ();
-
 
    if ( previtem ) 
       for ( int i = 0; i <= itemsavail.getlength(); i++ )
@@ -1269,8 +1264,6 @@ void SelectItemContainer :: paintselections ( int num, int act )
    selector[num].pos.y2 = y2;
 
    if ( y2 < agmp->resolutiony ) {
-      setinvisiblemouserectanglestk ( x1, y1, selector[num].pos.x2, y2 + freespace );
-                                                   
       showtext2 ( selector[num].name, x1, y1 );
    
       y1 += activefontsettings.font->height;
@@ -1285,8 +1278,6 @@ void SelectItemContainer :: paintselections ( int num, int act )
       activefontsettings.color = black;
       activefontsettings.length = keywidth;
       showtext2 ( selector[num].keyname, x2, y1 + ( y2 - y1 - activefontsettings.font->height ) / 2);
-   
-      getinvisiblemouserectanglestk ();
    }
    npop ( activefontsettings );
 }

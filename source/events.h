@@ -50,16 +50,6 @@ extern int getmousestatus ();
 
 extern void setmouseposition ( int x, int y );
 
-extern void setinvisiblemouserectangle ( int x1, int y1, int x2, int y2 );
-// -1, -1, -1, -1  schaltet die Maus wieder ?berall an
-
-extern void setinvisiblemouserectanglestk ( int x1, int y1, int x2, int y2 );
-extern void setinvisiblemouserectanglestk ( tmouserect r1 );
-// wie oben, jedoch werden die alten Params auf dem Stack gesichert
-
-extern void getinvisiblemouserectanglestk ( void );
-// holt die Params wieder vom Stack
-
 extern void setnewmousepointer ( void* picture, int hotspotx, int hotspoty );
 
 extern int mouseinrect ( int x1, int y1, int x2, int y2 );
@@ -116,12 +106,6 @@ extern void removemouseproc ( tsubmousehandler* proc );
 extern void pushallmouseprocs ( void );
 extern void popallmouseprocs ( void );
 
-#ifdef _DOS_
-extern int initmousehandler ( void* pic );
-extern void removemousehandler ();
-#endif
-
-
 /***************************************************************************
  *                                                                         *
  *   Keyboard handling routines                                            *
@@ -129,18 +113,9 @@ extern void removemousehandler ();
  ***************************************************************************/
 
 
-#ifdef _DOS_
- #include "dos/keysymbols.h"
-#else
  #ifdef _SDL_
   #include "sdl/keysymbols.h"
  #endif
-#endif
-
-#ifdef _DOS_
-extern void initkeyb();
-extern void closekeyb();
-#endif
 
  typedef int tkey;
 
@@ -163,16 +138,20 @@ extern void closekeyb();
  ***************************************************************************/
 
 
-#ifdef _DOS_
-    volatile extern long        ticker;
-#else
     extern volatile int ticker;
-#endif
     extern void ndelay(int time);
 
     extern void starttimer(void); //resets Timer
     extern char time_elapsed(int time); //check if time msecs are elapsed, since starttimer
     extern int  releasetimeslice( void );
+
+
+    //! should the SDL Events be queued
+    extern void queueEvents( bool active );
+
+    //! if the events are being queue, get one. \returns false if no event available
+    extern bool getQueuedEvent ( SDL_Event& event );
+
 
 
 #endif

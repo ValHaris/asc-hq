@@ -70,8 +70,11 @@ void CGameOptions::setDefaults ( void )
    attackspeed1=0;
    attackspeed2=0;
    attackspeed3=0;
-   sound_off=0;
-   sound_mute=0;
+   sound.off=0;
+   sound.muteEffects=0;
+   sound.muteMusic=0;
+   sound.soundVolume=100;
+   sound.musicVolume=100;
    specialForestChaining = 1;
    heightChangeMovement = 1;
 
@@ -123,11 +126,11 @@ void CGameOptions::setDefaults ( void )
       searchPath[5].setName ( s.c_str() );
   #endif
 
-  xresolution = 800;
-  yresolution = 600;
+  xresolution = 1024;
+  yresolution = 768;
 
-  mapeditor_xresolution = 800;
-  mapeditor_yresolution = 600;
+  mapeditor_xresolution = 1024;
+  mapeditor_yresolution = 768;
 
   setChanged();
 }
@@ -147,8 +150,11 @@ void CGameOptions::copy ( const CGameOptions& cgo )
    attackspeed1          = cgo.attackspeed1;
    attackspeed2          = cgo.attackspeed2;
    attackspeed3          = cgo.attackspeed3;
-   sound_off             = cgo.sound_off;
-   sound_mute            = cgo.sound_mute;
+   sound.off             = cgo.sound.off;
+   sound.muteEffects     = cgo.sound.muteEffects;
+   sound.muteMusic       = cgo.sound.muteMusic;
+   sound.soundVolume     = cgo.sound.soundVolume;
+   sound.musicVolume     = cgo.sound.musicVolume;
 
    mouse.scrollbutton    = cgo.mouse.scrollbutton;
    mouse.fieldmarkbutton = cgo.mouse.fieldmarkbutton;

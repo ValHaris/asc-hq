@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.74 2002-02-21 17:06:50 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.75 2002-03-02 23:04:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.74  2002/02/21 17:06:50  mbickel
+//      Completed Paragui integration
+//      Moved mail functions to own file (messages)
+//
 //     Revision 1.73  2001/12/14 10:20:05  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -3116,10 +3120,8 @@ void         tunit::buttonpressed(int         id)
    case 20 :
    case 21 :  {
                   unit->direction = id-14;
-                  setinvisiblemouserectanglestk ( dirx + x1 -fieldsizex/2, diry + y1 - fieldsizey/2 ,dirx + x1 + fieldsizex/2 ,diry + y1 +fieldsizey/2 );
                   bar(dirx + x1 -fieldsizex/2, diry + y1 - fieldsizey/2 ,dirx + x1 + fieldsizex/2 ,diry + y1 +fieldsizey/2,lightgray);
                   putrotspriteimage(dirx + x1 - fieldsizex/2 ,diry + y1 - fieldsizey/2, unit->typ->picture[ unit->direction ],unit->color);
-                  getinvisiblemouserectanglestk ();
                }
          break;
    case 30 : {
@@ -3416,7 +3418,6 @@ void tladeraum :: displaysingleitem ( int pos )
 {
    int x = x1 + 28 + (pos % itemsperline) * fielddistx;
    int y = y1 + 88 + (pos / itemsperline) * fielddisty * 3;
-   setinvisiblemouserectanglestk ( x, y, x + fieldsizex, y + fieldsizey );
    putspriteimage( x, y, icons.stellplatz );
    if ( pos >= maxusable )
       putspriteimage( x, y, icons.X );
@@ -3424,7 +3425,6 @@ void tladeraum :: displaysingleitem ( int pos )
    displaysingleitem ( pos, x, y );
    if ( pos == cursorpos )
       putspriteimage ( x, y, mycursor.picture );
-   getinvisiblemouserectanglestk ( );
 }
 
 int tladeraum :: mouseoverfield ( int pos )

@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.34 2002-02-14 20:58:13 mbickel Exp $
+//     $Id: events.cpp,v 1.35 2002-03-02 23:04:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2002/02/14 20:58:13  mbickel
+//      Started integration of paragui
+//
 //     Revision 1.33  2001/07/09 17:01:44  mbickel
 //      Small map can now be even smaller
 //      fixed redraw problems on windows
@@ -187,9 +190,12 @@ volatile tmousesettings mouseparams;
 
 SDL_mutex* keyboardmutex = NULL;
 SDL_mutex* eventHandlingMutex = NULL;
+SDL_mutex* eventQueueMutex = NULL;
 
 queue<tkey>   keybuffer_sym;
 queue<Uint32> keybuffer_prnt;
+queue<SDL_Event> eventQueue;
+bool _queueEvents = false;
 
 
 int exitprogram = 0;
@@ -254,27 +260,6 @@ int mouseTranslate ( int m)
 void setmouseposition ( int x, int y )
 {}
 
-
-
-void setinvisiblemouserectanglestk ( int x1, int y1, int x2, int y2 )
-{}
-
-
-void setinvisiblemouserectanglestk ( tmouserect r1 )
-{}
-
-
-
-void checkformouseinchangingrectangles( int frst, int scnd )
-{}
-
-
-void getinvisiblemouserectanglestk ( void )
-{}
-
-
-void setinvisiblemouserectangle ( int x1, int y1, int x2, int y2 )
-{}
 
 
 void setnewmousepointer ( void* picture, int hotspotx, int hotspoty )
@@ -598,9 +583,14 @@ int processEvents ( )
               //   if ( event.active.gain )
                     redrawScreen = true;
             break;
-#endif            
+#endif
       }
       result = 1;
+      if ( _queueEvents ) {
+         SDL_mutexP( eventQueueMutex );
+         eventQueue.push ( event );
+         SDL_mutexV( eventQueueMutex );
+      }
    } else
       result = 0;
 
@@ -646,6 +636,14 @@ void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mou
       exit(1);
    }
 
+
+   eventQueueMutex = SDL_CreateMutex ();
+   if ( !eventQueueMutex ) {
+      printf("creating eventQueueMutex failed\n" );
+      exit(1);
+   }
+
+
    SDL_EnableUNICODE ( 1 );
    SDL_EnableKeyRepeat ( 250, 30 );
 
@@ -662,4 +660,30 @@ void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mou
    SDL_WaitThread ( secondThreadHandle, NULL );
 }
 
+
+
+void queueEvents( bool active )
+{
+   _queueEvents = active;
+   if ( !active ) {
+      SDL_mutexP( eventQueueMutex );
+      while ( !eventQueue.empty())
+         eventQueue.pop();
+      SDL_mutexV( eventQueueMutex );
+   }
+}
+
+
+bool getQueuedEvent ( SDL_Event& event )
+{
+   SDL_mutexP( eventQueueMutex );
+   if ( !eventQueue.empty() ) {
+      event = eventQueue.front();
+      eventQueue.pop();
+      SDL_mutexV( eventQueueMutex );
+      return true;
+   }
+   SDL_mutexV( eventQueueMutex );
+   return false;
+}
 

@@ -73,6 +73,11 @@ USELIB("..\..\libs\jpeg-6b\libjpeg.lib");
 USEUNIT("..\..\stringtokenizer.cpp");
 USEUNIT("..\..\music.cpp");
 USELIB("..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB");
+USEUNIT("..\..\paradialog.cpp");
+USEUNIT("..\..\messages.cpp");
+USELIB("..\..\..\..\paragui\borland\Paragui.lib");
+USELIB("..\..\..\..\freetype2\objs\freetype.lib");
+USELIB("..\..\..\..\Expat\Libs\exp.lib");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 

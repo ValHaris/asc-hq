@@ -192,7 +192,6 @@ int  abortgame;
 
 pprogressbar actprogressbar = NULL;
 cmousecontrol* mousecontrol = NULL;
-PG_Application* pgApp = NULL;
 
 #define messagedisplaytime 300
 
@@ -573,7 +572,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
-                    ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_pauseResumeMusic, ua_soundDialog };
+                    ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog };
 
 
 class tsgpulldown : public tpulldown
@@ -591,11 +590,9 @@ void         tsgpulldown :: init ( void )
    addbutton ( "seperator", -1);
    addbutton ( "~O~ptions", ua_gamepreferences );
    addbutton ( "~M~ouse options", ua_mousepreferences );
-   addbutton ( "Select Music Play ~L~ist ", ua_selectPlayList );
-   addbutton ( "~P~ause / Resume Music", ua_pauseResumeMusic );
+   addbutton ( "~S~ound options", ua_soundDialog );
    addbutton ( "seperator", -1);
    addbutton ( "E~x~itõctrl-x", ua_exitgame );
-   addbutton ( "Paragui Sound Dialog", ua_soundDialog );
 
 
    addfield ("~G~ame");
@@ -682,7 +679,7 @@ void         MainMenuPullDown :: init ( void )
    addbutton ( "~O~ptions", ua_gamepreferences );
    addbutton ( "~M~ouse options", ua_mousepreferences );
    addbutton ( "Select Music Play ~L~ist ", ua_selectPlayList );
-   addbutton ( "~P~ause / Resume Music", ua_pauseResumeMusic );
+   addbutton ( "~S~ound options", ua_soundDialog );
    addbutton ( "seperator", -1);
    addbutton ( "E~x~itõctrl-x", ua_exitgame );
 
@@ -1459,10 +1456,7 @@ void execuseraction ( tuseractions action )
          selectPlayList();
          break;
 
-      case ua_pauseResumeMusic:
-         SoundSystem::getInstance()->resumePauseMusic();
-         break;
-      case ua_soundDialog: paraguiTest();
+      case ua_soundDialog: soundSettings();
          break;
 
    }
@@ -2087,12 +2081,16 @@ int main(int argc, char *argv[] )
    if ( cl->y() != 600 )
       yr = cl->y();
 
-   SoundSystem soundSystem ( CGameOptions::Instance()->sound_mute, cl->q() || CGameOptions::Instance()->sound_off );
+   SoundSystem soundSystem ( CGameOptions::Instance()->sound.muteEffects, CGameOptions::Instance()->sound.muteMusic, cl->q() || CGameOptions::Instance()->sound.off );
+   soundSystem.setMusicVolume ( CGameOptions::Instance()->sound.musicVolume );
+   soundSystem.setEffectVolume ( CGameOptions::Instance()->sound.soundVolume );
 
    PG_Application app;
    pgApp = &app;
    app.EnableSymlinks(true);
-   app.LoadTheme("asc_dlg");
+   if ( !app.LoadTheme("asc_dlg"))
+      fatalError ( "Could not load Paragui theme for ASC");
+
    int flags = SDL_SWSURFACE;
    if ( fullscreen )
       flags |= SDL_FULLSCREEN;

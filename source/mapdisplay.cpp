@@ -375,12 +375,10 @@ void ZoomLevel :: setzoomlevel ( int newzoom )
 
 void tgeneraldisplaymapbase :: setmouseinvisible ( void )
 {
-   setinvisiblemouserectanglestk ( invmousewindow );
 }
 
 void tgeneraldisplaymapbase :: restoremouse ( void )
 {
-   getinvisiblemouserectanglestk (  );
 }
 
 tgeneraldisplaymapbase :: tgeneraldisplaymapbase ( void )
@@ -1199,23 +1197,13 @@ void  tdisplaymap :: resetmovement ( void )
 
 void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, int height1, int height2, int fieldnum, int totalmove )
 {
-   int         dir;
-
-   int ms = getmousestatus();
-
-   if ( ms == 2)
-      setinvisiblemouserectanglestk ( scrleftspace, scrtopspace, scrleftspace + scrxsize, scrtopspace + scrysize );
-
-
-   dir = getdirection(x1,y1,x2,y2);
+   int dir = getdirection(x1,y1,x2,y2);
    eht->direction = dir;
-
 
    displaymovingunit.eht = NULL;
 
    idisplaymap.pnt_terrain (  );
    idisplaymap.pnt_main (  );
-
 
 
    npush ( dispmapdata );
@@ -1424,9 +1412,6 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
    }
    npop ( dispmapdata );
    *agmp = *hgmp;
-
-   if ( ms == 2)
-      getinvisiblemouserectanglestk (  );
 }
 
 

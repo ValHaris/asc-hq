@@ -64,6 +64,8 @@ USELIB("..\..\..\..\..\SDL_image\bin\SDL_image.lib");
 USELIB("..\..\..\libs\sdlmm\SDLmm.lib");
 USEUNIT("..\..\..\sdl\asc_IMG_jpg.c");
 USEUNIT("..\..\..\stringtokenizer.cpp");
+USEUNIT("..\..\..\messages.cpp");
+USEUNIT("..\..\..\paradialog.cpp");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 

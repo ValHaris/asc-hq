@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.44 2002-01-29 20:42:16 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.45 2002-03-02 23:04:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2002/01/29 20:42:16  mbickel
+//      Improved finding of files with relative path
+//      Added wildcards to music playlist files
+//
 //     Revision 1.43  2001/12/14 10:20:05  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -349,9 +353,7 @@ int infomessage( char* formatstring, ... )
    activefontsettings.length = agmp->resolutionx - ( 640 - 387);
 
    int yy = agmp->resolutiony - ( 480 - 450 );
-   setinvisiblemouserectanglestk ( 37, yy, 37 + activefontsettings.length, yy + activefontsettings.font->height );
    showtext3c( stringtooutput, 37, yy );
-   getinvisiblemouserectanglestk();
 
    npop( activefontsettings );
 

@@ -2,9 +2,13 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.106 2002-02-21 17:06:49 mbickel Exp $
+//     $Id: dialog.cpp,v 1.107 2002-03-02 23:04:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.106  2002/02/21 17:06:49  mbickel
+//      Completed Paragui integration
+//      Moved mail functions to own file (messages)
+//
 //     Revision 1.105  2002/01/07 11:40:40  mbickel
 //      Fixed some syntax errors
 //
@@ -3321,7 +3325,6 @@ void tbasicshowmap::dispimage ( void )
    else
       ysize = mysize;
 
-   setinvisiblemouserectanglestk ( xp1, yp1, xp1 + txsize, yp1 + tysize );
    collategraphicoperations cgo ( xp1, yp1, xp1 + txsize, yp1 + tysize );
 
    mapwindow.x1 = (txsize - xsize) / 2;
@@ -3395,9 +3398,6 @@ void tbasicshowmap::dispimage ( void )
    lastmaptick = ticker;
    lastmapposx = xofs;
    lastmapposy = yofs;
-
-
-   getinvisiblemouserectanglestk();
 }
 
 
@@ -5818,12 +5818,10 @@ void tparagraph :: displaycursor ( void )
 
       if ( starty  < winy2 ) {
          collategraphicoperations cgo ( winx1 + cursorx-2,   starty, winx1 + cursorx+2,   starty + activefontsettings.height );
-         setinvisiblemouserectanglestk ( winx1 + cursorx-2,   starty, winx1 + cursorx+2,   starty + activefontsettings.height  );
          xorline ( winx1 + cursorx,   starty+1, winx1 + cursorx,   starty + activefontsettings.height - 1, blue  );
          if ( cursorx )
            xorline ( winx1 + cursorx-1, starty+1, winx1 + cursorx-1, starty + activefontsettings.height - 1, blue  );
          cursorstat = !cursorstat;
-         getinvisiblemouserectanglestk();
       }
    }
 }
@@ -5858,9 +5856,7 @@ void tparagraph :: display ( void )
       char d = *c;
       *c = 0;
 
-      setinvisiblemouserectanglestk ( winx1, starty, winx1+activefontsettings.length, starty + activefontsettings.height );
       showtext2 ( linestart[ startline ], winx1, starty );
-      getinvisiblemouserectanglestk ();
 
       *c = d;
       starty += activefontsettings.height;

@@ -36,8 +36,8 @@ class CGameOptions
 		void copy ( const CGameOptions& cgo );
 
 		bool	isChanged();
-		void	setChanged(bool flag	=	true);		
-      
+		void	setChanged(bool flag	=      true);
+
 		const char*	getSearchPath(int i)	{	return(searchPath+i)->getName();};
 	    int getSearchPathNum ( void );
 		
@@ -78,12 +78,6 @@ class CGameOptions
 
       //! second delay in attack display
       int attackspeed3;
-
-      //! muted soud can be reactivated during the game
-      int sound_mute;
-
-      //! if the sound is off, it can only be reactivated by restarting asc, but doesn't lock the sound device
-      int sound_off;
 
       //! when an airplanes changes its height, should all accessible fields be found from which the height change can be started? May take some time on slower computers
       int heightChangeMovement;
@@ -133,15 +127,30 @@ class CGameOptions
          */ 
          int smalliconundermouse;  
 
-         //! the button to center the map around the selected field 
+         //! the button to center the map around the selected field
          int centerbutton;
 
-         //! the button to display the vehicle information          
+         //! the button to display the vehicle information
          int unitweaponinfo;
 
          //! not used
-         int dragndropmovement;  
+         int dragndropmovement;
       } mouse;
+
+      struct SoundSettings{
+         //! muted soud can be reactivated during the game
+         int muteEffects;
+
+         //! muted soud can be reactivated during the game
+         int muteMusic;
+
+         //! if the sound is off, it can only be reactivated by restarting asc, but doesn't lock the sound device
+         int off;
+
+         int soundVolume;
+        
+         int musicVolume;
+      } sound;
 
       class Container
       {

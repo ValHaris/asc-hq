@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.65 2002-01-19 22:39:19 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.66 2002-03-02 23:04:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.65  2002/01/19 22:39:19  mbickel
+//      Added music playing functions to ASC
+//
 //     Revision 1.64  2001/12/19 17:16:28  mbickel
 //      Some include file cleanups
 //
@@ -1130,12 +1133,7 @@ void         tdialogbox::enablebutton(int         id)
 
    npush( activefontsettings ); 
 
-   int mss = getmousestatus();
-   if ( mss == 2 )
-      setinvisiblemouserectanglestk ( x1 + pb->x1, y1 + pb->y1, x1 + pb->x2, y1 + pb->y2 );
-
    collategraphicoperations cgo ( x1 + pb->x1, max ( y1 + pb->y1 - 20, 0 ), x1 + pb->x2, y1 + pb->y2 );
-
 
    char strng[200];
    activefontsettings.font = schriften.smallarial; 
@@ -1229,11 +1227,7 @@ void         tdialogbox::enablebutton(int         id)
 
     }
 
-   if ( mss == 2 )
-      getinvisiblemouserectanglestk (  );
-
-
-   pb->active = true; 
+   pb->active = true;
    npop( activefontsettings ); 
    rebuildtaborder(); 
 } 
@@ -1656,11 +1650,8 @@ void         tdialogbox::execbutton( pbutton      pb, char      mouse )
 
 void         tdialogbox::showtabmark(int         b)
 { 
-   if (b != 0) {
-      setinvisiblemouserectanglestk ( x1 + taborder[b].x1 - 2,y1 + taborder[b].y1 - 2,x1 + taborder[b].x2 + 2,y1 + taborder[b].y2 + 2 );
-      xorrectangle(x1 + taborder[b].x1 - 2,y1 + taborder[b].y1 - 2,x1 + taborder[b].x2 + 2,y1 + taborder[b].y2 + 2,15); 
-      getinvisiblemouserectanglestk ();
-   }
+   if (b != 0)
+      xorrectangle(x1 + taborder[b].x1 - 2,y1 + taborder[b].y1 - 2,x1 + taborder[b].x2 + 2,y1 + taborder[b].y2 + 2,15);
 } 
 
 
@@ -1824,15 +1815,8 @@ void         tdialogbox::toggleswitch(pbutton      pb)
    else 
       col = pb->max;
 
-   int b = getmousestatus(); 
-   if (b == 2) 
-      setinvisiblemouserectanglestk ( x1 + pb->x1, y1 + pb->y1, x1 + pb->x2, y1 + pb->y2 );
-
    line(x1 + pb->x1,y1 + pb->y1,x1 + pb->x1 + (pb->y2 - pb->y1),y1 + pb->y2, col);
    line(x1 + pb->x1 + (pb->y2 - pb->y1),y1 + pb->y1,x1 + pb->x1,y1 + pb->y2, col);
-
-   if (b == 2) 
-      getinvisiblemouserectanglestk ( );
 
    buttonpressed(pb->id); 
 
@@ -2141,10 +2125,7 @@ void removemessage( void )
 
 void tdialogbox::dispeditstring ( char* st, int x1, int y1 )
 {
-   setinvisiblemouserectanglestk ( x1, y1, x1 + activefontsettings.length, y1 + activefontsettings.height );
-   showtext2(st,x1,y1); 
-   getinvisiblemouserectanglestk (  );
-
+   showtext2(st,x1,y1);
 }
 
 
@@ -2887,9 +2868,7 @@ void tviewtext::displaytext ( void )
   const char* s1;
   integer      i;
 
-  int mss = getmousestatus();
-
-   tvt_xp = 0; 
+   tvt_xp = 0;
    tvt_yp = 0;
 
    npush ( activefontsettings );
@@ -2920,8 +2899,6 @@ void tviewtext::displaytext ( void )
 
 
    if (tvt_dispactive) {
-      if (mss == 2)
-         setinvisiblemouserectanglestk ( tvt_x1, tvt_y1, tvt_x2, tvt_y2 );
 
       if ( tvt_startpoint ) {
          pstartpoint startpoint = tvt_startpoint;
@@ -2995,9 +2972,6 @@ void tviewtext::displaytext ( void )
              bar ( tvt_x1, tvt_yp + tvt_y1 - tvt_starty, tvt_x2, tvt_y2, tvt_background);
 
     }
-   if (tvt_dispactive)
-      if (mss == 2)
-         getinvisiblemouserectanglestk ();
 
    delete[] s5;
    delete[] actword;
@@ -3595,10 +3569,8 @@ int displaymessage2( const char* formatstring, ... )
    activefontsettings.length = agmp->resolutionx - ( 640 - 387);
 
    int yy = agmp->resolutiony - ( 480 - 450 );
-   setinvisiblemouserectanglestk ( 37, yy, 37 + activefontsettings.length, yy + activefontsettings.font->height );
    collategraphicoperations cgo ( 37, yy, 37 + activefontsettings.length, yy + activefontsettings.font->height );
    showtext3c( stringtooutput, 37, yy );
-   getinvisiblemouserectanglestk();
 
    npop( activefontsettings );
 

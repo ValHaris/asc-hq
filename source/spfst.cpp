@@ -2,9 +2,12 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.104 2001-12-19 17:16:29 mbickel Exp $
+//     $Id: spfst.cpp,v 1.105 2002-03-02 23:04:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.104  2001/12/19 17:16:29  mbickel
+//      Some include file cleanups
+//
 //     Revision 1.103  2001/12/14 10:20:05  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -671,7 +674,6 @@ void       tcursor::getimg ( void )
      int xp = idisplaymap.getfieldposx( posx, posy );
      int yp = idisplaymap.getfieldposy( posx, posy );
 
-     //setinvisiblemouserectanglestk ( xp, yp, xp + fieldxsize, yp + fieldysize );
      if (agmp-> linearaddress != hgmp-> linearaddress ) {
         npush(*agmp);
         *agmp = *hgmp;
@@ -680,7 +682,6 @@ void       tcursor::getimg ( void )
      } else {
         getimage(xp, yp, xp + idisplaymap.getfieldsizex(), yp + idisplaymap.getfieldsizey(), backgrnd );
      } /* endif */
-     //getinvisiblemouserectanglestk (  );
 }
 
 void       tcursor::putbkgr ( void )
@@ -688,7 +689,6 @@ void       tcursor::putbkgr ( void )
      int xp = idisplaymap.getfieldposx( posx, posy );
      int yp = idisplaymap.getfieldposy( posx, posy );
 
-     //setinvisiblemouserectanglestk ( xp, yp, xp + fieldxsize, yp + fieldysize );
      collategraphicoperations cgo ( xp, yp, xp + fieldxsize, yp + fieldysize );
      if (agmp-> linearaddress != hgmp-> linearaddress ) {
         npush( *agmp );
@@ -698,8 +698,6 @@ void       tcursor::putbkgr ( void )
      } else {
         putimage(xp, yp, backgrnd );
      } /* endif */
-     //getinvisiblemouserectanglestk (  );
-
 }
 
 void       tcursor::putimg ( void )
@@ -709,7 +707,6 @@ void       tcursor::putimg ( void )
 
      checksize();
 
-     //setinvisiblemouserectanglestk ( xp, yp, xp + fieldxsize, yp + fieldysize );
      collategraphicoperations cgo ( xp, yp, xp + fieldxsize, yp + fieldysize );
      if (agmp-> linearaddress != hgmp-> linearaddress ) {
         npush( *agmp );
@@ -719,7 +716,6 @@ void       tcursor::putimg ( void )
      } else {
         putrotspriteimage(xp, yp, picture,color );
      } /* endif */
-     //getinvisiblemouserectanglestk (  );
 }
 
 

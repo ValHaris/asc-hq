@@ -19,7 +19,8 @@
       obj\vehicle.obj obj\buildings.obj obj\networkdata.obj obj\getopt1.obj 
       obj\getopt.obj obj\objecttype.obj obj\terraintype.obj 
       obj\textfileparser.obj obj\textfiletags.obj obj\itemrepository.obj 
-      obj\asc_IMG_jpg.obj obj\stringtokenizer.obj"/>
+      obj\asc_IMG_jpg.obj obj\stringtokenizer.obj obj\messages.obj 
+      obj\paradialog.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -41,7 +42,7 @@
     <USERDEFINES value="karteneditor;HEXAGON;FREEMAPZOOM;_WIN32_;WIN32;_SDL_;_NOASM_;NEWKEYB;_DEBUG"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="mapeditor.bpf"/>
-    <INCLUDEPATH value="..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image"/>
+    <INCLUDEPATH value="..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include"/>
     <LIBPATH value="..\..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par -w-8027 -w-8026 -w-csu"/>
   </MACROS>
@@ -86,29 +87,34 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=22
-Item0=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image
-Item1=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;C:\Programme\ascdev\SDL_image
-Item2=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src
-Item3=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;C:\Programme\ascdev\SDLmm\src
-Item4=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer
-Item5=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer
-Item6=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt
-Item7=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32;..\..\..\LIBS\getopt
-Item8=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32;C:\Programme\ASCSRC\GAMES\ASC\SOURCE\LIBS\getopt
-Item9=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
-Item10=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
-Item11=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
-Item12=..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
-Item13=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
-Item14=..\..\..\..\..\sdl\src\main\win32;..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
-Item15=..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
-Item16=..\..\..;..\..\..\sdl;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;C:\Programme\ascsrc\games\asc\source\win32
-Item17=..\..\..;..\..\..\sdl;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include
-Item18=..\..\..\sdl;..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\sdl\include
-Item19=..\..\..\sdl;..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
-Item20=..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
-Item21=..\..\..;$(BCB)\include;$(BCB)\include\vcl
+Count=27
+Item0=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include\
+Item1=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;..\..\..\..\..\freetype2\include\freetype
+Item2=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include;C:\Programme\ascdev\freetype2\include\freetype
+Item3=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;..\..\..\..\..\paragui\include
+Item4=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image;C:\Programme\ascdev\paragui\include
+Item5=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;..\..\..\..\..\SDL_image
+Item6=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src;C:\Programme\ascdev\SDL_image
+Item7=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;..\..\..\..\..\SDLmm\src
+Item8=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer;C:\Programme\ascdev\SDLmm\src
+Item9=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer
+Item10=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer
+Item11=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt
+Item12=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32;..\..\..\LIBS\getopt
+Item13=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32;C:\Programme\ASCSRC\GAMES\ASC\SOURCE\LIBS\getopt
+Item14=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
+Item15=..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
+Item16=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
+Item17=..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
+Item18=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
+Item19=..\..\..\..\..\sdl\src\main\win32;..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
+Item20=..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
+Item21=..\..\..;..\..\..\sdl;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;C:\Programme\ascsrc\games\asc\source\win32
+Item22=..\..\..;..\..\..\sdl;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include
+Item23=..\..\..\sdl;..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\sdl\include
+Item24=..\..\..\sdl;..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
+Item25=..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
+Item26=..\..\..;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
 Count=14

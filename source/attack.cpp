@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: attack.cpp,v 1.57 2001-12-14 10:20:04 mbickel Exp $
+//     $Id: attack.cpp,v 1.58 2002-03-02 23:04:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2001/12/14 10:20:04  mbickel
+//      Cleanup and enhancements to configure.in
+//      Removed last remains of octagonal version from source files
+//
 //     Revision 1.56  2001/11/28 13:03:16  mbickel
 //      Fixed: attack selectable although 0% hit accuracy
 //      Fixed: refuelling not possible if weapon had wrong target height
@@ -377,7 +381,6 @@ void tfight :: calcdisplay ( int ad, int dd )
 
    collategraphicoperations cgo ( agmp->resolutionx - ( 640 - 450), 211, agmp->resolutionx - ( 640 - 623 ), 426 );
 
-   setinvisiblemouserectanglestk ( agmp->resolutionx - ( 640 - 450), 211, agmp->resolutionx - ( 640 - 623 ), 426 );
    if ( !icons.attack.orgbkgr ) {
       icons.attack.orgbkgr = new char [ imagesize ( agmp->resolutionx - ( 640 - 450), 211, agmp->resolutionx - ( 640 - 623 ), 426 ) ];
    }
@@ -529,7 +532,6 @@ void tfight :: calcdisplay ( int ad, int dd )
       releasetimeslice();
    } while ( t + time3 > ticker ); /* enddo */
    putimage ( agmp->resolutionx - ( 640 - 451 ), 211, icons.attack.orgbkgr );
-   getinvisiblemouserectanglestk ( );
 }
 
 

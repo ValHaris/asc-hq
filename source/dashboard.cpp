@@ -346,14 +346,10 @@ void         tdashboard :: paintlargeweaponinfo ( void )
 
        count++;
 
-       setinvisiblemouserectanglestk ( x1, y1, x1 + 640, y1 + count * 25 + 110 );
        void* imgbuf = asc_malloc ( imagesize ( x1, y1, x1 + 640, y1 + count * 25 + 110 ));
        getimage ( x1, y1, x1 + 640, y1 + count * 25 + 110, imgbuf );
 
        putimage ( x1, y1, icons.weaponinfo[0] );
-
-       getinvisiblemouserectanglestk ();
-
 
        if ( vt->weapons.count )
           for ( int j = 0; j < vt->weapons.count ; j++) {
@@ -407,8 +403,6 @@ void         tdashboard :: paintlargeweaponinfo ( void )
          int height, width;
          getpicsize ( icons.weaponinfo[4], width, height );
 
-         setinvisiblemouserectanglestk ( x, y, x + width, y + height );
-
          putspriteimage ( x, y, icons.weaponinfo[4] );
 
          activefontsettings.justify = centertext;
@@ -426,7 +420,6 @@ void         tdashboard :: paintlargeweaponinfo ( void )
          else
             showtext2c ( "no", x + 364, y +  2 );
 
-         getinvisiblemouserectanglestk ();
          i++;
       }
 
@@ -477,9 +470,7 @@ void         tdashboard :: paintlargeweaponinfo ( void )
          releasetimeslice();
       }
 
-      setinvisiblemouserectanglestk ( x1, y1, x1 + 640, y1 + count * 25 + 40 );
       putimage ( x1, y1, imgbuf );
-      getinvisiblemouserectanglestk ();
 
       asc_free  ( imgbuf );
 
@@ -495,8 +486,6 @@ void         tdashboard::paintlargeweaponefficiency ( int pos, int* e, int first
 
    int height, width;
    getpicsize ( icons.weaponinfo[3], width, height );
-
-   setinvisiblemouserectanglestk ( x, y, x + width, y + height );
 
    if ( first )
       putspriteimage ( x, y, icons.weaponinfo[3] );
@@ -552,7 +541,6 @@ void         tdashboard::paintlargeweaponefficiency ( int pos, int* e, int first
       }
    }
    activefontsettings.font = schriften.guifont;
-   getinvisiblemouserectanglestk ();
 }
 
 
@@ -565,8 +553,6 @@ void         tdashboard::paintlargeweapon ( int pos, const char* name, int ammoa
 
    int x = (agmp->resolutionx - 640) / 2;
    int y = 150 + 28 + pos * 14;
-
-   setinvisiblemouserectanglestk ( x, y, x + width, y + height );
 
    putspriteimage ( x, y, icons.weaponinfo[1] );
    y += 4;
@@ -648,7 +634,6 @@ void         tdashboard::paintlargeweapon ( int pos, const char* name, int ammoa
 
    activefontsettings.justify = lefttext;
 
-   getinvisiblemouserectanglestk ();
 }
 
 
@@ -823,8 +808,6 @@ void         tdashboard::paintwind( int repaint )
    */
 
    if ( !CGameOptions::Instance()->smallmapactive ) {
-      setinvisiblemouserectanglestk ( agmp->resolutionx - ( 800 - 612), 213, agmp->resolutionx - ( 800 - 781), 305 );
-
       static int lastdir = -1;
 
       if ( repaint ) {
@@ -904,7 +887,6 @@ void         tdashboard::paintwind( int repaint )
       for (j = i; j < 8; j++ )
          bar ( agmp->resolutionx - ( 640 - 597), 282-j*7, agmp->resolutionx - ( 640 - 601), 284-j*7, black );
 
-      getinvisiblemouserectanglestk (  );
    }
 }
 
@@ -1054,8 +1036,6 @@ void         tdashboard::paintzoom( void )
    zoom.y1 = agmp->resolutiony - ( 480 - 444);
    zoom.y2 = agmp->resolutiony - ( 480 - 464);
 
-   setinvisiblemouserectanglestk ( zoom.x1, zoom.y1, zoom.x2, zoom.y2 );
-
    static void* background = NULL;
    if ( !background ) {
       background = asc_malloc ( imagesize ( zoom.x1, zoom.y1, zoom.x2, zoom.y2 ));
@@ -1068,7 +1048,6 @@ void         tdashboard::paintzoom( void )
    int dist = zoom.x2 - zoom.picwidth - zoom.x1;
    putimage ( zoom.x1 + dist - dist * actzoom / maxzoom, zoom.y1, zoom.pic );
 
-   getinvisiblemouserectanglestk ();
 }
 #endif
 
@@ -1096,7 +1075,6 @@ tmainshowmap* smallmap = NULL;
 
 void         tdashboard::paintsmallmap ( int repaint )
 {
-   setinvisiblemouserectanglestk ( agmp->resolutionx - ( 800 - 612), 213, agmp->resolutionx - ( 800 - 781), 305 );
    if ( !smallmap ) {
       smallmap = new tmainshowmap;
       CGameOptions::Instance()->smallmapactive = 1;
@@ -1110,8 +1088,6 @@ void         tdashboard::paintsmallmap ( int repaint )
    smallmap->init ( agmp->resolutionx - ( 800 - 612 ) , 213, 781-612, 305-213 );
    smallmap->generatemap ( 1 );
    smallmap->dispimage ( );
-
-   getinvisiblemouserectanglestk (  );
 
 }
 
