@@ -1103,10 +1103,10 @@ void trunreplay :: execnextreplaymove ( void )
                               if ( unit > 0 ) {
                                  Vehicle* veh = actmap->getUnit(unit);
                                  if ( veh ) {
-                                    Resources res2 =  static_cast<ContainerBase*>(veh)->getResource( cost, 0, 1  );
                                     if ( veh->getMovement() < movecost )
                                        error("not enough movement to construct/remove object !");
                                     veh->decreaseMovement( movecost );
+                                    Resources res2 =  static_cast<ContainerBase*>(veh)->getResource( cost, 0, 1  );
                                     for ( int r = 0; r < 3; r++ )
                                        if ( res2.resource(r) < cost.resource(r)  && cost.resource(r) > 0 )
                                           error("Resource mismatch: not enough resources to construct/remove object !");
