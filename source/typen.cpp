@@ -1,6 +1,11 @@
-//     $Id: typen.cpp,v 1.66 2001-01-28 20:42:16 mbickel Exp $
+//     $Id: typen.cpp,v 1.67 2001-01-28 23:00:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.66  2001/01/28 20:42:16  mbickel
+//      Introduced a new string class, ASCString, which should replace all
+//        char* and std::string in the long term
+//      Split loadbi3.cpp into 3 different files (graphicselector, graphicset)
+//
 //     Revision 1.65  2001/01/23 21:05:22  mbickel
 //      Speed up of AI
 //      Lot of bugfixes in AI
@@ -311,7 +316,6 @@
 #include "global.h"
 #include "misc.h"
 #include "typen.h"
-#include "loadbi3.h"
 #include "graphicset.h"
 #include "basegfx.h" 
 
@@ -586,14 +590,13 @@ void tfield :: checkminetime ( int time ) { }
 int tfield :: getx( void ) { return 0; }
 int tfield :: gety( void ) { return 0; }
 
-void  tfield :: addobject( pobjecttype obj, int dir, int force )
-{ 
-} 
+void  tfield :: addobject( pobjecttype obj, int dir, int force ) {} 
 
 
-void tfield :: removeobject( pobjecttype obj )
-{ 
-} 
+void tfield :: removeobject( pobjecttype obj ) {} 
+
+void tfield :: deleteeverything ( void ) {}
+
 #else
 int tfield :: getx( void )
 {

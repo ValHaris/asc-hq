@@ -28,7 +28,6 @@
 #include "../basestrm.h"
 #include "../misc.h"
 #include "../sgstream.h"
-#include "../loadbi3.h"
 #include "../buildingtype.h"
 #include "../vehicletype.h"
 #include "../errors.h"

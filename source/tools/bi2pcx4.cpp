@@ -19,7 +19,6 @@
 */
 
 
-#include "..\loadbi3.h"
 #include "string.h"
 #include "..\vesa.h"
 #include "..\keybp.h"

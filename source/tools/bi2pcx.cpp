@@ -19,14 +19,15 @@
 */
 
 #include <stdlib.h>
-#include "..\loadbi3.h"
-#include "string.h"
 #include "..\basegfx.h"
 #include "..\loadpcx.h"
 #include "..\newfont.h"
 #include "..\misc.h"
 #include "../buildingtype.h"
 #include "../vehicletype.h"
+#include "../graphicset.h"
+#include "../graphicselector.h"
+#include "../sgstream.h"
 
 int background = 255;
 
@@ -38,11 +39,12 @@ struct tbipictparam {
    } entry[20];
 } bipict[4000];
 
+#include "../objxlat.cpp"
 
 int main(int argc, char *argv[] )
 {
 
-   t_carefor_containerstream cfcst;
+   opencontainer ( "*.con" );
 
 
   int index = 0;
@@ -123,16 +125,16 @@ int main(int argc, char *argv[] )
          {
             printf("\nLoading terrain:\n");
             tfindfile ff ( "*.trr" );
-            char* c = ff.getnextname();
-            while ( c ) { 
+            string c = ff.getnextname();
+            while ( !c.empty() ) { 
                if ( verbosity )
-                  printf("loading %s\n", c ) ;
+                  printf("loading %s\n", c.c_str() ) ;
                else
                   printf(".");
                fflush ( stdout );
       
-               pterraintype bdt = loadterraintype ( c );
-               fprintf(fp, "\n%s ; id %d ; pictures ", c, bdt->id );
+               pterraintype bdt = loadterraintype ( c.c_str() );
+               fprintf(fp, "\n%s ; id %d ; pictures ", c.c_str(), bdt->id );
 
                for ( int i = 0; i< cwettertypennum; i++ )
                   if ( bdt->weather[i] )
@@ -170,16 +172,16 @@ int main(int argc, char *argv[] )
          {
             printf("\nLoading objects:\n");
             tfindfile ff ( "*.obl" );
-            char* c = ff.getnextname();
-            while ( c ) { 
+            string c = ff.getnextname();
+            while ( !c.empty() ) { 
                if ( verbosity )
-                  printf("loading %s\n", c ) ;
+                  printf("loading %s\n", c.c_str() ) ;
                else
                   printf(".");
                fflush ( stdout );
       
-               pobjecttype obj = loadobjecttype ( c );
-               fprintf(fp, "\n%s ; id %d ; pictures ", c, obj->id );
+               pobjecttype obj = loadobjecttype ( c.c_str() );
+               fprintf(fp, "\n%s ; id %d ; pictures ", c.c_str(), obj->id );
 
                for ( int w = 0; w < cwettertypennum; w++ )
                   if ( (obj->weather & ( 1 << w)) && obj->picture[w] )
@@ -209,16 +211,16 @@ int main(int argc, char *argv[] )
          {
             printf("\nLoading buildings:\n");
             tfindfile ff ( "*.bld" );
-            char* c = ff.getnextname();
-            while ( c ) { 
+            string c = ff.getnextname();
+            while ( !c.empty() ) { 
                if ( verbosity )
-                  printf("loading %s\n", c ) ;
+                  printf("loading %s\n", c.c_str() ) ;
                else
                   printf(".");
                fflush ( stdout );
       
-               pbuildingtype bld = loadbuildingtype ( c );
-               fprintf(fp, "\n%s ; id %d ; pictures ", c, bld->id );
+               pbuildingtype bld = loadbuildingtype ( c.c_str() );
+               fprintf(fp, "\n%s ; id %d ; pictures ", c.c_str(), bld->id );
       
                for ( int i = 0; i< cwettertypennum ; i++ )
                   for ( int j = 0; j < maxbuildingpicnum; j++ )
@@ -246,23 +248,23 @@ int main(int argc, char *argv[] )
          {
             printf("\nLoading vehicles:\n");
                tfindfile ff ( "*.veh" );
-               char* c = ff.getnextname();
-               while ( c ) { 
+               string c = ff.getnextname();
+               while ( !c.empty() ) { 
                   if ( verbosity )
-                     printf("loading %s\n", c ) ;
+                     printf("loading %s\n", c.c_str() ) ;
                   else
                      printf(".");
                   fflush ( stdout );
          
-                  pvehicletype tnk = loadvehicletype ( c );
-                  fprintf(fp, "\n%s ; id %d ; pictures ", c, tnk->id );
+                  pvehicletype tnk = loadvehicletype ( c.c_str() );
+                  fprintf(fp, "\n%s ; id %d ; pictures ", c.c_str(), tnk->id );
          
                   if ( tnk->bipicture > 0 ) {
                      int n = tnk->bipicture;
                      int t = bipict[n].textnum;
                      bipict[n].textnum += 1;
           
-                     sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", c, tnk->id );
+                     sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", c.c_str(), tnk->id );
 
                      fprintf( fp, "%d ", n );
           
@@ -338,7 +340,7 @@ int main(int argc, char *argv[] )
       printf("Generating image: \n" ) ;
       fflush ( stdout );
       activateGraphicSet ( id );
-      for ( i = 0; i < bi3graphnum; i++ ) {
+      for ( i = 0; i < getActiveGraphicSet()->maxnum; i++ ) {
          void* v;
          if ( scale == 0 )
             loadbi3pict ( i, &v );

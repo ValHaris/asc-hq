@@ -30,19 +30,20 @@
 #include "..\misc.h"
 #include "..\basestrm.h"
 #include "..\basegfx.h"
-#include "..\loadbi3.h"
 #include "../buildingtype.h"
 #include "../vehicletype.h"
+#include "../graphicset.h"
+#include "../graphicselector.h"
 
 #define vid(wildcard,structure,loader) printf("%s\n", wildcard );\
                                        maxid=0;\
                                        for ( int j = 0; j < 60; j++ )\
                                            printf("=");\ 
                                        tfindfile ff ( wildcard );\
-                                       char* c = ff.getnextname();\
+                                       string c = ff.getnextname();\
                                        structure *data;\
-                                       while( c ) {\
-                                          data = loader( c );\
+                                       while( !c.empty() ) {\
+                                          data = loader( c.c_str() );\
                                           if ( data->id > maxid )\
                                              maxid = data->id;\
                                           int found = 0;\
@@ -187,9 +188,9 @@ int main ( void )
       }
    
       printf("\n\n\n terrain  " );
-      {
+      {                                              
          didcounta id;
-         vid ( "*.trr", tterraintype,loadterraintype );
+         vid ( "*.trr", TerrainType, loadterraintype );
          printresults( id );
       }
         

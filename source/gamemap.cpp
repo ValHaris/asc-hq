@@ -1126,7 +1126,7 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
 
   tfield defaultfield;
   memset ( &defaultfield, 0, sizeof ( defaultfield ));
-  defaultfield.typ = getterraintype_forid ( 30 )->weather[0];
+  defaultfield.typ = getterraintype_byid ( 30 )->weather[0];
 
   for ( x = 0; x < left; x++ )
      for ( int y = 0; y < newy; y++ )
@@ -1146,7 +1146,10 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
      for ( int x = 0; x < newx; x++ )
         newfield[ x + y * newx ] = defaultfield;
 
+  #ifndef converter
   calculateallobjects();
+  #endif
+
   for ( int p = 0; p < newx*newy; p++ )
      newfield[p].setparams();
 

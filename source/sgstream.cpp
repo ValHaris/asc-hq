@@ -5,9 +5,14 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.51 2001-01-28 20:42:15 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.52 2001-01-28 23:00:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2001/01/28 20:42:15  mbickel
+//      Introduced a new string class, ASCString, which should replace all
+//        char* and std::string in the long term
+//      Split loadbi3.cpp into 3 different files (graphicselector, graphicset)
+//
 //     Revision 1.50  2001/01/28 14:04:19  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -107,10 +112,6 @@
 #ifndef converter
  #include "dlg_box.h"
  #include "dialog.h"
-#endif
-
-#ifdef HEXAGON
- #include "loadbi3.h"
 #endif
 
 

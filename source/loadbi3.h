@@ -1,6 +1,11 @@
-//     $Id: loadbi3.h,v 1.10 2001-01-28 20:42:13 mbickel Exp $
+//     $Id: loadbi3.h,v 1.11 2001-01-28 23:00:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2001/01/28 20:42:13  mbickel
+//      Introduced a new string class, ASCString, which should replace all
+//        char* and std::string in the long term
+//      Split loadbi3.cpp into 3 different files (graphicselector, graphicset)
+//
 //     Revision 1.9  2001/01/25 23:45:00  mbickel
 //      Moved map displaying routins to own file (mapdisplay.cpp)
 //      Wrote program to create pcx images from map files (map2pcx.cpp)
@@ -69,6 +74,11 @@
 #include "typen.h"
 #include "sgstream.h"
 #include "palette.h"
+
+#ifdef converter
+ #error The small editors should not need to use LoadBi3
+#endif
+
 
 extern void check_bi3_dir ( void );
 extern void importbattleislemap ( const char* path, const char* filename, TerrainType::Weather* trrn, string* errorOutput = NULL );

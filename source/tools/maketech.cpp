@@ -311,11 +311,11 @@ void  selecttechnology(int num, int &id)
    ptechnology  technology; 
 
    tfindfile ff ( "*.tec" );
-   char *c = ff.getnextname();
+   string c = ff.getnextname();
 
-   while ( c ) {
+   while ( !c.empty() ) {
       tanzahl++;
-      technology = loadtechnology( c );
+      technology = loadtechnology( c.c_str() );
       printf("%3i %28s |    ", technology->id, technology->name);
       if (tanzahl % 2 ==0) printf("\n");
       c = ff.getnextname();

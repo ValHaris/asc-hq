@@ -34,7 +34,8 @@
 #include "..\sgstream.h"
 #include "..\loadpcx.h"
 #include "..\basegfx.h"
-#include "..\loadbi3.h"
+#include "../graphicset.h"
+#include "../graphicselector.h"
 
 char header[2][500];
 char text[200][500];
@@ -99,16 +100,16 @@ main(int argc, char *argv[] )
 
    tfindfile ff ( wildcard );
  
-   char* cn = ff.getnextname();
+   string cn = ff.getnextname();
 
    initgraphics ( 640, 480, 8 );
    load_palette();
    loadbi3graphics();
  
-   while( cn ) { 
+   while( !cn.empty() ) { 
 
       pterraintype   tt;
-      tt = loadterraintype( cn );
+      tt = loadterraintype( cn.c_str() );
 
       bar ( 0, 0, 600, 120, 255 );
       for ( int w = 0; w < cwettertypennum; w++ )
@@ -124,7 +125,7 @@ main(int argc, char *argv[] )
       putpixel ( 0, 69, 2 );
 
       char m[100];
-      strcpy ( m, cn );
+      strcpy ( m, cn.c_str() );
       char* d = m;
       while ( *d != '.' )
          d++;

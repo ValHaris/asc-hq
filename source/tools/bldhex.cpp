@@ -32,10 +32,8 @@
 #include "..\basegfx.h"
 #include "../buildingtype.h"
 #include "../vehicletype.h"
-
-#ifdef HEXAGON
-#include "..\loadbi3.h"
-#endif
+#include "../graphicset.h"
+#include "../graphicselector.h"
 
 
 int xdiff = 0, ydiff = 0;

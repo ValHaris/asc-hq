@@ -34,9 +34,10 @@
 #include "..\sgstream.h"
 #include "..\loadpcx.h"
 #include "..\basegfx.h"
-#include "..\loadbi3.h"
 #include "../buildingtype.h"
 #include "../vehicletype.h"
+#include "../graphicset.h"
+#include "../graphicselector.h"
 
 char header[2][500];
 char text[200][500];
@@ -95,7 +96,7 @@ main(int argc, char *argv[] )
    
       tfindfile ff ( wildcard );
     
-      char* cn = ff.getnextname();
+      string cn = ff.getnextname();
       
       initgraphics ( 640, 480, 8 );
       gi = 1;
@@ -103,16 +104,16 @@ main(int argc, char *argv[] )
       load_palette();
       loadbi3graphics();
     
-      while( cn ) { 
+      while( !cn.empty() ) { 
    
          pvehicletype   ft;
-         ft = loadvehicletype( cn );
+         ft = loadvehicletype( cn.c_str() );
    
          bar ( 0, 0, 120, 120, 255 );
          putspriteimage(0,0,ft->picture[0]); 
    
          char m[100];
-         strcpy ( m, cn );
+         strcpy ( m, cn.c_str() );
          char* d = m;
          while ( *d != '.' )
             d++;

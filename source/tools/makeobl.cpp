@@ -32,7 +32,6 @@
 #include "..\sgstream.h"
 #include "..\misc.h"
 #include "..\keybp.h"
-#include "..\loadbi3.h"
 
 
 char     mode50 = 1;

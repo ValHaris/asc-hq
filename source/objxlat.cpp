@@ -1,4 +1,4 @@
-// This file is included by loadbi3.cpp
+// This file is included by loadbi3.cpp and bi2pcx.cpp
 
 // The first entry is the picture number that is going to be replaced by the picture number of the second entry.
 
@@ -68,3 +68,23 @@ const int objecttranslate[objecttranslatenum][5] = {{ 1264, 1470, 1500, -1, -1 }
                                                     {  348,  342, -1, -1, -1 },
                                                     {  461, 1203, -1, -1, -1 }
                                                     };
+
+int getterraintranslatenum ( void )
+{
+   return terraintranslatenum;
+}
+
+int getobjectcontainertranslatenum ( void )
+{
+   return objecttranslatenum;
+}
+
+const int* getterraintranslate ( int pos )
+{
+   return terraintranslate[pos];
+}
+
+const int* getobjectcontainertranslate ( int pos )
+{
+   return objecttranslate[pos];
+}

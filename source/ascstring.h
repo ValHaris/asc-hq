@@ -32,7 +32,7 @@
         ASCString ( const char* ch ) : std::string ( ch ) {};
         ASCString ( ) {};
 
-        ASCString& sprintf ( std::string s, ... );
+       // ASCString& sprintf ( const std::string s,  ... );
         ASCString& toLower ( );
         ASCString& toUpper ( );
         ASCString  copyToLower ( ) const;

@@ -77,7 +77,8 @@
 
  class tresearch {
 
-     typedef map<int, ptechnology> DevelopedTechnologies;
+     typedef less<int> lessint ;
+     typedef map<int, ptechnology, lessint> DevelopedTechnologies;
      DevelopedTechnologies developedTechnologies;
 
      pmap map;

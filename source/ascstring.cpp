@@ -27,7 +27,8 @@
 #include "ascstring.h"
 #include "errors.h"
 
-ASCString& ASCString::sprintf ( std::string s, ... )
+/*
+ASCString& ASCString::sprintf ( const std::string* s, ... )
 {
    va_list argptr;
    va_start(argptr, s );
@@ -57,7 +58,7 @@ ASCString& ASCString::sprintf ( std::string s, ... )
    va_end(argptr);
    return *this;
 }
-
+*/
 
 ASCString& ASCString :: toLower ( )
 {

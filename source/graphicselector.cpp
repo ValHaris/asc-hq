@@ -19,7 +19,14 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "graphicset.h"
 #include "graphicselector.h"
+#include "newfont.h"
+#include "palette.h"
+#include "sgstream.h"
+#include "basegfx.h"
+#include "events.h"
+#include "stack.h"
 
 int marked = -1;
 
@@ -33,7 +40,7 @@ class tgetbi3pict {
    int ys ;
    int picsize ;
    static pfont fnt;
-
+   
    public:
       tgetbi3pict ( void );
       void paint ( void );
@@ -53,14 +60,10 @@ tgetbi3pict :: tgetbi3pict ( void )
    yn = 8;
    ys = 50;
    picsize = 24;
-
-   if ( !bi3graphnum )
-      loadbi3graphics();
-
-   if ( !paletteloaded ) {
+         
+   if ( !asc_paletteloaded ) 
      loadpalette();
-     paletteloaded = 1;
-   }
+
    setvgapalette256(pal);
 
 }
@@ -76,7 +79,7 @@ void tgetbi3pict :: paint ( void )
          if ( marked == num )
             rectangle ( 50 + x * xs, 10 + y * ys, 80 + x * xs, 40 + y * ys, yellow );
 
-         if ( num < bi3graphnum  &&  activeGraphicPictures.picAvail ( num ) ) {
+         if ( num < getActiveGraphicSet()->maxnum &&  getActiveGraphicSet()->picAvail ( num ) ) {
             void* buf;
             loadbi3pict ( num, &buf );
             putspriteimage ( 50 + x * xs + 30/2 - picsize/2, 10 + y * ys + 30/2 - picsize/2, buf );
@@ -125,13 +128,13 @@ void tgetbi3pict :: run ( int* num )
       }
       if ( ch == ct_down ) {
          marked += xn;
-         if ( marked >= bi3graphnum )
-            marked = bi3graphnum-1;
+         if ( marked >= getActiveGraphicSet()->maxnum )
+            marked = getActiveGraphicSet()->maxnum-1;
       }
       if ( ch == ct_right ) {
          marked += 1;
-         if ( marked >= bi3graphnum )
-            marked = bi3graphnum-1;
+         if ( marked >= getActiveGraphicSet()->maxnum )
+            marked = getActiveGraphicSet()->maxnum-1;
       }
       if ( ch == ct_left ) {
          marked -= 1;

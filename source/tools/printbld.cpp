@@ -28,9 +28,10 @@
 #include "..\basestrm.h"
 #include "..\misc.h"
 #include "..\sgstream.h"
-#include "..\loadbi3.h"
 #include "../buildingtype.h"
 #include "../vehicletype.h"
+#include "../graphicset.h"
+#include "../graphicselector.h"
 
 main(int argc, char *argv[] )
 {
@@ -57,10 +58,10 @@ main(int argc, char *argv[] )
       "name", "armor", "p_energy", "p_material", "id", "energy", "material", "fuel", "mx_energy", "mx_material", "mx_fuel", "mx_research" );
    
       tfindfile ff ( wildcard );
-      char* fn = ff.getnextname();
-      while ( fn ) {
+      string fn = ff.getnextname();
+      while ( !fn.empty() ) {
          pbuildingtype   ft;
-         ft = loadbuildingtype( fn );
+         ft = loadbuildingtype( fn.c_str() );
    
          fprintf ( fp, " %10.10s %5d %6d %6d %3d %7d %7d %7d %7d %7d %7d %7d \n",
    

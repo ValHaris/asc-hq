@@ -31,8 +31,9 @@
 #include "krkr.h"
 #include "..\sgstream.h"
 #include "..\misc.h"
-#include "..\loadbi3.h"
 #include "..\events.h"
+#include "../graphicset.h"
+#include "../graphicselector.h"
 
 
 char     mode50 = 1;
@@ -354,11 +355,11 @@ main (int argc, char *argv[] )
              
                tfindfile ff ( "*.obl" );
          
-               char *c = ff.getnextname();
+               string c = ff.getnextname();
              
-               while ( c ) {
-                   obj[objectlayernum] = loadobjecttype( c ); 
-                   name[objectlayernum] = strdup ( c );
+               while ( !c.empty() ) {
+                   obj[objectlayernum] = loadobjecttype( c.c_str() ); 
+                   name[objectlayernum] = strdup ( c.c_str() );
                    objectlayernum++;
                    c = ff.getnextname();
                 }

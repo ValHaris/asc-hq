@@ -29,9 +29,10 @@
 #include "..\basestrm.h"
 #include "..\misc.h"
 #include "..\sgstream.h"
-#include "..\loadbi3.h"
 #include "../buildingtype.h"
 #include "../vehicletype.h"
+#include "../graphicset.h"
+#include "../graphicselector.h"
 
 const int maxvehicles = 1000;
 
@@ -92,12 +93,12 @@ main(int argc, char *argv[] )
     
       tfindfile ff ( wildcard );
     
-      char* cn = ff.getnextname();
+      string cn = ff.getnextname();
     
-      while( cn ) { 
+      while( !cn.empty() ) { 
    
          pvehicletype   ft;
-         ft = loadvehicletype( cn );
+         ft = loadvehicletype( cn.c_str() );
    
          sprintf ( buf, " %12.12s %5d %6d %6d %3d %7d ",
                   ft->description, ft->armor, ft->productionCost.energy, ft->productionCost.material, ft->id, ft->tank );

@@ -2,9 +2,15 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.81 2001-01-28 14:04:19 mbickel Exp $
+//     $Id: spfst.cpp,v 1.82 2001-01-28 23:00:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.81  2001/01/28 14:04:19  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.80  2001/01/25 23:45:04  mbickel
 //      Moved map displaying routins to own file (mapdisplay.cpp)
 //      Wrote program to create pcx images from map files (map2pcx.cpp)
@@ -2467,8 +2473,6 @@ void tfield :: deleteeverything ( void )
    }
    setparams();
 }
-
-
 
 
 

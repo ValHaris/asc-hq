@@ -12,7 +12,6 @@
 #include "..\sgstream.h"
 #include "krkr.h"
 #include "..\basegfx.h"
-#include "..\loadbi3.h"
 
 
 int interpol;

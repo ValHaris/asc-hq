@@ -30,10 +30,6 @@
 #include "..\misc.h"
 #include "..\stack.h"
 
-#ifdef HEXAGON
-#include "loadbi3.h"
-#endif
-
 // const char* direcs[8] = { "oben","rechts oben","rechts","rechts unten","unten","links unten","links","links oben" };
 
 

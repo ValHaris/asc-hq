@@ -20,6 +20,7 @@
 
 
 #include <stdarg.h>
+#include <string>
 #include "krkr.h"
 #include "..\basestrm.h"
 
@@ -853,9 +854,9 @@ void     cfileselect :: search_files (char  *searchstr, unsigned attributes)
    {   // count
 
       tfindfile ff ( searchstr );
-      char* filename = ff.getnextname();
+      string filename = ff.getnextname();
    
-      while( filename ) {
+      while( !filename.empty() ) {
         quantity++;
         filename = ff.getnextname();
       }
@@ -870,11 +871,11 @@ void     cfileselect :: search_files (char  *searchstr, unsigned attributes)
       file = new tfile[quantity];
 
       tfindfile ff ( searchstr );
-      char* filename = ff.getnextname();
+      string  filename = ff.getnextname();
    
-      while( filename ) {
+      while( !filename.empty() ) {
 
-         strcpy (file[i].name, filename );
+         strcpy (file[i].name, filename.c_str() );
 
          /*
          file[i].size = fileinfo.size;
@@ -1342,6 +1343,7 @@ void terrainaccess_ed ( pterrainaccess ft, char* name  )
       bitselect (ft->terrainkill, cbodenarten, cbodenartennum);
 }
 
+#if 0
 void fatalError ( const char* formatstring, ... )
 {
    va_list paramlist;
@@ -1353,4 +1355,4 @@ void fatalError ( const char* formatstring, ... )
    fprintf(stderr, tempbuf );
    exit(1);
 }
-
+#endif

@@ -31,11 +31,10 @@
 #include "..\misc.h"
 #include "../buildingtype.h"
 #include "../vehicletype.h"
-#include "krkr.h"
+#include "../graphicset.h"
+#include "../graphicselector.h"
 
-#ifdef HEXAGON
- #include "..\loadbi3.h"
-#endif
+#include "krkr.h"
 
 
 char     richtung[2][11]  = {"0 ø", "45 ø"}; 
@@ -594,11 +593,11 @@ main (int argc, char *argv[] )
        
          tfindfile ff ( "*.obl" );
    
-         char *c = ff.getnextname();
+         string c = ff.getnextname();
        
-         while ( c ) {
-             obj[objectlayernum] = loadobjecttype( c ); 
-             name[objectlayernum] = strdup ( c );
+         while ( !c.empty() ) {
+             obj[objectlayernum] = loadobjecttype( c.c_str() ); 
+             name[objectlayernum] = strdup ( c.c_str() );
              objectlayernum++;
              c = ff.getnextname();
           }
@@ -652,11 +651,11 @@ main (int argc, char *argv[] )
           {
              tfindfile ff ( "*.veh" );
        
-             char *c = ff.getnextname();
+             string c = ff.getnextname();
            
-             while ( c ) {
-                 tnk[vehiclenum] = loadvehicletype( c ); 
-                 name[vehiclenum] = strdup ( c );
+             while ( !c.empty() ) {
+                 tnk[vehiclenum] = loadvehicletype( c.c_str() ); 
+                 name[vehiclenum] = strdup ( c.c_str() );
                  vehiclenum++;
                  c = ff.getnextname();
              }
@@ -729,11 +728,11 @@ main (int argc, char *argv[] )
             {
                 tfindfile ff ( "*.bld" );
           
-                char *c = ff.getnextname();
+                string c = ff.getnextname();
               
-                while ( c ) {
-                    bld[buildingnum] = loadbuildingtype( c ); 
-                    name[buildingnum] = strdup ( c );
+                while ( !c.empty() ) {
+                    bld[buildingnum] = loadbuildingtype( c.c_str() ); 
+                    name[buildingnum] = strdup ( c.c_str() );
                     buildingnum++;
                     c = ff.getnextname();
                  }

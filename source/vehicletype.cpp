@@ -19,7 +19,6 @@
 #include "buildingtype.h"
 #include "viewcalculation.h"
 #include "errors.h"
-#include "loadbi3.h"
 #include "basegfx.h"
 #include "graphicset.h"
 

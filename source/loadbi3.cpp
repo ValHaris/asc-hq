@@ -1,6 +1,11 @@
-//     $Id: loadbi3.cpp,v 1.37 2001-01-28 20:42:13 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.38 2001-01-28 23:00:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2001/01/28 20:42:13  mbickel
+//      Introduced a new string class, ASCString, which should replace all
+//        char* and std::string in the long term
+//      Split loadbi3.cpp into 3 different files (graphicselector, graphicset)
+//
 //     Revision 1.36  2001/01/28 17:19:12  mbickel
 //      The recent cleanup broke some source files; this is fixed now
 //
@@ -73,7 +78,10 @@
 #include "gameoptions.h"
 #include "events.h"
 #include "graphicset.h"
-#include "dlg_box.h"
+
+#ifdef converter
+ #error The small editors should not need to use LoadBi3
+#endif
 
 
 #ifndef HEXAGON
@@ -267,26 +275,6 @@ const int objecttranslate[objecttranslatenum][5] = {{ 1264, 1470, 1500, -1, -1 }
 const int fuelfactor = 120;
 const int materialfactor = 390;
 const int energyfactor = 390;
-
-int getterraintranslatenum ( void )
-{
-   return terraintranslatenum;
-}
-
-int getobjectcontainertranslatenum ( void )
-{
-   return objecttranslatenum;
-}
-
-const int* getterraintranslate ( int pos )
-{
-   return terraintranslate[pos];
-}
-
-const int* getobjectcontainertranslate ( int pos )
-{
-   return objecttranslate[pos];
-}
 
 
 

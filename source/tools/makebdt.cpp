@@ -29,12 +29,10 @@
 #include "..\misc.h"
 #include "..\stack.h"
 #include "..\basegfx.h"
+#include "../graphicset.h"
+#include "../graphicselector.h"
 
-#ifdef HEXAGON
-#include "..\loadbi3.h"
-#endif
-
-void        loadpcx2(char *       filestring, pwterraintype bdt, int i);
+void        loadpcx2(char *       filestring, TerrainType::Weather* bdt, int i);
 
 
 const char* bildnr[8] = { " 0   ( up ) ",
@@ -67,7 +65,7 @@ int main(int argc, char *argv[] )
    
       char           maxmovement = 0;
     
-      bdt = new ( tterraintype ) ;
+      bdt = new ( TerrainType ) ;
       memset ( bdt, 0, sizeof ( *bdt ));
    
       for (int i = 0; i < cwettertypennum; i++) bdt->weather[i] = NULL;
@@ -145,7 +143,7 @@ int main(int argc, char *argv[] )
                clearscreen();
                printf( " %s \n", cwettertypen[i] );
                if (bdt->weather[i] == NULL) {
-                   bdt->weather[i] = new ( twterraintype );
+                   bdt->weather[i] = new TerrainType::Weather ( bdt ) ;
                    memset ( bdt->weather[i], 0, sizeof ( *bdt->weather[i] ));
                }
    
@@ -454,7 +452,7 @@ int main(int argc, char *argv[] )
 
 
 
-void        loadpcx2(char *       filestring, pwterraintype bdt, int i)
+void        loadpcx2(char *       filestring, TerrainType::Weather* bdt, int i)
 {      
   void         *p = NULL;
 
