@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.90 2002-10-06 15:44:40 mbickel Exp $
+//     $Id: typen.cpp,v 1.91 2002-11-15 20:54:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.90  2002/10/06 15:44:40  mbickel
+//      Completed inheritance of .asctxt files
+//      Speed up of replays
+//
 //     Revision 1.89  2002/03/27 00:18:21  mbickel
 //      Changed the resource weight
 //
@@ -474,7 +478,7 @@ const char* cnetcontrol[cnetcontrolnum] = { "store energy",           "store mat
 const char* cgeneralnetcontrol[4] = {       "store",  "move out", "stop storing", "stop extraction" };
                                           // Functionen in Geb„uden ....
 
-const char*  cwettertypen[cwettertypennum] = {"dry (standard)","light rain", "heavy rain", "few snow", "lot of snow", "fog (don't use!!)"};
+const char*  cwettertypen[cwettertypennum] = {"dry (standard)","light rain", "heavy rain", "few snow", "lot of snow", "lot of snow + ice"};
 const char*  resourceNames[3]  = {"energy", "material", "fuel"}; 
 const int  cwaffenproduktionskosten[cwaffentypennum][3]    = {{20, 15, 10}, {2, 2, 0}, {3, 2, 0}, {3, 3, 2}, {3, 3, 2}, {4, 3, 2},
                                                               {1, 1, 0},    {1, 2, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}; // jeweils f?r weaponpackagesize Pack !

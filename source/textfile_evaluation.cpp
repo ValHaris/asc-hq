@@ -470,6 +470,9 @@ T PropertyTemplate<T>::parse ( const TextPropertyGroup::Entry& entry ) const
    if ( entry.op == TextPropertyGroup::Entry::eq )
       return operation_eq( entry );
 
+   if ( entry.op == TextPropertyGroup::Entry::alias_all )
+      operation_not_defined( entry );
+
    if ( !entry.parent )
       propertyContainer->error ( ASCString("PropertyContainer::PropertyTemplate::parse - no parent for operator ") + TextFormatParser::operations[entry.op] + " !");
 
@@ -505,7 +508,6 @@ T PropertyTemplate<T>::operation_add ( const TextPropertyGroup::Entry& entry ) c
 {
    operation_not_defined( entry );
 }
-
 
 template <class T>
 void PropertyTemplate<T>::evaluate ()

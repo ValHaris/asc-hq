@@ -30,8 +30,8 @@
 #include "textfile_evaluation.h"
 
 
-const int TextFormatParser::operationsNum = 3;
-const char* TextFormatParser::operations[3] =  { "=", "*=", "+=" };
+const int TextFormatParser::operationsNum = 5;
+const char* TextFormatParser::operations[5] =  { "=", "*=", "+=", "->", "->*" };
 const char* TextFormatParser::whiteSpace = " \t";
 
 
@@ -86,8 +86,9 @@ void TextPropertyGroup :: buildInheritance(TextPropertyList& tpl )
          }
       }
 
+      //! building inheritance
       for ( Entries::iterator i = entries.begin(); i != entries.end(); i++ ) {
-         if ( i->op != Entry::eq ) {
+         if ( i->op != Entry::eq && i->op != Entry::alias_all && i->op != Entry::alias) {
             Parents::iterator p = parents.begin();
             while ( p != parents.end() ) {
                i->parent = (*p)->find( i->propertyName );
@@ -99,6 +100,62 @@ void TextPropertyGroup :: buildInheritance(TextPropertyList& tpl )
                fatalError ( "could not find a parent entry for " + typeName + " :: " + i->propertyName  );
          }
       }
+
+      // linking alias
+      Entries additionalEntries;
+      for ( Entries::iterator i = entries.begin(); i != entries.end(); i++ ) {
+         if ( i->op == Entry::alias_all ) {
+            ASCString s = i->value;
+            s.toLower();
+            ASCString::size_type pos;
+            do {
+               pos = s.find ( " " );
+               if ( pos != s.npos )
+                  s.erase(pos,1);
+            } while ( pos != s.npos );
+            if ( s.length() > 0 )
+               if ( s[s.length()-1] != '.' )
+                  s = s + ".";
+
+            ASCString newName = i->propertyName;
+            if ( newName.length() > 0 )
+               if ( newName[newName.length()-1] != '.' )
+                  newName = newName + ".";
+
+            int counter = 0;
+            for ( Entries::iterator i = entries.begin(); i != entries.end(); i++ ) {
+               if ( i->propertyName.find ( s ) == 0 ) {
+                  Entry e = *i;
+                  e.propertyName.replace ( 0, s.length(), newName );
+                  additionalEntries.push_back ( e );
+                  counter++;
+               }
+            }
+            if ( !counter )
+               fatalError ( "could not find any alias matching " + i->value + " for " + typeName + " :: " + i->propertyName  );
+
+         }
+         if ( i->op == Entry::alias ) {
+            ASCString s = i->value;
+            s.toLower();
+            ASCString::size_type pos;
+            do {
+                  pos = s.find ( " " );
+                  if ( pos != s.npos )
+                     s.erase(pos,1);
+            } while ( pos != s.npos );
+            Entry* alias = find ( s );
+            if ( !alias )
+               fatalError ( "could not find the alias " + i->value + " for " + typeName + " :: " + i->propertyName  );
+            i->value = alias->value;
+            i->op = alias->op;
+            i->parent = alias->parent;
+         }
+      }
+
+      for ( Entries::iterator i = additionalEntries.begin(); i != additionalEntries.end(); i++ )
+         if ( find ( i->propertyName ) == NULL )
+            addEntry ( *i );
 
       callStack.pop_back();
 
@@ -229,7 +286,6 @@ void TextFormatParser::parseLine ( const ASCString& line )
       levelDepth--;
       return;
    }
-   int j = 3;
    error ( "unknown operator at entry " + s1  );
 }
 

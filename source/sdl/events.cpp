@@ -15,9 +15,15 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.35 2002-03-02 23:04:01 mbickel Exp $
+//     $Id: events.cpp,v 1.36 2002-11-15 20:54:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2002/03/02 23:04:01  mbickel
+//      Some cleanup of source code
+//      Improved Paragui Integration
+//      Updated documentation
+//      Improved Sound System
+//
 //     Revision 1.34  2002/02/14 20:58:13  mbickel
 //      Started integration of paragui
 //
@@ -179,11 +185,6 @@
 #include "../basegfx.h"
 #include "../global.h"
 
-
-
-/* Data touched at mouse callback time -- they are in a structure to
-        simplify calculating the size of the region to lock.
-*/
 
 
 volatile tmousesettings mouseparams;
@@ -446,11 +447,12 @@ tkey char2key(int c )
       return ct_invvalue;
 }
 
+/*
 char *get_key(tkey keynr)
 {
    return "not yet implemented";
 }
-
+*/
 
 int  releasetimeslice( void )
 {

@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: gui.cpp,v 1.79 2002-11-01 20:44:53 mbickel Exp $
+//     $Id: gui.cpp,v 1.80 2002-11-15 20:54:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.79  2002/11/01 20:44:53  mbickel
+//      Added function to specify which units can be build by other units
+//
 //     Revision 1.78  2002/09/19 20:20:05  mbickel
 //      Cleanup and various bug fixes
 //
@@ -752,7 +755,7 @@ void GuiHost<T>::reset ( void )
    numpainted = 0;
    infotextshown = NULL;
    for (int i = 0; i < iconspaintable ; i++ ) 
-      actshownicons[i/columncount][i%columncount] = NULL;
+      actshownicons[i%columncount][i/columncount] = NULL;
 }
 
 

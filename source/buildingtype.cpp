@@ -350,7 +350,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
                if ( w_picture[i][0][x][y] )
                   weatherBits.set(i);
 
-      pc.addTagArray( "Weather", weatherBits, cwettertypennum-1, weatherTags );
+      pc.addTagArray( "Weather", weatherBits, cwettertypennum, weatherTags );
 
 
       ASCString fieldNames;

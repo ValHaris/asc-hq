@@ -57,7 +57,7 @@ class TextPropertyGroup {
           class Entry {
             public:
                ASCString propertyName;
-               enum Operator { eq, mult_eq, add_eq } op;
+               enum Operator { eq, mult_eq, add_eq, alias, alias_all } op;
                ASCString value;
                Entry* parent;
                Entry ( const ASCString& propertyName_, Operator op_, const ASCString& value_ ) : propertyName ( propertyName_ ), op ( op_ ), value ( value_ ), parent ( NULL ) { propertyName.toLower(); };

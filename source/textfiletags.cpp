@@ -20,12 +20,13 @@
 #include "vehicletype.h"
 #include "buildingtype.h"
 
-const char* weatherTags[cwettertypennum-1]
+const char* weatherTags[cwettertypennum]
     = { "dry",
         "light_rain",
         "heavy_rain",
         "few_snow",
-        "much_snow" };
+        "much_snow",
+        "snow_and_ice" };
 
 const char*  bodenarten[cbodenartennum]
     = { "Shallow_water",
@@ -164,7 +165,7 @@ const char*  buildingFunctionTags[cbuildingfunctionnum]  =
         "_hr",
         "_fs",
         "_ms",
-        "" };
+        "_si" };
 
  const char* objectDisplayingMethodTags[objectDisplayingMethodNum]
     = { "Normal",

@@ -346,7 +346,7 @@ void TerrainType :: runTextIO ( PropertyContainer& pc )
    pc.addString( "Name", name );
    pc.addInteger( "ID", id );
 
-   pc.addTagArray( "Weather", weatherBits, cwettertypennum-1, weatherTags );
+   pc.addTagArray( "Weather", weatherBits, cwettertypennum, weatherTags );
 
    for ( int i = 0; i < cwettertypennum; i++ )
       if ( weatherBits.test(i) ) {

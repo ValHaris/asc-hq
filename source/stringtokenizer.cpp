@@ -26,7 +26,7 @@ StringTokenizer :: StringTokenizer ( const ASCString& _str, bool includeOperator
 {
    includeOperators = includeOperators_ ;
    // if ( includeOperators_ ) {
-      delimitter = "=*/+-";
+      delimitter = "=*/+->";
 //   }
 }
 

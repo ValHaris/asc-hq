@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.114 2002-10-27 22:19:44 mbickel Exp $
+//     $Id: typen.h,v 1.115 2002-11-15 20:54:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.114  2002/10/27 22:19:44  mbickel
+//      Added bridge terrain property
+//      Some restructuring of the graphic set code
+//
 //     Revision 1.113  2002/10/02 20:21:01  mbickel
 //      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
 //
@@ -237,8 +241,8 @@
      Boston, MA  02111-1307  USA
 */
 
-#ifndef typen_h                                                                            
-#define typen_h
+#ifndef typenH
+#define typenH
 
 #include <time.h>
 #include <list>
@@ -283,7 +287,7 @@ class  EllipseOnScreen {
 //! The number of different weapon types
 const int waffenanzahl = 8;
 
-//! The number of different weather; Be careful: 'fog' is included here, but it is not used and has a different concept
+//! The number of different weather
 const int cwettertypennum = 6;
 
 //! The number of vehicle categories; Each category has its own move malus

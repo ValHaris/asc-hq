@@ -1109,7 +1109,7 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
 {
    pc.addInteger  ( "ID", id );
    pc.addInteger  ( "GroupID", groupID, -1 );
-   pc.addTagArray ( "Weather", weather, cwettertypennum-1, weatherTags );
+   pc.addTagArray ( "Weather", weather, cwettertypennum, weatherTags );
    pc.addBool     ( "visible_in_fogOfWar", visibleago );
    pc.addIntegerArray ( "LinkableObjects", linkableObjects );
    if ( pc.find ( "LinkableTerrain" ) || !pc.isReading() )
