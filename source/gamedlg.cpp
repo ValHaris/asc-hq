@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.23 2000-05-10 19:55:51 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.24 2000-05-18 14:39:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/05/10 19:55:51  mbickel
+//      Fixed empty loops when waiting for mouse events
+//
 //     Revision 1.22  2000/05/07 18:21:21  mbickel
 //      Speed of attack animation can now be specified
 //
@@ -1708,7 +1711,7 @@ void  ttributepayments :: init ( void )
    rahmen ( true,      x1 + 10,  y1 + starty,      x1 + xsize - 10, y1 + ysize - 50 );
    rahmen3 ( "player", x1 + 20,  y1 + starty + 10, x1 + 150,        y1 + ysize - 60, 1 );
 
-   rahmen3 ( "you have to pay",    x1 + 160, y1 + wind1y,      x1 + wind2x - 10, y1 + wind2y - 10, 1 );
+   rahmen3 ( "you pay",            x1 + 160, y1 + wind1y,      x1 + wind2x - 10, y1 + wind2y - 10, 1 );
    rahmen3 ( "you have to get",    x1 + 160, y1 + wind2y,      x1 + wind2x - 10, y1 + ysize - 60 , 1 );
 
    rahmen3 ( "you paid",    x1 + wind2x - 5, y1 + wind1y,      x1 + xsize - 20, y1 + wind2y - 10, 1 );
