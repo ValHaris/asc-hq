@@ -1,6 +1,9 @@
-//     $Id: gui.cpp,v 1.19 2000-05-11 15:45:12 mbickel Exp $
+//     $Id: gui.cpp,v 1.20 2000-05-18 17:48:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/05/11 15:45:12  mbickel
+//      No vehicle action icons are shown when another action is running
+//
 //     Revision 1.18  2000/05/10 19:55:53  mbickel
 //      Fixed empty loops when waiting for mouse events
 //
@@ -1119,10 +1122,10 @@ void  tnsguiiconmove::exec         ( void )
            }
         }
 
-        return;
      }
 
    dashboard.x = 0xffff;
+
 }
 
 void  tnsguiiconmove::display      ( void ) 
@@ -1254,6 +1257,7 @@ void  tnsguiiconascent::exec         ( void )
         if ( res < 0 ) {
            dispmessage2 ( -res, NULL );
            delete pendingVehicleActions.action;
+           dashboard.x = 0xffff;
            return;
         }
 
@@ -1365,6 +1369,7 @@ void  tnsguiicondescent::exec         ( void )
         if ( res < 0 ) {
            dispmessage2 ( -res, NULL );
            delete pendingVehicleActions.action;
+           dashboard.x = 0xffff;
            return;
         }
 
@@ -1377,6 +1382,7 @@ void  tnsguiicondescent::exec         ( void )
            }
         }
      }
+   dashboard.x = 0xffff;
 }
 
 void  tnsguiicondescent::display      ( void ) 

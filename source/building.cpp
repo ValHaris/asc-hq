@@ -1,6 +1,9 @@
-//     $Id: building.cpp,v 1.19 2000-05-10 19:55:40 mbickel Exp $
+//     $Id: building.cpp,v 1.20 2000-05-18 17:48:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/05/10 19:55:40  mbickel
+//      Fixed empty loops when waiting for mouse events
+//
 //     Revision 1.18  2000/05/02 16:20:50  mbickel
 //      Fixed bug with several simultaneous vehicle actions running
 //      Fixed graphic error at ammo transfer in buildings
@@ -2515,6 +2518,11 @@ void  ccontainer :: moveicon_c :: exec         ( void )
        vehicleMovement->registerPVA ( vat_move, &pendingVehicleActions );
        for ( int i = 0; i < vehicleMovement->reachableFields.getFieldNum(); i++ ) 
           vehicleMovement->reachableFields.getField( i ) ->a.temp = 1;
+
+       if ( !gameoptions.dontMarkFieldsNotAccessible_movement )
+          for ( int j = 0; j < vehicleMovement->reachableFieldsIndirect.getFieldNum(); j++ )
+             vehicleMovement->reachableFieldsIndirect.getField( j ) ->a.temp2 = 2;
+
        displaymap();
 
        dashboard.x = 0xffff;
