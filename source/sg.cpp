@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.59 2000-07-16 14:57:42 mbickel Exp $
+//     $Id: sg.cpp,v 1.60 2000-07-22 18:57:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.59  2000/07/16 14:57:42  mbickel
+//      Datafile versioning
+//
 //     Revision 1.58  2000/07/16 14:20:04  mbickel
 //      AI has now some primitive tactics implemented
 //      Some clean up
@@ -1814,7 +1817,7 @@ void         speicherspiel( int as )
 
       mousevisible(false);
       cursor.hide(); 
-      displaymessage("saving as %s", 0, s2);
+      displaymessage("saving %s", 0, s1);
       savegame(s1,s2); 
 
       removemessage(); 

@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.46 2000-07-16 16:15:49 mbickel Exp $
+//     $Id: controls.cpp,v 1.47 2000-07-22 18:57:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2000/07/16 16:15:49  mbickel
+//      Building: ammotransfer improved
+//
 //     Revision 1.45  2000/07/16 14:57:41  mbickel
 //      Datafile versioning
 //
@@ -3206,13 +3209,17 @@ void         tdashboard :: paintlargeweaponinfo ( void )
       int first = 1;
       while ( mouseparams.taste == 2) {
          int topaint  = -1;
+         int serv = 0;
          for ( int j = 0; j < vt->weapons->count ; j++) {
             int x = (agmp->resolutionx - 640) / 2;
-            int y = 150 + 28 + j * 14;
+            int y = 150 + 28 + (j - serv) * 14;
             if ( vt->weapons->weapon[j].getScalarWeaponType() >= 0) 
                if ( vt->weapons->weapon[j].shootable() ) 
                   if ( mouseinrect ( x, y, x + 640, y+ 14 ))
-                     topaint = j;
+                     topaint = j; // + serv;
+            if ( vt->weapons->weapon[j].service() )
+               serv++;
+            
          }
          if ( topaint != lastpainted ) {
             if ( topaint == -1 )
