@@ -242,12 +242,6 @@ int getypos(void)
 #include "movecurs.inc"      
 
 
-pfield        getactfield(void)
-{
-   return getfield ( actmap->xpos + cursor.posx, actmap->ypos + cursor.posy ); 
-} 
-
-
 
 pfield        getfield(int          x,
                      int          y)

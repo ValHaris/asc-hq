@@ -71,6 +71,8 @@ class MapDisplayPG: public PG_Widget {
       //
    
    
+      void checkViewPosition();
+      
       void setNewZoom( float zoom );   
       void paintTerrain( int playerView );
       void fillSurface( int playerView );
@@ -104,6 +106,7 @@ class MapDisplayPG: public PG_Widget {
    public:
       MapDisplayPG ( PG_Widget *parent, const PG_Rect r );
       
+      MapCoordinate getCursorPos() { return cursor.pos; };
       
       void updateMap( bool force = false );
 

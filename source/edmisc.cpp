@@ -4585,3 +4585,10 @@ void resetPlayerData()
 
    } while ( playerRes.first != 6 );
 }
+
+
+pfield        getactfield(void)
+{
+   return getfield ( actmap->xpos + cursor.posx, actmap->ypos + cursor.posy ); 
+} 
+

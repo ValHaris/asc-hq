@@ -94,10 +94,17 @@ int   BuildingType :: getBIPicture( const LocalCoordinate& localCoordinate, int 
 
 const TypedSurface<1>&   BuildingType :: getPicture ( const LocalCoordinate& localCoordinate, int weather, int constructionStep ) const
 {
-   if ( bi_picture [weather][constructionStep][localCoordinate.x][localCoordinate.y] <= 0 )
+   if( constructionStep >= construction_steps )
+     constructionStep = construction_steps-1;
+     
+   if ( !weatherBits.test(weather))
+      weather = 0;
+     
+   if ( bi_picture [weather][constructionStep][localCoordinate.x][localCoordinate.y] <= 0 ) 
       return w_picture[weather][constructionStep][localCoordinate.x][localCoordinate.y];
-   else
+   else 
       return castSurface<1>(GraphicSetManager::Instance().getPic(bi_picture [weather][constructionStep][localCoordinate.x][localCoordinate.y]));
+   
 }
 
 void  BuildingType::paint ( Surface& s, SPoint pos, int player, int weather, int constructionStep ) const
@@ -171,8 +178,10 @@ void BuildingType :: read ( tnstream& stream )
             for ( int x = 0; x < 4; x++ )
                for ( int y = 0; y < 6 ; y++ ) {
                    picsAvail[v][w][x][y] = stream.readInt( );
-                   if ( picsAvail[v][w][x][y] )
+                   if ( picsAvail[v][w][x][y] ) {
                       field_Exists[x][y] = true;
+                      weatherBits.set(w);
+                   }   
                }    
                    
 
@@ -182,8 +191,10 @@ void BuildingType :: read ( tnstream& stream )
                for ( int y = 0; y < 6 ; y++ ) {
                    int i = stream.readInt( );
                    bi_picture[v][w][x][y] = i;
-                   if ( i > 0 )
+                   if ( i > 0 ) {
                       field_Exists[x][y] = true;
+                      weatherBits.set(w);
+                   }   
                }  
 
                    /*
@@ -437,8 +448,6 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
       ContainerBaseType::runTextIO ( pc );
    
       pc.addInteger ( "ConstructionStages", construction_steps );
-
-      BitSet weatherBits;
 
       for ( int i = 0; i < cwettertypennum; i++ )
          for ( int x = 0; x < 4; x++ )

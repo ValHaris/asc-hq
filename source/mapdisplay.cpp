@@ -120,7 +120,7 @@ struct CommandBlock {
 MapDisplayPG* theMapDisplay = NULL;
 
 MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
-      : PG_Widget ( parent, r, true ) ,
+      : PG_Widget ( parent, r, false ) ,
       zoom( 0.75 ),
       offset(0,0),
       surface(NULL),
@@ -130,8 +130,11 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
    setNewZoom( zoom );
    readData();
    
-   Surface s = Surface::Wrap( GetWidgetSurface () );
-   s.assignDefaultPalette();
+   SDL_Surface* ws = GetWidgetSurface ();
+   if ( ws ) {
+      Surface s = Surface::Wrap( ws );
+      s.assignDefaultPalette();
+   }
    
    theMapDisplay = this;
 }
@@ -228,8 +231,25 @@ void MapDisplayPG::fillSurface( int playerView )
 }
 
 
+void MapDisplayPG::checkViewPosition()
+{
+   if ( offset.x + field.numx >= actmap->xsize )
+      offset.x = max(0,actmap->xsize - field.numx);
+
+   if ( offset.y + field.numy >= actmap->ysize )
+      offset.y = max(0,actmap->ysize - field.numy);
+      
+   if ( offset.y & 1 )
+      offset.y -= 1;
+}
+
+
 void MapDisplayPG::paintTerrain( int playerView )
 {
+   checkViewPosition();
+
+   GraphicSetManager::Instance().setActive ( actmap->graphicset );
+   
    for (int y= field.displayed.y1; y < field.displayed.y2; ++y )
       for ( int x=field.displayed.x1; x < field.displayed.x2; ++x ) {
          pfield fld = getfield ( offset.x + x, offset.y + y );
@@ -355,6 +375,9 @@ void MapDisplayPG::paintTerrain( int playerView )
                // display view obstructions
                if ( pass == 9 ) {
                   if ( visibility == visible_ago) {
+                     MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaShadow> blitter;
+                     // PG_Point pnt = ClientToScreen( 0,0 );
+                     blitter.blit( icons.notVisible, *surface, pos);
                      /*
                                      // putspriteimage( r + unitrightshift , yp + unitdownshift , view.va8);
                                      putshadow( r, yp, icons.view.nv8, &xlattables.a.dark2 );
@@ -384,7 +407,7 @@ void MapDisplayPG::paintTerrain( int playerView )
    }
 }
 
-template<int pixelSize> class PixSel : public SourcePixelSelector_Zoom<pixelSize, SourcePixelSelector_Rectangle<pixelSize> > {};
+template<int pixelSize> class PixSel : public SourcePixelSelector_CacheZoom<pixelSize, SourcePixelSelector_Rectangle<pixelSize> > {};
 
 
 void MapDisplayPG::updateMap(bool force )
@@ -415,7 +438,25 @@ void MapDisplayPG::eventDraw ( SDL_Surface* srf, const PG_Rect& rect)
 
 void MapDisplayPG::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& dst)
 {
-   PG_Widget::eventBlit(srf,src,dst);
+   if ( !GetWidgetSurface ()) {
+        if ( dirty > Nothing )
+           updateMap();
+        /*
+        PG_Rect icon_src;
+        PG_Rect icon_dst;
+        GetClipRects(icon_src, icon_dst, *this);
+        PG_Widget::eventBlit(surface->getBaseSurface(), icon_src, icon_dst);
+        */
+        MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_PlainOverwrite,PixSel> blitter;
+        blitter.setZoom( zoom );
+        blitter.initSource( *surface );
+        blitter.setRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), int(float(Width()) / zoom), int(float(Height()) / zoom));
+        Surface s = Surface::Wrap( PG_Application::GetScreen() );
+        PG_Point pnt = ClientToScreen( 0,0 );
+        blitter.blit( *surface, s, SPoint(pnt.x, pnt.y ));
+   } else {
+      PG_Widget::eventBlit(srf,src,dst);
+   }   
    
       if ( cursor.visible ) {
          int x = cursor.pos.x - offset.x;
@@ -431,23 +472,6 @@ void MapDisplayPG::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect
          }   
       }
    
-#if 0
-   if ( dirty > Nothing )
-      updateMap();
-/*
-   PG_Rect icon_src;
-   PG_Rect icon_dst;
-   GetClipRects(icon_src, icon_dst, *this);
-   PG_Widget::eventBlit(surface->getBaseSurface(), icon_src, icon_dst);
-   */
-   MegaBlitter<1,1,ColorTransform_None,ColorMerger_PlainOverwrite,PixSel> blitter;
-   blitter.setZoom( zoom );
-   blitter.initSource( *surface );
-   blitter.setRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), int(float(Width()) / zoom), int(float(Height()) / zoom));
-   Surface s = Surface::Wrap( PG_Application::GetScreen() );
-   PG_Point pnt = ClientToScreen( 0,0 );
-   blitter.blit( *surface, s, SPoint(pnt.x, pnt.y ));
-   #endif
 }
 
 
@@ -497,7 +521,7 @@ MapCoordinate MapDisplayPG::widgetPos2mapPos( const SPoint& pos )
 
 bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
 {
-   if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == SDL_BUTTON_LEFT ) {
+   if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == CGameOptions::Instance()->mouse.fieldmarkbutton ) {
       MapCoordinate mc = screenPos2mapPos( SPoint(button->x, button->y));
       if ( mc.valid() && mc.x < actmap->xsize && mc.y < actmap->ysize ) {
          cursor.pos = mc;
@@ -507,6 +531,36 @@ bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
          return true;
       }
    }      
+   
+   if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == CGameOptions::Instance()->mouse.centerbutton ) {
+      MapCoordinate mc = screenPos2mapPos( SPoint(button->x, button->y));
+      if ( mc.valid() && mc.x < actmap->xsize && mc.y < actmap->ysize ) {
+      
+            int newx = mc.x - field.numx / 2;
+            int newy = mc.y - field.numy / 2;
+
+            if ( newx < 0 )
+               newx = 0;
+            if ( newy < 0 )
+               newy = 0;
+            if ( newx > actmap->xsize - field.numx )
+               newx = actmap->xsize - field.numx;
+            if ( newy > actmap->ysize - field.numy )
+               newy = actmap->ysize - field.numy;
+   
+            if ( newy & 1 )
+               newy--;
+
+            if ( newx != offset.x  || newy != offset.y ) {
+               offset.x = newx;
+               offset.y = newy;
+               dirty = Map;
+               Redraw();
+            }
+            return true;
+      }
+   }      
+   
    return false;
 }
 

@@ -24,7 +24,9 @@
  map<int,int*> RotationCache::cache;
  int RotationCache::xsize = -1;
  int RotationCache::ysize = -1;
- 
+
+ ZoomCache::ZoomMap ZoomCache::zoomCache;
+  
  NullParamType nullParam;
 
  

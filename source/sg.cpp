@@ -1161,7 +1161,7 @@ void execuseraction ( tuseractions action )
          break;
 
       case ua_benchgamewov:
-         benchgame( 2 );
+         benchgame( 0 );
          break;
 
       case ua_benchgamewv :
@@ -1723,7 +1723,21 @@ Menu::Menu ( PG_Widget *parent, const PG_Rect &rect)
 {
    setup();
    
-}    
+}  
+
+
+
+
+
+MapDisplayPG* mapDisplay = NULL;
+
+
+pfield        getactfield(void)
+{
+   return actmap->getField ( mapDisplay->getCursorPos() ); 
+} 
+
+
 
 class MainScreenWidget : public PG_Widget {
     PG_Application& app;
@@ -1735,6 +1749,7 @@ protected:
     Menu* menu;
 //    void eventDraw (SDL_Surface* surface, const PG_Rect& rect);
 //    void Blit ( bool recursive = true, bool restore = true );
+    ~MainScreenWidget() { ::mapDisplay = NULL; };
 };
 
 
@@ -1753,7 +1768,7 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
               : PG_Widget(NULL, PG_Rect ( 0, 0, app.GetScreen()->w, app.GetScreen()->h ), false),
               app ( application ) 
 {
-   mapDisplay = new MapDisplayPG( this, PG_Rect(20,20,Width() - 200, Height() - 20));
+   ::mapDisplay = mapDisplay = new MapDisplayPG( this, PG_Rect(20,20,Width() - 200, Height() - 20));
    menu = new Menu(this, PG_Rect(0,0,Width(),20));
 }
 

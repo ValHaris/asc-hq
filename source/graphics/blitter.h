@@ -86,6 +86,7 @@
        typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
        const PixelType* pointer;
        int pitch;
+       int linelength;
        const Surface* surface;
     protected:
        SourcePixelSelector_Plain() : pointer(NULL), surface(NULL) {};
@@ -94,7 +95,8 @@
        {
           surface = &srv; 
           pointer = (const PixelType*)(srv.pixels());
-          pitch = srv.pitch()/sizeof(PixelType) - srv.w();
+          linelength = srv.pitch()/sizeof(PixelType);
+          pitch = linelength - srv.w();
        };
 
        PixelType getPixel(int x, int y)
@@ -108,6 +110,7 @@
        PixelType nextPixel() { return *(pointer++); };
        void nextLine() { pointer += pitch; };
        void skipPixels( int pixNum ) { pointer += pixNum; };
+       void skipWholeLine() { pointer += linelength; };
 
        int getWidth()  { return surface->w(); };
        int getHeight() { return surface->h(); };
@@ -674,7 +677,7 @@
          void assign ( PixelType src, PixelType* dest )
          {
             if ( isOpaque(src ) ) {
-               *dest = (*dest >> 1) & 0x8f8f8f8f;
+               *dest = (*dest >> 1) & 0x7f7f7f7f;
             }   
          };
       public:
@@ -724,7 +727,7 @@ template<>
          {
             // STATIC_CHECK ( pixelsize == 1, wrong_pixel_size );
             if ( isOpaque(src ) ) {
-               *dest = ((*dest >> 1) & 0x8f8f8f8f) + (src >> 1) & 0x8f8f8f8f;
+               *dest = ((*dest >> 1) & 0x7f7f7f7f) + (src >> 1) & 0x7f7f7f7f;
             }   
          };
       public:
@@ -945,7 +948,94 @@ template<>
        
  };
 
+
+ class ZoomCache {
+    protected:
+       typedef map<float,int*> ZoomMap;
+       static ZoomMap zoomCache;
+ };
+
  
+ template<int pixelsize, class SourcePixelSelector = SourcePixelSelector_Plain<pixelsize> >
+ class SourcePixelSelector_CacheZoom : private ZoomCache, public SourcePixelSelector {
+       typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+       const Surface* surface;
+       float zoomFactor;
+    
+       int* xp;
+       int* yp;
+       ZoomMap::iterator cacheit;
+    protected:
+
+       int getWidth()  { return int( zoomFactor * SourcePixelSelector::getWidth()  );  };
+       int getHeight() { return int( zoomFactor * SourcePixelSelector::getHeight() );  };
+
+       PixelType getPixel(int x, int y)
+       {
+          return SourcePixelSelector::getPixel( int(float(x) / zoomFactor), int(float(y) / zoomFactor));
+       };
+
+       PixelType nextPixel()
+       {
+          for ( int i = 0; i < *xp; ++i )
+             SourcePixelSelector::nextPixel();
+          ++xp;   
+          
+          return SourcePixelSelector::nextPixel();
+       };
+       
+       void skipPixels( int pixNum ) { 
+          xp += pixNum; 
+          SourcePixelSelector::skipPixels( int ( float(pixNum) / zoomFactor ));
+       };
+
+       void nextLine() { 
+          SourcePixelSelector::nextLine();
+          for ( int i = 0; i < *yp; ++i )
+             SourcePixelSelector::skipWholeLine();
+             
+          xp = &cacheit->second[0]; yp++;   
+       };
+
+    
+    public:
+       
+       void setZoom( float factor )
+       {
+          this->zoomFactor = factor;
+          assert ( factor < 1 );
+
+          cacheit = zoomCache.find( factor );
+          if ( cacheit == zoomCache.end() ) {
+             int size  = max ( SDLmm::Display::GetDisplay().w(), SDLmm::Display::GetDisplay().h() );
+             
+             int* buf = new int[size];
+             
+             for ( int i = 0; i < size; ++i ) {
+                int a1 =  int( float(i) / zoomFactor );
+                int a2 =  int( float(i+1) / zoomFactor );
+                
+                buf[i] = a2 - a1 - 1;
+             }   
+                
+             zoomCache[zoomFactor] = buf;  
+             cacheit = zoomCache.find( factor );
+          }
+          xp = yp = &cacheit->second[0];
+       }
+       
+       SourcePixelSelector_CacheZoom( NullParamType npt = nullParam ) : surface(NULL), zoomFactor(1), xp(NULL), yp(NULL) { cacheit = zoomCache.end(); };
+       
+       SourcePixelSelector_CacheZoom( float zoom ) : surface(NULL), zoomFactor(1), xp(NULL), yp(NULL)
+       {
+          cacheit = zoomCache.end(); 
+          setZoom ( zoom );
+       };
+
+
+ };
+ 
+  
  
  
 template<int pixelsize, class SourcePixelSelector = SourcePixelSelector_Plain<pixelsize> >
@@ -1015,6 +1105,8 @@ template<int pixelsize, class SourcePixelSelector = SourcePixelSelector_Plain<pi
        {
           return getPixel(x++, y);
        };
+       
+       void skipWholeLine() { ++y; };
 
        void skipPixels( int pixNum ) { x += pixNum; };
        

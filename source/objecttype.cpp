@@ -96,6 +96,9 @@ Surface& ObjectType :: getPicture ( int i, int w )
 
 void ObjectType :: display ( Surface& surface, SPoint pos, int dir, int weather )
 {
+   if ( !this->weather.test( weather) )
+      weather = 0;
+
    vector<int> dirsToDisplay;
    
    if ( id == 4 ) {

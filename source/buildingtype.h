@@ -81,6 +81,9 @@ extern const char*  cbuildingfunctions[];
         bool             field_Exists[4][6];
         Surface8         w_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
         int              bi_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
+        
+        BitSet weatherBits; // for which weather are images available
+        
    public:
         //! A local coordinate referencing a single field that a building covers.
         class LocalCoordinate {
