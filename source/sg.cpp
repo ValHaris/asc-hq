@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.17 2000-01-07 13:20:04 mbickel Exp $
+//     $Id: sg.cpp,v 1.18 2000-01-19 21:18:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/01/07 13:20:04  mbickel
+//      DGA fullscreen mode now working
+//
 //     Revision 1.16  2000/01/06 11:19:14  mbickel
 //      Worked on the Linux-port again...
 //
@@ -135,7 +138,7 @@
 
 
 
-// #define MEMCHK
+#define MEMCHK
 
 extern int startreplaylate;
 
@@ -649,7 +652,7 @@ void new_new_handler ( void )
 
   void* memchkAlloc ( int tp, size_t amt )
   {
-     verifyallblocks();
+     // verifyallblocks();
      int error;
      void* tmp = malloc ( amt + 53 * 4 );
      int* tmpi = (int*) tmp;
@@ -1152,7 +1155,7 @@ void         loadcursor(void)
       actprogressbar->point();
 
    {
-      tnfilestream stream ("WAFFEN.RAW",1);       
+      tnfilestream stream ("waffen.raw",1);       
       int num;
    
       static int xlatselectweaponguiicons[12] = { 2, 7, 6, 3, 4, 9, 0, 5, 10, 11, 11, 11 };
@@ -1164,12 +1167,12 @@ void         loadcursor(void)
    }
 
    {
-      tnfilestream stream ("knorein.RAW",1);
+      tnfilestream stream ("knorein.raw",1);
       stream.readrlepict(   &icons.guiknopf, false, &w );
    }
 
    {
-      tnfilestream stream ("compi2.RAW",1);
+      tnfilestream stream ("compi2.raw",1);
       stream.readrlepict(   &icons.computer, false, &w );
    }
 
@@ -1181,12 +1184,12 @@ void         loadcursor(void)
    }
 
    {
-      tnfilestream stream ("mausi.RAW",1);
+      tnfilestream stream ("mausi.raw",1);
       stream.readrlepict(   &icons.mousepointer, false, &w );
    }
 
    {
-      tnfilestream stream ("gebasym2.RAW",1);
+      tnfilestream stream ("gebasym2.raw",1);
       for ( i = 0; i < 11; i++ )
          for ( int j = 0; j < 2; j++ )
             stream.readrlepict(   &icons.container.lasche.sym[i][j], false, &w );
@@ -2485,9 +2488,9 @@ void loaddata( int resolx, int resoly ) {
 
                 weapdist = new tweapdist;
 
-                schriften.smallarial = load_font("smalaril.FNT");
-                schriften.large = load_font("USABLACK.FNT");
-                schriften.arial8 = load_font("ARIAL8.FNT");
+                schriften.smallarial = load_font("smalaril.fnt");
+                schriften.large = load_font("usablack.fnt");
+                schriften.arial8 = load_font("arial8.fnt");
                 schriften.smallsystem = load_font("msystem.fnt");
                 schriften.guifont = load_font("gui.fnt");
                 schriften.guicolfont = load_font("guicol.fnt");
