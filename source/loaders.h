@@ -5,9 +5,13 @@
 
 */
 
-//     $Id: loaders.h,v 1.19 2001-10-11 10:41:06 mbickel Exp $
+//     $Id: loaders.h,v 1.20 2002-05-07 21:32:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2001/10/11 10:41:06  mbickel
+//      Restructured platform fileio handling
+//      Added map archival information to mapeditor
+//
 //     Revision 1.18  2001/07/28 11:19:12  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -115,13 +119,13 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    along with this program; see the file COPYING. If not, write to the
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
 */
 
-#ifndef loaders_h
-#define loaders_h
+#ifndef loadersH
+#define loadersH
 
 #include "ascstring.h"
 #include "sgstream.h"
@@ -227,7 +231,7 @@ class  tmaploaders : public tspfldloaders {
            void            initmap ( void );
          public:
            int             loadmap ( const char* name );
-           int             savemap ( const char* name );
+           int             savemap ( const ASCString& name );
            tmaploaders (void ) { oldmap = NULL; };
            ~tmaploaders();
 };

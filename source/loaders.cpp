@@ -5,9 +5,13 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.68 2002-03-18 21:42:17 mbickel Exp $
+//     $Id: loaders.cpp,v 1.69 2002-05-07 21:32:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.68  2002/03/18 21:42:17  mbickel
+//      Some cleanup and documentation in the Mine class
+//      The number of mines is now displayed in the field information window
+//
 //     Revision 1.67  2002/01/07 11:40:40  mbickel
 //      Fixed some syntax errors
 //
@@ -668,11 +672,8 @@ void    tspfldloaders::readevent ( pevent& event1 )
      }
 
      for (char m = 0; m <= 3; m++) {
-        if ( !event1->trigger[m] )
-           event1->trigger_data[m] = NULL;
-        else {
-           event1->trigger_data[m] = new tevent::LargeTriggerData;
-
+        event1->trigger_data[m] = new tevent::LargeTriggerData;
+        if ( event1->trigger[m] ) {
            if ((event1->trigger[m] == ceventt_buildingconquered) || 
               (event1->trigger[m] == ceventt_buildinglost) ||
               (event1->trigger[m] == ceventt_buildingdestroyed) || 
@@ -1663,11 +1664,14 @@ tspfldloaders::~tspfldloaders ( void )
 
 
 
-int          tmaploaders::savemap( const char * name )
+int          tmaploaders::savemap( const ASCString& name )
 { 
    #ifdef logging
    logtofile ( "loaders / tmaploaders::savemap / started " );
    #endif
+
+//   ASCString backupname= name + "~";
+//   ::rename(name.c_str(), backupname.c_str());
 
    tnfilestream filestream ( name, tnstream::writing );
 

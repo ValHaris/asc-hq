@@ -599,7 +599,7 @@ void         tsgpulldown :: init ( void )
    addbutton ( "seperator", -1 );
    addbutton ( "Continue network gameõF3", ua_continuenetworkgame);
    addbutton ( "setup Net~w~ork", ua_setupnetwork );
-   addbutton ( "Change ~P~assword", ua_changepassword );
+   addbutton ( "Change Passw~o~rd", ua_changepassword );
    addbutton ( "supervise network game", ua_networksupervisor );
    addbutton ( "seperator", -1 );
    addbutton ( "~P~layers + Alliances", ua_setupalliances);
@@ -608,8 +608,8 @@ void         tsgpulldown :: init ( void )
 
    addfield ( "~I~nfo" );
    addbutton ( "~V~ehicle types", ua_vehicleinfo );
-   addbutton ( "~U~nit weapon rangeõ3", ua_viewunitweaponrange );
-   addbutton ( "~U~nit movement rangeõ4", ua_viewunitmovementrange );
+   addbutton ( "Unit ~w~eapon rangeõ3", ua_viewunitweaponrange );
+   addbutton ( "Unit ~m~ovement rangeõ4", ua_viewunitmovementrange );
    addbutton ( "~G~ame Timeõ5", ua_GameStatus );
    addbutton ( "unit ~S~et informationõ6", ua_UnitSetInfo );
    addbutton ( "~T~errainõ7", ua_viewterraininfo );

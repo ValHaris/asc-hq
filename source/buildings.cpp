@@ -166,7 +166,7 @@ int Building :: vehicleloadable ( pvehicle vehicle, int uheight ) const
          #ifdef karteneditor
               return 2;
          #else
-              if ( color == gamemap->actplayer * 8)
+              if ( color == vehicle->color )
                  return 2;
               else
                 if ( !vehicle->attacked ) {
@@ -174,7 +174,8 @@ int Building :: vehicleloadable ( pvehicle vehicle, int uheight ) const
                       return 2;
                    else
                       if ( (vehicle->functions & cf_conquer)  || ( damage >= mingebaeudeeroberungsbeschaedigung))
-                         return 2;
+                         if ( getdiplomaticstatus2(color, vehicle->color ) == cawar )
+                            return 2;
                 }
          #endif
          }
