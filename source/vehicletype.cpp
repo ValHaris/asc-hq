@@ -1227,6 +1227,21 @@ void SingleWeapon::set ( int type )
    typ = type;
 }
 
+string SingleWeapon::getName ( void )
+{
+   string s;
+
+   int k = getScalarWeaponType();
+   if ( k < cwaffentypennum && k >= 0 ) 
+      s = cwaffentypen[k];
+   else
+      if ( service() )
+         s = cwaffentypen[cwservicen];
+      else
+         s = "undefined";
+
+   return s;
+}
 
 UnitWeapon :: UnitWeapon ( void )
 {
@@ -1263,7 +1278,7 @@ UnitWeapon :: UnitWeapon ( void )
 
 
 
-void   tvehicle::write ( pnstream stream )
+void   Vehicle::write ( pnstream stream )
 {
     stream->writeWord ( typ->id );
     stream->writeChar ( color );
@@ -1408,7 +1423,7 @@ void   tvehicle::write ( pnstream stream )
 }
 
 
-void   tvehicle::read ( pnstream stream )
+void   Vehicle::read ( pnstream stream )
 {
     int id = stream->readWord ();
 

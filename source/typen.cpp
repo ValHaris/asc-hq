@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.54 2000-10-12 22:24:02 mbickel Exp $
+//     $Id: typen.cpp,v 1.55 2000-10-18 17:09:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.54  2000/10/12 22:24:02  mbickel
+//      Made the DOS part of the new platform system work again
+//
 //     Revision 1.53  2000/10/11 15:33:46  mbickel
 //      Adjusted small editors to the new ASC structure
 //      Watcom compatibility
@@ -275,12 +278,15 @@
 #include "vehicletype.h"
 #include "buildingtype.h"
 
-
+//! The different levels of height
 const char*  choehenstufen[choehenstufennum] = {"deep submerged", "submerged", "floating", "ground level", "low-level flight", "flight", "high-level flight", "orbit"}; 
-                                                   // fahrend ??
 
+//! The different connections of something, be it unit, building, or field, to an event.
 const char* cconnections[6]  = {"destroyed", "conquered", "lost", "seen", "area entererd by any unit", "area entered by specific unit"};
+
 const char* ceventtriggerconn[8]  = {"AND ", "OR ", "NOT ", "( ", "(( ", ")) ", ") ", "Clear "}; 
+
+//! All actions that can be performed by events
 const char* ceventactions[ceventactionnum]  = {"message", "weather change", "new technology discovered", "lose campaign", "run script + next map",
                                                "new technology researchable", "map change", "discarded [ was erase event ]", "end campaign", "next map",
                                                "reinforcement","weather change completed", "new vehicle developed","palette change",
@@ -328,7 +334,8 @@ const char*  cwettertypen[cwettertypennum] = {"dry (standard)","light rain", "he
 const char*  resourceNames[3]  = {"energy", "material", "fuel"}; 
 const int  cwaffenproduktionskosten[cwaffentypennum][3]  = {{20, 15, 10}, {2, 2, 0}, {3, 2, 0}, {3, 3, 2}, {3, 3, 2}, {4, 3, 2},
                                                             {1, 1, 0},    {1, 2, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}; // jeweils f?r weaponpackagesize Pack !
-// const int experienceDecreaseDamageBoundaryNum = 4;
+
+//! when repairing a unit, the experience of the unit is decreased by one when passing each of these damage levels
 const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoundaryNum] = { 80, 60, 40, 20 };
 
 const int directionangle [ sidenum ] = 

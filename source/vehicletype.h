@@ -18,6 +18,7 @@
 #ifndef vehicletype_h_included
  #define vehicletype_h_included
 
+ #include <string>
  #include "typen.h"
  #include "containerbase.h"
 
@@ -80,6 +81,7 @@ extern const char*  cvehiclefunctions[];
      void         set ( int type );  // will be enhanced later ...
      int          gettype ( void ) { return typ; };
      int          offensive( void ) const;
+     string       getName ( void );
  };
 
  //! all the weapons of a #Vehicletype

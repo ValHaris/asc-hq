@@ -31,8 +31,8 @@
 #include "krkr.h"
 #include "..\sgstream.h"
 #include "..\misc.h"
-#include "..\keybp.h"
 #include "..\loadbi3.h"
+#include "..\events.h"
 
 
 char     mode50 = 1;

@@ -98,16 +98,89 @@ int main(int argc, char *argv[] )
          // some details about the unit; %d tells C to insert a decimal number there
          // take a look at the vehicletype class in vehicletype.h for the names of all variables that make a vehicletype
          // be carefuel not to make a , at the end of the first lines, since this would seperate the string in to several independant strings
+
+
+
+         fprintf ( detailed, "Number of weapons: %d\n", ft->weapons->count );
+
+         for ( int w = 0; w < ft->weapons->count ; w++) {
+            // looping through all weapons; w will be increased from 0 until it reaches ft->weapons->count; 
+            fprintf ( detailed, "weapon #%d: \n", ft->weapons->count );
+
+            fprintf ( detailed, "Maximum strengh: %d ; Minimum strength: %d \n", ft->weapons->weapon[w].maxstrength, ft->weapons->weapon[w].minstrength);
+            fprintf ( detailed, "Minimum distance: %d ; Maximum distance: %d \n", (ft->weapons->weapon[w].mindistance+9)/10, ft->weapons->weapon[w].maxdistance/10);
+            // Die entfernung wird durch 10 dividiert, um die Anzahl der Felder zu erhalten
+            // Die normale Division rundet IMMER ab, also 1,9 / 2 = 0
+            // Aber die minimale Entfernung muá aufgerundet werden, deshalb benutze ich einen kleinen Trick: Ich addiere vor der Division 9 (also Quotient-1) dazu
+
+            int i;
+            
+            fprintf ( detailed, "The weapon can attack: ");
+            for ( i = 0; i < 8; i++ ) 
+               if ( ft->weapons->weapon[w].targ & ( 1 << i ) )
+                  fprintf ( detailed, " %s;", choehenstufen[i] );
+            fprintf ( detailed, "\n");
+
+
+            fprintf ( detailed, "The weapon can be shot from: ");
+            for ( i = 0; i < 8; i++ ) 
+               if ( ft->weapons->weapon[w].sourceheight & ( 1 << i ) )
+                  fprintf ( detailed, " %s;", choehenstufen[i] );
+            fprintf ( detailed, "\n");
+
+
+            fprintf ( detailed, "The weapon can hit ");
+            for ( i = 0; i < cmovemalitypenum; i++ ) 
+               if ( !(ft->weapons->weapon[w].targets_not_hittable & ( 1 << i )) )
+                  fprintf ( detailed, " %s;", cmovemalitypes[i] );
+            fprintf ( detailed, "\n");
+
+            fprintf ( detailed, "weapon properties ");
+            for ( i = 0; i < cwaffentypennum; i++ ) 
+               if ( ft->weapons->weapon[w].typ & ( 1 << i ) )
+                  fprintf ( detailed, " %s;", cwaffentypen[i] );
+            fprintf ( detailed, "\n");
+
+         } /* endfor */
    
          fprintf ( detailed, "The unit can reach the following levels of height: ");
          // note that we didn't put a newline ( \n ) character at the end of the string
          
-         for ( int i = 0; i < 8; i++ ) 
-            if ( ft->height & ( 1 << i ) )
-               fprintf ( detailed, " %s;", choehenstufen[i] );
+         int i;
 
-         // choehenstufen is a global array that contains the names of the height levels         
-   
+         // Tabellenbeginn
+         fprintf( detailed, "<TABLE><TR>\n");
+
+         // Spaltentitel
+         for ( i = 0; i < 8; i++ ) 
+             fprintf ( detailed, " <TH>%s</TH>", choehenstufen[i] );
+
+         fprintf( detailed, "</TR><TR>\n");
+
+         // Spaltentitel
+         for ( i = 0; i < 8; i++ ) 
+            if ( ft->height & ( 1 << i ))
+                fprintf ( detailed, " <TD><IMG \"haken.gif\" ></TD>" );
+            else
+                fprintf ( detailed, " <TD></TD>"  );
+
+         fprintf( detailed, "</TR></TABLE>\n");
+
+
+   fprintf(detailed,"the unit can drive on this terrain" );
+   for ( i = 0; i < cbodenartennum ; i++) {
+      tterrainbits bts;
+      if ( i < 32 )
+         bts.set ( 1 << i, 0 );
+      else
+         bts.set ( 0, 1 << ( i - 32));
+
+      if ( ft->terrainaccess->terrain & bts) 
+         fprintf ( detailed, "%s", cbodenarten[i] );
+
+   } /* endfor */
+         
+
          fprintf( detailed,"\n");
          // now we are starting a new line
 

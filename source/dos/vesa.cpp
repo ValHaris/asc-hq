@@ -1,6 +1,12 @@
-//     $Id: vesa.cpp,v 1.2 2000-08-21 17:51:04 mbickel Exp $
+//     $Id: vesa.cpp,v 1.3 2000-10-18 17:09:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/08/21 17:51:04  mbickel
+//      Fixed: crash when unit reaching max experience
+//      Fixed: crash when displaying research image
+//      Fixed: crash when events referenced a unit that has been shot down
+//      Fixed: screenshot being written to wrong directory
+//
 //     Revision 1.1  2000/05/30 18:39:29  mbickel
 //      Added support for multiple directories
 //      Moved DOS specific files to a separate directory
@@ -703,6 +709,13 @@ void showavailablemodes ( void )
 }
 
 
+void  closegraphics ( void )
+{
+   if ( graphicinitialized ) {
+      closesvga();
+      settextmode(3);
+   }
+}
 
 int initgraphics ( int x, int y, int depth )
 {
@@ -720,6 +733,8 @@ int initgraphics ( int x, int y, int depth )
          printf("Initializing ... \n");
    
          initsvga( avm->mode[avm->num-1].num );
+         atexit ( closegraphics );
+
          int mode = avm->mode[avm->num-1].num;
          delete  ( avm );
          return mode;
@@ -741,16 +756,6 @@ int initgraphics ( int x, int y, int depth )
 int reinitgraphics(int modenum)
 {
    return initsvga ( modenum );
-}
-
-
-void  closegraphics ( void )
-{
-   if ( graphicinitialized ) {
-      closesvga();
-      settextmode(3);
-   }
-
 }
 
 void setWindowCaption ( const char* s )

@@ -339,8 +339,15 @@ void     loadicon (char *filename, void **icon)
    bar( 0, 0, 799, 599, 255 );
    loadpcxxy( filename, 1, 20, 20 );
 
+   void* pnter;
+      {
+         int w;
+         tnfilestream stream ("mausi.raw",1);
+         stream.readrlepict(   &pnter, false, &w );
+      }
+
    *icon = malloc ( 100000 );
-   initmousehandler();
+   initmousehandler( pnter );
    mousevisible( true );
 
    do {

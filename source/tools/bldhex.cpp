@@ -29,7 +29,6 @@
 #include "..\newfont.h"
 #include "..\events.h"
 #include "..\misc.h"
-#include "..\keybp.h"
 #include "..\basegfx.h"
 #include "../buildingtype.h"
 #include "../vehicletype.h"

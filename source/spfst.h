@@ -1,6 +1,10 @@
-//     $Id: spfst.h,v 1.29 2000-10-18 14:14:21 mbickel Exp $
+//     $Id: spfst.h,v 1.30 2000-10-18 17:09:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/10/18 14:14:21  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.28  2000/10/11 15:33:46  mbickel
 //      Adjusted small editors to the new ASC structure
 //      Watcom compatibility
@@ -329,22 +333,34 @@ extern void         initspfst( int x = 10, int y = 20 );
 
 extern void generatespfdspaces();
 
-extern void         checkfieldsformouse ( void );
-
 extern void  checkunitsforremoval ( void );
 extern void checkobjectsforremoval ( void );
 
+//! returns the maximum wind speed that the unit can endure
 extern int          getmaxwindspeedforunit ( const pvehicle eht );
+
 extern int          getwindheightforunit   ( const pvehicle eht );
 extern void         resetallbuildingpicturepointers ( void );
 
+/** Checks if the unit can drive on the field
+    \param uheight if != -1, the unit is assumed to be on this height instead of the actual one.
+    \returns 0=unit cannot access this field; 
+             1=unit can move across this field but cannot keep standing there
+             2=unit can move and stand there
+*/
 extern int          terrainaccessible (  const pfield        field, const pvehicle     vehicle, int uheight = -1 );
+
+/** Checks if the unit can drive on the field
+    \param uheight if != -1, the unit is assumed to be on this height instead of the actual one.
+    \returns 0=unit cannot access this field; 
+             1=unit can move across this field but cannot keep standing there; 
+             2=unit can move and stand there; 
+             < 0 unit cannot access this field, because of:
+                  -1   very deep water required to submerge deep
+                  -2   deep water required to submerge 
+                  -3   unit cannot drive onto terrain
+*/
 extern int          terrainaccessible2 ( const pfield        field, const pvehicle     vehicle, int uheight = -1 );  
-               /* same as terrainaccessible, but it returns why the unit cannot drive onto the terrain
-                  returns:  -1   very deep water required to submerge deep
-                            -2   deep water required to submerge 
-                            -3   unit cannot drive onto terrain
-               */
 
 //! return the screencoordinates of the upper left position of the displayed map
 extern int getmapposx ( void );  

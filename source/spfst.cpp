@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.66 2000-10-18 14:14:19 mbickel Exp $
+//     $Id: spfst.cpp,v 1.67 2000-10-18 17:09:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.66  2000/10/18 14:14:19  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.65  2000/10/14 14:16:09  mbickel
 //      Cleaned up includes
 //      Added mapeditor to win32 watcom project
@@ -357,15 +361,6 @@ int showresources = 0;
    #define stepsizey 4  
    #define fielddx 4    /*  verschiebung der ro ecke des bodentypes gegen?ber der vehicle etc  */ 
    #define fielddy 4  
-
-
-   struct {
-          int mx,my;
-          int fx,fy;
-          int stat;
-          int oldx, oldy;
-       } doubleclickparams ;
-
 
    int lockdisplaymap = 0;
    int dataVersion = 0;
@@ -2051,28 +2046,6 @@ void         clearfahrspuren(void)
          } 
 } 
 
-/*
-void         clearmovtemps2(void)
-{ 
-  word         x, y; 
-  int      l; 
-  pfield        pf; 
-
-   l = 0; 
-   if ((actmap->xsize == 0) || (actmap->ysize == 0)) 
-      return;
-   for (x = 0; x <= actmap->xsize - 1; x++) 
-      for (y = 0; y <= actmap->ysize - 1; y++) { 
-         pf = &actmap->field[l] ;
-         pf->special &= (  ~(1 << (cbmovetempv + 1)));
-         l++;
-      } 
-} 
-*/
-
-
-
-
 
 void         removevehicle(pvehicle*   vehicle)
 { 
@@ -2598,100 +2571,6 @@ int   getfieldundermouse ( int* xf, int* yf )
    #endif
 
    return 0;
-}
-
-
-void  checkfieldsformouse ( void )
-{
-   int i,j,xp,yp,k;
-   if (mouseparams.taste == 1 || doubleclickparams.stat == 1) {
-      for (i=0;i<idisplaymap.getscreenxsize();i++ ) {
-         for (j=0;j<idisplaymap.getscreenysize() ;j++ ) {
-            if ( j & 1)
-               xp = scrleftspace + fielddisthalfx + i * fielddistx + cursorrightshift;
-            else
-               xp = scrleftspace + i * fielddistx + cursorrightshift;
-   
-            yp = scrtopspace + j * fielddisty + cursordownshift;
-   
-            if ( mouseparams.x >= xp && mouseparams.x < xp+fieldxsize && mouseparams.y >= yp && mouseparams.y < yp + fieldysize) {
-              #ifdef HEXAGON
-               int xd = mouseparams.x - xp;
-               int yd = mouseparams.y - yp;
-               word* pw = (word*) icons.fieldshape;
-               char* pc = (char*) icons.fieldshape;
-
-               k = 0;
-
-               pc+=4;
-               if ( pw[0] >= xd  && pw[1] >= yd )
-                  if ( pc[ yd * ( pw[0] + 1) + xd] != 255 )
-                     k++;
-              #else
-               k=0;
-               int y;
-               for (y=0; y<10 ;y++ ) {
-                  if (mouseparams.x >  xp + 10 - y   &&   mouseparams.x <= xp + 20 + y   &&   mouseparams.y == yp + y)
-                     k++;
-               } /* endfor */
-   
-               for (y=10;y<20 ;y++ ) {
-                  if (mouseparams.x >= xp  &&   mouseparams.x <= xp + 30   &&   mouseparams.y == yp + y)
-                     k++;
-               } /* endfor */
-   
-               for (y=10; y>0 ;y-- ) {
-                  if (mouseparams.x >  xp + 10 - y   &&   mouseparams.x <= xp + 20 + y   &&   mouseparams.y == yp + 30 - y)
-                     k++;
-               } /* endfor */
-              #endif
-
-               if ( k ) {
-                  if ( cursor.posx != i || cursor.posy != j) {
-                     if (mouseparams.taste & 1 ) {
-                        doubleclickparams.mx = mouseparams.x;
-                        doubleclickparams.fx = i;
-                        doubleclickparams.my = mouseparams.y;
-                        doubleclickparams.fx = j;
-                        doubleclickparams.stat = 1;
-   
-                        mousevisible(false);
-                        cursor.hide();
-                        cursor.posx = i;
-                        cursor.posy = j;
-                        cursor.show();
-                        mousevisible(true);
-                     }
-                  } else {
-                     if (mouseparams.taste & 1) {
-                        if (doubleclickparams.stat == 2) {
-                           pfield fld = getactfield ();
-                           if (fld->building || fld ->vehicle || fld->a.temp ) {
-                              // setmouseongui();
-                              doubleclickparams.stat = 3;
-                           } else
-                              doubleclickparams.stat = 0;
-                        } else
-                          if (doubleclickparams.stat == 0 || doubleclickparams.stat == 3 ) {
-                             doubleclickparams.mx = mouseparams.x;
-                             doubleclickparams.fx = i;
-                             doubleclickparams.my = mouseparams.y;
-                             doubleclickparams.fx = j;
-                             doubleclickparams.stat = 1;
-                          };
-                     } else {
-                        if (doubleclickparams.stat == 1)
-                           doubleclickparams.stat = 2;
-                    }
-                  }
-               } /* endif */
-   
-            } /* endif */
-   
-            
-         } /* endfor */
-      } /* endfor */
-   }
 }
 
 

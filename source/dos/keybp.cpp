@@ -1,6 +1,9 @@
-//     $Id: keybp.cpp,v 1.4 2000-10-18 15:10:07 mbickel Exp $
+//     $Id: keybp.cpp,v 1.5 2000-10-18 17:09:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/10/18 15:10:07  mbickel
+//      Fixed event handling for windows and dos
+//
 //     Revision 1.3  2000/10/16 14:34:12  mbickel
 //      Win32 port is now running fine.
 //      Removed MSVC project files and put them into a zip file in
@@ -603,9 +606,6 @@ tkey char2key (int ch)
 extern void inittimer ( int freq );
 extern void closetimer ();
 
-extern int initmousehandler ( void* pic );
-extern void removemousehandler ();
-
 void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mousepointer )
 {
    mouseparams.xsize = 10;
@@ -621,7 +621,6 @@ void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mou
    atexit ( removemousehandler );
    
    gamethread( data );
-
 }
 
 

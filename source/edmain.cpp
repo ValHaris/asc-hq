@@ -1,6 +1,9 @@
-//     $Id: edmain.cpp,v 1.25 2000-10-18 15:10:03 mbickel Exp $
+//     $Id: edmain.cpp,v 1.26 2000-10-18 17:09:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/10/18 15:10:03  mbickel
+//      Fixed event handling for windows and dos
+//
 //     Revision 1.24  2000/10/18 14:14:06  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -386,11 +389,6 @@ void         loadcursor(void)
       stream.readrlepict ( &icons.mapbackground, false, &w );
    }
    #endif
-
-  {
-     tnfilestream stream ("mausi.raw",1);
-     stream.readrlepict( &icons.mousepointer, false, &w);
-  }
 
   {
     #ifdef HEXAGON
@@ -1008,6 +1006,12 @@ int main(int argc, char *argv[] )
        showtext2 ("Map Editor", 10, hgmp->resolutiony - activefontsettings.font->height - 2 );
 
    }
+   {
+      int w;
+      tnfilestream stream ("mausi.raw",1);
+      stream.readrlepict(   &icons.mousepointer, false, &w );
+   }
+
 
    initializeEventHandling ( mapeditorMainThread, mapname, icons.mousepointer );
 

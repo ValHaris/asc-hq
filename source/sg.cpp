@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.105 2000-10-18 15:10:04 mbickel Exp $
+//     $Id: sg.cpp,v 1.106 2000-10-18 17:09:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.105  2000/10/18 15:10:04  mbickel
+//      Fixed event handling for windows and dos
+//
 //     Revision 1.104  2000/10/18 14:14:16  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -1249,11 +1252,6 @@ void         loadcursor(void)
       for (i=0; i<8 ;i++ ) {
             stream.readrlepict(   &icons.pfeil2[i], false, &w );
       } /* endfor */
-   }
-
-   {
-      tnfilestream stream ("mausi.raw",1);
-      stream.readrlepict(   &icons.mousepointer, false, &w );
    }
 
    {
@@ -2985,6 +2983,8 @@ struct GameThreadParams {
 
 int gamethread ( void* data )
 {
+     printf(" gamethread reached \n"); fflush ( stdout );
+
       GameThreadParams* gtp = (GameThreadParams*) data;
 
       initspfst( -1, -1 ); // 6, 16
@@ -3275,10 +3275,16 @@ int main(int argc, char *argv[] )
       gtp.savegame = savegame;
       gtp.emailgame = emailgame;
 
+      {
+         int w;
+         tnfilestream stream ("mausi.raw",1);
+         stream.readrlepict(   &icons.mousepointer, false, &w );
+      }
+
       initializeEventHandling ( gamethread, &gtp, icons.mousepointer );
 
-
       closegraphics();
+
       writegameoptions ( );
 
       delete onlinehelp;

@@ -121,6 +121,11 @@ extern void removemouseproc ( tsubmousehandler* proc );
 extern void pushallmouseprocs ( void );
 extern void popallmouseprocs ( void );
 
+#ifdef _DOS_
+extern int initmousehandler ( void* pic );
+extern void removemousehandler ();
+#endif
+
 
 /***************************************************************************
  *                                                                         *
