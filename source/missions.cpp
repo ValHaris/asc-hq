@@ -2,9 +2,15 @@
     \brief The event handling of ASC
 */
 
-//     $Id: missions.cpp,v 1.22 2001-02-01 22:48:45 mbickel Exp $
+//     $Id: missions.cpp,v 1.23 2001-02-11 11:39:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2001/02/01 22:48:45  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.21  2001/01/28 17:19:13  mbickel
 //      The recent cleanup broke some source files; this is fixed now
 //
@@ -1176,7 +1182,7 @@ class tcheckpolygon_specificunitentered : public tfillpolygonsquarecoord {
 
 
 
-int unit_in_polygon ( peventtrigger_polygonentered trigger )
+int unit_in_polygon ( tevent::LargeTriggerData::PolygonEntered* trigger )
 {
    int found = 0;
    int* data = trigger->data;

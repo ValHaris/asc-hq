@@ -1,3 +1,8 @@
+/*! \file dashboard.cpp
+    \brief The box displaying unit information
+*/
+
+
 /***************************************************************************
                           dashboard.cpp  -  description
                              -------------------
@@ -5,9 +10,6 @@
     copyright            : (C) 2001 by Martin Bickel
     email                : bickel@asc-hq.org
  ***************************************************************************/
-/*! \file dashboard.cpp
-    \brief The box displaying unit information
-*/
 
 /***************************************************************************
  *                                                                         *

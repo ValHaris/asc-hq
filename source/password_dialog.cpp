@@ -1,3 +1,7 @@
+/*! \file password_dialog.cpp
+    \brief Dialog for entering and asking for passwords
+*/
+
 /***************************************************************************
                           password_dialog.cpp  -  description
                              -------------------
@@ -118,7 +122,7 @@ int tenterpassword :: checkforreask ( int crc )
 }
 */
 
-void tenterpassword :: init ( char* title  )
+void tenterpassword :: init ( char* _title  )
 {
    tdialogbox::init();
    xsize = 200;
@@ -157,10 +161,10 @@ void tenterpassword :: init ( char* title  )
    addkey ( 1, ct_enterk );
 
 
-   if ( !title )
+   if ( !_title )
       title = "enter password";
    else
-      title = title;
+      title = _title;
 
 
    addbutton ( "~p~assword:", 10, 50, xsize - 10, 75, 1, 0, 2, true );

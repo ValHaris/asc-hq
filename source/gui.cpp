@@ -1,6 +1,18 @@
-//     $Id: gui.cpp,v 1.51 2001-02-01 22:48:41 mbickel Exp $
+/*! \file gui.cpp
+    \brief All the buttons of the user interface with which the unit action are
+      controlled.
+*/
+
+
+//     $Id: gui.cpp,v 1.52 2001-02-11 11:39:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2001/02/01 22:48:41  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.50  2001/01/28 17:19:11  mbickel
 //      The recent cleanup broke some source files; this is fixed now
 //

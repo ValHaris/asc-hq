@@ -1,3 +1,7 @@
+/*! \file gameoptions.cpp
+    \brief The options which configure the behaviour of ASC
+*/
+
 /***************************************************************************
                           gameoptions.cpp  -  description
                              -------------------

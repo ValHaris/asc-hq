@@ -2,9 +2,15 @@
     \brief Interface to the event handling of ASC
 */
 
-//     $Id: missions.h,v 1.6 2001-01-28 14:04:14 mbickel Exp $
+//     $Id: missions.h,v 1.7 2001-02-11 11:39:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2001/01/28 14:04:14  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.5  2001/01/19 13:33:51  mbickel
 //      The AI now uses hemming
 //      Several bugfixes in Vehicle Actions
@@ -85,7 +91,7 @@ extern void  getnexteventtime(void);
 extern void  initmissions( void );
 
 extern void mark_polygon_fields_with_connection ( int* data, int mark );
-extern int unit_in_polygon ( peventtrigger_polygonentered trigger );
+extern int unit_in_polygon ( tevent::LargeTriggerData::PolygonEntered* trigger );
 
 
 #endif

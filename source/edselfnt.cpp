@@ -1,6 +1,16 @@
-//     $Id: edselfnt.cpp,v 1.22 2001-02-01 22:48:39 mbickel Exp $
+/*! \file edselfnt.cpp
+    \brief Selecting units, buildings, objects, weather etc. in the mapeditor
+*/
+
+//     $Id: edselfnt.cpp,v 1.23 2001-02-11 11:39:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2001/02/01 22:48:39  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.21  2001/01/25 23:44:59  mbickel
 //      Moved map displaying routins to own file (mapdisplay.cpp)
 //      Wrote program to create pcx images from map files (map2pcx.cpp)

@@ -1,6 +1,18 @@
-//     $Id: basestrm.h,v 1.34 2001-01-28 14:04:03 mbickel Exp $
+/*! \file basestrm.h
+    \brief The interface for the various streams that ASC offers, 
+           like file and memory streams. 
+*/
+
+
+//     $Id: basestrm.h,v 1.35 2001-02-11 11:39:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2001/01/28 14:04:03  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.33  2001/01/04 15:13:30  mbickel
 //      configure now checks for libSDL_image
 //      AI only conquers building that cannot be conquered back immediately
@@ -36,11 +48,6 @@
 
 #ifndef basestream_h
 #define basestream_h
-
-/*! \file basestrm.h
-    \brief The interface for the various streams that ASC offers, 
-           like file and memory streams. 
-*/
 
 
 #include <string>

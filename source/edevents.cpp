@@ -2,9 +2,15 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.19 2001-02-01 22:48:36 mbickel Exp $
+//     $Id: edevents.cpp,v 1.20 2001-02-11 11:39:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2001/02/01 22:48:36  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.18  2001/01/31 14:52:35  mbickel
 //      Fixed crashes in BI3 map importing routines
 //      Rewrote memory consistency checking
@@ -1442,7 +1448,7 @@ void         tcreateevent::buttonpressed(int         id)
     int           x,y;
     ppolygon  poly = NULL;
 
-    teventtrigger_polygonentered etpe;
+    tevent::LargeTriggerData::PolygonEntered etpe;
 
 
    const int         stringpriority[7]     = {32, 64, 1, 2, 4, 8, 16};
@@ -1851,7 +1857,7 @@ void         tcreateevent::buttonpressed(int         id)
                                     ae->trigger[nid] = rnr; 
                                     if ( ae->trigger_data[nid]->unitpolygon )
                                        delete ae->trigger_data[nid]->unitpolygon;
-                                    ae->trigger_data[nid]->unitpolygon = new teventtrigger_polygonentered ( etpe );
+                                    ae->trigger_data[nid]->unitpolygon = new tevent::LargeTriggerData::PolygonEntered ( etpe );
                                  } else 
                                     ae->trigger[nid] = 0; 
    

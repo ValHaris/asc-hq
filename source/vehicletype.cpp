@@ -280,7 +280,7 @@ void Vehicletype :: read ( tnstream& stream )
    vehiclesbuildableid = (int*) stream.readInt();
    buildicon = (void*) stream.readInt();
    buildingsbuildablenum = stream.readInt();
-   buildingsbuildable = (pbuildrange) stream.readInt();
+   buildingsbuildable = (Vehicletype::tbuildrange*) stream.readInt();
    weapons = (UnitWeapon*) stream.readInt();
    autorepairrate = stream.readInt();
    if ( version <= 2 )
@@ -1583,7 +1583,7 @@ void         tsearchforminablefields::testfield(void)
         if ( !fld->building  ||  fld->building->color == gamemap->actplayer*8  ||  fld->building->color == 8*8)
            if ( !fld->vehicle  ||  fld->vehicle->color == gamemap->actplayer*8 ||  fld->vehicle->color == 8*8) {
               if ( !fld->resourceview )
-                 fld->resourceview = new tresourceview;
+                 fld->resourceview = new tfield::Resourceview;
 
               for ( int c = 0; c < 8; c++ )
                  if ( shareview & (1 << c) ) {
@@ -1611,7 +1611,7 @@ int  tsearchforminablefields::run( pvehicle eht )
       for ( int i = 0; i < 8; i++ )
          if ( i*8 != eht->color )
             if ( gamemap->player[i].exist() )
-               if ( gamemap->shareview->mode[eht->color/8][i] == sv_shareview )
+               if ( gamemap->shareview->mode[eht->color/8][i] )
                   shareview += 1 << i;
 
    numberoffields = 0;

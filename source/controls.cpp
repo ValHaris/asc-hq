@@ -1,12 +1,17 @@
 /*! \file controls.cpp
    Controlling units (which is graudally moved to #vehicletype.cpp and #unitctrl.cpp );
-   Resource networks
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.95 2001-02-01 22:48:31 mbickel Exp $
+//     $Id: controls.cpp,v 1.96 2001-02-11 11:39:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.95  2001/02/01 22:48:31  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.94  2001/01/28 17:18:58  mbickel
 //      The recent cleanup broke some source files; this is fixed now
 //
@@ -1589,7 +1594,7 @@ void         calcmovemalus(int          x1,
 
 void initwindmovement(  const pvehicle vehicle ) {
    int direc;
-   twind wind = actmap->weather.wind[ getwindheightforunit ( vehicle ) ];
+   tmap::Weather::Wind wind = actmap->weather.wind[ getwindheightforunit ( vehicle ) ];
    for (direc = 0; direc < sidenum; direc++) {
      float relwindspeedx = 0, relwindspeedy = 0, abswindspeed;
 
@@ -1707,8 +1712,8 @@ void checkalliances_at_beginofturn ( void )
          actmap->alliances[i][act] = cawar;
          actmap->alliances[act][i] = cawar;
          if ( actmap->shareview ) {
-            actmap->shareview->mode[act][i] = sv_none;
-            actmap->shareview->mode[i][act] = sv_none;
+            actmap->shareview->mode[act][i] = false;
+            actmap->shareview->mode[i][act] = false;
          }
       }
       if ( actmap->alliances[i][act] == capeaceproposal  &&  actmap->alliances[act][i] == capeaceproposal) {
@@ -2134,7 +2139,7 @@ void tprocessminingfields :: testfield ( void )
 
         if ( abbuchen ) {
            if ( !fld->resourceview )
-              fld->resourceview = new tresourceview;
+              fld->resourceview = new tfield::Resourceview;
            fld->resourceview->visible |= 1 << color;
            fld->resourceview->fuelvisible[color] = fld->fuel;
            fld->resourceview->materialvisible[color] = fld->material;
@@ -2589,12 +2594,12 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
    for ( int p = 0; p < 8; p++ )
       actmap->player[p].existanceAtBeginOfTurn = actmap->player[p].exist();
 
-   if ( actmap->player[actmap->actplayer].stat == ps_human ) {
+   if ( actmap->player[actmap->actplayer].stat == Player::human ) {
 
       int humannum = 0;
       for ( int i = 0; i < 8; i++ )
          if ( actmap->player[i].exist() )
-            if ( actmap->player[i].stat == ps_human )
+            if ( actmap->player[i].stat == Player::human )
                humannum++;
 
       if ( humannum > 1  ||  forcepasswordchecking > 0 ) {
@@ -2670,7 +2675,7 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
       startreplaylate = 0;
    }
 
-   if ( actmap->replayinfo && actmap->player[ actmap->actplayer ].stat != ps_off ) {
+   if ( actmap->replayinfo && actmap->player[ actmap->actplayer ].stat != Player::off ) {
       if ( actmap->replayinfo->actmemstream )
          displaymessage2( "actmemstream already open at begin of turn ",2 );
       // displaymessage("saving replay information",0 );
@@ -3008,7 +3013,7 @@ void next_turn ( int playerView )
       if ( actmap->time.a.turn == 0 )  // the game has just been started
          pv = -1;
       else
-         if ( actmap->player[actmap->actplayer].stat != ps_human )
+         if ( actmap->player[actmap->actplayer].stat != Player::human )
             pv = -1;
          else
             pv = actmap->actplayer;
@@ -3023,7 +3028,7 @@ void next_turn ( int playerView )
    do {
      endTurn();
      nextPlayer();
-     if ( actmap->player[actmap->actplayer].stat == ps_computer )
+     if ( actmap->player[actmap->actplayer].stat == Player::computer )
         runai( pv );
 
      if ( actmap->time.a.turn >= startTurn+2 ) {
@@ -3033,7 +3038,7 @@ void next_turn ( int playerView )
         throw NoMapLoaded();
      }
 
-   } while ( actmap->player[actmap->actplayer].stat != ps_human ); /* enddo */
+   } while ( actmap->player[actmap->actplayer].stat != Player::human ); /* enddo */
 
    newTurnForHumanPlayer();
 
@@ -3043,9 +3048,9 @@ void next_turn ( int playerView )
 
 void initNetworkGame ( void )
 {
-   while ( actmap->player[actmap->actplayer].stat != ps_human ) {
+   while ( actmap->player[actmap->actplayer].stat != Player::human ) {
 
-     if ( actmap->player[actmap->actplayer].stat == ps_computer )
+     if ( actmap->player[actmap->actplayer].stat == Player::computer )
         runai(-1);
      endTurn();
      nextPlayer();

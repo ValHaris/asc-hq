@@ -8,7 +8,7 @@
     The graphic routines are older than ASC itself, first written in 1993 as a protected
     mode replacement for Borlands BGI. (That's why the uncompressed image structure
     is exactly the same as in the BGI).
-    This is the most badly designed and ugly part of ASC, which hould be completely rewritten,
+    This is the most badly designed and ugly part of ASC, which should be completely rewritten,
     to make use of high- and truecolor, hardware acceleration and to provide a nice, object
     oriented C++ interface.
 */

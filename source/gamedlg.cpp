@@ -1,6 +1,16 @@
-//     $Id: gamedlg.cpp,v 1.63 2001-02-01 22:48:40 mbickel Exp $
+/*! \file gamedlg.cpp
+    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
+*/
+
+//     $Id: gamedlg.cpp,v 1.64 2001-02-11 11:39:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.63  2001/02/01 22:48:40  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.62  2001/01/31 14:52:38  mbickel
 //      Fixed crashes in BI3 map importing routines
 //      Rewrote memory consistency checking
@@ -1226,7 +1236,7 @@ void         tnewcampaignlevel::loadcampaignmap(void)
               actmap = NULL;
               throw NoMapLoaded();
            }
-         } while ( actmap->player[actmap->actplayer].stat != ps_human ); /* enddo */
+         } while ( actmap->player[actmap->actplayer].stat != Player::human ); /* enddo */
 
       }
    } /* endtry */
@@ -1705,7 +1715,7 @@ void         tchoosenewsinglelevel::run(void)
 
          int human = 0;
          for ( int i = 0; i < 8; i++ )
-            if ( actmap->player[i].stat == ps_human )
+            if ( actmap->player[i].stat == Player::human )
                if ( actmap->player[i].exist() )
                   human++;
 
@@ -1736,7 +1746,7 @@ void         tchoosenewsinglelevel::run(void)
               actmap = NULL;
               throw NoMapLoaded();
            }
-         } while ( actmap->player[actmap->actplayer].stat != ps_human ); /* enddo */
+         } while ( actmap->player[actmap->actplayer].stat != Player::human ); /* enddo */
 
       } /* endtry */
 
@@ -4067,11 +4077,11 @@ class tgamepreferences : public tdialogbox {
                         char actgamepath[200];
 
                      public:
-                        char checkvalue( char id, void* p)  ;
+                        char checkvalue( int id, void* p)  ;
                         void init ( void );
                         void buttonpressed ( int id );
                         void run ( void );
-                        tgamepreferences ( ) 
+                        tgamepreferences ( )
                                                         : actoptions ( *CGameOptions::Instance() ) {};
                     };
 
@@ -4222,7 +4232,7 @@ void tgamepreferences :: init ( void )
 }
 
 
-char tgamepreferences :: checkvalue( char id, void* p)  
+char tgamepreferences :: checkvalue( int id, void* p)  
 {
    if ( id != 12 )
       return true;
@@ -4233,7 +4243,7 @@ char tgamepreferences :: checkvalue( char id, void* p)
       else {
          char temp[200];
          strcpy ( temp, cp );
-         if ( temp[0] ) 
+         if ( temp[0] )
             if ( temp[strlen(temp)-1] != '\\' )
                strcat ( temp, "\\" );
          return checkforvaliddirectory ( temp );

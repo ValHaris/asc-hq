@@ -1,3 +1,7 @@
+/*! \file viewcalculation.cpp
+    \brief calculation the view of units and buildings
+*/
+
 /***************************************************************************
                           viewcalculation.cpp  -  description
                              -------------------

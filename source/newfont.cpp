@@ -1,6 +1,18 @@
-//     $Id: newfont.cpp,v 1.10 2000-12-27 22:23:12 mbickel Exp $
+/*! \file newfont.cpp
+    \brief Handling the fonts of ASC. 
+
+    The routines for displaying fonts can be found in #basegfx.cpp (function #showtext ).
+    Although the file name contains is called newfont, the time when this was actually the case is long past (1993)... 
+    
+*/
+
+//     $Id: newfont.cpp,v 1.11 2001-02-11 11:39:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/12/27 22:23:12  mbickel
+//      Fixed crash in loading message text
+//      Removed many unused variables
+//
 //     Revision 1.9  2000/10/11 14:26:44  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class

@@ -1,3 +1,8 @@
+/*! \file mapdisplay.cpp    
+    \brief everything for displaying the map on the screen
+*/
+
+
 /***************************************************************************
                           mapdisplay.cpp  -  description
                              -------------------

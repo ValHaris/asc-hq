@@ -1,6 +1,17 @@
-//     $Id: loaders.cpp,v 1.42 2001-02-04 21:26:57 mbickel Exp $
+/*! \file loaders.cpp
+    \brief procedure for loading and writing savegames, maps etc.
+
+    IO for basic types like vehicletype, buildingtype etc which are also used by the small editors are found in sgstream
+
+*/
+
+//     $Id: loaders.cpp,v 1.43 2001-02-11 11:39:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2001/02/04 21:26:57  mbickel
+//      The AI status is written to savegames -> new savegame revision
+//      Lots of bug fixes
+//
 //     Revision 1.41  2001/02/01 22:48:43  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -494,7 +505,7 @@ void    tspfldloaders::readevent ( pevent& event1 )
         if ( !event1->trigger[m] )
            event1->trigger_data[m] = NULL;
         else {
-           event1->trigger_data[m] = new LargeTriggerData;
+           event1->trigger_data[m] = new tevent::LargeTriggerData;
 
            if ((event1->trigger[m] == ceventt_buildingconquered) || 
               (event1->trigger[m] == ceventt_buildinglost) ||
@@ -536,7 +547,7 @@ void    tspfldloaders::readevent ( pevent& event1 )
            } 
            if (event1->trigger[m] == ceventt_any_unit_enters_polygon || 
                event1->trigger[m] == ceventt_specific_unit_enters_polygon) {
-                  event1->trigger_data[m]->unitpolygon = new teventtrigger_polygonentered;
+                  event1->trigger_data[m]->unitpolygon = new tevent::LargeTriggerData::PolygonEntered;
                   stream->readdata2( *event1->trigger_data[m]->unitpolygon );
                   int sz = event1->trigger_data[m]->unitpolygon->size - sizeof ( *event1->trigger_data[m]->unitpolygon );
                   event1->trigger_data[m]->unitpolygon->data = new int [ (sz + sizeof(int) -1 ) / sizeof ( int ) ];
@@ -1361,7 +1372,7 @@ void tspfldloaders::readfields ( void )
          }
 
          if (b4 & csm_resources ) {
-            fld2->resourceview = new tresourceview;
+            fld2->resourceview = new tfield::Resourceview;
             stream->readdata2 ( *fld2->resourceview ); 
          }
 
@@ -1955,25 +1966,17 @@ void  savemap( const char * name )
      gl.savemap ( name );
    } /* endtry */
 
-   catch ( tfileerror err) {
+   catch ( tfileerror err ) {
       displaymessage( "file error writing map to filename %s ", 1, err.filename );
    } /* endcatch */
    catch ( ASCexception err) {
       displaymessage( "error writing map ", 1 );
    } /* endcatch */
 
-   #ifdef logging
-   logtofile ( "loaders / savemap / finished " );
-   #endif
-
-}             
+}
 
 void  loadmap( const char *       name )
 {
-   #ifdef logging
-   logtofile ( "loaders.cpp / loadmap / loadmap started ");
-   #endif
-
    try {
      tmaploaders gl;
      gl.loadmap ( name );
@@ -2000,10 +2003,6 @@ void  loadmap( const char *       name )
       if ( !actmap || actmap->xsize <= 0)
          throw NoMapLoaded();
    } /* endcatch */
-
-   #ifdef logging
-   logtofile ( "loaders.cpp / loadmap / loadmap finished ");
-   #endif
 }
 
 
@@ -2023,10 +2022,6 @@ void  savegame( const char *       name )
 
 void  loadgame( const char *       name )
 {
-   #ifdef logging
-   logtofile ( "loaders.cpp / loadgame / loadgame started ");
-   #endif
-
    try {
       tsavegameloaders gl;
       gl.loadgame ( name );
@@ -2052,10 +2047,6 @@ void  loadgame( const char *       name )
          throw NoMapLoaded();
    } /* endcatch */
 
-   #ifdef logging
-   logtofile ( "loaders.cpp / loadgame / loadgame finished ");
-   #endif
-
   #ifdef sgmain
    getnexteventtime();
   #endif
@@ -2076,10 +2067,6 @@ void  savereplay( int num )
 
 void  loadreplay( pmemorystreambuf streambuf )
 {
-   #ifdef logging
-   logtofile ( "loaders.cpp / loadreplay / loadreplay started ");
-   #endif
-
    try {
       treplayloaders rl;
       rl.loadreplay ( streambuf );
@@ -2104,11 +2091,6 @@ void  loadreplay( pmemorystreambuf streambuf )
       if ( actmap->xsize == 0)
          throw NoMapLoaded();
    } /* endcatch */
-
-   #ifdef logging
-   logtofile ( "loaders.cpp / loadreplay / loadreplay finished ");
-   #endif
-
 }
 
 
@@ -2165,8 +2147,6 @@ void treplayloaders :: loadreplay ( pmemorystreambuf streambuf )
 
 void treplayloaders :: savereplay ( int num )
 {
-
-
    if ( !actmap->replayinfo ) 
       displaymessage ( "treplayloaders :: savereplay   ;   No replay activated !",2);
 
@@ -2205,7 +2185,7 @@ void treplayloaders :: savereplay ( int num )
    replayfield->newjournal = NULL;
    // replayfield->objectcrc = NULL;
    if ( actmap->shareview )
-      replayfield->shareview = new tshareview ( actmap->shareview );
+      replayfield->shareview = new tmap::Shareview ( actmap->shareview );
 
    replayfield->replayinfo = NULL;
 

@@ -1,3 +1,7 @@
+/*! \file gamemap.cpp
+    \brief Implementation of THE central asc class: tmap 
+*/
+
 /***************************************************************************
                           gamemap.cpp  -  description
                              -------------------
@@ -210,7 +214,7 @@ void tmap :: read ( tnstream& stream )
       alliances_at_beginofturn[i] = stream.readChar();
 
    stream.readInt(); // was objectcrc = (pobjectcontainercrcs)
-   shareview = (pshareview) stream.readInt();
+   bool load_shareview = stream.readInt();
 
    continueplaying = stream.readInt();
    replayinfo = (treplayinfo*) stream.readInt();
@@ -354,10 +358,14 @@ void tmap :: read ( tnstream& stream )
     }
 */
 
-    if ( shareview ) {
-       shareview = new tshareview;
-       stream.readdata2 ( *(shareview) );
-    }
+    if ( load_shareview ) {
+       shareview = new tmap::Shareview;
+       for ( int i = 0; i < 8; i++ )
+          for ( int j = 0; j < 8; j++ )
+             shareview->mode[i][j] = stream.readChar();
+       shareview->recalculateview = stream.readInt();
+    } else
+       shareview = NULL;
 
     if ( preferredfilenames ) {
        int p;

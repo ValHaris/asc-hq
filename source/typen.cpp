@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.70 2001-02-06 16:27:41 mbickel Exp $
+//     $Id: typen.cpp,v 1.71 2001-02-11 11:39:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.70  2001/02/06 16:27:41  mbickel
+//      bugfixes, bugfixes and bugfixes
+//
 //     Revision 1.69  2001/02/04 21:27:00  mbickel
 //      The AI status is written to savegames -> new savegame revision
 //      Lots of bug fixes
@@ -920,7 +923,7 @@ pobject tobjectcontainer :: checkforobject ( pobjecttype o )
 
 
 
-tresourceview :: tresourceview ( void )
+tfield::Resourceview :: Resourceview ( void )
 {
    visible = 0;
    memset ( &fuelvisible, 0, sizeof ( fuelvisible ));
@@ -1243,7 +1246,7 @@ void tgameoptions :: setdefaults ( void )
 }
 */
 
-int twind::operator== ( const twind& b ) const
+bool tmap::Weather::Wind::operator== ( const tmap::Weather::Wind& b ) const
 {
    return ( (speed == b.speed) && ( direction == b.direction));
 }
@@ -1470,14 +1473,14 @@ tterrainbits cblargerocks ( 1<<23, 0 );
 
 
 
-tshareview :: tshareview ( const tshareview* org ) 
+tmap::Shareview :: Shareview ( const tmap::Shareview* org )
 { 
    memcpy ( mode, org->mode, sizeof ( mode ));
    recalculateview = org->recalculateview; 
 }
 
 
-teventtrigger_polygonentered :: teventtrigger_polygonentered ( void )
+tevent::LargeTriggerData::PolygonEntered :: PolygonEntered ( void )
 {
    size = 0;
    vehicle = NULL;
@@ -1490,7 +1493,7 @@ teventtrigger_polygonentered :: teventtrigger_polygonentered ( void )
    memset ( reserved, 0, sizeof ( reserved ));
 }
 
-teventtrigger_polygonentered :: teventtrigger_polygonentered ( const teventtrigger_polygonentered& poly )
+tevent::LargeTriggerData::PolygonEntered :: PolygonEntered ( const tevent::LargeTriggerData::PolygonEntered& poly )
 {
    size = poly.size;
    vehicle = poly.vehicle;
@@ -1508,7 +1511,7 @@ teventtrigger_polygonentered :: teventtrigger_polygonentered ( const teventtrigg
    memcpy ( reserved, poly.reserved, sizeof ( reserved ));
 
 }
-teventtrigger_polygonentered :: ~teventtrigger_polygonentered ( )
+tevent::LargeTriggerData::PolygonEntered :: ~PolygonEntered ( )
 {
    if ( data ) {
       delete[] data;
@@ -1517,7 +1520,7 @@ teventtrigger_polygonentered :: ~teventtrigger_polygonentered ( )
 }
 
 
-LargeTriggerData :: LargeTriggerData ( void )
+tevent::LargeTriggerData :: LargeTriggerData ( void )
 {
    time.abstime = 0;
    xpos = -1;
@@ -1531,7 +1534,7 @@ LargeTriggerData :: LargeTriggerData ( void )
    memset ( reserved, 0, sizeof ( reserved ));
 }
 
-LargeTriggerData :: LargeTriggerData ( const LargeTriggerData& data )
+tevent::LargeTriggerData :: LargeTriggerData ( const LargeTriggerData& data )
 {
    time = data.time;
    xpos = data.xpos;
@@ -1542,12 +1545,12 @@ LargeTriggerData :: LargeTriggerData ( const LargeTriggerData& data )
    mapid = data.mapid;
    id = data.id;
    if ( data.unitpolygon ) {
-      unitpolygon = new teventtrigger_polygonentered ( *data.unitpolygon );
+      unitpolygon = new tevent::LargeTriggerData::PolygonEntered ( *data.unitpolygon );
    } else
-     unitpolygon = NULL;
+      unitpolygon = NULL;
 }
 
-LargeTriggerData :: ~LargeTriggerData ( )
+tevent::LargeTriggerData :: ~LargeTriggerData ( )
 {
    if ( unitpolygon ) {
       delete unitpolygon;
@@ -1566,7 +1569,7 @@ tevent :: tevent ( void )
    datasize = 0;
    conn = 0;
    for ( int i = 0; i < 4; i++) { 
-      trigger[i] = 0; 
+      trigger[i] = 0;
       triggerstatus[i] = 0;
       triggerconnect[i] = 0; 
       triggertime.a.turn = -1;

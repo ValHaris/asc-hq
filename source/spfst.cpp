@@ -2,9 +2,15 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.83 2001-02-01 22:48:49 mbickel Exp $
+//     $Id: spfst.cpp,v 1.84 2001-02-11 11:39:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.83  2001/02/01 22:48:49  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.82  2001/01/28 23:00:41  mbickel
 //      Made the small editors compilable with Watcom again
 //
@@ -432,7 +438,7 @@ void         generatemap( TerrainType::Weather*   bt,
    actmap->ysize = ysize; 
    actmap->campaign = NULL;
    for (int k = 1; k < 8; k++) 
-      actmap->player[k].stat = ps_computer;
+      actmap->player[k].stat = Player::computer;
 
    actmap->title = strdup( "new map" );
    actmap->codeword[0] = 0;

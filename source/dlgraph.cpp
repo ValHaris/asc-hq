@@ -1,10 +1,19 @@
 /*! \file dlgraph.cpp
     \brief This file is included by dlg_box.cpp !
+
+    It was an attempt to move the graphical dialog functions to their own file, 
+     which was never finished.
 */
 
-//     $Id: dlgraph.cpp,v 1.10 2001-01-28 14:04:12 mbickel Exp $
+//     $Id: dlgraph.cpp,v 1.11 2001-02-11 11:39:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2001/01/28 14:04:12  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.9  2000/10/16 14:34:12  mbickel
 //      Win32 port is now running fine.
 //      Removed MSVC project files and put them into a zip file in

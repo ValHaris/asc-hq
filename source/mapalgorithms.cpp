@@ -1,3 +1,7 @@
+/*! \file mapalgorithms.cpp
+    \brief Routines for working with hexagonal grids
+*/
+
 /***************************************************************************
                           mapalgorithms.cpp  -  description
                              -------------------

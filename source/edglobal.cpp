@@ -1,6 +1,16 @@
-//     $Id: edglobal.cpp,v 1.28 2001-02-01 22:48:37 mbickel Exp $
+/** \file edglobal.cpp
+    \brief various functions for the mapeditor
+*/
+
+//     $Id: edglobal.cpp,v 1.29 2001-02-11 11:39:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2001/02/01 22:48:37  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.27  2001/01/31 14:52:35  mbickel
 //      Fixed crashes in BI3 map importing routines
 //      Rewrote memory consistency checking

@@ -1,6 +1,14 @@
-//     $Id: flview.cpp,v 1.4 2000-08-12 12:52:47 mbickel Exp $
+/*! \file flview.cpp
+    \brief Playing autodesk animator flic files. Not used for a long time, and
+      will probably require some updating before it runs again.
+*/
+
+//     $Id: flview.cpp,v 1.5 2001-02-11 11:39:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/08/12 12:52:47  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.3  2000/03/29 09:58:45  mbickel
 //      Improved memory handling for DOS version
 //      Many small changes I can't remember ;-)

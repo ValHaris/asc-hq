@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: sg.cpp,v 1.131 2001-02-04 21:26:58 mbickel Exp $
+//     $Id: sg.cpp,v 1.132 2001-02-11 11:39:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.131  2001/02/04 21:26:58  mbickel
+//      The AI status is written to savegames -> new savegame revision
+//      Lots of bug fixes
+//
 //     Revision 1.130  2001/02/01 22:48:46  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -325,7 +329,7 @@ int maintainencecheck( void )
     int num = 0;
 
     for ( int i = 0; i < 8; i++ )
-       if ( actmap->player[i].stat == ps_human )
+       if ( actmap->player[i].stat == Player::human )
           num++;
 
     if ( actmap->campaign )
@@ -1248,7 +1252,7 @@ void  checkforvictory ( void )
 
                int humannum=0;
                for ( int j = 0; j < 8; j++ )
-                  if (actmap->player[j].exist() && actmap->player[j].stat == ps_human )
+                  if (actmap->player[j].exist() && actmap->player[j].stat == Player::human )
                      humannum++;
                if ( humannum )
                   next_turn();

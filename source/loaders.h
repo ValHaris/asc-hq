@@ -1,6 +1,17 @@
-//     $Id: loaders.h,v 1.15 2001-02-04 21:26:58 mbickel Exp $
+/*! \file loaders.h
+    \brief procedure for loading and writing savegames, maps etc.
+
+    IO for basic types like vehicletype, buildingtype etc which are also used by the small editors are found in sgstream
+
+*/
+
+//     $Id: loaders.h,v 1.16 2001-02-11 11:39:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2001/02/04 21:26:58  mbickel
+//      The AI status is written to savegames -> new savegame revision
+//      Lots of bug fixes
+//
 //     Revision 1.14  2001/02/01 22:48:45  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -103,12 +114,6 @@
 #include "sgstream.h"
 #include "spfst.h"
 
-/*! \file loaders.h
-    \brief procedure for loading and writing savegames, maps etc.
-
-    IO for basic types like vehicletype, buildingtype etc which are also used by the small editors are found in sgstream
-
-*/
 
 
 extern ticons icons;

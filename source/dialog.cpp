@@ -2,9 +2,12 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.77 2001-02-06 17:15:10 mbickel Exp $
+//     $Id: dialog.cpp,v 1.78 2001-02-11 11:39:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.77  2001/02/06 17:15:10  mbickel
+//      Some changes for compilation by Borland C++ Builder
+//
 //     Revision 1.76  2001/02/04 21:26:55  mbickel
 //      The AI status is written to savegames -> new savegame revision
 //      Lots of bug fixes
@@ -3485,7 +3488,7 @@ class  tsetalliances : public tdialogbox {
                      typedef tdialogbox inherited;
                protected:
                      virtual void redraw ( void );       
-                     tshareview          sv;
+                     tmap::Shareview     sv;
                public:
                      char                status;
                      char                alliancedata[8][8];
@@ -3673,7 +3676,7 @@ void         tsetalliances::init( int supervis )
          if ( actmap->shareview ) 
             sv.mode[i][j] = actmap->shareview->mode[i][j];
          else
-            sv.mode[i][j] = sv_none;
+            sv.mode[i][j] = false;
    } 
 
    if ( !supervisor )
@@ -3697,7 +3700,7 @@ void         tsetalliances::init( int supervis )
       if ( actmap->shareview ) 
          for ( i = 0; i < 8; i++ )
             for (int j = 0; j < 8 ; j++) 
-               if ( sv.mode[i][j] == sv_shareview ) {
+               if ( sv.mode[i][j] ) {
                   alliancedata[i][j] = capeace_with_shareview;
                   alliancedata[j][i] = capeace_with_shareview;
                }
@@ -3922,20 +3925,20 @@ void         tsetalliances::setparams ( void )
         if ( actmap->alliances[i][j] == canewsetwar1 ) {
            actmap->alliances[i][j] = canewsetwar2;
            if ( actmap->shareview ) {
-              if ( sv.mode[i][j] != sv_none )
+              if ( sv.mode[i][j]  )
                  sv.recalculateview = 1;
-              sv.mode[j][i] = sv_none;
-              sv.mode[i][j] = sv_none;
+              sv.mode[j][i] = false;
+              sv.mode[i][j] = false;
            }
         }
         if ( oninit ) {
            if ( actmap->alliances[i][j] == capeace_with_shareview ) {
               actmap->alliances[i][j] = capeace;
-              sv.mode[j][i] = sv_shareview;
-              sv.mode[i][j] = sv_shareview;
+              sv.mode[j][i] = true;
+              sv.mode[i][j] = true;
            } else {
-              sv.mode[j][i] = sv_none;
-              sv.mode[i][j] = sv_none;
+              sv.mode[j][i] = false;
+              sv.mode[i][j] = false;
            }
         }
 
@@ -3947,7 +3950,7 @@ void         tsetalliances::setparams ( void )
   int svnum = sv.recalculateview;
   for ( i = 0; i < 8; i++ )
      for ( int j = 0; j < 8; j++ )
-        if ( sv.mode[i][j] != sv_none )
+        if ( sv.mode[i][j] )
            svnum++;
 
   if ( actmap->shareview && !svnum ) {
@@ -3956,7 +3959,7 @@ void         tsetalliances::setparams ( void )
   } else
     if ( actmap->shareview || svnum ) {
        if ( !actmap->shareview )
-          actmap->shareview = new tshareview;
+          actmap->shareview = new tmap::Shareview;
 
        *actmap->shareview = sv;
     }
@@ -3977,10 +3980,10 @@ void         tsetalliances::click(pascal_byte         bxx,
          actmap->player[y].stat++;
          if ( actmap->actplayer == -1 || mapeditor ) {
             if (actmap->player[y].stat > 2)
-               actmap->player[y].stat = ps_human;
+               actmap->player[y].stat = Player::human;
          } else {
             if (actmap->player[y].stat > 1)
-               actmap->player[y].stat = ps_human;
+               actmap->player[y].stat = Player::human;
          }
 
          activefontsettings.background = 17 + y * 8;
@@ -4009,10 +4012,10 @@ void         tsetalliances::click(pascal_byte         bxx,
       #endif
 
       if (x == 2  &&  ( y != actmap->actplayer ) && actmap->actplayer>=0  &&  !oninit )
-         if ( (actmap->alliances[actmap->actplayer][y] == capeace && actmap->alliances[y][actmap->actplayer] == capeace) ||  sv.mode[actmap->actplayer][y] == sv_shareview ) {
+         if ( (actmap->alliances[actmap->actplayer][y] == capeace && actmap->alliances[y][actmap->actplayer] == capeace) ||  sv.mode[actmap->actplayer][y] ) {
                                                  
-            if ( sv.mode[actmap->actplayer][y] == sv_shareview )
-               sv.mode[actmap->actplayer][y] = sv_none;
+            if ( sv.mode[actmap->actplayer][y] )
+               sv.mode[actmap->actplayer][y] = false;
             else {
              #ifdef __WATCOM_CPLUSPLUS__
               sv.mode[actmap->actplayer][y] ++;

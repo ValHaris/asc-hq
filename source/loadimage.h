@@ -1,3 +1,7 @@
+/*! \file loadimage.h
+    Displaying fullscreen JPEG images; implementation is platform dependent.
+*/
+
 /***************************************************************************
                           loadimage.h  -  description
                              -------------------
@@ -18,9 +22,6 @@
 #ifndef loadimage_h_included
  #define loadimage_h_included
 
-/*! \file loadimage.h
-    Displaying fullscreen JPEG images; implementation is platform dependent.
-*/
 
 
 enum FullscreenImageSettings { FIS_noTrueColor, FIS_oldModeNum };

@@ -1,6 +1,20 @@
-//     $Id: loadpcx.h,v 1.5 2001-01-25 23:45:00 mbickel Exp $
+/*! \file loadpcx.h
+    \brief Interface for loading and writing of PCX images. 
+
+    There are two independant implementations of these routines: #loadpcx.cpp and #dos/pcx.asm are written in assembly, and #loadpcxc.cpp is written in c++
+*/
+
+//     $Id: loadpcx.h,v 1.6 2001-02-11 11:39:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2001/01/25 23:45:00  mbickel
+//      Moved map displaying routins to own file (mapdisplay.cpp)
+//      Wrote program to create pcx images from map files (map2pcx.cpp)
+//      Fixed bug in repair function: too much resource consumption
+//      AI improvements and bug fixes
+//      The BI3 map import function now evaluates the player status (human/
+//       computer)
+//
 //     Revision 1.4  2000/05/30 18:39:25  mbickel
 //      Added support for multiple directories
 //      Moved DOS specific files to a separate directory

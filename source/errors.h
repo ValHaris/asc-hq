@@ -1,3 +1,7 @@
+/** \file errors.h
+    \brief The (base-) classes which are thrown as exceptions
+*/
+
 /***************************************************************************
                           errors.h  -  description
                              -------------------

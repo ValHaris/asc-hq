@@ -9,8 +9,9 @@
 /*! \file ascstring.cpp
     \brief Implementation of a string class that extends ansi C++ strings
 
-    The purpose of ASCString is to provide extra functionality and to make
-    a potential transition to unicode as easy as possible
+    The purpose of ASCString is to provide extra functionality, hide holes
+    of GNU's STL implementation and it should make a potential transition to 
+    unicode as easy as possible
 */
 
 /***************************************************************************

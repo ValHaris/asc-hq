@@ -1,6 +1,13 @@
-//     $Id: misc.h,v 1.16 2000-12-26 14:46:00 mbickel Exp $
+/** \file misc.h
+    miscellaneous functions which are used by ASC and all its tools
+*/
+
+//     $Id: misc.h,v 1.17 2001-02-11 11:39:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/12/26 14:46:00  mbickel
+//      Made ASC compilable (and runnable) with Borland C++ Builder
+//
 //     Revision 1.15  2000/12/21 16:41:56  mbickel
 //      Fixed some compilation errors that were made during documentation
 //
@@ -84,9 +91,6 @@
     Boston, MA  02111-1307  USA
 */
 
-/** \file misc.h
-    miscellaneous functions which are used by ASC and all its tools
-*/
 
 
 #ifndef misc_h

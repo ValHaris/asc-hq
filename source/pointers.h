@@ -26,10 +26,9 @@
  #define pointers_h_included
 
  typedef class tterrainaccess *pterrainaccess;
- typedef struct tcrc *pcrc;
+// typedef struct tcrc *pcrc;
  typedef class Vehicle  tvehicle ;
  typedef class Vehicle* pvehicle ;
- typedef struct tbuildrange* pbuildrange;
  typedef class tobjecttype* pobjecttype;
  typedef class tmap*  pmap;
  typedef class tmap Map;
@@ -43,9 +42,9 @@
  typedef struct TerrainType* pterraintype;
  typedef class tfield* pfield ;
  typedef class tobjectcontainer* pobjectcontainer;
- typedef struct tresourceview* presourceview;
+// typedef struct tresourceview* presourceview;
  typedef class tobject* pobject;
- typedef class tshareview *pshareview;
+// typedef class tshareview *pshareview;
  typedef class  BuildingType* pbuildingtype;
  class Vehicletype;
  typedef class  Vehicletype*  pvehicletype ;

@@ -164,7 +164,13 @@ extern const char*  cvehiclefunctions[];
 
         void*        buildicon;
         int          buildingsbuildablenum;
-        pbuildrange  buildingsbuildable;
+
+        struct tbuildrange {
+           int from;
+           int to;
+        };
+        tbuildrange*  buildingsbuildable;
+
         UnitWeapon*  weapons;
         int          autorepairrate;
 

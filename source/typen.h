@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.82 2001-02-06 16:27:42 mbickel Exp $
+//     $Id: typen.h,v 1.83 2001-02-11 11:39:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.82  2001/02/06 16:27:42  mbickel
+//      bugfixes, bugfixes and bugfixes
+//
 //     Revision 1.81  2001/02/04 21:27:00  mbickel
 //      The AI status is written to savegames -> new savegame revision
 //      Lots of bug fixes
@@ -139,19 +142,16 @@ const int repairefficiency_unit = 2;
 //! fraction of the production cost that is needed if a building repairs something
 const int repairefficiency_building = 3;
 
-
-enum tshareviewmode { sv_none, sv_shareview };
-
-
-  class  EllipseOnScreen {
-  public:
-    int x1, y1, x2, y2;
-    int color;
-    float precision;
-    int active;
-    EllipseOnScreen ( void ) { active = 0; };
-    void paint ( void );
-  };
+//! A Ellipse that is used for highlighting elements of the screen during the tutorial
+class  EllipseOnScreen {
+   public:
+      int x1, y1, x2, y2;
+      int color;
+      float precision;
+      int active;
+      EllipseOnScreen ( void ) { active = 0; };
+      void paint ( void );
+   };
 
 
 //! The number of different weapon types
@@ -204,7 +204,7 @@ class tterrainbits {
   tterrainbits ( int i = 0 ) { 
       set ( i ); 
   };
-  tterrainbits ( int i , int j ) { 
+  tterrainbits ( int i , int j ) {
       terrain1 = i; 
       terrain2 = j; 
   };
@@ -218,7 +218,7 @@ class tterrainbits {
   };
 
   void read ( tnstream& stream ) { 
-     terrain1 = stream.readInt(); 
+     terrain1 = stream.readInt();
      terrain2 = stream.readInt(); 
   };
 
@@ -256,7 +256,7 @@ class tterrainbits {
 
   tterrainbits& operator^= ( const tterrainbits& tb ) {
     terrain1 ^= tb.terrain1; 
-    terrain2 ^= tb.terrain2; 
+    terrain2 ^= tb.terrain2;
     return *this;
   };
 
@@ -275,7 +275,7 @@ class tterrainaccess {
       tterrainaccess ( void ) ;
 
       //! at least one of these bits must match on of the terrain
-      tterrainbits  terrain;      
+      tterrainbits  terrain;
 
       //! ALL these bits must be set in the terrain
       tterrainbits  terrainreq;   
@@ -299,7 +299,7 @@ class tterrainaccess {
          terrainreq.read ( stream );
          terrainnot.read ( stream );
          terrainkill.read ( stream );
-         
+
          for ( int a = 0; a < 10; a++ )
              stream.readInt( ); //dummy
       };
@@ -313,20 +313,9 @@ class tterrainaccess {
          for ( int a = 0; a < 10; a++ )
              stream.writeInt( 0 ); //dummy
       };
-      
+
 };
 
-/*
-struct tcrc {
-  int id;
-  int crc;
-};
-*/
-
-struct tbuildrange {
-  int from;
-  int to;
-};
 
 
 //! The number of different resources that ASC uses
@@ -334,6 +323,7 @@ const int resourceTypeNum = 3;
 //! The number of different resources that ASC uses
 const int resourceNum = resourceTypeNum;
 
+//! The Container for the three different Resources that ASC uses.
 class Resources {
   public:
      int energy;
@@ -374,7 +364,8 @@ extern Resources operator- ( const Resources& res1, const Resources& res2 );
 extern Resources operator+ ( const Resources& res1, const Resources& res2 );
 
 
-//! A mathematical matrix that can be multiplied with a #Resources instance (which is mathematically a vector) to form a new #Resources vector
+/** A mathematical matrix that can be multiplied with a #Resources instance (which is mathematically a vector) 
+    to form a new #Resources vector. */
 class ResourceMatrix {
            float e[resourceTypeNum][resourceTypeNum];
         public:
@@ -397,33 +388,24 @@ struct tquickview {
 
 
 
-
+  //! an image, which may either be independant or part of a graphic set
   struct thexpic {
     void* picture;
     //! the position of the image in a graphic set. < 0 if it is seperate pictureand not from a graphic set
     int   bi3pic;
-    int   flip;  // Bit 1: Horizontal ; Bit 2: Vertikal
+
+    //! is the image a flipped version of an image from the graphic set. Bit 0 : flipped horizontally, bit 1: flipped vertically
+    int   flip;
   };
 
 
 typedef struct teventstore* peventstore;
-struct teventstore { 
-    int          num; 
-    peventstore  next; 
-    int      eventid[256]; 
+struct teventstore {
+    int          num;
+    peventstore  next;
+    int      eventid[256];
     int      mapid[256];
 };
-
-  enum tplayerstat { ps_human, ps_computer, ps_off };
-
-  class  tshareview {
-  public:
-    tshareview ( void ) { recalculateview = 0; };
-    tshareview ( const tshareview* org );
-    char mode[8][8];
-    int recalculateview;
-  };
-  // mode[1][6] = visible_all    =>  Spieler 1 gibt Spieler 6 die view frei
 
 
 
@@ -564,7 +546,7 @@ class AiParameter : public AiValue {
  };
 
 class BaseAI { 
-       public: 
+       public:
          virtual void run ( void ) = 0;
          virtual bool isRunning ( void ) = 0;
          virtual int getVision ( void ) = 0;
@@ -776,44 +758,44 @@ class  tobjectcontainer {
     pobject checkforobject ( pobjecttype o );
 };
 
-  struct tresourceview {
-    tresourceview ( void );
-    char    visible;      // BM
-    char    fuelvisible[8];
-    char    materialvisible[8];
-  };
-
 //! a single field of the map
-class  tfield { 
+class  tfield {
   public:
     //! the terraintype (#pwterraintype) of the field
     TerrainType::Weather* typ;
 
     //! mineral resources on this field (should be changed to #ResourcesType sometime...)
-    char         fuel, material; 
+    char         fuel, material;
 
     //! can this field be seen be the player. Variable is bitmapped; two bits for each player
-    Word         visible;   /*  BM  */ 
+    Word         visible;   /*  BM  */
 
     //! in the old octagonal version of ASC it was possible to rotate the terraintype; this is not used in the hexagonal version any more
-    char         direction; 
+    char         direction;
 
-    void*      picture;   
+    void*      picture;
     union  {
-      struct { 
-        char         temp;      
-        char         temp2; 
+      struct {
+        char         temp;
+        char         temp2;
       }a;
       word tempw;
     };
     int          temp3;
     int          temp4;
-    
-    pvehicle     vehicle; 
-    pbuilding    building; 
+
+    pvehicle     vehicle;
+    pbuilding    building;
+
+    struct Resourceview {
+      Resourceview ( void );
+      char    visible;      // BM
+      char    fuelvisible[8];
+      char    materialvisible[8];
+    };
 
     //! the mineral resources that were seen by a player on this field; since the actual amount may have decreased since the player looked, this value is not identical to the fuel and material fields.
-    presourceview  resourceview;
+    Resourceview*  resourceview;
 
     //! objects and mines that may be placed on the field
     pobjectcontainer      object;
@@ -823,14 +805,14 @@ class  tfield {
 
     //! are any events connected to this field
     int connection;
-             
+
     //! the number of mines on the field
     int minenum ( void );
 
     /** add an object to the field
          \param obj The object type
-         \param dir The direction of the object type; -1 to use default direction 
-         \param force Put the object there even if it cannot normally be placed on this terrain 
+         \param dir The direction of the object type; -1 to use default direction
+         \param force Put the object there even if it cannot normally be placed on this terrain
     **/
     void addobject ( pobjecttype obj, int dir = -1, int force = 0 );
 
@@ -849,7 +831,7 @@ class  tfield {
     //! checks if there are objects from the given type on the field and returns them
     pobject checkforobject ( pobjecttype o );
 
-    //! the defense bonus that unit get when they are attacked 
+    //! the defense bonus that unit get when they are attacked
     int getdefensebonus ( void );
 
     //! the attack bonus that unit get when they are attacking
@@ -897,71 +879,71 @@ class  tfield {
 };
 
 
-typedef class teventtrigger_polygonentered* peventtrigger_polygonentered;
-class  teventtrigger_polygonentered {
+
+
+class tevent {
   public:
-    int size;
-    pvehicle vehicle;
-    int      vehiclenetworkid;
-    int* data;
-    int tempnwid;
-    int tempxpos;
-    int tempypos;
-    int color;                // bitmapped
-    int reserved[7];
-    teventtrigger_polygonentered ( void );
-    teventtrigger_polygonentered ( const teventtrigger_polygonentered& poly );
-    ~teventtrigger_polygonentered ( );
-};
-
-
-typedef class LargeTriggerData* PLargeTriggerData;
-class  LargeTriggerData {
-  public:
-    tgametime time;
-    int xpos, ypos;
-    int networkid;
-    pbuilding    building;
-    pvehicle     vehicle;  
-    int          mapid;
-    int          id;  
-    peventtrigger_polygonentered unitpolygon;  
-    int reserved[32];
-    LargeTriggerData ( void );
-    LargeTriggerData ( const LargeTriggerData& data );
-    ~LargeTriggerData();
-};
-
-
-class tevent { 
-  public:
-    union { 
+    union {
       struct {  word         saveas; char action, num;  }a;  /*  CEventActions  */
-      int      id;               /* Id-Nr      ==> Technology.Requireevent; Tevent.trigger; etc.  */ 
-    } ;                                          
+      int      id;               /* Id-Nr      ==> Technology.Requireevent; Tevent.trigger; etc.  */
+    } ;
 
     pascal_byte         player;   // 0..7  fuer die normalen Spieler
     // 8 wenn das Event unabh„ngig vom Spieler sofort auftreten soll
-              
-    char         description[20]; 
+
+    char         description[20];
 
     union {
-      void*    rawdata; 
+      void*    rawdata;
       char*    chardata;
       int*     intdata;
     };
-    int          datasize; 
-    pevent       next; 
+    int          datasize;
+    pevent       next;
     int          conn;   // wird nur im Spiel gebraucht, BIt 0 gibt an, das andere events abh„nging sind von diesem
-    word         trigger[4];   /*  CEventReason  */ 
-    PLargeTriggerData trigger_data[4];
+    word         trigger[4];   /*  CEventReason  */
 
-    pascal_byte         triggerconnect[4];   /*  CEventTriggerConn */ 
+    class  LargeTriggerData {
+      public:
+
+       class  PolygonEntered {
+         public:
+           int size;
+           pvehicle vehicle;
+           int      vehiclenetworkid;
+           int* data;
+           int tempnwid;
+           int tempxpos;
+           int tempypos;
+           int color;                // bitmapped
+           int reserved[7];
+           PolygonEntered ( void );
+           PolygonEntered ( const PolygonEntered& poly );
+           ~PolygonEntered ( );
+        };
+
+        tgametime time;
+        int xpos, ypos;
+        int networkid;
+        pbuilding    building;
+        pvehicle     vehicle;
+        int          mapid;
+        int          id;
+        tevent::LargeTriggerData::PolygonEntered* unitpolygon;
+        int reserved[32];
+        LargeTriggerData ( void );
+        LargeTriggerData ( const LargeTriggerData& data );
+        ~LargeTriggerData();
+    };
+
+    LargeTriggerData* trigger_data[4];
+
+    pascal_byte         triggerconnect[4];   /*  CEventTriggerConn */
     pascal_byte         triggerstatus[4];   /*  Nur im Spiel: 0: noch nicht erf?llt
                                          1: erf?llt, kann sich aber noch „ndern
                                          2: unwiederruflich erf?llt
-                                         3: unerf?llbar */ 
-    tgametime     triggertime;     // Im Karteneditor auf  -1 setzen !! 
+                                         3: unerf?llbar */
+    tgametime     triggertime;     // Im Karteneditor auf  -1 setzen !!
     // Werte ungleich -1 bedeuten automatisch, dass das event bereits erf?llt ist und evt. nur noch die Zeit abzuwait ist
 
     struct {
@@ -977,12 +959,12 @@ class tevent {
     tevent ( void );
     tevent ( const tevent& event );
     ~tevent ( void );
-}; 
+};
 
 /*
   struct teventact { 
     union { 
-      struct {  word         saveas, action;  }a;  // Id-Nr   ==> Technology.Requireevent; Tevent.trigger; etc.  
+      struct {  word         saveas, action;  }a;  // Id-Nr   ==> Technology.Requireevent; Tevent.trigger; etc.
       int      ID;    //   CEventActions  
     };
   };
@@ -1053,12 +1035,12 @@ class tevent {
       Twindchange
               intensit„t[3]         ( fuer tieffliegend, normalfliegend und hochfliegend ; -1 steht fuer keine Aenderung )
               Richtung[3]           ( dito )
- 
+
 
       Tmapchange               ( je ein int , alles unter Data )        { wetter wird beibehalten ! }
             numberoffields ( nicht die Anzahl fielder insgesamt, 
                ÃÄÄ>  bodentypid
-                     drehrichtung 
+                     drehrichtung
                      fieldadressierung   ( wie bei tweatherchange )
 
 
@@ -1093,15 +1075,6 @@ class tevent {
  */
 
 
-
-
-class twind {
-  public:
-    char speed;
-    char direction;
-    int operator== ( const twind& b ) const;
-    twind ( ) : speed ( 0 ), direction ( 0 ) {};
-};
 
 
 #define tnetworkdatasize 100
@@ -1195,21 +1168,27 @@ class tmap {
 
       //! the time in the game, mesured in a turns and moves
       tgametime    time;
-  
-      struct tweather {
+
+      struct Weather {
          //! the idea of fog is to reduce the visibility, but this is currently not used
          char fog;
 
          //! the speed of wind, for the different levels of height ( 0=low level flight, ..., 2 = high level flight)
-         twind wind[3];
+         class Wind {
+            public:
+              char speed;
+              char direction;
+              bool operator== ( const Wind& b ) const;
+              Wind ( ) : speed ( 0 ), direction ( 0 ) {};
+         } wind[3];
       } weather;
-  
+
       /** how are Resources handled on this map
              0= "ASC mode": complex system with mineral resources etc
              1= "BI mode": simpler system like in Battle Isle
       **/
-      int _resourcemode;  
-  
+      int _resourcemode;
+
       //! the diplomatic status between the players
       char         alliances[8][8];
 
@@ -1237,7 +1216,7 @@ class tmap {
             BaseAI*      ai;
 
             //! the status of the player: 0=human ; 1=AI ; 2=off
-            char         stat;
+            enum tplayerstat { human, computer, off } stat;
 
             //! the name of the player that is used if the player is human
             string       humanname;
@@ -1271,12 +1250,12 @@ class tmap {
             //! if ASC should check all events for fullfilled triggers, this variable will be set to true. This does not mean that there really ARE events that are ready to be executed
             int queuedEvents;
       } player[9];
-  
+
       //! a container for events that were executed during previous maps of the campaign
-      peventstore  oldevents; 
+      peventstore  oldevents;
 
       //! the list of events that haven't been triggered yet.
-      pevent       firsteventtocome; 
+      pevent       firsteventtocome;
 
       //! the list of events that already have been triggered.
       pevent       firsteventpassed;
@@ -1286,12 +1265,12 @@ class tmap {
 
       int eventpassed ( int saveas, int action, int mapid );
       int eventpassed ( int id, int mapid );
-  
+
       int          unitnetworkid;
       char         levelfinished;
       pnetwork     network;
       // int          alliance_names_not_used_any_more[8];
-  
+
       struct tcursorpos {
         struct {
           integer cx;
@@ -1330,10 +1309,20 @@ class tmap {
 
       char          alliances_at_beginofturn[8];
       // pobjectcontainercrcs   objectcrc;
-      pshareview    shareview;
+
+      class  Shareview {
+         public:
+            Shareview ( void ) { recalculateview = 0; };
+            Shareview ( const Shareview* org );
+            bool mode[8][8];
+            int recalculateview;
+       };
+       // mode[1][6] = visible_all    =>  Spieler 1 gibt Spieler 6 die view frei
+
+      Shareview*    shareview;
 
       //! if a player has won a singleplayer map, but wants to continue playing without any enemies, this will be set to 1
-      int           continueplaying;  
+      int           continueplaying;
       treplayinfo*  replayinfo;
 
       //! the player which is currently viewing the map. During replays, for example, this will be different from the player that moves units
@@ -1406,10 +1395,9 @@ class tmap {
       bool loadOldEvents;
    private:
       pvehicle getUnit ( pvehicle eht, int nwid );
+};
 
-
-}; 
-
+typedef tmap::Player Player;
 
 
 
@@ -1427,7 +1415,7 @@ struct tguiicon {
   void*      picture[2]; 
   char         txt[31]; 
   unsigned char         id; 
-  char         key[4]; 
+  char         key[4];
   word         realkey[4]; 
   unsigned char         order; 
 };

@@ -63,7 +63,7 @@ void checkforreplay ( void )
    }
 
 
-   if ( actmap->replayinfo  &&  rpnum  &&  actmap->player[ actmap->actplayer ].stat == ps_human )
+   if ( actmap->replayinfo  &&  rpnum  &&  actmap->player[ actmap->actplayer ].stat == Player::human )
       if (choice_dlg("run replay of last turn ?","~y~es","~n~o") == 1) {
          int s = actmap->actplayer + 1;
          if ( s >= 8 )
@@ -415,7 +415,7 @@ void logtoreplayinfo ( trpl_actions _action, ... )
       if ( action == rpl_shareviewchange ) {
          stream->writedata2 ( action );
          if ( actmap->shareview ) {
-            int size = sizeof ( tshareview ) / sizeof ( int );
+            int size = sizeof ( tmap::Shareview ) / sizeof ( int );
             stream->writedata2 ( size );
             stream->writedata2 ( *actmap->shareview );
          } else {
@@ -999,7 +999,7 @@ void trunreplay :: execnextreplaymove ( void )
          break;
       case rpl_shareviewchange: {
                                  int size;
-                                 pshareview sv = new tshareview;
+                                 tmap::Shareview* sv = new tmap::Shareview;
                                  stream->readdata2 ( size );
                                  if ( size ) {
                                     stream->readdata2 ( *sv );

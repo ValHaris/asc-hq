@@ -1,3 +1,10 @@
+/** \file memorycheck.cpp
+    \brief Includefile (!) for heap tracking
+  
+    The routines here can be included into the main programs for finding heap
+    related problems.
+*/
+
 /***************************************************************************
                           memorycheck.cpp  -  description
                              -------------------

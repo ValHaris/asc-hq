@@ -1,6 +1,17 @@
-//     $Id: loadbi3.cpp,v 1.40 2001-02-01 22:48:42 mbickel Exp $
+/*! \file history.cpp
+    \brief Importing maps from Battle Isle
+*/
+
+
+//     $Id: loadbi3.cpp,v 1.41 2001-02-11 11:39:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2001/02/01 22:48:42  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.39  2001/01/31 14:52:39  mbickel
 //      Fixed crashes in BI3 map importing routines
 //      Rewrote memory consistency checking
