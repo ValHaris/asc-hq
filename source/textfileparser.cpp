@@ -361,7 +361,7 @@ void PropertyContainer::IntegerArrayProperty::evaluate_rw ( )
 {
    if ( propertyContainer->isReading() ) {
       property.clear();
-      StringTokenizer st ( entry->value );
+      StringTokenizer st ( entry->value, true );
       ASCString s = st.getNextToken();
       while ( !s.empty() ) {
          property.push_back ( atoi ( s.c_str() ));

@@ -1,6 +1,11 @@
-//     $Id: loadbi3.h,v 1.12 2001-01-31 14:52:39 mbickel Exp $
+//     $Id: loadbi3.h,v 1.13 2001-08-02 18:18:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2001/01/31 14:52:39  mbickel
+//      Fixed crashes in BI3 map importing routines
+//      Rewrote memory consistency checking
+//      Fileselect dialog now uses ASCStrings
+//
 //     Revision 1.11  2001/01/28 23:00:40  mbickel
 //      Made the small editors compilable with Watcom again
 //
@@ -77,6 +82,7 @@
 #include "typen.h"
 #include "sgstream.h"
 #include "palette.h"
+#include "textfileparser.h"
 
 #ifdef converter
  #error The small editors should not need to use LoadBi3
@@ -97,5 +103,5 @@ extern int getobjectcontainertranslatenum ( void );
 extern const int* getterraintranslate ( int pos );
 extern const int* getobjectcontainertranslate ( int pos );
 
-
+extern void readBI3translationTable();
 #endif

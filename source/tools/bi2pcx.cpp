@@ -29,6 +29,7 @@
 #include "../graphicselector.h"
 #include "../sgstream.h"
 #include "../strtmesg.h"
+#include "../textfileparser.h"
 
 int background = 255;
 
@@ -74,6 +75,7 @@ int main(int argc, char *argv[] )
 
    loadpalette();
    loadbi3graphics();
+   readBI3translationTable();
 
    memset ( bipict, 0, sizeof ( 0 ) );
    try {

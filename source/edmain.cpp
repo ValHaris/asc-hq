@@ -2,9 +2,12 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.47 2001-08-02 15:33:01 mbickel Exp $
+//     $Id: edmain.cpp,v 1.48 2001-08-02 18:18:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2001/08/02 15:33:01  mbickel
+//      Completed text based file formats
+//
 //     Revision 1.46  2001/07/28 11:19:10  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -360,6 +363,8 @@ void loaddata( void )
    loadguipictures();
 
    loadalltextfiles();
+
+   readBI3translationTable();
 
    if ( actprogressbar )
       actprogressbar->startgroup();
