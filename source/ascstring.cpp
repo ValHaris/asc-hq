@@ -101,10 +101,18 @@ int ASCString :: compare ( int pos, int n, const ASCString& s )
    #endif
 }
 
-int ASCString :: compare_cis ( const ASCString& s )
+bool ASCString :: equal_ci ( const ASCString& s ) const
 {
-   // could be optimized a bit...
-   return copyToUpper().compare ( 0, npos, s.copyToUpper());
+   if ( length() != s.length() )
+      return false;
+
+   for ( int i = 0; i < length(); i++  )
+      if ( s[i] != this->operator[] (i) )
+         if ( ! ( s[i] >= 'A' && s[i] <= 'Z' && s[i] == this->operator[](i)+'A'-'a' ||
+                  s[i] >= 'a' && s[i] <= 'z' && s[i] == this->operator[](i)+'a'-'A' ) )
+               return false;
+
+   return true;
 }
 
 

@@ -42,7 +42,7 @@
            virtual bool readTextString ( ASCString& s, bool includeCR = false ); // return 0 if end of file is reached
            virtual ASCString readString ( bool includeCR = false );
            virtual void writepchar( const char* pc) ;
-           virtual void writeString( const ASCString& pc) ;
+           virtual void writeString( const ASCString& pc, bool binary = true ) ;
 
            virtual int  readInt  ( void );
            virtual word readWord ( void );

@@ -132,7 +132,7 @@ class  tfield {
 
 
     //! the terraintype properties. They determine which units can move over the field. This variable is recalculated from the terraintype and objects each time something on the field changes (#setparams)
-    tterrainbits  bdt;
+    TerrainBits  bdt;
 
     //! are any events connected to this field
     int connection;

@@ -870,7 +870,7 @@ tmap :: ~tmap ()
    if ( field )
 
       for ( int l=0 ;l < xsize * ysize ; l++ ) {
-         if ( field[l].bdt & cbbuildingentry )
+         if ( (field[l].bdt & getTerrainBitType(cbbuildingentry)).any() )
             delete field[l].building;
 
 
@@ -1585,7 +1585,7 @@ void tfield :: setparams ( void )
    bdt = typ->art;
 
    for ( i = 0; i < cmovemalitypenum; i++ )
-      _movemalus[i] = typ->movemalus[i];
+      _movemalus[i] = typ->move_malus[i];
 
    for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
       bdt  &=  o->typ->terrain_and;
@@ -1602,7 +1602,7 @@ void tfield :: setparams ( void )
 
    if ( building ) {
       if ( this == building->getField( building->typ->entry ))
-         bdt |= cbbuildingentry;
+         bdt |= getTerrainBitType(cbbuildingentry);
 
       if ( building )
          for (int x = 0; x < 4; x++)
@@ -1651,32 +1651,18 @@ int  Object :: getdir ( void )
 void Object :: display ( int x, int y, int weather )
 {
   if ( typ->id == 7 ) {
-    #ifndef HEXAGON
-     for (int i = 0; i <= 7; i++)
-        if ( dir & (1 << i))
-           putxlatfilter( x, y, typ->getpic ( i ), &xlattables.nochange[0] );
-    #else
-        if ( dir < typ->pictnum )
-           putshadow  ( x, y,  typ->getpic ( dir, weather ) , &xlattables.a.dark1);
-        else
-           putshadow  ( x, y,  typ->getpic ( 0, weather ) , &xlattables.a.dark1);
-    #endif
-  } else
- #ifndef HEXAGON
-  if ( typ->id == 8 ) {
-     putspriteimage( x, y, typ->getpic ( 0 ) );
-     for (int i = 0; i <= 7; i++)
-        if ( dir & (1 << i))
-           putspriteimage( x, y, typ->getpic ( i + 1 ) );
-  } else
- #endif
-  if ( typ->id == 30 ) {   // pipeline
-        if ( dir < typ->pictnum )
+        if ( dir < typ->weatherPicture[weather].images.size() )
            putshadow  ( x, y,  typ->getpic ( dir, weather ) , &xlattables.a.dark1);
         else
            putshadow  ( x, y,  typ->getpic ( 0, weather ) , &xlattables.a.dark1);
   } else
-     typ->display ( x, y, dir, weather );
+     if ( typ->id == 30 ) {   // pipeline
+           if ( dir < typ->weatherPicture[weather].images.size() )
+              putshadow  ( x, y,  typ->getpic ( dir, weather ) , &xlattables.a.dark1);
+           else
+              putshadow  ( x, y,  typ->getpic ( 0, weather ) , &xlattables.a.dark1);
+     } else
+        typ->display ( x, y, dir, weather );
 }
 
 

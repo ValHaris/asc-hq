@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: sg.cpp,v 1.153 2001-07-25 19:01:32 mbickel Exp $
+//     $Id: sg.cpp,v 1.154 2001-07-27 21:13:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.153  2001/07/25 19:01:32  mbickel
+//      Started adding text file formats
+//
 //     Revision 1.152  2001/07/20 21:27:31  mbickel
 //      even more diagnostic messages
 //
@@ -1781,7 +1784,7 @@ void viewunitmovementrange ( pvehicle veh, tkey taste )
 }
 
 extern void testland();
-extern void testtext();
+extern void testtext( TerrainType* pt, ObjectType* po );
 
 void  mainloop ( void )
 {
@@ -1877,7 +1880,7 @@ void  mainloop ( void )
                break;
 
             case ct_9: {
-                          testtext ( );
+                          testtext ( getterraintype_forid ( 1011 ), getobjecttype_forid ( 1 ) );
                                      /*
                           static pvehicle veh = 0;
                           if ( !veh ) {

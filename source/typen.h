@@ -1,6 +1,11 @@
-//     $Id: typen.h,v 1.93 2001-07-18 18:15:52 mbickel Exp $
+//     $Id: typen.h,v 1.94 2001-07-27 21:13:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.93  2001/07/18 18:15:52  mbickel
+//      Fixed: invalid sender of mails
+//      Fixed: unmoveable units are moved by AI
+//      Some reformatting of source files
+//
 //     Revision 1.92  2001/07/14 19:13:16  mbickel
 //      Rewrote sound system
 //      Moveing units make sounds
@@ -175,6 +180,8 @@
 #include "password.h"
 #include "research.h"
 
+
+
 #pragma pack(1)
 
 
@@ -222,133 +229,10 @@ const int maxunitexperience = 23;
 const int cbodenartennum = 33;
 
 
-// typedef bitset<cbodenartennum> tterrainbits;
 
-/** the properties of a terrain describing which units can move onto this field and which can't
-     The operators are crap. But since they are used only by tterrainaccess.accessible, which knows
-     that they are crap, the system is working ...
-*/
-class tterrainbits {
-#ifdef converter
- public:
-#endif
-  int terrain1;
-  int terrain2;
- public:
-  tterrainbits ( int i = 0 ) { 
-      set ( i ); 
-  };
-  tterrainbits ( int i , int j ) {
-      terrain1 = i; 
-      terrain2 = j; 
-  };
-  tterrainbits ( const tterrainbits &bts ) {
-      terrain1 = bts.terrain1; 
-      terrain2 = bts.terrain2; 
-  };
-  void set ( int i = 0, int j = 0 ) { 
-     terrain1 = i;
-     terrain2 = j; 
-  };
-
-  void read ( tnstream& stream ) { 
-     terrain1 = stream.readInt();
-     terrain2 = stream.readInt(); 
-  };
-
-  void write ( tnstream& stream ) const {
-     stream.writeInt( terrain1 );
-     stream.writeInt ( terrain2 ); 
-  };
+typedef bitset<64> BitSet;
 
 
-  int get32bit ( int pos ) {
-     if ( pos == 0 )
-        return terrain1;
-     else
-        return terrain2;
-  };
-
-
-  bool toand ( const tterrainbits& bts ) const;
-
-  bool existall ( const tterrainbits& bdt ) const {
-      return  ((terrain1 & bdt.terrain1) == bdt.terrain1) && ((terrain2 & bdt.terrain2) == bdt.terrain2);
-  };
-
-  tterrainbits& operator|= ( const tterrainbits& tb )  {
-    terrain1 |= tb.terrain1; 
-    terrain2 |= tb.terrain2; 
-    return *this;
-  };
-
-  tterrainbits& operator&= ( const tterrainbits& tb ) {
-    terrain1 &= tb.terrain1; 
-    terrain2 &= tb.terrain2; 
-    return *this;
-  };
-
-  tterrainbits& operator^= ( const tterrainbits& tb ) {
-    terrain1 ^= tb.terrain1; 
-    terrain2 ^= tb.terrain2;
-    return *this;
-  };
-
-  friend tterrainbits operator~ ( const tterrainbits &tb );
-};
-
-
-extern tterrainbits operator~ ( const tterrainbits &tb );
-extern tterrainbits operator| ( const tterrainbits& tb2, const tterrainbits& tb3 ) ;
-extern bool operator& ( const tterrainbits& tb2, const tterrainbits& tb3 ) ;
-extern tterrainbits operator^ ( const tterrainbits& tb2, const tterrainbits& tb3 ) ;
-
-//! This class is used by buildings, vehicles and objects to specify which terrain it can move to
-class tterrainaccess {
-   public:
-      tterrainaccess ( void ) ;
-
-      //! at least one of these bits must match on of the terrain
-      tterrainbits  terrain;
-
-      //! ALL these bits must be set in the terrain
-      tterrainbits  terrainreq;   
-
-      //! if one of these bits is set, the field will NOT be accessible
-      tterrainbits  terrainnot;   
-
-      //! if a terrain is not accessible AND one of these bits is matched, the unit will be destroyed
-      tterrainbits  terrainkill;  
-
-      int dummy[10];
-
-      /** checks whether a field with the given terrainbits is accessible.
-           \returns 1 if the field is accessible;
-                     0 if it is not accessible
-                     -1 if it is not accessible and the unit is killed by it    */
-      int accessible ( const tterrainbits& bts );
-
-      void read ( tnstream& stream ) {
-         terrain.read ( stream );
-         terrainreq.read ( stream );
-         terrainnot.read ( stream );
-         terrainkill.read ( stream );
-
-         for ( int a = 0; a < 10; a++ )
-             stream.readInt( ); //dummy
-      };
-
-      void write ( tnstream& stream ) {
-         terrain.write ( stream );
-         terrainreq.write ( stream );
-         terrainnot.write ( stream );
-         terrainkill.write ( stream );
-
-         for ( int a = 0; a < 10; a++ )
-             stream.writeInt( 0 ); //dummy
-      };
-
-};
 
 
 
@@ -392,6 +276,7 @@ class Resources {
      enum { Energy, Material, Fuel };
      void read ( tnstream& stream );
      void write ( tnstream& stream ) const;
+     void runTextIO ( PropertyContainer& pc );
 };
 
 extern Resources operator- ( const Resources& res1, const Resources& res2 );
@@ -409,14 +294,6 @@ class ResourceMatrix {
 
 
 
-//! A list that stores pointers, but deletes the objects (and not only the pointers) on destruction
-template <class T> class PointerList : public list<T> {
-   public:
-     ~PointerList() {
-        for ( iterator it=begin(); it!=end(); it++ )
-            delete *it;
-     };
-};
 
 
 //! the image for a terraintype ( #tterraintype ) that is shown on the small map
@@ -429,7 +306,7 @@ struct tquickview {
 };
 
 
-
+/*
   //! an image, which may either be independant or part of a graphic set
   struct thexpic {
     void* picture;
@@ -439,7 +316,7 @@ struct tquickview {
     //! is the image a flipped version of an image from the graphic set. Bit 0 : flipped horizontally, bit 1: flipped vertically
     int   flip;
   };
-
+*/
 
 typedef struct teventstore* peventstore;
 struct teventstore {
@@ -471,6 +348,16 @@ class  Message {
      */
      Message ( const ASCString& msg, pmap gamemap,int rec, int from = 512 );  // fuer Meldungen vom System
 };
+
+//! A list that stores pointers, but deletes the objects (and not only the pointers) on destruction
+template <class T> class PointerList : public list<T> {
+   public:
+     ~PointerList() {
+        for ( iterator it=begin(); it!=end(); it++ )
+            delete *it;
+     };
+};
+
 
 typedef PointerList<Message*> MessageContainer;
 typedef list<Message*> MessagePntrContainer;
@@ -540,146 +427,7 @@ class MapCoordinate3D : public MapCoordinate {
 */
 
 
-//! The type of a field
-class TerrainType {
-   public:
-     class  Weather {
-       public:
-         void*          picture[8];
-         void*          direcpict[8];
-         int            defensebonus;
-         int            attackbonus;
-         int            basicjamming;
-         char           movemaluscount;
-         char*          movemalus;
-         pterraintype   terraintype;
-         pquickview     quickview;
-         void           paint ( int x1, int y1 );
-         int            bi_picture[6]; 
-         tterrainbits   art; 
-         Weather ( TerrainType* base ) : terraintype ( base ) {};
-     };
-    char*              name;
-    int                id;
-    Weather*           weather[cwettertypennum];
-    int                neighbouringfield[8];   
-};
 
-
-//! An object that can be placed on fields. Roads, pipelines and ditches are examples of objects.
-class tobjecttype {
-  public: 
-    //! the id of the object, used when referencing objects in files
-    int id;
-
-    //! bitmapped variable containing the different weather types the objects exist for
-    int weather;
-
-    //! is the object displayed under fog of war
-    int visibleago;
-
-    //! some objects are graphically linked with others on neighbouring fields. This is the number of other object types that tis one links with. See #no_autonet
-    int objectslinkablenum;
-    //! the array of object types that this one links with. See #objectslinkablenum
-    union {
-      int*            objectslinkableid;
-      pobjecttype*    objectslinkable;
-    };
-
-    //! the array of pictures; this is from an old definition of object types where the picture of an object could not vary with the weather. Today the images are stored in #picture
-    thexpic* oldpicture;
-
-    //! the number of pictures for each weather. Objects which link graphically with neighbouring objects need more than one picture
-    int pictnum;
-
-    //! if an object should not be attackable, set armor to 0
-    int armor;
-
-    //! In the files and the small editors this variable may be smaller than #cmovemalitypenum, even 0; but the loader extends this to #cmovemalitypenum when an object is loaded ingame
-    char  movemalus_plus_count;
-    //! the movemalus_plus is added to the current movemalus of the field to form the new movemalus. Negative values are ok.
-    char* movemalus_plus;
-
-    //! In the files and the small editors this variable may be smaller than #cmovemalitypenum, even 0; but the loader extends this to #cmovemalitypenum when an object is loaded ingame.
-    char  movemalus_abs_count;
-    //! The movemalus_abs replaces the current movemalus of the field by a new one. Values of 0 and -1 won't affect the movemalus of the field, and values ranging from 1 to 9 must not be used.
-    char* movemalus_abs;
-
-    //! this is added to the current attackbonus of the field to form the new attackbonus. 
-    int attackbonus_plus;
-    //! The attackbonus_abs replaces the current attackbonus of the field by a new one. A value of -1 won't affect the attackbonus of the field
-    int attackbonus_abs;
-
-    //! this is added to the current defensebonus of the field to form the new defensebonus.
-    int defensebonus_plus;
-    //! The defensebonus_abs replaces the current defensebonus of the field by a new one. A value of -1 won't affect the attackbonus of the field
-    int defensebonus_abs;
-
-    //! this is added to the current basicjamming of the field to form the new jamming.
-    int basicjamming_plus;
-    //! basicjamming_abs replaces the current basicjamming of the field by a new one. A value < 0 won't affect the jamming of the field
-    int basicjamming_abs;
-
-    //! the level of height the object is on. This is not the simple system of 8 levels used for units and building, but one with 255 levels which are documented in docs/biimport.html
-    int height;   
-
-    //! The resources required to construct the object with a unit; Note that units usually don't have any energy available
-    Resources buildcost;
-
-    //! The resources required to remove the object with a unit; Note that units usually don't have any energy available
-    Resources removecost;
-
-    //! The movement points that are needed to build this object
-    int build_movecost;  
-
-    //! The movement points that are needed to remove this object
-    int remove_movecost; 
-
-    //! The name of the object
-    char* name;
-
-    //! if != 0 this object will not graphically connect to neighbouring objects
-    int no_autonet;
-
-    //! The terrain on which this object can be placed
-    tterrainaccess terrainaccess;
-
-    //! the terrain properties of the field will be AND-masked with this field and then OR-masked with terrain_or to form the new terrain properties
-    tterrainbits terrain_and;
-    tterrainbits terrain_or;
-    tobjecttype ( void ) : terrain_and ( -1 ) , terrain_or ( 0 ) {};
-
-    //! the icon used for selecting the object when executing the "build object" function of a unit. The image is automatically generated at load time
-    void* buildicon;
-    //! the icon used for selecting the object when executing the "remove object" function of a unit. The image is automatically generated at load time
-    void* removeicon;
-
-    //! direction lists were an attempt to allow the graphical connection of this object with neighbouring ones without having an image for each possible connection layout. The attempt failed. Don't use it any more.
-    int* dirlist;
-    int dirlistnum;
-
-    //! the images of the objects
-    thexpic* picture[cwettertypennum];
-
-    //! displays the objecttype at x/y on the screen
-    void display ( int x, int y );
-    void display ( int x, int y, int dir, int weather = 0 );
-
-    //! returns the pointer to the image i
-    void* getpic ( int i, int weather = 0 );
-
-    //! can the object be build on the field fld
-    int  buildable ( pfield fld );
-
-    //! if the object connects graphically with others, does it connect with buildings too
-    int connectablewithbuildings ( void );
-
-
-    //! reads the objecttype from a stream
-    void read ( tnstream& stream );
-    //! write the objecttype from a stream
-    void write ( tnstream& stream );
-};
 
 
 
@@ -1130,29 +878,6 @@ extern  const char*  choehenstufen[8] ;
 
 
 
-
-extern const char*  cbodenarten[]  ;
-  extern tterrainbits cbwater0 ;
-  extern tterrainbits cbwater1 ;
-  extern tterrainbits cbwater2 ;
-  extern tterrainbits cbwater3 ;
-  extern tterrainbits cbwater  ;
-  extern tterrainbits cbstreet ;
-  extern tterrainbits cbrailroad ;
-  extern tterrainbits cbbuildingentry ;
-  extern tterrainbits cbharbour ;
-  extern tterrainbits cbrunway ;
-  extern tterrainbits cbrunway ;
-  extern tterrainbits cbpipeline ;
-  extern tterrainbits cbpowerline;
-  extern tterrainbits cbfahrspur ;
-  extern tterrainbits cbfestland ;
-  extern tterrainbits cbsnow1 ;
-  extern tterrainbits cbsnow2 ;
-  extern tterrainbits cbhillside ;
-  extern tterrainbits cbsmallrocks ;
-  extern tterrainbits cblargerocks ;
-  extern tterrainbits cbfrozenwater ;
 
 
 extern const char*  resourceNames[3];

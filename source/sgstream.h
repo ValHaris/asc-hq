@@ -3,9 +3,14 @@
   
 */
 
-//     $Id: sgstream.h,v 1.18 2001-07-14 19:13:16 mbickel Exp $
+//     $Id: sgstream.h,v 1.19 2001-07-27 21:13:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2001/07/14 19:13:16  mbickel
+//      Rewrote sound system
+//      Moveing units make sounds
+//      Added sound files to data
+//
 //     Revision 1.17  2001/01/28 14:04:19  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -107,6 +112,8 @@
 
 #include "basestrm.h"
 #include "typen.h"
+#include "terraintype.h"
+#include "objecttype.h"
 
 
 extern pvehicletype loadvehicletype( const char *       name);
@@ -115,7 +122,6 @@ extern void writevehicle( pvehicletype ft, tnstream& stream );
 
 extern pterraintype loadterraintype( const char *       name);
 extern pterraintype loadterraintype( pnstream stream );
-extern void writeterrain ( pterraintype bdt, pnstream stream );
 
 extern pbuildingtype loadbuildingtype( const char *       name);
 extern pbuildingtype loadbuildingtype( pnstream stream );

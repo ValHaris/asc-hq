@@ -2,9 +2,12 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.26 2001-07-15 21:00:25 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.27 2001-07-27 21:13:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2001/07/15 21:00:25  mbickel
+//      Some cleanup in the vehicletype class
+//
 //     Revision 1.25  2001/03/23 16:02:56  mbickel
 //      Some restructuring;
 //      started rewriting event system
@@ -739,7 +742,7 @@ void SelectTerrainType :: displaysingleitem ( pterraintype item, int x, int y )
 
 ASCString SelectTerrainType :: getItemName ( pterraintype item )
 {
-   if ( item->name && item->name[0] )
+   if ( !item->name.empty() )
       return item->name;
    else
       return "-NONE-";
@@ -790,7 +793,7 @@ void SelectObjectType :: displaysingleitem ( pobjecttype item, int x, int y )
 
 ASCString SelectObjectType :: getItemName ( pobjecttype item )
 {
-   if ( item->name && item->name[0] )
+   if ( !item->name.empty() )
       return item->name;
    else
       return "-NONE-";
@@ -1004,7 +1007,7 @@ void SelectWeather :: showiteminfos ( pweathertype item, int x1, int y1, int x2,
          activefontsettings.height = 0;
          activefontsettings.length = x2 - x1 - 20 - fieldsizex;
    
-         showtext4 ( "the terrain '%s'", x1 + 20 + fieldsizex, y1 + 10, auswahl->name );
+         showtext4 ( "the terrain '%s'", x1 + 20 + fieldsizex, y1 + 10, auswahl->name.c_str() );
          showtext2 ( "does not have this weather", x1 + 20 + fieldsizex, y1 + 30 );
    
          npop ( activefontsettings );

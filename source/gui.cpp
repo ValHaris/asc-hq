@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: gui.cpp,v 1.60 2001-07-15 21:00:25 mbickel Exp $
+//     $Id: gui.cpp,v 1.61 2001-07-27 21:13:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2001/07/15 21:00:25  mbickel
+//      Some cleanup in the vehicletype class
+//
 //     Revision 1.59  2001/07/14 19:13:15  mbickel
 //      Rewrote sound system
 //      Moveing units make sounds
@@ -1666,7 +1669,7 @@ int   tnsguiiconputgroundmine::available    ( void )
 {
    if (moveparams.movestatus == 90) { 
       pfield fld = getactfield(); 
-      if ((fld->typ->art & cbwater) == 0)
+      if ( (fld->typ->art & getTerrainBitType(cbwater)).none() )
          if ( fld->a.temp ) 
             if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
                return true; 
@@ -1706,7 +1709,7 @@ int   tnsguiiconputseamine::available    ( void )
 {
    if (moveparams.movestatus == 90) { 
       pfield fld = getactfield(); 
-      if (fld->typ->art & cbwater ) 
+      if ( (fld->typ->art & getTerrainBitType(cbwater)).any() )
          if (fld->a.temp ) 
             if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
                return true; 

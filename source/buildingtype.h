@@ -25,6 +25,8 @@
  #include "typen.h"
  #include "containerbase.h"
  #include "ascstring.h"
+ #include "terraintype.h"
+ #include "objecttype.h"
 
 
 const int cbuildingfunctionnum = 18;
@@ -106,7 +108,7 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
         unsigned char         technologylevel;
         unsigned char         researchid;
 
-        tterrainaccess terrainaccess;
+        TerrainAccess terrainaccess;
 
         int          construction_steps;  // 1 .. 8
         int          maxresearchpoints;

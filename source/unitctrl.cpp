@@ -1,6 +1,12 @@
-//     $Id: unitctrl.cpp,v 1.60 2001-07-25 18:00:16 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.61 2001-07-27 21:13:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2001/07/25 18:00:16  mbickel
+//      Fixed: units could repair without repairing function but
+//      Fixed: airplanes tried to ascend through buildings
+//      Fixed: crash when kamikaze attack occured during movement
+//      Fixed: log(0) error in refuelling dialog
+//
 //     Revision 1.59  2001/07/15 21:31:03  mbickel
 //      The movement sounds can now fade in and out
 //
@@ -813,14 +819,14 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
       
         if ( vehicle->functions & cffahrspur )
            if ( fahrspurobject )
-              if ( fld1->bdt & cbfahrspur )
+              if ( (fld1->bdt & getTerrainBitType(cbfahrspur)).any() )
                  // if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checkobj2 ( fahrspurobject, 2 )))
                     fld1 -> addobject ( fahrspurobject, 1 << dir );
 
         if ( vehicle->functions & cficebreaker )
            if ( eisbrecherobject )
-              // if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checkobj2 ( eisbrecherobject, 2 )))
-                 if ( (fld1->bdt & cbfrozenwater ) ||(fld1->bdt & cbsnow1 )  || ( fld1->bdt & cbsnow2 ) || fld1->checkforobject ( eisbrecherobject ) ) {
+                 if (   (fld1->bdt & getTerrainBitType(cbicebreaking) ).any()
+                      || fld1->checkforobject ( eisbrecherobject ) ) {
                     fld1 -> addobject ( eisbrecherobject, 1 << dir );
                     fld1->checkforobject ( eisbrecherobject )->time = actmap->time.a.turn;
                  }
@@ -833,7 +839,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
       pfield field3 = fld2; 
       if (vehicle->functions & cffahrspur) {
          if ( fahrspurobject )
-            if ( field3->bdt & cbfahrspur )
+            if ( (field3->bdt & getTerrainBitType(cbfahrspur)).any() )
                // if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checkobj2 ( fahrspurobject, 2 )))
                   if (dir >= sidenum/2) 
                     getfield ( x, y ) -> addobject ( fahrspurobject, 1 << (dir - sidenum/2));
@@ -842,16 +848,14 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
       } 
       if ( vehicle->functions & cficebreaker )
          if ( eisbrecherobject )
-            // if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checkobj2 ( eisbrecherobject, 2 )))
-                 if ( (field3->bdt & cbsnow1 )  || ( field3->bdt & cbsnow2 ) || field3->checkforobject ( eisbrecherobject ) ) {
-                  if (dir >= sidenum/2) 
-                    getfield ( x, y ) -> addobject ( eisbrecherobject, 1 << (dir - sidenum/2));
-                  else 
-                    getfield ( x, y ) -> addobject ( eisbrecherobject, 1 << (dir + sidenum/2));
-      
-                    field3->checkforobject ( eisbrecherobject )->time = actmap->time.a.turn;
-      
-               }
+            if ( (field3->bdt & getTerrainBitType(cbicebreaking) ).any() || field3->checkforobject ( eisbrecherobject ) ) {
+               if (dir >= sidenum/2)
+                 getfield ( x, y ) -> addobject ( eisbrecherobject, 1 << (dir - sidenum/2));
+               else
+                 getfield ( x, y ) -> addobject ( eisbrecherobject, 1 << (dir + sidenum/2));
+
+                 field3->checkforobject ( eisbrecherobject )->time = actmap->time.a.turn;
+            }
 
       if ( vehicle ) {
          vehicle->xpos = x;

@@ -216,7 +216,7 @@ int main(int argc, char *argv[] )
       printf("\n\n\n objects  " );
       {
          didcounta id;
-         vid ( "*.obl", tobjecttype, loadobjecttype );
+         vid ( "*.obl", ObjectType, loadobjecttype );
          printresults( id );
          printf("\n PLEASE DO NOT USE IDs BELOW 100 FOR NEW OBJECTS !!\n");
       }

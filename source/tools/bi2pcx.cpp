@@ -108,16 +108,15 @@ int main(int argc, char *argv[] )
 
                for ( int i = 0; i< cwettertypennum; i++ )
                   if ( bdt->weather[i] )
-                     for ( int j = 0; j < 6; j++ )
-                        if ( bdt->weather[i]->picture[j] ) 
-                           if ( bdt->weather[i]->bi_picture[j] >= 0 ) {
-                              int n = bdt->weather[i]->bi_picture[j];
+                        if ( bdt->weather[i]->pict )
+                           if ( bdt->weather[i]->bi_pict >= 0 ) {
+                              int n = bdt->weather[i]->bi_pict;
                               int t = bipict[n].textnum++;
-                              if ( (i == 0)  ||  (bdt->weather[0]->bi_picture[0] < 0) ) {
+                              if ( (i == 0)  ||  (bdt->weather[0]->bi_pict < 0) ) {
                                  sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", c.c_str(), bdt->id );
                                  bipict [ n ].entry[ t ].color = 1;
                               } else {
-                                 sprintf ( bipict [ n ].entry[ t ] .text, "-> %d ; w=%d", bdt->weather[0]->bi_picture[0],i );
+                                 sprintf ( bipict [ n ].entry[ t ] .text, "-> %d ; w=%d", bdt->weather[0]->bi_pict,i );
                                  bipict [ n ].entry[ t ].color = 1;
                               }
                               fprintf( fp, "%d ", n );
@@ -154,18 +153,18 @@ int main(int argc, char *argv[] )
                fprintf(fp, "\n%s ; id %d ; pictures ", c.c_str(), obj->id );
 
                for ( int w = 0; w < cwettertypennum; w++ )
-                  if ( (obj->weather & ( 1 << w)) && obj->picture[w] )
-                     for ( int i = 0; i< obj->pictnum ; i++ )
-                         if ( obj->picture[w][i].bi3pic >= 0 ) {
-                            int n = obj->picture[w][i].bi3pic;
+                  if ( obj->weather.test(w)  )
+                     for ( int i = 0; i< obj->weatherPicture[w].images.size() ; i++ )
+                         if ( obj->weatherPicture[w].bi3pic[i] >= 0 ) {
+                            int n = obj->weatherPicture[w].bi3pic[i];
                             int t = bipict[n].textnum;
                             bipict[n].textnum += 2;
             
                             sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", c.c_str(), obj->id );
                             sprintf ( bipict [ n ].entry[ t+1 ] .text, "    #%d ", i );
-                            if ( obj->picture[w][i].flip & 1 )
+                            if ( obj->weatherPicture[w].flip[i] & 1 )
                                strcat ( bipict [ n ].entry[ t+1 ] .text, "H" );
-                            if ( obj->picture[w][i].flip & 2 )
+                            if ( obj->weatherPicture[w].flip[i] & 2 )
                                strcat ( bipict [ n ].entry[ t+1 ] .text, "V" );
 
                             fprintf( fp, "%d ", n );

@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: basestrm.h,v 1.43 2001-07-14 13:15:17 mbickel Exp $
+//     $Id: basestrm.h,v 1.44 2001-07-27 21:13:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2001/07/14 13:15:17  mbickel
+//      Rewrote sound handling
+//
 //     Revision 1.42  2001/06/14 14:46:46  mbickel
 //      The resolution of ASC can be specified in the configuration file
 //      The fileselect dialog box shows the file's location
@@ -185,24 +188,6 @@ class tinvalidversion : public tfileerror {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////        dynamic data structures
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
-template<class T>
-class dynamic_queue {
-           protected:
-              int blksize;
-              int size;
-              int first;
-              int last;
-              T* buf;
-           public:
-              dynamic_queue ( void );
-              T getval ( void );
-              void putval ( T a );
-              int valavail ( void );
-              ~dynamic_queue();
-};
-*/
 
 
 template<class T>
@@ -683,7 +668,8 @@ extern char* getnextfilenumname ( const char* first, const char* suffix, int num
 #define writedata2(a)  writedata ( &(a), sizeof(a) )
 #define readdata2(a)   readdata  ( &(a), sizeof(a) )
 
-extern int exist ( const char* s );
+//! does a file s exist (wildcards allowed)
+extern bool exist ( const ASCString& s );
 extern time_t get_filetime ( const char* devicename );
 
 extern void opencontainer ( const char* wildcard );
@@ -719,6 +705,8 @@ extern char* constructFileName( char* buf, int directoryLevel, const char* path,
 extern int directoryExist ( const char* path );
 extern char* extractPath ( char* buf, const char* filename );
 extern char* extractFileName ( char* buf, const char* filename );
+extern ASCString extractFileName ( const ASCString& filename );
+extern ASCString extractFileName_withoutSuffix ( const ASCString& filename );
 extern int createDirectory ( const char* name );
 extern ASCString getSearchPath ( int i );
 

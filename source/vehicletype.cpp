@@ -21,6 +21,8 @@
 #include "graphicset.h"
 #include "errors.h"
 #include "basegfx.h"
+#include "terraintype.h"
+#include "objecttype.h"
 
 
 const char*  cvehiclefunctions[cvehiclefunctionsnum]  = {
@@ -116,7 +118,7 @@ Vehicletype :: Vehicletype ( void )
    for ( i = 0; i < 8; i++ )
       aiparam[i] = NULL;
 
-   terrainaccess = new tterrainaccess;
+   terrainaccess = new TerrainAccess;
    vehicleCategoriesLoadable = -1;
 }
 
@@ -358,10 +360,10 @@ void Vehicletype :: read ( tnstream& stream )
    #endif
 
    if ( terrainaccess ) {
-      terrainaccess = new tterrainaccess;
+      terrainaccess = new TerrainAccess;
       terrainaccess->read ( stream );
    } else {
-      terrainaccess = new tterrainaccess;
+      terrainaccess = new TerrainAccess;
       terrainaccess->terrain.set ( _terrain, 0 );
       terrainaccess->terrainreq.set ( _terrainreq, 0 );
       terrainaccess->terrainnot.set ( _terrainnot, 0 );

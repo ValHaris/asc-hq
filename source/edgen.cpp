@@ -2,9 +2,15 @@
     \brief The random map generator
 */
 
-//     $Id: edgen.cpp,v 1.9 2001-02-01 22:48:37 mbickel Exp $
+//     $Id: edgen.cpp,v 1.10 2001-07-27 21:13:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2001/02/01 22:48:37  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.8  2001/01/28 14:04:13  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -407,8 +413,10 @@ void tmapgenerator::showmap(void)
 
 char tmapgenerator::checkland(int x, int y)
 {
-   if ( ! ( getfield(x,y)->typ->art & cbwater ) ) return true;
-   else return false;
+   if ( ( getfield(x,y)->typ->art & getTerrainBitType(cbwater) ).none() )
+      return true;
+   else
+      return false;
 }
 
 void tmapgenerator::addcoast(void)

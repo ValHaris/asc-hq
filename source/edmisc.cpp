@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.56 2001-07-15 21:00:25 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.57 2001-07-27 21:13:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.56  2001/07/15 21:00:25  mbickel
+//      Some cleanup in the vehicletype class
+//
 //     Revision 1.55  2001/07/11 20:44:37  mbickel
 //      Removed some vehicles from the data file.
 //      Put all legacy units in into the data/legacy directory
@@ -1977,9 +1980,9 @@ void         tnewmap::init(void)
       if ( ! random ) {
          mousevisible(false); 
          if ( tauswahl->weather[auswahlw] ) 
-            putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[auswahlw]->picture[0]);
+            putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[auswahlw]->pict );
          else
-            putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[0]->picture[0]);
+            putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[0]->pict );
          mousevisible(true); 
       } 
    rahmen(true,x1 + 10,y1 + starty,x1 + xsize - 10,y1 + ysize - 45); 
@@ -2082,9 +2085,9 @@ void         tnewmap::buttonpressed(int id)
       npop ( lastselectiontype );
 
       if ( tauswahl->weather[auswahlw] )
-         putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[auswahlw]->picture[0]); 
+         putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[auswahlw]->pict );
       else
-         putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[0]->picture[0]); 
+         putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[0]->pict );
    } 
    if (id == 11) 
       if ( ! random) {
@@ -3834,7 +3837,7 @@ void UnitTypeTransformation :: run ( void )
          pfield fld = getfield ( x, y );
          if ( fld->vehicle )
             transformvehicle ( fld->vehicle, unitsetnum, translationsetnum );
-         if ( fld->building && (fld->bdt & cbbuildingentry))
+         if ( fld->building && (fld->bdt & getTerrainBitType(cbbuildingentry) ).any() )
             for ( int i = 0; i < 32; i++ ) {
                if ( fld->building->loading[i] ) 
                   transformvehicle ( fld->building->loading[i], unitsetnum, translationsetnum );

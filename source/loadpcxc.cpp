@@ -5,9 +5,13 @@
     which is called #loadpcx.cpp , but not used any more.
 */
 
-//     $Id: loadpcxc.cpp,v 1.14 2001-02-28 14:10:05 mbickel Exp $
+//     $Id: loadpcxc.cpp,v 1.15 2001-07-27 21:13:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2001/02/28 14:10:05  mbickel
+//      Added some small editors to linux makefiles
+//      Added even more dirty hacks to basegfx: some more truecolor functions
+//
 //     Revision 1.13  2001/02/18 15:37:15  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -157,7 +161,6 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
 {
    int read = 0;
 
-
    // int m = y * agmp-> scanlinelength * agmp->byteperpix + x;
 
    tpcxheader header;
@@ -289,14 +292,14 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
 } 
 
 
-char loadpcxxy ( const char *name, char setpal, word x, word y)
+char loadpcxxy ( const ASCString& name, char setpal, word x, word y)
 {
    tnfilestream s ( name, tnstream::reading );
    return loadpcxxy ( &s, x, y, setpal );
 }
 
 
-void writepcx ( const char* name, int x1, int y1, int x2, int y2, dacpalette256 pal )
+void writepcx ( const ASCString& name, int x1, int y1, int x2, int y2, dacpalette256 pal )
 {
    tpcxheader header;
    memset ( &header, 0, sizeof (header ));

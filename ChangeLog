@@ -1,3 +1,112 @@
+2001-07-25 21:56  mbickel
+
+	* source/: attack.cpp, libs/bzlib/win/bzlib.bpr,
+	libs/triangul/win32/triangulation.bpr, tools/win/demount.bpr,
+	tools/win/gfx2pcx.bpr, tools/win/makegfx.bpr, tools/win/mount.bpr,
+	tools/win/tank2pcx.bpr, tools/win/tools.bpr, tools/win/viewid.bpr,
+	tools/win/weaponguide.bpr, win32/borland/asc.bpr,
+	win32/borland/mapeditor/mapeditor.bpr:	Fixed: kamikaze not working
+
+2001-07-25 21:01  mbickel
+
+	* asc.kdevprj, data/tutor1.map, source/ascstring.cpp,
+	source/ascstring.h, source/basestrm.cpp, source/misc.cpp,
+	source/sg.cpp, source/soundList.cpp, source/strtmesg.cpp,
+	source/ai/valuation.cpp:  Started adding text file formats
+
+2001-07-25 20:00  mbickel
+
+	* source/: PropertyGroup.cpp, gamedlg.cpp, unitctrl.cpp:  Fixed:
+	units could repair without repairing function but
+	 Fixed: airplanes tried to ascend through buildings
+	 Fixed: crash when kamikaze attack occured during movement
+	 Fixed: log(0) error in refuelling dialog
+
+2001-07-20 23:27  mbickel
+
+	* source/sg.cpp:  even more diagnostic messages
+
+2001-07-20 22:37  mbickel
+
+	* source/: sg.cpp, libs/bzlib/win/bzlib.bpr,
+	libs/triangul/win32/triangulation.bpr, sdl/sound.cpp,
+	tools/win/demount.bpr, tools/win/gfx2pcx.bpr,
+	tools/win/makegfx.bpr, tools/win/mount.bpr, tools/win/tank2pcx.bpr,
+	tools/win/tools.bpr, tools/win/viewid.bpr,
+	tools/win/weaponguide.bpr, win32/borland/asc.bpr,
+	win32/borland/mapeditor/mapeditor.bpr:	Enhanced logging
+	capabilities
+
+2001-07-18 23:51  mbickel
+
+	* source/TODO:	Removed fixed bugs
+
+2001-07-18 22:53  mbickel
+
+	* source/: dashboard.cpp, strtmesg.cpp, vehicle.cpp, sdl/sound.cpp:
+	 Fixed sound failing during game
+	 Fixed crash on loading game
+	 Fixed ammo not being displayed in large weapon info
+
+2001-07-18 20:15  mbickel
+
+	* asc.kdevprj, source/CLoadable.cpp, source/CLoadable.h,
+	source/Named.cpp, source/Named.h, source/Property.cpp,
+	source/Property.h, source/PropertyGroup.cpp,
+	source/PropertyGroup.h, source/PropertyIF.h, source/astar2.cpp,
+	source/gamedlg.cpp, source/gamedlg.h, source/typen.h:  Fixed:
+	invalid sender of mails
+	 Fixed: unmoveable units are moved by AI
+	 Some reformatting of source files
+
+2001-07-18 18:05  mbickel
+
+	* source/: TODO, controls.cpp, controls.h, dialog.cpp, dlg_box.cpp,
+	gamedlg.h, gamemap.cpp, loaders.cpp, sg.cpp, soundList.h,
+	spfst.cpp, strtmesg.cpp, strtmesg.h, vehicle.cpp, vehicle.h,
+	ai/base.cpp, ai/buildingcapture.cpp, ai/valuation.cpp,
+	win32/borland/mapeditor/mapeditor.bpr:	Fixed: infinitive loop in
+	displaying "player exterminated" msg
+	 Fixed: construction of units by units: wrong player
+	 Fixed: loading bug of maps with mines
+	 Fixed: invalid map parameter
+	 Fixed bug in game param edit dialog
+	 Fixed: cannot attack after declaring of war
+	 New: ffading of sounds
+
+2001-07-15 23:31  mbickel
+
+	* source/: dlg_box.cpp, soundList.cpp, soundList.h, unitctrl.cpp,
+	sdl/sound.cpp, sdl/sound.h, tools/weaponguide.cpp:  The movement
+	sounds can now fade in and out
+
+2001-07-15 23:00  mbickel
+
+	* asc.kdevprj, source/attack.cpp, source/basegfx.cpp,
+	source/building.cpp, source/controls.cpp, source/dashboard.cpp,
+	source/dialog.cpp, source/dlg_box.cpp, source/dlg_box.h,
+	source/edevents.cpp, source/edmisc.cpp, source/edselfnt.cpp,
+	source/gamedlg.cpp, source/gui.cpp, source/newfont.h,
+	source/sg.cpp, source/unitctrl.cpp, source/vehicle.cpp,
+	source/vehicle.h, source/vehicletype.cpp, source/vehicletype.h,
+	source/ai/misc.cpp, source/ai/service.cpp, source/ai/tactics.cpp,
+	source/ai/valuation.cpp:  Some cleanup in the vehicletype class
+
+2001-07-15 17:25  mbickel
+
+	* data/: harb0194.trr, harb0195.trr, harb0196.trr, harb0197.trr,
+	harb0198.trr, harb0199.trr, harb0200.trr, harb0201.trr:  Harbour
+	fields now have deeper water
+
+2001-07-15 12:36  mbickel
+
+	* source/: network.cpp, strtmesg.cpp:  Added explanation message in
+	email game save dialog
+
+2001-07-15 00:57  mbickel
+
+	* ChangeLog, data/helpsyst.txt:  Updated credits
+
 2001-07-14 23:26  mbickel
 
 	* asc.kdevprj, source/strtmesg.cpp:  Updated version information

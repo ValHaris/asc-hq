@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.45 2001-05-17 20:10:22 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.46 2001-07-27 21:13:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2001/05/17 20:10:22  mbickel
+//      Fixed: mapeditor was unable to load maps
+//      Removed debugging output from bi3 map loader
+//
 //     Revision 1.44  2001/04/30 11:41:25  mbickel
 //      Fixed crash when importing BI maps due to different structure packing
 //
@@ -709,7 +713,7 @@ void        tloadBImap ::   ReadACTNPart(void)
             if ( trrn )
                for ( int j = 0; j < cwettertypennum; j++ )
                   if ( trrn->weather[j] )
-                     if ( trrn->weather[j]->bi_picture[0] == Line[X] ) {
+                     if ( trrn->weather[j]->bi_pict == Line[X] ) {
                         fld->typ = trrn->weather[j];
                         fld->setparams();
                         found = 1;
@@ -795,9 +799,9 @@ void        tloadBImap ::   ReadACTNPart(void)
                   pobjecttype obj = getobjecttype_forpos ( i );
                   if ( obj ) 
                      for ( int ww = 0; ww < cwettertypennum; ww++ )
-                        if ( obj->weather & ( 1 << ww ))
-                           for ( int j = 0; j < obj->pictnum; j++ )
-                              if ( obj->picture[ww][j].bi3pic == xlt[m]  && !(found & 2)  && !( getActiveGraphicSet()->getMode(xlt[m]) & 256) ) {
+                        if ( obj->weather.test(ww) )
+                           for ( int j = 0; j < obj->weatherPicture[ww].images.size(); j++ )
+                              if ( obj->weatherPicture[ww].bi3pic[j] == xlt[m]  && !(found & 2)  && !( getActiveGraphicSet()->getMode(xlt[m]) & 256) ) {
                                  pfield fld = getfield ( newx, newy );
                                  if ( pass == 1 || obj->terrainaccess.accessible ( fld->bdt )) {
                                     fld -> addobject ( obj, 0, 1 );
@@ -811,7 +815,7 @@ void        tloadBImap ::   ReadACTNPart(void)
 
          if ( !found  && Line[X] != 0xffff ) {
             if ( fakemap ) {
-               pobjecttype o = new tobjecttype;
+               pobjecttype o = new ObjectType;
                *o = *getobjecttype_forid ( 44 );
                int id = 100000;
                while ( getobjecttype_forid ( id ))
@@ -819,11 +823,12 @@ void        tloadBImap ::   ReadACTNPart(void)
 
                o->id = id;
                o->weather = 1;
-               o->pictnum = 1;
-               o->picture[0] = new thexpic;
-               loadbi3pict_double ( Line[X], &o->picture[0]->picture );
-               o->picture[0]->flip = 0;
-               o->picture[0]->bi3pic = Line[X];
+
+               o->weatherPicture[0].resize(1);
+
+               loadbi3pict_double ( Line[X], &o->weatherPicture[0].images[0] );
+               o->weatherPicture[0].images[0] = 0;
+               o->weatherPicture[0].bi3pic[0] = Line[X];
 
                addobjecttype ( o );
 

@@ -25,9 +25,9 @@
 #ifndef pointers_h_included
  #define pointers_h_included
 
- typedef class tterrainaccess *pterrainaccess;
+ typedef class TerrainAccess *pterrainaccess;
  typedef class Vehicle* pvehicle ;
- typedef class tobjecttype* pobjecttype;
+ typedef class ObjectType* pobjecttype;
  typedef class tmap*  pmap;
  typedef class tmap Map;
  typedef class tevent* pevent ;
@@ -37,7 +37,6 @@
  typedef class tbasenetworkconnection* pbasenetworkconnection;
  typedef class tnetwork* pnetwork;
  typedef struct tquickview* pquickview;
- typedef struct TerrainType* pterraintype;
  typedef class  tfield* pfield ;
  typedef class  Object* pobject;
  typedef class  BuildingType* pbuildingtype;
@@ -45,5 +44,6 @@
  typedef class  Vehicletype*  pvehicletype ;
  typedef class  Building* pbuilding;
 
+ typedef class PropertyContainer;
 
 #endif

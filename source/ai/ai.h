@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: ai.h,v 1.4 2001-05-24 15:37:51 mbickel Exp $
+//     $Id: ai.h,v 1.5 2001-07-27 21:13:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2001/05/24 15:37:51  mbickel
+//      Fixed: reaction fire could not be disabled when unit out of ammo
+//      Fixed several AI problems
+//
 //     Revision 1.3  2001/04/03 11:54:17  mbickel
 //      AI Improvements: production , servicing
 //
@@ -49,6 +53,8 @@
 #include <list>
 
 #include "../typen.h"
+#include "../terraintype.h"
+#include "../objecttype.h"
 #include "../spfst.h"
 #include "../unitctrl.h"
 #include "../building_controls.h"

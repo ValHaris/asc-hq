@@ -2,9 +2,15 @@
     \brief Interface for changing the weather and the terrain on the map
 */
 
-//     $Id: weather.h,v 1.5 2001-01-28 14:04:22 mbickel Exp $
+//     $Id: weather.h,v 1.6 2001-07-27 21:13:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2001/01/28 14:04:22  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.4  2000/04/27 16:25:31  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -54,6 +60,7 @@
 #include "libs/triangul/triangul.h"
 
 #include "typen.h"
+#include "terraintype.h"
 
 #pragma pack(1)
 

@@ -140,6 +140,7 @@ void MapNetwork :: searchbuilding ( int x, int y )
                   pfield newfield = getfield ( xp2, yp2 );
                   if ( newfield && newfield->building != bld  && !newfield->a.temp )
 
+
                      searchfield ( xp2, yp2, d );
 
                   searchvehicle ( xp2, yp2 );
@@ -179,6 +180,7 @@ void MapNetwork :: start ( int x, int y )
 
             for ( tmap::Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); j++ )
                checkbuilding(*j);
+
 
 
 
@@ -229,11 +231,11 @@ int ResourceNet :: fieldavail ( int x, int y )
     else */
 
     if ( fld ) {
-       tterrainbits tb = cbpipeline;
+       TerrainBits tb = getTerrainBitType(cbpipeline);
        if ( resourcetype == 0)
-         tb |= cbpowerline;
+         tb |= getTerrainBitType(cbpowerline);
 
-       if ( fld->bdt & tb ) {
+       if ( (fld->bdt & tb).any() ) {
           int d = 0;
           for ( int i = 0; i < sidenum; i++ ) {
              int xp = x;
@@ -241,7 +243,7 @@ int ResourceNet :: fieldavail ( int x, int y )
              getnextfield ( xp, yp , i );
              pfield fld2 = getfield ( xp, yp );
              if ( fld2 )
-                if ( (fld2->bdt & tb) ||  fld2->building )
+                if ( (fld2->bdt & tb).any() ||  fld2->building )
                    d |= ( 1 << i );
           }
           return d;

@@ -1,6 +1,11 @@
-//     $Id: typen.cpp,v 1.78 2001-07-14 19:13:16 mbickel Exp $
+//     $Id: typen.cpp,v 1.79 2001-07-27 21:13:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.78  2001/07/14 19:13:16  mbickel
+//      Rewrote sound system
+//      Moveing units make sounds
+//      Added sound files to data
+//
 //     Revision 1.77  2001/07/13 12:53:01  mbickel
 //      Fixed duplicate icons in replay
 //      Fixed crash in tooltip help
@@ -378,6 +383,7 @@
 
 #include "vehicletype.h"
 #include "buildingtype.h"
+#include "textfileparser.h"
 
 //! The different levels of height
 const char*  choehenstufen[choehenstufennum] = {"deep submerged", "submerged", "floating", "ground level", "low-level flight", "flight", "high-level flight", "orbit"}; 
@@ -404,40 +410,7 @@ const char*  cminentypen[cminenum]  = {"antipersonnel mine", "antitank mine", "m
 const int cminestrength[cminenum]  = { 60, 120, 180, 180 };
 
 
-const char*  cbodenarten[cbodenartennum]  = {"shallow water , coast"       ,
-                                             "normal lowland",
-                                             "swamp thick",
-                                             "forest",
-                                             "high mountains",
-                                             "road",
-                                             "railroad",
-                                             "entry of building (not to be used for terrain)" ,
-                                             "harbour (safe for ships at storm)",
-                                             "runway"  ,
-                                             "pipeline",
-                                             "buried pipeline",
-                                             "water",
-                                             "deep water",
-                                             "hard sand",
-                                             "soft sand",
-                                             "track possible",
-                                             "small rocks",
-                                             "mud",
-                                             "snow",
-                                             "deep snow",
-                                             "mountains",
-                                             "very shallow water",
-                                             "large rocks",
-                                             "lava",
-                                             "ditch",
-                                             "hillside",
-                                             "turret foundation",
-                                             "swamp thin",
-                                             "Installation",
-                                             "pack ice",
-                                             "river",
-                                             "frozen water" };
-                                                             
+
 
 const char*  cwaffentypen[cwaffentypennum]  = {"cruise missile", "mine",    "bomb",       "air - missile", "ground - missile", "torpedo", "machine gun",
                                                "cannon",         "service", "ammunition refuel", "laser (not implemented yet!)", "shootable"};
@@ -502,115 +475,6 @@ const int csolarkraftwerkleistung[cwettertypennum] = { 1024, 512, 256, 756, 384 
 
 
 
-int  tobjecttype :: buildable ( pfield fld )
-{
-   #ifndef converter
-   if ( fld->building )
-      return 0;
-
-   #ifdef HEXAGON
-   if ( terrainaccess.accessible ( fld->bdt ) <= 0 )
-       return 0;
-   #endif
-
-   #endif
-   return 1;
-}
-
-
-void* tobjecttype :: getpic ( int i, int w )
-{
-   #ifdef HEXAGON
-   if ( !(weather & (1 << w )))
-      w = 0;
-
-   if ( pictnum <= i )
-      i = 0;
-
-   return picture [w][ i ].picture;
-
-   #else
-   return picture [ i  ];
-   #endif
-}
-
-
-
-
-void tobjecttype :: display ( int x, int y, int dir, int weather )
-{
-   #ifndef converter
-  if ( id == 1 || id == 2 ) {
-     putspriteimage ( x, y,  getpic( dir, weather ) );
-  } else
-#ifdef HEXAGON
-  if ( id == 4 ) {
-#else
-  if ( id == 3 ||  id == 4 ) {
-#endif
-
-     if ( dir == 68 ) 
-        putspriteimage ( x, y,  getpic ( 9, weather ) );
-     else
-     if ( dir == 34 )
-        putspriteimage ( x, y,  getpic ( 10, weather ) );
-     else
-     if ( dir == 17 ) 
-        putspriteimage ( x, y,  getpic ( 11, weather ) );
-     else
-     if ( dir == 136) 
-        putspriteimage ( x, y,  getpic ( 12, weather ) );
-     else
-     if ( dir == 0) 
-        putspriteimage ( x, y,  getpic ( 0, weather ) );
-     else
-        for (int i = 0; i <= 7; i++) 
-           if ( dir & (1 << i))
-              putspriteimage( x, y,  getpic ( i + 1, weather ) ); 
-
-  } else
-  if (  id == 5 ) {
-     putspriteimage  ( x, y,  getpic ( 0, weather ) );
-  } else
-  #ifndef HEXAGON
-  if (  id == 6  ||  id == 7 || id == 8 ) {
-     for (int i = 0; i <= 7; i++) 
-        if ( dir & (1 << i))
-           putspriteimage( x, y,  getpic ( i, weather ) ); 
-  } else 
-  #endif
-
-      if ( dirlistnum ) {
-         for ( int i = 0; i < dirlistnum; i++ )
-            if ( dirlist [ i ] == dir ) {
-               putspriteimage ( x, y, getpic ( i, weather ) );
-               return;
-            }
-
-         for ( int j = 0; j < dirlistnum; j++ )
-            if ( dirlist [ j ] == 0 ) {
-               putspriteimage ( x, y, getpic ( j, weather ) );
-               return;
-            }
-
-         putspriteimage ( x, y, getpic ( 0, weather ) );
-   
-      } else 
-        if ( dir < pictnum )
-           putspriteimage ( x, y, getpic ( dir, weather ) );
-        else
-           putspriteimage ( x, y, getpic ( 0, weather ) );
-
-  #endif
-}
-
-
-
-void tobjecttype :: display ( int x, int y )
-{
-   display ( x, y, 34, 0 );
-}
-
 
 
 ResourceMatrix :: ResourceMatrix ( const float* f )
@@ -667,6 +531,14 @@ Resources Resources::operator* ( double d )
    for ( int i = 0; i < resourceTypeNum; i++ )
       rs.resource(i) = int( resource(i)*d );
    return rs;
+}
+
+
+void Resources::runTextIO ( PropertyContainer& pc )
+{
+   pc.addInteger  ( "Energy", energy );
+   pc.addInteger  ( "Material", material );
+   pc.addInteger  ( "fuel", fuel );
 }
 
 
@@ -746,137 +618,6 @@ Message :: Message ( const ASCString& msg, pmap gamemap, int rec, int _from )  /
 #endif
 
 
-
-
-
-
-void      TerrainType::Weather::paint ( int x1, int y1 )
-{
- #ifndef converter
-  #ifdef HEXAGON
-   putspriteimage ( x1, y1, picture[0] );
-  #else
-   char* c = (char*) direcpict[0];
-
-   if ( agmp->windowstatus == 100 ) {
-      int i;
-      char* buf = (char*) (agmp->scanlinelength * y1 + x1 + agmp->linearaddress) + 19;
-
-      for (i=1; i<= 19 ;i++ ) {
-        for ( int num = 0; num < i * 2; num ++ ) {
-           *buf = *c;
-           c++;
-           buf++;
-        }
-
-        buf += agmp->scanlinelength - 2 * i - 1;
-      } /* endfor */
-                            
-      for (i=20; i > 0 ;i-- ) {
-        for ( int num = 0; num < i * 2; num ++ ) {
-           *buf = *c;
-           c++;
-           buf++;
-        }
-
-        buf += agmp->scanlinelength - 2 * i + 1;
-      } /* endfor */
-
-   }
-  #endif
- #endif
-}
-
-
-bool tterrainbits :: toand ( const tterrainbits& bts ) const
-{
-   return ( (bts.terrain1 & terrain1) || (bts.terrain2 & terrain2));
-}
-
-
-tterrainaccess :: tterrainaccess ( void )
-                : terrain ( -1, -1 )
-{
-   /*
-   terrain.terrain1 = -1;
-   terrain.terrain2 = -1;
-   terrainreq.terrain1 = 0;
-   terrainreq.terrain2 = 0;
-   terrainnot.terrain1 = 0;
-   terrainnot.terrain2 = 0;
-   terrainkill.terrain1 = 0;
-   terrainkill.terrain2 = 0;
-   */
-}
-
-int tterrainaccess :: accessible ( const tterrainbits& bts )
-{
-   if ( terrain.toand ( bts )
-         &&
-         bts.existall ( terrainreq )
-         &&
-        !terrainnot.toand ( bts )
-      ) return 1;
-   else
-      if ( terrainkill.toand ( bts ) )
-         return -1;
-      else
-         return 0;
-}
-
-
-tterrainbits cbwater0 ( 1<<22, 0 );
-tterrainbits cbwater1 ( 1, 0 );
-tterrainbits cbwater2 ( 4096, 0 );
-tterrainbits cbwater3 ( 8192, 0 );
-tterrainbits cbwater ( cbwater0 | cbwater1 | cbwater2 | cbwater3 );
-tterrainbits cb_all ( -1, -1 );
-tterrainbits cbstreet ( 32, 0 );
-tterrainbits cbrailroad ( 64, 0 );
-tterrainbits cbbuildingentry ( 128, 0 );
-tterrainbits cbharbour ( 256, 0 );
-tterrainbits cbrunway ( 512, 0 );
-tterrainbits cbpipeline ( 1024, 0 );
-tterrainbits cbpowerline ( 2048, 0 );
-tterrainbits cbfahrspur ( 1<<16, 0 );
-tterrainbits cbfestland ( cb_all  ^ cbwater );
-tterrainbits cbsnow1 ( 1<<19, 0 );
-tterrainbits cbsnow2 ( 1<<20, 0 );
-tterrainbits cbhillside ( 1<<26, 0 );
-tterrainbits cbsmallrocks ( 1<<17, 0 );
-tterrainbits cblargerocks ( 1<<23, 0 );
-tterrainbits cbfrozenwater ( 0, 1 );
-
-
-               tterrainbits operator~ ( const tterrainbits &tb )
-               {
-                  tterrainbits tbs  ( ~(tb.terrain1), ~(tb.terrain2) );
-                  return tbs;
-               };
-
-
-               tterrainbits operator| ( const tterrainbits& tb2, const tterrainbits& tb3 )
-               { 
-                  tterrainbits tb = tb2;
-                  return tb |=tb3;
-               };
-/*
-               tterrainbits& operator& ( tterrainbits tb2, tterrainbits tb3 ) 
-               {
-                  tterrainbits tb = tb2;
-                  return tb &=tb3;
-               };
-*/
-               bool operator& ( const tterrainbits& tb2, const tterrainbits& tb3 )
-               { 
-                  return tb2.toand ( tb3 ) ;
-               };
-
-               tterrainbits operator^ ( const tterrainbits& tb2, const tterrainbits& tb3 )
-               {
-                  tterrainbits tb = tb2;
-                  return tb ^=tb3;
-               };
 
 
 
@@ -1022,290 +763,6 @@ tevent :: ~tevent ()
    }
 }
 
-
-
-const int object_version = 1;
-
-void tobjecttype :: read ( tnstream& stream )
-{
-   int version = stream.readInt();
-
-   if ( version == object_version ) {
-
-       id = stream.readInt();
-       weather = stream.readInt();
-       visibleago = stream.readInt();
-       objectslinkablenum = stream.readInt();
-       bool _objectsLinkable = stream.readInt();
-       objectslinkable = NULL;
-       bool _oldpicture = stream.readInt();
-       oldpicture = NULL;
-
-       pictnum = stream.readInt();
-       armor = stream.readInt();
-
-       movemalus_plus_count = stream.readChar();
-       movemalus_plus = NULL; stream.readInt();
-
-       movemalus_abs_count = stream.readChar();
-       movemalus_abs = NULL; stream.readInt();
-
-       attackbonus_plus = stream.readInt();
-       attackbonus_abs  = stream.readInt();
-
-       defensebonus_plus = stream.readInt();
-       defensebonus_abs =  stream.readInt();
-
-       basicjamming_plus = stream.readInt();
-       basicjamming_abs = stream.readInt();
-
-       height = stream.readInt();
-
-       buildcost.read( stream );
-       removecost.read ( stream );
-       build_movecost = stream.readInt();
-       remove_movecost = stream.readInt();
-
-       bool _name = stream.readInt();
-       name = NULL;
-
-       no_autonet = stream.readInt();
-
-       terrainaccess.read( stream );
-       terrain_and.read ( stream );
-       terrain_or.read ( stream );
-
-       bool _buildicon = stream.readInt();
-       buildicon = NULL;
-       bool _removeicon = stream.readInt();
-       removeicon = NULL;
-
-       bool _dirlist = stream.readInt();
-       dirlist = NULL;
-
-       dirlistnum = stream.readInt();
-       bool _picture[cwettertypennum];
-       for ( int aa = 0; aa < cwettertypennum; aa++ ) {
-          _picture[aa] = stream.readInt();
-          picture[aa] = NULL;
-       }
-
-      int copycount = 0;
-
-      int w;
-      for ( int ww = 0; ww < cwettertypennum; ww++ )
-         if ( weather & ( 1 << ww ))
-            if ( pictnum ) {
-               picture[ww] = new thexpic[pictnum];
-               for ( int n = 0; n < pictnum; n++ ) {
-                  stream.readInt(); // dummy
-                  picture[ww][n].bi3pic = stream.readInt();
-                  picture[ww][n].flip = stream.readInt();
-
-                  if ( picture[ww][n].bi3pic != -1 )
-                     loadbi3pict_double ( picture[ww][n].bi3pic,
-                                         &picture[ww][n].picture,
-                                         1,  // CGameOptions::Instance()->bi3.interpolate.objects
-                                         0 );
-                  else
-                     stream.readrlepict ( &picture[ww][n].picture, false, &w);
-
-                 #ifndef converter
-                  if ( picture[ww][n].flip == 1 ) {
-                     void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-                     flippict ( picture[ww][n].picture, buf , 1 );
-                     asc_free ( picture[ww][n].picture );
-                     picture[ww][n].picture = buf;
-                     copycount++;
-                  }
-
-                  if ( picture[ww][n].flip == 2 ) {
-                     void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-                     flippict ( picture[ww][n].picture, buf , 2 );
-                     asc_free ( picture[ww][n].picture );
-                     picture[ww][n].picture = buf;
-                     copycount++;
-                  }
-
-                  if ( picture[ww][n].flip == 3 ) {
-                     void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-                     flippict ( picture[ww][n].picture, buf , 2 );
-                     flippict ( buf, picture[ww][n].picture, 1 );
-                     delete[] buf;
-                     copycount++;
-                  }
-
-                  if ( picture[ww][n].bi3pic == -1 )
-                     picture[ww][n].flip = 0;
-                 #endif 
-               }
-            }
-
-      if ( copycount == 0 )
-         for ( int ww = 0; ww < cwettertypennum; ww++ )
-            if ( weather & ( 1 << ww ))
-               if ( pictnum )
-                  for ( int n = 0; n < pictnum; n++ )
-                     if ( picture[ww][n].bi3pic != -1 ) {
-                        asc_free ( picture[ww][n].picture );
-                        loadbi3pict_double ( picture[ww][n].bi3pic,
-                                             &picture[ww][n].picture,
-                                             1 ); // CGameOptions::Instance()->bi3.interpolate.objects );
-                     }
-
-       #ifndef converter
-       int mmcount = cmovemalitypenum;
-
-       if (mmcount < movemalus_plus_count )
-          mmcount = movemalus_plus_count;
-       #else
-       int mmcount = movemalus_plus_count ;
-       #endif
-
-       movemalus_plus = new char[ mmcount ] ;
-
-       int j;
-       for (j=0; j< mmcount ; j++ ) {
-          if (j < movemalus_plus_count )
-             movemalus_plus[j] = stream.readChar();
-          else
-             if( j > 0 )
-               movemalus_plus[j] = movemalus_plus[0];
-             else
-               movemalus_plus[j] = 0;
-
-       }
-       movemalus_plus_count = mmcount;
-
-
-
-       #ifndef converter
-       mmcount = cmovemalitypenum;
-
-       if (mmcount < movemalus_abs_count )
-          mmcount = movemalus_abs_count;
-       #else
-       mmcount = movemalus_abs_count ;
-       #endif
-
-       movemalus_abs = new char[ mmcount ] ;
-
-       for (j=0; j< mmcount ; j++ ) {
-          if (j < movemalus_abs_count )
-             movemalus_abs[j] = stream.readChar();
-          else
-             if( j > 0 )
-                movemalus_abs[j] = movemalus_abs[0];
-             else
-                movemalus_abs[j] = 0;
-       }
-
-       movemalus_abs_count = mmcount;
-
-       if ( _name )
-          stream.readpchar ( &name );
-
-
-      if ( dirlistnum ) {
-         dirlist = new int[ dirlistnum ];
-         for ( int i = 0; i < dirlistnum; i++ )
-            dirlist[i] = stream.readInt();
-      }
-
-
-      if ( objectslinkablenum ) {
-         objectslinkableid = new int[ objectslinkablenum ];
-         for ( int i = 0; i < objectslinkablenum; i++ )
-             objectslinkableid[i] = stream.readInt();
-      }
-
-       buildicon = NULL;
-       removeicon = NULL;
-   } else
-       throw ASCmsgException ( "invalid object file format version");
-}
-
-void tobjecttype :: write ( tnstream& stream )
-{
-
-    stream.writeInt ( object_version );
-
-    stream.writeInt ( id);
-    stream.writeInt ( weather );
-    stream.writeInt ( visibleago );
-    stream.writeInt ( objectslinkablenum );
-    stream.writeInt ( -1 ); // was: objectslinkable
-    stream.writeInt ( -1 ); // was: oldpicture
-    stream.writeInt ( pictnum );
-    stream.writeInt ( armor );
-
-    stream.writeChar ( movemalus_plus_count );
-    stream.writeInt ( -1 ); // was movemalus_plus
-
-    stream.writeChar ( movemalus_abs_count );
-    stream.writeInt ( -1 ); // was movemalus_abs
-
-    stream.writeInt ( attackbonus_plus );
-    stream.writeInt ( attackbonus_abs );
-    stream.writeInt ( defensebonus_plus );
-    stream.writeInt ( defensebonus_abs );
-
-    stream.writeInt ( basicjamming_plus );
-    stream.writeInt ( basicjamming_abs );
-
-    stream.writeInt ( height );
-
-    buildcost.write( stream );
-    removecost.write ( stream );
-    stream.writeInt( build_movecost );
-    stream.writeInt( remove_movecost );
-
-    stream.writeInt ( -1 ); // was name
-    stream.writeInt ( no_autonet );
-
-    terrainaccess.write( stream );
-    terrain_and.write ( stream );
-    terrain_or.write ( stream );
-
-    stream.writeInt( -1 ); // was buildicon
-    stream.writeInt( -1 ); // was removeicon
-
-    stream.writeInt( -1 ); // was dirlist
-
-    stream.writeInt ( dirlistnum );
-    for ( int aa = 0; aa < cwettertypennum; aa++ )
-       stream.writeInt( -1 ); // was picture
-
-    for ( int ww = 0; ww < cwettertypennum; ww++ )
-       if ( weather & ( 1 << ww ))
-          for ( int l = 0; l < pictnum; l++ ) {
-             stream.writeInt ( -1 );
-             stream.writeInt ( picture[ww][l].bi3pic );
-             stream.writeInt ( picture[ww][l].flip );
-             if ( picture[ww][l].bi3pic == -1 )
-                stream.writedata( picture[ww][l].picture, getpicsize2 ( picture[ww][l].picture) );
-          }
-
-    if ( movemalus_plus_count )
-       for ( int i = 0; i < movemalus_plus_count; i++ )
-           stream.writeInt ( movemalus_plus[i] );
-
-    if ( movemalus_abs_count )
-       for ( int i = 0; i < movemalus_abs_count; i++ )
-           stream.writeInt ( movemalus_abs[i] );
-
-    if ( name )
-       stream.writepchar ( name );
-
-    if ( dirlistnum )
-       for ( int i = 0; i < dirlistnum; i++ )
-          stream.writeInt ( dirlist[i] );
-
-    if ( objectslinkablenum )
-       for ( int i = 0; i < objectslinkablenum; i++ )
-           stream.writeInt( objectslinkableid[i] );
-
-}
 
 
 

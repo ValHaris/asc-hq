@@ -5,9 +5,18 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.54 2001-07-18 16:05:47 mbickel Exp $
+//     $Id: loaders.cpp,v 1.55 2001-07-27 21:13:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.54  2001/07/18 16:05:47  mbickel
+//      Fixed: infinitive loop in displaying "player exterminated" msg
+//      Fixed: construction of units by units: wrong player
+//      Fixed: loading bug of maps with mines
+//      Fixed: invalid map parameter
+//      Fixed bug in game param edit dialog
+//      Fixed: cannot attack after declaring of war
+//      New: ffading of sounds
+//
 //     Revision 1.53  2001/07/11 20:13:27  mbickel
 //      Fixed crash when exception occures during game loading
 //      Fixed wrong sender of mails
@@ -307,6 +316,7 @@
 #include "errors.h"
 #include "networkdata.h"
 #include "strtmesg.h"
+#include "textfileparser.h"
 
 #ifdef sgmain
 #include "missions.h"
@@ -1183,7 +1193,7 @@ void   tspfldloaders::writefields ( void )
          b1 |= csm_direction; 
       if (fld->vehicle != NULL) 
          b1 |= csm_vehicle; 
-      if (fld->bdt & cbbuildingentry ) 
+      if ( (fld->bdt & getTerrainBitType( cbbuildingentry )).any() )
          b1 |= csm_building; 
 
 
@@ -1385,7 +1395,7 @@ void tspfldloaders::readfields ( void )
 
          if (b1 & csm_building ) {
             fld2->building = Building::newFromStream ( spfld, *stream );
-            fld2->bdt |= cbbuildingentry;
+            fld2->bdt |= getTerrainBitType(cbbuildingentry);
          }
 
          if (b3 & csm_material) 
@@ -1512,7 +1522,7 @@ void   tspfldloaders::chainitems ( pmap actmap )
       for (int x = 0; x < actmap->xsize; x++) {
           pfield fld = &actmap->field[i];
           fld->setparams();
-          if ( fld->bdt & cbbuildingentry )
+          if ( (fld->bdt & getTerrainBitType( cbbuildingentry )).any() )
              fld->building->resetPicturePointers();
           i++;
       }
@@ -2323,62 +2333,8 @@ void         savecampaignrecoveryinformation( const ASCString& filename,
                                              int id)
 { 
    displaymessage("This has not been implemented yet, sorry!", 2 );
-
-} 
-
-
-
-void         __erasemap( pmap& spfld )
-{ 
-   if ( !spfld )
-      return;
-
-  int         i; 
-  // pvehicle     aktvehicle;
-  // pbuilding    aktbuilding;
-
-
-   if (spfld->xsize == 0) 
-      return;
-
-
-   for (i = 0; i <= 8; i++) { 
-      if ( spfld->player[i].ai ) {
-         delete spfld->player[i].ai;
-         spfld->player[i].ai = NULL;
-      }
-   }
-
-   delete spfld;
-   spfld = NULL;
-
 }
 
-
-
-void         __erasemap_unchained( pmap& spfld )
-{ 
-   if ( !spfld )
-      return;
-
-
-  int         i; 
-
-   if (spfld->xsize == 0) return;
-
-
-   for (i=0; i<9 ; i++) {
-      if ( spfld->player[i].ai  ) {
-         delete spfld->player[i].ai;
-         spfld->player[i].ai = NULL;
-      }
-
-   }
-
-
-   delete spfld;
-   spfld = NULL;
-}
 
 
 
@@ -2409,11 +2365,7 @@ void         loadallvehicletypes(void)
     
           pvehicletype t = loadvehicletype( c.c_str() );
 
-          // if ( t->steigung && ((t->height & 6 ) == 6 )) 
-          //   t->steigung = 0;
-
           addvehicletype ( t );
-
           c = ff.getnextname();
        }
    }
@@ -2421,29 +2373,64 @@ void         loadallvehicletypes(void)
 
 
 void         loadallobjecttypes (void)
-{ 
-  tfindfile ff ( "*.obl" );
+{
+  {
+     tfindfile ff ( "*.obl" );
 
-  string c = ff.getnextname();
+     string c = ff.getnextname();
 
-  while ( !c.empty() ) {
-      if ( actprogressbar )
-         actprogressbar->point();
+     while ( !c.empty() ) {
+         if ( actprogressbar )
+            actprogressbar->point();
 
-      addobjecttype ( loadobjecttype( c.c_str() ));
+         if ( !exist ( extractFileName_withoutSuffix(c) + ".oblt") )
+            addobjecttype ( loadobjecttype( c.c_str() ));
 
-      c = ff.getnextname();
+         c = ff.getnextname();
+      }
+  }
+  {
+      TextPropertyList tpgl;
+
+      tfindfile ff ( "*.oblt" );
+
+      string c = ff.getnextname();
+
+      while( !c.empty() ) {
+         if ( actprogressbar )
+            actprogressbar->point();
+
+         tnfilestream s ( c, tnstream::reading );
+
+         displayLogMessage ( 5, "loadallobjecttypes :: loading " + c + ", " );
+
+         TextFormatParser tfp ( &s, "ObjectType" );
+
+         displayLogMessage ( 5, "TFP running... " );
+
+         tpgl.push_back ( tfp.run() );
+
+         displayLogMessage ( 5, "done\n" );
+
+         c = ff.getnextname();
+      }
+
+      for ( TextPropertyList::iterator i = tpgl.begin(); i != tpgl.end(); i++ ) {
+         if ( actprogressbar )
+            actprogressbar->point();
+
+         PropertyReadingContainer pc ( "ObjectType", *i );
+
+         ObjectType* ot = new ObjectType;
+         ot->runTextIO ( pc );
+         pc.run();
+
+         ot->fileName = (*i)->fileName;
+         ot->location = (*i)->location;
+         addobjecttype ( ot );
+      }
    }
-
-   #ifndef converter
-   for ( int i = 0; i < objecttypenum; i++ ) {
-      pobjecttype vt = getobjecttype_forpos ( i );
-      for ( int j = 0; j < vt->objectslinkablenum; j++ )
-          vt->objectslinkable[j] = getobjecttype_forid ( vt->objectslinkableid[j] );
-   }
-   #endif
-
-} 
+}
 
 
 
@@ -2478,20 +2465,67 @@ void         loadalltechnologies(void)
 
 
 void         loadallterraintypes(void)
-{ 
-   tfindfile ff ( "*.trr" );
+{
+   {
+      tfindfile ff ( "*.trr" );
 
-   string c = ff.getnextname();
+      string c = ff.getnextname();
 
-   while( !c.empty() ) {
-      if ( actprogressbar )
-         actprogressbar->point();
+      while( !c.empty() ) {
+         if ( actprogressbar )
+            actprogressbar->point();
 
-      addterraintype ( loadterraintype( c.c_str() ));
+         if ( !exist ( extractFileName_withoutSuffix(c) + ".trrt") )
+            addterraintype ( loadterraintype( c.c_str() ));
 
-      c = ff.getnextname();
-   } 
-};
+         c = ff.getnextname();
+      }
+   }
+
+
+   {
+      TextPropertyList tpgl;
+
+      tfindfile ff ( "*.trrt" );
+
+      string c = ff.getnextname();
+
+      while( !c.empty() ) {
+         if ( actprogressbar )
+            actprogressbar->point();
+
+         tnfilestream s ( c, tnstream::reading );
+
+         displayLogMessage ( 5, "loadallterraintypes :: loading " + c + ", " );
+
+         TextFormatParser tfp ( &s, "TerrainType" );
+
+         displayLogMessage ( 5, "TFP running... " );
+
+         tpgl.push_back ( tfp.run() );
+
+         displayLogMessage ( 5, "done\n" );
+
+         c = ff.getnextname();
+      }
+
+      for ( TextPropertyList::iterator i = tpgl.begin(); i != tpgl.end(); i++ ) {
+         if ( actprogressbar )
+            actprogressbar->point();
+
+         PropertyReadingContainer pc ( "TerrainType", *i );
+
+         TerrainType* tt = new TerrainType;
+         tt->runTextIO ( pc );
+         pc.run();
+
+         tt->fileName = (*i)->fileName;
+         tt->location = (*i)->location;
+         addterraintype ( tt );
+      }
+
+    }
+}
 
 
 

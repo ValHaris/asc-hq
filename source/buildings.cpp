@@ -271,7 +271,7 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
 
    pfield field = getField( typ->entry );
    if ( field )
-      field->bdt |= cbbuildingentry ;
+      field->bdt |= getTerrainBitType(cbbuildingentry) ;
 
    if ( setupImages ) {
       resetPicturePointers ();
@@ -296,10 +296,15 @@ int  Building :: unchainbuildingfromfield ( void )
                // if ( fld->vehicle )
                //   removevehicle( &fld->vehicle );
 
-               tterrainbits t1 = cbstreet | cbbuildingentry | cbrailroad | cbpowerline | cbpipeline;
-               tterrainbits t2 = ~t1;
+               TerrainBits t =   getTerrainBitType(cbstreet);
+               t |= getTerrainBitType(cbbuildingentry);
+               t |= getTerrainBitType(cbrailroad);
+               t |= getTerrainBitType(cbpowerline);
+               t |= getTerrainBitType(cbpipeline);
 
-               fld->bdt &= t2;
+               t.flip();
+
+               fld->bdt &= t;
 
                #ifdef sgmain
                 if ( typ->destruction_objects[i][j] )

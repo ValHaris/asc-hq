@@ -5,9 +5,14 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.59 2001-07-14 19:13:16 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.60 2001-07-27 21:13:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.59  2001/07/14 19:13:16  mbickel
+//      Rewrote sound system
+//      Moveing units make sounds
+//      Added sound files to data
+//
 //     Revision 1.58  2001/05/16 23:21:02  mbickel
 //      The data file is mounted using automake
 //      Added sgml documentation
@@ -270,7 +275,6 @@ char* rotatepict ( void* image, int organgle )
 
 const int building_version = 3;
 const int object_version = 1;
-const int terrain_version = 2;
 const int technology_version = 1;
 
 void* leergui = NULL;
@@ -861,8 +865,8 @@ pquickview generateaveragecol ( TerrainType::Weather* bdn )
 {
    pquickview qv;
    qv = new tquickview ;
-   for ( int dir = 0; dir < sidenum; dir++ ) 
-      if ( bdn->picture[dir] ) {
+   for ( int dir = 0; dir < 1; dir++ )
+      if ( bdn->pict ) {
 
          char* c = (char*) &qv->dir[dir].p1 ;
          // int dx,dy;
@@ -872,7 +876,7 @@ pquickview generateaveragecol ( TerrainType::Weather* bdn )
             // dy = fieldysize / i;
             for ( int k=0;k<i ; k++) {
                for ( int j=0 ; j<i ; j++) {
-                   generateaveragecolprt ( k * fieldxsize / i, j * fieldysize / i, (k+1) * fieldxsize / i, (j+1) * fieldysize / i, bdn->picture[dir],  c );
+                   generateaveragecolprt ( k * fieldxsize / i, j * fieldysize / i, (k+1) * fieldxsize / i, (j+1) * fieldysize / i, bdn->pict,  c );
                    c++;
                } /* endfor */
             } /* endfor */
@@ -888,164 +892,20 @@ pterraintype      loadterraintype( const char *       name)
    displayLogMessage ( 5, " loading terrain type %s ...", name );
    tnfilestream stream ( name, tnstream::reading );
    pterraintype tt = loadterraintype ( &stream );
+   tt->fileName = extractFileName_withoutSuffix ( name );
+   tt->location = name;
    displayLogMessage ( 5, " done\n" );
    return tt;
 }
 
-pterraintype      loadterraintype( pnstream stream )
-{ 
-   int version;
-   stream->readdata2 ( version );
-   if ( version == terrain_version || version == 1) {
-
-      TerrainType::Weather* pgbt;
-
-      pterraintype bbt = new TerrainType;
-   
-      bbt->name = (char*) stream->readInt();
-      bbt->id   = stream->readInt();
-      for ( int ww = 0; ww < cwettertypennum; ww++ )
-         bbt->weather[ww] = (TerrainType::Weather*) stream->readInt();
-      for ( int nf = 0; nf < 8; nf++ )
-         bbt->neighbouringfield[nf] = stream->readInt();
-
-      stream->readpchar( &bbt->name );
-   
-      for ( int i=0; i<cwettertypennum ;i++ ) {
-         if (bbt->weather[i] ) {
-            bbt->weather[i] = new TerrainType::Weather (bbt);
-            pgbt = bbt->weather[i];
-
-            int j;
-
-            for ( j = 0; j < 8; j++ )
-               pgbt->picture[j] = (void*) stream->readInt();
-
-            for ( j = 0; j < 8; j++ )
-               pgbt->direcpict[j] = (void*) stream->readInt();
-
-            if ( version == 1 ) {
-               stream->readInt(); //dummy1
-               pgbt->defensebonus = stream->readWord();
-               pgbt->attackbonus = stream->readWord();
-               pgbt->basicjamming = stream->readChar();
-            } else {
-               pgbt->defensebonus = stream->readInt();
-               pgbt->attackbonus = stream->readInt();
-               pgbt->basicjamming = stream->readInt();
-            }
-            pgbt->movemaluscount = stream->readChar();
-            pgbt->movemalus = (char*) stream->readInt();
-            pgbt->terraintype = (pterraintype) stream->readInt();
-            pgbt->quickview = (pquickview) stream->readInt();
-
-            for ( j = 0; j < 6; j++ )
-               pgbt->bi_picture[j] = stream->readInt();
-
-            stream->readdata2 ( pgbt->art );
-
-            #ifndef converter
-             char mmcount = cmovemalitypenum;
-             if (mmcount < pgbt->movemaluscount )
-                mmcount = pgbt->movemaluscount;
-            #else
-             char mmcount = pgbt->movemaluscount ;
-            #endif
-   
-            bbt->weather[i]->movemalus = new ( char[mmcount ]);
-   
-            for (j=0; j< mmcount ; j++ ) {
-               if (j < pgbt->movemaluscount)
-                  stream->readdata ( pgbt->movemalus+j, 1);
-               else
-                  pgbt->movemalus[j] = pgbt->movemalus[0];
-   
-               if ( pgbt->movemalus[j] == 0) {
-                  if (j == 0)
-                     pgbt->movemalus[j] = minmalq;
-                  else
-                     pgbt->movemalus[j] = pgbt->movemalus[0];
-               }
-            }
-            pgbt->movemaluscount = mmcount;
-   
-   
-            for ( j=0; j<8 ;j++ ) 
-               if ( pgbt->picture[j] ) 
-                  if ( pgbt->bi_picture[j] == -1 ) {
-                     pgbt->picture[j] = asc_malloc ( fieldsize );
-                     stream->readdata ( pgbt->picture[j], fieldsize );
-                   } else 
-                      loadbi3pict_double ( pgbt->bi_picture[j], 
-                                                                                        &pgbt->picture[j], 
-                                                                                        CGameOptions::Instance()->bi3.interpolate.terrain );
-   
-            pgbt->terraintype = bbt;
-            if ( pgbt->quickview ) {
-               pgbt->quickview = new ( tquickview );
-               stream->readdata ( pgbt->quickview, sizeof ( *pgbt->quickview ));
-            } 
-            #ifndef converter
-            else
-               pgbt->quickview = generateaveragecol ( pgbt );
-            #endif
-         } else 
-            bbt->weather[i] = NULL;
-   
-      } /* endfor */
-   
-      return bbt; 
-   } else
-      return NULL;
-} 
-
-
-void writeterrain ( pterraintype bdt, pnstream stream )
+pterraintype loadterraintype( pnstream stream )
 {
-   int m;
-
-   stream->writedata2 ( terrain_version );
-   stream->writeInt ( int(bdt->name) );
-   stream->writeInt ( bdt->id );
-   for ( m = 0; m < cwettertypennum; m++ )
-      stream->writeInt ( int( bdt->weather));
-
-   for ( m = 0; m < 8; m++ )
-      stream->writeInt ( bdt->neighbouringfield[m] );
-
-   stream->writepchar( bdt->name );
-   for (int i=0;i<cwettertypennum ;i++ ) {
-     if ( bdt->weather[i] ) {
-        for ( m = 0; m < 8; m++ )
-           stream->writeInt ( int( bdt->weather[i]->picture[m] ));
-
-        for ( m = 0; m < 8; m++ )
-           stream->writeInt ( int( bdt->weather[i]->direcpict[m] ));
-
-        stream->writeInt ( bdt->weather[i]->defensebonus );
-        stream->writeInt ( bdt->weather[i]->attackbonus );
-        stream->writeInt ( bdt->weather[i]->basicjamming );
-        stream->writeChar ( bdt->weather[i]->movemaluscount );
-        stream->writeInt ( int( bdt->weather[i]->movemalus ));
-        stream->writeInt ( int( bdt->weather[i]->terraintype ));
-        stream->writeInt ( int( bdt->weather[i]->quickview ));
-        stream->writedata2 ( bdt->weather[i]->art );
-         
-        for ( m = 0; m< 6; m++ )
-           stream->writeInt ( bdt->weather[i]->bi_picture[6] );
-
-        stream->writedata ( bdt->weather[i]->movemalus, bdt->weather[i]->movemaluscount );
-
-        for ( int j = 0; j < 8; j++ ) 
-           if ( bdt->weather[i]->picture[j] && bdt->weather[i]->bi_picture[j] == -1 ) 
-              stream->writedata ( ( char*) bdt->weather[i]->picture[j], fieldsize );
-           
-        
-        if ( bdt->weather[i]->quickview )
-           stream->writedata ( ( char*) bdt->weather[i]->quickview, sizeof ( *bdt->weather[i]->quickview ));
-     }
-   }
+    pterraintype bbt = new TerrainType;
+    bbt->read ( *stream );
+    return bbt;
 }
+
+
 
 
 
@@ -1063,6 +923,8 @@ pobjecttype   loadobjecttype( const char *       name)
    displayLogMessage ( 5, " loading object type %s ...", name );
    tnfilestream stream ( name, tnstream::reading );
    pobjecttype ot = loadobjecttype ( &stream );
+   ot->fileName = extractFileName_withoutSuffix ( name );
+   ot->location = extractFileName_withoutSuffix ( name );
    displayLogMessage ( 5, " done\n" );
    return ot;
 /*
@@ -1079,23 +941,8 @@ pobjecttype   loadobjecttype( const char *       name)
 
 pobjecttype   loadobjecttype( pnstream stream )
 {
-   pobjecttype fztn = new tobjecttype;
+   pobjecttype fztn = new ObjectType;
    fztn->read ( *stream );
-
-   if ( fztn->id == 9 )
-      pathobject = fztn;
-
-   if ( fztn->id == 1 )
-      streetobjectcontainer = fztn;
-
-   if ( fztn->id == 2 )
-      railroadobject = fztn;
-
-   if ( fztn->id == 6 )
-      eisbrecherobject = fztn;
-
-   if ( fztn->id == 7 )
-      fahrspurobject = fztn;
 
    #ifndef converter
     fztn->buildicon = generate_object_gui_build_icon ( fztn, 0 );

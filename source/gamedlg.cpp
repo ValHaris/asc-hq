@@ -1,8 +1,14 @@
 /*! \file gamedlg.cpp    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.75 2001-07-25 18:00:16 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.76 2001-07-27 21:13:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.75  2001/07/25 18:00:16  mbickel
+//      Fixed: units could repair without repairing function but
+//      Fixed: airplanes tried to ascend through buildings
+//      Fixed: crash when kamikaze attack occured during movement
+//      Fixed: log(0) error in refuelling dialog
+//
 //     Revision 1.74  2001/07/18 18:15:52  mbickel
 //      Fixed: invalid sender of mails
 //      Fixed: unmoveable units are moved by AI
@@ -5231,7 +5237,7 @@ void         tverlademunition::run(void)
             if ( p > 1 )
                p = 1;
 
-            newpos[i] = p * target->service[displayed[i]].maxAmount;
+            newpos[i] = int(p * target->service[displayed[i]].maxAmount);
 
             if (newpos[i] > target->service[displayed[i]].maxAmount)
                newpos[i] = target->service[displayed[i]].maxAmount;

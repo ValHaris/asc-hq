@@ -676,7 +676,7 @@ void tgeneraldisplaymap :: pnt_terrain ( void )
                    r = vfbleftspace + x * fielddistx;
 
                 yp = vfbtopspace + y * fielddisty;
-                putspriteimage ( r, yp, fld->typ->picture[0] );
+                putspriteimage ( r, yp, fld->typ->pict );
              }
           } else {
              int yp;

@@ -2,9 +2,18 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.88 2001-07-18 16:05:47 mbickel Exp $
+//     $Id: spfst.cpp,v 1.89 2001-07-27 21:13:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.88  2001/07/18 16:05:47  mbickel
+//      Fixed: infinitive loop in displaying "player exterminated" msg
+//      Fixed: construction of units by units: wrong player
+//      Fixed: loading bug of maps with mines
+//      Fixed: invalid map parameter
+//      Fixed bug in game param edit dialog
+//      Fixed: cannot attack after declaring of war
+//      New: ffading of sounds
+//
 //     Revision 1.87  2001/03/30 12:43:16  mbickel
 //      Added 3D pathfinding
 //      some cleanup and documentation
@@ -273,6 +282,21 @@ void addobjecttype ( pobjecttype obj )
    if ( obj ) {
       objecttypes[ objecttypenum++] = obj;
       objectmap[obj->id] = obj;
+
+      if ( obj->id == 9 )
+         pathobject = obj;
+
+      if ( obj->id == 1 )
+         streetobjectcontainer = obj;
+
+      if ( obj->id == 2 )
+         railroadobject = obj;
+
+      if ( obj->id == 6 )
+         eisbrecherobject = obj;
+
+      if ( obj->id == 7 )
+         fahrspurobject = obj;
    }
 }
 void addvehicletype ( pvehicletype vhcl )
@@ -346,13 +370,13 @@ int          terrainaccessible2 ( const pfield        field, const pvehicle     
       return 2; 
    else {
         if ( uheight == chtiefgetaucht ) 
-           if ( field->typ->art & cbwater3 )
+           if ( (field->typ->art & getTerrainBitType(cbwater3) ).any() )
               return 2; 
            else
               return -1;
         else
            if ( uheight == chgetaucht ) 
-              if ( field->typ->art & ( cbwater3 | cbwater2 ))
+              if ( (field->typ->art & ( getTerrainBitType(cbwater3) | getTerrainBitType(cbwater2 )) ).any() )
                  return 2; 
               else
                  return -2;
@@ -430,7 +454,7 @@ int         fieldaccessible( const pfield        field,
              
       } 
       else {   /*  geb„ude  */ 
-        if ((field->bdt & cbbuildingentry) && field->building->vehicleloadable ( vehicle, uheight ))
+        if ((field->bdt & getTerrainBitType(cbbuildingentry) ).any() && field->building->vehicleloadable ( vehicle, uheight ))
            return 2; 
         else 
            if (uheight >= chtieffliegend)
@@ -1148,8 +1172,8 @@ class Smoothing {
 
                   pobject obj = fld->checkforobject ( o );
                   if ( obj )
-                     if ( obj->typ->picture[0] && (obj->typ->weather & 1) )
-                        if ( IsInSetOfWord ( obj->typ->picture[0][ obj->dir ].bi3pic, Arr ))
+                     if ( obj->typ->weather.test(0) )
+                        if ( IsInSetOfWord ( obj->typ->weatherPicture[0].bi3pic[ obj->dir ], Arr ))
                            res += 1 << d;
 
                   // if ( fld->checkforobject ( o ) )
@@ -1171,7 +1195,7 @@ class Smoothing {
                pfield fld = getfield ( x1, y1 );
                if ( fld ) {
 
-                  if ( IsInSetOfWord ( fld->typ->bi_picture[ fld->direction ], Arr ))
+                  if ( IsInSetOfWord ( fld->typ->bi_pict, Arr ))
                      res += 1 << d;
 
                } else
@@ -1224,11 +1248,11 @@ class Smoothing {
              for ( int X = 0; X < actmap->xsize; X++ ) {
                  if ( TerObj ) {
                     pobject obj = getfield ( X, Y )-> checkforobject ( TerObj );
-                    if ( obj  && obj->typ->picture[0] && (obj->typ->weather & 1)) {
+                    if ( obj  && obj->typ->weather.test(0) ) {
                        int Old = obj->dir; // bipicnum
                                            //    Old:= TRawArrEck(Mission.ACTN[Y, X])[TerObj];  // bisherige Form / oder Bildnummer ?
 
-                       if ( IsInSetOfWord( obj->typ->picture[0][ obj->dir ].bi3pic, &SmoothData[P0] )) {    // Nur die "allesWald"-fielder werden gesmootht
+                       if ( IsInSetOfWord( obj->typ->weatherPicture[0].bi3pic[ obj->dir ], &SmoothData[P0] )) {    // Nur die "allesWald"-fielder werden gesmootht
                           int Mask = GetNeighbourMask( X, Y, &SmoothData[P1], TerObj );
                           if ( Mask < 63 ) {
                              int nw;
@@ -1238,8 +1262,8 @@ class Smoothing {
                                 else
                                    nw = SmoothData[P3+ 1 ]; // + (ticker % SmoothData[P3] )
                              }
-                             for ( int i = 0; i < TerObj->pictnum; i++ )
-                                if ( TerObj->picture[0][ i ].bi3pic == nw )
+                             for ( int i = 0; i < TerObj->weatherPicture[0].bi3pic.size(); i++ )
+                                if ( TerObj->weatherPicture[0].bi3pic[ i ] == nw )
                                    obj->dir = i;
                           }
                        }
@@ -1251,7 +1275,7 @@ class Smoothing {
                     TerrainType::Weather* old = fld->typ;
                     int odir = fld->direction;
 
-                    if ( IsInSetOfWord( fld->typ->bi_picture[ fld->direction ], &SmoothData[P0] )) {    // Nur die "allesWald"-fielder werden gesmootht
+                    if ( IsInSetOfWord( fld->typ->bi_pict, &SmoothData[P0] )) {    // Nur die "allesWald"-fielder werden gesmootht
                        int Mask = GetNeighbourMask( X, Y, &SmoothData[P1] );
                        if ( Mask < 63 ) {
                           int nw;
@@ -1267,8 +1291,8 @@ class Smoothing {
                                 for ( int j = 0; j < cwettertypennum; j++ )
                                    if ( trrn->weather[j] )
                                       for ( int k = 0; k < sidenum; k++ )
-                                         if ( trrn->weather[j]->picture[k] )
-                                            if ( trrn->weather[j]->bi_picture[k] == nw ) {
+                                         if ( trrn->weather[j]->pict )
+                                            if ( trrn->weather[j]->bi_pict == nw ) {
                                                fld->typ = trrn->weather[j];
                                                fld->direction = k;
                                                fld->setparams();
@@ -1568,16 +1592,16 @@ void         calculateobject( int       x,
       pfield fld2 = actmap->getField(a,b);
                   
       if ( fld2 ) {
-         for ( int oj = -1; oj < obj->objectslinkablenum; oj++ ) {
+         for ( int oj = -1; oj < int(obj->linkableObjects.size()); oj++ ) {
             pobject oi;
             if ( oj == -1 )
                oi = fld2->checkforobject ( obj );
             else
-               oi = fld2->checkforobject ( obj->objectslinkable[oj] );
+               oi = fld2->checkforobject ( getobjecttype_forid ( obj->linkableObjects[oj] ) );
             
             int bld = 0;
             if ( fld2->building ) {
-               if ( obj->connectablewithbuildings()  &&  (fld2->bdt & cbbuildingentry) )
+               if ( obj->connectablewithbuildings()  &&  (fld2->bdt & getTerrainBitType(cbbuildingentry) ).any() )
                   bld = 1;
                else
                   if ( isresourcenetobject ( obj ))
@@ -1929,7 +1953,7 @@ int  getmaxwindspeedforunit ( const pvehicle eht )
       if (eht->height >= chtieffliegend && eht->height <= chhochfliegend ) //    || ((eht->height == chfahrend) && ( field->typ->art & cbwater ))) ) 
          return eht->typ->movement[log2(eht->height)] * 256 ;
 
-      if ( (field->bdt & cbfestland) == 0)
+      if ( (field->bdt & getTerrainBitType(cbfestland)).none() )
          return eht->typ->maxwindspeedonwater * maxwindspeed;
    }
    return maxint;
@@ -2114,7 +2138,7 @@ int getcrc ( const pbuildingtype bld )
 
 
 
-int tobjecttype :: connectablewithbuildings ( void )
+int ObjectType :: connectablewithbuildings ( void )
 {
   if ( this == streetobjectcontainer || this == railroadobject  ||  this == pathobject || id == 1000 )
      return 1;

@@ -41,7 +41,7 @@
         ASCString  copyToUpper ( ) const;
 
         //! compares two string case insensitive
-        int compare_cis ( const ASCString& s );
+        bool equal_ci ( const ASCString& s ) const;
  };
 
  class StringTokenizer {

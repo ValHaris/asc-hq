@@ -2,9 +2,18 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.89 2001-07-18 16:05:47 mbickel Exp $
+//     $Id: dialog.cpp,v 1.90 2001-07-27 21:13:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.89  2001/07/18 16:05:47  mbickel
+//      Fixed: infinitive loop in displaying "player exterminated" msg
+//      Fixed: construction of units by units: wrong player
+//      Fixed: loading bug of maps with mines
+//      Fixed: invalid map parameter
+//      Fixed bug in game param edit dialog
+//      Fixed: cannot attack after declaring of war
+//      New: ffading of sounds
+//
 //     Revision 1.88  2001/07/15 21:00:25  mbickel
 //      Some cleanup in the vehicletype class
 //
@@ -5035,13 +5044,10 @@ void showbdtbits( void )
    char m[200];
    m[0] = 0;
    for (int i = 0; i < cbodenartennum ; i++) {
-      tterrainbits bts;
-      if ( i < 32 )
-         bts.set ( 1 << i, 0 );
-      else
-         bts.set ( 0, 1 << ( i - 32));
+      TerrainBits bts;
+      bts.set ( i );
 
-      if (fld->bdt & bts) {
+      if ( (fld->bdt & bts).any() ) {
          strcat ( m, cbodenarten[i] );
          strcat ( m, "\n" );
       }
@@ -5049,17 +5055,14 @@ void showbdtbits( void )
    displaymessage( m, 3 );
 }
 
-void appendTerrainBits ( char* text, tterrainbits* bdt )
+void appendTerrainBits ( char* text, TerrainBits* bdt )
 {
    int num = 0;
    for (int i = 0; i < cbodenartennum ; i++) {
-      tterrainbits bts;
-      if ( i < 32 )
-         bts.set ( 1 << i, 0 );
-      else
-         bts.set ( 0, 1 << ( i - 32));
+      TerrainBits bts;
+      bts.set ( i );
 
-      if ( *bdt & bts) {
+      if ( (*bdt & bts).any() ) {
          strcat ( text, "    " );
          // if ( num )
          ///   strcat ( text, ", " );
@@ -5078,7 +5081,8 @@ void viewterraininfo ( void )
                                             "ID: %d\n"
                                             "attack bonus: %.1f\n"
                                             "defense bonus: %.1f\n"
-                                            "base jamming: %d#aeinzug0##eeinzug0#\n\n"
+                                            "base jamming: %d\n"
+                                            "terrain filename: %s#aeinzug0##eeinzug0#\n\n"
                                             "#font02#Terrain properties:#font01##aeinzug20##eeinzug20##crtp10#";
 
       char text[10000];
@@ -5088,7 +5092,7 @@ void viewterraininfo ( void )
       float ab = fld->getattackbonus();
       float db = fld->getdefensebonus();
 
-      sprintf(text, terraininfo, getxpos(), getypos(), fld->direction, fld->typ->terraintype->id, ab/8, db/8, fld->getjamming() );
+      sprintf(text, terraininfo, getxpos(), getypos(), fld->direction, fld->typ->terraintype->id, ab/8, db/8, fld->getjamming(), fld->typ->terraintype->location.c_str() );
 
       appendTerrainBits ( text, &fld->bdt );
 
