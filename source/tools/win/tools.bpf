@@ -17,6 +17,12 @@ USELIB("..\..\..\..\sdl\bin\sdl.lib");
 USEUNIT("..\..\graphicset.cpp");
 USEUNIT("..\..\ascstring.cpp");
 USEUNIT("..\..\graphicselector.cpp");
+USEUNIT("..\..\loadpcxc.cpp");
+USEUNIT("..\..\newfont.cpp");
+USEUNIT("..\..\CLoadable.cpp");
+USEUNIT("..\..\Property.cpp");
+USEUNIT("..\..\PropertyGroup.cpp");
+USEUNIT("..\..\sdl\graphics.cpp");
 //---------------------------------------------------------------------------
 #define Library
 

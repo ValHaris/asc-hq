@@ -9,8 +9,7 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = bzlib.lib libjpeg.lib triangulation.lib mapeditor.exe asc.exe \
-  tools.lib weaponguide.exe
+PROJECTS = bzlib.lib libjpeg.lib triangulation.lib tools.lib mount.exe demount.exe weaponguide.exe gfx2pcx.exe makegfx.exe mapeditor.exe asc.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -43,6 +42,22 @@ weaponguide.exe: source\tools\win\weaponguide.bpr
 
 tools.lib: source\tools\win\tools.bpr
   $(ROOT)\bin\bpr2mak -t$(ROOT)\bin\deflib.bmk $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+demount.exe: source\tools\win\demount.bpr
+  $(ROOT)\bin\bpr2mak $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+gfx2pcx.exe: source\tools\win\gfx2pcx.bpr
+  $(ROOT)\bin\bpr2mak $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+makegfx.exe: source\tools\win\makegfx.bpr
+  $(ROOT)\bin\bpr2mak $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+mount.exe: source\tools\win\mount.bpr
+  $(ROOT)\bin\bpr2mak $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
 
