@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.135 2003-06-30 19:56:38 mbickel Exp $
+//     $Id: typen.h,v 1.136 2003-07-06 13:16:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.135  2003/06/30 19:56:38  mbickel
+//      Fixed compilation problems with GCC
+//
 //     Revision 1.134  2003/06/26 21:00:19  mbickel
 //      Fixed: land mines could not be carried on bridges
 //
@@ -574,13 +577,13 @@ class LoadableItemType {
        virtual ~LoadableItemType() {};
 };
 
-//        .              .                 !              !                !               !
+//        .              .                 !              .                !               !
  enum { cemessage,   ceweatherchange, cenewtechnology, celosecampaign, cerunscript,     cenewtechnologyresearchable,
-//        .             !                 !                                 !                 .
+//        .             !                 !               .                 !                 .
         cemapchange, ceeraseevent,    cecampaignend,   cenextmap,      cereinforcement, ceweatherchangecomplete,
-//         !                      !                                         .
+//         !                      !                  !                       .
         cenewvehicledeveloped, cepalettechange, cealliancechange,      cewindchange,    cenothing,
-//        .                                              .                       .
+//        .                    .         .               .                       .
         cegameparamchange, ceellipse, ceremoveellipse, cechangebuildingdamage, ceaddobject };
 
 
@@ -1054,7 +1057,7 @@ extern const char*  resourceNames[3];
 extern  const char* cconnections[6];
  #define cconnection_destroy 1  
  #define cconnection_conquer 2  
- #define cconnection_lose 4  
+ #define cconnection_lose 4
  #define cconnection_seen 8
  #define cconnection_areaentered_anyunit 16
  #define cconnection_areaentered_specificunit 32

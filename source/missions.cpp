@@ -888,10 +888,10 @@ void         executeevent ( pevent ev, MapDisplayInterface* md )
          }
       }
 
-      if ( ev->a.action == ceremoveellipse ) 
+      if ( ev->a.action == ceremoveellipse )
          if ( actmap->ellipse ) {
             actmap->ellipse->active = 0;
-            if ( md ) 
+            if ( md )
                repaintdisplay();
          }
 
@@ -1026,20 +1026,16 @@ void initmissions( void )
 
 
 void         startnextcampaignmap(word         id)
-{ 
-  tcontinuecampaign ncm; 
+{
+   tcontinuecampaign ncm;
+   ncm.init();
+   ncm.setid(id);
+   ncm.run();
+   ncm.done();
 
+   displaymap();
+}
 
-   ncm.init(); 
-   ncm.setid(id); 
-   ncm.run(); 
-   ncm.done(); 
-
-   cursor.hide(); 
-   //computeview(); 
-   displaymap(); 
-   cursor.show(); 
-} 
 
 
 class tfillpolygon_connectionmarker : public tfillpolygonsquarecoord {
@@ -1643,6 +1639,117 @@ void ChangeBuildingDamage::execute()
          fld->building->damage  = damage;
 
       dashboard.x = 0xffff;
+   }
+}
+
+
+void NextMap::read ( tnstream& stream )
+{
+   int version = stream.readInt();
+   mapID = stream.readInt();
+}
+
+void NextMap::write ( tnstream& stream )
+{
+   stream.writeInt( 1);
+   stream.writeInt( mapID );
+}
+
+void NextMap::execute()
+{
+   if ( !actmap->continueplaying ) {
+      if (actmap->campaign != NULL) {
+         startnextcampaignmap( mapID );
+         eject = true;
+         return;
+      } else {
+        viewtext2(904);
+        if (choice_dlg("Do you want to continue playing ?","~y~es","~n~o") == 2) {
+           delete actmap;
+           actmap = NULL;
+           throw NoMapLoaded();
+        } else {
+           actmap->continueplaying = 1;
+           if ( actmap->replayinfo ) {
+              delete actmap->replayinfo;
+              actmap->replayinfo = 0;
+           }
+        }
+      }
+   }
+}
+
+void LoseMap::execute()
+{
+   displaymessage ( "You have been defeated !", 3 );
+   delete actmap;
+   actmap = NULL;
+   throw NoMapLoaded();
+}
+
+
+void DisplayEllipse::read ( tnstream& stream )
+{
+   int version = stream.readInt();
+   x1 = stream.readInt();
+   x2 = stream.readInt();
+   y1 = stream.readInt();
+   y2 = stream.readInt();
+   alignRight = stream.readInt();
+   alignBottom = stream.readInt();
+}
+
+void DisplayEllipse::write ( tnstream& stream )
+{
+   stream.writeInt( 1 );
+   stream.writeInt( x1 );
+   stream.writeInt( x2 );
+   stream.writeInt( y1 );
+   stream.writeInt( y2 );
+   stream.writeInt( alignRight );
+   stream.writeInt( alignBottom );
+}
+
+void DisplayEllipse::execute()
+{
+   if ( !actmap->ellipse )
+      actmap->ellipse = new EllipseOnScreen;
+
+   if ( alignRight ) {     // x orientation
+      actmap->ellipse->x1 = agmp->resolutionx - ( 640 - x1 );
+      actmap->ellipse->x2 = agmp->resolutionx - ( 640 - x2 );
+   } else {
+      actmap->ellipse->x1 = x1;
+      actmap->ellipse->x2 = x2;
+   }
+
+   if ( alignBottom ) {     // y orientation
+      actmap->ellipse->y1 = agmp->resolutiony - ( 480 - y1 );
+      actmap->ellipse->y2 = agmp->resolutiony - ( 480 - y2 );
+   } else {
+      actmap->ellipse->y1 = y1;
+      actmap->ellipse->y2 = y2;
+   }
+
+   actmap->ellipse->color = white;
+   actmap->ellipse->precision = 0.15;
+   actmap->ellipse->active = 1;
+   /*
+   if ( md ) {
+      dashboard.paint( getactfield(), actmap->playerView );
+      actmap->ellipse->paint();
+   }
+   */
+}
+
+void RemoveEllipse::execute()
+{
+   if ( actmap->ellipse ) {
+      actmap->ellipse->active = 0;
+      /*
+      if ( md )
+         repaintdisplay();
+         */
    }
 }
 

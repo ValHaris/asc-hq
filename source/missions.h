@@ -2,9 +2,12 @@
     \brief Interface to the event handling of ASC
 */
 
-//     $Id: missions.h,v 1.11 2003-06-26 21:00:18 mbickel Exp $
+//     $Id: missions.h,v 1.12 2003-07-06 13:16:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2003/06/26 21:00:18  mbickel
+//      Fixed: land mines could not be carried on bridges
+//
 //     Revision 1.10  2003/05/01 18:02:22  mbickel
 //      Fixed: no movement decrease for cargo when transport moved
 //      Fixed: reactionfire not working when descending into range
@@ -397,6 +400,52 @@ class ChangeBuildingDamage: public EventAction {
 
       int damage;
       MapCoordinate position;
+};
+
+class NextMap : public EventAction {
+   public:
+      NextMap() : EventAction ( cenextmap ) {};
+
+      int mapID;
+
+      void read ( tnstream& stream );
+      void write ( tnstream& stream );
+
+      void execute();
+};
+
+class LoseMap : public EventAction {
+    public:
+      LoseMap(): EventAction(celosecampaign) {};
+
+      void read ( tnstream& stream ) {};
+      void write ( tnstream& stream ) {};
+
+      void execute();
+};
+
+class DisplayEllipse : public EventAction {
+    public:
+      DisplayEllipse(): EventAction(ceellipse), x1(-1),y1(-1),x2(-1),y2(-1),alignRight(false),alignBottom(false) {};
+
+      int x1,y1,x2,y2;
+      bool alignRight;
+      bool alignBottom;
+
+      void read ( tnstream& stream );
+      void write ( tnstream& stream );
+
+      void execute();
+};
+
+class RemoveEllipse : public EventAction {
+    public:
+      RemoveEllipse(): EventAction(ceremoveellipse) {};
+
+      void read ( tnstream& stream ) {};
+      void write ( tnstream& stream ) {};
+
+      void execute();
 };
 
 
