@@ -1,3 +1,326 @@
+2001-09-30 13:04  mbickel
+
+	* data/paybacktime.map:  Corrected alliances in paybacktime
+
+2001-09-30 11:46  mbickel
+
+	* data/moredata/mk1.con:  New version of unitset by Steffen
+	Fröhlich
+
+2001-09-29 22:44  mbickel
+
+	* data/paybacktime.map, source/strtmesg.cpp,
+	source/ai/valuation.cpp:  AI does better job of finding unit jobs
+	 Adjusted players of paybacktime
+
+2001-09-28 23:08  mbickel
+
+	* asc.bpg, data/first.map, data/first.msg, data/paybacktime.map,
+	data/paybacktime.msg, source/strtmesg.cpp, source/ai/base.cpp: 
+	Improved first two campaign maps
+	 Version now 1.9.0-pre2
+
+2001-09-28 21:36  mbickel
+
+	* data/first.map, source/sg.cpp:  New startup map
+
+2001-09-28 19:43  mbickel
+
+	* data/helpsyst.txt, source/basegfx.cpp, source/vehicletype.h: 
+	Fixed bug: wrong graphics with hillside
+	 Fixed bug: crash when vehicle function not found
+	 Updated Helpsystem
+
+2001-09-27 00:07  mbickel
+
+	* data/: helpsys2.txt, message1.txt:  Updated online help
+
+2001-09-26 22:30  mbickel
+
+	* source/strtmesg.cpp:	Changed version number to 1.9.0-pre1
+
+2001-09-26 21:53  mbickel
+
+	* configure, configure.in, data/Makefile.am, data/Makefile.in,
+	data/a_battl2.veh, data/a_battle.veh, data/a_bfigh1.veh,
+	data/a_bfigh2.veh, data/a_bomber.veh, data/a_ekrano.veh,
+	data/a_espion.veh, data/a_figbom.veh, data/a_fight1.veh,
+	data/a_fight3.veh, data/a_helic1.veh, data/a_long-r.veh,
+	data/a_reccep.veh, data/a_seapla.veh, data/a_star-c.veh,
+	data/a_stealt.veh, data/a_tanker.veh, data/a_transp.veh,
+	data/a_vertic.veh, data/a_zeppel.veh, data/airport1.bld,
+	data/airport2.bld, data/airport3.bld, data/b_aa-tur.veh,
+	data/b_bunker.veh, data/b_turret.veh, data/bridge.obl,
+	data/coast137.trr, data/coast138.trr, data/coast139.trr,
+	data/coast140.trr, data/coast141.trr, data/coast142.trr,
+	data/coast143.trr, data/coast144.trr, data/coast145.trr,
+	data/coast146.trr, data/coast147.trr, data/coast148.trr,
+	data/coast149.trr, data/coast150.trr, data/coast151.trr,
+	data/coast152.trr, data/coast153.trr, data/coast154.trr,
+	data/coast155.trr, data/coast156.trr, data/coast157.trr,
+	data/coast158.trr, data/cst222.trr, data/cst223.trr,
+	data/cstes0.trr, data/cstlns0.trr, data/cstlss0.trr,
+	data/cstnes0.trr, data/cstns0.trr, data/cstnws0.trr,
+	data/cstses0.trr, data/cstss0.trr, data/cstsws0.trr,
+	data/cstws0.trr, data/deng.bld, data/depot.bld, data/depot1.obl,
+	data/depot2.bld, data/depot2.obl, data/depot3.bld, data/depot3.obl,
+	data/depot4.obl, data/ditch.obl, data/fields.obl, data/fields2.obl,
+	data/flat0002.trr, data/flat0003.trr, data/flat0004.trr,
+	data/flat0005.trr, data/flat0006.trr, data/flat0007.trr,
+	data/flat0008.trr, data/flat0009.trr, data/flat0010.trr,
+	data/flat0011.trr, data/flat0012.trr, data/flat0013.trr,
+	data/flat0014.trr, data/flat0015.trr, data/flat0016.trr,
+	data/flat0017.trr, data/flat0018.trr, data/flat0019.trr,
+	data/flat0020.trr, data/flat0021.trr, data/flat0022.trr,
+	data/flat0023.trr, data/flat0024.trr, data/flat0025.trr,
+	data/flat0026.trr, data/flat0027.trr, data/flat0028.trr,
+	data/flat0029.trr, data/flat0030.trr, data/flat0031.trr,
+	data/flat0032.trr, data/flat0033.trr, data/flat0034.trr,
+	data/flat0035.trr, data/flat0036.trr, data/flat0037.trr,
+	data/flat0038.trr, data/flat0039.trr, data/flat0040.trr,
+	data/flat0041.trr, data/flat0042.trr, data/flat0043.trr,
+	data/flat0044.trr, data/flat0045.trr, data/flat0046.trr,
+	data/flat0047.trr, data/flat0048.trr, data/flat0049.trr,
+	data/flat0050.trr, data/flat0051.trr, data/flat0052.trr,
+	data/flat0053.trr, data/flat0054.trr, data/flat0055.trr,
+	data/flat0056.trr, data/flat0057.trr, data/flat0058.trr,
+	data/flat0059.trr, data/flat0060.trr, data/flat0061.trr,
+	data/flat0062.trr, data/flat0063.trr, data/flat0064.trr,
+	data/flat0065.trr, data/flat0066.trr, data/flat0067.trr,
+	data/flat0068.trr, data/flat0069.trr, data/flat0070.trr,
+	data/flat0071.trr, data/flat0072.trr, data/flat0073.trr,
+	data/flat0074.trr, data/flat0075.trr, data/flat0076.trr,
+	data/flat0077.trr, data/flat0078.trr, data/flat0079.trr,
+	data/flat0080.trr, data/flat0081.trr, data/flat0082.trr,
+	data/flat0083.trr, data/flat0084.trr, data/flat0085.trr,
+	data/flat0311.trr, data/flat0312.trr, data/flat0313.trr,
+	data/flat0314.trr, data/flat0315.trr, data/flat0318.trr,
+	data/flat0319.trr, data/flat0320.trr, data/flat1000.trr,
+	data/forest.obl, data/g_aa-art.veh, data/g_aa-tan.veh,
+	data/g_aa-tra.veh, data/g_ammuni.veh, data/g_ari1.veh,
+	data/g_ari2.veh, data/g_army-v.veh, data/g_constb.veh,
+	data/g_constr.veh, data/g_energy.veh, data/g_forest.veh,
+	data/g_h-tank.veh, data/g_jammer.veh, data/g_miner.veh,
+	data/g_paratr.veh, data/g_platoo.veh, data/g_privat.veh,
+	data/g_radar-.veh, data/g_rail_g.veh, data/g_recon2.veh,
+	data/g_reconn.veh, data/g_rep-tr.veh, data/g_repair.veh,
+	data/g_ro_tan.veh, data/g_survey.veh, data/g_tank-2.veh,
+	data/g_tanker.veh, data/g_tra-tr.veh, data/g_transp.veh,
+	data/g_troope.veh, data/harb0194.trr, data/harb0195.trr,
+	data/harb0196.trr, data/harb0197.trr, data/harb0198.trr,
+	data/harb0199.trr, data/harb0200.trr, data/harb0201.trr,
+	data/helisun.jpg, data/hill0065.obl, data/hill0066.obl,
+	data/hill0067.obl, data/hill0068.obl, data/hill0069.obl,
+	data/hill0070.obl, data/hill0071.obl, data/hill0072.obl,
+	data/hill0073.obl, data/hill0074.obl, data/hill0075.obl,
+	data/hill0321.trr, data/hill0322.trr, data/hill0323.trr,
+	data/hill0324.trr, data/hill0325.trr, data/hill1013.trr,
+	data/hills087.trr, data/hills088.trr, data/hills089.trr,
+	data/hills090.trr, data/hills091.trr, data/hills092.trr,
+	data/hills093.trr, data/hills094.trr, data/hills095.trr,
+	data/hills096.trr, data/hills097.trr, data/hills098.trr,
+	data/hills099.trr, data/hills100.trr, data/hills101.trr,
+	data/hills102.trr, data/hills103.trr, data/hills104.trr,
+	data/hills105.trr, data/hills106.trr, data/hills107.trr,
+	data/hills108.trr, data/hills109.trr, data/hills110.trr,
+	data/hills111.trr, data/hills112.trr, data/hills113.trr,
+	data/hills114.trr, data/hills115.trr, data/hills116.trr,
+	data/hills117.trr, data/hills118.trr, data/hills119.trr,
+	data/hills120.trr, data/hills121.trr, data/hills122.trr,
+	data/hills123.trr, data/hills124.trr, data/hills125.trr,
+	data/hills126.trr, data/hills127.trr, data/hills128.trr,
+	data/hills129.trr, data/hills130.trr, data/hills131.trr,
+	data/hills132.trr, data/hills133.trr, data/hills134.trr,
+	data/hills135.trr, data/hills202.trr, data/hills316.trr,
+	data/hq1.bld, data/hq2.bld, data/hq_big.bld, data/hq_bunk.bld,
+	data/hq_titan.bld, data/icebreak.obl, data/inst0033.obl,
+	data/inst0034.obl, data/inst0035.obl, data/inst0036.obl,
+	data/inst0037.obl, data/inst0038.obl, data/inst0039.obl,
+	data/inst0040.obl, data/inst0041.obl, data/inst0042.obl,
+	data/inst0043.obl, data/ltgreen1.obl, data/ltgreen2.obl,
+	data/mntn0046.obl, data/mntn0047.obl, data/mntn0048.obl,
+	data/mntn0049.obl, data/mntn0050.obl, data/mntn0051.obl,
+	data/mntn0052.obl, data/mntn0053.obl, data/mntn0054.obl,
+	data/mntn0055.obl, data/mntn0056.obl, data/mntn0057.obl,
+	data/mntn0058.obl, data/mntn0059.obl, data/mntn0060.obl,
+	data/mntn0061.obl, data/mntn0062.obl, data/mntn0063.obl,
+	data/mntn0064.obl, data/mntn0184.trr, data/mntn0185.trr,
+	data/mntn0186.trr, data/mntn0187.trr, data/mntn0188.trr,
+	data/mntn0189.trr, data/mntn0190.trr, data/mntn0191.trr,
+	data/mntn0192.trr, data/mntn0193.trr, data/netmount.bld,
+	data/obj_0022.obl, data/obj_0042.obl, data/obj_0089.obl,
+	data/obj_0234.obl, data/obj_0235.obl, data/obj_0236.obl,
+	data/obj_0238.obl, data/obj_0239.obl, data/obj_0240.obl,
+	data/obj_0241.obl, data/obj_0291.obl, data/obj_0313.obl,
+	data/obj_0314.obl, data/obj_0326.obl, data/obj_0327.obl,
+	data/obj_0328.obl, data/obj_0329.obl, data/obj_0330.obl,
+	data/obj_0331.obl, data/obj_0332.obl, data/obj_0333.obl,
+	data/obj_0334.obl, data/obj_0335.obl, data/obj_0336.obl,
+	data/obj_0337.obl, data/obj_0338.obl, data/obj_0339.obl,
+	data/obj_0340.obl, data/obj_0341.obl, data/obj_0342.obl,
+	data/obj_0343.obl, data/obj_0344.obl, data/obj_0345.obl,
+	data/obj_0346.obl, data/obj_0347.obl, data/obj_0348.obl,
+	data/obj_0358.obl, data/obj_0360.obl, data/obj_0388.obl,
+	data/obj_0444.obl, data/obj_0445.obl, data/obj_0446.obl,
+	data/obj_0447.obl, data/obj_0448.obl, data/obj_0453.obl,
+	data/obj_0454.obl, data/obj_0455.obl, data/obj_0456.obl,
+	data/obj_0457.obl, data/obj_0459.obl, data/obj_0460.obl,
+	data/obj_0461.obl, data/obj_0462.obl, data/obj_1283.obl,
+	data/obj_1329.obl, data/obj_1330.obl, data/obj_1331.obl,
+	data/obj_1332.obl, data/obj_1333.obl, data/obj_1334.obl,
+	data/oilplat.bld, data/path.obl, data/paybacktime.map,
+	data/paybacktime.msg, data/pipe0289.trr, data/pipe0290.trr,
+	data/pipe0291.trr, data/pipe0292.trr, data/pipe0293.trr,
+	data/pipe0294.trr, data/pipe0295.trr, data/pipe0296.trr,
+	data/pipe0297.trr, data/pipe0298.trr, data/pipelin2.obl,
+	data/pipeline.obl, data/railroad.obl, data/rck10346.trr,
+	data/rck10347.trr, data/rck10348.trr, data/rck1_159.trr,
+	data/rck1_160.trr, data/rck1_161.trr, data/rck1_162.trr,
+	data/rck1_163.trr, data/rck1_164.trr, data/rck1_165.trr,
+	data/rck1_166.trr, data/rck1_167.trr, data/rck1_168.trr,
+	data/rck1_169.trr, data/rck1_170.trr, data/rck1_171.trr,
+	data/rck1_172.trr, data/rck1_173.trr, data/rck1_174.trr,
+	data/rck1_175.trr, data/rck1_176.trr, data/rck1_177.trr,
+	data/rck20349.trr, data/rck2_178.trr, data/rck2_179.trr,
+	data/rck2_180.trr, data/rck2_181.trr, data/rck2_182.trr,
+	data/rck2_183.trr, data/research.bld, data/rforst00.obl,
+	data/rforst01.obl, data/rforst02.obl, data/rforst03.obl,
+	data/rforst04.obl, data/rforst05.obl, data/rforst06.obl,
+	data/rforst07.obl, data/rforst08.obl, data/rforst09.obl,
+	data/rforst10.obl, data/rforst11.obl, data/rforst12.obl,
+	data/rforst13.obl, data/rforst14.obl, data/road.obl,
+	data/road0310.trr, data/runway45.obl, data/s_aa-shi.veh,
+	data/s_amphib.veh, data/s_battle.veh, data/s_carrie.veh,
+	data/s_cruisr.veh, data/s_destro.veh, data/s_ice-br.veh,
+	data/s_nuclea.veh, data/s_patro2.veh, data/s_r-sled.veh,
+	data/s_repair.veh, data/s_speedb.veh, data/s_subm-d.veh,
+	data/s_submar.veh, data/s_supply.veh, data/s_tr-sub.veh,
+	data/s_transp.veh, data/secdepot.bld, data/solar.bld,
+	data/submarin.bld, data/swm1_266.trr, data/swm1_267.trr,
+	data/swm1_268.trr, data/swm1_269.trr, data/swm1_270.trr,
+	data/swm1_271.trr, data/swm2_272.trr, data/swm2_273.trr,
+	data/swm2_274.trr, data/swm2_275.trr, data/swm2_276.trr,
+	data/swm2_277.trr, data/swm2_278.trr, data/swm2_279.trr,
+	data/swm2_280.trr, data/swm2_281.trr, data/swm2_282.trr,
+	data/swm2_283.trr, data/swm2_284.trr, data/swm2_285.trr,
+	data/swm2_286.trr, data/swm2_287.trr, data/swm2_288.trr,
+	data/swmp0360.trr, data/terr_168.trr, data/terr_233.trr,
+	data/terr_237.trr, data/terr_242.trr, data/terr_290.trr,
+	data/terr_394.trr, data/terr_396.trr, data/terr_487.trr,
+	data/terr_488.trr, data/terr_489.trr, data/terr_490.trr,
+	data/terr_509.trr, data/terr_571.trr, data/title.jpg,
+	data/town1.bld, data/town2.bld, data/town3.bld, data/track.obl,
+	data/training.bld, data/trrt0359.trr, data/turrt044.obl,
+	data/unps0203.trr, data/unps0204.trr, data/unps0205.trr,
+	data/unps0206.trr, data/unps0207.trr, data/unps0208.trr,
+	data/unps0209.trr, data/unps0210.trr, data/unps0211.trr,
+	data/unps0212.trr, data/unps0213.trr, data/unps0214.trr,
+	data/unps0215.trr, data/unps0216.trr, data/unps0217.trr,
+	data/unps0218.trr, data/unps0219.trr, data/unps0220.trr,
+	data/unps0221.trr, data/unps0222.trr, data/unps0223.trr,
+	data/unps0224.trr, data/unps0225.trr, data/unps0226.trr,
+	data/unps0227.trr, data/unps0228.trr, data/unps0229.trr,
+	data/unps0230.trr, data/unps0231.trr, data/unps0232.trr,
+	data/unps0233.trr, data/unps0234.trr, data/unps0235.trr,
+	data/unps0236.trr, data/unps0237.trr, data/unps0238.trr,
+	data/unps0239.trr, data/unps0240.trr, data/unps0241.trr,
+	data/unps0242.trr, data/unps0243.trr, data/unps0244.trr,
+	data/unps0245.trr, data/unps0246.trr, data/unps0247.trr,
+	data/unps0248.trr, data/unps0249.trr, data/unps0250.trr,
+	data/unps0251.trr, data/unps0252.trr, data/unps0253.trr,
+	data/unps0254.trr, data/unps0255.trr, data/unps0256.trr,
+	data/unps0257.trr, data/unps0258.trr, data/unps0259.trr,
+	data/unps0260.trr, data/unps0261.trr, data/unps0262.trr,
+	data/unps0263.trr, data/unps0264.trr, data/unps0265.trr,
+	data/unps0319.trr, data/unps0326.trr, data/unps0327.trr,
+	data/unps0328.trr, data/unps0329.trr, data/unps0330.trr,
+	data/unps0331.trr, data/unps0332.trr, data/unps0333.trr,
+	data/unps0334.trr, data/unps0335.trr, data/unps0336.trr,
+	data/unps0337.trr, data/unps0338.trr, data/unps0339.trr,
+	data/unps0340.trr, data/unps0341.trr, data/unps0342.trr,
+	data/unps0343.trr, data/unps0344.trr, data/unps0345.trr,
+	data/unps0350.trr, data/unps0351.trr, data/unps0352.trr,
+	data/unps0353.trr, data/unps0354.trr, data/unps0355.trr,
+	data/unps0356.trr, data/unps0357.trr, data/unps0358.trr,
+	data/vehiclef.bld, data/vehicleg.bld, data/vehicleh.bld,
+	data/wa_ro303.trr, data/wa_ro304.trr, data/wa_ro305.trr,
+	data/wa_ro306.trr, data/wat1_299.trr, data/wat1_307.trr,
+	data/wat2_300.trr, data/wat2_308.trr, data/wat3_301.trr,
+	data/wat3_302.trr, data/wat3_309.trr, data/werft.bld,
+	data/windpow.bld, data/wreck076.obl, data/wreck077.obl,
+	data/wreck078.obl, data/moredata/Makefile.am,
+	data/moredata/buildings.con, data/moredata/mk1.con,
+	data/moredata/trrobj.con, doc/source.html, doc/source_borland.html,
+	source/dialog.cpp, source/sg.cpp, source/libs/bzlib/Makefile: 
+	Reorganized data files for coming ASC 1.9.0 release
+	 Improved field information dialog
+
+2001-09-26 21:44  mbickel
+
+	* asc.bpg, source/controls.cpp, source/gamemap.cpp,
+	source/tools/weaponguide.cpp:  Fixed bugs in map resizing
+
+2001-09-25 22:15  mbickel
+
+	* source/sg.cpp:  Changed startup map to paybacktime
+
+2001-09-25 20:03  mbickel
+
+	* source/: controls.cpp, typen.h:  Move after attack doesn't reduce
+	a units movement
+
+2001-09-25 17:13  mbickel
+
+	* data/message1.txt, source/attack.cpp, source/strtmesg.cpp,
+	source/unitctrl.cpp, source/unitctrl.h:  New version number
+	 Fixed crash when reaction fire during ascend
+
+2001-09-25 16:06  mbickel
+
+	* source/tools/demount.cpp:  Fixed: some files were not extracted
+	by demount
+
+2001-09-25 11:35  mbickel
+
+	* source/: gamemap.cpp, spfst.cpp:  Fixed disappearing building
+	when resizing map
+
+2001-09-24 19:22  mbickel
+
+	* source/: buildings.h, buildingtype.h, doxygen.config, gamemap.h,
+	spfst.cpp, typen.h:  Fixed crash in end of turn
+	 Improved documentation
+
+2001-09-24 14:05  mbickel
+
+	* ChangeLog, README, source/TODO, source/buildingtype.h,
+	source/edglobal.cpp, source/ai/service.cpp, source/tools/mount.cpp:
+	 Fixed: airplanes landing in wrong building for repairs
+
+2001-09-24 01:06  mbickel
+
+	* source/: building.cpp, building_controls.h, edglobal.cpp,
+	edmain.cpp, mapdisplay.cpp, unitctrl.cpp, vehicle.cpp, vehicle.h: 
+	Fixed:
+	  - ascent/descent during reactionfire
+	  - movement with nearly empty fuel tank
+	  - production icon displayed although unit could not be produced
+	  - invisible building becoming visible in fog of war
+
+2001-09-20 17:36  mbickel
+
+	* source/: basestrm.cpp, edselfnt.cpp, gamemap.cpp, gui.cpp,
+	objecttype.cpp, objecttype.h, palette.cpp, palette.h, strtmesg.cpp,
+	textfiletags.cpp, textfiletags.h, tools/mount.cpp,
+	tools/weaponguide.cpp, win32/borland/asc.bpr:  New object
+	displaying mode
+
+2001-09-18 13:19  mbickel
+
+	* source/: vehicletype.cpp, tools/weaponguide.cpp:  Fixed bug in
+	determining units loadable into a transport
+	 Weaponguide displays removable objects
+
 2001-09-14 13:34  mbickel
 
 	* source/: buildingtype.cpp, strtmesg.cpp, vehicletype.cpp:  Fixed
