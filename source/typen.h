@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.103 2001-10-06 11:30:42 mbickel Exp $
+//     $Id: typen.h,v 1.104 2001-10-08 14:44:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.103  2001/10/06 11:30:42  mbickel
+//      Fixed bug in gametime calculation
+//
 //     Revision 1.102  2001/10/03 20:56:07  mbickel
 //      Updated data files
 //      Updated online help
@@ -356,7 +359,7 @@ struct teventstore {
 struct GameTime {
   int move() { return abstime & 0xffff; };
   int turn() { return abstime >> 16; };
-  int set ( int turn, int move ) { abstime = (turn << 16) + move ; };
+  void set ( int turn, int move ) { abstime = (turn << 16) + move ; };
   int abstime;
 };
 

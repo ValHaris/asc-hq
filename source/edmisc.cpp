@@ -2,9 +2,15 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.66 2001-10-08 14:12:20 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.67 2001-10-08 14:44:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.66  2001/10/08 14:12:20  mbickel
+//      Fixed crash in AI
+//      Speedup of AI
+//      Map2PCX improvements
+//      Mapeditor usability improvements
+//
 //     Revision 1.65  2001/10/02 14:06:28  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -742,25 +748,25 @@ void placebodentyp(void)
                   pf->direction = auswahld;
                   pf->setparams();
                   if (pf->vehicle != NULL) 
-                     if ( terrainaccessible(pf,pf->vehicle) == false ) {
+                     if ( (pf->vehicle->typ->terrainaccess.accessible ( pf->bdt ) < 0) || (pf->vehicle->typ->terrainaccess.accessible ( pf->bdt ) == 0 && actmap->getgameparameter( cgp_movefrominvalidfields ) == 0 )) {
                         delete pf->vehicle;
                         pf->vehicle = NULL;
                      }
                }
-            } 
-         displaymap(); 
-         tfill = false; 
-         pdbaroff(); 
-      } 
-      else { 
-         if ( auswahl->weather[auswahlw] ) 
-            pf->typ = auswahl->weather[auswahlw]; 
+            }
+         displaymap();
+         tfill = false;
+         pdbaroff();
+      }
+      else {
+         if ( auswahl->weather[auswahlw] )
+            pf->typ = auswahl->weather[auswahlw];
          else
-            pf->typ = auswahl->weather[0]; 
+            pf->typ = auswahl->weather[0];
          pf->direction = auswahld;
          pf->setparams();
-         if (pf->vehicle != NULL) 
-            if ( terrainaccessible(pf,pf->vehicle) == false ) {
+         if (pf->vehicle != NULL)
+            if ( (pf->vehicle->typ->terrainaccess.accessible ( pf->bdt ) < 0) || (pf->vehicle->typ->terrainaccess.accessible ( pf->bdt ) == 0 && actmap->getgameparameter( cgp_movefrominvalidfields ) == 0 )) {
                delete pf->vehicle;
                pf->vehicle = NULL;
             }

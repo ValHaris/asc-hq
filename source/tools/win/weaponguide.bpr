@@ -96,7 +96,7 @@ Item0=C:\Programme\ascsrc\games\asc\source\tools\win
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=
+RunParams=*
 HostApplication=
 RemoteHost=
 RemotePath=

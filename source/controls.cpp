@@ -3,9 +3,15 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.115 2001-10-02 14:06:27 mbickel Exp $
+//     $Id: controls.cpp,v 1.116 2001-10-08 14:44:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.115  2001/10/02 14:06:27  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.114  2001/09/26 19:44:09  mbickel
 //      Fixed bugs in map resizing
 //
@@ -1621,53 +1627,31 @@ void         calcmovemalus(int          x1,
 }
 
 
-void initwindmovement(  const pvehicle vehicle ) {
+void initwindmovement(  const pvehicle vehicle )
+{
+   if ( vehicle->maxMovement() == 0 ) {
+      for ( int i = 0; i < sidenum; i++ )
+        windmovement[i] = 0;
+      return;
+   }
    int direc;
    tmap::Weather::Wind wind = actmap->weather.wind[ getwindheightforunit ( vehicle ) ];
    for (direc = 0; direc < sidenum; direc++) {
-     float relwindspeedx = 0, relwindspeedy = 0, abswindspeed;
+      float abswindspeed = ( wind.speed * maxwindspeed * minmalq / 256 );
 
-     #ifdef HEXAGON
-      abswindspeed = ( wind.speed * maxwindspeed * minmalq / 256 );
-     #else
-      if (direc & 1)
-         abswindspeed = ( wind.speed * maxwindspeed * minmalq / 256);
-      else
-         abswindspeed = ( wind.speed * maxwindspeed * maxmalq / 256 );
-     #endif
-
-      float relwindspeed  =  abswindspeed / vehicle->typ->movement[log2(vehicle->height)];
+      float relwindspeed  =  abswindspeed / vehicle->maxMovement();;
 
       float pi = 3.14159265;
 
-      relwindspeedx = 10 * relwindspeed * sin ( 2 * pi * wind.direction / sidenum );
-      relwindspeedy = -10 * relwindspeed * cos ( 2 * pi * wind.direction / sidenum );
+      float relwindspeedx = 10 * relwindspeed * sin ( 2 * pi * wind.direction / sidenum );
+      float relwindspeedy = -10 * relwindspeed * cos ( 2 * pi * wind.direction / sidenum );
 
-
-
-      float xtg = 0, ytg = 0;
-
-      xtg = 120 * sin ( 2 * pi * direc / sidenum );
-      ytg = -120 * cos ( 2 * pi * direc / sidenum );
-
-      #ifndef HEXAGON
-       if ( direc & 1 ) {
-          xtg = xtg * minmalq / maxmalq;
-          ytg = ytg * minmalq / maxmalq;
-       }
-      #endif
+      float xtg = 120 * sin ( 2 * pi * direc / sidenum );
+      float ytg = -120 * cos ( 2 * pi * direc / sidenum );
 
       int disttofly = (int)sqrt ( square ( xtg - relwindspeedx) + square ( ytg - relwindspeedy ) );
 
-      #ifdef HEXAGON
-       windmovement[direc] =  (120 - disttofly) / 10;
-      #else
-       if (direc & 1)
-         windmovement[direc] =  (80 - disttofly) / 10;
-       else
-         windmovement[direc] =  (120 - disttofly) / 10;
-      #endif
-
+      windmovement[direc] =  (120 - disttofly) / 10;
    }
 }
 
@@ -2552,7 +2536,7 @@ void endRound ( void )
              (*j)->initwork();
 
           int pass = 0;
-          int buildingwaiting = 0;
+          int buildingwaiting;
           int buildingnum;  
           do {
              pass++;
@@ -2781,11 +2765,6 @@ void endTurn ( void )
          bool unitRemoved = false;
          pvehicle actvehicle = *v;
 
-         /* fuel and movement */
-
-         int j = 1;
-
-
          // Bei Žnderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!
 
          if (( actvehicle->height >= chtieffliegend )   &&  ( actvehicle->height <= chhochfliegend ) && ( getfield(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) {
@@ -2794,10 +2773,9 @@ void endTurn ( void )
                delete actvehicle;
                actvehicle = NULL;
                unitRemoved = true;
-               j = -1;
             } else {
 
-               j = actvehicle->tank.fuel - actvehicle->typ->fuelConsumption * nowindplanefuelusage;
+               int j = actvehicle->tank.fuel - actvehicle->typ->fuelConsumption * nowindplanefuelusage;
 
                if ( actvehicle->height <= chhochfliegend )
                   j -= ( actvehicle->getMovement() * 64 / actvehicle->typ->movement[log2(actvehicle->height)] )

@@ -29,10 +29,10 @@ const int WAIT_SLEEP_MSEC = 50;
 
 SoundSystem* SoundSystem::instance = NULL;
 
-SoundSystem  :: SoundSystem ( bool mute, bool off )
+SoundSystem  :: SoundSystem ( bool mute, bool _off )
 {
    this->mute = mute;
-   this->off = off;
+   this->off = _off;
 
    for ( int i = 0; i < MIX_CHANNELS; i++ )
        channel[i] = NULL;

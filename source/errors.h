@@ -42,7 +42,7 @@
       protected:
          ASCString message;
       public:
-         ASCmsgException ( ASCString msg ) : message ( msg ) {};
+         ASCmsgException ( const ASCString& msg ) : message ( msg ) {};
          const ASCString& getMessage ( void ) const { return message; };
          virtual ~ASCmsgException() {};
   };

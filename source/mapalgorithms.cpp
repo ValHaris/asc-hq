@@ -37,11 +37,9 @@ tdrawgettempline :: tdrawgettempline ( int _freefields, pmap _gamemap )
 
 void tdrawgettempline :: putpix8 ( int x, int y )
 {
-   if ( !gamemap->getField ( x, y ) ) {
-      x = sx;
-      y = sy;
+   if ( !gamemap->getField ( x, y ) )
       return;
-   }
+   
    if ( num >= freefields )
       tempsum += gamemap->getField ( x, y )->getjamming();
    num++;

@@ -42,19 +42,6 @@
 
 int main(int argc, char *argv[] )
 {
-/*
-   ASCString s = "test #crt# test";
-   if (s.find ( "#crt" ))
-      printf("found\n");
-   else
-      printf("not found\n");
-
-   if ( s.find ( "#crt#" ) != ASCString::npos )
-      s.replace ( s.find  ("#crt#"), 5, "<p>");
-
-   printf(s.c_str());
-   return 0;
-  */
    Cmdline cl ( argc, argv );
 
    if ( cl.v() ) {
@@ -850,11 +837,15 @@ int main(int argc, char *argv[] )
 
    } /* endtry */
    catch ( tfileerror err ) {
-      printf("\nfatal error accessing file %s \n", err.getFileName().c_str() );
+      fatalError("fatal error accessing file " + err.getFileName() );
       return 1;
    } /* endcatch */
+   catch ( ASCmsgException err ) {
+      fatalError("a fatal exception occured: " + err.getMessage() );
+      return 2;
+   } /* endcatch */
    catch ( ASCexception ) {
-      printf("\na fatal exception occured\n" );
+      fatalError("\na fatal exception occured\n" );
       return 2;
    } /* endcatch */
 

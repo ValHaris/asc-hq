@@ -2,9 +2,15 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.97 2001-10-03 20:56:06 mbickel Exp $
+//     $Id: dialog.cpp,v 1.98 2001-10-08 14:44:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.97  2001/10/03 20:56:06  mbickel
+//      Updated data files
+//      Updated online help
+//      Clean up of Pulldown menues
+//      Weapons can now have different efficiencies against different unit classes
+//
 //     Revision 1.96  2001/10/02 14:06:27  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -806,7 +812,6 @@ void         tweaponinfo::run(void)
       releasetimeslice();
    }  while (!((mouseparams.taste == 0) || keypress()) );
    mousevisible(true);
-   k = 0;
 
    do {
       tdialogbox::run();
@@ -2925,15 +2930,12 @@ void tbasicshowmap::generatemap1 ( void )
    k++;
    *k = mysize - 1;
 
-   int l,i,j;
    char c;
-
 
    buffer2 = buffer + 4;
 
-   l = 0; 
-   for (j = 0; j < actmap->ysize ; j++) {
-      for (i = 0; i < actmap->xsize ; i++) { 
+   for (int j = 0; j < actmap->ysize ; j++) {
+      for ( int i = 0; i < actmap->xsize ; i++) {
          pfield fld1 = getfield ( i, j ) ;
          c = fld1->typ->quickview->dir[fld1->direction].p1;
 
@@ -2945,7 +2947,7 @@ void tbasicshowmap::generatemap1 ( void )
             else
                if ( v == visible_ago)
                   buffer2[ j * mxsize + 1 + i*2] = xlattables.a.dark1[ c ];
-               else 
+               else
                   if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 ) )
                      buffer2[ j * mxsize + 1 + i*2] = fld1->building->color + buildingcoloroffset;
                   else
@@ -2959,7 +2961,7 @@ void tbasicshowmap::generatemap1 ( void )
             else
                if ( v == visible_ago)
                   buffer2[ j * mxsize + i*2] = xlattables.a.dark1[ c ];
-               else 
+               else
                   if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 ))
                      buffer2[ j * mxsize + i*2] = fld1->building->color + buildingcoloroffset;
                   else
@@ -2967,10 +2969,9 @@ void tbasicshowmap::generatemap1 ( void )
                         buffer2[ j * mxsize + i*2] = fld1->vehicle->color + unitcoloroffset;
                      else
                         buffer2[ j * mxsize + i*2] = c;
-         } 
-         l++;
-      } 
-   } 
+         }
+      }
+   }
 }
 
 void tbasicshowmap::generatemap2 ( void )
@@ -3081,17 +3082,13 @@ void tbasicshowmap::generatemap3 ( void )
    k++;
    *k = mysize - 1;
 
-
-   int l,i,j,m,n;
-
    buffer2 = buffer + 4;
-   pfield fld1;
 
-   l = 0; 
-   for (j = 0; j < actmap->ysize ; j++) {
-      for (i = 0; i < actmap->xsize ; i++) { 
-         fld1 = getfield ( i, j ) ;
-         for (l = 0; l < 5 ; l++ ) {
+   for ( int j = 0; j < actmap->ysize ; j++) {
+      for ( int i = 0; i < actmap->xsize ; i++) {
+         pfield fld1 = getfield ( i, j ) ;
+         for ( int l = 0; l < 5 ; l++ ) {
+             int m;
              if (l < zoom)
                 m = (zoom-1)-l;
              else
@@ -3100,7 +3097,7 @@ void tbasicshowmap::generatemap3 ( void )
              int v = fieldVisibility ( fld1, actmap->playerView);
 
              if (j & 1) {
-                for (n = m ; n < 5-m ; n++ )
+                for (int n = m ; n < 5-m ; n++ )
                     if ( v == visible_not )
                        buffer2 [ (j * 3 + 0 + l) * mxsize + (i * 6) + 3 + n ] = visiblenotcol;
                     else
@@ -3116,7 +3113,7 @@ void tbasicshowmap::generatemap3 ( void )
                                 buffer2 [ (j * 3 + 0 + l) * mxsize + (i * 6) + 3 + n ] = fld1->typ->quickview->dir[fld1->direction].p5[n][l];
 
              } else {
-                for (n = m ; n < 5-m  ; n++ )
+                for ( int n = m ; n < 5-m  ; n++ )
                     if ( v == visible_not )
                        buffer2 [ (j * 3 + 0 + l) * mxsize + (i * 6) + 0 + n ] = visiblenotcol;
                     else
@@ -3136,7 +3133,7 @@ void tbasicshowmap::generatemap3 ( void )
    }
 }
 
-   
+
 int hexfieldform[] = { 16,16,14,14,14,14,12,12,10,10,8,8,8,8,6,6,4,4,2,2,2,2,0,0 };
 
 void tbasicshowmap::generatemap_var ( void )
@@ -5087,18 +5084,14 @@ void showbdtbits( void )
 
 void appendTerrainBits ( char* text, const TerrainBits* bdt )
 {
-   int num = 0;
    for (int i = 0; i < cbodenartennum ; i++) {
       TerrainBits bts;
       bts.set ( i );
 
       if ( (*bdt & bts).any() ) {
          strcat ( text, "    " );
-         // if ( num )
-         ///   strcat ( text, ", " );
          strcat ( text, cbodenarten[i] );
          strcat  ( text, "\n" );
-         num++;
       }
    } /* endfor */
 }

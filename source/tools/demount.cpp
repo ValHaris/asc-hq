@@ -13,8 +13,8 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    along with this program; see the file COPYING. If not, write to the
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
 */
 
@@ -26,8 +26,25 @@
 
 #include "../basestrm.h"
 #include "../strtmesg.h"
+#include "../ascstring.h"
+#include "../errors.h"
 #include <stdio.h>
 #include <malloc.h>
+
+
+#define logging
+
+#ifdef logging
+ void addToLog ( const ASCString& str )
+ {
+   FILE* f = fopen ( "demount.log", "at");
+   fprintf(f, str.c_str() );
+   fprintf(f, "\n" );
+   fclose(f);
+ }
+#else
+  #define addToLog(a)
+#endif
 
 
 
@@ -36,6 +53,8 @@
 
 int main(int argc, char *argv[] )
 {
+   addToLog( "Demount started\n");
+   
    Cmdline cl ( argc, argv );
 
    if ( cl.v() ) {
@@ -48,21 +67,41 @@ int main(int argc, char *argv[] )
       exit(1);
    }
 
+
    int pos;
    int num = 0;
    for ( int a = cl.next_param(); a < argc; a++ ) {
+
+      addToLog( ASCString("Processing ") + argv[a] );
+
       FILE* fp = fopen ( argv[a], filereadmode );
+      if ( !fp )
+         fatalError ( ASCString("Could not open file ") + argv[a] + " for reading!" );
+
       char magic[4];
       fread(&magic,1,sizeof(magic),fp);
-      if (strncmp(magic,"NCBM",4) != 0) {
-         printf("invalid containerfile\n");
-         return 1;
-      }
+
+      if (strncmp(magic,"NCBM",4) != 0)
+         fatalError("Invalid containerfile: magic not matched");
+
+      addToLog( "Reading pos" );
+
       fread ( &pos, 1, 4, fp );
+
+      addToLog( "Seeking to pos" );
+
       fseek ( fp, pos, SEEK_SET );
 
+      addToLog( "Reading count" );
+
       fread ( &num, 1, 4, fp );
+
+      addToLog( "Allocating index memory" );
+
       tcontainerindex* index = new tcontainerindex[num];
+
+      addToLog( "Reading index" );
+
       int i;
       for (i = 0; i < num; i++ ) {
          fread ( &index[i], 1, sizeof ( index[i] ) , fp );
@@ -74,18 +113,30 @@ int main(int argc, char *argv[] )
             } while ( index[i].name[p] ); /* enddo */
          }
       }
+
+      addToLog( "Closing index" );
       fclose ( fp );
+
+      addToLog( "Opening container pos" );
       opencontainer ( argv[a] );
 
       int bufsize = 1000000;
+
+      addToLog( "Reserving buffer" );
+
       void* buf = malloc ( bufsize );
+
+      addToLog ( ASCString("Number of files: ") + strrr(num));
 
       for ( i = 0; i < num; i++ ) {
          try {
+            addToLog( ASCString("Finding file ") + strrr ( i+1 ));
+
             tfindfile ff ( index[i].name );
             bool incontainer;
             ASCString nme = ff.getnextname ( NULL, &incontainer );
             if ( incontainer || nme.empty() ) {
+               addToLog( "Reserving buffer" );
                tnfilestream instream ( index[i].name, tnstream::reading );
                char namebuf[ maxFileStringSize ];
                int j = -1;
@@ -94,25 +145,36 @@ int main(int argc, char *argv[] )
                   namebuf[j] = tolower ( index[i].name[j] );
                } while ( namebuf[j] );
 
+               addToLog( "filename converted" );
+
                if ( !cl.q() )
                   printf("writing %s \n", namebuf );
 
+               addToLog( "opening output stream" );
                tn_file_buf_stream outstream ( namebuf, tnstream::writing );
                int size ;
                do {
                   size = instream.readdata ( buf, bufsize, 0 );
                   outstream.writedata ( buf, size );
                } while ( size == bufsize );
+               addToLog( "data written" );
+            } else {
+               printf("file %s already exists; skipping\n", index[i].name );
+               addToLog( ASCString("File ") + index[i].name + " skipped" );
             }
-         } /* endtry */
-         catch ( tfileerror err) {
-            printf( "error writing file %s ", err.getFileName().c_str() );
-            return 1;
+         }
+         catch ( tfileerror err ) {
+            fatalError( "error writing file " + err.getFileName() );
+         } /* endcatch */
+         catch ( ... ) {
+            fatalError( "Exception caught !" );
          } /* endcatch */
 
       } /* endfor */
 
+      addToLog( "freeing buffer" );
       free ( buf );
    }
+   addToLog( "quitting" );
    return 0;
 }

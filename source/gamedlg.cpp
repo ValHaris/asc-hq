@@ -1,8 +1,14 @@
 /*! \file gamedlg.cpp    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.81 2001-10-02 14:06:28 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.82 2001-10-08 14:44:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.81  2001/10/02 14:06:28  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.80  2001/09/13 17:43:12  mbickel
 //      Many, many bug fixes
 //
@@ -2799,7 +2805,6 @@ int  tparagraph :: reflow( int all  )
    int pos = 0;
    linestart [ linenum ] = text;
    int length = 0;
-   int oldlength = 0;
 
    do {        
 
@@ -2837,7 +2842,7 @@ int  tparagraph :: reflow( int all  )
         }
 
 
-   oldlength = 0;
+   int oldlength = 0;
    for (int i = 0; i <= linenum; i++) {
       length = 0;
       for ( int j = 0; j < linelength[i]; j++ ) {

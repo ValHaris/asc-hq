@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: sg.cpp,v 1.171 2001-10-03 20:56:06 mbickel Exp $
+//     $Id: sg.cpp,v 1.172 2001-10-08 14:44:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.171  2001/10/03 20:56:06  mbickel
+//      Updated data files
+//      Updated online help
+//      Clean up of Pulldown menues
+//      Weapons can now have different efficiencies against different unit classes
+//
 //     Revision 1.170  2001/10/02 18:08:52  mbickel
 //      Changed parser error handling to use exceptions
 //      Removed gfx2pcx project
@@ -1346,9 +1352,9 @@ void loadStartupMap ( const char *gameToLoad=NULL )
 
 void benchgame ( int mode )
 {
+   int t2;
    int t = ticker;
    int n = 0;
-   int t2 = t;
    do {
       if ( mode <= 1 ) {
          if ( mode == 1 )

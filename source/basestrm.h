@@ -4,9 +4,15 @@
 */
 
 
-//     $Id: basestrm.h,v 1.47 2001-10-08 14:12:20 mbickel Exp $
+//     $Id: basestrm.h,v 1.48 2001-10-08 14:44:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2001/10/08 14:12:20  mbickel
+//      Fixed crash in AI
+//      Speedup of AI
+//      Map2PCX improvements
+//      Mapeditor usability improvements
+//
 //     Revision 1.46  2001/08/27 21:03:55  mbickel
 //      Terraintype graphics can now be mounted from any number of PNG files
 //      Several AI improvements
@@ -147,7 +153,7 @@ class CharBuf {
 
 class tcompressionerror : public ASCmsgException {
    public:
-     tcompressionerror ( string msg, int returncode ) : ASCmsgException ( msg )
+     tcompressionerror ( const ASCString& msg, int returncode ) : ASCmsgException ( msg )
      {
         message += "\n the returncode is ";
         message += strrr ( returncode );

@@ -104,7 +104,6 @@ int ReplayMapDisplay :: checkMapPosition ( int x, int y )
    if ( y >= actmap->ysize )
       y = actmap->ysize - 1;
 
-   int result = 0;
    int a = actmap->xpos;
    int b = actmap->ypos;
    int xss = idisplaymap.getscreenxsize();
@@ -116,7 +115,6 @@ int ReplayMapDisplay :: checkMapPosition ( int x, int y )
       else
          actmap->xpos = 0;
 
-      result++;
    }
 
    if (y < b   ||   y >= b + yss  ) {
@@ -127,7 +125,6 @@ int ReplayMapDisplay :: checkMapPosition ( int x, int y )
       if ( actmap->ypos & 1 )
          actmap->ypos--;
 
-      result++;
    }
 
    if (actmap->xpos + xss > actmap->xsize)
