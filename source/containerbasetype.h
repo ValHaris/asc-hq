@@ -20,7 +20,7 @@
 
  #include "typen.h"
 
- class ContainerBaseType {
+ class ContainerBaseType: public LoadableItemType {
     public:
       Resources productionCost;
       virtual ~ContainerBaseType() {};

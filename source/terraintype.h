@@ -61,7 +61,7 @@
  typedef class TerrainType* pterraintype;
 
  //! The type of a field
- class TerrainType {
+ class TerrainType : public LoadableItemType {
     public:
       class  Weather {
         public:
@@ -83,12 +83,6 @@
      int                id;
      ASCString          name;
      Weather*           weather[cwettertypennum];
-
-     //! The filename of the terrain
-     ASCString          fileName;
-
-     //! The filename and location on disk (including containerfiles) of the terrain. Can only be used for informational purposes
-     ASCString          location;
 
      TerrainType();
      void runTextIO ( PropertyContainer& pc );

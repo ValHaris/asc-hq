@@ -35,6 +35,7 @@
 #include "../graphicselector.h"
 #include "../strtmesg.h"
 #include "../textfileparser.h"
+#include "../itemrepository.h"
 
 
 
@@ -63,61 +64,61 @@ int main(int argc, char *argv[] )
    try {
       loadpalette();
       loadbi3graphics();
+      loadalltextfiles();
+      loadallvehicletypes();
+      loadallobjecttypes();
+      loadallbuildingtypes();
+      loadallterraintypes();
+      freetextdata();
 
       for ( int i = cl.next_param(); i < argc; i++ ) {
-         tfindfile ff ( argv[i] );
-         ASCString filename = ff.getnextname();
-         while ( !filename.empty() ) {
-            if ( patimat ( "*.obl", filename.c_str() )) {
-               ObjectType* ot = loadobjecttype ( filename.c_str() );
+         for ( int j = 0; j < vehicletypenum; j++ )
+            if ( patimat ( argv[i], getvehicletype_forpos ( j )->filename.c_str() )) {
+               Vehicletype* vt = getvehicletype_forpos ( j );
 
-               PropertyWritingContainer pc ( "ObjectType", ot->fileName + ".asctxt" );
-               cout << "Writing file " << pc.getFilename() << "... ";
-               ot->runTextIO ( pc );
-               pc.run();
-
-               cout << "done \n";
-
-               delete ot;
-            }
-            if ( patimat ( "*.trr", filename.c_str() )) {
-               TerrainType* tt = loadterraintype ( filename.c_str() );
-
-               PropertyWritingContainer pc ( "TerrainType", tt->fileName + ".asctxt" );
-               cout << "Writing file " << pc.getFilename() << "... ";
-               tt->runTextIO ( pc );
-               pc.run();
-
-               cout << "done \n";
-
-               delete tt;
-            }
-            if ( patimat ( "*.veh", filename.c_str() )) {
-               Vehicletype* vt = loadvehicletype ( filename.c_str() );
-
-               PropertyWritingContainer pc ( "VehicleType", vt->filename + ".asctxt" );
+               PropertyWritingContainer pc ( "VehicleType", extractFileName_withoutSuffix ( vt->filename ) + ".asctxt" );
                cout << "Writing file " << pc.getFilename() << "... ";
                vt->runTextIO ( pc );
                pc.run();
 
                cout << "done \n";
-
-               delete vt;
             }
-            if ( patimat ( "*.bld", filename.c_str() )) {
-               BuildingType* bt = loadbuildingtype ( filename.c_str() );
 
-               PropertyWritingContainer pc ( "BuildingType", bt->fileName + ".asctxt" );
+         for ( int j = 0; j < objecttypenum; j++ )
+            if ( patimat ( argv[i], getobjecttype_forpos ( j )->filename.c_str() )) {
+               ObjectType* ot = getobjecttype_forpos ( j );
+
+               PropertyWritingContainer pc ( "ObjectType", extractFileName_withoutSuffix ( ot->filename ) + ".asctxt" );
+               cout << "Writing file " << pc.getFilename() << "... ";
+               ot->runTextIO ( pc );
+               pc.run();
+
+               cout << "done \n";
+            }
+
+         for ( int j = 0; j < terraintypenum; j++ )
+            if ( patimat ( argv[i], getterraintype_forpos ( j )->filename.c_str() )) {
+               TerrainType* tt = getterraintype_forpos ( j );
+
+               PropertyWritingContainer pc ( "TerrainType", extractFileName_withoutSuffix ( tt->filename ) + ".asctxt" );
+               cout << "Writing file " << pc.getFilename() << "... ";
+               tt->runTextIO ( pc );
+               pc.run();
+
+               cout << "done \n";
+            }
+
+         for ( int j = 0; j < buildingtypenum; j++ )
+            if ( patimat ( argv[i], getbuildingtype_forpos ( j )->filename.c_str() )) {
+               BuildingType* bt = getbuildingtype_forpos ( j );
+
+               PropertyWritingContainer pc ( "BuildingType", extractFileName_withoutSuffix ( bt->filename ) + ".asctxt" );
                cout << "Writing file " << pc.getFilename() << "... ";
                bt->runTextIO ( pc );
                pc.run();
 
                cout << "done \n";
-
-               delete bt;
             }
-            filename = ff.getnextname();
-         }
       }
 
    } /* endtry */
@@ -129,7 +130,7 @@ int main(int argc, char *argv[] )
       printf("\na fatal exception occured\n" );
       return 2;
    } /* endcatch */
-   
+
    return 0;
 }
 

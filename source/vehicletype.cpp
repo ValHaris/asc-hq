@@ -710,7 +710,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
       fn += "vehicle";
       fn += strrr(id);
    } else
-      fn = filename;
+      fn = extractFileName_withoutSuffix( filename );
 
    pc.addImage( "Picture", picture[0], fn ).evaluate();
 

@@ -2,9 +2,12 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.31 2001-08-09 17:06:10 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.32 2001-08-26 20:55:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2001/08/09 17:06:10  mbickel
+//      Fixed some warnings
+//
 //     Revision 1.30  2001/08/09 14:50:37  mbickel
 //      Added palette.map to data directory
 //      Improved usability of terrain selection in mapeditor
@@ -652,6 +655,7 @@ template<class T> T SelectAnything<T> :: selectitem( T previtem, tkey neutralkey
       if ( oldx != actitemx  || oldy != actitemy ) 
          showactiteminfos();
 
+      releasetimeslice();
    } while ( !finished );
 
    removemouseproc ( &selfntmousescrollproc );

@@ -403,7 +403,7 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
          if ( terraintype->weather[i] == this )
             w = i;
 
-      ASCString s = terraintype->fileName;
+      ASCString s = extractFileName_withoutSuffix ( terraintype->filename );
       if ( s.empty() ) {
          s = "terrain";
          s += strrr(terraintype->id);

@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.52 2001-08-09 19:28:22 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.53 2001-08-26 20:55:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2001/08/09 19:28:22  mbickel
+//      Started adding buildingtype text file functions
+//
 //     Revision 1.51  2001/08/09 15:58:59  mbickel
 //      Some usability improvements in the map editor
 //      More flexible BI3 map import
@@ -717,6 +720,7 @@ void        tloadBImap ::   ReadACTNPart(void)
                   }
 
                }
+
 
          if ( !found ) {
             int fnd = 0;

@@ -338,7 +338,7 @@ void         loadallobjecttypes (void)
       ot->runTextIO ( pc );
       pc.run();
 
-      ot->fileName = (*i)->fileName;
+      ot->filename = (*i)->fileName;
       ot->location = (*i)->location;
       addobjecttype ( ot );
    }
@@ -402,7 +402,7 @@ void         loadallterraintypes(void)
       tt->runTextIO ( pc );
       pc.run();
 
-      tt->fileName = (*i)->fileName;
+      tt->filename = (*i)->fileName;
       tt->location = (*i)->location;
       addterraintype ( tt );
    }
@@ -437,7 +437,7 @@ void         loadallbuildingtypes(void)
       bt->runTextIO ( pc );
       pc.run();
 
-      bt->fileName = (*i)->fileName;
+      bt->filename = (*i)->fileName;
       bt->location = (*i)->location;
       addbuildingtype ( bt );
    }

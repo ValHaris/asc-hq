@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.95 2001-07-28 21:09:08 mbickel Exp $
+//     $Id: typen.h,v 1.96 2001-08-26 20:55:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.95  2001/07/28 21:09:08  mbickel
+//      Prepared vehicletype structure for textIO
+//
 //     Revision 1.94  2001/07/27 21:13:35  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -424,22 +427,19 @@ class MapCoordinate3D : public MapCoordinate {
 
 
 
+//! An abstract base class that provides the interface for all loadable items
+class LoadableItemType {
+    public:
+       //! The filename of the item
+       ASCString filename;
 
-
-
-
-
-/*
-//////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////
-///    Now, these are the main structures ASC consists of
-//////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////
-*/
-
-
-
-
+       //! The filename and location on disk (including containerfiles) of the object. Can only be used for informational purposes
+       ASCString location;
+       
+       virtual void read ( tnstream& stream ) = 0;
+       virtual void write ( tnstream& stream ) const = 0;
+       virtual void runTextIO ( PropertyContainer& pc ) = 0;
+};
 
 
 

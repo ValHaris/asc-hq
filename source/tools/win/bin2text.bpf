@@ -2,6 +2,7 @@ USEUNIT("..\bin2text.cpp");
 USELIB("tools.lib");
 USELIB("..\..\..\..\sdl\bin\sdl.lib");
 USELIB("..\..\libs\bzlib\win\bzlib.lib");
+USEUNIT("..\..\itemrepository.cpp");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 

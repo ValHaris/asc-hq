@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.68 2001-08-09 19:28:22 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.69 2001-08-26 20:55:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.68  2001/08/09 19:28:22  mbickel
+//      Started adding buildingtype text file functions
+//
 //     Revision 1.67  2001/08/09 15:58:59  mbickel
 //      Some usability improvements in the map editor
 //      More flexible BI3 map import
@@ -374,7 +377,7 @@ pvehicletype   loadvehicletype( const char* name)
    displayLogMessage ( 5, " loading vehicle type %s ...", name );
    tnfilestream stream ( name, tnstream::reading );
    pvehicletype vt = loadvehicletype ( stream );
-   vt->filename = extractFileName_withoutSuffix ( name );
+   vt->filename = name;
    displayLogMessage ( 5, " done\n");
    return vt;
 }
@@ -608,7 +611,7 @@ pbuildingtype       loadbuildingtype( const char *       name)
 
    tnfilestream stream ( name, tnstream::reading );
    pbuildingtype bt = loadbuildingtype ( &stream );
-   bt->fileName = extractFileName_withoutSuffix ( name );
+   bt->filename = name;
 
    displayLogMessage ( 5, " done\n");
    return bt;
@@ -748,7 +751,7 @@ pterraintype      loadterraintype( const char *       name)
    displayLogMessage ( 5, " loading terrain type %s ...", name );
    tnfilestream stream ( name, tnstream::reading );
    pterraintype tt = loadterraintype ( &stream );
-   tt->fileName = extractFileName_withoutSuffix ( name );
+   tt->filename = name;
    displayLogMessage ( 5, " done\n" );
    return tt;
 }
@@ -769,7 +772,7 @@ pobjecttype   loadobjecttype( const char *       name)
    displayLogMessage ( 5, " loading object type %s ...", name );
    tnfilestream stream ( name, tnstream::reading );
    pobjecttype ot = loadobjecttype ( &stream );
-   ot->fileName = extractFileName_withoutSuffix ( name );
+   ot->filename = name;
    displayLogMessage ( 5, " done\n" );
    return ot;
 /*

@@ -23,7 +23,7 @@
 
 
  //! An object that can be placed on fields. Roads, pipelines and ditches are examples of objects.
- class ObjectType {
+ class ObjectType : public LoadableItemType {
    public:
      //! the id of the object, used when referencing objects in files
      int id;
@@ -79,13 +79,6 @@
      //! The name of the object
      ASCString name;
 
-     //! The filename of the object
-     ASCString fileName;
-
-     //! The filename and location on disk (including containerfiles) of the object. Can only be used for informational purposes
-     ASCString location;
-
-
      //! if != 0 this object will not graphically connect to neighbouring objects
      bool no_autonet;
 
@@ -132,7 +125,7 @@
      //! reads the objecttype from a stream
      void read ( tnstream& stream );
      //! write the objecttype from a stream
-     void write ( tnstream& stream );
+     void write ( tnstream& stream ) const;
 
      //! reads or writes the objecttype to the text stream pc
      void runTextIO ( PropertyContainer& pc );

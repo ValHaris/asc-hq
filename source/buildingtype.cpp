@@ -421,7 +421,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
                   void* img = asc_malloc ( imagesize ( 0, 0, construction_steps*500-1, 250-1 ));
                   getimage ( 0, 0, construction_steps*500-1, 250-1, img );
 
-                  pc.addImage ( weatherTags[w], img, extractFileName_withoutSuffix ( fileName )+weatherAbbrev[w]+".pcx" ).evaluate();
+                  pc.addImage ( weatherTags[w], img, extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".pcx" ).evaluate();
 
                   asc_free ( img );
                }
@@ -429,7 +429,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
             for ( int w = 0; w < cwettertypennum; w++ )
                if ( weatherBits.test(w) ) {
                   void* img = NULL;
-                  pc.addImage ( weatherTags[w], img, extractFileName_withoutSuffix ( fileName )+weatherAbbrev[w]+".pcx" ).evaluate();
+                  pc.addImage ( weatherTags[w], img, extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".pcx" ).evaluate();
                   tvirtualdisplay vd ( construction_steps*500, 250 );
                   putimage ( 0, 0, img );
                   asc_free ( img );

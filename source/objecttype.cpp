@@ -349,7 +349,7 @@ void ObjectType :: setupImages()
 }
 
 
-void ObjectType :: write ( tnstream& stream )
+void ObjectType :: write ( tnstream& stream ) const
 {
     stream.writeInt ( object_version );
 
@@ -505,7 +505,7 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                                         0 );
 
          } else {
-            ASCString s = fileName;
+            ASCString s = extractFileName_withoutSuffix( filename );
             if ( s.empty() ) {
                s = "object";
                s += strrr(id);
