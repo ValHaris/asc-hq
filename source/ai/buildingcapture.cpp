@@ -167,7 +167,7 @@ void AI :: checkConquer( )
 {
    // remove all capture orders for buildings which are no longer controlled by the enemy
 
-   for ( BuildingCaptureContainer::iterator bi = buildingCapture.begin(); bi != buildingCapture.end(); bi++) {
+   for ( BuildingCaptureContainer::iterator bi = buildingCapture.begin(); bi != buildingCapture.end(); ) {
       BuildingCaptureContainer::iterator nxt = bi;
       ++nxt;
       if ( getdiplomaticstatus2( getMap()->getField( bi->first )->building->color, getPlayerNum()*8 ) != cawar ) {

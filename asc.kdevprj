@@ -66,9 +66,9 @@ install_location=
 type=DATA
 [Workspace_1]
 browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/tutorial/index-7.html
-cpp_file=/home/martin/asc/source/loaders.cpp
-header_file=/home/martin/asc/source/typen.h
-openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/ai/strategy.cpp,/home/martin/asc/source/ai/ai_common.h,/home/martin/asc/source/ai/buildingcapture.cpp,/home/martin/asc/source/ai/misc.cpp,/home/martin/asc/source/Makefile.am,/home/martin/asc/source/edevents.cpp,/home/martin/asc/source/typen.h,/home/martin/asc/source/loaders.cpp
+cpp_file=/home/martin/asc/source/ai/buildingcapture.cpp
+header_file=/home/martin/asc/configure.in
+openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/strtmesg.cpp,/home/martin/asc/source/ai/ai.h,/home/martin/asc/source/ai/ai_common.h,/home/martin/asc/source/ai/buildingcapture.cpp,/home/martin/asc/configure.in
 show_outputview=true
 show_treeview=true
 [asc.kdevprj]

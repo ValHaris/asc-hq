@@ -1,3 +1,883 @@
+2001-05-21 14:50  mbickel
+
+	* source/strtmesg.cpp:	Updated version to 1.3.15
+
+2001-05-21 14:46  mbickel
+
+	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
+	source/controls.cpp, source/dlg_box.cpp, source/dlg_box.h,
+	source/edevents.cpp, source/edmain.cpp, source/loaders.cpp,
+	source/replay.cpp, source/sg.cpp, source/ai/misc.cpp,
+	source/sdl/Makefile.am, source/sdl/Makefile.in,
+	source/unix/Makefile.am, source/unix/Makefile.in:  Fixed infinite
+	loop in AI::strategy
+	 Fixed bugs in mapeditor - event editing
+	 Fixed bugs in even loading / writing
+	 Fixed wrong build order AI <-> main program
+
+2001-05-19 15:07  mbickel
+
+	* source/: edmain.cpp, events.h, sg.cpp, libs/readme.txt,
+	libs/getopt/getopt.c, libs/getopt/getopt.h, libs/getopt/getopt1.c,
+	sdl/events.cpp, tools/win/demount.bpr, tools/win/gfx2pcx.bpr,
+	tools/win/makegfx.bpr, tools/win/mount.bpr, tools/win/tools.bpf,
+	tools/win/tools.bpr, tools/win/viewid.bpr,
+	tools/win/weaponguide.bpr, win32/borland/asc.bpf,
+	win32/borland/asc.bpr, win32/borland/mapeditor/mapeditor.bpf,
+	win32/borland/mapeditor/mapeditor.bpr:	ASC now compiles with
+	Borland C++ Builder again
+	 Added getopt for use with BCB
+
+2001-05-19 00:30  mbickel
+
+	* acconfig.h, acinclude.m4, aclocal.m4, asc.kdevprj, config.h.in,
+	configure, configure.in, data/Makefile.am, data/Makefile.in,
+	source/basestrm.h, source/gameoptions.cpp, source/global.h,
+	source/dos/fileio.h, source/dos/global_os.h, source/unix/fileio.h,
+	source/unix/global_os.h, source/win32/borland/fileio.h,
+	source/win32/borland/global_os.h, source/win32/msvc/fileio.h,
+	source/win32/msvc/global_os.h, source/win32/watcom/fileio.h,
+	source/win32/watcom/global_os.h:  The data file is now installed in
+	the correct directory
+	 If the installation directory is changed with configure, the new
+	path
+	  will now be compiled directly into ASC
+
+2001-05-17 22:10  mbickel
+
+	* asc.kdevprj, source/edmain.cpp, source/loadbi3.cpp:  Fixed:
+	mapeditor was unable to load maps
+	 Removed debugging output from bi3 map loader
+
+2001-05-17 20:45  mbickel
+
+	* Makefile.in, configure, configure.in, data/Makefile.in,
+	doc/Makefile.in, source/Makefile.in, source/ai/Makefile.in,
+	source/clparser/Makefile.in, source/docs/Makefile.in,
+	source/docs/en/Makefile.in, source/libs/Makefile.in,
+	source/libs/triangul/Makefile.in, source/sdl/Makefile.in,
+	source/tools/Makefile.in, source/tools/linux/Makefile.in,
+	source/unix/Makefile.in, source/unix/mapeditor/Makefile.in: 
+	Changed configure.in so that the command line parser generation is
+	   optional
+
+2001-05-17 16:23  mbickel
+
+	* Makefile.am, Makefile.in, asc.kdevprj, configure, configure.in,
+	data/Makefile.in, doc/Makefile.am, doc/Makefile.in,
+	doc/manpages/Makefile.am, doc/manpages/Makefile.in,
+	source/Makefile.in, source/edmain.cpp, source/map2pcx.cpp,
+	source/sg.cpp, source/strtmesg.cpp, source/strtmesg.h,
+	source/ai/Makefile.in, source/clparser/Makefile.am,
+	source/clparser/Makefile.in, source/clparser/asc.cpp,
+	source/clparser/asc.gp, source/clparser/asc.h,
+	source/clparser/demount.cpp, source/clparser/demount.gp,
+	source/clparser/demount.h, source/clparser/gfx2pcx.cpp,
+	source/clparser/gfx2pcx.gp, source/clparser/gfx2pcx.h,
+	source/clparser/makegfx.cpp, source/clparser/makegfx.gp,
+	source/clparser/makegfx.h, source/clparser/map2pcx.cpp,
+	source/clparser/map2pcx.gp, source/clparser/map2pcx.h,
+	source/clparser/mapedit.cpp, source/clparser/mapedit.gp,
+	source/clparser/mapedit.h, source/clparser/mount.cpp,
+	source/clparser/mount.gp, source/clparser/mount.h,
+	source/clparser/parse_cl.h, source/clparser/viewid.cpp,
+	source/clparser/viewid.gp, source/clparser/viewid.h,
+	source/docs/Makefile.in, source/docs/en/Makefile.in,
+	source/libs/Makefile.in, source/libs/triangul/Makefile.in,
+	source/sdl/Makefile.in, source/tools/Makefile.in,
+	source/tools/bi2pcx.cpp, source/tools/demount.cpp,
+	source/tools/makegfx.cpp, source/tools/mntgraph.cpp,
+	source/tools/mount.cpp, source/tools/viewid.cpp,
+	source/tools/linux/Makefile.am, source/tools/linux/Makefile.in,
+	source/unix/Makefile.in, source/unix/mapeditor/Makefile.in: 
+	Rewrote command line parameters of all programs
+	 Made manpages generation optional
+
+2001-05-17 01:21  mbickel
+
+	* Makefile.am, Makefile.in, asc.kdevprj, config.h.in, configure,
+	configure.in, data/Makefile.am, data/Makefile.handwritten,
+	data/Makefile.in, doc/Makefile.am, doc/Makefile.in,
+	doc/manpages/Makefile.am, doc/manpages/Makefile.in,
+	doc/manpages/asc.sgml, doc/manpages/asc_demount.sgml,
+	doc/manpages/asc_mapedit.sgml, doc/manpages/asc_mount.sgml,
+	source/Makefile.am, source/Makefile.in, source/basestrm.cpp,
+	source/basestrm.h, source/building.cpp, source/buildings.cpp,
+	source/dialog.cpp, source/edmain.cpp, source/events.h,
+	source/gamemap.cpp, source/loaders.cpp, source/map2pcx.cpp,
+	source/mapdisplay.cpp, source/sg.cpp, source/sgstream.cpp,
+	source/vehicle.cpp, source/ai/Makefile.in,
+	source/clparser/Makefile.am, source/clparser/Makefile.in,
+	source/clparser/asc.cpp, source/clparser/asc.gp,
+	source/clparser/asc.h, source/clparser/mapedit.cpp,
+	source/clparser/mapedit.gp, source/clparser/mapedit.h,
+	source/docs/Makefile.in, source/docs/en/Makefile.in,
+	source/libs/Makefile.in, source/libs/triangul/Makefile.in,
+	source/sdl/Makefile.in, source/sdl/events.cpp,
+	source/tools/Makefile.in, source/tools/bi2pcx.cpp,
+	source/tools/linux/Makefile.in, source/unix/Makefile.am,
+	source/unix/Makefile.in, source/unix/mapeditor/Makefile.in:  The
+	data file is mounted using automake
+	 Added sgml documentation
+	 Added command line parsing functionality;
+	   integrated it into autoconf/automake
+	 Replaced command line parsing of ASC and ASCmapedit
+
+2001-05-15 11:54  mbickel
+
+	* asc.kdevprj, configure, configure.in, data/640480.pcx,
+	data/Makefile.handwritten, data/a_battl2.veh, data/a_battle.veh,
+	data/a_bfigh1.veh, data/a_bfigh2.veh, data/a_bomber.veh,
+	data/a_ekrano.veh, data/a_espion.veh, data/a_figbom.veh,
+	data/a_fight1.veh, data/a_fight3.veh, data/a_helic1.veh,
+	data/a_long-r.veh, data/a_reccep.veh, data/a_seapla.veh,
+	data/a_star-c.veh, data/a_stealt.veh, data/a_tanker.veh,
+	data/a_transp.veh, data/a_vertic.veh, data/a_zeppel.veh,
+	data/abriss.nic, data/acv.tec, data/airport1.bld,
+	data/airport2.bld, data/airport3.bld, data/allianc.raw,
+	data/allianc2.raw, data/ama2.raw, data/amatur.raw,
+	data/ammoprod.raw, data/ammotran.raw, data/arial8.fnt,
+	data/armor2.tec, data/asc.gfx, data/ascent.nic, data/attack.nic,
+	data/attack.raw, data/b_aa-tur.veh, data/b_bunker.veh,
+	data/b_turret.veh, data/bi2asc.pal, data/bi_index.raw,
+	data/bkgr4.scr, data/bldinfo.raw, data/bridge.obl,
+	data/build_ah.raw, data/build_h.raw, data/buildany.nic,
+	data/building.nic, data/c_recycl.nic, data/cancel.nic,
+	data/coast137.trr, data/coast138.trr, data/coast139.trr,
+	data/coast140.trr, data/coast141.trr, data/coast142.trr,
+	data/coast143.trr, data/coast144.trr, data/coast145.trr,
+	data/coast146.trr, data/coast147.trr, data/coast148.trr,
+	data/coast149.trr, data/coast150.trr, data/coast151.trr,
+	data/coast152.trr, data/coast153.trr, data/coast154.trr,
+	data/coast155.trr, data/coast156.trr, data/coast157.trr,
+	data/coast158.trr, data/compi.raw, data/compi2.raw,
+	data/consttnk.nic, data/contndwn.nic, data/contnup.nic,
+	data/cst222.trr, data/cst223.trr, data/cstes0.trr,
+	data/cstlns0.trr, data/cstlss0.trr, data/cstnes0.trr,
+	data/cstns0.trr, data/cstnws0.trr, data/cstses0.trr,
+	data/cstss0.trr, data/cstsws0.trr, data/cstws0.trr, data/curs2.raw,
+	data/curs3.raw, data/curshex.raw, data/curshex2.raw,
+	data/cursor2.raw, data/cursor3.raw, data/data.version,
+	data/deng.bld, data/depot.bld, data/depot1.obl, data/depot2.bld,
+	data/depot2.obl, data/depot3.bld, data/depot3.obl, data/depot4.obl,
+	data/descent.nic, data/dig.nic, data/ditch.obl, data/eisbr1.raw,
+	data/ekranopl.tec, data/emptyfld.raw, data/endturn.nic,
+	data/evilisle.map, data/exit.nic, data/expicons.raw,
+	data/extload.nic, data/fahrspr4.raw, data/farbe.raw,
+	data/fg4-0.raw, data/fg4-1.raw, data/fg4-2.raw, data/fg4-3.raw,
+	data/fg8.raw, data/fields.obl, data/fields2.obl, data/flat0002.trr,
+	data/flat0003.trr, data/flat0004.trr, data/flat0005.trr,
+	data/flat0006.trr, data/flat0007.trr, data/flat0008.trr,
+	data/flat0009.trr, data/flat0010.trr, data/flat0011.trr,
+	data/flat0012.trr, data/flat0013.trr, data/flat0014.trr,
+	data/flat0015.trr, data/flat0016.trr, data/flat0017.trr,
+	data/flat0018.trr, data/flat0019.trr, data/flat0020.trr,
+	data/flat0021.trr, data/flat0022.trr, data/flat0023.trr,
+	data/flat0024.trr, data/flat0025.trr, data/flat0026.trr,
+	data/flat0027.trr, data/flat0028.trr, data/flat0029.trr,
+	data/flat0030.trr, data/flat0031.trr, data/flat0032.trr,
+	data/flat0033.trr, data/flat0034.trr, data/flat0035.trr,
+	data/flat0036.trr, data/flat0037.trr, data/flat0038.trr,
+	data/flat0039.trr, data/flat0040.trr, data/flat0041.trr,
+	data/flat0042.trr, data/flat0043.trr, data/flat0044.trr,
+	data/flat0045.trr, data/flat0046.trr, data/flat0047.trr,
+	data/flat0048.trr, data/flat0049.trr, data/flat0050.trr,
+	data/flat0051.trr, data/flat0052.trr, data/flat0053.trr,
+	data/flat0054.trr, data/flat0055.trr, data/flat0056.trr,
+	data/flat0057.trr, data/flat0058.trr, data/flat0059.trr,
+	data/flat0060.trr, data/flat0061.trr, data/flat0062.trr,
+	data/flat0063.trr, data/flat0064.trr, data/flat0065.trr,
+	data/flat0066.trr, data/flat0067.trr, data/flat0068.trr,
+	data/flat0069.trr, data/flat0070.trr, data/flat0071.trr,
+	data/flat0072.trr, data/flat0073.trr, data/flat0074.trr,
+	data/flat0075.trr, data/flat0076.trr, data/flat0077.trr,
+	data/flat0078.trr, data/flat0079.trr, data/flat0080.trr,
+	data/flat0081.trr, data/flat0082.trr, data/flat0083.trr,
+	data/flat0084.trr, data/flat0085.trr, data/flat0311.trr,
+	data/flat0312.trr, data/flat0313.trr, data/flat0314.trr,
+	data/flat0315.trr, data/flat0318.trr, data/flat0319.trr,
+	data/flat0320.trr, data/flat1000.trr, data/floatmin.nic,
+	data/fluss.nic, data/forest.obl, data/g_aa-art.veh,
+	data/g_aa-tan.veh, data/g_aa-tra.veh, data/g_ammuni.veh,
+	data/g_ari1.veh, data/g_ari2.veh, data/g_army-v.veh,
+	data/g_bpipe.veh, data/g_constb.veh, data/g_constr.veh,
+	data/g_energy.veh, data/g_forest.veh, data/g_h-tank.veh,
+	data/g_jammer.veh, data/g_miner.veh, data/g_paratr.veh,
+	data/g_platoo.veh, data/g_privat.veh, data/g_puma.veh,
+	data/g_radar-.veh, data/g_rail_g.veh, data/g_recon2.veh,
+	data/g_reconn.veh, data/g_rep-tr.veh, data/g_repair.veh,
+	data/g_ro_tan.veh, data/g_survey.veh, data/g_tank-2.veh,
+	data/g_tanker.veh, data/g_tra-tr.veh, data/g_transp.veh,
+	data/g_troope.veh, data/gebasym2.raw, data/gui.fnt,
+	data/guicol.fnt, data/guiremov.raw, data/harb0194.trr,
+	data/harb0195.trr, data/harb0196.trr, data/harb0197.trr,
+	data/harb0198.trr, data/harb0199.trr, data/harb0200.trr,
+	data/harb0201.trr, data/height.raw, data/height2.raw,
+	data/helisun.jpg, data/helpsys2.txt, data/helpsys9.msg,
+	data/helpsysc.txt, data/helpsyst.txt, data/hex2oct.raw,
+	data/hexbuild.raw, data/hexcont.raw, data/hexfeld.raw,
+	data/hexfld.raw, data/hexfld_a.raw, data/hexinvi2.raw,
+	data/hexinvis.raw, data/hexmines.raw, data/hexrast.raw,
+	data/hill0065.obl, data/hill0066.obl, data/hill0067.obl,
+	data/hill0068.obl, data/hill0069.obl, data/hill0070.obl,
+	data/hill0071.obl, data/hill0072.obl, data/hill0073.obl,
+	data/hill0074.obl, data/hill0075.obl, data/hill0321.trr,
+	data/hill0322.trr, data/hill0323.trr, data/hill0324.trr,
+	data/hill0325.trr, data/hill1013.trr, data/hills087.trr,
+	data/hills088.trr, data/hills089.trr, data/hills090.trr,
+	data/hills091.trr, data/hills092.trr, data/hills093.trr,
+	data/hills094.trr, data/hills095.trr, data/hills096.trr,
+	data/hills097.trr, data/hills098.trr, data/hills099.trr,
+	data/hills100.trr, data/hills101.trr, data/hills102.trr,
+	data/hills103.trr, data/hills104.trr, data/hills105.trr,
+	data/hills106.trr, data/hills107.trr, data/hills108.trr,
+	data/hills109.trr, data/hills110.trr, data/hills111.trr,
+	data/hills112.trr, data/hills113.trr, data/hills114.trr,
+	data/hills115.trr, data/hills116.trr, data/hills117.trr,
+	data/hills118.trr, data/hills119.trr, data/hills120.trr,
+	data/hills121.trr, data/hills122.trr, data/hills123.trr,
+	data/hills124.trr, data/hills125.trr, data/hills126.trr,
+	data/hills127.trr, data/hills128.trr, data/hills129.trr,
+	data/hills130.trr, data/hills131.trr, data/hills132.trr,
+	data/hills133.trr, data/hills134.trr, data/hills135.trr,
+	data/hills202.trr, data/hills316.trr, data/hq1.bld, data/hq2.bld,
+	data/hq_big.bld, data/hq_bunk.bld, data/hq_titan.bld,
+	data/hxborder.raw, data/hxfield.raw, data/hxkontur.raw,
+	data/hxraster.raw, data/icebreak.obl, data/iconplan.raw,
+	data/iconship.raw, data/icontank.raw, data/in_ach.raw,
+	data/in_h.raw, data/informat.nic, data/inst0033.obl,
+	data/inst0034.obl, data/inst0035.obl, data/inst0036.obl,
+	data/inst0037.obl, data/inst0038.obl, data/inst0039.obl,
+	data/inst0040.obl, data/inst0041.obl, data/inst0042.obl,
+	data/inst0043.obl, data/knorein.raw, data/largehex.raw,
+	data/lcac2.jpg, data/leergui.raw, data/loading.nic,
+	data/loadinga.nic, data/loadingf.raw, data/logo640.pcx,
+	data/ltgreen1.obl, data/ltgreen2.obl, data/mapbkgr.raw,
+	data/mapbkgrb.raw, data/mausi.raw, data/message1.txt,
+	data/mineral.raw, data/mines.dat, data/mining.raw,
+	data/mining2.raw, data/mkbld.raw, data/mntn0046.obl,
+	data/mntn0047.obl, data/mntn0048.obl, data/mntn0049.obl,
+	data/mntn0050.obl, data/mntn0051.obl, data/mntn0052.obl,
+	data/mntn0053.obl, data/mntn0054.obl, data/mntn0055.obl,
+	data/mntn0056.obl, data/mntn0057.obl, data/mntn0058.obl,
+	data/mntn0059.obl, data/mntn0060.obl, data/mntn0061.obl,
+	data/mntn0062.obl, data/mntn0063.obl, data/mntn0064.obl,
+	data/mntn0184.trr, data/mntn0185.trr, data/mntn0186.trr,
+	data/mntn0187.trr, data/mntn0188.trr, data/mntn0189.trr,
+	data/mntn0190.trr, data/mntn0191.trr, data/mntn0192.trr,
+	data/mntn0193.trr, data/monogui.fnt, data/moormine.nic,
+	data/mouse1.raw, data/mouse2.raw, data/movement.nic,
+	data/msystem.fnt, data/netcontr.raw, data/netmount.bld,
+	data/obj_0022.obl, data/obj_0042.obl, data/obj_0089.obl,
+	data/obj_0234.obl, data/obj_0235.obl, data/obj_0236.obl,
+	data/obj_0238.obl, data/obj_0239.obl, data/obj_0240.obl,
+	data/obj_0241.obl, data/obj_0291.obl, data/obj_0313.obl,
+	data/obj_0314.obl, data/obj_0326.obl, data/obj_0327.obl,
+	data/obj_0328.obl, data/obj_0329.obl, data/obj_0330.obl,
+	data/obj_0331.obl, data/obj_0332.obl, data/obj_0333.obl,
+	data/obj_0334.obl, data/obj_0335.obl, data/obj_0336.obl,
+	data/obj_0337.obl, data/obj_0338.obl, data/obj_0339.obl,
+	data/obj_0340.obl, data/obj_0341.obl, data/obj_0342.obl,
+	data/obj_0343.obl, data/obj_0344.obl, data/obj_0345.obl,
+	data/obj_0346.obl, data/obj_0347.obl, data/obj_0348.obl,
+	data/obj_0358.obl, data/obj_0360.obl, data/obj_0388.obl,
+	data/obj_0444.obl, data/obj_0445.obl, data/obj_0446.obl,
+	data/obj_0447.obl, data/obj_0448.obl, data/obj_0453.obl,
+	data/obj_0454.obl, data/obj_0455.obl, data/obj_0456.obl,
+	data/obj_0457.obl, data/obj_0459.obl, data/obj_0460.obl,
+	data/obj_0461.obl, data/obj_0462.obl, data/obj_1283.obl,
+	data/obj_1329.obl, data/obj_1330.obl, data/obj_1331.obl,
+	data/obj_1332.obl, data/obj_1333.obl, data/obj_1334.obl,
+	data/oilplat.bld, data/out_ach.raw, data/out_h.raw,
+	data/palette.pal, data/path.obl, data/persmine.nic,
+	data/pfeil-a0.raw, data/pfeil2.raw, data/pfeil3.raw,
+	data/pipe0289.trr, data/pipe0290.trr, data/pipe0291.trr,
+	data/pipe0292.trr, data/pipe0293.trr, data/pipe0294.trr,
+	data/pipe0295.trr, data/pipe0296.trr, data/pipe0297.trr,
+	data/pipe0298.trr, data/pipelin2.obl, data/pipeline.nic,
+	data/pipeline.obl, data/poweroff.nic, data/poweron.nic,
+	data/produnit.nic, data/progress.6me, data/progress.6mn,
+	data/putmine.nic, data/pwrline.nic, data/pwrplant.raw,
+	data/pwrplnt2.raw, data/railroad.nic, data/railroad.obl,
+	data/railstat.map, data/rast.raw, data/rck10346.trr,
+	data/rck10347.trr, data/rck10348.trr, data/rck1_159.trr,
+	data/rck1_160.trr, data/rck1_161.trr, data/rck1_162.trr,
+	data/rck1_163.trr, data/rck1_164.trr, data/rck1_165.trr,
+	data/rck1_166.trr, data/rck1_167.trr, data/rck1_168.trr,
+	data/rck1_169.trr, data/rck1_170.trr, data/rck1_171.trr,
+	data/rck1_172.trr, data/rck1_173.trr, data/rck1_174.trr,
+	data/rck1_175.trr, data/rck1_176.trr, data/rck1_177.trr,
+	data/rck20349.trr, data/rck2_178.trr, data/rck2_179.trr,
+	data/rck2_180.trr, data/rck2_181.trr, data/rck2_182.trr,
+	data/rck2_183.trr, data/reacfire.nic, data/reacfoff.nic,
+	data/refinery.raw, data/refuel.nic, data/refueld.nic,
+	data/remomine.nic, data/rep_ach.raw, data/rep_h.raw,
+	data/repair.nic, data/research.bld, data/research.raw,
+	data/resorinf.raw, data/rforst00.obl, data/rforst01.obl,
+	data/rforst02.obl, data/rforst03.obl, data/rforst04.obl,
+	data/rforst05.obl, data/rforst06.obl, data/rforst07.obl,
+	data/rforst08.obl, data/rforst09.obl, data/rforst10.obl,
+	data/rforst11.obl, data/rforst12.obl, data/rforst13.obl,
+	data/rforst14.obl, data/rm_rnway.nic, data/rmfluss.nic,
+	data/rmpipeln.nic, data/rmpwrlne.nic, data/rmrailro.nic,
+	data/rmroad.nic, data/road.nic, data/road.obl, data/road0310.trr,
+	data/rp_back.nic, data/rp_exit.nic, data/rp_fast.nic,
+	data/rp_pause.nic, data/rp_play.nic, data/rp_slow.nic,
+	data/runway.nic, data/runway45.obl, data/s_aa-shi.veh,
+	data/s_amphib.veh, data/s_battle.veh, data/s_carrie.veh,
+	data/s_cruisr.veh, data/s_destro.veh, data/s_ice-br.veh,
+	data/s_nuclea.veh, data/s_patro2.veh, data/s_r-sled.veh,
+	data/s_repair.veh, data/s_speedb.veh, data/s_subm-d.veh,
+	data/s_submar.veh, data/s_supply.veh, data/s_tr-sub.veh,
+	data/s_transp.veh, data/s_typhon.veh, data/secdepot.bld,
+	data/sezieren.nic, data/smalaril.fnt, data/smallhex.raw,
+	data/solar.bld, data/solarpwr.raw, data/sonar.tec,
+	data/standard.set, data/submarin.bld, data/swm1_266.trr,
+	data/swm1_267.trr, data/swm1_268.trr, data/swm1_269.trr,
+	data/swm1_270.trr, data/swm1_271.trr, data/swm2_272.trr,
+	data/swm2_273.trr, data/swm2_274.trr, data/swm2_275.trr,
+	data/swm2_276.trr, data/swm2_277.trr, data/swm2_278.trr,
+	data/swm2_279.trr, data/swm2_280.trr, data/swm2_281.trr,
+	data/swm2_282.trr, data/swm2_283.trr, data/swm2_284.trr,
+	data/swm2_285.trr, data/swm2_286.trr, data/swm2_287.trr,
+	data/swm2_288.trr, data/swmp0360.trr, data/tabmark.raw,
+	data/takeoff.nic, data/tankmine.nic, data/terr_168.trr,
+	data/terr_233.trr, data/terr_237.trr, data/terr_242.trr,
+	data/terr_290.trr, data/terr_394.trr, data/terr_396.trr,
+	data/terr_487.trr, data/terr_488.trr, data/terr_489.trr,
+	data/terr_490.trr, data/terr_509.trr, data/terr_571.trr,
+	data/torp2.tec, data/torp3.tec, data/torp4.tec, data/town1.bld,
+	data/town2.bld, data/town3.bld, data/track.obl, data/training.bld,
+	data/training.nic, data/traninfo.raw, data/trrt0359.trr,
+	data/turrt044.obl, data/tutor0.map, data/tutor1.map,
+	data/tutor2.map, data/tutor3.map, data/tutor4.map,
+	data/unps0203.trr, data/unps0204.trr, data/unps0205.trr,
+	data/unps0206.trr, data/unps0207.trr, data/unps0208.trr,
+	data/unps0209.trr, data/unps0210.trr, data/unps0211.trr,
+	data/unps0212.trr, data/unps0213.trr, data/unps0214.trr,
+	data/unps0215.trr, data/unps0216.trr, data/unps0217.trr,
+	data/unps0218.trr, data/unps0219.trr, data/unps0220.trr,
+	data/unps0221.trr, data/unps0222.trr, data/unps0223.trr,
+	data/unps0224.trr, data/unps0225.trr, data/unps0226.trr,
+	data/unps0227.trr, data/unps0228.trr, data/unps0229.trr,
+	data/unps0230.trr, data/unps0231.trr, data/unps0232.trr,
+	data/unps0233.trr, data/unps0234.trr, data/unps0235.trr,
+	data/unps0236.trr, data/unps0237.trr, data/unps0238.trr,
+	data/unps0239.trr, data/unps0240.trr, data/unps0241.trr,
+	data/unps0242.trr, data/unps0243.trr, data/unps0244.trr,
+	data/unps0245.trr, data/unps0246.trr, data/unps0247.trr,
+	data/unps0248.trr, data/unps0249.trr, data/unps0250.trr,
+	data/unps0251.trr, data/unps0252.trr, data/unps0253.trr,
+	data/unps0254.trr, data/unps0255.trr, data/unps0256.trr,
+	data/unps0257.trr, data/unps0258.trr, data/unps0259.trr,
+	data/unps0260.trr, data/unps0261.trr, data/unps0262.trr,
+	data/unps0263.trr, data/unps0264.trr, data/unps0265.trr,
+	data/unps0319.trr, data/unps0326.trr, data/unps0327.trr,
+	data/unps0328.trr, data/unps0329.trr, data/unps0330.trr,
+	data/unps0331.trr, data/unps0332.trr, data/unps0333.trr,
+	data/unps0334.trr, data/unps0335.trr, data/unps0336.trr,
+	data/unps0337.trr, data/unps0338.trr, data/unps0339.trr,
+	data/unps0340.trr, data/unps0341.trr, data/unps0342.trr,
+	data/unps0343.trr, data/unps0344.trr, data/unps0345.trr,
+	data/unps0350.trr, data/unps0351.trr, data/unps0352.trr,
+	data/unps0353.trr, data/unps0354.trr, data/unps0355.trr,
+	data/unps0356.trr, data/unps0357.trr, data/unps0358.trr,
+	data/usablack.fnt, data/vehiclef.bld, data/vehicleg.bld,
+	data/vehicleh.bld, data/viewmap.nic, data/wa_ro303.trr,
+	data/wa_ro304.trr, data/wa_ro305.trr, data/wa_ro306.trr,
+	data/waffen.raw, data/wat1_299.trr, data/wat1_307.trr,
+	data/wat2_300.trr, data/wat2_308.trr, data/wat3_301.trr,
+	data/wat3_302.trr, data/wat3_309.trr, data/weapicon.raw,
+	data/weapinfo.raw, data/weapon00.wav, data/weapon01.wav,
+	data/weapon02.wav, data/weapon03.wav, data/weapon04.wav,
+	data/weapon05.wav, data/weapon06.wav, data/weapon07.wav,
+	data/weapon10.wav, data/weapons.dat, data/werft.bld,
+	data/windp.raw, data/windpfei.raw, data/windpow.bld,
+	data/windpowr.raw, data/windrose.raw, data/wreck076.obl,
+	data/wreck077.obl, data/wreck078.obl, data/x.raw, doc/asc.html,
+	doc/asc_doc.css, doc/asc_website.css, doc/biimport.html,
+	doc/copying, doc/demount.html, doc/dos4gw.doc, doc/editors.html,
+	doc/graphics.html, doc/index.html, doc/makeobject.html,
+	doc/maketank.html, doc/maketech.html, doc/mapedit.html,
+	doc/mount.html, doc/prnttank.html, doc/text.html,
+	doc/graphics/attackformula.gif, doc/graphics/direction_example.gif,
+	doc/graphics/directions.gif, doc/graphics/hemming.gif,
+	source/Makefile.am, source/Makefile.in, source/sg.cpp,
+	source/vehicle.cpp, source/libs/triangul/trimisc.c,
+	source/unix/Makefile.am, source/unix/Makefile.in,
+	source/unix/mapeditor/Makefile.am,
+	source/unix/mapeditor/Makefile.in:  Added complete Data and
+	documentaion to repository
+	 The unix programs are now build in the 'unix' subdirectory, not
+	the
+	  source directory.
+	 The executable names of all ASC helper programs now start with
+	'asc_'
+
+2001-05-14 17:31  mbickel
+
+	* asc.kdevprj, configure, configure.in, source/tools/mount.cpp: 
+	Changed usage of asc_mount
+	 Updated configure.in
+
+2001-05-10 18:24  mbickel
+
+	* source/tools/java/: CompAll.bat, StartSelector.bat,
+	UnitEditor.java:  Fixed crash in Java-Uniteditor when palette not
+	available
+
+2001-04-30 13:55  mbickel
+
+	* source/strtmesg.cpp:	Updated version to 1.3.14
+
+2001-04-30 13:41  mbickel
+
+	* asc.kdevprj, source/buildings.h, source/loadbi3.cpp,
+	source/vehicle.cpp, source/vehicle.h:  Fixed crash when importing
+	BI maps due to different structure packing
+
+2001-04-29 23:55  mbickel
+
+	* source/tools/win/: demount.bpr, gfx2pcx.bpr, makegfx.bpr:  Fixed:
+	Some windows editor crashed due to invalid runtime libraries
+
+2001-04-03 14:53  mbickel
+
+	* asc.bpg, source/ai/ai.bpf, source/ai/ai.bpr, source/ai/base.cpp,
+	source/ai/misc.cpp, source/ai/service.cpp,
+	source/tools/win/demount.bpr, source/tools/win/gfx2pcx.bpr,
+	source/tools/win/makegfx.bpr, source/tools/win/mount.bpr,
+	source/tools/win/viewid.bpr, source/tools/win/weaponguide.bpr: 
+	Compiled ASC with Borland
+	 Added AI-lib project files for BC++B
+
+2001-04-03 13:54  mbickel
+
+	* asc.kdevprj, source/astar2.cpp, source/astar2.h,
+	source/building.cpp, source/buildings.cpp, source/buildings.h,
+	source/gamemap.cpp, source/loaders.cpp, source/mapdisplay.cpp,
+	source/resourcenet.cpp, source/resourcenet.h, source/strtmesg.cpp,
+	source/typen.cpp, source/ai/ai.h, source/ai/ai_common.h,
+	source/ai/base.cpp, source/ai/misc.cpp, source/ai/service.cpp,
+	source/ai/strategy.cpp, source/ai/tactics.cpp,
+	source/ai/valuation.cpp, source/tools/linux/Makefile.am,
+	source/tools/linux/Makefile.in:  AI Improvements: production ,
+	servicing
+
+2001-04-01 15:00  mbickel
+
+	* source/tools/win/: viewid.bpf, viewid.bpr:  Added win32 project
+	files for viewid
+
+2001-04-01 14:59  mbickel
+
+	* asc.bpg, source/building.cpp, source/building_controls.h,
+	source/buildings.cpp, source/buildings.h, source/gui.cpp,
+	source/typen.h, source/ai/ai.h, source/ai/base.cpp,
+	source/ai/misc.cpp, source/ai/service.cpp, source/ai/valuation.cpp,
+	source/tools/viewid.cpp, source/win32/borland/asc.bpf,
+	source/win32/borland/asc.bpr:  Updated win32 project files to new
+	ai file structure
+	 Added viewid win32-project
+	 Improved AI : production and service path finding
+
+2001-03-30 14:43  mbickel
+
+	* asc.kdevprj, configure, configure.in, source/Makefile.am,
+	source/Makefile.in, source/TODO, source/artint.cpp,
+	source/artint.h, source/astar2.cpp, source/astar2.h,
+	source/buildings.cpp, source/buildings.h, source/containerbase.h,
+	source/controls.cpp, source/controls.h, source/edmisc.cpp,
+	source/edmisc.h, source/loaders.cpp, source/mapalgorithms.cpp,
+	source/mapalgorithms.h, source/mapdisplay.h, source/sg.cpp,
+	source/spfst.cpp, source/spfst.h, source/typen.h,
+	source/unitctrl.cpp, source/unitctrl.h, source/vehicle.cpp,
+	source/vehicle.h, source/viewcalculation.cpp,
+	source/viewcalculation.h, source/ai/Makefile.am,
+	source/ai/Makefile.in, source/ai/ai.h, source/ai/ai_common.h,
+	source/ai/base.cpp, source/ai/buildingcapture.cpp,
+	source/ai/misc.cpp, source/ai/service.cpp, source/ai/strategy.cpp,
+	source/ai/tactics.cpp, source/ai/valuation.cpp:  Added 3D
+	pathfinding
+	 some cleanup and documentation
+	 splitted the ai into several files, now located in the ai
+	subdirectory
+	 AI cares about airplane servicing and range constraints
+
+2001-03-23 17:02  mbickel
+
+	* asc.kdevprj, source/artint.cpp, source/building.cpp,
+	source/buildings.cpp, source/buildings.h, source/buildingtype.cpp,
+	source/buildingtype.h, source/controls.cpp, source/dashboard.cpp,
+	source/edevents.cpp, source/edselfnt.cpp, source/graphicset.cpp,
+	source/loaders.cpp, source/mapevents.cpp, source/mapevents.h,
+	source/replay.cpp, source/sgstream.cpp, source/typen.cpp,
+	source/unitctrl.cpp:  Some restructuring;
+	 started rewriting event system
+
+2001-03-07 22:40  mbickel
+
+	* source/: containerbase.cpp, edmain.cpp, edmisc.cpp, edselfnt.cpp,
+	strtmesg.cpp, vehicle.cpp, vehicle.h:  Lots of bugfixes in the
+	mapeditor
+
+2001-03-05 22:02  mbickel
+
+	* source/strtmesg.cpp:	Updated version number
+
+2001-03-05 21:57  mbickel
+
+	* asc.bpg, source/artint.cpp, source/ascstring.cpp,
+	source/dialog.cpp, source/gamemap.cpp,
+	source/win32/borland/mapeditor/mapeditor.bpr:  Fixed infinite loop
+	in AI
+	 Fixed map resizing crash in mapaeditor
+	 Fixed speedsearch not working in fileselector
+
+2001-03-02 14:24  mbickel
+
+	* asc.kdevprj, source/artint.cpp:  AI fixes
+
+2001-03-02 12:51  mbickel
+
+	* source/: artint.cpp, win32/borland/asc.bpr:  Fixed infinite loop
+	in AI::buildingcapture search
+
+2001-03-01 22:24  mbickel
+
+	* source/artint.cpp:  Fixed two AI bugs: inconsistent attack value
+	calculation
+
+2001-02-28 22:27  mbickel
+
+	* asc.kdevprj, source/strtmesg.cpp, source/tools/linux/Makefile.am,
+	source/tools/linux/Makefile.in:  Set version number to 1.3.10
+
+2001-02-28 17:13  mbickel
+
+	* source/tools/: makebdt.cpp, makeobl4.cpp, maketank.cpp,
+	maketech.cpp, pcxtank.cpp, printbld.cpp, printtnk.cpp, tools.wpj,
+	trrn2pcx.cpp, viewid.cpp:  Updated DOS editor projects
+
+2001-02-28 16:19  mbickel
+
+	* asc.bpg, source/tools/mount.cpp, source/tools/win/demount.bpf,
+	source/tools/win/demount.bpr, source/tools/win/gfx2pcx.bpf,
+	source/tools/win/gfx2pcx.bpr, source/tools/win/makegfx.bpf,
+	source/tools/win/makegfx.bpr, source/tools/win/mount.bpf,
+	source/tools/win/mount.bpr, source/tools/win/tools.bpf,
+	source/tools/win/tools.bpr:  Added more small editors to the win32
+	project
+
+2001-02-28 15:21  mbickel
+
+	* source/tools/makegfx.cpp:  Added makegfx
+
+2001-02-28 15:10  mbickel
+
+	* asc.kdevprj, source/basegfx.cpp, source/basegfx.h,
+	source/basestrm.cpp, source/basestrm.h, source/graphicset.cpp,
+	source/loadpcx.h, source/loadpcxc.cpp, source/tools/bi2pcx.cpp,
+	source/tools/mntgraph.cpp, source/tools/linux/Makefile.am,
+	source/tools/linux/Makefile.in:  Added some small editors to linux
+	makefiles
+	 Added even more dirty hacks to basegfx: some more truecolor
+	functions
+
+2001-02-26 23:03  mbickel
+
+	* source/: basestrm.h, tools/asctool.tgt, tools/bldhex.cpp,
+	tools/maketank.cpp, tools/mntgraph.cpp, tools/tools.wpj:  Some
+	adjustments for Watcom C++
+
+2001-02-26 22:14  mbickel
+
+	* asc.kdevprj, source/basegfx.cpp, source/basegfx.h,
+	source/basestrm.h, source/buildingtype.cpp, source/dos/fileio.h,
+	source/tools/bi2pcx.cpp, source/tools/mntgraph.cpp,
+	source/tools/linux/Makefile.am, source/tools/linux/Makefile.in,
+	source/unix/fileio.h, source/win32/borland/fileio.h,
+	source/win32/watcom/fileio.h:  Added two small editors to the linux
+	makefiles
+	 Added some more truecolor hacks to the graphics engine
+
+2001-02-26 14:49  mbickel
+
+	* source/: basestreaminterface.h, basestrm.cpp, gamedlg.cpp,
+	loaders.cpp, win32/borland/asc.bpf, win32/borland/asc.bpr,
+	win32/borland/mapeditor/mapeditor.bpf,
+	win32/borland/mapeditor/mapeditor.bpr:	Fixed bug in message
+	loading
+	 readString can now read strings that container \n
+
+2001-02-26 13:34  mbickel
+
+	* asc.kdevprj, doc/source.html, source/Makefile.am,
+	source/Makefile.in, source/TODO, source/artint.cpp,
+	source/artint.h, source/attack.cpp, source/attack.h,
+	source/basestrm.cpp, source/buildings.cpp, source/controls.cpp,
+	source/controls.h, source/dashboard.cpp, source/dashboard.h,
+	source/dialog.cpp, source/dlg_box.cpp, source/dlg_box.h,
+	source/edevents.cpp, source/edglobal.cpp, source/edmisc.cpp,
+	source/gamedlg.cpp, source/gamedlg.h, source/gamemap.cpp,
+	source/gamemap.h, source/gui.cpp, source/loaders.cpp,
+	source/loaders.h, source/mapdisplay.cpp, source/mapdisplay.h,
+	source/missions.cpp, source/missions.h, source/network.cpp,
+	source/network.h, source/networkdata.cpp, source/networkdata.h,
+	source/pointers.h, source/replay.cpp, source/resourcenet.cpp,
+	source/sg.cpp, source/spfst.cpp, source/spfst.h, source/typen.cpp,
+	source/typen.h, source/vehicle.cpp, source/viewcalculation.cpp,
+	source/tools/Makefile.am, source/tools/Makefile.in:  Some major
+	restructuing:
+	  new message containers
+	  events don't store pointers to units any more
+	  tfield class overhauled
+
+2001-02-18 18:53  mbickel
+
+	* source/containerbasetype.h:  Added containerbasetype.h
+
+2001-02-18 18:52  mbickel
+
+	* asc.kdevprj, source/Makefile.in, source/attack.cpp,
+	source/containerbase.cpp, source/containerbase.h,
+	source/controls.cpp, source/gui.cpp, source/map2pcx.cpp,
+	source/pointers.h, source/unitctrl.cpp, source/vehicle.cpp,
+	source/tools/demount.cpp, source/tools/mount.cpp:  Fixed some
+	compilation problems on Linux
+
+2001-02-18 16:41  mbickel
+
+	* source/Makefile.am:  added new files to the unix makefile.am
+
+2001-02-18 16:36  mbickel
+
+	* source/: attack.cpp, baseaiinterface.h, basegfx.cpp,
+	basestreaminterface.h, basestrm.cpp, basestrm.h, basetemp.h,
+	buildings.cpp, buildings.h, buildingtype.cpp, buildingtype.h,
+	containerbase.cpp, controls.cpp, dialog.cpp, dlg_box.cpp,
+	edmain.cpp, edmisc.cpp, gamedlg.cpp, gamemap.cpp, gamemap.h,
+	graphicselector.cpp, graphicset.cpp, gui.cpp, loadbi3.cpp,
+	loaders.cpp, loadpcxc.cpp, mapalgorithms.cpp, mapdisplay.cpp,
+	network.cpp, oldlzw.cpp, replay.cpp, research.cpp, resourcenet.cpp,
+	sg.cpp, sgstream.cpp, spfst.cpp, spfst.h, typen.cpp, typen.h,
+	unitctrl.cpp, vehicle.cpp, vehicle.h, vehicletype.cpp,
+	vehicletype.h, viewcalculation.h, libs/triangul/trimisc.c,
+	sdl/SDLStretch.cpp, sdl/events.cpp, sdl/loadimage.cpp,
+	sdl/sound.cpp, tools/weaponguide.cpp, tools/win/obj/nothing,
+	win32/borland/asc.bpf, win32/borland/asc.bpr,
+	win32/borland/mapeditor/mapeditor.bpf,
+	win32/borland/mapeditor/mapeditor.bpr:	Some cleanup and
+	documentation
+	 Restructured: vehicle and building classes into separate files
+	    tmap, tfield and helper classes into separate file (gamemap.h)
+	 basestrm : stream mode now specified by enum instead of int
+
+2001-02-15 22:57  mbickel
+
+	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
+	source/artint.cpp, source/artint.h, source/map2pcx.cpp,
+	source/sg.cpp, source/typen.h, source/vehicletype.cpp,
+	source/vehicletype.h:  The AI doesn't try to attack with recon
+	units any more
+
+2001-02-11 21:40  mbickel
+
+	* asc.kdevprj, source/dialog.cpp, source/gamemap.cpp,
+	source/loadbi3.cpp:  Fixed compilation problems with gcc
+
+2001-02-11 12:39  mbickel
+
+	* source/: artint.cpp, ascstring.cpp, basegfx.h, basestrm.h,
+	controls.cpp, dashboard.cpp, dialog.cpp, dlgraph.cpp, edevents.cpp,
+	edglobal.cpp, edmisc.cpp, edselfnt.cpp, errors.h, flview.cpp,
+	gamedlg.cpp, gamemap.cpp, gameoptions.cpp, gui.cpp, history.cpp,
+	loadbi3.cpp, loaders.cpp, loaders.h, loadimage.h, loadpcx.h,
+	loadpcxc.cpp, mapalgorithms.cpp, mapdisplay.cpp, memorycheck.cpp,
+	misc.h, missions.cpp, missions.h, newfont.cpp, password_dialog.cpp,
+	pd.cpp, pointers.h, replay.cpp, sg.cpp, sgstream.cpp, spfst.cpp,
+	typen.cpp, typen.h, vehicletype.cpp, vehicletype.h,
+	viewcalculation.cpp:  Some cleanup and documentation
+
+2001-02-08 22:20  mbickel
+
+	* asc.kdevprj, source/TODO, source/artint.cpp, source/artint.h,
+	source/attack.cpp, source/attack.h, source/doxygen.config,
+	source/strtmesg.cpp, source/vehicletype.cpp, source/vehicletype.h: 
+	AI attacks and services more sensibly
+
+2001-02-06 19:38  mbickel
+
+	* asc.kdevprj, source/ascstring.cpp, source/ascstring.h:  Added
+	string comparing method to ASCString
+
+2001-02-06 18:15  mbickel
+
+	* source/: basegfx.cpp, dialog.cpp, graphicselector.cpp, newfont.h,
+	tools/win/tools.bpf, tools/win/tools.bpr,
+	win32/borland/mapeditor/mapeditor.bpf,
+	win32/borland/mapeditor/mapeditor.bpr:	Some changes for
+	compilation by Borland C++ Builder
+
+2001-02-06 17:27  mbickel
+
+	* asc.kdevprj, source/artint.cpp, source/artint.h,
+	source/buildingtype.cpp, source/buildingtype.h, source/map2pcx.cpp,
+	source/typen.cpp, source/typen.h, source/unitctrl.cpp:	bugfixes,
+	bugfixes and bugfixes
+
+2001-02-04 22:26  mbickel
+
+	* asc.kdevprj, source/artint.cpp, source/artint.h,
+	source/attack.cpp, source/basestreaminterface.h,
+	source/basestrm.cpp, source/buildingtype.cpp,
+	source/containerbase.cpp, source/containerbase.h,
+	source/dialog.cpp, source/gamemap.cpp, source/gui.h,
+	source/loaders.cpp, source/loaders.h, source/sg.cpp,
+	source/sgstream.cpp, source/typen.cpp, source/typen.h,
+	source/unitctrl.cpp, source/unitctrl.h, source/vehicletype.cpp,
+	source/vehicletype.h, source/viewcalculation.cpp:  The AI status is
+	written to savegames -> new savegame revision
+	 Lots of bug fixes
+
+2001-02-01 23:48  mbickel
+
+	* asc.kdevprj, source/TODO, source/artint.cpp, source/artint.h,
+	source/attack.cpp, source/building.cpp, source/buildingtype.cpp,
+	source/buildingtype.h, source/containerbase.cpp,
+	source/containerbase.h, source/controls.cpp, source/dashboard.cpp,
+	source/dialog.cpp, source/dialog.h, source/edevents.cpp,
+	source/edgen.cpp, source/edglobal.cpp, source/edmisc.cpp,
+	source/edselfnt.cpp, source/gamedlg.cpp, source/gamemap.cpp,
+	source/gui.cpp, source/loadbi3.cpp, source/loaders.cpp,
+	source/loaders.h, source/map2pcx.cpp, source/mapdisplay.cpp,
+	source/missions.cpp, source/pointers.h, source/replay.cpp,
+	source/research.cpp, source/research.h, source/resourcenet.cpp,
+	source/sg.cpp, source/sgstream.cpp, source/spfst.cpp,
+	source/spfst.h, source/typen.cpp, source/typen.h,
+	source/unitctrl.cpp, source/vehicletype.cpp, source/vehicletype.h,
+	source/viewcalculation.cpp, source/viewcalculation.h:  rewrote the
+	storing of units and buildings
+	 Fixed bugs in bi3 map importing routines
+	 Fixed bugs in AI
+	 Fixed bugs in mapeditor
+
+2001-01-31 15:52  mbickel
+
+	* asc.kdevprj, source/dialog.cpp, source/dialog.h,
+	source/edevents.cpp, source/edglobal.cpp, source/edmain.cpp,
+	source/edmisc.cpp, source/gamedlg.cpp, source/gamemap.cpp,
+	source/loadbi3.cpp, source/loadbi3.h, source/loaders.cpp,
+	source/loaders.h, source/map2pcx.cpp, source/mapdisplay.cpp,
+	source/mapdisplay.h, source/memorycheck.cpp, source/network.cpp,
+	source/sg.cpp, source/vehicletype.cpp:	Fixed crashes in BI3 map
+	importing routines
+	 Rewrote memory consistency checking
+	 Fileselect dialog now uses ASCStrings
+
+2001-01-29 00:19  mbickel
+
+	* asc.kdevprj, source/misc.cpp, source/tools/java/.cvsignore: 
+	Finally, the linux version compiles again too...
+
+2001-01-29 00:00  mbickel
+
+	* source/: ascstring.cpp, ascstring.h, gamemap.cpp,
+	graphicselector.cpp, loadbi3.cpp, loadbi3.h, objxlat.cpp,
+	research.h, sgstream.cpp, spfst.cpp, typen.cpp, vehicletype.cpp,
+	tools/asctool.tgt, tools/bi2pcx.cpp, tools/bi2pcx2.cpp,
+	tools/bi2pcx3.cpp, tools/bi2pcx4.cpp, tools/bldhex.cpp,
+	tools/krkr.cpp, tools/makebdt.cpp, tools/makebdt2.cpp,
+	tools/makebdt3.cpp, tools/makeobl.cpp, tools/makeobl3.cpp,
+	tools/makeobl4.cpp, tools/makeobl5.cpp, tools/maketank.cpp,
+	tools/maketech.cpp, tools/mntgraph.cpp, tools/pcxtank.cpp,
+	tools/printbld.cpp, tools/printtnk.cpp, tools/tools.wpj,
+	tools/trrn2pcx.cpp, tools/viewid.cpp, tools/weaponguide.cpp,
+	tools/dos/maketec.tgt:	Made the small editors compilable with
+	Watcom again
+
+2001-01-28 22:39  mbickel
+
+	* source/: Named.cpp, Named.h, TODO, misc.cpp,
+	tools/weaponguide.cpp, tools/win/tools.bpf, tools/win/tools.bpr,
+	win32/borland/asc.bpf, win32/borland/asc.bpr,
+	win32/borland/global_os.h, win32/borland/mapeditor/mapeditor.bpf,
+	win32/borland/mapeditor/mapeditor.bpr,
+	win32/borland/mapeditor/obj/nothing, win32/borland/obj/nothing: 
+	Updated Borland C++ Building project files
+	 Fixed some compilation problems with Borland
+	 Made weaponguide compilable again
+
+2001-01-28 21:42  mbickel
+
+	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
+	source/Named.cpp, source/Named.h, source/TODO,
+	source/ascstring.cpp, source/ascstring.h, source/buildingtype.h,
+	source/edmisc.cpp, source/graphicselector.cpp,
+	source/graphicselector.h, source/graphicset.cpp,
+	source/graphicset.h, source/loadbi3.cpp, source/loadbi3.h,
+	source/mapdisplay.cpp, source/palette.cpp, source/palette.h,
+	source/sg.cpp, source/sgstream.cpp, source/typen.cpp,
+	source/vehicletype.cpp, source/vehicletype.h,
+	source/tools/linux/Makefile.am, source/tools/linux/Makefile.in: 
+	Introduced a new string class, ASCString, which should replace all
+	   char* and std::string in the long term
+	 Split loadbi3.cpp into 3 different files (graphicselector,
+	graphicset)
+
+2001-01-28 18:18  mbickel
+
+	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
+	source/building.cpp, source/controls.cpp, source/dashboard.cpp,
+	source/dialog.cpp, source/edmisc.cpp, source/gamedlg.cpp,
+	source/gamemap.cpp, source/gui.cpp, source/loadbi3.cpp,
+	source/mapdisplay.cpp, source/missions.cpp, source/replay.cpp,
+	source/resourcenet.cpp, source/sg.cpp, source/unitctrl.cpp:  The
+	recent cleanup broke some source files; this is fixed now
+
+2001-01-28 15:03  mbickel
+
+	* source/: CLoadable.cpp, CLoadable.h, PropertyGroup.cpp, TODO,
+	artint.cpp, artint.h, astar2.cpp, astar2.h, attack.cpp, attack.h,
+	basegfx.cpp, basegfx.h, basegui.h, basestreaminterface.h,
+	basestrm.cpp, basestrm.h, basetemp.h, borland.mlt, building.cpp,
+	building.h, building_controls.h, buildingtype.cpp, buildingtype.h,
+	containerbase.cpp, containerbase.h, controls.cpp, controls.h,
+	dashboard.cpp, dashboard.h, dialog.cpp, dialog.h, dlg_box.cpp,
+	dlg_box.h, dlgraph.cpp, doxygen.config, edevents.cpp, edevents.h,
+	edgen.cpp, edgen.h, edmain.cpp, gamemap.cpp, gui.h, loadpcxc.cpp,
+	map2pcx.cpp, missions.cpp, missions.h, network.cpp, oldlzw.cpp,
+	palette.cpp, palette.h, password.cpp, password.h, pd.cpp, pd.h,
+	pointers.h, replay.cpp, replay.h, research.cpp, research.h,
+	resourcenet.cpp, resourcenet.h, sg.cpp, sg.h, sgstream.cpp,
+	sgstream.h, soundList.cpp, soundList.h, spfst.cpp, spfst.h,
+	stack.cpp, stack.h, typen.h, viewcalculation.cpp, weather.cpp,
+	weather.h:  Some restructuring, documentation and cleanup
+	 The resource network functions are now it their own files, the
+	dashboard
+	  as well
+	 Updated the TODO list
+
+2001-01-26 00:44  mbickel
+
+	* ChangeLog, asc.kdevprj, source/Makefile.am, source/Makefile.in,
+	source/artint.cpp, source/artint.h, source/containerbase.cpp,
+	source/controls.cpp, source/dialog.cpp, source/edevents.cpp,
+	source/edglobal.cpp, source/edmain.cpp, source/edmisc.cpp,
+	source/edselfnt.cpp, source/loadbi3.cpp, source/loadbi3.h,
+	source/loadpcx.h, source/loadpcxc.cpp, source/map2pcx.cpp,
+	source/mapdisplay.cpp, source/mapdisplay.h, source/sg.cpp,
+	source/sg.h, source/spfst.cpp, source/spfst.h, source/strtmesg.cpp,
+	source/unitctrl.h, source/tools/Makefile.am,
+	source/tools/Makefile.in:  Moved map displaying routins to own file
+	(mapdisplay.cpp)
+	 Wrote program to create pcx images from map files (map2pcx.cpp)
+	 Fixed bug in repair function: too much resource consumption
+	 AI improvements and bug fixes
+	 The BI3 map import function now evaluates the player status
+	(human/
+	  computer)
+
 2001-01-24 15:42  mbickel
 
 	* asc.kdevprj, source/artint.cpp:  Fixed a crash in the AI
@@ -24,8 +904,7 @@
 	source/loaders.h, source/missions.cpp, source/pointers.h,
 	source/research.cpp, source/research.h, source/spfst.cpp,
 	source/spfst.h, source/typen.cpp, source/typen.h,
-	source/vehicletype.cpp, source/mapedit/Makefile.am,
-	source/mapedit/Makefile.in:  Speed up of AI
+	source/vehicletype.cpp:  Speed up of AI
 	 Lot of bugfixes in AI
 	 Moved Research to own files (research.*)
 	 Rewrote storing of developed technologies
@@ -256,9 +1135,8 @@
 	source/gameoptions.cpp, source/gameoptions.h,
 	source/memorycheck.cpp, source/password.cpp, source/password.h,
 	source/password_dialog.cpp, source/password_dialog.h,
-	source/sg.cpp, source/sgstream.cpp, source/typen.h,
-	source/mapedit/Makefile.am, source/mapedit/Makefile.in:  The
-	mapeditor has now two maps simultaneously active
+	source/sg.cpp, source/sgstream.cpp, source/typen.h:  The mapeditor
+	has now two maps simultaneously active
 	 Moved memorychecking functions to its own file: memorycheck.cpp
 	 Rewrote password handling in ASC
 
@@ -289,15 +1167,13 @@
 
 2000-11-22 12:34  mbickel
 
-	* config.h.in, configure, source/mapedit/Makefile.in,
-	source/tools/linux/Makefile.in:  new Makefile.in : dynamically
-	linked libbzip2
+	* config.h.in, configure, source/tools/linux/Makefile.in:  new
+	Makefile.in : dynamically linked libbzip2
 
 2000-11-22 09:48  mbickel
 
-	* configure.in, source/mapedit/Makefile.am,
-	source/tools/linux/Makefile.am:  mapeditor and mount/demount use
-	configurable bzlib linking
+	* configure.in, source/tools/linux/Makefile.am:  mapeditor and
+	mount/demount use configurable bzlib linking
 	 invalid bzlib tests in configure.in fixed
 
 2000-11-21 21:26  mbickel
@@ -314,9 +1190,9 @@
 	source/viewcalculation.cpp, source/viewcalculation.h,
 	source/docs/Makefile.in, source/docs/en/Makefile.in,
 	source/libs/Makefile.in, source/libs/triangul/Makefile.in,
-	source/mapedit/Makefile.in, source/sdl/Makefile.in,
-	source/tools/Makefile.in, source/tools/linux/Makefile.in:  Fixed
-	crash in tsearchfields (used by object construction for example)
+	source/sdl/Makefile.in, source/tools/Makefile.in,
+	source/tools/linux/Makefile.in:  Fixed crash in tsearchfields (used
+	by object construction for example)
 	 AI improvements
 	 configure.in: added some debug output
 		       fixed broken check for libbz2
@@ -508,9 +1384,8 @@
 	source/buildingtype.h, source/controls.cpp, source/loaders.cpp,
 	source/missions.cpp, source/sg.cpp, source/sgstream.cpp,
 	source/spfst.cpp, source/typen.cpp, source/typen.h,
-	source/vehicletype.cpp, source/vehicletype.h,
-	source/mapedit/Makefile.am, source/mapedit/Makefile.in:  AI moves
-	damaged units to repair
+	source/vehicletype.cpp, source/vehicletype.h:  AI moves damaged
+	units to repair
 	 tmap is not memory layout sensitive any more
 
 2000-10-24 17:35  schelli
@@ -740,8 +1615,7 @@
 	source/Makefile.in, source/basestrm.h, source/dialog.cpp,
 	source/gameoptions.cpp, source/global.h, source/misc.h,
 	source/sg.cpp, source/sgstream.cpp, source/dos/fileio.h,
-	source/dos/global_os.h, source/mapedit/Makefile.am,
-	source/mapedit/Makefile.in, source/sdl/Makefile.am,
+	source/dos/global_os.h, source/sdl/Makefile.am,
 	source/sdl/Makefile.in, source/sdl/events.cpp,
 	source/unix/fileio.h, source/unix/global_os.h,
 	source/win32/global_os.h, source/win32/borland/fileio.h,
@@ -843,8 +1717,7 @@
 	source/vehicletype.h, source/viewcalculation.cpp,
 	source/viewcalculation.h, source/libs/Makefile.am,
 	source/libs/Makefile.in, source/libs/readme.txt,
-	source/libs/bzlib/Makefile, source/mapedit/Makefile.am,
-	source/mapedit/Makefile.in, source/sdl/asc_IMG_jpg.c,
+	source/libs/bzlib/Makefile, source/sdl/asc_IMG_jpg.c,
 	source/sdl/events.cpp, source/sdl/graphics.cpp,
 	source/sdl/loadimage.cpp, source/tools/bldhex.cpp,
 	source/tools/makebuld.cpp, source/tools/mount.cpp,
@@ -1342,7 +2215,6 @@
 	source/edmisc.cpp, source/edselfnt.cpp, source/edselfnt.h,
 	source/gamedlg.cpp, source/loadbi3.cpp, source/sg.cpp,
 	source/spfst.cpp, source/typen.cpp, source/typen.h,
-	source/mapedit/Makefile.am, source/mapedit/Makefile.in,
 	source/sdl/loadimage.cpp:  New map paramter: fuel globally
 	available
 	 Mapeditor can now filter buildings too
@@ -1411,11 +2283,11 @@
 	source/loadpcxc.cpp, source/sg.cpp, source/spfst.cpp,
 	source/typen.cpp, source/docs/Makefile.in,
 	source/docs/en/Makefile.in, source/libs/Makefile.in,
-	source/libs/triangul/Makefile.in, source/mapedit/Makefile.in,
-	source/sdl/Makefile.am, source/sdl/Makefile.in,
-	source/sdl/sound.cpp, source/tools/Makefile.in,
-	source/tools/linux/Makefile.am, source/tools/linux/Makefile.in: 
-	Fixed: units had invalid height when produced in some buildings
+	source/libs/triangul/Makefile.in, source/sdl/Makefile.am,
+	source/sdl/Makefile.in, source/sdl/sound.cpp,
+	source/tools/Makefile.in, source/tools/linux/Makefile.am,
+	source/tools/linux/Makefile.in:  Fixed: units had invalid height
+	when produced in some buildings
 	 Fixed: units could not enter building if unitheightreq==0
 	 Started adding SDL_image support
 	 Upgraded to SDL1.1.3 (for SDL_image)
@@ -1517,9 +2389,9 @@
 	source/PropertyGroup.cpp, source/basestrm.cpp, source/basestrm.h,
 	source/edglobal.cpp, source/edmain.cpp, source/gameoptions.cpp,
 	source/gameoptions.h, source/sg.cpp, source/sgstream.cpp,
-	source/sgstream.h, source/strtmesg.cpp, source/mapedit/Makefile.am,
-	source/mapedit/Makefile.in, source/tools/linux/Makefile.am,
-	source/tools/linux/Makefile.in:  New configuration file handling
+	source/sgstream.h, source/strtmesg.cpp,
+	source/tools/linux/Makefile.am, source/tools/linux/Makefile.in: 
+	New configuration file handling
 	 ASC searches its data files in all directories specified in ascrc
 	 Renamed all tools so they begin with asc
 
@@ -1531,9 +2403,8 @@
 2000-07-29 17:28  mbickel
 
 	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
-	source/PropertyGroup.h, source/sgstream.cpp,
-	source/mapedit/Makefile.am, source/mapedit/Makefile.in:  Plaintext
-	configfile runs now in Linux version too
+	source/PropertyGroup.h, source/sgstream.cpp:  Plaintext configfile
+	runs now in Linux version too
 
 2000-07-29 16:54  mbickel
 
@@ -1584,8 +2455,7 @@
 2000-07-16 16:57  mbickel
 
 	* asc.kdevprj, source/controls.cpp, source/sg.cpp,
-	source/spfst.cpp, source/spfst.h, source/mapedit/Makefile.am,
-	source/mapedit/Makefile.in:  Datafile versioning
+	source/spfst.cpp, source/spfst.h:  Datafile versioning
 
 2000-07-16 16:19  mbickel
 
@@ -1867,14 +2737,13 @@
 
 2000-05-28 23:07  mbickel
 
-	* source/: mapedit/Makefile, tools/Makefile, tools/linux/Makefile: 
-	Removed some unnecessary Makefiles
+	* source/tools/: Makefile, linux/Makefile:  Removed some
+	unnecessary Makefiles
 
 2000-05-28 23:05  mbickel
 
-	* asc.kdevprj, source/loadbi3.cpp, source/mapedit/Makefile,
-	source/tools/linux/Makefile:  Linux version of mapedit was unable
-	to load buildings in BI3 map
+	* asc.kdevprj, source/loadbi3.cpp, source/tools/linux/Makefile: 
+	Linux version of mapedit was unable to load buildings in BI3 map
 
 2000-05-25 13:07  mbickel
 
@@ -1928,9 +2797,8 @@
 2000-05-18 16:14  mbickel
 
 	* asc.kdevprj, source/controls.cpp, source/sg.cpp,
-	source/spfst.cpp, source/unitctrl.cpp, source/mapedit/Makefile,
-	source/tools/linux/Makefile:  Fixed bug in movemalus calculation
-	for movement
+	source/spfst.cpp, source/unitctrl.cpp, source/tools/linux/Makefile:
+	 Fixed bug in movemalus calculation for movement
 	 Added "view movement range"
 
 2000-05-11 22:12  mbickel
@@ -1976,12 +2844,10 @@
 2000-05-08 22:38  mbickel
 
 	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
-	source/controls.cpp, source/mapedit/Makefile,
-	source/mapedit/Makefile.am, source/mapedit/Makefile.in,
-	source/sdl/Makefile.am, source/sdl/Makefile.in,
-	source/tools/mount.cpp, source/tools/linux/Makefile,
-	source/tools/linux/Makefile.am, source/tools/linux/Makefile.in: 
-	Cleaned up makefiles
+	source/controls.cpp, source/sdl/Makefile.am,
+	source/sdl/Makefile.in, source/tools/mount.cpp,
+	source/tools/linux/Makefile, source/tools/linux/Makefile.am,
+	source/tools/linux/Makefile.in:  Cleaned up makefiles
 	 Fixed bug in mount: crash when file > 1 MB
 	 Fixed bug in visibility calculation
 
@@ -1994,9 +2860,8 @@
 
 	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
 	source/gui.cpp, source/strtmesg.cpp, source/unitctrl.cpp,
-	source/mapedit/Makefile, source/mapedit/Makefile.am,
-	source/mapedit/Makefile.in, source/sdl/Makefile.am,
-	source/sdl/Makefile.in:  Fixed a bug in movement
+	source/sdl/Makefile.am, source/sdl/Makefile.in:  Fixed a bug in
+	movement
 
 2000-05-07 14:53  mbickel
 
@@ -2027,23 +2892,19 @@
 	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
 	source/basestrm.cpp, source/edmain.cpp, source/edmisc.cpp,
 	source/edselfnt.cpp, source/loaders.cpp, source/sg.cpp,
-	source/typen.cpp, source/mapedit/Makefile,
-	source/mapedit/Makefile.am, source/mapedit/Makefile.in,
-	source/sdl/Makefile.am, source/sdl/Makefile.in:  Mapeditor/linux is
-	now running
+	source/typen.cpp, source/sdl/Makefile.am, source/sdl/Makefile.in: 
+	Mapeditor/linux is now running
 
 2000-05-05 23:15  mbickel
 
 	* asc.kdevprj, configure, configure.in, source/Makefile.am,
 	source/Makefile.in, source/edevents.cpp, source/edgen.cpp,
 	source/edmain.cpp, source/edmisc.cpp, source/edmisc.h,
-	source/mapedit/Makefile, source/mapedit/Makefile.am,
-	source/mapedit/Makefile.in, source/tools/Makefile,
-	source/tools/Makefile.am, source/tools/Makefile.in,
-	source/tools/mount.cpp, source/tools/linux/Makefile,
-	source/tools/linux/Makefile.am, source/tools/linux/Makefile.in,
-	source/tools/linux/makefile:  Added Makefiles for mount/demount and
-	mapeditor
+	source/tools/Makefile, source/tools/Makefile.am,
+	source/tools/Makefile.in, source/tools/mount.cpp,
+	source/tools/linux/Makefile, source/tools/linux/Makefile.am,
+	source/tools/linux/Makefile.in, source/tools/linux/makefile:  Added
+	Makefiles for mount/demount and mapeditor
 	 mapeditor can now be compiled for linux, but is not running yet
 
 2000-05-03 16:50  mbickel
