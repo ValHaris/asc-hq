@@ -1,0 +1,10 @@
+technology {
+   Name = GUNNER
+   infotext = Reserach project finished! GUNNER avialable!
+   id = 101106
+   RelatedUnitID = 106
+   parent = 101915
+   researchpoints *= 150
+   techlevel = 3
+   TechnologiesRequired = 101915 
+} Technology

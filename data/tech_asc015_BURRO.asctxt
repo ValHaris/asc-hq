@@ -1,0 +1,10 @@
+technology {
+   Name = BURRO
+   infotext = Reserach project finished! BURRO avialable!
+   id = 101079
+   RelatedUnitID = 79
+   parent = 101915
+   researchpoints *= 140
+   techlevel = 2
+   TechnologiesRequired = 101915,101072 
+} Technology

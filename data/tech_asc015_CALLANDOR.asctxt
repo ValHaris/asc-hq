@@ -1,0 +1,10 @@
+technology {
+   Name = CALLANDOR
+   infotext = Reserach project finished! CALLANDOR avialable!
+   id = 101058
+   RelatedUnitID = 58
+   parent = 101915
+   researchpoints *= 180
+   techlevel = 4
+   TechnologiesRequired = 101915,101079,101072,101059,101057,101073 
+} Technology
