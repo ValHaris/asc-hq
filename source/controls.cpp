@@ -3,9 +3,14 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.139 2002-11-09 19:10:49 mbickel Exp $
+//     $Id: controls.cpp,v 1.140 2002-11-12 13:55:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.139  2002/11/09 19:10:49  mbickel
+//      Fixed: invalid data return after EOF if file very small
+//      Resourceproduction of matter converter now working if not all resources could be stored
+//      mk1 V3 required
+//
 //     Revision 1.138  2002/11/07 18:42:57  mbickel
 //      Fixed crash in reaction fire
 //      Improved autoborder object netification
@@ -502,6 +507,7 @@ void         putbuildinglevel1(void)
      }
 
      selectbuildinggui.checkformouse();
+     releasetimeslice();
 
    } while ( (selectbuildinggui.selectedbuilding == NULL) && (selectbuildinggui.cancel == 0));
 
@@ -509,8 +515,12 @@ void         putbuildinglevel1(void)
    npop ( actgui );
    mousevisible(false);
 
+   actgui->painticons();
+   
    if ( selectbuildinggui.selectedbuilding )
       spbf.initputbuilding( getxpos(), getypos(), selectbuildinggui.selectedbuilding );
+
+   actgui->painticons();
 
    mousevisible(true);
 }
