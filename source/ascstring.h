@@ -71,6 +71,9 @@ public:
     // Printing and formating helpers.
     ASCString&  format     ( const charT* pFormat, ... );
     void        printf     ();
+    
+    // convenience functions
+    bool endswith( const ASCString& s ) const;
 };
 
 // CONSTRUCTORS

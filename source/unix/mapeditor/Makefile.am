@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.19.2.4 2004-12-08 20:55:51 mbickel Exp $
+## $Id: Makefile.am,v 1.19.2.5 2004-12-12 19:58:46 mbickel Exp $
 
 vpath %.cpp ../..
 
@@ -28,12 +28,13 @@ stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
 textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
 mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
-geometry.cpp weatherarea.cpp guidimension.cpp weatherdialog.cpp 
+geometry.cpp weatherarea.cpp guidimension.cpp weatherdialog.cpp iconrepository.cpp
 
 asc_mapedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \
 $(PARAGUI_LIBS) $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-$(top_builddir)/source/graphics/libgraphics.la @SDL_TTF_LDADD@
+$(top_builddir)/source/graphics/libgraphics.la @SDL_TTF_LDADD@ \
+$(top_builddir)/source/libs/loki/libloki.la
 
 #asc_map2pcx_SOURCES	= map2pcx.cpp typen.cpp strtmesg.cpp \
 #stack.cpp spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp \

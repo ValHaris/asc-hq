@@ -80,7 +80,7 @@ public:
 class ASCTTFontRenderAlgorithm{
 public:
 ASCTTFontRenderAlgorithm(){};
-~ASCTTFontRenderAlgorithm(){};
+virtual ~ASCTTFontRenderAlgorithm(){};
 virtual SDL_Surface* render(const ASCTTFont* font, ASCString text, ASCRGBColor, ASCRGBColor = ASCRGBColor()) const = 0;
 
 };

@@ -32,6 +32,7 @@
 #include "controls.h"
 #include "dialog.h"
 #include "gameoptions.h"
+#include "iconrepository.h"
 
 namespace GuiFunctions {
 

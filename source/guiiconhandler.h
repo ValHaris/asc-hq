@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.2 2004-12-12 11:35:12 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.3 2004-12-12 19:58:45 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -36,13 +36,6 @@
 #include "typen.h"
 
 
-class IconRepository {
-        typedef map<ASCString,Surface*> Repository;
-        static Repository repository;
-     public:
-        static Surface& getIcon( const ASCString& name );
-
-};
 
 class GuiFunction {
 

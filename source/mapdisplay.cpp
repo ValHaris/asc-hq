@@ -47,74 +47,290 @@
  #include "dashboard.h"
 #endif
 
+#include "iconrepository.h"
+
+
+MapRenderer::Icons MapRenderer::icons;
+
+SigC::Signal3<void,Surface&, int, MapRenderer::PositionCalculator> MapRenderer::additionalItemDisplayHook;
+
+
+void MapRenderer::readData()
+{
+   if ( !icons.mapBackground.valid() ) {
+      icons.mapBackground = IconRepository::getIcon("mapbkgr.raw");
+      icons.notVisible    = IconRepository::getIcon("hexinvis.raw");
+      icons.markField     = IconRepository::getIcon("markedfield.pcx");
+      icons.markField.detectColorKey();
+   }
+}
+
+
+/*
+  layer:
+    0: terrain
+    1: below everything objects
+    2: deep submerged units and building
+        :
+        :
+    9  orbiting units
+   10  view obstructions
+*/
+
+void MapRenderer::paintSingleField( Surface& surf, int playerView, pfield fld, int layer, const SPoint& pos, const MapCoordinate& mc )
+{
+
+   int binaryheight = 0;
+   if ( layer > 1 )
+      binaryheight = 1 << ( layer-2);
+
+   VisibilityStates visibility = fieldVisibility ( fld, playerView );
+
+   if ( layer == 0 && visibility >= visible_ago )
+      fld->typ->paint ( surf, pos );
+
+
+   if ( visibility > visible_ago ) {
+
+      /* display buildings */
+      if ( fld->building  &&  (fld->building->typ->buildingheight & binaryheight) )
+         if ((visibility == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerView*8 ))
+            fld->building->paintSingleField( surf, pos, fld->building->getLocalCoordinate( mc ));
+
+
+      /* display units */
+      if ( fld->vehicle  &&  (fld->vehicle->height == binaryheight))
+         if ( ( fld->vehicle->color == playerView * 8 ) || (visibility == visible_all) || ((fld->vehicle->height >= chschwimmend) && (fld->vehicle->height <= chhochfliegend)))
+            fld->vehicle->paint( surf, pos );
+
+   }
+
+   // display objects
+   for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ ) {
+      int h = o->typ->imageHeight;
+      if ( visibility > visible_ago || (o->typ->visibleago && visibility >= visible_ago ))
+         if (  h >= (layer-1)*30 && h < layer*30 )
+            o->display ( surf, pos, fld->getweather() );
+   }
+
+
+
+
+   if ( visibility > visible_ago ) {
+      /* display mines */
+      /*
+        if ( visibility == visible_all )
+             if ( !fld->mines.empty() && layer == 4 ) {
+                if ( fld->mines.begin()->type != cmmooredmine )
+                   putspriteimage( r, yp, getmineadress(fld->mines.begin()->type) );
+                else
+                   putpicturemix ( r, yp, getmineadress(fld->mines.begin()->type, 1 ) ,  0, (char*) colormixbuf );
+                #ifdef karteneditor
+                bar ( r + 5 , yp +5, r + 15 , yp +10, 20 + fld->mineowner() * 8 );
+                #endif
+             }
+       */
+
+
+      /* display marked fields */
+
+      if ( layer == 9 ) {
+
+         if ( fld->a.temp && tempsvisible )
+            surf.Blit( icons.markField, pos );
+         else
+            if ( fld->a.temp2 && tempsvisible )
+               surf.Blit( icons.markField, pos );
+         // putspriteimage(  r, yp, xlatpict ( &xlattables.a.dark2 , cursor.markfield));
+
+      }
+
+
+   } else {
+      if (visibility == visible_ago) {
+         if ( fld->building  &&  (fld->building->typ->buildingheight & binaryheight) )
+            if ((visibility == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerView*8 ))
+               fld->building->paintSingleField( surf, pos, fld->building->getLocalCoordinate( mc ));
+
+      }
+   }
+
+   /* display resources */
+   /*
+   if ( layer == 8 && b >= visible_ago) {
+      #ifndef karteneditor
+      if ( fld->resourceview && (fld->resourceview->visible & ( 1 << playerview) ) ){
+         if ( showresources == 1 ) {
+            showtext2( strrr ( fld->resourceview->materialvisible[playerview] ) , r + 10 , yp +10 );
+            showtext2( strrr ( fld->resourceview->fuelvisible[playerview] )     , r + 10 , yp +20 );
+         } else
+            if ( showresources == 2 ) {
+               if ( fld->resourceview->materialvisible[playerview] )
+                  bar ( r + 10 , yp +2, r + 10 + fld->resourceview->materialvisible[playerview] / 10, yp +6, 23 );
+
+               if ( fld->resourceview->fuelvisible[playerview] )
+                  bar ( r + 10 , yp + 14 -2, r + 10 + fld->resourceview->fuelvisible[playerview] / 10, yp +14 +2 , 191 );
+            }
+      }
+      #else
+      if ( showresources == 1 ) {
+         showtext2( strrr ( fld->material ) , r + 10 , yp );
+         showtext2( strrr ( fld->fuel )     , r + 10 , yp + 10 );
+      }
+      else if ( showresources == 2 ) {
+         if ( fld->material )
+            bar ( r + 10 , yp -2, r + 10 + fld->material / 10, yp +2, 23 );
+         if ( fld->fuel )
+            bar ( r + 10 , yp +10 -2, r + 10 + fld->fuel / 10, yp +10 +2 , 191 );
+      }
+     #endif
+   }
+   */
+
+
+
+
+   // display view obstructions
+   if ( layer == 10 ) {
+      if ( visibility == visible_ago) {
+         MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaShadow> blitter;
+         // PG_Point pnt = ClientToScreen( 0,0 );
+         blitter.blit( icons.notVisible, surf, pos);
+         /*
+                         // putspriteimage( r + unitrightshift , yp + unitdownshift , view.va8);
+                         putshadow( r, yp, icons.view.nv8, &xlattables.a.dark2 );
+                         if ( fld->a.temp && tempsvisible )
+                            putspriteimage(  r, yp, cursor.markfield);
+                         else
+                            if ( fld->a.temp2 && tempsvisible )
+                               putspriteimage(  r, yp, xlatpict ( &xlattables.a.dark2 , cursor.markfield));
+          
+         */
+      } else
+         if ( visibility == visible_not) {
+            surf.Blit( icons.notVisible, pos );
+            /*
+                            if ( ( fld->a.temp || fld->a.temp2 ) && tempsvisible )
+                                  putspriteimage(  r, yp, cursor.markfield);
+            */
+
+         }
+
+   }
+
+}
+
+
+
+void MapRenderer::paintTerrain( Surface& surf, tmap* actmap, int playerView, const ViewPort& viewPort, const MapCoordinate& offset )
+{
+   GraphicSetManager::Instance().setActive ( actmap->graphicset );
+
+   for (int pass = 0; pass <= 10 ;pass++ ) {
+      for (int y= viewPort.y1; y < viewPort.y2; ++y )
+         for ( int x=viewPort.x1; x < viewPort.x2; ++x ) {
+            SPoint pos = getFieldPos(x,y);
+            MapCoordinate mc = MapCoordinate( offset.x + x, offset.y + y );
+            pfield fld = actmap->getField ( mc );
+            if ( fld )
+               paintSingleField( surf, playerView, fld, pass, pos, mc );
+            else
+               if ( pass == 0 )
+                  surf.Blit( icons.mapBackground, pos );
+
+         }
+      additionalItemDisplayHook( surf, pass, PositionCalculator(this, &MapRenderer::getFieldPos ));
+   }
+}
+
+
+
 #if 0
-       class ZoomCache {
-           public:
-              int width;
-              int* buffer
-       
-              ZoomCache() : buff(NULL) {};
-              
-              void setZoom( float factor ) {
-              
-              };
-              
-              ~ZoomCache() { delete buffer; };
-       };
+class ZoomCache
+{
+   public:
+      int width;
+      int* buffer
+
+      ZoomCache() : buff(NULL)
+      {}
+      ;
+
+      void setZoom( float factor )
+      {}
+      ;
+
+      ~ZoomCache()
+      {
+         delete buffer;
+      };
+};
 
 
 
-  template<int pixelsize, class SourcePixelSelector = SourcePixelSelector_Plain<pixelsize> >
- class SourcePixelSelector_CacheZoom: public SourcePixelSelector {
-       typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
-       float zoomFactor;
-       int x,y;
-       int cachePos;
-    public:
-    
-       
-       
-    protected:
-
-       int getWidth()  { return int( zoomFactor * SourcePixelSelector::getWidth()  );  };
-       int getHeight() { return int( zoomFactor * SourcePixelSelector::getHeight() );  };
-
-       PixelType getPixel(int x, int y)
-       {
-          return SourcePixelSelector::getPixel( int(float(x) / zoomFactor), int(float(y) / zoomFactor));
-       };
-
-       PixelType nextPixel()
-       {
-          return getPixel(x++, y);
-       };
-
-       void nextLine() { x= 0; ++y;};
-
-    public:
-       void setZoom( float factor )
-       {
-          this->zoomFactor = factor;
-       };
-       void setSize( int sourceWidth, int sourceHeight, int targetWidth, int targetHeight )
-       {
-          float zw = float(targetWidth) / float(sourceWidth);
-          float zh = float(targetHeight)/ float(sourceHeight);
-          setZoom( min ( zw,zh));
-       };
-
-       SourcePixelSelector_Zoom( NullParamType npt = nullParam) : zoomFactor(1),x(0),y(0) {};
-       
- };
-
-#endif
+template<int pixelsize, class SourcePixelSelector = SourcePixelSelector_Plain<pixelsize> >
+class SourcePixelSelector_CacheZoom: public SourcePixelSelector
+{
+      typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+      float zoomFactor;
+      int x,y;
+      int cachePos;
+   public:
 
 
 
-struct CommandBlock {
+   protected:
+
+      int getWidth()
+      {
+         return int( zoomFactor * SourcePixelSelector::getWidth()  );
+      };
+      int getHeight()
+      {
+         return int( zoomFactor * SourcePixelSelector::getHeight() );
+      };
+
+      PixelType getPixel(int x, int y)
+      {
+         return SourcePixelSelector::getPixel( int(float(x) / zoomFactor), int(float(y) / zoomFactor));
+      };
+
+      PixelType nextPixel()
+      {
+         return getPixel(x++, y);
+      };
+
+      void nextLine()
+      {
+         x= 0;
+         ++y;
+      };
+
+   public:
+      void setZoom( float factor )
+      {
+         this->zoomFactor = factor;
+      };
+      void setSize( int sourceWidth, int sourceHeight, int targetWidth, int targetHeight )
+      {
+         float zw = float(targetWidth) / float(sourceWidth);
+         float zh = float(targetHeight)/ float(sourceHeight);
+         setZoom( min ( zw,zh));
+      };
+
+      SourcePixelSelector_Zoom( NullParamType npt = nullParam) : zoomFactor(1),x(0),y(0)
+      {}
+      ;
+
+};
+
+struct CommandBlock
+{
    int targetPixels;
    int fx,fy;
-};   
+};
+
+#endif
 
 
 void benchMapDisplay()
@@ -122,84 +338,82 @@ void benchMapDisplay()
    int t = ticker;
    for ( int i = 0; i < 20; ++i )
       repaintMap();
-      
+
    int t2 = ticker;
-/*   
-   for ( int i = 0; i< 20; ++i)
-      theMapDisplay->Redraw();
-*/      
+   /*
+      for ( int i = 0; i< 20; ++i)
+         theMapDisplay->Redraw();
+   */
    int t3 = ticker;
-   
+
    ASCString s;
    s.format("update map: %d \nupdate widget: %d \n%f fps", t2-t,t3-t2, 20.0 / float(t3-t) * 100 );
    displaymessage(s, 1 );
-}   
-   
+}
+
 
 
 MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
       : PG_Widget ( parent, r, false ) ,
       zoom( 0.75 ),
-      offset(0,0),
       surface(NULL),
-      surfaceBorder(80),
+      offset(0,0),
       dirty(Map)
 {
-   setNewZoom( zoom );
+
    readData();
+   setNewZoom( zoom );
 
    repaintMap.connect( SigC::slot( *this, &MapDisplayPG::updateWidget ));
-   
-      
+
+
    SDL_Surface* ws = GetWidgetSurface ();
    if ( ws ) {
       Surface s = Surface::Wrap( ws );
       s.assignDefaultPalette();
    }
-   
+
 }
 
 int fs[24][3] = {{ 16, 16, 16 },
                  { 14, 20, 14 },
-                 { 12, 24, 12 }, 
-                 { 10, 28, 10 }, 
-                 {  8, 32,  8 }, 
-                 {  6, 36,  6 }, 
-                 {  4, 40,  4 }, 
-                 {  2, 44,  2 }, 
-                 {  0, 48,  0 }, 
-                 {  0, 48,  0 }, 
-                 {  2, 44,  2 }, 
-                 {  4, 40,  4 }, 
-                 {  6, 36,  6 }, 
-                 {  8, 32,  8 }, 
-                 { 10, 28, 10 }, 
-                 { 12, 24, 12 }, 
+                 { 12, 24, 12 },
+                 { 10, 28, 10 },
+                 {  8, 32,  8 },
+                 {  6, 36,  6 },
+                 {  4, 40,  4 },
+                 {  2, 44,  2 },
+                 {  0, 48,  0 },
+                 {  0, 48,  0 },
+                 {  2, 44,  2 },
+                 {  4, 40,  4 },
+                 {  6, 36,  6 },
+                 {  8, 32,  8 },
+                 { 10, 28, 10 },
+                 { 12, 24, 12 },
                  { 14, 20, 14 },
                  { 16, 16, 16 }};
-                
-                
+
+
 void setupFastBlitterCommands()
 {
-   #if 0 
-   // prefixes: f = field 
-   //           t = targetSurface
-   //           s = sourceSurface
-   //           sm = targetSurface modulo 
+#if 0
+#endif
 
-   for ( int ty = 0; ty < int((fieldsizey + fielddisty) * zoom); ++ty) {
-      int sy = int( float(ty) / zoom);
-     
-      int sx = 0;
-      enum { pre,main,post} state = pre;
-      for ( int tx = 0; tx < Width(); ++tx ) {
-         sx = int( float (tx) / zoom );
-         
-         int smx = sx % fieldsizex;
-         if ( smx < 
-         
-         #endif
 }
+
+
+MapDisplayPG::Icons MapDisplayPG::icons;
+
+
+void MapDisplayPG::readData()
+{
+   if ( !icons.cursor.valid() ) {
+      icons.cursor = IconRepository::getIcon( "curshex.raw" );
+      icons.fieldShape = IconRepository::getIcon("hexinvis.raw");
+   }
+}
+
 
 void MapDisplayPG::setNewZoom( float zoom )
 {
@@ -208,49 +422,26 @@ void MapDisplayPG::setNewZoom( float zoom )
 
    field.numx = int( ceil(float(Width())  / zoom / fielddistx) );
    field.numy = int( ceil(float(Height()) / zoom / fielddisty) );
-   
-   field.displayed.x1 = -1;
-   field.displayed.y1 = -1;
-   field.displayed.x2 = field.numx + 1;
-   field.displayed.y2 = field.numy + 1;
-   
+
+   field.viewPort.x1 = -1;
+   field.viewPort.y1 = -1;
+   field.viewPort.x2 = field.numx + 1;
+   field.viewPort.y2 = field.numy + 1;
+
    if ( field.numy & 1 )
       field.numy += 1;
 
    delete surface;
    surface = new Surface( Surface::createSurface ( field.numx * fielddistx + 2 * surfaceBorder, (field.numy - 1) * fielddisty + fieldysize +  2 * surfaceBorder, colorDepth*8 ));
-   
+
    dirty = Map;
-}
-
-MapDisplayPG::Icons MapDisplayPG::icons;
-
-
-void MapDisplayPG::readData()
-{
-   if ( !icons.mapBackground.valid() ) {
-
-      {
-         tnfilestream stream ("mapbkgr.raw", tnstream::reading);
-         icons.mapBackground.read( stream );
-      } {
-         tnfilestream stream ("hexinvis.raw",tnstream::reading);
-         icons.notVisible.read( stream );
-      } {
-         tnfilestream stream ("curshex.raw",tnstream::reading);
-         icons.cursor.read( stream );
-      } {
-         tnfilestream stream ("markedfield.pcx",tnstream::reading);
-         icons.markField.readImageFile( stream );
-         icons.markField.detectColorKey();
-      }
-   }
 }
 
 
 void MapDisplayPG::fillSurface( int playerView )
 {
-   paintTerrain ( playerView );
+   checkViewPosition();
+   paintTerrain( *surface, actmap, playerView, field.viewPort, offset );
    dirty = Curs;
 }
 
@@ -262,179 +453,18 @@ void MapDisplayPG::checkViewPosition()
 
    if ( offset.y + field.numy >= actmap->ysize )
       offset.y = max(0,actmap->ysize - field.numy);
-      
+
    if ( offset.y & 1 )
       offset.y -= 1;
 }
 
 
-void MapDisplayPG::paintTerrain( int playerView )
-{
-   checkViewPosition();
-
-   GraphicSetManager::Instance().setActive ( actmap->graphicset );
-   
-   for (int y= field.displayed.y1; y < field.displayed.y2; ++y )
-      for ( int x=field.displayed.x1; x < field.displayed.x2; ++x ) {
-         pfield fld = getfield ( offset.x + x, offset.y + y );
-         if ( fld ) {
-            if ( fieldVisibility ( fld, playerView ) != visible_not )
-               fld->typ->paint ( *surface, getFieldPos(x,y) );
-
-         } else
-            surface->Blit( icons.mapBackground, getFieldPos(x,y) );
-      } 
 
 
-   for (int pass = 0; pass < 10 ;pass++ ) {
-      int binaryheight = 0;
-      if ( pass > 0 )
-         binaryheight = 1 << ( pass-1);
-
-      for (int y= field.displayed.y1; y < field.displayed.y2; ++y )
-         for ( int x=field.displayed.x1; x < field.displayed.x2; ++x ) {
-            SPoint pos = getFieldPos(x,y);
-            pfield fld = getfield ( offset.x + x, offset.y + y );
-            if ( fld ) {
-               VisibilityStates visibility = fieldVisibility ( fld, playerView );
-
-               if ( visibility > visible_ago ) {
-
-                  /* display buildings */
-                  if ( fld->building  &&  (fld->building->typ->buildingheight & binaryheight) )
-                     if ((visibility == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerView*8 ))
-                        fld->building->paintSingleField( *surface, pos, fld->building->getLocalCoordinate( MapCoordinate(offset.x + x, offset.y + y)));
-
-
-                  /* display units */
-                  if ( fld->vehicle  &&  (fld->vehicle->height == binaryheight))
-                     if ( ( fld->vehicle->color == playerView * 8 ) || (visibility == visible_all) || ((fld->vehicle->height >= chschwimmend) && (fld->vehicle->height <= chhochfliegend)))
-                        fld->vehicle->paint( *surface, pos );
-
-               }
-
-               // display objects
-               for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ ) {
-                  int h = o->typ->imageHeight;
-                  if ( visibility > visible_ago || (o->typ->visibleago && visibility >= visible_ago ))
-                     if (  h >= pass*30 && h < 30 + pass*30 )
-                        o->display ( *surface, pos, fld->getweather() );
-               }
-
-
-
-
-               if ( visibility > visible_ago ) {
-                  /* display mines */
-                  /*
-                    if ( visibility == visible_all )
-                         if ( !fld->mines.empty() && pass == 3 ) {
-                            if ( fld->mines.begin()->type != cmmooredmine )
-                               putspriteimage( r, yp, getmineadress(fld->mines.begin()->type) );
-                            else
-                               putpicturemix ( r, yp, getmineadress(fld->mines.begin()->type, 1 ) ,  0, (char*) colormixbuf );
-                            #ifdef karteneditor
-                            bar ( r + 5 , yp +5, r + 15 , yp +10, 20 + fld->mineowner() * 8 );
-                            #endif
-                         }
-                   */
-
-
-                  /* display marked fields */
-                  
-                      if ( pass == 8 ) {
-
-                          if ( fld->a.temp && tempsvisible )
-                             surface->Blit( icons.markField, pos );
-                          else
-                             if ( fld->a.temp2 && tempsvisible )
-                                surface->Blit( icons.markField, pos );
-                                // putspriteimage(  r, yp, xlatpict ( &xlattables.a.dark2 , cursor.markfield));
-                                
-                      }
-                      
-
-               } else {
-                  if (visibility == visible_ago) {
-                     if ( fld->building  &&  (log2(fld->building->typ->buildingheight)+1 == pass ) )
-                        if ((visibility == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerView*8 ))
-                           fld->building->paintSingleField( *surface, pos, fld->building->getLocalCoordinate( MapCoordinate(offset.x + x, offset.y + y)));
-
-                  }
-               }
-
-               /* display resources */
-               /*
-               if ( pass == 8 && b >= visible_ago) {
-                  #ifndef karteneditor
-                  if ( fld->resourceview && (fld->resourceview->visible & ( 1 << playerview) ) ){
-                     if ( showresources == 1 ) {
-                        showtext2( strrr ( fld->resourceview->materialvisible[playerview] ) , r + 10 , yp +10 );
-                        showtext2( strrr ( fld->resourceview->fuelvisible[playerview] )     , r + 10 , yp +20 );
-                     } else
-                        if ( showresources == 2 ) {
-                           if ( fld->resourceview->materialvisible[playerview] )
-                              bar ( r + 10 , yp +2, r + 10 + fld->resourceview->materialvisible[playerview] / 10, yp +6, 23 );
-
-                           if ( fld->resourceview->fuelvisible[playerview] )
-                              bar ( r + 10 , yp + 14 -2, r + 10 + fld->resourceview->fuelvisible[playerview] / 10, yp +14 +2 , 191 );
-                        }
-                  }
-                  #else
-                  if ( showresources == 1 ) {
-                     showtext2( strrr ( fld->material ) , r + 10 , yp );
-                     showtext2( strrr ( fld->fuel )     , r + 10 , yp + 10 );
-                  }
-                  else if ( showresources == 2 ) {
-                     if ( fld->material )
-                        bar ( r + 10 , yp -2, r + 10 + fld->material / 10, yp +2, 23 );
-                     if ( fld->fuel )
-                        bar ( r + 10 , yp +10 -2, r + 10 + fld->fuel / 10, yp +10 +2 , 191 );
-                  }
-                 #endif
-               }
-               */
-
-
-
-
-               // display view obstructions
-               if ( pass == 9 ) {
-                  if ( visibility == visible_ago) {
-                     MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaShadow> blitter;
-                     // PG_Point pnt = ClientToScreen( 0,0 );
-                     blitter.blit( icons.notVisible, *surface, pos);
-                     /*
-                                     // putspriteimage( r + unitrightshift , yp + unitdownshift , view.va8);
-                                     putshadow( r, yp, icons.view.nv8, &xlattables.a.dark2 );
-                                     if ( fld->a.temp && tempsvisible )
-                                        putspriteimage(  r, yp, cursor.markfield);
-                                     else
-                                        if ( fld->a.temp2 && tempsvisible )
-                                           putspriteimage(  r, yp, xlatpict ( &xlattables.a.dark2 , cursor.markfield));
-                      
-                     */
-                  } else
-                     if ( visibility == visible_not) {
-                        surface->Blit( icons.notVisible, pos );
-                        /*
-                                        if ( ( fld->a.temp || fld->a.temp2 ) && tempsvisible )
-                                              putspriteimage(  r, yp, cursor.markfield);
-                        */
-
-                     }
-
-               }
-            }
-
-         }
-
-      // displayadditionalunits ( pass );
-   }
-}
-
-
-template<int pixelSize> class PixSel : public SourcePixelSelector_CacheZoom<pixelSize, SourcePixelSelector_DirectRectangle<pixelSize> > {};
+template<int pixelSize>
+class PixSel : public SourcePixelSelector_CacheZoom<pixelSize, SourcePixelSelector_DirectRectangle<pixelSize> >
+{}
+;
 // template<int pixelSize> class PixSel : public SourcePixelSelector_CacheZoom<pixelSize, SourcePixelSelector_Rectangle<pixelSize> > {};
 // template<int pixelSize> class PixSel : public SourcePixelSelector_Zoom<pixelSize, SourcePixelSelector_Rectangle<pixelSize> > {};
 
@@ -443,7 +473,7 @@ void MapDisplayPG::updateMap(bool force )
 {
    if ( dirty > Curs || force )
       fillSurface( actmap->playerView );
-  
+
 }
 
 void MapDisplayPG::updateWidget()
@@ -468,36 +498,36 @@ void MapDisplayPG::eventDraw ( SDL_Surface* srf, const PG_Rect& rect)
 {
    if ( dirty > Nothing )
       updateMap();
-      
+
    blitInternalSurface( srf, SPoint(0,0));
 }
 
 void MapDisplayPG::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& dst)
 {
    if ( !GetWidgetSurface ()) {
-        if ( dirty > Nothing )
-           updateMap();
-           
-        PG_Point pnt = ClientToScreen( 0,0 );
-        blitInternalSurface( PG_Application::GetScreen(), SPoint(pnt.x,pnt.y));
+      if ( dirty > Nothing )
+         updateMap();
+
+      PG_Point pnt = ClientToScreen( 0,0 );
+      blitInternalSurface( PG_Application::GetScreen(), SPoint(pnt.x,pnt.y));
    } else {
       PG_Widget::eventBlit(srf,src,dst);
-   }   
-   
-        if ( cursor.visible ) {
-                int x = actmap->player[actmap->playerView].cursorPos.x - offset.x;
-                int y = actmap->player[actmap->playerView].cursorPos.y - offset.y;
-                if( x >= field.displayed.x1 && x < field.displayed.x2 && y >= field.displayed.y1 && y < field.displayed.y2 ) {
-                // surface->Blit( icons.cursor, getFieldPos(x,y));
-                MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Zoom,TargetPixelSelector_Valid> blitter;
-                blitter.setZoom( zoom );
+   }
 
-                Surface s = Surface::Wrap( PG_Application::GetScreen() );
-                        // PG_Point pnt = ClientToScreen( 0,0 );
-                blitter.blit( icons.cursor, s, widget2screen ( internal2widget( mapPos2internalPos( MapCoordinate(x,y)))) );
-                }   
-        }
-   
+   if ( cursor.visible ) {
+      int x = actmap->player[actmap->playerView].cursorPos.x - offset.x;
+      int y = actmap->player[actmap->playerView].cursorPos.y - offset.y;
+      if( x >= field.viewPort.x1 && x < field.viewPort.x2 && y >= field.viewPort.y1 && y < field.viewPort.y2 ) {
+         // surface->Blit( icons.cursor, getFieldPos(x,y));
+         MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Zoom,TargetPixelSelector_Valid> blitter;
+         blitter.setZoom( zoom );
+
+         Surface s = Surface::Wrap( PG_Application::GetScreen() );
+         // PG_Point pnt = ClientToScreen( 0,0 );
+         blitter.blit( icons.cursor, s, widget2screen ( internal2widget( mapPos2internalPos( MapCoordinate(x,y)))) );
+      }
+   }
+
 }
 
 
@@ -532,16 +562,16 @@ MapCoordinate MapDisplayPG::widgetPos2mapPos( const SPoint& pos )
    int x = int( float(pos.x) / zoom ) + surfaceBorder;
    int y = int( float(pos.y) / zoom ) + surfaceBorder;
 
-   for (int yy= field.displayed.y1; yy < field.displayed.y2; ++yy )
-      for ( int xx=field.displayed.x1; xx < field.displayed.x2; ++xx ) {
+   for (int yy= field.viewPort.y1; yy < field.viewPort.y2; ++yy )
+      for ( int xx=field.viewPort.x1; xx < field.viewPort.x2; ++xx ) {
          int x1 = getFieldPosX(xx,yy);
          int y1 = getFieldPosY(xx,yy);
-         if ( x >= x1 && x < x1+ fieldsizex && y >= y1 && y < y1+fieldsizey ) 
-            if ( icons.notVisible.GetPixel(x-x1,y-y1) != 255 )
-               return MapCoordinate(xx+offset.x,yy+offset.y); 
+         if ( x >= x1 && x < x1+ fieldsizex && y >= y1 && y < y1+fieldsizey )
+            if ( icons.fieldShape.GetPixel(x-x1,y-y1) != 255 )
+               return MapCoordinate(xx+offset.x,yy+offset.y);
       }
-      
-   return MapCoordinate();     
+
+   return MapCoordinate();
 }
 
 
@@ -554,41 +584,41 @@ bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
          cursor.visible = true;
          dirty = Curs;
          Update();
-         
+
          updateFieldInfo();
          return true;
       }
-   }      
-   
+   }
+
    if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == CGameOptions::Instance()->mouse.centerbutton ) {
       MapCoordinate mc = screenPos2mapPos( SPoint(button->x, button->y));
       if ( mc.valid() && mc.x < actmap->xsize && mc.y < actmap->ysize ) {
-      
-            int newx = mc.x - field.numx / 2;
-            int newy = mc.y - field.numy / 2;
 
-            if ( newx < 0 )
-               newx = 0;
-            if ( newy < 0 )
-               newy = 0;
-            if ( newx > actmap->xsize - field.numx )
-               newx = actmap->xsize - field.numx;
-            if ( newy > actmap->ysize - field.numy )
-               newy = actmap->ysize - field.numy;
-   
-            if ( newy & 1 )
-               newy--;
+         int newx = mc.x - field.numx / 2;
+         int newy = mc.y - field.numy / 2;
 
-            if ( newx != offset.x  || newy != offset.y ) {
-               offset.x = newx;
-               offset.y = newy;
-               dirty = Map;
-               Redraw();
-            }
-            return true;
+         if ( newx < 0 )
+            newx = 0;
+         if ( newy < 0 )
+            newy = 0;
+         if ( newx > actmap->xsize - field.numx )
+            newx = actmap->xsize - field.numx;
+         if ( newy > actmap->ysize - field.numy )
+            newy = actmap->ysize - field.numy;
+
+         if ( newy & 1 )
+            newy--;
+
+         if ( newx != offset.x  || newy != offset.y ) {
+            offset.x = newx;
+            offset.y = newy;
+            dirty = Map;
+            Redraw();
+         }
+         return true;
       }
-   }      
-   
+   }
+
    return false;
 }
 
@@ -596,6 +626,136 @@ bool MapDisplayPG::eventMouseButtonUp (const SDL_MouseButtonEvent *button)
 {
    return false;
 }
+
+
+
+
+
+Surface MapDisplayPG::createMovementBufferSurface()
+{
+   return Surface::createSurface( 2*surfaceBorder + 2 * fielddisthalfx + fieldsizex, 2*surfaceBorder + 3*fieldsizey, 8*colorDepth, 0x00000000 ) ;
+}
+
+
+void MapDisplayPG::initMovementStructure()
+{
+   if ( !movementMask[0].mask.valid() )
+      for ( int dir = 0; dir < sidenum; ++dir ) {
+         movementMask[dir].mask = createMovementBufferSurface();
+         MapCoordinate start;
+         if ( dir >= 2 && dir <= 4 )
+            start = MapCoordinate( 1, 2 );
+         else
+            start = MapCoordinate( 1, 4 );
+
+         MapCoordinate dest = getNeighbouringFieldCoordinate( start, dir );
+
+         for ( int i = 0; i < sidenum; ++i)
+            movementMask[dir].mask.Blit( icons.fieldShape, getFieldPos2( getNeighbouringFieldCoordinate( start, i )));
+         for ( int i = 0; i < sidenum; ++i)
+            movementMask[dir].mask.Blit( icons.fieldShape, getFieldPos2( getNeighbouringFieldCoordinate( dest, i )));
+
+         SPoint pix = getFieldPos2( start );
+         movementMask[dir].startFieldPos = pix;
+
+         pix.x += fieldsizex/2;
+         pix.y += fieldsizey/2;
+         movementMask[dir].mask.SetColorKey( SDL_SRCCOLORKEY, movementMask[dir].mask.GetPixel( pix ));
+      }
+}
+
+
+void MapDisplayPG::displayMovementStep( Movement& movement, int percentage  )
+{
+   for ( int i = 0; i < touchedFieldNum; ++i ) {
+      SPoint pos = movement.touchedFields[i].surfPos;
+      const MapCoordinate& mc = movement.touchedFields[i].mapPos;
+
+      pfield fld = movement.actmap->getField ( mc );
+      for (int pass = 0; pass <= 10 ;pass++ )
+         if ( fld ) {
+            paintSingleField( *movement.surf, movement.playerView, fld, pass, pos, mc );
+
+            if ( pass >= 2 && pass < 10 )
+               if ( movement.veh->height & (1 << ( pass-2))) {
+                  SPoint pos;
+                  pos.x = movement.from.x + (movement.to.x - movement.from.x) * percentage/100;
+                  pos.y = movement.from.y + (movement.to.y - movement.from.y) * percentage/100;
+                  movement.veh->paint( *movement.surf, pos );
+               }
+         }
+
+   }
+}
+
+inline bool compare( const pair<MapCoordinate, MapCoordinate>& a, const pair<MapCoordinate, MapCoordinate>& b )
+{
+   return a.first.y < b.first.y;
+}   
+
+void MapDisplayPG::displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoordinate3D& from, const MapCoordinate3D& to )
+{
+   int startTime = ticker;
+   int duration = CGameOptions::Instance()->movespeed;
+   int endTime = startTime + duration;
+   
+   
+   initMovementStructure();
+
+   int dir = getdirection( from, to );
+   
+   MapCoordinate tempStart;
+   if ( dir >= 2 && dir <= 4 ) {
+      tempStart = MapCoordinate( 1, 2 );
+   } else {
+      tempStart = MapCoordinate( 1, 4 );
+   }   
+
+   vector< pair<MapCoordinate, MapCoordinate> > touchedFields;
+   
+   touchedFields.push_back ( make_pair( from, tempStart ));
+   for ( int i = 0; i < sidenum; ++i ) 
+      touchedFields.push_back ( make_pair( getNeighbouringFieldCoordinate(from, i), getNeighbouringFieldCoordinate(tempStart, i) ));
+      
+   MapCoordinate tempEnd = getNeighbouringFieldCoordinate( tempStart, dir );
+   touchedFields.push_back ( make_pair( to, tempEnd ));
+   for ( int i = 0; i < sidenum; ++i ) 
+      touchedFields.push_back ( make_pair( getNeighbouringFieldCoordinate(to, i), getNeighbouringFieldCoordinate(tempEnd, i) ));
+   
+
+   // now we have all fields that are touched during movement in a list
+   // let's sort it
+   
+   sort(   touchedFields.begin(), touchedFields.end(), compare );
+   unique( touchedFields.begin(), touchedFields.end() );
+
+   Movement movement;
+   for ( int i = 0; i< 10; ++i ) {
+      movement.touchedFields[i].mapPos = touchedFields[i].first;
+      movement.touchedFields[i].surfPos = getFieldPos2( touchedFields[i].second );
+   }   
+           
+   movement.veh = veh;
+   movement.from = getFieldPos2( tempStart );
+   movement.to = getFieldPos2( tempEnd );
+   movement.actmap = actmap;
+   
+   static Surface surface;
+   if ( !surface.valid() )
+      surface = createMovementBufferSurface();
+         
+   movement.surf = &surface;
+   
+   movement.playerView = actmap->playerView;
+   
+   while ( ticker < endTime ) {
+      displayMovementStep( movement, (ticker - startTime) * 100 / duration );
+   }
+      
+}
+
+
+
 
 
 
@@ -724,6 +884,7 @@ void         initMapDisplay( )
 
    idisplaymap.init( scrleftspace, 21, agmp->resolutionx - 295, agmp->resolutiony - 40 );
 #endif
+
 }
 
 
@@ -1445,7 +1606,8 @@ void tgeneraldisplaymap :: pnt_main ( void )
          }
       }
    }
-   #endif
+#endif
+
 }
 
 
@@ -1549,12 +1711,12 @@ void         displaymap(  )
       cursor.show();
 
 #else
-         
+
 
    repaintMap();
-   
+
 #endif
-      
+
 }
 
 
@@ -1639,7 +1801,7 @@ pfieldlist generatelst ( int x1, int y1, int x2, int y2 )
          case 4:
             adddirpts ( x1, y1, list, 3 );
             adddirpts ( x1, y1, list, 5 );
-            adddirpts ( x1+1, y1, list, 2 );
+            adddirpts ( x2, y2, list, 3 );
             break;
 
          case 5:
@@ -2274,6 +2436,7 @@ void MapDisplay :: updateDashboard ( void )
 #ifdef sgmain
    dashboard.paint ( getactfield(), actmap->playerView );
 #endif
+
 }
 
 void MapDisplay :: repaintDisplay ()

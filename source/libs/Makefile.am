@@ -1,3 +1,3 @@
 MAINTAINERCLEANFILES	= Makefile.in
 
-SUBDIRS 		= triangul sdlmm @LIBBZ2@
+SUBDIRS 		= triangul sdlmm loki @LIBBZ2@

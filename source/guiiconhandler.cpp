@@ -30,6 +30,7 @@
 
 #include "guiiconhandler.h"
 #include "spfst.h"
+#include "iconrepository.h"
 
 const int guiIconSizeX = 49;
 const int guiIconSizeY = 35;
@@ -37,19 +38,6 @@ const int guiIconSpace = 5;
 const int guiIconColumnNum = 3;
 
 
-IconRepository::Repository IconRepository::repository;
-
-Surface& IconRepository::getIcon( const ASCString& name )
-{
-  Repository::iterator i = repository.find( name );
-  if ( i != repository.end() ) 
-     return *i->second;
-  else {
-     tnfilestream fs ( name, tnstream::reading );
-     repository[name] = new Surface ( IMG_Load_RW ( SDL_RWFromStream( &fs ), 1));
-     return *repository[name];
-  }   
-}
 
 
 GuiButton::GuiButton( PG_Widget *parent, const PG_Rect &r ) : PG_Button( parent, r, "", -1, "GuiButton"), func( NULL ) 

@@ -132,13 +132,14 @@ stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
 textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
 mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
-geometry.cpp weatherarea.cpp guidimension.cpp weatherdialog.cpp 
+geometry.cpp weatherarea.cpp guidimension.cpp weatherdialog.cpp iconrepository.cpp
 
 
 asc_mapedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \
 $(PARAGUI_LIBS) $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-$(top_builddir)/source/graphics/libgraphics.la @SDL_TTF_LDADD@
+$(top_builddir)/source/graphics/libgraphics.la @SDL_TTF_LDADD@ \
+$(top_builddir)/source/libs/loki/libloki.la
 
 subdir = source/unix/mapeditor
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -174,12 +175,13 @@ am_asc_mapedit_OBJECTS = edevents.$(OBJEXT) edgen.$(OBJEXT) \
 	gameevent_dialogs.$(OBJEXT) clipboard.$(OBJEXT) \
 	resourceplacement.$(OBJEXT) resourceplacementdialog.$(OBJEXT) \
 	geometry.$(OBJEXT) weatherarea.$(OBJEXT) guidimension.$(OBJEXT) \
-	weatherdialog.$(OBJEXT)
+	weatherdialog.$(OBJEXT) iconrepository.$(OBJEXT)
 asc_mapedit_OBJECTS = $(am_asc_mapedit_OBJECTS)
 asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
 	$(top_builddir)/source/libs/triangul/libtriangul.la \
 	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-	$(top_builddir)/source/graphics/libgraphics.la
+	$(top_builddir)/source/graphics/libgraphics.la \
+	$(top_builddir)/source/libs/loki/libloki.la
 asc_mapedit_LDFLAGS =
 
 DEFS = @DEFS@
@@ -209,6 +211,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/gamemap.Po ./$(DEPDIR)/gameoptions.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/geometry.Po ./$(DEPDIR)/graphicset.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/guidimension.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/iconrepository.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/itemrepository.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/loadbi3.Po ./$(DEPDIR)/loaders.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/loadpcxc.Po \
@@ -325,6 +328,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/geometry.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/graphicset.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guidimension.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iconrepository.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/itemrepository.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadbi3.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loaders.Po@am__quote@

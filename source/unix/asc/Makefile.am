@@ -23,9 +23,11 @@ objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp music.cpp
 messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp messagedlg.cpp \
 simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp weatherarea.cpp \
-guidimension.cpp guiiconhandler.cpp guifunctions.cpp
+guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp 
+
 
 asc_LDADD   		= $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-$(top_builddir)/source/sdl/libsdl.la @PARAGUI_LIBS@ \
-@LDADDLIBBZ2@  @SIGC_LIBS@ $(top_builddir)/source/graphics/libgraphics.la @SDL_TTF_LDADD@
+$(top_builddir)/source/sdl/libsdl.la  $(top_builddir)/source/libs/loki/libloki.la \
+$(top_builddir)/source/graphics/libgraphics.la \
+@PARAGUI_LIBS@ @LDADDLIBBZ2@ @SIGC_LIBS@ @SDL_TTF_LDADD@

@@ -439,6 +439,7 @@ AC_OUTPUT(  Makefile \
 	    source/libs/sdlmm/Makefile \
 	    source/libs/sdlmm/src/Makefile \
 	    source/libs/triangul/Makefile \
+	    source/libs/loki/Makefile \
 	    source/sdl/Makefile \
 	    source/tools/Makefile \
 	    source/tools/lib/Makefile \

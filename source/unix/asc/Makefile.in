@@ -129,13 +129,14 @@ objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp music.cpp
 messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp messagedlg.cpp \
 simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp weatherarea.cpp \
-guidimension.cpp guiiconhandler.cpp guifunctions.cpp
+guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp 
 
 
 asc_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-$(top_builddir)/source/sdl/libsdl.la @PARAGUI_LIBS@ \
-@LDADDLIBBZ2@  @SIGC_LIBS@ $(top_builddir)/source/graphics/libgraphics.la @SDL_TTF_LDADD@
+$(top_builddir)/source/sdl/libsdl.la  $(top_builddir)/source/libs/loki/libloki.la \
+$(top_builddir)/source/graphics/libgraphics.la \
+@PARAGUI_LIBS@ @LDADDLIBBZ2@ @SIGC_LIBS@ @SDL_TTF_LDADD@
 
 subdir = source/unix/asc
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -172,12 +173,13 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) typen.$(OBJEXT) \
 	gameevent_dialogs.$(OBJEXT) statisticdialog.$(OBJEXT) \
 	clipboard.$(OBJEXT) geometry.$(OBJEXT) weatherarea.$(OBJEXT) \
 	guidimension.$(OBJEXT) guiiconhandler.$(OBJEXT) \
-	guifunctions.$(OBJEXT)
+	guifunctions.$(OBJEXT) iconrepository.$(OBJEXT)
 asc_OBJECTS = $(am_asc_OBJECTS)
 asc_DEPENDENCIES = $(top_builddir)/source/libs/triangul/libtriangul.la \
 	$(top_builddir)/source/ai/libai.la \
 	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 	$(top_builddir)/source/sdl/libsdl.la \
+	$(top_builddir)/source/libs/loki/libloki.la \
 	$(top_builddir)/source/graphics/libgraphics.la
 asc_LDFLAGS =
 
@@ -210,6 +212,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/gui.Po ./$(DEPDIR)/guidimension.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/guifunctions.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/guiiconhandler.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/iconrepository.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/itemrepository.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/loadbi3.Po ./$(DEPDIR)/loaders.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/loadpcxc.Po \
@@ -330,6 +333,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guidimension.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guifunctions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guiiconhandler.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iconrepository.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/itemrepository.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadbi3.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loaders.Po@am__quote@

@@ -131,6 +131,21 @@ void ASCString::printf ( )
     ASCStringHelpers::_Printf ( c_str () );
 }
 
+
+/**
+   Checks if the last characters of string are equal to s
+*/    
+bool ASCString::endswith( const ASCString& s ) const
+{
+   size_type p =  rfind( s );
+   if ( p != npos ) 
+      return p == length() - s.length();
+   else   
+      return false;
+}
+
+
+
 /*!
     Duplicate and convert to lowercase.
 
@@ -166,4 +181,5 @@ ASCString copytoUpper ( const ASCString& String )
 
     return l_TempString;
 }
+
 

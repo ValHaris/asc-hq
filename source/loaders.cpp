@@ -214,7 +214,7 @@ void         seteventtriggers( pmap actmap )
 
 
 /**************************************************************/
-/*     sezierungen schreiben / lesen                        ÿ */
+/*     sezierungen schreiben / lesen                         */
 /**************************************************************/
 
 
@@ -429,7 +429,7 @@ void   tspfldloaders::readoldevents ( void )
 
 
 /**************************************************************/
-/*     map schreiben / lesen / initialisieren         ÿ */
+/*     map schreiben / lesen / initialisieren          */
 /**************************************************************/
 
 void    tspfldloaders::writemap ( void )
@@ -501,7 +501,7 @@ void tgameloaders :: readAI ( )
 
 
 /**************************************************************/
-/*     Network schreiben / lesen                            ÿ */
+/*     Network schreiben / lesen                             */
 /**************************************************************/
 
 void        tspfldloaders::writenetwork ( void )
@@ -541,7 +541,7 @@ void        tspfldloaders::readnetwork ( void )
 
 
 /**************************************************************/
-/*     fielder schreiben / lesen                             ÿ */
+/*     fielder schreiben / lesen                              */
 /**************************************************************/
 
 const int objectstreamversion = 1;
@@ -892,7 +892,7 @@ void tspfldloaders::readfields ( void )
 
 
 /**************************************************************/
-/*     Chain Items                                          ÿ */
+/*     Chain Items                                           */
 /**************************************************************/
 
 void   tspfldloaders::chainitems ( pmap actmap )
@@ -909,7 +909,7 @@ void   tspfldloaders::chainitems ( pmap actmap )
 
 
 /**************************************************************/
-/*     Set Player Existencies                               ÿ */
+/*     Set Player Existencies                                */
 /**************************************************************/
 
 
@@ -974,9 +974,6 @@ int          tmaploaders::savemap( const ASCString& name )
    logtofile ( "loaders / tmaploaders::savemap / started " );
    #endif
 
-//   ASCString backupname= name + "~";
-//   ::rename(name.c_str(), backupname.c_str());
-
    tnfilestream filestream ( name, tnstream::writing );
 
    stream = &filestream;
@@ -985,7 +982,7 @@ int          tmaploaders::savemap( const ASCString& name )
 
 
    /********************************************************************************/
-   /*   Stream initialisieren, Dateiinfo schreiben , map schreiben         ÿ */
+   /*   Stream initialisieren, Dateiinfo schreiben , map schreiben          */
    /********************************************************************************/
    {
        stream->writepchar ( getFullVersionString() );  // description is not used any more
@@ -996,6 +993,7 @@ int          tmaploaders::savemap( const ASCString& name )
    }
 
    writefields ();
+   spfld->weatherSystem->write(filestream);
    stream->writeInt ( actmapversion );
 
    spfld = NULL;
@@ -1055,10 +1053,18 @@ int          tmaploaders::loadmap( const char *       name )
 
    displayLogMessage ( 8, "fields, ");
    readfields ();
+   if(version > 0xfe28){  
+     if(spfld->weatherSystem != NULL ) {
+        delete spfld->weatherSystem;
+     }
+     spfld->weatherSystem = new WeatherSystem(spfld);
+     spfld->weatherSystem->read(filestream);
+   }
+
 
 
   /*****************************************************************************************************/
-  /*   šberprfen,  Stream schlieáen                 ÿ                                                 */
+  /*   berprfen,  Stream schlieï¿½n                                                                  */
   /*****************************************************************************************************/
 
    version = stream->readInt();
@@ -1130,6 +1136,8 @@ void   tsavegameloaders::savegame( pnstream strm, pmap gamemap, bool writeReplay
    writemessages();
 
    writefields ( );
+   
+   spfld->weatherSystem->write(*stream);
 
    writedissections();
 
@@ -1217,7 +1225,15 @@ tmap*          tsavegameloaders::loadgame( pnstream strm )
    }
 
    readfields ( );
-
+   
+   if(version >= 0xff41){  
+     if(spfld->weatherSystem != NULL) {
+        delete spfld->weatherSystem;
+     }
+     spfld->weatherSystem = new WeatherSystem(spfld);
+     spfld->weatherSystem->read(*stream);
+   }
+   
    readdissections();
 
    bool loadReplay = true;
@@ -1253,7 +1269,7 @@ tmap*          tsavegameloaders::loadgame( pnstream strm )
 
 
    /*****************************************************************************************************/
-   /*   Netzwerk                                      ÿ                                                 */
+   /*   Netzwerk                                                                                       */
    /*****************************************************************************************************/
 
 
@@ -2114,3 +2130,4 @@ int  tspeedcrccheck :: getstatus ( void )
    return status;
 }
 */
+
