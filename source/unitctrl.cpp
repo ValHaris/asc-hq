@@ -1,6 +1,12 @@
-//     $Id: unitctrl.cpp,v 1.72 2001-10-21 20:00:30 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.73 2001-11-08 17:32:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.72  2001/10/21 20:00:30  mbickel
+//      Fixed AI problems
+//      Fixed: wrong message when unit could not attack
+//      Fxied: invalid order in which objects were displayed
+//      Replay: moving units are only displayed if BOTH fields are visible
+//
 //     Revision 1.71  2001/10/02 14:06:29  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -431,9 +437,9 @@ int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int heigh
  
       
        if ( newheight != -1 && newheight != vehicle->height )
-          logtoreplayinfo ( rpl_changeheight, x1, y1, x, y, vehicle->networkid, (int) vehicle->height, (int) newheight );
+          logtoreplayinfo ( rpl_changeheight2, x1, y1, x, y, vehicle->networkid, (int) vehicle->height, (int) newheight, noInterrupt );
        else 
-          logtoreplayinfo ( rpl_move2, x1, y1, x, y, vehicle->networkid, (int) vehicle->height );
+          logtoreplayinfo ( rpl_move3, x1, y1, x, y, vehicle->networkid, (int) vehicle->height, noInterrupt );
  
        if ( mapDisplay )
           mapDisplay->startAction();

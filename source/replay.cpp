@@ -97,6 +97,39 @@ void checkforreplay ( void )
 }
 
 
+void initReplayLogging()
+{
+   if ( startreplaylate ) {
+      actmap->replayinfo = new treplayinfo;
+      startreplaylate = 0;
+   }
+
+   if ( actmap->replayinfo && actmap->player[ actmap->actplayer ].stat != Player::off ) {
+      if ( actmap->replayinfo->actmemstream )
+         displaymessage2( "actmemstream already open at begin of turn ",2 );
+
+      if ( actmap->replayinfo->guidata[actmap->actplayer] ) {
+         delete actmap->replayinfo->guidata[actmap->actplayer];
+         actmap->replayinfo->guidata[actmap->actplayer] = NULL;
+      }
+
+      savereplay ( actmap->actplayer );
+
+      actmap->replayinfo->guidata[actmap->actplayer] = new tmemorystreambuf;
+      actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::writing );
+   }
+}
+
+void closeReplayLogging()
+{
+   if ( actmap->replayinfo )
+      if ( actmap->replayinfo->actmemstream ) {
+         delete actmap->replayinfo->actmemstream;
+         actmap->replayinfo->actmemstream = NULL;
+      }
+}
+
+
 int ReplayMapDisplay :: checkMapPosition ( int x, int y )
 {
    if ( x >= actmap->xsize )
@@ -253,25 +286,35 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( y2 );
          stream->writeInt ( nwid );
       }
-      if ( action == rpl_move2 ) {
+      if ( action == rpl_move2 || action == rpl_move3 ) {
          int x1 =  va_arg ( paramlist, int );
          int y1 =  va_arg ( paramlist, int );
          int x2 =  va_arg ( paramlist, int );
          int y2 =  va_arg ( paramlist, int );
          int nwid = va_arg ( paramlist, int );
          int height = va_arg ( paramlist, int );
+
          stream->writeChar ( action );
-         int size = 6;
-         stream->writeInt ( size );
+         if ( action == rpl_move2 ) {
+            int size = 6;
+            stream->writeInt ( size );
+         } else {
+            int size = 7;
+            stream->writeInt ( size );
+         }
          stream->writeInt ( x1 );
          stream->writeInt ( y1 );
          stream->writeInt ( x2 );
          stream->writeInt ( y2 );
          stream->writeInt ( nwid );
          stream->writeInt ( height );
+         if ( action == rpl_move3 ) {
+            int nointerrupt = va_arg ( paramlist, int );
+            stream->writeInt ( nointerrupt );
+         }
       }
 
-      if ( action == rpl_changeheight ) {
+      if ( action == rpl_changeheight || action == rpl_changeheight2 ) {
          int x1 =  va_arg ( paramlist, int );
          int y1 =  va_arg ( paramlist, int );
          int x2 =  va_arg ( paramlist, int );
@@ -280,8 +323,13 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          int oldheight = va_arg ( paramlist, int );
          int newheight = va_arg ( paramlist, int );
          stream->writeChar ( action );
-         int size = 7;
-         stream->writeInt ( size );
+         if ( action == rpl_changeheight ) {
+            int size = 7;
+            stream->writeInt ( size );
+         } else {
+            int size = 8;
+            stream->writeInt ( size );
+         }
          stream->writeInt ( x1 );
          stream->writeInt ( y1 );
          stream->writeInt ( x2 );
@@ -289,6 +337,10 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( nwid );
          stream->writeInt ( oldheight );
          stream->writeInt ( newheight );
+         if ( action == rpl_changeheight2 ) {
+            int noInterrupt = va_arg ( paramlist, int );
+            stream->writeInt ( noInterrupt );
+         }
       }
       if ( action == rpl_convert ) {
          int x =  va_arg ( paramlist, int );
@@ -607,6 +659,7 @@ void trunreplay :: execnextreplaymove ( void )
                            displaymessage("severe replay inconsistency:\nno vehicle for move1 command !", 1);
                      }
          break;
+      case rpl_move3:
       case rpl_move2: {
                         stream->readInt(); // size
                         int x1 = stream->readInt();
@@ -615,6 +668,12 @@ void trunreplay :: execnextreplaymove ( void )
                         int y2 = stream->readInt();
                         int nwid = stream->readInt();
                         int height = stream->readInt();
+                        int noInterrupt;
+                        if ( nextaction == rpl_move3 )
+                           noInterrupt = stream->readInt();
+                        else
+                           noInterrupt = -1;
+
                         readnextaction();
 
                         pvehicle eht = actmap->getUnit ( x1, y1, nwid );
@@ -626,7 +685,7 @@ void trunreplay :: execnextreplaymove ( void )
                            int t = ticker;
                            vm.execute ( NULL, x2, y2, 2, -1, -1 );
                            wait( t );
-                           vm.execute ( NULL, x2, y2, 3, -1, -1 );
+                           vm.execute ( NULL, x2, y2, 3, -1, noInterrupt );
 
                            if ( vm.getStatus() != 1000 )
                               eht = NULL;
@@ -706,6 +765,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                       }
          break;
+      case rpl_changeheight2:
       case rpl_changeheight: {
                         stream->readInt();  // size
                         int x1 = stream->readInt();
@@ -715,6 +775,12 @@ void trunreplay :: execnextreplaymove ( void )
                         int nwid = stream->readInt();
                         int oldheight = stream->readInt();
                         int newheight = stream->readInt();
+                        int noInterrupt = -1;
+
+                        if ( nextaction == rpl_changeheight2 )
+                           noInterrupt = stream->readInt();
+
+
                         readnextaction();
 
                         pvehicle eht = actmap->getUnit ( x1, y1, nwid );
@@ -731,7 +797,7 @@ void trunreplay :: execnextreplaymove ( void )
                            int t = ticker;
                            va->execute ( NULL, x2, y2, 2, -1, -1 );
                            wait( t );
-                           va->execute ( NULL, x2, y2, 3, -1, -1 );
+                           va->execute ( NULL, x2, y2, 3, -1, noInterrupt );
 
                            if ( va->getStatus() != 1000 )
                               eht = NULL;

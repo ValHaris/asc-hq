@@ -1,3 +1,108 @@
+2001-11-05 22:50  mbickel
+
+	* source/: tools/win/makepal.bpf, tools/win/makepal.bpr,
+	win32/borland/asc.bpr:	Updated Borland project files
+
+2001-11-05 22:31  mbickel
+
+	* data/data.version, source/edmisc.cpp, source/sgstream.cpp:  Fixed
+	compilation errors
+	 new data version required
+
+2001-11-05 22:10  mbickel
+
+	* asc.bpg, data/palette.pal, source/dashboard.cpp,
+	source/dlg_box.cpp, source/mapdisplay.cpp, source/palette.h,
+	source/sg.cpp, source/sgstream.cpp, source/strtmesg.cpp,
+	source/tools/makepal.cpp:  Updated palette code
+
+2001-11-04 23:52  mbickel
+
+	* source/: controls.cpp, gamedlg.cpp, spfst.cpp, vehicle.cpp,
+	win32/borland/asc.bpr:	Fixed bug in wood net calculation
+	 Fixed broken refuel dialog
+
+2001-11-04 22:50  mbickel
+
+	* source/: objecttype.cpp, spfst.cpp, ai/tactics.cpp:  Fixed error
+	messages in AI
+	 Fixed wrong displaying of objects in snow
+
+2001-10-31 21:47  mbickel
+
+	* Makefile.in, asc.kdevprj, data/Makefile.in, doc/Makefile.in,
+	source/Makefile.in, source/ai/Makefile.in, source/docs/Makefile.in,
+	source/docs/en/Makefile.in, source/libs/Makefile.in,
+	source/libs/triangul/Makefile.in, source/sdl/Makefile.in,
+	source/tools/Makefile.in, source/tools/linux/Makefile.in,
+	source/unix/Makefile.in, source/unix/mapeditor/Makefile.in:  Some
+	cleanup
+
+2001-10-31 21:30  mbickel
+
+	* source/typen.h:  Fixed strange problems with gcc
+
+2001-10-31 21:10  mbickel
+
+	* configure, source/ai/ai.h, source/ai/misc.cpp:  Circumvented a
+	bug in gcc
+
+2001-10-31 21:02  mbickel
+
+	* configure.in:  Fixed string compare check
+
+2001-10-31 20:31  mbickel
+
+	* configure, configure.in, source/ascstring.cpp,
+	source/ai/misc.cpp:  Added improved gcc bug circumvention for
+	different versions
+
+2001-10-31 19:34  mbickel
+
+	* source/: ascstring.h, attack.cpp, basestreaminterface.h,
+	basestrm.cpp, building_controls.h, containerbase.h,
+	containerbasetype.h, dashboard.h, dialog.cpp, dlg_box.cpp,
+	edgen.cpp, edglobal.cpp, edmisc.cpp, errors.h, graphicset.h,
+	itemrepository.h, loadimage.h, map2pcx.cpp, mapdisplay.cpp,
+	mapdisplay.h, misc.cpp, newfont.cpp, objecttype.h, palette.cpp,
+	password.h, password_dialog.h, pointers.h, replay.h, research.h,
+	resourcenet.h, sgstream.cpp, soundList.h, spfst.cpp, spfst.h,
+	terraintype.h, textfileparser.h, viewcalculation.h, weather.h,
+	ai/ai_common.h, sdl/graphics.h, sdl/keysymbols.h, sdl/sound.h,
+	tools/krkr.cpp:  Some adjustments and fixes for gcc 3.0.2
+
+2001-10-29 21:24  mbickel
+
+	* doc/manpages/Makefile.in, source/building.cpp,
+	source/edselfnt.cpp:  Fixed AI crash when producing to much units
+
+2001-10-28 22:33  mbickel
+
+	* source/strtmesg.cpp:	Increased version number
+
+2001-10-28 21:42  mbickel
+
+	* data/first.map, data/helpsyst.txt, data/paybacktime.map,
+	source/TODO, source/attack.cpp, source/buildings.cpp,
+	source/controls.cpp, source/gamedlg.cpp, source/gamemap.cpp,
+	source/gamemap.h, source/missions.cpp, source/viewcalculation.cpp,
+	source/ai/buildingcapture.cpp, source/ai/misc.cpp:  Fixed AI
+	crashes
+	 Fixed problems when next campaign map could not be found.
+	 Fixed forgotten events.
+	 Added several new experimental map parameters
+	 Some improvements to the campaign maps
+
+2001-10-24 18:30  mbickel
+
+	* ChangeLog, configure, configure.in, doc/manpages/Makefile.in,
+	source/resourcenet.h:  Added test for SDLmm to configure.in
+
+2001-10-23 17:37  mbickel
+
+	* source/: TODO, resourcenet.cpp, strtmesg.cpp:  Fixed crash when
+	determining the emount of energy available in buildings
+
 2001-10-22 23:04  mbickel
 
 	* source/: strtmesg.cpp, win32/borland/asc.bpr:  Increased version

@@ -131,11 +131,17 @@ void AI::checkKeys ( void )
 
 void AI:: run ( void )
 {
-   mapDisplay = rmd;
+   if ( getMap()->playerView >= 0 )
+      mapDisplay = rmd;
+   else
+      mapDisplay = NULL;
+
    int startTime = ticker;
    AiResult res;
 
    cursor.hide();
+
+   initReplayLogging();
 
    unitCounter = 0;
    _isRunning = true;
@@ -187,6 +193,9 @@ void AI:: run ( void )
    if ( !mapDisplay )
       displaymap();
    int duration = ticker-startTime;
+
+
+   closeReplayLogging();
 
    if ( CGameOptions::Instance()->runAI == 2 )
       if ( duration > 100*60 )
@@ -419,6 +428,10 @@ AI :: ~AI ( )
       delete[] fieldInformation;
       fieldInformation = NULL;
       fieldNum = 0;
+   }
+   if ( rmd ) {
+      delete rmd;
+      rmd = NULL;
    }
 }
 

@@ -3,9 +3,13 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.120 2001-11-04 22:52:35 mbickel Exp $
+//     $Id: controls.cpp,v 1.121 2001-11-08 17:32:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.120  2001/11/04 22:52:35  mbickel
+//      Fixed bug in wood net calculation
+//      Fixed broken refuel dialog
+//
 //     Revision 1.119  2001/10/28 20:42:17  mbickel
 //      Fixed AI crashes
 //      Fixed problems when next campaign map could not be found.
@@ -2680,36 +2684,12 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
 
    actmap->playerView = actmap->actplayer;
 
-   if ( startreplaylate ) {
-      actmap->replayinfo = new treplayinfo;
-      startreplaylate = 0;
-   }
-
-   if ( actmap->replayinfo && actmap->player[ actmap->actplayer ].stat != Player::off ) {
-      if ( actmap->replayinfo->actmemstream )
-         displaymessage2( "actmemstream already open at begin of turn ",2 );
-      // displaymessage("saving replay information",0 );
-
-      if ( actmap->replayinfo->guidata[actmap->actplayer] ) {
-         delete actmap->replayinfo->guidata[actmap->actplayer];
-         actmap->replayinfo->guidata[actmap->actplayer] = NULL;
-      }
-
-      savereplay ( actmap->actplayer );
-
-      actmap->replayinfo->guidata[actmap->actplayer] = new tmemorystreambuf;
-      actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::writing );
-
-      // removemessage ();
-
-   }
-
+   initReplayLogging();
 
    actmap->xpos = actmap->cursorpos.position[ actmap->actplayer ].sx;
    actmap->ypos = actmap->cursorpos.position[ actmap->actplayer ].sy;
 
    cursor.gotoxy ( actmap->cursorpos.position[ actmap->actplayer ].cx, actmap->cursorpos.position[ actmap->actplayer ].cy , 0);
-
 
    dashboard.x = 0xffff;
    transfer_all_outstanding_tribute();
@@ -2767,11 +2747,7 @@ void sendnetworkgametonextplayer ( int oldplayer, int newplayer )
 
 void endTurn ( void )
 {
-   if ( actmap->replayinfo )
-      if ( actmap->replayinfo->actmemstream ) {
-         delete actmap->replayinfo->actmemstream;
-         actmap->replayinfo->actmemstream = NULL;
-      }
+   closeReplayLogging();
 
    /* *********************  vehicle ********************  */
 

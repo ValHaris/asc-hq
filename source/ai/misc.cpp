@@ -506,6 +506,7 @@ int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path )
       return 0;
 
    while ( pi != path.end() ) {
+      int nwid = veh->networkid;
       if ( pi->z == veh->height ) {
          VehicleMovement vm ( mapDisplay, NULL );
          vm.execute ( veh, -1, -1, 0, -1, -1 );
@@ -537,6 +538,10 @@ int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path )
             pi = lastmatch+1;
          }
       }
+
+      //! the unit may have been shot down
+      if ( ! getMap()->getUnit ( nwid ))
+         return -1;
 
       if ( pi == path.end() ) {
          if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer )
@@ -579,6 +584,10 @@ int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path )
              return -1;
           }
       }
+
+      //! the unit may have been shot down
+      if ( ! getMap()->getUnit ( nwid ))
+         return -1;
 
       pi++;
    }

@@ -29,7 +29,7 @@
 enum trpl_actions { rpl_attack, rpl_move, rpl_changeheight, rpl_convert, rpl_remobj, rpl_buildobj, rpl_putbuilding,
                     rpl_removebuilding, rpl_putmine, rpl_removemine, rpl_produceunit, rpl_removeunit, rpl_trainunit,
                     rpl_reactionfire, rpl_finished, rpl_shareviewchange, rpl_alliancechange, rpl_move2, rpl_buildtnk,
-                    rpl_refuel, rpl_bldrefuel };
+                    rpl_refuel, rpl_bldrefuel, rpl_move3, rpl_changeheight2 };
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 
@@ -67,5 +67,12 @@ extern int startreplaylate;
 
 //! checks if there is replay information and -if there is any- runs the replay
 extern void checkforreplay ( void );
+
+//! Initialized the replay logging at the beginning of a players or the ai's turn.
+extern void initReplayLogging();
+
+//! Close the replay logging at the end of a players or the ai's turn.
+extern void closeReplayLogging();
+
 
 #endif

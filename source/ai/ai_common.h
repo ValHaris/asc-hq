@@ -53,6 +53,7 @@
 #include "../itemrepository.h"
 #include "../building_controls.h"
 #include "../viewcalculation.h"
+#include "../replay.h"
 
 
 extern const int currentServiceOrderVersion;
