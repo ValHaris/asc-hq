@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.27 2002-10-06 15:44:41 mbickel Exp $
+## $Id: Makefile.am,v 1.28 2002-10-12 18:06:27 mbickel Exp $
 
 vpath %.cpp ..:../..
 
@@ -20,8 +20,8 @@ bin_PROGRAMS 		= asc_demount \
 			asc_weaponguide \
 			asc_raw2pcx
 
-asc_demount_SOURCES	= demount.cpp basestrm.cpp misc.cpp ascstring.cpp strtmesg.cpp
-asc_mount_SOURCES       = mount.cpp        basestrm.cpp misc.cpp ascstring.cpp strtmesg.cpp
+asc_demount_SOURCES	    = demount.cpp      basestrm.cpp misc.cpp ascstring.cpp strtmesg.cpp stringtokenizer.cpp
+asc_mount_SOURCES       = mount.cpp        basestrm.cpp misc.cpp ascstring.cpp strtmesg.cpp stringtokenizer.cpp
 asc_makegfx_SOURCES     = makegfx.cpp      basestrm.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp CLoadable.cpp Named.cpp Property.cpp PropertyGroup.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp
 asc_viewid_SOURCES      = viewid.cpp       basestrm.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp CLoadable.cpp Named.cpp Property.cpp PropertyGroup.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp itemrepository.cpp
 asc_bin2text_SOURCES    = bin2text.cpp     basestrm.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp CLoadable.cpp Named.cpp Property.cpp PropertyGroup.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp itemrepository.cpp
