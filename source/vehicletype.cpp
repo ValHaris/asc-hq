@@ -120,7 +120,7 @@ int Vehicletype::maxsize ( void ) const
 extern void* generate_vehicle_gui_build_icon ( pvehicletype tnk );
 #endif
 
-const int vehicle_version = 19;
+const int vehicle_version = 20;
 
 
 
@@ -423,6 +423,8 @@ void Vehicletype :: read ( tnstream& stream )
             weapons.weapon[j].laserRechargeRate = stream.readInt();
             weapons.weapon[j].laserRechargeCost.read( stream );
          }
+         if ( version >= 20 )
+            weapons.weapon[j].soundLabel = stream.readString();
 
       }
 
@@ -486,6 +488,11 @@ void Vehicletype :: read ( tnstream& stream )
    else
       if ( version >= 18 )
          cargoMovementDivisor = stream.readFloat();
+
+   if ( version >= 20 ) {
+      movementSoundLabel = stream.readString();
+      killSoundLabel = stream.readString();
+   }
 }
 
 void Vehicletype::setupPictures()
@@ -655,7 +662,7 @@ void Vehicletype:: write ( tnstream& stream ) const
 
       stream.writeInt( weapons.weapon[j].laserRechargeRate );
       weapons.weapon[j].laserRechargeCost.write( stream );
-
+      stream.writeString( weapons.weapon[j].soundLabel );
    }
 
    terrainaccess.write ( stream );
@@ -677,7 +684,11 @@ void Vehicletype:: write ( tnstream& stream ) const
    stream.writerlepict( buildicon );
 
    stream.writeFloat ( cargoMovementDivisor );
+
+   stream.writeString( movementSoundLabel );
+   stream.writeString( killSoundLabel );
 }
+
 
 const ASCString& Vehicletype::getName( ) const
 {

@@ -20,7 +20,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/sdlmm/src;../../../libs/getopt;&quot;../../../libs/libsigc++&quot;;&quot;$(paragui1)/include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;NO_PARAGUI"
+				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
@@ -36,7 +36,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sdlevent.lib triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc++.lib"
+				AdditionalDependencies="sdlevent.lib triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc++.lib paraguid.lib"
 				ShowProgress="0"
 				OutputFile="$(OutDir)/bin/ASC.exe"
 				LinkIncremental="2"
@@ -78,7 +78,7 @@
 				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)/include&quot;;../../../libs/SDLmm/include;&quot;$(SDL_mixer)&quot;;../../../libs/;&quot;../../../libs/libsigc++&quot;;../../../libs/getopt"
-				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;NO_PARAGUI"
+				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_"
 				RuntimeLibrary="2"
 				DefaultCharIsUnsigned="TRUE"
 				RuntimeTypeInfo="TRUE"
@@ -92,7 +92,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sdlevent.lib triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc++.lib"
+				AdditionalDependencies="sdlevent.lib triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc++.lib paragui.lib"
 				OutputFile="$(OutDir)/bin/ASC.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/Release&quot;;&quot;$(SDL_image)/VisualC/Release&quot;;../../../Release/lib;&quot;../../../libs/libsigc++/sigc++/release&quot;;../../../libs/SDLmm/SDLmm/release;&quot;$(SDL)/VisualC/SDLmain/Release&quot;;&quot;$(SDL)/VisualC/SDL/Release&quot;"
@@ -140,9 +140,6 @@
 				RelativePath="..\..\..\attack.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ai\base.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\basegfx.cpp">
 			</File>
 			<File
@@ -157,9 +154,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\building.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\ai\buildingcapture.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\buildings.cpp">
@@ -249,21 +243,6 @@
 				RelativePath="..\..\..\messages.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ai\misc.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\..\misc.cpp">
 			</File>
 			<File
@@ -345,16 +324,10 @@
 				RelativePath="..\..\..\statisticdialog.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ai\strategy.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\stringtokenizer.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\strtmesg.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\ai\tactics.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\terraintype.cpp">
@@ -375,9 +348,6 @@
 				RelativePath="..\..\..\unitctrl.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ai\valuation.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\vehicle.cpp">
 			</File>
 			<File
@@ -386,6 +356,40 @@
 			<File
 				RelativePath="..\..\..\viewcalculation.cpp">
 			</File>
+			<Filter
+				Name="AI"
+				Filter="">
+				<File
+					RelativePath="..\..\..\ai\base.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\ai\buildingcapture.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\ai\misc.cpp">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\ai\strategy.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\ai\tactics.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\ai\valuation.cpp">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"

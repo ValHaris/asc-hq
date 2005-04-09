@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.129 2005-04-02 13:57:06 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.130 2005-04-09 13:44:19 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -3638,8 +3638,9 @@ void selectunitsetfilter ( void )
    if ( ItemFiltrationSystem::itemFilters.size() > 0 ) {
 
       vector<ASCString> buttons;
-      buttons.push_back ( "~H~ide items" );
-      buttons.push_back ( "~L~ist items" );
+      buttons.push_back ( "~H~ide set" );
+      buttons.push_back ( "~S~how set" );
+      buttons.push_back ( "~S~how set only");
       buttons.push_back ( "~O~k" );
 
       pair<int,int> playerRes;
@@ -3663,7 +3664,14 @@ void selectunitsetfilter ( void )
          if ( playerRes.first == 1 && playerRes.second >= 0)
             ItemFiltrationSystem::itemFilters[playerRes.second]->setActive( false );
 
-      } while ( playerRes.first != 2 );
+         if ( playerRes.first == 2 && playerRes.second >= 0)
+            for ( int i = 0; i < ItemFiltrationSystem::itemFilters.size(); i++ )
+               if ( i == playerRes.second )
+                  ItemFiltrationSystem::itemFilters[i]->setActive(false);
+               else
+                  ItemFiltrationSystem::itemFilters[i]->setActive(true);
+
+      } while ( playerRes.first != 3 );
 
       resetvehicleselector();
       resetbuildingselector();

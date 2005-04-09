@@ -490,7 +490,7 @@ int          tputmine::initpm(  char mt, const pvehicle eht )
       return -119;
    }
    if (mienenlegen || mienenraeumen)
-      initsearch( MapCoordinate( getxpos(),getypos()), int(ceil(float(weapon->mindistance) / maxmalq)), weapon->maxdistance / maxmalq );
+      initsearch( MapCoordinate( getxpos(),getypos()), (weapon->mindistance + maxmalq-1) / maxmalq, weapon->maxdistance / maxmalq );
    return 0;
 }
 
@@ -1449,11 +1449,16 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
            // flying
            movecost = maxmalq;
         else {
-           int mm = getfield( start.x, start.y )->getContainer()->vehicleUnloadSystem( vehicle->typ, dest.getBitmappedHeight() )->movecost;
-           if ( mm > 0 )
-              movecost = mm;
-           else
-              movecost = getfield( dest.x, dest.y )->getmovemalus( vehicle );
+           if ( start.getNumericalHeight() <= 1 ) {
+              movecost = submarineMovement;
+              checkWind = false;
+           } else {
+              int mm = getfield( start.x, start.y )->getContainer()->vehicleUnloadSystem( vehicle->typ, dest.getBitmappedHeight() )->movecost;
+              if ( mm > 0 )
+                 movecost = mm;
+              else
+                 movecost = getfield( dest.x, dest.y )->getmovemalus( vehicle );
+           }
         }
       } else {
         // moving from one container to another
