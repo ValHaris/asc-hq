@@ -8,7 +8,121 @@ panel {
       Filename = weapon_large_top.png
       name = top
       x = 0
-      y = 8
+      y = 9
+      widgetnum = 2
+      widget0 {
+         type = dummy
+         x = 128
+         y = 18
+         TextAlign = LEFT
+         FontColor = 0xcfcfcf
+         Fontsize = 9
+         widgetnum = 8
+         widget0 {
+           type = statictext
+           x = 0
+           y = 0
+           text = reaction
+         } widget0
+         widget1 {
+           type = statictext
+           x = 52
+           y = 0
+           text = ammo
+         } widget1
+         widget2 {
+           type = statictext
+           x = 97
+           y = 0
+           text = can
+         } widget2
+         widget3 {
+           type = statictext
+           x = 128
+           y = 0
+           text = can
+         } widget3
+         widget4 {
+           type = statictext
+           x = 163
+           y = 0
+           text = strenght
+         } widget4
+         widget5 {
+           type = statictext
+           x = 223
+           y = 0
+           text = distance
+         } widget5
+         widget6 {
+           type = statictext
+           x = 327
+           y = 0
+           text = can be shot from
+         } widget6
+         widget7 {
+           type = statictext
+           x = 539
+           y = 0
+           text = targets
+         } widget7
+      } widget0
+
+
+      widget1 {
+         type = dummy
+         x = 47
+         y = 38
+         TextAlign = LEFT
+         FontColor = 0xcfcfcf
+         Fontsize = 9
+         widgetnum = 7
+         widget0 {
+           type = statictext
+           x = 0
+           y = 0
+           text = weapon type
+         } widget0
+         widget1 {
+           type = statictext
+           x = 91
+           y = 0
+           text = fire
+         } widget1
+         widget2 {
+           type = statictext
+           x = 129
+           y = 0
+           Fontsize = 8
+           text = cur  max
+         } widget2
+         widget3 {
+           type = statictext
+           x = 174
+           y = 0
+           Fontsize = 9
+           text = shoot
+         } widget3
+         widget4 {
+           type = statictext
+           x = 205
+           y = 0
+           text = refuel
+         } widget4
+         widget5 {
+           type = statictext
+           x = 241
+           y = 0
+           Fontsize = 8
+           text = min    max
+         } widget5
+         widget6 {
+           type = statictext
+           x = 300
+           y = 0
+           text = min    max
+         } widget6
+      } widget1
    } widget0
 
     LineWidget {
@@ -28,7 +142,7 @@ panel {
       FontColor = 0xfac914
       widgetnum = 13
       widget0 {
-        type = specialdisplay
+        type = image
         x = 31
         y = 1
         height = 9
@@ -37,16 +151,16 @@ panel {
       } widget0
        widget1 {
         type = TextOutput
-        textalign = CENTER        
+        textalign = CENTER
         x = 55
         y = 1
         height = 9
         width = 64
         name = weapon_text1
-      } widget1 
+      } widget1
        widget2 {
         type = TextOutput
-        textalign = CENTER        
+        textalign = CENTER
         x = 137
         y = 1
         height = 9
@@ -56,19 +170,19 @@ panel {
        widget3 {
         type = TextOutput
         textalign = LEFT        
-        x = 177
+        x = 179
         y = 1
         height = 9
-        width = 35
+        width = 31
         name = weapon_currentammo
       } widget3
        widget4 {
         type = Textoutput
         textalign = Right        
-        x = 177
+        x = 179
         y = 1
         height = 9
-        width = 35
+        width = 31
         name = weapon_maxammo
       } widget4
        widget5 {
@@ -127,7 +241,7 @@ panel {
       } widget10
        widget11 {
         type = SpecialDisplay
-        x = 404
+        x = 403
         y = 1
         height = 9
         width = 180
@@ -135,7 +249,7 @@ panel {
       } widget11
        widget12 {
         type = SpecialDisplay
-        x = 594
+        x = 593
         y = 1
         height = 9
         width = 180
@@ -186,7 +300,7 @@ panel {
         y = 0
         widgetnum = 5
         widget0 {
-          type = specialdisplay
+          type = image
           x = 343
           y = 70
           height = 9

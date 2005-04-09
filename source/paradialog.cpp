@@ -536,19 +536,27 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
 
       if ( type == Image ) {
          ASCString filename;
-         pc.addString( "FileName", filename );
+         pc.addString( "FileName", filename, "" );
          int imgMode;
          pc.addNamedInteger( "mode", imgMode, imageModeNum, imageModes, 0 );
 
-         try {
-            Surface& surf = IconRepository::getIcon(filename);
+         if ( !filename.empty() ) {
+            try {
+               Surface& surf = IconRepository::getIcon(filename);
 
-            PG_Image* img = new PG_Image( parent, PG_Point(r.x, r.y ), surf.getBaseSurface(), false, PG_Draw::BkMode(imgMode) );
+               PG_Image* img = new PG_Image( parent, PG_Point(r.x, r.y ), surf.getBaseSurface(), false, PG_Draw::BkMode(imgMode) );
+
+               widgetParams.assign ( img );
+               parsePanelASCTXT( pc, img, widgetParams );
+            } catch ( tfileerror ) {
+               displaymessage( "unable to load " + filename, 1 );
+            }
+         } else {
+            PG_Image* img = new PG_Image( parent, PG_Point(r.x, r.y ), NULL, false, PG_Draw::BkMode(imgMode) );
             widgetParams.assign ( img );
             parsePanelASCTXT( pc, img, widgetParams );
-         } catch ( tfileerror ) {
-            displaymessage( "unable to load " + filename, 1 );
          }
+
       }
       if ( type == Area ) {
          bool mode;
@@ -641,11 +649,61 @@ void Panel::setLabelText ( const ASCString& widgetName, const ASCString& text, P
       l->SetText( text );
 }
 
+void Panel::setLabelColor ( const ASCString& widgetName, PG_Color color, PG_Widget* parent )
+{
+   if ( !parent )
+      parent = this;
+
+   PG_Label* l = dynamic_cast<PG_Label*>( parent->FindChild( widgetName, true ) );
+   if ( l )
+      l->SetFontColor ( color );
+}
+
+
 void Panel::setLabelText ( const ASCString& widgetName, int i, PG_Widget* parent )
 {
    ASCString s = ASCString::toString(i);
    setLabelText ( widgetName, s, parent );
 }
+
+void Panel::setImage ( const ASCString& widgetName, Surface& image, PG_Widget* parent )
+{
+   setImage( widgetName, image.getBaseSurface(), parent);
+}
+
+void Panel::setImage ( const ASCString& widgetName, SDL_Surface* image, PG_Widget* parent )
+{
+   if ( !parent )
+      parent = this;
+
+   PG_Image* i = dynamic_cast<PG_Image*>( parent->FindChild( widgetName, true ) );
+   if ( i ) {
+      i->SetImage( image, false );
+      if ( image )
+		   i->SizeWidget( image->w, image->h);
+   }
+}
+
+void Panel::hide ( const ASCString& widgetName, PG_Widget* parent )
+{
+   if ( !parent )
+      parent = this;
+
+   PG_Widget* i = parent->FindChild( widgetName, true );
+   if ( i )
+      i->Hide();
+}
+
+void Panel::show ( const ASCString& widgetName, PG_Widget* parent )
+{
+   if ( !parent )
+      parent = this;
+
+   PG_Widget* i = parent->FindChild( widgetName, true );
+   if ( i )
+      i->Show();
+}
+
 
 
 void Panel::setBargraphValue( const ASCString& widgetName, float fraction )

@@ -122,6 +122,11 @@ class Panel : public  PG_Window {
       TextPropertyGroup* textPropertyGroup;
       void setLabelText ( const ASCString& widgetName, const ASCString& text, PG_Widget* parent = NULL );
       void setLabelText ( const ASCString& widgetName, int i, PG_Widget* parent = NULL );
+      void setLabelColor ( const ASCString& widgetName, PG_Color color, PG_Widget* parent = NULL );
+      void setImage ( const ASCString& widgetName, Surface& image, PG_Widget* parent = NULL );
+      void setImage ( const ASCString& widgetName, SDL_Surface* image = NULL, PG_Widget* parent = NULL );
+      void hide( const ASCString& widgetName, PG_Widget* parent = NULL );
+      void show( const ASCString& widgetName, PG_Widget* parent = NULL );
       void setBargraphValue( const ASCString& widgetName, float fraction );
       void setBarGraphColor( const ASCString& widgetName, PG_Color color );
 

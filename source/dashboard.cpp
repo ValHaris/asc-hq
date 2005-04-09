@@ -27,6 +27,7 @@
 #include "iconrepository.h"
 #include "spfst.h"
 #include "pgimage.h"
+#include "textfiletags.h"
 
 
 
@@ -308,9 +309,10 @@ bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent*
                vt = fld->vehicle->typ;
                veh = fld->vehicle;
             }
-
-            WeaponInfoPanel* wip = new WeaponInfoPanel( PG_Application::GetWidgetById( 1 ), veh, vt );
-            wip->Show();
+            if ( vt || veh ) {
+               WeaponInfoPanel* wip = new WeaponInfoPanel( PG_Application::GetWidgetById( 1 ), veh, vt );
+               wip->Show();
+            }
             return true;
          }
          if ( event->type == SDL_MOUSEBUTTONUP ) {
@@ -332,9 +334,11 @@ bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent*
 
 class WeaponInfoLine: public PG_Image {
       const SingleWeapon* weapon;
+      const Vehicletype* veh;
+      WeaponInfoPanel* wip;
    public:
-      WeaponInfoLine( PG_Widget* parent, const PG_Point& p, SDL_Surface* image, const SingleWeapon* weap )
-           : PG_Image( parent, p, image, false ), weapon(weap)
+      WeaponInfoLine( WeaponInfoPanel* parent, const PG_Point& p, SDL_Surface* image, const SingleWeapon* weap, const Vehicletype* vehicle )
+           : PG_Image( parent, p, image, false ), weapon(weap), veh ( vehicle ), wip(parent)
       {
       };
 
@@ -345,12 +349,19 @@ class WeaponInfoLine: public PG_Image {
             screen.Blit( IconRepository::getIcon(SingleWeapon::getIconFileName( weapon->getScalarWeaponType()) + "-small.png"), SPoint(dst.x, dst.y));
 
          if ( name == "weapon_targets" || name == "weapon_shootfrom" ) {
-            int& height = (name == "weapon_targets") ? weapon->targ : weapon->sourceheight;
+            int height;
+            if (name == "weapon_targets")
+               height = weapon->targ;
+            else {
+               height = weapon->sourceheight;
+               if ( veh )
+                  height &= veh->height;
+            }
 
             for ( int i = 0; i < 8; ++i )
                if ( height & (1 << i )) {
-                  Surface& tick = IconRepository::getIcon("tick.png");
-                  screen.Blit( tick, SPoint(dst.x + (7-i) * tick.w(), dst.y  ) );
+                  Surface& tick = IconRepository::getIcon("weapon_ok.png");
+                  screen.Blit( tick, SPoint(dst.x + i * tick.w(), dst.y  ) );
                }
          }
 
@@ -361,6 +372,16 @@ class WeaponInfoLine: public PG_Image {
          SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( name, true ) );
          if ( sdw )
             sdw->display.connect( SigC::slot( *this, &WeaponInfoLine::painter ));
+      };
+
+	   void eventMouseEnter()
+      {
+         wip->showWeapon( weapon );
+      };
+
+      void eventMouseLeave()
+      {
+         wip->showWeapon();
       };
 
 };
@@ -387,13 +408,15 @@ WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const V
 
    SizeWidget( head.w(), height, false );
 
+   int lineStartY = GetTitlebarHeight() + head.h()  - 1;
+
    PG_Widget* footWidget = FindChild( "bottom", true );
    assert( footWidget != NULL );
-   footWidget->MoveWidget(0,  GetTitlebarHeight() + head.h() + line.h() * weaponCount, false );
+   footWidget->MoveWidget(0,  lineStartY + line.h() * weaponCount, false );
 
    for ( int i = 0; i < weaponCount; ++i ) {
       WidgetParameters widgetParams = getDefaultWidgetParams();
-      WeaponInfoLine* lineWidget = new WeaponInfoLine ( this, PG_Point( 0,  GetTitlebarHeight() + head.h() + i * line.h() ), line.getBaseSurface(), displayedWeapons[i] );
+      WeaponInfoLine* lineWidget = new WeaponInfoLine ( this, PG_Point( 0,  lineStartY + i * line.h() ), line.getBaseSurface(), displayedWeapons[i], vt );
 
       PropertyReadingContainer pc ( "panel", textPropertyGroup );
 
@@ -402,7 +425,7 @@ WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const V
       pc.closeBracket();
 
 
-      lineWidget->registerSpecialDisplay( "weapon_symbol1" );
+      setImage( "weapon_symbol1", IconRepository::getIcon(SingleWeapon::getIconFileName( displayedWeapons[i]->getScalarWeaponType()) + "-small.png"), lineWidget );
       lineWidget->registerSpecialDisplay( "weapon_shootfrom" );
       lineWidget->registerSpecialDisplay( "weapon_targets" );
 
@@ -417,12 +440,90 @@ WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const V
       setLabelText( "weapon_strenghtmin", displayedWeapons[i]->minstrength, lineWidget );
       setLabelText( "weapon_distancemin", displayedWeapons[i]->mindistance, lineWidget );
       setLabelText( "weapon_distancemax", displayedWeapons[i]->maxdistance, lineWidget );
-// weapon_shootfrom
-// weapon_targets
 
 
    }
+   setLabelText( "weapon_shootaftermove", vt->wait ? "no" : "yes" );
+   setLabelText( "weapon_moveaftershoot", vt->functions & cf_moveafterattack ? "yes" : "no" );
 }
+
+
+void WeaponInfoPanel::showWeapon( const SingleWeapon* weap )
+{
+   int effic[13];
+   for ( int k = 0; k < 13; k++ )
+      if ( weap )
+         effic[k] = weap->efficiency[k];
+      else
+         effic[k] = -1;
+
+   if ( weap ) {
+      int mindelta = 1000;
+      int maxdelta = -1000;
+      for ( int h1 = 0; h1 < 8; h1++ )
+         for ( int h2 = 0; h2 < 8; h2++ )
+            if ( weap->sourceheight & ( 1 << h1 ) )
+               if ( weap->targ & ( 1 << h2 )) {
+                  int delta = getheightdelta ( h1, h2);
+                  if ( delta > maxdelta )
+                     maxdelta = delta;
+                  if ( delta < mindelta )
+                     mindelta = delta;
+               }
+      for ( int a = -6; a < mindelta; a++ )
+         effic[6+a] = -1;
+      for ( int b = maxdelta+1; b < 7; b++ )
+         effic[6+b] = -1;
+   }
+
+   for ( int i = -6; i <= 6; ++i ) {
+      if ( effic[6+i] >= 0 )
+         setLabelText( "weapon_distance_" + ASCString::toString(i), i );
+      else
+         setLabelText( "weapon_distance_" + ASCString::toString(i), "" );
+
+      if ( weap && effic[6+i] >= 0 )
+         setLabelText( "weapon_efficiency_" + ASCString::toString(i), weap->efficiency[6+i]  );
+      else
+         setLabelText( "weapon_efficiency_" + ASCString::toString(i), "" );
+   }
+
+                                   // grey light grey  yellow,    blue      red        green
+   static const int colors[6] = { 0x969595, 0xdfdfdf, 0xfac914,  0x5383e6,   0xff5e5e, 0x08ce37 };
+
+   for ( int i = 0; i< cmovemalitypenum; ++i)
+      if ( weap ) {
+         int col;
+         if ( weap->targetingAccuracy[i] < 10 )
+            col = colors[0] ;
+         else
+            if ( weap->targetingAccuracy[i] < 30 )
+               col = colors[1] ;
+            else
+               if ( weap->targetingAccuracy[i] < 80 )
+                  col = colors[3] ;
+               else
+                  if ( weap->targetingAccuracy[i] < 120 )
+                     col = colors[2];
+                  else
+                     col = colors[4];
+         setLabelColor( ASCString("weapon_efficiency_") + unitCategoryTags[i], col );
+         setLabelText( ASCString("weapon_efficiency_") + unitCategoryTags[i], weap->targetingAccuracy[i]  );
+      } else
+         setLabelText( ASCString("weapon_efficiency_") + unitCategoryTags[i], "" );
+
+   if ( weap )
+      setLabelText( "weapon_text2",  weap->getName() );
+   else
+      setLabelText( "weapon_text2",  "" );
+
+   if ( weap )  {
+      setImage( "weapon_symbol2", IconRepository::getIcon(SingleWeapon::getIconFileName( weap->getScalarWeaponType()) + "-small.png") );
+      show( "weapon_symbol2" );
+   } else
+      hide( "weapon_symbol2" );
+}
+
 
 
 

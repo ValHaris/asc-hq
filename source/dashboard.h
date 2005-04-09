@@ -29,6 +29,7 @@
 
 class Vehicletype;
 class Vehicle;
+class SingleWeapon;
 
 
 class DashboardPanel : public Panel {
@@ -68,6 +69,7 @@ class WeaponInfoPanel : public Panel {
 
      public:
         WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const Vehicletype* vt ) ;
+        void showWeapon( const SingleWeapon* weap = NULL );
 
         static const ASCString& WIP_Name();
         // void eval();

@@ -756,9 +756,14 @@ ASCString StringProperty::operation_eq ( const TextPropertyGroup::Entry& entry )
     ASCString s = entry.value;
     ASCString::size_type pos = s.find_first_not_of ( TextFormatParser::whiteSpace );
     if ( pos == ASCString::npos )
-       s.erase();
+       s.erase();                            
     else
        s.erase ( 0, pos );
+
+    pos = s.find_last_not_of ( TextFormatParser::whiteSpace );
+    if ( pos != ASCString::npos )
+       s.erase ( pos+1 );
+
 
     return s;
 }
