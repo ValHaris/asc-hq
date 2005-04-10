@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.130 2005-04-09 13:44:19 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.131 2005-04-10 19:33:28 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -2448,11 +2448,12 @@ void         EditAiParam::buttonpressed(int         id)
              break;
    case 22 : getxy ( &aiv.dest.x, &aiv.dest.y );
              aiv.dest.setnum ( aiv.dest.x, aiv.dest.y, -2 );
+             z = -2;
              redraw();
              break;
 
    case 30 : action = 1;
-             aiv.dest.setnum ( aiv.dest.x, aiv.dest.y, -2 );
+             aiv.dest.setnum ( aiv.dest.x, aiv.dest.y, z );
              break;
    case 31 : action = 1;
               tus.restore();
