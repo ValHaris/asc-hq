@@ -1570,7 +1570,7 @@ int    compressrle ( const void* p, void* q)
             num = 1;
             actbyte = *s;
    
-            while ( s[num] == actbyte  &&  xp+num < x   &&   num < 255) 
+            while ( xp+num < x   &&   num < 255 && s[num] == actbyte ) 
                num++;
    
             if ( num > 2  ||  actbyte == header->rle ) {
