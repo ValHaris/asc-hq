@@ -23211,7 +23211,7 @@ fi
 
 
 
-                                                                                                                                                                                                                            ac_config_files="$ac_config_files Makefile asc.spec doc/Makefile doc/manpages/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile data/Makefile data/dialog/Makefile data/music/Makefile"
+                                                                                                                                                                                                                                      ac_config_files="$ac_config_files Makefile asc.spec doc/Makefile doc/manpages/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile source/unix/asc/Makefile data/Makefile data/dialog/Makefile data/music/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -23808,6 +23808,7 @@ do
   "source/tools/linux/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/tools/linux/Makefile" ;;
   "source/unix/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/unix/Makefile" ;;
   "source/unix/mapeditor/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/unix/mapeditor/Makefile" ;;
+  "source/unix/asc/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/unix/asc/Makefile" ;;
   "data/Makefile" ) CONFIG_FILES="$CONFIG_FILES data/Makefile" ;;
   "data/dialog/Makefile" ) CONFIG_FILES="$CONFIG_FILES data/dialog/Makefile" ;;
   "data/music/Makefile" ) CONFIG_FILES="$CONFIG_FILES data/music/Makefile" ;;
