@@ -23,6 +23,7 @@
 #include "textfileparser.h"
 #include "textfiletags.h"
 #include "textfile_evaluation.h"
+#include "overviewmapimage.h"
 
 const char*  cbodenarten[cbodenartennum+1]  = {"shallow water"       ,
                                              "normal lowland",
@@ -133,6 +134,11 @@ const OverviewMapImage* TerrainType::Weather::getQuickView()
       }
       return quickView;
    }
+}
+
+TerrainType::Weather::~Weather()
+{ 
+   delete quickView; 
 }
 
 

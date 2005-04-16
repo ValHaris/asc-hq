@@ -4015,10 +4015,11 @@ void tprogressbar :: lineto ( float pos )
    if ( newpos > lastpaintedpos ) {
 
       collategraphicoperations cgo ( lastpaintedpos+1, y1, newpos, y2 );
+      /*
       for ( int x = lastpaintedpos+1; x <= newpos; x++ )
          for ( int y = y1; y <= y2; y++ )
             putpixel ( x, y, color );
-
+*/
       lastpaintedpos = newpos;
    }
 }

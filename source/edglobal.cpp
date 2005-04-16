@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.62.2.3 2004-12-28 16:11:43 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.62.2.4 2005-04-16 16:01:22 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -419,7 +419,7 @@ void execaction(int code)
              while (mouseparams.taste != 0)
                 releasetimeslice();
              cursor.hide();
-             showmap ();
+             // showmap ();
              displaymap();
              cursor.show();
              }

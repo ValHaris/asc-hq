@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.19.2.6 2004-12-28 16:11:46 mbickel Exp $
+## $Id: Makefile.am,v 1.19.2.7 2005-04-16 16:01:23 mbickel Exp $
 
 vpath %.cpp ../..
 
@@ -28,7 +28,8 @@ stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
 textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
 mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
-geometry.cpp weatherarea.cpp guidimension.cpp weatherdialog.cpp iconrepository.cpp
+geometry.cpp weatherarea.cpp guidimension.cpp weatherdialog.cpp \
+iconrepository.cpp overviewmapimage.cpp
 
 asc_mapedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \

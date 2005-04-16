@@ -26,8 +26,8 @@
 class OverviewMapImage {
          bool initialized;
       public:
-         static const width = 4;
-         static const height = 4;
+         static const int width = 4;
+         static const int height = 4;
          SDLmm::ColorRGBA segment[width][height];
          OverviewMapImage();
          OverviewMapImage( const Surface& image );

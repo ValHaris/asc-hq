@@ -121,7 +121,7 @@ const int cbodenartennum = 35;
           const OverviewMapImage* getQuickView();
 
           Weather ( TerrainType* base ) : quickView ( NULL ), terraintype ( base ) {};
-          ~Weather() { delete quickView; };
+          ~Weather();
           void runTextIO ( PropertyContainer& pc );
       };
      Weather*           weather[cwettertypennum];
