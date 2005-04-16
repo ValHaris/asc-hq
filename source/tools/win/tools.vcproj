@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="tools"
 	ProjectGUID="{2D401A22-BAA4-11D5-8156-00805F852A9B}"
 	Keyword="ManagedCProj">
@@ -16,11 +16,11 @@
 			IntermediateDirectory="Debug"
 			ConfigurationType="4"
 			CharacterSet="2"
-			ManagedExtensions="TRUE">
+			ManagedExtensions="FALSE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SDL_image)&quot;;&quot;$(SDLmm)/src&quot;;../../../source;&quot;$(SDL)/include&quot;;../../sdl;../../libs/getopt;../../win32/msvc"
+				AdditionalIncludeDirectories="&quot;$(SDL_image)&quot;;&quot;$(Libsigcpp)&quot;;../../libs/SDLmm/src;../../../source;&quot;$(SDL)/include&quot;;../../sdl;../../libs/getopt;../../win32/msvc"
 				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;_WIN32_;converter;_NOASM_;_SDL_"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -29,7 +29,6 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				CompileAsManaged="0"
 				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
@@ -48,6 +47,12 @@
 				Name="VCResourceCompilerTool"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -55,7 +60,7 @@
 			IntermediateDirectory="Release"
 			ConfigurationType="4"
 			CharacterSet="2"
-			ManagedExtensions="TRUE">
+			ManagedExtensions="FALSE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
@@ -76,7 +81,6 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				CompileAsManaged="0"
 				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
@@ -95,8 +99,16 @@
 				Name="VCResourceCompilerTool"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Source Files"
@@ -127,9 +139,6 @@
 			</File>
 			<File
 				RelativePath="..\..\sdl\graphics.cpp">
-			</File>
-			<File
-				RelativePath="..\..\graphicselector.cpp">
 			</File>
 			<File
 				RelativePath="..\..\graphicset.cpp">

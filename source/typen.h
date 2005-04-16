@@ -176,14 +176,6 @@ struct GameTime {
 };
 
 
-//! the image for a terraintype ( #tterraintype ) that is shown on the small map
-struct FieldQuickView {
-      char p1;
-      char p3[3][3];
-      char p5[5][5];
-};
-
-
 
 //! Coordinate on the twodimensional map
 class MapCoordinate {

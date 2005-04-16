@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="sdl"
 	ProjectGUID="{1714B977-BACD-11D5-8156-00805F852A9B}"
 	SccProjectName=""
@@ -22,10 +22,12 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SDL_mixer)&quot;;&quot;$(SDL)/include&quot;;&quot;$(SDLmm)/src&quot;;../../../libs/getopt;../.;../../../libs/jpeg;../../../libs/bzlib"
+				AdditionalIncludeDirectories="&quot;$(SDL_mixer)&quot;;&quot;$(SDL)/include&quot;;../../../libs/getopt;../.;../../../libs/jpeg;../../../libs/bzlib;&quot;$(Libsigcpp)&quot;"
 				PreprocessorDefinitions="WIN32,_DEBUG,_LIB,_WIN32_,_MSC_VER,_NOASM_,WIN32_LEAN_AND_MEAN,_SDL_,XMD_H"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				BufferSecurityCheck="FALSE"
+				RuntimeTypeInfo="TRUE"
 				PrecompiledHeaderFile=".\Debug/sdl.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
@@ -54,6 +56,12 @@
 				Culture="1033"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -70,6 +78,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="2"
+				AdditionalIncludeDirectories="&quot;$(SDL_mixer)&quot;;&quot;$(SDL)/include&quot;;../../../libs/getopt;../.;../../../libs/jpeg;../../../libs/bzlib;&quot;$(Libsigcpp)&quot;"
 				PreprocessorDefinitions="WIN32,NDEBUG,_LIB;_WIN32_,_MSC_VER,_NOASM_,WIN32_LEAN_AND_MEAN,_SDL_,XMD_H"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -102,8 +111,16 @@
 				Culture="1033"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Source Files"

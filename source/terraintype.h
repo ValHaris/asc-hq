@@ -21,6 +21,8 @@
  #include "graphics/surface.h"
  #include "typen.h"
 
+ class OverviewMapImage;
+
 //! the number of bits that specify the terrain of a field
 const int cbodenartennum = 35;
 
@@ -83,7 +85,7 @@ const int cbodenartennum = 35;
 
       class  Weather {
           //! the color information for the small map
-          FieldQuickView* quickView;
+          OverviewMapImage* quickView;
         public:
           //! the image of the field
           Surface        image;
@@ -116,8 +118,7 @@ const int cbodenartennum = 35;
           //! pointer to the outer structure
           TerrainType*   terraintype;
 
-          const FieldQuickView* getQuickView();
-          void readQuickView ( tnstream& stream );
+          const OverviewMapImage* getQuickView();
 
           Weather ( TerrainType* base ) : quickView ( NULL ), terraintype ( base ) {};
           ~Weather() { delete quickView; };

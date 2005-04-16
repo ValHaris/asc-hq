@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="mapeditor"
 	ProjectGUID="{2610C66C-BB44-11D5-8156-00805F852A9B}"
 	Keyword="Win32Proj">
@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;&quot;$(SDLmm)/src&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/getopt"
+				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;../../../libs/sdlmm/src;&quot;$(SDL_mixer)&quot;;../../../libs/getopt;&quot;../../../libs/libsigc++&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON,_NOASM_,FREEMAPZOOM,NEWKEYB,_WIN32_,karteneditor,_SDL_"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -38,7 +38,7 @@
 				AdditionalDependencies="triangulate.lib libbzip2.lib sdlevent.lib SDL.lib SDLmain.lib SDLmm.lib SDL_image.lib SDL_mixer.lib"
 				OutputFile="$(OutDir)/bin/mapeditor.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SDL_mixer)/lib;$(SDL)/lib;$(SDL_image)/lib;$(SDLmm)/lib;$(OutDir)/lib"
+				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/Debug&quot;;&quot;$(SDL_image)/VisualC/Debug&quot;;../../../Debug/lib;&quot;../../../libs/libsigc++/sigc++/Debug&quot;;../../../libs/SDLmm/SDLmm/Debug;&quot;$(SDL)/VisualC/SDLmain/Debug&quot;;&quot;$(SDL)/VisualC/SDL/Debug&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/mapeditor.pdb"
 				SubSystem="2"
@@ -56,11 +56,17 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="../../../Release"
+			OutputDirectory="../Release"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
 			CharacterSet="2">
@@ -72,7 +78,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="../.;$(SDL)/include;$(SDL_image)/include;$(SDLmm)/include;$(SDL_mixer)/include;../../../libs/getopt"
+				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)/include&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/getopt;&quot;../../../libs/libsigc++&quot;;../../../libs/SDLmm/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;HEXAGON,_NOASM_,FREEMAPZOOM,NEWKEYB,_WIN32_,karteneditor,_SDL_"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -92,7 +98,7 @@
 				AdditionalDependencies="triangulate.lib libbzip2.lib sdlevent.lib SDL.lib SDLmain.lib SDLmm.lib SDL_image.lib SDL_mixer.lib"
 				OutputFile="$(OutDir)/bin/mapeditor.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(SDL_mixer)/lib;$(SDL)/lib;$(SDL_image)/lib;$(SDLmm)/lib;$(OutDir)/lib"
+				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/Release&quot;;&quot;$(SDL_image)/VisualC/Release&quot;;../../../Release/lib;&quot;../../../libs/libsigc++/sigc++/release&quot;;../../../libs/SDLmm/SDLmm/release;&quot;$(SDL)/VisualC/SDLmain/Release&quot;;&quot;$(SDL)/VisualC/SDL/Release&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/mapeditor.pdb"
 				SubSystem="2"
@@ -112,9 +118,17 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Source Files"
@@ -145,10 +159,16 @@
 				RelativePath="..\..\..\buildingtype.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\clipboard.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\CLoadable.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\containerbase.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\containerbasetype.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\dialog.cpp">
@@ -173,6 +193,15 @@
 			</File>
 			<File
 				RelativePath="..\..\..\edselfnt.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\gameevent_dialogs.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\gameevents.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\gameeventsystem.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\gamemap.cpp">
@@ -208,7 +237,16 @@
 				RelativePath="..\..\..\mapdisplay.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\mappolygons.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\messages.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\misc.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\music.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\Named.cpp">
@@ -238,6 +276,9 @@
 				RelativePath="..\..\..\pd.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\prehistoricevents.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\Property.cpp">
 			</File>
 			<File
@@ -253,16 +294,31 @@
 				RelativePath="..\..\..\sgstream.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\simplestream.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\sdl\sound.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\soundList.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\spfst.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\stack.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\stringtokenizer.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\strtmesg.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\terraintype.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\textfile_evaluation.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\textfileparser.cpp">
@@ -281,9 +337,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\viewcalculation.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\weather.cpp">
 			</File>
 		</Filter>
 		<Filter
@@ -401,6 +454,9 @@
 				RelativePath="..\..\..\research.h">
 			</File>
 			<File
+				RelativePath=".\resource.h">
+			</File>
+			<File
 				RelativePath="..\..\..\resourcenet.h">
 			</File>
 			<File
@@ -443,6 +499,9 @@
 		<Filter
 			Name="Resource Files"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+			<File
+				RelativePath=".\mapeditor.rc">
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

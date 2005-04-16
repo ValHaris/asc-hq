@@ -28,7 +28,7 @@
       obj\ascttfont.obj obj\SDL_ttf.obj obj\blitter.obj obj\iconrepository.obj 
       obj\guiiconhandler.obj obj\guifunctions.obj obj\weatherarea.obj 
       obj\SDL_loadso.obj obj\geometry.obj obj\SmallObj.obj obj\drawing.obj 
-      obj\gamedialog.obj obj\guidimension.obj obj\gui.obj"/>
+      obj\gamedialog.obj obj\guidimension.obj obj\gui.obj obj\overviewmapimage.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -175,6 +175,7 @@
       <FILE FILENAME="..\..\guidimension.cpp" FORMNAME="" UNITNAME="guidimension" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\gui.cpp" FORMNAME="" UNITNAME="gui" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\..\freetype2\objs\freetype-bcb.lib" FORMNAME="" UNITNAME="freetype-bcb.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\overviewmapimage.cpp" FORMNAME="" UNITNAME="overviewmapimage" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
