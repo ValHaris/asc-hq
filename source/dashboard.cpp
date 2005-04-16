@@ -31,6 +31,29 @@
 
 
 
+OverviewMapPanel::OverviewMapPanel( PG_Widget *parent, const PG_Rect &r )
+                 : Panel ( parent, r, "OverviewMap", true )
+{
+   SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( "overviewmap", true ) );
+   if ( sdw )
+      sdw->display.connect( SigC::slot( *this, &OverviewMapPanel::painter ));
+
+}
+
+
+void OverviewMapPanel::painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst)
+{
+   Surface screen = Surface::Wrap( PG_Application::GetScreen() );
+   if ( name == "overviewmap" && actmap ) {
+      Surface s = actmap->getOverviewMap();
+
+      MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_Zoom> blitter;
+      blitter.setSize( s.w(), s.h(), dst.w, dst.h );
+      blitter.blit( s, screen, SPoint(dst.x, dst.y) );
+   }
+};
+
+
 DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme = true )
                :Panel ( parent, r, panelName_, loadTheme )
 {

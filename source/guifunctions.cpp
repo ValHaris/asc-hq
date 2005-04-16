@@ -1181,7 +1181,7 @@ class ViewMap : public GuiFunction
 
       void execute( const MapCoordinate& pos, int num )
       {
-          showmap ();
+          // showmap ();
           displaymap();
       }
 

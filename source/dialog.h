@@ -2,9 +2,12 @@
     \brief Interface for all the dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.h,v 1.27.2.1 2004-11-04 22:22:21 mbickel Exp $
+//     $Id: dialog.h,v 1.27.2.2 2005-04-16 13:28:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27.2.1  2004/11/04 22:22:21  mbickel
+//      More integration of new graphics system
+//
 //     Revision 1.27  2004/07/12 18:15:04  mbickel
 //      Lots of tweaks and fixed for more portability and compilation with mingw
 //
@@ -151,9 +154,6 @@ extern int   choice_dlg(const char *       title,
    
 
 
-//! shows a small overview map in a dialog box
-extern void showmap ( void );
-
 
 extern char mix3colors ( int p1, int p2, int p3 );
 extern char mix2colors ( int a, int b );
@@ -219,55 +219,6 @@ class tprogressbar : public SigC::Object {
 
 
 };
-
-class tbasicshowmap {
-         public:
-            tbasicshowmap ( void );
-            int  generatemap ( int autosize );
-            void freebuf ( void );
-            void dispimage ( void );
-            void generatemap_var ( void );
-            void init ( int x1, int y1, int xsize, int ysize );
-            void checkformouse ( void );
-
-         protected :
-            unsigned char      *buffer, *buffer2;
-            int       zoom;
-            int       mxsize,mysize;
-            int       lastmapxsize, lastmapysize;
-            int       xofs, yofs;           // Anzahl der Pixel links und oben des virtuellen Bildes, die NICHT angezeigt werden
-            int       dispxpos, dispypos;   // Koordinaten des linken oberen fieldes des Bildschirmouseschnitts
-            int       border;               
-            int       maxzoom;
-            int txsize, tysize;   // Gr”áe des angezeigten Fensters
-            int bufsizex, bufsizey;
-            int xp1, yp1;
-
-            int getbufpos( int x, int y ) { return (y * mxsize + x + 4);};
-            int scrxsize ;
-            int scrysize ;
-
-            int lastmapposx;
-            int lastmapposy;
-            int lastmaptick;
-            int maxmapscrollspeed;
-
-            void saveimage ( void );
-
-            tmouserect  mapwindow;   // Rechteck, in dem die Karte angezeigt wird. Relativ zu x1/y1 der DLG-Box
-            int getfieldposx ( int c );
-            int getfieldposy ( int c );
-            int getposfieldx ( int c );
-            int getposfieldy ( int c );
-
-            void generatemap1 ( void );
-            void generatemap2 ( void );
-            void generatemap3 ( void );
-            // void displaymap ( void );
-            void interpolatemap ( void );
-
-            void setmapposition ( void );
-    };
 
 
 //! a dialog box that lets a user resize the active map. Should only be used in the mapeditor

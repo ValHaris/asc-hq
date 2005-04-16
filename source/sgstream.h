@@ -3,7 +3,7 @@
   
 */
 
-//     $Id: sgstream.h,v 1.30.2.9 2005-01-30 15:48:31 mbickel Exp $
+//     $Id: sgstream.h,v 1.30.2.10 2005-04-16 13:28:35 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -40,8 +40,6 @@
 
 
 extern void generatedirecpict ( void* orgpict, void* direcpict );
-FieldQuickView* generateAverageCol ( void* image );
-FieldQuickView* generateAverageCol ( const Surface& image );
 
 
 

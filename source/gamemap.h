@@ -650,6 +650,7 @@ class tmap {
       void read ( tnstream& stream );
       void write ( tnstream& stream );
 
+      Surface getOverviewMap();
 
       pterraintype getterraintype_byid ( int id );
       pobjecttype getobjecttype_byid ( int id );

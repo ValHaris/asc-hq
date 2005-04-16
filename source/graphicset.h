@@ -28,18 +28,19 @@
 #include "global.h" 
 #include "graphics/surface.h" 
 #include "typen.h"
+#include "overviewmapimage.h"
 
  extern int getGraphicSetIdFromFilename ( const ASCString& filename );
 
- 
+
  class GraphicSetManager_Base {
- 
+
         class GraphicSet {
               public:
                 int id;
                 vector<Surface> image;
                 vector<int>     picmode;
-                map<int,FieldQuickView> quickViewImages;
+                map<int,OverviewMapImage> quickViewImages;
 
                 bool  picAvail ( int num ) const 
                 { 
@@ -66,7 +67,7 @@
      bool picAvail ( int num ) const;
      int  getMode( int num ) const;
      Surface& getPic ( int num );
-     const FieldQuickView* getQuickView( int id );
+     const OverviewMapImage* getQuickView( int id );
      friend class Loki::CreateUsingNew<GraphicSetManager_Base>;
      // friend struct CreateUsingNew;
 

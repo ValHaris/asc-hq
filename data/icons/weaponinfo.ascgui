@@ -272,7 +272,7 @@ panel {
         name = move_shoot
         x = 0
         y = 0
-        widgetnum = 2
+        widgetnum = 3
         widget0 {
           type = TextOutput
           textalign = CENTER        
@@ -291,6 +291,13 @@ panel {
          width = 21
          name = weapon_moveaftershoot
        } widget1
+       widget2 {
+         type = StaticText
+         x = 190
+         y = 6
+         height = 7
+         text = unit can ahoot after moving
+       } widget2
       } widget0
 
        widget1 {

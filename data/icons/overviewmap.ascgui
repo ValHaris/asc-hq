@@ -1,0 +1,13 @@
+panel {
+   width = 170
+   height = 170
+   WidgetNum = 1
+   Widget0 {
+      type = SpecialDisplay
+      name = overviewmap
+      x = 1
+      y = 10
+      width = 168
+      height = 150 
+   } Widget0
+} panel

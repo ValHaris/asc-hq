@@ -50,6 +50,7 @@
 #include "pgspinnerbox.h"
 #include "pglog.h"
 #include "pgmenubar.h"
+#include "pgrichedit.h"
 
 #include "sdl/graphics.h"
 #include "ascstring.h"

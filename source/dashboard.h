@@ -76,6 +76,14 @@ class WeaponInfoPanel : public Panel {
 };
 
 
+class OverviewMapPanel : public Panel {
+     public:
+        OverviewMapPanel( PG_Widget *parent, const PG_Rect &r ) ;
+     protected:
+        void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
+
+};
+
 #if 0
 
 

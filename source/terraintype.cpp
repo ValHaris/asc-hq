@@ -123,20 +123,20 @@ void      TerrainType::Weather::paint ( Surface& s, SPoint pos )
 }
 
 
-const FieldQuickView* TerrainType::Weather::getQuickView()
+const OverviewMapImage* TerrainType::Weather::getQuickView()
 {
    if  ( bi_pict >= 0 ) {
       return GraphicSetManager::Instance().getQuickView( bi_pict );
    } else {
       if (!quickView ) {
-         quickView = generateAverageCol( image );
+         quickView = new OverviewMapImage( image );
       }
       return quickView;
    }
 }
 
 
-const int terrain_version = 3;
+const int terrain_version = 4;
 
 
 void TerrainType::MoveMalus::read( tnstream& stream, int defaultValue, int moveMalusCount )
@@ -255,9 +255,6 @@ void TerrainType::read( tnstream& stream )
                if ( pgbt->bi_pict == -1 )
                   pgbt->image.read ( stream );
 
-            if ( readQuickView )
-               pgbt->readQuickView( stream );
-
          } else
             weather[i] = NULL;
 
@@ -266,17 +263,6 @@ void TerrainType::read( tnstream& stream )
 
    } else
       throw tinvalidversion ( stream.getDeviceName(), terrain_version, version );
-}
-
-void TerrainType::Weather::readQuickView ( tnstream& stream )
-{
-   quickView = new FieldQuickView;
-
-   stream.readdata ( quickView, sizeof ( *quickView )); // endian ok !!!
-
-   FieldQuickView temp;
-   for ( int i = 1; i < 8; i++ )
-      stream.readdata ( &temp, sizeof ( *quickView )); // endian ok !!!
 }
 
 
@@ -324,7 +310,7 @@ TerrainType::~TerrainType()
    for ( int i = 0; i< cwettertypennum; ++i) {
       delete weather[i];
       weather[i] = NULL;
-   }   
+   }
 }
 
 

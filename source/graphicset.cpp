@@ -83,24 +83,23 @@ int GraphicSetManager_Base :: setActive ( int id )
    return 0;
 }
 
-const FieldQuickView* GraphicSetManager_Base::getQuickView( int id )
+const OverviewMapImage* GraphicSetManager_Base::getQuickView( int id )
 {
    if ( picAvail ( id )) {
-      map<int,FieldQuickView>::iterator qv = activeSet->quickViewImages.find ( id );
+      map<int,OverviewMapImage>::iterator qv = activeSet->quickViewImages.find ( id );
       if ( qv == activeSet->quickViewImages.end()) {
-         FieldQuickView* fqv = generateAverageCol ( getPic( id ) );
+         OverviewMapImage* fqv = new OverviewMapImage ( getPic( id ) );
          activeSet->quickViewImages[id] = *fqv;
          delete fqv;
          return &activeSet->quickViewImages[id];
       } else
          return &qv->second;
-      
+
    } else {
-      static FieldQuickView* emptyFieldQuickView = NULL;
-      if ( !emptyFieldQuickView ) {
-         emptyFieldQuickView = new FieldQuickView;
-         memset( emptyFieldQuickView, 255, sizeof(FieldQuickView) );
-      }  
+      static OverviewMapImage* emptyFieldQuickView = NULL;
+      if ( !emptyFieldQuickView )
+         emptyFieldQuickView = new OverviewMapImage();
+
       return emptyFieldQuickView;
    }
 }

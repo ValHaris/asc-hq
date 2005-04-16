@@ -270,7 +270,7 @@ class MainScreenWidget : public PG_Widget {
     PG_Application& app;
 public:
     MainScreenWidget( PG_Application& application );
-    enum Panels { ButtonPanel, WindInfo, UnitInfo };
+    enum Panels { ButtonPanel, WindInfo, UnitInfo, OverviewMap };
     void spawnPanel ( Panels panel );
 
 protected:
@@ -1548,7 +1548,7 @@ void execuseraction2 ( tuseractions action )
       case ua_viewWindPanel:     mainScreenWidget->spawnPanel( MainScreenWidget::WindInfo );
          break;
       case ua_clearImageCache:  IconRepository::clear();
-         break;   
+         break;
       case ua_viewUnitInfoPanel: mainScreenWidget->spawnPanel( MainScreenWidget::UnitInfo );
       default:
          break;
@@ -1783,6 +1783,10 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
 
    displayLogMessage ( 7, "done\n  UnitInfo ");
    spawnPanel ( UnitInfo );
+
+   displayLogMessage ( 7, "done\n  OverviewMap ");
+   spawnPanel ( OverviewMap );
+
    displayLogMessage ( 5, "done\nMainScreenWidget completed\n");
 
 
@@ -1804,6 +1808,10 @@ void MainScreenWidget::spawnPanel ( Panels panel )
       guiHost = new NewGuiHost( this, mapDisplay, PG_Rect(Width()-180, 454, 170, 220));
       guiHost->pushIconHandler( &GuiFunctions::primaryGuiIcons );
       guiHost->Show();
+   }
+   if ( panel == OverviewMap ) {
+      OverviewMapPanel* smp = new OverviewMapPanel( this, PG_Rect(Width()-180, 40, 170, 170));
+      smp->Show();
    }
 }
 

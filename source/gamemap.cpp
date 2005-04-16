@@ -33,6 +33,7 @@
 #include "itemrepository.h"
 #include "strtmesg.h"
 #include "graphics/blitter.h"
+#include "overviewmapimage.h"
 
 #ifdef sgmain
  #include "network.h"
@@ -625,6 +626,18 @@ void tmap :: write ( tnstream& stream )
     stream.writeInt ( events.size());
     for ( Events::iterator i = events.begin(); i != events.end(); ++i )
        (*i)->write( stream );
+}
+
+
+
+
+Surface tmap::getOverviewMap()
+{
+   Surface s = Surface::createSurface( (xsize+1) * 6, 4 + ysize * 2 , 32 );
+   for ( int y = 0; y < ysize; ++y )
+      for ( int x = 0; x < xsize; ++x )
+          getField(x,y)->typ->getQuickView()->blit( s, x * 6 + (y&1) * 3 , y * 2 );
+   return s;
 }
 
 
