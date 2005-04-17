@@ -791,7 +791,8 @@ class SearchForMineralResources : public GuiFunction
             if (fld->vehicle->color == actmap->actplayer * 8)
                if ( (fld->vehicle->typ->functions &  cfmanualdigger) && !(fld->vehicle->typ->functions &  cfautodigger) )
                   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
-                     return fld->vehicle->searchForMineralResourcesAvailable();
+                     if ( actmap->_resourcemode == 0 ) 
+                        return fld->vehicle->searchForMineralResourcesAvailable();
          return false;
       };
 
@@ -875,7 +876,9 @@ class EnableReactionfire : public GuiFunction
                if ( eht->reactionfire.getStatus() == Vehicle::ReactionFire::off )
                   if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
                      if ( eht->weapexist() )
-                        return true;
+                        for ( int i = 0; i < eht->typ->weapons.count; ++i )
+                           if ( eht->typ->weapons.weapon[i].offensive() && eht->typ->weapons.weapon[i].reactionFireShots )
+                              return true;
 
          return false;
       };
@@ -909,7 +912,9 @@ class DisableReactionfire : public GuiFunction
             if ( eht->color == actmap->actplayer * 8)
                if ( eht->reactionfire.getStatus() != Vehicle::ReactionFire::off )
                   if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
-                     return true;
+                     // for ( int i = 0; i < eht->typ->weapons.count; ++i )
+                        // if ( eht->typ->weapons.weapon[i].offensive() && eht->typ->weapons.weapon[i].reactionFireShots )
+                           return true;
 
          return false;
       };

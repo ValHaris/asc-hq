@@ -1,6 +1,9 @@
-//     $Id: global_os.h,v 1.7.2.1 2005-02-15 14:21:44 mbickel Exp $
+//     $Id: global_os.h,v 1.7.2.2 2005-04-17 08:55:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7.2.1  2005/02/15 14:21:44  mbickel
+//      Merged changes of 1.15.3
+//
 //     Revision 1.8  2004/12/16 10:22:22  mbickel
 //      Fixed compilation problems on AMD64 platform
 //
@@ -67,7 +70,7 @@
   
   #define StaticClassVariable
 
-  typedef unsigned int PointerSizedInt;
+  typedef unsigned long PointerSizedInt;
 
 
   #ifdef __cplusplus

@@ -1076,7 +1076,7 @@ void tmap::endTurn()
    for ( tmap::Player::VehicleList::iterator v = player[actplayer].vehicleList.begin(); v != player[actplayer].vehicleList.end(); ++v ) {
       Vehicle* actvehicle = *v;
 
-      // Bei nderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!
+      // Bei Aenderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!
 
       if (( actvehicle->height >= chtieffliegend )   &&  ( actvehicle->height <= chhochfliegend ) && ( getfield(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) {
          if ( getmaxwindspeedforunit ( actvehicle ) < weather.windSpeed*maxwindspeed ){

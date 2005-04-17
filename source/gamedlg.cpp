@@ -816,7 +816,7 @@ int  setupnetwork ( tnetwork* nw, int edt, int player )
 }
 
 /*********************************************************************************************************/
-/*   Neuen Level starten                                                                               ÿ */
+/*   Neuen Level starten                                                                                 */
 /*********************************************************************************************************/
 
 void         tchoosenewcampaign::evaluatemapinfo( const char* srname, tmap* spfld )

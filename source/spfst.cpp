@@ -635,7 +635,7 @@ void         putbuilding( const MapCoordinate& entryPosition,
                          int          ignoreunits )
 { 
    if ( color & 7 )
-      displaymessage("putbuilding muá eine farbe aus 0,8,16,24,.. ?bergeben werden !",2); 
+      displaymessage("putbuilding muss eine farbe aus 0,8,16,24,.. uebergeben werden !",2); 
 
    for ( int a = 0; a < 4; a++)
       for ( int b = 0; b < 6; b++ )
@@ -666,7 +666,7 @@ void         putbuilding2( const MapCoordinate& entryPosition,
                            pbuildingtype buildingtyp)
 { 
    if ( color & 7 )
-      displaymessage("putbuilding muá eine farbe aus 0,8,16,24,.. ?bergeben werden !",2); 
+      displaymessage("putbuilding muss eine farbe aus 0,8,16,24,.. uebergeben werden !",2);
 
    for ( int a = 0; a < 4; a++)
       for ( int b = 0; b < 6; b++ )

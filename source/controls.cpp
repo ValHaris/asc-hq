@@ -1016,9 +1016,9 @@ void Building :: execnetcontrol ( void )
 
                                   +4         mit abbuchen                         /
                                   +8         nur Tributzahlungen kassieren       /
-                                 +16         plus zur?ckliefern                 <  diese Bits schlieáen sich gegenseitig aus
-                                 +32         usage zur?ckliefern                 \
-                                 +64         tank zur?ckliefern                   \
+                                 +16         plus zurueckliefern                 <  diese Bits schliessen sich gegenseitig aus
+                                 +32         usage zurueckliefern                 \
+                                 +64         tank zurueckliefern                   \
                                  */
 
 
@@ -1283,7 +1283,7 @@ void nextPlayer( void )
 /*
       tlockdispspfld ldsf;
 
-      int forcepwd;  // Wenn der aktuelle player gerade verloren hat, muá fuer den n„chsten player die Passwortabfrage kommen, auch wenn er nur noch der einzige player ist !
+      int forcepwd;  // Wenn der aktuelle player gerade verloren hat, muss fuer den naechsten player die Passwortabfrage kommen, auch wenn er nur noch der einzige player ist !
       if ( oldplayer >= 0  &&  !actmap->player[oldplayer].existent )
          forcepwd = 1;
       else
