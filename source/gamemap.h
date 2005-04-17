@@ -37,7 +37,7 @@
  #include "password.h"
 
 //! The number of game paramters that can be specified for each map.
-const int gameparameternum = 30;
+const int gameparameternum = 31;
 
 //! The names of the game paramter. \sa gameparameterdefault
 extern const char* gameparametername[ gameparameternum ];
@@ -77,7 +77,8 @@ enum GameParameter { cgp_fahrspur,
        cgp_disableDirectView,
        cgp_disableUnitTransfer,
        cgp_experienceDivisorDefense,
-       cgp_debugEvents };
+       cgp_debugEvents,
+       cgp_objectGrowthMultiplier };
 
 
 //! an instance of an object type (#tobjecttype) on the map
@@ -297,6 +298,7 @@ class  tfield {
 //! The map. THE central structure of ASC, which holds everything not globally available together
 class tmap {
       void operator= ( const tmap& map );
+
    public:
       //! the size of the map
       int          xsize, ysize;
@@ -660,8 +662,16 @@ class tmap {
 
       //! just a helper variable for loading the map; no function outside;
       bool loadOldEvents;
+
+      //! generated a pseudo-random number with the map-internal seed
+      int random( int max );
+
    private:
       pvehicle getUnit ( pvehicle eht, int nwid );
+
+      void objectGrowth();
+
+      unsigned int randomSeed;
 };
 
 typedef tmap::Player Player;

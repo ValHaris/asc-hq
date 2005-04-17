@@ -214,7 +214,11 @@ int Vehicle :: putResource ( int amount, int resourcetype, bool queryonly, int s
       if ( resourcetype == 0 )  // no energy storable
          return 0;
 
-      int tostore = min ( getMaxResourceStorageForWeight ( resourcetype ) - tank.resource(resourcetype), amount);
+      int spaceAvail = getMaxResourceStorageForWeight ( resourcetype ) - tank.resource(resourcetype);
+      if ( spaceAvail < 0 )
+         spaceAvail = 0;
+
+      int tostore = min ( spaceAvail, amount);
       if ( !queryonly )
          tank.resource(resourcetype) += tostore;
 

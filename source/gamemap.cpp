@@ -21,6 +21,7 @@
 
 #include <algorithm>
 #include <ctime>
+#include <cmath>
 
 #include "global.h"
 #include "misc.h"
@@ -48,6 +49,7 @@ const int MineBasePunch[cminenum]  = { 60, 120, 180, 180 };
 
 tmap :: tmap ( void )
 {
+   randomSeed = rand();
 
    eventID = 0;
 
@@ -125,7 +127,7 @@ tmap :: tmap ( void )
 }
 
 
-const int tmapversion = 7;
+const int tmapversion = 8;
 
 void tmap :: read ( tnstream& stream )
 {
@@ -416,6 +418,9 @@ void tmap :: read ( tnstream& stream )
           events.push_back ( ev );
        }
     }
+
+    if ( version >= 8 )
+       randomSeed = stream.readInt();
 }
 
 
@@ -618,6 +623,9 @@ void tmap :: write ( tnstream& stream )
     stream.writeInt ( events.size());
     for ( Events::iterator i = events.begin(); i != events.end(); ++i )
        (*i)->write( stream );
+
+    if ( tmapversion >= 8 )
+       stream.writeInt( randomSeed );
 }
 
 
@@ -1138,6 +1146,45 @@ void tmap::endRound()
           } while ( didSomething );
           doresearch( this, i );
        }
+
+    if ( getgameparameter( cgp_objectGrowthMultiplier) > 0 )
+       objectGrowth();
+}
+
+#include "libs/rand/rand_r.h"
+#include "libs/rand/rand_r.c"
+
+int tmap::random( int max )
+{
+   return rand_r( &randomSeed ) % max;
+}
+
+void tmap::objectGrowth()
+{
+   typedef vector< pair<pfield,int> > NewObjects;
+   NewObjects newObjects;
+   for ( int y = 0; y < ysize; ++y )
+      for ( int x = 0; x < xsize; ++x ) {
+          pfield fld = getField( x, y );
+          for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i)
+             if ( i->typ->growthRate > 0 )
+                for ( int d = 0; d < 6; ++d ) {
+                   pfield fld2 = getField ( getNeighbouringFieldCoordinate( MapCoordinate(x,y), d ));
+                   if ( fld2 && fld2->objects.empty() && (!fld2->vehicle || fld2->vehicle->height >= chtieffliegend) && !fld2->building ) {
+                      double d = i->typ->growthRate * getgameparameter( cgp_objectGrowthMultiplier) / 100;
+                      if ( d > 0 ) {
+                         int p = std::ceil ( double(1) / d );
+                         if ( p > 1 )
+                            if ( random ( p ) == 1 )
+                               if ( i->typ->fieldModification[fld2->getweather()].terrainaccess.accessible( fld->bdt) > 0 )
+                                  newObjects.push_back( make_pair( fld2, i->typ->id ));
+                      }
+                   }
+                }
+      }
+
+   for ( NewObjects::iterator i = newObjects.begin(); i != newObjects.end(); ++i )
+      i->first->addobject ( getobjecttype_byid( i->second ));
 }
 
 
@@ -2401,7 +2448,8 @@ const int gameparameterdefault [ gameparameternum ] = { 1,                      
                                                         0,                       //       cgp_disableDirectView
                                                         0,                       //       cgp_disableUnitTransfer
                                                         1,                       //       cgp_experienceDivisorDefense
-                                                        0 };                     //       cgp_debugEvents
+                                                        0,                       //       cgp_debugEvents
+                                                        0 };                     //       cgp_objectGrowthMultiplier
 
 
 const bool gameParameterChangeableByEvent [ gameparameternum ] = { true,   //       cgp_fahrspur
@@ -2433,7 +2481,8 @@ const bool gameParameterChangeableByEvent [ gameparameternum ] = { true,   //   
                                                                  false,    //       cgp_disableDirectView
                                                                  false,    //       cgp_disableUnitTransfer
                                                                  false,    //       cgp_experienceDivisorDefense
-                                                                 true  };  //       cgp_debugEvents
+                                                                 true,     //       cgp_debugEvents
+                                                                 true };   //       cgp_objectGrowthMultiplier
 
 const int gameParameterLowerLimit [ gameparameternum ] = { 1,    //       cgp_fahrspur
                                                            1,    //       cgp_eis,
@@ -2464,7 +2513,8 @@ const int gameParameterLowerLimit [ gameparameternum ] = { 1,    //       cgp_fa
                                                            0,    //       cgp_disableDirectView
                                                            0,    //       cgp_disableUnitTransfer
                                                            1,    //       cgp_experienceDivisorDefense
-                                                           0 };  //       cgp_debugEvents
+                                                           0,    //       cgp_debugEvents
+                                                           0 };  //       cgp_objectGrowthMultiplier
 
 const int gameParameterUpperLimit [ gameparameternum ] = { maxint,                //       cgp_fahrspur
                                                            maxint,                //       cgp_eis,
@@ -2495,7 +2545,9 @@ const int gameParameterUpperLimit [ gameparameternum ] = { maxint,              
                                                            1,                     //       cgp_disableDirectView
                                                            1,                     //       cgp_disableUnitTransfer
                                                            10,                    //       cgp_experienceDivisorDefense
-                                                           2 };                   //       cgp_debugEvents
+                                                           2,                     //       cgp_debugEvents
+                                                           maxint };              //       cgp_objectGrowthMultiplier
+
 
 const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "freezing time of icebreaker fairway",
@@ -2526,5 +2578,6 @@ const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "disable direct View",
                                                       "disable transfering units/buildings to other players",
                                                       "experience effect divisor for defense",
-                                                      "debug game events" };
+                                                      "debug game events",
+                                                      "Object growth rate (percentage)" };
 

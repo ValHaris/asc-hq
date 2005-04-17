@@ -164,6 +164,9 @@
      //! returns the level of height of this object in the normal 8 level scheme of asc (deep submerged, submerged, ... )
      int getEffectiveHeight();
 
+     //! the probability that an object of this type spawns another object on a neighbouring field
+     double growthRate;
+
    private:
      //! the loading functions call this method to setup the objects images
      void setupImages();

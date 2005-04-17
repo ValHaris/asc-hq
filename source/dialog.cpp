@@ -5344,6 +5344,7 @@ void tparagraph :: checkcursor( void )
 
 void tparagraph :: addchar ( char c )
 {
+   assert ( c >= 0 );
    checkcursor();
    if ( size + 1 > allocated )
       changesize ( size + 1 );

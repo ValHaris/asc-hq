@@ -2130,7 +2130,8 @@ int   tnsguiicondig::available    ( void )
       if (fld->vehicle->color == actmap->actplayer * 8) 
          if ( (fld->vehicle->typ->functions &  cfmanualdigger) && !(fld->vehicle->typ->functions &  cfautodigger) )
             if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
-               return fld->vehicle->searchForMineralResourcesAvailable();
+               if ( actmap->_resourcemode == 0 ) 
+                  return fld->vehicle->searchForMineralResourcesAvailable();
    return 0;
 }
 
@@ -2185,6 +2186,8 @@ int   tnsguiiconenablereactionfire::available    ( void )
          if ( eht->reactionfire.getStatus() == Vehicle::ReactionFire::off )
             if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
                if ( eht->weapexist() )
+                  for ( int i = 0; i < eht->typ->weapons.count; ++i )
+                      if ( eht->typ->weapons.weapon[i].offensive() && eht->typ->weapons.weapon[i].reactionFireShots )
                   return 1;
 
    return 0;

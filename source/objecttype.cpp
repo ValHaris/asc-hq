@@ -49,6 +49,7 @@ ObjectType :: ObjectType ( void )
    viewbonus_plus = 0;
    imageHeight = 0;
    physicalHeight = 0;
+   growthRate = 0;
 }
 
 ObjectType::FieldModification&  ObjectType::getFieldModification ( int weather )
@@ -802,7 +803,7 @@ void         calculateallobjects( pmap actmap )
 
 
 
-const int object_version = 11;
+const int object_version = 12;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -878,8 +879,13 @@ void ObjectType :: read ( tnstream& stream )
        stream.readrlepict ( &buildicon,  false, &w);
        stream.readrlepict ( &removeicon, false, &w);
 
-
        techDependency.read ( stream );
+
+       if ( version >= 12 )
+          growthRate = stream.readFloat();
+       else
+          growthRate = 0;
+
 
        for ( int ww = 0; ww < cwettertypennum; ww++ )
          if ( weather.test ( ww ) ) {
@@ -1027,6 +1033,8 @@ void ObjectType :: write ( tnstream& stream ) const
 
     techDependency.write ( stream );
 
+    stream.writeFloat( growthRate );
+
 
     for ( int ww = 0; ww < cwettertypennum; ww++ )
        if ( weather.test( ww ) ) {
@@ -1136,6 +1144,8 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
    pc.closeBracket ();
 
    pc.addString( "Name", name );
+
+   pc.addDFloat( "GrowthRate", growthRate, 0 );
 
    pc.addTagInteger ( "NetBehaviour", netBehaviour, netBehaviourNum, objectNetMethod, int(0) );
 
