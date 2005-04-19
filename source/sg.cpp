@@ -2363,7 +2363,7 @@ int main(int argc, char *argv[] )
    
 
    ASC_PG_App app ( "asc2_dlg" );
-   app.sigKeyUp.connect( SigC::slot(&GameDialog::gameDialog ));
+//   app.sigKeyUp.connect( SigC::slot(&GameDialog::gameDialog ));
 
    app.sigAppIdle.connect ( SigC::slot( mainloopidle ));
 

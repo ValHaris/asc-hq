@@ -300,6 +300,8 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
 
    repaintMap.connect( SigC::slot( *this, &MapDisplayPG::updateWidget ));
 
+   PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &MapDisplayPG::keyboardHandler ));
+
 
    SDL_Surface* ws = GetWidgetSurface ();
    if ( ws ) {
@@ -701,6 +703,8 @@ void MapDisplayPG::displayMovementStep( Movement& movement, int percentage  )
 
 
 
+
+
 bool ccompare( const MapDisplayPG::TouchedField& a, const MapDisplayPG::TouchedField& b )
 {
    return a.realMap.y < b.realMap.y || (a.realMap.y == b.realMap.y && a.realMap.x < b.realMap.x);
@@ -740,7 +744,7 @@ void MapDisplayPG::displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoor
 
    typedef vector< TouchedField > TouchedFields;
    TouchedFields touchedFields;
-   
+
    touchedFields.push_back ( TouchedField( from, tempStart ));
    for ( int i = 0; i < sidenum; ++i ) 
       touchedFields.push_back ( TouchedField( getNeighbouringFieldCoordinate(from, i), getNeighbouringFieldCoordinate(tempStart, i) ));
@@ -823,7 +827,125 @@ void MapDisplayPG::displayAddons( Surface& surf, int pass)
          if ( p.x >= 0 && p.y >= 0 && p.x + fieldsizex < surf.w() && p.y + fieldsizey < surf.h() )
             additionalUnit->paint( surf, p );
       }
-        
+
+}
+
+MapCoordinate& MapDisplayPG::getCursor()
+{
+   if ( actmap )
+      return actmap->player[actmap->playerView].cursorPos;
+   else {
+      static MapCoordinate mc;
+      return mc;
+   }
+}
+
+void MapDisplayPG::moveCursor( int dir, int step )
+{
+   MapCoordinate pos = getCursor();
+
+   switch ( dir ) {
+      case 0:  pos.y -= 2;
+               break;
+      case 2:  if ( pos.y & 1 ) {
+                   pos.x += 1;
+                   pos.y -= 1;
+               } else
+                   pos.y += 1;
+               break;
+      case 4:  pos.y += 2;
+               break;
+      case 6:  if ( pos.y & 1 ) {
+                   pos.y -= 1;
+               } else {
+                   if ( pos.x > 0 ) {
+                      pos.x -= 1;
+                      pos.y += 1;
+                   }
+               }
+               break;
+   }
+
+   if ( pos.x >= actmap->xsize )
+      pos.x = actmap->xsize -1;
+
+   if ( pos.x < 0 )
+      pos.x = 0;
+
+   if ( pos.y >= actmap->ysize )
+      pos.y = actmap->ysize -1;
+
+   if ( pos.y < 0 )
+      pos.y = 0;
+
+   if ( pos != getCursor() ) {
+
+      cursor.invisible = 0;
+      dirty = Curs;
+
+      getCursor() = pos;
+
+      MapCoordinate oldOffset = offset;
+
+      if ( pos.x < offset.x )
+         offset.x = max( 0, pos.x );
+
+      if ( pos.y < offset.y )
+         offset.y = min( 0, pos.y & ~1);
+
+      if ( pos.x > offset.x + field.numx - 2)
+         offset.x = pos.x - field.numx + 2;
+
+      if ( pos.y > offset.y + field.numy - 4 )
+         offset.y = (pos.y - field.numy + 4) & ~1;
+
+      if ( offset != oldOffset )
+         dirty = Map;
+
+      checkViewPosition();
+
+      updateFieldInfo();
+      Update();
+   }
+}
+
+
+bool MapDisplayPG::keyboardHandler( PG_MessageObject* messageObject, const SDL_KeyboardEvent* keyEvent)
+{
+   if ( !keyEvent || !actmap )
+      return false;
+
+   if ( keyEvent->type == SDL_KEYDOWN ) {
+      if ( keyEvent->keysym.sym == SDLK_RIGHT  || keyEvent->keysym.sym == SDLK_KP6 ) {
+         moveCursor(2, 1);
+         return true;
+      }
+      if ( keyEvent->keysym.sym == SDLK_LEFT  || keyEvent->keysym.sym == SDLK_KP4 ) {
+         moveCursor(6, 1);
+         return true;
+      }
+      if ( keyEvent->keysym.sym == SDLK_UP || keyEvent->keysym.sym == SDLK_KP8 ) {
+         moveCursor(0, 1);
+         return true;
+      }
+      if ( keyEvent->keysym.sym == SDLK_DOWN || keyEvent->keysym.sym == SDLK_KP2 ) {
+         moveCursor(4, 1);
+         return true;
+      }
+      if ( keyEvent->keysym.sym == SDLK_KP_MINUS )
+         if ( zoom > 0.2 ) {
+            setNewZoom( zoom - 0.1 );
+            Update();
+         }
+
+      if ( keyEvent->keysym.sym == SDLK_KP_PLUS )
+         if ( zoom < 1 ) {
+            setNewZoom( min(1.0, zoom + 0.1) );
+            Update();
+         }
+
+   }
+   return false;
 }
 
 
@@ -836,7 +958,7 @@ class PG_MapDisplay : public MapDisplayInterface {
            MapDisplayPG* mapDisplayWidget;
          public:
            PG_MapDisplay( MapDisplayPG* mapDisplayWidget_ ) : mapDisplayWidget( mapDisplayWidget_ ) {};
-           
+
            int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback soundStart );
            void deleteVehicle ( Vehicle* vehicle ) {};
            void displayMap ( void );

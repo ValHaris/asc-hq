@@ -28,31 +28,46 @@ void OverviewMapImage::create( const Surface& image )
 
             for ( int iy = image.h() * y / height; iy < image.h() * (y+1) / height; ++iy)
                for ( int ix = image.w() * x / width; ix < image.w() * (x+1) / width; ++ix) {
-                   if ( image.GetPixelFormat().BitsPerPixel() == 1 ) {
+                   if ( image.GetPixelFormat().BitsPerPixel() == 8 ) {
                       int col = image.GetPixel(ix,iy);
                       if ( col != 255 ) {
                          r += pal[col][0] * 4;
-                         g += pal[col][0] * 4;
-                         b += pal[col][0] * 4;
+                         g += pal[col][1] * 4;
+                         b += pal[col][2] * 4;
+                         ++count;
                       } else
                          a += 255;
                    } else {
-                      SDLmm::ColorRGBA col = image.GetPixelFormat().GetRGBA( image.GetPixel(ix,iy));
-                      /*
-                      r += col.r * (255-col.a) / 255;
-                      g += col.g * (255-col.a) / 255;;
-                      b += col.b * (255-col.a) / 255;;
-                      */
-                      r += col.r ;
-                      g += col.g ;
-                      b += col.b ;
-                      a += col.a;
+                      SDLmm::Color rawColor = image.GetPixel(ix,iy);
+                      if ( !image.isTransparent( rawColor )) {
+                         SDLmm::ColorRGBA col = image.GetPixelFormat().GetRGBA( rawColor );
+
+                         /*
+                         r += col.r * (255-col.a) / 255;
+                         g += col.g * (255-col.a) / 255;
+                         b += col.b * (255-col.a) / 255;
+                         */
+
+                         r += col.r * (col.a) / 255;
+                         g += col.g * (col.a) / 255;
+                         b += col.b * (col.a) / 255;
+
+                         /*
+                         r += col.r ;
+                         g += col.g ;
+                         b += col.b ;
+                         a += col.a;
+                         */
+                         ++count;
+                      } else {
+                         r = r;
+                      }
+
                    }
-                   ++count;
                }
 
             if ( count )
-               segment[x][y] = SDLmm::ColorRGBA( r / count, g / count, b / count, a / count );
+               segment[x][y] = SDLmm::ColorRGBA( r / count, g / count, b / count, 0 );
             else
                segment[x][y] = SDLmm::ColorRGBA( 0, 0, 0, 0xff );
          }

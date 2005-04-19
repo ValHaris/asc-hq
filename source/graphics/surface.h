@@ -62,6 +62,8 @@
 
       //! tries to automatically detect the color key of the surface
       void detectColorKey( bool RLE = false );
+
+      bool isTransparent( SDLmm::Color col );
       
       SDL_Surface* getBaseSurface() { return me; };
    protected:

@@ -47,8 +47,14 @@ void OverviewMapPanel::painter ( const PG_Rect &src, const ASCString& name, cons
    if ( name == "overviewmap" && actmap ) {
       Surface s = actmap->getOverviewMap();
 
-      MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_Zoom> blitter;
-      blitter.setSize( s.w(), s.h(), dst.w, dst.h );
+
+
+      // MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_Zoom> blitter;
+      // blitter.setSize( s.w(), s.h(), dst.w, dst.h );
+
+      MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_Rectangle> blitter;
+
+      blitter.setRectangle( SPoint(0,0), dst.w, dst.h );
       blitter.blit( s, screen, SPoint(dst.x, dst.y) );
    }
 };

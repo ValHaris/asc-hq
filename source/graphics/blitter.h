@@ -1178,7 +1178,8 @@ template<>
        void setZoom( float factor )
        {
           this->zoomFactor = factor;
-          assert ( factor < 1 );
+          assert ( factor > 0 );
+          assert ( factor <= 1 );
 
           cacheit = zoomCache.find( factor );
           if ( cacheit == zoomCache.end() ) {

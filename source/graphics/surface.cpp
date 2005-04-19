@@ -381,6 +381,15 @@ void Surface::detectColorKey ( bool RLE )
 }
 
 
+bool Surface::isTransparent( SDLmm::Color col )
+{
+   if ( flags() & SDL_SRCCOLORKEY ) 
+      return (col & GetPixelFormat().Rmask() | GetPixelFormat().Gmask() | GetPixelFormat().Bmask()) == GetPixelFormat().colorkey();
+   else
+      return false;
+}
+
+
 
 Surface& getFieldMask()
 {

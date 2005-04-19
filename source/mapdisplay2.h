@@ -200,6 +200,16 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       Surface createMovementBufferSurface();
       void displayMovementStep( Movement& movement, int percentage );
 
+      bool eventKeyDown(const SDL_KeyboardEvent* key)
+      {
+         keyboardHandler( this, key );
+      };
+
+      bool keyboardHandler( PG_MessageObject* messageObject, const SDL_KeyboardEvent* keyEvent);
+   private:
+      void moveCursor( int dir, int step );
+      MapCoordinate& getCursor();
+
    public:
 
       class CursorHiding {
