@@ -21,6 +21,7 @@
  #include "typen.h"
  #include "terraintype.h"
  #include "research.h"
+ #include "overviewmapimage.h"
 
 
  //! An object that can be placed on fields. Roads, pipelines and ditches are examples of objects. \sa Object
@@ -125,8 +126,11 @@
 
      TechAdapterDependency techDependency;
 
+     const OverviewMapImage* getOverviewMapImage( int picnum, int weather );
+
      //! the images of the objects
      struct WeatherPicture {
+        vector<OverviewMapImage> overviewMapImage;
         vector<Surface> images;
         vector<int>   bi3pic;
         vector<int>   flip;

@@ -78,6 +78,28 @@ int ObjectType :: getEffectiveHeight()
 }
 
 
+const OverviewMapImage* ObjectType :: getOverviewMapImage( int picnum, int weather  )
+{
+   if ( !this->weather.test(weather) )
+      weather = 0;
+
+   if ( weatherPicture[weather].images.size() <= picnum )
+      picnum = 0;
+
+   if ( weatherPicture[weather].bi3pic[picnum] > 0 )
+      return GraphicSetManager::Instance().getQuickView( weatherPicture[weather].bi3pic[picnum] );
+   else {
+      if ( weatherPicture[weather].overviewMapImage.size() <= picnum )
+         weatherPicture[weather].overviewMapImage.resize( picnum+1 );
+
+      if ( !weatherPicture[weather].overviewMapImage[picnum].valid() )
+         weatherPicture[weather].overviewMapImage[picnum].create( weatherPicture[weather].images[picnum] );
+
+      return &weatherPicture[weather].overviewMapImage[picnum];
+   }
+}
+
+
 Surface& ObjectType :: getPicture ( int i, int w )
 {
    if ( !weather.test(w) )

@@ -699,7 +699,7 @@
        };
   };
 
-  
+
  template<int pixelsize>
  class ColorMerger_AlphaOverwrite : public ColorMerger_AlphaHandler<pixelsize> {
          typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
@@ -825,7 +825,7 @@
  
 
  template<int pixelsize>
- class ColorMerger_AlphaMixer {}; 
+ class ColorMerger_AlphaMixer {};
  
 
 template<>
@@ -991,6 +991,7 @@ template<>
        int tableIndex;
        int pitch;
        int* cacheIndex;
+       int x,y,w,h;
     protected:
 
        void init ( const Surface& srv )
@@ -1003,6 +1004,8 @@ template<>
           tableIndex = 0;
           pixelStart = currentPixel = (PixelType*)surface->pixels();
           pitch = srv.pitch()/sizeof(PixelType) - srv.w();
+          w = srv.w();
+          h = srv.h();
        }
 
        PixelType nextPixel()
@@ -1017,21 +1020,38 @@ template<>
              else
                 return surface->GetPixelFormat().colorkey();
           } else {
-             ++tableIndex;
-             return *(currentPixel++);
+             if ( degrees == 0 ) {
+                ++tableIndex;
+                return *(currentPixel++);
+             } else {
+                SPoint newpos = ::getPixelRotationLocation( SPoint(x++,y), w, h, degrees );
+                return getSourcePixel ( newpos.x, newpos.y );
+             }
           }
        };
 
-       void skipPixels( int pixNum ) { currentPixel += pixNum; tableIndex += pixNum; };
+       void skipPixels( int pixNum ) { currentPixel += pixNum; tableIndex += pixNum; x += pixNum; };
 
-       
+
        void nextLine()
        {
           currentPixel += pitch;
+          ++y;
+          x = 0;
        };
 
        int getWidth()  { return surface->w(); };
        int getHeight() { return surface->h(); };
+
+    private:
+       PixelType getSourcePixel(int x, int y)
+       {
+          if ( x >= 0 && y >= 0 && x < surface->w() && y < surface->h() )
+             return surface->GetPixel(SPoint(x,y));
+          else
+             return surface->GetPixelFormat().colorkey();
+       };
+
 
     public:
        void setAngle( const Surface& srv, int degrees )
@@ -1061,15 +1081,15 @@ template<>
              cacheIndex = cache[degrees];
           }
        }
-       
-       SourcePixelSelector_CacheRotation( NullParamType npt = nullParam ) : surface(NULL), degrees(0), useCache(false),pixelStart(NULL), currentPixel(NULL),tableIndex(0),pitch(0), cacheIndex(NULL) {};
-       
-       SourcePixelSelector_CacheRotation( const Surface& srv, int degrees ) : surface(NULL), degrees(0), useCache(false),pixelStart(NULL), currentPixel(NULL),tableIndex(0),pitch(0), cacheIndex(NULL) 
+
+       SourcePixelSelector_CacheRotation( NullParamType npt = nullParam ) : surface(NULL), degrees(0), useCache(false),pixelStart(NULL), currentPixel(NULL),tableIndex(0),pitch(0), cacheIndex(NULL),x(0),y(0),w(0),h(0) {};
+
+       SourcePixelSelector_CacheRotation( const Surface& srv, int degrees ) : surface(NULL), degrees(0), useCache(false),pixelStart(NULL), currentPixel(NULL),tableIndex(0),pitch(0), cacheIndex(NULL),x(0),y(0),w(0),h(0)
        {
           setAngle ( srv, degrees );
        };
 
-       SourcePixelSelector_CacheRotation( pair<const Surface*, int> p ) : surface(NULL), degrees(0), useCache(false),pixelStart(NULL), currentPixel(NULL),tableIndex(0),pitch(0), cacheIndex(NULL)
+       SourcePixelSelector_CacheRotation( pair<const Surface*, int> p ) : surface(NULL), degrees(0), useCache(false),pixelStart(NULL), currentPixel(NULL),tableIndex(0),pitch(0), cacheIndex(NULL),x(0),y(0),w(0),h(0)
        {
           setAngle ( *(p.first), p.second );
        };

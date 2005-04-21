@@ -635,8 +635,13 @@ Surface tmap::getOverviewMap()
 {
    Surface s = Surface::createSurface( (xsize+1) * 6, 4 + ysize * 2 , 32 );
    for ( int y = 0; y < ysize; ++y )
-      for ( int x = 0; x < xsize; ++x )
-          getField(x,y)->typ->getQuickView()->blit( s, x * 6 + (y&1) * 3 , y * 2 );
+      for ( int x = 0; x < xsize; ++x ) {
+         pfield fld = getField(x,y);
+         int w = fld->getweather();
+         fld->typ->getQuickView()->blit( s, x * 6 + (y&1) * 3 , y * 2 );
+         for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
+            i->getOverviewMapImage( w )->blit( s, x * 6 + (y&1) * 3 , y * 2 );
+      }
    return s;
 }
 
@@ -2083,6 +2088,11 @@ int  Object :: getdir ( void )
 void Object :: display ( Surface& surface, SPoint pos, int weather ) const
 {
    typ->display ( surface, pos, dir, weather );
+}
+
+const OverviewMapImage* Object :: getOverviewMapImage( int weather )
+{
+   return typ->getOverviewMapImage( dir, weather );
 }
 
 

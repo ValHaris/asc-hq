@@ -93,6 +93,7 @@ class Object {
        Object ( void );
        Object ( pobjecttype t );
        void display ( Surface& surface, SPoint pos, int weather = 0 ) const;
+       const OverviewMapImage* getOverviewMapImage( int weather );
        void setdir ( int dir );
        int  getdir ( void );
 };

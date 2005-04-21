@@ -31,6 +31,7 @@ class OverviewMapImage {
          SDLmm::ColorRGBA segment[width][height];
          OverviewMapImage();
          OverviewMapImage( const Surface& image );
+         bool valid() const {  return initialized;};
          void create( const Surface& image );
          void read( tnstream& stream );
          void write ( tnstream& stream ) const;
