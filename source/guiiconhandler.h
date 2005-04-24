@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.8 2005-02-09 20:28:03 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.9 2005-04-24 19:15:41 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -56,7 +56,7 @@ class GenericGuiFunction : public GuiFunction {
         typedef Loki::Functor<void, TYPELIST_1(const MapCoordinate&)> Execution;
      protected:
         Availability avail;
-        Execution exec;   
+        Execution exec;
      public:   
      
         GenericGuiFunction( Surface icon_, Availability availability, Execution execution, const ASCString& iconName ) 
@@ -124,6 +124,8 @@ class NewGuiHost : public Panel {
         static NewGuiHost* theGuiHost;
         list<GuiIconHandler*> iconHandlerStack;
         MapDisplayPG* mapDisplay;
+        bool enterKeyPressed;
+        int keyPressedButton;
      protected:
         bool mapIconProcessing( const MapCoordinate& pos, const SDL_MouseButtonEvent* event, bool cursorChanged );
 
@@ -134,6 +136,11 @@ class NewGuiHost : public Panel {
         SmallButtons smallButtons;
 
 
+        bool eventKeyDown(const SDL_KeyboardEvent* key);
+        bool eventKeyUp(const SDL_KeyboardEvent* key);
+
+        //! when operated by keyboard, set a new button as the pressed one
+        bool setNewButtonPressed( int i );
 
      public:
         NewGuiHost (PG_Widget *parent, MapDisplayPG* mapDisplay, const PG_Rect &r ) ;

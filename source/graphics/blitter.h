@@ -270,6 +270,8 @@
            
            ColorConverter<BytesPerSourcePixel,BytesPerTargetPixel> colorConverter( src, dst );
 
+           SourceColorTransform<BytesPerSourcePixel>::init( src );
+
            int h = SourcePixelSelector<BytesPerSourcePixel>::getHeight();
            int w = SourcePixelSelector<BytesPerSourcePixel>::getWidth();
 
@@ -413,6 +415,7 @@
      protected:
         ColorTransform_None(){};
         PixelType transform( PixelType col) { return col; };
+        void init( Surface& src ) {};
      public:
         ColorTransform_None ( NullParamType npt ) {};
  };
@@ -424,6 +427,8 @@
         ColorTransform_PlayerCol() {};
 
         PixelType transform( PixelType col) { return col; };
+
+        void init( Surface& src ) {};
 
      public:
         ColorTransform_PlayerCol( int player ) {};
@@ -447,6 +452,8 @@
            else
               return col;
         };
+
+        void init( Surface& src ) {};
 
      public:
         ColorTransform_PlayerCol( int player )
@@ -513,8 +520,11 @@
   template<int pixelsize>
   class ColorTransform_PlayerTrueCol {
         typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+        bool lateConversion;
+        DI_Color sourceColor;
+
         PixelType refColor;
-        int refr, refg, refb;
+        int refr, refg, refb;  // this is NOT RED, GREEN, BLUE, but device dependant. Should be renamed
     protected:
         ColorTransform_PlayerTrueCol() : refColor(0),refr(0),refg(0),refb(0) {};
 
@@ -532,12 +542,16 @@
         };
 
         void init( Surface& src ) {
-
+           if ( lateConversion ) {
+              setColor( src.GetPixelFormat().MapRGB( sourceColor ));
+              lateConversion = false;
+           }
         }
 
      public:
-        ColorTransform_PlayerTrueCol( PixelType color ) { setColor(color); };
-        ColorTransform_PlayerTrueCol ( NullParamType npt ) : refColor(0),refr(0),refg(0),refb(0) {};
+        ColorTransform_PlayerTrueCol( PixelType color ) : lateConversion( false ) { setColor(color); };
+        ColorTransform_PlayerTrueCol( DI_Color color ) : lateConversion( false ) { setColor(color); };
+        ColorTransform_PlayerTrueCol ( NullParamType npt ) : lateConversion( false ) , refColor(0),refr(0),refg(0),refb(0) {};
 
         void setColor( PixelType color )
         {
@@ -545,6 +559,12 @@
            refr = (color >> 16) & 0xff;
            refg = (color >> 8) & 0xff;
            refb = (color ) & 0xff;
+        };
+
+        void setColor( DI_Color color )
+        {
+           lateConversion = true;
+           sourceColor = color;
         };
  };
 
@@ -557,6 +577,7 @@
      protected:
         ColorTransform_XLAT() : table(NULL) {};
 
+        void init( Surface& src ) {};
 
         Color transform( Color col)
         {
@@ -592,6 +613,8 @@
            int i = ((col & 0xff) + ((col >> 8) & 0xff) + ((col >> 16) & 0xff)) / 3;
            return i + (i<<8) + (i <<16);
         };
+
+        void init( Surface& src ) {};
 
      public:
         ColorTransform_Gray ( NullParamType npt ) {};

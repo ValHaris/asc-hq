@@ -159,13 +159,18 @@ GuiIconHandler::~GuiIconHandler()
 NewGuiHost* NewGuiHost::theGuiHost = NULL;
 
 NewGuiHost :: NewGuiHost (PG_Widget *parent, MapDisplayPG* mapDisplay, const PG_Rect &r )
-         : Panel( parent, r, "GuiIcons", false ) , handler(NULL)
+         : Panel( parent, r, "GuiIcons", false ) , handler(NULL), enterKeyPressed(false), keyPressedButton(-1)
 {
    this->mapDisplay = mapDisplay;
    mapDisplay->mouseButtonOnField.connect( SigC::slot( *this, &NewGuiHost::mapIconProcessing ));
    updateFieldInfo.connect ( SigC::slot( *this, &NewGuiHost::eval ));
    theGuiHost = this;
+
+   PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &NewGuiHost::eventKeyDown ));
+   PG_Application::GetApp()->sigKeyUp.connect( SigC::slot( *this, &NewGuiHost::eventKeyUp ));
+
 }
+
 
 void NewGuiHost::eval()
 {
@@ -266,6 +271,81 @@ bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SDL_MouseBut
 
    return false;
 }
+
+
+bool NewGuiHost::setNewButtonPressed( int i )
+{
+   if ( keyPressedButton == i )
+      return false;
+
+   if ( keyPressedButton >= 0 ) {
+      GuiButton* button = getButton( keyPressedButton );
+      if ( button ) {
+         button->SetPressed(false);
+         button->SetToggle(false);
+      }
+   }
+
+   if ( i < buttons.size() ) {
+      keyPressedButton = i;
+
+      if ( keyPressedButton >= 0 ) {
+         GuiButton* button = getButton( keyPressedButton );
+         if ( button ) {
+            button->SetToggle(true);
+            button->SetPressed(true);
+         }
+      }
+      return true;
+   }
+   return false;
+}
+
+bool NewGuiHost::eventKeyDown(const SDL_KeyboardEvent* key)
+{
+   if ( key->keysym.sym == SDLK_RETURN   ) {
+      if ( !enterKeyPressed ) {
+         enterKeyPressed = true;
+         setNewButtonPressed( 0 );
+      }
+      return true;
+   }
+
+   if ( enterKeyPressed ) {
+      if ( key->keysym.sym == SDLK_RIGHT  || key->keysym.sym == SDLK_KP6 )
+         return setNewButtonPressed( keyPressedButton + 1);
+
+      if ( key->keysym.sym == SDLK_LEFT  || key->keysym.sym == SDLK_KP4 )
+         if  ( keyPressedButton > 0 )
+            return setNewButtonPressed( keyPressedButton - 1);
+
+      if ( key->keysym.sym == SDLK_UP || key->keysym.sym == SDLK_KP8 )
+         if ( keyPressedButton >= guiIconColumnNum )
+            return setNewButtonPressed( keyPressedButton - guiIconColumnNum );
+
+      if ( key->keysym.sym == SDLK_DOWN || key->keysym.sym == SDLK_KP2 )
+         return setNewButtonPressed( keyPressedButton + guiIconColumnNum );
+   }
+
+   return false;
+}
+
+bool NewGuiHost::eventKeyUp(const SDL_KeyboardEvent* key)
+{
+   if ( key->keysym.sym == SDLK_RETURN   ) {
+      enterKeyPressed = false;
+
+      GuiButton* button = getButton( keyPressedButton );
+      if ( button )
+         button->exec();
+
+      setNewButtonPressed( -1 );
+      return true;
+   }
+
+   return false;
+}
+
 
 
 bool NewGuiHost::clearSmallIcons()

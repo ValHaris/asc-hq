@@ -299,6 +299,7 @@ class  tfield {
 //! The map. THE central structure of ASC, which holds everything not globally available together
 class tmap {
       void operator= ( const tmap& map );
+      Surface overviewMapImage;
    public:
       //! the size of the map
       int          xsize, ysize;
@@ -310,7 +311,7 @@ class tmap {
       pfield       field;
 
       //! the codeword for accessing a map in a campaign
-      char         codeword[11]; 
+      char         codeword[11];
 
       //! the title of the map
       ASCString    maptitle;
@@ -444,7 +445,7 @@ class tmap {
 
             MapCoordinate cursorPos;
 
-            int getColor();
+            DI_Color getColor();
             
       } player[9];
 
@@ -651,7 +652,7 @@ class tmap {
       void read ( tnstream& stream );
       void write ( tnstream& stream );
 
-      Surface getOverviewMap();
+      const Surface& getOverviewMap();
 
       pterraintype getterraintype_byid ( int id );
       pobjecttype getobjecttype_byid ( int id );

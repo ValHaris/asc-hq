@@ -26,6 +26,34 @@
 
  typedef SDLmm::SPoint SPoint;
 
+ //! A Device Independent color. Shamelessly pinched from Paragui to reduce coupling
+class DI_Color : public SDL_Color {
+public:
+	DI_Color();
+	DI_Color(const SDL_Color& c);
+	DI_Color(Uint32 c);
+	DI_Color(Uint8 r, Uint8 g, Uint8 b);
+
+	DI_Color& operator=(const SDL_Color& c);
+
+	DI_Color& operator=(Uint32 c);
+
+	// operator Uint32() const;
+
+	inline Uint32 MapRGB(SDL_PixelFormat* format) const {
+		return SDL_MapRGB(format, r, g, b);
+	}
+
+	inline Uint32 MapRGBA(SDL_PixelFormat* format, Uint8 a) const {
+		return SDL_MapRGBA(format, r, g, b, a);
+	}
+
+	inline bool operator!=(const DI_Color& c) const {
+		return ((r != c.r) || (g != c.g) || (b != c.b));
+	}
+};
+
+
  class Surface: public SDLmm::Surface {
     public:
       static const Uint32 transparent = 0;
@@ -64,7 +92,12 @@
       void detectColorKey( bool RLE = false );
 
       bool isTransparent( SDLmm::Color col ) const;
-      
+
+      /*
+      SDLmm::ColorRGB GetRGB(SDLmm::Color pixel) const;
+      SDLmm::ColorRGBA GetRGBA(SDLmm::Color pixel) const;
+      */
+
       SDL_Surface* getBaseSurface() { return me; };
    protected:
       virtual int getDepthFormat() { return -1; };

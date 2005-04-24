@@ -932,17 +932,21 @@ bool MapDisplayPG::keyboardHandler( PG_MessageObject* messageObject, const SDL_K
          moveCursor(4, 1);
          return true;
       }
-      if ( keyEvent->keysym.sym == SDLK_KP_MINUS )
+      if ( keyEvent->keysym.sym == SDLK_KP_MINUS ) {
          if ( zoom > 0.2 ) {
             setNewZoom( zoom - 0.1 );
             Update();
          }
+         return true;
+      }
 
-      if ( keyEvent->keysym.sym == SDLK_KP_PLUS )
+      if ( keyEvent->keysym.sym == SDLK_KP_PLUS ) {
          if ( zoom < 1 ) {
             setNewZoom( min(1.0, zoom + 0.1) );
             Update();
          }
+         return true;
+      }
 
    }
    return false;

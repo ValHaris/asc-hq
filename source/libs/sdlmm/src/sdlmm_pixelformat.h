@@ -45,9 +45,8 @@ namespace SDLmm {
     */
     explicit PixelFormat(SDL_PixelFormat *pixelformat): me(pixelformat) {  }
     
-    //! The destructor.
-    virtual ~PixelFormat() {
-    }
+    // The destructor.
+    // virtual ~PixelFormat() { }
     
     //! \name Informational methods
     //@{
@@ -101,6 +100,8 @@ namespace SDLmm {
     Color MapRGB(Uint8 r, Uint8 g, Uint8 b) const;
     
     Color MapRGB(const ColorRGB& colorrgb) const { return MapRGB(colorrgb.r, colorrgb.g, colorrgb.b); }
+
+    Color MapRGB(const SDL_Color& colorrgb) const { return MapRGB(colorrgb.r, colorrgb.g, colorrgb.b); }
     
     //! Map a RGBA color value to a pixel format.
     /*!

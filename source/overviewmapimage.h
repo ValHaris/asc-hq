@@ -36,6 +36,11 @@ class OverviewMapImage {
          void read( tnstream& stream );
          void write ( tnstream& stream ) const;
          void blit( Surface& s, int x, int y, int layer = 0 ) const;
+         static void fill( Surface& s, int x, int y, SDLmm::Color color );
+         static void fill( Surface& s, int x, int y, SDL_Color color );
+         static void fillCenter( Surface& s, int x, int y, SDLmm::Color color );
+         static void fillCenter( Surface& s, int x, int y, SDL_Color color );
+         static void lighten( Surface& s, int x, int y, float value );
 };
 
 

@@ -57,6 +57,30 @@
  }
 
  extern SDL_Color lightenColor( const SDL_Color& color, float factor );
+ extern void lightenColor( SDLmm::Color* color, float factor );
+ extern SDLmm::Color lightenColor( SDLmm::Color color, float factor );
+
+ template< int pixelsize,
+           template<int> class ColorMerger >
+ class PutPixel: public ColorMerger<pixelsize> {
+        typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+        Surface& surf;
+     public:
+        PutPixel( Surface& surface ) : surf ( surface )
+        {
+           init( surface );
+        };
+
+        void set( SPoint pos, PixelType src )
+        {
+            PixelType* pix = (PixelType*)( surf.pixels() );
+            pix += pos.y * surf.pitch()/pixelsize + pos.x;
+
+            assign ( src, pix );
+        };
+ };
+
+
 
 #endif
 

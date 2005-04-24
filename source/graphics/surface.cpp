@@ -28,6 +28,49 @@
 #include "../sdl/SDLStretch.h"
 #include "../misc.h"
 
+
+DI_Color::DI_Color() {
+	r = 0;
+	g = 0;
+	b = 0;
+}
+
+DI_Color::DI_Color(const SDL_Color& c) {
+	*this = c;
+}
+
+DI_Color::DI_Color(Uint32 c) {
+	*this = c;
+}
+
+DI_Color::DI_Color(Uint8 r, Uint8 g, Uint8 b) {
+	*this = (Uint32)((r << 16) | (g << 8) | b);
+}
+
+DI_Color& DI_Color::operator=(const SDL_Color& c) {
+	r = c.r;
+	g = c.g;
+	b = c.b;
+	
+	return *this;
+}
+
+DI_Color& DI_Color::operator=(Uint32 c) {
+	r = (c >> 16) & 0xFF;
+	g = (c >> 8) & 0xFF;
+	b = c & 0xFF;
+	
+	return *this;
+}
+
+/*
+DI_Color::operator Uint32() const {
+	return (r << 16) | (g << 8) | b;
+}
+*/
+
+
+
  SDLmm::PixelFormat* Surface::default8bit  = NULL;
  SDLmm::PixelFormat* Surface::default32bit = NULL;
 
@@ -103,23 +146,43 @@ void Surface::convert()
          s.SetColorKey( SDL_SRCCOLORKEY, GetPixelFormat().colorkey() );
       *this = s;   
    }
-   
+
    if ( default32bit && GetPixelFormat().BytesPerPixel() == 4 )  {
       if ( default32bit->Rmask() != GetPixelFormat().Rmask() || default32bit->Gmask() != GetPixelFormat().Gmask() || default32bit->Bmask() != GetPixelFormat().Bmask() ) {
          SDL_Surface *tmp;
          if ( flags() & SDL_SRCALPHA )
             tmp  = SDL_DisplayFormatAlpha(me);
-         else   
+         else
             tmp  = SDL_DisplayFormat(me);
-            
+
          if ( !tmp )
-            return;   
-            
+            return;
+
          SetSurface(tmp);
       }
    }
-  
+
 }
+
+/*
+SDLmm::ColorRGB  Surface::GetRGB(SDLmm::Color pixel) const
+{
+   if ( GetPixelFormat().BytesPerPixel() == 1 ) {
+      assert( pixel < 256 );
+      return SDLmm::ColorRGB( pal[pixel][0] * 4, pal[pixel][1] * 4, pal[pixel][2] * 4 );
+   } else
+      return GetPixelFormat().GetRGB( pixel );
+}
+
+SDLmm::ColorRGBA Surface::GetRGBA(SDLmm::Color pixel) const
+{
+   if ( GetPixelFormat().BytesPerPixel() == 1 ) {
+      assert( pixel < 256 );
+      return SDLmm::ColorRGBA( pal[pixel][0] * 4, pal[pixel][1] * 4, pal[pixel][2] * 4, opaque );
+   } else
+      return GetPixelFormat().GetRGBA( pixel );
+}
+*/
 
 Surface::Surface(const SDLmm::Surface& other) : SDLmm::Surface ( other )
 {
@@ -306,7 +369,7 @@ Surface Surface::createSurface( int width, int height, int depth, SDLmm::Color c
    else {
       s.Fill(color & 0xff );
       s.assignDefaultPalette();
-   }   
+   }
    // s.SetColorKey( SDL_SRCCOLORKEY, 255 );
    return s;
 }

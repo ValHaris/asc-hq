@@ -202,7 +202,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
 
       bool eventKeyDown(const SDL_KeyboardEvent* key)
       {
-         keyboardHandler( this, key );
+         return keyboardHandler( this, key );
       };
 
       bool keyboardHandler( PG_MessageObject* messageObject, const SDL_KeyboardEvent* keyEvent);

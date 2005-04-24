@@ -34,6 +34,7 @@
 #include "strtmesg.h"
 #include "graphics/blitter.h"
 #include "overviewmapimage.h"
+#include "iconrepository.h"
 
 #ifdef sgmain
  #include "network.h"
@@ -631,18 +632,45 @@ void tmap :: write ( tnstream& stream )
 
 
 
-Surface tmap::getOverviewMap()
+const Surface& tmap::getOverviewMap()
 {
-   Surface s = Surface::createSurface( (xsize+1) * 6, 4 + ysize * 2 , 32 );
+   overviewMapImage = Surface::createSurface( (xsize+1) * 6, 4 + ysize * 2 , 32 );
    for ( int y = 0; y < ysize; ++y )
       for ( int x = 0; x < xsize; ++x ) {
+         int imgx = x * 6 + (y&1) * 3 ;
+         int imgy = y * 2;
+
          pfield fld = getField(x,y);
-         int w = fld->getweather();
-         fld->typ->getQuickView()->blit( s, x * 6 + (y&1) * 3 , y * 2 );
-         for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
-            i->getOverviewMapImage( w )->blit( s, x * 6 + (y&1) * 3 , y * 2 );
+         VisibilityStates visi = fieldVisibility( fld, playerView );
+         if ( visi == visible_not ) {
+            static SDLmm::Color invisible = 0;
+            if ( !invisible ) {
+               Surface& hex = IconRepository::getIcon("hexinvis.raw");
+               invisible = overviewMapImage.GetPixelFormat().MapRGB ( hex.GetPixelFormat().GetRGB( hex.GetPixel ( hex.w() / 2, hex.h() / 2 )));
+            }
+            OverviewMapImage::fill ( overviewMapImage, imgx, imgy, invisible );
+         } else {
+            if ( fld->building && fieldvisiblenow( fld, playerView) )
+               OverviewMapImage::fill ( overviewMapImage, imgx, imgy, player[fld->building->getOwner()].getColor() );
+            else {
+
+               int w = fld->getweather();
+               fld->typ->getQuickView()->blit( overviewMapImage, imgx, imgy );
+               for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
+                  if ( visi > visible_ago || i->typ->visibleago )
+                     i->getOverviewMapImage( w )->blit( overviewMapImage, imgx , imgy );
+
+               if ( fld->vehicle && fieldvisiblenow( fld, playerView) )
+                  OverviewMapImage::fillCenter ( overviewMapImage, imgx, imgy, player[fld->vehicle->getOwner()].getColor() );
+
+               if ( visi == visible_ago )
+                  OverviewMapImage::lighten( overviewMapImage, imgx, imgy, 0.7 ); 
+
+            }
+
+         }
       }
-   return s;
+   return overviewMapImage;
 }
 
 
@@ -783,20 +811,20 @@ void tmap :: setupResources ( void )
 
 
 
-int tmap :: Player :: getColor()
+DI_Color tmap :: Player :: getColor()
 {
    switch ( player ) {
-      case 0: return 0xe00000;
-      case 1: return 0x0071db;
-      case 2: return 0xbcb300;
-      case 3: return 0x00aa00;
-      case 4: return 0xbc0000;
-      case 5: return 0xb200b2;
-      case 6: return 0x0000aa;
-      case 7: return 0xbc6700;
-      case 8: return 0xaaaaaa;
+      case 0: return DI_Color( 0xe0, 0, 0 );
+      case 1: return DI_Color( 0, 0x71, 0xdb );
+      case 2: return DI_Color( 0xbc, 0xb3, 0 );
+      case 3: return DI_Color( 0, 0xaa, 0 );
+      case 4: return DI_Color( 0xbc, 0, 0 );
+      case 5: return DI_Color( 0xb2, 0, 0xb2 );
+      case 6: return DI_Color( 0,0, 0xaa );
+      case 7: return DI_Color( 0xbc, 0x67, 0 );
+      case 8: return DI_Color( 0xaa, 0xaa, 0xaa );
    };
-   return 0;
+   return DI_Color(0, 0, 0);
 }
 
 const ASCString& tmap :: Player :: getName( )

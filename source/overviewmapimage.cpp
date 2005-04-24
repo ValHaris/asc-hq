@@ -2,6 +2,7 @@
 #include "overviewmapimage.h"
 #include "palette.h"
 #include "iconrepository.h"
+#include "graphics/drawing.h"
 
 
 OverviewMapImage::OverviewMapImage() : initialized(false )
@@ -38,8 +39,9 @@ void OverviewMapImage::create( const Surface& image )
                             r += pal[col][0] * 4;
                             g += pal[col][1] * 4;
                             b += pal[col][2] * 4;
+                            a += Surface::opaque;
                          } else
-                            a += 255;
+                            a += Surface::transparent;
                       } else {
                          SDLmm::Color rawColor = image.GetPixel(ix,iy);
                          if ( !image.isTransparent( rawColor )) {
@@ -61,8 +63,9 @@ void OverviewMapImage::create( const Surface& image )
                             b += col.b ;
                             a += col.a;
                             */
+                            a += Surface::opaque;
                          } else
-                            a += 255;
+                            a += Surface::transparent;
                       }
                       ++count;
                    }
@@ -70,21 +73,59 @@ void OverviewMapImage::create( const Surface& image )
             if ( count )
                segment[x][y] = SDLmm::ColorRGBA( r / count, g / count, b / count, a / count );
             else
-               segment[x][y] = SDLmm::ColorRGBA( 0, 0, 0, 0xff );
+               segment[x][y] = SDLmm::ColorRGBA( 0, 0, 0, Surface::transparent );
          }
 }
 
 void OverviewMapImage::blit( Surface& s, int x, int y, int layer ) const
 {
    assert( s.GetPixelFormat().BytesPerPixel() == 4 );
-//   ColorMerger_AlphaMerge<4> colorMerger;
+   PutPixel<4,ColorMerger_AlphaMerge> putpix( s );
+
    for ( int ly = 0; ly < height; ++ly )
       for ( int lx = 0; lx < width; ++lx )
          if ( ! ((ly == 0 || ly == height-1) && (lx == 0 || lx == width-1))) {
 //            *((Uint32 *)pixels() + y * pitch()/4 + x) = color
 
-            s.SetPixel( x + lx, y + ly, s.GetPixelFormat().MapRGBA( segment[lx][ly] ));
+            putpix.set( SPoint( x + lx, y + ly), s.GetPixelFormat().MapRGBA( segment[lx][ly] ) );
+            // s.SetPixel( x + lx, y + ly, s.GetPixelFormat().MapRGBA( segment[lx][ly] ));
          }
 
+}
+
+
+void OverviewMapImage::fill( Surface& s, int x, int y, SDL_Color color )
+{
+   fill( s,x,y, s.GetPixelFormat().MapRGB(color ));
+}
+
+void OverviewMapImage::fill( Surface& s, int x, int y, SDLmm::Color color )
+{
+   for ( int ly = 0; ly < height; ++ly )
+      for ( int lx = 0; lx < width; ++lx )
+         if ( ! ((ly == 0 || ly == height-1) && (lx == 0 || lx == width-1)))
+            s.SetPixel4( x + lx, y + ly, color );
+
+}
+
+void OverviewMapImage::fillCenter( Surface& s, int x, int y, SDL_Color color )
+{
+   fillCenter( s,x,y, s.GetPixelFormat().MapRGB(color ));
+}
+
+void OverviewMapImage::fillCenter( Surface& s, int x, int y, SDLmm::Color color )
+{
+   for ( int ly = 1; ly < 3; ++ly )
+      for ( int lx = 1; lx < 3; ++lx )
+         s.SetPixel4( x + lx, y + ly, color );
+
+}
+
+void OverviewMapImage::lighten( Surface& s, int x, int y, float value )
+{
+   for ( int ly = 0; ly < height; ++ly )
+      for ( int lx = 0; lx < width; ++lx )
+         if ( ! ((ly == 0 || ly == height-1) && (lx == 0 || lx == width-1)))
+            s.SetPixel4( x + lx, y + ly, lightenColor( s.GetPixel(x + lx, y + ly), 0.7 ));
 }
 

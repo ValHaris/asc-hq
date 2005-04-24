@@ -25,7 +25,7 @@
       obj\ascttfont.obj obj\blitter.obj obj\surface.obj obj\weatherdialog.obj 
       obj\weatherarea.obj obj\guidimension.obj obj\SDL_loadso.obj 
       obj\geometry.obj obj\resourceplacement.obj obj\resourceplacementdialog.obj 
-      obj\iconrepository.obj"/>
+      obj\iconrepository.obj obj\overviewmapimage.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -36,7 +36,8 @@
       ..\..\..\libs\triangul\win32\triangulation.lib 
       ..\..\..\libs\libsigc++\libsigcpp.lib 
       ..\..\..\..\..\paragui-1.2\borland\Paragui.lib 
-      ..\..\..\..\..\Expat\Libs\exp.lib ..\..\..\..\..\freetype2\objs\freetype.lib"/>
+      ..\..\..\..\..\Expat\Libs\exp.lib 
+      ..\..\..\..\..\freetype2\objs\freetype-bcb.lib"/>
     <LIBRARIES value="bcb2kaxserver.lib indy.lib dbxcds.lib dclocx.lib soaprtl.lib bcbie.lib 
       nmfast.lib dbexpress.lib inetdbxpress.lib inetdb.lib inetdbbde.lib 
       inet.lib xmlrtl.lib visualdbclx.lib ibxpress.lib teeqr.lib tee.lib 
@@ -163,12 +164,13 @@
       <FILE FILENAME="..\..\..\weatherarea.cpp" FORMNAME="" UNITNAME="weatherarea.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\guidimension.cpp" FORMNAME="" UNITNAME="guidimension" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\..\..\Expat\Libs\exp.lib" FORMNAME="" UNITNAME="exp.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\..\..\freetype2\objs\freetype.lib" FORMNAME="" UNITNAME="freetype.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\..\..\sdl\src\SDL_loadso.c" FORMNAME="" UNITNAME="SDL_loadso" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\geometry.cpp" FORMNAME="" UNITNAME="geometry" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\resourceplacement.cpp" FORMNAME="" UNITNAME="resourceplacement.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\resourceplacementdialog.cpp" FORMNAME="" UNITNAME="resourceplacementdialog.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\iconrepository.cpp" FORMNAME="" UNITNAME="iconrepository" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\overviewmapimage.cpp" FORMNAME="" UNITNAME="overviewmapimage" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\..\..\freetype2\objs\freetype-bcb.lib" FORMNAME="" UNITNAME="freetype-bcb.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

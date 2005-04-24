@@ -1,4 +1,3 @@
-
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-2003  Martin Bickel  and  Marc Schellenberger
@@ -22,6 +21,8 @@
 #include "drawing.h"
 
 
+// these routines should be optimized
+
 SDL_Color lightenColor( const SDL_Color& color, float factor )
 {
    SDL_Color c  = color;
@@ -30,4 +31,30 @@ SDL_Color lightenColor( const SDL_Color& color, float factor )
    c.b =  min( max( int( float(c.b) * factor ), 0 ), 255);
    return c;
 };
+
+/*
+SDLmm::ColorRGB lightenColor( const SDLmm::ColorRGB& color, float factor )
+{
+   SDLmm::ColorRGB c  = color;
+   c.r =  min( max( int( float(c.r) * factor ), 0 ), 255);
+   c.g =  min( max( int( float(c.g) * factor ), 0 ), 255);
+   c.b =  min( max( int( float(c.b) * factor ), 0 ), 255);
+   return c;
+};
+
+*/
+
+SDLmm::Color lightenColor( SDLmm::Color color, float factor )
+{
+   SDLmm::Color c = min( max( int( float(color & 0xff) * factor ), 0 ), 255) |
+                    (min( max( int( float((color >> 8) & 0xff) * factor ), 0 ), 255) << 8) |
+                    (min( max( int( float((color >> 16) & 0xff) * factor ), 0 ), 255) << 16) |
+                    (color & 0xff000000);
+   return c;
+}
+
+void lightenColor( SDLmm::Color* color, float factor )
+{
+   *color = lightenColor( *color, factor );
+}
 

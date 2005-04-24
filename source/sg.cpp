@@ -40,7 +40,7 @@
    
    Every building and unit is of a certain 'type': Vehicletype and BuildingType .
    These are stored in the data files which are loaded on startup and are globally 
-   available. They are not modified during runtime in any way and are referenced 
+   available. They are not modified during runtime in any way and are referenced
    by the instances of Vehicle and Building. The Vehicletype has information that are shared
    by all vehicles of this 'type', like speed, weapon systems, accessable
    terrain etc, while the vehicle stores things like remaining movement for this
@@ -1550,6 +1550,7 @@ void execuseraction2 ( tuseractions action )
       case ua_clearImageCache:  IconRepository::clear();
          break;
       case ua_viewUnitInfoPanel: mainScreenWidget->spawnPanel( MainScreenWidget::UnitInfo );
+         break;
       default:
          break;
    }
@@ -1726,6 +1727,7 @@ void Menu::setup()
    addbutton ( "Button Panel", ua_viewButtonPanel );
    addbutton ( "Wind Panel", ua_viewWindPanel );
    addbutton ( "Unit Info Panel", ua_viewUnitInfoPanel );
+   addbutton ( "Unit Info Dialog", ua_viewUnitInfoPanel );
    currentMenu->addSeparator();
    addbutton ( "clear image cache", ua_clearImageCache );
    addbutton ( "reload dialog theme", ua_reloadDlgTheme );
