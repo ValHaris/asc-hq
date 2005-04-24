@@ -1118,7 +1118,10 @@ void tmap::endRound()
 {
     actplayer = 0;
     time.set ( time.turn()+1, 0 );
-    clearfahrspuren();
+
+    for ( int y = 0; y < ysize; ++y )
+       for ( int x = 0; x < xsize; ++x )
+           getField(x,y)->endRound( time.turn() );
 
     for (int i = 0; i <= 7; i++)
        if (player[i].exist() ) {
@@ -1170,15 +1173,19 @@ void tmap::objectGrowth()
              if ( i->typ->growthRate > 0 )
                 for ( int d = 0; d < 6; ++d ) {
                    pfield fld2 = getField ( getNeighbouringFieldCoordinate( MapCoordinate(x,y), d ));
-                   if ( fld2 && fld2->objects.empty() && (!fld2->vehicle || fld2->vehicle->height >= chtieffliegend) && !fld2->building ) {
-                      double d = i->typ->growthRate * getgameparameter( cgp_objectGrowthMultiplier) / 100;
-                      if ( d > 0 ) {
-                         int p = std::ceil ( double(1) / d );
-                         if ( p > 1 )
-                            if ( random ( p ) == 1 )
-                               if ( i->typ->fieldModification[fld2->getweather()].terrainaccess.accessible( fld->bdt) > 0 )
-                                  newObjects.push_back( make_pair( fld2, i->typ->id ));
-                      }
+                   if ( fld2 && (!fld2->vehicle || fld2->vehicle->height >= chtieffliegend) && !fld2->building ) 
+                      if ( fld2->objects.empty() || getgameparameter( cgp_objectGrowOnOtherObjects ) > 0 ) {
+                        double d = i->typ->growthRate * getgameparameter( cgp_objectGrowthMultiplier) / 100;
+                        if ( d > 0 ) {
+                           if ( d > 0.9 )
+                              d = 0.9;
+
+                           int p = std::ceil ( double(1) / d) ;
+                           if ( p > 1 )
+                              if ( random ( p ) == 1 )
+                                 if ( i->typ->fieldModification[fld2->getweather()].terrainaccess.accessible( fld2->bdt) > 0 )
+                                    newObjects.push_back( make_pair( fld2, i->typ->id ));
+                        }
                    }
                 }
       }
@@ -1693,6 +1700,41 @@ void tfield::init ()
 
 
 
+bool AgeableItem::age( AgeableItem& obj )
+{
+   if ( obj.lifetimer > 0 ) {
+      --obj.lifetimer;
+      return obj.lifetimer==0;
+   } else
+      return false;
+}
+
+void tfield::endRound( int turn )
+{
+   bool recalc = false;
+   for ( ObjectContainer::iterator i = objects.begin(); i != objects.end(); ) {
+      if ( AgeableItem::age( *i )) {
+         i = objects.erase(i);
+         recalc = true;
+      } else
+         ++i;
+   }
+   // remove_if( objects.begin(), objects.end(), Object::age );
+
+   for ( MineContainer::iterator i = mines.begin(); i != mines.end(); ) {
+      if ( AgeableItem::age( *i )) {
+         i = mines.erase(i);
+         recalc = true;
+      } else
+         ++i;
+   }
+   // remove_if( mines.begin(), mines.end(), Object::age );
+
+   if ( recalc )
+      setparams();
+}
+
+
 void tfield::operator= ( const tfield& f )
 {
    typ = f.typ;
@@ -1718,16 +1760,15 @@ void tfield::operator= ( const tfield& f )
       view[i] = f.view[i];
 }
 
-void tfield :: checkminetime ( int time )
+
+Mine::Mine( MineTypes type, int strength, int player, tmap* gamemap )
 {
-   for ( MineContainer::iterator m = mines.begin(); m != mines.end();  ) {
-      int lt = gamemap->getgameparameter ( GameParameter(cgp_antipersonnelmine_lifetime + m->type - 1));
-      if ( lt && m->time + lt < time )
-         m = mines.erase( m );
-      else
-         m++;
-   }
+   this->type = type;
+   this->strength = strength;
+   this->player = player;
+   lifetimer = gamemap->getgameparameter( GameParameter(cgp_antipersonnelmine_lifetime + type - 1));
 }
+
 
 
 int tfield :: mineattacks ( const pvehicle veh )
@@ -1771,7 +1812,6 @@ void  tfield :: addobject( pobjecttype obj, int dir, bool force )
 
      if ( buildable ) {
          Object o ( obj );
-         o.time = gamemap->time.turn();
          if ( dir != -1 )
             o.dir = dir;
          else
@@ -1789,6 +1829,7 @@ void  tfield :: addobject( pobjecttype obj, int dir, bool force )
       if ( dir != -1 )
          i->dir |= dir;
 
+      i->lifetimer = obj->lifetime;
       sortobjects();
    }
 }
@@ -1884,22 +1925,14 @@ void tfield :: sortobjects ( void )
 bool  tfield :: putmine( int col, int typ, int strength )
 {
    if ( mineowner() >= 0  && mineowner() != col )
-      return 0;
+      return false;
 
    if ( mines.size() >= gamemap->getgameparameter ( cgp_maxminesonfield ))
-      return 0;
+      return false;
 
-   Mine m;
-   m.strength = strength ;
-   m.player = col;
-   m.type = MineTypes(typ);
-   if ( gamemap && gamemap->time.turn() >= 0 )
-      m.time = gamemap->time.turn();
-   else
-      m.time = 0;
-
+   Mine m ( MineTypes(typ), strength, col, gamemap );
    mines.push_back ( m );
-   return 1;
+   return true;
 }
 
 int tfield :: mineowner( void )
@@ -2080,6 +2113,7 @@ Object :: Object ( void )
 
 Object :: Object ( pobjecttype t )
 {
+   lifetimer = t->lifetime;
    typ = t;
    dir = 0;
    damage = 0;
@@ -2449,7 +2483,8 @@ const int gameparameterdefault [ gameparameternum ] = { 1,                      
                                                         0,                       //       cgp_disableUnitTransfer
                                                         1,                       //       cgp_experienceDivisorDefense
                                                         0,                       //       cgp_debugEvents
-                                                        0 };                     //       cgp_objectGrowthMultiplier
+                                                        0,                       //       cgp_objectGrowthMultiplier
+                                                        0 };                     //       cgp_objectGrowOnOtherObjects
 
 
 const bool gameParameterChangeableByEvent [ gameparameternum ] = { true,   //       cgp_fahrspur
@@ -2482,7 +2517,8 @@ const bool gameParameterChangeableByEvent [ gameparameternum ] = { true,   //   
                                                                  false,    //       cgp_disableUnitTransfer
                                                                  false,    //       cgp_experienceDivisorDefense
                                                                  true,     //       cgp_debugEvents
-                                                                 true };   //       cgp_objectGrowthMultiplier
+                                                                 true,     //       cgp_objectGrowthMultiplier
+                                                                 false };  //       cgp_objectGrowOnOtherObjects
 
 const int gameParameterLowerLimit [ gameparameternum ] = { 1,    //       cgp_fahrspur
                                                            1,    //       cgp_eis,
@@ -2514,7 +2550,10 @@ const int gameParameterLowerLimit [ gameparameternum ] = { 1,    //       cgp_fa
                                                            0,    //       cgp_disableUnitTransfer
                                                            1,    //       cgp_experienceDivisorDefense
                                                            0,    //       cgp_debugEvents
-                                                           0 };  //       cgp_objectGrowthMultiplier
+                                                           0,    //       cgp_objectGrowthMultiplier
+                                                           0 };  //       cgp_objectGrowOnOtherObjects
+
+
 
 const int gameParameterUpperLimit [ gameparameternum ] = { maxint,                //       cgp_fahrspur
                                                            maxint,                //       cgp_eis,
@@ -2546,7 +2585,8 @@ const int gameParameterUpperLimit [ gameparameternum ] = { maxint,              
                                                            1,                     //       cgp_disableUnitTransfer
                                                            10,                    //       cgp_experienceDivisorDefense
                                                            2,                     //       cgp_debugEvents
-                                                           maxint };              //       cgp_objectGrowthMultiplier
+                                                           maxint,                //       cgp_objectGrowthMultiplier
+                                                           1 };                   //       cgp_objectGrowOnOtherObjects
 
 
 const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
@@ -2579,5 +2619,6 @@ const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "disable transfering units/buildings to other players",
                                                       "experience effect divisor for defense",
                                                       "debug game events",
-                                                      "Object growth rate (percentage)" };
+                                                      "Object growth rate (percentage)",
+                                                      "Objects can grow on files with other objects" };
 

@@ -4,9 +4,14 @@
 */
 
 
-//     $Id: basestrm.h,v 1.59 2004-05-29 15:07:37 mbickel Exp $
+//     $Id: basestrm.h,v 1.60 2005-04-24 10:09:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.59  2004/05/29 15:07:37  mbickel
+//      Fixed maps
+//      Fixed crash with asc.cache
+//      ai speed up
+//
 //     Revision 1.58  2004/05/16 11:28:00  mbickel
 //      Speed up of startup loading by using a cache file
 //
@@ -759,6 +764,7 @@ extern char* extractFileName ( char* buf, const char* filename );
 extern ASCString extractFileName ( const ASCString& filename );
 extern ASCString extractFileName_withoutSuffix ( const ASCString& filename );
 extern int createDirectory ( const char* name );
+extern int getSearchPathNum();
 extern ASCString getSearchPath ( int i );
 
 //! converts path delimitters from foreign operating systems to the ones used by the current operating system. On Linux, this function converts backslashes to slashes, on Windows vice versa

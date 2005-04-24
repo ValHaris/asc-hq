@@ -225,9 +225,6 @@ extern const char*  cvehiclefunctions[];
         //! the recommended task for the unit, set by the unit creater
         AiParameter::Job recommendedAIJob;
 
-        //! returns the maximum weight of this unit including maximum fuel and material
-        int maxweight ( void ) const ;
-
         //! returns the maximum weight of this unit without fuel and material
         int maxsize   ( void ) const ;
 

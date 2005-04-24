@@ -3,9 +3,12 @@
   
 */
 
-//     $Id: sgstream.h,v 1.33 2005-04-02 13:57:06 mbickel Exp $
+//     $Id: sgstream.h,v 1.34 2005-04-24 10:09:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2005/04/02 13:57:06  mbickel
+//      Cleanup and new configuration scripts
+//
 //     Revision 1.32  2004/09/26 19:53:21  mbickel
 //      Reversed merge of branch
 //
@@ -179,6 +182,7 @@ extern void loadpalette ( void );
 extern int readgameoptions ( const char* filename = NULL );
 extern int writegameoptions ( void );
 extern char* getConfigFileName ( char* buffer );
+extern ASCString getConfigFileName ();
 extern void loadguipictures( void );
 extern void checkFileLoadability ( const char* filename );
 

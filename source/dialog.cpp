@@ -3905,15 +3905,7 @@ void         tsetalliances::click(pascal_byte         bxx,
       if (x == 2  &&  ( y != actmap->actplayer ) && actmap->actplayer>=0  &&  !oninit && !supervisor )
          if ( (actmap->alliances[actmap->actplayer][y] == capeace && actmap->alliances[y][actmap->actplayer] == capeace) ||  sv.mode[actmap->actplayer][y] ) {
 
-            if ( sv.mode[actmap->actplayer][y] )
-               sv.mode[actmap->actplayer][y] = false;
-            else {
-             #ifdef __WATCOM_CPLUSPLUS__
-              sv.mode[actmap->actplayer][y] ++;
-             #else
-              sv.mode[actmap->actplayer][y] += 1;
-             #endif
-            }
+            sv.mode[actmap->actplayer][y] = ! sv.mode[actmap->actplayer][y];
 
             activefontsettings.color = 23 + y * 8;
             activefontsettings.background = dblue;
@@ -4951,7 +4943,7 @@ void viewterraininfo ( void )
             mines[m->type-1]++;
             int lifetime = actmap->getgameparameter( GameParameter(cgp_antipersonnelmine_lifetime + m->type-1 ));
             if ( lifetime > 0)
-               mineDissolve[m->type-1] = min ( m->time + lifetime, mineDissolve[m->type-1] );
+               mineDissolve[m->type-1] = min( m->lifetimer, mineDissolve[m->type-1]);
          }
 
       if ( mines[0] || mines[1] || mines[2] || mines[3] ) {
@@ -4966,8 +4958,9 @@ void viewterraininfo ( void )
             strcat ( text, MineNames[i] );
             strcat ( text, "(s). " );
             if ( mineDissolve[i] >= 0 && mineDissolve[i] < maxint ) {
-               strcat ( text, "Next mine will dissolve at turn " );
-               strcat ( text, strrr( mineDissolve[i]+actmap->getgameparameter(GameParameter(cgp_antipersonnelmine_lifetime+i)) ));
+               strcat ( text, "Next mine will dissolve in " );
+               strcat ( text, strrr( mineDissolve[i]));
+               strcat ( text, " turns.");
             }
             strcat ( text, "\n" );
          }

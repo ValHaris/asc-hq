@@ -613,31 +613,6 @@ void         tcursor::display(void)
 } 
 
 
-void         clearfahrspuren(void)
-{ 
-      if ((actmap->xsize == 0) || (actmap->ysize == 0)) 
-        return;
-      int l = 0; 
-      for ( int y = 0; y < actmap->ysize ; y++) 
-         for ( int x = 0; x < actmap->xsize ; x++) {
-            pobject i = actmap->field[l].checkforobject ( fahrspurobject );
-            if ( i ) 
-               if ( actmap->getgameparameter ( cgp_fahrspur ) > 0 )
-                  if ( i->time + actmap->getgameparameter ( cgp_fahrspur ) < actmap->time.turn() )
-                     getfield ( x, y ) -> removeobject ( fahrspurobject );
-
-            i = actmap->field[l].checkforobject ( eisbrecherobject );
-            if ( i ) 
-               if ( actmap->getgameparameter ( cgp_eis ) > 0 )
-                  if ( i->time + actmap->getgameparameter ( cgp_eis ) < actmap->time.turn() )
-                     getfield ( x, y ) -> removeobject ( eisbrecherobject );
-
-            getfield ( x, y )->checkminetime ( actmap->time.turn() );
-            l++;
-         } 
-} 
-
-
 
 void         putbuilding( const MapCoordinate& entryPosition,
                          int          color,

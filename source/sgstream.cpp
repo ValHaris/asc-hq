@@ -454,6 +454,14 @@ char* getConfigFileName ( char* buffer )
    return buffer;
 }
 
+ASCString getConfigFileName ()
+{
+   if ( configFileNameUsed )
+      return configFileNameUsed ;
+   else
+      return "-none- ; default values used";
+}
+
 
 CLoadableGameOptions* loadableGameOptions =     NULL;
 
@@ -715,8 +723,27 @@ void versionError( const ASCString& filename, const ASCString& location )
 {
    ASCString msg = "A newer version of the data file '";
    msg += filename + "' is required. \nYou can get a new data package at http://www.asc-hq.org\n";
-   msg += "The old file is located at " + location;
+   msg += "The old file is " + location;
    fatalError( msg );
+}
+
+void checkFileVersion( const ASCString& filename, const ASCString& containername, int version )
+{
+   ASCString location;
+   bool dataOk = true;
+   if ( exist ( filename )) {
+      tnfilestream s ( filename, tnstream::reading );
+      ASCString str = s.readString();
+      int v = atoi ( str.c_str() );
+      if ( v < version )
+         dataOk = false;
+      location = s.getLocation();
+   } else
+      dataOk = false;
+
+   if ( !dataOk )
+      versionError ( containername, location );
+
 }
 
 void checkDataVersion( )
@@ -730,50 +757,15 @@ void checkDataVersion( )
    } else
       dataVersion = 0;
 
-   if ( dataVersion < 11 || dataVersion > 0xffff )
+   if ( dataVersion < 12 || dataVersion > 0xffff )
       versionError ( "main.con", location );
 
 
-   if ( exist ( "mk1.version" )) {
-      tnfilestream s ( "mk1.version", tnstream::reading );
-      ASCString str = s.readString();
-      int v = atoi ( str.c_str() );
-      if ( v < 10 )
-         dataOk = false;
-      location = s.getLocation();
-   } else
-      dataOk = false;
+   checkFileVersion( "mk1.version", "mk1.con", 11 );
+   checkFileVersion( "mk3.version", "units-mk3.con", 10 );
+   checkFileVersion( "buildings.version", "buildings.con", 10 );
+   checkFileVersion( "trrobj.version", "trrobj.con", 12 );
 
-   if ( !dataOk )
-      versionError ( "mk1.con", location );
-
-
-   if ( exist ( "buildings.version" )) {
-      tnfilestream s ( "buildings.version", tnstream::reading );
-      ASCString str = s.readString();
-      int v = atoi ( str.c_str() );
-      if ( v < 10 || v >= 0xffff)
-         dataOk = false;
-      location = s.getLocation();
-   } else
-      dataOk = false;
-
-   if ( !dataOk )
-      versionError ( "buildings.con", location );
-
-
-   if ( exist ( "trrobj.version" )) {
-      tnfilestream s ( "trrobj.version", tnstream::reading );
-      ASCString str = s.readString();
-      int v = atoi ( str.c_str() );
-      if ( v < 10 )
-         dataOk = false;
-      location = s.getLocation();
-   } else
-      dataOk = false;
-
-   if ( !dataOk )
-      versionError ( "trrobj.con", location );
 
 }
 

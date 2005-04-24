@@ -50,6 +50,7 @@ ObjectType :: ObjectType ( void )
    imageHeight = 0;
    physicalHeight = 0;
    growthRate = 0;
+   lifetime = -1;
 }
 
 ObjectType::FieldModification&  ObjectType::getFieldModification ( int weather )
@@ -803,7 +804,7 @@ void         calculateallobjects( pmap actmap )
 
 
 
-const int object_version = 12;
+const int object_version = 13;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -886,6 +887,11 @@ void ObjectType :: read ( tnstream& stream )
        else
           growthRate = 0;
 
+       if ( version >= 13 )
+          lifetime = stream.readInt();
+       else
+          lifetime = -1;
+
 
        for ( int ww = 0; ww < cwettertypennum; ww++ )
          if ( weather.test ( ww ) ) {
@@ -925,7 +931,7 @@ void ObjectType :: setupImages()
    #ifndef converter
    for ( int ww = 0; ww < cwettertypennum; ww++ )
       if ( weather.test( ww ) )
-         for ( int n = 0; n < weatherPicture[ww].bi3pic.size(); n++ ) 
+         for ( int n = 0; n < weatherPicture[ww].bi3pic.size(); n++ )
 			   if ( weatherPicture[ww].flip.size() > n ) {
                if ( weatherPicture[ww].flip[n] == 1 ) {
                   void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
@@ -1034,6 +1040,7 @@ void ObjectType :: write ( tnstream& stream ) const
     techDependency.write ( stream );
 
     stream.writeFloat( growthRate );
+    stream.writeInt( lifetime );
 
 
     for ( int ww = 0; ww < cwettertypennum; ww++ )
@@ -1146,6 +1153,7 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
    pc.addString( "Name", name );
 
    pc.addDFloat( "GrowthRate", growthRate, 0 );
+   pc.addInteger( "LifeTime", lifetime, -1 );
 
    pc.addTagInteger ( "NetBehaviour", netBehaviour, netBehaviourNum, objectNetMethod, int(0) );
 

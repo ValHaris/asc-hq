@@ -543,7 +543,7 @@ void        tspfldloaders::readnetwork ( void )
 /*     fielder schreiben / lesen                             ÿ */
 /**************************************************************/
 
-const int objectstreamversion = 1;
+const int objectstreamversion = 2;
 
 void   tspfldloaders::writefields ( void )
 {
@@ -667,7 +667,7 @@ void   tspfldloaders::writefields ( void )
          for ( tfield::MineContainer::iterator m = fld->mines.begin(); m != fld->mines.end(); m++  ) {
             stream->writeInt ( m->type );
             stream->writeInt ( m->strength );
-            stream->writeInt ( m->time );
+            stream->writeInt ( m->lifetimer );
             stream->writeInt ( m->player );
          }
 
@@ -677,7 +677,7 @@ void   tspfldloaders::writefields ( void )
             stream->writeInt ( 1 ); // was: pointer to type
             stream->writeInt ( o->damage );
             stream->writeInt ( o->dir );
-            stream->writeInt ( o->time );
+            stream->writeInt ( o->lifetimer );
             for ( int i = 0; i < 4; i++ )
                stream->writeInt ( 0 );  // dummy
             stream->writeInt ( o->typ->id );
@@ -801,11 +801,7 @@ void tspfldloaders::readfields ( void )
             char minetype = stream->readChar();
             char minestrength = stream->readChar();
             if ( minetype >> 4 ) {
-               Mine m;
-               m.type = MineTypes((minetype >> 1) & 7);
-               m.strength = minestrength;
-               m.time = 0;
-               m.player = minetype >> 4;
+               Mine m( MineTypes((minetype >> 1) & 7), minestrength, minetype >> 4, spfld );
                fld2->mines.push_back ( m );
             }
 
@@ -815,20 +811,32 @@ void tspfldloaders::readfields ( void )
                tempObjects[i] = stream->readInt();
          }
 
+         int objectversion = 1;
          if ( b4 & csm_newobject ) {
-            int objectversion = stream->readInt();
+            objectversion = stream->readInt();
 
-            if ( objectversion != objectstreamversion )
+            if ( objectversion < 1 || objectversion > objectstreamversion )
                throw tinvalidversion ( "object", objectstreamversion, objectversion );
 
             int minenum = stream->readInt();
 
             for ( int i = 0; i < minenum; i++ ) {
-               Mine m;
-               m.type = MineTypes(stream->readInt());
-               m.strength = stream->readInt();
-               m.time = stream->readInt();
-               m.player = stream->readInt();
+               MineTypes type = MineTypes(stream->readInt());
+               int strength = stream->readInt();
+               int player = stream->readInt();
+               Mine m ( type, strength, player, spfld );
+               if ( objectversion == 1 ) {
+                  int endtime = stream->readInt();
+                  int lifetime = spfld->getgameparameter( GameParameter(cgp_antipersonnelmine_lifetime + m.type - 1));
+                  if ( lifetime > 0  &&  endtime > 0 )
+                     m.lifetimer = endtime - spfld->time.turn() + spfld->getgameparameter( GameParameter(cgp_antipersonnelmine_lifetime + m.type - 1));
+                  else
+                     if ( lifetime > 0 )
+                        m.lifetimer = lifetime;
+                     else
+                        m.lifetimer = -1;
+               } else
+                  m.lifetimer = stream->readInt();
                fld2->mines.push_back ( m );
             }
 
@@ -841,7 +849,11 @@ void tspfldloaders::readfields ( void )
                stream->readInt(); // was: type
                o.damage = stream->readInt();
                o.dir = stream->readInt();
-               o.time = stream->readInt();
+               if ( objectversion >= 2 )
+                  o.lifetimer = stream->readInt();
+               else
+                  stream->readInt();
+
                for ( int i = 0; i < 4; i++ )
                   stream->readInt(); // dummy
 
@@ -850,6 +862,9 @@ void tspfldloaders::readfields ( void )
 
                if ( !o.typ )
                   throw InvalidID ( "object", id );
+
+               if ( objectversion == 1 )
+                  o.lifetimer = o.typ->lifetime;
 
                fld2->objects.push_back ( o );
             }

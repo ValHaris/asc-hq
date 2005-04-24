@@ -660,7 +660,7 @@ void         tdialogbox::rebuildtaborder(void)
 { 
   pbutton      pb;
   pbutton      pb2;
-  integer      i; 
+  integer      i = 0; 
   ttaborder    b; 
 
    pb = firstbutton; 

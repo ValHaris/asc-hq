@@ -587,7 +587,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
                     ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog, ua_reloadDlgTheme, ua_showPlayerSpeed, ua_renameunit,
-                    ua_statisticdialog, ua_viewPipeNet, ua_cancelResearch, ua_showResearchStatus, ua_exportUnitToFile, ua_cargosummary };
+                    ua_statisticdialog, ua_viewPipeNet, ua_cancelResearch, ua_showResearchStatus, ua_exportUnitToFile, ua_cargosummary, ua_showsearchdirs };
 
 
 class tsgpulldown : public tpulldown
@@ -680,6 +680,8 @@ void         tsgpulldown :: init ( void )
    addfield ( "~H~elp" );
    addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );
    addbutton ( "HowTo ~C~ontinue email games", ua_howtocontinuepbem );
+   addbutton ( "seperator", -1);
+   addbutton ( "Show ASC search ~P~ath", ua_showsearchdirs );
    addbutton ( "seperator", -1);
    addbutton ( "~K~eys", ua_help );
 
@@ -1233,6 +1235,24 @@ void showCargoSummary()
 }
 
 
+void showSearchPath()
+{
+
+      ASCString s;
+      for ( int i = 0; i < getSearchPathNum(); ++i )
+         s += getSearchPath ( i ) + "\n"; 
+
+      s += "\n";
+      s += "Configuration file used: \n";
+      s += getConfigFileName();
+
+      tviewanytext vat ;
+      vat.init ( "Search Path", s.c_str(), 20, -1 , 450, 480 );
+      vat.run();
+      vat.done();
+}
+
+
 void execuseraction ( tuseractions action )
 {
    switch ( action ) {
@@ -1354,7 +1374,7 @@ void execuseraction ( tuseractions action )
          if ( fieldvisiblenow  ( getactfield() )) {
             pvehicle eht = getactfield()->vehicle;
             if ( eht && getdiplomaticstatus ( eht->color ) == capeace )
-               displaymessage(" weight of unit: \n basic: %d\n+fuel: %d\n+material:%d\n+cargo:%d\n= %d",1 ,eht->typ->weight, eht->getTank().fuel * resourceWeight[Resources::Fuel] / 1000 , eht->getTank().material * resourceWeight[Resources::Material] / 1000, eht->cargo(), eht->weight() );
+               displaymessage(" weight of unit: \n basic: %d\n+cargo:%d\n= %d",1 ,eht->typ->weight, eht->cargo(), eht->weight() );
          }
          break;
 
@@ -1677,6 +1697,10 @@ void execuseraction ( tuseractions action )
          break;
          case ua_cargosummary: showCargoSummary();
          break;
+         case ua_showsearchdirs: showSearchPath();
+         break;
+
+                                 
 
 
 #ifndef NO_PARAGUI

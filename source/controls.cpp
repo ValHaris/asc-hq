@@ -1449,7 +1449,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
            // flying
            movecost = maxmalq;
         else {
-           if ( start.getNumericalHeight() <= 1 ) {
+           if ( start.getNumericalHeight() <= 1 && start.getNumericalHeight() != -1 ) {
               movecost = submarineMovement;
               checkWind = false;
            } else {

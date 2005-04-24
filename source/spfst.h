@@ -142,11 +142,6 @@ extern void  putstreets2( int          x1,
                           pobjecttype obj );
 
 
-/** removes objects like tracks (by vehicles) or shipping lanes (made by icebreakers) 
-    after their lifetime (specified in the mapparameters) is exceeded      */
-extern void  clearfahrspuren(void);
-
-
 /*! tests if the vehicle can move onto the field
 
    \param uheight the level of height for which the check should be done. Use -2 to use the current height of the unit

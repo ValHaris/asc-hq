@@ -2132,6 +2132,11 @@ void addSearchPath ( const char* path )
    }
 }
 
+int getSearchPathNum()
+{
+   return searchDirNum;
+}
+
 ASCString getSearchPath ( int i )
 {
    if ( i < searchDirNum )

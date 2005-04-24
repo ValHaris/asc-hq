@@ -407,7 +407,7 @@ bool AStar3D::Container::update ( const Node& node )
 {
    iterator i = find ( node.h );
    if ( i != Parent::end() )
-      if (i->gval > node.gval ) {
+      if (i->gval > node.gval || (i->gval == node.gval && i->hasAttacked && !node.hasAttacked)) {
          Parent::erase ( i );
          add ( node );
          return true;

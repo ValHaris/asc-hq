@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.156 2005-03-06 14:11:50 mbickel Exp $
+//     $Id: typen.h,v 1.157 2005-04-24 10:09:31 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -784,8 +784,6 @@ const int maxminingrange = 10;
 const float productionLineConstructionCostFactor = 0.5;
 const float productionLineRemovalCostFactor = 0.2;
 
-//! The weight of 1000 units of a Resource
-extern const int resourceWeight[ resourceTypeNum ];
 
 #define objectbuildmovecost 16  // vehicle->movement -= (8 + ( fld->movemalus[0] - 8 ) / ( objectbuildmovecost / 8 ) ) * kosten des obj
 

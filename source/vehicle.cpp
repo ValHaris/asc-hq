@@ -214,7 +214,7 @@ int Vehicle :: putResource ( int amount, int resourcetype, bool queryonly, int s
       if ( resourcetype == 0 )  // no energy storable
          return 0;
 
-      int spaceAvail = getMaxResourceStorageForWeight ( resourcetype ) - tank.resource(resourcetype);
+      int spaceAvail = typ->tank.resource( resourcetype ) - tank.resource(resourcetype);
       if ( spaceAvail < 0 )
          spaceAvail = 0;
 
@@ -259,7 +259,7 @@ void Vehicle :: setGeneratorStatus ( bool status )
 
 int Vehicle::weight( void ) const
 {
-   return typ->weight + tank.fuel * resourceWeight[Resources::Fuel] / 1000 + tank.material * resourceWeight[Resources::Material] / 1000 + cargo();
+   return typ->weight + cargo();
 }
 
 int Vehicle::size ( void )
@@ -551,8 +551,6 @@ void Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
               if (   (startField->bdt & getTerrainBitType(cbicebreaking) ).any()
                    || startField->checkforobject ( eisbrecherobject ) ) {
                  startField->addobject ( eisbrecherobject, 1 << dir );
-                 if ( startField->checkforobject ( eisbrecherobject ) )
-                    startField->checkforobject ( eisbrecherobject )->time = gamemap->time.turn();
               }
 
      dir = (dir + sidenum/2) % sidenum;
@@ -567,8 +565,6 @@ void Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
               if (   (destField->bdt & getTerrainBitType(cbicebreaking) ).any()
                    || destField->checkforobject ( eisbrecherobject ) ) {
                  destField->addobject ( eisbrecherobject, 1 << dir );
-                 if ( destField->checkforobject ( eisbrecherobject ) )
-                    destField->checkforobject ( eisbrecherobject )->time = gamemap->time.turn();
               }
    }
 }
@@ -907,71 +903,44 @@ bool Vehicle :: buildingconstructable ( pbuildingtype building )
       return false;
 }
 
-
-int Vehicle :: searchstackforfreeweight ( pvehicle eht, int what )
+int Vehicle :: searchstackforfreeweight ( Vehicle* searchedInnerVehicle )
 {
-   if ( eht == this ) {
-      if ( what == 1 ) // material or fuel
-         return maxint;
-      else
-         return typ->maxLoadableWeight - cargo();
-        // return typ->maxweight() + typ->loadcapacity - weight();
+   if ( searchedInnerVehicle == this ) {
+      return typ->maxLoadableWeight - cargo();
    } else {
-      int w1 = typ->maxweight() + typ->maxLoadableWeight - weight();
-      int w2 = -1;
+      int currentFreeWeight = typ->maxLoadableWeight - cargo();
+      int innerFreeWeight = -1;
       for ( int i = 0; i < 32; i++ )
          if ( loading[i] ) {
-            int w3 = loading[i]->searchstackforfreeweight ( eht, what );
-            if ( w3 >= 0 )
-               w2 = w3;
+            int w = loading[i]->searchstackforfreeweight ( searchedInnerVehicle );
+            if ( w >= 0 )
+               innerFreeWeight = w;
          }
 
-      if ( w2 != -1 )
-         if ( w2 < w1 )
-            return w2;
-         else
-            return w1;
+      if ( innerFreeWeight != -1 )
+         return min ( currentFreeWeight, innerFreeWeight );
       else
          return -1;
    }
 }
 
-int Vehicle :: freeweight ( int what )
+
+int Vehicle :: freeWeight ()
 {
    pfield fld = gamemap->getField ( xpos, ypos );
    if ( fld->vehicle )
-        return fld->vehicle->searchstackforfreeweight ( this, what );
+      return fld->vehicle->searchstackforfreeweight ( this );
    else
       if ( fld->building ) {
          for ( int i = 0; i < 32; i++ )
             if ( fld->building->loading[i] ) {
-               int w3 = fld->building->loading[i]->searchstackforfreeweight ( this, what );
+               int w3 = fld->building->loading[i]->searchstackforfreeweight ( this );
                if ( w3 >= 0 )
                   return w3;
             }
       }
 
    return -2;
-}
-
-int Vehicle::getMaxResourceStorageForWeight ( int resourcetype )
-{
-   if( resourcetype == 0) // no storage of energy
-      return 0;
-
-   pfield fld = gamemap->getField ( xpos, ypos );
-   if ( fld->vehicle  &&  fld->vehicle != this && resourceWeight[resourcetype] ) {
-      int fw = freeweight( 1 );
-      if ( fw >= 0 ) {
-         int maxf = fw * 1000 / resourceWeight[resourcetype];
-         if ( maxf > typ->tank.resource(resourcetype) || maxf < 0 )
-            return typ->tank.resource(resourcetype);
-         else
-            return maxf;
-      } else
-         return typ->tank.resource(resourcetype);
-   } else
-      return typ->tank.resource(resourcetype);
 }
 
 
