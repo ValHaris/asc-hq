@@ -823,10 +823,11 @@ void tspfldloaders::readfields ( void )
             for ( int i = 0; i < minenum; i++ ) {
                MineTypes type = MineTypes(stream->readInt());
                int strength = stream->readInt();
+               int minetime = stream->readInt();
                int player = stream->readInt();
                Mine m ( type, strength, player, spfld );
                if ( objectversion == 1 ) {
-                  int endtime = stream->readInt();
+                  int endtime = minetime;
                   int lifetime = spfld->getgameparameter( GameParameter(cgp_antipersonnelmine_lifetime + m.type - 1));
                   if ( lifetime > 0  &&  endtime > 0 )
                      m.lifetimer = endtime - spfld->time.turn() + spfld->getgameparameter( GameParameter(cgp_antipersonnelmine_lifetime + m.type - 1));
@@ -836,7 +837,7 @@ void tspfldloaders::readfields ( void )
                      else
                         m.lifetimer = -1;
                } else
-                  m.lifetimer = stream->readInt();
+                  m.lifetimer = minetime;
                fld2->mines.push_back ( m );
             }
 
