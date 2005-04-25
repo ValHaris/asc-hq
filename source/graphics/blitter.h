@@ -415,7 +415,7 @@
      protected:
         ColorTransform_None(){};
         PixelType transform( PixelType col) { return col; };
-        void init( Surface& src ) {};
+        void init( const Surface& src ) {};
      public:
         ColorTransform_None ( NullParamType npt ) {};
  };
@@ -428,7 +428,7 @@
 
         PixelType transform( PixelType col) { return col; };
 
-        void init( Surface& src ) {};
+        void init( const Surface& src ) {};
 
      public:
         ColorTransform_PlayerCol( int player ) {};
@@ -453,7 +453,7 @@
               return col;
         };
 
-        void init( Surface& src ) {};
+        void init( const Surface& src ) {};
 
      public:
         ColorTransform_PlayerCol( int player )
@@ -541,7 +541,7 @@
                  return col;
         };
 
-        void init( Surface& src ) {
+        void init( const Surface& src ) {
            if ( lateConversion ) {
               setColor( src.GetPixelFormat().MapRGB( sourceColor ));
               lateConversion = false;
@@ -577,7 +577,7 @@
      protected:
         ColorTransform_XLAT() : table(NULL) {};
 
-        void init( Surface& src ) {};
+        void init( const Surface& src ) {};
 
         Color transform( Color col)
         {
@@ -614,7 +614,7 @@
            return i + (i<<8) + (i <<16);
         };
 
-        void init( Surface& src ) {};
+        void init( const Surface& src ) {};
 
      public:
         ColorTransform_Gray ( NullParamType npt ) {};
