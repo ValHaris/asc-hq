@@ -61,7 +61,7 @@ class ItemRepository: public TextFileDataLoader {
       T* getObject_byPos( int pos ) { return container[pos]; };
 
       T* getObject_byID( int id ) { 
-         ObjectMap::iterator i = hash.find( id );
+         typename ObjectMap::iterator i = hash.find( id );
          if ( i != hash.end() )
             return i->second;
 
