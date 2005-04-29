@@ -1533,7 +1533,7 @@ void  savereplay( int num )
 
       memstream.writeInt ( actreplayversion );
    }
-   catch ( ASCexception err) {
+   catch ( ASCexception err ) {
       displaymessage( "error saving replay information", 1 );
    } /* endcatch */
 }

@@ -581,9 +581,9 @@ void Vehicle::ReactionFire::checkData ( )
 {
    // the size could have changed because a unit was saved to disk with 1 weapon system, the type modified to 2 and the unit loaded again
    if ( weaponShots.size() < unit->typ->weapons.count ) {
-      int oldsize = weaponShots.size();
+      size_t oldsize = weaponShots.size();
       weaponShots.resize( unit->typ->weapons.count );
-      for ( int i = oldsize; i < unit->typ->weapons.count; ++i )
+      for ( size_t i = oldsize; i < unit->typ->weapons.count; ++i )
          weaponShots[i] = unit->typ->weapons.weapon[i].reactionFireShots;
    }
 }

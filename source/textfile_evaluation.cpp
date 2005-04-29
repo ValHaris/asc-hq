@@ -244,7 +244,7 @@ void PropertyWritingContainer :: writeProperty ( Property& p, const ASCString& v
    output += p.getLastName();
    output +=  " = ";
 
-   int indent = output.length();
+   size_t indent = output.length();
    ASCString::size_type pos = value.find ( "\n" );
    if ( pos != ASCString::npos ) {
       output += "[";
@@ -1169,7 +1169,7 @@ ImageArrayProperty::PropertyType ImageArrayProperty::operation_eq ( const TextPr
 
 ASCString ImageArrayProperty::toString() const
 {
-   int num = property.size();
+   size_t num = property.size();
    tvirtualdisplay vdp ( 1100, 100 * (num / 10 + 1), 255, 8 );
    int cnt = 0;
    for ( PropertyType::iterator i = property.begin(); i != property.end(); i++ ) {

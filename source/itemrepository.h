@@ -47,18 +47,32 @@ extern void registerDataLoader( TextFileDataLoader& dataLoader );
 
 template<class T>
 class ItemRepository: public TextFileDataLoader {
-   ASCString typeName;
-   vector<T*>   container;
-   typedef map<int,T*>  ObjectMap;
-   ObjectMap hash;
+      ASCString typeName;
+      vector<T*>   container;
+      typedef map<int,T*>  ObjectMap;
+      ObjectMap hash;
 
-   void add( T* obj );
+      void add( T* obj );
+
+      map<int,int> idTranslation;
 
    public:
       ItemRepository( const ASCString& typeName_ ) : typeName( typeName_ ) {};
       T* getObject_byPos( int pos ) { return container[pos]; };
-      T* getObject_byID( int id ) { return hash[id]; };
-      int getNum() { return container.size(); };
+
+      T* getObject_byID( int id ) { 
+         ObjectMap::iterator i = hash.find( id );
+         if ( i != hash.end() )
+            return i->second;
+
+         map<int,int>::iterator j = idTranslation.find( id );
+         if ( j != idTranslation.end())
+            return getObject_byID( j->second );
+
+         return NULL;
+      };
+
+      size_t getNum() { return container.size(); };
       void readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location );
       void read( tnstream& stream );
       void write( tnstream& stream );
@@ -66,6 +80,8 @@ class ItemRepository: public TextFileDataLoader {
 
       vector<T*>& getVector() { return container; };
       virtual ~ItemRepository() {};
+
+      void addIdTranslation( int from, int to );
 
 };
 

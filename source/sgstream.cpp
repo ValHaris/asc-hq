@@ -866,7 +866,7 @@ void SingleUnitSet::read ( pnstream stream )
          ASCString s2;
          data = stream->readTextString ( s2 );
 
-         int seppos = s2.find_first_of ( separator );
+         size_t seppos = s2.find_first_of ( separator );
          if ( seppos >= 0 ) {
             ASCString b = s2.substr(0, seppos);
             ASCString e = s2.substr( seppos+1 );
@@ -905,7 +905,7 @@ void SingleUnitSet::read ( pnstream stream )
          }
       }
    } else {
-      int seppos = s.find_first_of ( ';' );
+      size_t seppos = s.find_first_of ( ';' );
       if ( seppos >= 0 ) {
          ASCString b = s.substr(0, seppos);
          ASCString e = s.substr( seppos+1 );

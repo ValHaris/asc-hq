@@ -29,6 +29,13 @@
 #include <string>
 #include <list>
 
+#include "global.h"
+
+#ifdef HAVE_LIMITS
+ #include <limits> 
+#endif
+
+
 #include <sys/stat.h>
 
 #include "global.h"
@@ -306,6 +313,13 @@ float tnstream::readFloat ( void )
    return c;
 }
 
+void tnstream::writeInt  ( size_t i )
+{
+#ifdef HAVE_LIMITS
+   assert( i <=  numeric_limits<int>::max());
+#endif
+   writeInt( int(i) );
+}
 
 
 void tnstream::writeInt  ( int i )

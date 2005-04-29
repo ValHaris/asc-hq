@@ -4,9 +4,14 @@
 */
 
 
-//     $Id: basestrm.h,v 1.60 2005-04-24 10:09:30 mbickel Exp $
+//     $Id: basestrm.h,v 1.61 2005-04-29 17:57:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2005/04/24 10:09:30  mbickel
+//      Added object growth
+//      Updated version numbers
+//      Fixed mine and object removal
+//
 //     Revision 1.59  2004/05/29 15:07:37  mbickel
 //      Fixed maps
 //      Fixed crash with asc.cache
@@ -652,7 +657,7 @@ class tfindfile {
 
                name = stream.readString();
                directoryLevel = stream.readInt();
-               isInContainer = stream.readInt();
+               isInContainer = stream.readInt() != 0;
                location = stream.readString();
                size = stream.readInt();
                date = stream.readInt();

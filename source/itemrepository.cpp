@@ -119,6 +119,12 @@ void ItemRepository<T>::write( tnstream& stream )
    }
 }
 
+template<class T>
+void ItemRepository<T>::addIdTranslation( int from, int to )
+{
+    idTranslation[from] = to;
+}
+
 
 ItemRepository<Vehicletype>  vehicleTypeRepository( "vehicletype" );
 ItemRepository<TerrainType>  terrainTypeRepository( "terraintype" );
@@ -128,6 +134,12 @@ ItemRepository<Technology>   technologyRepository ( "technology");
 
 TechAdapterContainer techAdapterContainer;
 
+namespace {
+   class Foo {
+   public:
+      Foo() { objectTypeRepository.addIdTranslation( 12998, 1 ); };
+   } foo;
+};
 
 class TechAdapterLoader : public TextFileDataLoader {
       void readTextFiles(PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location ) {

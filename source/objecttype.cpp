@@ -1064,9 +1064,9 @@ void ObjectType :: write ( tnstream& stream ) const
 void ObjectType :: FieldModification :: runTextIO ( PropertyContainer& pc )
 {
    pc.addDFloatArray ( "Movemalus_plus", movemalus_plus );
-   int mm = movemalus_plus.size();
+   size_t mm = movemalus_plus.size();
    movemalus_plus.resize( cmovemalitypenum );
-   for ( int i = mm; i < cmovemalitypenum; i++ ) {
+   for ( size_t i = mm; i < cmovemalitypenum; i++ ) {
       if ( i == 0 )
          movemalus_plus[i] = 0;
       else
@@ -1077,7 +1077,7 @@ void ObjectType :: FieldModification :: runTextIO ( PropertyContainer& pc )
    pc.addDFloatArray ( "Movemalus_abs", movemalus_abs );
    mm = movemalus_abs.size();
    movemalus_abs.resize( cmovemalitypenum );
-   for ( int i = mm; i < cmovemalitypenum; i++ ) {
+   for ( size_t i = mm; i < cmovemalitypenum; i++ ) {
       if ( i == 0 )
          movemalus_abs[i] = -1;
       else

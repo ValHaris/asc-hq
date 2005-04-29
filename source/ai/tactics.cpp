@@ -592,7 +592,7 @@ AI::AiResult AI::tactics( void )
 
    int hemmingBonus = 5;
 
-   int lastTactVehiclesSize; // = tactVehicles.size();
+   size_t lastTactVehiclesSize; // = tactVehicles.size();
 
    while ( !tactVehicles.empty() ) {
       lastTactVehiclesSize = tactVehicles.size();
