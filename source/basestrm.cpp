@@ -313,6 +313,8 @@ float tnstream::readFloat ( void )
    return c;
 }
 
+#if SIZE_T_not_identical_to_INT
+
 void tnstream::writeInt  ( size_t i )
 {
 #ifdef HAVE_LIMITS
@@ -321,6 +323,7 @@ void tnstream::writeInt  ( size_t i )
    writeInt( int(i) );
 }
 
+#endif
 
 void tnstream::writeInt  ( int i )
 {
