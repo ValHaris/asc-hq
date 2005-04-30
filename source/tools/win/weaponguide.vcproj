@@ -20,7 +20,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../..;../../tools;../../libs/getopt"
+				AdditionalIncludeDirectories="../..;../../tools;../../libs/getopt;&quot;../../libs/libsigc++&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;_WIN32_;converter;minimalIO;_NOASM_;_MSC_VER"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="3"
@@ -35,10 +35,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/FORCE:MULTIPLE"
-				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib SDLmm.lib SDL_image.lib"
+				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib SDLmm.lib SDL_image.lib triangulate.lib jpeglib.lib SDLmain.lib sigc++.lib"
 				OutputFile="$(OutDir)/bin/weaponguide.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SDL_image)/lib&quot;;&quot;$(SDL)/lib&quot;;&quot;$(SDLmm)/lib&quot;;&quot;$(OutDir)/lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(SDL_image)/VisualC/Debug&quot;;../../Debug/lib;../../libs/SDLmm/SDLmm/debug;&quot;$(SDL)/VisualC/SDLmain/Debug&quot;;&quot;$(SDL)/VisualC/SDL/Debug&quot;;&quot;../../libs/libsigc++/sigc++/Debug&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/weaponguide.pdb"/>
 			<Tool
@@ -77,7 +77,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="../..;../../tools;../../libs/getopt"
+				AdditionalIncludeDirectories="../..;../../tools;../../libs/getopt;&quot;../../libs/libsigc++&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;_WIN32_;converter;minimalIO;_NOASM_;_MSC_VER"
 				StringPooling="FALSE"
 				MinimalRebuild="FALSE"
@@ -92,10 +92,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/FORCE:MULTIPLE"
-				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib SDLmm.lib SDL_image.lib"
+				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib SDLmm.lib SDL_image.lib triangulate.lib jpeglib.lib SDLmain.lib sigc++.lib"
 				OutputFile="$(OutDir)/bin/weaponguide.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(SDL_image)/lib;$(SDLmm)/lib;$(OutDir)/lib"
+				AdditionalLibraryDirectories="&quot;$(SDL_image)/VisualC/Release&quot;;../../Release/lib;../../libs/SDLmm/SDLmm/Release;&quot;$(SDL)/VisualC/SDLmain/Release&quot;;&quot;$(SDL)/VisualC/SDL/Release&quot;;&quot;../../libs/libsigc++/sigc++/Release&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/weaponguide.pdb"
 				OptimizeReferences="2"
@@ -129,6 +129,15 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
+			<File
+				RelativePath="..\groupfile.cpp">
+			</File>
+			<File
+				RelativePath="..\guidegenerator.cpp">
+			</File>
+			<File
+				RelativePath="..\infopage.cpp">
+			</File>
 			<File
 				RelativePath="..\..\itemrepository.cpp">
 			</File>

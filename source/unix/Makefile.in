@@ -123,8 +123,12 @@ RANLIB = @RANLIB@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_LIBS = @SDL_LIBS@
+
 SDL_TTF_LDADD = @SDL_TTF_LDADD@
 SET_MAKE = @SET_MAKE@
+=======
+SET_MAKE = @SET_MAKE@
+>>>>>>> 1.33
 SGML2MAN = @SGML2MAN@
 SHELL = @SHELL@
 SIGC_CFLAGS = @SIGC_CFLAGS@
@@ -177,10 +181,14 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
+
 INCLUDES = -I$(top_builddir) -I$(top_src_dir) \
 			  -I$(top_builddir)/source -I$(top_src_dir)/source
 
 SUBDIRS = asc mapeditor
+=======
+SUBDIRS = asc mapeditor
+>>>>>>> 1.33
 all: all-recursive
 
 .SUFFIXES:
@@ -490,7 +498,6 @@ uninstall-info: uninstall-info-recursive
 	mostlyclean-recursive pdf pdf-am ps ps-am tags tags-recursive \
 	uninstall uninstall-am uninstall-info-am
 
-vpath %.cpp ..
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

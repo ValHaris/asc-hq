@@ -40,6 +40,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+
 bin_PROGRAMS = asc_demount$(EXEEXT) asc_mount$(EXEEXT) \
 	asc_makegfx$(EXEEXT) asc_weaponguide$(EXEEXT)
 subdir = source/tools/linux
@@ -126,6 +127,89 @@ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMDEP_FALSE = @AMDEP_FALSE@
 AMDEP_TRUE = @AMDEP_TRUE@
+=======
+bin_PROGRAMS = asc_demount$(EXEEXT) asc_mount$(EXEEXT) \
+	asc_makegfx$(EXEEXT) asc_weaponguide$(EXEEXT)
+subdir = source/tools/linux
+DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
+	$(top_srcdir)/configure.in
+am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
+	$(ACLOCAL_M4)
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = $(top_builddir)/config.h
+CONFIG_CLEAN_FILES =
+am__installdirs = "$(DESTDIR)$(bindir)"
+binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
+PROGRAMS = $(bin_PROGRAMS)
+am_asc_demount_OBJECTS = demount.$(OBJEXT) basestrm.$(OBJEXT) \
+	simplestream.$(OBJEXT) misc.$(OBJEXT) ascstring.$(OBJEXT) \
+	strtmesg.$(OBJEXT) stringtokenizer.$(OBJEXT)
+asc_demount_OBJECTS = $(am_asc_demount_OBJECTS)
+asc_demount_DEPENDENCIES =  \
+	$(top_builddir)/source/tools/lib/libasc_cmd.la
+am_asc_makegfx_OBJECTS = makegfx.$(OBJEXT) basestrm.$(OBJEXT) \
+	simplestream.$(OBJEXT) misc.$(OBJEXT) ascstring.$(OBJEXT) \
+	loadpcxc.$(OBJEXT) palette.$(OBJEXT) sgstream.$(OBJEXT) \
+	newfont.$(OBJEXT) basegfx.$(OBJEXT) graphicset.$(OBJEXT) \
+	gameoptions.$(OBJEXT) CLoadable.$(OBJEXT) Named.$(OBJEXT) \
+	Property.$(OBJEXT) PropertyGroup.$(OBJEXT) stack.$(OBJEXT) \
+	buildingtype.$(OBJEXT) typen.$(OBJEXT) vehicletype.$(OBJEXT) \
+	password.$(OBJEXT) strtmesg.$(OBJEXT) textfileparser.$(OBJEXT) \
+	containerbasetype.$(OBJEXT) terraintype.$(OBJEXT) \
+	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
+	textfile_evaluation.$(OBJEXT) stringtokenizer.$(OBJEXT) \
+	research.$(OBJEXT) itemrepository.$(OBJEXT)
+asc_makegfx_OBJECTS = $(am_asc_makegfx_OBJECTS)
+asc_makegfx_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
+	$(top_builddir)/source/tools/lib/libasc_cmd.la \
+	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la
+am_asc_mount_OBJECTS = mount.$(OBJEXT) basestrm.$(OBJEXT) \
+	simplestream.$(OBJEXT) misc.$(OBJEXT) ascstring.$(OBJEXT) \
+	strtmesg.$(OBJEXT) stringtokenizer.$(OBJEXT)
+asc_mount_OBJECTS = $(am_asc_mount_OBJECTS)
+asc_mount_DEPENDENCIES =  \
+	$(top_builddir)/source/tools/lib/libasc_cmd.la
+am_asc_weaponguide_OBJECTS = weaponguide.$(OBJEXT) basestrm.$(OBJEXT) \
+	simplestream.$(OBJEXT) misc.$(OBJEXT) ascstring.$(OBJEXT) \
+	loadpcxc.$(OBJEXT) palette.$(OBJEXT) sgstream.$(OBJEXT) \
+	newfont.$(OBJEXT) basegfx.$(OBJEXT) graphicset.$(OBJEXT) \
+	gameoptions.$(OBJEXT) CLoadable.$(OBJEXT) Named.$(OBJEXT) \
+	Property.$(OBJEXT) PropertyGroup.$(OBJEXT) stack.$(OBJEXT) \
+	buildingtype.$(OBJEXT) typen.$(OBJEXT) vehicletype.$(OBJEXT) \
+	password.$(OBJEXT) strtmesg.$(OBJEXT) textfileparser.$(OBJEXT) \
+	containerbasetype.$(OBJEXT) terraintype.$(OBJEXT) \
+	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
+	textfile_evaluation.$(OBJEXT) stringtokenizer.$(OBJEXT) \
+	research.$(OBJEXT) itemrepository.$(OBJEXT) \
+	groupfile.$(OBJEXT) guidegenerator.$(OBJEXT) \
+	infopage.$(OBJEXT)
+asc_weaponguide_OBJECTS = $(am_asc_weaponguide_OBJECTS)
+asc_weaponguide_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
+	$(top_builddir)/source/tools/lib/libasc_cmd.la \
+	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la
+DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
+depcomp = $(SHELL) $(top_srcdir)/depcomp
+am__depfiles_maybe = depfiles
+CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CXXFLAGS) $(CXXFLAGS)
+CXXLD = $(CXX)
+CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+SOURCES = $(asc_demount_SOURCES) $(asc_makegfx_SOURCES) \
+	$(asc_mount_SOURCES) $(asc_weaponguide_SOURCES)
+DIST_SOURCES = $(asc_demount_SOURCES) $(asc_makegfx_SOURCES) \
+	$(asc_mount_SOURCES) $(asc_weaponguide_SOURCES)
+ETAGS = etags
+CTAGS = ctags
+DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+ACLOCAL = @ACLOCAL@
+AMDEP_FALSE = @AMDEP_FALSE@
+AMDEP_TRUE = @AMDEP_TRUE@
 AMTAR = @AMTAR@
 AR = @AR@
 AUTOCONF = @AUTOCONF@
@@ -189,8 +273,12 @@ RANLIB = @RANLIB@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_LIBS = @SDL_LIBS@
+
 SDL_TTF_LDADD = @SDL_TTF_LDADD@
 SET_MAKE = @SET_MAKE@
+=======
+SET_MAKE = @SET_MAKE@
+>>>>>>> 1.42
 SGML2MAN = @SGML2MAN@
 SHELL = @SHELL@
 SIGC_CFLAGS = @SIGC_CFLAGS@
@@ -252,6 +340,7 @@ AM_CXXFLAGS = @SDL_CFLAGS@ -Dconverter @SIGC_CFLAGS@
 #			asc_raw2pcx
 asc_demount_SOURCES = demount.cpp      basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp strtmesg.cpp stringtokenizer.cpp
 asc_mount_SOURCES = mount.cpp        basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp strtmesg.cpp stringtokenizer.cpp
+
 asc_makegfx_SOURCES = makegfx.cpp      basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp  stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp   terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp overviewmapimage.cpp iconrepository.cpp
 #asc_viewid_SOURCES      = viewid.cpp       basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
 #asc_bin2text_SOURCES    = bin2text.cpp     basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
@@ -259,6 +348,7 @@ asc_weaponguide_SOURCES = weaponguide.cpp  basestrm.cpp simplestream.cpp misc.cp
 #asc_raw2pcx_SOURCES     = raw2pcx.cpp      basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
 asc_mount_LDADD = @SDL_LIBS@  @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
 asc_demount_LDADD = @SDL_LIBS@  @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
+
 asc_makegfx_LDADD = $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/graphics/libgraphics.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la $(top_builddir)/source/sdl/libsdl.la
 #asc_viewid_LDADD      = $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/graphics/libgraphics.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
 #asc_bin2text_LDADD    = $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/graphics/libgraphics.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la

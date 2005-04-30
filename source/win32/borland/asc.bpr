@@ -33,7 +33,8 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
     <LIBFILES value="..\..\..\..\Expat\Libs\exp.lib ..\..\..\..\SDL_image\bin\SDL_image.lib 
-      ..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB ..\..\..\..\sdl\bin\sdl.lib 
+      ..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB 
+      ..\..\..\..\paragui\borland\Paragui.lib ..\..\..\..\sdl\bin\sdl.lib 
       ..\..\AI\ai.lib ..\..\libs\bzlib\win\bzlib.lib 
       ..\..\libs\jpeg-6b\libjpeg.lib ..\..\libs\sdlmm\SDLmm.lib 
       ..\..\libs\triangul\win32\triangulation.lib 
@@ -77,6 +78,7 @@
       <FILE FILENAME="..\..\..\..\Expat\Libs\exp.lib" FORMNAME="" UNITNAME="exp" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\..\SDL_image\bin\SDL_image.lib" FORMNAME="" UNITNAME="SDL_image" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB" FORMNAME="" UNITNAME="SDL_mixer" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\..\paragui\borland\Paragui.lib" FORMNAME="" UNITNAME="Paragui" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\..\sdl\bin\sdl.lib" FORMNAME="" UNITNAME="sdl" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\..\sdl\src\main\win32\SDL_main.c" FORMNAME="" UNITNAME="SDL_main" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\AI\ai.lib" FORMNAME="" UNITNAME="ai" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
@@ -176,6 +178,7 @@
       <FILE FILENAME="..\..\gui.cpp" FORMNAME="" UNITNAME="gui" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\..\freetype2\objs\freetype-bcb.lib" FORMNAME="" UNITNAME="freetype-bcb.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\overviewmapimage.cpp" FORMNAME="" UNITNAME="overviewmapimage" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\..\freetype2\objs\freetype-bcb.lib" FORMNAME="" UNITNAME="freetype-bcb.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

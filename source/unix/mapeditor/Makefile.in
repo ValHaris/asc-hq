@@ -40,6 +40,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+
 bin_PROGRAMS = asc_mapedit$(EXEEXT)
 subdir = source/unix/mapeditor
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
@@ -109,14 +110,71 @@ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMDEP_FALSE = @AMDEP_FALSE@
 AMDEP_TRUE = @AMDEP_TRUE@
-AMTAR = @AMTAR@
-AR = @AR@
-AUTOCONF = @AUTOCONF@
-AUTOHEADER = @AUTOHEADER@
-AUTOMAKE = @AUTOMAKE@
-AWK = @AWK@
-CC = @CC@
-CCDEPMODE = @CCDEPMODE@
+=======
+bin_PROGRAMS = asc_mapedit$(EXEEXT)
+subdir = source/unix/mapeditor
+DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
+	$(top_srcdir)/configure.in
+am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
+	$(ACLOCAL_M4)
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = $(top_builddir)/config.h
+CONFIG_CLEAN_FILES =
+am__installdirs = "$(DESTDIR)$(bindir)"
+binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
+PROGRAMS = $(bin_PROGRAMS)
+am_asc_mapedit_OBJECTS = edevents.$(OBJEXT) edgen.$(OBJEXT) \
+	edglobal.$(OBJEXT) edmain.$(OBJEXT) edselfnt.$(OBJEXT) \
+	edmisc.$(OBJEXT) typen.$(OBJEXT) strtmesg.$(OBJEXT) \
+	stack.$(OBJEXT) spfst.$(OBJEXT) sgstream.$(OBJEXT) \
+	pd.$(OBJEXT) palette.$(OBJEXT) newfont.$(OBJEXT) \
+	misc.$(OBJEXT) loadpcxc.$(OBJEXT) loaders.$(OBJEXT) \
+	loadbi3.$(OBJEXT) dlg_box.$(OBJEXT) dialog.$(OBJEXT) \
+	basestrm.$(OBJEXT) basegfx.$(OBJEXT) attack.$(OBJEXT) \
+	CLoadable.$(OBJEXT) Property.$(OBJEXT) PropertyGroup.$(OBJEXT) \
+	gameoptions.$(OBJEXT) Named.$(OBJEXT) buildingtype.$(OBJEXT) \
+	vehicletype.$(OBJEXT) containerbase.$(OBJEXT) \
+	mapalgorithms.$(OBJEXT) viewcalculation.$(OBJEXT) \
+	gamemap.$(OBJEXT) password.$(OBJEXT) password_dialog.$(OBJEXT) \
+	research.$(OBJEXT) mapdisplay.$(OBJEXT) ascstring.$(OBJEXT) \
+	graphicset.$(OBJEXT) vehicle.$(OBJEXT) buildings.$(OBJEXT) \
+	networkdata.$(OBJEXT) resourcenet.$(OBJEXT) \
+	textfileparser.$(OBJEXT) terraintype.$(OBJEXT) \
+	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
+	itemrepository.$(OBJEXT) stringtokenizer.$(OBJEXT) \
+	music.$(OBJEXT) messages.$(OBJEXT) paradialog.$(OBJEXT) \
+	textfile_evaluation.$(OBJEXT) containerbasetype.$(OBJEXT) \
+	soundList.$(OBJEXT) simplestream.$(OBJEXT) \
+	mappolygons.$(OBJEXT) prehistoricevents.$(OBJEXT) \
+	gameevents.$(OBJEXT) gameeventsystem.$(OBJEXT) \
+	gameevent_dialogs.$(OBJEXT) clipboard.$(OBJEXT)
+asc_mapedit_OBJECTS = $(am_asc_mapedit_OBJECTS)
+am__DEPENDENCIES_1 =
+asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
+	$(top_builddir)/source/libs/triangul/libtriangul.la \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la
+DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
+depcomp = $(SHELL) $(top_srcdir)/depcomp
+am__depfiles_maybe = depfiles
+CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CXXFLAGS) $(CXXFLAGS)
+CXXLD = $(CXX)
+CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+SOURCES = $(asc_mapedit_SOURCES)
+DIST_SOURCES = $(asc_mapedit_SOURCES)
+ETAGS = etags
+CTAGS = ctags
+DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+ACLOCAL = @ACLOCAL@
+AMDEP_FALSE = @AMDEP_FALSE@
+AMDEP_TRUE = @AMDEP_TRUE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
@@ -167,18 +225,6 @@ PARAGUI_CFLAGS = @PARAGUI_CFLAGS@
 PARAGUI_CONFIG = @PARAGUI_CONFIG@
 PARAGUI_LIBS = @PARAGUI_LIBS@
 PATH_SEPARATOR = @PATH_SEPARATOR@
-PKG_CONFIG = @PKG_CONFIG@
-RANLIB = @RANLIB@
-SDL_CFLAGS = @SDL_CFLAGS@
-SDL_CONFIG = @SDL_CONFIG@
-SDL_LIBS = @SDL_LIBS@
-SDL_TTF_LDADD = @SDL_TTF_LDADD@
-SET_MAKE = @SET_MAKE@
-SGML2MAN = @SGML2MAN@
-SHELL = @SHELL@
-SIGC_CFLAGS = @SIGC_CFLAGS@
-SIGC_LIBS = @SIGC_LIBS@
-STRIP = @STRIP@
 VERSION = @VERSION@
 ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
@@ -244,20 +290,7 @@ terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
 textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
 mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
-gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
-geometry.cpp weatherarea.cpp guidimension.cpp weatherdialog.cpp \
-iconrepository.cpp overviewmapimage.cpp
 
-asc_mapedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
-$(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \
-$(PARAGUI_LIBS) $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-$(top_builddir)/source/graphics/libgraphics.la @SDL_TTF_LDADD@ \
-$(top_builddir)/source/libs/loki/libloki.la
-
-all: all-am
-
-.SUFFIXES:
-.SUFFIXES: .cpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -390,37 +423,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicletype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/viewcalculation.Po@am__quote@
+
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/weatherarea.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/weatherdialog.Po@am__quote@
-
-.cpp.o:
-@am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ $<
-
-.cpp.obj:
-@am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ `$(CYGPATH_W) '$<'`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
-
-.cpp.lo:
-@am__fastdepCXX_TRUE@	if $(LTCXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Plo"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
-
-mostlyclean-libtool:
-	-rm -f *.lo
-
-clean-libtool:
-	-rm -rf .libs _libs
-
-distclean-libtool:
+ydistclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
 
