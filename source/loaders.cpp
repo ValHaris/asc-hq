@@ -1069,7 +1069,7 @@ int          tmaploaders::loadmap( const char *       name )
 
    displayLogMessage ( 8, "fields, ");
    readfields ();
-   if(version > 0xfe28){  
+   if(version > 0xfe50){  
      if(spfld->weatherSystem != NULL ) {
         delete spfld->weatherSystem;
      }
@@ -1242,7 +1242,7 @@ tmap*          tsavegameloaders::loadgame( pnstream strm )
 
    readfields ( );
    
-   if(version >= 0xff41){  
+   if(version >= 0xff60){  
      if(spfld->weatherSystem != NULL) {
         delete spfld->weatherSystem;
      }
