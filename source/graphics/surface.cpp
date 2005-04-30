@@ -458,10 +458,15 @@ Surface& getFieldMask()
 {
    static Surface* mask8 = NULL;
    if ( !mask8 ) {
-      tnfilestream st ( "largehex.pcx", tnstream::reading );
-      mask8 = new Surface ( IMG_LoadPCX_RW ( SDL_RWFromStream( &st )));
-      assert ( mask8->GetPixelFormat().BitsPerPixel() == 8);
-      mask8->SetColorKey( SDL_SRCCOLORKEY, 0 );
+      try {
+         tnfilestream st ( "largehex.pcx", tnstream::reading );
+         mask8 = new Surface ( IMG_LoadPCX_RW ( SDL_RWFromStream( &st )));
+         assert ( mask8->GetPixelFormat().BitsPerPixel() == 8);
+         mask8->SetColorKey( SDL_SRCCOLORKEY, 0 );
+      }
+      catch ( tfileerror err ) {
+         fatalError( "could not access " + err.getFileName() );
+      }
       
    }
    return *mask8;

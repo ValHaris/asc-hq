@@ -135,12 +135,8 @@ RANLIB = @RANLIB@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_LIBS = @SDL_LIBS@
-
 SDL_TTF_LDADD = @SDL_TTF_LDADD@
 SET_MAKE = @SET_MAKE@
-=======
-SET_MAKE = @SET_MAKE@
->>>>>>> 1.17
 SGML2MAN = @SGML2MAN@
 SHELL = @SHELL@
 SIGC_CFLAGS = @SIGC_CFLAGS@
@@ -193,11 +189,7 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
-
 AM_CXXFLAGS = @SDL_CFLAGS@ @SIGC_CFLAGS@ @PARAGUI_CFLAGS@ -Dsgmain
-=======
-AM_CXXFLAGS = @SDL_CFLAGS@ @SIGC_CFLAGS@ -Dsgmain
->>>>>>> 1.17
 noinst_LTLIBRARIES = libai.la
 libai_la_SOURCES = base.cpp misc.cpp strategy.cpp valuation.cpp \
 buildingcapture.cpp service.cpp tactics.cpp

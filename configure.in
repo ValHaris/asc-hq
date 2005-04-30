@@ -11,7 +11,7 @@ AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE(asc,$asc_version)
 AM_MAINTAINER_MODE
 
-AC_DISABLE_SHARED
+dnl AC_DISABLE_SHARED
 AC_PROG_LIBTOOL
 AM_PROG_LIBTOOL
 
@@ -445,7 +445,6 @@ AC_OUTPUT(  Makefile \
 	    source/tools/lib/Makefile \
 	    source/tools/linux/Makefile \
 	    source/unix/Makefile \
-	    source/unix/asc/Makefile \
 	    source/unix/mapeditor/Makefile \
 	    source/unix/asc/Makefile \
 	    data/Makefile \
