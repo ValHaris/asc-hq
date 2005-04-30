@@ -160,6 +160,16 @@
 
      //! returns the level of height of this object in the normal 8 level scheme of asc (deep submerged, submerged, ... )
      int getEffectiveHeight();
+
+     //! the probability that an object of this type spawns another object on a neighbouring field
+     double growthRate;
+
+     //! the object is removed when it is lifetime turns old. -1 disables removal
+     int lifetime;
+
+   private:
+     //! the loading functions call this method to setup the objects images
+     void setupImages();
  };
 
 const int objectDisplayingMethodNum = 5;

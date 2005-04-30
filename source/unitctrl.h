@@ -1,4 +1,3 @@
-//     $Id: unitctrl.h,v 1.36.2.7 2005-02-15 16:33:38 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -121,8 +120,8 @@ class BaseVehicleMovement : public VehicleAction {
               MapDisplayInterface* mapDisplay;
               int status;
            public:
-              BaseVehicleMovement ( VehicleActionType _actionType, PPendingVehicleActions _pva, MapDisplayInterface* md ) : VehicleAction ( _actionType, _pva ), mapDisplay(md), status(0), attackedByReactionFire(false) {};
-              BaseVehicleMovement ( MapDisplayInterface* md ) : VehicleAction ( vat_move, NULL ), mapDisplay(md), status(0), attackedByReactionFire(false) {};
+              BaseVehicleMovement ( VehicleActionType _actionType, PPendingVehicleActions _pva, MapDisplayInterface* md ) : VehicleAction ( _actionType, _pva ),mapDisplay(md), status(0), attackedByReactionFire(false)  {};
+              BaseVehicleMovement ( MapDisplayInterface* md ) : VehicleAction ( vat_move, NULL ),mapDisplay(md), status(0), attackedByReactionFire(false) {};
               AStar3D::Path path;
               int execute ( Vehicle* veh, int x, int y, int step, int height, int noInterrupt );
               bool attackedByReactionFire;

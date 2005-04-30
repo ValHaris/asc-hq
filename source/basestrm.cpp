@@ -29,6 +29,13 @@
 #include <string>
 #include <list>
 
+#include "global.h"
+
+#ifdef HAVE_LIMITS
+ #include <limits> 
+#endif
+
+
 #include <sys/stat.h>
 
 #include "global.h"
@@ -306,7 +313,24 @@ float tnstream::readFloat ( void )
    return c;
 }
 
+#if SIZE_T_not_identical_to_INT
 
+void tnstream::writeInt  ( size_t i )
+{
+#ifdef HAVE_LIMITS
+   assert( i <=  numeric_limits<int>::max());
+#endif
+   writeInt( int(i) );
+}
+
+#endif
+/*
+void tnstream::writeInt  ( unsigned int i )
+{
+   i = SDL_SwapLE32(i);
+   writedata2 ( i );
+}
+*/
 
 void tnstream::writeInt  ( int i )
 {
@@ -1637,7 +1661,7 @@ int    compressrle ( const void* p, void* q)
             num = 1;
             actbyte = *s;
    
-            while ( s[num] == actbyte  &&  xp+num < x   &&   num < 255) 
+            while ( xp+num < x   &&   num < 255 && s[num] == actbyte ) 
                num++;
    
             if ( num > 2  ||  actbyte == header->rle ) {
@@ -2193,6 +2217,11 @@ void addSearchPath ( const ASCString& path )
             ascDirectory[ searchDirNum++ ] = strdup ( s.c_str() );
       }
    }
+}
+
+int getSearchPathNum()
+{
+   return searchDirNum;
 }
 
 ASCString getSearchPath ( int i )

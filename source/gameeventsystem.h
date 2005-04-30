@@ -2,7 +2,6 @@
     \brief Interface to the event handling of ASC
 */
 
-//     $Id: gameeventsystem.h,v 1.1.2.2 2004-12-04 15:29:45 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -179,7 +178,7 @@ class Factory{
          else {
             fatalError("Factory: Object ID not found");
             return NULL;
-         }    
+         }
       };
 };
 

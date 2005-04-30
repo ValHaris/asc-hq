@@ -447,6 +447,7 @@ AC_OUTPUT(  Makefile \
 	    source/unix/Makefile \
 	    source/unix/asc/Makefile \
 	    source/unix/mapeditor/Makefile \
+	    source/unix/asc/Makefile \
 	    data/Makefile \
 	    data/dialog/Makefile \
 	    data/music/Makefile  )

@@ -5,8 +5,6 @@
 
 */
 
-//     $Id: loaders.h,v 1.30.2.2 2004-12-16 18:48:29 mbickel Exp $
-
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -72,11 +70,11 @@ extern void  loadicons(void);
 
 extern void  savecampaignrecoveryinformation( const ASCString& filename, int id);
 
-const int actsavegameversion  = 0xff41;
+const int actsavegameversion  = 0xff60;
 const int minsavegameversion  = 0xff31;
-const int actmapversion       = 0xfe29;
+const int actmapversion       = 0xfe50;
 const int minmapversion       = 0xfe24;
-const int actnetworkversion   = 0x0012;
+const int actnetworkversion   = 0x0030;
 const int minnetworkversion   = 0x0004;
 const int actreplayversion    = 0x0003;
 const int minreplayversion    = 0x0001;

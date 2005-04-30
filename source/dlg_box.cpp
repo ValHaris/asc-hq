@@ -664,7 +664,7 @@ void         tdialogbox::rebuildtaborder(void)
 { 
   pbutton      pb;
   pbutton      pb2;
-  integer      i; 
+  integer      i = 0; 
   ttaborder    b; 
 
    pb = firstbutton; 
@@ -2732,7 +2732,9 @@ void tviewtext::setparams ( int xx1, int yy1, int xx2, int yy2, const char* ttxt
 
 void tviewtext::displaytext ( void )
 {
-  collategraphicoperations cgo ( tvt_x1, tvt_y1, tvt_x2, tvt_y2 );
+  auto_ptr<collategraphicoperations> cgo;
+  if ( tvt_dispactive )
+    cgo.reset( new collategraphicoperations ( tvt_x1, tvt_y1, tvt_x2, tvt_y2 ) );
 
    tvt_color = defaulttextcolor;
    tvt_maxlineheight = activefontsettings.font->height + 5;
@@ -2826,7 +2828,7 @@ void tviewtext::displaytext ( void )
              activefontsettings.length = 0;
              strcpy ( actline, actword );
           }
-   
+
           if (*s1 == '\n') {
              displaysingleline ( actline );
              nextline ( eeinzug, s1 );
@@ -3803,6 +3805,11 @@ void warning ( const ASCString& str )
 void errorMessage ( const ASCString& string )
 {
    displaymessage ( string.c_str(), 1 );
+}
+
+void infoMessage ( const ASCString& string )
+{
+   displaymessage ( string.c_str(), 3 );
 }
 
 

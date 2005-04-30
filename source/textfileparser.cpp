@@ -25,8 +25,8 @@
 #include "textfile_evaluation.h"
 
 
-const int TextFormatParser::operationsNum = 5;
-const char* TextFormatParser::operations[5] =  { "=", "*=", "+=", "->", "->*" };
+const int TextFormatParser::operationsNum = 6;
+const char* TextFormatParser::operations[6] =  { "=", "*=", "+=", "->", "->*", "-=" };
 const char* TextFormatParser::whiteSpace = " \t";
 
 

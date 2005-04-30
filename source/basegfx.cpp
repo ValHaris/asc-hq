@@ -568,11 +568,11 @@ char* rotatepict ( void* image, int organgle )
       for ( int x = 0; x < fieldxsize; x++ ) {
          int dx = x - fieldxsize/2 ;
          int dy = fieldysize/2 - y;
-         float nx, ny;
+         double nx, ny;
          if ( organgle != 0 && organgle != -180 && organgle != 180) {
             float wnk ;
             if ( dx  )
-               wnk = atan2 ( dy, dx );
+               wnk = atan2 ( double(dy), double(dx) );
             else
                if ( dy > 0 )
                   wnk = pi/2;
@@ -580,7 +580,7 @@ char* rotatepict ( void* image, int organgle )
                   wnk = -pi/2;
 
             wnk -= angle;
-            float radius = sqrt ( dx * dx + dy * dy );
+            float radius = sqrt ( double(dx * dx + dy * dy ));
 
             nx = radius * cos ( wnk );
             ny = radius * sin ( wnk );
@@ -616,7 +616,7 @@ char* rotatepict_grw ( void* image, int organgle )
 
    float angle = ((float)organgle) / 360 * 2 * pi + pi;
 
-   int d = int(sqrt(fieldxsize*fieldxsize + fieldysize*fieldysize ));
+   int d = int(sqrt(double(fieldxsize*fieldxsize + fieldysize*fieldysize )));
 
    char* dst = new char[ imagesize ( 0, 0, d,d ) ];
    dst[0] = d-1;
@@ -635,7 +635,7 @@ char* rotatepict_grw ( void* image, int organgle )
          if ( organgle != 0 && organgle != -180 && organgle != 180) {
             float wnk ;
             if ( dx  )
-               wnk = atan2 ( dy, dx );
+               wnk = atan2 ( double(dy), double(dx) );
             else
                if ( dy > 0 )
                   wnk = pi/2;
@@ -643,7 +643,7 @@ char* rotatepict_grw ( void* image, int organgle )
                   wnk = -pi/2;
 
             wnk -= angle;
-            float radius = sqrt ( dx * dx + dy * dy );
+            float radius = sqrt ( double(dx * dx + dy * dy ));
 
             nx = radius * cos ( wnk );
             ny = radius * sin ( wnk );

@@ -123,8 +123,6 @@ RANLIB = @RANLIB@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_LIBS = @SDL_LIBS@
-SDL_TTF_LDADD = @SDL_TTF_LDADD@
-SET_MAKE = @SET_MAKE@
 SGML2MAN = @SGML2MAN@
 SHELL = @SHELL@
 SIGC_CFLAGS = @SIGC_CFLAGS@
@@ -177,7 +175,11 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
+
 SUBDIRS = @GENCL@ docs sdl libs ai graphics unix tools 
+=======
+SUBDIRS = @GENCL@ docs sdl libs ai unix tools
+>>>>>>> 1.55
 EXTRA_DIST = *.cpp *.h *.inc
 all: all-recursive
 

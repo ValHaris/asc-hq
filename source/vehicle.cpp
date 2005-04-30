@@ -214,7 +214,11 @@ int Vehicle :: putResource ( int amount, int resourcetype, bool queryonly, int s
       if ( resourcetype == 0 )  // no energy storable
          return 0;
 
-      int tostore = min ( getMaxResourceStorageForWeight ( resourcetype ) - tank.resource(resourcetype), amount);
+      int spaceAvail = typ->tank.resource( resourcetype ) - tank.resource(resourcetype);
+      if ( spaceAvail < 0 )
+         spaceAvail = 0;
+
+      int tostore = min ( spaceAvail, amount);
       if ( !queryonly )
          tank.resource(resourcetype) += tostore;
 
@@ -255,7 +259,7 @@ void Vehicle :: setGeneratorStatus ( bool status )
 
 int Vehicle::weight( void ) const
 {
-   return typ->weight + tank.fuel * resourceWeight[Resources::Fuel] / 1000 + tank.material * resourceWeight[Resources::Material] / 1000 + cargo();
+   return typ->weight + cargo();
 }
 
 int Vehicle::size ( void )
@@ -547,8 +551,6 @@ void Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
               if (   (startField->bdt & getTerrainBitType(cbicebreaking) ).any()
                    || startField->checkforobject ( eisbrecherobject ) ) {
                  startField->addobject ( eisbrecherobject, 1 << dir );
-                 if ( startField->checkforobject ( eisbrecherobject ) )
-                    startField->checkforobject ( eisbrecherobject )->time = gamemap->time.turn();
               }
 
      dir = (dir + sidenum/2) % sidenum;
@@ -563,8 +565,6 @@ void Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
               if (   (destField->bdt & getTerrainBitType(cbicebreaking) ).any()
                    || destField->checkforobject ( eisbrecherobject ) ) {
                  destField->addobject ( eisbrecherobject, 1 << dir );
-                 if ( destField->checkforobject ( eisbrecherobject ) )
-                    destField->checkforobject ( eisbrecherobject )->time = gamemap->time.turn();
               }
    }
 }
@@ -577,9 +577,23 @@ Vehicle::ReactionFire::ReactionFire ( Vehicle* _unit ) : unit ( _unit )
 }
 
 
+void Vehicle::ReactionFire::checkData ( )
+{
+   // the size could have changed because a unit was saved to disk with 1 weapon system, the type modified to 2 and the unit loaded again
+   if ( weaponShots.size() < unit->typ->weapons.count ) {
+      size_t oldsize = weaponShots.size();
+      weaponShots.resize( unit->typ->weapons.count );
+      for ( size_t i = oldsize; i < unit->typ->weapons.count; ++i )
+         weaponShots[i] = unit->typ->weapons.weapon[i].reactionFireShots;
+   }
+}
+
+
+
 void Vehicle::ReactionFire::resetShotCount()
 {
-   for ( int i = 0; i < unit->typ->weapons.count; ++i )
+   assert( unit->typ->weapons.count <= weaponShots.size() );
+   for ( int i = 0; i < unit->typ->weapons.count; ++i ) 
       weaponShots[i] = unit->typ->weapons.weapon[i].reactionFireShots;
 }
 
@@ -802,14 +816,19 @@ bool  Vehicle :: vehicleconstructable ( pvehicletype tnk, int x, int y )
    if ( !tnk->techDependency.available ( gamemap->player[getOwner()].research))
       return 0;
 
-   if ( tnk->terrainaccess.accessible ( gamemap->getField(x,y)->bdt ) > 0 || height >= chtieffliegend)
-      if ( tnk->productionCost.material <= tank.material &&
-           tnk->productionCost.energy   <= tank.fuel  )
-           if ( beeline (x, y, xpos, ypos) <= maxmalq )
-              if ( getheightdelta( log2(tnk->height), log2(height) ) == 0 )
+//              if ( getheightdelta( log2(tnk->height), log2(height) ) == 0 )
+   if( (tnk->height & height ) || (( tnk->height & (chfahrend | chschwimmend)) && (height & (chfahrend | chschwimmend)))) {
+      int hgt = height;
+      if ( !(tnk->height & height))
+         hgt = 1 << log2(tnk->height);
+      if ( terrainaccessible2( gamemap->getField(x,y), tnk->terrainaccess, hgt ) > 0 )
+   //   tnk->terrainaccess.accessible ( gamemap->getField(x,y)->bdt ) > 0 || height >= chtieffliegend)
+         if ( tnk->productionCost.material <= tank.material &&
+              tnk->productionCost.energy   <= tank.fuel  )
+              if ( beeline (x, y, xpos, ypos) <= maxmalq )
                  return 1;
 
-
+   }
    return 0;
 }
 
@@ -856,71 +875,44 @@ bool Vehicle :: buildingconstructable ( pbuildingtype building )
       return false;
 }
 
-
-int Vehicle :: searchstackforfreeweight ( Vehicle* eht, int what )
+int Vehicle :: searchstackforfreeweight ( Vehicle* searchedInnerVehicle )
 {
-   if ( eht == this ) {
-      if ( what == 1 ) // material or fuel
-         return maxint;
-      else
-         return typ->maxLoadableWeight - cargo();
-        // return typ->maxweight() + typ->loadcapacity - weight();
+   if ( searchedInnerVehicle == this ) {
+      return typ->maxLoadableWeight - cargo();
    } else {
-      int w1 = typ->maxweight() + typ->maxLoadableWeight - weight();
-      int w2 = -1;
+      int currentFreeWeight = typ->maxLoadableWeight - cargo();
+      int innerFreeWeight = -1;
       for ( int i = 0; i < 32; i++ )
          if ( loading[i] ) {
-            int w3 = loading[i]->searchstackforfreeweight ( eht, what );
-            if ( w3 >= 0 )
-               w2 = w3;
+            int w = loading[i]->searchstackforfreeweight ( searchedInnerVehicle );
+            if ( w >= 0 )
+               innerFreeWeight = w;
          }
 
-      if ( w2 != -1 )
-         if ( w2 < w1 )
-            return w2;
-         else
-            return w1;
+      if ( innerFreeWeight != -1 )
+         return min ( currentFreeWeight, innerFreeWeight );
       else
          return -1;
    }
 }
 
-int Vehicle :: freeweight ( int what )
+
+int Vehicle :: freeWeight ()
 {
    pfield fld = gamemap->getField ( xpos, ypos );
    if ( fld->vehicle )
-        return fld->vehicle->searchstackforfreeweight ( this, what );
+      return fld->vehicle->searchstackforfreeweight ( this );
    else
       if ( fld->building ) {
          for ( int i = 0; i < 32; i++ )
             if ( fld->building->loading[i] ) {
-               int w3 = fld->building->loading[i]->searchstackforfreeweight ( this, what );
+               int w3 = fld->building->loading[i]->searchstackforfreeweight ( this );
                if ( w3 >= 0 )
                   return w3;
             }
       }
 
    return -2;
-}
-
-int Vehicle::getMaxResourceStorageForWeight ( int resourcetype )
-{
-   if( resourcetype == 0) // no storage of energy
-      return 0;
-
-   pfield fld = gamemap->getField ( xpos, ypos );
-   if ( fld->vehicle  &&  fld->vehicle != this && resourceWeight[resourcetype] ) {
-      int fw = freeweight( 1 );
-      if ( fw >= 0 ) {
-         int maxf = fw * 1000 / resourceWeight[resourcetype];
-         if ( maxf > typ->tank.resource(resourcetype) || maxf < 0 )
-            return typ->tank.resource(resourcetype);
-         else
-            return maxf;
-      } else
-         return typ->tank.resource(resourcetype);
-   } else
-      return typ->tank.resource(resourcetype);
 }
 
 
@@ -1101,11 +1093,14 @@ void Vehicle :: fillMagically( void )
 
 
 
-const int vehicleVersion = 2;
+const int vehicleVersion = 3;
 
 void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 {
-    stream.writeWord ( typ->id );
+    stream.writeWord ( 0 );
+    stream.writeInt( vehicleVersion );
+    stream.writeInt( typ->id );
+
     stream.writeChar ( color );
 
     int bm = cem_version;
@@ -1266,6 +1261,12 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 void   Vehicle::read ( tnstream& stream )
 {
     int _id = stream.readWord ();
+    int version = 0;
+    if ( _id == 0 ) {
+       version = stream.readInt();
+       _id = stream.readInt();
+    }
+
     stream.readChar (); // color
     if ( _id != typ->id )
        fatalError ( "Vehicle::read - trying to read a unit of different type" );
@@ -1458,8 +1459,10 @@ void   Vehicle::readData ( tnstream& stream )
        else
           weapstrength[m] = 0;
 
-    if ( version >= 1 )
+    if ( version >= 1 ) {
       readClassContainer( reactionfire.weaponShots, stream );
+      reactionfire.checkData();
+    }
     if ( version >= 2 )
       readClassContainer( reactionfire.nonattackableUnits, stream );
 }
@@ -1505,6 +1508,12 @@ void Vehicle::paint ( Surface& s, SPoint pos, int shadowDist ) const
 Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream, int forceNetworkID )
 {
    int id = stream.readWord ();
+   int version = 0;
+   if ( id == 0 ) {
+      version = stream.readInt();
+      id = stream.readInt();
+   }
+
    pvehicletype fzt = gamemap->getvehicletype_byid ( id );
    if ( !fzt )
       throw InvalidID ( "vehicle", id );

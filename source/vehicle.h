@@ -118,6 +118,7 @@
 
          //! hook that is called when a turn ends
          void endTurn ( void );
+         void checkData();
 
          bool canMove() const;
        private:
@@ -169,7 +170,7 @@
     int getHeight() const { return height; };
     
 
-    //! weight of unit including cargo, fuel and material
+    //! weight of unit including cargo
     int weight( void ) const;
 
     //! returns the units name or, if it does not exist, the unit type's name or description
@@ -177,25 +178,20 @@
 
 
   protected:
-    /** should not be called except from freeweight
-        \param what: 0=cargo ; 1=material/fuel
-    */
-    int searchstackforfreeweight( Vehicle* eht, int what );
-
-    //! returns the maximum amount of the resource 'resourcetype' that the unit can carry
-    int getMaxResourceStorageForWeight ( int resourcetype );
-
     const ResourceMatrix& getRepairEfficiency ( void ) { return repairEfficiency; };
 
     virtual void postRepair ( int oldDamage );
 
+  private:
+    /** if a unit (searchedInnerVehicle) is inside a transport, its payload depends also on the transport.
+        Since transports can be arbitrarily stacked, this function is used to search the entire
+        stack from outmost to the searched inner vehicle */
+    int searchstackforfreeweight ( Vehicle* searchedInnerVehicle );
 
   public:
 
-    /** returns the free weight that can be used for cargo or for resources
-        \param what: 0=cargo ; 1=resources
-    */
-    int freeweight ( int what = 0 );
+    //! returns the free weight that can be used for cargo
+    int freeWeight();
 
     //! Returns the size of a unit. A size is equal to the weight of the unit without any cargo or carried resources.
     int size ( void );

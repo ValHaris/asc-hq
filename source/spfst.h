@@ -145,11 +145,6 @@ extern void  putstreets2( int          x1,
                           pobjecttype obj );
 
 
-/** removes objects like tracks (by vehicles) or shipping lanes (made by icebreakers) 
-    after their lifetime (specified in the mapparameters) is exceeded      */
-extern void  clearfahrspuren(void);
-
-
 /*! tests if the vehicle can move onto the field
 
    \param uheight the level of height for which the check should be done. Use -2 to use the current height of the unit
@@ -201,6 +196,18 @@ extern int          terrainaccessible (  const pfield field, const Vehicle* vehi
                   -3   unit cannot drive onto terrain
 */
 extern int          terrainaccessible2 ( const pfield        field, const Vehicle* vehicle, int uheight = -1 );
+
+
+/** Checks if the field can be accessed
+    \returns 0=unit cannot access this field;
+             1=unit can move across this field but cannot keep standing there;
+             2=unit can move and stand there;
+             < 0 unit cannot access this field, because of:
+                  -1   very deep water required to submerge deep
+                  -2   deep water required to submerge
+                  -3   unit cannot drive onto terrain
+*/
+int          terrainaccessible2 ( const pfield        field, const TerrainAccess& terrainAccess, int uheight );
 
 
 /*!

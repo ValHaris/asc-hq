@@ -148,7 +148,7 @@ void InfoPage::startTable(int border, TableWidth interpretWAs, int width, TableW
     *buildingInfStream << "width=\"" << width;
     switch(interpretWAs) {
     case ABSOLUTE: *buildingInfStream << "px\""; break;
-    case RELATIVE: *buildingInfStream << "\%\"";
+    case RELATIVE: *buildingInfStream << "%%\"";
       break;
     }
   }
@@ -166,7 +166,7 @@ void InfoPage::startTable(int border, TableWidth interpretWAs, int width, TableW
   if(cols) {
     *buildingInfStream << "<colgroup>" << endl;
     for(int i=0; i< cols->size(); i++) {
-      *buildingInfStream << "<col width=\"" << (*cols)[i] <<"\%\">" << endl;
+      *buildingInfStream << "<col width=\"" << (*cols)[i] <<"%%\">" << endl;
     }
     *buildingInfStream << "</colgroup>" << endl;
   }

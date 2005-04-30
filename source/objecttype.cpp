@@ -49,6 +49,8 @@ ObjectType :: ObjectType ( void )
    imageHeight = 0;
    physicalHeight = 0;
    imageUsesAlpha = false;
+   growthRate = 0;
+   lifetime = -1;
 }
 
 ObjectType::FieldModification&  ObjectType::getFieldModification ( int weather )
@@ -836,7 +838,7 @@ void         calculateallobjects( pmap actmap )
 
 
 
-const int object_version = 14;
+const int object_version = 15;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -908,13 +910,24 @@ void ObjectType :: read ( tnstream& stream )
 
        displayMethod = stream.readInt();
 
-       if ( version <= 13 ) {
+       if ( version <= 15 ) {
           Surface s;
           s.read( stream );
           s.read( stream );
        }
 
        techDependency.read ( stream );
+
+       if ( version >= 12 )
+          growthRate = stream.readFloat();
+       else
+          growthRate = 0;
+
+       if ( version >= 13 )
+          lifetime = stream.readInt();
+       else
+          lifetime = -1;
+
 
        for ( int ww = 0; ww < cwettertypennum; ww++ )
          if ( weather.test ( ww ) ) {
@@ -1005,6 +1018,9 @@ void ObjectType :: write ( tnstream& stream ) const
 
     techDependency.write ( stream );
 
+    stream.writeFloat( growthRate );
+    stream.writeInt( lifetime );
+
 
     for ( int ww = 0; ww < cwettertypennum; ww++ )
        if ( weather.test( ww ) ) {
@@ -1028,9 +1044,9 @@ void ObjectType :: write ( tnstream& stream ) const
 void ObjectType :: FieldModification :: runTextIO ( PropertyContainer& pc )
 {
    pc.addDFloatArray ( "Movemalus_plus", movemalus_plus );
-   int mm = movemalus_plus.size();
+   size_t mm = movemalus_plus.size();
    movemalus_plus.resize( cmovemalitypenum );
-   for ( int i = mm; i < cmovemalitypenum; i++ ) {
+   for ( size_t i = mm; i < cmovemalitypenum; i++ ) {
       if ( i == 0 )
          movemalus_plus[i] = 0;
       else
@@ -1041,7 +1057,7 @@ void ObjectType :: FieldModification :: runTextIO ( PropertyContainer& pc )
    pc.addDFloatArray ( "Movemalus_abs", movemalus_abs );
    mm = movemalus_abs.size();
    movemalus_abs.resize( cmovemalitypenum );
-   for ( int i = mm; i < cmovemalitypenum; i++ ) {
+   for ( size_t i = mm; i < cmovemalitypenum; i++ ) {
       if ( i == 0 )
          movemalus_abs[i] = -1;
       else
@@ -1116,6 +1132,9 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
 
    pc.addString( "Name", name );
 
+   pc.addDFloat( "GrowthRate", growthRate, 0 );
+   pc.addInteger( "LifeTime", lifetime, -1 );
+
    pc.addTagInteger ( "NetBehaviour", netBehaviour, netBehaviourNum, objectNetMethod, int(0) );
 
    if ( pc.isReading() && pc.find ( "NoSelfChaining" )) {
@@ -1168,7 +1187,7 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                pc.addIntegerArray ( "ImageReference", imgReferences );
 
                for ( int j = 0; j < weatherPicture[i].images.size(); j++ )
-                  if ( imgReferences[j] >= 0 && imgReferences[j] < weatherPicture[i].images.size() ) 
+                  if ( imgReferences[j] >= 0 && imgReferences[j] < weatherPicture[i].images.size() )
                      weatherPicture[i].images[j] = weatherPicture[i].images[imgReferences[j]];
 
             } else {

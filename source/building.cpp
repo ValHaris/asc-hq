@@ -922,7 +922,7 @@ int getstepwidth ( int max )
    else
       ep = 0.0;
 
-   return (int)pow ( 10, ep );
+   return int(pow ( double(10), ep ));
 }
 
 
@@ -6509,8 +6509,8 @@ void ccontainer_t :: ctransportinfo_subwindow :: paintvariables ( void )
    eht = hostcontainer->getmarkedunit();
    if ( eht ) {
       showtext2c ( strrr ( eht->typ->weight ),                       subwinx1 + 170,  subwiny1 +  62 );
-      showtext2c ( strrr ( eht->getTank().material * resourceWeight[Resources::Material] / 1000 ),  subwinx1 + 170,  subwiny1 +  70 );
-      showtext2c ( strrr ( eht->getTank().fuel     * resourceWeight[Resources::Fuel]     / 1000 ),  subwinx1 + 170,  subwiny1 +  78 );
+      showtext2c ( "-",  subwinx1 + 170,  subwiny1 +  70 );
+      showtext2c ( "-",  subwinx1 + 170,  subwiny1 +  78 );
       showtext2c ( strrr ( eht->cargo() ),                           subwinx1 + 170,  subwiny1 +  86 );
       showtext2c ( strrr ( eht->weight() ),                          subwinx1 + 170,  subwiny1 +  96 );
    } else {

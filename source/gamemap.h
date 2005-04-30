@@ -40,7 +40,7 @@
  class WeatherSystem;
 
 //! The number of game paramters that can be specified for each map.
-const int gameparameternum = 29;
+const int gameparameternum = 32;
 
 //! The names of the game paramter. \sa gameparameterdefault
 extern const char* gameparametername[ gameparameternum ];
@@ -79,16 +79,28 @@ enum GameParameter { cgp_fahrspur,
        cgp_experienceDivisorAttack,
        cgp_disableDirectView,
        cgp_disableUnitTransfer,
-       cgp_experienceDivisorDefense };
+       cgp_experienceDivisorDefense,
+       cgp_debugEvents,
+       cgp_objectGrowthMultiplier,
+       cgp_objectGrowOnOtherObjects };
 
+
+class AgeableItem {
+    protected:
+       AgeableItem() : lifetimer(-1) {};
+    public:
+       int lifetimer;
+
+       //! ages the object by one turn. Returns true if the object shall be removed
+       static bool age( AgeableItem& obj );
+};
 
 //! an instance of an object type (#tobjecttype) on the map
-class Object {
+class Object : public AgeableItem {
     public:
        pobjecttype typ;
        int damage;
        int dir;
-       int time;
        // int dummy[4];
        Object ( void );
        Object ( pobjecttype t );
@@ -96,6 +108,7 @@ class Object {
        const OverviewMapImage* getOverviewMapImage( int weather );
        void setdir ( int dir );
        int  getdir ( void );
+
 };
 
 #define cminenum 4
@@ -105,17 +118,17 @@ extern const int MineBasePunch[cminenum]  ;
 enum MineTypes { cmantipersonnelmine = 1 , cmantitankmine, cmmooredmine, cmfloatmine  };
 
 
-class Mine {
+class Mine : public AgeableItem {
    public:
+      Mine( MineTypes type, int strength, int player, tmap* gamemap );
+
+
       MineTypes type;
 
       //! the effective punch of the mine
       int strength;
 
-      //! the turnnumber in which the mine was placed
-      int time;
-
-      //! the player who placed the mine; range 0 .. 7      
+      //! the player who placed the mine; range 0 .. 7
       int player;
 
       //! can the mine attack this unit
@@ -127,7 +140,7 @@ class LoadNextMap {
        public:
           int id;
           LoadNextMap( int ID ) : id(ID) {};
-};          
+};
 
 
 
@@ -247,9 +260,6 @@ class  tfield {
     //! the player who placed the mines on this field.
     int mineowner ( void );
 
-    //! mines may have a limited lifetime. This methods removes all mines whose maxmimum lifetime is exeeded
-    void checkminetime ( int time );
-
     //! checks if the unit is standing on this field. Since units are being cloned for some checks, this method should be used instead of comparing the pointers to the unit
     bool unitHere ( const Vehicle* veh );
 
@@ -263,6 +273,8 @@ class  tfield {
          \param num The position of the mine; if num is -1, the last mine is removed)
     **/
     void  removemine ( int num ); 
+
+    void endRound( int turn );
 
     //! some variables for the viewcalculation algorithm. see #viewcalculation.cpp for details
     struct View {
@@ -676,8 +688,16 @@ class tmap {
 
       //! just a helper variable for loading the map; no function outside;
       bool loadOldEvents;
+
+      //! generated a pseudo-random number with the map-internal seed
+      int random( int max );
+
    private:
       Vehicle* getUnit ( Vehicle* eht, int nwid );
+
+      void objectGrowth();
+
+      unsigned int randomSeed;
 };
 
 typedef tmap::Player Player;

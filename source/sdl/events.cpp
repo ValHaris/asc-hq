@@ -364,13 +364,13 @@ SDL_Thread* secondThreadHandle = NULL;
 int closeEventThread = 0;
 
 const int keyTranslationNum = 7;
-int keyTranslation[keyTranslationNum][2] = {{ '‰', 'Ñ' },
-                                            {'ˆ', 'î' },
-                                            {'¸', 'Å'},
-                                            {'ƒ', 'é' },
-                                            {'÷', 'ô' },
-                                            {'‹', 'ö' },
-                                            {'ﬂ', '·' }}; 
+int keyTranslation[keyTranslationNum][2] = { { 228, 132 }, //   "a
+                                             { 246, 148 }, //   "o
+                                             { 252, 129 }, //   "u
+                                             { 196, 142 }, //   "A
+                                             { 214, 153 }, //   "O
+                                             { 220, 154 }, //   "U
+                                             { 223, 225 } }; // sz
 
 int processEvents ( )
 {

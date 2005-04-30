@@ -2,7 +2,7 @@
     \brief Interface to the polygon triangulation library
 */
 
-//     $Id: polygontriangulation.h,v 1.2 2004-01-16 21:17:23 mbickel Exp $
+//     $Id: polygontriangulation.h,v 1.2.2.1 2005-04-30 14:46:18 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -154,7 +154,7 @@ bool PolygonPainter<Poly>::checkpolygon   ( const Poly& poly )
     if ( poly.vertex.size() > 1  && poly.vertex.size() < 3 )
        return true;
     else {
-       int i,j,k;
+       size_t i,j,k;
 
        for ( i = 0; i < poly.vertex.size(); i++ )
           for ( j = 0; j < poly.vertex.size(); j++ )

@@ -121,6 +121,12 @@ ItemRepository<T>::~ItemRepository()
 }
 
 
+template<class T>
+void ItemRepository<T>::addIdTranslation( int from, int to )
+{
+    idTranslation[from] = to;
+}
+
 
 ItemRepository<Vehicletype>  vehicleTypeRepository( "vehicletype" );
 ItemRepository<TerrainType>  terrainTypeRepository( "terraintype" );
@@ -130,6 +136,12 @@ ItemRepository<Technology>   technologyRepository ( "technology");
 
 TechAdapterContainer techAdapterContainer;
 
+namespace {
+   class Foo {
+   public:
+      Foo() { objectTypeRepository.addIdTranslation( 12998, 1 ); };
+   } foo;
+};
 
 class TechAdapterLoader : public TextFileDataLoader {
       void readTextFiles(PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location ) {
@@ -156,7 +168,7 @@ class TechAdapterLoader : public TextFileDataLoader {
 
 void  loadalltextfiles ( );
 
-const int cacheVersion = 9;
+const int cacheVersion = 13;
 
 class FileCache {
       vector<tfindfile::FileInfo> actualFileInfo;

@@ -1,10 +1,7 @@
 /*! \file basestrm.h
-    \brief The interface for the various streams that ASC offers, 
-           like file and memory streams. 
+    \brief The interface for the various streams that ASC offers,
+           like file and memory streams.
 */
-
-
-//     $Id: basestrm.h,v 1.59.2.2 2004-12-28 16:11:41 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -528,7 +525,7 @@ class tfindfile {
 
                name = stream.readString();
                directoryLevel = stream.readInt();
-               isInContainer = stream.readInt();
+               isInContainer = stream.readInt() != 0;
                location = stream.readString();
                size = stream.readInt();
                date = stream.readInt();
@@ -641,6 +638,7 @@ extern char* extractFileName ( char* buf, const char* filename );
 extern ASCString extractFileName ( const ASCString& filename );
 extern ASCString extractFileName_withoutSuffix ( const ASCString& filename );
 extern int createDirectory ( const char* name );
+extern int getSearchPathNum();
 extern ASCString getSearchPath ( int i );
 
 //! converts path delimitters from foreign operating systems to the ones used by the current operating system. On Linux, this function converts backslashes to slashes, on Windows vice versa

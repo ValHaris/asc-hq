@@ -3,8 +3,6 @@
   
 */
 
-//     $Id: sgstream.h,v 1.30.2.10 2005-04-16 13:28:35 mbickel Exp $
-
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -46,7 +44,8 @@ extern void generatedirecpict ( void* orgpict, void* direcpict );
 extern void loadpalette ( );
 extern int readgameoptions ( const ASCString& filename= "" );
 extern bool writegameoptions ( ASCString filename = "" );
-// extern ASCString getConfigFileName( const ASCString& filename );
+extern ASCString getConfigFileName ();
+
 extern void loadguipictures( void );
 extern void checkFileLoadability ( const ASCString& filename );
 

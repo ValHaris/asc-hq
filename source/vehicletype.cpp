@@ -106,11 +106,6 @@ Vehicletype :: Vehicletype ( void )
 }
 
 
-int Vehicletype::maxweight ( void ) const
-{
-   return weight + tank.fuel * resourceWeight[Resources::Fuel] / 1000 + tank.material * resourceWeight[Resources::Material] / 1000;
-}
-
 int Vehicletype::maxsize ( void ) const
 {
    return weight;
@@ -120,7 +115,7 @@ int Vehicletype::maxsize ( void ) const
 extern void* generate_vehicle_gui_build_icon ( pvehicletype tnk );
 #endif
 
-const int vehicle_version = 19;
+const int vehicle_version = 21;
 
 
 
@@ -200,7 +195,10 @@ void Vehicletype :: read ( tnstream& stream )
    stream.readChar(); // dummy
    stream.readChar(); // dummy
    stream.readChar(); // dummy
-   id = stream.readWord();
+   if ( version <= 18 )
+      id = stream.readWord();
+   else
+      id = stream.readInt();
    tank.fuel = stream.readInt();
    fuelConsumption = stream.readWord();
    tank.energy = stream.readInt();
@@ -429,6 +427,8 @@ void Vehicletype :: read ( tnstream& stream )
             weapons.weapon[j].laserRechargeRate = stream.readInt();
             weapons.weapon[j].laserRechargeCost.read( stream );
          }
+         if ( version >= 20 )
+            weapons.weapon[j].soundLabel = stream.readString();
 
       }
 
@@ -485,6 +485,11 @@ void Vehicletype :: read ( tnstream& stream )
    else
       if ( version >= 18 )
          cargoMovementDivisor = stream.readFloat();
+
+   if ( version >= 20 ) {
+      movementSoundLabel = stream.readString();
+      killSoundLabel = stream.readString();
+   }
 }
 
 
@@ -525,7 +530,7 @@ void Vehicletype:: write ( tnstream& stream ) const
    stream.writeChar(0);
    stream.writeChar(0);
    stream.writeChar(0);
-   stream.writeWord(id );
+   stream.writeInt(id );
    stream.writeInt(tank.fuel );
    stream.writeWord(fuelConsumption );
    stream.writeInt(tank.energy );
@@ -615,7 +620,7 @@ void Vehicletype:: write ( tnstream& stream ) const
 
       stream.writeInt( weapons.weapon[j].laserRechargeRate );
       weapons.weapon[j].laserRechargeCost.write( stream );
-
+      stream.writeString( weapons.weapon[j].soundLabel );
    }
 
    terrainaccess.write ( stream );
@@ -637,7 +642,11 @@ void Vehicletype:: write ( tnstream& stream ) const
    buildicon.write(stream);
 
    stream.writeFloat ( cargoMovementDivisor );
+
+   stream.writeString( movementSoundLabel );
+   stream.writeString( killSoundLabel );
 }
+
 
 const ASCString& Vehicletype::getName( ) const
 {

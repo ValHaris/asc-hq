@@ -31,6 +31,7 @@
  extern void errorMessage ( const ASCString& string );
  extern void warning ( const ASCString& string );
  extern void longWarning ( const ASCString& string );
+ extern void infoMessage ( const ASCString& string );
 
 
  #ifdef HAVE_EXCEPTION

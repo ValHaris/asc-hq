@@ -250,7 +250,7 @@ void tn_file_buf_stream::readbuffer( void )
 
 void tn_file_buf_stream::writebuffer()
 { 
-   int written = fwrite( zeiger, 1, actmempos, fp );
+   size_t written = fwrite( zeiger, 1, actmempos, fp );
    if ( ferror ( fp ) || actmempos != written )
       throw  tfileerror ( getDeviceName() );
 

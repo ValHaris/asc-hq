@@ -790,8 +790,6 @@ const int maxminingrange = 10;
 const float productionLineConstructionCostFactor = 0.5;
 const float productionLineRemovalCostFactor = 0.2;
 
-//! The weight of 1000 units of a Resource
-extern const int resourceWeight[ resourceTypeNum ];
 
 #define objectbuildmovecost 16  // vehicle->movement -= (8 + ( fld->movemalus[0] - 8 ) / ( objectbuildmovecost / 8 ) ) * kosten des obj
 

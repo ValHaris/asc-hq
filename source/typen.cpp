@@ -89,8 +89,6 @@ const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoundaryNum
 const int directionangle [ sidenum ] = 
  { 0, -53, -127, -180, -180 -53 , -180 -127 };
 
-const int resourceWeight[ resourceTypeNum ] = { 0, 10, 4 };
-
 
 
 

@@ -1111,21 +1111,34 @@ int scrleftspace = 21;
 
 void copyvfb2displaymemory_zoom ( void* parmbuf, int x1, int y1, int x2, int y2 )
 {
+  struct parmstruct {
+          long src;
+          long dst;
+          int x;
+          int y;
+          int* steps;
+          int srcdif;
+          int dstdif;
+          int* vfbsteps;
+      };
+   
    int tempdirectscreenaccess = agmp->directscreenaccess;
    if ( hgmp->directscreenaccess != agmp->directscreenaccess )
       agmp->directscreenaccess = hgmp->directscreenaccess;
 
-   int* parmi = (int*) parmbuf;
+      
+   parmstruct* parm;
+   parm = (parmstruct *)parmbuf;
+   
+   char* esi = (char*) parm->src;
+   char* edi = (char*) parm->dst;
 
-   char* esi = (char*) parmi[0];
-   char* edi = (char*) parmi[1];
-
-   int edx = parmi[3];
+   int edx = parm->y;
    int ecx;
    int* ebp;
    do {
-      ebp = (int*) parmi[4];
-      ecx =  parmi[2];
+      ebp = parm->steps;
+      ecx =  parm->x;
       do {
 
          esi += *ebp;
@@ -1137,9 +1150,9 @@ void copyvfb2displaymemory_zoom ( void* parmbuf, int x1, int y1, int x2, int y2 
 
       } while ( ecx ); /* enddo */
 
-      esi += parmi[5];
-      edi += parmi[6];
-      ebp = (int*) parmi[7];
+      esi += parm->srcdif;
+      edi += parm->dstdif;
+      ebp = parm->vfbsteps;
 
       edx--;
       esi += ebp[edx];
@@ -1634,26 +1647,26 @@ void tdisplaymap :: cp_buf ( void )
    else {
 
 
-      struct {
-         int src;
-         int dst;
-         int x;
-         int y;
-         int* steps;
-         int srcdif;
-         int dstdif;
-         int* vfbsteps;
-      }
-      parm;
 
-      parm.dst = hgmp->linearaddress + windowx1 + windowy1 * hgmp->bytesperscanline ;
-      parm.src = agmp->linearaddress + vfbstartdif;
-      parm.x = window.xsize;
-      parm.y = window.ysize;
-      parm.steps = copybufsteps;
-      parm.srcdif = agmp->bytesperscanline - vfbwidthused - 1;
-      parm.dstdif = hgmp->bytesperscanline - window.xsize;
-      parm.vfbsteps = copybufstepwidth;
+       struct {
+          long src;
+          long dst;
+          int x;
+          int y;
+          int* steps;
+          int srcdif;
+          int dstdif;
+          int* vfbsteps;
+       } parm;
+
+       parm.dst = hgmp->linearaddress + windowx1 + windowy1 * hgmp->bytesperscanline ;
+       parm.src = agmp->linearaddress + vfbstartdif;
+       parm.x = window.xsize;
+       parm.y = window.ysize;
+       parm.steps = copybufsteps;
+       parm.srcdif = agmp->bytesperscanline - vfbwidthused - 1;
+       parm.dstdif = hgmp->bytesperscanline - window.xsize;
+       parm.vfbsteps = copybufstepwidth;
 
       copyvfb2displaymemory_zoom ( &parm.src );
 
@@ -1664,26 +1677,25 @@ void tdisplaymap :: cp_buf ( void )
 void tdisplaymap :: cp_buf ( int x1, int y1, int x2, int y2 )
 {
 
-   struct {
-      int src;
-      int dst;
-      int x;
-      int y;
-      int* steps;
-      int srcdif;
-      int dstdif;
-      int* vfbsteps;
-   }
-   parm;
+       struct {
+          long src;
+          long dst;
+          int x;
+          int y;
+          int* steps;
+          int srcdif;
+          int dstdif;
+          int* vfbsteps;
+       } parm;
 
-   parm.dst = hgmp->linearaddress + windowx1 + windowy1 * hgmp->bytesperscanline ;
-   parm.src = agmp->linearaddress + vfbstartdif;
-   parm.x = window.xsize;
-   parm.y = window.ysize;
-   parm.steps = copybufsteps;
-   parm.srcdif = agmp->bytesperscanline - vfbwidthused - 1;
-   parm.dstdif = hgmp->bytesperscanline - window.xsize;
-   parm.vfbsteps = copybufstepwidth;
+       parm.dst = hgmp->linearaddress + windowx1 + windowy1 * hgmp->bytesperscanline ;
+       parm.src = agmp->linearaddress + vfbstartdif;
+       parm.x = window.xsize;
+       parm.y = window.ysize;
+       parm.steps = copybufsteps;
+       parm.srcdif = agmp->bytesperscanline - vfbwidthused - 1;
+       parm.dstdif = hgmp->bytesperscanline - window.xsize;
+       parm.vfbsteps = copybufstepwidth;
 
    copyvfb2displaymemory_zoom ( &parm.src, getfieldposx ( x1-2, y1-2), getfieldposy( x1-2, y1-2 ), getfieldposx ( x2, y2) + getfieldsizex(), getfieldposy( x2, y2 ) + getfieldsizex());
 }
@@ -2970,5 +2982,4 @@ int tbackgroundpict :: getlastpaintmode ( void )
 }
 
 #endif
-
 

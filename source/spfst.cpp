@@ -104,6 +104,11 @@ int          terrainaccessible2 ( const pfield        field, const Vehicle*     
       return 0;
 
 
+   return terrainaccessible2( field, vehicle->typ->terrainaccess, uheight );
+}
+
+int          terrainaccessible2 ( const pfield        field, const TerrainAccess& terrainAccess, int uheight )
+{
    if ( uheight >= chtieffliegend)
       return 2;
    else {
@@ -119,13 +124,20 @@ int          terrainaccessible2 ( const pfield        field, const Vehicle*     
               else
                  return -2;
            else {
-              if ( vehicle->typ->terrainaccess.accessible ( field->bdt ) > 0 )
-                 return 2;
-              else
+              if ( terrainAccess.accessible ( field->bdt ) > 0 ) {
+                 if ( uheight == chschwimmend ) {
+                    if ( (field->bdt & getTerrainBitType(cbwater)).any() )
+                       return 2;
+                    else
+                       return -3;
+                 } else
+                    return 2;
+              } else
                  return -3;
             }
    }
 }
+
 
 
 int         fieldAccessible( const pfield        field,
@@ -599,31 +611,6 @@ void         tcursor::display(void)
       oposx = posx;
       oposy = posy;
       show(); 
-} 
-
-
-void         clearfahrspuren(void)
-{ 
-      if ((actmap->xsize == 0) || (actmap->ysize == 0)) 
-        return;
-      int l = 0; 
-      for ( int y = 0; y < actmap->ysize ; y++) 
-         for ( int x = 0; x < actmap->xsize ; x++) {
-            pobject i = actmap->field[l].checkforobject ( fahrspurobject );
-            if ( i ) 
-               if ( actmap->getgameparameter ( cgp_fahrspur ) > 0 )
-                  if ( i->time + actmap->getgameparameter ( cgp_fahrspur ) < actmap->time.turn() )
-                     getfield ( x, y ) -> removeobject ( fahrspurobject );
-
-            i = actmap->field[l].checkforobject ( eisbrecherobject );
-            if ( i ) 
-               if ( actmap->getgameparameter ( cgp_eis ) > 0 )
-                  if ( i->time + actmap->getgameparameter ( cgp_eis ) < actmap->time.turn() )
-                     getfield ( x, y ) -> removeobject ( eisbrecherobject );
-
-            getfield ( x, y )->checkminetime ( actmap->time.turn() );
-            l++;
-         } 
 } 
 
 

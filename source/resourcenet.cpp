@@ -250,6 +250,8 @@ int ResourceNet :: fieldavail ( int x, int y )
 
     if ( fld ) {
        TerrainBits tb = getTerrainBitType(cbpipeline);
+       assert( resourcetype >= 0 );
+       
        if ( resourcetype == 0)
          tb |= getTerrainBitType(cbpowerline);
 

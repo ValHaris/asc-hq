@@ -2,7 +2,6 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.42.2.1 2004-11-27 23:20:51 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger

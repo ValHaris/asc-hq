@@ -2,8 +2,6 @@
     \brief Interface to the event handling of ASC
 */
 
-//     $Id: gameevents.h,v 1.3.2.2 2004-12-11 21:22:30 mbickel Exp $
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -111,7 +109,7 @@ class FieldAddressing: protected PolygonPainerSquareCoordinate  {
       void setpointabs ( int x,  int y  );
 
       void setup();
-      friend Event* readOldEvent( pnstream stream, pmap map, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents );
+      friend Event* readOldEvent( pnstream stream, pmap gamemap, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents );
 };
 
 

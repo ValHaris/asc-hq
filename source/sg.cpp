@@ -1073,17 +1073,36 @@ void showCargoSummary()
    Summary summary;
 
    pfield fld = getactfield();
-   if ( fld && fld->vehicle )
+   if ( fld && fld->vehicle && fld->vehicle->getOwner() == actmap->actplayer ) {
       calcCargoSummary( fld->vehicle, summary );
 
-   ASCString s;
-   for ( Summary::iterator i = summary.begin(); i != summary.end(); ++i )
-      s += vehicleTypeRepository.getObject_byID( i->first )->name + ": " + strrr(i->second) + "\n";
+      ASCString s;
+      for ( Summary::iterator i = summary.begin(); i != summary.end(); ++i )
+         s += vehicleTypeRepository.getObject_byID( i->first )->name + ": " + strrr(i->second) + "\n";
 
-   tviewanytext vat ;
-   vat.init ( "Cargo information", s.c_str(), 20, -1 , 450, 480 );
-   vat.run();
-   vat.done();
+      tviewanytext vat ;
+      vat.init ( "Cargo information", s.c_str(), 20, -1 , 450, 480 );
+      vat.run();
+      vat.done();
+   }
+}
+
+
+void showSearchPath()
+{
+
+      ASCString s;
+      for ( int i = 0; i < getSearchPathNum(); ++i )
+         s += getSearchPath ( i ) + "\n"; 
+
+      s += "\n";
+      s += "Configuration file used: \n";
+      s += getConfigFileName();
+
+      tviewanytext vat ;
+      vat.init ( "Search Path", s.c_str(), 20, -1 , 450, 480 );
+      vat.run();
+      vat.done();
 }
 
 
@@ -1205,7 +1224,7 @@ void execuseraction ( tuseractions action )
          if ( fieldvisiblenow  ( getactfield() )) {
             Vehicle* eht = getactfield()->vehicle;
             if ( eht && getdiplomaticstatus ( eht->color ) == capeace )
-               displaymessage(" weight of unit: \n basic: %d\n+fuel: %d\n+material:%d\n+cargo:%d\n= %d",1 ,eht->typ->weight, eht->getTank().fuel * resourceWeight[Resources::Fuel] / 1000 , eht->getTank().material * resourceWeight[Resources::Material] / 1000, eht->cargo(), eht->weight() );
+               displaymessage(" weight of unit: \n basic: %d\n+cargo:%d\n= %d",1 ,eht->typ->weight, eht->cargo(), eht->weight() );
          }
          break;
 
@@ -1527,8 +1546,14 @@ void execuseraction ( tuseractions action )
          break;
       case ua_cargosummary: showCargoSummary();
          break;
-   }
+
+      case ua_showsearchdirs: showSearchPath();
+         break;
+
+      };
 }
+
+
 
 
 // user actions using the new event system
@@ -1731,11 +1756,12 @@ void Menu::setup()
    currentMenu->addSeparator();
    addbutton ( "clear image cache", ua_clearImageCache );
    addbutton ( "reload dialog theme", ua_reloadDlgTheme );
-   
-   
+
+
    addfield ( "~H~elp" );
    addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );
    addbutton ( "HowTo ~C~ontinue email games", ua_howtocontinuepbem );
+   addbutton ( "Show ASC search ~P~ath", ua_showsearchdirs );
    currentMenu->addSeparator();
    addbutton ( "~K~eys", ua_help );
 
@@ -2231,7 +2257,6 @@ int gamethread ( void* data )
             }
 
             displayLogMessage ( 8, "gamethread :: Painting background pict..." );
-            // backgroundpict.paint();
 
             if ( !gtp->filename.empty() && patimat ( tournamentextension, gtp->filename.c_str() ) ) {
                displayLogMessage ( 5, "Initializing network game..." );
@@ -2286,6 +2311,8 @@ int gamethread ( void* data )
 
 int main(int argc, char *argv[] )
 {
+   assert ( sizeof(PointerSizedInt) == sizeof(int*));
+
    Cmdline* cl = NULL;
    auto_ptr<Cmdline> apcl ( cl );
    try {
@@ -2422,6 +2449,11 @@ int main(int argc, char *argv[] )
 #ifdef MEMCHK
    verifyallblocks();
 #endif
+
+   #ifdef NO_PARAGUI
+   SDL_Quit();
+   #endif
+
    return(0);
 }
 

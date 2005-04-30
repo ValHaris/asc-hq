@@ -456,7 +456,7 @@ char* int2string ( int i, char* buf )
    if ( gettextwdth ( buf, NULL ) > activefontsettings.length   &&  activefontsettings.length) {
       char buf2[50];
 
-      int pot  = (int) log10 ( i );
+      int pot  = (int) log10 ( double(i) );
       int base = (int) pow ( 10, pot );
       int first = i / base;
       int rest = i - first * base;

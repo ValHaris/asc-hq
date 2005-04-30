@@ -877,8 +877,8 @@ bool Building::ResourceSink :: finished()
 {
    for ( int r = 0; r < 3; r++ )
       if ( toGet.resource(r) > 0 )
-         return true;
-   return false;
+         return false;
+   return true;
 }
 
 Resources Building::ResourceSink :: getPlus()
@@ -1042,7 +1042,7 @@ Resources Building::BiResourceGeneration::getPlus()
 
 
 
-Building::MiningStation :: MiningStation( Building* bld_  , bool justQuery_) :  SearchFields ( bld_->getMap() ), bld ( bld_ ), justQuery( justQuery_ )
+Building::MiningStation :: MiningStation( Building* bld_  , bool justQuery_) : SearchFields ( bld_->getMap() ), bld ( bld_ ), justQuery( justQuery_ )
 {
    int counter = 0;
    for ( int r = 1; r < 3; r++ ) {
@@ -1096,6 +1096,11 @@ bool Building::MiningStation :: run()
 
    if ( !justQuery ) {
       powerAvail = bld->getResource( toConsume, 1 );
+      for ( int r = 0; r <3; ++r )
+         if ( powerAvail.resource(r) < 0 ) {
+            warning( ASCString("map corruption detected; available power for mining station is negative! ") + resourceNames[r] );
+            powerAvail.resource( r ) = 0;
+         }
    } else
       powerAvail = toConsume;
 
@@ -1152,17 +1157,33 @@ void Building::MiningStation :: testfield ( const MapCoordinate& mc )
                if ( usageRatio[i] * toExtract_thisTurn.resource(r) > 0 )
                   perc = min  ( perc, float( double(powerAvail.resource(i)) / usageRatio[i] * toExtract_thisTurn.resource(r)));
 
+            if ( perc < 0 ) {
+               warning("Warning: mining station inconsistency\n");
+               perc = 0;
+            }   
+                  
             if ( !justQuery )
                *fieldResource -= int( toExtract_thisTurn.resource(r) * perc * distEfficiency / resourceFactor );
 
             int ex = int( ceil(toExtract_thisTurn.resource(r) * perc * distEfficiency));
             actuallyExtracted.resource(r) += ex;
             spaceAvail.resource(r) -= ex;
+            for ( int i = 0; i < 3; ++i) {
+               if ( spaceAvail.resource(i) < -2 )  // we allow for small deviations due to rounding errors
+                  warning("Warning: mining station inconsistency 2!\n");
+                  
+               if ( spaceAvail.resource(i) < 0 )
+                  spaceAvail.resource(i) = 0;
+            }
+                   
 
             for ( int i = 0; i < 3; i++ ) {
                float c = usageRatio[i] * toExtract_thisTurn.resource(r) * perc;
                consumed[i] += c;
                powerAvail.resource(i) -= int( ceil(c) );
+               if ( powerAvail.resource(i) < 0 )
+                  powerAvail.resource(i) = 0;
+                  
             }
 
             toExtract_thisTurn.resource(r) -= int( toExtract_thisTurn.resource(r) * perc);
