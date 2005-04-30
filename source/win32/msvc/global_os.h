@@ -36,7 +36,7 @@
   #define HAVE_ITOA
   #define HAVE_DIRENT_H 
   #define HAVE_LIMITS
-  #define SIZE_T_not_identical_to_INT 1
+//  #define SIZE_T_not_identical_to_INT 1
 
   #define StaticClassVariable
 

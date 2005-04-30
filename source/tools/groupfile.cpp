@@ -14,6 +14,8 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#include <algorithm>
+
 #include "groupfile.h"
 
 
@@ -100,8 +102,9 @@ Category& Category::operator=(const Category& cat) {
     delete (*i);
   }
   for(std::list<AbstractEntry*>::iterator i = subEntries.begin(); i != subEntries.end(); i++) {
-    subEntries.push_back((*i)->clone());
+    subEntries.push_back( (*i)->clone() );
   }
+  return (*this);
 }
 
 AbstractEntry* Category::clone() {
@@ -128,10 +131,8 @@ void Category::addEntry(AbstractEntry* entry) throw (ASCmsgException) {
 };
 
 void Category::removeEntry(AbstractEntry* entry){
-  std::list<AbstractEntry*>::iterator begin = subEntries.begin();
-  std::list<AbstractEntry*>::iterator end = subEntries.end();
-  std::list<AbstractEntry*>::iterator result = find(begin, end, entry);   
-  if(result != end){
+  std::list<AbstractEntry*>::iterator result = std::find(subEntries.begin(), subEntries.end(), entry);   
+  if(result != subEntries.end()){
     delete *result;
   }
 

@@ -70,7 +70,7 @@
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="2"
 				OptimizeForWindowsApplication="TRUE"
-				AdditionalIncludeDirectories="../../../source;$(SDL)/include;../../sdl;../../libs/getopt;../../win32/msvc"
+				AdditionalIncludeDirectories="&quot;$(SDL_image)&quot;;&quot;$(Libsigcpp)&quot;;../../libs/SDLmm/src;../../../source;&quot;$(SDL)/include&quot;;../../sdl;../../libs/getopt;../../win32/msvc"
 				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;_WIN32_;converter;_NOASM_;_SDL_"
 				StringPooling="TRUE"
 				MinimalRebuild="FALSE"
@@ -129,6 +129,12 @@
 				RelativePath="..\..\CLoadable.cpp">
 			</File>
 			<File
+				RelativePath="..\..\containerbasetype.cpp">
+			</File>
+			<File
+				RelativePath="..\lib\errorout.cpp">
+			</File>
+			<File
 				RelativePath="..\..\gameoptions.cpp">
 			</File>
 			<File
@@ -171,13 +177,25 @@
 				RelativePath="..\..\PropertyGroup.cpp">
 			</File>
 			<File
+				RelativePath="..\..\research.cpp">
+			</File>
+			<File
 				RelativePath="..\..\sgstream.cpp">
+			</File>
+			<File
+				RelativePath="..\..\simplestream.cpp">
+			</File>
+			<File
+				RelativePath="..\..\stringtokenizer.cpp">
 			</File>
 			<File
 				RelativePath="..\..\strtmesg.cpp">
 			</File>
 			<File
 				RelativePath="..\..\terraintype.cpp">
+			</File>
+			<File
+				RelativePath="..\..\textfile_evaluation.cpp">
 			</File>
 			<File
 				RelativePath="..\..\textfileparser.cpp">
