@@ -120,7 +120,7 @@
            //! Writes a 32 bit signed Integer. In the stream little-endian byte order is used and a translation is performed, if necessary.
            virtual void writeInt  ( int  i );
 
-           virtual void writeInt  ( unsigned int  i );
+           // virtual void writeInt  ( unsigned int  i );
 
            #ifdef SIZE_T_not_identical_to_INT
            //! Writes a size_t as a 32 bit signed Integer. If the value is larger, an error is aborted.

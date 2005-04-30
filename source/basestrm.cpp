@@ -324,13 +324,13 @@ void tnstream::writeInt  ( size_t i )
 }
 
 #endif
-
+/*
 void tnstream::writeInt  ( unsigned int i )
 {
    i = SDL_SwapLE32(i);
    writedata2 ( i );
 }
-
+*/
 
 void tnstream::writeInt  ( int i )
 {
