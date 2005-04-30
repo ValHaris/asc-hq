@@ -132,7 +132,7 @@ tmap :: tmap ( void )
 }
 
 
-const int tmapversion = 8;
+const int tmapversion = 9;
 
 void tmap :: read ( tnstream& stream )
 {
@@ -206,7 +206,7 @@ void tmap :: read ( tnstream& stream )
       else
          player[i].ASCversion = 0;
          
-      if ( version >= 8 )
+      if ( version >= 9 )
          player[i].cursorPos.read( stream );
    }
 
@@ -633,8 +633,7 @@ void tmap :: write ( tnstream& stream )
     for ( Events::iterator i = events.begin(); i != events.end(); ++i )
        (*i)->write( stream );
 
-    if ( tmapversion >= 8 )
-       stream.writeInt( randomSeed );
+    stream.writeInt( randomSeed );
 }
 
 

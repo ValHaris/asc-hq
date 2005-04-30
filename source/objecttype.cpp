@@ -910,7 +910,7 @@ void ObjectType :: read ( tnstream& stream )
 
        displayMethod = stream.readInt();
 
-       if ( version <= 15 ) {
+       if ( version < 15 ) {
           Surface s;
           s.read( stream );
           s.read( stream );
