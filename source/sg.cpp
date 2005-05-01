@@ -1636,6 +1636,7 @@ void execUserAction_ev( tuseractions action )
 bool execUserActionI  (PG_PopupMenu::MenuItem* menuItem )
 {
    execUserAction_ev( tuseractions( menuItem->getId() ) );
+
    return true;
 }
 

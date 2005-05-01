@@ -30,7 +30,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mapeditor", "mapeditor\mape
 		{0D580E34-B11C-45CD-A50A-9B5B203992B6} = {0D580E34-B11C-45CD-A50A-9B5B203992B6}
 		{E14FAA4A-B45F-4E09-9BE6-78CA0247F915} = {E14FAA4A-B45F-4E09-9BE6-78CA0247F915}
 		{1714B977-BACD-11D5-8156-00805F852A9B} = {1714B977-BACD-11D5-8156-00805F852A9B}
-		{049F5980-B0BD-4F97-B142-B118733068C8} = {049F5980-B0BD-4F97-B142-B118733068C8}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demount", "..\..\tools\win\demount.vcproj", "{9DB90739-BAA7-11D5-8156-00805F852A9B}"
@@ -76,10 +75,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SDLmm", "..\..\libs\sdlmm\S
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sigc++", "..\..\libs\libsigc++\sigc++\sigc++.vcproj", "{049F5980-B0BD-4F97-B142-B118733068C8}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -112,8 +107,6 @@ Global
 		{5EC07E44-BAB8-11D5-8156-00805F852A9B}.Release.ActiveCfg = Release|Win32
 		{7DD5348B-0DE1-4810-B856-723BA5D3733A}.Debug.ActiveCfg = Debug|Win32
 		{7DD5348B-0DE1-4810-B856-723BA5D3733A}.Release.ActiveCfg = Release|Win32
-		{049F5980-B0BD-4F97-B142-B118733068C8}.Debug.ActiveCfg = Debug|Win32
-		{049F5980-B0BD-4F97-B142-B118733068C8}.Release.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

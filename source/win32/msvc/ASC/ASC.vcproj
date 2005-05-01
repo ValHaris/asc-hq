@@ -20,7 +20,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/sdlmm/src;../../../libs/getopt;&quot;../../../libs/libsigc++&quot;;&quot;$(paragui12)/include&quot;"
+				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/sdlmm/src;../../../libs/getopt;&quot;$(libsigcpp)&quot;;&quot;$(paragui12)/include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;NOMINMAX"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -79,7 +79,7 @@
 				Name="VCCLCompilerTool"
 				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/sdlmm/src;../../../libs/getopt;&quot;../../../libs/libsigc++&quot;;&quot;$(paragui12)/include&quot;"
+				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/sdlmm/src;../../../libs/getopt;&quot;$(libsigcpp)&quot;;&quot;$(paragui12)/include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;NOMINMAX"
 				RuntimeLibrary="2"
 				DefaultCharIsUnsigned="TRUE"
