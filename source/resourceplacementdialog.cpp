@@ -182,26 +182,31 @@ bool ResourcePlacementDialog::buttonEvent( PG_Button* button ) {
 
 bool ResourcePlacementDialog::scrollTrackEventMaterial(long data) {
   materialOffSetValue->SetText( int2String(data));
+  return true;
 }
 
 bool ResourcePlacementDialog::scrollTrackEventFuel(long data) {
   stringstream s;
   s << data;
   fuelOffSetValue->SetText( s.str().c_str());
+  return true;
 }
 
 
 bool ResourcePlacementDialog::scrollTrackEventMaterialFreeRatio(long data){
    materialFreeRatioValue->SetText( int2String(data));
+  return true;
 }
 
 
 bool ResourcePlacementDialog::scrollTrackEventFuelFreeRatio(long data){
   fuelFreeRatioValue->SetText(int2String(data));
+  return true;
 }
 
 bool ResourcePlacementDialog::buttonErrorOkEvent( PG_Button* button ){
   quitModalLoop(1);
+  return true;
 }
 
 void resourcePlacementDialog() {

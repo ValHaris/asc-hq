@@ -56,7 +56,7 @@ void Weathercast::painter (const PG_Rect &src, const ASCString& name, const PG_R
     if(windStack.front().speed > 0) {
         Surface screen = Surface::Wrap( PG_Application::GetScreen() );
 
-        MegaBlitter<4,colorDepth,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Rotation> blitter;
+        MegaBlitter<4,colorDepth,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_DirectRotation> blitter;
         blitter.setAngle( directionangle[windStack.front().direction] );
         PG_Point p(windRoseImage->x, windRoseImage->y);
         blitter.blit ( IconRepository::getIcon("wind-arrow.png"), screen, SPoint(p.x, p.y) );
