@@ -1190,7 +1190,7 @@ vector<Surface> loadASCImage ( const ASCString& file, int num )
           applyLegacyFieldMask(s2);
        } else {
           // we don't want any transformations from one palette to another; we just assume that all 8-Bit images use the same colorspace
-          MegaBlitter<1,1,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Rectangle> blitter;
+          MegaBlitter<1,1,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Rectangle > blitter;
           blitter.setRectangle(SDLmm::SRect(SPoint(x1,y1),fieldsizex,fieldsizey));
           blitter.blit( s, s2, SPoint(0,0)  );
           applyFieldMask(s2);

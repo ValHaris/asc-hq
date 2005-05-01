@@ -40,7 +40,7 @@ namespace SDLmm {
 
     \author David Hedbor <david@hedbor.org>
   */
-  class DECLSPEC BaseSurface {
+  class  BaseSurface {
 
   protected:
     //! The actual SDL_Surface allocated for this BaseSurface.

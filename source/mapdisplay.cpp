@@ -20,20 +20,19 @@
  *                                                                         *
  ***************************************************************************/
 
-
 #include <cmath>
+#include <limits>
 
 #include "global.h"
-
+#include "typen.h"
 #include "mapdisplay.h"
 #include "mapdisplay2.h"
 #include "vehicletype.h"
 #include "buildingtype.h"
 #include "spfst.h"
-#include "typen.h"
+#include "dialog.h"
 #include "loaders.h"
 #include "gameoptions.h"
-#include "dialog.h"
 #include "stack.h"
 #include "loadbi3.h"
 #include "mapalgorithms.h"
@@ -464,7 +463,7 @@ void MapDisplayPG::displayCursor()
    int y = actmap->player[actmap->playerView].cursorPos.y - offset.y;
    if( x >= field.viewPort.x1 && x < field.viewPort.x2 && y >= field.viewPort.y1 && y < field.viewPort.y2 ) {
       // surface->Blit( icons.cursor, getFieldPos(x,y));
-      MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Zoom,TargetPixelSelector_Valid> blitter;
+      MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom,TargetPixelSelector_Valid> blitter;
       blitter.setZoom( zoom );
 
       Surface s = Surface::Wrap( PG_Application::GetScreen() );
@@ -746,13 +745,13 @@ void MapDisplayPG::displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoor
    TouchedFields touchedFields;
 
    touchedFields.push_back ( TouchedField( from, tempStart ));
-   for ( int i = 0; i < sidenum; ++i ) 
-      touchedFields.push_back ( TouchedField( getNeighbouringFieldCoordinate(from, i), getNeighbouringFieldCoordinate(tempStart, i) ));
+   for ( int ii = 0; ii < sidenum; ++ii ) 
+      touchedFields.push_back ( TouchedField( getNeighbouringFieldCoordinate(from, ii), getNeighbouringFieldCoordinate(tempStart, ii) ));
       
    MapCoordinate tempEnd = getNeighbouringFieldCoordinate( tempStart, dir );
    touchedFields.push_back ( TouchedField( to, tempEnd ));
-   for ( int i = 0; i < sidenum; ++i ) 
-      touchedFields.push_back ( TouchedField( getNeighbouringFieldCoordinate(to, i), getNeighbouringFieldCoordinate(tempEnd, i) ));
+   for ( int ii = 0; ii < sidenum; ++ii ) 
+      touchedFields.push_back ( TouchedField( getNeighbouringFieldCoordinate(to, ii), getNeighbouringFieldCoordinate(tempEnd, ii) ));
    
 
    // now we have all fields that are touched during movement in a list

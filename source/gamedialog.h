@@ -321,6 +321,7 @@ private:
   bool ok(PG_Button* button);  
 };
 
+
 class SoundSettings : public ASC_PG_Dialog
 {
       CGameOptions::SoundSettings sSettings;

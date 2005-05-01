@@ -24,7 +24,7 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;_WIN32_;converter;minimalIO;_NOASM_"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="2"
+				RuntimeLibrary="3"
 				DefaultCharIsUnsigned="TRUE"
 				WarningLevel="3"
 				DebugInformationFormat="3"

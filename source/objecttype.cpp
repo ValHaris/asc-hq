@@ -151,13 +151,13 @@ void ObjectType::realDisplay ( Surface& surface, SPoint pos, int dir, int weathe
          flip = weatherPicture[weather].flip[dir];
 
       if ( id == 7 || id == 30 || displayMethod==1 ) { // buried pipeline,
-         megaBlitter<ColorTransform_None, ColorMerger_AlphaShadow, SourcePixelSelector_Flip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
+         megaBlitter<ColorTransform_None, ColorMerger_AlphaShadow, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
       } else
          if ( displayMethod == 2 ) {  // translation
-            megaBlitter<ColorTransform_None, ColorMerger_Alpha_XLAT_TableShifter, SourcePixelSelector_Flip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam, xlattables.nochange, flip, nullParam); 
+            megaBlitter<ColorTransform_None, ColorMerger_Alpha_XLAT_TableShifter, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam, xlattables.nochange, flip, nullParam); 
          } else
             if ( displayMethod == 4 ) {
-               megaBlitter<ColorTransform_None, ColorMerger_AlphaMixer, SourcePixelSelector_Flip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
+               megaBlitter<ColorTransform_None, ColorMerger_AlphaMixer, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
             } else {
                bool disp = true;
                #ifndef karteneditor
@@ -167,9 +167,9 @@ void ObjectType::realDisplay ( Surface& surface, SPoint pos, int dir, int weathe
                if ( disp ) {
                   if ( flip ) {
                      if ( imageUsesAlpha )
-                        megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_Flip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
+                        megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
                      else   
-                        megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Flip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
+                        megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
                   } else {  
                      if ( imageUsesAlpha )
                         megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
@@ -1035,7 +1035,7 @@ void ObjectType :: write ( tnstream& stream ) const
                 stream.writeInt ( 2 );
                 weatherPicture[ww].images[l].write( stream );
              }
-             stream.writeInt ( weatherPicture[ww].flip[l] );
+             stream.writeInt ( weatherPicture[ww].flip.at(l) );
           }
        }
 }
@@ -1187,8 +1187,11 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                pc.addIntegerArray ( "ImageReference", imgReferences );
 
                for ( int j = 0; j < weatherPicture[i].images.size(); j++ )
-                  if ( imgReferences[j] >= 0 && imgReferences[j] < weatherPicture[i].images.size() )
+                  if ( j < imgReferences.size() && imgReferences[j] >= 0 && imgReferences[j] < weatherPicture[i].images.size() )
                      weatherPicture[i].images[j] = weatherPicture[i].images[imgReferences[j]];
+
+               while ( weatherPicture[i].flip.size() < weatherPicture[i].images.size() )
+                  weatherPicture[i].flip.push_back(0);
 
             } else {
                for ( int u = 0; u < weatherPicture[i].images.size(); u++ ) {

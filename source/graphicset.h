@@ -68,7 +68,7 @@
      int  getMode( int num ) const;
      Surface& getPic ( int num );
      const OverviewMapImage* getQuickView( int id );
-     friend class Loki::CreateUsingNew<GraphicSetManager_Base>;
+     friend struct Loki::CreateUsingNew<GraphicSetManager_Base>;
      // friend struct CreateUsingNew;
 
      ~GraphicSetManager_Base();

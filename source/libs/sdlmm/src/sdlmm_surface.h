@@ -38,7 +38,7 @@ namespace SDLmm {
     \author David Hedbor <david@hedbor.org>
   */
   
-  class DECLSPEC Surface : public BaseSurface
+  class  Surface : public BaseSurface
   {
   public:
     //! Constructor from an SDL_Surface*

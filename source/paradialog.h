@@ -256,6 +256,5 @@ private:
  extern void errorgMessageDialog( const ASCString& message  );
 
 
- extern void soundSettings();
 
 #endif

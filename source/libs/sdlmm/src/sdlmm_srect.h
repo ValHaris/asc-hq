@@ -40,7 +40,7 @@ namespace SDLmm {
     rectangles like intersections.
     \author David Hedbor <david@hedbor.org>
   */
-  class DECLSPEC SRect : public SDL_Rect {
+  class  SRect : public SDL_Rect {
   public:
     //! Default constructor which creates an empty SRect (xywh variables set
     //! to sero).

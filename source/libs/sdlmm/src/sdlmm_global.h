@@ -23,6 +23,7 @@
 #ifndef SDLMM_GLOBAL_H
 #define SDLMM_GLOBAL_H
 
+
 //! The namespace for the SDLmm library. 
 namespace SDLmm {
   // Init and cleanup functions
@@ -40,7 +41,7 @@ namespace SDLmm {
     that instantiating an object might be enough (for example creating
     a VideoInfo instance will initialize the video subsystem).
    */
-  bool DECLSPEC Init(Uint32 flags);
+  bool  Init(Uint32 flags);
   
   //! Shut down SDL
   /*!
@@ -54,7 +55,7 @@ namespace SDLmm {
     atexit(SDLmm::Quit);
     \endcode
   */
-  void DECLSPEC Quit();
+  void  Quit();
 
   //! Check which subsystems are initialized
   /*!
@@ -65,16 +66,16 @@ namespace SDLmm {
     \returns A bitwised OR'd combination of the initialized
     subsystems.
   */
-  Uint32 DECLSPEC WasInit(Uint32 flags);
+  Uint32  WasInit(Uint32 flags);
 
   //! Get the latest error message.
   /*!
     \returns The error message for the last SDL function that failed.
    */
-  const DECLSPEC char *GetError();
+  const  char *GetError();
 
   //! Return the SDLmm library version.
-  const DECLSPEC char *version();
+  const  char *version();
 }
 
 #endif // SDLMM_GLOBAL_H

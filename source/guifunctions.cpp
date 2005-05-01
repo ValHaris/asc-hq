@@ -1487,11 +1487,11 @@ Surface buildGuiIcon( const Surface& image, bool remove = false )
 
    const Surface& o = image;
    if ( o.GetPixelFormat().BitsPerPixel() == 32 ) {
-      MegaBlitter<4,4,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Zoom> blitter;
+      MegaBlitter<4,4,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_DirectZoom> blitter;
       blitter.setSize( o.w(), o.h(), s.w(), s.h() );
       blitter.blit( o, s, SPoint((s.w() - blitter.getZoom() * o.w())/2, (s.h() - blitter.getZoom() * o.h())/2));
    } else {
-      MegaBlitter<1,4,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Zoom> blitter;
+      MegaBlitter<1,4,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_DirectZoom> blitter;
       blitter.setSize( o.w(), o.h(), s.w(), s.h() );
       blitter.blit( o, s, SPoint((s.w() - blitter.getZoom() * o.w())/2, (s.h() - blitter.getZoom() * o.h())/2));
    }

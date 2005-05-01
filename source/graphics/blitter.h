@@ -995,6 +995,14 @@ template<>
        SourcePixelSelector_Rotation( int degreesToRotate )  : degrees(degreesToRotate),x(0),y(0),w(0),h(0) {}
  };
 
+template<int pixelsize>
+ class SourcePixelSelector_DirectRotation: public SourcePixelSelector_Rotation<pixelsize> {
+   public:
+       SourcePixelSelector_DirectRotation( NullParamType npt = nullParam ) {}
+       SourcePixelSelector_DirectRotation( int degreesToRotate )  : SourcePixelSelector_Rotation<pixelsize>(degreesToRotate) {}
+ };
+ 
+
 
  class RotationCache {
     protected:
@@ -1166,6 +1174,12 @@ template<>
        
  };
 
+ template<int pixelsize>
+ class SourcePixelSelector_DirectZoom: public SourcePixelSelector_Zoom<pixelsize> {
+   public:
+      SourcePixelSelector_DirectZoom( NullParamType npt = nullParam) {};
+ };
+ 
 
  class ZoomCache {
     protected:
@@ -1302,22 +1316,29 @@ template<int pixelsize, class SourcePixelSelector = SourcePixelSelector_Plain<pi
              
  };
 
+ template<int pixelsize>
+ class SourcePixelSelector_DirectFlip : public SourcePixelSelector_Flip<pixelsize> {
+ public:
+    SourcePixelSelector_DirectFlip( NullParamType npt = nullParam) {};
+    SourcePixelSelector_DirectFlip( int flip) : SourcePixelSelector_Flip<pixelsize>(flip) {};
+ };
 
-template<int pixelsize, class SourcePixelSelector = SourcePixelSelector_Plain<pixelsize> >
- class SourcePixelSelector_Rectangle: public SourcePixelSelector {
+// template<int pixelsize, class SourcePixelSelector = SourcePixelSelector_Plain<pixelsize> > // MSVC7 fails to understand that...
+template<int pixelsize>
+ class SourcePixelSelector_Rectangle: public SourcePixelSelector_Plain<pixelsize> {
        typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
        int x,y,x1,y1;
        int w,h;
     protected:
        SourcePixelSelector_Rectangle() : x(0),y(0),x1(0),y1(0),w(0),h(0) {};
 
-       int getWidth()  { return min(w, SourcePixelSelector::getWidth() -x1 ); };
-       int getHeight() { return min(h, SourcePixelSelector::getHeight()-y1 ); };
+       int getWidth()  { return min(w, SourcePixelSelector_Plain<pixelsize>::getWidth() -x1 ); };
+       int getHeight() { return min(h, SourcePixelSelector_Plain<pixelsize>::getHeight()-y1 ); };
                      
        
        PixelType getPixel(int x, int y)
        {
-         return SourcePixelSelector::getPixel( x + x1, y + y1 );
+         return SourcePixelSelector_Plain<pixelsize>::getPixel( x + x1, y + y1 );
        };
 
        PixelType nextPixel()

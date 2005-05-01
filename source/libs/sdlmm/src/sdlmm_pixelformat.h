@@ -31,7 +31,7 @@ namespace SDLmm {
     \author Adam Gates
   */
 
-  class DECLSPEC PixelFormat {
+  class  PixelFormat {
   protected:
     //! The actual SDL_PixelFormat for this PixelFormat.
     SDL_PixelFormat *me;

@@ -606,7 +606,7 @@ void ChangeDefaultPasswordDialog::changeDefaultPasswordDialog(PG_MessageObject* 
    
    
    bool MousePreferencesDialog::ok(PG_Button* button){
-   
+      return true;  
    }
    
    void MousePreferencesDialog::mousePreferencesDialog(PG_MessageObject* caller){
@@ -872,7 +872,6 @@ bool SoundSettings::buttonEvent( PG_Button* button )
    updateSettings();
    return true;
 }
-
 
 void SoundSettings::soundSettings(PG_MessageObject* caller)
 {
