@@ -49,12 +49,12 @@ void OverviewMapPanel::painter ( const PG_Rect &src, const ASCString& name, cons
 
 
 
-      // MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_Zoom> blitter;
-      // blitter.setSize( s.w(), s.h(), dst.w, dst.h );
+      MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_DirectZoom> blitter;
+      blitter.setSize( s.w(), s.h(), dst.w, dst.h );
 
-      MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_Rectangle> blitter;
+      // MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_Rectangle> blitter;
+      // blitter.setRectangle( SPoint(0,0), dst.w, dst.h );
 
-      blitter.setRectangle( SPoint(0,0), dst.w, dst.h );
       blitter.blit( s, screen, SPoint(dst.x, dst.y) );
    }
 };

@@ -1106,6 +1106,15 @@ void showSearchPath()
 }
 
 
+class UnitInfoDialog : public Panel {
+
+     public:
+        UnitInfoDialog (PG_Widget *parent, const Vehicle* veh, const Vehicletype* vt ) 
+           : Panel( parent, PG_Rect::null, "UnitInfoDialog" ) {};
+};
+
+
+
 // user actions using the old event system
 void execuseraction ( tuseractions action )
 {
@@ -1322,9 +1331,14 @@ void execuseraction ( tuseractions action )
          renameUnit();
          break;
 
-      case ua_vehicleinfo:
+      case ua_vehicleinfo: {
+         UnitInfoDialog* uid = new UnitInfoDialog( NULL, NULL, NULL );
+         uid->Show();
+         /*
          activefontsettings.font = schriften.smallarial;
          vehicle_information();
+         */
+                           }
          break;
 
       case ua_researchinfo:
