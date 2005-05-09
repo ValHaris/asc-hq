@@ -26,6 +26,7 @@
  #define dashboardH
 
 #include "paradialog.h"
+#include "mapdisplay2.h"
 
 class Vehicletype;
 class Vehicle;
@@ -77,94 +78,13 @@ class WeaponInfoPanel : public Panel {
 
 
 class OverviewMapPanel : public Panel {
+        MapDisplayPG* mapDisplayWidget;
+        float currentZoom;  
      public:
-        OverviewMapPanel( PG_Widget *parent, const PG_Rect &r ) ;
+        OverviewMapPanel( PG_Widget *parent, const PG_Rect &r, MapDisplayPG* mapDisplay ) ;
      protected:
         void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
 
 };
 
-#if 0
-
-
-  //! The unit, weather and map information displayed on the right side of the screen
-  class tdashboard {
-                public:
-                       pfont        font; 
-                       int         x, y; 
-                       Vehicle*     vehicle;
-                       pvehicletype vehicletype;
-                       const Building*    building;
-                       pfield       objfield;
-
-                       void         allocmem ( void );
-                    protected:
-                       int          largeWeaponsDisplayPos[16];
-                       void*        fuelbkgr;
-                       int          fuelbkgrread;
-                       void*        imagebkgr;
-                       int          imageshown;
-                       int          movedisp;   // 0: Movement f?r Runde    1: movement mit Tank
-                       int          windheightshown;
-                       void*        windheightbackground;
-                       void         putheight(integer      i,   integer      sel);
-                       void         paintheight(void);
-                       void         painttank(void);
-                       void         paintweapon( int h, int num, int strength, const SingleWeapon  *weap );
-                       void         paintweapons(void);
-                       void         paintweaponammount( int h, int num, int max, bool dash = false );
-                       void         paintdamage(void);
-                       void         paintexperience(void);
-                       void         paintmovement(void);
-                       void         paintarmor(void);
-                       void         paintwind( int repaint = 0 );
-                       void         paintclasses ( void );
-                       void         paintname ( void );
-                       void         paintimage( void );
-                       void         paintplayer( void );
-                       void         paintalliances ( void ); 
-                       void         paintsmallmap ( int repaint = 0  );
-                       void         paintlargeweaponinfo ( void );
-                       void         paintlargeweapon ( int pos, const char* name, int ammoact, int ammomax, int shoot, int refuel, int strengthmax, int strengthmin, int distmax, int distmin, int from, int to );
-                       void         paintlargeweaponefficiency ( int pos, int* e, int alreadypainted, const int* hit );
-                       void         paintzoom( void );
-                     public:
-                       struct {
-                          void*        pic;
-                          int x1, y1, x2, y2;
-                          int picwidth;
-                       } zoom;
-
-                       void         checkformouse ( int func = 0 );
-                       void paint ( const pfield fld, int playerview );
-                       tdashboard ( void );
-                       void paintvehicleinfo( Vehicle*     vehicle,
-                                              const Building*    building,
-                                              const pfield       _objfield,
-                                              pvehicletype vehicletype );
-
-                       void         paintlweaponinfo ( void );
-
-                       int backgrndcol ;
-                       int vgcol       ;
-                       int ymx         ;
-                       int ymn         ;
-                       int ydl         ;
-                       int munitnumberx ;
-
-                       struct {
-                           int mindist, maxdist, minstrength, maxstrength;
-                           int displayed;
-                       } weaps[8];
-
-                       int repainthard;
-                    protected:
-                         char* str_2 ( int num );
-                         int materialdisplayed;
-
-
-                    }; 
-  extern tdashboard dashboard; 
-
-  #endif
 #endif

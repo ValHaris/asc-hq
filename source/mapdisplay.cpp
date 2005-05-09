@@ -535,6 +535,18 @@ MapCoordinate MapDisplayPG::widgetPos2mapPos( const SPoint& pos )
    return MapCoordinate();
 }
 
+MapCoordinate MapDisplayPG::upperLeftCorner()
+{
+   return offset;	
+}
+
+MapCoordinate MapDisplayPG::lowerRightCorner()
+{
+   return MapCoordinate( offset.x + field.numx , offset.y + field.numy );
+}
+
+
+
 
 bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
 {

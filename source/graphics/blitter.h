@@ -948,6 +948,20 @@ template<>
  };
 
 
+ template<int pixelsize>
+ class ColorMerger_Set  {
+         typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+         SDLmm::Color col;
+      public:
+
+         void assign ( PixelType src, PixelType* dest ) const
+         {
+            *dest = col;
+         };
+
+         ColorMerger_Set( SDLmm::Color color ) { col = color;};
+ };
+
 
 //////////////////// Source Pixel Selector  ///////////////////////////////////
 

@@ -1334,6 +1334,8 @@ void execuseraction ( tuseractions action )
       case ua_vehicleinfo: {
          UnitInfoDialog* uid = new UnitInfoDialog( NULL, NULL, NULL );
          uid->Show();
+         uid->RunModal();
+         delete uid;
          /*
          activefontsettings.font = schriften.smallarial;
          vehicle_information();
@@ -1853,7 +1855,8 @@ void MainScreenWidget::spawnPanel ( Panels panel )
       guiHost->Show();
    }
    if ( panel == OverviewMap ) {
-      OverviewMapPanel* smp = new OverviewMapPanel( this, PG_Rect(Width()-180, 40, 170, 170));
+      assert( mapDisplay);
+      OverviewMapPanel* smp = new OverviewMapPanel( this, PG_Rect(Width()-180, 40, 170, 170), mapDisplay );
       smp->Show();
    }
 }

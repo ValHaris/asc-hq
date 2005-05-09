@@ -141,6 +141,10 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       SPoint mapPos2internalPos ( const MapCoordinate& pos );
       SPoint internal2widget( const SPoint& pos );
       SPoint widget2screen( const SPoint& pos );
+      
+      MapCoordinate upperLeftCorner();
+      MapCoordinate lowerRightCorner();
+      
    protected:
 
       void blitInternalSurface( SDL_Surface* dest, const SPoint& pnt );

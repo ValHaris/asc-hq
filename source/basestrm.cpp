@@ -318,7 +318,7 @@ float tnstream::readFloat ( void )
 void tnstream::writeInt  ( size_t i )
 {
 #ifdef HAVE_LIMITS
-   assert( i <=  numeric_limits<int>::max());
+   // assert( i <=  numeric_limits<int>::max());
 #endif
    writeInt( int(i) );
 }

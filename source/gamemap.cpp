@@ -641,11 +641,10 @@ void tmap :: write ( tnstream& stream )
 
 const Surface& tmap::getOverviewMap()
 {
-   overviewMapImage = Surface::createSurface( (xsize+1) * 6, 4 + ysize * 2 , 32 );
+   overviewMapImage = Surface::createSurface( (xsize+1) * 6, 4 + ysize * 2 , 32, 0 );
    for ( int y = 0; y < ysize; ++y )
       for ( int x = 0; x < xsize; ++x ) {
-         int imgx = x * 6 + (y&1) * 3 ;
-         int imgy = y * 2;
+         SPoint imgpos = OverviewMapImage::map2surface( MapCoordinate( x, y));
 
          pfield fld = getField(x,y);
          VisibilityStates visi = fieldVisibility( fld, playerView );
@@ -655,23 +654,23 @@ const Surface& tmap::getOverviewMap()
                Surface& hex = IconRepository::getIcon("hexinvis.raw");
                invisible = overviewMapImage.GetPixelFormat().MapRGB ( hex.GetPixelFormat().GetRGB( hex.GetPixel ( hex.w() / 2, hex.h() / 2 )));
             }
-            OverviewMapImage::fill ( overviewMapImage, imgx, imgy, invisible );
+            OverviewMapImage::fill ( overviewMapImage, imgpos, invisible );
          } else {
             if ( fld->building && fieldvisiblenow( fld, playerView) )
-               OverviewMapImage::fill ( overviewMapImage, imgx, imgy, player[fld->building->getOwner()].getColor() );
+               OverviewMapImage::fill ( overviewMapImage, imgpos, player[fld->building->getOwner()].getColor() );
             else {
 
                int w = fld->getweather();
-               fld->typ->getQuickView()->blit( overviewMapImage, imgx, imgy );
+               fld->typ->getQuickView()->blit( overviewMapImage, imgpos );
                for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
                   if ( visi > visible_ago || i->typ->visibleago )
-                     i->getOverviewMapImage( w )->blit( overviewMapImage, imgx , imgy );
+                     i->getOverviewMapImage( w )->blit( overviewMapImage, imgpos );
 
                if ( fld->vehicle && fieldvisiblenow( fld, playerView) )
-                  OverviewMapImage::fillCenter ( overviewMapImage, imgx, imgy, player[fld->vehicle->getOwner()].getColor() );
+                  OverviewMapImage::fillCenter ( overviewMapImage, imgpos, player[fld->vehicle->getOwner()].getColor() );
 
                if ( visi == visible_ago )
-                  OverviewMapImage::lighten( overviewMapImage, imgx, imgy, 0.7 ); 
+                  OverviewMapImage::lighten( overviewMapImage, imgpos, 0.7 ); 
 
             }
 

@@ -31,13 +31,12 @@
 
 
 
-OverviewMapPanel::OverviewMapPanel( PG_Widget *parent, const PG_Rect &r )
-                 : Panel ( parent, r, "OverviewMap", true )
+OverviewMapPanel::OverviewMapPanel( PG_Widget *parent, const PG_Rect &r, MapDisplayPG* mapDisplay )
+                 : Panel ( parent, r, "OverviewMap", true ), mapDisplayWidget( mapDisplay), currentZoom( 1 )
 {
    SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( "overviewmap", true ) );
    if ( sdw )
       sdw->display.connect( SigC::slot( *this, &OverviewMapPanel::painter ));
-
 }
 
 
@@ -49,15 +48,32 @@ void OverviewMapPanel::painter ( const PG_Rect &src, const ASCString& name, cons
 
 
 
-      MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_DirectZoom> blitter;
+      MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom> blitter;
       blitter.setSize( s.w(), s.h(), dst.w, dst.h );
 
-      // MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_Rectangle> blitter;
-      // blitter.setRectangle( SPoint(0,0), dst.w, dst.h );
-
+      currentZoom  = blitter.getZoom();
       blitter.blit( s, screen, SPoint(dst.x, dst.y) );
+
+      SPoint ul = OverviewMapImage::map2surface( mapDisplayWidget->upperLeftCorner());
+      SPoint lr = OverviewMapImage::map2surface( mapDisplayWidget->lowerRightCorner());
+      ul.x *= currentZoom;
+      ul.y *= currentZoom;
+      lr.x *= currentZoom;
+      lr.y *= currentZoom;
+
+      if ( ul.x < 0 )
+         ul.x = 0;
+      if ( ul.y < 0 )
+         ul.y = 0;
+      if ( lr.x >= src.Width() )
+         lr.x = src.Width() -1;
+      if ( lr.y >= src.Height() )
+         lr.y = src.Height() -1;
+
+      rectangle<4>(screen, SPoint(dst.x + ul.x, dst.y + ul.y), lr.x-ul.x, lr.y-ul.y, ColorMerger_Set<4>(0xff), ColorMerger_Set<4>(0xff) );
+
    }
-};
+}
 
 
 DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme = true )
