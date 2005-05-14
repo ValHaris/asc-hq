@@ -92,7 +92,7 @@ void BaseVehicleMovement :: PathFinder :: getMovementFields ( IntFieldList& reac
 int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrupt )
 {
    WindMovement* wind;
-   if ( (vehicle->typ->height & ( chtieffliegend | chfliegend | chhochfliegend )) && actmap->weather.windSpeed ) {
+   if ( (vehicle->typ->height & ( chtieffliegend | chfliegend | chhochfliegend )) && actmap->weatherSystem->getCurrentWindSpeed() ) {
       wind = new WindMovement ( vehicle );
    } else
       wind = NULL;

@@ -1075,6 +1075,8 @@ int          tmaploaders::loadmap( const char *       name )
      }
      spfld->weatherSystem = new WeatherSystem(spfld);
      spfld->weatherSystem->read(filestream);
+   }else{
+     spfld->weatherSystem->setGlobalWind(WeatherSystem::legacyWindSpeed, static_cast<Direction>(WeatherSystem::legacyWindDirection));   
    }
 
 
@@ -1179,7 +1181,6 @@ void         tsavegameloaders::savegame( const ASCString& name)
 
 
 
-
 int   tsavegameloaders::loadgame( const ASCString& filename )
 {
    tnfilestream filestream ( filename, tnstream::reading );
@@ -1248,6 +1249,8 @@ tmap*          tsavegameloaders::loadgame( pnstream strm )
      }
      spfld->weatherSystem = new WeatherSystem(spfld);
      spfld->weatherSystem->read(*stream);
+   }else{
+      spfld->weatherSystem->setGlobalWind(WeatherSystem::legacyWindSpeed, static_cast<Direction>(WeatherSystem::legacyWindDirection));   
    }
    
    readdissections();
@@ -1294,6 +1297,8 @@ tmap*          tsavegameloaders::loadgame( pnstream strm )
 int          tnetworkloaders::savenwgame( pnstream strm )
 { 
    spfld = actmap;
+   
+   actmap->weatherSystem->write(*stream);
 
    stream = strm;
 
@@ -1359,7 +1364,21 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
       for ( int i = 0; i < 8; i++ )
          spfld->player[i].research.read_techs ( *stream );
 
-
+   
+   //NEW SaveData Weather  
+   if(version >= 0x0013){       
+     if(spfld->weatherSystem != NULL) {
+        delete spfld->weatherSystem;
+     }
+     spfld->weatherSystem = new WeatherSystem(spfld);
+     spfld->weatherSystem->read(*stream);
+   }else{
+      spfld->weatherSystem->setGlobalWind(WeatherSystem::legacyWindSpeed, static_cast<Direction>(WeatherSystem::legacyWindDirection));   
+   }
+   
+   /*if(version > 0xfe28){  //Vielleicht minus 1     
+     actmap->weatherSystem->read(*stream);
+   }*/
    readmessages();
    readnetwork ();
 

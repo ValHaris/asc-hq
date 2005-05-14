@@ -112,7 +112,7 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
    if ( name == "windarrow" ) {
       if ( actmap && actmap->weatherSystem->getCurrentWindSpeed() > 0 ) {
          MegaBlitter<4,colorDepth,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_DirectRotation> blitter;
-         blitter.setAngle( directionangle[actmap->weatherSystem->getCurrentWindDirection()] );
+         blitter.setAngle( (WeatherSystem::WindDirNum - actmap->weatherSystem->getCurrentWindDirection()) * (360 /WeatherSystem::WindDirNum));
          blitter.blit ( IconRepository::getIcon("wind-arrow.png"), screen, SPoint(dst.x, dst.y) );
       }
       return;

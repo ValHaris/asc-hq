@@ -32,6 +32,7 @@
 #include <pgmessagebox.h>
 #include <pgdropdown.h>
 #include <pgcolor.h>
+#include <pgrichedit.h>
 
 #include "pgbutton.h"
 #include "pgwidgetlist.h"

@@ -823,10 +823,10 @@ ASCString EventAction::getName()
 void WindChange::execute( MapDisplayInterface* md )
 {
    if ( speed != -1 )
-      gamemap->weather.windSpeed = speed;
+      gamemap->weatherSystem->setGlobalWind(speed, gamemap->weatherSystem->getCurrentWindDirection());
 
    if ( direction != -1 )
-      gamemap->weather.windDirection = direction;
+      gamemap->weatherSystem->setGlobalWind(gamemap->weatherSystem->getCurrentWindSpeed(), static_cast<Direction>(direction));
 
    if ( md )
       md->updateDashboard();

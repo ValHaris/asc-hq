@@ -47,6 +47,32 @@
 const char* MineNames[cminenum]  = {"antipersonnel mine", "antitank mine", "antisub mine", "antiship mine"};
 const int MineBasePunch[cminenum]  = { 60, 120, 180, 180 };
 
+RandomGenerator::RandomGenerator(int seedValue){
+
+}
+
+RandomGenerator::~RandomGenerator(){
+
+
+}
+
+unsigned int RandomGenerator::getPercentage(){
+  return getRandomValue(100);
+}
+
+unsigned int RandomGenerator::getRandomValue(int limit) {
+  return getRandomValue(0, limit); 
+}
+
+unsigned int RandomGenerator::getRandomValue (int lowerLimit, int upperLimit){
+   if(upperLimit == 0) {
+        return 1;
+   }
+   int random_integer = rand();
+   random_integer = random_integer % upperLimit;
+   return (lowerLimit + random_integer);
+}
+
 
 
 
@@ -127,7 +153,7 @@ tmap :: tmap ( void )
    game_parameter = NULL;
    mineralResourcesDisplayed = 0;
 
-   weatherSystem  = new WeatherSystem(this, 1, 1.0557);
+   weatherSystem  = new WeatherSystem(this, 1, 0.03);   
    setgameparameter( cgp_objectsDestroyedByTerrain, 1 );
 }
 
@@ -165,14 +191,15 @@ void tmap :: read ( tnstream& stream )
 
    bool loadCampaign = stream.readInt();
    actplayer = stream.readChar();
-   time.abstime = stream.readInt();
-
-   weather.fog = stream.readChar();
-   weather.windSpeed = stream.readChar();
-   weather.windDirection  = stream.readChar();
+   time.abstime = stream.readInt();   
+   if(version < 9){
+     stream.readChar();
+     WeatherSystem::legacyWindSpeed = stream.readChar();
+     WeatherSystem::legacyWindDirection = stream.readChar();
+   }
+   
    for ( int j = 0; j < 4; j++ )
       stream.readChar(); // was: different wind in different altitudes
-
    for ( i = 0; i< 12; i++ )
       stream.readChar(); // dummy
 
@@ -450,12 +477,7 @@ void tmap :: write ( tnstream& stream )
 
    stream.writeInt( campaign != NULL);
    stream.writeChar( actplayer );
-   stream.writeInt( time.abstime );
-
-   stream.writeChar( weather.fog );
-   stream.writeChar( weather.windSpeed );
-   stream.writeChar( weather.windDirection );
-
+   stream.writeInt( time.abstime );   
    for  ( i= 0; i < 4; i++ )
       stream.writeChar( 0 );
 
@@ -1118,7 +1140,7 @@ void tmap::endTurn()
       // Bei Aenderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!
 
       if (( actvehicle->height >= chtieffliegend )   &&  ( actvehicle->height <= chhochfliegend ) && ( getfield(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) {
-         if ( getmaxwindspeedforunit ( actvehicle ) < weather.windSpeed*maxwindspeed ){
+         if ( getmaxwindspeedforunit ( actvehicle ) < weatherSystem->getCurrentWindSpeed()*maxwindspeed ){
             ASCString ident = "The unit " + (*v)->getName() + " at position ("+strrr((*v)->getPosition().x)+"/"+strrr((*v)->getPosition().y)+") crashed because of the strong wind";
             new Message ( ident, actmap, 1<<(*v)->getOwner());
             toRemove.push_back ( *v );
@@ -1130,9 +1152,9 @@ void tmap::endTurn()
                int mo = actvehicle->typ->movement[log2(actvehicle->height)];
                if ( mo )
                   j -= ( actvehicle->getMovement() * 64 / mo)
-                       * (weather.windSpeed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
+                       * (weatherSystem->getCurrentWindSpeed() * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
                else
-                  j -= (weather.windSpeed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
+                  j -= (weatherSystem->getCurrentWindSpeed() * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
             }
            //          movement * 64        windspeed * maxwindspeed         fuelConsumption
            // j -=   ----------------- *  ----------------------------- *   -----------
@@ -1211,6 +1233,7 @@ void tmap::endRound()
              didSomething = false;
              for ( BuildingWork::iterator j = buildingWork.begin(); j != buildingWork.end(); j++ )
                 if ( ! (*j)->finished() ) 
+    //weatherSystem->update(time);
                    if ( (*j)->run() )
                       didSomething = true;
 
@@ -1274,7 +1297,7 @@ bool tmap::nextPlayer()
          runde++;
          newRound();
       }
-
+  
       if ( !player[actplayer].exist() )
          if ( replayinfo )
             if ( replayinfo->guidata[actplayer] ) {
@@ -1327,6 +1350,8 @@ tmap :: ~tmap ()
       game_parameter = NULL;
    }
 
+   delete weatherSystem;
+
    if ( field ) {
       delete[] field;
       field = NULL;
@@ -1334,6 +1359,7 @@ tmap :: ~tmap ()
 
    if ( actmap == this )
       actmap = NULL;
+
 }
 
 /*

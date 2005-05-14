@@ -37,7 +37,21 @@
  #include "password.h"
  #include "weatherarea.h"
  
- class WeatherSystem;
+ class RandomGenerator{
+ 
+ RandomGenerator(int seedValue);
+ ~RandomGenerator();
+ 
+ unsigned int getPercentage();
+ unsigned int getRandomValue(int upperLimit);
+ unsigned int getRandomValue (int lowerLimit, int upperLimit);
+ 
+ 
+ 
+ };
+ 
+ 
+class WeatherSystem;
 
 //! The number of game paramters that can be specified for each map.
 const int gameparameternum = 32;
@@ -353,14 +367,14 @@ class tmap {
       //! the time in the game, mesured in a turns and moves
       GameTime    time;
 
-      struct Weather {
+      /*struct Weather {
          Weather():fog(0),windSpeed(0),windDirection(0){};
          //! the idea of fog is to reduce the visibility, but this is currently not used
          int fog;
 
          int windSpeed;
          int windDirection;
-      } weather;
+      } weather;*/
 
       WeatherSystem* weatherSystem;
       /** how are Resources handled on this map

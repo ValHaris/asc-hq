@@ -17,10 +17,10 @@
 #include "ascstring.h"
 
 const int WeatherDialog::xsize = 500;
-const int WeatherDialog::ysize = 600;
+const int WeatherDialog::ysize = 650;
 
 
-WeatherDialog::WeatherDialog() :  ASC_PG_Dialog(NULL, PG_Rect( 100, 100, xsize, ysize ), "Weather Configuration", SHOW_CLOSE ) {
+WeatherDialog::WeatherDialog() :  ASC_PG_Dialog(NULL, PG_Rect( 100, 50, xsize, ysize ), "Weather Configuration", SHOW_CLOSE ) {
 
     //Random Mode
     randomMode = new PG_CheckButton(this, PG_Rect( GuiDimension::getLeftIndent(), GuiDimension::getTopOffSet(), xsize/3 , GetTextHeight()*2), "Random Mode");
@@ -77,10 +77,23 @@ WeatherDialog::WeatherDialog() :  ASC_PG_Dialog(NULL, PG_Rect( 100, 100, xsize, 
     upperSizeLimitsLabel->SetSizeByText();
     upperSizeLimitsValue = new PG_LineEdit(this, PG_Rect(valueXPos ,upperSizeLimitsYPos, GuiDimension::getLineEditWidth() , GetTextHeight()*2));
     upperSizeLimitsValue->SetText(ASCString::toString(actmap->weatherSystem->getUpperSizeLimit()));
-
+    
+    //Lower Duration Limit
+    int lowerDurationLimitYPos = upperSizeLimitsYPos + GetTextHeight() * 2;
+    lowerDurationLimitLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftIndent(), lowerDurationLimitYPos, xsize/3 , GetTextHeight()*2), "Lower Duration Limit:");
+    lowerDurationLimitLabel->SetSizeByText();
+    lowerDurationLimitValue = new PG_LineEdit(this, PG_Rect(valueXPos ,lowerDurationLimitYPos, GuiDimension::getLineEditWidth(),
+    GetTextHeight()*2));
+    lowerDurationLimitValue->SetText(ASCString::toString(actmap->weatherSystem->getLowerDurationLimit()));
+     
+    //Upper Duration Limit
+    int upperDurationLimitYPos = lowerDurationLimitYPos + GetTextHeight() * 2;
+    upperDurationLimitLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftIndent(), upperDurationLimitYPos, xsize/3 , GetTextHeight()*2), "Upper Duration Limit:");
+    upperDurationLimitLabel->SetSizeByText();
+    upperDurationLimitValue = new PG_LineEdit(this, PG_Rect(valueXPos ,upperDurationLimitYPos, GuiDimension::getLineEditWidth() , GetTextHeight()*2));
+    upperDurationLimitValue->SetText(ASCString::toString(actmap->weatherSystem->getUpperDurationLimit()));
     //FallOut
-    int fallOutYPos = upperSizeLimitsYPos + GetTextHeight() * 2 + GuiDimension::getTopOffSet();
-    ;
+    int fallOutYPos = upperDurationLimitYPos + GetTextHeight() * 2 + GuiDimension::getTopOffSet();    
     fallOutLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftIndent(), fallOutYPos, xsize/3 , GetTextHeight()*2), "Fallout Chances:");
     fallOutLabel->SetSizeByText();
 
@@ -161,6 +174,12 @@ bool WeatherDialog::buttonEvent( PG_Button* button ) {
 
         actmap->weatherSystem->setRandomSizeBorders(atof(lowerSizeLimitsValue->GetText()), atof(upperSizeLimitsValue->GetText()) );
     }
+    if(lowerDurationLimitValue->GetText()!=""){
+      actmap->weatherSystem->setLowerDurationLimit(atoi(lowerDurationLimitValue->GetText()));
+    }
+    if(upperDurationLimitValue->GetText()!=""){
+      actmap->weatherSystem->setUpperDurationLimit(atoi(upperDurationLimitValue->GetText()));
+    }
 
     quitModalLoop(1);
     return true;
@@ -219,15 +238,15 @@ EventAreasDialog::EventAreasDialog() : ASC_PG_Dialog(NULL, PG_Rect( 100, 100, xS
 
     //add Button
     int yPosButtons = 20 + eventList->Height() + GuiDimension::getTopOffSet();
-    addButton = new PG_Button(this, PG_Rect(xPos1, yPosButtons, 50, 35), "Add", 90);
+    addButton = new PG_Button(this, PG_Rect(xPos1, yPosButtons, 70, 35), "Add", 90);
     addButton->sigClick.connect(SigC::slot( *this, &EventAreasDialog::buttonAdd ));
 
     //remove Button
-    removeButton = new PG_Button(this, PG_Rect(Width() - (xPos1 + 35), yPosButtons, 50, 35), "Remove", 90);
+    removeButton = new PG_Button(this, PG_Rect(Width() - (xPos1 + 70), yPosButtons, 70, 35), "Remove", 90);
     removeButton->sigClick.connect(SigC::slot( *this, &EventAreasDialog::buttonRemove ));
 
     //Ok and Cancel Button
-    (new PG_Button(this, PG_Rect(30, Height()-40, (Width()-70)/2, 30), "OK", 100))->sigClick.connect(SigC::slot( *this, &EventAreasDialog::buttonEvent ));
+    (new PG_Button(this, PG_Rect((Width()- GuiDimension::getButtonWidth())/2, Height()-40, GuiDimension::getButtonWidth() , 30), "OK", 100))->sigClick.connect(SigC::slot( *this, &EventAreasDialog::buttonEvent ));
     //(new PG_Button(this, PG_Rect(Width()/2+5, Height()-40, (Width()-70)/2, 30), "Cancel", 101))->sigClick.connect(SigC::slot( *this, &EventAreasDialog::closeWindow ));
 
     sigClose.connect( SigC::slot( *this, &EventAreasDialog::closeWindow ));
@@ -324,11 +343,11 @@ EventWindChangesDialog::EventWindChangesDialog() : ASC_PG_Dialog(NULL, PG_Rect( 
     addButton->sigClick.connect(SigC::slot( *this, &EventWindChangesDialog::buttonAdd ));
 
     //remove Button
-    removeButton = new PG_Button(this, PG_Rect(Width() - (xPos1 + 35), yPosButtons, 50, 35), "Remove", 90);
+    removeButton = new PG_Button(this, PG_Rect(Width() - (xPos1 + 50), yPosButtons, 50, 35), "Remove", 90);
     removeButton->sigClick.connect(SigC::slot( *this, &EventWindChangesDialog::buttonRemove ));
 
     //Ok and Cancel Button
-    (new PG_Button(this, PG_Rect(xSize/2, Height()-40, (Width()-70)/2, 30), "OK", 100))->sigClick.connect(SigC::slot( *this, &EventWindChangesDialog::buttonEvent ));
+    (new PG_Button(this, PG_Rect((Width()-GuiDimension::getButtonWidth())/2, Height()-40, GuiDimension::getButtonWidth(), 30), "OK", 100))->sigClick.connect(SigC::slot( *this, &EventWindChangesDialog::buttonEvent ));
     //(new PG_Button(this, PG_Rect(Width()/2+5, Height()-40, (Width()-70)/2, 30), "Cancel", 101))->sigClick.connect(SigC::slot( *this, &EventWindChangeDialog::closeWindow ));
 
     sigClose.connect( SigC::slot( *this, &EventWindChangesDialog::closeWindow ));

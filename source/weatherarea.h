@@ -34,11 +34,9 @@ extern const char*  cdirections[];
 enum Direction {
 N,
 NE,
-E,
 SE,
 S,
 SW,
-W,
 NW,
 };
 
@@ -180,7 +178,7 @@ int getValue();
 Point2D posInArea;
 };
 
-class WeatherSystem{
+class WeatherSystem : public SigC::Object{
 private:
 
 static const int WEATHERVERSION = 1;
@@ -218,16 +216,25 @@ WeatherSystemMode currentMode;
 
 WeatherSystem(const WeatherSystem&);
 WeatherSystem& operator=(const WeatherSystem&);
-void randomWeatherChange(GameTime currentTime, Direction windDirection);
-Direction randomWindChange(int currentTurn);
+void randomWeatherChange(GameTime currentTime, Direction windDirection, int delay = 0);
+Direction randomWindChange(int currentTurn, int delay = 0);
 
 float createRandomValue(float lowerlimit, float upperlimit);
 Direction getNthTurnWindDirection(int turn, GameTime currentTime);
 
 public:
   static const int FallOutNum = 6;
-  static const int WindDirNum = 8;
+  static const int WindDirNum = 6;
   static const int WINDSPEEDDETAILLEVEL = 8;
+  
+  //Used to support old wind data
+  //Once the read order of tmap is changed and fields + weather are read inside of gamemap::read
+  //get rid of this
+  
+  static int legacyWindSpeed;
+  static int legacyWindDirection;
+  
+  
   WeatherSystem(tmap* map);
   WeatherSystem(tmap* map, int areaSpawns, float windspeed2FieldRatio, unsigned int timeInterval = 6, WeatherSystemMode mode = EVENTMODE, FalloutType defaultFallout = DRY);
   ~WeatherSystem();
@@ -241,7 +248,7 @@ public:
   void removeWeatherArea(GameTime time, WeatherArea* area);
   void removeWindChange(int time, WindData);
   void addGlobalWindChange(int speed, Direction direction, int time) throw (IllegalValueException);  
-  void update(GameTime currentTime);
+  void update();  
   void write (tnstream& outputStream) const;
   void read (tnstream& inputStream);
   
@@ -295,6 +302,14 @@ public:
     areaSpawnAmount = a;
   }
   
+  void setLowerDurationLimit(int udl){
+    lowerRandomDuration = udl;
+  }
+  
+  void setUpperDurationLimit(int ldl){
+    upperRandomDuration = ldl;
+  }
+  
   inline const WeatherSystemMode getEventMode() const{
     return currentMode;
   }
@@ -320,6 +335,15 @@ public:
   inline const float getUpperSizeLimit() const{
     return upperRandomSize;
   }
+  
+  const int getLowerDurationLimit() const{
+    return lowerRandomDuration;
+  }
+  
+  const int getUpperDurationLimit() const{
+    return upperRandomDuration;
+  }
+  
   
   WindData getWindDataOfTurn(int turn) const;
 };

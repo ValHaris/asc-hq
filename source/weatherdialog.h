@@ -267,6 +267,12 @@ private:
   PG_Label* lowerSizeLimitsLabel;
   PG_LineEdit* lowerSizeLimitsValue;
   
+  PG_Label* lowerDurationLimitLabel;
+  PG_LineEdit* lowerDurationLimitValue;
+  
+  PG_Label* upperDurationLimitLabel;
+  PG_LineEdit* upperDurationLimitValue;
+  
   PG_Label* fallOutLabel;
   PG_Button* fallOutButton;
   

@@ -891,7 +891,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
    if ( wm && checkWind )
       if (dest.getNumericalHeight() >= 4 && dest.getNumericalHeight() <= 6 &&
           start.getNumericalHeight() >= 4 && start.getNumericalHeight() <= 6 &&
-          actmap->weather.windSpeed  ) {
+          actmap->weatherSystem->getCurrentWindSpeed()  ) {
          movecost -=  wm->getDist( direc ) * dist;
          fuelcost -=  wm->getDist ( direc ) * dist;
 

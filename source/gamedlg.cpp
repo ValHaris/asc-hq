@@ -3386,7 +3386,7 @@ void showPlayerTime()
 
 void displaywindspeed( void )
 {
-   displaymessage2("wind speed is %d which equals %s fields / turn", actmap->weather.windSpeed, strrrd8d ( actmap->weather.windSpeed * maxwindspeed / 256 ));
+   displaymessage2("wind speed is %d which equals %s fields / turn", actmap->weatherSystem->getCurrentWindSpeed(), strrrd8d ( actmap->weatherSystem->getCurrentWindSpeed() * maxwindspeed / 256 ));
 }
 
 
