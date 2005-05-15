@@ -1166,7 +1166,7 @@ void tmap::endRound()
 
 int tmap::random( int max )
 {
-   return rand_r( &randomSeed ) % max;
+   return asc_rand_r( &randomSeed ) % max;
 }
 
 void tmap::objectGrowth()

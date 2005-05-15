@@ -38,6 +38,7 @@
 /*#define FAST_JPEG*/
 
 /* See if an image is contained in a data source */
+/*
 int IMG_isJPG(SDL_RWops *src)
 {
         int is_JPG;
@@ -55,6 +56,7 @@ int IMG_isJPG(SDL_RWops *src)
         }
         return(is_JPG);
 }
+*/
 
 #define INPUT_BUFFER_SIZE       4096
 typedef struct {
@@ -68,7 +70,7 @@ typedef struct {
  * Initialize source --- called by jpeg_read_header
  * before any data is actually read.
  */
-void _init_source (j_decompress_ptr cinfo)
+void _asc_init_source (j_decompress_ptr cinfo)
 {
         /* We don't actually need to do anything */
         return;
@@ -77,7 +79,7 @@ void _init_source (j_decompress_ptr cinfo)
 /*
  * Fill the input buffer --- called whenever buffer is emptied.
  */
-int _fill_input_buffer (j_decompress_ptr cinfo)
+int _asc_fill_input_buffer (j_decompress_ptr cinfo)
 {
         my_source_mgr * src = (my_source_mgr *) cinfo->src;
         int nbytes;
@@ -107,7 +109,7 @@ int _fill_input_buffer (j_decompress_ptr cinfo)
  * Arranging for additional bytes to be discarded before reloading the input
  * buffer is the application writer's problem.
  */
-void _skip_input_data (j_decompress_ptr cinfo, long num_bytes)
+void _asc_skip_input_data (j_decompress_ptr cinfo, long num_bytes)
 {
         my_source_mgr * src = (my_source_mgr *) cinfo->src;
 
@@ -132,7 +134,7 @@ void _skip_input_data (j_decompress_ptr cinfo, long num_bytes)
  * Terminate source --- called by jpeg_finish_decompress
  * after all data has been read.
  */
-void _term_source (j_decompress_ptr cinfo)
+void _asc_term_source (j_decompress_ptr cinfo)
 {
         /* We don't actually need to do anything */
         return;
@@ -143,7 +145,7 @@ void _term_source (j_decompress_ptr cinfo)
  * The caller must have already opened the stream, and is responsible
  * for closing it after finishing decompression.
  */
-void jpeg_SDL_RW_src (j_decompress_ptr cinfo, SDL_RWops *ctx)
+void asc_jpeg_SDL_RW_src (j_decompress_ptr cinfo, SDL_RWops *ctx)
 {
   my_source_mgr *src;
 
@@ -162,18 +164,18 @@ void jpeg_SDL_RW_src (j_decompress_ptr cinfo, SDL_RWops *ctx)
   }
 
   src = (my_source_mgr *) cinfo->src;
-  src->pub.init_source = _init_source;
-  src->pub.fill_input_buffer = _fill_input_buffer;
-  src->pub.skip_input_data = _skip_input_data;
+  src->pub.init_source = _asc_init_source;
+  src->pub.fill_input_buffer = _asc_fill_input_buffer;
+  src->pub.skip_input_data = _asc_skip_input_data;
   src->pub.resync_to_restart = jpeg_resync_to_restart; /* use default method */
-  src->pub.term_source = _term_source;
+  src->pub.term_source = _asc_term_source;
   src->ctx = ctx;
   src->pub.bytes_in_buffer = 0; /* forces fill_input_buffer on first read */
   src->pub.next_input_byte = NULL; /* until buffer loaded */
 }
 
 /* Load a JPEG type image from an SDL datasource */
-SDL_Surface *IMG_LoadJPG_RW_D(SDL_RWops *src, int depth)
+SDL_Surface *ASC_IMG_LoadJPG_RW_D(SDL_RWops *src, int depth)
 {
         struct jpeg_error_mgr errmgr;
         struct jpeg_decompress_struct cinfo;
@@ -184,7 +186,7 @@ SDL_Surface *IMG_LoadJPG_RW_D(SDL_RWops *src, int depth)
         /* Create a decompression structure and load the JPEG header */
         cinfo.err = jpeg_std_error(&errmgr);
         jpeg_create_decompress(&cinfo);
-        jpeg_SDL_RW_src(&cinfo, src);
+        asc_jpeg_SDL_RW_src(&cinfo, src);
         jpeg_read_header(&cinfo, TRUE);
 
         cinfo.out_color_space = JCS_RGB;

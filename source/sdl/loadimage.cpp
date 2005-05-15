@@ -24,13 +24,13 @@
 #include "../palette.h"
 #include "../loadpcx.h"
 
-extern "C" SDL_Surface *IMG_LoadJPG_RW_D(SDL_RWops *src, int depth);
+extern "C" SDL_Surface *ASC_IMG_LoadJPG_RW_D(SDL_RWops *src, int depth);
 
 
 void read_JPEG_file ( pnstream stream )
 {
       SDL_RWops *src = SDL_RWFromStream ( stream );
-      SDL_Surface* convimg = IMG_LoadJPG_RW_D( src, 8 );
+      SDL_Surface* convimg = ASC_IMG_LoadJPG_RW_D( src, 8 );
       SDL_RWclose(src);
 
       SDL_Surface* screen = SDL_GetVideoSurface();
