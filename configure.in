@@ -313,6 +313,27 @@ else
 fi
 
 
+AC_MSG_CHECKING("distinct size_t type")
+AC_COMPILE_IFELSE( [
+    #include <string>
+   void foo( int i ) {};
+   void foo( size_t i ) {};
+   void foo( unsigned int i ) {};
+   int main() {
+     size_t t = 7;
+     foo(t);
+     return 0;
+   }  
+], size_t_type=distinct )
+
+if test "x$size_t_type" = x ; then
+  AC_MSG_RESULT("no")
+else
+  CXXFLAGS="$CXXFLAGS -DSIZE_T_not_identical_to_INT"
+  AC_MSG_RESULT("yes")
+fi
+
+
 dnl shell vars set by test&feature flag for libbz2
 AC_SUBST([LIBBZ2])
 AC_SUBST([LDADDLIBBZ2])

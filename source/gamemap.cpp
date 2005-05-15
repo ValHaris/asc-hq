@@ -187,7 +187,7 @@ void tmap :: read ( tnstream& stream )
       else
          player[i].research.read ( stream );
 
-      player[i].ai = (BaseAI*) stream.readInt();
+      player[i].ai = (BaseAI*)stream.readInt() ;
       player[i].stat = Player::tplayerstat ( stream.readChar() );
       stream.readChar(); // dummy
       dummy_playername[i] = stream.readInt();
@@ -214,7 +214,7 @@ void tmap :: read ( tnstream& stream )
 
    unitnetworkid = stream.readInt();
    levelfinished = stream.readChar();
-   network = (pnetwork) stream.readInt();
+   network = (pnetwork)stream.readInt();
    bool alliance_names_not_used_any_more[8];
    for ( i = 0; i < 8; i++ )
       alliance_names_not_used_any_more[i] = stream.readInt(); // dummy
@@ -269,7 +269,8 @@ void tmap :: read ( tnstream& stream )
 
    int preferredfilenames = stream.readInt();
 
-   ellipse = (EllipseOnScreen*) stream.readInt();
+   bool __loadEllipse = stream.readInt();
+   ellipse = NULL;
    graphicset = stream.readInt();
    gameparameter_num = stream.readInt();
 
@@ -368,10 +369,11 @@ void tmap :: read ( tnstream& stream )
        }
     }
 
-    if ( ellipse ) {
+    if ( __loadEllipse ) {
        ellipse = new EllipseOnScreen;
        ellipse->read( stream );
-    }
+    } else
+       ellipse = NULL;
 
     int orggpnum = gameparameter_num;
     gameparameter_num = 0;
@@ -1185,7 +1187,7 @@ void tmap::objectGrowth()
                            if ( d > 0.9 )
                               d = 0.9;
 
-                           int p = std::ceil ( double(1) / d) ;
+                           int p = static_cast<int>(std::ceil ( double(1) / d));
                            if ( p > 1 )
                               if ( random ( p ) == 1 )
                                  if ( i->typ->fieldModification[fld2->getweather()].terrainaccess.accessible( fld2->bdt) > 0 )
