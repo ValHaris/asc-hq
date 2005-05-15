@@ -602,7 +602,7 @@ void tmap :: write ( tnstream& stream )
     stream.writeString ( archivalInformation.description );
     stream.writeString ( archivalInformation.tags );
     stream.writeString ( archivalInformation.requirements );
-    stream.writeInt ( ::time ( &archivalInformation.modifytime ));
+    stream.writeInt ( (unsigned int) (::time ( &archivalInformation.modifytime )));
 
 
     stream.writeInt( unitProduction.idsAllowed.size() );
@@ -614,7 +614,7 @@ void tmap :: write ( tnstream& stream )
        stream.writeInt( player[ii].playTime.size() );
        for ( Player::PlayTimeContainer::iterator i = player[ii].playTime.begin(); i != player[ii].playTime.end(); ++i ) {
           stream.writeInt( i->turn );
-          stream.writeInt( i->date );
+          stream.writeInt( (unsigned int) i->date );
        }
     }
 
@@ -1102,7 +1102,7 @@ void tmap::endTurn()
       }
 
       if ( actvehicle )
-         actvehicle->endTurn();
+         actvehicle->endOwnTurn();
 
    }
 
@@ -1110,6 +1110,11 @@ void tmap::endTurn()
       delete *v;
 
    checkunitsforremoval();
+
+  for ( int i = 0; i < 9; ++i ) 
+     for ( tmap::Player::VehicleList::iterator v = player[i].vehicleList.begin(); v != player[i].vehicleList.end(); ++v ) 
+         (*v)->endAnyTurn();
+
 
 }
 

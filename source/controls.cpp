@@ -1815,7 +1815,7 @@ void sendnetworkgametonextplayer ( int oldplayer, int newplayer )
 void endTurn ( void )
 {
    mousevisible(false);
-   if ( actmap->actplayer >= 0 )
+   if ( actmap->actplayer >= 0 ) 
       actmap->endTurn();
 
    closeReplayLogging();

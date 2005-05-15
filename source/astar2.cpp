@@ -816,6 +816,9 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
                              if ( step < hcm->dist )
                                 getnextfield ( newpos.x, newpos.y, dir );
+                             else
+                                if ( fld && (fld->building || (fld->vehicle && fld->vehicle != veh)))
+                                   access = false;
                           }
 
                           pfield fld = actmap->getField( newpos );

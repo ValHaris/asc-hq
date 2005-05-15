@@ -367,13 +367,19 @@ void Vehicle :: endRound ( void )
    }
 }
 
-void Vehicle :: endTurn( void )
+void Vehicle :: endAnyTurn()
+{
+   reactionfire.endAnyTurn();
+}
+
+
+void Vehicle :: endOwnTurn()
 {
    if ( typ->autorepairrate > 0 )
       if ( damage )
          repairItem ( this, max ( damage - typ->autorepairrate, 0 ) );
 
-   reactionfire.endTurn();
+   reactionfire.endOwnTurn();
 
    if ( !gamemap->getField(getPosition())->unitHere(this)) {
       int mx = -1;
@@ -399,7 +405,6 @@ void Vehicle :: endTurn( void )
             ++cnt;
          }
       }
-
 
    resetMovement();
    attacked = false;
@@ -646,9 +651,13 @@ void Vehicle::ReactionFire::disable ( void )
    }
 }
 
+void Vehicle::ReactionFire::endAnyTurn()
+{
+   resetShotCount();
+}
 
 
-void Vehicle::ReactionFire::endTurn ( void )
+void Vehicle::ReactionFire::endOwnTurn()
 {
    if ( status != off ) {
       if ( status == init1a )
@@ -662,7 +671,6 @@ void Vehicle::ReactionFire::endTurn ( void )
       else
          enemiesAttackable = 0;
    }
-   resetShotCount();
    nonattackableUnits.clear();
 }
 

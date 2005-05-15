@@ -291,7 +291,7 @@ void      tspfldloaders:: writemessages ( void )
 
       stream->writeInt ( (*mi)->from );
       stream->writeInt ( (*mi)->to );
-      stream->writeInt ( (*mi)->time );
+      stream->writeInt ( (unsigned int) (*mi)->time );
       stream->writeInt ( 1 );
       stream->writeInt ( (*mi)->id );
       stream->writeInt ( (*mi)->gametime.turn() );

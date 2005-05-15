@@ -228,6 +228,10 @@ void PropertyContainer :: run ( )
       for ( Properties::iterator i = properties.begin(); i != properties.end(); i++ )
          if ( !(*i)->evaluated )
             (*i)->evaluate();
+
+   closeBracket();
+   if ( levelDepth )
+      error ( "PropertyReadingContainer :: ~PropertyReadingContainer - still brackets open" );
 }
 
 void PropertyReadingContainer :: writeProperty ( Property& p, const ASCString& value )
@@ -490,11 +494,9 @@ PropertyReadingContainer :: PropertyReadingContainer ( const ASCString& baseName
    openBracket ( baseName );
 }
 
+
 PropertyReadingContainer :: ~PropertyReadingContainer (  )
 {
-   closeBracket();
-   if ( levelDepth )
-      error ( "PropertyReadingContainer :: ~PropertyReadingContainer - still brackets open" );
 }
 
 PropertyWritingContainer :: PropertyWritingContainer ( const ASCString& baseName, tnstream& stream ) : PropertyContainer ( baseName, NULL, false ), stream ( stream )

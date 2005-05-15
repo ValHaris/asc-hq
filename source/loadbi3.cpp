@@ -407,8 +407,6 @@ void BI3TranslationTableLoader::readTextFiles( PropertyReadingContainer& prc, co
 {
    Bi3MapTranslationTable* bmtt = new Bi3MapTranslationTable;
    bmtt->runTextIO ( prc );
-   prc.run();
-
    bmtt->filename = fileName;
    bmtt->location = location;
    bi3ImportTables.push_back ( bmtt );

@@ -117,7 +117,8 @@
          vector<int> nonattackableUnits;
 
          //! hook that is called when a turn ends
-         void endTurn ( void );
+         void endOwnTurn();
+         void endAnyTurn();
          void checkData();
 
          bool canMove() const;
@@ -194,8 +195,12 @@
     //! Returns the size of a unit. A size is equal to the weight of the unit without any cargo or carried resources.
     int size ( void );
 
-    //! hook that is called when a turn ends
-    void endTurn( void );
+    //! hook that is called when a player ends his turn
+    void endOwnTurn( void );
+
+    //! hook that is called when any player (including owner) ends turn
+    void endAnyTurn( void );
+
 
     //! hook that is called the next round begins ( active player switching from player8 to player1 )
     void endRound ( void );

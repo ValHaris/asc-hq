@@ -2856,7 +2856,7 @@ void tviewtext::evalcommand ( const char** s)
    int tvt_oldx;
 
 
-   memset( s4, sizeof( s4 ), 0);
+   memset( s4, 0, sizeof( s4 ));
    if (strnicmp(s3, "#COLOR", 6) == 0) {
       i+=6;
       while (s3[i] != '#') {
