@@ -114,8 +114,7 @@ float AttackFormula :: strength_hemming ( int  ax,  int ay,  pvehicle d_eht )
 
 float AttackFormula :: strength_damage ( int damage )
 {
-   float a = (300 - 2 * damage) / 3;
-   return a / 100;
+   return 1 - (2.0 * float(damage) / 300.0);
 }
 
 float AttackFormula :: strength_experience ( int experience )
