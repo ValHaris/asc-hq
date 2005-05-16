@@ -59,15 +59,16 @@
 
  class ASC_PG_App : public PG_Application {
        ASCString themeName;
-       int quitModalLoopValue;
 
     public:
+       static const int mapDisplayID = 2;
+       static const int mainScreenID = 1;
+    
        ASC_PG_App ( const ASCString& themeName );
        bool InitScreen ( int w, int h, int depth = 0, Uint32 flags = SDL_SWSURFACE|SDL_HWPALETTE );
        void reloadTheme();
        int Run ();
-       bool processEvents();
-       void quit() { quitModalLoopValue = 1; };
+       void processEvent();
        bool enableLegacyEventHandling( bool use );
       // PG_Theme* LoadTheme(const char* xmltheme, bool asDefault = true, const char* searchpath = NULL );
  };
@@ -76,19 +77,18 @@
  
  //! Adapter class for using Paragui Dialogs in ASC. This class transfers the event control from ASC to Paragui and back. All new dialog classes should be derived from this class
 class ASC_PG_Dialog : public PG_Window {
-       SDL_Surface* background;
+       // SDL_Surface* background;
     private:
-       int quitModalLoopValue;       
+       // int quitModalLoopValue;       
     protected:
       PG_MessageObject* caller;
       bool closeWindow();
-      void quitModalLoop(int i = 1) { quitModalLoopValue = i; };    
+      void quitModalLoop(int value ); 
       virtual bool eventKeyUp(const SDL_KeyboardEvent *key);
     public:
        ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCString& windowtext, WindowFlags flags=DEFAULT, const ASCString& style="Window", int heightTitlebar=25);
        int Run( );
        int RunModal( );
-       ~ASC_PG_Dialog();
 };
 
 class BarGraphWidget;
@@ -136,6 +136,7 @@ class Panel : public  PG_Window {
 
    public:
       Panel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme = true );
+      // FIXME Close button does not delete Panel
       ~Panel();
 };
 

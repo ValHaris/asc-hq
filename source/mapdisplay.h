@@ -222,6 +222,7 @@ class MapDisplayInterface {
            virtual void resetMovement ( void ) = 0;
            virtual void startAction ( void ) = 0;
            virtual void stopAction ( void ) = 0;
+           virtual void cursor_goto ( const MapCoordinate& pos ) = 0;
            virtual void displayActionCursor ( int x1, int y1, int x2, int y2 ) = 0;
            virtual void removeActionCursor ( void ) = 0;
            virtual void updateDashboard () = 0;

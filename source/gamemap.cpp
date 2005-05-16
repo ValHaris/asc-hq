@@ -36,6 +36,7 @@
 #include "graphics/blitter.h"
 #include "overviewmapimage.h"
 #include "iconrepository.h"
+#include "paradialog.h"
 
 #ifdef sgmain
  #include "network.h"
@@ -76,7 +77,114 @@ unsigned int RandomGenerator::getRandomValue (int lowerLimit, int upperLimit){
 
 
 
+OverviewMapHolder :: OverviewMapHolder( tmap& gamemap ) : map(gamemap), initialized(false), completed(false), x(0),y(0) 
+{
+   PG_Application::GetApp()->sigAppIdle.connect( SigC::slot( *this, &OverviewMapHolder::idleHandler ));
+}
+
+bool OverviewMapHolder :: idleHandler( )
+{
+   int t = ticker;
+   while ( !completed && (t + 5 > ticker ))
+      drawNextField( true );
+   return true;
+}
+
+
+void OverviewMapHolder::updateField( const MapCoordinate& pos )
+{
+   SPoint imgpos = OverviewMapImage::map2surface( pos );
+
+   pfield fld = map.getField( pos );
+   VisibilityStates visi = fieldVisibility( fld, map.playerView );
+   if ( visi == visible_not ) {
+      static SDLmm::Color invisible = 0;
+      if ( !invisible ) {
+         Surface& hex = IconRepository::getIcon("hexinvis.raw");
+         invisible = overviewMapImage.GetPixelFormat().MapRGB ( hex.GetPixelFormat().GetRGB( hex.GetPixel ( hex.w() / 2, hex.h() / 2 )));
+      }
+      OverviewMapImage::fill ( overviewMapImage, imgpos, invisible );
+   } else {
+      if ( fld->building && fieldvisiblenow( fld, map.playerView) )
+         OverviewMapImage::fill ( overviewMapImage, imgpos, map.player[fld->building->getOwner()].getColor() );
+      else {
+
+         int w = fld->getweather();
+         fld->typ->getQuickView()->blit( overviewMapImage, imgpos );
+         for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
+            if ( visi > visible_ago || i->typ->visibleago )
+               i->getOverviewMapImage( w )->blit( overviewMapImage, imgpos );
+
+         if ( fld->vehicle && fieldvisiblenow( fld, map.playerView) )
+            OverviewMapImage::fillCenter ( overviewMapImage, imgpos, map.player[fld->vehicle->getOwner()].getColor() );
+
+         if ( visi == visible_ago )
+            OverviewMapImage::lighten( overviewMapImage, imgpos, 0.7 ); 
+
+      }
+
+   }
+}
+
+void OverviewMapHolder::drawNextField( bool signalOnComplete )
+{
+   if ( !init() )
+      return;
+      
+   if ( x == map.xsize ) {
+      x = 0;
+      ++y;
+   }   
+   if ( y < map.ysize ) {
+      updateField( MapCoordinate(x,y));
+      ++x;
+   }
+   if ( y == map.ysize ) {
+      completed = true;
+      if ( signalOnComplete )
+         viewChanged();
+   }
+}
+
+bool OverviewMapHolder::init()
+{
+   if ( !initialized ) {
+      if ( map.xsize > 0 && map.ysize > 0 ) {
+         overviewMapImage = Surface::createSurface( (map.xsize+1) * 6, 4 + map.ysize * 2 , 32, 0 );
+         initialized = true;
+      }
+   }
+   return initialized;
+}   
+
+
+const Surface& OverviewMapHolder::getOverviewMap( bool complete )
+{
+   bool initialized = init();
+   assert( initialized );
+   if ( complete )
+      while ( !completed )
+         drawNextField( false );
+   return overviewMapImage;
+}
+
+void OverviewMapHolder::startUpdate()
+{
+   completed = false;
+   x = 0;
+   y = 0;
+}
+
+void OverviewMapHolder::clear()
+{
+   overviewMapImage.Fill( Surface::transparent );
+   startUpdate();
+}
+
+
+
 tmap :: tmap ( void )
+      : overviewMapHolder( *this )
 {
    randomSeed = rand();
 
@@ -661,44 +769,9 @@ void tmap :: write ( tnstream& stream )
 
 
 
-const Surface& tmap::getOverviewMap()
+MapCoordinate& tmap::getCursor()
 {
-   overviewMapImage = Surface::createSurface( (xsize+1) * 6, 4 + ysize * 2 , 32, 0 );
-   for ( int y = 0; y < ysize; ++y )
-      for ( int x = 0; x < xsize; ++x ) {
-         SPoint imgpos = OverviewMapImage::map2surface( MapCoordinate( x, y));
-
-         pfield fld = getField(x,y);
-         VisibilityStates visi = fieldVisibility( fld, playerView );
-         if ( visi == visible_not ) {
-            static SDLmm::Color invisible = 0;
-            if ( !invisible ) {
-               Surface& hex = IconRepository::getIcon("hexinvis.raw");
-               invisible = overviewMapImage.GetPixelFormat().MapRGB ( hex.GetPixelFormat().GetRGB( hex.GetPixel ( hex.w() / 2, hex.h() / 2 )));
-            }
-            OverviewMapImage::fill ( overviewMapImage, imgpos, invisible );
-         } else {
-            if ( fld->building && fieldvisiblenow( fld, playerView) )
-               OverviewMapImage::fill ( overviewMapImage, imgpos, player[fld->building->getOwner()].getColor() );
-            else {
-
-               int w = fld->getweather();
-               fld->typ->getQuickView()->blit( overviewMapImage, imgpos );
-               for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
-                  if ( visi > visible_ago || i->typ->visibleago )
-                     i->getOverviewMapImage( w )->blit( overviewMapImage, imgpos );
-
-               if ( fld->vehicle && fieldvisiblenow( fld, playerView) )
-                  OverviewMapImage::fillCenter ( overviewMapImage, imgpos, player[fld->vehicle->getOwner()].getColor() );
-
-               if ( visi == visible_ago )
-                  OverviewMapImage::lighten( overviewMapImage, imgpos, 0.7 ); 
-
-            }
-
-         }
-      }
-   return overviewMapImage;
+   return player[actplayer].cursorPos;
 }
 
 
@@ -1120,10 +1193,6 @@ bool tmap :: compareResources( tmap* replaymap, int player, ASCString* log )
 
 void tmap::endTurn()
 {
-   cursorpos.position[actplayer].cx = getxpos();
-   cursorpos.position[actplayer].cy = getypos();
-   cursorpos.position[actplayer].sx = xpos;
-   cursorpos.position[actplayer].sy = ypos;
    player[actplayer].ASCversion = getNumericVersion();
    Player::PlayTime pt;
    pt.turn = time.turn();
@@ -1271,7 +1340,7 @@ void tmap::objectGrowth()
                            if ( d > 0.9 )
                               d = 0.9;
 
-                           int p = std::ceil ( double(1) / d) ;
+                           int p = static_cast<int>(std::ceil ( double(1) / d)) ;
                            if ( p > 1 )
                               if ( random ( p ) == 1 )
                                  if ( i->typ->fieldModification[fld2->getweather()].terrainaccess.accessible( fld2->bdt) > 0 )

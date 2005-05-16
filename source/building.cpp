@@ -2743,9 +2743,6 @@ void ccontainer_b :: cammunitiontransferb_subwindow :: execexternalload ( void )
          npush (actgui);
          actgui = hostcontainer->oldguihost;
 
-         int cursorx = cursor.posx;
-         int cursory = cursor.posy;
-
          displaymap ();
          dashboard.x = 0xffff;
          mousevisible( true );
@@ -2755,10 +2752,10 @@ void ccontainer_b :: cammunitiontransferb_subwindow :: execexternalload ( void )
 
             tkey input;
             if (keypress ()) {
-               mainloopgeneralkeycheck (input);
+               // mainloopgeneralkeycheck (input);
             }
 
-            mainloopgeneralmousecheck ();
+            // mainloopgeneralmousecheck ();
 
          } while ( moveparams.movestatus==130 ) ;
          removemouseproc ( &mousescrollproc );
@@ -2768,15 +2765,11 @@ void ccontainer_b :: cammunitiontransferb_subwindow :: execexternalload ( void )
          mousevisible ( false );
          Vehicle* markedvehicle = NULL;
          if ( moveparams.movestatus == 131 ) {
-            markedvehicle = getactfield()->vehicle ;
+            markedvehicle = actmap->getField( actmap->getCursor())->vehicle;
             externalloadingactive = 1;
          }
          moveparams.movestatus = 0;
 
-         cursor.hide ();
-         cursor.posx = cursorx;
-         cursor.posy = cursory;
-         cursor.show ();
          actmap->cleartemps(7);
          hostcontainer->buildgraphics();
          hostcontainer->displayloading ();
@@ -2851,9 +2844,6 @@ void  ccontainer :: moveicon_c :: exec         ( void )
       npush (actgui);
       actgui = main->oldguihost;
 
-      int cursorx = cursor.posx;
-      int cursory = cursor.posy;
-
       vehicleMovement->registerPVA ( vat_move, &pendingVehicleActions );
       for ( int i = 0; i < vehicleMovement->reachableFields.getFieldNum(); i++ )
          vehicleMovement->reachableFields.getField( i ) ->a.temp = 1;
@@ -2872,10 +2862,10 @@ void  ccontainer :: moveicon_c :: exec         ( void )
 
          tkey input;
          if (keypress ()) {
-            mainloopgeneralkeycheck (input);
+            // mainloopgeneralkeycheck (input);
          }
 
-         mainloopgeneralmousecheck ();
+         // mainloopgeneralmousecheck ();
          releasetimeslice();
 
       } while ( pendingVehicleActions.actionType == vat_move ) ;
@@ -2884,10 +2874,6 @@ void  ccontainer :: moveicon_c :: exec         ( void )
          setnewmousepointer ( icons.mousepointer, 0,0 );
 
       mousevisible ( false );
-      cursor.hide ();
-      cursor.posx = cursorx;
-      cursor.posy = cursory;
-      cursor.show ();
       actmap->cleartemps(7);
       main->buildgraphics();
       main->displayloading ();
@@ -3528,7 +3514,7 @@ void  ccontainer_b :: init ( Building* bld )
 
       // setzen des mapcursors auf den Geb„udeeingang
       MapCoordinate mc = building->getEntry();
-      cursor.gotoxy ( mc.x , mc.y );
+      // cursor.gotoxy ( mc.x , mc.y );
 
       ccontainer :: init ( NULL, building->color, building->name.c_str(), building->typ->name.c_str());
       ccontainer :: displayloading ();

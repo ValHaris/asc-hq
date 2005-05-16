@@ -35,8 +35,16 @@ OverviewMapPanel::OverviewMapPanel( PG_Widget *parent, const PG_Rect &r, MapDisp
                  : Panel ( parent, r, "OverviewMap", true ), mapDisplayWidget( mapDisplay), currentZoom( 1 )
 {
    SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( "overviewmap", true ) );
-   if ( sdw )
+   if ( sdw ) {
       sdw->display.connect( SigC::slot( *this, &OverviewMapPanel::painter ));
+      sdw->sigMouseMotion.connect( SigC::slot( *this, &OverviewMapPanel::mouseMotion ));
+      sdw->sigMouseButtonDown.connect( SigC::slot( *this, &OverviewMapPanel::mouseButtonDown ));
+   }
+   
+   ovmap = sdw;
+   assert( ovmap );
+      
+   viewChanged.connect ( SigC::slot( *this, &OverviewMapPanel::redraw ));
 }
 
 
@@ -44,9 +52,7 @@ void OverviewMapPanel::painter ( const PG_Rect &src, const ASCString& name, cons
 {
    Surface screen = Surface::Wrap( PG_Application::GetScreen() );
    if ( name == "overviewmap" && actmap ) {
-      Surface s = actmap->getOverviewMap();
-
-
+      Surface s = actmap->overviewMapHolder.getOverviewMap( false );
 
       MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom> blitter;
       blitter.setSize( s.w(), s.h(), dst.w, dst.h );
@@ -75,11 +81,44 @@ void OverviewMapPanel::painter ( const PG_Rect &src, const ASCString& name, cons
    }
 }
 
+bool OverviewMapPanel::mouseClick ( SPoint pos )
+{
+   MapCoordinate mc = OverviewMapImage::surface2map( SPoint(float(pos.x) / currentZoom, float(pos.y) / currentZoom ));
+   if ( !(mc.valid() && mc.x < actmap->xsize && mc.y < actmap->ysize ))
+      return false;
+
+   mapDisplayWidget->centerOnField( mc );
+   return true;
+}
+
+
+bool OverviewMapPanel::mouseButtonDown ( const SDL_MouseButtonEvent *button)
+{
+   if ( ovmap->IsMouseInside() )
+      if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == 1 ) {
+         PG_Point p = ovmap->ScreenToClient( button->x, button->y );
+         return mouseClick( SPoint( p.x, p.y ));
+      }
+
+   return false;
+}
+
+bool OverviewMapPanel::mouseMotion  (  const SDL_MouseMotionEvent *motion)
+{
+   if ( ovmap->IsMouseInside() )
+      if ( motion->type == SDL_MOUSEMOTION && (motion->state & 1 ) ) {
+         PG_Point p = ovmap->ScreenToClient( motion->x, motion->y );
+         return mouseClick( SPoint( p.x, p.y ));
+      }
+
+   return false;
+}
+
 
 DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme = true )
                :Panel ( parent, r, panelName_, loadTheme )
 {
-   updateFieldInfo.connect ( SigC::slot( *this, &WindInfoPanel::eval ));
+   updateFieldInfo.connect ( SigC::slot( *this, &DashboardPanel::eval ));
    registerSpecialDisplay( "windarrow" );
 
    registerSpecialDisplay( "unitexp" );
@@ -355,7 +394,7 @@ bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent*
                veh = fld->vehicle;
             }
             if ( vt || veh ) {
-               WeaponInfoPanel* wip = new WeaponInfoPanel( PG_Application::GetWidgetById( 1 ), veh, vt );
+               WeaponInfoPanel* wip = new WeaponInfoPanel( PG_Application::GetWidgetById( ASC_PG_App::mainScreenID ), veh, vt );
                wip->Show();
             }
             return true;

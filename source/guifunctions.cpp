@@ -205,9 +205,37 @@ AttackGui attackGui;
 
 
 
-
-
-
+class Cancel : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num ) 
+      {
+         return moveparams.movestatus || pendingVehicleActions.action;  
+      };
+      
+      void execute( const MapCoordinate& pos, int num ) 
+      { 
+         if ( moveparams.movestatus || pendingVehicleActions.action ) {
+            moveparams.movestatus = 0;
+            if ( pendingVehicleActions.action )
+               delete pendingVehicleActions.action;
+      
+            actmap->cleartemps(7);
+            updateFieldInfo();
+            displaymap();
+         }
+      };
+      
+      Surface& getImage( const MapCoordinate& po, int nums )
+      {
+         return IconRepository::getIcon("cancel.png");
+      };
+      
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "cancel";
+      };
+};
 
 
 
@@ -1220,7 +1248,7 @@ class PutMine : public GuiFunction
 
       void execute( const MapCoordinate& pos, int num )
       {
-         legemine(0, 0);
+         putMine( pos, 0, 0);
          updateFieldInfo();
          displaymap();
       }
@@ -1259,7 +1287,7 @@ class PutAntiTankMine : public PutGroundMine
    public:
       void execute( const MapCoordinate& pos, int num )
       {
-         legemine(cmantitankmine, 1 );
+         putMine(pos, cmantitankmine, 1 );
          displaymap();
       }
 
@@ -1279,7 +1307,7 @@ class PutAntiPersonalMine : public PutGroundMine
    public:
       void execute( const MapCoordinate& pos, int num )
       {
-         legemine(cmantipersonnelmine, 1);
+         putMine(pos, cmantipersonnelmine, 1);
          displaymap();
       }
 
@@ -1317,7 +1345,7 @@ class PutAntiShipMine : public GuiFunction
 
       void execute( const MapCoordinate& pos, int num )
       {
-         legemine(cmfloatmine, 1);
+         putMine( pos, cmfloatmine, 1);
          displaymap();
       }
 
@@ -1350,7 +1378,7 @@ class PutAntiSubMine : public GuiFunction
 
       void execute( const MapCoordinate& pos, int num )
       {
-         legemine(cmmooredmine,1 );
+         putMine( pos, cmmooredmine,1 );
          displaymap();
       }
 
@@ -1381,7 +1409,7 @@ class RemoveMine : public GuiFunction
 
       void execute( const MapCoordinate& pos, int num )
       {
-         legemine(0, -1);
+         putMine( pos, 0, -1);
          displaymap();
       }
 
@@ -2552,7 +2580,7 @@ void registerGuiFunctions( GuiIconHandler& handler )
    handler.registerUserFunction( new GuiFunctions::ConstructBuilding() );
    handler.registerUserFunction( new GuiFunctions::DestructBuilding() );
    handler.registerUserFunction( new GuiFunctions::SearchForMineralResources() );
-   handler.registerUserFunction( new GuiFunctions::OpenContainer() );
+   // handler.registerUserFunction( new GuiFunctions::OpenContainer() );
    handler.registerUserFunction( new GuiFunctions::EnableReactionfire() );
    handler.registerUserFunction( new GuiFunctions::DisableReactionfire() );
    handler.registerUserFunction( new GuiFunctions::Ascend );
@@ -2560,12 +2588,15 @@ void registerGuiFunctions( GuiIconHandler& handler )
    handler.registerUserFunction( new GuiFunctions::RepairUnit );
    handler.registerUserFunction( new GuiFunctions::RefuelUnit );
    handler.registerUserFunction( new GuiFunctions::RefuelUnitDialog );
-   handler.registerUserFunction( new GuiFunctions::ViewMap );
+   // handler.registerUserFunction( new GuiFunctions::ViewMap );
    handler.registerUserFunction( new GuiFunctions::PutMine );
    handler.registerUserFunction( new GuiFunctions::PutAntiTankMine );
    handler.registerUserFunction( new GuiFunctions::PutAntiPersonalMine );
    handler.registerUserFunction( new GuiFunctions::PutAntiShipMine );
    handler.registerUserFunction( new GuiFunctions::PutAntiSubMine );
    handler.registerUserFunction( new GuiFunctions::RemoveMine );
+   
+   handler.registerUserFunction( new GuiFunctions::Cancel() );
+   
 }
 

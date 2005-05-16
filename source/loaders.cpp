@@ -1113,10 +1113,6 @@ int          tmaploaders::loadmap( const char *       name )
    actmap = spfld;
    spfld = NULL;
 
-
-   cursor.posx = 0;
-   cursor.posy = 0;
-
    actmap->time.set ( 1, 0 );
    actmap->levelfinished = false;
 
@@ -1190,9 +1186,6 @@ int   tsavegameloaders::loadgame( const ASCString& filename )
    delete actmap;
    actmap = spfld;
    actmap->levelfinished = false;
-
-   cursor.posx = 0;
-   cursor.posy = 0;
 
    if ( actmap->replayinfo ) {
       if ( actmap->replayinfo->actmemstream )

@@ -101,7 +101,7 @@ extern void  constructvehicle( pvehicletype tnk );
 extern void build_vehicles_reset( void );
 
 //! An old procedure for putting and removing mines.
-extern void  legemine( int typ, int delta );
+extern void  putMine( const MapCoordinate& pos, int typ, int delta );
 
 #if 0
 //! An old procedure for constructing a building with a vehicle
@@ -214,6 +214,7 @@ class ReplayMapDisplay : public MapDisplayInterface {
            void resetMovement ( void ) { mapDisplay->resetMovement(); };
            void startAction ( void ) { mapDisplay->startAction(); };
            void stopAction ( void ) { mapDisplay->stopAction(); };
+           void cursor_goto( const MapCoordinate& pos ) { mapDisplay->cursor_goto(pos);};
            void displayActionCursor ( int x1, int y1, int x2 , int y2 , int secondWait );
            void displayActionCursor ( int x1, int y1 ) { displayActionCursor ( x1, y1, -1, -1, 0 ); };
            void displayActionCursor ( int x1, int y1, int x2 , int y2 ) { displayActionCursor ( x1, y1, x2, y2, 0 ); };

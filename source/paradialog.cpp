@@ -43,7 +43,7 @@
 #include "pgmessagebox.h"
 #include "pgwindow.h"
 #include "pgrichedit.h"
-
+#include "pgsdleventsupplier.h"
 
 
 #include "paradialog.h"
@@ -57,10 +57,55 @@
 #include "iconrepository.h"
 #include "graphics/drawing.h"
 
+
+
+class EventSupplier: public PG_SDLEventSupplier {
+   public:
+
+	/**
+	Polls for currently pending events, and returns true if there are any pending events, or false if there are none available. 
+	If event is not NULL, the next event is removed from the queue and stored in that area.
+
+	@param	event	pointer to an event structure
+	@return		true - events are available
+	*/
+	bool PollEvent(SDL_Event* event) {
+            bool result = getQueuedEvent( *event );
+            if ( result ) 
+               CombineMouseMotionEvents( event );
+            return result;
+        };
+
+	/**
+	Checks if an event is in the queue. If there is, it will be copied into the event structure, 
+	WITHOUT being removed from the event queue. 
+
+	@param event pointer to an event structure
+	@return  true - events are available
+	*/
+	bool PeepEvent(SDL_Event* event) {
+            return peekEvent( *event );
+        }
+        
+	/**
+	Waits indefinitely for the next available event.
+
+	@param event 	pointer to an event structure
+	@return		return 0 if there was an error while waiting for events        
+	*/
+	int WaitEvent(SDL_Event* event)
+        {
+            while ( !getQueuedEvent( *event ))
+               releasetimeslice();
+            CombineMouseMotionEvents( event );
+            return 1;  
+        };
+
+} eventSupplier;
+
 ASC_PG_App* pgApp = NULL;
 
 ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
-      : quitModalLoopValue ( 0 )
 {
    this->themeName = themeName;
    EnableSymlinks(true);
@@ -80,6 +125,7 @@ ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
    reloadTheme();
 
    pgApp = this;
+   SetEventSupplier ( &eventSupplier );
 }
 
 ASC_PG_App& getPGApplication()
@@ -123,37 +169,11 @@ return true;
 }
 */
 
-bool ASC_PG_App::processEvents ( )
+void ASC_PG_App::processEvent( )
 {
-   int eventNum = 0;
-
    SDL_Event event;
-   int motionx = 0;
-   int motiony = 0;
-   while ( getQueuedEvent( event )) {
-      bool skipEvent = false;
-      if ( event.type == SDL_MOUSEMOTION ) {
-         SDL_Event nextEvent;
-         if ( peekEvent ( nextEvent ) )
-            if ( nextEvent.type == SDL_MOUSEMOTION ) {
-               skipEvent = true;
-               motionx += event.motion.xrel;
-               motiony += event.motion.yrel;
-            }
-         if ( !skipEvent ) {
-            event.motion.xrel += motionx;
-            event.motion.yrel += motiony;
-            motionx = 0;
-            motiony = 0;
-         }
-      }
-
-      if ( !skipEvent ) {
-         pgApp->PumpIntoEventQueue( &event );
-         ++eventNum;
-      }
-   }
-   return eventNum  > 0;
+	if ( GetEventSupplier()->PollEvent(&event)) 
+		PumpIntoEventQueue(&event);
 }
 
 
@@ -161,12 +181,10 @@ int ASC_PG_App::Run ( )
 {
    enableLegacyEventHandling ( false );
 
-   while ( !quitModalLoopValue ) {
-      if ( !processEvents() )
-         eventIdle();
-   }
+   PG_Application::Run();
+   
    enableLegacyEventHandling ( true );
-   return quitModalLoopValue;
+   return 0;
 }
 
 
@@ -176,16 +194,12 @@ int ASC_PG_App::Run ( )
 
 ASC_PG_Dialog :: ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCString& windowtext, WindowFlags flags, const ASCString& style, int heightTitlebar )
       :PG_Window ( parent, r, windowtext, flags, style, heightTitlebar ),
-      quitModalLoopValue ( 0 ), caller(0)
+      // quitModalLoopValue ( 0 ), 
+      caller(0)
 {
    //   mainScreenWidget->setDirty();
    //   SDL_mutexP ( eventHandlingMutex );
    sigMouseButtonDown.connect(SigC::slot(*this, &ASC_PG_Dialog::eventMouseButtonDown));
-}
-
-ASC_PG_Dialog::~ASC_PG_Dialog ()
-{
-   //   SDL_mutexV ( eventHandlingMutex );
 }
 
 
@@ -194,7 +208,7 @@ int ASC_PG_Dialog::Run ( )
 #ifndef sgmain
    bool eventQueue = setEventRouting ( true, false );
 #endif
-
+/*
    while ( !quitModalLoopValue ) {
       SDL_Event event;
       int motionx = 0;
@@ -223,6 +237,8 @@ int ASC_PG_Dialog::Run ( )
       } else
          SDL_Delay ( 2 );
    }
+   */
+   int quitModalLoopValue = PG_Window::RunModal();
 #ifndef sgmain
    setEventRouting ( eventQueue, !eventQueue );
 #endif
@@ -241,7 +257,7 @@ bool ASC_PG_Dialog::eventKeyUp(const SDL_KeyboardEvent *key){
 int ASC_PG_Dialog::RunModal ( )
 {
    bool eventQueue = setEventRouting ( true, false );
-
+/*
    while ( !quitModalLoopValue ) {
       SDL_Event event;
       int motionx = 0;
@@ -271,10 +287,19 @@ int ASC_PG_Dialog::RunModal ( )
       } else
          SDL_Delay ( 2 );
    }
+   */
+   int quitModalLoopValue = PG_Window::RunModal();
    setEventRouting ( eventQueue, !eventQueue );
 
    return quitModalLoopValue;
 }
+
+void ASC_PG_Dialog::quitModalLoop(int value )
+{
+   SetModalStatus( value );
+   PG_Window::QuitModal();
+}
+
 
 /*
 bool ASC_PG_Dialog::eventKeyUp (const SDL_KeyboardEvent *key){
@@ -285,7 +310,7 @@ if(key->keysym.sym == SDLK_ESCAPE){
 
 }
 
-/*
+
 bool ASC_PG_Dialog::eventKeyUp (const SDL_KeyboardEvent *key){
 if(key->keysym.sym == SDLK_ESCAPE){
    closeWindow();
@@ -304,7 +329,7 @@ if(key->keysym.sym == SDLK_ESCAPE){
 
 
 bool ASC_PG_Dialog::closeWindow(){
-  quitModalLoop(1);
+  PG_Window::QuitModal();
   if( caller != 0){     
     caller->SetInputFocus();
   }
@@ -636,6 +661,9 @@ Panel::Panel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_,
 {
    if ( loadTheme )
       setup();
+      
+      // FIXME Hide button does not delete Panel
+      
 }
 
 
@@ -746,7 +774,6 @@ Panel::WidgetParameters Panel::getDefaultWidgetParams()
 bool Panel::setup()
 {
    try {
-
 
       tnfilestream s ( panelName.toLower() + ".ascgui", tnstream::reading );
 
@@ -937,7 +964,7 @@ void MessageDialog::LoadThemeStyle(const std::string& widgettype) {
 //Event?
 bool MessageDialog::handleButton(PG_Button* button) {
 	//Set Buttonflag to ButtonID
-	quitModalLoop(button->GetID());
+        quitModalLoop( button->GetID() );
 	return true;
 }
 

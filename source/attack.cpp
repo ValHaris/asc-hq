@@ -278,7 +278,7 @@ class AttackPanel : public Panel {
 
 
 
-AttackPanel::AttackPanel ( tfight& engine_ ) : Panel( PG_Application::GetWidgetById(1), PG_Rect(0,0,170,200), "Attack" ), engine( engine_ )
+AttackPanel::AttackPanel ( tfight& engine_ ) : Panel( PG_Application::GetWidgetById(ASC_PG_App::mainScreenID), PG_Rect(0,0,170,200), "Attack" ), engine( engine_ )
 {
    registerSpecialDisplay( "attacker_unit_pic" );
    registerSpecialDisplay( "defender_unit_pic" );

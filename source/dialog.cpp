@@ -1543,8 +1543,11 @@ void         tvehicleinfo::run(void)
 
    i = 0;
    if ( !aktvehicle ) {
-      Vehicle* eht = getactfield()->vehicle;
-      if ( !fieldvisiblenow(getactfield()) )
+      pfield fld = actmap->getField( actmap->getCursor());
+      if ( !fld )
+         return;
+      Vehicle* eht = fld->vehicle;
+      if ( !fieldvisiblenow( fld ))
          eht = NULL;
       if ( eht ) {
          while (eht->typ != actmap->getvehicletype_bypos ( i ))
@@ -4097,13 +4100,11 @@ void tchoosezoomlevel :: run ( void )
 
 void choosezoomlevel ( void )
 {
-   cursor.hide();
    tchoosezoomlevel ctl;
    ctl.init();
    ctl.run();
    ctl.done();
    displaymap();
-   cursor.show();
 }
 
 
@@ -4112,7 +4113,7 @@ void choosezoomlevel ( void )
 
 void showbdtbits( void )
 {
-   pfield fld = getactfield();
+   pfield fld = actmap->getField(actmap->getCursor());
    char m[200];
    m[0] = 0;
    for (int i = 0; i < cbodenartennum ; i++) {
@@ -4143,7 +4144,8 @@ void appendTerrainBits ( char* text, const TerrainBits* bdt )
 
 void viewterraininfo ( void )
 {
-   if ( fieldvisiblenow  ( getactfield() )) {
+   pfield fld = actmap->getField( actmap->getCursor() );
+   if ( fld && fieldvisiblenow  ( fld )) {
       const char* terraininfo = "#font02#Field Information (%d,%d)#font01##aeinzug20##eeinzug20##crtp10#"
                                             "direction: %d\n"
                                             "ID: %d\n"
@@ -4156,11 +4158,10 @@ void viewterraininfo ( void )
       char text[10000];
 
 
-      pfield fld = getactfield();
       float ab = fld->getattackbonus();
       float db = fld->getdefensebonus();
 
-      sprintf(text, terraininfo, getxpos(), getypos(), fld->direction, fld->typ->terraintype->id, ab/8, db/8, fld->getjamming(), fld->typ->terraintype->location.c_str() );
+      sprintf(text, terraininfo, actmap->getCursor().x, actmap->getCursor().y, fld->direction, fld->typ->terraintype->id, ab/8, db/8, fld->getjamming(), fld->typ->terraintype->location.c_str() );
 
       appendTerrainBits ( text, &fld->bdt );
 
@@ -4169,11 +4170,11 @@ void viewterraininfo ( void )
 
       for ( int i = 0; i < cmovemalitypenum; i++ ) {
          char t2[1000];
-         if ( getactfield()->vehicle && getactfield()->vehicle->typ->movemalustyp == i )
+         if ( fld->vehicle && fld->vehicle->typ->movemalustyp == i )
             strcat ( text, "#color1#");
          sprintf(t2, "%s: %d\n",  cmovemalitypes[i], fld->getmovemalus(i) );
          strcat ( text, t2 );
-         if ( getactfield()->vehicle && getactfield()->vehicle->typ->movemalustyp == i )
+         if ( fld->vehicle && fld->vehicle->typ->movemalustyp == i )
             strcat ( text, "#color0#");
       }
 
@@ -4209,11 +4210,11 @@ void viewterraininfo ( void )
          strcat ( text, "#aeinzug0#\n");
       }
 
-      if  ( getactfield()->vehicle ) {
+      if  ( fld->vehicle ) {
          strcat ( text, "#aeinzug0##eeinzug0#\n\n"
                         "#font02#Vehicle Information:#font01##aeinzug20##eeinzug20##crtp10#" );
 
-         const Vehicletype* typ = getactfield()->vehicle->typ;
+         const Vehicletype* typ = fld->vehicle->typ;
 
 
          strcat ( text, "Unit name: " );
@@ -4227,7 +4228,7 @@ void viewterraininfo ( void )
          sprintf(t3, "\nUnit ID: %d \n", typ->id );
          strcat ( text, t3 );
 
-         sprintf(t3, "\nInternal Identification: %d \n", getactfield()->vehicle->networkid );
+         sprintf(t3, "\nInternal Identification: %d \n", fld->vehicle->networkid );
          strcat ( text, t3 );
 
 
@@ -4282,13 +4283,13 @@ void viewterraininfo ( void )
 void viewUnitSetinfo ( void )
 {
    ASCString s;
-   pfield fld = getactfield();
-   if ( fieldvisiblenow  ( fld ) && fld->vehicle ) {
+   pfield fld = actmap->getField( actmap->getCursor() );
+   if ( fld && fieldvisiblenow  ( fld ) && fld->vehicle ) {
 
          s += "#aeinzug0##eeinzug0#\n"
               "#font02#Unit Information:#font01##aeinzug20##eeinzug20##crtp10#" ;
 
-         const Vehicletype* typ = getactfield()->vehicle->typ;
+         const Vehicletype* typ = fld->vehicle->typ;
 /*
          s += "\nreactionfire.Status: ";
          s += strrr( getactfield()->vehicle->reactionfire.status );
@@ -4456,10 +4457,10 @@ void setmapparameters ( void )
 #define blocksize 256
 
 
-StaticClassVariable int tparagraph :: winy1;
-StaticClassVariable int tparagraph :: winy2;
-StaticClassVariable int tparagraph :: winx1;
-StaticClassVariable int tparagraph :: maxlinenum;
+int tparagraph :: winy1;
+int tparagraph :: winy2;
+int tparagraph :: winx1;
+int tparagraph :: maxlinenum;
 
 tparagraph :: tparagraph ( void )
 {

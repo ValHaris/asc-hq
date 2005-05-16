@@ -273,7 +273,7 @@ int          tputmine::initpm(  char mt, const Vehicle* eht )
       return -119;
    }
    if (mienenlegen || mienenraeumen)
-      initsearch( MapCoordinate( getxpos(),getypos()), (weapon->mindistance + maxmalq-1) / maxmalq, weapon->maxdistance / maxmalq );
+      initsearch( eht->getPosition(), (weapon->mindistance + maxmalq-1) / maxmalq, weapon->maxdistance / maxmalq );
    return 0;
 }
 
@@ -284,9 +284,6 @@ void         tputmine::run(void)
       startsearch();
       if (numberoffields > 0) {
          moveparams.movestatus = 90;
-         moveparams.movesx = getxpos();
-         moveparams.movesy = getypos();
-
       }
    }
 }
@@ -296,17 +293,17 @@ void         tputmine::run(void)
 
 
 
-void  legemine( int typ, int delta )
+void  putMine( const MapCoordinate& pos, int typ, int delta )
 {
    if (moveparams.movestatus == 0) {
+      Vehicle* veh = actmap->getField(pos)->vehicle; 
+      if ( !veh || veh->color != (actmap->actplayer << 3))
+         return;
+         
+      moveparams.vehicletomove = veh;
+         
       tputmine ptm ( actmap );
-      Vehicle* eht = getactfield()->vehicle;
-      moveparams.vehicletomove = eht;
-      if (eht == NULL)
-         return;
-      if (eht->color != (actmap->actplayer << 3))
-         return;
-      int res = ptm.initpm(typ,eht);
+      int res = ptm.initpm(typ,veh);
       ptm.run();
       if ( res < 0 )
          dispmessage2 ( -res );
@@ -314,7 +311,7 @@ void  legemine( int typ, int delta )
    else
       if (moveparams.movestatus == 90) {
          Vehicle* eht = moveparams.vehicletomove;
-         pfield fld = getactfield();
+         pfield fld = actmap->getField(pos);
          if ( fld->a.temp ) {
 
             if ( (fld->a.temp & 1) && ( delta > 0 )) {
@@ -326,9 +323,7 @@ void  legemine( int typ, int delta )
                         eht->ammo[i]--;
                         eht->setMovement ( eht->getMovement() - mineputmovedecrease );
                         strength = eht->weapstrength[i];
-                        int x = getxpos();
-                        int y = getypos();
-                        logtoreplayinfo ( rpl_putmine, x, y, (int) actmap->actplayer, (int) typ, (int) MineBasePunch[typ-1] * strength / 64 );
+                        logtoreplayinfo ( rpl_putmine, pos.x, pos.y, (int) actmap->actplayer, (int) typ, (int) MineBasePunch[typ-1] * strength / 64 );
                         break;
                      }
 
@@ -336,12 +331,10 @@ void  legemine( int typ, int delta )
             }
 
             if ( (fld->a.temp & 2) && ( delta < 0 )) {
-               int x = getxpos();
-               int y = getypos();
-               pfield fld = getactfield();
-               fld -> removemine( -1 );
-               eht->setMovement ( eht->getMovement() - mineremovemovedecrease );
-               logtoreplayinfo ( rpl_removemine, x, y );
+               pfield fld = actmap->getField(pos);
+               fld->removemine( -1 );
+               eht->decreaseMovement ( mineremovemovedecrease );
+               logtoreplayinfo ( rpl_removemine, pos.x, pos.y );
             }
             actmap->cleartemps(7);
             computeview( actmap );
@@ -464,7 +457,8 @@ int  treactionfirereplay :: checkfield ( const MapCoordinate3D& pos, Vehicle* &e
 
 
              if ( md && attackvisible ) {
-               cursor.setcolor ( 8 );
+             /*
+               // cursor.setcolor ( 8 );
 
                cursor.gotoxy ( rpli->x1, rpli->y1 );
                int t = ticker;
@@ -476,8 +470,9 @@ int  treactionfirereplay :: checkfield ( const MapCoordinate3D& pos, Vehicle* &e
                while ( t + 15 > ticker )
                   releasetimeslice();
 
-               cursor.setcolor ( 0 );
-               cursor.hide();
+               // cursor.setcolor ( 0 );
+               // cursor.hide();
+               */
              }
              attacks++;
 
@@ -688,6 +683,7 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, Veh
                      int visibility = 0;
                      if ( md ) {
                         displaymessage2 ( "attacking with weapon %d ", atw->num[num] );
+                        /*
                         cursor.setcolor ( 8 );
 
                         if ( fieldvisiblenow ( getfield (ul->eht->xpos, ul->eht->ypos ), actmap->playerView)) {
@@ -708,6 +704,7 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, Veh
 
                         cursor.setcolor ( 0 );
                         cursor.hide();
+                        */
                      }
 
                      Vehicle* veh = ul->eht;
@@ -1142,7 +1139,7 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
    actmap->xpos = actmap->cursorpos.position[ actmap->actplayer ].sx;
    actmap->ypos = actmap->cursorpos.position[ actmap->actplayer ].sy;
 
-   cursor.gotoxy ( actmap->cursorpos.position[ actmap->actplayer ].cx, actmap->cursorpos.position[ actmap->actplayer ].cy , 0);
+//   cursor.gotoxy ( actmap->cursorpos.position[ actmap->actplayer ].cx, actmap->cursorpos.position[ actmap->actplayer ].cy , 0);
 
    updateFieldInfo();
    transfer_all_outstanding_tribute();
@@ -1273,7 +1270,7 @@ void nextPlayer( void )
 
    if ( CGameOptions::Instance()->debugReplay && oldplayer >= 0 && actmap->player[oldplayer].stat == Player::human && actmap->replayinfo)
       if (choice_dlg("run replay of your turn ?","~y~es","~n~o") == 1) {
-         cursor.gotoxy( actmap->cursorpos.position[oldplayer].cx, actmap->cursorpos.position[oldplayer].cy );
+         // cursor.gotoxy( actmap->cursorpos.position[oldplayer].cx, actmap->cursorpos.position[oldplayer].cy );
          runSpecificReplay ( oldplayer, oldplayer );
       }
 
@@ -1328,10 +1325,6 @@ void next_turn ( int playerView )
       pv = playerView;
 
 
-   int bb = cursor.an;
-   if (bb)
-      cursor.hide();
-
    do {
      endTurn();
      nextPlayer();
@@ -1349,9 +1342,6 @@ void next_turn ( int playerView )
    } while ( actmap->player[actmap->actplayer].stat != Player::human ); /* enddo */
 
    newTurnForHumanPlayer();
-
-   if (bb)
-     cursor.display();
 }
 
 void initNetworkGame ( void )

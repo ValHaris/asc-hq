@@ -93,6 +93,8 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
 
       void readData();
 
+      static MapDisplayPG* theMapDisplay;
+      
             
       float zoom;
       Surface* surface;
@@ -105,10 +107,6 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
          int numx, numy;
       } field;   
       
-      struct Cursor {
-         Cursor() : invisible(1) {};
-         int invisible;
-      } cursor;
 
       void displayCursor();
       
@@ -206,28 +204,29 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
 
       bool eventKeyDown(const SDL_KeyboardEvent* key)
       {
-         return keyboardHandler( this, key );
+         return keyboardHandler( key );
       };
 
-      bool keyboardHandler( PG_MessageObject* messageObject, const SDL_KeyboardEvent* keyEvent);
+      bool keyboardHandler( const SDL_KeyboardEvent* keyEvent);
+      
+      bool disableKeyboardCursorMovement;
+     
+   public:   
+      void keyboadCursorMovement( bool enable ) { disableKeyboardCursorMovement = !enable; }; 
+      
    private:
       void moveCursor( int dir, int step );
-      MapCoordinate& getCursor();
 
    public:
 
-      class CursorHiding {
-          public:
-             CursorHiding();
-             ~CursorHiding();
-      };
-      friend class CursorHiding;
+   
 
       MapDisplayPG ( PG_Widget *parent, const PG_Rect r );
 
       void displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoordinate3D& from, const MapCoordinate3D& to );
 
       bool fieldInView(const MapCoordinate& mc );
+      bool centerOnField( const MapCoordinate& mc );
 
       void registerAdditionalUnit ( Vehicle* veh );
 
@@ -245,8 +244,30 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       */
       SigC::Signal3<bool,const MapCoordinate&, const SDL_MouseButtonEvent*, bool> mouseButtonOnField;
 
-
+      
+      struct Cursor {
+            int invisible;
+            MapDisplayPG* mapDisplay; 
+            Cursor( MapDisplayPG* md ) : invisible(0), mapDisplay(md) {};
+            friend class MapDisplayPG;
+            MapCoordinate& pos();
+          public:
+            void goTo( const MapCoordinate& position );
+            void intoView();
+      } cursor; 
+            
+      class CursorHiding {
+         public:
+            CursorHiding();
+            ~CursorHiding();
+      };
+            
+      friend class CursorHiding;
+     
 };
+
+
+
 
 extern void benchMapDisplay();
 

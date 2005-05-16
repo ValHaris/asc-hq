@@ -285,6 +285,7 @@
 
     //! displays the unit at position spos on s
     void paint ( Surface& s, SPoint pos, int shadowDist = -1 ) const;
+    void paint ( Surface& s, SPoint pos, bool shaded, int shadowDist = -1 ) const;
 
 
   private:

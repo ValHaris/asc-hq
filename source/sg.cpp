@@ -89,7 +89,6 @@
 #include "controls.h"
 #include "dlg_box.h"
 #include "dialog.h"
-#include "gui.h"
 #include "pd.h"
 #include "strtmesg.h"
 #include "gamedlg.h"
@@ -193,6 +192,10 @@ pprogressbar actprogressbar = NULL;
 
 
 
+pfield        getSelectedField(void)
+{
+   return actmap->getField( actmap->getCursor() ); 
+} 
 
 
 #define mmaintainence
@@ -658,7 +661,6 @@ void loadMap()
 
    if ( !s1.empty() ) {
       mousevisible(false);
-      cursor.hide();
       displaymessage("loading map %s",0, s1.c_str() );
       loadmap( s1.c_str() );
       actmap->startGame();
@@ -688,7 +690,6 @@ void loadGame()
 
    if ( !s1.empty() ) {
       mousevisible(false);
-      cursor.hide();
       displaymessage("loading %s ",0, s1.c_str());
       loadgame(s1.c_str() );
       removemessage();
@@ -725,13 +726,11 @@ void saveGame( bool as )
       actmap->preferredFileNames.savegame[actmap->actplayer] = s1;
 
       mousevisible(false);
-      cursor.hide();
       displaymessage("saving %s", 0, s1.c_str());
       savegame(s1.c_str());
 
       removemessage();
       displaymap();
-      cursor.show();
    }
    mousevisible(true);
 }
@@ -760,13 +759,11 @@ void         newsinglelevel(void)
 
 void         startnewsinglelevelfromgame(void)
 {
-   cursor.hide();
    newsinglelevel();
    if ( !actmap )
       throw NoMapLoaded();
    computeview( actmap );
    displaymap();
-   cursor.show();
 }
 
 
@@ -1049,7 +1046,7 @@ void viewunitmovementrange ( Vehicle* veh, tkey taste )
 void renameUnit()
 {
    if ( actmap ) {
-      pfield fld = getactfield();
+      pfield fld = getSelectedField();
       if ( fld && fld->vehicle && fld->vehicle->getOwner() == actmap->actplayer )
          fld->vehicle->name = editString ( "unit name", fld->vehicle->name );
       if ( fld && fld->building && fld->building->getOwner() == actmap->actplayer )
@@ -1072,7 +1069,7 @@ void showCargoSummary()
    typedef map<int,int> Summary;
    Summary summary;
 
-   pfield fld = getactfield();
+   pfield fld = getSelectedField();
    if ( fld && fld->vehicle && fld->vehicle->getOwner() == actmap->actplayer ) {
       calcCargoSummary( fld->vehicle, summary );
 
@@ -1110,7 +1107,9 @@ class UnitInfoDialog : public Panel {
 
      public:
         UnitInfoDialog (PG_Widget *parent, const Vehicle* veh, const Vehicletype* vt ) 
-           : Panel( parent, PG_Rect::null, "UnitInfoDialog" ) {};
+           : Panel( parent, PG_Rect::null, "UnitInfoDialog" ) {
+               sigClose.connect( SigC::slot( *this, &UnitInfoDialog::QuitModal ));
+           };
 };
 
 
@@ -1230,8 +1229,8 @@ void execuseraction ( tuseractions action )
          break;
 
       case ua_unitweightinfo:
-         if ( fieldvisiblenow  ( getactfield() )) {
-            Vehicle* eht = getactfield()->vehicle;
+         if ( fieldvisiblenow  ( getSelectedField() )) {
+            Vehicle* eht = getSelectedField()->vehicle;
             if ( eht && getdiplomaticstatus ( eht->color ) == capeace )
                displaymessage(" weight of unit: \n basic: %d\n+cargo:%d\n= %d",1 ,eht->typ->weight, eht->cargo(), eht->weight() );
          }
@@ -1284,15 +1283,13 @@ void execuseraction ( tuseractions action )
          else
             exitprogram = 0;
             */
-            getPGApplication().quit();
+            getPGApplication().Quit();
          break;
 
       case ua_newcampaign:
-         cursor.hide();
          newcampaign();
          computeview( actmap );
          displaymap();
-         cursor.show();
          break;
 
       case ua_loadgame:
@@ -1323,24 +1320,12 @@ void execuseraction ( tuseractions action )
 
       case ua_giveunitaway:
          if ( actmap && actmap->getgameparameter( cgp_disableUnitTransfer ) == 0 )
-            giveunitaway ();
+            giveunitaway ( actmap->getField( actmap->getCursor() ));
          else
             displaymessage("Sorry, this function has been disabled when starting the map!", 1 );
          break;
       case ua_renameunit:
          renameUnit();
-         break;
-
-      case ua_vehicleinfo: {
-         UnitInfoDialog* uid = new UnitInfoDialog( NULL, NULL, NULL );
-         uid->Show();
-         uid->RunModal();
-         delete uid;
-         /*
-         activefontsettings.font = schriften.smallarial;
-         vehicle_information();
-         */
-                           }
          break;
 
       case ua_researchinfo:
@@ -1454,11 +1439,11 @@ void execuseraction ( tuseractions action )
          displaymessage ( "Current game time is:\n turn %d , move %d ", 3, actmap->time.turn(), actmap->time.move() );
          break;
       case ua_viewunitweaponrange:
-         viewunitweaponrange ( getactfield()->vehicle, ct_invvalue );
+         viewunitweaponrange ( getSelectedField()->vehicle, ct_invvalue );
          break;
 
       case ua_viewunitmovementrange:
-         viewunitmovementrange ( getactfield()->vehicle, ct_invvalue );
+         viewunitmovementrange ( getSelectedField()->vehicle, ct_invvalue );
          break;
 
       case ua_aibench:
@@ -1539,10 +1524,10 @@ void execuseraction ( tuseractions action )
          }
          break;
       case ua_exportUnitToFile:
-         if ( getactfield()->vehicle && getactfield()->vehicle->getOwner() == actmap->actplayer ){
+         if ( getSelectedField()->vehicle && getSelectedField()->vehicle->getOwner() == actmap->actplayer ){
             ASCString s = "do you really want to cut this unit from the game?";
             if (choice_dlg(s.c_str(),"~y~es","~n~o") == 1) {
-               Vehicle* veh = getactfield()->vehicle;
+               Vehicle* veh = getSelectedField()->vehicle;
                ClipBoard::Instance().clear();
                ClipBoard::Instance().addUnit( veh );
 
@@ -1592,6 +1577,17 @@ void execuseraction2 ( tuseractions action )
          break;
       case ua_viewUnitInfoPanel: mainScreenWidget->spawnPanel( MainScreenWidget::UnitInfo );
          break;
+      case ua_vehicleinfo: {
+         UnitInfoDialog* uid = new UnitInfoDialog( NULL, NULL, NULL );
+         uid->Show();
+         uid->RunModal();
+         delete uid;
+         /*
+         activefontsettings.font = schriften.smallarial;
+         vehicle_information();
+         */
+                           }
+         break;
       default:
          break;
    }
@@ -1599,45 +1595,6 @@ void execuseraction2 ( tuseractions action )
 }
 
 
-void mainloopgeneralkeycheck ( tkey& ch )
-{
-   int keyprn;
-   getkeysyms ( &ch, &keyprn );
-
-   movecursor(ch);
-   actgui->checkforkey ( ch, keyprn );
-}
-
-
-
-
-void mainloopgeneralmousecheck ( void )
-{
-   if ( exitprogram )
-      execuseraction ( ua_exitgame );
-
-   actgui->checkformouse();
-
-
-   if ( lastdisplayedmessageticker + messagedisplaytime < ticker )
-      displaymessage2("");
-
-
-   {
-      int oldx = actmap->xpos;
-      int oldy = actmap->ypos;
-      checkformousescrolling();
-      if ( oldx != actmap->xpos || oldy != actmap->ypos )
-         updateFieldInfo();
-   }
-
-   if ( onlinehelp )
-      onlinehelp->checkforhelp();
-/*
-   if ( onlinehelpwind && !CGameOptions::Instance()->smallmapactive )
-      onlinehelpwind->checkforhelp();
-      */
-}
 
 
 void execUserAction_ev( tuseractions action )
@@ -1798,12 +1755,6 @@ Menu::Menu ( PG_Widget *parent, const PG_Rect &rect)
 
 
 
-pfield        getactfield(void)
-{
-   return actmap->getField( actmap->player[actmap->actplayer].cursorPos ); 
-} 
-
-
 
 MainScreenWidget::MainScreenWidget( PG_Application& application )
               : PG_Widget(NULL, PG_Rect ( 0, 0, app.GetScreen()->w, app.GetScreen()->h ), false),
@@ -1814,17 +1765,18 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
 
    displayLogMessage ( 7, "  Mapdisplay ");
    mapDisplay = new MapDisplayPG( this, PG_Rect(20,20,Width() - 200, Height() - 40));
+   mapDisplay->SetID( ASC_PG_App::mapDisplayID );
 
    displayLogMessage ( 7, "done\n  Menu ");
    menu = new Menu(this, PG_Rect(0,0,Width(),20));
 
-   SetID( 1 );
+   SetID( ASC_PG_App::mainScreenID );
 
    displayLogMessage ( 7, "done\n  ButtonPanel ");
    spawnPanel ( ButtonPanel );
 
-   displayLogMessage ( 7, "done\n  WindInfo ");
-   spawnPanel ( WindInfo );
+   // displayLogMessage ( 7, "done\n  WindInfo ");
+   // spawnPanel ( WindInfo );
 
    displayLogMessage ( 7, "done\n  UnitInfo ");
    spawnPanel ( UnitInfo );
@@ -1842,21 +1794,21 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
 void MainScreenWidget::spawnPanel ( Panels panel )
 {
    if ( panel == WindInfo ) {
-      WindInfoPanel* wi = new WindInfoPanel( this, PG_Rect(Width()-180, 340, 170, 114));
+      WindInfoPanel* wi = new WindInfoPanel( this, PG_Rect(Width()-170, 480, 170, 114));
       wi->Show();
    }
    if ( panel == UnitInfo ) {
-      UnitInfoPanel* ui = new UnitInfoPanel( this, PG_Rect(Width()-180, 20, 170, 320));
+      UnitInfoPanel* ui = new UnitInfoPanel( this, PG_Rect(Width()-170, 160, 170, 320));
       ui->Show();
    }
    if ( panel == ButtonPanel ) {
-      guiHost = new NewGuiHost( this, mapDisplay, PG_Rect(Width()-180, 454, 170, 220));
+      guiHost = new NewGuiHost( this, mapDisplay, PG_Rect(Width()-170, Height()-200, 170, 200));
       guiHost->pushIconHandler( &GuiFunctions::primaryGuiIcons );
       guiHost->Show();
    }
    if ( panel == OverviewMap ) {
       assert( mapDisplay);
-      OverviewMapPanel* smp = new OverviewMapPanel( this, PG_Rect(Width()-180, 40, 170, 170), mapDisplay );
+      OverviewMapPanel* smp = new OverviewMapPanel( this, PG_Rect(Width()-170, 0, 170, 160), mapDisplay );
       smp->Show();
    }
 }
@@ -1872,7 +1824,7 @@ bool mainloopidle(  )
 
       checkforvictory();
    }
-   return NULL;
+   return false;
 }
 
 void  mainloop2()
@@ -1899,7 +1851,7 @@ void  mainloop ( void )
       activefontsettings.color=14;
       if (keypress()) {
 
-         mainloopgeneralkeycheck ( ch );
+         // mainloopgeneralkeycheck ( ch );
 
          switch (ch) {
 
@@ -1959,7 +1911,7 @@ void  mainloop ( void )
 
                   if ( actmap->player[color].ai ) {
                      AI* ai = (AI*) actmap->player[color].ai;
-                     ai->showFieldInformation ( getxpos(), getypos() );
+                     ai->showFieldInformation ( actmap->getCursor().x, actmap->getCursor().y );
                   }
                }
                break;
@@ -1978,11 +1930,11 @@ void  mainloop ( void )
                break;
 
             case ct_3:
-               viewunitweaponrange ( getactfield()->vehicle, ct_3 );
+               viewunitweaponrange ( getSelectedField()->vehicle, ct_3 );
                break;
 
             case ct_4:
-               viewunitmovementrange ( getactfield()->vehicle, ct_4 );
+               viewunitmovementrange ( getSelectedField()->vehicle, ct_4 );
                break;
 
             case ct_5:
@@ -2017,7 +1969,7 @@ void  mainloop ( void )
          ch = ct_invvalue;
 
 
-      mainloopgeneralmousecheck ( );
+      // mainloopgeneralmousecheck ( );
 
       /************************************************************************************************/
       /*        Pulldown Men?                                                                       . */
@@ -2118,7 +2070,6 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 
    if ( actprogressbar ) actprogressbar->startgroup();
 
-   cursor.init();
    // selectbuildinggui.init( resolx, resoly );
 
    if ( actprogressbar ) actprogressbar->startgroup();
@@ -2218,7 +2169,6 @@ int gamethread ( void* data )
 
    int resolx = agmp->resolutionx;
    int resoly = agmp->resolutiony;
-   gui.init ( resolx, resoly );
    virtualscreenbuf.init();
 
    try {
@@ -2285,7 +2235,6 @@ int gamethread ( void* data )
             displayLogMessage ( 8, "gamethread :: displaying map..." );
             // displaymap();
             displayLogMessage ( 8, "done.\n" );
-            // cursor.show();
 
             moveparams.movestatus = 0;
 

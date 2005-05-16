@@ -210,7 +210,7 @@ void ReplayMapDisplay :: displayPosition ( int x, int y )
 
 void ReplayMapDisplay :: removeActionCursor ( void )
 {
-   cursor.hide();
+//   cursor.hide();
 }
 
 void ReplayMapDisplay :: displayActionCursor ( int x1, int y1, int x2, int y2, int secondWait )
@@ -218,7 +218,8 @@ void ReplayMapDisplay :: displayActionCursor ( int x1, int y1, int x2, int y2, i
    if ( x1 >= 0 && y1 >= 0 ) {
       int i = fieldvisiblenow ( getfield ( x1, y1 ), actmap->playerView );
       if( i ) {
-         cursor.gotoxy ( x1, y1, i );
+         cursor_goto( MapCoordinate( x1, y1 ));
+         
          if ( x2 >= 0 && y2 >= 0 )
             wait( 30 );
          else
@@ -229,7 +230,7 @@ void ReplayMapDisplay :: displayActionCursor ( int x1, int y1, int x2, int y2, i
    if ( x2 >= 0 && y2 >= 0 ) {
       int i = fieldvisiblenow ( getfield ( x2, y2 ), actmap->playerView );
       if( i ) {
-         cursor.gotoxy ( x2, y2, i );
+         cursor_goto( MapCoordinate( x2, y2 ));
          if ( secondWait )
             wait();
       }
@@ -1857,7 +1858,6 @@ int  trunreplay :: run ( int player, int viewingplayer )
 
    lastErrorMessage = "";
 
-   cursor.hide();
    movenum = 0;
 
    actplayer = actmap->actplayer;
@@ -1890,9 +1890,6 @@ int  trunreplay :: run ( int player, int viewingplayer )
    actmap->xpos = orgmap->cursorpos.position[ viewingplayer ].sx;
    actmap->ypos = orgmap->cursorpos.position[ viewingplayer ].sy;
 
-   cursor.gotoxy ( orgmap->cursorpos.position[ viewingplayer ].cx, orgmap->cursorpos.position[ viewingplayer ].cy , 0);
-
-
    if ( stream->dataavail () )
       status = 1;
    else
@@ -1905,7 +1902,7 @@ int  trunreplay :: run ( int player, int viewingplayer )
    mousevisible( true );
 //   cursor.show();
 
-   cursor.checkposition( getxpos(), getypos() );
+//   cursor.checkposition( getxpos(), getypos() );
    bool resourcesCompared = false;
    do {
        if ( status == 2 ) {
@@ -1918,8 +1915,6 @@ int  trunreplay :: run ( int player, int viewingplayer )
           releasetimeslice();
 
        if (nextaction == rpl_finished  || status != 2) {
-          if ( !cursor.an )
-             cursor.show();
           if ( nextaction == rpl_finished && !resourcesCompared ) {
 
              displaymessage2("running final comparison" );
@@ -1947,11 +1942,9 @@ int  trunreplay :: run ( int player, int viewingplayer )
 
              delete nextPlayerMap;
           }
-       } else
-          if ( cursor.an )
-             cursor.hide();
+       }
 
-       getPGApplication().processEvents();
+       getPGApplication().processEvent();
 
    } while ( status > 0  &&  status < 100 ) ;
 
@@ -1963,7 +1956,6 @@ int  trunreplay :: run ( int player, int viewingplayer )
    int st = status;
    status = 0;
 
-   cursor.gotoxy ( orgmap->cursorpos.position[ actplayer ].cx, orgmap->cursorpos.position[ actplayer ].cy );
    updateFieldInfo();
 
    if ( st == 101 )

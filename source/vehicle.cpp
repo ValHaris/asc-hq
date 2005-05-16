@@ -1495,11 +1495,16 @@ const ASCString&  Vehicle::getName() const
 void Vehicle::paint ( Surface& s, SPoint pos, int shadowDist ) const
 {
   #ifdef sgmain
-   bool shaded = !canMove() && maxMovement() && ( color == gamemap->actplayer*8) && (attacked || !typ->weapons.count || CGameOptions::Instance()->units_gray_after_move );
+   bool shaded = (!canMove()) && maxMovement() && ( color == gamemap->actplayer*8) && (attacked || !typ->weapons.count || CGameOptions::Instance()->units_gray_after_move );
   #else
    bool shaded = 0;
   #endif
 
+   paintField( typ->getImage(), s, pos, direction, shaded, shadowDist );
+}
+
+void Vehicle::paint ( Surface& s, SPoint pos, bool shaded, int shadowDist ) const
+{
    paintField( typ->getImage(), s, pos, direction, shaded, shadowDist );
 }
 

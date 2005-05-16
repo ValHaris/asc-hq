@@ -65,9 +65,13 @@ SigC::Signal0<void> repaintDisplay;
 SigC::Signal0<void> updateFieldInfo;
 SigC::Signal1<void,ContainerBase*> showContainerInfo;
 SigC::Signal1<void,Vehicletype*> showVehicleTypeInfo;
+SigC::Signal0<void> viewChanged;
 
 
+#ifndef sgmain
    tcursor            cursor;
+#endif
+   
    pmap              actmap;
 
    Schriften schriften;
@@ -244,24 +248,6 @@ void         generatemap( TerrainType::Weather*   bt,
 
 
 
-int getxpos(void)
-{ 
-   return cursor.posx + actmap->xpos; 
-} 
-
-
-int getypos(void)
-{
-   return cursor.posy + actmap->ypos;
-}
-
-
-
-
-#include "movecurs.inc"      
-
-
-
 pfield        getfield(int          x,
                      int          y)
 { 
@@ -292,6 +278,26 @@ void*      getmineadress(  int num , int uncompressed )
       return uncompressedMinePictures[type];
    }
 } 
+
+
+
+#ifndef sgmain
+
+int getxpos(void)
+{ 
+   return cursor.posx + actmap->xpos; 
+} 
+
+
+int getypos(void)
+{
+   return cursor.posy + actmap->ypos;
+}
+
+
+
+
+#include "movecurs.inc"      
 
 
 
@@ -537,6 +543,16 @@ void         tcursor::hide(void)
    if (ms == 2) mousevisible(true);
 }
 
+void         tcursor::display(void)
+{ 
+      hide(); 
+      oposx = posx;
+      oposy = posy;
+      show(); 
+} 
+
+
+#endif
 
 
 int         getdiplomaticstatus(int         b)
@@ -605,13 +621,6 @@ int isresourcenetobject ( pobjecttype obj )
 
 
 
-void         tcursor::display(void)
-{ 
-      hide(); 
-      oposx = posx;
-      oposy = posy;
-      show(); 
-} 
 
 
 

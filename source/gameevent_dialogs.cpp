@@ -171,8 +171,8 @@ void         tgetxy::buttonpressed(int         id)
    break;
       case 3: {
                   mousevisible(false);
-                  x = getxpos();
-                  y = getypos();
+                  x = actmap->getCursor().x;
+                  y = actmap->getCursor().y;
                   displaymap();
                   mousevisible(true);
                   do {
@@ -615,7 +615,7 @@ Vehicle* selectunit ( Vehicle* unit )
           y = 0;
        }
 
-       cursor.gotoxy(x,y);
+       // cursor.gotoxy(x,y);
        return selectUnitFromMap();
     } else {
        displaymessage("no vehicles on map !", 1 );

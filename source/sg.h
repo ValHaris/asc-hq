@@ -47,9 +47,6 @@ extern void execuseraction ( tuseractions action );
 extern void execUserAction_ev( tuseractions action );
 
 
-extern void mainloopgeneralmousecheck ( void );
-extern void mainloopgeneralkeycheck ( tkey& ch );
-
 extern pprogressbar actprogressbar ;
 
 

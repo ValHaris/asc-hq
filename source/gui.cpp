@@ -75,8 +75,8 @@ void setguiposy ( int y )
 }
 
 
-StaticClassVariable void*    BasicGuiHost::background[30][30];
-StaticClassVariable int      BasicGuiHost::numpainted;
+void*    BasicGuiHost::background[30][30];
+int      BasicGuiHost::numpainted;
 
 
 template<class T>
@@ -878,7 +878,7 @@ void tnguiicon::display      ( void )
 
 
 #ifndef _NoStaticClassMembers_
-StaticClassVariable pnsguiicon tnsguiicon ::first = NULL;
+pnsguiicon tnsguiicon ::first = NULL;
 #endif
 
 tnsguiicon::tnsguiicon ( void )
@@ -2208,8 +2208,8 @@ void tselectbuildingguihost ::reset ( Vehicle* v )
 
 
 #ifndef _NoStaticClassMembers_
-StaticClassVariable pnputbuildingguiicon tnputbuildingguiicon :: first    = NULL;
-StaticClassVariable int             tnputbuildingguiicon :: buildnum = 0;
+pnputbuildingguiicon tnputbuildingguiicon :: first    = NULL;
+int             tnputbuildingguiicon :: buildnum = 0;
 #endif
 
 tnputbuildingguiicon :: tnputbuildingguiicon ( pbuildingtype bld )
@@ -2259,8 +2259,8 @@ int         tnputbuildingguiicon::available( void )
 
 
 #ifndef _NoStaticClassMembers_
-StaticClassVariable pnputobjectcontainerguiicon tnputobjectcontainerguiicon :: first    = NULL;
-StaticClassVariable int             tnputobjectcontainerguiicon :: buildnum = 0;
+pnputobjectcontainerguiicon tnputobjectcontainerguiicon :: first    = NULL;
+int             tnputobjectcontainerguiicon :: buildnum = 0;
 #endif
 
 
@@ -2338,8 +2338,8 @@ int         tnputobjectcontainerguiicon::available( void )
 
 
 
-StaticClassVariable pnputvehiclecontainerguiicon tnputvehiclecontainerguiicon :: first    = NULL;
-StaticClassVariable int                          tnputvehiclecontainerguiicon :: buildnum = 0;
+pnputvehiclecontainerguiicon tnputvehiclecontainerguiicon :: first    = NULL;
+int                          tnputvehiclecontainerguiicon :: buildnum = 0;
 
 tnputvehiclecontainerguiicon :: tnputvehiclecontainerguiicon ( pvehicletype obj )
 {
@@ -2459,7 +2459,7 @@ void    tselectweaponguihost ::  checkcoordinates ( void )
 }
 
 
-StaticClassVariable pnweapselguiicon tnweapselguiicon::first = NULL;
+pnweapselguiicon tnweapselguiicon::first = NULL;
 
 
 tnweapselguiicon::tnweapselguiicon ( void )
@@ -2638,7 +2638,7 @@ void  tnweapselguiicon::setup        ( pattackweap atw, int n )
 
 
 #ifndef _NoStaticClassMembers_
-StaticClassVariable preplayguiicon treplayguiicon ::first = NULL;
+preplayguiicon treplayguiicon ::first = NULL;
 #endif
 
 treplayguiicon::treplayguiicon ( void )

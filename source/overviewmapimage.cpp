@@ -23,34 +23,34 @@ SPoint OverviewMapImage::map2surface( const MapCoordinate& pos )
 MapCoordinate OverviewMapImage::surface2map( const SPoint& pos )
 {
    int lx = pos.x % 6;
-   int ly = pos.y % 4;
+   int ly = pos.y % 2;
    switch ( ly ) {
       case 0: {
                  if ( lx == 1 || lx == 2 )
-                    return MapCoordinate( lx / 6, ly / 4 );
+                    return MapCoordinate( pos.x / 6, pos.y / 2 );
                  if ( lx == 0 )
-                    return MapCoordinate( lx / 6 - 1, ly / 4 - 1 );
+                    return MapCoordinate( pos.x / 6 - 1, pos.y / 2 - 1 );
                  if ( lx >= 3 )
-                    return MapCoordinate( lx / 6 , ly / 4 - 1 );
+                    return MapCoordinate( pos.x / 6 , pos.y / 2 - 1 );
               };
          break;
       case 1:
       case 2: {
                  if ( lx < 4 )
-                    return MapCoordinate( lx / 6, ly / 4 );
+                    return MapCoordinate( pos.x / 6, pos.y / 2 );
                  if ( lx >= 4 )
                     if ( ly == 1 )
-                       return MapCoordinate( lx / 6 - 1, ly / 4 - 1 );
+                       return MapCoordinate( pos.x / 6 - 1, pos.y / 2 - 1 );
                     else
-                       return MapCoordinate( lx / 6 - 1, ly / 4 + 1 );
+                       return MapCoordinate( pos.x / 6 - 1, pos.y / 2 + 1 );
               };
       case 3: {
                  if ( lx == 1 || lx == 2 )
-                    return MapCoordinate( lx / 6, ly / 4 );
+                    return MapCoordinate( pos.x / 6, pos.y / 2 );
                  if ( lx == 0 )
-                    return MapCoordinate( lx / 6 - 1, ly / 4 );
+                    return MapCoordinate( pos.x / 6 - 1, pos.y / 2 );
                  if ( lx >= 3 )
-                    return MapCoordinate( lx / 6 , ly / 4 + 1 );
+                    return MapCoordinate( pos.x / 6 , pos.y / 2 + 1 );
               };
          break;
    };

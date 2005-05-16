@@ -38,16 +38,14 @@
  #include "weatherarea.h"
  
  class RandomGenerator{
- 
- RandomGenerator(int seedValue);
- ~RandomGenerator();
- 
- unsigned int getPercentage();
- unsigned int getRandomValue(int upperLimit);
- unsigned int getRandomValue (int lowerLimit, int upperLimit);
- 
- 
- 
+   public:
+
+      RandomGenerator(int seedValue);
+      ~RandomGenerator();
+      
+      unsigned int getPercentage();
+      unsigned int getRandomValue(int upperLimit);
+      unsigned int getRandomValue (int lowerLimit, int upperLimit);
  };
  
  
@@ -319,13 +317,37 @@ class  tfield {
 
 
 
-
+class OverviewMapHolder : public SigC::Object {
+      tmap& map;
+      Surface overviewMapImage;
+      bool initialized;
+      bool completed;
+      int x;
+      int y;
+      
+   protected:   
+      bool idleHandler( );
+      bool init();
+      void drawNextField( bool signalOnComplete );
+      void updateField( const MapCoordinate& pos );
+      
+   public:
+      OverviewMapHolder( tmap& gamemap );
+   
+      /** 
+      returns the overview surface for the map. 
+      \param complete complete the image if it is not ready (might take several seconds)
+      */
+      const Surface& getOverviewMap( bool complete = true );
+      
+      void startUpdate();
+      void clear();
+};
 
 
 //! The map. THE central structure of ASC, which holds everything not globally available together
 class tmap {
       void operator= ( const tmap& map );
-      Surface overviewMapImage;
    public:
       //! the size of the map
       int          xsize, ysize;
@@ -475,6 +497,8 @@ class tmap {
             
       } player[9];
 
+      MapCoordinate& getCursor();
+      
       typedef map<int, Vehicle*> VehicleLookupCache;
       VehicleLookupCache vehicleLookupCache; 
 
@@ -678,7 +702,7 @@ class tmap {
       void read ( tnstream& stream );
       void write ( tnstream& stream );
 
-      const Surface& getOverviewMap();
+      OverviewMapHolder overviewMapHolder;
 
       pterraintype getterraintype_byid ( int id );
       pobjecttype getobjecttype_byid ( int id );

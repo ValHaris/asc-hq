@@ -2857,7 +2857,7 @@ class tgiveunitawaydlg : public tdialogbox {
              int ply[8];
              int xs;
            public:
-             void init ( void );
+             void init ( pfield fld );
              void run ( void );
              void buttonpressed ( int id );
        };
@@ -2884,9 +2884,9 @@ void tgiveunitawaydlg :: paintplayer ( int i )
       showtext2 ( "neutral", x1 + 60, y1 + starty + xs+17 + i * 40 - activefontsettings.font->height / 2 );
 }
 
-void         tgiveunitawaydlg :: init(void)
+void         tgiveunitawaydlg :: init( pfield fld )
 { 
-   fld = getactfield();
+   this->fld = fld;
 
    xs = 15;
 
@@ -2987,17 +2987,16 @@ void tgiveunitawaydlg :: run ( void )
       else
          if ( fld->building )
             fld->building->convert ( ply[markedplayer] );
-      logtoreplayinfo ( rpl_convert, (int) getxpos(), (int) getypos(), (int) ply[markedplayer] );
+      logtoreplayinfo ( rpl_convert, fld->getContainer()->getPosition().x, fld->getContainer()->getPosition().y, (int) ply[markedplayer] );
       computeview( actmap );
    }
 }
 
-void giveunitaway ( void )
+void giveunitaway ( pfield fld )
 {
-   pfield fld = getactfield();
    if ( ( fld->vehicle && fld->vehicle->color==actmap->actplayer*8) ||  (fld->building && fld->building->color == actmap->actplayer * 8 )) {
       tgiveunitawaydlg gua;
-      gua.init ();
+      gua.init ( fld );
       gua.run ();
       gua.done ();
    } else {

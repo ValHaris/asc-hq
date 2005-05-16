@@ -286,7 +286,7 @@ bool NewGuiHost::setNewButtonPressed( int i )
       }
    }
 
-   if ( i < buttons.size() ) {
+   if ( i < buttons.size() || i < 0 ) {
       keyPressedButton = i;
 
       if ( keyPressedButton >= 0 ) {
@@ -305,6 +305,7 @@ bool NewGuiHost::eventKeyDown(const SDL_KeyboardEvent* key)
 {
    if ( key->keysym.sym == SDLK_RETURN   ) {
       if ( !enterKeyPressed ) {
+         mapDisplay->keyboadCursorMovement( false );
          enterKeyPressed = true;
          setNewButtonPressed( 0 );
       }
@@ -325,6 +326,15 @@ bool NewGuiHost::eventKeyDown(const SDL_KeyboardEvent* key)
 
       if ( key->keysym.sym == SDLK_DOWN || key->keysym.sym == SDLK_KP2 )
          return setNewButtonPressed( keyPressedButton + guiIconColumnNum );
+         
+      if ( key->keysym.sym == SDLK_ESCAPE || key->keysym.sym == SDLK_END ) {
+         enterKeyPressed = false;
+         mapDisplay->keyboadCursorMovement( true );
+         
+         setNewButtonPressed( -1 );
+         return true;
+      }
+         
    }
 
    return false;
@@ -332,8 +342,9 @@ bool NewGuiHost::eventKeyDown(const SDL_KeyboardEvent* key)
 
 bool NewGuiHost::eventKeyUp(const SDL_KeyboardEvent* key)
 {
-   if ( key->keysym.sym == SDLK_RETURN   ) {
+   if ( key->keysym.sym == SDLK_RETURN  && enterKeyPressed ) {
       enterKeyPressed = false;
+      mapDisplay->keyboadCursorMovement( true );
 
       GuiButton* button = getButton( keyPressedButton );
       if ( button )

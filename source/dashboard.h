@@ -79,12 +79,16 @@ class WeaponInfoPanel : public Panel {
 
 class OverviewMapPanel : public Panel {
         MapDisplayPG* mapDisplayWidget;
+        PG_Widget* ovmap;
         float currentZoom;  
      public:
         OverviewMapPanel( PG_Widget *parent, const PG_Rect &r, MapDisplayPG* mapDisplay ) ;
      protected:
         void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
-
+        void redraw() { Redraw(true); };
+        bool mouseButtonDown ( const SDL_MouseButtonEvent *button);
+        bool mouseMotion (  const SDL_MouseMotionEvent *motion);
+        bool mouseClick ( SPoint pos );
 };
 
 #endif

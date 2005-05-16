@@ -47,6 +47,7 @@
             } ; 
    extern Schriften schriften;
 
+   #ifndef sgmain
    class tcursor { 
            public:
               int       posx, posy;
@@ -79,8 +80,6 @@
 
   extern tcursor cursor;
 
-  //! this is the one and only map that is loaded by ASC
-  extern pmap actmap; 
 
 
  //! passes a key to the map-cursor
@@ -90,14 +89,22 @@
 //! returns the field that is selected with the cursor
 extern pfield getactfield(void);
 
-//! returns the field at the given coordinates
-extern pfield getfield(int x, int y);
 
 //! returns the x coordinate of the cursor location
 extern int  getxpos(void);
 
 //!returns the y coordinate of the cursor location
 extern int  getypos(void);
+
+  #endif
+
+
+  //! this is the one and only map that is loaded by ASC
+  extern pmap actmap; 
+
+
+//! returns the field at the given coordinates
+extern pfield getfield(int x, int y);
 
 
 //! returns the diplomatic status between actmap->actplayer and the player with color b (note that the color is playernum*8 ) 
@@ -246,6 +253,7 @@ extern int  rol ( int valuetorol, int rolwidth );
 extern SigC::Signal0<void> repaintMap;
 extern SigC::Signal0<void> repaintDisplay;
 extern SigC::Signal0<void> updateFieldInfo;
+extern SigC::Signal0<void> viewChanged;
 extern SigC::Signal1<void,ContainerBase*> showContainerInfo;
 extern SigC::Signal1<void,Vehicletype*> showVehicleTypeInfo;
 
