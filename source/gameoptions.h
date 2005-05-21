@@ -77,13 +77,13 @@ class CGameOptions
       // int dontMarkFieldsNotAccessible_movement;
 
       //! first delay of attack display
-      // int attackspeed1;
+      int attackspeed1;
 
       //! speed of moving bars in attack display
-      // int attackspeed2;
+      int attackspeed2;
 
       //! second delay in attack display
-      // int attackspeed3;
+      int attackspeed3;
 
       //! force ASC to run in windowed mode (and not fullscreen, which is default)
       bool forceWindowedMode;

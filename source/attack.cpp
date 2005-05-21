@@ -406,7 +406,7 @@ void tfight :: calcdisplay ( int ad, int dd )
    calc();
    at->Show();
 
-/*
+
    int time1 = CGameOptions::Instance()->attackspeed1;
    if ( time1 <= 0 )
       time1 = 30;
@@ -419,16 +419,9 @@ void tfight :: calcdisplay ( int ad, int dd )
    if ( time3 <= 0 )
       time3 = 30;
 
-
-*/
-   int time1=300;
-   int time2=500;
-   int time3=300;
-
    do {
       releasetimeslice();
    } while ( t + time1 > ticker ); /* enddo */
-
 
 
 

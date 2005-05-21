@@ -529,6 +529,11 @@ WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const V
    }
    setLabelText( "weapon_shootaftermove", vt->wait ? "no" : "yes" );
    setLabelText( "weapon_moveaftershoot", vt->functions & cf_moveafterattack ? "yes" : "no" );
+
+   /*
+   for ( int i = 0; i < cmovemalitypenum; ++i ) 
+      setLabelText( ASCString("weapon_efficiency_") + unitCategoryTags[i], cmovemalitypes[i] );
+      */
 }
 
 

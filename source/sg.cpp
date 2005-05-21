@@ -1577,6 +1577,8 @@ void execuseraction2 ( tuseractions action )
          break;
       case ua_viewUnitInfoPanel: mainScreenWidget->spawnPanel( MainScreenWidget::UnitInfo );
          break;
+      case ua_viewOverviewMapPanel: mainScreenWidget->spawnPanel( MainScreenWidget::OverviewMap );
+         break;
       case ua_vehicleinfo: {
          UnitInfoDialog* uid = new UnitInfoDialog( NULL, NULL, NULL );
          uid->Show();
@@ -1726,7 +1728,7 @@ void Menu::setup()
    addbutton ( "Button Panel", ua_viewButtonPanel );
    addbutton ( "Wind Panel", ua_viewWindPanel );
    addbutton ( "Unit Info Panel", ua_viewUnitInfoPanel );
-   addbutton ( "Unit Info Dialog", ua_viewUnitInfoPanel );
+   addbutton ( "Overview Map Panel", ua_viewOverviewMapPanel );
    currentMenu->addSeparator();
    addbutton ( "clear image cache", ua_clearImageCache );
    addbutton ( "reload dialog theme", ua_reloadDlgTheme );

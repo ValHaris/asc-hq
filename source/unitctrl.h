@@ -36,6 +36,7 @@
 
 /** \file unitctrl.h
    New system for actions performed by units
+   This design is considered a failure, it won't be used for any new code
 */
 
 #ifdef karteneditor

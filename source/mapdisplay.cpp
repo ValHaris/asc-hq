@@ -462,10 +462,12 @@ void MapDisplayPG::displayCursor()
       
    int x = actmap->player[actmap->playerView].cursorPos.x - offset.x;
    int y = actmap->player[actmap->playerView].cursorPos.y - offset.y;
-   if( x >= field.viewPort.x1 && x < field.viewPort.x2 && y >= field.viewPort.y1 && y < field.viewPort.y2 ) {
+   if( x >= field.viewPort.x1 && x < field.viewPort.x2 && y >= field.viewPort.y1 && y < field.viewPort.y2 && x >= 0 && y >= 0 && x < actmap->xsize && y < actmap->ysize ) {
       // surface->Blit( icons.cursor, getFieldPos(x,y));
-      MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom,TargetPixelSelector_Valid> blitter;
+      MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom,TargetPixelSelector_Rect> blitter;
       blitter.setZoom( zoom );
+      blitter.setTargetRect ( *this );
+
 
       Surface s = Surface::Wrap( PG_Application::GetScreen() );
       // PG_Point pnt = ClientToScreen( 0,0 );

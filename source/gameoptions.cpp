@@ -111,9 +111,10 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    pc.addBool("UnitsGrayAfterMove", units_gray_after_move, units_gray_after_move );
    pc.addInteger( "MapZoom", mapzoom, mapzoom);
    pc.addInteger( "MapZoomEditor", mapzoomeditor, mapzoomeditor );
-   // pc.addInteger( "AttackSpeed1", attackspeed1, 0 );
-   // pc.addInteger( "AttackSpeed2", attackspeed2, 0);
-   // add(new IntProperty("AttackSpeed3"							,&_pOptions->attackspeed3));
+   pc.addInteger( "AttackSpeed1", attackspeed1, 30 );
+   pc.addInteger( "AttackSpeed2", attackspeed2, 50 );
+   pc.addInteger( "AttackSpeed3", attackspeed2, 30 );
+
    pc.addBool( "ForceWindowedMode", forceWindowedMode, forceWindowedMode );
    pc.addBool( "MapeditWindowedMode", mapeditWindowedMode, mapeditWindowedMode );
    pc.addBool( "AutomaticTraining", automaticTraining, automaticTraining );
@@ -187,11 +188,11 @@ void CGameOptions::setDefaults ( void )
    mapzoomeditor=60;
    // startupcount=0;
    // dontMarkFieldsNotAccessible_movement=0;
-   /*
-   attackspeed1=0;
-   attackspeed2=0;
-   attackspeed3=0;
-   */
+   
+   attackspeed1=30;
+   attackspeed2=50;
+   attackspeed3=30;
+   
    sound.off=false;
    sound.muteEffects=false;
    sound.muteMusic=false;
