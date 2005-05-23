@@ -272,8 +272,10 @@ void   GuiHost<T>::paintsmallicons ( int taste, int up )
          if ( mouseinrect ( smalliconpos.x + j * ( guismallicongap + guismalliconsizex ), smalliconpos.y, smalliconpos.x + j * ( guismallicongap + guismalliconsizex ) + guismalliconsizex, smalliconpos.y + guismalliconsizey )) {
             fnd = 1;
             if ( actshownicons[j % columncount][j / columncount] ) {
-                if ( actshownicons[j % columncount][j / columncount] != infotextshown )
-                   msg = displaymessage2 ( actshownicons[j % columncount][j / columncount]->getinfotext() );
+                if ( actshownicons[j % columncount][j / columncount] != infotextshown ) {
+                   msg = 0;
+                   displaymessage2 ( actshownicons[j % columncount][j / columncount]->getinfotext() );
+                }   
 
                 infotextshown = actshownicons[j % columncount][j / columncount];
              }
@@ -445,7 +447,8 @@ void   GuiHost<T>::bi2control (  )
 
       actshownicons[xp][yp]->iconpressed();
 
-      int msg = displaymessage2( actshownicons[xp][yp]->getinfotext() );
+      int msg = 0;
+      displaymessage2( actshownicons[xp][yp]->getinfotext() );
       infotextshown = actshownicons[xp][yp];
 
       int zx = xp;
@@ -521,7 +524,8 @@ void   GuiHost<T>::bi2control (  )
 
 
                }
-               msg = displaymessage2( actshownicons[xp][yp]->getinfotext() );
+               msg = 0;
+               displaymessage2( actshownicons[xp][yp]->getinfotext() );
                infotextshown = actshownicons[xp][yp];
                zx = xp;
                zy = yp;

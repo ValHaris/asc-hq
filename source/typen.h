@@ -28,6 +28,7 @@
 
 #include "global.h"
 
+
 #ifdef HAVE_LIMITS
  #include <limits>
 #else
@@ -175,6 +176,53 @@ struct GameTime {
   int abstime;
 };
 
+/**
+@brief A Vector2D is a line (without a defined start point) in a 2 dimensional space and is deccribed by its
+       x- and y component
+@author Kevin Hirschmann
+
+*/
+class Vector2D{
+private:
+int xComponent;
+int yComponent;
+
+public:
+ /**
+ @brief Default constructor 
+ */
+ Vector2D();
+ /**
+ @brief Constructor for creating a new vector
+ @param x The xComponent
+ @param y The yComponent
+ */
+ Vector2D(int x, int y);
+ /**
+ @brief Destructor
+ */
+ ~Vector2D();
+ /**
+ @brief Retrieves the xComponent of the Vector
+ @return the xComponent 
+ */
+ int getXComponent() const;
+ /**
+ @brief Retrieves the yComponent of the Vector
+ @return the yComponent
+ */
+ int getYComponent() const;
+ /**
+ @brief Calculates the length of the vector (Pythagoras)
+ @return The length of the Vector
+ */
+ double getLength() const;
+ /**
+ @brief Checks if the vector is the zero-vector
+ @return true if x- and yComponent == 0; flase otherwise
+ */
+ bool isZeroVector() const;
+};
 
 
 //! Coordinate on the twodimensional map
@@ -197,6 +245,8 @@ class MapCoordinate {
                y = stream.readInt ( );
             };
             bool valid() const { return x >= 0 && y >= 0 ; } ;
+	    void move(const Vector2D& v);
+	    void move(int width, int height);
       };
 
 inline MapCoordinate operator-( const MapCoordinate& a, const MapCoordinate& b )
@@ -558,7 +608,6 @@ struct ticons {
    void*        fieldshape;
    void*        hex2octmask;
    void*        mapbackground;
-   void*        mine[8]; // explosive mines
 };
 
 
@@ -772,10 +821,10 @@ const int maxwindspeed = 60;          // Wind with a strength of 255 means that 
 #define cnet_stopfueloutput     0x800
 
 
-#define resource_fuel_factor 100         // die im boden liegenden Bodensch„tzen ergeben effektiv soviel mal mehr ( bei Bergwerkseffizienz 1024 )
+#define resource_fuel_factor 100         // die im boden liegenden Bodenschtzen ergeben effektiv soviel mal mehr ( bei Bergwerkseffizienz 1024 )
 #define resource_material_factor 100     // "
 
-#define destruct_building_material_get 2 // beim Abreissen erh„lt man 1/2 des eingesetzten Materials zur?ck
+#define destruct_building_material_get 2 // beim Abreissen erhlt man 1/2 des eingesetzten Materials zur?ck
 #define destruct_building_fuel_usage 10  // beim Abreissen wird 10 * fuelconsumption Fuel fuelconsumptiont
 
 

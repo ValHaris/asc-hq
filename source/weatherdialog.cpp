@@ -483,10 +483,10 @@ std::string WeatherAreaInformation::getInformation() const {
     info.append(cwettertypen[weatherArea->getFalloutType()]);
     info.append("; ");
     info.append("x: ");
-    info.append(ASCString::toString(weatherArea->getCenterPos().getX()));
+    info.append(ASCString::toString(weatherArea->getCenterPos().x));
     info.append("; ");
     info.append("y: ");
-    info.append(ASCString::toString(weatherArea->getCenterPos().getY()));
+    info.append(ASCString::toString(weatherArea->getCenterPos().y));
 
     return info;
 }

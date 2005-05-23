@@ -940,6 +940,7 @@ template<>
             PixelType d = 0;
             for ( int i = 0; i < 3; ++i)
                d |= min( max( int( float(((*dest) >> (i*8)) & 0xff) * b ), 0 ), 255) << (i*8);
+            d |= (*dest & 0xff000000);
 
             *dest = d;
          };
@@ -1146,16 +1147,17 @@ template<int pixelsize>
  template<int pixelsize, class SourcePixelSelector = SourcePixelSelector_Plain<pixelsize> >
  class SourcePixelSelector_Zoom: public SourcePixelSelector {
        typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
-       float zoomFactor;
+       float zoomFactorX;
+       float zoomFactorY;
        int x,y;
     protected:
 
-       int getWidth()  { return int( zoomFactor * SourcePixelSelector::getWidth()  );  };
-       int getHeight() { return int( zoomFactor * SourcePixelSelector::getHeight() );  };
+       int getWidth()  { return int( zoomFactorX * SourcePixelSelector::getWidth()  );  };
+       int getHeight() { return int( zoomFactorY * SourcePixelSelector::getHeight() );  };
 
        PixelType getPixel(int x, int y)
        {
-          return SourcePixelSelector::getPixel( int(float(x) / zoomFactor), int(float(y) / zoomFactor));
+          return SourcePixelSelector::getPixel( int(float(x) / zoomFactorX), int(float(y) / zoomFactorY));
        };
 
        PixelType nextPixel()
@@ -1170,21 +1172,33 @@ template<int pixelsize>
     public:
        void setZoom( float factor )
        {
-          this->zoomFactor = factor;
+          this->zoomFactorX = factor;
+          this->zoomFactorY = factor;
+       };
+       void setZoom( float factorX, float factorY )
+       {
+          this->zoomFactorX = factorX;
+          this->zoomFactorY = factorY;
        };
 
-       float getZoom() {
-         return zoomFactor;
+       float getZoomX() {
+         return zoomFactorX;
+       };
+       float getZoomY() {
+         return zoomFactorY;
        };
 
-       void setSize( int sourceWidth, int sourceHeight, int targetWidth, int targetHeight )
+       void setSize( int sourceWidth, int sourceHeight, int targetWidth, int targetHeight, bool forceSquare = true )
        {
           float zw = float(targetWidth) / float(sourceWidth);
           float zh = float(targetHeight)/ float(sourceHeight);
-          setZoom( min ( zw,zh));
+          if ( forceSquare ) 
+            setZoom( min ( zw,zh));
+          else 
+            setZoom( zw,zh );
        };
 
-       SourcePixelSelector_Zoom( NullParamType npt = nullParam) : zoomFactor(1),x(0),y(0) {};
+       SourcePixelSelector_Zoom( NullParamType npt = nullParam) : zoomFactorX(1),zoomFactorY(1),x(0),y(0) {};
        
  };
 

@@ -1754,12 +1754,6 @@ void         loadicons(void)
   int          *w = & w2, i;
 
 
-   {
-      tnfilestream stream ( "hexmines.raw", tnstream::reading );
-      for ( int i = 0; i < 4; i++)
-         stream.readrlepict( &icons.mine[i], false, &w2);
-   }
-
   {
       int xl[5] = { cawar, cawarannounce, capeaceproposal, capeace, capeace_with_shareview };
       tnfilestream stream ("allianc2.raw",tnstream::reading);

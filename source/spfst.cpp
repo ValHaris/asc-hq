@@ -66,6 +66,7 @@ SigC::Signal0<void> updateFieldInfo;
 SigC::Signal1<void,ContainerBase*> showContainerInfo;
 SigC::Signal1<void,Vehicletype*> showVehicleTypeInfo;
 SigC::Signal0<void> viewChanged;
+SigC::Signal0<bool> idleEvent;
 
 
 #ifndef sgmain
@@ -261,23 +262,6 @@ pfield        getfield(int          x,
 
 
 
-
-
-void* uncompressedMinePictures[4] = { NULL, NULL, NULL, NULL };
-
-
-void*      getmineadress(  int num , int uncompressed )
-{ 
-   if ( !uncompressed ) 
-      return icons.mine[num-1]; 
-   else {
-      int type = num-1;
-      if ( !uncompressedMinePictures[type] ) 
-         uncompressedMinePictures[type] = uncompress_rlepict ( icons.mine[num-1] );
-
-      return uncompressedMinePictures[type];
-   }
-} 
 
 
 

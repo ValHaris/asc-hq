@@ -14,7 +14,7 @@ strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp pd.cpp palette.cpp \
 newfont.cpp network.cpp misc.cpp loadpcxc.cpp loaders.cpp \
 loadbi3.cpp gui.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp \
 building.cpp basestrm.cpp basegfx.cpp attack.cpp \
-gameoptions.cpp astar2.cpp vehicletype.cpp \
+gameoptions.cpp astar2.cpp vehicletype.cpp objects.cpp \
 buildingtype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp \
 gamemap.cpp password.cpp password_dialog.cpp replay.cpp research.cpp \
 mapdisplay.cpp resourcenet.cpp dashboard.cpp ascstring.cpp graphicset.cpp \
@@ -24,7 +24,7 @@ messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp messag
 simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp weatherarea.cpp \
 guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp gamedialog.cpp \
-infopopup.cpp overviewmapimage.cpp
+infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp
 
 
 asc_LDADD   		= $(top_builddir)/source/libs/triangul/libtriangul.la \

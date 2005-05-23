@@ -80,6 +80,16 @@ ASCString& ASCString::format ( const charT* pFormat, ... )
     std::va_list arg_ptr;
     va_start ( arg_ptr, pFormat );
 
+    vaformat( pFormat, arg_ptr );
+
+    va_end ( arg_ptr );
+
+    return *this;
+}
+
+
+ASCString&  ASCString::vaformat     ( const charT* pFormat, va_list ap )
+{
     int  l_iNbChar = 10000;
     bool l_bIsDone = false;
 
@@ -87,7 +97,7 @@ ASCString& ASCString::format ( const charT* pFormat, ... )
     {
         charT* l_pBuf = new charT [ l_iNbChar ];
 
-        int l_iNbCharWritten = ASCStringHelpers::_Vsnprintf ( l_pBuf, l_iNbChar, pFormat, arg_ptr );
+        int l_iNbCharWritten = ASCStringHelpers::_Vsnprintf ( l_pBuf, l_iNbChar, pFormat, ap );
 
         if ( l_iNbCharWritten != -1 )
         {
@@ -105,11 +115,9 @@ ASCString& ASCString::format ( const charT* pFormat, ... )
 
         delete [] l_pBuf;
     };
-
-    va_end ( arg_ptr );
-
     return *this;
 }
+
 
 /*!
     Print this ASCString to the standard output stream.

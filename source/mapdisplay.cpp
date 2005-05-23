@@ -124,30 +124,23 @@ void MapRenderer::paintSingleField( Surface& surf, int playerView, pfield fld, i
 
    // display objects
    if ( layer & 1 )
-   for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ ) {
-      int h = o->typ->imageHeight;
-      if ( visibility > visible_ago || (o->typ->visibleago && visibility >= visible_ago ))
-         if (  h >= ((layer-1)/2)*30 && h < (layer-1)/2*30+30 )
-            o->display ( surf, pos, fld->getweather() );
-   }
+      for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ ) {
+         int h = o->typ->imageHeight;
+         if ( visibility > visible_ago || (o->typ->visibleago && visibility >= visible_ago ))
+            if (  h >= ((layer-1)/2)*30 && h < (layer-1)/2*30+30 )
+               o->display ( surf, pos, fld->getweather() );
+      }
 
 
 
 
    if ( visibility > visible_ago ) {
       /* display mines */
-      /*
-        if ( visibility == visible_all )
-             if ( !fld->mines.empty() && layer == 4 ) {
-                if ( fld->mines.begin()->type != cmmooredmine )
-                   putspriteimage( r, yp, getmineadress(fld->mines.begin()->type) );
-                else
-                   putpicturemix ( r, yp, getmineadress(fld->mines.begin()->type, 1 ) ,  0, (char*) colormixbuf );
-                #ifdef karteneditor
-                bar ( r + 5 , yp +5, r + 15 , yp +10, 20 + fld->mineowner() * 8 );
-                #endif
-             }
-       */
+      
+      if ( visibility == visible_all )
+         if ( !fld->mines.empty() && layer == 7 ) 
+            fld->mines.begin()->paint( surf, pos );
+     
 
 
       /* display marked fields */
@@ -395,12 +388,21 @@ void MapDisplayPG::updateWidget()
 
 void MapDisplayPG::blitInternalSurface( SDL_Surface* dest, const SPoint& pnt )
 {
-   MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_PlainOverwrite,PixSel> blitter;
-   blitter.setZoom( zoom );
-   blitter.initSource( *surface );
-   blitter.setRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), int(float(Width()) / zoom), int(float(Height()) / zoom));
-   Surface s = Surface::Wrap( dest );
-   blitter.blit( *surface, s, SPoint(pnt.x, pnt.y ));
+   if ( zoom != 1 ) {
+      MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_PlainOverwrite,PixSel> blitter;
+      blitter.setZoom( zoom );
+      blitter.initSource( *surface );
+      blitter.setRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), int(float(Width()) / zoom), int(float(Height()) / zoom));
+      Surface s = Surface::Wrap( dest );
+      blitter.blit( *surface, s, SPoint(pnt.x, pnt.y ));
+   } else {
+      MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_DirectRectangle> blitter;
+      blitter.initSource( *surface );
+      blitter.setRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), Width(), Height() );
+      Surface s = Surface::Wrap( dest );
+      blitter.blit( *surface, s, SPoint(pnt.x, pnt.y ));
+   }   
+   
 }
 
 
@@ -1846,6 +1848,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
                if (b > visible_ago ) {
                   /* display mines */
+                  /*
                   if ( b == visible_all )
                      if ( !fld->mines.empty() && hgt == 3 ) {
                         if ( fld->mines.begin()->type != cmmooredmine )
@@ -1858,7 +1861,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
 #endif
 
                      }
-
+*/
 
                   /* display marked fields */
                   if ( hgt == 8 ) {

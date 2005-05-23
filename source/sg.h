@@ -38,10 +38,13 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_dispvehicleimpro
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
                     ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog, ua_reloadDlgTheme, ua_showPlayerSpeed, ua_renameunit,
-                    ua_statisticdialog, ua_viewPipeNet, ua_cancelResearch, ua_showResearchStatus, ua_exportUnitToFile, ua_viewButtonPanel, ua_viewWindPanel,
-                    ua_clearImageCache, ua_viewUnitInfoPanel, ua_cargosummary, ua_viewUnitInfoDialog, ua_showsearchdirs, ua_viewOverviewMapPanel };
+                    ua_statisticdialog, ua_viewPipeNet, ua_cancelResearch, ua_showResearchStatus, ua_exportUnitToFile, ua_viewButtonPanel,
+		    ua_viewWindPanel, ua_clearImageCache, ua_viewUnitInfoPanel, ua_cargosummary, ua_viewUnitInfoDialog, ua_showsearchdirs, ua_viewOverviewMapPanel, ua_weathercast};
 
 extern void execuseraction ( tuseractions action );
+
+//! takes care of event system switching between old and new functions
+extern void execUserAction_ev( tuseractions action );
 
 //! switches the event handling between paragui and legacy depending on function called
 extern void execUserAction_ev( tuseractions action );

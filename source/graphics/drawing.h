@@ -41,17 +41,20 @@
       pix += pos.y * surface.pitch()/BytePerPixel + pos.x;
 
       int pitch = surface.pitch()/BytePerPixel;
+      
+      h -= 1;
+      w -= 1;
 
-      for ( int x = 0; x < w; ++x )
+      for ( int x = 0; x <= w; ++x )
          ul.assign ( 1, (pix+x) );
 
-      for ( int y = 0; y < h; ++y )
+      for ( int y = 0; y <= h; ++y )
          ul.assign ( 1, (pix+y*pitch) );
 
-      for ( int x = 0; x < w; ++x )
+      for ( int x = 0; x <= w; ++x )
          lr.assign ( 1, (pix+x+h*pitch) );
 
-      for ( int y = 0; y < h; ++y )
+      for ( int y = 0; y <= h; ++y )
          lr.assign ( 1, (pix+y*pitch+w) );
 
  }

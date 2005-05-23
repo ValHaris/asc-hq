@@ -63,7 +63,7 @@ const char* cnetcontrol[cnetcontrolnum] = { "store energy",           "store mat
                                             "stop storing energy", "stop storing material", "stop storing fuel",
                                             "stop energy extraction", "stop material extraction", "stop fuelextraction" };
 const char* cgeneralnetcontrol[4] = {       "store",  "move out", "stop storing", "stop using" };
-                                          // Functionen in Geb„uden ....
+                                          // Functionen in Gebuden ....
 
 const char*  cwettertypen[cwettertypennum] = {"dry (standard)","light rain", "heavy rain", "few snow", "lot of snow", "lot of snow + ice"};
 const char*  resourceNames[3]  = {"energy", "material", "fuel"};
@@ -253,3 +253,34 @@ void IntRange::write ( tnstream& stream ) const
 ////////////////////////////////////////////////////////////////////
 
 
+void MapCoordinate::move(const Vector2D& v){
+  x +=v.getXComponent();
+  y +=v.getYComponent();
+}
+
+void MapCoordinate::move(int width, int height) {
+  x +=width;
+  y +=height;
+}
+
+//***************************************************************************************************************************************
+Vector2D::Vector2D():xComponent(0), yComponent(0) {}
+
+Vector2D::Vector2D(int x, int y):xComponent(x), yComponent(y) {}
+
+Vector2D::~Vector2D() {}
+
+int Vector2D::getXComponent() const {
+  return xComponent;
+}
+
+int Vector2D::getYComponent() const {
+  return yComponent;
+}
+double Vector2D::getLength() const{
+  return std::sqrt(std::pow(double(xComponent), 2) + std::pow(double(yComponent),2));
+}
+
+bool Vector2D::isZeroVector() const {
+  return ((xComponent == 0) && (yComponent == 0));
+}

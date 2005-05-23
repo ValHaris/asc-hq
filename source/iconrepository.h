@@ -34,7 +34,6 @@ class IconRepository {
      public:
         static Surface& getIcon( const ASCString& name );
         static void clear() { repository.clear(); };
-
 };
 
 

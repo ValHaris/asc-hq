@@ -3424,54 +3424,6 @@ int         viewtextquery( int          id,
 tdisplaymessage* messagebox = NULL;
 
 
-int displaymessage2( const char* formatstring, ... )
-{
-   const int maxlength = 2000;
-   char stringtooutput[maxlength];
-   char* c = new char[maxlength];
-   // int linenum = 0;
-
-   memset (stringtooutput, 0, sizeof ( stringtooutput ));
-
-   va_list paramlist;
-   va_start ( paramlist, formatstring );
-
-   int lng = vsprintf( stringtooutput, formatstring, paramlist );
-   if ( lng >= maxlength )
-      displaymessage ( "dlg_box.cpp / displaymessage2:   string to long !\nPlease report this error",1 );
-
-   va_end ( paramlist );
-
-
-   npush ( activefontsettings );
-   activefontsettings.justify = lefttext;
-   activefontsettings.font = schriften.guifont;
-   activefontsettings.color = 20 + ((actmap)?actmap->actplayer:0) * 8;
-   activefontsettings.markcolor = yellow;
-   activefontsettings.background = 172;
-   activefontsettings.height = activefontsettings.font->height;
-   activefontsettings.length = agmp->resolutionx - ( 640 - 387);
-
-   int yy = agmp->resolutiony - ( 480 - 450 );
-   collategraphicoperations cgo ( 37, yy, 37 + activefontsettings.length, yy + activefontsettings.font->height );
-   showtext3c( stringtooutput, 37, yy );
-
-   npop( activefontsettings );
-
-   if ( formatstring == NULL  ||  formatstring[0] == 0 )
-      lastdisplayedmessageticker = 0xffffff;
-   else
-      lastdisplayedmessageticker = ticker;
-   
-
-   delete[] c;
-
-   return ++actdisplayedmessage;
-}
-
-
-
-
 
 
 

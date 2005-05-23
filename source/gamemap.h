@@ -36,6 +36,7 @@
  #include "research.h"
  #include "password.h"
  #include "weatherarea.h"
+ #include "objects.h"
  
  class RandomGenerator{
    public:
@@ -95,57 +96,6 @@ enum GameParameter { cgp_fahrspur,
        cgp_debugEvents,
        cgp_objectGrowthMultiplier,
        cgp_objectGrowOnOtherObjects };
-
-
-class AgeableItem {
-    protected:
-       AgeableItem() : lifetimer(-1) {};
-    public:
-       int lifetimer;
-
-       //! ages the object by one turn. Returns true if the object shall be removed
-       static bool age( AgeableItem& obj );
-};
-
-//! an instance of an object type (#tobjecttype) on the map
-class Object : public AgeableItem {
-    public:
-       pobjecttype typ;
-       int damage;
-       int dir;
-       // int dummy[4];
-       Object ( void );
-       Object ( pobjecttype t );
-       void display ( Surface& surface, SPoint pos, int weather = 0 ) const;
-       const OverviewMapImage* getOverviewMapImage( int weather );
-       void setdir ( int dir );
-       int  getdir ( void );
-
-};
-
-#define cminenum 4
-extern const char* MineNames[cminenum] ;
-extern const int MineBasePunch[cminenum]  ;
-
-enum MineTypes { cmantipersonnelmine = 1 , cmantitankmine, cmmooredmine, cmfloatmine  };
-
-
-class Mine : public AgeableItem {
-   public:
-      Mine( MineTypes type, int strength, int player, tmap* gamemap );
-
-
-      MineTypes type;
-
-      //! the effective punch of the mine
-      int strength;
-
-      //! the player who placed the mine; range 0 .. 7
-      int player;
-
-      //! can the mine attack this unit
-      bool attacksunit ( const Vehicle* veh );
-};
 
 
 class LoadNextMap {
@@ -343,6 +293,8 @@ class OverviewMapHolder : public SigC::Object {
       void startUpdate();
       void clear();
 };
+
+
 
 
 //! The map. THE central structure of ASC, which holds everything not globally available together

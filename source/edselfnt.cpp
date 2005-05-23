@@ -768,7 +768,9 @@ class tminetype {
          public:
             int type;
             char* name;
-            void paint ( int x, int y ) { putrotspriteimage ( x, y, getmineadress(type+1), farbwahl*8 ); };
+            void paint ( int x, int y ) { 
+            Mine::paint( MineTypes(type+1), farbwahl, getActiveSurface(), SPoint(x,y) ); 
+            };
        };
 typedef tminetype* pminetype;
 vector< pminetype > minevector;

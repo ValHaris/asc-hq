@@ -83,7 +83,7 @@ class WeatherArea{
 private:
 WeatherFields area;
 tmap* map;
-Point2D center;
+MapCoordinate center;
 int duration;
 int width;
 int height;
@@ -99,7 +99,7 @@ float verticalWindAccu;
 int seedValue;
 WeatherArea &operator=(const WeatherArea&);
 WeatherArea(const WeatherArea&);
-Point2D calculateFieldPosition(Point2D center, Vector2D relPos);
+MapCoordinate calculateFieldPosition(MapCoordinate center, Vector2D relPos);
 
 
 short createAlgebraicSign();
@@ -125,10 +125,18 @@ public:
     void setFalloutType(FalloutType fallout);    
     FalloutType getFalloutType() const;
     FalloutType getFalloutType(int value) const;
+    int getWidth() const;
+    int getHeight() const;
+    float getHorizontalWindAccu() const;
+    float getVerticalWindAccu() const;
     
-    Point2D getCenterPos(){
+    MapCoordinate getCenterPos() const{
       return center;
     }
+    
+    const WeatherField* getCenterField() const{
+      return area[static_cast<int>(height/2 * ((area.size() % height)-1) +  (width/2 +0.5))];
+    };
     
     int getDuration() const;
     void setDuration(int duration);
@@ -164,7 +172,7 @@ void setMapField(tfield* mapField);
 
 public:
 WeatherField(tmap* map);
-WeatherField(Point2D mapPos, const WeatherArea* area);
+WeatherField(MapCoordinate mapPos, const WeatherArea* area);
 ~WeatherField();
 void move(const Vector2D& vector);
 bool isOnMap(const tmap* map) const;
@@ -175,7 +183,7 @@ void read (tnstream& inputStream);
 void setValue(int v);
 int getValue();
 
-Point2D posInArea;
+MapCoordinate posInArea;
 };
 
 class WeatherSystem : public SigC::Object{
@@ -253,8 +261,10 @@ public:
   void read (tnstream& inputStream);
   
   pair<GameTime, WeatherArea*> getNthWeatherArea(int n) const;
+  const WeatherArea* getNthActiveWeatherArea(int n) const;
   pair<int, WindData> getNthWindChange(int n) const;
   const int getQueuedWeatherAreasSize() const;
+  const int getActiveWeatherAreasSize() const;
   const int getQueuedWindChangesSize() const;
   void setSeedValueGeneration(bool setNew);
 

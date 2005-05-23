@@ -165,8 +165,6 @@ extern int fieldAccessible( const pfield        field,
                             const bool* attacked = NULL,
                             bool ignoreVisibility = false );
 
-//! returns the image of an (explosive) mine. The type of the mine is specified by num.
-extern void* getmineadress( int num , int uncompressed = 0 );
 
 /** removes all units that cannot exist any more, either due to invalid terrin
     (like tanks on melting ice) or too much wind (eg. hoovercrafts in a storm) */
@@ -256,6 +254,7 @@ extern SigC::Signal0<void> updateFieldInfo;
 extern SigC::Signal0<void> viewChanged;
 extern SigC::Signal1<void,ContainerBase*> showContainerInfo;
 extern SigC::Signal1<void,Vehicletype*> showVehicleTypeInfo;
+extern SigC::Signal0<bool> idleEvent;
 
 #ifdef sgmain
 static void repaintdisplay() { repaintDisplay(); };

@@ -50,6 +50,7 @@
 #include "events.h"
 #include "gameoptions.h"
 #include "sg.h"
+#include "spfst.h"
 
 
 #include "resourceplacement.h"
@@ -105,11 +106,19 @@ class EventSupplier: public PG_SDLEventSupplier {
 
 ASC_PG_App* pgApp = NULL;
 
+bool idler()
+{
+   idleEvent();
+   return true;
+}   
+
 ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
 {
    this->themeName = themeName;
    EnableSymlinks(true);
    EnableAppIdleCalls();
+   // sigAppIdle.connect( SigC::slot( idleEvent )); // I don't get a direct connection to work
+   sigAppIdle.connect( SigC::slot( &idler ));
    int i = 0;
    bool themeFound = false;
    ASCString path;

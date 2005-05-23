@@ -2,9 +2,13 @@
     \brief Interface for some basic classes from which all of ASC's dialogs are derived
 */
 
-//     $Id: dlg_box.h,v 1.33.2.1 2005-02-09 20:28:03 mbickel Exp $
+//     $Id: dlg_box.h,v 1.33.2.2 2005-05-23 15:51:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33.2.1  2005/02/09 20:28:03  mbickel
+//      Migrated some more gui functions
+//      Enable gameevent hanlding
+//
 //     Revision 1.33  2004/07/12 18:15:04  mbickel
 //      Lots of tweaks and fixed for more portability and compilation with mingw
 //
@@ -466,8 +470,6 @@ typedef class tdialogbox* pdialogbox;
                    };
 
 
-//! displays a message in the status line of ASC
-extern int  displaymessage2( const char* formatstring, ... );
 
 /** displays a dialog box with a message
    \param formatstring the text, which may contain the same format arguments as sprintf

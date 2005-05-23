@@ -57,7 +57,7 @@ void OverviewMapPanel::painter ( const PG_Rect &src, const ASCString& name, cons
       MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom> blitter;
       blitter.setSize( s.w(), s.h(), dst.w, dst.h );
 
-      currentZoom  = blitter.getZoom();
+      currentZoom  = blitter.getZoomX();
       blitter.blit( s, screen, SPoint(dst.x, dst.y) );
 
       SPoint ul = OverviewMapImage::map2surface( mapDisplayWidget->upperLeftCorner());

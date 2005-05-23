@@ -1680,7 +1680,7 @@ const char*        getmessage( int id)
 
 
 
-int          dispmessage2(int          id,
+void         dispmessage2(int          id,
                           char *       st)
 {
    char          *s2;
@@ -1707,10 +1707,8 @@ int          dispmessage2(int          id,
       } /* endwhile */
       *s2 = 0;
 
-      return displaymessage2(s); 
-   } else
-     return -1;
-    
+      displaymessage2(s); 
+   }
 } 
 
 

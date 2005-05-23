@@ -29,7 +29,7 @@ WeatherArea::WeatherArea(tmap* m, int xCenter, int yCenter, int w, int h, int d,
     for(int i = 0; i < width * height; i++) {
         int x =  i % width;
         int y =  i / width;
-        wf = new WeatherField(Point2D(x + (center.getX() - width/2), y + (center.getY() - height/2)), this);
+        wf = new WeatherField(MapCoordinate(x + (center.x - width/2), y + (center.y - height/2)), this);
         area.push_back(wf);
     }
     createWeatherFields();
@@ -79,13 +79,23 @@ void WeatherArea::setFalloutType(FalloutType fallout) {
 
 FalloutType WeatherArea::getFalloutType(int value) const {
     if(ft > 0) {
-    if(value < (MAXVALUE * 0.25)) {
+    /*if(value < (MAXVALUE * 0.25)) {
             return map->weatherSystem->getDefaultFalloutType();
-        }
+      }*/
     }
 
     return ft;
 }
+
+int WeatherArea::getHeight() const{
+  return height;
+}
+
+int WeatherArea::getWidth() const{
+  return width;
+
+}
+
 void WeatherArea::updateMovementVector(unsigned int windspeed, Direction windDirection, double ratio) {
     if(windDirection == N) {
         verticalWindAccu += (-1 * ratio * windspeed);
@@ -143,8 +153,8 @@ void WeatherArea::write (tnstream& outputStream) const {
     outputStream.writeInt(duration);
     outputStream.writeInt(width);
     outputStream.writeInt(height);
-    outputStream.writeInt(center.getX());
-    outputStream.writeInt(center.getY());
+    outputStream.writeInt(center.x);
+    outputStream.writeInt(center.y);
     outputStream.writeFloat(verticalWindAccu);
     outputStream.writeFloat(horizontalWindAccu);
     /*Version 1*/
@@ -164,7 +174,7 @@ void WeatherArea::read (tnstream& inputStream) {
     height = inputStream.readInt();
     int x = inputStream.readInt();
     int y = inputStream.readInt();
-    center = Point2D(x, y);
+    center = MapCoordinate(x, y);
     verticalWindAccu = inputStream.readFloat();
     horizontalWindAccu = inputStream.readFloat();
     /* Version 1*/
@@ -176,7 +186,7 @@ void WeatherArea::read (tnstream& inputStream) {
     for ( int i = 0; i < size; i++ ) {
         int x =  i % width;
         int y =  i / width;
-        WeatherField* wf = new WeatherField(Point2D(x + (center.getX() - width/2), y + (center.getY() - height/2)), this);
+        WeatherField* wf = new WeatherField(MapCoordinate(x + (center.x - width/2), y + (center.y - height/2)), this);
         /*WeatherField* newWf = new WeatherField(map);*/
         wf->read(inputStream);
         area.push_back(wf);
@@ -217,6 +227,14 @@ int WeatherArea::getDuration() const {
 
 void WeatherArea::setDuration(int d) {
     duration = d;
+}
+
+float WeatherArea::getHorizontalWindAccu() const{
+  return horizontalWindAccu;
+}
+
+float WeatherArea::getVerticalWindAccu() const{
+  return verticalWindAccu;
 }
 
 
@@ -331,9 +349,9 @@ int WeatherArea::calculateDiamondPointValue(int a, int b, int c, int d) {
 
 WeatherField::WeatherField(tmap* m):mapField(0), map(m) {}
 
-WeatherField::WeatherField(Point2D mapPos, const WeatherArea* area):posInArea(mapPos), mapField(0) {
+WeatherField::WeatherField(MapCoordinate mapPos, const WeatherArea* area):posInArea(mapPos), mapField(0) {
     if(isOnMap(area->getMap())) {
-        mapField = area->getMap()->getField(posInArea.getX(), posInArea.getY());
+        mapField = area->getMap()->getField(posInArea.x, posInArea.y);
     }
     counter = 0;
 }
@@ -349,8 +367,8 @@ void WeatherField::setMapField(tfield* field) {
 }
 
 bool WeatherField::isOnMap(const tmap* map) const {
-    if((posInArea.getX()>=0) && (posInArea.getX() < map->xsize)&&
-            (posInArea.getY()>=0) && (posInArea.getY() < map->ysize))
+    if((posInArea.x>=0) && (posInArea.x < map->xsize)&&
+            (posInArea.y>=0) && (posInArea.y < map->ysize))
     return true;
     else
         return false;
@@ -365,7 +383,7 @@ bool WeatherField::isOnMap(const tmap* map) const {
     }
 void WeatherField::update(const WeatherArea* area, FieldSet& processedFields) {
     //cout << "Field: " << posInArea.getX() << "," << posInArea.getY() <<", " << value << endl;
-    mapField = area->getMap()->getField(posInArea.getX(), posInArea.getY());
+    mapField = area->getMap()->getField(posInArea.x, posInArea.y);
     mapField->setweather(area->getFalloutType(value));
     mapField->setparams();
     processedFields.insert(mapField);
@@ -455,12 +473,26 @@ pair<GameTime, WeatherArea*> WeatherSystem::getNthWeatherArea(int n) const {
     WeatherAreas::const_iterator it;
     it = weatherAreas.begin();
     while(k<n) {
-    ++it;
-    ++k;
+      ++it;
+      ++k;
     }
     return *it;
 
 }
+
+ const WeatherArea* WeatherSystem::getNthActiveWeatherArea(int n) const {
+    int k = 0;
+    WeatherAreaList::const_iterator it;
+    it = activeWeatherAreas.begin();
+    while(k<n) {
+      ++it;
+      ++k;
+    }
+    return *it;
+
+}
+
+
 const int WeatherSystem::getQueuedWeatherAreasSize() const {
     return weatherAreas.size();
 }
@@ -661,7 +693,6 @@ WindData WeatherSystem::getWindDataOfTurn(int turn) const {
 }
 
 
-
 void WeatherSystem::update() {
     GameTime currentTime = gameMap->time;
     GameTime startTime;
@@ -689,7 +720,21 @@ void WeatherSystem::update() {
         setGlobalWind(itTr->second.speed , itTr->second.direction );
         windTriggers.erase(itTr);
     }
-
+    
+    for(WeatherAreaList::iterator it = activeWeatherAreas.begin(); it != activeWeatherAreas.end(); it++) {
+        if((*it)->getDuration()==0) {
+            WeatherArea* area2Delete = *it;
+            it = activeWeatherAreas.erase(it);
+            area2Delete->removeArea(processedFields);
+            delete area2Delete;
+        }
+    }
+    
+    for(WeatherAreaList::iterator it = activeWeatherAreas.begin(); it != activeWeatherAreas.end(); it++) {
+        (*it)->updateMovementVector(windspeed, globalWindDirection, getWindspeed2FieldRatio());
+	(*it)->update(this, processedFields);        
+    }
+    
     WeatherAreas::iterator medium = weatherAreas.lower_bound(currentTime);
     WeatherAreas::iterator upper = weatherAreas.upper_bound(currentTime);
     for(WeatherAreas::iterator it = medium; it != upper; it++) {
@@ -701,23 +746,12 @@ void WeatherSystem::update() {
     for(WeatherAreas::iterator it = medium; it != upper; it++) {
         weatherAreas.erase(it);
     }
+    
 
-    for(WeatherAreaList::iterator it = activeWeatherAreas.begin(); it != activeWeatherAreas.end(); it++) {
-        if((*it)->getDuration()==0) {
-            WeatherArea* area2Delete = *it;
-            it = activeWeatherAreas.erase(it);
-            area2Delete->removeArea(processedFields);
-            delete area2Delete;
-        }
-    }
-
-    for(WeatherAreaList::iterator it = activeWeatherAreas.begin(); it != activeWeatherAreas.end(); it++) {
-        (*it)->update(this, processedFields);
-        (*it)->updateMovementVector(windspeed, globalWindDirection, getWindspeed2FieldRatio());
-    }
+    
 
 
-    processedFields.clear();
+    processedFields.clear();//vielleicht nach oben
 }
 
 
@@ -785,6 +819,11 @@ Direction WeatherSystem::getNthTurnWindDirection(int turn, GameTime currentTime)
     }
 
     return direction;
+}
+
+const int WeatherSystem::getActiveWeatherAreasSize() const{
+  return activeWeatherAreas.size();
+
 }
 
 void WeatherSystem::write(tnstream& outputStream) const {

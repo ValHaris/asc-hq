@@ -2,81 +2,6 @@
     \brief Interface for all the dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.h,v 1.27.2.2 2005-04-16 13:28:34 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.27.2.1  2004/11/04 22:22:21  mbickel
-//      More integration of new graphics system
-//
-//     Revision 1.27  2004/07/12 18:15:04  mbickel
-//      Lots of tweaks and fixed for more portability and compilation with mingw
-//
-//     Revision 1.26  2004/05/20 14:01:09  mbickel
-//      Many bugfixes and new features, among them:
-//        - Container.FillUnitsAutomatically = 2
-//        - generate Tech Tree
-//        - show research info
-//        - edit research in mapeditor
-//        - limit production to units that can leave a building
-//
-//     Revision 1.25  2003/07/06 15:10:26  mbickel
-//      Better configure messages
-//      code cleanup
-//      Replays update resources for constructing / removing objects
-//
-//     Revision 1.24  2002/11/20 20:00:53  mbickel
-//      New features: specify passwords when starting a game
-//      Better error messages when loading a game through command line parameters
-//      Fixed .ASCTXT problems with alias and inheritance
-//
-//     Revision 1.23  2002/03/14 18:14:37  mbickel
-//      Improved messages for proposing peace
-//      Fixed display error when enterering passwords
-//
-//     Revision 1.22  2002/03/03 14:13:48  mbickel
-//      Some documentation updates
-//      Soundsystem update
-//      AI bug fixed
-//
-//     Revision 1.21  2002/02/21 17:06:50  mbickel
-//      Completed Paragui integration
-//      Moved mail functions to own file (messages)
-//
-//     Revision 1.20  2001/10/11 10:41:06  mbickel
-//      Restructured platform fileio handling
-//      Added map archival information to mapeditor
-//
-//     Revision 1.19  2001/10/02 14:06:28  mbickel
-//      Some cleanup and documentation
-//      Bi3 import tables now stored in .asctxt files
-//      Added ability to choose amoung different BI3 import tables
-//      Added map transformation tables
-//
-//     Revision 1.18  2001/02/01 22:48:36  mbickel
-//      rewrote the storing of units and buildings
-//      Fixed bugs in bi3 map importing routines
-//      Fixed bugs in AI
-//      Fixed bugs in mapeditor
-//
-//     Revision 1.17  2001/01/31 14:52:35  mbickel
-//      Fixed crashes in BI3 map importing routines
-//      Rewrote memory consistency checking
-//      Fileselect dialog now uses ASCStrings
-//
-//     Revision 1.16  2001/01/28 14:04:11  mbickel
-//      Some restructuring, documentation and cleanup
-//      The resource network functions are now it their own files, the dashboard
-//       as well
-//      Updated the TODO list
-//
-//     Revision 1.15  2001/01/21 12:48:35  mbickel
-//      Some cleanup and documentation
-//
-//     Revision 1.14  2000/11/29 09:40:18  mbickel
-//      The mapeditor has now two maps simultaneously active
-//      Moved memorychecking functions to its own file: memorycheck.cpp
-//      Rewrote password handling in ASC
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -128,9 +53,11 @@ extern void  setupalliances( int supervisor = 0 );
 
    
 extern void  vehicle_information ( const Vehicletype* type = NULL);
+
+extern void displaymessage2( const char* formatstring, ... );
    
 //! displays a message in the message line
-extern int   dispmessage2(int          id,
+extern void  dispmessage2(int          id,
                           char *       st = NULL );
    
 //! loads all messages from the files message?.txt

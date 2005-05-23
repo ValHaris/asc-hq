@@ -5,6 +5,7 @@
 
 #include "ASCStringHelpers.h"
 #include <stdexcept>      // for range_error
+#include <stdarg.h>
 
 using std::range_error;
 
@@ -77,6 +78,7 @@ public:
 
     // Printing and formating helpers.
     ASCString&  format     ( const charT* pFormat, ... );
+    ASCString&  vaformat     ( const charT* pFormat, va_list ap );
     void        printf     ();
     
     // convenience functions
