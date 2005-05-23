@@ -648,9 +648,13 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
         // If we're at the goal, then exit
         for ( vector<MapCoordinate3D>::const_iterator i = B.begin(); i != B.end(); i++ )
            if( N.h == *i ) {
-              found = true;
-              endpos = N.h;
-              break;
+              pfield fld = actmap->getField(N.h);
+              if ( N.h.getNumericalHeight() == -1 || !(fld->building || fld->vehicle)) {
+                 found = true;
+                 endpos = N.h;
+                 break;
+              }
+
            }
         if ( found )
            break;
