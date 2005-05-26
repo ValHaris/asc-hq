@@ -556,11 +556,9 @@ char* rotatepict ( void* image, int organgle )
    float angle = ((float)organgle) / 360 * 2 * pi + pi;
 
    char* dst = new char[ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-   dst[0] = fieldxsize-1;
-   dst[1] = 0;
-
-   dst[2] = fieldysize-1;
-   dst[3] = 0;
+   Uint16* wp = (Uint16*) dst;
+   wp[0] = fieldxsize-1;
+   wp[1] = fieldysize-1;
 
    char* pnt  = dst + 4;
 
@@ -619,11 +617,9 @@ char* rotatepict_grw ( void* image, int organgle )
    int d = int(sqrt(double(fieldxsize*fieldxsize + fieldysize*fieldysize )));
 
    char* dst = new char[ imagesize ( 0, 0, d,d ) ];
-   dst[0] = d-1;
-   dst[1] = 0;
-
-   dst[2] = d-1;
-   dst[3] = 0;
+   Uint16* wp = (Uint16*) dst;
+   wp[0] = d-1;
+   wp[1] = d-1;
 
    char* pnt  = dst + 4;
 
