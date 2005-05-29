@@ -64,6 +64,9 @@ public:
     int compare_ci ( const charT* pS ) const;
     int compare_ci ( size_type p0, size_type n0, const charT* pS, size_type pos ) const;
 
+    //! converts the parameter to a String
+    static ASCString toString(int i );
+
     // Case-manipulation helpers
     ASCString&  toLower    ();
     ASCString&  toUpper    ();

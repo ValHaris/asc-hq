@@ -167,3 +167,10 @@ ASCString copytoUpper ( const ASCString& String )
     return l_TempString;
 }
 
+ASCString ASCString::toString(int i )
+{
+   ASCString s;
+   s.format("%d",i);
+   return s;
+}
+

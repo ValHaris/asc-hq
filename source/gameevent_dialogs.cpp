@@ -136,9 +136,9 @@ void         tgetxy::init(void)
    addbutton("~C~ancel",120,ysize - 40,200,ysize - 20,0,1,2,true);
    addbutton("~M~ap",220,ysize - 40,300,ysize - 20,0,1,3,true);
    addbutton("~X~-Pos",20,60,150,80,2,1,4,true);
-   addeingabe(4,&x,0,actmap->xsize - 1);
+   addeingabe(4,&x,-1,actmap->xsize - 1);
    addbutton("~Y~-Pos",170,60,300,80,2,1,5,true);
-   addeingabe(5,&y,0,actmap->ysize - 1);
+   addeingabe(5,&y,-1,actmap->ysize - 1);
 
    buildgraphics();
 
@@ -198,8 +198,11 @@ void         getxy( int *x, int *y)
    ce.y = *y ;
    ce.init();
    ce.run();
-   *x = ce.x;
-   *y = ce.y;
+   if ( ce.x != 50000 )
+   {
+      *x = ce.x;
+      *y = ce.y;
+   }
    ce.done();
 }
 

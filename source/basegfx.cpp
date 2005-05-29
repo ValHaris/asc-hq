@@ -1525,7 +1525,7 @@ TrueColorImage* getimage ( int x1, int y1, int x2, int y2 )
      for ( int x = 0; x < tci->getxsize(); x++ ) {
         trgbpixel t;
         t.rgb = getpixel ( x1 + x, y1 + y );
-        if ( t.rgb == TCalpha )
+        if ( t.isTransparent() )
            t.channel.a = alphabase;
         tci->setpix ( x, y, t );
      }

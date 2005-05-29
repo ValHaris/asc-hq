@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.131 2005-04-10 19:33:28 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.132 2005-05-29 19:34:19 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -699,7 +699,9 @@ void         pdsetup(void)
    pd.addbutton ( "Resi~z~e mapõR",             act_resizemap );
    pd.addbutton ( "set global ~w~eatherõctrl-W", act_setactweatherglobal );
    pd.addbutton ( "~C~reate ressourcesõctrl+F", act_createresources );
+#ifdef pbpeditor
    pd.addbutton ( "~S~et turn number",        act_setTurnNumber );
+#endif
    pd.addbutton ( "~E~dit technologies",          act_editResearch );
    pd.addbutton ( "edit ~R~search points",          act_editResearchPoints );
    pd.addbutton ( "edit ~T~ech adapter",          act_editTechAdapter );
@@ -717,6 +719,8 @@ void         pdsetup(void)
    pd.addbutton ( "Com~p~are Resources ", act_displayResourceComparison );
    pd.addbutton ( "Show Pipeline Net", act_showPipeNet );
    pd.addbutton ( "Generate Tech Tree", act_generateTechTree );
+   pd.addbutton ( "Show Player Strength", act_playerStrengthSummary );
+
 
    pd.addfield ("~O~ptions");
     pd.addbutton ( "~M~ap valuesõctrl+M",          act_changemapvals );
