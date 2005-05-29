@@ -134,6 +134,9 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
 			<File
+				RelativePath="..\..\..\asc-mainscreen.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\ascstring.cpp">
 			</File>
 			<File
@@ -252,6 +255,9 @@
 				RelativePath="..\..\..\mapdisplay.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\mapfield.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\mappolygons.cpp">
 			</File>
 			<File
@@ -277,6 +283,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\newfont.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\objects.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\objecttype.cpp">

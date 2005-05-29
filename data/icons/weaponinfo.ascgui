@@ -272,7 +272,7 @@ panel {
         name = move_shoot
         x = 0
         y = 0
-        widgetnum = 3
+        widgetnum = 4
         widget0 {
           type = TextOutput
           textalign = CENTER        
@@ -293,11 +293,23 @@ panel {
        } widget1
        widget2 {
          type = StaticText
-         x = 190
-         y = 6
-         height = 7
+         x = 170
+         y = 5
+         TextAlign = LEFT
+         FontColor = 0xcfcfcf
+         Fontsize = 9
+         height = 10
          text = unit can ahoot after moving
        } widget2
+        widget3 {
+         type = StaticText
+         x = 435
+         y = 5
+         TextAlign = LEFT
+         FontColor = 0xcfcfcf
+         height = 10
+         text = unit can move after shooting
+       } widget3
       } widget0
 
        widget1 {
@@ -305,7 +317,9 @@ panel {
         name = Effictiency_info
         x = 0
         y = 0
-        widgetnum = 5
+        FontSize = 8        
+        FontColor = 0xfac914
+        widgetnum = 6
         widget0 {
           type = image
           x = 343
@@ -703,6 +717,233 @@ panel {
               name = weapon_efficiency_heavy_ship
             } widget17
           } widget4
+          widget5 {
+            type = dummy
+            x = 0
+            y = 0
+            widgetnum = 22
+            widget0 {
+              type = StaticText
+              x = 355
+              y = 58
+              TextAlign = LEFT
+              FontColor = 0xcfcfcf
+              FontSize = 9
+              height = 10
+              text = weapon type
+            } widget0
+            widget1 {
+              type = StaticText
+              x = 141
+              y = 86
+              TextAlign = LEFT
+              FontColor = 0xcfcfcf
+              FontSize = 9
+              height = 10
+              text = height difference
+            } widget1
+            widget2 {
+              type = StaticText
+              x = 141
+              y = 97
+              TextAlign = LEFT
+              FontColor = 0xcfcfcf
+              height = 10
+              text = weapon efficiency
+            } widget2
+            widget3 {
+              type = StaticText
+              x = 351
+              y = 117
+              TextAlign = LEFT
+              FontColor = 0xcfcfcf
+              height = 10
+              text = weapon can hit
+            } widget3
+            widget4 {
+              type = StaticText
+              x = 127
+              y = 133
+              TextAlign = RIGHT
+              FontColor = 0xcfcfcf
+              width = 120
+              height = 10
+              text = default
+            } widget4
+            widget5 {
+              type = StaticText
+              x = 127
+              y = 145
+              TextAlign = RIGHT
+              FontColor = 0xcfcfcf
+              width = 120
+              height = 10
+              text = trooper
+            } widget5
+            widget6 {
+              type = StaticText
+              x = 127
+              y = 157
+              TextAlign = RIGHT
+              FontColor = 0xcfcfcf
+              width = 120
+              height = 10
+              text = rail vehicle
+            } widget6
+            widget7 {
+              type = StaticText
+              x = 127
+              y = 169
+              TextAlign = RIGHT
+              FontColor = 0xcfcfcf
+              width = 120
+              height = 10
+              text = building-turret-object
+            } widget7
+            widget8 {
+              type = StaticText
+              x = 127
+              y = 181
+              TextAlign = RIGHT
+              FontColor = 0xcfcfcf
+              width = 120
+              height = 10
+              text = hoovercraft
+            } widget8
+            widget9 {
+              type = StaticText
+              x = 127
+              y = 193
+              TextAlign = RIGHT
+              FontColor = 0xcfcfcf
+              width = 120
+              height = 10
+              text = helicopter
+            } widget9
+
+            widget10 {
+              type = StaticText
+              x = 304
+              y = 133
+              TextAlign = RIGHT
+              FontColor = 0xcfcfcf
+              width = 120
+              height = 10
+              text = light wheeled vehicle
+            } widget10
+            widget11 {
+              type = StaticText
+              x = 304
+              y = 145
+              TextAlign = RIGHT
+              FontColor = 0xcfcfcf
+              width = 120
+              height = 10
+              text = light tracked vehicle
+            } widget11
+            widget12 {
+              type = StaticText
+              x = 304
+              y = 157
+              TextAlign = RIGHT
+              FontColor = 0xcfcfcf
+              width = 120
+              height = 10
+              text = medium wheeled vehicle
+            } widget12
+            widget13 {
+              type = StaticText
+              x = 304
+              y = 169
+              TextAlign = RIGHT
+              FontColor = 0xcfcfcf
+              width = 120
+              height = 10
+              text = medium tracked vehicle
+            } widget13
+            widget14 {
+              type = StaticText
+              x = 304
+              y = 181
+              TextAlign = RIGHT
+              FontColor = 0xcfcfcf
+              width = 120
+              height = 10
+              text = heavy wheeled vehicle
+            } widget14
+            widget15 {
+              type = StaticText
+              x = 304
+              y = 193
+              TextAlign = RIGHT
+              FontColor = 0xcfcfcf
+              width = 120
+              height = 10
+              text = heavy tracked vehicle
+            } widget15
+
+            widget16 {
+              type = StaticText
+              x = 467
+              y = 133
+              TextAlign = RIGHT
+              FontColor = 0xcfcfcf
+              width = 120
+              height = 10
+              text = light aircraft
+            } widget16
+            widget17 {
+              type = StaticText
+              x = 467
+              y = 145
+              TextAlign = RIGHT
+              FontColor = 0xcfcfcf
+              width = 120
+              height = 10
+              text = medium aircraft
+            } widget17
+            widget18 {
+              type = StaticText
+              x = 467
+              y = 157
+              TextAlign = RIGHT
+              FontColor = 0xcfcfcf
+              width = 120
+              height = 10
+              text = heavy aircraft
+            } widget18
+            widget19 {
+              type = StaticText
+              x = 467
+              y = 169
+              TextAlign = RIGHT
+              FontColor = 0xcfcfcf
+              width = 120
+              height = 10
+              text = light ship
+            } widget19
+            widget20 {
+              type = StaticText
+              x = 467
+              y = 181
+              TextAlign = RIGHT
+              FontColor = 0xcfcfcf
+              width = 120
+              height = 10
+              text = medium ship
+            } widget20
+            widget21 {
+              type = StaticText
+              x = 467
+              y = 193
+              TextAlign = RIGHT
+              FontColor = 0xcfcfcf
+              width = 120
+              height = 10
+              text = heavy ship
+            } widget21
+
+          } widget5  
 
        } widget1
 
