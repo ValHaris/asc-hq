@@ -342,7 +342,7 @@ struct trgbpixel {
 #if SDL_BYTEORDER == SDL_LIL_ENDIAN
 #define TCalpha 0xfefefe
 #else
-#define TCalpha 0xfefefe00
+#define TCalpha 0xfefefe
 #endif
 
 //! A class for a RGB image. Was an attempt to rewrite the graphics engine, but should be scrapped. Any new code should use SDLmm-Surfaces.
