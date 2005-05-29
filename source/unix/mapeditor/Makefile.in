@@ -84,7 +84,8 @@ am__DEPENDENCIES_1 =
 asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
 	$(top_builddir)/source/libs/triangul/libtriangul.la \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la
+	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
+	$(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -223,7 +224,7 @@ MAINTAINERCLEANFILES = Makefile.in
 INCLUDES = -I$(top_builddir) -I$(top_src_dir) \
 			  -I$(top_builddir)/source -I$(top_src_dir)/source
 
-AM_CXXFLAGS = @SDL_CFLAGS@ -Dkarteneditor -DNEWKEYB @PARAGUI_CFLAGS@ @SIGC_CFLAGS@
+AM_CXXFLAGS = $(SDL_CFLAGS) -Dkarteneditor -DNEWKEYB $(PARAGUI_CFLAGS) $(SIGC_CFLAGS)
 #asc_map2pcx
 asc_mapedit_SOURCES = edevents.cpp edgen.cpp edglobal.cpp edmain.cpp \
 edselfnt.cpp edmisc.cpp typen.cpp strtmesg.cpp stack.cpp \
@@ -242,7 +243,8 @@ gameevent_dialogs.cpp clipboard.cpp
 
 asc_mapedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \
-$(PARAGUI_LIBS) $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la
+$(PARAGUI_LIBS) $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
+$(SDL_LIBS)
 
 all: all-am
 

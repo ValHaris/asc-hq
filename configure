@@ -25325,7 +25325,7 @@ if test "${enable_debug+set}" = set; then
   ENABLEDEBUG=1
 fi;
 if test "X$ENABLEDEBUG" = "X1"; then
-   CXXFLAGS="$CXXFLAGS -g3"
+   CXXFLAGS="$CXXFLAGS -g3 -O0"
    echo SDL_CFLAGS $SDL_CFLAGS
    echo SDL_LIBS $SDL_LIBS
    echo PARAGUI_CFLAGS $PARAGUI_CFLAGS

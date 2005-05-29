@@ -7,7 +7,7 @@ INCLUDES		= -I$(top_builddir) -I$(top_src_dir) \
 
 SUBDIRS 		= 
 
-AM_CXXFLAGS 		= @SDL_CFLAGS@ -Dsgmain  -DNEWKEYB @PARAGUI_CFLAGS@  @SIGC_CFLAGS@
+AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dsgmain  -DNEWKEYB $(PARAGUI_CFLAGS)  $(SIGC_CFLAGS)
 
 bin_PROGRAMS		= asc
 
@@ -28,5 +28,4 @@ gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp
 
 asc_LDADD   		= $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-$(top_builddir)/source/sdl/libsdl.la @PARAGUI_LIBS@ \
-@LDADDLIBBZ2@  @SIGC_LIBS@
+$(top_builddir)/source/sdl/libsdl.la $(PARAGUI_LIBS) @LDADDLIBBZ2@  $(SIGC_LIBS) $(SDL_LIBS)

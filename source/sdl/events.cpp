@@ -506,7 +506,7 @@ void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mou
    SDL_EnableUNICODE ( 1 );
    SDL_EnableKeyRepeat ( 250, 30 );
 
-#ifdef _WIN32_
+#if defined(_WIN32_) | defined(MACOSX)
    _gamethread = gamethread;
    secondThreadHandle = SDL_CreateThread ( gameThreadWrapper, data );
    eventthread( NULL );

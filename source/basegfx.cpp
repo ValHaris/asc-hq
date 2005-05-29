@@ -760,9 +760,11 @@ int getpixel(int x1, int y1)
    else {
       if ( agmp->windowstatus == 100 ) {
          char* pc = (char*) ( agmp->linearaddress + x1 * agmp->byteperpix + y1 * agmp->scanlinelength );
-         return pc[ agmp->redfieldposition/8 ] + 
-              ( pc[ agmp->greenfieldposition/8 ] << 8 ) + 
-              ( pc[ agmp->bluefieldposition/8 ] << 16 );
+         trgbpixel pix;
+         pix.channel.r = pc[ agmp->redfieldposition/8 ];
+         pix.channel.g = pc[ agmp->greenfieldposition/8 ];
+         pix.channel.b = pc[ agmp->bluefieldposition/8 ];
+         return pix.rgb;
       } else {
         return -1;
       }
@@ -1511,6 +1513,10 @@ void putimage_noalpha ( int x1, int y1, TrueColorImage* tci )
      }
 }
 
+bool trgbpixel::isTransparent()
+{
+   return ( channel.r == 0xfe && channel.g == 0xfe && channel.b == 0xfe ) ;
+}
 
 TrueColorImage* getimage ( int x1, int y1, int x2, int y2 )
 {

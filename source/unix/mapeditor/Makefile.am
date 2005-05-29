@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.21 2004-09-26 19:53:21 mbickel Exp $
+## $Id: Makefile.am,v 1.22 2005-05-29 15:42:28 mbickel Exp $
 
 vpath %.cpp ../..
 
@@ -9,7 +9,7 @@ MAINTAINERCLEANFILES	= Makefile.in
 INCLUDES		= -I$(top_builddir) -I$(top_src_dir) \
 			  -I$(top_builddir)/source -I$(top_src_dir)/source
 
-AM_CXXFLAGS 		= @SDL_CFLAGS@ -Dkarteneditor -DNEWKEYB @PARAGUI_CFLAGS@ @SIGC_CFLAGS@
+AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dkarteneditor -DNEWKEYB $(PARAGUI_CFLAGS) $(SIGC_CFLAGS)
 
 bin_PROGRAMS 		= asc_mapedit
 #asc_map2pcx
@@ -31,7 +31,9 @@ gameevent_dialogs.cpp clipboard.cpp
 
 asc_mapedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \
-$(PARAGUI_LIBS) $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la
+$(PARAGUI_LIBS) $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
+$(SDL_LIBS)
+
 
 #asc_map2pcx_SOURCES	= map2pcx.cpp typen.cpp strtmesg.cpp \
 #stack.cpp spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp \

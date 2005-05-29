@@ -327,12 +327,23 @@ struct trgbpixel {
        public:
          union {
             int rgb;
+            #if SDL_BYTEORDER == SDL_LIL_ENDIAN
             struct { char r,g,b,a;  }channel;
+            #else
+            struct { char a,b,g,r;  }channel;
+            #endif
           };
        //    mix ( const trgbpixel* pix );
+          bool isTransparent();
         };
 
 #define alphabase 64
+
+#if SDL_BYTEORDER == SDL_LIL_ENDIAN
+#define TCalpha 0xfefefe
+#else
+#define TCalpha 0xfefefe00
+#endif
 
 //! A class for a RGB image. Was an attempt to rewrite the graphics engine, but should be scrapped. Any new code should use SDLmm-Surfaces.
 class TrueColorImage {
@@ -351,8 +362,6 @@ class TrueColorImage {
          ~TrueColorImage();
 
    };
-
-#define TCalpha 0xfefefe
 
 //! changes an images size. The source image (in buf) is 8-bit with palette pal .
 extern TrueColorImage* zoomimage ( void* buf, int xsize, int ysize, dacpalette256 pal, int interpolate = 1, int proportional = 1 );

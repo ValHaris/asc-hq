@@ -80,11 +80,13 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	gameevent_dialogs.$(OBJEXT) statisticdialog.$(OBJEXT) \
 	clipboard.$(OBJEXT)
 asc_OBJECTS = $(am_asc_OBJECTS)
+am__DEPENDENCIES_1 =
 asc_DEPENDENCIES =  \
 	$(top_builddir)/source/libs/triangul/libtriangul.la \
 	$(top_builddir)/source/ai/libai.la \
 	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-	$(top_builddir)/source/sdl/libsdl.la
+	$(top_builddir)/source/sdl/libsdl.la $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -231,7 +233,7 @@ INCLUDES = -I$(top_builddir) -I$(top_src_dir) \
 			  -I$(top_builddir)/source -I$(top_src_dir)/source
 
 SUBDIRS = 
-AM_CXXFLAGS = @SDL_CFLAGS@ -Dsgmain  -DNEWKEYB @PARAGUI_CFLAGS@  @SIGC_CFLAGS@
+AM_CXXFLAGS = $(SDL_CFLAGS) -Dsgmain  -DNEWKEYB $(PARAGUI_CFLAGS)  $(SIGC_CFLAGS)
 asc_SOURCES = unitctrl.cpp soundList.cpp typen.cpp \
 strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp pd.cpp palette.cpp \
 newfont.cpp network.cpp misc.cpp loadpcxc.cpp loaders.cpp \
@@ -249,8 +251,7 @@ gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp
 
 asc_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-$(top_builddir)/source/sdl/libsdl.la @PARAGUI_LIBS@ \
-@LDADDLIBBZ2@  @SIGC_LIBS@
+$(top_builddir)/source/sdl/libsdl.la $(PARAGUI_LIBS) @LDADDLIBBZ2@  $(SIGC_LIBS) $(SDL_LIBS)
 
 all: all-recursive
 
