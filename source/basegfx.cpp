@@ -764,6 +764,7 @@ int getpixel(int x1, int y1)
          pix.channel.r = pc[ agmp->redfieldposition/8 ];
          pix.channel.g = pc[ agmp->greenfieldposition/8 ];
          pix.channel.b = pc[ agmp->bluefieldposition/8 ];
+         pix.channel.a = 0;
          return pix.rgb;
       } else {
         return -1;

@@ -433,11 +433,13 @@ AI::AiResult AI::buildings( int process )
 
       for ( int j= 0; j < 32; j++ ) {
          pvehicle veh = bc.getloadedunit ( j );
-         if ( veh )
+         if ( veh ) {
+            displaymessage2("processing building %d (unit %d)", buildingCounter, j );
             if ( veh->aiparam[ getPlayerNum() ]->getJob() != AiParameter::job_supply )
                bc.refill.resource ( veh, Resources::Fuel, maxint );
             else
                bc.refill.filleverything( veh );
+         }
       }
 
       result += container ( bc );
