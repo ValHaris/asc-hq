@@ -72,6 +72,8 @@
     public:
       int                id;
       ASCString          name;
+      ASCString          getName() { return name; };
+      
       class MoveMalus: public vector<int> {
          public: MoveMalus();
            #ifdef _vector_at_broken_
@@ -101,9 +103,6 @@
 
           //! the movement cost for the various units to move across this field
           TerrainType::MoveMalus   move_malus;
-
-          //! displays the image on the screen coordinates x1/y1
-          void           paint ( SPoint pos );
 
           //! displays the image on the screen coordinates x1/y1
           void           paint ( Surface& s, SPoint pos );

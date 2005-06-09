@@ -62,27 +62,28 @@ am_asc_mapedit_OBJECTS = edevents.$(OBJEXT) edgen.$(OBJEXT) \
 	misc.$(OBJEXT) loadpcxc.$(OBJEXT) loaders.$(OBJEXT) \
 	loadbi3.$(OBJEXT) dlg_box.$(OBJEXT) dialog.$(OBJEXT) \
 	basestrm.$(OBJEXT) basegfx.$(OBJEXT) attack.$(OBJEXT) \
-	gameoptions.$(OBJEXT) buildingtype.$(OBJEXT) \
-	vehicletype.$(OBJEXT) containerbase.$(OBJEXT) \
-	mapalgorithms.$(OBJEXT) viewcalculation.$(OBJEXT) \
-	gamemap.$(OBJEXT) password.$(OBJEXT) password_dialog.$(OBJEXT) \
-	research.$(OBJEXT) mapdisplay.$(OBJEXT) ascstring.$(OBJEXT) \
-	graphicset.$(OBJEXT) vehicle.$(OBJEXT) buildings.$(OBJEXT) \
-	networkdata.$(OBJEXT) resourcenet.$(OBJEXT) \
-	textfileparser.$(OBJEXT) terraintype.$(OBJEXT) \
-	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
-	itemrepository.$(OBJEXT) stringtokenizer.$(OBJEXT) \
-	music.$(OBJEXT) messages.$(OBJEXT) paradialog.$(OBJEXT) \
-	textfile_evaluation.$(OBJEXT) containerbasetype.$(OBJEXT) \
-	soundList.$(OBJEXT) simplestream.$(OBJEXT) \
-	mappolygons.$(OBJEXT) prehistoricevents.$(OBJEXT) \
-	gameevents.$(OBJEXT) gameeventsystem.$(OBJEXT) \
-	gameevent_dialogs.$(OBJEXT) clipboard.$(OBJEXT) \
-	resourceplacement.$(OBJEXT) resourceplacementdialog.$(OBJEXT) \
-	geometry.$(OBJEXT) weatherarea.$(OBJEXT) \
-	guidimension.$(OBJEXT) weatherdialog.$(OBJEXT) \
-	iconrepository.$(OBJEXT) overviewmapimage.$(OBJEXT) \
-	mapfield.$(OBJEXT) objects.$(OBJEXT)
+	gameoptions.$(OBJEXT) maped-mainscreen.$(OBJEXT) \
+	buildingtype.$(OBJEXT) vehicletype.$(OBJEXT) \
+	containerbase.$(OBJEXT) mapalgorithms.$(OBJEXT) \
+	viewcalculation.$(OBJEXT) gamemap.$(OBJEXT) password.$(OBJEXT) \
+	password_dialog.$(OBJEXT) research.$(OBJEXT) \
+	mapdisplay.$(OBJEXT) ascstring.$(OBJEXT) graphicset.$(OBJEXT) \
+	vehicle.$(OBJEXT) buildings.$(OBJEXT) networkdata.$(OBJEXT) \
+	resourcenet.$(OBJEXT) textfileparser.$(OBJEXT) \
+	terraintype.$(OBJEXT) objecttype.$(OBJEXT) \
+	textfiletags.$(OBJEXT) itemrepository.$(OBJEXT) \
+	stringtokenizer.$(OBJEXT) music.$(OBJEXT) messages.$(OBJEXT) \
+	paradialog.$(OBJEXT) textfile_evaluation.$(OBJEXT) \
+	containerbasetype.$(OBJEXT) soundList.$(OBJEXT) \
+	simplestream.$(OBJEXT) mappolygons.$(OBJEXT) \
+	prehistoricevents.$(OBJEXT) gameevents.$(OBJEXT) \
+	gameeventsystem.$(OBJEXT) gameevent_dialogs.$(OBJEXT) \
+	clipboard.$(OBJEXT) resourceplacement.$(OBJEXT) \
+	resourceplacementdialog.$(OBJEXT) geometry.$(OBJEXT) \
+	weatherarea.$(OBJEXT) guidimension.$(OBJEXT) \
+	weatherdialog.$(OBJEXT) iconrepository.$(OBJEXT) \
+	overviewmapimage.$(OBJEXT) mapfield.$(OBJEXT) \
+	objects.$(OBJEXT) overviewmappanel.$(OBJEXT)
 asc_mapedit_OBJECTS = $(am_asc_mapedit_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
@@ -236,7 +237,7 @@ asc_mapedit_SOURCES = edevents.cpp edgen.cpp edglobal.cpp edmain.cpp \
 edselfnt.cpp edmisc.cpp typen.cpp strtmesg.cpp stack.cpp \
 spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp \
 loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp \
-attack.cpp gameoptions.cpp \
+attack.cpp gameoptions.cpp maped-mainscreen.cpp \
 buildingtype.cpp vehicletype.cpp containerbase.cpp \
 mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp \
 password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
@@ -247,7 +248,7 @@ textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
 mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
 geometry.cpp weatherarea.cpp guidimension.cpp weatherdialog.cpp \
-iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp
+iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp
 
 asc_mapedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \
@@ -358,6 +359,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadpcxc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapalgorithms.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapdisplay.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/maped-mainscreen.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapfield.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mappolygons.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messages.Po@am__quote@
@@ -368,6 +370,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/objects.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/objecttype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/overviewmapimage.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/overviewmappanel.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/palette.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/paradialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password.Po@am__quote@

@@ -986,12 +986,9 @@ void         teventsel::run(void)
 void         event(void)
 { teventsel    te;
 
-   cursor.hide();
    te.init();
    te.run();
    te.done();
-   ch = 0;
-   cursor.show();
 }
 
 

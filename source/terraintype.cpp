@@ -110,10 +110,12 @@ TerrainType::TerrainType()
 
 }
 
+/*
 void      TerrainType::Weather::paint ( SPoint pos )
 {
    paint( getActiveSurface(), pos );
 }
+*/
 
 void      TerrainType::Weather::paint ( Surface& s, SPoint pos )
 {

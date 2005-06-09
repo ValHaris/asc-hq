@@ -4044,6 +4044,7 @@ void tprogressbar :: writetostream ( pnstream stream )
 }
 
 
+
 class tchoosezoomlevel : public tdialogbox {
              protected:
                 int zoom;
@@ -4060,14 +4061,14 @@ void tchoosezoomlevel :: init ( void )
    title = "choose zoomlevel";
    xsize = 200;
    ysize = 150;
-   zoom = zoomlevel.getzoomlevel();
+//   zoom = zoomlevel.getzoomlevel();
    ok = 0;
 
    addbutton ( "~O~k", 10, ysize - 30, xsize - 10, ysize - 10 , 0, 1, 1, true );
    addkey ( 1, ct_enter );
 
    addbutton ( "", 10, 60, xsize - 10, 85                     , 2, 1, 2, true );
-   addeingabe ( 2, &zoom, zoomlevel.getminzoom(), zoomlevel.getmaxzoom() );
+   // addeingabe ( 2, &zoom, zoomlevel.getminzoom(), zoomlevel.getmaxzoom() );
    addkey ( 1, ct_space );
 
    buildgraphics();
@@ -4092,7 +4093,7 @@ void tchoosezoomlevel :: run ( void )
    do {
       tdialogbox::run();
    } while ( !ok ); 
-   zoomlevel.setzoomlevel ( zoom );
+//   zoomlevel.setzoomlevel ( zoom );
 
 };
 

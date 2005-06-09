@@ -69,10 +69,13 @@ SigC::Signal0<void> viewChanged;
 SigC::Signal0<bool> idleEvent;
 
 
-#ifndef sgmain
-   tcursor            cursor;
-#endif
-   
+
+void displaymap()
+{
+   repaintMap();
+}   
+
+  
    pmap              actmap;
 
    Schriften schriften;
@@ -263,280 +266,6 @@ pfield        getfield(int          x,
 
 
 
-
-
-#ifndef sgmain
-
-int getxpos(void)
-{ 
-   return cursor.posx + actmap->xpos; 
-} 
-
-
-int getypos(void)
-{
-   return cursor.posy + actmap->ypos;
-}
-
-
-
-
-#include "movecurs.inc"      
-
-
-
-void         tcursor::init ( void )
-{
-   actpictwidth = 0;
-
-   backgrnd = new int [  imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-
-   {
-      tnfilestream iconl ( "markedfield.pcx", tnstream::reading );
-      SDLmm::Surface markedField ( IMG_Load_RW( SDL_RWFromStream ( &iconl ), true ));
-
-      cursor.markfield = convertSurface ( markedField, false );
-   }
-
-   {
-      int w;
-      tnfilestream stream ( "curshex.raw", tnstream::reading );
-      stream.readrlepict ( &cursor.orgpicture, false, &w);
-      void* newpic = uncompress_rlepict ( cursor.orgpicture );
-      if ( newpic ) {
-         delete[] cursor.orgpicture ;
-         cursor.orgpicture = newpic;
-      }
-   }
-
-   int h,w;
-   getpicsize ( orgpicture, w, h );
-   actpictwidth = w;
-   picture = new char [ getpicsize2 ( orgpicture )];
-   memcpy ( picture, orgpicture, getpicsize2 ( orgpicture ));
-
-   posx = 0;
-   posy = 0;
-   oposx = 0;
-   oposy = 0;
-}
-
-void  tcursor :: checksize ( void )
-{
-   int actwidth = idisplaymap.getfieldsizex();
-   if ( actpictwidth != actwidth ) {
-      delete[] picture;
-
-      TrueColorImage* zimg = zoomimage ( orgpicture, idisplaymap.getfieldsizex(), idisplaymap.getfieldsizey(), pal, 0 );
-      picture = convertimage ( zimg, pal ) ;
-      delete zimg;
-
-      int h;
-      getpicsize ( picture, actpictwidth, h );
-
-   }
-}
-
-
-void       tcursor::reset ( void )
-{
-   if (an) hide();
-   posx = 0; 
-   posy = 0; 
-   oposx = 0; 
-   oposy = 0; 
-
-}
-
-
-void       tcursor::getimg ( void )
-{
-     int xp = idisplaymap.getfieldposx( posx, posy );
-     int yp = idisplaymap.getfieldposy( posx, posy );
-
-     if (agmp-> linearaddress != hgmp-> linearaddress ) {
-        npush(*agmp);
-        *agmp = *hgmp;
-        getimage(xp, yp, xp + idisplaymap.getfieldsizex(), yp + idisplaymap.getfieldsizey(), backgrnd );
-        npop (*agmp);
-     } else {
-        getimage(xp, yp, xp + idisplaymap.getfieldsizex(), yp + idisplaymap.getfieldsizey(), backgrnd );
-     } /* endif */
-}
-
-void       tcursor::putbkgr ( void )
-{
-     int xp = idisplaymap.getfieldposx( posx, posy );
-     int yp = idisplaymap.getfieldposy( posx, posy );
-
-     collategraphicoperations cgo ( xp, yp, xp + fieldxsize, yp + fieldysize );
-     if (agmp-> linearaddress != hgmp-> linearaddress ) {
-        npush( *agmp );
-        *agmp = *hgmp;
-        putimage(xp, yp, backgrnd );
-        npop ( *agmp );
-     } else {
-        putimage(xp, yp, backgrnd );
-     } /* endif */
-}
-
-void       tcursor::putimg ( void )
-{
-     int xp = idisplaymap.getfieldposx( posx, posy );
-     int yp = idisplaymap.getfieldposy( posx, posy );
-
-     checksize();
-
-     collategraphicoperations cgo ( xp, yp, xp + fieldxsize, yp + fieldysize );
-     if (agmp-> linearaddress != hgmp-> linearaddress ) {
-        npush( *agmp );
-        *agmp = *hgmp;
-        putrotspriteimage(xp, yp, picture,color );
-        npop ( *agmp );
-     } else {
-        putrotspriteimage(xp, yp, picture,color );
-     } /* endif */
-}
-
-
-void         tcursor::setcolor( int col )
-{ 
-   color = col; 
-} 
-
-
-int        tcursor::checkposition ( int x, int y )
-{
-   if ( x >= actmap->xsize )
-      x = actmap->xsize - 1;
-   if ( y >= actmap->ysize )
-      y = actmap->ysize - 1;
-
-   int result = 0;
-   int a = actmap->xpos; 
-   int b = actmap->ypos; 
-   int xss = idisplaymap.getscreenxsize();
-   int yss = idisplaymap.getscreenysize();
-
-   if ((x < a) || (x >= a + xss )) { 
-      if (x >= xss / 2) 
-         actmap->xpos = (x - xss / 2); 
-      else 
-         actmap->xpos = 0; 
-
-      result++;
-   } 
-
-   if (y < b   ||   y >= b + yss  ) {
-      if (y >= yss / 2) 
-         actmap->ypos = (y - yss / 2); 
-      else 
-         actmap->ypos = 0; 
-      if ( actmap->ypos & 1 )
-         actmap->ypos--;
-
-      result++;
-   }
-
-   if (actmap->xpos + xss > actmap->xsize) 
-      actmap->xpos = actmap->xsize - xss ; 
-   if (actmap->ypos + yss  > actmap->ysize) 
-      actmap->ypos = actmap->ysize - yss ; 
-
-   if ((actmap->xpos != a) || (actmap->ypos != b)) {
-      displaymap(); 
-      result++;
-   }
-
-   cursor.posx = x - actmap->xpos; 
-   cursor.posy = y - actmap->ypos; 
-
-   return result;
-}
-
-
-int tcursor::gotoxy(int x, int y, int disp)
-{ 
-   if ( x >= actmap->xsize )
-      x = actmap->xsize-1;
-
-   if ( y >= actmap->ysize )
-      y = actmap->ysize-1;
-
-   if ( x < 0 )
-      x = 0;
-
-   if ( y < 0 )
-      y = 0;
-
-   int res = 0;
-   if ( disp || an )
-      cursor.hide(); 
-
-   if ( disp )
-      res = checkposition ( x, y );
-   else {
-      cursor.posx = x - actmap->xpos; 
-      cursor.posy = y - actmap->ypos; 
-   }
-
-   if ( disp )
-      cursor.show(); 
-
-   return res;
-} 
-
-
-
-bool         tcursor::show(void)
-{ 
-   if ( !actmap || actmap->xsize == 0  || actmap->ysize == 0 )
-      return false;
-
-   int ms = getmousestatus (); 
-   if (ms == 2) 
-       mousevisible(false); 
-
-    
-   int poschange = checkposition ( actmap->xpos + posx, actmap->ypos + posy );
-
-   if (  an == false || poschange ) {
-         oposx = posx;
-         oposy = posy;
-
-         getimg();
-         putimg();
-   } 
-      
-   an = true; 
-
-   if (ms == 2)
-      mousevisible(true);
-
-   return poschange > 0;
-}
-
-
-void         tcursor::hide(void)
-{
-   int ms = getmousestatus();
-   if (ms == 2) mousevisible(false);
-   if ( an )
-      putbkgr();
-   an = false;
-   if (ms == 2) mousevisible(true);
-}
-
-void         tcursor::display(void)
-{ 
-      hide(); 
-      oposx = posx;
-      oposy = posy;
-      show(); 
-} 
-
-
-#endif
 
 
 int         getdiplomaticstatus(int         b)
@@ -1160,5 +889,25 @@ VisibilityStates fieldVisibility( const pfield pe, int player )
       return c;
    } else
       return visible_not;
+}
+
+
+
+int getUnitSetID( const Vehicletype* veh )
+{
+   for ( UnitSets::iterator i = unitSets.begin(); i != unitSets.end(); ++i)
+      if ( (*i)->isMember( veh->id, SingleUnitSet::unit) )
+         return (*i)->ID;
+         
+   return -1;
+}
+
+int getUnitSetID( const BuildingType* bld )
+{
+   for ( UnitSets::iterator i = unitSets.begin(); i != unitSets.end(); ++i)
+      if ( (*i)->isMember( bld->id, SingleUnitSet::building) )
+         return (*i)->ID;
+         
+   return -1;
 }
 

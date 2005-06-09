@@ -374,6 +374,15 @@ Surface Surface::createSurface( int width, int height, int depth, SDLmm::Color c
    return s;
 }
 
+void Surface::FillTransparent()
+{
+   if ( GetPixelFormat().BitsPerPixel() == 32 ) {
+      Fill( 0 );
+   } else {
+      Fill( GetPixelFormat().colorkey() );
+   }      
+}
+
 
 void Surface::assignDefaultPalette()
 {

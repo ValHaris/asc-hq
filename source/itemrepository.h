@@ -61,7 +61,7 @@ class ItemRepository: public TextFileDataLoader {
 
    public:
       ItemRepository( const ASCString& typeName_ ) : typeName( typeName_ ) {};
-      T* getObject_byPos( int pos ) { return container[pos]; };
+      T* getObject_byPos( int pos ) const { return container[pos]; };
 
       T* getObject_byID( int id ) { 
          typename ObjectMap::iterator i = hash.find( id );
@@ -75,7 +75,7 @@ class ItemRepository: public TextFileDataLoader {
          return NULL;
       };
 
-      size_t getNum() { return container.size(); };
+      size_t getNum() const { return container.size(); };
       void readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location );
       void read( tnstream& stream );
       void write( tnstream& stream );

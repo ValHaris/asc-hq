@@ -374,6 +374,9 @@ class PixSel : public SourcePixelSelector_CacheZoom<pixelSize, SourcePixelSelect
 
 void MapDisplayPG::updateMap(bool force )
 {
+   if ( !actmap )
+      return;
+      
    if ( dirty > Curs || force )
       fillSurface( actmap->playerView );
 
@@ -462,8 +465,8 @@ void MapDisplayPG::displayCursor()
    if ( !actmap )
       return;
       
-   int x = actmap->player[actmap->playerView].cursorPos.x - offset.x;
-   int y = actmap->player[actmap->playerView].cursorPos.y - offset.y;
+   int x = cursor.pos().x - offset.x;
+   int y = cursor.pos().y  - offset.y;
    if( x >= field.viewPort.x1 && x < field.viewPort.x2 && y >= field.viewPort.y1 && y < field.viewPort.y2 && x >= 0 && y >= 0 && x < actmap->xsize && y < actmap->ysize ) {
       // surface->Blit( icons.cursor, getFieldPos(x,y));
       MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom,TargetPixelSelector_Rect> blitter;
@@ -590,14 +593,14 @@ bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
       return false;
 
    if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == CGameOptions::Instance()->mouse.fieldmarkbutton ) {
-      bool changed = actmap->player[actmap->playerView].cursorPos != mc;
-      actmap->player[actmap->playerView].cursorPos = mc;
+      bool changed = cursor.pos() != mc;
+      cursor.pos() = mc;
       cursor.invisible = 0;
       dirty = Curs;
 
       updateFieldInfo();
 
-      bool exit = mouseButtonOnField( mc, button, changed );
+      bool exit = mouseButtonOnField( mc, SPoint(button->x, button->y), changed );
       Update();
 
       return true;
@@ -609,6 +612,31 @@ bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
 
    return false;
 }
+
+bool MapDisplayPG::eventMouseMotion (const SDL_MouseMotionEvent *button)
+{
+   MapCoordinate mc = screenPos2mapPos( SPoint(button->x, button->y));
+   if ( !(mc.valid() && mc.x < actmap->xsize && mc.y < actmap->ysize ))
+      return false;
+      
+   if ( button->type == SDL_MOUSEMOTION && (button->state == SDL_BUTTON( CGameOptions::Instance()->mouse.fieldmarkbutton) )) {
+      bool changed = cursor.pos() != mc;
+      if ( changed ) {
+         cursor.pos() = mc;
+         cursor.invisible = 0;
+         dirty = Curs;
+   
+         updateFieldInfo();
+   
+         bool exit = mouseDraggedToField( mc, SPoint(button->x, button->y), changed );
+         Update();
+   
+         return true;
+     }
+   }
+   return false;
+}
+
 
 bool MapDisplayPG::eventMouseButtonUp (const SDL_MouseButtonEvent *button)
 {
@@ -1142,17 +1170,32 @@ MapDisplayInterface& getDefaultMapDisplay()
    return *mapDisplay;
 }
 
-    
+
+int lockdisplaymap = 0;
+int showresources = 0;
+
+
+tlockdispspfld :: tlockdispspfld ( void )
+{
+   lockdisplaymap ++;
+}
+
+tlockdispspfld :: ~tlockdispspfld ()
+{
+   lockdisplaymap --;
+}
+
+bool tempsvisible = true;
+
+
+#if 0    
 
 
 
-bool tempsvisible;
 
 extern void repaintdisplay();
 
-int showresources = 0;
 
-int lockdisplaymap = 0;
 
 
 tpaintmapborder* mapborderpainter = NULL;
@@ -2494,15 +2537,6 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, Vehicle* eht, i
 }
 
 
-tlockdispspfld :: tlockdispspfld ( void )
-{
-   lockdisplaymap ++;
-}
-
-tlockdispspfld :: ~tlockdispspfld ()
-{
-   lockdisplaymap --;
-}
 
 
 
@@ -3057,3 +3091,4 @@ int tbackgroundpict :: getlastpaintmode ( void )
 
 #endif
 
+#endif

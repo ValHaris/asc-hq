@@ -566,8 +566,6 @@ void         loadMoreData(void)
          stream.readrlepict (   &icons.weaponinfo[i], false, &w );
    }
 
-   backgroundpict.load();
-
 }
 
 
@@ -1149,16 +1147,8 @@ void execuseraction ( tuseractions action )
          viewterraininfo();
          break;
 
-      case ua_unitweightinfo:
-         if ( fieldvisiblenow  ( getSelectedField() )) {
-            Vehicle* eht = getSelectedField()->vehicle;
-            if ( eht && getdiplomaticstatus ( eht->color ) == capeace )
-               displaymessage(" weight of unit: \n basic: %d\n+cargo:%d\n= %d",1 ,eht->typ->weight, eht->cargo(), eht->weight() );
-         }
-         break;
-
       case ua_writemaptopcx :
-         writemaptopcx ();
+         // writemaptopcx ();
          break;
 
       case ua_writescreentopcx:
@@ -1199,11 +1189,7 @@ void execuseraction ( tuseractions action )
          break;
 
       case ua_exitgame:
-         /*if (choice_dlg("do you really want to quit ?","~y~es","~n~o") == 1)
-            abortgame = 1;
-         else
-            exitprogram = 0;
-            */
+         if (choice_dlg("do you really want to quit ?","~y~es","~n~o") == 1)
             getPGApplication().Quit();
          break;
 
@@ -1356,9 +1342,6 @@ void execuseraction ( tuseractions action )
       case ua_GameParameterInfo:
          showGameParameters();
          break;
-      case ua_GameStatus:
-         displaymessage ( "Current game time is:\n turn %d , move %d ", 3, actmap->time.turn(), actmap->time.move() );
-         break;
       case ua_viewunitweaponrange:
          viewunitweaponrange ( getSelectedField()->vehicle, ct_invvalue );
          break;
@@ -1483,6 +1466,16 @@ void execuseraction2 ( tuseractions action )
 {
    switch ( action ) {
    
+      case ua_unitweightinfo:
+         if ( fieldvisiblenow  ( getSelectedField() )) {
+            Vehicle* eht = getSelectedField()->vehicle;
+            if ( eht && getdiplomaticstatus ( eht->color ) == capeace )
+               displaymessage(" weight of unit: \n basic: %d\n+cargo:%d\n= %d",1 ,eht->typ->weight, eht->cargo(), eht->weight() );
+         }
+         break;
+      case ua_GameStatus:
+         displaymessage ( "Current game time is:\n turn %d , move %d ", 3, actmap->time.turn(), actmap->time.move() );
+         break;
       case ua_soundDialog:
           SoundSettings::soundSettings( NULL );
          break;
@@ -1884,7 +1877,6 @@ int gamethread ( void* data )
    GameThreadParams* gtp = (GameThreadParams*) data;
 
    loadpalette();
-   initMapDisplay( );
 
    int resolx = agmp->resolutionx;
    int resoly = agmp->resolutiony;
@@ -1917,7 +1909,6 @@ int gamethread ( void* data )
    displayLogMessage ( 5, "loaddata completed successfully.\n" );
    setvgapalette256(pal);
 
-   addmouseproc ( &mousescrollproc );
 
    displayLogMessage ( 5, "starting music..." );
    startMusic();
@@ -2029,8 +2020,6 @@ int main(int argc, char *argv[] )
    verbosity = cl->r();
 
    displayLogMessage( 1, getstartupmessage() );
-
-   mapborderpainter = &backgroundpict;
 
    initFileIO( cl->c().c_str() );  // passing the filename from the command line options
 

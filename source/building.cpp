@@ -2746,7 +2746,7 @@ void ccontainer_b :: cammunitiontransferb_subwindow :: execexternalload ( void )
          displaymap ();
          dashboard.x = 0xffff;
          mousevisible( true );
-         addmouseproc ( &mousescrollproc );
+         // addmouseproc ( &mousescrollproc );
 
          do {
 
@@ -2758,9 +2758,11 @@ void ccontainer_b :: cammunitiontransferb_subwindow :: execexternalload ( void )
             // mainloopgeneralmousecheck ();
 
          } while ( moveparams.movestatus==130 ) ;
-         removemouseproc ( &mousescrollproc );
+         // removemouseproc ( &mousescrollproc );
+         /*
          if ( mouseparams.pictpointer != icons.mousepointer )
             setnewmousepointer ( icons.mousepointer, 0,0 );
+            */
 
          mousevisible ( false );
          Vehicle* markedvehicle = NULL;
@@ -2856,7 +2858,7 @@ void  ccontainer :: moveicon_c :: exec         ( void )
 
       dashboard.x = 0xffff;
       mousevisible( true );
-      addmouseproc ( &mousescrollproc );
+//      addmouseproc ( &mousescrollproc );
 
       do {
 
@@ -2869,9 +2871,11 @@ void  ccontainer :: moveicon_c :: exec         ( void )
          releasetimeslice();
 
       } while ( pendingVehicleActions.actionType == vat_move ) ;
+      /*
       removemouseproc ( &mousescrollproc );
       if ( mouseparams.pictpointer != icons.mousepointer )
          setnewmousepointer ( icons.mousepointer, 0,0 );
+         */
 
       mousevisible ( false );
       actmap->cleartemps(7);

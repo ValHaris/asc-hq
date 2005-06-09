@@ -243,7 +243,14 @@ void tnstream :: writeImage ( const void* buf, bool compress )
       char* tempbuf = new char [ 0xffff ];
       if ( tempbuf ) {
          int   size    = compressrle ( buf, tempbuf );
-         writedata ( tempbuf, size );
+	 trleheader* hd = (trleheader*) tempbuf;
+	 writeWord( hd->id );
+	 writeWord( hd->size );
+	 writeChar( hd->rle );
+	 writeWord( hd->x );
+	 writeWord( hd->y );
+	 
+         writedata ( hd+1, size - sizeof(*hd) );
          delete[] tempbuf;
       } else
          compress = false;
@@ -251,7 +258,9 @@ void tnstream :: writeImage ( const void* buf, bool compress )
 
    if ( !compress )  {
       Uint16* pw = (Uint16*) buf;
-      writedata ( buf, ( pw[0] + 1 ) * ( pw[1] + 1 ) + 4 );
+      writeWord(pw[0] );
+      writeWord(pw[1] );
+      writedata ( pw+2, ( pw[0] + 1 ) * ( pw[1] + 1 ) );
    }
 }
 

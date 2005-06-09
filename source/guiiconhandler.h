@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.9 2005-04-24 19:15:41 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.10 2005-06-09 20:27:13 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -127,7 +127,7 @@ class NewGuiHost : public Panel {
         bool enterKeyPressed;
         int keyPressedButton;
      protected:
-        bool mapIconProcessing( const MapCoordinate& pos, const SDL_MouseButtonEvent* event, bool cursorChanged );
+        bool mapIconProcessing( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged );
 
         typedef vector<GuiButton*> Buttons;
         Buttons buttons;

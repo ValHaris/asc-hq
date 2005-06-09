@@ -1,6 +1,10 @@
-//     $Id: edmisc.h,v 1.38.2.1 2004-10-26 16:35:04 mbickel Exp $
+//     $Id: edmisc.h,v 1.38.2.2 2005-06-09 20:27:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38.2.1  2004/10/26 16:35:04  mbickel
+//      Replaced graphic storage in buildings and objects
+//      cleaned up some names: pvehicle, pbuilding
+//
 //     Revision 1.38  2004/09/25 12:37:51  mbickel
 //      Fixed crash in mapeditor
 //      fixed graphical glitches when moving from one field to an invisible next
@@ -244,6 +248,10 @@
 #error this file should only be used in the mapeditor
 #endif
 
+extern bool mousePressedOnField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged);
+extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged);
+
+
   typedef struct selectrec {
                   int         srr;
                   int         xpos, ypos;
@@ -274,7 +282,7 @@
                  void addpolygon(ppolygon *poly, int place, int id);
                  void deletepolygon(ppolygon *poly);
             };
-*/
+
    class tmycursor : public tcursor {
          public :
               int sx,sy,ix,iy;
@@ -282,7 +290,7 @@
               virtual void putimg  ( void );
               virtual void putbkgr ( void );
    };
-
+*/
    class  PolygonEditor {
              Poly_gon& poly;
              void display();
@@ -343,7 +351,6 @@
    extern pobjecttype      actobject;
    extern int auswahlm;
    extern int auswahlw;
-   extern int auswahld;
    extern int farbwahl;
    extern int                     altefarbwahl;
    extern tfontsettings         rsavefont;
@@ -355,8 +362,6 @@
    extern Building*               gbde;
    extern int                    variable;
    extern char                mapsaved;
-   extern tmycursor             mycursor;
-   extern tpulldown              pd;
 //   extern tcdrom                 cdrom;
 
 
@@ -373,10 +378,7 @@
 #define cselmine 6                       //* Minen
 #define cselweather 7                //* Wetter
 
-extern void         repaintdisplay(void);
 extern void         setstartvariables(void);
-extern void         pdbaroff(void);
-extern void         pulldown(void);
 extern void         exchg(int *a1,int *a2);
 extern void         placebuilding(int colorr,pbuildingtype   buildingtyp,char choose);
 extern void         k_savemap(char saveas);
@@ -393,15 +395,15 @@ extern void         changemapvalues(void);
 extern void         unit_cargo( Vehicle* vh );
 extern void         building_cargo( Building* bld );
 extern void         building_production( Building* bld );
-extern void         freevariables(void);
 extern int          selectfield(int * cx ,int  * cy);
 extern void 	     playerchange(void);
 
 //extern void         setpolytemps (int value, ppolygon poly1); //* setzt in diesem Polygon den Tempvalue auf value
 extern void         editpolygon (Poly_gon& poly);
 // extern int        getpolygon(ppolygon *poly); //return Fehlerstatus
-extern void        showpalette(void);
-extern void        pdsetup(void);
+
+extern pfield getactfield();
+
 
 extern void cdplayer( void );
 
@@ -412,10 +414,8 @@ extern void movebuilding();
 extern void unitsettransformation( void );
 
 extern void placebodentyp(void);
-extern void placeunit(void);
 extern void placeobject(void);
 extern void placemine(void);
-extern void putactthing ( void );
 
 //! The class that manages the switching between the primary map (for editing) and the secondary map (for selecting objects and terrain)
 class MapSwitcher {

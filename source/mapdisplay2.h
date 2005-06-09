@@ -122,6 +122,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
 
 
       bool eventMouseButtonDown (const SDL_MouseButtonEvent *button);
+      bool eventMouseMotion (const SDL_MouseMotionEvent *button);
       bool eventMouseButtonUp (const SDL_MouseButtonEvent *button);
       
       //
@@ -239,11 +240,18 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
 
       /** Signal that is fired when the mouse is pressed on a valid field, after the cursor evaluation has been run.
            \param MapCoordinate the Coordinate of the field that was clicked
-           \param SDL_MouseButtonEvent the Event structure of the click
+           \param SPoint the mouse position
            \param bool true if the cursor had been repositioned
       */
-      SigC::Signal3<bool,const MapCoordinate&, const SDL_MouseButtonEvent*, bool> mouseButtonOnField;
+      SigC::Signal3<bool,const MapCoordinate&, const SPoint&, bool> mouseButtonOnField;
 
+      /** Signal that is fired when the mouse is dragged onto a new field with mouse buttons pressed.
+           \param MapCoordinate the Coordinate of the field that was clicked
+           \param SPoint the mouse position
+           \param bool true if the cursor had been repositioned
+      */
+      SigC::Signal3<bool,const MapCoordinate&, const SPoint&, bool> mouseDraggedToField;
+      
       
       struct Cursor {
             int invisible;

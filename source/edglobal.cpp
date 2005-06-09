@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.62.2.4 2005-04-16 16:01:22 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.62.2.5 2005-06-09 20:27:13 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -40,8 +40,7 @@
 #include "clipboard.h"
 #include "resourceplacementdialog.h"
 #include "weatherdialog.h"
-
-mc_check mc;
+#include "maped-mainscreen.h"
 
 
    const char* execactionnames[execactionscount] = {
@@ -49,7 +48,7 @@ mc_check mc;
         "Help",
         "Goto EditMode",
         "Select terrain",
-        "Select terrainALL",
+        "Select terrainAll",
         "Select unit",
         "Select color",
         "Select building",
@@ -69,7 +68,6 @@ mc_check mc;
         "Open UnitInfo",
         "View map",
         "About",
-        "Change GlobalDirection",
         "Create resources",
         "View/Change cargo",
         "View/Change resources",
@@ -138,6 +136,9 @@ mc_check mc;
         "setup weather generation" };
 
 
+SigC::Signal0<void> mapChanged;
+        
+        
 // õS Infomessage
 
 int infomessage( char* formatstring, ... )
@@ -180,46 +181,6 @@ int infomessage( char* formatstring, ... )
    delete ( c );
 
    return ++actdisplayedmessage;
-}
-
-//õS MC_CHeck
-
-void mc_check::on(void)
-{
-   if (mycursor.an == false ) {
-      int ms = getmousestatus();
-      if (ms == 1) { 		//mouse off
-         if (mstatus == 0) mousevisible(true);
-         else mstatus++;
-      } else { 			//mouse on
-         mstatus++;
-      }
-      if (cursor.an == false) {  //cursor off
-         if (cstatus == 0) cursor.show();
-         else cstatus++;
-      } else { 			//cursor on
-         cstatus++;
-      } /* endif */
-   }
-}
-
-void mc_check::off(void)
-{
-   if (mycursor.an == false ) {
-      int ms = getmousestatus(); 
-      if (ms == 1) { 		//mouse off
-         mstatus--;
-      } else { 			//mouse on
-         if (mstatus == 0) mousevisible(false);
-         else mstatus--;
-      }
-      if (cursor.an == false) {  	//cursor off
-         cstatus--;
-      } else { 			//cursor on
-         if (cstatus == 0) cursor.hide();
-         else cstatus--;
-      } /* endif */
-   }
 }
 
 
@@ -281,59 +242,41 @@ void showPipeNet()
 
 // õS ExecAction
 
+void         execaction_ev(int code)
+{
+   getPGApplication().enableLegacyEventHandling ( true );
+   execaction(code);
+   getPGApplication().enableLegacyEventHandling ( false );
+}
+
+
 void execaction(int code)
 {
    switch(code) {
     case act_help :   if ( polyfieldmode ) help ( 1040 );
                        else help(1000);
        break;
-    case act_selbodentypAll : {
-                        ch = 0;
-                        cursor.hide();
-                        selterraintype( ct_f3 );
-                        cursor.show();
-                     }
+    case act_selbodentypAll : mainScreenWidget->selectTerrain();
        break;
-    case act_selunit : {
-                       ch = 0;
-                       cursor.hide();
-                       selvehicletype( ct_f4 );
-                       cursor.show();
-                     }
+    case act_selunit : mainScreenWidget->selectVehicle();
        break;
     case act_selcolor : {
                        ch = 0;
-                       cursor.hide();
                        selcolor( ct_f5 );
-                       cursor.show();
                      }
        break;
-    case act_selbuilding : {
-                       ch = 0;
-                       cursor.hide();
-                       selbuilding( ct_f6);
-                       cursor.show();
-                     }
+    case act_selbuilding : mainScreenWidget->selectBuilding(); 
        break;
-    case act_selobject : {
-                       ch = 0;
-                       cursor.hide();
-                       selobject( ct_f7 );
-                       cursor.show();
-                     }
+    case act_selobject : mainScreenWidget->selectObject();
        break;
     case act_selmine : {
                        ch = 0;
-                       cursor.hide();
                        selmine( ct_f8 );
-                       cursor.show();
                      }
        break;
     case act_selweather : {
                        ch = 0;
-                       cursor.hide();
                        selweather( ct_f9  );   // !!!!!         // Test (Boolean) Testet, ob das wetter auch verfgbar ist fr bodentyp
-                       cursor.show();                           // True : WIRD getestet / false : kein Test
                      }
        break;
     case act_setupalliances :  setupalliances();
@@ -343,13 +286,6 @@ void execaction(int code)
                       else showresources = 0;
                       displaymap();
        }
-       break;
-    case act_changeglobaldir : {
-                                  auswahld++;
-                                  if (auswahld > sidenum-1) auswahld = 0;
-                                 //// if ( selectnr > cselcolor) selectnr = cselbodentyp; ???????
-                                  showallchoices();
-                                }
        break;
     case act_asc_resource :   {
                                   actmap->_resourcemode = false;
@@ -361,7 +297,7 @@ void execaction(int code)
                                   displaymessage ( "Battle Isle Resource mode enabled", 3 );
                                }
        break;
-    case act_maptopcx : writemaptopcx ();  
+    case act_maptopcx : //writemaptopcx ();  
        break;
     case act_loadmap :   {
                             if (mapsaved == false )
@@ -383,7 +319,6 @@ void execaction(int code)
                                delete oldmap;
                                oldmap = NULL;
                             }
-                            pdbaroff();
                             displaymap();
                           } 
        break;
@@ -410,18 +345,14 @@ void execaction(int code)
        }
        break;
        */
-    case act_repaintdisplay :   repaintdisplay();
-       break;
     case act_unitinfo :  vehicle_information();
        break;
     case act_viewmap :  
              {
              while (mouseparams.taste != 0)
                 releasetimeslice();
-             cursor.hide();
              // showmap ();
              displaymap();
-             cursor.show();
              }
        break;
     case act_changeunitdir : {
@@ -446,13 +377,11 @@ void execaction(int code)
     case act_createresources2 : resourcePlacementDialog();
        break;
     case act_changecargo :   {
-                 cursor.hide();
                  if ( getactfield()->building )                    
                     building_cargo( getactfield()->building );
                  else 
                     if ( getactfield()->vehicle )
                        unit_cargo( getactfield()->vehicle );
-                 cursor.show(); 
               }
        break;
     case act_changeterraindir : {
@@ -467,6 +396,7 @@ void execaction(int code)
        break;
     case act_events :   event();
        break;
+       /*
     case act_fillmode :   if ( polyfieldmode == false ) {   
                  if (tfill == true) tfill = false;
                  else tfill = true; 
@@ -475,6 +405,7 @@ void execaction(int code)
                  pdbaroff(); 
               } 
        break;
+       */
     case act_mapgenerator : mapgenerator();
        break;
     case act_setactivefieldvals : {
@@ -499,12 +430,11 @@ void execaction(int code)
                      lastselectiontype = cselobject;
                      setnewobjectselection ( actobject );
                   } else {
-                     auswahld = fld->direction;
                      auswahl = fld->typ->terraintype;
                      lastselectiontype = cselbodentyp;
                      setnewterrainselection ( auswahl );
                   }
-                  showallchoices();
+                  // showallchoices();
                }
        break;
        
@@ -585,8 +515,6 @@ void execaction(int code)
                          }
                       }
         break;
-    case act_showpalette : showpalette();
-       break;
     case act_changeminestrength : changeminestrength();
        break;
     case act_changemapvals :   changemapvalues();
@@ -610,6 +538,7 @@ void execaction(int code)
                  } /* endif */
               } 
               break;
+              /*
     case act_mirrorcursorx :   {
                     cursor.gotoxy ( actmap->xsize-getxpos(), getypos() );
                     int tmp = farbwahl;
@@ -629,9 +558,8 @@ void execaction(int code)
                     showStatusBar();
                  }
        break;
+       */
     case act_placebodentyp : placebodentyp();
-       break;
-    case act_placeunit : placeunit();
        break;
     case act_placebuilding : placebuilding(farbwahl,auswahlb,true);
        break;
@@ -639,7 +567,10 @@ void execaction(int code)
        break;
     case act_placemine : placemine();
        break;
-    case act_placething : putactthing();
+    case act_placething : if ( getSelection() ) {
+                              getSelection()->place( actmap->getCursor() );
+                              mapChanged();
+                          }    
        break;
        /*
     case act_endpolyfieldmode : {
@@ -662,13 +593,14 @@ void execaction(int code)
           execaction(act_switchmaps);
           ch = ct_invvalue;
        } else
-          if (choice_dlg("Do you really want to quit ?","~y~es","~n~o") == 2) ch = ct_invvalue;
-             else {
-                ch = ct_esc; //Exit MapEdit
-                if (mapsaved == false )
-                   if (choice_dlg("Map not saved ! Save now ?","~y~es","~n~o") == 1) k_savemap(false);
-               }
+          if (choice_dlg("Do you really want to quit ?","~y~es","~n~o") == 1) {
+             if (mapsaved == false )
+                if (choice_dlg("Map not saved ! Save now ?","~y~es","~n~o") == 1) 
+                   k_savemap(false);
+                   
+             getPGApplication().Quit();
           }
+       }   
        break;
     case act_about :
     case act_aboutbox : {
@@ -713,15 +645,12 @@ void execaction(int code)
          ASCString filename;
          fileselectsvga ( wildcard, filename, true );
          if ( !filename.empty() ) {
-            insertbattleislemap ( getxpos(), getypos(), path.c_str(), filename.c_str() );
+            insertbattleislemap ( actmap->getCursor().x, actmap->getCursor().y, path.c_str(), filename.c_str() );
             displaymap();
          }
       }
       break;
-   case act_resizemap : cursor.hide();
-                        resizemap();
-                        cursor.checkposition ( actmap->xpos + cursor.posx, actmap->ypos + cursor.posy );
-                        cursor.show();
+   case act_resizemap : resizemap();
       break;
    case act_movebuilding: movebuilding();
       break;
@@ -735,7 +664,7 @@ void execaction(int code)
    case act_setunitfilter: selectunitsetfilter();
       break;
    case act_selectgraphicset: selectgraphicset();
-                              showallchoices();
+                              // showallchoices();
       break;
    case act_setzoom : choosezoomlevel();
       break;
@@ -757,7 +686,6 @@ void execaction(int code)
    case act_switchmaps: mapSwitcher.toggle();
                         displaymap();
                         showStatusBar();
-                        showallchoices();
       break;
    case act_transformMap: transformMap();
       break;
@@ -768,7 +696,7 @@ void execaction(int code)
    case act_specifyunitproduction: unitProductionLimitation();
       break;
    case act_pasteFromClipboard: if ( !getactfield()->getContainer() ) {
-                                   ClipBoard::Instance().place( MapCoordinate(getxpos(), getypos() ));
+                                   ClipBoard::Instance().place( actmap->getCursor() );
                                    mapsaved = false;
                                    displaymap();
                                 }

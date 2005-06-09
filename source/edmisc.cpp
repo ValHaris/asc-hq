@@ -60,7 +60,6 @@
    int          auswahls;
    int          auswahlm;       
    int          auswahlw;
-   int          auswahld;
    int          farbwahl;
    int                  altefarbwahl;
 
@@ -74,12 +73,28 @@
    int                  i;
    Building*            gbde;
    char         mapsaved;
-   tmycursor            mycursor;
 
-//   tpolygon_management  polymanage;
-   tpulldown            pd;
-   // tcdrom            cdrom;
 
+   
+bool mousePressedOnField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged)
+{
+   if ( getSelection() ) {
+      getSelection()->place( pos );
+      mapChanged();
+   }   
+   return true;
+}
+
+bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged)
+{
+   if ( getSelection() && getSelection()->supportMultiFieldPlacement() ) {
+      getSelection()->place( pos );
+      mapChanged();
+   }   
+   return true;
+}
+   
+   
 // õS Checkobject
 
 char checkobject(pfield pf)
@@ -408,7 +423,7 @@ void tputresourcesdlg :: run ( void )
    } while ( status < 10 ); /* enddo */
    if ( status == 11 ) {
       tputresources pr ( actmap );
-      pr.init ( getxpos(), getypos(), dist, resourcetype ? 1 : 2, maxresource, minresource );
+      pr.init ( actmap->getCursor().x, actmap->getCursor().y, dist, resourcetype ? 1 : 2, maxresource, minresource );
    }
 }
 
@@ -420,7 +435,6 @@ void placebodentyp(void)
    int fillx2, filly2;
    int i, j;
 
-   cursor.hide(); 
    mousevisible(false); 
    mapsaved = false;
    if (polyfieldmode) {
@@ -440,8 +454,8 @@ void placebodentyp(void)
       lastselectiontype = cselbodentyp;
       pf2 = getactfield();
       if (tfill) {
-         filly2 = cursor.posy + actmap->ypos;
-         fillx2 = cursor.posx + actmap->xpos;
+         filly2 = actmap->getCursor().y;
+         fillx2 = actmap->getCursor().x;
          if (fillx1 > fillx2) exchg(&fillx1,&fillx2);
          if (filly1 > filly2) exchg(&filly1,&filly2);
          for (i = filly1; i <= filly2; i++)
@@ -453,7 +467,6 @@ void placebodentyp(void)
                   else
                      pf2->typ = auswahl->weather[0]; 
    
-                  pf2->direction = auswahld;
                   pf2->setparams();
                   if (pf2->vehicle != NULL) 
                      if ( (pf2->vehicle->typ->terrainaccess.accessible (pf2->bdt ) < 0) || (pf2->vehicle->typ->terrainaccess.accessible ( pf2->bdt) == 0 && actmap->getgameparameter( cgp_movefrominvalidfields ) == 0 )) {
@@ -464,14 +477,12 @@ void placebodentyp(void)
             }
          displaymap();
          tfill = false;
-         pdbaroff();
       }
       else {
          if ( auswahl->weather[auswahlw] )
             pf2->typ = auswahl->weather[auswahlw];
          else
             pf2->typ = auswahl->weather[0];
-         pf2->direction = auswahld;
          pf2->setparams();
          if (pf2->vehicle != NULL)
             if ( (pf2->vehicle->typ->terrainaccess.accessible ( pf2->bdt )< 0) || (pf2->vehicle->typ->terrainaccess.accessible ( pf2->bdt ) == 0 && actmap->getgameparameter( cgp_movefrominvalidfields ) == 0 )) {
@@ -482,109 +493,21 @@ void placebodentyp(void)
    } /* endif */
    displaymap(); 
    mousevisible(true); 
-   cursor.show(); 
 }
 
 
-void placeunit(void)
-{
-   if (polyfieldmode) {
-   /*
-      cursor.hide();
-      mousevisible(false);
-      mapsaved = false;
-
-      tfillpolygonunit fillpoly;
-
-      fillpoly.tempvalue = 0;
-
-      if (fillpoly.paint_polygon ( pfpoly ) == 0)
-         displaymessage("Invalid Polygon !",1 );
-
-      polyfieldmode = false;
-      pdbaroff();
-
-      displaymap();
-      mousevisible(true);
-      cursor.show();
-      */
-   } else {
-      lastselectiontype = cselunit;
-      if (farbwahl < 8) {
-         cursor.hide();
-         mousevisible(false);
-         mapsaved = false;
-         pf2 = getactfield();
-         int accessible = 1;
-         if ( auswahlf ) {
-            accessible = auswahlf->terrainaccess.accessible ( pf2->bdt );
-            if ( auswahlf->height >= chtieffliegend )
-               accessible = 1;
-         }
-
-         if (pf2 != NULL)
-              // !( pf2->bdt & cbbuildingentry)
-            if ( !( pf2->building ) && ( accessible || actmap->getgameparameter( cgp_movefrominvalidfields)) ) {
-               int set = 1;
-               if ( pf2->vehicle ) {
-                  if ( pf2->vehicle->typ != auswahlf ) {
-                     delete pf2->vehicle;
-                     pf2->vehicle = NULL;
-                   } else {
-                      set = 0;
-                      pf2->vehicle->convert( farbwahl );
-                   }
-               }
-               if ((auswahlf != NULL) && set ) {
-                  pf2->vehicle = new Vehicle ( auswahlf, actmap, farbwahl );
-                  pf2->vehicle->setnewposition ( getxpos(), getypos() );
-                  pf2->vehicle->fillMagically();
-                  pf2->vehicle->height=1;
-                  while ( ! ( ( ( ( pf2->vehicle->height & pf2->vehicle->typ->height ) > 0) && (terrainaccessible(pf2,pf2->vehicle) == 2) ) ) && (pf2->vehicle->height != 0) )
-                     pf2->vehicle->height = pf2->vehicle->height * 2;
-                  if (pf2->vehicle->height == 0 ) {
-                     if ( actmap->getgameparameter( cgp_movefrominvalidfields) ) {
-                        pf2->vehicle->height=1;
-                        while ( !(pf2->vehicle->height & pf2->vehicle->typ->height) && pf2->vehicle->height )
-                           pf2->vehicle->height = pf2->vehicle->height * 2;
-                     }
-                     if (pf2->vehicle->height == 0 ) {
-                        delete pf2->vehicle;
-                        pf2->vehicle = NULL;
-                     }
-                  }
-                  if ( pf2->vehicle ) {
-                     pf2->vehicle->setMovement ( pf2->vehicle->typ->movement[log2(pf2->vehicle->height)] );
-                     pf2->vehicle->direction = auswahld;
-                  }
-               }
-            }
-            else
-               if (auswahlf == NULL)
-                  if (pf2->vehicle != NULL) {
-                     delete pf2->vehicle;
-                     pf2->vehicle = NULL;
-                  }
-         displaymap();
-         mousevisible(true);
-         cursor.show();
-      }
-   } /* endif */
-}
 
 
 void placeobject(void)
 {
-   cursor.hide();
    mousevisible(false);
    mapsaved = false;
    pf2 = getactfield(); 
    if (tfill) { 
-      putstreets2(fillx1,filly1,cursor.posx + actmap->xpos,cursor.posy + actmap->ypos, actobject ); 
+      putstreets2(fillx1,filly1, actmap->getCursor().x, actmap->getCursor().y, actobject ); 
       // 5. parameter zeiger auf object
       displaymap(); 
       tfill = false; 
-      pdbaroff(); 
    } else {
       pf2 = getactfield();
       Vehicle* eht = pf2->vehicle;
@@ -596,66 +519,20 @@ void placeobject(void)
    lastselectiontype = cselobject;
    displaymap(); 
    mousevisible(true); 
-   cursor.show(); 
 }
 
 void placemine(void)
 {
-   cursor.hide();
    mousevisible(false); 
    mapsaved = false;
    getactfield()->putmine(farbwahl,auswahlm+1,MineBasePunch[auswahlm]);
    lastselectiontype = cselmine;
    displaymap();
    mousevisible(true); 
-   cursor.show(); 
 }
 
 
-void putactthing ( void )
-{
-    cursor.hide();
-    mousevisible(false); 
-    mapsaved = false;
-    pf2 = getactfield();
-    switch (lastselectiontype) {
-       case cselbodentyp :
-       case cselweather : placebodentyp();
-          break;
-       case cselunit:
-       case cselcolor:  placeunit();
-          break;
-       case cselbuilding:   placebuilding(farbwahl,auswahlb,true);
-          break;
-       case cselobject:   placeobject();
-          break;
-       case cselmine:   if ( farbwahl < 8 ) getactfield()->putmine(farbwahl,auswahlm+1,MineBasePunch[auswahlm]);
-          break;
-    } 
-    displaymap(); 
-    mousevisible(true); 
-    cursor.show(); 
-}
 
-
-// õS ShowPalette
-
-void         showpalette(void)
-{ 
-   bar ( 0, 0, 639, 479, black );
-   int x=7;
-
-   for ( char a = 0; a <= 15; a++) 
-      for ( char b = 0; b <= 15; b++) { 
-         bar(     a * 40, b * 20,a * 40 +  x,b * 20 + 20, xlattables.a.light    [a * 16 + b]);
-         bar( x + a * 40, b * 20,a * 40 + 2*x,b * 20 + 20, xlattables.nochange [a * 16 + b]); 
-         bar(2*x + a * 40, b * 20,a * 40 + 3*x,b * 20 + 20, xlattables.a.dark1    [a * 16 + b]); 
-         bar(3*x + a * 40, b * 20,a * 40 + 4*x,b * 20 + 20, xlattables.a.dark2    [a * 16 + b]); 
-         bar(4*x + a * 40, b * 20,a * 40 + 5*x,b * 20 + 20, xlattables.a.dark3    [a * 16 + b]); 
-      }      
-   wait();
-   repaintdisplay();
-} 
 
 // õS Lines
 
@@ -669,82 +546,6 @@ void lines(int x1,int y1,int x2,int y2)
 
 
 
-// õS PDSetup
-
-void         pdsetup(void)
-{
-  pd.addfield ( "~F~ile" );
-   pd.addbutton ( "~N~ew mapõctrl+N" , act_newmap    );
-   pd.addbutton ( "~L~oad mapõctrl+L", act_loadmap   );
-   pd.addbutton ( "~S~ave mapõS",      act_savemap   );
-   pd.addbutton ( "Save map ~a~s",     act_savemapas );
-   pd.addbutton ( "Edit Map ~A~rchival Information", act_editArchivalInformation );
-   pd.addbutton ( "seperator",         -1            );
-   pd.addbutton ( "Load Clipboard",     act_readClipBoard );
-   pd.addbutton ( "Save Clipboard",     act_saveClipboard );
-   pd.addbutton ( "seperator",         -1            );
-   pd.addbutton ( "~W~rite map to PCX-Fileõctrl+G", act_maptopcx);
-    pd.addbutton ( "~I~mport BI mapõctrl-i", act_import_bi_map );
-    pd.addbutton ( "Insert ~B~I map", act_insert_bi_map );
-    pd.addbutton ( "seperator", -1 );
-    pd.addbutton ( "set zoom level", act_setzoom );
-   pd.addbutton ( "seperator", -1 );
-   pd.addbutton ( "E~x~itõEsc", act_end);
-
-  pd.addfield ("~E~dit");
-   pd.addbutton ( "~C~opy õctrl+C",          act_copyToClipboard );
-   pd.addbutton ( "Cu~t~",                   act_cutToClipboard );
-   pd.addbutton ( "~P~aste õctrl+V",         act_pasteFromClipboard );
-   pd.addbutton ( "seperator",                  -1 );
-   pd.addbutton ( "Resi~z~e mapõR",             act_resizemap );
-   pd.addbutton ( "set global uniform ~w~eather‹¨«trl-W", act_setactweatherglobal );
-   pd.addbutton ( "configure weather generator", act_setactnewweather );
-   pd.addbutton ( "~C~reate regional ressources", act_createresources );
-   pd.addbutton ( "~C~reate global ressourcesõctrl+F", act_createresources2 );
-   pd.addbutton ( "~S~et turn number",        act_setTurnNumber );
-   pd.addbutton ( "~E~dit technologies",          act_editResearch );
-   pd.addbutton ( "edit ~R~search points",          act_editResearchPoints );
-   pd.addbutton ( "edit ~T~ech adapter",          act_editTechAdapter );
-   pd.addbutton ( "reset player data...",   act_resetPlayerData );
-
-  pd.addfield ("~T~ools");
-   pd.addbutton ( "~V~iew mapõV",            act_viewmap );
-   // pd.addbutton ( "~S~how palette",             act_showpalette );
-   pd.addbutton ( "~R~ebuild displayõctrl+R",   act_repaintdisplay );
-   pd.addbutton ( "seperator",                  -1 );
-   pd.addbutton ( "~M~ap generatorõG",          act_mapgenerator );
-   pd.addbutton ( "Sm~o~oth coasts",          act_smoothcoasts );
-   pd.addbutton ( "~U~nitset transformation",    act_unitsettransformation );
-   pd.addbutton ( "map ~t~ransformation",        act_transformMap );
-   pd.addbutton ( "Com~p~are Resources ", act_displayResourceComparison );
-   pd.addbutton ( "Show Pipeline Net", act_showPipeNet );
-   pd.addbutton ( "Generate Tech Tree", act_generateTechTree );
-
-   pd.addfield ("~O~ptions");
-    pd.addbutton ( "~M~ap valuesõctrl+M",          act_changemapvals );
-    pd.addbutton ( "~C~hange playersõO",           act_changeplayers);
-    pd.addbutton ( "~E~dit eventsõE",              act_events );
-    pd.addbutton ( "~S~etup Player + Alliancesõctrl+A",     act_setupalliances );
-//    pd.addbutton ( "unit production ~L~imitation", act_specifyunitproduction );
-    pd.addbutton ( "seperator",                    -1);
-    pd.addbutton ( "~T~oggle ResourceViewõctrl+B", act_toggleresourcemode);
-    pd.addbutton ( "~B~I ResourceMode",            act_bi_resource );
-    pd.addbutton ( "~A~sc ResourceMode",           act_asc_resource );
-    pd.addbutton ( "edit map ~P~arameters",        act_setmapparameters );
-    pd.addbutton ( "setup item ~F~iltersõctrl+h",  act_setunitfilter );
-    pd.addbutton ( "select ~G~raphic set",         act_selectgraphicset );
-
-   pd.addfield ("~H~elp");
-    pd.addbutton ( "~U~nit Informationõctrl+U",    act_unitinfo );
-    pd.addbutton ( "unit~S~et Information",        act_unitSetInformation );
-    pd.addbutton ( "~T~errain Information",        act_terraininfo );
-    pd.addbutton ( "seperator",                    -1 );
-    pd.addbutton ( "~H~elp SystemõF1",             act_help );
-    pd.addbutton ( "~A~bout",                      act_about );
-
-    pd.init();
-    pd.setshortkeys();
-}
 
 // õS PlayerChange
 
@@ -1054,60 +855,6 @@ void playerchange(void)
 }
 
 
-//* õS Mycursor
-
-void       tmycursor::getimg ( void )
-{
-     int xp, yp;
-
-     xp = sx + posx * ix;
-     yp = sy + posy * iy;
-
-     if (agmp-> linearaddress != hgmp-> linearaddress ) {
-        npush(*agmp);
-        *agmp = *hgmp;
-        getimage(xp, yp, xp + fieldsizex, yp + fieldsizey, backgrnd );
-        npop (*agmp);
-     } else {
-        getimage(xp, yp, xp + fieldsizex, yp + fieldsizey, backgrnd );
-     }
-}
-
-void       tmycursor::putbkgr ( void )
-{
-     int xp, yp;
-
-     xp = sx + posx * ix;
-     yp = sy + posy * iy;
-
-     if (agmp-> linearaddress != hgmp-> linearaddress ) {
-        npush( *agmp );
-        *agmp = *hgmp;
-        putimage(xp, yp, backgrnd );
-        npop ( *agmp );
-     } else {
-        putimage(xp, yp, backgrnd );
-     }
-
-
-}
-
-void       tmycursor::putimg ( void )
-{
-     int xp, yp;
-
-     xp = sx + posx * ix;
-     yp = sy + posy * iy;
-
-     if (agmp-> linearaddress != hgmp-> linearaddress ) {
-        npush( *agmp );
-        *agmp = *hgmp;
-        putrotspriteimage(xp, yp, picture,color );
-        npop ( *agmp );
-     } else {
-        putrotspriteimage(xp, yp, picture,color );
-     }
-}
 
 
 void         exchg(int *       a1,
@@ -1120,22 +867,6 @@ void         exchg(int *       a1,
 }
 
 
-void         pdbaroff(void)
-{
-   mousevisible(false);
-   pd.baroff();
-   rsavefont = activefontsettings;
-
-   activefontsettings.font = schriften.smallarial;
-   activefontsettings.color = 1;
-   activefontsettings.background = black;
-   activefontsettings.length = 200;
-   activefontsettings.justify = lefttext;
-
-   showStatusBar();
-   activefontsettings = rsavefont;
-   mousevisible(true);
-}
 
 
 // õS TCDPlayer
@@ -1231,19 +962,6 @@ void cdplayer( void )
 
 */
 
-void         repaintdisplay(void)
-{
-   mousevisible(false);
-   cursor.hide();
-   bar(0,0,agmp->resolutionx-1,agmp->resolutiony-1,0);
-   if ( !lockdisplaymap )
-      displaymap();
-
-   pdbaroff();
-   showallchoices();
-   cursor.show();
-   mousevisible(true);
-}
 
 #ifndef pbpeditor
 
@@ -1263,11 +981,9 @@ void         k_savemap(char saveas)
    }
    if ( !filename.empty() ) {
       mapsaved = true;
-      cursor.hide();
       actmap->preferredFileNames.mapname[0] = filename;
       savemap( filename.c_str() );
       displaymap();
-      cursor.show();
    }
    mousevisible(true);
 }
@@ -1280,7 +996,6 @@ void         k_loadmap(void)
    mousevisible(false);
    fileselectsvga( mapextension, s1, true );
    if ( !s1.empty() ) {
-      cursor.hide();
       displaymessage("loading map %s",0, s1.c_str() );
       loadmap(s1.c_str());
       actmap->startGame();
@@ -1296,7 +1011,6 @@ void         k_loadmap(void)
 
 
       displaymap();
-      cursor.show();
       mapsaved = true;
    }
    mousevisible(true);
@@ -1320,7 +1034,6 @@ void         placebuilding(int               colorr,
    Building*    gbde;
 
    mousevisible(false);
-   cursor.hide();
    mapsaved = false;
 
    int f = 0;
@@ -1328,7 +1041,7 @@ void         placebuilding(int               colorr,
       for ( int x = 0; x < 4; x++ )
          for ( int y = 0; y < 6; y++ )
             if ( buildingtyp->fieldExists ( BuildingType::LocalCoordinate(x, y) )) {
-               MapCoordinate mc = buildingtyp->getFieldCoordinate ( MapCoordinate (getxpos(), getypos()), BuildingType::LocalCoordinate (x, y) );
+               MapCoordinate mc = buildingtyp->getFieldCoordinate ( actmap->getCursor() , BuildingType::LocalCoordinate (x, y) );
                if ( !actmap->getField (mc) )
                   return;
 
@@ -1339,7 +1052,7 @@ void         placebuilding(int               colorr,
          if (choice_dlg("Invalid terrain for building !","~i~gnore","~c~ancel") == 2)
             return;
 
-      putbuilding( MapCoordinate( getxpos(),getypos()), colorr * 8,buildingtyp,buildingtyp->construction_steps);
+      putbuilding( actmap->getCursor(), colorr * 8,buildingtyp,buildingtyp->construction_steps);
    }
 
    gbde = getactfield()->building;
@@ -1358,16 +1071,10 @@ void         placebuilding(int               colorr,
 
    lastselectiontype = cselbuilding;
    displaymap();
-   cursor.show();
    mousevisible(true);
 }
 
 
-
-void         freevariables(void)
-{
-   asc_free ( mycursor.backgrnd );
-}
 
 
 void         setstartvariables(void)
@@ -1386,7 +1093,6 @@ void         setstartvariables(void)
    auswahls = 0;
    auswahlm = 1;
    auswahlw = 0;
-   auswahld = 0;
    farbwahl = 0;
 
    sr[0].maxanz = terrainTypeRepository.getNum();
@@ -1410,10 +1116,6 @@ void         setstartvariables(void)
    sr[9].maxanz = cwettertypennum;
    sr[9].showall = true;
 
-   mycursor.picture = cursor.orgpicture;
-   mycursor.backgrnd = malloc (10000);
-
-   atexit( freevariables );
 }
 
 
@@ -1422,21 +1124,18 @@ int  selectfield(int * cx ,int  * cy)
 {
    // int oldposx = getxpos();
    // int oldposy = getypos();
-   cursor.gotoxy( *cx, *cy );
+   actmap->getCursor() = MapCoordinate( *cx, *cy );
    displaymap();
-   cursor.show();
    tkey ch = ct_invvalue;
    do {
       if (keypress()) {
          ch = r_key();
-         movecursor( ch );
+         // movecursor( ch );
       } else
          releasetimeslice();
    } while ( ch!=ct_enter  &&  ch!=ct_space  && ch!=ct_esc); /* enddo */
-   cursor.hide();
-   *cx=cursor.posx+actmap->xpos;
-   *cy=cursor.posy+actmap->ypos;
-   // cursor.gotoxy( oldposx, oldposy );
+   *cx=actmap->getCursor().x;
+   *cy=actmap->getCursor().y;
    if ( ch == ct_enter )
       return 1;
    else
@@ -1451,13 +1150,12 @@ int  selectfield(int * cx ,int  * cy)
 Vehicle*  selectUnitFromMap()
 {
    displaymap();
-   cursor.show();
    tkey ch = ct_invvalue;
    Vehicle* veh = NULL;
    do {
       if (keypress()) {
          ch = r_key();
-         movecursor( ch );
+         // movecursor( ch );
          if( ch == 'c' &&  getactfield()->getContainer()  )
             veh = selectUnitFromContainer( getactfield()->getContainer() );
 
@@ -1470,7 +1168,6 @@ Vehicle*  selectUnitFromMap()
 
 
    } while ( !veh  && ch!=ct_esc); /* enddo */
-   cursor.hide();
 
    if ( ch == ct_enter || ct_space )
       return veh;
@@ -1679,10 +1376,10 @@ void         tnewmap::init(void)
 
    if (valueflag == true ) {
       addbutton("~X~ Size",15,130,235,150,2,1,2,true);
-      addeingabe(2,&sxsize,idisplaymap.getscreenxsize(1),65534);
+      addeingabe(2,&sxsize,10,65534);
 
       addbutton("~Y~ Size",250,130,470,150,2,1,3,true);
-      addeingabe(3,&sysize,idisplaymap.getscreenysize(1),65534);
+      addeingabe(3,&sysize,10,65534);
 
       addbutton("~R~andom",250,190,310,210,3,1,11,true);
       addeingabe(11,&random,0,lightgray);
@@ -1719,9 +1416,9 @@ void         tnewmap::init(void)
       if ( ! random ) {
          mousevisible(false);
          if ( tauswahl->weather[auswahlw] )
-            tauswahl->weather[auswahlw]->paint ( SPoint(x1 + 440,y1 + 182) );
+            tauswahl->weather[auswahlw]->paint ( getActiveSurface(), SPoint(x1 + 440,y1 + 182) );
          else
-            tauswahl->weather[0]->paint ( SPoint(x1 + 440,y1 + 182) );
+            tauswahl->weather[0]->paint ( getActiveSurface(), SPoint(x1 + 440,y1 + 182) );
          mousevisible(true);
       }
    rahmen(true,x1 + 10,y1 + starty,x1 + xsize - 10,y1 + ysize - 45);
@@ -1822,9 +1519,9 @@ void         tnewmap::buttonpressed(int id)
       npop ( lastselectiontype );
 
       if ( tauswahl->weather[auswahlw] )
-         tauswahl->weather[auswahlw]->paint( SPoint(x1 + 440,y1 + 182) );
+         tauswahl->weather[auswahlw]->paint( getActiveSurface(), SPoint(x1 + 440,y1 + 182) );
       else
-         tauswahl->weather[0]->paint ( SPoint(x1 + 440,y1 + 182) );
+         tauswahl->weather[0]->paint ( getActiveSurface(), SPoint(x1 + 440,y1 + 182) );
    }
    if (id == 11)
       if ( ! random) {
@@ -1852,7 +1549,6 @@ void         newmap(void)
    nm.init();
    nm.run();
    nm.done();
-   pdbaroff();
 }
 
 
@@ -1868,7 +1564,6 @@ void         changemapvalues(void)
    nm.run();
    nm.done();
 //   if (actmap->campaign != NULL) setupalliances();
-   pdbaroff();
 }
 
 
@@ -2867,20 +2562,6 @@ void         changeminestrength(void)
 }
 
 
-//* õS Pulldown
-
-void         pulldown( void )
-
-{
-   pd.checkpulldown();
-   if ( pd.action2execute >= 0 ) {
-      execaction ( pd.action2execute );
-
-      if (mouseparams.y <= pd.pdb.pdbreite )
-         pd.baron();
-      pd.action2execute = -1;
-   }
-}
 
 //* õS Laderaum Unit-Cargo
 
@@ -2968,8 +2649,6 @@ void tladeraum :: displaysingleitem ( int pos )
       putspriteimage( x, y, icons.X );
 
    displaysingleitem ( pos, x, y );
-   if ( pos == cursorpos )
-      putspriteimage ( x, y, mycursor.picture );
 }
 
 int tladeraum :: mouseoverfield ( int pos )
@@ -3916,14 +3595,10 @@ void MapSwitcher :: toggle ( )
 {
    maps[active].map = actmap;
    maps[active].changed = !mapsaved;
-   maps[active].cursorx = getxpos();
-   maps[active].cursory = getypos();
    active = !active;
 
    actmap = maps[active].map;
    mapsaved = !maps[active].changed;
-   if  ( actmap )
-      cursor.gotoxy( maps[active].cursorx, maps[active].cursory );
 }
 
 string MapSwitcher :: getName ()
@@ -3960,8 +3635,10 @@ void showStatusBar(void)
 
    char       s[200];
    s[0] = 0;
+   /*
    if ( actmap )
       sprintf(s, "X:%d/%d Y:%d/%d", getxpos(), int(actmap->xsize), getypos(), int(actmap->ysize));
+      */
 
    int y = agmp->resolutiony - 45;
 
@@ -4597,10 +4274,10 @@ void resetPlayerData()
 
 pfield        getactfield(void)
 {
-   return getfield ( actmap->xpos + cursor.posx, actmap->ypos + cursor.posy ); 
+   return actmap->getField( actmap->getCursor() );; 
 } 
 
-
+/*
 void displaymessage2( const char* formatstring, ... )
 {
    const int maxlength = 2000;
@@ -4644,3 +4321,4 @@ void displaymessage2( const char* formatstring, ... )
    delete[] c;
 
 }
+*/

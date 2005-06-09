@@ -30,6 +30,8 @@ class ContainerBaseType: public LoadableItemType {
      //! a short name, for example B-52
      ASCString    name;
 
+     virtual const ASCString& getName() const { return name; };
+     
      //! an extensive information about the unit/building which may be several paragraphs long
      ASCString    infotext;
 

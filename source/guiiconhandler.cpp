@@ -227,13 +227,13 @@ void NewGuiHost::disableButtons( int i )
    }
 }
 
-bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SDL_MouseButtonEvent* event, bool cursorChanged )
+bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged )
 {
    PG_Application::SetBulkMode(true);
 
    clearSmallIcons();
 
-   PG_Point p = mapDisplay->ScreenToClient( event->x, event->y );
+   PG_Point p = mapDisplay->ScreenToClient( mousePos.x, mousePos.y );
 
    pfield fld = actmap->getField(pos);
 

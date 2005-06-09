@@ -31,8 +31,6 @@
 
 #include "basestrm.h"
 #include "typen.h"
-#include "terraintype.h"
-#include "objecttype.h"
 #include "graphics/surface.h"
 
 
@@ -86,10 +84,10 @@ class SingleUnitSet {
 
      };
 
-extern std::vector<SingleUnitSet*> unitSets;
+typedef std::vector<SingleUnitSet*> UnitSets;
+extern UnitSets unitSets;
 
 extern void loadUnitSets ( void );
-
 
 //! displays a message on the log. If msgVerbosity is greater than the game verbosity, the message is NOT printed
 extern void displayLogMessage ( int msgVerbosity, char* message, ... );

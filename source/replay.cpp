@@ -49,8 +49,8 @@ void runSpecificReplay( int player, int viewingplayer )
 {
     if ( actmap->replayinfo->map[player] && actmap->replayinfo->guidata[player] ) {
 
-       npush ( lockdisplaymap );
-       lockdisplaymap = 0;
+       // npush ( lockdisplaymap );
+       // lockdisplaymap = 0;
 
        int t;
 
@@ -58,7 +58,7 @@ void runSpecificReplay( int player, int viewingplayer )
           t = runreplay.run ( player, viewingplayer );
        } while ( t ); /* enddo */
 
-       npop ( lockdisplaymap );
+       // npop ( lockdisplaymap );
 
     }
 }
@@ -140,6 +140,9 @@ void closeReplayLogging()
 
 int ReplayMapDisplay :: checkMapPosition ( int x, int y )
 {
+   mapDisplay->displayPosition(x,y);
+   /*
+
    if ( x >= actmap->xsize )
       x = actmap->xsize - 1;
    if ( y >= actmap->ysize )
@@ -176,6 +179,8 @@ int ReplayMapDisplay :: checkMapPosition ( int x, int y )
    if ((actmap->xpos != a) || (actmap->ypos != b))
       return 1;
    else
+      return 0;
+      */
       return 0;
 }
 

@@ -115,6 +115,8 @@
 
      //! The name of the object
      ASCString name;
+     
+     ASCString getName() { return name; };
 
      static const int netBehaviourNum = 6;
      enum NetBehaviour { NetToBuildings = 1, NetToBuildingEntry = 2, NetToSelf = 4, NetToBorder = 8, SpecialForest = 0x10, AutoBorder = 0x20 };

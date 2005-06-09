@@ -1,4 +1,4 @@
-//     $Id: edglobal.h,v 1.20.2.2 2004-12-07 21:11:19 mbickel Exp $
+//     $Id: edglobal.h,v 1.20.2.3 2005-06-09 20:27:13 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -21,17 +21,6 @@
 */
 
 //*Actions fÅr Editor
-
-class mc_check {
-   public :
-      void on(void);
-      void off(void);
-   protected :
-      signed char mstatus,cstatus;
-   };
-
-
-extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
@@ -64,7 +53,6 @@ enum tuseractions {
      act_unitinfo,
      act_viewmap,
      act_about,
-     act_changeglobaldir,
      act_createresources,
      act_changecargo,
      act_changeresources,
@@ -133,4 +121,8 @@ enum tuseractions {
      act_setactnewweather
  };
 
+extern SigC::Signal0<void> mapChanged;
+ 
+ 
 extern void         execaction(int code);
+extern void         execaction_ev(int code);

@@ -2,7 +2,7 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.67.2.7 2004-12-28 16:11:43 mbickel Exp $
+//     $Id: edmain.cpp,v 1.67.2.8 2005-06-09 20:27:13 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -42,6 +42,7 @@
 #include "graphicset.h"
 #include "paradialog.h"
 #include "soundList.h"
+#include "maped-mainscreen.h"
 
 #include <signal.h>
 
@@ -163,14 +164,15 @@ void loaddata( void )
 void buildemptymap ( void )
 {
    if ( terrainTypeRepository.getObject_byID(30) )
-      generatemap(terrainTypeRepository.getObject_byID(30)->weather[0], idisplaymap.getscreenxsize(1), idisplaymap.getscreenysize());
+      generatemap(terrainTypeRepository.getObject_byID(30)->weather[0], 10, 20);
    else
-      generatemap(terrainTypeRepository.getObject_byPos(0)->weather[0], idisplaymap.getscreenxsize(1), idisplaymap.getscreenysize());
+      generatemap(terrainTypeRepository.getObject_byPos(0)->weather[0], 10, 20);
 }
 
 
 void checkLeftMouseButton ( )
 {
+/*
    static int buttonStat = 0;
 
    int x,y;
@@ -217,7 +219,7 @@ void checkLeftMouseButton ( )
                buttonStat = 0;
       }
    } 
-
+*/
 /*
             if ( mouseparams.taste == 1 ) {
                int mx, my;
@@ -263,50 +265,13 @@ void checkLeftMouseButton ( )
 void         editor(void)
 {  int execcode;
 
-   cursor.show();
    do {
       try {
          do { 
             if ( keypress() ) {
                ch = r_key();
 
-               pd.key = ch;
                switch (ch) {
-                  #ifdef NEWKEYB
-                  case ct_up:
-                  case ct_down:
-                  case ct_left:
-                  case ct_right:
-                  case ct_up + ct_stp:
-                  case ct_down + ct_stp:
-                  case ct_left + ct_stp:
-                  case ct_right + ct_stp:
-                  #endif
-                  case ct_1k:
-                  case ct_2k:
-                  case ct_3k:
-                  case ct_4k:
-                  case ct_5k:
-                  case ct_6k:
-                  case ct_7k:
-                  case ct_8k:
-                  case ct_9k:
-                  case ct_1k + ct_stp:
-                  case ct_2k + ct_stp:
-                  case ct_3k + ct_stp:
-                  case ct_4k + ct_stp:
-                  case ct_5k + ct_stp:
-                  case ct_6k + ct_stp:
-                  case ct_7k + ct_stp:
-                  case ct_8k + ct_stp:
-                  case ct_9k + ct_stp:   if ( polyfieldmode == false ) {
-                                                    mousevisible(false);
-                                                    movecursor(ch);
-                                                    cursor.show();
-                                                    showStatusBar();
-                                                    mousevisible(true);
-                                                 }
-                     break;
                   case ct_f1:   execaction(act_help);
                      break;
                   case ct_f7 :
@@ -335,8 +300,6 @@ void         editor(void)
                   case ct_b + ct_stp:  execaction(act_toggleresourcemode);
                      break;
                   case ct_c + ct_stp:  execaction(act_copyToClipboard);
-                     break;
-                  case ct_d + ct_stp : execaction(act_changeglobaldir);
                      break;
                   case ct_f + ct_stp: execaction(act_createresources);
                      break;
@@ -433,9 +396,9 @@ void         editor(void)
                      break;
                   }
             } 
-            pulldown();
             checkselfontbuttons();
             checkLeftMouseButton();
+            /*
             if ( mouseparams.taste == 2 ) {
                int mx, my;
                while ( mouseparams.taste == 2 ) {
@@ -456,15 +419,15 @@ void         editor(void)
                   releasetimeslice();
                }
             }
+            */
       
-            checkformousescrolling();
+            // checkformousescrolling();
             releasetimeslice();
       
          }  while (! (ch == ct_esc) || (ch == ct_altp+ct_x ) );
       } /* endtry */
       catch ( NoMapLoaded ) {
          buildemptymap();
-         repaintdisplay();
       } /* endcatch */
    }  while (! (ch == ct_esc) || (ch == ct_altp+ct_x ) );
 }
@@ -519,10 +482,8 @@ int mapeditorMainThread ( void* _mapname )
 {
    const char* mapname = (const char*) _mapname;
    loadpalette();
-   initMapDisplay( );
 
-   cursor.init();
-
+  
    try {
       GraphicSetManager::Instance().loadData();
       loaddata();
@@ -574,26 +535,25 @@ int mapeditorMainThread ( void* _mapname )
 
    setstartvariables();
 
-   addmouseproc ( &mousescrollproc );
+//   addmouseproc ( &mousescrollproc );
 
-   bar( 0, 0, hgmp->resolutionx-1, hgmp->resolutiony-1, 0 );
-   setvgapalette256(pal);
-
-   displaymap();
-   showallchoices();
-   pdsetup();
-   pdbaroff();
-
+   mainScreenWidget = new MainScreenWidget( getPGApplication());
+   mainScreenWidget->Show();
+   
    mousevisible(true);
-   cursor.show();
 
    gameStartupComplete = true;
-   editor();
+   getPGApplication().Run();
    return 0;
 }
 
 // including the command line parser, which is generated by genparse
 #include "clparser/mapedit.cpp"
+
+void setSaveNotification()
+{
+   mapsaved = false;
+}
 
 int main(int argc, char *argv[] )
 { 
@@ -657,27 +617,22 @@ int main(int argc, char *argv[] )
 
 
 
-   int xr = 800;
-   int yr = 600;
    // determining the graphics resolution
-   if ( CGameOptions::Instance()->mapeditor_xresolution != 800 )
-      xr = CGameOptions::Instance()->mapeditor_xresolution;
+   int xr  = CGameOptions::Instance()->mapeditor_xresolution;
    if ( cl->x() != 800 )
       xr = cl->x();
 
-   if ( CGameOptions::Instance()->mapeditor_yresolution != 600 )
-      yr = CGameOptions::Instance()->mapeditor_yresolution;
+   int yr  = CGameOptions::Instance()->mapeditor_yresolution;
    if ( cl->y() != 600 )
       yr = cl->y();
 
-      
-   ASC_PG_App app ( "asc_dlg" );
+   ASC_PG_App app ( "asc2_dlg" );
    
    int flags = SDL_SWSURFACE;
    if ( fullscreen )
       flags |= SDL_FULLSCREEN;
    
-   app.InitScreen( xr, yr, 8, flags);
+   app.InitScreen( xr, yr, 32, flags);
       
    atexit ( closesvgamode );
 
@@ -716,12 +671,15 @@ int main(int argc, char *argv[] )
    }
 
 
+   mapChanged.connect( repaintMap );
+   mapChanged.connect( updateFieldInfo );
+   mapChanged.connect( SigC::slot( setSaveNotification) );
+   
    char* buf = new char[cl->l().length()+10];
    strcpy ( buf, cl->l().c_str() );
    initializeEventHandling ( mapeditorMainThread, buf, icons.mousepointer );
    delete[] buf;
 
-   cursor.hide();
    writegameoptions ();
 
   #ifdef MEMCHK

@@ -1063,7 +1063,6 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
 
       if ( humannum > 1  ||  forcepasswordchecking > 0 ) {
          tlockdispspfld ldsf;
-         backgroundpict.paint();
 
          bool firstRound = actmap->time.turn() == 1;
          bool specifyPassword = firstRound && actmap->player[actmap->actplayer].passwordcrc.empty();

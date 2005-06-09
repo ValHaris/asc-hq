@@ -6,9 +6,13 @@
     which should still be loaded.
 */
 
-//     $Id: oldlzw.cpp,v 1.8 2001-10-21 16:07:22 mbickel Exp $
+//     $Id: oldlzw.cpp,v 1.8.2.1 2005-06-09 20:27:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2001/10/21 16:07:22  mbickel
+//      New vehicle function: jam only own field
+//      Fixed compilation problem
+//
 //     Revision 1.7  2001/02/18 15:37:16  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -325,6 +329,7 @@ void tlzwstreamcompression  :: LZWOut ( CodeType code )
  void tlzwstreamcompression  :: LZWIn ( void )
 {
     readlzwdata ( &incode, sizeof( CodeType ) );
+    incode = SDL_SwapLE16( incode );
 }
 
 

@@ -106,19 +106,14 @@ class EventSupplier: public PG_SDLEventSupplier {
 
 ASC_PG_App* pgApp = NULL;
 
-bool idler()
-{
-   idleEvent();
-   return true;
-}   
 
 ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
 {
    this->themeName = themeName;
    EnableSymlinks(true);
    EnableAppIdleCalls();
-   // sigAppIdle.connect( SigC::slot( idleEvent )); // I don't get a direct connection to work
-   sigAppIdle.connect( SigC::slot( &idler ));
+   sigAppIdle.connect(  idleEvent ); // I don't get a direct connection to work
+   // sigAppIdle.connect( SigC::slot( &idler ));
    int i = 0;
    bool themeFound = false;
    ASCString path;
@@ -902,18 +897,32 @@ void BarGraphWidget::setFraction( float f )
 }
 
 
+PG_Rect calcMessageBoxSize( const ASCString& message )
+{
+  int counter = 0;
+  for ( int i = 0; i< message.length(); ++i)
+     if ( message[i] == '\n' )
+        counter++;
+
+  return PG_Rect( 100, 100, 500, 150 + counter * 10 );
+}
+
+
+
 void errorMessageDialog( const ASCString& message )
 {
-               MessageDialog msg( NULL, PG_Rect(100,100,500,150),"Error", message,PG_Rect(200,100,100,40),"OK" );
-               msg.Show();
-               msg.RunModal();
+   PG_Rect size = calcMessageBoxSize(message);
+   PG_MessageBox msg( NULL, calcMessageBoxSize(message), "Error", message,PG_Rect(200,100,100,40), "OK" );
+   msg.Show();
+   msg.RunModal();
 }
 
 void warningMessageDialog( const ASCString& message )
 {
-               MessageDialog msg( NULL, PG_Rect(100,100,500,150),"Warning", message,PG_Rect(200,100,100,40),"OK" );
-               msg.Show();
-               msg.RunModal();
+   PG_Rect size = calcMessageBoxSize(message);
+   PG_MessageBox msg( NULL, size, "Warning", message,PG_Rect(size.w/2 - 50,size.h - 40, 100, 30), "OK" );
+   msg.Show();
+   msg.RunModal();
 }
 
 

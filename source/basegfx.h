@@ -45,11 +45,7 @@
 
 #pragma pack(1)
 
-#ifdef sgmain
 const int colorDepth = 4;
-#else
-const int colorDepth = 1;
-#endif
 
 
 

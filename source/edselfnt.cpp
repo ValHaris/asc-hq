@@ -22,6 +22,7 @@
     Boston, MA  02111-1307  USA
 */
 
+
 #include "vehicletype.h"
 #include "buildingtype.h"
 
@@ -31,41 +32,205 @@
 #include "mapdisplay.h"
 #include "itemrepository.h"
 
+#include "graphics/blitter.h"
+#include "paradialog.h"
 
 
+MapComponent* currentItem = NULL;
+SigC::Signal1<void,const MapComponent*> setNewSelection;
 
-class tselfntmousescrollproc : public tsubmousehandler {
-         public:
-           void mouseaction ( void );
-};
-
-tselfntmousescrollproc selfntmousescrollproc;
-
-int selfntmousecurs = 8;
-void tselfntmousescrollproc :: mouseaction ( void )
+void setSelection( const MapComponent* component ) 
 {
-   int pntnum = -1;
-
-   void* newpnt = NULL;
-
-   if ( mouseparams.y1 == 0 )
-       pntnum = 0;
-   else
-     if ( mouseparams.y1 + mouseparams.ysize >= hgmp->resolutiony  )
-       pntnum = 4;
-     else
-       pntnum = 8;
-
-   if ( pntnum < 8 )
-      newpnt = icons.pfeil2[pntnum];
-   else
-      newpnt = icons.mousepointer;
-
-   selfntmousecurs = pntnum;
-
-   if ( mouseparams.pictpointer != newpnt ) 
-      setnewmousepointer ( newpnt, mousehotspots[pntnum][0], mousehotspots[pntnum][1] );
+   delete currentItem;
+   currentItem = component->clone();
 }
+
+const MapComponent* getSelection()
+{
+   return currentItem;
+}
+
+
+MapComponent::MapComponent()
+{
+   static bool init = false;
+   if ( !init ) {
+      setNewSelection.connect( SigC::slot( setSelection ));
+      init = true;
+   }
+}
+
+
+
+
+
+
+bool vehicleComp( const Vehicletype* v1, const Vehicletype* v2 )
+{
+   int id1 = getUnitSetID(v1);
+   int id2 = getUnitSetID(v2);
+   return (id1 <  id2) ||
+          (id1 == id2 && v1->movemalustyp  < v2->movemalustyp ) ||
+          (id1 == id2 && v1->movemalustyp == v2->movemalustyp && v1->name < v2->name);
+}
+
+bool buildingComp( const BuildingType* v1, const BuildingType* v2 )
+{
+   int id1 = getUnitSetID(v1);
+   int id2 = getUnitSetID(v2);
+   return (id1 <  id2) ||
+          (id1 == id2 && v1->name < v2->name);
+}
+
+bool objectComp( const ObjectType* v1, const ObjectType* v2 )
+{
+   return v1->name < v2->name;
+}
+
+bool terrainComp( const TerrainType* v1, const TerrainType* v2 )
+{
+   if (  v1->weather[0] && v2->weather[0] )
+      return v1->weather[0]->art.to_ulong()  < v2->weather[0]->art.to_ulong();
+   else
+      return v1->name < v2->name;
+}
+
+
+void sortItems( vector<Vehicletype*>& vec )
+{
+   sort( vec.begin(), vec.end(), vehicleComp );
+}
+
+void sortItems( vector<BuildingType*>& vec )
+{
+   sort( vec.begin(), vec.end(), buildingComp );
+}
+
+void sortItems( vector<ObjectType*>& vec )
+{
+   sort( vec.begin(), vec.end(), objectComp );
+}
+
+void sortItems( vector<TerrainType*>& vec )
+{
+   sort( vec.begin(), vec.end(), terrainComp );
+}
+
+
+
+void MapComponent::display( PG_Widget* parent, SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst ) const
+{
+   if ( !getClippingSurface().valid() )
+      getClippingSurface() = Surface::createSurface( displayWidth() + 10, displayHeight() + fontHeight + 10, 32, 0 );
+   getClippingSurface().Fill(0);   
+   display( getClippingSurface(), SPoint( 0, 0 ) );
+   
+   SDL_Rect      blitRect;
+   blitRect.x = 0;
+   blitRect.y = displayHeight() + 2;
+   blitRect.w = displayWidth();
+   blitRect.h = displayHeight() - blitRect.y;
+   PG_FontEngine::RenderText( getClippingSurface().getBaseSurface(), blitRect, blitRect.x, blitRect.y+parent->GetFontAscender(), getName(), parent->GetFont() );
+   
+   PG_Draw::BlitSurface( getClippingSurface().getBaseSurface(), src, surface, dst);
+}
+
+
+
+
+Surface BasicItem<Vehicletype>::clippingSurface;
+int VehicleItem::place( const MapCoordinate& mc ) const
+{
+   pfield fld = actmap->getField(mc);
+   if ( !fld )
+      return -1;
+
+   Vehicletype* veh = item;
+   
+   if ( !veh )
+      return -2;
+
+   bool accessible = veh->terrainaccess.accessible ( fld->bdt );
+   if ( veh->height >= chtieffliegend )
+         accessible = true;
+
+   if ( fld->building  || ( !accessible && !actmap->getgameparameter( cgp_movefrominvalidfields)) ) 
+      return -3;
+   
+   
+   if ( fld->vehicle ) {
+      if ( fld->vehicle->typ != veh ) {
+         delete fld->vehicle;
+         fld->vehicle = NULL;
+      } else {
+         fld->vehicle->convert( actplayer );
+         return 1;
+      }
+   }
+   fld->vehicle = new Vehicle ( veh, actmap, actplayer );
+   fld->vehicle->setnewposition ( mc );
+   fld->vehicle->fillMagically();
+   
+   for ( int i = 0; i < 9; ++i ) {
+      if ( fld->vehicle->typ->height & (1 << i )) {
+         fld->vehicle->height = 1 << i;
+         if ( terrainaccessible( fld, fld->vehicle ) == 2  || actmap->getgameparameter( cgp_movefrominvalidfields) )
+            break;
+      }
+      if ( i == 8 ) { // no height found
+         delete fld->vehicle;
+         fld->vehicle = NULL;
+         return -3;
+      }   
+   }
+   fld->vehicle->resetMovement();
+   return 1;
+   
+}
+
+
+Surface BuildingItem::clippingSurface;
+Surface BuildingItem::fullSizeImage;
+int BuildingItem::place( const MapCoordinate& mc ) const
+{
+   Building* building = new Building( actmap, mc, bld, actplayer );
+}
+
+void BuildingItem::display( Surface& s, const SPoint& pos ) const 
+{ 
+   if ( !fullSizeImage.valid() )
+      fullSizeImage = Surface::createSurface( displayWidth()*2 + 10, displayHeight()*2 + 30, 32, 0 );
+   fullSizeImage.FillTransparent();
+   bld->paint ( fullSizeImage, SPoint(0,0), actplayer); 
+   
+   MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom,TargetPixelSelector_Valid> blitter;
+   blitter.setZoom( 0.5 );
+   blitter.blit( fullSizeImage, s, pos );
+}
+
+
+
+Surface BasicItem<ObjectType>::clippingSurface;
+int ObjectItem::place( const MapCoordinate& mc ) const
+{
+   actmap->getField(mc)->addobject( item );
+}
+
+
+Surface BasicItem<TerrainType>::clippingSurface;
+int TerrainItem::place( const MapCoordinate& mc ) const
+{
+   pfield fld = actmap->getField(mc);
+   fld->typ = item->weather[0]; 
+   fld->setweather( currentWeather );
+   fld->setparams();
+}
+
+
+
+
+int actplayer = 0;
+int currentWeather = 0;
 
 
 //* õS terrainSelect
@@ -295,7 +460,7 @@ template<class T> T SelectAnything<T> :: selectitem( T previtem, tkey neutralkey
    if ( mouseparams.pictpointer != icons.mousepointer ) 
        setnewmousepointer ( icons.mousepointer, 0,0 );
 
-   addmouseproc ( &selfntmousescrollproc );
+   // addmouseproc ( &selfntmousescrollproc );
 
    bar ( position.x1, position.y1-getiteminfoheight(), position.x2, position.y2, black );
 
@@ -434,7 +599,7 @@ template<class T> T SelectAnything<T> :: selectitem( T previtem, tkey neutralkey
       } else
          if ( mousepressed == 1 )
             finished = 1;
-
+/*
       if ( selfntmousecurs != 8 ) {
          if ( selfntmousecurs == 0 )
             if ( winstarty > 0 )
@@ -452,7 +617,7 @@ template<class T> T SelectAnything<T> :: selectitem( T previtem, tkey neutralkey
                   actitemy ++;
                }
       }
-
+*/
       while ( actitemx >= maxx ) {
          actitemx -= maxx;
          actitemy ++;
@@ -486,8 +651,10 @@ template<class T> T SelectAnything<T> :: selectitem( T previtem, tkey neutralkey
       releasetimeslice();
    } while ( !finished );
 
+   /*
    removemouseproc ( &selfntmousescrollproc );
    popallmouseprocs();
+   */
 
 
    if ( finished == 1 ) {
@@ -591,12 +758,13 @@ void SelectTerrainType :: displaysingleitem ( pterraintype item, int x, int y )
    bar ( x, y, x + getitemsizex(), y + getitemsizey(), black );
    if ( auswahlw >= cwettertypennum || auswahlw < 0 )
       auswahlw = 0;
-
+/*
    if ( item )
       if ( item->weather[auswahlw] )
          item->weather[auswahlw]->paint ( SPoint(x, y) );
       else
          item->weather[0]->paint ( SPoint(x, y) );
+         */
 }
 
 ASCString SelectTerrainType :: getItemName ( pterraintype item )
@@ -861,10 +1029,10 @@ void SelectWeather :: showiteminfos ( pweathertype item, int x1, int y1, int x2,
    bar ( x1+1, y1+1, x2-1, y2-1, black );
    if ( item && auswahl ) 
       if ( auswahl->weather[ item->num ] ) {
-         auswahl->weather[item->num]->paint ( SPoint(x1 + 10, (y1 + y2 - fieldsizey )/2) );
+         // auswahl->weather[item->num]->paint ( SPoint(x1 + 10, (y1 + y2 - fieldsizey )/2) );
       } else {
 
-         auswahl->weather[0]->paint ( SPoint(x1 + 10, (y1 + y2 - fieldsizey )/2) );
+         // auswahl->weather[0]->paint ( SPoint(x1 + 10, (y1 + y2 - fieldsizey )/2) );
 
          npush ( activefontsettings );
          activefontsettings.font = schriften.smallarial;
@@ -1052,7 +1220,6 @@ class SelectItemContainer {
              };
 
 
-             void paintallselections ( void );
              void checkformouse ( void );
       } selectitemcontainer;
 
@@ -1109,28 +1276,6 @@ void SelectItemContainer :: paintselections ( int num, int act )
    npop ( activefontsettings );
 }
 
-void SelectItemContainer :: paintallselections ( void ) 
-{
-     if ( !paintallselections_initialized ) {
-        selectornum = 0;
-        addselector ( getterrainselector(),   "Terrain", "F3" );
-        addselector ( getvehicleselector(),   "Vehicle", "F4" );
-        addselector ( getcolorselector(),     "Color",   "F5" );
-        addselector ( getbuildingselector(),  "Building","F6" );
-        addselector ( getobjectselector(),    "Object",  "F7" );
-        addselector ( getmineselector(),      "Mine",    "F8" );
-        addselector ( getweatherselector(),   "Weather", "F9" );
-     }
-     selectionypos = selfontyanf;
-     for ( int i = 0; i < selectornum; i++ )
-        paintselections ( i, lastselectiontype - 1 );
-
-     int x1 = selfontxanf;
-     int x2 = selfontxanf + selfontxsize;
-
-     if ( selectionypos < agmp->resolutiony-1 )
-        bar ( x1, selectionypos , x2, agmp->resolutiony-1 , black );
-}
 
 void SelectItemContainer :: checkformouse ( void ) 
 {
@@ -1174,14 +1319,12 @@ void selterraintype( tkey ench )
 {  
    auswahl = selectitemcontainer.getterrainselector()->selectitem( auswahl, ench );
    lastselectiontype = cselbodentyp;
-   showallchoices();
 }
 
 pvehicletype selvehicletype(tkey ench )
 {
    auswahlf = selectitemcontainer.getvehicleselector()->selectitem( auswahlf, ench );
    lastselectiontype = cselunit;
-   showallchoices();
    return auswahlf;
 }
 
@@ -1194,35 +1337,30 @@ void selcolor( tkey ench )
        
    if ( lastselectiontype != cselunit && lastselectiontype != cselbuilding && lastselectiontype != cselmine )
       lastselectiontype = cselunit;
-   showallchoices();
 }
 
 void selobject( tkey ench )
 {  
    actobject = selectitemcontainer.getobjectselector()->selectitem( actobject, ench );
    lastselectiontype = cselobject;
-   showallchoices();
 }
 
 void selmine( tkey ench )
 {  
    auswahlm = selectitemcontainer.getmineselector()->selectitem( minevector[auswahlm], ench )->type;
    lastselectiontype = cselmine;
-   showallchoices();
 }
 
 void selweather( tkey ench )
 {  
    auswahlw = selectitemcontainer.getweatherselector()->selectitem( weathervector[auswahlw], ench )->num;
    lastselectiontype = cselbodentyp;
-   showallchoices();
 }
 
 void selbuilding ( tkey ench )
 {
    auswahlb = selectitemcontainer.getbuildingselector()->selectitem( auswahlb, ench );
    lastselectiontype = cselbuilding;
-   showallchoices();
 }
 
   /* Nr
@@ -1238,16 +1376,6 @@ void selbuilding ( tkey ench )
  10: Weathersel
  */ 
 
-
-void    showallchoices(void)
-{
-   static int shown = 0;
-   if (shown )
-      return;
-   shown++;
-   selectitemcontainer.paintallselections( );
-   shown--;
-}
 
 
 void checkselfontbuttons(void)

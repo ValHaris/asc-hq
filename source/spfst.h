@@ -47,57 +47,6 @@
             } ; 
    extern Schriften schriften;
 
-   #ifndef sgmain
-   class tcursor { 
-           public:
-              int       posx, posy;
-              char      an; 
-              int       color; 
-
-              int  gotoxy (int x, int y, int disp = 1 );     // result: 0: map wurde nicht neu angezeigt     1: map wurde neu angezeigt
-              //! \returns true if map repositioned
-              bool show ( void );
-              void hide ( void );
-              void setcolor ( int col );
-              void init ( void );
-              void display ( void );
-              void reset ( void );
-              void*        markfield;
-              void*        picture; 
-              void*        orgpicture;
-              int          actpictwidth;
-
-              int         checkposition ( int x, int y );
-
-              virtual void getimg  ( void );
-              virtual void putimg  ( void );
-              virtual void putbkgr ( void );
-              int          oposx, oposy;
-              void*      backgrnd; 
-              virtual void checksize ( void );
-   };
-
-
-  extern tcursor cursor;
-
-
-
- //! passes a key to the map-cursor
- extern void  movecursor(tkey         ch);
- 
-
-//! returns the field that is selected with the cursor
-extern pfield getactfield(void);
-
-
-//! returns the x coordinate of the cursor location
-extern int  getxpos(void);
-
-//!returns the y coordinate of the cursor location
-extern int  getypos(void);
-
-  #endif
-
 
   //! this is the one and only map that is loaded by ASC
   extern pmap actmap; 
@@ -256,9 +205,12 @@ extern SigC::Signal1<void,ContainerBase*> showContainerInfo;
 extern SigC::Signal1<void,Vehicletype*> showVehicleTypeInfo;
 extern SigC::Signal0<bool> idleEvent;
 
-#ifdef sgmain
+extern void displaymap();
 static void repaintdisplay() { repaintDisplay(); };
-#endif
+
+extern int getUnitSetID( const Vehicletype* veh );
+extern int getUnitSetID( const BuildingType* bld );
+
 
 #endif
 

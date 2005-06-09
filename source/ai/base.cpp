@@ -210,7 +210,7 @@ void AI:: run ( bool benchMark )
 
    _isRunning = false;
    if ( !mapDisplay )
-      displaymap();
+      repaintMap();
    int duration = ticker-startTime;
 
 
@@ -297,7 +297,7 @@ void AI :: showFieldInformation ( int x, int y )
    for ( ReconPositions::iterator i = reconPositions.begin(); i != reconPositions.end(); i++ )
       getMap()->getField( i->first )->a.temp2 = 1;
 
-   displaymap();
+   repaintMap();
 
 
    strcat ( text, "\n#font02#Section Information#font01##aeinzug20##eeinzug10##crtp10#");

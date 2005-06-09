@@ -75,6 +75,8 @@ public:
       void  newFromBGI( void* img );
       void* toBGI() const;
 
+      void FillTransparent();
+      
       void read ( tnstream& stream ) ;
       void readImageFile ( tnstream& stream ) ;
       void write ( tnstream& stream ) const;

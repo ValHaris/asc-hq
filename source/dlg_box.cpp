@@ -1936,35 +1936,33 @@ void displaymessage( const ASCString& text, int num  )
       #endif
 
       if ( legacyEventSystemActive() ) {
-      setvgapalette256(pal);
-
-      static int messageboxopen = 0;
-      if ( messageboxopen )
-         return;
-
-      messageboxopen++;
-      if ( messagebox ) {
-        if ( messagebox->boxstatus )
-           messagebox->done();
-        delete messagebox;
-        messagebox = NULL;
-      }
-
-      messagebox = new tdisplaymessage;
-
-      if ( num== 2 )
-         messagebox->init( stringtooutput, num, linenum, "~q~uit program");
-      else
-         messagebox->init( stringtooutput, num, linenum);
-
-      if (num != 0 ) {
-         messagebox->run();
-         messagebox->done();
-         delete messagebox;
-         messagebox = NULL;
-      }
-
-      messageboxopen--;
+         static int messageboxopen = 0;
+         if ( messageboxopen )
+            return;
+   
+         messageboxopen++;
+         if ( messagebox ) {
+            if ( messagebox->boxstatus )
+               messagebox->done();
+            delete messagebox;
+            messagebox = NULL;
+         }
+   
+         messagebox = new tdisplaymessage;
+   
+         if ( num== 2 )
+            messagebox->init( stringtooutput, num, linenum, "~q~uit program");
+         else
+            messagebox->init( stringtooutput, num, linenum);
+   
+         if (num != 0 ) {
+            messagebox->run();
+            messagebox->done();
+            delete messagebox;
+            messagebox = NULL;
+         }
+   
+         messageboxopen--;
       } else {
          warningMessageDialog( text );
       }
