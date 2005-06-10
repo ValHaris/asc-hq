@@ -463,7 +463,7 @@ TerrainBits getTerrainBitType ( TerrainBitTypes tbt )
       case cbwater1 : tb.setInt( 1 );   break;
       case cbwater2 : tb.setInt( 4096 ); break;
       case cbwater3 : tb.setInt( 8192 ); break;
-      case cbwater  : tb.setInt ( 1<<22 | 1 | 4096 | 8192 ); break;
+      case cbwater  : tb.setInt ( 1<<22 | 1 | 4096 | 8192 | 1 << 31 ); break;
       case cbstreet : tb.setInt ( 32, 0 ); break;
       case cbrailroad : tb.setInt ( 64, 0 ); break;
       case cbbuildingentry : tb.setInt ( 128, 0 ); break;
