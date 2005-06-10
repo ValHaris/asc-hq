@@ -199,8 +199,8 @@ Menu::Menu ( PG_Widget *parent, const PG_Rect &rect)
 MainScreenWidget::MainScreenWidget( PG_Application& application )
               : PG_Widget(NULL, PG_Rect ( 0, 0, app.GetScreen()->w, app.GetScreen()->h ), false),
               app ( application ) , messageLine(NULL), lastMessageTime(0), 
-              vehicleSelector( NULL ), buildingSelector( NULL ), objectSelector(NULL), terrainSelector(NULL),
-              currentSelectionWidget(NULL)
+              vehicleSelector( NULL ), buildingSelector( NULL ), objectSelector(NULL), terrainSelector(NULL), 
+              weatherSelector( NULL ), currentSelectionWidget(NULL)
 {
 
    displayLogMessage ( 5, "MainScreenWidget: initializing panels:\n");
@@ -253,10 +253,33 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
    PG_Button* button4 = new PG_Button( this, PG_Rect( Width() - 150, 290, 140, 20), "Select Terrain" );
    button4->sigClick.connect( SigC::slot( *this, &MainScreenWidget::selectTerrain ));
  
-   currentSelectionWidget = new SelectionItemWidget( this, PG_Rect( Width() - BuildingItem::Width() - 10, 330, BuildingItem::Width(), BuildingItem::Height() + MapComponent::fontHeight ) );
+   currentSelectionWidget = new SelectionItemWidget( this, PG_Rect( Width() - BuildingItem::Width() - 10, 360, BuildingItem::Width(), BuildingItem::Height() + MapComponent::fontHeight ) );
    
    setNewSelection.connect( SigC::slot( *currentSelectionWidget, &SelectionItemWidget::set ));
+   
+   weatherSelector = new PG_DropDown( this, PG_Rect( Width() - BuildingItem::Width() - 10, 330, BuildingItem::Width(), 20));
+   weatherSelector->SetEditable( false );
+   
+   int i = weatherSelector->GetSelectedItemIndex();
+   
+   for ( int i = 0; i < cwettertypennum; ++i )
+      weatherSelector->AddItem( cwettertypen[i] );
+   weatherSelector->AddItem( ASCString::toString(i) );
+   weatherSelector->SelectItem(0);
+
+            
+  // weatherSelector->sigSelectItem.connect( SigC::slot( *this, &MainScreenWidget::weatherChanged ));
+  // weatherSelector->sigSelectItem.connect( SigC::slot( *currentSelectionWidget, &SelectionItemWidget::Update ));
+   
+   
 }
+
+bool MainScreenWidget::weatherChanged( int i )
+{
+   currentWeather = i;
+     
+}
+
 
 bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 {

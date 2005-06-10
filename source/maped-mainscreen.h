@@ -74,6 +74,7 @@ class MainScreenWidget : public PG_Widget {
     PG_Window* buildingSelector;
     PG_Window* objectSelector;
     PG_Window* terrainSelector;
+    PG_DropDown* weatherSelector;
     SelectionItemWidget* currentSelectionWidget;
 public:
     MainScreenWidget( PG_Application& application );
@@ -92,6 +93,7 @@ protected:
     Menu* menu;
     
     void buildBackgroundImage();
+    bool weatherChanged( int i );
     bool idleHandler( );
     bool eventKeyDown(const SDL_KeyboardEvent* key);
     
