@@ -1779,6 +1779,7 @@ void mainloopgeneralmousecheck ( void )
 }
 
 
+
 void  mainloop ( void )
 {
    tkey ch;
@@ -2139,8 +2140,7 @@ int gamethread ( void* data )
 
    abortgame = 0;
    gameStartupComplete = true;
-
-
+   
    displayLogMessage ( 5, "entering outer main loop.\n" );
    do {
       try {
@@ -2268,7 +2268,7 @@ int main(int argc, char *argv[] )
    SDL_Init ( SDL_INIT_VIDEO );
    #endif
 
-      
+
    SDLmm::Surface* icon = NULL;
    try {
       tnfilestream iconl ( "icon_asc.gif", tnstream::reading );

@@ -3890,6 +3890,7 @@ void         tsetalliances::click(pascal_byte         bxx,
            nextplayer = 0;
       } while ( !actmap->player[nextplayer].exist() ); /* enddo */
 
+      #if SDL_BYTEORDER == SDL_LIL_ENDIAN
       if (x == 1 && ( y == actmap->actplayer || y == nextplayer || supervisor ) ) {
          location[y]++;
          if (location[y] >= playernum) 
@@ -3900,6 +3901,7 @@ void         tsetalliances::click(pascal_byte         bxx,
          showtext2(temp,x1 + ply_x1 + 30 + tsa_namelength,y1 + ply_y1 + y * 22);
          checkfornetwork();
       } 
+      #endif //  SDL_LIL_ENDIAN
       #endif
 
       if (x == 2  &&  ( y != actmap->actplayer ) && actmap->actplayer>=0  &&  !oninit && !supervisor )

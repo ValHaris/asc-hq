@@ -2000,6 +2000,11 @@ void initNetworkGame ( void )
 
 void continuenetworkgame ( void )
 {
+#if SDL_BYTEORDER != SDL_LIL_ENDIAN
+   displaymessage("Sorry, multiplayer through file transfer is currently not available on big endian machines\nThis will be available with ASC 2.0 , please check www.asc-hq.org", 1 );
+   return;
+#endif
+
    tlockdispspfld ldsf;
 
    tnetwork network;
