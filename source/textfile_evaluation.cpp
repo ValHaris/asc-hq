@@ -1286,7 +1286,11 @@ ASCImageProperty::PropertyType ASCImageProperty::operation_eq ( const TextProper
       } else
          if ( fn.suffix() == "pcx" ) {
             tnfilestream fs ( fn, tnstream::reading );
-            Surface s ( IMG_LoadPCX_RW ( SDL_RWFromStream( &fs )));
+            SDL_Surface* surface = IMG_LoadPCX_RW ( SDL_RWFromStream( &fs ));
+            if ( !surface )
+               propertyContainer->error( "error loading file " + fn );
+               
+            Surface s ( surface );
             if ( s.GetPixelFormat().BitsPerPixel() == 8)
                s.SetColorKey( SDL_SRCCOLORKEY, 255 );
             else 
