@@ -2014,12 +2014,6 @@ void         tdialogbox::stredit(char *       s,
    int         position; 
    int          i;
 
-  #ifdef _DOS_
-   #ifdef NEWKEYB
-   closekeyb();
-   #endif
-  #endif
-
    if ( strlen ( s ) > max )
       max = strlen ( s );
 
@@ -2230,12 +2224,6 @@ void         tdialogbox::stredit(char *       s,
       strcpy(s,ss);
    delete[] ss;
    delete[] ss2;
-
-  #ifdef _DOS_
-   #ifdef NEWKEYB
-   initkeyb();
-   #endif
-  #endif
 } 
 
 
@@ -2285,12 +2273,6 @@ void         tdialogbox::intedit(int *    st,
    int          i;
    int          ml;
    char ok;
-
-  #ifdef _DOS_
-   #ifdef NEWKEYB
-   closekeyb();
-   #endif
-  #endif
 
    ml =  12 ;
    activefontsettings.justify = lefttext; 
@@ -2513,12 +2495,6 @@ void         tdialogbox::intedit(int *    st,
 
    delete[] ss;
    delete[] ss2;
-
-   #ifdef _DOS_
-    #ifdef NEWKEYB
-    initkeyb();
-    #endif
-   #endif
 
 } 
 
@@ -3025,8 +3001,6 @@ tviewtext::~tviewtext()
 
 void tviewtextwithscrolling::checkscrolling ( void )
 {
-
-         #ifdef NEWKEYB
          int pagepressed_scrollspeedmultiplicator = 8;
          int tick = ticker;
          while ( (skeypress ( ct_down ) ||  skeypress ( ct_2k )) && (tvt_starty + textsizey < textsizeycomplete)) {
@@ -3085,8 +3059,6 @@ void tviewtextwithscrolling::checkscrolling ( void )
             repaintscrollbar();
          }
 
-
-         #endif
 }
 
 
@@ -3258,11 +3230,7 @@ void         thelpsystem::init(int id, char* titlet )
 
    if (textsizeycomplete >= textsizey) {
       scrollbarvisible = true; 
-      #ifdef NEWKEYB
       addscrollbar(xsize - 30,starty,xsize - 15,ysize - 40,&textsizeycomplete, textsizey, &tvt_starty,1,0);
-      #else
-      addscrollbar(xsize - 30,starty,xsize - 15,ysize - 40,&textsizeycomplete, textsizey, &tvt_starty,1,1);
-      #endif
       setscrollspeed ( 1 , 1 );
 
    }                                                                                       

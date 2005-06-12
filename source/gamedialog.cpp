@@ -121,7 +121,7 @@ bool GameDialog::gameDialog(const SDL_KeyboardEvent *key) {
         GameDialog* gd = new GameDialog();
         instance = gd;
         gd->Show();
-        gd->Run();
+        gd->RunModal();
         delete gd;
         GameDialog::instance = 0;
     }
@@ -161,7 +161,7 @@ bool ConfirmExitDialog::exitGame(PG_Button* button) {
 void ConfirmExitDialog::confirmExitDialog(PG_MessageObject* caller) {
     ConfirmExitDialog ced(caller);
     ced.Show();
-    ced.Run();
+    ced.RunModal();
 }
 
 //*******************************************************************************************************************+
@@ -219,7 +219,7 @@ void SinglePlayerDialog::singlePlayerDialog(PG_MessageObject* caller) {
         SinglePlayerDialog* spd = new SinglePlayerDialog(caller);
         SinglePlayerDialog::instance = spd;
         spd->Show();
-        spd->Run();
+        spd->RunModal();
         delete spd;
         SinglePlayerDialog::instance = 0;
     }
@@ -294,7 +294,7 @@ bool MultiPlayerDialog::superVise(PG_Button* button) {
 void MultiPlayerDialog::multiPlayerDialog(PG_MessageObject* c) {
     MultiPlayerDialog spd(c);
     spd.Show();
-    spd.Run();
+    spd.RunModal();
 }
 
 
@@ -371,7 +371,7 @@ bool OptionsDialog::showOtherOptions(PG_Button* button) {
 void OptionsDialog::optionsDialog(PG_MessageObject* caller) {
     OptionsDialog od(caller);
     od.Show();
-    od.Run();
+    od.RunModal();
 }
 
 //*******************************************************************************************************************+
@@ -430,7 +430,7 @@ bool DisplayOptionsDialog::ok(PG_Button* button) {
 void DisplayOptionsDialog::displayOptionsDialog(PG_MessageObject* c) {
     DisplayOptionsDialog ced(c);
     ced.Show();
-    ced.Run();
+    ced.RunModal();
 }
 
 //*******************************************************************************************************************+
@@ -513,7 +513,7 @@ bool GameOptionsDialog::ok(PG_Button* button) {
 void GameOptionsDialog::gameOptionsDialog(PG_MessageObject* caller) {
     GameOptionsDialog god(caller);
     god.Show();
-    god.Run();
+    god.RunModal();
 }
 
 
@@ -581,7 +581,7 @@ bool ChangeDefaultPasswordDialog::ok(PG_Button* button){
 void ChangeDefaultPasswordDialog::changeDefaultPasswordDialog(PG_MessageObject* caller) {
     ChangeDefaultPasswordDialog cdpd(caller);
     cdpd.Show();
-    cdpd.Run();
+    cdpd.RunModal();
 }
 
 //*******************************************************************************************************************
@@ -612,7 +612,7 @@ void ChangeDefaultPasswordDialog::changeDefaultPasswordDialog(PG_MessageObject* 
    void MousePreferencesDialog::mousePreferencesDialog(PG_MessageObject* caller){
      MousePreferencesDialog mpd(caller);
      mpd.Show();
-     mpd.Run();
+     mpd.RunModal();
    }
 //*******************************************************************************************************************
 
@@ -638,7 +638,7 @@ bool ChangeMapPasswordDialog::ok(PG_Button* button){
 void ChangeMapPasswordDialog::changeMapPasswordDialog(PG_MessageObject* caller) {
     ChangeMapPasswordDialog cdpd(caller);
     cdpd.Show();
-    cdpd.Run();
+    cdpd.RunModal();
 }
 
 
@@ -753,7 +753,7 @@ bool SaveGameDialog::ok(PG_Button* button) {
 void SaveGameDialog::saveGameDialog(PG_MessageObject* c) {
     SaveGameDialog sgd(c);
     sgd.Show();
-    sgd.Run();
+    sgd.RunModal();
 }
 
 //*************************************************************************************************************************
@@ -775,7 +775,7 @@ bool LoadGameDialog::ok(PG_Button* button) {
 void LoadGameDialog::loadGameDialog(PG_MessageObject* caller) {
     LoadGameDialog lgd(caller);
     lgd.Show();
-    lgd.Run();
+    lgd.RunModal();
 }
 
 //*************************************************************************************************************************
@@ -880,6 +880,6 @@ void SoundSettings::soundSettings(PG_MessageObject* caller)
    // printf("c2c %d \n", ticker );
    wnd1.Show();
    // printf("c3c %d \n", ticker );
-   wnd1.Run();
+   wnd1.RunModal();
    // printf("c4c %d \n", ticker );
 }

@@ -104,17 +104,17 @@ Mine::Mine( MineTypes type, int strength, int player, tmap* gamemap )
 }
 
 
-Object :: Object ( void )
+Object :: Object ( )
 {
    typ = NULL;
    dir = 0;
    damage = 0;
 }
 
-Object :: Object ( pobjecttype t )
+Object :: Object ( const ObjectType* o )
 {
-   lifetimer = t->lifetime;
-   typ = t;
+   lifetimer = o->lifetime;
+   typ = o;
    dir = 0;
    damage = 0;
 }

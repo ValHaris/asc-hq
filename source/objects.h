@@ -44,12 +44,12 @@ class AgeableItem {
 //! an instance of an object type (#tobjecttype) on the map
 class Object : public AgeableItem {
     public:
-       pobjecttype typ;
+       const ObjectType* typ;
        int damage;
        int dir;
-       // int dummy[4];
-       Object ( void );
-       Object ( pobjecttype t );
+       
+       Object ();
+       Object ( const ObjectType* o );
        void display ( Surface& surface, SPoint pos, int weather = 0 ) const;
        const OverviewMapImage* getOverviewMapImage( int weather );
        void setdir ( int dir );

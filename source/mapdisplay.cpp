@@ -600,7 +600,7 @@ bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
 
       updateFieldInfo();
 
-      bool exit = mouseButtonOnField( mc, SPoint(button->x, button->y), changed );
+      mouseButtonOnField( mc, SPoint(button->x, button->y), changed );
       Update();
 
       return true;
@@ -628,7 +628,7 @@ bool MapDisplayPG::eventMouseMotion (const SDL_MouseMotionEvent *button)
    
          updateFieldInfo();
    
-         bool exit = mouseDraggedToField( mc, SPoint(button->x, button->y), changed );
+         mouseDraggedToField( mc, SPoint(button->x, button->y), changed );
          Update();
    
          return true;

@@ -64,7 +64,7 @@ extern int getdiplomaticstatus2( int c, int b);
 
 extern void  putbuilding( const MapCoordinate& entryPosition,
                          int          color,
-                         pbuildingtype buildingtyp,
+                         const BuildingType* buildingtyp,
                          int          completion,
                          int          ignoreunits = 0 ); // f?r Kartened
 
@@ -85,7 +85,7 @@ extern void  calculateallobjects( pmap m = actmap );
 extern void  calculateobject(int  x,
                              int  y,
                              bool mof,
-                             pobjecttype obj,
+                             const ObjectType* obj,
                              pmap gamemap = actmap );
 
 //! generate a map of size xsize/ysize and consisting just of fields bt. The map is stored in #actmap

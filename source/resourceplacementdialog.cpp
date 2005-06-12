@@ -212,7 +212,7 @@ bool ResourcePlacementDialog::buttonErrorOkEvent( PG_Button* button ){
 void resourcePlacementDialog() {
   ResourcePlacementDialog rpd;
   rpd.Show();
-  rpd.Run();
+  rpd.RunModal();
 }
 
 

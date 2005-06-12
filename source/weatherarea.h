@@ -95,7 +95,7 @@ static const int MAXVALUE;
 static const int MAXOFFSET;
 float horizontalWindAccu;
 float verticalWindAccu;
-
+bool clustered;
 int seedValue;
 WeatherArea &operator=(const WeatherArea&);
 WeatherArea(const WeatherArea&);
@@ -112,7 +112,7 @@ int calculateDiamondPointValue(int a, int b, int c, int d);
 void createWeatherFields();
 
 public:
-    WeatherArea(tmap* map, int xCenter, int yCenter, int width, int height, int duration, FalloutType fType, unsigned int seedValue);
+    WeatherArea(tmap* map, int xCenter, int yCenter, int width, int height, int duration, FalloutType fType, unsigned int seedValue, bool clustered = true);
     WeatherArea(tmap* map, int xCenter, int yCenter, int radius);
     WeatherArea(tmap* map);
     
@@ -177,7 +177,7 @@ WeatherField(MapCoordinate mapPos, const WeatherArea* area);
 void move(const Vector2D& vector);
 bool isOnMap(const tmap* map) const;
 void update(const WeatherArea*, FieldSet& processedFields);
-void reset(FieldSet& processedFields);
+void reset(tmap* m, const WeatherArea*, FieldSet& processedFields);
 void write (tnstream& outputStream) const;
 void read (tnstream& inputStream);
 void setValue(int v);
@@ -185,7 +185,7 @@ int getValue();
 
 MapCoordinate posInArea;
 };
-
+//**************************************************************************************************************************************
 class WeatherSystem : public SigC::Object{
 private:
 
@@ -252,6 +252,7 @@ public:
   void setLikelihoodWindSpeed(const Percentages&  wd) throw (IllegalValueException);
   void setRandomSizeBorders(float lower, float upper);
   void setGlobalWind(unsigned int speed, Direction direction) throw (IllegalValueException);
+  void setDefaultFallout(FalloutType newFalloutType);
   void addWeatherArea(WeatherArea* area, GameTime time);
   void removeWeatherArea(GameTime time, WeatherArea* area);
   void removeWindChange(int time, WindData);

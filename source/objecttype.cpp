@@ -53,7 +53,7 @@ ObjectType :: ObjectType ( void )
    lifetime = -1;
 }
 
-ObjectType::FieldModification&  ObjectType::getFieldModification ( int weather )
+const ObjectType::FieldModification&  ObjectType::getFieldModification ( int weather ) const
 {
    if ( this->weather.test( weather ))
       return fieldModification[weather];
@@ -61,7 +61,7 @@ ObjectType::FieldModification&  ObjectType::getFieldModification ( int weather )
       return fieldModification[0];
 }
 
-bool  ObjectType :: buildable ( pfield fld )
+bool  ObjectType :: buildable ( pfield fld ) const
 {
    #ifndef converter
    if ( fld->building )
@@ -74,13 +74,13 @@ bool  ObjectType :: buildable ( pfield fld )
    return true;
 }
 
-int ObjectType :: getEffectiveHeight()
+int ObjectType :: getEffectiveHeight() const
 {
   return 1 << physicalHeight;
 }
 
 
-const OverviewMapImage* ObjectType :: getOverviewMapImage( int picnum, int weather  )
+const OverviewMapImage* ObjectType :: getOverviewMapImage( int picnum, int weather  ) const
 {
    if ( !this->weather.test(weather) )
       weather = 0;
@@ -102,7 +102,7 @@ const OverviewMapImage* ObjectType :: getOverviewMapImage( int picnum, int weath
 }
 
 
-Surface& ObjectType :: getPicture ( int i, int w )
+const Surface& ObjectType :: getPicture ( int i, int w ) const
 {
    if ( !weather.test(w) )
       w = 0;
@@ -117,7 +117,7 @@ Surface& ObjectType :: getPicture ( int i, int w )
 }
 
 
-void ObjectType :: display ( Surface& surface, SPoint pos, int dir, int weather )
+void ObjectType :: display ( Surface& surface, SPoint pos, int dir, int weather ) const
 {
    if ( !this->weather.test( weather) )
       weather = 0;
@@ -143,47 +143,44 @@ void ObjectType :: display ( Surface& surface, SPoint pos, int dir, int weather 
 
 
 
-void ObjectType::realDisplay ( Surface& surface, SPoint pos, int dir, int weather )
+void ObjectType::realDisplay ( Surface& surface, SPoint pos, int dir, int weather ) const
 {
- 
-      int flip = 0;
-      if ( dir < weatherPicture[weather].flip.size() )
-         flip = weatherPicture[weather].flip[dir];
+   int flip = 0;
+   if ( dir < weatherPicture[weather].flip.size() )
+      flip = weatherPicture[weather].flip[dir];
 
-      if ( id == 7 || id == 30 || displayMethod==1 ) { // buried pipeline,
-         megaBlitter<ColorTransform_None, ColorMerger_AlphaShadow, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
+   if ( id == 7 || id == 30 || displayMethod==1 ) { // buried pipeline,
+      megaBlitter<ColorTransform_None, ColorMerger_AlphaShadow, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
+   } else
+      if ( displayMethod == 2 ) {  // translation
+         megaBlitter<ColorTransform_None, ColorMerger_Alpha_XLAT_TableShifter, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam, xlattables.nochange, flip, nullParam); 
       } else
-         if ( displayMethod == 2 ) {  // translation
-            megaBlitter<ColorTransform_None, ColorMerger_Alpha_XLAT_TableShifter, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam, xlattables.nochange, flip, nullParam); 
-         } else
-            if ( displayMethod == 4 ) {
-               megaBlitter<ColorTransform_None, ColorMerger_AlphaMixer, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
-            } else {
-               bool disp = true;
-               #ifndef karteneditor
-               if ( displayMethod == 3 ) // mapeditorOnly
-                  disp = false;
-               #endif
-               if ( disp ) {
-                  if ( flip ) {
-                     if ( imageUsesAlpha )
-                        megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
-                     else   
-                        megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
-                  } else {  
-                     if ( imageUsesAlpha )
-                        megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
-                     else
-                        megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
-                  }   
-               }
-            }   
-   
+         if ( displayMethod == 4 ) {
+            megaBlitter<ColorTransform_None, ColorMerger_AlphaMixer, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
+         } else {
+            bool disp = true;
+            #ifndef karteneditor
+            if ( displayMethod == 3 ) // mapeditorOnly
+               disp = false;
+            #endif
+            if ( disp ) {
+               if ( flip ) {
+                  if ( imageUsesAlpha )
+                     megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
+                  else   
+                     megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
+               } else {  
+                  if ( imageUsesAlpha )
+                     megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
+                  else
+                     megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
+               }   
+            }
+         }   
 }
 
 
-
-void ObjectType :: display ( Surface& surface, SPoint pos )
+void ObjectType :: display ( Surface& surface, SPoint pos ) const
 {
    display ( surface, pos, 34, 0 );
 }
@@ -449,7 +446,7 @@ class Smoothing {
                  } else {
                     pfield fld = getfield ( X, Y );
                     TerrainType::Weather* old = fld->typ;
-                    int odir = fld->direction;
+                    // int odir = fld->direction;
 
                     if ( IsInSetOfWord( fld->typ->bi_pict, &SmoothData[P0] )) {    // Nur die "allesWald"-fielder werden gesmootht
                        int Mask = GetNeighbourMask( X, Y, &SmoothData[P1] );
@@ -478,7 +475,7 @@ class Smoothing {
                           */
                        }
                     }
-                    if ( old != fld->typ  ||  odir != fld->direction )
+                    if ( old != fld->typ  )
                        Res = 1;
 
                  }
@@ -717,113 +714,6 @@ void calculateforest( pmap actmap, pobjecttype woodObj )
 }
 
 } // namespace forestcalculation
-
-
-void         calculateobject( int       x,
-                              int       y,
-                              bool      mof,
-                              pobjecttype obj,
-                              pmap actmap )
-{
-   if ( obj->netBehaviour & ObjectType::SpecialForest ) {
-      ForestCalculation::calculateforest( actmap, obj );
-      return;
-   }
-
-   pfield fld = actmap->getField(x,y) ;
-   pobject oi2 = fld-> checkforobject (  obj  );
-
-   int c = 0;
-   for ( int dir = 0; dir < sidenum; dir++) {
-      int a = x;
-      int b = y;
-      getnextfield( a, b, dir );
-      pfield fld2 = actmap->getField(a,b);
-
-      if ( fld2 ) {
-         for ( int oj = -1; oj < int(obj->linkableObjects.size()); oj++ ) {
-            pobject oi;
-            if ( oj == -1 )
-               oi = fld2->checkforobject ( obj );
-            else
-               oi = fld2->checkforobject ( actmap->getobjecttype_byid ( obj->linkableObjects[oj] ) );
-
-            if ( oi ) {
-               c |=  1 << dir ;
-               if ( mof )
-                  calculateobject ( a, b, false, oi->typ, actmap );
-
-            }
-         }
-         for ( unsigned int t = 0; t < obj->linkableTerrain.size(); t++ )
-            if ( fld2->typ->terraintype->id == obj->linkableTerrain[t] )
-               c |=  1 << dir ;
-
-         if ( fld2->building && !(fld2->building->typ->special & cgnoobjectchainingb) ) {
-            if ( (obj->netBehaviour & ObjectType::NetToBuildingEntry)  &&  (fld2->bdt & getTerrainBitType(cbbuildingentry) ).any() )
-               c |= 1 << dir;
-
-            if ( obj->netBehaviour & ObjectType::NetToBuildings )
-               c |= 1 << dir;
-         }
-
-      }
-      else {
-         if ( obj->netBehaviour & ObjectType::NetToBorder )
-            c |= 1 << dir;
-      }
-   }
-
-   if ( obj->netBehaviour & ObjectType::AutoBorder ) {
-      int autoborder = 0;
-      int count = 0;
-      for ( int dir = 0; dir < sidenum; dir++) {
-         int a = x;
-         int b = y;
-         getnextfield( a, b, dir );
-         pfield fld2 = actmap->getField(a,b);
-         if ( !fld2 ) {
-            // if the field opposite of the border field is connected to, make a straight line out of the map.
-            if ( c & (1 << ((dir+sidenum/2) % sidenum ))) {
-               autoborder |= 1 << dir;
-               count++;
-            }
-         }
-      }
-      if ( count == 1 )
-         c |= autoborder;
-   }
-
-   if ( oi2 ) {
-     oi2->setdir ( c );
-     fld->setparams();
-   }
-
-}
-
-
-
-
-void         calculateallobjects( pmap actmap )
-{
-   vector<ObjectType*> forestObjects;
-   for ( int y = 0; y < actmap->ysize ; y++)
-      for ( int x = 0; x < actmap->xsize ; x++) {
-         pfield fld = actmap->getField(x,y);
-
-         for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ )
-             if ( !(i->typ->netBehaviour & ObjectType::SpecialForest) )
-                calculateobject( x, y, false, i->typ, actmap );
-             else
-                if ( find ( forestObjects.begin(), forestObjects.end(), i->typ ) == forestObjects.end())
-                   forestObjects.push_back ( i->typ );
-
-         fld->setparams();
-      }
-
-   for ( vector<ObjectType*>::iterator i = forestObjects.begin(); i != forestObjects.end(); i++ )
-      ForestCalculation::calculateforest( actmap, *i );
-}
 
 
 

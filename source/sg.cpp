@@ -1504,6 +1504,8 @@ void execuseraction2 ( tuseractions action )
          */
                            }
          break;
+      case ua_weathercast: weathercast();
+      break;
       default:
          break;
    }
@@ -1565,17 +1567,9 @@ void  mainloop ( void )
 
          switch (ch) {
 
-#ifndef NEWKEYB
-            case 'R':
-      case ua_weathercast: weathercast();
-               execuseraction ( ua_repainthard );
-               break;
-#else
             case ct_shp + ct_r:
                execuseraction ( ua_repainthard );
                break;
-#endif
-
             case ct_stp + ct_l:
                execuseraction ( ua_loadgame );
                break;

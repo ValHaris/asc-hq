@@ -49,15 +49,8 @@ class SelectionItemWidget : public PG_Widget {
          Surface s = Surface::Wrap( surface );
          s.Fill( s.GetPixelFormat().MapRGB( DI_Color( 0x73b16a ) ));
          if ( it ) {
-            SPoint pos ( (Width() - it->displayWidth()) / 2, (Height() - MapComponent::fontHeight - it->displayHeight())/2 );
+            SPoint pos ( (Width() - it->displayWidth()) / 2, (Height() - it->displayHeight())/2 );
             it->display( s, pos );
-            
-            SDL_Rect      blitRect;
-            blitRect.x = 0;
-            blitRect.y = pos.y + it->displayHeight() + 2;
-            blitRect.w = it->displayWidth();
-            blitRect.h = it->displayHeight() - blitRect.y;
-            PG_FontEngine::RenderText( surface, blitRect, blitRect.x, blitRect.y+GetFontAscender(), it->getName(), GetFont() );
         }    
       };
 
@@ -74,7 +67,11 @@ class MainScreenWidget : public PG_Widget {
     PG_Window* buildingSelector;
     PG_Window* objectSelector;
     PG_Window* terrainSelector;
-    PG_DropDown* weatherSelector;
+    DropDownSelector* weatherSelector;
+    DropDownSelector* playerSelector;
+    DropDownSelector* brushSelector;
+    PG_Label* selectionName;
+    PG_Label* coordinateDisplay;
     SelectionItemWidget* currentSelectionWidget;
 public:
     MainScreenWidget( PG_Application& application );
@@ -86,6 +83,7 @@ public:
     bool selectBuilding();
     bool selectObject();
     bool selectTerrain();
+    void updateStatusBar();
    
 protected:
     MapDisplayPG* mapDisplay;
@@ -93,9 +91,11 @@ protected:
     Menu* menu;
     
     void buildBackgroundImage();
-    bool weatherChanged( int i );
+    void brushChanged( int i );
+    void selectionChanged( const MapComponent* item ); 
     bool idleHandler( );
     bool eventKeyDown(const SDL_KeyboardEvent* key);
+    void setupStatusBar();
     
     void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst) ;
 //    void eventDraw (SDL_Surface* surface, const PG_Rect& rect);

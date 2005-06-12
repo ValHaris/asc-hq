@@ -78,6 +78,9 @@ OverviewMapHolder :: OverviewMapHolder( tmap& gamemap ) : map(gamemap), initiali
    idleEvent.connect( SigC::slot( *this, &OverviewMapHolder::idleHandler ));
 }
 
+
+SigC::Signal0<void> OverviewMapHolder::generationComplete;
+
 bool OverviewMapHolder :: idleHandler( )
 {
    int t = ticker;
@@ -122,7 +125,7 @@ void OverviewMapHolder::updateField( const MapCoordinate& pos )
    }
 }
 
-void OverviewMapHolder::drawNextField( bool signalOnComplete )
+void OverviewMapHolder::drawNextField( bool signalOnCompletion )
 {
    if ( !init() )
       return;
@@ -137,8 +140,8 @@ void OverviewMapHolder::drawNextField( bool signalOnComplete )
    }
    if ( y == map.ysize ) {
       completed = true;
-      if ( signalOnComplete )
-         viewChanged();
+      if ( signalOnCompletion )
+         generationComplete();
    }
 }
 
@@ -177,6 +180,11 @@ void OverviewMapHolder::clear()
    startUpdate();
 }
 
+void OverviewMapHolder::clear( tmap* actmap )
+{
+   if ( actmap )
+      actmap->overviewMapHolder.clear();
+}
 
 
 tmap :: tmap ( void )

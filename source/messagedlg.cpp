@@ -510,11 +510,7 @@ void         tviewmessage::init( const Message& msg )
    if (textsizeycomplete >= textsizey) {
       scrollbarvisible = true;
 
-      #ifdef NEWKEYB
       addscrollbar(xsize - 30,starty,xsize - 15,ysize - 35,&textsizeycomplete, textsizey, &tvt_starty,1,0);
-      #else
-      addscrollbar(xsize - 30,starty,xsize - 15,ysize - 35,&textsizeycomplete, textsizey, &tvt_starty,1,1);
-      #endif
       setscrollspeed ( 1 , 1 );
 
       rightspace = 40;

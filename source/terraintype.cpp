@@ -237,7 +237,7 @@ void TerrainType::read( tnstream& stream )
             int move_maluscount = stream.readChar();
             stream.readInt(); // pgbt->movemalus = (char*)
             stream.readInt(); // pgbt->terraintype
-            bool readQuickView = stream.readInt();
+            stream.readInt(); // bool readQuickView
 
             pgbt->art.read ( stream );
 

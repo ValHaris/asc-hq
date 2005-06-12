@@ -264,6 +264,29 @@ void         SearchFields::startsearch(void)
    }  while (!((dist - step == lastDistance) || cancelSearch));
 }
 
+
+class SearchFieldsIterator : public SearchFields {
+   public:
+      typedef FieldIterationFunctor MyFunctor;
+   private:   
+      MyFunctor& myFunctor;
+   protected:
+      void testfield ( const MapCoordinate& pos ) {
+         myFunctor(pos);
+      };      
+   public: 
+      SearchFieldsIterator ( pmap _gamemap, MyFunctor& functor ) : SearchFields( _gamemap ), myFunctor( functor ) {};
+           
+};
+
+void circularFieldIterator( pmap gamemap, const MapCoordinate& center, int startDist, int stopDist, FieldIterationFunctor functor )
+{
+   SearchFieldsIterator searchFields( gamemap, functor );
+   searchFields.initsearch( center, startDist, stopDist );
+   searchFields.startsearch();      
+}
+
+
 int         ccmpheighchangemovedir[6]  = {0, 1, 5, 2, 4, 3 };
 
 

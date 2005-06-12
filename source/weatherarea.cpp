@@ -24,7 +24,7 @@ const char*  cdirections[WeatherSystem::WindDirNum] = {"North", "NorthEast", "So
 //****************************************************************************************************************************************
 const int WeatherArea::MAXVALUE = 200;
 const int WeatherArea::MAXOFFSET = 100;
-WeatherArea::WeatherArea(tmap* m, int xCenter, int yCenter, int w, int h, int d, FalloutType fallout, unsigned int sV): map(m), center(xCenter, yCenter), width(w), height(h), duration(d), ft(fallout), stepCount(0), seedValue(sV), verticalWindAccu(0), horizontalWindAccu(0) {
+WeatherArea::WeatherArea(tmap* m, int xCenter, int yCenter, int w, int h, int d, FalloutType fallout, unsigned int sV, bool clustered): map(m), center(xCenter, yCenter), width(w), height(h), duration(d), ft(fallout), stepCount(0), seedValue(sV), verticalWindAccu(0), horizontalWindAccu(0), clustered(clustered) {
     WeatherField* wf;
     for(int i = 0; i < width * height; i++) {
         int x =  i % width;
@@ -78,12 +78,16 @@ void WeatherArea::setFalloutType(FalloutType fallout) {
 }
 
 FalloutType WeatherArea::getFalloutType(int value) const {
-    if(ft > 0) {
-    /*if(value < (MAXVALUE * 0.25)) {
-            return map->weatherSystem->getDefaultFalloutType();
-      }*/
-    }
 
+    if((ft != map->weatherSystem->getDefaultFalloutType()) && (clustered)) {
+      if(value < (MAXVALUE * 0.25)) {        
+        if((ft != DRY) && (ft != LSNOW)){	
+            return static_cast<FalloutType>(ft-1);
+	}else{
+	  return map->weatherSystem->getDefaultFalloutType();
+	}
+      }
+    }
     return ft;
 }
 
@@ -133,7 +137,7 @@ void WeatherArea::update(WeatherSystem* wSystem, FieldSet& processedFields) {
         for(int i = 0; i < area.size(); i++) {
             WeatherField* wf = area[i];
             if(wf->isOnMap(map)) {
-                wf->reset(processedFields);
+                wf->reset(this->map, this, processedFields);
             }
         }
         center.move(currentMovement);
@@ -165,6 +169,7 @@ void WeatherArea::write (tnstream& outputStream) const {
     for ( WeatherFields::const_iterator i = area.begin(); i != area.end(); i++ ) {
     (*i)->write ( outputStream );
     }
+    outputStream.writeInt(clustered);
 }
 
 void WeatherArea::read (tnstream& inputStream) {
@@ -192,6 +197,7 @@ void WeatherArea::read (tnstream& inputStream) {
         area.push_back(wf);
     }
     //createWeatherFields();
+    clustered = inputStream.readInt();
 }
 
 Vector2D WeatherArea::getWindVector() const {
@@ -216,7 +222,7 @@ void WeatherArea::removeArea(FieldSet& processedFields) {
     for(int i = 0; i < area.size(); i++) {
         WeatherField* wf = area[i];
         if(wf->isOnMap(map)) {
-            wf->reset(processedFields);
+            wf->reset(this->map, this, processedFields);
         }
     }
 }
@@ -375,25 +381,22 @@ bool WeatherField::isOnMap(const tmap* map) const {
 
     }
 
-    void WeatherField::reset(FieldSet& processedFields) {
+void WeatherField::reset(tmap* m, const WeatherArea* area, FieldSet& processedFields) {
         if(processedFields.find(mapField)== processedFields.end()) {
-            mapField->setweather(DRY);
+            mapField->setweather(m->weatherSystem->getDefaultFalloutType());
             mapField->setparams();
         }
-    }
-void WeatherField::update(const WeatherArea* area, FieldSet& processedFields) {
-    //cout << "Field: " << posInArea.getX() << "," << posInArea.getY() <<", " << value << endl;
+}
+
+void WeatherField::update(const WeatherArea* area, FieldSet& processedFields) {    
     mapField = area->getMap()->getField(posInArea.x, posInArea.y);
     mapField->setweather(area->getFalloutType(value));
     mapField->setparams();
     processedFields.insert(mapField);
 }
 
-void WeatherField::write (tnstream& outputStream) const {
-    //outputStream.writeInt(posInArea.getX());
-    //outputStream.writeInt(posInArea.getY());
+void WeatherField::write (tnstream& outputStream) const {    
     outputStream.writeInt(value);
-
 }
 
 void  WeatherField::read(tnstream& inputStream) {
@@ -553,9 +556,10 @@ void WeatherSystem::setRandomSizeBorders(float lower, float upper) {
 
 void WeatherSystem::setGlobalWind(unsigned int ws, Direction d) throw (IllegalValueException) {
     windspeed = ws;
-    globalWindDirection = d;
-    //    gameMap->weather.windDirection = globalWindDirection;
-    //    gameMap->weather.windSpeed = windspeed;
+    globalWindDirection = d;    
+}
+void WeatherSystem::setDefaultFallout(FalloutType newFalloutType){
+  defaultFallout = newFalloutType;
 }
 
 void WeatherSystem::addWeatherArea(WeatherArea* area, GameTime time) {

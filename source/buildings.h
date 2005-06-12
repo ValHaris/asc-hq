@@ -121,7 +121,7 @@ class  Building : public ContainerBase {
     };
 
     Work* spawnWorkClasses( bool justQuery );
-    const pbuildingtype typ;
+    const BuildingType* typ;
 
     pvehicletype      production[32];
 
@@ -166,7 +166,7 @@ class  Building : public ContainerBase {
 
     AiValue*      aiparam[8];
 
-    Building( pmap map, const MapCoordinate& entryPosition, const pbuildingtype type , int player, bool setupImages = true, bool chainToField = true);
+    Building( pmap map, const MapCoordinate& entryPosition, const BuildingType* type , int player, bool setupImages = true, bool chainToField = true);
 
     int lastmineddist;
 

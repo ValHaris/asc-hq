@@ -24,7 +24,8 @@ messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp messag
 simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp weatherarea.cpp \
 guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp gamedialog.cpp \
-infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappanel.cpp
+infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappanel.cpp \
+weathercast.cpp
 
 
 asc_LDADD   		= $(top_builddir)/source/libs/triangul/libtriangul.la \

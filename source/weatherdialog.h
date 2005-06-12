@@ -225,6 +225,8 @@ private:
   PG_Label* heightLabel;
   PG_LineEdit* heightValue;
   
+  PG_CheckButton* clusteredMode;
+  
   PG_Label* wTypesLabel;
   PG_DropDown* weatherTypes;
   
@@ -251,6 +253,9 @@ private:
   
   PG_CheckButton* randomMode;
   PG_CheckButton* seedMode;
+  
+  PG_Label* defaultWeatherLabel;
+  PG_DropDown* weatherTypes;
   
   PG_Label* areaSpawnsLabel;
   PG_LineEdit* areaSpawnsValue;

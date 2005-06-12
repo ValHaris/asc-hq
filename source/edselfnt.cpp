@@ -36,30 +36,57 @@
 #include "paradialog.h"
 
 
-MapComponent* currentItem = NULL;
-SigC::Signal1<void,const MapComponent*> setNewSelection;
+SelectionHolder selection;
 
-void setSelection( const MapComponent* component ) 
+SigC::Signal0<void> filtersChangedSignal;
+
+void SelectionHolder::setSelection( const MapComponent* component ) 
 {
    delete currentItem;
    currentItem = component->clone();
+   selectionChanged( currentItem );
 }
 
-const MapComponent* getSelection()
+void SelectionHolder::setPlayer( int player )
+{
+   actplayer = player;
+   if ( currentItem )
+      selectionChanged( currentItem );
+}
+
+void SelectionHolder::setWeather( int weather )
+{
+   currentWeather = weather;
+   if ( currentItem )
+      selectionChanged( currentItem );
+}
+
+
+const MapComponent* SelectionHolder::getSelection()
 {
    return currentItem;
 }
 
-
-MapComponent::MapComponent()
+void SelectionHolder::pickup ( pfield fld )
 {
-   static bool init = false;
-   if ( !init ) {
-      setNewSelection.connect( SigC::slot( setSelection ));
-      init = true;
+   if ( fld->vehicle ) {
+      VehicleItem v ( fld->vehicle->typ );
+      actplayer = fld->vehicle->getOwner();
+      setSelection( &v );
+   } else
+   if ( fld->building ) {
+      BuildingItem b ( fld->building->typ );
+      actplayer = fld->building->getOwner();
+      setSelection( &b );
+   } else
+   if ( !fld->objects.empty() ) {
+      ObjectItem o ( fld->objects.begin()->typ );
+      setSelection( &o );
+   } else {
+      TerrainItem t ( fld->typ->terraintype );
+      setSelection( &t );
    }
 }
-
 
 
 
@@ -145,10 +172,13 @@ int VehicleItem::place( const MapCoordinate& mc ) const
    if ( !fld )
       return -1;
 
-   Vehicletype* veh = item;
+   const Vehicletype* veh = item;
    
    if ( !veh )
       return -2;
+     
+   if ( selection.getPlayer()  == 8 )
+      return -3;
 
    bool accessible = veh->terrainaccess.accessible ( fld->bdt );
    if ( veh->height >= chtieffliegend )
@@ -163,11 +193,11 @@ int VehicleItem::place( const MapCoordinate& mc ) const
          delete fld->vehicle;
          fld->vehicle = NULL;
       } else {
-         fld->vehicle->convert( actplayer );
+         fld->vehicle->convert( selection.getPlayer()  );
          return 1;
       }
    }
-   fld->vehicle = new Vehicle ( veh, actmap, actplayer );
+   fld->vehicle = new Vehicle ( veh, actmap, selection.getPlayer()  );
    fld->vehicle->setnewposition ( mc );
    fld->vehicle->fillMagically();
    
@@ -193,7 +223,24 @@ Surface BuildingItem::clippingSurface;
 Surface BuildingItem::fullSizeImage;
 int BuildingItem::place( const MapCoordinate& mc ) const
 {
-   Building* building = new Building( actmap, mc, bld, actplayer );
+   int f = 0;
+   for ( int x = 0; x < 4; x++ )
+      for ( int y = 0; y < 6; y++ )
+         if ( bld->fieldExists ( BuildingType::LocalCoordinate(x, y) )) {
+            MapCoordinate mc = bld->getFieldCoordinate ( actmap->getCursor() , BuildingType::LocalCoordinate (x, y) );
+            if ( !actmap->getField (mc) )
+               return -1;
+
+            if ( bld->terrainaccess.accessible ( actmap->getField (mc)->bdt ) <= 0 )
+               f++;
+         }
+   if ( f ) {
+      // if (choice_dlg("Invalid terrain for building !","~i~gnore","~c~ancel") == 2)
+         return -1 ;
+   }      
+
+   putbuilding( actmap->getCursor(), selection.getPlayer()  * 8, bld, bld->construction_steps );
+   return 0;
 }
 
 void BuildingItem::display( Surface& s, const SPoint& pos ) const 
@@ -201,7 +248,7 @@ void BuildingItem::display( Surface& s, const SPoint& pos ) const
    if ( !fullSizeImage.valid() )
       fullSizeImage = Surface::createSurface( displayWidth()*2 + 10, displayHeight()*2 + 30, 32, 0 );
    fullSizeImage.FillTransparent();
-   bld->paint ( fullSizeImage, SPoint(0,0), actplayer); 
+   bld->paint ( fullSizeImage, SPoint(0,0), selection.getPlayer() ); 
    
    MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom,TargetPixelSelector_Valid> blitter;
    blitter.setZoom( 0.5 );
@@ -214,6 +261,7 @@ Surface BasicItem<ObjectType>::clippingSurface;
 int ObjectItem::place( const MapCoordinate& mc ) const
 {
    actmap->getField(mc)->addobject( item );
+   return 0;
 }
 
 
@@ -222,8 +270,9 @@ int TerrainItem::place( const MapCoordinate& mc ) const
 {
    pfield fld = actmap->getField(mc);
    fld->typ = item->weather[0]; 
-   fld->setweather( currentWeather );
+   fld->setweather( selection.getWeather() );
    fld->setparams();
+   return 0;
 }
 
 
@@ -231,6 +280,7 @@ int TerrainItem::place( const MapCoordinate& mc ) const
 
 int actplayer = 0;
 int currentWeather = 0;
+int brushSize = 1;
 
 
 //* õS terrainSelect
@@ -487,27 +537,19 @@ template<class T> T SelectAnything<T> :: selectitem( T previtem, tkey neutralkey
          getkeysyms ( &ch, &prntkey );
          switch ( ch ) {
          
-               #ifdef NEWKEYB
                case ct_up:
-               #endif
                case ct_8k:   actitemy--;
                              break;
                              
-               #ifdef NEWKEYB
                case ct_left:
-               #endif
                case ct_4k:   actitemx--;
                              break;
                              
-               #ifdef NEWKEYB
                case ct_right:
-               #endif
                case ct_6k:   actitemx++;
                              break;
                              
-               #ifdef NEWKEYB
                case ct_down:
-               #endif
                case ct_2k:   actitemy++;
                   break;
                   
@@ -1293,7 +1335,7 @@ void SelectItemContainer :: checkformouse ( void )
          case 0: if ( skeypress ( ct_lstrg ) || skeypress ( ct_rstrg ) || skeypress ( ct_lshift ) || skeypress ( ct_rshift ))
                     selterraintype ( ct_invvalue );
                  else
-                    execaction(act_switchmaps );
+                    execaction_ev(act_switchmaps );
             break;
          case 1: selvehicletype ( ct_invvalue );
             break;
@@ -1304,7 +1346,7 @@ void SelectItemContainer :: checkformouse ( void )
          case 4: if ( skeypress ( ct_lstrg ) || skeypress ( ct_rstrg ) || skeypress ( ct_lshift ) || skeypress ( ct_rshift ))
                     selobject ( ct_invvalue );
                  else
-                    execaction(act_switchmaps );
+                    execaction_ev(act_switchmaps );
             break;
          case 5: selmine ( ct_invvalue );
             break;

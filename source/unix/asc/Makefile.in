@@ -82,7 +82,8 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	guifunctions.$(OBJEXT) iconrepository.$(OBJEXT) \
 	gamedialog.$(OBJEXT) infopopup.$(OBJEXT) \
 	overviewmapimage.$(OBJEXT) asc-mainscreen.$(OBJEXT) \
-	mapfield.$(OBJEXT) overviewmappanel.$(OBJEXT)
+	mapfield.$(OBJEXT) overviewmappanel.$(OBJEXT) \
+	weathercast.$(OBJEXT)
 asc_OBJECTS = $(am_asc_OBJECTS)
 asc_DEPENDENCIES =  \
 	$(top_builddir)/source/libs/triangul/libtriangul.la \
@@ -246,7 +247,8 @@ messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp messag
 simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp weatherarea.cpp \
 guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp gamedialog.cpp \
-infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappanel.cpp
+infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappanel.cpp \
+weathercast.cpp
 
 asc_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
@@ -403,6 +405,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicletype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/viewcalculation.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/weatherarea.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/weathercast.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

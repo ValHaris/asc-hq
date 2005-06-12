@@ -28,6 +28,7 @@
 #include "spfst.h"
 #include "pgimage.h"
 #include "textfiletags.h"
+#include "mapdisplay.h"
 
 
 

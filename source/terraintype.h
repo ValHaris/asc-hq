@@ -72,7 +72,7 @@
     public:
       int                id;
       ASCString          name;
-      ASCString          getName() { return name; };
+      ASCString          getName() const { return name; };
       
       class MoveMalus: public vector<int> {
          public: MoveMalus();

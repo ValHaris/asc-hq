@@ -492,6 +492,27 @@ bool ItemFiltrationSystem::isFiltered ( ItemFiltrationSystem::Category cat, int 
 }
 
 
+bool ItemFiltrationSystem::isFiltered( const Vehicletype* item )
+{
+   return isFiltered( Vehicle, item->id );
+}
+
+bool ItemFiltrationSystem::isFiltered( const BuildingType* item )
+{
+   return isFiltered( Building, item->id );
+}
+
+bool ItemFiltrationSystem::isFiltered( const ObjectType* item )
+{
+   return isFiltered( Object, item->id );
+}
+
+bool ItemFiltrationSystem::isFiltered( const TerrainType* item )
+{
+   return isFiltered( Terrain, item->id );
+}
+
+
 void ItemFiltrationSystem::DataLoader::readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location )
 {
    ItemFilter* itf = new ItemFilter;

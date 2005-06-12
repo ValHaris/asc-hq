@@ -88,16 +88,16 @@ class  tfield {
          \param dir The direction of the object type; -1 to use default direction
          \param force Put the object there even if it cannot normally be placed on this terrain
     **/
-    void addobject ( pobjecttype obj, int dir = -1, bool force = false );
+    void addobject ( const ObjectType* obj, int dir = -1, bool force = false );
 
     //! removes all objects of the given type from the field
-    void removeobject ( pobjecttype obj, bool force = false );
+    void removeobject ( const ObjectType* obj, bool force = false );
 
     //! sorts the objects. Since objects can be on different levels of height, the lower one must be displayed first
     void sortobjects ( void );
 
     //! checks if there are objects from the given type on the field and returns them
-    pobject checkforobject ( pobjecttype o );
+    pobject checkforobject ( const ObjectType*  o );
 
 
     //! the terraintype properties. They determine which units can move over the field. This variable is recalculated from the terraintype and objects each time something on the field changes (#setparams)

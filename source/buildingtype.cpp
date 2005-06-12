@@ -128,7 +128,7 @@ void  BuildingType:: paintSingleField ( Surface& s, SPoint pos, const LocalCoord
 
 
 
-MapCoordinate  BuildingType :: getFieldCoordinate ( const MapCoordinate& entryOnMap, const LocalCoordinate& localCoordinates )
+MapCoordinate  BuildingType :: getFieldCoordinate ( const MapCoordinate& entryOnMap, const LocalCoordinate& localCoordinates ) const
 {
    int orgx = entryOnMap.x - entry.x - (entry.y & ~entryOnMap.y & 1 );
    int orgy = entryOnMap.y - entry.y;

@@ -143,6 +143,11 @@ class ItemFiltrationSystem {
 
 
          static bool isFiltered ( Category cat, int id );
+         static bool isFiltered( const Vehicletype* item );
+         static bool isFiltered( const BuildingType* item );
+         static bool isFiltered( const ObjectType* item );
+         static bool isFiltered( const TerrainType* item );
+       
 };
 
 #endif

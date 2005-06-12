@@ -578,8 +578,6 @@ void   tspfldloaders::writefields ( void )
 
       if (fld->typ->terraintype->id > 255) 
          b1 |= csm_typid32; 
-      if (fld->direction != 0) 
-         b1 |= csm_direction; 
       if (fld->vehicle != NULL) 
          b1 |= csm_vehicle; 
       if ( (fld->bdt & getTerrainBitType( cbbuildingentry )).any() )
@@ -641,9 +639,6 @@ void   tspfldloaders::writefields ( void )
          stream->writeInt ( fld->typ->terraintype->id );
       else
          stream->writeChar ( fld->typ->terraintype->id );
-
-      if (b1 & csm_direction )                    
-         stream->writeChar ( fld->direction );
 
       if (b1 & csm_vehicle ) 
          fld->vehicle->write ( *stream );
@@ -764,10 +759,8 @@ void tspfldloaders::readfields ( void )
             throw InvalidID ( "terrain", k );
 
          if (b1 & csm_direction )
-            fld2->direction = stream->readChar();
-         else                                              
-            fld2->direction = 0; 
-
+            stream->readChar();  // fld2->direction = 0; 
+            
 
          if (b1 & csm_vehicle ) {
              fld2->vehicle = Vehicle::newFromStream ( spfld, *stream );
@@ -893,7 +886,6 @@ void tspfldloaders::readfields ( void )
          spfld->field[l].typ = lfld->typ;
          spfld->field[l].fuel = lfld->material;
          spfld->field[l].visible = lfld->visible;
-         spfld->field[l].direction = lfld->direction;
          spfld->field[l].tempw = 0;
          spfld->field[l].connection = lfld->connection;
          for ( int i = 0; i < 8; i++ )

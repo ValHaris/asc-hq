@@ -104,7 +104,36 @@ class EventSupplier: public PG_SDLEventSupplier {
 
 } eventSupplier;
 
+
+
+
+
+DropDownSelector::DropDownSelector( PG_Widget *parent, const PG_Rect &r, int id, const std::string &style) 
+     : PG_DropDown( parent, r, id, style ), first(true)
+{
+   SetEditable(false);
+   sigSelectItem.connect( SigC::slot( *this, &DropDownSelector::itemSelected ));
+}
+
+bool DropDownSelector::itemSelected(  ) // PG_ListBoxBaseItem* i, void* p
+{
+   selectionSignal( GetSelectedItemIndex ());
+   return true;
+}
+
+
+void DropDownSelector::AddItem (const std::string &text, void *userdata, Uint16 height)
+{
+   PG_DropDown::AddItem( text, userdata, height );
+   if ( first ) {
+      first = false;
+      SelectFirstItem();
+   }   
+}
+
+
 ASC_PG_App* pgApp = NULL;
+
 
 
 ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
@@ -203,10 +232,11 @@ ASC_PG_Dialog :: ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCS
 {
    //   mainScreenWidget->setDirty();
    //   SDL_mutexP ( eventHandlingMutex );
-   sigMouseButtonDown.connect(SigC::slot(*this, &ASC_PG_Dialog::eventMouseButtonDown));
+   // sigMouseButtonDown.connect(SigC::slot(*this, &ASC_PG_Dialog::eventMouseButtonDown));
 }
 
 
+#if 0
 int ASC_PG_Dialog::Run ( )
 {
 #ifndef sgmain
@@ -249,6 +279,8 @@ int ASC_PG_Dialog::Run ( )
 
    return quitModalLoopValue;
 }
+#endif
+
 
 bool ASC_PG_Dialog::eventKeyUp(const SDL_KeyboardEvent *key){
   if(key->keysym.sym == SDLK_ESCAPE) {
@@ -258,6 +290,7 @@ bool ASC_PG_Dialog::eventKeyUp(const SDL_KeyboardEvent *key){
 }
 
 
+#if 0
 int ASC_PG_Dialog::RunModal ( )
 {
    bool eventQueue = setEventRouting ( true, false );
@@ -297,6 +330,7 @@ int ASC_PG_Dialog::RunModal ( )
 
    return quitModalLoopValue;
 }
+#endif
 
 void ASC_PG_Dialog::quitModalLoop(int value )
 {

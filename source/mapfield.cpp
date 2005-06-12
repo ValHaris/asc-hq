@@ -70,7 +70,6 @@ void tfield::init ()
    temp3 = 0;
    temp4 = 0;
    visible = 0;
-   direction = 0;
    fuel = 0;
    material = 0;
    resourceview = NULL;
@@ -112,7 +111,6 @@ void tfield::operator= ( const tfield& f )
    fuel = f.fuel;
    material = f.material;
    visible = f.visible;
-   direction = f.direction;
    tempw = f.tempw;
    temp3 = f.temp3;
    temp4 = f.temp4;
@@ -151,7 +149,7 @@ Mine& tfield::getMine ( int n )
   return *i;
 }
 
-void  tfield :: addobject( pobjecttype obj, int dir, bool force )
+void  tfield :: addobject( const ObjectType* obj, int dir, bool force )
 {
    if ( !obj )
       return;
@@ -197,7 +195,7 @@ void  tfield :: addobject( pobjecttype obj, int dir, bool force )
 }
 
 
-void tfield :: removeobject( pobjecttype obj , bool force)
+void tfield :: removeobject( const ObjectType* obj, bool force)
 {
    if ( !force && building )
       return;
@@ -449,7 +447,7 @@ void tfield :: setparams ( void )
    
 }
 
-pobject tfield :: checkforobject ( pobjecttype o )
+pobject tfield :: checkforobject ( const ObjectType*  o )
 {
    for ( ObjectContainer::iterator i = objects.begin(); i != objects.end(); i++ )
       if ( i->typ == o )

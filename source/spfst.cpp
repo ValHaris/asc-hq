@@ -58,7 +58,7 @@
 #include "mapdisplay.h"
 #include "vehicle.h"
 #include "buildings.h"
-
+#include "mapfield.h"
 
 SigC::Signal0<void> repaintMap;
 SigC::Signal0<void> repaintDisplay;
@@ -339,7 +339,7 @@ int isresourcenetobject ( pobjecttype obj )
 
 void         putbuilding( const MapCoordinate& entryPosition,
                          int          color,
-                         pbuildingtype buildingtyp,
+                         const BuildingType* buildingtyp,
                          int          completion,
                          int          ignoreunits )
 { 
@@ -910,4 +910,116 @@ int getUnitSetID( const BuildingType* bld )
          
    return -1;
 }
+
+
+void         calculateobject( int       x,
+                              int       y,
+                              bool      mof,
+                              const ObjectType* obj,
+                              pmap actmap )
+{
+   if ( obj->netBehaviour & ObjectType::SpecialForest ) {
+      // ForestCalculation::calculateforest( actmap, obj );
+      return;
+   }
+
+   pfield fld = actmap->getField(x,y) ;
+   pobject oi2 = fld-> checkforobject (  obj  );
+
+   int c = 0;
+   for ( int dir = 0; dir < sidenum; dir++) {
+      int a = x;
+      int b = y;
+      getnextfield( a, b, dir );
+      pfield fld2 = actmap->getField(a,b);
+
+      if ( fld2 ) {
+         for ( int oj = -1; oj < int(obj->linkableObjects.size()); oj++ ) {
+            pobject oi;
+            if ( oj == -1 )
+               oi = fld2->checkforobject ( obj );
+            else
+               oi = fld2->checkforobject ( actmap->getobjecttype_byid ( obj->linkableObjects[oj] ) );
+
+            if ( oi ) {
+               c |=  1 << dir ;
+               if ( mof )
+                  calculateobject ( a, b, false, oi->typ, actmap );
+
+            }
+         }
+         for ( unsigned int t = 0; t < obj->linkableTerrain.size(); t++ )
+            if ( fld2->typ->terraintype->id == obj->linkableTerrain[t] )
+               c |=  1 << dir ;
+
+         if ( fld2->building && !(fld2->building->typ->special & cgnoobjectchainingb) ) {
+            if ( (obj->netBehaviour & ObjectType::NetToBuildingEntry)  &&  (fld2->bdt & getTerrainBitType(cbbuildingentry) ).any() )
+               c |= 1 << dir;
+
+            if ( obj->netBehaviour & ObjectType::NetToBuildings )
+               c |= 1 << dir;
+         }
+
+      }
+      else {
+         if ( obj->netBehaviour & ObjectType::NetToBorder )
+            c |= 1 << dir;
+      }
+   }
+
+   if ( obj->netBehaviour & ObjectType::AutoBorder ) {
+      int autoborder = 0;
+      int count = 0;
+      for ( int dir = 0; dir < sidenum; dir++) {
+         int a = x;
+         int b = y;
+         getnextfield( a, b, dir );
+         pfield fld2 = actmap->getField(a,b);
+         if ( !fld2 ) {
+            // if the field opposite of the border field is connected to, make a straight line out of the map.
+            if ( c & (1 << ((dir+sidenum/2) % sidenum ))) {
+               autoborder |= 1 << dir;
+               count++;
+            }
+         }
+      }
+      if ( count == 1 )
+         c |= autoborder;
+   }
+
+   if ( oi2 ) {
+     oi2->setdir ( c );
+     fld->setparams();
+   }
+
+}
+
+
+
+
+void         calculateallobjects( pmap actmap )
+{
+   // vector<ObjectType*> forestObjects;
+   for ( int y = 0; y < actmap->ysize ; y++)
+      for ( int x = 0; x < actmap->xsize ; x++) {
+         pfield fld = actmap->getField(x,y);
+
+         for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ )
+             // if ( !(i->typ->netBehaviour & ObjectType::SpecialForest) )
+                calculateobject( x, y, false, i->typ, actmap );
+                #if 0
+             else
+                if ( find ( forestObjects.begin(), forestObjects.end(), i->typ ) == forestObjects.end())
+                   forestObjects.push_back ( i->typ );
+                   #endif
+
+         fld->setparams();
+      }
+#if 0
+   for ( vector<ObjectType*>::iterator i = forestObjects.begin(); i != forestObjects.end(); i++ )
+      ForestCalculation::calculateforest( actmap, *i );
+#endif      
+}
+
+
 

@@ -1,204 +1,3 @@
-//     $Id: edmisc.h,v 1.38.2.2 2005-06-09 20:27:13 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.38.2.1  2004/10/26 16:35:04  mbickel
-//      Replaced graphic storage in buildings and objects
-//      cleaned up some names: pvehicle, pbuilding
-//
-//     Revision 1.38  2004/09/25 12:37:51  mbickel
-//      Fixed crash in mapeditor
-//      fixed graphical glitches when moving from one field to an invisible next
-//      ASC can create clipboard files
-//      units don't defend when attacker is not visible
-//
-//     Revision 1.37  2004/09/13 16:56:54  mbickel
-//      Added many reset data functions to mapeditor
-//      cargomovecostdivisor for vehicles is now float
-//      Fixed: objects could not be attacked
-//      Filenames in cache
-//
-//     Revision 1.36  2004/09/08 19:34:31  mbickel
-//      Added multiple reaction fire
-//
-//     Revision 1.35  2004/07/12 18:15:05  mbickel
-//      Lots of tweaks and fixed for more portability and compilation with mingw
-//
-//     Revision 1.34  2004/05/29 15:07:37  mbickel
-//      Fixed maps
-//      Fixed crash with asc.cache
-//      ai speed up
-//
-//     Revision 1.33  2004/05/20 14:01:10  mbickel
-//      Many bugfixes and new features, among them:
-//        - Container.FillUnitsAutomatically = 2
-//        - generate Tech Tree
-//        - show research info
-//        - edit research in mapeditor
-//        - limit production to units that can leave a building
-//
-//     Revision 1.32  2004/05/11 20:22:33  mbickel
-//      Readded research system to ASC
-//
-//     Revision 1.31  2004/01/16 15:33:46  mbickel
-//     Completely rewritten game event system
-//     TPWM-decoding-Patch
-//     Fixed: swallog message: wrong coordinates
-//     Autotraining for units with max ammo only
-//     Movement required for clearing mines
-//     Unit names can be edited
-//     weather dependen object properties
-//     Unit swallowed by ground -> unified message
-//     units cannot enter enemy transports
-//     Building entry has constant movemalus
-//     Message for resource transfer for providing player
-//     increased ammo production cost
-//     Fixed: unit could attack after movement (with RF on) although "no attack after move" property was set
-//     Buildings: new properties: "ExternalResourceTransfer", "ExternalAmmoTransfer"
-//     Container: Movemalus override for unloading
-//     Startup map specified in ASC.INI
-//
-//     Revision 1.30  2003/04/23 18:31:10  mbickel
-//      Fixed: AI problems
-//      Improved cheating detection in replay
-//
-//     Revision 1.29  2003/03/26 19:16:46  mbickel
-//      Fixed AI bugs
-//      Fixed clipboard bugs
-//      Fixed: unable to move units out of some transport
-//
-//     Revision 1.28  2003/03/20 10:08:29  mbickel
-//      KI speed up
-//      mapeditor: added clipboard
-//      Fixed movement issues
-//
-//     Revision 1.27  2002/11/01 20:44:53  mbickel
-//      Added function to specify which units can be build by other units
-//
-//     Revision 1.26  2002/10/09 16:58:46  mbickel
-//      Fixed to GrafikSet loading
-//      New item filter for mapeditor
-//
-//     Revision 1.25  2002/04/21 21:27:00  mbickel
-//      Mapeditor: Fixed crash in "Put Resources"
-//      Updating the small map after AI
-//      Fixed infinite loop "quit game" after sending signal
-//
-//     Revision 1.24  2002/04/14 17:21:18  mbickel
-//      Renamed global variable pf to pf2 due to name clash with SDL_mixer library
-//
-//     Revision 1.23  2002/03/17 21:25:18  mbickel
-//      Fixed: View unit movement revealed the reaction fire status of enemy units
-//      Mapeditor: new function "resource comparison"
-//
-//     Revision 1.22  2002/02/21 17:06:50  mbickel
-//      Completed Paragui integration
-//      Moved mail functions to own file (messages)
-//
-//     Revision 1.21  2001/10/11 10:41:06  mbickel
-//      Restructured platform fileio handling
-//      Added map archival information to mapeditor
-//
-//     Revision 1.20  2001/10/02 14:06:28  mbickel
-//      Some cleanup and documentation
-//      Bi3 import tables now stored in .asctxt files
-//      Added ability to choose amoung different BI3 import tables
-//      Added map transformation tables
-//
-//     Revision 1.19  2001/05/24 15:37:51  mbickel
-//      Fixed: reaction fire could not be disabled when unit out of ammo
-//      Fixed several AI problems
-//
-//     Revision 1.18  2001/03/30 12:43:16  mbickel
-//      Added 3D pathfinding
-//      some cleanup and documentation
-//      splitted the ai into several files, now located in the ai subdirectory
-//      AI cares about airplane servicing and range constraints
-//
-//     Revision 1.17  2000/11/29 11:05:28  mbickel
-//      Improved userinterface of the mapeditor
-//      map::preferredfilenames uses now strings (instead of char*)
-//
-//     Revision 1.16  2000/11/29 09:40:21  mbickel
-//      The mapeditor has now two maps simultaneously active
-//      Moved memorychecking functions to its own file: memorycheck.cpp
-//      Rewrote password handling in ASC
-//
-//     Revision 1.15  2000/11/21 20:27:02  mbickel
-//      Fixed crash in tsearchfields (used by object construction for example)
-//      AI improvements
-//      configure.in: added some debug output
-//                    fixed broken check for libbz2
-//
-//     Revision 1.14  2000/10/18 14:14:09  mbickel
-//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
-//       fixed soon.
-//
-//     Revision 1.13  2000/10/14 14:16:04  mbickel
-//      Cleaned up includes
-//      Added mapeditor to win32 watcom project
-//
-//     Revision 1.12  2000/10/11 14:26:33  mbickel
-//      Modernized the internal structure of ASC:
-//       - vehicles and buildings now derived from a common base class
-//       - new resource class
-//       - reorganized exceptions (errors.h)
-//      Split some files:
-//        typen -> typen, vehicletype, buildingtype, basecontainer
-//        controls -> controls, viewcalculation
-//        spfst -> spfst, mapalgorithm
-//      bzlib is now statically linked and sources integrated
-//
-//     Revision 1.11  2000/08/12 12:52:47  mbickel
-//      Made DOS-Version compile and run again.
-//
-//     Revision 1.10  2000/05/30 18:39:24  mbickel
-//      Added support for multiple directories
-//      Moved DOS specific files to a separate directory
-//
-//     Revision 1.9  2000/05/23 20:40:45  mbickel
-//      Removed boolean type
-//
-//     Revision 1.8  2000/05/05 21:15:04  mbickel
-//      Added Makefiles for mount/demount and mapeditor
-//      mapeditor can now be compiled for linux, but is not running yet
-//
-//     Revision 1.7  2000/04/27 16:25:22  mbickel
-//      Attack functions cleanup
-//      New vehicle categories
-//      Rewrote resource production in ASC resource mode
-//      Improved mine system: several mines on a single field allowed
-//      Added unitctrl.* : Interface for vehicle functions
-//        currently movement and height change included
-//      Changed timer to SDL_GetTicks
-//
-//     Revision 1.6  2000/03/16 14:06:56  mbickel
-//      Added unitset transformation to the mapeditor
-//
-//     Revision 1.5  2000/03/11 18:22:05  mbickel
-//      Added support for multiple graphic sets
-//
-//     Revision 1.4  1999/12/27 12:59:57  mbickel
-//      new vehicle function: each weapon can now be set to not attack certain
-//                            vehicles
-//
-//     Revision 1.3  1999/11/22 18:27:20  mbickel
-//      Restructured graphics engine:
-//        VESA now only for DOS
-//        BASEGFX should be platform independant
-//        new interface for initialization
-//      Rewrote all ASM code in C++, but it is still available for the Watcom
-//        versions
-//      Fixed bugs in RLE decompression, BI map importer and the view calculation
-//
-//     Revision 1.2  1999/11/16 03:41:39  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -380,10 +179,8 @@ extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePo
 
 extern void         setstartvariables(void);
 extern void         exchg(int *a1,int *a2);
-extern void         placebuilding(int colorr,pbuildingtype   buildingtyp,char choose);
 extern void         k_savemap(char saveas);
 extern void         k_loadmap(void);
-extern void         showStatusBar(void);
 extern void         lines(int      x1,int      y,int      x2,int      y2);
 
 extern void         changeunitvalues(Vehicle* ae);
@@ -413,8 +210,6 @@ extern void selectunitsetfilter ( void );
 extern void movebuilding();
 extern void unitsettransformation( void );
 
-extern void placebodentyp(void);
-extern void placeobject(void);
 extern void placemine(void);
 
 //! The class that manages the switching between the primary map (for editing) and the secondary map (for selecting objects and terrain)
@@ -461,6 +256,7 @@ extern Vehicle* selectUnitFromContainer( ContainerBase* container );
 extern Vehicle*  selectUnitFromMap();
 extern void resetPlayerData();
 
+extern void placeCurrentItem();
 
 
 #endif

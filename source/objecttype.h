@@ -27,7 +27,7 @@
  //! An object that can be placed on fields. Roads, pipelines and ditches are examples of objects. \sa Object
  class ObjectType : public LoadableItemType {
      bool imageUsesAlpha;
-     void realDisplay ( Surface& surface, SPoint pos, int dir, int weather );
+     void realDisplay ( Surface& surface, SPoint pos, int dir, int weather ) const;
    public:
      //! the id of the object, used when referencing objects in files
      int id;
@@ -68,7 +68,7 @@
         void runTextIO ( PropertyContainer& pc );
      } fieldModification[cwettertypennum];
 
-     FieldModification& getFieldModification( int weather );
+     const FieldModification& getFieldModification( int weather ) const;
 
      //! this is added to the current attackbonus of the field to form the new attackbonus.
      int attackbonus_plus;
@@ -116,7 +116,7 @@
      //! The name of the object
      ASCString name;
      
-     ASCString getName() { return name; };
+     ASCString getName() const { return name; };
 
      static const int netBehaviourNum = 6;
      enum NetBehaviour { NetToBuildings = 1, NetToBuildingEntry = 2, NetToSelf = 4, NetToBorder = 8, SpecialForest = 0x10, AutoBorder = 0x20 };
@@ -128,11 +128,11 @@
 
      TechAdapterDependency techDependency;
 
-     const OverviewMapImage* getOverviewMapImage( int picnum, int weather );
+     const OverviewMapImage* getOverviewMapImage( int picnum, int weather ) const ; 
 
      //! the images of the objects
      struct WeatherPicture {
-        vector<OverviewMapImage> overviewMapImage;
+        mutable vector<OverviewMapImage> overviewMapImage;
         vector<Surface> images;
         vector<int>   bi3pic;
         vector<int>   flip;
@@ -140,14 +140,14 @@
      } weatherPicture [cwettertypennum];
 
      //! displays the objecttype at x/y on the screen
-     void display ( Surface& surface, SPoint pos );
-     void display ( Surface& surface, SPoint pos, int dir, int weather = 0 );
+     void display ( Surface& surface, SPoint pos ) const ;
+     void display ( Surface& surface, SPoint pos, int dir, int weather = 0 ) const;
      
      //! returns the pointer to the image i
-     Surface& getPicture ( int i = 0, int weather = 0 );
+     const Surface& getPicture ( int i = 0, int weather = 0 ) const;
 
      //! can the object be build on the field fld
-     bool buildable ( pfield fld );
+     bool buildable ( pfield fld ) const;
 
      //! reads the objecttype from a stream
      void read ( tnstream& stream );
@@ -161,7 +161,7 @@
      int displayMethod;
 
      //! returns the level of height of this object in the normal 8 level scheme of asc (deep submerged, submerged, ... )
-     int getEffectiveHeight();
+     int getEffectiveHeight() const;
 
      //! the probability that an object of this type spawns another object on a neighbouring field
      double growthRate;
@@ -174,6 +174,8 @@
      void setupImages();
  };
 
+ 
+ 
 const int objectDisplayingMethodNum = 5;
 
 namespace ForestCalculation {

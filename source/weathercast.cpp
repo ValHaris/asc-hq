@@ -12,47 +12,56 @@
 #include "weathercast.h"
 #include "guidimension.h"
 #include "graphics/blitter.h"
+#include "graphics/drawing.h"
 #include "iconrepository.h"
+#include "mapdisplay2.h"
 #include "spfst.h"
+#include "paradialog.h"
 
-SDL_Color LRAINOR = {255, 0, 0};
 
-const int Weathercast::xSize = 400;
+const int Weathercast::xSize = 500;
 const int Weathercast::ySize = 400;
 
 const int Weathercast::MAPXSIZE = 200;
 const int Weathercast::MAPYSIZE = 200;
-Weathercast::Weathercast(const WeatherSystem& ws):  ASC_PG_Dialog(NULL, PG_Rect( 100, 100, xSize, ySize ), "Weathercast", MODAL ), weatherSystem(ws), windSpeed(0), counter(0) {
+Weathercast::Weathercast(const WeatherSystem& ws):  ASC_PG_Dialog(NULL, PG_Rect( 100, 100, xSize, ySize ), "Weathercast", MODAL ), weatherSystem(ws), windSpeed(0), counter(0), currentZoom(0.5), mapYPos(80) {
+    
+    mapDisplayWidget = (MapDisplayPG*)(getPGApplication().GetWidgetById(ASC_PG_App::mapDisplayID));
 
-    turnLabel = new PG_Label(this, PG_Rect(xSize /2, GuiDimension::getTopOffSet(), 10, GetTextHeight() * 2), "Turn: +0");
-    turnLabel->SetSizeByText();
-    turnLabelWidth = turnLabel->Width();
-    back = new PG_Button(this, PG_Rect(10, GuiDimension::getTopOffSet()*2, 55, 35), "back", 90);
-    back->sigClick.connect(SigC::slot( *this, &Weathercast::buttonBack));
-    forward = new PG_Button(this, PG_Rect(Width() -(back->Width() + 10) , GuiDimension::getTopOffSet()*2, 55, 35), "forward", 90);
+    //Forward, Backward Button
+    forward = new PG_Button(this, PG_Rect(Width() -(50 + 10) , Height() - GuiDimension::getTopOffSet()*6, 55, 35), "forward", 90);
     forward->sigClick.connect(SigC::slot( *this, &Weathercast::buttonForward));
+    back = new PG_Button(this, PG_Rect(Width() -(50 + 10) - 60, Height() - GuiDimension::getTopOffSet()*6, 55, 35), "back", 90);
+    back->sigClick.connect(SigC::slot( *this, &Weathercast::buttonBack));
+    
 
-    Surface screen = Surface::Wrap( PG_Application::GetScreen() );
-    actmap->overviewMapHolder.clear();
-    s = actmap->overviewMapHolder.getOverviewMap();
-
-
-
-    generateWeatherMap(actmap->time.turn());
-    s.strech(MAPXSIZE, MAPYSIZE);
-    weatherMapImage = new PG_Image(this, PG_Point(25, 100), s.GetSurface(), false, PG_Draw::BkMode(PG_Draw::TILE), "g");
-
-    windRoseImage = new PG_Image(this, PG_Point(300, 150), IconRepository::getIcon("windrose.png").GetSurface(), false, PG_Draw::BkMode(PG_Draw::TILE), "g");
-    sdw  = new SpecialDisplayWidget(this, PG_Rect(100, 100, 100, 100));
+    //Display wind elements
+    int windRoseYPos = mapYPos + 30 + GuiDimension::getTopOffSet();
+    windRoseImage = new PG_Image(this, PG_Point(400, windRoseYPos), IconRepository::getIcon("windrose.png").GetSurface(), false, PG_Draw::BkMode(PG_Draw::TILE), "g");
+    sdw  = new SpecialDisplayWidget(this, PG_Rect(100, 100, xSize, ySize));
     sdw->display.connect( SigC::slot( *this, &Weathercast::painter ));
+    sdw->sigMouseMotion.connect( SigC::slot( *this, &Weathercast::mouseMotion ));
+    sdw->sigMouseButtonDown.connect( SigC::slot( *this, &Weathercast::mouseButtonDown ));
+    viewChanged.connect ( SigC::slot( *this, &Weathercast::redraw ));
+    
+    int windBarYPos = windRoseYPos + windRoseImage->Height();
+    windBar = new PG_Image(this, PG_Point(400, windBarYPos ), IconRepository::getIcon("wind_bar.png").GetSurface(), false, PG_Draw::BkMode(PG_Draw::TILE), "g");
+    bgw = new BarGraphWidget ( this, PG_Rect(400, windBarYPos, 90, 20), BarGraphWidget::Direction(0) );
 
     WindData wData;
     wData.speed = weatherSystem.getCurrentWindSpeed();
     wData.direction = weatherSystem.getCurrentWindDirection();
     windStack.push_front(wData);
-    windspeedLabel = new PG_Label(this, PG_Rect(280, 170 + windRoseImage->Height() , 10, GetTextHeight() * 2), "Windspeed: ");
+    windspeedLabel = new PG_Label(this, PG_Rect(427, windBarYPos + windBar->Height() -16 , 10, GetTextHeight() * 2));    
+    windspeedLabel->SetFontSize(windspeedLabel->GetFontSize() -5);        
     updateWeatherSpeed(actmap->time.turn());
 
+    //Display turn
+    turnLabel = new PG_Label(this, PG_Rect(Width() -(48) - 60, (Height() - GuiDimension::getTopOffSet()*8) + 5, 10, GetTextHeight() * 2), "Turn: +0");
+    turnLabel->SetSizeByText();
+    turnLabelWidth = turnLabel->Width();
+    
+    
     okButton = new PG_Button(this, PG_Rect((xSize - GuiDimension::getButtonWidth()) / 2, ySize - (GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet()), GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "OK", 90);
     okButton->sigClick.connect(SigC::slot( *this, &Weathercast::closeWindow ));
 
@@ -62,8 +71,7 @@ Weathercast::Weathercast(const WeatherSystem& ws):  ASC_PG_Dialog(NULL, PG_Rect(
 Weathercast::~Weathercast() {}
 
 void Weathercast::paintWeatherArea(const WeatherArea* wa) {
-    MegaBlitter<4,colorDepth,ColorTransform_None, ColorMerger_AlphaOverwrite> blitter;
-
+    MegaBlitter<4,colorDepth,ColorTransform_None, ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectRectangle> blitter;
     static const char* weathernames[] = {"terrain_weather_dry.png",
                                          "terrain_weather_lightrain.png",
                                          "terrain_weather_heavyrain.png",
@@ -78,8 +86,13 @@ void Weathercast::paintWeatherArea(const WeatherArea* wa) {
     if((wa->getCenterPos().x + hMove >0) && (wa->getCenterPos().y + vMove >0)) {
         SPoint pixCenter = OverviewMapImage::map2surface(MapCoordinate(wa->getCenterPos().x + hMove, wa->getCenterPos().y + vMove));
         Surface wSurface = IconRepository::getIcon(weathernames[wa->getFalloutType()]);
-        wSurface.strech(18,10);
-        blitter.blit ( wSurface, s, pixCenter );
+        wSurface.strech(20,12);
+        if(pixCenter.x + wSurface.w() > s.w()) {
+            blitter.setRectangle( SPoint(0,0), s.w() - (pixCenter.x), wSurface.h());
+        } else {
+            blitter.setRectangle( SPoint(0,0), wSurface.w(), wSurface.h());
+        }
+        blitter.blit( wSurface, s, pixCenter );
     }
 
     /*for(int i = (wa->getCenterPos().x - wa->getWidth()/2); i < wa->getCenterPos().x + wa->getWidth(); i++){
@@ -93,14 +106,14 @@ void Weathercast::paintWeatherArea(const WeatherArea* wa) {
 void Weathercast::generateWeatherMap(int turn) {
     for(int i =0; i < weatherSystem.getActiveWeatherAreasSize(); i++) {
         const WeatherArea* wa = weatherSystem.getNthActiveWeatherArea(i);
-        if((wa->getDuration() > (turn - actmap->time.turn())) && (wa->getCenterField()->isOnMap(actmap))) {
+        if((wa->getDuration() > (turn - (actmap->time.turn() + 1))) && (wa->getCenterField()->isOnMap(actmap))) {
             paintWeatherArea(wa);
-        }        
+        }
 
     }
     for(int i =0; i < weatherSystem.getQueuedWeatherAreasSize(); i++) {
         pair<GameTime, WeatherArea*> p = weatherSystem.getNthWeatherArea(i);
-        if(p.first.turn() <= turn) {            
+        if(p.first.turn() <= turn) {
             paintWeatherArea(p.second);
         }
     }
@@ -108,22 +121,108 @@ void Weathercast::generateWeatherMap(int turn) {
 
 
 void Weathercast::painter (const PG_Rect &src, const ASCString& name, const PG_Rect &dst) {
-    /*   cout << "painter" << endl;
-       if(windStack.front().speed > 0) {
-             Surface screen = Surface::Wrap(this->GetWidgetSurface()  );
+    Surface screen = Surface::Wrap( PG_Application::GetScreen() );
     {
-           Surface s = actmap->getOverviewMap();  
-    MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_DirectZoom> blitter;
-           blitter.setSize( 100, 100, 200, 200 );
-           blitter.blit( s, screen, SPoint(0, 0) );c++ struct
+        MegaBlitter<4,colorDepth,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_DirectZoom> blitter;
+        static const char* weathernames[] = {"terrain_weather_dry.png",
+                                             "terrain_weather_lightrain.png",
+                                             "terrain_weather_heavyrain.png",
+                                             "terrain_weather_lightsnow.png",
+                                             "terrain_weather_heavysnow.png",
+                                             "terrain_weather_ice.png"
+
+                                            }
+                                            ;
+        PG_Point defaultWeatherPoint(ClientToScreen(403,mapYPos));
+        Surface ws = IconRepository::getIcon(weathernames[actmap->weatherSystem->getDefaultFalloutType()]);
+        ws.strech(60, 25);
+        blitter.blit( ws, screen, SPoint(defaultWeatherPoint.x, defaultWeatherPoint.y ));
     }
-         
-           MegaBlitter<4,colorDepth,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_DirectRotation> blitter;
-           blitter.setAngle( directionangle[windStack.front().direction] );
-           PG_Point p(windRoseImage->x, windRoseImage->y);
-           blitter.blit ( IconRepository::getIcon("wind-arrow.png"), screen, SPoint(p.x, p.y) );
-       }*/
+    if(windStack.front().speed > 0) {
+        MegaBlitter<4,colorDepth,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_DirectRotation> blitter;
+        blitter.setAngle( directionangle[windStack.front().direction] );
+        PG_Point p(windRoseImage->x, windRoseImage->y);
+        blitter.blit ( IconRepository::getIcon("wind-arrow.png"), screen, SPoint(p.x, p.y) );
+    }
+    if ( actmap ) {
+        {
+            actmap->overviewMapHolder.clear();
+            s = actmap->overviewMapHolder.getOverviewMap( true );
+            generateWeatherMap(actmap->time.turn() + counter);
+            MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom> blitter;
+            blitter.setSize( s.w(), s.h(), dst.w - 100, dst.h -100 );
+
+            //blitter.setZoom(4.0);
+            currentZoom  = blitter.getZoomX();
+            PG_Point dstPoint(ClientToScreen(30,mapYPos));
+            blitter.blit( s, screen, SPoint(dstPoint.x, dstPoint.y) );
+
+            SPoint ul = OverviewMapImage::map2surface( mapDisplayWidget->upperLeftCorner());
+            SPoint lr = OverviewMapImage::map2surface( mapDisplayWidget->lowerRightCorner());
+
+
+            ul.x *= currentZoom;
+            ul.y *= currentZoom;
+            lr.x *= currentZoom;
+            lr.y *= currentZoom;
+
+            if ( ul.x < 0 )
+                ul.x = 0;
+            if ( ul.y < 0 )
+                ul.y = 0;
+            if ( lr.x >= dst.w - 100 )
+                lr.x = dst.w - 100 -1;
+            if ( lr.y >= dst.h -100 )
+                lr.y = dst.h -100 -1;
+
+            rectangle<4>(screen, SPoint(dstPoint.x + ul.x, dstPoint.y + ul.y), lr.x - ul.x, lr.y- ul.y, ColorMerger_Set<4>(0xff), ColorMerger_Set<4>(0xff) );
+        }
+    }
+    {
+        bgw->setColor(0x00ff00);
+        bgw->setFraction(windSpeed/255.0);
+        bgw->SendToBack();
+        bgw->Show();
+        windBar->Show();
+        std::string wind;
+        wind.append(strrr(windSpeed));
+        windspeedLabel->SetText(wind);
+        windspeedLabel->SetSizeByText();
+        windspeedLabel->Show();
+
+    }
 }
+
+bool Weathercast::mouseButtonDown ( const SDL_MouseButtonEvent *button) {
+    if ( sdw->IsMouseInside() )
+        if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == 1 ) {
+            PG_Point p = sdw->ScreenToClient( button->x, button->y );
+            return mouseClick( SPoint( p.x, p.y ));
+        }
+
+    return false;
+}
+
+bool Weathercast::mouseMotion  (  const SDL_MouseMotionEvent *motion) {
+    if ( sdw->IsMouseInside() )
+        if ( motion->type == SDL_MOUSEMOTION && (motion->state & 1 ) ) {
+            PG_Point p = sdw->ScreenToClient( motion->x, motion->y );
+            return mouseClick( SPoint( p.x, p.y ));
+        }
+
+    return false;
+}
+
+bool Weathercast::mouseClick ( SPoint pos ) {
+    MapCoordinate mc = OverviewMapImage::surface2map( SPoint(float(pos.x) / currentZoom, float(pos.y) / currentZoom ));
+    if ( !(mc.valid() && mc.x < actmap->xsize && mc.y < actmap->ysize ))
+        return false;
+
+    mapDisplayWidget->centerOnField( mc );
+    return true;
+}
+
+
 
 WindAccu Weathercast::updateWindAccu(const WindAccu& ac, unsigned int windspeed, Direction windDirection, float ratio) {
     WindAccu wAccu = {ac.horizontalValue, ac.verticalValue};
@@ -149,12 +248,12 @@ WindAccu Weathercast::updateWindAccu(const WindAccu& ac, unsigned int windspeed,
 
 bool Weathercast::buttonForward( PG_Button* button ) {
     if(counter < weatherSystem.getMaxForecast()) {
-       //update turn information
+        //update turn information
         ++counter;
         showTurn();
-	//update wind data
+        //update wind data
         updateWeatherSpeed(actmap->time.turn() + counter);
-	//update display data of active weatherareas (active at least since actmap->time)
+        //update display data of active weatherareas (active at least since actmap->time)
         for(int i =0; i < weatherSystem.getActiveWeatherAreasSize(); i++) {
             const WeatherArea* wa = weatherSystem.getNthActiveWeatherArea(i);
             if(wa->getDuration() - counter > 0) {
@@ -169,7 +268,7 @@ bool Weathercast::buttonForward( PG_Button* button ) {
                 warea2WindAccu[wa] = wAccu;
             }
         }
-	//update display data for queued weatherareas
+        //update display data for queued weatherareas
         for(int i =0; i < weatherSystem.getQueuedWeatherAreasSize(); i++) {
             pair<GameTime, WeatherArea*> p = weatherSystem.getNthWeatherArea(i);
             const WeatherArea* wa = p.second;
@@ -184,13 +283,8 @@ bool Weathercast::buttonForward( PG_Button* button ) {
             wAccu = updateWindAccu(wAccu, windSpeed,  windStack.front().direction, weatherSystem.getWindspeed2FieldRatio());
             warea2WindAccu[p.second] = wAccu;
         }
-        //display new data
-        actmap->overviewMapHolder.clear();
-        s = actmap->overviewMapHolder.getOverviewMap();
-        generateWeatherMap(actmap->time.turn() + counter);
-        s.strech(MAPXSIZE, MAPYSIZE);
-        weatherMapImage->SetImage(s.getBaseSurface());
         Update();
+        this->redraw();
     }
     return true;
 }
@@ -220,17 +314,10 @@ bool Weathercast::buttonBack( PG_Button* button ) {
                 warea2WindAccu[wa] = wAccu;
             }
         }
-        //display new data
-        actmap->overviewMapHolder.clear();
-        s = actmap->overviewMapHolder.getOverviewMap();
-        generateWeatherMap(actmap->time.turn() + counter);
-        s.strech(MAPXSIZE, MAPYSIZE);
-        weatherMapImage->SetImage(s.getBaseSurface());
         //update wind data
         if(weatherSystem.getWindDataOfTurn(actmap->time.turn() + counter + 1).speed >=0) {
             windStack.pop_front();
-            windSpeed = windStack.front().speed;
-            showWindSpeed();
+            windSpeed = windStack.front().speed;            
         }
         Update();
     }
@@ -252,30 +339,19 @@ void Weathercast::showTurn() {
 
 }
 
-void Weathercast::showWindSpeed() {
-    std::string wind = "WindSpeed: ";
-    wind.append(strrr(windSpeed));
-    windspeedLabel->SetText(wind);
-    windspeedLabel->SetSizeByText();
-    windspeedLabel->Redraw();
-
-}
-
 
 void Weathercast::updateWeatherSpeed(int turn) {
     int newWindSpeed = weatherSystem.getWindDataOfTurn(turn).speed;
     WindData wd = weatherSystem.getWindDataOfTurn(turn);
     windSpeed = newWindSpeed;
-    windStack.push_front(wd);
-    windRoseImage->Update();    
-    showWindSpeed();
+    windStack.push_front(wd);    
 }
 
 
 extern void weathercast() {
     Weathercast wc(*(actmap->weatherSystem));
     wc.Show();
-    wc.Run();
+    wc.RunModal();
 }
 
 

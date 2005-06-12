@@ -187,7 +187,7 @@ void         destructbuildinglevel2( int xp, int yp)
       if (moveparams.movestatus == 115) {
          actmap->cleartemps(7);
          Vehicle* eht = moveparams.vehicletomove;
-         pbuildingtype bld = fld->building->typ;
+         const BuildingType* bld = fld->building->typ;
 
 
 

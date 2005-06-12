@@ -36,6 +36,7 @@ OverviewMapPanel::OverviewMapPanel( PG_Widget *parent, const PG_Rect &r, MapDisp
    assert( ovmap );
       
    viewChanged.connect ( SigC::slot( *this, &OverviewMapPanel::redraw ));
+   OverviewMapHolder::generationComplete.connect ( SigC::slot( *this, &OverviewMapPanel::redraw ));
 }
 
 
@@ -53,10 +54,10 @@ void OverviewMapPanel::painter ( const PG_Rect &src, const ASCString& name, cons
 
       SPoint ul = OverviewMapImage::map2surface( mapDisplayWidget->upperLeftCorner());
       SPoint lr = OverviewMapImage::map2surface( mapDisplayWidget->lowerRightCorner());
-      ul.x *= currentZoom;
-      ul.y *= currentZoom;
-      lr.x *= currentZoom;
-      lr.y *= currentZoom;
+      ul.x = int( float( ul.x) * currentZoom );
+      ul.y = int( float( ul.y) * currentZoom );
+      lr.x = int( float( lr.x) * currentZoom );
+      lr.y = int( float( lr.y) * currentZoom );
 
       if ( ul.x < 0 )
          ul.x = 0;
@@ -74,7 +75,7 @@ void OverviewMapPanel::painter ( const PG_Rect &src, const ASCString& name, cons
 
 bool OverviewMapPanel::mouseClick ( SPoint pos )
 {
-   MapCoordinate mc = OverviewMapImage::surface2map( SPoint(float(pos.x) / currentZoom, float(pos.y) / currentZoom ));
+   MapCoordinate mc = OverviewMapImage::surface2map( SPoint(int( float(pos.x) / currentZoom), int(float(pos.y) / currentZoom )));
    if ( !(mc.valid() && mc.x < actmap->xsize && mc.y < actmap->ysize ))
       return false;
 

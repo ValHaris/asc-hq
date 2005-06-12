@@ -52,6 +52,7 @@
 #include "pglog.h"
 #include "pgmenubar.h"
 #include "pgrichedit.h"
+#include "pgdropdown.h"
 
 #include "sdl/graphics.h"
 #include "ascstring.h"
@@ -87,8 +88,17 @@ class ASC_PG_Dialog : public PG_Window {
       virtual bool eventKeyUp(const SDL_KeyboardEvent *key);
     public:
        ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCString& windowtext, WindowFlags flags=DEFAULT, const ASCString& style="Window", int heightTitlebar=25);
-       int Run( );
-       int RunModal( );
+};
+
+
+class DropDownSelector: public PG_DropDown {
+        bool first;
+     protected:
+        bool itemSelected( ); // PG_ListBoxBaseItem* i, void* p );   
+     public:
+        DropDownSelector( PG_Widget *parent, const PG_Rect &r=PG_Rect::null, int id=-1, const std::string &style="DropDown");
+        void AddItem (const std::string &text, void *userdata=NULL, Uint16 height=0);
+        SigC::Signal1<void, int> selectionSignal;
 };
 
 class BarGraphWidget;

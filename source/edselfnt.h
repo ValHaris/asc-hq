@@ -47,32 +47,40 @@ extern void selbuilding ( tkey ench );
 extern void selcargo( ContainerBase* container );
 extern void selbuildingproduction( Building* eht );
 
-extern void setnewvehicleselection ( pvehicletype v );
-extern void setnewterrainselection ( pterraintype t );
-extern void setnewobjectselection  ( pobjecttype o );
-extern void setnewbuildingselection ( pbuildingtype v );
-
-extern void resetvehicleselector ( void );
-extern void resetbuildingselector ( void );
-extern void resetterrainselector ( void );
-extern void resetobjectselector ( void );
 
 
-extern void checkselfontbuttons(void);
+class MapComponent;
 
+extern SigC::Signal0<void> filtersChangedSignal;
 
+class SelectionHolder : public SigC::Object {
+     const MapComponent* currentItem;
+     int actplayer;
+     int currentWeather;
+     
+  public:
+     SelectionHolder() : currentItem(NULL), actplayer(0), currentWeather(0),brushSize(1) {};
+ 
+     int getPlayer() { return actplayer; };
+     void setPlayer( int player );
+     
+     void setWeather( int weather );
+     int getWeather() { return currentWeather; };
+     
+     int brushSize;
+     const MapComponent* getSelection();
+     void setSelection( const MapComponent* component ) ;
+     void pickup ( pfield fld );
+     
+     SigC::Signal1<void,const MapComponent*> selectionChanged;
+   
+};
+ 
+extern SelectionHolder selection;
 
-
-
-
-
-
-extern int actplayer;
-extern int currentWeather;
 
 class MapComponent {
     protected:
-       MapComponent();
        virtual Surface& getClippingSurface() const = 0;
     public:  
        static const int fontHeight = 20;
@@ -81,7 +89,10 @@ class MapComponent {
        virtual int displayHeight() const = 0;
        virtual MapComponent* clone() const = 0;
        virtual int place( const MapCoordinate& mc ) const = 0;
+       //! just a wrapper so we have a function return void
+       void vPlace( const MapCoordinate& mc ) const { place( mc ); };  
        virtual void display( Surface& s, const SPoint& pos ) const = 0;
+       virtual int getID() const = 0;
        virtual bool supportMultiFieldPlacement() const { return true; };
        virtual void display( PG_Widget* parent, SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst ) const;
        virtual ~MapComponent() {};
@@ -90,25 +101,26 @@ class MapComponent {
 
 template<class Item> class BasicItem : public MapComponent {
     protected:
-       Item* item;
+       const Item* item;
        static Surface clippingSurface;
        Surface& getClippingSurface() const { return clippingSurface; };
     public:  
-       BasicItem( Item* i ) : item( i ) {};
+       BasicItem( const Item* i ) : item( i ) {};
        ASCString getName() const { return item->getName(); };
        virtual int displayWidth() const { return Width(); };
        static  int Width() { return fieldsizex; };
        virtual int displayHeight() const { return Height(); };
        static int Height() { return fieldsizey; };
+       virtual int getID() const { return item->id; };
 };
 
 template<class C> class ItemTypeSelector {};
 
 class VehicleItem : public BasicItem<Vehicletype> {
     public:  
-       VehicleItem( Vehicletype* vehicle ) : BasicItem<Vehicletype>( vehicle ) {};
+       VehicleItem( const Vehicletype* vehicle ) : BasicItem<Vehicletype>( vehicle ) {};
        virtual int place( const MapCoordinate& mc ) const ;
-       virtual void display( Surface& s, const SPoint& pos ) const { item->paint ( s, pos, actplayer); };
+       virtual void display( Surface& s, const SPoint& pos ) const { item->paint ( s, pos, selection.getPlayer() ); };
        virtual MapComponent* clone() const { return new VehicleItem( item ); };
 };
 template<> class ItemTypeSelector<Vehicletype> {
@@ -119,13 +131,13 @@ template<> class ItemTypeSelector<Vehicletype> {
 
 
 class BuildingItem : public MapComponent {
-       BuildingType* bld;
+       const BuildingType* bld;
        static Surface clippingSurface;
        static Surface fullSizeImage;
     protected:
        Surface& getClippingSurface() const { return clippingSurface; };
     public:  
-       BuildingItem( BuildingType* building ) : bld( building ) {};
+       BuildingItem( const BuildingType* building ) : bld( building ) {};
        ASCString getName() const { return bld->getName(); };
        virtual int displayWidth() const { return Width(); };
        static  int Width() { return (fieldsizex+(4-1)*fielddistx+fielddisthalfx)/2; };
@@ -135,7 +147,7 @@ class BuildingItem : public MapComponent {
        virtual int place( const MapCoordinate& mc ) const ;
        virtual void display( Surface& s, const SPoint& pos ) const;
        virtual MapComponent* clone() const { return new BuildingItem( bld ); };
-;
+       virtual int getID() const { return bld->id; };
 };
 template<> class ItemTypeSelector<BuildingType> {
    public:
@@ -145,7 +157,7 @@ template<> class ItemTypeSelector<BuildingType> {
 
 class ObjectItem : public BasicItem<ObjectType> {
     public:  
-       ObjectItem( ObjectType* object ) : BasicItem<ObjectType>( object ) {};
+       ObjectItem( const ObjectType* object ) : BasicItem<ObjectType>( object ) {};
        virtual int place( const MapCoordinate& mc ) const;
        virtual void display( Surface& s, const SPoint& pos ) const { item->display (s, pos); };
        virtual MapComponent* clone() const { return new ObjectItem( item ); };
@@ -158,7 +170,7 @@ template<> class ItemTypeSelector<ObjectType> {
 
 class TerrainItem : public BasicItem<TerrainType> {
     public:  
-       TerrainItem( TerrainType* object ) : BasicItem<TerrainType>( object ) {};
+       TerrainItem( const TerrainType* object ) : BasicItem<TerrainType>( object ) {};
        virtual int place( const MapCoordinate& mc ) const;
        virtual void display( Surface& s, const SPoint& pos ) const { item->weather[0]->paint (s, pos); };
        virtual MapComponent* clone() const { return new TerrainItem( item ); };
@@ -178,9 +190,6 @@ extern void sortItems( vector<TerrainType*>& vec );
 
 
 
-extern SigC::Signal1<void,const MapComponent*> setNewSelection;
-extern const MapComponent* getSelection();
-
 
 class SingleItemWidget : public PG_Widget {
       PG_Window* my_window;
@@ -196,15 +205,37 @@ class SingleItemWidget : public PG_Widget {
       };
       
       void set( const MapComponent* item) { it = item; };
+
+      ~SingleItemWidget() {
+         delete it;
+      };   
       
+      ASCString getItemName() {
+         return it->getName();
+      }
+      
+      bool nameMatch( const ASCString& name )
+      {
+         ASCString a = name;
+         a.toLower();
+         ASCString b = getItemName().toLower();
+         if ( a.length() > 0 && b.length() > 0 )
+            if ( b.find ( a ) == 0 ) 
+               return true;
+         return false;
+      };   
+           
    protected:
       
-      bool eventMouseButtonDown (const SDL_MouseButtonEvent *button) {
+      bool eventMouseButtonUp (const SDL_MouseButtonEvent *button) {
          if ( my_window ) 
-            if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == SDL_BUTTON_LEFT ) {
+            if ( button->type == SDL_MOUSEBUTTONUP && button->button == SDL_BUTTON_LEFT ) {
                my_window->Hide();
-               setNewSelection( it );
+               my_window->QuitModal();
+               selection.setSelection( it );
+               return true;
             }   
+         return false;
       };
       
       void eventBlit ( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst )
@@ -214,25 +245,69 @@ class SingleItemWidget : public PG_Widget {
 
 };
 
+
+
 template <class ItemType> class ItemSelector : public PG_Window {
 
       const ItemRepository<ItemType>& repository;
       vector<ItemType*> items;
+      typedef vector<SingleItemWidget*> WidgetList;
+      WidgetList widgets;
       int rowCount;
       int columnCount;
       PG_ScrollWidget* scrollWidget;
       static const int gapWidth = 5;
+      PG_Label* nameSearch;
+   protected:   
+      bool eventKeyDown(const SDL_KeyboardEvent* key) {
+         if ( key->keysym.sym == SDLK_BACKSPACE ) {
+            ASCString s = nameSearch->GetText();
+            if ( s.length() > 0 ) {
+               s.erase( s.length() - 1 );
+               nameSearch->SetText( s );
+            }
+            return true;
+         } 
+         
+         if ( key->keysym.unicode <= 255 ) {
+            nameSearch->SetText( nameSearch->GetText() + char ( key->keysym.unicode ));
+            locateObject( nameSearch->GetText() );
+            return true;
+         }   
+      };
+      
+      void locateObject( const ASCString& name ) {
+         for ( WidgetList::iterator i = widgets.begin(); i != widgets.end(); ++i ) {
+            if ( (*i)->nameMatch( name )  ) {
+               scrollWidget->ScrollToWidget( *i );
+               return;
+            }   
+         }
+      }
+      
    public:
       ItemSelector( PG_Widget *parent, const PG_Rect &r , const ItemRepository<ItemType>& itemRepository ) : PG_Window( parent,r,"Item Selector"), repository( itemRepository), scrollWidget( NULL) {
          columnCount = r.w / (ItemTypeSelector<ItemType>::type::Width()  + gapWidth);
          reLoad();
          setupWidgets();
+         filtersChangedSignal.connect( SigC::slot( *this, &ItemSelector<ItemType>::filtersChanged ));
+         nameSearch = new PG_Label ( this, PG_Rect( 5, Height() - 25, Width() - 10, 20 ));
       };
 
-      bool isFiltered(ItemType* item) {
-         return false;
-      };   
+      int RunModal()
+      {
+         nameSearch->SetText( "" );
+         return PG_Window::RunModal();
+      }
       
+      virtual bool isFiltered( const ItemType* item) {
+         return ItemFiltrationSystem::isFiltered( item );
+      };   
+
+      void filtersChanged() {
+         reLoad();
+         setupWidgets();
+      }         
            
       void reLoad() {
          items.clear();
@@ -249,7 +324,8 @@ template <class ItemType> class ItemSelector : public PG_Window {
       void setupWidgets()
       {
          delete scrollWidget;
-         scrollWidget = new PG_ScrollWidget( this , PG_Rect( 0, GetTitlebarHeight () + 2, Width(), Height()- GetTitlebarHeight ()- 5 ));
+         scrollWidget = new PG_ScrollWidget( this , PG_Rect( 0, GetTitlebarHeight () + 2, Width(), Height()- GetTitlebarHeight ()- 30 ));
+         widgets.clear();
          /*
 	widgetList->SetDirtyUpdate(false);
 	widgetList->SetTransparency(0);
@@ -263,7 +339,7 @@ template <class ItemType> class ItemSelector : public PG_Window {
          int y = 0;
          for ( size_t i = 0; i < items.size(); ++i ) {
             typedef typename ItemTypeSelector<ItemType>::type itt ;
-            new SingleItemWidget ( new itt( items[i] ), scrollWidget, SPoint( x * (ItemTypeSelector<ItemType>::type::Width() + gapWidth), y * (ItemTypeSelector<ItemType>::type::Height() + MapComponent::fontHeight + gapWidth) ), this);
+            widgets.push_back( new SingleItemWidget ( new itt( items[i] ), scrollWidget, SPoint( x * (ItemTypeSelector<ItemType>::type::Width() + gapWidth), y * (ItemTypeSelector<ItemType>::type::Height() + MapComponent::fontHeight + gapWidth) ), this) );
             // new PG_Button( widgetList, PG_Rect( 10 + x , 10+y , 40,20), items[i]->getName() );
             ++x;
             if ( x >= columnCount ) {
@@ -274,11 +350,5 @@ template <class ItemType> class ItemSelector : public PG_Window {
       }
          
 };
-
-/*
-class VehicleSelector: public ItemSelector<VehicleType> {
-
-};
-*/
 
 #endif

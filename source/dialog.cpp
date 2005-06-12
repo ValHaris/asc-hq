@@ -681,11 +681,7 @@ void         tvehicleinfo::init( const Vehicletype* type )
 
    textsizey = ( ysize - 65) - ( starty + 55 );
 
-   #ifdef NEWKEYB
    addscrollbar(xsize - 35, starty + 55 , xsize - 20,ysize - 65, &textsizeycomplete, textsizey, &tvt_starty,8,0);
-   #else
-   addscrollbar(xsize - 35, starty + 55 , xsize - 20,ysize - 65, &textsizeycomplete, textsizey, &tvt_starty,8,1);
-   #endif
    setscrollspeed( 8 , 1 );
 
    hidebutton ( 8 );
@@ -2215,11 +2211,6 @@ void         tfileselectsvga::checkfsf( char lock )
 
 void         tfileselectsvga::run(void)
 { 
-   #ifdef _DOS_
-    #ifdef NEWKEYB
-     closekeyb();
-    #endif
-   #endif
 
    activefontsettings.background = dblue; 
 
@@ -2383,11 +2374,6 @@ void         tfileselectsvga::run(void)
    } else
       result->erase();
 
-  #ifdef _DOS_
-   #ifdef NEWKEYB
-   initkeyb();
-   #endif
-  #endif
 }
 
 
@@ -3603,11 +3589,7 @@ void         tviewanytext:: init( char* _title, const char* text , int xx1 , int
    if (textsizeycomplete >= textsizey) {
       scrollbarvisible = true; 
 
-      #ifdef NEWKEYB
       addscrollbar(xsize - 30,starty,xsize - 15,ysize - 35,&textsizeycomplete, textsizey, &tvt_starty,1,0);
-      #else
-      addscrollbar(xsize - 30,starty,xsize - 15,ysize - 35,&textsizeycomplete, textsizey, &tvt_starty,1,1);
-      #endif
       setscrollspeed ( 1 , 1 );
 
       rightspace = 40;
@@ -4146,7 +4128,6 @@ void viewterraininfo ( void )
    pfield fld = actmap->getField( actmap->getCursor() );
    if ( fld && fieldvisiblenow  ( fld )) {
       const char* terraininfo = "#font02#Field Information (%d,%d)#font01##aeinzug20##eeinzug20##crtp10#"
-                                            "direction: %d\n"
                                             "ID: %d\n"
                                             "attack bonus: %.1f\n"
                                             "defense bonus: %.1f\n"
@@ -4160,7 +4141,7 @@ void viewterraininfo ( void )
       float ab = fld->getattackbonus();
       float db = fld->getdefensebonus();
 
-      sprintf(text, terraininfo, actmap->getCursor().x, actmap->getCursor().y, fld->direction, fld->typ->terraintype->id, ab/8, db/8, fld->getjamming(), fld->typ->terraintype->location.c_str() );
+      sprintf(text, terraininfo, actmap->getCursor().x, actmap->getCursor().y, fld->typ->terraintype->id, ab/8, db/8, fld->getjamming(), fld->typ->terraintype->location.c_str() );
 
       appendTerrainBits ( text, &fld->bdt );
 
@@ -4943,11 +4924,6 @@ tmessagedlg :: tmessagedlg ( void )
     firstparagraph = NULL;
     lastcursortick = 0;
     blinkspeed = 80;
-    #ifdef _DOS_
-     #ifdef NEWKEYB
-     closekeyb();
-     #endif
-    #endif
 }
 
 void tmessagedlg :: inserttext ( const ASCString& txt )
@@ -5055,11 +5031,6 @@ tmessagedlg :: ~tmessagedlg ( )
       delete actparagraph;
       actparagraph = temp;
    }
-   #ifdef _DOS_
-    #ifdef NEWKEYB
-    initkeyb();
-    #endif
-   #endif
 }
 
 void tmessagedlg :: setup ( void )

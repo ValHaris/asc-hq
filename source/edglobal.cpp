@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.62.2.5 2005-06-09 20:27:13 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.62.2.6 2005-06-12 11:05:15 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -52,7 +52,8 @@
         "Select unit",
         "Select color",
         "Select building",
-        "Select special object",
+        "Select object",
+        "Select objectAll",
         "Select mine",
         "Select weather",
         "Setup alliances",
@@ -85,10 +86,6 @@
         "View/Change item Values",
         "Mirror CX-Pos",
         "Mirror CY-Pos",
-        "Place terrain",
-        "Place Unit",
-        "Place building",
-        "Place special object",
         "Place mine",
         "Place active thing",
         "Delete Unit",
@@ -133,10 +130,11 @@
         "Edit TechAdapter",
         "Reset Player Data...",
         "Fill map with resources",
-        "setup weather generation" };
+        "setup weather generation",
+        "Primary action" };
 
 
-SigC::Signal0<void> mapChanged;
+SigC::Signal1<void, tmap* > mapChanged;
         
         
 // õS Infomessage
@@ -242,19 +240,17 @@ void showPipeNet()
 
 // õS ExecAction
 
-void         execaction_ev(int code)
-{
-   getPGApplication().enableLegacyEventHandling ( true );
-   execaction(code);
-   getPGApplication().enableLegacyEventHandling ( false );
-}
 
-
+//! this executes all functions that use legacy Eventhandling
 void execaction(int code)
 {
    switch(code) {
     case act_help :   if ( polyfieldmode ) help ( 1040 );
                        else help(1000);
+       break;
+    case act_selbodentyp : if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) 
+                              execaction ( act_setactivefieldvals );
+                           execaction( act_switchmaps);
        break;
     case act_selbodentypAll : mainScreenWidget->selectTerrain();
        break;
@@ -269,6 +265,10 @@ void execaction(int code)
        break;
     case act_selobject : mainScreenWidget->selectObject();
        break;
+    case act_selobjectAll: if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) 
+                              execaction ( act_setactivefieldvals );
+                           execaction( act_switchmaps);
+       break;                    
     case act_selmine : {
                        ch = 0;
                        selmine( ct_f8 );
@@ -384,16 +384,6 @@ void execaction(int code)
                        unit_cargo( getactfield()->vehicle );
               }
        break;
-    case act_changeterraindir : {
-                      pf2 = getactfield();
-                      if (pf2 != NULL) {
-                         pf2->direction++;
-                         if (pf2->direction>sidenum-1) pf2->direction = 0;
-                         mapsaved = false;
-                         displaymap();
-                      }
-                   }
-       break;
     case act_events :   event();
        break;
        /*
@@ -408,36 +398,8 @@ void execaction(int code)
        */
     case act_mapgenerator : mapgenerator();
        break;
-    case act_setactivefieldvals : {
-                  pfield fld = getactfield();
-
-                  if ( fld->vehicle ) {
-                     auswahlf = vehicleTypeRepository.getObject_byID ( fld->vehicle->typ->id );
-                     altefarbwahl = farbwahl;
-                     farbwahl = fld->vehicle->color/8;
-                     lastselectiontype = cselunit;
-                     setnewvehicleselection ( auswahlf );
-                  } else
-                  if ( fld->building ) {
-                     auswahlb = fld->building->typ;
-                     altefarbwahl = farbwahl;
-                     farbwahl = fld->building->color/8;
-                     lastselectiontype = cselbuilding;
-                     setnewbuildingselection ( auswahlb );
-                  } else
-                  if ( !fld->objects.empty() ) {
-                     actobject = fld->objects.begin()->typ ;
-                     lastselectiontype = cselobject;
-                     setnewobjectselection ( actobject );
-                  } else {
-                     auswahl = fld->typ->terraintype;
-                     lastselectiontype = cselbodentyp;
-                     setnewterrainselection ( auswahl );
-                  }
-                  // showallchoices();
-               }
+    case act_setactivefieldvals : selection.pickup( getactfield() ); 
        break;
-       
     case act_deletething : {
                          pf2 = getactfield();
                          mapsaved = false;
@@ -559,18 +521,9 @@ void execaction(int code)
                  }
        break;
        */
-    case act_placebodentyp : placebodentyp();
-       break;
-    case act_placebuilding : placebuilding(farbwahl,auswahlb,true);
-       break;
-    case act_placeobject : placeobject();
-       break;
     case act_placemine : placemine();
        break;
-    case act_placething : if ( getSelection() ) {
-                              getSelection()->place( actmap->getCursor() );
-                              mapChanged();
-                          }    
+    case act_placething : placeCurrentItem();
        break;
        /*
     case act_endpolyfieldmode : {
@@ -662,6 +615,7 @@ void execaction(int code)
    case act_terraininfo: viewterraininfo();
       break;
    case act_setunitfilter: selectunitsetfilter();
+                           filtersChangedSignal(); 
       break;
    case act_selectgraphicset: selectgraphicset();
                               // showallchoices();
@@ -672,20 +626,17 @@ void execaction(int code)
       break;
    case act_unitSetInformation: viewUnitSetinfo();
       break;
-   case act_selbodentyp: if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) {
-                            execaction ( act_setactivefieldvals );
-                            /*
-                            auswahl = getactfield()->typ->terraintype;
-                            setnewterrainselection ( auswahl );
-                            showallchoices();
-                            */
-                         } else
-                            lastselectiontype = cselbodentyp;
-                         execaction(act_switchmaps);
-                         break;
+   case act_primaryAction: if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) {
+                              execaction ( act_setactivefieldvals );
+                              execaction(act_switchmaps);
+                           } else 
+                             execaction( act_placething );
+                             
+                           break;
+                           
    case act_switchmaps: mapSwitcher.toggle();
                         displaymap();
-                        showStatusBar();
+                        updateFieldInfo();
       break;
    case act_transformMap: transformMap();
       break;
@@ -742,9 +693,23 @@ void execaction(int code)
       break;
    case act_resetPlayerData: resetPlayerData();
       break;
-   case act_setactnewweather: weatherConfigurationDialog();
-      break;
 
     }
 }
 
+//! this executes all functions that use Paragui Eventhandling
+void execaction_pg(int code) 
+{
+   switch(code) {
+      case act_setactnewweather: weatherConfigurationDialog();
+         break;
+   };      
+}
+
+void         execaction_ev(int code)
+{
+   execaction_pg(code);
+   getPGApplication().enableLegacyEventHandling ( true );
+   execaction(code);
+   getPGApplication().enableLegacyEventHandling ( false );
+}

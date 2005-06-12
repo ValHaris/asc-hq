@@ -20,6 +20,7 @@
 
  #include "typen.h"
  #include "vehicle.h"
+ #include "libs/loki/Functor.h"
 
   /** searches fields in hexagonal "circles" around a field and calls testfield for each field
   */
@@ -38,6 +39,10 @@
                     virtual ~SearchFields() {};
                  };
 
+  typedef Loki::Functor<void, TYPELIST_1(const MapCoordinate&) > FieldIterationFunctor;
+  extern void circularFieldIterator( pmap gamemap, const MapCoordinate& center, int startDist, int stopDist, FieldIterationFunctor functor ); 
+
+                 
   /** draws a straight line on the hexagonal map and calls putpix8 for each field.
       Awfully unoptimized!
   */

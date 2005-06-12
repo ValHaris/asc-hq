@@ -2,7 +2,7 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.67.2.8 2005-06-09 20:27:13 mbickel Exp $
+//     $Id: edmain.cpp,v 1.67.2.9 2005-06-12 11:05:16 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -262,176 +262,6 @@ void checkLeftMouseButton ( )
 }
 
 
-void         editor(void)
-{  int execcode;
-
-   do {
-      try {
-         do { 
-            if ( keypress() ) {
-               ch = r_key();
-
-               switch (ch) {
-                  case ct_f1:   execaction(act_help);
-                     break;
-                  case ct_f7 :
-                  case ct_f3 : execaction(act_selbodentyp);
-                     break;
-                  case ct_f3 + ct_shp :
-                  case ct_f3 + ct_altp :
-                  case ct_f3 + ct_stp : execaction(act_selbodentypAll);
-                     break;
-                  case ct_f4 : execaction(act_selunit);
-                     break;
-                  case ct_f5 : execaction(act_selcolor);
-                     break;
-                  case ct_f6 : execaction(act_selbuilding);
-                     break;
-                  case ct_f7 + ct_shp :
-                  case ct_f7 + ct_altp :
-                  case ct_f7 + ct_stp : execaction(act_selobject);
-                     break;
-                  case ct_f8 : execaction(act_selmine);
-                     break;
-                  case ct_f9 : execaction(act_selweather);
-                     break;
-                  case ct_a + ct_stp :  execaction(act_setupalliances);
-                     break;
-                  case ct_b + ct_stp:  execaction(act_toggleresourcemode);
-                     break;
-                  case ct_c + ct_stp:  execaction(act_copyToClipboard);
-                     break;
-                  case ct_f + ct_stp: execaction(act_createresources);
-                     break;
-                  case ct_g + ct_stp: execaction(act_maptopcx);
-                     break;
-                  case ct_h + ct_stp : execaction(act_setunitfilter);
-                     break;
-                  case ct_i + ct_stp: execaction (act_import_bi_map );
-                     break;
-                  case ct_l + ct_stp : execaction(act_loadmap);
-                     break;
-                  case ct_m + ct_stp: execaction(act_changemapvals);
-                     break;
-                  case ct_n + ct_stp: execaction(act_newmap);
-                     break;
-                  case ct_o + ct_stp: execaction(act_polymode);
-                     break;
-                  case ct_p + ct_stp: execaction(act_changeproduction);
-                     break;
-                  case ct_r + ct_stp: execaction(act_repaintdisplay);
-                     break;
-                  case ct_u + ct_stp : execaction(act_unitinfo);
-                     break;
-                  case ct_v + ct_stp: execaction(act_pasteFromClipboard);
-                     break;
-                  case ct_w + ct_stp : execaction(act_setactweatherglobal);
-                     break;
-                  case ct_x + ct_stp: execaction(act_end);
-                     break;
-                  case ct_d + ct_shp: execaction(act_changeunitdir);
-                     break;
-                  case ct_a:   execaction(act_movebuilding);
-                     break;
-                  case ct_b:   execaction(act_changeresources);
-                     break;
-                  case ct_c:   execaction(act_changecargo);
-                     break;
-                  case ct_d : execaction(act_changeterraindir);
-                     break;
-                  case ct_e:  execaction(act_events);
-                     break;
-                  case ct_f:  execaction(act_fillmode);
-                     break;
-                  case ct_g: execaction(act_mapgenerator);
-                     break;
-                  case ct_h: execaction(act_setactivefieldvals);
-                     break;
-                  case ct_entf: execaction(act_deletething);
-                      break;
-                  case ct_l : execaction(act_showpalette);
-                     break;
-                  case ct_m : execaction(act_changeminestrength);
-                     break;
-                  case ct_o: execaction(act_changeplayers);
-                     break;
-                  case ct_p: execaction(act_changeunitvals);
-                     break;
-                  case ct_r: execaction(act_resizemap);
-                     break;
-                  case ct_s : execaction(act_savemap);
-                     break;
-                  case ct_v:   execaction(act_viewmap);
-                     break;
-                  case ct_x:   execaction(act_mirrorcursorx);
-                     break;
-                  case ct_y:   execaction(act_mirrorcursory);
-                     break;
-                  case ct_z:   execaction(act_setzoom );
-                     break;
-                  case ct_3 : execaction(act_placebodentyp);
-                     break;
-                  case ct_4 : execaction(act_placeunit);
-                     break;
-                  case ct_6 : execaction(act_placebuilding);
-                     break;
-                  case ct_7 : execaction(act_placeobject);
-                     break;
-                  case ct_8 : execaction(act_placemine);
-                     break;
-                  case ct_tab: execaction(act_switchmaps );
-                     break;
-                  case ct_enter :
-                  case ct_space : if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) 
-                                    execaction(act_setactivefieldvals);
-                                  else
-                                    execaction(act_placething);
-                     break;
-                  case ct_esc : {
-                        if ( polyfieldmode )
-                           execaction(act_endpolyfieldmode);
-                        else
-                           execaction(act_end);
-                     }
-                     break;
-                  }
-            } 
-            checkselfontbuttons();
-            checkLeftMouseButton();
-            /*
-            if ( mouseparams.taste == 2 ) {
-               int mx, my;
-               while ( mouseparams.taste == 2 ) {
-                 if ( getfieldundermouse ( &mx, &my ) )  {
-                    mousevisible(false);
-                    cursor.hide();
-                    cursor.posx = mx;
-                    cursor.posy = my;
-                    cursor.show();
-                    mousevisible(true);
-
-                    execcode = rightmousebox();
-                    if (execcode != -1) execaction(execcode);
-
-                    while ( mouseparams.taste != 0 )
-                       releasetimeslice();
-                  }
-                  releasetimeslice();
-               }
-            }
-            */
-      
-            // checkformousescrolling();
-            releasetimeslice();
-      
-         }  while (! (ch == ct_esc) || (ch == ct_altp+ct_x ) );
-      } /* endtry */
-      catch ( NoMapLoaded ) {
-         buildemptymap();
-      } /* endcatch */
-   }  while (! (ch == ct_esc) || (ch == ct_altp+ct_x ) );
-}
-
 
 //* õS Diverse
 
@@ -671,9 +501,9 @@ int main(int argc, char *argv[] )
    }
 
 
-   mapChanged.connect( repaintMap );
-   mapChanged.connect( updateFieldInfo );
-   mapChanged.connect( SigC::slot( setSaveNotification) );
+   mapChanged.connect( SigC::hide<tmap*>( repaintMap.slot() ) );
+   mapChanged.connect( SigC::hide<tmap*>( updateFieldInfo.slot() ) );
+   mapChanged.connect( SigC::hide<tmap*>( SigC::slot( setSaveNotification) ));
    
    char* buf = new char[cl->l().length()+10];
    strcpy ( buf, cl->l().c_str() );

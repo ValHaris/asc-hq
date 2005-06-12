@@ -36,11 +36,21 @@ WeatherDialog::WeatherDialog() :  ASC_PG_Dialog(NULL, PG_Rect( 100, 50, xsize, y
         seedMode->SetPressed();
     }
 
-    //xPosition for edit Fields
+     //xPosition for edit Fields
     int valueXPos = static_cast<int>(xsize * 0.8);
+    
+    int defaultWeatherYPos = seedModeYPos + GetTextHeight()*2;
+    defaultWeatherLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftOffSet(), defaultWeatherYPos, 10, GetTextHeight() * 2), "Default Weather");
+    defaultWeatherLabel->SetSizeByText();
+    weatherTypes = new PG_DropDown(this, PG_Rect(xsize - GuiDimension::getLineEditWidth() *5, defaultWeatherYPos, GuiDimension::getLineEditWidth() *4, GetTextHeight() * 2));
+
+    for(int i = 0; i < cwettertypennum; i++) {
+        weatherTypes->AddItem(cwettertypen[i]);
+
+    }   
 
     //Amount of Area Spawns
-    int areaSpawnsLabelYPos = seedModeYPos + GetTextHeight()*2;
+    int areaSpawnsLabelYPos = defaultWeatherYPos + GetTextHeight()*2;
     areaSpawnsLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftIndent(), areaSpawnsLabelYPos, xsize/3 , GetTextHeight()*2),
                                    "Amount of Spawns:");
     areaSpawnsLabel->SetSizeByText();
@@ -146,7 +156,7 @@ WeatherDialog::~WeatherDialog() {}
 void weatherConfigurationDialog() {
     WeatherDialog wd;
     wd.Show();
-    wd.Run();
+    wd.RunModal();
 }
 
 
@@ -162,6 +172,7 @@ bool WeatherDialog::buttonEvent( PG_Button* button ) {
     } else {
         actmap->weatherSystem->setSeedValueGeneration(true);
     }
+    actmap->weatherSystem->setDefaultFallout(static_cast<FalloutType>(this->weatherTypes->GetSelectedItemIndex()));
     if(!((nthTurnValue->GetText()=="") ||
             (windSpeedFieldRatioValue->GetText() == "") ||
             (areaSpawnsValue->GetText() == "")||
@@ -188,28 +199,28 @@ bool WeatherDialog::buttonEvent( PG_Button* button ) {
 bool WeatherDialog::editFallOut( PG_Button* button ) {
     FallOutSettingsDialog fd;
     fd.Show();
-    fd.Run();
+    fd.RunModal();
     return true;
 }
 
 bool WeatherDialog::editWindSpeed( PG_Button* button ) {
     WindSpeedSettingsDialog wsd;
     wsd.Show();
-    wsd.Run();
+    wsd.RunModal();
     return true;
 }
 
 bool WeatherDialog::editWindDirection( PG_Button* button ) {
     WindDirectionSettingsDialog wdd;
     wdd.Show();
-    wdd.Run();
+    wdd.RunModal();
     return true;
 }
 
 bool WeatherDialog::editEventAreas(PG_Button* button ) {
     EventAreasDialog ead;
     ead.Show();
-    ead.Run();
+    ead.RunModal();
     return true;
 }
 
@@ -217,7 +228,7 @@ bool WeatherDialog::editEventAreas(PG_Button* button ) {
 bool WeatherDialog::editEventWindChanges(PG_Button* button ) {
     EventWindChangesDialog ewcd;
     ewcd.Show();
-    ewcd.Run();
+    ewcd.RunModal();
     return true;
 }
 //*********************************************************************************************************
@@ -268,7 +279,7 @@ bool EventAreasDialog::buttonEvent( PG_Button* button ) {
 bool EventAreasDialog::buttonAdd( PG_Button* button ) {
     AddWeatherAreaDialog awad(this);
     awad.Show();
-    awad.Run();
+    awad.RunModal();
     return true;
 }
 
@@ -369,7 +380,7 @@ bool EventWindChangesDialog::buttonEvent( PG_Button* button ) {
 bool EventWindChangesDialog::buttonAdd( PG_Button* button ) {
     AddWindChangeDialog awcd(this);
     awcd.Show();
-    awcd.Run();
+    awcd.RunModal();
     return true;
 }
 
@@ -535,7 +546,11 @@ AddWeatherAreaDialog::AddWeatherAreaDialog(EventAreasDialog* ead):  ASC_PG_Dialo
     heightValue = new PG_LineEdit(this, PG_Rect(valueXPos, heightYPos, GuiDimension::getLineEditWidth(), GetTextHeight() * 2));
     heightValue->SetValidKeys("1234567890");
 
-    int wTypesYPos = heightYPos + + GetTextHeight() * 2;
+    int heightClustered = heightYPos + GetTextHeight() * 2;
+    clusteredMode = new PG_CheckButton(this, PG_Rect( GuiDimension::getLeftIndent(), heightClustered, GuiDimension::getLineEditWidth() , GetTextHeight()*2), "Clustered Mode");
+    clusteredMode->SetSizeByText();
+    
+    int wTypesYPos = heightClustered + GetTextHeight() * 2;
     wTypesLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftOffSet(), wTypesYPos, 10, GetTextHeight() * 2), "Weather Type");
     wTypesLabel->SetSizeByText();
     weatherTypes = new PG_DropDown(this, PG_Rect(valueXPos - valueXPos/2, wTypesYPos, GuiDimension::getLineEditWidth() *4, GetTextHeight() * 2));
@@ -571,7 +586,7 @@ bool AddWeatherAreaDialog::buttonEvent( PG_Button* button ) {
       ) {
         FalloutType t = static_cast<FalloutType>(weatherTypes->GetSelectedItemIndex());
         WeatherArea* newWeatherArea = new WeatherArea(actmap, atoi(xCoordValue->GetText()), atoi(yCoordValue->GetText()),  atoi(widthValue->GetText()), atoi(heightValue->GetText()),
-	atoi(durationValue->GetText()), t, actmap->weatherSystem->createRandomValue());
+	atoi(durationValue->GetText()), t, actmap->weatherSystem->createRandomValue(), clusteredMode->GetPressed());
         GameTime time;
         time.set(atoi(turnValue->GetText()), 0);
         WeatherAreaInformation* wai = new WeatherAreaInformation(newWeatherArea, time);

@@ -40,7 +40,7 @@ const float repairEfficiencyBuilding[resourceTypeNum*resourceTypeNum] = { 1./3.,
                                                                           0,     1./3., 0,
                                                                           0,     0,     0 };
 
-Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const pbuildingtype type, int player, bool setupImages, bool chainToField )
+Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const BuildingType* type, int player, bool setupImages, bool chainToField )
            : ContainerBase ( type, actmap, player ), typ ( type ), repairEfficiency ( repairEfficiencyBuilding )
 {
    int i;

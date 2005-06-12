@@ -2,9 +2,12 @@
     \brief The random map generator
 */
 
-//     $Id: edgen.cpp,v 1.20 2004-07-12 18:15:05 mbickel Exp $
+//     $Id: edgen.cpp,v 1.20.2.1 2005-06-12 11:05:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2004/07/12 18:15:05  mbickel
+//      Lots of tweaks and fixed for more portability and compilation with mingw
+//
 //     Revision 1.19  2004/05/12 20:05:52  mbickel
 //      Restructured file loading routines for upcoming data cache
 //
@@ -501,35 +504,35 @@ void tmapgenerator::addcoast(void)
                } /* endif */
                if (whereland & 1) {
                   pf->typ = btyp[0]->weather[0];
-                  pf->direction = 0;
+                  // pf->direction = 0;
                } 
                if (whereland & 2) {
                   pf->typ = btyp[1]->weather[0];
-                  pf->direction = 0;
+                  // pf->direction = 0;
                } 
                if (whereland & 4) {
                   pf->typ = btyp[0]->weather[0];
-                  pf->direction = 1;
+                  // pf->direction = 1;
                } 
                if (whereland & 8) {
                   pf->typ = btyp[1]->weather[0];
-                  pf->direction = 1;
+                  // pf->direction = 1;
                } 
                if (whereland & 16) {
                   pf->typ = btyp[0]->weather[0];
-                  pf->direction = 2;
+                  // pf->direction = 2;
                } 
                if (whereland & 32) {
                   pf->typ = btyp[1]->weather[0];
-                  pf->direction = 2;
+                  // pf->direction = 2;
                } 
                if (whereland & 64) {
                   pf->typ = btyp[0]->weather[0];
-                  pf->direction = 3;
+                  // pf->direction = 3;
                } 
                if (whereland & 128) {
                   pf->typ = btyp[1]->weather[0];
-                  pf->direction = 3;
+                  // pf->direction = 3;
                } 
             } 
          } /* endfor */
@@ -636,7 +639,6 @@ void tmapgenerator::setmap(void)
          for (i=0;i< ( plasma.maxx / 2 ) ;i++ ) {
             for (j=0;j<plasma.maxy;j++ ) {
                pf = &actmap->field[ ( plasma.maxx / 2 - i - 1 ) + ( ( plasma.maxy - j -1) * plasma.maxx / 2 ) ];
-               pf->direction = 0;
                int plasmalayernr = ( i * 2 + ( j & 1 ) ) + ( j * plasma.maxx );
                setpfield ( plasmalayernr ) ;
                pf->setparams();
@@ -653,7 +655,6 @@ void tmapgenerator::setmap(void)
          for (i=0;i< ( plasma.maxx / 2 ) ;i++ ) {
             for (j=0;j<plasma.maxy;j++ ) {
                pf = &actmap->field[i + ( j * plasma.maxx / 2 ) ];
-               pf->direction = 0;
                int plasmalayernr = ( i * 2 + ( j & 1 ) ) + ( j * plasma.maxx );
                setpfield ( plasmalayernr ) ;
                pf->setparams();

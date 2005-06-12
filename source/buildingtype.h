@@ -169,7 +169,7 @@ extern const char*  cbuildingfunctions[];
             \param entryOnMap The location of the buildings entry on the map
             \param localCoordinate The relative coordinate of the buildings segment for which is global MapCoordinate is going to be calculated and returned.
         */
-        MapCoordinate getFieldCoordinate( const MapCoordinate& entryOnMap, const LocalCoordinate& localCoordinate );
+        MapCoordinate getFieldCoordinate( const MapCoordinate& entryOnMap, const LocalCoordinate& localCoordinate ) const;
 
         //! converts a global coordinate into a local coordinate.
         LocalCoordinate getLocalCoordinate( const MapCoordinate& entryOnMap, const MapCoordinate& field ) const;

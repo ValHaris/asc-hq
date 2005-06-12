@@ -140,10 +140,13 @@ void Menu::setup()
    addbutton ( "reset player data...",   act_resetPlayerData );
 
   addfield ("~S~elect");
-   addbutton ( "Vehicle Type\tF2",  act_selunit );
-   addbutton ( "Terrain Type\tF3",  act_selbodentyp );
-   addbutton ( "Object Type \tF4",  act_selobject );
+   addbutton ( "Vehicle\tF2",  act_selunit );
+   addbutton ( "Terrain from map\tF3",  act_selbodentyp );
+   addbutton ( "Terrain from list\tctrl-F3",  act_selbodentypAll );
+   addbutton ( "Object from map \tF4",  act_selbodentyp );
+   addbutton ( "Object from list \tctrl-F4",  act_selobject );
    addbutton ( "Building Type\tF5", act_selbuilding );
+   addbutton ( "Mine\tF6", act_selmine );
    
    
   addfield ("~T~ools");
@@ -200,7 +203,7 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
               : PG_Widget(NULL, PG_Rect ( 0, 0, app.GetScreen()->w, app.GetScreen()->h ), false),
               app ( application ) , messageLine(NULL), lastMessageTime(0), 
               vehicleSelector( NULL ), buildingSelector( NULL ), objectSelector(NULL), terrainSelector(NULL), 
-              weatherSelector( NULL ), currentSelectionWidget(NULL)
+              weatherSelector( NULL ), selectionName(NULL), coordinateDisplay(NULL), currentSelectionWidget(NULL)
 {
 
    displayLogMessage ( 5, "MainScreenWidget: initializing panels:\n");
@@ -211,7 +214,11 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
 
    mapDisplay->mouseButtonOnField.connect( SigC::slot( mousePressedOnField ));
    mapDisplay->mouseDraggedToField.connect( SigC::slot( mouseDraggedToField ));
+
    
+   setupStatusBar();
+  
+      
    displayLogMessage ( 7, "done\n  Menu ");
    menu = new Menu(this, PG_Rect(15,0,Width()-200,20));
 
@@ -240,52 +247,241 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
    
    PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &MainScreenWidget::eventKeyDown ));
    
+   int xpos = Width() - 150;
+   int w = 140;
+   int ypos = 180;
    
-   PG_Button* button = new PG_Button( this, PG_Rect( Width() - 150, 200, 140, 20), "Select Vehicle" );
+   PG_Button* button = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Vehicle" );
    button->sigClick.connect( SigC::slot( *this, &MainScreenWidget::selectVehicle ));
+   ypos += 25;
    
-   PG_Button* button2 = new PG_Button( this, PG_Rect( Width() - 150, 230, 140, 20), "Select Building" );
+   PG_Button* button2 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Building" );
    button2->sigClick.connect( SigC::slot( *this, &MainScreenWidget::selectBuilding ));
+   ypos += 25;
 
-   PG_Button* button3 = new PG_Button( this, PG_Rect( Width() - 150, 260, 140, 20), "Select Object" );
+   PG_Button* button3 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Object" );
    button3->sigClick.connect( SigC::slot( *this, &MainScreenWidget::selectObject ));
+   ypos += 25;
    
-   PG_Button* button4 = new PG_Button( this, PG_Rect( Width() - 150, 290, 140, 20), "Select Terrain" );
+   PG_Button* button4 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Terrain" );
    button4->sigClick.connect( SigC::slot( *this, &MainScreenWidget::selectTerrain ));
+   ypos += 25;
  
-   currentSelectionWidget = new SelectionItemWidget( this, PG_Rect( Width() - BuildingItem::Width() - 10, 360, BuildingItem::Width(), BuildingItem::Height() + MapComponent::fontHeight ) );
    
-   setNewSelection.connect( SigC::slot( *currentSelectionWidget, &SelectionItemWidget::set ));
+   new PG_Label( this, PG_Rect( xpos, ypos, w/2 - 5, 20), "Brush:");
+   brushSelector = new DropDownSelector( this, PG_Rect( xpos+w/2+5, ypos, w/2-5, 20));
+   brushSelector->AddItem("1");
+   brushSelector->AddItem("3");
+   brushSelector->AddItem("5");
+   brushSelector->selectionSignal.connect( SigC::slot( *this, &MainScreenWidget::brushChanged ));
+   ypos += 25;
    
-   weatherSelector = new PG_DropDown( this, PG_Rect( Width() - BuildingItem::Width() - 10, 330, BuildingItem::Width(), 20));
-   weatherSelector->SetEditable( false );
-   
-   int i = weatherSelector->GetSelectedItemIndex();
-   
+  
+   weatherSelector = new DropDownSelector( this, PG_Rect( xpos, ypos, w, 20));
    for ( int i = 0; i < cwettertypennum; ++i )
       weatherSelector->AddItem( cwettertypen[i] );
-   weatherSelector->AddItem( ASCString::toString(i) );
-   weatherSelector->SelectItem(0);
-
+    ypos += 25;  
             
-  // weatherSelector->sigSelectItem.connect( SigC::slot( *this, &MainScreenWidget::weatherChanged ));
-  // weatherSelector->sigSelectItem.connect( SigC::slot( *currentSelectionWidget, &SelectionItemWidget::Update ));
+   weatherSelector->selectionSignal.connect( SigC::slot( selection, &SelectionHolder::setWeather ) );
+//   weatherSelector->selectionSignal.connect( SigC::slot( *currentSelectionWidget, &SelectionItemWidget::Update ));
    
+
+   playerSelector = new DropDownSelector( this, PG_Rect( xpos, ypos, w, 20));
+   for ( int i = 0; i < 9; ++i )
+      playerSelector->AddItem( "Player " + ASCString::toString(i) );
+   playerSelector->selectionSignal.connect( SigC::slot( selection, &SelectionHolder::setPlayer ) );
+   ypos += 25;
    
+   currentSelectionWidget = new SelectionItemWidget( this, PG_Rect( Width() - BuildingItem::Width() - 10, ypos, BuildingItem::Width(), BuildingItem::Height() ) );
+   ypos += BuildingItem::Height() + 5;
+
+   selectionName = new PG_Label( this, PG_Rect( xpos, currentSelectionWidget->my_ypos + currentSelectionWidget->Height() + 10, currentSelectionWidget->Width(), 20 ));
+   ypos += 25;
+   
+   selection.selectionChanged.connect( SigC::slot( *currentSelectionWidget, &SelectionItemWidget::set ));
+   selection.selectionChanged.connect( SigC::slot( *this, &MainScreenWidget::selectionChanged ));
+
 }
 
-bool MainScreenWidget::weatherChanged( int i )
+void MainScreenWidget::setupStatusBar()
 {
-   currentWeather = i;
-     
+   int x = mapDisplay->my_xpos;
+   int y =  mapDisplay->my_ypos + mapDisplay->Height() + 25;
+   int height = 20;
+
+   messageLine = new PG_Label ( this, PG_Rect( x, y, 200, height ) );
+   messageLine->SetFontSize(11);
+   x += 210;
+   
+
+   coordinateDisplay = new PG_Label ( this, PG_Rect( x, y, 80, height ) );
+   coordinateDisplay->SetFontSize(11);
+   
+   updateFieldInfo.connect( SigC::slot( *this, &MainScreenWidget::updateStatusBar ));
+}
+
+void MainScreenWidget::updateStatusBar()
+{
+   MapCoordinate pos = actmap->getCursor();
+   coordinateDisplay->SetText( ASCString::toString( pos.x) + " / " + ASCString::toString( pos.y ));
+}
+
+void MainScreenWidget::selectionChanged( const MapComponent* item )
+{
+   selectionName->SetText( item->getName() + "(ID: " + ASCString::toString( item->getID()   ) + ")");
+}
+
+
+void MainScreenWidget::brushChanged( int i )
+{
+   selection.brushSize = i+1;
+   if ( selection.brushSize < 1 )
+      selection.brushSize = 1;
 }
 
 
 bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 {
-   switch ( key->keysym.sym ) {
-      case SDLK_SPACE: execaction( act_placething );
-                       return true;
+   int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
+
+   if ( !mod  ) {
+      switch ( key->keysym.sym ) {
+         case SDLK_RETURN:
+         case SDLK_SPACE: execaction_ev( act_placething );
+                        return true;
+                        
+         case SDLK_F1:  execaction_ev(act_help);
+                        return true;
+         case SDLK_F2 : execaction_ev(act_selunit);
+                        return true;
+         case SDLK_F3:  execaction_ev(act_selbodentyp);
+                        return true;
+         case SDLK_F4 : execaction_ev(act_selobject);
+                        return true;
+         case SDLK_F5 : execaction_ev(act_selbuilding);
+                        return true;
+         case SDLK_F6 : execaction_ev(act_selmine);
+                        return true;
+         case SDLK_a:   execaction_ev(act_movebuilding);
+                        return true;
+         case SDLK_b:   execaction_ev(act_changeresources);
+                        return true;
+         case SDLK_c:   execaction_ev(act_changecargo);
+                        return true;
+         case SDLK_d : execaction_ev(act_changeterraindir);
+                        return true;
+         case SDLK_e:  execaction_ev(act_events);
+                        return true;
+         case SDLK_f:  execaction_ev(act_fillmode);
+                        return true;
+         case SDLK_g: execaction_ev(act_mapgenerator);
+                        return true;
+         case SDLK_h: execaction_ev(act_setactivefieldvals);
+                        return true;
+         case SDLK_DELETE: execaction_ev(act_deletething);
+                        return true;
+         case SDLK_l : execaction_ev(act_showpalette);
+                        return true;
+         case SDLK_m : execaction_ev(act_changeminestrength);
+                        return true;
+         case SDLK_o: execaction_ev(act_changeplayers);
+                        return true;
+
+         case SDLK_p: execaction_ev(act_changeunitvals);
+                        return true;
+
+         case SDLK_r: execaction_ev(act_resizemap);
+                        return true;
+
+         case SDLK_s : execaction_ev(act_savemap);
+                        return true;
+
+         case SDLK_v:   execaction_ev(act_viewmap);
+                        return true;
+
+         case SDLK_x:   execaction_ev(act_mirrorcursorx);
+                        return true;
+
+         case SDLK_y:   execaction_ev(act_mirrorcursory);
+                        return true;
+
+         case SDLK_z:   execaction_ev(act_setzoom );
+                        return true;
+
+         case SDLK_8 : execaction_ev(act_placemine);
+                        return true;
+
+         case SDLK_TAB: execaction_ev(act_switchmaps );
+                        return true;
+
+         case SDLK_ESCAPE :  if ( polyfieldmode )
+                                execaction_ev(act_endpolyfieldmode);
+                             else
+                                execaction_ev(act_end);
+                        return true;
+       }
+   }
+      
+   if ( mod & KMOD_CTRL ) {
+      switch ( key->keysym.sym ) {
+         case SDLK_F3 : execaction_ev(act_selbodentypAll);
+                        return true;
+   
+         case SDLK_F4 : execaction_ev(act_selobjectAll);
+                        return true;
+
+         case SDLK_a:  execaction_ev(act_setupalliances);
+                        return true;
+   
+         case SDLK_b:  execaction_ev(act_toggleresourcemode);
+                        return true;
+   
+         case SDLK_c:  execaction_ev(act_copyToClipboard);
+                        return true;
+   
+         case SDLK_f: execaction_ev(act_createresources);
+                        return true;
+   
+         case SDLK_g: execaction_ev(act_maptopcx);
+                        return true;
+   
+         case SDLK_h: execaction_ev(act_setunitfilter);
+                        return true;
+   
+         case SDLK_i: execaction_ev (act_import_bi_map );
+                        return true;
+   
+         case SDLK_l: execaction_ev(act_loadmap);
+                        return true;
+   
+         case SDLK_m: execaction_ev(act_changemapvals);
+                        return true;
+   
+         case SDLK_n: execaction_ev(act_newmap);
+                        return true;
+   
+         case SDLK_o: execaction_ev(act_polymode);
+                        return true;
+   
+         case SDLK_p: execaction_ev(act_changeproduction);
+                        return true;
+   
+         case SDLK_r: execaction_ev(act_repaintdisplay);
+                        return true;
+   
+         case SDLK_u: execaction_ev(act_unitinfo);
+                        return true;
+   
+         case SDLK_v: execaction_ev(act_pasteFromClipboard);
+                        return true;
+   
+         case SDLK_w: execaction_ev(act_setactweatherglobal);
+                        return true;
+
+         case SDLK_x: execaction_ev(act_end);
+                        return true;
+   
+       } 
    }                 
    return false;
 }
@@ -297,6 +493,7 @@ bool MainScreenWidget :: selectVehicle()
       vehicleSelector = new ItemSelector<Vehicletype>( this, PG_Rect( Width()-300, 100, 280, Height()-150), vehicleTypeRepository);
       
    vehicleSelector->Show();
+   vehicleSelector->RunModal();
    return true;
 }
 
@@ -306,6 +503,7 @@ bool MainScreenWidget :: selectBuilding()
       buildingSelector = new ItemSelector<BuildingType>( this, PG_Rect( Width()-300, 100, 280, Height()-150), buildingTypeRepository);
    
    buildingSelector->Show();
+   buildingSelector->RunModal();
    return true;
 }
 
@@ -315,6 +513,7 @@ bool MainScreenWidget :: selectObject()
       objectSelector = new ItemSelector<ObjectType>( this, PG_Rect( Width()-300, 100, 280, Height()-150), objectTypeRepository);
       
    objectSelector->Show();
+   objectSelector->RunModal();
    return true;
 }
 
@@ -324,6 +523,7 @@ bool MainScreenWidget :: selectTerrain()
       terrainSelector = new ItemSelector<TerrainType>( this, PG_Rect( Width()-300, 100, 280, Height()-150), terrainTypeRepository);
       
    terrainSelector->Show();
+   terrainSelector->RunModal();
    return true;
 }
 
@@ -366,18 +566,6 @@ void MainScreenWidget::buildBackgroundImage()
       blitRects[1] = PG_Rect(  0, y1, x1,     y2 ); 
       blitRects[2] = PG_Rect( x2, y1, Width() - x2, y2 ); 
       blitRects[3] = PG_Rect( 0, y2, Width(), Height() - y2 ); 
-      
-/*     
-      int mx1 = x1 - borderWidth;
-      int mx2 = x2 + borderWidth;
-      int my1 = y2 + 10;
-      
-      int msglength = mx2 - mx1;
-
-      messageLine = new PG_Label ( this, PG_Rect( mx1 + 20, my1 + 9, msglength - 30, msgend.h() - 18) );
-      messageLine->SetFontSize(11);
-      */
-         
    }
 }
 
@@ -435,6 +623,7 @@ void MainScreenWidget::spawnPanel ( Panels panel )
       assert( mapDisplay);
       OverviewMapPanel* smp = new OverviewMapPanel( this, PG_Rect(Width()-170, 0, 170, 160), mapDisplay );
       smp->Show();
+      mapChanged.connect( SigC::slot( OverviewMapHolder::clear ));
    }
 }
 

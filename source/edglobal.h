@@ -1,4 +1,4 @@
-//     $Id: edglobal.h,v 1.20.2.3 2005-06-09 20:27:13 mbickel Exp $
+//     $Id: edglobal.h,v 1.20.2.4 2005-06-12 11:05:16 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -24,7 +24,7 @@
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 91;
+const int execactionscount = 89;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -38,6 +38,7 @@ enum tuseractions {
      act_selcolor,
      act_selbuilding,
      act_selobject,
+     act_selobjectAll,
      act_selmine,
      act_selweather,
      act_setupalliances,
@@ -70,10 +71,6 @@ enum tuseractions {
      act_changeunitvals,
      act_mirrorcursorx,
      act_mirrorcursory,
-     act_placebodentyp,
-     act_placeunit,
-     act_placebuilding,
-     act_placeobject,
      act_placemine,
      act_placething,
      act_deleteunit,
@@ -118,11 +115,11 @@ enum tuseractions {
      act_editTechAdapter,
      act_resetPlayerData,
      act_createresources2,
-     act_setactnewweather
+     act_setactnewweather,
+     act_primaryAction
  };
 
-extern SigC::Signal0<void> mapChanged;
+extern SigC::Signal1<void, tmap* > mapChanged;
  
  
-extern void         execaction(int code);
 extern void         execaction_ev(int code);
