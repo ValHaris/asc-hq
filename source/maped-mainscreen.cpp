@@ -623,7 +623,7 @@ void MainScreenWidget::spawnPanel ( Panels panel )
       assert( mapDisplay);
       OverviewMapPanel* smp = new OverviewMapPanel( this, PG_Rect(Width()-170, 0, 170, 160), mapDisplay );
       smp->Show();
-      mapChanged.connect( SigC::slot( OverviewMapHolder::clear ));
+      mapChanged.connect( SigC::slot( OverviewMapHolder::clearmap ));
    }
 }
 

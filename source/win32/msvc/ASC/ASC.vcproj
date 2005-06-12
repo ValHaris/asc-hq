@@ -294,6 +294,9 @@
 				RelativePath="..\..\..\overviewmapimage.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\overviewmappanel.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\palette.cpp">
 			</File>
 			<File
@@ -379,6 +382,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\weatherarea.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\weathercast.cpp">
 			</File>
 			<Filter
 				Name="AI"

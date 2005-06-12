@@ -4,10 +4,10 @@ panel {
    BackgroundImage = transparent-bg.png
    FontColor = 0xc9f4ae
    Fontsize = 9
-   WidgetNum = 3
+   WidgetNum = 8
    Widget0 {
       type = image
-      Filename = pad9.png
+      Filename = pad.png
       name = pad
       x = 0
       y = 9
@@ -46,6 +46,7 @@ panel {
         } widget2
         widget3 {
           type = dummy
+          name = picture
           x = 80
           y = 26
           width = 201
@@ -89,7 +90,7 @@ panel {
      widgetnum = 6
      widget0 {
        type = SpecialInput
-       name = padclick_info
+       name = padclick_informations
        x = 0
        y = 0
        width = 70
@@ -220,15 +221,22 @@ panel {
        x = 0
        y = 0
        FontColor = 0xc9f4ae
-       widgetnum = 4
+       widgetnum = 5
        widget0 {
+         type = image
+         Filename = padscreen.png
+         x = 53
+         y = 222
+       } widget0
+
+       widget1 {
          type = image
          Filename = padinfoscreenwindow.png
          x = 75
          y = 255
          widgetnum = 9
          widget0 {
-           FontAlign = LEFT
+           TextAlign = LEFT
            Fontsize = 16
            type = StaticText
            text = informations
@@ -298,16 +306,16 @@ panel {
            height = 16
            width = 60
          } widget8
-       } widget0 
+       } widget1 
    
-       widget1 {
+       widget2 {
          type = image
          Filename = padproductioncostscreenwindow.png
          x = 75
          y = 370
          widgetnum = 5
          widget0 {
-           FontAlign = LEFT
+           TextAlign = LEFT
            Fontsize = 16
            type = StaticText
            text = production cost
@@ -347,16 +355,16 @@ panel {
            height = 16
            width = 60
          } widget4
-       } widget1
+       } widget2
 
-       widget2 {
+       widget3 {
          type = image
          Filename = padtankscreenwindow.png
          x = 75
          y = 455
          widgetnum = 7
          widget0 {
-           FontAlign = LEFT
+           TextAlign = LEFT
            Fontsize = 16
            type = StaticText
            text = tank size
@@ -413,16 +421,16 @@ panel {
            height = 16
            width = 60
          } widget6
-       } widget2
+       } widget3
 
-       widget3 {
+       widget4 {
          type = image
          Filename = padabilityscreenwindow.png
          x = 310
          y = 255
          widgetnum = 2
          widget0 {
-           FontAlign = LEFT
+           TextAlign = LEFT
            Fontsize = 16
            type = StaticText
            text = abilities
@@ -432,17 +440,1512 @@ panel {
          } widget0
          widget1 {
            type = SpecialDisplay
+           name = unitpad_unitabilities
            FontSize = 14
            x = 10
            y = 26
            width = 180
            height = 264
          } widget1
-       } widget3
-
-
+       } widget4
      } widget1
-
    } widget2
 
+
+
+   widget3 {
+     type = dummy
+     name = movement
+     x = 0
+     y = 0
+     widgetnum = 2
+     widget0 {
+       type = image
+       Filename = padbuttons.png
+       x = 555
+       y = 400
+       widgetnum = 5
+       widget0 {
+         type = Statictext
+         text = info
+         x = 3
+         y = 7
+         FontColor = 0x87a674
+         FontSize = 11
+         TextAlign = CENTER
+         height = 14
+         width = 70
+      } widget0
+       widget1 {
+         type = image
+         Filename = light_padbutton.png
+         x = 77
+         y = 0
+         width = 70
+         height = 25
+         widgetnum = 1
+         widget0 {
+           type = Statictext
+           text = movement
+           x = 3
+           y = 7
+           FontColor = 0xc9f4ae
+           FontSize = 11
+           TextAlign = CENTER
+           height = 14
+         } widget0
+       } widget1 
+
+       widget2 {
+         type = Statictext
+         text = weapons
+         x = 3
+         y = 39
+         FontColor = 0x87a674
+         FontSize = 11
+         TextAlign = CENTER
+         height = 14
+         width = 68
+       } widget2
+       widget3 {
+         type = Statictext
+         text = transport
+         x = 80
+         y = 39
+         FontColor = 0x87a674
+         FontSize = 11
+         TextAlign = CENTER
+         height = 14
+         width = 68
+       } widget3
+       widget4 {
+         type = Statictext
+         text = description
+         x = 2
+         y = 71
+         FontColor = 0x87a674
+         FontSize = 11
+         TextAlign = CENTER
+         height = 14
+         width = 67
+       } widget4
+     } widget0
+ 
+     widget1 {
+       type = dummy
+       name = padmovmentscreen
+       x = 0
+       y = 0
+       FontColor = 0xc9f4ae
+       widgetnum = 4
+       widget0 {
+         type = image
+         Filename = padscreen.png
+         x = 53
+         y = 222
+       } widget0
+
+       widget1 {
+         type = image
+         Filename = padspeedscreenwindow.png
+         x = 75
+         y = 245
+         widgetnum = 6
+         widget0 {
+           TextAlign = LEFT
+           Fontsize = 16
+           type = StaticText
+           text = speed
+           x = 10
+           y = 3
+           height = 18
+         } widget0
+         widget1 {
+           type = Statictext
+           text = fuel consumption:
+           x = 10
+           y = 60
+           Fontsize = 14
+           height = 16
+           widgetnum = 1
+           widget0 {
+              type = TextOutput
+              text = unitpad_unitmove_unitfuelconsumption
+              TextAlign = RIGHT
+              x = 100
+              y = 0
+              width = 60
+              height = 16
+            } widget0
+         } widget1
+         widget2 {
+           type = Statictext
+           text = level:
+           x = 10
+           y = 24
+           height = 15
+         } widget2
+         widget3 {
+           type = Statictext
+           text = max speed:
+           x = 10
+           y = 42
+           height = 15
+           widgetnum = 8
+           widget0 {
+             type = TextOutput
+             text = unitpad_unitmove_deep_submerged
+             TextAlign = CENTER
+             FontSize = 13
+             x = 95
+             y = 1
+             width = 30
+             height = 13
+           } widget0
+           widget1 {
+             type = TextOutput
+             text = unitpad_unitmove_submerged
+             TextAlign = CENTER
+             FontSize = 13
+             x = 138
+             y = 1
+             width = 30
+             height = 13
+           } widget1
+           widget2 {
+             type = TextOutput
+             text = unitpad_unitmove_floating
+             TextAlign = CENTER
+             FontSize = 13
+             x = 181
+             y = 1
+             width = 30
+             height = 13
+           } widget2
+           widget3 {
+             type = TextOutput
+             text = unitpad_unitmove_ground
+             TextAlign = CENTER
+             FontSize = 13
+             x = 224
+             y = 1
+             width = 30
+             height = 13
+           } widget3
+           widget4 {
+             type = TextOutput
+             text = unitpad_unitmove_low_level_flight
+             TextAlign = CENTER
+             FontSize = 13
+             x = 267
+             y = 1
+             width = 30
+             height = 13
+           } widget4
+           widget5 {
+             type = TextOutput
+             text = unitpad_unitmove_medium_level_flight
+             TextAlign = CENTER
+             FontSize = 13
+             x = 310
+             y = 1
+             width = 30
+             height = 13
+           } widget5
+           widget6 {
+             type = TextOutput
+             text = unitpad_unitmove_high_level_flight
+             TextAlign = CENTER
+             FontSize = 13
+             x = 353
+             y = 1
+             width = 30
+             height = 13
+           } widget6
+           widget7 {
+             type = TextOutput
+             text = unitpad_unitmove_orbit
+             TextAlign = CENTER
+             FontSize = 13
+             x = 396
+             y = 1
+             width = 30
+             height = 13
+           } widget7
+         } widget3
+         widget4 {
+           type = image
+           Filename = padlevels.png
+           x = 100
+           y = 22
+           FontSize = 14
+         } widget4
+         widget5 {
+           type = StaticText
+           text = wind resistance:
+           x = 10
+           y = 76
+           Fontsize = 14
+           height = 16
+           widgetnum = 1
+           widget0 {
+             type = TextOutput
+             text = unitpad_unitmove_windresistance
+              TextAlign = RIGHT
+              x = 100
+              y = 0
+              width = 60
+              height = 16
+            } widget0
+         } widget5
+       } widget1 
+   
+       widget2 {
+         type = image
+         Filename = padterrainscreenwindow.png
+         x = 75
+         y = 350
+         widgetnum = 3
+         widget0 {
+           TextAlign = LEFT
+           Fontsize = 16
+           type = StaticText
+           text = terrain access
+           x = 10
+           y = 3
+           height = 18
+         } widget0
+         
+	 widget1 {
+           type = SpecialDisplay
+           name = unitpad_terrainaccessarea
+           x = 10
+           y = 25
+           width = 160
+           height = 170
+           widgetnum = 1
+           
+           LineWidget {
+             type = image
+             Filename = padterraintab.png
+             name = unitpad_line_terrain
+             x = 0
+             y = 2
+             widgetnum = 1
+             widget0 {
+                TextAlign = LEFT
+                FontSize = 11 
+                type = TextOutput
+                name = unitpad_unitmove_terraintype
+                x = 3
+                y = 1
+                width = 120
+                height = 12
+             } widget0
+             widget1 {
+               type = SpecialDisplay
+               name = unitpad_unitmove_terrainaccess
+               x = 132
+               y = 1
+             } widget1
+           } LineWidget
+
+           widget0 {
+             type = image
+             Filename = padterraintab-begin.png
+             x = 0
+             y = 0
+           } widget0
+          } widget1
+  
+        widget2 {
+           type = SpecialDisplay
+           name = unitpad_unitmove_terrainscroll
+           x = 165
+           y = 25
+           width = 25
+           height = 171
+           widgetnum = 2
+           widget0 {
+             type = SpecialInput
+             name = unitpad_unitmove_scrollup_terrain
+             x = 0
+             y = 0
+             width = 25
+             height = 32
+           } widget0
+           widget1 {
+             type = SpecialInput
+             name = unitpad_unitmove_scrolldown_terrain
+             x = 0
+             y = 139
+             width = 25
+             height = 32
+           } widget1
+         } widget2
+
+      } widget2
+ 
+
+
+       widget3 {
+         type = image
+         Filename = padheightchangescreenwindow.png
+         x = 278
+         y = 350
+         widgetnum = 2
+         widget0 {
+           TextAlign = LEFT
+           Fontsize = 16
+           type = StaticText
+           text = height change
+           x = 10
+           y = 3
+           height = 18
+         } widget0
+         
+         LineWidget {
+           type = image
+           Filename = padheightchangetab.png
+           name = line_unitpad_heightchange
+           x = 10
+           y = 68
+           widgetnum = 4
+           widget0 {
+              TextAlign = CENTER
+              FontSize = 11 
+              type = SpecialDisplay
+              name = unitpad_move_changeheight_levels
+              x = 3
+              y = 2
+              width = 65
+              height = 11
+           } widget0
+           widget1 {
+             type = TextOutput
+             name = unitpad_move_changeheight_change
+             x = 70
+             y = 2
+             width = 46
+           } widget1
+           widget2 {
+              type = TextOutput
+              name = unitpad_move_changeheight_movepoints
+              x = 118
+              y = 2
+              width = 44
+           } widget2
+           widget3 {
+             type = TextOutput
+             name = unitpad_move_changeheight_distance
+             x = 162
+             y = 2
+             width = 59
+           } widget3
+         } LineWidget
+
+         widget1 {
+           type = image
+           Filename = padheightchangetab-begin.png
+           x = 10
+           y = 25
+           widgetnum = 8
+           widget0 {
+             TextAlign = CENTER
+             FontSize = 11
+             type = StaticText
+             text = current
+             x = 3
+             y = 8
+             width = 67
+             height = 12
+           } widget0
+           widget1 {
+             type = StaticText
+             text = height
+             x = 3
+             y = 19
+             width = 67
+             height = 12
+           } widget1
+           widget2 {
+             type = StaticText
+             text = height
+             x = 73
+             y = 8
+             width = 40
+             height = 12
+           } widget2
+           widget3 {
+             type = StaticText
+             text = change
+             x = 73
+             y = 19
+             width = 40
+             height = 12
+           } widget3
+           widget4 {
+             type = StaticText
+             text = requir.
+             x = 120
+             y = 3
+             width = 40
+             height = 12
+           } widget4
+           widget5 {
+             type = StaticText
+             text = move
+             x = 120
+             y = 14
+             width = 40
+             height = 12
+           } widget5
+           widget6 {
+             type = StaticText
+             text = points
+             x = 120
+             y = 25
+             width = 40
+             height = 12
+           } widget6
+           widget7 {
+             type = StaticText
+             text = distance
+             x = 165
+             y = 14
+             width = 50
+             height = 12
+           } widget7
+         } widget1
+
+       } widget3
+     } widget1
+   } widget3
+
+
+   widget4 {
+     type = dummy
+     name = weapon
+     x = 0
+     y = 0
+     widgetnum = 2
+     widget0 {
+       type = image
+       Filename = padbuttons.png
+       x = 555
+       y = 400
+       widgetnum = 5
+       widget0 {
+         type = Statictext
+         text = info
+         x = 3
+         y = 7
+         FontColor = 0x87a674
+         FontSize = 11
+         TextAlign = CENTER
+         height = 14
+         width = 70
+      } widget0
+       widget1 {
+         type = image
+         Filename = light_padbutton.png
+         x = 0
+         y = 32
+         width = 70
+         height = 25
+         widgetnum = 1
+         widget0 {
+           type = Statictext
+           text = weapons
+           x = 3
+           y = 7
+           FontColor = 0xc9f4ae
+           FontSize = 11
+           TextAlign = CENTER
+           height = 14
+         } widget0
+       } widget1 
+
+       widget2 {
+         type = Statictext
+         text = movement
+         x = 80
+         y = 7
+         FontColor = 0x87a674
+         FontSize = 11
+         TextAlign = CENTER
+         height = 14
+         width = 68
+       } widget2
+       widget3 {
+         type = Statictext
+         text = transport
+         x = 80
+         y = 39
+         FontColor = 0x87a674
+         FontSize = 11
+         TextAlign = CENTER
+         height = 14
+         width = 68
+       } widget3
+       widget4 {
+         type = Statictext
+         text = description
+         x = 2
+         y = 71
+         FontColor = 0x87a674
+         FontSize = 11
+         TextAlign = CENTER
+         height = 14
+         width = 67
+       } widget4
+     } widget0
+ 
+     widget1 {
+       type = dummy
+       name = padweaponscreen
+       x = 0
+       y = 0
+       FontColor = 0xc9f4ae
+       widgetnum = 3
+       widget0 {
+         type = image
+         Filename = padscreen.png
+         x = 53
+         y = 222
+       } widget0
+       widget1 {
+         type = image
+         Filename = padweaponscreenwindow.png
+         x = 75
+         y = 240
+         widgetnum = 19
+         widget0 {
+           TextAlign = LEFT
+           Fontsize = 16
+           type = StaticText
+           text = weapon list
+           x = 10
+           y = 3
+           height = 18
+         } widget0
+
+         LineWidget {
+           type = SpecialDisplay
+           name = line_pad_weapon_choose
+           x = 10
+           y = 30
+           width = 191
+           height = 190
+           widgetnum = 1
+           widget0 {
+             type = SpecialDisplay
+             name = pad_weaponbar
+             x = 0
+             y = 0
+             widgetnum = 2
+             widget0 {
+               type = image
+               Filename = pad_weaponhole.png
+               x = 8
+               y = 3
+               widgetnum = 1
+               widget0 {
+                 type = SpecialDisplay
+                 name = unitpad_weapon_symbol
+                 x = 2
+                 y = 2
+               } widget0
+              } widget0
+              widget1 {
+                type = TextOutput
+                name = unitpad_weaponweaponname
+                TextAlign = LEFT
+                FontSize = 14
+                x = 40
+                y = 4
+                height = 14
+             } Widget1
+           } widget0             
+         } LineWidget
+
+         widget1 {
+           TextAlign = LEFT
+           Fontsize = 13
+           type = StaticText
+           text = sourceheight
+           x = 10
+           y = 250
+           height = 13
+         } widget1
+         widget2 {
+           TextAlign = LEFT
+           Fontsize = 13
+           type = StaticText
+           text = sourcetarget
+           x = 10
+           y = 267
+           height = 13
+         } widget2
+         widget3 {
+           TextAlign = LEFT
+           Fontsize = 13
+           type = StaticText
+           text = max. ammo:
+           x = 10
+           y = 285
+           height = 13
+         } widget3
+         widget4 {
+           type = image
+           Filename = pad_weapon_levels.png
+           x = 120
+           y = 250
+           widgetnum = 1
+           widget0 {
+             type = SpecialDisplay
+             name = unitpad_weapon_source
+             x = 2
+             y = 3
+             width = 242
+             height = 15
+           } widget0
+         } widget4
+         widget5 {
+           type = image
+           Filename = pad_weapon_levels.png
+           x = 120
+           y = 267
+           widgetnum = 1
+           widget0 {
+             type = SpecialDisplay
+             name = unitpad_weapon_target
+             x = 2
+             y = 3
+             width = 242
+             height = 15
+           } widget0
+         } widget5
+         widget6 {
+           TextAlign = LEFT
+           Fontsize = 13
+           type = StaticText
+           text = reaction fire:
+           x = 10
+           y = 300
+           height = 13
+         } widget6
+         widget7 {
+           TextAlign = LEFT
+           Fontsize = 13
+           type = StaticText
+           text = distance:        -
+           x = 135
+           y = 300
+           height = 13
+         } widget7
+         widget8 {
+           TextAlign = LEFT
+           Fontsize = 13
+           type = StaticText
+           text = can transfer ammo:
+           x = 280
+           y = 300
+           height = 13
+         } widget8
+         widget9 {
+           TextAlign = LEFT
+           Fontsize = 13
+           type = StaticText
+           text = strength:        -
+           x = 135
+           y = 285
+           height = 13
+         } widget9
+         widget10 {
+           TextAlign = LEFT
+           Fontsize = 13
+           type = StaticText
+           text = can shoot:
+           x = 280
+           y = 285
+           height = 13
+         } widget10
+         widget11 {
+           TextAlign = RIGHT
+           Fontsize = 13
+           type = Textoutput
+           name = unitpad_weapon_maxammo
+           x = 95
+           y = 285
+           height = 13
+           width = 20
+         } widget11
+         widget12 {
+           TextAlign = RIGHT
+           Fontsize = 13
+           type = TextOutput
+           name = unitpad_weapon_reactionfire
+           x = 95
+           y = 300
+           height = 13
+           width = 20
+         } widget12
+         widget13 {
+           TextAlign = RIGHT
+           Fontsize = 13
+           type = TextOutput
+           name = unitpad_weapon_minstrength
+           x = 198
+           y = 285
+           height = 13
+           width = 25
+         } widget13
+         widget14 {
+           TextAlign = RIGHT
+           Fontsize = 13
+           type = TextOutput
+           name = unitpad_weapon_minrange
+           x = 198
+           y = 300
+           height = 13
+           width = 25
+         } widget14
+         widget15 {
+           TextAlign = LEFT
+           Fontsize = 13
+           type = TextOutput
+           name = unitpad_weapon_maxstrength
+           x = 235
+           y = 285
+           height = 13
+           width = 25
+         } widget15
+         widget16 {
+           TextAlign = LEFT
+           Fontsize = 13
+           type = TextOutput
+           name = unitpad_weapon_maxrange
+           x = 235
+           y = 300
+           height = 13
+           width = 25
+         } widget16
+         widget17 {
+           TextAlign = LEFT
+           Fontsize = 13
+           type = TextOutput
+           name = unitpad_weapon_canshoot
+           x = 410
+           y = 285
+           height = 13
+           width = 25
+         } widget17
+         widget18 {
+           TextAlign = LEFT
+           Fontsize = 13
+           type = TextOutput
+           name = unitpad_weapon_cantransfer
+           x = 410
+           y = 300
+           height = 13
+           width = 25
+         } widget18
+       } widget1
+
+       widget2 {
+         type = image
+         Filename = padweapondiagramscreenwindow.png
+         x = 304
+         y = 240
+         widgetnum = 2
+         widget0 {
+           TextAlign = LEFT
+           Fontsize = 16
+           type = StaticText
+           text = weapon analyse
+           x = 10
+           y = 3
+           height = 18
+         } widget0
+         widget1 {
+           type = SpecialDisplay
+           name = unitpad_weapon_diagram
+           x = 15
+           y = 30
+           width = 185
+           height = 190
+         } widget1
+       } widget2
+     } widget1
+   } widget4
+
+
+   widget5 {
+     type = dummy
+     name = transport
+     x = 0
+     y = 0
+     widgetnum = 2
+     widget0 {
+       type = image
+       Filename = padbuttons.png
+       x = 555
+       y = 400
+       widgetnum = 5
+       widget0 {
+         type = Statictext
+         text = info
+         x = 3
+         y = 7
+         FontColor = 0x87a674
+         FontSize = 11
+         TextAlign = CENTER
+         height = 14
+         width = 70
+      } widget0
+       widget1 {
+         type = image
+         Filename = light_padbutton.png
+         x = 77
+         y = 32
+         width = 70
+         height = 25
+         widgetnum = 1
+         widget0 {
+           type = Statictext
+           text = transport
+           x = 3
+           y = 7
+           FontColor = 0xc9f4ae
+           FontSize = 11
+           TextAlign = CENTER
+           height = 14
+         } widget0
+       } widget1 
+
+       widget2 {
+         type = Statictext
+         text = movement
+         x = 80
+         y = 7
+         FontColor = 0x87a674
+         FontSize = 11
+         TextAlign = CENTER
+         height = 14
+         width = 68
+       } widget2
+       widget3 {
+         type = Statictext
+         text = weapons
+         x = 3
+         y = 39
+         FontColor = 0x87a674
+         FontSize = 11
+         TextAlign = CENTER
+         height = 14
+         width = 68
+       } widget3
+       widget4 {
+         type = Statictext
+         text = description
+         x = 2
+         y = 71
+         FontColor = 0x87a674
+         FontSize = 11
+         TextAlign = CENTER
+         height = 14
+         width = 67
+       } widget4
+     } widget0
+ 
+     widget1 {
+       type = dummy
+       name = padtransportscreen
+       x = 0
+       y = 0
+       FontColor = 0xc9f4ae
+       widgetnum = 3
+       widget0 {
+         type = image
+         Filename = padscreen.png
+         x = 53
+         y = 222
+       } widget0
+       widget1 {
+         type = image
+         Filename = padtransportentrancescreenwindow.png
+         x = 75
+         y = 240
+         widgetnum = 1
+         widget0 {
+           TextAlign = LEFT
+           Fontsize = 16
+           type = StaticText
+           text = entrance systems
+           x = 10
+           y = 3
+           height = 18
+         } widget0
+   
+         Linewidget {
+           type = SpecialDisplay
+           name = line_pad_entrance_choose
+           x = 10
+           y = 21
+           width = 430
+           height = 26
+           widgetnum = 1
+           widget0 {
+             type = SpecialDisplay
+             name = pad_transport_square
+             x = 0
+             y = 0
+             widgetnum = 1
+             widget0 {
+               type = image
+               Filename = pad_transport_entrancebutton.png
+               x = 4
+               y = 4
+               widgetnum = 1
+               widget0 {
+                 type = Textoutput
+                 name = unitpad_transport_entrancenumber
+                 TextAlign = CENTER
+                 FontSize = 11
+                 x = 2
+                 y = 3
+                 height = 14
+                 width = 15
+               } Widget0
+             } widget0
+          } widget0             
+        } LineWidget
+      } widget1
+ 
+      widget2 {
+        type = image
+        Filename = padtransportdetailscreenwindow.png
+        x = 75
+        y = 289
+        widgetnum = 16
+        widget0 {
+           TextAlign = LEFT
+           Fontsize = 12
+           type = StaticText
+           text = loadable units:
+           x = 5
+           y = 109
+           height = 13
+           width = 120
+        } widget0
+        widget1 {
+           TextAlign = RIGHT
+           Fontsize = 12
+           type = StaticText
+           text = entrance system:
+           x = 5
+           y = 25
+           height = 13
+           width = 120
+        } widget1
+        widget2 {
+           TextAlign = RIGHT
+           Fontsize = 12
+           type = StaticText
+           text = transporter level:
+           x = 5
+           y = 63
+           height = 13
+           width = 120
+        } widget2
+        widget3 {
+           TextAlign = RIGHT
+           Fontsize = 12
+           type = StaticText
+           text = unit level:
+           x = 5
+           y = 89
+           height = 13
+           width = 120
+        } widget3
+        widget4 {
+          type = SpecialDisplay
+          name = unitpad_transport_inoutdocking
+          x = 140
+          y = 12
+          width = 240
+          height = 39
+        } widget4 
+
+        LineWidget {
+          type = dummy
+          name = unitpad_transport_leveldisplay
+          x = 140
+          y = 62
+          widgetnum = 2
+          widget0 {
+            type = SpecialDisplay
+            name = unitpad_transport_transporterlevel
+            x = 2
+            y = 2
+            width = 21
+            height = 21
+          } widget0
+          widget1 {
+            type = SpecialDisplay
+            name = unitpad_transport_unitlevel
+            x = 2
+            y = 27
+            width = 21
+            height = 21
+          } widget1
+        } Linewidget 
+
+       widget5 {
+          type = dummy
+          name = unitpad_transport_units
+          x = 51
+          y = 133
+          widgetnum = 17
+          widget0 {
+            type = SpecialDisplay
+            name = unitpad_transport_light_wheeled_vehicle
+            x = 1
+            y = 1
+            width = 23
+            height = 9
+          } widget0
+          widget1 {
+            type = SpecialDisplay
+            name = unitpad_transport_light_ship
+            x = 1
+            y = 32
+            width = 23
+            height = 9
+          } widget1
+          widget2 {
+            type = SpecialDisplay
+            name = unitpad_transport_trooper
+            x = 1
+            y = 64
+            width = 23
+            height = 9
+          } widget2
+          widget3 {
+            type = SpecialDisplay
+            name = unitpad_transport_medium_wheeled_vehicle
+            x = 73
+            y = 1
+            width = 23
+            height = 9
+          } widget3
+          widget4 {
+            type = SpecialDisplay
+            name = unitpad_transport_medium_ship
+            x = 73
+            y = 32
+            width = 23
+            height = 9
+          } widget4
+          widget5 {
+            type = SpecialDisplay
+            name = unitpad_transport_rail_vehicle
+            x = 73
+            y = 64
+            width = 23
+            height = 9
+          } widget5
+          widget6 {
+            type = SpecialDisplay
+            name = unitpad_transport_heavy_wheeled_vehicle
+            x = 146
+            y = 1
+            width = 23
+            height = 9
+          } widget6
+          widget7 {
+            type = SpecialDisplay
+            name = unitpad_transport_heavy_ship
+            x = 146
+            y = 32
+            width = 23
+            height = 9
+          } widget7
+          widget8 {
+            type = SpecialDisplay
+            name = unitpad_transport_building|turret|object
+            x = 146
+            y = 64
+            width = 23
+            height = 9
+          } widget8
+          widget9 {
+            type = SpecialDisplay
+            name = unitpad_transport_light_tracked_vehicle
+            x = 218
+            y = 1
+            width = 23
+            height = 9
+          } widget9
+          widget10 {
+            type = SpecialDisplay
+            name = unitpad_transport_light_aircraft
+            x = 218  
+            y = 32
+            width = 23
+            height = 9
+          } widget10
+          widget11 {
+            type = SpecialDisplay
+            name = unitpad_transport_helicopter
+            x = 218
+            y = 64
+            width = 23
+            height = 9
+          } widget11
+          widget12 {
+            type = SpecialDisplay
+            name = unitpad_transport_medium_tracked_vehicle
+            x = 291
+            y = 1
+            width = 23
+            height = 9
+          } widget12
+          widget13 {
+            type = SpecialDisplay
+            name = unitpad_transport_medium_aircraft
+            x = 291
+            y = 32
+            width = 23
+            height = 9
+          } widget13
+          widget14 {
+            type = SpecialDisplay
+            name = unitpad_transort_hoovercraft
+            x = 291
+            y = 64
+            width = 23
+            height = 9
+          } widget14
+          widget15 {
+            type = SpecialDisplay
+            name = unitpad_transport_heavy_tracked_vehicle
+            x = 363
+            y = 1
+            width = 23
+            height = 9
+          } widget15
+          widget16 {
+            type = SpecialDisplay
+            name = unitpad_transport_heavy_aircraft
+            x = 363
+            y = 32
+            width = 23
+            height = 9
+          } widget16
+        } widget5
+        widget6 {
+           TextAlign = RIGHT
+           Fontsize = 11
+           type = StaticText
+           text = max. total cargo weight: 
+           x = 5
+           y = 228
+           height = 13
+           width = 169
+        } widget6
+        widget7 {
+           TextAlign = RIGHT
+           Fontsize = 11
+           type = StaticText
+           text = max. single cargo weight: 
+           x = 5
+           y = 241
+           height = 13
+           width = 169
+        } widget7
+        widget8 {
+           TextAlign = RIGHT
+           Fontsize = 11
+           type = StaticText
+           text = unit needs special functions: 
+           x = 5
+           y = 254
+           height = 13
+           width = 169
+        } widget8
+        widget9 {
+           TextAlign = Right
+           Fontsize = 11
+           type = StaticText
+           text = can attack afterwards: 
+           x = 210
+           y = 228
+           height = 13
+           width = 200
+        } widget9
+        widget10 {
+           TextAlign = Right
+           Fontsize = 11
+           type = StaticText
+           text = max. loadable units: 
+           x = 210
+           y = 241
+           height = 13
+           width = 200
+        } widget10
+        widget11 {
+           TextAlign = Right
+           Fontsize = 11
+           type = TextOutput
+           name = unitpad_transport_maxtotalweight
+           x = 136
+           y = 228
+           height = 13
+           width = 100
+        } widget11
+        widget12 {
+           TextAlign = Right
+           Fontsize = 11
+           type = TextOutput
+           name = unitpad_transport_maxsingleweight
+           x = 136
+           y = 241
+           height = 13
+           width = 100
+        } widget12
+        widget13 {
+           TextAlign = Left
+           Fontsize = 11
+           type = TextOutput
+           name = unitpad_transport_specialfunctions
+           x = 180
+           y = 254
+           height = 13
+           width = 257
+        } widget13
+        widget14 {
+           TextAlign = left
+           Fontsize = 11
+           type = Textoutput
+           name = unitpad_transport_attackafterwards
+           x = 415
+           y = 228
+           height = 13
+           width = 25
+        } widget14
+        widget15 {
+           TextAlign = left
+           Fontsize = 11
+           type = TextOutput
+           name = unitpad_transport_loadableunits
+           x = 415
+           y = 241
+           height = 13
+           width = 25
+        } widget15
+      } widget2
+    } widget1
+  } widget5
+
+   widget6 {
+     type = dummy
+     name = description
+     x = 0
+     y = 0
+     widgetnum = 2
+     widget0 {
+       type = image
+       Filename = padbuttons.png
+       x = 555
+       y = 400
+       widgetnum = 5
+       widget0 {
+         type = Statictext
+         text = info
+         x = 3
+         y = 7
+         FontColor = 0x87a674
+         FontSize = 11
+         TextAlign = CENTER
+         height = 14
+         width = 70
+      } widget0
+       widget1 {
+         type = image
+         Filename = light_padbutton.png
+         x = 0
+         y = 64
+         width = 70
+         height = 25
+         widgetnum = 1
+         widget0 {
+           type = Statictext
+           text = description
+           x = 3
+           y = 7
+           FontColor = 0xc9f4ae
+           FontSize = 11
+           TextAlign = CENTER
+           height = 14
+         } widget0
+       } widget1 
+
+       widget2 {
+         type = Statictext
+         text = movement
+         x = 80
+         y = 7
+         FontColor = 0x87a674
+         FontSize = 11
+         TextAlign = CENTER
+         height = 14
+         width = 68
+       } widget2
+       widget3 {
+         type = Statictext
+         text = weapons
+         x = 3
+         y = 39
+         FontColor = 0x87a674
+         FontSize = 11
+         TextAlign = CENTER
+         height = 14
+         width = 68
+       } widget3
+       widget4 {
+         type = Statictext
+         text = transport
+         x = 80
+         y = 39
+         FontColor = 0x87a674
+         FontSize = 11
+         TextAlign = CENTER
+         height = 14
+         width = 67
+       } widget4
+     } widget0
+ 
+     widget1 {
+       type = dummy
+       name = padtransportscreen
+       x = 0
+       y = 0
+       FontColor = 0xc9f4ae
+       widgetnum = 2
+       widget0 {
+         type = image
+         Filename = padscreen.png
+         x = 53
+         y = 222
+       } widget0
+       widget1 {
+         type = image
+         Filename = paddescriptionscreenwindow.png
+         x = 75
+         y = 240
+         width = 444
+         height = 320
+         widgetnum = 3
+         widget0 {
+           TextAlign = LEFT
+           Fontsize = 16
+           type = StaticText
+           text = unit description
+           x = 10
+           y = 3
+           height = 18
+         } widget0
+         widget1 {
+           type = SpecialDisplay
+           name = unitpad_descriptionscrollbar
+           x = 410
+           y = 27
+           width = 25
+           height = 286
+           widgetnum = 2
+           widget0 {
+             type = SpecialInput
+             name = unitpad_description_scrollup
+             x = 0
+             y = 0
+             width = 25
+             height = 32
+           } widget0
+           widget1 {
+             type = SpecialInput
+             name = unitpad_description_scrolldown
+             x = 0
+             y = 254
+             width = 25
+             height = 32
+           } widget1
+         } widget1
+         widget2 {
+           type = SpecialDisplay
+           name = unitpad_description_text
+           x = 10
+           y = 25
+           FontSize = 11
+           TextAlign = Left
+           height = 14
+           x2 = -45
+           y2 = -10
+         } widget2
+       } widget1
+     } widget1
+   } widget6
+
+  widget7 {
+    type = dummy
+    name = unitpad_video
+    x = 0
+    y = 0
+    widgetnum = 4
+    widget0 {
+      type = SpecialDisplay
+      name = unitpad_playbuttons
+      x = 592
+      y = 360
+    } widget0      
+     widget1 {
+      type = SpecialInput
+      name = unitpad_playbutton_klick.png
+      x = 627
+      y = 360
+      width = 35
+      height = 25
+      widgetnum = 1
+      widget0 {
+        type = SpecialDisplay
+        name =  unitpad_play
+        x = 0
+        y = 0
+      } widget0
+    } widget1
+     widget2 {
+      type = SpecialInput
+      name = unitpad_noplaybutton_klick.png
+      x = 592
+      y = 360
+      width = 35
+      height = 25
+      widgetnum = 1
+      widget0 {
+        type = SpecialDisplay
+        name =  unitpad_noplay
+        x = 0
+        y = 0
+      } widget0
+    } widget2
+    widget3 {
+      type = SpecialDisplay
+      name = unitpad_showvideo
+      x = 80
+      y = 26
+      width = 201
+      height = 151
+    } widget3
+  } widget7
 } panel

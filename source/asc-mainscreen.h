@@ -51,7 +51,7 @@ protected:
     Menu* menu;
     
     bool idleHandler( );
-    
+
     void buildBackgroundImage();
     void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst) ;
 //    void eventDraw (SDL_Surface* surface, const PG_Rect& rect);

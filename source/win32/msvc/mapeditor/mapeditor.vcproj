@@ -245,6 +245,12 @@
 				RelativePath="..\..\..\mapdisplay.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\maped-mainscreen.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\mapfield.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\mappolygons.cpp">
 			</File>
 			<File
@@ -266,10 +272,16 @@
 				RelativePath="..\..\..\newfont.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\objects.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\objecttype.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\overviewmapimage.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\overviewmappanel.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\palette.cpp">
@@ -369,6 +381,16 @@
 				</File>
 				<File
 					RelativePath="..\..\..\graphics\surface.cpp">
+				</File>
+			</Filter>
+			<Filter
+				Name="Loki"
+				Filter="">
+				<File
+					RelativePath="..\..\..\libs\loki\Singleton.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\libs\loki\SmallObj.cpp">
 				</File>
 			</Filter>
 		</Filter>

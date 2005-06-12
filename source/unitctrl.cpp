@@ -534,10 +534,14 @@ int VehicleMovement :: execute ( Vehicle* veh, int x, int y, int step, int heigh
       status = 3;
       return status;
    } else
-    if ( status == 3 )
-       return BaseVehicleMovement::execute ( veh, x, y, step, height, capabilities & NoInterrupt );
-    else
-       status = 0;
+      if ( status == 3 ) {
+         int res = BaseVehicleMovement::execute ( veh, x, y, step, height, capabilities & NoInterrupt );
+         mapChanged( actmap );
+         return res;
+      }
+      else
+         status = 0;
+
   return status;
 }
 

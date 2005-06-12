@@ -364,8 +364,10 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
    buildBackgroundImage();
 
    PG_Application::GetApp()->sigAppIdle.connect( SigC::slot( *this, &MainScreenWidget::idleHandler ));
-   
+
+   mapChanged.connect( SigC::slot( OverviewMapHolder::clearmap ));
 }
+
 
 bool MainScreenWidget :: idleHandler( )
 {

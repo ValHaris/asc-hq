@@ -274,6 +274,7 @@ template <class ItemType> class ItemSelector : public PG_Window {
             locateObject( nameSearch->GetText() );
             return true;
          }   
+         return false;
       };
       
       void locateObject( const ASCString& name ) {

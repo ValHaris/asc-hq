@@ -180,7 +180,7 @@ void OverviewMapHolder::clear()
    startUpdate();
 }
 
-void OverviewMapHolder::clear( tmap* actmap )
+void OverviewMapHolder::clearmap( tmap* actmap )
 {
    if ( actmap )
       actmap->overviewMapHolder.clear();

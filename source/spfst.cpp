@@ -66,6 +66,7 @@ SigC::Signal0<void> updateFieldInfo;
 SigC::Signal1<void,ContainerBase*> showContainerInfo;
 SigC::Signal1<void,Vehicletype*> showVehicleTypeInfo;
 SigC::Signal0<void> viewChanged;
+SigC::Signal1<void,tmap*> mapChanged;
 SigC::Signal0<bool> idleEvent;
 
 

@@ -133,7 +133,7 @@ class OverviewMapHolder : public SigC::Object {
       */
       const Surface& getOverviewMap( bool complete = true );
       
-      static void clear( tmap* actmap );
+      static void clearmap( tmap* actmap );
       
       static SigC::Signal0<void> generationComplete;
       
