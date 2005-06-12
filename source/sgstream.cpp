@@ -199,7 +199,7 @@ int readgameoptions ( const ASCString& filename )
              const int size = 2000;
              char  buf[size];
              DWORD size2 = size;
-             if ( RegQueryValueEx ( key, "InstallDir", NULL, &type, (BYTE*)buf, &size2 ) == ERROR_SUCCESS ) {
+             if ( RegQueryValueEx ( key, "InstallDir2", NULL, &type, (BYTE*)buf, &size2 ) == ERROR_SUCCESS ) {
                 if ( type == REG_SZ	 ) {
                    fn = buf;
                    appendbackslash ( fn );

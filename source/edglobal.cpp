@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.62.2.6 2005-06-12 11:05:15 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.62.2.7 2005-06-12 13:46:52 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -134,8 +134,7 @@
         "Primary action" };
 
 
-SigC::Signal1<void, tmap* > mapChanged;
-        
+      
         
 // õS Infomessage
 

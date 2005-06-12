@@ -1,4 +1,4 @@
-//     $Id: edglobal.h,v 1.20.2.4 2005-06-12 11:05:16 mbickel Exp $
+//     $Id: edglobal.h,v 1.20.2.5 2005-06-12 13:46:52 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -119,7 +119,6 @@ enum tuseractions {
      act_primaryAction
  };
 
-extern SigC::Signal1<void, tmap* > mapChanged;
  
  
 extern void         execaction_ev(int code);
