@@ -741,8 +741,10 @@ int  tncontainerstream :: getcontainerfilesize ( const char* name )
 
 void tncontainerstream :: opencontainerfile ( const char* name )
 {
-   if ( actfile )
-      throw tfileerror ( name );
+   if ( actfile ) {
+      ASCString err = ASCString("two files simultaneously: ") + actfile->name + " and " + name;
+      throw tfileerror (  err );
+   }
 
    containerfilepos = 0;
    int i = 0;

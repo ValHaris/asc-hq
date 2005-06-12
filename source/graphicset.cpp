@@ -78,7 +78,9 @@ int GraphicSetManager_Base :: setActive ( int id )
          activeSet = *i;
          return id;
       }
-   
+
+   if ( graphicSets.size() < 1 )
+      fatalError( "no graphic sets (*.gfx) found!" );
    activeSet = *graphicSets.begin();   
    return 0;
 }

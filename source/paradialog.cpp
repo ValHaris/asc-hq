@@ -150,8 +150,10 @@ ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
       path = getSearchPath ( i++ );
       if ( !path.empty() ) {
          AddArchive ( path );
-         if ( !themeFound )
-            themeFound = AddArchive ( (path + themeName + ".zip").c_str() );
+         if ( !themeFound ){
+            ASCString arch = path + themeName + ".zip";
+            themeFound = AddArchive ( arch.c_str() );
+         }
       }
    } while ( !path.empty() );
    PG_LogConsole::SetLogLevel ( PG_LOG_ERR );
@@ -184,7 +186,7 @@ bool ASC_PG_App:: InitScreen ( int w, int h, int depth, Uint32 flags )
 void ASC_PG_App :: reloadTheme()
 {
    if ( !LoadTheme(themeName ))
-      fatalError ( "Could not load Paragui theme for ASC");
+      fatalError ( "Could not load Paragui theme for ASC: " + themeName );
 }
 
 
@@ -812,11 +814,14 @@ Panel::WidgetParameters Panel::getDefaultWidgetParams()
 bool Panel::setup()
 {
    try {
+      WidgetParameters widgetParameters = getDefaultWidgetParams();
 
-      tnfilestream s ( panelName.toLower() + ".ascgui", tnstream::reading );
+      {
+         tnfilestream s ( panelName.toLower() + ".ascgui", tnstream::reading );
 
-      TextFormatParser tfp ( &s );
-      textPropertyGroup = tfp.run();
+         TextFormatParser tfp ( &s );
+         textPropertyGroup = tfp.run();
+      }
 
       PropertyReadingContainer pc ( "panel", textPropertyGroup );
 
@@ -847,11 +852,6 @@ bool Panel::setup()
 
      	   MoveWidget( x1, y1, false );
       }
-
-
-
-
-      WidgetParameters widgetParameters = getDefaultWidgetParams();
 
       widgetParameters.runTextIO( pc );
       widgetParameters.assign ( this );
