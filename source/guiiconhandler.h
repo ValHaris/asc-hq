@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.10 2005-06-09 20:27:13 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.11 2005-06-13 19:49:06 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -42,6 +42,7 @@ class GuiFunction {
 
      public:
        virtual bool available( const MapCoordinate& pos, int num ) = 0;
+       virtual bool checkForKey( const SDL_KeyboardEvent* key, int modifier ) { return false; };
        virtual void execute( const MapCoordinate& pos, int num ) = 0;
        virtual Surface& getImage( const MapCoordinate& pos, int num ) = 0;
        virtual ASCString getName( const MapCoordinate& pos, int num ) = 0;
@@ -113,6 +114,8 @@ class GuiIconHandler {
        /** registers a user function. Icons are displayed in the order that they were registered.
           By passing an object here, the GuiIconHandler wil obtain ownership of the object and delete it on his destruction */
        void registerUserFunction( GuiFunction* function );
+
+       bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
 
        virtual void eval();
        virtual ~GuiIconHandler();

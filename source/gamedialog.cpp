@@ -817,8 +817,8 @@ SoundSettings::SoundSettings(PG_Widget* parent, const PG_Rect& r, PG_MessageObje
 
    sigClose.connect( SigC::slot( *this, &SoundSettings::closeWindow ));
    
-   caller = c;
-   SetInputFocus();
+   // caller = c;
+   // SetInputFocus();
 }
 
 

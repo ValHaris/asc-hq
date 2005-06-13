@@ -36,6 +36,7 @@
 #include "graphics/blitter.h"
 #include "graphics/drawing.h"
 #include "overviewmappanel.h"
+#include "ai/ai.h"
 
 
 MainScreenWidget*  mainScreenWidget = NULL ;
@@ -507,4 +508,111 @@ void MainScreenWidget::spawnPanel ( Panels panel )
    }
 }
 
+bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
+{
+   int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
 
+   if ( !mod  ) {
+      switch ( key->keysym.sym ) {
+            case SDLK_F1:
+               execuseraction ( ua_help );
+               return true;
+
+            case SDLK_F2:
+               execuseraction ( ua_mainmenu );
+               return true;
+
+            case SDLK_F3:
+               execuseraction ( ua_continuenetworkgame );
+               return true;
+
+            case SDLK_F4:
+               execuseraction ( ua_computerturn );
+               return true;
+
+            case SDLK_F8:
+               {
+                  int color = actmap->actplayer;
+                  for ( int p = 0; p < 8; p++ )
+                     if ( actmap->player[p].stat == Player::computer && actmap->player[p].exist() )
+                        color = p;
+
+                  if ( actmap->player[color].ai ) {
+                     AI* ai = (AI*) actmap->player[color].ai;
+                     ai->showFieldInformation ( actmap->getCursor().x, actmap->getCursor().y );
+                  }
+               }
+               return true;
+
+            case SDLK_F11: {
+            // computeview ( actmap );
+            }
+            return true;
+
+            case SDLK_1:
+               execuseraction ( ua_changeresourceview );
+               return true;
+
+            case SDLK_2:
+               execuseraction ( ua_toggleunitshading );
+               return true;
+
+            case SDLK_3:
+               // viewunitweaponrange ( getSelectedField()->vehicle, SDLK_3 );
+               return true;
+
+            case SDLK_4:
+               // viewunitmovementrange ( getSelectedField()->vehicle, SDLK_4 );
+               return true;
+
+            case SDLK_5:
+               execuseraction ( ua_GameStatus );
+               return true;
+
+            case SDLK_6:
+               execuseraction ( ua_UnitSetInfo );
+               return true;
+
+            case SDLK_7:
+               execuseraction ( ua_viewterraininfo );
+               return true;
+
+            case SDLK_8:
+               execuseraction ( ua_unitweightinfo );
+               return true;
+
+            case SDLK_9:
+               // viewPipeNet ( SDLK_9 );
+               return true;
+
+            case SDLK_0: execuseraction( ua_writescreentopcx );
+               return true;
+      }
+   }
+
+   if ( mod & KMOD_CTRL ) {
+      switch ( key->keysym.sym ) {
+            case SDLK_l:
+               execuseraction ( ua_loadgame );
+               return true;
+
+            case SDLK_s:
+               execuseraction ( ua_savegame );
+               return true;
+
+
+            case SDLK_n:
+               execuseraction ( ua_startnewsinglelevel );
+               return true;
+
+            case SDLK_F12:
+               execuseraction ( ua_exportUnitToFile );
+               return true;
+
+            case SDLK_x:
+               execuseraction ( ua_exitgame );
+               return true;
+      }
+   }
+   return false;
+}

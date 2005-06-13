@@ -138,6 +138,20 @@ void GuiIconHandler::eval()
    host->disableButtons(num);
 }
 
+bool GuiIconHandler::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+{
+   if ( !actmap->getCursor().valid())
+      return false;
+
+   for ( Functions::iterator i = functions.begin(); i != functions.end(); ++i )
+      if ( (*i)->available(actmap->getCursor(), 0 ))
+         if ( (*i)->checkForKey( key, modifier)) {
+            (*i)->execute(actmap->getCursor(), 0 );
+            return true;
+         }
+   return false;
+}
+
 
 void GuiIconHandler::registerUserFunction( GuiFunction* function )
 {
@@ -335,6 +349,11 @@ bool NewGuiHost::eventKeyDown(const SDL_KeyboardEvent* key)
          return true;
       }
          
+   } else {
+      if ( handler )
+         if ( handler->checkForKey( key, SDL_GetModState() ))
+            return true;
+
    }
 
    return false;

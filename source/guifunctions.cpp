@@ -208,24 +208,30 @@ AttackGui attackGui;
 class Cancel : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num ) 
+      bool available( const MapCoordinate& pos, int num )
       {
-         return moveparams.movestatus || pendingVehicleActions.action;  
+         return moveparams.movestatus || pendingVehicleActions.action;
       };
-      
-      void execute( const MapCoordinate& pos, int num ) 
-      { 
+
+      void execute( const MapCoordinate& pos, int num )
+      {
          if ( moveparams.movestatus || pendingVehicleActions.action ) {
             moveparams.movestatus = 0;
             if ( pendingVehicleActions.action )
                delete pendingVehicleActions.action;
-      
+
             actmap->cleartemps(7);
             updateFieldInfo();
             displaymap();
          }
       };
-      
+
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.sym == SDLK_ESCAPE || key->keysym.unicode == 'c' );
+      };
+
+
       Surface& getImage( const MapCoordinate& po, int nums )
       {
          return IconRepository::getIcon("cancel.png");
@@ -244,6 +250,12 @@ class Movement : public GuiFunction
    public:
       bool available( const MapCoordinate& pos, int num );
       void execute( const MapCoordinate& pos, int num );
+
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.sym == SDLK_SPACE );
+      };
+
       Surface& getImage( const MapCoordinate& pos, int num )
       {
          return IconRepository::getIcon("movement.png");
@@ -356,6 +368,10 @@ class Ascend : public GuiFunction
    public:
       bool available( const MapCoordinate& pos, int num );
       void execute( const MapCoordinate& pos, int num );
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == 's' );
+      };
       Surface& getImage( const MapCoordinate& pos, int num )
       {
          return IconRepository::getIcon("ascend-airplane.png");
@@ -452,6 +468,10 @@ class Descend : public GuiFunction
    public:
       bool available( const MapCoordinate& pos, int num );
       void execute( const MapCoordinate& pos, int num );
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == 'd' );
+      };
       Surface& getImage( const MapCoordinate& pos, int num )
       {
          return IconRepository::getIcon("descent-airplane.png");
@@ -557,6 +577,10 @@ class EndTurn : public GuiFunction
    public:
       bool available( const MapCoordinate& pos, int num ) ;
       void execute( const MapCoordinate& pos, int num );
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == 'e' );
+      };
       Surface& getImage( const MapCoordinate& po, int nums )
       {
          return IconRepository::getIcon("endturn.png");
@@ -598,6 +622,10 @@ class Attack : public GuiFunction
    public:
       bool available( const MapCoordinate& pos, int num ) ;
       void execute( const MapCoordinate& pos, int num );
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == 'a' );
+      };
       Surface& getImage( const MapCoordinate& pos, int num )
       {
          return IconRepository::getIcon("attack.png");
@@ -668,6 +696,10 @@ class PowerOn : public GuiFunction
          return false;
       };
 
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == 'p' );
+      };
       void execute( const MapCoordinate& pos, int num )
       {
          Vehicle* veh = actmap->getField(pos)->vehicle;
@@ -705,6 +737,10 @@ class PowerOff : public GuiFunction
          return false;
       };
       
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == 'p' );
+      };
       void execute( const MapCoordinate& pos, int num )
       {
          Vehicle* veh = actmap->getField(pos)->vehicle;
@@ -910,6 +946,10 @@ class EnableReactionfire : public GuiFunction
 
          return false;
       };
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == 'x' );
+      };
 
       void execute( const MapCoordinate& pos, int num )
       {
@@ -947,6 +987,10 @@ class DisableReactionfire : public GuiFunction
          return false;
       };
 
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == 'x' );
+      };
       void execute( const MapCoordinate& pos, int num )
       {
          actmap->getField(pos)->vehicle->reactionfire.disable();
@@ -1023,6 +1067,10 @@ class RepairUnit : public GuiFunction
          return false;
       };
 
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == 'r' );
+      };
       void execute( const MapCoordinate& pos, int num )
       {
          if ( pendingVehicleActions.actionType == vat_nothing ) {
@@ -1109,6 +1157,10 @@ class RefuelUnit : public GuiFunction
 
          return false;
       };
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == 'f' );
+      };
 
       void execute( const MapCoordinate& pos, int num )
       {
@@ -1176,6 +1228,10 @@ class RefuelUnitDialog : public GuiFunction
 
          return false;
       };
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == 'F' );
+      };
 
       void execute( const MapCoordinate& pos, int num )
       {
@@ -1201,7 +1257,7 @@ class RefuelUnitDialog : public GuiFunction
 
 
 
-
+#if 0
 class ViewMap : public GuiFunction
 {
    public:
@@ -1228,7 +1284,7 @@ class ViewMap : public GuiFunction
          return "view survey map";
       };
 };
-
+#endif
 
 
 class PutMine : public GuiFunction
@@ -1244,6 +1300,10 @@ class PutMine : public GuiFunction
                      if ( !fld->vehicle->attacked )
                         return true;
          return false;
+      };
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == 'm' );
       };
 
       void execute( const MapCoordinate& pos, int num )
