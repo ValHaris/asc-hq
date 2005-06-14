@@ -27,7 +27,7 @@
 #include "../basestrm.h"
 #include "../sdl/SDLStretch.h"
 #include "../misc.h"
-
+#include <iostream>
 
 DI_Color::DI_Color() {
 	r = 0;
@@ -76,7 +76,7 @@ DI_Color::operator Uint32() const {
 
 void Surface::SetScreen( SDL_Surface* screen )
 {
-  if ( screen && screen->format->BitsPerPixel == 32 )
+  if ( screen && screen->format->BitsPerPixel == 32 )    
      default32bit = new SDLmm::PixelFormat ( screen->format );
 }
 

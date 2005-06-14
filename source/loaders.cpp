@@ -1283,8 +1283,6 @@ int          tnetworkloaders::savenwgame( pnstream strm )
 { 
    spfld = actmap;
    
-   actmap->weatherSystem->write(*stream);
-
    stream = strm;
 
    stream->writepchar ( getFullVersionString() );  // description is not used any more
@@ -1293,6 +1291,8 @@ int          tnetworkloaders::savenwgame( pnstream strm )
    stream->writeInt ( actnetworkversion );
 
    writemap ();
+
+   actmap->weatherSystem->write(*stream);
 
    writemessages();
 

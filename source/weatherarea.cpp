@@ -464,11 +464,10 @@ WeatherSystem::WeatherSystem(tmap* map):gameMap(map) {
 
 WeatherSystem::~WeatherSystem() {
     WeatherAreas::iterator it;
-    for(it = weatherAreas.begin(); it!= weatherAreas.end(); it++) {
-        WeatherArea* area2Delete = it->second;
-        weatherAreas.erase(it);
-        delete area2Delete;
-    }
+    for(it = weatherAreas.begin(); it!= weatherAreas.end(); it++) 
+        delete it->second;
+
+    weatherAreas.clear();
 }
 
 pair<GameTime, WeatherArea*> WeatherSystem::getNthWeatherArea(int n) const {
@@ -747,15 +746,9 @@ void WeatherSystem::update() {
         it->second->updateMovementVector(windspeed , globalWindDirection, getWindspeed2FieldRatio());
     }
 
-    for(WeatherAreas::iterator it = medium; it != upper; it++) {
-        weatherAreas.erase(it);
-    }
     
-
-    
-
-
-    processedFields.clear();//vielleicht nach oben
+    int amount = weatherAreas.erase(currentTime);            
+    processedFields.clear();
 }
 
 
