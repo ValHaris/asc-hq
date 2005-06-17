@@ -44,6 +44,7 @@
 #include "pgwindow.h"
 #include "pgrichedit.h"
 #include "pgsdleventsupplier.h"
+#include "pgmultilineedit.h"
 
 
 #include "paradialog.h"
@@ -404,7 +405,7 @@ class Emboss : public PG_Widget {
 
 
 
-const int widgetTypeNum = 8;
+const int widgetTypeNum = 9;
 const char* widgetTypes[widgetTypeNum]
 =
    { "image",
@@ -414,7 +415,8 @@ const char* widgetTypes[widgetTypeNum]
      "bargraph",
      "specialDisplay",
      "specialInput",
-     "dummy"
+     "dummy",
+     "multilinetext"
    };
 
 enum  WidgetTypes  { Image,
@@ -424,7 +426,8 @@ enum  WidgetTypes  { Image,
                      BarGraph,
                      SpecialDisplay,
                      SpecialInput,
-                     Dummy };
+                     Dummy,
+                     MultiLineText };
 
 const int imageModeNum = 5;
 const char* imageModes[imageModeNum]
@@ -456,7 +459,7 @@ const char* barDirections[barDirectionNum]
 
 
 Panel::WidgetParameters::WidgetParameters()
-      : backgroundMode(PG_Draw::TILE),  textAlign( PG_Label::LEFT ), fontAlpha(255), fontSize(8), transparency(0)
+      : backgroundMode(PG_Draw::TILE),  textAlign( PG_Label::LEFT ), fontAlpha(255), fontSize(8), transparency(0), hidden(false)
 {
 }
 
@@ -477,6 +480,7 @@ void  Panel::WidgetParameters::runTextIO ( PropertyReadingContainer& pc )
    pc.addInteger("FontSize", fontSize, fontSize );
    pc.addInteger("BackgroundColor", backgroundColor,  backgroundColor );
    pc.addInteger("Transparency", transparency, transparency );
+   pc.addBool( "hidden", hidden, hidden );
 
 }
 
@@ -532,9 +536,70 @@ void  Panel::WidgetParameters::assign( PG_Widget* widget )
    widget->SetFontAlpha( fontAlpha );
    widget->SetFontSize( fontSize );
    widget->SetTransparency( transparency );
+   if ( hidden )
+      widget->Hide(false);
 }
 
 
+Panel::Panel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme )
+      : PG_Window ( parent, r, "", DEFAULT, "Panel", 9 ), panelName( panelName_ ), textPropertyGroup(NULL)
+{
+   if ( loadTheme )
+      setup();
+      
+      // FIXME Hide button does not delete Panel
+   BringToFront();
+      
+}
+
+
+PG_Rect Panel::parseRect ( PropertyReadingContainer& pc, PG_Widget* parent )
+{
+   int x,y,w,h,x2,y2;
+   // pc.openBracket( "position" );
+   pc.addInteger( "x", x );
+   pc.addInteger( "y", y );
+   pc.addInteger( "width", w, 0 );
+   pc.addInteger( "height", h, 0 );
+   pc.addInteger( "x2", x2, 0 );
+   pc.addInteger( "y2", y2, 0 );
+   // pc.closeBracket();
+
+   PG_Rect r ( x,y,w,h);
+
+   if ( x < 0 )
+      r.x = parent->Width() - w + x;
+
+   if ( r.y < 0 )
+      r.y = parent->Height() - h + y;
+
+   if ( x2 != 0 ) {
+      if ( x2 < 0 )
+         x2 = parent->Width() + x2;
+
+      w = x2 - r.x;
+   }
+
+   if ( y2 != 0 ) {
+      if ( y2 < 0 )
+         x2 = parent->Height() + y2;
+
+      h = y2 - r.y;
+   }
+
+
+   if ( w <= 0 )
+      r.w = parent->Width() - r.x;
+   else
+      r.w = w;
+
+   if ( h <= 0 )
+      r.h = parent->Height() - r.y;
+   else
+      r.h = h;
+
+   return r;
+}
 
 
 void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams )
@@ -543,55 +608,20 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
    pc.addString( "name", name, "" );
    parent->SetName( name );
 
+   if ( pc.find( "userHandler" )) {
+      ASCString label;
+      pc.addString( "userHandler", label);
+      userHandler( label, pc, parent, widgetParams );
+   }
+
    int widgetNum;
    pc.addInteger( "WidgetNum", widgetNum, 0 );
 
    for ( int i = 0; i < widgetNum; ++i) {
       pc.openBracket( ASCString("Widget") + strrr(i));
 
-      int x,y,w,h,x2,y2;
-      // pc.openBracket( "position" );
-      pc.addInteger( "x", x );
-      pc.addInteger( "y", y );
-      pc.addInteger( "width", w, 0 );
-      pc.addInteger( "height", h, 0 );
-      pc.addInteger( "x2", x2, 0 );
-      pc.addInteger( "y2", y2, 0 );
-      // pc.closeBracket();
 
-      PG_Rect r ( x,y,w,h);
-
-      if ( x < 0 )
-         r.x = parent->Width() - w + x;
-
-      if ( r.y < 0 )
-         r.y = parent->Height() - h + y;
-
-      if ( x2 != 0 ) {
-         if ( x2 < 0 )
-            x2 = parent->Width() + x2;
-
-         w = x2 - r.x;
-      }
-
-      if ( y2 != 0 ) {
-         if ( y2 < 0 )
-            x2 = parent->Height() + y2;
-
-         h = y2 - r.y;
-      }
-
-
-      if ( w <= 0 )
-         r.w = parent->Width() - r.x;
-      else
-         r.w = w;
-
-      if ( h <= 0 )
-         r.h = parent->Height() - r.y;
-      else
-         r.h = h;
-
+      PG_Rect r = parseRect( pc, parent );
 
       widgetParams.runTextIO( pc );
 
@@ -649,6 +679,14 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
          widgetParams.assign ( lb );
          parsePanelASCTXT( pc, lb, widgetParams );
       }
+      if ( type == MultiLineText ) {
+         PG_MultiLineEdit* lb = new PG_MultiLineEdit ( parent, r );
+         lb->SetBorderSize(0);
+         lb->SetEditable(false);
+         widgetParams.assign ( lb );
+         parsePanelASCTXT( pc, lb, widgetParams );
+      }
+
       if ( type == BarGraph ) {
          int dir;
          pc.addNamedInteger( "direction", dir, barDirectionNum, barDirections, 0 );
@@ -696,15 +734,6 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
    }
 }
 
-Panel::Panel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme )
-      : PG_Window ( parent, r, "", DEFAULT, "Panel", 9 ), panelName( panelName_ ), textPropertyGroup(NULL)
-{
-   if ( loadTheme )
-      setup();
-      
-      // FIXME Hide button does not delete Panel
-      
-}
 
 
 void Panel::setLabelText ( const ASCString& widgetName, const ASCString& text, PG_Widget* parent )
@@ -715,6 +744,11 @@ void Panel::setLabelText ( const ASCString& widgetName, const ASCString& text, P
    PG_Label* l = dynamic_cast<PG_Label*>( parent->FindChild( widgetName, true ) );
    if ( l )
       l->SetText( text );
+   else {
+      PG_MultiLineEdit* l = dynamic_cast<PG_MultiLineEdit*>( parent->FindChild( widgetName, true ) );
+      if ( l )
+         l->SetText( text );
+   }
 }
 
 void Panel::setLabelColor ( const ASCString& widgetName, PG_Color color, PG_Widget* parent )
@@ -725,6 +759,11 @@ void Panel::setLabelColor ( const ASCString& widgetName, PG_Color color, PG_Widg
    PG_Label* l = dynamic_cast<PG_Label*>( parent->FindChild( widgetName, true ) );
    if ( l )
       l->SetFontColor ( color );
+   else {
+      PG_MultiLineEdit* l = dynamic_cast<PG_MultiLineEdit*>( parent->FindChild( widgetName, true ) );
+      if ( l )
+         l->SetFontColor ( color );
+   }
 }
 
 

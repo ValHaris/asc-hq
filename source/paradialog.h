@@ -105,8 +105,8 @@ class BarGraphWidget;
 
 class Panel : public  PG_Window {
       ASCString panelName;
-      bool setup();
    protected:
+      bool setup();
 
       class WidgetParameters
       {
@@ -121,6 +121,7 @@ class Panel : public  PG_Window {
             int fontSize;
             int backgroundColor;
             int transparency;
+            bool hidden;
 
             void assign( PG_Widget* widget );
             void assign( BarGraphWidget* widget );
@@ -142,7 +143,10 @@ class Panel : public  PG_Window {
       void setBargraphValue( const ASCString& widgetName, float fraction );
       void setBarGraphColor( const ASCString& widgetName, PG_Color color );
 
-      static void parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams );
+      virtual void userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams ) {}; 
+
+      static PG_Rect parseRect ( PropertyReadingContainer& pc, PG_Widget* parent );
+      void parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams );
 
    public:
       Panel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme = true );

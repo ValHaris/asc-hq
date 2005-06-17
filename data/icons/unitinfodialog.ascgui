@@ -90,7 +90,7 @@ panel {
      widgetnum = 6
      widget0 {
        type = SpecialInput
-       name = padclick_informations
+       name = padclick_information
        x = 0
        y = 0
        width = 70
@@ -141,7 +141,7 @@ panel {
 
    widget2 {
      type = dummy
-     name = informations
+     name = information
      x = 0
      y = 0
      widgetnum = 2
@@ -239,7 +239,7 @@ panel {
            TextAlign = LEFT
            Fontsize = 16
            type = StaticText
-           text = informations
+           text = information
            x = 10
            y = 3
            height = 18
@@ -439,7 +439,7 @@ panel {
            height = 18
          } widget0
          widget1 {
-           type = SpecialDisplay
+           type = multilinetext
            name = unitpad_unitabilities
            FontSize = 14
            x = 10
@@ -570,7 +570,7 @@ panel {
            widgetnum = 1
            widget0 {
               type = TextOutput
-              text = unitpad_unitmove_unitfuelconsumption
+              name = unitpad_unitmove_unitfuelconsumption
               TextAlign = RIGHT
               x = 100
               y = 0
@@ -594,7 +594,7 @@ panel {
            widgetnum = 8
            widget0 {
              type = TextOutput
-             text = unitpad_unitmove_deep_submerged
+             name = unitpad_unitmove_deep_submerged
              TextAlign = CENTER
              FontSize = 13
              x = 95
@@ -604,7 +604,7 @@ panel {
            } widget0
            widget1 {
              type = TextOutput
-             text = unitpad_unitmove_submerged
+             name = unitpad_unitmove_submerged
              TextAlign = CENTER
              FontSize = 13
              x = 138
@@ -614,7 +614,7 @@ panel {
            } widget1
            widget2 {
              type = TextOutput
-             text = unitpad_unitmove_floating
+             name = unitpad_unitmove_floating
              TextAlign = CENTER
              FontSize = 13
              x = 181
@@ -624,7 +624,7 @@ panel {
            } widget2
            widget3 {
              type = TextOutput
-             text = unitpad_unitmove_ground
+             name = unitpad_unitmove_ground_level
              TextAlign = CENTER
              FontSize = 13
              x = 224
@@ -634,7 +634,7 @@ panel {
            } widget3
            widget4 {
              type = TextOutput
-             text = unitpad_unitmove_low_level_flight
+             name = unitpad_unitmove_low_level_flight
              TextAlign = CENTER
              FontSize = 13
              x = 267
@@ -644,7 +644,7 @@ panel {
            } widget4
            widget5 {
              type = TextOutput
-             text = unitpad_unitmove_medium_level_flight
+             name = unitpad_unitmove_medium_level_flight
              TextAlign = CENTER
              FontSize = 13
              x = 310
@@ -654,7 +654,7 @@ panel {
            } widget5
            widget6 {
              type = TextOutput
-             text = unitpad_unitmove_high_level_flight
+             name = unitpad_unitmove_high_level_flight
              TextAlign = CENTER
              FontSize = 13
              x = 353
@@ -664,7 +664,7 @@ panel {
            } widget6
            widget7 {
              type = TextOutput
-             text = unitpad_unitmove_orbit
+             name = unitpad_unitmove_orbit
              TextAlign = CENTER
              FontSize = 13
              x = 396
@@ -690,7 +690,7 @@ panel {
            widgetnum = 1
            widget0 {
              type = TextOutput
-             text = unitpad_unitmove_windresistance
+             name = unitpad_unitmove_windresistance
               TextAlign = RIGHT
               x = 100
               y = 0
@@ -804,12 +804,15 @@ panel {
            height = 18
          } widget0
          
+         userHandler = unitpad_heightchange
+         
          LineWidget {
            type = image
            Filename = padheightchangetab.png
            name = line_unitpad_heightchange
            x = 10
            y = 68
+           height = 20
            widgetnum = 4
            widget0 {
               TextAlign = CENTER
@@ -854,7 +857,7 @@ panel {
              TextAlign = CENTER
              FontSize = 11
              type = StaticText
-             text = current
+             text = starting
              x = 3
              y = 8
              width = 67
@@ -1847,7 +1850,7 @@ panel {
          y = 240
          width = 444
          height = 320
-         widgetnum = 3
+         widgetnum = 2
          widget0 {
            TextAlign = LEFT
            Fontsize = 16
@@ -1858,32 +1861,7 @@ panel {
            height = 18
          } widget0
          widget1 {
-           type = SpecialDisplay
-           name = unitpad_descriptionscrollbar
-           x = 410
-           y = 27
-           width = 25
-           height = 286
-           widgetnum = 2
-           widget0 {
-             type = SpecialInput
-             name = unitpad_description_scrollup
-             x = 0
-             y = 0
-             width = 25
-             height = 32
-           } widget0
-           widget1 {
-             type = SpecialInput
-             name = unitpad_description_scrolldown
-             x = 0
-             y = 254
-             width = 25
-             height = 32
-           } widget1
-         } widget1
-         widget2 {
-           type = SpecialDisplay
+           type = multilinetext
            name = unitpad_description_text
            x = 10
            y = 25
@@ -1892,7 +1870,7 @@ panel {
            height = 14
            x2 = -45
            y2 = -10
-         } widget2
+         } widget1
        } widget1
      } widget1
    } widget6

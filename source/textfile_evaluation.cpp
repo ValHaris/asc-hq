@@ -463,6 +463,23 @@ void PropertyContainer::addNamedInteger ( const ASCString& name, int& property, 
 }
 
 
+void PropertyContainer::storeContext( const ASCString& label )
+{
+   storedContext[label] = make_pair( levelDepth, level );
+}
+
+bool PropertyContainer::restoreContext( const ASCString& label )
+{
+   StoredContext::iterator pos = storedContext.find( label );
+   if ( pos != storedContext.end() ) {
+      levelDepth = pos->second.first;
+      level = pos->second.second;
+      return true;
+   }
+   return false;
+}
+
+
 #ifdef ParserLoadImages
 
 void PropertyContainer::addImageArray ( const ASCString& name, vector<void*> &property, const ASCString& filename )

@@ -42,6 +42,9 @@ class PropertyContainer {
          typedef list<ASCString> Level;
          Level level;
 
+         typedef map< ASCString, pair<int, Level> > StoredContext;
+         StoredContext storedContext;
+
          TextPropertyGroup* textPropertyGroup;
       public:
 
@@ -101,6 +104,9 @@ class PropertyContainer {
         #endif
          void addBool  ( const ASCString& name, bool &property );
          void addBool  ( const ASCString& name, bool &property, bool defaultValue  );
+
+         void storeContext( const ASCString& label );
+         bool restoreContext( const ASCString& label );
 
          // void run ( );
          bool isReading() { return reading; };

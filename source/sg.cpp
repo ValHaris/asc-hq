@@ -1021,14 +1021,154 @@ void showSearchPath()
       vat.done();
 }
 
+#include "textfiletags.h"
+
+static const char* paneName[5]  = { "information", "movement", "weapons", "transport", "description" };
 
 class UnitInfoDialog : public Panel {
+        const Vehicle* veh;
+        const Vehicletype* vt;
+
+         void registerSpecialDisplay( const ASCString& name )
+         {
+            SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( name, true ) );
+            if ( sdw )
+               sdw->display.connect( SigC::slot( *this, &UnitInfoDialog::painter ));
+         };
+
+         void registerSpecialInput( const ASCString& name )
+         {
+            SpecialInputWidget* siw = dynamic_cast<SpecialInputWidget*>( FindChild( name, true ) );
+            if ( siw )
+               siw->sigMouseButtonDown.connect( SigC::slot( *this, &UnitInfoDialog::onClick ));
+         };
+
+         bool onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event ) {
+            PG_Widget* w = dynamic_cast<PG_Widget*>(obj);
+            if ( w ) {
+               click( w->GetName() );
+               return true;
+            } 
+            return false;
+         };
+
+         void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst)
+         {
+            Surface screen = Surface::Wrap( PG_Application::GetScreen() );
+
+            if ( name == "unitpad_unitsymbol" ) 
+               vt->paint( screen, SPoint( dst.x, dst.y ), veh ? veh->getOwner() : 0 );
+            
+         };
+
+         void activate( const ASCString& pane ) {
+            for ( int i = 0; i < 5; ++i )
+                if ( ASCString( paneName[i]) == pane )
+                   show( paneName[i] );
+                else
+                   hide( paneName[i] );
+         };
+
+         void click( const ASCString& name ) {
+            for ( int i = 0; i < 5; ++i)
+               if ( name == ASCString("padclick_") + paneName[i] ) 
+                  activate(paneName[i]);
+            if ( name == "padclick_exit" )
+               QuitModal();
+         };
 
      public:
-        UnitInfoDialog (PG_Widget *parent, const Vehicle* veh, const Vehicletype* vt ) 
-           : Panel( parent, PG_Rect::null, "UnitInfoDialog" ) {
+        
+        
+        UnitInfoDialog (PG_Widget *parent, const Vehicle* vehicle, const Vehicletype* vehicleType ) 
+           : Panel( parent, PG_Rect::null, "UnitInfoDialog", false ), veh(vehicle), vt( vehicleType ) {
                sigClose.connect( SigC::slot( *this, &UnitInfoDialog::QuitModal ));
+
+               if( veh )
+                  vt = veh->typ;
+
+               setup();
+
+               if ( veh )
+                  setLabelText( "unitpad_unitname", veh->getName() );
+               else
+                  if ( vt )
+                     setLabelText( "unitpad_unitname", vt->getName() );
+
+               setLabelText( "unitpad_unitcategory", cmovemalitypes[ vt->movemalustyp ] );
+               registerSpecialDisplay( "unitpad_unitsymbol");
+
+               if ( vt ) {
+                  setLabelText( "unitpad_unitarmor", vt->armor );
+                  setLabelText( "unitpad_unitweight", vt->weight );
+                  setLabelText( "unitpad_unitview", vt->view );
+                  setLabelText( "unitpad_unitjamming", vt->jamming );
+                  setLabelText( "unitpad_unitcostenergy", vt->productionCost.energy );
+                  setLabelText( "unitpad_unitcostmaterial", vt->productionCost.material );
+                  setLabelText( "unitpad_unitcostfuel", vt->productionCost.fuel );
+                  setLabelText( "unitpad_unittankfuel", vt->tank.fuel );
+                  setLabelText( "unitpad_unittankenergy", vt->tank.energy );
+                  setLabelText( "unitpad_unittankmaterial", vt->tank.material );
+
+                  ASCString abilities;
+                  for ( int i = 0; i < cvehiclefunctionsnum; ++i )
+                     if ( vt->functions & (1 << i)) 
+                        abilities += cvehiclefunctions[i] + ASCString("\n");
+                  setLabelText( "unitpad_unitabilities", abilities );
+
+
+                  setLabelText( "unitpad_unitmove_unitfuelconsumption", vt->fuelConsumption );
+                  for ( int i = 0; i< 8; ++i )
+                     setLabelText( ASCString("unitpad_unitmove_") + heightTags[i], vt->movement[i] );
+
+                  if ( vt->maxwindspeedonwater < 255 && vt->maxwindspeedonwater > 0 )
+                     setLabelText( "unitpad_unitmove_windresistance", vt->maxwindspeedonwater );
+                  else
+                     setLabelText( "unitpad_unitmove_windresistance", "-" );
+
+               }
+
+
+
+
+               for ( int i = 0; i < 5; ++i )
+                  registerSpecialInput( ASCString("padclick_") + paneName[i] );
+               registerSpecialInput( "padclick_exit" );
+
+               setLabelText( "unitpad_description_text", vt->infotext );
            };
+
+      void userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams ) 
+      {
+         if ( label == "unitpad_heightchange" && vt ) {
+            int yoffset = 0;
+            for ( int i = 0; i < vt->heightChangeMethodNum; ++i ) {
+               pc.openBracket( "LineWidget" );
+               PG_Rect r = parseRect( pc, parent);
+               r.y += yoffset;
+               SpecialInputWidget* sw = new SpecialInputWidget ( parent, r );
+               parsePanelASCTXT( pc, sw, widgetParams );
+               pc.closeBracket();
+               yoffset += sw->Height();
+
+               int srcLevelCount = 0;
+               for ( int j = 0; j < 8; ++j )
+                  if ( vt->height & vt->heightChangeMethod[i].startHeight & (1 << j))
+                     ++srcLevelCount;
+
+               // if ( srcLevelCount < 4 )
+
+               ASCString delta = ASCString::toString( vt->heightChangeMethod[i].heightDelta );
+               if ( vt->heightChangeMethod[i].heightDelta > 0 )
+                  delta = "+" + delta;
+               setLabelText( "unitpad_move_changeheight_change", delta, sw );
+               
+               setLabelText( "unitpad_move_changeheight_movepoints", vt->heightChangeMethod[i].moveCost, sw );
+               setLabelText( "unitpad_move_changeheight_distance", vt->heightChangeMethod[i].dist, sw );
+            }
+         }
+      }; 
+        
 };
 
 
@@ -1494,14 +1634,13 @@ void execuseraction2 ( tuseractions action )
       case ua_viewOverviewMapPanel: mainScreenWidget->spawnPanel( MainScreenWidget::OverviewMap );
          break;
       case ua_vehicleinfo: {
-         UnitInfoDialog* uid = new UnitInfoDialog( NULL, NULL, NULL );
-         uid->Show();
-         uid->RunModal();
-         delete uid;
-         /*
-         activefontsettings.font = schriften.smallarial;
-         vehicle_information();
-         */
+         pfield fld = actmap->getField( actmap->getCursor() );
+         if ( fld && fld->vehicle ) {
+            UnitInfoDialog* uid = new UnitInfoDialog( NULL, fld->vehicle, NULL );
+            uid->Show();
+            uid->RunModal();
+            delete uid;
+         }
                            }
          break;
       case ua_weathercast: weathercast();

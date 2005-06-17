@@ -88,17 +88,14 @@ void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
 
    pc.addString( "Name", name );
 
-   ASCString it = infotext;
+   pc.addString( "Infotext", infotext, "" );
 
-   while ( it.find ( "\n" ) != ASCString::npos )
-      it.replace ( it.find ( "\n" ), 1, "#crt#" );
-   while ( it.find ( "\r" ) != ASCString::npos )
-      it.replace ( it.find ( "\r" ), 1, "" );
-
-   pc.addString( "Infotext", it, "" );
-
-   if ( pc.isReading() )
-      infotext = it;
+   while ( infotext.find ( "#CRT#" ) != ASCString::npos )
+      infotext.replace ( infotext.find ( "#CRT#" ), 5, "\n" );
+   while ( infotext.find ( "#crt#" ) != ASCString::npos )
+      infotext.replace ( infotext.find ( "#crt#" ), 5, "\n" );
+   while ( infotext.find ( "\r" ) != ASCString::npos )
+      infotext.replace ( infotext.find ( "\r" ), 1, "" );
 
    pc.addInteger( "ID", id );
    pc.addInteger( "View", view );
