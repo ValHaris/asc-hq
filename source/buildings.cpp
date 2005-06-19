@@ -678,6 +678,7 @@ void Building::endTurn(  )
             }
          }
    }
+   repairedThisTurn = 0;
 #endif
 }
 
