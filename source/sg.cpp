@@ -1143,20 +1143,34 @@ class UnitInfoDialog : public Panel {
          if ( label == "unitpad_heightchange" && vt ) {
             int yoffset = 0;
             for ( int i = 0; i < vt->heightChangeMethodNum; ++i ) {
+               int srcLevelCount = 0;
+               for ( int j = 0; j < 8; ++j )
+                  if ( vt->height & vt->heightChangeMethod[i].startHeight & (1 << j)) 
+                     ++srcLevelCount;
+
                pc.openBracket( "LineWidget" );
                PG_Rect r = parseRect( pc, parent);
                r.y += yoffset;
+               r.my_height *= (srcLevelCount-1) / 3 + 1;
+
                SpecialInputWidget* sw = new SpecialInputWidget ( parent, r );
                parsePanelASCTXT( pc, sw, widgetParams );
                pc.closeBracket();
                yoffset += sw->Height();
 
-               int srcLevelCount = 0;
-               for ( int j = 0; j < 8; ++j )
-                  if ( vt->height & vt->heightChangeMethod[i].startHeight & (1 << j))
-                     ++srcLevelCount;
 
-               // if ( srcLevelCount < 4 )
+
+               int xoffs = 0;
+               int yoffs = 0;
+               int counter = 0;
+               for ( int j = 0; j < 8; ++j )
+                  if ( vt->height & vt->heightChangeMethod[i].startHeight & (1 << j))  {
+                     ASCString filename = "height-a" + ASCString::toString(j) + ".png";
+                     xoffs = IconRepository::getIcon(filename).w() * (counter % 3 );
+                     yoffs = IconRepository::getIcon(filename).h() * (counter / 3 );
+                     new PG_Image( sw, PG_Point( xoffs, yoffs ), IconRepository::getIcon(filename).getBaseSurface(), false );
+                     ++counter;
+                  }
 
                ASCString delta = ASCString::toString( vt->heightChangeMethod[i].heightDelta );
                if ( vt->heightChangeMethod[i].heightDelta > 0 )
@@ -1165,6 +1179,38 @@ class UnitInfoDialog : public Panel {
                
                setLabelText( "unitpad_move_changeheight_movepoints", vt->heightChangeMethod[i].moveCost, sw );
                setLabelText( "unitpad_move_changeheight_distance", vt->heightChangeMethod[i].dist, sw );
+            }
+         }
+         if ( label == "unitpad_terrainaccess" && vt ) {
+            int yoffset = 0;
+            for ( int i = 0; i < cbodenartennum; ++i ) {
+               if ( vt->terrainaccess.terrain.test(i) || vt->terrainaccess.terrainkill.test(i) || vt->terrainaccess.terrainnot.test(i) || vt->terrainaccess.terrainreq.test(i) ) {
+                  pc.openBracket( "LineWidget" );
+                  PG_Rect r = parseRect( pc, parent);
+                  r.y += yoffset;
+
+                  SpecialInputWidget* sw = new SpecialInputWidget ( parent, r );
+                  parsePanelASCTXT( pc, sw, widgetParams );
+                  pc.closeBracket();
+                  yoffset += sw->Height();
+
+                  setLabelText( "unitpad_unitmove_terraintype", cbodenarten[i], sw);
+
+                  PG_Widget* w = sw->FindChild("unitpad_unitmove_terrainaccess");
+                  if ( w ) {
+                     int xoffs = 0;
+                     static const char* iconName[] = {"pad_symbol_ok.png", "pad_symbol_warn.png", "pad_symbol_no.png", "pad_symbol_kill.png" };  
+                     const TerrainBits* bits[] = { &vt->terrainaccess.terrain, &vt->terrainaccess.terrainreq, &vt->terrainaccess.terrainnot, &vt->terrainaccess.terrainkill };
+                     for ( int icon = 0; icon < 4; ++icon ) {
+                        bool set = bits[icon]->test(i);
+
+                        if ( set ) {
+                           PG_Image* img = new PG_Image( w, PG_Point( xoffs, 0 ), IconRepository::getIcon( iconName[icon] ).getBaseSurface(), false );
+                           xoffs += img->Width();
+                        }
+                     }
+                  }
+               }
             }
          }
       }; 

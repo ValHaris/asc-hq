@@ -717,13 +717,16 @@ panel {
          } widget0
          
 	 widget1 {
-           type = SpecialDisplay
+           type = ScrollArea
            name = unitpad_terrainaccessarea
            x = 10
            y = 25
-           width = 160
+           width = 185
            height = 170
            widgetnum = 1
+
+           userHandler = unitpad_terrainaccess
+
            
            LineWidget {
              type = image
@@ -731,7 +734,10 @@ panel {
              name = unitpad_line_terrain
              x = 0
              y = 2
-             widgetnum = 1
+             height = 13
+             width = 150
+             
+             widgetnum = 2
              widget0 {
                 TextAlign = LEFT
                 FontSize = 11 
@@ -746,6 +752,7 @@ panel {
                type = SpecialDisplay
                name = unitpad_unitmove_terrainaccess
                x = 132
+               width = -10
                y = 1
              } widget1
            } LineWidget

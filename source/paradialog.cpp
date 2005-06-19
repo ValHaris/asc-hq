@@ -405,7 +405,7 @@ class Emboss : public PG_Widget {
 
 
 
-const int widgetTypeNum = 9;
+const int widgetTypeNum = 10;
 const char* widgetTypes[widgetTypeNum]
 =
    { "image",
@@ -416,7 +416,8 @@ const char* widgetTypes[widgetTypeNum]
      "specialDisplay",
      "specialInput",
      "dummy",
-     "multilinetext"
+     "multilinetext",
+     "scrollarea"
    };
 
 enum  WidgetTypes  { Image,
@@ -427,7 +428,8 @@ enum  WidgetTypes  { Image,
                      SpecialDisplay,
                      SpecialInput,
                      Dummy,
-                     MultiLineText };
+                     MultiLineText,
+                     ScrollArea };
 
 const int imageModeNum = 5;
 const char* imageModes[imageModeNum]
@@ -726,6 +728,19 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
 
       if ( type == Dummy ) {
          SpecialInputWidget* sw = new SpecialInputWidget ( parent, r );
+         parsePanelASCTXT( pc, sw, widgetParams );
+      }
+      if ( type == ScrollArea ) {
+         PG_ScrollWidget* sw = new PG_ScrollWidget( parent, r );
+         ASCString scrollbar;
+         pc.addString( "horizontal_scollbar", scrollbar, "true" );
+         if ( scrollbar.compare_ci( "false" ) == 0)
+            sw->EnableScrollBar(false, PG_ScrollBar::HORIZONTAL );
+
+         pc.addString( "vertical_scollbar", scrollbar, "true" );
+         if ( scrollbar.compare_ci( "false" ) == 0)
+            sw->EnableScrollBar(false, PG_ScrollBar::VERTICAL );
+
          parsePanelASCTXT( pc, sw, widgetParams );
       }
 
