@@ -705,7 +705,7 @@ panel {
          Filename = padterrainscreenwindow.png
          x = 75
          y = 350
-         widgetnum = 3
+         widgetnum = 2
          widget0 {
            TextAlign = LEFT
            Fontsize = 16
@@ -765,32 +765,6 @@ panel {
            } widget0
           } widget1
   
-        widget2 {
-           type = SpecialDisplay
-           name = unitpad_unitmove_terrainscroll
-           x = 165
-           y = 25
-           width = 25
-           height = 171
-           widgetnum = 2
-           widget0 {
-             type = SpecialInput
-             name = unitpad_unitmove_scrollup_terrain
-             x = 0
-             y = 0
-             width = 25
-             height = 32
-           } widget0
-           widget1 {
-             type = SpecialInput
-             name = unitpad_unitmove_scrolldown_terrain
-             x = 0
-             y = 139
-             width = 25
-             height = 32
-           } widget1
-         } widget2
-
       } widget2
  
 
@@ -1273,7 +1247,7 @@ panel {
            TextAlign = LEFT
            Fontsize = 16
            type = StaticText
-           text = weapon analyse
+           text = weapon analysis
            x = 10
            y = 3
            height = 18

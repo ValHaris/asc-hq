@@ -1680,14 +1680,14 @@ void execuseraction2 ( tuseractions action )
       case ua_viewOverviewMapPanel: mainScreenWidget->spawnPanel( MainScreenWidget::OverviewMap );
          break;
       case ua_vehicleinfo: {
-         pfield fld = actmap->getField( actmap->getCursor() );
-         if ( fld && fld->vehicle ) {
-            UnitInfoDialog* uid = new UnitInfoDialog( NULL, fld->vehicle, NULL );
-            uid->Show();
-            uid->RunModal();
-            delete uid;
+            pfield fld = actmap->getField( actmap->getCursor() );
+            if ( fld && fld->vehicle ) {
+               UnitInfoDialog* uid = new UnitInfoDialog( NULL, fld->vehicle, NULL );
+               uid->Show();
+               uid->RunModal();
+               delete uid;
+            }
          }
-                           }
          break;
       case ua_weathercast: weathercast();
       break;
@@ -1948,7 +1948,7 @@ int gamethread ( void* data )
    virtualscreenbuf.init();
 
    try {
-      int fs = loadFullscreenImage ( "title.jpg" );
+   //   int fs = loadFullscreenImage ( "title.jpg" );
       if ( !fs ) {
          tnfilestream stream ( "logo640.pcx", tnstream::reading );
          loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 );
