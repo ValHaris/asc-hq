@@ -1,10 +1,11 @@
 panel {
    width = 746
    height = 615
-   BackgroundImage = transparent-bg.png
    FontColor = 0xc9f4ae
    Fontsize = 9
    WidgetNum = 8
+   name = MainPanelWidget
+   localtransparency = 255
    Widget0 {
       type = image
       Filename = pad.png
@@ -745,7 +746,7 @@ panel {
                 name = unitpad_unitmove_terraintype
                 x = 3
                 y = 1
-                width = 120
+                width = 130
                 height = 12
              } widget0
              widget1 {
@@ -909,7 +910,7 @@ panel {
 
    widget4 {
      type = dummy
-     name = weapon
+     name = weapons
      x = 0
      y = 0
      widgetnum = 2
@@ -1849,7 +1850,7 @@ panel {
            FontSize = 11
            TextAlign = Left
            height = 14
-           x2 = -45
+           x2 = -1
            y2 = -10
          } widget1
        } widget1

@@ -2,7 +2,7 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.67.2.9 2005-06-12 11:05:16 mbickel Exp $
+//     $Id: edmain.cpp,v 1.67.2.10 2005-06-25 13:49:52 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -53,12 +53,6 @@
 // #define backgroundpict1 "BKGR2.PCX"  
 #define menutime 35
 
-//* õS Load-Functions
-
-pprogressbar actprogressbar = NULL;
-
-
-const char* progressbarfilename = "progress.6me";
 
 
 // #define MEMCHK
@@ -115,50 +109,24 @@ void         loadcursor(void)
 void loaddata( void ) 
 {
 
-   actprogressbar = new tprogressbar; 
-   {
-      tfindfile ff ( progressbarfilename );
-      if ( !ff.getnextname().empty() ) {
-         tnfilestream strm ( progressbarfilename, tnstream::reading );
-         actprogressbar->start ( 255, 0, agmp->resolutiony-2, agmp->resolutionx-1, agmp->resolutiony-1, &strm );
-      } else
-         actprogressbar->start ( 255, 0, agmp->resolutiony-2, agmp->resolutionx-1, agmp->resolutiony-1, NULL );
-   }
-
-   if ( actprogressbar )
-      actprogressbar->startgroup();
    loadcursor();
 
-   if ( actprogressbar )
-      actprogressbar->startgroup();
+   dataLoaderTicker();
 
    loadguipictures();
 
-   // ItemFiltrationSystem::read();
-
-   if ( actprogressbar )
-      actprogressbar->startgroup();
+   dataLoaderTicker();
 
    GraphicSetManager::Instance().loadData();
       
    registerDataLoader ( new PlayListLoader() );
    registerDataLoader ( new BI3TranslationTableLoader() );
 
-   dataLoaderTicker.connect(SigC::slot( *actprogressbar, &tprogressbar::point ));
    loadAllData();
 
-   if ( actprogressbar )
-      actprogressbar->startgroup();
+   dataLoaderTicker();
 
    loadUnitSets();
-
-   if ( actprogressbar ) {
-      actprogressbar->end();
-      tnfilestream strm ( progressbarfilename, tnstream::writing );
-      actprogressbar->writetostream( &strm );
-      delete actprogressbar;
-      actprogressbar = NULL;
-   }
 }
 
 void buildemptymap ( void )
@@ -315,6 +283,7 @@ int mapeditorMainThread ( void* _mapname )
 
   
    try {
+      getPGApplication().activateProgressBar( true, dataLoaderTicker );
       GraphicSetManager::Instance().loadData();
       loaddata();
 
@@ -345,6 +314,8 @@ int mapeditorMainThread ( void* _mapname )
       actmap->preferredFileNames.mapname[0] = "";
 
       mapSwitcher.toggle();
+      
+      getPGApplication().activateProgressBar( false, dataLoaderTicker );
 
    } /* end try */
    catch ( ParsingError err ) {
@@ -481,18 +452,7 @@ int main(int argc, char *argv[] )
 
    virtualscreenbuf.init();
 
-   int fs = loadFullscreenImage ( "title_mapeditor.jpg" );
-   if ( !fs ) {
-      tnfilestream stream ( "logo640.pcx", tnstream::reading );
-      loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 );
-      int whitecol = 251;
-      activefontsettings.font = schriften.smallarial;
-      activefontsettings.background = 255;
-      activefontsettings.justify = centertext;
-      activefontsettings.color = whitecol;
-      activefontsettings.length = hgmp->resolutionx-20;
-      showtext2 ("Map Editor", 10, hgmp->resolutiony - activefontsettings.font->height - 2 );
-   }
+   getPGApplication().setFullscreenImage( "title_mapeditor.jpg" );
 
    {
       int w;

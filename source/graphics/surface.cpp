@@ -21,11 +21,11 @@
 
 #include <SDL_image.h>
 #include <cmath>
+#include "../sdl/SDLStretch.h"
 #include "surface.h"
 #include "blitter.h"
 #include "../basegfx.h"
 #include "../basestrm.h"
-#include "../sdl/SDLStretch.h"
 #include "../misc.h"
 #include <iostream>
 
@@ -406,7 +406,11 @@ void Surface::assignPalette(SDL_Color* colors, int startColor, int colorNum )
 }
 
 
-
+/*
+void SDL_StretchSurface(SDL_Surface* src_surface, int xs1, int ys1, int xs2, int ys2, SDL_Surface* dst_surface, int xd1, int yd1, int xd2, int yd2, Uint32* lutVOI)
+{
+}
+*/
 
 void Surface::strech ( int width, int height )
 {
@@ -417,8 +421,7 @@ void Surface::strech ( int width, int height )
       else
          s = SDL_CreateRGBSurface ( SDL_SWSURFACE, width, height, 32, 0xff, 0xff00, 0xff0000, 0xff000000 );
          
-      SDL_StretchSurface( me,0,0,w()-1,h()-1,
-                          s, 0,0,width-1, height-1);
+      SDL_StretchSurface( me,0,0,w()-1,h()-1, s, 0,0,width-1, height-1);
 
       SetSurface(s);
       if( GetPixelFormat().BytesPerPixel() == 1 ) {
@@ -431,7 +434,6 @@ void Surface::strech ( int width, int height )
 
 void Surface::detectColorKey ( bool RLE )
 {
-
 
    // detect if image has per pixel alpha - don't use ColorKey then
    if ( GetPixelFormat().BitsPerPixel() > 8 ) 

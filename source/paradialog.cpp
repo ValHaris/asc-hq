@@ -18,6 +18,7 @@
 
 #include "global.h"
 
+ #include <SDL_image.h>
 #include <paragui.h>
 #include <pgapplication.h>
 #include <pgmessagebox.h>
@@ -133,11 +134,14 @@ void DropDownSelector::AddItem (const std::string &text, void *userdata, Uint16 
 }
 
 
+
+
 ASC_PG_App* pgApp = NULL;
 
 
 
-ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
+
+ASC_PG_App :: ASC_PG_App ( const ASCString& themeName ) : fullscreenImage( NULL ), progress( NULL )
 {
    this->themeName = themeName;
    EnableSymlinks(true);
@@ -164,10 +168,83 @@ ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
    SetEventSupplier ( &eventSupplier );
 }
 
+
+class AutoProgressBar: public PG_ProgressBar {
+
+      int starttime;
+      int time;
+      int lastticktime;
+      int lastdisplaytime;
+
+      void tick()
+      {
+         double p = double(ticker - starttime) * 100  / time;
+         
+         // limit to 10 Hz to reduce graphic updates
+         if ( lastdisplaytime + 4 < ticker ) {
+            SetProgress( p );
+            lastdisplaytime = ticker;
+         }
+            
+         lastticktime = ticker;
+      };
+
+   public:
+      AutoProgressBar( SigC::Signal0<void>& tickSignal, PG_Widget *parent, const PG_Rect &r=PG_Rect::null, const std::string &style="Progressbar" ) : PG_ProgressBar( parent, r, style ), lastticktime(-1)
+      {
+         lastdisplaytime = starttime = ::ticker;
+         
+         tickSignal.connect( SigC::slot( *this, &AutoProgressBar::tick ));
+         
+         try {
+            tn_file_buf_stream stream ( "progress.dat", tnstream::writing  );
+            time = stream.readInt( );
+         }
+         catch ( ... ) {
+            time = 200;
+         };   
+      };
+      
+      void close( )
+      {
+         try {
+            tn_file_buf_stream stream ( "progress.dat", tnstream::writing  );
+            stream.writeInt( lastticktime - starttime );
+         }
+         catch ( ... ) {
+         }
+      }
+};
+
+
+void ASC_PG_App::activateProgressBar( bool active, SigC::Signal0<void>& ticker )
+{
+   if ( active && !progress ) {
+      progress = new AutoProgressBar( ticker, NULL, PG_Rect( 0, GetScreen()->h - 15, GetScreen()->w, 15 ) );
+      progress->Show();
+   } 
+}
+
 ASC_PG_App& getPGApplication()
 {
    return *pgApp;
 }
+
+void ASC_PG_App::setFullscreenImage( const ASCString& name )
+{
+   if ( name.empty() ) {
+      DeleteBackground(); 
+      delete fullscreenImage;   
+      return;
+   }
+   tnfilestream s ( name, tnstream::reading );
+   fullscreenImage = IMG_Load_RW( SDL_RWFromStream( &s ), true );
+   if ( fullscreenImage ) {
+      SetBackground( fullscreenImage, PG_Draw::STRETCH );
+      EnableBackground(true);
+   }
+}
+
 
 
 
@@ -610,6 +687,12 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
    pc.addString( "name", name, "" );
    parent->SetName( name );
 
+   int transparency;
+   pc.addInteger("localtransparency", transparency, -1 );
+   if ( transparency != -1 ) {
+      SetTransparency( transparency );
+   }
+   
    if ( pc.find( "userHandler" )) {
       ASCString label;
       pc.addString( "userHandler", label);
@@ -869,7 +952,7 @@ bool Panel::setup()
 {
    try {
       WidgetParameters widgetParameters = getDefaultWidgetParams();
-
+      
       {
          tnfilestream s ( panelName.toLower() + ".ascgui", tnstream::reading );
 

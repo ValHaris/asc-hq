@@ -60,6 +60,8 @@
 
  class ASC_PG_App : public PG_Application {
        ASCString themeName;
+       SDL_Surface* fullscreenImage;
+       PG_ProgressBar* progress;
 
     public:
        static const int mapDisplayID = 2;
@@ -67,6 +69,8 @@
     
        ASC_PG_App ( const ASCString& themeName );
        bool InitScreen ( int w, int h, int depth = 0, Uint32 flags = SDL_SWSURFACE|SDL_HWPALETTE );
+       void setFullscreenImage( const ASCString& name = "");
+       void activateProgressBar( bool active, SigC::Signal0<void>& ticker );
        void reloadTheme();
        int Run ();
        void processEvent();
@@ -202,7 +206,7 @@ class BarGraphWidget : public PG_ThemeWidget {
 class SpecialInputWidget : public PG_Widget {
    public:
      
-      SpecialInputWidget (PG_Widget *parent, const PG_Rect &rect ) : PG_Widget( parent, rect, false ) { };
+      SpecialInputWidget (PG_Widget *parent, const PG_Rect &rect ) : PG_Widget( parent, rect, false ) { SetTransparency(255); };
       void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst) { };
 };
 

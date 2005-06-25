@@ -26,6 +26,7 @@
 #include "../errors.h"
 
 
+#include "SDLStretch.cpp"
 
 SDL_Surface *screen = NULL;
 int fullscreen = 1;

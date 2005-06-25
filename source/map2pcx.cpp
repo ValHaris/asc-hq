@@ -41,8 +41,6 @@
 #include "memorycheck.cpp"
 #include "graphicset.h"
 
-pprogressbar actprogressbar = NULL;
-
 void repaintdisplay ( void ) {};
 
 void         loadcursor(void)

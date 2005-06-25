@@ -188,7 +188,6 @@ tsgonlinemousehelpwind* onlinehelpwind = NULL;
 
 
 
-pprogressbar actprogressbar = NULL;
 
 #define messagedisplaytime 300
 
@@ -315,15 +314,14 @@ void         loadMoreData(void)
       stream.readrlepict(   &icons.windbackground, false, &w);
    }
 
-   if ( actprogressbar )
-      actprogressbar->point();
+   dataLoaderTicker();
    {
       tnfilestream stream ("hexfld_a.raw",tnstream::reading);
       stream.readrlepict(   &icons.container.mark.active, false, &w);
    }
 
-   if ( actprogressbar )
-      actprogressbar->point(); {
+   dataLoaderTicker();
+   {
       tnfilestream stream ("hexfld.raw",tnstream::reading);
       stream.readrlepict(   &icons.container.mark.inactive, false, &w);
    }
@@ -353,8 +351,7 @@ void         loadMoreData(void)
       stream.readrlepict(   &icons.container.container_window, false, &w);
    }
 
-   if ( actprogressbar )
-      actprogressbar->point();
+   dataLoaderTicker();
 
 
    loadpalette();
@@ -365,18 +362,16 @@ void         loadMoreData(void)
       xlattables.nochange[w] = w;
    } /* endfor */
 
-   if ( actprogressbar )
-      actprogressbar->point();
+   dataLoaderTicker();
 
    loadicons();
 
-   if ( actprogressbar )
-      actprogressbar->point();
+   dataLoaderTicker();
 
    loadmessages();
 
-   if ( actprogressbar )
-      actprogressbar->point(); {
+   dataLoaderTicker();
+   {
       tnfilestream stream ("waffen.raw",tnstream::reading);
       int num = stream.readInt();
 
@@ -429,8 +424,8 @@ void         loadMoreData(void)
       stream.readrlepict(   &icons.container.subwin.ammoproduction.schiene, false, &w );
    }
 
-   if ( actprogressbar )
-      actprogressbar->point(); {
+   dataLoaderTicker();
+   {
       tnfilestream stream ("resorinf.raw",tnstream::reading);
       stream.readrlepict(   &icons.container.subwin.resourceinfo.start, false, &w );
    }
@@ -485,7 +480,8 @@ void         loadMoreData(void)
 
 
 
-   int m; {
+   int m; 
+   {
       tnfilestream stream ( "bldinfo.raw", tnstream::reading );
       stream.readrlepict( &icons.container.subwin.buildinginfo.start, false, &m );
       for ( int i = 0; i < 8; i++ )
@@ -538,8 +534,8 @@ void         loadMoreData(void)
       stream.readrlepict(   &icons.container.subwin.transportinfo.sum, false, &w );
    }
 
-   if ( actprogressbar )
-      actprogressbar->point(); {
+   dataLoaderTicker();
+   {
       tnfilestream stream ("attack.raw", tnstream::reading);
       stream.readrlepict (   &icons.attack.bkgr, false, &w );
       icons.attack.orgbkgr = NULL;
@@ -1062,11 +1058,16 @@ class UnitInfoDialog : public Panel {
          };
 
          void activate( const ASCString& pane ) {
+            // PG_Application::SetBulkMode();
+            for ( int i = 0; i < 5; ++i )
+                if ( ASCString( paneName[i]) != pane )
+                   hide( paneName[i] );
+                   
             for ( int i = 0; i < 5; ++i )
                 if ( ASCString( paneName[i]) == pane )
                    show( paneName[i] );
-                else
-                   hide( paneName[i] );
+            // Update();
+            // PG_Application::SetBulkMode(false);
          };
 
          void click( const ASCString& name ) {
@@ -1136,6 +1137,9 @@ class UnitInfoDialog : public Panel {
                registerSpecialInput( "padclick_exit" );
 
                setLabelText( "unitpad_description_text", vt->infotext );
+               
+              activate(paneName[0]);
+               
            };
 
       void userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams ) 
@@ -1183,12 +1187,13 @@ class UnitInfoDialog : public Panel {
          }
          if ( label == "unitpad_terrainaccess" && vt ) {
             int yoffset = 0;
-            for ( int i = 0; i < cbodenartennum; ++i ) {
+            for ( int i = 0; i < cbodenartennum ; ++i ) {
                if ( vt->terrainaccess.terrain.test(i) || vt->terrainaccess.terrainkill.test(i) || vt->terrainaccess.terrainnot.test(i) || vt->terrainaccess.terrainreq.test(i) ) {
                   pc.openBracket( "LineWidget" );
                   PG_Rect r = parseRect( pc, parent);
                   r.y += yoffset;
 
+                  
                   SpecialInputWidget* sw = new SpecialInputWidget ( parent, r );
                   parsePanelASCTXT( pc, sw, widgetParams );
                   pc.closeBracket();
@@ -1772,22 +1777,10 @@ pfont load_font ( const char* name )
    return loadfont ( &stream );
 }
 
-const char* progressbarfilename = "progress.6mn";
-
 
 
 void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 {
-   actprogressbar = new tprogressbar;
-   if ( actprogressbar ) {
-      tfindfile ff ( progressbarfilename );
-      if ( !ff.getnextname().empty() ) {
-         tnfilestream strm ( progressbarfilename, tnstream::reading );
-         actprogressbar->start ( 255, 0, agmp->resolutiony-3, agmp->resolutionx-1, agmp->resolutiony-1, &strm );
-      } else {
-         actprogressbar->start ( 255, 0, agmp->resolutiony-3, agmp->resolutionx-1, agmp->resolutiony-1, NULL );
-      }
-   }
 
    schriften.smallarial = load_font("smalaril.fnt");
    schriften.large = load_font("usablack.fnt");
@@ -1824,52 +1817,37 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
    shrinkfont ( schriften.monogui, -1 );
    pulldownfont = schriften.smallarial ;
 
-   if ( actprogressbar ) actprogressbar->startgroup();
+   dataLoaderTicker();
 
    SoundList::init();
 
-   if ( actprogressbar ) actprogressbar->startgroup();
+   dataLoaderTicker();
 
    loadMoreData();
 
-   if ( actprogressbar ) actprogressbar->startgroup();
+   dataLoaderTicker();
 
    registerDataLoader ( new PlayListLoader() );
    registerDataLoader ( new BI3TranslationTableLoader() );
 
    loadguipictures();
-   if ( actprogressbar ) actprogressbar->startgroup();
+   dataLoaderTicker();
+   
    loadAllData();
+   
+   dataLoaderTicker();
 
-   if ( actprogressbar ) actprogressbar->startgroup();
    loadUnitSets();
-
-   if ( actprogressbar ) actprogressbar->startgroup();
-
-   // selectbuildinggui.init( resolx, resoly );
-
-   if ( actprogressbar ) actprogressbar->startgroup();
 
    loadStartupMap( gameToLoad );
 
-   if ( actprogressbar ) actprogressbar->startgroup();
+   dataLoaderTicker();
 
    displayLogMessage ( 6, "done\n" );
 
-   if ( actprogressbar ) actprogressbar->startgroup();
+   dataLoaderTicker();
 
-   if ( actprogressbar ) {
-      actprogressbar->end();
-      try {
-         tnfilestream strm ( progressbarfilename, tnstream::writing );
-         actprogressbar->writetostream( &strm );
-      } /* endtry */
-      catch ( tfileerror ) { } /* endcatch */
-
-      delete actprogressbar;
-      actprogressbar = NULL;
-   }
-   
+ 
    registerGuiFunctions( GuiFunctions::primaryGuiIcons );
 }
 
@@ -1948,15 +1926,10 @@ int gamethread ( void* data )
    virtualscreenbuf.init();
 
    try {
-   //   int fs = loadFullscreenImage ( "title.jpg" );
-      if ( !fs ) {
-         tnfilestream stream ( "logo640.pcx", tnstream::reading );
-         loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 );
-      }
+      getPGApplication().activateProgressBar( true, dataLoaderTicker );
+      getPGApplication().setFullscreenImage( "title.jpg" );
       loaddata( resolx, resoly, gtp->filename.c_str() );
-      if ( fs )
-         closeFullscreenImage ();
-
+      getPGApplication().setFullscreenImage( );
    }
    catch ( ParsingError err ) {
       displaymessage ( "Error parsing text file " + err.getMessage(), 2 );

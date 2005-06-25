@@ -294,6 +294,7 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
 
    PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &MapDisplayPG::keyboardHandler ));
 
+   SetName( "THEMapDisplay");
 
    SDL_Surface* ws = GetWidgetSurface ();
    if ( ws ) {
@@ -389,35 +390,7 @@ void MapDisplayPG::updateWidget()
 }
 
 
-void MapDisplayPG::blitInternalSurface( SDL_Surface* dest, const SPoint& pnt )
-{
-   if ( zoom != 1 ) {
-      MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_PlainOverwrite,PixSel> blitter;
-      blitter.setZoom( zoom );
-      blitter.initSource( *surface );
-      blitter.setRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), int(float(Width()) / zoom), int(float(Height()) / zoom));
-      Surface s = Surface::Wrap( dest );
-      blitter.blit( *surface, s, SPoint(pnt.x, pnt.y ));
-   } else {
-      MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_DirectRectangle> blitter;
-      blitter.initSource( *surface );
-      blitter.setRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), Width(), Height() );
-      Surface s = Surface::Wrap( dest );
-      blitter.blit( *surface, s, SPoint(pnt.x, pnt.y ));
-   }   
-   
-}
-
-
-void MapDisplayPG::eventDraw ( SDL_Surface* srf, const PG_Rect& rect)
-{
-   if ( dirty > Nothing )
-      updateMap();
-
-   blitInternalSurface( srf, SPoint(0,0));
-}
-
- class TargetPixelSelector_Rect {
+class TargetPixelSelector_Rect {
         PG_Rect rect; 
         int x2,y2;
         int w,h;
@@ -450,15 +423,53 @@ void MapDisplayPG::eventDraw ( SDL_Surface* srf, const PG_Rect& rect)
         };
         
      public:
-        void setTargetRect( const PG_Rect& r  ) 
+        void setTargetRect( const SDL_Rect& r  ) 
         { 
            rect = r; 
            x2 = r.x + r.w; 
            y2 = r.y + r.h;
         };
+        
+        void setClippingRect( SDL_Surface*  srv  ) 
+        { 
+           setTargetRect( srv->clip_rect );
+        };
+        
         TargetPixelSelector_Rect ( NullParamType npt = nullParam ) :w(0xffffff),h(0xffffff) {};   
   };
 
+
+void MapDisplayPG::blitInternalSurface( SDL_Surface* dest, const SPoint& pnt )
+{
+   if ( zoom != 1 ) {
+      MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_PlainOverwrite,PixSel,TargetPixelSelector_Rect> blitter;
+      blitter.setZoom( zoom );
+      blitter.initSource( *surface );
+      blitter.setRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), int(float(Width()) / zoom), int(float(Height()) / zoom));
+      blitter.setClippingRect( dest );
+      Surface s = Surface::Wrap( dest );
+      blitter.blit( *surface, s, SPoint(pnt.x, pnt.y ));
+   } else {
+      MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_DirectRectangle,TargetPixelSelector_Rect> blitter;
+      blitter.initSource( *surface );
+      blitter.setRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), Width(), Height() );
+      blitter.setClippingRect( dest );
+      Surface s = Surface::Wrap( dest );
+      blitter.blit( *surface, s, SPoint(pnt.x, pnt.y ));
+   }   
+   
+}
+
+
+void MapDisplayPG::eventDraw ( SDL_Surface* srf, const PG_Rect& rect)
+{
+   if ( dirty > Nothing )
+      updateMap();
+
+   blitInternalSurface( srf, SPoint(0,0));
+}
+
+ 
 
 void MapDisplayPG::displayCursor()
 {

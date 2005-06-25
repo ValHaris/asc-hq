@@ -113,40 +113,6 @@ extern const char* getmessage( int id );
 //! the dialog box for setting up how to load bi3 graphics and maps. Since ASC now uses its own graphics, this dialog is not used any more.
 extern void bi3preferences  ( void );
 
-typedef class tprogressbar* pprogressbar;
-class tprogressbar : public SigC::Object {
-       public:
-         void start ( int _color, int _x1, int _y1, int _x2, int _y2, pnstream stream );
-         void end ( void );
-         void point ( void );
-         void startgroup ( void );
-         void writetostream ( pnstream stream );
-       private:
-         int x1, y1, x2, y2, color;
-         int starttick;
-         int time;
-         int first;
-
-            struct tgroup {
-               int num;
-               int orgnum;
-               int time;
-               int newtime;
-               int timefromstart;
-               dynamic_array<int> point;
-            };
-   
-            dynamic_array<tgroup> group;
-            int groupnum;
-            int actgroupnum;
-
-       int ended;
-       int lastpaintedpos;
-       void lineto ( float pos );
-
-
-};
-
 
 //! a dialog box that lets a user resize the active map. Should only be used in the mapeditor
 extern void resizemap ( void );

@@ -545,7 +545,11 @@ bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                return true;
 
             case SDLK_F11: {
-            // computeview ( actmap );
+            ASCString s;
+            for ( int i = 0; i < 20; ++i )
+               s += ASCString::toString(i) + "\n";
+            
+            displaymessage( s, 1 );
             }
             return true;
 

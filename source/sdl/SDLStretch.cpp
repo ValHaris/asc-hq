@@ -20,12 +20,17 @@
 
  ***************************************************************************/
 
+
+ 
 #include "../global.h"
-#include "SDLStretch.h"
 #include <stdio.h>
 #include <cstring>
 #include <math.h>
 #include <stdlib.h>
+#include "SDLStretch.h"
+
+#define sign(x) ((x)>0 ? 1:-1)
+
 
 template<class ST, class DT>
 inline void StretchTemplateLUT(int x1, int x2, int y1, int y2, int yr, int yw, ST src_pixels, DT dst_pixels, Uint32* lut)
@@ -140,6 +145,7 @@ inline void RectStretchTemplate(SDL_Surface* src_surface, ST src, int xs1, int y
 
 }
 
+
 void SDL_StretchSurface(SDL_Surface* src_surface, int xs1, int ys1, int xs2, int ys2, SDL_Surface* dst_surface, int xd1, int yd1, int xd2, int yd2, Uint32* lutVOI)
 {
         int src_bpp = src_surface->format->BytesPerPixel;
@@ -212,3 +218,4 @@ void SDL_StretchSurface(SDL_Surface* src_surface, SDL_Rect* src_rect, SDL_Surfac
                                 dst_rect->h,    
                                 voiLUT);
 }
+ 
