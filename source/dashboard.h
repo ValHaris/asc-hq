@@ -76,5 +76,7 @@ class WeaponInfoPanel : public Panel {
         // void eval();
 };
 
+extern void assignWeaponInfo ( Panel* panel, PG_Widget* widget, const SingleWeapon& weapon );
+
 
 #endif

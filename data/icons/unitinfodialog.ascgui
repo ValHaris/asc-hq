@@ -1,3 +1,23 @@
+; Zu ändern: unitpad_weapon_source und  unitpad_weapon_target
+; weapon_target_submerged und weapon_source_submerged werden eingeschaltet
+; weapon_notarget_submerged und weapon_nosource_submerged  werden ausgeschaltet
+;
+; weaponliste in scrollarea
+;
+; weapongraph: Achsen, Achsenbeschriftung, 
+;   labels an ende der achsen:  unitpad_weapon_diagram_maxstrength, unitpad_weapon_diagram_maxdist
+;
+; bei entrance system: 
+;   dockingheight fehlt !!
+;   unitpad_transport_light_wheeled_vehicle & co besser durch eine Art LineWidget ersetzen und die Bilder für die einzelnen Typen
+;      einzeln abspeichern. Dann sind wir flexibler, wenn wir unser Sortiment an Typen ändern. Außerdem haben wir ja noch den Typ "Default"
+;      Ich weiß zwar nicht, was wir für ein symbol dafür nehmen sollen, aber den Typ haben wir nunmal ...
+;   außerdem würde ich eine Trennung der Parameter, die bei der Einheit festgelegt werden (anzahl stellplätze, gewichte) sowie der des EntranceSystems
+;      gut finden
+;
+; Bei LineWidgets bitte immer die Größe eines einzelnen Elements angeben, nicht die des gesamten Bereichs!
+
+
 panel {
    width = 746
    height = 615
@@ -717,7 +737,7 @@ panel {
            height = 18
          } widget0
          
-	 widget1 {
+         widget1 {
            type = ScrollArea
            name = unitpad_terrainaccessarea
            x = 10
@@ -1004,7 +1024,7 @@ panel {
          Filename = padweaponscreenwindow.png
          x = 75
          y = 240
-         widgetnum = 19
+         widgetnum = 5
          widget0 {
            TextAlign = LEFT
            Fontsize = 16
@@ -1015,17 +1035,21 @@ panel {
            height = 18
          } widget0
 
+         userhandler = unitpad_weaponlist
+
          LineWidget {
-           type = SpecialDisplay
+           type = dummy
            name = line_pad_weapon_choose
            x = 10
            y = 30
            width = 191
-           height = 190
+           height = 19
            widgetnum = 1
            widget0 {
-             type = SpecialDisplay
+             type = image
              name = pad_weaponbar
+             Filename = padweaponchoosebar.png
+             localtransparency = 255
              x = 0
              y = 0
              widgetnum = 2
@@ -1036,15 +1060,15 @@ panel {
                y = 3
                widgetnum = 1
                widget0 {
-                 type = SpecialDisplay
-                 name = unitpad_weapon_symbol
+                 type = image
+                 name = weapon_symbol1
                  x = 2
                  y = 2
                } widget0
               } widget0
               widget1 {
                 type = TextOutput
-                name = unitpad_weaponweaponname
+                name = weapon_text1
                 TextAlign = LEFT
                 FontSize = 14
                 x = 40
@@ -1058,7 +1082,7 @@ panel {
            TextAlign = LEFT
            Fontsize = 13
            type = StaticText
-           text = sourceheight
+           text = source height
            x = 10
            y = 250
            height = 13
@@ -1067,7 +1091,7 @@ panel {
            TextAlign = LEFT
            Fontsize = 13
            type = StaticText
-           text = sourcetarget
+           text = target height
            x = 10
            y = 267
            height = 13
@@ -1082,160 +1106,168 @@ panel {
            height = 13
          } widget3
          widget4 {
-           type = image
-           Filename = pad_weapon_levels.png
-           x = 120
-           y = 250
-           widgetnum = 1
-           widget0 {
-             type = SpecialDisplay
-             name = unitpad_weapon_source
-             x = 2
-             y = 3
-             width = 242
-             height = 15
-           } widget0
-         } widget4
-         widget5 {
-           type = image
-           Filename = pad_weapon_levels.png
-           x = 120
-           y = 267
-           widgetnum = 1
-           widget0 {
-             type = SpecialDisplay
-             name = unitpad_weapon_target
-             x = 2
-             y = 3
-             width = 242
-             height = 15
-           } widget0
-         } widget5
-         widget6 {
-           TextAlign = LEFT
-           Fontsize = 13
-           type = StaticText
-           text = reaction fire:
-           x = 10
-           y = 300
-           height = 13
-         } widget6
-         widget7 {
-           TextAlign = LEFT
-           Fontsize = 13
-           type = StaticText
-           text = distance:        -
-           x = 135
-           y = 300
-           height = 13
-         } widget7
-         widget8 {
-           TextAlign = LEFT
-           Fontsize = 13
-           type = StaticText
-           text = can transfer ammo:
-           x = 280
-           y = 300
-           height = 13
-         } widget8
-         widget9 {
-           TextAlign = LEFT
-           Fontsize = 13
-           type = StaticText
-           text = strength:        -
-           x = 135
-           y = 285
-           height = 13
-         } widget9
-         widget10 {
-           TextAlign = LEFT
-           Fontsize = 13
-           type = StaticText
-           text = can shoot:
-           x = 280
-           y = 285
-           height = 13
-         } widget10
-         widget11 {
-           TextAlign = RIGHT
-           Fontsize = 13
-           type = Textoutput
-           name = unitpad_weapon_maxammo
-           x = 95
-           y = 285
-           height = 13
-           width = 20
-         } widget11
-         widget12 {
-           TextAlign = RIGHT
-           Fontsize = 13
-           type = TextOutput
-           name = unitpad_weapon_reactionfire
-           x = 95
-           y = 300
-           height = 13
-           width = 20
-         } widget12
-         widget13 {
-           TextAlign = RIGHT
-           Fontsize = 13
-           type = TextOutput
-           name = unitpad_weapon_minstrength
-           x = 198
-           y = 285
-           height = 13
-           width = 25
-         } widget13
-         widget14 {
-           TextAlign = RIGHT
-           Fontsize = 13
-           type = TextOutput
-           name = unitpad_weapon_minrange
-           x = 198
-           y = 300
-           height = 13
-           width = 25
-         } widget14
-         widget15 {
-           TextAlign = LEFT
-           Fontsize = 13
-           type = TextOutput
-           name = unitpad_weapon_maxstrength
-           x = 235
-           y = 285
-           height = 13
-           width = 25
-         } widget15
-         widget16 {
-           TextAlign = LEFT
-           Fontsize = 13
-           type = TextOutput
-           name = unitpad_weapon_maxrange
-           x = 235
-           y = 300
-           height = 13
-           width = 25
-         } widget16
-         widget17 {
-           TextAlign = LEFT
-           Fontsize = 13
-           type = TextOutput
-           name = unitpad_weapon_canshoot
-           x = 410
-           y = 285
-           height = 13
-           width = 25
-         } widget17
-         widget18 {
-           TextAlign = LEFT
-           Fontsize = 13
-           type = TextOutput
-           name = unitpad_weapon_cantransfer
-           x = 410
-           y = 300
-           height = 13
-           width = 25
-         } widget18
+            type = dummy
+            name = single_weapon_info
+            x = 0
+            y = 0
+            widgetNum = 15
+            
+            widget0 {
+              type = image
+              Filename = pad_weapon_levels.png
+              x = 120
+              y = 250
+              widgetnum = 1
+              widget0 {
+                type = SpecialDisplay
+                name = unitpad_weapon_source
+                x = 2
+                y = 3
+                width = 242
+                height = 15
+              } widget0
+            } widget0
+            widget1 {
+              type = image
+              Filename = pad_weapon_levels.png
+              x = 120
+              y = 267
+              widgetnum = 1
+              widget0 {
+                type = SpecialDisplay
+                name = unitpad_weapon_target
+                x = 2
+                y = 3
+                width = 242
+                height = 15
+              } widget0
+            } widget1
+            widget2 {
+              TextAlign = LEFT
+              Fontsize = 13
+              type = StaticText
+              text = reaction fire:
+              x = 10
+              y = 300
+              height = 13
+            } widget2
+            widget3 {
+              TextAlign = LEFT
+              Fontsize = 13
+              type = StaticText
+              text = distance:        -
+              x = 135
+              y = 300
+              height = 13
+            } widget3
+            widget4 {
+              TextAlign = LEFT
+              Fontsize = 13
+              type = StaticText
+              text = can transfer ammo:
+              x = 280
+              y = 300
+              height = 13
+            } widget4
+            widget5 {
+              TextAlign = LEFT
+              Fontsize = 13
+              type = StaticText
+              text = strength:        -
+              x = 135
+              y = 285
+              height = 13
+            } widget5
+            widget6 {
+              TextAlign = LEFT
+              Fontsize = 13
+              type = StaticText
+              text = can shoot:
+              x = 280
+              y = 285
+              height = 13
+            } widget6
+            widget7 {
+              TextAlign = RIGHT
+              Fontsize = 13
+              type = Textoutput
+              name = weapon_maxammo
+              x = 95
+              y = 285
+              height = 13
+              width = 20
+            } widget7
+            widget8 {
+              TextAlign = RIGHT
+              Fontsize = 13
+              type = TextOutput
+              name = weapon_reactionfire
+              x = 95
+              y = 300
+              height = 13
+              width = 20
+            } widget8
+            widget9 {
+              TextAlign = RIGHT
+              Fontsize = 13
+              type = TextOutput
+              name = weapon_strenghtmin
+              x = 198
+              y = 285
+              height = 13
+              width = 25
+            } widget9
+            widget10 {
+              TextAlign = RIGHT
+              Fontsize = 13
+              type = TextOutput
+              name = weapon_distancemin
+              x = 198
+              y = 300
+              height = 13
+              width = 25
+            } widget10
+            widget11 {
+              TextAlign = LEFT
+              Fontsize = 13
+              type = TextOutput
+              name = weapon_strenghtmax
+              x = 235
+              y = 285
+              height = 13
+              width = 25
+            } widget11
+            widget12 {
+              TextAlign = LEFT
+              Fontsize = 13
+              type = TextOutput
+              name = weapon_distancemax
+              x = 235
+              y = 300
+              height = 13
+              width = 25
+            } widget12
+            widget13 {
+              TextAlign = LEFT
+              Fontsize = 13
+              type = TextOutput
+              name = weapon_canshoot
+              x = 410
+              y = 285
+              height = 13
+              width = 25
+            } widget13
+            widget14 {
+              TextAlign = LEFT
+              Fontsize = 13
+              type = TextOutput
+              name = weapon_canrefuel
+              x = 410
+              y = 300
+              height = 13
+              width = 25
+            } widget14
+         } widget4 
        } widget1
 
        widget2 {
@@ -1373,17 +1405,21 @@ panel {
            height = 18
          } widget0
    
+         userhandler = entrancesystems
+   
          Linewidget {
            type = SpecialDisplay
            name = line_pad_entrance_choose
            x = 10
            y = 21
-           width = 430
+           width = 40
            height = 26
            widgetnum = 1
            widget0 {
-             type = SpecialDisplay
+             type = image
+             filename = pad_transport_choosebar.png 
              name = pad_transport_square
+             localtransparency = 255
              x = 0
              y = 0
              widgetnum = 1
@@ -1413,7 +1449,7 @@ panel {
         Filename = padtransportdetailscreenwindow.png
         x = 75
         y = 289
-        widgetnum = 16
+        widgetnum = 17
         widget0 {
            TextAlign = LEFT
            Fontsize = 12
@@ -1455,15 +1491,37 @@ panel {
            width = 120
         } widget3
         widget4 {
-          type = SpecialDisplay
+          type = dummy
           name = unitpad_transport_inoutdocking
           x = 140
           y = 12
           width = 240
           height = 39
+          widgetnum = 3
+          widget0 {
+            type = image
+            filename = pad_transport_in.png
+            name = pad_transport_in
+            x = 0
+            y = 0
+          } widget0
+          widget1 {
+            type = image
+            filename = pad_transport_out.png
+            name = pad_transport_out
+            x = 80
+            y = 0
+          } widget1
+          widget2 {
+            type = image
+            filename = pad_transport_docking.png
+            name = pad_transport_docking
+            x = 160
+            y = 0
+          } widget2
         } widget4 
 
-        LineWidget {
+        widget16 {
           type = dummy
           name = unitpad_transport_leveldisplay
           x = 140
@@ -1474,7 +1532,6 @@ panel {
             name = unitpad_transport_transporterlevel
             x = 2
             y = 2
-            width = 21
             height = 21
           } widget0
           widget1 {
@@ -1482,10 +1539,9 @@ panel {
             name = unitpad_transport_unitlevel
             x = 2
             y = 27
-            width = 21
             height = 21
           } widget1
-        } Linewidget 
+        } widget16
 
        widget5 {
           type = dummy
@@ -1494,7 +1550,7 @@ panel {
           y = 133
           widgetnum = 17
           widget0 {
-            type = SpecialDisplay
+            type = Image
             name = unitpad_transport_light_wheeled_vehicle
             x = 1
             y = 1
@@ -1502,7 +1558,7 @@ panel {
             height = 9
           } widget0
           widget1 {
-            type = SpecialDisplay
+            type = Image
             name = unitpad_transport_light_ship
             x = 1
             y = 32
@@ -1510,7 +1566,7 @@ panel {
             height = 9
           } widget1
           widget2 {
-            type = SpecialDisplay
+            type = Image
             name = unitpad_transport_trooper
             x = 1
             y = 64
@@ -1518,7 +1574,7 @@ panel {
             height = 9
           } widget2
           widget3 {
-            type = SpecialDisplay
+            type = Image
             name = unitpad_transport_medium_wheeled_vehicle
             x = 73
             y = 1
@@ -1526,7 +1582,7 @@ panel {
             height = 9
           } widget3
           widget4 {
-            type = SpecialDisplay
+            type = Image
             name = unitpad_transport_medium_ship
             x = 73
             y = 32
@@ -1534,7 +1590,7 @@ panel {
             height = 9
           } widget4
           widget5 {
-            type = SpecialDisplay
+            type = Image
             name = unitpad_transport_rail_vehicle
             x = 73
             y = 64
@@ -1542,7 +1598,7 @@ panel {
             height = 9
           } widget5
           widget6 {
-            type = SpecialDisplay
+            type = Image
             name = unitpad_transport_heavy_wheeled_vehicle
             x = 146
             y = 1
@@ -1550,7 +1606,7 @@ panel {
             height = 9
           } widget6
           widget7 {
-            type = SpecialDisplay
+            type = Image
             name = unitpad_transport_heavy_ship
             x = 146
             y = 32
@@ -1558,7 +1614,7 @@ panel {
             height = 9
           } widget7
           widget8 {
-            type = SpecialDisplay
+            type = Image
             name = unitpad_transport_building|turret|object
             x = 146
             y = 64
@@ -1566,7 +1622,7 @@ panel {
             height = 9
           } widget8
           widget9 {
-            type = SpecialDisplay
+            type = Image
             name = unitpad_transport_light_tracked_vehicle
             x = 218
             y = 1
@@ -1574,7 +1630,7 @@ panel {
             height = 9
           } widget9
           widget10 {
-            type = SpecialDisplay
+            type = Image
             name = unitpad_transport_light_aircraft
             x = 218  
             y = 32
@@ -1582,7 +1638,7 @@ panel {
             height = 9
           } widget10
           widget11 {
-            type = SpecialDisplay
+            type = Image
             name = unitpad_transport_helicopter
             x = 218
             y = 64
@@ -1590,7 +1646,7 @@ panel {
             height = 9
           } widget11
           widget12 {
-            type = SpecialDisplay
+            type = Image
             name = unitpad_transport_medium_tracked_vehicle
             x = 291
             y = 1
@@ -1598,7 +1654,7 @@ panel {
             height = 9
           } widget12
           widget13 {
-            type = SpecialDisplay
+            type = Image
             name = unitpad_transport_medium_aircraft
             x = 291
             y = 32
@@ -1606,7 +1662,7 @@ panel {
             height = 9
           } widget13
           widget14 {
-            type = SpecialDisplay
+            type = Image
             name = unitpad_transort_hoovercraft
             x = 291
             y = 64
@@ -1614,7 +1670,7 @@ panel {
             height = 9
           } widget14
           widget15 {
-            type = SpecialDisplay
+            type = Image
             name = unitpad_transport_heavy_tracked_vehicle
             x = 363
             y = 1
@@ -1622,7 +1678,7 @@ panel {
             height = 9
           } widget15
           widget16 {
-            type = SpecialDisplay
+            type = Image
             name = unitpad_transport_heavy_aircraft
             x = 363
             y = 32

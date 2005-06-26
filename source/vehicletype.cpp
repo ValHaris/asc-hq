@@ -773,6 +773,7 @@ ASCString    SingleWeapon::getIconFileName( int numerical )
       case cwmachinegunn: return "weap-machinegun";
       case cwcannonn: return "weap-cannon";
       case cwminen: return "weap-mine";
+      case cwservicen: return "weap-service";   
       default: return "weap-undefined";
    };
 }

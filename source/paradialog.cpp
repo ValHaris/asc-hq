@@ -180,7 +180,7 @@ class AutoProgressBar: public PG_ProgressBar {
       {
          double p = double(ticker - starttime) * 100  / time;
          
-         // limit to 10 Hz to reduce graphic updates
+         // limit to 25 Hz to reduce graphic updates
          if ( lastdisplaytime + 4 < ticker ) {
             SetProgress( p );
             lastdisplaytime = ticker;
@@ -197,7 +197,7 @@ class AutoProgressBar: public PG_ProgressBar {
          tickSignal.connect( SigC::slot( *this, &AutoProgressBar::tick ));
          
          try {
-            tn_file_buf_stream stream ( "progress.dat", tnstream::writing  );
+            tnfilestream stream ( "progress.dat", tnstream::reading  );
             time = stream.readInt( );
          }
          catch ( ... ) {
@@ -212,6 +212,7 @@ class AutoProgressBar: public PG_ProgressBar {
             stream.writeInt( lastticktime - starttime );
          }
          catch ( ... ) {
+            ticker = 10;
          }
       }
 };
@@ -223,6 +224,12 @@ void ASC_PG_App::activateProgressBar( bool active, SigC::Signal0<void>& ticker )
       progress = new AutoProgressBar( ticker, NULL, PG_Rect( 0, GetScreen()->h - 15, GetScreen()->w, 15 ) );
       progress->Show();
    } 
+   if ( !active ) {
+      if ( progress )
+         progress->close();
+      delete progress;
+   }
+
 }
 
 ASC_PG_App& getPGApplication()
@@ -690,7 +697,7 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
    int transparency;
    pc.addInteger("localtransparency", transparency, -1 );
    if ( transparency != -1 ) {
-      SetTransparency( transparency );
+      parent->SetTransparency( transparency );
    }
    
    if ( pc.find( "userHandler" )) {
@@ -832,7 +839,15 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
    }
 }
 
+void Panel::rename( const ASCString& widgetName, const ASCString& newname, PG_Widget* parent )
+{
+   if ( !parent )
+      parent = this;
 
+   PG_Widget* w = parent->FindChild( widgetName, true );
+   if ( w )
+      w->SetName( newname );
+}
 
 void Panel::setLabelText ( const ASCString& widgetName, const ASCString& text, PG_Widget* parent )
 {
@@ -889,6 +904,17 @@ void Panel::setImage ( const ASCString& widgetName, SDL_Surface* image, PG_Widge
    }
 }
 
+void Panel::setWidgetTransparency ( const ASCString& widgetName, int transparency, PG_Widget* parent  )
+{
+   if ( !parent )
+      parent = this;
+
+   PG_Widget* i = parent->FindChild( widgetName, true );
+   if ( i )
+      i->SetTransparency( transparency );
+}
+
+
 void Panel::hide ( const ASCString& widgetName, PG_Widget* parent )
 {
    if ( !parent )
@@ -925,6 +951,7 @@ void Panel::setBarGraphColor( const ASCString& widgetName, PG_Color color )
    if ( bgw )
       bgw->setColor( color );
 }
+
 
 
 Panel::WidgetParameters Panel::getDefaultWidgetParams()

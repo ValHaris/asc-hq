@@ -31,6 +31,7 @@
 #include "sgstream.h"
 
 #include "loadpcx.h"
+#include "itemrepository.h"
 
 
 
@@ -187,6 +188,9 @@ void GraphicSetManager_Base::loadData()
                gs->image[i] = emptyField;
             }
            gs->image[i].assignDefaultPalette();
+
+           dataLoaderTicker();
+
          }
 
          delete[] picmode;

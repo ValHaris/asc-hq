@@ -58,10 +58,12 @@
 #include "ascstring.h"
 #include "textfile_evaluation.h"
 
+class AutoProgressBar;
+
  class ASC_PG_App : public PG_Application {
        ASCString themeName;
        SDL_Surface* fullscreenImage;
-       PG_ProgressBar* progress;
+       AutoProgressBar* progress;
 
     public:
        static const int mapDisplayID = 2;
@@ -137,6 +139,7 @@ class Panel : public  PG_Window {
       WidgetParameters getDefaultWidgetParams();
 
       TextPropertyGroup* textPropertyGroup;
+   public:
       void setLabelText ( const ASCString& widgetName, const ASCString& text, PG_Widget* parent = NULL );
       void setLabelText ( const ASCString& widgetName, int i, PG_Widget* parent = NULL );
       void setLabelColor ( const ASCString& widgetName, PG_Color color, PG_Widget* parent = NULL );
@@ -146,6 +149,9 @@ class Panel : public  PG_Window {
       void show( const ASCString& widgetName, PG_Widget* parent = NULL );
       void setBargraphValue( const ASCString& widgetName, float fraction );
       void setBarGraphColor( const ASCString& widgetName, PG_Color color );
+      void rename( const ASCString& widgetName, const ASCString& newname, PG_Widget* parent = NULL );
+      void setWidgetTransparency ( const ASCString& widgetName, int transparency, PG_Widget* parent = NULL );
+   protected:
 
       virtual void userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams ) {}; 
 
