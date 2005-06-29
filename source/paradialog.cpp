@@ -175,30 +175,51 @@ class AutoProgressBar: public PG_ProgressBar {
       int time;
       int lastticktime;
       int lastdisplaytime;
+      int counter;
+      vector<int> newTickTimes;
+      vector<int> prevTickTimes;
+      
 
       void tick()
       {
-         double p = double(ticker - starttime) * 100  / time;
+         
+         newTickTimes.push_back ( ticker - starttime );
          
          // limit to 25 Hz to reduce graphic updates
          if ( lastdisplaytime + 4 < ticker ) {
+            double p;
+            // double p = double(ticker - starttime) * 100  / time;
+            if ( counter < prevTickTimes.size() && time ) {
+               int a = prevTickTimes[counter];
+               p = 100 * a / time;
+            } else
+               p = counter / 100;
+               
+            if ( p > 99 )
+               p = 99;
+            
             SetProgress( p );
             lastdisplaytime = ticker;
          }
+         
+         ++counter;
+         
             
          lastticktime = ticker;
       };
 
    public:
-      AutoProgressBar( SigC::Signal0<void>& tickSignal, PG_Widget *parent, const PG_Rect &r=PG_Rect::null, const std::string &style="Progressbar" ) : PG_ProgressBar( parent, r, style ), lastticktime(-1)
+      AutoProgressBar( SigC::Signal0<void>& tickSignal, PG_Widget *parent, const PG_Rect &r=PG_Rect::null, const std::string &style="Progressbar" ) : PG_ProgressBar( parent, r, style ), lastticktime(-1), counter(0)
       {
-         lastdisplaytime = starttime = ::ticker;
+         lastdisplaytime = starttime = ticker;
          
          tickSignal.connect( SigC::slot( *this, &AutoProgressBar::tick ));
          
          try {
             tnfilestream stream ( "progress.dat", tnstream::reading  );
+            int version = stream.readInt();
             time = stream.readInt( );
+            readClassContainer( prevTickTimes, stream );
          }
          catch ( ... ) {
             time = 200;
@@ -209,10 +230,11 @@ class AutoProgressBar: public PG_ProgressBar {
       {
          try {
             tn_file_buf_stream stream ( "progress.dat", tnstream::writing  );
+            stream.writeInt( 1 );
             stream.writeInt( lastticktime - starttime );
+            writeClassContainer( newTickTimes, stream );
          }
          catch ( ... ) {
-            ticker = 10;
          }
       }
 };

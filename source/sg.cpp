@@ -1193,7 +1193,7 @@ class UnitInfoDialog : public Panel {
          };
 
          void activate( const ASCString& pane ) {
-            // PG_Application::SetBulkMode();
+            PG_Application::SetBulkMode();
             for ( int i = 0; i < 5; ++i )
                 if ( ASCString( paneName[i]) != pane )
                    hide( paneName[i] );
@@ -1201,8 +1201,8 @@ class UnitInfoDialog : public Panel {
             for ( int i = 0; i < 5; ++i )
                 if ( ASCString( paneName[i]) == pane )
                    show( paneName[i] );
-            // Update();
-            // PG_Application::SetBulkMode(false);
+            PG_Application::SetBulkMode(false);
+            Update();
          };
 
          void click( const ASCString& name ) {
@@ -2011,6 +2011,11 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 
    GraphicSetManager::Instance().loadData();
 
+   dataLoaderTicker();
+   
+   loadAllData();
+  
+   
    activefontsettings.markfont = schriften.guicolfont;
    shrinkfont ( schriften.guifont, -1 );
    shrinkfont ( schriften.guicolfont, -1 );
@@ -2033,9 +2038,6 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
    loadguipictures();
    dataLoaderTicker();
    
-   loadAllData();
-   
-   dataLoaderTicker();
 
    loadUnitSets();
 

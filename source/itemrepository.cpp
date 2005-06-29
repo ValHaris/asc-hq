@@ -94,6 +94,7 @@ void ItemRepository<T>::read( tnstream& stream )
 
       t->filename = stream.readString();
       t->location = stream.readString();
+      dataLoaderTicker();
 
       add ( t );
       // add ( T::newFromStream(stream ));
