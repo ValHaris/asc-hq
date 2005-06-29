@@ -1650,8 +1650,14 @@ void Reinforcements :: execute( MapDisplayInterface* md )
    while ( cnt < objectNum ) {
       Type type = Type(stream.readInt());
       if ( type == ReinfVehicle ) {
+         try {
          Vehicle* veh = Vehicle::newFromStream( gamemap, stream, ++gamemap->unitnetworkid );
          FindUnitPlacementPos fupp( gamemap, veh );
+         } 
+         catch ( InvalidID err ) {
+            displaymessage( "Error executing event 'Reinforcements'\n" +  err.getMessage(), 1);
+            throw ShutDownMap();
+         }
       }
       if ( type == ReinfBuilding ) {
         Building* bld = Building::newFromStream ( gamemap, stream );

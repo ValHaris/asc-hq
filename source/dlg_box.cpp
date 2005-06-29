@@ -1918,6 +1918,7 @@ void displaymessage( const ASCString& text, int num  )
    if ( !displayInternally ) {
       for ( int i=0; i<= linenum ;i++ )
           fprintf(stderr,"%s\n",stringtooutput[i]);
+      fflush( stderr );
    } else {
       #ifdef _WIN322_
         if ( !gameStartupComplete && num==2 ) {
@@ -3783,6 +3784,7 @@ void fatalError ( const ASCString& string )
 void warning ( const ASCString& str )
 {
 	fprintf(stderr, "ASC: %s \n", str.c_str());
+   fflush( stderr );
 }
 
 void errorMessage ( const ASCString& string )

@@ -2187,6 +2187,10 @@ int gamethread ( void* data )
          }
       } /* endtry */
       catch ( NoMapLoaded ) { } /* endcatch */
+      catch ( ShutDownMap ) { 
+         delete actmap;
+         actmap = NULL;
+      }
       catch ( LoadNextMap lnm ) {
          if ( actmap->campaign ) {
             startnextcampaignmap( lnm.id );

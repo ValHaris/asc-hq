@@ -63,6 +63,7 @@ const char* fileNameDelimitter = " =*/+<>,";
               ASCString toString ( ) const ;
               int operation_eq  ( const TextPropertyGroup::Entry& entry ) const;
               int operation_add ( const TextPropertyGroup::Entry& entry ) const;
+              int operation_sub ( const TextPropertyGroup::Entry& entry ) const;
               int operation_mult ( const TextPropertyGroup::Entry& entry ) const;
             public:
                IntegerProperty ( int& property_ ) : PTI ( property_ ) {};
@@ -119,6 +120,7 @@ const char* fileNameDelimitter = " =*/+<>,";
             protected:
               typedef vector<T> PropertyType;
               PropertyType operation_add ( const TextPropertyGroup::Entry& entry ) const;
+              PropertyType operation_sub ( const TextPropertyGroup::Entry& entry ) const;
               PropertyType operation_mult ( const TextPropertyGroup::Entry& entry ) const;
               ValArrayProperty ( PropertyType& property_ ) : PropertyTemplate<vector<T> > ( property_ ) {};
 
@@ -635,6 +637,12 @@ int IntegerProperty::operation_add ( const TextPropertyGroup::Entry& entry ) con
    return parse ( *entry.parent ) + operation_eq ( entry );
 }
 
+int IntegerProperty::operation_sub ( const TextPropertyGroup::Entry& entry ) const
+{
+   return parse ( *entry.parent ) - operation_eq ( entry );
+}
+
+
 int IntegerProperty::operation_mult ( const TextPropertyGroup::Entry& entry ) const
 {
    return int ( double ( parse ( *entry.parent )) *  atof ( entry.value.c_str() ));
@@ -792,6 +800,36 @@ typename ValArrayProperty<T>::PropertyType ValArrayProperty<T>::operation_add ( 
    this->propertyContainer->error ( this->name + ": array dimensions do not agree" );
    return child;
 }
+
+template<class T>
+typename ValArrayProperty<T>::PropertyType ValArrayProperty<T>::operation_sub ( const TextPropertyGroup::Entry& entry ) const
+{
+   PropertyType child = this->operation_eq( entry );
+   PropertyType parent = this->parse ( *entry.parent );
+
+   if ( child.size() == parent.size() ) {
+      PropertyType res;
+      for ( int i = 0; i < child.size(); i++ )
+         res.push_back ( parent[i] - child[i] );
+      return res;
+   }
+   if ( child.size() == 1 ) {
+      PropertyType res;
+      for ( int i = 0; i < parent.size(); i++ )
+         res.push_back ( parent[i] - child[0] );
+      return res;
+   }
+   if ( parent.size() == 1 ) {
+      PropertyType res;
+      for ( int i = 0; i < child.size(); i++ )
+         res.push_back ( parent[0] - child[i] );
+      return res;
+   }
+
+   this->propertyContainer->error ( this->name + ": array dimensions do not agree" );
+   return child;
+}
+
 
 template<class T>
 typename ValArrayProperty<T>::PropertyType ValArrayProperty<T>::operation_mult ( const TextPropertyGroup::Entry& entry ) const

@@ -1445,20 +1445,21 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
    } else
       if ( dest.getNumericalHeight() >= 0 ) {
         // moving out of container
-        if ( dest.getNumericalHeight() >= 4 )
-           // flying
-           movecost = maxmalq;
+        int mm = getfield( start.x, start.y )->getContainer()->vehicleUnloadSystem( vehicle->typ, dest.getBitmappedHeight() )->movecost;
+        if ( mm > 0 )
+            movecost = mm;
         else {
-           if ( start.getNumericalHeight() <= 1 && start.getNumericalHeight() != -1 ) {
-              movecost = submarineMovement;
-              checkWind = false;
-           } else {
-              int mm = getfield( start.x, start.y )->getContainer()->vehicleUnloadSystem( vehicle->typ, dest.getBitmappedHeight() )->movecost;
-              if ( mm > 0 )
-                 movecost = mm;
-              else
-                 movecost = getfield( dest.x, dest.y )->getmovemalus( vehicle );
-           }
+            if ( dest.getNumericalHeight() >= 4 )
+               // flying
+               movecost = maxmalq;
+            else {
+               if ( start.getNumericalHeight() <= 1 && start.getNumericalHeight() != -1 ) {
+                  movecost = submarineMovement;
+                  checkWind = false;
+               } else {
+                  movecost = getfield( dest.x, dest.y )->getmovemalus( vehicle );
+               }
+            }
         }
       } else {
         // moving from one container to another

@@ -64,6 +64,7 @@
 
 
   class NoMapLoaded : public ASCexception {};
+  class ShutDownMap : public ASCexception {};
   class OutOfRange  : public ASCexception {};
 
 
