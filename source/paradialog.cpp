@@ -263,7 +263,7 @@ void ASC_PG_App::setFullscreenImage( const ASCString& name )
 {
    if ( name.empty() ) {
       DeleteBackground(); 
-      delete fullscreenImage;   
+      SDL_FreeSurface( fullscreenImage );   
       return;
    }
    tnfilestream s ( name, tnstream::reading );

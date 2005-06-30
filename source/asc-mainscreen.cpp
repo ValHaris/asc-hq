@@ -380,6 +380,7 @@ bool MainScreenWidget :: idleHandler( )
 }
 
 
+
 void MainScreenWidget::buildBackgroundImage()
 {
    if ( !backgroundImage.valid() ) {

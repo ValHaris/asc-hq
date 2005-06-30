@@ -296,6 +296,8 @@ void registerDataLoader( TextFileDataLoader& dataLoader )
 
 void  loadAllData( bool useCache )
 {
+   loadguipictures();
+   
    FileCache cache;
 
    registerDataLoader( vehicleTypeRepository );

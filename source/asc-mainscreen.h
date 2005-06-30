@@ -44,6 +44,7 @@ public:
     void spawnPanel ( Panels panel );
 
     void displayMessage( const ASCString& message );
+
     
 protected:
     MapDisplayPG* mapDisplay;

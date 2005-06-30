@@ -2035,8 +2035,6 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
    registerDataLoader ( new PlayListLoader() );
    registerDataLoader ( new BI3TranslationTableLoader() );
 
-   loadguipictures();
-   dataLoaderTicker();
    
 
    loadUnitSets();
