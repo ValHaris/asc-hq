@@ -53,6 +53,7 @@
 #include "gameoptions.h"
 #include "sg.h"
 #include "spfst.h"
+#include "strtmesg.h"
 
 
 #include "resourceplacement.h"
@@ -60,6 +61,7 @@
 #include "iconrepository.h"
 #include "graphics/drawing.h"
 
+#include "messaginghub.h"
 
 
 class EventSupplier: public PG_SDLEventSupplier {
@@ -141,7 +143,7 @@ ASC_PG_App* pgApp = NULL;
 
 
 
-ASC_PG_App :: ASC_PG_App ( const ASCString& themeName ) : fullscreenImage( NULL ), progress( NULL )
+ASC_PG_App :: ASC_PG_App ( const ASCString& themeName ) 
 {
    this->themeName = themeName;
    EnableSymlinks(true);
@@ -240,38 +242,52 @@ class AutoProgressBar: public PG_ProgressBar {
 };
 
 
-void ASC_PG_App::activateProgressBar( bool active, SigC::Signal0<void>& ticker )
-{
-   if ( active && !progress ) {
-      progress = new AutoProgressBar( ticker, NULL, PG_Rect( 0, GetScreen()->h - 15, GetScreen()->w, 15 ) );
-      progress->Show();
-   } 
-   if ( !active ) {
-      if ( progress )
-         progress->close();
-      delete progress;
-   }
-
-}
 
 ASC_PG_App& getPGApplication()
 {
    return *pgApp;
 }
 
-void ASC_PG_App::setFullscreenImage( const ASCString& name )
+
+     
+StartupScreen::StartupScreen( const ASCString& filename, SigC::Signal0<void>& ticker ) : progressBar(NULL), infoLabel(NULL), versionLabel(NULL), fullscreenImage(NULL)
 {
-   if ( name.empty() ) {
-      DeleteBackground(); 
-      SDL_FreeSurface( fullscreenImage );   
-      return;
-   }
-   tnfilestream s ( name, tnstream::reading );
+   MessagingHub::Instance().statusInformation.connect( SigC::slot( *this, &StartupScreen::disp ));
+   
+   tnfilestream s ( filename, tnstream::reading );
    fullscreenImage = IMG_Load_RW( SDL_RWFromStream( &s ), true );
    if ( fullscreenImage ) {
-      SetBackground( fullscreenImage, PG_Draw::STRETCH );
-      EnableBackground(true);
+      PG_Application::GetApp()->SetBackground( fullscreenImage, PG_Draw::STRETCH );
+      PG_Application::GetApp()->EnableBackground(true);
    }
+   int progressHeight = 15;
+   SDL_Surface* screen = PG_Application::GetApp()->GetScreen();
+   progressBar = new AutoProgressBar( ticker, NULL, PG_Rect( 0, screen->h - progressHeight, screen->w, progressHeight ) );
+   progressBar->Show();
+   infoLabel = new PG_Label( NULL, PG_Rect( screen->w/2, screen->h - progressHeight - 25, screen->w - 20, 20 ));
+   infoLabel->SetAlignment( PG_Label::RIGHT );
+   infoLabel->Show();
+   if ( MessagingHub::Instance().getVerbosity() > 0 ) {
+      versionLabel = new PG_Label( NULL, PG_Rect( 10, screen->h - progressHeight - 25, screen->w/2, 20 ));
+      versionLabel->SetAlignment( PG_Label::LEFT );
+      versionLabel->SetText( getVersionString() );
+      versionLabel->Show();
+   }
+}
+
+void StartupScreen::disp( const ASCString& s )
+{
+   infoLabel->SetText( s );
+}
+
+         
+StartupScreen::~StartupScreen()
+{
+   PG_Application::GetApp()->DeleteBackground(); 
+   SDL_FreeSurface( fullscreenImage );   
+   delete progressBar;
+   delete infoLabel;
+   delete versionLabel;
 }
 
 
@@ -301,15 +317,7 @@ bool ASC_PG_App :: enableLegacyEventHandling( bool use )
 {
    return !setEventRouting ( !use, use );
 }
-/*
-bool ASC_PG_App::eventKeyUp (const SDL_KeyboardEvent *key){
- if(key->keysym.sym == SDLK_ESCAPE){
- GameDialog::gameDialog();
- }
 
-return true;
-}
-*/
 
 void ASC_PG_App::processEvent( )
 {

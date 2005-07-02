@@ -57,7 +57,7 @@
 #include <SDL_endian.h>
 
 
-
+#include "messaginghub.h"
 
 
  const int maxSearchDirNum = 30;
@@ -67,8 +67,6 @@
 
 
 
-
- int verbosity = 0;
 
 #pragma pack(1)
 struct trleheader {
@@ -1011,7 +1009,7 @@ void ContainerCollector :: init ( const char* wildcard )
             }
             if ( patimat ( buf3, direntp->d_name )) {
                container[containernum++] = new tncontainerstream( constructFileName ( buf, i, buf2, direntp->d_name), this, i);
-               if ( verbosity >= 2 )
+               if ( MessagingHub::Instance().getVerbosity() >= 2 )
                   printf("container %s mounted\n", buf );
             }
          } 

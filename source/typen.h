@@ -37,15 +37,11 @@
 
 #include "basictypes.h"
 
-// #include <values.h>
-
 #include "pointers.h"
 #include "tpascal.inc"
-#include "misc.h"
 #include "basestrm.h"
-#include "errors.h"
+#include "messaginghub.h"
 
-// #include "password.h"
 
 //! the color depth of the gamemap
 const int gamemapPixelSize = 4;

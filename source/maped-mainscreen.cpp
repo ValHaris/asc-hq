@@ -31,7 +31,6 @@
 #include "graphics/blitter.h"
 #include "graphics/drawing.h"
 #include "edglobal.h"
-#include "basicmessages.h"
 #include "mapdisplay2.h"
 #include "spfst.h"
 #include "overviewmappanel.h"

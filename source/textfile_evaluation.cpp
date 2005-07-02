@@ -22,7 +22,6 @@
 #include "textfileparser.h"
 #include "textfile_evaluation.h"
 #include "stringtokenizer.h"
-#include "basicmessages.h"
 #ifdef ParserLoadImages
  #include <SDL_image.h>
  #include "loadpcx.h"

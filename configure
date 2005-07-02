@@ -21971,52 +21971,37 @@ echo "${ECHO_T}no" >&6
 fi
 
 pkg_failed=no
-echo "$as_me:$LINENO: checking for SIGC_CFLAGS" >&5
-echo $ECHO_N "checking for SIGC_CFLAGS... $ECHO_C" >&6
-if test "${pkg_cv_SIGC_CFLAGS+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  if test "x$ac_cv_env_SIGC_CFLAGS_set" = "xset"; then
-	pkg_cv_SIGC_CFLAGS=$ac_cv_env_SIGC_CFLAGS_value
-elif test -n "$PKG_CONFIG"; then
-	if { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists \"sigc++-1.2\" >/dev/null 2>&1") >&5
-  ($PKG_CONFIG --exists "sigc++-1.2" >/dev/null 2>&1) 2>&5
+echo "$as_me:$LINENO: checking for SIGC" >&5
+echo $ECHO_N "checking for SIGC... $ECHO_C" >&6
+
+if test -n "$PKG_CONFIG"; then
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"sigc++-1.2\"") >&5
+  ($PKG_CONFIG --exists --print-errors "sigc++-1.2") 2>&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; then
-		pkg_cv_SIGC_CFLAGS=`$PKG_CONFIG --cflags "sigc++-1.2" 2>/dev/null`
-	else
-		pkg_failed=yes
-	fi
+  pkg_cv_SIGC_CFLAGS=`$PKG_CONFIG --cflags "sigc++-1.2" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
 else
 	pkg_failed=untried
 fi
-fi
-echo "$as_me:$LINENO: result: $pkg_cv_SIGC_CFLAGS" >&5
-echo "${ECHO_T}$pkg_cv_SIGC_CFLAGS" >&6
-echo "$as_me:$LINENO: checking for SIGC_LIBS" >&5
-echo $ECHO_N "checking for SIGC_LIBS... $ECHO_C" >&6
-if test "${pkg_cv_SIGC_LIBS+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  if test "x$ac_cv_env_SIGC_LIBS_set" = "xset"; then
-	pkg_cv_SIGC_LIBS=$ac_cv_env_SIGC_LIBS_value
-elif test -n "$PKG_CONFIG"; then
-	if { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists \"sigc++-1.2\" >/dev/null 2>&1") >&5
-  ($PKG_CONFIG --exists "sigc++-1.2" >/dev/null 2>&1) 2>&5
+if test -n "$PKG_CONFIG"; then
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"sigc++-1.2\"") >&5
+  ($PKG_CONFIG --exists --print-errors "sigc++-1.2") 2>&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; then
-		pkg_cv_SIGC_LIBS=`$PKG_CONFIG --libs "sigc++-1.2" 2>/dev/null`
-	else
-		pkg_failed=yes
-	fi
+  pkg_cv_SIGC_LIBS=`$PKG_CONFIG --libs "sigc++-1.2" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
 else
 	pkg_failed=untried
 fi
-fi
-echo "$as_me:$LINENO: result: $pkg_cv_SIGC_LIBS" >&5
-echo "${ECHO_T}$pkg_cv_SIGC_LIBS" >&6
 
 if test $pkg_failed = yes; then
 	SIGC_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "sigc++-1.2"`

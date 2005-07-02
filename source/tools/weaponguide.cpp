@@ -61,7 +61,7 @@ int main(int argc, char *argv[] ) {
     exit(0);
   }
   cout << "*******Starting guide generation*******" << endl;
-  verbosity = cl.r();
+  MessagingHub::Instance().setVerbosity( cl.r() );
 
   initFileIO( cl.c(), 4 );  // passing the filename from the command line options
   ASCString prefixDir = cl.d();

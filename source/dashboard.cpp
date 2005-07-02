@@ -29,7 +29,7 @@
 #include "pgimage.h"
 #include "textfiletags.h"
 #include "mapdisplay.h"
-
+#include "unitinfodialog.h"
 
 
 
@@ -390,38 +390,6 @@ class WeaponInfoLine: public PG_Image {
 };
 
 
-void assignWeaponInfo ( Panel* panel, PG_Widget* widget, const SingleWeapon& weapon )
-{
-   panel->setImage( "weapon_symbol1", IconRepository::getIcon(SingleWeapon::getIconFileName( weapon.getScalarWeaponType()) + "-small.png"), widget );
-
-   panel->setLabelText( "weapon_text1", weapon.getName(), widget );
-   panel->setLabelText( "weapon_reactionfire", weapon.reactionFireShots, widget );
-   panel->setLabelText( "weapon_maxammo", weapon.count, widget );
-   panel->setLabelText( "weapon_canshoot", weapon.offensive()? "yes" : "no", widget );
-   panel->setLabelText( "weapon_canrefuel", weapon.canRefuel()? "yes" : "no", widget );
-   panel->setLabelText( "weapon_strenghtmax", weapon.maxstrength, widget );
-   panel->setLabelText( "weapon_strenghtmin", weapon.minstrength, widget );
-   panel->setLabelText( "weapon_distancemin", weapon.mindistance, widget );
-   panel->setLabelText( "weapon_distancemax", weapon.maxdistance, widget );
-
-   for ( int i = 0; i < 8; ++i ) {
-      if ( weapon.targ & (1<< i)) {
-         panel->setWidgetTransparency( ASCString("weapon_notarget_") + heightTags[i] , 255 );
-         panel->setWidgetTransparency( ASCString("weapon_target_") + heightTags[i] , 0 );
-      } else {
-         panel->setWidgetTransparency( ASCString("weapon_notarget_") + heightTags[i] , 0 );
-         panel->setWidgetTransparency( ASCString("weapon_target_") + heightTags[i] , 255 );
-      }
-
-      if ( weapon.sourceheight & (1<< i)) {
-         panel->setWidgetTransparency( ASCString("weapon_nosource_") + heightTags[i] , 255 );
-         panel->setWidgetTransparency( ASCString("weapon_source_") + heightTags[i] , 0 );
-      } else {
-         panel->setWidgetTransparency( ASCString("weapon_nosource_") + heightTags[i] , 0 );
-         panel->setWidgetTransparency( ASCString("weapon_source_") + heightTags[i] , 255 );
-      }
-   }
-}
 
 WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const Vehicletype* vt ) : Panel( parent, PG_Rect::null, "WeaponInfo" ), weaponCount(0)
 {

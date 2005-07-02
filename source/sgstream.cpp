@@ -590,23 +590,3 @@ std::vector<SingleUnitSet*> unitSets;
 
 
 
-void displayLogMessage ( int msgVerbosity, char* message, ... )
-{
-   va_list arglist;
-   va_start ( arglist, message );
-   if ( msgVerbosity <= verbosity ) {
-      char buf[10000];
-      vsprintf ( buf, message, arglist );
-
-      displayLogMessage( msgVerbosity, ASCString(buf) );
-   }
-   va_end ( arglist );
-}
-
-void displayLogMessage ( int msgVerbosity, const ASCString& message )
-{
-   if ( msgVerbosity <= verbosity ) {
-      fprintf ( stdout, "%s", message.c_str() );
-      fflush ( stdout );
-   }
-}

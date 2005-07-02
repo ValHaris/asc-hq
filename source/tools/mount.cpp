@@ -59,7 +59,13 @@
             fprintf( outfile, "%c%c%c", a, b, c )
 
 
+void fatalError ( const ASCString& s )
+{
+   fprintf( stderr, "%s \n", s.c_str() );
+   exit(1);
+}
 
+            
 int writeInt  ( FILE* f, int i )
 {
    i = SDL_SwapLE32(i);

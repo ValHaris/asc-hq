@@ -608,8 +608,6 @@ extern const char* filewritemode;
 extern const char* filereadmodetext;
 extern const char* filewritemodetext;
 
-extern int verbosity;
-
 
 //! This class handles filenames. All operations that work on filenames will be added here
 class FileName : public ASCString {

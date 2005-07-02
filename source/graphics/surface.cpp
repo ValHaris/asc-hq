@@ -27,6 +27,7 @@
 #include "../basegfx.h"
 #include "../basestrm.h"
 #include "../misc.h"
+#include "../messaginghub.h"
 #include <iostream>
 
 DI_Color::DI_Color() {

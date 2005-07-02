@@ -19,7 +19,6 @@
 #include <SDL_image.h>
 #include <algorithm>
 #include "ascstring.h"
-#include "basicmessages.h"
 #include "textfileparser.h"
 #include "stringtokenizer.h"
 #include "textfile_evaluation.h"

@@ -2,9 +2,12 @@
     \brief Interface for some basic classes from which all of ASC's dialogs are derived
 */
 
-//     $Id: dlg_box.h,v 1.33.2.2 2005-05-23 15:51:52 mbickel Exp $
+//     $Id: dlg_box.h,v 1.33.2.3 2005-07-02 18:11:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33.2.2  2005/05/23 15:51:52  mbickel
+//      New main screen layout of ASC
+//
 //     Revision 1.33.2.1  2005/02/09 20:28:03  mbickel
 //      Migrated some more gui functions
 //      Enable gameevent hanlding
@@ -210,11 +213,6 @@
   #define dlg_notitle 4  
   #define dlg_3dtitle 8
 
-
-/** This variable is set to true after the game is finished loading and is operational.
-    It is used for the fatal error message dialog box on win32, which will be the
-    standard Win32 dialog during startup, while during game it will use ASCs dialog system */
-extern bool gameStartupComplete;
 
   class   tdlgengine {
                  protected:

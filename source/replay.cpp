@@ -903,8 +903,7 @@ void trunreplay :: removeActionCursor ( void )
 
 void trunreplay :: execnextreplaymove ( void )
 {
-   if ( verbosity >= 8 )
-     printf("executing replay move %d\n", movenum );
+   displayLogMessage( 8, "executing replay move %d\n", movenum );
 
    displaymessage2("executing replay move %d\n", movenum );
    movenum++;

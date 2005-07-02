@@ -29,6 +29,7 @@
 
 #include "iconrepository.h"
 #include "basestrm.h"
+#include "messaginghub.h"
 
 
 IconRepository::Repository IconRepository::repository;

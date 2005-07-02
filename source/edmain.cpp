@@ -2,7 +2,7 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.67.2.10 2005-06-25 13:49:52 mbickel Exp $
+//     $Id: edmain.cpp,v 1.67.2.11 2005-07-02 18:11:41 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -283,7 +283,8 @@ int mapeditorMainThread ( void* _mapname )
 
   
    try {
-      getPGApplication().activateProgressBar( true, dataLoaderTicker );
+      StartupScreen sus( "title_mapeditor.jpg", dataLoaderTicker );
+      
       GraphicSetManager::Instance().loadData();
       loaddata();
 
@@ -314,8 +315,6 @@ int mapeditorMainThread ( void* _mapname )
       actmap->preferredFileNames.mapname[0] = "";
 
       mapSwitcher.toggle();
-      
-      getPGApplication().activateProgressBar( false, dataLoaderTicker );
 
    } /* end try */
    catch ( ParsingError err ) {
@@ -343,7 +342,6 @@ int mapeditorMainThread ( void* _mapname )
    
    mousevisible(true);
 
-   gameStartupComplete = true;
    getPGApplication().Run();
    return 0;
 }
@@ -380,7 +378,7 @@ int main(int argc, char *argv[] )
       exit(0);
    }
 
-   verbosity = cl->r();
+   MessagingHub::Instance().setVerbosity( cl->r() );
 
    #ifdef logging
     logtofile ( kgetstartupmessage() );
@@ -451,8 +449,6 @@ int main(int argc, char *argv[] )
    
 
    virtualscreenbuf.init();
-
-   getPGApplication().setFullscreenImage( "title_mapeditor.jpg" );
 
    {
       int w;

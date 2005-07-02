@@ -89,10 +89,6 @@ extern UnitSets unitSets;
 
 extern void loadUnitSets ( void );
 
-//! displays a message on the log. If msgVerbosity is greater than the game verbosity, the message is NOT printed
-extern void displayLogMessage ( int msgVerbosity, char* message, ... );
-extern void displayLogMessage ( int msgVerbosity, const ASCString& message );
-
 extern int dataVersion;
 extern void checkDataVersion( );
 

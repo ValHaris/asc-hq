@@ -4,3 +4,5 @@ SUBDIRS 		= @GENCL@ docs sdl libs ai graphics unix tools
 
 EXTRA_DIST 		= *.cpp *.h *.inc
 
+htmldoc: doxygen.config
+	doxygen doxygen.config

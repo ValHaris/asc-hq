@@ -25,6 +25,7 @@
 #include "textfileparser.h"
 #include "sgstream.h"
 #include "textfile_evaluation.h"
+#include "messaginghub.h"
 
 
 SigC::Signal0<void> dataLoaderTicker;
@@ -318,6 +319,8 @@ void  loadAllData( bool useCache )
       }
       displayLogMessage ( 4, "loading of cache completed\n");
    } else {
+      MessagingHub::Instance().statusInformation("rebuilding data cache, please be patient");
+      
       loadalltextfiles();
 
       for ( DataLoaders::iterator dl = dataLoaders.begin(); dl != dataLoaders.end(); ++dl) {
@@ -392,7 +395,7 @@ void  loadalltextfiles ( )
       for ( TextPropertyList::iterator j = i->second.begin(); j != i->second.end(); j++ ) {
           displayLogMessage( 9, "Building inheritance: " + (*j)->location + "\n");
           (*j)->buildInheritance( i->second );
-          if ( verbosity >= 10 )
+          if ( MessagingHub::Instance().getVerbosity() >= 10 )
              (*j)->print();
       }
    }

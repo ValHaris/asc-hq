@@ -26,7 +26,6 @@
 #include "sgstream.h"
 #include "errors.h"
 #include "graphicset.h"
-#include "basicmessages.h" 
 #include "errors.h"
 #include "basegfx.h"
 #include "terraintype.h"

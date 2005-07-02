@@ -26,13 +26,6 @@
  #include "global.h"
  #include "misc.h"
 
- extern void fatalError ( const char* formatstring, ... );
- extern void fatalError ( const ASCString& string );
- extern void errorMessage ( const ASCString& string );
- extern void warning ( const ASCString& string );
- extern void longWarning ( const ASCString& string );
- extern void infoMessage ( const ASCString& string );
-
 
  #ifdef HAVE_EXCEPTION
   #include <exception>

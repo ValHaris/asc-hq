@@ -53,7 +53,6 @@
  #include <winuser.h>
 #endif
 
-bool gameStartupComplete = false;
 
 
 char strrstring[200];

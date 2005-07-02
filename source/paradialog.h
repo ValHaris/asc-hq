@@ -60,19 +60,26 @@
 
 class AutoProgressBar;
 
+class StartupScreen: public SigC::Object {
+       PG_Label* infoLabel;
+       PG_Label* versionLabel;
+       AutoProgressBar* progressBar; 
+       SDL_Surface* fullscreenImage;
+        void disp( const ASCString& s );
+     public:
+         StartupScreen( const ASCString& filename, SigC::Signal0<void>& ticker );        
+         ~StartupScreen();
+};
+
  class ASC_PG_App : public PG_Application {
        ASCString themeName;
-       SDL_Surface* fullscreenImage;
-       AutoProgressBar* progress;
-
     public:
        static const int mapDisplayID = 2;
        static const int mainScreenID = 1;
     
        ASC_PG_App ( const ASCString& themeName );
        bool InitScreen ( int w, int h, int depth = 0, Uint32 flags = SDL_SWSURFACE|SDL_HWPALETTE );
-       void setFullscreenImage( const ASCString& name = "");
-       void activateProgressBar( bool active, SigC::Signal0<void>& ticker );
+       
        void reloadTheme();
        int Run ();
        void processEvent();
