@@ -98,6 +98,9 @@ class ContainerBaseType: public LoadableItemType {
 
      TechAdapterDependency techDependency;
 
+     //! the filename of an image that is shown in info dialogs
+     ASCString infoImageFilename;
+
      void runTextIO ( PropertyContainer& pc );
 
      //! can units of the given type be moved into this buildtype? This is a prerequisite - but not the only requirement - for a real unit to move into a real building

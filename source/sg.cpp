@@ -1028,6 +1028,7 @@ class UnitInfoDialog : public Panel {
         int currentWeapon;
         typedef vector< pair<int,int> > EntranceHeights;
         EntranceHeights entranceHeights;
+        Surface infoImage;
 
          void registerSpecialDisplay( const ASCString& name )
          {
@@ -1095,13 +1096,16 @@ class UnitInfoDialog : public Panel {
                   ASCString n = "pad_transport_square" + ASCString::toString(i);
                   PG_Widget* w = FindChild( n, true );
                   if ( w ) {
-                     if ( i == entranceNum )
+                     if ( i == entranceNum ) 
                         w->SetTransparency( 0 );
+                        // w->SetVisible(true );
                      else
                         w->SetTransparency( 255 );
-                     w->Update();
+                        // w->SetVisible(false  );
+                     // w->Update();
                   }
                }
+               Update();
             }
             return true;
          };
@@ -1118,11 +1122,14 @@ class UnitInfoDialog : public Panel {
                   if ( w ) {
                      if ( i == weaponNum )
                         w->SetTransparency( 0 );
+                        // w->SetVisible(true );
                      else
+                        // w->SetVisible(false );
                         w->SetTransparency( 255 );
-                     w->Update();
+                     // w->Update();
                   }
                }
+               Update();
                currentWeapon = weaponNum;
                if ( weaponGraph )
                   weaponGraph->Update();
@@ -1233,6 +1240,16 @@ class UnitInfoDialog : public Panel {
                catch ( ... ) {
                   displaymessage( "unknown exception", 1 );
                   return;
+               }
+
+               if ( !vt->infoImageFilename.empty() && exist( vt->infoImageFilename )) {
+                  PG_Image* img = dynamic_cast<PG_Image*>(FindChild( "picture" ));
+                  if ( img ) {
+                     tnfilestream stream ( vt->infoImageFilename, tnstream::reading );
+                     infoImage.readImageFile( stream );
+                     img->SetDrawMode( PG_Draw::STRETCH );
+                     img->SetImage( infoImage.getBaseSurface(), false );
+                  }
                }
 
                if ( veh )

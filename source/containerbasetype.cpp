@@ -103,6 +103,7 @@ void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
       view = 255;
 
    pc.addInteger( "Jamming", jamming, 0 );
+   pc.addString( "InfoImage", infoImageFilename, "" );
 }
 
 
@@ -117,7 +118,7 @@ bool ContainerBaseType :: vehicleFit ( const Vehicletype* fzt ) const
    return false;
 }
 
-const int containerBaseTypeVersion = 1;
+const int containerBaseTypeVersion = 2;
 
 
 void ContainerBaseType :: read ( tnstream& stream )
@@ -136,6 +137,9 @@ void ContainerBaseType :: read ( tnstream& stream )
    entranceSystems.resize(num);
    for ( int i = 0; i < num; i++ )
       entranceSystems[i].read( stream );
+
+   if ( version >= 2 )
+      infoImageFilename = stream.readString();
 }
 
 void ContainerBaseType :: write ( tnstream& stream ) const
@@ -148,6 +152,7 @@ void ContainerBaseType :: write ( tnstream& stream ) const
    stream.writeInt( entranceSystems.size() );
    for ( int i = 0; i < entranceSystems.size(); i++ )
       entranceSystems[i].write( stream );
+   stream.writeString( infoImageFilename );
 }
 
 const int containerBaseTypeTransportVersion = 2;
@@ -174,6 +179,7 @@ void ContainerBaseType :: TransportationIO :: read ( tnstream& stream )
       movecost = stream.readInt();
    else
       movecost = -1;
+   
 }
 
 void ContainerBaseType :: TransportationIO :: write ( tnstream& stream ) const

@@ -229,7 +229,7 @@ class AutoProgressBar: public PG_ProgressBar {
       void close( )
       {
          try {
-            tn_file_buf_stream stream ( "progress.dat", tnstream::writing  );
+            tnfilestream stream ( "progress.dat", tnstream::writing  );
             stream.writeInt( 1 );
             stream.writeInt( lastticktime - starttime );
             writeClassContainer( newTickTimes, stream );
@@ -728,11 +728,24 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
       userHandler( label, pc, parent, widgetParams );
    }
 
+
+   vector<ASCString> childNames;
+
+
+   if ( pc.find( "ChildWidgets" )) 
+      pc.addStringArray( "ChildWidgets", childNames );
+
+
    int widgetNum;
    pc.addInteger( "WidgetNum", widgetNum, 0 );
 
-   for ( int i = 0; i < widgetNum; ++i) {
-      pc.openBracket( ASCString("Widget") + strrr(i));
+   for ( int i = 0; i < widgetNum; ++i) 
+      childNames.push_back( ASCString("Widget") + ASCString::toString( i ));
+
+
+
+   for ( int i = 0; i < childNames.size(); ++i) {
+      pc.openBracket( childNames[i] );
 
 
       PG_Rect r = parseRect( pc, parent );
@@ -784,17 +797,28 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
          ASCString text;
          pc.addString( "text", text );
 
-         PG_Label* lb = new PG_Label ( parent, r, text );
+         ASCString style;
+         pc.addString( "style", style, "Label" );
+
+         PG_Label* lb = new PG_Label ( parent, r, text, style );
          widgetParams.assign ( lb );
          parsePanelASCTXT( pc, lb, widgetParams );
       }
       if ( type == TextOutput ) {
-         PG_Label* lb = new PG_Label ( parent, r );
+         ASCString style;
+         pc.addString( "style", style, "Label" );
+
+         PG_Label* lb = new PG_Label ( parent, r, PG_NULLSTR, style );
+
          widgetParams.assign ( lb );
          parsePanelASCTXT( pc, lb, widgetParams );
       }
       if ( type == MultiLineText ) {
-         PG_MultiLineEdit* lb = new PG_MultiLineEdit ( parent, r );
+         ASCString style;
+         pc.addString( "style", style, "LineEdit" );
+
+         PG_MultiLineEdit* lb = new PG_MultiLineEdit ( parent, r, style );
+
          lb->SetBorderSize(0);
          lb->SetEditable(false);
          widgetParams.assign ( lb );
@@ -843,7 +867,10 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
          parsePanelASCTXT( pc, sw, widgetParams );
       }
       if ( type == ScrollArea ) {
-         PG_ScrollWidget* sw = new PG_ScrollWidget( parent, r );
+         ASCString style;
+         pc.addString( "style", style, "ScrollWidget" );
+
+         PG_ScrollWidget* sw = new PG_ScrollWidget( parent, r, style );
          ASCString scrollbar;
          pc.addString( "horizontal_scollbar", scrollbar, "true" );
          if ( scrollbar.compare_ci( "false" ) == 0)
@@ -1038,6 +1065,11 @@ bool Panel::setup()
 
      	   MoveWidget( x1, y1, false );
       }
+
+      int titlebarHeight;
+      pc.addInteger("Titlebarheight", titlebarHeight, -1 );
+      if ( titlebarHeight != -1 )
+         SetTitlebarHeight( titlebarHeight );
 
       widgetParameters.runTextIO( pc );
       widgetParameters.assign ( this );

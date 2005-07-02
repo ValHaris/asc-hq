@@ -16,9 +16,16 @@
 ;      gut finden
 ;
 ; Bei LineWidgets bitte immer die Größe eines einzelnen Elements angeben, nicht die des gesamten Bereichs!
+;
+; Das "picture" widget sollte vom Typ Image sein und das NO PICTURE überdecken
+;
+; Für die Paragui-Objekte ScrollWidget, Multilinetextedit und Scrollbar müsstest Du noch den Style anpassen. Versuch' bitte, ohne
+; vollständig transparentes Hintergrundbild auszukommen und benutz' stattdessen lieber 
+
 
 
 panel {
+   TitlebarHeight = 0
    width = 746
    height = 615
    FontColor = 0xc9f4ae
