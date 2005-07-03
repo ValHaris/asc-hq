@@ -40,7 +40,6 @@
 #include "events.h"
 #include "stack.h"
 #include "dlg_box.h"
-#include "loadpcx.h"
 #include "paradialog.h"
 
 
@@ -1913,9 +1912,6 @@ void displaymessage( const ASCString& text, int num  )
    if ( num == 2 )
       displayInternally = false;
    #endif
-
-   if ( !graphicinitialized )
-      displayInternally = false;
 
 
    if ( num == 2 )

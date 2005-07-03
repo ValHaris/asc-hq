@@ -116,7 +116,6 @@ void checkbi3dir ( void )
          }
       }
      if ( notfound ) {
-         if ( !graphicinitialized ) {
             char bi3path[10000];
             printf("Enter Battle Isle directory:\n" );
             scanf ( "%s", bi3path );
@@ -124,11 +123,6 @@ void checkbi3dir ( void )
             CGameOptions::Instance()->bi3.dir = bi3path;
             appendbackslash ( CGameOptions::Instance()->bi3.dir );
             CGameOptions::Instance()->setChanged();
-         } else {
-            closegraphics();
-            printf("\nplease run ASC first to create a config file !\n");
-            exit(0);
-         }
      }
    } while ( notfound ); /* enddo */
    battleisleversion = 3;

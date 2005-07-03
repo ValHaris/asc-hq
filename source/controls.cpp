@@ -42,7 +42,6 @@
 #include "controls.h"
 #include "network.h"
 #include "events.h"
-#include "loadpcx.h"
 #include "stack.h"
 #include "dlg_box.h"
 #include "dialog.h"

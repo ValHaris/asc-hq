@@ -388,7 +388,6 @@
         <filename name="background" value="asc/top_grey_panel.bmp"/>
         <property name="backmode" value="TILE"/>
         <property name="blend" value="0"/>
-        <property name="bordersize" value="0"/>
     </object>
     <object>
         <name value="CloseButton"/>
@@ -416,8 +415,19 @@
           <gradient name="gradient" color0="0x00FF7b56" color1="0x00737b56" color2="0x00737b56" color3="0x00737b56"/>
           <property name="blend" value="0"/>
       </object>
+    <object>
+        <name value="LineEdit"/>
+        <color name="textcolor" value="0x00303030"/>
+        <filename name="background" value="asc/top_grey_panel.bmp"/>
+        <property name="backmode" value="STRETCH"/>
+         <gradient name="gradient" color0="0x00FF0000" color1="0x00000000" color2="0x00FF0000" color3="0x000000FF"/>
+        <property name="blend" value="128"/>
+        <property name="bordersize" value="5"/>
+    </object>
      </widget>
 
+     
+     
     <widget>
         <type value="ListBox"/>
         <object>

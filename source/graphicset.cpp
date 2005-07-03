@@ -30,7 +30,6 @@
 #include "typen.h"
 #include "sgstream.h"
 
-#include "loadpcx.h"
 #include "itemrepository.h"
 
 

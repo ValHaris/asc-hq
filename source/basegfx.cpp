@@ -1206,13 +1206,6 @@ void* uncompress_rlepict ( void* pict )
       return NULL;
 }
 
-void setvgapalette256 ( dacpalette256 pal )
-{
-   if ( graphicinitialized )
-      set_vgapalette256( pal );
-   else
-      memcpy ( activepalette256, pal, sizeof ( *activepalette256 ));
-}
 
 
 void ellipse ( int x1, int y1, int x2, int y2, int color, float tolerance )

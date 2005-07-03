@@ -31,11 +31,6 @@
 SDL_Surface *screen = NULL;
 int fullscreen = 1;
 
-int reinitgraphics(int modenum)
-{
-  return 1;
-}
-
 int isfullscreen ( void )
 {
    if ( !screen )
@@ -49,31 +44,6 @@ void setWindowCaption ( const char* s )
    SDL_WM_SetCaption ( s, NULL );
 }
 
-
-
-int initgraphics ( int x, int y, int depth, SDLmm::Surface* icon )
-{
-  if ( SDL_Init(SDL_INIT_VIDEO  ) < 0 )  // | SDL_INIT_NOPARACHUTE
-     fatalError ( ASCString("Couldn't initialize SDL: ") + SDL_GetError());
-  setWindowCaption ( "Advanced Strategic Command" );
-
-  if ( icon )
-     SDL_WM_SetIcon( icon->GetSurface(), NULL );
-
-
-  /* Initialize the display in a 640x480 8-bit palettized mode */
-  int flags = SDL_SWSURFACE;
-  if ( fullscreen )
-     flags |= SDL_FULLSCREEN;
-
-  SDL_Surface* screen = SDL_SetVideoMode(x, y, depth, flags ); // | SDL_FULLSCREEN
-  if ( !screen )
-     fatalError ( "Couldn't set %dx%dx%d video mode: %s\n", x,y,depth, SDL_GetError());
-
-  initASCGraphicSubsystem ( screen, icon );
-
-  return 1;
-}
 
 bool dummyScreenPaletteSetup = false;
 
@@ -100,16 +70,8 @@ void initASCGraphicSubsystem ( SDL_Surface* _screen, SDLmm::Surface* icon )
      
 
   *hgmp = *agmp;
-
-  graphicinitialized = 1;
 }
 
-
-void  closegraphics ( void )
-{
-        SDL_FreeSurface ( screen );
-        screen = NULL;
-}
 
 SDL_Surface* getScreen()
 {
@@ -183,31 +145,5 @@ int copy2screen( int x1, int y1, int x2, int y2 )
    return 0;
 }
 
-
-void setdisplaystart( int x, int y)
-{
-}
-
-void set_vgapalette256 ( dacpalette256 pal )
-{
-        SDL_Color spal[256];
-        int col;
-        for ( int i = 0; i < 256; i++ ) {
-           for ( int c = 0; c < 3; c++ ) {
-         if ( pal[i][c] == 255 )
-            col = activepalette[i][c];
-         else {
-            col = pal[i][c];
-            activepalette[i][c] = col;
-         }
-         switch ( c ) {
-            case 0: spal[i].r = col * 4; break;
-            case 1: spal[i].g = col * 4; break;
-            case 2: spal[i].b = col * 4; break;
-         };
-     }
-        }       
-        SDL_SetColors ( screen, spal, 0, 256 );
-}
 
 

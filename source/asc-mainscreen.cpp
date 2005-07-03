@@ -336,37 +336,47 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
 
    displayLogMessage ( 5, "MainScreenWidget: initializing panels:\n");
 
+   dataLoaderTicker();
+
    displayLogMessage ( 7, "  Mapdisplay ");
    mapDisplay = new MapDisplayPG( this, PG_Rect(15,30,Width() - 200, Height() - 73));
    mapDisplay->SetID( ASC_PG_App::mapDisplayID );
+   dataLoaderTicker();
 
    displayLogMessage ( 7, "done\n  Menu ");
    menu = new Menu(this, PG_Rect(15,0,Width()-200,20));
 
+   dataLoaderTicker();
    SetID( ASC_PG_App::mainScreenID );
 
    displayLogMessage ( 7, "done\n  ButtonPanel ");
    spawnPanel ( ButtonPanel );
 
+   dataLoaderTicker();
    // displayLogMessage ( 7, "done\n  WindInfo ");
    // spawnPanel ( WindInfo );
 
    displayLogMessage ( 7, "done\n  UnitInfo ");
+   dataLoaderTicker();
    spawnPanel ( UnitInfo );
 
    displayLogMessage ( 7, "done\n  OverviewMap ");
+   dataLoaderTicker();
    spawnPanel ( OverviewMap );
 
    displayLogMessage ( 5, "done\nMainScreenWidget completed\n");
+   dataLoaderTicker();
 
 
    repaintDisplay.connect ( SigC::bind( SigC::slot( *this, &MainScreenWidget::Update ), true ));
    
    buildBackgroundImage();
+   dataLoaderTicker();
 
    PG_Application::GetApp()->sigAppIdle.connect( SigC::slot( *this, &MainScreenWidget::idleHandler ));
 
    mapChanged.connect( SigC::slot( OverviewMapHolder::clearmap ));
+   dataLoaderTicker();
 }
 
 
@@ -391,8 +401,11 @@ void MainScreenWidget::buildBackgroundImage()
       MegaBlitter< 1, gamemapPixelSize, ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_DirectZoom> blitter;
       blitter.setSize( source.w(), source.h(), Width(), Height(), false );
       
+      dataLoaderTicker();
       blitter.blit( source, backgroundImage, SPoint(0,0) );
-      
+
+      dataLoaderTicker();
+            
       assert( mapDisplay );
       PG_Rect r = *mapDisplay;
       
@@ -414,6 +427,7 @@ void MainScreenWidget::buildBackgroundImage()
       Surface& msgmid   = IconRepository::getIcon("msgline2.png");
       Surface& msgend   = IconRepository::getIcon("msgline3.png");
 
+      dataLoaderTicker();
       
       int mx1 = x1 - borderWidth;
       int mx2 = x2 + borderWidth;
@@ -429,12 +443,15 @@ void MainScreenWidget::buildBackgroundImage()
          backgroundImage.Blit( msgmid, SPoint( mx1 + x, my1 ));
          x += msgmid.w();
       }
+      dataLoaderTicker();
       backgroundImage.Blit( msgmid, SPoint( mx1 + msglength - msgend.w() - msgmid.w(), my1 ));
       
+      dataLoaderTicker();
       backgroundImage.Blit( msgend, SPoint( mx1 + msglength - msgend.w(), my1) );
 
       messageLine = new PG_Label ( this, PG_Rect( mx1 + 20, my1 + 9, msglength - 30, msgend.h() - 18) );
       messageLine->SetFontSize(11);
+      dataLoaderTicker();
          
    }
 }

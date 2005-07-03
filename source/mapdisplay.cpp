@@ -36,7 +36,6 @@
 #include "stack.h"
 #include "loadbi3.h"
 #include "mapalgorithms.h"
-#include "loadpcx.h"
 #include "graphicset.h"
 #include "graphics/blitter.h"
 
@@ -287,7 +286,12 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
       disableKeyboardCursorMovement(false),
       cursor(this)
 {
+   dataLoaderTicker();
+   
    readData();
+   
+   dataLoaderTicker();
+   
    setNewZoom( zoom );
 
    repaintMap.connect( SigC::slot( *this, &MapDisplayPG::updateWidget ));
@@ -296,6 +300,7 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
 
    SetName( "THEMapDisplay");
 
+   dataLoaderTicker();
    SDL_Surface* ws = GetWidgetSurface ();
    if ( ws ) {
       Surface s = Surface::Wrap( ws );
@@ -306,6 +311,7 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
    
    theMapDisplay = this;
    theGlobalMapDisplay = this;
+   dataLoaderTicker();
 }
 
 

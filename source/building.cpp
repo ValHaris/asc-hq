@@ -43,7 +43,6 @@
 #include "building.h"
 #include "building_controls.h"
 #include "controls.h"
-#include "loadpcx.h"
 #include "sg.h"
 #include "stack.h"
 #include "gamedlg.h"
@@ -2037,11 +2036,13 @@ void  ccontainer :: run ()
             if ( input==ct_right || input==ct_6k) movemark(cursor_right);
 
          }
+         /*
          if ( input == ct_0 )  {
             char* nm = getnextfilenumname ( "screen", "pcx", 0 );
             writepcx ( nm, 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, pal );
             displaymessage2( "screen saved to %s", nm );
          }
+         }*/
 
       }
 

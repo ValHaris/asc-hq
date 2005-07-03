@@ -2,7 +2,7 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.67.2.11 2005-07-02 18:11:41 mbickel Exp $
+//     $Id: edmain.cpp,v 1.67.2.12 2005-07-03 20:57:19 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -30,7 +30,6 @@
 
 
 #include "edmisc.h"
-#include "loadpcx.h"
 #include "loadbi3.h"
 #include "edselfnt.h"
 #include "edglobal.h"
@@ -231,41 +230,6 @@ void checkLeftMouseButton ( )
 
 
 
-//* õS Diverse
-
-void closesvgamode( void )
-{
-   closegraphics();
-}    
-
-
-void showmemory ( void )
-{
-  #ifdef _DOS_
-   npush ( activefontsettings );
-   activefontsettings.length = 99;
-   activefontsettings.background = 0;
-   activefontsettings.color = 14;
-   activefontsettings.justify = lefttext;
-   activefontsettings.font = schriften.smallarial;
-   int mss = getmousestatus();
-
-   int a = maxavail();
-   int b = _memavl();
-   showtext2( strrr ( a ), 210,410 );
-   showtext2( strrr ( b+a ), 310,410 );
-   // showtext2( strrr ( _memmax() ), 10,410 );
-   showtext2( strrr ( b  ), 110,480 );
-   showtext2( strrr ( stackfree ()  ), 410,410 );
-   if (mss == 2)
-      setinvisiblemouserectangle ( -1, -1, -1, -1 );
-
-   npop  ( activefontsettings );
-  #endif
-}
-
-//* õS Main-Program
-
 
 pfont load_font(char* name)
 {
@@ -433,8 +397,6 @@ int main(int argc, char *argv[] )
    
    app.InitScreen( xr, yr, 32, flags);
       
-   atexit ( closesvgamode );
-
    #ifdef pbpeditor
    setWindowCaption ( "Advanced Strategic Command : PBP Editor ");
    #else
@@ -468,9 +430,6 @@ int main(int argc, char *argv[] )
 
    writegameoptions ();
 
-  #ifdef MEMCHK
-   verifyallblocks();
-  #endif
    return 0;
 }
 

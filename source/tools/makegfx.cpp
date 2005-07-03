@@ -43,6 +43,9 @@ bool decodeFileName ( const ASCString& f, int& num )
 
 int main(int argc, char *argv[] )
 {
+   printf("Sorry, makegfx is currently not usable\n");
+   return 0;
+   
    Cmdline cl ( argc, argv );
 
    if ( cl.v() ) {
@@ -72,7 +75,7 @@ int main(int argc, char *argv[] )
    int highestImage = 0;
 
    char tempbuf[10000];
-
+#if 0
    for ( int i = cl.next_param()+1; i < argc; i++ ) {
       tfindfile ff ( argv[i] );
       ASCString filename = ff.getnextname();
@@ -110,7 +113,7 @@ int main(int argc, char *argv[] )
          filename = ff.getnextname();
       }
    }
-
+#endif
    tnfilestream s ( argv[cl.next_param()], tnstream::writing );
    int magic = -1;
    s.writedata2 ( magic );

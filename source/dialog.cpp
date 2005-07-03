@@ -39,7 +39,6 @@
 #include "loaders.h"
 #include "misc.h"
 #include "events.h"
-#include "loadpcx.h"
 #include "stack.h"
 #include "dlg_box.h"
 #include "dialog.h"

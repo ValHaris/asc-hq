@@ -105,7 +105,7 @@ void tpcxheader::write ( tnstream* stream )
 
 #pragma pack()
 
-
+#if 0
 int pcxGetColorDepth ( const ASCString& filename, int* width, int* height )
 {
    tnfilestream stream ( filename.c_str(), tnstream::reading );
@@ -258,7 +258,7 @@ char loadpcxxy( pnstream stream, int x, int y, bool setpalette, int* xsize, int*
          for ( int i = 0; i < 3; i++ )
             for ( int j = 0; j < 256; j++ )
                pal[j][i] >>= 2;
-         setvgapalette256 ( pal );
+         // setvgapalette256 ( pal );
       }
    }
 
@@ -272,7 +272,7 @@ char loadpcxxy ( const ASCString& name, bool setpal, int xpos, int ypos, int* xs
    tnfilestream s ( name, tnstream::reading );
    return loadpcxxy ( &s, xpos, ypos, setpal, xsize, ysize );
 }
-
+#endif
 
 void writepcx ( const ASCString& name, int x1, int y1, int x2, int y2, dacpalette256 pal )
 {

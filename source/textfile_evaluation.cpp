@@ -24,7 +24,6 @@
 #include "stringtokenizer.h"
 #ifdef ParserLoadImages
  #include <SDL_image.h>
- #include "loadpcx.h"
  #include "basegfx.h"
  #include "typen.h"
  #include "graphics/blitter.h"
@@ -196,7 +195,7 @@ const char* fileNameDelimitter = " =*/+<>,";
                NamedIntProperty ( int& property_, int tagNum_, const char** tags_, int defaultValue_ ) : PTNI ( property_, defaultValue_ ), tagNum (tagNum_), tags ( tags_ ) {};
          };
 
-
+/*
          typedef PropertyTemplate<void*> PTIMG;
          class ImageProperty : public PTIMG {
                ASCString fileName;
@@ -206,7 +205,7 @@ const char* fileNameDelimitter = " =*/+<>,";
             public:
                ImageProperty ( void* &property_, const ASCString& fileName_ ) : PTIMG ( property_ ), fileName ( fileName_ ) {};
          };
-
+*/
          typedef PropertyTemplate<Surface> PTIMG2;
          class ASCImageProperty : public PTIMG2 {
                typedef Surface PropertyType;
@@ -480,12 +479,13 @@ bool PropertyContainer::restoreContext( const ASCString& label )
 
 
 #ifdef ParserLoadImages
-
+#if 0
 void PropertyContainer::addImageArray ( const ASCString& name, vector<void*> &property, const ASCString& filename )
 {
    ImageArrayProperty* ip = new ImageArrayProperty ( property, filename );
    setup ( ip, name );
 }
+#endif
 
 void PropertyContainer::addImageArray ( const ASCString& name, vector<Surface> &property, const ASCString& filename )
 {
@@ -493,12 +493,13 @@ void PropertyContainer::addImageArray ( const ASCString& name, vector<Surface> &
    setup ( ip, name );
 }
 
-
+#if 0
 void PropertyContainer::addImage ( const ASCString& name, void* &property, const ASCString& filename )
 {
    ImageProperty* ip = new ImageProperty ( property, filename );
    setup ( ip, name );
 }
+#endif
 
 void PropertyContainer::addImage ( const ASCString& name, Surface &property, const ASCString& filename )
 {
@@ -1115,6 +1116,7 @@ void* getRawFieldMask()
    return mask;
 }
 
+#if 0
 vector<void*> loadImage ( const ASCString& file, int num )
 {
    vector<void*> images;
@@ -1171,7 +1173,7 @@ vector<void*> loadImage ( const ASCString& file, int num )
 
    return images;
 }
-
+#endif
 
 vector<Surface> loadASCImage ( const ASCString& file, int num )
 {
@@ -1217,7 +1219,7 @@ vector<Surface> loadASCImage ( const ASCString& file, int num )
    return images;
 }
 
-
+#if 0
 void* ImageProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {
    void* img;
@@ -1258,6 +1260,7 @@ void* ImageProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) cons
    return img;
 }
 
+
 ASCString ImageProperty::toString() const
 {
    int width, height;
@@ -1268,7 +1271,7 @@ ASCString ImageProperty::toString() const
    writepcx ( valueToWrite, 0, 0, width-1, height-1, pal );
    return valueToWrite;
 }
-
+#endif
 
 ASCImageProperty::PropertyType ASCImageProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {
@@ -1337,7 +1340,7 @@ ASCString ASCImageProperty::toString() const
 }
 
 
-
+#if 0
 ImageArrayProperty::PropertyType ImageArrayProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {
    try {
@@ -1369,7 +1372,7 @@ ASCString ImageArrayProperty::toString() const
    writepcx ( extractFileName_withoutSuffix(fileName) + ".pcx", 0, 0, 1100 - 1, 100 * (num / 10 + 1) - 1, pal );
    return valueToWrite;
 }
-
+#endif
 
 ASCImageArrayProperty::PropertyType ASCImageArrayProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {

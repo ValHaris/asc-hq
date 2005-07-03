@@ -190,9 +190,6 @@ extern void*     xlatbuffer;
  extern SPoint getPixelRotationLocation( SPoint pos, int width, int height, int degrees );
 
 
- //! sets the color palette in 8 bit mode
- extern void setvgapalette256 ( dacpalette256 pal );
-
  //! puts a single pixel on the screen. This is one of the few functions that work in truecolor mode too
  extern void putpixel(int x1, int y1, int color);
  

@@ -78,7 +78,6 @@
 #include "ai/ai.h"
 #include "basegfx.h"
 #include "misc.h"
-#include "loadpcx.h"
 #include "newfont.h"
 #include "events.h"
 #include "typen.h"
@@ -229,23 +228,6 @@ bool maintainencecheck( void )
    return false;
 #endif
 }
-
-
-void* loadpcx2raw( const ASCString& file )
-{
-   int pcxwidth,imgwidth;
-   int pcxheight,imgheight;
-   int depth = pcxGetColorDepth ( file, &pcxwidth, &pcxheight );
-   if ( depth > 8 )
-      fatalError(file + " could not be loaded: only 8 bit images supported");
-
-   tvirtualdisplay vdp ( pcxwidth, pcxheight, 255, 8 );
-   loadpcxxy ( file, 0, 0, 0, &imgwidth, &imgheight );
-   void* img = new char[imagesize (0, 0, imgheight-1, imgwidth-1)];
-   getimage ( 0, 0, imgwidth-1, imgheight-1, img );
-   return img;
-}
-
 
 
 
@@ -1139,9 +1121,9 @@ void execuseraction ( tuseractions action )
 
       case ua_writescreentopcx:
          {
-            char* nm = getnextfilenumname ( "screen", "pcx", 0 );
-            writepcx ( nm, 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, pal );
-            displaymessage2( "screen saved to %s", nm );
+            // char* nm = getnextfilenumname ( "screen", "pcx", 0 );
+            // writepcx ( nm, 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, pal );
+            // displaymessage2( "screen saved to %s", nm );
          }
          break;
 
@@ -1733,12 +1715,12 @@ int gamethread ( void* data )
       }
       
       displayLogMessage ( 5, "loaddata completed successfully.\n" );
-      setvgapalette256(pal);
-      
+      dataLoaderTicker();
       
       displayLogMessage ( 5, "starting music..." );
       startMusic();
       displayLogMessage ( 5, " done \n" );
+      dataLoaderTicker();
       
       onlinehelp = new tsgonlinemousehelp;
       onlinehelpwind = new tsgonlinemousehelpwind;
@@ -1746,6 +1728,7 @@ int gamethread ( void* data )
       repaintDisplay.connect( repaintMap );
       
       mainScreenWidget = new MainScreenWidget( getPGApplication());
+      dataLoaderTicker();
    }
    
    
@@ -1933,8 +1916,6 @@ int main(int argc, char *argv[] )
       fatalError ("Out of memory");
    }
 
-   closegraphics();
-
    delete actmap;
    actmap = NULL;
    
@@ -1945,14 +1926,6 @@ int main(int argc, char *argv[] )
 
    delete onlinehelpwind;
    onlinehelpwind = NULL;
-
-#ifdef MEMCHK
-   verifyallblocks();
-#endif
-
-   #ifdef NO_PARAGUI
-   SDL_Quit();
-   #endif
 
    return(0);
 }

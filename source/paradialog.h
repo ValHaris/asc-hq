@@ -130,6 +130,7 @@ class Panel : public  PG_Window {
             PG_Label::TextAlign textAlign;
             int fontColor;
             ASCString fontName;
+            ASCString style;
             int fontAlpha;
             int fontSize;
             int backgroundColor;

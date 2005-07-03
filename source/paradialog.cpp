@@ -264,7 +264,7 @@ StartupScreen::StartupScreen( const ASCString& filename, SigC::Signal0<void>& ti
    SDL_Surface* screen = PG_Application::GetApp()->GetScreen();
    progressBar = new AutoProgressBar( ticker, NULL, PG_Rect( 0, screen->h - progressHeight, screen->w, progressHeight ) );
    progressBar->Show();
-   infoLabel = new PG_Label( NULL, PG_Rect( screen->w/2, screen->h - progressHeight - 25, screen->w - 20, 20 ));
+   infoLabel = new PG_Label( NULL, PG_Rect( screen->w/2, screen->h - progressHeight - 25, screen->w/2 - 10, 20 ));
    infoLabel->SetAlignment( PG_Label::RIGHT );
    infoLabel->Show();
    if ( MessagingHub::Instance().getVerbosity() > 0 ) {
@@ -285,6 +285,7 @@ StartupScreen::~StartupScreen()
 {
    PG_Application::GetApp()->DeleteBackground(); 
    SDL_FreeSurface( fullscreenImage );   
+   progressBar->close();
    delete progressBar;
    delete infoLabel;
    delete versionLabel;
@@ -594,10 +595,13 @@ void  Panel::WidgetParameters::runTextIO ( PropertyReadingContainer& pc )
    pc.addString("FontName", fontName, fontName );
    pc.addInteger("FontAlpha", fontAlpha, fontAlpha );
    pc.addInteger("FontSize", fontSize, fontSize );
-   pc.addInteger("BackgroundColor", backgroundColor,  backgroundColor );
+   if ( pc.find( "BackgroundColor" )) {
+      pc.addInteger("BackgroundColor", backgroundColor,  backgroundColor );
+      backgroundImage.clear();
+   };
    pc.addInteger("Transparency", transparency, transparency );
    pc.addBool( "hidden", hidden, hidden );
-
+   pc.addString("Style", style, style );
 }
 
 
@@ -618,15 +622,20 @@ void  Panel::WidgetParameters::assign( PG_ThemeWidget* widget )
    if ( !widget )
       return;
 
-   if ( !backgroundImage.empty() )
-      widget->SetBackground( IconRepository::getIcon(backgroundImage).getBaseSurface(), backgroundMode );
-   else
-      widget->SetBackground( NULL );
-
-   widget->SetBackgroundColor( backgroundColor );
-
-   assign( (PG_Widget*)widget );
-
+//   if ( !style.empty() )
+//      widget->LoadThemeStyle( style );
+//   else {
+      
+      if ( !backgroundImage.empty() )
+         widget->SetBackground( IconRepository::getIcon(backgroundImage).getBaseSurface(), backgroundMode );
+      else {
+         widget->SetBackground( NULL );
+         widget->SetSimpleBackground( true );
+      }
+   
+      widget->SetBackgroundColor( backgroundColor );
+      assign( (PG_Widget*)widget );
+//   }
 }
 
 void  Panel::WidgetParameters::assign( PG_Label* widget )
@@ -759,6 +768,10 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
       PG_Rect r = parseRect( pc, parent );
 
       widgetParams.runTextIO( pc );
+      
+      bool hasStyle = pc.find( "style" );
+      ASCString style;
+      pc.addString( "style", style, "Panel" );
 
 
       int type;
@@ -792,9 +805,6 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
          bool mode;
          pc.addBool( "in", mode, true );
 
-         ASCString style;
-         pc.addString( "style", style, "Emboss" );
-
          Emboss* tw = new Emboss ( parent, r );
          // PG_ThemeWidget* tw = new PG_ThemeWidget ( parent, r, style );
          widgetParams.assign ( tw );
@@ -805,31 +815,27 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
          ASCString text;
          pc.addString( "text", text );
 
-         ASCString style;
-         pc.addString( "style", style, "Label" );
-
          PG_Label* lb = new PG_Label ( parent, r, text, style );
-         widgetParams.assign ( lb );
+         if ( !hasStyle )
+            widgetParams.assign ( lb );
          parsePanelASCTXT( pc, lb, widgetParams );
       }
       if ( type == TextOutput ) {
-         ASCString style;
-         pc.addString( "style", style, "Label" );
-
          PG_Label* lb = new PG_Label ( parent, r, PG_NULLSTR, style );
 
-         widgetParams.assign ( lb );
+         if ( !hasStyle )
+            widgetParams.assign ( lb );
          parsePanelASCTXT( pc, lb, widgetParams );
       }
       if ( type == MultiLineText ) {
-         ASCString style;
-         pc.addString( "style", style, "LineEdit" );
 
          PG_MultiLineEdit* lb = new PG_MultiLineEdit ( parent, r, style );
 
-         lb->SetBorderSize(0);
          lb->SetEditable(false);
-         widgetParams.assign ( lb );
+         if ( !hasStyle ) {
+            lb->SetBorderSize(0);
+            widgetParams.assign ( lb );
+         }
          parsePanelASCTXT( pc, lb, widgetParams );
       }
 
@@ -875,9 +881,6 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
          parsePanelASCTXT( pc, sw, widgetParams );
       }
       if ( type == ScrollArea ) {
-         ASCString style;
-         pc.addString( "style", style, "ScrollWidget" );
-
          PG_ScrollWidget* sw = new PG_ScrollWidget( parent, r, style );
          ASCString scrollbar;
          pc.addString( "horizontal_scollbar", scrollbar, "true" );
@@ -888,6 +891,9 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
          if ( scrollbar.compare_ci( "false" ) == 0)
             sw->EnableScrollBar(false, PG_ScrollBar::VERTICAL );
 
+         if ( !hasStyle )
+            widgetParams.assign ( sw );
+            
          parsePanelASCTXT( pc, sw, widgetParams );
       }
 
