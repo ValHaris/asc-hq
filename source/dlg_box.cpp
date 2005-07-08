@@ -1965,10 +1965,10 @@ void displaymessage( const ASCString& text, int num  )
 
    if ( num == 2 ) {
       #ifdef _WIN32_
-        if ( !gameStartupComplete ) {
+//        if ( !gameStartupComplete ) {
            MessageBox(NULL, text.c_str(), "Fatal Error", MB_ICONERROR | MB_OK | MB_TASKMODAL );
            exit(1);
-        }
+  //      }
       #endif
       exit ( 1 );
    }

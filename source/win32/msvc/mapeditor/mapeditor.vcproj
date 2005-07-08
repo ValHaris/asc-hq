@@ -257,6 +257,9 @@
 				RelativePath="..\..\..\messages.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\messaginghub.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\misc.cpp">
 			</File>
 			<File

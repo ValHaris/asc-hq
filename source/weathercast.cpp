@@ -20,7 +20,7 @@
 
 
 
-WeatherPanel::WeatherPanel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme): DashboardPanel( parent, r, panelName_, loadTheme), counter(0) {
+WeatherPanel::WeatherPanel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme): Panel( parent, r, panelName_, loadTheme), counter(0) {
 
     weatherSystem = actmap->weatherSystem;
     turnLabel = new PG_Label(this, PG_Rect(Width() - 108, (Height() - GuiDimension::getButtonHeight()) - GetTextHeight() *2, 10, GetTextHeight() * 2), "Turn: +0");

@@ -36,7 +36,7 @@ typedef list<WindData> WindStack;
 typedef map<const WeatherArea*, WindAccu> WeatherMap;
 
 
-class WeatherPanel: public DashboardPanel{
+class WeatherPanel: public Panel{
 public:
 WeatherPanel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme = true );
 virtual ~WeatherPanel();

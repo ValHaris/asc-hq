@@ -101,7 +101,7 @@ panel {
             height = 32
           } widget1
           widget2 {
-            type = SpecialDisplay
+            type = image
             name = unitpad_3dpic
             x = 0
             y = 0
@@ -469,6 +469,7 @@ panel {
          widget1 {
            type = multilinetext
            name = unitpad_unitabilities
+           transparency = 255
            FontSize = 14
            x = 10
            y = 26
@@ -747,6 +748,7 @@ panel {
          widget1 {
            type = ScrollArea
            name = unitpad_terrainaccessarea
+           transparency = 255
            x = 10
            y = 25
            width = 185
@@ -779,8 +781,8 @@ panel {
              widget1 {
                type = SpecialDisplay
                name = unitpad_unitmove_terrainaccess
-               x = 132
-               width = -10
+               x = 127
+               width = 23
                y = 1
              } widget1
            } LineWidget
@@ -1670,7 +1672,7 @@ panel {
           } widget13
           widget14 {
             type = Image
-            name = unitpad_transort_hoovercraft
+            name = unitpad_transport_hoovercraft
             x = 291
             y = 64
             width = 23
@@ -1908,6 +1910,8 @@ panel {
          widget1 {
            type = multilinetext
            name = unitpad_description_text
+           ; transparency = 255
+           BackgroundImage = lila.png
            x = 10
            y = 25
            FontSize = 11

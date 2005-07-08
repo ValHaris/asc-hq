@@ -64,6 +64,17 @@ class UnitInfoDialog : public Panel {
         EntranceHeights entranceHeights;
         Surface infoImage;
 
+  	     bool eventKeyDown(const SDL_KeyboardEvent* key)
+        {
+           if ( key->keysym.sym == SDLK_ESCAPE ) {
+              QuitModal();
+              return true;
+           }
+           return false;
+        };
+
+
+
          void registerSpecialDisplay( const ASCString& name )
          {
             SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( name, true ) );
