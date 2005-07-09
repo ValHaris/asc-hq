@@ -1859,6 +1859,13 @@ void  mainloop ( void )
 
             case ct_f11: {
 
+               int counter  = 0;
+               for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i )
+                  if ( vehicleTypeRepository.getObject_byPos(i)->movemalustyp == 0 ) {
+                     printf( "%s \n", vehicleTypeRepository.getObject_byPos(i)->name.c_str()  );
+                     ++counter;
+                  }
+               displaymessage("%d / %d", 1, counter, vehicleTypeRepository.getNum() );
                // delete getactfield()->vehicle->aiparam[1];
                // getactfield()->vehicle->aiparam[1] = NULL;
                // displaymap();

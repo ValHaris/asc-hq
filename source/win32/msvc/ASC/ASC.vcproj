@@ -45,6 +45,8 @@
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/ASC.pdb"
+				GenerateMapFile="TRUE"
+				MapLines="TRUE"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool

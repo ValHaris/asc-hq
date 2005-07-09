@@ -825,6 +825,9 @@ void tspfldloaders::readfields ( void )
                int strength = stream->readInt();
                int minetime = stream->readInt();
                int player = stream->readInt();
+               if ( player < 0 || player > 7 )
+                  player = 0;
+
                Mine m ( type, strength, player, spfld );
                if ( objectversion == 1 ) {
                   int endtime = minetime;

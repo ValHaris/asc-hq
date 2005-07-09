@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.132 2005-05-29 19:34:19 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.133 2005-07-09 10:44:46 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -890,7 +890,7 @@ void         tplayerchange::anzeige(void)
    int i;
    for (i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
       int color = actmap->field[i].mineowner();
-      if ( color >= 0 )
+      if ( color >= 0 && color < 8 )
          m[color]++;
    }
    activefontsettings.length = 40;
