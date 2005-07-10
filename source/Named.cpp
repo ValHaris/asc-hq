@@ -59,9 +59,18 @@ const char*	Named::getName() const
    return _name;
 }
 
+// extern "C" __declspec(dllimport) int __cdecl _CrtIsValidHeapPointer(const void * pUserData);
+
 void	Named::setName(const char* pszName)
 {
+//    assert( _CrtIsValidHeapPointer( strdup("Hallo welt")));
+
    if (_name!=NULL)
       free(_name);
    _name	=	(pszName!=NULL && pszName[0])	?	strdup(pszName)	:	NULL;
+
+/*   if ( _name  ) {
+      assert( _CrtIsValidHeapPointer( _name ));
+   }
+*/
 }

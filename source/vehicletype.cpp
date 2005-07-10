@@ -856,7 +856,15 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    if ( pc.find ( "WreckageObject" ) || !pc.isReading() )
       pc.addIntegerArray("WreckageObject", wreckageObject );
 
-   pc.addDFloat("CargoMovementDivisor", cargoMovementDivisor, 2 );
+
+   if ( pc.find( "CargoMovementDivisor" ))
+      pc.addDFloat("CargoMovementDivisor", cargoMovementDivisor);
+   else {
+      pc.openBracket( "Transportation" );
+      pc.addDFloat("CargoMovementDivisor", cargoMovementDivisor, 2 );
+      pc.closeBracket();
+   }
+
 
    pc.addInteger("Weight",  weight);
    pc.openBracket("TerrainAccess" );

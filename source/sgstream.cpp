@@ -761,12 +761,11 @@ void checkDataVersion( )
       versionError ( "main.con", location );
 
 
-   checkFileVersion( "mk1.version", "mk1.con", 11 );
-   checkFileVersion( "mk3.version", "units-mk3.con", 10 );
+   checkFileVersion( "mk1.version", "mk1.con", 13 );
+   checkFileVersion( "mk3.version", "units-mk3.con", 12 );
    checkFileVersion( "buildings.version", "buildings.con", 10 );
-   checkFileVersion( "trrobj.version", "trrobj.con", 12 );
-
-
+   checkFileVersion( "trrobj.version", "trrobj.con", 13 );
+   checkFileVersion( "trrobj2.version", "trrobj2.con", 2 );
 }
 
 //===================================================================================
