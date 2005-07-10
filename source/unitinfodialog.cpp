@@ -339,14 +339,12 @@ class UnitInfoDialog : public Panel {
                   else
                      setLabelText( "unitpad_unitmove_windresistance", "-" );
 
-                  setLabelText( "unitpad_transport_maxtotalweight", vt->maxLoadableWeight );
-                  setLabelText( "unitpad_transport_maxsingleweight", vt->maxLoadableUnitSize );
-                  setLabelText( "unitpad_transport_loadableunits", vt->maxLoadableUnits );
-
-
+                  if ( vt->maxLoadableUnits ) {
+                     setLabelText( "unitpad_transport_maxtotalweight", vt->maxLoadableWeight );
+                     setLabelText( "unitpad_transport_maxsingleweight", vt->maxLoadableUnitSize );
+                     setLabelText( "unitpad_transport_loadableunits", vt->maxLoadableUnits );
+                  }
                }
-
-
 
 
                for ( int i = 0; i < 5; ++i )

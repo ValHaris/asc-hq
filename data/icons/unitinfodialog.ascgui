@@ -27,79 +27,80 @@
 panel {
    TitlebarHeight = 0
    width = 746
-   height = 606
+   height = 615
    FontColor = 0xc9f4ae
    Fontsize = 9
    WidgetNum = 8
    name = MainPanelWidget
    backgroundimage = pad.png
+      
    widget0 {
-        type = dummy
-        name = Padinfos
-        x = 0
-        y = 0
-        widgetnum = 4
-        widget0 {
-          type = SpecialDisplay
-          name = unitpad_unitsymbol
-          x = 605
-          y = 227
-        } widget0
-        widget1 {
-          type = TextOutput
-          TextAlign = CENTER
-          Fontsize = 14
-          name = unitpad_unitname
-          x = 511
-          y = 300
-          widht = 151
-          height = 16
-        } widget1
-        widget2 {
-          type = TextOutput
-          TextAlign = CENTER
-          Fontsize = 11
-          name = unitpad_unitcategory
-          x = 511
-          y = 316
-          widht = 151
-          height = 12
-        } widget2
-        widget3 {
-          type = dummy
-          name = picture
-          x = 80
-          y = 26
-          width = 201
-          height = 151
-          widgetnum = 3
-          widget0 {
-            type = StaticText
-            text = NO
-            TextAlign = CENTER
-            Fontsize = 30
-            x = 78
-            y = 40
-            width = 50
-            height = 32
-          } widget0
-          widget1 {
-            type = StaticText
-            text = PICTURE
-            TextAlign = CENTER
-            Fontsize = 30
-            x = 13
-            y = 75
-            width = 180
-            height = 32
-          } widget1
-          widget2 {
-            type = image
-            name = unitpad_3dpic
-            x = 0
-            y = 0
-          } widget2
-        } widget3
+     type = dummy
+     name = Padinfos
+     x = 0
+     y = 0
+     widgetnum = 4
+     widget0 {
+       type = SpecialDisplay
+       name = unitpad_unitsymbol
+       x = 605
+       y = 227
+     } widget0
+     widget1 {
+       type = TextOutput
+       TextAlign = CENTER
+       Fontsize = 14
+       name = unitpad_unitname
+       x = 511
+       y = 300
+       widht = 151
+       height = 16
+     } widget1
+     widget2 {
+       type = TextOutput
+       TextAlign = CENTER
+       Fontsize = 11
+       name = unitpad_unitcategory
+       x = 511
+       y = 316
+       widht = 151
+       height = 12
+     } widget2
+     widget3 {
+       type = dummy
+       name = picture
+       x = 80
+       y = 26
+       width = 201
+       height = 151
+       widgetnum = 3
+       widget0 {
+         type = StaticText
+         text = NO
+         TextAlign = CENTER
+         Fontsize = 30
+         x = 78
+         y = 40
+         width = 50
+         height = 32
+       } widget0
+       widget1 {
+         type = StaticText
+         text = PICTURE
+         TextAlign = CENTER
+         Fontsize = 30
+         x = 13
+         y = 75
+         width = 180
+         height = 32
+       } widget1
+       widget2 {
+         type = image
+         name = unitpad_3dpic
+         x = 0
+         y = 0
+       } widget2
+     } widget3
    } widget0
 
    widget1 {
@@ -552,9 +553,9 @@ panel {
        x = 0
        y = 0
        FontColor = 0xc9f4ae
-       childwidgets = widget1 widget2 widget3
+       widgetnum = 3
 
-       widget1 {
+       widget0 {
          type = image
          Filename = padspeedscreenwindow.png
          x = 75
@@ -707,9 +708,9 @@ panel {
               height = 16
             } widget0
          } widget5
-       } widget1 
+       } widget0 
    
-       widget2 {
+       widget1 {
          type = image
          Filename = padterrainscreenwindow.png
          x = 75
@@ -775,11 +776,11 @@ panel {
            } widget0
           } widget1
   
-      } widget2
- 
+       } widget1
 
 
-       widget3 {
+
+       widget2 {
          type = image
          Filename = padheightchangescreenwindow.png
          x = 278
@@ -912,7 +913,7 @@ panel {
            } widget7
          } widget1
 
-       } widget3
+       } widget2
      } widget1
    } widget3
 
@@ -1481,6 +1482,7 @@ panel {
             name = pad_transport_in
             x = 0
             y = 0
+            transparency = 255
           } widget0
           widget1 {
             type = image
@@ -1488,6 +1490,7 @@ panel {
             name = pad_transport_out
             x = 80
             y = 0
+            transparency = 255
           } widget1
           widget2 {
             type = image
@@ -1495,6 +1498,7 @@ panel {
             name = pad_transport_docking
             x = 160
             y = 0
+            transparency = 255
           } widget2
         } widget4 
 
