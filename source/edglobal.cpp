@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.62.2.7 2005-06-12 13:46:52 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.62.2.8 2005-07-10 18:31:39 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -247,30 +247,9 @@ void execaction(int code)
     case act_help :   if ( polyfieldmode ) help ( 1040 );
                        else help(1000);
        break;
-    case act_selbodentyp : if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) 
-                              execaction ( act_setactivefieldvals );
-                           execaction( act_switchmaps);
-       break;
-    case act_selbodentypAll : mainScreenWidget->selectTerrain();
-       break;
-    case act_selunit : mainScreenWidget->selectVehicle();
-       break;
     case act_selcolor : {
                        ch = 0;
                        selcolor( ct_f5 );
-                     }
-       break;
-    case act_selbuilding : mainScreenWidget->selectBuilding(); 
-       break;
-    case act_selobject : mainScreenWidget->selectObject();
-       break;
-    case act_selobjectAll: if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) 
-                              execaction ( act_setactivefieldvals );
-                           execaction( act_switchmaps);
-       break;                    
-    case act_selmine : {
-                       ch = 0;
-                       selmine( ct_f8 );
                      }
        break;
     case act_selweather : {
@@ -702,6 +681,27 @@ void execaction_pg(int code)
    switch(code) {
       case act_setactnewweather: weatherConfigurationDialog();
          break;
+    case act_selbodentyp : if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) 
+                              execaction ( act_setactivefieldvals );
+                           execaction( act_switchmaps);
+       break;
+    case act_selbodentypAll : mainScreenWidget->selectTerrain();
+       break;
+    case act_selunit : mainScreenWidget->selectVehicle();
+       break;
+    case act_selbuilding : mainScreenWidget->selectBuilding(); 
+       break;
+    case act_selobject : mainScreenWidget->selectObject();
+       break;
+    case act_selobjectAll: if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) 
+                              execaction ( act_setactivefieldvals );
+                           execaction( act_switchmaps);
+       break;                    
+    case act_selmine : {
+                       ch = 0;
+                       selmine( ct_f8 );
+                     }
+       break;
    };      
 }
 

@@ -194,11 +194,14 @@ extern void sortItems( vector<TerrainType*>& vec );
 class SingleItemWidget : public PG_Widget {
       PG_Window* my_window;
       const MapComponent* it;
+      SingleItemWidget** my_selectedItemMarker;
       static const int labelHeight = 15;
    public:
-      SingleItemWidget( const MapComponent* item, PG_Widget* parent, SPoint pos, PG_Window* window = NULL ) : PG_Widget( parent, PG_Rect( pos.x, pos.y, item->displayWidth(), item->displayHeight() + MapComponent::fontHeight ) ),  my_window(window), it(item)
+      SingleItemWidget( const MapComponent* item, PG_Widget* parent, SPoint pos, PG_Window* window = NULL, SingleItemWidget** selectedItemMarker = NULL ) : PG_Widget( parent, PG_Rect( pos.x, pos.y, item->displayWidth(), item->displayHeight() + MapComponent::fontHeight ) ),  my_window(window), it(item), my_selectedItemMarker( selectedItemMarker )
       {
       }
+      
+      const MapComponent* getMapComponent() { return it; };
 
       int ItemHeight() { 
          return it->displayHeight() + labelHeight; 
@@ -232,7 +235,20 @@ class SingleItemWidget : public PG_Widget {
             if ( button->type == SDL_MOUSEBUTTONUP && button->button == SDL_BUTTON_LEFT ) {
                my_window->Hide();
                my_window->QuitModal();
+               if ( my_selectedItemMarker )
+                  *my_selectedItemMarker = this;
                selection.setSelection( it );
+               return true;
+            }   
+         return false;
+      };
+      
+      bool eventMouseButtonDown (const SDL_MouseButtonEvent *button) {
+         if ( my_window ) 
+            if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == SDL_BUTTON_LEFT ) {
+               if ( my_selectedItemMarker )
+                  *my_selectedItemMarker = this;
+               Update();
                return true;
             }   
          return false;
@@ -240,7 +256,10 @@ class SingleItemWidget : public PG_Widget {
       
       void eventBlit ( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst )
       {
+         if ( my_selectedItemMarker && *my_selectedItemMarker && *my_selectedItemMarker == this)
+            SDL_FillRect( PG_Application::GetScreen(), const_cast<PG_Rect*>(&dst), 0xff666666 );
          it->display( this, PG_Application::GetScreen(), src, dst );
+           
       };
 
 };
@@ -258,7 +277,40 @@ template <class ItemType> class ItemSelector : public PG_Window {
       PG_ScrollWidget* scrollWidget;
       static const int gapWidth = 5;
       PG_Label* nameSearch;
+      SingleItemWidget* selectedItem;
    protected:   
+      bool moveSelection( int amount ) 
+      {
+         WidgetList::iterator i;
+         if ( !selectedItem ) {
+            i = widgets.begin();
+         } else {
+            i = find( widgets.begin(), widgets.end(), selectedItem );
+            if ( i != widgets.end() ) {
+               if ( amount > 0 ) {
+                  if ( widgets.end() - i > amount )
+                     i += amount;
+                  else
+                     i = widgets.end() - 1;
+               } else
+               if ( amount < 0 ) {
+                  if ( i - widgets.begin() >= -amount )
+                     i += amount;
+                  else
+                     i = widgets.begin();
+               }
+            }
+         }
+         
+         if ( *i != selectedItem ) {
+            selectedItem = *i;
+            scrollWidget->ScrollToWidget( *i );
+            Update();
+            return true;
+         } 
+         return false;
+      }
+   
       bool eventKeyDown(const SDL_KeyboardEvent* key) {
          if ( key->keysym.sym == SDLK_BACKSPACE ) {
             ASCString s = nameSearch->GetText();
@@ -268,26 +320,59 @@ template <class ItemType> class ItemSelector : public PG_Window {
             }
             return true;
          } 
+         if ( key->keysym.sym == SDLK_RIGHT )  {
+            moveSelection(1);
+            return true;
+         }
+         if ( key->keysym.sym == SDLK_LEFT )  {
+            moveSelection(-1);
+            return true;
+         }
+         if ( key->keysym.sym == SDLK_UP )  {
+            moveSelection(-columnCount);
+            return true;
+         }
+         if ( key->keysym.sym == SDLK_DOWN )  {
+            moveSelection(columnCount);
+            return true;
+         }
+
+         if ( key->keysym.sym == SDLK_RETURN ) {
+            if ( selectedItem ) {
+               selection.setSelection( selectedItem->getMapComponent() );
+               Hide();
+               QuitModal();
+               return true;
+            }
+         } 
          
+                  
          if ( key->keysym.unicode <= 255 ) {
-            nameSearch->SetText( nameSearch->GetText() + char ( key->keysym.unicode ));
-            locateObject( nameSearch->GetText() );
+            ASCString newtext = nameSearch->GetText() + char ( key->keysym.unicode );
+            if ( locateObject( newtext ) ) 
+               nameSearch->SetText( newtext );
+            
             return true;
          }   
+         
+         
          return false;
       };
       
-      void locateObject( const ASCString& name ) {
+      bool locateObject( const ASCString& name ) {
          for ( WidgetList::iterator i = widgets.begin(); i != widgets.end(); ++i ) {
             if ( (*i)->nameMatch( name )  ) {
+               selectedItem = *i;
                scrollWidget->ScrollToWidget( *i );
-               return;
+               Update();
+               return true;
             }   
          }
+         return false;
       }
       
    public:
-      ItemSelector( PG_Widget *parent, const PG_Rect &r , const ItemRepository<ItemType>& itemRepository ) : PG_Window( parent,r,"Item Selector"), repository( itemRepository), scrollWidget( NULL) {
+      ItemSelector( PG_Widget *parent, const PG_Rect &r , const ItemRepository<ItemType>& itemRepository ) : PG_Window( parent,r,"Item Selector"), repository( itemRepository), scrollWidget( NULL), selectedItem(NULL) {
          columnCount = r.w / (ItemTypeSelector<ItemType>::type::Width()  + gapWidth);
          reLoad();
          setupWidgets();
@@ -318,8 +403,6 @@ template <class ItemType> class ItemSelector : public PG_Window {
                items.push_back(item);
          }
          sortItems( items );
-         // sort( items.begin(), items.end(), itemComp );      
-         // sort( items.begin(), items.end() );      
       };
       
       void setupWidgets()
@@ -327,21 +410,12 @@ template <class ItemType> class ItemSelector : public PG_Window {
          delete scrollWidget;
          scrollWidget = new PG_ScrollWidget( this , PG_Rect( 0, GetTitlebarHeight () + 2, Width(), Height()- GetTitlebarHeight ()- 30 ));
          widgets.clear();
-         /*
-	widgetList->SetDirtyUpdate(false);
-	widgetList->SetTransparency(0);
-	widgetList->SetBackground("default/wnd_close.bmp", PG_Draw::TILE, 0xFF);
-	widgetList->SetBackgroundBlend(0);
-			
-	widgetList->EnableScrollBar(true, PG_ScrollBar::VERTICAL);
-	widgetList->EnableScrollBar(true, PG_ScrollBar::HORIZONTAL);
-        */
+         
          int x = 0;
          int y = 0;
          for ( size_t i = 0; i < items.size(); ++i ) {
             typedef typename ItemTypeSelector<ItemType>::type itt ;
-            widgets.push_back( new SingleItemWidget ( new itt( items[i] ), scrollWidget, SPoint( x * (ItemTypeSelector<ItemType>::type::Width() + gapWidth), y * (ItemTypeSelector<ItemType>::type::Height() + MapComponent::fontHeight + gapWidth) ), this) );
-            // new PG_Button( widgetList, PG_Rect( 10 + x , 10+y , 40,20), items[i]->getName() );
+            widgets.push_back( new SingleItemWidget ( new itt( items[i] ), scrollWidget, SPoint( x * (ItemTypeSelector<ItemType>::type::Width() + gapWidth), y * (ItemTypeSelector<ItemType>::type::Height() + MapComponent::fontHeight + gapWidth) ), this, &selectedItem) );
             ++x;
             if ( x >= columnCount ) {
                x = 0; 
