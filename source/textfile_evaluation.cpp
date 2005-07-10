@@ -726,6 +726,10 @@ ASCString StringProperty::operation_eq ( const TextPropertyGroup::Entry& entry )
     else
        s.erase ( 0, pos );
 
+    pos = s.find_last_not_of ( TextFormatParser::whiteSpace );
+    if ( pos != ASCString::npos && pos+1 < s.length() )
+       s.erase ( pos+1 );
+
     return s;
 }
 
