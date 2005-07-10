@@ -165,7 +165,7 @@ void MapComponent::display( PG_Widget* parent, SDL_Surface * surface, const PG_R
 
 
 
-Surface BasicItem<Vehicletype>::clippingSurface;
+// template<class Vehicletype> Surface BasicItem<Vehicletype>::clippingSurface;
 int VehicleItem::place( const MapCoordinate& mc ) const
 {
    pfield fld = actmap->getField(mc);
@@ -257,7 +257,7 @@ void BuildingItem::display( Surface& s, const SPoint& pos ) const
 
 
 
-Surface BasicItem<ObjectType>::clippingSurface;
+// template<> Surface BasicItem<ObjectType>::clippingSurface;
 int ObjectItem::place( const MapCoordinate& mc ) const
 {
    actmap->getField(mc)->addobject( item );
@@ -265,7 +265,7 @@ int ObjectItem::place( const MapCoordinate& mc ) const
 }
 
 
-Surface BasicItem<TerrainType>::clippingSurface;
+template<typename T> Surface BasicItem<T>::clippingSurface;
 int TerrainItem::place( const MapCoordinate& mc ) const
 {
    pfield fld = actmap->getField(mc);

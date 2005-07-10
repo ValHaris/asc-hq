@@ -288,12 +288,13 @@ class UnitInfoDialog : public Panel {
                }
 
                if ( !vt->infoImageFilename.empty() && exist( vt->infoImageFilename )) {
-                  PG_Image* img = dynamic_cast<PG_Image*>(FindChild( "picture" ));
+                  PG_Image* img = dynamic_cast<PG_Image*>(FindChild( "unitpad_3dpic", true ));
                   if ( img ) {
                      tnfilestream stream ( vt->infoImageFilename, tnstream::reading );
                      infoImage.readImageFile( stream );
                      img->SetDrawMode( PG_Draw::STRETCH );
                      img->SetImage( infoImage.getBaseSurface(), false );
+                     img->SizeWidget( img->GetParent()->w, img->GetParent()->h );
                   }
                }
 
@@ -355,6 +356,7 @@ class UnitInfoDialog : public Panel {
                setLabelText( "unitpad_description_text", vt->infotext );
                
               activate(paneName[0]);
+              Show();
                
            };
 

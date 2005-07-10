@@ -27,20 +27,13 @@
 panel {
    TitlebarHeight = 0
    width = 746
-   height = 615
+   height = 606
    FontColor = 0xc9f4ae
    Fontsize = 9
    WidgetNum = 8
    name = MainPanelWidget
-   localtransparency = 255
-   Widget0 {
-      type = image
-      Filename = pad.png
-      name = pad
-      x = 0
-      y = 9
-      widgetnum = 1
-      widget0 {
+   backgroundimage = pad.png
+   widget0 {
         type = dummy
         name = Padinfos
         x = 0
@@ -107,8 +100,7 @@ panel {
             y = 0
           } widget2
         } widget3
-      } widget0
-    } widget0
+   } widget0
 
    widget1 {
      type = dummy
@@ -249,13 +241,7 @@ panel {
        x = 0
        y = 0
        FontColor = 0xc9f4ae
-       widgetnum = 5
-       widget0 {
-         type = image
-         Filename = padscreen.png
-         x = 53
-         y = 222
-       } widget0
+       childwidgets = widget1 widget2 widget3 widget4
 
        widget1 {
          type = image
@@ -566,13 +552,7 @@ panel {
        x = 0
        y = 0
        FontColor = 0xc9f4ae
-       widgetnum = 4
-       widget0 {
-         type = image
-         Filename = padscreen.png
-         x = 53
-         y = 222
-       } widget0
+       childwidgets = widget1 widget2 widget3
 
        widget1 {
          type = image
@@ -1021,14 +1001,8 @@ panel {
        x = 0
        y = 0
        FontColor = 0xc9f4ae
-       widgetnum = 3
+       widgetnum = 2
        widget0 {
-         type = image
-         Filename = padscreen.png
-         x = 53
-         y = 222
-       } widget0
-       widget1 {
          type = image
          Filename = padweaponscreenwindow.png
          x = 75
@@ -1277,9 +1251,9 @@ panel {
               width = 25
             } widget14
          } widget4 
-       } widget1
+       } widget0
 
-       widget2 {
+       widget1 {
          type = image
          Filename = padweapondiagramscreenwindow.png
          x = 304
@@ -1302,7 +1276,7 @@ panel {
            width = 185
            height = 190
          } widget1
-       } widget2
+       } widget1
      } widget1
    } widget4
 
@@ -1391,14 +1365,8 @@ panel {
        x = 0
        y = 0
        FontColor = 0xc9f4ae
-       widgetnum = 3
+       widgetnum = 2
        widget0 {
-         type = image
-         Filename = padscreen.png
-         x = 53
-         y = 222
-       } widget0
-       widget1 {
          type = image
          Filename = padtransportentrancescreenwindow.png
          x = 75
@@ -1451,9 +1419,9 @@ panel {
              } widget0
           } widget0             
         } LineWidget
-      } widget1
+      } widget0
  
-      widget2 {
+      widget1 {
         type = image
         Filename = padtransportdetailscreenwindow.png
         x = 75
@@ -1795,7 +1763,7 @@ panel {
            height = 13
            width = 25
         } widget15
-      } widget2
+      } widget1
     } widget1
   } widget5
 
@@ -1883,14 +1851,8 @@ panel {
        x = 0
        y = 0
        FontColor = 0xc9f4ae
-       widgetnum = 2
+       widgetnum = 1
        widget0 {
-         type = image
-         Filename = padscreen.png
-         x = 53
-         y = 222
-       } widget0
-       widget1 {
          type = image
          Filename = paddescriptionscreenwindow.png
          x = 75
@@ -1910,8 +1872,7 @@ panel {
          widget1 {
            type = multilinetext
            name = unitpad_description_text
-           ; transparency = 255
-           BackgroundImage = lila.png
+           transparency = 255
            x = 10
            y = 25
            FontSize = 11
@@ -1920,7 +1881,7 @@ panel {
            x2 = -1
            y2 = -10
          } widget1
-       } widget1
+       } widget0
      } widget1
    } widget6
 

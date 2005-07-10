@@ -71,7 +71,7 @@
      public:
         PutPixel( Surface& surface ) : surf ( surface )
         {
-           init( surface );
+           ColorMerger<pixelsize>::init( surface );
         };
 
         void set( SPoint pos, PixelType src )

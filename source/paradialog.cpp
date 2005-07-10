@@ -783,11 +783,25 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
          int imgMode;
          pc.addNamedInteger( "mode", imgMode, imageModeNum, imageModes, 0 );
 
+         
          if ( !filename.empty() ) {
             try {
+               bool dirtyUpdate = true;
                Surface& surf = IconRepository::getIcon(filename);
-
+               if ( surf.GetPixelFormat().BytesPerPixel() == 4 ) {
+                  Uint32* p = (Uint32*) surf.pixels();
+                  int aMask = surf.GetPixelFormat().Amask();
+                  int aShift = surf.GetPixelFormat().Ashift();
+                  for ( int y = 0; y < surf.h() && dirtyUpdate; ++y ) {
+                     for ( int x = 0; x < surf.w() && dirtyUpdate; ++x)
+                        if ( ((p[x] & aMask) >> aShift ) != Surface::opaque )
+                           dirtyUpdate = false;
+                      p += surf.pitch() / 4;
+                  }
+               }
+               
                PG_Image* img = new PG_Image( parent, PG_Point(r.x, r.y ), surf.getBaseSurface(), false, PG_Draw::BkMode(imgMode) );
+               img->SetDirtyUpdate(dirtyUpdate);
 
                widgetParams.assign ( img );
                parsePanelASCTXT( pc, img, widgetParams );

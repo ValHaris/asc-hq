@@ -20,6 +20,7 @@
 
 #include <stdio.h>
 #include <cstring>
+#include <cmath>
 
 #include "global.h"
 #include "ascstring.h"
