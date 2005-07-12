@@ -286,6 +286,7 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
       disableKeyboardCursorMovement(false),
       cursor(this)
 {
+   SetDirtyUpdate(true);
    dataLoaderTicker();
    
    readData();
@@ -903,8 +904,10 @@ void MapDisplayPG::moveCursor( int dir, int step )
       case 0:  pos.y -= 2;
                break;
       case 2:  if ( pos.y & 1 ) {
-                   pos.x += 1;
-                   pos.y -= 1;
+                  if ( pos.x < actmap->xsize-1 ) {
+                     pos.x += 1;
+                     pos.y -= 1;
+                  }
                } else
                    pos.y += 1;
                break;
@@ -1047,8 +1050,12 @@ void MapDisplayPG::Cursor::goTo( const MapCoordinate& position )
       mapDisplay->centerOnField(position);
    pos()=position;
    
-   if ( pos() != oldpos )
-      mapDisplay->updateWidget();
+   if ( pos() != oldpos ) {
+      invisible = 0;
+      mapDisplay->dirty = MapDisplayPG::Curs;
+      mapDisplay->Update();
+      // mapDisplay->updateWidget();
+   }
       
 }
 

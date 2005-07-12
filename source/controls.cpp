@@ -682,12 +682,12 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, Veh
                      int visibility = 0;
                      if ( md ) {
                         displaymessage2 ( "attacking with weapon %d ", atw->num[num] );
-                        /*
-                        cursor.setcolor ( 8 );
+                        
+                        // cursor.setcolor ( 8 );
 
                         if ( fieldvisiblenow ( getfield (ul->eht->xpos, ul->eht->ypos ), actmap->playerView)) {
                            ++visibility;
-                           cursor.gotoxy ( ul->eht->xpos, ul->eht->ypos );
+                           md->cursor_goto( ul->eht->getPosition() );
                            int t = ticker;
                            while ( t + 15 > ticker )
                               releasetimeslice();
@@ -695,12 +695,12 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, Veh
 
                         if ( fieldvisiblenow ( fld, actmap->playerView)) {
                            ++visibility;
-                           cursor.gotoxy ( pos.x, pos.y );
+                           md->cursor_goto( pos );
                            int t = ticker;
                            while ( t + 15 > ticker )
                               releasetimeslice();
                         }
-
+/*
                         cursor.setcolor ( 0 );
                         cursor.hide();
                         */

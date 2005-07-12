@@ -4,7 +4,6 @@ panel {
    x = -10
    y = 100
  
-   BackgroundColor = 0xffffff
    WidgetNum = 1
    Widget0 {
       type = area
