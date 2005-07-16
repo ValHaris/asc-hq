@@ -1226,8 +1226,14 @@ void showCargoSummary()
       calcCargoSummary( fld->vehicle, summary );
 
       ASCString s;
+
+      map<ASCString, int> sorter;
+
       for ( Summary::iterator i = summary.begin(); i != summary.end(); ++i )
-         s += vehicleTypeRepository.getObject_byID( i->first )->name + ": " + strrr(i->second) + "\n";
+         sorter[vehicleTypeRepository.getObject_byID( i->first )->name] = i->second;
+
+      for ( map<ASCString, int>::iterator i = sorter.begin(); i != sorter.end(); ++i )
+         s += i->first + ": " + strrr(i->second) + "\n";
 
       tviewanytext vat ;
       vat.init ( "Cargo information", s.c_str(), 20, -1 , 450, 480 );
