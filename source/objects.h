@@ -63,6 +63,22 @@ extern const int MineBasePunch[cminenum]  ;
 
 enum MineTypes { cmantipersonnelmine = 1 , cmantitankmine, cmmooredmine, cmfloatmine  };
 
+class MineType {
+      MineTypes type;
+   public:
+      int id;
+      ASCString name;
+      ASCString location;
+      
+      MineType( MineTypes t ) : type ( t ), id( int(t)) {};
+      MineType( const MineType& w ) : type ( w.type ) {};
+      ASCString getName() const {
+         return MineNames[int(type)-1];
+      };
+      
+      void paint ( Surface& surface, SPoint pos ) const ;
+};
+
 
 class Mine : public AgeableItem {
    public:

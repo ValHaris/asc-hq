@@ -69,7 +69,7 @@ void ItemRepository<T>::add( T* obj )
 
 
 template<class T>
-void ItemRepository<T>::readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location )
+void ItemRepositoryLoader<T>::readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location )
 {
    T* t = new T;
    t->runTextIO ( prc );
@@ -81,7 +81,7 @@ void ItemRepository<T>::readTextFiles( PropertyReadingContainer& prc, const ASCS
 
 
 template<class T>
-void ItemRepository<T>::read( tnstream& stream )
+void ItemRepositoryLoader<T>::read( tnstream& stream )
 {
    int version = stream.readInt();
    if ( version != 1 )
@@ -104,22 +104,15 @@ void ItemRepository<T>::read( tnstream& stream )
 
 
 template<class T>
-void ItemRepository<T>::write( tnstream& stream )
+void ItemRepositoryLoader<T>::write( tnstream& stream )
 {
    stream.writeInt( 1 );
-   stream.writeInt( container.size() );
-   for ( typename vector<T*>::iterator i = container.begin(); i != container.end(); ++i ) {
+   stream.writeInt( ItemRepository<T>::container.size() );
+   for ( typename vector<T*>::iterator i = ItemRepository<T>::container.begin(); i != ItemRepository<T>::container.end(); ++i ) {
        (*i)->write( stream );
        stream.writeString ( (*i)->filename );
        stream.writeString ( (*i)->location );
    }
-}
-
-template<class T>
-ItemRepository<T>::~ItemRepository()
-{
-   for ( typename ItemContainerType::iterator i = container.begin(); i != container.end(); ++i )
-      delete *i;
 }
 
 
@@ -129,12 +122,23 @@ void ItemRepository<T>::addIdTranslation( int from, int to )
     idTranslation[from] = to;
 }
 
+MineTypeRepository  mineTypeRepository;
 
-ItemRepository<Vehicletype>  vehicleTypeRepository( "vehicletype" );
-ItemRepository<TerrainType>  terrainTypeRepository( "terraintype" );
-ItemRepository<ObjectType>   objectTypeRepository ( "objecttype" );
-ItemRepository<BuildingType> buildingTypeRepository ("buildingtype");
-ItemRepository<Technology>   technologyRepository ( "technology");
+
+MineTypeRepository::MineTypeRepository() : ItemRepository<MineType>("Mines")
+{
+   add( new MineType( cmantipersonnelmine ) );
+   add( new MineType( cmantitankmine ) );
+   add( new MineType( cmmooredmine ) );
+   add( new MineType( cmfloatmine ) );
+}
+
+
+ItemRepositoryLoader<Vehicletype>  vehicleTypeRepository( "vehicletype" );
+ItemRepositoryLoader<TerrainType>  terrainTypeRepository( "terraintype" );
+ItemRepositoryLoader<ObjectType>   objectTypeRepository ( "objecttype" );
+ItemRepositoryLoader<BuildingType> buildingTypeRepository ("buildingtype");
+ItemRepositoryLoader<Technology>   technologyRepository ( "technology");
 
 TechAdapterContainer techAdapterContainer;
 
@@ -516,6 +520,11 @@ bool ItemFiltrationSystem::isFiltered( const ObjectType* item )
 bool ItemFiltrationSystem::isFiltered( const TerrainType* item )
 {
    return isFiltered( Terrain, item->id );
+}
+
+bool ItemFiltrationSystem::isFiltered( const MineType* item )
+{
+   return false;
 }
 
 

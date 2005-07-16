@@ -201,7 +201,7 @@ Menu::Menu ( PG_Widget *parent, const PG_Rect &rect)
 MainScreenWidget::MainScreenWidget( PG_Application& application )
               : PG_Widget(NULL, PG_Rect ( 0, 0, app.GetScreen()->w, app.GetScreen()->h ), false),
               app ( application ) , messageLine(NULL), lastMessageTime(0), 
-              vehicleSelector( NULL ), buildingSelector( NULL ), objectSelector(NULL), terrainSelector(NULL), 
+              vehicleSelector( NULL ), buildingSelector( NULL ), objectSelector(NULL), terrainSelector(NULL), mineSelector(NULL),
               weatherSelector( NULL ), selectionName(NULL), coordinateDisplay(NULL), currentSelectionWidget(NULL)
 {
 
@@ -253,19 +253,26 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
    PG_Button* button = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Vehicle" );
    button->sigClick.connect( SigC::slot( *this, &MainScreenWidget::selectVehicle ));
    ypos += 25;
+   new PG_ToolTipHelp( button, "test" );
    
    PG_Button* button2 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Building" );
    button2->sigClick.connect( SigC::slot( *this, &MainScreenWidget::selectBuilding ));
    ypos += 25;
+   new PG_ToolTipHelp( button2, "test2" );
 
    PG_Button* button3 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Object" );
    button3->sigClick.connect( SigC::slot( *this, &MainScreenWidget::selectObject ));
    ypos += 25;
+   new PG_ToolTipHelp( button3, "MOOM" );
    
    PG_Button* button4 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Terrain" );
    button4->sigClick.connect( SigC::slot( *this, &MainScreenWidget::selectTerrain ));
    ypos += 25;
- 
+
+   PG_Button* button5 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Mine" );
+   button5->sigClick.connect( SigC::slot( *this, &MainScreenWidget::selectMine ));
+   ypos += 25;
+    
    
    new PG_Label( this, PG_Rect( xpos, ypos, w/2 - 5, 20), "Brush:");
    brushSelector = new DropDownSelector( this, PG_Rect( xpos+w/2+5, ypos, w/2-5, 20));
@@ -523,6 +530,16 @@ bool MainScreenWidget :: selectTerrain()
       
    terrainSelector->Show();
    terrainSelector->RunModal();
+   return true;
+}
+
+bool MainScreenWidget :: selectMine()
+{
+   if ( !mineSelector ) 
+      mineSelector = new ItemSelector<MineType>( this, PG_Rect( Width()-300, 100, 280, Height()-150), mineTypeRepository);
+      
+   mineSelector->Show();
+   mineSelector->RunModal();
    return true;
 }
 

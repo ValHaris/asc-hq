@@ -65,7 +65,6 @@
 
    tfontsettings        rsavefont;
    int                  lastselectiontype;
-   selectrec            sr[10];
 
    char         tfill,polyfieldmode;
    int          fillx1, filly1;
@@ -956,28 +955,6 @@ void         setstartvariables(void)
    auswahlm = 1;
    auswahlw = 0;
    farbwahl = 0;
-
-   sr[0].maxanz = terrainTypeRepository.getNum();
-   sr[0].showall = true;
-   sr[1].maxanz = vehicleTypeRepository.getNum();
-   sr[1].showall = true;
-   sr[2].maxanz = 9;
-   sr[2].showall = true;
-   sr[3].maxanz = buildingTypeRepository.getNum();
-   sr[3].showall = true;
-   sr[4].maxanz = vehicleTypeRepository.getNum();
-   sr[4].showall = false;
-   sr[5].maxanz = objectTypeRepository.getNum();
-   sr[5].showall = true;
-   sr[6].maxanz = vehicleTypeRepository.getNum();
-   sr[6].showall = false;
-   sr[7].maxanz = vehicleTypeRepository.getNum();
-   sr[7].showall = false;
-   sr[8].maxanz = minecount;
-   sr[8].showall = true;
-   sr[9].maxanz = cwettertypennum;
-   sr[9].showall = true;
-
 }
 
 

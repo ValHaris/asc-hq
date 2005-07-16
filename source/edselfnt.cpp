@@ -91,7 +91,6 @@ void SelectionHolder::pickup ( pfield fld )
 
 
 
-
 bool vehicleComp( const Vehicletype* v1, const Vehicletype* v2 )
 {
    int id1 = getUnitSetID(v1);
@@ -122,6 +121,11 @@ bool terrainComp( const TerrainType* v1, const TerrainType* v2 )
       return v1->name < v2->name;
 }
 
+bool mineComp( const MineType* v1, const MineType* v2 )
+{
+   return v1->id < v2->id;
+}
+
 
 void sortItems( vector<Vehicletype*>& vec )
 {
@@ -143,6 +147,10 @@ void sortItems( vector<TerrainType*>& vec )
    sort( vec.begin(), vec.end(), terrainComp );
 }
 
+void sortItems( vector<MineType*>& vec )
+{
+   sort( vec.begin(), vec.end(), mineComp );
+}
 
 
 void MapComponent::display( PG_Widget* parent, SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst ) const
@@ -272,6 +280,13 @@ int TerrainItem::place( const MapCoordinate& mc ) const
    fld->typ = item->weather[0]; 
    fld->setweather( selection.getWeather() );
    fld->setparams();
+   return 0;
+}
+
+
+int MineItem::place( const MapCoordinate& mc ) const
+{
+   actmap->getField(mc)->putmine( selection.getPlayer(), item->id, MineBasePunch[item->id-1] );
    return 0;
 }
 

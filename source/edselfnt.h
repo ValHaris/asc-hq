@@ -31,6 +31,7 @@
 
 #include "events.h"
 #include "itemrepository.h"
+#include "objects.h"
 
 
 #define selfontyanf 40       						//Auswahlanzeige Yanf
@@ -183,10 +184,29 @@ template<> class ItemTypeSelector<TerrainType> {
 
 
 
+
+class MineItem : public BasicItem<MineType> {
+    public:  
+       MineItem( const MineType* object ) : BasicItem<MineType>( object ) {};
+       virtual int place( const MapCoordinate& mc ) const;
+       virtual void display( Surface& s, const SPoint& pos ) const { item->paint(s, pos); };
+       virtual MapComponent* clone() const { return new MineItem( item ); };
+};
+
+template<> class ItemTypeSelector<MineType> {
+   public:
+      typedef MineItem type;
+};
+
+
+
 extern void sortItems( vector<Vehicletype*>& vec );
 extern void sortItems( vector<BuildingType*>& vec );
 extern void sortItems( vector<ObjectType*>& vec );
 extern void sortItems( vector<TerrainType*>& vec );
+extern void sortItems( vector<MineType*>& vec );
+
+
 
 
 

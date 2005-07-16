@@ -67,6 +67,7 @@ class MainScreenWidget : public PG_Widget {
     PG_Window* buildingSelector;
     PG_Window* objectSelector;
     PG_Window* terrainSelector;
+    PG_Window* mineSelector;
     DropDownSelector* weatherSelector;
     DropDownSelector* playerSelector;
     DropDownSelector* brushSelector;
@@ -83,7 +84,9 @@ public:
     bool selectBuilding();
     bool selectObject();
     bool selectTerrain();
+    bool selectMine();
     void updateStatusBar();
+    
    
 protected:
     MapDisplayPG* mapDisplay;

@@ -1207,6 +1207,70 @@ void warningMessageDialog( const ASCString& message )
 
 
 
+
+
+
+
+class  MessageDialog : public ASC_PG_Dialog {
+public:
+	/**
+	Creates a PopUp with 2 Buttons
+		
+	@param parent Parent widget
+	@param r rectangle of PopUp
+	@param windowtitle Title of window
+	@param windowtext Text to appear in window
+	@param btn1 Struct PG_Rect to create Button 1
+	@param btn1text Text to appear in Button 1
+	@param btn2 Struct PG_Rect to create Button 2
+	@param btn2text Text to appear in Button 2
+	@param textalign Alignment for windowtext
+	@param style widgetstyle to use (default "MessageBox")
+	*/
+	MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const PG_Rect& btn1, const std::string& btn1text, const PG_Rect& btn2, const std::string& btn2text, PG_Label::TextAlign textalign = PG_Label::CENTER, const std::string& style="MessageBox");
+
+	/**
+	Creates a PopUp with 1 Button
+
+	@param parent Parent widget
+	@param r rectangle of PopUp
+	@param windowtitle Title of window
+	@param windowtext Text to appear in window
+	@param btn1 Struct PG_Rect to create Button 1
+	@param btn1text Text to appear in Button 1
+	@param textalign Alignment for windowtext
+	@param style widgetstyle to use (default "MessageBox")
+	*/
+	MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const PG_Rect& btn1, const std::string& btn1text, PG_Label::TextAlign textalign = PG_Label::CENTER, const std::string& style="MessageBox");
+
+	/**
+	Destructor
+	*/
+	~MessageDialog();
+
+	void LoadThemeStyle(const std::string& widgettype);
+
+protected:
+
+	/**
+	Checks if button is pressed
+
+	@param button pointer to PG_BUtton
+	*/
+	virtual bool handleButton(PG_Button* button);
+
+	PG_Button* my_btnok;
+	PG_Button* my_btncancel;
+
+private:
+
+	PG_RichEdit* my_textbox;
+	int my_msgalign;
+
+	void Init(const std::string& windowtext, int textalign, const std::string& style) ;
+};
+
+
 MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const PG_Rect& btn1, const std::string& btn1text, const PG_Rect& btn2, const std::string& btn2text, PG_Label::TextAlign textalign, const std::string& style) :
 ASC_PG_Dialog(parent, r, windowtitle, MODAL) {
 
@@ -1265,4 +1329,146 @@ bool MessageDialog::handleButton(PG_Button* button) {
         quitModalLoop( button->GetID() );
 	return true;
 }
+
+
+
+
+
+
+
+ 
+
+
+PG_ToolTipHelp :: PG_ToolTipHelp( PG_Widget* parent, const std::string& text, const std::string &style, bool deleteOnParentDeletion ) : parentWidget(parent), lastTick(0), labelStyle(style), status(off)
+{
+   if ( !parent )
+      return;
+        
+   parent->sigMouseEnter.connect( SigC::slot( *this, &PG_ToolTipHelp::onParentEnter ), parent );
+   parent->sigMouseLeave.connect( SigC::slot( *this, &PG_ToolTipHelp::onParentLeave ), parent );
+   parent->sigMouseMotion.connect( SigC::slot( *this, &PG_ToolTipHelp::onMouseMotion ));
+   PG_Application::GetApp()->sigAppIdle.connect( SigC::slot( *this, &PG_ToolTipHelp::onIdle ));
+   PG_Application::GetApp()->EnableAppIdleCalls();
+   
+   if ( deleteOnParentDeletion  )
+      parent->sigDelete.connect( SigC::slot( *this, &PG_ToolTipHelp::onParentDelete ));
+      
+         
+   SetText( text );
+}
+
+PG_LineEdit* PG_ToolTipHelp::toolTipLabel = NULL;
+PG_ToolTipHelp::Ticker* PG_ToolTipHelp::ticker = NULL;
+
+
+void PG_ToolTipHelp :: SetText( const std::string& text )
+{
+   my_text = text;
+}
+
+bool PG_ToolTipHelp :: onIdle(  )
+{
+   if ( !ticker )    
+      return false;
+
+   if ( status != counting )
+      return false;
+            
+   if ( ticker->getTicker() > lastTick + 10 ) {
+      if ( status < shown ) {
+         int x, y;
+         PG_Application::GetEventSupplier()->GetMouseState( x,y );
+         ShowHelp( PG_Point(x+5,y+10) );   
+         status = shown;
+      }
+      return true;
+   }
+   return false;
+}
+
+
+bool PG_ToolTipHelp :: onParentEnter( void* dummy )
+{
+   if ( !ticker )
+      ticker = new Ticker(100);
+      
+   status = counting;
+   
+   lastTick = ticker->getTicker();
+}
+
+bool PG_ToolTipHelp :: onParentLeave( void* dummy )
+{
+   // if the ToolTipLabel is beneath the mouse cursor, we'll receive a onParentLeave notification that we'll ignore
+   if ( toolTipLabel && toolTipLabel->IsMouseInside() ) 
+      return false;
+   
+   HideHelp();
+   status = off;
+   return false;
+}
+
+
+bool PG_ToolTipHelp :: onParentDelete( const PG_MessageObject* object )
+{
+   if ( status != off)
+      HideHelp();
+      
+   delete this;
+   return true;
+}
+
+bool PG_ToolTipHelp :: onMouseMotion( const SDL_MouseMotionEvent *motion )
+{
+   if ( ticker ) 
+      lastTick = ticker->getTicker();
+      
+   status = counting;
+      
+   HideHelp();
+}
+
+
+void PG_ToolTipHelp :: ShowHelp( const PG_Point& pos )
+{
+   PG_Point mousePos = pos;
+   /*
+   if ( ! parentWidget->IsInside( mousePos ) ) 
+      mousePos = PG_Point( parentWidget->x + parentWidget->Width() / 2, parentWidget->y + parentWidget->Height() / 2 );
+   */
+
+   if ( toolTipLabel )
+      delete toolTipLabel;
+      
+   toolTipLabel = new PG_LineEdit( NULL, PG_Rect( mousePos.x, mousePos.y, 0, 0 ), labelStyle );
+   toolTipLabel->SetText( my_text );
+   toolTipLabel->SetEditable( false );
+ 
+   Uint16 w;
+   Uint16 h;
+   toolTipLabel->GetTextSize( w, h );
+   
+   PG_Rect r = *toolTipLabel;
+   if ( toolTipLabel->x + toolTipLabel->Width() > PG_Application::GetScreen()->w )
+      r.x = PG_Application::GetScreen()->w - toolTipLabel->Width();
+
+   if ( toolTipLabel->y + toolTipLabel->Height() > PG_Application::GetScreen()->h )
+      r.y = PG_Application::GetScreen()->h - toolTipLabel->Height();
+
+   r.w = w + 6;
+   r.h = h + 4;      
+   toolTipLabel->MoveWidget( r, false );
+   toolTipLabel->Show();
+   toolTipLabel->sigMouseMotion.connect( SigC::slot( *this, &PG_ToolTipHelp::onMouseMotion ));
+}
+
+void PG_ToolTipHelp :: HideHelp( )
+{
+   if ( toolTipLabel ) {
+      delete toolTipLabel;
+      toolTipLabel = NULL;
+   }
+}
+
+
 

@@ -33,6 +33,7 @@
 #include <pgdropdown.h>
 #include <pgcolor.h>
 #include <pgrichedit.h>
+#include <pgtimerobject.h>
 
 #include "pgbutton.h"
 #include "pgwidgetlist.h"
@@ -226,64 +227,56 @@ class SpecialInputWidget : public PG_Widget {
 
 
 
-class  MessageDialog : public ASC_PG_Dialog {
-public:
-	/**
-	Creates a PopUp with 2 Buttons
-		
-	@param parent Parent widget
-	@param r rectangle of PopUp
-	@param windowtitle Title of window
-	@param windowtext Text to appear in window
-	@param btn1 Struct PG_Rect to create Button 1
-	@param btn1text Text to appear in Button 1
-	@param btn2 Struct PG_Rect to create Button 2
-	@param btn2text Text to appear in Button 2
-	@param textalign Alignment for windowtext
-	@param style widgetstyle to use (default "MessageBox")
-	*/
-	MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const PG_Rect& btn1, const std::string& btn1text, const PG_Rect& btn2, const std::string& btn2text, PG_Label::TextAlign textalign = PG_Label::CENTER, const std::string& style="MessageBox");
+class PG_ToolTipHelp: public SigC::Object {
+   private:
+   
+      class Ticker: public PG_TimerObject {
+            volatile Uint32 ticker;
+            Uint32 eventTimer(Uint32 interval) {
+               ++ticker;
+               return interval;
+            };
+         public:
+            Ticker( int interval ) {
+               SetTimer( interval );
+            };   
+            Uint32 getTicker() { 
+               return ticker; 
+            };
+      };
+      
+      static Ticker* ticker;
 
-	/**
-	Creates a PopUp with 1 Button
-
-	@param parent Parent widget
-	@param r rectangle of PopUp
-	@param windowtitle Title of window
-	@param windowtext Text to appear in window
-	@param btn1 Struct PG_Rect to create Button 1
-	@param btn1text Text to appear in Button 1
-	@param textalign Alignment for windowtext
-	@param style widgetstyle to use (default "MessageBox")
-	*/
-	MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const PG_Rect& btn1, const std::string& btn1text, PG_Label::TextAlign textalign = PG_Label::CENTER, const std::string& style="MessageBox");
-
-	/**
-	Destructor
-	*/
-	~MessageDialog();
-
-	void LoadThemeStyle(const std::string& widgettype);
-
-protected:
-
-	/**
-	Checks if button is pressed
-
-	@param button pointer to PG_BUtton
-	*/
-	virtual bool handleButton(PG_Button* button);
-
-	PG_Button* my_btnok;
-	PG_Button* my_btncancel;
-
-private:
-
-	PG_RichEdit* my_textbox;
-	int my_msgalign;
-
-	void Init(const std::string& windowtext, int textalign, const std::string& style) ;
+      void startTimer();
+         
+   protected:
+      PG_Widget* parentWidget;
+      PG_TimerObject::ID id;
+      int lastTick;
+      
+      enum { off, counting, shown } status;
+      
+      std::string my_text;
+      std::string labelStyle;
+      
+      static PG_LineEdit* toolTipLabel;
+      
+      bool onParentEnter( PG_Pointer dummy );
+      bool onParentLeave( PG_Pointer dummy );
+      bool onParentDelete( const PG_MessageObject* object );
+      bool onMouseMotion( const SDL_MouseMotionEvent *motion );
+      bool onIdle();
+      
+      
+   public:
+      PG_ToolTipHelp( PG_Widget* parent, const std::string& text, const std::string &style="ToolTipHelp", bool deleteOnParentDeletion = true  );
+      
+      void SetText( const std::string& text );
+      
+      void ShowHelp( const PG_Point& pos );
+      void HideHelp( );
 };
+
 
 
  extern void warningMessageDialog( const ASCString& message  );

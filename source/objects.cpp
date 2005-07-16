@@ -34,11 +34,16 @@
 #include "objects.h"
 #include "spfst.h"
 #include "gamemap.h"
+#include "graphics/blitter.h"
 
 
 const char* MineNames[cminenum]  = {"antipersonnel mine", "antitank mine", "antisub mine", "antiship mine"};
 const int MineBasePunch[cminenum]  = { 60, 120, 180, 180 };
 
+void MineType :: paint ( Surface& surface, SPoint pos ) const 
+{
+   Mine::paint( type, 0, surface, pos );
+}
 
 
 bool Mine :: attacksunit ( const Vehicle* veh )
@@ -70,8 +75,10 @@ void Mine::paint( MineTypes type, int player, Surface& surf, SPoint pos )
          break;
      };
    }
-   if ( images[type] ) 
-      surf.Blit( *images[type], pos );
+   if ( images[type] ) {
+      megaBlitter< ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain, TargetPixelSelector_All > 
+                ( *images[type], surf, pos, nullParam,nullParam, nullParam,nullParam);
+   }
 }
 
 void Mine::paint( Surface& surf, SPoint pos )

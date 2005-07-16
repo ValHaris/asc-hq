@@ -476,6 +476,21 @@
     </widget>
 
     <widget>
+      <type value="ToolTipHelp"/>
+       <object>
+          <name value="LineEdit"/>
+          <color name="textcolor" value="0x00000000"/>
+          <property name="blend" value="0"/>
+          <property name ="bordersize" value="1"/>
+          <color    name="bordercolor0" value="0x00000000"/>
+          <color    name="bordercolor1" value="0x00000000"/>
+          <property name ="simplebackground" value="1"/>
+          <color    name="backgroundcolor" value="0x00fffe80"/>
+      </object>
+    </widget>    
+    
+    
+    <widget>
         <type value="SpinnerBox"/>
         <object>
             <name value="ButtonUp"/>

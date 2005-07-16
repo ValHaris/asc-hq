@@ -138,8 +138,6 @@ extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePo
     };
 
 
-#define objectcount 4
-#define minecount 4
 
    extern tkey                     ch;
    extern pfield                    pf2;
@@ -154,7 +152,6 @@ extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePo
    extern int                     altefarbwahl;
    extern tfontsettings         rsavefont;
    extern int                   lastselectiontype;
-   extern selectrec              sr[10];
    // extern ppolygon               pfpoly;
    extern char                tfill,polyfieldmode;
    extern int                    fillx1, filly1;
