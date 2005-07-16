@@ -190,13 +190,22 @@ ASCString copytoUpper ( const ASCString& String )
     return l_TempString;
 }
 
-
 ASCString ASCString::toString(int i )
 {
    ASCString s;
    s.format("%d",i);
    return s;
 }
+
+#ifdef SIZE_T_not_identical_to_INT
+ASCString ASCString::toString( size_t i )
+{
+   ASCString s;
+   s.format("%d",i);
+   return s;
+}
+#endif 
+
 
 ASCString ASCString::toString(double d )
 {

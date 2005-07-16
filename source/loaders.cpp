@@ -7,7 +7,7 @@
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-2003  Martin Bickel  and  Marc Schellenberger
+    Copyright (C) 1994-2005  Martin Bickel  and  Marc Schellenberger
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -292,7 +292,7 @@ void      tspfldloaders:: writemessages ( void )
 
       stream->writeInt ( (*mi)->from );
       stream->writeInt ( (*mi)->to );
-      stream->writeInt ( (*mi)->time );
+      stream->writeInt ( (unsigned int) (*mi)->time );
       stream->writeInt ( 1 );
       stream->writeInt ( (*mi)->id );
       stream->writeInt ( (*mi)->gametime.turn() );
@@ -819,6 +819,9 @@ void tspfldloaders::readfields ( void )
                int strength = stream->readInt();
                int minetime = stream->readInt();
                int player = stream->readInt();
+               if ( player < 0 || player > 7 )
+                  player = 0;
+
                Mine m ( type, strength, player, spfld );
                if ( objectversion == 1 ) {
                   int endtime = minetime;

@@ -114,6 +114,7 @@ int rlemain ( char* argv1, char* argv2  )
 
    eof        = 0;
    first_time = 1;
+   count = 0;
 
    buffer = (unsigned char *) malloc ( BUFFER_SIZE );
    if ( buffer == NULL ) {
@@ -176,15 +177,17 @@ int rlemain ( char* argv1, char* argv2  )
 
    /* at EOF, so flush out any remaining bytes to be written */
 
-   if ( count < 3 )  {
-      if ( prev_char == Sentinel )  {
-         fprintf ( outfile, "%c%c",  Sentinel, count );
+   if ( count > 0 ) {
+      if ( count < 3 )  {
+         if ( prev_char == Sentinel )  {
+            fprintf ( outfile, "%c%c",  Sentinel, count );
+         } else
+            do {
+               fputc ( prev_char, outfile );
+            } while ( --count );
       } else
-         do {
-            fputc ( prev_char, outfile );
-         } while ( --count );
-   } else
-      WriteCode ( Sentinel, count, prev_char );
+         WriteCode ( Sentinel, count, prev_char );
+   }      
 
    fclose ( infile );
    fclose ( outfile );
@@ -347,6 +350,9 @@ void testcompress ( char* name, int size )
       }
       int mz = filesize ( "temp.mzl" );
 
+      if ( !size ) {
+         fatalError(" encountered a file of size 0 !" );
+      }
 
       if ( verbose )
          printf ( "; rle: %3d%%; mzl: %3d%%", 100 * rl / size, 100 * mz / size );

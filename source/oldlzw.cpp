@@ -6,57 +6,6 @@
     which should still be loaded.
 */
 
-//     $Id: oldlzw.cpp,v 1.8.2.1 2005-06-09 20:27:13 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.8  2001/10/21 16:07:22  mbickel
-//      New vehicle function: jam only own field
-//      Fixed compilation problem
-//
-//     Revision 1.7  2001/02/18 15:37:16  mbickel
-//      Some cleanup and documentation
-//      Restructured: vehicle and building classes into separate files
-//         tmap, tfield and helper classes into separate file (gamemap.h)
-//      basestrm : stream mode now specified by enum instead of int
-//
-//     Revision 1.6  2001/01/28 14:04:15  mbickel
-//      Some restructuring, documentation and cleanup
-//      The resource network functions are now it their own files, the dashboard
-//       as well
-//      Updated the TODO list
-//
-//     Revision 1.5  2000/10/11 14:26:44  mbickel
-//      Modernized the internal structure of ASC:
-//       - vehicles and buildings now derived from a common base class
-//       - new resource class
-//       - reorganized exceptions (errors.h)
-//      Split some files:
-//        typen -> typen, vehicletype, buildingtype, basecontainer
-//        controls -> controls, viewcalculation
-//        spfst -> spfst, mapalgorithm
-//      bzlib is now statically linked and sources integrated
-//
-//     Revision 1.4  2000/05/03 14:49:14  mbickel
-//      Fixed a bug in LZW decompression
-//
-//     Revision 1.3  1999/11/22 18:27:47  mbickel
-//      Restructured graphics engine:
-//        VESA now only for DOS
-//        BASEGFX should be platform independant
-//        new interface for initialization
-//      Rewrote all ASM code in C++, but it is still available for the Watcom
-//        versions
-//      Fixed bugs in RLE decompression, BI map importer and the view calculation
-//
-//     Revision 1.2  1999/11/16 03:42:17  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger

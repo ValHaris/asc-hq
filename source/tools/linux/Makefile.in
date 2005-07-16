@@ -16,7 +16,7 @@
 
 ######################################################################
 
-SOURCES = $(asc_demount_SOURCES) $(asc_makegfx_SOURCES) $(asc_mount_SOURCES) $(asc_weaponguide_SOURCES)
+SOURCES = $(asc_demount_SOURCES) $(asc_mount_SOURCES) $(asc_weaponguide_SOURCES)
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -41,7 +41,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = asc_demount$(EXEEXT) asc_mount$(EXEEXT) \
-	asc_makegfx$(EXEEXT) asc_weaponguide$(EXEEXT)
+	asc_weaponguide$(EXEEXT)
 subdir = source/tools/linux
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -59,32 +59,14 @@ am_asc_demount_OBJECTS = demount.$(OBJEXT) basestrm.$(OBJEXT) \
 	simplestream.$(OBJEXT) misc.$(OBJEXT) ascstring.$(OBJEXT) \
 	strtmesg.$(OBJEXT) stringtokenizer.$(OBJEXT)
 asc_demount_OBJECTS = $(am_asc_demount_OBJECTS)
-asc_demount_DEPENDENCIES =  \
+am__DEPENDENCIES_1 =
+asc_demount_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(top_builddir)/source/tools/lib/libasc_cmd.la
-am_asc_makegfx_OBJECTS = makegfx.$(OBJEXT) basestrm.$(OBJEXT) \
-	simplestream.$(OBJEXT) misc.$(OBJEXT) ascstring.$(OBJEXT) \
-	loadpcxc.$(OBJEXT) palette.$(OBJEXT) sgstream.$(OBJEXT) \
-	newfont.$(OBJEXT) basegfx.$(OBJEXT) graphicset.$(OBJEXT) \
-	gameoptions.$(OBJEXT) stack.$(OBJEXT) buildingtype.$(OBJEXT) \
-	typen.$(OBJEXT) vehicletype.$(OBJEXT) password.$(OBJEXT) \
-	strtmesg.$(OBJEXT) textfileparser.$(OBJEXT) \
-	containerbasetype.$(OBJEXT) terraintype.$(OBJEXT) \
-	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
-	textfile_evaluation.$(OBJEXT) stringtokenizer.$(OBJEXT) \
-	research.$(OBJEXT) itemrepository.$(OBJEXT) \
-	overviewmapimage.$(OBJEXT) iconrepository.$(OBJEXT) \
-	messaginghub.$(OBJEXT)
-asc_makegfx_OBJECTS = $(am_asc_makegfx_OBJECTS)
-asc_makegfx_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
-	$(top_builddir)/source/graphics/libgraphics.la \
-	$(top_builddir)/source/tools/lib/libasc_cmd.la \
-	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-	$(top_builddir)/source/sdl/libsdl.la
 am_asc_mount_OBJECTS = mount.$(OBJEXT) basestrm.$(OBJEXT) \
 	simplestream.$(OBJEXT) misc.$(OBJEXT) ascstring.$(OBJEXT) \
 	strtmesg.$(OBJEXT) stringtokenizer.$(OBJEXT)
 asc_mount_OBJECTS = $(am_asc_mount_OBJECTS)
-asc_mount_DEPENDENCIES =  \
+asc_mount_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(top_builddir)/source/tools/lib/libasc_cmd.la
 am_asc_weaponguide_OBJECTS = weaponguide.$(OBJEXT) basestrm.$(OBJEXT) \
 	simplestream.$(OBJEXT) misc.$(OBJEXT) ascstring.$(OBJEXT) \
@@ -101,11 +83,11 @@ am_asc_weaponguide_OBJECTS = weaponguide.$(OBJEXT) basestrm.$(OBJEXT) \
 	infopage.$(OBJEXT) overviewmapimage.$(OBJEXT) \
 	iconrepository.$(OBJEXT) messaginghub.$(OBJEXT)
 asc_weaponguide_OBJECTS = $(am_asc_weaponguide_OBJECTS)
-asc_weaponguide_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
-	$(top_builddir)/source/graphics/libgraphics.la \
+asc_weaponguide_DEPENDENCIES = $(am__DEPENDENCIES_1) \
+	$(top_builddir)/source/sdl/libsdl.la $(am__DEPENDENCIES_1) \
 	$(top_builddir)/source/tools/lib/libasc_cmd.la \
 	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-	$(top_builddir)/source/sdl/libsdl.la
+	$(top_builddir)/source/graphics/libgraphics.la
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -117,10 +99,10 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(asc_demount_SOURCES) $(asc_makegfx_SOURCES) \
-	$(asc_mount_SOURCES) $(asc_weaponguide_SOURCES)
-DIST_SOURCES = $(asc_demount_SOURCES) $(asc_makegfx_SOURCES) \
-	$(asc_mount_SOURCES) $(asc_weaponguide_SOURCES)
+SOURCES = $(asc_demount_SOURCES) $(asc_mount_SOURCES) \
+	$(asc_weaponguide_SOURCES)
+DIST_SOURCES = $(asc_demount_SOURCES) $(asc_mount_SOURCES) \
+	$(asc_weaponguide_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -247,23 +229,24 @@ MAINTAINERCLEANFILES = Makefile.in
 INCLUDES = -I $(top_builddir) -I$(top_src_dir) \
 -I$(top_builddir)/source -I$(top_src_dir)/source
 
-AM_CXXFLAGS = @SDL_CFLAGS@ -Dconverter @SIGC_CFLAGS@
+AM_CXXFLAGS = $(SDL_CFLAGS) -Dconverter $(SIGC_CFLAGS)
+#			asc_makegfx \
 #			asc_viewid \
 #			asc_bin2text \
 #			asc_raw2pcx
 asc_demount_SOURCES = demount.cpp      basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp strtmesg.cpp stringtokenizer.cpp
 asc_mount_SOURCES = mount.cpp        basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp strtmesg.cpp stringtokenizer.cpp
-asc_makegfx_SOURCES = makegfx.cpp      basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp  stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp   terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp overviewmapimage.cpp iconrepository.cpp messaginghub.cpp
+#asc_makegfx_SOURCES     = makegfx.cpp      basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp  stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp   terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp overviewmapimage.cpp iconrepository.cpp messaginghub.cpp
 #asc_viewid_SOURCES      = viewid.cpp       basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
 #asc_bin2text_SOURCES    = bin2text.cpp     basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
-asc_weaponguide_SOURCES = weaponguide.cpp  basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp  stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp   terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp groupfile.cpp guidegenerator.cpp infopage.cpp overviewmapimage.cpp iconrepository.cpp messaginghub.cpp
+asc_weaponguide_SOURCES = weaponguide.cpp  basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp  stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp   terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp groupfile.cpp guidegenerator.cpp infopage.cpp overviewmapimage.cpp iconrepository.cpp messaginghub.cpp 
 #asc_raw2pcx_SOURCES     = raw2pcx.cpp      basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
-asc_mount_LDADD = @SDL_LIBS@ @SIGC_LIBS@ @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_demount_LDADD = @SDL_LIBS@ @SIGC_LIBS@ @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_makegfx_LDADD = $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/graphics/libgraphics.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la $(top_builddir)/source/sdl/libsdl.la
-#asc_viewid_LDADD      = $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/graphics/libgraphics.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-#asc_bin2text_LDADD    = $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/graphics/libgraphics.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_weaponguide_LDADD = $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/graphics/libgraphics.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la $(top_builddir)/source/sdl/libsdl.la
+asc_mount_LDADD = $(SDL_LIBS) $(SIGC_LIBS) @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
+asc_demount_LDADD = $(SDL_LIBS) $(SIGC_LIBS) @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
+#asc_makegfx_LDADD     = $(SDL_LIBS) $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ $(SIGC_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la 
+#asc_viewid_LDADD      = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
+#asc_bin2text_LDADD    = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
+asc_weaponguide_LDADD = $(SDL_LIBS) $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ $(SIGC_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la  $(top_builddir)/source/graphics/libgraphics.la
 all: all-am
 
 .SUFFIXES:
@@ -328,9 +311,6 @@ clean-binPROGRAMS:
 asc_demount$(EXEEXT): $(asc_demount_OBJECTS) $(asc_demount_DEPENDENCIES) 
 	@rm -f asc_demount$(EXEEXT)
 	$(CXXLINK) $(asc_demount_LDFLAGS) $(asc_demount_OBJECTS) $(asc_demount_LDADD) $(LIBS)
-asc_makegfx$(EXEEXT): $(asc_makegfx_OBJECTS) $(asc_makegfx_DEPENDENCIES) 
-	@rm -f asc_makegfx$(EXEEXT)
-	$(CXXLINK) $(asc_makegfx_LDFLAGS) $(asc_makegfx_OBJECTS) $(asc_makegfx_LDADD) $(LIBS)
 asc_mount$(EXEEXT): $(asc_mount_OBJECTS) $(asc_mount_DEPENDENCIES) 
 	@rm -f asc_mount$(EXEEXT)
 	$(CXXLINK) $(asc_mount_LDFLAGS) $(asc_mount_OBJECTS) $(asc_mount_LDADD) $(LIBS)
@@ -358,7 +338,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/infopage.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/itemrepository.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadpcxc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/makegfx.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messaginghub.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mount.Po@am__quote@
@@ -583,7 +562,7 @@ uninstall-am: uninstall-binPROGRAMS uninstall-info-am
 
 
 vpath %.cpp ..:../..
-#asc_raw2pcx_LDADD     = $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/graphics/libgraphics.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
+#asc_raw2pcx_LDADD     = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
 
 # vim: noexpandtab ai
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

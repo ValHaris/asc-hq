@@ -648,9 +648,13 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
         // If we're at the goal, then exit
         for ( vector<MapCoordinate3D>::const_iterator i = B.begin(); i != B.end(); i++ )
            if( N.h == *i ) {
-              found = true;
-              endpos = N.h;
-              break;
+              pfield fld = actmap->getField(N.h);
+              if ( N.h.getNumericalHeight() == -1 || !(fld->building || (fld->vehicle && fld->vehicle != veh ))) {
+                 found = true;
+                 endpos = N.h;
+                 break;
+              }
+
            }
         if ( found )
            break;
@@ -711,17 +715,17 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
           }
 
           if ( !operationLimiter || operationLimiter->allowDocking() ) {
-             int dock = actmap->getField(A)->getContainer()->vehicleDocking(veh, true );
+             int dock = actmap->getField(N.h)->getContainer()->vehicleDocking(veh, true );
              for ( int dir = 0; dir < 6; dir++ ) {
                 if ( dock ) {
                    for ( int dir = 0; dir < 6; dir++ ) {
-                      MapCoordinate3D pos = getNeighbouringFieldCoordinate ( A, dir );
+                      MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N.h, dir );
                       pfield fld = actmap->getField( pos );
-                      if ( fld && fld->getContainer() && ( fld->getContainer() != actmap->getField(A)->getContainer() ))
+                      if ( fld && fld->getContainer() && ( fld->getContainer() != actmap->getField(N.h)->getContainer() ))
                          if ( fld->getContainer()->vehicleDocking(veh, false ) & dock )
-                            if ( fld->getContainer()->getOwner() == actmap->getField(A)->getContainer()->getOwner() )
+                            if ( fld->getContainer()->getOwner() == actmap->getField(N.h)->getContainer()->getOwner() )
                                if ( !fld->building || (fld->bdt & getTerrainBitType(cbbuildingentry) ).any()) {
-                                  Node N2;
+                                  Node N2 = N;
                                   N2.h.setnum ( pos.x, pos.y, -1);
                                   N2.canStop = true;
                                   N2.gval = N.gval + 10;
@@ -816,6 +820,9 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
                              if ( step < hcm->dist )
                                 getnextfield ( newpos.x, newpos.y, dir );
+                             else
+                                if ( fld && (fld->building || (fld->vehicle && fld->vehicle != veh)))
+                                   access = false;
                           }
 
                           pfield fld = actmap->getField( newpos );

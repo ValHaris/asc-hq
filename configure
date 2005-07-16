@@ -23803,25 +23803,20 @@ echo "${ECHO_T}\"yes\"" >&6
 fi
 
 
-echo "$as_me:$LINENO: checking \"size_t <-> int parameter conflicts\"" >&5
-echo $ECHO_N "checking \"size_t <-> int parameter conflicts\"... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking \"distinct size_t type\"" >&5
+echo $ECHO_N "checking \"distinct size_t type\"... $ECHO_C" >&6
 cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <string>
-int
-main ()
-{
 
-   class foostd::basic_string<wchar_t> test;
-   test.c_str();
+    #include <string>
+   void foo( int i ) {};
+   void foo( size_t i ) {};
+   void foo( unsigned int i ) {};
+   int main() {
+     size_t t = 7;
+     foo(t);
+     return 0;
+   }
 
-  ;
-  return 0;
-}
 _ACEOF
 rm -f conftest.$ac_objext
 if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
@@ -23844,20 +23839,19 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  :
+  size_t_type=distinct
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-Unicode_broken=yes
 fi
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
-if test "x$Unicode_broken" = x ; then
+if test "x$size_t_type" = x ; then
   echo "$as_me:$LINENO: result: \"no\"" >&5
 echo "${ECHO_T}\"no\"" >&6
 else
-  CXXFLAGS="$CXXFLAGS -D_UNICODE_BROKEN_"
+  CXXFLAGS="$CXXFLAGS -DSIZE_T_not_identical_to_INT"
   echo "$as_me:$LINENO: result: \"yes\"" >&5
 echo "${ECHO_T}\"yes\"" >&6
 fi

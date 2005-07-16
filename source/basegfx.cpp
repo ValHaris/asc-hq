@@ -4,7 +4,7 @@
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-2003  Martin Bickel  and  Marc Schellenberger
+    Copyright (C) 1994-2005  Martin Bickel  and  Marc Schellenberger
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -556,11 +556,9 @@ char* rotatepict ( void* image, int organgle )
    float angle = ((float)organgle) / 360 * 2 * pi + pi;
 
    char* dst = new char[ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-   dst[0] = fieldxsize-1;
-   dst[1] = 0;
-
-   dst[2] = fieldysize-1;
-   dst[3] = 0;
+   Uint16* wp = (Uint16*) dst;
+   wp[0] = fieldxsize-1;
+   wp[1] = fieldysize-1;
 
    char* pnt  = dst + 4;
 
@@ -619,11 +617,9 @@ char* rotatepict_grw ( void* image, int organgle )
    int d = int(sqrt(double(fieldxsize*fieldxsize + fieldysize*fieldysize )));
 
    char* dst = new char[ imagesize ( 0, 0, d,d ) ];
-   dst[0] = d-1;
-   dst[1] = 0;
-
-   dst[2] = d-1;
-   dst[3] = 0;
+   Uint16* wp = (Uint16*) dst;
+   wp[0] = d-1;
+   wp[1] = d-1;
 
    char* pnt  = dst + 4;
 
@@ -764,9 +760,12 @@ int getpixel(int x1, int y1)
    else {
       if ( agmp->windowstatus == 100 ) {
          char* pc = (char*) ( agmp->linearaddress + x1 * agmp->byteperpix + y1 * agmp->scanlinelength );
-         return pc[ agmp->redfieldposition/8 ] + 
-              ( pc[ agmp->greenfieldposition/8 ] << 8 ) + 
-              ( pc[ agmp->bluefieldposition/8 ] << 16 );
+         trgbpixel pix;
+         pix.channel.r = pc[ agmp->redfieldposition/8 ];
+         pix.channel.g = pc[ agmp->greenfieldposition/8 ];
+         pix.channel.b = pc[ agmp->bluefieldposition/8 ];
+         pix.channel.a = 0;
+         return pix.rgb;
       } else {
         return -1;
       }
@@ -1518,6 +1517,10 @@ void putimage_noalpha ( int x1, int y1, TrueColorImage* tci )
      }
 }
 
+bool trgbpixel::isTransparent()
+{
+   return ( channel.r == 0xfe && channel.g == 0xfe && channel.b == 0xfe ) ;
+}
 
 TrueColorImage* getimage ( int x1, int y1, int x2, int y2 )
 {
@@ -1526,7 +1529,7 @@ TrueColorImage* getimage ( int x1, int y1, int x2, int y2 )
      for ( int x = 0; x < tci->getxsize(); x++ ) {
         trgbpixel t;
         t.rgb = getpixel ( x1 + x, y1 + y );
-        if ( t.rgb == TCalpha )
+        if ( t.isTransparent() )
            t.channel.a = alphabase;
         tci->setpix ( x, y, t );
      }

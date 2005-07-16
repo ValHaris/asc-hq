@@ -2,8 +2,6 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.62.2.8 2005-07-10 18:31:39 mbickel Exp $
-
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -41,6 +39,7 @@
 #include "resourceplacementdialog.h"
 #include "weatherdialog.h"
 #include "maped-mainscreen.h"
+#include "attack.h"
 
 
    const char* execactionnames[execactionscount] = {
@@ -131,7 +130,9 @@
         "Reset Player Data...",
         "Fill map with resources",
         "setup weather generation",
-        "Primary action" };
+        "Primary action",
+        "Reset Player Data...",
+        "View Player Strength" };
 
 
       
@@ -236,6 +237,49 @@ void showPipeNet()
    }
    isShown = true;
 }
+
+double unitStrengthValue( Vehicle* veh )
+{
+   double s = veh->typ->productionCost.energy + veh->typ->productionCost.material;
+   AttackFormula af;
+   s *= (af.strength_experience( veh->experience) + af.defense_experience( veh->experience))/2 + 1.0 ;
+   s *= af.strength_damage( veh->damage );
+   return s;
+}
+
+void showPlayerStrength()
+{
+   ASCString message;
+   for ( int i = 0; i< 8; ++i ) {
+      double strength = 0;
+      Resources r;
+      for ( Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); ++j ) {
+         strength += unitStrengthValue( *j );
+         r += (*j)->typ->productionCost;
+      }
+
+      message += "\nPlayer " + ASCString::toString(i) + " " + actmap->player[i].getName() + "\n";
+      message += "strength: ";
+      ASCString s;
+      s.format("%9.0f", ceil(strength/10000) );
+      message += s + "\n";
+      message += "Unit production cost: \n";
+      for ( int k = 0; k < 3; ++k ) {
+         message += resourceNames[k];
+         message += ": " + ASCString::toString(r.resource(k)/1000 ) + "\n";
+      }
+      message += "Unit count: " + ASCString::toString( actmap->player[i].vehicleList.size());
+      message += "\n\n";
+   }
+   tviewanytext vat ;
+   vat.init ( "Player strength summary", message.c_str(), 20, -1 , 450, 480 );
+   vat.run();
+   vat.done();
+}
+
+
+
+
 
 // õS ExecAction
 
@@ -670,6 +714,8 @@ void execaction(int code)
    case act_editTechAdapter: editTechAdapter();
       break;
    case act_resetPlayerData: resetPlayerData();
+      break;
+   case act_playerStrengthSummary: showPlayerStrength();
       break;
 
     }

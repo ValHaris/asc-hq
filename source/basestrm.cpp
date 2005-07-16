@@ -4,7 +4,7 @@
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-2003  Martin Bickel  and  Marc Schellenberger
+    Copyright (C) 1994-2005  Martin Bickel  and  Marc Schellenberger
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -331,13 +331,19 @@ void tnstream::writeInt  ( size_t i )
 }
 
 #endif
-/*
+
 void tnstream::writeInt  ( unsigned int i )
 {
    i = SDL_SwapLE32(i);
    writedata2 ( i );
 }
-*/
+
+void tnstream::writeInt  ( bool b )
+{
+   int i = b;
+   i = SDL_SwapLE32(i);
+   writedata2 ( i );
+}
 
 void tnstream::writeInt  ( int i )
 {

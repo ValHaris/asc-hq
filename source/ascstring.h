@@ -66,11 +66,16 @@ public:
     int compare_ci ( size_type p0, size_type n0, const charT* pS, size_type pos ) const;
 
     //! converts the parameter to a String
-    static ASCString toString(int i );
+    static ASCString toString( int i );
+    
+   #ifdef SIZE_T_not_identical_to_INT
+    static ASCString toString( size_t i );
+   #endif 
+    
     //! converts the parameter to a String with base radix
     // static ASCString toString(int i, int radix );
     //! converts the parameter to a String
-    static ASCString toString(double d );
+    static ASCString toString( double d );
 
     // Case-manipulation helpers
     ASCString&  toLower    ();

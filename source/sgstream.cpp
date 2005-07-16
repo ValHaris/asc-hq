@@ -7,7 +7,7 @@
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-2003  Martin Bickel  and  Marc Schellenberger
+    Copyright (C) 1994-2005  Martin Bickel  and  Marc Schellenberger
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -399,12 +399,11 @@ void checkDataVersion( )
       versionError ( "main.con", location );
 
 
-   checkFileVersion( "mk1.version", "mk1.con", 11 );
-   checkFileVersion( "mk3.version", "units-mk3.con", 10 );
-   checkFileVersion( "buildings.version", "buildings.con", 10 );
-   checkFileVersion( "trrobj.version", "trrobj.con", 12 );
-
-
+   checkFileVersion( "mk1.version", "mk1.con", 13 );
+   checkFileVersion( "mk3.version", "units-mk3.con", 12 );
+   checkFileVersion( "buildings.version", "buildings.con", 11 );
+   checkFileVersion( "trrobj.version", "trrobj.con", 13 );
+   checkFileVersion( "trrobj2.version", "trrobj2.con", 2 );
 }
 
 //===================================================================================

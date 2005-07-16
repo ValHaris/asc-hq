@@ -5,7 +5,7 @@ MAINTAINERCLEANFILES	= Makefile.in
 INCLUDES		= -I$(top_builddir) -I$(top_src_dir) \
 			  -I$(top_builddir)/source -I$(top_src_dir)/source
 
-AM_CXXFLAGS 		= @SDL_CFLAGS@ -Dsgmain  -DNEWKEYB @PARAGUI_CFLAGS@  @SIGC_CFLAGS@
+AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dsgmain  -DNEWKEYB $(PARAGUI_CFLAGS)  $(SIGC_CFLAGS)
 
 bin_PROGRAMS		= asc
 
@@ -32,4 +32,4 @@ asc_LDADD   		= $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 $(top_builddir)/source/sdl/libsdl.la  $(top_builddir)/source/libs/loki/libloki.la \
 $(top_builddir)/source/graphics/libgraphics.la \
-@PARAGUI_LIBS@ @LDADDLIBBZ2@ @SIGC_LIBS@ @SDL_TTF_LDADD@
+$(PARAGUI_LIBS) @LDADDLIBBZ2@  $(SIGC_LIBS) $(SDL_LIBS)

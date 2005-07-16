@@ -6,7 +6,7 @@
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-2003  Martin Bickel  and  Marc Schellenberger
+    Copyright (C) 1994-2005  Martin Bickel  and  Marc Schellenberger
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -833,20 +833,21 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
    } else
       if ( dest.getNumericalHeight() >= 0 ) {
         // moving out of container
-        if ( dest.getNumericalHeight() >= 4 )
-           // flying
-           movecost = maxmalq;
+        int mm = getfield( start.x, start.y )->getContainer()->vehicleUnloadSystem( vehicle->typ, dest.getBitmappedHeight() )->movecost;
+        if ( mm > 0 )
+            movecost = mm;
         else {
-           if ( start.getNumericalHeight() <= 1 && start.getNumericalHeight() != -1 ) {
-              movecost = submarineMovement;
-              checkWind = false;
-           } else {
-              int mm = getfield( start.x, start.y )->getContainer()->vehicleUnloadSystem( vehicle->typ, dest.getBitmappedHeight() )->movecost;
-              if ( mm > 0 )
-                 movecost = mm;
-              else
-                 movecost = getfield( dest.x, dest.y )->getmovemalus( vehicle );
-           }
+            if ( dest.getNumericalHeight() >= 4 )
+               // flying
+               movecost = maxmalq;
+            else {
+               if ( start.getNumericalHeight() <= 1 && start.getNumericalHeight() != -1 ) {
+                  movecost = submarineMovement;
+                  checkWind = false;
+               } else {
+                  movecost = getfield( dest.x, dest.y )->getmovemalus( vehicle );
+               }
+            }
         }
       } else {
         // moving from one container to another
@@ -1196,7 +1197,7 @@ void sendnetworkgametonextplayer ( int oldplayer, int newplayer )
 void endTurn ( void )
 {
    mousevisible(false);
-   if ( actmap->actplayer >= 0 )
+   if ( actmap->actplayer >= 0 ) 
       actmap->endTurn();
 
    closeReplayLogging();
@@ -1374,6 +1375,11 @@ void initNetworkGame ( void )
 
 void continuenetworkgame ( void )
 {
+#if SDL_BYTEORDER != SDL_LIL_ENDIAN
+   displaymessage("Sorry, multiplayer through file transfer is currently not available on big endian machines\nThis will be available with ASC 2.0 , please check www.asc-hq.org", 1 );
+   return;
+#endif
+
    tlockdispspfld ldsf;
 
    tnetwork network;

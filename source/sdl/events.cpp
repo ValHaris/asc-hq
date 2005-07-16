@@ -470,7 +470,7 @@ int eventthread ( void* nothing )
    return 0;
 }
 
-#ifdef _WIN32_
+#if defined(_WIN32_) | defined(__APPLE__)
 int (*_gamethread)(void *);
 
 int gameThreadWrapper ( void* data )
@@ -509,7 +509,7 @@ void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mou
    SDL_EnableUNICODE ( 1 );
    SDL_EnableKeyRepeat ( 250, 30 );
 
-#ifdef _WIN32_
+#if defined(_WIN32_) | defined(__APPLE__)
    _gamethread = gamethread;
    secondThreadHandle = SDL_CreateThread ( gameThreadWrapper, data );
    eventthread( NULL );

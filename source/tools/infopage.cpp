@@ -563,7 +563,7 @@ void BuildingCargoPage::buildContent() {
       for ( ContainerBaseType::EntranceSystems::const_iterator i = cbt.entranceSystems.begin();
             i != cbt.entranceSystems.end(); i++ ) {
         if ( i->mode & ContainerBaseType::TransportationIO::Docking &&  i->dockingHeight_rel != -100 ) {
-          addTDEntry(getHeightImgString( i->dockingHeight_rel));
+          addTDEntry( strrr( i->dockingHeight_rel));
         } else {
           addEmptyTD(1);
         }
@@ -790,7 +790,7 @@ void UnitCargoPage::buildContent() {
       for ( ContainerBaseType::EntranceSystems::const_iterator i = cbt.entranceSystems.begin();
             i != cbt.entranceSystems.end(); i++ ) {
         if ( i->mode & ContainerBaseType::TransportationIO::Docking &&  i->dockingHeight_rel != -100 ) {
-          addTDEntry(getHeightImgString( i->dockingHeight_rel));
+          addTDEntry(strrr( i->dockingHeight_rel));
         } else {
           addEmptyTD(1);
         }

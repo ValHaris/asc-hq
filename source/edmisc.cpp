@@ -601,7 +601,7 @@ void         tplayerchange::anzeige(void)
    int i;
    for (i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
       int color = actmap->field[i].mineowner();
-      if ( color >= 0 )
+      if ( color >= 0 && color < 8 )
          m[color]++;
    }
    activefontsettings.length = 40;

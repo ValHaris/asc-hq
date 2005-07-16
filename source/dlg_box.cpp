@@ -5,7 +5,7 @@
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-2003  Martin Bickel  and  Marc Schellenberger
+    Copyright (C) 1994-2005  Martin Bickel  and  Marc Schellenberger
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1922,6 +1922,7 @@ void displaymessage( const ASCString& text, int num  )
    if ( !displayInternally ) {
       for ( int i=0; i<= linenum ;i++ )
           fprintf(stderr,"%s\n",stringtooutput[i]);
+      fflush( stderr );
    } else {
       #ifdef _WIN322_
         if ( !gameStartupComplete && num==2 ) {
@@ -2841,7 +2842,7 @@ void tviewtext::evalcommand ( const char** s)
    int tvt_oldx;
 
 
-   memset( s4, sizeof( s4 ), 0);
+   memset( s4, 0, sizeof( s4 ));
    if (strnicmp(s3, "#COLOR", 6) == 0) {
       i+=6;
       while (s3[i] != '#') {
@@ -3713,6 +3714,7 @@ void fatalError ( const ASCString& string )
 void warning ( const ASCString& str )
 {
 	fprintf(stderr, "ASC: %s \n", str.c_str());
+   fflush( stderr );
 }
 
 void errorMessage ( const ASCString& string )

@@ -21,7 +21,7 @@
 /* This algorithm is mentioned in the ISO C standard, here extended
    for 32 bits.  */
 int
-rand_r (unsigned int *seed)
+asc_rand_r (unsigned int *seed)
 {
   unsigned int next = *seed;
   int result;

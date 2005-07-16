@@ -4,7 +4,7 @@
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-2003  Martin Bickel  
+    Copyright (C) 1994-2005  Martin Bickel  
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -156,16 +156,16 @@ void SoundList::initialize(  )
 
 Sound* SoundList::getSound( const ASCString& filename, int fadeIn )
 {
-   displayLogMessage ( 10, " SoundList::getSound(1) : trying to acquire handle for sound %s \n", filename.c_str() );
+   displayLogMessage ( 5, " SoundList::getSound(1) : trying to acquire handle for sound %s \n", filename.c_str() );
 
    if ( soundFiles.find ( filename ) == soundFiles.end() ) {
-     displayLogMessage ( 10, " Sound has not been loaded ...\n" );
+     displayLogMessage ( 5, " Sound has not been loaded ...\n" );
      Sound* s = new Sound ( filename, fadeIn );
      soundFiles[filename] = s;
      if ( s != NULL )
-        displayLogMessage ( 10, " loading sound completed\n" );
+        displayLogMessage ( 5, " loading sound completed\n" );
      else
-        displayLogMessage ( 10, " loading sound failed\n" );
+        displayLogMessage ( 5, " loading sound failed\n" );
 
      return s;
   } else

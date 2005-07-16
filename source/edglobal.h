@@ -1,5 +1,3 @@
-//     $Id: edglobal.h,v 1.20.2.5 2005-06-12 13:46:52 mbickel Exp $
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -24,7 +22,7 @@
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 89;
+const int execactionscount = 90;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -116,9 +114,12 @@ enum tuseractions {
      act_resetPlayerData,
      act_createresources2,
      act_setactnewweather,
-     act_primaryAction
+     act_primaryAction, 
+     act_playerStrengthSummary
  };
 
  
  
 extern void         execaction_ev(int code);
+extern void         execaction(int code);
+

@@ -331,7 +331,7 @@ void tmap :: read ( tnstream& stream )
       else
          player[i].research.read ( stream );
 
-      player[i].ai = (BaseAI*) stream.readInt();
+      player[i].ai = (BaseAI*)stream.readInt() ;
       player[i].stat = Player::tplayerstat ( stream.readChar() );
       stream.readChar(); // dummy
       dummy_playername[i] = stream.readInt();
@@ -361,7 +361,7 @@ void tmap :: read ( tnstream& stream )
 
    unitnetworkid = stream.readInt();
    levelfinished = stream.readChar();
-   network = (pnetwork) stream.readInt();
+   network = (pnetwork)stream.readInt();
    bool alliance_names_not_used_any_more[8];
    for ( i = 0; i < 8; i++ )
       alliance_names_not_used_any_more[i] = stream.readInt(); // dummy
@@ -416,7 +416,8 @@ void tmap :: read ( tnstream& stream )
 
    int preferredfilenames = stream.readInt();
 
-   ellipse = (EllipseOnScreen*) stream.readInt();
+   bool __loadEllipse = stream.readInt();
+   ellipse = NULL;
    graphicset = stream.readInt();
    gameparameter_num = stream.readInt();
 
@@ -515,10 +516,11 @@ void tmap :: read ( tnstream& stream )
        }
     }
 
-    if ( ellipse ) {
+    if ( __loadEllipse ) {
        ellipse = new EllipseOnScreen;
        ellipse->read( stream );
-    }
+    } else
+       ellipse = NULL;
 
     int orggpnum = gameparameter_num;
     gameparameter_num = 0;
@@ -745,7 +747,7 @@ void tmap :: write ( tnstream& stream )
     stream.writeString ( archivalInformation.description );
     stream.writeString ( archivalInformation.tags );
     stream.writeString ( archivalInformation.requirements );
-    stream.writeInt ( ::time ( &archivalInformation.modifytime ));
+    stream.writeInt ( (unsigned int) (::time ( &archivalInformation.modifytime )));
 
 
     stream.writeInt( unitProduction.idsAllowed.size() );
@@ -757,7 +759,7 @@ void tmap :: write ( tnstream& stream )
        stream.writeInt( player[ii].playTime.size() );
        for ( Player::PlayTimeContainer::iterator i = player[ii].playTime.begin(); i != player[ii].playTime.end(); ++i ) {
           stream.writeInt( i->turn );
-          stream.writeInt( i->date );
+          stream.writeInt( (unsigned int) i->date );
        }
     }
 
@@ -1269,7 +1271,7 @@ void tmap::endTurn()
       }
 
       if ( actvehicle )
-         actvehicle->endTurn();
+         actvehicle->endOwnTurn();
 
    }
 
@@ -1277,6 +1279,11 @@ void tmap::endTurn()
       delete *v;
 
    checkunitsforremoval();
+
+  for ( int i = 0; i < 9; ++i ) 
+     for ( tmap::Player::VehicleList::iterator v = player[i].vehicleList.begin(); v != player[i].vehicleList.end(); ++v ) 
+         (*v)->endAnyTurn();
+
 
 }
 
@@ -1327,7 +1334,7 @@ void tmap::endRound()
 
 int tmap::random( int max )
 {
-   return rand_r( &randomSeed ) % max;
+   return asc_rand_r( &randomSeed ) % max;
 }
 
 void tmap::objectGrowth()
@@ -1348,7 +1355,7 @@ void tmap::objectGrowth()
                            if ( d > 0.9 )
                               d = 0.9;
 
-                           int p = static_cast<int>(std::ceil ( double(1) / d)) ;
+                           int p = static_cast<int>(std::ceil ( double(1) / d));
                            if ( p > 1 )
                               if ( random ( p ) == 1 )
                                  if ( i->typ->fieldModification[fld2->getweather()].terrainaccess.accessible( fld2->bdt) > 0 )

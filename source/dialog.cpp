@@ -4,7 +4,7 @@
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-2003  Martin Bickel  and  Marc Schellenberger
+    Copyright (C) 1994-2005  Martin Bickel  and  Marc Schellenberger
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -3117,6 +3117,7 @@ void         tsetalliances::click(pascal_byte         bxx,
            nextplayer = 0;
       } while ( !actmap->player[nextplayer].exist() ); /* enddo */
 
+      #if SDL_BYTEORDER == SDL_LIL_ENDIAN
       if (x == 1 && ( y == actmap->actplayer || y == nextplayer || supervisor ) ) {
          location[y]++;
          if (location[y] >= playernum) 
@@ -3127,6 +3128,7 @@ void         tsetalliances::click(pascal_byte         bxx,
          showtext2(temp,x1 + ply_x1 + 30 + tsa_namelength,y1 + ply_y1 + y * 22);
          checkfornetwork();
       } 
+      #endif //  SDL_LIL_ENDIAN
       #endif
 
       if (x == 2  &&  ( y != actmap->actplayer ) && actmap->actplayer>=0  &&  !oninit && !supervisor )

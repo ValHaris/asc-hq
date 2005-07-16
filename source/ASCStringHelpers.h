@@ -264,7 +264,7 @@ inline ASCStringHelpers::charT* ASCStringHelpers::_Strlwr ( charT* pS )
 
     charT* pTemp = pS;
 
-    while ( *pTemp != _T( '\0' ) )
+    while ( *pTemp != 0 )
     {
         #ifdef ASC_UNICODE
             *pTemp = towlower ( *pTemp );
@@ -308,7 +308,7 @@ inline ASCStringHelpers::charT* ASCStringHelpers::_Strupr ( charT* pS )
 
     charT* pTemp = pS;
 
-    while ( *pTemp != _T( '\0' ) )
+    while ( *pTemp != 0 )
     {
         #ifdef ASC_UNICODE
             *pTemp = towupper ( *pTemp );
