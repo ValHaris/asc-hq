@@ -28,7 +28,7 @@ panel {
    TitlebarHeight = 0
    width = 746
    height = 615
-   FontColor = 0xc9f4ae
+   FontColor = 0xe1fbd1
    Fontsize = 9
    WidgetNum = 8
    name = MainPanelWidget
@@ -43,7 +43,7 @@ panel {
      widget0 {
        type = SpecialDisplay
        name = unitpad_unitsymbol
-       x = 605
+       x = 603
        y = 227
      } widget0
      widget1 {
@@ -241,14 +241,14 @@ panel {
        name = padinfoscreen
        x = 0
        y = 0
-       FontColor = 0xc9f4ae
+       FontColor = 0xe1fbd1
        childwidgets = widget1 widget2 widget3 widget4
 
        widget1 {
          type = image
          Filename = padinfoscreenwindow.png
          x = 75
-         y = 255
+         y = 245
          widgetnum = 9
          widget0 {
            TextAlign = LEFT
@@ -327,7 +327,7 @@ panel {
          type = image
          Filename = padproductioncostscreenwindow.png
          x = 75
-         y = 370
+         y = 360
          widgetnum = 5
          widget0 {
            TextAlign = LEFT
@@ -376,7 +376,7 @@ panel {
          type = image
          Filename = padtankscreenwindow.png
          x = 75
-         y = 455
+         y = 445
          widgetnum = 7
          widget0 {
            TextAlign = LEFT
@@ -442,7 +442,7 @@ panel {
          type = image
          Filename = padabilityscreenwindow.png
          x = 310
-         y = 255
+         y = 245
          widgetnum = 2
          widget0 {
            TextAlign = LEFT
@@ -457,7 +457,7 @@ panel {
            type = multilinetext
            name = unitpad_unitabilities
            transparency = 255
-           FontSize = 14
+           FontSize = 12
            x = 10
            y = 26
            width = 180
@@ -552,14 +552,14 @@ panel {
        name = padmovmentscreen
        x = 0
        y = 0
-       FontColor = 0xc9f4ae
+       FontColor = 0xe1fbd1
        widgetnum = 3
 
        widget0 {
          type = image
          Filename = padspeedscreenwindow.png
          x = 75
-         y = 245
+         y = 235
          widgetnum = 6
          widget0 {
            TextAlign = LEFT
@@ -714,7 +714,7 @@ panel {
          type = image
          Filename = padterrainscreenwindow.png
          x = 75
-         y = 350
+         y = 340
          widgetnum = 2
          widget0 {
            TextAlign = LEFT
@@ -732,7 +732,7 @@ panel {
            transparency = 255
            x = 10
            y = 25
-           width = 185
+           width = 180
            height = 170
            widgetnum = 1
 
@@ -784,7 +784,7 @@ panel {
          type = image
          Filename = padheightchangescreenwindow.png
          x = 278
-         y = 350
+         y = 340
          widgetnum = 2
          widget0 {
            TextAlign = LEFT
@@ -842,7 +842,7 @@ panel {
          widget1 {
            type = image
            Filename = padheightchangetab-begin.png
-           x = 10
+           x = 8
            y = 25
            widgetnum = 8
            widget0 {
@@ -1001,13 +1001,13 @@ panel {
        name = padweaponscreen
        x = 0
        y = 0
-       FontColor = 0xc9f4ae
+       FontColor = 0xe1fbd1
        widgetnum = 2
        widget0 {
          type = image
          Filename = padweaponscreenwindow.png
          x = 75
-         y = 240
+         y = 230
          widgetnum = 5
          widget0 {
            TextAlign = LEFT
@@ -1101,30 +1101,159 @@ panel {
               Filename = pad_weapon_levels.png
               x = 120
               y = 250
-              widgetnum = 1
+              widgetnum = 8
               widget0 {
-                type = SpecialDisplay
-                name = unitpad_weapon_source
+                type = image
+                Filename = pad_symbol_no.png
+                name = weapon_nosource_deep_submerged
                 x = 2
                 y = 3
-                width = 242
-                height = 15
+                width = 23
+                height = 9
               } widget0
+              widget1 {
+                type = image
+                Filename = pad_symbol_no.png
+                name = weapon_nosource_submerged
+                x = 33
+                y = 3
+                width = 23
+                height = 9
+              } widget1
+              widget2 {
+                type = image
+                Filename = pad_symbol_no.png
+                name = weapon_nosource_floating
+                x = 64
+                y = 3
+                width = 23
+                height = 9
+              } widget2
+              widget3 {
+                type = image
+                Filename = pad_symbol_no.png
+                name = weapon_nosource_ground_level
+                x = 95
+                y = 3
+                width = 23
+                height = 9
+              } widget3
+              widget4 {
+                type = image
+                Filename = pad_symbol_no.png
+                name = weapon_nosource_low_level_flight
+                x = 126
+                y = 3
+                width = 23
+                height = 9
+              } widget4
+              widget5 {
+                type = image
+                Filename = pad_symbol_no.png
+                name = weapon_nosource_medium_level_flight
+                x = 157
+                y = 3
+                width = 23
+                height = 9
+              } widget5
+              widget6 {
+                type = image
+                Filename = pad_symbol_no.png
+                name = weapon_nosource_high_level_flight
+                x = 188
+                y = 3
+                width = 23
+                height = 9
+              } widget6
+              widget7 {
+                type = image
+                Filename = pad_symbol_no.png
+                name = weapon_nosource_orbit
+                x = 219
+                y = 3
+                width = 23
+                height = 9
+              } widget7
             } widget0
             widget1 {
               type = image
               Filename = pad_weapon_levels.png
               x = 120
               y = 267
-              widgetnum = 1
+              widgetnum = 8
               widget0 {
-                type = SpecialDisplay
-                name = unitpad_weapon_target
+                type = image
+                Filename = pad_symbol_no.png
+                name = weapon_notarget_deep_submerged
                 x = 2
                 y = 3
-                width = 242
-                height = 15
+                width = 23
+                height = 9
               } widget0
+              widget1 {
+                type = image
+                Filename = pad_symbol_no.png
+                name = weapon_notarget_submerged
+                x = 33
+                y = 3
+                width = 23
+                height = 9
+              } widget1
+              widget2 {
+                type = image
+                Filename = pad_symbol_no.png
+                name = weapon_notarget_floating
+                x = 64
+                y = 3
+                width = 23
+                height = 9
+              } widget2
+              widget3 {
+                type = image
+                Filename = pad_symbol_no.png
+                name = weapon_notarget_ground_level
+                x = 95
+                y = 3
+                width = 23
+                height = 9
+              } widget3
+              widget4 {
+                type = image
+                Filename = pad_symbol_no.png
+                name = weapon_notarget_low_level_flight
+                x = 126
+                y = 3
+                width = 23
+                height = 9
+              } widget4
+              widget5 {
+                type = image
+                Filename = pad_symbol_no.png
+                name = weapon_notarget_medium_level_flight
+                x = 157
+                y = 3
+                width = 23
+                height = 9
+              } widget5
+              widget6 {
+                type = image
+                Filename = pad_symbol_no.png
+                name = weapon_notarget_high_level_flight
+                x = 188
+                y = 3
+                width = 23
+                height = 9
+              } widget6
+              widget7 {
+                type = image
+                Filename = pad_symbol_no.png
+                name = weapon_notarget_orbit
+                x = 219
+                y = 3
+                width = 23
+                height = 9
+              } widget7
+
             } widget1
             widget2 {
               TextAlign = LEFT
@@ -1179,7 +1308,7 @@ panel {
               x = 95
               y = 285
               height = 13
-              width = 20
+              width = 25
             } widget7
             widget8 {
               TextAlign = RIGHT
@@ -1258,8 +1387,8 @@ panel {
          type = image
          Filename = padweapondiagramscreenwindow.png
          x = 304
-         y = 240
-         widgetnum = 2
+         y = 230
+         widgetnum = 14
          widget0 {
            TextAlign = LEFT
            Fontsize = 16
@@ -1272,11 +1401,112 @@ panel {
          widget1 {
            type = SpecialDisplay
            name = unitpad_weapon_diagram
-           x = 15
-           y = 30
-           width = 185
-           height = 190
+           x = 25
+           y = 38
+           width = 168
+           height = 168
          } widget1
+         widget2 {
+           type = STaticText
+           TextAlign = CENTER
+           Fontsize = 12
+           text = s
+           x = 8
+           y = 70
+           width = 10
+           height = 12 
+         } widget2   
+         widget3 {
+           type = STaticText
+           text = t
+           x = 8
+           y = 82
+           width = 10
+           height = 12 
+         } widget3
+         widget4 {
+           type = STaticText
+           text = r
+           x = 8
+           y = 94
+           width = 10
+           height = 12 
+         } widget4
+         widget5 {
+           type = STaticText
+           text = e
+           x = 8
+           y = 106
+           width = 10
+           height = 12 
+         } widget5   
+         widget6 {
+           type = STaticText
+           text = n
+           x = 8
+           y = 118
+           width = 10
+           height = 12 
+         } widget6
+         widget7 {
+           type = STaticText
+           text = g
+           x = 8
+           y = 130
+           width = 10
+           height = 12 
+         } widget7
+         widget8 {
+           type = STaticText
+           text = t
+           x = 8
+           y = 142
+           width = 10
+           height = 12 
+         } widget8
+         widget9 {
+           type = STaticText
+           text = h
+           x = 8
+           y = 154
+           width = 10
+           height = 12 
+         } widget9
+         widget10 {
+           type = Statictext
+           text = distance
+           x = 60
+           y = 213
+           width = 100
+           height = 12
+         } widget10
+         widget11 {
+           type = TextOutput
+           FontSize = 13
+           name = unitpad_weapon_diagram_maxstrength
+           x = 6
+           y = 25
+           width = 30
+           height = 12
+         } widget11 
+         widget12 {
+           type = TextOutput
+           FontSize = 13
+           name = unitpad_weapon_diagram_maxdist
+           x = 181
+           y = 213
+           width = 30
+           height = 12
+         } widget12 
+         widget13 {
+           type = TextOutput
+           FontSize = 13
+           name = unitpad_weapon_diagram_mindist
+           x = 9
+           y = 213
+           width = 30
+           height = 12
+         } widget13 
        } widget1
      } widget1
    } widget4
@@ -1365,13 +1595,13 @@ panel {
        name = padtransportscreen
        x = 0
        y = 0
-       FontColor = 0xc9f4ae
+       FontColor = 0xe1fbd1
        widgetnum = 2
        widget0 {
          type = image
          Filename = padtransportentrancescreenwindow.png
          x = 75
-         y = 240
+         y = 230
          widgetnum = 1
          widget0 {
            TextAlign = LEFT
@@ -1854,13 +2084,13 @@ panel {
        name = padtransportscreen
        x = 0
        y = 0
-       FontColor = 0xc9f4ae
+       FontColor = 0xe1fbd1
        widgetnum = 1
        widget0 {
          type = image
          Filename = paddescriptionscreenwindow.png
          x = 75
-         y = 240
+         y = 230
          width = 444
          height = 320
          widgetnum = 2
@@ -1879,10 +2109,10 @@ panel {
            transparency = 255
            x = 10
            y = 25
-           FontSize = 11
+           FontSize = 12
            TextAlign = Left
            height = 14
-           x2 = -1
+           x2 = -5
            y2 = -10
          } widget1
        } widget0

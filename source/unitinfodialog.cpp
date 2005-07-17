@@ -21,7 +21,8 @@
 
 void assignWeaponInfo ( Panel* panel, PG_Widget* widget, const SingleWeapon& weapon )
 {
-   panel->setImage( "weapon_symbol1", IconRepository::getIcon(SingleWeapon::getIconFileName( weapon.getScalarWeaponType()) + "-small.png"), widget );
+   int scalarType = weapon.service() ? cwservicen : weapon.getScalarWeaponType();
+   panel->setImage( "weapon_symbol1", IconRepository::getIcon(SingleWeapon::getIconFileName( scalarType ) + "-small.png"), widget );
 
    panel->setLabelText( "weapon_text1", weapon.getName(), widget );
    panel->setLabelText( "weapon_reactionfire", weapon.reactionFireShots, widget );
@@ -214,7 +215,7 @@ class UnitInfoDialog : public Panel {
                         maxstrength = max ( maxstrength, vt->weapons.weapon[i].maxstrength );
                      }
 
-                  setLabelText( "unitpad_weapon_diagram_maxdist", maxdist / maxmalq );
+                  setLabelText( "unitpad_weapon_diagram_maxdist", max(maxdist / maxmalq, 2 ) );
                   setLabelText( "unitpad_weapon_diagram_maxstrength", maxstrength );
 
                   if( maxdist > 0 && maxstrength > 0 )
@@ -344,6 +345,8 @@ class UnitInfoDialog : public Panel {
                      setLabelText( "unitpad_transport_maxsingleweight", vt->maxLoadableUnitSize );
                      setLabelText( "unitpad_transport_loadableunits", vt->maxLoadableUnits );
                   }
+                  if ( vt->weapons.count >= 1 )
+                     onWeaponClick( NULL, NULL, 0 );
                }
 
 
@@ -372,6 +375,7 @@ class UnitInfoDialog : public Panel {
                PG_Rect r = parseRect( pc, parent);
                r.y += yoffset;
                r.my_height *= (srcLevelCount-1) / 3 + 1;
+               widgetParams.runTextIO( pc );
 
                SpecialInputWidget* sw = new SpecialInputWidget ( parent, r );
                parsePanelASCTXT( pc, sw, widgetParams );
@@ -406,6 +410,7 @@ class UnitInfoDialog : public Panel {
             for ( int i = 0; i < cbodenartennum ; ++i ) {
                if ( vt->terrainaccess.terrain.test(i) || vt->terrainaccess.terrainkill.test(i) || vt->terrainaccess.terrainnot.test(i) || vt->terrainaccess.terrainreq.test(i) ) {
                   pc.openBracket( "LineWidget" );
+                  widgetParams.runTextIO( pc );
                   PG_Rect r = parseRect( pc, parent);
                   r.y += yoffset;
 
@@ -438,6 +443,7 @@ class UnitInfoDialog : public Panel {
             int yoffset = 0;
             for ( int i = 0; i < vt->weapons.count ; ++i ) {
                pc.openBracket( "LineWidget" );
+               widgetParams.runTextIO( pc );
                PG_Rect r = parseRect( pc, parent);
                r.y += yoffset;
 
@@ -456,6 +462,7 @@ class UnitInfoDialog : public Panel {
             int xoffset = 0;
             for ( int i = 0; i < vt->entranceSystems.size() ; ++i ) {
                pc.openBracket( "LineWidget" );
+               widgetParams.runTextIO( pc );
                PG_Rect r = parseRect( pc, parent);
                r.x += xoffset;
 

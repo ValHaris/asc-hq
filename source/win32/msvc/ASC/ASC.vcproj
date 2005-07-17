@@ -34,7 +34,7 @@
 				BrowseInformation="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4290"/>
+				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4290;4267"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -91,7 +91,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4290"/>
+				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4290;4267"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool

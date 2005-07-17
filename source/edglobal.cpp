@@ -268,7 +268,7 @@ void showPlayerStrength()
          message += resourceNames[k];
          message += ": " + ASCString::toString(r.resource(k)/1000 ) + "\n";
       }
-      message += "Unit count: " + ASCString::toString( actmap->player[i].vehicleList.size());
+      message += "Unit count: " + ASCString::toString( int( actmap->player[i].vehicleList.size()));
       message += "\n\n";
    }
    tviewanytext vat ;

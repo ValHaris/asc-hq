@@ -732,7 +732,7 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
    ASCString name;
    pc.addString( "name", name, "" );
    parent->SetName( name );
-
+   
    int transparency;
    pc.addInteger("localtransparency", transparency, -1 );
    if ( transparency != -1 ) {
@@ -1395,6 +1395,7 @@ bool PG_ToolTipHelp :: onParentEnter( void* dummy )
    status = counting;
    
    lastTick = ticker->getTicker();
+   return true;
 }
 
 bool PG_ToolTipHelp :: onParentLeave( void* dummy )
@@ -1426,6 +1427,7 @@ bool PG_ToolTipHelp :: onMouseMotion( const SDL_MouseMotionEvent *motion )
    status = counting;
       
    HideHelp();
+   return true;
 }
 
 
