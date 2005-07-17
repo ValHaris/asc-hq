@@ -40,7 +40,7 @@
 #include "weatherdialog.h"
 #include "maped-mainscreen.h"
 #include "attack.h"
-
+#include "unitinfodialog.h"
 
    const char* execactionnames[execactionscount] = {
         "End MapEdit",
@@ -133,6 +133,58 @@
         "Primary action",
         "Reset Player Data...",
         "View Player Strength" };
+
+
+
+SelectionHolder selection;
+
+void SelectionHolder::setSelection( const MapComponent* component ) 
+{
+   delete currentItem;
+   currentItem = component->clone();
+   selectionChanged( currentItem );
+}
+
+void SelectionHolder::setPlayer( int player )
+{
+   actplayer = player;
+   if ( currentItem )
+      selectionChanged( currentItem );
+}
+
+void SelectionHolder::setWeather( int weather )
+{
+   currentWeather = weather;
+   if ( currentItem )
+      selectionChanged( currentItem );
+}
+
+
+const MapComponent* SelectionHolder::getSelection()
+{
+   return currentItem;
+}
+
+void SelectionHolder::pickup ( pfield fld )
+{
+   if ( fld->vehicle ) {
+      VehicleItem v ( fld->vehicle->typ );
+      actplayer = fld->vehicle->getOwner();
+      setSelection( &v );
+   } else
+   if ( fld->building ) {
+      BuildingItem b ( fld->building->typ );
+      actplayer = fld->building->getOwner();
+      setSelection( &b );
+   } else
+   if ( !fld->objects.empty() ) {
+      ObjectItem o ( fld->objects.begin()->typ );
+      setSelection( &o );
+   } else {
+      TerrainItem t ( fld->typ->terraintype );
+      setSelection( &t );
+   }
+}
 
 
       
@@ -367,8 +419,6 @@ void execaction(int code)
        }
        break;
        */
-    case act_unitinfo :  vehicle_information();
-       break;
     case act_viewmap :  
              {
              while (mouseparams.taste != 0)
@@ -747,6 +797,8 @@ void execaction_pg(int code)
                        ch = 0;
                        selmine( ct_f8 );
                      }
+       break;
+    case act_unitinfo :  unitInfoDialog();
        break;
    };      
 }

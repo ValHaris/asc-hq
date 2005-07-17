@@ -239,7 +239,7 @@ void         tchoosetechnology::run(void)
                         while ( mouseparams.taste == 1 )
                            releasetimeslice();
 
-                        vehicle_information ( vt );
+                        // vehicle_information ( vt );
                      }
                   }
                }

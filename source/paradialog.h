@@ -227,55 +227,6 @@ class SpecialInputWidget : public PG_Widget {
 
 
 
-class PG_ToolTipHelp: public SigC::Object {
-   private:
-   
-      class Ticker: public PG_TimerObject {
-            volatile Uint32 ticker;
-            Uint32 eventTimer(Uint32 interval) {
-               ++ticker;
-               return interval;
-            };
-         public:
-            Ticker( int interval ) {
-               SetTimer( interval );
-            };   
-            Uint32 getTicker() { 
-               return ticker; 
-            };
-      };
-      
-      static Ticker* ticker;
-
-      void startTimer();
-         
-   protected:
-      PG_Widget* parentWidget;
-      PG_TimerObject::ID id;
-      int lastTick;
-      
-      enum { off, counting, shown } status;
-      
-      std::string my_text;
-      std::string labelStyle;
-      
-      static PG_LineEdit* toolTipLabel;
-      
-      bool onParentEnter( PG_Pointer dummy );
-      bool onParentLeave( PG_Pointer dummy );
-      bool onParentDelete( const PG_MessageObject* object );
-      bool onMouseMotion( const SDL_MouseMotionEvent *motion );
-      bool onIdle();
-      
-      
-   public:
-      PG_ToolTipHelp( PG_Widget* parent, const std::string& text, const std::string &style="ToolTipHelp", bool deleteOnParentDeletion = true  );
-      
-      void SetText( const std::string& text );
-      
-      void ShowHelp( const PG_Point& pos );
-      void HideHelp( );
-};
 
 
 

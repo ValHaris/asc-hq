@@ -50,34 +50,13 @@ extern void selbuildingproduction( Building* eht );
 
 
 
-class MapComponent;
-
 extern SigC::Signal0<void> filtersChangedSignal;
 
-class SelectionHolder : public SigC::Object {
-     const MapComponent* currentItem;
-     int actplayer;
-     int currentWeather;
-     
-  public:
-     SelectionHolder() : currentItem(NULL), actplayer(0), currentWeather(0),brushSize(1) {};
- 
-     int getPlayer() { return actplayer; };
-     void setPlayer( int player );
-     
-     void setWeather( int weather );
-     int getWeather() { return currentWeather; };
-     
-     int brushSize;
-     const MapComponent* getSelection();
-     void setSelection( const MapComponent* component ) ;
-     void pickup ( pfield fld );
-     
-     SigC::Signal1<void,const MapComponent*> selectionChanged;
-   
+
+class MapComponentPlacer {
+   public:
+
 };
- 
-extern SelectionHolder selection;
 
 
 class MapComponent {
@@ -121,7 +100,7 @@ class VehicleItem : public BasicItem<Vehicletype> {
     public:  
        VehicleItem( const Vehicletype* vehicle ) : BasicItem<Vehicletype>( vehicle ) {};
        virtual int place( const MapCoordinate& mc ) const ;
-       virtual void display( Surface& s, const SPoint& pos ) const { item->paint ( s, pos, selection.getPlayer() ); };
+       virtual void display( Surface& s, const SPoint& pos ) const { item->paint ( s, pos, 0 ); };
        virtual MapComponent* clone() const { return new VehicleItem( item ); };
 };
 template<> class ItemTypeSelector<Vehicletype> {
@@ -247,7 +226,9 @@ class SingleItemWidget : public PG_Widget {
                return true;
          return false;
       };   
-           
+
+      SigC::Signal1<void,const MapComponent*> itemSelected;
+                 
    protected:
       
       bool eventMouseButtonUp (const SDL_MouseButtonEvent *button) {
@@ -257,7 +238,7 @@ class SingleItemWidget : public PG_Widget {
                my_window->QuitModal();
                if ( my_selectedItemMarker )
                   *my_selectedItemMarker = this;
-               selection.setSelection( it );
+               itemSelected( it );
                return true;
             }   
          return false;
@@ -359,7 +340,7 @@ template <class ItemType> class ItemSelector : public PG_Window {
 
          if ( key->keysym.sym == SDLK_RETURN ) {
             if ( selectedItem ) {
-               selection.setSelection( selectedItem->getMapComponent() );
+               itemSelected( selectedItem->getMapComponent() );
                Hide();
                QuitModal();
                return true;
@@ -399,6 +380,8 @@ template <class ItemType> class ItemSelector : public PG_Window {
          filtersChangedSignal.connect( SigC::slot( *this, &ItemSelector<ItemType>::filtersChanged ));
          nameSearch = new PG_Label ( this, PG_Rect( 5, Height() - 25, Width() - 10, 20 ));
       };
+      
+      SigC::Signal1<void,const MapComponent*> itemSelected;
 
       int RunModal()
       {
@@ -435,7 +418,9 @@ template <class ItemType> class ItemSelector : public PG_Window {
          int y = 0;
          for ( size_t i = 0; i < items.size(); ++i ) {
             typedef typename ItemTypeSelector<ItemType>::type itt ;
-            widgets.push_back( new SingleItemWidget ( new itt( items[i] ), scrollWidget, SPoint( x * (ItemTypeSelector<ItemType>::type::Width() + gapWidth), y * (ItemTypeSelector<ItemType>::type::Height() + MapComponent::fontHeight + gapWidth) ), this, &selectedItem) );
+            SingleItemWidget* siw = new SingleItemWidget ( new itt( items[i] ), scrollWidget, SPoint( x * (ItemTypeSelector<ItemType>::type::Width() + gapWidth), y * (ItemTypeSelector<ItemType>::type::Height() + MapComponent::fontHeight + gapWidth) ), this, &selectedItem);
+            siw->itemSelected.connect( itemSelected );
+            widgets.push_back( siw );
             ++x;
             if ( x >= columnCount ) {
                x = 0; 

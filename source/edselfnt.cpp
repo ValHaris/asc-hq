@@ -28,65 +28,15 @@
 
 #include "edmisc.h"
 #include "edselfnt.h"
-#include "edglobal.h"
 #include "mapdisplay.h"
 #include "itemrepository.h"
+#include "edglobal.h"
 
 #include "graphics/blitter.h"
 #include "paradialog.h"
 
 
-SelectionHolder selection;
-
 SigC::Signal0<void> filtersChangedSignal;
-
-void SelectionHolder::setSelection( const MapComponent* component ) 
-{
-   delete currentItem;
-   currentItem = component->clone();
-   selectionChanged( currentItem );
-}
-
-void SelectionHolder::setPlayer( int player )
-{
-   actplayer = player;
-   if ( currentItem )
-      selectionChanged( currentItem );
-}
-
-void SelectionHolder::setWeather( int weather )
-{
-   currentWeather = weather;
-   if ( currentItem )
-      selectionChanged( currentItem );
-}
-
-
-const MapComponent* SelectionHolder::getSelection()
-{
-   return currentItem;
-}
-
-void SelectionHolder::pickup ( pfield fld )
-{
-   if ( fld->vehicle ) {
-      VehicleItem v ( fld->vehicle->typ );
-      actplayer = fld->vehicle->getOwner();
-      setSelection( &v );
-   } else
-   if ( fld->building ) {
-      BuildingItem b ( fld->building->typ );
-      actplayer = fld->building->getOwner();
-      setSelection( &b );
-   } else
-   if ( !fld->objects.empty() ) {
-      ObjectItem o ( fld->objects.begin()->typ );
-      setSelection( &o );
-   } else {
-      TerrainItem t ( fld->typ->terraintype );
-      setSelection( &t );
-   }
-}
 
 
 

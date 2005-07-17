@@ -118,7 +118,32 @@ enum tuseractions {
      act_playerStrengthSummary
  };
 
+class SelectionHolder : public SigC::Object {
+     const MapComponent* currentItem;
+     int actplayer;
+     int currentWeather;
+     
+  public:
+     SelectionHolder() : currentItem(NULL), actplayer(0), currentWeather(0),brushSize(1) {};
  
+     int getPlayer() { return actplayer; };
+     void setPlayer( int player );
+     
+     void setWeather( int weather );
+     int getWeather() { return currentWeather; };
+     
+     int brushSize;
+     const MapComponent* getSelection();
+     void setSelection( const MapComponent* component ) ;
+     void pickup ( pfield fld );
+     
+     SigC::Signal1<void,const MapComponent*> selectionChanged;
+   
+};
+ 
+extern SelectionHolder selection;
+
+  
  
 extern void         execaction_ev(int code);
 extern void         execaction(int code);

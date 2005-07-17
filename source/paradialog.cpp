@@ -46,6 +46,7 @@
 #include "pgrichedit.h"
 #include "pgsdleventsupplier.h"
 #include "pgmultilineedit.h"
+#include "pgtooltiphelp.h"
 
 
 #include "paradialog.h"
@@ -764,6 +765,9 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
    for ( int i = 0; i < childNames.size(); ++i) {
       pc.openBracket( childNames[i] );
 
+      ASCString toolTipHelp;
+      pc.addString( "ToolTipHelp", toolTipHelp, "" );
+      
 
       PG_Rect r = parseRect( pc, parent );
 
@@ -777,6 +781,8 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
       int type;
       pc.addNamedInteger( "type", type, widgetTypeNum, widgetTypes );
 
+      PG_Widget* newWidget = NULL;
+      
       if ( type == Image ) {
          ASCString filename;
          pc.addString( "FileName", filename, "" );
@@ -801,6 +807,7 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
                }
                
                PG_Image* img = new PG_Image( parent, PG_Point(r.x, r.y ), surf.getBaseSurface(), false, PG_Draw::BkMode(imgMode) );
+               newWidget = img;
                img->SetDirtyUpdate(dirtyUpdate);
 
                widgetParams.assign ( img );
@@ -810,6 +817,7 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
             }
          } else {
             PG_Image* img = new PG_Image( parent, PG_Point(r.x, r.y ), NULL, false, PG_Draw::BkMode(imgMode) );
+            newWidget = img;
             widgetParams.assign ( img );
             parsePanelASCTXT( pc, img, widgetParams );
          }
@@ -823,6 +831,7 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
          // PG_ThemeWidget* tw = new PG_ThemeWidget ( parent, r, style );
          widgetParams.assign ( tw );
          parsePanelASCTXT( pc, tw, widgetParams );
+         newWidget = tw;
       }
 
       if ( type == StaticLabel ) {
@@ -833,6 +842,7 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
          if ( !hasStyle )
             widgetParams.assign ( lb );
          parsePanelASCTXT( pc, lb, widgetParams );
+         newWidget = lb;
       }
       if ( type == TextOutput ) {
          PG_Label* lb = new PG_Label ( parent, r, PG_NULLSTR, style );
@@ -840,6 +850,7 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
          if ( !hasStyle )
             widgetParams.assign ( lb );
          parsePanelASCTXT( pc, lb, widgetParams );
+         newWidget = lb;
       }
       if ( type == MultiLineText ) {
 
@@ -851,6 +862,7 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
             widgetParams.assign ( lb );
          }
          parsePanelASCTXT( pc, lb, widgetParams );
+         newWidget = lb;
       }
 
       if ( type == BarGraph ) {
@@ -874,6 +886,7 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
          bg->setColor( colorRange );
          widgetParams.assign ( bg );
          parsePanelASCTXT( pc, bg, widgetParams );
+         newWidget = bg;
       }
 
 
@@ -882,17 +895,20 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
          widgetParams.assign ( sw );
 
          parsePanelASCTXT( pc, sw, widgetParams );
+         newWidget = sw;
       }
 
       if ( type == SpecialInput ) {
          SpecialInputWidget* sw = new SpecialInputWidget ( parent, r );
 
          parsePanelASCTXT( pc, sw, widgetParams );
+         newWidget = sw;
       }
 
       if ( type == Dummy ) {
          SpecialInputWidget* sw = new SpecialInputWidget ( parent, r );
          parsePanelASCTXT( pc, sw, widgetParams );
+         newWidget = sw;
       }
       if ( type == ScrollArea ) {
          PG_ScrollWidget* sw = new PG_ScrollWidget( parent, r, style );
@@ -909,8 +925,11 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
             widgetParams.assign ( sw );
             
          parsePanelASCTXT( pc, sw, widgetParams );
+         newWidget = sw;
       }
 
+      if ( newWidget && !toolTipHelp.empty() )
+         new PG_ToolTipHelp( newWidget, toolTipHelp );
 
       pc.closeBracket();
    }
@@ -1329,148 +1348,4 @@ bool MessageDialog::handleButton(PG_Button* button) {
         quitModalLoop( button->GetID() );
 	return true;
 }
-
-
-
-
-
-
-
- 
-
-
-PG_ToolTipHelp :: PG_ToolTipHelp( PG_Widget* parent, const std::string& text, const std::string &style, bool deleteOnParentDeletion ) : parentWidget(parent), lastTick(0), labelStyle(style), status(off)
-{
-   if ( !parent )
-      return;
-        
-   parent->sigMouseEnter.connect( SigC::slot( *this, &PG_ToolTipHelp::onParentEnter ), parent );
-   parent->sigMouseLeave.connect( SigC::slot( *this, &PG_ToolTipHelp::onParentLeave ), parent );
-   parent->sigMouseMotion.connect( SigC::slot( *this, &PG_ToolTipHelp::onMouseMotion ));
-   PG_Application::GetApp()->sigAppIdle.connect( SigC::slot( *this, &PG_ToolTipHelp::onIdle ));
-   PG_Application::GetApp()->EnableAppIdleCalls();
-   
-   if ( deleteOnParentDeletion  )
-      parent->sigDelete.connect( SigC::slot( *this, &PG_ToolTipHelp::onParentDelete ));
-      
-         
-   SetText( text );
-}
-
-PG_LineEdit* PG_ToolTipHelp::toolTipLabel = NULL;
-PG_ToolTipHelp::Ticker* PG_ToolTipHelp::ticker = NULL;
-
-
-void PG_ToolTipHelp :: SetText( const std::string& text )
-{
-   my_text = text;
-}
-
-bool PG_ToolTipHelp :: onIdle(  )
-{
-   if ( !ticker )    
-      return false;
-
-   if ( status != counting )
-      return false;
-            
-   if ( ticker->getTicker() > lastTick + 10 ) {
-      if ( status < shown ) {
-         int x, y;
-         PG_Application::GetEventSupplier()->GetMouseState( x,y );
-         ShowHelp( PG_Point(x+5,y+10) );   
-         status = shown;
-      }
-      return true;
-   }
-   return false;
-}
-
-
-bool PG_ToolTipHelp :: onParentEnter( void* dummy )
-{
-   if ( !ticker )
-      ticker = new Ticker(100);
-      
-   status = counting;
-   
-   lastTick = ticker->getTicker();
-   return true;
-}
-
-bool PG_ToolTipHelp :: onParentLeave( void* dummy )
-{
-   // if the ToolTipLabel is beneath the mouse cursor, we'll receive a onParentLeave notification that we'll ignore
-   if ( toolTipLabel && toolTipLabel->IsMouseInside() ) 
-      return false;
-   
-   HideHelp();
-   status = off;
-   return false;
-}
-
-
-bool PG_ToolTipHelp :: onParentDelete( const PG_MessageObject* object )
-{
-   if ( status != off)
-      HideHelp();
-      
-   delete this;
-   return true;
-}
-
-bool PG_ToolTipHelp :: onMouseMotion( const SDL_MouseMotionEvent *motion )
-{
-   if ( ticker ) 
-      lastTick = ticker->getTicker();
-      
-   status = counting;
-      
-   HideHelp();
-   return true;
-}
-
-
-void PG_ToolTipHelp :: ShowHelp( const PG_Point& pos )
-{
-   PG_Point mousePos = pos;
-   /*
-   if ( ! parentWidget->IsInside( mousePos ) ) 
-      mousePos = PG_Point( parentWidget->x + parentWidget->Width() / 2, parentWidget->y + parentWidget->Height() / 2 );
-   */
-
-   if ( toolTipLabel )
-      delete toolTipLabel;
-      
-   toolTipLabel = new PG_LineEdit( NULL, PG_Rect( mousePos.x, mousePos.y, 0, 0 ), labelStyle );
-   toolTipLabel->SetText( my_text );
-   toolTipLabel->SetEditable( false );
- 
-   Uint16 w;
-   Uint16 h;
-   toolTipLabel->GetTextSize( w, h );
-   
-   PG_Rect r = *toolTipLabel;
-   if ( toolTipLabel->x + toolTipLabel->Width() > PG_Application::GetScreen()->w )
-      r.x = PG_Application::GetScreen()->w - toolTipLabel->Width();
-
-   if ( toolTipLabel->y + toolTipLabel->Height() > PG_Application::GetScreen()->h )
-      r.y = PG_Application::GetScreen()->h - toolTipLabel->Height();
-
-   r.w = w + 6;
-   r.h = h + 4;      
-   toolTipLabel->MoveWidget( r, false );
-   toolTipLabel->Show();
-   toolTipLabel->sigMouseMotion.connect( SigC::slot( *this, &PG_ToolTipHelp::onMouseMotion ));
-}
-
-void PG_ToolTipHelp :: HideHelp( )
-{
-   if ( toolTipLabel ) {
-      delete toolTipLabel;
-      toolTipLabel = NULL;
-   }
-}
-
-
 

@@ -36,6 +36,7 @@ panel {
            x = 2
            y = 2
 	   name = unitexp
+           ToolTipHelp = Experience
         } Widget0
      } Widget1
 

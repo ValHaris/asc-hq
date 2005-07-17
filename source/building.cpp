@@ -3061,11 +3061,13 @@ int ccontainer :: cunitinformation_icon :: available ( void )
 
 void  ccontainer :: cunitinformation_icon :: exec ( void )
 {
+/*
    if ( main->getmarkedunittype() )
       vehicle_information ( main->getmarkedunittype() );
    else
       if ( main->getmarkedunit() )
          vehicle_information ( main->getmarkedunit()->typ );
+  */
 }
 
 ccontainer :: cunitinformation_icon :: cunitinformation_icon ( void )

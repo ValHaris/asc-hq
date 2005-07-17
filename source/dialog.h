@@ -52,8 +52,6 @@ extern void  setupalliances( int supervisor = 0 );
 
 
    
-extern void  vehicle_information ( const Vehicletype* type = NULL);
-
 extern void displaymessage2( const char* formatstring, ... );
    
 //! displays a message in the message line

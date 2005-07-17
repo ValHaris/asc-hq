@@ -483,16 +483,20 @@ class UnitInfoDialog : public Panel {
         
 };
 
-void unitInfoDialog()
+void unitInfoDialog( const Vehicletype* vt )
 {
-
-   pfield fld = actmap->getField( actmap->getCursor() );
-   if ( fld && fld->vehicle ) {
-      UnitInfoDialog* uid = new UnitInfoDialog( NULL, fld->vehicle, NULL );
-      uid->Show();
-      uid->RunModal();
-      delete uid;
-   } else
-      displaymessage2("please select a unit" );
+   if ( vt ) {
+      UnitInfoDialog uid ( NULL, NULL, vt );
+      uid.Show();
+      uid.RunModal();
+   } else {
+      pfield fld = actmap->getField( actmap->getCursor() );
+      if ( fld && fld->vehicle ) {
+         UnitInfoDialog uid ( NULL, fld->vehicle, NULL );
+         uid.Show();
+         uid.RunModal();
+      } else
+         displaymessage2("please select a unit" );
+  }
 }
 

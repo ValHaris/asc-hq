@@ -23,6 +23,7 @@
 #include <SDL_mixer.h>
 
 #include "paradialog.h"
+#include "pgtooltiphelp.h"
 
 #include "basegfx.h"
 #include "misc.h"
@@ -495,8 +496,11 @@ bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
 bool MainScreenWidget :: selectVehicle()
 {
-   if ( !vehicleSelector ) 
-      vehicleSelector = new ItemSelector<Vehicletype>( this, PG_Rect( Width()-300, 100, 280, Height()-150), vehicleTypeRepository);
+   if ( !vehicleSelector ) {
+      ItemSelector<Vehicletype>* is = new ItemSelector<Vehicletype>( this, PG_Rect( Width()-300, 100, 280, Height()-150), vehicleTypeRepository);
+      is->itemSelected.connect( SigC::slot( selection, &SelectionHolder::setSelection ));
+      vehicleSelector = is;
+   }
       
    vehicleSelector->Show();
    vehicleSelector->RunModal();
@@ -505,8 +509,11 @@ bool MainScreenWidget :: selectVehicle()
 
 bool MainScreenWidget :: selectBuilding()
 {
-   if ( !buildingSelector ) 
-      buildingSelector = new ItemSelector<BuildingType>( this, PG_Rect( Width()-300, 100, 280, Height()-150), buildingTypeRepository);
+   if ( !buildingSelector ) {
+      ItemSelector<BuildingType>* is = new ItemSelector<BuildingType>( this, PG_Rect( Width()-300, 100, 280, Height()-150), buildingTypeRepository);
+      is->itemSelected.connect( SigC::slot( selection, &SelectionHolder::setSelection ));
+      buildingSelector = is;
+   }
    
    buildingSelector->Show();
    buildingSelector->RunModal();
@@ -515,8 +522,11 @@ bool MainScreenWidget :: selectBuilding()
 
 bool MainScreenWidget :: selectObject()
 {
-   if ( !objectSelector ) 
-      objectSelector = new ItemSelector<ObjectType>( this, PG_Rect( Width()-300, 100, 280, Height()-150), objectTypeRepository);
+   if ( !objectSelector ) {
+      ItemSelector<ObjectType>* is = new ItemSelector<ObjectType>( this, PG_Rect( Width()-300, 100, 280, Height()-150), objectTypeRepository);
+      is->itemSelected.connect( SigC::slot( selection, &SelectionHolder::setSelection ));
+      objectSelector = is;
+   }
       
    objectSelector->Show();
    objectSelector->RunModal();
@@ -525,8 +535,11 @@ bool MainScreenWidget :: selectObject()
 
 bool MainScreenWidget :: selectTerrain()
 {
-   if ( !terrainSelector ) 
-      terrainSelector = new ItemSelector<TerrainType>( this, PG_Rect( Width()-300, 100, 280, Height()-150), terrainTypeRepository);
+   if ( !terrainSelector ) {
+      ItemSelector<TerrainType>* is = new ItemSelector<TerrainType>( this, PG_Rect( Width()-300, 100, 280, Height()-150), terrainTypeRepository);
+      is->itemSelected.connect( SigC::slot( selection, &SelectionHolder::setSelection ));
+      terrainSelector = is;
+   }
       
    terrainSelector->Show();
    terrainSelector->RunModal();
@@ -535,8 +548,11 @@ bool MainScreenWidget :: selectTerrain()
 
 bool MainScreenWidget :: selectMine()
 {
-   if ( !mineSelector ) 
-      mineSelector = new ItemSelector<MineType>( this, PG_Rect( Width()-300, 100, 280, Height()-150), mineTypeRepository);
+   if ( !mineSelector ) {
+      ItemSelector<MineType>* is = new ItemSelector<MineType>( this, PG_Rect( Width()-300, 100, 280, Height()-150), mineTypeRepository);
+      is->itemSelected.connect( SigC::slot( selection, &SelectionHolder::setSelection ));
+      mineSelector = is;
+   }
       
    mineSelector->Show();
    mineSelector->RunModal();
