@@ -195,6 +195,12 @@ void AI :: checkConquer( )
       ++nxt;
       pvehicle veh= getMap()->getUnit ( bi->second.unit );
       pbuilding bld = getMap()->getField( bi->first )->building;
+      if ( !bld ) {
+         buildingCapture.erase ( bi );
+         bi = nxt;
+         continue;
+      }
+
       if ( getdiplomaticstatus2( bld->color, getPlayerNum()*8 ) != cawar
            || !( veh && fieldAccessible ( getMap()->getField( bi->first ), veh ) == 2 )) {
 
