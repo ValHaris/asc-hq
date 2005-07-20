@@ -1,3 +1,154 @@
+2005-07-16 15:20  mbickel
+
+	* libtool, source/sgstream.cpp:  Updated data version
+
+2005-07-16 08:46  mbickel
+
+	* source/: attack.cpp, basegfx.cpp, basestrm.cpp, building.cpp,
+	  clipboard.cpp, controls.cpp, dialog.cpp, dlg_box.cpp,
+	  gamedlg.cpp, gameevent_dialogs.cpp, gameevents.cpp,
+	  gameeventsystem.cpp, gui.cpp, loadbi3.cpp, loaders.cpp,
+	  loadpcxc.cpp, mappolygons.cpp, misc.cpp, network.cpp,
+	  newfont.cpp, palette.cpp, pd.cpp, prehistoricevents.cpp,
+	  sgstream.cpp, simplestream.cpp, soundList.cpp, spfst.cpp,
+	  stack.cpp, statisticdialog.cpp, strtmesg.cpp, typen.cpp,
+	  unitctrl.cpp:  Updated Copyright notice
+
+2005-07-16 08:40  mbickel
+
+	* source/sg.cpp:  Updated version number
+
+2005-07-10 14:48  mbickel
+
+	* source/textfile_evaluation.cpp:  Fixed: trailing spaces are
+	  stripped from strings in asctxt files
+
+2005-07-10 11:07  mbickel
+
+	* source/: Named.cpp, itemrepository.cpp, sgstream.cpp,
+	  strtmesg.cpp, vehicletype.cpp, win32/msvc/ASC/ASC.vcproj:
+	  CargoDivisor in transportation
+
+2005-07-09 12:44  mbickel
+
+	* source/: edmisc.cpp, loaders.cpp, sg.cpp, soundList.cpp,
+	  vehicle.cpp, win32/msvc/ASC/ASC.vcproj:  Fixed: moving transports
+	  one field at a time disabled movement cost for cargo
+
+2005-06-29 20:51  mbickel
+
+	* source/: controls.cpp, dlg_box.cpp, errors.h, gameevents.cpp,
+	  sg.cpp, strtmesg.cpp, textfile_evaluation.cpp,
+	  win32/msvc/ASC/ASC.vcproj:  Fixed: crash when reinforcement event
+	  uses invalid IDs
+
+2005-06-19 16:06  mbickel
+
+	* source/: buildings.cpp, strtmesg.cpp:  Fixed bug that prevented
+	  buildings from being repaired more than once
+
+2005-06-14 21:13  mbickel
+
+	* data/asc014.map, source/astar2.cpp:  Fixed bug in pathfinding
+
+2005-06-12 09:33  mbickel
+
+	* libtool, source/controls.cpp, source/dialog.cpp, source/sg.cpp,
+	  source/sdl/events.cpp, source/tools/linux/Makefile.am,
+	  source/tools/linux/Makefile.in:  Fixes for MacOS X
+
+2005-06-11 15:43  mbickel
+
+	* source/: astar2.cpp, strtmesg.cpp:  Fixed bug in Movement code
+
+2005-06-10 20:25  mbickel
+
+	* source/: strtmesg.cpp, terraintype.cpp:  Fixed: river not treated
+	  as water
+
+2005-06-07 20:09  mbickel
+
+	* source/: basegfx.cpp, sg.cpp, ai/misc.cpp:  Fixed graphics bug
+	   Fixed problems when loading map by command line switch
+
+2005-05-29 21:36  mbickel
+
+	* source/basegfx.h:  yet another endian fix
+
+2005-05-29 21:34  mbickel
+
+	* source/: ascstring.cpp, ascstring.h, basegfx.cpp, edglobal.cpp,
+	  edglobal.h, edmisc.cpp, gameevent_dialogs.cpp,
+	  tools/linux/Makefile.am:  Fixed bugs
+
+2005-05-29 19:05  mbickel
+
+	* config.guess, config.sub, configure, libtool:  Updated libtool
+
+2005-05-29 17:42  mbickel
+
+	* configure, configure.in, libtool, source/basegfx.cpp,
+	  source/basegfx.h, source/sdl/events.cpp,
+	  source/tools/linux/Makefile.am, source/tools/linux/Makefile.in,
+	  source/unix/asc/Makefile.am, source/unix/asc/Makefile.in,
+	  source/unix/mapeditor/Makefile.am,
+	  source/unix/mapeditor/Makefile.in:  Lots of fixes for running on
+	  MacOSX
+
+2005-05-26 17:03  mbickel
+
+	* source/: basegfx.cpp, basestrm.cpp, oldlzw.cpp:  Fixed endian
+	  problems
+
+2005-05-23 17:30  mbickel
+
+	* source/: astar2.cpp, strtmesg.cpp, tools/infopage.cpp:  Fixed: AI
+	  could move any unit into any else
+
+2005-05-15 19:12  mbickel
+
+	* data/asc007.map, source/strtmesg.cpp:  Update campaign map 7
+
+2005-05-15 19:01  mbickel
+
+	* source/attack.cpp:  Reformatted attack forumla
+
+2005-05-15 15:39  mbickel
+
+	* source/: ASCStringHelpers.h, gamemap.cpp, libs/rand/rand_r.c,
+	  libs/rand/rand_r.h, sdl/asc_IMG_jpg.c, sdl/loadimage.cpp:
+	  Changes to allow compilation on MacOS X
+
+2005-05-15 11:24  mbickel
+
+	* ChangeLog, config.guess, config.sub, configure, configure.in,
+	  libtool, data/asc007.map, data/largehex.pcx, source/gamemap.cpp,
+	  source/tools/demount.cpp, source/tools/mount.cpp:  Fixed
+	  compilation and portability problems
+
+2005-05-15 10:36  mbickel
+
+	* data/asc006.map, data/asc007.map, source/astar2.cpp,
+	  source/basestreaminterface.h, source/basestrm.cpp,
+	  source/controls.cpp, source/dlg_box.cpp, source/gamemap.cpp,
+	  source/loadbi3.cpp, source/loaders.cpp, source/strtmesg.cpp,
+	  source/textfile_evaluation.cpp, source/vehicle.cpp,
+	  source/vehicle.h, source/win32/msvc/ASC.sln,
+	  source/win32/msvc/ASC/ASC.rc, source/win32/msvc/ASC/ASC.vcproj,
+	  source/win32/msvc/ASC/asc.ICO, source/win32/msvc/ASC/icon2.ico,
+	  source/win32/msvc/mapeditor/asc.ico,
+	  source/win32/msvc/mapeditor/mapeditor.rc:  Fixed: height change
+	  not possible with 0 fields dist
+	   Fixed: reaction fire not recharging
+
+2005-04-30 20:22  mbickel
+
+	* source/win32/msvc/ASC/ASC.rc:  removed asc.rc
+
+2005-04-30 20:22  mbickel
+
+	* source/win32/msvc/ASC/ASC.rc:  Added asc.rc
+
 2005-04-30 13:51  mbickel
 
 	* source/: basestreaminterface.h, basestrm.cpp:  Fixed compilation
