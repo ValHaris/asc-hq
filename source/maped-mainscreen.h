@@ -89,6 +89,7 @@ public:
     
    
 protected:
+
     MapDisplayPG* mapDisplay;
     NewGuiHost* guiHost;
     Menu* menu;

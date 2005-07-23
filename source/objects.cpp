@@ -32,8 +32,6 @@
 #include "graphics/blitter.h"
 #include "iconrepository.h"
 #include "objects.h"
-#include "spfst.h"
-#include "gamemap.h"
 #include "graphics/blitter.h"
 
 
@@ -42,26 +40,10 @@ const int MineBasePunch[cminenum]  = { 60, 120, 180, 180 };
 
 void MineType :: paint ( Surface& surface, SPoint pos ) const 
 {
-   Mine::paint( type, 0, surface, pos );
+   paint( type, 0, surface, pos );
 }
 
-
-bool Mine :: attacksunit ( const Vehicle* veh )
-{
-     if  (!( ( veh->typ->functions & cfmineimmune ) ||
-              ( veh->height > chfahrend ) ||
-              ( getdiplomaticstatus2 ( veh->color, player*8 ) == capeace ) ||
-              ( (veh->typ->movemalustyp ==  cmm_trooper) && (type != cmantipersonnelmine)) || 
-              ( veh->height <= chgetaucht && type != cmmooredmine ) || 
-              ( veh->height == chschwimmend && type != cmfloatmine ) ||
-              ( veh->height == chfahrend && type != cmantipersonnelmine  && type != cmantitankmine )
-            ))
-         return true;
-     return false;
-}
-
-
-void Mine::paint( MineTypes type, int player, Surface& surf, SPoint pos )
+void MineType::paint( MineTypes type, int player, Surface& surf, SPoint pos )
 {
    static Surface* images[5] = { NULL, NULL, NULL, NULL, NULL };
    if ( !images[type] ) {
@@ -81,15 +63,6 @@ void Mine::paint( MineTypes type, int player, Surface& surf, SPoint pos )
    }
 }
 
-void Mine::paint( Surface& surf, SPoint pos )
-{
-   paint( type, player, surf, pos );   
-}
-
-
-
-
-
 
 bool AgeableItem::age( AgeableItem& obj )
 {
@@ -98,16 +71,6 @@ bool AgeableItem::age( AgeableItem& obj )
       return obj.lifetimer==0;
    } else
       return false;
-}
-
-
-
-Mine::Mine( MineTypes type, int strength, int player, tmap* gamemap )
-{
-   this->type = type;
-   this->strength = strength;
-   this->player = player;
-   lifetimer = gamemap->getgameparameter( GameParameter(cgp_antipersonnelmine_lifetime + type - 1));
 }
 
 

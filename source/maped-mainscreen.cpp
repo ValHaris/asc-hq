@@ -335,7 +335,7 @@ void MainScreenWidget::updateStatusBar()
 
 void MainScreenWidget::selectionChanged( const MapComponent* item )
 {
-   selectionName->SetText( item->getName() + "(ID: " + ASCString::toString( item->getID()   ) + ")");
+   selectionName->SetText( item->getItemType()->getName() + "(ID: " + ASCString::toString( item->getItemType()->getID()   ) + ")");
 }
 
 
@@ -494,68 +494,50 @@ bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 }
 
 
+
+typedef PG_Window* PG_WindowPointer;
+
+template <class ItemType> 
+void showSelectionWindow( PG_Widget* parent, PG_WindowPointer &selectionWindow, const ItemRepository<ItemType>& itemRepository  )
+{
+   if ( !selectionWindow ) {
+      ItemSelectorWindow* sw = new ItemSelectorWindow( parent, PG_Rect( parent->Width()-300, 100, 280, parent->Height()-150), new MapItemTypeWidgetFactory< MapItemTypeWidget<ItemType> >(itemRepository) );
+      filtersChangedSignal.connect( SigC::slot( *sw, &ItemSelectorWindow::reLoad ));
+      selectionWindow = sw;
+   }
+   
+   selectionWindow->Show();
+   selectionWindow->RunModal();
+}
+
+
 bool MainScreenWidget :: selectVehicle()
 {
-   if ( !vehicleSelector ) {
-      ItemSelector<Vehicletype>* is = new ItemSelector<Vehicletype>( this, PG_Rect( Width()-300, 100, 280, Height()-150), vehicleTypeRepository);
-      is->itemSelected.connect( SigC::slot( selection, &SelectionHolder::setSelection ));
-      vehicleSelector = is;
-   }
-      
-   vehicleSelector->Show();
-   vehicleSelector->RunModal();
+   showSelectionWindow( this, vehicleSelector, vehicleTypeRepository );
    return true;
 }
 
 bool MainScreenWidget :: selectBuilding()
 {
-   if ( !buildingSelector ) {
-      ItemSelector<BuildingType>* is = new ItemSelector<BuildingType>( this, PG_Rect( Width()-300, 100, 280, Height()-150), buildingTypeRepository);
-      is->itemSelected.connect( SigC::slot( selection, &SelectionHolder::setSelection ));
-      buildingSelector = is;
-   }
-   
-   buildingSelector->Show();
-   buildingSelector->RunModal();
+   showSelectionWindow( this, buildingSelector, buildingTypeRepository );
    return true;
 }
 
 bool MainScreenWidget :: selectObject()
 {
-   if ( !objectSelector ) {
-      ItemSelector<ObjectType>* is = new ItemSelector<ObjectType>( this, PG_Rect( Width()-300, 100, 280, Height()-150), objectTypeRepository);
-      is->itemSelected.connect( SigC::slot( selection, &SelectionHolder::setSelection ));
-      objectSelector = is;
-   }
-      
-   objectSelector->Show();
-   objectSelector->RunModal();
+   showSelectionWindow( this, objectSelector, objectTypeRepository );
    return true;
 }
 
 bool MainScreenWidget :: selectTerrain()
 {
-   if ( !terrainSelector ) {
-      ItemSelector<TerrainType>* is = new ItemSelector<TerrainType>( this, PG_Rect( Width()-300, 100, 280, Height()-150), terrainTypeRepository);
-      is->itemSelected.connect( SigC::slot( selection, &SelectionHolder::setSelection ));
-      terrainSelector = is;
-   }
-      
-   terrainSelector->Show();
-   terrainSelector->RunModal();
+   showSelectionWindow( this, terrainSelector, terrainTypeRepository );
    return true;
 }
 
 bool MainScreenWidget :: selectMine()
 {
-   if ( !mineSelector ) {
-      ItemSelector<MineType>* is = new ItemSelector<MineType>( this, PG_Rect( Width()-300, 100, 280, Height()-150), mineTypeRepository);
-      is->itemSelected.connect( SigC::slot( selection, &SelectionHolder::setSelection ));
-      mineSelector = is;
-   }
-      
-   mineSelector->Show();
-   mineSelector->RunModal();
+   showSelectionWindow( this, mineSelector, mineTypeRepository );
    return true;
 }
 

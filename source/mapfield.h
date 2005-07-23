@@ -18,6 +18,7 @@
  #include "vehicle.h"
  #include "buildings.h"
  #include "basestrm.h"
+ #include "explosivemines.h"
  
 
 

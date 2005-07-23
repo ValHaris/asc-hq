@@ -103,19 +103,24 @@ void sortItems( vector<MineType*>& vec )
 }
 
 
-void MapComponent::display( PG_Widget* parent, SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst ) const
+void MapComponent::displayClip( PG_Widget* parent, SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst ) const
 {
    if ( !getClippingSurface().valid() )
       getClippingSurface() = Surface::createSurface( displayWidth() + 10, displayHeight() + fontHeight + 10, 32, 0 );
+      
    getClippingSurface().Fill(0);   
    display( getClippingSurface(), SPoint( 0, 0 ) );
    
+   static PG_ThemeWidget* fontProvidingWidget = NULL;
+   if ( !fontProvidingWidget  )
+      fontProvidingWidget = new PG_ThemeWidget( NULL );
+      
    SDL_Rect      blitRect;
    blitRect.x = 0;
    blitRect.y = displayHeight() + 2;
    blitRect.w = displayWidth();
    blitRect.h = displayHeight() - blitRect.y;
-   PG_FontEngine::RenderText( getClippingSurface().getBaseSurface(), blitRect, blitRect.x, blitRect.y+parent->GetFontAscender(), getName(), parent->GetFont() );
+   PG_FontEngine::RenderText( getClippingSurface().getBaseSurface(), blitRect, blitRect.x, blitRect.y+fontProvidingWidget ->GetFontAscender(), getItemType()->getName(), fontProvidingWidget ->GetFont() );
    
    PG_Draw::BlitSurface( getClippingSurface().getBaseSurface(), src, surface, dst);
 }
@@ -243,18 +248,110 @@ int MineItem::place( const MapCoordinate& mc ) const
 
 
 
+
+
+
+
+
+
+
+
+
 int actplayer = 0;
 int currentWeather = 0;
 int brushSize = 1;
 
 
-//* õS terrainSelect
 
-// How must a typedef be used to work with templates?
-// something like
-//template<class T> typedef dynamic_array<T> vect<T> ;
 
-#define vect vector
+
+
+
+
+
+
+
+
+
+
+
+
+class CargoItemFactory: public MapItemTypeWidgetFactory<MapItemTypeWidget< Vehicletype > > {
+      typedef MapItemTypeWidgetFactory<MapItemTypeWidget< Vehicletype > > Parent;
+      typedef MapItemTypeWidget< Vehicletype > WidgetType;
+       ContainerBase* container;
+   protected:
+      bool isFiltered( const ItemType& item ) {
+         if ( Parent::isFiltered( item ))
+            return false;
+      
+         bool result = false;
+         Vehicle* unit = new Vehicle ( &item, actmap, container->getOwner() );
+         if ( container->vehicleFit ( unit ))
+            result = true;
+         delete unit;
+         return result;
+      };
+
+   public:
+      CargoItemFactory(  ContainerBase* container_ )  : Parent(vehicleTypeRepository), container( container_ ) {};
+      
+      void itemSelected( const SelectionWidget* widget )
+      {
+         if ( !widget )
+            return;
+            
+         const WidgetType* mapItemWidget = dynamic_cast<const WidgetType*>(widget);
+         assert( mapItemWidget );
+         if ( mapItemWidget->getItem() ) {
+            Vehicle* unit = new Vehicle ( mapItemWidget->getItem(), actmap, container->getOwner() );
+            unit->fillMagically();
+            unit->setnewposition ( container->getPosition() );
+            unit->tank.material = 0;
+            unit->tank.fuel = 0;
+            if ( container->vehicleFit ( unit )) {
+               unit->tank.material = unit->typ->tank.material;
+               unit->tank.fuel = unit->typ->tank.fuel;
+      
+               if ( !container->vehicleFit ( unit )) {
+                  unit->tank.material = 0;
+                  unit->tank.fuel = 0;
+                  displaymessage("Warning:\nThe unit you just set could not be loaded with full material and fuel\nPlease set these values manually",1);
+               }
+               int p = 0;
+               while ( container->loading[p] && p < 32 )
+                  p++;
+               if ( p < 32 )
+                  container->loading[p] = unit;
+      
+            } else {
+               delete unit;
+               displaymessage("The unit could not be loaded !",1);
+            }
+         }
+      }
+     
+};
+
+
+void selcargo( PG_Window* parentWindow, ContainerBase* container )
+{
+   ItemSelectorWindow isw( parentWindow, PG_Rect( 100, 100, 280, 600), new CargoItemFactory( container ) );
+   isw.Show();
+   isw.RunModal();
+}
+
+
+
+
+/////////////////////////////////////// CARGO //////////////////////////////////////
+
+
+
+
+
+
+
 
 class SelectAnythingBase {
             public:
@@ -264,6 +361,7 @@ class SelectAnythingBase {
         };
 
 
+#define vect vector
 
 
 template<class T> 
@@ -944,7 +1042,7 @@ class tminetype {
             int type;
             char* name;
             void paint ( int x, int y ) { 
-            Mine::paint( MineTypes(type+1), farbwahl, getActiveSurface(), SPoint(x,y) ); 
+            MineType::paint( MineTypes(type+1), farbwahl, getActiveSurface(), SPoint(x,y) ); 
             };
        };
 typedef tminetype* pminetype;
@@ -1439,7 +1537,9 @@ void setnewbuildingselection ( pbuildingtype v )
 }
 
 
-/////////////////////////////////////// CARGO //////////////////////////////////////
+
+
+
 
 
 class SelectCargoVehicleType : public SelectVehicleType {
@@ -1512,6 +1612,24 @@ class SelectVehicleTypeForBuildingProduction : public SelectCargoVehicleType {
 //* õS Fahrzeuge fr Unit-Beloading
 
 
+
+
+
+//* õS Fahrzeuge fr Geb„ude-Production
+
+void selbuildingproduction( Building* bld )
+{  
+   SelectVehicleTypeForBuildingProduction svtfbc ( bld );
+   svtfbc.init( vehicleTypeRepository.getVector() );
+   pvehicletype newcargo = svtfbc.selectitem ( NULL );
+   if ( newcargo ) {
+      int p = 0;
+      while ( bld->production[p] )
+        p++;
+      bld->production[p] = newcargo;
+   }
+}
+
 void selcargo( ContainerBase* container )
 {
    SelectVehicleTypeForContainerCargo svtftc ( container );
@@ -1545,23 +1663,5 @@ void selcargo( ContainerBase* container )
       }
    }
 }
-
-
-
-//* õS Fahrzeuge fr Geb„ude-Production
-
-void selbuildingproduction( Building* bld )
-{  
-   SelectVehicleTypeForBuildingProduction svtfbc ( bld );
-   svtfbc.init( vehicleTypeRepository.getVector() );
-   pvehicletype newcargo = svtfbc.selectitem ( NULL );
-   if ( newcargo ) {
-      int p = 0;
-      while ( bld->production[p] )
-        p++;
-      bld->production[p] = newcargo;
-   }
-}
-
 
 

@@ -456,7 +456,7 @@ panel {
          widget1 {
            type = multilinetext
            name = unitpad_unitabilities
-           transparency = 255
+           localtransparency = 255
            FontSize = 12
            x = 10
            y = 26
@@ -729,7 +729,7 @@ panel {
          widget1 {
            type = ScrollArea
            name = unitpad_terrainaccessarea
-           transparency = 255
+           localtransparency = 255
            x = 10
            y = 25
            width = 180
@@ -740,32 +740,40 @@ panel {
 
            
            LineWidget {
-             type = image
-             Filename = padterraintab.png
              name = unitpad_line_terrain
              x = 0
              y = 2
              height = 13
              width = 150
              
-             widgetnum = 2
+             widgetnum = 1
              widget0 {
-                TextAlign = LEFT
-                FontSize = 11 
-                type = TextOutput
-                name = unitpad_unitmove_terraintype
-                x = 3
-                y = 1
-                width = 130
-                height = 12
-             } widget0
-             widget1 {
-               type = SpecialDisplay
-               name = unitpad_unitmove_terrainaccess
-               x = 127
-               width = 23
-               y = 1
-             } widget1
+                type = image
+                Filename = padterraintab.png
+                x = 0
+                y = 2
+                height = 13
+                width = 150
+                
+                widgetnum = 2
+                widget0 {
+                    TextAlign = LEFT
+                    FontSize = 11 
+                    type = TextOutput
+                    name = unitpad_unitmove_terraintype
+                    x = 3
+                    y = 1
+                    width = 130
+                    height = 12
+                } widget0
+                widget1 {
+                  type = SpecialDisplay
+                  name = unitpad_unitmove_terrainaccess
+                  x = 127
+                  width = 23
+                  y = 1
+                } widget1
+             } widget0 
            } LineWidget
 
            widget0 {
@@ -1008,7 +1016,8 @@ panel {
          Filename = padweaponscreenwindow.png
          x = 75
          y = 230
-         widgetnum = 5
+         widgetnum = 6
+
          widget0 {
            TextAlign = LEFT
            Fontsize = 16
@@ -1019,50 +1028,62 @@ panel {
            height = 18
          } widget0
 
-         userhandler = unitpad_weaponlist
+         widget1 {
+           type = ScrollArea
+           name = unitpad_weaponchoosearea
+           localtransparency = 255
+           x = 5
+           y = 20
+           width = 202
+           height = 150
+         
+         
+           userhandler = unitpad_weaponlist
 
-         LineWidget {
-           type = dummy
-           name = line_pad_weapon_choose
-           x = 10
-           y = 30
-           width = 191
-           height = 19
-           widgetnum = 1
-           widget0 {
-             type = image
-             name = pad_weaponbar
-             Filename = padweaponchoosebar.png
-             localtransparency = 255
-             x = 0
-             y = 0
-             widgetnum = 2
+           LineWidget {
+             type = dummy
+             name = line_pad_weapon_choose
+             x = 10
+             y = 30
+             width = 191
+             height = 19
+             widgetnum = 1
              widget0 {
                type = image
-               Filename = pad_weaponhole.png
-               x = 8
-               y = 3
-               widgetnum = 1
+               name = pad_weaponbar
+               Filename = padweaponchoosebar.png
+               localtransparency = 255
+               x = 0
+               y = 0
+               widgetnum = 2
                widget0 {
                  type = image
-                 name = weapon_symbol1
-                 x = 2
-                 y = 2
-               } widget0
-              } widget0
-              widget1 {
-                type = TextOutput
-                name = weapon_text1
-                TextAlign = LEFT
-                FontSize = 14
-                x = 40
-                y = 4
-                height = 14
-             } Widget1
-           } widget0             
-         } LineWidget
+                 Filename = pad_weaponhole.png
+                 x = 8
+                 y = 3
+                 widgetnum = 1
+                 widget0 {
+                   type = image
+                   name = weapon_symbol1
+                   x = 2
+                   y = 2
+                 } widget0
+                } widget0
+                widget1 {
+                  type = TextOutput
+                  name = weapon_text1
+                  TextAlign = LEFT
+                  FontSize = 14
+                  x = 40
+                  y = 4
+                  height = 14
+               } Widget1
+             } widget0             
+           } LineWidget
+         } widget1
 
-         widget1 {
+
+         widget2 {
            TextAlign = LEFT
            Fontsize = 13
            type = StaticText
@@ -1070,8 +1091,8 @@ panel {
            x = 10
            y = 250
            height = 13
-         } widget1
-         widget2 {
+         } widget2
+         widget3 {
            TextAlign = LEFT
            Fontsize = 13
            type = StaticText
@@ -1079,8 +1100,8 @@ panel {
            x = 10
            y = 267
            height = 13
-         } widget2
-         widget3 {
+         } widget3
+         widget4 {
            TextAlign = LEFT
            Fontsize = 13
            type = StaticText
@@ -1088,13 +1109,13 @@ panel {
            x = 10
            y = 285
            height = 13
-         } widget3
-         widget4 {
+         } widget4
+         widget5 {
             type = dummy
             name = single_weapon_info
             x = 0
             y = 0
-            widgetNum = 15
+            widgetnum = 15
             
             widget0 {
               type = image
@@ -1380,7 +1401,7 @@ panel {
               height = 13
               width = 25
             } widget14
-         } widget4 
+         } widget5 
        } widget0
 
        widget1 {

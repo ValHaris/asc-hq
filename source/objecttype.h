@@ -22,10 +22,11 @@
  #include "terraintype.h"
  #include "research.h"
  #include "overviewmapimage.h"
+ #include "mapitemtype.h"
 
 
  //! An object that can be placed on fields. Roads, pipelines and ditches are examples of objects. \sa Object
- class ObjectType : public LoadableItemType {
+ class ObjectType : public MapItemType, public LoadableItemType {
      bool imageUsesAlpha;
      void realDisplay ( Surface& surface, SPoint pos, int dir, int weather ) const;
    public:
@@ -117,6 +118,9 @@
      ASCString name;
      
      ASCString getName() const { return name; };
+     
+     int getID() const { return id; };    
+     
 
      static const int netBehaviourNum = 6;
      enum NetBehaviour { NetToBuildings = 1, NetToBuildingEntry = 2, NetToSelf = 4, NetToBorder = 8, SpecialForest = 0x10, AutoBorder = 0x20 };

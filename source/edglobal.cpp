@@ -138,10 +138,10 @@
 
 SelectionHolder selection;
 
-void SelectionHolder::setSelection( const MapComponent* component ) 
+void SelectionHolder::setSelection( const MapComponent& component ) 
 {
    delete currentItem;
-   currentItem = component->clone();
+   currentItem = component.clone();
    selectionChanged( currentItem );
 }
 
@@ -170,19 +170,19 @@ void SelectionHolder::pickup ( pfield fld )
    if ( fld->vehicle ) {
       VehicleItem v ( fld->vehicle->typ );
       actplayer = fld->vehicle->getOwner();
-      setSelection( &v );
+      setSelection( v );
    } else
    if ( fld->building ) {
       BuildingItem b ( fld->building->typ );
       actplayer = fld->building->getOwner();
-      setSelection( &b );
+      setSelection( b );
    } else
    if ( !fld->objects.empty() ) {
       ObjectItem o ( fld->objects.begin()->typ );
-      setSelection( &o );
+      setSelection( o );
    } else {
       TerrainItem t ( fld->typ->terraintype );
-      setSelection( &t );
+      setSelection( t );
    }
 }
 
@@ -345,12 +345,12 @@ void execaction(int code)
        break;
     case act_selcolor : {
                        ch = 0;
-                       selcolor( ct_f5 );
+                       // selcolor( ct_f5 );
                      }
        break;
     case act_selweather : {
                        ch = 0;
-                       selweather( ct_f9  );   // !!!!!         // Test (Boolean) Testet, ob das wetter auch verfgbar ist fr bodentyp
+                       // selweather( ct_f9  );   // !!!!!         // Test (Boolean) Testet, ob das wetter auch verfgbar ist fr bodentyp
                      }
        break;
     case act_setupalliances :  setupalliances();
@@ -716,8 +716,10 @@ void execaction(int code)
       break;
    case act_displayResourceComparison : resourceComparison();
       break;
+      /*
    case act_specifyunitproduction: unitProductionLimitation();
       break;
+      */
    case act_pasteFromClipboard: if ( !getactfield()->getContainer() ) {
                                    ClipBoard::Instance().place( actmap->getCursor() );
                                    mapsaved = false;
@@ -793,10 +795,7 @@ void execaction_pg(int code)
                               execaction ( act_setactivefieldvals );
                            execaction( act_switchmaps);
        break;                    
-    case act_selmine : {
-                       ch = 0;
-                       selmine( ct_f8 );
-                     }
+    case act_selmine : mainScreenWidget->selectMine();
        break;
     case act_unitinfo :  unitInfoDialog();
        break;

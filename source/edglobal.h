@@ -20,6 +20,11 @@
 
 //*Actions fÅr Editor
 
+#ifndef edglobalH
+#define edglobalH
+
+#include "ed_mapcomponent.h"
+
 extern int infomessage( char* formatstring, ... );
 
 const int execactionscount = 90;
@@ -134,7 +139,7 @@ class SelectionHolder : public SigC::Object {
      
      int brushSize;
      const MapComponent* getSelection();
-     void setSelection( const MapComponent* component ) ;
+     void setSelection( const MapComponent& component ) ;
      void pickup ( pfield fld );
      
      SigC::Signal1<void,const MapComponent*> selectionChanged;
@@ -148,3 +153,4 @@ extern SelectionHolder selection;
 extern void         execaction_ev(int code);
 extern void         execaction(int code);
 
+#endif

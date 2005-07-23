@@ -30,6 +30,7 @@
  #include "buildings.h"
  #include "basestrm.h"
  #include "research.h"
+ #include "mapitemtype.h"
 
 class AgeableItem {
     protected:
@@ -57,18 +58,20 @@ class Object : public AgeableItem {
 
 };
 
-#define cminenum 4
+const int cminenum = 4;
 extern const char* MineNames[cminenum] ;
 extern const int MineBasePunch[cminenum]  ;
 
 enum MineTypes { cmantipersonnelmine = 1 , cmantitankmine, cmmooredmine, cmfloatmine  };
 
-class MineType {
+class MineType : public MapItemType {
       MineTypes type;
    public:
       int id;
       ASCString name;
       ASCString location;
+      
+      int getID() const { return id; }; 
       
       MineType( MineTypes t ) : type ( t ), id( int(t)) {};
       MineType( const MineType& w ) : type ( w.type ) {};
@@ -77,34 +80,8 @@ class MineType {
       };
       
       void paint ( Surface& surface, SPoint pos ) const ;
-};
-
-
-class Mine : public AgeableItem {
-   public:
-      Mine( MineTypes type, int strength, int player, tmap* gamemap );
-
-
-      MineTypes type;
-
-      //! the effective punch of the mine
-      int strength;
-
-      //! the player who placed the mine; range 0 .. 7
-      int player;
-
-      //! can the mine attack this unit
-      bool attacksunit ( const Vehicle* veh );
-      
-      //! display the mine
-      void paint( Surface& surf, SPoint pos );
-
-      //! display the mine
       static void paint( MineTypes type, int player, Surface& surf, SPoint pos );
-          
 };
-
-
 
 #endif
 

@@ -20,6 +20,7 @@
 
  #include "graphics/surface.h"
  #include "typen.h"
+ #include "mapitemtype.h"
 
  class OverviewMapImage;
 
@@ -68,9 +69,10 @@
  typedef class TerrainType* pterraintype;
 
  //! The type of a field
- class TerrainType : public LoadableItemType {
+ class TerrainType : public MapItemType, public LoadableItemType {
     public:
       int                id;
+      int                getID() const { return id; };
       ASCString          name;
       ASCString          getName() const { return name; };
       

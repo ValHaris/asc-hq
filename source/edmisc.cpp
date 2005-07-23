@@ -1346,7 +1346,7 @@ void         tnewmap::buttonpressed(int id)
       mousevisible(true);
 
       lastselectiontype = cselbodentyp;
-      selterraintype( ct_invvalue );
+//      selterraintype( ct_invvalue );
 
       mousevisible(false);
       putimage(430,0,p);
@@ -2590,7 +2590,7 @@ void         tladeraum::done(void)
    ch = 0;
 }
 
-
+/*
 class UnitProductionLimitation : public tladeraum {
               tmap::UnitProduction::IDsAllowed ids;
               tmap::UnitProduction& up;
@@ -2670,7 +2670,7 @@ void unitProductionLimitation(  )
       warned = true;
    }
 }
-
+*/
 
 
 

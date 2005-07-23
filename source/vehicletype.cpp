@@ -647,7 +647,7 @@ void Vehicletype:: write ( tnstream& stream ) const
 }
 
 
-const ASCString& Vehicletype::getName( ) const
+ASCString Vehicletype::getName( ) const
 {
   if ( !name.empty() )
      return name;

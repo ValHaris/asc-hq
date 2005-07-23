@@ -20,8 +20,9 @@
 
  #include "typen.h"
  #include "research.h"
+ #include "mapitemtype.h"
 
-class ContainerBaseType: public LoadableItemType {
+class ContainerBaseType: public MapItemType, public LoadableItemType {
    public:
      ContainerBaseType ();
 
@@ -30,7 +31,9 @@ class ContainerBaseType: public LoadableItemType {
      //! a short name, for example B-52
      ASCString    name;
 
-     virtual const ASCString& getName() const { return name; };
+     ASCString getName() const { return name; };
+     int getID() const { return id; };
+     
      
      //! an extensive information about the unit/building which may be several paragraphs long
      ASCString    infotext;
