@@ -1015,7 +1015,7 @@ void execuseraction ( tuseractions action )
    switch ( action ) {
       case ua_repainthard  :
       case ua_repaint      :
-         repaintdisplay();
+         repaintDisplay();
          break;
 
       case ua_help         :
@@ -1431,6 +1431,7 @@ void execuseraction ( tuseractions action )
       case ua_showsearchdirs: showSearchPath();
          break;
 
+      default:;
       };
 }
 

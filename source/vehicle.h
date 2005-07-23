@@ -175,7 +175,7 @@
     int weight( void ) const;
 
     //! returns the units name or, if it does not exist, the unit type's name or description
-    const ASCString&    getName() const;
+    const ASCString    getName() const;
 
 
   protected:

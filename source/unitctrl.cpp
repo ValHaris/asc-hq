@@ -867,6 +867,7 @@ void     VehicleAttack :: tsearchattackablevehicles::testfield( const MapCoordin
                   break;
                case AttackWeap::object:   va->attackableObjects.addField   ( mc, *atw );
                   break;
+               default:;
             } /* endswitch */
             anzahlgegner++;
          } 

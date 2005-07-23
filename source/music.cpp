@@ -18,7 +18,7 @@
 #include "textfile_evaluation.h"
 
 
-typedef vector<MusicPlayList*> PlayLists;
+typedef deallocating_vector<MusicPlayList*> PlayLists;
 PlayLists playLists;
 
 void PlayListLoader::readTextFiles ( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location )

@@ -116,8 +116,8 @@ protected:
   /**
   *@brief Standard-Constructor
   */
-  AbstractEntry(): depth(0), parent(0) {}
-  AbstractEntry(ASCString data, ASCString css): lineData(data), cssFile(css), depth(0), parent(0) {};
+  AbstractEntry(): parent(0), depth(0) {}
+  AbstractEntry(ASCString data, ASCString css): cssFile(css), lineData(data), parent(0), depth(0) {};
 
 
 };

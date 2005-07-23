@@ -220,7 +220,7 @@ class AutoProgressBar: public PG_ProgressBar {
          
          try {
             tnfilestream stream ( "progress.dat", tnstream::reading  );
-            int version = stream.readInt();
+            stream.readInt(); // version
             time = stream.readInt( );
             readClassContainer( prevTickTimes, stream );
          }
@@ -251,7 +251,7 @@ ASC_PG_App& getPGApplication()
 
 
      
-StartupScreen::StartupScreen( const ASCString& filename, SigC::Signal0<void>& ticker ) : progressBar(NULL), infoLabel(NULL), versionLabel(NULL), fullscreenImage(NULL)
+StartupScreen::StartupScreen( const ASCString& filename, SigC::Signal0<void>& ticker ) : infoLabel(NULL), versionLabel(NULL), progressBar(NULL), fullscreenImage(NULL)
 {
    MessagingHub::Instance().statusInformation.connect( SigC::slot( *this, &StartupScreen::disp ));
    

@@ -2,7 +2,7 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.67.2.12 2005-07-03 20:57:19 mbickel Exp $
+//     $Id: edmain.cpp,v 1.67.2.13 2005-07-23 11:36:24 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -299,14 +299,17 @@ int mapeditorMainThread ( void* _mapname )
 
    setstartvariables();
 
-//   addmouseproc ( &mousescrollproc );
-
    mainScreenWidget = new MainScreenWidget( getPGApplication());
    mainScreenWidget->Show();
    
    mousevisible(true);
 
    getPGApplication().Run();
+   
+   if ( actmap ) {
+      delete actmap;
+      actmap = NULL;
+   }
    return 0;
 }
 
@@ -349,13 +352,6 @@ int main(int argc, char *argv[] )
     logtofile ( "\n new log started \n ");
    #endif
 
-   #ifdef _DOS_
-    if ( showmodes ) {
-       showavailablemodes();
-       return 0;
-    }
-   #endif
-
    signal ( SIGINT, SIG_IGN );
 
    initFileIO( cl->c().c_str() );
@@ -367,18 +363,6 @@ int main(int argc, char *argv[] )
       fullscreen = 0;
 
    checkDataVersion();
-
-   SDLmm::Surface* icon = NULL;
-   try {
-      tnfilestream iconl ( "icon_mapeditor.gif", tnstream::reading );
-      SDL_Surface *icn = IMG_LoadGIF_RW( SDL_RWFromStream ( &iconl ));
-      SDL_SetColorKey(icn, SDL_SRCCOLORKEY, *((Uint8 *)icn->pixels));
-      icon = new SDLmm::Surface ( icn );
-   }
-   catch ( ... ) {
-   }
-
-
 
    // determining the graphics resolution
    int xr  = CGameOptions::Instance()->mapeditor_xresolution;
@@ -429,6 +413,7 @@ int main(int argc, char *argv[] )
    delete[] buf;
 
    writegameoptions ();
+   
 
    return 0;
 }

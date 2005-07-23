@@ -172,7 +172,7 @@ bool ItemSelectorWindow::nameMatch( const SelectionWidget* selection, const ASCS
 
 
 ItemSelectorWindow::ItemSelectorWindow( PG_Widget *parent, const PG_Rect &r , SelectionItemFactory* itemFactory ) 
-   : PG_Window( parent,r,"Item Selector"), factory( itemFactory ), scrollWidget( NULL), selectedItem(NULL), rowCount(0), selectionCallBack( this, &ItemSelectorWindow::isItemMarked ), columnCount(-1) {
+   : PG_Window( parent,r,"Item Selector"), rowCount(0), scrollWidget( NULL), nameSearch(NULL), selectedItem(NULL), factory( itemFactory ), columnCount(-1), selectionCallBack( this, &ItemSelectorWindow::isItemMarked ) {
    reLoad();
    nameSearch = new PG_Label ( this, PG_Rect( 5, Height() - 25, Width() - 10, 20 ));
 };
@@ -194,7 +194,7 @@ void ItemSelectorWindow::reLoad()
    
    factory->restart();
    SelectionWidget* w; 
-   while ( w = factory->spawnNextItem( scrollWidget, PG_Point(x,y)) ) {
+   while ( (w = factory->spawnNextItem( scrollWidget, PG_Point(x,y))) ) {
    
       if ( columnCount < 0 )
          columnCount = scrollWidget->Width() / (w->Width() + gapWidth);

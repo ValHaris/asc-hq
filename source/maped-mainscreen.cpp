@@ -426,6 +426,7 @@ bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                              else
                                 execaction_ev(act_end);
                         return true;
+         default:;
        }
    }
       
@@ -487,6 +488,7 @@ bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
          case SDLK_x: execaction_ev(act_end);
                         return true;
+         default:;
    
        } 
    }                 

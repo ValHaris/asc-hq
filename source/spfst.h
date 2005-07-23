@@ -207,7 +207,6 @@ extern SigC::Signal1<void,Vehicletype*> showVehicleTypeInfo;
 extern SigC::Signal0<bool> idleEvent;
 
 extern void displaymap();
-static void repaintdisplay() { repaintDisplay(); };
 
 extern int getUnitSetID( const Vehicletype* veh );
 extern int getUnitSetID( const BuildingType* bld );

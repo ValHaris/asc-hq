@@ -617,6 +617,7 @@ T PropertyTemplate<T>::parse ( const TextPropertyGroup::Entry& entry ) const
       case TextPropertyGroup::Entry::mult_eq : return operation_mult ( entry );
       case TextPropertyGroup::Entry::add_eq :  return operation_add ( entry );
       case TextPropertyGroup::Entry::sub_eq :  return operation_sub ( entry );
+      default:;
    }
 
    propertyContainer->error ( "PropertyTemplate::parse - invalid operator !");

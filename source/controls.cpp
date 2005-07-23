@@ -186,9 +186,6 @@ void         destructbuildinglevel2( int xp, int yp)
       if (moveparams.movestatus == 115) {
          actmap->cleartemps(7);
          Vehicle* eht = moveparams.vehicletomove;
-         const BuildingType* bld = fld->building->typ;
-
-
 
          Building* bb = fld->building;
          Resources res = eht->getResource( getDestructionCost( bb, eht ), false);

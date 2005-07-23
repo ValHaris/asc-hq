@@ -50,8 +50,6 @@
 # include "resourcenet.h"
 #endif
 
-extern void repaintdisplay();
-
 const int EventActionNum = 21;
 const int EventTriggerNum = 18;
 

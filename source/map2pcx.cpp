@@ -41,7 +41,6 @@
 #include "memorycheck.cpp"
 #include "graphicset.h"
 
-void repaintdisplay ( void ) {};
 
 void         loadcursor(void)
 { 

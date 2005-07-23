@@ -609,6 +609,7 @@ bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
             case SDLK_0: execuseraction( ua_writescreentopcx );
                return true;
+            default:;
       }
    }
 
@@ -634,6 +635,7 @@ bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
             case SDLK_x:
                execuseraction ( ua_exitgame );
                return true;
+            default:;
       }
    }
    return false;

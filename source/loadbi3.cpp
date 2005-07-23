@@ -1462,7 +1462,7 @@ void tloadBImap :: LoadTXTFile ( char* filename )
       {
          char code=0;
          char inbuf[16]; // worst case buffer usage is 8*2
-         char inptr=0;
+         int inptr=0;
          fread(&code, 1, 1, fp);
          char bitsset=((code>>7)&1)+((code>>6)&1)+((code>>5)&1)+((code>>4)&1)+((code>>3)&1)+((code>>2)&1)+((code>>1)&1)+((code>>0)&1);
          fread(&inbuf, 8+bitsset, 1, fp);

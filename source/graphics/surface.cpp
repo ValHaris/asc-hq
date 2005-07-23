@@ -132,7 +132,7 @@ void Surface::SetScreen( SDL_Surface* screen )
 
  
  
-Surface::Surface( SDL_Surface *surface) : SDLmm::Surface ( surface )
+Surface::Surface( SDL_Surface *surface) : SDLmm::Surface ( surface ), pixelDataPointer(NULL)
 {
    if ( me )
       convert();
@@ -185,7 +185,7 @@ SDLmm::ColorRGBA Surface::GetRGBA(SDLmm::Color pixel) const
 }
 */
 
-Surface::Surface(const SDLmm::Surface& other) : SDLmm::Surface ( other )
+Surface::Surface(const SDLmm::Surface& other) : SDLmm::Surface ( other ), pixelDataPointer(NULL)
 {
    if ( me )
       convert();
@@ -262,6 +262,7 @@ void Surface::read ( tnstream& stream )
       stream.readdata( q, hd.size);  // endian ok ?
 
       char* uncomp = (char*) uncompress_rlepict ( pnter );
+      pixelDataPointer = uncomp;
       delete[] pnter;
 
       SetSurface( SDL_CreateRGBSurfaceFrom(uncomp+4, hd.x+1, hd.y+1, 8, hd.x+1, 0, 0, 0, 0 ));
@@ -463,6 +464,15 @@ bool Surface::isTransparent( SDLmm::Color col ) const
    else
       return false;
 }
+
+Surface::~Surface()
+{
+   if ( pixelDataPointer ) {
+      asc_free( pixelDataPointer );
+      pixelDataPointer = NULL;
+   }
+}
+
 
 
 

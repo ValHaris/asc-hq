@@ -271,7 +271,9 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       };
             
       friend class CursorHiding;
-     
+
+      ~MapDisplayPG ();
+           
 };
 
 

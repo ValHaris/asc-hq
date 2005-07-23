@@ -62,3 +62,9 @@ Surface& IconRepository::getIcon( const ASCString& name )
   }
 }
 
+IconRepository::Repository::~Repository()
+{
+   for (   Repository::iterator i = repository.begin(); i != repository.end(); ++i )
+      delete i->second;
+}
+

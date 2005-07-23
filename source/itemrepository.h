@@ -127,7 +127,7 @@ extern void  loadAllData( bool useCache = true );
 extern pobjecttype eisbrecherobject;
 extern pobjecttype fahrspurobject;
 
-typedef  vector<TechAdapter*> TechAdapterContainer;
+typedef  deallocating_vector<TechAdapter*> TechAdapterContainer;
 extern TechAdapterContainer techAdapterContainer;
 
 

@@ -1467,7 +1467,7 @@ void         tchoosenewsinglelevel::run(void)
 
          actmap->setupResources();
          tlockdispspfld lock;
-         repaintdisplay();
+         repaintDisplay();
          computeview( actmap );
 
          do {

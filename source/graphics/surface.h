@@ -55,12 +55,13 @@ public:
 
 
  class Surface: public SDLmm::Surface {
+      void* pixelDataPointer; // in some situations
     public:
       static const Uint32 transparent = 0;
       static const Uint32 opaque = 255l;
       explicit Surface( SDL_Surface *surface);
       Surface(const SDLmm::Surface& other);
-      Surface() : SDLmm::Surface(NULL) {};
+      Surface() : SDLmm::Surface(NULL), pixelDataPointer(NULL) {};
 
       static Surface createSurface( int width, int height, SDLmm::Color color = 255 );
       static Surface createSurface( int width, int height, int depth, SDLmm::Color color = 0xff0000ff );
@@ -101,6 +102,7 @@ public:
       */
 
       SDL_Surface* getBaseSurface() { return me; };
+      ~Surface();
    protected:
       virtual int getDepthFormat() { return -1; };
       void convert();

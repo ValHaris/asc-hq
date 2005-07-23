@@ -560,7 +560,7 @@ Event*   readOldEvent( pnstream stream, pmap gamemap, map<int,int>& eventTransla
                                     }
                                     break;
 
-       default:                     displaymessage("The event action %s has not been converted and will be missing!", 1, ceventactions[event1.a.action] );
+       default:                     displaymessage("The event action %s has not been converted and will be missing!", 1, ceventactions[int(event1.a.action)] );
      };
 
      if ( ea ) {

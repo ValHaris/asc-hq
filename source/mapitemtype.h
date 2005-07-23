@@ -17,6 +17,7 @@ class MapItemType {
    public:
        virtual ASCString getName() const = 0;
        virtual int getID() const = 0;      
+       virtual ~MapItemType() {};
 };
 
 #endif

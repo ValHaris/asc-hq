@@ -84,7 +84,7 @@ class SingleUnitSet {
 
      };
 
-typedef std::vector<SingleUnitSet*> UnitSets;
+typedef deallocating_vector<SingleUnitSet*> UnitSets;
 extern UnitSets unitSets;
 
 extern void loadUnitSets ( void );

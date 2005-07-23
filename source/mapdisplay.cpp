@@ -316,6 +316,15 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
 }
 
 
+MapDisplayPG::~MapDisplayPG ()
+{
+   if ( surface ) {
+      delete surface;
+      surface = NULL;
+   }
+}
+
+
 MapDisplayPG::Icons MapDisplayPG::icons;
 
 

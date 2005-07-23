@@ -1350,7 +1350,7 @@ class  tenternamestrings : public tdialogbox {
                        char             names[9][100];
                        char             buttonnames[9][100];
 
-                       void             init( char plyexistyte, char md);
+                       void             init( char plyexistyte, int md);
                        virtual void     run ( void );
                        virtual void     buttonpressed( int id );
                        void             done ( void );
@@ -1400,7 +1400,7 @@ class  tsetalliances : public tdialogbox {
 static const char*    cens[]  = { "player", "alliance", "computer" };
 
 
-void         tenternamestrings::init(  char plyexist, char md )
+void         tenternamestrings::init(  char plyexist, int md )
 { 
 
   char         i, j;

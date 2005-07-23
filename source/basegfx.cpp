@@ -1995,14 +1995,14 @@ void showtext ( const char* text, int x, int y, int textcol )
     int    characterdist[1024];
     int ps = 0;
     while ( *t ) {
-       if ( activefontsettings.font->character[*t].width ) {
-          characterwidth[ps] = activefontsettings.font->character[*t].width;
-          characterpointer[ps] = activefontsettings.font->character[*t].memposition + 2;
+       if ( activefontsettings.font->character[int(*t)].width ) {
+          characterwidth[ps] = activefontsettings.font->character[int(*t)].width;
+          characterpointer[ps] = activefontsettings.font->character[int(*t)].memposition + 2;
           if ( t[1] )
-             characterdist[ps] = activefontsettings.font->kerning[t[1]][t[0]] + 2;
+             characterdist[ps] = activefontsettings.font->kerning[int(t[1])][int(t[0])] + 2;
           else
              characterdist[ps] = 0;
-          length +=activefontsettings.font->character[*t].width;
+          length +=activefontsettings.font->character[int(*t)].width;
           length += characterdist[ps];
           ps++;
        }

@@ -283,6 +283,17 @@ class LoadableItemType {
        virtual ~LoadableItemType() {};
 };
 
+
+template< typename T> 
+class deallocating_vector : public vector<T> {
+   public:
+      ~deallocating_vector() {
+         for ( typename vector<T>::iterator i = begin(); i != end(); ++i )
+            delete *i;
+      };      
+};
+
+
 class IntRange {
      public:
            int from;
@@ -294,6 +305,8 @@ class IntRange {
 };
 
 extern vector<IntRange> String2IntRangeVector( const ASCString& t );
+
+
 
 
 template<typename C>

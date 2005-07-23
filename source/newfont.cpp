@@ -45,7 +45,7 @@
 
 const char* fontid = "I\'m a font file on your Disk. Leave me alone !\x01A\x0A0";
 
-#define spacewidthkey 'n'
+#define spacewidthkey (int('n'))
 
 typedef dacpalette256 dacpal;
 
@@ -186,7 +186,7 @@ pfont        loadfont( pnstream stream )
       font2->character[i].size      =  font1->character[i].size;
       font2->character[i].memposition =font1->character[i].memposition;
       for (int j = 0; j < 256 ; j++ ) {
-          font2->kerning[j][i] = font1->kerning[font1->kernchartable[i]] [font1->kernchartable[j]];
+          font2->kerning[j][i] = font1->kerning[int(font1->kernchartable[i])] [int(font1->kernchartable[j])];
           if ( font2->kerning[j][i] > 10  ||  font2->kerning[j][i] < - 10 )
              printf("%c%c\n",i,j);
       }
@@ -225,10 +225,10 @@ int gettextwdth ( const char* txt, pfont font )
 
    i=0;
    while (txt[i] != 0) {
-      if (font->character[txt[i]].size) {
-         result +=2 + font->character[txt[i]].width;
+      if (font->character[int(txt[i])].size) {
+         result +=2 + font->character[int(txt[i])].width;
          if ( txt[i+1] )                          //          if ((txt[i+1] != 0) && (txt[i+1] != ' ')) 
-            result += font->kerning[txt[i+1]][txt[i]];
+            result += font->kerning[int(txt[i+1])][int(txt[i])];
       } /* endif */
       i++;
    } /* endwhile */

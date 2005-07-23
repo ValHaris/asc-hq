@@ -1492,7 +1492,7 @@ MapCoordinate3D Vehicle :: getPosition3D ( ) const
 }
 
 
-const ASCString&  Vehicle::getName() const
+const ASCString  Vehicle::getName() const
 {
    if ( name.empty() )
       return typ->getName();

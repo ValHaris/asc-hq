@@ -29,7 +29,10 @@
 
 
 class IconRepository {
-        typedef map<ASCString,Surface*> Repository;
+        class Repository: public map<ASCString,Surface*> {
+            public:
+               ~Repository();
+        };
         static Repository repository;
      public:
         static Surface& getIcon( const ASCString& name );

@@ -585,7 +585,7 @@ void loadUnitSets ( void )
    } /* endwhile */
 }
 
-std::vector<SingleUnitSet*> unitSets;
+UnitSets unitSets;
 
 
 

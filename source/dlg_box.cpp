@@ -238,7 +238,7 @@ void          tdialogbox::redrawall ( void )
    if ( prev )
       prev->redrawall(); 
    else
-      repaintdisplay();
+      repaintDisplay();
 }
 
 void           tdialogbox::redrawall2 ( int xx1, int yy1, int xx2, int yy2 )
@@ -248,7 +248,7 @@ void           tdialogbox::redrawall2 ( int xx1, int yy1, int xx2, int yy2 )
       if ( prev )
          prev->redrawall2 ( xx1, yy1, xx2, yy2 ); 
       else
-         repaintdisplay();
+         repaintDisplay();
 }
 
 
@@ -1258,7 +1258,7 @@ void         tdialogbox::done(void)
 
       if (imagesaved) {
          if ( first == this )
-            ::repaintdisplay();
+            ::repaintDisplay();
          else    
             putimage(x1,y1,tp);
          asc_free ( tp );
@@ -1553,7 +1553,7 @@ void         tdialogbox::run(void)
             if ( prev )
                prev->redrawall2(  oldx, oldy, oldx + xsize, oldy + ysize ); 
             else
-               repaintdisplay();
+               repaintDisplay();
 
          } 
 
