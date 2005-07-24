@@ -1692,7 +1692,7 @@ widget5 {
            type = StaticText
            text = loadable units:
            x = 5
-           y = 109
+           y = 135
            height = 13
            width = 120
         } widget0
@@ -1772,10 +1772,10 @@ widget5 {
           type = ScrollArea
           name = unitpad_loadablescroll
           x = 8
-          y = 130
-          width = 178
-          height = 145
-          widgetnum = 2
+          y = 151
+          width = 173
+          height = 110
+          widgetnum = 23
           localtransparency = 255
           widget0 {
             type = Image
@@ -1802,7 +1802,7 @@ widget5 {
           widget1 {
             type = Image
             Filename = pad_transport_loadable.png
-            x = 88
+            x = 78
             y = 0
             widgetnum = 2
             widget0 {
@@ -1821,30 +1821,431 @@ widget5 {
             } widget1
           } widget1
 
+          widget2 {
+            type = Image
+            Filename = pad_transport_loadable.png
+            x = 0
+            y = 35
+            widgetnum = 2
+            widget0 {
+              type = Image
+              Filename = pad_symbol_mediumtracked.png
+              x = 2
+              y = 2
+            } widget0
+            widget1 {
+              type = Image
+              name = unitpad_transport_medium_tracked_vehicle
+              x = 50
+              y = 10
+              width = 23
+              height = 9
+            } widget1
+          } widget2
 
+          widget3 {
+            type = Image
+            Filename = pad_transport_loadable.png
+            x = 78
+            y = 35
+            widgetnum = 2
+            widget0 {
+              type = Image
+              Filename = pad_symbol_heavytracked.png
+              x = 2
+              y = 2
+            } widget0
+            widget1 {
+              type = Image
+              name = unitpad_transport_heavy_tracked_vehicle
+              x = 50
+              y = 10
+              width = 23
+              height = 9
+            } widget1
+          } widget3
+    
+          widget4 {
+            type = Image
+            Filename = pad_transport_split.png 
+            x = 26
+            y = 70
+          } widget4
+          
+          widget5 {
+            type = Image
+            Filename = pad_transport_loadable.png
+            x = 0
+            y = 77
+            widgetnum = 2
+            widget0 {
+              type = Image
+              Filename = pad_symbol_rail.png
+              x = 2
+              y = 2
+            } widget0
+            widget1 {
+              type = Image
+              name = unitpad_transport_rail_vehicle
+              x = 50
+              y = 10
+              width = 23
+              height = 9
+            } widget1
+          } widget5
 
-        } widget5
+          widget6 {
+            type = Image
+            Filename = pad_transport_loadable.png
+            x = 78
+            y = 77
+            widgetnum = 2
+            widget0 {
+              type = Image
+              Filename = pad_symbol_lightwheeled.png
+              x = 2
+              y = 2
+            } widget0
+            widget1 {
+              type = Image
+              name = unitpad_transport_light_wheeled_vehicle
+              x = 50
+              y = 10
+              width = 23
+              height = 9
+            } widget1
+          } widget6
 
+          widget7 {
+            type = Image
+            Filename = pad_transport_loadable.png
+            x = 0
+            y = 112
+            widgetnum = 2
+            widget0 {
+              type = Image
+              Filename = pad_symbol_mediumwheeled.png
+              x = 2
+              y = 2
+            } widget0
+            widget1 {
+              type = Image
+              name = unitpad_transport_medium_wheeled_vehicle
+              x = 50
+              y = 10
+              width = 23
+              height = 9
+            } widget1
+          } widget7
+
+          widget8 {
+            type = Image
+            Filename = pad_transport_loadable.png
+            x = 78
+            y = 112
+            widgetnum = 2
+            widget0 {
+              type = Image
+              Filename = pad_symbol_heavywheeled.png
+              x = 2
+              y = 2
+            } widget0
+            widget1 {
+              type = Image
+              name = unitpad_transport_heavy_wheeled_vehicle
+              x = 50
+              y = 10
+              width = 23
+              height = 9
+            } widget1
+          } widget8
+    
+          widget9 {
+            type = Image
+            Filename = pad_transport_split.png 
+            x = 26
+            y = 147
+          } widget9
+
+          widget10 {
+            type = Image
+            Filename = pad_transport_loadable.png
+            x = 0
+            y = 154
+            widgetnum = 2
+            widget0 {
+              type = Image
+              Filename = pad_symbol_helicopter.png
+              x = 2
+              y = 2
+            } widget0
+            widget1 {
+              type = Image
+              name = unitpad_transport_helicopter
+              x = 50
+              y = 10
+              width = 23
+              height = 9
+            } widget1
+          } widget10
+
+          widget11 {
+            type = Image
+            Filename = pad_transport_loadable.png
+            x = 78
+            y = 154
+            widgetnum = 2
+            widget0 {
+              type = Image
+              Filename = pad_symbol_lightair.png
+              x = 2
+              y = 2
+            } widget0
+            widget1 {
+              type = Image
+              name = unitpad_transport_light_aircraft
+              x = 50
+              y = 10
+              width = 23
+              height = 9
+            } widget1
+          } widget11
+
+          widget12 {
+            type = Image
+            Filename = pad_transport_loadable.png
+            x = 0
+            y = 189
+            widgetnum = 2
+            widget0 {
+              type = Image
+              Filename = pad_symbol_mediumair.png
+              x = 2
+              y = 2
+            } widget0
+            widget1 {
+              type = Image
+              name = unitpad_transport_medium_aircraft
+              x = 50
+              y = 10
+              width = 23
+              height = 9
+            } widget1
+          } widget12
+
+          widget13 {
+            type = Image
+            Filename = pad_transport_loadable.png
+            x = 78
+            y = 189
+            widgetnum = 2
+            widget0 {
+              type = Image
+              Filename = pad_symbol_heavyair.png
+              x = 2
+              y = 2
+            } widget0
+            widget1 {
+              type = Image
+              name = unitpad_transport_heavy_aircraft
+              x = 50
+              y = 10
+              width = 23
+              height = 9
+            } widget1
+          } widget13
+    
+          widget14 {
+            type = Image
+            Filename = pad_transport_split.png 
+            x = 26
+            y = 224
+          } widget14
+
+          widget15 {
+            type = Image
+            Filename = pad_transport_loadable.png
+            x = 0
+            y = 231
+            widgetnum = 2
+            widget0 {
+              type = Image
+              Filename = pad_symbol_hoovercraft.png
+              x = 2
+              y = 2
+            } widget0
+            widget1 {
+              type = Image
+              name = unitpad_transport_hoovercraft
+              x = 50
+              y = 10
+              width = 23
+              height = 9
+            } widget1
+          } widget15
+
+          widget16 {
+            type = Image
+            Filename = pad_transport_loadable.png
+            x = 78
+            y = 231
+            widgetnum = 2
+            widget0 {
+              type = Image
+              Filename = pad_symbol_lightship.png
+              x = 2
+              y = 2
+            } widget0
+            widget1 {
+              type = Image
+              name = unitpad_transport_light_ship
+              x = 50
+              y = 10
+              width = 23
+              height = 9
+            } widget1
+          } widget16
+
+          widget17 {
+            type = Image
+            Filename = pad_transport_loadable.png
+            x = 0
+            y = 266
+            widgetnum = 2
+            widget0 {
+              type = Image
+              Filename = pad_symbol_mediumship.png
+              x = 2
+              y = 2
+            } widget0
+            widget1 {
+              type = Image
+              name = unitpad_transport_medium_ship
+              x = 50
+              y = 10
+              width = 23
+              height = 9
+            } widget1
+          } widget17
+
+          widget18 {
+            type = Image
+            Filename = pad_transport_loadable.png
+            x = 78
+            y = 266
+            widgetnum = 2
+            widget0 {
+              type = Image
+              Filename = pad_symbol_heavyship.png
+              x = 2
+              y = 2
+            } widget0
+            widget1 {
+              type = Image
+              name = unitpad_transport_heavy_ship
+              x = 50
+              y = 10
+              width = 23
+              height = 9
+            } widget1
+          } widget18
+    
+          widget19 {
+            type = Image
+            Filename = pad_transport_split.png 
+            x = 26
+            y = 301
+          } widget19
+
+          widget20 {
+            type = Image
+            Filename = pad_transport_loadable.png
+            x = 0
+            y = 308
+            widgetnum = 2
+            widget0 {
+              type = Image
+              Filename = pad_symbol_default.png
+              x = 2
+              y = 2
+            } widget0
+            widget1 {
+              type = Image
+              name = unitpad_transport_default
+              x = 50
+              y = 10
+              width = 23
+              height = 9
+            } widget1
+          } widget20
+
+          widget21 {
+            type = Image
+            Filename = pad_transport_loadable.png
+            x = 78
+            y = 308
+            widgetnum = 2
+            widget0 {
+              type = Image
+              Filename = pad_symbol_turret.png
+              x = 2
+              y = 2
+            } widget0
+            widget1 {
+              type = Image
+              name = unitpad_transport_building|turret|object
+              x = 50
+              y = 10
+              width = 23
+              height = 9
+            } widget1
+          } widget21
+
+          widget22 {
+            type = Image
+            Filename = pad_transport_split.png 
+            x = 26
+            y = 343
+          } widget22
+       } widget5
 
         widget6 {
-           TextAlign = RIGHT
-           Fontsize = 11
-           type = StaticText
-           text = max. total cargo weight: 
-           x = 5
-           y = 228
-           height = 13
-           width = 169
+          type = StaticText
+          text = cargo size
+          TextAlign = Left
+          Fontsize = 16
+          height = 18
+          width = 100
+          x = 216
+          y = 150
         } widget6
+        
         widget7 {
-           TextAlign = RIGHT
-           Fontsize = 11
-           type = StaticText
-           text = max. single cargo weight: 
-           x = 5
-           y = 241
-           height = 13
-           width = 169
+          type = dummy
+           name = transport_cargo_size
+          x = 0
+          y = 0
+          widgetnum = 2
+          widget0 {
+             TextAlign = left
+             Fontsize = 12
+             type = StaticText
+             text = max. total cargo weight: 
+             x = 216
+             y = 172
+             height = 13
+             width = 169
+          } widget0
+          widget1 {
+             TextAlign = LEFT
+             Fontsize = 12
+             type = StaticText
+             text = max. single cargo weight: 
+             x = 216
+             y = 185
+             height = 13
+             width = 169
+          } widget1
         } widget7
         widget8 {
            TextAlign = RIGHT
@@ -1852,49 +2253,49 @@ widget5 {
            type = StaticText
            text = unit needs special functions: 
            x = 5
-           y = 254
+           y = 107
            height = 13
            width = 169
         } widget8
         widget9 {
-           TextAlign = Right
+           TextAlign = LEFT
            Fontsize = 11
            type = StaticText
            text = can attack afterwards: 
-           x = 210
-           y = 228
+           x = 5
+           y = 118
            height = 13
            width = 200
         } widget9
         widget10 {
-           TextAlign = Right
-           Fontsize = 11
+           TextAlign = left
+           Fontsize = 12
            type = StaticText
            text = max. loadable units: 
-           x = 210
-           y = 241
+           x = 216
+           y = 198
            height = 13
            width = 200
         } widget10
         widget11 {
-           TextAlign = Right
-           Fontsize = 11
+           TextAlign = right
+           Fontsize = 12
            type = TextOutput
            name = unitpad_transport_maxtotalweight
-           x = 136
-           y = 228
+           x = 300
+           y = 172
            height = 13
-           width = 100
+           width = 135
         } widget11
         widget12 {
            TextAlign = Right
-           Fontsize = 11
+           Fontsize = 12
            type = TextOutput
            name = unitpad_transport_maxsingleweight
-           x = 136
-           y = 241
+           x = 300
+           y = 185
            height = 13
-           width = 100
+           width = 135
         } widget12
         widget13 {
            TextAlign = Left
@@ -1902,7 +2303,7 @@ widget5 {
            type = TextOutput
            name = unitpad_transport_specialfunctions
            x = 180
-           y = 254
+           y = 107
            height = 13
            width = 257
         } widget13
@@ -1911,24 +2312,26 @@ widget5 {
            Fontsize = 11
            type = Textoutput
            name = unitpad_transport_attackafterwards
-           x = 415
-           y = 228
+           x = 180
+           y = 118
            height = 13
            width = 25
         } widget14
         widget15 {
-           TextAlign = left
-           Fontsize = 11
+           TextAlign = right
+           Fontsize = 12
            type = TextOutput
            name = unitpad_transport_loadableunits
-           x = 415
-           y = 241
+           x = 300
+           y = 198
            height = 13
-           width = 25
+           width = 135
         } widget15
       } widget1
     } widget1
   } widget5
+
+
    widget6 {
      type = dummy
      name = description
