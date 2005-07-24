@@ -354,7 +354,7 @@ bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
    if ( !mod  ) {
       switch ( key->keysym.sym ) {
          case SDLK_RETURN:
-         case SDLK_SPACE: execaction_ev( act_placething );
+         case SDLK_SPACE: execaction_ev( act_primaryAction );
                         return true;
                         
          case SDLK_F1:  execaction_ev(act_help);

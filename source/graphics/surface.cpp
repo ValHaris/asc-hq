@@ -466,11 +466,12 @@ bool Surface::isTransparent( SDLmm::Color col ) const
 }
 
 Surface::~Surface()
-{
+{/*
    if ( pixelDataPointer ) {
       asc_free( pixelDataPointer );
       pixelDataPointer = NULL;
    }
+   */
 }
 
 

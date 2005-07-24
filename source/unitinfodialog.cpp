@@ -27,7 +27,7 @@ void assignWeaponInfo ( Panel* panel, PG_Widget* widget, const SingleWeapon& wea
    panel->setLabelText( "weapon_text1", weapon.getName(), widget );
    panel->setLabelText( "weapon_reactionfire", weapon.reactionFireShots, widget );
    panel->setLabelText( "weapon_maxammo", weapon.count, widget );
-   panel->setLabelText( "weapon_canshoot", weapon.offensive()? "yes" : "no", widget );
+   panel->setLabelText( "weapon_canshoot", weapon.shootable()? "yes" : "no", widget );
    panel->setLabelText( "weapon_canrefuel", weapon.canRefuel()? "yes" : "no", widget );
    panel->setLabelText( "weapon_strenghtmax", weapon.maxstrength, widget );
    panel->setLabelText( "weapon_strenghtmin", weapon.minstrength, widget );
@@ -235,12 +235,21 @@ class UnitInfoDialog : public Panel {
                      }
                }
             }
-            if ( name == "unitpad_transport_transporterlevel" || name == "unitpad_transport_unitlevel" ) {
+            if ( name == "unitpad_transport_leveldisplay" ) {
                int xoffs = 0;
                for ( EntranceHeights::iterator i = entranceHeights.begin(); i != entranceHeights.end(); ++i ) {
-                  Surface& icon = IconRepository::getIcon( ASCString("height-a") + ASCString::toString( name == "unitpad_transport_unitlevel" ? i->second : i->first) + ".png");
+                  for ( int j = 0; j < 2; ++j ) {
+                     Surface& icon = IconRepository::getIcon( ASCString("height-a") + ASCString::toString( j==0 ? i->second : i->first) + ".png");
+                     int y;
+                     if ( j == 0)
+                        y = 2;
+                     else  
+                        y = 27;
+                     screen.Blit( icon, SPoint( dst.x + xoffs+2, dst.y+y ));
+                  }
+                  Surface& icon = IconRepository::getIcon("pad_transport_leveldisplay.png");
                   screen.Blit( icon, SPoint( dst.x + xoffs, dst.y ));
-                  xoffs += icon.w() + 5;
+                  xoffs += icon.w() + 3;
                }
             }
          };
@@ -310,6 +319,8 @@ class UnitInfoDialog : public Panel {
                registerSpecialDisplay( "unitpad_weapon_diagram");
                registerSpecialDisplay( "unitpad_transport_transporterlevel");
                registerSpecialDisplay( "unitpad_transport_unitlevel");
+               registerSpecialDisplay( "unitpad_transport_leveldisplay");
+               
                weaponGraph = FindChild( "unitpad_weapon_diagram", true );
 
                if ( vt ) {
@@ -384,14 +395,12 @@ class UnitInfoDialog : public Panel {
 
 
 
-               int xoffs = 0;
-               int yoffs = 0;
                int counter = 0;
                for ( int j = 0; j < 8; ++j )
                   if ( vt->height & vt->heightChangeMethod[i].startHeight & (1 << j))  {
                      ASCString filename = "height-a" + ASCString::toString(j) + ".png";
-                     xoffs = IconRepository::getIcon(filename).w() * (counter % 3 );
-                     yoffs = IconRepository::getIcon(filename).h() * (counter / 3 );
+                     int xoffs = 3 + IconRepository::getIcon(filename).w() * (counter % 3 );
+                     int yoffs = 2 + IconRepository::getIcon(filename).h() * (counter / 3 );
                      new PG_Image( sw, PG_Point( xoffs, yoffs ), IconRepository::getIcon(filename).getBaseSurface(), false );
                      ++counter;
                   }

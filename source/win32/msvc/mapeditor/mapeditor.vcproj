@@ -194,6 +194,9 @@
 				RelativePath="..\..\..\edselfnt.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\explosivemines.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\gameevent_dialogs.cpp">
 			</File>
 			<File
@@ -317,6 +320,9 @@
 				RelativePath="..\..\..\resourceplacementdialog.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\selectionwindow.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\sgstream.cpp">
 			</File>
 			<File
@@ -354,6 +360,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\typen.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\unitinfodialog.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\vehicle.cpp">

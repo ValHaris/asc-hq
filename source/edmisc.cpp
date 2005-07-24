@@ -77,7 +77,7 @@
    
 void placeCurrentItem()
 {
-   if ( selection.getSelection() ) {
+   if ( selection.getSelection() && actmap->getCursor().valid() ) {
       if ( selection.getSelection()->supportMultiFieldPlacement()  && selection.brushSize > 1 ) {
          circularFieldIterator( actmap, actmap->getCursor(), 0, selection.brushSize-1, FieldIterationFunctor( selection.getSelection(), &MapComponent::vPlace ));
       } else {

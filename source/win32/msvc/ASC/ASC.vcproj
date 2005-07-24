@@ -190,6 +190,9 @@
 				RelativePath="..\..\..\dlg_box.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\explosivemines.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\gamedialog.cpp">
 			</File>
 			<File
