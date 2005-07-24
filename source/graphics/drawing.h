@@ -59,6 +59,32 @@
 
  }
 
+ template<int BytePerPixel, class ColorMerger>
+ void paintFilledRectangle( const Surface& surface, const SPoint& pos, int w, int h, const ColorMerger& ul )
+ {
+       if ( w <= 0 || h <= 0 )
+         return;
+         
+      typedef typename PixelSize2Type<BytePerPixel>::PixelType TargetPixelType;
+      ul.init( surface );
+
+      TargetPixelType* pix = (TargetPixelType*)( surface.pixels() );
+      pix += pos.y * surface.pitch()/BytePerPixel + pos.x;
+
+      int pitch = surface.pitch()/BytePerPixel - w;
+      
+      h -= 1;
+      w -= 1;
+
+      for ( int y = 0; y <= h; ++y ) {
+         for ( int x = 0; x <= w; ++x ) {
+            ul.assign ( pix );
+            ++pix;
+          }
+          pix += pitch;
+      }    
+ }
+ 
  extern SDL_Color lightenColor( const SDL_Color& color, float factor );
  extern void lightenColor( SDLmm::Color* color, float factor );
  extern SDLmm::Color lightenColor( SDLmm::Color color, float factor );

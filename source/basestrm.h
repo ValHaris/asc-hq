@@ -299,6 +299,7 @@ class t_compressor_stream_interface {
            public:
              virtual void writecmpdata ( const void* buf, int size ) = 0;
              virtual int readcmpdata ( void* buf, int size, bool excpt = true ) = 0;
+             virtual ~t_compressor_stream_interface() {};
       };
 /*
 class t_compressor_2ndbuf_filter : public t_compressor_stream_interface {
@@ -445,6 +446,7 @@ typedef tnfilestream*  pnfilestream ;
 class ContainerIndexer {
        public:
            virtual void addfile ( const char* filename, const pncontainerstream stream, int directoryLevel ) = 0;
+           virtual ~ContainerIndexer() {};
      };
 
 

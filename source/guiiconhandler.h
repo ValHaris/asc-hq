@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.11 2005-06-13 19:49:06 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.12 2005-07-24 12:51:20 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -32,7 +32,7 @@
 #include "graphics/surface.h"
 
 #include "paradialog.h"
-#include "mapdisplay2.h"
+#include "mapdisplay.h"
 
 #include "typen.h"
 
@@ -135,8 +135,7 @@ class NewGuiHost : public Panel {
         typedef vector<GuiButton*> Buttons;
         Buttons buttons;
 
-        typedef vector<SmallGuiButton*> SmallButtons;
-        SmallButtons smallButtons;
+        PG_Widget* smallButtonHolder;
 
 
         bool eventKeyDown(const SDL_KeyboardEvent* key);

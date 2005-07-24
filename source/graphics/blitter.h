@@ -634,6 +634,20 @@
          ColorMerger_PlainOverwrite ( NullParamType npt ) {};
  };
 
+ template<int pixelsize>
+ class ColorMerger_ColoredOverwrite {
+         typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+         DI_Color col;
+         mutable PixelType transformedColor;
+      public:
+         void init( const Surface& dst ) const {
+            transformedColor =  dst.GetPixelFormat().MapRGB( col );
+         };
+         void assign ( PixelType src, PixelType* dest ) const { *dest = src; };
+         void assign ( PixelType* dest ) const { *dest = transformedColor; };
+         ColorMerger_ColoredOverwrite ( DI_Color color ) : col(color) {};
+ };
+
  
  template<int pixelsize>
  class ColorMerger_AlphaHandler {

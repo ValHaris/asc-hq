@@ -32,7 +32,7 @@
 #include "graphics/blitter.h"
 #include "graphics/drawing.h"
 #include "edglobal.h"
-#include "mapdisplay2.h"
+#include "mapdisplay.h"
 #include "spfst.h"
 #include "overviewmappanel.h"
 #include "edselfnt.h"

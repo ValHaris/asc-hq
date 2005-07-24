@@ -154,8 +154,6 @@ tdialogbox::tdialogbox()
    virtualbufoffset = 0;
    boxstatus = 0;
 
-   pushallmouseprocs ( );
-
    if ( mouseparams.pictpointer != icons.mousepointer )
        setnewmousepointer ( icons.mousepointer, 0,0 );
 
@@ -2524,11 +2522,6 @@ tdialogbox::~tdialogbox()
    if ( boxstatus )
       done();
    boxstatus = 0;
-
-
-   popallmouseprocs ( );
-   // addmouseproc ( (void*) mousescrollproc );
-   // npop ( mouseproc );
 
    if ( prev ) {
       prev->next = NULL;

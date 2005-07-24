@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: building_controls.h,v 1.20.2.1 2004-10-26 16:35:03 mbickel Exp $
+//     $Id: building_controls.h,v 1.20.2.2 2005-07-24 12:51:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20.2.1  2004/10/26 16:35:03  mbickel
+//      Replaced graphic storage in buildings and objects
+//      cleaned up some names: pvehicle, pbuilding
+//
 //     Revision 1.20  2004/09/13 16:56:53  mbickel
 //      Added many reset data functions to mapeditor
 //      cargomovecostdivisor for vehicles is now float
@@ -191,6 +195,7 @@ class    ccontainercontrols
       virtual Vehicle* getloadedunit (int num) = 0;
 
       ContainerBase* baseContainer;
+      virtual ~ccontainercontrols() {};
    protected:
       virtual void repaintResources() {};
 };

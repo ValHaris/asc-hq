@@ -139,30 +139,6 @@ class tonlinehelplist {
 
        };
 
-class tonlinemousehelp : public tsubmousehandler {
-          protected:
-              int active;
-              void* image;
-              struct {
-                 int x1,y1,x2,y2;
-              } pos;
-
-              int lastmousemove;
-
-
-              tonlinehelplist helplist;
-
-           public:
-              tonlinemousehelp ( void );
-              void mouseaction ( void );
-              void displayhelp ( int messagenum );
-              void removehelp  ( void );
-              virtual void checkforhelp ( void );
-              virtual void checklist ( tonlinehelplist* list );
-              void invisiblerect ( tmouserect newoffarea );
-              int  rectinoffarea ( void );
-              virtual ~tonlinemousehelp ();
-      };
 
 extern void gamepreferences  ( void );
 extern void mousepreferences ( void );

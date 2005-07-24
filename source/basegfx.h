@@ -302,6 +302,7 @@ class tdrawline {
          public: 
            void start ( int x1, int y1, int x2, int y2 );
            virtual void putpix ( int x, int y ) = 0;
+           virtual ~tdrawline() {};
        };
 
 /** A virtual screen is allocated and the agmp pointer set to it. All graphic operations will

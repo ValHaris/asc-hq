@@ -25,7 +25,7 @@
 
 #include "global.h"
 #include "paradialog.h"
-#include "mapdisplay2.h"
+#include "mapdisplay.h"
 
 
 class OverviewMapPanel : public Panel {

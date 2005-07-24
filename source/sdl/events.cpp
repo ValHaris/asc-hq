@@ -53,8 +53,6 @@ int exitprogram = 0;
  ***************************************************************************/
 
 
-const int mouseprocnum = 10;
-tsubmousehandler* pmouseprocs[ mouseprocnum ];
 bool redrawScreen = false;
 
 int mouse_in_off_area ( void )
@@ -78,13 +76,6 @@ void mousevisible( int an)
 int getmousestatus ()
 {
    return 2;
-}
-
-void callsubhandler ( void )
-{
-   for ( int i = 0; i < mouseprocnum; i++ )
-      if ( pmouseprocs[i] )
-         pmouseprocs[i]->mouseaction();
 }
 
 int mouseTranslate ( int m)
@@ -127,42 +118,6 @@ int mouseinrect ( const tmouserect* rect )
       return 0;
 }
 
-
-void addmouseproc ( tsubmousehandler* proc )
-{
-   int i;
-   for (i = 0; i < mouseprocnum ; i++) {
-      if ( !pmouseprocs[i] ) {
-         pmouseprocs[i] = proc;
-         break;
-      }
-   } /* endfor */
-
-   if ( i >= mouseprocnum )
-      exit(1);
-}
-
-void removemouseproc ( tsubmousehandler* proc )
-{
-   for (int i = 0; i < mouseprocnum ; i++)
-      if ( pmouseprocs[i] == proc )
-         pmouseprocs[i] = NULL;
-}
-
-void pushallmouseprocs ( void )
-{
-   for (int i = 0; i < mouseprocnum ; i++) {
-      npush ( pmouseprocs[i] );
-      pmouseprocs[i] = NULL;
-   }
-}
-
-
-void popallmouseprocs ( void )
-{
-   for (int i = 0; i < mouseprocnum ; i++)
-      npop ( pmouseprocs[i] );
-}
 
 
 tmouserect tmouserect :: operator+ ( const tmouserect& b ) const
@@ -392,7 +347,6 @@ int processEvents ( )
                   mouseparams.taste &= ~(1 << taste);
                mouseparams.x = event.button.x;
                mouseparams.y = event.button.y;
-               callsubhandler();
             }
             break;
 
@@ -406,7 +360,6 @@ int processEvents ( )
                for ( int i = 0; i < 3; i++ )
                   if ( event.motion.state & (1 << i) )
                      mouseparams.taste |= 1 << mouseTranslate(i);
-               callsubhandler();
             }
             break;
          case SDL_KEYDOWN:

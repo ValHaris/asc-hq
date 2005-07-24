@@ -134,6 +134,10 @@ class Resources {
      void runTextIO ( PropertyContainer& pc, const Resources& defaultValue );
      static const char* name( int r );
      ASCString toString();
+     
+     static const int materialColor = 0x8b3d1e;
+     static const int fuelColor = 0x8b7800;
+     static const int energyColor = 0x3b2dd7;
 };
 
 extern Resources operator- ( const Resources& res1, const Resources& res2 );
@@ -288,7 +292,7 @@ template< typename T>
 class deallocating_vector : public vector<T> {
    public:
       ~deallocating_vector() {
-         for ( typename vector<T>::iterator i = begin(); i != end(); ++i )
+         for ( typename vector<T>::iterator i = vector<T>::begin(); i != vector<T>::end(); ++i )
             delete *i;
       };      
 };

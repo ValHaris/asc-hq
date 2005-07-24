@@ -26,7 +26,6 @@
 #include "global.h"
 #include "typen.h"
 #include "mapdisplay.h"
-#include "mapdisplay2.h"
 #include "vehicletype.h"
 #include "buildingtype.h"
 #include "spfst.h"
@@ -38,6 +37,7 @@
 #include "mapalgorithms.h"
 #include "graphicset.h"
 #include "graphics/blitter.h"
+#include "graphics/drawing.h"
 
 #ifdef sgmain
  #include "controls.h"
@@ -48,6 +48,75 @@
 
 
 MapRenderer::Icons MapRenderer::icons;
+
+
+class ContainerInfoLayer : public MapLayer {
+      Surface& marker;
+      bool hasCargo( const ContainerBase* c ) {
+         for ( int i = 0; i< 32; ++i)
+            if ( c->loading[i] )
+               return true;
+         return false;
+      };
+    public: 
+      ContainerInfoLayer() : marker( IconRepository::getIcon("fieldcontainermarker.png") ) {};
+         
+      bool onLayer( int layer ) { return layer == 17; };
+      void paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos );
+};
+
+void ContainerInfoLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
+{
+   if ( fieldInfo.playerView >= visible_ago) {
+      if ( fieldInfo.fld->vehicle || (fieldInfo.fld->building && fieldInfo.fld->bdt.test(cbbuildingentry) )) {
+         ContainerBase* c = fieldInfo.fld->getContainer();
+         if ( c->getOwner() == fieldInfo.playerView && hasCargo(c) ) 
+            fieldInfo.surface.Blit( marker, pos );
+         
+      }
+   }
+}
+
+
+ 
+class ResourceLayer : public MapLayer {
+      void paintBar( const MapRenderer::FieldRenderInfo& fieldInfo, const SPoint& pos, int row, int amount, int color ) {
+         if ( amount ) 
+           paintFilledRectangle<4>( fieldInfo.surface, SPoint( pos.x + 10, pos.y + 2 + row*12), amount / 10, 5, ColorMerger_ColoredOverwrite<4>( color ));
+      
+      };
+    public: 
+      bool onLayer( int layer ) { return layer == 17; };
+      void paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos );
+};
+
+void ResourceLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
+{
+   if ( fieldInfo.playerView >= visible_ago) {
+      #ifndef karteneditor
+      if ( fieldInfo.fld->resourceview && (fieldInfo.fld->resourceview->visible & ( 1 << fieldInfo.playerView) ) ){
+         if ( showresources == 1 ) {
+            // showtext2( strrr ( fieldinfo.fld->resourceview->materialvisible[playerview] ) , r + 10 , yp +10 );
+            // showtext2( strrr ( fieldinfo.fld->resourceview->fuelvisible[playerview] )     , r + 10 , yp +20 );
+         } else
+            if ( showresources == 2 ) {
+               paintBar( fieldInfo, pos, 0, fieldInfo.fld->resourceview->materialvisible[fieldInfo.playerView], Resources::materialColor );
+               paintBar( fieldInfo, pos, 1, fieldInfo.fld->resourceview->fuelvisible[fieldInfo.playerView], Resources::fuelColor );
+            }
+      }
+      #else
+      if ( showresources == 1 ) {
+         // showtext2( strrr ( fieldinfo.fld->material ) , r + 10 , yp );
+         // showtext2( strrr ( fieldinfo.fld->fuel )     , r + 10 , yp + 10 );
+      }
+      else 
+         if ( showresources == 2 ) {
+            paintBar( fieldInfo, pos, 0, fieldInfo.fld->material, Resources::materialColor );
+            paintBar( fieldInfo, pos, 1, fieldInfo.fld->fuel, Resources::fuelColor );
+         }
+     #endif
+   }
+}
 
 
 void MapRenderer::readData()
@@ -91,7 +160,7 @@ int MapRenderer::bitmappedHeight2pass( int height )
 }
 
 
-void MapRenderer::paintSingleField( Surface& surf, int playerView, pfield fld, int layer, const SPoint& pos, const MapCoordinate& mc )
+void MapRenderer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
 {
 
    int binaryUnitHeight = 0;
@@ -99,25 +168,24 @@ void MapRenderer::paintSingleField( Surface& surf, int playerView, pfield fld, i
       if ( !(layer & 1 ))
          binaryUnitHeight = 1 << (( layer-2)/2);
    
+   pfield fld = fieldInfo.fld;
 
-   VisibilityStates visibility = fieldVisibility ( fld, playerView );
-
-   if ( layer == 0 && visibility >= visible_ago )
-      fld->typ->paint ( surf, pos );
+   if ( layer == 0 && fieldInfo.visibility >= visible_ago )
+      fld->typ->paint ( fieldInfo.surface, pos );
 
 
-   if ( visibility > visible_ago ) {
+   if ( fieldInfo.visibility > visible_ago ) {
 
       /* display buildings */
       if ( fld->building  &&  (fld->building->typ->buildingheight & binaryUnitHeight) )
-         if ((visibility == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerView*8 ))
-            fld->building->paintSingleField( surf, pos, fld->building->getLocalCoordinate( mc ));
+         if ((fieldInfo.visibility == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == fieldInfo.playerView*8 ))
+            fld->building->paintSingleField( fieldInfo.surface, pos, fld->building->getLocalCoordinate( fieldInfo.pos ));
 
 
       /* display units */
       if ( fld->vehicle  &&  (fld->vehicle->height == binaryUnitHeight))
-         if ( ( fld->vehicle->color == playerView * 8 ) || (visibility == visible_all) || ((fld->vehicle->height >= chschwimmend) && (fld->vehicle->height <= chhochfliegend)))
-            fld->vehicle->paint( surf, pos );
+         if ( ( fld->vehicle->color == fieldInfo.playerView * 8 ) || (fieldInfo.visibility == visible_all) || ((fld->vehicle->height >= chschwimmend) && (fld->vehicle->height <= chhochfliegend)))
+            fld->vehicle->paint( fieldInfo.surface, pos );
 
    }
 
@@ -125,20 +193,20 @@ void MapRenderer::paintSingleField( Surface& surf, int playerView, pfield fld, i
    if ( layer & 1 )
       for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ ) {
          int h = o->typ->imageHeight;
-         if ( visibility > visible_ago || (o->typ->visibleago && visibility >= visible_ago ))
+         if ( fieldInfo.visibility > visible_ago || (o->typ->visibleago && fieldInfo.visibility >= visible_ago ))
             if (  h >= ((layer-1)/2)*30 && h < (layer-1)/2*30+30 )
-               o->display ( surf, pos, fld->getweather() );
+               o->display ( fieldInfo.surface, pos, fld->getweather() );
       }
 
 
 
 
-   if ( visibility > visible_ago ) {
+   if ( fieldInfo.visibility > visible_ago ) {
       /* display mines */
       
-      if ( visibility == visible_all )
+      if ( fieldInfo.visibility == visible_all )
          if ( !fld->mines.empty() && layer == 7 ) 
-            fld->mines.begin()->paint( surf, pos );
+            fld->mines.begin()->paint( fieldInfo.surface, pos );
      
 
 
@@ -146,18 +214,18 @@ void MapRenderer::paintSingleField( Surface& surf, int playerView, pfield fld, i
 
       if ( layer == 18 ) {
          if ( fld->a.temp && tempsvisible )
-            surf.Blit( icons.markField, pos );
+            fieldInfo.surface.Blit( icons.markField, pos );
          else
             if ( fld->a.temp2 && tempsvisible )
-               surf.Blit( icons.markFieldDark, pos );
+               fieldInfo.surface.Blit( icons.markFieldDark, pos );
       }
 
 
    } else {
-      if (visibility == visible_ago) {
+      if (fieldInfo.visibility == visible_ago) {
          if ( fld->building  &&  (fld->building->typ->buildingheight & binaryUnitHeight) )
-            if ((visibility == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerView*8 ))
-               fld->building->paintSingleField( surf, pos, fld->building->getLocalCoordinate( mc ));
+            if ((fieldInfo.visibility == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == fieldInfo.playerView*8 ))
+               fld->building->paintSingleField( fieldInfo.surface, pos, fld->building->getLocalCoordinate( fieldInfo.pos ));
 
       }
    }
@@ -199,10 +267,10 @@ void MapRenderer::paintSingleField( Surface& surf, int playerView, pfield fld, i
 
    // display view obstructions
    if ( layer == 18 ) {
-      if ( visibility == visible_ago) {
+      if ( fieldInfo.visibility == visible_ago) {
          MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaShadow> blitter;
          // PG_Point pnt = ClientToScreen( 0,0 );
-         blitter.blit( icons.notVisible, surf, pos);
+         blitter.blit( icons.notVisible, fieldInfo.surface, pos);
          /*
                          // putspriteimage( r + unitrightshift , yp + unitdownshift , view.va8);
                          putshadow( r, yp, icons.view.nv8, &xlattables.a.dark2 );
@@ -214,8 +282,8 @@ void MapRenderer::paintSingleField( Surface& surf, int playerView, pfield fld, i
           
          */
       } else
-         if ( visibility == visible_not) {
-            surf.Blit( icons.notVisible, pos );
+         if ( fieldInfo.visibility == visible_not) {
+            fieldInfo.surface.Blit( icons.notVisible, pos );
             /*
                             if ( ( fld->a.temp || fld->a.temp2 ) && tempsvisible )
                                   putspriteimage(  r, yp, cursor.markfield);
@@ -224,6 +292,10 @@ void MapRenderer::paintSingleField( Surface& surf, int playerView, pfield fld, i
          }
 
    }
+   
+   for ( LayerRenderer::iterator i = layerRenderer.begin(); i != layerRenderer.end(); ++i )
+      if ( (*i)->isActive() && (*i)->onLayer(layer))
+         (*i)->paintSingleField( fieldInfo , layer, pos );
 
 }
 
@@ -231,17 +303,21 @@ void MapRenderer::paintSingleField( Surface& surf, int playerView, pfield fld, i
 
 void MapRenderer::paintTerrain( Surface& surf, tmap* actmap, int playerView, const ViewPort& viewPort, const MapCoordinate& offset )
 {
+   FieldRenderInfo fieldRenderInfo( surf );
+   fieldRenderInfo.playerView = playerView;
+
    GraphicSetManager::Instance().setActive ( actmap->graphicset );
 
    for (int pass = 0; pass <= 18 ;pass++ ) {
       for (int y= viewPort.y1; y < viewPort.y2; ++y )
          for ( int x=viewPort.x1; x < viewPort.x2; ++x ) {
+            fieldRenderInfo.pos = MapCoordinate( offset.x + x, offset.y + y ); 
+            fieldRenderInfo.fld = actmap->getField ( fieldRenderInfo.pos );
             SPoint pos = getFieldPos(x,y);
-            MapCoordinate mc = MapCoordinate( offset.x + x, offset.y + y );
-            pfield fld = actmap->getField ( mc );
-            if ( fld )
-               paintSingleField( surf, playerView, fld, pass, pos, mc );
-            else
+            if ( fieldRenderInfo.fld ) {
+               fieldRenderInfo.visibility = fieldVisibility ( fieldRenderInfo.fld, playerView );
+               paintSingleField( fieldRenderInfo, pass, pos );
+            } else
                if ( pass == 0 )
                   surf.Blit( icons.mapBackground, pos );
 
@@ -313,6 +389,9 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
    theMapDisplay = this;
    theGlobalMapDisplay = this;
    dataLoaderTicker();
+   
+   addMapLayer( new ResourceLayer(), "res" );
+   addMapLayer( new ContainerInfoLayer(), "cont" );
 }
 
 
@@ -653,7 +732,7 @@ bool MapDisplayPG::eventMouseMotion (const SDL_MouseMotionEvent *button)
          cursor.invisible = 0;
          dirty = Curs;
    
-         updateFieldInfo();
+         cursorMoved();
    
          mouseDraggedToField( mc, SPoint(button->x, button->y), changed );
          Update();
@@ -720,14 +799,17 @@ void MapDisplayPG::initMovementStructure()
 
 void MapDisplayPG::displayMovementStep( Movement& movement, int percentage  )
 {
+   FieldRenderInfo fieldRenderInfo( *movement.surf );
+   fieldRenderInfo.playerView = movement.playerView;
    for (int pass = 0; pass <= 18 ;pass++ )
       for ( int i = 0; i < touchedFieldNum; ++i ) {
          SPoint pos = movement.touchedFields[i].surfPos;
-         const MapCoordinate& mc = movement.touchedFields[i].mapPos;
+         fieldRenderInfo.pos = movement.touchedFields[i].mapPos;
+         fieldRenderInfo.fld = movement.actmap->getField ( fieldRenderInfo.pos );
+         if ( fieldRenderInfo.fld ) {
+            fieldRenderInfo.visibility = fieldVisibility ( fieldRenderInfo.fld, fieldRenderInfo.playerView );
 
-         pfield fld = movement.actmap->getField ( mc );
-         if ( fld ) {
-            paintSingleField( *movement.surf, movement.playerView, fld, pass, pos, mc );
+            paintSingleField( fieldRenderInfo, pass, pos );
 
             if ( pass >= 2 && pass < 18 )
               if ( !(pass & 1 ))
@@ -971,7 +1053,7 @@ void MapDisplayPG::moveCursor( int dir, int step )
 
       checkViewPosition();
       
-      updateFieldInfo();
+      cursorMoved();
       Update();
       
       if ( offset != oldOffset )
@@ -1030,6 +1112,19 @@ bool MapDisplayPG::keyboardHandler( const SDL_KeyboardEvent* keyEvent)
 void MapDisplayPG::registerAdditionalUnit( Vehicle* veh )
 {
    additionalUnit = veh;
+}
+
+void MapDisplayPG::addMapLayer( MapLayer* layer, const ASCString& name )
+{
+   MapRenderer::addMapLayer( layer );
+   layerMap[name] = layer;
+}
+
+void MapDisplayPG::activateMapLayer( const ASCString& name, bool active )
+{
+   LayerMap::iterator i = layerMap.find( name );
+   if ( i != layerMap.end() )
+      i->second->setActive( active );
 }
 
 

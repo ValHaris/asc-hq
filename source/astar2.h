@@ -104,6 +104,7 @@ class AStar3D {
               virtual bool allowMovement() = 0;
               virtual bool allowLeavingContainer() = 0;
               virtual bool allowDocking() = 0;
+              virtual ~OperationLimiter() {};
        };
 
 

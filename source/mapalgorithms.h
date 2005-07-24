@@ -69,6 +69,7 @@
                    virtual void putpix8 ( int x, int y );
                    double winkel ( int x, int y );
                    int winkelcomp ( double w1, double w2 );
+                   virtual ~tdrawgettempline() {};
               };
 
 //! changes x and y to the coordinates of the neighbouring field of (x/y) in the direction direc

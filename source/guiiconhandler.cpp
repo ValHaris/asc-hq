@@ -31,8 +31,8 @@
 #include "guiiconhandler.h"
 #include "spfst.h"
 #include "iconrepository.h"
-#include "mapdisplay2.h"
-
+#include "mapdisplay.h"
+#include "sigc++/retype_return.h"
 
 const int guiIconSizeX = 49;
 const int guiIconSizeY = 35;
@@ -173,13 +173,16 @@ GuiIconHandler::~GuiIconHandler()
 NewGuiHost* NewGuiHost::theGuiHost = NULL;
 
 NewGuiHost :: NewGuiHost (PG_Widget *parent, MapDisplayPG* mapDisplay, const PG_Rect &r )
-         : Panel( parent, r, "GuiIcons", false ) , handler(NULL), enterKeyPressed(false), keyPressedButton(-1)
+         : Panel( parent, r, "GuiIcons", false ) , handler(NULL), enterKeyPressed(false), keyPressedButton(-1), smallButtonHolder(NULL)
 {
    this->mapDisplay = mapDisplay;
    mapDisplay->mouseButtonOnField.connect( SigC::slot( *this, &NewGuiHost::mapIconProcessing ));
    updateFieldInfo.connect ( SigC::slot( *this, &NewGuiHost::eval ));
    theGuiHost = this;
 
+   cursorMoved.connect( SigC::hide_return( SigC::slot( *this, &NewGuiHost::clearSmallIcons )) );
+
+   
    PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &NewGuiHost::eventKeyDown ));
    PG_Application::GetApp()->sigKeyUp.connect( SigC::slot( *this, &NewGuiHost::eventKeyUp ));
    SetTransparency(255);
@@ -241,6 +244,17 @@ void NewGuiHost::disableButtons( int i )
    }
 }
 
+class SmallButtonHolder : public SpecialInputWidget {
+   public:
+      SmallButtonHolder (PG_Widget *parent, const PG_Rect &rect ) : SpecialInputWidget( parent, rect ) {};
+      bool eventMouseMotion (const SDL_MouseMotionEvent *motion) { return true; };
+      bool eventMouseButtonDown (const SDL_MouseButtonEvent *button) { return true; };
+      bool eventMouseButtonUp (const SDL_MouseButtonEvent *button) { return true; };
+};      
+
+
+ 
+
 bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged )
 {
    PG_Application::SetBulkMode(true);
@@ -267,21 +281,36 @@ bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mous
       p.y += 2;
    }
 
-   if ( !cursorChanged )
-      for ( int j = 0; j < buttons.size(); ++j) {
-         GuiButton* b = getButton(j);
-         if ( !b->IsHidden() ) {
-            SmallGuiButton* sgi = new SmallGuiButton( mapDisplay, PG_Rect( p.x, p.y, smallGuiIconSizeX, smallGuiIconSizeY ), b, this );
-            p.x += smallGuiIconSizeX + smallGuiIconSpace;
-            smallButtons.push_back ( sgi );
-            if ( j == 0  && positionedUnderCursor )
-               sgi->press();
+   if ( !cursorChanged ) {
+      int count = 0;
+      for ( int j = 0; j < buttons.size(); ++j) 
+         if ( !getButton(j)->IsHidden() )
+            ++count;
+      
+      if ( count ) {
+         delete smallButtonHolder;
+         smallButtonHolder = new SmallButtonHolder ( mapDisplay, PG_Rect( p.x, p.y, count * smallGuiIconSizeX + (count-1)*smallGuiIconSpace, smallGuiIconSizeY ));
+
+         PG_Rect r = PG_Rect( 0, 0, smallGuiIconSizeX, smallGuiIconSizeY  );
+         for ( int j = 0; j < buttons.size(); ++j) {
+            GuiButton* b = getButton(j);
+            if ( !b->IsHidden() ) {
+               SmallGuiButton* sgi = new SmallGuiButton( smallButtonHolder, r, b, this );
+               r.x += smallGuiIconSizeX + smallGuiIconSpace;
+               if ( j == 0  && positionedUnderCursor )
+                  sgi->press();
+            }
          }
       }
+   }
 
    PG_Application::SetBulkMode(false);
+   if ( smallButtonHolder )
+      smallButtonHolder->Show();
+   /*
    for ( SmallButtons::iterator i = smallButtons.begin(); i != smallButtons.end(); ++i )
       (*i)->Show();
+      */
 
    return false;
 }
@@ -385,9 +414,14 @@ bool NewGuiHost::clearSmallIcons()
    if ( !bulk )
       PG_Application::SetBulkMode(true);
 
+      /*
    for ( SmallButtons::iterator i = smallButtons.begin(); i != smallButtons.end(); ++i )
       delete *i;
    smallButtons.clear();
+      */
+   
+   delete smallButtonHolder;
+   smallButtonHolder = NULL;
 
    if ( !bulk ) {
       PG_Application::SetBulkMode(false);

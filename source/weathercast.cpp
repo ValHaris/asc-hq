@@ -14,7 +14,7 @@
 #include "graphics/blitter.h"
 #include "graphics/drawing.h"
 #include "iconrepository.h"
-#include "mapdisplay2.h"
+#include "mapdisplay.h"
 #include "spfst.h"
 #include "paradialog.h"
 

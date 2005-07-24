@@ -47,6 +47,7 @@ class AttackFormula {
             float defense_experience ( int experience );
             float defense_defensebonus ( int defensebonus );
             static float getHemmingFactor ( int relDir );  // 0 <= reldir <= sidenum-2
+            virtual ~AttackFormula() {};
         };
 
 class tfight : public AttackFormula {

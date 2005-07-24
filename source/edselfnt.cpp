@@ -569,12 +569,6 @@ template<class T> T SelectAnything<T> :: selectitem( T previtem, tkey neutralkey
    if ( num <= 0 )
       return NULL;
 
-   pushallmouseprocs();
-   if ( mouseparams.pictpointer != icons.mousepointer ) 
-       setnewmousepointer ( icons.mousepointer, 0,0 );
-
-   // addmouseproc ( &selfntmousescrollproc );
-
    bar ( position.x1, position.y1-getiteminfoheight(), position.x2, position.y2, black );
 
    if ( previtem ) 
@@ -755,12 +749,6 @@ template<class T> T SelectAnything<T> :: selectitem( T previtem, tkey neutralkey
 
       releasetimeslice();
    } while ( !finished );
-
-   /*
-   removemouseproc ( &selfntmousescrollproc );
-   popallmouseprocs();
-   */
-
 
    if ( finished == 1 ) {
       int pos = actitemx + actitemy * maxx;

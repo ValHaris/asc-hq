@@ -37,6 +37,7 @@
 #include "graphics/drawing.h"
 #include "overviewmappanel.h"
 #include "ai/ai.h"
+#include "itemrepository.h"
 
 
 MainScreenWidget*  mainScreenWidget = NULL ;

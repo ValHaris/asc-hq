@@ -26,7 +26,7 @@
  #define dashboardH
 
 #include "paradialog.h"
-#include "mapdisplay2.h"
+#include "mapdisplay.h"
 
 class Vehicletype;
 class Vehicle;

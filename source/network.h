@@ -1,36 +1,3 @@
-//     $Id: network.h,v 1.8 2003-01-28 17:48:42 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.7  2002/02/21 17:06:51  mbickel
-//      Completed Paragui integration
-//      Moved mail functions to own file (messages)
-//
-//     Revision 1.6  2001/02/26 12:35:25  mbickel
-//      Some major restructuing:
-//       new message containers
-//       events don't store pointers to units any more
-//       tfield class overhauled
-//
-//     Revision 1.5  2000/08/12 12:52:49  mbickel
-//      Made DOS-Version compile and run again.
-//
-//     Revision 1.4  1999/12/28 21:03:12  mbickel
-//      Continued Linux port
-//      Added KDevelop project files
-//
-//     Revision 1.3  1999/12/07 22:13:25  mbickel
-//      Fixed various bugs
-//      Extended BI3 map import tables
-//
-//     Revision 1.2  1999/11/16 03:42:14  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger

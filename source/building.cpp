@@ -138,16 +138,6 @@ class csubwindow
 
 
 
-class tcontaineronlinemousehelp : public tonlinemousehelp
-{
-      pcontainer hostcontainer;
-   public:
-      tonlinehelplist* helplist2;
-      virtual void checkforhelp ( void );
-      tcontaineronlinemousehelp ( pcontainer host );
-};
-
-
 
 class   hosticons_c: public ContainerBaseGuiHost
 { // basis fuer icons ->struct mit allen icons
@@ -325,8 +315,6 @@ class    ccontainer : public virtual ccontainercontrols
 
       void     showresources  ( void );
       void     showammo ( void );
-
-      tcontaineronlinemousehelp* containeronlinemousehelp;
 
    public :
       virtual void paintvehicleinfo ( void );
@@ -1762,16 +1750,6 @@ ccontainer :: ccontainer (void)
    mousestat = 1;
    keymode = 0;
 
-   pushallmouseprocs ( );
-
-   // removemouseproc ( (void*) mousescrollproc );
-   // npush ( mouseproc );
-   // mouseproc = NULL;
-
-   if ( mouseparams.pictpointer != icons.mousepointer )
-      setnewmousepointer ( icons.mousepointer, 0,0 );
-
-
    allsubwindownum = 0;
    mark.x=0;
    mark.y=0;
@@ -1782,8 +1760,6 @@ ccontainer :: ccontainer (void)
    actsubwindow = NULL;
    inactivefield = icons.container.mark.inactive;
    activefield   = icons.container.mark.active;
-
-   containeronlinemousehelp = new tcontaineronlinemousehelp ( this );
 
 };
 
@@ -1800,18 +1776,9 @@ void   ccontainer :: registersubwindow ( psubwindow subwin )
 
 ccontainer :: ~ccontainer (void)
 {
-   delete containeronlinemousehelp;
-
    allsubwindownum = 0;
-   // addmouseproc ( (void*) mousescrollproc );
-
-   popallmouseprocs ( );
-
-
-
-   //     npop ( mouseproc );
 }
-;
+
 
 void  ccontainer :: buildgraphics( void )
 {
@@ -1998,7 +1965,6 @@ void  ccontainer :: run ()
          int keyprn;
          tkey input;
          getkeysyms( &input, &keyprn );
-         containeronlinemousehelp->removehelp ();
 
          if ( input == ct_tab ) {
             {
@@ -2081,7 +2047,6 @@ void  ccontainer :: run ()
          unitchanged();
       }
 
-      containeronlinemousehelp->checkforhelp();
       releasetimeslice();
    } while (end == 0);
 }
@@ -6745,20 +6710,4 @@ generalicon_c:: ~generalicon_c ( )
    first = NULL;
 }
 
-void tcontaineronlinemousehelp :: checkforhelp ( void )
-{
-   if ( CGameOptions::Instance()->onlinehelptime )
-      if ( (ticker > lastmousemove+CGameOptions::Instance()->onlinehelptime  && mouseparams.taste == 0 ) || mouseparams.taste == 2 )
-         if ( active == 1 )
-            if ( hostcontainer->actsubwindow )
-               if ( hostcontainer->actsubwindow->helplist.num )
-                  checklist ( &hostcontainer->actsubwindow->helplist );
-
-
-}
-
-tcontaineronlinemousehelp :: tcontaineronlinemousehelp ( pcontainer host )
-{
-   hostcontainer = host;
-}
 

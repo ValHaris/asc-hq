@@ -200,6 +200,7 @@ extern int  rol ( int valuetorol, int rolwidth );
 extern SigC::Signal0<void> repaintMap;
 extern SigC::Signal0<void> repaintDisplay;
 extern SigC::Signal0<void> updateFieldInfo;
+extern SigC::Signal0<void> cursorMoved;
 extern SigC::Signal0<void> viewChanged;
 extern SigC::Signal1<void,tmap*> mapChanged;
 extern SigC::Signal1<void,ContainerBase*> showContainerInfo;

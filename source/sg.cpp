@@ -110,7 +110,6 @@
 #include "messagedlg.h"
 #include "statisticdialog.h"
 #include "clipboard.h"
-#include "mapdisplay2.h"
 #include "guiiconhandler.h"
 #include "guifunctions.h"
 #include "iconrepository.h"
@@ -124,71 +123,6 @@
 #include "memorycheck.cpp"
 
 
-
-class tsgonlinemousehelp : public tonlinemousehelp
-{
-   public:
-      tsgonlinemousehelp ( void );
-};
-
-tsgonlinemousehelp :: tsgonlinemousehelp ( void )
-{
-   helplist.num = 12;
-
-   static tonlinehelpitem sghelpitems[12]  = {{{ 498, 26, 576, 36}, 20001 },
-         {{ 498, 41, 576, 51}, 20002 },
-         {{ 586, 26, 612, 51}, 20003 },
-         {{ 499, 57, 575, 69}, 20004 },
-         {{ 499, 70, 575, 81}, 20005 },
-         {{ 577, 58, 610, 68}, 20006 },
-         {{ 577, 70, 610, 80}, 20007 },
-         {{ 502, 92, 531,193}, 20008 },
-         {{ 465, 92, 485,194}, 20009 },
-         {{ 551, 92, 572,193}, 20010 },
-         {{ 586, 90, 612,195}, 20011 },
-         {{ 473,agmp->resolutiony - ( 480 - 449 ), 601,agmp->resolutiony - ( 480 - 460 )}, 20016 }};
-
-   for ( int i = 0; i< helplist.num; i++ ) {
-      sghelpitems[i].rect.x1 = agmp->resolutionx - ( 640 - sghelpitems[i].rect.x1 );
-      sghelpitems[i].rect.x2 = agmp->resolutionx - ( 640 - sghelpitems[i].rect.x2 );
-   }
-
-   helplist.item = sghelpitems;
-}
-
-tsgonlinemousehelp* onlinehelp = NULL;
-
-
-
-
-class tsgonlinemousehelpwind : public tonlinemousehelp
-{
-   public:
-      tsgonlinemousehelpwind ( void );
-} ;
-
-tsgonlinemousehelpwind :: tsgonlinemousehelpwind ( void )
-{
-   helplist.num = 3;
-
-   static tonlinehelpitem sghelpitemswind[3]  = { {{ 501,224, 569,290}, 20013 },
-         {{ 589,228, 609,289}, 20014 },
-         {{ 489,284, 509,294}, 20015 }};
-
-   for ( int i = 0; i< helplist.num; i++ ) {
-      sghelpitemswind[i].rect.x1 = agmp->resolutionx - ( 640 - sghelpitemswind[i].rect.x1 );
-      sghelpitemswind[i].rect.x2 = agmp->resolutionx - ( 640 - sghelpitemswind[i].rect.x2 );
-   }
-
-   helplist.item = sghelpitemswind;
-}
-
-tsgonlinemousehelpwind* onlinehelpwind = NULL;
-
-
-
-
-#define messagedisplaytime 300
 
 
 
@@ -1712,9 +1646,6 @@ int gamethread ( void* data )
       displayLogMessage ( 5, " done \n" );
       dataLoaderTicker();
       
-      onlinehelp = new tsgonlinemousehelp;
-      onlinehelpwind = new tsgonlinemousehelpwind;
-      
       repaintDisplay.connect( repaintMap );
       
       mainScreenWidget = new MainScreenWidget( getPGApplication());
@@ -1876,6 +1807,7 @@ int main(int argc, char *argv[] )
 
    app.sigAppIdle.connect ( SigC::slot( mainloopidle ));
 
+   cursorMoved.connect( updateFieldInfo );
 
    int flags = SDL_SWSURFACE;
    if ( fullscreen )
@@ -1915,12 +1847,6 @@ int main(int argc, char *argv[] )
    actmap = NULL;
    
    writegameoptions ( );
-
-   delete onlinehelp;
-   onlinehelp = NULL;
-
-   delete onlinehelpwind;
-   onlinehelpwind = NULL;
 
    return(0);
 }

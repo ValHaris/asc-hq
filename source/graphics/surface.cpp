@@ -263,6 +263,8 @@ void Surface::read ( tnstream& stream )
 
       char* uncomp = (char*) uncompress_rlepict ( pnter );
       pixelDataPointer = uncomp;
+      
+      // TODO fix memory leak: uncomp will not be deleted
       delete[] pnter;
 
       SetSurface( SDL_CreateRGBSurfaceFrom(uncomp+4, hd.x+1, hd.y+1, 8, hd.x+1, 0, 0, 0, 0 ));

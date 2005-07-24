@@ -63,6 +63,7 @@
 SigC::Signal0<void> repaintMap;
 SigC::Signal0<void> repaintDisplay;
 SigC::Signal0<void> updateFieldInfo;
+SigC::Signal0<void> cursorMoved;
 SigC::Signal1<void,ContainerBase*> showContainerInfo;
 SigC::Signal1<void,Vehicletype*> showVehicleTypeInfo;
 SigC::Signal0<void> viewChanged;

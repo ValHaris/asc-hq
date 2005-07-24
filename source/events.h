@@ -96,25 +96,10 @@ class tmousesettings {
 
 
 
-class tsubmousehandler {
-        protected:
-           tmouserect offarea;
-        public:
-           tsubmousehandler ( void ) { offarea.x1 = 0; offarea.y1 = 0; offarea.x2 = 0; offarea.y2 = 0; };
-           virtual void mouseaction ( void ) = 0;
-           virtual void invisiblerect ( tmouserect newoffarea ) { offarea = newoffarea; };
-     };
-
 
 extern void mouseintproc2( void );
 extern volatile tmousesettings mouseparams;
 
-
-extern void addmouseproc ( tsubmousehandler* proc );
-extern void removemouseproc ( tsubmousehandler* proc );
-
-extern void pushallmouseprocs ( void );
-extern void popallmouseprocs ( void );
 
 /***************************************************************************
  *                                                                         *
