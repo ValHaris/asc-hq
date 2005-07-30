@@ -202,12 +202,8 @@ int         fieldAccessible( const pfield        field,
               if (vehicleplattfahrbar(vehicle,field))
                  return 2;
               else
-                 if ((attackpossible28(field->vehicle,vehicle) == false) || (getdiplomaticstatus(field->vehicle->color) == capeace))
-                   if ( terrainaccessible ( field, vehicle, uheight ) )
-                      return 1;
-                   else
-                      return 0;
-
+                 if ((field->vehicle->height != vehicle->height) || (attackpossible28(field->vehicle,vehicle) == false) || (getdiplomaticstatus(field->vehicle->color) == capeace))
+                    return 1;
       }
       else {   // building
         if ((field->bdt & getTerrainBitType(cbbuildingentry) ).any() && field->building->vehicleLoadable ( vehicle, uheight, attacked ))
@@ -323,7 +319,7 @@ int        getdiplomaticstatus2(int    b, int    c)
 
 
 
-int isresourcenetobject ( pobjecttype obj )
+int isresourcenetobject ( ObjectType* obj )
 {
    if ( obj->id == 3 || obj->id == 30 || obj->id == 4 )
       return 1;
@@ -374,7 +370,7 @@ void         putbuilding( const MapCoordinate& entryPosition,
 
 void         putbuilding2( const MapCoordinate& entryPosition,
                            int         color,
-                           pbuildingtype buildingtyp)
+                           BuildingType* buildingtyp)
 { 
    if ( color & 7 )
       displaymessage("putbuilding muss eine farbe aus 0,8,16,24,.. uebergeben werden !",2);
@@ -468,7 +464,7 @@ void     putstreets2  ( int      x1,
                         int      y1,
                         int      x2,
                         int      y2,
-                        pobjecttype obj )
+                        ObjectType* obj )
 {
 
    int x = x1;
@@ -610,7 +606,7 @@ int  getmaxwindspeedforunit ( const Vehicle* eht )
 
 
 /*
-int getcrc ( const pvehicletype fzt )
+int getcrc ( const Vehicletype* fzt )
 {
     if ( !fzt )
        return -1;
@@ -679,7 +675,7 @@ int getcrc ( const ptechnology tech )
     return crc32buf ( &t, sizeof ( t )) ;
 }
 
-int getcrc ( const pobjecttype obj )
+int getcrc ( const ObjectType* obj )
 {
     if ( !obj )
        return -1;
@@ -740,7 +736,7 @@ int getcrc ( const pterraintype bdn )
 }
 
 
-int getcrc ( const pbuildingtype bld )
+int getcrc ( const BuildingType* bld )
 {
     if ( !bld )
        return -1;
@@ -926,7 +922,7 @@ void         calculateobject( int       x,
    }
 
    pfield fld = actmap->getField(x,y) ;
-   pobject oi2 = fld-> checkforobject (  obj  );
+   Object* oi2 = fld-> checkforobject (  obj  );
 
    int c = 0;
    for ( int dir = 0; dir < sidenum; dir++) {
@@ -937,7 +933,7 @@ void         calculateobject( int       x,
 
       if ( fld2 ) {
          for ( int oj = -1; oj < int(obj->linkableObjects.size()); oj++ ) {
-            pobject oi;
+            Object* oi;
             if ( oj == -1 )
                oi = fld2->checkforobject ( obj );
             else

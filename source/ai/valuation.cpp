@@ -238,7 +238,7 @@ AiParameter::JobList AI::chooseJob ( const Vehicletype* typ, int functions )
 
 
 
-void  AI :: calculateThreat ( pvehicletype vt)
+void  AI :: calculateThreat ( Vehicletype* vt)
 {
    CalculateThreat_VehicleType ctvt ( this );
    ctvt.calc_threat_vehicletype( vt );
@@ -418,7 +418,7 @@ void     AI :: calculateAllThreats( void )
    // Calculates the basethreats for all vehicle types
    if ( !baseThreatsCalculated ) {
       for ( int w = 0; w < vehicleTypeRepository.getNum(); w++) {
-         pvehicletype fzt = vehicleTypeRepository.getObject_byPos(w);
+         Vehicletype* fzt = vehicleTypeRepository.getObject_byPos(w);
          if ( fzt )
             calculateThreat( fzt );
 
@@ -429,7 +429,7 @@ void     AI :: calculateAllThreats( void )
    // Some further calculations that only need to be done once.
    if ( maxTrooperMove == 0) {
       for ( int v = 0; v < vehicleTypeRepository.getNum(); v++) {
-         pvehicletype fzt = vehicleTypeRepository.getObject_byPos( v );
+         Vehicletype* fzt = vehicleTypeRepository.getObject_byPos( v );
          if ( fzt )
             if ( fzt->functions & cf_conquer )
                if ( fzt->movement[log2(chfahrend)] > maxTrooperMove )   // buildings can only be conquered on ground level, or by moving to adjecent field which is less
@@ -438,7 +438,7 @@ void     AI :: calculateAllThreats( void )
    }
    if ( maxTransportMove == 0 ) {
       for (int v = 0; v < vehicleTypeRepository.getNum(); v++) {
-         pvehicletype fzt = vehicleTypeRepository.getObject_byPos( v );
+         Vehicletype* fzt = vehicleTypeRepository.getObject_byPos( v );
          if ( fzt )
             for ( int w = 0; w <= 7; w++) // cycle through all levels of height
                if (fzt->movement[w] > maxTransportMove)
@@ -452,7 +452,7 @@ void     AI :: calculateAllThreats( void )
          maxWeapDist[height] = 0; // It may be possible that there is no weapon to shoot to a specific height
 
          for ( int v = 0; v < vehicleTypeRepository.getNum(); v++) {
-            pvehicletype fzt = vehicleTypeRepository.getObject_byPos( v );
+            Vehicletype* fzt = vehicleTypeRepository.getObject_byPos( v );
             if ( fzt )
                for ( int w = 0; w < fzt->weapons.count ; w++)
                   if ( fzt->weapons.weapon[w].maxdistance > maxWeapDist[height] )

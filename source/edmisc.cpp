@@ -54,9 +54,9 @@
    pfield               pf2;
 
    pterraintype auswahl;
-   pvehicletype auswahlf;
-   pobjecttype  actobject;
-   pbuildingtype        auswahlb;
+   Vehicletype* auswahlf;
+   ObjectType*  actobject;
+   BuildingType*        auswahlb;
    int          auswahls;
    int          auswahlm;       
    int          auswahlw;
@@ -2609,7 +2609,7 @@ class UnitProductionLimitation : public tladeraum {
 const char* UnitProductionLimitation:: getinfotext ( int pos )
 {
    if ( ids.size() > pos ) {
-      pvehicletype vt = actmap->getvehicletype_byid( ids[pos] );
+      Vehicletype* vt = actmap->getvehicletype_byid( ids[pos] );
       if ( vt )
          return vt->name.c_str();
    }
@@ -2625,7 +2625,7 @@ void UnitProductionLimitation :: init (  )
 void UnitProductionLimitation :: displaysingleitem ( int pos, int x, int y )
 {
    if ( ids.size() > pos ) {
-      pvehicletype vt = actmap->getvehicletype_byid( ids[pos] );
+      Vehicletype* vt = actmap->getvehicletype_byid( ids[pos] );
       if ( vt )
          vt->paint( getActiveSurface(), SPoint ( x, y), farbwahl );
    }
@@ -2633,7 +2633,7 @@ void UnitProductionLimitation :: displaysingleitem ( int pos, int x, int y )
 
 void UnitProductionLimitation :: additem  ( void )
 {
-   pvehicletype vt = selvehicletype ( ct_invvalue );
+   Vehicletype* vt = selvehicletype ( ct_invvalue );
    if ( vt ) {
       for ( tmap::UnitProduction::IDsAllowed::iterator i = ids.begin(); i != ids.end(); i++ )
          if ( *i == vt->id )
@@ -3215,7 +3215,7 @@ class UnitTypeTransformation {
                 int unitstransformed;
                 int unitsnottransformed;
 
-                pvehicletype transformvehicletype ( const Vehicletype* type, int unitsetnum, int translationnum );
+                Vehicletype* transformvehicletype ( const Vehicletype* type, int unitsetnum, int translationnum );
                 void transformvehicle ( Vehicle* veh, int unitsetnum, int translationnum );
                 dynamic_array<int> vehicleTypesNotTransformed;
                 int vehicleTypesNotTransformedNum ;
@@ -3300,11 +3300,11 @@ void         UnitTypeTransformation :: TranslationTableSelection::run(void)
       redline = -1;
 } 
 
-pvehicletype UnitTypeTransformation :: transformvehicletype ( const Vehicletype* type, int unitsetnum, int translationnum )
+Vehicletype* UnitTypeTransformation :: transformvehicletype ( const Vehicletype* type, int unitsetnum, int translationnum )
 {
    for ( int i = 0; i < unitSets[unitsetnum]->transtab[translationnum]->translation.size(); i++ )
       if ( unitSets[unitsetnum]->transtab[translationnum]->translation[i].from == type->id ) {
-         pvehicletype tp = vehicleTypeRepository.getObject_byID ( unitSets[unitsetnum]->transtab[translationnum]->translation[i].to );
+         Vehicletype* tp = vehicleTypeRepository.getObject_byID ( unitSets[unitsetnum]->transtab[translationnum]->translation[i].to );
          if ( tp ) 
             return tp;
       }
@@ -3326,7 +3326,7 @@ void  UnitTypeTransformation ::transformvehicle ( Vehicle* veh, int unitsetnum, 
       if ( veh->loading[i] )
          transformvehicle ( veh->loading[i], unitsetnum, translationnum );
 
-   pvehicletype nvt = transformvehicletype ( veh->typ, unitsetnum, translationnum );
+   Vehicletype* nvt = transformvehicletype ( veh->typ, unitsetnum, translationnum );
    if ( !nvt ) {
       unitsnottransformed++;
       return;
@@ -3374,7 +3374,7 @@ void UnitTypeTransformation :: run ( void )
                if ( fld->building->loading[i] ) 
                   transformvehicle ( fld->building->loading[i], unitsetnum, translationsetnum );
                if ( fld->building->production[i] ) {
-                  pvehicletype vt = transformvehicletype ( fld->building->production[i], unitsetnum, translationsetnum );
+                  Vehicletype* vt = transformvehicletype ( fld->building->production[i], unitsetnum, translationsetnum );
                   if ( vt ) {
                      fld->building->production[i] = vt;
                      unitstransformed++;
@@ -3390,7 +3390,7 @@ void UnitTypeTransformation :: run ( void )
           s += "\n ID ";
           s += strrr ( vehicleTypesNotTransformed[i] );
           s += " : ";
-          pvehicletype vt = vehicleTypeRepository.getObject_byID ( vehicleTypesNotTransformed[i] );
+          Vehicletype* vt = vehicleTypeRepository.getObject_byID ( vehicleTypesNotTransformed[i] );
           if ( !vt-> name.empty() )
              s += vt->name;
           else

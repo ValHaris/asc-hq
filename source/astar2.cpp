@@ -778,8 +778,10 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
                   if ( N2.canStop && actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh) {
                      // there's an container on the field that can be entered. This means, the unit can't stop 'over' the container...
-                     N2.canStop = false;
-                     nodeVisited ( N2, dir, open );
+                     if ( !(veh->typ->functions & cfonlytransmove) ) {
+                        N2.canStop = false;
+                        nodeVisited ( N2, dir, open );
+                     }
 
                      // ... only inside it
                      N2.canStop = true;
@@ -788,13 +790,14 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                      // N2.hasAttacked = true;
                      nodeVisited ( N2, dir, open, N.h.getNumericalHeight(), maxmalq );
                   } else
-                     nodeVisited ( N2, dir, open );
+                     if ( !(veh->typ->functions & cfonlytransmove) )
+                        nodeVisited ( N2, dir, open );
               }
 
            // and now change the units' height. That's only possible on fields where the unit can stop it's movement
 
 
-           if ( !operationLimiter || operationLimiter->allowHeightChange() )
+           if ( (!operationLimiter || operationLimiter->allowHeightChange()) && !(veh->typ->functions & cfonlytransmove) )
               if ( (fieldAccessible ( actmap->getField(N.h), veh, N.h.getBitmappedHeight() ) == 2 ) || actmap->getgameparameter( cgp_movefrominvalidfields) )
                  for ( int heightDelta = -1; heightDelta <= 1; heightDelta += 2 ) {
                     const Vehicletype::HeightChangeMethod* hcm = veh->getHeightChange( heightDelta, N.h.getBitmappedHeight());

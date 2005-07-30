@@ -108,7 +108,10 @@ const Surface& ObjectType :: getPicture ( int i, int w ) const
       w = 0;
 
    if ( weatherPicture[w].images.size() <= i )
-      i = 0;
+      if ( i >= 64 && weatherPicture[w].images.size() > 34 )
+         i = 34;
+      else
+         i = 0;
 
    if ( weatherPicture[w].bi3pic[i] > 0 )
       return GraphicSetManager::Instance().getPic(weatherPicture[w].bi3pic[i]);
@@ -182,7 +185,7 @@ void ObjectType::realDisplay ( Surface& surface, SPoint pos, int dir, int weathe
 
 void ObjectType :: display ( Surface& surface, SPoint pos ) const
 {
-   display ( surface, pos, 34, 0 );
+   display ( surface, pos, 64, 0 );
 }
 
 
@@ -333,7 +336,7 @@ class Smoothing {
          };
 
 
-         int  GetNeighbourMask( int x, int y, int* Arr, pobjecttype o )
+         int  GetNeighbourMask( int x, int y, int* Arr, ObjectType* o )
          {
             int res = 0;
             for ( int d = 0; d < sidenum; d++ ) {
@@ -343,7 +346,7 @@ class Smoothing {
                pfield fld = getfield ( x1, y1 );
                if ( fld ) {
 
-                  pobject obj = fld->checkforobject ( o );
+                  Object* obj = fld->checkforobject ( o );
                   if ( obj )
                      if ( obj->typ->weather.test(0) )
                         if ( IsInSetOfWord ( obj->typ->weatherPicture[0].bi3pic[ obj->dir ], Arr ))
@@ -410,7 +413,7 @@ class Smoothing {
          };
 
 
-         int SmoothIt( pobjecttype TerObj, int* SmoothData )
+         int SmoothIt( ObjectType* TerObj, int* SmoothData )
          {
            int P0 = SmoothData[0];
            int P1 = SmoothData[1];
@@ -420,7 +423,7 @@ class Smoothing {
            for ( int Y = 0 ; Y < actmap->ysize; Y++ )
              for ( int X = 0; X < actmap->xsize; X++ ) {
                  if ( TerObj ) {
-                    pobject obj = getfield ( X, Y )-> checkforobject ( TerObj );
+                    Object* obj = getfield ( X, Y )-> checkforobject ( TerObj );
                     if ( obj  && obj->typ->weather.test(0) ) {
                        int Old = obj->dir; // bipicnum
                                            //    Old:= TRawArrEck(Mission.ACTN[Y, X])[TerObj];  // bisherige Form / oder Bildnummer ?
@@ -485,7 +488,7 @@ class Smoothing {
 
 
 
-         void smooth ( int what, pobjecttype woodObj )
+         void smooth ( int what, ObjectType* woodObj )
          {
            int ShowAgain = 0;
            if ( what & 2 ) {
@@ -644,14 +647,14 @@ Smoothdaten
 */
 
 
-void smooth ( int what, pmap gamemap, pobjecttype woodObj )
+void smooth ( int what, pmap gamemap, ObjectType* woodObj )
 {
   Smoothing s ( gamemap );
   s.smooth ( what, woodObj );
 }
 
 
-void calculateforest( pmap actmap, pobjecttype woodObj )
+void calculateforest( pmap actmap, ObjectType* woodObj )
 {
    for ( int y = 0; y < actmap->ysize ; y++)
      for ( int x = 0; x < actmap->xsize ; x++) {
@@ -684,7 +687,7 @@ void calculateforest( pmap actmap, pobjecttype woodObj )
                      pfield fld2 = actmap->getField(a,b);
 
                      if ( fld2 ) {
-                        pobject oi = fld2->checkforobject ( o->typ );
+                        Object* oi = fld2->checkforobject ( o->typ );
                         if ( oi )
                            if ( oi->dir <= 20  ||  run == 0 )
                               c |=  1 << i ;

@@ -45,7 +45,7 @@ main(int argc, char *argv[] )
           
    while ( n ) {
       quantity++;
-      pvehicletype ft = loadvehicletype( n );
+      Vehicletype* ft = loadvehicletype( n );
       printf (" converting <%15.15s>  \n ", n);
 
       ft->armor = ft->armor * armorfaktor / 10;

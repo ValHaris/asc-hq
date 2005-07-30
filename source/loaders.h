@@ -86,7 +86,7 @@ class  tspfldloaders {
            pnstream        stream;
            tmap*     spfld;
 
-           void            writeevent  ( pevent event );
+//           void            writeevent  ( pevent event );
 
            void            readoldevents     ( void );
 

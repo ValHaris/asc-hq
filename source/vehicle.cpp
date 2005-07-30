@@ -97,7 +97,7 @@ Vehicle :: ~Vehicle (  )
       pfield fld = getMap()->getField(getPosition());
       if ( fld->vehicle ==  this ) {
          for ( vector<int>::const_iterator i = typ->wreckageObject.begin(); i != typ->wreckageObject.end(); ++i ) {
-            pobjecttype obj = getMap()->getobjecttype_byid( *i );
+            ObjectType* obj = getMap()->getobjecttype_byid( *i );
             if ( obj )
                getMap()->getField(getPosition()) -> addobject ( obj );
          }
@@ -267,7 +267,7 @@ int Vehicle::size ( void )
    return typ->weight;
 }
 
-void Vehicle::transform ( const pvehicletype type )
+void Vehicle::transform ( const Vehicletype* type )
 {
    typ = type;
 
@@ -776,7 +776,7 @@ void Vehicle::convert ( int col )
    conquered();
 }
 
-Vehicle* Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
+Vehicle* Vehicle :: constructvehicle ( Vehicletype* tnk, int x, int y )
 {
    if ( gamemap && vehicleconstructable( tnk, x, y )) {
       Vehicle* v = new Vehicle( tnk, gamemap, color/8 );
@@ -819,7 +819,7 @@ Vehicle* Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
       return NULL;
 }
 
-bool  Vehicle :: vehicleconstructable ( pvehicletype tnk, int x, int y )
+bool  Vehicle :: vehicleconstructable ( Vehicletype* tnk, int x, int y )
 {
    if ( !tnk->techDependency.available ( gamemap->player[getOwner()].research))
       return 0;
@@ -841,7 +841,7 @@ bool  Vehicle :: vehicleconstructable ( pvehicletype tnk, int x, int y )
 }
 
 
-bool Vehicle :: buildingconstructable ( pbuildingtype building )
+bool Vehicle :: buildingconstructable ( BuildingType* building )
 {
    if ( !building )
       return 0;
@@ -1527,7 +1527,7 @@ Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream, int forceNetwo
       id = stream.readInt();
    }
 
-   pvehicletype fzt = gamemap->getvehicletype_byid ( id );
+   Vehicletype* fzt = gamemap->getvehicletype_byid ( id );
    if ( !fzt )
       throw InvalidID ( "vehicle", id );
 

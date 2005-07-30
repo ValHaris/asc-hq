@@ -65,6 +65,7 @@ const char*  cvehiclefunctions[cvehiclefunctionsnum+1]  = {
                    "refuels energy",
                    "jams only own field",
                    "move with reaction fire on",
+                   "only move to and from transports",
                    NULL };
 
 
@@ -111,10 +112,10 @@ int Vehicletype::maxsize ( void ) const
 }
 
 #ifndef converter
-extern void* generate_vehicle_gui_build_icon ( pvehicletype tnk );
+extern void* generate_vehicle_gui_build_icon ( Vehicletype* tnk );
 #endif
 
-const int vehicle_version = 21;
+const int vehicle_version = 22;
 
 
 
@@ -396,6 +397,8 @@ void Vehicletype :: read ( tnstream& stream )
          if ( version >= 17 )
             weapons.weapon[j].reactionFireShots = stream.readInt();
 
+         if ( version >= 22 )
+            weapons.weapon[j].name = stream.readString();
 
          /*
          if ( weapons.weapon[j].getScalarWeaponType() == cwminen )
@@ -489,6 +492,9 @@ void Vehicletype :: read ( tnstream& stream )
       movementSoundLabel = stream.readString();
       killSoundLabel = stream.readString();
    }
+
+   if ( version >= 22 ) 
+      readClassContainer( guideSortHelp, stream );
 }
 
 
@@ -609,6 +615,7 @@ void Vehicletype:: write ( tnstream& stream ) const
       stream.writeInt(weapons.weapon[j].maxstrength );
       stream.writeInt(weapons.weapon[j].minstrength );
       stream.writeInt(weapons.weapon[j].reactionFireShots );
+      stream.writeString( weapons.weapon[j].name );
 
       for ( int k = 0; k < 13; k++ )
          stream.writeInt(weapons.weapon[j].efficiency[k] );
@@ -644,6 +651,7 @@ void Vehicletype:: write ( tnstream& stream ) const
 
    stream.writeString( movementSoundLabel );
    stream.writeString( killSoundLabel );
+   writeClassContainer( guideSortHelp, stream );
 }
 
 
@@ -747,6 +755,9 @@ void SingleWeapon::set ( int type )
 
 ASCString SingleWeapon::getName ( void ) const
 {
+   if ( !name.empty() )
+      return name;
+
    ASCString s;
 
    int k = getScalarWeaponType();
@@ -773,6 +784,7 @@ ASCString    SingleWeapon::getIconFileName( int numerical )
       case cwcannonn: return "weap-cannon";
       case cwminen: return "weap-mine";
       case cwservicen: return "weap-service";   
+      case cwlasern: return "weap-laser";   
       default: return "weap-undefined";
    };
 }
@@ -908,6 +920,8 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
 
    pc.closeBracket ();
 
+   if ( pc.find( "guideSortHelp") )
+      pc.addIntegerArray("guideSortHelp", guideSortHelp );
 
    #ifndef converter
    buildicon = generate_gui_build_icon ( this );
@@ -970,6 +984,7 @@ void SingleWeapon::runTextIO ( PropertyContainer& pc )
             pc.addInteger( unitCategoryTags[i], targetingAccuracy[i] );
       pc.closeBracket();
    }
+   pc.addString("name", name, "");
 }
 
 
@@ -1078,8 +1093,8 @@ Resources Vehicletype :: calcProductionsCost()
 			typecostm += armor*10;
 		} else
 		if ( movemalustyp == MoveMalusType::light_aircraft || movemalustyp == MoveMalusType::medium_aircraft || movemalustyp == MoveMalusType::heavy_aircraft || movemalustyp == MoveMalusType::helicopter ) {
-			typecoste += armor*16;
-			typecostm += armor*16;
+			typecoste += armor*20;
+			typecostm += armor*20;
 		} else {
 			typecoste += armor*5;
 			typecostm += armor*5;
@@ -1126,8 +1141,8 @@ Resources Vehicletype :: calcProductionsCost()
 		}
 		// Zuschlag für Triebwerke
 		if (movecostsize > 70 ) {
-			typecoste += (movecostsize-70)*30;
-			typecostm += (movecostsize-70)*15;
+			typecoste += (movecostsize-70)*15;
+			typecostm += (movecostsize-70)*5;
 		}
 		
 		// Zuschlag für Flugzeugtriebwerke

@@ -184,7 +184,7 @@ const int objectDisplayingMethodNum = 5;
 
 namespace ForestCalculation {
   //! automatically adjusting the pictures of woods and coasts to form coherent structures
-  extern void smooth ( int what, pmap gamemap, pobjecttype woodObj );
+  extern void smooth ( int what, pmap gamemap, ObjectType* woodObj );
 };
 
 

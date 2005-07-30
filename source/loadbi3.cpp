@@ -544,7 +544,7 @@ class tloadBImap {
        void ReadSHOPPart(void);
        void ReadShopNames( char *txtdata, unsigned long txtsize );
        Vehicle* getunit ( int typ, int col );
-       pvehicletype getvehicletype ( int typ );
+       Vehicletype* getvehicletype ( int typ );
        char* GetStr ( int a, int b );
        int convcol ( int c );
 
@@ -646,10 +646,10 @@ int translateunits[ bi3unitnum ][2] = { {1201,26}, {1270,26}, {1202,13}, {1200,6
                                         {1234,4},  {1235,4},  {1267,35},{1250,29}};
 
 
-pvehicletype  tloadBImap :: getvehicletype ( int tp )
+Vehicletype*  tloadBImap :: getvehicletype ( int tp )
 {
    for ( int j = 0; j < vehicleTypeRepository.getNum(); j++ ) {
-      pvehicletype tnk = vehicleTypeRepository.getObject_byPos ( j );
+      Vehicletype* tnk = vehicleTypeRepository.getObject_byPos ( j );
       if ( tnk )
          if ( tnk->bipicture > 0 )
             if ( tnk->bipicture == 1340 + tp * 2 )
@@ -660,7 +660,7 @@ pvehicletype  tloadBImap :: getvehicletype ( int tp )
    if ( tp < bi3unitnum )
       for ( int i = 0; i < 2; i++ )
          if ( translateunits[tp][i] > 0 ) {
-            pvehicletype tnk = vehicleTypeRepository.getObject_byID ( translateunits[tp][i] );
+            Vehicletype* tnk = vehicleTypeRepository.getObject_byID ( translateunits[tp][i] );
             if ( tnk )
                return tnk;
          }
@@ -670,7 +670,7 @@ pvehicletype  tloadBImap :: getvehicletype ( int tp )
 Vehicle* tloadBImap :: getunit ( int tp, int col )
 {
    if ( tp != 0xffff && tp != 0xff && col != 0xff ) {
-      pvehicletype vt = getvehicletype ( tp );
+      Vehicletype* vt = getvehicletype ( tp );
       if ( vt ) {
          Vehicle* eht = new Vehicle ( vt, actmap, col );
          eht->fillMagically();
@@ -817,7 +817,7 @@ void        tloadBImap ::   ReadACTNPart(void)
                   pterraintype trrn = terrainTypeRepository.getObject_byID ( translationTable->terraincombixlat[j].terrainid );
                   if ( trrn ) {
                      fld->typ = trrn->weather[translationTable->terraincombixlat[j].terrainweather];
-                     pobjecttype obj = NULL;
+                     ObjectType* obj = NULL;
                      if ( translationTable->terraincombixlat[j].objectid > 0 )
                         obj = objectTypeRepository.getObject_byID ( translationTable->terraincombixlat[j].objectid );
                      if ( obj )
@@ -907,7 +907,7 @@ void        tloadBImap ::   ReadACTNPart(void)
             for ( int pass = 0; pass < 2 && !found_without_force; pass++ ) {
                for ( int i = 0; i < translationTable->object2IDtranslate.size(); i++ )
                   if ( xlt[m] == translationTable->object2IDtranslate[i].first )  {
-                     pobjecttype obj = objectTypeRepository.getObject_byID ( translationTable->object2IDtranslate[i].second );
+                     ObjectType* obj = objectTypeRepository.getObject_byID ( translationTable->object2IDtranslate[i].second );
                      if ( obj ) {
                         pfield fld = getfield ( newx, newy );
                         if ( pass == 1 || obj->getFieldModification(fld->getweather()).terrainaccess.accessible ( fld->bdt )) {
@@ -921,7 +921,7 @@ void        tloadBImap ::   ReadACTNPart(void)
 
                if ( !(found & 1) )
                   for ( int i = 0; i < objectTypeRepository.getNum(); i++ ) {
-                     pobjecttype obj = objectTypeRepository.getObject_byPos ( i );
+                     ObjectType* obj = objectTypeRepository.getObject_byPos ( i );
                      if ( obj )
                         for ( int ww = 0; ww < cwettertypennum; ww++ )
                            if ( obj->weather.test(ww) )
@@ -956,7 +956,7 @@ void        tloadBImap ::   ReadACTNPart(void)
 
          if ( !found  && Line[X] != 0xffff ) {
             if ( fakemap ) {
-               pobjecttype o = new ObjectType;
+               ObjectType* o = new ObjectType;
                *o = *objectTypeRepository.getObject_byID ( 44 );
                int id = 1000000;
                while ( objectTypeRepository.getObject_byID ( id ))
@@ -1022,7 +1022,7 @@ void        tloadBImap ::   ReadACTNPart(void)
 } 
  
 struct blds {
-  pbuildingtype bld;
+  BuildingType* bld;
   int pictnum;
   int terrainmatch;
   int objectmatch;
@@ -1086,7 +1086,7 @@ void       tloadBImap :: ReadSHOPPart( void )
            int bldlistnum = 0;
 
            for ( int i = 0; i < buildingTypeRepository.getNum(); i++ ) {
-               pbuildingtype bld  = buildingTypeRepository.getObject_byPos ( i );
+               BuildingType* bld  = buildingTypeRepository.getObject_byPos ( i );
                if ( bld )
                   for ( int w = 0; w < cwettertypennum; w++ ) 
                      for ( int p = 0; p < maxbuildingpicnum; p++ ) 
@@ -1137,7 +1137,7 @@ void       tloadBImap :: ReadSHOPPart( void )
 
               int actpos = 0;
               while ( !found && actpos < bldlistnum ) {
-                  pbuildingtype bld = bldlist[actpos].bld;
+                  BuildingType* bld = bldlist[actpos].bld;
                   for ( int w = 0; w < cwettertypennum; w++ ) 
                      for ( int p = 0; p < maxbuildingpicnum; p++ )  
                          if ( !found ) {
@@ -1204,7 +1204,7 @@ void       tloadBImap :: ReadSHOPPart( void )
 
               int prodnum = 0;
               for ( int k= 0; k < 4; k++ ) {
-                 pvehicletype vt = getvehicletype ( FileShop.a.Produce[k] );
+                 Vehicletype* vt = getvehicletype ( FileShop.a.Produce[k] );
                  if ( vt ) {
                     int fnd = 0;
                     for ( int l = 0; l < prodnum; l++ )
@@ -1218,7 +1218,7 @@ void       tloadBImap :: ReadSHOPPart( void )
               }
               for ( int l = 0; l < 64; l++ )
                  if ( OrgMissRec.StdProd[l] & 3 ) {
-                    pvehicletype vt = getvehicletype ( l );
+                    Vehicletype* vt = getvehicletype ( l );
                     if ( vt ) {
                        int fnd = 0;
                        for ( int l = 0; l < prodnum; l++ )

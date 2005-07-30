@@ -98,7 +98,7 @@ class  tfield {
     void sortobjects ( void );
 
     //! checks if there are objects from the given type on the field and returns them
-    pobject checkforobject ( const ObjectType*  o );
+    Object* checkforobject ( const ObjectType*  o );
 
 
     //! the terraintype properties. They determine which units can move over the field. This variable is recalculated from the terraintype and objects each time something on the field changes (#setparams)

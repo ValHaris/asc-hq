@@ -250,7 +250,7 @@ class tmap {
 
             class Dissection {
                public:
-                  pvehicletype  fzt;
+                  Vehicletype*  fzt;
                   const Technology*   tech;
                   int           orgpoints;
                   int           points;
@@ -307,17 +307,6 @@ class tmap {
       Events events;
 
       vector<GameTime> eventTimes;
-
-      /*
-      //! a container for events that were executed during previous maps of the campaign
-      peventstore  oldevents;
-
-      //! the list of events that haven't been triggered yet.
-      pevent       firsteventtocome;
-
-      //! the list of events that already have been triggered.
-      pevent       firsteventpassed;
-      */
 
       // required for loading the old map file format; no usage outside the loading routine
       // bool loadeventstore,loadeventstocome,loadeventpassed;
@@ -504,15 +493,15 @@ class tmap {
       OverviewMapHolder overviewMapHolder;
 
       pterraintype getterraintype_byid ( int id );
-      pobjecttype getobjecttype_byid ( int id );
-      pvehicletype getvehicletype_byid ( int id );
-      pbuildingtype getbuildingtype_byid ( int id );
+      ObjectType* getobjecttype_byid ( int id );
+      Vehicletype* getvehicletype_byid ( int id );
+      BuildingType* getbuildingtype_byid ( int id );
       const Technology* gettechnology_byid ( int id );
 
       pterraintype getterraintype_bypos ( int pos );
-      pobjecttype getobjecttype_bypos ( int pos );
-      pvehicletype getvehicletype_bypos ( int pos );
-      pbuildingtype getbuildingtype_bypos ( int pos );
+      ObjectType* getobjecttype_bypos ( int pos );
+      Vehicletype* getvehicletype_bypos ( int pos );
+      BuildingType* getbuildingtype_bypos ( int pos );
       const Technology* gettechnology_bypos ( int pos );
 
       int getTerrainTypeNum ( );

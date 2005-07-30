@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: building_controls.h,v 1.20.2.2 2005-07-24 12:51:20 mbickel Exp $
+//     $Id: building_controls.h,v 1.20.2.3 2005-07-30 07:50:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20.2.2  2005/07/24 12:51:20  mbickel
+//      Updated mapdisplaying
+//
 //     Revision 1.20.2.1  2004/10/26 16:35:03  mbickel
 //      Replaced graphic storage in buildings and objects
 //      cleaned up some names: pvehicle, pbuilding
@@ -242,9 +245,9 @@ class    cbuildingcontrols : public virtual ccontainercontrols
       {                         // PRODUCEUNIT
          public :
             //! lack : the reason why the unit is not produceable; bitmapped: bit 0 - 2  Resource N lacking; bit 10 : not researched yet
-            int         available ( pvehicletype fzt, int* lack = NULL );
-            Vehicle*    produce ( pvehicletype fzt, bool forceRefill = false );
-            Vehicle*    produce_hypothetically ( pvehicletype fzt );
+            int         available ( Vehicletype* fzt, int* lack = NULL );
+            Vehicle*    produce ( Vehicletype* fzt, bool forceRefill = false );
+            Vehicle*    produce_hypothetically ( Vehicletype* fzt );
       }
       produceunit ;
 

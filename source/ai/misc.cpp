@@ -727,7 +727,7 @@ void AI ::  runReconUnits ( )
    }
 }
 
-AI::UnitDistribution::Group AI::getUnitDistributionGroup ( pvehicletype vt )
+AI::UnitDistribution::Group AI::getUnitDistributionGroup ( Vehicletype* vt )
 {
    switch ( chooseJob ( vt, vt->functions ).front() ) {
       case AiParameter::job_supply : return UnitDistribution::service;

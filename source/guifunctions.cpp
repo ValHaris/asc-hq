@@ -1498,7 +1498,7 @@ class ObjectBuildingGui : public GuiIconHandler, public GuiFunction {
       void execute( const MapCoordinate& pos, int num );
       Surface& getImage( const MapCoordinate& pos, int num );
       ASCString getName( const MapCoordinate& pos, int num );
-      bool checkObject( pfield fld, pobjecttype objtype, Mode mode );
+      bool checkObject( pfield fld, ObjectType* objtype, Mode mode );
 
       void search ( const MapCoordinate& pos, int& num, int pass );
 
@@ -1544,7 +1544,7 @@ void ObjectBuildingGui::execute( const MapCoordinate& pos, int num )
 {
    if ( num ) {
       pfield fld = actmap->getField(pos);
-      pobjecttype obj = objectTypeRepository.getObject_byID( abs(num) );
+      ObjectType* obj = objectTypeRepository.getObject_byID( abs(num) );
 
       if ( !fld->checkforobject ( obj ) ) {
          assert(num>0);
@@ -1597,7 +1597,7 @@ Surface& ObjectBuildingGui::getImage( const MapCoordinate& pos, int num )
    if ( num == 0 )
       return IconRepository::getIcon("cancel.png");
 
-   pobjecttype objtype = objectTypeRepository.getObject_byID( abs(num) );
+   ObjectType* objtype = objectTypeRepository.getObject_byID( abs(num) );
 
    if ( !objtype )
       return IconRepository::getIcon("cancel.png");
@@ -1617,7 +1617,7 @@ ASCString ObjectBuildingGui::getName( const MapCoordinate& pos, int num )
    if ( num == 0 )
       return "cancel";
 
-   pobjecttype objtype = objectTypeRepository.getObject_byID( abs(num) );
+   ObjectType* objtype = objectTypeRepository.getObject_byID( abs(num) );
    if ( !objtype )
       return "";
 
@@ -1632,7 +1632,7 @@ ASCString ObjectBuildingGui::getName( const MapCoordinate& pos, int num )
 }
 
 
-bool ObjectBuildingGui::checkObject( pfield fld, pobjecttype objtype, Mode mode )
+bool ObjectBuildingGui::checkObject( pfield fld, ObjectType* objtype, Mode mode )
 {
     if ( !objtype || !fld )
        return false;
@@ -1690,7 +1690,7 @@ void ObjectBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
    for ( int i = 0; i < veh->typ->objectGroupsBuildable.size(); i++ )
      for ( int j = veh->typ->objectGroupsBuildable[i].from; j <= veh->typ->objectGroupsBuildable[i].to; j++ )
        for ( int k = 0; k < objectTypeRepository.getNum(); k++ ) {
-          pobjecttype objtype = objectTypeRepository.getObject_byPos ( k );
+          ObjectType* objtype = objectTypeRepository.getObject_byPos ( k );
           if ( objtype->groupID == j )
              if ( checkObject( fld, objtype, Build ))
                if ( pass==1 )
@@ -1715,7 +1715,7 @@ void ObjectBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
    for ( int i = 0; i < veh->typ->objectGroupsRemovable.size(); i++ )
      for ( int j = veh->typ->objectGroupsRemovable[i].from; j <= veh->typ->objectGroupsRemovable[i].to; j++ )
        for ( int k = 0; k < objectTypeRepository.getNum(); k++ ) {
-          pobjecttype objtype = objectTypeRepository.getObject_byPos ( k );
+          ObjectType* objtype = objectTypeRepository.getObject_byPos ( k );
           if ( objtype->groupID == j )
              if ( checkObject( fld, objtype, Remove ))
                 if ( pass==1 )

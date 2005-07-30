@@ -160,6 +160,7 @@ extern const char*  ceventtrigger[];
 
 #pragma pack(1)
 
+ typedef class tevent* pevent ;
 
    class PrehistoricEventStructure {
      public:

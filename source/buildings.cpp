@@ -478,7 +478,7 @@ Building* Building::newFromStream ( pmap gamemap, tnstream& stream, bool chainTo
     int xpos, ypos, color;
     Resources res;
 
-    pbuildingtype typ;
+    BuildingType* typ;
 
     if ( version < buildingstreamversion )
        throw tinvalidversion( stream.getDeviceName(), buildingstreamversion, version );

@@ -470,7 +470,8 @@ void execaction(int code)
        */
     case act_mapgenerator : mapgenerator();
        break;
-    case act_setactivefieldvals : selection.pickup( getactfield() ); 
+    case act_setactivefieldvals : if ( getactfield() ) 
+                                      selection.pickup( getactfield() ); 
        break;
     case act_deletething : {
                          pf2 = getactfield();

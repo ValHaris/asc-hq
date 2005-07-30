@@ -538,7 +538,7 @@ void tsearchreactionfireingunits :: init ( Vehicle* vehicle, const AStar3D::Path
          maxshootdist[i] = 0;
 
       for (int i = 0; i < vehicleTypeRepository.getNum(); i++ ) {
-         pvehicletype fzt = vehicleTypeRepository.getObject_byPos ( i );
+         Vehicletype* fzt = vehicleTypeRepository.getObject_byPos ( i );
          if ( fzt )
             for (j = 0; j < fzt->weapons.count; j++ )
                if ( fzt->weapons.weapon[j].shootable() )
@@ -1553,7 +1553,7 @@ void dissectvehicle ( Vehicle* eht )
 
 
 
-void         generatevehicle_cl ( pvehicletype fztyp,
+void         generatevehicle_cl ( Vehicletype* fztyp,
                                   int         col,
                                   Vehicle* &   vehicle,
                                   int          x,

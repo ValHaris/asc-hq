@@ -142,10 +142,10 @@ extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePo
    extern tkey                     ch;
    extern pfield                    pf2;
    extern pterraintype      auswahl;
-   extern pvehicletype        auswahlf;
-   extern pbuildingtype    auswahlb;
+   extern Vehicletype*        auswahlf;
+   extern BuildingType*    auswahlb;
    extern int                 auswahls;
-   extern pobjecttype      actobject;
+   extern ObjectType*      actobject;
    extern int auswahlm;
    extern int auswahlw;
    extern int farbwahl;

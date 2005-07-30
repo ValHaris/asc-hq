@@ -81,7 +81,7 @@ void runWildcard ( const ASCString& st )
 
          while( !cn.empty() ) {
 
-            pvehicletype   ft;
+            Vehicletype*   ft;
             ft = loadvehicletype( cn.c_str() );
 
             bar ( 0, 0, 120, 120, 255 );

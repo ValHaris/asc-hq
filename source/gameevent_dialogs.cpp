@@ -573,7 +573,7 @@ void  tshownewtanks :: init ( bool*      buf2 )
    int i, num = 0;
    for (i=0; i < vehicleTypeRepository.getNum() ;i++ ) {
       if ( buf[i] ) {
-         pvehicletype tnk = vehicleTypeRepository.getObject_byPos ( i );
+         Vehicletype* tnk = vehicleTypeRepository.getObject_byPos ( i );
          if ( tnk ) {
             bar ( x1 + 25, y1 + 45 + num * 50, x1 + 65, y1 + 85 + num * 50, dblue );
             tnk->paint( getActiveSurface(), SPoint (  x1 + 30, y1 + 50 + num * 50), actmap->actplayer );

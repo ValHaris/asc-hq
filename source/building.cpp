@@ -342,7 +342,7 @@ class    ccontainer : public virtual ccontainercontrols
       void     done (void);
       void     movemark (int direction);
       virtual Vehicle* getmarkedunit (void) = 0;
-      virtual pvehicletype getmarkedunittype ( void );
+      virtual Vehicletype* getmarkedunittype ( void );
       void     displayloading ( int x, int y, int dx = 0, int dy = 0 );
       void     displayloading (void);
       ccontainer (void);
@@ -696,8 +696,8 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
       Vehicle* getloadedunit (int num);
       virtual void     setpictures ( void );
 
-      pvehicletype getmarkedunittype ( void );
-      pvehicletype produceableunits[32];
+      Vehicletype* getmarkedunittype ( void );
+      Vehicletype* produceableunits[32];
 
 
       struct I2
@@ -1410,7 +1410,7 @@ void cbuildingcontrols :: cproduceammunition :: produce ( int weaptype, int num 
 
 
 
-int   cbuildingcontrols :: cproduceunit :: available (pvehicletype fzt, int* lack )
+int   cbuildingcontrols :: cproduceunit :: available (Vehicletype* fzt, int* lack )
 {
    int l = 0;
    if ( actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( fzt ) ) {
@@ -1436,7 +1436,7 @@ int   cbuildingcontrols :: cproduceunit :: available (pvehicletype fzt, int* lac
 
 
 
-Vehicle* cbuildingcontrols :: cproduceunit :: produce (pvehicletype fzt, bool forceRefill)
+Vehicle* cbuildingcontrols :: cproduceunit :: produce (Vehicletype* fzt, bool forceRefill)
 {
    Vehicle*    eht;
    generatevehicle_cl ( fzt, cc->getactplayer() , eht, cc->getxpos(), cc->getypos() );
@@ -1491,7 +1491,7 @@ Vehicle* cbuildingcontrols :: cproduceunit :: produce (pvehicletype fzt, bool fo
    return eht;
 };
 
-Vehicle* cbuildingcontrols :: cproduceunit :: produce_hypothetically (pvehicletype fzt)
+Vehicle* cbuildingcontrols :: cproduceunit :: produce_hypothetically (Vehicletype* fzt)
 {
    Vehicle*    eht;
    generatevehicle_cl ( fzt, cc->getactplayer() , eht, cc->getxpos (), cc->getypos () );
@@ -2112,7 +2112,7 @@ void  ccontainer :: movemark (int direction)
 
 };
 
-pvehicletype ccontainer :: getmarkedunittype ( void )
+Vehicletype* ccontainer :: getmarkedunittype ( void )
 {
    return NULL;
 }
@@ -3503,7 +3503,7 @@ void  ccontainer_b :: init ( Building* bld )
 void ccontainer_b :: unitchanged( void )
 {
    if ( unitmode == mproduction ) {
-      pvehicletype fzt = getmarkedunittype();
+      Vehicletype* fzt = getmarkedunittype();
       if ( fzt  && actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( fzt ) ) {
          int en = fzt->productionCost.energy;
          int ma = fzt->productionCost.material;
@@ -3564,7 +3564,7 @@ Vehicle*    ccontainer_b :: getmarkedunit (void)
       return NULL;
 }
 
-pvehicletype ccontainer_b :: getmarkedunittype ( void )
+Vehicletype* ccontainer_b :: getmarkedunittype ( void )
 {
    if ( unitmode == mproduction )
       return produceableunits[mark.y*unitsshownx + mark.x];
@@ -6232,7 +6232,7 @@ void  ccontainer_b :: produceuniticon_cb :: exec         ( void )
 
 const char* ccontainer_b :: produceuniticon_cb :: getinfotext  ( void )
 {
-   pvehicletype fzt = main->getmarkedunittype();
+   Vehicletype* fzt = main->getmarkedunittype();
    if ( fzt ) {
       int en = fzt->productionCost.energy;
       int ma = fzt->productionCost.material;

@@ -32,6 +32,7 @@
 #include "vehicletype.h"
 #include "vehicle.h"
 #include "buildings.h"
+#include "objects.h"
 
 
 
@@ -168,7 +169,7 @@ class tmineattacksunit : public tfight {
 
 class tunitattacksobject : public UnitAttacksSomething {
            pfield       targetField;
-           pobject      _obji;
+           Object*      _obji;
            int _x, _y;
 
          protected:

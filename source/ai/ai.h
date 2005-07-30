@@ -342,7 +342,7 @@
             */
             int changeVehicleHeight ( Vehicle* veh, VehicleMovement* vm, int preferredDirection = -1 );
 
-            void  calculateThreat ( pvehicletype vt);
+            void  calculateThreat ( Vehicletype* vt);
             void  calculateThreat ( Vehicle* eht );
             void  calculateThreat ( Building* bld );
             void  calculateThreat ( Building* bld, int player );
@@ -377,7 +377,7 @@
             };
             UnitDistribution originalUnitDistribution;
             UnitDistribution::Group getUnitDistributionGroup ( Vehicle* veh );
-            UnitDistribution::Group getUnitDistributionGroup ( pvehicletype veh );
+            UnitDistribution::Group getUnitDistributionGroup ( Vehicletype* veh );
 
             UnitDistribution calcUnitDistribution();
             struct ProductionRating {

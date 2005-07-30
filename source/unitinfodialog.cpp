@@ -31,8 +31,8 @@ void assignWeaponInfo ( Panel* panel, PG_Widget* widget, const SingleWeapon& wea
    panel->setLabelText( "weapon_canrefuel", weapon.canRefuel()? "yes" : "no", widget );
    panel->setLabelText( "weapon_strenghtmax", weapon.maxstrength, widget );
    panel->setLabelText( "weapon_strenghtmin", weapon.minstrength, widget );
-   panel->setLabelText( "weapon_distancemin", weapon.mindistance, widget );
-   panel->setLabelText( "weapon_distancemax", weapon.maxdistance, widget );
+   panel->setLabelText( "weapon_distancemin", (weapon.mindistance+9)/10, widget );
+   panel->setLabelText( "weapon_distancemax", weapon.maxdistance/10, widget );
 
    for ( int i = 0; i < 8; ++i ) {
       if ( weapon.targ & (1<< i)) {

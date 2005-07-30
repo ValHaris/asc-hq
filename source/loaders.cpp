@@ -787,8 +787,8 @@ void tspfldloaders::readfields ( void )
          else
             fld2->visible = 0;
 
-         bool tempObjects[16];
-         int  tempObjectNum;
+         bool tempobjects[16];
+         int  tempobjectNum;
 
          if (b3 & csm_object ) {
 
@@ -799,10 +799,10 @@ void tspfldloaders::readfields ( void )
                fld2->mines.push_back ( m );
             }
 
-            tempObjectNum = stream->readInt();
+            tempobjectNum = stream->readInt();
 
             for ( int i = 0; i < 16; i++ )
-               tempObjects[i] = stream->readInt();
+               tempobjects[i] = stream->readInt();
          }
 
          int objectversion = 1;
@@ -838,11 +838,11 @@ void tspfldloaders::readfields ( void )
                fld2->mines.push_back ( m );
             }
 
-            tempObjectNum = stream->readInt();
+            tempobjectNum = stream->readInt();
          }
 
          if ( (b3 & csm_object) || (b4 & csm_newobject )) {
-            for ( int n = 0; n < tempObjectNum; n++ ) {
+            for ( int n = 0; n < tempobjectNum; n++ ) {
                Object o;
                stream->readInt(); // was: type
                o.damage = stream->readInt();
@@ -1794,7 +1794,7 @@ void         loadicons(void)
 
 
 /*
-tspeedcrccheck :: tspeedcrccheck ( pobjectcontainercrcs crclist )
+tspeedcrccheck :: tspeedcrccheck ( Object*containercrcs crclist )
 {
    status = 0;
 
@@ -1879,7 +1879,7 @@ void tspeedcrccheck :: additemtolist ( pcrcblock lst, int id, int crc )
 }
 
 
-int  tspeedcrccheck :: checkunit     ( pvehicletype f, int add )
+int  tspeedcrccheck :: checkunit     ( Vehicletype* f, int add )
 {
    if ( !f )
       return 1;
@@ -1912,7 +1912,7 @@ int  tspeedcrccheck :: checkunit     ( pvehicletype f, int add )
    return 0;
 }
 
-int  tspeedcrccheck :: checkbuilding     ( pbuildingtype b, int add )
+int  tspeedcrccheck :: checkbuilding     ( BuildingType* b, int add )
 {
    if ( !b )
       return 1;
@@ -1978,7 +1978,7 @@ int  tspeedcrccheck :: checktech     ( ptechnology t, int add )
 
 
 
-int  tspeedcrccheck :: checkobj   ( pobjecttype o, int add )
+int  tspeedcrccheck :: checkobj   ( ObjectType* o, int add )
 {
    if ( !o )
       return 1;
@@ -2082,7 +2082,7 @@ void tspeedcrccheck :: appendstring ( char* s, char* d, int id, int mode )
 
 
 
-int tspeedcrccheck :: checkunit2     ( pvehicletype f,     int add  )
+int tspeedcrccheck :: checkunit2     ( Vehicletype* f,     int add  )
 {
    int s = checkunit ( f, add );
    if ( !s  &&  add == 1  ) {
@@ -2092,7 +2092,7 @@ int tspeedcrccheck :: checkunit2     ( pvehicletype f,     int add  )
    return s;
 }
 
-int tspeedcrccheck :: checkbuilding2 ( pbuildingtype b,    int add   )
+int tspeedcrccheck :: checkbuilding2 ( BuildingType* b,    int add   )
 {
    int s = checkbuilding ( b, add );
    if ( !s  &&  add == 1  ) {
@@ -2112,7 +2112,7 @@ int tspeedcrccheck :: checktech2     ( ptechnology t,    int add    )
    return s;
 }
 
-int tspeedcrccheck :: checkobj2      ( pobjecttype o,    int add    )
+int tspeedcrccheck :: checkobj2      ( ObjectType* o,    int add    )
 {
    int s = checkobj ( o, add );
    if ( !s  &&  add == 1  ) {

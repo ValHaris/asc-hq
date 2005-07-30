@@ -1,6 +1,9 @@
-//     $Id: gui.h,v 1.26.2.5 2005-02-07 20:10:11 mbickel Exp $
+//     $Id: gui.h,v 1.26.2.6 2005-07-30 07:50:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26.2.5  2005/02/07 20:10:11  mbickel
+//      Added small action buttons
+//
 //     Revision 1.26.2.4  2005/01/30 15:48:30  mbickel
 //      Further extensions to gui
 //
@@ -262,7 +265,7 @@ class tselectbuildingguihost : public SelectBuildingBaseGuiHost {
 
          void              init ( int resolutionx, int resolutiony );
 
-         pbuildingtype selectedbuilding;
+         BuildingType* selectedbuilding;
          Vehicle* vehicle;
          int cancel;
          void reset ( Vehicle* v );
@@ -406,14 +409,14 @@ class tnputbuildingguiicon : public tnguiicon {
 
             virtual void      setfrst  ( pnguiicon ts );
 
-            pbuildingtype           building;
+            BuildingType*           building;
 
            friend void tselectbuildingguihost ::init( int resolutionx, int resolutiony );
 
           public:
             virtual pnguiicon frst     ( void );
 
-            tnputbuildingguiicon ( pbuildingtype bld );
+            tnputbuildingguiicon ( BuildingType* bld );
             int   available    ( void );
             void  exec         ( void );
          };
@@ -427,14 +430,14 @@ class tnputobjectcontainerguiicon : public tnguiicon {
             static int             buildnum;
 
             virtual void      setfrst  ( pnguiicon ts );
-            pobjecttype           object;
+            Object*type           object;
 
            friend void tselectobjectcontainerguihost ::init( int resolutionx, int resolutiony );
 
           public:
             virtual pnguiicon frst     ( void );
 
-            tnputobjectcontainerguiicon ( pobjecttype obj, int bld );
+            tnputobjectcontainerguiicon ( Object*type obj, int bld );
             int   available    ( void );
             void  exec         ( void );
             int forcedeneable;
@@ -445,14 +448,14 @@ class tnputvehiclecontainerguiicon : public tnguiicon {
             static int             buildnum;
           protected:
             virtual void      setfrst  ( pnguiicon ts );
-            pvehicletype           vehicle;
+            Vehicletype*           vehicle;
 
            friend void tselectvehiclecontainerguihost ::init( int resolutionx, int resolutiony );
 
           public:
             virtual pnguiicon frst     ( void );
 
-            tnputvehiclecontainerguiicon ( pvehicletype obj );
+            tnputvehiclecontainerguiicon ( Vehicletype* obj );
             int   available    ( void );
             void  exec         ( void );
             int forcedeneable;

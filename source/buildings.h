@@ -124,7 +124,7 @@ class  Building : public ContainerBase {
     Work* spawnWorkClasses( bool justQuery );
     const BuildingType* typ;
 
-    pvehicletype      production[32];
+    Vehicletype*      production[32];
 
     //! the Resources that are produced each turn
     Resources   plus;
@@ -157,7 +157,7 @@ class  Building : public ContainerBase {
     bool         visible;
 
     //! the vehicletype that the building can produce
-    pvehicletype  productionbuyable[32];
+    Vehicletype*  productionbuyable[32];
 
     //! the maximum amount of Resources that the building can produce each turn in the BI resource mode ; see also #maxplus
     Resources    bi_resourceplus;

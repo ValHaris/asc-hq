@@ -1214,7 +1214,7 @@ void UnitConstructionPage::buildContent() {
     startTable(1, RELATIVE, 100);
     for ( unsigned int i = 0; i < vt.objectsBuildable.size(); i++ ) {
       for ( int b = 0; b < objectTypeRepository.getNum(); b++ ) {
-        pobjecttype obj = objectTypeRepository.getObject_byPos ( b );
+        Object*type obj = objectTypeRepository.getObject_byPos ( b );
         if (     obj->id >= vt.objectsBuildable[i].from
                  && obj->id <= vt.objectsBuildable[i].to ) {
           names = addTREntryln(names, obj->name.c_str() + ASCString("(") + strrr(obj->id )+ ")");
@@ -1232,7 +1232,7 @@ void UnitConstructionPage::buildContent() {
     names = "";
     for ( unsigned int i = 0; i < vt.objectsRemovable.size(); i++ ) {
       for ( int b = 0; b < objectTypeRepository.getNum(); b++ ) {
-        pobjecttype obj = objectTypeRepository.getObject_byPos ( b );
+        Object*type obj = objectTypeRepository.getObject_byPos ( b );
         if (     obj->id >= vt.objectsRemovable[i].from
                  && obj->id <= vt.objectsRemovable[i].to ) {
           ASCString s;
@@ -1283,7 +1283,7 @@ void UnitConstructionPage::buildContent() {
     names = "";
     for ( unsigned int i = 0; i < vt.buildingsBuildable.size(); i++ ) {
       for ( int b = 0; b < buildingTypeRepository.getNum(); b++ ) {
-        pbuildingtype bld = buildingTypeRepository.getObject_byPos ( b );
+        BuildingType* bld = buildingTypeRepository.getObject_byPos ( b );
         if (     bld->id >= vt.buildingsBuildable[i].from
                  && bld->id <= vt.buildingsBuildable[i].to ) {
 
@@ -1302,7 +1302,7 @@ void UnitConstructionPage::buildContent() {
     names = "";
     for ( unsigned int i = 0; i < vt.vehiclesBuildable.size(); i++ ) {
       for ( int b = 0; b < vehicleTypeRepository.getNum(); b++ ) {
-        pvehicletype veh = vehicleTypeRepository.getObject_byPos ( b );
+        Vehicletype* veh = vehicleTypeRepository.getObject_byPos ( b );
         if (     veh->id >= vt.vehiclesBuildable[i].from
                  && veh->id <= vt.vehiclesBuildable[i].to ) {
           names = addTREntryln(names, constructLink(veh->name.c_str() + ASCString("(") + strrr(veh->id )+ ")", "./" + UnitGuideGen::constructFileName(*veh) + MAINLINKSUFFIX + HTML));

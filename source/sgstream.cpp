@@ -68,7 +68,7 @@ const int technology_version = 1;
 Surface leergui;
 
 
-Surface generate_gui_build_icon ( pvehicletype tnk )
+Surface generate_gui_build_icon ( Vehicletype* tnk )
 {
    Surface s = leergui.Duplicate();
    s.Blit(tnk->getImage(), SPoint((s.w() - tnk->getImage().w())/2, (s.h() - tnk->getImage().h())/2));

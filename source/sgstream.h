@@ -92,6 +92,6 @@ extern void loadUnitSets ( void );
 extern int dataVersion;
 extern void checkDataVersion( );
 
-extern Surface generate_gui_build_icon ( pvehicletype tnk );
+extern Surface generate_gui_build_icon ( Vehicletype* tnk );
 
 #endif

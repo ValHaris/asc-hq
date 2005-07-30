@@ -403,7 +403,7 @@ void tmap :: read ( tnstream& stream )
    for ( i = 0; i < 8; i++ )
       alliances_at_beginofturn[i] = stream.readChar();
 
-   stream.readInt(); // was objectcrc = (pobjectcontainercrcs)
+   stream.readInt(); // was objectcrc = (Object*containercrcs)
    bool load_shareview = stream.readInt();
 
    continueplaying = stream.readInt();
@@ -1663,17 +1663,17 @@ pterraintype tmap :: getterraintype_byid ( int id )
    return terrainTypeRepository.getObject_byID ( id );
 }
 
-pobjecttype tmap :: getobjecttype_byid ( int id )
+ObjectType* tmap :: getobjecttype_byid ( int id )
 {
    return objectTypeRepository.getObject_byID ( id );
 }
 
-pvehicletype tmap :: getvehicletype_byid ( int id )
+Vehicletype* tmap :: getvehicletype_byid ( int id )
 {
    return vehicleTypeRepository.getObject_byID ( id );
 }
 
-pbuildingtype tmap :: getbuildingtype_byid ( int id )
+BuildingType* tmap :: getbuildingtype_byid ( int id )
 {
    return buildingTypeRepository.getObject_byID ( id );
 }
@@ -1689,17 +1689,17 @@ pterraintype tmap :: getterraintype_bypos ( int pos )
    return terrainTypeRepository.getObject_byPos ( pos );
 }
 
-pobjecttype tmap :: getobjecttype_bypos ( int pos )
+ObjectType* tmap :: getobjecttype_bypos ( int pos )
 {
    return objectTypeRepository.getObject_byPos ( pos );
 }
 
-pvehicletype tmap :: getvehicletype_bypos ( int pos )
+Vehicletype* tmap :: getvehicletype_bypos ( int pos )
 {
    return vehicleTypeRepository.getObject_byPos ( pos );
 }
 
-pbuildingtype tmap :: getbuildingtype_bypos ( int pos )
+BuildingType* tmap :: getbuildingtype_bypos ( int pos )
 {
    return buildingTypeRepository.getObject_byPos ( pos );
 }

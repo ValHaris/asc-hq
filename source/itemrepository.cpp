@@ -31,8 +31,8 @@
 SigC::Signal0<void> dataLoaderTicker;
 
 
-pobjecttype eisbrecherobject = NULL;
-pobjecttype fahrspurobject = NULL;
+ObjectType* eisbrecherobject = NULL;
+ObjectType* fahrspurobject = NULL;
 
 const char* cacheFileName = "asc2.cache";
 

@@ -1146,7 +1146,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                            readnextaction();
 
-                           pobjecttype obj = objectTypeRepository.getObject_byID ( id );
+                           ObjectType* obj = objectTypeRepository.getObject_byID ( id );
 
                            pfield fld = getfield ( x, y );
                            if ( obj && fld ) {
@@ -1218,7 +1218,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                            pfield fld = getfield ( x, y );
 
-                           pvehicletype tnk = vehicleTypeRepository.getObject_byID ( id );
+                           Vehicletype* tnk = vehicleTypeRepository.getObject_byID ( id );
 
                            if ( fld && tnk && !fld->vehicle ) {
                               displayActionCursor ( x, y );
@@ -1267,7 +1267,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                                pfield fld = getfield ( x, y );
 
-                               pbuildingtype bld = buildingTypeRepository.getObject_byID ( id );
+                               BuildingType* bld = buildingTypeRepository.getObject_byID ( id );
 
                                if ( bld && fld ) {
                                   displayActionCursor ( x, y );
@@ -1405,7 +1405,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                                  pfield fld = getfield ( x, y );
 
-                                 pvehicletype tnk = vehicleTypeRepository.getObject_byID ( id );
+                                 Vehicletype* tnk = vehicleTypeRepository.getObject_byID ( id );
                                  if ( tnk && fld) {
                                  
                                     #if 0

@@ -2216,7 +2216,7 @@ pnputbuildingguiicon tnputbuildingguiicon :: first    = NULL;
 int             tnputbuildingguiicon :: buildnum = 0;
 #endif
 
-tnputbuildingguiicon :: tnputbuildingguiicon ( pbuildingtype bld )
+tnputbuildingguiicon :: tnputbuildingguiicon ( BuildingType* bld )
 {
    setnxt ( first );
    first = this;
@@ -2269,7 +2269,7 @@ int             tnputobjectcontainerguiicon :: buildnum = 0;
 
 
 
-tnputobjectcontainerguiicon :: tnputobjectcontainerguiicon ( pobjecttype obj, int bld )
+tnputobjectcontainerguiicon :: tnputobjectcontainerguiicon ( Object*type obj, int bld )
 {
    setnxt ( first );
    first = this;
@@ -2345,7 +2345,7 @@ int         tnputobjectcontainerguiicon::available( void )
 pnputvehiclecontainerguiicon tnputvehiclecontainerguiicon :: first    = NULL;
 int                          tnputvehiclecontainerguiicon :: buildnum = 0;
 
-tnputvehiclecontainerguiicon :: tnputvehiclecontainerguiicon ( pvehicletype obj )
+tnputvehiclecontainerguiicon :: tnputvehiclecontainerguiicon ( Vehicletype* obj )
 {
    setnxt ( first );
    first = this;

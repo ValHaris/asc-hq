@@ -60,7 +60,7 @@ main(int argc, char *argv[] )
       tfindfile ff ( wildcard );
       string fn = ff.getnextname();
       while ( !fn.empty() ) {
-         pbuildingtype   ft;
+         BuildingType*   ft;
          ft = loadbuildingtype( fn.c_str() );
    
          fprintf ( fp, " %10.10s %5d %6d %6d %3d %7d %7d %7d %7d %7d %7d %7d \n",

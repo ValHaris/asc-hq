@@ -154,7 +154,7 @@ void  tfield :: addobject( const ObjectType* obj, int dir, bool force )
    if ( !obj )
       return;
 
-   pobject i = checkforobject ( obj );
+   Object* i = checkforobject ( obj );
    if ( !i ) {
      int buildable = obj->buildable ( this );
      #ifdef karteneditor
@@ -447,7 +447,7 @@ void tfield :: setparams ( void )
    
 }
 
-pobject tfield :: checkforobject ( const ObjectType*  o )
+Object* tfield :: checkforobject ( const ObjectType*  o )
 {
    for ( ObjectContainer::iterator i = objects.begin(); i != objects.end(); i++ )
       if ( i->typ == o )

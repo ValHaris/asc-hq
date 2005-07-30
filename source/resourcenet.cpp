@@ -243,7 +243,7 @@ void MapNetwork :: start ( int x, int y )
 int ResourceNet :: fieldavail ( int x, int y )
 {
     pfield fld = actmap->getField ( x, y );
-/*    pobject o = fld->checkforobject ( pipelineobject ) ; 
+/*    Object* o = fld->checkforobject ( pipelineobject ) ; 
     if ( o )
        return o->dir;
     else */

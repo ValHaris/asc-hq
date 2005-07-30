@@ -152,7 +152,7 @@ class MapItemTypeWidgetFactory : public SelectionItemFactory {
 
 
 extern void selterraintype( tkey ench );
-extern pvehicletype selvehicletype(tkey ench );
+extern Vehicletype* selvehicletype(tkey ench );
 extern void selcolor( tkey ench );
 extern void selobject( tkey ench );
 extern void selmine( tkey ench );

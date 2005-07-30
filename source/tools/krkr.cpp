@@ -1324,7 +1324,7 @@ int 10
 }
 
 
-void terrainaccess_ed ( pterrainaccess ft, char* name  )
+void terrainaccess_ed ( TerrainAccess* ft, char* name  )
 {
       printf ("\n    Terrain the %s can drive on / be build on \n"
               "           (for many %ss it is enough to specify only this field): \n", name, name );

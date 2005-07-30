@@ -70,7 +70,7 @@ extern void  putbuilding( const MapCoordinate& entryPosition,
 
 extern void  putbuilding2( const MapCoordinate& entryPosition,
                           int color,
-                          pbuildingtype buildingtyp);  // f?r Spiel
+                          BuildingType* buildingtyp);  // f?r Spiel
 
 
 //! recalculates the connection (like road interconnections) of all objects on the map
@@ -98,7 +98,7 @@ extern void  putstreets2( int          x1,
                           int          y1,
                           int          x2,
                           int          y2,
-                          pobjecttype obj );
+                          ObjectType* obj );
 
 
 /*! tests if the vehicle can move onto the field

@@ -23,6 +23,8 @@
  #include "containerbase.h"
  #include "ascstring.h"
 
+class BuildingType;
+
  class Vehicle : public ContainerBase {
     bool cleanRemove;
 
@@ -211,10 +213,10 @@
 
 
     //! constructs a vehicle at the given position.
-    Vehicle* constructvehicle ( pvehicletype tnk, int x, int y );
+    Vehicle* constructvehicle ( Vehicletype* tnk, int x, int y );
 
     //! checks whether the unit can construct a vehicle of the given type at the given position.
-    bool vehicleconstructable ( pvehicletype tnk, int x, int y );
+    bool vehicleconstructable ( Vehicletype* tnk, int x, int y );
 
     //! sets the unit (and its cargo) the a new position (the unit will not be chained to a field)
     void setnewposition ( int x, int y );
@@ -249,7 +251,7 @@
     /** checks whether the unit can construct a building of the given type.
         This method does not check if there is enough space around the unit to place
         the building */
-    bool buildingconstructable ( pbuildingtype bld );
+    bool buildingconstructable ( BuildingType* bld );
 
     /** searches for mineral resources.
         \returns > 0 on success ; < 0 on failure (error number is returned => message.txt )
@@ -305,7 +307,7 @@
 
 
     //! to be used with EXTREME caution, and only in the mapeditor !!
-    void transform ( const pvehicletype type );
+    void transform ( const Vehicletype* type );
 
     /** returns the method for changing the height in the specified direction, or none if there is none.
         \param dir  +1 is up;  -1 is down

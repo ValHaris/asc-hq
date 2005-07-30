@@ -66,7 +66,7 @@ int main(int argc, char *argv[] )
       freetextdata();
 
       for ( int i = 0; i < objecttypenum; i++ ) {
-        pobjecttype s = getobjecttype_forpos ( i );
+        Object*type s = getobjecttype_forpos ( i );
         printf(" %30s - %5d - %s\n", s->filename.c_str(), s->id, s->name.c_str() );
       }
 

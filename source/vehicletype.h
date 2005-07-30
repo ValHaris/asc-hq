@@ -27,7 +27,7 @@
 
 
 //! The number of 'special' vehicle functions
-const int cvehiclefunctionsnum = 28;
+const int cvehiclefunctionsnum = 29;
 extern const char*  cvehiclefunctions[];
  #define cfsonar 1
  #define cfparatrooper 2
@@ -55,6 +55,7 @@ extern const char*  cvehiclefunctions[];
  #define cfenergyref ( 1 << 25 )
  #define cfownFieldJamming ( 1 << 26 )
  #define cfmovewithRF ( 1 << 27 )
+ #define cfonlytransmove ( 1 << 28 )
 
  #define cfvehiclefunctionsanzeige 0xFFFFFFFF
 
@@ -107,6 +108,8 @@ extern const char*  cvehiclefunctions[];
      int          reactionFireShots;
 
      ASCString    soundLabel;
+
+     ASCString    name;
 
      int          getScalarWeaponType(void) const;
      bool         requiresAmmo(void) const;
@@ -230,6 +233,8 @@ extern const char*  cvehiclefunctions[];
 
         //! this label can select a special sound to be played when this unit is killed
         ASCString    killSoundLabel;
+
+        vector<int> guideSortHelp;
 
         int heightChangeMethodNum;
         class HeightChangeMethod{

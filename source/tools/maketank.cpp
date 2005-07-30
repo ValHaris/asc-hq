@@ -99,7 +99,7 @@ main (int argc, char *argv[] )
    t_carefor_containerstream cfcst;
    try {
 
-      pvehicletype   ft;
+      Vehicletype*   ft;
       tfile          datfile;
       char           pict = YES;       // Bilder einlesen
       char           dif = 1;          // Anzahl der Bilder
@@ -586,7 +586,7 @@ main (int argc, char *argv[] )
    
       {  
    
-         dynamic_array<pobjecttype> obj;
+         dynamic_array<Object*type> obj;
          dynamic_array<pchar> name;
    
          int objectlayernum = 0; 
@@ -643,7 +643,7 @@ main (int argc, char *argv[] )
       if ( ft->functions & cfvehicleconstruction ) {  
          loadguipictures();
 
-         dynamic_array<pvehicletype> tnk;
+         dynamic_array<Vehicletype*> tnk;
          dynamic_array<pchar> name;
    
          int vehiclenum = 0; 
@@ -720,7 +720,7 @@ main (int argc, char *argv[] )
          clearscreen ();
          if ( m ) {
    
-            dynamic_array<pbuildingtype> bld;
+            dynamic_array<BuildingType*> bld;
             dynamic_array<pchar> name;
       
             int buildingnum = 0; 

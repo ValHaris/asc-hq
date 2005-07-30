@@ -57,7 +57,7 @@
                         int          newheight; 
                         int          oldheight; 
                         char         heightdir; 
-                        pbuildingtype buildingtobuild;   /*  nur bei movestatus = 111  */ 
+                        BuildingType* buildingtobuild;   /*  nur bei movestatus = 111  */ 
                         int          movespeed;
                         int          uheight;
                      }; 
@@ -95,7 +95,7 @@ extern void  checkforvictory ( );
 
 
 //! An old procedure for building vehicle (like turrets) with a unit.
-extern void  constructvehicle( pvehicletype tnk );
+extern void  constructvehicle( Vehicletype* tnk );
 
 //! A helper function for #constructvehicle
 extern void build_vehicles_reset( void );
@@ -108,7 +108,7 @@ extern void  putMine( const MapCoordinate& pos, int typ, int delta );
 extern void  putbuildinglevel1(void);
 
 //! An old procedure for constructing a building with a vehicle
-extern void  putbuildinglevel2( const pbuildingtype bld, integer      xp, integer      yp);
+extern void  putbuildinglevel2( const BuildingType* bld, integer      xp, integer      yp);
 
 //! An old procedure for constructing a building with a vehicle
 extern void  putbuildinglevel3(integer      x, integer      y);
@@ -154,7 +154,7 @@ typedef treactionfire_replayinfo* preactionfire_replayinfo;
      not available (because it hasn't been researched, for example), vehicle will be set to NULL,
      else it will contain a pointer to the newly created vehicle. The vehicle will be empty after
      creation (no fuel, etc). The resources for the creation must be seperately 'consumed'. */
-extern void   generatevehicle_cl ( pvehicletype fztyp,
+extern void   generatevehicle_cl ( Vehicletype* fztyp,
                                                 int               col,
                                                 Vehicle* &    vehicle,
                                                 int               x, 

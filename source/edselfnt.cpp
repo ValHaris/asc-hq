@@ -761,18 +761,18 @@ template<class T> T SelectAnything<T> :: selectitem( T previtem, tkey neutralkey
 }
 
 
-class SelectVehicleType : public SelectAnything< pvehicletype > {
+class SelectVehicleType : public SelectAnything< Vehicletype* > {
                     protected:
-                       virtual bool isavailable ( pvehicletype item );
-                       virtual void displaysingleitem ( pvehicletype item, int x, int y );
+                       virtual bool isavailable ( Vehicletype* item );
+                       virtual void displaysingleitem ( Vehicletype* item, int x, int y );
                        virtual int getitemsizex ( void ) { return fieldsizex; } ;
                        virtual int getitemsizey ( void ) { return fieldsizey; } ;
-                       virtual void showiteminfos ( pvehicletype item, int x1, int y1, int x2, int y2 );
-                       virtual ASCString getItemName ( pvehicletype item );
+                       virtual void showiteminfos ( Vehicletype* item, int x1, int y1, int x2, int y2 );
+                       virtual ASCString getItemName ( Vehicletype* item );
 };
 
 
-bool SelectVehicleType :: isavailable ( pvehicletype item )
+bool SelectVehicleType :: isavailable ( Vehicletype* item )
 {
    /*
    if ( farbwahl == 8 ) {
@@ -785,7 +785,7 @@ bool SelectVehicleType :: isavailable ( pvehicletype item )
 }
 
 
-void SelectVehicleType :: displaysingleitem ( pvehicletype item, int x, int y )
+void SelectVehicleType :: displaysingleitem ( Vehicletype* item, int x, int y )
 {
    bar ( x, y, x + getitemsizex(), y + getitemsizey(), black );
    if ( item )
@@ -793,7 +793,7 @@ void SelectVehicleType :: displaysingleitem ( pvehicletype item, int x, int y )
       item->paint( getActiveSurface(), SPoint(x,y), farbwahl, 0 );
 }
 
-ASCString SelectVehicleType :: getItemName ( pvehicletype item )
+ASCString SelectVehicleType :: getItemName ( Vehicletype* item )
 {
    if ( !item->name.empty()  )
       return item->name;
@@ -805,7 +805,7 @@ ASCString SelectVehicleType :: getItemName ( pvehicletype item )
 }
 
 
-void SelectVehicleType :: showiteminfos ( pvehicletype item, int x1, int y1, int x2, int y2 )
+void SelectVehicleType :: showiteminfos ( Vehicletype* item, int x1, int y1, int x2, int y2 )
 { 
    rectangle ( x1, y1, x2, y2, lightgray );
    bar ( x1+1, y1+1, x2-1, y2-1, black );
@@ -894,30 +894,30 @@ void SelectTerrainType :: showiteminfos ( pterraintype item, int x1, int y1, int
 
 
 
-class SelectObjectType : public SelectAnything< pobjecttype > {
+class SelectObjectType : public SelectAnything< ObjectType* > {
                     protected:
-                       virtual bool isavailable ( pobjecttype item );
-                       virtual void displaysingleitem ( pobjecttype item, int x, int y );
+                       virtual bool isavailable ( ObjectType* item );
+                       virtual void displaysingleitem ( ObjectType* item, int x, int y );
                        virtual int getitemsizex ( void ) { return fieldsizex; } ;
                        virtual int getitemsizey ( void ) { return fieldsizey; } ;
-                       virtual void showiteminfos ( pobjecttype item, int x1, int y1, int x2, int y2 );
-                       virtual ASCString getItemName ( pobjecttype item );
+                       virtual void showiteminfos ( ObjectType* item, int x1, int y1, int x2, int y2 );
+                       virtual ASCString getItemName ( ObjectType* item );
 };
 
-bool SelectObjectType :: isavailable ( pobjecttype item )
+bool SelectObjectType :: isavailable ( ObjectType* item )
 {
   return !ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Object, item->id );
 }
 
 
-void SelectObjectType :: displaysingleitem ( pobjecttype item, int x, int y )
+void SelectObjectType :: displaysingleitem ( ObjectType* item, int x, int y )
 {
    bar ( x, y, x + getitemsizex(), y + getitemsizey(), black );
    if ( item )
       item->display ( getActiveSurface(), SPoint(x, y) );
 }
 
-ASCString SelectObjectType :: getItemName ( pobjecttype item )
+ASCString SelectObjectType :: getItemName ( ObjectType* item )
 {
    if ( !item->name.empty() )
       return item->name;
@@ -926,7 +926,7 @@ ASCString SelectObjectType :: getItemName ( pobjecttype item )
 }
 
 
-void SelectObjectType :: showiteminfos ( pobjecttype item, int x1, int y1, int x2, int y2 )
+void SelectObjectType :: showiteminfos ( ObjectType* item, int x1, int y1, int x2, int y2 )
 { 
    rectangle ( x1, y1, x2, y2, lightgray );
    bar ( x1+1, y1+1, x2-1, y2-1, black );
@@ -951,25 +951,25 @@ void SelectObjectType :: showiteminfos ( pobjecttype item, int x1, int y1, int x
 
 
 
-class SelectBuildingType : public SelectAnything< pbuildingtype > {
+class SelectBuildingType : public SelectAnything< BuildingType* > {
                        int buildingfieldsdisplayedx, buildingfieldsdisplayedy;
                     protected:
-                       virtual bool isavailable ( pbuildingtype item );
-                       virtual void displaysingleitem ( pbuildingtype item, int x, int y );
+                       virtual bool isavailable ( BuildingType* item );
+                       virtual void displaysingleitem ( BuildingType* item, int x, int y );
                        virtual int getitemsizex ( void ) { return fieldsizex+(buildingfieldsdisplayedx-1)*fielddistx+fielddisthalfx; } ;
                        virtual int getitemsizey ( void ) { return fieldsizey+(buildingfieldsdisplayedy-1)*fielddisty; } ;
-                       virtual void showiteminfos ( pbuildingtype item, int x1, int y1, int x2, int y2 );
-                       virtual ASCString getItemName ( pbuildingtype item );
+                       virtual void showiteminfos ( BuildingType* item, int x1, int y1, int x2, int y2 );
+                       virtual ASCString getItemName ( BuildingType* item );
                     public:
                        SelectBuildingType( void ) { buildingfieldsdisplayedx = 4; buildingfieldsdisplayedy = 6; };
 };
 
-bool SelectBuildingType :: isavailable ( pbuildingtype item )
+bool SelectBuildingType :: isavailable ( BuildingType* item )
 {
   return !ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Building, item->id );
 }
 
-ASCString SelectBuildingType :: getItemName ( pbuildingtype item )
+ASCString SelectBuildingType :: getItemName ( BuildingType* item )
 {
    if ( item->name.empty() )
       return "-NONE-";
@@ -978,14 +978,14 @@ ASCString SelectBuildingType :: getItemName ( pbuildingtype item )
 }
 
 
-void SelectBuildingType :: displaysingleitem ( pbuildingtype item, int x, int y )
+void SelectBuildingType :: displaysingleitem ( BuildingType* item, int x, int y )
 {
    bar ( x, y, x + getitemsizex(), y + getitemsizey(), black );
    if ( item )
       item->paint( getActiveSurface(), SPoint(x,y), farbwahl );
 }
 
-void SelectBuildingType :: showiteminfos ( pbuildingtype item, int x1, int y1, int x2, int y2 )
+void SelectBuildingType :: showiteminfos ( BuildingType* item, int x1, int y1, int x2, int y2 )
 { 
    rectangle ( x1, y1, x2, y2, lightgray );
    bar ( x1+1, y1+1, x2-1, y2-1, black );
@@ -1414,7 +1414,7 @@ void selterraintype( tkey ench )
    lastselectiontype = cselbodentyp;
 }
 
-pvehicletype selvehicletype(tkey ench )
+Vehicletype* selvehicletype(tkey ench )
 {
    auswahlf = selectitemcontainer.getvehicleselector()->selectitem( auswahlf, ench );
    lastselectiontype = cselunit;
@@ -1479,7 +1479,7 @@ void checkselfontbuttons(void)
 
 
 
-void setnewvehicleselection ( pvehicletype v )
+void setnewvehicleselection ( Vehicletype* v )
 {
    selectitemcontainer.getvehicleselector()->setnewselection ( v );
    selectitemcontainer.getcolorselector()->setnewselection( colorvector[farbwahl] );
@@ -1512,12 +1512,12 @@ void setnewterrainselection ( pterraintype t )
    selectitemcontainer.getterrainselector()->setnewselection( t );
 }
 
-void setnewobjectselection  ( pobjecttype o )
+void setnewobjectselection  ( ObjectType* o )
 {
    selectitemcontainer.getobjectselector()->setnewselection( o );
 }
 
-void setnewbuildingselection ( pbuildingtype v )
+void setnewbuildingselection ( BuildingType* v )
 {
    selectitemcontainer.getbuildingselector()->setnewselection ( v );
    selectitemcontainer.getcolorselector()->setnewselection( colorvector[farbwahl] );
@@ -1532,10 +1532,10 @@ void setnewbuildingselection ( pbuildingtype v )
 
 class SelectCargoVehicleType : public SelectVehicleType {
       public:
-          void showiteminfos ( pvehicletype item, int x1, int y1, int x2, int y2 );
+          void showiteminfos ( Vehicletype* item, int x1, int y1, int x2, int y2 );
      };
 
-void SelectCargoVehicleType :: showiteminfos ( pvehicletype item, int x1, int y1, int x2, int y2 )
+void SelectCargoVehicleType :: showiteminfos ( Vehicletype* item, int x1, int y1, int x2, int y2 )
 {
    rectangle ( x1, y1, x2, y2, lightgray );
    bar ( x1+1, y1+1, x2-1, y2-1, black );
@@ -1568,10 +1568,10 @@ class SelectVehicleTypeForContainerCargo : public SelectCargoVehicleType {
          ContainerBase* container;
       public:
          SelectVehicleTypeForContainerCargo ( ContainerBase* _container ) { container = _container; };
-         bool isavailable ( pvehicletype item );
+         bool isavailable ( Vehicletype* item );
      };
 
-bool SelectVehicleTypeForContainerCargo :: isavailable ( pvehicletype item )
+bool SelectVehicleTypeForContainerCargo :: isavailable ( Vehicletype* item )
 {
    bool result = false;
    if ( SelectVehicleType::isavailable ( item ) ) {
@@ -1587,7 +1587,7 @@ class SelectVehicleTypeForBuildingProduction : public SelectCargoVehicleType {
          Building* building;
       public:
          SelectVehicleTypeForBuildingProduction ( Building* _building ) { building = _building; };
-         bool isavailable ( pvehicletype item ) {  
+         bool isavailable ( Vehicletype* item ) {  
             for ( int i = 0; i < 32; i++ )
                if ( building->production[i] == item )
                   return 0;
@@ -1609,7 +1609,7 @@ void selbuildingproduction( Building* bld )
 {  
    SelectVehicleTypeForBuildingProduction svtfbc ( bld );
    svtfbc.init( vehicleTypeRepository.getVector() );
-   pvehicletype newcargo = svtfbc.selectitem ( NULL );
+   Vehicletype* newcargo = svtfbc.selectitem ( NULL );
    if ( newcargo ) {
       int p = 0;
       while ( bld->production[p] )
@@ -1622,7 +1622,7 @@ void selcargo( ContainerBase* container )
 {
    SelectVehicleTypeForContainerCargo svtftc ( container );
    svtftc.init( vehicleTypeRepository.getVector() );
-   pvehicletype newcargo = svtftc.selectitem ( NULL );
+   Vehicletype* newcargo = svtftc.selectitem ( NULL );
 
    if ( newcargo ) {
       Vehicle* unit = new Vehicle ( newcargo, actmap, container->getOwner() );
