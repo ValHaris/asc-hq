@@ -303,9 +303,6 @@
 				RelativePath="..\..\..\resourcenet.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ai\service.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\sg.cpp">
 			</File>
 			<File
@@ -382,6 +379,9 @@
 							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\ai\service.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\ai\strategy.cpp">

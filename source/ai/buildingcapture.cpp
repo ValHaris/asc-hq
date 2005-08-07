@@ -306,7 +306,7 @@ void AI :: checkConquer( )
       
       veh->aiparam[getPlayerNum()]->setJob ( AiParameter::job_conquer );
       veh->aiparam[getPlayerNum()]->setTask ( AiParameter::tsk_move );
-      veh->aiparam[getPlayerNum()]->dest = bld->getEntry();
+      veh->aiparam[getPlayerNum()]->dest.setnum( bld->getEntry().x, bld->getEntry().y, -1 );
    }
 
    // execute capture orders

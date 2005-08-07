@@ -773,6 +773,7 @@ trunreplay :: trunreplay ( void ) : gui ( replayGuiHost )
 
 void trunreplay::error( const char* message, ... )
 {
+   // return;
    va_list paramlist;
    va_start ( paramlist, message );
    if ( message != lastErrorMessage ) {
