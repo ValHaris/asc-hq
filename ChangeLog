@@ -1,3 +1,27 @@
+2005-08-07 09:23  mbickel
+
+	* source/: edglobal.cpp, itemrepository.cpp, replay.cpp,
+	  sgstream.cpp, strtmesg.cpp, unitctrl.cpp, vehicletype.cpp,
+	  ai/buildingcapture.cpp, win32/msvc/ASC/ASC.vcproj:  Fixed AI
+	  problems
+
+2005-07-24 09:43  mbickel
+
+	* source/building.cpp:	Fixed ammo transfer bug
+
+2005-07-20 21:03  mbickel
+
+	* ChangeLog, source/strtmesg.cpp:  Updated version number
+
+2005-07-20 20:40  mbickel
+
+	* source/ai/buildingcapture.cpp:  Fixed crash in AI
+
+2005-07-17 08:54  mbickel
+
+	* source/: strtmesg.cpp, vehicle.cpp:  Fixed rounding errors when
+	  moving tranports one field at a time
+
 2005-07-16 15:20  mbickel
 
 	* libtool, source/sgstream.cpp:  Updated data version
