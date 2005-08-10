@@ -1400,6 +1400,9 @@ int VehicleService :: execute ( pvehicle veh, int targetNWID, int dummy, int ste
                           if ( building->ammo[ serv.sourcePos ] < 0 ) {
                              building->produceAmmo ( serv.sourcePos, -building->ammo[ serv.sourcePos ] );
                           }
+                          if ( building->ammo[ serv.sourcePos ] < 0 ) 
+                             fatalError("negative amount of ammo available! \nPlease report this to bugs@asc-hq.org" );
+
                           logtoreplayinfo ( rpl_refuel, t.dest->xpos, t.dest->ypos, t.dest->networkid, serv.targetPos, t.dest->ammo[ serv.targetPos ] );
                           MapCoordinate mc = building->getEntry();
                           logtoreplayinfo ( rpl_bldrefuel, mc.x, mc.y, serv.targetPos, building->ammo[ serv.sourcePos ] );
