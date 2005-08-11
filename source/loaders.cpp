@@ -1392,6 +1392,19 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
 
    calculateallobjects();
 
+
+   // there was a bug that made the ammo amount underflow
+   for ( int i = 0; i < 8; ++i)
+      for ( Player::BuildingList::iterator b = actmap->player[i].buildingList.begin(); b != actmap->player[i].buildingList.end(); ++b )
+         for ( int a = 0; a < waffenanzahl; ++a )
+            if ( (*b)->ammo[a] > 32000 ) {
+               ASCString s;
+               s.format( "Player %s had %d ammo of type %s in the building at %d/%d", actmap->player[i].getName().c_str(), (*b)->ammo[a], cwaffentypen[a], (*b)->getEntry().x, (*b)->getEntry().y );
+               new Message( s, actmap, 1 );
+               (*b)->ammo[a] = 0;
+            }
+
+
    actmap->levelfinished = false;
 
   return 0;

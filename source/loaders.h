@@ -5,7 +5,7 @@
 
 */
 
-//     $Id: loaders.h,v 1.33 2005-04-29 17:57:13 mbickel Exp $
+//     $Id: loaders.h,v 1.34 2005-08-11 19:10:32 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -76,7 +76,7 @@ const int actsavegameversion  = 0xff43;
 const int minsavegameversion  = 0xff31;
 const int actmapversion       = 0xfe31;
 const int minmapversion       = 0xfe24;
-const int actnetworkversion   = 0x0015;
+const int actnetworkversion   = 0x0016;
 const int minnetworkversion   = 0x0004;
 const int actreplayversion    = 0x0003;
 const int minreplayversion    = 0x0001;
