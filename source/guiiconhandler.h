@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.12 2005-07-24 12:51:20 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.13 2005-08-17 18:59:15 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -74,6 +74,8 @@ class GuiButton : public PG_Button {
           GuiFunction* func;
           MapCoordinate pos;
           int id;
+       protected:
+	       void eventMouseEnter();
        public:
           GuiButton( PG_Widget *parent, const PG_Rect &r );
           void registerFunc( GuiFunction* f, const MapCoordinate& position, int id );

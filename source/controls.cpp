@@ -853,7 +853,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
         checkWind = false;
       }
 
-
+/*
    if ( checkHemming )
       for (int c = 0; c < sidenum; c++) {
          int x = dest.x;
@@ -878,7 +878,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
            }
          }
       }
-
+*/
     /*******************************/
     /*    Wind calculation        ÿ */
     /*******************************/

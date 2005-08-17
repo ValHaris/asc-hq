@@ -79,6 +79,12 @@ void GuiButton::unregisterFunc()
    SetIcon ( (SDL_Surface*) NULL );
 }
 
+void GuiButton::eventMouseEnter()
+{
+   MessagingHub::Instance().statusInformation("Hallo Welt" );
+}
+
+
 
 SmallGuiButton::SmallGuiButton( PG_Widget *parent, const PG_Rect &r, GuiButton* guiButton, NewGuiHost* host ) : PG_Button( parent, r, "", -1, "GuiButton"), referenceButton( guiButton )
 {
