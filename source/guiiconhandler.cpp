@@ -81,9 +81,16 @@ void GuiButton::unregisterFunc()
 
 void GuiButton::eventMouseEnter()
 {
-   MessagingHub::Instance().statusInformation("Hallo Welt" );
+   PG_Button::eventMouseEnter();
+   if ( func )
+      MessagingHub::Instance().statusInformation( func->getName(pos, id));
 }
 
+void GuiButton::eventMouseLeave()
+{
+   PG_Button::eventMouseLeave();
+   MessagingHub::Instance().statusInformation("");
+}
 
 
 SmallGuiButton::SmallGuiButton( PG_Widget *parent, const PG_Rect &r, GuiButton* guiButton, NewGuiHost* host ) : PG_Button( parent, r, "", -1, "GuiButton"), referenceButton( guiButton )

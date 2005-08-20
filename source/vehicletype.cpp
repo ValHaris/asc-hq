@@ -1032,7 +1032,7 @@ void Vehicletype :: HeightChangeMethod :: write ( tnstream& stream ) const
                           Preiskalkulation  -  description
                              -------------------
     begin                : So Aug 15 2004
-    copyright            : (C) 2001 by Martin Bickel & Steffen Fröhlich
+    copyright            : (C) 2001 by Martin Bickel & Steffen Fr÷hlich
     email                : bickel@asc-hq.org
 
  vehicletype {
@@ -1050,7 +1050,7 @@ Part III -typecost
 part IV  -weaponcost
 Part V   -specialcost
 Part VI  -addierung
-Part VII -Abschläge
+Part VII -Abschlõge
 
  ***************************************************************************/
 
@@ -1096,42 +1096,48 @@ Resources Vehicletype :: calcProductionsCost()
 			typecoste += armor*20;
 			typecostm += armor*20;
 		} else {
-			typecoste += armor*5;
-			typecostm += armor*5;
+			typecoste += armor*6;
+			typecostm += armor*6;
 		}
 
-		// Zuschlag für Eisbrecher
+		// Zuschlag f³r Eisbrecher
 		if ( functions & cficebreaker ) {
 			typecoste += armor *2;
 			typecostm += armor *2;
 		}
-		// Zuschlag für U-Boote / Druckhülle
+		// Zuschlag f³r U-Boote / Druckh³lle
 		if ( height & chgetaucht ) {
 			typecoste += armor*2;
 			typecostm += armor*2;
 		}
-		// Zuschlag für orbitalfähige Einheiten / Druckhülle
+		// Zuschlag f³r orbitalfõhige Einheiten / Druckh³lle
 		if ( height & chsatellit ) {
 			typecoste += armor*3;
 			typecostm += armor*2;
 		}
-		// Zuschlag für hochfliegende Einheiten / Extra starke Triebwerke
+		// Zuschlag f³r hochfliegende Einheiten / Extra starke Triebwerke
 		if ( height & chhochfliegend ) {
 			typecoste += armor*2;
 			typecostm += armor*2;
 		}
-		// Zuschlag für Transportkapazität
+		// Zuschlag f³r Transportkapazitõt
 		if ( entranceSystems.size() > 0 ) {
 			typecoste += maxLoadableUnits*100;
 			typecostm += maxLoadableUnits*100;
 
-			// Zuschlag für Flugzeugträger / Start- und Landeeinrichtungen
-			for ( int T=0; T < entranceSystems.size(); ++T ) {
-				if ( entranceSystems[T].container_height == chfahrend && entranceSystems[T].height_abs == chtieffliegend && maxLoadableUnits > 2 ) {
-					typecoste += maxLoadableUnits*800;
-					typecostm += maxLoadableUnits*800;
-				}
-			}
+         bool carrierCharge = false;
+
+			// Zuschlag f³r Flugzeugtrõger / Start- und Landeeinrichtungen
+			for ( int T=0; T < entranceSystems.size(); ++T ) 
+				if ( entranceSystems[T].container_height < chtieffliegend 
+                  && (entranceSystems[T].height_abs & (chtieffliegend | chfliegend | chhochfliegend | chsatellit))
+                  && maxLoadableUnits > 2 )
+               carrierCharge = true;
+
+         if ( carrierCharge ) {
+		      typecoste += maxLoadableUnits*1000;
+				typecostm += maxLoadableUnits*1000;
+         }
 		}
 		// Check maximale Reichweite
 		for ( int M=0; M < movement.size(); ++M ) {
@@ -1139,26 +1145,26 @@ Resources Vehicletype :: calcProductionsCost()
 				movecostsize = movement[M];
 			}
 		}
-		// Zuschlag für Triebwerke
+		// Zuschlag f³r Triebwerke
 		if (movecostsize > 70 ) {
 			typecoste += (movecostsize-70)*15;
 			typecostm += (movecostsize-70)*5;
 		}
 		
-		// Zuschlag für Flugzeugtriebwerke
+		// Zuschlag f³r Flugzeugtriebwerke
 		if (movecostsize > 120 ) {
 			typecoste += (movecostsize-120)*10;
-			typecostm += (movecostsize-120)*5;
+			typecostm += (movecostsize-120)*10;
 		}
-		// Zuschlag für Hochleistungsflugzeugtriebwerke
+		// Zuschlag f³r Hochleistungsflugzeugtriebwerke
 		if (movecostsize > 170 ) {
-			typecoste += (movecostsize-170)*5;
-			typecostm += (movecostsize-170)*5;
+			typecoste += (movecostsize-170)*12;
+			typecostm += (movecostsize-170)*12;
 		}
-		// Zuschlag für Spezialflugzeugtriebwerke
+		// Zuschlag f³r Spezialflugzeugtriebwerke
 		if (movecostsize > 200 ) {
-			typecoste += (movecostsize-200)*10;
-			typecostm += (movecostsize-200)*10;
+			typecoste += (movecostsize-200)*14;
+			typecostm += (movecostsize-200)*14;
 		}
 
 
@@ -1218,17 +1224,17 @@ Resources Vehicletype :: calcProductionsCost()
 			// Waffenreichweitenzuschlag Kurzstrecke
 			if (rangecostsize > 19 ) {
 				weaponcoste += (rangecostsize-10)*80;
-				weaponcostm += (rangecostsize-10)*50;
+				weaponcostm += (rangecostsize-10)*70;
 			}
 			// Waffenreichweitenzuschlag Mittelstrecke
 			if (rangecostsize > 69 ) {
-				weaponcoste += (rangecostsize-60)*100;
-				weaponcostm += (rangecostsize-60)*80;
+				weaponcoste += (rangecostsize-60)*150;
+				weaponcostm += (rangecostsize-60)*100;
 			}
 			// Waffenreichweitenzuschlag Langstrecke
 			if (rangecostsize > 99 ) {
-				weaponcoste += (rangecostsize-90)*110;
-				weaponcostm += (rangecostsize-90)*100;
+				weaponcoste += (rangecostsize-90)*200;
+				weaponcostm += (rangecostsize-90)*200;
 			}
 		}
 
@@ -1237,10 +1243,10 @@ Resources Vehicletype :: calcProductionsCost()
 
 		if ( jamming > 0 && (functions & cfownFieldJamming) ) {
 			if (jamming < 31 ) {
-				typecoste += jamming*20;  //  für Trooper oder eigenschaftsbedingt (klein, schnell)
+				typecoste += jamming*20;  //  f³r Trooper oder eigenschaftsbedingt (klein, schnell)
 				typecostm += jamming*10;
 			} else {
-				typecoste += jamming*50;  //  für alle höherwirkenden Stealthverfahren, Anstrich, besondere Konstruktion, tarnfeld usw.
+				typecoste += jamming*50;  //  f³r alle h÷herwirkenden Stealthverfahren, Anstrich, besondere Konstruktion, tarnfeld usw.
 				typecostm += jamming*30;
 			}
 		} else {
@@ -1331,7 +1337,7 @@ Resources Vehicletype :: calcProductionsCost()
 		res.energy += typecoste + weaponcoste + specialcoste;
 		res.material += typecostm + weaponcostm + specialcostm;
 
-// Part VII Abschläge
+// Part VII Abschlõge
 		// keine Luftbetankung
 		if (functions & cfnoairrefuel) {
 			res.energy -= typecoste/6;
@@ -1346,14 +1352,14 @@ Resources Vehicletype :: calcProductionsCost()
 
 		// low movement
 		if (movecostsize < 20 ) {
-			res.energy -= typecoste/5;
-			res.material -= typecostm/6;
+			res.energy -= typecoste/4;
+			res.material -= typecostm/4;
 		}
 
 		// low movement
 		if (movecostsize < 10 ) {
-			res.energy -= typecoste/5;
-			res.material -= typecostm/6;
+			res.energy -= typecoste/4;
+			res.material -= typecostm/4;
 		}
 // Part VIII Abschluss
 

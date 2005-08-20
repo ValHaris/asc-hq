@@ -322,6 +322,7 @@ void showPlayerStrength()
       }
       message += "Unit count: " + ASCString::toString( int( actmap->player[i].vehicleList.size()));
       message += "\n\n";
+
    }
    tviewanytext vat ;
    vat.init ( "Player strength summary", message.c_str(), 20, -1 , 450, 480 );

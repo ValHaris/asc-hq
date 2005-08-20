@@ -1214,7 +1214,7 @@ void UnitConstructionPage::buildContent() {
     startTable(1, RELATIVE, 100);
     for ( unsigned int i = 0; i < vt.objectsBuildable.size(); i++ ) {
       for ( int b = 0; b < objectTypeRepository.getNum(); b++ ) {
-        Object*type obj = objectTypeRepository.getObject_byPos ( b );
+        ObjectType* obj = objectTypeRepository.getObject_byPos ( b );
         if (     obj->id >= vt.objectsBuildable[i].from
                  && obj->id <= vt.objectsBuildable[i].to ) {
           names = addTREntryln(names, obj->name.c_str() + ASCString("(") + strrr(obj->id )+ ")");
@@ -1232,7 +1232,7 @@ void UnitConstructionPage::buildContent() {
     names = "";
     for ( unsigned int i = 0; i < vt.objectsRemovable.size(); i++ ) {
       for ( int b = 0; b < objectTypeRepository.getNum(); b++ ) {
-        Object*type obj = objectTypeRepository.getObject_byPos ( b );
+        ObjectType* obj = objectTypeRepository.getObject_byPos ( b );
         if (     obj->id >= vt.objectsRemovable[i].from
                  && obj->id <= vt.objectsRemovable[i].to ) {
           ASCString s;

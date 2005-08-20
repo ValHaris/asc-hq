@@ -1653,12 +1653,13 @@ int   ctransportcontrols :: putammunition ( int weapontype, int ammunition, int 
       if ( ammo )
          if ( vehicle->typ->weapons.weapon[i].getScalarWeaponType() == weapontype ) {
             int dif = vehicle->typ->weapons.weapon[i].count - vehicle->ammo[i];
-            if ( ammo > dif )
-               ammo = dif;
+            if ( dif > ammo )
+               dif = ammo;
             if ( abbuchen )
-               vehicle->ammo[i] += ammo;
+               vehicle->ammo[i] += dif;
+            ammo -= dif;
          }
-   return ammo;
+   return ammunition - ammo;
 };
 
 

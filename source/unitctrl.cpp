@@ -1182,24 +1182,19 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( Vehicl
                int stillNeeded = destWeapon.count - targetUnit->ammo[i] - s.orgSourceAmount;
                int produceable;
                if ( (stillNeeded > 0) && (bld->typ->special & cgammunitionproductionb)) {
-                  stillNeeded = ((stillNeeded +4) / 5)*5;
                   Resources res;
                   for( int j = 0; j< resourceTypeNum; j++ )
-                     res.resource(j) = cwaffenproduktionskosten[type][j] * stillNeeded / 5;
+                     res.resource(j) = cwaffenproduktionskosten[type][j] * stillNeeded;
 
                   // ContainerBase* cb = bld;
                   // Resources res2 = cb->getResource ( res, 1 );
-                  Resources res2;
-                  for ( int r = 0; r < 2; r++ )
-                     res2.resource(r) = min ( buildingResources.resource(r), res.resource(r) );
 
                   int perc = 100;
                   for ( int i = 0; i< resourceTypeNum; i++ )
                       if ( res.resource(i) )
-                         perc = min ( perc, 100 * res2.resource(i) / res.resource(i) );
+                         perc = min ( perc, 100 * buildingResources.resource(i) / res.resource(i) );
 
                   produceable = stillNeeded * perc / 100 ;
-                  produceable = (produceable / 5) * 5;
                } else
                   produceable = 0;
 
@@ -1442,12 +1437,19 @@ int VehicleService :: fillEverything ( int targetNWID, bool repairsToo )
 
    Target& t = i->second;
 
-   for ( int j = 0; j< t.service.size(); j++ )
-      if ( t.service[j].type != srv_repair )
-         execute ( NULL, targetNWID, -1, 2, j, t.service[j].maxAmount );
-      else
-         if ( repairsToo )
-            execute ( NULL, targetNWID, -1, 2, j, t.service[j].minAmount );
+   for ( int j = 0; j< t.service.size(); j++ ) {
+      switch( t.service[j].type ) {
+         case srv_repair: 
+               if ( repairsToo )
+                  execute ( NULL, targetNWID, -1, 2, j, t.service[j].minAmount );
+               break;
+         case srv_ammo:
+         case srv_resource:
+               execute ( NULL, targetNWID, -1, 2, j, t.service[j].maxAmount );
+               break;
+      }
+   }
+
    return 0;
 }
 

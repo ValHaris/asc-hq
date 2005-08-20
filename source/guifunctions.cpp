@@ -146,30 +146,30 @@ ASCString AttackGui::getName( const MapCoordinate& pos, int num )
    if ( num == -1 )
       return "cancel";
 
-      Vehicle* attacker = attackEngine->getAttacker();
+   Vehicle* attacker = attackEngine->getAttacker();
 
-      tfight* battle = NULL;
+   tfight* battle = NULL;
 
-      pair<pattackweap, int> p = getEntry(pos,num);
-      
+   pair<pattackweap, int> p = getEntry(pos,num);
+   
 
-      if ( p.first->target == AttackWeap::vehicle )
-         battle = new tunitattacksunit ( attacker, actmap->getField(pos)->vehicle, true, p.first->num[p.second] );
-      else
-      if ( p.first->target == AttackWeap::building )
-         battle = new tunitattacksbuilding ( attacker, pos.x, pos.y, p.first->num[p.second] );
-      else
-      if ( p.first->target == AttackWeap::object )
-         battle = new tunitattacksobject ( attacker, pos.x, pos.y, p.first->num[p.second] );
+   if ( p.first->target == AttackWeap::vehicle )
+      battle = new tunitattacksunit ( attacker, actmap->getField(pos)->vehicle, true, p.first->num[p.second] );
+   else
+   if ( p.first->target == AttackWeap::building )
+      battle = new tunitattacksbuilding ( attacker, pos.x, pos.y, p.first->num[p.second] );
+   else
+   if ( p.first->target == AttackWeap::object )
+      battle = new tunitattacksobject ( attacker, pos.x, pos.y, p.first->num[p.second] );
 
 
-      int dd = battle->dv.damage;
-      int ad = battle->av.damage;
-      battle->calc ( );
+   int dd = battle->dv.damage;
+   int ad = battle->av.damage;
+   battle->calc ( );
 
-      ASCString result;
-      result.format( "%s; eff strength: %d; damage inflicted to enemy: %d, making a total of ~%d~; own damage will be +%d = %d", cwaffentypen[log2(p.first->typ[p.second])], battle->av.strength, battle->dv.damage-dd, battle->dv.damage, battle->av.damage-ad, battle->av.damage );
-      return result;
+   ASCString result;
+   result.format( "%s; eff strength: %d; damage inflicted to enemy: %d, making a total of ~%d~; own damage will be +%d = %d", cwaffentypen[log2(p.first->typ[p.second])], battle->av.strength, battle->dv.damage-dd, battle->dv.damage, battle->av.damage-ad, battle->av.damage );
+   return result;
 }
 
 

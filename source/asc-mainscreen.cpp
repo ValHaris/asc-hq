@@ -378,6 +378,8 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
 
    mapChanged.connect( SigC::slot( OverviewMapHolder::clearmap ));
    dataLoaderTicker();
+   
+   MessagingHub::Instance().statusInformation.connect( SigC::slot( *this, &MainScreenWidget::displayMessage ));
 }
 
 
