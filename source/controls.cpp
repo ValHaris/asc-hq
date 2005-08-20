@@ -450,7 +450,7 @@ void         destructbuildinglevel2( int xp, int yp)
 void         tputmine::testfield(const MapCoordinate& mc)
 {
    pfield fld = gamemap->getField(mc);
-   if ( !fld->vehicle  &&  !fld->building ) {
+   if ( !fld->vehicle  &&  !fld->building && fieldvisiblenow( fld, player )) {
       fld->a.temp = 0;
       if ( !fld->mines.empty() ) {
          fld->a.temp += 2;
@@ -799,6 +799,9 @@ void tbuildstreet::checkObject( pfield fld, pobjecttype objtype, Mode mode )
 void         tbuildstreet::testfield( const MapCoordinate& mc )
 {
    pfield fld = gamemap->getField(mc);
+
+   if ( !fieldvisiblenow( fld, actvehicle->getOwner()))
+      return;
 
    obj = new tobjectcontainers_buildable_on_field ( mc.x, mc.y );
    objects_buildable.field[ objects_buildable.fieldnum++ ] = obj;
