@@ -75,10 +75,13 @@ class SelectionItemFactory {
       virtual SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos ) = 0;
       
       virtual void itemSelected( const SelectionWidget* widget ) = 0;
+      virtual void itemMarked  ( const SelectionWidget* widget ) {};
       virtual ~SelectionItemFactory() {};
 };
 
-class ItemSelectorWindow : public PG_Window {
+
+
+class ItemSelectorWidget : public PG_Widget {
       
       typedef vector<SelectionWidget*> WidgetList;
       WidgetList widgets;
@@ -106,11 +109,27 @@ class ItemSelectorWindow : public PG_Window {
       
    public:
       // the ItemSelectorWindow will take ownership over the itemFactory
-      ItemSelectorWindow( PG_Widget *parent, const PG_Rect &r , SelectionItemFactory* itemFactory ) ;
+      ItemSelectorWidget( PG_Widget *parent, const PG_Rect &r , SelectionItemFactory* itemFactory ) ;
+
+      SigC::Signal1<void,const SelectionWidget*> sigItemSelected;
       
-      int RunModal();
-      
+            
       void reLoad();
+      void resetNamesearch();
 };
+
+
+class ItemSelectorWindow: public PG_Window {
+      ItemSelectorWidget* itemSelector;
+      void itemSelected( const SelectionWidget* );
+   public:
+      // the ItemSelectorWindow will take ownership over the itemFactory
+      ItemSelectorWindow( PG_Widget *parent, const PG_Rect &r , SelectionItemFactory* itemFactory ) ;
+     
+      int RunModal();
+      void reLoad();
+
+};
+
 
 #endif

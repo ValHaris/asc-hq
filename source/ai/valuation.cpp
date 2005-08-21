@@ -45,6 +45,7 @@ const int ccbt_training = 150;
                           public:
                               void              calc_threat_vehicletype ( Vehicletype* _fzt );
                               CalculateThreat_VehicleType ( AI* _ai ) { ai = _ai; };
+                              virtual ~CalculateThreat_VehicleType() {};
                        };
 
   class CalculateThreat_Vehicle : public CalculateThreat_VehicleType {

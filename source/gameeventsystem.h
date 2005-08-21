@@ -30,6 +30,7 @@
 
 #include "typen.h"
 #include "libs/loki/Singleton.h"
+#include "factory.h"
 
 #if defined(sgmain) || defined(karteneditor)
 # include "mapdisplay.h"
@@ -159,34 +160,6 @@ class Event {
 };
 
 
-
-template < class AbstractProduct,
-           typename IdentifierType >
-class Factory{
-   public:
-      typedef AbstractProduct* (*ObjectCreatorCallBack)();
-   private:
-      typedef map<IdentifierType, ObjectCreatorCallBack> CallbackMap;
-      CallbackMap callbackMap;
-   public:
-      bool registerClass( IdentifierType id, ObjectCreatorCallBack createFn ) { callbackMap[id] = createFn; return true; };
-      AbstractProduct* createObject( IdentifierType id )
-      {
-         typename CallbackMap::const_iterator i = callbackMap.find(id);
-         if ( i != callbackMap.end() )
-            return (i->second)();
-         else {
-            fatalError("Factory: Object ID not found");
-            return NULL;
-         }
-      };
-};
-
-template<class Base, class Derived>
-Base* ObjectCreator()
-{
-   return new Derived;
-}
 
 typedef Loki::SingletonHolder< Factory< EventTrigger, EventTriggerID > > triggerFactory;
 typedef Loki::SingletonHolder< Factory< EventAction , EventActionID  > > actionFactory;

@@ -18,14 +18,15 @@ gameoptions.cpp astar2.cpp vehicletype.cpp objects.cpp \
 buildingtype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp \
 gamemap.cpp password.cpp password_dialog.cpp replay.cpp research.cpp \
 mapdisplay.cpp resourcenet.cpp dashboard.cpp ascstring.cpp graphicset.cpp \
-vehicle.cpp buildings.cpp networkdata.cpp textfileparser.cpp terraintype.cpp \
+vehicle.cpp buildings.cpp networkinterface.cpp textfileparser.cpp terraintype.cpp \
 objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp music.cpp \
 messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp messagedlg.cpp \
 simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp weatherarea.cpp \
 guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp gamedialog.cpp \
 infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappanel.cpp \
-weathercast.cpp unitinfodialog.cpp messaginghub.cpp explosivemines.cpp selectionwindow.cpp
+weathercast.cpp unitinfodialog.cpp messaginghub.cpp explosivemines.cpp selectionwindow.cpp \
+legacynetworkloaders.cpp
 
 
 asc_LDADD   		= $(top_builddir)/source/libs/triangul/libtriangul.la \

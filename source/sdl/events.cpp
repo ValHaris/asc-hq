@@ -312,8 +312,6 @@ char time_elapsed(int time)
  *                                                                         *
  ***************************************************************************/
 
-//! The handle for the second thread; depending on platform this could be the event handling thread or the game thread
-SDL_Thread* secondThreadHandle = NULL;
 
 
 int closeEventThread = 0;
@@ -462,6 +460,9 @@ void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mou
    SDL_EnableUNICODE ( 1 );
    SDL_EnableKeyRepeat ( 250, 30 );
 
+   //! The handle for the second thread; depending on platform this could be the event handling thread or the game thread
+   SDL_Thread* secondThreadHandle = NULL;
+   
 #if defined(_WIN32_) | defined(__APPLE__)
    _gamethread = gamethread;
    secondThreadHandle = SDL_CreateThread ( gameThreadWrapper, data );

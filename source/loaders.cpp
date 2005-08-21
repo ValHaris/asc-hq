@@ -45,7 +45,6 @@
 #include "sg.h"
 #include "attack.h"
 #include "errors.h"
-#include "networkdata.h"
 #include "strtmesg.h"
 #include "textfileparser.h"
 #include "itemrepository.h"
@@ -443,7 +442,6 @@ void    tspfldloaders::writemap ( void )
 
 void     tmaploaders::initmap ( void )
 {
-    spfld->network          = NULL;
     spfld->game_parameter = NULL;
 }
 
@@ -504,37 +502,13 @@ void tgameloaders :: readAI ( )
 /*     Network schreiben / lesen                             */
 /**************************************************************/
 
-void        tspfldloaders::writenetwork ( void )
+extern void readLegacyNetworkData ( tnstream& stream );
+
+
+void        tspfldloaders::readLegacyNetwork ( void )
 {
-  if ( spfld->network ) {
-     int i;
-
-      // don't change anything for Big-Endian adaption,
-      // this part is really ugly and I'll rewrite it
-
-     stream->writedata2 ( *spfld->network );
-     for ( i = 0; i < 8  ; i++ ) 
-        if (spfld->network->computer[i].name != NULL)
-           stream->writepchar ( spfld->network->computer[i].name );
-
-  }
-}
-
-
-void        tspfldloaders::readnetwork ( void )
-{
-   if ( spfld->network ) {
-      int i;
-
-      // don't change anything for Big-Endian adaption,
-      // this part is really ugly and I'll rewrite it
-
-      spfld->network = new ( tnetwork );
-      stream->readdata2 ( *spfld->network );
-      for (i=0; i<8 ; i++ ) 
-         if (spfld->network->computer[i].name != NULL )
-            stream->readpchar ( &spfld->network->computer[i].name );
-   }
+   if ( spfld->___loadLegacyNetwork )
+      readLegacyNetworkData( *stream );
 }
 
 
@@ -1140,8 +1114,6 @@ void   tsavegameloaders::savegame( pnstream strm, pmap gamemap, bool writeReplay
    stream->writeInt( actsavegameversion );
    writemap ();
 
-   writenetwork ( );
-
    writemessages();
 
    writefields ( );
@@ -1216,7 +1188,7 @@ tmap*          tsavegameloaders::loadgame( pnstream strm )
 
    readmap ();
 
-   readnetwork ();
+   readLegacyNetwork ();
 
    if  ( version <= 0xff39 )
       for ( int i = 0; i < 8; i++ )
@@ -1299,8 +1271,6 @@ int          tnetworkloaders::savenwgame( pnstream strm )
 
    writemessages();
 
-   writenetwork ( );
-
    stream->writeInt ( actnetworkversion );
 
    writefields ( );
@@ -1324,7 +1294,7 @@ int          tnetworkloaders::savenwgame( pnstream strm )
 
 
 
-int          tnetworkloaders::loadnwgame( pnstream strm )
+tmap*  tnetworkloaders::loadnwgame( pnstream strm )
 { 
    char* name = "network game";
 
@@ -1368,7 +1338,7 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
      actmap->weatherSystem->read(*stream);
    }*/
    readmessages();
-   readnetwork ();
+   readLegacyNetwork ();
 
    version = stream->readInt();
 
@@ -1404,15 +1374,14 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
 
    seteventtriggers( spfld );
 
-   delete actmap;
-   actmap = spfld;
+   calculateallobjects( spfld );
+
+   spfld->levelfinished = false;
+   
+   tmap* spfldcopy = spfld;
    spfld = NULL;
 
-   calculateallobjects();
-
-   actmap->levelfinished = false;
-
-  return 0;
+   return spfldcopy;
 }
 
 
@@ -1721,23 +1690,11 @@ bool validatesavfile ( const char* filename )
 
 
 
-
-
-
-
 void         savecampaignrecoveryinformation( const ASCString& filename,
                                              int id)
 { 
    displaymessage("This has not been implemented yet, sorry!", 2 );
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -1791,360 +1748,4 @@ void         loadicons(void)
          stream.readrlepict( &icons.height[i],false,w);
    }
 }
-
-
-/*
-tspeedcrccheck :: tspeedcrccheck ( Object*containercrcs crclist )
-{
-   status = 0;
-
-   strng = NULL;
-   strnglen = 0;
-
-   int i;
-*/
-/*
-   for ( i = 0; i <= maxterrainanz; i++ )
-      bdt[i] = 0;
-
-   for ( i = 0; i <= maxvehicletypeenanz; i++ )
-      fzt[i] = 0;
-
-   for ( i = 0; i <= maxbuildingnumber; i++ )
-      bld[i] = 0;
-
-   for ( i = 0; i <= maxtechnologynumber; i++ )
-      tec[i] = 0;
-
-   for ( i = 0; i <= maxobjectnumber; i++ )
-      obj[i] = 0;
-*/
-/*
-   list = crclist;
-
-
-
-
-
-
-
-   for ( i = 0; i < list->unit.crcnum; i++ ) 
-      if ( getcrc ( vehicleTypeRepository.getObject_byID ( list->unit.crc[i].id, 0 )) == list->unit.crc[i].crc )
-         fzt[ list->unit.crc[i].id ] = 1;
-      else    
-         fzt[ list->unit.crc[i].id ] = 2;
-
-   for ( i = 0; i < list->building.crcnum; i++ ) 
-      if ( getcrc ( buildingTypeRepository.getObject_byID ( list->building.crc[i].id, 0 )) == list->building.crc[i].crc )
-         bld[ list->building.crc[i].id ] = 1;
-      else
-         bld[ list->building.crc[i].id ] = 2;
-
-   for ( i = 0; i < list->object.crcnum; i++ ) 
-      if ( getcrc ( objectTypeRepository.getObject_byID ( list->object.crc[i].id, 0 )) == list->object.crc[i].crc )
-         obj[ list->object.crc[i].id ] = 1;
-      else
-         obj[ list->object.crc[i].id ] = 2;
-
-   for ( i = 0; i < list->terrain.crcnum; i++ ) 
-      if ( getcrc ( terrainTypeRepository.getObject_byID ( list->terrain.crc[i].id, 0 )) == list->terrain.crc[i].crc )
-         bdt[ list->terrain.crc[i].id ] = 1;
-      else
-         bdt[ list->terrain.crc[i].id ] = 2;
-
-   for ( i = 0; i < list->technology.crcnum; i++ ) 
-      if ( getcrc ( technologyRepository.getObject_byID ( list->technology.crc[i].id, 0 )) == list->technology.crc[i].crc )
-         tec[ list->technology.crc[i].id ] = 1;
-      else
-         tec[ list->technology.crc[i].id ] = 2;
-}
-
-
-
-
-void tspeedcrccheck :: additemtolist ( pcrcblock lst, int id, int crc )
-{
-    pcrc pc = lst->crc;
-    lst->crc = new tcrc[ lst->crcnum + 1 ];
-    for ( int i = 0; i < lst->crcnum; i++ )
-       lst->crc[i] = pc[i];
-
-    lst->crc[ lst->crcnum ].crc = crc;
-    lst->crc[ lst->crcnum ].id  = id;
-
-    if ( pc )
-       delete pc;
-
-    lst->crcnum++;
-}
-
-
-int  tspeedcrccheck :: checkunit     ( Vehicletype* f, int add )
-{
-   if ( !f )
-      return 1;
-
-   int stat = fzt[ f->id ];
-   if ( stat == 1 )
-      return 1;
-   else
-      if ( stat == 2 )
-         return 0;
-      else
-         if ( stat == 0 ) {
-            if ( list->unit.restricted == 0 ||  ( add == 0  && list->unit.restricted == 1 ))
-               return 1;
-            else
-              if ( list->unit.restricted == 1 ) {
-
-                 additemtolist ( &list->unit, f->id, getcrc ( f ) );
-                 appendstring ( "unit", f->description, f->id, 0 );
-
-                 fzt[ f->id ] = 1;
-
-                 return 1;
-              } else
-                 if ( list->unit.restricted == 2 )
-                    return 0;
-
-               
-         }
-   return 0;
-}
-
-int  tspeedcrccheck :: checkbuilding     ( BuildingType* b, int add )
-{
-   if ( !b )
-      return 1;
-
-   int stat = bld[ b->id ];
-   if ( stat == 1 )
-      return 1;
-   else
-      if ( stat == 2 )
-         return 0;
-      else
-         if ( stat == 0 ) {
-            if ( list->building.restricted == 0 ||  ( add == 0  && list->building.restricted == 1 ) )
-               return 1;
-            else
-              if ( list->building.restricted == 1 ) {
-                 additemtolist ( &list->building, b->id, getcrc ( b ) );
-                 appendstring ( "building", b->name, b->id, 0 );
-
-                 bld[ b->id ] = 1;
-
-                 return 1;
-              } else
-                 if ( list->building.restricted == 2 )
-                    return 0;
-
-
-         }
-   return 0;
-}
-
-int  tspeedcrccheck :: checktech     ( ptechnology t, int add )
-{
-   if ( !t )
-      return 1;
-
-   int stat = tec[ t->id ];
-   if ( stat == 1 )
-      return 1;
-   else
-      if ( stat == 2 )
-         return 0;
-      else
-         if ( stat == 0 ) {
-            if ( list->technology.restricted == 0 ||  ( add == 0  && list->technology.restricted == 1 ))
-               return 1;
-            else
-              if ( list->technology.restricted == 1 ) {
-                 additemtolist ( &list->technology, t->id, getcrc ( t ) );
-                 appendstring ( "technology", t->name, t->id, 0 );
-                 tec[ t->id ] = 1;
-
-                 return 1;
-              } else
-                 if ( list->technology.restricted == 2 )
-                    return 0;
-
-               
-         }
-   return 0;
-}
-
-
-
-
-int  tspeedcrccheck :: checkobj   ( ObjectType* o, int add )
-{
-   if ( !o )
-      return 1;
-
-   int stat = obj[ o->id ];
-   if ( stat == 1 )
-      return 1;
-   else
-      if ( stat == 2 )
-         return 0;
-      else
-         if ( stat == 0 ) {
-            if ( list->object.restricted == 0 ||  ( add == 0  && list->object.restricted == 1 ))
-               return 1;
-            else
-              if ( list->object.restricted == 1 ) {
-                 additemtolist ( &list->object, o->id, getcrc ( o ) );
-                 appendstring ( "object", o->name, o->id, 0 );
-
-                 obj[ o->id ] = 1;
-
-                 return 1;
-              } else
-                 if ( list->object.restricted == 2 )
-                    return 0;
-
-               
-         }
-   return 0;
-}
-
-int  tspeedcrccheck :: checkterrain    ( pterraintype b, int add )
-{
-   if ( !b )
-      return 1;
-
-   int stat = bdt[ b->id ];
-   if ( stat == 1 )
-      return 1;
-   else
-      if ( stat == 2 )
-         return 0;
-      else
-         if ( stat == 0 ) {
-            if ( list->terrain.restricted == 0  ||  ( add == 0  && list->terrain.restricted == 1 ))
-               return 1;
-            else
-              if ( list->terrain.restricted == 1 ) {
-                 additemtolist ( &list->terrain, b->id, getcrc ( b ) );
-                 appendstring ( "terrain", b->name, b->id, 0 );
-
-                 bdt[ b->id ] = 1;
-
-                 return 1;
-              } else
-                 if ( list->terrain.restricted == 2 )
-                    return 0;
-
-               
-         }
-   return 0;
-}
-
-
-void tspeedcrccheck :: appendstring ( char* s, char* d, int id, int mode )
-{
-   char st[200];
-   switch ( mode ) {
-      case 0:sprintf ( st, "NOTE : the crc of the %s named %s , id %d was appended to the crc-list\n", s, d, id );
-         break;
-      case 1:sprintf ( st, "#color4#ERROR#color0#: the %s named %s , id %d , failed the crc-check\n", s, d, id );
-         break;
-      case 2:sprintf ( st, "#color4#ERROR#color0#: the crc of the %s named %s , id %d , is not in the crc-list\n", s, d, id );
-         break;
-      case 3:sprintf ( st, "#color4#ERROR#color0#: the %s named %s , id %d , has an invalid crc\n", s, d, id );
-         break;
-   }
-
-   if ( !strng ) {
-      strnglen = 500;
-      strng = new char[strnglen];
-      strng[0] = 0;
-   }
-
-#ifdef _DOS_
-   if ( _heapchk() != _HEAPOK ) 
-      beep();
-#endif
-
-   while ( strlen ( strng ) + strlen ( st ) > strnglen ) {
-      char* tmp = strng;
-      int newsize = strnglen + 500;
-      strng = new char[ newsize ];
-      strcpy ( strng, tmp );
-      delete[] tmp;
-      strnglen = newsize;
-   }
-
-   strcat ( strng, st );
-}
-
-
-
-int tspeedcrccheck :: checkunit2     ( Vehicletype* f,     int add  )
-{
-   int s = checkunit ( f, add );
-   if ( !s  &&  add == 1  ) {
-      appendstring ( "unit", f->description, f->id, 1 );
-      status = 1;
-   }
-   return s;
-}
-
-int tspeedcrccheck :: checkbuilding2 ( BuildingType* b,    int add   )
-{
-   int s = checkbuilding ( b, add );
-   if ( !s  &&  add == 1  ) {
-      appendstring ( "building", b->name, b->id, 1 );
-      status = 1;
-   }
-   return s;
-}
-
-int tspeedcrccheck :: checktech2     ( ptechnology t,    int add    )
-{
-   int s = checktech ( t, add );
-   if ( !s  &&  add == 1  ) {
-      appendstring ( "technology", t->name, t->id, 1 );
-      status = 1;
-   }
-   return s;
-}
-
-int tspeedcrccheck :: checkobj2      ( ObjectType* o,    int add    )
-{
-   int s = checkobj ( o, add );
-   if ( !s  &&  add == 1  ) {
-      appendstring ( "object", o->name, o->id, 1 );
-      status = 1;
-   }
-   return s;
-}
-
-int tspeedcrccheck :: checkterrain2  ( pterraintype b,    int add    )
-{
-   int s = checkterrain ( b, add );
-   if ( !s  &&  add == 1 ) {
-      appendstring ( "terrain", b->name, b->id, 1 );
-      status = 1;
-   }
-   return s;
-}
-
-
-
-int  tspeedcrccheck :: getstatus ( void )
-{
-   if ( strng  && strng[0] ) {
-      tviewanytext tvat;
-      tvat.init ( "crc status", strng ,60, 90, 520, 300 );
-      tvat.run();
-      tvat.done();
-      delete[] strng;
-      strng = NULL;
-   }
-   return status;
-}
-*/
 

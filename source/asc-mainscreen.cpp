@@ -235,6 +235,7 @@ void Menu::setup()
    addfield ("~G~ame");
    addbutton ( "New ~C~ampaign", ua_newcampaign);
    addbutton ( "~N~ew single Level\tctrl-n", ua_startnewsinglelevel );
+   addbutton ( "New Multiplayer Game", ua_newmultiplayergame );
    currentMenu->addSeparator();
    addbutton ( "~L~oad game\tctrl-l", ua_loadgame );
    addbutton ( "~S~ave game\tctrl-s", ua_savegame );
@@ -535,12 +536,12 @@ bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
    if ( !mod  ) {
       switch ( key->keysym.sym ) {
+            case SDLK_ESCAPE:
+               execuseraction( ua_mainmenu );
+               return true;
+               
             case SDLK_F1:
                execuseraction ( ua_help );
-               return true;
-
-            case SDLK_F2:
-               execuseraction ( ua_mainmenu );
                return true;
 
             case SDLK_F3:
@@ -565,13 +566,14 @@ bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                }
                return true;
 
-            case SDLK_F11: {
-            ASCString s;
-            for ( int i = 0; i < 20; ++i )
-               s += ASCString::toString(i) + "\n";
-            
-            displaymessage( s, 1 );
-            }
+            case SDLK_F11: 
+               {
+                  ASCString s;
+                  for ( int i = 0; i < 20; ++i )
+                     s += ASCString::toString(i) + "\n";
+                  
+                  displaymessage( s, 1 );
+               }
             return true;
 
             case SDLK_1:

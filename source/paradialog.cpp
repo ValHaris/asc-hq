@@ -401,7 +401,7 @@ int ASC_PG_Dialog::Run ( )
 #endif
 
 
-bool ASC_PG_Dialog::eventKeyUp(const SDL_KeyboardEvent *key){
+bool ASC_PG_Dialog::eventKeyDown(const SDL_KeyboardEvent *key){
   if(key->keysym.sym == SDLK_ESCAPE) {
         closeWindow();
     }
@@ -521,7 +521,7 @@ class Emboss : public PG_Widget {
 
 
 
-const int widgetTypeNum = 10;
+const int widgetTypeNum = 12;
 const char* widgetTypes[widgetTypeNum]
 =
    { "image",
@@ -533,7 +533,9 @@ const char* widgetTypes[widgetTypeNum]
      "specialInput",
      "dummy",
      "multilinetext",
-     "scrollarea"
+     "scrollarea",
+     "button",
+     "radiobutton"
    };
 
 enum  WidgetTypes  { Image,
@@ -545,7 +547,9 @@ enum  WidgetTypes  { Image,
                      SpecialInput,
                      Dummy,
                      MultiLineText,
-                     ScrollArea };
+                     ScrollArea,
+                     Button,
+                     RadioButton };
 
 const int imageModeNum = 5;
 const char* imageModes[imageModeNum]
@@ -576,110 +580,146 @@ const char* barDirections[barDirectionNum]
 
 
 
-Panel::WidgetParameters::WidgetParameters()
-      : backgroundMode(PG_Draw::TILE),  textAlign( PG_Label::LEFT ), fontAlpha(255), fontSize(8), transparency(0), hidden(false)
+ASCGUI_Window::WidgetParameters::WidgetParameters()
+      : backgroundMode(PG_Draw::TILE),  
+        textAlign( PG_Label::LEFT ), textAlign_defined(false),
+        fontColor(0xffffff), fontColor_defined(false),
+        fontAlpha(255), fontAlpha_defined(false),
+        fontSize(8), fontSize_defined(false),
+        backgroundColor_defined(false),
+        transparency(0), transparency_defined(false),
+        hidden(false)
 {
 }
 
-void  Panel::WidgetParameters::runTextIO ( PropertyReadingContainer& pc )
+void  ASCGUI_Window::WidgetParameters::runTextIO ( PropertyReadingContainer& pc )
 {
-   pc.addString( "BackgroundImage", backgroundImage, backgroundImage );
-   int i = backgroundMode;
-   pc.addNamedInteger( "BackgroundMode", i, imageModeNum, imageModes, i);
-   backgroundMode = PG_Draw::BkMode( i );
+   if ( pc.find( "BackgroundImage" )) {
+      pc.addString( "BackgroundImage", backgroundImage, backgroundImage );
+      int i = backgroundMode;
+      pc.addNamedInteger( "BackgroundMode", i, imageModeNum, imageModes, i);
+      backgroundMode = PG_Draw::BkMode( i );
+   }
 
-   int ta = textAlign;
-   pc.addNamedInteger( "TextAlign", ta, textAlignNum, textAlignment, ta );
-   textAlign = PG_Label::TextAlign( ta );
+   if ( pc.find( "TextAlign" )) {
+      int ta = textAlign;
+      pc.addNamedInteger( "TextAlign", ta, textAlignNum, textAlignment, ta );
+      textAlign = PG_Label::TextAlign( ta );
+      textAlign_defined = true;
+   }
 
-   pc.addInteger("FontColor", fontColor, fontColor );
+   if ( pc.find( "FontColor")) {
+      pc.addInteger("FontColor", fontColor, fontColor );
+      fontColor_defined = true;
+   }
+   
    pc.addString("FontName", fontName, fontName );
-   pc.addInteger("FontAlpha", fontAlpha, fontAlpha );
-   pc.addInteger("FontSize", fontSize, fontSize );
+   
+   if ( pc.find( "FontAlpha")) {
+      pc.addInteger("FontAlpha", fontAlpha, fontAlpha );
+      fontAlpha_defined = true;
+   }    
+   
+   if ( pc.find( "FontSize")) {
+      pc.addInteger("FontSize", fontSize, fontSize );
+      fontSize_defined = true;
+   }
+   
    if ( pc.find( "BackgroundColor" )) {
       pc.addInteger("BackgroundColor", backgroundColor,  backgroundColor );
       backgroundImage.clear();
+      backgroundColor_defined = true;
    };
-   pc.addInteger("Transparency", transparency, transparency );
+   
+   if ( pc.find("Transparency")) {
+      pc.addInteger("Transparency", transparency, transparency );
+      transparency_defined = true;
+   }
+   
    pc.addBool( "hidden", hidden, hidden );
    pc.addString("Style", style, style );
 }
 
 
-void  Panel::WidgetParameters::assign( BarGraphWidget* widget )
+void  ASCGUI_Window::WidgetParameters::assign( BarGraphWidget* widget )
 {
    if ( !widget )
       return;
 
-   widget->setColor( backgroundColor );
+   if ( backgroundColor_defined )
+      widget->setColor( backgroundColor );
 
    assign( (PG_ThemeWidget*)widget );
 
 }
 
 
-void  Panel::WidgetParameters::assign( PG_ThemeWidget* widget )
+void  ASCGUI_Window::WidgetParameters::assign( PG_ThemeWidget* widget )
 {
    if ( !widget )
       return;
 
-//   if ( !style.empty() )
-//      widget->LoadThemeStyle( style );
-//   else {
-      
-      if ( !backgroundImage.empty() )
-         widget->SetBackground( IconRepository::getIcon(backgroundImage).getBaseSurface(), backgroundMode );
-      else {
+   
+   if ( !backgroundImage.empty() )
+      widget->SetBackground( IconRepository::getIcon(backgroundImage).getBaseSurface(), backgroundMode );
+   else {
+      if ( backgroundColor_defined ) {
          widget->SetBackground( NULL );
          widget->SetSimpleBackground( true );
       }
-   
+   }
+
+   if ( backgroundColor_defined )
       widget->SetBackgroundColor( backgroundColor );
-      assign( (PG_Widget*)widget );
-//   }
+      
+   assign( (PG_Widget*)widget );
 }
 
-void  Panel::WidgetParameters::assign( PG_Label* widget )
+void  ASCGUI_Window::WidgetParameters::assign( PG_Label* widget )
 {
    if ( !widget )
       return;
 
-
-   widget->SetAlignment( textAlign );
+   if ( textAlign_defined )
+      widget->SetAlignment( textAlign );
 
    assign( (PG_Widget*)widget );
 }
 
 
-void  Panel::WidgetParameters::assign( PG_Widget* widget )
+void  ASCGUI_Window::WidgetParameters::assign( PG_Widget* widget )
 {
    if ( !widget )
       return;
 
-   widget->SetFontColor( fontColor );
+   if ( fontColor_defined ) 
+      widget->SetFontColor( fontColor );
+      
    if ( !fontName.empty() )
       widget->SetFontName( fontName );
-   widget->SetFontAlpha( fontAlpha );
-   widget->SetFontSize( fontSize );
-   widget->SetTransparency( transparency );
+      
+   if ( fontAlpha_defined )
+      widget->SetFontAlpha( fontAlpha );
+   
+   if ( fontSize_defined )
+      widget->SetFontSize( fontSize );
+   
+   if ( transparency_defined )
+      widget->SetTransparency( transparency );
+      
    if ( hidden )
       widget->Hide(false);
 }
 
 
-Panel::Panel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme )
-      : PG_Window ( parent, r, "", DEFAULT, "Panel", 9 ), panelName( panelName_ ), textPropertyGroup(NULL)
+ASCGUI_Window::ASCGUI_Window ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, const ASCString& baseStyle, bool loadTheme )
+      : PG_Window ( parent, r, "", DEFAULT, baseStyle, 9 ), panelName( panelName_ ), textPropertyGroup(NULL)
 {
-   if ( loadTheme )
-      setup();
-      
-      // FIXME Hide button does not delete Panel
-   BringToFront();
-      
+      // FIXME Hide button does not delete Panel      
 }
 
 
-PG_Rect Panel::parseRect ( PropertyReadingContainer& pc, PG_Widget* parent )
+PG_Rect ASCGUI_Window::parseRect ( PropertyReadingContainer& pc, PG_Widget* parent )
 {
    int x,y,w,h,x2,y2;
    // pc.openBracket( "position" );
@@ -708,7 +748,7 @@ PG_Rect Panel::parseRect ( PropertyReadingContainer& pc, PG_Widget* parent )
 
    if ( y2 != 0 ) {
       if ( y2 < 0 )
-         x2 = parent->Height() + y2;
+         y2 = parent->Height() + y2;
 
       h = y2 - r.y;
    }
@@ -728,7 +768,7 @@ PG_Rect Panel::parseRect ( PropertyReadingContainer& pc, PG_Widget* parent )
 }
 
 
-void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams )
+void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams )
 {
    ASCString name;
    pc.addString( "name", name, "" );
@@ -927,6 +967,42 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
          parsePanelASCTXT( pc, sw, widgetParams );
          newWidget = sw;
       }
+      
+      if ( type == Button ) {
+         PG_Button* sw = new PG_Button( parent, r, style );
+
+         ASCString text;
+         pc.addString( "text", text );
+         
+         if ( !text.empty() )
+            sw->SetText( text );
+         
+         
+         if ( !hasStyle )
+            widgetParams.assign ( sw );
+            
+         parsePanelASCTXT( pc, sw, widgetParams );
+         newWidget = sw;
+      }
+
+      if ( type == RadioButton ) {
+         PG_RadioButton* sw = new PG_RadioButton( parent, r, style );
+
+         ASCString text;
+         pc.addString( "text", text );
+         
+         if ( !text.empty() )
+            sw->SetText( text );
+         
+         if ( !hasStyle )
+            widgetParams.assign ( sw );
+            
+         parsePanelASCTXT( pc, sw, widgetParams );
+         newWidget = sw;
+      }
+            
+      if ( newWidget && newWidget->GetName().empty() )
+         newWidget->SetName( childNames[i] );
 
       if ( newWidget && !toolTipHelp.empty() )
          new PG_ToolTipHelp( newWidget, toolTipHelp );
@@ -935,7 +1011,7 @@ void Panel::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, 
    }
 }
 
-void Panel::rename( const ASCString& widgetName, const ASCString& newname, PG_Widget* parent )
+void ASCGUI_Window::rename( const ASCString& widgetName, const ASCString& newname, PG_Widget* parent )
 {
    if ( !parent )
       parent = this;
@@ -945,7 +1021,7 @@ void Panel::rename( const ASCString& widgetName, const ASCString& newname, PG_Wi
       w->SetName( newname );
 }
 
-void Panel::setLabelText ( const ASCString& widgetName, const ASCString& text, PG_Widget* parent )
+void ASCGUI_Window::setLabelText ( const ASCString& widgetName, const ASCString& text, PG_Widget* parent )
 {
    if ( !parent )
       parent = this;
@@ -960,7 +1036,7 @@ void Panel::setLabelText ( const ASCString& widgetName, const ASCString& text, P
    }
 }
 
-void Panel::setLabelColor ( const ASCString& widgetName, PG_Color color, PG_Widget* parent )
+void ASCGUI_Window::setLabelColor ( const ASCString& widgetName, PG_Color color, PG_Widget* parent )
 {
    if ( !parent )
       parent = this;
@@ -976,18 +1052,18 @@ void Panel::setLabelColor ( const ASCString& widgetName, PG_Color color, PG_Widg
 }
 
 
-void Panel::setLabelText ( const ASCString& widgetName, int i, PG_Widget* parent )
+void ASCGUI_Window::setLabelText ( const ASCString& widgetName, int i, PG_Widget* parent )
 {
    ASCString s = ASCString::toString(i);
    setLabelText ( widgetName, s, parent );
 }
 
-void Panel::setImage ( const ASCString& widgetName, Surface& image, PG_Widget* parent )
+void ASCGUI_Window::setImage ( const ASCString& widgetName, Surface& image, PG_Widget* parent )
 {
    setImage( widgetName, image.getBaseSurface(), parent);
 }
 
-void Panel::setImage ( const ASCString& widgetName, SDL_Surface* image, PG_Widget* parent )
+void ASCGUI_Window::setImage ( const ASCString& widgetName, SDL_Surface* image, PG_Widget* parent )
 {
    if ( !parent )
       parent = this;
@@ -996,11 +1072,11 @@ void Panel::setImage ( const ASCString& widgetName, SDL_Surface* image, PG_Widge
    if ( i ) {
       i->SetImage( image, false );
       if ( image )
-		   i->SizeWidget( image->w, image->h);
+         i->SizeWidget( image->w, image->h);
    }
 }
 
-void Panel::setWidgetTransparency ( const ASCString& widgetName, int transparency, PG_Widget* parent  )
+void ASCGUI_Window::setWidgetTransparency ( const ASCString& widgetName, int transparency, PG_Widget* parent  )
 {
    if ( !parent )
       parent = this;
@@ -1011,7 +1087,7 @@ void Panel::setWidgetTransparency ( const ASCString& widgetName, int transparenc
 }
 
 
-void Panel::hide ( const ASCString& widgetName, PG_Widget* parent )
+void ASCGUI_Window::hide ( const ASCString& widgetName, PG_Widget* parent )
 {
    if ( !parent )
       parent = this;
@@ -1021,7 +1097,7 @@ void Panel::hide ( const ASCString& widgetName, PG_Widget* parent )
       i->Hide();
 }
 
-void Panel::show ( const ASCString& widgetName, PG_Widget* parent )
+void ASCGUI_Window::show ( const ASCString& widgetName, PG_Widget* parent )
 {
    if ( !parent )
       parent = this;
@@ -1033,7 +1109,7 @@ void Panel::show ( const ASCString& widgetName, PG_Widget* parent )
 
 
 
-void Panel::setBargraphValue( const ASCString& widgetName, float fraction )
+void ASCGUI_Window::setBargraphValue( const ASCString& widgetName, float fraction )
 {
    BarGraphWidget* bgw = dynamic_cast<BarGraphWidget*>( FindChild( widgetName, true ) );
    if ( bgw )
@@ -1041,7 +1117,7 @@ void Panel::setBargraphValue( const ASCString& widgetName, float fraction )
 }
 
 
-void Panel::setBarGraphColor( const ASCString& widgetName, PG_Color color )
+void ASCGUI_Window::setBarGraphColor( const ASCString& widgetName, PG_Color color )
 {
    BarGraphWidget* bgw = dynamic_cast<BarGraphWidget*>( FindChild( widgetName, true ) );
    if ( bgw )
@@ -1050,28 +1126,8 @@ void Panel::setBarGraphColor( const ASCString& widgetName, PG_Color color )
 
 
 
-Panel::WidgetParameters Panel::getDefaultWidgetParams()
-{
-    static WidgetParameters defaultWidgetParameters;
-    static ASCString panelBackgroundImage;
-    static bool defaultsLoaded = false;
-    if ( !defaultsLoaded ) {
-       tnfilestream s ( "default.ascgui", tnstream::reading );
 
-       TextFormatParser tfp ( &s );
-       auto_ptr<TextPropertyGroup> tpg ( tfp.run());
-
-       PropertyReadingContainer pc ( "panel", tpg.get() );
-
-       defaultWidgetParameters.runTextIO ( pc );
-       pc.addString("PanelBackgroundImage", panelBackgroundImage );
-       defaultsLoaded = true;
-    }
-    return defaultWidgetParameters;
-}
-
-
-bool Panel::setup()
+bool ASCGUI_Window::setup()
 {
    try {
       WidgetParameters widgetParameters = getDefaultWidgetParams();
@@ -1110,7 +1166,7 @@ bool Panel::setup()
          if ( y1 < 0 )
             y1 = GetParent()->Height() - Height() + y1;
 
-     	   MoveWidget( x1, y1, false );
+         MoveWidget( x1, y1, false );
       }
 
       int titlebarHeight;
@@ -1118,6 +1174,11 @@ bool Panel::setup()
       if ( titlebarHeight != -1 )
          SetTitlebarHeight( titlebarHeight );
 
+      ASCString title;
+      pc.addString("Title", title, "" );
+      if ( !title.empty() )
+         SetTitle( title );
+         
       widgetParameters.runTextIO( pc );
       widgetParameters.assign ( this );
 
@@ -1133,10 +1194,57 @@ bool Panel::setup()
 
 }
 
-Panel::~Panel()
+ASCGUI_Window::~ASCGUI_Window()
 {
    if ( textPropertyGroup )
       delete textPropertyGroup;
+}
+
+
+Panel :: Panel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme )
+       : ASCGUI_Window( parent, r, panelName_, "Panel", loadTheme )
+{
+   if ( loadTheme )
+      setup();
+      
+   BringToFront();
+}
+
+ASCGUI_Window::WidgetParameters Panel::getDefaultWidgetParams()
+{
+    static WidgetParameters defaultWidgetParameters;
+    static ASCString panelBackgroundImage;
+    static bool defaultsLoaded = false;
+    if ( !defaultsLoaded ) {
+       tnfilestream s ( "default.ascgui", tnstream::reading );
+
+       TextFormatParser tfp ( &s );
+       auto_ptr<TextPropertyGroup> tpg ( tfp.run());
+
+       PropertyReadingContainer pc ( "panel", tpg.get() );
+
+       defaultWidgetParameters.runTextIO ( pc );
+       pc.addString("PanelBackgroundImage", panelBackgroundImage );
+       defaultsLoaded = true;
+    }
+    return defaultWidgetParameters;
+}
+
+
+
+
+ConfigurableWindow :: ConfigurableWindow ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme )
+       : ASCGUI_Window( parent, r, panelName_, "Window", loadTheme )
+{
+   if ( loadTheme )
+      setup();
+      
+   BringToFront();
+}
+
+ASCGUI_Window::WidgetParameters ConfigurableWindow ::getDefaultWidgetParams()
+{
+   return  WidgetParameters();
 }
 
 

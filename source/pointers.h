@@ -30,8 +30,6 @@
  typedef class tresearch* presearch ;
  typedef char* pchar;
  typedef class tbasenetworkconnection* pbasenetworkconnection;
- typedef class tnetwork* pnetwork;
- typedef struct tquickview* pquickview;
  typedef class  tfield* pfield ;
  class Vehicletype;
  class PropertyContainer;

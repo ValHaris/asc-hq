@@ -99,7 +99,7 @@ class ASC_PG_Dialog : public PG_Window {
       PG_MessageObject* caller;
       bool closeWindow();
       void quitModalLoop(int value ); 
-      virtual bool eventKeyUp(const SDL_KeyboardEvent *key);
+      virtual bool eventKeyDown(const SDL_KeyboardEvent *key);
     public:
        ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCString& windowtext, WindowFlags flags=DEFAULT, const ASCString& style="Window", int heightTitlebar=25);
 };
@@ -117,7 +117,7 @@ class DropDownSelector: public PG_DropDown {
 
 class BarGraphWidget;
 
-class Panel : public  PG_Window {
+class ASCGUI_Window : public  PG_Window {
       ASCString panelName;
    protected:
       bool setup();
@@ -128,14 +128,26 @@ class Panel : public  PG_Window {
             WidgetParameters();
             ASCString backgroundImage;
             PG_Draw::BkMode backgroundMode;
+            
             PG_Label::TextAlign textAlign;
+            bool textAlign_defined;
+            
             int fontColor;
+            bool fontColor_defined;
+            
             ASCString fontName;
             ASCString style;
             int fontAlpha;
+            bool fontAlpha_defined;
+            
             int fontSize;
+            bool fontSize_defined;
+            
             int backgroundColor;
+            bool backgroundColor_defined;
+            
             int transparency;
+            bool transparency_defined;
             bool hidden;
 
             void assign( PG_Widget* widget );
@@ -145,7 +157,7 @@ class Panel : public  PG_Window {
             void runTextIO ( PropertyReadingContainer& pc );
       };
 
-      WidgetParameters getDefaultWidgetParams();
+      virtual WidgetParameters getDefaultWidgetParams() = 0;
 
       TextPropertyGroup* textPropertyGroup;
    public:
@@ -167,11 +179,28 @@ class Panel : public  PG_Window {
       static PG_Rect parseRect ( PropertyReadingContainer& pc, PG_Widget* parent );
       void parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams );
 
+      ASCGUI_Window ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, const ASCString& baseStyle = "Panel", bool loadTheme = true );
+      // FIXME Close button does not delete Panel
+      ~ASCGUI_Window();
+};
+
+
+class Panel : public ASCGUI_Window {
+   protected:
+      WidgetParameters getDefaultWidgetParams();
    public:
       Panel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme = true );
-      // FIXME Close button does not delete Panel
-      ~Panel();
 };
+
+
+class ConfigurableWindow : public ASCGUI_Window {
+   protected:
+      WidgetParameters getDefaultWidgetParams();
+   public:
+      ConfigurableWindow ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme = true );
+};
+
+
 
 class SpecialDisplayWidget : public PG_Widget {
    public:

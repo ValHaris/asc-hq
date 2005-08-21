@@ -120,6 +120,20 @@ void SmallGuiButton::press()
    Update();
 }   
 
+void SmallGuiButton::eventMouseEnter()
+{
+   PG_Button::eventMouseEnter();
+   if ( referenceButton && referenceButton->func )
+      MessagingHub::Instance().statusInformation( referenceButton->func->getName(referenceButton->pos, referenceButton->id));
+}
+
+void SmallGuiButton::eventMouseLeave()
+{
+   PG_Button::eventMouseLeave();
+   MessagingHub::Instance().statusInformation("");
+}
+
+
 SmallGuiButton::~SmallGuiButton()
 {
    if ( smallIcon )

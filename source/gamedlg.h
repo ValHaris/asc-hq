@@ -104,16 +104,6 @@ class  tchoosenewsinglelevel : public tchoosenewmap {
 
 
 extern void  choosetechnology(void);
-
-extern int   setupnetwork ( tnetwork* nw, int edt = 7, int player = -1 );
-/* edt ist bitmappt:
-      bit 0 :  receive einstellbar
-          1 :  send einstellbar
-          2 :  computer wechselbar
-                  falls 0 dann:
-           3:  prinzipiell computer 0 verwenden
-*/
-
 extern void  settributepayments ( void );
 
 

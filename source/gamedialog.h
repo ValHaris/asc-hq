@@ -23,9 +23,9 @@ public:
 
     ~GameDialog();
     
-    static bool gameDialog(const SDL_KeyboardEvent *key);    
+    static bool gameDialog();    
 protected:
-  bool handleEventKeyUp (const SDL_KeyboardEvent *key);
+  bool handleEventKeyDown (const SDL_KeyboardEvent *key);
 private:
   static const int xSize;
   static const int ySize;
@@ -337,6 +337,31 @@ class SoundSettings : public ASC_PG_Dialog
       
 
 };
+
+
+class StartMultiplayerGame: public ConfigurableWindow {
+   public:    
+      static void startMultiplayerGame(PG_MessageObject* c);  
+   private:
+   
+      int page;
+      enum { PBP, Hotseat, PBEM } mode;
+      ASCString filename;
+   
+      StartMultiplayerGame(PG_MessageObject* c);
+   
+      bool nextPage(PG_Button* button);
+      void showPage();
+      
+      void fileNameSelected( const ASCString& filename )
+      {
+         this->filename = filename;
+      };   
+      
+   protected:   
+      void userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams ); 
+};
+
 
 #endif
 

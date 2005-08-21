@@ -94,8 +94,7 @@ class  tspfldloaders {
            void            writedissections ( void );
            void            readdissections ( void );
 
-           void            writenetwork ( void );
-           void            readnetwork  ( void );
+           void            readLegacyNetwork  ( void );
 
            virtual void    initmap ( void ) = 0;
 
@@ -137,7 +136,7 @@ class  tgameloaders : public tspfldloaders {
 
 class tnetworkloaders : public tgameloaders {
         public:
-           int             loadnwgame ( pnstream strm );
+           tmap*           loadnwgame ( pnstream strm );
            int             savenwgame ( pnstream strm );
 };
 

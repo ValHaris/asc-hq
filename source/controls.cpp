@@ -782,9 +782,6 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
                             bool*  inhibitAttack,
                             bool container2container )
 {
-
-   static const  int         movemalus[6]  = { 8, 6, 3, 0, 3, 6 };
-
    int direc = getdirection ( start.x, start.y, dest.x, dest.y );
 
 
@@ -854,6 +851,8 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
       }
 
 /*
+   static const  int         movemalus[6]  = { 8, 6, 3, 0, 3, 6 };
+   
    if ( checkHemming )
       for (int c = 0; c < sidenum; c++) {
          int x = dest.x;
@@ -1066,7 +1065,7 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
          // bool askForPassword = false;
 
          if ( (!actmap->player[actmap->actplayer].passwordcrc.empty() && actmap->player[actmap->actplayer].passwordcrc != CGameOptions::Instance()->getDefaultPassword() )
-            || firstRound || (actmap->network && actmap->network->globalparams.reaskpasswords) ) {
+            || firstRound  ) {
                if ( forcepasswordchecking < 0 ) {
                   delete actmap;
                   actmap = NULL;
@@ -1158,7 +1157,7 @@ void sendnetworkgametonextplayer ( int oldplayer, int newplayer )
             num++;
           }
    }  endfor */
-
+#if 0
 
    tnetworkcomputer* compi = &actmap->network->computer[ actmap->network->player[ oldplayer ].compposition ];
    while ( compi->send.transfermethod == NULL  ||  compi->send.transfermethodid == 0 )
@@ -1186,7 +1185,7 @@ void sendnetworkgametonextplayer ( int oldplayer, int newplayer )
 
 
    throw NoMapLoaded ();
-
+#endif
 }
 
 
@@ -1275,9 +1274,10 @@ void nextPlayer( void )
    int newplayer = actmap->actplayer;
    actmap->playerView = actmap->actplayer;
 
-   if ( oldplayer >= 0 && actmap->network &&  oldplayer != actmap->actplayer && actmap->network->player[ newplayer ].compposition != actmap->network->player[ oldplayer ].compposition )
+/*   if ( oldplayer >= 0 && actmap->network &&  oldplayer != actmap->actplayer && actmap->network->player[ newplayer ].compposition != actmap->network->player[ oldplayer ].compposition )
       sendnetworkgametonextplayer ( oldplayer, newplayer );
    else {
+   */
 /*
       tlockdispspfld ldsf;
 
@@ -1289,7 +1289,7 @@ void nextPlayer( void )
 
       newturnforplayer( forcepwd );
 */
-   }
+//   }
 }
 
 
@@ -1378,7 +1378,7 @@ void continuenetworkgame ( void )
 #endif
 
    tlockdispspfld ldsf;
-
+#if 0
    tnetwork network;
 /*
    int stat;
@@ -1463,6 +1463,7 @@ void continuenetworkgame ( void )
 
 
    initNetworkGame( );
+   #endif
 }
 
 

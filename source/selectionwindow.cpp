@@ -20,6 +20,7 @@
 
 #include "selectionwindow.h"
 
+#include "sigc++/retype_return.h"
 
 bool SelectionWidget::eventMouseButtonUp (const SDL_MouseButtonEvent *button) 
 {
@@ -50,7 +51,7 @@ void SelectionWidget::eventBlit ( SDL_Surface * surface, const PG_Rect & src, co
 
 
 
-bool ItemSelectorWindow::moveSelection( int amount ) 
+bool ItemSelectorWidget::moveSelection( int amount ) 
 {
    WidgetList::iterator i;
    if ( !selectedItem ) {
@@ -75,6 +76,7 @@ bool ItemSelectorWindow::moveSelection( int amount )
    
    if ( *i != selectedItem ) {
       selectedItem = *i;
+      resetNamesearch();
       scrollWidget->ScrollToWidget( *i );
       Update();
       return true;
@@ -82,7 +84,7 @@ bool ItemSelectorWindow::moveSelection( int amount )
    return false;
 }
 
-bool ItemSelectorWindow::eventKeyDown(const SDL_KeyboardEvent* key) 
+bool ItemSelectorWidget::eventKeyDown(const SDL_KeyboardEvent* key) 
 {
    if ( key->keysym.sym == SDLK_BACKSPACE ) {
       ASCString s = nameSearch->GetText();
@@ -128,25 +130,26 @@ bool ItemSelectorWindow::eventKeyDown(const SDL_KeyboardEvent* key)
    return false;
 };
 
-void ItemSelectorWindow::itemSelected( const SelectionWidget* w )
+void ItemSelectorWidget::itemSelected( const SelectionWidget* w )
 {
+   Update();
    factory->itemSelected( w );
-   Hide();
-   QuitModal();
+   sigItemSelected( w );
 }
 
-void ItemSelectorWindow::markItem( const SelectionWidget* w )
+void ItemSelectorWidget::markItem( const SelectionWidget* w )
 {
    selectedItem = w;  
+   factory->itemMarked( w );
 }
 
 
-bool ItemSelectorWindow::isItemMarked( const SelectionWidget* w )
+bool ItemSelectorWidget::isItemMarked( const SelectionWidget* w )
 {
    return w == selectedItem;
 }
       
-bool ItemSelectorWindow::locateObject( const ASCString& name ) 
+bool ItemSelectorWidget::locateObject( const ASCString& name ) 
 {
    for ( WidgetList::iterator i = widgets.begin(); i != widgets.end(); ++i ) {
       if ( nameMatch( *i, name )  ) {
@@ -159,7 +162,7 @@ bool ItemSelectorWindow::locateObject( const ASCString& name )
    return false;
 }
 
-bool ItemSelectorWindow::nameMatch( const SelectionWidget* selection, const ASCString& name )
+bool ItemSelectorWidget::nameMatch( const SelectionWidget* selection, const ASCString& name )
 {
    ASCString a = name;
    a.toLower();
@@ -171,22 +174,19 @@ bool ItemSelectorWindow::nameMatch( const SelectionWidget* selection, const ASCS
 };   
 
 
-ItemSelectorWindow::ItemSelectorWindow( PG_Widget *parent, const PG_Rect &r , SelectionItemFactory* itemFactory ) 
-   : PG_Window( parent,r,"Item Selector"), rowCount(0), scrollWidget( NULL), nameSearch(NULL), selectedItem(NULL), factory( itemFactory ), columnCount(-1), selectionCallBack( this, &ItemSelectorWindow::isItemMarked ) {
+ItemSelectorWidget::ItemSelectorWidget( PG_Widget *parent, const PG_Rect &r , SelectionItemFactory* itemFactory ) 
+   : PG_Widget( parent,r ), rowCount(0), scrollWidget( NULL), nameSearch(NULL), selectedItem(NULL), factory( itemFactory ), columnCount(-1), selectionCallBack( this, &ItemSelectorWidget::isItemMarked ) {
+   SetTransparency(255);
    reLoad();
    nameSearch = new PG_Label ( this, PG_Rect( 5, Height() - 25, Width() - 10, 20 ));
 };
 
-int ItemSelectorWindow::RunModal()
-{
-   nameSearch->SetText( "" );
-   return PG_Window::RunModal();
-}
 
-void ItemSelectorWindow::reLoad() 
+void ItemSelectorWidget::reLoad() 
 {
    delete scrollWidget;
-   scrollWidget = new PG_ScrollWidget( this , PG_Rect( 0, GetTitlebarHeight () + 2, Width(), Height()- GetTitlebarHeight ()- 30 ));
+   scrollWidget = new PG_ScrollWidget( this , PG_Rect( 0, 0, Width(), Height() - 30 ));
+   scrollWidget->SetTransparency(255);
    widgets.clear();
 
    int x = 0;
@@ -199,8 +199,8 @@ void ItemSelectorWindow::reLoad()
       if ( columnCount < 0 )
          columnCount = scrollWidget->Width() / (w->Width() + gapWidth);
 
-      w->itemSelected.connect( SigC::slot( *this, &ItemSelectorWindow::itemSelected ));
-      w->itemMarked.connect( SigC::slot( *this, &ItemSelectorWindow::markItem ));
+      w->itemSelected.connect( SigC::slot( *this, &ItemSelectorWidget::itemSelected ));
+      w->itemMarked.connect( SigC::slot( *this, &ItemSelectorWidget::markItem ));
       w->setSelectionCallback( &selectionCallBack );
       widgets.push_back ( w );
       
@@ -212,3 +212,35 @@ void ItemSelectorWindow::reLoad()
    }   
 }
 
+
+void ItemSelectorWidget::resetNamesearch()
+{
+   nameSearch->SetText( "" );
+}
+
+
+ItemSelectorWindow::ItemSelectorWindow( PG_Widget *parent, const PG_Rect &r , SelectionItemFactory* itemFactory ) 
+   : PG_Window( parent,r,"Item Selector") {
+   
+   itemSelector = new ItemSelectorWidget( this, PG_Rect( 0, GetTitlebarHeight () + 2, Width(), Height()- GetTitlebarHeight ()- 5 ), itemFactory );
+   
+   itemSelector->sigItemSelected.connect(  SigC::slot( *this, &ItemSelectorWindow::itemSelected ));
+};
+
+void ItemSelectorWindow::itemSelected( const SelectionWidget* )
+{
+   Hide();
+   QuitModal();
+}
+
+
+int ItemSelectorWindow::RunModal()
+{
+   itemSelector ->resetNamesearch();
+   return PG_Window::RunModal();
+}
+
+void ItemSelectorWindow::reLoad()
+{
+   itemSelector->reLoad();
+}

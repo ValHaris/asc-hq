@@ -313,6 +313,7 @@ void         choosetechnology(void)
 
 
 
+#if 0
 
 class tchoosetransfermethod : public tdialogbox {
             protected:
@@ -814,6 +815,8 @@ int  setupnetwork ( tnetwork* nw, int edt, int player )
    return 1;
 
 }
+
+#endif
 
 /*********************************************************************************************************/
 /*   Neuen Level starten                                                                                 */

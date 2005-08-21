@@ -112,12 +112,12 @@ tvirtualscreenbuf :: tvirtualscreenbuf ( void )
 void tvirtualscreenbuf:: init ( void )
 {
    size = hgmp->bytesperscanline * hgmp->resolutiony;
-   buf = new char[ size ];
+   buf = asc_malloc( size );
 }
 
 tvirtualscreenbuf:: ~tvirtualscreenbuf ()
 {
-   delete[] buf;
+   asc_free( buf );
    buf = NULL;
 }
 

@@ -159,6 +159,7 @@ class ResourceMatrix {
 
 
 
+
 //! the time in ASC, measured in turns and moves
 struct GameTime {
   GameTime() { abstime = 0; };

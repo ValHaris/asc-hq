@@ -67,7 +67,7 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	password_dialog.$(OBJEXT) replay.$(OBJEXT) research.$(OBJEXT) \
 	mapdisplay.$(OBJEXT) resourcenet.$(OBJEXT) dashboard.$(OBJEXT) \
 	ascstring.$(OBJEXT) graphicset.$(OBJEXT) vehicle.$(OBJEXT) \
-	buildings.$(OBJEXT) networkdata.$(OBJEXT) \
+	buildings.$(OBJEXT) networkinterface.$(OBJEXT) \
 	textfileparser.$(OBJEXT) terraintype.$(OBJEXT) \
 	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
 	itemrepository.$(OBJEXT) stringtokenizer.$(OBJEXT) \
@@ -85,7 +85,7 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	mapfield.$(OBJEXT) overviewmappanel.$(OBJEXT) \
 	weathercast.$(OBJEXT) unitinfodialog.$(OBJEXT) \
 	messaginghub.$(OBJEXT) explosivemines.$(OBJEXT) \
-	selectionwindow.$(OBJEXT)
+	selectionwindow.$(OBJEXT) legacynetworkloaders.$(OBJEXT)
 asc_OBJECTS = $(am_asc_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_DEPENDENCIES =  \
@@ -246,14 +246,15 @@ gameoptions.cpp astar2.cpp vehicletype.cpp objects.cpp \
 buildingtype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp \
 gamemap.cpp password.cpp password_dialog.cpp replay.cpp research.cpp \
 mapdisplay.cpp resourcenet.cpp dashboard.cpp ascstring.cpp graphicset.cpp \
-vehicle.cpp buildings.cpp networkdata.cpp textfileparser.cpp terraintype.cpp \
+vehicle.cpp buildings.cpp networkinterface.cpp textfileparser.cpp terraintype.cpp \
 objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp music.cpp \
 messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp messagedlg.cpp \
 simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp weatherarea.cpp \
 guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp gamedialog.cpp \
 infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappanel.cpp \
-weathercast.cpp unitinfodialog.cpp messaginghub.cpp explosivemines.cpp selectionwindow.cpp
+weathercast.cpp unitinfodialog.cpp messaginghub.cpp explosivemines.cpp selectionwindow.cpp \
+legacynetworkloaders.cpp
 
 asc_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
@@ -365,6 +366,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iconrepository.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/infopopup.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/itemrepository.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/legacynetworkloaders.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadbi3.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loaders.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadpcxc.Po@am__quote@
@@ -378,7 +380,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/music.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/network.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/networkdata.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/networkinterface.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/newfont.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/objects.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/objecttype.Po@am__quote@

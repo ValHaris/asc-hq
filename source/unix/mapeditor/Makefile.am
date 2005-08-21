@@ -21,7 +21,7 @@ attack.cpp gameoptions.cpp maped-mainscreen.cpp \
 buildingtype.cpp vehicletype.cpp containerbase.cpp \
 mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp \
 password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
-vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \
+vehicle.cpp buildings.cpp networkinterface.cpp resourcenet.cpp textfileparser.cpp \
 terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
 textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
@@ -29,7 +29,7 @@ mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
 geometry.cpp weatherarea.cpp guidimension.cpp weatherdialog.cpp \
 iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
-unitinfodialog.cpp messaginghub.cpp explosivemines.cpp selectionwindow.cpp
+unitinfodialog.cpp messaginghub.cpp explosivemines.cpp selectionwindow.cpp legacynetworkloaders.cpp
 
 asc_mapedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \

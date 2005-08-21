@@ -38,6 +38,7 @@
  #include "weatherarea.h"
  #include "objects.h"
  #include "mapfield.h"
+ #include "networkinterface.h"
  
  class RandomGenerator{
    public:
@@ -213,6 +214,8 @@ class tmap {
             friend class tmap;
             int player;
          public:
+            Player();
+            
             //! does the player exist at all
             bool         exist();
 
@@ -292,6 +295,8 @@ class tmap {
 
             MapCoordinate cursorPos;
 
+            GameTransferMechanism* network;
+            
             DI_Color getColor();
             
       } player[9];
@@ -316,8 +321,6 @@ class tmap {
 
       int          unitnetworkid;
       char         levelfinished;
-      pnetwork     network;
-      // int          alliance_names_not_used_any_more[8];
 
       //! only to be used by units and buildings. To speed up map destruction, the view won't be recalculated. No signals will be send when units & buildings are destroyed, either 
       bool __mapDestruction;
@@ -360,7 +363,7 @@ class tmap {
       int           messageid;
 
       //! temporary variables for loading the map
-      bool ___loadJournal, ___loadNewJournal, ___loadtitle;
+      bool ___loadJournal, ___loadNewJournal, ___loadtitle, ___loadLegacyNetwork;
 
       void allocateFields ( int x, int y );
 

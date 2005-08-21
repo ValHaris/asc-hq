@@ -527,9 +527,6 @@ void loadGame()
       if ( !actmap || actmap->xsize == 0 || actmap->ysize == 0 )
          throw  NoMapLoaded();
 
-      if ( actmap->network )
-         setallnetworkpointers ( actmap->network );
-
       computeview( actmap );
       displaymap();
       updateFieldInfo();
@@ -612,8 +609,6 @@ void loadStartupMap ( const char *gameToLoad=NULL )
                tnfilestream gamefile ( gameToLoad, tnstream::reading );
                tnetworkloaders nwl;
                nwl.loadnwgame( &gamefile );
-               if ( actmap->network )
-                  setallnetworkpointers ( actmap->network );
             } catch ( tfileerror ) {
                fatalError ( "%s is not a legal email game.", gameToLoad );
             }
@@ -635,8 +630,6 @@ void loadStartupMap ( const char *gameToLoad=NULL )
             try {
                loadmap( gameToLoad );
                computeview( actmap );
-               if ( actmap->network )
-                  setallnetworkpointers ( actmap->network );
                actmap->startGame();
 
             } catch ( tfileerror ) {
@@ -984,11 +977,14 @@ void execuseraction ( tuseractions action )
          break;
 
       case ua_mainmenu:
+         /*
          if (choice_dlg("do you really want to close the current game ?","~y~es","~n~o") == 1) {
             delete actmap;
             actmap = NULL;
             throw NoMapLoaded();
          }
+         */
+         GameDialog::gameDialog();
          break;
 /*
       case ua_mntnc_morefog:
@@ -1238,10 +1234,13 @@ void execuseraction ( tuseractions action )
          }
          break;
       case ua_setupnetwork:
+      /*
          if ( actmap->network )
             setupnetwork ( actmap->network );
          else
             displaymessage("This map is not played across a network",3 );
+            */
+            displaymessage("Not implemented yet",3 );
          break;
       case ua_selectgraphicset:
          selectgraphicset();
@@ -1407,7 +1406,9 @@ void execuseraction2 ( tuseractions action )
       case ua_vehicleinfo: unitInfoDialog();
          break;
       case ua_weathercast: weathercast();
-      break;
+         break;
+      case ua_newmultiplayergame: StartMultiplayerGame::startMultiplayerGame(NULL);
+         break;
       default:
          break;
    }
@@ -1552,54 +1553,6 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 //! A Paragui widget that fills the whole screen and redraws it whenever Paragui wants to it.
 
 
-void runmainmenu ( void )
-{
-/*
-   MainMenuPullDown pd;
-   pd.init();
-   backgroundpict.paint();
-   pd.baron();
-   // loadFullscreenImage ( "title.jpg" );
-
-   do {
-      tkey ch = ct_invvalue;
-      if (keypress()) {
-         ch = r_key();
-
-         switch (ch) {
-            case ct_f3:
-               execuseraction ( ua_continuenetworkgame );
-               break;
-            case 'R':
-               execuseraction ( ua_repainthard );
-               break;
-            case ct_stp + ct_l:
-               execuseraction ( ua_loadgame );
-               break;
-            case ct_stp + ct_n:
-               execuseraction ( ua_startnewsinglelevel );
-               break;
-            case ct_x + ct_stp:
-               execuseraction ( ua_exitgame );
-               break;
-         };
-      }
-
-      pd.key = ch;
-      pd.checkpulldown();
-
-      if (pd.action2execute >= 0 ) {
-         tuseractions ua = (tuseractions) pd.action2execute;
-         pd.action2execute = -1;
-         execuseraction ( ua );
-         pd.redraw();
-      }
-
-      releasetimeslice();
-   } while ( !actmap  ); 
-*/
-}
-
 
 
 struct GameThreadParams
@@ -1657,7 +1610,7 @@ int gamethread ( void* data )
       try {
          if ( !actmap || actmap->xsize <= 0 || actmap->ysize <= 0 ) {
             displayLogMessage ( 8, "gamethread :: starting main menu.\n" );
-            runmainmenu();
+            GameDialog::gameDialog();
          } else {
             if ( actmap->actplayer == -1 ) {
                displayLogMessage ( 8, "gamethread :: performing next_turn..." );

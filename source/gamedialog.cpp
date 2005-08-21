@@ -14,6 +14,7 @@
 #include "guidimension.h"
 #include "sdl/sound.h"
 #include "misc.h"
+#include "selectionwindow.h"
 //#include "basestrm.h"
 
 const int GameDialog::xSize = 450;
@@ -58,7 +59,7 @@ GameDialog::GameDialog():  ASC_PG_Dialog(NULL, PG_Rect( 200, 100, xSize, ySize )
 
 GameDialog::~GameDialog() {
 }
-bool GameDialog::handleEventKeyUp (const SDL_KeyboardEvent *key) {    
+bool GameDialog::handleEventKeyDown (const SDL_KeyboardEvent *key) {    
    if(key->keysym.sym == SDLK_ESCAPE) {
         closeWindow();
     }
@@ -116,7 +117,7 @@ bool GameDialog::multiGame(PG_Button* button) {
 }
 
 
-bool GameDialog::gameDialog(const SDL_KeyboardEvent *key) {
+bool GameDialog::gameDialog() {
     if(GameDialog::instance == 0) {
         GameDialog* gd = new GameDialog();
         instance = gd;
@@ -771,13 +772,18 @@ bool LoadGameDialog::ok(PG_Button* button) {
     quitModalLoop(1);
     return true;
 }
-
+/*
 void LoadGameDialog::loadGameDialog(PG_MessageObject* caller) {
+
+    ItemSelectorWindow isw ( NULL, PG_Rect( 10,10,500,500) , new  ) ;
+    
+    File
+
     LoadGameDialog lgd(caller);
     lgd.Show();
     lgd.RunModal();
 }
-
+*/
 //*************************************************************************************************************************
 
 SoundSettings::SoundSettings(PG_Widget* parent, const PG_Rect& r, PG_MessageObject* c ) :
@@ -882,4 +888,208 @@ void SoundSettings::soundSettings(PG_MessageObject* caller)
    // printf("c3c %d \n", ticker );
    wnd1.RunModal();
    // printf("c4c %d \n", ticker );
+}
+
+
+//*******************************************************************************************************************+
+
+
+StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWindow( NULL, PG_Rect::null, "newmultiplayergame", false ), page(1), mode ( PBEM )
+{
+    setup();
+    sigClose.connect( SigC::slot( *this, &StartMultiplayerGame::QuitModal ));
+    
+    PG_RadioButton* b3 = dynamic_cast<PG_RadioButton*>(FindChild("PBP", true ));
+    PG_RadioButton* b2 = dynamic_cast<PG_RadioButton*>(FindChild("PBEM", true ));
+    PG_RadioButton* b1 = dynamic_cast<PG_RadioButton*>(FindChild("Hotseat", true ));
+    if ( b1 ) {
+      if ( b2 ) 
+         b1->AddToGroup( b2 );
+      if ( b3 ) 
+         b1->AddToGroup( b3 );
+         
+      b1->SetPressed();
+    }
+
+    PG_Button* next = dynamic_cast<PG_Button*>(FindChild("next", true ));
+    if ( next )
+      next->sigClick.connect( SigC::slot( *this, &StartMultiplayerGame::nextPage ));
+      
+    showPage();
+        
+}
+
+bool StartMultiplayerGame::nextPage(PG_Button* button)
+{
+   int oldpage = page;
+   switch ( page )  {
+      case 1: ++page;
+              break;
+   }
+   
+   showPage();
+   return true;
+}
+
+void StartMultiplayerGame::showPage()
+{
+   for ( int i = 0; i < 10; ++i ) {
+      ASCString name = "Page" + ASCString::toString(i);
+      if ( page == i )
+         show( name );
+      else   
+         hide( name );
+   }
+}
+
+
+void StartMultiplayerGame::startMultiplayerGame(PG_MessageObject* c)
+{
+    StartMultiplayerGame smg(c);
+    smg.Show();
+    smg.RunModal();
+}
+
+
+
+
+
+class FileInfo {
+   public:  
+      ASCString name;
+      ASCString location;
+      time_t modificationTime;
+      FileInfo( const ASCString& filename, const ASCString& filelocation, time_t time  ) : name( filename), location( filelocation ), modificationTime( time )
+      {
+      }
+      FileInfo( const FileInfo& fi ) : name( fi.name ), location( fi.location ), modificationTime( fi.modificationTime )
+      {
+      }
+};      
+   
+
+
+class FileWidget: public SelectionWidget  {
+      FileInfo fileInfo;
+      ASCString time;
+   public:
+      FileWidget( PG_Widget* parent, const PG_Point& pos, int width, const FileInfo* fi ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, 20 )), fileInfo( *fi )
+      {
+         char c[100];
+         ctime_r( &fileInfo.modificationTime, c );
+         time  = c;
+         
+         int col1 =        width * 3 / 9;
+         int col2 = col1 + width * 2 / 9;
+        
+         PG_Label* lbl1 = new PG_Label( this, PG_Rect( 0, 0, col1 - 10, Height() ), fileInfo.name );
+         lbl1->SetFontSize( lbl1->GetFontSize() -2 );
+         
+         PG_Label* lbl2 = new PG_Label( this, PG_Rect( col1, 0, col2-col1-10, Height() ), time );
+         lbl2->SetFontSize( lbl2->GetFontSize() -2 );
+         
+         PG_Label* lbl3 = new PG_Label( this, PG_Rect( col2, 0, Width() - col2, Height() ), fileInfo.location );
+         lbl3->SetFontSize( lbl3->GetFontSize() -2 );
+         
+         SetTransparency( 255 );
+      };
+      
+      ASCString getName() const { return fileInfo.name; };
+                 
+   protected:
+      
+      void display( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst ) 
+      {
+      
+      };
+};
+
+
+
+class FileSelectionItemFactory: public SelectionItemFactory  {
+   protected:
+      typedef deallocating_vector<FileInfo*> Items;
+      Items::iterator it;
+
+   private:      
+      Items items;
+      
+   public:
+      FileSelectionItemFactory( const ASCString& wildcard )  {
+      
+         tfindfile ff ( wildcard );
+         
+         tfindfile::FileInfo fi;
+         while ( ff.getnextname( fi) ) {
+            FileInfo* fi2 = new FileInfo( fi.name, fi.location, fi.date );
+            items.push_back ( fi2 );
+         }
+
+         sort( items.begin(), items.end(), comp );
+         restart();   
+      };
+      
+      static bool comp ( const FileInfo* i1, const FileInfo* i2 )
+      {
+         return  i1->modificationTime < i2->modificationTime || ( (i1->modificationTime == i2->modificationTime) &&  (i1->name < i2->name) );
+         // return  i1->name < i2->name;
+      };
+
+      void restart()
+      {
+         it = items.begin();
+      };
+      
+      SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos )
+      {
+         if ( it != items.end() )
+            return new FileWidget( parent, pos, parent->Width() - 15, *(it++) );
+         else
+            return NULL;
+      };
+      
+      SigC::Signal1<void,const ASCString& > filenameSelected;
+      SigC::Signal1<void,const ASCString& > filenameMarked;
+      
+      void itemMarked( const SelectionWidget* widget )
+      {
+         if ( !widget )
+            return;
+            
+         const FileWidget* fw = dynamic_cast<const FileWidget*>(widget);
+         assert( fw );
+         filenameMarked( fw->getName() );
+      }
+      
+      void itemSelected( const SelectionWidget* widget )
+      {
+         if ( !widget )
+            return;
+            
+         const FileWidget* fw = dynamic_cast<const FileWidget*>(widget);
+         assert( fw );
+         filenameSelected( fw->getName() );
+      }
+      
+};
+
+
+void StartMultiplayerGame::userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams )
+{
+   if ( label == "FileList" ) {
+      FileSelectionItemFactory* factory = new FileSelectionItemFactory( mapextension );
+      factory->filenameSelected.connect ( SigC::slot( *this, &StartMultiplayerGame::fileNameSelected ));
+      factory->filenameMarked.connect   ( SigC::slot( *this, &StartMultiplayerGame::fileNameSelected ));
+      new ItemSelectorWidget( parent, PG_Rect(0, 0, parent->Width(), parent->Height()), factory );
+   }
+}
+
+
+
+void LoadGameDialog::loadGameDialog(PG_MessageObject* caller) {
+
+    ItemSelectorWindow isw ( NULL, PG_Rect( 10,10,500,500) , new  FileSelectionItemFactory( "*.foo" )) ;
+    
+    isw.Show();
+    isw.RunModal();
 }

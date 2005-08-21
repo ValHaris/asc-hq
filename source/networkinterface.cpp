@@ -20,29 +20,21 @@
 
 
 
-#ifndef network_h
-#define network_h
-
 #include "networkinterface.h"
 
+GameTransferMechanism* GameTransferMechanism :: read ( tnstream& stream )
+{
+   stream.readInt();
+   ASCString id = stream.readString();
+   GameTransferMechanism* m = networkTransferMechanismFactory::Instance().createObject( id );
+   m->readChildData( stream );
+   return m;
+}
 
-class FileTransfer : public GameTransferMechanism {
-      ASCString filename;
-   protected:   
-      void readChildData ( tnstream& stream );
-      void writeChildData ( tnstream& stream ) const;
-      bool enterfilename();
-      ASCString constructFileName( tmap* actmap ) const;
-   public:
-      void setup();
-      void setup( const ASCString& filename );
-      
-      void send( const tmap* map );
-      tmap* receive();
-      ASCString getMechanismID() const { return mechanismID(); };
-      static ASCString mechanismID() { return "FileTransfer"; };
-};
+void GameTransferMechanism :: write ( tnstream& stream ) const
+{
+   stream.writeInt( 1 ); // version
+   stream.writeString( getMechanismID() );
+   writeChildData( stream );
+}
 
-extern void networksupervisor ( void );
-
-#endif

@@ -49,7 +49,6 @@
 #include "password_dialog.h"
 #include "itemrepository.h"
 #include "mapdisplay.h"
-#include "networkdata.h"
 #include "graphicset.h"
 #include "viewcalculation.h"
 
@@ -1579,7 +1578,7 @@ void         tsetalliances::init( int supervis )
    addbutton("~p~layer names",400,80,xsize - 20,105,0,1,3,true); 
    #ifndef karteneditor
    addbutton("~a~i names",400,115,xsize - 20,140,0,1,4,true);
-   addbutton("~n~etwork",400,160,xsize - 20,190,0,1,5, actmap->network != NULL ); 
+//   addbutton("~n~etwork",400,160,xsize - 20,190,0,1,5, actmap->network != NULL ); 
    #endif
 
    int lastcomppos = 0;
@@ -1591,12 +1590,13 @@ void         tsetalliances::init( int supervis )
       if ( actmap->player[i].exist() )  // ((playermode[i] == ps_human) || (playermode[i] == ps_computer)) &&
          playerpos[plnum++] = i;
 
+/*         
       if ( actmap->player[i].exist() && actmap->network ) {
          location[i] = actmap->network->player[i].compposition;
          lastcomppos = location[i];
       } else
          location[i] = lastcomppos;
-
+*/
       if (actmap->player[i].exist() )
          lastplayer = i;
 
@@ -1805,24 +1805,6 @@ void          tsetalliances::checkfornetwork ( void )
   for ( i = 1; i < 256; i<<=1 ) 
      if ( cmp & i )
         num++;
-
-  if ( num >= 2 ) {
-     if ( actmap->network == NULL ) {
-        actmap->network = new ( tnetwork );
-        // memset ( actmap->network, 0, sizeof ( *actmap->network ));
-        enablebutton ( 5 );
-     }
-  } else {
-     if ( actmap->network ) {
-        for (i = 0; i < 8; i++) 
-           if ( actmap->network->computer[i].name )
-              delete[]  actmap->network->computer[i].name ;
-
-        delete  actmap->network ;
-        actmap->network = NULL;
-        disablebutton( 5 );
-     }
-  }
 }
 #endif
 
@@ -1830,38 +1812,13 @@ void         tsetalliances::setparams ( void )
 {
   int i, j;
 
-  if ( actmap->network ) {
-     for ( int i = 0; i < 8; i++ )
-         actmap->network->computer[i].existent = 0;
-  }
   for (i = 0; i < 8; i++) {
 
       for (j = 0; j < 8; j++)
          actmap->alliances[i][j] = alliancedata[i][j];
 
-      if ( actmap->player[i].exist() ) {
-         if ( actmap->network )
-            actmap->network->computer[ location[i] ].existent = 1;
-      }
-
-      if ( actmap->network ) {
-         if ( actmap->network->computer[i].name )
-            delete[]  actmap->network->computer[i].name ;
-
-         string s = "computer ";
-         s += strrr( i );
-         actmap->network->computer[i].name = strdup ( s.c_str() );
-         actmap->network->player[i].compposition = location[i];
-      }
-
    } /* endfor */
 
-  if ( actmap->network ) {
-      actmap->network->computernum = 0;
-      for ( i = 0; i < 8; i++ )
-         if ( actmap->network->computer[i].existent )
-            actmap->network->computernum++;
-  }
   for ( i = 0; i < 8; i++ )
      for (j = 0; j < 8; j++ ) {
         if ( actmap->alliances[i][j] == canewsetwar1 ) {
@@ -2089,7 +2046,7 @@ void         tsetalliances::buttonpressed( int id )
 */
       #ifndef karteneditor
       case 5: setparams();
-              setupnetwork ( actmap->network );
+              // setupnetwork ( actmap->network );
               break;
 
       case 6: {

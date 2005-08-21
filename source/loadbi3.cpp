@@ -1438,7 +1438,7 @@ void tloadBImap :: LoadTXTFile ( char* filename )
    fread ( buf, 1, 4, fp );
    if ( strncmp ( buf, "TPWM",4) == 0  ) {
       // The file is compressed.
-      unsigned long tpwmsize=txtsize; // store the size of the compressed file.
+//      unsigned long tpwmsize=txtsize; // store the size of the compressed file.
       fread(&txtsize, 4, 1, fp); // this is the uncompressed size.
       unsigned long outptr=0;
       txtbuffer=(char *)realloc(txtbuffer, txtsize);

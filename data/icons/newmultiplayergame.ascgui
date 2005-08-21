@@ -1,0 +1,86 @@
+
+panel {
+  x = 50
+  y = 50
+  width = 700
+  height = 500
+  name = MainWidget
+
+  Title = New Multiplayer Game
+    
+  ChildWidgets = Next QuickStart Page1 Page2
+  
+  Next {
+    type = button
+    text = Next >
+    name = next
+    x = -30
+    y = -20
+    height  = 30
+    width = 90
+  } Next
+
+  QuickStart {
+    type = button
+    text = QuickStart
+    name = quickstart
+    x = -130
+    y = -20
+    height  = 30
+    width = 90
+  } QuickStart
+
+  Page1 {
+    type = dummy
+    x = 0
+    y = 0
+    ChildWidgets = RadioGroup
+    
+    RadioGroup {
+      type = dummy
+      x = 100
+      y = 140
+      height = 200
+      width = 300
+      
+      ChildWidgets = Hotseat PBEM PBP
+      HotSeat {
+        x = 0
+        y = 0
+        height = 30
+        width = 200
+        type = RadioButton
+        Text = Hotseat
+      } HotSeat
+  
+      PBEM {
+        x = 0
+        y = 40
+        height = 30
+        width = 200
+        type = RadioButton
+        Text = Play By Email
+      } PBEM
+  
+      PBP {
+        x = 0
+        y = 80
+        height = 30
+        width = 200
+        type = RadioButton
+        Text = Project Battle Planets
+      } PBP
+        
+    } RadioGroup
+  } Page1
+
+  Page2 {
+    type = dummy
+    x = 20
+    y = 40
+    x2 = -20
+    y2 = -80
+    Userhandler = FileList
+  } Page2    
+      
+} panel

@@ -214,34 +214,19 @@ tmap :: tmap ( void )
       for ( int j = 0; j < 8; j++ )
           alliances[i][j] = cawar;
 
-   for ( i = 0; i< 9; i++ ) {
-      player[i].ai = NULL;
+   for ( i = 0; i < 9; ++i ) {
       player[i].player = i;
-
       if ( i == 0 )
          player[i].stat = Player::human;
       else
          player[i].stat = Player::off;
-
-      player[i].queuedEvents = 0;
-      if ( i < 8 ) {
-         player[i].humanname = "human ";
-         player[i].humanname += strrr( i );
-         player[i].computername = "computer ";
-         player[i].computername += strrr( i );
-      } else
-         player[i].humanname = player[i].computername = "neutral";
-
-
+         
       player[i].research.chainToMap ( this, i );
-      player[i].ASCversion = 0;
    }
-
+          
    unitnetworkid = 0;
 
    levelfinished = 0;
-
-   network = 0;
 
    for ( i = 0; i < 8; i++ ) {
       cursorpos.position[i].cx = 0;
@@ -270,7 +255,7 @@ tmap :: tmap ( void )
 }
 
 
-const int tmapversion = 9;
+const int tmapversion = 10;
 
 void tmap :: read ( tnstream& stream )
 {
@@ -361,10 +346,17 @@ void tmap :: read ( tnstream& stream )
 
    unitnetworkid = stream.readInt();
    levelfinished = stream.readChar();
-   network = (pnetwork)stream.readInt();
+   
    bool alliance_names_not_used_any_more[8];
-   for ( i = 0; i < 8; i++ )
-      alliance_names_not_used_any_more[i] = stream.readInt(); // dummy
+   if ( version <= 9 ) {
+      ___loadLegacyNetwork  = stream.readInt();
+      for ( i = 0; i < 8; i++ )
+         alliance_names_not_used_any_more[i] = stream.readInt(); // dummy
+   } else {
+      ___loadLegacyNetwork = false;
+      for ( i = 0; i < 8; i++ )
+         alliance_names_not_used_any_more[i] = 0;
+   }
 
    for ( i = 0; i< 8; i++ ) {
       cursorpos.position[i].cx = stream.readWord();
@@ -373,7 +365,9 @@ void tmap :: read ( tnstream& stream )
       cursorpos.position[i].sy = stream.readWord();
    }
 
-   stream.readInt(); // loadtribute
+   if ( version <= 9 )
+      stream.readInt(); // loadtribute
+      
    __loadunsentmessage = stream.readInt();
    __loadmessages = stream.readInt();
 
@@ -624,9 +618,6 @@ void tmap :: write ( tnstream& stream )
 
    stream.writeInt( unitnetworkid );
    stream.writeChar( levelfinished );
-   stream.writeInt( network != NULL );
-   for ( i = 0; i < 8; i++ )
-      stream.writeInt( 0 ); // dummy
 
    for ( i = 0; i< 8; i++ ) {
       stream.writeWord( cursorpos.position[i].cx );
@@ -635,7 +626,6 @@ void tmap :: write ( tnstream& stream )
       stream.writeWord( cursorpos.position[i].sy );
    }
 
-   stream.writeInt( -1 );
    stream.writeInt( 1 );
    stream.writeInt( !messages.empty() );
 
@@ -1742,7 +1732,6 @@ void tmap :: startGame ( )
       player[j].queuedEvents = 1;
 
    levelfinished = false;
-   network = NULL;
    int num = 0;
    int cols[72];
 
@@ -1860,6 +1849,26 @@ void tmap::Shareview :: write( tnstream& stream )
          stream.writeChar( mode[i][j] );
    stream.writeInt( recalculateview );
 }
+
+
+tmap :: Player :: Player()
+{
+   network = NULL;   
+   ai = NULL;
+
+   queuedEvents = 0;
+   if ( player < 8 ) {
+      humanname = "human ";
+      humanname += strrr( player );
+      computername = "computer ";
+      computername += strrr( player );
+   } else
+      humanname = computername = "neutral";
+
+   ASCversion = 0;
+}
+
+
 
 
 void AiThreat :: write ( tnstream& stream )

@@ -20,29 +20,31 @@
 
 
 
-#ifndef network_h
-#define network_h
+#ifndef networkinterfaceH
+#define networkinterfaceH
 
-#include "networkinterface.h"
+#include "libs/loki/Singleton.h"
+#include "factory.h"
 
+#include "basestrm.h"
 
-class FileTransfer : public GameTransferMechanism {
-      ASCString filename;
+class tmap;
+
+class GameTransferMechanism {
    protected:   
-      void readChildData ( tnstream& stream );
-      void writeChildData ( tnstream& stream ) const;
-      bool enterfilename();
-      ASCString constructFileName( tmap* actmap ) const;
+      virtual void readChildData ( tnstream& stream ) = 0;
+      virtual void writeChildData ( tnstream& stream ) const = 0;
    public:
-      void setup();
-      void setup( const ASCString& filename );
-      
-      void send( const tmap* map );
-      tmap* receive();
-      ASCString getMechanismID() const { return mechanismID(); };
-      static ASCString mechanismID() { return "FileTransfer"; };
+      virtual void setup() = 0;
+      virtual void send( const tmap* map ) = 0;
+      virtual tmap* receive() = 0;
+      static GameTransferMechanism* read ( tnstream& stream );
+      void write ( tnstream& stream ) const;
+      virtual ASCString getMechanismID() const = 0;
+      virtual ~GameTransferMechanism() {};
 };
 
-extern void networksupervisor ( void );
+typedef Loki::SingletonHolder< Factory< GameTransferMechanism, ASCString > > networkTransferMechanismFactory;
+
 
 #endif
