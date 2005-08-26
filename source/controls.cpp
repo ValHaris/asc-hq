@@ -1271,7 +1271,7 @@ void nextPlayer( void )
 
 
 
-   int newplayer = actmap->actplayer;
+//   int newplayer = actmap->actplayer;
    actmap->playerView = actmap->actplayer;
 
 /*   if ( oldplayer >= 0 && actmap->network &&  oldplayer != actmap->actplayer && actmap->network->player[ newplayer ].compposition != actmap->network->player[ oldplayer ].compposition )

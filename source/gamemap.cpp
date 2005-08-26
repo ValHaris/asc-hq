@@ -1850,6 +1850,12 @@ void tmap::Shareview :: write( tnstream& stream )
    stream.writeInt( recalculateview );
 }
 
+const char* tmap :: Player :: playerStatusNames[5] = { "Human Player", 
+                                                       "AI player",
+                                                       "off",
+                                                       "Supervisor",
+                                                       NULL };
+
 
 tmap :: Player :: Player()
 {

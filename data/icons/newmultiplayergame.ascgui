@@ -8,7 +8,15 @@ panel {
 
   Title = New Multiplayer Game
     
-  ChildWidgets = Next QuickStart Page1 Page2
+  ChildWidgets = Next QuickStart Page1 Page2 Page3 Page4 Page5 Bottomline
+  
+  Bottomline {
+     type = Area
+     x = 20
+     y = -60
+     x2 = -20
+     y2 = -58
+  } Bottomline
   
   Next {
     type = button
@@ -82,5 +90,33 @@ panel {
     y2 = -80
     Userhandler = FileList
   } Page2    
-      
+
+  Page3 {
+    type = dummy
+    x = 20
+    y = 40
+    x2 = -20
+    y2 = -80
+    Userhandler = PlayerSetup
+  } Page3
+
+  Page4 {
+    type = dummy
+    x = 20
+    y = 40
+    x2 = -20
+    y2 = -80
+    Userhandler = AllianceSetup
+  } Page4
+  
+  Page5 {
+    type = dummy
+    x = 20
+    y = 40
+    x2 = -20
+    y2 = -80
+    Userhandler = GameParameters
+  } Page5
+    
+        
 } panel

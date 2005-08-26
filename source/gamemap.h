@@ -238,6 +238,8 @@ class tmap {
 
             //! the status of the player: 0=human ; 1=AI ; 2=off
             enum tplayerstat { human, computer, off } stat;
+            
+            static const char* playerStatusNames[];
 
             //! the name of the player that is used if the player is human
             ASCString       humanname;
@@ -247,6 +249,8 @@ class tmap {
 
             //! returns the name of the player depending on the status
             const ASCString& getName( );
+            
+            void setName( const ASCString& name ) { humanname = name; };
 
             //! the Password required for playing this player
             Password passwordcrc;
@@ -301,6 +305,8 @@ class tmap {
             
       } player[9];
 
+      int getPlayerCount() const { return 8; };
+      
       MapCoordinate& getCursor();
       
       typedef map<int, Vehicle*> VehicleLookupCache;

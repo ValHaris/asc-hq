@@ -9,6 +9,7 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
+#include <sstream>
 #include "gamedialog.h"
 #include "gamedlg.h"
 #include "guidimension.h"
@@ -16,6 +17,7 @@
 #include "misc.h"
 #include "selectionwindow.h"
 //#include "basestrm.h"
+
 
 const int GameDialog::xSize = 450;
 const int GameDialog::ySize = 500;
@@ -894,7 +896,150 @@ void SoundSettings::soundSettings(PG_MessageObject* caller)
 //*******************************************************************************************************************+
 
 
-StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWindow( NULL, PG_Rect::null, "newmultiplayergame", false ), page(1), mode ( PBEM )
+class PropertyEditorField {
+   public:
+      virtual bool Valid() = 0;
+      virtual bool Apply() = 0;
+      virtual void Reload() = 0;
+      virtual ~PropertyEditorField() {};
+};      
+
+class PropertyEditorWidget : public PG_ScrollWidget {
+      
+      typedef std::vector<PropertyEditorField*> PropertyFieldsType;
+      PropertyFieldsType propertyFields;
+      
+      std::string styleName;
+      
+      int ypos;
+      int lineHeight;
+      int lineSpacing;
+
+   public:
+      PropertyEditorWidget ( PG_Widget *parent, const PG_Rect &r, const std::string &style="PropertyEditor" ) : PG_ScrollWidget( parent, r, style ), styleName( style ), ypos ( 0 ), lineHeight(25), lineSpacing(2)
+      {
+         // LoadThemeStyle( style, "ScrollArea" );
+      };
+      
+      std::string GetStyleName() {
+         return styleName;  
+      };
+
+      void Reload() {
+         for ( PropertyFieldsType::iterator i = propertyFields.begin(); i != propertyFields.end(); ++i )
+            (*i)->Reload();
+      };
+      
+            
+      bool Valid() {
+         for ( PropertyFieldsType::iterator i = propertyFields.begin(); i != propertyFields.end(); ++i )
+            if ( ! (*i)->Valid() )
+               return false;
+         return true;
+      };
+      
+      bool Apply() {
+         if ( !Valid() )
+            return false;
+                        
+         for ( PropertyFieldsType::iterator i = propertyFields.begin(); i != propertyFields.end(); ++i )
+            (*i)->Apply();
+            
+         return true;
+      };
+      
+      PG_Rect RegisterProperty( const std::string& name, PropertyEditorField* propertyEditorField )
+      {
+         propertyFields.push_back( propertyEditorField );
+         
+         int w = Width() - my_widthScrollbar - 2 * lineSpacing;
+      
+         PG_LineEdit* label = new PG_LineEdit( this, PG_Rect( 0, ypos, w/2 - 1, lineHeight) );
+         label->LoadThemeStyle( styleName, "Label" );
+         label->SetEditable( false );
+         label->SetText( name );
+         PG_Rect r  ( w / 2 , ypos, w / 2 - 1, lineHeight );
+         ypos += lineHeight + lineSpacing;
+         return r;
+      };
+      
+      ~PropertyEditorWidget() 
+      {
+         for ( PropertyFieldsType::iterator i = propertyFields.begin(); i != propertyFields.end(); ++i )
+            delete *i;
+      };
+      
+};
+
+
+
+
+class StringProperty : public PropertyEditorField {
+      PG_LineEdit* lineEdit;
+      std::string& myProperty;
+   public:
+      StringProperty( PropertyEditorWidget* propertyEditor, const std::string& name, std::string& string ) : myProperty( string )
+      {
+         PG_Rect r = propertyEditor->RegisterProperty( name, this );
+         lineEdit = new PG_LineEdit( propertyEditor, r );
+         lineEdit->LoadThemeStyle( propertyEditor->GetStyleName(), "StringEditor" );
+         Reload();
+      };
+   
+      bool Valid() { return true; };
+      bool Apply() {
+         myProperty = lineEdit->GetText();
+         return true;
+      };
+      void Reload() {
+         lineEdit->SetText( myProperty );
+      };            
+};
+
+
+template <class IntegerType>
+class IntegerProperty : public PropertyEditorField {
+      PG_LineEdit* lineEdit;
+      IntegerType& myProperty;
+   protected:   
+      bool convert( IntegerType& i ) {
+         std::istringstream s( lineEdit->GetText() );
+         return s >> i;
+      };
+      
+   public:
+      IntegerProperty( PropertyEditorWidget* propertyEditor, const std::string& name, IntegerType& myInteger ) : myProperty( myInteger )
+      {
+         PG_Rect r = propertyEditor->RegisterProperty( name, this );
+         lineEdit = new PG_LineEdit( propertyEditor, r );
+         lineEdit->LoadThemeStyle( propertyEditor->GetStyleName(), "IntegerEditor" );
+         Reload();
+      };
+   
+      bool Valid() { 
+         IntegerType i;
+         return convert(i);
+       };
+       
+      bool Apply() {
+         return convert( myProperty );
+      };
+      
+      void Reload() {
+         std::ostringstream s;
+         s << myProperty;
+         lineEdit->SetText( s.str() );
+      };            
+      
+};
+
+
+
+//*******************************************************************************************************************+
+
+
+
+StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWindow( NULL, PG_Rect::null, "newmultiplayergame", false ), page(1), mode ( PBEM ), mapParameterEditor(NULL)
 {
     setup();
     sigClose.connect( SigC::slot( *this, &StartMultiplayerGame::QuitModal ));
@@ -921,10 +1066,17 @@ StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWin
 
 bool StartMultiplayerGame::nextPage(PG_Button* button)
 {
-   int oldpage = page;
+   // int oldpage = page;
    switch ( page )  {
-      case 1: ++page;
+      case 1:
+      case 2: 
+      case 3: 
+      case 4: ++page;
               break;
+              
+      case 5: if ( mapParameterEditor->Valid() )
+                 ++page;
+              break;   
    }
    
    showPage();
@@ -1074,6 +1226,204 @@ class FileSelectionItemFactory: public SelectionItemFactory  {
 };
 
 
+
+class ColoredBar : public PG_ThemeWidget {
+   public:
+      ColoredBar( PG_Color col,  PG_Widget *parent, const PG_Rect &r ) : PG_ThemeWidget( parent, r )
+      {
+         SetGradient ( PG_Gradient( col,col,col,col ));
+         SetBorderSize(0);
+         SetBackgroundBlend ( 255 );
+      };
+};
+
+
+class PlayerSetupWidget : public PG_ScrollWidget {
+      tmap* actmap;
+      static const int spacing = 40;
+      
+      struct PlayerWidgets {
+         PG_LineEdit* name;
+         PG_DropDown* type;
+         int pos;
+      };
+         
+      
+      vector<PlayerWidgets> playerWidgets;
+   public:
+      PlayerSetupWidget( tmap* gamemap, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style="ScrollWidget" ) : PG_ScrollWidget( parent, r, style ) , actmap ( gamemap )
+      {
+         int counter = 0; 
+         for ( int i = 0; i < actmap->getPlayerCount(); ++i ) 
+            if ( actmap->player[i].exist() ) {
+            
+               PlayerWidgets pw;
+               pw.pos  = i;
+               
+               int y = 20 + counter * spacing;
+               
+               ColoredBar* colbar = new ColoredBar( actmap->player[i].getColor(), this, PG_Rect( 20, y, Width() - 60, 30 ));
+               colbar->SetTransparency( 128 );
+               
+               
+               int y1 = Width() * 4 / 10;
+               
+               pw.name = new PG_LineEdit( colbar, PG_Rect( 40, 5, y1 - 40, 20 ));
+               pw.name->SetText( actmap->player[i].getName());
+               
+               
+               PG_Rect r = PG_Rect( y1 + 20, 5, colbar->Width() - y1 - 40, 20 );
+               if ( !allEditable && actmap->actplayer != i ) {
+                  pw.name->SetEditable( false );
+               
+                  pw.type = new PG_DropDown( colbar, r);
+                  
+                  int pos = 0;
+                  while ( tmap :: Player :: playerStatusNames[pos] ) {
+                     pw.type->AddItem( tmap :: Player :: playerStatusNames[pos] );
+                     ++pos;
+                  }
+                  
+                  pw.type->SelectItem( actmap->player[i].stat );
+                  pw.type->SetEditable(false);
+               } else {
+                  pw.type = NULL;
+                  PG_LineEdit* le = new PG_LineEdit( colbar, r );
+                  le->SetText( tmap :: Player :: playerStatusNames[ actmap->player[i].stat ] );
+                  le->SetEditable( false );
+               }
+               
+               PG_ThemeWidget* col = new PG_ThemeWidget( colbar, PG_Rect( 5, 5, 20, 20 ));
+               col->SetSimpleBackground(true);
+               col->SetBackgroundColor ( actmap->player[i].getColor());
+               col->SetBorderSize(0);
+
+               playerWidgets.push_back( pw );
+                              
+               ++counter;
+            } else
+               actmap->player[i].stat = Player::off;
+            
+         SetTransparency(255);
+      };
+      
+      void Apply() {
+         for ( vector<PlayerWidgets>::iterator i = playerWidgets.begin(); i != playerWidgets.end(); ++i ) {
+            actmap->player[i->pos].setName( i->name->GetText() );
+            if ( i->type )
+               actmap->player[i->pos].stat = Player::tplayerstat( i->type->GetSelectedItemIndex() );
+         }
+      };
+};
+
+
+class GameParameterEditorWidget : public PropertyEditorWidget {
+      tmap* actmap;
+      int values[gameparameternum];
+   public:
+      GameParameterEditorWidget ( tmap* gamemap, PG_Widget* parent, const PG_Rect& rect ) : PropertyEditorWidget( parent, rect ), actmap ( gamemap )
+      {
+         for ( int i = 0; i< gameparameternum; ++i ) {
+            values[i] = actmap->getgameparameter ( GameParameter(i) );
+            new IntegerProperty<int>( this , gameparametername[i], values[i] );
+         }
+      };
+};
+
+class AllianceSetupWidget : public PG_ScrollWidget {
+      tmap* actmap;
+      
+      struct PlayerWidgets {
+         PG_LineEdit* name;
+         PG_DropDown* type;
+         int pos;
+      };
+         
+      vector<PlayerWidgets> playerWidgets;
+      
+   public:
+      AllianceSetupWidget( tmap* gamemap, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style="ScrollWidget" ) : PG_ScrollWidget( parent, r, style ) , actmap ( gamemap )
+      {
+         int playerNum = 0;
+         for ( int i = 0; i < actmap->getPlayerCount(); ++i ) 
+            if ( actmap->player[i].exist() ) 
+               ++playerNum;
+
+              
+         const int colWidth = 40;
+         const int lineHeight = 30;
+         const int barSpace = 5;
+         const int spacing = 10;
+         const int nameLength = 200;
+         const int barOverhang = 20;
+         const int sqaureWidth = lineHeight;
+         const int lineLength = sqaureWidth + nameLength + playerNum * (colWidth + spacing) + barOverhang;
+         const int colHeight  =  barOverhang + playerNum * (lineHeight + spacing) - spacing +  barOverhang;
+                        
+         int counter = 0; 
+         for ( int i = 0; i < actmap->getPlayerCount(); ++i ) 
+            if ( actmap->player[i].exist() ) {
+            
+               PlayerWidgets pw;
+               pw.pos  = i;
+               
+               int y = barOverhang + counter * (lineHeight + spacing);
+               int x = sqaureWidth + nameLength + spacing + counter * (colWidth + spacing);
+               
+               ColoredBar* horizontalBar = new ColoredBar( actmap->player[i].getColor(), this, PG_Rect( 0, y, lineLength, lineHeight ));
+               horizontalBar->SetTransparency( 128 );
+               
+               pw.name = new PG_LineEdit( horizontalBar, PG_Rect( sqaureWidth, barSpace, nameLength, lineHeight-2*barSpace ));
+               pw.name->SetText( actmap->player[i].getName());
+               pw.name->SetEditable( false );
+
+               PG_ThemeWidget* col = new PG_ThemeWidget( horizontalBar, PG_Rect( barSpace, barSpace, sqaureWidth - 2*barSpace, lineHeight - 2*barSpace ));
+               col->SetSimpleBackground(true);
+               col->SetBackgroundColor ( actmap->player[i].getColor());
+               col->SetBorderSize(0);
+               
+                              
+               ColoredBar* verticalBar = new ColoredBar( actmap->player[i].getColor(), this, PG_Rect( x, 0, colWidth, colHeight ));
+               verticalBar->SetTransparency( 128 );
+               
+               /*
+               PG_Rect r = PG_Rect( y1 + 20, 5, colbar->Width() - y1 - 40, 20 );
+               if ( !allEditable && actmap->actplayer != i ) {
+               
+                  pw.type = new PG_DropDown( colbar, r);
+                  
+                  int pos = 0;
+                  while ( tmap :: Player :: playerStatusNames[pos] ) {
+                     pw.type->AddItem( tmap :: Player :: playerStatusNames[pos] );
+                     ++pos;
+                  }
+                  
+                  pw.type->SelectItem( actmap->player[i].stat );
+                  pw.type->SetEditable(false);
+               } else {
+                  pw.type = NULL;
+                  PG_LineEdit* le = new PG_LineEdit( colbar, r );
+                  le->SetText( tmap :: Player :: playerStatusNames[ actmap->player[i].stat ] );
+                  le->SetEditable( false );
+               }
+               */
+               
+
+               playerWidgets.push_back( pw );
+               
+                              
+               ++counter;
+            } 
+            
+         SetTransparency(255);
+      };
+      
+      void Apply() {
+      };
+};
+
+
+
 void StartMultiplayerGame::userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams )
 {
    if ( label == "FileList" ) {
@@ -1082,7 +1432,17 @@ void StartMultiplayerGame::userHandler( const ASCString& label, PropertyReadingC
       factory->filenameMarked.connect   ( SigC::slot( *this, &StartMultiplayerGame::fileNameSelected ));
       new ItemSelectorWidget( parent, PG_Rect(0, 0, parent->Width(), parent->Height()), factory );
    }
+   if ( label == "PlayerSetup" ) {
+      new PlayerSetupWidget( actmap, true, parent, PG_Rect( 0, 0, parent->Width(), parent->Height() ));
+   }
+   if ( label == "AllianceSetup" ) {
+      new AllianceSetupWidget( actmap, true, parent, PG_Rect( 0, 0, parent->Width(), parent->Height() ));
+   }
+   if ( label == "GameParameters" ) {
+      mapParameterEditor = new GameParameterEditorWidget( actmap, parent, PG_Rect( 0, 0, parent->Width(), parent->Height() ));
+   }
 }
+
 
 
 
@@ -1093,3 +1453,7 @@ void LoadGameDialog::loadGameDialog(PG_MessageObject* caller) {
     isw.Show();
     isw.RunModal();
 }
+
+
+
+

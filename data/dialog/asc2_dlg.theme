@@ -115,8 +115,8 @@
         <property name="backmode1" value="TILE"/>
         <property name="backmode2" value="TILE"/>
         <gradient name="gradient0" color0="0x00508565" color1="0x00508565" color2="0x00508565" color3="0x00508565"/>
-        <gradient name="gradient1" color0="0x00508565" color1="0x00508565" color2="0x00508565" color3="0x00508565"/>
-        <gradient name="gradient2" color0="0x00508565" color1="0x00508565" color2="0x00508565" color3="0x00508565"/>
+        <gradient name="gradient1" color0="0x0063a57d" color1="0x0063a57d" color2="0x0063a57d" color3="0x0063a57d"/>
+        <gradient name="gradient2" color0="0x0063a57d" color1="0x0063a57d" color2="0x0063a57d" color3="0x0063a57d"/>
         <property name="blend0" value="200"/>
         <property name="blend1" value="240"/>
         <property name="blend2" value="200"/>
@@ -472,6 +472,8 @@
         <object>
             <name value="LineEdit"/>
             <property name ="bordersize" value="1"/>
+            <property name ="simplebackground" value="1"/>
+            <color    name="backgroundcolor" value="0x00508565"/>
         </object>
     </widget>
 
