@@ -954,10 +954,8 @@ class PropertyEditorWidget : public PG_ScrollWidget {
          
          int w = Width() - my_widthScrollbar - 2 * lineSpacing;
       
-         PG_LineEdit* label = new PG_LineEdit( this, PG_Rect( 0, ypos, w/2 - 1, lineHeight) );
+         PG_Label* label = new PG_Label( this, PG_Rect( 0, ypos, w/2 - 1, lineHeight), name );
          label->LoadThemeStyle( styleName, "Label" );
-         label->SetEditable( false );
-         label->SetText( name );
          PG_Rect r  ( w / 2 , ypos, w / 2 - 1, lineHeight );
          ypos += lineHeight + lineSpacing;
          return r;
@@ -976,44 +974,81 @@ class PropertyEditorWidget : public PG_ScrollWidget {
 
 class StringProperty : public PropertyEditorField {
       PG_LineEdit* lineEdit;
-      std::string& myProperty;
+      std::string* myProperty;
    public:
-      StringProperty( PropertyEditorWidget* propertyEditor, const std::string& name, std::string& string ) : myProperty( string )
+      StringProperty( PropertyEditorWidget* propertyEditor, const std::string& name, std::string* string ) : myProperty( string )
       {
          PG_Rect r = propertyEditor->RegisterProperty( name, this );
-         lineEdit = new PG_LineEdit( propertyEditor, r );
-         lineEdit->LoadThemeStyle( propertyEditor->GetStyleName(), "StringEditor" );
+         lineEdit = new PG_LineEdit( propertyEditor, r, propertyEditor->GetStyleName() );
          Reload();
+      };
+      
+      StringProperty( PropertyEditorWidget* propertyEditor, const std::string& name, const std::string& string ) : myProperty( NULL )
+      {
+         PG_Rect r = propertyEditor->RegisterProperty( name, this );
+         lineEdit = new PG_LineEdit( propertyEditor, r, propertyEditor->GetStyleName() );
+         lineEdit->SetText( string );
       };
    
       bool Valid() { return true; };
       bool Apply() {
-         myProperty = lineEdit->GetText();
+         if ( myProperty )
+            *myProperty = lineEdit->GetText();
+            
          return true;
       };
       void Reload() {
-         lineEdit->SetText( myProperty );
+         if ( myProperty )
+            lineEdit->SetText( *myProperty );
       };            
 };
 
 
 template <class IntegerType>
-class IntegerProperty : public PropertyEditorField {
+class IntegerProperty : public PropertyEditorField, public SigC::Object {
       PG_LineEdit* lineEdit;
-      IntegerType& myProperty;
+      IntegerType* myProperty;
    protected:   
       bool convert( IntegerType& i ) {
          std::istringstream s( lineEdit->GetText() );
          return s >> i;
       };
       
+      void set( IntegerType i ) {
+         std::ostringstream s;
+         s << i;
+         lineEdit->SetText( s.str() );
+      }
+      
+      bool EditEnd() {
+         IntegerType i ;
+         if ( convert(i)) {
+            sigValueChanged(this,i);
+            return true;
+         } else
+            return false;
+      }
+      
    public:
-      IntegerProperty( PropertyEditorWidget* propertyEditor, const std::string& name, IntegerType& myInteger ) : myProperty( myInteger )
+     
+      typedef PG_Signal2<IntegerProperty*, IntegerType> IntegerPropertySignal;
+      IntegerPropertySignal sigValueChanged;
+      IntegerPropertySignal sigValueApplied;
+      
+      IntegerProperty( PropertyEditorWidget* propertyEditor, const std::string& name, IntegerType* myInteger ) : myProperty( myInteger )
       {
          PG_Rect r = propertyEditor->RegisterProperty( name, this );
-         lineEdit = new PG_LineEdit( propertyEditor, r );
-         lineEdit->LoadThemeStyle( propertyEditor->GetStyleName(), "IntegerEditor" );
+         lineEdit = new PG_LineEdit( propertyEditor, r, propertyEditor->GetStyleName() );
+         lineEdit->sigEditEnd.connect( SigC::slot( *this, &IntegerProperty<IntegerType>::EditEnd ));
          Reload();
+      };
+      
+      IntegerProperty( PropertyEditorWidget* propertyEditor, const std::string& name, IntegerType myInteger ) : myProperty( NULL )
+      {
+         PG_Rect r = propertyEditor->RegisterProperty( name, this );
+         lineEdit = new PG_LineEdit( propertyEditor, r, propertyEditor->GetStyleName() );
+         // lineEdit->sigEditEnd.connect( SigC::slot( *this, IntegerProperty::EditEnd ));
+         set( myInteger );
       };
    
       bool Valid() { 
@@ -1022,13 +1057,21 @@ class IntegerProperty : public PropertyEditorField {
        };
        
       bool Apply() {
-         return convert( myProperty );
+         IntegerType i;
+         if ( !convert(i) )
+            return false;
+
+         sigValueApplied( this, i );
+                        
+         if ( myProperty )
+            *myProperty = i;
+            
+         return true;
       };
       
       void Reload() {
-         std::ostringstream s;
-         s << myProperty;
-         lineEdit->SetText( s.str() );
+         if ( myProperty )
+            set( *myProperty );
       };            
       
 };
@@ -1325,7 +1368,7 @@ class GameParameterEditorWidget : public PropertyEditorWidget {
       {
          for ( int i = 0; i< gameparameternum; ++i ) {
             values[i] = actmap->getgameparameter ( GameParameter(i) );
-            new IntegerProperty<int>( this , gameparametername[i], values[i] );
+            new IntegerProperty<int>( this , gameparametername[i], &values[i] );
          }
       };
 };
