@@ -914,11 +914,11 @@ class PropertyEditorWidget : public PG_ScrollWidget {
       int ypos;
       int lineHeight;
       int lineSpacing;
+      int labelWidth;
 
    public:
-      PropertyEditorWidget ( PG_Widget *parent, const PG_Rect &r, const std::string &style="PropertyEditor" ) : PG_ScrollWidget( parent, r, style ), styleName( style ), ypos ( 0 ), lineHeight(25), lineSpacing(2)
+      PropertyEditorWidget ( PG_Widget *parent, const PG_Rect &r, const std::string &style="PropertyEditor", int labelWidthPercentage = 50 ) : PG_ScrollWidget( parent, r, style ), styleName( style ), ypos ( 0 ), lineHeight(25), lineSpacing(2), labelWidth(labelWidthPercentage)
       {
-         // LoadThemeStyle( style, "ScrollArea" );
       };
       
       std::string GetStyleName() {
@@ -954,9 +954,9 @@ class PropertyEditorWidget : public PG_ScrollWidget {
          
          int w = Width() - my_widthScrollbar - 2 * lineSpacing;
       
-         PG_Label* label = new PG_Label( this, PG_Rect( 0, ypos, w/2 - 1, lineHeight), name );
+         PG_Label* label = new PG_Label( this, PG_Rect( 0, ypos, w * labelWidth / 100 - 1, lineHeight), name );
          label->LoadThemeStyle( styleName, "Label" );
-         PG_Rect r  ( w / 2 , ypos, w / 2 - 1, lineHeight );
+         PG_Rect r  ( w * labelWidth / 100 , ypos, w * ( 100 - labelWidth ) / 100  - 1, lineHeight );
          ypos += lineHeight + lineSpacing;
          return r;
       };
@@ -971,22 +971,46 @@ class PropertyEditorWidget : public PG_ScrollWidget {
 
 
 
-
-class StringProperty : public PropertyEditorField {
+class LineFieldProperty : public PropertyEditorField, public SigC::Object {
+   protected:
       PG_LineEdit* lineEdit;
-      std::string* myProperty;
-   public:
-      StringProperty( PropertyEditorWidget* propertyEditor, const std::string& name, std::string* string ) : myProperty( string )
+      
+      LineFieldProperty ( PropertyEditorWidget* propertyEditor, const std::string& name ) 
       {
          PG_Rect r = propertyEditor->RegisterProperty( name, this );
          lineEdit = new PG_LineEdit( propertyEditor, r, propertyEditor->GetStyleName() );
+         lineEdit->sigEditEnd.connect( SigC::slot( *this, &LineFieldProperty::EditEnd ));
+      }
+      
+      
+      virtual bool EditEnd() = 0;
+
+
+};
+
+
+class StringProperty : public LineFieldProperty {
+      std::string* myProperty;
+      
+   protected:
+   
+      bool EditEnd() {
+         sigValueChanged(this,lineEdit->GetText());
+         return true;
+      }
+   
+   public:
+      typedef PG_Signal2<StringProperty*, std::string> StringPropertySignal;
+      StringPropertySignal sigValueChanged;
+      StringPropertySignal sigValueApplied;
+      
+      StringProperty( PropertyEditorWidget* propertyEditor, const std::string& name, std::string* string ) : LineFieldProperty( propertyEditor, name ), myProperty( string )
+      {
          Reload();
       };
       
-      StringProperty( PropertyEditorWidget* propertyEditor, const std::string& name, const std::string& string ) : myProperty( NULL )
+      StringProperty( PropertyEditorWidget* propertyEditor, const std::string& name, const std::string& string ) : LineFieldProperty( propertyEditor, name ), myProperty( NULL )
       {
-         PG_Rect r = propertyEditor->RegisterProperty( name, this );
-         lineEdit = new PG_LineEdit( propertyEditor, r, propertyEditor->GetStyleName() );
          lineEdit->SetText( string );
       };
    
@@ -1005,9 +1029,10 @@ class StringProperty : public PropertyEditorField {
 
 
 template <class IntegerType>
-class IntegerProperty : public PropertyEditorField, public SigC::Object {
-      PG_LineEdit* lineEdit;
+class IntegerProperty : public LineFieldProperty {
       IntegerType* myProperty;
+      IntegerType minValue;
+      IntegerType maxValue;
    protected:   
       bool convert( IntegerType& i ) {
          std::istringstream s( lineEdit->GetText() );
@@ -1035,25 +1060,42 @@ class IntegerProperty : public PropertyEditorField, public SigC::Object {
       IntegerPropertySignal sigValueChanged;
       IntegerPropertySignal sigValueApplied;
       
-      IntegerProperty( PropertyEditorWidget* propertyEditor, const std::string& name, IntegerType* myInteger ) : myProperty( myInteger )
+      IntegerProperty( PropertyEditorWidget* propertyEditor, const std::string& name, IntegerType* myInteger ) : LineFieldProperty( propertyEditor, name ), myProperty( myInteger )
       {
-         PG_Rect r = propertyEditor->RegisterProperty( name, this );
-         lineEdit = new PG_LineEdit( propertyEditor, r, propertyEditor->GetStyleName() );
-         lineEdit->sigEditEnd.connect( SigC::slot( *this, &IntegerProperty<IntegerType>::EditEnd ));
+         minValue = numeric_limits<IntegerType>::min();
+         maxValue = numeric_limits<IntegerType>::max();
          Reload();
       };
       
-      IntegerProperty( PropertyEditorWidget* propertyEditor, const std::string& name, IntegerType myInteger ) : myProperty( NULL )
+      IntegerProperty( PropertyEditorWidget* propertyEditor, const std::string& name, IntegerType myInteger ) : LineFieldProperty( propertyEditor, name ), myProperty( NULL )
       {
-         PG_Rect r = propertyEditor->RegisterProperty( name, this );
-         lineEdit = new PG_LineEdit( propertyEditor, r, propertyEditor->GetStyleName() );
-         // lineEdit->sigEditEnd.connect( SigC::slot( *this, IntegerProperty::EditEnd ));
+         minValue = numeric_limits<IntegerType>::min();
+         maxValue = numeric_limits<IntegerType>::max();
          set( myInteger );
       };
-   
+
+      void SetRange( IntegerType min, IntegerType max )
+      {
+         if ( min <= max ) {
+            minValue = min;
+            maxValue = max;
+         }
+      }
+         
+      bool CheckRange( IntegerType value )
+      {
+         return value >= minValue && value <= maxValue;
+      }   
+      
       bool Valid() { 
          IntegerType i;
-         return convert(i);
+         if ( !convert(i) )
+            return false;
+            
+         if ( !CheckRange( i ))
+            return false;
+            
+         return true;
        };
        
       bool Apply() {
@@ -1061,6 +1103,9 @@ class IntegerProperty : public PropertyEditorField, public SigC::Object {
          if ( !convert(i) )
             return false;
 
+         if ( !CheckRange( i ))
+            return false;
+         
          sigValueApplied( this, i );
                         
          if ( myProperty )
@@ -1080,7 +1125,62 @@ class IntegerProperty : public PropertyEditorField, public SigC::Object {
 
 //*******************************************************************************************************************+
 
+class GameParameterEditorWidget : public PG_Widget {
+      tmap* actmap;
+      int values[gameparameternum];
+      PropertyEditorWidget* propertyEditor;
+      
+   protected:
+      bool LoadParameter()
+      {
+         return true;  
+      }
 
+      bool SaveParameter()
+      {
+         return true;  
+      }
+
+      bool ResetParameter()
+      {
+         for ( int i = 0; i< gameparameternum; ++i ) 
+            values[i] = gameparameterdefault[i];
+         propertyEditor->Reload(); 
+         return true;  
+      }
+                  
+   public:
+      GameParameterEditorWidget ( tmap* gamemap, PG_Widget* parent, const PG_Rect& rect ) : PG_Widget( parent, rect ), actmap ( gamemap )
+      {
+         SetTransparency(255);
+         
+         propertyEditor = new PropertyEditorWidget( this, PG_Rect( 0,0, rect.Width() - 110, rect.Height() ), "PropertyEditor", 70 );
+         
+         PG_Button* load = new PG_Button( this, PG_Rect( rect.Width() - 100, 0,  100, 30 ), "Load" );
+         load->sigClick.connect( SigC::slot( *this, &GameParameterEditorWidget::LoadParameter ));
+         
+         PG_Button* save = new PG_Button( this, PG_Rect( rect.Width() - 100, 40, 100, 30 ), "Save" );
+         save->sigClick.connect( SigC::slot( *this, &GameParameterEditorWidget::SaveParameter ));
+         
+         PG_Button* def = new PG_Button( this, PG_Rect( rect.Width() - 100, 80, 100, 30 ), "Default" );
+         def->sigClick.connect( SigC::slot( *this, &GameParameterEditorWidget::ResetParameter ));
+         
+         
+         for ( int i = 0; i< gameparameternum; ++i ) {
+            values[i] = actmap->getgameparameter ( GameParameter(i) );
+            IntegerProperty<int>* ip = new IntegerProperty<int>( propertyEditor , gameparametername[i], &values[i] );
+            ip->SetRange( gameParameterLowerLimit[i], gameParameterUpperLimit[i] );
+         }
+      };
+      
+      bool Valid()
+      {
+         return propertyEditor->Valid();
+      }
+};
+
+
+//*******************************************************************************************************************+
 
 StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWindow( NULL, PG_Rect::null, "newmultiplayergame", false ), page(1), mode ( PBEM ), mapParameterEditor(NULL)
 {
@@ -1360,18 +1460,6 @@ class PlayerSetupWidget : public PG_ScrollWidget {
 };
 
 
-class GameParameterEditorWidget : public PropertyEditorWidget {
-      tmap* actmap;
-      int values[gameparameternum];
-   public:
-      GameParameterEditorWidget ( tmap* gamemap, PG_Widget* parent, const PG_Rect& rect ) : PropertyEditorWidget( parent, rect ), actmap ( gamemap )
-      {
-         for ( int i = 0; i< gameparameternum; ++i ) {
-            values[i] = actmap->getgameparameter ( GameParameter(i) );
-            new IntegerProperty<int>( this , gameparametername[i], &values[i] );
-         }
-      };
-};
 
 class AllianceSetupWidget : public PG_ScrollWidget {
       tmap* actmap;

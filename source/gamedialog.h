@@ -339,7 +339,7 @@ class SoundSettings : public ASC_PG_Dialog
 };
 
 
-class PropertyEditorWidget;
+class GameParameterEditorWidget;
 
 class StartMultiplayerGame: public ConfigurableWindow {
    public:    
@@ -350,7 +350,7 @@ class StartMultiplayerGame: public ConfigurableWindow {
       enum { PBP, Hotseat, PBEM } mode;
       ASCString filename;
       
-      PropertyEditorWidget* mapParameterEditor;
+      GameParameterEditorWidget* mapParameterEditor;
    
       StartMultiplayerGame(PG_MessageObject* c);
    
