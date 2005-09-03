@@ -32,17 +32,10 @@
 #include "loaders.h"
 #include "password.h"
 
+
 const int dbluedark = 248;
 
-#define maxstringlength 50  
-
-/*! Selects a file
-
-  \param ext the wildcard to search ( *.map for example )
-  \param filename A string which will contain the selected filename. If it is empty, the dialog was canceled.
-  \param load  true for selecting an existing file for loading; false for entering a filename to save to
-*/
-extern void   fileselectsvga( const ASCString& ext, ASCString& filename, bool load );
+ASCString  selectFile( const ASCString& ext, bool load );
 
 extern void  startnextcampaignmap( int id);
 
@@ -121,9 +114,6 @@ extern void viewterraininfo ( void );
 
 extern void viewUnitSetinfo ( void );
 
-extern int selectgameparameter( int lc );
-
-extern void setmapparameters ( void );
 
 
 
@@ -221,6 +211,7 @@ class MultilineEdit : public tmessagedlg  {
 extern void selectgraphicset ( void );
 
 extern int editInt( const ASCString& title, int defaultValue, int minValue = 0, int maxValue = maxint );
+
 
 
 #endif

@@ -887,9 +887,8 @@ void         k_savemap(char saveas)
       filename = actmap->preferredFileNames.mapname[0];;
    }
 
-   mousevisible(false);
    if ( saveas || !nameavail ) {
-      fileselectsvga(mapextension, filename, false);
+      filename = selectFile(mapextension, false);
    }
    if ( !filename.empty() ) {
       mapsaved = true;
@@ -897,16 +896,12 @@ void         k_savemap(char saveas)
       savemap( filename.c_str() );
       displaymap();
    }
-   mousevisible(true);
 }
 
 
 void         k_loadmap(void)
 {
-   ASCString s1;
-
-   mousevisible(false);
-   fileselectsvga( mapextension, s1, true );
+   ASCString s1 = selectFile( mapextension, true );
    if ( !s1.empty() ) {
       displaymessage("loading map %s",0, s1.c_str() );
       loadmap(s1.c_str());
@@ -925,7 +920,6 @@ void         k_loadmap(void)
       displaymap();
       mapsaved = true;
    }
-   mousevisible(true);
 }
 
 #else
@@ -3462,8 +3456,7 @@ MapSwitcher mapSwitcher;
 void transformMap ( )
 {
 
-   ASCString filename;
-   fileselectsvga ( "*.ascmapxlat", filename, true );
+   ASCString filename = selectFile( "*.ascmapxlat", true );
 
    if ( filename.empty() )
       return;
@@ -3690,8 +3683,7 @@ void resourceComparison ( )
 
 void readClipboard()
 {
-   ASCString filename;
-   fileselectsvga(clipboardFileExtension, filename, true);
+   ASCString filename = selectFile(clipboardFileExtension, true);
    if ( !filename.empty() ) {
       tnfilestream stream ( filename, tnstream::reading );
       ClipBoard::Instance().read( stream );
@@ -3700,8 +3692,7 @@ void readClipboard()
 
 void saveClipboard()
 {
-   ASCString filename;
-   fileselectsvga(clipboardFileExtension, filename, false);
+   ASCString filename = selectFile( clipboardFileExtension, false);
    if ( !filename.empty() ) {
       tnfilestream stream ( filename, tnstream::writing );
       ClipBoard::Instance().write( stream );
@@ -3814,8 +3805,7 @@ void editResearchPoints()
 
 void generateTechTree()
 {
-   ASCString filename;
-   fileselectsvga("*.dot", filename, false);
+   ASCString filename = selectFile("*.dot", false);
    if ( !filename.empty() ) {
 
       map<ASCString,int> temptechs;

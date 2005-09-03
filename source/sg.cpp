@@ -124,6 +124,8 @@
 
 
 
+#include "dialogs/newgame.h"
+#include "dialogs/soundsettings.h"
 
 
 pfield        getSelectedField(void)
@@ -485,13 +487,10 @@ void         loadMoreData(void)
 
 void loadMap()
 {
-   ASCString s1;
 
-   mousevisible(false);
-   fileselectsvga(mapextension, s1, true );
+   ASCString s1 = selectFile( mapextension, true );
 
    if ( !s1.empty() ) {
-      mousevisible(false);
       displaymessage("loading map %s",0, s1.c_str() );
       loadmap( s1.c_str() );
       actmap->startGame();
@@ -508,19 +507,15 @@ void loadMap()
       updateFieldInfo();
       moveparams.movestatus = 0;
    }
-   mousevisible(true);
 }
 
 
 void loadGame()
 {
-   mousevisible(false);
 
-   ASCString s1;
-   fileselectsvga(savegameextension, s1, true );
+   ASCString s1 = selectFile( savegameextension, true );
 
    if ( !s1.empty() ) {
-      mousevisible(false);
       displaymessage("loading %s ",0, s1.c_str());
       loadgame(s1.c_str() );
       removemessage();
@@ -532,7 +527,6 @@ void loadGame()
       updateFieldInfo();
       moveparams.movestatus = 0;
    }
-   mousevisible(true);
 }
 
 
@@ -545,22 +539,19 @@ void saveGame( bool as )
       nameavail = 1;
 
    if ( as || !nameavail ) {
-      mousevisible(false);
-      fileselectsvga(savegameextension, s1, false );
+      s1 = selectFile( savegameextension, false);
    } else
       s1 = actmap->preferredFileNames.savegame[actmap->actplayer];
 
    if ( !s1.empty() ) {
       actmap->preferredFileNames.savegame[actmap->actplayer] = s1;
 
-      mousevisible(false);
       displaymessage("saving %s", 0, s1.c_str());
       savegame(s1.c_str());
 
       removemessage();
       displaymap();
    }
-   mousevisible(true);
 }
 
 
@@ -1105,14 +1096,6 @@ void execuseraction ( tuseractions action )
          displaymap();
          break;
 
-      case ua_loadgame:
-         loadGame();
-         break;
-
-      case ua_savegame:
-         saveGame( true );
-         break;
-
       case ua_setupalliances:
          setupalliances();
          logtoreplayinfo ( rpl_alliancechange );
@@ -1344,8 +1327,7 @@ void execuseraction ( tuseractions action )
                ClipBoard::Instance().clear();
                ClipBoard::Instance().addUnit( veh );
 
-               ASCString filename;
-               fileselectsvga(clipboardFileExtension, filename, false);
+               ASCString filename = selectFile( clipboardFileExtension, false );
                if ( !filename.empty() ) {
                   tnfilestream stream ( filename, tnstream::writing );
                   ClipBoard::Instance().write( stream );
@@ -1387,11 +1369,11 @@ void execuseraction2 ( tuseractions action )
          displaymessage ( "Current game time is:\n turn %d , move %d ", 3, actmap->time.turn(), actmap->time.move() );
          break;
       case ua_soundDialog:
-          SoundSettings::soundSettings( NULL );
+          soundSettings( NULL );
          break;
       case ua_reloadDlgTheme:
              getPGApplication().reloadTheme();
-             SoundSettings::soundSettings( NULL );
+             soundSettings( NULL );
          break;
       case ua_viewButtonPanel:  mainScreenWidget->spawnPanel( MainScreenWidget::ButtonPanel );
          break;
@@ -1408,6 +1390,10 @@ void execuseraction2 ( tuseractions action )
       case ua_weathercast: weathercast();
          break;
       case ua_newmultiplayergame: StartMultiplayerGame::startMultiplayerGame(NULL);
+         break;
+      case ua_loadgame: loadGame();
+         break;
+      case ua_savegame: saveGame( true );
          break;
       default:
          break;

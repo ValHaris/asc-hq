@@ -455,7 +455,8 @@ AC_OUTPUT(  Makefile \
 	    source/clparser/Makefile \
 	    source/docs/Makefile \
 	    source/docs/en/Makefile \
-            source/graphics/Makefile \
+	    source/graphics/Makefile \
+	    source/dialogs/Makefile \
 	    source/libs/Makefile \
 	    source/libs/sdlmm/Makefile \
 	    source/libs/sdlmm/src/Makefile \

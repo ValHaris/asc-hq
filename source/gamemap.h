@@ -57,6 +57,7 @@ class WeatherSystem;
 //! The number of game paramters that can be specified for each map.
 const int gameparameternum = 32;
 
+#if 0
 //! The names of the game paramter. \sa gameparameterdefault
 extern const char* gameparametername[ gameparameternum ];
 
@@ -65,6 +66,7 @@ extern const int gameparameterdefault [ gameparameternum ];
 extern const int gameParameterLowerLimit [ gameparameternum ];
 extern const int gameParameterUpperLimit [ gameparameternum ];
 extern const bool gameParameterChangeableByEvent [ gameparameternum ];
+#endif
 
 enum GameParameter { cgp_fahrspur,
        cgp_eis,
@@ -100,6 +102,17 @@ enum GameParameter { cgp_fahrspur,
        cgp_objectGrowOnOtherObjects };
 
 
+struct GameParameterSettings {
+         const char* name;
+         int defaultValue;
+         int minValue;
+         int maxValue;
+         bool changeableByEvent;
+         bool legacy;
+         const char* longName;
+};
+extern GameParameterSettings gameParameterSettings[gameparameternum ];
+       
 class LoadNextMap {
        public:
           int id;

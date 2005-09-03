@@ -855,7 +855,7 @@ int tmap :: getgameparameter ( GameParameter num )
      return game_parameter[num];
   } else
      if ( num < gameparameternum )
-        return gameparameterdefault[ num ];
+        return gameParameterSettings[num].defaultValue;
      else
         return 0;
 }
@@ -872,7 +872,7 @@ void tmap :: setgameparameter ( GameParameter num, int value )
            game_parameter[i] = oldparam[i];
         for ( int j = gameparameter_num; j < num; j++ )
            if ( j < gameparameternum )
-              game_parameter[j] = gameparameterdefault[j];
+              game_parameter[j] = gameParameterSettings[j].defaultValue;
            else
               game_parameter[j] = 0;
         game_parameter[num] = value;
@@ -883,7 +883,7 @@ void tmap :: setgameparameter ( GameParameter num, int value )
        game_parameter = new int[num+1];
        for ( int j = 0; j < num; j++ )
           if ( j < gameparameternum )
-             game_parameter[j] = gameparameterdefault[j];
+             game_parameter[j] = gameParameterSettings[j].defaultValue;
           else
              game_parameter[j] = 0;
        game_parameter[num] = value;
@@ -2128,43 +2128,44 @@ tmap :: ReplayInfo :: ~ReplayInfo ( )
   }
 }
 
+GameParameterSettings gameParameterSettings[gameparameternum ] = {
+      {  "LifetimeTrack",                      1,                    1,   maxint,             true,   false,   "lifetime of tracks"},//       cgp_fahrspur                        
+      {  "LifetimeBrokenIce",                  2,                    1,   maxint,             true,   false,   "freezing time of icebreaker fairway"},   //       cgp_eis,                            
+      {  "MoveFromInaccessibleFields",         0,                    0,   1,                  true,   false,   "move vehicles from unaccessible fields"},   //       cgp_movefrominvalidfields,          
+      {  "BuildingConstructionFactorMaterial", 100,                  1,   maxint,             true,   false,   "building construction material factor (percent)"},   //       cgp_building_material_factor,       
+      {  "BuildingConstructionFactorEnergy",   100,                  1,   maxint,             true,   false,   "building construction fuel factor (percent)"},   //       cgp_building_fuel_factor,           
+      {  "ForbitBuildingConstruction",         1,                    0,   1,                  true,   false,   "forbid construction of buildings"},   //       cgp_forbid_building_construction,   
+      {  "LimitUnitProductionByUnit",          0,                    0,   2,                  true,   false,   "limit construction of units by other units"},   //       cgp_forbid_unitunit_construction,   
+      {  "Bi3Training",                        0,                    0,   maxunitexperience,  true,   false,   "use BI3 style training factor "},   //       cgp_bi3_training,                   
+      {  "MaxMinesOnField",                    1,                    0,   maxint,             true,   false,   "maximum number of mines on a single field"},   //       cgp_maxminesonfield,                
+      {  "LifetimeAntipersonnelMine",          0,                    0,   maxint,             true,   false,   "lifetime of antipersonnel mine"},   //       cgp_antipersonnelmine_lifetime,     
+      {  "LifetimeAntiTankMine",               0,                    0,   maxint,             true,   false,   "lifetime of antitank mine"},   //       cgp_antitankmine_lifetime,          
+      {  "LifetimeAntiSubMine",                0,                    0,   maxint,             true,   false,   "lifetime of antisub mine"},   //       cgp_mooredmine_lifetime,            
+      {  "LifetimeAntiShipMine",               0,                    0,   maxint,             true,   false,   "lifetime of antiship mine"},   //       cgp_floatingmine_lifetime,          
+      {  "BuildingArmorFactor",                100,                  1,   maxint,             true,   false,   "building armor factor (percent)"},   //       cgp_buildingarmor,                  
+      {  "MaxBuildingRepair",                  100,                  0,   100,                true,   false,   "max building damage repair / turn"},   //       cgp_maxbuildingrepair,              
+      {  "BuildingRepairCostIncrease",         100,                  1,   maxint,             true,   false,   "building repair cost increase (percent)"},   //       cgp_buildingrepairfactor,           
+      {  "GlobalFuel",                         1,                    0,   1,                  true,   false,   "fuel globally available (BI Resource Mode)"},   //       cgp_globalfuel,                     
+      {  "MaxTrainingExperience",              maxunitexperience,    0,   maxunitexperience,  true,   false,   "maximum experience that can be gained by training"},   //       cgp_maxtrainingexperience,          
+      {  "InitialMapVisibility",               0,                    0,   2,                  true,   false,   "initial map visibility"},   //       cgp_initialMapVisibility,           
+      {  "AttackPower",                        40,                   1,   100,                true,   false,   "attack power (EXPERIMENTAL!)"},   //       cgp_attackPower,                    
+      {  "JammingAmplifier",                   100,                  0,   1000,               true,   false,   "jamming amplifier (EXPERIMENTAL!)"},   //       cgp_jammingAmplifier,               
+      {  "JammingSlope",                       10,                   0,   100,                true,   false,   "jamming slope (EXPERIMENTAL!)"},   //       cgp_jammingSlope,                   
+      {  "SupervisorMapSave",                  0,                    0,   1,                  false,  false,   "The Supervisor may save a game as new map (spying!!!)"},  //       cgp_superVisorCanSaveMap,           
+      {  "ObjectsDestroyedByTerrain",          1,                    0,   1,                  true,   false,   "objects can be destroyed by terrain"},   //       cgp_objectsDestroyedByTerrain,      
+      {  "TrainingIncrement",                  2,                    1,   maxunitexperience,  true,   false,   "training centers: training increment"},   //       cgp_trainingIncrement,              
+      {  "ExperienceEffectDivisorAttack",      1,                    1,   10,                 false,  false,   "experience effect divisor for attack"},  //       gp_experienceDivisorAttack
+      {  "DisableDirectView",                  0,                    0,   1,                  false,  false,   "disable direct View"},  //       cgp_disableDirectView
+      {  "DisableUnitTrade",                   0,                    0,   1,                  false,  false,   "disable transfering units/buildings to other players"},  //       cgp_disableUnitTransfer
+      {  "ExperienceEffectDivisorDefense",     1,                    1,   10,                 false,  false,   "experience effect divisor for defense"},  //       cgp_experienceDivisorDefense
+      {  "DebugGameEvents",                    0,                    0,   2,                  true,   false,   "debug game events"},  //       cgp_debugEvents
+      {  "ObjectGrowthRate",                   0,                    0,   maxint,             true,   false,   "Object growth rate (percentage)" },  //       cgp_objectGrowthMultiplier
+      {  "ObjectsGrowOnOtherObjects",          0,                    0,   1,                  false,  false,   "Objects can grow on fields with other objects"  }  //       cgp_objectGrowOnOtherObjects
+      };   
 
+#if 0         
 
-const int gameparameterdefault [ gameparameternum ] = { 1,                       //       cgp_fahrspur                        
-                                                        2,                       //       cgp_eis,                            
-                                                        0,                       //       cgp_movefrominvalidfields,          
-                                                        100,                     //       cgp_building_material_factor,       
-                                                        100,                     //       cgp_building_fuel_factor,           
-                                                        1,                       //       cgp_forbid_building_construction,   
-                                                        0,                       //       cgp_forbid_unitunit_construction,   
-                                                        0,                       //       cgp_bi3_training,                   
-                                                        1,                       //       cgp_maxminesonfield,                
-                                                        0,                       //       cgp_antipersonnelmine_lifetime,     
-                                                        0,                       //       cgp_antitankmine_lifetime,          
-                                                        0,                       //       cgp_mooredmine_lifetime,            
-                                                        0,                       //       cgp_floatingmine_lifetime,          
-                                                        100,                     //       cgp_buildingarmor,                  
-                                                        100,                     //       cgp_maxbuildingrepair,              
-                                                        100,                     //       cgp_buildingrepairfactor,           
-                                                        1,                       //       cgp_globalfuel,                     
-                                                        maxunitexperience,       //       cgp_maxtrainingexperience,          
-                                                        0,                       //       cgp_initialMapVisibility,           
-                                                        40,                      //       cgp_attackPower,                    
-                                                        100,                     //       cgp_jammingAmplifier,               
-                                                        10,                      //       cgp_jammingSlope,                   
-                                                        0,                       //       cgp_superVisorCanSaveMap,           
-                                                        1,                       //       cgp_objectsDestroyedByTerrain,      
-                                                        2,                       //       cgp_trainingIncrement,              
-                                                        1,                       //       gp_experienceDivisorAttack
-                                                        0,                       //       cgp_disableDirectView
-                                                        0,                       //       cgp_disableUnitTransfer
-                                                        1,                       //       cgp_experienceDivisorDefense
-                                                        0,                       //       cgp_debugEvents
-                                                        0,                       //       cgp_objectGrowthMultiplier
-                                                        0 };                     //       cgp_objectGrowOnOtherObjects
-
-
-const bool gameParameterChangeableByEvent [ gameparameternum ] = { true,   //       cgp_fahrspur
+const bool gameParameterChangeableByEvent [ gameparameternum ]={ true,   //       cgp_fahrspur
                                                                  true,     //       cgp_eis,
                                                                  true,     //       cgp_movefrominvalidfields,
                                                                  true,     //       cgp_building_material_factor,
@@ -2299,4 +2300,4 @@ const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "Object growth rate (percentage)",
                                                       "Objects can grow on files with other objects" };
 
-
+#endif

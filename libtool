@@ -22,7 +22,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 # As a special exception to the GNU General Public License, if you
 # distribute this file as part of a program that contains a
@@ -33,7 +33,7 @@
 SED="/bin/sed"
 
 # Sed that helps us avoid accidentally triggering echo(1) options like -n.
-Xsed="/bin/sed -e s/^X//"
+Xsed="/bin/sed -e 1s/^X//"
 
 # The HP-UX ksh and POSIX shell print the target directory to stdout
 # if CDPATH is set.
@@ -149,7 +149,7 @@ max_cmd_len=32768
 # Does compiler simultaneously support -c and -o options?
 compiler_c_o="yes"
 
-# Must we lock files when doing compilation ?
+# Must we lock files when doing compilation?
 need_locks="no"
 
 # Do we need the lib prefix for modules?
@@ -210,9 +210,9 @@ old_archive_from_expsyms_cmds=""
 # Commands used to build and install a shared archive.
 archive_cmds="\$CC -shared \$libobjs \$deplibs \$compiler_flags \${wl}-soname \$wl\$soname -o \$lib"
 archive_expsym_cmds="\$echo \\\"{ global:\\\" > \$output_objdir/\$libname.ver~
-cat \$export_symbols | sed -e \\\"s/\\\\(.*\\\\)/\\\\1;/\\\" >> \$output_objdir/\$libname.ver~
-\$echo \\\"local: *; };\\\" >> \$output_objdir/\$libname.ver~
-        \$CC -shared \$libobjs \$deplibs \$compiler_flags \${wl}-soname \$wl\$soname \${wl}-version-script \${wl}\$output_objdir/\$libname.ver -o \$lib"
+  cat \$export_symbols | sed -e \\\"s/\\\\(.*\\\\)/\\\\1;/\\\" >> \$output_objdir/\$libname.ver~
+  \$echo \\\"local: *; };\\\" >> \$output_objdir/\$libname.ver~
+	  \$CC -shared \$libobjs \$deplibs \$compiler_flags \${wl}-soname \$wl\$soname \${wl}-version-script \${wl}\$output_objdir/\$libname.ver -o \$lib"
 postinstall_cmds=""
 postuninstall_cmds=""
 
@@ -6954,7 +6954,7 @@ max_cmd_len=32768
 # Does compiler simultaneously support -c and -o options?
 compiler_c_o="yes"
 
-# Must we lock files when doing compilation ?
+# Must we lock files when doing compilation?
 need_locks="no"
 
 # Do we need the lib prefix for modules?

@@ -30,10 +30,10 @@
 #include <pgwindow.h>
 #include <pgapplication.h>
 
-#include "libs/loki/Functor.h"
+#include "../libs/loki/Functor.h"
 
-#include "global.h"
-#include "ascstring.h"
+#include "../global.h"
+#include "../ascstring.h"
 
 
 class SelectionWidget : public PG_Widget {
@@ -83,6 +83,8 @@ class SelectionItemFactory {
 
 class ItemSelectorWidget : public PG_Widget {
       
+      bool namesConstrained;
+
       typedef vector<SelectionWidget*> WidgetList;
       WidgetList widgets;
       
@@ -112,7 +114,9 @@ class ItemSelectorWidget : public PG_Widget {
       ItemSelectorWidget( PG_Widget *parent, const PG_Rect &r , SelectionItemFactory* itemFactory ) ;
 
       SigC::Signal1<void,const SelectionWidget*> sigItemSelected;
+      SigC::Signal1<void,ASCString> nameEntered;
       
+      void constrainNames( bool constrain );
             
       void reLoad();
       void resetNamesearch();

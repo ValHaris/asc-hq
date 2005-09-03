@@ -29,7 +29,7 @@
 #include <pgwindow.h>
 #include <pgapplication.h>
 
-#include "selectionwindow.h"
+#include "dialogs/selectionwindow.h"
 #include "ed_mapcomponent.h"
 #include "edglobal.h"
 

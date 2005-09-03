@@ -42,6 +42,8 @@
 #include "attack.h"
 #include "unitinfodialog.h"
 
+#include "dialogs/editmapparam.h"   
+   
    const char* execactionnames[execactionscount] = {
         "End MapEdit",
         "Help",
@@ -651,8 +653,7 @@ void execaction(int code)
 
          ASCString wildcard = path + "mis" + pathdelimitterstring + "*.dat" ;
 
-         ASCString filename;
-         fileselectsvga ( wildcard, filename, true );
+         ASCString filename = selectFile( wildcard, true );
          if ( !filename.empty() ) {
             TerrainType::Weather* t = auswahl->weather[auswahlw];
             if ( !t )
@@ -669,8 +670,7 @@ void execaction(int code)
 
          ASCString wildcard = path + "mis" + pathdelimitterstring + "*.dat" ;
 
-         ASCString filename;
-         fileselectsvga ( wildcard, filename, true );
+         ASCString filename = selectFile( wildcard, true );
          if ( !filename.empty() ) {
             insertbattleislemap ( actmap->getCursor().x, actmap->getCursor().y, path.c_str(), filename.c_str() );
             displaymap();
@@ -683,8 +683,6 @@ void execaction(int code)
       break;
    case act_setactweatherglobal: setweatherall ( auswahlw );
                                  displaymap();
-      break;
-   case act_setmapparameters: setmapparameters();
       break;
    case act_terraininfo: viewterraininfo();
       break;
@@ -800,6 +798,8 @@ void execaction_pg(int code)
     case act_selmine : mainScreenWidget->selectMine();
        break;
     case act_unitinfo :  unitInfoDialog();
+       break;
+    case act_setmapparameters: setmapparameters( actmap );
        break;
    };      
 }

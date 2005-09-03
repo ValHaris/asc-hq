@@ -22,6 +22,7 @@
 #ifndef paradialogH
  #define paradialogH
 
+#include <sstream>
 
 #include "global.h"
 
@@ -58,6 +59,7 @@
 #include "sdl/graphics.h"
 #include "ascstring.h"
 #include "textfile_evaluation.h"
+#include "graphics/drawing.h"
 
 class AutoProgressBar;
 
@@ -114,6 +116,18 @@ class DropDownSelector: public PG_DropDown {
         void AddItem (const std::string &text, void *userdata=NULL, Uint16 height=0);
         SigC::Signal1<void, int> selectionSignal;
 };
+
+
+class ColoredBar : public PG_ThemeWidget {
+   public:
+      ColoredBar( PG_Color col,  PG_Widget *parent, const PG_Rect &r ) : PG_ThemeWidget( parent, r )
+      {
+         SetGradient ( PG_Gradient( col,col,col,col ));
+         SetBorderSize(0);
+         SetBackgroundBlend ( 255 );
+      };
+};
+
 
 class BarGraphWidget;
 
@@ -254,6 +268,24 @@ class SpecialInputWidget : public PG_Widget {
       void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst) { };
 };
 
+class Emboss : public PG_Widget {
+      bool inv;
+   public:
+
+      Emboss (PG_Widget *parent, const PG_Rect &rect, bool inverted = false ) : PG_Widget( parent, rect, false ), inv(inverted)
+      {
+      }
+
+
+      void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst) {
+         Surface s = Surface::Wrap( PG_Application::GetScreen() );
+         if ( inv )
+            rectangle<4> ( s, SPoint(dst.x, dst.y), dst.w, dst.h, ColorMerger_Brightness<4>( 0.7 ), ColorMerger_Brightness<4>( 1.4 ));
+         else
+            rectangle<4> ( s, SPoint(dst.x, dst.y), dst.w, dst.h, ColorMerger_Brightness<4>( 1.4 ), ColorMerger_Brightness<4>( 0.7 ));
+      };
+};
+
 
 
 
@@ -264,4 +296,251 @@ class SpecialInputWidget : public PG_Widget {
 
 
 
+ 
+class PropertyEditorField {
+   public:
+      virtual bool Valid() = 0;
+      virtual bool Apply() = 0;
+      virtual void Reload() = 0;
+      virtual ~PropertyEditorField() {};
+};      
+
+class PropertyEditorWidget : public PG_ScrollWidget {
+      
+      typedef std::vector<PropertyEditorField*> PropertyFieldsType;
+      PropertyFieldsType propertyFields;
+      
+      std::string styleName;
+      
+      int ypos;
+      int lineHeight;
+      int lineSpacing;
+      int labelWidth;
+
+   public:
+      PropertyEditorWidget ( PG_Widget *parent, const PG_Rect &r, const std::string &style="PropertyEditor", int labelWidthPercentage = 50 );
+     
+      std::string GetStyleName();
+
+      void Reload();
+      
+            
+      bool Valid();
+      
+      bool Apply();
+      
+      PG_Rect RegisterProperty( const std::string& name, PropertyEditorField* propertyEditorField );
+      
+      ~PropertyEditorWidget() ;
+};
+
+
+
+class LineFieldProperty : public PropertyEditorField, public SigC::Object {
+   protected:
+      PG_LineEdit* lineEdit;
+      
+      LineFieldProperty ( PropertyEditorWidget* propertyEditor, const std::string& name ) 
+      {
+         PG_Rect r = propertyEditor->RegisterProperty( name, this );
+         lineEdit = new PG_LineEdit( propertyEditor, r, propertyEditor->GetStyleName() );
+         lineEdit->sigEditEnd.connect( SigC::slot( *this, &LineFieldProperty::EditEnd ));
+      }
+      
+      
+      virtual bool EditEnd() = 0;
+
+
+};
+
+
+class StringProperty : public LineFieldProperty {
+      std::string* myProperty;
+      
+   protected:
+   
+      bool EditEnd() {
+         sigValueChanged(this,lineEdit->GetText());
+         return true;
+      }
+   
+   public:
+      typedef PG_Signal2<StringProperty*, std::string> StringPropertySignal;
+      StringPropertySignal sigValueChanged;
+      StringPropertySignal sigValueApplied;
+      
+      StringProperty( PropertyEditorWidget* propertyEditor, const std::string& name, std::string* string ) : LineFieldProperty( propertyEditor, name ), myProperty( string )
+      {
+         Reload();
+      };
+      
+      StringProperty( PropertyEditorWidget* propertyEditor, const std::string& name, const std::string& string ) : LineFieldProperty( propertyEditor, name ), myProperty( NULL )
+      {
+         lineEdit->SetText( string );
+      };
+   
+      bool Valid() { return true; };
+      bool Apply() {
+         if ( myProperty )
+            *myProperty = lineEdit->GetText();
+            
+         return true;
+      };
+      void Reload() {
+         if ( myProperty )
+            lineEdit->SetText( *myProperty );
+      };            
+};
+
+
+template <class IntegerType>
+class IntegerProperty : public LineFieldProperty {
+      IntegerType* myProperty;
+      IntegerType minValue;
+      IntegerType maxValue;
+   protected:   
+      bool convert( IntegerType& i ) {
+         std::istringstream s( lineEdit->GetText() );
+         return s >> i;
+      };
+      
+      void set( IntegerType i ) {
+         std::ostringstream s;
+         s << i;
+         lineEdit->SetText( s.str() );
+      }
+      
+      bool EditEnd() {
+         IntegerType i ;
+         if ( convert(i)) {
+            sigValueChanged(this,i);
+            return true;
+         } else
+            return false;
+      }
+      
+   public:
+     
+      typedef PG_Signal2<IntegerProperty*, IntegerType> IntegerPropertySignal;
+      IntegerPropertySignal sigValueChanged;
+      IntegerPropertySignal sigValueApplied;
+      
+      IntegerProperty( PropertyEditorWidget* propertyEditor, const std::string& name, IntegerType* myInteger ) : LineFieldProperty( propertyEditor, name ), myProperty( myInteger )
+      {
+         minValue = numeric_limits<IntegerType>::min();
+         maxValue = numeric_limits<IntegerType>::max();
+         Reload();
+      };
+      
+      IntegerProperty( PropertyEditorWidget* propertyEditor, const std::string& name, IntegerType myInteger ) : LineFieldProperty( propertyEditor, name ), myProperty( NULL )
+      {
+         minValue = numeric_limits<IntegerType>::min();
+         maxValue = numeric_limits<IntegerType>::max();
+         set( myInteger );
+      };
+
+      void SetRange( IntegerType min, IntegerType max )
+      {
+         if ( min <= max ) {
+            minValue = min;
+            maxValue = max;
+         }
+      }
+         
+      bool CheckRange( IntegerType value )
+      {
+         return value >= minValue && value <= maxValue;
+      }   
+      
+      bool Valid() { 
+         IntegerType i;
+         if ( !convert(i) )
+            return false;
+            
+         if ( !CheckRange( i ))
+            return false;
+            
+         return true;
+       };
+       
+      bool Apply() {
+         IntegerType i;
+         if ( !convert(i) )
+            return false;
+
+         if ( !CheckRange( i ))
+            return false;
+         
+         sigValueApplied( this, i );
+                        
+         if ( myProperty )
+            *myProperty = i;
+            
+         return true;
+      };
+      
+      void Reload() {
+         if ( myProperty )
+            set( *myProperty );
+      };            
+      
+};
+
+
+
+template<typename B>            
+class BoolProperty : public PropertyEditorField, public SigC::Object  {
+      B* myProperty;
+      PG_CheckButton* checkbox;
+      
+      bool click( bool b)
+      {
+         sigValueChanged(this,b);
+         return true;
+      }   
+      
+   public:
+      typedef PG_Signal2<BoolProperty*, B> BoolPropertySignal;
+      BoolPropertySignal sigValueChanged;
+      BoolPropertySignal sigValueApplied;
+      
+      BoolProperty( PropertyEditorWidget* propertyEditor, const std::string& name, B* b ) : myProperty( b )
+      {
+         PG_Rect r = propertyEditor->RegisterProperty( name, this );
+         checkbox = new PG_CheckButton( propertyEditor, r, PG_NULLSTR, -1, propertyEditor->GetStyleName() );
+         checkbox->sigClick.connect( SigC::slot(*this, &BoolProperty::click));
+         Reload();
+      };
+      
+      BoolProperty( PropertyEditorWidget* propertyEditor, const std::string& name, B& b ) : myProperty( NULL )
+      {
+         PG_Rect r = propertyEditor->RegisterProperty( name, this );
+         checkbox = new PG_CheckButton( propertyEditor, r, PG_NULLSTR, -1, propertyEditor->GetStyleName() );
+         checkbox->sigClick.connect( SigC::slot(*this, &BoolProperty::click));
+
+         if ( b )
+            checkbox->SetPressed();
+         else
+            checkbox->SetUnpressed();
+      };
+   
+      bool Valid() { return true; };
+      bool Apply() {
+         if ( myProperty )
+            *myProperty = checkbox->GetPressed();
+            
+         return true;
+      };
+      void Reload() {
+         if ( myProperty )
+            if ( *myProperty )
+               checkbox->SetPressed();
+            else
+               checkbox->SetUnpressed();
+      };            
+};
+
+
+
+ 
 #endif

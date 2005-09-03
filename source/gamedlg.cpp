@@ -57,7 +57,7 @@
 #include "replay.h"
 #include "itemrepository.h"
 #include "strtmesg.h"
-
+#include "dialogs/editmapparam.h"
 
 class   tchoosetechnology : public tdialogbox {
                            typedef vector<const Technology*> Techs;
@@ -1154,9 +1154,7 @@ void         tcontinuecampaign::buttonpressed(int         id)
       break;
 
       case 2:   {
-            ASCString t;
-
-            fileselectsvga("*.rcy", t, true );
+            ASCString t = selectFile( "*.rcy", true );
             if ( !t.empty() )
                savecampaignrecoveryinformation ( t.c_str(), idsearched);
          }
@@ -1302,12 +1300,10 @@ void         tchoosenewmap::readmapinfo(void)
 
 void         tchoosenewmap::buttonpressed( int id )
 {
-   ASCString t;
-
    switch (id) {
 
       case 2:   {
-            fileselectsvga( mapextension, t, true );
+            ASCString t = selectFile( mapextension, true );
             if ( !t.empty() ) {
                strcpy(mapname, t.c_str());
                readmapinfo();
@@ -1465,7 +1461,7 @@ void         tchoosenewsinglelevel::run(void)
             multiplayersettings ();
          else {
             choosetechlevel();
-            setmapparameters();
+            setmapparameters( actmap );
          }
 
          actmap->setupResources();
@@ -2434,12 +2430,13 @@ void writeGameParametersToString ( std::string& s)
    s = "The game has been set up with the following game parameters:\n";
    s += "(black line: parameter has default value)\n\n";
    for ( int i = 0; i< gameparameternum; i++ ) {
-      int d = actmap->getgameparameter(GameParameter(i)) != gameparameterdefault[i];
+   
+      int d = actmap->getgameparameter(GameParameter(i)) != gameParameterSettings[i].defaultValue;
 
       if ( d )
          s+= "#color4#";
 
-      s += gameparametername[i];
+      s += gameParameterSettings[i].longName;
       s += " = ";
       s += strrr ( actmap->getgameparameter(GameParameter(i)) );
 
@@ -2510,7 +2507,7 @@ void tmultiplayersettings :: buttonpressed ( int id )
 {
    tdialogbox :: buttonpressed ( id );
    if ( id == 125 )
-      setmapparameters();
+      setmapparameters( actmap );
 
    if ( id == 1 ) {             // OK
       status = 2;

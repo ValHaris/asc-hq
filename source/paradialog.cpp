@@ -503,20 +503,6 @@ bool ASC_PG_Dialog::closeWindow(){
 
 
 
-class Emboss : public PG_Widget {
-   public:
-
-      Emboss (PG_Widget *parent, const PG_Rect &rect ) : PG_Widget( parent, rect, false )
-      {
-      }
-
-
-      void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst) {
-         Surface s = Surface::Wrap( PG_Application::GetScreen() );
-         rectangle<4> ( s, SPoint(dst.x, dst.y), dst.w, dst.h, ColorMerger_Brightness<4>( 1.4 ), ColorMerger_Brightness<4>( 0.7 ));
-      };
-};
-
 
 
 
@@ -1457,3 +1443,56 @@ bool MessageDialog::handleButton(PG_Button* button) {
 	return true;
 }
 
+
+
+
+      PropertyEditorWidget :: PropertyEditorWidget ( PG_Widget *parent, const PG_Rect &r, const std::string &style, int labelWidthPercentage ) : PG_ScrollWidget( parent, r, style ), styleName( style ), ypos ( 0 ), lineHeight(25), lineSpacing(2), labelWidth(labelWidthPercentage)
+      {
+      };
+      
+      std::string PropertyEditorWidget :: GetStyleName() {
+         return styleName;  
+      };
+
+      void PropertyEditorWidget :: Reload() {
+         for ( PropertyFieldsType::iterator i = propertyFields.begin(); i != propertyFields.end(); ++i )
+            (*i)->Reload();
+      };
+      
+            
+      bool PropertyEditorWidget :: Valid() {
+         for ( PropertyFieldsType::iterator i = propertyFields.begin(); i != propertyFields.end(); ++i )
+            if ( ! (*i)->Valid() )
+               return false;
+         return true;
+      };
+      
+      bool PropertyEditorWidget :: Apply() {
+         if ( !Valid() )
+            return false;
+                        
+         for ( PropertyFieldsType::iterator i = propertyFields.begin(); i != propertyFields.end(); ++i )
+            (*i)->Apply();
+            
+         return true;
+      };
+      
+      PG_Rect PropertyEditorWidget :: RegisterProperty( const std::string& name, PropertyEditorField* propertyEditorField )
+      {
+         propertyFields.push_back( propertyEditorField );
+         
+         int w = Width() - my_widthScrollbar - 2 * lineSpacing;
+      
+         PG_Label* label = new PG_Label( this, PG_Rect( 0, ypos, w * labelWidth / 100 - 1, lineHeight), name );
+         label->LoadThemeStyle( styleName, "Label" );
+         PG_Rect r  ( w * labelWidth / 100 , ypos, w * ( 100 - labelWidth ) / 100  - 1, lineHeight );
+         ypos += lineHeight + lineSpacing;
+         return r;
+      };
+      
+      PropertyEditorWidget :: ~PropertyEditorWidget() 
+      {
+         for ( PropertyFieldsType::iterator i = propertyFields.begin(); i != propertyFields.end(); ++i )
+            delete *i;
+      };
+      

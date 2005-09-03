@@ -25,12 +25,12 @@ simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameevents
 gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp weatherarea.cpp \
 guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp gamedialog.cpp \
 infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappanel.cpp \
-weathercast.cpp unitinfodialog.cpp messaginghub.cpp explosivemines.cpp selectionwindow.cpp \
+weathercast.cpp unitinfodialog.cpp messaginghub.cpp explosivemines.cpp  \
 legacynetworkloaders.cpp
 
 
 asc_LDADD   		= $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 $(top_builddir)/source/sdl/libsdl.la  $(top_builddir)/source/libs/loki/libloki.la \
-$(top_builddir)/source/graphics/libgraphics.la \
+$(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(PARAGUI_LIBS) @LDADDLIBBZ2@  $(SIGC_LIBS) $(SDL_LIBS)

@@ -537,19 +537,19 @@ bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
    if ( !mod  ) {
       switch ( key->keysym.sym ) {
             case SDLK_ESCAPE:
-               execuseraction( ua_mainmenu );
+               execUserAction_ev( ua_mainmenu );
                return true;
                
             case SDLK_F1:
-               execuseraction ( ua_help );
+               execUserAction_ev ( ua_help );
                return true;
 
             case SDLK_F3:
-               execuseraction ( ua_continuenetworkgame );
+               execUserAction_ev ( ua_continuenetworkgame );
                return true;
 
             case SDLK_F4:
-               execuseraction ( ua_computerturn );
+               execUserAction_ev ( ua_computerturn );
                return true;
 
             case SDLK_F8:
@@ -577,11 +577,11 @@ bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
             return true;
 
             case SDLK_1:
-               execuseraction ( ua_changeresourceview );
+               execUserAction_ev ( ua_changeresourceview );
                return true;
 
             case SDLK_2:
-               execuseraction ( ua_toggleunitshading );
+               execUserAction_ev ( ua_toggleunitshading );
                return true;
 
             case SDLK_3:
@@ -593,26 +593,26 @@ bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                return true;
 
             case SDLK_5:
-               execuseraction ( ua_GameStatus );
+               execUserAction_ev ( ua_GameStatus );
                return true;
 
             case SDLK_6:
-               execuseraction ( ua_UnitSetInfo );
+               execUserAction_ev ( ua_UnitSetInfo );
                return true;
 
             case SDLK_7:
-               execuseraction ( ua_viewterraininfo );
+               execUserAction_ev ( ua_viewterraininfo );
                return true;
 
             case SDLK_8:
-               execuseraction ( ua_unitweightinfo );
+               execUserAction_ev ( ua_unitweightinfo );
                return true;
 
             case SDLK_9:
                // viewPipeNet ( SDLK_9 );
                return true;
 
-            case SDLK_0: execuseraction( ua_writescreentopcx );
+            case SDLK_0: execUserAction_ev( ua_writescreentopcx );
                return true;
             default:;
       }
@@ -621,24 +621,24 @@ bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
    if ( mod & KMOD_CTRL ) {
       switch ( key->keysym.sym ) {
             case SDLK_l:
-               execuseraction ( ua_loadgame );
+               execUserAction_ev ( ua_loadgame );
                return true;
 
             case SDLK_s:
-               execuseraction ( ua_savegame );
+               execUserAction_ev ( ua_savegame );
                return true;
 
 
             case SDLK_n:
-               execuseraction ( ua_startnewsinglelevel );
+               execUserAction_ev ( ua_startnewsinglelevel );
                return true;
 
             case SDLK_F12:
-               execuseraction ( ua_exportUnitToFile );
+               execUserAction_ev ( ua_exportUnitToFile );
                return true;
 
             case SDLK_x:
-               execuseraction ( ua_exitgame );
+               execUserAction_ev ( ua_exitgame );
                return true;
             default:;
       }

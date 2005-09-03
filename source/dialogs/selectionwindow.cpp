@@ -18,9 +18,9 @@
     Boston, MA  02111-1307  USA
 */
 
-#include "selectionwindow.h"
-
 #include "sigc++/retype_return.h"
+#include "selectionwindow.h"
+#include "../paradialog.h"
 
 bool SelectionWidget::eventMouseButtonUp (const SDL_MouseButtonEvent *button) 
 {
@@ -112,16 +112,20 @@ bool ItemSelectorWidget::eventKeyDown(const SDL_KeyboardEvent* key)
    }
 
    if ( key->keysym.sym == SDLK_RETURN ) {
-      if ( selectedItem ) {
+      if ( selectedItem && nameMatch( selectedItem, nameSearch->GetText()) ) {
          itemSelected( selectedItem );
          return true;
-      }
+      } else 
+         if ( !namesConstrained ) {
+            nameEntered( nameSearch->GetText() );
+            return true;
+         }   
    } 
    
             
    if ( key->keysym.unicode <= 255 ) {
       ASCString newtext = nameSearch->GetText() + char ( key->keysym.unicode );
-      if ( locateObject( newtext ) ) 
+      if ( locateObject( newtext ) || !namesConstrained ) 
          nameSearch->SetText( newtext );
       
       return true;
@@ -175,12 +179,19 @@ bool ItemSelectorWidget::nameMatch( const SelectionWidget* selection, const ASCS
 
 
 ItemSelectorWidget::ItemSelectorWidget( PG_Widget *parent, const PG_Rect &r , SelectionItemFactory* itemFactory ) 
-   : PG_Widget( parent,r ), rowCount(0), scrollWidget( NULL), nameSearch(NULL), selectedItem(NULL), factory( itemFactory ), columnCount(-1), selectionCallBack( this, &ItemSelectorWidget::isItemMarked ) {
+   : PG_Widget( parent,r ), namesConstrained(true), rowCount(0), scrollWidget( NULL), nameSearch(NULL), selectedItem(NULL), factory( itemFactory ), columnCount(-1), selectionCallBack( this, &ItemSelectorWidget::isItemMarked ) {
    SetTransparency(255);
    reLoad();
-   nameSearch = new PG_Label ( this, PG_Rect( 5, Height() - 25, Width() - 10, 20 ));
+   Emboss* e = new Emboss( this, PG_Rect( 1, Height() - 26, Width()-20, 22), true );
+   nameSearch = new PG_Label ( e, PG_Rect( 4,1, e->Width()-4 , e->Height()-2 ));
+   // nameSearch = new PG_Label ( this, PG_Rect( 5, Height() - 25, Width() - 10, 20 ));
 };
 
+
+void ItemSelectorWidget::constrainNames( bool constrain )
+{
+   namesConstrained = constrain;
+}   
 
 void ItemSelectorWidget::reLoad() 
 {

@@ -15,6 +15,7 @@
 #include "gameoptions.h"
 #include "paradialog.h"
 #include "pgmultilineedit.h"
+#include "gamemap.h"
 /**
 @author Kevin Hirschmann
 */
@@ -321,50 +322,6 @@ private:
   bool ok(PG_Button* button);  
 };
 
-
-class SoundSettings : public ASC_PG_Dialog
-{
-      CGameOptions::SoundSettings sSettings;
-      void updateSettings();
-   public:
-      SoundSettings(PG_Widget* parent, const PG_Rect& r, PG_MessageObject* caller);
-      static void soundSettings(PG_MessageObject* caller);      
-   protected:
-
-      bool radioButtonEvent( PG_RadioButton* button, bool state);
-      bool buttonEvent( PG_Button* button );
-      bool eventScrollTrack(PG_Slider* slider, long data);
-      
-
-};
-
-
-class GameParameterEditorWidget;
-
-class StartMultiplayerGame: public ConfigurableWindow {
-   public:    
-      static void startMultiplayerGame(PG_MessageObject* c);  
-   private:
-
-      int page;
-      enum { PBP, Hotseat, PBEM } mode;
-      ASCString filename;
-      
-      GameParameterEditorWidget* mapParameterEditor;
-   
-      StartMultiplayerGame(PG_MessageObject* c);
-   
-      bool nextPage(PG_Button* button);
-      void showPage();
-      
-      void fileNameSelected( const ASCString& filename )
-      {
-         this->filename = filename;
-      };   
-      
-   protected:   
-      void userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams ); 
-};
 
 
 #endif

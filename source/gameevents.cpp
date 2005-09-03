@@ -855,7 +855,7 @@ void WindChange::setup()
 void ChangeGameParameter::execute( MapDisplayInterface* md )
 {
    if ( parameterNum >= 0 )
-      if ( gameParameterChangeableByEvent [ parameterNum ] )
+      if ( gameParameterSettings[parameterNum ].changeableByEvent )
          gamemap->setgameparameter( GameParameter(parameterNum) , parameterValue );
 }
 
@@ -875,17 +875,19 @@ void ChangeGameParameter::writeData( tnstream& stream )
 
 void ChangeGameParameter::setup()
 {
+/*
     int nr = selectgameparameter( parameterNum );
     if ( (nr >= 0) && ( nr < gameparameternum) ) {
-       if ( gameParameterChangeableByEvent[ nr ] ) {
+       if ( gameParameterSettings[nr].changeableByEvent ) {
           int org = parameterValue;
-          if ( org < gameParameterLowerLimit[nr] && org > gameParameterUpperLimit[nr] )
-             org = gameparameterdefault[nr];
-          parameterValue = getid("Parameter Val", org, gameParameterLowerLimit[nr], gameParameterUpperLimit[nr]);
+          if ( org < gameParameterSettings[nr].minValue && org > gameParameterSettings[nr].maxValue )
+             org = gameParameterSettings[nr].defaultValue;
+          parameterValue = getid("Parameter Val", org, gameParameterSettings[nr].minValue, gameParameterSettings[nr].maxValue);
           parameterNum = nr;
        } else
           displaymessage("This parameter cannot be changed by events",1);
     }
+    */
 }
 
 

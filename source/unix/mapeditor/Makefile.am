@@ -29,13 +29,13 @@ mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
 geometry.cpp weatherarea.cpp guidimension.cpp weatherdialog.cpp \
 iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
-unitinfodialog.cpp messaginghub.cpp explosivemines.cpp selectionwindow.cpp legacynetworkloaders.cpp
+unitinfodialog.cpp messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp
 
 asc_mapedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \
 $(PARAGUI_LIBS) $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-$(top_builddir)/source/graphics/libgraphics.la @SDL_TTF_LDADD@ \
-$(top_builddir)/source/libs/loki/libloki.la $(SDL_LIBS)
+$(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
+@SDL_TTF_LDADD@ $(top_builddir)/source/libs/loki/libloki.la $(SDL_LIBS)
 
 
 #asc_map2pcx_SOURCES	= map2pcx.cpp typen.cpp strtmesg.cpp \
