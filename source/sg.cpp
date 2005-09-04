@@ -1389,7 +1389,7 @@ void execuseraction2 ( tuseractions action )
          break;
       case ua_weathercast: weathercast();
          break;
-      case ua_newmultiplayergame: StartMultiplayerGame::startMultiplayerGame(NULL);
+      case ua_newmultiplayergame: startMultiplayerGame();
          break;
       case ua_loadgame: loadGame();
          break;

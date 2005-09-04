@@ -8,7 +8,7 @@ panel {
 
   Title = New Multiplayer Game
     
-  ChildWidgets = Next QuickStart Page1 Page2 Page3 Page4 Page5 Bottomline
+  ChildWidgets = Next QuickStart Page1 Page2 Page3 Page4 Page5 Page6 Page7 Bottomline
   
   Bottomline {
      type = Area
@@ -163,6 +163,69 @@ panel {
     y2 = -80
     Userhandler = GameParameters
   } Page5
+
+  Page6 {
+    type = dummy
+    x = 20
+    y = 40
+    x2 = -20
+    y2 = -80
+
+    ChildWidgets = Replay SupervisorOn SupervisorPlain SupervisorEnc
     
+    Replay {
+      type = Checkbox
+      text = Replays
+      x = 40
+      y = 20
+      height = 25
+      width = 300
+    } Replay
+
+    SupervisorOn {
+      type = Checkbox
+      text = Non-participating supervisor
+      x = 40
+      y = 60
+      height = 25
+      width = 3300
+    } SupervisorOn
+
+    SupervisorPlain {
+      type = LineEdit
+      x = 60
+      y = 90
+      height = 25
+      width = 280
+    } SupervisorPlain
+    
+    SupervisorEnc {
+      type = LineEdit
+      x = 60
+      y = 120
+      height = 25
+      width = 280
+    } SupervisorEnc
+  } Page6
+
+  Page7 {
+    type = dummy
+    x = 20
+    y = 40
+    x2 = -20
+    y2 = -80
+    ChildWidgets = MapPassword
+    
+    MapPassword {
+      type = LineEdit
+      text = foo
+      x = 40
+      y = 60
+      height = 30
+      width = 200
+    } MapPassword
+  } Page7
+      
+      
         
 } panel

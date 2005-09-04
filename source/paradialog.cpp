@@ -507,7 +507,7 @@ bool ASC_PG_Dialog::closeWindow(){
 
 
 
-const int widgetTypeNum = 12;
+const int widgetTypeNum = 14;
 const char* widgetTypes[widgetTypeNum]
 =
    { "image",
@@ -521,7 +521,9 @@ const char* widgetTypes[widgetTypeNum]
      "multilinetext",
      "scrollarea",
      "button",
-     "radiobutton"
+     "radiobutton",
+     "checkbox",
+     "lineedit"
    };
 
 enum  WidgetTypes  { Image,
@@ -535,7 +537,9 @@ enum  WidgetTypes  { Image,
                      MultiLineText,
                      ScrollArea,
                      Button,
-                     RadioButton };
+                     RadioButton,
+                     CheckBox,
+                     LineEdit };
 
 const int imageModeNum = 5;
 const char* imageModes[imageModeNum]
@@ -991,6 +995,37 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
          parsePanelASCTXT( pc, sw, widgetParams );
          newWidget = sw;
          
+      }
+      if ( type == CheckBox ) {
+         PG_CheckButton* sw = new PG_CheckButton( parent, r, style );
+
+         ASCString text;
+         pc.addString( "text", text );
+         
+         if ( !text.empty() )
+            sw->SetText( text );
+         
+         if ( !hasStyle )
+            widgetParams.assign ( sw );
+            
+         parsePanelASCTXT( pc, sw, widgetParams );
+         newWidget = sw;
+         
+      }
+      if ( type == LineEdit ) {
+         PG_LineEdit* sw = new PG_LineEdit( parent, r, style );
+         
+         ASCString text;
+         pc.addString( "text", text, "" );
+         
+         if ( !text.empty() )
+            sw->SetText( text );
+         
+         if ( !hasStyle )
+            widgetParams.assign ( sw );
+            
+         parsePanelASCTXT( pc, sw, widgetParams );
+         newWidget = sw;
       }
             
       if ( newWidget && newWidget->GetName().empty() )

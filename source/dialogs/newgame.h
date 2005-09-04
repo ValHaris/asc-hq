@@ -22,36 +22,8 @@
 #ifndef NEWGAME_H
 #define NEWGAME_H
 
-#include "../gamemap.h"
-#include "../paradialog.h"
 
-class GameParameterEditorWidget;
-
-class StartMultiplayerGame: public ConfigurableWindow {
-   public:    
-      static void startMultiplayerGame(PG_MessageObject* c);  
-   private:
-
-      int page;
-      enum { PBP, Hotseat, PBEM } mode;
-      ASCString filename;
-      
-      GameParameterEditorWidget* mapParameterEditor;
-   
-      StartMultiplayerGame(PG_MessageObject* c);
-   
-      bool nextPage(PG_Button* button);
-      void showPage();
-      
-      void fileNameSelected( const ASCString& filename )
-      {
-         this->filename = filename;
-      };   
-      
-   protected:   
-      void userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams ); 
-};
-
+extern void startMultiplayerGame(PG_MessageObject* c = NULL );  
 
 
 #endif

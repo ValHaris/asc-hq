@@ -27,14 +27,60 @@
 #include "playersetup.h"
 #include "fileselector.h"
 #include "../loaders.h"
+#include "../gamemap.h"
+#include "../paradialog.h"
 
+class GameParameterEditorWidget;
 
-StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWindow( NULL, PG_Rect::null, "newmultiplayergame", false ), page(1), mode ( PBEM ), mapParameterEditor(NULL)
+class StartMultiplayerGame: public ConfigurableWindow {
+   private:
+
+      tmap* newMap;
+      
+      int page;
+     
+      // enum Mode { NewCampagin, ContinueCampaign, Skirmish, PBP, Hotseat, PBEM } mode;
+      int mode;
+      
+      static const char* buttonLabels[];
+      
+      ASCString filename;
+      
+      GameParameterEditorWidget* mapParameterEditor;
+   
+      bool nextPage(PG_Button* button = NULL);
+      void showPage();
+      
+      void fileNameSelected( const ASCString& filename )
+      {
+         this->filename = filename;
+      };   
+      
+   protected:   
+      void userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams ); 
+      
+   public:
+      StartMultiplayerGame(PG_MessageObject* c);
+      ~StartMultiplayerGame();
+   
+};
+
+const char* StartMultiplayerGame::buttonLabels[7] = {
+   "NewCampaign",
+   "ContinueCampaign",
+   "SinglePlayer",
+   "Hotseat",
+   "PBEM",
+   "PBP",
+   NULL
+};
+
+StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWindow( NULL, PG_Rect::null, "newmultiplayergame", false ), newMap(NULL), page(1), mode ( 0 ), mapParameterEditor(NULL)
 {
     setup();
     sigClose.connect( SigC::slot( *this, &StartMultiplayerGame::QuitModal ));
     
-    PG_RadioButton* b1 = dynamic_cast<PG_RadioButton*>(FindChild("Hotseat", true ));
+    PG_RadioButton* b1 = dynamic_cast<PG_RadioButton*>(FindChild(buttonLabels[0], true ));
     if ( b1 ) 
       b1->SetPressed();
 
@@ -46,12 +92,41 @@ StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWin
         
 }
 
+
+StartMultiplayerGame::~StartMultiplayerGame()
+{
+   if ( newMap )
+      delete newMap;
+}      
+
+
 bool StartMultiplayerGame::nextPage(PG_Button* button)
 {
    // int oldpage = page;
    switch ( page )  {
-      case 1:
-      case 2: 
+      case 1: {
+            int i = 0;
+            while ( buttonLabels[i] ) {
+               PG_RadioButton* b = dynamic_cast<PG_RadioButton*>(FindChild(buttonLabels[i], true ));
+               if ( b && b->GetPressed() ) {
+                  mode = i;
+                  break;
+               }
+               ++i;
+            }   
+            if ( mode == 1 )
+               page = 7;
+            else
+               ++page;
+         }
+         break;
+      case 2: {
+            if ( !filename.empty() )
+               // if ( exists( filename )) {
+                  ++page;
+               // }
+         }
+         break;
       case 3: 
       case 4: ++page;
               break;
@@ -77,15 +152,6 @@ void StartMultiplayerGame::showPage()
 }
 
 
-void StartMultiplayerGame::startMultiplayerGame(PG_MessageObject* c)
-{
-    StartMultiplayerGame smg(c);
-    smg.Show();
-    smg.RunModal();
-}
-
-
-
 
 void StartMultiplayerGame::userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams )
 {
@@ -106,4 +172,12 @@ void StartMultiplayerGame::userHandler( const ASCString& label, PropertyReadingC
    }
 }
 
+
+
+void startMultiplayerGame(PG_MessageObject* c)
+{
+    StartMultiplayerGame smg(c);
+    smg.Show();
+    smg.RunModal();
+}
 
