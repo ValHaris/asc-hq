@@ -786,7 +786,8 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
    for ( int i = 0; i < widgetNum; ++i) 
       childNames.push_back( ASCString("Widget") + ASCString::toString( i ));
 
-
+      
+   PG_RadioButton* radioButtonGroup = NULL;
 
    for ( int i = 0; i < childNames.size(); ++i) {
       pc.openBracket( childNames[i] );
@@ -973,6 +974,10 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
 
       if ( type == RadioButton ) {
          PG_RadioButton* sw = new PG_RadioButton( parent, r, style );
+         if ( radioButtonGroup )
+            radioButtonGroup->AddToGroup( sw );
+            
+         radioButtonGroup = sw;
 
          ASCString text;
          pc.addString( "text", text );
@@ -985,6 +990,7 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
             
          parsePanelASCTXT( pc, sw, widgetParams );
          newWidget = sw;
+         
       }
             
       if ( newWidget && newWidget->GetName().empty() )

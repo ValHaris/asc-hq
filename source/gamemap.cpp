@@ -44,6 +44,17 @@
 #endif
 
 
+const char* diplomaticStateNames[diplomaticStateNum+1] = 
+{
+   "War",
+   "Truce",
+   "Peace",
+   "Peace with comn. radar",
+   "Alliance",
+   NULL
+};
+
+
 RandomGenerator::RandomGenerator(int seedValue){
 
 }

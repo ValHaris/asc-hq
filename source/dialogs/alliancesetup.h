@@ -35,7 +35,7 @@ class AllianceSetupWidget : public PG_ScrollWidget {
       };
          
       vector<PlayerWidgets> playerWidgets;
-      
+
    public:
       AllianceSetupWidget( tmap* gamemap, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style="ScrollWidget" );
       void Apply();

@@ -46,35 +46,81 @@ panel {
     
     RadioGroup {
       type = dummy
-      x = 100
-      y = 140
-      height = 200
-      width = 300
+      x = 40
+      y = 40
+      height = 400
+      width = 450
       
-      ChildWidgets = Hotseat PBEM PBP
-      HotSeat {
+      ChildWidgets = Label1 NewCampaign ContinueCampaign SinglePlayer Label2 Hotseat PBEM PBP 
+      Label1 {
         x = 0
         y = 0
         height = 30
-        width = 200
+        width = -10
+        type = StaticText
+        Text = Single Player
+      } Label1
+      
+      NewCampaign {
+        x = 0
+        y = 40
+        height = 30
+        width = -10
+        type = RadioButton
+        Text = Start New Campaign
+      } NewCampaign
+      
+      ContinueCampaign {
+        x = 0
+        y = 80
+        height = 30
+        width = -10
+        type = RadioButton
+        Text = Continue Campaign with Password
+      } ContinueCampaign
+
+      SinglePlayer {
+        x = 0
+        y = 120
+        height = 30
+        width = -10
+        type = RadioButton
+        Text = Skirmish
+      } SinglePlayer
+      
+      Label2 {
+        x = 0
+        y = 160
+        height = 30
+        width = -10
+        type = StaticText
+        Text = Multi Player
+      } Label2
+      
+            
+      HotSeat {
+        x = 0
+        y = 200
+        height = 30
+        width = -10
         type = RadioButton
         Text = Hotseat
       } HotSeat
   
       PBEM {
         x = 0
-        y = 40
+        y = 240
         height = 30
-        width = 200
+        width = -10
         type = RadioButton
         Text = Play By Email
       } PBEM
   
       PBP {
         x = 0
-        y = 80
+        y = 280
         height = 30
-        width = 200
+        width = -10
         type = RadioButton
         Text = Project Battle Planets
       } PBP

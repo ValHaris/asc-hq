@@ -34,17 +34,9 @@ StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWin
     setup();
     sigClose.connect( SigC::slot( *this, &StartMultiplayerGame::QuitModal ));
     
-    PG_RadioButton* b3 = dynamic_cast<PG_RadioButton*>(FindChild("PBP", true ));
-    PG_RadioButton* b2 = dynamic_cast<PG_RadioButton*>(FindChild("PBEM", true ));
     PG_RadioButton* b1 = dynamic_cast<PG_RadioButton*>(FindChild("Hotseat", true ));
-    if ( b1 ) {
-      if ( b2 ) 
-         b1->AddToGroup( b2 );
-      if ( b3 ) 
-         b1->AddToGroup( b3 );
-         
+    if ( b1 ) 
       b1->SetPressed();
-    }
 
     PG_Button* next = dynamic_cast<PG_Button*>(FindChild("next", true ));
     if ( next )

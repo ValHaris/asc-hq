@@ -156,7 +156,9 @@ class OverviewMapHolder : public SigC::Object {
 };
 
 
-
+const int diplomaticStateNum = 5;
+enum DiplomaticStates { WAR, TRUCE, PEACE, PEACE_SV, ALLIANCE };
+extern const char* diplomaticStateNames[diplomaticStateNum+1];
 
 //! The map. THE central structure of ASC, which holds everything not globally available together
 class tmap {

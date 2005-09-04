@@ -23,26 +23,101 @@
 #include <pgimage.h>
 
 #include "../iconrepository.h"
+#include "../gamemap.h"
 #include "playersetup.h"
 #include "alliancesetup.h"
 
 
+const int diplomaticStateIconSize = 18;
+const int diplomaticStateIconSpace = 2;
 
-class DiplomaticModeChooser : public PG_ListBox {
+ASCString getDiplomaticStateImage( DiplomaticStates s )
+{
+   ASCString filename = "diplo-" + ASCString::toString(s) + ".png";
+   return filename;
+};
 
+class ListBoxImageItem : public PG_ListBoxBaseItem {
+      DiplomaticStates state;
    public:
-      DiplomaticModeChooser ( PG_Widget *parent, PG_Point pos ) : PG_ListBox( parent, PG_Rect( pos.x, pos.y, 40,20 ))
+      ListBoxImageItem( PG_ListBox *parent, PG_Point pos, DiplomaticStates s )  : PG_ListBoxBaseItem( parent, diplomaticStateIconSize + 2*diplomaticStateIconSpace ), state(s)
       {
-         for ( int i = 0; i < 5; ++i ) {
-            ASCString filename = "diplo-" + ASCString::toString(i) + ".png";
-            AddChild( new PG_Image( NULL, PG_Point(0,0), IconRepository::getIcon( filename ).getBaseSurface(), false ));
-            // AddItem( ASCString::toString(i));
-         }   
+         new PG_Image( this, PG_Point(diplomaticStateIconSpace,diplomaticStateIconSpace), IconRepository::getIcon( getDiplomaticStateImage(s)).getBaseSurface() , false );
+         new PG_Label( this, PG_Rect(diplomaticStateIconSize + 5, diplomaticStateIconSpace, 200,diplomaticStateIconSize), diplomaticStateNames[s]);
+      }
+      
+      SigC::Signal1<void,DiplomaticStates> sigSet;
+      
+      bool eventMouseButtonUp(const SDL_MouseButtonEvent* button) 
+      {
+            if(button->button != 1) {
+                     return false;
+            }
+            
+            PG_ListBox* listbox = dynamic_cast<PG_ListBox*>(GetParent());
+      
+            if(listbox == NULL || !listbox->IsVisible()) {
+                     return true;
+            }
+      
+            listbox->SelectItem(this);
+            listbox->QuitModal();
+            sigSet(state);
+      
+            return true;
+      }
+};
+
+
+class DiplomaticModeChooser : public PG_Widget {
+      DiplomaticStates mode;
+      bool writePossible;
+      
+   protected:
+
+      void selectMode()
+      {
+         PG_ListBox listBox( NULL, PG_Rect( x, y + Height(), 250, diplomaticStateNum * ( diplomaticStateIconSpace * 2 + diplomaticStateIconSize ) + 4 ));
+         for ( int i = 0; i < diplomaticStateNum; ++i) {
+            ListBoxImageItem* item = new ListBoxImageItem( NULL, PG_Point(0,0), DiplomaticStates(i));
+            item->sigSet.connect( SigC::slot( *this, &DiplomaticModeChooser::SetState));
+            listBox.AddChild( item );
+         }
+         listBox.Show();
+         listBox.RunModal();
+      }     
+            
+   public:
+      DiplomaticModeChooser ( PG_Widget *parent, const PG_Rect& pos, DiplomaticStates dm, bool writeable ) : PG_Widget( parent, pos, true ), mode(dm), writePossible( writeable )
+      {
       };
+      
+      void eventDraw (SDL_Surface *surface, const PG_Rect &rect)
+      {
+         Surface s = Surface::Wrap( surface );
+         s.Blit(  IconRepository::getIcon( getDiplomaticStateImage(mode) ) );
+      }
+      
+      void SetState( DiplomaticStates state )
+      {
+         mode = state;
+         Redraw();
+         Update(true);
+      }
+      
+      bool eventMouseButtonUp(const SDL_MouseButtonEvent* button) 
+      {
+         if(button->button != 1) {
+                  return false;
+         }
+
+         if ( writePossible )   
+            selectMode();
+         // listBox->Show();            
+         return true;
+      }
 };      
  
-// PG_DropDown (PG_Widget *parent, const PG_Rect &r=PG_Rect::null, int id=-1, const std::string &style="DropDown")
-
 
 AllianceSetupWidget::AllianceSetupWidget( tmap* gamemap, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style ) : PG_ScrollWidget( parent, r, style ) , actmap ( gamemap )
 {
@@ -61,16 +136,30 @@ AllianceSetupWidget::AllianceSetupWidget( tmap* gamemap, bool allEditable, PG_Wi
    const int sqaureWidth = lineHeight;
    const int lineLength = sqaureWidth + nameLength + playerNum * (colWidth + spacing) + barOverhang;
    const int colHeight  =  barOverhang + playerNum * (lineHeight + spacing) - spacing +  barOverhang;
-                  
+
+   #define calcx(counter) (sqaureWidth + nameLength + spacing + counter * (colWidth + spacing) )
+   #define calcy(counter) (barOverhang + counter * (lineHeight + spacing))
+
    int counter = 0; 
+   for ( int i = 0; i < actmap->getPlayerCount(); ++i ) 
+      if ( actmap->player[i].exist() ) {
+         int x = calcx(counter);
+         
+         ColoredBar* verticalBar = new ColoredBar( actmap->player[i].getColor(), this, PG_Rect( x, 0, colWidth, colHeight ));
+         verticalBar->SetTransparency( 128 );
+         
+         ++counter;
+      }
+   
+                        
+   counter = 0; 
    for ( int i = 0; i < actmap->getPlayerCount(); ++i ) 
       if ( actmap->player[i].exist() ) {
       
          PlayerWidgets pw;
          pw.pos  = i;
          
-         int y = barOverhang + counter * (lineHeight + spacing);
-         int x = sqaureWidth + nameLength + spacing + counter * (colWidth + spacing);
+         int y = calcy(counter);
          
          ColoredBar* horizontalBar = new ColoredBar( actmap->player[i].getColor(), this, PG_Rect( 0, y, lineLength, lineHeight ));
          horizontalBar->SetTransparency( 128 );
@@ -84,45 +173,25 @@ AllianceSetupWidget::AllianceSetupWidget( tmap* gamemap, bool allEditable, PG_Wi
          col->SetBackgroundColor ( actmap->player[i].getColor());
          col->SetBorderSize(0);
          
+         int cnt2 = 0;
+         for ( int j = 0; j < actmap->getPlayerCount(); ++j ) 
+            if ( actmap->player[j].exist() )  {
+               if ( i != j ) {
+                  int x = calcx(cnt2) - barSpace;
+                  new DiplomaticModeChooser( horizontalBar, PG_Rect(x + (colWidth - diplomaticStateIconSize)/2 ,  (lineHeight - diplomaticStateIconSize)/2,diplomaticStateIconSize,diplomaticStateIconSize), PEACE, j > i );
+               }
+               ++cnt2;
+            }   
                         
-         ColoredBar* verticalBar = new ColoredBar( actmap->player[i].getColor(), this, PG_Rect( x, 0, colWidth, colHeight ));
-         verticalBar->SetTransparency( 128 );
-
-         for ( int j = 0; j < actmap->getPlayerCount(); ++j )
-            if ( i != j )
-               new DiplomaticModeChooser( verticalBar, PG_Point(0,y));
-                        
-         /*
-         PG_Rect r = PG_Rect( y1 + 20, 5, colbar->Width() - y1 - 40, 20 );
-         if ( !allEditable && actmap->actplayer != i ) {
-         
-            pw.type = new PG_DropDown( colbar, r);
-            
-            int pos = 0;
-            while ( tmap :: Player :: playerStatusNames[pos] ) {
-               pw.type->AddItem( tmap :: Player :: playerStatusNames[pos] );
-               ++pos;
-            }
-            
-            pw.type->SelectItem( actmap->player[i].stat );
-            pw.type->SetEditable(false);
-         } else {
-            pw.type = NULL;
-            PG_LineEdit* le = new PG_LineEdit( colbar, r );
-            le->SetText( tmap :: Player :: playerStatusNames[ actmap->player[i].stat ] );
-            le->SetEditable( false );
-         }
-         */
-         
-
          playerWidgets.push_back( pw );
-         
                         
          ++counter;
       } 
       
    SetTransparency(255);
 };
+
+
 
 void AllianceSetupWidget::Apply() {
 };
