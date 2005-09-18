@@ -29,8 +29,10 @@
 
 
 
-PlayerSetupWidget::PlayerSetupWidget( tmap* gamemap, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style ) : PG_ScrollWidget( parent, r, style ) , actmap ( gamemap )
+PlayerSetupWidget::PlayerSetupWidget( tmap* gamemap, Mode mode, PG_Widget *parent, const PG_Rect &r, const std::string &style ) : PG_ScrollWidget( parent, r, style ) , actmap ( gamemap )
 {
+   this->mode = mode;
+   
    int counter = 0; 
    for ( int i = 0; i < actmap->getPlayerCount(); ++i ) 
       if ( actmap->player[i].exist() ) {
@@ -51,9 +53,7 @@ PlayerSetupWidget::PlayerSetupWidget( tmap* gamemap, bool allEditable, PG_Widget
          
          
          PG_Rect r = PG_Rect( y1 + 20, 5, colbar->Width() - y1 - 40, 20 );
-         if ( !allEditable && actmap->actplayer != i ) {
-            pw.name->SetEditable( false );
-         
+         if ( mode != SelfEditable  || actmap->actplayer == i ) {
             pw.type = new PG_DropDown( colbar, r);
             
             int pos = 0;
@@ -65,6 +65,7 @@ PlayerSetupWidget::PlayerSetupWidget( tmap* gamemap, bool allEditable, PG_Widget
             pw.type->SelectItem( actmap->player[i].stat );
             pw.type->SetEditable(false);
          } else {
+            pw.name->SetEditable( false );
             pw.type = NULL;
             PG_LineEdit* le = new PG_LineEdit( colbar, r );
             le->SetText( tmap :: Player :: playerStatusNames[ actmap->player[i].stat ] );
@@ -85,10 +86,33 @@ PlayerSetupWidget::PlayerSetupWidget( tmap* gamemap, bool allEditable, PG_Widget
    SetTransparency(255);
 };
 
-void PlayerSetupWidget::Apply() {
+bool PlayerSetupWidget::Valid() {
+   if ( mode == AllEditableSinglePlayer ) {
+      int humanNum = 0;
+      for ( vector<PlayerWidgets>::iterator i = playerWidgets.begin(); i != playerWidgets.end(); ++i ) 
+         if ( i->type )
+            if (    Player::tplayerstat( i->type->GetSelectedItemIndex()) == Player::human
+                 || Player::tplayerstat( i->type->GetSelectedItemIndex()) == Player::supervisor
+                 || Player::tplayerstat( i->type->GetSelectedItemIndex()) == Player::suspended  ) 
+               ++humanNum;
+               
+       if ( humanNum > 1 ) {
+         MessagingHub::Instance().error("Only a single human player allowed in SinglePlayer mode allowed!");
+         return false;
+       }
+   }
+   return true;
+}
+
+
+bool PlayerSetupWidget::Apply() {
+   if ( !Valid() )
+      return false;
+      
    for ( vector<PlayerWidgets>::iterator i = playerWidgets.begin(); i != playerWidgets.end(); ++i ) {
       actmap->player[i->pos].setName( i->name->GetText() );
       if ( i->type )
          actmap->player[i->pos].stat = Player::tplayerstat( i->type->GetSelectedItemIndex() );
    }
+   return true;
 };

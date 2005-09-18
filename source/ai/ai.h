@@ -481,6 +481,7 @@
 
            Player& getPlayer ( void ) { return getMap()->player[player]; };
            Player& getPlayer ( int player ) { return getMap()->player[player]; };
+           Player& getPlayer ( PlayerID id ) { return getMap()->player[id.getID()]; };
            void showFieldInformation ( int x, int y );
            bool isRunning ( void );
 

@@ -904,8 +904,7 @@ void         k_loadmap(void)
    ASCString s1 = selectFile( mapextension, true );
    if ( !s1.empty() ) {
       displaymessage("loading map %s",0, s1.c_str() );
-      loadmap(s1.c_str());
-      actmap->startGame();
+      actmap = mapLoadingExceptionChecker( s1, MapLoadingFunction( tmaploaders::loadmap )); 
 
       if ( actmap->campaign && !actmap->campaign->directaccess && actmap->codeword[0]) {
          tlockdispspfld ldsf;

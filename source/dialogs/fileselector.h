@@ -56,12 +56,13 @@ class FileSelectionItemFactory: public SelectionItemFactory  {
       
       SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos );
       
-      SigC::Signal1<void,const ASCString& > filenameSelected;
+      SigC::Signal1<void,const ASCString& > filenameSelectedMouse;
+      SigC::Signal1<void,const ASCString& > filenameSelectedKeyb;
       SigC::Signal1<void,const ASCString& > filenameMarked;
       
       void itemMarked( const SelectionWidget* widget );
       
-      void itemSelected( const SelectionWidget* widget );
+      void itemSelected( const SelectionWidget* widget, bool mouse );
 };
 
 extern ASCString  selectFile( const ASCString& ext, bool load );

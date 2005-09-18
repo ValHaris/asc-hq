@@ -299,7 +299,7 @@ bool  ContainerBase :: vehicleLoadable ( const Vehicle* vehicle, int uheight, co
                               if ( !hasAttacked ) {
                                  if ( getOwner() == 8 )
                                     return true;
-                                 if ( getdiplomaticstatus2(color, vehicle->color ) == cawar  )
+                                 if ( gamemap->getPlayer(this).diplomacy.isHostile( vehicle->getOwner())  )
                                     if (damage >= mingebaeudeeroberungsbeschaedigung  || (vehicle->typ->functions & cf_conquer) )
                                        return true;
                               }

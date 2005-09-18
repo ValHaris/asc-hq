@@ -231,9 +231,9 @@ int  evaluatevisibilityfield ( pmap actmap, pfield fld, int player, int add, int
 
    if ( add == -1 ) {
       add = 0;
-      if ( actmap->shareview )
-         for ( int i = 0; i < 8; i++ )
-            if ( actmap->shareview->mode[i][player] )
+      for ( int i = 0; i < 8; i++ )
+         if ( i != player )
+            if ( actmap->player[i].diplomacy.sharesView( player) )
                add |= 1 << i;
    }
    add |= 1 << player;
@@ -283,11 +283,10 @@ int  evaluateviewcalculation ( pmap actmap, int player_fieldcount_mask )
    for ( int player = 0; player < 8; player++ )
       if ( actmap->player[player].exist() ) {
          int add = 0;
-         if ( actmap->shareview )
-            for ( int i = 0; i < 8; i++ )
-               if ( actmap->player[i].exist() && i != player )
-                  if ( actmap->shareview->mode[i][player] )
-                     add |= 1 << i;
+         for ( int i = 0; i < 8; i++ )
+            if ( actmap->player[i].exist() && i != player )
+               if ( actmap->player[i].diplomacy.sharesView( player) )
+                  add |= 1 << i;
 
          int nm = actmap->xsize * actmap->ysize;
          if ( player_fieldcount_mask & (1 << player ))
@@ -324,11 +323,10 @@ int  evaluateviewcalculation ( pmap actmap, const MapCoordinate& pos, int distan
    for ( int player = 0; player < 8; player++ )
       if ( actmap->player[player].exist() ) {
          int add = 0;
-         if ( actmap->shareview )
-            for ( int i = 0; i < 8; i++ )
-               if ( actmap->player[i].exist() && i != player )
-                  if ( actmap->shareview->mode[i][player] )
-                     add |= 1 << i;
+         for ( int i = 0; i < 8; i++ )
+            if ( actmap->player[i].exist() && i != player )
+               if ( actmap->player[i].diplomacy.sharesView( player) )
+                  add |= 1 << i;
 
          for ( int yy = y1; yy <= y2; yy++ )
             for ( int xx = x1; xx <= x2; xx++ ) {

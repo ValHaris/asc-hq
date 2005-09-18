@@ -198,7 +198,7 @@ void AI::getAttacks ( AStar3D& vm, Vehicle* veh, TargetVector& tv, int hemmingBo
       for ( int x = x1; x <= x2; ++x) {
          pfield fld = getMap()->getField(x,y);
          if ( fld && fld->vehicle)
-            if ( getdiplomaticstatus2 ( fld->vehicle->color, getPlayerNum()*8 ) != capeace )
+            if ( getPlayer(fld->vehicle->getOwner()).diplomacy.isHostile( getPlayerNum() )  )
                enemycount++;
       }
 
@@ -578,9 +578,9 @@ AI::AiResult AI::tactics( void )
             for ( int y = veh->ypos - ydist; y <= veh->ypos + ydist; y++ ) {
                pfield fld = getMap()->getField(x,y );
                if ( fld ) {
-                  if ( fld->vehicle && getdiplomaticstatus2 ( veh->color, fld->vehicle->color ) == cawar )
+                  if ( fld->vehicle && getPlayer(veh->getOwner()).diplomacy.isHostile( fld->vehicle->getOwner() )  )
                      enemiesNear = true;
-                  if ( fld->building && getdiplomaticstatus2 ( veh->color, fld->building->color ) == cawar )
+                  if ( fld->building && getPlayer(veh->getOwner()).diplomacy.isHostile( fld->building->getOwner() )  )
                      enemiesNear = true;
                }
             }

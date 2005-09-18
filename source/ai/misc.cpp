@@ -185,7 +185,7 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
        if ((veh->height > chfahrend) && (i->h.getNumericalHeight() == chfahrend) ) {
           // we don't want to land in hostile territory
           FieldInformation& fi = ai.getFieldInformation ( i->h.x, i->h.y );
-          if ( fi.control == -1 || getdiplomaticstatus2 ( fi.control * 8, ai.getPlayerNum()*8 ) == capeace )
+          if ( fi.control == -1 || !actmap->player[fi.control].diplomacy.isHostile( ai.getPlayerNum() ) )
               landingPositions[dist] = i->h;
        }
    }
@@ -662,7 +662,7 @@ void AI::CheckFieldRecon :: testfield ( const MapCoordinate& mc )
 {
    FieldInformation& fi = ai->getFieldInformation ( mc.x, mc.y );
    if( fi.control != -1 )
-      if ( getdiplomaticstatus2 ( player*8, fi.control*8 ) == capeace )
+      if ( !actmap->player[player].diplomacy.isHostile( fi.control )  )
          ownFields[dist]++;
       else
          enemyFields[dist]++;
@@ -835,7 +835,7 @@ void AI::production()
       enemyValue[i] = 0;
 
    for ( int p = 0; p < 8; p++ )
-      if ( getdiplomaticstatus2( p*8, getPlayerNum()*8 ) != capeace )
+      if ( actmap->player[p].diplomacy.isHostile( getPlayerNum() ) )
           for ( Player::VehicleList::iterator vli = getMap()->player[p].vehicleList.begin(); vli != getMap()->player[p].vehicleList.end(); vli++ ) {
               enemyThreat += (*vli)->aiparam[getPlayerNum()]->threat;
               enemyValue[(*vli)->aiparam[getPlayerNum()]->valueType] += (*vli)->aiparam[getPlayerNum()]->getValue();

@@ -2,7 +2,7 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.67.2.13 2005-07-23 11:36:24 mbickel Exp $
+//     $Id: edmain.cpp,v 1.67.2.14 2005-09-18 16:55:16 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -264,7 +264,7 @@ int mapeditorMainThread ( void* _mapname )
             }
          } else
             if( patimat ( mapextension, mapname )) 
-               loadmap ( mapname );
+               actmap = mapLoadingExceptionChecker( mapname, MapLoadingFunction( tmaploaders::loadmap )); 
             else
                fatalError ( "%s is not an accepted file format", mapname );
       } else
@@ -272,7 +272,7 @@ int mapeditorMainThread ( void* _mapname )
 
       mapSwitcher.toggle();
       if ( exist ( "palette.map" ))
-         loadmap ( "palette.map");
+         actmap = mapLoadingExceptionChecker( "palette.map", MapLoadingFunction( tmaploaders::loadmap )); 
       else
          buildemptymap();
 

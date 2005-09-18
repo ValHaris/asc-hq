@@ -32,7 +32,7 @@
 #include "libs/loki/Singleton.h"
 #include "factory.h"
 
-#if defined(sgmain) || defined(karteneditor)
+#if defined(sgmain) || defined(karteneditor) || defined(maindialogs)
 # include "mapdisplay.h"
 #else
  class MapDisplayInterface {};

@@ -102,7 +102,7 @@ void         SearchReconquerBuilding :: testfield(const MapCoordinate& mc)
       Vehicle* eht = gamemap->getField(mc)->vehicle;
       // Building* bld = getfield(xp,yp)->building;
       if ( eht )
-         if (getdiplomaticstatus(eht->color) != capeace)
+         if ( ai.getPlayer().diplomacy.isHostile( eht->getOwner() ) )
             if ( canUnitCapture ( eht )) {
                VehicleMovement vm ( NULL );
                if ( vm.available ( eht )) {
@@ -201,7 +201,7 @@ void AI :: checkConquer( )
          continue;
       }
 
-      if ( getdiplomaticstatus2( bld->color, getPlayerNum()*8 ) != cawar
+      if ( !getPlayer(bld->getOwner()).diplomacy.isHostile( getPlayerNum() ) 
            || !( veh && fieldAccessible ( getMap()->getField( bi->first ), veh ) == 2 )) {
 
          if ( veh ) {
@@ -235,7 +235,7 @@ void AI :: checkConquer( )
    for ( int c = 0; c <= 8; c++ ) {
       if ( c<8 ) {
          if ( !getPlayer(c).exist() ) continue;
-         if ( getdiplomaticstatus2 ( getPlayerNum()*8, c*8 ) != cawar ) continue;
+         if ( !getPlayer().diplomacy.isHostile( c)  ) continue;
       }
       for ( Player::BuildingList::iterator bi = getPlayer(c).buildingList.begin(); bi != getPlayer(c).buildingList.end(); bi++ ) {
          Building* bld = *bi;

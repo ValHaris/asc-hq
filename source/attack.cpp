@@ -1047,7 +1047,7 @@ pattackweap  attackpossible( const Vehicle*     angreifer, int x, int y)
    }
    else
       if (efield->building != NULL) {
-         if (getdiplomaticstatus2(efield->building->color, angreifer->color) == cawar || efield->building->color == 8*8 )
+         if ( actmap->getPlayer(angreifer).diplomacy.isHostile( efield->building->getOwner() ) || efield->building->color == 8*8 )
             for (int i = 0; i < angreifer->typ->weapons.count ; i++)
                if (angreifer->typ->weapons.weapon[i].shootable() )
                   if (angreifer->typ->weapons.weapon[i].offensive() )
@@ -1144,7 +1144,7 @@ bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, pattackwe
    if (angreifer->typ->weapons.count == 0)
      return false ;
 
-   if ( getdiplomaticstatus2 ( angreifer->color, verteidiger->color ) == cawar )
+   if ( actmap->player[angreifer->getOwner()].diplomacy.isHostile( verteidiger->getOwner() )  )
       for ( int i = 0; i < angreifer->typ->weapons.count ; i++)
          for ( int h = 0; h < 8; h++ )
             if ( uheight & (1<<h))
@@ -1191,7 +1191,7 @@ bool attackpossible28( const Vehicle* attacker, const Vehicle* target, pattackwe
    if (angreifer->typ->weapons.count == 0)
      return false ;
 
-   if ( getdiplomaticstatus2 ( angreifer->color, verteidiger->color ) == cawar )
+   if ( actmap->player[angreifer->getOwner()].diplomacy.isHostile( verteidiger->getOwner() )  )
       for ( int i = 0; i < angreifer->typ->weapons.count ; i++)
          if (angreifer->typ->weapons.weapon[i].shootable() )
             if (angreifer->typ->weapons.weapon[i].offensive() )
@@ -1235,7 +1235,7 @@ bool attackpossible2n( const Vehicle* attacker, const Vehicle* target, pattackwe
      return false ;
 
    int dist = beeline ( angreifer, verteidiger );
-   if ( getdiplomaticstatus2 ( angreifer->color, verteidiger->color ) == cawar )
+   if ( actmap->player[angreifer->getOwner()].diplomacy.isHostile( verteidiger->getOwner() ) )
       if ( !angreifer->attacked )
          if ( !angreifer->typ->wait || !angreifer->hasMoved() || angreifer->reactionfire.getStatus() == Vehicle::ReactionFire::ready)
             for ( int i = 0; i < angreifer->typ->weapons.count ; i++)

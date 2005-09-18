@@ -44,15 +44,66 @@
 #endif
 
 
+SigC::Signal3<void,int,int,DiplomaticStates> DiplomaticStateVector::anyStateChanged;
+
+
 const char* diplomaticStateNames[diplomaticStateNum+1] = 
 {
    "War",
    "Truce",
    "Peace",
-   "Peace with comn. radar",
+   "Peace with shared radar",
    "Alliance",
    NULL
 };
+
+
+
+DiplomaticStateVector::DiplomaticStateVector()
+{
+}
+
+
+DiplomaticStates DiplomaticStateVector::getState( int towardsPlayer )
+{
+   if ( towardsPlayer < states.size() )
+      return states[towardsPlayer];
+   else
+      return WAR;
+}
+
+void DiplomaticStateVector::setState( int towardsPlayer, DiplomaticStates s )
+{
+   if ( towardsPlayer < states.size() ) {
+      states[towardsPlayer] = s;
+      stateChanged(towardsPlayer,s);
+   }      
+}
+
+void DiplomaticStateVector::propose( int towardsPlayer, DiplomaticStates s )
+{
+}
+
+      
+void DiplomaticStateVector::read ( tnstream& stream )
+{
+   stream.readInt();
+   int size = stream.readInt();
+   states.resize( size );
+   for ( int i = 0; i < size; ++i )
+      states[i] = DiplomaticStates( stream.readInt() );
+}
+
+void DiplomaticStateVector::write ( tnstream& stream ) const
+{
+   stream.writeInt( 1 );
+   stream.writeInt( states.size() );
+   for ( int i = 0; i< states.size(); ++i )
+      stream.writeInt( int( states[i]));
+
+}
+
+
 
 
 RandomGenerator::RandomGenerator(int seedValue){
@@ -221,10 +272,6 @@ tmap :: tmap ( void )
 
    _resourcemode = 0;
 
-   for ( i = 0; i < 8; i++ )
-      for ( int j = 0; j < 8; j++ )
-          alliances[i][j] = cawar;
-
    for ( i = 0; i < 9; ++i ) {
       player[i].player = i;
       if ( i == 0 )
@@ -247,10 +294,7 @@ tmap :: tmap ( void )
    }
 
    messageid = 0;
-   for ( i = 0; i< 8; i++ )
-      alliances_at_beginofturn[i] = 0;
 
-   shareview = NULL;
    continueplaying = 0;
    replayinfo = NULL;
    playerView = -1;
@@ -266,7 +310,7 @@ tmap :: tmap ( void )
 }
 
 
-const int tmapversion = 10;
+const int tmapversion = 11;
 
 void tmap :: read ( tnstream& stream )
 {
@@ -313,9 +357,11 @@ void tmap :: read ( tnstream& stream )
 
    _resourcemode = stream.readInt();
 
-   for ( i = 0; i < 8; i++ )
-      for ( int j = 0; j < 8; j++ )
-         alliances[j][i] = stream.readChar();
+   int alliances[8][8];
+   if ( version <= 10 )
+      for ( i = 0; i < 8; i++ )
+         for ( int j = 0; j < 8; j++ )
+            alliances[j][i] = stream.readChar();
 
    int dummy_playername[9];
    for ( i = 0; i< 9; i++ ) {
@@ -343,6 +389,17 @@ void tmap :: read ( tnstream& stream )
          
       if ( version >= 9 )
          player[i].cursorPos.read( stream );
+         
+      if ( version >= 11 ) 
+         player[i].diplomacy.read( stream );
+      else {
+         for ( int j = 0; j< 8; ++j ) {
+            if ( alliances[i][j] == 0 ) 
+                player[i].diplomacy.setState( j, WAR ); 
+            else
+                player[i].diplomacy.setState( j, PEACE ); 
+         }
+      }
    }
 
 
@@ -405,11 +462,14 @@ void tmap :: read ( tnstream& stream )
 
    supervisorpasswordcrc.read ( stream );
 
-   for ( i = 0; i < 8; i++ )
-      alliances_at_beginofturn[i] = stream.readChar();
+   if ( version <= 10 )
+      for ( i = 0; i < 8; i++ )
+         stream.readChar(); // alliances_at_beginofturn[i] = 
 
    stream.readInt(); // was objectcrc = (Object*containercrcs)
-   bool load_shareview = stream.readInt();
+   bool load_shareview = false;
+   if ( version <= 10 )
+      load_shareview = stream.readInt();
 
    continueplaying = stream.readInt();
    __loadreplayinfo =  stream.readInt();
@@ -485,11 +545,17 @@ void tmap :: read ( tnstream& stream )
 
     stream.readInt();
 
-    if ( load_shareview ) {
-       shareview = new tmap::Shareview;
-       shareview->read ( stream );
-    } else
-       shareview = NULL;
+    if ( load_shareview && version <= 10 ) {
+    
+      for ( int i = 0; i < 8; i++ )
+         for ( int j =0; j < 8; j++ ) {
+            int sv = stream.readChar();
+            if ( sv )
+               player[i].diplomacy.setState( j, PEACE_SV );
+         }      
+               
+      stream.readInt();
+    } 
 
     if ( preferredfilenames ) {
        int p;
@@ -605,10 +671,6 @@ void tmap :: write ( tnstream& stream )
 
    stream.writeInt( _resourcemode );
 
-   for ( i = 0; i < 8; i++ )
-      for ( int j = 0; j < 8; j++ )
-         stream.writeChar( alliances[j][i] );
-
    for ( i = 0; i< 9; i++ ) {
       stream.writeChar( player[i].existanceAtBeginOfTurn );
       stream.writeInt( 1 ); // dummy
@@ -650,11 +712,7 @@ void tmap :: write ( tnstream& stream )
 
    supervisorpasswordcrc.write ( stream );
 
-   for ( i = 0; i < 8; i++ )
-      stream.writeChar( alliances_at_beginofturn[i] );
-
    stream.writeInt( 0 );
-   stream.writeInt( shareview != NULL );
 
    stream.writeInt( continueplaying );
    stream.writeInt( replayinfo != NULL );
@@ -714,9 +772,6 @@ void tmap :: write ( tnstream& stream )
        stream.writeInt ( 0 );
 
     stream.writeInt ( 0 );
-
-    if ( shareview )
-       shareview->write ( stream );
 
     int p;
     for ( p = 0; p < 8; p++ )
@@ -1419,12 +1474,6 @@ tmap :: ~tmap ()
       }
    }
 
-
-   if ( shareview ) {
-      delete shareview;
-      shareview = NULL;
-   }
-
    if ( replayinfo ) {
       delete replayinfo;
       replayinfo = NULL;
@@ -1794,6 +1843,10 @@ void tmap :: startGame ( )
    #else
    actplayer = 0;
    #endif
+   
+   setupResources();
+   
+   // calling signal
    newRound();
 } 
 
@@ -1829,7 +1882,7 @@ void tmap::operator= ( const tmap& map )
   throw ASCmsgException ( "tmap::operator= undefined");
 }
 
-
+/*
 tmap::Shareview :: Shareview ( const tmap::Shareview* org )
 {
    memcpy ( mode, org->mode, sizeof ( mode ));
@@ -1860,11 +1913,13 @@ void tmap::Shareview :: write( tnstream& stream )
          stream.writeChar( mode[i][j] );
    stream.writeInt( recalculateview );
 }
+*/
 
-const char* tmap :: Player :: playerStatusNames[5] = { "Human Player", 
+const char* tmap :: Player :: playerStatusNames[6] = { "Human Player", 
                                                        "AI player",
                                                        "off",
                                                        "Supervisor",
+                                                       "suspended",
                                                        NULL };
 
 

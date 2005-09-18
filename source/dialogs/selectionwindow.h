@@ -74,7 +74,7 @@ class SelectionItemFactory {
       virtual void restart() = 0;
       virtual SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos ) = 0;
       
-      virtual void itemSelected( const SelectionWidget* widget ) = 0;
+      virtual void itemSelected( const SelectionWidget* widget, bool mouse ) = 0;
       virtual void itemMarked  ( const SelectionWidget* widget ) {};
       virtual ~SelectionItemFactory() {};
 };
@@ -103,7 +103,7 @@ class ItemSelectorWidget : public PG_Widget {
    protected:   
       bool moveSelection( int amount ) ;
       bool eventKeyDown(const SDL_KeyboardEvent* key);
-      void itemSelected( const SelectionWidget* w );
+      void itemSelected( const SelectionWidget* w, bool mouse );
       void markItem( const SelectionWidget* w );
       bool isItemMarked( const SelectionWidget* w );
       bool locateObject( const ASCString& name );

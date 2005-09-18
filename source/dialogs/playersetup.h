@@ -39,8 +39,12 @@ class PlayerSetupWidget : public PG_ScrollWidget {
       
       vector<PlayerWidgets> playerWidgets;
    public:
-      PlayerSetupWidget( tmap* gamemap, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style="ScrollWidget" );
-      void Apply();
+      enum Mode{ AllEditable, AllEditableSinglePlayer, SelfEditable };
+      PlayerSetupWidget( tmap* gamemap, Mode mode, PG_Widget *parent, const PG_Rect &r, const std::string &style="ScrollWidget" );
+      bool Valid();
+      bool Apply();
+   private:
+      Mode mode;   
 };
 
 

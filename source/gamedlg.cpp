@@ -977,7 +977,6 @@ void         tnewcampaignlevel::loadcampaignmap(void)
    try {
       if (loader.loadmap(mapname) == 0) {
          actmap->startGame();
-         actmap->setupResources();
          computeview( actmap );
 
          do {
@@ -1433,7 +1432,7 @@ void         tchoosenewsinglelevel::run(void)
       displaymessage("loading: %s ",0, mapname);
 
       try {
-         loadmap( mapname );
+         // loadmap( mapname );
          actmap->startGame();
 
          removemessage();
@@ -1442,7 +1441,7 @@ void         tchoosenewsinglelevel::run(void)
             actmap->campaign = NULL;
          }
 
-         setupalliances();
+         // setupalliances();
 
          int human = 0;
          for ( int i = 0; i < 8; i++ )
@@ -1464,7 +1463,6 @@ void         tchoosenewsinglelevel::run(void)
             setmapparameters( actmap );
          }
 
-         actmap->setupResources();
          tlockdispspfld lock;
          repaintDisplay();
          computeview( actmap );
@@ -2717,7 +2715,7 @@ void         tgiveunitawaydlg :: init( pfield fld )
    num = 0;
    for ( int i = 0; i < 8; i++ )
       if ( actmap->player[i].exist() )
-         if ( i != actmap->actplayer && getdiplomaticstatus ( i*8 ) == capeace ) 
+         if ( i != actmap->actplayer &&  actmap->player[actmap->actplayer].diplomacy.getState( i) >= PEACE ) 
             ply[num++] = i;
 
    if ( fld->building )

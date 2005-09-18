@@ -567,6 +567,8 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( exp );
          stream->writeInt ( nwid );
       }
+      /*
+      not supported any more because of new diplomatic model
       if ( action == rpl_shareviewchange ) {
          stream->writeChar ( action );
          if ( actmap->shareview ) {
@@ -581,13 +583,17 @@ void logtoreplayinfo ( trpl_actions _action, ... )
             stream->writeInt ( size );
          }
       }
-      if ( action == rpl_alliancechange ) {
+      */
+      if ( action == rpl_alliancechange2 ) {
          stream->writeChar ( action );
-         int size = sizeof ( actmap->alliances ) / sizeof ( int );
-         stream->writeInt ( size );
-         for ( int a = 0; a < 8; a++ )
-            for ( int b = 0; b < 8; b++ )
-               stream->writeChar ( actmap->alliances[a][b] );
+         stream->writeInt( 3 ); // size
+
+         int actingPlayer =  va_arg ( paramlist, int );
+         int targetPlayer =  va_arg ( paramlist, int );
+         int state = va_arg ( paramlist, int );
+         stream->writeInt( actingPlayer );
+         stream->writeInt( targetPlayer );
+         stream->writeInt( state );
       }
       if ( action == rpl_refuel || action == rpl_refuel2 ) {
          int x =  va_arg ( paramlist, int );
@@ -1481,6 +1487,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                               }
          break;
+         /*
       case rpl_shareviewchange: {
                                  int size = stream->readInt();
                                  tmap::Shareview* sv = new tmap::Shareview;
@@ -1505,11 +1512,14 @@ void trunreplay :: execnextreplaymove ( void )
                                  displaymap();
                               }
          break;
-      case rpl_alliancechange: {
+         */
+      case rpl_alliancechange2: {
                                  stream->readInt();  // size
-                                 for ( int a = 0; a < 8; a++ )
-                                    for ( int b = 0; b < 8; b++ )
-                                       actmap->alliances[a][b] = stream->readChar();
+                                 int actingPlayer = stream->readInt();
+                                 int targetPlayer = stream->readInt();
+                                 int state = stream->readInt();
+                                 actmap->player[actingPlayer].diplomacy.setState( targetPlayer, DiplomaticStates( state ));
+                                 
                                  readnextaction();
                                  updateFieldInfo();
                               }

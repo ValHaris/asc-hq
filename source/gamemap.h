@@ -156,9 +156,40 @@ class OverviewMapHolder : public SigC::Object {
 };
 
 
+
 const int diplomaticStateNum = 5;
 enum DiplomaticStates { WAR, TRUCE, PEACE, PEACE_SV, ALLIANCE };
 extern const char* diplomaticStateNames[diplomaticStateNum+1];
+
+
+
+class DiplomaticStateVector {
+      vector<DiplomaticStates> states;
+   public:
+      DiplomaticStateVector();
+      DiplomaticStates getState( int towardsPlayer );
+      void setState( int towardsPlayer, DiplomaticStates s );
+      void propose ( int towardsPlayer, DiplomaticStates s );
+      
+      bool isHostile( int towardsPlayer ) { return getState( towardsPlayer ) == WAR; };
+      bool sharesView( int receivingPlayer ) { return getState( receivingPlayer ) >= PEACE_SV; };
+      
+      SigC::Signal2<void,int,DiplomaticStates> stateChanged;
+      static SigC::Signal3<void,int,int,DiplomaticStates> anyStateChanged;
+   
+      void read ( tnstream& stream );
+      void write ( tnstream& stream ) const;
+};
+
+class PlayerID {
+      int num;
+   public:
+      PlayerID( int num ) { this->num = num; };
+      PlayerID( const ContainerBase* c ) : num( c->getOwner() ) {};
+      PlayerID( const ContainerBase& c ) : num( c.getOwner() ) {};
+      int getID() const { return num; };
+};      
+
 
 //! The map. THE central structure of ASC, which holds everything not globally available together
 class tmap {
@@ -220,9 +251,6 @@ class tmap {
       **/
       int _resourcemode;
 
-      //! the diplomatic status between the players
-      char         alliances[8][8];
-
 
       //! the different players in ASC. There may be 8 players (0..7) and neutral units (8)
       class Player {
@@ -252,7 +280,7 @@ class tmap {
             BaseAI*      ai;
 
             //! the status of the player: 0=human ; 1=AI ; 2=off
-            enum tplayerstat { human, computer, off } stat;
+            enum tplayerstat { human, computer, off, supervisor, suspended } stat;
             
             static const char* playerStatusNames[];
 
@@ -315,12 +343,19 @@ class tmap {
             MapCoordinate cursorPos;
 
             GameTransferMechanism* network;
-            
+
+            DiplomaticStateVector diplomacy;
+                        
             DI_Color getColor();
             
       } player[9];
 
       int getPlayerCount() const { return 8; };
+      
+      Player& getPlayer( PlayerID p )
+      {
+         return player[p.getID() ];
+      }
       
       MapCoordinate& getCursor();
       
@@ -391,7 +426,7 @@ class tmap {
       ASCString     gameJournal;
       ASCString     newJournal;
       Password      supervisorpasswordcrc;
-
+/*
       char          alliances_at_beginofturn[8];
 
       class  Shareview {
@@ -403,9 +438,11 @@ class tmap {
             void read ( tnstream& stream );
             void write( tnstream& stream );
        };
+       
        // mode[1][6] = visible_all    =>  Spieler 1 gibt Spieler 6 die view frei
 
       Shareview*    shareview;
+*/
 
       //! if a player has won a singleplayer map, but wants to continue playing without any enemies, this will be set to 1
       int           continueplaying;
@@ -481,7 +518,6 @@ class tmap {
       void setgameparameter ( GameParameter num, int value );
       void cleartemps( int b = -1, int value = 0 );
       bool isResourceGlobal ( int resource );
-      void setupResources ( void );
       const ASCString& getPlayerName ( int playernum );
       pfield getField ( int x, int y );
       pfield getField ( const MapCoordinate& pos );
@@ -546,6 +582,7 @@ class tmap {
       Vehicle* getUnit ( Vehicle* eht, int nwid );
 
       void objectGrowth();
+      void setupResources ( void );
 
       unsigned int randomSeed;
 };

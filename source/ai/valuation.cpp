@@ -352,7 +352,7 @@ void AI :: calculateFieldInformation ( void )
       for ( int x = 0; x < activemap->xsize; x++ ) {
          pfield fld = getfield ( x, y );
          if ( config.wholeMapVisible || fieldvisiblenow ( fld, getPlayerNum() ) )
-            if ( fld->vehicle && getdiplomaticstatus2 ( getPlayerNum()*8, fld->vehicle->color) == cawar ) {
+            if ( fld->vehicle && getPlayer().diplomacy.isHostile( fld->vehicle->getOwner() )) {
                WeaponThreatRange wr ( this );
                if ( !fld->vehicle->typ->wait ) {
 
@@ -543,7 +543,7 @@ void AI :: Section :: init ( int _x, int _y, int xsize, int ysize, int _xp, int 
       for ( int x = x1; x <= x2; x++ ) {
          absFieldThreat += ai->getFieldThreat ( x, y );
          pfield fld = getfield ( x, y );
-         if ( fld->vehicle && getdiplomaticstatus ( fld->vehicle->color )==cawar) {
+         if ( fld->vehicle && ai->getPlayer().diplomacy.isHostile( fld->vehicle->getOwner() ) ) {
             if ( !fld->vehicle->aiparam[ ai->getPlayerNum() ] )
                ai->calculateThreat ( fld->vehicle );
             AiParameter& aip = * fld->vehicle->aiparam[ ai->getPlayerNum() ];

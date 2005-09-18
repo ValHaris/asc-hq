@@ -536,7 +536,6 @@ void EventTriggered::triggered()
 EventTrigger::State AllEnemyUnitsDestroyed::getState( int player )
 {
    for ( int i = 0; i < 8; i++ )
-      if ( getdiplomaticstatus2( player*8, i*8 ) != capeace )
          if ( !gamemap->player[i].vehicleList.empty() )
             return unfulfilled;
 
@@ -563,7 +562,7 @@ void AllEnemyUnitsDestroyed::triggered()
 EventTrigger::State AllEnemyBuildingsDestroyed::getState( int player )
 {
    for ( int i = 0; i < 8; i++ )
-      if ( getdiplomaticstatus2( player*8, i*8 ) != capeace )
+      if ( actmap->getPlayer(player).diplomacy.isHostile(i))
          if ( !gamemap->player[i].buildingList.empty() )
             return unfulfilled;
 
@@ -1466,12 +1465,12 @@ void ChangeDiplomaticStatus :: setup ()
 void ChangeDiplomaticStatus :: execute( MapDisplayInterface* md )
 {
    if ( proposal == Peace )
-      gamemap->alliances[targetPlayer][proposingPlayer] = capeaceproposal;
+      actmap->getPlayer(proposingPlayer).diplomacy.propose( targetPlayer, PEACE );
    else
       if ( proposal == War )
-         gamemap->alliances[targetPlayer][proposingPlayer] = cawarannounce;
+         actmap->getPlayer(proposingPlayer).diplomacy.propose( targetPlayer, WAR );
       else {
-         gamemap->alliances[targetPlayer][proposingPlayer] = canewsetwar2;
+         actmap->getPlayer(proposingPlayer).diplomacy.setState( targetPlayer, WAR );
       }
 }
 
@@ -1509,13 +1508,12 @@ void SetViewSharing :: setup ()
 
 void SetViewSharing :: execute( MapDisplayInterface* md )
 {
-   if ( !gamemap->shareview )
-      gamemap->shareview = new tmap::Shareview;
-
    if ( enable )
-      gamemap->shareview->mode[providingPlayer][viewingPlayer] = true;
+      gamemap->player[providingPlayer].diplomacy.setState( viewingPlayer, PEACE_SV );
    else
-      gamemap->shareview->mode[providingPlayer][viewingPlayer] = false;
+      if ( gamemap->player[providingPlayer].diplomacy.getState( viewingPlayer ) >= PEACE_SV )
+         gamemap->player[providingPlayer].diplomacy.setState( viewingPlayer, PEACE );
+         
    #ifdef sgmain
    computeview( gamemap );
    #endif

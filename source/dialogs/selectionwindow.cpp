@@ -113,7 +113,7 @@ bool ItemSelectorWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
    if ( key->keysym.sym == SDLK_RETURN ) {
       if ( selectedItem && nameMatch( selectedItem, nameSearch->GetText()) ) {
-         itemSelected( selectedItem );
+         itemSelected( selectedItem, false );
          return true;
       } else 
          if ( !namesConstrained ) {
@@ -134,10 +134,10 @@ bool ItemSelectorWidget::eventKeyDown(const SDL_KeyboardEvent* key)
    return false;
 };
 
-void ItemSelectorWidget::itemSelected( const SelectionWidget* w )
+void ItemSelectorWidget::itemSelected( const SelectionWidget* w, bool mouse )
 {
    Update();
-   factory->itemSelected( w );
+   factory->itemSelected( w, mouse );
    sigItemSelected( w );
 }
 
@@ -157,7 +157,7 @@ bool ItemSelectorWidget::locateObject( const ASCString& name )
 {
    for ( WidgetList::iterator i = widgets.begin(); i != widgets.end(); ++i ) {
       if ( nameMatch( *i, name )  ) {
-         selectedItem = *i;
+         markItem( *i );         
          scrollWidget->ScrollToWidget( *i );
          Update();
          return true;
@@ -210,7 +210,7 @@ void ItemSelectorWidget::reLoad()
       if ( columnCount < 0 )
          columnCount = scrollWidget->Width() / (w->Width() + gapWidth);
 
-      w->itemSelected.connect( SigC::slot( *this, &ItemSelectorWidget::itemSelected ));
+      w->itemSelected.connect( SigC::bind( SigC::slot( *this, &ItemSelectorWidget::itemSelected ), true ));
       w->itemMarked.connect( SigC::slot( *this, &ItemSelectorWidget::markItem ));
       w->setSelectionCallback( &selectionCallBack );
       widgets.push_back ( w );

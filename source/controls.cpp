@@ -583,7 +583,7 @@ void tsearchreactionfireingunits :: init ( Vehicle* vehicle, const AStar3D::Path
             if ( eht->color != vehicle->color )
                if ( eht->reactionfire.getStatus() >= Vehicle::ReactionFire::ready )
                   if ( eht->reactionfire.enemiesAttackable & ( 1 << ( vehicle->color / 8 )))
-                     if ( getdiplomaticstatus ( eht->color ) == cawar )
+                     if ( actmap->player[eht->getOwner()].diplomacy.isHostile( actmap->actplayer))
                         if ( attackpossible2u ( eht, vehicle, NULL, vehicle->typ->height ) )
                            addunit ( eht );
 
@@ -902,6 +902,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
 
 void checkalliances_at_endofturn ( void )
 {
+   #if 0
    for ( int i = 0; i < 8; i++ ) {
       int act = actmap->actplayer;
       if ( i != act ) {
@@ -950,12 +951,15 @@ void checkalliances_at_endofturn ( void )
 
       }
    }
+   #endif
+   #warning alliances
 }
 
 
 
 void checkalliances_at_beginofturn ( void )
 {
+   #if 0
    int i;
 
    int act = actmap->actplayer ;
@@ -978,6 +982,8 @@ void checkalliances_at_beginofturn ( void )
    for ( i = 0; i < 8; i++ )
       actmap->alliances_at_beginofturn[i] = actmap->alliances[i][act];
 
+   #endif
+   #warning alliances
 }
 
 

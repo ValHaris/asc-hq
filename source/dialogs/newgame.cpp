@@ -29,6 +29,8 @@
 #include "../loaders.h"
 #include "../gamemap.h"
 #include "../paradialog.h"
+#include "../controls.h"
+#include "../viewcalculation.h"
 
 class GameParameterEditorWidget;
 
@@ -37,9 +39,10 @@ class StartMultiplayerGame: public ConfigurableWindow {
 
       tmap* newMap;
       
-      int page;
+      enum Pages { ModeSelection = 1, FilenameSelection, PlayerSetup, AllianceSetup, MapParameterEditor, MultiPlayerOptions, PasswordSearch }; 
+      Pages page;
      
-      // enum Mode { NewCampagin, ContinueCampaign, Skirmish, PBP, Hotseat, PBEM } mode;
+      enum Mode { NewCampagin, ContinueCampaign, Skirmish, PBP, Hotseat, PBEM };
       int mode;
       
       static const char* buttonLabels[];
@@ -47,6 +50,13 @@ class StartMultiplayerGame: public ConfigurableWindow {
       ASCString filename;
       
       GameParameterEditorWidget* mapParameterEditor;
+      PG_Widget* mapParameterEditorParent;
+      
+      AllianceSetupWidget* allianceSetup;
+      PG_Widget* allianceSetupParent;
+      
+      PlayerSetupWidget* playerSetup;
+      PG_Widget* playerSetupParent;
    
       bool nextPage(PG_Button* button = NULL);
       void showPage();
@@ -54,10 +64,35 @@ class StartMultiplayerGame: public ConfigurableWindow {
       void fileNameSelected( const ASCString& filename )
       {
          this->filename = filename;
+         nextPage();
+      };   
+
+      void fileNameMarked( const ASCString& filename )
+      {
+         this->filename = filename;
       };   
       
+      void showButtons( bool start, bool quickstart, bool next )
+      {
+         if ( next )
+            show("next");
+         else
+            hide("next");   
+            
+         if ( quickstart )
+            show("quickstart");
+         else
+            hide("quickstart");   
+
+         if ( start )
+            show("start");
+         else
+            hide("start");   
+      };
+            
    protected:   
       void userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams ); 
+      bool start();
       
    public:
       StartMultiplayerGame(PG_MessageObject* c);
@@ -75,7 +110,10 @@ const char* StartMultiplayerGame::buttonLabels[7] = {
    NULL
 };
 
-StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWindow( NULL, PG_Rect::null, "newmultiplayergame", false ), newMap(NULL), page(1), mode ( 0 ), mapParameterEditor(NULL)
+StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWindow( NULL, PG_Rect::null, "newmultiplayergame", false ), newMap(NULL), page(ModeSelection), mode ( 0 ), 
+   mapParameterEditor(NULL), mapParameterEditorParent(NULL),
+   allianceSetup(NULL), allianceSetupParent(NULL),
+   playerSetup(NULL), playerSetupParent(NULL)
 {
     setup();
     sigClose.connect( SigC::slot( *this, &StartMultiplayerGame::QuitModal ));
@@ -87,9 +125,17 @@ StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWin
     PG_Button* next = dynamic_cast<PG_Button*>(FindChild("next", true ));
     if ( next )
       next->sigClick.connect( SigC::slot( *this, &StartMultiplayerGame::nextPage ));
+
+    PG_Button* start = dynamic_cast<PG_Button*>(FindChild("start", true ));
+    if ( start )
+      start->sigClick.connect( SigC::slot( *this, &StartMultiplayerGame::start ));
+      
+    PG_Button* qstart = dynamic_cast<PG_Button*>(FindChild("quickstart", true ));
+    if ( qstart )
+      qstart->sigClick.connect( SigC::slot( *this, &StartMultiplayerGame::start ));
       
     showPage();
-        
+    showButtons(false,false,true);
 }
 
 
@@ -102,9 +148,9 @@ StartMultiplayerGame::~StartMultiplayerGame()
 
 bool StartMultiplayerGame::nextPage(PG_Button* button)
 {
-   // int oldpage = page;
+   int oldpage = page;
    switch ( page )  {
-      case 1: {
+      case ModeSelection: {
             int i = 0;
             while ( buttonLabels[i] ) {
                PG_RadioButton* b = dynamic_cast<PG_RadioButton*>(FindChild(buttonLabels[i], true ));
@@ -115,29 +161,60 @@ bool StartMultiplayerGame::nextPage(PG_Button* button)
                ++i;
             }   
             if ( mode == 1 )
-               page = 7;
+               page = PasswordSearch;
             else
-               ++page;
+               page = FilenameSelection;
          }
          break;
-      case 2: {
+      case FilenameSelection: {
             if ( !filename.empty() )
-               // if ( exists( filename )) {
-                  ++page;
-               // }
+               if ( exist( filename )) {
+                  newMap = mapLoadingExceptionChecker( filename, MapLoadingFunction( tmaploaders::loadmap ));
+                  if ( newMap )
+                     page = PlayerSetup;
+                }
+               
          }
          break;
-      case 3: 
-      case 4: ++page;
-              break;
+      case PlayerSetup: 
+               if ( playerSetup->Valid() )
+                  page = AllianceSetup;
+               break;       
               
-      case 5: if ( mapParameterEditor->Valid() )
-                 ++page;
+      case AllianceSetup: page = MapParameterEditor; 
+               break;
+              
+      case MapParameterEditor: 
+               if ( mapParameterEditor->Valid() )
+                  page = MultiPlayerOptions;
               break;   
+      default: 
+           break;
    }
    
-   showPage();
-   return true;
+   if ( oldpage != page ) {
+      if ( page == PlayerSetup && playerSetupParent ) {
+         delete playerSetup;
+         if ( mode == Skirmish )
+            playerSetup = new PlayerSetupWidget( newMap, PlayerSetupWidget::AllEditableSinglePlayer, playerSetupParent, PG_Rect( 0, 0, playerSetupParent->Width(), playerSetupParent->Height() ));
+         else  
+            playerSetup = new PlayerSetupWidget( newMap, PlayerSetupWidget::AllEditable, playerSetupParent, PG_Rect( 0, 0, playerSetupParent->Width(), playerSetupParent->Height() ));
+      }   
+      
+      if ( page == AllianceSetup && allianceSetupParent ) {
+         delete allianceSetup;
+         allianceSetup = new AllianceSetupWidget( newMap, true, allianceSetupParent, PG_Rect( 0, 0, allianceSetupParent->Width(), allianceSetupParent->Height() ));
+      }   
+
+      if ( page == MapParameterEditor && mapParameterEditorParent ) {
+         delete mapParameterEditor;
+         mapParameterEditor = new GameParameterEditorWidget( newMap, mapParameterEditorParent, PG_Rect( 0, 0, mapParameterEditorParent->Width(), mapParameterEditorParent->Height() ));
+      }   
+         
+      showPage();
+      return true;
+   } else
+      return false;
 }
 
 void StartMultiplayerGame::showPage()
@@ -149,6 +226,21 @@ void StartMultiplayerGame::showPage()
       else   
          hide( name );
    }
+   
+   switch ( page ) {
+      case FilenameSelection: 
+         showButtons(false,true,true);
+         break;
+         
+      case MapParameterEditor: 
+         if ( mode != Hotseat && mode != PBEM )
+            showButtons(true,false,false);
+         else   
+            showButtons(false,true,true);
+         break;
+      default:
+         break;   
+    }     
 }
 
 
@@ -157,19 +249,73 @@ void StartMultiplayerGame::userHandler( const ASCString& label, PropertyReadingC
 {
    if ( label == "FileList" ) {
       FileSelectionItemFactory* factory = new FileSelectionItemFactory( mapextension );
-      factory->filenameSelected.connect ( SigC::slot( *this, &StartMultiplayerGame::fileNameSelected ));
-      factory->filenameMarked.connect   ( SigC::slot( *this, &StartMultiplayerGame::fileNameSelected ));
+      factory->filenameSelectedKeyb.connect ( SigC::slot( *this, &StartMultiplayerGame::fileNameSelected ));
+      factory->filenameSelectedMouse.connect ( SigC::slot( *this, &StartMultiplayerGame::fileNameMarked ));
+      factory->filenameMarked.connect   ( SigC::slot( *this, &StartMultiplayerGame::fileNameMarked ));
       new ItemSelectorWidget( parent, PG_Rect(0, 0, parent->Width(), parent->Height()), factory );
    }
-   if ( label == "PlayerSetup" ) {
-      new PlayerSetupWidget( actmap, true, parent, PG_Rect( 0, 0, parent->Width(), parent->Height() ));
+   
+   if ( label == "PlayerSetup" ) 
+      playerSetupParent = parent;
+      
+   if ( label == "AllianceSetup" ) 
+      allianceSetupParent = parent;
+      
+   if ( label == "GameParameters" )
+      mapParameterEditorParent = parent; 
+  
+}
+
+
+bool StartMultiplayerGame::start()
+{
+   if ( mode == Skirmish ) {
+      bool humanFound = false;
+      for ( int i = 0; i < newMap->getPlayerCount(); ++i )
+         if ( newMap->player[i].exist() )
+            if ( newMap->player[i].stat == Player::human )
+               if ( humanFound )
+                  newMap->player[i].stat = Player::computer;
+               else
+                  humanFound = true;   
    }
-   if ( label == "AllianceSetup" ) {
-      new AllianceSetupWidget( actmap, true, parent, PG_Rect( 0, 0, parent->Width(), parent->Height() ));
+
+   if ( mode == PBEM || mode == Hotseat ) {
+      int humanNum = 0;
+      for ( int i = 0; i < newMap->getPlayerCount(); ++i )
+         if ( newMap->player[i].exist() )
+            if ( newMap->player[i].stat == Player::human )
+               ++humanNum;   
+            
+      if ( humanNum <= 1 )
+         for ( int i = 0; i < newMap->getPlayerCount(); ++i )
+            if ( newMap->player[i].exist() )
+               if ( newMap->player[i].stat == Player::computer ) {
+                  newMap->player[i].stat = Player::human;
+                  ++humanNum;
+               }
+            
+            
+      if ( humanNum <= 1 ) {
+         MessagingHub::Instance().error("Not enough players on map for multiplayer game!");
+         return false;
+      }   
    }
-   if ( label == "GameParameters" ) {
-      mapParameterEditor = new GameParameterEditorWidget( actmap, parent, PG_Rect( 0, 0, parent->Width(), parent->Height() ));
-   }
+   
+   if ( !newMap ) 
+     newMap = mapLoadingExceptionChecker( filename, MapLoadingFunction( tmaploaders::loadmap ));
+   
+   delete actmap;
+   actmap = newMap;
+   newMap = NULL;
+   QuitModal();
+   Hide();
+   next_turn();
+   computeview( actmap );
+   displaymap();
+   updateFieldInfo();
+   moveparams.movestatus = 0;
+   return true;
 }
 
 
@@ -180,4 +326,5 @@ void startMultiplayerGame(PG_MessageObject* c)
     smg.Show();
     smg.RunModal();
 }
+
 

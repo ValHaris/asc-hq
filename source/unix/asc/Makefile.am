@@ -5,7 +5,7 @@ MAINTAINERCLEANFILES	= Makefile.in
 INCLUDES		= -I$(top_builddir) -I$(top_src_dir) \
 			  -I$(top_builddir)/source -I$(top_src_dir)/source
 
-AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dsgmain  -DNEWKEYB $(PARAGUI_CFLAGS)  $(SIGC_CFLAGS)
+AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dsgmain $(PARAGUI_CFLAGS)  $(SIGC_CFLAGS)
 
 bin_PROGRAMS		= asc
 

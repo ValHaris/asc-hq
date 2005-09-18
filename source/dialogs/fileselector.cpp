@@ -117,14 +117,17 @@ class FileWidget: public SelectionWidget  {
          filenameMarked( fw->getName() );
       }
       
-      void FileSelectionItemFactory::itemSelected( const SelectionWidget* widget )
+      void FileSelectionItemFactory::itemSelected( const SelectionWidget* widget, bool mouse )
       {
          if ( !widget )
             return;
             
          const FileWidget* fw = dynamic_cast<const FileWidget*>(widget);
          assert( fw );
-         filenameSelected( fw->getName() );
+         if ( mouse )         
+            filenameSelectedMouse( fw->getName() );
+         else   
+            filenameSelectedKeyb( fw->getName() );
       }
 
 
@@ -146,7 +149,8 @@ class FileWidget: public SelectionWidget  {
       FileSelectionWindow::FileSelectionWindow( PG_Widget *parent, const PG_Rect &r, const ASCString& fileWildcard, bool save ) : ASC_PG_Dialog( parent, r, "Choose Filename" ), wildcard( fileWildcard)
       {
          FileSelectionItemFactory* factory = new FileSelectionItemFactory( fileWildcard );
-         factory->filenameSelected.connect ( SigC::slot( *this, &FileSelectionWindow::fileNameSelected ));
+         factory->filenameSelectedMouse.connect ( SigC::slot( *this, &FileSelectionWindow::fileNameSelected ));
+         factory->filenameSelectedKeyb.connect ( SigC::slot( *this, &FileSelectionWindow::fileNameSelected ));
          // factory->filenameMarked.connect   ( SigC::slot( *this, &FileSelectionWindow::fileNameSelected ));
          ItemSelectorWidget* isw = new ItemSelectorWidget( this, PG_Rect(10, GetTitlebarHeight(), r.Width() - 20, r.Height() - GetTitlebarHeight()), factory );
          if ( save ) {

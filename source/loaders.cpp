@@ -989,27 +989,13 @@ int          tmaploaders::savemap( const ASCString& name )
 
 
 
-
-
-tmaploaders :: ~tmaploaders()
-{
-   if ( oldmap ) {
-      delete oldmap ;
-      oldmap = NULL;
-   }
-}
-
-int          tmaploaders::loadmap( const char *       name )
+tmap* tmaploaders::_loadmap( const ASCString& name )
 { 
-    oldmap = actmap;
-    actmap = NULL;
-
-    displayLogMessage ( 4, "loading map %s ... ", name );
+    displayLogMessage ( 4, "loading map %s ... ", name.c_str() );
 
     tnfilestream filestream ( name, tnstream::reading);
 
     stream = &filestream;
-
 
     char* description = NULL;
  
@@ -1019,7 +1005,7 @@ int          tmaploaders::loadmap( const char *       name )
     int w = stream->readWord();
  
     if ( w != fileterminator ) 
-       throw tinvalidversion ( name, fileterminator, (int) w );
+       throw tinvalidversion ( name, fileterminator, w );
 
 
     int version = stream->readInt();
@@ -1048,23 +1034,15 @@ int          tmaploaders::loadmap( const char *       name )
      spfld->weatherSystem->setGlobalWind(WeatherSystem::legacyWindSpeed, static_cast<Direction>(WeatherSystem::legacyWindDirection));   
    }
 
-
-
-  /*****************************************************************************************************/
-  /*   berprfen,  Stream schlie�n                                                                  */
-  /*****************************************************************************************************/
-
    version = stream->readInt();
-   if (version > actmapversion || version < minmapversion ) {
-      delete spfld;
-      spfld = NULL;
+   if (version > actmapversion || version < minmapversion ) 
       throw tinvalidversion ( name, actmapversion, version );
-   } 
+   
 
    displayLogMessage ( 8, "chainItems, ");
    chainitems ( spfld );
 
-   for ( int sp = 7; sp >= 0; sp--)
+   for ( int sp = spfld->getPlayerCount()-1; sp >= 0; sp--)
       if ( spfld->player[sp].exist() )
          spfld->actplayer = sp;
 
@@ -1075,20 +1053,29 @@ int          tmaploaders::loadmap( const char *       name )
    calculateallobjects( spfld );
 
 
-   displayLogMessage ( 8, "~oldmap, ");
-   delete oldmap;
-   oldmap = NULL;
+   displayLogMessage ( 8, "init for playing, ");
    
-   actmap = spfld;
-   spfld = NULL;
-
-   actmap->time.set ( 1, 0 );
-   actmap->levelfinished = false;
+   spfld->time.set ( 1, 0 );
+   spfld->levelfinished = false;
+   spfld->preferredFileNames.mapname[0] = name ;
+   spfld->startGame();
 
    displayLogMessage ( 4, "done\n");
 
-   return 0;
+   tmap* m  = spfld;
+   spfld = NULL;
+   
+   return m;
 } 
+
+
+tmap* tmaploaders::loadmap ( const ASCString& name )
+{
+     tmaploaders gl;
+     return gl._loadmap ( name );
+}     
+   
+
 
 
 
@@ -1418,40 +1405,6 @@ void  savemap( const char * name )
 
 }
 
-void  loadmap( const char *       name )
-{
-   try {
-     tmaploaders gl;
-     gl.loadmap ( name );
-
-     actmap->preferredFileNames.mapname[0] = name ;
-   }
-   catch ( InvalidID err ) {
-      displaymessage( err.getMessage().c_str(), 1 );
-      if ( !actmap || actmap->xsize <= 0)
-         throw NoMapLoaded();
-   } /* endcatch */
-   catch ( tinvalidversion err ) {
-      if ( err.expected < err.found )
-         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nPlease install the latest version from www.asc-hq.org", 1, err.getFileName().c_str(), err.expected, err.found );
-      else
-         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nThis is a bug, please report it!", 1, err.getFileName().c_str(), err.expected, err.found );
-
-      if ( !actmap || actmap->xsize <= 0)
-         throw NoMapLoaded();
-   } /* endcatch */
-   catch ( tfileerror err) {
-      displaymessage( "error reading map filename %s ", 1, err.getFileName().c_str() );
-      if ( !actmap || actmap->xsize <= 0)
-         throw NoMapLoaded();
-   } /* endcatch */
-   catch ( ASCexception ) {
-      displaymessage( "error loading map", 1 );
-      if ( !actmap || actmap->xsize <= 0)
-         throw NoMapLoaded();
-   } /* endcatch */
-}
-
 
 void  savegame( const ASCString& name )
 {
@@ -1576,7 +1529,34 @@ tmap*  loadreplay( pmemorystreambuf streambuf )
 
 
 
-
+tmap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadingFunction loader )
+{
+   tmap* m = NULL;
+   try {
+     m = loader( filename );
+   }
+   catch ( InvalidID err ) {
+      displaymessage( err.getMessage().c_str(), 1 );
+      return NULL;
+   } /* endcatch */
+   catch ( tinvalidversion err ) {
+      if ( err.expected < err.found )
+         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nPlease install the latest version from www.asc-hq.org", 1, err.getFileName().c_str(), err.expected, err.found );
+      else
+         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nThis is a bug, please report it!", 1, err.getFileName().c_str(), err.expected, err.found );
+      return NULL;
+   } /* endcatch */
+   catch ( tfileerror err) {
+      displaymessage( "error reading map filename %s ", 1, err.getFileName().c_str() );
+      return NULL;
+   } /* endcatch */
+   catch ( ASCexception ) {
+      displaymessage( "error loading file", 1 );
+      return NULL;
+   } /* endcatch */
+   
+   return m;
+}
 
 
 

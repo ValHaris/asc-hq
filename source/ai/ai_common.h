@@ -104,7 +104,7 @@ extern const int currentServiceOrderVersion;
           int visnum = 0;
           int enemynum = 0;
           for ( int i = 0; i< 8; i++ )
-             if ( getdiplomaticstatus2 ( i*8, ai->getPlayerNum()*8 ) != capeace ) {
+             if ( actmap->player[i].diplomacy.isHostile( ai->getPlayerNum() ) ) {
                 enemynum++;
                 int v = (visibility >> ( 2*i)) & 3;
                 if ( v >= visible_now )
@@ -131,7 +131,7 @@ extern const int currentServiceOrderVersion;
           int visnum = 0;
           int enemynum = 0;
           for ( int i = 0; i< 8; i++ )
-             if ( getdiplomaticstatus2 ( i*8, ai->getPlayerNum()*8 ) != capeace ) {
+             if ( actmap->player[i].diplomacy.isHostile( ai->getPlayerNum() ) ) {
                 enemynum++;
                 int v = (visibility >> ( 2*i)) & 3;
                 if ( v >= visible_now )

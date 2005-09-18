@@ -28,6 +28,8 @@
 #ifndef loadersH
 #define loadersH
 
+#include "libs/loki/Functor.h"
+
 #include "ascstring.h"
 #include "sgstream.h"
 #include "spfst.h"
@@ -49,14 +51,15 @@ extern pguiicon loadguiicon( const char *       name);
 //! saves the map located in #actmap to the map file name
 extern void  savemap( const char *       name );
 
-//! loads the map from the file name to #actmap
-extern void  loadmap( const char *       name );
-
 //! saves the game located in #actmap to the savegame file name
 extern void  savegame( const ASCString& name );
 
 //! loads the game from the file name to  #actmap
 extern void  loadgame( const char *       name );
+
+
+typedef Loki::Functor<tmap*, TYPELIST_1(const ASCString&) > MapLoadingFunction;
+extern tmap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadingFunction loader );
 
 
 
@@ -115,14 +118,17 @@ class  tspfldloaders {
            tspfldloaders ( void );
 };
 
+
+
 class  tmaploaders : public tspfldloaders {
-           pmap oldmap;
            void            initmap ( void );
+           tmap*           _loadmap ( const ASCString& name );
          public:
-           int             loadmap ( const char* name );
+           static tmap* loadmap ( const ASCString& name );
+           
+           
            int             savemap ( const ASCString& name );
-           tmaploaders (void ) { oldmap = NULL; };
-           ~tmaploaders();
+           tmaploaders (void ) {};
 };
 
 

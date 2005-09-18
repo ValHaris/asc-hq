@@ -1079,7 +1079,7 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( Vehicle
                if ( targetUnit && serviceWeapon )
                   if ( !(targetUnit->typ->functions & cfnoairrefuel) || targetUnit->height <= chfahrend )
                      if ( serviceWeapon->targetingAccuracy[targetUnit->typ->movemalustyp] > 0  )
-                        if (getdiplomaticstatus2(veh->color, targetUnit->color) == capeace)
+                        if ( actmap->player[veh->getOwner()].diplomacy.getState( targetUnit->getOwner()) >= PEACE )
                            if ( (serviceWeapon->maxdistance >= dist && serviceWeapon->mindistance <= dist) || bypassChecks.distance )
                               if ( targetUnit->height & targheight || ( bypassChecks.height && ( targetUnit->typ->height & targheight) )) {
                                  if ( sourceWeapon.canRefuel() ) {
@@ -1154,7 +1154,7 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( Vehicle
 
 void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( Vehicle* targetUnit )
 {
-   if ( getdiplomaticstatus2(bld->color, targetUnit->color) != capeace)
+   if ( actmap->player[bld->getOwner()].diplomacy.getState( targetUnit->getOwner()) < PEACE )
       return;
       
    VehicleService::Target targ;

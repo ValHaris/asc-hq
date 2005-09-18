@@ -39,10 +39,6 @@ ASCString  selectFile( const ASCString& ext, bool load );
 
 extern void  startnextcampaignmap( int id);
 
-extern void  setupalliances( int supervisor = 0 );
-
-
-
 
    
 extern void displaymessage2( const char* formatstring, ... );

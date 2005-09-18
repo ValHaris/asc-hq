@@ -247,7 +247,7 @@ void         tstatisticarmies::count(void)
          if (j == actmap->actplayer) 
             b = 0; 
          else 
-            if (getdiplomaticstatus(j * 8) == capeace) 
+            if ( actmap->player[actmap->actplayer].diplomacy.getState(j) >= PEACE ) 
                b = 1; 
             else 
                b = 2;
@@ -284,7 +284,7 @@ void         tstatisticbuildings::count(void)
          if (j == actmap->actplayer) 
             b = 0; 
          else 
-            if (getdiplomaticstatus(j * 8) == capeace) 
+            if ( actmap->player[actmap->actplayer].diplomacy.getState(j) >= PEACE ) 
                b = 1; 
             else 
                b = 2; 
@@ -750,45 +750,9 @@ void tenterfiledescription::run ( void )
 
 */
 
-extern dacpalette256 pal;
-#define sqr(a) (a)*(a)
-
-char mix3colors ( int p1, int p2, int p3 )
-{
-    int diff = 0xFFFFFFF;
-    int actdif;
-    char pix1;
- 
-    int r = pal[p1][0] + pal[p2][0] + pal[p3][0]  ;
-    int g = pal[p1][1] + pal[p2][1] + pal[p3][1]  ;
-    int b = pal[p1][2] + pal[p2][2] + pal[p3][2]  ;
-
-    for (int k=0; k<256 ; k++ ) {
-       actdif = sqr( pal[k][0]  * 2 - r ) + sqr( pal[k][1] * 2 -  g ) + sqr( pal[k][2] * 2 - b );
-       if (actdif < diff) {
-          diff = actdif;
-          pix1 = k;
-       }
-    } 
-    return pix1;
-
-}
-
-char mix2colors ( int a, int b )
-{
-   return (*colormixbuf) [ a ] [ b ];
-}
-
-char mix4colors ( int a, int b, int c, int d )
-{
-   return mix2colors ( mix2colors ( a, b ), mix2colors ( c, d ) );
-}
 
 
-
-
-
-
+#if 0
 
 
 
@@ -930,11 +894,12 @@ int               tenternamestrings::getcapabilities ( void )
   return 1;
 }
 
-
+#endif
 
 
 void viewVisibilityStatistics()
 {
+/*
    ASCString msg;
 
    tmap::Shareview* sv = actmap->shareview;
@@ -967,9 +932,9 @@ void viewVisibilityStatistics()
    actmap->shareview = sv;
    computeview ( actmap );
 
-
+*/
    tviewanytext vat;
-   vat.init ( "Visibility Statistics", msg.c_str() );
+   vat.init ( "Visibility Statistics", "Sorry, not available in ASC2 " );
    vat.run();
    vat.done();
 }
@@ -977,7 +942,7 @@ void viewVisibilityStatistics()
 
 
 
-
+#if 0
 
 
 
@@ -1689,7 +1654,7 @@ void         setupalliances( int supervisor )
    sua.done(); 
 }  
 
-
+#endif
 
 
 /*

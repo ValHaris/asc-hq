@@ -130,7 +130,7 @@ class MapItemTypeWidgetFactory : public SelectionItemFactory {
             return NULL;
       };
       
-      void itemSelected( const SelectionWidget* widget )
+      void itemSelected( const SelectionWidget* widget, bool mouse )
       {
          if ( !widget )
             return;

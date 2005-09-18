@@ -35,7 +35,7 @@
 // #include "mousecontrol.h"
 #include "soundList.h"
 #include "astar2.h"
-
+#include "mapdisplay.h"
 
 
 

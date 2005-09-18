@@ -296,7 +296,7 @@ class CargoItemFactory: public MapItemTypeWidgetFactory<MapItemTypeWidget< Vehic
    public:
       CargoItemFactory(  ContainerBase* container_ )  : Parent(vehicleTypeRepository), container( container_ ) {};
       
-      void itemSelected( const SelectionWidget* widget )
+      void itemSelected( const SelectionWidget* widget, bool mouse )
       {
          if ( !widget )
             return;

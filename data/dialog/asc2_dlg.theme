@@ -22,10 +22,9 @@
        <object>
           <!-- The default for all widgets that have no own section -->
           <name value="ThemeWidget"/>
-          <filename name="background" value="asc/dialog_background.png"/>
-          <color name="textcolor" value="0x0000FFFF"/>
-          <property name="backmode" value="TILE"/>
-          <gradient name="gradient" color0="0x00FF7b56" color1="0x00737b56" color2="0x00737b56" color3="0x00737b56"/>
+          <color    name="backgroundcolor" value="0x00447156"/>
+          <gradient name="gradient" color0="0x00447156" color1="0x00447156" color2="0x00447156" color3="0x00447156"/>
+          <color name="textcolor" value="0x00d5fae4"/>
           <property name="blend" value="0"/>
       </object>
     </widget>    

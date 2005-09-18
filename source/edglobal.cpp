@@ -43,6 +43,7 @@
 #include "unitinfodialog.h"
 
 #include "dialogs/editmapparam.h"   
+#include "dialogs/alliancesetup.h"
    
    const char* execactionnames[execactionscount] = {
         "End MapEdit",
@@ -355,8 +356,6 @@ void execaction(int code)
                        ch = 0;
                        // selweather( ct_f9  );   // !!!!!         // Test (Boolean) Testet, ob das wetter auch verfÅgbar ist fÅr bodentyp
                      }
-       break;
-    case act_setupalliances :  setupalliances();
        break;
     case act_toggleresourcemode :  {
                       if (showresources < 2) showresources++;
@@ -800,6 +799,8 @@ void execaction_pg(int code)
     case act_unitinfo :  unitInfoDialog();
        break;
     case act_setmapparameters: setmapparameters( actmap );
+       break;
+    case act_setupalliances :  setupalliances( actmap, true );
        break;
    };      
 }

@@ -126,6 +126,7 @@
 
 #include "dialogs/newgame.h"
 #include "dialogs/soundsettings.h"
+#include "dialogs/alliancesetup.h"
 
 
 pfield        getSelectedField(void)
@@ -485,31 +486,6 @@ void         loadMoreData(void)
 
 
 
-void loadMap()
-{
-
-   ASCString s1 = selectFile( mapextension, true );
-
-   if ( !s1.empty() ) {
-      displaymessage("loading map %s",0, s1.c_str() );
-      loadmap( s1.c_str() );
-      actmap->startGame();
-
-      next_turn();
-
-      removemessage();
-      if (actmap->campaign != NULL) {
-         delete  ( actmap->campaign );
-         actmap->campaign = NULL;
-      }
-
-      displaymap();
-      updateFieldInfo();
-      moveparams.movestatus = 0;
-   }
-}
-
-
 void loadGame()
 {
 
@@ -586,6 +562,13 @@ void         startnewsinglelevelfromgame(void)
 }
 
 
+void loadmap( const ASCString& name )
+{
+   tmap* m = mapLoadingExceptionChecker( name, MapLoadingFunction( tmaploaders::loadmap ));
+   delete actmap;
+   actmap = m;
+   computeview( actmap );
+}
 
 void loadStartupMap ( const char *gameToLoad=NULL )
 {
@@ -620,9 +603,6 @@ void loadStartupMap ( const char *gameToLoad=NULL )
 
             try {
                loadmap( gameToLoad );
-               computeview( actmap );
-               actmap->startGame();
-
             } catch ( tfileerror ) {
                fatalError ( "%s is not a legal map. ", gameToLoad );
             }
@@ -671,12 +651,7 @@ void loadStartupMap ( const char *gameToLoad=NULL )
          s = filename;
       }
 
-      loadmap(s.c_str());
-
-      displayLogMessage ( 6, "initializing map..." );
-      actmap->startGame();
-      displayLogMessage ( 6, "done\n Setting up Resources..." );
-      actmap->setupResources();
+      loadmap( s );
       displayLogMessage ( 6, "done\n" );
    }
 }
@@ -1096,19 +1071,6 @@ void execuseraction ( tuseractions action )
          displaymap();
          break;
 
-      case ua_setupalliances:
-         setupalliances();
-         logtoreplayinfo ( rpl_alliancechange );
-         logtoreplayinfo ( rpl_shareviewchange );
-
-         if ( actmap->shareview && actmap->shareview->recalculateview ) {
-            logtoreplayinfo ( rpl_shareviewchange );
-            computeview( actmap );
-            actmap->shareview->recalculateview = 0;
-            displaymap();
-         }
-         updateFieldInfo();
-         break;
 
       case ua_settribute :
          settributepayments ();
@@ -1361,7 +1323,7 @@ void execuseraction2 ( tuseractions action )
       case ua_unitweightinfo:
          if ( fieldvisiblenow  ( getSelectedField() )) {
             Vehicle* eht = getSelectedField()->vehicle;
-            if ( eht && getdiplomaticstatus ( eht->color ) == capeace )
+            if ( eht && actmap->player[actmap->actplayer].diplomacy.getState( eht->getOwner()) >= PEACE_SV )
                displaymessage(" weight of unit: \n basic: %d\n+cargo:%d\n= %d",1 ,eht->typ->weight, eht->cargo(), eht->weight() );
          }
          break;
@@ -1394,6 +1356,22 @@ void execuseraction2 ( tuseractions action )
       case ua_loadgame: loadGame();
          break;
       case ua_savegame: saveGame( true );
+         break;
+      case ua_setupalliances:
+         setupalliances( actmap, false );
+         logtoreplayinfo ( rpl_alliancechange );
+         logtoreplayinfo ( rpl_shareviewchange );
+
+         /*
+         if ( actmap->shareview && actmap->shareview->recalculateview ) {
+            logtoreplayinfo ( rpl_shareviewchange );
+            computeview( actmap );
+            actmap->shareview->recalculateview = 0;
+            displaymap();
+         }
+         */
+         #warning SHAREVIEW
+         updateFieldInfo();
          break;
       default:
          break;

@@ -24,6 +24,7 @@
 
 #include "../iconrepository.h"
 #include "../gamemap.h"
+#include "../paradialog.h"
 #include "playersetup.h"
 #include "alliancesetup.h"
 
@@ -70,7 +71,7 @@ class ListBoxImageItem : public PG_ListBoxBaseItem {
 
 
 class DiplomaticModeChooser : public PG_Widget {
-      DiplomaticStates mode;
+      DiplomaticStates& mode;
       bool writePossible;
       
    protected:
@@ -88,10 +89,12 @@ class DiplomaticModeChooser : public PG_Widget {
       }     
             
    public:
-      DiplomaticModeChooser ( PG_Widget *parent, const PG_Rect& pos, DiplomaticStates dm, bool writeable ) : PG_Widget( parent, pos, true ), mode(dm), writePossible( writeable )
+      DiplomaticModeChooser ( PG_Widget *parent, const PG_Rect& pos, DiplomaticStates& dm, bool writeable ) : PG_Widget( parent, pos, true ), mode(dm), writePossible( writeable )
       {
       };
-      
+
+      SigC::Signal1<void,DiplomaticStates> sigStateChange;
+            
       void eventDraw (SDL_Surface *surface, const PG_Rect &rect)
       {
          Surface s = Surface::Wrap( surface );
@@ -103,28 +106,35 @@ class DiplomaticModeChooser : public PG_Widget {
          mode = state;
          Redraw();
          Update(true);
+         sigStateChange(state);
       }
       
       bool eventMouseButtonUp(const SDL_MouseButtonEvent* button) 
       {
-         if(button->button != 1) {
-                  return false;
+         if (button->button != 1) {
+            return false;
          }
 
          if ( writePossible )   
             selectMode();
-         // listBox->Show();            
          return true;
       }
 };      
  
 
-AllianceSetupWidget::AllianceSetupWidget( tmap* gamemap, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style ) : PG_ScrollWidget( parent, r, style ) , actmap ( gamemap )
+AllianceSetupWidget::AllianceSetupWidget( tmap* gamemap, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style ) : PG_ScrollWidget( parent, r, style ) , actmap ( gamemap ), states(NULL)
 {
+   this->allEditable = allEditable;
    int playerNum = 0;
-   for ( int i = 0; i < actmap->getPlayerCount(); ++i ) 
+   
+   states = new DiplomaticStates[actmap->getPlayerCount() * actmap->getPlayerCount() ];
+   
+   for ( int i = 0; i < actmap->getPlayerCount(); ++i ) {
       if ( actmap->player[i].exist() ) 
          ++playerNum;
+      for ( int j = 0; j < actmap->getPlayerCount(); ++j )
+         setState( actmap->player[i].diplomacy.getState( j ), i, j );
+   }      
 
          
    const int colWidth = 40;
@@ -178,7 +188,11 @@ AllianceSetupWidget::AllianceSetupWidget( tmap* gamemap, bool allEditable, PG_Wi
             if ( actmap->player[j].exist() )  {
                if ( i != j ) {
                   int x = calcx(cnt2) - barSpace;
-                  new DiplomaticModeChooser( horizontalBar, PG_Rect(x + (colWidth - diplomaticStateIconSize)/2 ,  (lineHeight - diplomaticStateIconSize)/2,diplomaticStateIconSize,diplomaticStateIconSize), PEACE, j > i );
+                  DiplomaticModeChooser* dmc = new DiplomaticModeChooser( horizontalBar, PG_Rect(x + (colWidth - diplomaticStateIconSize)/2 ,  (lineHeight - diplomaticStateIconSize)/2,diplomaticStateIconSize,diplomaticStateIconSize), getState(i,j), j > i );
+                  if ( allEditable )
+                     dmc->sigStateChange.connect( SigC::bind( SigC::slot( *this, &AllianceSetupWidget::setState ), j, i));
+                     
+                  diplomaticWidgets[ linearize( i,j) ] = dmc;
                }
                ++cnt2;
             }   
@@ -192,6 +206,72 @@ AllianceSetupWidget::AllianceSetupWidget( tmap* gamemap, bool allEditable, PG_Wi
 };
 
 
+void AllianceSetupWidget::setState( DiplomaticStates s, int actingPlayer, int secondPlayer )
+{
+   getState( actingPlayer, secondPlayer) = s;
+   
+   DiplomaticWidgets::iterator i = diplomaticWidgets.find( linearize( actingPlayer, secondPlayer) );
+   if ( i != diplomaticWidgets.end() )
+      i->second->Redraw(true);
+}
 
-void AllianceSetupWidget::Apply() {
+DiplomaticStates& AllianceSetupWidget::getState( int actingPlayer, int secondPlayer )
+{
+   return states[ linearize( actingPlayer, secondPlayer) ];
+}
+
+int AllianceSetupWidget::linearize( int actingPlayer, int secondPlayer  )
+{
+   return actingPlayer * actmap->getPlayerCount() + secondPlayer;
+}
+
+
+void AllianceSetupWidget::Apply() 
+{
+   for ( int acting = 0; acting < actmap->getPlayerCount(); ++acting )
+      for ( int second = 0; second < actmap->getPlayerCount(); ++second )
+         actmap->player[acting].diplomacy.setState( second, getState( acting, second ));         
 };
+
+
+AllianceSetupWidget::~AllianceSetupWidget()
+{
+   delete[] states;
+}   
+
+
+
+
+
+
+
+
+
+
+class AllianceSetupWindow : public ASC_PG_Dialog {
+      AllianceSetupWidget* asw;
+   public:
+      AllianceSetupWindow( tmap* actmap, bool allEditable, PG_Widget *parent, const PG_Rect &r ) : ASC_PG_Dialog( parent, r, "Diplomacy" )
+      {
+         asw = new AllianceSetupWidget( actmap, allEditable, this, PG_Rect( 5, 30, r.Width() - 10, r.Height() - 60 ));
+         PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 200, Height() - 30, 90, 20 ), "OK" );
+         ok->sigClick.connect( SigC::slot( *this, &AllianceSetupWindow::Apply ));
+         PG_Button* cancel = new PG_Button( this, PG_Rect( Width() - 100, Height() - 30, 90, 20 ), "Cancel" );
+         cancel->sigClick.connect( SigC::slot( *this, &AllianceSetupWindow::QuitModal ));
+      }
+
+      bool Apply()
+      {
+         asw->Apply();
+         QuitModal();
+         return true;
+      }
+
+};
+
+void  setupalliances( tmap* actmap, bool supervisor  )
+{
+   AllianceSetupWindow asw ( actmap, supervisor, NULL, PG_Rect( 100, 100, 600, 500 ));
+   asw.Show();
+   asw.RunModal();
+}

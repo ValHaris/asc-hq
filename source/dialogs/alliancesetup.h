@@ -22,25 +22,40 @@
 #ifndef ALLIANCESETUP_H
 #define ALLIANCESETUP_H
 
+#include <map>
 #include <pgscrollwidget.h>
 #include "../gamemap.h"
 
 class AllianceSetupWidget : public PG_ScrollWidget {
       tmap* actmap;
+      bool allEditable;
+      DiplomaticStates* states;
+      
       
       struct PlayerWidgets {
          PG_LineEdit* name;
          PG_DropDown* type;
          int pos;
       };
+
+      typedef map<int,PG_Widget*> DiplomaticWidgets;
+      DiplomaticWidgets diplomaticWidgets;
          
       vector<PlayerWidgets> playerWidgets;
+      
+      int linearize( int actingPlayer, int secondPlayer  );
+      void setState( DiplomaticStates s, int actingPlayer, int secondPlayer );
+      
+      DiplomaticStates& getState( int actingPlayer, int secondPlayer );
 
    public:
       AllianceSetupWidget( tmap* gamemap, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style="ScrollWidget" );
       void Apply();
+      ~AllianceSetupWidget();
 };
 
+
+void  setupalliances( tmap* actmap, bool supervisor = false );
 
 
 #endif

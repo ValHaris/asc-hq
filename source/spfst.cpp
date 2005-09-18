@@ -202,7 +202,7 @@ int         fieldAccessible( const pfield        field,
               if (vehicleplattfahrbar(vehicle,field))
                  return 2;
               else
-                 if ((field->vehicle->height != vehicle->height) || (attackpossible28(field->vehicle,vehicle) == false) || (getdiplomaticstatus(field->vehicle->color) == capeace))
+                 if ((field->vehicle->height != vehicle->height) || (attackpossible28(field->vehicle,vehicle) == false) ||  actmap->player[actmap->actplayer].diplomacy.getState( field->vehicle->getOwner()) >= PEACE )
                     return 1;
       }
       else {   // building
@@ -264,7 +264,7 @@ pfield        getfield(int          x,
 
 
 
-
+/*
 
 int         getdiplomaticstatus(int         b)
 {
@@ -311,21 +311,7 @@ int        getdiplomaticstatus2(int    b, int    c)
 }
 
 
-
-
-
-
-
-
-
-
-int isresourcenetobject ( ObjectType* obj )
-{
-   if ( obj->id == 3 || obj->id == 30 || obj->id == 4 )
-      return 1;
-   else
-      return 0;
-}
+*/
 
 
 

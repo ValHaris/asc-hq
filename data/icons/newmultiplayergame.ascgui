@@ -8,7 +8,7 @@ panel {
 
   Title = New Multiplayer Game
     
-  ChildWidgets = Next QuickStart Page1 Page2 Page3 Page4 Page5 Page6 Page7 Bottomline
+  ChildWidgets = Next QuickStart Start Page1 Page2 Page3 Page4 Page5 Page6 Page7 Bottomline
   
   Bottomline {
      type = Area
@@ -22,7 +22,7 @@ panel {
     type = button
     text = Next >
     name = next
-    x = -30
+    x = -130
     y = -20
     height  = 30
     width = 90
@@ -32,12 +32,23 @@ panel {
     type = button
     text = QuickStart
     name = quickstart
-    x = -130
+    x = -230
     y = -20
     height  = 30
     width = 90
   } QuickStart
 
+  Start {
+    type = button
+    text = Start
+    name = start
+    x = -30
+    y = -20
+    height  = 30
+    width = 90
+  } Start
+  
+  
   Page1 {
     type = dummy
     x = 0

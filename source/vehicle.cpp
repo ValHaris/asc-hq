@@ -1021,12 +1021,11 @@ int  tsearchforminablefields::run( const Vehicle* eht )
 
 
    shareview = 1 << ( eht->color / 8);
-   if ( gamemap->shareview )
-      for ( int i = 0; i < 8; i++ )
-         if ( i*8 != eht->color )
-            if ( gamemap->player[i].exist() )
-               if ( gamemap->shareview->mode[eht->color/8][i] )
-                  shareview += 1 << i;
+   for ( int i = 0; i < 8; i++ )
+      if ( i*8 != eht->color )
+         if ( gamemap->player[i].exist() )
+            if ( gamemap->getPlayer(eht).diplomacy.sharesView(i) )
+               shareview += 1 << i;
 
    numberoffields = 0;
    initsearch( eht->getPosition(), eht->typ->digrange, 0 );
