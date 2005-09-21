@@ -123,7 +123,7 @@ void Building :: convert ( int player )
    if ( color < 8*8 )
       removeview();
 
-   tmap::Player::BuildingList::iterator i = find ( gamemap->player[oldcol].buildingList.begin(), gamemap->player[oldcol].buildingList.end(), this );
+   Player::BuildingList::iterator i = find ( gamemap->player[oldcol].buildingList.begin(), gamemap->player[oldcol].buildingList.end(), this );
    if ( i != gamemap->player[oldcol].buildingList.end())
       gamemap->player[oldcol].buildingList.erase ( i );
 
@@ -363,7 +363,7 @@ Building :: ~Building ()
    if ( gamemap ) {
       int c = color/8;
 
-      tmap::Player::BuildingList::iterator i = find ( gamemap->player[c].buildingList.begin(), gamemap->player[c].buildingList.end(), this );
+      Player::BuildingList::iterator i = find ( gamemap->player[c].buildingList.begin(), gamemap->player[c].buildingList.end(), this );
       if ( i != gamemap->player[c].buildingList.end() )
          gamemap->player[c].buildingList.erase ( i );
    }
@@ -1285,7 +1285,7 @@ void doresearch ( tmap* actmap, int player )
    typedef vector<ResearchEfficiency> VRE;
    VRE vre;
 
-   for ( tmap::Player::BuildingList::iterator bi = actmap->player[player].buildingList.begin(); bi != actmap->player[player].buildingList.end(); bi++ ) {
+   for ( Player::BuildingList::iterator bi = actmap->player[player].buildingList.begin(); bi != actmap->player[player].buildingList.end(); bi++ ) {
       Building* bld = *bi;
       if ( bld->typ->special & cgresearchb ) {
          Resources res = returnResourcenUseForResearch ( bld, bld->researchpoints );

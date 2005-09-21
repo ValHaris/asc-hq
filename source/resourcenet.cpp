@@ -176,7 +176,7 @@ MapNetwork :: ~MapNetwork ()
 void MapNetwork :: searchAllVehiclesNextToBuildings ( int player )
 {
    pass++;
-   for ( tmap::Player::VehicleList::iterator j = actmap->player[player].vehicleList.begin(); j != actmap->player[player].vehicleList.end(); j++ ) {
+   for ( Player::VehicleList::iterator j = actmap->player[player].vehicleList.begin(); j != actmap->player[player].vehicleList.end(); j++ ) {
       MapCoordinate3D mc = (*j)->getPosition();
       for ( int s = 0; s < sidenum; s++ ) {
          pfield fld = actmap->getField ( getNeighbouringFieldCoordinate ( mc, s ));
@@ -200,7 +200,7 @@ void MapNetwork :: start ( int x, int y )
       for ( int i = 0; i < 8; i++ )
          if ( actmap->player[i].exist() ) {
 
-            for ( tmap::Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); j++ )
+            for ( Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); j++ )
                checkbuilding(*j);
 
             // if ( !searchfinished() )
@@ -523,7 +523,7 @@ void transfer_all_outstanding_tribute ( void )
                   topay[ resourcetype ] = actmap->tribute.avail[ player ][ targplayer ].resource( resourcetype ) + got[ resourcetype ];
 
                   if ( !actmap->isResourceGlobal (resourcetype) ) {
-                     for ( tmap::Player::BuildingList::iterator j = actmap->player[player].buildingList.begin(); j != actmap->player[player].buildingList.end() &&  topay[resourcetype] > got[resourcetype] ; j++ ) {
+                     for ( Player::BuildingList::iterator j = actmap->player[player].buildingList.begin(); j != actmap->player[player].buildingList.end() &&  topay[resourcetype] > got[resourcetype] ; j++ ) {
                         PutTribute pt ( actmap );
                         got[resourcetype] += pt.puttribute ( *j, resourcetype, 0, targplayer, player, 1 );
                      }

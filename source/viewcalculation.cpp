@@ -202,7 +202,7 @@ void         clearvisibility( pmap actmap, int  reset )
      return;
 
    for ( int p = 0; p < 8; p++ )
-      for ( tmap::Player::VehicleList::iterator i = actmap->player[p].vehicleList.begin(); i != actmap->player[p].vehicleList.end(); i++ )
+      for ( Player::VehicleList::iterator i = actmap->player[p].vehicleList.begin(); i != actmap->player[p].vehicleList.end(); i++ )
          if ( (*i)->isViewing())
             (*i)->removeview();
 
@@ -352,13 +352,13 @@ int computeview( pmap actmap, int player_fieldcount_mask )
    for ( int a = 0; a < 8; a++)
       if (actmap->player[a].exist() ) {
 
-         for ( tmap::Player::VehicleList::iterator i = actmap->player[a].vehicleList.begin(); i != actmap->player[a].vehicleList.end(); i++ ) {
+         for ( Player::VehicleList::iterator i = actmap->player[a].vehicleList.begin(); i != actmap->player[a].vehicleList.end(); i++ ) {
             Vehicle* actvehicle = *i;
             if ( actvehicle == actmap->getField(actvehicle->xpos,actvehicle->ypos)->vehicle)
                actvehicle->addview();
          }
 
-         for ( tmap::Player::BuildingList::iterator i = actmap->player[a].buildingList.begin(); i != actmap->player[a].buildingList.end(); i++ )
+         for ( Player::BuildingList::iterator i = actmap->player[a].buildingList.begin(); i != actmap->player[a].buildingList.end(); i++ )
             (*i)->addview();
       }
 

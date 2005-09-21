@@ -57,8 +57,8 @@ PlayerSetupWidget::PlayerSetupWidget( tmap* gamemap, Mode mode, PG_Widget *paren
             pw.type = new PG_DropDown( colbar, r);
             
             int pos = 0;
-            while ( tmap :: Player :: playerStatusNames[pos] ) {
-               pw.type->AddItem( tmap :: Player :: playerStatusNames[pos] );
+            while ( Player :: playerStatusNames[pos] ) {
+               pw.type->AddItem( Player :: playerStatusNames[pos] );
                ++pos;
             }
             
@@ -68,7 +68,7 @@ PlayerSetupWidget::PlayerSetupWidget( tmap* gamemap, Mode mode, PG_Widget *paren
             pw.name->SetEditable( false );
             pw.type = NULL;
             PG_LineEdit* le = new PG_LineEdit( colbar, r );
-            le->SetText( tmap :: Player :: playerStatusNames[ actmap->player[i].stat ] );
+            le->SetText( Player :: playerStatusNames[ actmap->player[i].stat ] );
             le->SetEditable( false );
          }
          

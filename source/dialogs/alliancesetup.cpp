@@ -32,22 +32,63 @@
 const int diplomaticStateIconSize = 18;
 const int diplomaticStateIconSpace = 2;
 
+
+template<typename SelectionType>
+int getItemNum() { return 0; };
+
+template<typename SelectionType>
+const char* getStateName(int s) { return NULL; };
+
+
+template<>
+int getItemNum<DiplomaticStates>() { return diplomaticStateNum; };
+
+template<>
+const char* getStateName<DiplomaticStates>(int s) { return diplomaticStateNames[s]; };
+
+
+enum DiplomaticTransitions { SNEAK_ATTACK, TO_WAR, TO_TRUCE, TO_PEACE, TO_PEACE_SV, TO_ALLIANCE };
+
+template<>
+int getItemNum<DiplomaticTransitions>() { return diplomaticStateNum+1; };
+
+template<>
+const char* getStateName<DiplomaticTransitions>(int s) 
+{ 
+   if ( s == 0 ) 
+      return "Sneak Attack"; 
+   else 
+      return diplomaticStateNames[s-1]; 
+};
+
+
 ASCString getDiplomaticStateImage( DiplomaticStates s )
 {
    ASCString filename = "diplo-" + ASCString::toString(s) + ".png";
    return filename;
 };
 
+ASCString getDiplomaticStateImage( DiplomaticTransitions s )
+{
+   if ( s == SNEAK_ATTACK ) {
+      ASCString filename = "diplo-sneak.png";
+      return filename;
+   } else 
+      return getDiplomaticStateImage( DiplomaticStates( s-1 ));
+};
+
+
+template <typename SelectionType>
 class ListBoxImageItem : public PG_ListBoxBaseItem {
-      DiplomaticStates state;
+      SelectionType state;
    public:
-      ListBoxImageItem( PG_ListBox *parent, PG_Point pos, DiplomaticStates s )  : PG_ListBoxBaseItem( parent, diplomaticStateIconSize + 2*diplomaticStateIconSpace ), state(s)
+      ListBoxImageItem( PG_ListBox *parent, PG_Point pos, SelectionType s )  : PG_ListBoxBaseItem( parent, diplomaticStateIconSize + 2*diplomaticStateIconSpace ), state(s)
       {
          new PG_Image( this, PG_Point(diplomaticStateIconSpace,diplomaticStateIconSpace), IconRepository::getIcon( getDiplomaticStateImage(s)).getBaseSurface() , false );
-         new PG_Label( this, PG_Rect(diplomaticStateIconSize + 5, diplomaticStateIconSpace, 200,diplomaticStateIconSize), diplomaticStateNames[s]);
+         new PG_Label( this, PG_Rect(diplomaticStateIconSize + 5, diplomaticStateIconSpace, 200,diplomaticStateIconSize), getStateName<SelectionType>(s));
       }
       
-      SigC::Signal1<void,DiplomaticStates> sigSet;
+      SigC::Signal1<void,SelectionType> sigSet;
       
       bool eventMouseButtonUp(const SDL_MouseButtonEvent* button) 
       {
@@ -70,17 +111,21 @@ class ListBoxImageItem : public PG_ListBoxBaseItem {
 };
 
 
+
+
+
+template <typename SelectionType>
 class DiplomaticModeChooser : public PG_Widget {
-      DiplomaticStates& mode;
+      SelectionType& mode;
       bool writePossible;
       
    protected:
 
       void selectMode()
       {
-         PG_ListBox listBox( NULL, PG_Rect( x, y + Height(), 250, diplomaticStateNum * ( diplomaticStateIconSpace * 2 + diplomaticStateIconSize ) + 4 ));
-         for ( int i = 0; i < diplomaticStateNum; ++i) {
-            ListBoxImageItem* item = new ListBoxImageItem( NULL, PG_Point(0,0), DiplomaticStates(i));
+         PG_ListBox listBox( NULL, PG_Rect( x, y + Height(), 250, getItemNum<SelectionType>() * ( diplomaticStateIconSpace * 2 + diplomaticStateIconSize ) + 4 ));
+         for ( int i = 0; i < getItemNum<SelectionType>(); ++i) {
+            ListBoxImageItem<SelectionType>* item = new ListBoxImageItem<SelectionType>( NULL, PG_Point(0,0), SelectionType(i));
             item->sigSet.connect( SigC::slot( *this, &DiplomaticModeChooser::SetState));
             listBox.AddChild( item );
          }
@@ -89,11 +134,11 @@ class DiplomaticModeChooser : public PG_Widget {
       }     
             
    public:
-      DiplomaticModeChooser ( PG_Widget *parent, const PG_Rect& pos, DiplomaticStates& dm, bool writeable ) : PG_Widget( parent, pos, true ), mode(dm), writePossible( writeable )
+      DiplomaticModeChooser ( PG_Widget *parent, const PG_Rect& pos, SelectionType& dm, bool writeable ) : PG_Widget( parent, pos, true ), mode(dm), writePossible( writeable )
       {
       };
 
-      SigC::Signal1<void,DiplomaticStates> sigStateChange;
+      SigC::Signal1<void,SelectionType> sigStateChange;
             
       void eventDraw (SDL_Surface *surface, const PG_Rect &rect)
       {
@@ -101,7 +146,7 @@ class DiplomaticModeChooser : public PG_Widget {
          s.Blit(  IconRepository::getIcon( getDiplomaticStateImage(mode) ) );
       }
       
-      void SetState( DiplomaticStates state )
+      void SetState( SelectionType state )
       {
          mode = state;
          Redraw();
@@ -188,11 +233,18 @@ AllianceSetupWidget::AllianceSetupWidget( tmap* gamemap, bool allEditable, PG_Wi
             if ( actmap->player[j].exist() )  {
                if ( i != j ) {
                   int x = calcx(cnt2) - barSpace;
-                  DiplomaticModeChooser* dmc = new DiplomaticModeChooser( horizontalBar, PG_Rect(x + (colWidth - diplomaticStateIconSize)/2 ,  (lineHeight - diplomaticStateIconSize)/2,diplomaticStateIconSize,diplomaticStateIconSize), getState(i,j), j > i );
-                  if ( allEditable )
+                  PG_Rect rect ( x + (colWidth - diplomaticStateIconSize)/2 ,  (lineHeight - diplomaticStateIconSize)/2,diplomaticStateIconSize,diplomaticStateIconSize); 
+                  if ( allEditable ) {
+                     DiplomaticModeChooser<DiplomaticStates>* dmc = new DiplomaticModeChooser<DiplomaticStates>( horizontalBar, rect, getState(i,j), j > i );
                      dmc->sigStateChange.connect( SigC::bind( SigC::slot( *this, &AllianceSetupWidget::setState ), j, i));
+                     diplomaticWidgets[ linearize( i,j) ] = dmc;
+                  } else {
+                     static DiplomaticTransitions s = DiplomaticTransitions(2);
+                     DiplomaticModeChooser<DiplomaticTransitions>* dmc = new DiplomaticModeChooser<DiplomaticTransitions>( horizontalBar, rect, s, j > i );
+                     // dmc->sigStateChange.connect( SigC::bind( SigC::slot( *this, &AllianceSetupWidget::setState ), j, i));
+                     diplomaticWidgets[ linearize( i,j) ] = dmc;
+                  }   
                      
-                  diplomaticWidgets[ linearize( i,j) ] = dmc;
                }
                ++cnt2;
             }   

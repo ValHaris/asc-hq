@@ -1591,7 +1591,7 @@ void         generatevehicle_cl ( Vehicletype* fztyp,
       if ( actmap->getgameparameter(cgp_bi3_training) >= 1 ) {
          int cnt = 0;
 
-         for ( tmap::Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ )
+         for ( Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ )
             if ( (*bi)->typ->special & cgtrainingb )
                cnt++;
 

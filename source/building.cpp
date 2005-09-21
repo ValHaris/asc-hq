@@ -4181,7 +4181,7 @@ void ccontainer_b :: cconventionelpowerplant_subwindow :: setnewpower ( int pwr 
       power = 1024;
 
    if ( allbuildings ) {
-      for ( tmap::Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ ) {
+      for ( Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ ) {
          Building* bld = *bi;
          if ( bld->typ->special & cgconventionelpowerplantb )
             for ( int r = 0; r < 3; r++ )
@@ -5131,7 +5131,7 @@ void ccontainer_b :: cresearch_subwindow :: setnewresearch ( int res )
    research = res;
 
    if ( allbuildings ) {
-      for ( tmap::Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ ) {
+      for ( Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ ) {
          Building* bld = *bi;
          if ( bld->typ->special & cgresearchb ) {
             bld->researchpoints = bld->maxresearchpoints * research/1024;
@@ -5176,7 +5176,7 @@ void  ccontainer_b :: cresearch_subwindow :: displayvariables ( void )
    showtext2c ( "avail in:",        subwinx1 + 8, subwiny1 + 97 );
 
    int rppt = 0;
-   for ( tmap::Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ )
+   for ( Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ )
        rppt += (*bi)->researchpoints;
 
    if ( rppt  && actmap->player[actmap->actplayer].research.activetechnology ) {
@@ -5451,7 +5451,7 @@ void ccontainer_b :: cminingstation_subwindow :: setnewextraction ( int res )
    extraction = res;
 
    if ( allbuildings ) {
-      for ( tmap::Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ ) {
+      for ( Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ ) {
          Building* bld = *bi;
          if ( bld->typ->special & cgminingstationb ) {
             for ( int r = 0; r < 3; r++ )

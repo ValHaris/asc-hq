@@ -161,12 +161,20 @@ const int diplomaticStateNum = 5;
 enum DiplomaticStates { WAR, TRUCE, PEACE, PEACE_SV, ALLIANCE };
 extern const char* diplomaticStateNames[diplomaticStateNum+1];
 
+class Player;
 
-
-class DiplomaticStateVector {
+class DiplomaticStateVector : public SigC::Object {
+      Player& player; 
       vector<DiplomaticStates> states;
+      typedef map<int,DiplomaticStates> QueuedStateChanges;
+      QueuedStateChanges queuedStateChanges;
+      
+      void turnBegins();
+      
    public:
-      DiplomaticStateVector();
+      DiplomaticStateVector( Player& _player );
+      void deployHooks();
+      
       DiplomaticStates getState( int towardsPlayer );
       void setState( int towardsPlayer, DiplomaticStates s );
       void propose ( int towardsPlayer, DiplomaticStates s );
@@ -181,14 +189,128 @@ class DiplomaticStateVector {
       void write ( tnstream& stream ) const;
 };
 
+
+
+
+//! the different players in ASC. There may be 8 players (0..7) and neutral units (8)
+class Player {
+      friend class tmap;
+      int player;
+      tmap* parentMap;
+   public:
+      Player();
+      
+      int getPosition() const { return player; };
+      const tmap* getParentMap() const { return parentMap; };
+      tmap* getParentMap() { return parentMap; };
+      
+      //! does the player exist at all
+      bool         exist();
+
+      //! did the player exist when the turn started? Required for checking if a player has been terminated
+      bool existanceAtBeginOfTurn;
+
+      typedef list<Vehicle*> VehicleList;
+      //! a list of all units
+      VehicleList  vehicleList;
+
+      typedef list<Building*> BuildingList;
+      //! a list of all units
+      BuildingList  buildingList;
+
+      //! the status of the scientific research
+      Research    research;
+
+      //! if the player is run by an AI, this is the pointer to it
+      BaseAI*      ai;
+
+      //! the status of the player: 0=human ; 1=AI ; 2=off
+      enum tplayerstat { human, computer, off, supervisor, suspended } stat;
+      
+      static const char* playerStatusNames[];
+
+      //! the name of the player that is used if the player is human
+      ASCString       humanname;
+
+      //! the name of the player that is used if the player is the AI
+      ASCString       computername;
+
+      //! returns the name of the player depending on the status
+      const ASCString& getName( );
+      
+      void setName( const ASCString& name ) { humanname = name; };
+
+      //! the Password required for playing this player
+      Password passwordcrc;
+
+      class Dissection {
+         public:
+            Vehicletype*  fzt;
+            const Technology*   tech;
+            int           orgpoints;
+            int           points;
+            int           num;
+      };
+
+      //! the list of dissected units
+      typedef list<Dissection> DissectionContainer;
+      DissectionContainer dissections;
+
+      bool __dissectionsToLoad;
+
+      //! the list of messages that haven't been read by the player yet
+      MessagePntrContainer  unreadmessage;
+      bool __loadunreadmessage;
+
+      //! the list of messages that already have been read by the player yet
+      MessagePntrContainer  oldmessage;
+      bool __loadoldmessage;
+
+      //! the list of messages that have been sent yet
+      MessagePntrContainer  sentmessage;
+      bool __loadsentmessage;
+
+      //! if ASC should check all events for fullfilled triggers, this variable will be set to true. This does not mean that there really ARE events that are ready to be executed
+      int queuedEvents;
+
+      //! the version of ASC that this player has used to make his last turn 
+      int ASCversion;
+
+      struct PlayTime {
+         int turn;
+         time_t date;
+      };
+      typedef list<PlayTime> PlayTimeContainer;
+
+      //! The time this player ended his turns. This is very informative in email games with > 2 players to find out who is delaying the game.
+      PlayTimeContainer playTime;
+
+      MapCoordinate cursorPos;
+
+      GameTransferMechanism* network;
+
+      DiplomaticStateVector diplomacy;
+                  
+      DI_Color getColor();
+
+      SigC::Signal0<void> turnBegins;
+      SigC::Signal0<void> turnEnds;
+                 
+};
+
+
+//! convenience-class which automatically determines the Player of units, buildings and other game objects
 class PlayerID {
       int num;
    public:
       PlayerID( int num ) { this->num = num; };
       PlayerID( const ContainerBase* c ) : num( c->getOwner() ) {};
       PlayerID( const ContainerBase& c ) : num( c.getOwner() ) {};
+      PlayerID( const Player& p ) : num( p.getPosition() ) {};
+      PlayerID( const PlayerID& p ) : num( p.getID() ) {};
       int getID() const { return num; };
 };      
+
 
 
 //! The map. THE central structure of ASC, which holds everything not globally available together
@@ -252,103 +374,7 @@ class tmap {
       int _resourcemode;
 
 
-      //! the different players in ASC. There may be 8 players (0..7) and neutral units (8)
-      class Player {
-            friend class tmap;
-            int player;
-         public:
-            Player();
-            
-            //! does the player exist at all
-            bool         exist();
-
-            //! did the player exist when the turn started? Required for checking if a player has been terminated
-            bool existanceAtBeginOfTurn;
-
-            typedef list<Vehicle*> VehicleList;
-            //! a list of all units
-            VehicleList  vehicleList;
-
-            typedef list<Building*> BuildingList;
-            //! a list of all units
-            BuildingList  buildingList;
-
-            //! the status of the scientific research
-            Research    research;
-
-            //! if the player is run by an AI, this is the pointer to it
-            BaseAI*      ai;
-
-            //! the status of the player: 0=human ; 1=AI ; 2=off
-            enum tplayerstat { human, computer, off, supervisor, suspended } stat;
-            
-            static const char* playerStatusNames[];
-
-            //! the name of the player that is used if the player is human
-            ASCString       humanname;
-
-            //! the name of the player that is used if the player is the AI
-            ASCString       computername;
-
-            //! returns the name of the player depending on the status
-            const ASCString& getName( );
-            
-            void setName( const ASCString& name ) { humanname = name; };
-
-            //! the Password required for playing this player
-            Password passwordcrc;
-
-            class Dissection {
-               public:
-                  Vehicletype*  fzt;
-                  const Technology*   tech;
-                  int           orgpoints;
-                  int           points;
-                  int           num;
-            };
-
-            //! the list of dissected units
-            typedef list<Dissection> DissectionContainer;
-            DissectionContainer dissections;
-
-            bool __dissectionsToLoad;
-
-            //! the list of messages that haven't been read by the player yet
-            MessagePntrContainer  unreadmessage;
-            bool __loadunreadmessage;
-
-            //! the list of messages that already have been read by the player yet
-            MessagePntrContainer  oldmessage;
-            bool __loadoldmessage;
-
-            //! the list of messages that have been sent yet
-            MessagePntrContainer  sentmessage;
-            bool __loadsentmessage;
-
-            //! if ASC should check all events for fullfilled triggers, this variable will be set to true. This does not mean that there really ARE events that are ready to be executed
-            int queuedEvents;
-
-            //! the version of ASC that this player has used to make his last turn 
-            int ASCversion;
-
-            struct PlayTime {
-              int turn;
-              time_t date;
-            };
-            typedef list<PlayTime> PlayTimeContainer;
-
-            //! The time this player ended his turns. This is very informative in email games with > 2 players to find out who is delaying the game.
-            PlayTimeContainer playTime;
-
-            MapCoordinate cursorPos;
-
-            GameTransferMechanism* network;
-
-            DiplomaticStateVector diplomacy;
-                        
-            DI_Color getColor();
-            
-      } player[9];
+      Player player[9];
 
       int getPlayerCount() const { return 8; };
       
@@ -586,8 +612,6 @@ class tmap {
 
       unsigned int randomSeed;
 };
-
-typedef tmap::Player Player;
 
 
 

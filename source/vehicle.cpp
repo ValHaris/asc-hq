@@ -113,7 +113,7 @@ Vehicle :: ~Vehicle (  )
    if ( gamemap ) {
       int c = color/8;
 
-      tmap::Player::VehicleList::iterator i = find ( gamemap->player[c].vehicleList.begin(), gamemap->player[c].vehicleList.end(), this );
+      Player::VehicleList::iterator i = find ( gamemap->player[c].vehicleList.begin(), gamemap->player[c].vehicleList.end(), this );
       if ( i != gamemap->player[c].vehicleList.end() )
          gamemap->player[c].vehicleList.erase ( i );
 
@@ -760,7 +760,7 @@ void Vehicle::convert ( int col )
 
    int oldcol = getOwner();
 
-   tmap::Player::VehicleList::iterator i = find ( gamemap->player[oldcol].vehicleList.begin(), gamemap->player[oldcol].vehicleList.end(), this );
+   Player::VehicleList::iterator i = find ( gamemap->player[oldcol].vehicleList.begin(), gamemap->player[oldcol].vehicleList.end(), this );
    if ( i != gamemap->player[oldcol].vehicleList.end())
       gamemap->player[oldcol].vehicleList.erase ( i );
 

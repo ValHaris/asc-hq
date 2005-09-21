@@ -1802,7 +1802,7 @@ void tresearchinfo::init ( void )
 
 void tresearchinfo::count ( void )
 {
-   for ( tmap::Player::BuildingList::iterator i = actmap->player[actmap->actplayer].buildingList.begin(); i != actmap->player[actmap->actplayer].buildingList.end(); i++ )
+   for ( Player::BuildingList::iterator i = actmap->player[actmap->actplayer].buildingList.begin(); i != actmap->player[actmap->actplayer].buildingList.end(); i++ )
       rppt += (*i)->researchpoints;
 }
 

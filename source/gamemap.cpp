@@ -59,8 +59,42 @@ const char* diplomaticStateNames[diplomaticStateNum+1] =
 
 
 
-DiplomaticStateVector::DiplomaticStateVector()
+DiplomaticStateVector::DiplomaticStateVector( Player& _player ) : player( _player )
 {
+}
+
+void DiplomaticStateVector::deployHooks()
+{
+   player.turnBegins.connect( SigC::slot( *this, &DiplomaticStateVector::turnBegins ));
+}
+
+void DiplomaticStateVector::turnBegins( )
+{
+   for ( QueuedStateChanges::iterator i = queuedStateChanges.begin(); i != queuedStateChanges.end(); ++i ) {
+      if ( states[i->first] > i->second ) {
+         // we are changing to a more aggressive state, which doesn't need the confirmation of the counterpart
+         setState( i->first, i->second );
+         player.getParentMap()->player[ i->first ].diplomacy.setState( player.getPosition(), i->second);
+      } else {
+         // we are browsing through the queued changes of the target player to look if a accepted our proposal
+         
+         DiplomaticStateVector& target = player.getParentMap()->player[ i->first ].diplomacy;
+         QueuedStateChanges::iterator t = target.queuedStateChanges.find( player.getPosition() );
+         if ( t != target.queuedStateChanges.end() ) {
+            if ( t->second > i->second ) {
+               // he proposes even more peace, we'll only set the state we proposed, but keep his proposal
+               setState( i->first, i->second );
+               target.setState( player.getPosition(), i->second );
+            } else {
+               // he proposes less peace, but we'll set the state he proposed and delete his proposal, because it's fulfilled
+               setState( i->first, t->second );
+               target.setState( player.getPosition(), t->second );
+               target.queuedStateChanges.erase( t );
+            }
+         }
+      }
+   }
+   queuedStateChanges.clear();
 }
 
 
@@ -82,6 +116,7 @@ void DiplomaticStateVector::setState( int towardsPlayer, DiplomaticStates s )
 
 void DiplomaticStateVector::propose( int towardsPlayer, DiplomaticStates s )
 {
+   queuedStateChanges[towardsPlayer] = s;  
 }
 
       
@@ -101,6 +136,7 @@ void DiplomaticStateVector::write ( tnstream& stream ) const
    for ( int i = 0; i< states.size(); ++i )
       stream.writeInt( int( states[i]));
 
+   stream.writeInt( queuedStateChanges.size() );
 }
 
 
@@ -278,7 +314,9 @@ tmap :: tmap ( void )
          player[i].stat = Player::human;
       else
          player[i].stat = Player::off;
-         
+      
+      player[i].parentMap = this;
+           
       player[i].research.chainToMap ( this, i );
    }
           
@@ -978,7 +1016,7 @@ void tmap :: setupResources ( void )
 
 
 
-DI_Color tmap :: Player :: getColor()
+DI_Color Player :: getColor()
 {
    switch ( player ) {
       case 0: return DI_Color( 0xe0, 0, 0 );
@@ -994,7 +1032,7 @@ DI_Color tmap :: Player :: getColor()
    return DI_Color(0, 0, 0);
 }
 
-const ASCString& tmap :: Player :: getName( )
+const ASCString& Player :: getName( )
 {
    static ASCString off = "off";
    switch ( stat ) {
@@ -1265,11 +1303,11 @@ void tmap::endTurn()
    ::time ( &pt.date );
    player[actplayer].playTime.push_back ( pt );
 
-   for ( tmap::Player::BuildingList::iterator b = player[actplayer].buildingList.begin(); b != player[actplayer].buildingList.end(); ++b )
+   for ( Player::BuildingList::iterator b = player[actplayer].buildingList.begin(); b != player[actplayer].buildingList.end(); ++b )
       (*b)->endTurn();
 
-   tmap::Player::VehicleList toRemove;
-   for ( tmap::Player::VehicleList::iterator v = player[actplayer].vehicleList.begin(); v != player[actplayer].vehicleList.end(); ++v ) {
+   Player::VehicleList toRemove;
+   for ( Player::VehicleList::iterator v = player[actplayer].vehicleList.begin(); v != player[actplayer].vehicleList.end(); ++v ) {
       Vehicle* actvehicle = *v;
 
       // Bei Aenderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!
@@ -1331,13 +1369,13 @@ void tmap::endTurn()
 
    }
 
-   for ( tmap::Player::VehicleList::iterator v = toRemove.begin(); v != toRemove.end(); v++ )
+   for ( Player::VehicleList::iterator v = toRemove.begin(); v != toRemove.end(); v++ )
       delete *v;
 
    checkunitsforremoval();
 
   for ( int i = 0; i < 9; ++i ) 
-     for ( tmap::Player::VehicleList::iterator v = player[i].vehicleList.begin(); v != player[i].vehicleList.end(); ++v ) 
+     for ( Player::VehicleList::iterator v = player[i].vehicleList.begin(); v != player[i].vehicleList.end(); ++v ) 
          (*v)->endAnyTurn();
 
 
@@ -1356,13 +1394,13 @@ void tmap::endRound()
     for (int i = 0; i <= 7; i++)
        if (player[i].exist() ) {
 
-          for ( tmap::Player::VehicleList::iterator j = player[i].vehicleList.begin(); j != player[i].vehicleList.end(); j++ )
+          for ( Player::VehicleList::iterator j = player[i].vehicleList.begin(); j != player[i].vehicleList.end(); j++ )
              (*j)->endRound();
 
           typedef PointerList<Building::Work*> BuildingWork;
           BuildingWork buildingWork;
 
-          for ( tmap::Player::BuildingList::iterator j = player[i].buildingList.begin(); j != player[i].buildingList.end(); j++ ) {
+          for ( Player::BuildingList::iterator j = player[i].buildingList.begin(); j != player[i].buildingList.end(); j++ ) {
              Building::Work* w = (*j)->spawnWorkClasses( false );
              if ( w )
                 buildingWork.push_back ( w );
@@ -1626,7 +1664,7 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
      ox2 = xsize;
 
   for (int s = 0; s < 9; s++)
-     for ( tmap::Player::BuildingList::iterator i = player[s].buildingList.begin(); i != player[s].buildingList.end(); i++ )
+     for ( Player::BuildingList::iterator i = player[s].buildingList.begin(); i != player[s].buildingList.end(); i++ )
         (*i)->unchainbuildingfromfield();
 
 
@@ -1679,7 +1717,7 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
 
 
   for (int s = 0; s < 9; s++)
-     for ( tmap::Player::BuildingList::iterator i = player[s].buildingList.begin(); i != player[s].buildingList.end(); i++ ) {
+     for ( Player::BuildingList::iterator i = player[s].buildingList.begin(); i != player[s].buildingList.end(); i++ ) {
         MapCoordinate mc = (*i)->getEntry();
         mc.x += left;
         mc.y += top;
@@ -1687,7 +1725,7 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
      }
 
   for (int s = 0; s < 9; s++)
-     for ( tmap::Player::VehicleList::iterator i = player[s].vehicleList.begin(); i != player[s].vehicleList.end(); i++ ) {
+     for ( Player::VehicleList::iterator i = player[s].vehicleList.begin(); i != player[s].vehicleList.end(); i++ ) {
         (*i)->xpos += left;
         (*i)->ypos += top;
      }
@@ -1703,7 +1741,7 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
   return 0;
 }
 
-bool tmap::Player::exist()
+bool Player::exist()
 {
   return !(buildingList.empty() && vehicleList.empty());
 }
@@ -1915,7 +1953,7 @@ void tmap::Shareview :: write( tnstream& stream )
 }
 */
 
-const char* tmap :: Player :: playerStatusNames[6] = { "Human Player", 
+const char* Player :: playerStatusNames[6] = { "Human Player", 
                                                        "AI player",
                                                        "off",
                                                        "Supervisor",
@@ -1923,10 +1961,12 @@ const char* tmap :: Player :: playerStatusNames[6] = { "Human Player",
                                                        NULL };
 
 
-tmap :: Player :: Player()
+Player :: Player() : diplomacy( *this )
 {
+   diplomacy.deployHooks();
    network = NULL;   
    ai = NULL;
+   parentMap = NULL;
 
    queuedEvents = 0;
    if ( player < 8 ) {
