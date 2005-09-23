@@ -29,7 +29,7 @@
 class AllianceSetupWidget : public PG_ScrollWidget {
       tmap* actmap;
       bool allEditable;
-      DiplomaticStates* states;
+      // DiplomaticStates* states;
       
       
       struct PlayerWidgets {
@@ -38,6 +38,14 @@ class AllianceSetupWidget : public PG_ScrollWidget {
          int pos;
       };
 
+   public:   
+      enum DiplomaticTransitions { SNEAK_ATTACK, TO_WAR, TO_TRUCE, TO_PEACE, TO_PEACE_SV, TO_ALLIANCE };
+      
+   protected:   
+      
+      vector< vector< DiplomaticTransitions > > stateChanges;
+      vector< vector< DiplomaticStates > > states;
+      
       typedef map<int,PG_Widget*> DiplomaticWidgets;
       DiplomaticWidgets diplomaticWidgets;
          

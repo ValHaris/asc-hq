@@ -115,6 +115,7 @@ class ItemSelectorWidget : public PG_Widget {
 
       SigC::Signal1<void,const SelectionWidget*> sigItemSelected;
       SigC::Signal1<void,ASCString> nameEntered;
+      SigC::Signal0<bool> sigQuitModal;
       
       void constrainNames( bool constrain );
             

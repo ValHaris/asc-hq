@@ -47,13 +47,11 @@ template<>
 const char* getStateName<DiplomaticStates>(int s) { return diplomaticStateNames[s]; };
 
 
-enum DiplomaticTransitions { SNEAK_ATTACK, TO_WAR, TO_TRUCE, TO_PEACE, TO_PEACE_SV, TO_ALLIANCE };
+template<>
+int getItemNum<AllianceSetupWidget::DiplomaticTransitions>() { return diplomaticStateNum+1; };
 
 template<>
-int getItemNum<DiplomaticTransitions>() { return diplomaticStateNum+1; };
-
-template<>
-const char* getStateName<DiplomaticTransitions>(int s) 
+const char* getStateName<AllianceSetupWidget::DiplomaticTransitions>(int s) 
 { 
    if ( s == 0 ) 
       return "Sneak Attack"; 
@@ -68,9 +66,9 @@ ASCString getDiplomaticStateImage( DiplomaticStates s )
    return filename;
 };
 
-ASCString getDiplomaticStateImage( DiplomaticTransitions s )
+ASCString getDiplomaticStateImage( AllianceSetupWidget::DiplomaticTransitions s )
 {
-   if ( s == SNEAK_ATTACK ) {
+   if ( s == AllianceSetupWidget::SNEAK_ATTACK ) {
       ASCString filename = "diplo-sneak.png";
       return filename;
    } else 
@@ -167,18 +165,31 @@ class DiplomaticModeChooser : public PG_Widget {
 };      
  
 
-AllianceSetupWidget::AllianceSetupWidget( tmap* gamemap, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style ) : PG_ScrollWidget( parent, r, style ) , actmap ( gamemap ), states(NULL)
+AllianceSetupWidget::AllianceSetupWidget( tmap* gamemap, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style ) : PG_ScrollWidget( parent, r, style ) , actmap ( gamemap )
 {
    this->allEditable = allEditable;
    int playerNum = 0;
    
-   states = new DiplomaticStates[actmap->getPlayerCount() * actmap->getPlayerCount() ];
-   
    for ( int i = 0; i < actmap->getPlayerCount(); ++i ) {
+      vector<DiplomaticTransitions> t;
+      vector< DiplomaticStates > s;
+      
+      const DiplomaticStateVector& diplo = actmap->player[i].diplomacy;
+      
+      for ( int j = 0; j < actmap->getPlayerCount(); ++j )  {
+         DiplomaticStateVector::QueuedStateChanges::const_iterator change = diplo.queuedStateChanges.find(j);
+         if ( change != diplo.queuedStateChanges.end() )
+            t.push_back( DiplomaticTransitions( change->second + 1 ));
+         else
+            t.push_back( DiplomaticTransitions( diplo.getState(j) + 1 ));
+         s.push_back( diplo.getState(j));
+      }   
+       
+      stateChanges.push_back ( t );        
+      states.push_back ( s );
+      
       if ( actmap->player[i].exist() ) 
          ++playerNum;
-      for ( int j = 0; j < actmap->getPlayerCount(); ++j )
-         setState( actmap->player[i].diplomacy.getState( j ), i, j );
    }      
 
          
@@ -235,11 +246,11 @@ AllianceSetupWidget::AllianceSetupWidget( tmap* gamemap, bool allEditable, PG_Wi
                   int x = calcx(cnt2) - barSpace;
                   PG_Rect rect ( x + (colWidth - diplomaticStateIconSize)/2 ,  (lineHeight - diplomaticStateIconSize)/2,diplomaticStateIconSize,diplomaticStateIconSize); 
                   if ( allEditable ) {
-                     DiplomaticModeChooser<DiplomaticStates>* dmc = new DiplomaticModeChooser<DiplomaticStates>( horizontalBar, rect, getState(i,j), j > i );
+                     DiplomaticModeChooser<DiplomaticStates>* dmc = new DiplomaticModeChooser<DiplomaticStates>( horizontalBar, rect, getState(i,j), true );
                      dmc->sigStateChange.connect( SigC::bind( SigC::slot( *this, &AllianceSetupWidget::setState ), j, i));
                      diplomaticWidgets[ linearize( i,j) ] = dmc;
                   } else {
-                     static DiplomaticTransitions s = DiplomaticTransitions(2);
+                     DiplomaticTransitions& s = stateChanges[i][j];
                      DiplomaticModeChooser<DiplomaticTransitions>* dmc = new DiplomaticModeChooser<DiplomaticTransitions>( horizontalBar, rect, s, j > i );
                      // dmc->sigStateChange.connect( SigC::bind( SigC::slot( *this, &AllianceSetupWidget::setState ), j, i));
                      diplomaticWidgets[ linearize( i,j) ] = dmc;
@@ -269,7 +280,7 @@ void AllianceSetupWidget::setState( DiplomaticStates s, int actingPlayer, int se
 
 DiplomaticStates& AllianceSetupWidget::getState( int actingPlayer, int secondPlayer )
 {
-   return states[ linearize( actingPlayer, secondPlayer) ];
+   return states.at(actingPlayer).at(secondPlayer);
 }
 
 int AllianceSetupWidget::linearize( int actingPlayer, int secondPlayer  )
@@ -281,14 +292,26 @@ int AllianceSetupWidget::linearize( int actingPlayer, int secondPlayer  )
 void AllianceSetupWidget::Apply() 
 {
    for ( int acting = 0; acting < actmap->getPlayerCount(); ++acting )
-      for ( int second = 0; second < actmap->getPlayerCount(); ++second )
-         actmap->player[acting].diplomacy.setState( second, getState( acting, second ));         
+      for ( int second = 0; second < actmap->getPlayerCount(); ++second ) {
+      
+         if ( allEditable ) {
+            if ( getState( acting, second ) != actmap->player[acting].diplomacy.getState( second ))
+               actmap->player[acting].diplomacy.setState( second, getState( acting, second ));         
+         } else {
+            if ( stateChanges[acting][second] == SNEAK_ATTACK ) {
+               actmap->player[acting].diplomacy.sneakAttack( second );         
+            } else {
+               DiplomaticStates s = DiplomaticStates( stateChanges[acting][second] - 1);
+               if ( s != getState( acting, second ))
+                  actmap->player[acting].diplomacy.propose( second, s );         
+            }   
+         }
+      }
 };
 
 
 AllianceSetupWidget::~AllianceSetupWidget()
 {
-   delete[] states;
 }   
 
 

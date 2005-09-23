@@ -1706,6 +1706,10 @@ int    compressrle ( const void* p, void* q)
 
 
 
+bool patimat (const ASCString& pat, const ASCString& str)
+{
+   return patimat( pat.c_str(), str.c_str() );
+}
 
 bool patimat (const char *pat, const char *str)
 {

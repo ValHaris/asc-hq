@@ -44,103 +44,6 @@
 #endif
 
 
-SigC::Signal3<void,int,int,DiplomaticStates> DiplomaticStateVector::anyStateChanged;
-
-
-const char* diplomaticStateNames[diplomaticStateNum+1] = 
-{
-   "War",
-   "Truce",
-   "Peace",
-   "Peace with shared radar",
-   "Alliance",
-   NULL
-};
-
-
-
-DiplomaticStateVector::DiplomaticStateVector( Player& _player ) : player( _player )
-{
-}
-
-void DiplomaticStateVector::deployHooks()
-{
-   player.turnBegins.connect( SigC::slot( *this, &DiplomaticStateVector::turnBegins ));
-}
-
-void DiplomaticStateVector::turnBegins( )
-{
-   for ( QueuedStateChanges::iterator i = queuedStateChanges.begin(); i != queuedStateChanges.end(); ++i ) {
-      if ( states[i->first] > i->second ) {
-         // we are changing to a more aggressive state, which doesn't need the confirmation of the counterpart
-         setState( i->first, i->second );
-         player.getParentMap()->player[ i->first ].diplomacy.setState( player.getPosition(), i->second);
-      } else {
-         // we are browsing through the queued changes of the target player to look if a accepted our proposal
-         
-         DiplomaticStateVector& target = player.getParentMap()->player[ i->first ].diplomacy;
-         QueuedStateChanges::iterator t = target.queuedStateChanges.find( player.getPosition() );
-         if ( t != target.queuedStateChanges.end() ) {
-            if ( t->second > i->second ) {
-               // he proposes even more peace, we'll only set the state we proposed, but keep his proposal
-               setState( i->first, i->second );
-               target.setState( player.getPosition(), i->second );
-            } else {
-               // he proposes less peace, but we'll set the state he proposed and delete his proposal, because it's fulfilled
-               setState( i->first, t->second );
-               target.setState( player.getPosition(), t->second );
-               target.queuedStateChanges.erase( t );
-            }
-         }
-      }
-   }
-   queuedStateChanges.clear();
-}
-
-
-DiplomaticStates DiplomaticStateVector::getState( int towardsPlayer )
-{
-   if ( towardsPlayer < states.size() )
-      return states[towardsPlayer];
-   else
-      return WAR;
-}
-
-void DiplomaticStateVector::setState( int towardsPlayer, DiplomaticStates s )
-{
-   if ( towardsPlayer < states.size() ) {
-      states[towardsPlayer] = s;
-      stateChanged(towardsPlayer,s);
-   }      
-}
-
-void DiplomaticStateVector::propose( int towardsPlayer, DiplomaticStates s )
-{
-   queuedStateChanges[towardsPlayer] = s;  
-}
-
-      
-void DiplomaticStateVector::read ( tnstream& stream )
-{
-   stream.readInt();
-   int size = stream.readInt();
-   states.resize( size );
-   for ( int i = 0; i < size; ++i )
-      states[i] = DiplomaticStates( stream.readInt() );
-}
-
-void DiplomaticStateVector::write ( tnstream& stream ) const
-{
-   stream.writeInt( 1 );
-   stream.writeInt( states.size() );
-   for ( int i = 0; i< states.size(); ++i )
-      stream.writeInt( int( states[i]));
-
-   stream.writeInt( queuedStateChanges.size() );
-}
-
-
-
 
 RandomGenerator::RandomGenerator(int seedValue){
 
@@ -387,7 +290,12 @@ void tmap :: read ( tnstream& stream )
      WeatherSystem::legacyWindSpeed = stream.readChar();
      WeatherSystem::legacyWindDirection = stream.readChar();
    }
+
+   if ( version >= 11 ) 
+      if ( stream.readInt() != 0x12345678 )
+         throw ASCmsgException("marker not matched when loading tmap");
    
+      
    for ( int j = 0; j < 4; j++ )
       stream.readChar(); // was: different wind in different altitudes
    for ( i = 0; i< 12; i++ )
@@ -439,6 +347,11 @@ void tmap :: read ( tnstream& stream )
          }
       }
    }
+   
+   if ( version >= 11 ) 
+      if ( stream.readInt() != 0x12345678 )
+         throw ASCmsgException("marker not matched when loading tmap");
+         
 
 
 
@@ -536,11 +449,14 @@ void tmap :: read ( tnstream& stream )
    for ( i = 0; i < 8; i++ )
        _oldgameparameter[i] = stream.readInt();
 
-// return;
+   if ( version >= 11 ) 
+      if ( stream.readInt() != 0x12345678 )
+         throw ASCmsgException("marker not matched when loading tmap");
 
 /////////////////////
 // Here initmap was called
 /////////////////////
+
 
 
     if ( ___loadtitle )
@@ -698,9 +614,14 @@ void tmap :: write ( tnstream& stream )
    stream.writeInt (1); // dummy
    stream.writedata ( codeword, 11 );
 
+   
+   
    stream.writeInt( campaign != NULL);
    stream.writeChar( actplayer );
    stream.writeInt( time.abstime );   
+   
+   stream.writeInt( 0x12345678 );
+   
    for  ( i= 0; i < 4; i++ )
       stream.writeChar( 0 );
 
@@ -725,8 +646,11 @@ void tmap :: write ( tnstream& stream )
       stream.writeInt( 1 );
       stream.writeInt ( player[i].ASCversion );
       player[i].cursorPos.write( stream );
+      player[i].diplomacy.write( stream );
    }
 
+   stream.writeInt( 0x12345678 );
+   
    stream.writeInt( unitnetworkid );
    stream.writeChar( levelfinished );
 
@@ -776,7 +700,9 @@ void tmap :: write ( tnstream& stream )
    for ( i = 0; i < 8; i++ )
        stream.writeInt( getgameparameter(GameParameter(i)) );
 
+   stream.writeInt( 0x12345678 );
 
+       
 ///////////////////
 // second part
 //////////////////
@@ -1014,42 +940,6 @@ void tmap :: setupResources ( void )
    }
 }
 
-
-
-DI_Color Player :: getColor()
-{
-   switch ( player ) {
-      case 0: return DI_Color( 0xe0, 0, 0 );
-      case 1: return DI_Color( 0, 0x71, 0xdb );
-      case 2: return DI_Color( 0xbc, 0xb3, 0 );
-      case 3: return DI_Color( 0, 0xaa, 0 );
-      case 4: return DI_Color( 0xbc, 0, 0 );
-      case 5: return DI_Color( 0xb2, 0, 0xb2 );
-      case 6: return DI_Color( 0,0, 0xaa );
-      case 7: return DI_Color( 0xbc, 0x67, 0 );
-      case 8: return DI_Color( 0xaa, 0xaa, 0xaa );
-   };
-   return DI_Color(0, 0, 0);
-}
-
-const ASCString& Player :: getName( )
-{
-   static ASCString off = "off";
-   switch ( stat ) {
-     case 0: return humanname;
-     case 1: return computername;
-     default: return off;
-   }
-}
-
-
-const ASCString& tmap :: getPlayerName ( int playernum )
-{
-   if ( playernum >= 8 )
-      playernum /= 8;
-
-   return player[playernum].getName();
-}
 
 
 
@@ -1741,11 +1631,6 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
   return 0;
 }
 
-bool Player::exist()
-{
-  return !(buildingList.empty() && vehicleList.empty());
-}
-
 pterraintype tmap :: getterraintype_byid ( int id )
 {
    return terrainTypeRepository.getObject_byID ( id );
@@ -1952,34 +1837,6 @@ void tmap::Shareview :: write( tnstream& stream )
    stream.writeInt( recalculateview );
 }
 */
-
-const char* Player :: playerStatusNames[6] = { "Human Player", 
-                                                       "AI player",
-                                                       "off",
-                                                       "Supervisor",
-                                                       "suspended",
-                                                       NULL };
-
-
-Player :: Player() : diplomacy( *this )
-{
-   diplomacy.deployHooks();
-   network = NULL;   
-   ai = NULL;
-   parentMap = NULL;
-
-   queuedEvents = 0;
-   if ( player < 8 ) {
-      humanname = "human ";
-      humanname += strrr( player );
-      computername = "computer ";
-      computername += strrr( player );
-   } else
-      humanname = computername = "neutral";
-
-   ASCversion = 0;
-}
-
 
 
 
@@ -2269,141 +2126,3 @@ GameParameterSettings gameParameterSettings[gameparameternum ] = {
       {  "ObjectsGrowOnOtherObjects",          0,                    0,   1,                  false,  false,   "Objects can grow on fields with other objects"  }  //       cgp_objectGrowOnOtherObjects
       };   
 
-#if 0         
-
-const bool gameParameterChangeableByEvent [ gameparameternum ]={ true,   //       cgp_fahrspur
-                                                                 true,     //       cgp_eis,
-                                                                 true,     //       cgp_movefrominvalidfields,
-                                                                 true,     //       cgp_building_material_factor,
-                                                                 true,     //       cgp_building_fuel_factor,
-                                                                 true,     //       cgp_forbid_building_construction,
-                                                                 true,     //       cgp_forbid_unitunit_construction,
-                                                                 true,     //       cgp_bi3_training,
-                                                                 true,     //       cgp_maxminesonfield,
-                                                                 true,     //       cgp_antipersonnelmine_lifetime,
-                                                                 true,     //       cgp_antitankmine_lifetime,
-                                                                 true,     //       cgp_mooredmine_lifetime,
-                                                                 true,     //       cgp_floatingmine_lifetime,
-                                                                 true,     //       cgp_buildingarmor,
-                                                                 true,     //       cgp_maxbuildingrepair,
-                                                                 true,     //       cgp_buildingrepairfactor,
-                                                                 true,     //       cgp_globalfuel,
-                                                                 true,     //       cgp_maxtrainingexperience,
-                                                                 true,     //       cgp_initialMapVisibility,
-                                                                 true,     //       cgp_attackPower,
-                                                                 true,     //       cgp_jammingAmplifier,
-                                                                 true,     //       cgp_jammingSlope,
-                                                                 false,    //       cgp_superVisorCanSaveMap,
-                                                                 true,     //       cgp_objectsDestroyedByTerrain,
-                                                                 true,     //       cgp_trainingIncrement,
-                                                                 false,    //       cgp_experienceDivisorAttack };
-                                                                 false,    //       cgp_disableDirectView
-                                                                 false,    //       cgp_disableUnitTransfer
-                                                                 false,    //       cgp_experienceDivisorDefense
-                                                                 true,     //       cgp_debugEvents
-                                                                 true,     //       cgp_objectGrowthMultiplier
-                                                                 false };  //       cgp_objectGrowOnOtherObjects
-
-const int gameParameterLowerLimit [ gameparameternum ] = { 1,    //       cgp_fahrspur
-                                                           1,    //       cgp_eis,
-                                                           0,    //       cgp_movefrominvalidfields,
-                                                           1,    //       cgp_building_material_factor,
-                                                           1,    //       cgp_building_fuel_factor,
-                                                           0,    //       cgp_forbid_building_construction,
-                                                           0,    //       cgp_forbid_unitunit_construction,
-                                                           0,    //       cgp_bi3_training,
-                                                           0,    //       cgp_maxminesonfield,
-                                                           0,    //       cgp_antipersonnelmine_lifetime,
-                                                           0,    //       cgp_antitankmine_lifetime,
-                                                           0,    //       cgp_mooredmine_lifetime,
-                                                           0,    //       cgp_floatingmine_lifetime,
-                                                           1,    //       cgp_buildingarmor,
-                                                           0,    //       cgp_maxbuildingrepair,
-                                                           1,    //       cgp_buildingrepairfactor,
-                                                           0,    //       cgp_globalfuel,
-                                                           0,    //       cgp_maxtrainingexperience,
-                                                           0,    //       cgp_initialMapVisibility,
-                                                           1,    //       cgp_attackPower,
-                                                           0,    //       cgp_jammingAmplifier,
-                                                           0,    //       cgp_jammingSlope,
-                                                           0,    //       cgp_superVisorCanSaveMap,
-                                                           0,    //       cgp_objectsDestroyedByTerrain,
-                                                           1,    //       cgp_trainingIncrement,
-                                                           1,    //       gp_experienceDivisorAttack
-                                                           0,    //       cgp_disableDirectView
-                                                           0,    //       cgp_disableUnitTransfer
-                                                           1,    //       cgp_experienceDivisorDefense
-                                                           0,    //       cgp_debugEvents
-                                                           0,    //       cgp_objectGrowthMultiplier
-                                                           0 };  //       cgp_objectGrowOnOtherObjects
-
-
-
-const int gameParameterUpperLimit [ gameparameternum ] = { maxint,                //       cgp_fahrspur
-                                                           maxint,                //       cgp_eis,
-                                                           1,                     //       cgp_movefrominvalidfields,
-                                                           maxint,                //       cgp_building_material_factor,
-                                                           maxint,                //       cgp_building_fuel_factor,
-                                                           1,                     //       cgp_forbid_building_construction,
-                                                           2,                     //       cgp_forbid_unitunit_construction,
-                                                           maxunitexperience,     //       cgp_bi3_training,
-                                                           maxint,                //       cgp_maxminesonfield,
-                                                           maxint,                //       cgp_antipersonnelmine_lifetime,
-                                                           maxint,                //       cgp_antitankmine_lifetime,
-                                                           maxint,                //       cgp_mooredmine_lifetime,
-                                                           maxint,                //       cgp_floatingmine_lifetime,
-                                                           maxint,                //       cgp_buildingarmor,
-                                                           100,                   //       cgp_maxbuildingrepair,
-                                                           maxint,                //       cgp_buildingrepairfactor,
-                                                           1,                     //       cgp_globalfuel,
-                                                           maxunitexperience,     //       cgp_maxtrainingexperience,
-                                                           2,                     //       cgp_initialMapVisibility,
-                                                           100,                   //       cgp_attackPower,
-                                                           1000,                  //       cgp_jammingAmplifier,
-                                                           100,                   //       cgp_jammingSlope,
-                                                           1,                     //       cgp_superVisorCanSaveMap,
-                                                           1,                     //       cgp_objectsDestroyedByTerrain,
-                                                           maxunitexperience,     //       cgp_trainingIncrement,
-                                                           10,                    //       cgp_experienceDivisorAttack;
-                                                           1,                     //       cgp_disableDirectView
-                                                           1,                     //       cgp_disableUnitTransfer
-                                                           10,                    //       cgp_experienceDivisorDefense
-                                                           2,                     //       cgp_debugEvents
-                                                           maxint,                //       cgp_objectGrowthMultiplier
-                                                           1 };                   //       cgp_objectGrowOnOtherObjects
-
-
-const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
-                                                      "freezing time of icebreaker fairway",
-                                                      "move vehicles from unaccessible fields",
-                                                      "building construction material factor (percent)",
-                                                      "building construction fuel factor (percent)",
-                                                      "forbid construction of buildings",
-                                                      "limit construction of units by other units",
-                                                      "use BI3 style training factor ",
-                                                      "maximum number of mines on a single field",
-                                                      "lifetime of antipersonnel mine",
-                                                      "lifetime of antitank mine",
-                                                      "lifetime of antisub mine",
-                                                      "lifetime of antiship mine",
-                                                      "building armor factor (percent)",
-                                                      "max building damage repair / turn",
-                                                      "building repair cost increase (percent)",
-                                                      "fuel globally available (BI Resource Mode)",
-                                                      "maximum experience that can be gained by training",
-                                                      "initial map visibility",
-                                                      "attack power (EXPERIMENTAL!)",
-                                                      "jamming amplifier (EXPERIMENTAL!)",
-                                                      "jamming slope (EXPERIMENTAL!)",
-                                                      "The Supervisor may save a game as new map (spying!!!)",
-                                                      "objects can be destroyed by terrain",
-                                                      "training centers: training increment",
-                                                      "experience effect divisor for attack",
-                                                      "disable direct View",
-                                                      "disable transfering units/buildings to other players",
-                                                      "experience effect divisor for defense",
-                                                      "debug game events",
-                                                      "Object growth rate (percentage)",
-                                                      "Objects can grow on files with other objects" };
-
-#endif

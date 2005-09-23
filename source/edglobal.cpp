@@ -375,29 +375,6 @@ void execaction(int code)
        break;
     case act_maptopcx : //writemaptopcx ();  
        break;
-    case act_loadmap :   {
-                            if (mapsaved == false )
-                               if (choice_dlg("Map not saved ! Save now ?","~y~es","~n~o") == 1) 
-                                  k_savemap(false);
-
-                            pmap oldmap = actmap;
-                            actmap = NULL;
-                            try {
-                                k_loadmap();
-                            }
-                            catch ( ... ) {
-                                displaymessage ( "error loading file",1 );
-                            }
-                            if ( !actmap ) {
-                                actmap = oldmap;
-                                oldmap = NULL;
-                            } else {
-                               delete oldmap;
-                               oldmap = NULL;
-                            }
-                            displaymap();
-                          } 
-       break;
     case act_changeplayers : playerchange();
        break;
     case act_newmap :   newmap();
@@ -557,10 +534,6 @@ void execaction(int code)
     case act_changemapvals :   changemapvalues();
        break;                                        
     case act_changeproduction :   if ( getactfield()->building ) building_production( getactfield()->building );
-       break;
-    case act_savemap :  k_savemap(false);
-       break;
-    case act_savemapas :  k_savemap(true);
        break;
     case act_changeunitvals :   {
                  pf2 = getactfield();
@@ -801,6 +774,33 @@ void execaction_pg(int code)
     case act_setmapparameters: setmapparameters( actmap );
        break;
     case act_setupalliances :  setupalliances( actmap, true );
+       break;
+    case act_loadmap :   {
+                            if (mapsaved == false )
+                               if (choice_dlg("Map not saved ! Save now ?","~y~es","~n~o") == 1) 
+                                  k_savemap(false);
+
+                            pmap oldmap = actmap;
+                            actmap = NULL;
+                            try {
+                                k_loadmap();
+                            }
+                            catch ( ... ) {
+                                displaymessage ( "error loading file",1 );
+                            }
+                            if ( !actmap ) {
+                                actmap = oldmap;
+                                oldmap = NULL;
+                            } else {
+                               delete oldmap;
+                               oldmap = NULL;
+                            }
+                            displaymap();
+                          } 
+       break;
+    case act_savemap :  k_savemap(false);
+       break;
+    case act_savemapas :  k_savemap(true);
        break;
    };      
 }

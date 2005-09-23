@@ -233,9 +233,9 @@ void Menu::setup()
 
 
    addfield ("~G~ame");
-   addbutton ( "New ~C~ampaign", ua_newcampaign);
-   addbutton ( "~N~ew single Level\tctrl-n", ua_startnewsinglelevel );
-   addbutton ( "New Multiplayer Game", ua_newmultiplayergame );
+//   addbutton ( "New ~C~ampaign", ua_newcampaign);
+//   addbutton ( "~N~ew single Level\tctrl-n", ua_startnewsinglelevel );
+   addbutton ( "New Game", ua_newmultiplayergame );
    currentMenu->addSeparator();
    addbutton ( "~L~oad game\tctrl-l", ua_loadgame );
    addbutton ( "~S~ave game\tctrl-s", ua_savegame );
@@ -245,7 +245,7 @@ void Menu::setup()
    addbutton ( "Change Passw~o~rd", ua_changepassword );
    addbutton ( "supervise network game", ua_networksupervisor );
    currentMenu->addSeparator();
-   addbutton ( "~P~layers + Alliances", ua_setupalliances);
+   addbutton ( "~D~iplomacy", ua_setupalliances);
    addbutton ( "transfer ~U~nit control", ua_giveunitaway );
    addbutton ( "~r~ename unit/building", ua_renameunit );
    addbutton ( "~T~ransfer resources", ua_settribute);

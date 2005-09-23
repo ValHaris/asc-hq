@@ -141,8 +141,10 @@ class FileWidget: public SelectionWidget  {
          quitModalLoop(0);
       };   
       
-      void FileSelectionWindow::fileNameSelected2( ASCString filename )
+      void FileSelectionWindow::fileNameEntered( ASCString filename )
       {
+         if ( !patimat( wildcard, filename ))
+            filename += wildcard.substr(1);
          fileNameSelected(filename);
       };   
       
@@ -155,8 +157,9 @@ class FileWidget: public SelectionWidget  {
          ItemSelectorWidget* isw = new ItemSelectorWidget( this, PG_Rect(10, GetTitlebarHeight(), r.Width() - 20, r.Height() - GetTitlebarHeight()), factory );
          if ( save ) {
             isw->constrainNames( false );
-            isw->nameEntered.connect( SigC::slot( *this, &FileSelectionWindow::fileNameSelected2 ));
+            isw->nameEntered.connect( SigC::slot( *this, &FileSelectionWindow::fileNameEntered ));
          }
+         isw->sigQuitModal.connect( SigC::slot( *this, &ItemSelectorWindow::QuitModal));
 
       };
       

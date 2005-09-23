@@ -86,7 +86,7 @@ am_asc_mapedit_OBJECTS = edevents.$(OBJEXT) edgen.$(OBJEXT) \
 	mapfield.$(OBJEXT) objects.$(OBJEXT) \
 	overviewmappanel.$(OBJEXT) unitinfodialog.$(OBJEXT) \
 	messaginghub.$(OBJEXT) explosivemines.$(OBJEXT) \
-	legacynetworkloaders.$(OBJEXT)
+	legacynetworkloaders.$(OBJEXT) player.$(OBJEXT)
 asc_mapedit_OBJECTS = $(am_asc_mapedit_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
@@ -254,7 +254,7 @@ mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
 geometry.cpp weatherarea.cpp guidimension.cpp weatherdialog.cpp \
 iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
-unitinfodialog.cpp messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp
+unitinfodialog.cpp messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp player.cpp
 
 asc_mapedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \
@@ -385,6 +385,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password_dialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pd.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/player.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/prehistoricevents.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/research.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/resourcenet.Po@am__quote@

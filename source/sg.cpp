@@ -942,16 +942,6 @@ void execuseraction ( tuseractions action )
                         */
          break;
 
-      case ua_mainmenu:
-         /*
-         if (choice_dlg("do you really want to close the current game ?","~y~es","~n~o") == 1) {
-            delete actmap;
-            actmap = NULL;
-            throw NoMapLoaded();
-         }
-         */
-         GameDialog::gameDialog();
-         break;
 /*
       case ua_mntnc_morefog:
          if (actmap->weather.fog < 255   && maintainencecheck() ) {
@@ -1372,6 +1362,16 @@ void execuseraction2 ( tuseractions action )
          */
          #warning SHAREVIEW
          updateFieldInfo();
+         break;
+      case ua_mainmenu:
+         /*
+         if (choice_dlg("do you really want to close the current game ?","~y~es","~n~o") == 1) {
+            delete actmap;
+            actmap = NULL;
+            throw NoMapLoaded();
+         }
+         */
+         GameDialog::gameDialog();
          break;
       default:
          break;

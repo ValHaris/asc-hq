@@ -900,7 +900,12 @@ void         k_loadmap(void)
    ASCString s1 = selectFile( mapextension, true );
    if ( !s1.empty() ) {
       displaymessage("loading map %s",0, s1.c_str() );
-      actmap = mapLoadingExceptionChecker( s1, MapLoadingFunction( tmaploaders::loadmap )); 
+      tmap* mp = mapLoadingExceptionChecker( s1, MapLoadingFunction( tmaploaders::loadmap )); 
+      if ( !mp )
+         return;
+         
+      delete actmap;
+      actmap =  mp;
 
       if ( actmap->campaign && !actmap->campaign->directaccess && actmap->codeword[0]) {
          tlockdispspfld ldsf;

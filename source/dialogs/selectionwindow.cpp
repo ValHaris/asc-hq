@@ -112,16 +112,30 @@ bool ItemSelectorWidget::eventKeyDown(const SDL_KeyboardEvent* key)
    }
 
    if ( key->keysym.sym == SDLK_RETURN ) {
-      if ( selectedItem && nameMatch( selectedItem, nameSearch->GetText()) ) {
-         itemSelected( selectedItem, false );
-         return true;
-      } else 
-         if ( !namesConstrained ) {
-            nameEntered( nameSearch->GetText() );
+      if ( namesConstrained ) {
+         if ( selectedItem && nameMatch( selectedItem, nameSearch->GetText()) ) {
+            itemSelected( selectedItem, false );
             return true;
          }   
+      } else {
+         if ( nameSearch->GetText().length() ) {
+            nameEntered( nameSearch->GetText() );
+            return true;
+         } else {
+            if ( selectedItem ) {
+               itemSelected( selectedItem, false );
+               return true;
+            }   
+         }   
+      }
    } 
-   
+
+   if ( key->keysym.sym == SDLK_ESCAPE )  {
+      sigQuitModal();
+      QuitModal();
+      return true;
+   }
+      
             
    if ( key->keysym.unicode <= 255 ) {
       ASCString newtext = nameSearch->GetText() + char ( key->keysym.unicode );
@@ -231,11 +245,14 @@ void ItemSelectorWidget::resetNamesearch()
 
 
 ItemSelectorWindow::ItemSelectorWindow( PG_Widget *parent, const PG_Rect &r , SelectionItemFactory* itemFactory ) 
-   : PG_Window( parent,r,"Item Selector") {
+   : PG_Window( parent,r,"Item Selector") 
+{
+   SetTransparency( 0 );
    
    itemSelector = new ItemSelectorWidget( this, PG_Rect( 0, GetTitlebarHeight () + 2, Width(), Height()- GetTitlebarHeight ()- 5 ), itemFactory );
    
    itemSelector->sigItemSelected.connect(  SigC::slot( *this, &ItemSelectorWindow::itemSelected ));
+   itemSelector->sigQuitModal.connect( SigC::slot( *this, &ItemSelectorWindow::QuitModal));
 };
 
 void ItemSelectorWindow::itemSelected( const SelectionWidget* )

@@ -34,6 +34,7 @@
 
 class GameParameterEditorWidget;
 
+
 class StartMultiplayerGame: public ConfigurableWindow {
    private:
 
@@ -42,7 +43,7 @@ class StartMultiplayerGame: public ConfigurableWindow {
       enum Pages { ModeSelection = 1, FilenameSelection, PlayerSetup, AllianceSetup, MapParameterEditor, MultiPlayerOptions, PasswordSearch }; 
       Pages page;
      
-      enum Mode { NewCampagin, ContinueCampaign, Skirmish, PBP, Hotseat, PBEM };
+      enum Mode { NewCampagin, ContinueCampaign, Skirmish, Hotseat, PBEM, PBP };
       int mode;
       
       static const char* buttonLabels[];
@@ -109,6 +110,7 @@ const char* StartMultiplayerGame::buttonLabels[7] = {
    "PBP",
    NULL
 };
+
 
 StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWindow( NULL, PG_Rect::null, "newmultiplayergame", false ), newMap(NULL), page(ModeSelection), mode ( 0 ), 
    mapParameterEditor(NULL), mapParameterEditorParent(NULL),
@@ -269,6 +271,13 @@ void StartMultiplayerGame::userHandler( const ASCString& label, PropertyReadingC
 
 bool StartMultiplayerGame::start()
 {
+   if ( !newMap ) 
+      newMap = mapLoadingExceptionChecker( filename, MapLoadingFunction( tmaploaders::loadmap ));
+     
+   if ( !newMap )
+      return false;
+     
+     
    if ( mode == Skirmish ) {
       bool humanFound = false;
       for ( int i = 0; i < newMap->getPlayerCount(); ++i )
@@ -302,9 +311,7 @@ bool StartMultiplayerGame::start()
       }   
    }
    
-   if ( !newMap ) 
-     newMap = mapLoadingExceptionChecker( filename, MapLoadingFunction( tmaploaders::loadmap ));
-   
+  
    delete actmap;
    actmap = newMap;
    newMap = NULL;

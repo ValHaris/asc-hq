@@ -32,7 +32,7 @@ class FileSelectionWindow : public ASC_PG_Dialog {
 
    protected:
       void fileNameSelected( const ASCString& filename );
-      void fileNameSelected2( ASCString filename );
+      void fileNameEntered( ASCString filename );
    public:
       FileSelectionWindow( PG_Widget *parent, const PG_Rect &r, const ASCString& fileWildcard, bool save );
       ASCString getFilename() { return filename; };
