@@ -95,15 +95,15 @@ Unit type not found
 9999
 No error message found for this error
 10001
-%s made a sneak attack against his ally %s
+%s made a sneak attack against %s
 10002
 %s declares war 
 10003
-%s proposes peace
+%s proposes %s
 10004
 peace has been negotiated between %s and %s
 10005
-%s accepts peace
+%s accepts %s
 10010
 %s has been terminated !
 10011

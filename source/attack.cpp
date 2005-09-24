@@ -1191,7 +1191,7 @@ bool attackpossible28( const Vehicle* attacker, const Vehicle* target, pattackwe
    if (angreifer->typ->weapons.count == 0)
      return false ;
 
-   if ( actmap->player[angreifer->getOwner()].diplomacy.isHostile( verteidiger->getOwner() )  )
+//   if ( actmap->player[angreifer->getOwner()].diplomacy.isHostile( verteidiger->getOwner() )  )
       for ( int i = 0; i < angreifer->typ->weapons.count ; i++)
          if (angreifer->typ->weapons.weapon[i].shootable() )
             if (angreifer->typ->weapons.weapon[i].offensive() )

@@ -151,6 +151,7 @@ class OverviewMapHolder : public SigC::Object {
 //! The map. THE central structure of ASC, which holds everything not globally available together
 class tmap {
       void operator= ( const tmap& map );
+      bool dialogsHooked;
    public:
       //! the size of the map
       int          xsize, ysize;
@@ -379,7 +380,6 @@ class tmap {
       void setgameparameter ( GameParameter num, int value );
       void cleartemps( int b = -1, int value = 0 );
       bool isResourceGlobal ( int resource );
-      const ASCString& getPlayerName ( int playernum );
       pfield getField ( int x, int y );
       pfield getField ( const MapCoordinate& pos );
       void startGame ( );
@@ -438,6 +438,9 @@ class tmap {
 
       //! generated a pseudo-random number with the map-internal seed
       int random( int max );
+      
+      void guiHooked();
+      bool getGuiHooked() { return dialogsHooked; };
 
    private:
       Vehicle* getUnit ( Vehicle* eht, int nwid );

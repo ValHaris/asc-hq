@@ -28,5 +28,6 @@ extern void editmessage ( Message& msg );
 extern void editjournal ( void );
 extern void viewjournal ( void );
 extern void viewunreadmessages ( void );
+extern void chainMessageFunctions ( tmap* actmap );
 
 #endif

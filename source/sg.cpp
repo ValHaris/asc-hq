@@ -119,7 +119,7 @@
 #include "asc-mainscreen.h"
 #include "unitinfodialog.h"
 #include "messaginghub.h"
-
+#include "cannedmessages.h"
 #include "memorycheck.cpp"
 
 
@@ -483,6 +483,13 @@ void         loadMoreData(void)
 
 }
 
+void hookGuiToMap( tmap* map )
+{
+   if ( !map->getGuiHooked() ) {
+      chainMessageFunctions( map );
+      map->guiHooked();
+   }   
+}
 
 
 
@@ -501,6 +508,7 @@ void loadGame()
       computeview( actmap );
       displaymap();
       updateFieldInfo();
+      hookGuiToMap ( actmap );
       moveparams.movestatus = 0;
    }
 }
@@ -568,6 +576,7 @@ void loadmap( const ASCString& name )
    delete actmap;
    actmap = m;
    computeview( actmap );
+   hookGuiToMap( actmap );
 }
 
 void loadStartupMap ( const char *gameToLoad=NULL )
@@ -1341,7 +1350,9 @@ void execuseraction2 ( tuseractions action )
          break;
       case ua_weathercast: weathercast();
          break;
-      case ua_newmultiplayergame: startMultiplayerGame();
+      case ua_newmultiplayergame: 
+         startMultiplayerGame();
+         hookGuiToMap(actmap);
          break;
       case ua_loadgame: loadGame();
          break;

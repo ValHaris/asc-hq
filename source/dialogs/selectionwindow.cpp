@@ -113,7 +113,7 @@ bool ItemSelectorWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
    if ( key->keysym.sym == SDLK_RETURN ) {
       if ( namesConstrained ) {
-         if ( selectedItem && nameMatch( selectedItem, nameSearch->GetText()) ) {
+         if ( selectedItem && (nameMatch( selectedItem, nameSearch->GetText()) || nameSearch->GetText().length() == 0) ) {
             itemSelected( selectedItem, false );
             return true;
          }   

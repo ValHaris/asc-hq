@@ -221,6 +221,7 @@ extern bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, pa
 
      The distance is assumed to be 1 field. The routine is used for the movement routines for 
      example, because units moving next to enemies get a movement malus.
+     Does not evaluate any diplomatic states
 
      \param attackweap if != NULL, detailed information about the weapons which can perform
                           the attack are written to attackweap

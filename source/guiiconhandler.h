@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.15 2005-08-21 18:55:25 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.16 2005-09-24 17:15:09 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -122,7 +122,7 @@ class GuiIconHandler {
           By passing an object here, the GuiIconHandler wil obtain ownership of the object and delete it on his destruction */
        void registerUserFunction( GuiFunction* function );
 
-       bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+       virtual bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
 
        virtual void eval();
        virtual ~GuiIconHandler();

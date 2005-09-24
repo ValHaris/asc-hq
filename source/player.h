@@ -82,6 +82,14 @@ class Player {
    public:
       Player();
       
+      SigC::Signal0<void> sigTurnBegins;
+      SigC::Signal0<void> sigUserInteractionBegins;
+      SigC::Signal0<void> sigTurnEnds;
+
+      void turnBegins();
+      void userInteractionBegins();
+      void turnEnds();
+            
       int getPosition() const { return player; };
       const tmap* getParentMap() const { return parentMap; };
       tmap* getParentMap() { return parentMap; };
@@ -111,16 +119,10 @@ class Player {
       
       static const char* playerStatusNames[];
 
-      //! the name of the player that is used if the player is human
-      ASCString       humanname;
-
-      //! the name of the player that is used if the player is the AI
-      ASCString       computername;
-
       //! returns the name of the player depending on the status
-      const ASCString& getName( );
+      ASCString getName( ) const;
       
-      void setName( const ASCString& name ) { humanname = name; };
+      void setName( const ASCString& name ) { this->name = name; };
 
       //! the Password required for playing this player
       Password passwordcrc;
@@ -175,8 +177,9 @@ class Player {
                   
       DI_Color getColor();
 
-      SigC::Signal0<void> turnBegins;
-      SigC::Signal0<void> turnEnds;
+   private:   
+      ASCString       name;
+      void sendQueuedMessages();
                  
 };
 

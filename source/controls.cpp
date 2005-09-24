@@ -60,6 +60,7 @@
 #include "strtmesg.h"
 #include "messagedlg.h"
 #include "gameevent_dialogs.h"
+#include "cannedmessages.h"
 
 tmoveparams moveparams;
 
@@ -594,6 +595,7 @@ void tsearchreactionfireingunits :: init ( Vehicle* vehicle, const AStar3D::Path
             punitlist ul  = unitlist[i];
             while ( ul ) {
                punitlist next = ul->next;
+               
                pattackweap atw = attackpossible ( ul->eht, vehicle->xpos, vehicle->ypos );
                for ( int j = 0; j < atw->count; ++j )
                   if ( ul->eht->reactionfire.weaponShots[atw->num[j]] ) {
@@ -900,98 +902,6 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
 
 
 
-void checkalliances_at_endofturn ( void )
-{
-   #if 0
-   for ( int i = 0; i < 8; i++ ) {
-      int act = actmap->actplayer;
-      if ( i != act ) {
-
-         if ( actmap->alliances[i] [act] == canewsetwar2 ) {
-            // message "sneak attack" to all players except attacker
-
-            int to = 0;
-            for ( int j = 0; j < 8; j++ )
-               if ( j != act )
-                  to |= 1 << j;
-
-            ASCString txt;
-            txt.format ( getmessage( 10001 ), actmap->player[act].getName().c_str(), actmap->player[i].getName().c_str() );
-            new Message ( txt, actmap, to );
-         }
-
-         if ( actmap->alliances[i] [act] == capeaceproposal  &&  actmap->alliances_at_beginofturn[i] != capeaceproposal ) {
-            int to = 0;
-            for ( int j = 0; j < 8; j++ )
-               if ( j == i )
-                  to |= 1 << j;
-
-            char txt[200];
-            const char* sp;
-            if ( actmap->alliances[act] [i] == capeaceproposal )
-               sp = getmessage( 10005 );  // accepts peace
-            else
-               sp = getmessage( 10003 );  // proposes peace
-
-            sprintf ( txt, sp, actmap->player[act].getName().c_str() );
-            new Message ( txt, actmap, to );
-         }
-
-         if ( actmap->alliances[i] [act] == cawarannounce ) {
-            int to = 0;
-            for ( int j = 0; j < 8; j++ )
-               if ( j == i )
-                  to |= 1 << j;
-
-            char txt[200];
-            const char* sp = getmessage( 10002 );
-            sprintf ( txt, sp, actmap->player[act].getName().c_str() );
-            new Message ( txt, actmap, to );
-         }
-
-      }
-   }
-   #endif
-   #warning alliances
-}
-
-
-
-void checkalliances_at_beginofturn ( void )
-{
-   #if 0
-   int i;
-
-   int act = actmap->actplayer ;
-   for (i = 0; i < 8; i++ ) {
-      if ( actmap->alliances[i][act] == cawarannounce || actmap->alliances[i][act] == canewsetwar2 ) {
-         actmap->alliances[i][act] = cawar;
-         actmap->alliances[act][i] = cawar;
-         if ( actmap->shareview ) {
-            actmap->shareview->mode[act][i] = false;
-            actmap->shareview->mode[i][act] = false;
-         }
-      }
-      if ( actmap->alliances[i][act] == capeaceproposal  &&  actmap->alliances[act][i] == capeaceproposal) {
-         actmap->alliances[i][act] = capeace;
-         actmap->alliances[act][i] = capeace;
-      }
-   }
-
-
-   for ( i = 0; i < 8; i++ )
-      actmap->alliances_at_beginofturn[i] = actmap->alliances[i][act];
-
-   #endif
-   #warning alliances
-}
-
-
-
-
-
-
-
 
 
 void Building :: execnetcontrol ( void )
@@ -1051,7 +961,6 @@ int  Building :: getResource ( int      need,    int resourcetype, bool queryonl
 
 void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
 {
-   checkalliances_at_beginofturn ();
    for ( int p = 0; p < 8; p++ )
       actmap->player[p].existanceAtBeginOfTurn = actmap->player[p].exist() && actmap->player[p].stat != Player::off;
 
@@ -1144,6 +1053,8 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
 
    updateFieldInfo();
    transfer_all_outstanding_tribute();
+   
+   actmap->player[ actmap->actplayer].userInteractionBegins();
 }
 
 
@@ -1205,21 +1116,8 @@ void endTurn ( void )
    closeReplayLogging();
 
 
-     /* *********************  allianzen ********************  */
-
-  checkalliances_at_endofturn ();
-
      /* *********************  messages ********************  */
 
-  MessagePntrContainer::iterator mi = actmap->unsentmessage.begin();
-  while ( mi != actmap->unsentmessage.end() ) {
-     actmap->player[ actmap->actplayer ].sentmessage.push_back ( *mi );
-     for ( int i = 0; i < 8; i++ )
-        if ( (*mi)->to & ( 1 << i ))
-           actmap->player[ i ].unreadmessage.push_back ( *mi );
-
-     mi = actmap->unsentmessage.erase ( mi );
-  }
 
   if ( !actmap->newJournal.empty() ) {
      ASCString add = actmap->gameJournal;

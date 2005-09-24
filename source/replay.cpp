@@ -39,6 +39,7 @@
 #include "resourcenet.h"
 #include "guiiconhandler.h"
 #include "guifunctions.h"
+#include "cannedmessages.h"
 
 trunreplay runreplay;
 

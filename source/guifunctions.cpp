@@ -57,6 +57,7 @@ class AttackGui : public GuiIconHandler, public GuiFunction {
       void execute( const MapCoordinate& pos, int num );
       Surface& getImage( const MapCoordinate& pos, int num );
       ASCString getName( const MapCoordinate& pos, int num );
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
 
    public:
       AttackGui() : attackEngine( NULL ) {};
@@ -64,6 +65,15 @@ class AttackGui : public GuiIconHandler, public GuiFunction {
       void eval();
 
 };
+
+bool AttackGui :: checkForKey( const SDL_KeyboardEvent* key, int modifier )
+{
+   if ( key->keysym.sym == SDLK_ESCAPE || key->keysym.unicode == 'c' ) {
+      execute( actmap->getCursor(), -1 );
+      return true;
+   }
+   return false;
+}
 
 
 pair<pattackweap, int> AttackGui::getEntry( const MapCoordinate& pos, int num )

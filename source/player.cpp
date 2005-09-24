@@ -30,6 +30,7 @@
 #include "buildingtype.h"
 #include "player.h"
 #include "gamemap.h"
+#include "cannedmessages.h"
 
 SigC::Signal3<void,int,int,DiplomaticStates> DiplomaticStateVector::anyStateChanged;
 
@@ -48,17 +49,18 @@ const char* diplomaticStateNames[diplomaticStateNum+1] =
 
 DiplomaticStateVector::DiplomaticStateVector( Player& _player ) : player( _player )
 {
+   deployHooks();
 }
 
 void DiplomaticStateVector::deployHooks()
 {
-   player.turnBegins.connect( SigC::slot( *this, &DiplomaticStateVector::turnBegins ));
+   player.sigTurnBegins.connect( SigC::slot( *this, &DiplomaticStateVector::turnBegins ));
 }
 
 void DiplomaticStateVector::turnBegins( )
 {
    for ( QueuedStateChanges::iterator i = queuedStateChanges.begin(); i != queuedStateChanges.end(); ++i ) {
-      if ( states[i->first] > i->second ) {
+      if ( getState(i->first) > i->second ) {
          // we are changing to a more aggressive state, which doesn't need the confirmation of the counterpart
          setState( i->first, i->second );
          player.getParentMap()->player[ i->first ].diplomacy.setState( player.getPosition(), i->second);
@@ -76,6 +78,12 @@ void DiplomaticStateVector::turnBegins( )
                // he proposes less peace, but we'll set the state he proposed and delete his proposal, because it's fulfilled
                setState( i->first, t->second );
                target.setState( player.getPosition(), t->second );
+               
+               ASCString txt;
+               txt.format( getmessage( 10005 ), target.player.getName().c_str(), diplomaticStateNames[t->second] ); // accepts peace
+               
+               new Message ( txt, player.getParentMap(), 1 << t->first );
+               
                target.queuedStateChanges.erase( t );
             }
          }
@@ -106,11 +114,36 @@ void DiplomaticStateVector::sneakAttack( int towardsPlayer )
 {
    setState( towardsPlayer, WAR );         
    player.getParentMap()->player[ towardsPlayer ].diplomacy.setState( player.getPosition(), WAR );
+   
+   int to = 0;
+   for ( int j = 0; j < 8; j++ )
+      if ( j != player.getPosition() )
+         to |= 1 << j;
+
+   ASCString txt;
+   txt.format ( getmessage( 10001 ), player.getName().c_str(), player.getParentMap()->player[towardsPlayer].getName().c_str() );
+   new Message ( txt, player.getParentMap(), to );
 }
 
 
 void DiplomaticStateVector::propose( int towardsPlayer, DiplomaticStates s )
 {
+   const DiplomaticStateVector& targ = player.getParentMap()->player[ towardsPlayer ].diplomacy;
+   
+   if ( targ.queuedStateChanges.find( player.getPosition() ) == targ.queuedStateChanges.end() ) {
+      // we only send a message of this is an initial proposal. If the other player already has on himself for us, we don't send a message
+      ASCString txt;
+      int msgid;
+      if ( s > getState( towardsPlayer )) 
+         msgid = 10003;  //  propose peace
+      else
+         msgid = 10002;  //  declare war
+            
+      txt.format( getmessage( msgid ), player.getName().c_str(), diplomaticStateNames[s]  ); 
+      
+      new Message ( txt, player.getParentMap(), 1 << towardsPlayer );
+   }   
+   
    queuedStateChanges[towardsPlayer] = s;  
 }
 
@@ -149,6 +182,11 @@ void DiplomaticStateVector::write ( tnstream& stream ) const
 
 
 
+
+
+
+
+
 const char* Player :: playerStatusNames[6] = { "Human Player", 
                                                        "AI player",
                                                        "off",
@@ -157,24 +195,37 @@ const char* Player :: playerStatusNames[6] = { "Human Player",
                                                        NULL };
 
 
-Player :: Player() : diplomacy( *this )
+Player :: Player() 
+        : diplomacy( *this )
 {
-   diplomacy.deployHooks();
    network = NULL;   
    ai = NULL;
    parentMap = NULL;
-
    queuedEvents = 0;
-   if ( player < 8 ) {
-      humanname = "human ";
-      humanname += strrr( player );
-      computername = "computer ";
-      computername += strrr( player );
-   } else
-      humanname = computername = "neutral";
-
    ASCversion = 0;
 }
+
+void Player :: turnBegins()
+{
+   sigTurnBegins();
+}
+
+void Player :: userInteractionBegins()
+{
+   sigUserInteractionBegins();
+}
+
+void Player :: turnEnds()
+{
+   sendQueuedMessages();
+   
+   for ( BuildingList::iterator b = buildingList.begin(); b != buildingList.end(); ++b )
+      (*b)->endTurn();
+   
+   
+   sigTurnEnds();
+}
+
 
 
 DI_Color Player :: getColor()
@@ -193,26 +244,34 @@ DI_Color Player :: getColor()
    return DI_Color(0, 0, 0);
 }
 
-const ASCString& Player :: getName( )
+ASCString Player :: getName( ) const
 {
-   static ASCString off = "off";
+   if ( name.length() ) 
+      return name;
+
+      
+            
    switch ( stat ) {
-     case 0: return humanname;
-     case 1: return computername;
-     default: return off;
+     case 0: return ASCString("human ") + ASCString::toString(getPosition() );
+     case 1: return ASCString("AI ") + ASCString::toString(getPosition() );
+     default: return "off";
    }
 }
 
 
-const ASCString& tmap :: getPlayerName ( int playernum )
+
+void Player :: sendQueuedMessages()
 {
-   if ( playernum >= 8 )
-      playernum /= 8;
-
-   return player[playernum].getName();
+   MessagePntrContainer::iterator mi = getParentMap()->unsentmessage.begin();
+   while ( mi != getParentMap()->unsentmessage.end() ) {
+      sentmessage.push_back ( *mi );
+      for ( int i = 0; i < 8; i++ )
+         if ( (*mi)->to & ( 1 << i ))
+            getParentMap()->player[ i ].unreadmessage.push_back ( *mi );
+   
+      mi = getParentMap()->unsentmessage.erase ( mi );
+   }
 }
-
-
 
 
 bool Player::exist()

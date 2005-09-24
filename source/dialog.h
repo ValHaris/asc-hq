@@ -47,9 +47,7 @@ extern void displaymessage2( const char* formatstring, ... );
 extern void  dispmessage2(int          id,
                           char *       st = NULL );
    
-//! loads all messages from the files message?.txt
-extern void  loadmessages(void);
-   
+  
 extern void  statisticarmies(void);
    
 extern void  statisticbuildings(void);
@@ -72,9 +70,6 @@ extern int   choice_dlg(const char *       title,
 extern char mix3colors ( int p1, int p2, int p3 );
 extern char mix2colors ( int a, int b );
 extern char mix4colors ( int a, int b, int c, int d );
-
-//! returns a pointer to the message id. The messages must have been loaded with loadmessages
-extern const char* getmessage( int id );
 
 
   class   tviewanytext : public tdialogbox, public tviewtextwithscrolling {
@@ -207,7 +202,6 @@ class MultilineEdit : public tmessagedlg  {
 extern void selectgraphicset ( void );
 
 extern int editInt( const ASCString& title, int defaultValue, int minValue = 0, int maxValue = maxint );
-
 
 
 #endif

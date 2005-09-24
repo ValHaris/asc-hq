@@ -219,7 +219,7 @@ AllianceSetupWidget::AllianceSetupWidget( tmap* gamemap, bool allEditable, PG_Wi
    
                         
    counter = 0; 
-   for ( int i = 0; i < actmap->getPlayerCount(); ++i ) 
+   for ( int i = 0; i < actmap->getPlayerCount(); ++i ) // rows
       if ( actmap->player[i].exist() ) {
       
          PlayerWidgets pw;
@@ -240,7 +240,7 @@ AllianceSetupWidget::AllianceSetupWidget( tmap* gamemap, bool allEditable, PG_Wi
          col->SetBorderSize(0);
          
          int cnt2 = 0;
-         for ( int j = 0; j < actmap->getPlayerCount(); ++j ) 
+         for ( int j = 0; j < actmap->getPlayerCount(); ++j ) // columns
             if ( actmap->player[j].exist() )  {
                if ( i != j ) {
                   int x = calcx(cnt2) - barSpace;
@@ -251,7 +251,7 @@ AllianceSetupWidget::AllianceSetupWidget( tmap* gamemap, bool allEditable, PG_Wi
                      diplomaticWidgets[ linearize( i,j) ] = dmc;
                   } else {
                      DiplomaticTransitions& s = stateChanges[i][j];
-                     DiplomaticModeChooser<DiplomaticTransitions>* dmc = new DiplomaticModeChooser<DiplomaticTransitions>( horizontalBar, rect, s, j > i );
+                     DiplomaticModeChooser<DiplomaticTransitions>* dmc = new DiplomaticModeChooser<DiplomaticTransitions>( horizontalBar, rect, s, i == gamemap->actplayer );
                      // dmc->sigStateChange.connect( SigC::bind( SigC::slot( *this, &AllianceSetupWidget::setState ), j, i));
                      diplomaticWidgets[ linearize( i,j) ] = dmc;
                   }   
@@ -302,7 +302,14 @@ void AllianceSetupWidget::Apply()
                actmap->player[acting].diplomacy.sneakAttack( second );         
             } else {
                DiplomaticStates s = DiplomaticStates( stateChanges[acting][second] - 1);
-               if ( s != getState( acting, second ))
+               DiplomaticStates t;
+               DiplomaticStateVector::QueuedStateChanges::iterator q = actmap->player[acting].diplomacy.queuedStateChanges.find( second );
+               if ( q == actmap->player[acting].diplomacy.queuedStateChanges.end() )
+                  t = getState( acting, second );
+               else
+                  t = q->second;   
+                  
+               if ( t != s )
                   actmap->player[acting].diplomacy.propose( second, s );         
             }   
          }

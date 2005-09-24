@@ -52,6 +52,7 @@
 #include "graphicset.h"
 #include "viewcalculation.h"
 #include "paradialog.h"
+#include "cannedmessages.h"
 
 #ifndef karteneditor
  #include "gamedlg.h"
@@ -453,56 +454,9 @@ void         statisticbuildings(void)
 
 
 
-map<int,ASCString> messageStrings;
-
 
 #define klickconst 100
 #define delayconst 10
-
-
-void   loadsinglemessagefile ( const char* name )
-{
-   try {
-      tnfilestream stream ( name, tnstream::reading );
-
-      ASCString s1, s2;
-      s1 = stream.readString();
-      s2 = stream.readString();
-
-      while ( !s1.empty() && !s2.empty() ) {
-         int w = atoi ( s1.c_str() );
-
-         messageStrings[w] = s2;
-
-         s1 = stream.readString();
-         s2 = stream.readString();
-      }
-   }
-   catch ( treadafterend ) {
-   }
-}
-
-
-void         loadmessages(void)
-{
-   tfindfile ff ( "message?.txt" );
-   ASCString filename = ff.getnextname();
-
-   while( !filename.empty() ) {
-      loadsinglemessagefile ( filename.c_str() );
-      filename = ff.getnextname();
-   }
-}
-
-
-const char*        getmessage( int id)
-{
-   if ( messageStrings.find ( id ) != messageStrings.end() )
-         return messageStrings[id].c_str();
-
-   static const char* notfound = "message not found";
-   return notfound;
-}
 
 
 
@@ -2373,7 +2327,7 @@ void viewUnitSetinfo ( void )
          s += "\nUnit owner: ";
          s += strrr ( fld->vehicle->color / 8 );
          s += " - ";
-         s += actmap->getPlayerName ( fld->vehicle->color/8 );
+         s += actmap->getPlayer(fld->vehicle).getName();
 
          char t3[1000];
          sprintf(t3, "\nUnit ID: %d \n", typ->id );
@@ -3163,7 +3117,6 @@ void longWarning ( const ASCString& string )
    vat.run();
    vat.done();
 }
-
 
 
 

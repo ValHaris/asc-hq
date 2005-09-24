@@ -32,6 +32,7 @@
 #include "../controls.h"
 #include "../viewcalculation.h"
 
+
 class GameParameterEditorWidget;
 
 
@@ -73,6 +74,13 @@ class StartMultiplayerGame: public ConfigurableWindow {
          this->filename = filename;
       };   
       
+      bool quickstart()
+      {
+         if ( Apply() )
+            start();
+         return true;
+      }
+      
       void showButtons( bool start, bool quickstart, bool next )
       {
          if ( next )
@@ -94,6 +102,7 @@ class StartMultiplayerGame: public ConfigurableWindow {
    protected:   
       void userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams ); 
       bool start();
+      bool Apply();
       
    public:
       StartMultiplayerGame(PG_MessageObject* c);
@@ -134,7 +143,7 @@ StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWin
       
     PG_Button* qstart = dynamic_cast<PG_Button*>(FindChild("quickstart", true ));
     if ( qstart )
-      qstart->sigClick.connect( SigC::slot( *this, &StartMultiplayerGame::start ));
+      qstart->sigClick.connect( SigC::slot( *this, &StartMultiplayerGame::quickstart ));
       
     showPage();
     showButtons(false,false,true);
@@ -147,6 +156,43 @@ StartMultiplayerGame::~StartMultiplayerGame()
       delete newMap;
 }      
 
+bool StartMultiplayerGame::Apply()
+{
+   switch ( page )  {
+      case FilenameSelection: {
+            if ( !filename.empty() )
+               if ( exist( filename )) {
+                  newMap = mapLoadingExceptionChecker( filename, MapLoadingFunction( tmaploaders::loadmap ));
+                  if ( newMap ) 
+                     return true;
+                }
+               
+         }
+         break;
+      case PlayerSetup: 
+            if ( playerSetup->Valid() ) {
+               playerSetup->Apply();
+               return true;
+            }   
+            break;       
+              
+      case AllianceSetup: 
+         allianceSetup->Apply();
+         return true;
+         
+      case MapParameterEditor: 
+            if ( mapParameterEditor->Valid() ) {
+               mapParameterEditor->Apply();
+               return true;
+            }   
+            break;   
+              
+      default: 
+           break;
+   }
+   
+   return false;
+}
 
 bool StartMultiplayerGame::nextPage(PG_Button* button)
 {
@@ -168,28 +214,26 @@ bool StartMultiplayerGame::nextPage(PG_Button* button)
                page = FilenameSelection;
          }
          break;
-      case FilenameSelection: {
-            if ( !filename.empty() )
-               if ( exist( filename )) {
-                  newMap = mapLoadingExceptionChecker( filename, MapLoadingFunction( tmaploaders::loadmap ));
-                  if ( newMap )
-                     page = PlayerSetup;
-                }
-               
-         }
-         break;
+         
+      case FilenameSelection: 
+            if ( Apply() )
+               page = PlayerSetup;
+            break;
       case PlayerSetup: 
-               if ( playerSetup->Valid() )
-                  page = AllianceSetup;
-               break;       
+            if ( Apply() )
+               page = AllianceSetup;
+            break;       
               
-      case AllianceSetup: page = MapParameterEditor; 
-               break;
+      case AllianceSetup: 
+            if ( Apply() )
+               page = MapParameterEditor;
+            break;
               
       case MapParameterEditor: 
-               if ( mapParameterEditor->Valid() )
-                  page = MultiPlayerOptions;
-              break;   
+            if ( Apply() )
+               page = MultiPlayerOptions;
+            break;   
+            
       default: 
            break;
    }
@@ -239,6 +283,9 @@ void StartMultiplayerGame::showPage()
             showButtons(true,false,false);
          else   
             showButtons(false,true,true);
+         break;
+      case MultiPlayerOptions: 
+         showButtons(true,false,false);
          break;
       default:
          break;   

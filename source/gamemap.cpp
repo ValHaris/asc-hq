@@ -192,6 +192,7 @@ tmap :: tmap ( void )
       : overviewMapHolder( *this )
 {
    randomSeed = rand();
+   dialogsHooked = false;
 
    eventID = 0;
 
@@ -250,6 +251,10 @@ tmap :: tmap ( void )
    setgameparameter( cgp_objectsDestroyedByTerrain, 1 );
 }
 
+void tmap :: guiHooked()
+{
+   dialogsHooked = true;
+}
 
 const int tmapversion = 11;
 
@@ -480,10 +485,10 @@ void tmap :: read ( tnstream& stream )
 
 
        if ( exist_humanplayername[w] )
-          player[w].humanname = stream.readString();
+          player[w].setName( stream.readString() );
 
        if ( exist_computerplayername[w] )
-          player[w].computername = stream.readString();
+          stream.readString();
 
     } /* endfor */
 
@@ -667,10 +672,10 @@ void tmap :: write ( tnstream& stream )
    stream.writeInt( messageid );
 
    for ( i = 0; i < 8; i++ )
-      stream.writeInt( !player[i].humanname.empty() );
+      stream.writeInt( 1 );
 
    for ( i = 0; i < 8; i++ )
-      stream.writeInt( !player[i].computername.empty() );
+      stream.writeInt( 0 );
 
    supervisorpasswordcrc.write ( stream );
 
@@ -720,14 +725,8 @@ void tmap :: write ( tnstream& stream )
          stream.writeChar(0); // dummy
    }
 
-   for (int w=0; w<8 ; w++ ) {
-
-      if ( !player[w].humanname.empty() )
-         stream.writeString ( player[w].humanname );
-
-      if ( !player[w].computername.empty() )
-         stream.writeString ( player[w].computername );
-   }
+   for (int w=0; w<8 ; w++ ) 
+      stream.writeString ( player[w].getName() );
 
    if ( !tribute.empty() ) {
        stream.writeInt ( -1 );
@@ -1192,9 +1191,8 @@ void tmap::endTurn()
    pt.turn = time.turn();
    ::time ( &pt.date );
    player[actplayer].playTime.push_back ( pt );
-
-   for ( Player::BuildingList::iterator b = player[actplayer].buildingList.begin(); b != player[actplayer].buildingList.end(); ++b )
-      (*b)->endTurn();
+   
+   player[actplayer].turnEnds();
 
    Player::VehicleList toRemove;
    for ( Player::VehicleList::iterator v = player[actplayer].vehicleList.begin(); v != player[actplayer].vehicleList.end(); ++v ) {
@@ -1374,6 +1372,10 @@ bool tmap::nextPlayer()
             }
 
    }  while ( (!player[actplayer].exist() || player[actplayer].stat == Player::off)  && (runde <= 2)  );
+   
+   if ( player[actplayer].exist() && player[actplayer].stat != Player::off ) {
+      player[actplayer].turnBegins();
+   }
    return runde <= 2;
 }
 

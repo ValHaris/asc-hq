@@ -27,7 +27,7 @@
 #include "mapalgorithms.h"
 #include "dlg_box.h"
 #include "dialog.h"
-
+#include "cannedmessages.h"
 
 SigC::Signal0<void> tributeTransferred;
 

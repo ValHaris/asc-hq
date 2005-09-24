@@ -18,6 +18,7 @@
 
 #include "gamedlg.h"
 #include "messagedlg.h"
+#include "gamemap.h"
 
 class tnewmessage : public tmessagedlg  {
             protected:
@@ -650,7 +651,7 @@ void editjournal ( void )
 }
 
 
-void viewunreadmessages ( void )
+void viewunreadmessages ()
 {
    MessagePntrContainer::iterator mi = actmap->player[ actmap->actplayer ].unreadmessage.begin();
    while ( mi != actmap->player[ actmap->actplayer ].unreadmessage.end()  ) {
@@ -659,3 +660,10 @@ void viewunreadmessages ( void )
       mi = actmap->player[ actmap->actplayer ].unreadmessage.erase ( mi );
    }
 }
+
+void chainMessageFunctions ( tmap* actmap )
+{
+   for ( int i = 0; i < actmap->getPlayerCount(); ++i )
+      actmap->getPlayer(i).sigUserInteractionBegins.connect( SigC::slot( &viewunreadmessages ));
+}
+
