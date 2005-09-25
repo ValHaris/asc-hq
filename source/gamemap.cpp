@@ -38,7 +38,6 @@
 #include "iconrepository.h"
 
 #ifdef sgmain
- #include "network.h"
  #include "gameoptions.h"
  #include "resourcenet.h"
 #endif
@@ -189,7 +188,7 @@ void OverviewMapHolder::clearmap( tmap* actmap )
 
 
 tmap :: tmap ( void )
-      : overviewMapHolder( *this )
+      : overviewMapHolder( *this ), network(NULL)
 {
    randomSeed = rand();
    dialogsHooked = false;
@@ -213,14 +212,12 @@ tmap :: tmap ( void )
    _resourcemode = 0;
 
    for ( i = 0; i < 9; ++i ) {
-      player[i].player = i;
+      player[i].setParentMap ( this, i );
       if ( i == 0 )
          player[i].stat = Player::human;
       else
          player[i].stat = Player::off;
       
-      player[i].parentMap = this;
-           
       player[i].research.chainToMap ( this, i );
    }
           
@@ -256,7 +253,7 @@ void tmap :: guiHooked()
    dialogsHooked = true;
 }
 
-const int tmapversion = 11;
+const int tmapversion = 12;
 
 void tmap :: read ( tnstream& stream )
 {
@@ -325,7 +322,7 @@ void tmap :: read ( tnstream& stream )
          player[i].research.read ( stream );
 
       player[i].ai = (BaseAI*)stream.readInt() ;
-      player[i].stat = Player::tplayerstat ( stream.readChar() );
+      player[i].stat = Player::PlayerStatus ( stream.readChar() );
       stream.readChar(); // dummy
       dummy_playername[i] = stream.readInt();
       player[i].passwordcrc.read ( stream );
@@ -351,6 +348,9 @@ void tmap :: read ( tnstream& stream )
                 player[i].diplomacy.setState( j, PEACE ); 
          }
       }
+      
+      if ( version >= 12 )
+         player[i].email = stream.readString();
    }
    
    if ( version >= 11 ) 
@@ -600,6 +600,12 @@ void tmap :: read ( tnstream& stream )
 
     if ( version >= 8 )
        randomSeed = stream.readInt();
+       
+    if ( version >= 12 ) {
+      bool nw = stream.readInt();
+      if ( nw ) 
+         network = GameTransferMechanism::read( stream );         
+    }
 }
 
 
@@ -652,6 +658,7 @@ void tmap :: write ( tnstream& stream )
       stream.writeInt ( player[i].ASCversion );
       player[i].cursorPos.write( stream );
       player[i].diplomacy.write( stream );
+      stream.writeString ( player[i].email );
    }
 
    stream.writeInt( 0x12345678 );
@@ -789,6 +796,12 @@ void tmap :: write ( tnstream& stream )
        (*i)->write( stream );
 
     stream.writeInt( randomSeed );
+
+    if ( network ) {
+      stream.writeInt( 1 );
+      network->write( stream );
+    } else
+      stream.writeInt( 0 );
 }
 
 
@@ -1192,7 +1205,7 @@ void tmap::endTurn()
    ::time ( &pt.date );
    player[actplayer].playTime.push_back ( pt );
    
-   player[actplayer].turnEnds();
+   sigPlayerTurnEnds( player[actplayer] );
 
    Player::VehicleList toRemove;
    for ( Player::VehicleList::iterator v = player[actplayer].vehicleList.begin(); v != player[actplayer].vehicleList.end(); ++v ) {
@@ -1203,7 +1216,7 @@ void tmap::endTurn()
       if (( actvehicle->height >= chtieffliegend )   &&  ( actvehicle->height <= chhochfliegend ) && ( getfield(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) {
          if ( getmaxwindspeedforunit ( actvehicle ) < weatherSystem->getCurrentWindSpeed()*maxwindspeed ){
             ASCString ident = "The unit " + (*v)->getName() + " at position ("+strrr((*v)->getPosition().x)+"/"+strrr((*v)->getPosition().y)+") crashed because of the strong wind";
-            new Message ( ident, actmap, 1<<(*v)->getOwner());
+            new Message ( ident, this, 1<<(*v)->getOwner());
             toRemove.push_back ( *v );
          } else {
 
@@ -1242,7 +1255,7 @@ void tmap::endTurn()
             if (j < 0) {
                ASCString ident = "The unit " + (*v)->getName() + " at position ("+strrr((*v)->getPosition().x);
                ident += ASCString("/")+strrr((*v)->getPosition().y)+") crashed due to lack of fuel";
-               new Message ( ident, actmap, 1<<(*v)->getOwner());
+               new Message ( ident, this, 1<<(*v)->getOwner());
                toRemove.push_back ( *v );
                // logtoreplayinfo( rpl_removeunit, actvehicle->getPosition().x, actvehicle->getPosition().y, actvehicle->networkid );
             } else {
@@ -1266,6 +1279,10 @@ void tmap::endTurn()
      for ( Player::VehicleList::iterator v = player[i].vehicleList.begin(); v != player[i].vehicleList.end(); ++v ) 
          (*v)->endAnyTurn();
 
+   if ( replayinfo )
+      replayinfo->closeLogging();
+      
+   processJournal();   
 
 }
 
@@ -1352,7 +1369,7 @@ void tmap::objectGrowth()
 }
 
 
-bool tmap::nextPlayer()
+bool tmap::advanceToNextPlayer()
 {
    int runde = 0;
    do {
@@ -1374,7 +1391,7 @@ bool tmap::nextPlayer()
    }  while ( (!player[actplayer].exist() || player[actplayer].stat == Player::off)  && (runde <= 2)  );
    
    if ( player[actplayer].exist() && player[actplayer].stat != Player::off ) {
-      player[actplayer].turnBegins();
+      sigPlayerTurnBegins( player[actplayer] );
    }
    return runde <= 2;
 }
@@ -1413,6 +1430,12 @@ tmap :: ~tmap ()
       delete[] game_parameter;
       game_parameter = NULL;
    }
+   
+   if ( network ) {
+      delete network;
+      network = NULL;
+   }   
+      
 
    delete weatherSystem;
 
@@ -1708,6 +1731,45 @@ int tmap :: getTechnologyNum ( )
 {
    return  technologyRepository.getNum();
 }
+
+void tmap::processJournal()
+{
+  if ( !newJournal.empty() ) {
+     ASCString add = gameJournal;
+
+     char tempstring[100];
+     char tempstring2[100];
+     sprintf( tempstring, "#color0# %s ; turn %d #color0##crt##crt#", player[actplayer].getName().c_str(), time.turn() );
+     sprintf( tempstring2, "#color%d#", getplayercolor ( actplayer ));
+
+     int fnd;
+     do {
+        fnd = 0;
+        if ( !add.empty() )
+           if ( add.find ( '\n', add.length()-1 ) != add.npos ) {
+              add.erase ( add.length()-1 );
+              fnd++;
+           } else
+             if ( add.length() > 4 )
+                if ( add.find ( "#crt#", add.length()-5 ) != add.npos ) {
+                  add.erase ( add.length()-5 );
+                  fnd++;
+                }
+
+     } while ( fnd ); /* enddo */
+
+     add += tempstring2;
+     add += newJournal;
+     add += tempstring;
+
+     gameJournal = add;
+     newJournal.erase();
+
+     lastjournalchange.set ( time.turn(), actplayer );
+  }
+ 
+}
+
 
 void tmap :: startGame ( )
 {
@@ -2074,6 +2136,13 @@ void tmap :: ReplayInfo :: write ( tnstream& stream )
    }
 }
 
+void tmap :: ReplayInfo :: closeLogging()
+{
+   if ( actmemstream ) {
+      delete actmemstream;
+      actmemstream = NULL;
+   }
+}
 
 tmap :: ReplayInfo :: ~ReplayInfo ( )
 {

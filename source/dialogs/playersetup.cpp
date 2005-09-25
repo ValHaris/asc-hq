@@ -91,9 +91,9 @@ bool PlayerSetupWidget::Valid() {
       int humanNum = 0;
       for ( vector<PlayerWidgets>::iterator i = playerWidgets.begin(); i != playerWidgets.end(); ++i ) 
          if ( i->type )
-            if (    Player::tplayerstat( i->type->GetSelectedItemIndex()) == Player::human
-                 || Player::tplayerstat( i->type->GetSelectedItemIndex()) == Player::supervisor
-                 || Player::tplayerstat( i->type->GetSelectedItemIndex()) == Player::suspended  ) 
+            if (    Player::PlayerStatus( i->type->GetSelectedItemIndex()) == Player::human
+                 || Player::PlayerStatus( i->type->GetSelectedItemIndex()) == Player::supervisor
+                 || Player::PlayerStatus( i->type->GetSelectedItemIndex()) == Player::suspended  ) 
                ++humanNum;
                
        if ( humanNum > 1 ) {
@@ -112,7 +112,7 @@ bool PlayerSetupWidget::Apply() {
    for ( vector<PlayerWidgets>::iterator i = playerWidgets.begin(); i != playerWidgets.end(); ++i ) {
       actmap->player[i->pos].setName( i->name->GetText() );
       if ( i->type )
-         actmap->player[i->pos].stat = Player::tplayerstat( i->type->GetSelectedItemIndex() );
+         actmap->player[i->pos].stat = Player::PlayerStatus( i->type->GetSelectedItemIndex() );
    }
    return true;
 };

@@ -774,7 +774,7 @@ void        tloadBImap ::   ReadACTNPart(void)
 
     for ( int i = 0; i < 6; i++ )
        if ( OrgMissRec.WhoPlays & (1<< i))
-          actmap->player[ convcol ( 1 << i) ].stat = Player::tplayerstat( (OrgMissRec.PlayType>>i) & 1);
+          actmap->player[ convcol ( 1 << i) ].stat = Player::PlayerStatus( (OrgMissRec.PlayType>>i) & 1);
        else
           actmap->player[convcol ( 1 << i) ].stat = Player::off;
 

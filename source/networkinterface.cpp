@@ -38,3 +38,9 @@ void GameTransferMechanism :: write ( tnstream& stream ) const
    writeChildData( stream );
 }
 
+void networksupervisor ()
+{
+
+}
+
+

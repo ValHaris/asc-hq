@@ -36,7 +36,7 @@ class GameTransferMechanism {
       virtual void writeChildData ( tnstream& stream ) const = 0;
    public:
       virtual void setup() = 0;
-      virtual void send( const tmap* map ) = 0;
+      virtual void send( const tmap* map, int lastPlayer, int lastturn ) = 0;
       virtual tmap* receive() = 0;
       static GameTransferMechanism* read ( tnstream& stream );
       void write ( tnstream& stream ) const;
@@ -45,6 +45,8 @@ class GameTransferMechanism {
 };
 
 typedef Loki::SingletonHolder< Factory< GameTransferMechanism, ASCString > > networkTransferMechanismFactory;
+
+extern void networksupervisor ();
 
 
 #endif

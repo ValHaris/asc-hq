@@ -52,7 +52,7 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 libdialogs_la_DEPENDENCIES =
 am_libdialogs_la_OBJECTS = editmapparam.lo selectionwindow.lo \
 	fileselector.lo playersetup.lo alliancesetup.lo newgame.lo \
-	soundsettings.lo
+	soundsettings.lo emailsetup.lo
 libdialogs_la_OBJECTS = $(am_libdialogs_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -192,7 +192,7 @@ target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = $(SDL_CFLAGS) $(PARAGUI_CFLAGS)  $(SIGC_CFLAGS) -Dmaindialogs
 noinst_LTLIBRARIES = libdialogs.la
-libdialogs_la_SOURCES = editmapparam.cpp selectionwindow.cpp fileselector.cpp playersetup.cpp alliancesetup.cpp newgame.cpp soundsettings.cpp
+libdialogs_la_SOURCES = editmapparam.cpp selectionwindow.cpp fileselector.cpp playersetup.cpp alliancesetup.cpp newgame.cpp soundsettings.cpp emailsetup.cpp
 libdialogs_la_LIBADD = @SDL_LIBS@ 
 all: all-am
 
@@ -247,6 +247,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/alliancesetup.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/editmapparam.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/emailsetup.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fileselector.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/newgame.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/playersetup.Plo@am__quote@

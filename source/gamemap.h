@@ -287,6 +287,7 @@ class tmap {
 
       ASCString     gameJournal;
       ASCString     newJournal;
+      
       Password      supervisorpasswordcrc;
 /*
       char          alliances_at_beginofturn[8];
@@ -321,6 +322,9 @@ class tmap {
           int stopRecordingActions;
           void read ( tnstream& stream );
           void write ( tnstream& stream );
+          
+           //! Close the replay logging at the end of a players or the ai's turn.
+          void closeLogging();
           ~ReplayInfo ( );
         };
 
@@ -391,13 +395,18 @@ class tmap {
       void endRound();
 
 
+      SigC::Signal1<void,Player&> sigPlayerTurnBegins;
+      SigC::Signal1<void,Player&> sigPlayerUserInteractionBegins;
+      SigC::Signal1<void,Player&> sigPlayerTurnEnds;
+      
+      
       //! called when a new round starts (after switching from player 7 to player 0 )
       SigC::Signal0<void> newRound;
 
 
 
       //! changes to the next player and calls endRound() if necessary. \Returns false if there are no players left
-      bool nextPlayer();
+      bool advanceToNextPlayer();
 
       VisibilityStates getInitialMapVisibility( int player );
 
@@ -442,11 +451,17 @@ class tmap {
       void guiHooked();
       bool getGuiHooked() { return dialogsHooked; };
 
+      
+      GameTransferMechanism* network;
+      
    private:
       Vehicle* getUnit ( Vehicle* eht, int nwid );
 
       void objectGrowth();
       void setupResources ( void );
+      
+      //! adds the current players new journal entries to the map journal
+      void processJournal();
 
       unsigned int randomSeed;
 };

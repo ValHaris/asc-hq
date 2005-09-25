@@ -20,14 +20,14 @@
 
  #include "messages.h"
 
-extern void editmessage ( Message& msg );
-extern void newmessage ( void );
-extern void viewmessages ( char* title, const MessagePntrContainer& msgc, bool editable, int md  ) ;   // mode : 0 verschickte ; 1 empfangene
-extern void viewmessage ( const Message& message );
-extern void editmessage ( Message& msg );
-extern void editjournal ( void );
-extern void viewjournal ( void );
-extern void viewunreadmessages ( void );
-extern void chainMessageFunctions ( tmap* actmap );
+extern void editmessage( Message& msg );
+extern void newmessage();
+extern void viewmessages( char* title, const MessagePntrContainer& msgc, bool editable, int md  ) ;   // mode : 0 verschickte ; 1 empfangene
+extern void viewmessage( const Message& message );
+extern void editmessage( Message& msg );
+extern void editjournal();
+extern void viewjournal();
+extern void viewunreadmessages( Player& player );
+extern void checkJournal( Player& player );
 
 #endif

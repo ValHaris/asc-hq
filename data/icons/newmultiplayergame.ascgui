@@ -8,7 +8,7 @@ panel {
 
   Title = New Multiplayer Game
     
-  ChildWidgets = Next QuickStart Start Page1 Page2 Page3 Page4 Page5 Page6 Page7 Bottomline
+  ChildWidgets = Next QuickStart Start Page1 Page2 Page3 Page4 Page5 Page6 Page7 Page8 Bottomline
   
   Bottomline {
      type = Area
@@ -163,7 +163,7 @@ panel {
     y = 40
     x2 = -20
     y2 = -80
-    Userhandler = AllianceSetup
+    Userhandler = EmailSetup
   } Page4
   
   Page5 {
@@ -172,17 +172,26 @@ panel {
     y = 40
     x2 = -20
     y2 = -80
-    Userhandler = GameParameters
+    Userhandler = AllianceSetup
   } Page5
-
+  
   Page6 {
     type = dummy
     x = 20
     y = 40
     x2 = -20
     y2 = -80
+    Userhandler = GameParameters
+  } Page6
 
-    ChildWidgets = Replay SupervisorOn SupervisorPlain SupervisorEnc
+  Page7 {
+    type = dummy
+    x = 20
+    y = 40
+    x2 = -20
+    y2 = -80
+
+    ChildWidgets = Replay SupervisorOn SupervisorPlain SupervisorEnc Filename
     
     Replay {
       type = Checkbox
@@ -199,7 +208,7 @@ panel {
       x = 40
       y = 60
       height = 25
-      width = 3300
+      width = 300
     } SupervisorOn
 
     SupervisorPlain {
@@ -217,9 +226,17 @@ panel {
       height = 25
       width = 280
     } SupervisorEnc
-  } Page6
+    
+    Filename {
+      type = LineEdit
+      x = 40
+      y = 150
+      height = 25
+      width = 300
+    } Filename
+  } Page7
 
-  Page7 {
+  Page8 {
     type = dummy
     x = 20
     y = 40
@@ -235,7 +252,7 @@ panel {
       height = 30
       width = 200
     } MapPassword
-  } Page7
+  } Page8
       
       
         

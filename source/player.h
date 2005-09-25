@@ -50,11 +50,8 @@ class DiplomaticStateVector : public SigC::Object {
       typedef map<int,DiplomaticStates> QueuedStateChanges;
       QueuedStateChanges queuedStateChanges;
       
-      void turnBegins();
-      
    public:
       DiplomaticStateVector( Player& _player );
-      void deployHooks();
       
       DiplomaticStates getState( int towardsPlayer ) const;
       void setState( int towardsPlayer, DiplomaticStates s );
@@ -63,7 +60,10 @@ class DiplomaticStateVector : public SigC::Object {
       
       bool isHostile( int towardsPlayer ) { return getState( towardsPlayer ) == WAR; };
       bool sharesView( int receivingPlayer ) { return getState( receivingPlayer ) >= PEACE_SV; };
+
+      void turnBegins();
       
+            
       SigC::Signal2<void,int,DiplomaticStates> stateChanged;
       static SigC::Signal3<void,int,int,DiplomaticStates> anyStateChanged;
    
@@ -75,24 +75,23 @@ class tmap;
 
 
 //! the different players in ASC. There may be 8 players (0..7) and neutral units (8)
-class Player {
-      friend class tmap;
+class Player : public SigC::Object {
       int player;
       tmap* parentMap;
+      
+      void turnBegins( Player& p );
+      void userInteractionBegins( Player& p );
+      void turnEnds( Player& p );
+      
    public:
       Player();
       
-      SigC::Signal0<void> sigTurnBegins;
-      SigC::Signal0<void> sigUserInteractionBegins;
-      SigC::Signal0<void> sigTurnEnds;
-
-      void turnBegins();
-      void userInteractionBegins();
-      void turnEnds();
-            
       int getPosition() const { return player; };
+      
       const tmap* getParentMap() const { return parentMap; };
       tmap* getParentMap() { return parentMap; };
+      
+      void setParentMap( tmap* map, int pos );
       
       //! does the player exist at all
       bool         exist();
@@ -114,12 +113,12 @@ class Player {
       //! if the player is run by an AI, this is the pointer to it
       BaseAI*      ai;
 
-      //! the status of the player: 0=human ; 1=AI ; 2=off
-      enum tplayerstat { human, computer, off, supervisor, suspended } stat;
+      //! the status of the player
+      enum PlayerStatus { human, computer, off, supervisor, suspended } stat;
       
       static const char* playerStatusNames[];
 
-      //! returns the name of the player depending on the status
+      //! returns the name of the player 
       ASCString getName( ) const;
       
       void setName( const ASCString& name ) { this->name = name; };
@@ -171,9 +170,9 @@ class Player {
 
       MapCoordinate cursorPos;
 
-      GameTransferMechanism* network;
-
       DiplomaticStateVector diplomacy;
+      
+      ASCString email;
                   
       DI_Color getColor();
 

@@ -125,9 +125,6 @@ extern void checkforreplay ( void );
 //! Initialized the replay logging at the beginning of a players or the ai's turn.
 extern void initReplayLogging();
 
-//! Close the replay logging at the end of a players or the ai's turn.
-extern void closeReplayLogging();
-
 //! runs the replay for the given player
 extern void runSpecificReplay( int player, int viewingplayer );
 

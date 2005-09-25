@@ -73,7 +73,7 @@ bool FileTransfer::enterfilename()
 }
 
 
-void FileTransfer::send( const tmap* map )
+void FileTransfer::send( const tmap* map, int lastPlayer, int lastturn )
 {
    while ( filename.empty() ) {
       if( !enterfilename() )
@@ -81,7 +81,7 @@ void FileTransfer::send( const tmap* map )
    }
 
    try {      
-      tnfilestream gamefile ( constructFileName( actmap ), tnstream::reading );
+      tnfilestream gamefile ( constructFileName( actmap, lastPlayer, lastturn ), tnstream::reading );
       tnetworkloaders nwl;
       nwl.savenwgame( &gamefile );
    } catch ( tfileerror ) {
@@ -103,22 +103,22 @@ tmap* FileTransfer::receive()
    return map;
 }
 
-ASCString FileTransfer::constructFileName( tmap* actmap ) const
+ASCString FileTransfer::constructFileName( tmap* actmap, int lastPlayer, int lastturn ) const
 {
    ASCString s = filename;
    while ( s.find( "$p") != ASCString::npos )
-      s.replace( s.find( "$p"), 2, 1, 'A' + actmap->actplayer );
+      s.replace( s.find( "$p"), 2, 1, 'A' + lastPlayer );
 
    while ( s.find( "$t") != ASCString::npos )
-      s.replace( s.find( "$t"), 2, ASCString::toString( actmap->time.turn() ) );
+      s.replace( s.find( "$t"), 2, ASCString::toString( lastturn ) );
       
    return s;
 }
 
 
+#if 0
 void networksupervisor ( void )
 {
-#if 0
    class tcarefordeletionofmap {
          pmap tmp;
       public:
@@ -250,8 +250,8 @@ void networksupervisor ( void )
       delete actmap;
       actmap = NULL;
    }
-   #endif
 }
+   #endif
 
 
 

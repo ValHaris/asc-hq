@@ -49,15 +49,9 @@ const char* diplomaticStateNames[diplomaticStateNum+1] =
 
 DiplomaticStateVector::DiplomaticStateVector( Player& _player ) : player( _player )
 {
-   deployHooks();
 }
 
-void DiplomaticStateVector::deployHooks()
-{
-   player.sigTurnBegins.connect( SigC::slot( *this, &DiplomaticStateVector::turnBegins ));
-}
-
-void DiplomaticStateVector::turnBegins( )
+void DiplomaticStateVector::turnBegins()
 {
    for ( QueuedStateChanges::iterator i = queuedStateChanges.begin(); i != queuedStateChanges.end(); ++i ) {
       if ( getState(i->first) > i->second ) {
@@ -198,32 +192,43 @@ const char* Player :: playerStatusNames[6] = { "Human Player",
 Player :: Player() 
         : diplomacy( *this )
 {
-   network = NULL;   
    ai = NULL;
    parentMap = NULL;
    queuedEvents = 0;
    ASCversion = 0;
 }
 
-void Player :: turnBegins()
+void Player :: setParentMap( tmap* map, int pos )
 {
-   sigTurnBegins();
+   parentMap = map;
+   player = pos;
+   parentMap->sigPlayerTurnBegins.connect( SigC::slot( *this, &Player::turnBegins ));   
+   parentMap->sigPlayerUserInteractionBegins.connect( SigC::slot( *this, &Player::userInteractionBegins ));   
+   parentMap->sigPlayerTurnEnds.connect( SigC::slot( *this, &Player::turnEnds ));   
 }
 
-void Player :: userInteractionBegins()
+
+void Player :: turnBegins( Player& p )
 {
-   sigUserInteractionBegins();
+   if ( &p == this ) {
+      diplomacy.turnBegins();
+   }   
 }
 
-void Player :: turnEnds()
+void Player :: userInteractionBegins( Player& p )
 {
-   sendQueuedMessages();
-   
-   for ( BuildingList::iterator b = buildingList.begin(); b != buildingList.end(); ++b )
-      (*b)->endTurn();
-   
-   
-   sigTurnEnds();
+   if ( &p == this ) {
+   }
+}
+
+void Player :: turnEnds( Player& p )
+{
+   if ( &p == this ) {
+      sendQueuedMessages();
+      
+      for ( BuildingList::iterator b = buildingList.begin(); b != buildingList.end(); ++b )
+         (*b)->endTurn();
+   }      
 }
 
 

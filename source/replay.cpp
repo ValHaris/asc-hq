@@ -129,15 +129,6 @@ void initReplayLogging()
    }
 }
 
-void closeReplayLogging()
-{
-   if ( actmap->replayinfo )
-      if ( actmap->replayinfo->actmemstream ) {
-         delete actmap->replayinfo->actmemstream;
-         actmap->replayinfo->actmemstream = NULL;
-      }
-}
-
 
 int ReplayMapDisplay :: checkMapPosition ( int x, int y )
 {
@@ -1936,7 +1927,7 @@ int  trunreplay :: run ( int player, int viewingplayer )
              displaymessage2("running final comparison" );
 
              actmap->endTurn();
-             actmap->nextPlayer();
+             actmap->advanceToNextPlayer();
              resourcesCompared = true;
              ASCString resourceComparisonResult;
              tmap* comparisonMap = NULL;

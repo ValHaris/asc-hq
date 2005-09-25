@@ -68,7 +68,7 @@ void    viewtextmessage ( int id, int player )
       new Message ( txt, actmap, to );
       #ifdef sgmain
       if ( player == actmap->actplayer )
-         viewunreadmessages (  );
+         viewunreadmessages ( actmap->player[ actmap->actplayer ] );
       #endif
    } else
       displaymessage( "Message %d not found", 1, id );
@@ -1367,7 +1367,7 @@ void DisplayImmediateMessage::execute( MapDisplayInterface* md )
    if ( !message.empty() ) {
       new Message ( message, gamemap, 1 << gamemap->actplayer );
       #ifdef sgmain
-      viewunreadmessages (  );
+      viewunreadmessages ( actmap->player[ actmap->actplayer ] );
       #endif
    }
 }

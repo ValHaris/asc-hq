@@ -214,7 +214,8 @@ void AI:: run ( bool benchMark )
    int duration = ticker-startTime;
 
 
-   closeReplayLogging();
+   if ( getMap()->replayinfo )
+      getMap()->replayinfo->closeLogging();
 
 //   getMap()->weather = weatherBackup;
 

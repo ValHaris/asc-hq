@@ -235,7 +235,7 @@ void Menu::setup()
    addfield ("~G~ame");
 //   addbutton ( "New ~C~ampaign", ua_newcampaign);
 //   addbutton ( "~N~ew single Level\tctrl-n", ua_startnewsinglelevel );
-   addbutton ( "New Game", ua_newmultiplayergame );
+   addbutton ( "New Game", ua_newGame );
    currentMenu->addSeparator();
    addbutton ( "~L~oad game\tctrl-l", ua_loadgame );
    addbutton ( "~S~ave game\tctrl-s", ua_savegame );
@@ -630,7 +630,7 @@ bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
 
             case SDLK_n:
-               execUserAction_ev ( ua_startnewsinglelevel );
+               execUserAction_ev ( ua_newGame );
                return true;
 
             case SDLK_F12:

@@ -630,6 +630,18 @@ void viewmessage ( const Message& message )
    vm.done();
 }
 
+
+
+void checkJournal( Player& player )
+{
+   tmap* actmap = player.getParentMap();
+   
+   if ( actmap->lastjournalchange.abstime )
+      if ( (actmap->lastjournalchange.turn() == actmap->time.turn() ) ||
+            (actmap->lastjournalchange.turn() == actmap->time.turn()-1  &&  actmap->lastjournalchange.move() > actmap->actplayer ) )
+               viewjournal();
+}
+
 void viewjournal ( void )
 {
    if ( !actmap->gameJournal.empty() ) {
@@ -651,19 +663,16 @@ void editjournal ( void )
 }
 
 
-void viewunreadmessages ()
+void viewunreadmessages ( Player& player )
 {
-   MessagePntrContainer::iterator mi = actmap->player[ actmap->actplayer ].unreadmessage.begin();
-   while ( mi != actmap->player[ actmap->actplayer ].unreadmessage.end()  ) {
+   MessagePntrContainer::iterator mi = player.unreadmessage.begin();
+   while ( mi != player.unreadmessage.end()  ) {
       viewmessage ( **mi );
-      actmap->player[ actmap->actplayer ].oldmessage.push_back ( *mi );
-      mi = actmap->player[ actmap->actplayer ].unreadmessage.erase ( mi );
+      player.oldmessage.push_back ( *mi );
+      mi = player.unreadmessage.erase ( mi );
    }
 }
 
-void chainMessageFunctions ( tmap* actmap )
-{
-   for ( int i = 0; i < actmap->getPlayerCount(); ++i )
-      actmap->getPlayer(i).sigUserInteractionBegins.connect( SigC::slot( &viewunreadmessages ));
-}
+
+
 

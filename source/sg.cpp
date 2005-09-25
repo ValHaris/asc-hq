@@ -91,7 +91,6 @@
 #include "pd.h"
 #include "strtmesg.h"
 #include "gamedlg.h"
-#include "network.h"
 #include "building.h"
 #include "sg.h"
 #include "soundList.h"
@@ -121,7 +120,7 @@
 #include "messaginghub.h"
 #include "cannedmessages.h"
 #include "memorycheck.cpp"
-
+#include "networkinterface.h"
 
 
 #include "dialogs/newgame.h"
@@ -486,7 +485,11 @@ void         loadMoreData(void)
 void hookGuiToMap( tmap* map )
 {
    if ( !map->getGuiHooked() ) {
-      chainMessageFunctions( map );
+      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &viewunreadmessages ));
+      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &researchCheck ));
+      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkJournal ));
+      map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( SigC::slot( &checkforreplay )));
+      
       map->guiHooked();
    }   
 }
@@ -1350,7 +1353,7 @@ void execuseraction2 ( tuseractions action )
          break;
       case ua_weathercast: weathercast();
          break;
-      case ua_newmultiplayergame: 
+      case ua_newGame: 
          startMultiplayerGame();
          hookGuiToMap(actmap);
          break;
@@ -1432,7 +1435,7 @@ void  mainloop2()
 void  mainloop ( void )
 {
    do {
-      viewunreadmessages();
+      viewunreadmessages( actmap->player[ actmap->actplayer ] );
       activefontsettings.background=0;
       activefontsettings.length=50;
       activefontsettings.color=14;

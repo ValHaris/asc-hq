@@ -39,7 +39,6 @@
 #include "paradialog.h"
 
 #ifdef sgmain
- #include "network.h"
  #include "gameoptions.h"
  #include "resourcenet.h"
 #endif

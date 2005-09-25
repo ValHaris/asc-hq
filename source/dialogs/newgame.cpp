@@ -26,11 +26,14 @@
 #include "alliancesetup.h"
 #include "playersetup.h"
 #include "fileselector.h"
+#include "emailsetup.h"
 #include "../loaders.h"
 #include "../gamemap.h"
 #include "../paradialog.h"
 #include "../controls.h"
 #include "../viewcalculation.h"
+#include "../networkinterface.h"
+#include "../network.h"
 
 
 class GameParameterEditorWidget;
@@ -41,7 +44,7 @@ class StartMultiplayerGame: public ConfigurableWindow {
 
       tmap* newMap;
       
-      enum Pages { ModeSelection = 1, FilenameSelection, PlayerSetup, AllianceSetup, MapParameterEditor, MultiPlayerOptions, PasswordSearch }; 
+      enum Pages { ModeSelection = 1, FilenameSelection, PlayerSetup, EmailSetup, AllianceSetup, MapParameterEditor, MultiPlayerOptions, PasswordSearch }; 
       Pages page;
      
       enum Mode { NewCampagin, ContinueCampaign, Skirmish, Hotseat, PBEM, PBP };
@@ -59,9 +62,15 @@ class StartMultiplayerGame: public ConfigurableWindow {
       
       PlayerSetupWidget* playerSetup;
       PG_Widget* playerSetupParent;
+      
+      EmailSetupWidget* emailSetup;
+      PG_Widget* emailSetupParent;
    
       bool nextPage(PG_Button* button = NULL);
       void showPage();
+      bool checkPlayerStat();
+      void setupNetwork();
+      
       
       void fileNameSelected( const ASCString& filename )
       {
@@ -124,7 +133,8 @@ const char* StartMultiplayerGame::buttonLabels[7] = {
 StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWindow( NULL, PG_Rect::null, "newmultiplayergame", false ), newMap(NULL), page(ModeSelection), mode ( 0 ), 
    mapParameterEditor(NULL), mapParameterEditorParent(NULL),
    allianceSetup(NULL), allianceSetupParent(NULL),
-   playerSetup(NULL), playerSetupParent(NULL)
+   playerSetup(NULL), playerSetupParent(NULL),
+   emailSetup(NULL), emailSetupParent(NULL)
 {
     setup();
     sigClose.connect( SigC::slot( *this, &StartMultiplayerGame::QuitModal ));
@@ -163,8 +173,16 @@ bool StartMultiplayerGame::Apply()
             if ( !filename.empty() )
                if ( exist( filename )) {
                   newMap = mapLoadingExceptionChecker( filename, MapLoadingFunction( tmaploaders::loadmap ));
-                  if ( newMap ) 
-                     return true;
+                  if ( newMap ) {
+                     setupNetwork();
+                     if ( checkPlayerStat() )
+                        return true;
+                     else {
+                        delete newMap;
+                        newMap = NULL;
+                        return false;
+                     }      
+                  }
                 }
                
          }
@@ -175,6 +193,9 @@ bool StartMultiplayerGame::Apply()
                return true;
             }   
             break;       
+      case EmailSetup:
+            emailSetup->Apply();      
+            return true;
               
       case AllianceSetup: 
          allianceSetup->Apply();
@@ -221,8 +242,16 @@ bool StartMultiplayerGame::nextPage(PG_Button* button)
             break;
       case PlayerSetup: 
             if ( Apply() )
-               page = AllianceSetup;
+               if ( mode == PBEM || mode == PBP )
+                  page = EmailSetup;
+               else
+                  page = AllianceSetup;
+                  
             break;       
+      case EmailSetup: 
+            if ( Apply() )
+               page = AllianceSetup;
+            break;
               
       case AllianceSetup: 
             if ( Apply() )
@@ -256,7 +285,12 @@ bool StartMultiplayerGame::nextPage(PG_Button* button)
          delete mapParameterEditor;
          mapParameterEditor = new GameParameterEditorWidget( newMap, mapParameterEditorParent, PG_Rect( 0, 0, mapParameterEditorParent->Width(), mapParameterEditorParent->Height() ));
       }   
-         
+
+      if ( page == EmailSetup && emailSetupParent ) {
+         delete emailSetup;
+         emailSetup = new EmailSetupWidget( newMap, -1, emailSetupParent, PG_Rect( 0, 0, emailSetupParent->Width(), emailSetupParent->Height() ));
+      }   
+               
       showPage();
       return true;
    } else
@@ -312,19 +346,14 @@ void StartMultiplayerGame::userHandler( const ASCString& label, PropertyReadingC
       
    if ( label == "GameParameters" )
       mapParameterEditorParent = parent; 
+      
+   if ( label == "EmailSetup" )
+      emailSetupParent = parent;
   
 }
 
-
-bool StartMultiplayerGame::start()
+bool StartMultiplayerGame::checkPlayerStat()
 {
-   if ( !newMap ) 
-      newMap = mapLoadingExceptionChecker( filename, MapLoadingFunction( tmaploaders::loadmap ));
-     
-   if ( !newMap )
-      return false;
-     
-     
    if ( mode == Skirmish ) {
       bool humanFound = false;
       for ( int i = 0; i < newMap->getPlayerCount(); ++i )
@@ -334,6 +363,19 @@ bool StartMultiplayerGame::start()
                   newMap->player[i].stat = Player::computer;
                else
                   humanFound = true;   
+                  
+      if ( !humanFound )            
+         for ( int i = 0; i < newMap->getPlayerCount(); ++i )
+            if ( newMap->player[i].exist() )
+               if ( newMap->player[i].stat == Player::computer ) {
+                  newMap->player[i].stat = Player::human;
+                  humanFound = true;   
+               }   
+               
+      if ( !humanFound ) {
+         MessagingHub::Instance().error("Map has no players!");
+         return false;
+      }   
    }
 
    if ( mode == PBEM || mode == Hotseat ) {
@@ -357,7 +399,42 @@ bool StartMultiplayerGame::start()
          return false;
       }   
    }
+   return true;
+}
+
+void StartMultiplayerGame::setupNetwork()
+{
+   if ( mode == PBP || mode == PBEM ) {
+      if ( newMap && !newMap->network ) {
+         FileTransfer* ft = new FileTransfer();
+         newMap->network = ft;
+         
+         ASCString filename = newMap->preferredFileNames.mapname[0];
+         if( filename.empty() )
+            filename = "game";   
+         
+         if ( filename.find( '.') != ASCString::npos )
+            filename.erase( filename.find( '.'));
+            
+         filename += "-$p-$t";
+         ft->setup( filename );
+      }
+   }
+}
+
+
+bool StartMultiplayerGame::start()
+{
+   if ( !newMap ) 
+      newMap = mapLoadingExceptionChecker( filename, MapLoadingFunction( tmaploaders::loadmap ));
+     
+   if ( !newMap )
+      return false;
    
+   if ( !checkPlayerStat() )
+      return false;
+   
+   setupNetwork();
   
    delete actmap;
    actmap = newMap;

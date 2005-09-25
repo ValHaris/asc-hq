@@ -226,5 +226,10 @@ class ReplayMapDisplay : public MapDisplayInterface {
 
     };
 
+    
+//! checks if a new technology must be chosen by the current player. Runs the appropriate dialogs    
+extern void researchCheck( Player& player );
+    
+    
 
 #endif

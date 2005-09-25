@@ -40,7 +40,6 @@
 #include "loaders.h"
 #include "misc.h"
 #include "controls.h"
-#include "network.h"
 #include "events.h"
 #include "stack.h"
 #include "dlg_box.h"
@@ -995,17 +994,9 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
             displaymessage("next player is:\n%s",3,actmap->player[actmap->actplayer].getName().c_str() );
       }
 
-      checkforreplay();
-
-      if ( actmap->lastjournalchange.abstime )
-         if ( (actmap->lastjournalchange.turn() == actmap->time.turn() ) ||
-              (actmap->lastjournalchange.turn() == actmap->time.turn()-1  &&  actmap->lastjournalchange.move() > actmap->actplayer ) )
-                 viewjournal();
-
       updateFieldInfo();
 
       moveparams.movestatus = 0;
-
 
    }
    computeview( actmap );
@@ -1013,38 +1004,6 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
    actmap->playerView = actmap->actplayer;
 
    initReplayLogging();
-
-   if ( actmap->player[actmap->actplayer].stat == Player::human ) {
-      Research& research = actmap->player[actmap->actplayer].research;
-      if (research.activetechnology == NULL )
-         if ( research.progress ) {
-            choosetechnology();
-         }
-      if (research.activetechnology  )
-         if( find ( research.developedTechnologies.begin(), research.developedTechnologies.end(), research.activetechnology->id ) != research.developedTechnologies.end()) {
-            research.progress = 0;
-            choosetechnology();
-         }
-         
-      while ((research.activetechnology != NULL ) &&
-             (research.progress >= research.activetechnology->researchpoints)) {
-              int mx = research.progress - research.activetechnology->researchpoints;
-
-              showtechnology( research.activetechnology );
-              if ( research.activetechnology )
-                 logtoreplayinfo ( rpl_techResearched, research.activetechnology->id, actmap->actplayer );
-
-              NewVehicleTypeDetection pfzt;
-
-              research.addtechnology();
-
-              pfzt.evalbuffer ();
-
-              choosetechnology();
-
-              research.progress = mx;
-      }
-   }
 
    actmap->xpos = actmap->cursorpos.position[ actmap->actplayer ].sx;
    actmap->ypos = actmap->cursorpos.position[ actmap->actplayer ].sy;
@@ -1054,10 +1013,42 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
    updateFieldInfo();
    transfer_all_outstanding_tribute();
    
-   actmap->player[ actmap->actplayer].userInteractionBegins();
+   actmap->sigPlayerUserInteractionBegins( actmap->player[ actmap->actplayer] );
 }
 
 
+
+void researchCheck( Player& player )
+{
+   Research& research = player.research;
+   if (research.activetechnology == NULL && research.progress ) 
+      choosetechnology();
+      
+   if ( research.activetechnology )
+      if( find ( research.developedTechnologies.begin(), research.developedTechnologies.end(), research.activetechnology->id ) != research.developedTechnologies.end()) {
+         research.progress = 0;
+         choosetechnology();
+      }
+      
+   while ( research.activetechnology  &&  (research.progress >= research.activetechnology->researchpoints)) {
+      int mx = research.progress - research.activetechnology->researchpoints;
+
+      showtechnology( research.activetechnology );
+      
+      if ( research.activetechnology )
+         logtoreplayinfo ( rpl_techResearched, research.activetechnology->id, player.getPosition() );
+
+      NewVehicleTypeDetection pfzt;
+
+      research.addtechnology();
+
+      pfzt.evalbuffer ();
+
+      choosetechnology();
+
+      research.progress = mx;
+   }
+}
 
 
 
@@ -1107,60 +1098,13 @@ void sendnetworkgametonextplayer ( int oldplayer, int newplayer )
 
 
 
-void endTurn ( void )
-{
-   mousevisible(false);
-   if ( actmap->actplayer >= 0 ) 
-      actmap->endTurn();
-
-   closeReplayLogging();
-
-
-     /* *********************  messages ********************  */
-
-
-  if ( !actmap->newJournal.empty() ) {
-     ASCString add = actmap->gameJournal;
-
-     char tempstring[100];
-     char tempstring2[100];
-     sprintf( tempstring, "#color0# %s ; turn %d #color0##crt##crt#", actmap->player[actmap->actplayer].getName().c_str(), actmap->time.turn() );
-     sprintf( tempstring2, "#color%d#", getplayercolor ( actmap->actplayer ));
-
-     int fnd;
-     do {
-        fnd = 0;
-        if ( !add.empty() )
-           if ( add.find ( '\n', add.length()-1 ) != add.npos ) {
-              add.erase ( add.length()-1 );
-              fnd++;
-           } else
-             if ( add.length() > 4 )
-                if ( add.find ( "#crt#", add.length()-5 ) != add.npos ) {
-                  add.erase ( add.length()-5 );
-                  fnd++;
-                }
-
-     } while ( fnd ); /* enddo */
-
-     add += tempstring2;
-     add += actmap->newJournal;
-     add += tempstring;
-
-     actmap->gameJournal = add;
-     actmap->newJournal.erase();
-
-     actmap->lastjournalchange.set ( actmap->time.turn(), actmap->actplayer );
-  }
-}
-
 
 void nextPlayer( void )
 {
    int oldplayer = actmap->actplayer;
 
 
-   if ( !actmap->nextPlayer() ) {
+   if ( !actmap->advanceToNextPlayer() ) {
       displaymessage("There are no players left any more !",1);
       delete actmap;
       actmap = NULL;
@@ -1226,7 +1170,10 @@ void next_turn ( int playerView )
 
 
    do {
-     endTurn();
+   
+      if ( actmap->actplayer >= 0 ) 
+         actmap->endTurn();
+      
      nextPlayer();
 
      if ( actmap->player[actmap->actplayer].stat == Player::computer )
@@ -1252,7 +1199,7 @@ void initNetworkGame ( void )
         computeview( actmap );
         runai(-1);
      }
-     endTurn();
+     actmap->endTurn();
      nextPlayer();
    }
 

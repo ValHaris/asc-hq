@@ -32,12 +32,12 @@ class FileTransfer : public GameTransferMechanism {
       void readChildData ( tnstream& stream );
       void writeChildData ( tnstream& stream ) const;
       bool enterfilename();
-      ASCString constructFileName( tmap* actmap ) const;
+      ASCString constructFileName( tmap* actmap, int lastPlayer, int lastturn ) const;
    public:
       void setup();
       void setup( const ASCString& filename );
       
-      void send( const tmap* map );
+      void send( const tmap* map, int lastPlayer, int lastturn  );
       tmap* receive();
       ASCString getMechanismID() const { return mechanismID(); };
       static ASCString mechanismID() { return "FileTransfer"; };
