@@ -153,10 +153,6 @@ void AI:: run ( bool benchMark )
    int startTime = ticker;
    AiResult res;
 
-   // cursor.hide();
-
-   initReplayLogging();
-
    unitCounter = 0;
    _isRunning = true;
    _vision = visible_ago;

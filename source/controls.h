@@ -24,7 +24,7 @@
     Boston, MA  02111-1307  USA
 */
 
-#if defined(karteneditor) && !defined(pbpeditor)
+#if defined(karteneditor) 
  #error the mapeditor should not need to use controls.h !
 #endif
 
@@ -134,21 +134,6 @@ extern void dissectvehicle ( Vehicle* eht );
 
 
 
-struct treactionfire_replayinfo {
-         int x1 ;
-         int y1 ;
-         int x2 ;
-         int y2 ;
-         int ad1 ;
-         int ad2 ;
-         int dd1 ;
-         int dd2 ;
-         int wpnum;
-};
-typedef treactionfire_replayinfo* preactionfire_replayinfo;
-
-
-
 
 /** creates a new vehicle, setting up its class depending on the research. If this vehicletype is
      not available (because it hasn't been researched, for example), vehicle will be set to NULL,
@@ -164,40 +149,6 @@ extern int searchexternaltransferfields ( Building* bld );
 
 extern Resources getDestructionCost( Building* bld, Vehicle* veh );
 
-
-class treactionfire {
-          public:
-             virtual int  checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, MapDisplayInterface* md ) = 0;
-             virtual void init ( Vehicle* eht, const AStar3D::Path&  fieldlist ) = 0;
-             virtual ~treactionfire() {};
-        };
-
-class treactionfirereplay : public treactionfire {
-          protected:
-             int num;
-             dynamic_array<preactionfire_replayinfo> replay;
-             Vehicle* unit;
-          public:
-             treactionfirereplay ( void );
-             ~treactionfirereplay ( );
-             virtual int checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, MapDisplayInterface* md );
-             virtual void init ( Vehicle* eht, const AStar3D::Path& fieldlist );
-   };
-
-class tsearchreactionfireingunits : public treactionfire {
-           protected:
-
-
-                static int maxshootdist[8];     // f?r jede H”henstufe eine
-                void addunit ( Vehicle* vehicle );
-                void removeunit ( Vehicle* vehicle );
-           public:
-
-                tsearchreactionfireingunits( void );
-                void init ( Vehicle* eht, const AStar3D::Path& fieldlist );
-                int  checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, MapDisplayInterface* md );
-                ~tsearchreactionfireingunits();
-      };
 
 extern void initNetworkGame( void );
 

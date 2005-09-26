@@ -19,6 +19,7 @@
  #define replayH
 
 #include "controls.h"
+#include "reactionfire.h"
 
 /*! \file replay.h
     \brief Interface for recording and playing replays
@@ -123,7 +124,7 @@ extern int startreplaylate;
 extern void checkforreplay ( void );
 
 //! Initialized the replay logging at the beginning of a players or the ai's turn.
-extern void initReplayLogging();
+extern void initReplayLogging( Player& player );
 
 //! runs the replay for the given player
 extern void runSpecificReplay( int player, int viewingplayer );

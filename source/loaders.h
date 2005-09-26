@@ -28,6 +28,8 @@
 #ifndef loadersH
 #define loadersH
 
+#include <sigc++/sigc++.h>
+
 #include "libs/loki/Functor.h"
 
 #include "ascstring.h"
@@ -55,7 +57,7 @@ extern void  savemap( const char *       name );
 extern void  savegame( const ASCString& name );
 
 //! loads the game from the file name to  #actmap
-extern void  loadgame( const char *       name );
+extern void  loadgame( const ASCString& name );
 
 
 typedef Loki::Functor<tmap*, TYPELIST_1(const ASCString&) > MapLoadingFunction;
@@ -89,7 +91,7 @@ class  tspfldloaders {
            pnstream        stream;
            tmap*     spfld;
 
-//           void            writeevent  ( pevent event );
+           static SigC::Signal1<void,tmap*> mapLoaded; 
 
            void            readoldevents     ( void );
 
@@ -165,13 +167,13 @@ class treplayloaders : public tspfldloaders {
 */
 
 //! checks, whether filename is a valid map file
-extern bool validatemapfile ( const char* filename );
+extern bool validatemapfile ( const ASCString& filename );
 
 //! checks, whether filename is a valid savegame
-extern bool validatesavfile ( const char* filename );
+extern bool validatesavfile ( const ASCString& filename );
 
 //! checks, whether filename is a valid email game
-extern bool validateemlfile ( const char* filename );
+extern bool validateemlfile ( const ASCString& filename );
 
 
 #endif

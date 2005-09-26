@@ -897,6 +897,8 @@ void   tspfldloaders::chainitems ( pmap actmap )
 /*     Set Player Existencies                                */
 /**************************************************************/
 
+SigC::Signal1<void,tmap*> tspfldloaders::mapLoaded; 
+
 
 tspfldloaders::tspfldloaders ( void )
 {
@@ -1065,6 +1067,8 @@ tmap* tmaploaders::_loadmap( const ASCString& name )
    tmap* m  = spfld;
    spfld = NULL;
    
+   mapLoaded( m );
+   
    return m;
 } 
 
@@ -1152,6 +1156,8 @@ int   tsavegameloaders::loadgame( const ASCString& filename )
          actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::writing );
       }
    }
+   
+   mapLoaded( actmap );
 
    return 0;
 }
@@ -1368,6 +1374,9 @@ tmap*  tnetworkloaders::loadnwgame( pnstream strm )
    tmap* spfldcopy = spfld;
    spfld = NULL;
 
+   mapLoaded( spfldcopy );
+   
+   
    return spfldcopy;
 }
 
@@ -1421,7 +1430,7 @@ void  savegame( const ASCString& name )
 }
 
 
-void  loadgame( const char *       name )
+void  loadgame( const ASCString& name )
 {
    try {
       tsavegameloaders gl;
@@ -1566,7 +1575,7 @@ tmap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadingFunction 
 
 
 
-bool validatemapfile ( const char* filename )
+bool validatemapfile ( const ASCString& filename )
 {
 
    char* description = NULL;
@@ -1592,17 +1601,17 @@ bool validatemapfile ( const char* filename )
    } /* endtry */
 
    catch ( ASCexception ) {
-       return 0;
+       return false;
    } /* endcatch */
 
-   return 1;
+   return true;
 } 
 
 
 
 
 
-bool validateemlfile ( const char* filename )
+bool validateemlfile ( const ASCString& filename )
 {
    char* description = NULL;
 
@@ -1627,15 +1636,15 @@ bool validateemlfile ( const char* filename )
    } /* endtry */
 
    catch ( ASCexception ) {
-       return 0;
+       return false;
    } /* endcatch */
 
 
-   return 1;
+   return true;
 } 
 
 
-bool validatesavfile ( const char* filename )
+bool validatesavfile ( const ASCString& filename )
 {
 
    char* description = NULL;
@@ -1660,10 +1669,10 @@ bool validatesavfile ( const char* filename )
    } /* endtry */
 
    catch ( ASCexception ) {
-       return 0;
+       return false;
    } /* endcatch */
 
-   return 1;
+   return true;
 } 
 
 

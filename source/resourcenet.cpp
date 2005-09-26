@@ -506,10 +506,11 @@ int PutTribute :: puttribute ( Building* start, int resource, int _queryonly, in
 }
 
 
-void transfer_all_outstanding_tribute ( void )
+void transfer_all_outstanding_tribute ( Player& player )
 {
-   int targplayer = actmap->actplayer;
-     // for ( int player = 0; player < 8; player++ )
+   int targplayer = player.getPosition();
+   tmap* actmap = player.getParentMap();
+   
    if ( actmap->player[targplayer].exist() ) {
       ASCString text;
 

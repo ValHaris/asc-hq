@@ -166,7 +166,7 @@ class GetResourceUsage : public ResourceChangeNet {
                   GetResourceUsage ( pmap gamemap ) : ResourceChangeNet ( gamemap ) {};
    };
 
-extern void transfer_all_outstanding_tribute( void );
+extern void transfer_all_outstanding_tribute( Player& player );
 
 extern SigC::Signal0<void> tributeTransferred;
 

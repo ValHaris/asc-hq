@@ -497,7 +497,6 @@ struct ticons {
  //  void*        windarrow;
    void*        stellplatz;
    void*        guiknopf;   // reingedr?ckter knopf
-   void*        computer;
    void*        windbackground;
    void*        smallmapbackground;
    void*        weaponinfo[5];
@@ -613,8 +612,6 @@ struct ticons {
    void*        pfeil2[8];     // beispielsweise fuer das Mouse-Scrolling 
    void*        mousepointer;
    void*        fieldshape;
-   void*        hex2octmask;
-   void*        mapbackground;
 };
 
 

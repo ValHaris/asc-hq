@@ -28,7 +28,7 @@
 
 #include "dialog.h"
 
-enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_dispvehicleimprovement, ua_mainmenu, ua_mntnc_morefog,
+enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_mainmenu, ua_mntnc_morefog,
                     ua_mntnc_lessfog,   ua_mntnc_morewind,   ua_mntnc_lesswind, ua_mntnc_rotatewind, ua_changeresourceview,
                     ua_benchgamewv,     ua_benchgamewov,     ua_viewterraininfo, ua_unitweightinfo,  ua_writemaptopcx,  ua_writescreentopcx,
                     ua_startnewsinglelevel, ua_changepassword, ua_gamepreferences, ua_bi3preferences,

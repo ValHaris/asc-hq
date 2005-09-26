@@ -2,7 +2,7 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.67.2.15 2005-09-24 17:15:08 mbickel Exp $
+//     $Id: edmain.cpp,v 1.67.2.16 2005-09-26 19:55:31 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -67,11 +67,6 @@ void         loadcursor(void)
   {
       tnfilestream stream ("hexfeld.raw", tnstream::reading);
       stream.readrlepict ( &icons.fieldshape, false, &w );
-  }
-
-  {
-      tnfilestream stream ("mapbkgrb.raw", tnstream::reading);
-      stream.readrlepict ( &icons.mapbackground, false, &w );
   }
 
   {

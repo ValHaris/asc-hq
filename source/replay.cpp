@@ -106,26 +106,28 @@ void checkforreplay ( void )
 }
 
 
-void initReplayLogging()
+void initReplayLogging( Player& player )
 {
+   tmap* actmap = player.getParentMap();
+   
    if ( startreplaylate ) {
       actmap->replayinfo = new tmap::ReplayInfo;
       startreplaylate = 0;
    }
 
-   if ( actmap->replayinfo && actmap->player[ actmap->actplayer ].stat != Player::off ) {
+   if ( actmap->replayinfo && player.stat != Player::off ) {
       if ( actmap->replayinfo->actmemstream )
          displaymessage2( "actmemstream already open at begin of turn ",2 );
 
-      if ( actmap->replayinfo->guidata[actmap->actplayer] ) {
-         delete actmap->replayinfo->guidata[actmap->actplayer];
-         actmap->replayinfo->guidata[actmap->actplayer] = NULL;
+      if ( actmap->replayinfo->guidata[ player.getPosition() ] ) {
+         delete actmap->replayinfo->guidata[ player.getPosition() ];
+         actmap->replayinfo->guidata[ player.getPosition() ] = NULL;
       }
 
-      savereplay ( actmap->actplayer );
+      savereplay ( player.getPosition() );
 
-      actmap->replayinfo->guidata[actmap->actplayer] = new tmemorystreambuf;
-      actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::writing );
+      actmap->replayinfo->guidata[ player.getPosition() ] = new tmemorystreambuf;
+      actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[ player.getPosition() ], tnstream::writing );
    }
 }
 
@@ -1871,8 +1873,6 @@ int  trunreplay :: run ( int player, int viewingplayer )
 
    orgmap = actmap;
    actmap = loadreplay ( orgmap->replayinfo->map[player]  );
-
-   transfer_all_outstanding_tribute();   
 
    actmap->playerView = viewingplayer;
 
