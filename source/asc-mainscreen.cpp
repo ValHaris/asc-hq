@@ -381,6 +381,7 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
    dataLoaderTicker();
    
    MessagingHub::Instance().statusInformation.connect( SigC::slot( *this, &MainScreenWidget::displayMessage ));
+   MessagingHub::Instance().messageWindowFactory.connect( SigC::slot( *this, &MainScreenWidget::createStatusWindow ));
 }
 
 
@@ -505,6 +506,11 @@ void MainScreenWidget::eventBlit (SDL_Surface *surface, const PG_Rect &src, cons
    dstrect.x = blitRects[3].x;
    dstrect.y = blitRects[3].y;
    s.Blit( backgroundImage, blitRects[3], dstrect );
+}
+
+StatusMessageWindow MainScreenWidget::createStatusWindow( const ASCString& msg )
+{
+   return StatusMessageWindow( new PG_StatusWindowData( msg ));
 }
 
 

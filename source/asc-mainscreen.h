@@ -27,6 +27,7 @@
  #define ascmainscreenH 
 
 #include "paradialog.h"
+#include "messaginghub.h"
 
 class Menu;
 class NewGuiHost;
@@ -38,6 +39,10 @@ class MainScreenWidget : public PG_Widget {
     SDL_Rect blitRects[4];
     PG_Label* messageLine;
     int lastMessageTime;
+
+    StatusMessageWindow createStatusWindow( const ASCString& msg );
+    
+        
 public:
     MainScreenWidget( PG_Application& application );
     enum Panels { ButtonPanel, WindInfo, UnitInfo, OverviewMap };

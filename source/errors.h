@@ -48,8 +48,8 @@
                  InvalidID ( string msg, int id ) : ASCmsgException ( "Could not find a " + msg )
                  {
                     message += " with an ID of ";
-                    message += strrr ( id );
-                    message += "\nThis is usually caused when the file you are trying to load uses objects\n"
+                    message += ASCString::toString( id );
+                    message += "\nThis is usually caused when the file you are trying to load uses objects "
                                "from optional data packages that you don't have installed." ;
 
                  };

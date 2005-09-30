@@ -487,9 +487,8 @@ void loadGame()
    ASCString s1 = selectFile( savegameextension, true );
 
    if ( !s1.empty() ) {
-      displaymessage("loading %s ",0, s1.c_str());
+      StatusMessageWindow smw = MessagingHub::Instance().infoMessageWindow( "loading " + s1 );
       loadgame( s1 );
-      removemessage();
       if ( !actmap || actmap->xsize == 0 || actmap->ysize == 0 )
          throw  NoMapLoaded();
 
@@ -518,11 +517,8 @@ void saveGame( bool as )
    if ( !s1.empty() ) {
       actmap->preferredFileNames.savegame[actmap->actplayer] = s1;
 
-      displaymessage("saving %s", 0, s1.c_str());
+      StatusMessageWindow smw = MessagingHub::Instance().infoMessageWindow( "saving " + s1 );
       savegame( s1 );
-
-      removemessage();
-      displaymap();
    }
 }
 

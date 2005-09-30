@@ -60,6 +60,7 @@
 #include "ascstring.h"
 #include "textfile_evaluation.h"
 #include "graphics/drawing.h"
+#include "messaginghub.h"
 
 class AutoProgressBar;
 
@@ -540,7 +541,13 @@ class BoolProperty : public PropertyEditorField, public SigC::Object  {
       };            
 };
 
+class MessageDialog;
 
+class PG_StatusWindowData : public StatusMessageWindow::UserData {
+      MessageDialog* md;
+   public:
+      PG_StatusWindowData( const ASCString& msg );
+      ~PG_StatusWindowData() ;
+};
 
- 
 #endif

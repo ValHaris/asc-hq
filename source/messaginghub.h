@@ -28,6 +28,31 @@
 
  #include "ascstring.h"
 
+  class StatusMessageWindow {
+    public:
+       class UserData {
+             friend class StatusMessageWindow;
+             int counter;  
+          public:
+             UserData() : counter(1) {};
+             virtual ~UserData() {};
+       
+       };
+    private:   
+       UserData* userData;
+    protected:
+       void copy( const StatusMessageWindow& smw );
+       void unlink();
+    public:
+       StatusMessageWindow();
+       StatusMessageWindow( UserData* ud ) : userData(ud) {};
+       StatusMessageWindow( const StatusMessageWindow& smw );
+       StatusMessageWindow& operator=( const StatusMessageWindow& smw );    
+       void close();
+       virtual ~StatusMessageWindow();
+ };
+
+
  class MessagingHubBase {
     protected:
        int verbosity;
@@ -36,17 +61,41 @@
        MessagingHubBase() : verbosity(0) {};
        void setVerbosity( int v ) { verbosity = v; };
        int  getVerbosity() { return verbosity; };
+       
+       enum MessageType { FatalError, Error, Warning, InfoMessage, StatusInfo, LogMessage };
+       
+       //! displays an error message and aborts the game
        SigC::Signal1<void, const ASCString&> fatalError;
+       
+       //! displays an error message and continues game
        SigC::Signal1<void, const ASCString&> error;
+       
+       //! displays a warning
        SigC::Signal1<void, const ASCString&> warning;
+       
+       //! displays an informational message 
        SigC::Signal1<void, const ASCString&> infoMessage;
+       
+       //! displays a message in the message line
        SigC::Signal1<void, const ASCString&> statusInformation;
+       
+       //! prints a message to the logging file
        SigC::Signal2<void, const ASCString&,int> logMessage;
+       
+       //! displays any kind of message, as specified by parameter
+       void message( MessageType type, const ASCString& msg, ... );
+       
+       StatusMessageWindow infoMessageWindow( const ASCString& msg );
+        
+       //! prints a message to the logging file
+       SigC::Signal1<StatusMessageWindow, const ASCString&> messageWindowFactory;
+              
    };
        
  typedef Loki::SingletonHolder<MessagingHubBase > MessagingHub;
 
 
+ 
  extern void fatalError ( const char* formatstring, ... );
  extern void fatalError ( const ASCString& string );
  extern void errorMessage ( const ASCString& string );
