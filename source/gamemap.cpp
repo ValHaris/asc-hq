@@ -234,7 +234,7 @@ tmap :: tmap ( void )
 
    messageid = 0;
 
-   continueplaying = 0;
+   continueplaying = false;
    replayinfo = NULL;
    playerView = -1;
    lastjournalchange.abstime = 0;
@@ -343,9 +343,9 @@ void tmap :: read ( tnstream& stream )
       else {
          for ( int j = 0; j< 8; ++j ) {
             if ( alliances[i][j] == 0 ) 
-                player[i].diplomacy.setState( j, WAR ); 
-            else
                 player[i].diplomacy.setState( j, PEACE ); 
+            else
+                player[i].diplomacy.setState( j, WAR ); 
          }
       }
       
@@ -1197,8 +1197,36 @@ bool tmap :: compareResources( tmap* replaymap, int player, ASCString* log )
 }
 
 
+
+
+
+
+
+void tmap::beginTurn()
+{
+   if ( !player[actplayer].exist() )
+      if ( replayinfo )
+         if ( replayinfo->guidata[actplayer] ) {
+            delete replayinfo->guidata[actplayer];
+            replayinfo->guidata[actplayer] = NULL;
+         }
+            
+   if ( player[actplayer].exist() && player[actplayer].stat != Player::off ) {
+      sigPlayerTurnBegins( player[actplayer] );
+      
+      if ( player[actplayer].stat == Player::human || player[actplayer].stat == Player::supervisor )
+         sigPlayerUserInteractionEnds( player[actplayer] );
+
+   }
+}
+
+
+
 void tmap::endTurn()
 {
+   if ( player[actplayer].stat == Player::human || player[actplayer].stat == Player::supervisor )
+      sigPlayerUserInteractionEnds( player[actplayer] );
+      
    player[actplayer].ASCversion = getNumericVersion();
    Player::PlayTime pt;
    pt.turn = time.turn();
@@ -1368,33 +1396,6 @@ void tmap::objectGrowth()
       i->first->addobject ( getobjecttype_byid( i->second ));
 }
 
-
-bool tmap::advanceToNextPlayer()
-{
-   int runde = 0;
-   do {
-      actplayer++;
-      time.set ( time.turn(), 0 );
-      if (actplayer > 7) {
-         endRound();
-         runde++;
-         newRound();
-      }
-  
-      if ( !player[actplayer].exist() )
-         if ( replayinfo )
-            if ( replayinfo->guidata[actplayer] ) {
-               delete replayinfo->guidata[actplayer];
-               replayinfo->guidata[actplayer] = NULL;
-            }
-
-   }  while ( (!player[actplayer].exist() || player[actplayer].stat == Player::off)  && (runde <= 2)  );
-   
-   if ( player[actplayer].exist() && player[actplayer].stat != Player::off ) {
-      sigPlayerTurnBegins( player[actplayer] );
-   }
-   return runde <= 2;
-}
 
 tmap :: ~tmap ()
 {

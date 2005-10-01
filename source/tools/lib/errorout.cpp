@@ -19,6 +19,7 @@
 #include "../../global.h"
 #include "ascstring.h"
 
+#if 0
 void fatalError ( const ASCString& text )
 {
    fprintf ( stderr, text.c_str() );
@@ -43,7 +44,6 @@ void fatalError ( const char* formatstring, ... )
 }
 
 
-
 void warning ( const ASCString& output )
 {
    cerr << "ASC: " << output.c_str() << endl;
@@ -54,3 +54,5 @@ void longWarning ( const ASCString& output )
 {
    cerr << "ASC: " << output.c_str() << endl;
 }
+#endif
+

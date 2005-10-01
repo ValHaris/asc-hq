@@ -18,7 +18,8 @@
 
 #include "global.h"
 
- #include <SDL_image.h>
+#include <SDL_image.h>
+
 #include <paragui.h>
 #include <pgapplication.h>
 #include <pgmessagebox.h>
@@ -169,6 +170,8 @@ ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
 
    pgApp = this;
    SetEventSupplier ( &eventSupplier );
+   
+   
 }
 
 
@@ -301,8 +304,12 @@ bool ASC_PG_App:: InitScreen ( int w, int h, int depth, Uint32 flags )
    if ( result ) {
       initASCGraphicSubsystem ( GetScreen(), NULL );
       Surface::SetScreen( GetScreen() );
+      
+      MessagingHub::Instance().error.connect( SigC::bind( SigC::slot( *this, &ASC_PG_App:: messageDialog ), MessagingHubBase::Error ));
+      MessagingHub::Instance().fatalError.connect( SigC::bind( SigC::slot( *this, &ASC_PG_App:: messageDialog ), MessagingHubBase::FatalError ));
+      MessagingHub::Instance().warning.connect(SigC::bind( SigC::slot( *this, &ASC_PG_App:: messageDialog ), MessagingHubBase::Warning ));
+      MessagingHub::Instance().infoMessage.connect( SigC::bind( SigC::slot( *this, &ASC_PG_App:: messageDialog ), MessagingHubBase::InfoMessage ));
    }
-
 
    return result;
 }
@@ -1410,7 +1417,7 @@ private:
 
 
 MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const PG_Rect& btn1, const std::string& btn1text, const PG_Rect& btn2, const std::string& btn2text, PG_Label::TextAlign textalign, const std::string& style) :
-ASC_PG_Dialog(parent, r, windowtitle, MODAL) {
+ASC_PG_Dialog(parent, r, windowtitle, MODAL, style) {
 
 	my_btnok = new PG_Button(this, btn1, btn1text);
 	my_btnok->SetID(1);
@@ -1424,7 +1431,7 @@ ASC_PG_Dialog(parent, r, windowtitle, MODAL) {
 }
 
 MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const PG_Rect& btn1, const std::string& btn1text, PG_Label::TextAlign textalign, const std::string& style) :
-   ASC_PG_Dialog(parent, r, windowtitle, MODAL), my_btncancel(NULL)  
+   ASC_PG_Dialog(parent, r, windowtitle, MODAL, style ), my_btncancel(NULL)  
 {
 
 	my_btnok = new PG_Button(this, btn1, btn1text);
@@ -1435,7 +1442,7 @@ MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::str
 }
 
 MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, PG_Label::TextAlign textalign, const std::string& style) :
-   ASC_PG_Dialog(parent, r, windowtitle, MODAL), my_btnok(NULL), my_btncancel(NULL) 
+   ASC_PG_Dialog(parent, r, windowtitle, MODAL, style ), my_btnok(NULL), my_btncancel(NULL) 
 {
 
 	Init(windowtext, textalign, style);
@@ -1511,7 +1518,7 @@ PG_Rect calcMessageBoxSize( const ASCString& message )
 void errorMessageDialog( const ASCString& message )
 {
    PG_Rect size = calcMessageBoxSize(message);
-   MessageDialog msg( NULL, size, "Error", message,PG_Rect(200,100,100,40), "OK" );
+   MessageDialog msg( NULL, size, "Error", message,PG_Rect(200,100,100,40), "OK", PG_Label::CENTER, "ErrorMessage" );
    msg.Show();
    msg.RunModal();
 }
@@ -1519,11 +1526,49 @@ void errorMessageDialog( const ASCString& message )
 void warningMessageDialog( const ASCString& message )
 {
    PG_Rect size = calcMessageBoxSize(message);
-   MessageDialog msg( NULL, size, "Warning", message,PG_Rect(size.w/2 - 50,size.h - 40, 100, 30), "OK" );
+   MessageDialog msg( NULL, size, "Warning", message,PG_Rect(size.w/2 - 50,size.h - 40, 100, 30), "OK", PG_Label::CENTER, "WarningMessage" );
    msg.Show();
    msg.RunModal();
 }
 
+void infoMessageDialog( const ASCString& message )
+{
+   PG_Rect size = calcMessageBoxSize(message);
+   MessageDialog msg( NULL, size, "Information", message,PG_Rect(size.w/2 - 50,size.h - 40, 100, 30), "OK" );
+   msg.Show();
+   msg.RunModal();
+}
+
+
+void ASC_PG_App:: messageDialog( const ASCString& message, MessagingHubBase::MessageType mt )
+{
+   ASCString title;
+   ASCString style;
+   switch ( mt ) {
+      case MessagingHubBase::Error: 
+         title = "Error"; 
+         style = "ErrorMessage";
+         break;
+      case MessagingHubBase::Warning: 
+         title = "Warning"; 
+         style = "WarningMessage";
+         break;
+      case MessagingHubBase::InfoMessage: 
+         title = "Information"; 
+         style = "Window";
+         break;
+      case MessagingHubBase::FatalError: 
+         title = "Fatal Error"; 
+         style = "FatalErrorMessage";
+         break;
+      default: break;
+   };
+      
+   PG_Rect size = calcMessageBoxSize(message);
+   MessageDialog msg( NULL, size, title, message,PG_Rect(200,100,100,40), "OK", PG_Label::CENTER, style );
+   msg.Show();
+   msg.RunModal();
+}
 
 
 PG_StatusWindowData::PG_StatusWindowData( const ASCString& msg ) 

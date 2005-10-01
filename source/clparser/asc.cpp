@@ -51,8 +51,8 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
   _executable += argv[0];
 
   /* default values */
-  _x = 800;
-  _y = 600;
+  _x = 1024;
+  _y = 768;
   _r = 0;
   _w = false;
   _f = false;
@@ -66,7 +66,7 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
         {
         case 'x': 
           _x = atoi(optarg);
-          if (_x < 640)
+          if (_x < 800)
             {
               string s;
               s += "parameter range error: x must be >= 640";
@@ -76,7 +76,7 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
 
         case 'y': 
           _y = atoi(optarg);
-          if (_y < 480)
+          if (_y < 600)
             {
               string s;
               s += "parameter range error: y must be >= 480";
@@ -155,8 +155,8 @@ void Cmdline::usage()
   cout << "(";
   cout << "type=";
   cout << "INTEGER,";
-  cout << " range=640...,";
-  cout << " default=800";
+  cout << " range=800...,";
+  cout << " default=1024";
   cout << ")\n";
   cout << "         Set horizontal resolution to <X>\n";
   cout << "  [ -y ] ";
@@ -164,8 +164,8 @@ void Cmdline::usage()
   cout << "(";
   cout << "type=";
   cout << "INTEGER,";
-  cout << " range=480...,";
-  cout << " default=600";
+  cout << " range=600...,";
+  cout << " default=800";
   cout << ")\n";
   cout << "         Set vertical resolution to <Y>\n";
   cout << "  [ -l ] ";

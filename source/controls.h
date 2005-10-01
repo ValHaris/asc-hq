@@ -150,7 +150,8 @@ extern int searchexternaltransferfields ( Building* bld );
 extern Resources getDestructionCost( Building* bld, Vehicle* veh );
 
 
-extern void initNetworkGame( void );
+//! this checks if one player has been using a new ASC version than the current player. If this is the case, the current player is notified and asked to upgrade
+extern void checkUsedASCVersions( Player& currentPlayer );
 
 class ReplayMapDisplay : public MapDisplayInterface {
            MapDisplayInterface* mapDisplay;

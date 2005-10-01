@@ -312,7 +312,7 @@ char time_elapsed(int time)
  *                                                                         *
  ***************************************************************************/
 
-
+#include <iostream>
 
 int closeEventThread = 0;
 
@@ -422,6 +422,10 @@ int eventthread ( void* nothing )
 }
 
 #if defined(_WIN32_) | defined(__APPLE__)
+#define FirstThreadEvents 1
+#endif
+
+#ifdef FirstThreadEvents 
 int (*_gamethread)(void *);
 
 int gameThreadWrapper ( void* data )
@@ -431,6 +435,11 @@ int gameThreadWrapper ( void* data )
    return res;
 }
 #endif
+
+
+//! The handle for the second thread; depending on platform this could be the event handling thread or the game thread
+SDL_Thread* secondThreadHandle = NULL;
+
 
 void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mousepointer )
 {
@@ -460,10 +469,8 @@ void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mou
    SDL_EnableUNICODE ( 1 );
    SDL_EnableKeyRepeat ( 250, 30 );
 
-   //! The handle for the second thread; depending on platform this could be the event handling thread or the game thread
-   SDL_Thread* secondThreadHandle = NULL;
    
-#if defined(_WIN32_) | defined(__APPLE__)
+#ifdef FirstThreadEvents 
    _gamethread = gamethread;
    secondThreadHandle = SDL_CreateThread ( gameThreadWrapper, data );
    eventthread( NULL );
@@ -475,6 +482,20 @@ void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mou
 
    SDL_WaitThread ( secondThreadHandle, NULL );
 }
+
+void exit_asc( int returnresult )
+{
+#ifndef FirstThreadEvents 
+   if ( secondThreadHandle ) {
+      closeEventThread = 1;
+      SDL_WaitThread ( secondThreadHandle, NULL );
+   }   
+#endif
+
+   exit( returnresult );   
+   
+}
+
 
 bool setEventRouting( bool queue, bool legacy )
 {

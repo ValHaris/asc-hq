@@ -60,6 +60,7 @@
 #include "messagedlg.h"
 #include "gameevent_dialogs.h"
 #include "cannedmessages.h"
+#include "network.h"
 
 tmoveparams moveparams;
 
@@ -592,48 +593,43 @@ int  Building :: getResource ( int      need,    int resourcetype, bool queryonl
 
 
 
-void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
+bool authenticateUser ( tmap* actmap, int forcepasswordchecking = 0, bool allowCancel = true )
 {
    for ( int p = 0; p < 8; p++ )
       actmap->player[p].existanceAtBeginOfTurn = actmap->player[p].exist() && actmap->player[p].stat != Player::off;
 
-   if ( actmap->player[actmap->actplayer].stat == Player::human ) {
+   int humannum = 0;
+   for ( int i = 0; i < 8; i++ )
+      if ( actmap->player[i].exist() )
+         if ( actmap->player[i].stat == Player::human )
+            humannum++;
 
-      int humannum = 0;
-      for ( int i = 0; i < 8; i++ )
-         if ( actmap->player[i].exist() )
-            if ( actmap->player[i].stat == Player::human )
-               humannum++;
+   if ( humannum > 1  ||  forcepasswordchecking > 0 ) {
+      tlockdispspfld ldsf;
 
-      if ( humannum > 1  ||  forcepasswordchecking > 0 ) {
-         tlockdispspfld ldsf;
+      bool firstRound = actmap->time.turn() == 1;
+      bool specifyPassword = firstRound && actmap->player[actmap->actplayer].passwordcrc.empty();
+      // bool askForPassword = false;
 
-         bool firstRound = actmap->time.turn() == 1;
-         bool specifyPassword = firstRound && actmap->player[actmap->actplayer].passwordcrc.empty();
-         // bool askForPassword = false;
-
-         if ( (!actmap->player[actmap->actplayer].passwordcrc.empty() && actmap->player[actmap->actplayer].passwordcrc != CGameOptions::Instance()->getDefaultPassword() )
-            || firstRound  ) {
-               if ( forcepasswordchecking < 0 ) {
-                  delete actmap;
-                  actmap = NULL;
-                  throw NoMapLoaded();
-               } else {
-                  bool stat;
-                  do {
-                     stat = enterpassword ( actmap->player[actmap->actplayer].passwordcrc, specifyPassword );
-                  } while ( actmap->player[actmap->actplayer].passwordcrc.empty() && stat && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
-               }
-         } else
-            displaymessage("next player is:\n%s",3,actmap->player[actmap->actplayer].getName().c_str() );
-      }
-
-      updateFieldInfo();
-
-      moveparams.movestatus = 0;
-
+      if ( (!actmap->player[actmap->actplayer].passwordcrc.empty() && actmap->player[actmap->actplayer].passwordcrc != CGameOptions::Instance()->getDefaultPassword() )
+         || firstRound  ) {
+            if ( forcepasswordchecking < 0 ) {
+               delete actmap;
+               actmap = NULL;
+               throw NoMapLoaded();
+            } else {
+               bool stat;
+               do {
+                  stat = enterpassword ( actmap->player[actmap->actplayer].passwordcrc, specifyPassword, allowCancel );
+                  if ( !stat )
+                     return false;
+               } while ( actmap->player[actmap->actplayer].passwordcrc.empty() && stat && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
+            }
+      } else
+         infoMessage("next player is " + actmap->player[actmap->actplayer].getName() );
    }
-   computeview( actmap );
+
+   moveparams.movestatus = 0;
 
    actmap->playerView = actmap->actplayer;
 
@@ -642,9 +638,12 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
 
 //   cursor.gotoxy ( actmap->cursorpos.position[ actmap->actplayer ].cx, actmap->cursorpos.position[ actmap->actplayer ].cy , 0);
 
+   computeview( actmap );
+   actmap->beginTurn(); 
+
    updateFieldInfo();
+   return true;
    
-   actmap->sigPlayerUserInteractionBegins( actmap->player[ actmap->actplayer] );
 }
 
 
@@ -683,93 +682,7 @@ void researchCheck( Player& player )
 
 
 
-void sendnetworkgametonextplayer ( int oldplayer, int newplayer )
-{
-/*
-   int num = 0;
-   int pl[8];
 
-   for (int i = 0; i < 8; i++) {
-      if ( actmap->player[i].existent )
-         if ( actmap->player[i].firstvehicle || actmap->player[i].firstbuilding ) {
-            pl[num] = i;
-            num++;
-          }
-   }  endfor */
-#if 0
-
-   tnetworkcomputer* compi = &actmap->network->computer[ actmap->network->player[ oldplayer ].compposition ];
-   while ( compi->send.transfermethod == NULL  ||  compi->send.transfermethodid == 0 )
-        setupnetwork( actmap->network, 2, oldplayer );
-
-   displaymessage ( " starting data transfer ",0);
-
-   try {
-      compi->send.transfermethod->initconnection ( TN_SEND );
-      compi->send.transfermethod->inittransfer ( &compi->send.data );
-
-      tnetworkloaders nwl;
-      nwl.savenwgame ( compi->send.transfermethod->stream );
-
-      compi->send.transfermethod->closetransfer();
-      compi->send.transfermethod->closeconnection();
-   } /* endtry */
-   catch ( tfileerror ) {
-      displaymessage ( "error saving file", 1 );
-   } /* endcatch */
-
-   delete actmap;
-   actmap = NULL;
-   displaymessage( " data transfer finished",1);
-
-
-   throw NoMapLoaded ();
-#endif
-}
-
-
-
-
-void nextPlayer( void )
-{
-   int oldplayer = actmap->actplayer;
-
-
-   if ( !actmap->advanceToNextPlayer() ) {
-      displaymessage("There are no players left any more !",1);
-      delete actmap;
-      actmap = NULL;
-      throw NoMapLoaded ();
-   }
-
-   if ( CGameOptions::Instance()->debugReplay && oldplayer >= 0 && actmap->player[oldplayer].stat == Player::human && actmap->replayinfo)
-      if (choice_dlg("run replay of your turn ?","~y~es","~n~o") == 1) {
-         // cursor.gotoxy( actmap->cursorpos.position[oldplayer].cx, actmap->cursorpos.position[oldplayer].cy );
-         runSpecificReplay ( oldplayer, oldplayer );
-      }
-
-
-
-//   int newplayer = actmap->actplayer;
-   actmap->playerView = actmap->actplayer;
-
-/*   if ( oldplayer >= 0 && actmap->network &&  oldplayer != actmap->actplayer && actmap->network->player[ newplayer ].compposition != actmap->network->player[ oldplayer ].compposition )
-      sendnetworkgametonextplayer ( oldplayer, newplayer );
-   else {
-   */
-/*
-      tlockdispspfld ldsf;
-
-      int forcepwd;  // Wenn der aktuelle player gerade verloren hat, muss fuer den naechsten player die Passwortabfrage kommen, auch wenn er nur noch der einzige player ist !
-      if ( oldplayer >= 0  &&  !actmap->player[oldplayer].existent )
-         forcepwd = 1;
-      else
-         forcepwd = 0;
-
-      newturnforplayer( forcepwd );
-*/
-//   }
-}
 
 
 void runai( int playerView )
@@ -783,10 +696,32 @@ void runai( int playerView )
    updateFieldInfo();
 }
 
+
+int findNextPlayer( tmap* actmap )
+{
+   int p = actmap->actplayer;
+   bool found = false;
+   do {
+      ++p;
+      if ( p >= actmap->getPlayerCount()) 
+         p = 0;
+      
+      if ( actmap->player[p].exist() )
+         if ( actmap->player[p].stat != Player::off )
+            found = true;
+      
+   } while ( !found );
+   return p;
+}
+
 void next_turn ( int playerView )
 {
-   int startTurn = actmap->time.turn();
+   int lastPlayer = actmap->actplayer;
+   int lastTurn = actmap->time.turn();
 
+   if  ( lastPlayer >= 0 )
+      actmap->endTurn();
+   
    int pv;
    if ( playerView == -2 ) {
       if ( actmap->time.turn() <= 0 || actmap->actplayer < 0 )
@@ -799,153 +734,108 @@ void next_turn ( int playerView )
    } else
       pv = playerView;
 
-
-   do {
-   
-      if ( actmap->actplayer >= 0 ) 
-         actmap->endTurn();
       
-     nextPlayer();
+   if ( findNextPlayer( actmap ) == lastPlayer ) {
+      if ( !actmap->continueplaying ) {
+         viewtext2(904);
+         if (choice_dlg("Do you want to continue playing ?","~y~es","~n~o") == 2) {
+            delete actmap;
+            actmap = NULL;
+            throw NoMapLoaded();
+         } else {
+            actmap->continueplaying = true;
+            if ( actmap->replayinfo ) {
+               delete actmap->replayinfo;
+               actmap->replayinfo = NULL;
+            }
+         }
+      }   
+   }
+      
+ 
+   int loop = 0;
+   bool closeLoop = false;
+        
+   do {
+      
+      int nextPlayer = findNextPlayer( actmap );
+      
+      if ( nextPlayer <= lastPlayer ) {
+         actmap->endRound();
+         ++loop;
+      }   
+      
+      if ( loop > 2 ) {
+         displaymessage("no human players found !", 1 );
+         delete actmap;
+         actmap = NULL;
+         throw NoMapLoaded();
+      }
 
-     if ( actmap->player[actmap->actplayer].stat == Player::computer )
-        runai( pv );
+               
+      actmap->actplayer = nextPlayer;   
+      
+      if ( actmap->player[nextPlayer].stat == Player::computer ) {
+         actmap->beginTurn();
+         runai( lastPlayer );
+         actmap->endTurn();
+      }
+      
+      if ( actmap->player[nextPlayer].stat == Player::suspended ) {
+         actmap->beginTurn();
+         actmap->endTurn();
+      }   
+         
+      if ( actmap->player[nextPlayer].stat == Player::human || actmap->player[nextPlayer].stat == Player::supervisor ) {
+         if ( actmap->network && lastPlayer >= 0 ) {
+            actmap->network->send( actmap, lastPlayer, lastTurn );
+            delete actmap;
+            actmap = NULL;
+            throw NoMapLoaded();
+         } else
+            closeLoop = true;
+      }
+   } while ( !closeLoop ); /* enddo */
 
-     if ( actmap->time.turn() >= startTurn+2 ) {
-        displaymessage("no human players found !", 1 );
-        delete actmap;
-        actmap = NULL;
-        throw NoMapLoaded();
-     }
-
-   } while ( actmap->player[actmap->actplayer].stat != Player::human ); /* enddo */
-
-   newTurnForHumanPlayer();
+   authenticateUser( actmap, 0, false );
 }
 
-void initNetworkGame ( void )
+void checkUsedASCVersions ( Player& currentPlayer )
 {
-   while ( actmap->player[actmap->actplayer].stat != Player::human ) {
-
-     if ( actmap->player[actmap->actplayer].stat == Player::computer ) {
-        computeview( actmap );
-        runai(-1);
-     }
-     actmap->endTurn();
-     nextPlayer();
-   }
-
-   newTurnForHumanPlayer( 0 );
-
    for ( int i = 0; i < 8; i++ )
       if  ( actmap->player[i].exist() )
-         if ( actmap->player[i].ASCversion > 0 )
-            if ( (actmap->player[i].ASCversion & 0xffffff00) > getNumericVersion() ) {
-               new Message ( ASCString("Player ") + actmap->player[i].getName()
-                        + " is using a newer version of ASC. \n"
-                          "Please check www.asc-hq.org for updates.\n\n"
-                          "Please do NOT report any problems with this version of ASC until "
-                          "you have confirmed that they are also present in the latest "
-                          "version of ASC.", actmap, 1<<actmap->actplayer );
-               return;
-            }
+         if ( actmap->actplayer != i )
+            if ( actmap->player[i].ASCversion > 0 )
+               if ( (actmap->player[i].ASCversion & 0xffffff00) > getNumericVersion() ) {
+                  new Message ( ASCString("Player ") + actmap->player[i].getName()
+                           + " is using a newer version of ASC. \n"
+                           "Please check www.asc-hq.org for updates.\n\n"
+                           "Please do NOT report any problems with this version of ASC until "
+                           "you have confirmed that they are also present in the latest "
+                           "version of ASC.", actmap, 1<<actmap->actplayer );
+                  return;
+               }
 
 }
 
 
-void continuenetworkgame ( void )
+
+
+void continuenetworkgame ()
 {
-#if SDL_BYTEORDER != SDL_LIL_ENDIAN
-   displaymessage("Sorry, multiplayer through file transfer is currently not available on big endian machines\nThis will be available with ASC 2.0 , please check www.asc-hq.org", 1 );
-   return;
-#endif
-
-   tlockdispspfld ldsf;
-#if 0
-   tnetwork network;
-/*
-   int stat;
-   int go = 0;
-   do {
-      stat = setupnetwork( &network, 1+8 );
-      if ( stat == 1 ) {
-         return;
-      }
-      if ( network.computer[0].receive.transfermethod == 0 )
-         displaymessage("please choose a transfer method !",1 );
-      else
-         if ( network.computer[0].receive.transfermethodid != network.computer[0].receive.transfermethod->getid() )
-            displaymessage("please setup transfer method !", 1 );
-         else
-            if ( !network.computer[0].receive.transfermethod->validateparams( &network.computer[0].receive.data, TN_RECEIVE ))
-               displaymessage("please setup transfer method !", 1 );
-            else
-               go = 1;
-   } while ( !go );
-
-*/
-   int stat;
-   int go = 0;
-   do {
-      stat = network.computer[0].receive.transfermethod->setupforreceiving ( &network.computer[0].receive.data );
-      if ( stat == 0 )
-         return;
-
-      if ( network.computer[0].receive.transfermethod  &&
-           network.computer[0].receive.transfermethodid == network.computer[0].receive.transfermethod->getid()  &&
-           network.computer[0].receive.transfermethod->validateparams( &network.computer[0].receive.data, TN_RECEIVE ))
-           go = 1;
-   } while ( !go );
-
-
-   try {
-       displaymessage ( " starting data transfer ",0);
-
-       network.computer[0].receive.transfermethod->initconnection ( TN_RECEIVE );
-       network.computer[0].receive.transfermethod->inittransfer ( &network.computer[0].receive.data );
-
-       tnetworkloaders nwl;
-       nwl.loadnwgame ( network.computer[0].receive.transfermethod->stream );
-
-       network.computer[0].receive.transfermethod->closetransfer();
-
-       network.computer[0].receive.transfermethod->closeconnection();
-
-       if ( actmap->network )
-          setallnetworkpointers ( actmap->network );
-
-       removemessage();
-   } /* endtry */
-
-   catch ( InvalidID err ) {
-      displaymessage( err.getMessage().c_str(), 1 );
-      throw NoMapLoaded();
-   } /* endcatch */
-   catch ( tinvalidversion err ) {
-      if ( err.expected < err.found )
-         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nPlease install the latest version from www.asc-hq.org", 1, err.getFileName().c_str(), err.expected, err.found );
-      else
-         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nThis is a bug, please report it!", 1, err.getFileName().c_str(), err.expected, err.found );
-
-      throw NoMapLoaded();
-   } /* endcatch */
-   catch ( tcompressionerror err ) {
-      displaymessage( "The file cannot be decompressed. \nIt has probably been damaged during transmission from the previous player to you.\nTry sending it zip compressed or otherwise encapsulated.\n", 1 );
-      throw NoMapLoaded();
-   } /* endcatch */
-   catch ( tfileerror err) {
-      displaymessage( "error reading game %s ", 1, err.getFileName().c_str() );
-      throw NoMapLoaded();
-   } /* endcatch */
-   catch ( ASCexception ) {
-      displaymessage( "error loading game", 1 );
-      throw NoMapLoaded();
-   } /* endcatch */
-   if ( !actmap || actmap->xsize <= 0 || actmap->ysize <= 0 )
-      throw NoMapLoaded();
-
-
-   initNetworkGame( );
-   #endif
+   ASCString filename = selectFile( ASCString("*") + tournamentextension, true );
+   if ( filename.empty() )
+      return;
+      
+   FileTransfer ft;
+   auto_ptr<tmap> newMap ( mapLoadingExceptionChecker( filename, MapLoadingFunction( &ft, &FileTransfer::loadPBEMFile )));
+   if ( !newMap.get() )
+      return; 
+   
+   if ( authenticateUser( newMap.get() )) {
+      delete actmap;
+      actmap = newMap.release();
+   }
 }
 
 

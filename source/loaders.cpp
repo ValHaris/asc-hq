@@ -62,7 +62,7 @@ ticons icons;
 
  const char* savegameextension = "*.sav";
  const char* mapextension = "*.map";
- const char* tournamentextension = "*.asc";
+ const char* tournamentextension = ".ascpbm";
 
 
 

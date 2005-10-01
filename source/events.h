@@ -40,6 +40,9 @@ extern void initializeEventHandling ( int (*fn)(void *) , void *data, void* mous
 
 extern SDL_mutex* eventHandlingMutex;
 
+extern void exit_asc( int returnresult );
+
+
 /***************************************************************************
  *                                                                         *
  *   Mouse handling routines                                               *

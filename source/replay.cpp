@@ -64,6 +64,16 @@ void runSpecificReplay( int player, int viewingplayer )
     }
 }
 
+void viewOwnReplay( Player& player )
+{
+   if ( CGameOptions::Instance()->debugReplay && player.getParentMap()->replayinfo )
+      if (choice_dlg("run replay of your turn ?","~y~es","~n~o") == 1) {
+         // cursor.gotoxy( actmap->cursorpos.position[oldplayer].cx, actmap->cursorpos.position[oldplayer].cy );
+         runSpecificReplay ( player.getPosition(), player.getPosition() );
+      }
+}
+
+
 void checkforreplay ( void )
 {
    if ( !actmap->replayinfo )
@@ -1927,7 +1937,6 @@ int  trunreplay :: run ( int player, int viewingplayer )
              displaymessage2("running final comparison" );
 
              actmap->endTurn();
-             actmap->advanceToNextPlayer();
              resourcesCompared = true;
              ASCString resourceComparisonResult;
              tmap* comparisonMap = NULL;

@@ -89,6 +89,9 @@ void DiplomaticStateVector::turnBegins()
 
 DiplomaticStates DiplomaticStateVector::getState( int towardsPlayer ) const
 {
+   if ( player.getPosition() == towardsPlayer )
+      return ALLIANCE;
+      
    if ( towardsPlayer < states.size() )
       return states[towardsPlayer];
    else

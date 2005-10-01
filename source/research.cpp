@@ -106,7 +106,7 @@ int TechDependency::findInheritanceLevel( int id, vector<int>& stack, const ASCS
                Technology* t = technologyRepository.getObject_byID( k );
                if ( t )
                   s += t->name + "\n";
-               longWarning ( s );
+               warning ( s );
                return -1;
             }
 

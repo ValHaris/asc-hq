@@ -202,6 +202,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       } field;   
       
 
+      void displayCursor( const PG_Rect& dst );
       void displayCursor();
       
       enum Dirty { Nothing, Curs, Map } dirty;

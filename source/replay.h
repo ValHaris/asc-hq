@@ -129,5 +129,8 @@ extern void initReplayLogging( Player& player );
 //! runs the replay for the given player
 extern void runSpecificReplay( int player, int viewingplayer );
 
+//! runs the replay of the current player. This is used primarily for debugging the replay system
+extern void viewOwnReplay( Player& player );
+
 
 #endif

@@ -40,7 +40,7 @@ class MainScreenWidget : public PG_Widget {
     PG_Label* messageLine;
     int lastMessageTime;
 
-    StatusMessageWindow createStatusWindow( const ASCString& msg );
+    StatusMessageWindowHolder createStatusWindow( const ASCString& msg );
     
         
 public:

@@ -191,7 +191,7 @@ panel {
     x2 = -20
     y2 = -80
 
-    ChildWidgets = Replay SupervisorOn SupervisorPlain SupervisorEnc Filename
+    ChildWidgets = Replay SupervisorOn SupervisorPlain SupervisorEnc Filename FilenameLabel
     
     Replay {
       type = Checkbox
@@ -211,6 +211,7 @@ panel {
       width = 300
     } SupervisorOn
 
+    
     SupervisorPlain {
       type = LineEdit
       x = 60
@@ -226,10 +227,20 @@ panel {
       height = 25
       width = 280
     } SupervisorEnc
+
     
+    FilenameLabel {
+      x = 40
+      y = 150
+      height = 25
+      width = 100
+      type = StaticText
+      Text = Filename: 
+    } FilenameLabel
+        
     Filename {
       type = LineEdit
-      x = 40
+      x = 160
       y = 150
       height = 25
       width = 300

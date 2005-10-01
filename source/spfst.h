@@ -49,7 +49,7 @@
 
 
   //! this is the one and only map that is loaded by ASC
-  extern pmap actmap; 
+  extern tmap* actmap; 
 
 
 //! returns the field at the given coordinates

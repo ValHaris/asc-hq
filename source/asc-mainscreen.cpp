@@ -305,6 +305,7 @@ void Menu::setup()
    currentMenu->addSeparator();
    addbutton ( "clear image cache", ua_clearImageCache );
    addbutton ( "reload dialog theme", ua_reloadDlgTheme );
+   addbutton ( "test messages", ua_testMessages );
 
 
    addfield ( "~H~elp" );
@@ -508,9 +509,9 @@ void MainScreenWidget::eventBlit (SDL_Surface *surface, const PG_Rect &src, cons
    s.Blit( backgroundImage, blitRects[3], dstrect );
 }
 
-StatusMessageWindow MainScreenWidget::createStatusWindow( const ASCString& msg )
+StatusMessageWindowHolder MainScreenWidget::createStatusWindow( const ASCString& msg )
 {
-   return StatusMessageWindow( new PG_StatusWindowData( msg ));
+   return StatusMessageWindowHolder( new PG_StatusWindowData( msg ));
 }
 
 

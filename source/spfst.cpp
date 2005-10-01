@@ -78,7 +78,7 @@ void displaymap()
 }   
 
   
-   pmap              actmap;
+   tmap*    actmap;
 
    Schriften schriften;
 

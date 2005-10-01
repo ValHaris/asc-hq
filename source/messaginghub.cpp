@@ -12,18 +12,18 @@
  #include "messaginghub.h"
 
  
-StatusMessageWindow :: StatusMessageWindow( const StatusMessageWindow& smw )
+StatusMessageWindowHolder :: StatusMessageWindowHolder( const StatusMessageWindowHolder& smw )
 {
    copy(smw);
 }
  
-StatusMessageWindow::StatusMessageWindow()
+StatusMessageWindowHolder::StatusMessageWindowHolder()
 {
    userData = new UserData;
 }
 
 
-void StatusMessageWindow::unlink()
+void StatusMessageWindowHolder::unlink()
 {
    if ( userData ) {
       userData->counter -= 1;
@@ -34,7 +34,7 @@ void StatusMessageWindow::unlink()
    }
 }
 
-void StatusMessageWindow::copy( const StatusMessageWindow& smw )
+void StatusMessageWindowHolder::copy( const StatusMessageWindowHolder& smw )
 {
    if ( smw.userData ) {
       unlink();
@@ -45,26 +45,26 @@ void StatusMessageWindow::copy( const StatusMessageWindow& smw )
    }   
 }
 
-void StatusMessageWindow::close()
+void StatusMessageWindowHolder::close()
 {
    unlink();
 }   
 
 
-StatusMessageWindow& StatusMessageWindow::operator=( const StatusMessageWindow& smw )
+StatusMessageWindowHolder& StatusMessageWindowHolder::operator=( const StatusMessageWindowHolder& smw )
 {
    copy(smw);
    return *this;
 }
 
 
-StatusMessageWindow::~StatusMessageWindow()
+StatusMessageWindowHolder::~StatusMessageWindowHolder()
 {
    unlink();
 }
 
-StatusMessageWindow MessagingHubBase::infoMessageWindow( const ASCString& msg ) { 
-   return StatusMessageWindow( messageWindowFactory( msg )); 
+StatusMessageWindowHolder MessagingHubBase::infoMessageWindow( const ASCString& msg ) { 
+   return StatusMessageWindowHolder( messageWindowFactory( msg )); 
 }
 
  
@@ -78,7 +78,9 @@ void MessagingHubBase::message( MessageType type, const ASCString& msg, ... )
    
      
    switch ( type ) {
-      case FatalError: fatalError( message ); break;
+      case FatalError: fatalError( message ); 
+                       exitHandler();
+                       break;
       case Error:      error ( message ); break;
       case Warning:    warning( message ); break;
       case InfoMessage: infoMessage( message ); break;
@@ -90,7 +92,7 @@ void MessagingHubBase::message( MessageType type, const ASCString& msg, ... )
 }
  
   
-void displayLogMessage ( int msgVerbosity, char* message, ... )
+void displayLogMessage ( int msgVerbosity, const char* message, ... )
 {
    va_list arglist;
    va_start ( arglist, message );
@@ -105,9 +107,42 @@ void displayLogMessage ( int msgVerbosity, char* message, ... )
 
 void displayLogMessage ( int msgVerbosity, const ASCString& message )
 {
-   if ( msgVerbosity <= MessagingHub::Instance().getVerbosity() ) {
-      fprintf ( stdout, "%s", message.c_str() );
-      fflush ( stdout );
-   }
+   if ( msgVerbosity <= MessagingHub::Instance().getVerbosity() ) 
+      MessagingHub::Instance().logMessage( message, msgVerbosity );
+
 }
  
+void fatalError ( const ASCString& string )
+{
+   MessagingHub::Instance().message( MessagingHubBase::FatalError, string );
+}
+
+void fatalError ( const char* msg, ... )
+{
+   va_list arglist;
+   va_start ( arglist, msg );
+
+   ASCString message;
+   message.vaformat( msg, arglist );
+
+   fatalError( message );
+      
+   va_end ( arglist );
+}
+
+
+void warning ( const ASCString& str )
+{
+   MessagingHub::Instance().message( MessagingHubBase::Warning, str );
+}
+
+void errorMessage ( const ASCString& string )
+{
+   MessagingHub::Instance().message( MessagingHubBase::Error, string );
+}
+
+void infoMessage ( const ASCString& string )
+{
+   MessagingHub::Instance().message( MessagingHubBase::InfoMessage, string );
+}
+

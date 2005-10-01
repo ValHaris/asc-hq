@@ -1958,7 +1958,7 @@ void displaymessage( const ASCString& text, int num  )
    
          messageboxopen--;
       } else {
-         warningMessageDialog( text );
+         MessagingHub::Instance().warning( text );
       }
    } /* endif */
 
@@ -3682,42 +3682,6 @@ int      getid( const char*  title, int lval,int min,int max)
    gi.run();
    gi.done();
    return gi.mid;
-}
-
-void fatalError ( const char* formatstring, ... )
-{
-   va_list paramlist;
-   va_start ( paramlist, formatstring );
-
-   char tempbuf[1000];
-
-   int lng = vsprintf( tempbuf, formatstring, paramlist );
-   va_end ( paramlist );
-   if ( lng >= 1000 )
-      displaymessage ( "dlg_box.cpp / fatalError:   string to long !\nPlease report this error",1 );
-
-   fatalError ( ASCString(tempbuf) );
-}
-
-void fatalError ( const ASCString& string )
-{
-   displaymessage ( string.c_str(), 2 );
-}
-
-void warning ( const ASCString& str )
-{
-	fprintf(stderr, "ASC: %s \n", str.c_str());
-   fflush( stderr );
-}
-
-void errorMessage ( const ASCString& string )
-{
-   displaymessage ( string.c_str(), 1 );
-}
-
-void infoMessage ( const ASCString& string )
-{
-   displaymessage ( string.c_str(), 3 );
 }
 
 

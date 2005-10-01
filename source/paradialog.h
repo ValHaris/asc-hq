@@ -77,6 +77,9 @@ class StartupScreen: public SigC::Object {
 
  class ASC_PG_App : public PG_Application {
        ASCString themeName;
+       
+       void messageDialog( const ASCString& message, MessagingHubBase::MessageType mt );
+       
     public:
        static const int mapDisplayID = 2;
        static const int mainScreenID = 1;
@@ -286,14 +289,6 @@ class Emboss : public PG_Widget {
             rectangle<4> ( s, SPoint(dst.x, dst.y), dst.w, dst.h, ColorMerger_Brightness<4>( 1.4 ), ColorMerger_Brightness<4>( 0.7 ));
       };
 };
-
-
-
-
-
-
- extern void warningMessageDialog( const ASCString& message  );
- extern void errorgMessageDialog( const ASCString& message  );
 
 
 
@@ -543,7 +538,7 @@ class BoolProperty : public PropertyEditorField, public SigC::Object  {
 
 class MessageDialog;
 
-class PG_StatusWindowData : public StatusMessageWindow::UserData {
+class PG_StatusWindowData : public StatusMessageWindowHolder::UserData {
       MessageDialog* md;
    public:
       PG_StatusWindowData( const ASCString& msg );

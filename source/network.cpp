@@ -64,11 +64,12 @@ void FileTransfer::setup()
 
 void FileTransfer::setup( const ASCString& filename )
 {
-
+   this->filename = filename;
 }
 
 bool FileTransfer::enterfilename()
 {
+   filename = editString( "Enter Filename", filename );
    return true;
 }
 
@@ -81,9 +82,16 @@ void FileTransfer::send( const tmap* map, int lastPlayer, int lastturn )
    }
 
    try {      
-      tnfilestream gamefile ( constructFileName( actmap, lastPlayer, lastturn ), tnstream::reading );
-      tnetworkloaders nwl;
-      nwl.savenwgame( &gamefile );
+      ASCString fname = constructFileName( map, lastPlayer, lastturn );
+      {
+         tnfilestream gamefile ( fname, tnstream::writing );
+         tnetworkloaders nwl;
+         nwl.savenwgame( &gamefile );
+      }
+      ASCString msg = "Data written to file\nPlease send " + fname + " to \n" + map->player[map->actplayer].getName();
+      if ( !map->player[map->actplayer].email.empty() )
+         msg += " (" + map->player[map->actplayer].email + ")";
+      infoMessage( msg );
    } catch ( tfileerror ) {
       fatalError ( "error writing file %s ", filename.c_str() );
    }
@@ -91,6 +99,11 @@ void FileTransfer::send( const tmap* map, int lastPlayer, int lastturn )
 
 
 tmap* FileTransfer::receive()
+{
+   return loadPBEMFile( filename );
+}   
+
+tmap* FileTransfer::loadPBEMFile( const ASCString& filename )
 {
    tmap* map = NULL;
    try {      
@@ -103,7 +116,7 @@ tmap* FileTransfer::receive()
    return map;
 }
 
-ASCString FileTransfer::constructFileName( tmap* actmap, int lastPlayer, int lastturn ) const
+ASCString FileTransfer::constructFileName( const tmap* actmap, int lastPlayer, int lastturn ) const
 {
    ASCString s = filename;
    while ( s.find( "$p") != ASCString::npos )
@@ -112,6 +125,7 @@ ASCString FileTransfer::constructFileName( tmap* actmap, int lastPlayer, int las
    while ( s.find( "$t") != ASCString::npos )
       s.replace( s.find( "$t"), 2, ASCString::toString( lastturn ) );
       
+   s += tournamentextension;
    return s;
 }
 

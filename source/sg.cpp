@@ -207,27 +207,6 @@ void         loadMoreData(void)
          stream.readrlepict(   &icons.experience[i], false, &w );
    }
 
-   /*
-   {
-      tnfilestream stream ("hexinvi2.raw",tnstream::reading);
-      stream.readrlepict(   &icons.view.va8, false, &w);
-   }
-
-   {
-      tnfilestream stream ("hexinvis.raw",tnstream::reading);
-      stream.readrlepict(   &icons.view.nv8, false, &w);
-      void* u = uncompress_rlepict ( icons.view.nv8 );
-      if ( u ) {
-         asc_free( icons.view.nv8 );
-         icons.view.nv8 = u;
-      }
-   }
-
-   {
-      tnfilestream stream ("fg8.raw",tnstream::reading);
-      stream.readrlepict(   &icons.view.fog8, false, &w);
-   }
-     */
    {
       tnfilestream stream ("windrose.raw",tnstream::reading);
       stream.readrlepict(   &icons.windbackground, false, &w);
@@ -475,7 +454,10 @@ void hookGuiToMap( tmap* map )
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &researchCheck ));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkJournal ));
       map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( SigC::slot( &checkforreplay )));
-      
+      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkUsedASCVersions ));
+
+      map->sigPlayerUserInteractionEnds.connect( SigC::slot( viewOwnReplay));
+            
       map->guiHooked();
    }   
 }
@@ -487,7 +469,7 @@ void loadGame()
    ASCString s1 = selectFile( savegameextension, true );
 
    if ( !s1.empty() ) {
-      StatusMessageWindow smw = MessagingHub::Instance().infoMessageWindow( "loading " + s1 );
+      StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "loading " + s1 );
       loadgame( s1 );
       if ( !actmap || actmap->xsize == 0 || actmap->ysize == 0 )
          throw  NoMapLoaded();
@@ -517,41 +499,14 @@ void saveGame( bool as )
    if ( !s1.empty() ) {
       actmap->preferredFileNames.savegame[actmap->actplayer] = s1;
 
-      StatusMessageWindow smw = MessagingHub::Instance().infoMessageWindow( "saving " + s1 );
+      StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "saving " + s1 );
       savegame( s1 );
    }
 }
 
 
 
-void         newcampaign(void)
-{
-   tchoosenewcampaign tnc;
-   tnc.init();
-   tnc.run();
-   tnc.done();
-}
 
-
-
-void         newsinglelevel(void)
-{
-   tchoosenewsinglelevel tnc;
-
-   tnc.init();
-   tnc.run();
-   tnc.done();
-   // actmap->player[0].exist();
-}
-
-void         startnewsinglelevelfromgame(void)
-{
-   newsinglelevel();
-   if ( !actmap )
-      throw NoMapLoaded();
-   computeview( actmap );
-   displaymap();
-}
 
 
 void loadmap( const ASCString& name )
@@ -567,7 +522,7 @@ void loadStartupMap ( const char *gameToLoad=NULL )
 {
    if ( gameToLoad && gameToLoad[0] ) {
       try {
-         if ( patimat ( tournamentextension, gameToLoad )) {
+         if ( patimat ( ASCString("*")+tournamentextension, gameToLoad )) {
 
             if( validateemlfile( gameToLoad ) == 0 )
                fatalError( "Email gamefile %s is invalid. Aborting.", gameToLoad );
@@ -995,10 +950,6 @@ void execuseraction ( tuseractions action )
          }
          break;
 
-      case ua_startnewsinglelevel:
-         startnewsinglelevelfromgame();
-         break;
-
       case ua_changepassword:
          {
             bool success;
@@ -1027,12 +978,6 @@ void execuseraction ( tuseractions action )
       case ua_exitgame:
          if (choice_dlg("do you really want to quit ?","~y~es","~n~o") == 1)
             getPGApplication().Quit();
-         break;
-
-      case ua_newcampaign:
-         newcampaign();
-         computeview( actmap );
-         displaymap();
          break;
 
 
@@ -1107,11 +1052,6 @@ void execuseraction ( tuseractions action )
             vat.run();
             vat.done();
          }
-         break;
-
-      case ua_continuenetworkgame:
-         continuenetworkgame();
-         displaymap();
          break;
 
       case ua_toggleunitshading:
@@ -1319,6 +1259,11 @@ void execuseraction2 ( tuseractions action )
          startMultiplayerGame();
          hookGuiToMap(actmap);
          break;
+      case ua_continuenetworkgame:
+         continuenetworkgame();
+         hookGuiToMap(actmap);
+         displaymap();
+         break;
       case ua_loadgame: loadGame();
          break;
       case ua_savegame: saveGame( true );
@@ -1348,6 +1293,12 @@ void execuseraction2 ( tuseractions action )
          }
          */
          GameDialog::gameDialog();
+         break;
+      case ua_testMessages: 
+         MessagingHub::Instance().message( MessagingHubBase::InfoMessage, "This is an informational message" );
+         MessagingHub::Instance().message( MessagingHubBase::Warning,     "This is an warning message" );
+         MessagingHub::Instance().message( MessagingHubBase::Error,       "This is an error message" );
+         MessagingHub::Instance().message( MessagingHubBase::FatalError,  "This is an fatal error message" );
          break;
       default:
          break;
@@ -1554,33 +1505,18 @@ int gamethread ( void* data )
                displayLogMessage ( 8, "done.\n" );
             }
 
-            displayLogMessage ( 8, "gamethread :: Painting background pict..." );
-
-            if ( !gtp->filename.empty() && patimat ( tournamentextension, gtp->filename.c_str() ) ) {
-               displayLogMessage ( 5, "Initializing network game..." );
-               initNetworkGame ( );
-               displayLogMessage ( 5, "done\n" );
-            }
-
-            displayLogMessage ( 8, "gamethread :: displaying map..." );
-            // displaymap();
-            displayLogMessage ( 8, "done.\n" );
-
             moveparams.movestatus = 0;
-
-            displayLogMessage ( 8, "gamethread :: painting gui icons..." );
-            // actgui->painticons();
-            displayLogMessage ( 8, "done.\n" );
-            mousevisible(true);
 
             updateFieldInfo();
 
             displayLogMessage ( 5, "entering inner main loop.\n" );
             mainloop2();
-            mousevisible ( false );
          }
       } /* endtry */
-      catch ( NoMapLoaded ) { } /* endcatch */
+      catch ( NoMapLoaded ) { 
+         delete actmap;
+         actmap = NULL;
+      } /* endcatch */
       catch ( ShutDownMap ) { 
          delete actmap;
          actmap = NULL;
@@ -1602,7 +1538,7 @@ int gamethread ( void* data )
            }
          }
       }
-   } while ( false );
+   } while ( true );
    return 0;
 }
 
@@ -1612,6 +1548,34 @@ void deployMapPlayingHooks ( tmap* map )
    map->sigPlayerTurnBegins.connect( SigC::slot( initReplayLogging ));
    map->sigPlayerTurnBegins.connect( SigC::slot( transfer_all_outstanding_tribute ));   
 }
+
+
+ class StdIoErrorHandler : public SigC::Object {
+       void printStdout( const ASCString& msg )
+       {
+          cout << msg << "\n";
+       }
+       void printStderr( const ASCString& msg )
+       {
+          cerr << msg << "\n";
+       }
+       
+       void messageLogger( const ASCString& msg, int level )
+       {
+          cout << "L" << level << ": " << msg << "\n";
+       }
+    public:
+       StdIoErrorHandler() 
+       {
+          MessagingHub::Instance().warning.connect( SigC::slot( *this, &StdIoErrorHandler::printStderr ));
+          MessagingHub::Instance().error.connect( SigC::slot( *this, &StdIoErrorHandler::printStderr ));
+          MessagingHub::Instance().fatalError.connect( SigC::slot( *this, &StdIoErrorHandler::printStderr ));
+          MessagingHub::Instance().infoMessage.connect( SigC::slot( *this, &StdIoErrorHandler::printStdout ));
+          MessagingHub::Instance().logMessage.connect( SigC::slot( *this, &StdIoErrorHandler::messageLogger ));
+          MessagingHub::Instance().exitHandler.connect( SigC::bind( SigC::slot( exit_asc ), -1 ));
+       }
+ };      
+
 
 
 // including the command line parser, which is generated by genparse
@@ -1651,6 +1615,7 @@ int main(int argc, char *argv[] )
       fullscreen = SDL_TRUE;
 
    MessagingHub::Instance().setVerbosity( cl->r() );
+   StdIoErrorHandler stdIoErrorHandler;
 
    displayLogMessage( 1, getstartupmessage() );
 

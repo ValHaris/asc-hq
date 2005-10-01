@@ -307,9 +307,6 @@ class tmap {
       Shareview*    shareview;
 */
 
-      //! if a player has won a singleplayer map, but wants to continue playing without any enemies, this will be set to 1
-      int           continueplaying;
-
       class ReplayInfo {
       public:
           ReplayInfo ( void );
@@ -386,8 +383,20 @@ class tmap {
       bool isResourceGlobal ( int resource );
       pfield getField ( int x, int y );
       pfield getField ( const MapCoordinate& pos );
+      
+      
+      /** @name Turn Management
+        *  These methods control the game advance of a player to the next player
+        */
+      //@{
+      
+      //! prepares a new game for being played
       void startGame ( );
 
+      //! called when a player starts his turn
+      void beginTurn();
+      
+      
       //! called after a player ends his turn
       void endTurn();
 
@@ -397,6 +406,7 @@ class tmap {
 
       SigC::Signal1<void,Player&> sigPlayerTurnBegins;
       SigC::Signal1<void,Player&> sigPlayerUserInteractionBegins;
+      SigC::Signal1<void,Player&> sigPlayerUserInteractionEnds;
       SigC::Signal1<void,Player&> sigPlayerTurnEnds;
       
       
@@ -404,10 +414,15 @@ class tmap {
       SigC::Signal0<void> newRound;
 
 
+      //! if a player has won a singleplayer map, but wants to continue playing without any enemies, this will be set to 1
+      bool  continueplaying;
+      
+      
+      //@}
 
-      //! changes to the next player and calls endRound() if necessary. \Returns false if there are no players left
-      bool advanceToNextPlayer();
-
+      
+            
+      
       VisibilityStates getInitialMapVisibility( int player );
 
       //! resizes the map. Positive numbers enlarge the map in that direction

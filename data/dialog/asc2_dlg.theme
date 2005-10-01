@@ -29,6 +29,7 @@
       </object>
     </widget>    
     
+   
     <widget>
       <type value="MenuBar"/>
        <object>
@@ -377,6 +378,78 @@
       </object>
     </widget>
 
+    <widget>
+    <type value="ErrorMessage"/>
+    <object>
+        <name value="Titlebar"/>
+        <color name="textcolor" value="0x00303030"/>
+        <property name="bordersize" value="0"/>
+        <property name="height" value="20"/>
+        <filename name="background" value="asc/top_grey.bmp"/>
+        <property name="backmode" value="TILE"/>
+        <property name="blend" value="0"/>
+        <property name="bordersize" value="0"/>
+    </object>
+    <object>
+          <name value="ThemeWidget"/>
+          <filename name="background" value="asc/dialog_background2.png"/>
+          <color name="textcolor" value="0x00e3e400"/>
+          <property name="backmode" value="TILE"/>
+          <gradient name="gradient" color0="0x00e30000" color1="0x00e30000" color2="0x00e30000" color3="0x00e30000"/>
+          <property name="blend" value="255"/>
+          <property name="transparency" value="0"/>
+      </object>
+    </widget>
+
+    <widget>
+    <type value="FatalErrorMessage"/>
+    <object>
+        <name value="Titlebar"/>
+        <color name="textcolor" value="0x00303030"/>
+        <property name="bordersize" value="0"/>
+        <property name="height" value="20"/>
+        <filename name="background" value="asc/top_grey.bmp"/>
+        <property name="backmode" value="TILE"/>
+        <property name="blend" value="0"/>
+        <property name="bordersize" value="0"/>
+    </object>
+    <object>
+          <name value="ThemeWidget"/>
+          <filename name="background" value="asc/dialog_background2.png"/>
+          <color name="textcolor" value="0x00e3e400"/>
+          <property name="backmode" value="TILE"/>
+          <gradient name="gradient" color0="0x00e30000" color1="0x00e30000" color2="0x00e30000" color3="0x00e30000"/>
+          <property name="blend" value="255"/>
+          <property name="transparency" value="0"/>
+      </object>
+    </widget>
+        
+    <widget>
+    <type value="WarningMessage"/>
+    <object>
+        <name value="Titlebar"/>
+        <color name="textcolor" value="0x00303030"/>
+        <property name="bordersize" value="0"/>
+        <property name="height" value="20"/>
+        <filename name="background" value="asc/top_grey.bmp"/>
+        <property name="backmode" value="TILE"/>
+        <property name="blend" value="128"/>
+        <property name="bordersize" value="0"/>
+    </object>
+     <object>
+        <!-- The main area of the standard window -->
+          <name value="ThemeWidget"/>
+          <filename name="background" value="asc/dialog_background2.png"/>
+          <color name="textcolor" value="0x00e30000"/>
+          <property name="backmode" value="TILE"/>
+          <gradient name="gradient" color0="0x00447156" color1="0x00447156" color2="0x00447156" color3="0x00447156"/>
+          <property name="blend" value="0"/>
+          <property name="transparency" value="80"/>
+      </object>
+    </widget>
+    
+    
+    
     <widget>
     <type value="PropertyEditor"/>
      <object>

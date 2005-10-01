@@ -568,6 +568,11 @@ void MapDisplayPG::eventDraw ( SDL_Surface* srf, const PG_Rect& rect)
 
 void MapDisplayPG::displayCursor()
 {
+   displayCursor( *this );
+}
+
+void MapDisplayPG::displayCursor( const PG_Rect& dst )
+{
    if ( !actmap )
       return;
       
@@ -577,7 +582,7 @@ void MapDisplayPG::displayCursor()
       // surface->Blit( icons.cursor, getFieldPos(x,y));
       MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom,TargetPixelSelector_Rect> blitter;
       blitter.setZoom( zoom );
-      blitter.setTargetRect ( *this );
+      blitter.setTargetRect ( dst );
 
 
       Surface s = Surface::Wrap( PG_Application::GetScreen() );
@@ -600,7 +605,7 @@ void MapDisplayPG::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect
    }
 
    if ( !cursor.invisible )
-      displayCursor();
+      displayCursor( dst );
 
 
 }

@@ -53,6 +53,7 @@ class StartMultiplayerGame: public ConfigurableWindow {
       static const char* buttonLabels[];
       
       ASCString filename;
+      ASCString PBEMfilename;
       
       GameParameterEditorWidget* mapParameterEditor;
       PG_Widget* mapParameterEditorParent;
@@ -69,6 +70,8 @@ class StartMultiplayerGame: public ConfigurableWindow {
       bool nextPage(PG_Button* button = NULL);
       void showPage();
       bool checkPlayerStat();
+      
+      ASCString getDefaultPBEM_Filename();
       void setupNetwork();
       
       
@@ -174,7 +177,6 @@ bool StartMultiplayerGame::Apply()
                if ( exist( filename )) {
                   newMap = mapLoadingExceptionChecker( filename, MapLoadingFunction( tmaploaders::loadmap ));
                   if ( newMap ) {
-                     setupNetwork();
                      if ( checkPlayerStat() )
                         return true;
                      else {
@@ -207,6 +209,17 @@ bool StartMultiplayerGame::Apply()
                return true;
             }   
             break;   
+      case MultiPlayerOptions:
+         {
+            PG_LineEdit* le = dynamic_cast<PG_LineEdit*>( FindChild( "Filename", true ));
+            if ( le ) 
+               if ( !le->GetText().empty() ) {
+                  PBEMfilename = le->GetText();
+                  return true;
+               }
+            return false;      
+         }      
+         break;
               
       default: 
            break;
@@ -217,6 +230,12 @@ bool StartMultiplayerGame::Apply()
 
 bool StartMultiplayerGame::nextPage(PG_Button* button)
 {
+   static int counter  = 0;
+   ++counter;
+   if ( counter == 3 ) {
+      cout << "foo \n";
+      counter = 0;
+   }   
    int oldpage = page;
    switch ( page )  {
       case ModeSelection: {
@@ -290,6 +309,13 @@ bool StartMultiplayerGame::nextPage(PG_Button* button)
          delete emailSetup;
          emailSetup = new EmailSetupWidget( newMap, -1, emailSetupParent, PG_Rect( 0, 0, emailSetupParent->Width(), emailSetupParent->Height() ));
       }   
+      
+      if ( page == MultiPlayerOptions ) {
+         PG_LineEdit* le = dynamic_cast<PG_LineEdit*>( FindChild( "Filename", true ));
+         PBEMfilename = getDefaultPBEM_Filename();
+         if ( le )
+            le->SetText( PBEMfilename );         
+      }
                
       showPage();
       return true;
@@ -402,6 +428,21 @@ bool StartMultiplayerGame::checkPlayerStat()
    return true;
 }
 
+ASCString StartMultiplayerGame::getDefaultPBEM_Filename()
+{
+   ASCString filename = newMap->preferredFileNames.mapname[0];
+   if( filename.empty() )
+      filename = "game";   
+   
+   if ( filename.find( '.') != ASCString::npos )
+      filename.erase( filename.find( '.'));
+      
+   filename += "-$p-$t";
+   
+   return filename;
+}
+
+
 void StartMultiplayerGame::setupNetwork()
 {
    if ( mode == PBP || mode == PBEM ) {
@@ -409,15 +450,10 @@ void StartMultiplayerGame::setupNetwork()
          FileTransfer* ft = new FileTransfer();
          newMap->network = ft;
          
-         ASCString filename = newMap->preferredFileNames.mapname[0];
-         if( filename.empty() )
-            filename = "game";   
-         
-         if ( filename.find( '.') != ASCString::npos )
-            filename.erase( filename.find( '.'));
-            
-         filename += "-$p-$t";
-         ft->setup( filename );
+         if ( !PBEMfilename.empty() )
+            ft->setup( PBEMfilename );
+         else   
+            ft->setup( getDefaultPBEM_Filename() );
       }
    }
 }

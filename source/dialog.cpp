@@ -3110,14 +3110,5 @@ int editInt( const ASCString& title, int defaultValue, int minValue, int maxValu
 }
 
 
-void longWarning ( const ASCString& string )
-{
-   tviewanytext vat ;
-   vat.init ( "Warning", string.c_str(), 20, -1 , 450, 480 );
-   vat.run();
-   vat.done();
-}
-
-
 
 

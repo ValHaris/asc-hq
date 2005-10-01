@@ -28,10 +28,11 @@
 
  #include "ascstring.h"
 
-  class StatusMessageWindow {
+  //! A class that hols a MessageWindow. This class ensures that the window is removed if the last copy of the object is deleted
+  class StatusMessageWindowHolder {
     public:
        class UserData {
-             friend class StatusMessageWindow;
+             friend class StatusMessageWindowHolder;
              int counter;  
           public:
              UserData() : counter(1) {};
@@ -41,15 +42,15 @@
     private:   
        UserData* userData;
     protected:
-       void copy( const StatusMessageWindow& smw );
+       void copy( const StatusMessageWindowHolder& smw );
        void unlink();
     public:
-       StatusMessageWindow();
-       StatusMessageWindow( UserData* ud ) : userData(ud) {};
-       StatusMessageWindow( const StatusMessageWindow& smw );
-       StatusMessageWindow& operator=( const StatusMessageWindow& smw );    
+       StatusMessageWindowHolder();
+       StatusMessageWindowHolder( UserData* ud ) : userData(ud) {};
+       StatusMessageWindowHolder( const StatusMessageWindowHolder& smw );
+       StatusMessageWindowHolder& operator=( const StatusMessageWindowHolder& smw );    
        void close();
-       virtual ~StatusMessageWindow();
+       virtual ~StatusMessageWindowHolder();
  };
 
 
@@ -66,7 +67,10 @@
        
        //! displays an error message and aborts the game
        SigC::Signal1<void, const ASCString&> fatalError;
-       
+
+       //! exits the program
+       SigC::Signal0<void> exitHandler;
+              
        //! displays an error message and continues game
        SigC::Signal1<void, const ASCString&> error;
        
@@ -84,11 +88,20 @@
        
        //! displays any kind of message, as specified by parameter
        void message( MessageType type, const ASCString& msg, ... );
-       
-       StatusMessageWindow infoMessageWindow( const ASCString& msg );
+  
+       /** Displays a status window. As long as a copy of the returned StatusMessageWindowHolder exists, the window is shown.
+       Typical usage:
+       \code
+        if ( doSomething ) {
+             MessagingHubBase::StatusMessageWindowHolder smwh = MessagingHub::Instance().infoMessageWindow( "I'm doing something" );
+             doIt();
+        } // status window is automatically removed when scope is left
+        \endcode
+        */
+       StatusMessageWindowHolder infoMessageWindow( const ASCString& msg );
         
        //! prints a message to the logging file
-       SigC::Signal1<StatusMessageWindow, const ASCString&> messageWindowFactory;
+       SigC::Signal1<StatusMessageWindowHolder, const ASCString&> messageWindowFactory;
               
    };
        
@@ -100,12 +113,11 @@
  extern void fatalError ( const ASCString& string );
  extern void errorMessage ( const ASCString& string );
  extern void warning ( const ASCString& string );
- extern void longWarning ( const ASCString& string );
  extern void infoMessage ( const ASCString& string );
 
- extern void displayLogMessage ( int msgVerbosity, char* message, ... );
+ extern void displayLogMessage ( int msgVerbosity, const char* message, ... );
  extern void displayLogMessage ( int msgVerbosity, const ASCString& message );
-      
+
 
 #endif
 
