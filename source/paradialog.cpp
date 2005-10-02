@@ -174,6 +174,11 @@ ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
    
 }
 
+void ASC_PG_App :: Quit()
+{
+   sigQuit();
+   PG_Application::Quit();
+}
 
 class AutoProgressBar: public PG_ProgressBar {
 

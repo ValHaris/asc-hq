@@ -33,6 +33,7 @@ const int WAIT_SLEEP_MSEC = 50;
 SoundSystem* SoundSystem::instance = NULL;
 
 SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
+   : sdl_initialized(false), mix_initialized( false )
 {
    musicState = uninitialized;
    currentPlaylist = NULL;

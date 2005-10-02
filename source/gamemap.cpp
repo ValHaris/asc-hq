@@ -341,12 +341,13 @@ void tmap :: read ( tnstream& stream )
       if ( version >= 11 ) 
          player[i].diplomacy.read( stream );
       else {
-         for ( int j = 0; j< 8; ++j ) {
-            if ( alliances[i][j] == 0 ) 
-                player[i].diplomacy.setState( j, PEACE ); 
-            else
-                player[i].diplomacy.setState( j, WAR ); 
-         }
+         if ( i < 8 ) // no alliances for neutral 'player'
+            for ( int j = 0; j< 8; ++j ) {
+               if ( alliances[i][j] == 0 ) 
+                  player[i].diplomacy.setState( j, PEACE ); 
+               else
+                  player[i].diplomacy.setState( j, WAR ); 
+            }
       }
       
       if ( version >= 12 )

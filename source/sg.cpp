@@ -1442,11 +1442,18 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 
 
 
-struct GameThreadParams
+class GameThreadParams: public SigC::Object
 {
-   ASCString filename;
-   ASC_PG_App& application;
-   GameThreadParams( ASC_PG_App& app ) : application ( app ){};
+   private:
+      void exit() { exitMainloop = true; }; 
+   public:   
+      ASCString filename;
+      ASC_PG_App& application;
+      bool exitMainloop;
+      GameThreadParams( ASC_PG_App& app ) : application ( app ), exitMainloop(false) 
+      {
+         app.sigQuit.connect( SigC::slot( *this, &GameThreadParams::exit ));
+      };
 };
 
 int gamethread ( void* data )
@@ -1538,7 +1545,7 @@ int gamethread ( void* data )
            }
          }
       }
-   } while ( true );
+   } while ( !gtp->exitMainloop );
    return 0;
 }
 

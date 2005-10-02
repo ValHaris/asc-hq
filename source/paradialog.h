@@ -89,8 +89,12 @@ class StartupScreen: public SigC::Object {
        
        void reloadTheme();
        int Run ();
+       void Quit ();
+       
        void processEvent();
        bool enableLegacyEventHandling( bool use );
+       
+       SigC::Signal0<void> sigQuit;
       // PG_Theme* LoadTheme(const char* xmltheme, bool asDefault = true, const char* searchpath = NULL );
  };
 

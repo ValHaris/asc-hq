@@ -2818,7 +2818,7 @@ void tviewtext::displaytext ( void )
    delete[] actword;
    delete[] actline;
 
-   asc_free( tvt_firstlinebuf );
+   delete[] tvt_firstlinebuf;
 
    npop ( activefontsettings );
 
