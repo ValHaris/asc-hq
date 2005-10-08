@@ -9,15 +9,15 @@
  ***************************************************************************/
 
 #include <pgimage.h>
-#include "paradialog.h"
-#include "typen.h"
-#include "vehicletype.h"
-#include "vehicle.h"
-#include "iconrepository.h"
-#include "spfst.h"
-#include "dialog.h"
+#include "../paradialog.h"
+#include "../typen.h"
+#include "../vehicletype.h"
+#include "../vehicle.h"
+#include "../iconrepository.h"
+#include "../spfst.h"
+#include "../dialog.h"
 
-#include "textfiletags.h"
+#include "../textfiletags.h"
 
 void assignWeaponInfo ( Panel* panel, PG_Widget* widget, const SingleWeapon& weapon )
 {
@@ -53,8 +53,8 @@ void assignWeaponInfo ( Panel* panel, PG_Widget* widget, const SingleWeapon& wea
    }
 }
 
-
-static const char* paneName[5]  = { "information", "movement", "weapons", "transport", "description" };
+const int paneNum = 5;
+static const char* paneName[paneNum]  = { "information", "movement", "weapons", "transport", "description" };
 
 class UnitInfoDialog : public Panel {
         const Vehicle* veh;
@@ -256,11 +256,11 @@ class UnitInfoDialog : public Panel {
 
          void activate( const ASCString& pane ) {
             PG_Application::SetBulkMode();
-            for ( int i = 0; i < 5; ++i )
+            for ( int i = 0; i < paneNum; ++i )
                 if ( ASCString( paneName[i]) != pane )
                    hide( paneName[i] );
                    
-            for ( int i = 0; i < 5; ++i )
+            for ( int i = 0; i < paneNum; ++i )
                 if ( ASCString( paneName[i]) == pane )
                    show( paneName[i] );
             PG_Application::SetBulkMode(false);
@@ -268,7 +268,7 @@ class UnitInfoDialog : public Panel {
          };
 
          void click( const ASCString& name ) {
-            for ( int i = 0; i < 5; ++i)
+            for ( int i = 0; i < paneNum; ++i)
                if ( name == ASCString("padclick_") + paneName[i] ) 
                   activate(paneName[i]);
             if ( name == "padclick_exit" )
@@ -361,7 +361,7 @@ class UnitInfoDialog : public Panel {
                }
 
 
-               for ( int i = 0; i < 5; ++i )
+               for ( int i = 0; i < paneNum; ++i )
                   registerSpecialInput( ASCString("padclick_") + paneName[i] );
                registerSpecialInput( "padclick_exit" );
 

@@ -30,15 +30,6 @@
 #include "graphicset.h"
 #include "basegfx.h" 
 
-#ifndef converter
-#include "spfst.h"
-#endif
-
-#ifdef sgmain
- #include "network.h"
- #include "gameoptions.h"
-#endif
-
 #include "vehicletype.h"
 #include "buildingtype.h"
 #include "textfileparser.h"

@@ -38,12 +38,6 @@
 #include "iconrepository.h"
 #include "paradialog.h"
 
-#ifdef sgmain
- #include "gameoptions.h"
- #include "resourcenet.h"
-#endif
-
-
 
 
 tfield :: tfield ( pmap gamemap_ )

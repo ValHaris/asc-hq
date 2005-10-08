@@ -41,6 +41,7 @@
 #include "spfst.h"
 #include "building.h"
 #include "gamedlg.h"
+#include "dialogs/cargodialog.h"
 
 namespace GuiFunctions
 {
@@ -915,10 +916,10 @@ class OpenContainer : public GuiFunction
 
       void execute( const MapCoordinate& pos, int num )
       {
-          containeractive++;
           pfield fld = actmap->getField(pos);
-          container( fld->vehicle, fld->building );
-          containeractive--;
+          
+          cargoDialog( fld->getContainer() );
+          
           updateFieldInfo();
           repaintMap();
       }
@@ -2650,7 +2651,7 @@ void registerGuiFunctions( GuiIconHandler& handler )
    handler.registerUserFunction( new GuiFunctions::ConstructBuilding() );
    handler.registerUserFunction( new GuiFunctions::DestructBuilding() );
    handler.registerUserFunction( new GuiFunctions::SearchForMineralResources() );
-   // handler.registerUserFunction( new GuiFunctions::OpenContainer() );
+   handler.registerUserFunction( new GuiFunctions::OpenContainer() );
    handler.registerUserFunction( new GuiFunctions::EnableReactionfire() );
    handler.registerUserFunction( new GuiFunctions::DisableReactionfire() );
    handler.registerUserFunction( new GuiFunctions::Ascend );

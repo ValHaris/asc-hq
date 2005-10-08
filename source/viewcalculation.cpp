@@ -27,9 +27,6 @@
 #include "buildingtype.h"
 #include "errors.h"
 
-#ifdef sgmain
-// #include "gameevents.h"
-#endif
 
 SigC::Signal0<void> buildingSeen;
 
@@ -255,10 +252,8 @@ int  evaluatevisibilityfield ( pmap actmap, pfield fld, int player, int add, int
          jamming += fld->view[i].jamming;
    }
    if ( sight > jamming   ||  direct  ) {
-      #ifdef sgmain
       if ( fld->building && (fld->building->connection & cconnection_seen))
          buildingSeen();
-      #endif
 
       if (( fld->vehicle  && ( fld->vehicle->color  == player * 8 ) && false ) ||
           ( fld->vehicle  && ( fld->vehicle->height  < chschwimmend ) && sonar ) ||

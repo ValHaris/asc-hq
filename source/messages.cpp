@@ -21,30 +21,6 @@
 #include "gamemap.h"
 #include "spfst.h"
 
-/*
-#ifndef sgmain
-
-Message :: Message ( pmap spfld )
-{
-   from = 0;
-   to = 0;
-   time = 0;
-   id = 0;
-   gametime.set( 0, 0);
-}
-
-
-Message :: Message ( const ASCString& , pmap gamemap, int rec, int from )
-{
-   from = 0;
-   to = 0;
-   time = 0;
-   id = 0;
-   gametime.set( 0, 0);
-}
-
-#else
-*/
 Message :: Message ( pmap spfld  )
 {
    from = 1 << spfld->actplayer;

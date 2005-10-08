@@ -1,6 +1,11 @@
-//     $Id: global_os.h,v 1.5 2001-05-18 22:30:30 mbickel Exp $
+//     $Id: global_os.h,v 1.5.2.1 2005-10-08 15:24:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2001/05/18 22:30:30  mbickel
+//      The data file is now installed in the correct directory
+//      If the installation directory is changed with configure, the new path
+//       will now be compiled directly into ASC
+//
 //     Revision 1.4  2000/11/08 21:58:02  mbickel
 //      brought the small editors up to date
 //
@@ -54,11 +59,6 @@
   #define StaticClassVariable static
   #ifdef __WATCOM_CPLUSPLUS__      // and not Watcom C
   namespace std {};
-  #endif
-
-  #ifndef converter
-   #define UseMemAvail
-   #define UseMemCheck
   #endif
 
   #include <wchar.h>

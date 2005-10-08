@@ -84,10 +84,9 @@ am_asc_mapedit_OBJECTS = edevents.$(OBJEXT) edgen.$(OBJEXT) \
 	guidimension.$(OBJEXT) weatherdialog.$(OBJEXT) \
 	iconrepository.$(OBJEXT) overviewmapimage.$(OBJEXT) \
 	mapfield.$(OBJEXT) objects.$(OBJEXT) \
-	overviewmappanel.$(OBJEXT) unitinfodialog.$(OBJEXT) \
-	messaginghub.$(OBJEXT) explosivemines.$(OBJEXT) \
-	legacynetworkloaders.$(OBJEXT) player.$(OBJEXT) \
-	cannedmessages.$(OBJEXT)
+	overviewmappanel.$(OBJEXT) messaginghub.$(OBJEXT) \
+	explosivemines.$(OBJEXT) legacynetworkloaders.$(OBJEXT) \
+	player.$(OBJEXT) cannedmessages.$(OBJEXT)
 asc_mapedit_OBJECTS = $(am_asc_mapedit_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
@@ -255,7 +254,7 @@ mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
 geometry.cpp weatherarea.cpp guidimension.cpp weatherdialog.cpp \
 iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
-unitinfodialog.cpp messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp \
+messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp \
 player.cpp cannedmessages.cpp
 
 asc_mapedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
@@ -406,7 +405,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textfileparser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textfiletags.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/typen.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitinfodialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicletype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/viewcalculation.Po@am__quote@

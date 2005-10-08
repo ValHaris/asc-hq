@@ -111,9 +111,6 @@ int Vehicletype::maxsize ( void ) const
    return weight;
 }
 
-#ifndef converter
-extern void* generate_vehicle_gui_build_icon ( Vehicletype* tnk );
-#endif
 
 const int vehicle_version = 22;
 

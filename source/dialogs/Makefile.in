@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-SOURCES = $(libdialogs_la_SOURCES)
+SOURCES = $(libdialogs_la_SOURCES) $(libgamedialogs_la_SOURCES)
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -52,8 +52,11 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 libdialogs_la_DEPENDENCIES =
 am_libdialogs_la_OBJECTS = editmapparam.lo selectionwindow.lo \
 	fileselector.lo playersetup.lo alliancesetup.lo newgame.lo \
-	soundsettings.lo emailsetup.lo
+	soundsettings.lo emailsetup.lo unitinfodialog.lo
 libdialogs_la_OBJECTS = $(am_libdialogs_la_OBJECTS)
+libgamedialogs_la_DEPENDENCIES =
+am_libgamedialogs_la_OBJECTS = cargodialog.lo
+libgamedialogs_la_OBJECTS = $(am_libgamedialogs_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -65,8 +68,8 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(libdialogs_la_SOURCES)
-DIST_SOURCES = $(libdialogs_la_SOURCES)
+SOURCES = $(libdialogs_la_SOURCES) $(libgamedialogs_la_SOURCES)
+DIST_SOURCES = $(libdialogs_la_SOURCES) $(libgamedialogs_la_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -191,9 +194,11 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = $(SDL_CFLAGS) $(PARAGUI_CFLAGS)  $(SIGC_CFLAGS) -Dmaindialogs
-noinst_LTLIBRARIES = libdialogs.la
-libdialogs_la_SOURCES = editmapparam.cpp selectionwindow.cpp fileselector.cpp playersetup.cpp alliancesetup.cpp newgame.cpp soundsettings.cpp emailsetup.cpp
+noinst_LTLIBRARIES = libdialogs.la libgamedialogs.la
+libdialogs_la_SOURCES = editmapparam.cpp selectionwindow.cpp fileselector.cpp playersetup.cpp alliancesetup.cpp newgame.cpp soundsettings.cpp emailsetup.cpp unitinfodialog.cpp 
 libdialogs_la_LIBADD = @SDL_LIBS@ 
+libgamedialogs_la_SOURCES = cargodialog.cpp
+libgamedialogs_la_LIBADD = @SDL_LIBS@ 
 all: all-am
 
 .SUFFIXES:
@@ -238,6 +243,8 @@ clean-noinstLTLIBRARIES:
 	done
 libdialogs.la: $(libdialogs_la_OBJECTS) $(libdialogs_la_DEPENDENCIES) 
 	$(CXXLINK)  $(libdialogs_la_LDFLAGS) $(libdialogs_la_OBJECTS) $(libdialogs_la_LIBADD) $(LIBS)
+libgamedialogs.la: $(libgamedialogs_la_OBJECTS) $(libgamedialogs_la_DEPENDENCIES) 
+	$(CXXLINK)  $(libgamedialogs_la_LDFLAGS) $(libgamedialogs_la_OBJECTS) $(libgamedialogs_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -246,6 +253,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/alliancesetup.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cargodialog.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/editmapparam.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/emailsetup.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fileselector.Plo@am__quote@
@@ -253,6 +261,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/playersetup.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/selectionwindow.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/soundsettings.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitinfodialog.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

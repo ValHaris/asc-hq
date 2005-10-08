@@ -40,8 +40,8 @@
 #include "weatherdialog.h"
 #include "maped-mainscreen.h"
 #include "attack.h"
-#include "unitinfodialog.h"
 
+#include "dialogs/unitinfodialog.h"
 #include "dialogs/editmapparam.h"   
 #include "dialogs/alliancesetup.h"
    

@@ -83,10 +83,10 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	gamedialog.$(OBJEXT) infopopup.$(OBJEXT) \
 	overviewmapimage.$(OBJEXT) asc-mainscreen.$(OBJEXT) \
 	mapfield.$(OBJEXT) overviewmappanel.$(OBJEXT) \
-	weathercast.$(OBJEXT) unitinfodialog.$(OBJEXT) \
-	messaginghub.$(OBJEXT) explosivemines.$(OBJEXT) \
-	legacynetworkloaders.$(OBJEXT) player.$(OBJEXT) \
-	cannedmessages.$(OBJEXT) reactionfire.$(OBJEXT)
+	weathercast.$(OBJEXT) messaginghub.$(OBJEXT) \
+	explosivemines.$(OBJEXT) legacynetworkloaders.$(OBJEXT) \
+	player.$(OBJEXT) cannedmessages.$(OBJEXT) \
+	reactionfire.$(OBJEXT)
 asc_OBJECTS = $(am_asc_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_DEPENDENCIES =  \
@@ -97,6 +97,7 @@ asc_DEPENDENCIES =  \
 	$(top_builddir)/source/libs/loki/libloki.la \
 	$(top_builddir)/source/graphics/libgraphics.la \
 	$(top_builddir)/source/dialogs/libdialogs.la \
+	$(top_builddir)/source/dialogs/libgamedialogs.la \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
@@ -255,14 +256,14 @@ simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameevents
 gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp weatherarea.cpp \
 guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp gamedialog.cpp \
 infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappanel.cpp \
-weathercast.cpp unitinfodialog.cpp messaginghub.cpp explosivemines.cpp  \
-legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp
+weathercast.cpp messaginghub.cpp explosivemines.cpp  \
+legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp 
 
 asc_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 $(top_builddir)/source/sdl/libsdl.la  $(top_builddir)/source/libs/loki/libloki.la \
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
-$(PARAGUI_LIBS) @LDADDLIBBZ2@  $(SIGC_LIBS) $(SDL_LIBS)
+$(top_builddir)/source/dialogs/libgamedialogs.la $(PARAGUI_LIBS) @LDADDLIBBZ2@  $(SIGC_LIBS) $(SDL_LIBS)
 
 all: all-am
 
@@ -415,7 +416,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textfiletags.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/typen.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitctrl.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitinfodialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicletype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/viewcalculation.Po@am__quote@

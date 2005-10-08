@@ -13,6 +13,7 @@
 
  
 StatusMessageWindowHolder :: StatusMessageWindowHolder( const StatusMessageWindowHolder& smw )
+   : userData( NULL )
 {
    copy(smw);
 }

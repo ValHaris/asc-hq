@@ -23,7 +23,7 @@
 #ifndef unitinfodialogH
 #define unitinfodialogH
 
-#include "vehicletype.h"
+#include "../vehicletype.h"
 
 extern void unitInfoDialog( const Vehicletype* vt = NULL );
 extern void assignWeaponInfo ( Panel* panel, PG_Widget* widget, const SingleWeapon& weapon );

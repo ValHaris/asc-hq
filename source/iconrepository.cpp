@@ -51,9 +51,7 @@ Surface& IconRepository::getIcon( const ASCString& name )
         return *repository[name];
      }
      catch ( tfileerror err ) {
-        #ifndef converter
         errorMessage("could not load " + err.getFileName() );
-        #endif
         if ( name != "dummy.png" )
            return getIcon( "dummy.png" );
         else

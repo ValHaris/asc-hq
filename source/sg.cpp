@@ -116,7 +116,7 @@
 #include "gamedialog.h"
 #include "weathercast.h"
 #include "asc-mainscreen.h"
-#include "unitinfodialog.h"
+#include "dialogs/unitinfodialog.h"
 #include "messaginghub.h"
 #include "cannedmessages.h"
 #include "memorycheck.cpp"

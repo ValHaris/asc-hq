@@ -1578,7 +1578,7 @@ void ASC_PG_App:: messageDialog( const ASCString& message, MessagingHubBase::Mes
 
 PG_StatusWindowData::PG_StatusWindowData( const ASCString& msg ) 
 {
-   md = new MessageDialog( NULL, PG_Rect( 100, 100, 250, 100 ), "status", msg );
+   md = new MessageDialog( NULL, PG_Rect( 100, 100, 250, 100 ), "status", msg, PG_Label::CENTER, "Window" );
    md->Show();
 };
 

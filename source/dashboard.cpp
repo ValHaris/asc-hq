@@ -29,7 +29,7 @@
 #include "pgimage.h"
 #include "textfiletags.h"
 #include "mapdisplay.h"
-#include "unitinfodialog.h"
+#include "dialogs/unitinfodialog.h"
 
 
 

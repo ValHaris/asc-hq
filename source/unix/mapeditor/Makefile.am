@@ -29,7 +29,7 @@ mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
 geometry.cpp weatherarea.cpp guidimension.cpp weatherdialog.cpp \
 iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
-unitinfodialog.cpp messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp \
+messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp \
 player.cpp cannedmessages.cpp
 
 asc_mapedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
