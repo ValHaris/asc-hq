@@ -685,9 +685,9 @@ void AnyUnitEntersPolygon::fieldOperator( const MapCoordinate& mc )
             found = true;
 
       if ( fld && fld->building )
-         for ( int i = 0; i < 32; ++i )
-            if ( fld->building->loading[i] )
-               if ( (1 << fld->building->loading[i]->getOwner()) & player )
+         for ( ContainerBase::Cargo::iterator i = fld->building->cargo.begin(); i != fld->building->cargo.end(); ++i )
+            if ( *i ) 
+               if ( (1 << (*i)->getOwner()) & player )
                   found = true;
 
    } else {

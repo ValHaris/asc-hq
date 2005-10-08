@@ -318,11 +318,7 @@ class CargoItemFactory: public MapItemTypeWidgetFactory<MapItemTypeWidget< Vehic
                   unit->tank.fuel = 0;
                   displaymessage("Warning:\nThe unit you just set could not be loaded with full material and fuel\nPlease set these values manually",1);
                }
-               int p = 0;
-               while ( container->loading[p] && p < 32 )
-                  p++;
-               if ( p < 32 )
-                  container->loading[p] = unit;
+               container->addToCargo( unit );
       
             } else {
                delete unit;
@@ -1639,11 +1635,7 @@ void selcargo( ContainerBase* container )
             unit->tank.fuel = 0;
             displaymessage("Warning:\nThe unit you just set could not be loaded with full material and fuel\nPlease set these values manually",1);
          }
-         int p = 0;
-         while ( container->loading[p] && p < 32 )
-            p++;
-         if ( p < 32 )
-            container->loading[p] = unit;
+         container->addToCargo( unit );
 
       } else {
         delete unit;

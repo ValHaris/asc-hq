@@ -797,10 +797,10 @@ void renameUnit()
 
 void calcCargoSummary( ContainerBase* cb, map<int,int>& summary )
 {
-   for ( int i = 0; i < 32; ++i )
-      if ( cb->loading[i] ) {
-         calcCargoSummary( cb->loading[i], summary );
-         summary[cb->loading[i]->typ->id] += 1;
+   for ( ContainerBase::Cargo::iterator i = cb->cargo.begin(); i != cb->cargo.end(); ++i )
+      if ( *i ) {
+         calcCargoSummary( *i, summary );
+         summary[ (*i)->typ->id] += 1;
       }
 }
 
@@ -1228,7 +1228,7 @@ void execuseraction2 ( tuseractions action )
          if ( fieldvisiblenow  ( getSelectedField() )) {
             Vehicle* eht = getSelectedField()->vehicle;
             if ( eht && actmap->player[actmap->actplayer].diplomacy.getState( eht->getOwner()) >= PEACE_SV )
-               displaymessage(" weight of unit: \n basic: %d\n+cargo:%d\n= %d",1 ,eht->typ->weight, eht->cargo(), eht->weight() );
+               displaymessage(" weight of unit: \n basic: %d\n+cargo:%d\n= %d",1 ,eht->typ->weight, eht->cargoWeight(), eht->weight() );
          }
          break;
       case ua_GameStatus:

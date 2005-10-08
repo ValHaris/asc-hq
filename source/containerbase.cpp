@@ -30,8 +30,6 @@
 
 ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, pmap map, int player ) : gamemap ( map ), baseType (bt)
 {
-   for ( int i = 0; i< 32; i++ )
-      loading[i] = NULL;
    damage = 0;
    color = player*8;
 }
@@ -116,70 +114,86 @@ int ContainerBase :: getMaxRepair ( const ContainerBase* item, int newDamage, Re
 int ContainerBase :: vehiclesLoaded ( void ) const
 {
    int a = 0;
-   /*
-   if (eht->typ->loadcapacity == 0)
-      return( 0 );
-   */
 
-   for ( int b = 0; b <= 31; b++)
-      if ( loading[b] )
-         a++;
+   for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i )
+         ++a; 
 
    return a;
 }
 
 bool ContainerBase :: searchAndRemove( Vehicle* veh )
 {
-   for ( int b = 0; b <= 31; b++)
-      if ( loading[b] == veh ) {
-         loading[b] = NULL;
-         return true;
-      } else
-         if ( loading[b] )
-            if ( loading[b]->searchAndRemove ( veh ))
+   if ( removeUnitFromCargo( veh ))
+      return true;
+   else
+      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+         if ( *i )
+            if ( (*i)->searchAndRemove( veh ))
                return true;
-   return false;
+               
+   return false;               
 }
 
 
 
-int ContainerBase::cargo ( void ) const
+int ContainerBase::cargoWeight() const
 {
    int w = 0;
-   for (int c = 0; c <= 31; c++)
-      if ( loading[c] )
-         w += loading[c]->weight();
+   for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i )
+         w += (*i)->weight();
+         
    return w;
 }
 
-void ContainerBase::regroupUnits ()
-{
-   int num = 0;
-   for ( int i = 18; i < 32; i++ )
-      if ( loading[i] )
-         num++;
 
-   if ( num ) {
-      for ( int i = 0; i < 18; i++ )
-         if ( !loading[i] ) {
-            for ( int j = i+1; j < 32; j++ )
-               loading[j-1] = loading[j];
-            loading[31] = NULL;
+
+const ContainerBase* ContainerBase :: findParentUnit ( const Vehicle* veh ) const
+{
+   for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i ) {
+         if ( *i == veh )
+            return this;
+         else {
+            const ContainerBase* cb = (*i)->findParentUnit( veh );
+            if ( cb )
+               return cb;
          }
-   }
+      }
+      
+   return NULL;
 }
 
-
-const ContainerBase* ContainerBase :: findUnit ( const Vehicle* veh ) const
+bool ContainerBase::unitLoaded( int nwid )
 {
-   for ( int i = 0; i < 32; i++ ) {
-      if ( loading[i] == veh )
-         return this;
-      else
-         if ( loading[i] )
-            if ( loading[i]->findUnit ( veh ) )
-               return loading[i];
-   }
+   for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i ) {
+         if ( (*i)->networkid == nwid )
+            return true;
+         else {
+            if ( (*i)->unitLoaded( nwid ) )
+               return true;
+         }
+      }
+      
+   return false;
+
+}
+
+Vehicle* ContainerBase :: findUnit ( int nwid ) 
+{
+   for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i ) {
+         if ( (*i)->networkid == nwid )
+            return *i;
+         else {
+            Vehicle* cb = (*i)->findUnit( nwid );
+            if ( cb )
+               return cb;
+         }
+      }
+      
    return NULL;
 }
 
@@ -261,12 +275,49 @@ void ContainerBase::paintField ( const Surface& img, Surface& dest, SPoint pos, 
 }
 
 
+void ContainerBase :: addToCargo( Vehicle* veh )
+{
+   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( ! (*i) ) {
+         *i = veh;
+         return;
+      }
+         
+   cargo.push_back( veh );
+}
+
+bool ContainerBase :: removeUnitFromCargo( Vehicle* veh, bool recursive )
+{
+   if ( !veh )
+      return false;
+   else   
+      return removeUnitFromCargo( veh->networkid );
+}
+
+bool ContainerBase :: removeUnitFromCargo( int nwid, bool recursive )
+{
+   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i ) 
+      if ( *i ) {
+   
+         if ( (*i)->networkid == nwid ) {
+            *i = NULL;
+            return true;
+         }
+         if ( recursive )
+            if ( (*i)->removeUnitFromCargo( nwid, recursive ))
+               return true;
+      }
+      
+   return false;   
+}
+
+
 bool ContainerBase :: vehicleFit ( const Vehicle* vehicle ) const
 {
 
    if ( baseType->vehicleFit ( vehicle->typ )) // checks size and type
       if ( vehiclesLoaded() < min ( 32, baseType->maxLoadableUnits ) || (vehicle->color != color ) )
-         if ( cargo() + vehicle->weight() <= baseType->maxLoadableWeight || findUnit ( vehicle ) || (vehicle->color != color )) // if the unit is already  loaded, the container already bears its weight
+         if ( cargoWeight() + vehicle->weight() <= baseType->maxLoadableWeight || findParentUnit ( vehicle ) || (vehicle->color != color )) // if the unit is already  loaded, the container already bears its weight
             return true;
 
    return false;
@@ -383,6 +434,10 @@ int  ContainerBase :: vehicleDocking ( const Vehicle* vehicle, bool out ) const
 
 ContainerBase :: ~ContainerBase ( )
 {
+   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i )
+         delete *i;
+
    if ( !gamemap->__mapDestruction ) {
       destroyed();
       anyContainerDestroyed();
@@ -401,11 +456,7 @@ TemporaryContainerStorage :: TemporaryContainerStorage ( ContainerBase* _cb, boo
 void TemporaryContainerStorage :: restore (  )
 {
    if ( _storeCargo )
-      for ( int i = 0; i < 32; i++ )
-         if ( cb->loading[i] ) {
-            delete cb->loading[i];
-            cb->loading[i] = NULL;
-         }
+      cb->cargo.clear();
 
    tmemorystream stream ( &buf, tnstream::reading );
    cb->read ( stream );

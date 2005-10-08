@@ -2692,15 +2692,20 @@ class tvehiclecargo : public tladeraum {
 
 const char* tvehiclecargo :: getinfotext ( int pos )
 {
-   if ( transport->loading[ pos ] )
-      if ( !transport->loading[ pos ]->name.empty() )
-         return transport->loading[ pos ]->name.c_str();
+   if ( transport->cargo.size() <= pos )
+      return NULL;
+      
+   Vehicle* veh = transport->cargo[pos];
+   if ( !veh )
+      return NULL;
+      
+   if ( !veh->name.empty() )
+      return veh->name.c_str();
+   else
+      if ( !veh->typ->name.empty() )
+         return veh->typ->name.c_str();
       else
-         if ( !transport->loading[ pos ]->typ->name.empty() )
-            return transport->loading[ pos ]->typ->name.c_str();
-         else
-            return transport->loading[ pos ]->typ->description.c_str();
-   return NULL;
+         return veh->typ->description.c_str();
 }
 
 
@@ -2711,8 +2716,8 @@ void tvehiclecargo :: init (  )
 
 void tvehiclecargo :: displaysingleitem ( int pos, int x, int y )
 {
-   if ( transport->loading[ pos ] )
-      transport->loading[ pos ]->typ->paint( getActiveSurface(), SPoint ( x, y), farbwahl );
+   if ( transport->cargo.size() > pos && transport->cargo[pos] )
+      transport->cargo[ pos ]->typ->paint( getActiveSurface(), SPoint ( x, y), farbwahl );
 }
 
 void tvehiclecargo :: additem  ( void )
@@ -2722,37 +2727,34 @@ void tvehiclecargo :: additem  ( void )
 
 void tvehiclecargo :: removeitem ( int pos )
 {
-   if ( transport->loading[ pos ] ) {
-      delete transport->loading[ pos ] ;
-      transport->loading[ pos ] = NULL;
+   if ( transport->cargo.size() > pos && transport->cargo[pos] ) {
+      delete transport->cargo[ pos ] ;
+      transport->cargo[ pos ] = NULL;
    }
 }
 
 void tvehiclecargo :: checkforadditionalkeys ( tkey ch )
 {
-   if ( transport->loading[ cursorpos ] ) {
+   if ( transport->cargo.size() > cursorpos && transport->cargo[cursorpos] ) {
+   
        if ( ch == ct_p )
-          changeunitvalues( transport->loading[ cursorpos ] );
+          changeunitvalues( transport->cargo[ cursorpos ] );
        if ( ch == ct_c )
-          unit_cargo( transport->loading[ cursorpos ] );
+          unit_cargo( transport->cargo[ cursorpos ] );
 
        if ( ch == ct_c + ct_stp )
-          if ( transport->loading[ cursorpos ] ) {
+          if ( transport->cargo[ cursorpos ] ) {
              ClipBoard::Instance().clear();
-             ClipBoard::Instance().addUnit( transport->loading[ cursorpos ] );
+             ClipBoard::Instance().addUnit( transport->cargo[ cursorpos ] );
           }
    }
    if ( ch == ct_v + ct_stp ) {
       Vehicle* veh = ClipBoard::Instance().pasteUnit();
-      if ( transport->vehicleFit( veh ))
-         for ( int i = 0; i < 32; i++ )
-            if ( !transport->loading[i] ) {
-               veh->convert( log2(transport->color) );
-               transport->loading[i] = veh;
-               redraw();
-               return;
-            }
-      delete veh;
+      if ( transport->vehicleFit( veh )) {
+         transport->addToCargo( veh );
+         redraw();
+      } else   
+         delete veh;
    }
 }
 
@@ -2774,7 +2776,7 @@ void         unit_cargo( Vehicle* vh )
    }
 }
 
-
+#if 0
 
 class SelectFromContainer : public tladeraum {
                protected:
@@ -2848,13 +2850,18 @@ void SelectFromContainer :: finish ( int cancel )
 {
 }
 
+#endif
+
 Vehicle* selectUnitFromContainer( ContainerBase* container )
 {
+#if 0
    SelectFromContainer sfc ( container );
    sfc.init();
    sfc.run();
    sfc.done();
    return sfc.unit;
+   #endif
+   return NULL;
 }
 
 
@@ -2876,7 +2883,7 @@ void tbuildingcargoprod :: finish ( int cancel )
    if ( cancel )
       tus.restore();
 }
-
+#if 0
 class tbuildingcargo : public tbuildingcargoprod {
                protected:
                     virtual const char* getinfotext ( int pos );
@@ -2950,15 +2957,18 @@ const char* tbuildingcargo :: getinfotext ( int pos )
    return NULL;
 }
 
+#endif
 
 void         building_cargo( Building* bld )
 {
+#if 0
    if ( bld  ) {
       tbuildingcargo laderaum ( bld );
       laderaum.init( "cargo" );
       laderaum.run();
       laderaum.done();
    }
+   #endif
 }
 
 //* õS Production Building-Production
@@ -3316,9 +3326,9 @@ Vehicletype* UnitTypeTransformation :: transformvehicletype ( const Vehicletype*
 
 void  UnitTypeTransformation ::transformvehicle ( Vehicle* veh, int unitsetnum, int translationnum )
 {
-   for ( int i = 0; i < 32; i++ )
-      if ( veh->loading[i] )
-         transformvehicle ( veh->loading[i], unitsetnum, translationnum );
+   for ( ContainerBase::Cargo::iterator i = veh->cargo.begin(); i != veh->cargo.end(); ++i )
+      if ( *i )
+         transformvehicle ( *i, unitsetnum, translationnum );
 
    Vehicletype* nvt = transformvehicletype ( veh->typ, unitsetnum, translationnum );
    if ( !nvt ) {
@@ -3363,10 +3373,12 @@ void UnitTypeTransformation :: run ( void )
          pfield fld = getfield ( x, y );
          if ( fld->vehicle )
             transformvehicle ( fld->vehicle, unitsetnum, translationsetnum );
-         if ( fld->building && (fld->bdt & getTerrainBitType(cbbuildingentry) ).any() )
-            for ( int i = 0; i < 32; i++ ) {
-               if ( fld->building->loading[i] ) 
-                  transformvehicle ( fld->building->loading[i], unitsetnum, translationsetnum );
+         if ( fld->building && (fld->bdt & getTerrainBitType(cbbuildingentry) ).any() ) {
+            for ( ContainerBase::Cargo::iterator i = fld->building->cargo.begin(); i != fld->building->cargo.end(); ++i )
+               if ( *i )
+                  transformvehicle ( *i, unitsetnum, translationsetnum );
+                  
+            for ( int i = 0; i < 32; ++i )      
                if ( fld->building->production[i] ) {
                   Vehicletype* vt = transformvehicletype ( fld->building->production[i], unitsetnum, translationsetnum );
                   if ( vt ) {
@@ -3375,11 +3387,11 @@ void UnitTypeTransformation :: run ( void )
                   } else
                      unitsnottransformed++;
                }
-            }
+         }   
       }
 
     if ( vehicleTypesNotTransformedNum ) {
-       string s = "The following vehicles could not be transformed: ";
+       ASCString s = "The following vehicles could not be transformed: ";
        for ( int i = 0; i < vehicleTypesNotTransformedNum; i++ ) {
           s += "\n ID ";
           s += strrr ( vehicleTypesNotTransformed[i] );

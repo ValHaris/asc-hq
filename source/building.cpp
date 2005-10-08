@@ -1007,10 +1007,11 @@ void  ccontainercontrols :: crefill :: emptyeverything ( Vehicle* eht )
    for (int i = 0; i < eht->typ->weapons.count; i++)
       if ( eht->typ->weapons.weapon[ i ].requiresAmmo() )
          ammunition ( eht, i, 0 );
-
+/*
    for ( int i = 0; i < 32; i++ )
       if ( eht->loading[i] )
          emptyeverything ( eht->loading[i] );
+*/         
 }
 
 
@@ -1040,74 +1041,74 @@ bool ccontainercontrols :: cmove_unit_in_container :: movedownavail ( Vehicle* e
 
 void ccontainercontrols :: cmove_unit_in_container :: moveup ( Vehicle* eht )
 {
-   if ( moveupavail( eht ) )
-      if ( eht ) {
-         Vehicle* targe = buildingparamstack[recursiondepth-1].eht;
-         Building* targb = buildingparamstack[recursiondepth-1].bld;
-
-         if ( targe ) {
-            int i = 0;
-            while ( i < maxloadableunits   &&  targe->loading[i] )
-               i++;
-
-            if ( !targe->loading[i] ) {
-               targe->loading[i] = eht;
-               i = 0;
-               while ( cc_t->vehicle->loading[i] != eht)
-                  i++;
-
-               cc_t->vehicle->loading[i] = 0;
-
-            }
-            logtoreplayinfo ( rpl_moveUnitUpDown, targe->getPosition().x, targe->getPosition().y, cc_t->vehicle->networkid, targe->networkid, eht->networkid );
-         } else
-            if ( targb ) {
-               int i = 0;
-               while ( i < maxloadableunits   &&  targb->loading[i] )
-                  i++;
-
-               if ( !targb->loading[i] ) {
-                  targb->loading[i] = eht;
-                  i = 0;
-                  while ( cc_t->vehicle->loading[i] != eht)
-                     i++;
-
-                  cc_t->vehicle->loading[i] = 0;
-               }
-               logtoreplayinfo ( rpl_moveUnitUpDown, targb->getPosition().x, targb->getPosition().y, cc_t->vehicle->networkid, -1, eht->networkid );
-            }
-      }
+//    if ( moveupavail( eht ) )
+//       if ( eht ) {
+//          Vehicle* targe = buildingparamstack[recursiondepth-1].eht;
+//          Building* targb = buildingparamstack[recursiondepth-1].bld;
+// 
+//          if ( targe ) {
+//             int i = 0;
+//             while ( i < maxloadableunits   &&  targe->loading[i] )
+//                i++;
+// 
+//             if ( !targe->loading[i] ) {
+//                targe->loading[i] = eht;
+//                i = 0;
+//                while ( cc_t->vehicle->loading[i] != eht)
+//                   i++;
+// 
+//                cc_t->vehicle->loading[i] = 0;
+// 
+//             }
+//             logtoreplayinfo ( rpl_moveUnitUpDown, targe->getPosition().x, targe->getPosition().y, cc_t->vehicle->networkid, targe->networkid, eht->networkid );
+//          } else
+//             if ( targb ) {
+//                int i = 0;
+//                while ( i < maxloadableunits   &&  targb->loading[i] )
+//                   i++;
+// 
+//                if ( !targb->loading[i] ) {
+//                   targb->loading[i] = eht;
+//                   i = 0;
+//                   while ( cc_t->vehicle->loading[i] != eht)
+//                      i++;
+// 
+//                   cc_t->vehicle->loading[i] = 0;
+//                }
+//                logtoreplayinfo ( rpl_moveUnitUpDown, targb->getPosition().x, targb->getPosition().y, cc_t->vehicle->networkid, -1, eht->networkid );
+//             }
+//       }
 }
 
 
 void ccontainercontrols :: cmove_unit_in_container :: movedown ( Vehicle* eht, Vehicle* into )
 {
-   if ( movedownavail(eht, into) ) {
-
-      int i = 0;
-      while ( i < maxloadableunits   &&  into->loading[i] )
-         i++;
-
-      if ( !into->loading[i] ) {
-         into->loading[i] = eht;
-
-         i = 0;
-         if ( cc_t ) {
-            while ( cc_t->vehicle->loading[i] != eht)
-               i++;
-
-            cc_t->vehicle->loading[i] = 0;
-            logtoreplayinfo ( rpl_moveUnitUpDown, cc_t->vehicle->getPosition().x, cc_t->vehicle->getPosition().y, cc_t->vehicle->networkid, into->networkid, eht->networkid );
-         } else
-            if ( cc_b ) {
-               while ( cc_b->building->loading[i] != eht)
-                  i++;
-
-               cc_b->building->loading[i] = 0;
-               logtoreplayinfo ( rpl_moveUnitUpDown, cc_b->building->getPosition().x, cc_b->building->getPosition().y, -1, into->networkid, eht->networkid );
-            }
-      }
-   }
+//    if ( movedownavail(eht, into) ) {
+// 
+//       int i = 0;
+//       while ( i < maxloadableunits   &&  into->loading[i] )
+//          i++;
+// 
+//       if ( !into->loading[i] ) {
+//          into->loading[i] = eht;
+// 
+//          i = 0;
+//          if ( cc_t ) {
+//             while ( cc_t->vehicle->loading[i] != eht)
+//                i++;
+// 
+//             cc_t->vehicle->loading[i] = 0;
+//             logtoreplayinfo ( rpl_moveUnitUpDown, cc_t->vehicle->getPosition().x, cc_t->vehicle->getPosition().y, cc_t->vehicle->networkid, into->networkid, eht->networkid );
+//          } else
+//             if ( cc_b ) {
+//                while ( cc_b->building->loading[i] != eht)
+//                   i++;
+// 
+//                cc_b->building->loading[i] = 0;
+//                logtoreplayinfo ( rpl_moveUnitUpDown, cc_b->building->getPosition().x, cc_b->building->getPosition().y, -1, into->networkid, eht->networkid );
+//             }
+//       }
+//    }
 }
 
 VehicleMovement*   ccontainercontrols :: movement (  Vehicle* eht, bool simpleMode )
@@ -1244,34 +1245,34 @@ int    cbuildingcontrols :: getHeight ( void )
 
 void  cbuildingcontrols :: removevehicle ( Vehicle* *peht )
 {
-   for (int i=0; i<=31; i++) {
-      if ( *peht == building->loading[i] )
-         building->loading[i]=NULL;
-   }
-   building->regroupUnits();
-   logtoreplayinfo ( rpl_removeunit, building->getEntry().x, building->getEntry().y, (*peht)->networkid );
-   delete *peht;
-   *peht = NULL;
+//    for (int i=0; i<=31; i++) {
+//       if ( *peht == building->loading[i] )
+//          building->loading[i]=NULL;
+//    }
+//    building->regroupUnits();
+//    logtoreplayinfo ( rpl_removeunit, building->getEntry().x, building->getEntry().y, (*peht)->networkid );
+//    delete *peht;
+//    *peht = NULL;
 }
 
 
 Resources  cbuildingcontrols :: crecycling :: resourceuse (Vehicle* eht)
 {
-   int   output;
-   if ( cc->getspecfunc( mbuilding ) & cgrecyclingplantb)
-      output = recyclingoutput;
-   else
-      output = destructoutput;
-
-   Resources res;
-
-   for (int i=0; i<=31; i++)
-      if ( eht->loading[i] )
-         res += resourceuse ( eht->loading[i] );
-
-
-   res.material += eht->typ->productionCost.material * (100 - eht->damage/2 ) / 100 / output;
-   return res;
+//    int   output;
+//    if ( cc->getspecfunc( mbuilding ) & cgrecyclingplantb)
+//       output = recyclingoutput;
+//    else
+//       output = destructoutput;
+// 
+//    Resources res;
+// 
+//    for (int i=0; i<=31; i++)
+//       if ( eht->loading[i] )
+//          res += resourceuse ( eht->loading[i] );
+// 
+// 
+//    res.material += eht->typ->productionCost.material * (100 - eht->damage/2 ) / 100 / output;
+//    return res;
 }
 
 
@@ -1424,11 +1425,11 @@ int   cbuildingcontrols :: cproduceunit :: available (Vehicletype* fzt, int* lac
       if ( lack )
          *lack = l;
 
-      if ( l == 0) {
-         for ( int i = 0; i < 32; i++ )
-            if ( !cc_b->building->loading[ i ] )
-               return 1;
-      }
+//       if ( l == 0) {
+//          for ( int i = 0; i < 32; i++ )
+//             if ( !cc_b->building->loading[ i ] )
+//                return 1;
+//       }
    }
 
    return 0;
@@ -1462,13 +1463,13 @@ Vehicle* cbuildingcontrols :: cproduceunit :: produce (Vehicletype* fzt, bool fo
 
    int i = 0;
    int n = 1;
-   while ( n ) {
-      if ( cc_b->building->loading[ i ] == NULL ) {
-         cc_b->building->loading[ i ] = eht;
-         n = 0;
-      } else
-         i++;
-   } /* endwhile */
+//    while ( n ) {
+//       if ( cc_b->building->loading[ i ] == NULL ) {
+//          cc_b->building->loading[ i ] = eht;
+//          n = 0;
+//       } else
+//          i++;
+//    } /* endwhile */
 
    Resources res;
    for ( int i = 0; i < fzt->weapons.count; ++i )
@@ -1720,10 +1721,10 @@ int   ctransportcontrols :: getspecfunc ( tcontainermode mode )
 
 void  ctransportcontrols :: removevehicle ( Vehicle* *peht )
 {
-   for (int i=0; i<=31; i++) {
-      if ( *peht == vehicle->loading[i] )
-         vehicle->loading[i]=NULL;
-   };
+//    for (int i=0; i<=31; i++) {
+//       if ( *peht == vehicle->loading[i] )
+//          vehicle->loading[i]=NULL;
+//    };
    logtoreplayinfo ( rpl_removeunit, vehicle->xpos, vehicle->ypos, (*peht)->networkid );
    delete *peht;
    *peht = NULL;
@@ -3559,17 +3560,17 @@ void  ccontainer_b :: setpictures ( void )
 
 Vehicle*    ccontainer_b :: getmarkedunit (void)
 {
-   if ( unitmode == mnormal || unitmode == mloadintocontainer)
-      return building->loading[mark.y*unitsshownx + mark.x];
-   else
+//    if ( unitmode == mnormal || unitmode == mloadintocontainer)
+//       return building->loading[mark.y*unitsshownx + mark.x];
+//    else
       return NULL;
 }
 
 Vehicletype* ccontainer_b :: getmarkedunittype ( void )
 {
-   if ( unitmode == mproduction )
-      return produceableunits[mark.y*unitsshownx + mark.x];
-   else
+//    if ( unitmode == mproduction )
+//       return produceableunits[mark.y*unitsshownx + mark.x];
+//    else
       return NULL;
 }
 
@@ -3577,14 +3578,14 @@ Vehicletype* ccontainer_b :: getmarkedunittype ( void )
 
 Vehicle* cbuildingcontrols :: getloadedunit (int num)
 {
-   return building->loading[num];
+//    return building->loading[num];
 };
 
 Vehicle* ccontainer_b :: getloadedunit (int num)
 {
-   if ( unitmode == mnormal || unitmode == mloadintocontainer )
-      return building->loading[num];
-   else
+//    if ( unitmode == mnormal || unitmode == mloadintocontainer )
+//       return building->loading[num];
+//    else
       return NULL;
 };
 
@@ -6453,7 +6454,7 @@ void ccontainer_t :: ctransportinfo_subwindow :: paintvariables ( void )
    activefontsettings.background = 201;
 
    Vehicle* eht = cc_t->vehicle;
-   int mass = eht->cargo();
+   int mass = eht->cargoWeight();
    int free = eht->typ->maxLoadableWeight - mass;
 
    activefontsettings.length = 40;
@@ -6470,7 +6471,7 @@ void ccontainer_t :: ctransportinfo_subwindow :: paintvariables ( void )
       showtext2c ( strrr ( eht->typ->weight ),                       subwinx1 + 170,  subwiny1 +  62 );
       showtext2c ( "-",  subwinx1 + 170,  subwiny1 +  70 );
       showtext2c ( "-",  subwinx1 + 170,  subwiny1 +  78 );
-      showtext2c ( strrr ( eht->cargo() ),                           subwinx1 + 170,  subwiny1 +  86 );
+      showtext2c ( strrr ( eht->cargoWeight() ),                           subwinx1 + 170,  subwiny1 +  86 );
       showtext2c ( strrr ( eht->weight() ),                          subwinx1 + 170,  subwiny1 +  96 );
    } else {
       showtext2c ( "-",                       subwinx1 + 170,  subwiny1 +  62 );
@@ -6559,9 +6560,9 @@ void  ccontainer_t :: init (Vehicle* eht)
 
 Vehicle*    ccontainer_t :: getmarkedunit (void)
 {
-   if ( unitmode == mnormal || unitmode == mloadintocontainer)
+/*   if ( unitmode == mnormal || unitmode == mloadintocontainer)
       return vehicle->loading[mark.y*unitsshownx + mark.x];
-   else
+    else */
       return NULL;
 }
 
@@ -6569,14 +6570,15 @@ Vehicle*    ccontainer_t :: getmarkedunit (void)
 
 Vehicle* ctransportcontrols :: getloadedunit (int num)
 {
-   return vehicle->loading[num];
+//   return vehicle->loading[num];
+return NULL;
 };
 
 Vehicle* ccontainer_t :: getloadedunit (int num)
 {
-   if ( unitmode == mnormal || unitmode == mloadintocontainer )
+ /*  if ( unitmode == mnormal || unitmode == mloadintocontainer )
       return vehicle->loading[num];
-   else
+   else */
       return NULL;
 };
 

@@ -1059,7 +1059,6 @@ void       tloadBImap :: ReadSHOPPart( void )
               int Y = FileShop.Pos1 / 64;
               int X = FileShop.Pos1 % 64;
               pfield fld = getfield ( X / 2, Y * 2 + (X & 1) );
-              int nm = 0;
               if ( fld->vehicle ) 
                  for ( int j = 0; j < 8; j++ ) 
                     if ( FileShop.a.Content.Veh[j] >= 0 ) {
@@ -1067,7 +1066,7 @@ void       tloadBImap :: ReadSHOPPart( void )
                        if ( eht ) {
                           eht->xpos = xoffset + X / 2;
                           eht->ypos = yoffset + Y * 2 + (X & 1);
-                          fld->vehicle->loading[nm++] = eht;
+                          fld->vehicle->addToCargo( eht );
                        }
                     }
 
@@ -1192,11 +1191,10 @@ void       tloadBImap :: ReadSHOPPart( void )
               if ( newcol != fld->building->color/8 )
                  fld->building->convert ( newcol );
 
-              int unitnum = 0;
               for ( int j = 0; j < 16; j++ ) {
                  Vehicle* eht = getunit ( FileShop.a.Content.All[j], fld->building->color/8 );
                  if ( eht ) {
-                    fld->building->loading[unitnum++] = eht;
+                    fld->building->addToCargo( eht );
                     eht->xpos = newx;
                     eht->ypos = newy;
                  }

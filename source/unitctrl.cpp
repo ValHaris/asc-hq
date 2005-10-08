@@ -116,11 +116,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
       oldfield->vehicle = NULL;
    } else {
       ContainerBase* cn = oldfield->getContainer();
-      int i = 0;
-      while (cn->loading[i] != vehicle)
-         i++;
-      cn->loading[i] = NULL;
-      cn->regroupUnits();
+      cn->removeUnitFromCargo( vehicle );      
    }
 
    SoundLoopManager slm ( SoundList::getInstance().getSound( SoundList::moving, vehicle->typ->movemalustyp, vehicle->typ->movementSoundLabel ), false );
@@ -293,10 +289,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
             vehicle->addview();
          } else {
             ContainerBase* cn = fld->getContainer();
-            int i = 0;
-            while ( cn->loading[i] && (i < 31))
-               i++;
-            cn->loading[i] = vehicle;
+            cn->addToCargo( vehicle );
             if (cn->getOwner() != vehicle->getOwner() && fld->building ) {
                fld->building->convert( vehicle->color / 8 );
                if ( fieldvisiblenow ( fld, actmap->playerView ) || actmap->playerView*8  == vehicle->color )
@@ -1248,9 +1241,9 @@ void  VehicleService :: FieldSearch :: testfield( const MapCoordinate& mc )
    pfield fld = gamemap->getField ( mc );
    if ( fld && veh && fld->vehicle ) {
       if ( fld->vehicle == veh ) {
-         for ( int i = 0; i < 32; i++ )
-            if ( veh->loading[i] )
-              checkVehicle2Vehicle ( veh->loading[i], mc.x, mc.y );
+         for ( ContainerBase::Cargo::iterator i = veh->cargo.begin(); i != veh->cargo.end(); ++i )
+            if ( *i )
+              checkVehicle2Vehicle ( *i, mc.x, mc.y );
       }
       if ( fld->vehicle )
          checkVehicle2Vehicle ( fld->vehicle, mc.x, mc.y );
@@ -1258,9 +1251,9 @@ void  VehicleService :: FieldSearch :: testfield( const MapCoordinate& mc )
 
    if ( fld && bld ) {
       if ( fld->building == bld && beeline( mc.x, mc.y, startPos.x, startPos.y)== 0) {
-         for ( int i = 0; i < 32; i++ )
-            if ( bld->loading[i] )
-               checkBuilding2Vehicle ( bld->loading[i] );
+         for ( ContainerBase::Cargo::iterator i = bld->cargo.begin(); i != bld->cargo.end(); ++i )
+            if ( *i )
+               checkBuilding2Vehicle ( *i );
       }
       if ( fld->vehicle )
          checkBuilding2Vehicle ( fld->vehicle );

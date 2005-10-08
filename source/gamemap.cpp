@@ -977,12 +977,12 @@ Vehicle* tmap :: getUnit ( Vehicle* eht, int nwid )
       if ( eht->networkid == nwid )
          return eht;
       else
-         for ( int i = 0; i < 32; i++ )
-            if ( eht->loading[i] )
-               if ( eht->loading[i]->networkid == nwid )
-                  return eht->loading[i];
+         for ( ContainerBase::Cargo::iterator i = eht->cargo.begin(); i != eht->cargo.end(); ++i )
+            if ( *i ) 
+               if ( (*i)->networkid == nwid )
+                  return *i;
                else {
-                  Vehicle* ld = getUnit ( eht->loading[i], nwid );
+                  Vehicle* ld = getUnit ( *i, nwid );
                   if ( ld )
                      return ld;
                }
@@ -1015,21 +1015,14 @@ Vehicle* tmap :: getUnit ( int x, int y, int nwid )
    if ( !fld )
       return NULL;
 
-   if ( !fld->vehicle )
-      if ( fld->building ) {
-         for ( int i = 0; i < 32; i++ ) {
-            Vehicle* ld = getUnit ( fld->building->loading[i], nwid );
-            if ( ld )
-               return ld;
-         }
-         return NULL;
-      } else
-         return NULL;
-   else
-      if ( fld->vehicle->networkid == nwid )
+   if ( fld->vehicle && fld->vehicle->networkid == nwid )
          return fld->vehicle;
-      else
-         return getUnit ( fld->vehicle, nwid );
+         
+   if ( fld->getContainer() )
+      return fld->getContainer()->findUnit( nwid );
+      
+   return NULL;
+     
 }
 
 ContainerBase* tmap::getContainer ( int nwid )

@@ -49,7 +49,7 @@ class ContainerBase {
       //! is called after a repair is perfored. Vehicles use this to reduce their experience.
       virtual void postRepair ( int oldDamage ) = 0;
       virtual bool isBuilding() const = 0;
-      const ContainerBase* findUnit ( const Vehicle* veh ) const;
+      const ContainerBase* findParentUnit ( const Vehicle* veh ) const;
       
       void paintField ( const Surface& src, Surface& dest, SPoint pos, int dir, bool shaded, int shadowDist = -1 ) const;
       
@@ -58,11 +58,18 @@ class ContainerBase {
 
       const ContainerBaseType*  baseType;
 
-      Vehicle*     loading[32];
+      // Vehicle*     loading[32];
 
-      //! regroup units. This is necessary for the building dialog which only displays the first 18 units, although more than 18 can be inside ( for example, there are 18 inside, and then the enemy conquers it using a trooper)
-      void regroupUnits ();
-
+      typedef vector<Vehicle*> Cargo;
+      Cargo cargo;
+      
+      void addToCargo( Vehicle* veh );
+      bool removeUnitFromCargo( Vehicle* veh, bool recursive = false );
+      bool removeUnitFromCargo( int nwid, bool recursive = false );
+      bool unitLoaded( int nwid );
+      Vehicle* findUnit ( int nwid );
+      
+     
       int damage;
       int color;
 
@@ -116,7 +123,7 @@ class ContainerBase {
       bool vehicleFit ( const Vehicle* vehicle ) const;
 
       //! weight of all loaded units
-      int cargo ( void ) const;
+      int cargoWeight() const;
 
       SigC::Signal0<void> conquered;
       SigC::Signal0<void> destroyed;

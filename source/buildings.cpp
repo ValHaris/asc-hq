@@ -61,8 +61,6 @@ Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const B
 
    for ( i = 0; i< 32; i++ ) {
       production[i] = 0;
-      productionbuyable[i] = 0;
-      loading[i] = 0;
    }
 
    repairedThisTurn = 0;
@@ -134,9 +132,9 @@ void Building :: convert ( int player )
    if ( player < 8 )
       addview();
 
-   for ( int i = 0; i < 32; i++)
-      if ( loading[i] )
-         loading[i]->convert ( player );
+   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i ) 
+         (*i)->convert( player );
 
    conquered();
 }
@@ -211,9 +209,9 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
             field->building = this;
          }
 
-   for ( int i = 0; i < 32; i++ )
-      if ( loading[i] )
-         loading[i]->setnewposition ( entryPos.x, entryPos.y );
+   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i ) 
+         (*i)->setnewposition ( entryPos.x, entryPos.y );
 
    pfield field = getField( typ->entry );
    if ( field )
@@ -368,9 +366,6 @@ Building :: ~Building ()
          gamemap->player[c].buildingList.erase ( i );
    }
 
-   for ( int i = 0; i < 32; i++ )
-      if ( loading[i] )
-         delete loading[i] ;
 
    unchainbuildingfromfield();
 
@@ -391,7 +386,7 @@ Building :: ~Building ()
 }
 
 
-const int buildingstreamversion = -3;
+const int buildingstreamversion = -4;
 
 
 void Building :: write ( tnstream& stream, bool includeLoadedUnits )
@@ -430,18 +425,18 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits )
 
     stream.writeInt ( repairedThisTurn );
 
-    char c = 0;
+    int c = 0;
 
     if ( includeLoadedUnits )
-       for ( int k = 0; k <= 31; k++)
-          if (loading[k] )
-             c++;
+       for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+          if ( *i ) 
+             ++c;
 
-    stream.writeChar ( c );
+    stream.writeInt ( c );
     if ( c )
-       for ( int k = 0; k <= 31; k++)
-          if ( loading[k] )
-             loading[k]->write ( stream );
+       for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+          if ( *i ) 
+             (*i)->write ( stream );
 
 
     c = 0;
@@ -455,20 +450,6 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits )
        for (int k = 0; k <= 31; k++)
           if (production[k] )
              stream.writeInt( production[k]->id );
-
-
-    c = 0;
-    if (typ->special & cgvehicleproductionb )
-       for (int k = 0; k <= 31; k++)
-          if ( productionbuyable[k] )
-             c++;
-
-    stream.writeChar ( c );
-    if ( c )
-       for ( int k = 0; k <= 31; k++)
-          if ( productionbuyable[k] )
-             stream.writeInt( productionbuyable[k]->id );
-
 }
 
 
@@ -575,20 +556,25 @@ void Building :: readData ( tnstream& stream, int version )
     else
        repairedThisTurn = 0;
 
-    char c = stream.readChar();
+    int c;
+    if ( version <= -4 )
+       c = stream.readInt();
+    else
+       c = stream.readChar();
+       
     if ( c ) {
        for ( int k = 0; k < c; k++) {
-          loading[k] = Vehicle::newFromStream ( gamemap, stream );
-          loading[k]->setnewposition ( getEntry().x, getEntry().y );
-          if ( loading[k]->color != color ) {
+          Vehicle* v = Vehicle::newFromStream ( gamemap, stream );
+          v->setnewposition ( getEntry().x, getEntry().y );
+          if ( v->color != color ) {
              ASCString msg;
-             msg.format("warning: the building at position %d / %d , which is owned by player %d, contained units from player %d ", getEntry().x, getEntry().y, color/8, loading[k]->color/8 );
+             msg.format("warning: the building at position %d / %d , which is owned by player %d, contained units from player %d ", getEntry().x, getEntry().y, color/8, v->color/8 );
              warning(msg);
-             loading[k]->convert(getOwner());
+             v->convert(getOwner());
           }
+                          
+          addToCargo(v);
        }
-       for ( int l = c; l < 32; l++ )
-          loading[l] = NULL;
     }
 
     c = stream.readChar();
@@ -609,24 +595,17 @@ void Building :: readData ( tnstream& stream, int version )
           production[l] = NULL;
     }
 
-    c = stream.readChar();
-    if ( c ) {
-       for ( int k = 0; k < c ; k++) {
-           int id;
-           if ( version <= -3 )
-              id = stream.readInt();
-           else
-              id = stream.readWord();
-
-           productionbuyable[k] = gamemap->getvehicletype_byid ( id );
-
-           if ( !productionbuyable[k] )
-              throw InvalidID ( "unit", id );
-       }
-       for ( int l = c; l < 32; l++ )
-          productionbuyable[l] = NULL;
-    }
-
+    if ( version >= -3 ) {
+         c = stream.readChar();
+         if ( c ) {
+            for ( int k = 0; k < c ; k++) {
+               if ( version <= -3 )
+                  stream.readInt();
+               else
+                  stream.readWord();
+            }
+         }
+    }    
 
     for ( i = 0; i< 3; i++ ) {
        if ( typ->maxplus.resource(i) > 0 ) {
@@ -657,19 +636,19 @@ void Building::endTurn(  )
 {
 #ifdef sgmain
    if ( CGameOptions::Instance()->automaticTraining && (typ->special & cgtrainingb )) {
-      for ( int i = 0; i < 32; ++i )
-         if ( loading[i] ) {
+      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+         if ( *i ) {
             bool ammoFull = true;
-            for ( int w = 0; w < loading[i]->typ->weapons.count; ++w )
-               if ( loading[i]->ammo[w] < loading[i]->typ->weapons.weapon[w].count )
+            for ( int w = 0; w < (*i)->typ->weapons.count; ++w )
+               if ( (*i)->ammo[w] < (*i)->typ->weapons.weapon[w].count )
                   ammoFull = false;
 
             if ( ammoFull ) {
                cbuildingcontrols bc;
                bc.init(this);
-               if ( bc.training.available( loading[i] )) {
-                  bc.training.trainunit( loading[i] );
-                  bc.refill.filleverything( loading[i] );
+               if ( bc.training.available( *i )) {
+                  bc.training.trainunit( *i );
+                  bc.refill.filleverything( *i );
                }
             }
          }

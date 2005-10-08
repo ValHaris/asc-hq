@@ -53,8 +53,8 @@ MapRenderer::Icons MapRenderer::icons;
 class ContainerInfoLayer : public MapLayer {
       Surface& marker;
       bool hasCargo( const ContainerBase* c ) {
-         for ( int i = 0; i< 32; ++i)
-            if ( c->loading[i] )
+         for ( ContainerBase::Cargo::const_iterator i = c->cargo.begin(); i != c->cargo.end(); ++i )
+            if ( *i )
                return true;
          return false;
       };

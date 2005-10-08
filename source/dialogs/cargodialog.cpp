@@ -192,10 +192,12 @@ class CargoDialog : public Panel {
                }
 
                
-               
+               loadedUnits = cb->cargo;
+               /*               
                for ( int i = 0; i< 32; ++i )
                   if ( cb->loading[i] )
                      loadedUnits.push_back (  cb->loading[i] );
+                     */
                      
                PG_Widget* unitScrollArea = FindChild( "UnitScrollArea", true );
                if ( unitScrollArea ) {

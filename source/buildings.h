@@ -156,9 +156,6 @@ class  Building : public ContainerBase {
     //! is the building visible? Building can be made invisible, but this feature should be used only in some very special cases
     bool         visible;
 
-    //! the vehicletype that the building can produce
-    Vehicletype*  productionbuyable[32];
-
     //! the maximum amount of Resources that the building can produce each turn in the BI resource mode ; see also #maxplus
     Resources    bi_resourceplus;
 

@@ -271,9 +271,9 @@ LockReplayRecording::~LockReplayRecording()
 Resources getUnitResourceCargo ( Vehicle* veh )
 {
    Resources res = veh->getTank();
-   for ( int i = 0; i < 32; ++i )
-      if ( veh->loading[i] )
-         res += getUnitResourceCargo ( veh->loading[i] );
+   for ( ContainerBase::Cargo::iterator i = veh->cargo.begin(); i != veh->cargo.end(); ++i )
+      if ( *i )
+         res += getUnitResourceCargo ( *i );
    return res;
 }
 
@@ -807,54 +807,6 @@ void trunreplay::error( const char* message, ... )
 }
 
 
-int    trunreplay :: removeunit ( Vehicle* eht, int nwid )
-{
-   if ( !eht )
-      return 0;
-
-    for ( int i = 0; i < 32; i++ )
-       if ( eht->loading[i] )
-          if ( eht->loading[i]->networkid == nwid ) {
-             delete eht->loading[i];
-             eht->loading[i] = NULL;
-             return 1;
-          } else {
-             int ld = removeunit ( eht->loading[i], nwid );
-             if ( ld )
-                return ld;
-          }
-   return 0;
-}
-
-int  trunreplay :: removeunit ( int x, int y, int nwid )
-{
-   pfield fld  = getfield ( x, y );
-   if ( !fld->vehicle )
-      if ( fld->building ) {
-         for ( int i = 0; i < 32; i++ ) {
-            if ( fld->building->loading[i] ) {
-               if ( fld->building->loading[i]->networkid == nwid ) {
-                  delete fld->building->loading[i];
-                  fld->building->loading[i] = NULL;
-                  return 1;
-               } else {
-                  int ld = removeunit ( fld->building->loading[i], nwid );
-                  if ( ld )
-                     return ld;
-               }
-            }
-         }
-         return 0;
-      } else
-         return 0;
-   else
-      if ( fld->vehicle->networkid == nwid ) {
-         delete fld->vehicle ;
-         fld->vehicle = NULL;
-         return 1;
-      } else
-         return removeunit ( fld->vehicle, nwid );
-}
 
 
 void trunreplay :: wait ( int t )
@@ -1434,10 +1386,7 @@ void trunreplay :: execnextreplaymove ( void )
                                           displayActionCursor ( x, y );
                                           error("severe replay inconsistency: \nNot enough resources to produce unit %s !\nRequired: %d/%d/%d ; Available: %d/%d/%d", eht->typ->description.c_str(), tnk->productionCost.energy, tnk->productionCost.material, tnk->productionCost.fuel, r.energy, r.material, r.fuel);
                                        }
-                                       int i = 0;
-                                       while ( fld->building->loading[i])
-                                          i++;
-                                       fld->building->loading[i] = eht;
+                                       fld->building->addToCargo( eht );
                                     } else {
                                        displayActionCursor ( x, y );
                                        fld->vehicle = eht;
@@ -1464,7 +1413,7 @@ void trunreplay :: execnextreplaymove ( void )
                                     Vehicle* veh = actmap->getUnit( nwid );
                                     bc.recycling.recycle( veh );
                                  } else
-                                    if ( !removeunit ( x, y, nwid ))
+                                    if ( !fld->getContainer() || !fld->getContainer()->removeUnitFromCargo ( nwid, true ))
                                        displaymessage ( "severe replay inconsistency:\nCould not remove unit %d!", 1, nwid );
                               }
          break;
@@ -1616,27 +1565,12 @@ void trunreplay :: execnextreplaymove ( void )
                                     to = actmap->getField ( x, y )->building;
 
                                  if ( eht && from && to ) {
-                                    int i = 0;
-                                    while ( from->loading[i] != eht )
-                                       i++;
-
-                                    if ( i >= 32 ) {
+                                    if ( ! from->removeUnitFromCargo( eht )) {
                                        error("severe replay inconsistency: container for moveUpDown 2 !");
                                        return;
                                     }
 
-                                    from->loading[i] = NULL;
-
-                                    while ( to->loading[i]  )
-                                       i++;
-
-                                    if ( i >= 32 ) {
-                                       error("severe replay inconsistency: container for moveUpDown 3 !");
-                                       return;
-                                    }
-
-                                    to->loading[i] = eht;
-
+                                    to->addToCargo( eht );
                                  } else
                                     error("severe replay inconsistency: container for moveUpDown !");
                               }

@@ -122,10 +122,6 @@ Vehicle :: ~Vehicle (  )
          gamemap->vehicleLookupCache.erase(j);
    }
 
-   for ( int i = 0; i < 32; i++ )
-      if ( loading[i] )
-         delete loading[i];
-
    pfield fld = gamemap->getField( xpos, ypos);
    if ( fld ) {
       if ( fld->vehicle  == this )
@@ -144,9 +140,6 @@ Vehicle :: ~Vehicle (  )
 
 void Vehicle :: init ( void )
 {
-   for ( int j = 0; j < 32; j++ )
-       loading[j] = NULL;
-
    xpos = -1;
    ypos = -1;
 
@@ -259,7 +252,7 @@ void Vehicle :: setGeneratorStatus ( bool status )
 
 int Vehicle::weight( void ) const
 {
-   return typ->weight + cargo();
+   return typ->weight + cargoWeight();
 }
 
 int Vehicle::size ( void )
@@ -454,15 +447,14 @@ void Vehicle :: setMovement ( int newmove, double cargoDivisor )
       if ( typ->movement[ log2 ( height ) ] ) {
          double diff = _movement - newmove;
          double perc = diff / typ->movement[ log2 ( height ) ] ;
-         for ( int i = 0; i < 32; i++ ) {
-            if ( loading[i] ) {
+         for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+            if ( *i ) {
                double lperc = perc;
                if ( cargoDivisor )
                   lperc /= cargoDivisor;
 
-               loading[i]->decreaseMovement ( max( 1, int( ceil( lperc * double(loading[i]->typ->movement[ log2 ( loading[i]->height)] )))));
+               (*i)->decreaseMovement ( max( 1, int( ceil( lperc * double( (*i)->typ->movement[ log2 ( (*i)->height)] )))));
             }
-         } /* endfor */
    }
    _movement = newmove;
 }
@@ -527,8 +519,8 @@ bool Vehicle :: canMove ( void ) const
       } else {
          ContainerBase* cnt = fld->getContainer();
          if ( cnt )
-            for ( int i = 0; i < 32; i++ )
-               if ( cnt->loading[i] == this )
+            for ( Cargo::iterator i = cnt->cargo.begin(); i != cnt->cargo.end(); ++i )
+               if ( *i == this ) 
                   if ( cnt->vehicleUnloadable( typ ) > 0 || cnt->vehicleDocking( this, true ) > 0 )
                      return true;
       }
@@ -717,12 +709,12 @@ bool Vehicle :: weapexist( void )
 
 void Vehicle :: setnewposition ( int x , int y )
 {
-  xpos = x;
-  ypos = y;
-  if ( typ->maxLoadableUnits > 0)
-     for ( int i = 0; i <= 31; i++)
-        if ( loading[i] )
-           loading[i]->setnewposition ( x , y );
+   xpos = x;
+   ypos = y;
+   if ( typ->maxLoadableUnits > 0)
+      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+         if ( *i ) 
+           (*i)->setnewposition ( x , y );
 }
 
 void Vehicle :: setnewposition ( const MapCoordinate& mc )
@@ -768,9 +760,9 @@ void Vehicle::convert ( int col )
 
    color = col << 3;
 
-   for ( int i = 0; i < 32; i++)
-      if ( loading[i] )
-         loading[i]->convert( col );
+   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i ) 
+         (*i)->convert( col );
 
    // emit signal
    conquered();
@@ -886,13 +878,13 @@ bool Vehicle :: buildingconstructable ( BuildingType* building )
 int Vehicle :: searchstackforfreeweight ( Vehicle* searchedInnerVehicle )
 {
    if ( searchedInnerVehicle == this ) {
-      return typ->maxLoadableWeight - cargo();
+      return typ->maxLoadableWeight - cargoWeight();
    } else {
-      int currentFreeWeight = typ->maxLoadableWeight - cargo();
+      int currentFreeWeight = typ->maxLoadableWeight - cargoWeight();
       int innerFreeWeight = -1;
-      for ( int i = 0; i < 32; i++ )
-         if ( loading[i] ) {
-            int w = loading[i]->searchstackforfreeweight ( searchedInnerVehicle );
+      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+         if ( *i ) {
+            int w = (*i)->searchstackforfreeweight ( searchedInnerVehicle );
             if ( w >= 0 )
                innerFreeWeight = w;
          }
@@ -912,9 +904,9 @@ int Vehicle :: freeWeight ()
       return fld->vehicle->searchstackforfreeweight ( this );
    else
       if ( fld->building ) {
-         for ( int i = 0; i < 32; i++ )
-            if ( fld->building->loading[i] ) {
-               int w3 = fld->building->loading[i]->searchstackforfreeweight ( this );
+         for ( Cargo::iterator i = fld->building->cargo.begin(); i != fld->building->cargo.end(); ++i )
+            if ( *i ) {
+               int w3 = (*i)->searchstackforfreeweight ( this );
                if ( w3 >= 0 )
                   return w3;
             }
@@ -962,9 +954,9 @@ void Vehicle :: postAttack()
 void Vehicle::setAttacked()
 {
    attacked = true;
-   for ( int i = 0; i < 32; i++ )
-      if ( loading[i] )
-         loading[i]->setAttacked();
+   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i ) 
+         (*i)->setAttacked();
 }
 
 
@@ -1100,7 +1092,7 @@ void Vehicle :: fillMagically( void )
 
 
 
-const int vehicleVersion = 3;
+const int vehicleVersion = 4;
 
 void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 {
@@ -1130,9 +1122,9 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 
        }
     if ( includeLoadedUnits )
-       for ( int i = 0; i < 32; i++ )
-          if ( loading[i] )
-              bm |= cem_loading;
+       for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+          if ( *i ) 
+             bm |= cem_loading;
 
     if ( attacked  )
        bm |= cem_attacked;
@@ -1195,17 +1187,16 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
          stream.writeInt ( weapstrength[j] );
 
     if ( bm & cem_loading ) {
-       char c=0;
-       for ( int k = 0; k <= 31; k++)
-          if ( loading[k] )
-             c++;
+       int c=0;
+       for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+          if ( *i ) 
+             ++c;
 
-       stream.writeChar ( c );
+       stream.writeInt ( c );
 
-       if ( c )
-          for ( int k = 0; k <= 31; k++)
-             if ( loading[k] )
-                loading[k]->write ( stream );
+       for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+          if ( *i ) 
+             (*i)->write ( stream );
     }
 
     if ( bm & cem_height )
@@ -1338,18 +1329,20 @@ void   Vehicle::readData ( tnstream& stream )
           weapstrength[i] = typ->weapons.weapon[i].maxstrength;
 
     if ( bm & cem_loading ) {
-       char c = stream.readChar();
+       int c;
+       if ( version <= 3 )
+          c = stream.readChar();
+       else
+          c = stream.readInt();   
 
        if ( c ) {
           for (int k = 0; k < c; k++) {
-             loading[k] = Vehicle::newFromStream ( gamemap, stream );
-             if ( loading[k]->color != color )
-                loading[k]->convert( color/8 );
+             Vehicle* v = Vehicle::newFromStream ( gamemap, stream );
+             if ( v->color != color )
+                 v->convert( color/8 );
+             addToCargo(v);
 
           }
-
-          for ( int l = c; l < 32; l++ )
-             loading[l] = NULL;
        }
     }
 
