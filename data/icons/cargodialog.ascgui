@@ -42,7 +42,7 @@ panel {
            x = 50
            y = 0
            width = 50
-           text = materialavail
+           name = materialavail
          } Material
          
          

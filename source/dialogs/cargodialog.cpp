@@ -92,8 +92,15 @@ class StoringPosition : public PG_Widget {
          MegaBlitter<4,4,ColorTransform_None, ColorMerger_AlphaOverwrite> blitter;
          blitter.blit( icon, clippingSurface, SPoint(0,0));
                   
-         if ( num < storage.size() && storage[num] )
-            storage[num]->typ->paint( clippingSurface, SPoint(0,0), storage[num]->getOwner() );
+         if ( num < storage.size() && storage[num] ) {
+            int ypos;
+            if ( num == highlight.getMark() )
+               ypos = 0;
+            else 
+               ypos = 1;
+                  
+            storage[num]->typ->paint( clippingSurface, SPoint(0,ypos), storage[num]->getOwner() );
+         }   
 
          PG_Draw::BlitSurface( clippingSurface.getBaseSurface(), src, PG_Application::GetScreen(), dst);
       }
@@ -105,13 +112,30 @@ Surface StoringPosition::clippingSurface;
 static const char* paneName[5]  = { "information", "movement", "weapons", "transport", "description" };
 
 class CargoDialog : public Panel {
-        const ContainerBase* container;
+        ContainerBase* container;
         bool setupOK;
+        int unitColumnCount;
+        
+        vector<StoringPosition*> storingPositionVector;
         
         HighLightingManager unitHighLight;
 
 
         StorageVector loadedUnits;
+        
+        void moveSelection( int delta )
+        {
+           int newpos = unitHighLight.getMark() + delta;
+           
+           if ( newpos < 0 )
+               newpos = 0;
+               
+           if ( newpos >= storingPositionVector.size() )
+               newpos = storingPositionVector.size() -1 ;
+               
+           if ( newpos != unitHighLight.getMark() )
+               unitHighLight.setNew( newpos );
+        }
         
         bool eventKeyDown(const SDL_KeyboardEvent* key)
         {
@@ -119,6 +143,22 @@ class CargoDialog : public Panel {
               QuitModal();
               return true;
            }
+            if ( key->keysym.sym == SDLK_RIGHT )  {
+               moveSelection(1);
+               return true;
+            }
+            if ( key->keysym.sym == SDLK_LEFT )  {
+               moveSelection(-1);
+               return true;
+            }
+            if ( key->keysym.sym == SDLK_UP )  {
+               moveSelection(-unitColumnCount);
+               return true;
+            }
+            if ( key->keysym.sym == SDLK_DOWN )  {
+               moveSelection(unitColumnCount);
+               return true;
+            }
            return false;
         };
 
@@ -170,12 +210,38 @@ class CargoDialog : public Panel {
             PG_Application::SetBulkMode(false);
             Update();
          };
+         
+         void updateResourceDisplay()
+         {
+            setLabelText( "energyavail", container->getResource(maxint, 0, true ) );
+            setLabelText( "materialavail", container->getResource(maxint, 1, true ) );
+            setLabelText( "fuelavail", container->getResource(maxint, 2, true ) );
+         }
 
+        
+        
+         void checkStoringPosition( int oldpos, int newpos )
+         {
+            PG_ScrollWidget* unitScrollArea = dynamic_cast<PG_ScrollWidget*>(FindChild( "UnitScrollArea", true ));
+            if ( unitScrollArea )
+               if ( newpos < storingPositionVector.size() && newpos >= 0 )
+                  unitScrollArea->ScrollToWidget( storingPositionVector[newpos] );
+         }   
+         
+         Vehicle* getMarkedUnit()
+         {
+            int pos = unitHighLight.getMark();
+            if ( pos < 0 || pos >= loadedUnits.size() )
+               return NULL;
+            else
+               return loadedUnits[pos];
+         }
+         
      public:
         
         
         CargoDialog (PG_Widget *parent, ContainerBase* cb ) 
-           : Panel( parent, PG_Rect::null, "cargodialog", false ), container(cb), setupOK(false)  {
+           : Panel( parent, PG_Rect::null, "cargodialog", false ), container(cb), setupOK(false), unitColumnCount(0)  {
                sigClose.connect( SigC::slot( *this, &CargoDialog::QuitModal ));
 
                try {
@@ -191,6 +257,7 @@ class CargoDialog : public Panel {
                   return;
                }
 
+               unitHighLight.markChanged.connect( SigC::slot( *this, &CargoDialog::checkStoringPosition ));
                
                loadedUnits = cb->cargo;
                /*               
@@ -208,9 +275,11 @@ class CargoDialog : public Panel {
                      posNum = loadedUnits.size();
                      
                   for ( int i = 0; i < posNum; ++i ) {
-                     new StoringPosition( unitScrollArea, PG_Point( x, y), unitHighLight, loadedUnits, i, cb->baseType->maxLoadableUnits >= loadedUnits.size() );
+                     storingPositionVector.push_back( new StoringPosition( unitScrollArea, PG_Point( x, y), unitHighLight, loadedUnits, i, cb->baseType->maxLoadableUnits >= loadedUnits.size() ));
                      x += StoringPosition::spWidth;
                      if ( x + StoringPosition::spWidth >= unitScrollArea->Width() - 20 ) {
+                        if ( !unitColumnCount )
+                           unitColumnCount = i + 1;
                         x = 0;
                         y += StoringPosition::spHeight;
                      }   
@@ -224,6 +293,7 @@ class CargoDialog : public Panel {
                registerSpecialDisplay( "unitpad_transport_unitlevel");
                registerSpecialDisplay( "unitpad_transport_leveldisplay");
                
+               updateResourceDisplay();
                
               activate(paneName[0]);
               Show();
