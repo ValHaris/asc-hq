@@ -462,7 +462,6 @@ void networksupervisor ( void )
       return;
    } /* endcatch */
 
-
    int ok = 0;
    if ( !actmap->supervisorpasswordcrc.empty() ) {
       ok = enterpassword ( actmap->supervisorpasswordcrc );

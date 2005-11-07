@@ -587,7 +587,8 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
                     ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog, ua_reloadDlgTheme, ua_showPlayerSpeed, ua_renameunit,
-                    ua_statisticdialog, ua_viewPipeNet, ua_cancelResearch, ua_showResearchStatus, ua_exportUnitToFile, ua_cargosummary, ua_showsearchdirs };
+                    ua_statisticdialog, ua_viewPipeNet, ua_cancelResearch, ua_showResearchStatus, ua_exportUnitToFile, ua_cargosummary, ua_showsearchdirs,
+                    ua_unitsummary };
 
 
 class tsgpulldown : public tpulldown
@@ -644,6 +645,7 @@ void         tsgpulldown :: init ( void )
    addbutton ( "~R~esearch", ua_researchinfo );
    addbutton ( "~P~lay time", ua_showPlayerSpeed );
    addbutton ( "~C~argo Summary", ua_cargosummary );
+   addbutton ( "Unit Summary", ua_unitsummary );
    // addbutton ( "~R~esearch status", ua_showResearchStatus );
 
    // addbutton ( "vehicle ~I~mprovementõF7", ua_dispvehicleimprovement);
@@ -1216,15 +1218,11 @@ void calcCargoSummary( ContainerBase* cb, map<int,int>& summary )
       }
 }
 
-void showCargoSummary()
-{
    typedef map<int,int> Summary;
-   Summary summary;
 
-   pfield fld = getactfield();
-   if ( fld && fld->vehicle && fld->vehicle->getOwner() == actmap->actplayer ) {
-      calcCargoSummary( fld->vehicle, summary );
 
+void showSummary ( map<int,int>& summary )
+{
       ASCString s;
 
       map<ASCString, int> sorter;
@@ -1236,11 +1234,43 @@ void showCargoSummary()
          s += i->first + ": " + strrr(i->second) + "\n";
 
       tviewanytext vat ;
-      vat.init ( "Cargo information", s.c_str(), 20, -1 , 450, 480 );
+      vat.init ( "Unit summary", s.c_str(), 20, -1 , 450, 480 );
       vat.run();
       vat.done();
+
+}
+
+void showCargoSummary()
+{
+   Summary summary;
+
+   pfield fld = getactfield();
+   if ( fld && fld->vehicle && fld->vehicle->getOwner() == actmap->actplayer ) {
+      calcCargoSummary( fld->vehicle, summary );
+      showSummary( summary );
    }
 }
+
+void showUnitSummary()
+{
+   Summary summary;
+
+   for ( int y = 0; y < actmap->ysize; ++y )
+      for ( int x = 0; x < actmap->xsize; ++x ) {
+         pfield fld = actmap->getField(x,y);
+         if ( fld ) {
+            if ( fld->vehicle && fld->vehicle->getOwner() == actmap->actplayer ) {
+               calcCargoSummary( fld->vehicle, summary );
+               summary[ fld->vehicle->typ->id] += 1;
+            }
+            if ( fld->building && fld->building->getOwner() == actmap->actplayer && (fld->bdt & getTerrainBitType(cbbuildingentry)).any() ) 
+               calcCargoSummary( fld->getContainer(), summary );
+         }
+      }
+
+   showSummary( summary );
+}
+
 
 
 void showSearchPath()
@@ -1705,6 +1735,8 @@ void execuseraction ( tuseractions action )
          break;
          case ua_cargosummary: showCargoSummary();
          break;
+         case ua_unitsummary: showUnitSummary();
+            break;
          case ua_showsearchdirs: showSearchPath();
          break;
 

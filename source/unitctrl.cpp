@@ -1153,6 +1153,24 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
 
    targ.dest = targetUnit;
 
+
+   if ( bld->typ->special & (cgexternalloadingb | cgexternalresourceloadingb ))
+      for ( int r = 1; r < resourceTypeNum; r++ )  // no energy !!
+         if ( targetUnit->typ->tank.resource(r) ) {
+            VehicleService::Target::Service s;
+            s.type = VehicleService::srv_resource;
+            s.sourcePos = r;
+            s.targetPos = r;
+            s.curAmount = targetUnit->getTank().resource(r);
+            // s.orgSourceAmount = bld->getResource (maxint, r, 1 );
+            s.orgSourceAmount = buildingResources.resource(r);
+            s.maxAmount = s.curAmount + min ( targetUnit->putResource(maxint, r, 1) , s.orgSourceAmount );
+            // int sourceSpace = bld->putResource(maxint, r, 1);
+            int sourceSpace = resourcesCapacity.resource(r);
+            s.minAmount = max ( s.curAmount - sourceSpace, 0 );
+            targ.service.push_back ( s );
+         }
+
    for (int i = 0; i < targetUnit->typ->weapons.count ; i++)
       if ( targetUnit->typ->weapons.weapon[i].requiresAmmo() ) {
          int type = targetUnit->typ->weapons.weapon[i].getScalarWeaponType();
@@ -1190,23 +1208,6 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
                targ.service.push_back ( s );
             }
       }
-
-   if ( bld->typ->special & (cgexternalloadingb | cgexternalresourceloadingb ))
-      for ( int r = 1; r < resourceTypeNum; r++ )  // no energy !!
-         if ( targetUnit->typ->tank.resource(r) ) {
-            VehicleService::Target::Service s;
-            s.type = VehicleService::srv_resource;
-            s.sourcePos = r;
-            s.targetPos = r;
-            s.curAmount = targetUnit->getTank().resource(r);
-            // s.orgSourceAmount = bld->getResource (maxint, r, 1 );
-            s.orgSourceAmount = buildingResources.resource(r);
-            s.maxAmount = s.curAmount + min ( targetUnit->putResource(maxint, r, 1) , s.orgSourceAmount );
-            // int sourceSpace = bld->putResource(maxint, r, 1);
-            int sourceSpace = resourcesCapacity.resource(r);
-            s.minAmount = max ( s.curAmount - sourceSpace, 0 );
-            targ.service.push_back ( s );
-         }
 
 
    if ( bld->canRepair( targetUnit ) )
@@ -1397,14 +1398,16 @@ int VehicleService :: execute ( pvehicle veh, int targetNWID, int dummy, int ste
            case srv_ammo: delta = amount - serv.curAmount;
                           t.dest->ammo[ serv.targetPos ] += delta;
                           building->ammo[ serv.sourcePos ] -= delta;
+                          MapCoordinate mc = building->getEntry();
                           if ( building->ammo[ serv.sourcePos ] < 0 ) {
-                             building->produceAmmo ( serv.sourcePos, -building->ammo[ serv.sourcePos ] );
+                             int amount = -building->ammo[ serv.sourcePos ];
+                             building->produceAmmo ( serv.sourcePos, amount );
+                             logtoreplayinfo ( rpl_produceAmmo, mc.x, mc.y, serv.sourcePos, amount );
                           }
                           if ( building->ammo[ serv.sourcePos ] < 0 ) 
                              fatalError("negative amount of ammo available! \nPlease report this to bugs@asc-hq.org" );
 
                           logtoreplayinfo ( rpl_refuel, t.dest->xpos, t.dest->ypos, t.dest->networkid, serv.targetPos, t.dest->ammo[ serv.targetPos ] );
-                          MapCoordinate mc = building->getEntry();
                           logtoreplayinfo ( rpl_bldrefuel, mc.x, mc.y, serv.targetPos, building->ammo[ serv.sourcePos ] );
                           break;
         }
