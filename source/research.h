@@ -154,8 +154,8 @@ class TechAdapterDependency {
      void read ( tnstream& stream );
      void write ( tnstream& stream );
 
-     void read_struct ( tnstream& stream );
-     void read_techs ( tnstream& stream );
+     void read_struct ( tnstream& stream, bool merge = false );
+     void read_techs ( tnstream& stream, bool merge = false );
 
      void evalTechAdapter();
      bool techAdapterAvail( const ASCString& ta ) const;

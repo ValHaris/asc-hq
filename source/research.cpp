@@ -486,7 +486,7 @@ const int researchableWeaponImprovements = 8;
 
 const int researchVersion = -3;
 
-void Research :: read_struct ( tnstream& stream )
+void Research :: read_struct ( tnstream& stream, bool merge )
 {
    int version = stream.readInt();
    
@@ -512,8 +512,13 @@ void Research :: read_struct ( tnstream& stream )
       progress = stream.readInt();
       activetechnology = technologyRepository.getObject_byID( stream.readInt());
       int size = stream.readInt();
+
+      if ( !merge ) 
+         developedTechnologies.clear();
+
       for ( int i = 0; i < size; ++i )
          developedTechnologies.push_back ( stream.readInt());
+
       ___oldVersionLoader = false;
 
       if ( version <= -2 )
@@ -521,8 +526,15 @@ void Research :: read_struct ( tnstream& stream )
       else
          techsAvail = true;
 
-      if ( version <= -3 )
-         readClassContainer( predefinedTechAdapter, stream );
+      if ( version <= -3 ) {
+         if ( merge ) {
+            vector<ASCString> predefinedTechAdapter_t;
+            readClassContainer( predefinedTechAdapter_t, stream );
+            predefinedTechAdapter.insert( predefinedTechAdapter.begin(), predefinedTechAdapter_t.begin(), predefinedTechAdapter_t.end() );
+         } else {
+            readClassContainer( predefinedTechAdapter, stream );
+         }
+      }
    }
 }
 
@@ -539,12 +551,13 @@ void Research :: write ( tnstream& stream ) {
 }
 
 
-void Research :: read_techs ( tnstream& stream )
+void Research :: read_techs ( tnstream& stream, bool merge )
 {
    if ( !___oldVersionLoader )
       return;
 
-   developedTechnologies.clear();
+   if ( !merge )
+      developedTechnologies.clear();
 
    int w = stream.readInt ();
 
