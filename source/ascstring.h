@@ -337,4 +337,7 @@ inline int ASCString::compare_ci ( size_type p0, size_type n0, const charT* pS, 
 ASCString copytoLower ( const ASCString& s );
 ASCString copytoUpper ( const ASCString& s );
 
+// extern const ASCString operator+ ( const ASCString& s1, const ASCString& s2 );
+extern const ASCString operator+ ( const char* s1, const ASCString& s2 );
+
 #endif // _ASC_STRING_H_INCLUDED_

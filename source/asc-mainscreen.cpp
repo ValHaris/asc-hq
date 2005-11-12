@@ -301,6 +301,7 @@ void Menu::setup()
    addbutton ( "Wind Panel", ua_viewWindPanel );
    addbutton ( "Unit Info Panel", ua_viewUnitInfoPanel );
    addbutton ( "Overview Map Panel", ua_viewOverviewMapPanel );
+   addbutton ( "Map Control Panel", ua_viewMapControlPanel );
    addbutton("Weathercast", ua_weathercast);
    currentMenu->addSeparator();
    addbutton ( "clear image cache", ua_clearImageCache );
@@ -534,6 +535,10 @@ void MainScreenWidget::spawnPanel ( Panels panel )
       assert( mapDisplay);
       OverviewMapPanel* smp = new OverviewMapPanel( this, PG_Rect(Width()-170, 0, 170, 160), mapDisplay );
       smp->Show();
+   }
+   if ( panel == MapControl ) {
+      MapInfoPanel* mcp = new MapInfoPanel( this, PG_Rect(Width()-170, 0, 170, 160), mapDisplay );
+      mcp->Show();
    }
 }
 

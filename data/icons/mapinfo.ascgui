@@ -1,0 +1,280 @@
+panel {
+   height = 130
+   WidgetNum = 1
+   
+   Widget0 {
+      type = dummy
+      x = 3
+      y = 10
+      x2 = -3
+      y2 = -1
+      
+      WidgetNum = 6
+   
+      fontsize = 9
+      fontcolor = 0xffffff
+      Widget0 {
+         name = pipes
+         type = checkbox
+         x = 0
+         y = 0
+         x2 = 0
+         height = 15
+         text = Show Pipelines
+         ToolTipHelp = Ctrl 1
+      } Widget0
+      
+      Widget1 {
+         name = container
+         type = checkbox
+         x = 0
+         y = 15
+         x2 = 0
+         height = 15
+         text = Show Cargo
+         ToolTipHelp = Ctrl 2
+      } Widget1
+
+      Widget2 {
+         name = resources
+         type = checkbox
+         x = 0
+         y = 30
+         x2 = 0
+         height = 15
+         text = Mineral Resources
+         ToolTipHelp = Ctrl 3
+      } Widget2
+      
+      Widget3 {
+         name = weaprange
+         type = button
+         x = 0
+         y = 45
+         x2 = 0
+         height = 15
+         text = show weapon range
+         ToolTipHelp = Ctrl 5
+      } Widget3
+      
+      Widget4 {
+         name = moverange
+         type = button
+         x = 0
+         y = 60
+         x2 = 0
+         height = 15
+         text = show movement range
+         ToolTipHelp = Ctrl 6
+      } Widget4
+   
+      Widget5 {
+         name = zoomscroller
+         type = slider
+         Orientation = horizontal
+         x = 0
+         y = 75
+         x2 = 0
+         height = 20
+      } Widget5
+   
+   } Widget0
+      
+      
+   
+   wWidget0 {
+      type = area
+      x = 3
+      y = 10
+      width = 70
+      height = 100  
+      widgetnum = 2
+      widget0 {
+        type = image
+        x = 5
+        y = 3
+        filename = windrose.png
+        widgetnum = 1
+        widget0 {
+          type = SpecialDisplay
+          x = 0
+          y = 0
+          name = windarrow
+        } widget0
+      } widget0
+      widget1 {
+        type = dummy
+        x = 4
+        y = 68
+        width = 66
+        height = 32
+        widgetnum = 2
+        widget0 {
+          type = image
+          x = 0
+          y = 0
+          filename = wind_bg.png
+          widgetnum = 1
+          widget0 {
+            type = BarGraph
+            x = 7
+            y = 7
+            width = 51
+            height =  6
+            name = winddisplay
+          } widget0
+        } widget0
+        widget1 {
+          type = image
+          x = 0
+          y = 0
+          filename = wind_bar.png
+          widgetnum = 1
+          widget0 {
+            TextAlign = CENTER
+            FontColor = 0xffffff
+            Fontsize = 8
+            type = TextOutput
+            x = 22
+            y = 18
+            width = 23
+            height = 9
+            name = windspeed
+          } widget0
+        } widget1       
+     } widget1  
+   } wWidget0
+
+   wWidget1 {
+      type = area
+      x = 75
+      y = 10
+      width = 92
+      height = 100
+      widgetnum = 4
+      widget0 {
+        type = image
+        x = 2
+        y = 3
+        filename = terrain_textbox.png
+        widgetnum = 1
+        widget0 {
+          TextAlign = CENTER
+          FontColor = 0xffffff
+          Fontsize = 8
+          x = 1
+          y = 1
+          type = Textoutput
+          Name = terrain_name
+        } widget0     
+     } widget0
+     
+        
+      
+       widget1 {
+         type = image
+         x = 2
+         y = 18
+         filename = terrain_boni.png
+         widgetnum = 1
+         widget0 {
+           type = dummy
+           x = 5
+           y = 5
+           TextAlign = CENTER
+           FontColor = 0xffffff
+           Fontsize = 8
+           widgetnum = 3
+           widget0 {
+              type = TextOutput
+              x = 1
+              y = 14
+              width = 23
+              height = 8
+              name = terrain_attackbonus
+           } widget0
+           widget1 {
+              type = Textoutput
+              x = 29
+              y = 14
+              width = 23
+              height = 8
+              name = terrain_jam
+           } widget1
+           widget2 {
+              type = textoutput
+              x = 57
+              y = 14
+              width = 23
+              height = 8
+              name = terrain_defencebonus
+           } widget2     
+         } widget0
+       } widget1
+
+       widget2 {
+         type = image
+         x = 2
+         y = 50
+         filename = terrain_prop.png
+         widgetnum = 1
+         widget0 {
+           type = dummy
+           x = 5
+           y = 5
+           TextAlign = CENTER
+           FontColor = 0xffffff
+           Fontsize = 8
+           widgetnum = 4
+           widget0 {
+              type = Textoutput
+              x = 51
+              y = 2
+              width = 30
+              height = 8
+              name = terrain_pipe
+           } widget0
+           widget1 {
+              type = Textoutput
+              x = 51
+              y = 14
+              width = 30
+              height = 8
+              name = terrain_harbour
+           } widget1
+           widget2 {
+              type = statictext
+              x = 4
+              y = 1
+              width = 40
+              height = 8
+              text = pipeline
+           } widget2
+           widget3 {
+              type = statictext
+              x = 4
+              y = 14
+              width = 40
+              height = 8
+              text = harbour
+           } widget3           
+         } widget0
+       } widget2
+
+
+        widget3 {
+        type = image
+        x = 30
+        y = 82
+        filename = weather_field.png
+        widgetnum = 1
+        widget0 {
+          type = SpecialDisplay
+          x = 0
+          y = 0
+          name = field_weather
+        } widget0
+      } widget3
+   } wwidget1
+   
+} panel

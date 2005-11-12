@@ -874,7 +874,7 @@ class SearchForMineralResources : public GuiFunction
       void execute( const MapCoordinate& pos, int num )
       {
           actmap->getField(pos)->vehicle->searchForMineralResources( ) ;
-          showresources = 1;
+          #warning ShowResources
           updateFieldInfo();
           repaintMap();
       }

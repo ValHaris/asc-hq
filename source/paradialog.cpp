@@ -519,7 +519,7 @@ bool ASC_PG_Dialog::closeWindow(){
 
 
 
-const int widgetTypeNum = 14;
+const int widgetTypeNum = 15;
 const char* widgetTypes[widgetTypeNum]
 =
    { "image",
@@ -535,7 +535,8 @@ const char* widgetTypes[widgetTypeNum]
      "button",
      "radiobutton",
      "checkbox",
-     "lineedit"
+     "lineedit",
+     "slider"
    };
 
 enum  WidgetTypes  { Image,
@@ -551,7 +552,8 @@ enum  WidgetTypes  { Image,
                      Button,
                      RadioButton,
                      CheckBox,
-                     LineEdit };
+                     LineEdit,
+                     Slider };
 
 const int imageModeNum = 5;
 const char* imageModes[imageModeNum]
@@ -580,6 +582,13 @@ const char* barDirections[barDirectionNum]
      "buttom2top"
    };
 
+const int sliderDirectionNum = 2;
+const char* sliderDirections[sliderDirectionNum]
+=
+   { "vertical",
+     "horizontal"
+   };
+   
 
 
 ASCGUI_Window::WidgetParameters::WidgetParameters()
@@ -695,19 +704,19 @@ void  ASCGUI_Window::WidgetParameters::assign( PG_Widget* widget )
       return;
 
    if ( fontColor_defined ) 
-      widget->SetFontColor( fontColor );
+      widget->SetFontColor( fontColor, true );
       
    if ( !fontName.empty() )
-      widget->SetFontName( fontName );
+      widget->SetFontName( fontName, true );
       
    if ( fontAlpha_defined )
-      widget->SetFontAlpha( fontAlpha );
+      widget->SetFontAlpha( fontAlpha, true );
    
    if ( fontSize_defined )
-      widget->SetFontSize( fontSize );
+      widget->SetFontSize( fontSize, true );
    
    if ( transparency_defined )
-      widget->SetTransparency( transparency );
+      widget->SetTransparency( transparency, true );
       
    if ( hidden )
       widget->Hide(false);
@@ -1038,6 +1047,20 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
             
          parsePanelASCTXT( pc, sw, widgetParams );
          newWidget = sw;
+      }
+      if ( type == Slider ) {
+         
+         int direction = 0;
+         pc.addNamedInteger( "Orientation", direction, sliderDirectionNum, sliderDirections, direction);
+        
+         
+         PG_ScrollBar* sb = new PG_Slider( parent, r, PG_ScrollBar::ScrollDirection(direction), -1, style );
+         
+         if ( !hasStyle )
+            widgetParams.assign ( sb );
+            
+         parsePanelASCTXT( pc, sb, widgetParams );
+         newWidget = sb;
       }
             
       if ( newWidget && newWidget->GetName().empty() )

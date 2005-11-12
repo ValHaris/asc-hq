@@ -162,7 +162,7 @@ class MapLayer {
    public:
       virtual bool onLayer( int layer ) = 0;
       bool isActive() { return active; };
-      void setActive( bool active ) { this->active = active; };
+      virtual void setActive( bool active ) { this->active = active; };
       virtual void paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos ) = 0;
       virtual ~MapLayer() {};
 };
@@ -224,11 +224,13 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
    
       void checkViewPosition();
       
-      void setNewZoom( float zoom );   
       void fillSurface( int playerView );
 
 
    public:
+      void setNewZoom( float zoom );   
+      SigC::Signal1<void, float> newZoom;
+      
       MapCoordinate screenPos2mapPos( const SPoint& pos );
       MapCoordinate widgetPos2mapPos( const SPoint& pos );
 
@@ -334,6 +336,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
 
       void addMapLayer( MapLayer* layer, const ASCString& name );
       void activateMapLayer( const ASCString& name, bool active );
+      SigC::Signal2<void, bool, const ASCString&> layerChanged;
 
       /** Signal that is fired when the mouse is pressed on a valid field, after the cursor evaluation has been run.
            \param MapCoordinate the Coordinate of the field that was clicked

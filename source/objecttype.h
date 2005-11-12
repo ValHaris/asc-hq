@@ -28,7 +28,7 @@
  //! An object that can be placed on fields. Roads, pipelines and ditches are examples of objects. \sa Object
  class ObjectType : public MapItemType, public LoadableItemType {
      bool imageUsesAlpha;
-     void realDisplay ( Surface& surface, SPoint pos, int dir, int weather ) const;
+     void realDisplay ( Surface& surface, const SPoint& pos, int dir, int weather ) const;
    public:
      //! the id of the object, used when referencing objects in files
      int id;
@@ -144,8 +144,8 @@
      } weatherPicture [cwettertypennum];
 
      //! displays the objecttype at x/y on the screen
-     void display ( Surface& surface, SPoint pos ) const ;
-     void display ( Surface& surface, SPoint pos, int dir, int weather = 0 ) const;
+     void display ( Surface& surface, const SPoint& pos ) const ;
+     void display ( Surface& surface, const SPoint& pos, int dir, int weather = 0 ) const;
      
      //! returns the pointer to the image i
      const Surface& getPicture ( int i = 0, int weather = 0 ) const;

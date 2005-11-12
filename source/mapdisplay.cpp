@@ -79,44 +79,196 @@ void ContainerInfoLayer::paintSingleField( const MapRenderer::FieldRenderInfo& f
 
 
  
-class ResourceLayer : public MapLayer {
+class ResourceGraphLayer : public MapLayer {
       void paintBar( const MapRenderer::FieldRenderInfo& fieldInfo, const SPoint& pos, int row, int amount, int color ) {
+         int length = amount / 10;
+         int maxlength = 255/10;
          if ( amount ) 
-           paintFilledRectangle<4>( fieldInfo.surface, SPoint( pos.x + 10, pos.y + 2 + row*12), amount / 10, 5, ColorMerger_ColoredOverwrite<4>( color ));
-      
+            paintFilledRectangle<4>( fieldInfo.surface, SPoint( pos.x + 10, pos.y + 2 + row*12), length, 5, ColorMerger_ColoredOverwrite<4>( color ));
+         if ( length < maxlength )
+            paintFilledRectangle<4>( fieldInfo.surface, SPoint( pos.x + 10 + length, pos.y + 2 + row*12), maxlength-length, 5, ColorMerger_ColoredOverwrite<4>( 0x888888 ));
+           
       };
     public: 
       bool onLayer( int layer ) { return layer == 17; };
       void paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos );
 };
 
-void ResourceLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
+void ResourceGraphLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
 {
    if ( fieldInfo.playerView >= visible_ago) {
       #ifndef karteneditor
       if ( fieldInfo.fld->resourceview && (fieldInfo.fld->resourceview->visible & ( 1 << fieldInfo.playerView) ) ){
-         if ( showresources == 1 ) {
-            // showtext2( strrr ( fieldinfo.fld->resourceview->materialvisible[playerview] ) , r + 10 , yp +10 );
-            // showtext2( strrr ( fieldinfo.fld->resourceview->fuelvisible[playerview] )     , r + 10 , yp +20 );
-         } else
-            if ( showresources == 2 ) {
-               paintBar( fieldInfo, pos, 0, fieldInfo.fld->resourceview->materialvisible[fieldInfo.playerView], Resources::materialColor );
-               paintBar( fieldInfo, pos, 1, fieldInfo.fld->resourceview->fuelvisible[fieldInfo.playerView], Resources::fuelColor );
-            }
+         paintBar( fieldInfo, pos, 0, fieldInfo.fld->resourceview->materialvisible[fieldInfo.playerView], Resources::materialColor );
+         paintBar( fieldInfo, pos, 1, fieldInfo.fld->resourceview->fuelvisible[fieldInfo.playerView], Resources::fuelColor );
       }
       #else
-      if ( showresources == 1 ) {
-         // showtext2( strrr ( fieldinfo.fld->material ) , r + 10 , yp );
-         // showtext2( strrr ( fieldinfo.fld->fuel )     , r + 10 , yp + 10 );
-      }
-      else 
-         if ( showresources == 2 ) {
-            paintBar( fieldInfo, pos, 0, fieldInfo.fld->material, Resources::materialColor );
-            paintBar( fieldInfo, pos, 1, fieldInfo.fld->fuel, Resources::fuelColor );
-         }
+      paintBar( fieldInfo, pos, 0, fieldInfo.fld->material, Resources::materialColor );
+      paintBar( fieldInfo, pos, 1, fieldInfo.fld->fuel, Resources::fuelColor );
      #endif
    }
 }
+
+
+
+
+class PipeLayer : public MapLayer {
+      ObjectType* buried_pipeline;
+      ObjectType* pipeline;
+      bool isPipe( const ContainerBase* c ) {
+         for ( ContainerBase::Cargo::const_iterator i = c->cargo.begin(); i != c->cargo.end(); ++i )
+            if ( *i )
+               return true;
+         return false;
+      };
+    public: 
+      PipeLayer() : buried_pipeline( NULL ), pipeline ( NULL )
+      {
+         for ( int i = 0; i < objectTypeRepository.getNum(); ++i ) {
+            ObjectType* obj = objectTypeRepository.getObject_byPos( i );
+            if (obj->displayMethod == 1 && obj->fieldModification[0].terrain_or.test( cbpipeline )) {
+               buried_pipeline = obj;
+            }
+            if (obj->displayMethod == 0 && obj->fieldModification[0].terrain_or.test( cbpipeline )) {
+               pipeline = obj;
+            }
+         }
+      }
+    
+      bool onLayer( int layer ) { return layer == 17; };
+      void paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos );
+};
+
+void PipeLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
+{
+   if ( !pipeline )
+      return;
+      
+   if ( fieldInfo.visibility > visible_ago) {
+      if ( fieldInfo.fld->building ) {
+         pipeline->display( fieldInfo.surface, pos, 63, 0 );
+      } else {
+         if ( fieldInfo.fld->bdt.test( cbpipeline )) {
+            Object* o = fieldInfo.fld->checkforobject( buried_pipeline );
+            if ( o )
+               pipeline->display( fieldInfo.surface, pos, o->dir, 0 );
+            else {
+               for ( tfield::ObjectContainer::iterator i = fieldInfo.fld->objects.begin(); i != fieldInfo.fld->objects.end(); ++i )
+                  if ( i->typ->fieldModification[0].terrain_or.test( cbpipeline ) ) {
+                     pipeline->display( fieldInfo.surface, pos, i->dir, 0 );
+                     break;
+                  }   
+                     
+            }
+         }
+      }   
+   }
+}
+
+#if 0
+
+class WeaponRange : public SearchFields
+{
+   public:
+      int run ( const Vehicle* veh );
+      void testfield ( const MapCoordinate& mc )
+      {
+         gamemap->getField( mc )->tempw = 1;
+      };
+      WeaponRange ( pmap _gamemap ) : SearchFields ( _gamemap )
+      {}
+      ;
+};
+
+int  WeaponRange :: run ( const Vehicle* veh )
+{
+   int found = 0;
+   if ( fieldvisiblenow ( getfield ( veh->xpos, veh->ypos )))
+      for ( int i = 0; i < veh->typ->weapons.count; i++ ) {
+         if ( veh->typ->weapons.weapon[i].shootable() ) {
+            initsearch ( veh->getPosition(), veh->typ->weapons.weapon[i].maxdistance/minmalq, (veh->typ->weapons.weapon[i].mindistance+maxmalq-1)/maxmalq );
+            startsearch();
+            found++;
+         }
+      }
+   return found;
+}
+
+
+ 
+class UnitWeaponRangeLayer : public MapLayer, public SigC::Object {
+
+      map<MapCoordinate,int> fields;
+
+      void eval()
+      {
+         if ( act
+   if ( veh && !moveparams.movestatus  ) {
+      actmap->cleartemps ( 7 );
+      WeaponRange wr ( actmap );
+      int res = wr.run ( veh );
+      if ( res ) {
+         displaymap();
+
+         if ( taste != ct_invvalue ) {
+            while ( skeypress ( taste )) {
+
+               while ( keypress() )
+                  r_key();
+
+               releasetimeslice();
+            }
+         } else {
+            int mb = mouseparams.taste;
+            while ( mouseparams.taste == mb && !keypress() )
+               releasetimeslice();
+            while ( keypress() )
+               r_key();
+         }
+
+         actmap->cleartemps ( 7 );
+         displaymap();
+      }
+   }
+      
+      }
+      
+    public: 
+      UnitWeaponRangeLayer() {
+         cursorMoved.connect( SigC::slot( *this, UnitWeaponRangeLayer::cursorMoved ));
+      }
+      
+      void cursorMoved()
+      {
+         fields.clear();
+         if ( isActive() ) {
+            eval();            
+         }
+      }
+
+      void setActive( bool active ) { 
+         MapLayer::setActive(active);
+         eval(); 
+      };
+      
+            
+      bool onLayer( int layer ) { return layer == 17; };
+      void paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos ){
+         if ( fieldInfo.playerView >= visible_ago) {
+            if ( fieldInfo.fld->vehicle || (fieldInfo.fld->building && fieldInfo.fld->bdt.test(cbbuildingentry) )) {
+               ContainerBase* c = fieldInfo.fld->getContainer();
+               if ( c->getOwner() == fieldInfo.playerView && hasCargo(c) ) 
+                  fieldInfo.surface.Blit( marker, pos );
+               
+            }
+         }
+      }
+};
+
+
+
+#endif
+
 
 
 void MapRenderer::readData()
@@ -390,8 +542,9 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
    theGlobalMapDisplay = this;
    dataLoaderTicker();
    
-   addMapLayer( new ResourceLayer(), "res" );
-   addMapLayer( new ContainerInfoLayer(), "cont" );
+   addMapLayer( new ResourceGraphLayer(), "resources" );
+   addMapLayer( new ContainerInfoLayer(), "container" );
+   addMapLayer( new PipeLayer()         , "pipes" );
 }
 
 
@@ -436,6 +589,7 @@ void MapDisplayPG::setNewZoom( float zoom )
    surface = new Surface( Surface::createSurface ( field.numx * fielddistx + 2 * surfaceBorder, (field.numy - 1) * fielddisty + fieldysize +  2 * surfaceBorder, colorDepth*8 ));
 
    dirty = Map;
+   newZoom( zoom );
 }
 
 
@@ -1123,13 +1277,16 @@ void MapDisplayPG::addMapLayer( MapLayer* layer, const ASCString& name )
 {
    MapRenderer::addMapLayer( layer );
    layerMap[name] = layer;
+   layer->setActive(false);
 }
 
 void MapDisplayPG::activateMapLayer( const ASCString& name, bool active )
 {
    LayerMap::iterator i = layerMap.find( name );
-   if ( i != layerMap.end() )
+   if ( i != layerMap.end() ) {
       i->second->setActive( active );
+      layerChanged( active, name );
+   }   
 }
 
 

@@ -638,101 +638,9 @@ void benchgame ( int mode )
    displaymessage2 ( " %s fps ", buf );
 }
 
-class WeaponRange : public SearchFields
-{
-   public:
-      int run ( const Vehicle* veh );
-      void testfield ( const MapCoordinate& mc )
-      {
-         gamemap->getField( mc )->tempw = 1;
-      };
-      WeaponRange ( pmap _gamemap ) : SearchFields ( _gamemap )
-      {}
-      ;
-};
-
-int  WeaponRange :: run ( const Vehicle* veh )
-{
-   int found = 0;
-   if ( fieldvisiblenow ( getfield ( veh->xpos, veh->ypos )))
-      for ( int i = 0; i < veh->typ->weapons.count; i++ ) {
-         if ( veh->typ->weapons.weapon[i].shootable() ) {
-            initsearch ( veh->getPosition(), veh->typ->weapons.weapon[i].maxdistance/minmalq, (veh->typ->weapons.weapon[i].mindistance+maxmalq-1)/maxmalq );
-            startsearch();
-            found++;
-         }
-      }
-   return found;
-}
 
 
-void viewunitweaponrange ( const Vehicle* veh, tkey taste )
-{
-   if ( veh && !moveparams.movestatus  ) {
-      actmap->cleartemps ( 7 );
-      WeaponRange wr ( actmap );
-      int res = wr.run ( veh );
-      if ( res ) {
-         displaymap();
 
-         if ( taste != ct_invvalue ) {
-            while ( skeypress ( taste )) {
-
-               while ( keypress() )
-                  r_key();
-
-               releasetimeslice();
-            }
-         } else {
-            int mb = mouseparams.taste;
-            while ( mouseparams.taste == mb && !keypress() )
-               releasetimeslice();
-            while ( keypress() )
-               r_key();
-         }
-
-         actmap->cleartemps ( 7 );
-         displaymap();
-      }
-   }
-}
-
-
-void viewPipeNet( tkey taste )
-{
-
-   if ( !moveparams.movestatus ) {
-      actmap->cleartemps ( 7 );
-      TerrainBits tb = getTerrainBitType(cbpipeline);
-      for ( int x = 0; x < actmap->xsize; ++x )
-         for ( int y = 0; y < actmap->ysize; ++y ) {
-             pfield fld = actmap->getField ( x, y );
-             if ( fieldvisiblenow( fld ))
-                if ( (fld->bdt & tb).any() || fld->building )
-                   fld->a.temp = 1;
-         }
-
-      displaymap();
-
-      if ( taste != ct_invvalue ) {
-         while ( skeypress ( taste )) {
-            while ( keypress() )
-               r_key();
-
-            releasetimeslice();
-         }
-      } else {
-         int mb = mouseparams.taste;
-         while ( mouseparams.taste == mb && !keypress() )
-            releasetimeslice();
-
-         while ( keypress() )
-            r_key();
-      }
-      actmap->cleartemps ( 7 );
-      displaymap();
-   }
-}
 
 
 void viewunitmovementrange ( Vehicle* veh, tkey taste )
@@ -1101,7 +1009,7 @@ void execuseraction ( tuseractions action )
          showGameParameters();
          break;
       case ua_viewunitweaponrange:
-         viewunitweaponrange ( getSelectedField()->vehicle, ct_invvalue );
+         // viewunitweaponrange ( getSelectedField()->vehicle, ct_invvalue );
          break;
 
       case ua_viewunitmovementrange:
@@ -1251,6 +1159,7 @@ void execuseraction2 ( tuseractions action )
          break;
       case ua_viewOverviewMapPanel: mainScreenWidget->spawnPanel( MainScreenWidget::OverviewMap );
          break;
+      case ua_viewMapControlPanel: mainScreenWidget->spawnPanel( MainScreenWidget::MapControl );
       case ua_vehicleinfo: unitInfoDialog();
          break;
       case ua_weathercast: weathercast();

@@ -22,6 +22,7 @@
 
 
 // these routines should be optimized
+// http://gcc.gnu.org/onlinedocs/gcc-3.3/gcc/Vector-Extensions.html
 
 SDL_Color lightenColor( const SDL_Color& color, float factor )
 {

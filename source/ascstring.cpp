@@ -214,3 +214,17 @@ ASCString ASCString::toString(double d )
    return s;
 }
 
+const ASCString operator+ ( const ASCString& s1, const ASCString& s2 )
+{
+   ASCString s = s1;
+   s += s2;
+   return s;
+}
+
+const ASCString operator+ ( const char* s1, const ASCString& s2 )
+{
+   ASCString s = s1;
+   s += s2;
+   return s;
+}
+

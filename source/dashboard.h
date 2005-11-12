@@ -77,5 +77,20 @@ class WeaponInfoPanel : public Panel {
 };
 
 
+class MapInfoPanel : public DashboardPanel {
+        MapDisplayPG* mapDisplay;
+        PG_Slider* zoomSlider;
+        bool changeActive;
+        
+        void layerChanged( bool state, const ASCString& label );        
+        bool scrollTrack( long pos );
+        bool checkBox( bool state, const char* name );
+        void zoomChanged( float zoom );
+     protected:
+        void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
+     public:
+        MapInfoPanel (PG_Widget *parent, const PG_Rect &r, MapDisplayPG* mapDisplay ) ;
+};
+
 
 #endif

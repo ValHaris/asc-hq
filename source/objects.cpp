@@ -38,12 +38,12 @@
 const char* MineNames[cminenum]  = {"antipersonnel mine", "antitank mine", "antisub mine", "antiship mine"};
 const int MineBasePunch[cminenum]  = { 60, 120, 180, 180 };
 
-void MineType :: paint ( Surface& surface, SPoint pos ) const 
+void MineType :: paint ( Surface& surface, const SPoint& pos ) const 
 {
    paint( type, 0, surface, pos );
 }
 
-void MineType::paint( MineTypes type, int player, Surface& surf, SPoint pos )
+void MineType::paint( MineTypes type, int player, Surface& surf, const SPoint& pos )
 {
    static Surface* images[5] = { NULL, NULL, NULL, NULL, NULL };
    if ( !images[type] ) {
@@ -100,7 +100,7 @@ int  Object :: getdir ( void )
    return dir;
 }
 
-void Object :: display ( Surface& surface, SPoint pos, int weather ) const
+void Object :: display ( Surface& surface, const SPoint& pos, int weather ) const
 {
    typ->display ( surface, pos, dir, weather );
 }

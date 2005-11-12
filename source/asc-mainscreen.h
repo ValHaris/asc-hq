@@ -45,7 +45,7 @@ class MainScreenWidget : public PG_Widget {
         
 public:
     MainScreenWidget( PG_Application& application );
-    enum Panels { ButtonPanel, WindInfo, UnitInfo, OverviewMap };
+    enum Panels { ButtonPanel, WindInfo, UnitInfo, OverviewMap, MapControl };
     void spawnPanel ( Panels panel );
 
     void displayMessage( const ASCString& message );

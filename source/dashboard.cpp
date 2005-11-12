@@ -20,6 +20,8 @@
  *                                                                         *
  ***************************************************************************/
 
+ #include "sigc++/retype.h"
+
 #include "dashboard.h"
 #include "graphics/blitter.h"
 #include "graphics/drawing.h"
@@ -530,6 +532,67 @@ ASCString WeaponInfoPanel::name = "WeaponInfoPanel";
 const ASCString& WeaponInfoPanel::WIP_Name()
 {
    return name;
+}
+
+
+MapInfoPanel::MapInfoPanel (PG_Widget *parent, const PG_Rect &r, MapDisplayPG* mapDisplay ) : DashboardPanel( parent, r, "MapInfo" ), zoomSlider(NULL), changeActive(false)
+{
+   assert( mapDisplay );
+   this->mapDisplay = mapDisplay;
+   
+   zoomSlider = dynamic_cast<PG_Slider*>( FindChild( "zoomscroller", true ) );
+   if ( zoomSlider ) {
+      zoomSlider->SetRange(0,75); // results in zoomlevels from 100 - 25
+      zoomSlider->sigSlide.connect( SigC::slot( *this, &MapInfoPanel::scrollTrack ));
+      mapDisplay->newZoom.connect( SigC::slot( *this, &MapInfoPanel::zoomChanged ));
+   }   
+
+   const int labelnum = 3;
+   char* label[labelnum] = { "pipes", "container", "resources"};
+   for ( int i = 0; i < labelnum; ++i ) {
+      PG_CheckButton* cb = dynamic_cast<PG_CheckButton*>( FindChild( label[i], true ) );
+      if ( cb ) 
+         cb->sigClick.connect( SigC::bind( SigC::slot( *this, &MapInfoPanel::checkBox ), label[i] ));
+   }      
+   
+   mapDisplay->layerChanged.connect( SigC::slot( *this, &MapInfoPanel::layerChanged ));
+      
+}
+
+void MapInfoPanel::layerChanged( bool state, const ASCString& label )
+{
+   PG_CheckButton* cb = dynamic_cast<PG_CheckButton*>( FindChild( label, true ) );
+   if ( cb && ! changeActive ) 
+      if ( state )
+         cb->SetPressed();
+      else
+         cb->SetUnpressed();
+}
+
+
+void MapInfoPanel::zoomChanged( float zoom )
+{
+   if ( !changeActive )
+      if ( zoomSlider )
+         zoomSlider->SetPosition( 100 - int( zoom * 100 ));
+}
+
+bool MapInfoPanel::scrollTrack( long pos )
+{
+   changeActive = true;
+   mapDisplay->setNewZoom( 1 - float(pos) / 100 );
+   repaintMap();
+   changeActive = false;
+   return true;
+}
+
+bool MapInfoPanel::checkBox( bool state, const char* name )
+{
+   changeActive = true;
+   mapDisplay->activateMapLayer( name, state );
+   repaintMap();
+   changeActive = false;
+   return true;
 }
 
 

@@ -51,7 +51,7 @@ class Object : public AgeableItem {
        
        Object ();
        Object ( const ObjectType* o );
-       void display ( Surface& surface, SPoint pos, int weather = 0 ) const;
+       void display ( Surface& surface, const SPoint& pos, int weather = 0 ) const;
        const OverviewMapImage* getOverviewMapImage( int weather );
        void setdir ( int dir );
        int  getdir ( void );
@@ -79,8 +79,8 @@ class MineType : public MapItemType {
          return MineNames[int(type)-1];
       };
       
-      void paint ( Surface& surface, SPoint pos ) const ;
-      static void paint( MineTypes type, int player, Surface& surf, SPoint pos );
+      void paint ( Surface& surface, const SPoint& pos ) const ;
+      static void paint( MineTypes type, int player, Surface& surf, const SPoint& pos );
 };
 
 #endif

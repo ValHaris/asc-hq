@@ -65,7 +65,7 @@ class UnitInfoDialog : public Panel {
         EntranceHeights entranceHeights;
         Surface infoImage;
 
-  	     bool eventKeyDown(const SDL_KeyboardEvent* key)
+        bool eventKeyDown(const SDL_KeyboardEvent* key)
         {
            if ( key->keysym.sym == SDLK_ESCAPE ) {
               QuitModal();

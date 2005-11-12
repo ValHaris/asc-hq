@@ -120,7 +120,7 @@ const Surface& ObjectType :: getPicture ( int i, int w ) const
 }
 
 
-void ObjectType :: display ( Surface& surface, SPoint pos, int dir, int weather ) const
+void ObjectType :: display ( Surface& surface, const SPoint& pos, int dir, int weather ) const
 {
    if ( !this->weather.test( weather) )
       weather = 0;
@@ -146,13 +146,13 @@ void ObjectType :: display ( Surface& surface, SPoint pos, int dir, int weather 
 
 
 
-void ObjectType::realDisplay ( Surface& surface, SPoint pos, int dir, int weather ) const
+void ObjectType::realDisplay ( Surface& surface, const SPoint& pos, int dir, int weather ) const
 {
    int flip = 0;
    if ( dir < weatherPicture[weather].flip.size() )
       flip = weatherPicture[weather].flip[dir];
 
-   if ( id == 7 || id == 30 || displayMethod==1 ) { // buried pipeline,
+   if ( displayMethod==1 ) { // SHADOW: buried pipeline, tracks, ...
       megaBlitter<ColorTransform_None, ColorMerger_AlphaShadow, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
    } else
       if ( displayMethod == 2 ) {  // translation
@@ -183,7 +183,7 @@ void ObjectType::realDisplay ( Surface& surface, SPoint pos, int dir, int weathe
 }
 
 
-void ObjectType :: display ( Surface& surface, SPoint pos ) const
+void ObjectType :: display ( Surface& surface, const SPoint& pos ) const
 {
    display ( surface, pos, 64, 0 );
 }
@@ -1092,14 +1092,14 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                   weatherPicture[i].flip[u] = 0;
                }
             }
-
-            if ( pc.find ( "DisplayMethod" ) )
-               pc.addNamedInteger( "DisplayMethod", displayMethod, objectDisplayingMethodNum, objectDisplayingMethodTags );
-            else
-               displayMethod = 0;
-
          }
+         
+         if ( pc.find ( "DisplayMethod" ) )
+            pc.addNamedInteger( "DisplayMethod", displayMethod, objectDisplayingMethodNum, objectDisplayingMethodTags );
+         else
+            displayMethod = 0;
 
+         
          if ( !oldWeatherSpecification ) {
             fieldModification[i].runTextIO( pc );
          }
