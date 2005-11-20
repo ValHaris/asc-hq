@@ -317,7 +317,7 @@ int main(int argc, char *argv[] )
 
    virtualscreenbuf.init();
 
-   initializeEventHandling ( mapeditorMainThread, NULL, NULL );
+   initializeEventHandling ( mapeditorMainThread, NULL );
 
    return 0;
 }

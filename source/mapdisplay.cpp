@@ -930,7 +930,7 @@ Surface MapDisplayPG::createMovementBufferSurface()
 
 void MapDisplayPG::initMovementStructure()
 {
-   if ( !movementMask[0].mask.valid() )
+   if ( !movementMask[0].mask.valid() ) 
       for ( int dir = 0; dir < sidenum; ++dir ) {
          movementMask[dir].mask = createMovementBufferSurface();
          MapCoordinate start;
@@ -1037,7 +1037,7 @@ void MapDisplayPG::displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoor
    int dir = getdirection( from, to );
    
    if ( from.x == to.x && from.y == to.y )
-      dir = 0;  // changing height vertically
+      dir = -1;  // changing height vertically
    else   
       veh->direction = dir;
    
@@ -1055,7 +1055,12 @@ void MapDisplayPG::displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoor
    for ( int ii = 0; ii < sidenum; ++ii ) 
       touchedFields.push_back ( TouchedField( getNeighbouringFieldCoordinate(from, ii), getNeighbouringFieldCoordinate(tempStart, ii) ));
       
-   MapCoordinate tempEnd = getNeighbouringFieldCoordinate( tempStart, dir );
+   MapCoordinate tempEnd;
+   if ( dir == -1 )
+      tempEnd = tempStart;
+   else
+      tempEnd = getNeighbouringFieldCoordinate( tempStart, dir );
+      
    touchedFields.push_back ( TouchedField( to, tempEnd ));
    for ( int ii = 0; ii < sidenum; ++ii ) 
       touchedFields.push_back ( TouchedField( getNeighbouringFieldCoordinate(to, ii), getNeighbouringFieldCoordinate(tempEnd, ii) ));
@@ -1112,7 +1117,10 @@ void MapDisplayPG::displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoor
       surface.Fill(0xffffffff );   
          
    movement.surf = &surface;
-   movement.mask = &movementMask[dir].mask;
+   if ( dir < 0 )
+      movement.mask = &movementMask[0].mask;
+   else   
+      movement.mask = &movementMask[dir].mask;
    
    movement.playerView = actmap->playerView;
    

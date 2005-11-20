@@ -441,7 +441,7 @@ int gameThreadWrapper ( void* data )
 SDL_Thread* secondThreadHandle = NULL;
 
 
-void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mousepointer )
+void initializeEventHandling ( int (*gamethread)(void *) , void *data )
 {
    mouseparams.xsize = 10;
    mouseparams.ysize = 10;

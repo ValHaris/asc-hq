@@ -2,7 +2,7 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.67.2.16 2005-09-26 19:55:31 mbickel Exp $
+//     $Id: edmain.cpp,v 1.67.2.17 2005-11-20 20:58:54 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -392,20 +392,13 @@ int main(int argc, char *argv[] )
 
    virtualscreenbuf.init();
 
-   {
-      int w;
-      tnfilestream stream ("mausi.raw", tnstream::reading);
-      stream.readrlepict(   &icons.mousepointer, false, &w );
-   }
-
-
    mapChanged.connect( SigC::hide<tmap*>( repaintMap.slot() ) );
    mapChanged.connect( SigC::hide<tmap*>( updateFieldInfo.slot() ) );
    mapChanged.connect( SigC::hide<tmap*>( SigC::slot( setSaveNotification) ));
    
    char* buf = new char[cl->l().length()+10];
    strcpy ( buf, cl->l().c_str() );
-   initializeEventHandling ( mapeditorMainThread, buf, icons.mousepointer );
+   initializeEventHandling ( mapeditorMainThread, buf  );
    delete[] buf;
 
    writegameoptions ();

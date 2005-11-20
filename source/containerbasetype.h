@@ -26,6 +26,10 @@ class ContainerBaseType: public MapItemType, public LoadableItemType {
    public:
      ContainerBaseType ();
 
+     static const int functionNum = 43;
+     
+     // BitSet functions;
+     
      int id;
 
      //! a short name, for example B-52

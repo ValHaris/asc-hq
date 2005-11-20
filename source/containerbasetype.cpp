@@ -23,6 +23,54 @@
 #include "graphics/blitter.h"
 
 
+
+
+const char*  ccontainerfunctions[ContainerBaseType::functionNum+1]  =
+              { "HQ",
+                "training",
+                "internal vehicle production",
+                "ammunition production",
+                "internal unit repair",
+                "recycling",
+                "research",
+                "sonar",
+                "view satellites",
+                "view mines",
+                "wind power plant",
+                "solar power plant",
+                "matter converter",
+                "mining station",
+                "construct units that cannot move out",
+                "resource sink",
+                "external energy transfer",
+                "external material transfer",
+                "external fuel transfer",
+                "external ammo transfer",
+                "external repair",
+                "no object chaining",
+                "self destruct on conquer",
+               "paratrooper",
+               "mine-layer",
+               "cruiser landing",
+               "conquer buildings",
+               "move after attack",
+               "construct ALL buildings",
+               "external vehicle production",
+               "construct specific buildings",
+               "icebreaker",
+               "cannot be refuelled in air",
+               "makes tracks",
+               "drill for mineral resources manually",
+               "search for mineral resources automatically",
+               "no reactionfire",
+               "auto repair",
+               "Kamikaze only",
+               "immune to mines",
+               "jams only own field",
+               "move with reaction fire on",
+               "only move to and from transports" };
+
+
 ContainerBaseType :: ContainerBaseType ()
 {
    maxLoadableUnits = 0;

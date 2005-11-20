@@ -610,7 +610,6 @@ struct ticons {
      void* orgbkgr;
    } attack;
    void*        pfeil2[8];     // beispielsweise fuer das Mouse-Scrolling 
-   void*        mousepointer;
    void*        fieldshape;
 };
 

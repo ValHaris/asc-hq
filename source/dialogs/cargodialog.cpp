@@ -109,7 +109,38 @@ class StoringPosition : public PG_Widget {
 Surface StoringPosition::clippingSurface;
 
 
-static const char* paneName[5]  = { "information", "movement", "weapons", "transport", "description" };
+
+
+
+const int subWindowNum = 11;
+static const char* subWindowName[subWindowNum] = { "ammotransfer", "ammoproduction", "info", "cargoinfo", "conventionalpower", "mining", "netcontrol", "research", "resourceinfo", "solarpower", "windpower" };
+
+class SubWinButton : public PG_Button {
+       public:
+          static const int buttonwidth = 47;
+          static const int buttonheight = 23;
+          
+          SubWinButton( PG_Widget *parent, const SPoint& pos, int subWindow ) : PG_Button( parent, PG_Rect( pos.x, pos.y, buttonwidth, buttonheight ), "", -1, "SubWinButton")
+          {
+            SetBackground( PRESSED, IconRepository::getIcon("cargo-buttonpressed.png").getBaseSurface() );
+            SetBackground( HIGHLITED, IconRepository::getIcon("cargo-buttonhighlighted.png").getBaseSurface() );
+            SetBackground( UNPRESSED, IconRepository::getIcon("cargo-buttonunpressed.png").getBaseSurface() );
+            SetBorderSize(0,0,0);
+            SetIcon( IconRepository::getIcon(ASCString("cargo-") + subWindowName[subWindow] + ".png" ).getBaseSurface() );
+          };
+};
+
+
+class CargoDialog;
+
+class SubWindow {
+   public:
+      virtual bool available( CargoDialog* cd ) = 0;
+      virtual void registerSubwindow( CargoDialog* cd ) {};
+};
+
+
+
 
 class CargoDialog : public Panel {
         ContainerBase* container;
@@ -120,6 +151,7 @@ class CargoDialog : public Panel {
         
         HighLightingManager unitHighLight;
 
+        deallocating_vector<SubWindow*> subwindows;
 
         StorageVector loadedUnits;
         
@@ -198,15 +230,20 @@ class CargoDialog : public Panel {
             }
          };
 
+         bool activate_i( int pane ) {
+            activate( subWindowName[pane] );
+            return true;
+         }
+            
          void activate( const ASCString& pane ) {
             PG_Application::SetBulkMode();
-            for ( int i = 0; i < 5; ++i )
-                if ( ASCString( paneName[i]) != pane )
-                   hide( paneName[i] );
+            for ( int i = 0; i < subWindowNum; ++i )
+                if ( ASCString( subWindowName[i]) != pane )
+                   hide( subWindowName[i] );
                    
-            for ( int i = 0; i < 5; ++i )
-                if ( ASCString( paneName[i]) == pane )
-                   show( paneName[i] );
+            for ( int i = 0; i < subWindowNum; ++i )
+                if ( ASCString( subWindowName[i]) == pane )
+                   show( subWindowName[i] );
             PG_Application::SetBulkMode(false);
             Update();
          };
@@ -287,15 +324,17 @@ class CargoDialog : public Panel {
                }
                
                // setLabelText( "unitpad_unitcategory", cmovemalitypes[ vt->movemalustyp ] );
+               /*
                registerSpecialDisplay( "unitpad_unitsymbol");
                registerSpecialDisplay( "unitpad_weapon_diagram");
                registerSpecialDisplay( "unitpad_transport_transporterlevel");
                registerSpecialDisplay( "unitpad_transport_unitlevel");
                registerSpecialDisplay( "unitpad_transport_leveldisplay");
+               */
                
                updateResourceDisplay();
                
-              activate(paneName[0]);
+              activate_i(0);
               Show();
               setupOK = true;
                
@@ -310,7 +349,14 @@ class CargoDialog : public Panel {
 
       void userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams ) 
       {
-         if ( label == "unitpad_heightchange" ) {
+         if ( label == "ButtonPanel" ) {
+            int x = 0;
+            for ( int i = 0; i < subWindowNum; ++i ) {
+               SubWinButton* button = new SubWinButton( parent, SPoint( x, 0 ), i);
+               button->sigClick.connect( SigC::bind( SigC::slot( *this, &CargoDialog::activate_i  ), i));
+               x += SubWinButton::buttonwidth;
+            }   
+            
          /*
             int yoffset = 0;
             for ( int i = 0; i < vt->heightChangeMethodNum; ++i ) {

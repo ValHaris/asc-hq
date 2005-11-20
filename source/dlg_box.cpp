@@ -154,9 +154,6 @@ tdialogbox::tdialogbox()
    virtualbufoffset = 0;
    boxstatus = 0;
 
-   if ( mouseparams.pictpointer != icons.mousepointer )
-       setnewmousepointer ( icons.mousepointer, 0,0 );
-
    dlg_mode =  0;
    int rdw = 0;
 

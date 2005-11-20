@@ -1607,16 +1607,9 @@ int main(int argc, char *argv[] )
          gtp.filename = argv[i];
 
 
-   {
-      int w;
-      tnfilestream stream ("mausi.raw", tnstream::reading);
-      stream.readrlepict(   &icons.mousepointer, false, &w );
-   }
-
-
    try {
       // this starts the gamethread procedure, whichs will run the entire game
-      initializeEventHandling ( gamethread, &gtp, icons.mousepointer );
+      initializeEventHandling ( gamethread, &gtp );
    }
    catch ( bad_alloc ) {
       fatalError ("Out of memory");
