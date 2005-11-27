@@ -42,6 +42,9 @@ extern SDL_mutex* eventHandlingMutex;
 
 extern void exit_asc( int returnresult );
 
+class ThreadExitException {};
+
+
 
 /***************************************************************************
  *                                                                         *

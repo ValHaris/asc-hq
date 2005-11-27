@@ -39,8 +39,8 @@ SDL_mutex* eventQueueMutex = NULL;
 queue<tkey>   keybuffer_sym;
 queue<Uint32> keybuffer_prnt;
 queue<SDL_Event> eventQueue;
-bool _queueEvents = false;
-bool _fillLegacyEventStructures = true;
+bool _queueEvents = true;
+bool _fillLegacyEventStructures = false;
 
 
 int exitprogram = 0;
@@ -421,6 +421,7 @@ int eventthread ( void* nothing )
    return 0;
 }
 
+
 #if defined(_WIN32_) | defined(__APPLE__)
 #define FirstThreadEvents 1
 #endif
@@ -430,9 +431,15 @@ int (*_gamethread)(void *);
 
 int gameThreadWrapper ( void* data )
 {
-   int res = _gamethread ( data );
+   try {
+      int res = _gamethread ( data );
+      closeEventThread = 1;
+      return res;
+   }
+   catch ( ... ) {
+   }
    closeEventThread = 1;
-   return res;
+   return -1;
 }
 #endif
 
@@ -483,6 +490,8 @@ void initializeEventHandling ( int (*gamethread)(void *) , void *data )
    SDL_WaitThread ( secondThreadHandle, NULL );
 }
 
+
+
 void exit_asc( int returnresult )
 {
 #ifndef FirstThreadEvents 
@@ -490,9 +499,16 @@ void exit_asc( int returnresult )
       closeEventThread = 1;
       SDL_WaitThread ( secondThreadHandle, NULL );
    }   
+   exit( returnresult );   
+#else
+   if ( secondThreadHandle ) {
+      throw ThreadExitException();
+   }
+   exit( returnresult );   
+
+
 #endif
 
-   exit( returnresult );   
    
 }
 

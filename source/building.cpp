@@ -1273,6 +1273,7 @@ Resources  cbuildingcontrols :: crecycling :: resourceuse (Vehicle* eht)
 // 
 //    res.material += eht->typ->productionCost.material * (100 - eht->damage/2 ) / 100 / output;
 //    return res;
+   return Resources();
 }
 
 
@@ -3579,6 +3580,7 @@ Vehicletype* ccontainer_b :: getmarkedunittype ( void )
 Vehicle* cbuildingcontrols :: getloadedunit (int num)
 {
 //    return building->loading[num];
+   return NULL;
 };
 
 Vehicle* ccontainer_b :: getloadedunit (int num)

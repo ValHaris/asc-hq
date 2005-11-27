@@ -162,10 +162,17 @@ ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
          if ( !themeFound ){
             ASCString arch = path + themeName + ".zip";
             themeFound = AddArchive ( arch.c_str() );
+            if ( themeFound ) 
+               displayLogMessage( 4, "found dialog theme at " + arch );
+            
          }
       }
    } while ( !path.empty() );
    PG_LogConsole::SetLogLevel ( PG_LOG_ERR );
+
+   if ( !themeFound ) 
+      displayLogMessage( 2, "did not found dialog theme!!" );
+
    reloadTheme();
 
    pgApp = this;
@@ -1379,14 +1386,12 @@ public:
 	@param r rectangle of PopUp
 	@param windowtitle Title of window
 	@param windowtext Text to appear in window
-	@param btn1 Struct PG_Rect to create Button 1
 	@param btn1text Text to appear in Button 1
-	@param btn2 Struct PG_Rect to create Button 2
 	@param btn2text Text to appear in Button 2
 	@param textalign Alignment for windowtext
 	@param style widgetstyle to use (default "MessageBox")
 	*/
-	MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const PG_Rect& btn1, const std::string& btn1text, const PG_Rect& btn2, const std::string& btn2text, PG_Label::TextAlign textalign = PG_Label::CENTER, const std::string& style="MessageBox");
+	MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const std::string& btn1text, const std::string& btn2text, PG_Label::TextAlign textalign = PG_Label::CENTER, const std::string& style="MessageBox");
 
 	/**
 	Creates a PopUp with 1 Button
@@ -1395,12 +1400,11 @@ public:
 	@param r rectangle of PopUp
 	@param windowtitle Title of window
 	@param windowtext Text to appear in window
-	@param btn1 Struct PG_Rect to create Button 1
 	@param btn1text Text to appear in Button 1
 	@param textalign Alignment for windowtext
 	@param style widgetstyle to use (default "MessageBox")
 	*/
-	MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const PG_Rect& btn1, const std::string& btn1text, PG_Label::TextAlign textalign = PG_Label::CENTER, const std::string& style="MessageBox");
+	MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const std::string& btn1text, PG_Label::TextAlign textalign = PG_Label::CENTER, const std::string& style="MessageBox");
 
 	/**
 	Creates a PopUp without Buttons
@@ -1444,13 +1448,20 @@ private:
 };
 
 
-MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const PG_Rect& btn1, const std::string& btn1text, const PG_Rect& btn2, const std::string& btn2text, PG_Label::TextAlign textalign, const std::string& style) :
+MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const std::string& btn1text, const std::string& btn2text, PG_Label::TextAlign textalign, const std::string& style) :
 ASC_PG_Dialog(parent, r, windowtitle, MODAL, style) {
+
+
+   int buttonWidth = min( 120, r.Width() / 2 - 20 );
+   PG_Rect btn1 = PG_Rect( r.Width() / 2 - buttonWidth - 10, r.Height() - 35, buttonWidth, 30 ); 
 
 	my_btnok = new PG_Button(this, btn1, btn1text);
 	my_btnok->SetID(1);
 	my_btnok->sigClick.connect(slot(*this, &MessageDialog::handleButton));
-	
+
+   PG_Rect btn2 = btn1;
+   btn2.x = r.Width() / 2 + 10;
+
 	my_btncancel = new PG_Button(this, btn2, btn2text);
 	my_btncancel->SetID(2);
 	my_btncancel->sigClick.connect(slot(*this, &MessageDialog::handleButton));
@@ -1458,9 +1469,12 @@ ASC_PG_Dialog(parent, r, windowtitle, MODAL, style) {
 	Init(windowtext, textalign, style);
 }
 
-MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const PG_Rect& btn1, const std::string& btn1text, PG_Label::TextAlign textalign, const std::string& style) :
+MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const std::string& btn1text, PG_Label::TextAlign textalign, const std::string& style) :
    ASC_PG_Dialog(parent, r, windowtitle, MODAL, style ), my_btncancel(NULL)  
 {
+
+   int buttonWidth = min( 120, r.Width() - 20 );
+   PG_Rect btn1 = PG_Rect( r.Width() / 2 - buttonWidth/2, r.Height() - 40, buttonWidth, 30 ); 
 
 	my_btnok = new PG_Button(this, btn1, btn1text);
 	my_btnok->SetID(1);
@@ -1502,7 +1516,7 @@ MessageDialog::~MessageDialog() {
 
 void MessageDialog::Init(const std::string& windowtext, int textalign, const std::string& style) {
 
-	my_textbox = new PG_RichEdit(this, PG_Rect(10, 40, my_width-20, my_height-50));
+	my_textbox = new PG_RichEdit(this, PG_Rect(10, 40, my_width-20, my_height-50 - 40));
 	my_textbox->SendToBack();
 	my_textbox->SetTransparency(255);
 	my_textbox->SetText(windowtext);
@@ -1538,7 +1552,7 @@ PG_Rect calcMessageBoxSize( const ASCString& message )
      if ( message[i] == '\n' )
         counter++;
 
-  return PG_Rect( 100, 100, 500, 150 + counter * 10 );
+  return PG_Rect( 100, 100, 500, 150 + counter * 20 );
 }
 
 
@@ -1546,7 +1560,7 @@ PG_Rect calcMessageBoxSize( const ASCString& message )
 void errorMessageDialog( const ASCString& message )
 {
    PG_Rect size = calcMessageBoxSize(message);
-   MessageDialog msg( NULL, size, "Error", message,PG_Rect(200,100,100,40), "OK", PG_Label::CENTER, "ErrorMessage" );
+   MessageDialog msg( NULL, size, "Error", message, "OK", PG_Label::CENTER, "ErrorMessage" );
    msg.Show();
    msg.RunModal();
 }
@@ -1554,7 +1568,7 @@ void errorMessageDialog( const ASCString& message )
 void warningMessageDialog( const ASCString& message )
 {
    PG_Rect size = calcMessageBoxSize(message);
-   MessageDialog msg( NULL, size, "Warning", message,PG_Rect(size.w/2 - 50,size.h - 40, 100, 30), "OK", PG_Label::CENTER, "WarningMessage" );
+   MessageDialog msg( NULL, size, "Warning", message, "OK", PG_Label::CENTER, "WarningMessage" );
    msg.Show();
    msg.RunModal();
 }
@@ -1562,7 +1576,7 @@ void warningMessageDialog( const ASCString& message )
 void infoMessageDialog( const ASCString& message )
 {
    PG_Rect size = calcMessageBoxSize(message);
-   MessageDialog msg( NULL, size, "Information", message,PG_Rect(size.w/2 - 50,size.h - 40, 100, 30), "OK" );
+   MessageDialog msg( NULL, size, "Information", message, "OK" );
    msg.Show();
    msg.RunModal();
 }
@@ -1593,7 +1607,7 @@ void ASC_PG_App:: messageDialog( const ASCString& message, MessagingHubBase::Mes
    };
       
    PG_Rect size = calcMessageBoxSize(message);
-   MessageDialog msg( NULL, size, title, message,PG_Rect(200,100,100,40), "OK", PG_Label::CENTER, style );
+   MessageDialog msg( NULL, size, title, message,"OK", PG_Label::CENTER, style );
    msg.Show();
    msg.RunModal();
 }
@@ -1601,7 +1615,7 @@ void ASC_PG_App:: messageDialog( const ASCString& message, MessagingHubBase::Mes
 
 PG_StatusWindowData::PG_StatusWindowData( const ASCString& msg ) 
 {
-   md = new MessageDialog( NULL, PG_Rect( 100, 100, 250, 100 ), "status", msg, PG_Label::CENTER, "Window" );
+   md = new MessageDialog( NULL, calcMessageBoxSize( msg ), "status", msg, PG_Label::CENTER, "Window" );
    md->Show();
 };
 

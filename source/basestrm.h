@@ -648,6 +648,16 @@ extern void convertPathDelimitters ( ASCString& path );
 #ifdef _SDL_
  #include <SDL.h>
  extern SDL_RWops *SDL_RWFromStream( pnstream stream );
+
+class RWOPS_Handler {
+      SDL_RWops *rwo;
+   public:
+      RWOPS_Handler( SDL_RWops *rw ) : rwo (rw) {};
+      SDL_RWops* Get() { return rwo; };
+      void Close() { if ( rwo ) { SDL_RWclose(rwo); rwo = NULL; } };
+      ~RWOPS_Handler() { Close(); };
+};
+
 #endif
 
 #endif

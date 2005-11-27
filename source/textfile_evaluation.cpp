@@ -1313,6 +1313,7 @@ ASCString ImageProperty::toString() const
 }
 #endif
 
+
 ASCImageProperty::PropertyType ASCImageProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {
    try {
@@ -1323,7 +1324,9 @@ ASCImageProperty::PropertyType ASCImageProperty::operation_eq ( const TextProper
          SDLmm::Surface* s = NULL;
          do {
             tnfilestream fs ( fn, tnstream::reading );
-            SDLmm::Surface s2 ( IMG_LoadPNG_RW ( SDL_RWFromStream( &fs )));
+            RWOPS_Handler rwo( SDL_RWFromStream( &fs ) );
+            SDLmm::Surface s2 ( IMG_LoadPNG_RW ( rwo.Get() ));
+            rwo.Close();
             // s2.SetAlpha ( SDL_SRCALPHA, SDL_ALPHA_OPAQUE );
             if ( !s )
                s = new SDLmm::Surface ( s2 );
@@ -1345,7 +1348,11 @@ ASCImageProperty::PropertyType ASCImageProperty::operation_eq ( const TextProper
       } else
          if ( fn.suffix() == "pcx" ) {
             tnfilestream fs ( fn, tnstream::reading );
-            SDL_Surface* surface = IMG_LoadPCX_RW ( SDL_RWFromStream( &fs ));
+
+            RWOPS_Handler rwo ( SDL_RWFromStream( &fs ));
+            SDL_Surface* surface = IMG_LoadPCX_RW ( rwo.Get() );
+            rwo.Close();
+
             if ( !surface )
                propertyContainer->error( "error loading file " + fn );
                

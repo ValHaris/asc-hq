@@ -1190,7 +1190,9 @@ void execuseraction2 ( tuseractions action )
             displaymap();
          }
          */
+#ifndef WIN32
          #warning SHAREVIEW
+#endif
          updateFieldInfo();
          break;
       case ua_mainmenu:
@@ -1389,6 +1391,10 @@ int gamethread ( void* data )
       }
       catch ( ASCexception ) {
          displaymessage ( "loading of game failed", 2 );
+      }
+      catch ( ThreadExitException ) {
+         displayLogMessage(0, "caught thread exiting exception, shutting down");
+         exit_asc( -1 );
       }
       catch ( ... ) {
          displaymessage ( "caught undefined exception", 2 );

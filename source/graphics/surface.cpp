@@ -485,7 +485,10 @@ Surface& getFieldMask()
    if ( !mask8 ) {
       try {
          tnfilestream st ( "largehex.pcx", tnstream::reading );
-         mask8 = new Surface ( IMG_LoadPCX_RW ( SDL_RWFromStream( &st )));
+         RWOPS_Handler rwo ( SDL_RWFromStream( &st ) );
+         mask8 = new Surface ( IMG_LoadPCX_RW ( rwo.Get() ));
+         rwo.Close();
+
          assert ( mask8->GetPixelFormat().BitsPerPixel() == 8);
          mask8->SetColorKey( SDL_SRCCOLORKEY, 0 );
       }

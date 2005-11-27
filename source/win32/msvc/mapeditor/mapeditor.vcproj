@@ -161,6 +161,9 @@
 				RelativePath="..\..\..\buildingtype.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\cannedmessages.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\clipboard.cpp">
 			</File>
 			<File
@@ -233,6 +236,9 @@
 				RelativePath="..\..\..\itemrepository.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\legacynetworkloaders.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\loadbi3.cpp">
 			</File>
 			<File
@@ -272,7 +278,7 @@
 				RelativePath="..\ndir.c">
 			</File>
 			<File
-				RelativePath="..\..\..\networkdata.cpp">
+				RelativePath="..\..\..\networkinterface.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\newfont.cpp">
@@ -305,6 +311,9 @@
 				RelativePath="..\..\..\pd.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\player.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\prehistoricevents.cpp">
 			</File>
 			<File
@@ -318,9 +327,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\resourceplacementdialog.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\selectionwindow.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\sgstream.cpp">
@@ -362,9 +368,6 @@
 				RelativePath="..\..\..\typen.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\unitinfodialog.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\vehicle.cpp">
 			</File>
 			<File
@@ -403,6 +406,25 @@
 				</File>
 				<File
 					RelativePath="..\..\..\libs\loki\SmallObj.cpp">
+				</File>
+			</Filter>
+			<Filter
+				Name="dialogs"
+				Filter="">
+				<File
+					RelativePath="..\..\..\dialogs\alliancesetup.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\editmapparam.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\fileselector.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\selectionwindow.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\unitinfodialog.cpp">
 				</File>
 			</Filter>
 		</Filter>
@@ -449,10 +471,16 @@
 				RelativePath="..\..\..\edglobal.h">
 			</File>
 			<File
+				RelativePath="..\..\..\dialogs\editmapparam.h">
+			</File>
+			<File
 				RelativePath="..\..\..\edmisc.h">
 			</File>
 			<File
 				RelativePath="..\..\..\edselfnt.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\fileselector.h">
 			</File>
 			<File
 				RelativePath="..\..\..\gamemap.h">
@@ -527,6 +555,9 @@
 				RelativePath="..\..\..\resourcenet.h">
 			</File>
 			<File
+				RelativePath="..\..\..\dialogs\selectionwindow.h">
+			</File>
+			<File
 				RelativePath="..\..\..\sgstream.h">
 			</File>
 			<File
@@ -549,6 +580,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\typen.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\unitinfodialog.h">
 			</File>
 			<File
 				RelativePath="..\..\..\vehicle.h">

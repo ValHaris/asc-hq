@@ -42,9 +42,13 @@ class FileWidget: public SelectionWidget  {
    public:
       FileWidget( PG_Widget* parent, const PG_Point& pos, int width, const FileInfo* fi ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, 18 )), fileInfo( *fi )
       {
+         #ifndef ctime_r
+         time = ctime( &fileInfo.modificationTime );
+         #else
          char c[100];
          ctime_r( &fileInfo.modificationTime, c );
          time  = c;
+         #endif
          
          int col1 =        width * 3 / 9;
          int col2 = col1 + width * 3 / 9;

@@ -135,6 +135,9 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
 			<File
+				RelativePath="..\..\..\dialogs\alliancesetup.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\asc-mainscreen.cpp">
 			</File>
 			<File
@@ -169,6 +172,9 @@
 				RelativePath="..\..\..\buildingtype.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\cannedmessages.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\clipboard.cpp">
 			</File>
 			<File
@@ -190,7 +196,13 @@
 				RelativePath="..\..\..\dlg_box.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\dialogs\editmapparam.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\explosivemines.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\fileselector.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\gamedialog.cpp">
@@ -244,6 +256,9 @@
 				RelativePath="..\..\..\itemrepository.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\legacynetworkloaders.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\loadbi3.cpp">
 			</File>
 			<File
@@ -286,10 +301,13 @@
 				RelativePath="..\..\..\network.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\networkdata.cpp">
+				RelativePath="..\..\..\networkinterface.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\newfont.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\newgame.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\objects.cpp">
@@ -319,7 +337,16 @@
 				RelativePath="..\..\..\pd.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\player.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\playersetup.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\prehistoricevents.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\reactionfire.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\replay.cpp">
@@ -329,6 +356,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\resourcenet.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\selectionwindow.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\sg.cpp">
@@ -341,6 +371,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\soundList.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\soundsettings.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\spfst.cpp">
@@ -374,9 +407,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\unitctrl.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\unitinfodialog.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\vehicle.cpp">
@@ -453,10 +483,26 @@
 					RelativePath="..\..\..\libs\loki\SmallObj.cpp">
 				</File>
 			</Filter>
+			<Filter
+				Name="dialogs"
+				Filter="">
+				<File
+					RelativePath="..\..\..\dialogs\cargodialog.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\emailsetup.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\unitinfodialog.cpp">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc">
+			<File
+				RelativePath="..\..\..\dialogs\alliancesetup.h">
+			</File>
 			<File
 				RelativePath="..\..\..\ascstring.h">
 			</File>
@@ -503,6 +549,9 @@
 				RelativePath="..\..\..\buildingtype.h">
 			</File>
 			<File
+				RelativePath="..\..\..\dialogs\cargodialog.h">
+			</File>
+			<File
 				RelativePath="..\..\..\clipboard.h">
 			</File>
 			<File
@@ -533,16 +582,25 @@
 				RelativePath="..\..\..\edglobal.h">
 			</File>
 			<File
+				RelativePath="..\..\..\dialogs\editmapparam.h">
+			</File>
+			<File
 				RelativePath="..\..\..\edmisc.h">
 			</File>
 			<File
 				RelativePath="..\..\..\edselfnt.h">
 			</File>
 			<File
+				RelativePath="..\..\..\dialogs\emailsetup.h">
+			</File>
+			<File
 				RelativePath="..\..\..\errors.h">
 			</File>
 			<File
 				RelativePath="..\..\..\events.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\fileselector.h">
 			</File>
 			<File
 				RelativePath="..\..\..\gamedialog.h">
@@ -647,6 +705,9 @@
 				RelativePath="..\..\..\newfont.h">
 			</File>
 			<File
+				RelativePath="..\..\..\dialogs\newgame.h">
+			</File>
+			<File
 				RelativePath="..\..\..\objecttype.h">
 			</File>
 			<File
@@ -666,6 +727,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\pd.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\playersetup.h">
 			</File>
 			<File
 				RelativePath="..\..\..\pointers.h">
@@ -692,6 +756,9 @@
 				RelativePath="..\..\..\resourceplacement.h">
 			</File>
 			<File
+				RelativePath="..\..\..\dialogs\selectionwindow.h">
+			</File>
+			<File
 				RelativePath="..\..\..\sg.h">
 			</File>
 			<File
@@ -702,6 +769,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\soundList.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\soundsettings.h">
 			</File>
 			<File
 				RelativePath="..\..\..\spfst.h">
@@ -735,6 +805,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\unitctrl.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\unitinfodialog.h">
 			</File>
 			<File
 				RelativePath="..\..\..\vehicle.h">
