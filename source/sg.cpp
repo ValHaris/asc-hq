@@ -1394,7 +1394,7 @@ int gamethread ( void* data )
       }
       catch ( ThreadExitException ) {
          displayLogMessage(0, "caught thread exiting exception, shutting down");
-         exit_asc( -1 );
+         return -1;
       }
       catch ( ... ) {
          displaymessage ( "caught undefined exception", 2 );
@@ -1612,10 +1612,10 @@ int main(int argc, char *argv[] )
       for ( int i = cl->next_param(); i < argc; i++ )
          gtp.filename = argv[i];
 
-
+   int returncode = 0;
    try {
       // this starts the gamethread procedure, whichs will run the entire game
-      initializeEventHandling ( gamethread, &gtp );
+      returncode = initializeEventHandling ( gamethread, &gtp );
    }
    catch ( bad_alloc ) {
       fatalError ("Out of memory");
@@ -1626,6 +1626,6 @@ int main(int argc, char *argv[] )
    
    writegameoptions ( );
 
-   return(0);
+   return( returncode );
 }
 

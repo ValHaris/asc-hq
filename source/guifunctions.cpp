@@ -143,8 +143,8 @@ Surface& AttackGui::getImage( const MapCoordinate& pos, int num )
    switch ( p.first->typ[p.second] ) {
       case cwcruisemissileb: return IconRepository::getIcon("weap-cruisemissile.png");
       case cwbombb: return IconRepository::getIcon("weap-bomb.png");
-      case cwairmissileb: return IconRepository::getIcon("weap-bigmissile.png");
-      case cwgroundmissileb: return IconRepository::getIcon("weap-smallmissile.png");
+      case cwlargemissileb: return IconRepository::getIcon("weap-bigmissile.png");
+      case cwsmallmissileb: return IconRepository::getIcon("weap-smallmissile.png");
       case cwtorpedob: return IconRepository::getIcon("weap-torpedo.png");
       case cwmachinegunb: return IconRepository::getIcon("weap-machinegun.png");
       case cwcannonb: return IconRepository::getIcon("weap-cannon.png");

@@ -15,6 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <pgimage.h>
 #include "cargodialog.h"
 #include "../containerbase.h"
 #include "../paradialog.h"
@@ -146,6 +147,7 @@ class CargoDialog : public Panel {
         ContainerBase* container;
         bool setupOK;
         int unitColumnCount;
+        Surface infoImage;
         
         vector<StoringPosition*> storingPositionVector;
         
@@ -322,8 +324,24 @@ class CargoDialog : public Panel {
                      }   
                   }
                }
-               
-               // setLabelText( "unitpad_unitcategory", cmovemalitypes[ vt->movemalustyp ] );
+
+               if ( !cb->baseType->infoImageFilename.empty() && exist( cb->baseType->infoImageFilename )) {
+                  PG_Image* img = dynamic_cast<PG_Image*>(FindChild( "container_3dpic", true ));
+                  if ( img ) {
+                     tnfilestream stream ( cb->baseType->infoImageFilename, tnstream::reading );
+                     infoImage.readImageFile( stream );
+                     img->SetDrawMode( PG_Draw::STRETCH );
+                     img->SetImage( infoImage.getBaseSurface(), false );
+                     img->SizeWidget( img->GetParent()->w, img->GetParent()->h );
+                  }
+               }
+
+
+               setLabelText( "UnitName", cb->getName() );
+               if ( cb->getName() != cb->baseType->name )
+                  setLabelText( "UnitClass", cb->baseType->name );
+
+               showAmmo();
                /*
                registerSpecialDisplay( "unitpad_unitsymbol");
                registerSpecialDisplay( "unitpad_weapon_diagram");
@@ -346,6 +364,18 @@ class CargoDialog : public Panel {
             return Panel::RunModal();
          return 0;   
       }     
+
+      void showAmmo()
+      {
+         setLabelText( "cmmun", container->getAmmo( cwcruisemissile ));
+         setLabelText( "minemun", container->getAmmo( cwminen ));
+         setLabelText( "bombmun", container->getAmmo( cwbombn ));
+         setLabelText( "lmmun", container->getAmmo( cwlargemissilen ));
+         setLabelText( "smmun", container->getAmmo( cwsmallmissilen ));
+         setLabelText( "mgmun", container->getAmmo( cwmachinegunn ));
+         setLabelText( "canmun", container->getAmmo( cwcannonn ));
+         setLabelText( "torpmun", container->getAmmo( cwtorpedon ));
+      }
 
       void userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams ) 
       {

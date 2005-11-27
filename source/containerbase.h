@@ -99,7 +99,11 @@ class ContainerBase {
       virtual int getIdentification() = 0;
 
       virtual int getHeight() const = 0;
-      
+
+      virtual ASCString getName ( ) const = 0;
+
+      virtual int getAmmo( int type ) const = 0;
+
       
       //! returns the player this vehicle/building belongs to
       int getOwner() const { return color >> 3; };

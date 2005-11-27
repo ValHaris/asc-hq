@@ -1484,13 +1484,23 @@ MapCoordinate3D Vehicle :: getPosition3D ( ) const
 }
 
 
-const ASCString  Vehicle::getName() const
+ASCString  Vehicle::getName() const
 {
    if ( name.empty() )
       return typ->getName();
    else
       return name;
 }
+
+int Vehicle::getAmmo( int type ) const
+{
+   int amount = 0;
+   for ( int i = 0; i < typ->weapons.count; ++i )
+      if ( typ->weapons.weapon[i].getScalarWeaponType() == type )
+         amount += ammo[i];
+   return amount;
+}
+
 
 void Vehicle::paint ( Surface& s, SPoint pos, int shadowDist ) const
 {

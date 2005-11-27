@@ -39,8 +39,6 @@
 const char*  choehenstufen[choehenstufennum] = {"deep submerged", "submerged", "floating", "ground level", "low-level flight", "flight", "high-level flight", "orbit"};
 
 
-const char*  cwaffentypen[cwaffentypennum]  = {"cruise missile", "mine",    "bomb",       "large missile", "small missile", "torpedo", "machine gun",
-                                               "cannon",         "service", "ammunition refuel", "laser", "shootable", "object placement"};
 
 const char*  cmovemalitypes[cmovemalitypenum] = { "default",
                                                  "light tracked vehicle", "medium tracked vehicle", "heavy tracked vehicle",
@@ -59,21 +57,6 @@ const char* cgeneralnetcontrol[4] = {       "store",  "move out", "stop storing"
 
 const char*  cwettertypen[cwettertypennum] = {"dry (standard)","light rain", "heavy rain", "few snow", "lot of snow", "lot of snow + ice"};
 const char*  resourceNames[3]  = {"energy", "material", "fuel"};
-const int  cwaffenproduktionskosten[cwaffentypennum][3]    = { {1500,1500,1500},  // cruise missile
-                                                               {10, 10, 10},     // mine
-                                                               {40, 40, 40},     // bomb
-                                                               {200, 200, 200},     // big missile
-                                                               {50, 50, 50},     // small missile
-                                                               {20, 30, 40},     // torpedo
-                                                               {1, 1, 1},     // machine gun
-                                                               {5, 5, 1},     // cannon
-                                                               {0, 0, 0},     // service
-                                                               {0, 0, 0},     // ammo refuel
-                                                               {0, 0, 0},     // laser
-                                                               {0, 0, 0},     // shootable
-                                                               {0, 0, 0}};    // objectPlacement
-
-                                                                              // jeweils f?r weaponpackagesize Pack !
 
 //! when repairing a unit, the experience of the unit is decreased by one when passing each of these damage levels
 const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoundaryNum] = { 80, 60, 40, 20 };

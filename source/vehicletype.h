@@ -59,6 +59,42 @@ extern const char*  cvehiclefunctions[];
 
  #define cfvehiclefunctionsanzeige 0xFFFFFFFF
 
+
+#define cwaffentypennum 13
+ extern const char*  cwaffentypen[cwaffentypennum] ;
+ #define cwcruisemissile 0
+ #define cwcruisemissileb ( 1 << cwcruisemissile )
+ #define cwminen 1
+ #define cwmineb ( 1 << cwminen   )
+ #define cwbombn 2
+ #define cwbombb ( 1 << cwbombn  )
+ #define cwlargemissilen 3
+ #define cwlargemissileb ( 1 << cwlargemissilen  )
+ #define cwsmallmissilen 4
+ #define cwsmallmissileb ( 1 << cwsmallmissilen  )
+ #define cwtorpedon 5
+ #define cwtorpedob ( 1 << cwtorpedon  )
+ #define cwmachinegunn 6
+ #define cwmachinegunb ( 1 << cwmachinegunn )
+ #define cwcannonn 7
+ #define cwcannonb ( 1 << cwcannonn )
+ #define cwweapon ( cwcruisemissileb | cwbombb | cwlargemissileb | cwsmallmissileb | cwtorpedob | cwmachinegunb | cwcannonb | cwlaserb )
+ #define cwshootablen 11
+ #define cwshootableb ( 1 << cwshootablen  )
+ #define cwlasern 10
+ #define cwlaserb ( 1 << cwlasern  )
+ #define cwammunitionn 9
+ #define cwammunitionb ( 1 << cwammunitionn )
+ #define cwservicen 8
+ #define cwserviceb ( 1 << cwservicen )
+ #define cwobjectplacementn 12
+ #define cwobjectplacementb ( 1 << cwobjectplacementn )
+ extern const int cwaffenproduktionskosten[cwaffentypennum][3];  /*  Angabe: Waffentyp; energy - Material - Sprit ; jeweils fuer 5er Pack */
+
+
+
+
+
  //! A single weapon of a #Vehicletype
  class SingleWeapon {
      int          typ;

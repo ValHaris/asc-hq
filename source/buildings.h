@@ -263,10 +263,13 @@ class  Building : public ContainerBase {
     void endTurn( void );
 
     //! returns a name for the building. If the building itself has a name, it will be returned. If it doesn't, the name of the building type will be returned.
-    const ASCString& getName ( ) const;
+    ASCString getName ( ) const;
 
     //! returns the amount of resources that the net which the building is connected to produces each turn
     Resources netResourcePlus( ) const;
+
+    int getAmmo( int type ) const;
+
 
     int getHeight() const { return typ->buildingheight; };
     

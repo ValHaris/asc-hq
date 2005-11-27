@@ -624,13 +624,20 @@ void Building :: readData ( tnstream& stream, int version )
     }
 }
 
-const ASCString& Building::getName ( ) const
+ASCString Building::getName ( ) const
 {
    if ( name.empty())
       return typ->name;
    else
       return name;
 }
+
+int Building::getAmmo( int type ) const
+{
+   assert( type >= 0 && type < waffenanzahl );
+   return ammo[type];
+}
+
 
 void Building::endTurn(  )
 {

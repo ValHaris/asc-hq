@@ -36,7 +36,7 @@ extern bool setEventRouting( bool queue, bool legacy );
 
 extern bool legacyEventSystemActive();
 
-extern void initializeEventHandling ( int (*fn)(void *) , void *data );
+extern int initializeEventHandling ( int (*fn)(void *) , void *data );
 
 extern SDL_mutex* eventHandlingMutex;
 

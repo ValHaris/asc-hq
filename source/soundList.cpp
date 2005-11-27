@@ -115,8 +115,8 @@ void SoundList::initialize(  )
     readLine( pc, "CRUISEMISSILE", SoundList::shooting, 0 );
     readLine( pc, "MINE", SoundList::shooting, 1 );
     readLine( pc, "BOMB", SoundList::shooting, 2 );
-    readLine( pc, "AIRMISSILE", SoundList::shooting, 3 );
-    readLine( pc, "GROUNDMISSILE", SoundList::shooting, 4 );
+    readLine( pc, "LARGEMISSILE", SoundList::shooting, 3 );
+    readLine( pc, "SMALLMISSILE", SoundList::shooting, 4 );
     readLine( pc, "TORPEDO", SoundList::shooting, 5 );
     readLine( pc, "MACHINEGUN", SoundList::shooting, 6 );
     readLine( pc, "CANNON", SoundList::shooting, 7 );

@@ -411,6 +411,10 @@ int processEvents ( )
    return result;
 }
 
+#if defined(_WIN32_) | defined(__APPLE__)
+#define FirstThreadEvents 1
+#endif
+
 int eventthread ( void* nothing )
 {
    while ( !closeEventThread ) {
@@ -418,13 +422,10 @@ int eventthread ( void* nothing )
          SDL_Delay(10);
       ticker = SDL_GetTicks() / 10;
    }
-   return 0;
+   return closeEventThread;
 }
 
 
-#if defined(_WIN32_) | defined(__APPLE__)
-#define FirstThreadEvents 1
-#endif
 
 #ifdef FirstThreadEvents 
 int (*_gamethread)(void *);
@@ -438,7 +439,7 @@ int gameThreadWrapper ( void* data )
    }
    catch ( ... ) {
    }
-   closeEventThread = 1;
+   closeEventThread = -1;
    return -1;
 }
 #endif
@@ -448,7 +449,7 @@ int gameThreadWrapper ( void* data )
 SDL_Thread* secondThreadHandle = NULL;
 
 
-void initializeEventHandling ( int (*gamethread)(void *) , void *data )
+int initializeEventHandling ( int (*gamethread)(void *) , void *data )
 {
    mouseparams.xsize = 10;
    mouseparams.ysize = 10;
@@ -480,14 +481,15 @@ void initializeEventHandling ( int (*gamethread)(void *) , void *data )
 #ifdef FirstThreadEvents 
    _gamethread = gamethread;
    secondThreadHandle = SDL_CreateThread ( gameThreadWrapper, data );
-   eventthread( NULL );
+   int res = eventthread( NULL );
 #else
    secondThreadHandle = SDL_CreateThread ( eventthread, NULL );
-   gamethread( data );
+   int res = gamethread( data );
    closeEventThread = 1;
 #endif
 
    SDL_WaitThread ( secondThreadHandle, NULL );
+   return res;
 }
 
 

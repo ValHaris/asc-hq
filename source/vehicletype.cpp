@@ -68,6 +68,22 @@ const char*  cvehiclefunctions[cvehiclefunctionsnum+1]  = {
                    "only move to and from transports",
                    NULL };
 
+const char*  cwaffentypen[cwaffentypennum]  = {"cruise missile", "mine",    "bomb",       "large missile", "small missile", "torpedo", "machine gun",
+                                               "cannon",         "service", "ammunition refuel", "laser", "shootable", "object placement"};
+
+const int  cwaffenproduktionskosten[cwaffentypennum][3]    = { {1500,1500,1500},  // cruise missile
+                                                               {10, 10, 10},     // mine
+                                                               {40, 40, 40},     // bomb
+                                                               {200, 200, 200},     // big missile
+                                                               {50, 50, 50},     // small missile
+                                                               {20, 30, 40},     // torpedo
+                                                               {1, 1, 1},     // machine gun
+                                                               {5, 5, 1},     // cannon
+                                                               {0, 0, 0},     // service
+                                                               {0, 0, 0},     // ammo refuel
+                                                               {0, 0, 0},     // laser
+                                                               {0, 0, 0},     // shootable
+                                                               {0, 0, 0}};    // objectPlacement
 
 
 Vehicletype :: Vehicletype ( void )
@@ -774,8 +790,8 @@ ASCString    SingleWeapon::getIconFileName( int numerical )
    switch ( numerical ) {
       case cwcruisemissile: return "weap-cruisemissile";
       case cwbombn: return "weap-bomb";
-      case cwairmissilen: return "weap-bigmissile";
-      case cwgroundmissilen: return "weap-smallmissile";
+      case cwlargemissilen: return "weap-bigmissile";
+      case cwsmallmissilen: return "weap-smallmissile";
       case cwtorpedon: return "weap-torpedo";
       case cwmachinegunn: return "weap-machinegun";
       case cwcannonn: return "weap-cannon";
@@ -1181,11 +1197,11 @@ Resources Vehicletype :: calcProductionsCost()
 					weaponcoste += weapons.weapon[W].maxstrength*8;
 					weaponcostm += weapons.weapon[W].maxstrength*8;
 				}
-				if (weapons.weapon[W].getScalarWeaponType() == cwgroundmissilen && weapons.weapon[W].shootable() ) {
+				if (weapons.weapon[W].getScalarWeaponType() == cwsmallmissilen && weapons.weapon[W].shootable() ) {
 					weaponcoste += weapons.weapon[W].maxstrength*10;
 					weaponcostm += weapons.weapon[W].maxstrength*10;
 				}
-				if (weapons.weapon[W].getScalarWeaponType() == cwairmissilen && weapons.weapon[W].shootable() ) {
+				if (weapons.weapon[W].getScalarWeaponType() == cwlargemissilen && weapons.weapon[W].shootable() ) {
 					weaponcoste += weapons.weapon[W].maxstrength*12;
 					weaponcostm += weapons.weapon[W].maxstrength*12;
 				}

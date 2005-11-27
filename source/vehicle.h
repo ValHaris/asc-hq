@@ -177,7 +177,9 @@ class BuildingType;
     int weight( void ) const;
 
     //! returns the units name or, if it does not exist, the unit type's name or description
-    const ASCString    getName() const;
+    ASCString    getName() const;
+
+    int getAmmo( int type ) const;
 
 
   protected:

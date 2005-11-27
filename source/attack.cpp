@@ -1089,8 +1089,8 @@ pattackweap  attackpossible( const Vehicle*     angreifer, int x, int y)
                      if ( angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwcannonn ||
                           angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwlasern ||
                           angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwcruisemissile ||
-                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwairmissilen ||
-                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwgroundmissilen ||
+                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwlargemissilen ||
+                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwsmallmissilen ||
                           angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwbombn ) {
                         if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[cmm_building] )
                               if (fieldvisiblenow(efield, angreifer->color/8)) {
