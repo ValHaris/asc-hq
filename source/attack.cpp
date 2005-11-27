@@ -371,8 +371,8 @@ void tfight :: calcdisplay ( int ad, int dd )
    float avd = float( 100 - av.damage )/100;
    float dvd = float( 100 - dv.damage )/100;
 
-   PG_Color attackingColor = lightenColor( actmap->player[getAttackingPlayer()].getColor(), 1.4 );
-   PG_Color defendingColor = lightenColor( actmap->player[getDefendingPlayer()].getColor(), 1.4 );
+   PG_Color attackingColor = lighten_Color( actmap->player[getAttackingPlayer()].getColor(), 22 );
+   PG_Color defendingColor = lighten_Color( actmap->player[getDefendingPlayer()].getColor(), 22 );
 
    at->setBarGraphValue( "attacker_unitstatusbar", avd );
    at->setBarGraphColor( "attacker_unitstatusbar", attackingColor );

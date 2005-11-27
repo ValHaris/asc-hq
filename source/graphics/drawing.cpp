@@ -24,14 +24,6 @@
 // these routines should be optimized
 // http://gcc.gnu.org/onlinedocs/gcc-3.3/gcc/Vector-Extensions.html
 
-SDL_Color lightenColor( const SDL_Color& color, float factor )
-{
-   SDL_Color c  = color;
-   c.r =  min( max( int( float(c.r) * factor ), 0 ), 255);
-   c.g =  min( max( int( float(c.g) * factor ), 0 ), 255);
-   c.b =  min( max( int( float(c.b) * factor ), 0 ), 255);
-   return c;
-};
 
 /*
 SDLmm::ColorRGB lightenColor( const SDLmm::ColorRGB& color, float factor )
@@ -45,17 +37,52 @@ SDLmm::ColorRGB lightenColor( const SDLmm::ColorRGB& color, float factor )
 
 */
 
-SDLmm::Color lightenColor( SDLmm::Color color, float factor )
+char saturationTranslationTable[256][256];
+
+class TableGenerator {
+   public:
+      TableGenerator() {
+         for ( int i = 0; i < 256; ++i )
+            for ( int j = 0; j < 256; ++j ) {
+               int v = i * j / 16;
+               if ( v > 255 )
+                  v = 255;
+               if ( v < 0 )
+                  v = 0;
+               saturationTranslationTable[i][j] = v;
+            }
+      };
+} tableGenerator;
+
+#if 0
+SDLmm::Color lighten_Color( SDLmm::Color color, char factor16 )
 {
+   SDLmm::Color c = saturationTranslationTable[color & 0xff][factor16] |
+         (saturationTranslationTable[(color >> 8) & 0xff][factor16] << 8 ) |
+         (saturationTranslationTable[(color >> 16) & 0xff][factor16] << 16 ) |
+         (color & 0xff000000);
+   /*
    SDLmm::Color c = min( max( int( float(color & 0xff) * factor ), 0 ), 255) |
                     (min( max( int( float((color >> 8) & 0xff) * factor ), 0 ), 255) << 8) |
                     (min( max( int( float((color >> 16) & 0xff) * factor ), 0 ), 255) << 16) |
                     (color & 0xff000000);
+   */
    return c;
 }
 
-void lightenColor( SDLmm::Color* color, float factor )
+SDL_Color lightenColor( const SDL_Color& color, float factor )
 {
-   *color = lightenColor( *color, factor );
+   SDL_Color c  = color;
+   c.r =  min( max( int( float(c.r) * factor ), 0 ), 255);
+   c.g =  min( max( int( float(c.g) * factor ), 0 ), 255);
+   c.b =  min( max( int( float(c.b) * factor ), 0 ), 255);
+   return c;
+};
+
+
+void lighten_Color( SDLmm::Color* color, float factor )
+{
+   *color = lighten_Color( *color, factor );
 }
 
+#endif

@@ -26,6 +26,7 @@
 #include "textfile_evaluation.h"
 #include "mapalgorithms.h"
 #include "graphics/blitter.h"
+#include "graphics/drawing.h"
 
 #ifndef converter
 #include "gamemap.h"
@@ -153,7 +154,7 @@ void ObjectType::realDisplay ( Surface& surface, const SPoint& pos, int dir, int
       flip = weatherPicture[weather].flip[dir];
 
    if ( displayMethod==1 ) { // SHADOW: buried pipeline, tracks, ...
-      megaBlitter<ColorTransform_None, ColorMerger_AlphaShadow, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
+      megaBlitter<ColorTransform_None, ColorMerger_AlphaLighter, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam, 0.7, flip, nullParam); 
    } else
       if ( displayMethod == 2 ) {  // translation
          megaBlitter<ColorTransform_None, ColorMerger_Alpha_XLAT_TableShifter, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam, xlattables.nochange, flip, nullParam); 

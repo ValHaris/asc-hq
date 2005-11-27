@@ -166,9 +166,10 @@ void OverviewMapImage::fillCenter( Surface& s, const SPoint& pos, SDLmm::Color c
 
 void OverviewMapImage::lighten( Surface& s, const SPoint& pos, float value )
 {
+   int value16 = int( value * 16 );
    for ( int ly = 0; ly < height; ++ly )
       for ( int lx = 0; lx < width; ++lx )
          if ( ! ((ly == 0 || ly == height-1) && (lx == 0 || lx == width-1)))
-            s.SetPixel4( pos.x + lx, pos.y + ly, lightenColor( s.GetPixel(pos.x + lx, pos.y + ly), value ));
+            s.SetPixel4( pos.x + lx, pos.y + ly, lighten_Color( s.GetPixel(pos.x + lx, pos.y + ly), value16 ));
 }
 
