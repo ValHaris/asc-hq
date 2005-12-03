@@ -1153,7 +1153,7 @@ void viewunitmovementrange ( pvehicle veh, tkey taste )
 {
    if ( veh && !moveparams.movestatus && fieldvisiblenow ( getfield ( veh->xpos, veh->ypos ))) {
       actmap->cleartemps ( 7 );
-      TemporaryContainerStorage tcs ( veh, true );
+      TemporaryContainerStorage tcs ( veh, false );
       veh->reactionfire.disable();
       veh->setMovement ( veh->typ->movement[log2(veh->height)]);
       int oldcolor = veh->color;
@@ -1192,7 +1192,9 @@ void viewunitmovementrange ( pvehicle veh, tkey taste )
          }
       }
       veh->color = oldcolor;
+      
       tcs.restore();
+      
    }
 }
 

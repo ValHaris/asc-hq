@@ -321,7 +321,7 @@ TemporaryContainerStorage :: TemporaryContainerStorage ( ContainerBase* _cb, boo
 
 void TemporaryContainerStorage :: restore (  )
 {
-   if ( _storeCargo )
+   if ( _storeCargo ) 
       for ( int i = 0; i < 32; i++ )
          if ( cb->loading[i] ) {
             delete cb->loading[i];

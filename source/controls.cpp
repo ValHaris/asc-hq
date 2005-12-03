@@ -1370,10 +1370,11 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, pve
    for ( int i = 0; i < 8; i++ )
       evaluatevisibilityfield ( actmap, fld, i, -1, actmap->getgameparameter ( cgp_initialMapVisibility ) );
 
-   vehicle->height = oldheight;
-
    if ( result )
       vehicle = NULL;
+   else
+      vehicle->height = oldheight;
+      
 
    return attacks;
 }
