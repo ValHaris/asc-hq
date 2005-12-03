@@ -384,6 +384,7 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
    
    MessagingHub::Instance().statusInformation.connect( SigC::slot( *this, &MainScreenWidget::displayMessage ));
    MessagingHub::Instance().messageWindowFactory.connect( SigC::slot( *this, &MainScreenWidget::createStatusWindow ));
+#warning to mapeditor...
 }
 
 

@@ -122,7 +122,7 @@
 #include "memorycheck.cpp"
 #include "networkinterface.h"
 #include "resourcenet.h"
-
+#include "mapimageexport.h"
 
 #include "dialogs/newgame.h"
 #include "dialogs/soundsettings.h"
@@ -846,10 +846,6 @@ void execuseraction ( tuseractions action )
          viewterraininfo();
          break;
 
-      case ua_writemaptopcx :
-         // writemaptopcx ();
-         break;
-
       case ua_writescreentopcx:
          {
             // char* nm = getnextfilenumname ( "screen", "pcx", 0 );
@@ -1210,6 +1206,9 @@ void execuseraction2 ( tuseractions action )
          MessagingHub::Instance().message( MessagingHubBase::Warning,     "This is an warning message" );
          MessagingHub::Instance().message( MessagingHubBase::Error,       "This is an error message" );
          MessagingHub::Instance().message( MessagingHubBase::FatalError,  "This is an fatal error message" );
+         break;
+      case ua_writemaptopcx :
+         writemaptopcx ( actmap );
          break;
       default:
          break;

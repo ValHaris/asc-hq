@@ -40,6 +40,7 @@
 #include "weatherdialog.h"
 #include "maped-mainscreen.h"
 #include "attack.h"
+#include "mapimageexport.h"
 
 #include "dialogs/unitinfodialog.h"
 #include "dialogs/editmapparam.h"   
@@ -372,8 +373,6 @@ void execaction(int code)
                                   actmap->_resourcemode = true;
                                   displaymessage ( "Battle Isle Resource mode enabled", 3 );
                                }
-       break;
-    case act_maptopcx : //writemaptopcx ();  
        break;
     case act_changeplayers : playerchange();
        break;
@@ -802,7 +801,9 @@ void execaction_pg(int code)
        break;
     case act_savemapas :  k_savemap(true);
        break;
-   };      
+    case act_maptopcx : writemaptopcx ( actmap );
+       break;
+   };
 }
 
 void         execaction_ev(int code)

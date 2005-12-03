@@ -899,8 +899,8 @@ void         k_loadmap(void)
 {
    ASCString s1 = selectFile( mapextension, true );
    if ( !s1.empty() ) {
-      displaymessage("loading map %s",0, s1.c_str() );
-      tmap* mp = mapLoadingExceptionChecker( s1, MapLoadingFunction( tmaploaders::loadmap )); 
+      StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "loading map " + s1 );
+      tmap* mp = mapLoadingExceptionChecker( s1, MapLoadingFunction( tmaploaders::loadmap ));
       if ( !mp )
          return;
          

@@ -32,6 +32,7 @@
 #include "tpascal.inc"
 #include "basegfx.h"
 #include "misc.h"
+#include "loadpcx.h"
 
 #pragma pack(1)
 
@@ -363,3 +364,106 @@ void writepcx ( const ASCString& name, int x1, int y1, int x2, int y2, dacpalett
 }
 
 
+void writepcx ( const ASCString& name, Surface& s )
+{
+   writepcx( name, s, SDLmm::SRect( SPoint(0,0), s.w(), s.h() ));
+}
+
+void writepcx ( const ASCString& name, Surface& s, const SDLmm::SRect& rect )
+{
+   int x1 = rect.x;
+   int y1 = rect.y;
+   int x2 = rect.x + rect.w - 1;
+   int y2 = rect.y + rect.h - 1;
+   tpcxheader header;
+   memset ( &header, 0, sizeof (header ));
+   header.manufacturer = 10;
+   header.version = 5;
+   header.encoding = 1;
+   header.bitsperpixel = 8;
+   header.xmin = 0;
+   header.xmax = x2 - y1 ;
+   header.ymin = 0 ;
+   header.ymax = y2 - y1;
+   header.hdpi = 0;
+   header.vdpi = 0;
+   if ( s.GetPixelFormat().BitsPerPixel() == 8 )
+      header.nplanes = 1;
+   else
+      header.nplanes = 3;
+
+//   header.bytesperline = ((header.xmax - header.xmin) + 1) & 0xFFFE;
+   header.bytesperline = x2 - x1 + 1 ;
+   if ( header.bytesperline & 1 )
+      header.bytesperline++;
+   header.paletteinfo = 1;
+
+   int fsize = 0;
+
+   tn_file_buf_stream stream ( name, tnstream::writing );
+
+   header.write ( &stream );
+
+   fsize += sizeof ( header );
+
+   int shift[3] = { 0, 0, };
+   if ( header.nplanes > 1 ) {
+      shift[0] = s.GetPixelFormat().Rshift();
+      shift[1] = s.GetPixelFormat().Gshift();
+      shift[2] = s.GetPixelFormat().Bshift();
+   }
+   
+   for ( int y = y1; y <= y2; y++ )
+      for ( int plane = 0; plane < header.nplanes; plane++ ) {
+         int lastbyte = -1;
+         int count = 0;
+         for ( int x = x1; x < x1 + header.bytesperline; x++ ) {
+            char c = (s.GetPixel( x, y ) >> shift[plane]) & 0xff;
+   
+            if ( (lastbyte == c && count < 63) || lastbyte == -1 ) {
+               count ++;
+               lastbyte = c;
+            }
+            else {
+               if ( count > 1 || lastbyte >= 192 ) {
+                  char d = 192 + count;
+                  stream.writeChar ( d );
+                  fsize += sizeof ( d );
+               }
+               char lstbyte = lastbyte;
+               stream.writeChar ( lstbyte );
+               fsize += sizeof ( lstbyte );
+               count = 1;
+               lastbyte = c;
+            }
+               
+         }
+         if ( count > 1 || lastbyte >= 192 ) {
+            char d = 192 + count;
+            stream.writeChar ( d );
+            fsize += sizeof ( d );
+         }
+         char lstbyte = lastbyte;
+         stream.writeChar ( lstbyte );
+         fsize += sizeof ( lstbyte );
+      
+      }
+
+      if ( header.nplanes == 1 ) {
+         char d = 12;
+         stream.writeChar ( d );
+         fsize += sizeof ( d );
+
+         dacpalette256 pal2;
+
+         for ( int i = 0; i < 3; i++ )
+            for ( int j = 0; j < 256; j++ )
+               pal2[j][i] = pal[j][i] << 2;
+
+         stream.writedata ( &pal2, 768 ); // endian ok !!!
+         fsize += 768 ;
+      }
+      stream.seek ( 0 );
+      header.size = fsize;
+      header.write ( &stream );
+}

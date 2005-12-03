@@ -38,12 +38,7 @@
 #include "graphicset.h"
 #include "graphics/blitter.h"
 #include "graphics/drawing.h"
-
-#ifdef sgmain
- #include "controls.h"
- #include "gui.h"
-#endif
-
+#include "loadpcx.h"
 #include "iconrepository.h"
 
 
@@ -1486,7 +1481,7 @@ tlockdispspfld :: ~tlockdispspfld ()
 bool tempsvisible = true;
 
 
-#if 0    
+#if 0
 
 
 

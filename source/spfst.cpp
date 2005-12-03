@@ -33,24 +33,17 @@
 #include "buildingtype.h"
 
 #include "basestrm.h"
-#include "tpascal.inc"
+// #include "tpascal.inc"
 #include "misc.h"
 #include "basegfx.h"
-#include "newfont.h"
 #include "typen.h"
 #include "spfst.h"
 #include "events.h"
-#include "dlg_box.h"
 #include "loaders.h"
-#include "stack.h"
-#include "loadpcx.h"
+// #include "stack.h"
 #include "attack.h"
-#include "gameoptions.h"
+// #include "gameoptions.h"
 #include "itemrepository.h"
-
-#ifndef karteneditor
-  #include "gamedlg.h"
-#endif
 
 #include "dialog.h"
 #include "loadbi3.h"

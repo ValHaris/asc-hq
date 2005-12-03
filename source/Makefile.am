@@ -6,3 +6,4 @@ EXTRA_DIST 		= *.cpp *.h *.inc
 
 htmldoc: doxygen.config
 	doxygen doxygen.config
+_SOURCES = mapimageexport.cpp
