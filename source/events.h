@@ -25,7 +25,6 @@
 #ifndef events_h_included
 #define events_h_included
 
-
 extern void initializeEventHandling ( int (*fn)(void *) , void *data, void* mousepointer );
 
 extern SDL_mutex* eventHandlingMutex;
