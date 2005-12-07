@@ -25,7 +25,7 @@ simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameevents
 gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp weatherarea.cpp \
 guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp gamedialog.cpp \
 infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappanel.cpp \
-weathercast.cpp messaginghub.cpp explosivemines.cpp  \
+weathercast.cpp messaginghub.cpp explosivemines.cpp mainscreenwidget.cpp \
 legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimageexport.cpp
 
 asc_LDADD   		= $(top_builddir)/source/libs/triangul/libtriangul.la \

@@ -1145,17 +1145,18 @@ void execuseraction2 ( tuseractions action )
              getPGApplication().reloadTheme();
              soundSettings( NULL );
          break;
-      case ua_viewButtonPanel:  mainScreenWidget->spawnPanel( MainScreenWidget::ButtonPanel );
+      case ua_viewButtonPanel:  mainScreenWidget->spawnPanel( ASC_MainScreenWidget::ButtonPanel );
          break;
-      case ua_viewWindPanel:     mainScreenWidget->spawnPanel( MainScreenWidget::WindInfo );
+      case ua_viewWindPanel:     mainScreenWidget->spawnPanel( ASC_MainScreenWidget::WindInfo );
          break;
       case ua_clearImageCache:  IconRepository::clear();
          break;
-      case ua_viewUnitInfoPanel: mainScreenWidget->spawnPanel( MainScreenWidget::UnitInfo );
+      case ua_viewUnitInfoPanel: mainScreenWidget->spawnPanel( ASC_MainScreenWidget::UnitInfo );
          break;
-      case ua_viewOverviewMapPanel: mainScreenWidget->spawnPanel( MainScreenWidget::OverviewMap );
+      case ua_viewOverviewMapPanel: mainScreenWidget->spawnPanel( ASC_MainScreenWidget::OverviewMap );
          break;
-      case ua_viewMapControlPanel: mainScreenWidget->spawnPanel( MainScreenWidget::MapControl );
+      case ua_viewMapControlPanel: mainScreenWidget->spawnPanel( ASC_MainScreenWidget::MapControl );
+         break;
       case ua_vehicleinfo: unitInfoDialog();
          break;
       case ua_weathercast: weathercast();
@@ -1409,7 +1410,7 @@ int gamethread ( void* data )
       
       repaintDisplay.connect( repaintMap );
       
-      mainScreenWidget = new MainScreenWidget( getPGApplication());
+      mainScreenWidget = new ASC_MainScreenWidget( getPGApplication());
       dataLoaderTicker();
    }
    
@@ -1513,7 +1514,7 @@ int main(int argc, char *argv[] )
    try {
       cl = new Cmdline ( argc, argv );
    } catch ( string s ) {
-      cerr << s.c_str();
+      cerr << s;
       exit(1);
    }
 

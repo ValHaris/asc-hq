@@ -29,6 +29,7 @@
 #include "paradialog.h"
 #include "edselfnt.h"
 #include "graphics/surface.h"
+#include "mainscreenwidget.h"
 
 class Menu;
 class NewGuiHost;
@@ -57,12 +58,7 @@ class SelectionItemWidget : public PG_Widget {
 };
 
 
-class MainScreenWidget : public PG_Widget {
-    PG_Application& app;
-    Surface backgroundImage;
-    SDL_Rect blitRects[4];
-    PG_Label* messageLine;
-    int lastMessageTime;
+class Maped_MainScreenWidget : public MainScreenWidget {
     PG_Window* vehicleSelector;
     PG_Window* buildingSelector;
     PG_Window* objectSelector;
@@ -75,11 +71,10 @@ class MainScreenWidget : public PG_Widget {
     PG_Label* coordinateDisplay;
     SelectionItemWidget* currentSelectionWidget;
 public:
-    MainScreenWidget( PG_Application& application );
+    Maped_MainScreenWidget( PG_Application& application );
     enum Panels { ButtonPanel, WindInfo, UnitInfo, OverviewMap };
     void spawnPanel ( Panels panel );
 
-    void displayMessage( const ASCString& message );
     bool selectVehicle();
     bool selectBuilding();
     bool selectObject();
@@ -90,27 +85,23 @@ public:
    
 protected:
 
-    MapDisplayPG* mapDisplay;
     NewGuiHost* guiHost;
     Menu* menu;
     
-    void buildBackgroundImage();
     void brushChanged( int i );
     void selectionChanged( const MapComponent* item ); 
-    bool idleHandler( );
     bool eventKeyDown(const SDL_KeyboardEvent* key);
     void setupStatusBar();
     
-    void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst) ;
-//    void eventDraw (SDL_Surface* surface, const PG_Rect& rect);
-//    void Blit ( bool recursive = true, bool restore = true );
-    ~MainScreenWidget() { };
+    ASCString getBackgroundImageFilename() { return "mapeditor-background.png"; };
+    
+    ~Maped_MainScreenWidget() { };
 };
 
 //! displays a message in the status line of ASC
 extern void displaymessage2( const char* formatstring, ... );
 
-extern MainScreenWidget*  mainScreenWidget ;
+extern Maped_MainScreenWidget*  mainScreenWidget ;
 
 #endif
 

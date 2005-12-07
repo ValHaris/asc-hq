@@ -82,9 +82,10 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	overviewmapimage.$(OBJEXT) asc-mainscreen.$(OBJEXT) \
 	mapfield.$(OBJEXT) overviewmappanel.$(OBJEXT) \
 	weathercast.$(OBJEXT) messaginghub.$(OBJEXT) \
-	explosivemines.$(OBJEXT) legacynetworkloaders.$(OBJEXT) \
-	player.$(OBJEXT) cannedmessages.$(OBJEXT) \
-	reactionfire.$(OBJEXT) mapimageexport.$(OBJEXT)
+	explosivemines.$(OBJEXT) mainscreenwidget.$(OBJEXT) \
+	legacynetworkloaders.$(OBJEXT) player.$(OBJEXT) \
+	cannedmessages.$(OBJEXT) reactionfire.$(OBJEXT) \
+	mapimageexport.$(OBJEXT)
 asc_OBJECTS = $(am_asc_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_DEPENDENCIES =  \
@@ -254,7 +255,7 @@ simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameevents
 gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp weatherarea.cpp \
 guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp gamedialog.cpp \
 infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappanel.cpp \
-weathercast.cpp messaginghub.cpp explosivemines.cpp  \
+weathercast.cpp messaginghub.cpp explosivemines.cpp mainscreenwidget.cpp \
 legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimageexport.cpp
 
 asc_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
@@ -372,6 +373,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadbi3.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loaders.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadpcxc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainscreenwidget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapalgorithms.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapdisplay.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapfield.Po@am__quote@

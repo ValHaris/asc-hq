@@ -40,72 +40,7 @@
 #include "itemrepository.h"
 
 
-MainScreenWidget*  mainScreenWidget = NULL ;
-
-/*
-class tsgonlinemousehelp : public tonlinemousehelp
-{
-   public:
-      tsgonlinemousehelp ( void );
-};
-
-tsgonlinemousehelp :: tsgonlinemousehelp ( void )
-{
-   helplist.num = 12;
-
-   static tonlinehelpitem sghelpitems[12]  = {{{ 498, 26, 576, 36}, 20001 },
-         {{ 498, 41, 576, 51}, 20002 },
-         {{ 586, 26, 612, 51}, 20003 },
-         {{ 499, 57, 575, 69}, 20004 },
-         {{ 499, 70, 575, 81}, 20005 },
-         {{ 577, 58, 610, 68}, 20006 },
-         {{ 577, 70, 610, 80}, 20007 },
-         {{ 502, 92, 531,193}, 20008 },
-         {{ 465, 92, 485,194}, 20009 },
-         {{ 551, 92, 572,193}, 20010 },
-         {{ 586, 90, 612,195}, 20011 },
-         {{ 473,agmp->resolutiony - ( 480 - 449 ), 601,agmp->resolutiony - ( 480 - 460 )}, 20016 }};
-
-   for ( int i = 0; i< helplist.num; i++ ) {
-      sghelpitems[i].rect.x1 = agmp->resolutionx - ( 640 - sghelpitems[i].rect.x1 );
-      sghelpitems[i].rect.x2 = agmp->resolutionx - ( 640 - sghelpitems[i].rect.x2 );
-   }
-
-   helplist.item = sghelpitems;
-}
-
-tsgonlinemousehelp* onlinehelp = NULL;
-
-
-
-
-class tsgonlinemousehelpwind : public tonlinemousehelp
-{
-   public:
-      tsgonlinemousehelpwind ( void );
-} ;
-
-tsgonlinemousehelpwind :: tsgonlinemousehelpwind ( void )
-{
-   helplist.num = 3;
-
-   static tonlinehelpitem sghelpitemswind[3]  = { {{ 501,224, 569,290}, 20013 },
-         {{ 589,228, 609,289}, 20014 },
-         {{ 489,284, 509,294}, 20015 }};
-
-   for ( int i = 0; i< helplist.num; i++ ) {
-      sghelpitemswind[i].rect.x1 = agmp->resolutionx - ( 640 - sghelpitemswind[i].rect.x1 );
-      sghelpitemswind[i].rect.x2 = agmp->resolutionx - ( 640 - sghelpitemswind[i].rect.x2 );
-   }
-
-   helplist.item = sghelpitemswind;
-}
-
-tsgonlinemousehelpwind* onlinehelpwind = NULL;
-
-*/
-
-
+ASC_MainScreenWidget*  mainScreenWidget = NULL ;
 
 
 
@@ -135,57 +70,8 @@ class Menu : public PG_MenuBar {
 
 
 
-
-/*
-class MainMenuPullDown : public tpulldown
-{
-   public:
-      void init ( void );
-} ;
-
-void         MainMenuPullDown :: init ( void )
-{
-   alwaysOpen = true;
-
-   addfield ( "Glo~b~al" );
-   addbutton ( "~O~ptions", ua_gamepreferences );
-   addbutton ( "~M~ouse options", ua_mousepreferences );
-   // addbutton ( "Select Music Play ~L~ist ", ua_selectPlayList );
-   addbutton ( "~S~ound options", ua_soundDialog );
-   addbutton ( "seperator", -1);
-   addbutton ( "E~x~it\tctrl-x", ua_exitgame );
-
-
-   addfield ("~G~ame");
-   addbutton ( "New ~C~ampaign", ua_newcampaign);
-   addbutton ( "~N~ew single Level\tctrl-n", ua_startnewsinglelevel );
-
-   addbutton ( "~L~oad game\tctrl-l", ua_loadgame );
-   addbutton ( "Continue network game\tF3", ua_continuenetworkgame);
-   addbutton ( "supervise network game", ua_networksupervisor );
-
-   addfield ( "~H~elp" );
-   addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );
-   addbutton ( "HowTo ~C~ontinue email games", ua_howtocontinuepbem );
-   addbutton ( "seperator", -1);
-   addbutton ( "~K~eys", ua_help );
-
-   addbutton ( "~A~bout", ua_viewaboutmessage );
-
-   tpulldown :: init();
-   setshortkeys();
-}
-
-*/
-
-
 Menu::~Menu()
 {
-/*
-   for ( Categories::iterator i = categories.begin(); i != categories.end(); ++i )
-      delete *i;
-*/      
-      
 }
 
 bool Menu::execAction  (PG_PopupMenu::MenuItem* menuItem )
@@ -333,19 +219,11 @@ Menu::Menu ( PG_Widget *parent, const PG_Rect &rect)
 
 
 
-MainScreenWidget::MainScreenWidget( PG_Application& application )
-              : PG_Widget(NULL, PG_Rect ( 0, 0, app.GetScreen()->w, app.GetScreen()->h ), false),
-              app ( application ) , messageLine(NULL), lastMessageTime(0)
+ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
+              : MainScreenWidget( application )
 {
 
-   displayLogMessage ( 5, "MainScreenWidget: initializing panels:\n");
-
-   dataLoaderTicker();
-
-   displayLogMessage ( 7, "  Mapdisplay ");
-   mapDisplay = new MapDisplayPG( this, PG_Rect(15,30,Width() - 200, Height() - 73));
-   mapDisplay->SetID( ASC_PG_App::mapDisplayID );
-   dataLoaderTicker();
+   setup( true );
 
    displayLogMessage ( 7, "done\n  Menu ");
    menu = new Menu(this, PG_Rect(15,0,Width()-200,20));
@@ -368,109 +246,12 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
    dataLoaderTicker();
    spawnPanel ( OverviewMap );
 
-   displayLogMessage ( 5, "done\nMainScreenWidget completed\n");
-   dataLoaderTicker();
-
-
-   repaintDisplay.connect ( SigC::bind( SigC::slot( *this, &MainScreenWidget::Update ), true ));
-   
-   buildBackgroundImage();
-   dataLoaderTicker();
-
-   PG_Application::GetApp()->sigAppIdle.connect( SigC::slot( *this, &MainScreenWidget::idleHandler ));
-
-   mapChanged.connect( SigC::slot( OverviewMapHolder::clearmap ));
-   dataLoaderTicker();
-   
-   MessagingHub::Instance().statusInformation.connect( SigC::slot( *this, &MainScreenWidget::displayMessage ));
-   MessagingHub::Instance().messageWindowFactory.connect( SigC::slot( *this, &MainScreenWidget::createStatusWindow ));
-#warning to mapeditor...
-}
-
-
-bool MainScreenWidget :: idleHandler( )
-{
-   if ( ticker > lastMessageTime + 300 ) {
-      displayMessage( "" );
-      lastMessageTime = 0xfffffff;
-   }   
-   return true;
 }
 
 
 
-void MainScreenWidget::buildBackgroundImage()
-{
-   if ( !backgroundImage.valid() ) {
-      backgroundImage = Surface::createSurface( Width(), Height(), 32 );
-      
-      Surface& source = IconRepository::getIcon("640480.pcx");
-      
-      MegaBlitter< 1, gamemapPixelSize, ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_DirectZoom> blitter;
-      blitter.setSize( source.w(), source.h(), Width(), Height(), false );
-      
-      dataLoaderTicker();
-      blitter.blit( source, backgroundImage, SPoint(0,0) );
 
-      dataLoaderTicker();
-            
-      assert( mapDisplay );
-      PG_Rect r = *mapDisplay;
-      
-      const int borderWidth = 5;
-      for ( int i = 0; i <= borderWidth; ++i ) 
-         rectangle<4> ( backgroundImage, SPoint(r.x-i, r.y-i), r.w+2*i, r.h+2*i, ColorMerger_Brightness<4>( 0.6 ), ColorMerger_Brightness<4>( 1.5 ));
 
-      int x1 = r.x + 1;
-      int y1 = r.y + 1;
-      int x2 = r.x + r.Width() - 1;
-      int y2 = r.y + r.Height() -1;
-
-      blitRects[0] = PG_Rect(  0, 0, Width(), y1 ); 
-      blitRects[1] = PG_Rect(  0, y1, x1,     y2 ); 
-      blitRects[2] = PG_Rect( x2, y1, Width() - x2, y2 ); 
-      blitRects[3] = PG_Rect( 0, y2, Width(), Height() - y2 ); 
-      
-      Surface& msgstart = IconRepository::getIcon("msgline1.png");
-      Surface& msgmid   = IconRepository::getIcon("msgline2.png");
-      Surface& msgend   = IconRepository::getIcon("msgline3.png");
-
-      dataLoaderTicker();
-      
-      int mx1 = x1 - borderWidth;
-      int mx2 = x2 + borderWidth;
-      int my1 = y2 + 10;
-      
-      int msglength = mx2 - mx1;
-      int midlength = msglength - msgend.w();
-
-      backgroundImage.Blit( msgstart, SPoint( mx1, my1 ));
-
-      int x = msgstart.w();
-      while ( x + msgmid.w() < midlength ) {
-         backgroundImage.Blit( msgmid, SPoint( mx1 + x, my1 ));
-         x += msgmid.w();
-      }
-      dataLoaderTicker();
-      backgroundImage.Blit( msgmid, SPoint( mx1 + msglength - msgend.w() - msgmid.w(), my1 ));
-      
-      dataLoaderTicker();
-      backgroundImage.Blit( msgend, SPoint( mx1 + msglength - msgend.w(), my1) );
-
-      messageLine = new PG_Label ( this, PG_Rect( mx1 + 20, my1 + 9, msglength - 30, msgend.h() - 18) );
-      messageLine->SetFontSize(11);
-      dataLoaderTicker();
-         
-   }
-}
-
-void MainScreenWidget::displayMessage( const ASCString& message )
-{
-   if ( messageLine ) {
-      messageLine->SetText( message );
-      lastMessageTime = ticker;
-   }   
-}
 
 void displaymessage2( const char* formatstring, ... )
 {
@@ -490,34 +271,8 @@ void displaymessage2( const char* formatstring, ... )
 
 
 
-void MainScreenWidget::eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst) 
-{
-   SDL_Rect dstrect;
-   Surface s = Surface::Wrap( PG_Application::GetScreen() );
-   dstrect.x = blitRects[0].x;
-   dstrect.y = blitRects[0].y;
-   s.Blit( backgroundImage, blitRects[0], dstrect );
-   
-   dstrect.x = blitRects[1].x;
-   dstrect.y = blitRects[1].y;
-   s.Blit( backgroundImage, blitRects[1], dstrect );
-   
-   dstrect.x = blitRects[2].x;
-   dstrect.y = blitRects[2].y;
-   s.Blit( backgroundImage, blitRects[2], dstrect );
-   
-   dstrect.x = blitRects[3].x;
-   dstrect.y = blitRects[3].y;
-   s.Blit( backgroundImage, blitRects[3], dstrect );
-}
 
-StatusMessageWindowHolder MainScreenWidget::createStatusWindow( const ASCString& msg )
-{
-   return StatusMessageWindowHolder( new PG_StatusWindowData( msg ));
-}
-
-
-void MainScreenWidget::spawnPanel ( Panels panel )
+void ASC_MainScreenWidget::spawnPanel ( Panels panel )
 {
    if ( panel == WindInfo ) {
       WindInfoPanel* wi = new WindInfoPanel( this, PG_Rect(Width()-170, 480, 170, 114));
@@ -532,18 +287,17 @@ void MainScreenWidget::spawnPanel ( Panels panel )
       guiHost->pushIconHandler( &GuiFunctions::primaryGuiIcons );
       guiHost->Show();
    }
-   if ( panel == OverviewMap ) {
-      assert( mapDisplay);
-      OverviewMapPanel* smp = new OverviewMapPanel( this, PG_Rect(Width()-170, 0, 170, 160), mapDisplay );
-      smp->Show();
-   }
+   
+   if ( panel == OverviewMap ) 
+      spawnOverviewMapPanel();
+   
    if ( panel == MapControl ) {
       MapInfoPanel* mcp = new MapInfoPanel( this, PG_Rect(Width()-170, 0, 170, 160), mapDisplay );
       mcp->Show();
    }
 }
 
-bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
+bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 {
    int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
 

@@ -16,7 +16,6 @@
 #include <map>
 #include "pgimage.h"
 #include "paradialog.h"
-#include "asc-mainscreen.h"
 #include "weatherarea.h"
 #include "paradialog.h"
 #include "dashboard.h"

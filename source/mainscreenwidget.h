@@ -23,37 +23,49 @@
 */
 
 
-#ifndef ascmainscreenH
- #define ascmainscreenH 
+#ifndef mainscreenwidgetH
+ #define mainscreenwidgetH
 
 #include "paradialog.h"
 #include "messaginghub.h"
-#include "mainscreenwidget.h"
 
 class Menu;
 class NewGuiHost;
 class MapDisplayPG;
 
-class ASC_MainScreenWidget : public MainScreenWidget {
-public:
-    ASC_MainScreenWidget( PG_Application& application );
-    enum Panels { ButtonPanel, WindInfo, UnitInfo, OverviewMap, MapControl };
-    void spawnPanel ( Panels panel );
+class MainScreenWidget : public PG_Widget {
+    PG_Application& app;
+    Surface backgroundImage;
+    SDL_Rect blitRects[4];
+    int lastMessageTime;
 
+    StatusMessageWindowHolder createStatusWindow( const ASCString& msg );
+    
+    void buildBackgroundImage( bool messageLine );
+        
+public:
+    MainScreenWidget( PG_Application& application );
+
+    void displayMessage( const ASCString& message );
+
+    
 protected:
+    MapDisplayPG* mapDisplay;
     NewGuiHost* guiHost;
     Menu* menu;
+    PG_Label* messageLine;
+
+    void spawnOverviewMapPanel ();
     
-    bool eventKeyDown(const SDL_KeyboardEvent* key);
-    ASCString getBackgroundImageFilename() { return "gamebackground.png"; };
+    void setup( bool messageLine );
     
-    ~ASC_MainScreenWidget() { };
+    bool idleHandler( );
+
+    virtual ASCString getBackgroundImageFilename() = 0;
+    void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst) ;
+    ~MainScreenWidget() { };
 };
 
-//! displays a message in the status line of ASC
-extern void displaymessage2( const char* formatstring, ... );
-
-extern ASC_MainScreenWidget*  mainScreenWidget ;
 
 #endif
 

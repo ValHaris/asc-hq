@@ -38,7 +38,7 @@
 #include "edselfnt.h"
 #include "edmisc.h"
 
-MainScreenWidget*  mainScreenWidget = NULL ;
+Maped_MainScreenWidget*  mainScreenWidget = NULL ;
 
 
 class Menu : public PG_MenuBar {
@@ -199,79 +199,49 @@ Menu::Menu ( PG_Widget *parent, const PG_Rect &rect)
 
 
 
-MainScreenWidget::MainScreenWidget( PG_Application& application )
-              : PG_Widget(NULL, PG_Rect ( 0, 0, app.GetScreen()->w, app.GetScreen()->h ), false),
-              app ( application ) , messageLine(NULL), lastMessageTime(0), 
+Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
+              : MainScreenWidget( application ),
               vehicleSelector( NULL ), buildingSelector( NULL ), objectSelector(NULL), terrainSelector(NULL), mineSelector(NULL),
               weatherSelector( NULL ), selectionName(NULL), coordinateDisplay(NULL), currentSelectionWidget(NULL)
 {
 
-   displayLogMessage ( 5, "MainScreenWidget: initializing panels:\n");
-
-   displayLogMessage ( 7, "  Mapdisplay ");
-   mapDisplay = new MapDisplayPG( this, PG_Rect(15,30,Width() - 200, Height() - 73));
-   mapDisplay->SetID( ASC_PG_App::mapDisplayID );
-
+   setup( false );
    mapDisplay->mouseButtonOnField.connect( SigC::slot( mousePressedOnField ));
    mapDisplay->mouseDraggedToField.connect( SigC::slot( mouseDraggedToField ));
 
    
    setupStatusBar();
-  
-      
-   displayLogMessage ( 7, "done\n  Menu ");
+   
    menu = new Menu(this, PG_Rect(15,0,Width()-200,20));
 
-   SetID( ASC_PG_App::mainScreenID );
-
-   // displayLogMessage ( 7, "done\n  ButtonPanel ");
-   // spawnPanel ( ButtonPanel );
-
-   // displayLogMessage ( 7, "done\n  WindInfo ");
-   // spawnPanel ( WindInfo );
-
-   // displayLogMessage ( 7, "done\n  UnitInfo ");
-   // spawnPanel ( UnitInfo );
-
-   displayLogMessage ( 7, "done\n  OverviewMap ");
-   spawnPanel ( OverviewMap );
-
-   displayLogMessage ( 5, "done\nMainScreenWidget completed\n");
-
-
-   repaintDisplay.connect ( SigC::bind( SigC::slot( *this, &MainScreenWidget::Update ), true ));
    
-   buildBackgroundImage();
-
-   PG_Application::GetApp()->sigAppIdle.connect( SigC::slot( *this, &MainScreenWidget::idleHandler ));
-   
-   PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &MainScreenWidget::eventKeyDown ));
+   PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &Maped_MainScreenWidget::eventKeyDown ));
    
    int xpos = Width() - 150;
    int w = 140;
    int ypos = 180;
    
    PG_Button* button = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Vehicle" );
-   button->sigClick.connect( SigC::slot( *this, &MainScreenWidget::selectVehicle ));
+   button->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectVehicle ));
    ypos += 25;
    new PG_ToolTipHelp( button, "test" );
    
    PG_Button* button2 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Building" );
-   button2->sigClick.connect( SigC::slot( *this, &MainScreenWidget::selectBuilding ));
+   button2->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectBuilding ));
    ypos += 25;
    new PG_ToolTipHelp( button2, "test2" );
 
    PG_Button* button3 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Object" );
-   button3->sigClick.connect( SigC::slot( *this, &MainScreenWidget::selectObject ));
+   button3->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectObject ));
    ypos += 25;
    new PG_ToolTipHelp( button3, "MOOM" );
    
    PG_Button* button4 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Terrain" );
-   button4->sigClick.connect( SigC::slot( *this, &MainScreenWidget::selectTerrain ));
+   button4->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectTerrain ));
    ypos += 25;
 
    PG_Button* button5 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Mine" );
-   button5->sigClick.connect( SigC::slot( *this, &MainScreenWidget::selectMine ));
+   button5->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectMine ));
    ypos += 25;
     
    
@@ -280,7 +250,7 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
    brushSelector->AddItem("1");
    brushSelector->AddItem("3");
    brushSelector->AddItem("5");
-   brushSelector->selectionSignal.connect( SigC::slot( *this, &MainScreenWidget::brushChanged ));
+   brushSelector->selectionSignal.connect( SigC::slot( *this, &Maped_MainScreenWidget::brushChanged ));
    ypos += 25;
    
   
@@ -306,11 +276,11 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
    ypos += 25;
    
    selection.selectionChanged.connect( SigC::slot( *currentSelectionWidget, &SelectionItemWidget::set ));
-   selection.selectionChanged.connect( SigC::slot( *this, &MainScreenWidget::selectionChanged ));
+   selection.selectionChanged.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectionChanged ));
 
 }
 
-void MainScreenWidget::setupStatusBar()
+void Maped_MainScreenWidget::setupStatusBar()
 {
    int x = mapDisplay->my_xpos;
    int y =  mapDisplay->my_ypos + mapDisplay->Height() + 25;
@@ -324,22 +294,22 @@ void MainScreenWidget::setupStatusBar()
    coordinateDisplay = new PG_Label ( this, PG_Rect( x, y, 80, height ) );
    coordinateDisplay->SetFontSize(11);
    
-   updateFieldInfo.connect( SigC::slot( *this, &MainScreenWidget::updateStatusBar ));
+   updateFieldInfo.connect( SigC::slot( *this, &Maped_MainScreenWidget::updateStatusBar ));
 }
 
-void MainScreenWidget::updateStatusBar()
+void Maped_MainScreenWidget::updateStatusBar()
 {
    MapCoordinate pos = actmap->getCursor();
    coordinateDisplay->SetText( ASCString::toString( pos.x) + " / " + ASCString::toString( pos.y ));
 }
 
-void MainScreenWidget::selectionChanged( const MapComponent* item )
+void Maped_MainScreenWidget::selectionChanged( const MapComponent* item )
 {
    selectionName->SetText( item->getItemType()->getName() + "(ID: " + ASCString::toString( item->getItemType()->getID()   ) + ")");
 }
 
 
-void MainScreenWidget::brushChanged( int i )
+void Maped_MainScreenWidget::brushChanged( int i )
 {
    selection.brushSize = i+1;
    if ( selection.brushSize < 1 )
@@ -347,7 +317,7 @@ void MainScreenWidget::brushChanged( int i )
 }
 
 
-bool MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
+bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 {
    int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
 
@@ -513,85 +483,37 @@ void showSelectionWindow( PG_Widget* parent, PG_WindowPointer &selectionWindow, 
 }
 
 
-bool MainScreenWidget :: selectVehicle()
+bool Maped_MainScreenWidget :: selectVehicle()
 {
    showSelectionWindow( this, vehicleSelector, vehicleTypeRepository );
    return true;
 }
 
-bool MainScreenWidget :: selectBuilding()
+bool Maped_MainScreenWidget :: selectBuilding()
 {
    showSelectionWindow( this, buildingSelector, buildingTypeRepository );
    return true;
 }
 
-bool MainScreenWidget :: selectObject()
+bool Maped_MainScreenWidget :: selectObject()
 {
    showSelectionWindow( this, objectSelector, objectTypeRepository );
    return true;
 }
 
-bool MainScreenWidget :: selectTerrain()
+bool Maped_MainScreenWidget :: selectTerrain()
 {
    showSelectionWindow( this, terrainSelector, terrainTypeRepository );
    return true;
 }
 
-bool MainScreenWidget :: selectMine()
+bool Maped_MainScreenWidget :: selectMine()
 {
    showSelectionWindow( this, mineSelector, mineTypeRepository );
    return true;
 }
 
 
-bool MainScreenWidget :: idleHandler( )
-{
-   if ( ticker > lastMessageTime + 300 ) {
-      displayMessage( "" );
-      lastMessageTime = 0xfffffff;
-   }   
-   return true;
-}
-
-
-void MainScreenWidget::buildBackgroundImage()
-{
-   if ( !backgroundImage.valid() ) {
-      backgroundImage = Surface::createSurface( Width(), Height(), 32 );
-      
-      Surface& source = IconRepository::getIcon("mapeditor-background.png");
-      
-      MegaBlitter< 4, gamemapPixelSize, ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_DirectZoom> blitter;
-      blitter.setSize( source.w(), source.h(), Width(), Height(), false );
-      
-      blitter.blit( source, backgroundImage, SPoint(0,0) );
-      
-      assert( mapDisplay );
-      PG_Rect r = *mapDisplay;
-      
-      const int borderWidth = 5;
-      for ( int i = 0; i <= borderWidth; ++i ) 
-         rectangle<4> ( backgroundImage, SPoint(r.x-i, r.y-i), r.w+2*i, r.h+2*i, ColorMerger_Brightness<4>( 0.6 ), ColorMerger_Brightness<4>( 1.5 ));
-
-      int x1 = r.x + 1;
-      int y1 = r.y + 1;
-      int x2 = r.x + r.Width() - 1;
-      int y2 = r.y + r.Height() -1;
-
-      blitRects[0] = PG_Rect(  0, 0, Width(), y1 ); 
-      blitRects[1] = PG_Rect(  0, y1, x1,     y2 ); 
-      blitRects[2] = PG_Rect( x2, y1, Width() - x2, y2 ); 
-      blitRects[3] = PG_Rect( 0, y2, Width(), Height() - y2 ); 
-   }
-}
-
-void MainScreenWidget::displayMessage( const ASCString& message )
-{
-   if ( messageLine ) {
-      messageLine->SetText( message );
-      lastMessageTime = ticker;
-   }   
-}
 
 void displaymessage2( const char* formatstring, ... )
 {
@@ -611,29 +533,8 @@ void displaymessage2( const char* formatstring, ... )
 
 
 
-void MainScreenWidget::eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst) 
-{
-   SDL_Rect dstrect;
-   Surface s = Surface::Wrap( PG_Application::GetScreen() );
-   dstrect.x = blitRects[0].x;
-   dstrect.y = blitRects[0].y;
-   s.Blit( backgroundImage, blitRects[0], dstrect );
-   
-   dstrect.x = blitRects[1].x;
-   dstrect.y = blitRects[1].y;
-   s.Blit( backgroundImage, blitRects[1], dstrect );
-   
-   dstrect.x = blitRects[2].x;
-   dstrect.y = blitRects[2].y;
-   s.Blit( backgroundImage, blitRects[2], dstrect );
-   
-   dstrect.x = blitRects[3].x;
-   dstrect.y = blitRects[3].y;
-   s.Blit( backgroundImage, blitRects[3], dstrect );
-}
 
-
-void MainScreenWidget::spawnPanel ( Panels panel )
+void Maped_MainScreenWidget::spawnPanel ( Panels panel )
 {
    if ( panel == OverviewMap ) {
       assert( mapDisplay);

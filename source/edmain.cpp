@@ -2,7 +2,7 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.67.2.17 2005-11-20 20:58:54 mbickel Exp $
+//     $Id: edmain.cpp,v 1.67.2.18 2005-12-07 21:20:37 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -295,7 +295,7 @@ int mapeditorMainThread ( void* _mapname )
 
    setstartvariables();
 
-   mainScreenWidget = new MainScreenWidget( getPGApplication());
+   mainScreenWidget = new Maped_MainScreenWidget( getPGApplication());
    mainScreenWidget->Show();
    
    mousevisible(true);
@@ -326,7 +326,7 @@ int main(int argc, char *argv[] )
       cl = new Cmdline ( argc, argv );
    }
    catch ( string s ) {
-      cerr << s.c_str();
+      cerr << s;
       exit(1);
    }
 
@@ -350,7 +350,7 @@ int main(int argc, char *argv[] )
 
    signal ( SIGINT, SIG_IGN );
 
-   initFileIO( cl->c().c_str() );
+   initFileIO( cl->c() );
 
    fullscreen = !CGameOptions::Instance()->mapeditWindowedMode;
    if ( cl->f() )
