@@ -120,8 +120,8 @@ class MapRenderer {
       static const int surfaceBorder = 60;
             
       struct ViewPort {
-         ViewPort( int x1, int y1, int x2, int y2 ) { this->x1 = x1; this->y1 = y1; this->x2 = x2; this->y2 = y2; };
-         ViewPort(){};
+         ViewPort( int x1, int y1, int x2, int y2 );
+         ViewPort();
          int x1,y1,x2,y2;
       };
 
@@ -198,7 +198,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       MapCoordinate offset;
      
       void setupFastBlitterCommands();
-      struct {
+      struct Field {
          ViewPort viewPort;
          int numx, numy;
       } field;   
@@ -251,7 +251,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       static const int effectiveMovementSurfaceWidth = 4 * fielddisthalfx + fieldsizex;
       static const int effectiveMovementSurfaceHeight = 4*fieldsizey;
       
-      struct {
+      struct MovementMask {
          Surface mask;
          SPoint  startFieldPos;
       } movementMask[sidenum];

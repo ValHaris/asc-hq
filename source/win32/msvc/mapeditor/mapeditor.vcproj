@@ -248,6 +248,9 @@
 				RelativePath="..\..\..\loadpcxc.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\mainscreenwidget.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\mapalgorithms.cpp">
 			</File>
 			<File
@@ -258,6 +261,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\mapfield.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\mapimageexport.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\mappolygons.cpp">
