@@ -239,7 +239,6 @@ class MessageIDequals : public unary_function<Message*,bool>{
 void      tspfldloaders:: readmessagelist( MessagePntrContainer& lst )
 {
    int i = stream->readInt();
-   printf("tspfldloaders:: readmessagelist : reading %d \n", i );
    
    while ( i ) {
       // MessageContainer::iterator mi = find ( spfld->messages.begin(), spfld->messages.end(), MessageIDequals ( i ));
@@ -258,7 +257,8 @@ void      tspfldloaders:: readmessagelist( MessagePntrContainer& lst )
 
 void      tspfldloaders:: readmessages ( void )
 {
-   stream->readInt(); // magic
+   int magic = stream->readInt(); 
+   assert( magic == messageVersion );
 
    while ( spfld->__loadmessages ) {
       Message* msg = new Message ( spfld );
@@ -268,7 +268,6 @@ void      tspfldloaders:: readmessages ( void )
       msg->time    = stream->readInt();
       bool msgtext = stream->readInt();
       msg->id      = stream->readInt();
-      printf("tspfldloaders:: readmessages : reading %d \n", msg->id );
       int t = stream->readInt();
       int m = stream->readInt();
       msg->gametime.set ( t, m );

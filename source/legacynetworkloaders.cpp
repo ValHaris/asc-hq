@@ -18,6 +18,7 @@
     Boston, MA  02111-1307  USA
 */
 
+#include "messaginghub.h"
 
 #pragma pack(1)
 enum tnetworkchannel { TN_RECEIVE, TN_SEND };
@@ -65,6 +66,7 @@ class  tnetwork {
 void        readLegacyNetworkData ( tnstream& stream )
 {
    #if SDL_BYTEORDER == SDL_LIL_ENDIAN
+   if ( sizeof(tnetwork)==2040 ) {
       int i;
 
       // don't change anything for Big-Endian adaption,
@@ -75,10 +77,12 @@ void        readLegacyNetworkData ( tnstream& stream )
       for (i=0; i<8 ; i++ ) 
          if (net.computer[i].name != NULL )
             stream.readpchar ( &net.computer[i].name );
-   #else
-   displaymessage ("Unable to load map in old file format on a big endian machine\nPlease convert this file to the new file format on a little endian machine and try again",1);
-   throw tfileerror();
+   } else 
    #endif
+   {
+      errorMessage("Unable to load map in old file format on this computer architecture\nPlease convert this file to the new file format on a 32 Bit little endian machine and try again");
+      throw tfileerror();
+   }
 }
 
 
