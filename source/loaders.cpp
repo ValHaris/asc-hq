@@ -239,6 +239,8 @@ class MessageIDequals : public unary_function<Message*,bool>{
 void      tspfldloaders:: readmessagelist( MessagePntrContainer& lst )
 {
    int i = stream->readInt();
+   printf("tspfldloaders:: readmessagelist : reading %d \n", i );
+   
    while ( i ) {
       // MessageContainer::iterator mi = find ( spfld->messages.begin(), spfld->messages.end(), MessageIDequals ( i ));
       MessageContainer::iterator mi = spfld->messages.end();
@@ -247,7 +249,7 @@ void      tspfldloaders:: readmessagelist( MessagePntrContainer& lst )
             mi = mi2;
 
       if ( mi == spfld->messages.end())
-         displaymessage ( "message list corrupted !\nplease report this bug!\nthe game will continue, but some messages will probably be missing\nand other instabilities may occur.",1);
+         warning( "message list corrupted !\nplease report this bug!\nthe game will continue, but some messages will probably be missing\nand other instabilities may occur.");
       lst.push_back ( *mi );
       i = stream->readInt();
    }
@@ -266,6 +268,7 @@ void      tspfldloaders:: readmessages ( void )
       msg->time    = stream->readInt();
       bool msgtext = stream->readInt();
       msg->id      = stream->readInt();
+      printf("tspfldloaders:: readmessages : reading %d \n", msg->id );
       int t = stream->readInt();
       int m = stream->readInt();
       msg->gametime.set ( t, m );

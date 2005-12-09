@@ -421,6 +421,7 @@ int WeatherSystem::legacyWindDirection = 0;
 
 WeatherSystem::WeatherSystem(tmap* map, int spawn, float ws2fr, unsigned int tInterval, WeatherSystemMode mode, FalloutType defaultFT):timeInterval(tInterval), windspeed2FieldRatio(ws2fr), areaSpawnAmount(spawn), maxForecast(5), gameMap(map), currentMode(mode), windspeed(0), globalWindDirection(S), lowerRandomSize(0.25), upperRandomSize(0.8), access2RandCount(0), defaultFallout(defaultFT), lowerRandomDuration(tInterval), upperRandomDuration(tInterval*3) {
     seedValue = time(0);
+    seedValueIsSet = true;
     srand(static_cast<unsigned int>(seedValue));
 
     Percentages defaultFallOut;

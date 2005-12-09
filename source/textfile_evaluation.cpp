@@ -1229,6 +1229,8 @@ vector<Surface> loadASCImage ( const ASCString& file, int num )
    tnfilestream fs ( file, tnstream::reading );
    
    Surface s ( IMG_Load_RW ( SDL_RWFromStream( &fs ), 1));
+   assert( s.valid());
+   
    if ( s.GetPixelFormat().BitsPerPixel() == 8 )
       s.assignDefaultPalette();
 
