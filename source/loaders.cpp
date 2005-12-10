@@ -506,33 +506,48 @@ void tgameloaders :: readAI ( )
 void        tspfldloaders::writenetwork ( void )
 {
   if ( spfld->network ) {
-     int i;
+#if SDL_BYTEORDER == SDL_LIL_ENDIAN
+      if ( sizeof(tnetwork)==2040 ) {
 
-      // don't change anything for Big-Endian adaption,
-      // this part is really ugly and I'll rewrite it
+         // don't change anything for Big-Endian adaption,
+         // this part is really ugly and I'll rewrite it
+   
+         stream->writedata2 ( *spfld->network );
+         for ( int i = 0; i < 8  ; i++ ) 
+            if (spfld->network->computer[i].name != NULL)
+               stream->writepchar ( spfld->network->computer[i].name );
 
-     stream->writedata2 ( *spfld->network );
-     for ( i = 0; i < 8  ; i++ ) 
-        if (spfld->network->computer[i].name != NULL)
-           stream->writepchar ( spfld->network->computer[i].name );
-
-  }
+      } else
+#endif
+      {
+         errorMessage("Can't save PBEM map on this computer architecture\nPBEM support for 64 bit and Big Endian architectures will be available in ASC2");
+         throw tfileerror();
+      }
+   }
 }
 
 
 void        tspfldloaders::readnetwork ( void )
 {
    if ( spfld->network ) {
-      int i;
+
+#if SDL_BYTEORDER == SDL_LIL_ENDIAN
+      if ( sizeof(tnetwork)==2040 ) {
 
       // don't change anything for Big-Endian adaption,
       // this part is really ugly and I'll rewrite it
 
-      spfld->network = new ( tnetwork );
-      stream->readdata2 ( *spfld->network );
-      for (i=0; i<8 ; i++ ) 
-         if (spfld->network->computer[i].name != NULL )
-            stream->readpchar ( &spfld->network->computer[i].name );
+         spfld->network = new ( tnetwork );
+         stream->readdata2 ( *spfld->network );
+         for ( int i=0; i<8 ; i++ )
+            if (spfld->network->computer[i].name != NULL )
+               stream->readpchar ( &spfld->network->computer[i].name );
+      } else
+#endif
+      {
+         errorMessage("Unable to load map on this computer architecture\nPBEM support for 64 bit and Big Endian architectures will be available in ASC2");
+         throw tfileerror();
+      }
    }
 }
 
