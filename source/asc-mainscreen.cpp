@@ -220,7 +220,7 @@ Menu::Menu ( PG_Widget *parent, const PG_Rect &rect)
 
 
 ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
-              : MainScreenWidget( application )
+   : MainScreenWidget( application ), guiHost(NULL), menu(NULL), unitInfoPanel(NULL)
 {
 
    setup( true );
@@ -279,8 +279,8 @@ void ASC_MainScreenWidget::spawnPanel ( Panels panel )
       wi->Show();
    }
    if ( panel == UnitInfo ) {
-      UnitInfoPanel* ui = new UnitInfoPanel( this, PG_Rect(Width()-170, 160, 170, 320));
-      ui->Show();
+      unitInfoPanel = new UnitInfoPanel( this, PG_Rect(Width()-170, 160, 170, 320));
+      unitInfoPanel->Show();
    }
    if ( panel == ButtonPanel ) {
       guiHost = new NewGuiHost( this, mapDisplay, PG_Rect(Width()-170, Height()-200, 170, 200));

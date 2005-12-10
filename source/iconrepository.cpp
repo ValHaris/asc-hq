@@ -66,3 +66,14 @@ IconRepository::Repository::~Repository()
       delete i->second;
 }
 
+bool IconRepository::exists( const ASCString& name )
+{
+   return repository.find(name) != repository.end();
+}
+
+void IconRepository::insert( const ASCString& name, Surface* s )
+{
+   repository[name] = s;
+}
+
+

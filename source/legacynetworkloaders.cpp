@@ -32,10 +32,10 @@ typedef tnetworkconnectionparameters* pnetworkconnectionparameters;
 
 class tnetworkcomputer {
   public:
-    char*        name;
+     int        name; // was: char*
     struct {
       int          transfermethodid;
-      pbasenetworkconnection transfermethod;
+      int transfermethod;  // was: pbasenetworkconnection
       tnetworkconnectionparameters         data;
     } send, receive;
     int          existent;
@@ -75,8 +75,9 @@ void        readLegacyNetworkData ( tnstream& stream )
       tnetwork net; 
       stream.readdata2 ( net );
       for (i=0; i<8 ; i++ ) 
-         if (net.computer[i].name != NULL )
-            stream.readpchar ( &net.computer[i].name );
+         if (net.computer[i].name ) {
+            stream.readString();
+         }   
    } else 
    #endif
    {

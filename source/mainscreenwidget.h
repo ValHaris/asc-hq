@@ -29,8 +29,7 @@
 #include "paradialog.h"
 #include "messaginghub.h"
 
-class Menu;
-class NewGuiHost;
+// class Menu;
 class MapDisplayPG;
 
 class MainScreenWidget : public PG_Widget {
@@ -51,8 +50,7 @@ public:
     
 protected:
     MapDisplayPG* mapDisplay;
-    NewGuiHost* guiHost;
-    Menu* menu;
+    // Menu* menu;
     PG_Label* messageLine;
 
     void spawnOverviewMapPanel ();

@@ -37,6 +37,8 @@ class IconRepository {
      public:
         static Surface& getIcon( const ASCString& name );
         static void clear() { repository.clear(); };
+        static bool exists( const ASCString& name );
+        static void insert( const ASCString& name, Surface* s );
 };
 
 

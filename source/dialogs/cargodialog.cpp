@@ -23,6 +23,8 @@
 #include "../iconrepository.h"
 #include "../vehicle.h"
 
+#include "../asc-mainscreen.h"
+#include "../guiiconhandler.h"
 
 class HighLightingManager {
       int marked;
@@ -138,6 +140,7 @@ class SubWindow {
    public:
       virtual bool available( CargoDialog* cd ) = 0;
       virtual void registerSubwindow( CargoDialog* cd ) {};
+      virtual ~SubWindow() {};
 };
 
 
@@ -365,6 +368,27 @@ class CargoDialog : public Panel {
          return 0;   
       }     
 
+      bool ProcessEvent ( const SDL_Event *   event,bool   bModal = false  )
+      {
+         if ( !Panel::ProcessEvent( event, bModal )) {
+            if ( mainScreenWidget ) {
+               if ( mainScreenWidget->getGuiHost() ) {
+                  if ( mainScreenWidget->getGuiHost()->ProcessEvent( event, bModal ))
+                     return true;
+                  
+                  if ( mainScreenWidget->getUnitInfoPanel() ) {
+                     if ( mainScreenWidget->getUnitInfoPanel()->ProcessEvent( event, bModal ))
+                        return true;
+                  }
+               }
+            }
+
+         } else
+            return true;
+            
+         return false;
+      }
+      
       void showAmmo()
       {
          setLabelText( "cmmun", container->getAmmo( cwcruisemissile ));
