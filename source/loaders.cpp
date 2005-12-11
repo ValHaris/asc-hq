@@ -507,23 +507,42 @@ void        tspfldloaders::writenetwork ( void )
 {
   if ( spfld->network ) {
 #if SDL_BYTEORDER == SDL_LIL_ENDIAN
-      if ( sizeof(tnetwork)==2040 ) {
 
-         // don't change anything for Big-Endian adaption,
-         // this part is really ugly and I'll rewrite it
+      // don't change anything for Big-Endian adaption,
+      // this part is really ugly and is rewrite for ASC2
    
-         stream->writedata2 ( *spfld->network );
-         for ( int i = 0; i < 8  ; i++ ) 
-            if (spfld->network->computer[i].name != NULL)
-               stream->writepchar ( spfld->network->computer[i].name );
-
-      } else
-#endif
-      {
+      for ( int i = 0; i < 8; ++i ) {
+         stream->writeChar( spfld->network->player[i].compposition );
+         stream->writeInt( spfld->network->player[i].codewordcrc );
+      }
+   
+      for ( int i = 0; i< 8; ++i ) {
+         stream->writeInt( spfld->network->computer[i].name != NULL );
+         stream->writeInt( spfld->network->computer[i].send.transfermethodid );
+         stream->writeInt( spfld->network->computer[i].send.transfermethod != NULL );
+         stream->writedata2( spfld->network->computer[i].send.data );
+         stream->writeInt( spfld->network->computer[i].receive.transfermethodid );
+         stream->writeInt( spfld->network->computer[i].receive.transfermethod != NULL );
+         stream->writedata2( spfld->network->computer[i].receive.data );
+         stream->writeInt( spfld->network->computer[i].existent );
+      }
+      stream->writeInt( spfld->network->computernum );
+      stream->writeInt( spfld->network->turn );
+      stream->writeInt( spfld->network->globalparams.enablesaveloadofgames );
+      stream->writeInt( spfld->network->globalparams.reaskpasswords );
+      for ( int i = 0; i< 48; ++i )
+         stream->writeInt( spfld->network->globalparams.dummy[i] );
+   
+      
+      // stream->writedata2 ( *spfld->network );
+      for ( int i = 0; i < 8  ; i++ )
+         if (spfld->network->computer[i].name != NULL)
+            stream->writepchar ( spfld->network->computer[i].name );
+#else
          errorMessage("Can't save PBEM map on this computer architecture\nPBEM support for 64 bit and Big Endian architectures will be available in ASC2");
          throw tfileerror();
-      }
-   }
+#endif
+  }
 }
 
 
@@ -532,22 +551,41 @@ void        tspfldloaders::readnetwork ( void )
    if ( spfld->network ) {
 
 #if SDL_BYTEORDER == SDL_LIL_ENDIAN
-      if ( sizeof(tnetwork)==2040 ) {
 
       // don't change anything for Big-Endian adaption,
-      // this part is really ugly and I'll rewrite it
+      // this part is really ugly and is rewrite for ASC2
 
          spfld->network = new ( tnetwork );
-         stream->readdata2 ( *spfld->network );
+         for ( int i = 0; i < 8; ++i ) {
+            spfld->network->player[i].compposition = stream->readChar();
+            spfld->network->player[i].codewordcrc = stream->readInt();
+         }
+
+         for ( int i = 0; i< 8; ++i ) {
+            spfld->network->computer[i].name = (char*) stream->readInt();
+            spfld->network->computer[i].send.transfermethodid = stream->readInt();
+            spfld->network->computer[i].send.transfermethod = (pbasenetworkconnection) stream->readInt();
+            stream->readdata2( spfld->network->computer[i].send.data );
+            spfld->network->computer[i].receive.transfermethodid = stream->readInt();
+            spfld->network->computer[i].receive.transfermethod = (pbasenetworkconnection) stream->readInt();
+            stream->readdata2( spfld->network->computer[i].receive.data );
+            spfld->network->computer[i].existent = stream->readInt();
+         }
+         spfld->network->computernum = stream->readInt();
+         spfld->network->turn = stream->readInt();
+         spfld->network->globalparams.enablesaveloadofgames = stream->readInt();
+         spfld->network->globalparams.reaskpasswords = stream->readInt();
+         for ( int i = 0; i< 48; ++i )
+            spfld->network->globalparams.dummy[i] = stream->readInt();
+         
+         // stream->readdata2 ( *spfld->network );
          for ( int i=0; i<8 ; i++ )
             if (spfld->network->computer[i].name != NULL )
                stream->readpchar ( &spfld->network->computer[i].name );
-      } else
-#endif
-      {
+#else
          errorMessage("Unable to load map on this computer architecture\nPBEM support for 64 bit and Big Endian architectures will be available in ASC2");
          throw tfileerror();
-      }
+#endif
    }
 }
 
