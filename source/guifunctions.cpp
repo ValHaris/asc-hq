@@ -72,7 +72,7 @@ class AttackGui : public GuiIconHandler, public GuiFunction {
 bool AttackGui :: checkForKey( const SDL_KeyboardEvent* key, int modifier )
 {
    if ( key->keysym.sym == SDLK_ESCAPE || key->keysym.unicode == 'c' ) {
-      execute( actmap->getCursor(), actmap->getField( actmap->getCursor())->getContainer() , -1 );
+      // execute( actmap->getCursor(), actmap->getField( actmap->getCursor())->getContainer() , -1 );
       return true;
    }
    return false;
@@ -305,7 +305,7 @@ void Movement::execute( const MapCoordinate& pos, ContainerBase* subject, int nu
       for ( int j = 0; j < pendingVehicleActions.move->reachableFieldsIndirect.getFieldNum(); j++ )
          pendingVehicleActions.move->reachableFieldsIndirect.getField( j ) ->a.temp2 = 2;
       displaymap();
-
+      updateFieldInfo();
    } else {
       if ( !pendingVehicleActions.move )
          return;

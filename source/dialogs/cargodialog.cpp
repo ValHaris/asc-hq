@@ -208,10 +208,20 @@ namespace CargoGuiFunctions {
             GuiFunctions::Movement::execute( pos, subject, num );
             parent.QuitModal();
          }
-         
-
    };
 
+   class CancelMovement : public GuiFunctions::Cancel {
+         PG_Widget& parent;
+      public:
+         CancelMovement ( PG_Widget& masterParent ) : parent( masterParent)  {};
+         
+         void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+         {
+            GuiFunctions::Cancel::execute( pos, subject, num );
+            parent.QuitModal();
+         }
+   };
+   
 
    class Movement : public GuiFunction
    {
@@ -637,6 +647,7 @@ void Movement::execute( const MapCoordinate& pos, ContainerBase* subject, int nu
          
       GuiIconHandler guiIconHandler;
       guiIconHandler.registerUserFunction( new MovementDestination( *mainScreenWidget ) );
+      guiIconHandler.registerUserFunction( new CancelMovement( *mainScreenWidget ) );
 
       NewGuiHost::pushIconHandler( &guiIconHandler );
 
