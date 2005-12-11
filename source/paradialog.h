@@ -80,6 +80,9 @@ class StartupScreen: public SigC::Object {
        
        void messageDialog( const ASCString& message, MessagingHubBase::MessageType mt );
        
+    protected:
+       bool eventQuit(int id, PG_MessageObject* widget, unsigned long data);
+       
     public:
        static const int mapDisplayID = 2;
        static const int mainScreenID = 1;
@@ -94,7 +97,7 @@ class StartupScreen: public SigC::Object {
        void processEvent();
        bool enableLegacyEventHandling( bool use );
        
-       SigC::Signal0<void> sigQuit;
+       // SigC::Signal0<void> sigQuit;
       // PG_Theme* LoadTheme(const char* xmltheme, bool asDefault = true, const char* searchpath = NULL );
  };
 

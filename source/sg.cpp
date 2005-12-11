@@ -65,7 +65,6 @@
 #include <new>
 #include <cstdlib>
 #include <ctype.h>
-#include <signal.h>
 #include <algorithm>
 #include <memory>
 #include <SDL_image.h>
@@ -1356,7 +1355,7 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 class GameThreadParams: public SigC::Object
 {
    private:
-      void exit() { exitMainloop = true; }; 
+      bool exit() { exitMainloop = true; return true; };
    public:   
       ASCString filename;
       ASC_PG_App& application;

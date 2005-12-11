@@ -1,4 +1,4 @@
-//     $Id: guifunctions.h,v 1.1.2.3 2005-03-06 18:02:50 mbickel Exp $
+//     $Id: guifunctions.h,v 1.1.2.4 2005-12-11 14:42:38 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -32,6 +32,10 @@
 
 extern void registerGuiFunctions( GuiIconHandler& handler );
 extern void registerReplayGuiFunctions( GuiIconHandler& handler );
+
+//! generic functions that are available in the cargo dialog
+extern void registerCargoGuiFunctions( GuiIconHandler& handler );
+
 
 namespace GuiFunctions {
    extern GuiIconHandler primaryGuiIcons;

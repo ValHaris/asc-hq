@@ -28,6 +28,7 @@
 #include <stdlib.h>
 
 #include "guifunctions.h"
+#include "guifunctions-interface.h"
 #include "unitctrl.h"
 #include "controls.h"
 #include "dialog.h"
@@ -43,6 +44,7 @@
 #include "gamedlg.h"
 #include "dialogs/cargodialog.h"
 
+
 namespace GuiFunctions
 {
 
@@ -54,23 +56,23 @@ class AttackGui : public GuiIconHandler, public GuiFunction {
      pair<pattackweap, int> getEntry( const MapCoordinate& pos, int num );
 
    protected:
-      bool available( const MapCoordinate& pos, int num );
-      void execute( const MapCoordinate& pos, int num );
-      Surface& getImage( const MapCoordinate& pos, int num );
-      ASCString getName( const MapCoordinate& pos, int num );
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
 
    public:
       AttackGui() : attackEngine( NULL ) {};
       void setupWeapons( VehicleAttack* va ) { attackEngine = va; };
-      void eval();
+      void eval( const MapCoordinate& mc, ContainerBase* subject );
 
 };
 
 bool AttackGui :: checkForKey( const SDL_KeyboardEvent* key, int modifier )
 {
    if ( key->keysym.sym == SDLK_ESCAPE || key->keysym.unicode == 'c' ) {
-      execute( actmap->getCursor(), -1 );
+      execute( actmap->getCursor(), actmap->getField( actmap->getCursor())->getContainer() , -1 );
       return true;
    }
    return false;
@@ -103,7 +105,7 @@ pair<pattackweap, int> AttackGui::getEntry( const MapCoordinate& pos, int num )
 }
 
 
-bool AttackGui::available( const MapCoordinate& pos, int num )
+bool AttackGui::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( num == -1 )
       return true;
@@ -114,7 +116,7 @@ bool AttackGui::available( const MapCoordinate& pos, int num )
       return false;
 }
 
-void AttackGui::execute( const MapCoordinate& pos, int num )
+void AttackGui::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( num != -1 ) {
    
@@ -134,7 +136,7 @@ void AttackGui::execute( const MapCoordinate& pos, int num )
    updateFieldInfo();
 }
 
-Surface& AttackGui::getImage( const MapCoordinate& pos, int num )
+Surface& AttackGui::getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( num == -1 )
       return IconRepository::getIcon("cancel.png");
@@ -152,7 +154,7 @@ Surface& AttackGui::getImage( const MapCoordinate& pos, int num )
    };
 }
 
-ASCString AttackGui::getName( const MapCoordinate& pos, int num )
+ASCString AttackGui::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( num == -1 )
       return "cancel";
@@ -184,26 +186,19 @@ ASCString AttackGui::getName( const MapCoordinate& pos, int num )
 }
 
 
-void AttackGui::eval()
+void AttackGui::eval( const MapCoordinate& mc, ContainerBase* subject )
 {
-   MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
-
-   if ( !mc.valid() )
-      return;
-
-   if ( mc.x >= actmap->xsize || mc.y >= actmap->ysize )
-      return;
-
+   
    int num = 0;
    while ( getEntry( mc, num).first ) {
        GuiButton* b = host->getButton(num);
-       b->registerFunc( this, mc, num );
+       b->registerFunc( this, mc, subject, num );
        b->Show();
        ++num;
    }
 
    GuiButton* b = host->getButton(num);
-   b->registerFunc( this, mc, -1 );
+   b->registerFunc( this, mc, subject, -1 );
    b->Show();
    ++num;
 
@@ -216,68 +211,59 @@ AttackGui attackGui;
 
 
 
-class Cancel : public GuiFunction
+bool Cancel::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   public:
-      bool available( const MapCoordinate& pos, int num )
-      {
-         return moveparams.movestatus || pendingVehicleActions.action;
-      };
+   return moveparams.movestatus || pendingVehicleActions.action;
+};
 
-      void execute( const MapCoordinate& pos, int num )
-      {
-         if ( moveparams.movestatus || pendingVehicleActions.action ) {
-            moveparams.movestatus = 0;
-            if ( pendingVehicleActions.action )
-               delete pendingVehicleActions.action;
+void Cancel::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+{
+   if ( moveparams.movestatus || pendingVehicleActions.action ) {
+      moveparams.movestatus = 0;
+      if ( pendingVehicleActions.action )
+         delete pendingVehicleActions.action;
 
-            actmap->cleartemps(7);
-            updateFieldInfo();
-            displaymap();
-         }
-      };
+      actmap->cleartemps(7);
+      updateFieldInfo();
+      displaymap();
+   }
+};
 
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
-      {
-         return ( key->keysym.sym == SDLK_ESCAPE || key->keysym.unicode == 'c' );
-      };
+bool Cancel::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+{
+   return ( key->keysym.sym == SDLK_ESCAPE || key->keysym.unicode == 'c' );
+};
 
 
-      Surface& getImage( const MapCoordinate& po, int nums )
-      {
-         return IconRepository::getIcon("cancel.png");
-      };
-      
-      ASCString getName( const MapCoordinate& pos, int num )
-      {
-         return "cancel";
-      };
+Surface& Cancel::getImage( const MapCoordinate& po, ContainerBase* subject, int nums )
+{
+   return IconRepository::getIcon("cancel.png");
+};
+
+ASCString Cancel::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+{
+   return "cancel";
 };
 
 
 
-class Movement : public GuiFunction
+bool Movement::checkForKey( const SDL_KeyboardEvent* key, int modifier )
 {
-   public:
-      bool available( const MapCoordinate& pos, int num );
-      void execute( const MapCoordinate& pos, int num );
-
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
-      {
-         return ( key->keysym.sym == SDLK_SPACE );
-      };
-
-      Surface& getImage( const MapCoordinate& pos, int num )
-      {
-         return IconRepository::getIcon("movement.png");
-      };
-      ASCString getName( const MapCoordinate& pos, int num )
-      {
-         return "move unit";
-      };
+   return ( key->keysym.sym == SDLK_SPACE );
 };
 
-bool Movement::available( const MapCoordinate& pos, int num )
+Surface& Movement::getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+{
+   return IconRepository::getIcon("movement.png");
+};
+
+ASCString Movement::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+{
+   return "move unit";
+};
+
+
+bool Movement::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
       Vehicle* eht = actmap->getField(pos)->vehicle;
@@ -297,7 +283,7 @@ bool Movement::available( const MapCoordinate& pos, int num )
    return false;
 }
 
-void Movement::execute( const MapCoordinate& pos, int num )
+void Movement::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
       new VehicleMovement ( &getDefaultMapDisplay(), &pendingVehicleActions );
@@ -377,23 +363,23 @@ void Movement::execute( const MapCoordinate& pos, int num )
 class Ascend : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num );
-      void execute( const MapCoordinate& pos, int num );
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
       {
          return ( key->keysym.unicode == 's' );
       };
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("ascend-airplane.png");
       };
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "ascend";
       };
 };
 
-bool Ascend::available( const MapCoordinate& pos, int num )
+bool Ascend::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( moveparams.movestatus == 0 && !pendingVehicleActions.action ) {
       Vehicle* eht = actmap->getField(pos)->vehicle;
@@ -411,7 +397,7 @@ bool Ascend::available( const MapCoordinate& pos, int num )
    return false;
 }
 
-void Ascend::execute( const MapCoordinate& pos, int num )
+void Ascend::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
       new IncreaseVehicleHeight ( &getDefaultMapDisplay(), &pendingVehicleActions );
@@ -477,23 +463,23 @@ void Ascend::execute( const MapCoordinate& pos, int num )
 class Descend : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num );
-      void execute( const MapCoordinate& pos, int num );
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
       {
          return ( key->keysym.unicode == 'd' );
       };
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("descent-airplane.png");
       };
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "descend";
       };
 };
 
-bool Descend::available( const MapCoordinate& pos, int num )
+bool Descend::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( moveparams.movestatus == 0 && !pendingVehicleActions.action ) {
       Vehicle* eht = actmap->getField(pos)->vehicle;
@@ -512,7 +498,7 @@ bool Descend::available( const MapCoordinate& pos, int num )
    return false;
 }
 
-void Descend::execute( const MapCoordinate& pos, int num )
+void Descend::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
       new DecreaseVehicleHeight ( &getDefaultMapDisplay(), &pendingVehicleActions );
@@ -586,23 +572,23 @@ void Descend::execute( const MapCoordinate& pos, int num )
 class EndTurn : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num ) ;
-      void execute( const MapCoordinate& pos, int num );
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) ;
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
       {
          return ( key->keysym.unicode == 'e' );
       };
-      Surface& getImage( const MapCoordinate& po, int nums )
+      Surface& getImage( const MapCoordinate& po, ContainerBase* subject, int nums )
       {
          return IconRepository::getIcon("endturn.png");
       };
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "end turn";
       };
 };
 
-bool EndTurn::available( const MapCoordinate& pos, int num )
+bool EndTurn::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
       if (actmap->levelfinished == false)
@@ -611,7 +597,7 @@ bool EndTurn::available( const MapCoordinate& pos, int num )
 }
 
 
-void EndTurn::execute( const MapCoordinate& pos, int num )
+void EndTurn::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( !CGameOptions::Instance()->endturnquestion || (choice_dlg("do you really want to end your turn ?","~y~es","~n~o") == 1)) {
 
@@ -631,24 +617,24 @@ void EndTurn::execute( const MapCoordinate& pos, int num )
 class Attack : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num ) ;
-      void execute( const MapCoordinate& pos, int num );
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) ;
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
       {
          return ( key->keysym.unicode == 'a' );
       };
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("attack.png");
       };
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "attack";
       };
 };
 
 
-bool Attack::available( const MapCoordinate& pos, int num )
+bool Attack::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
       Vehicle* eht = actmap->getField(pos)->vehicle;
@@ -659,7 +645,7 @@ bool Attack::available( const MapCoordinate& pos, int num )
    return false;
 }
 
-void Attack::execute(  const MapCoordinate& pos, int num )
+void Attack::execute(  const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
       new VehicleAttack ( &getDefaultMapDisplay(), &pendingVehicleActions );
@@ -693,7 +679,7 @@ void Attack::execute(  const MapCoordinate& pos, int num )
 class PowerOn : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing )  {
             pfield fld = actmap->getField ( pos );
@@ -711,7 +697,7 @@ class PowerOn : public GuiFunction
       {
          return ( key->keysym.unicode == 'p' );
       };
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          Vehicle* veh = actmap->getField(pos)->vehicle;
          veh->setGeneratorStatus ( true );
@@ -719,12 +705,12 @@ class PowerOn : public GuiFunction
          updateFieldInfo();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("poweron.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "enable power generation";
       };
@@ -734,7 +720,7 @@ class PowerOn : public GuiFunction
 class PowerOff : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing )  {
             pfield fld = actmap->getField ( pos );
@@ -752,7 +738,7 @@ class PowerOff : public GuiFunction
       {
          return ( key->keysym.unicode == 'p' );
       };
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          Vehicle* veh = actmap->getField(pos)->vehicle;
          veh->setGeneratorStatus ( false );
@@ -760,12 +746,12 @@ class PowerOff : public GuiFunction
          updateFieldInfo();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("poweron.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "enable power generation";
       };
@@ -776,19 +762,19 @@ class PowerOff : public GuiFunction
 class UnitInfo : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num ) ;
-      void execute( const MapCoordinate& pos, int num ) { execUserAction_ev(ua_vehicleinfo);};
-      Surface& getImage( const MapCoordinate& po, int nums )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) ;
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) { execUserAction_ev(ua_vehicleinfo);};
+      Surface& getImage( const MapCoordinate& po, ContainerBase* subject, int nums )
       {
          return IconRepository::getIcon("unitinfo.png");
       };
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "unit info";
       };
 };
 
-bool UnitInfo::available( const MapCoordinate& pos, int num )
+bool UnitInfo::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    pfield fld = actmap->getField(pos);
    if ( fld && fld->vehicle )
@@ -807,20 +793,20 @@ bool UnitInfo::available( const MapCoordinate& pos, int num )
 class DestructBuilding : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num ) ;
-      void execute( const MapCoordinate& pos, int num );
-      Surface& getImage( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) ;
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("destructbuilding.png");
       };
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "destruct building";
       };
 };
 
 
-bool DestructBuilding::available( const MapCoordinate& pos, int num )
+bool DestructBuilding::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
     pfield fld = actmap->getField(pos);
     if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
@@ -840,7 +826,7 @@ bool DestructBuilding::available( const MapCoordinate& pos, int num )
     return false;
 }
 
-void DestructBuilding::execute(  const MapCoordinate& pos, int num )
+void DestructBuilding::execute(  const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
       destructbuildinglevel1( pos.x, pos.y );
@@ -859,7 +845,7 @@ void DestructBuilding::execute(  const MapCoordinate& pos, int num )
 class SearchForMineralResources : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          pfield fld = actmap->getField(pos);
          if (fld->vehicle != NULL)
@@ -871,22 +857,24 @@ class SearchForMineralResources : public GuiFunction
          return false;
       };
 
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
           actmap->getField(pos)->vehicle->searchForMineralResources( ) ;
-#ifndef WIN32
-          #warning ShowResources
-#endif
+
+          MapDisplayPG* mapDisplay = dynamic_cast<MapDisplayPG*>( ASC_PG_App::GetWidgetById( ASC_PG_App::mapDisplayID ));
+          if ( mapDisplay )
+             mapDisplay->activateMapLayer("resources", true);
+          
           updateFieldInfo();
           repaintMap();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return IconRepository::getIcon("poweron.png");
+         return IconRepository::getIcon("dig.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "search for mineral resources";
       };
@@ -897,7 +885,7 @@ class OpenContainer : public GuiFunction
 {
      static int containeractive;
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
         pfield fld = actmap->getField(pos);
         if ( fieldvisiblenow ( fld ))
@@ -916,7 +904,7 @@ class OpenContainer : public GuiFunction
         return false;
       };
 
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
           pfield fld = actmap->getField(pos);
           
@@ -926,7 +914,7 @@ class OpenContainer : public GuiFunction
           repaintMap();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("container.png");
       };
@@ -936,7 +924,7 @@ class OpenContainer : public GuiFunction
          return ( key->keysym.unicode == 'l' );
       };
       
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "open transport / building";
       };
@@ -950,7 +938,7 @@ int OpenContainer::containeractive = 0;
 class EnableReactionfire : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          Vehicle* eht = actmap->getField(pos)->vehicle;
          if ( eht )
@@ -969,7 +957,7 @@ class EnableReactionfire : public GuiFunction
          return ( key->keysym.unicode == 'x' );
       };
 
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          int res = actmap->getField(pos)->vehicle->reactionfire.enable();
          if ( res < 0 )
@@ -977,12 +965,12 @@ class EnableReactionfire : public GuiFunction
          updateFieldInfo();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("enable-reactionfire.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "enable reaction fire";
       };
@@ -991,7 +979,7 @@ class EnableReactionfire : public GuiFunction
 class DisableReactionfire : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          Vehicle* eht = actmap->getField(pos)->vehicle;
          if ( eht )
@@ -1009,18 +997,18 @@ class DisableReactionfire : public GuiFunction
       {
          return ( key->keysym.unicode == 'x' );
       };
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          actmap->getField(pos)->vehicle->reactionfire.disable();
          updateFieldInfo();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("disable-reactionfire.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "disable reaction fire";
       };
@@ -1031,7 +1019,7 @@ class DisableReactionfire : public GuiFunction
 class ExternalLoading : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          if (moveparams.movestatus == 130)
             if ( actmap->getField(pos)->a.temp == 123 )
@@ -1039,17 +1027,17 @@ class ExternalLoading : public GuiFunction
          return false;
       };
 
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          moveparams.movestatus++;
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("disable-reactionfire.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "disable reaction fire";
       };
@@ -1061,7 +1049,7 @@ class ExternalLoading : public GuiFunction
 class RepairUnit : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          pfield fld = actmap->getField(pos);
          if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
@@ -1089,7 +1077,7 @@ class RepairUnit : public GuiFunction
       {
          return ( key->keysym.unicode == 'r' );
       };
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          if ( pendingVehicleActions.actionType == vat_nothing ) {
             VehicleService* vs = new VehicleService ( &getDefaultMapDisplay(), &pendingVehicleActions );
@@ -1132,12 +1120,12 @@ class RepairUnit : public GuiFunction
          }
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("repair.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "repair a unit";
       };
@@ -1147,7 +1135,7 @@ class RepairUnit : public GuiFunction
 class RefuelUnit : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          pfield fld = actmap->getField(pos);
          if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
@@ -1180,7 +1168,7 @@ class RefuelUnit : public GuiFunction
          return ( key->keysym.unicode == 'f' );
       };
 
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          if ( pendingVehicleActions.actionType == vat_nothing ) {
             VehicleService* vs = new VehicleService ( &getDefaultMapDisplay(), &pendingVehicleActions );
@@ -1223,12 +1211,12 @@ class RefuelUnit : public GuiFunction
          }
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("refuel.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "refuel a unit";
       };
@@ -1238,7 +1226,7 @@ class RefuelUnit : public GuiFunction
 class RefuelUnitDialog : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          pfield fld = actmap->getField(pos);
          if ( pendingVehicleActions.service && pendingVehicleActions.service->guimode == 2 && fld->a.temp && fld->vehicle )
@@ -1251,7 +1239,7 @@ class RefuelUnitDialog : public GuiFunction
          return ( key->keysym.unicode == 'F' );
       };
 
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          verlademunition( pendingVehicleActions.service, actmap->getField(pos)->vehicle->networkid );
          delete pendingVehicleActions.service;
@@ -1260,12 +1248,12 @@ class RefuelUnitDialog : public GuiFunction
          updateFieldInfo();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("refuel-dialog.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "refuel a unit";
       };
@@ -1279,25 +1267,25 @@ class RefuelUnitDialog : public GuiFunction
 class ViewMap : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
             return true;
          return false;
       };
 
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
           // showmap ();
           displaymap();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("worldmap.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "view survey map";
       };
@@ -1308,7 +1296,7 @@ class ViewMap : public GuiFunction
 class PutMine : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          pfield fld = actmap->getField(pos);
          if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
@@ -1324,19 +1312,19 @@ class PutMine : public GuiFunction
          return ( key->keysym.unicode == 'm' );
       };
 
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          putMine( pos, 0, 0);
          updateFieldInfo();
          displaymap();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("putmine.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "put / remove mines";
       };
@@ -1347,7 +1335,7 @@ class PutMine : public GuiFunction
 class PutGroundMine : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          if (moveparams.movestatus == 90) {
             pfield fld = actmap->getField(pos);
@@ -1363,18 +1351,18 @@ class PutGroundMine : public GuiFunction
 class PutAntiTankMine : public PutGroundMine
 {
    public:
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          putMine(pos, cmantitankmine, 1 );
          displaymap();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("putantitankmine.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "put anti-tank mine";
       };
@@ -1383,18 +1371,18 @@ class PutAntiTankMine : public PutGroundMine
 class PutAntiPersonalMine : public PutGroundMine
 {
    public:
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          putMine(pos, cmantipersonnelmine, 1);
          displaymap();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("putantipersonalmine.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "put anti-personal mine";
       };
@@ -1406,7 +1394,7 @@ class PutAntiPersonalMine : public PutGroundMine
 class PutAntiShipMine : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          if (moveparams.movestatus == 90) {
             pfield fld = actmap->getField(pos);
@@ -1421,18 +1409,18 @@ class PutAntiShipMine : public GuiFunction
          return false;
       };
 
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          putMine( pos, cmfloatmine, 1);
          displaymap();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("putantishipmine.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "put anti-ship mine";
       };
@@ -1441,7 +1429,7 @@ class PutAntiShipMine : public GuiFunction
 class PutAntiSubMine : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          if (moveparams.movestatus == 90) {
             pfield fld = actmap->getField(pos);
@@ -1454,18 +1442,18 @@ class PutAntiSubMine : public GuiFunction
          return false;
       };
 
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          putMine( pos, cmmooredmine,1 );
          displaymap();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("putantisubmine.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "put anti-submarine mine";
       };
@@ -1475,7 +1463,7 @@ class PutAntiSubMine : public GuiFunction
 class RemoveMine : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          if (moveparams.movestatus == 90) {
             pfield fld = actmap->getField(pos);
@@ -1485,18 +1473,18 @@ class RemoveMine : public GuiFunction
          return false;
       };
 
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          putMine( pos, 0, -1);
          displaymap();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("removemine.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "remove mine";
       };
@@ -1512,20 +1500,20 @@ class ObjectBuildingGui : public GuiIconHandler, public GuiFunction {
    protected:
       enum Mode { Build, Remove };
 
-      bool available( const MapCoordinate& pos, int num );
-      void execute( const MapCoordinate& pos, int num );
-      Surface& getImage( const MapCoordinate& pos, int num );
-      ASCString getName( const MapCoordinate& pos, int num );
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
       bool checkObject( pfield fld, ObjectType* objtype, Mode mode );
 
       void search ( const MapCoordinate& pos, int& num, int pass );
 
-      void addButton( int &num, const MapCoordinate& mc, int id );
+      void addButton( int &num, const MapCoordinate& mc, ContainerBase* subject, int id );
 
    public:
       ObjectBuildingGui() : veh( NULL ) {};
       bool init( Vehicle* vehicle );
-      void eval();
+      void eval( const MapCoordinate& mc, ContainerBase* subject );
 
 };
 
@@ -1542,7 +1530,7 @@ bool ObjectBuildingGui::init( Vehicle* vehicle )
 }
 
 
-bool ObjectBuildingGui::available( const MapCoordinate& pos, int num )
+bool ObjectBuildingGui::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    return true;
    /*
@@ -1558,7 +1546,7 @@ checkObject
       */
 }
 
-void ObjectBuildingGui::execute( const MapCoordinate& pos, int num )
+void ObjectBuildingGui::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( num ) {
       pfield fld = actmap->getField(pos);
@@ -1610,7 +1598,7 @@ Surface buildGuiIcon( const Surface& image, bool remove = false )
    return s;
 }
 
-Surface& ObjectBuildingGui::getImage( const MapCoordinate& pos, int num )
+Surface& ObjectBuildingGui::getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( num == 0 )
       return IconRepository::getIcon("cancel.png");
@@ -1630,7 +1618,7 @@ Surface& ObjectBuildingGui::getImage( const MapCoordinate& pos, int num )
 }
 
 
-ASCString ObjectBuildingGui::getName( const MapCoordinate& pos, int num )
+ASCString ObjectBuildingGui::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( num == 0 )
       return "cancel";
@@ -1680,10 +1668,10 @@ bool ObjectBuildingGui::checkObject( pfield fld, ObjectType* objtype, Mode mode 
 }
 
 
-void ObjectBuildingGui::addButton( int &num, const MapCoordinate& mc, int id )
+void ObjectBuildingGui::addButton( int &num, const MapCoordinate& mc, ContainerBase* subject, int id )
 {
     GuiButton* b = host->getButton(num);
-    b->registerFunc( this, mc, id );
+    b->registerFunc( this, mc, subject, id );
     b->Show();
     ++num;
 }
@@ -1698,7 +1686,7 @@ void ObjectBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
      for ( int j = veh->typ->objectsBuildable[i].from; j <= veh->typ->objectsBuildable[i].to; j++ )
        if ( checkObject( fld, actmap->getobjecttype_byid ( j ), Build ))
           if ( pass==1 )
-            addButton(num, pos, j);
+            addButton(num, pos, veh, j);
           else {
             ++num;
             fld->a.temp = 1;
@@ -1712,7 +1700,7 @@ void ObjectBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
           if ( objtype->groupID == j )
              if ( checkObject( fld, objtype, Build ))
                if ( pass==1 )
-                  addButton(num, pos, objtype->id);
+                  addButton(num, pos, veh, objtype->id);
                 else {
                   ++num;
                   fld->a.temp = 1;
@@ -1723,7 +1711,7 @@ void ObjectBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
      for ( int j = veh->typ->objectsRemovable[i].from; j <= veh->typ->objectsRemovable[i].to; j++ )
        if ( checkObject( fld, actmap->getobjecttype_byid ( j ), Remove ))
           if ( pass==1 )
-            addButton(num, pos, -j);
+            addButton(num, pos, veh, -j);
           else {
             ++num;
             fld->a.temp = 1;
@@ -1737,7 +1725,7 @@ void ObjectBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
           if ( objtype->groupID == j )
              if ( checkObject( fld, objtype, Remove ))
                 if ( pass==1 )
-                   addButton(num, pos, -objtype->id);
+                   addButton(num, pos, veh, -objtype->id);
                 else {
                   ++num;
                   fld->a.temp = 1;
@@ -1747,13 +1735,8 @@ void ObjectBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
 }
 
 
-void ObjectBuildingGui::eval()
+void ObjectBuildingGui::eval( const MapCoordinate& mc, ContainerBase* subject )
 {
-   MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
-
-   if ( !mc.valid() )
-      return;
-
    int num = 0;
    if ( mc.x < actmap->xsize || mc.y < actmap->ysize )
       if ( veh )
@@ -1761,7 +1744,7 @@ void ObjectBuildingGui::eval()
             search( mc, num, 1 );
 
    GuiButton* b = host->getButton(num);
-   b->registerFunc( this, mc, 0 );
+   b->registerFunc( this, mc, subject, 0 );
    b->Show();
    ++num;
 
@@ -1776,20 +1759,20 @@ ObjectBuildingGui objectBuildingGui;
 class BuildObject : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num ) ;
-      void execute( const MapCoordinate& pos, int num );
-      Surface& getImage( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) ;
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("buildobjects.png");
       };
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "Object construction";
       };
 };
 
 
-bool BuildObject::available( const MapCoordinate& pos, int num )
+bool BuildObject::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    pfield fld = actmap->getField(pos);
    if ( fld && fld->vehicle )
@@ -1801,7 +1784,7 @@ bool BuildObject::available( const MapCoordinate& pos, int num )
    return false;
 }
 
-void BuildObject::execute(  const MapCoordinate& pos, int num )
+void BuildObject::execute(  const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( pendingVehicleActions.actionType == vat_nothing ) {
 
@@ -1828,19 +1811,19 @@ void BuildObject::execute(  const MapCoordinate& pos, int num )
 class VehicleBuildingGui : public GuiIconHandler, public GuiFunction {
       Vehicle* veh;
    protected:
-      bool available( const MapCoordinate& pos, int id  );
-      void execute( const MapCoordinate& pos, int id  );
-      Surface& getImage( const MapCoordinate& pos, int id  );
-      ASCString getName( const MapCoordinate& pos, int id  );
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int id  );
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int id  );
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int id  );
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int id  );
 
       void search ( const MapCoordinate& pos, int& num, int pass );
 
-      void addButton( int &num, const MapCoordinate& mc, int id );
+      void addButton( int &num, const MapCoordinate& mc, ContainerBase* subject, int id );
 
    public:
       VehicleBuildingGui() : veh( NULL ) {};
       bool init( Vehicle* vehicle );
-      void eval();
+      void eval( const MapCoordinate& mc , ContainerBase* subject );
 
 };
 
@@ -1857,12 +1840,12 @@ bool VehicleBuildingGui::init( Vehicle* vehicle )
 }
 
 
-bool VehicleBuildingGui::available( const MapCoordinate& pos, int id  )
+bool VehicleBuildingGui::available( const MapCoordinate& pos, ContainerBase* subject, int id  )
 {
    return true;
 }
 
-void VehicleBuildingGui::execute( const MapCoordinate& pos, int id  )
+void VehicleBuildingGui::execute( const MapCoordinate& pos, ContainerBase* subject, int id  )
 {
    if ( id ) {
       Vehicletype* vt = vehicleTypeRepository.getObject_byID( id );
@@ -1877,7 +1860,7 @@ void VehicleBuildingGui::execute( const MapCoordinate& pos, int id  )
    updateFieldInfo();
 }
 
-Surface& VehicleBuildingGui::getImage( const MapCoordinate& pos, int id )
+Surface& VehicleBuildingGui::getImage( const MapCoordinate& pos, ContainerBase* subject, int id )
 {
    if ( id == 0 )
       return IconRepository::getIcon("cancel.png");
@@ -1898,7 +1881,7 @@ Surface& VehicleBuildingGui::getImage( const MapCoordinate& pos, int id )
 }
 
 
-ASCString VehicleBuildingGui::getName( const MapCoordinate& pos, int id )
+ASCString VehicleBuildingGui::getName( const MapCoordinate& pos, ContainerBase* subject, int id )
 {
    if ( id == 0 )
       return "cancel";
@@ -1915,10 +1898,10 @@ ASCString VehicleBuildingGui::getName( const MapCoordinate& pos, int id )
 
 
 
-void VehicleBuildingGui::addButton( int &num, const MapCoordinate& mc, int id )
+void VehicleBuildingGui::addButton( int &num, const MapCoordinate& mc, ContainerBase* subject, int id )
 {
     GuiButton* b = host->getButton(num);
-    b->registerFunc( this, mc, id );
+    b->registerFunc( this, mc, subject, id );
     b->Show();
     ++num;
 }
@@ -1935,7 +1918,7 @@ void VehicleBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
             Vehicletype* v = actmap->getvehicletype_byid ( j );
             if ( v && veh->vehicleconstructable ( v, pos.x, pos.y )) {
                if ( pass==1 )
-                  addButton(num, pos, v->id);
+                  addButton(num, pos, veh, v->id);
                else {
                   ++num;
                   fld->a.temp = 1;
@@ -1945,13 +1928,8 @@ void VehicleBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
 }
 
 
-void VehicleBuildingGui::eval()
+void VehicleBuildingGui::eval( const MapCoordinate& mc , ContainerBase* subject )
 {
-   MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
-
-   if ( !mc.valid() )
-      return;
-
    int num = 0;
    if ( mc.x < actmap->xsize || mc.y < actmap->ysize )
       if ( veh )
@@ -1959,7 +1937,7 @@ void VehicleBuildingGui::eval()
             search( mc, num, 1 );
 
    GuiButton* b = host->getButton(num);
-   b->registerFunc( this, mc, 0 );
+   b->registerFunc( this, mc, subject, 0 );
    b->Show();
    ++num;
 
@@ -1974,20 +1952,20 @@ VehicleBuildingGui vehicleBuildingGui;
 class BuildVehicle : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num ) ;
-      void execute( const MapCoordinate& pos, int num );
-      Surface& getImage( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) ;
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("constructunit.png");
       };
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "Unit construction";
       };
 };
 
 
-bool BuildVehicle::available( const MapCoordinate& pos, int num )
+bool BuildVehicle::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    pfield fld = actmap->getField(pos);
    if ( fld && fld->vehicle )
@@ -1999,7 +1977,7 @@ bool BuildVehicle::available( const MapCoordinate& pos, int num )
    return false;
 }
 
-void BuildVehicle::execute(  const MapCoordinate& pos, int num )
+void BuildVehicle::execute(  const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( pendingVehicleActions.actionType == vat_nothing ) {
       pfield fld = actmap->getField(pos);
@@ -2029,20 +2007,20 @@ class BuildingConstruction : public GuiIconHandler, public GuiFunction {
       int bldid;
       map<MapCoordinate,int> entryPos;
    protected:
-      bool available( const MapCoordinate& pos, int id  );
-      void execute( const MapCoordinate& pos, int id  );
-      Surface& getImage( const MapCoordinate& pos, int id  );
-      ASCString getName( const MapCoordinate& pos, int id  );
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int id  );
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int id  );
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int id  );
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int id  );
 
       void search ( const MapCoordinate& pos, int& num, int pass );
 
-      void addButton( int &num, const MapCoordinate& mc, int id );
+      void addButton( int &num, const MapCoordinate& mc, ContainerBase* subject, int id );
 
    public:
       BuildingConstruction() : veh( NULL ), bldid(-1) {};
       bool init( Vehicle* vehicle );
       bool setup();
-      void eval();
+      void eval( const MapCoordinate& mc, ContainerBase* subject );
 
 };
 
@@ -2070,11 +2048,11 @@ bool BuildingConstruction::setup()
    if ( moveparams.movestatus == 110 )
       for ( int i = 0; i < buildingTypeRepository.getNum(); i++)
          if ( veh->buildingconstructable ( buildingTypeRepository.getObject_byPos( i ) ))
-            addButton( num, veh->getPosition(), buildingTypeRepository.getObject_byPos( i )->id );
+            addButton( num, veh->getPosition(), veh, buildingTypeRepository.getObject_byPos( i )->id );
 
 
    GuiButton* b = host->getButton(num);
-   b->registerFunc( this, veh->getPosition(), -1 );
+   b->registerFunc( this, veh->getPosition(), veh, -1 );
    b->Show();
    ++num;
 
@@ -2083,7 +2061,7 @@ bool BuildingConstruction::setup()
 }
 
 
-bool BuildingConstruction::available( const MapCoordinate& pos, int id  )
+bool BuildingConstruction::available( const MapCoordinate& pos, ContainerBase* subject, int id  )
 {
    if ( id < 0 )
       return true;
@@ -2100,7 +2078,7 @@ bool BuildingConstruction::available( const MapCoordinate& pos, int id  )
    return false;
 }
 
-void BuildingConstruction::execute( const MapCoordinate& pos, int id  )
+void BuildingConstruction::execute( const MapCoordinate& pos, ContainerBase* subject, int id  )
 {
    bool close = false;
    if ( id < 0 )
@@ -2121,7 +2099,7 @@ void BuildingConstruction::execute( const MapCoordinate& pos, int id  )
       if ( num ) {
          moveparams.movestatus = 111;
          repaintMap();
-         eval();
+         eval( pos, subject );
       } else
          close = true;
    } else
@@ -2157,7 +2135,7 @@ void BuildingConstruction::execute( const MapCoordinate& pos, int id  )
             if ( b ) {
                moveparams.movestatus = 112;
                repaintMap();
-               eval();
+               eval( pos, subject );
             }
          }
      } else
@@ -2241,7 +2219,7 @@ Surface generate_gui_build_icon ( BuildingType* bld )
 }
 
 
-Surface& BuildingConstruction::getImage( const MapCoordinate& pos, int id )
+Surface& BuildingConstruction::getImage( const MapCoordinate& pos, ContainerBase* subject, int id )
 {
    if ( id < 0 )
       return IconRepository::getIcon("cancel.png");
@@ -2262,7 +2240,7 @@ Surface& BuildingConstruction::getImage( const MapCoordinate& pos, int id )
 }
 
 
-ASCString BuildingConstruction::getName( const MapCoordinate& pos, int id )
+ASCString BuildingConstruction::getName( const MapCoordinate& pos, ContainerBase* subject, int id )
 {
    if ( id < 0 )
       return "cancel";
@@ -2279,10 +2257,10 @@ ASCString BuildingConstruction::getName( const MapCoordinate& pos, int id )
 
 
 
-void BuildingConstruction::addButton( int &num, const MapCoordinate& mc, int id )
+void BuildingConstruction::addButton( int &num, const MapCoordinate& mc, ContainerBase* subject, int id )
 {
     GuiButton* b = host->getButton(num);
-    b->registerFunc( this, mc, id );
+    b->registerFunc( this, mc, subject, id );
     b->Show();
     ++num;
 }
@@ -2333,21 +2311,16 @@ void BuildingConstruction::search ( const MapCoordinate& pos, int& num, int pass
 }
 
 
-void BuildingConstruction::eval()
+void BuildingConstruction::eval( const MapCoordinate& mc, ContainerBase* subject )
 {
    if (moveparams.movestatus == 112 || moveparams.movestatus ==111 ) {
-      MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
-
-      if ( !mc.valid() )
-         return;
-
       int num = 0;
 
       if ( entryPos[mc] == bldid )
-         addButton( num, mc, bldid );
+         addButton( num, mc, veh, bldid );
 
       GuiButton* b = host->getButton(num);
-      b->registerFunc( this, mc, 0 );
+      b->registerFunc( this, mc, subject, 0 );
       b->Show();
       ++num;
 
@@ -2363,20 +2336,20 @@ BuildingConstruction buildingConstruction;
 class ConstructBuilding : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num ) ;
-      void execute( const MapCoordinate& pos, int num );
-      Surface& getImage( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) ;
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("constructbuilding.png");
       };
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "Unit construction";
       };
 };
 
 
-bool ConstructBuilding::available( const MapCoordinate& pos, int num )
+bool ConstructBuilding::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
 
    if ( actmap->getgameparameter(cgp_forbid_building_construction) )
@@ -2403,7 +2376,7 @@ bool ConstructBuilding::available( const MapCoordinate& pos, int num )
    return false;
 }
 
-void ConstructBuilding::execute(  const MapCoordinate& pos, int num )
+void ConstructBuilding::execute(  const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( pendingVehicleActions.actionType == vat_nothing ) {
       pfield fld = actmap->getField(pos);
@@ -2443,7 +2416,7 @@ void ConstructBuilding::execute(  const MapCoordinate& pos, int num )
 class ReplayPlay : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          if ( runreplay.status == 1 )
             return true;
@@ -2451,18 +2424,18 @@ class ReplayPlay : public GuiFunction
          return false;
       };
 
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
         runreplay.status = 2;
         updateFieldInfo();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("replay-play.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "start replay";
       };
@@ -2472,7 +2445,7 @@ class ReplayPlay : public GuiFunction
 class ReplayPause : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          if ( runreplay.status == 2 )
             return true;
@@ -2480,18 +2453,18 @@ class ReplayPause : public GuiFunction
          return false;
       };
 
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
         runreplay.status = 1;
         updateFieldInfo();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("replay-pause.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "pause replay";
       };
@@ -2502,7 +2475,7 @@ class ReplayPause : public GuiFunction
 class ReplayFaster : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          if ( runreplay.status == 2 )
             if ( CGameOptions::Instance()->replayspeed > 0 )
@@ -2511,7 +2484,7 @@ class ReplayFaster : public GuiFunction
          return false;
       };
 
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          if ( CGameOptions::Instance()->replayspeed > 20 )
             CGameOptions::Instance()->replayspeed -= 20;
@@ -2523,12 +2496,12 @@ class ReplayFaster : public GuiFunction
          updateFieldInfo();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("replay-faster.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "increase replay speed";
       };
@@ -2538,7 +2511,7 @@ class ReplayFaster : public GuiFunction
 class ReplaySlower : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          if ( runreplay.status == 2 )
             return true;
@@ -2546,7 +2519,7 @@ class ReplaySlower : public GuiFunction
          return false;
       };
 
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          CGameOptions::Instance()->replayspeed += 20;
          CGameOptions::Instance()->setChanged ( 1 );
@@ -2554,12 +2527,12 @@ class ReplaySlower : public GuiFunction
          updateFieldInfo();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("replay-slow.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "decrease replay speed";
       };
@@ -2569,7 +2542,7 @@ class ReplaySlower : public GuiFunction
 class ReplayRewind : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          if ( runreplay.status == 1  ||  runreplay.status == 10 )
               return true;
@@ -2577,18 +2550,18 @@ class ReplayRewind : public GuiFunction
          return false;
       };
 
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          runreplay.status = 101;
          updateFieldInfo();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("replay-back.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "restart replay";
       };
@@ -2598,7 +2571,7 @@ class ReplayRewind : public GuiFunction
 class ReplayExit : public GuiFunction
 {
    public:
-      bool available( const MapCoordinate& pos, int num )
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          if ( runreplay.status == 1 || runreplay.status == 10 || runreplay.status == 11 )
               return true;
@@ -2606,18 +2579,18 @@ class ReplayExit : public GuiFunction
          return false;
       };
 
-      void execute( const MapCoordinate& pos, int num )
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          runreplay.status = 100;
          updateFieldInfo();
       }
 
-      Surface& getImage( const MapCoordinate& pos, int num )
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("replay-exit.png");
       };
 
-      ASCString getName( const MapCoordinate& pos, int num )
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "restart replay";
       };
@@ -2635,6 +2608,11 @@ GuiIconHandler primaryGuiIcons;
 } // namespace GuiFunctions
 
 
+void registerCargoGuiFunctions( GuiIconHandler& handler )
+{
+   // handler.registerUserFunction( new GuiFunctions::Movement() );
+}
+
 void registerReplayGuiFunctions( GuiIconHandler& handler )
 {
    handler.registerUserFunction( new GuiFunctions::ReplayPlay() );
@@ -2651,7 +2629,6 @@ void registerGuiFunctions( GuiIconHandler& handler )
    handler.registerUserFunction( new GuiFunctions::Attack() );
    handler.registerUserFunction( new GuiFunctions::PowerOn() );
    handler.registerUserFunction( new GuiFunctions::PowerOff() );
-   handler.registerUserFunction( new GuiFunctions::EndTurn() );
    handler.registerUserFunction( new GuiFunctions::UnitInfo() );
    handler.registerUserFunction( new GuiFunctions::BuildObject() );
    handler.registerUserFunction( new GuiFunctions::BuildVehicle() );
@@ -2674,6 +2651,7 @@ void registerGuiFunctions( GuiIconHandler& handler )
    handler.registerUserFunction( new GuiFunctions::PutAntiSubMine );
    handler.registerUserFunction( new GuiFunctions::RemoveMine );
    
+   handler.registerUserFunction( new GuiFunctions::EndTurn() );
    handler.registerUserFunction( new GuiFunctions::Cancel() );
    
 }

@@ -147,3 +147,8 @@ void infoMessage ( const ASCString& string )
    MessagingHub::Instance().message( MessagingHubBase::InfoMessage, string );
 }
 
+void statusMessage ( const ASCString& string )
+{
+   MessagingHub::Instance().message( MessagingHubBase::StatusInfo, string );
+}
+

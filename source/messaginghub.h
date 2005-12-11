@@ -114,7 +114,8 @@
  extern void errorMessage ( const ASCString& string );
  extern void warning ( const ASCString& string );
  extern void infoMessage ( const ASCString& string );
-
+ extern void statusMessage ( const ASCString& string );
+       
  extern void displayLogMessage ( int msgVerbosity, const char* message, ... );
  extern void displayLogMessage ( int msgVerbosity, const ASCString& message );
 

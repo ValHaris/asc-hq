@@ -19,6 +19,7 @@
 #include "global.h"
 
 #include <SDL_image.h>
+#include <signal.h>
 
 #include <paragui.h>
 #include <pgapplication.h>
@@ -143,6 +144,10 @@ void DropDownSelector::AddItem (const std::string &text, void *userdata, Uint16 
 ASC_PG_App* pgApp = NULL;
 
 
+void signalQuit( int i )
+{
+   getPGApplication().Quit();
+}
 
 
 ASC_PG_App :: ASC_PG_App ( const ASCString& themeName ) 
@@ -178,14 +183,25 @@ ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
    pgApp = this;
    SetEventSupplier ( &eventSupplier );
    
+   signal ( SIGINT, &signalQuit );
+   
    
 }
 
 void ASC_PG_App :: Quit()
 {
-   sigQuit();
+   sigQuit(this);
    PG_Application::Quit();
 }
+
+
+bool ASC_PG_App::eventQuit(int id, PG_MessageObject* widget, unsigned long data)
+{
+   sigQuit(this);
+   return PG_Application::eventQuit( id, widget, data );
+}
+
+
 
 class AutoProgressBar: public PG_ProgressBar {
 

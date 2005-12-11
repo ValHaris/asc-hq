@@ -58,24 +58,28 @@ GuiButton::GuiButton( PG_Widget *parent, const PG_Rect &r ) : PG_Button( parent,
 bool GuiButton::exec()
 {
   if ( func ) {
-     func->execute( pos, id );
+     func->execute( pos, subject, id );
      return true;
   }
   return false;
 }
 
 
-void GuiButton::registerFunc( GuiFunction* f, const MapCoordinate& position, int id )
+void GuiButton::registerFunc( GuiFunction* f, const MapCoordinate& position, ContainerBase* subject, int id )
 {
    this->id = id;
+   this->subject = subject;
    func = f;
    pos = position;
-   SetIcon( f->getImage( position, id).getBaseSurface());
+   SetIcon( f->getImage( position, subject, id).getBaseSurface());
 }
 
 void GuiButton::unregisterFunc()
 {
    func = NULL;
+   id = 0;
+   subject = NULL;
+   pos = MapCoordinate(-1,-1);
    SetIcon ( (SDL_Surface*) NULL );
 }
 
@@ -83,7 +87,7 @@ void GuiButton::eventMouseEnter()
 {
    PG_Button::eventMouseEnter();
    if ( func )
-      MessagingHub::Instance().statusInformation( func->getName(pos, id));
+      MessagingHub::Instance().statusInformation( func->getName(pos, subject, id));
 }
 
 void GuiButton::eventMouseLeave()
@@ -91,6 +95,17 @@ void GuiButton::eventMouseLeave()
    PG_Button::eventMouseLeave();
    MessagingHub::Instance().statusInformation("");
 }
+
+bool GuiButton::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+{
+   if ( func->available( pos, subject, id ))
+      if ( func->checkForKey( key, modifier)) {
+         func->execute( pos, subject, id );
+         return true;
+      }
+   return false;
+}
+
 
 
 SmallGuiButton::SmallGuiButton( PG_Widget *parent, const PG_Rect &r, GuiButton* guiButton, NewGuiHost* host ) : PG_Button( parent, r, "", -1, "GuiButton"), referenceButton( guiButton )
@@ -124,7 +139,7 @@ void SmallGuiButton::eventMouseEnter()
 {
    PG_Button::eventMouseEnter();
    if ( referenceButton && referenceButton->func )
-      MessagingHub::Instance().statusInformation( referenceButton->func->getName(referenceButton->pos, referenceButton->id));
+      MessagingHub::Instance().statusInformation( referenceButton->func->getName(referenceButton->pos, referenceButton->subject, referenceButton->id));
 }
 
 void SmallGuiButton::eventMouseLeave()
@@ -142,21 +157,13 @@ SmallGuiButton::~SmallGuiButton()
 
 
 
-void GuiIconHandler::eval()
+void GuiIconHandler::eval( const MapCoordinate& pos, ContainerBase* subject )
 {
-   MapCoordinate mc = actmap->player[actmap->playerView].cursorPos;
-
-   if ( !mc.valid() )
-      return;
-
-   if ( mc.x >= actmap->xsize || mc.y >= actmap->ysize )
-      return;
-
    int num = 0;
    for ( Functions::iterator i = functions.begin(); i != functions.end(); ++i ) {
-      if ( (*i)->available(mc, 0 )) {
+      if ( (*i)->available(pos, subject, 0 )) {
          GuiButton* b = host->getButton(num);
-         b->registerFunc( *i, mc, 0 );
+         b->registerFunc( *i, pos, subject, 0 );
          b->Show();
          ++num;
       }
@@ -165,17 +172,38 @@ void GuiIconHandler::eval()
    host->disableButtons(num);
 }
 
+/*
+void GuiIconHandler::eval()
+{
+   MapCoordinate mc = actmap->getCursor();
+
+   if ( !mc.valid() )
+      return;
+
+   if ( mc.x >= actmap->xsize || mc.y >= actmap->ysize )
+      return;
+
+   ContainerBase* subject = actmap->getField(mc)->getContainer();
+   
+   eval( mc, subject );
+}
+*/
+
 bool GuiIconHandler::checkForKey( const SDL_KeyboardEvent* key, int modifier )
 {
+#if 0
    if ( !actmap->getCursor().valid())
       return false;
 
+   ContainerBase* subject = actmap->getField(actmap->getCursor())->getContainer();
+   
    for ( Functions::iterator i = functions.begin(); i != functions.end(); ++i )
-      if ( (*i)->available(actmap->getCursor(), 0 ))
+      if ( (*i)->available(actmap->getCursor(), subject, 0 ))
          if ( (*i)->checkForKey( key, modifier)) {
-            (*i)->execute(actmap->getCursor(), 0 );
+            (*i)->execute(actmap->getCursor(), subject, 0 );
             return true;
          }
+#endif         
    return false;
 }
 
@@ -204,7 +232,7 @@ NewGuiHost :: NewGuiHost (PG_Widget *parent, MapDisplayPG* mapDisplay, const PG_
 {
    this->mapDisplay = mapDisplay;
    mapDisplay->mouseButtonOnField.connect( SigC::slot( *this, &NewGuiHost::mapIconProcessing ));
-   updateFieldInfo.connect ( SigC::slot( *this, &NewGuiHost::eval ));
+   updateFieldInfo.connect ( SigC::slot( *this, &NewGuiHost::evalCursor ));
    theGuiHost = this;
 
    cursorMoved.connect( SigC::hide_return( SigC::slot( *this, &NewGuiHost::clearSmallIcons )) );
@@ -216,11 +244,27 @@ NewGuiHost :: NewGuiHost (PG_Widget *parent, MapDisplayPG* mapDisplay, const PG_
 }
 
 
-void NewGuiHost::eval()
+void NewGuiHost::evalCursor()
+{
+   MapCoordinate mc = actmap->getCursor();
+
+   if ( !mc.valid() )
+      return;
+
+   if ( mc.x >= actmap->xsize || mc.y >= actmap->ysize )
+      return;
+
+   ContainerBase* subject = actmap->getField(mc)->getContainer();
+   
+   eval( mc, subject );
+}
+
+void NewGuiHost::eval( const MapCoordinate& pos, ContainerBase* subject )
 {
    if ( handler )
-      handler->eval();
+      handler->eval( pos, subject );
 }
+
 
 void NewGuiHost::pushIconHandler( GuiIconHandler* iconHandler )
 {
@@ -406,8 +450,14 @@ bool NewGuiHost::eventKeyDown(const SDL_KeyboardEvent* key)
       }
          
    } else {
+      int modifier = SDL_GetModState();
+      for ( int j = 0; j < buttons.size(); ++j)
+         if ( getButton(j)->ready() )
+            if ( getButton(j)->checkForKey( key, modifier ))
+               return true;
+
       if ( handler )
-         if ( handler->checkForKey( key, SDL_GetModState() ))
+         if ( handler->checkForKey( key, modifier ))
             return true;
 
    }

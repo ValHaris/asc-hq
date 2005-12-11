@@ -2,7 +2,7 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.67.2.18 2005-12-07 21:20:37 mbickel Exp $
+//     $Id: edmain.cpp,v 1.67.2.19 2005-12-11 14:42:38 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -43,8 +43,6 @@
 #include "soundList.h"
 #include "maped-mainscreen.h"
 #include "cannedmessages.h"
-
-#include <signal.h>
 
 #ifdef _DOS_
  #include "dos\memory.h"
@@ -347,8 +345,6 @@ int main(int argc, char *argv[] )
     logtofile ( kgetstartupmessage() );
     logtofile ( "\n new log started \n ");
    #endif
-
-   signal ( SIGINT, SIG_IGN );
 
    initFileIO( cl->c() );
 

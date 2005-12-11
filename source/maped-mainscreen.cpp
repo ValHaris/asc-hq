@@ -16,7 +16,6 @@
 #include <new>
 #include <cstdlib>
 #include <ctype.h>
-#include <signal.h>
 #include <algorithm>
 #include <memory>
 #include <SDL_image.h>

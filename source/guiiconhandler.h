@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.16 2005-09-24 17:15:09 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.17 2005-12-11 14:42:38 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -41,14 +41,15 @@
 class GuiFunction {
 
      public:
-       virtual bool available( const MapCoordinate& pos, int num ) = 0;
+       virtual bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) = 0;
        virtual bool checkForKey( const SDL_KeyboardEvent* key, int modifier ) { return false; };
-       virtual void execute( const MapCoordinate& pos, int num ) = 0;
-       virtual Surface& getImage( const MapCoordinate& pos, int num ) = 0;
-       virtual ASCString getName( const MapCoordinate& pos, int num ) = 0;
+       virtual void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) = 0;
+       virtual Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num ) = 0;
+       virtual ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num ) = 0;
        virtual ~GuiFunction() {};
 };
 
+/*
 class GenericGuiFunction : public GuiFunction {
         ASCString name;
         Surface icon;
@@ -68,11 +69,12 @@ class GenericGuiFunction : public GuiFunction {
         Surface& getImage( const MapCoordinate& pos, int num ) { return icon; };
         ASCString getName( const MapCoordinate& pos, int num ) { return name; };
 };
-
+*/
 
 class GuiButton : public PG_Button {
           GuiFunction* func;
           MapCoordinate pos;
+          ContainerBase* subject;
           int id;
           friend class SmallGuiButton;
        protected:
@@ -80,9 +82,11 @@ class GuiButton : public PG_Button {
           void eventMouseLeave();
        public:
           GuiButton( PG_Widget *parent, const PG_Rect &r );
-          void registerFunc( GuiFunction* f, const MapCoordinate& position, int id );
+          void registerFunc( GuiFunction* f, const MapCoordinate& position, ContainerBase* subject, int id );
+          bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
           void unregisterFunc();
           bool exec();
+          bool ready() { return func; };
 };
 
 class NewGuiHost;
@@ -119,12 +123,15 @@ class GuiIconHandler {
        GuiIconHandler() : host(NULL) {};
 
        /** registers a user function. Icons are displayed in the order that they were registered.
-          By passing an object here, the GuiIconHandler wil obtain ownership of the object and delete it on his destruction */
+          By passing an object here, the GuiIconHandler will obtain ownership of the object and delete it on his destruction */
        void registerUserFunction( GuiFunction* function );
 
        virtual bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
 
-       virtual void eval();
+       //! checks evaluates the field on which the cursor resides
+       // virtual void eval();
+       
+       virtual void eval( const MapCoordinate& pos, ContainerBase* subject );
        virtual ~GuiIconHandler();
 };
 
@@ -151,11 +158,13 @@ class NewGuiHost : public Panel {
         //! when operated by keyboard, set a new button as the pressed one
         bool setNewButtonPressed( int i );
 
+        void evalCursor();
+        
      public:
         NewGuiHost (PG_Widget *parent, MapDisplayPG* mapDisplay, const PG_Rect &r ) ;
         static void pushIconHandler( GuiIconHandler* iconHandler );
         static void popIconHandler();
-        void eval();
+        void eval( const MapCoordinate& pos, ContainerBase* subject );
 
         bool clearSmallIcons();
 
