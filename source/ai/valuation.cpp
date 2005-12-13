@@ -278,11 +278,11 @@ void  AI :: calculateThreat ( Building* bld, int player )
          value += (*i)->aiparam[ player ]->getValue();
       }
 
-   for (b = 0; b <= 31; b++)
-      if ( bld->production[b] )  {
-         if ( !bld->production[b]->aiparam[ player ] )
-            calculateThreat ( bld->production[b] );
-         value += bld->production[b]->aiparam[ player ]->getValue() / 10;
+   for (b = 0; b < bld->unitProduction.size(); b++)
+      if ( bld->unitProduction[b] )  {
+         if ( !bld->unitProduction[b]->aiparam[ player ] )
+            calculateThreat ( bld->unitProduction[b] );
+         value += bld->unitProduction[b]->aiparam[ player ]->getValue() / 10;
       }
 
    if (bld->typ->special & cgrepairfacilityb )

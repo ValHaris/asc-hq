@@ -124,8 +124,6 @@ class  Building : public ContainerBase {
     Work* spawnWorkClasses( bool justQuery );
     const BuildingType* typ;
 
-    Vehicletype*      production[32];
-
     //! the Resources that are produced each turn
     Resources   plus;
 

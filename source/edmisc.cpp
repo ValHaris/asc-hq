@@ -2985,8 +2985,8 @@ class tbuildingproduction : public tbuildingcargoprod {
 
 void tbuildingproduction :: displaysingleitem ( int pos, int x, int y )
 {
-   if ( building->production[ pos ] )
-      building->production[ pos ]->paint( getActiveSurface(), SPoint ( x, y), farbwahl );
+   if ( building->unitProduction[ pos ] )
+      building->unitProduction[ pos ]->paint( getActiveSurface(), SPoint ( x, y), farbwahl );
 }
 
 void tbuildingproduction :: additem  ( void )
@@ -2996,19 +2996,20 @@ void tbuildingproduction :: additem  ( void )
 
 void tbuildingproduction :: removeitem ( int pos )
 {
-   building->production[ pos ] = NULL;
+   building->unitProduction[ pos ] = NULL;
 }
 
 const char* tbuildingproduction :: getinfotext ( int pos )
 {
-   if ( building->production[ pos ] )
-      if ( !building->production[ pos ]->name.empty() )
-         return building->production[ pos ]->name.c_str();
+   if ( building->unitProduction[ pos ] )
+      if ( !building->unitProduction[ pos ]->name.empty() )
+         return building->unitProduction[ pos ]->name.c_str();
       else
-         return building->production[ pos ]->description.c_str();
+         return building->unitProduction[ pos ]->description.c_str();
    return NULL;
 }
 
+bool isNull(const Vehicletype* v ) { return !v; };
 
 void         building_production( Building* bld )
 {
@@ -3017,6 +3018,7 @@ void         building_production( Building* bld )
       laderaum.init( "production" );
       laderaum.run();
       laderaum.done();
+      bld->unitProduction.erase(remove_if( bld->unitProduction.begin(), bld->unitProduction.end(),  isNull ), bld->unitProduction.end() );
    }
 }
 
@@ -3378,11 +3380,11 @@ void UnitTypeTransformation :: run ( void )
                if ( *i )
                   transformvehicle ( *i, unitsetnum, translationsetnum );
                   
-            for ( int i = 0; i < 32; ++i )      
-               if ( fld->building->production[i] ) {
-                  Vehicletype* vt = transformvehicletype ( fld->building->production[i], unitsetnum, translationsetnum );
+            for ( int i = 0; i < fld->building->unitProduction.size(); ++i )
+               if ( fld->building->unitProduction[i] ) {
+                  Vehicletype* vt = transformvehicletype ( fld->building->unitProduction[i], unitsetnum, translationsetnum );
                   if ( vt ) {
-                     fld->building->production[i] = vt;
+                     fld->building->unitProduction[i] = vt;
                      unitstransformed++;
                   } else
                      unitsnottransformed++;
@@ -4005,8 +4007,7 @@ void resetPlayerData()
 
             if ( playerRes.first == 2 ) {
                for ( Player::BuildingList::iterator i = actmap->player[player].buildingList.begin(); i != actmap->player[player].buildingList.end(); ++i )
-                  for ( int j = 0; j < 32; ++j )
-                     (*i)->production[j] = NULL;
+                  (*i)->unitProduction.clear();
             }
 
             if ( playerRes.first == 3 ) {

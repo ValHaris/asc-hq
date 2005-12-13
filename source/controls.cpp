@@ -575,8 +575,14 @@ int  Building :: putResource ( int      need,    int resourcetype, bool queryonl
    if ( need < 0 )
       return -getResource( -need, resourcetype, queryonly, scope );
    else {
-      PutResource putresource ( getMap(), scope );
-      return putresource.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, color/8, scope );
+      int placed;
+      {
+         PutResource putresource ( getMap(), scope );
+         placed = putresource.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, color/8, scope );
+      }
+      if ( !queryonly && placed > 0 )
+         resourceChanged();
+      return placed;
    }
 }
 
@@ -586,8 +592,15 @@ int  Building :: getResource ( int      need,    int resourcetype, bool queryonl
    if ( need < 0 )
       return -putResource( -need, resourcetype, queryonly, scope );
    else {
-      GetResource gr ( getMap(), scope );
-      return gr.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, color/8, scope );
+      int got;
+      {
+         GetResource gr ( getMap(), scope );
+         got = gr.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, color/8, scope );
+      }
+      if ( !queryonly && got > 0 )
+         resourceChanged();
+      return got;
+      
    }
 }
 

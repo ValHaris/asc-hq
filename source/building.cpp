@@ -1580,6 +1580,7 @@ Resources cbuildingcontrols :: BuildProductionLine :: resourcesNeeded( Vehiclety
 
 int cbuildingcontrols :: BuildProductionLine :: build( Vehicletype* veh  )
 {
+   /*
    for ( int i = 0; i < 18; ++i ) {
       if ( !cc_b->building->production[i] ) {
          if ( cc_b->building->getResource( resourcesNeeded(veh), 1 ) < resourcesNeeded(veh))
@@ -1590,6 +1591,7 @@ int cbuildingcontrols :: BuildProductionLine :: build( Vehicletype* veh  )
          return 0;
       }
    }
+}*/
    return -501;
 }
 
@@ -1602,6 +1604,7 @@ Resources cbuildingcontrols :: RemoveProductionLine :: resourcesNeeded( Vehiclet
 
 int cbuildingcontrols :: RemoveProductionLine :: remove( Vehicletype* veh  )
 {
+   /*
    for ( int i = 0; i < 18; ++i ) {
       if ( cc_b->building->production[i] == veh ) {
          if ( cc_b->building->getResource( resourcesNeeded(veh), 1 ) < resourcesNeeded(veh))
@@ -1612,6 +1615,7 @@ int cbuildingcontrols :: RemoveProductionLine :: remove( Vehicletype* veh  )
          return 0;
       }
    }
+   */
    return -502;
 }
 
@@ -3528,8 +3532,8 @@ void  ccontainer_b :: setpictures ( void )
    int i;
    if ( unitmode == mnormal  || unitmode == mloadintocontainer ) {
       ccontainer::setpictures();
-   } else
-
+   } /* else
+      
       if ( unitmode == mproduction ) {
          int num = 0;
          for (i = 0; i < 32; i++ )
@@ -3555,6 +3559,7 @@ void  ccontainer_b :: setpictures ( void )
          inactivefield = icons.container.mark.repairinactive;
          activefield   = icons.container.mark.repairactive;
       }
+      */
 }
 
 
@@ -5987,10 +5992,11 @@ int  ccontainer_b :: BuildProductionLineIcon :: available ( )
       return 0;
 
    int count = 0;
+   /*
    for ( int i = 0; i < 32; ++i )
       if ( cc_b->building->production[i] )
          ++count;
-
+   */
    if ( count >= 18 )
       return 0;
 
@@ -6003,6 +6009,7 @@ void ccontainer_b :: BuildProductionLineIcon :: exec( )
    vector<int>       idList;
 
    Resources r = cc_b->building->getResource( Resources(maxint, maxint, maxint), 1 );
+   /*
    for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) {
       Vehicletype* veh = actmap->getvehicletype_bypos ( i );
       if ( veh ) {
@@ -6030,7 +6037,7 @@ void ccontainer_b :: BuildProductionLineIcon :: exec( )
                }
       }
    }
-
+   */
    if ( idList.size() ) {
       vector<ASCString> buttons;
       buttons.push_back ( "Build" );

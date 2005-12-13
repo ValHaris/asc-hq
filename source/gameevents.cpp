@@ -1420,13 +1420,9 @@ void AddProductionCapability :: setup ()
 void AddProductionCapability :: execute( MapDisplayInterface* md )
 {
    pfield fld = gamemap->getField ( pos );
-   if ( fld && fld->building && vehicleTypeID >= 0 ) {
-      int i = 0;
-      while ( i < 32 && fld->building->production[i] )
-         ++i;
-      if ( i < 32 && !fld->building->production[i] )
-         fld->building->production[i] = gamemap->getvehicletype_byid(vehicleTypeID);
-   }
+   if ( fld && fld->building && vehicleTypeID >= 0 )
+      fld->building->unitProduction.push_back( gamemap->getvehicletype_byid(vehicleTypeID) );
+   
 }
 
 

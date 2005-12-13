@@ -1584,8 +1584,8 @@ class SelectVehicleTypeForBuildingProduction : public SelectCargoVehicleType {
       public:
          SelectVehicleTypeForBuildingProduction ( Building* _building ) { building = _building; };
          bool isavailable ( Vehicletype* item ) {  
-            for ( int i = 0; i < 32; i++ )
-               if ( building->production[i] == item )
+            for ( int i = 0; i < building->unitProduction.size(); i++ )
+               if ( building->unitProduction[i] == item )
                   return 0;
             return building->typ->vehicleFit ( item )
                    && SelectVehicleType::isavailable ( item )
@@ -1606,12 +1606,8 @@ void selbuildingproduction( Building* bld )
    SelectVehicleTypeForBuildingProduction svtfbc ( bld );
    svtfbc.init( vehicleTypeRepository.getVector() );
    Vehicletype* newcargo = svtfbc.selectitem ( NULL );
-   if ( newcargo ) {
-      int p = 0;
-      while ( bld->production[p] )
-        p++;
-      bld->production[p] = newcargo;
-   }
+   if ( newcargo )
+      bld->unitProduction.push_back( newcargo );
 }
 
 void selcargo( ContainerBase* container )

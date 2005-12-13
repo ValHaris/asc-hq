@@ -212,8 +212,11 @@ int Vehicle :: putResource ( int amount, int resourcetype, bool queryonly, int s
          spaceAvail = 0;
 
       int tostore = min ( spaceAvail, amount);
-      if ( !queryonly )
+      if ( !queryonly ) {
          tank.resource(resourcetype) += tostore;
+         if ( tostore > 0 )
+            resourceChanged();
+      }
 
       return tostore;
    }
@@ -230,9 +233,11 @@ int Vehicle :: getResource ( int amount, int resourcetype, bool queryonly, int s
          return 0;
 
       int toget = min ( tank.resource(resourcetype), amount);
-      if ( !queryonly )
+      if ( !queryonly ) {
          tank.resource(resourcetype) -= toget;
-
+         if ( toget > 0 )
+            resourceChanged();
+      }
 
       return toget;
    }
@@ -1092,7 +1097,7 @@ void Vehicle :: fillMagically( void )
 
 
 
-const int vehicleVersion = 4;
+const int vehicleVersion = 5;
 
 void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 {
@@ -1254,6 +1259,10 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 
     writeClassContainer( reactionfire.weaponShots, stream );
     writeClassContainer( reactionfire.nonattackableUnits, stream );
+
+    stream.writeInt( unitProduction.size() );
+    for ( int i = 0; i < unitProduction.size(); ++i )
+       stream.writeInt( unitProduction[i]->id );
 }
 
 void   Vehicle::read ( tnstream& stream )
@@ -1465,6 +1474,18 @@ void   Vehicle::readData ( tnstream& stream )
     }
     if ( version >= 2 )
       readClassContainer( reactionfire.nonattackableUnits, stream );
+
+    unitProduction.clear();
+    if ( version >= 5 ) {
+       int pcount = stream.readInt();
+       for ( int i = 0; i< pcount; ++i ) {
+          int id = stream.readInt();
+          unitProduction.push_back ( gamemap->getvehicletype_byid ( id ) );
+          if ( !unitProduction[i] )
+             throw InvalidID ( "unit", id );
+       }
+    }
+       
 }
 
 MapCoordinate3D Vehicle :: getPosition ( ) const

@@ -59,10 +59,6 @@ Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const B
 
    netcontrol = 0;
 
-   for ( i = 0; i< 32; i++ ) {
-      production[i] = 0;
-   }
-
    repairedThisTurn = 0;
    visible = 1;
    damage = 0;
@@ -386,7 +382,7 @@ Building :: ~Building ()
 }
 
 
-const int buildingstreamversion = -4;
+const int buildingstreamversion = -5;
 
 
 void Building :: write ( tnstream& stream, bool includeLoadedUnits )
@@ -439,17 +435,11 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits )
              (*i)->write ( stream );
 
 
-    c = 0;
-    if (typ->special & cgvehicleproductionb )
-       for (int k = 0; k <= 31; k++)
-          if ( production[k] )
-             c++;
-
-    stream.writeChar ( c );
-    if ( c )
-       for (int k = 0; k <= 31; k++)
-          if (production[k] )
-             stream.writeInt( production[k]->id );
+    stream.writeInt( unitProduction.size() );
+    for (int k = 0; k < unitProduction.size(); k++ ) {
+       assert( unitProduction[k] );
+       stream.writeInt( unitProduction[k]->id );
+    }   
 }
 
 
@@ -577,7 +567,13 @@ void Building :: readData ( tnstream& stream, int version )
        }
     }
 
-    c = stream.readChar();
+    
+    unitProduction.clear();
+    if ( version <= -5 )
+       c = stream.readInt();
+    else
+       c = stream.readChar();
+    
     if ( c ) {
        for ( int k = 0; k < c ; k++) {
 
@@ -587,12 +583,10 @@ void Building :: readData ( tnstream& stream, int version )
            else
               id = stream.readWord();
 
-           production[k] = gamemap->getvehicletype_byid ( id ) ;
-           if ( !production[k] )
+           unitProduction.push_back ( gamemap->getvehicletype_byid ( id ) );
+           if ( !unitProduction[k] )
               throw InvalidID ( "unit", id );
        }
-       for ( int l = c; l < 32; l++ )
-          production[l] = NULL;
     }
 
     if ( version >= -3 ) {

@@ -31,6 +31,8 @@
 #include "../unitctrl.h"
 #include "../cannedmessages.h"
 
+#include "selectionwindow.h"
+
 class HighLightingManager
 {
       int marked;
@@ -51,6 +53,9 @@ class HighLightingManager
       };
 
 };
+
+const Vehicletype* selectVehicletype( ContainerBase* plant, const vector<Vehicletype*>& items );
+
 
 typedef vector<Vehicle*> StorageVector;
 
@@ -259,6 +264,32 @@ namespace CargoGuiFunctions {
    }
 
 
+   class UnitProduction : public GuiFunction
+   {
+      CargoDialog& parent;
+      public:
+         UnitProduction( CargoDialog& masterParent ) : parent( masterParent)  {};
+         bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
+         {
+            return true;
+         }
+
+         void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+         {
+            return ( key->keysym.sym == 'p' );
+         };
+
+         Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+         {
+            return IconRepository::getIcon("unitproduction.png");
+         };
+         ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+         {
+            return "produce unit";
+         };
+   };
 }; // namespace CargoGuiFunctions
 
 
@@ -415,6 +446,7 @@ class CargoDialog : public Panel
       {
          registerCargoGuiFunctions( handler );
          handler.registerUserFunction( new CargoGuiFunctions::Movement( *this ) );
+         handler.registerUserFunction( new CargoGuiFunctions::UnitProduction( *this ));
       }
 
       
@@ -429,6 +461,7 @@ class CargoDialog : public Panel
          registerGuiFunctions( guiIconHandler );
          
 
+         cb->resourceChanged.connect( SigC::slot( *this, &CargoDialog::updateResourceDisplay ));
          NewGuiHost::pushIconHandler( &guiIconHandler );
 
          
@@ -605,6 +638,7 @@ class CargoDialog : public Panel
          }
       };
 
+      ContainerBase* getContainer() { return container; };
 
       ~CargoDialog()
       {
@@ -619,56 +653,62 @@ class CargoDialog : public Panel
 
 namespace CargoGuiFunctions {
    
-void Movement::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
-{
-   if ( !mainScreenWidget )
-      return;
-      
-   Vehicle* unit = dynamic_cast<Vehicle*>(subject);
-   if ( !unit )
-      return;
-      
-   bool simpleMode = false;
-   if (  skeypress( ct_lshift ) ||  skeypress ( ct_rshift ))
-      simpleMode = true;
-
-   VehicleMovement* vehicleMovement = ContainerControls::movement ( unit, simpleMode );
-   if ( vehicleMovement ) {
-
-      vehicleMovement->registerPVA ( vat_move, &pendingVehicleActions );
-      for ( int i = 0; i < vehicleMovement->reachableFields.getFieldNum(); i++ )
-         vehicleMovement->reachableFields.getField( i ) ->a.temp = 1;
-
-         // if ( !CGameOptions::Instance()->dontMarkFieldsNotAccessible_movement )
-      for ( int j = 0; j < vehicleMovement->reachableFieldsIndirect.getFieldNum(); j++ )
-         vehicleMovement->reachableFieldsIndirect.getField( j ) ->a.temp2 = 2;
-
-      repaintMap();
+   void Movement::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      if ( !mainScreenWidget )
+         return;
          
-      GuiIconHandler guiIconHandler;
-      guiIconHandler.registerUserFunction( new MovementDestination( *mainScreenWidget ) );
-      guiIconHandler.registerUserFunction( new CancelMovement( *mainScreenWidget ) );
-
-      NewGuiHost::pushIconHandler( &guiIconHandler );
-
-      parent.Hide();
+      Vehicle* unit = dynamic_cast<Vehicle*>(subject);
+      if ( !unit )
+         return;
          
-      mainScreenWidget->Update();
-      mainScreenWidget->RunModal();
-      actmap->cleartemps(7);
+      bool simpleMode = false;
+      if (  skeypress( ct_lshift ) ||  skeypress ( ct_rshift ))
+         simpleMode = true;
+   
+      VehicleMovement* vehicleMovement = ContainerControls::movement ( unit, simpleMode );
+      if ( vehicleMovement ) {
+   
+         vehicleMovement->registerPVA ( vat_move, &pendingVehicleActions );
+         for ( int i = 0; i < vehicleMovement->reachableFields.getFieldNum(); i++ )
+            vehicleMovement->reachableFields.getField( i ) ->a.temp = 1;
+   
+            // if ( !CGameOptions::Instance()->dontMarkFieldsNotAccessible_movement )
+         for ( int j = 0; j < vehicleMovement->reachableFieldsIndirect.getFieldNum(); j++ )
+            vehicleMovement->reachableFieldsIndirect.getField( j ) ->a.temp2 = 2;
+   
+         repaintMap();
+            
+         GuiIconHandler guiIconHandler;
+         guiIconHandler.registerUserFunction( new MovementDestination( *mainScreenWidget ) );
+         guiIconHandler.registerUserFunction( new CancelMovement( *mainScreenWidget ) );
+   
+         NewGuiHost::pushIconHandler( &guiIconHandler );
+   
+         parent.Hide();
+            
+         mainScreenWidget->Update();
+         mainScreenWidget->RunModal();
+         actmap->cleartemps(7);
+   
+         NewGuiHost::popIconHandler();
+         parent.cargoChanged();
+         parent.Show();
+            
+         if ( pendingVehicleActions.move )
+            delete pendingVehicleActions.move;
+   
+      } else
+         infoMessage( getmessage( 107 ) );
+   
+   }
 
-      NewGuiHost::popIconHandler();
-      parent.cargoChanged();
-      parent.Show();
-         
-      if ( pendingVehicleActions.move )
-         delete pendingVehicleActions.move;
+   void UnitProduction::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      selectVehicletype( parent.getContainer(), parent.getContainer()->unitProduction );
+   }
 
-   } else
-      infoMessage( getmessage( 107 ) );
-
-}
-
+   
 }
 
 
@@ -682,4 +722,150 @@ void cargoDialog( ContainerBase* cb )
 }
 
 
+
+
+class VehicleTypeWidget: public SelectionWidget  {
+      const Vehicletype* vt;
+      PG_Label*  resourceWidget[3];
+      static Surface clippingSurface;
+      Surface& getClippingSurface() { return clippingSurface; };
+   public:
+      VehicleTypeWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, int lackingResources = 0 ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, fieldsizey+10 )), vt( vehicletype )
+      {
+         
+         int col1 = 50;
+         int lineheight  = 15;
+        
+         int sw = (width - col1 - 10) / 6;
+         
+         PG_Label* lbl1 = new PG_Label( this, PG_Rect( col1, 0, 3 * sw, lineheight ), vt->name );
+         lbl1->SetFontSize( lbl1->GetFontSize() -2 );
+         
+         PG_Label* lbl2 = new PG_Label( this, PG_Rect( col1 + 3 * sw, 0, 3 * sw, lineheight ), vt->description );
+         lbl2->SetFontSize( lbl2->GetFontSize() -2 );
+         
+         for ( int i = 0; i < 3; ++i ) {
+            PG_Label* lbl = new PG_Label( this, PG_Rect( col1 + 2 * i * sw, lineheight + 5, sw, lineheight ), resourceNames[i] );
+            lbl->SetFontSize( lbl->GetFontSize() -2 );
+
+            
+            resourceWidget[i] = new PG_Label( this, PG_Rect( col1 + 2 * i * sw + sw, lineheight + 5, sw, lineheight ), ASCString::toString(vt->productionCost.resource(i)) );
+            resourceWidget[i]->SetFontSize( resourceWidget[i]->GetFontSize() -2 );
+            if ( lackingResources & (1<<i) )
+               resourceWidget[i]->SetFontColor( 0xff0000);
+         }
+         
+         SetTransparency( 255 );
+      };
+      
+      ASCString getName() const { return vt->getName(); };
+      const Vehicletype* getVehicletype() const { return vt; };
+                 
+   protected:
+      
+      void display( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst )
+      {
+         if ( !getClippingSurface().valid() )
+            getClippingSurface() = Surface::createSurface( fieldsizex + 10, fieldsizey + 10, 32, 0 );
+      
+         getClippingSurface().Fill(0);
+
+         vt->paint( getClippingSurface(), SPoint(5,5), actmap->actplayer, 0 );
+         PG_Draw::BlitSurface( getClippingSurface().getBaseSurface(), src, surface, dst);
+      }
+      
+};
+
+Surface VehicleTypeWidget::clippingSurface;
+
+
+
+
+class VehicleTypeSelectionItemFactory: public SelectionItemFactory  {
+      Resources plantResources;
+   public:
+      typedef vector<Vehicletype*> Container;
+   protected:
+      Container::iterator it;
+      Container items;
+   public:   
+      VehicleTypeSelectionItemFactory( Resources plantResources, const Container& types )
+      {
+         items = types;
+         sort( items.begin(), items.end(), comp );
+         restart();
+         this->plantResources = plantResources;
+      };
+      
+      static bool comp ( const Vehicletype* v1, const Vehicletype* v2 )
+      {
+         return v1->getName() > v2->getName();
+      };
+
+      void restart()
+      {
+         it = items.begin();
+      };
+      
+      SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos )
+      {
+         if ( it != items.end() ) {
+            const Vehicletype* v = *(it++);
+            int lackingResources = 0;
+            for ( int r = 0; r < 3; ++r )
+               if ( plantResources.resource(r) < v->productionCost.resource(r))
+                  lackingResources |= 1 << r;
+            return new VehicleTypeWidget( parent, pos, parent->Width() - 15, v, lackingResources );
+         } else
+            return NULL;
+      };
+      
+      SigC::Signal1<void,const Vehicletype* > vehicleTypeSelected;
+      
+      void itemSelected( const SelectionWidget* widget, bool mouse )
+      {
+         if ( !widget )
+            return;
+            
+         const VehicleTypeWidget* fw = dynamic_cast<const VehicleTypeWidget*>(widget);
+         assert( fw );
+         vehicleTypeSelected( fw->getVehicletype() );
+      }
+};
+
+
+
+class VehicleTypeSelectionWindow : public ASC_PG_Dialog {
+      const Vehicletype* selected;
+   protected:
+      void fileNameSelected( const Vehicletype* filename )
+      {
+         selected = filename;
+         quitModalLoop(0);
+      };
+
+   public:
+      VehicleTypeSelectionWindow( PG_Widget *parent, const PG_Rect &r, ContainerBase* plant, const vector<Vehicletype*>& items ) : ASC_PG_Dialog( parent, r, "Choose Vehicle Type" ), selected(NULL)
+      {
+         VehicleTypeSelectionItemFactory* factory = new VehicleTypeSelectionItemFactory( plant->getResource(Resources(maxint,maxint,maxint), true), items );
+         factory->vehicleTypeSelected.connect ( SigC::slot( *this, &VehicleTypeSelectionWindow::fileNameSelected ));
+
+         ItemSelectorWidget* isw = new ItemSelectorWidget( this, PG_Rect(10, GetTitlebarHeight(), r.Width() - 20, r.Height() - GetTitlebarHeight()), factory );
+         isw->sigQuitModal.connect( SigC::slot( *this, &ItemSelectorWindow::QuitModal));
+      };
+
+      const Vehicletype* getVehicletype() { return selected; };
+};
+
+
+const Vehicletype* selectVehicletype( ContainerBase* plant, const vector<Vehicletype*>& items )
+{
+   VehicleTypeSelectionWindow fsw( NULL, PG_Rect( 10, 10, 400, 500 ), plant, items );
+   fsw.Show();
+   fsw.RunModal();
+   const Vehicletype* v = fsw.getVehicletype();
+   if ( v )
+      plant->getResource( v->productionCost, false );
+   return v;
+}
 

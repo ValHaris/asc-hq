@@ -58,10 +58,12 @@ class ContainerBase {
 
       const ContainerBaseType*  baseType;
 
-      // Vehicle*     loading[32];
-
       typedef vector<Vehicle*> Cargo;
       Cargo cargo;
+
+      typedef vector<Vehicletype*> Production;
+      Production unitProduction;
+      
       
       void addToCargo( Vehicle* veh );
       bool removeUnitFromCargo( Vehicle* veh, bool recursive = false );
@@ -129,6 +131,8 @@ class ContainerBase {
       //! weight of all loaded units
       int cargoWeight() const;
 
+      SigC::Signal0<void> resourceChanged;
+      
       SigC::Signal0<void> conquered;
       SigC::Signal0<void> destroyed;
       static SigC::Signal0<void> anyContainerDestroyed;
