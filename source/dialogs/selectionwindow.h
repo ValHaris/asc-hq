@@ -68,14 +68,17 @@ class SelectionWidget : public PG_Widget {
       virtual void display( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst ) = 0;
 };
 
+class ItemSelectorWidget;
 
-class SelectionItemFactory {
+class SelectionItemFactory{
    public:
       virtual void restart() = 0;
       virtual SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos ) = 0;
       
       virtual void itemSelected( const SelectionWidget* widget, bool mouse ) = 0;
       virtual void itemMarked  ( const SelectionWidget* widget ) {};
+      // virtual int getBottomLineHeight() { return 0; };
+      // virtual void spawnBottonWidgets( ItemSelectorWidget* parent, const PG_Rect& area ) {};
       virtual ~SelectionItemFactory() {};
 };
 
@@ -119,7 +122,7 @@ class ItemSelectorWidget : public PG_Widget {
       
       void constrainNames( bool constrain );
             
-      void reLoad();
+      void reLoad( bool show = false );
       void resetNamesearch();
 };
 

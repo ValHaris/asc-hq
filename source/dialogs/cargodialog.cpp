@@ -705,7 +705,7 @@ namespace CargoGuiFunctions {
 
    void UnitProduction::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
    {
-      selectVehicletype( parent.getContainer(), parent.getContainer()->unitProduction );
+      const Vehicletype* v = selectVehicletype( parent.getContainer(), parent.getContainer()->unitProduction );
    }
 
    
@@ -730,7 +730,7 @@ class VehicleTypeWidget: public SelectionWidget  {
       static Surface clippingSurface;
       Surface& getClippingSurface() { return clippingSurface; };
    public:
-      VehicleTypeWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, int lackingResources = 0 ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, fieldsizey+10 )), vt( vehicletype )
+      VehicleTypeWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, int lackingResources, const Resources& cost ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, fieldsizey+10 )), vt( vehicletype )
       {
          
          int col1 = 50;
@@ -749,7 +749,7 @@ class VehicleTypeWidget: public SelectionWidget  {
             lbl->SetFontSize( lbl->GetFontSize() -2 );
 
             
-            resourceWidget[i] = new PG_Label( this, PG_Rect( col1 + 2 * i * sw + sw, lineheight + 5, sw, lineheight ), ASCString::toString(vt->productionCost.resource(i)) );
+            resourceWidget[i] = new PG_Label( this, PG_Rect( col1 + 2 * i * sw + sw, lineheight + 5, sw, lineheight ), ASCString::toString(cost.resource(i)) );
             resourceWidget[i]->SetFontSize( resourceWidget[i]->GetFontSize() -2 );
             if ( lackingResources & (1<<i) )
                resourceWidget[i]->SetFontColor( 0xff0000);
@@ -781,15 +781,17 @@ Surface VehicleTypeWidget::clippingSurface;
 
 
 
-class VehicleTypeSelectionItemFactory: public SelectionItemFactory  {
+class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC::Object  {
       Resources plantResources;
+      bool fillResources;
+      bool fillAmmo;
    public:
       typedef vector<Vehicletype*> Container;
    protected:
       Container::iterator it;
       Container items;
    public:   
-      VehicleTypeSelectionItemFactory( Resources plantResources, const Container& types )
+      VehicleTypeSelectionItemFactory( Resources plantResources, const Container& types ) : fillResources(true), fillAmmo(true)
       {
          items = types;
          sort( items.begin(), items.end(), comp );
@@ -802,6 +804,24 @@ class VehicleTypeSelectionItemFactory: public SelectionItemFactory  {
          return v1->getName() > v2->getName();
       };
 
+      SigC::Signal0<void> reloadAllItems;
+
+      
+      bool setAmmoFilling( bool value )
+      {
+         fillAmmo = value;
+         reloadAllItems();
+         return true;
+      }
+      
+      bool setResourceFilling( bool value )
+      {
+         fillResources = value;
+         reloadAllItems();
+         return true;
+      }
+
+      
       void restart()
       {
          it = items.begin();
@@ -811,11 +831,23 @@ class VehicleTypeSelectionItemFactory: public SelectionItemFactory  {
       {
          if ( it != items.end() ) {
             const Vehicletype* v = *(it++);
+            Resources cost  = v->productionCost;
+
+            if ( fillResources )
+               cost += Resources( 0, v->tank.material, v->tank.fuel );
+
+            if ( fillAmmo )
+               for ( int w = 0; w < v->weapons.count; ++w )
+                  if ( v->weapons.weapon[w].requiresAmmo() ) {
+                     int type = v->weapons.weapon[w].getScalarWeaponType();
+                     cost += Resources( cwaffenproduktionskosten[type][0], cwaffenproduktionskosten[type][1], cwaffenproduktionskosten[type][2] );
+                  }
+            
             int lackingResources = 0;
             for ( int r = 0; r < 3; ++r )
-               if ( plantResources.resource(r) < v->productionCost.resource(r))
+               if ( plantResources.resource(r) < cost.resource(r))
                   lackingResources |= 1 << r;
-            return new VehicleTypeWidget( parent, pos, parent->Width() - 15, v, lackingResources );
+            return new VehicleTypeWidget( parent, pos, parent->Width() - 15, v, lackingResources, cost );
          } else
             return NULL;
       };
@@ -831,12 +863,14 @@ class VehicleTypeSelectionItemFactory: public SelectionItemFactory  {
          assert( fw );
          vehicleTypeSelected( fw->getVehicletype() );
       }
+
 };
 
 
 
 class VehicleTypeSelectionWindow : public ASC_PG_Dialog {
       const Vehicletype* selected;
+      ItemSelectorWidget* isw;
    protected:
       void fileNameSelected( const Vehicletype* filename )
       {
@@ -844,14 +878,34 @@ class VehicleTypeSelectionWindow : public ASC_PG_Dialog {
          quitModalLoop(0);
       };
 
+      void reLoadAndUpdate()
+      {
+         isw->reLoad( true );
+      }
+      
    public:
-      VehicleTypeSelectionWindow( PG_Widget *parent, const PG_Rect &r, ContainerBase* plant, const vector<Vehicletype*>& items ) : ASC_PG_Dialog( parent, r, "Choose Vehicle Type" ), selected(NULL)
+      VehicleTypeSelectionWindow( PG_Widget *parent, const PG_Rect &r, ContainerBase* plant, const vector<Vehicletype*>& items ) : ASC_PG_Dialog( parent, r, "Choose Vehicle Type" ), selected(NULL), isw(NULL)
       {
          VehicleTypeSelectionItemFactory* factory = new VehicleTypeSelectionItemFactory( plant->getResource(Resources(maxint,maxint,maxint), true), items );
          factory->vehicleTypeSelected.connect ( SigC::slot( *this, &VehicleTypeSelectionWindow::fileNameSelected ));
 
-         ItemSelectorWidget* isw = new ItemSelectorWidget( this, PG_Rect(10, GetTitlebarHeight(), r.Width() - 20, r.Height() - GetTitlebarHeight()), factory );
+         isw = new ItemSelectorWidget( this, PG_Rect(10, GetTitlebarHeight(), r.Width() - 20, r.Height() - GetTitlebarHeight() - 40), factory );
          isw->sigQuitModal.connect( SigC::slot( *this, &ItemSelectorWindow::QuitModal));
+
+         factory->reloadAllItems.connect( SigC::slot( *this, &VehicleTypeSelectionWindow::reLoadAndUpdate ));
+         
+         
+         int y = GetTitlebarHeight() + isw->Height();
+         PG_CheckButton* fillRes = new PG_CheckButton( this, PG_Rect( 10, y + 2, r.Width() / 2 - 20, 20), "Fill with Resources" );
+         fillRes->SetPressed();
+         fillRes->sigClick.connect( SigC::slot( *factory, &VehicleTypeSelectionItemFactory::setResourceFilling ));
+         
+         PG_CheckButton* fillAmmo = new PG_CheckButton( this, PG_Rect( 10, y + 20, r.Width() / 2 - 20, 20), "Fill with Ammo" );
+         fillAmmo->SetPressed();
+         fillAmmo->sigClick.connect( SigC::slot( *factory, &VehicleTypeSelectionItemFactory::setAmmoFilling ));
+         
+         PG_Button* b = new PG_Button( this, PG_Rect( r.Width() / 2 + 10, y + 2, (r.Width() - 20) - (r.Width() / 2 + 10) , 35), "Produce" );
+         
       };
 
       const Vehicletype* getVehicletype() { return selected; };
@@ -864,8 +918,6 @@ const Vehicletype* selectVehicletype( ContainerBase* plant, const vector<Vehicle
    fsw.Show();
    fsw.RunModal();
    const Vehicletype* v = fsw.getVehicletype();
-   if ( v )
-      plant->getResource( v->productionCost, false );
    return v;
 }
 

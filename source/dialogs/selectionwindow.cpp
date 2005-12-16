@@ -196,8 +196,11 @@ ItemSelectorWidget::ItemSelectorWidget( PG_Widget *parent, const PG_Rect &r , Se
    : PG_Widget( parent,r ), namesConstrained(true), rowCount(0), scrollWidget( NULL), nameSearch(NULL), selectedItem(NULL), factory( itemFactory ), columnCount(-1), selectionCallBack( this, &ItemSelectorWidget::isItemMarked ) {
    SetTransparency(255);
    reLoad();
-   Emboss* e = new Emboss( this, PG_Rect( 1, Height() - 26, Width()-20, 22), true );
+   int bottom = 0; // itemFactory->getBottomLineHeight();
+   Emboss* e = new Emboss( this, PG_Rect( 1, Height() - 26 - bottom, Width()-20, 22), true );
    nameSearch = new PG_Label ( e, PG_Rect( 4,1, e->Width()-4 , e->Height()-2 ));
+
+   // factory->spawnBottonWidgets( this, PG_Rect( 1, Height() - bottom, Width()-20, bottom-1));
    // nameSearch = new PG_Label ( this, PG_Rect( 5, Height() - 25, Width() - 10, 20 ));
 };
 
@@ -207,8 +210,14 @@ void ItemSelectorWidget::constrainNames( bool constrain )
    namesConstrained = constrain;
 }   
 
-void ItemSelectorWidget::reLoad() 
+void ItemSelectorWidget::reLoad( bool show ) 
 {
+   int orgx = -1;
+   int orgy = -1;
+   if ( scrollWidget ) {
+      orgx = scrollWidget->GetScrollPosX();
+      orgy = scrollWidget->GetScrollPosY();
+   }
    delete scrollWidget;
    scrollWidget = new PG_ScrollWidget( this , PG_Rect( 0, 0, Width(), Height() - 30 ));
    scrollWidget->SetTransparency(255);
@@ -234,7 +243,13 @@ void ItemSelectorWidget::reLoad()
          x = 0; 
          y += w->Height() + gapWidth;
       }
-   }   
+   }
+
+   if ( orgx >= 0 && orgy >= 0 )
+      scrollWidget->ScrollTo ( orgx, orgy );
+   
+   if ( show )
+      scrollWidget->Show();
 }
 
 
