@@ -1169,6 +1169,7 @@ int   cbuildingcontrols :: putammunition ( int weapontype, int ammunition, int a
 
 int    cbuildingcontrols :: getammunition ( int weapontype, int num, int abbuchen, int produceifrequired )
 {
+#if 0
    if ( building->ammo[ weapontype ] > num  ) {
 
       if ( abbuchen )
@@ -1203,6 +1204,8 @@ int    cbuildingcontrols :: getammunition ( int weapontype, int num, int abbuche
       }
 
    }
+#endif
+return 0;
 }
 
 int    cbuildingcontrols :: ammotypeavail ( int type )
@@ -1340,6 +1343,7 @@ cbuildingcontrols :: cproduceammunition :: cproduceammunition ( void )
 
 int  cbuildingcontrols :: cproduceammunition :: checkavail ( int weaptype, int num )
 {
+#if 0
    if ( cc_b->building->typ->special & cgammunitionproductionb ) {
       int needede = cwaffenproduktionskosten[weaptype][0] * num;
       int neededm = cwaffenproduktionskosten[weaptype][1] * num;
@@ -1383,7 +1387,6 @@ int  cbuildingcontrols :: cproduceammunition :: checkavail ( int weaptype, int n
          perc = 100;
 
       int prod = num * perc / 100;
-
       energyneeded   = cwaffenproduktionskosten[weaptype][0] * prod;
       materialneeded = cwaffenproduktionskosten[weaptype][1] * prod;
       fuelneeded     = cwaffenproduktionskosten[weaptype][2] * prod;
@@ -1394,7 +1397,9 @@ int  cbuildingcontrols :: cproduceammunition :: checkavail ( int weaptype, int n
       materialneeded = 0;
       fuelneeded     = 0;
       return 0;
-   }
+}
+#endif
+return 0;
 }
 
 
@@ -1402,7 +1407,7 @@ void cbuildingcontrols :: cproduceammunition :: produce ( int weaptype, int num 
 {
    int n = checkavail( weaptype, num );
    cc->getResource ( Resources( energyneeded, materialneeded, fuelneeded ), false );
-   cc->putammunition ( weaptype, n*weaponpackagesize, 1 );
+//   cc->putammunition ( weaptype, n*weaponpackagesize, 1 );
 
    logtoreplayinfo ( rpl_produceAmmo, cc_b->building->getPosition().x, cc_b->building->getPosition().y, weaptype, n );
 }
@@ -1422,26 +1427,26 @@ int   cbuildingcontrols :: cproduceunit :: available (Vehicletype* fzt, int* lac
    } else
       l |= 1 << 10;
 
-   if ( cc->baseContainer->vehicleUnloadable(fzt) || (cc_b->building->typ->special & cgproduceAllUnitsB )) {
-      if ( lack )
-         *lack = l;
+//   if ( cc->baseContainer->vehicleUnloadable(fzt) || (cc_b->building->typ->special & cgproduceAllUnitsB )) {
+//      if ( lack )
+//         *lack = l;
 
 //       if ( l == 0) {
 //          for ( int i = 0; i < 32; i++ )
 //             if ( !cc_b->building->loading[ i ] )
 //                return 1;
 //       }
-   }
+//   }
 
    return 0;
 }
 
 
 
-Vehicle* cbuildingcontrols :: cproduceunit :: produce (Vehicletype* fzt, bool forceRefill)
+Vehicle* cbuildingcontrols :: cproduceunit ::produce (Vehicletype* fzt, bool forceRefill)
 {
    Vehicle*    eht;
-   generatevehicle_cl ( fzt, cc->getactplayer() , eht, cc->getxpos(), cc->getypos() );
+//   generatevehicle_cl ( fzt, cc->getactplayer() , eht, cc->getxpos(), cc->getypos() );
 
    /* ####TRANS
    for ( int h2 = 0; h2<8; h2++ )
@@ -1493,10 +1498,11 @@ Vehicle* cbuildingcontrols :: cproduceunit :: produce (Vehicletype* fzt, bool fo
    return eht;
 };
 
+
 Vehicle* cbuildingcontrols :: cproduceunit :: produce_hypothetically (Vehicletype* fzt)
 {
-   Vehicle*    eht;
-   generatevehicle_cl ( fzt, cc->getactplayer() , eht, cc->getxpos (), cc->getypos () );
+   Vehicle*    eht = NULL;
+   // generatevehicle_cl ( fzt, cc->getactplayer() , eht, cc->getxpos (), cc->getypos () );
 
 
    return eht;
@@ -1507,6 +1513,7 @@ Vehicle* cbuildingcontrols :: cproduceunit :: produce_hypothetically (Vehicletyp
 
 int   cbuildingcontrols :: ctrainunit :: available ( Vehicle* eht )
 {
+#if 0
    if ( actmap->getgameparameter( cgp_bi3_training ) )
       return 0;
 
@@ -1526,7 +1533,7 @@ int   cbuildingcontrols :: ctrainunit :: available ( Vehicle* eht )
                return 1;
          }
       }
-
+#endif
    return 0;
 }
 
@@ -1554,10 +1561,11 @@ void  cbuildingcontrols :: ctrainunit :: trainunit ( Vehicle* eht )
 
 int   cbuildingcontrols :: cdissectunit :: available ( Vehicle* eht )
 {
+#if 0
    if ( eht )
       if (  cc->getspecfunc ( mbuilding ) & cgresearchb )
          return !actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( eht->typ );
-
+#endif
    return 0;
 }
 
@@ -1716,7 +1724,7 @@ int   ctransportcontrols :: getypos (void)
 int   ctransportcontrols :: getspecfunc ( tcontainermode mode )
 {
    if ( mode == mtransport )
-      return vehicle->typ->functions;
+      return 0; // vehicle->typ->functions;
    else
       return 0;
 };
@@ -2699,7 +2707,7 @@ void ccontainer :: cammunitiontransfer_subwindow :: resetresources ( int mode )
 
 int ccontainer_b :: cammunitiontransferb_subwindow :: externalloadavailable ( void )
 {
-   return cc_b->building->typ->special & (cgexternalloadingb | cgexternalresourceloadingb | cgexternalammoloadingb );
+   return false; //  cc_b->building->typ->special & (cgexternalloadingb | cgexternalresourceloadingb | cgexternalammoloadingb );
 }
 
 
@@ -4101,6 +4109,7 @@ ccontainer_b :: cconventionelpowerplant_subwindow :: cconventionelpowerplant_sub
 
 int  ccontainer_b :: cconventionelpowerplant_subwindow :: subwin_available ( void )
 {
+#if 0
    if ( actmap->_resourcemode != 1 )
       if ( ( hostcontainer->getspecfunc ( mbuilding ) & cgconventionelpowerplantb ) && ( cc_b->building->maxplus.energy )) {
          bool avail = false;
@@ -4114,7 +4123,7 @@ int  ccontainer_b :: cconventionelpowerplant_subwindow :: subwin_available ( voi
 
    if ( next )
       next->subwin_available ();
-
+#endif
    return 0;
 }
 
@@ -4187,6 +4196,7 @@ void ccontainer_b :: cconventionelpowerplant_subwindow :: setnewpower ( int pwr 
    power = pwr;
    if ( power > 1024 )
       power = 1024;
+#if 0
 
    if ( allbuildings ) {
       for ( Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ ) {
@@ -4203,7 +4213,9 @@ void ccontainer_b :: cconventionelpowerplant_subwindow :: setnewpower ( int pwr 
          bld->plus.resource(r) = bld->maxplus.resource(r) * power/1024;
 
       logtoreplayinfo( rpl_setResourceProcessingAmount, bld->getPosition().x, bld->getPosition().y, bld->plus.energy, bld->plus.material, bld->plus.fuel );
-   }
+}
+#endif
+
 
 }
 
@@ -4380,12 +4392,13 @@ ccontainer_b :: cwindpowerplant_subwindow :: cwindpowerplant_subwindow ( void )
 
 int  ccontainer_b :: cwindpowerplant_subwindow :: subwin_available ( void )
 {
+#if 0
    if ( actmap->_resourcemode != 1 )
       if ( hostcontainer->getspecfunc ( mbuilding ) & cgwindkraftwerkb )
          cbuildingsubwindow :: subwin_available ( );
    if ( next )
       next->subwin_available ();
-
+#endif
    return 0;
 }
 
@@ -4464,12 +4477,14 @@ ccontainer_b :: csolarpowerplant_subwindow :: csolarpowerplant_subwindow ( void 
 
 int  ccontainer_b :: csolarpowerplant_subwindow :: subwin_available ( void )
 {
+#if 0
+
    if ( actmap->_resourcemode != 1 )
       if ( hostcontainer->getspecfunc ( mbuilding ) & cgsolarkraftwerkb )
          cbuildingsubwindow :: subwin_available ( );
    if ( next )
       next->subwin_available ();
-
+#endif
    return 0;
 }
 
@@ -4587,11 +4602,13 @@ ccontainer_b :: cammunitionproduction_subwindow :: cammunitionproduction_subwind
 
 int  ccontainer_b :: cammunitionproduction_subwindow :: subwin_available ( void )
 {
+#if 0
+
    if ( hostcontainer->getspecfunc ( mbuilding ) & cgammunitionproductionb )
       cbuildingsubwindow :: subwin_available ( );
    if ( next )
       next->subwin_available ();
-
+#endif
    return 0;
 }
 
@@ -4765,7 +4782,7 @@ void ccontainer_b :: cammunitionproduction_subwindow :: paintobj ( int num, int 
       activefontsettings.justify = centertext;
       activefontsettings.background = bkgrcol;
 
-      showtext2c ( strrr ( toproduce[num] * weaponpackagesize ), subwinx1 + 6 + num * 37, subwiny1 + 96 );
+      showtext2c ( strrr ( toproduce[num] ), subwinx1 + 6 + num * 37, subwiny1 + 96 );
    }
    if ( objcoordinates[num].type == 5 ) {
       collategraphicoperations cgo  ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2+10,   objcoordinates[num].y2 );
@@ -5060,11 +5077,12 @@ ccontainer_b :: cresearch_subwindow :: cresearch_subwindow ( void )
 
 int  ccontainer_b :: cresearch_subwindow :: subwin_available ( void )
 {
+#if 0
    if ( (hostcontainer->getspecfunc ( mbuilding ) & cgresearchb) && ( cc_b->building->maxresearchpoints ))
       cbuildingsubwindow :: subwin_available ( );
    if ( next )
       next->subwin_available ();
-
+#endif
    return 0;
 }
 
@@ -5137,6 +5155,7 @@ void ccontainer_b :: cresearch_subwindow :: setnewresearch ( int res )
    line( x, gy1, x, gy2-1, cl );
 
    research = res;
+#if 0
 
    if ( allbuildings ) {
       for ( Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ ) {
@@ -5157,6 +5176,7 @@ void ccontainer_b :: cresearch_subwindow :: setnewresearch ( int res )
 
       logtoreplayinfo ( rpl_setResearch, bld->getIdentification(), bld->researchpoints );
    }
+#endif
 }
 
 
@@ -5366,6 +5386,7 @@ ccontainer_b :: cminingstation_subwindow :: cminingstation_subwindow ( void )
 
 int  ccontainer_b :: cminingstation_subwindow :: subwin_available ( void )
 {
+#if 0
    if ( actmap->_resourcemode != 1 )
       if ( hostcontainer->getspecfunc ( mbuilding ) & cgminingstationb )
          cbuildingsubwindow :: subwin_available ( );
@@ -5373,7 +5394,7 @@ int  ccontainer_b :: cminingstation_subwindow :: subwin_available ( void )
 
    if ( next )
       next->subwin_available ();
-
+#endif
    return 0;
 }
 
@@ -5457,6 +5478,7 @@ void ccontainer_b :: cminingstation_subwindow :: setnewextraction ( int res )
    line( x, gy1, x, gy2-1, cl );
 
    extraction = res;
+#if 0
 
    if ( allbuildings ) {
       for ( Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ ) {
@@ -5474,6 +5496,7 @@ void ccontainer_b :: cminingstation_subwindow :: setnewextraction ( int res )
          
       logtoreplayinfo( rpl_setResourceProcessingAmount, bld->getPosition().x, bld->getPosition().y, bld->plus.energy, bld->plus.material, bld->plus.fuel );
    }
+#endif
 }
 
 
@@ -5680,13 +5703,15 @@ ccontainer_b :: cmineralresources_subwindow :: cmineralresources_subwindow ( voi
 
 int  ccontainer_b :: cmineralresources_subwindow :: subwin_available ( void )
 {
+#if 0
+
    if ( actmap->_resourcemode != 1 )
       if ( hostcontainer->getspecfunc ( mbuilding ) & cgminingstationb )
          cbuildingsubwindow :: subwin_available ( );
 
    if ( next )
       next->subwin_available ();
-
+#endif
    return 0;
 }
 
@@ -6201,6 +6226,8 @@ ccontainer_b :: produceuniticon_cb :: produceuniticon_cb ( void )
 
 int   ccontainer_b :: produceuniticon_cb :: available    ( void )
 {
+#if 0
+
    if ( cc_b->building->color == actmap->actplayer * 8 ) {
       if ( main->unitmode == mnormal ) {
          if ( cc_b->building->vehiclesLoaded() >= min ( 32, cc_b->building->baseType->maxLoadableUnits ))
@@ -6219,6 +6246,7 @@ int   ccontainer_b :: produceuniticon_cb :: available    ( void )
             if (  cproduceunit :: available ( main->getmarkedunittype() ) )
                return 1;
    }
+#endif
    return 0;
 }
 

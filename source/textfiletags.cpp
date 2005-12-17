@@ -75,8 +75,8 @@ const char*  bodenarten[cbodenartennum]
         "medium_level_flight",
         "high_level_flight",
         "orbit" };
-
- const char* vehicleAbilities[cvehiclefunctionsnum]
+        
+ const char* vehicleAbilities[Vehicletype::legacyVehicleFunctionNum]
      = {           "sonar",
                    "paratrooper",
                    "mine_layer",
@@ -106,7 +106,9 @@ const char*  bodenarten[cbodenartennum]
                    "jam_only_own_field",
                    "MoveDuringReactionFire",
                    "onlyTransMove" };
+        
 
+        
 const char*  weaponTags[cwaffentypennum]
    = {  "cruise_missile",
         "mine",
@@ -142,8 +144,8 @@ const char*  unitCategoryTags[cmovemalitypenum] =
      "helicopter",
      "hoovercraft"
    };
-
-const char*  buildingFunctionTags[cbuildingfunctionnum]  =
+   
+const char*  buildingFunctionTags[24]  =
               { "HeadQuarters",
                 "Training_Facility",
                 "__unused__",
@@ -168,7 +170,52 @@ const char*  buildingFunctionTags[cbuildingfunctionnum]  =
                 "NoObjectChaining",
                 "Selfdestruct_at_conquer",
                 "satelliteview" };
+   
 
+  const char*  containerFunctionTags[ContainerBaseType::functionNum]  =
+  {"Training_Facility",
+   "Vehicle_Production",
+   "Ammo_Production",
+   "Repair_Facility",
+   "Recycling",
+   "Research",
+   "Sonar",
+   "satelliteview",
+   "mineview",
+   "Wind_Power_Plant",
+   "Solar_Power_Plant",
+   "Matter_Converter",
+   "Mining_Station",
+   "Produce_Units_that_cannot_leave",
+   "ResourceSink",
+   "ExternalEnergyTransfer",
+   "ExternalMaterialTransfer",
+   "ExternalFuelTransfer",
+   "ExternalAmmoTransfer",
+   "ExternalRepair",
+   "NoObjectChaining",
+   "Selfdestruct_at_conquer",
+   "paratrooper",
+   "mine_layer",
+   "cruiserlanding",
+   "conquer_buildings",
+   "move_after_attack",
+   "construct_vehicles",
+   "construct_specific_buildings",
+   "icebreaker",
+   "no_midair_refuel",
+   "leaves_tracks",
+   "automatic_resource_searching",
+   "no_reactionfire",
+   "self_repairing",
+   "Kamikaze_only",
+   "immune_to_mines",
+   "jam_only_own_field",
+   "MoveDuringReactionFire",
+   "onlyTransMove" 
+   };
+   
+   
 
  const char* weatherAbbrev[cwettertypennum]
     = { "_dry",

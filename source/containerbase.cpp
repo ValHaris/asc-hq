@@ -342,7 +342,7 @@ bool  ContainerBase :: vehicleLoadable ( const Vehicle* vehicle, int uheight, co
             if ( i->mode & ContainerBaseType::TransportationIO::In )
                if ( i->height_rel == -100 || i->height_rel == getheightdelta ( getPosition().getNumericalHeight(), log2(uheight)  ) )
                   if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))
-                     if ( (i->requireUnitFunction & vehicle->typ->functions) || i->requireUnitFunction == 0 )
+                     if ( vehicle->typ->hasAnyFunction(i->requiresUnitFeature) || i->requiresUnitFeature.none() )
                         if ( i->vehicleCategoriesLoadable & (1<<vehicle->typ->movemalustyp)) {
                            if ( isBuilding() ) {
                               if ( getOwner() == vehicle->getOwner())
@@ -351,7 +351,7 @@ bool  ContainerBase :: vehicleLoadable ( const Vehicle* vehicle, int uheight, co
                                  if ( getOwner() == 8 )
                                     return true;
                                  if ( gamemap->getPlayer(this).diplomacy.isHostile( vehicle->getOwner())  )
-                                    if (damage >= mingebaeudeeroberungsbeschaedigung  || (vehicle->typ->functions & cf_conquer) )
+                                    if (damage >= mingebaeudeeroberungsbeschaedigung  || vehicle->typ->hasFunction( ContainerBaseType::ConquerBuildings ) )
                                        return true;
                               }
                            } else {
@@ -371,7 +371,7 @@ int  ContainerBase :: vehicleUnloadable ( const Vehicletype* vehicleType ) const
          if ( i->mode & ContainerBaseType::TransportationIO::Out )
             if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))
                if ( i->vehicleCategoriesLoadable & (1<<vehicleType->movemalustyp))
-                  if ( (i->requireUnitFunction & vehicleType->functions) || i->requireUnitFunction == 0 )
+                  if ( vehicleType->hasAnyFunction(i->requiresUnitFeature) || i->requiresUnitFeature.none() )
                      if ( i->height_abs != 0 && i->height_rel != -100 ) {
                         int h = 0;
                         for ( int hh = 0; hh < 8; ++hh)
@@ -393,8 +393,8 @@ const ContainerBaseType::TransportationIO* ContainerBase::vehicleUnloadSystem ( 
          if ( i->mode & ContainerBaseType::TransportationIO::Out )
             if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))
                if ( i->vehicleCategoriesLoadable & (1<<vehicleType->movemalustyp))
-                  if ( (i->requireUnitFunction & vehicleType->functions) || i->requireUnitFunction == 0 )
-                     if ( i->height_abs != 0 && i->height_rel != -100 ) {
+                 if ( vehicleType->hasAnyFunction(i->requiresUnitFeature) || i->requiresUnitFeature.none() )
+                    if ( i->height_abs != 0 && i->height_rel != -100 ) {
                         if ( height & ( i->height_abs & (1 << (getPosition().getNumericalHeight() + i->height_rel ))))
                            return &(*i);
                      } else

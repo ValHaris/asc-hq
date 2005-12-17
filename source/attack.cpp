@@ -508,7 +508,7 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
    av.weapcount  = attackingunit->ammo [ _weapon ];
    av.color      = attackingunit->getOwner();
    av.initiative = attackingunit->typ->initiative;
-   av.kamikaze   = attackingunit->typ->functions & cfkamikaze;
+   av.kamikaze   = attackingunit->typ->hasFunction( ContainerBaseType::KamikazeOnly  );
    av.height = attackingunit->height;
    av.weapontype = attackingunit->typ->weapons.weapon[ _weapon ].getScalarWeaponType();
 
@@ -546,7 +546,7 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
    } else
       respond = 0;
 
-   if ( attackedunit->typ->functions & cfkamikaze )
+   if ( attackedunit->typ->hasFunction( ContainerBaseType::KamikazeOnly  ))
       respond = 0;
 
    if ( respond ) {
@@ -683,7 +683,7 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
    av.weapontype = attackingunit->typ->weapons.weapon[ _weapon ].getScalarWeaponType();
    av.color      = attackingunit->getOwner();
    av.initiative = attackingunit->typ->initiative;
-   av.kamikaze   = attackingunit->typ->functions & cfkamikaze;
+   av.kamikaze   = attackingunit->typ->hasFunction( ContainerBaseType::KamikazeOnly  );
    av.height = attackingunit->height;
 
    pfield field = getfield ( attackingunit->xpos, attackingunit->ypos );
@@ -946,7 +946,7 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
    av.experience = attackingunit->experience;
    av.weapnum    = _weapon;
    av.weapcount   = attackingunit->ammo [ _weapon ];
-   av.kamikaze   = attackingunit->typ->functions & cfkamikaze;
+   av.kamikaze   = attackingunit->typ->hasFunction( ContainerBaseType::KamikazeOnly  );
    av.height = attackingunit->height;
    av.weapontype = attackingunit->typ->weapons.weapon[ _weapon ].getScalarWeaponType();
 

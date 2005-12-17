@@ -1383,20 +1383,20 @@ int gamethread ( void* data )
          loaddata( resolx, resoly, gtp->filename.c_str() );
       }
       catch ( ParsingError err ) {
-         displaymessage ( "Error parsing text file " + err.getMessage(), 2 );
+         fatalError ( "Error parsing text file " + err.getMessage() );
       }
       catch ( tfileerror err ) {
-         displaymessage ( "Error loading file " + err.getFileName(), 2 );
+         fatalError ( "Error loading file " + err.getFileName() );
       }
       catch ( ASCexception ) {
-         displaymessage ( "loading of game failed", 2 );
+         fatalError ( "loading of game failed" );
       }
       catch ( ThreadExitException ) {
          displayLogMessage(0, "caught thread exiting exception, shutting down");
          return -1;
       }
       catch ( ... ) {
-         displaymessage ( "caught undefined exception", 2 );
+         fatalError ( "caught undefined exception" );
       }
       
       displayLogMessage ( 5, "loaddata completed successfully.\n" );

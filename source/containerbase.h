@@ -104,7 +104,8 @@ class ContainerBase {
 
       virtual ASCString getName ( ) const = 0;
 
-      virtual int getAmmo( int type ) const = 0;
+      virtual int getAmmo( int type, int num, bool queryOnly )  = 0;
+      virtual int putAmmo( int type, int num, bool queryOnly )  = 0;
 
       
       //! returns the player this vehicle/building belongs to
@@ -132,6 +133,7 @@ class ContainerBase {
       int cargoWeight() const;
 
       SigC::Signal0<void> resourceChanged;
+      SigC::Signal0<void> ammoChanged;
       
       SigC::Signal0<void> conquered;
       SigC::Signal0<void> destroyed;

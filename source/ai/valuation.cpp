@@ -173,7 +173,7 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( Vehicle* _eht )
 
    if ( aip->getJob() == AiParameter::job_undefined )
       if ( eht->canMove() )
-         aip->setJob( AI::chooseJob ( eht->typ, eht->typ->functions ));
+         aip->setJob( AI::chooseJob ( eht->typ ));
 /*
    generatethreatvalue();
    int l = 0;
@@ -188,7 +188,7 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( Vehicle* _eht )
 */
 }
 
-AiParameter::JobList AI::chooseJob ( const Vehicletype* typ, int functions )
+AiParameter::JobList AI::chooseJob ( const Vehicletype* typ )
 {
    AiParameter::JobList jobList;
 
@@ -212,11 +212,11 @@ AiParameter::JobList AI::chooseJob ( const Vehicletype* typ, int functions )
       if ( typ->weapons.weapon[w].service() )
          service = true;
 
-   if ( ((functions & cfrepair) || service) && maxmove >= minmalq && maxstrength < 45)
+   if ( ( typ->hasFunction( ContainerBaseType::ExternalRepair ) || service) && maxmove >= minmalq && maxstrength < 45)
       jobList.push_back ( AiParameter::job_supply );
 
 
-   if ( functions & cf_conquer ) {
+   if ( typ->hasFunction( ContainerBaseType::ConquerBuildings ) ) {
       /* if ( functions & cf_trooper )  {
          if ( typ->height & chfahrend )
             jobList.push_back ( AiParameter::job_conquer );
@@ -227,7 +227,7 @@ AiParameter::JobList AI::chooseJob ( const Vehicletype* typ, int functions )
    }
 
    if ( ( maxstrength*1.5 < typ->view
-        || (maxstrength*1.5 < typ->jamming && !(typ->functions & cfownFieldJamming)))
+           || (maxstrength*1.5 < typ->jamming && !typ->hasFunction( ContainerBaseType::JamsOnlyOwnField )))
        && maxmove > minmalq  )
       jobList.push_back (  AiParameter::job_recon );
 
@@ -285,13 +285,12 @@ void  AI :: calculateThreat ( Building* bld, int player )
          value += bld->unitProduction[b]->aiparam[ player ]->getValue() / 10;
       }
 
-   if (bld->typ->special & cgrepairfacilityb )
+   if (bld->typ->hasFunction( ContainerBaseType::InternalUnitRepair  ))
       value += ccbt_repairfacility;
-   if (bld->typ->special & cghqb )
-      value += ccbt_hq;
-   if (bld->typ->special & cgtrainingb )
+   
+   if (bld->typ->hasFunction( ContainerBaseType::TrainingCenter  ) )
       value += ccbt_training;
-   if (bld->typ->special & cgrecyclingplantb )
+   if (bld->typ->hasFunction( ContainerBaseType::RecycleUnits  )  )
       value += ccbt_recycling;
 
    bld->aiparam[ player ]->setValue ( value );
@@ -434,7 +433,7 @@ void     AI :: calculateAllThreats( void )
       for ( int v = 0; v < vehicleTypeRepository.getNum(); v++) {
          Vehicletype* fzt = vehicleTypeRepository.getObject_byPos( v );
          if ( fzt )
-            if ( fzt->functions & cf_conquer )
+            if ( fzt->hasFunction( ContainerBaseType::ConquerBuildings  ) )
                if ( fzt->movement[log2(chfahrend)] > maxTrooperMove )   // buildings can only be conquered on ground level, or by moving to adjecent field which is less
                   maxTrooperMove = fzt->movement[log2(chfahrend)];
       }

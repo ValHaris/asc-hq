@@ -24,6 +24,7 @@
 #ifndef basestreaminterface_h_included
  #define basestreaminterface_h_included
 
+#include <bitset>
  #include "global.h"
  #include "tpascal.inc"
 
@@ -114,6 +115,26 @@
            //! Reads a 8 bit unsigned Integer. 
            virtual char readChar ( void );
 
+           template<size_t N>
+           void writeBitset( const std::bitset<N>& bs ) {
+              writeInt(1);
+              writeInt(N);
+              for( int i = 0; i < N;++i)
+                 writeChar( bs.test(i));
+           }
+
+           template<size_t N>
+           void readBitset( std::bitset<N>& bs ) {
+              readInt(); // version
+              int n = readInt();
+              assert( n == N );
+              bs.reset();
+              for( int i = 0; i < N;++i)
+                 if ( readChar() )
+                  bs.set( i );
+           }
+           
+           
            //! Reads a flaot variable.
            virtual float readFloat ( void );
 

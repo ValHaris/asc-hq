@@ -194,7 +194,9 @@ void Vehicle :: init ( void )
 
 bool Vehicle :: canRepair( const ContainerBase* item ) const
 {
-   return (typ->functions & cfrepair) || (item == this && typ->autorepairrate ) ;
+   return typ->hasFunction( ContainerBaseType::InternalUnitRepair  ) ||
+          typ->hasFunction( ContainerBaseType::ExternalRepair  ) ||
+          (item == this && typ->autorepairrate ) ;
 }
 
 int Vehicle :: putResource ( int amount, int resourcetype, bool queryonly, int scope )
@@ -247,7 +249,7 @@ int Vehicle :: getResource ( int amount, int resourcetype, bool queryonly, int s
 
 void Vehicle :: setGeneratorStatus ( bool status )
 {
-   if ( typ->functions & cfgenerator ) {
+   if ( typ->hasFunction( ContainerBaseType::MatterConverter )) {
       generatoractive = status;
    } else
      generatoractive = 0;
@@ -355,7 +357,7 @@ void Vehicle :: repairunit(Vehicle* vehicle, int maxrepair )
 
 void Vehicle :: endRound ( void )
 {
-   if ( typ->functions & cfgenerator ) {
+   if ( typ->hasFunction( ContainerBaseType::MatterConverter )) {
       int endiff = typ->tank.energy - tank.energy;
       if ( tank.fuel < endiff * generatortruckefficiency )
          endiff = tank.fuel / generatortruckefficiency;
@@ -538,17 +540,17 @@ void Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
    if ( start == dest )
       return;
       
-   if ((typ->functions & ( cffahrspur | cficebreaker )) && (height == chfahrend || height == chschwimmend))  {
+   if ((typ->hasFunction( ContainerBaseType::MakesTracks) || typ->hasFunction( ContainerBaseType::IceBreaker)) && (height == chfahrend || height == chschwimmend))  {
      int dir = getdirection( start, dest );
 
      pfield startField = gamemap->getField(start);
      pfield destField = gamemap->getField(dest);
-     if ( typ->functions & cffahrspur )
+     if ( typ->hasFunction( ContainerBaseType::MakesTracks ))
         if ( fahrspurobject )
            if ( (startField->bdt & getTerrainBitType(cbfahrspur)).any() )
               startField->addobject ( fahrspurobject, 1 << dir );
 
-     if ( typ->functions & cficebreaker )
+     if ( typ->hasFunction( ContainerBaseType::IceBreaker ))
         if ( eisbrecherobject )
               if (   (startField->bdt & getTerrainBitType(cbicebreaking) ).any()
                    || startField->checkforobject ( eisbrecherobject ) ) {
@@ -557,13 +559,13 @@ void Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
 
      dir = (dir + sidenum/2) % sidenum;
 
-     if ( typ->functions & cffahrspur )
-        if ( fahrspurobject )
+     if ( typ->hasFunction( ContainerBaseType::MakesTracks ))
+          if ( fahrspurobject )
            if ( (destField->bdt & getTerrainBitType(cbfahrspur)).any() )
               destField->addobject ( fahrspurobject, 1 << dir );
 
-     if ( typ->functions & cficebreaker )
-        if ( eisbrecherobject )
+     if ( typ->hasFunction( ContainerBaseType::IceBreaker ))
+          if ( eisbrecherobject )
               if (   (destField->bdt & getTerrainBitType(cbicebreaking) ).any()
                    || destField->checkforobject ( eisbrecherobject ) ) {
                  destField->addobject ( eisbrecherobject, 1 << dir );
@@ -602,7 +604,7 @@ void Vehicle::ReactionFire::resetShotCount()
 
 int Vehicle::ReactionFire::enable ( void )
 {
-   if ( unit->typ->functions & cfno_reactionfire )
+   if ( unit->typ->hasFunction( ContainerBaseType::NoReactionfire  ) )
       return -216;
       
    #ifdef karteneditor
@@ -673,7 +675,7 @@ void Vehicle::ReactionFire::endOwnTurn()
 
 bool Vehicle::ReactionFire::canMove() const
 {
-   if ( unit->typ->functions & cfmovewithRF )
+   if ( unit->typ->hasFunction( ContainerBaseType::MoveWithReactionFire  ))
       return true;
    if ( status == off )
       return true;
@@ -799,7 +801,7 @@ Vehicle* Vehicle :: constructvehicle ( Vehicletype* tnk, int x, int y )
       tank.material -= tnk->productionCost.material;
       tank.fuel -= tnk->productionCost.energy;
 
-
+      /*
       int refuel = 0;
       for ( int i = 0; i < typ->weapons.count; i++ )
          if ( typ->weapons.weapon[i].service()  )
@@ -809,7 +811,7 @@ Vehicle* Vehicle :: constructvehicle ( Vehicletype* tnk, int x, int y )
                if ( typ->functions & (cffuelref | cfmaterialref) )
                   refuel = 1;
             }
-
+      */
       v->attacked = 1;
       return v;
    } else
@@ -866,18 +868,14 @@ bool Vehicle :: buildingconstructable ( BuildingType* building )
 
 
    if ( building->productionCost.material * mf / 100 <= tank.material   &&   building->productionCost.fuel * ff / 100 <= tank.fuel ) {
-      int found = 0;
-      if ( typ->functions & cfputbuilding )
-         found = 1;
-      if ( typ->functions & cfspecificbuildingconstruction )
+      if ( typ->hasFunction( ContainerBaseType::ConstructBuildings) )
          for ( int i = 0; i < typ->buildingsBuildable.size(); i++ )
             if ( typ->buildingsBuildable[i].from <= building->id &&
                  typ->buildingsBuildable[i].to   >= building->id )
-                 found = 1;
-
-      return found;
-   } else
-      return false;
+               return true;
+   }
+   
+   return false;
 }
 
 int Vehicle :: searchstackforfreeweight ( Vehicle* searchedInnerVehicle )
@@ -948,7 +946,7 @@ void Vehicle :: removeview ( void )
 void Vehicle :: postAttack()
 {
    attacked = true;
-   if ( typ->functions & cf_moveafterattack )
+   if ( typ->hasFunction( ContainerBaseType::MoveAfterAttack  ) )
       decreaseMovement ( maxMovement() * attackmovecost / 100 );
    else
       if ( reactionfire.getStatus() == ReactionFire::off )
@@ -972,14 +970,14 @@ class tsearchforminablefields: public SearchFields {
       int run ( const Vehicle*     eht );
       virtual void testfield ( const MapCoordinate& mc );
       tsearchforminablefields ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
-      static bool available( const Vehicle* eht );
   };
 
+  /*
 bool Vehicle::searchForMineralResourcesAvailable()
 {
    return tsearchforminablefields::available( this );
 }
-
+  */
 
 
 void         tsearchforminablefields::testfield( const MapCoordinate& mc )
@@ -1000,20 +998,11 @@ void         tsearchforminablefields::testfield( const MapCoordinate& mc )
 }
 
 
-bool tsearchforminablefields::available( const Vehicle* eht )
-{
-   if ( (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger) )
-      if ( eht->attacked ||
-          (eht->typ->wait && eht->hasMoved() ) ||
-          (eht->getMovement() < searchforresorcesmovedecrease ))
-          return false;
-   return true;
-}
 
 
 int  tsearchforminablefields::run( const Vehicle* eht )
 {
-   if ( !available( eht ) )
+   if ( !eht->typ->hasFunction( ContainerBaseType::DetectsMineralResources  ) )
       return -311;
 
 
@@ -1032,8 +1021,8 @@ int  tsearchforminablefields::run( const Vehicle* eht )
 //   if ( (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger) )
 //      eht->setMovement ( eht->getMovement() - searchforresorcesmovedecrease );
 
-   if ( !gamemap->mineralResourcesDisplayed && (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger))
-      gamemap->mineralResourcesDisplayed = 1;
+//   if ( !gamemap->mineralResourcesDisplayed && (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger))
+//      gamemap->mineralResourcesDisplayed = 1;
 
    return 1;
 }
@@ -1513,13 +1502,40 @@ ASCString  Vehicle::getName() const
       return name;
 }
 
-int Vehicle::getAmmo( int type ) const
+int Vehicle::getAmmo( int type, int num, bool queryOnly ) 
 {
-   int amount = 0;
-   for ( int i = 0; i < typ->weapons.count; ++i )
-      if ( typ->weapons.weapon[i].getScalarWeaponType() == type )
-         amount += ammo[i];
-   return amount;
+   int got = 0;
+   int weap = 0;
+   while ( weap < typ->weapons.count && got < num ) {
+      if ( typ->weapons.weapon[weap].getScalarWeaponType() == type ) {
+         int toget = min( num - got, ammo[weap]);
+         if ( !queryOnly )
+            ammo[weap] -= toget;
+         got += toget;
+      }
+      ++weap;
+   }
+   if ( got && !queryOnly )
+      ammoChanged();
+   return got;
+}
+
+int Vehicle::putAmmo( int type, int num, bool queryOnly )
+{
+   int put = 0;
+   int weap = 0;
+   while ( weap < typ->weapons.count && put < num ) {
+      if ( typ->weapons.weapon[weap].getScalarWeaponType() == type ) {
+         int toput = min( num - put, typ->weapons.weapon[weap].count - ammo[weap]);
+         if ( !queryOnly )
+            ammo[weap] += toput;
+         put += toput;
+      }
+      ++weap;
+   }
+   if ( put && !queryOnly )
+      ammoChanged();
+   return put;
 }
 
 

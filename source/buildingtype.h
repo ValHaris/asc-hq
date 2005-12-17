@@ -31,7 +31,7 @@
  #include "textfileparser.h"
  #include "research.h"
 
-
+/*
 const int cbuildingfunctionnum = 24;
 extern const char*  cbuildingfunctions[];
  #define cghqn 0
@@ -74,7 +74,7 @@ extern const char*  cbuildingfunctions[];
  #define cgselfdestruct_at_conquerb ( 1 << cgselfdestruct_at_conquern )
  #define cgsatviewn 23
  #define cgsatviewb ( 1 << cgsatviewn )
-
+*/
 
  //! The class describing properties that are common to all buildings of a certain kind. \sa Building
  class  BuildingType : public ContainerBaseType {
@@ -84,6 +84,10 @@ extern const char*  cbuildingfunctions[];
 
         BitSet weatherBits; // for which weather are images available
 
+        void convertOldFunctions( int abilities, const ASCString& location );
+        
+        static const int cbuildingfunctionnum = 24;
+        
    public:
         //! A local coordinate referencing a single field that a building covers.
         class LocalCoordinate {

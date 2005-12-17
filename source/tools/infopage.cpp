@@ -368,37 +368,33 @@ BuildingMainPage::BuildingMainPage(const BuildingType&  bt, ASCString filePath, 
 
 void BuildingMainPage::addCategory() {
 
-  if ( bt.special & cghqb ) {
-    addTREntry("Category", HQ);
-    return;
-  }
-  if ( bt.special & cgvehicleproductionb ) {
+   if ( bt.hasFunction( ContainerBaseType::InternalVehicleProduction  )) {
     addTREntry("Category", FACTORY);
     return;
   }
-  if ( bt.special & cgresearchb ) {
-    addTREntry("Category", RESEARCHFAC);
+  if ( bt.hasFunction( ContainerBaseType::Research  )) {
+     addTREntry("Category", RESEARCHFAC);
     return;
   }
 
-  if ( bt.special & cgwindkraftwerkb ) {
-    addTREntry("Category", WINDPOWERPLANT);
+  if ( bt.hasFunction( ContainerBaseType::WindPowerPlant  )) {
+     addTREntry("Category", WINDPOWERPLANT);
     return;
   }
-  if ( bt.special & cgsolarkraftwerkb ) {
-    addTREntry("Category", SOLARPOWERPLANT);
+  if ( bt.hasFunction( ContainerBaseType::SolarPowerPlant  )) {
+     addTREntry("Category", SOLARPOWERPLANT);
     return;
   }
-  if ( bt.special & cgconventionelpowerplantb ) {
-    addTREntry("Category", MATTERCONVERTER);
+  if ( bt.hasFunction( ContainerBaseType::MatterConverter )) {
+     addTREntry("Category", MATTERCONVERTER);
     return;
   }
-  if ( bt.special & cgminingstationb ) {
-    addTREntry("Category", MININGSTATION);
+  if ( bt.hasFunction( ContainerBaseType::MiningStation  )) {
+     addTREntry("Category", MININGSTATION);
     return;
   }
-  if ( bt.special & cgtrainingb ) {
-    addTREntry("Category", TRAININGCENTER);
+  if ( bt.hasFunction( ContainerBaseType::TrainingCenter  )) {
+     addTREntry("Category", TRAININGCENTER);
     return;
   }
   addTREntry("Category", NOCATEGORY);
@@ -409,10 +405,7 @@ void BuildingMainPage::addCategory() {
 
 void BuildingMainPage::addCapabilities() {
   ASCString cap;
-  for ( int i = 0; i < cbuildingfunctionnum; ++i)
-  if ( bt.special & ( 1 << i )){
-     cap = addTREntryln(cap, cbuildingfunctions[i] );
-  }
+
   addTREntry("Capabilities", cap);
   return;
 
@@ -600,12 +593,13 @@ void BuildingCargoPage::buildContent() {
       for ( ContainerBaseType::EntranceSystems::const_iterator i = cbt.entranceSystems.begin(); i != cbt.entranceSystems.end(); i++ ) {
         ASCString funcs;
         bool none = true;
-        for ( int j = 0; j<cvehiclefunctionsnum; j++) {
-          if ( i->requireUnitFunction & ( 1 << j )) {
-            funcs = addTREntryln(funcs, cvehiclefunctions[j]);
-            none = false;
-          }
-        }
+        for ( int j = 0; j < ContainerBaseType::functionNum; ++j)
+           if ( i->requiresUnitFeature.test(j) ) {
+              funcs = addTREntryln(funcs, ContainerBaseType::getFunctionName(ContainerBaseType::ContainerFunctions(j)) );
+               none = false;
+            }
+        
+
         if(none) {
           addTDEntry("None");
         } else {
@@ -827,12 +821,13 @@ void UnitCargoPage::buildContent() {
       for ( ContainerBaseType::EntranceSystems::const_iterator i = cbt.entranceSystems.begin(); i != cbt.entranceSystems.end(); i++ ) {
         ASCString funcs;
         bool none = true;
-        for ( int j = 0; j<cvehiclefunctionsnum; j++) {
-          if ( i->requireUnitFunction & ( 1 << j )) {
-            funcs = addTREntryln(funcs, cvehiclefunctions[j]);
-            none = false;
-          }
-        }
+
+        for ( int j = 0; j < ContainerBaseType::functionNum; ++j)
+           if ( i->requiresUnitFeature.test(j) ) {
+               funcs = addTREntryln(funcs, ContainerBaseType::getFunctionName(ContainerBaseType::ContainerFunctions(j)) );
+               none = false;
+            }
+      
         if(none) {
           addTDEntry("None");
         } else {
@@ -863,11 +858,11 @@ UnitMainPage::UnitMainPage(const VehicleType&  vtype, ASCString filePath, UnitGu
 void UnitMainPage::addCapabilities() {
 
  ASCString cap;
+ 
+ for ( int j = 0; j < ContainerBaseType::functionNum; ++j)
+    if ( vt.hasFunction( ContainerBaseType::ContainerFunctions(j) ) ) 
+    cap = addTREntryln(cap, ContainerBaseType::getFunctionName(ContainerBaseType::ContainerFunctions(j)) );
 
- for ( int i = 0; i < cvehiclefunctionsnum; ++i)
-  if ( vt.functions & ( 1 << i )){       
-   cap = addTREntryln(cap, cvehiclefunctions[i] );
- }
  addTREntry("Capabilities & Properties", cap);
  return;
 }

@@ -92,7 +92,7 @@ void         SearchReconquerBuilding :: unitfound(Vehicle*     eht)
 
 bool SearchReconquerBuilding :: canUnitCapture( Vehicle* eht )
 {
-   return (eht->typ->functions & cf_conquer )
+   return (eht->typ->hasFunction( ContainerBaseType::ConquerBuildings ) )
            && fieldAccessible ( buildingToCapture->getEntryField(), eht) == 2 ;
 
 }
@@ -250,7 +250,7 @@ void AI :: checkConquer( )
             Vehicle* veh = *vi;
             if ( !veh->canMove() ) continue;
             if ( fieldAccessible ( bld->getEntryField(), veh ) != 2 ) continue;
-            if ( c!=8 && !(veh->typ->functions & cf_conquer) ) continue;
+            if ( c!=8 && !(veh->typ->hasFunction( ContainerBaseType::ConquerBuildings  )) ) continue;
             if ( veh->aiparam[getPlayerNum()]->hasJob( AiParameter::job_conquer)  &&
                  veh->aiparam[getPlayerNum()]->getTask() != AiParameter::tsk_nothing ) continue;
 
@@ -298,7 +298,7 @@ void AI :: checkConquer( )
 
       // dispatch capture order
       BuildingCapture& bc = buildingCapture[ bld->getEntry() ];
-      if ( veh->typ->functions & cf_conquer )
+      if ( veh->typ->hasFunction( ContainerBaseType::ConquerBuildings  ))
          bc.state = BuildingCapture::conq_conqUnit;
       else
          bc.state = BuildingCapture::conq_unitNotConq;

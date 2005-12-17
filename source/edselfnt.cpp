@@ -1589,7 +1589,7 @@ class SelectVehicleTypeForBuildingProduction : public SelectCargoVehicleType {
                   return 0;
             return building->typ->vehicleFit ( item )
                    && SelectVehicleType::isavailable ( item )
-                   &&  ( building->vehicleUnloadable(item) || (building->typ->special & cgproduceAllUnitsB ));
+                  &&  ( building->vehicleUnloadable(item) || (building->typ->hasFunction( ContainerBaseType::InternalVehicleProduction  ) ));
          };
      };
 

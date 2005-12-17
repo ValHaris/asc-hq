@@ -35,7 +35,7 @@
 #include "textfile_evaluation.h"
 #include "graphics/blitter.h"
 
-
+/*
 const char*  cvehiclefunctions[cvehiclefunctionsnum+1]  = {
                    "sonar",
                    "paratrooper",
@@ -67,23 +67,31 @@ const char*  cvehiclefunctions[cvehiclefunctionsnum+1]  = {
                    "move with reaction fire on",
                    "only move to and from transports",
                    NULL };
+*/
+const char*  cwaffentypen[cwaffentypennum]  =
+   {"cruise missile", "mine",    "bomb",       "large missile", "small missile", "torpedo", "machine gun",
+    "cannon",         "service", "ammunition refuel", "laser", "shootable", "object placement"
+   };
 
-const char*  cwaffentypen[cwaffentypennum]  = {"cruise missile", "mine",    "bomb",       "large missile", "small missile", "torpedo", "machine gun",
-                                               "cannon",         "service", "ammunition refuel", "laser", "shootable", "object placement"};
-
-const int  cwaffenproduktionskosten[cwaffentypennum][3]    = { {1500,1500,1500},  // cruise missile
-                                                               {10, 10, 10},     // mine
-                                                               {40, 40, 40},     // bomb
-                                                               {200, 200, 200},     // big missile
-                                                               {50, 50, 50},     // small missile
-                                                               {20, 30, 40},     // torpedo
-                                                               {1, 1, 1},     // machine gun
-                                                               {5, 5, 1},     // cannon
-                                                               {0, 0, 0},     // service
-                                                               {0, 0, 0},     // ammo refuel
-                                                               {0, 0, 0},     // laser
-                                                               {0, 0, 0},     // shootable
-                                                               {0, 0, 0}};    // objectPlacement
+const int  cwaffenproduktionskosten[cwaffentypennum][3]    =
+   { {
+        1500,1500,1500
+     }
+     ,  // cruise missile
+     {10, 10, 10},     // mine
+     {40, 40, 40},     // bomb
+     {200, 200, 200},     // big missile
+     {50, 50, 50},     // small missile
+     {20, 30, 40},     // torpedo
+     {1, 1, 1},     // machine gun
+     {5, 5, 1},     // cannon
+     {0, 0, 0},     // service
+     {0, 0, 0},     // ammo refuel
+     {0, 0, 0},     // laser
+     {0, 0, 0},     // shootable
+     {0, 0, 0}
+   }
+   ;    // objectPlacement
 
 
 Vehicletype :: Vehicletype ( void )
@@ -98,7 +106,6 @@ Vehicletype :: Vehicletype ( void )
    cargoMovementDivisor = 2;
    wait = 0;
    fuelConsumption = 0;
-   functions = 0;
 
    movement.resize(8);
    for ( i = 0; i < 8; i++ )
@@ -128,7 +135,7 @@ int Vehicletype::maxsize ( void ) const
 }
 
 
-const int vehicle_version = 22;
+const int vehicle_version = 23;
 
 
 
@@ -183,7 +190,7 @@ void Vehicletype :: read ( tnstream& stream )
       if ( version <= 18 )
          picture[j] = stream.readInt();
       else
-         picture[j] = false;   
+         picture[j] = false;
 
    height = stream.readChar();
    stream.readWord(); // was: researchID
@@ -216,7 +223,10 @@ void Vehicletype :: read ( tnstream& stream )
    fuelConsumption = stream.readWord();
    tank.energy = stream.readInt();
    tank.material = stream.readInt();
-   functions = stream.readInt();
+   if ( version <= 22 ) {
+      int functions = stream.readInt();
+      features = convertOldFunctions ( functions, stream.getLocation() );
+   }
 
    for ( j = 0; j < 8; j++ )
       if ( version <= 4 )
@@ -231,14 +241,14 @@ void Vehicletype :: read ( tnstream& stream )
 
    if ( version <= 2 )
       for ( j = 0; j < 9; j++ )
-          stream.readWord( ); // dummy1
+         stream.readWord( ); // dummy1
 
    bool ___load_classnames[8];
    if ( version <= 15 ) {
       stream.readChar(); // classnum
 
       for ( j = 0; j < 8; j++ )
-          ___load_classnames[j] = stream.readInt();
+         ___load_classnames[j] = stream.readInt();
 
       for ( j = 0; j < 8; j++ ) {
          int k;
@@ -322,7 +332,7 @@ void Vehicletype :: read ( tnstream& stream )
          if ( ___load_classnames[i] )
             stream.readString ( true );
 
-   if ( functions & cfautorepair )
+   if ( hasFunction( AutoRepair ) )
       if ( !autorepairrate )
          autorepairrate = autorepairdamagedecrease; // which is 10
 
@@ -474,25 +484,26 @@ void Vehicletype :: read ( tnstream& stream )
    location = stream.getLocation();
 
    if ( version >= 9 )
-     ContainerBaseType::read ( stream );
+      ContainerBaseType::read ( stream );
 
    if ( version >= 10 ) {
-     heightChangeMethodNum = stream.readInt();
-     heightChangeMethod.resize(heightChangeMethodNum );
-     for ( int i = 0; i < heightChangeMethodNum; i++ )
-        heightChangeMethod[i].read( stream );
+      heightChangeMethodNum = stream.readInt();
+      heightChangeMethod.resize(heightChangeMethodNum );
+      for ( int i = 0; i < heightChangeMethodNum; i++ )
+         heightChangeMethod[i].read( stream );
    } else
       heightChangeMethodNum = 0;
 
    if ( version >= 12 )
       techDependency.read( stream );
 
-   if ( version >= 13 ) 
+   if ( version >= 13 )
       buildicon.read( stream );
    else {
-      #ifndef converter
-       buildicon = generate_gui_build_icon ( this );
-      #endif
+#ifndef converter
+      buildicon = generate_gui_build_icon ( this );
+#endif
+
    }
 
    if ( version >= 14 && version < 18)
@@ -506,7 +517,7 @@ void Vehicletype :: read ( tnstream& stream )
       killSoundLabel = stream.readString();
    }
 
-   if ( version >= 22 ) 
+   if ( version >= 22 )
       readClassContainer( guideSortHelp, stream );
 }
 
@@ -553,9 +564,8 @@ void Vehicletype:: write ( tnstream& stream ) const
    stream.writeWord(fuelConsumption );
    stream.writeInt(tank.energy );
    stream.writeInt(tank.material );
-   stream.writeInt(functions );
    for ( j = 0; j < 8; j++ )
-       stream.writeInt( movement[j] );
+      stream.writeInt( movement[j] );
 
 
    stream.writeChar(movemalustyp );
@@ -670,10 +680,10 @@ void Vehicletype:: write ( tnstream& stream ) const
 
 ASCString Vehicletype::getName( ) const
 {
-  if ( !name.empty() )
-     return name;
-  else
-     return description;
+   if ( !name.empty() )
+      return name;
+   else
+      return description;
 }
 
 int Vehicletype :: maxSpeed ( ) const
@@ -698,28 +708,29 @@ Vehicletype :: ~Vehicletype ( )
 
 SingleWeapon::SingleWeapon()
 {
-  typ = 0;
-  targ = 0;
-  sourceheight = 0;
-  maxdistance = 0;
-  mindistance = 0;
-  count = 0;
-  maxstrength= 0;
-  minstrength = 0;
-  laserRechargeRate = 0;
-  for ( int i = 0; i < 13; i++ )
-    efficiency[i] = 0;
-  for ( int i = 0; i < cmovemalitypenum; i++ )
-    targetingAccuracy[i] = 100;
+   typ = 0;
+   targ = 0;
+   sourceheight = 0;
+   maxdistance = 0;
+   mindistance = 0;
+   count = 0;
+   maxstrength= 0;
+   minstrength = 0;
+   laserRechargeRate = 0;
+   for ( int i = 0; i < 13; i++ )
+      efficiency[i] = 0;
+   for ( int i = 0; i < cmovemalitypenum; i++ )
+      targetingAccuracy[i] = 100;
 
-  reactionFireShots = 1;
+   reactionFireShots = 1;
 }
 
 
 /* Translate the weapon/mine/service bit pattern into scalar
  * weapon number for use in fetching UI resources.
  */
-int SingleWeapon::getScalarWeaponType(void) const {
+int SingleWeapon::getScalarWeaponType(void) const
+{
    if ( typ & (cwweapon | cwmineb) )
       return log2 ( typ & (cwweapon | cwmineb) );
    else
@@ -761,7 +772,8 @@ bool SingleWeapon::canRefuel( void ) const
    return typ & cwammunitionb;
 }
 
-void SingleWeapon::set ( int type )
+void SingleWeapon::set
+   ( int type )
 {
    typ = type;
 }
@@ -785,20 +797,31 @@ ASCString SingleWeapon::getName ( void ) const
    return s;
 }
 
-ASCString    SingleWeapon::getIconFileName( int numerical ) 
+ASCString    SingleWeapon::getIconFileName( int numerical )
 {
    switch ( numerical ) {
-      case cwcruisemissile: return "weap-cruisemissile";
-      case cwbombn: return "weap-bomb";
-      case cwlargemissilen: return "weap-bigmissile";
-      case cwsmallmissilen: return "weap-smallmissile";
-      case cwtorpedon: return "weap-torpedo";
-      case cwmachinegunn: return "weap-machinegun";
-      case cwcannonn: return "weap-cannon";
-      case cwminen: return "weap-mine";
-      case cwservicen: return "weap-service";   
-      case cwlasern: return "weap-laser";   
-      default: return "weap-undefined";
+      case cwcruisemissile:
+         return "weap-cruisemissile";
+      case cwbombn:
+         return "weap-bomb";
+      case cwlargemissilen:
+         return "weap-bigmissile";
+      case cwsmallmissilen:
+         return "weap-smallmissile";
+      case cwtorpedon:
+         return "weap-torpedo";
+      case cwmachinegunn:
+         return "weap-machinegun";
+      case cwcannonn:
+         return "weap-cannon";
+      case cwminen:
+         return "weap-mine";
+      case cwservicen:
+         return "weap-service";
+      case cwlasern:
+         return "weap-laser";
+      default:
+         return "weap-undefined";
    };
 }
 
@@ -833,10 +856,18 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    pc.addTagInteger( "Height", height, choehenstufennum, heightTags );
    pc.addBool ( "WaitFortack", wait );
    pc.openBracket( "Tank" );
-     tank.runTextIO ( pc );
+   tank.runTextIO ( pc );
    pc.closeBracket();
    pc.addInteger( "FuelConsumption", fuelConsumption );
-   pc.addTagInteger( "Abilities", functions, cvehiclefunctionsnum, vehicleAbilities );
+   if ( pc.find("Abilities")) {
+      int abilities;
+      pc.addTagInteger ( "Abilities", abilities, legacyVehicleFunctionNum, vehicleAbilities );
+
+      features = convertOldFunctions ( abilities, pc.getFileName() );
+
+   } else
+      pc.addTagArray ( "Features", features, functionNum, containerFunctionTags );
+
    pc.addIntegerArray ( "Movement", movement );
    for ( vector<int>::iterator i = movement.begin(); i != movement.end(); i++ )
       if ( *i > 255 )
@@ -861,36 +892,36 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
 
    pc.addInteger("Weight",  weight);
    pc.openBracket("TerrainAccess" );
-    terrainaccess.runTextIO ( pc );
+   terrainaccess.runTextIO ( pc );
    pc.closeBracket();
 
    pc.openBracket ( "Construction" );
-    pc.addIntRangeArray ( "Buildings", buildingsBuildable );
-    pc.addIntRangeArray ( "Vehicles", vehiclesBuildable );
-    pc.addIntRangeArray ( "Objects", objectsBuildable );
-    if ( pc.isReading() ) {
+   pc.addIntRangeArray ( "Buildings", buildingsBuildable );
+   pc.addIntRangeArray ( "Vehicles", vehiclesBuildable );
+   pc.addIntRangeArray ( "Objects", objectsBuildable );
+   if ( pc.isReading() ) {
       if ( pc.find ( "ObjectsRemovable" ))
          pc.addIntRangeArray ( "ObjectsRemovable", objectsRemovable );
       else
          setupRemovableObjectsFromOldFileLayout();
-    } else
-         pc.addIntRangeArray ( "ObjectsRemovable", objectsRemovable );
+   } else
+      pc.addIntRangeArray ( "ObjectsRemovable", objectsRemovable );
 
-    pc.addIntRangeArray ( "ObjectGroupsBuildable", objectGroupsBuildable, false );
-    pc.addIntRangeArray ( "ObjectGroupsRemovable", objectGroupsRemovable, false );
+   pc.addIntRangeArray ( "ObjectGroupsBuildable", objectGroupsBuildable, false );
+   pc.addIntRangeArray ( "ObjectGroupsRemovable", objectGroupsRemovable, false );
    pc.closeBracket();
 
    pc.openBracket ( "Weapons");
-    pc.addInteger("Initiative", initiative );
-    pc.addInteger("Number", weapons.count );
-    for ( int i = 0; i < weapons.count; i++ ) {
-        pc.openBracket ( ASCString("Weapon")+strrr(i) );
-        weapons.weapon[i].runTextIO( pc );
-        pc.closeBracket();
-        if ( functions & cfno_reactionfire )
-           weapons.weapon[i].reactionFireShots = 0;
+   pc.addInteger("Initiative", initiative );
+   pc.addInteger("Number", weapons.count );
+   for ( int i = 0; i < weapons.count; i++ ) {
+      pc.openBracket ( ASCString("Weapon")+strrr(i) );
+      weapons.weapon[i].runTextIO( pc );
+      pc.closeBracket();
+      if ( hasFunction( NoReactionfire ) )
+         weapons.weapon[i].reactionFireShots = 0;
 
-    }
+   }
 
    pc.closeBracket();
 
@@ -912,7 +943,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    techDependency.runTextIO( pc, strrr(id) );
 
 
-   
+
    pc.openBracket ( "ConstructionCost" );
    productionCost.runTextIO ( pc );
    int costCalcMethod;
@@ -936,9 +967,72 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    if ( pc.find( "guideSortHelp") )
       pc.addIntegerArray("guideSortHelp", guideSortHelp );
 
-   #ifndef converter
+#ifndef converter
+
    buildicon = generate_gui_build_icon ( this );
-   #endif
+#endif
+}
+
+BitSet Vehicletype::convertOldFunctions( int abilities, const ASCString& location )
+{
+   BitSet features;
+   if ( abilities & 1 )
+      features.set( Sonar );
+   if ( abilities & 2 )
+      features.set( Paratrooper );
+   if ( abilities & 4 )
+      features.set( PlaceMines );
+   if ( abilities & 16 )
+      features.set( ExternalRepair );
+   if ( abilities & 32 )
+      features.set( ConquerBuildings );
+   if ( abilities & 64 )
+      features.set( MoveAfterAttack );
+   if ( abilities & 128 )
+      features.set( SatelliteView );
+   if ( abilities & 256 )
+      errorMessage( location + ": The features construct_ALL_buildings is not supported any more");
+   if ( abilities & 512 )
+      features.set( MineView );
+   if ( abilities & 1024 )
+      features.set( ExternalVehicleProduction );
+   if ( abilities & 2048 )
+      features.set( ConstructBuildings );
+   if ( abilities & 4096 )
+      features.set( ExternalFuelTransfer );
+   if ( abilities & 8192 )
+      features.set( IceBreaker );
+   if ( abilities & 16384 )
+      features.set( NoInairRefuelling );
+   if ( abilities & 32768 )
+      features.set( ExternalMaterialTransfer );
+   if ( abilities & (1 << 17) )
+      features.set( MakesTracks );
+   if ( abilities & (1 << 18) )
+      features.set( DetectsMineralResources );
+   if ( abilities & (1 << 19) )
+      features.set( NoReactionfire );
+   if ( abilities & (1 << 20) )
+      features.set( AutoRepair );
+   if ( abilities & (1 << 21) )
+      features.set( MatterConverter );
+   // we probably need to setup the conversion matrix at this point
+
+   if ( abilities & (1 << 22) )
+      features.set( DetectsMineralResources );
+   if ( abilities & (1 << 23) )
+      features.set( KamikazeOnly );
+   if ( abilities & (1 << 24) )
+      features.set( ImmuneToMines );
+   if ( abilities & (1 << 25) )
+      features.set( ExternalEnergyTransfer );
+   if ( abilities & (1 << 26) )
+      features.set( JamsOnlyOwnField );
+   if ( abilities & (1 << 27) )
+      features.set( MoveWithReactionFire );
+   if ( abilities & (1 << 28) )
+      features.set( OnlyMoveToAndFromTransports );
+   return features;
 }
 
 void  Vehicletype::paint ( Surface& s, SPoint pos, int player, int direction ) const
@@ -960,21 +1054,23 @@ void SingleWeapon::runTextIO ( PropertyContainer& pc )
    pc.addString("Sound", soundLabel, "");
    pc.addInteger("LaserRechargeRate", laserRechargeRate, 0 );
    pc.openBracket( "laserRechargeCost" );
-    laserRechargeCost.runTextIO ( pc, Resources(0,0,0) );
+   laserRechargeCost.runTextIO ( pc, Resources(0,0,0) );
    pc.closeBracket();
 
    pc.addInteger("ReactionFireShots", reactionFireShots, 1 );
 
-   pc.openBracket("HitAccuracy" ); {
-     for ( int j = 0; j < 13; j++ )
-        if ( j < 6 )
-           pc.addInteger( ASCString("d")+strrr(abs(j-6)), efficiency[j] );
-        else
-           if ( j == 6 )
-              pc.addInteger( "0", efficiency[j] );
-           else
-              pc.addInteger( ASCString("u")+strrr(j-6), efficiency[j] );
-   } pc.closeBracket();
+   pc.openBracket("HitAccuracy" );
+   {
+      for ( int j = 0; j < 13; j++ )
+         if ( j < 6 )
+            pc.addInteger( ASCString("d")+strrr(abs(j-6)), efficiency[j] );
+         else
+            if ( j == 6 )
+               pc.addInteger( "0", efficiency[j] );
+            else
+               pc.addInteger( ASCString("u")+strrr(j-6), efficiency[j] );
+   }
+   pc.closeBracket();
 
    if ( pc.isReading() ) {
       if ( pc.find ( "cantHit" )) {
@@ -1010,7 +1106,7 @@ void Vehicletype :: HeightChangeMethod :: runTextIO ( PropertyContainer& pc )
    pc.addInteger("Dist", dist );
 }
 
- 
+
 
 const int vehicleHeightChangeMethodVersion = 1;
 
@@ -1047,16 +1143,16 @@ void Vehicletype :: HeightChangeMethod :: write ( tnstream& stream ) const
     begin                : So Aug 15 2004
     copyright            : (C) 2001 by Martin Bickel & Steffen Fr÷hlich
     email                : bickel@asc-hq.org
-
+ 
  vehicletype {
    constructioncost {
-   	calculationMode = [auto](default)[add][manual]
-   	energy = 0
-   	material = 0
-   	fuel = 0
+    calculationMode = [auto](default)[add][manual]
+    energy = 0
+    material = 0
+    fuel = 0
    } constructioncost
  } vehicletYpe
-
+ 
 Part I   -description
 Part II  -beginn calculation
 Part III -typecost
@@ -1064,7 +1160,7 @@ part IV  -weaponcost
 Part V   -specialcost
 Part VI  -addierung
 Part VII -Abschlõge
-
+ 
  ***************************************************************************/
 
 //Part II beginn calculation
@@ -1072,311 +1168,311 @@ Part VII -Abschlõge
 
 Resources Vehicletype :: calcProductionsCost()
 {
-	Resources res;
-	// Anfang -> Abschluss
-		res.energy = 0;
-		res.material = 0;
-		res.fuel = 0;
-		int typecoste = 0;
-		int typecostm = 0;
-		int weaponcoste = 0;
-		int weaponcostm = 0;
-		int specialcoste = 0;
-		int specialcostm = 0;
-		int movecostsize = 0;
-		int rangecostsize = 0;
-		
+   Resources res;
+   // Anfang -> Abschluss
+   res.energy = 0;
+   res.material = 0;
+   res.fuel = 0;
+   int typecoste = 0;
+   int typecostm = 0;
+   int weaponcoste = 0;
+   int weaponcostm = 0;
+   int specialcoste = 0;
+   int specialcostm = 0;
+   int movecostsize = 0;
+   int rangecostsize = 0;
 
-// Part III typecost
 
-		if ( movemalustyp == MoveMalusType::trooper) {
-			typecoste += armor*2;
-			typecostm += armor*2;
-		} else
-		if ( movemalustyp == MoveMalusType::light_tracked_vehicle || movemalustyp == MoveMalusType::medium_tracked_vehicle || movemalustyp == MoveMalusType::heavy_tracked_vehicle || movemalustyp == MoveMalusType::light_wheeled_vehicle || movemalustyp == MoveMalusType::medium_wheeled_vehicle || movemalustyp == MoveMalusType::heavy_wheeled_vehicle || movemalustyp == MoveMalusType::rail_vehicle || movemalustyp == MoveMalusType::structure) {
-			typecoste += armor*8;
-			typecostm += armor*8;
-		} else
-		if ( movemalustyp == MoveMalusType::hoovercraft) {
-			typecoste += armor*9;
-			typecostm += armor*9;
-		} else
-		if ( movemalustyp == MoveMalusType::light_ship || movemalustyp == MoveMalusType::medium_ship || movemalustyp == MoveMalusType::heavy_ship ) {
-			typecoste += armor*10;
-			typecostm += armor*10;
-		} else
-		if ( movemalustyp == MoveMalusType::light_aircraft || movemalustyp == MoveMalusType::medium_aircraft || movemalustyp == MoveMalusType::heavy_aircraft || movemalustyp == MoveMalusType::helicopter ) {
-			typecoste += armor*20;
-			typecostm += armor*20;
-		} else {
-			typecoste += armor*6;
-			typecostm += armor*6;
-		}
+   // Part III typecost
 
-		// Zuschlag f³r Eisbrecher
-		if ( functions & cficebreaker ) {
-			typecoste += armor *2;
-			typecostm += armor *2;
-		}
-		// Zuschlag f³r U-Boote / Druckh³lle
-		if ( height & chgetaucht ) {
-			typecoste += armor*2;
-			typecostm += armor*2;
-		}
-		// Zuschlag f³r orbitalfõhige Einheiten / Druckh³lle
-		if ( height & chsatellit ) {
-			typecoste += armor*3;
-			typecostm += armor*2;
-		}
-		// Zuschlag f³r hochfliegende Einheiten / Extra starke Triebwerke
-		if ( height & chhochfliegend ) {
-			typecoste += armor*2;
-			typecostm += armor*2;
-		}
-		// Zuschlag f³r Transportkapazitõt
-		if ( entranceSystems.size() > 0 ) {
-			typecoste += maxLoadableUnits*100;
-			typecostm += maxLoadableUnits*100;
+   if ( movemalustyp == MoveMalusType::trooper) {
+      typecoste += armor*2;
+      typecostm += armor*2;
+   } else
+      if ( movemalustyp == MoveMalusType::light_tracked_vehicle || movemalustyp == MoveMalusType::medium_tracked_vehicle || movemalustyp == MoveMalusType::heavy_tracked_vehicle || movemalustyp == MoveMalusType::light_wheeled_vehicle || movemalustyp == MoveMalusType::medium_wheeled_vehicle || movemalustyp == MoveMalusType::heavy_wheeled_vehicle || movemalustyp == MoveMalusType::rail_vehicle || movemalustyp == MoveMalusType::structure) {
+         typecoste += armor*8;
+         typecostm += armor*8;
+      } else
+         if ( movemalustyp == MoveMalusType::hoovercraft) {
+            typecoste += armor*9;
+            typecostm += armor*9;
+         } else
+            if ( movemalustyp == MoveMalusType::light_ship || movemalustyp == MoveMalusType::medium_ship || movemalustyp == MoveMalusType::heavy_ship ) {
+               typecoste += armor*10;
+               typecostm += armor*10;
+            } else
+               if ( movemalustyp == MoveMalusType::light_aircraft || movemalustyp == MoveMalusType::medium_aircraft || movemalustyp == MoveMalusType::heavy_aircraft || movemalustyp == MoveMalusType::helicopter ) {
+                  typecoste += armor*20;
+                  typecostm += armor*20;
+               } else {
+                  typecoste += armor*6;
+                  typecostm += armor*6;
+               }
 
-         bool carrierCharge = false;
+   // Zuschlag f³r Eisbrecher
+   if ( hasFunction( IceBreaker ) ) {
+      typecoste += armor *2;
+      typecostm += armor *2;
+   }
+   // Zuschlag f³r U-Boote / Druckh³lle
+   if ( height & chgetaucht ) {
+      typecoste += armor*2;
+      typecostm += armor*2;
+   }
+   // Zuschlag f³r orbitalfõhige Einheiten / Druckh³lle
+   if ( height & chsatellit ) {
+      typecoste += armor*3;
+      typecostm += armor*2;
+   }
+   // Zuschlag f³r hochfliegende Einheiten / Extra starke Triebwerke
+   if ( height & chhochfliegend ) {
+      typecoste += armor*2;
+      typecostm += armor*2;
+   }
+   // Zuschlag f³r Transportkapazitõt
+   if ( entranceSystems.size() > 0 ) {
+      typecoste += maxLoadableUnits*100;
+      typecostm += maxLoadableUnits*100;
 
-			// Zuschlag f³r Flugzeugtrõger / Start- und Landeeinrichtungen
-			for ( int T=0; T < entranceSystems.size(); ++T ) 
-				if ( entranceSystems[T].container_height < chtieffliegend 
-                  && (entranceSystems[T].height_abs & (chtieffliegend | chfliegend | chhochfliegend | chsatellit))
-                  && maxLoadableUnits > 2 )
-               carrierCharge = true;
+      bool carrierCharge = false;
 
-         if ( carrierCharge ) {
-		      typecoste += maxLoadableUnits*1000;
-				typecostm += maxLoadableUnits*1000;
+      // Zuschlag f³r Flugzeugtrõger / Start- und Landeeinrichtungen
+      for ( int T=0; T < entranceSystems.size(); ++T )
+         if ( entranceSystems[T].container_height < chtieffliegend
+               && (entranceSystems[T].height_abs & (chtieffliegend | chfliegend | chhochfliegend | chsatellit))
+               && maxLoadableUnits > 2 )
+            carrierCharge = true;
+
+      if ( carrierCharge ) {
+         typecoste += maxLoadableUnits*1000;
+         typecostm += maxLoadableUnits*1000;
+      }
+   }
+   // Check maximale Reichweite
+   for ( int M=0; M < movement.size(); ++M ) {
+      if ( movecostsize < movement[M] ) {
+         movecostsize = movement[M];
+      }
+   }
+   // Zuschlag f³r Triebwerke
+   if (movecostsize > 70 ) {
+      typecoste += (movecostsize-70)*15;
+      typecostm += (movecostsize-70)*5;
+   }
+
+   // Zuschlag f³r Flugzeugtriebwerke
+   if (movecostsize > 120 ) {
+      typecoste += (movecostsize-120)*10;
+      typecostm += (movecostsize-120)*10;
+   }
+   // Zuschlag f³r Hochleistungsflugzeugtriebwerke
+   if (movecostsize > 170 ) {
+      typecoste += (movecostsize-170)*12;
+      typecostm += (movecostsize-170)*12;
+   }
+   // Zuschlag f³r Spezialflugzeugtriebwerke
+   if (movecostsize > 200 ) {
+      typecoste += (movecostsize-200)*14;
+      typecostm += (movecostsize-200)*14;
+   }
+
+
+
+   // Part IV - weaponcost
+   if ( weapons.count > 0 ) {
+      for ( int W=0; W < weapons.count; ++W ) {
+         if (weapons.weapon[W].getScalarWeaponType() == cwmachinegunn && weapons.weapon[W].shootable() ) {
+            weaponcoste += weapons.weapon[W].maxstrength*5;
+            weaponcostm += weapons.weapon[W].maxstrength*5;
          }
-		}
-		// Check maximale Reichweite
-		for ( int M=0; M < movement.size(); ++M ) {
-			if ( movecostsize < movement[M] ) {
-				movecostsize = movement[M];
-			}
-		}
-		// Zuschlag f³r Triebwerke
-		if (movecostsize > 70 ) {
-			typecoste += (movecostsize-70)*15;
-			typecostm += (movecostsize-70)*5;
-		}
-		
-		// Zuschlag f³r Flugzeugtriebwerke
-		if (movecostsize > 120 ) {
-			typecoste += (movecostsize-120)*10;
-			typecostm += (movecostsize-120)*10;
-		}
-		// Zuschlag f³r Hochleistungsflugzeugtriebwerke
-		if (movecostsize > 170 ) {
-			typecoste += (movecostsize-170)*12;
-			typecostm += (movecostsize-170)*12;
-		}
-		// Zuschlag f³r Spezialflugzeugtriebwerke
-		if (movecostsize > 200 ) {
-			typecoste += (movecostsize-200)*14;
-			typecostm += (movecostsize-200)*14;
-		}
+         if (weapons.weapon[W].getScalarWeaponType() == cwcannonn && weapons.weapon[W].shootable() ) {
+            weaponcoste += weapons.weapon[W].maxstrength*10;
+            weaponcostm += weapons.weapon[W].maxstrength*10;
+         }
+         if (weapons.weapon[W].getScalarWeaponType() == cwbombn && weapons.weapon[W].shootable() ) {
+            weaponcoste += weapons.weapon[W].maxstrength*8;
+            weaponcostm += weapons.weapon[W].maxstrength*8;
+         }
+         if (weapons.weapon[W].getScalarWeaponType() == cwsmallmissilen && weapons.weapon[W].shootable() ) {
+            weaponcoste += weapons.weapon[W].maxstrength*10;
+            weaponcostm += weapons.weapon[W].maxstrength*10;
+         }
+         if (weapons.weapon[W].getScalarWeaponType() == cwlargemissilen && weapons.weapon[W].shootable() ) {
+            weaponcoste += weapons.weapon[W].maxstrength*12;
+            weaponcostm += weapons.weapon[W].maxstrength*12;
+         }
+         if (weapons.weapon[W].getScalarWeaponType() == cwcruisemissile && weapons.weapon[W].shootable() ) {
+            weaponcoste += weapons.weapon[W].maxstrength*30;
+            weaponcostm += weapons.weapon[W].maxstrength*30;
+         }
+         if (weapons.weapon[W].getScalarWeaponType() == cwtorpedon && weapons.weapon[W].shootable() ) {
+            weaponcoste += weapons.weapon[W].maxstrength*11;
+            weaponcostm += weapons.weapon[W].maxstrength*11;
+         }
+         if (weapons.weapon[W].getScalarWeaponType() == cwminen && weapons.weapon[W].shootable() ) {
+            weaponcoste += weapons.weapon[W].maxstrength*2;
+            weaponcostm += weapons.weapon[W].maxstrength*2;
+         }
+         if (weapons.weapon[W].getScalarWeaponType() == cwlasern && weapons.weapon[W].shootable() ) {
+            weaponcoste += weapons.weapon[W].maxstrength*14;
+            weaponcostm += weapons.weapon[W].maxstrength*13;
+         }
+         if (weapons.weapon[W].service() ) {
+            weaponcoste += 1000;
+            weaponcostm += 500;
+         }
+         if (weapons.weapon[W].canRefuel() ) {
+            weaponcoste += 100;
+            weaponcostm += 50;
+         }
+         // Check maximal Waffenreichweite
+         if ( rangecostsize < weapons.weapon[W].maxdistance ) {
+            rangecostsize = weapons.weapon[W].maxdistance;
+         }
+      }
+      // Waffenreichweitenzuschlag Kurzstrecke
+      if (rangecostsize > 19 ) {
+         weaponcoste += (rangecostsize-10)*80;
+         weaponcostm += (rangecostsize-10)*70;
+      }
+      // Waffenreichweitenzuschlag Mittelstrecke
+      if (rangecostsize > 69 ) {
+         weaponcoste += (rangecostsize-60)*150;
+         weaponcostm += (rangecostsize-60)*100;
+      }
+      // Waffenreichweitenzuschlag Langstrecke
+      if (rangecostsize > 99 ) {
+         weaponcoste += (rangecostsize-90)*200;
+         weaponcostm += (rangecostsize-90)*200;
+      }
+   }
 
+   // Part V Specialcost
+   // stealth (typecost) oder jamming (specialcost)
 
+   if ( jamming > 0 && hasFunction( JamsOnlyOwnField ) ) {
+      if (jamming < 31 ) {
+         typecoste += jamming*20;  //  f³r Trooper oder eigenschaftsbedingt (klein, schnell)
+         typecostm += jamming*10;
+      } else {
+         typecoste += jamming*50;  //  f³r alle h÷herwirkenden Stealthverfahren, Anstrich, besondere Konstruktion, tarnfeld usw.
+         typecostm += jamming*30;
+      }
+   } else {
+      specialcoste += jamming*170;
+      specialcostm += jamming*150;
+   }
 
-// Part IV - weaponcost
-		if ( weapons.count > 0 ) {
-			for ( int W=0; W < weapons.count; ++W ) {
-				if (weapons.weapon[W].getScalarWeaponType() == cwmachinegunn && weapons.weapon[W].shootable() ) {
-					weaponcoste += weapons.weapon[W].maxstrength*5;
-					weaponcostm += weapons.weapon[W].maxstrength*5;
-				}
-				if (weapons.weapon[W].getScalarWeaponType() == cwcannonn && weapons.weapon[W].shootable() ) {
-					weaponcoste += weapons.weapon[W].maxstrength*10;
-					weaponcostm += weapons.weapon[W].maxstrength*10;
-				}
-				if (weapons.weapon[W].getScalarWeaponType() == cwbombn && weapons.weapon[W].shootable() ) {
-					weaponcoste += weapons.weapon[W].maxstrength*8;
-					weaponcostm += weapons.weapon[W].maxstrength*8;
-				}
-				if (weapons.weapon[W].getScalarWeaponType() == cwsmallmissilen && weapons.weapon[W].shootable() ) {
-					weaponcoste += weapons.weapon[W].maxstrength*10;
-					weaponcostm += weapons.weapon[W].maxstrength*10;
-				}
-				if (weapons.weapon[W].getScalarWeaponType() == cwlargemissilen && weapons.weapon[W].shootable() ) {
-					weaponcoste += weapons.weapon[W].maxstrength*12;
-					weaponcostm += weapons.weapon[W].maxstrength*12;
-				}
-				if (weapons.weapon[W].getScalarWeaponType() == cwcruisemissile && weapons.weapon[W].shootable() ) {
-					weaponcoste += weapons.weapon[W].maxstrength*30;
-					weaponcostm += weapons.weapon[W].maxstrength*30;
-				}
-				if (weapons.weapon[W].getScalarWeaponType() == cwtorpedon && weapons.weapon[W].shootable() ) {
-					weaponcoste += weapons.weapon[W].maxstrength*11;
-					weaponcostm += weapons.weapon[W].maxstrength*11;
-				}
-				if (weapons.weapon[W].getScalarWeaponType() == cwminen && weapons.weapon[W].shootable() ) {
-					weaponcoste += weapons.weapon[W].maxstrength*2;
-					weaponcostm += weapons.weapon[W].maxstrength*2;
-				}
-				if (weapons.weapon[W].getScalarWeaponType() == cwlasern && weapons.weapon[W].shootable() ) {
-					weaponcoste += weapons.weapon[W].maxstrength*14;
-					weaponcostm += weapons.weapon[W].maxstrength*13;
-				}
-				if (weapons.weapon[W].service() ) {
-					weaponcoste += 1000;
-					weaponcostm += 500;
-				}
-				if (weapons.weapon[W].canRefuel() ) {
-					weaponcoste += 100;
-					weaponcostm += 50;
-				}
-				// Check maximal Waffenreichweite
-				if ( rangecostsize < weapons.weapon[W].maxdistance ) {
-					rangecostsize = weapons.weapon[W].maxdistance;
-				}
-			}
-			// Waffenreichweitenzuschlag Kurzstrecke
-			if (rangecostsize > 19 ) {
-				weaponcoste += (rangecostsize-10)*80;
-				weaponcostm += (rangecostsize-10)*70;
-			}
-			// Waffenreichweitenzuschlag Mittelstrecke
-			if (rangecostsize > 69 ) {
-				weaponcoste += (rangecostsize-60)*150;
-				weaponcostm += (rangecostsize-60)*100;
-			}
-			// Waffenreichweitenzuschlag Langstrecke
-			if (rangecostsize > 99 ) {
-				weaponcoste += (rangecostsize-90)*200;
-				weaponcostm += (rangecostsize-90)*200;
-			}
-		}
+   // Baufunktionen
+   if ( hasFunction( ConstructBuildings )) {
+      specialcoste += 1000;
+      specialcostm += 500;
+   }
+   if ( hasFunction( InternalVehicleProduction ) || hasFunction( ExternalVehicleProduction )) {
+      specialcoste += 1000;
+      specialcostm += 500;
+   }
+   if ( objectsBuildable.size() > 0 || objectGroupsBuildable.size() > 0 ) {
+      specialcoste += 1000;
+      specialcostm += 500;
+   }
+   // Res Search
+   if ( hasFunction( DetectsMineralResources )) {
+      specialcoste += digrange*150;
+      specialcostm += digrange*100;
+   }
+   // Generator
+   if ( hasFunction( MatterConverter) ) {
+      specialcoste += 1000;
+      specialcostm += 500;
+   }
+   //ParaTrooper
+   if ( hasFunction( Paratrooper ) ) {
+      specialcoste += armor*2 ;
+      specialcostm += armor ;
+   }
+   // Reparaturfahrzeug
+   if ( hasFunction(InternalUnitRepair) || hasFunction(ExternalRepair) ) {
+      specialcoste += 1000;
+      specialcostm += 500;
+   }
+   // Selbstreparatur / Heilung
+   if ( hasFunction( AutoRepair ) ) {
+      specialcoste += autorepairrate*armor / 15;
+      specialcostm += autorepairrate*armor / 15;
+   }
+   // Radar
+   if ( view > 40 ) {
+      specialcoste += (view-40)*50;
+      specialcostm += (view-40)*20;
+   }
+   if (view > 90 ) {
+      specialcoste += (view-90)*100;
+      specialcostm += (view-90)*100;
+   }
+   // Satview
+   if ( hasFunction( SatelliteView ) ) {
+      specialcoste += view*20;
+      specialcostm += view*8;
+   }
+   //Sonar
+   if ( hasFunction(Sonar) && (movemalustyp == MoveMalusType::trooper) ) {
+      specialcoste += view*10;
+      specialcostm += view*4;
+   } else {
+      if ( hasFunction(Sonar)) {
+         specialcoste += view*20;
+         specialcostm += view*10;
+      }
+   }
+   //Move during reaction fire
+   if ( hasFunction( MoveWithReactionFire )) {
+      int rfweapcount = 0;
+      for ( int i = 0; i < weapons.count; ++i )
+         if ( weapons.weapon[i].shootable() )
+            rfweapcount += weapons.weapon[i].reactionFireShots;
 
-// Part V Specialcost
-		// stealth (typecost) oder jamming (specialcost)
+      specialcoste += rfweapcount * 100;
+      specialcostm += rfweapcount * 50;
+   }
 
-		if ( jamming > 0 && (functions & cfownFieldJamming) ) {
-			if (jamming < 31 ) {
-				typecoste += jamming*20;  //  f³r Trooper oder eigenschaftsbedingt (klein, schnell)
-				typecostm += jamming*10;
-			} else {
-				typecoste += jamming*50;  //  f³r alle h÷herwirkenden Stealthverfahren, Anstrich, besondere Konstruktion, tarnfeld usw.
-				typecostm += jamming*30;
-			}
-		} else {
-			specialcoste += jamming*170;
-			specialcostm += jamming*150;
-		}
+   //move after attack
+   if ( hasFunction( MoveAfterAttack ) ) {
+      specialcoste += movecostsize*10;
+      specialcostm += movecostsize*5;
+   }
 
-		// Baufunktionen
-		if ( (functions & cfputbuilding) || (functions & cfspecificbuildingconstruction ) ) {
-			specialcoste += 1000;
-			specialcostm += 500;
-		}
-		if ( functions & cfvehicleconstruction ) {
-			specialcoste += 1000;
-			specialcostm += 500;
-		}
-		if ( objectsBuildable.size() > 0 || objectGroupsBuildable.size() > 0 ) {
-			specialcoste += 1000;
-			specialcostm += 500;
-		}
-      // Res Search
-		if ( (functions & cfmanualdigger) || (functions & cfautodigger) ) {
-			specialcoste += digrange*150;
-			specialcostm += digrange*100;
-		}
-      // Generator
-		if ( functions & cfgenerator ) {
-			specialcoste += 1000;
-			specialcostm += 500;
-		}
-      //ParaTrooper
-		if ( functions & cfparatrooper ) {
-			specialcoste += armor*2 ;
-			specialcostm += armor ;
-		}
-		// Reparaturfahrzeug
-		if ( functions & cfrepair ) {
-			specialcoste += 1000;
-			specialcostm += 500;
-		}
-		// Selbstreparatur / Heilung
-		if ( functions & cfautorepair ) {
-			specialcoste += autorepairrate*armor / 15;
-			specialcostm += autorepairrate*armor / 15;
-		}
-		// Radar
-		if ( view > 40 ) {
-			specialcoste += (view-40)*50;
-			specialcostm += (view-40)*20;
-		}
-		if (view > 90 ) {
-			specialcoste += (view-90)*100;
-			specialcostm += (view-90)*100;
-		}
-      // Satview
-		if ( functions & cfsatellitenview ) {
-			specialcoste += view*20;
-			specialcostm += view*8;
-		}
-		//Sonar
-		if ( (functions & cfsonar) && (movemalustyp == MoveMalusType::trooper) ) {
-			specialcoste += view*10;
-			specialcostm += view*4;
-		} else {
-			if (functions & cfsonar) {
-				specialcoste += view*20;
-				specialcostm += view*10;
-			}
-		}
-		//Move during reaction fire
-		if ( functions & cfmovewithRF ) {
-         int rfweapcount = 0;
-         for ( int i = 0; i < weapons.count; ++i )
-            if ( weapons.weapon[i].shootable() )
-               rfweapcount += weapons.weapon[i].reactionFireShots;
+   // Part VI - Addition
+   res.energy += typecoste + weaponcoste + specialcoste;
+   res.material += typecostm + weaponcostm + specialcostm;
 
-			specialcoste += rfweapcount * 100;
-			specialcostm += rfweapcount * 50;
-		}
+   // Part VII Abschlõge
+   // keine Luftbetankung
+   if ( hasFunction( NoInairRefuelling )) {
+      res.energy -= typecoste/6;
+      res.material -= typecostm/6;
+   }
 
-		//move after attack
-		if ( functions & cf_moveafterattack ) {
-			specialcoste += movecostsize*10;
-			specialcostm += movecostsize*5;
-		}
+   // Kamikazeeinheiten
+   if ( hasFunction( KamikazeOnly )) {
+      res.energy -= (typecoste+weaponcoste)/2;
+      res.material -= (typecostm+weaponcostm)/2;
+   }
 
-// Part VI - Addition
-		res.energy += typecoste + weaponcoste + specialcoste;
-		res.material += typecostm + weaponcostm + specialcostm;
+   // low movement
+   if (movecostsize < 20 ) {
+      res.energy -= typecoste/4;
+      res.material -= typecostm/4;
+   }
 
-// Part VII Abschlõge
-		// keine Luftbetankung
-		if (functions & cfnoairrefuel) {
-			res.energy -= typecoste/6;
-			res.material -= typecostm/6;
-		}
+   // low movement
+   if (movecostsize < 10 ) {
+      res.energy -= typecoste/4;
+      res.material -= typecostm/4;
+   }
+   // Part VIII Abschluss
 
-		// Kamikazeeinheiten
-		if (functions & cfkamikaze) {
-			res.energy -= (typecoste+weaponcoste)/2;
-			res.material -= (typecostm+weaponcostm)/2;
-		}
-
-		// low movement
-		if (movecostsize < 20 ) {
-			res.energy -= typecoste/4;
-			res.material -= typecostm/4;
-		}
-
-		// low movement
-		if (movecostsize < 10 ) {
-			res.energy -= typecoste/4;
-			res.material -= typecostm/4;
-		}
-// Part VIII Abschluss
-
-	return res;
+   return res;
 }
 
 

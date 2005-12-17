@@ -80,10 +80,9 @@ Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const B
 
 bool Building::canRepair ( const ContainerBase* item ) const
 {
-   if ( (typ->special & cgrepairfacilityb) || item == this )
-      return true;
-   else
-      return false;
+   return typ->hasFunction( ContainerBaseType::InternalUnitRepair  ) ||
+         typ->hasFunction( ContainerBaseType::ExternalRepair  ) ||
+         (item == this  ) ;
 }
 
 int Building::getIdentification()
@@ -97,7 +96,7 @@ void Building :: convert ( int player )
       fatalError("convertbuilding: \n color muá im bereich 0..8 sein ");
 
    #ifdef sgmain
-   if ( typ->special & cgselfdestruct_at_conquerb ) {
+   if ( typ->hasFunction( ContainerBaseType::SelfDestructOnConquer  ) ) {
       delete this;
       return;
    }
@@ -327,9 +326,9 @@ BuildingType::LocalCoordinate Building::getLocalCoordinate( const MapCoordinate&
   return typ->getLocalCoordinate( entryPosition, field );
 }
 
+#if 0
 void    Building :: produceAmmo ( int type, int num )
 {
-   num = ((num + weaponpackagesize - 1) / weaponpackagesize)*weaponpackagesize;
    Resources res;
    for( int j = 0; j< resourceTypeNum; j++ )
       res.resource(j) = cwaffenproduktionskosten[type][j] * num / 5;
@@ -350,7 +349,7 @@ void    Building :: produceAmmo ( int type, int num )
 
    ammo[type] += produceablePackages * 5;
 }
-
+#endif
 
 Building :: ~Building ()
 {
@@ -626,17 +625,33 @@ ASCString Building::getName ( ) const
       return name;
 }
 
-int Building::getAmmo( int type ) const
+int Building::getAmmo( int type, int num, bool queryOnly ) 
 {
    assert( type >= 0 && type < waffenanzahl );
-   return ammo[type];
+   int got = min( ammo[type], num );
+   if ( !queryOnly ) {
+      ammo[type] -= got;
+      ammoChanged();
+   }
+   return got;
 }
+
+int Building::putAmmo( int type, int num, bool queryOnly ) 
+{
+   assert( type >= 0 && type < waffenanzahl );
+   if ( !queryOnly ) {
+      ammo[type] += num;
+      ammoChanged();
+   }
+   return num;
+}
+
 
 
 void Building::endTurn(  )
 {
 #ifdef sgmain
-   if ( CGameOptions::Instance()->automaticTraining && (typ->special & cgtrainingb )) {
+   if ( CGameOptions::Instance()->automaticTraining && (typ->hasFunction( ContainerBaseType::TrainingCenter  ) )) {
       for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
          if ( *i ) {
             bool ammoFull = true;
@@ -674,19 +689,19 @@ Resources Building::netResourcePlus( ) const
 Building::Work* Building::spawnWorkClasses( bool justQuery )
 {
    if ( actmap->_resourcemode != 1 ) {
-      if ( typ->special & cgwindkraftwerkb )
+      if ( typ->hasFunction( ContainerBaseType::WindPowerPlant  ) )
          return new WindPowerplant ( this );
 
-      if ( typ->special & cgsolarkraftwerkb )
+      if ( typ->hasFunction( ContainerBaseType::SolarPowerPlant  ) )
          return new SolarPowerplant ( this );
 
-      if ( typ->special & cgconventionelpowerplantb )
+      if ( typ->hasFunction( ContainerBaseType::MatterConverter  ) )
          return new MatterConverter ( this );
 
-      if ( typ->special & cgminingstationb )
+      if ( typ->hasFunction( ContainerBaseType::MiningStation ) )
          return new MiningStation ( this, justQuery );
 
-      if ( typ->special & cgresourceSinkB )
+      if ( typ->hasFunction( ContainerBaseType::ResourceSink  ) )
          return new ResourceSink ( this );
    } else {
       return new BiResourceGeneration ( this );
@@ -1227,7 +1242,7 @@ Resources Building :: getResourceUsage( )
      r = w->getUsage();
    delete w;
 
-   if ( typ->special & cgresearchb )
+   if ( typ->hasFunction( ContainerBaseType::Research ) )
       r += returnResourcenUseForResearch( this, researchpoints );
 
 
@@ -1267,7 +1282,7 @@ void doresearch ( tmap* actmap, int player )
 
    for ( Player::BuildingList::iterator bi = actmap->player[player].buildingList.begin(); bi != actmap->player[player].buildingList.end(); bi++ ) {
       Building* bld = *bi;
-      if ( bld->typ->special & cgresearchb ) {
+      if ( bld->typ->hasFunction( ContainerBaseType::Research  ) ) {
          Resources res = returnResourcenUseForResearch ( bld, bld->researchpoints );
 
          int m = max ( res.energy, max ( res.material, res.fuel));

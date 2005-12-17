@@ -130,14 +130,14 @@ void         tcomputevehicleview::init( const Vehicle* eht, int _mode  )   // mo
    if ( eht->height == chsatellit )
       satellitenview = 1;
    else
-      satellitenview = !!(eht->typ->functions & cfsatellitenview);
+      satellitenview = eht->typ->hasFunction( ContainerBaseType::SatelliteView  );
 
-   sonar =           !!(eht->typ->functions & cfsonar);
-   minenview =      !!(eht->typ->functions & cfmineview);
-   if ( eht->typ->functions & cfownFieldJamming )
+   sonar =  eht->typ->hasFunction( ContainerBaseType::Sonar );
+   minenview = eht->typ->hasFunction( ContainerBaseType::MineView  );
+   if ( eht->typ->hasFunction( ContainerBaseType::JamsOnlyOwnField  ) )
       rangeJamming = false;
 
-   if ( (eht->typ->functions & cfautodigger) && _mode == 1 )
+   if ( eht->typ->hasFunction( ContainerBaseType::DetectsMineralResources  ) && _mode == 1 )
       eht->searchForMineralResources();
 
    int view = eht->typ->view+1;
@@ -172,10 +172,16 @@ void         tcomputebuildingview::init( const Building*    bld,  int _mode )
    }
 
    initviewcalculation( c, j, bld->getEntry().x, bld->getEntry().y, _mode, bld->typ->buildingheight );
-   sonar = !!(bld->typ->special & cgsonarb);
+   
+   if ( bld->typ->buildingheight == chsatellit )
+      satellitenview = 1;
+   else
+      satellitenview = bld->typ->hasFunction( ContainerBaseType::SatelliteView  );
 
-   minenview = false;
-   satellitenview = !!(bld->typ->special & cgsatviewb);
+   sonar =  bld->typ->hasFunction( ContainerBaseType::Sonar );
+   minenview = bld->typ->hasFunction( ContainerBaseType::MineView  );
+   if ( bld->typ->hasFunction( ContainerBaseType::JamsOnlyOwnField  ) )
+      rangeJamming = false;
 
    building = bld;
 

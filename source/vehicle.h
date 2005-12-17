@@ -179,7 +179,8 @@ class BuildingType;
     //! returns the units name or, if it does not exist, the unit type's name or description
     ASCString    getName() const;
 
-    int getAmmo( int type ) const;
+    int getAmmo( int type, int num, bool queryOnly );
+    int putAmmo( int type, int num, bool queryOnly );
 
 
   protected:
@@ -260,7 +261,7 @@ class BuildingType;
     */
     int searchForMineralResources( ) const;
 
-    bool searchForMineralResourcesAvailable();
+//    bool searchForMineralResourcesAvailable();
 
     //! returns the units position
     MapCoordinate3D getPosition ( ) const;

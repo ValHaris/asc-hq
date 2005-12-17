@@ -23,12 +23,58 @@
  #include "mapitemtype.h"
 
 class ContainerBaseType: public MapItemType, public LoadableItemType {
+   protected:
+      std::bitset<64> features;
    public:
      ContainerBaseType ();
 
-     static const int functionNum = 43;
+     enum ContainerFunctions { TrainingCenter,
+        InternalVehicleProduction,
+        AmmoProduction,
+        InternalUnitRepair,
+        RecycleUnits,
+        Research,
+        Sonar,
+        SatelliteView,
+        MineView,
+        WindPowerPlant,
+        SolarPowerPlant,
+        MatterConverter,
+        MiningStation,
+        ProduceNonLeavableUnits,
+        ResourceSink,
+        ExternalEnergyTransfer,
+        ExternalMaterialTransfer,
+        ExternalFuelTransfer,
+        ExternalAmmoTransfer,
+        ExternalRepair,
+        NoObjectChaining,
+        SelfDestructOnConquer,
+        Paratrooper,
+        PlaceMines,
+        CruiserLanding,
+        ConquerBuildings,
+        MoveAfterAttack,
+        ExternalVehicleProduction,
+        ConstructBuildings,
+        IceBreaker,
+        NoInairRefuelling,
+        MakesTracks,
+        DetectsMineralResources,
+        NoReactionfire,
+        AutoRepair,
+        KamikazeOnly,
+        ImmuneToMines,
+        JamsOnlyOwnField,
+        MoveWithReactionFire,
+        OnlyMoveToAndFromTransports };
+
      
-     // BitSet functions;
+     static const int functionNum = 41;
+
+     bool hasFunction( ContainerFunctions function ) const;
+     bool hasAnyFunction( std::bitset<64> functions ) const;
+     static const char* getFunctionName( ContainerFunctions function );
      
      int id;
 
@@ -89,7 +135,7 @@ class ContainerBaseType: public MapItemType, public LoadableItemType {
 
             int dockingHeight_rel;
 
-            int requireUnitFunction;
+            std::bitset<64> requiresUnitFeature;
 
             int movecost;
 

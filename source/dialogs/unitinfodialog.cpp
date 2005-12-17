@@ -115,11 +115,11 @@ class UnitInfoDialog : public Panel {
                         setImage( ASCString("unitpad_transport_") + unitCategoryTags[i], IconRepository::getIcon("pad_symbol_no.png") );
 
                   ASCString s;
-                  for ( int i = 0; i < cvehiclefunctionsnum; ++i )
-                     if ( tio.requireUnitFunction & (1 << i)) {
+                  for ( int i = 0; i < ContainerBaseType::functionNum; ++i )
+                     if ( tio.requiresUnitFeature.test( i )) {
                         if ( s.length() )
                            s += ", ";
-                        s += cvehiclefunctions[i];
+                        s += ContainerBaseType::getFunctionName( ContainerBaseType::ContainerFunctions(i));
                      }
                   setLabelText( "unitpad_transport_specialfunctions", s );
 
@@ -335,10 +335,11 @@ class UnitInfoDialog : public Panel {
                   setLabelText( "unitpad_unittankenergy", vt->tank.energy );
                   setLabelText( "unitpad_unittankmaterial", vt->tank.material );
 
+
                   ASCString abilities;
-                  for ( int i = 0; i < cvehiclefunctionsnum; ++i )
-                     if ( vt->functions & (1 << i)) 
-                        abilities += cvehiclefunctions[i] + ASCString("\n");
+                  for ( int i = 0; i < ContainerBaseType::functionNum; ++i )
+                     if ( vt->hasFunction(ContainerBaseType::ContainerFunctions(i)))
+                        abilities += ContainerBaseType::getFunctionName(ContainerBaseType::ContainerFunctions(i)) + ASCString("\n");
                   setLabelText( "unitpad_unitabilities", abilities );
 
 

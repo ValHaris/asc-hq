@@ -23,11 +23,8 @@
 #include "graphics/blitter.h"
 
 
-
-
 const char*  ccontainerfunctions[ContainerBaseType::functionNum+1]  =
-              { "HQ",
-                "training",
+              { "training",
                 "internal vehicle production",
                 "ammunition production",
                 "internal unit repair",
@@ -54,7 +51,6 @@ const char*  ccontainerfunctions[ContainerBaseType::functionNum+1]  =
                "cruiser landing",
                "conquer buildings",
                "move after attack",
-               "construct ALL buildings",
                "external vehicle production",
                "construct specific buildings",
                "icebreaker",
@@ -68,7 +64,8 @@ const char*  ccontainerfunctions[ContainerBaseType::functionNum+1]  =
                "immune to mines",
                "jams only own field",
                "move with reaction fire on",
-               "only move to and from transports" };
+               "only move to and from transports",
+              NULL };
 
 
 ContainerBaseType :: ContainerBaseType ()
@@ -82,6 +79,27 @@ ContainerBaseType :: ContainerBaseType ()
    view = 0;
 }
 
+bool ContainerBaseType::hasFunction( ContainerFunctions function ) const
+{
+   return features.test( int(function) );
+}
+
+bool ContainerBaseType::hasAnyFunction( BitSet functions ) const
+{
+   return (features & functions).any();
+}
+           
+
+
+const char* ContainerBaseType::getFunctionName( ContainerFunctions function )
+{
+   if ( function < functionNum )
+      return ccontainerfunctions[function];
+   else
+      return NULL;
+}
+
+
 ContainerBaseType::TransportationIO::TransportationIO()
 {
   mode = 0;
@@ -91,7 +109,6 @@ ContainerBaseType::TransportationIO::TransportationIO()
   vehicleCategoriesLoadable = -1;
   dockingHeight_abs = 0;
   dockingHeight_rel = 0;
-  requireUnitFunction = 0;
   disableAttack = false;
   movecost = -1;
 }
@@ -106,7 +123,16 @@ void ContainerBaseType :: TransportationIO :: runTextIO ( PropertyContainer& pc 
    pc.addTagInteger( "CategoriesNOT", vehicleCategoriesLoadable, cmovemalitypenum, unitCategoryTags, true );
    pc.addTagInteger( "DockingHeightAbs", dockingHeight_abs, choehenstufennum, heightTags, 0 );
    pc.addInteger( "DockingHeightRel", dockingHeight_rel, -100 );
-   pc.addTagInteger( "RequireUnitFunction", requireUnitFunction, cvehiclefunctionsnum, vehicleAbilities, 0 );
+   if ( pc.find( "RequireUnitFunction" )) {
+      int r = 0;
+      pc.addTagInteger( "RequireUnitFunction", r, Vehicletype::legacyVehicleFunctionNum, vehicleAbilities, 0 );
+      requiresUnitFeature = Vehicletype::convertOldFunctions(r, pc.getFileName() );
+   } else
+      if ( pc.find( "RequiresUnitFeature" ))
+         pc.addTagArray( "RequiresUnitFeature", requiresUnitFeature, ContainerBaseType::functionNum, containerFunctionTags );
+      else
+         requiresUnitFeature.reset();
+      
    pc.addBool( "DisableAttack", disableAttack, false );
    pc.addInteger( "MoveCost", movecost, -1 );
    if ( movecost < 10 && movecost >= 0 )
@@ -166,7 +192,7 @@ bool ContainerBaseType :: vehicleFit ( const Vehicletype* fzt ) const
    return false;
 }
 
-const int containerBaseTypeVersion = 2;
+const int containerBaseTypeVersion = 3;
 
 
 void ContainerBaseType :: read ( tnstream& stream )
@@ -188,6 +214,10 @@ void ContainerBaseType :: read ( tnstream& stream )
 
    if ( version >= 2 )
       infoImageFilename = stream.readString();
+
+   if ( version >= 3 )
+      stream.readBitset( features );
+
 }
 
 void ContainerBaseType :: write ( tnstream& stream ) const
@@ -201,9 +231,10 @@ void ContainerBaseType :: write ( tnstream& stream ) const
    for ( int i = 0; i < entranceSystems.size(); i++ )
       entranceSystems[i].write( stream );
    stream.writeString( infoImageFilename );
+   stream.writeBitset( features );
 }
 
-const int containerBaseTypeTransportVersion = 2;
+const int containerBaseTypeTransportVersion = 3;
 
 
 void ContainerBaseType :: TransportationIO :: read ( tnstream& stream )
@@ -221,7 +252,12 @@ void ContainerBaseType :: TransportationIO :: read ( tnstream& stream )
    vehicleCategoriesLoadable = stream.readInt();
    dockingHeight_abs = stream.readInt();
    dockingHeight_rel = stream.readInt();
-   requireUnitFunction = stream.readInt();
+   if ( version <= 2 ) {
+      int r = stream.readInt();
+      requiresUnitFeature = Vehicletype::convertOldFunctions(r, stream.getLocation());
+   } else
+      stream.readBitset( requiresUnitFeature );
+      
    disableAttack = stream.readInt();
    if ( version >= 2 )
       movecost = stream.readInt();
@@ -240,7 +276,7 @@ void ContainerBaseType :: TransportationIO :: write ( tnstream& stream ) const
    stream.writeInt ( vehicleCategoriesLoadable );
    stream.writeInt ( dockingHeight_abs );
    stream.writeInt ( dockingHeight_rel );
-   stream.writeInt ( requireUnitFunction );
+   stream.writeBitset ( requiresUnitFeature );
    stream.writeInt ( disableAttack );
    stream.writeInt ( movecost );
 }

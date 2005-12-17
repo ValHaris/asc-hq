@@ -134,17 +134,6 @@ extern void dissectvehicle ( Vehicle* eht );
 
 
 
-
-/** creates a new vehicle, setting up its class depending on the research. If this vehicletype is
-     not available (because it hasn't been researched, for example), vehicle will be set to NULL,
-     else it will contain a pointer to the newly created vehicle. The vehicle will be empty after
-     creation (no fuel, etc). The resources for the creation must be seperately 'consumed'. */
-extern void   generatevehicle_cl ( Vehicletype* fztyp,
-                                                int               col,
-                                                Vehicle* &    vehicle,
-                                                int               x, 
-                                                int               y );
-
 extern int searchexternaltransferfields ( Building* bld );
 
 extern Resources getDestructionCost( Building* bld, Vehicle* veh );

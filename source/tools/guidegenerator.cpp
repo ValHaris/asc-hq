@@ -304,22 +304,20 @@ void BuildingGuideGen::generateCategories() const {
           if(s->isMember(bt->id, SingleUnitSet::building)&&(processedBuildingIds.find(bt->id)!=processedBuildingIds.end())) {
             ASCString fileLink = relMenuPath + strrr(bt->id) + APPENDIX + ASCString(MAINLINKSUFFIX) + HTML;
             CategoryMember* dataEntry = new CategoryMember(bt->name.toUpper(), menuCSSFile, fileLink, TARGET);
-            if ( bt->special & cghqb ) {
-              hqCat->addEntry(dataEntry);
-            } else if ( bt->special & cgvehicleproductionb ) {
+            if ( bt->hasFunction( ContainerBaseType::InternalVehicleProduction  )) {
               facCat->addEntry(dataEntry);
-            } else if ( bt->special & cgresearchb ) {
+            } else if ( bt->hasFunction( ContainerBaseType::Research ) ) {
               researchCat->addEntry(dataEntry);
-            } else if ( bt->special & cgwindkraftwerkb ) {
+            } else if ( bt->hasFunction( ContainerBaseType::WindPowerPlant  )) {
               windpowCat->addEntry(dataEntry);
-            } else if(bt->special & cgsolarkraftwerkb) {
-              solarpowCat->addEntry(dataEntry);
-            } else if ( bt->special & cgconventionelpowerplantb ) {
-              mattconCat->addEntry(dataEntry);
-            } else if ( bt->special & cgminingstationb ) {
-              mineCat->addEntry(dataEntry);
-            } else if ( bt->special & cgtrainingb ) {
-              trainCat->addEntry(dataEntry);
+            } else if ( bt->hasFunction( ContainerBaseType::SolarPowerPlant  )) {
+               solarpowCat->addEntry(dataEntry);
+            } else if ( bt->hasFunction( ContainerBaseType::MatterConverter  )) {
+               mattconCat->addEntry(dataEntry);
+            } else if ( bt->hasFunction( ContainerBaseType::MiningStation  )) {
+               mineCat->addEntry(dataEntry);
+            } else if ( bt->hasFunction( ContainerBaseType::TrainingCenter  )) {
+               trainCat->addEntry(dataEntry);
             } else {
               noCat->addEntry(dataEntry);
             }

@@ -222,7 +222,7 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
 
    if ( buildingRequired ) {
       for ( ReachableBuildings::iterator rb = reachableBuildings.begin(); rb != reachableBuildings.end(); rb++  ) {
-         if ( !repair || (rb->second->typ->special & cgrepairfacilityb))
+         if ( !repair || (rb->second->typ->hasFunction( ContainerBaseType::InternalUnitRepair )))
             return rb->second->getPosition3D();
       }
    }
@@ -729,7 +729,7 @@ void AI ::  runReconUnits ( )
 
 AI::UnitDistribution::Group AI::getUnitDistributionGroup ( Vehicletype* vt )
 {
-   switch ( chooseJob ( vt, vt->functions ).front() ) {
+   switch ( chooseJob ( vt ).front() ) {
       case AiParameter::job_supply : return UnitDistribution::service;
       case AiParameter::job_recon  : return UnitDistribution::recon;
       case AiParameter::job_conquer: return UnitDistribution::conquer;

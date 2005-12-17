@@ -750,8 +750,6 @@ const int submarineMovement = 11;
 
 #define autorepairdamagedecrease 10    // only for old units ; new one use autorepairrate
 
-#define weaponpackagesize 1
-
 #define brigde1buildcostincrease 12       // jeweils Basis 8; flaches Wasser
 #define brigde2buildcostincrease 16       // jeweils Basis 8; mitteltiefes Wasser
 #define brigde3buildcostincrease 36       // jeweils Basis 8; tiefes Wasser

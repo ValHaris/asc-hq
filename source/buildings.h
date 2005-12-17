@@ -229,10 +229,6 @@ class  Building : public ContainerBase {
     //! converts a global coordinate into a local coordinate.
     BuildingType::LocalCoordinate getLocalCoordinate( const MapCoordinate& field ) const;
     
-    
-    //! produces ammunition and stores it in #ammo
-    void produceAmmo ( int type, int num );
-
     //! returns the position of the buildings entry
     MapCoordinate3D getPosition ( ) const { return getEntry(); };
 
@@ -266,7 +262,8 @@ class  Building : public ContainerBase {
     //! returns the amount of resources that the net which the building is connected to produces each turn
     Resources netResourcePlus( ) const;
 
-    int getAmmo( int type ) const;
+    int getAmmo( int type, int num, bool queryOnly );
+    int putAmmo( int type, int num, bool queryOnly );
 
 
     int getHeight() const { return typ->buildingheight; };

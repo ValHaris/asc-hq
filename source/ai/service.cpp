@@ -475,7 +475,7 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
                                                    for ( int  j = 0; j < waffenanzahl; j++ ) {
                                                        int n = ammoNeeded[j] - bld->ammo[j];
                                                        if ( n > 0 )
-                                                          if ( bld->typ->special & cgammunitionproductionb ) {
+                                                          if ( bld->typ->hasFunction( ContainerBaseType::AmmoProduction  )) {
                                                              for ( int r = 0; r < resourceTypeNum; r++ )
                                                                 needed.resource(r) += (n+4)/5 * cwaffenproduktionskosten[j][r];
                                                           } else

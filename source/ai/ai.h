@@ -347,7 +347,7 @@
             void  calculateThreat ( Building* bld );
             void  calculateThreat ( Building* bld, int player );
 
-            static AiParameter::JobList chooseJob ( const Vehicletype* typ, int functions );
+            static AiParameter::JobList chooseJob ( const Vehicletype* typ );
             friend class CalculateThreat_Vehicle;
 
             /** This structure helps identifying units which don't reach any

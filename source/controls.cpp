@@ -100,7 +100,10 @@ void tsearchexternaltransferfields :: searchtransferfields( Building* building )
    actmap->cleartemps( 7 );
    bld = building;
    numberoffields = 0;
-   if ( bld->typ->special & cgexternalloadingb ) {
+   if ( bld->typ->hasFunction( ContainerBaseType::ExternalEnergyTransfer  ) ||
+        bld->typ->hasFunction( ContainerBaseType::ExternalMaterialTransfer  ) ||
+        bld->typ->hasFunction( ContainerBaseType::ExternalFuelTransfer  ) ||
+        bld->typ->hasFunction( ContainerBaseType::ExternalAmmoTransfer  ) ) {
       initsearch( bld->getEntry(), 1, 1 );
       startsearch();
    }
@@ -937,50 +940,6 @@ void dissectvehicle ( Vehicle* eht )
    */
 }
 
-
-
-void         generatevehicle_cl ( Vehicletype* fztyp,
-                                  int         col,
-                                  Vehicle* &   vehicle,
-                                  int          x,
-                                  int          y )
-{
-   if ( actmap->player[ actmap->actplayer ].research.vehicletypeavailable ( fztyp ) ) {
-
-      vehicle = new Vehicle ( fztyp, actmap, col );
-              
-      logtoreplayinfo ( rpl_produceunit, (int) fztyp->id , (int) col * 8, x, y, int(0), (int) vehicle->networkid );
-
-      vehicle->xpos = x;
-      vehicle->ypos = y;
-
-      int height = -1;
-      int maxmove = -1;
-      for ( int h = 0; h < 8; h++ )
-         if ( fztyp->height & ( 1 << h ))
-            if ( fztyp->movement[h] > maxmove ) {
-               maxmove = fztyp->movement[h];
-               height = h;
-            }
-      vehicle->height = 1 << height;
-      vehicle->setMovement ( 0 );
-
-
-
-      if ( actmap->getgameparameter(cgp_bi3_training) >= 1 ) {
-         int cnt = 0;
-
-         for ( Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ )
-            if ( (*bi)->typ->special & cgtrainingb )
-               cnt++;
-
-         vehicle->experience += cnt * actmap->getgameparameter(cgp_bi3_training);
-         if ( vehicle->experience > maxunitexperience )
-            vehicle->experience = maxunitexperience;
-      }
-   } else
-     vehicle = NULL;
-} 
 
 
 

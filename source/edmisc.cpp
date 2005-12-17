@@ -253,7 +253,9 @@ void tmousebuttonbox::done(void)
 // õS Rightmousebox
 
 int rightmousebox(void)
-{  tmousebuttonbox tmb;
+{
+   /*
+   tmousebuttonbox tmb;
 
    tmb.init();
    pf2 = getactfield();
@@ -270,7 +272,7 @@ int rightmousebox(void)
          tmb.additem(act_changeunitvals);
          if ( pf2->building->typ->maxLoadableUnits > 0  )
             tmb.additem(act_changecargo);
-         if ( pf2->building->typ->special & cgvehicleproductionb )
+         if ( pf2->building->typ->hasFunction( ContainerBaseType::InternalVehicleProduction  ) )
             tmb.additem(act_changeproduction);
          tmb.additem(act_deletebuilding);
          tmb.additem(act_deleteunit);
@@ -296,6 +298,8 @@ int rightmousebox(void)
    tmb.run();
    tmb.done();
    return tmb.actcode;
+   */
+   return 0;
 }
 
 // õS Leftmousebox
@@ -1467,30 +1471,43 @@ void         BuildingValues::init(void)
    addbutton("~F~uel-Storage",15,170,215,190,2,1,3,true);
    addeingabe(3,&storage.fuel,0,gbde.gettank(2));
 
-   if ( gbde.typ->special & (cgconventionelpowerplantb | cgsolarkraftwerkb | cgwindkraftwerkb | cgminingstationb | cgresourceSinkB)) b = true;
-   else b = false;
-
-   addbutton("Energy-Max-Plus",230,50,430,70,2,1,13,b);
-   addeingabe(13,&mplus.energy,0,gbde.typ->maxplus.energy);
-
-   if ( gbde.typ->special & (cgconventionelpowerplantb | cgminingstationb | cgresourceSinkB )) b = true;
-   else b = false;
-
-   addbutton("Energ~y~-Plus",230,90,430,110,2,1,4,b);
-   addeingabe(4,&plus.energy,0,mplus.energy);
-
-   if ( (gbde.typ->special & cgconventionelpowerplantb) || ((gbde.typ->special & cgminingstationb ) && gbde.typ->efficiencymaterial ) || (gbde.typ->special & cgresourceSinkB))
+   if ( gbde.typ->hasFunction( ContainerBaseType::MatterConverter  ) ||
+        gbde.typ->hasFunction( ContainerBaseType::SolarPowerPlant  ) ||
+        gbde.typ->hasFunction( ContainerBaseType::WindPowerPlant  ) ||
+        gbde.typ->hasFunction( ContainerBaseType::MiningStation  ) ||
+        gbde.typ->hasFunction( ContainerBaseType::ResourceSink  ))
       b = true;
    else
       b = false;
 
+   addbutton("Energy-Max-Plus",230,50,430,70,2,1,13,b);
+   addeingabe(13,&mplus.energy,0,gbde.typ->maxplus.energy);
+
+   if ( gbde.typ->hasFunction( ContainerBaseType::MatterConverter  ) ||
+        gbde.typ->hasFunction( ContainerBaseType::MiningStation  ) ||
+        gbde.typ->hasFunction( ContainerBaseType::ResourceSink  ))
+      b = true;
+   else
+      b = false;
+   
+
+   addbutton("Energ~y~-Plus",230,90,430,110,2,1,4,b);
+   addeingabe(4,&plus.energy,0,mplus.energy);
+
+   if ( ((gbde.typ->hasFunction( ContainerBaseType::MatterConverter) || gbde.typ->hasFunction( ContainerBaseType::MiningStation)) && gbde.typ->efficiencymaterial )
+          || gbde.typ->hasFunction( ContainerBaseType::ResourceSink  ) )
+      b = true;
+   else
+      b = false;
+   
    addbutton("Material-Max-Plus",230,130,430,150,2,1,14,b);
    addeingabe(14,&mplus.material,0,gbde.typ->maxplus.material);
 
    addbutton("M~a~terial-Plus",230,170,430,190,2,1,5,b);
    addeingabe(5,&plus.material,0,mplus.material);
 
-   if ( (gbde.typ->special & cgconventionelpowerplantb) || ((gbde.typ->special & cgminingstationb ) && gbde.typ->efficiencyfuel )|| (gbde.typ->special & cgresourceSinkB))
+   if ( ((gbde.typ->hasFunction( ContainerBaseType::MatterConverter) || gbde.typ->hasFunction( ContainerBaseType::MiningStation)) && gbde.typ->efficiencyfuel )
+          || gbde.typ->hasFunction( ContainerBaseType::ResourceSink  ) )
       b = true;
    else
       b = false;
@@ -1501,7 +1518,7 @@ void         BuildingValues::init(void)
    addbutton("F~u~el-Plus",230,250,430,270,2,1,6,b);
    addeingabe(6,&plus.fuel, 0, mplus.fuel);
 
-   if ( ( gbde.typ->special & cgresearchb ) || ( gbde.typ->maxresearchpoints > 0))
+   if ( gbde.typ->hasFunction( ContainerBaseType::Research) || ( gbde.typ->maxresearchpoints > 0))
       b = true;
    else
       b = false;
@@ -2068,7 +2085,7 @@ void         tunit::init(  )
       npop ( unit->height );
    }
 
-   addbutton("~R~eactionfire",dirx-50,250,dirx+50,260,3,1,22,(unit->typ->functions & cfno_reactionfire) == 0 );
+   addbutton("~R~eactionfire",dirx-50,250,dirx+50,260,3,1,22,(unit->typ->hasFunction( ContainerBaseType::NoReactionfire  )) == 0 );
    reactionfire = unit->reactionfire.getStatus();
    addeingabe(22, &reactionfire, 0, lightgray);
 
@@ -3013,7 +3030,7 @@ bool isNull(const Vehicletype* v ) { return !v; };
 
 void         building_production( Building* bld )
 {
-   if ( bld  && (bld->typ->special & cgvehicleproductionb ) ) {
+   if ( bld  && (bld->typ->hasFunction( ContainerBaseType::InternalVehicleProduction  ) ) ) {
       tbuildingproduction laderaum ( bld );
       laderaum.init( "production" );
       laderaum.run();

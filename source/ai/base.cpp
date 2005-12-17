@@ -116,7 +116,7 @@ void    AI :: setup (void)
 
 
    for ( Player::VehicleList::iterator i = getPlayer().vehicleList.begin(); i != getPlayer().vehicleList.end(); ++i)
-       if ( (*i)->typ->functions & cfmovewithRF )
+      if ( (*i)->typ->hasFunction( ContainerBaseType::MoveWithReactionFire ) )
           if ( (*i)->reactionfire.getStatus() == Vehicle::ReactionFire::off )
              (*i)->reactionfire.enable();
 

@@ -685,7 +685,7 @@ class PowerOn : public GuiFunction
             pfield fld = actmap->getField ( pos );
             if ( fld->vehicle )
                if ( fld->vehicle->color == actmap->actplayer*8  &&
-                     ( fld->vehicle->typ->functions & cfgenerator))
+                     ( fld->vehicle->typ->hasFunction( ContainerBaseType::MatterConverter  )))
                   if ( !fld->vehicle->getGeneratorStatus() )
                      return true;
 
@@ -726,7 +726,7 @@ class PowerOff : public GuiFunction
             pfield fld = actmap->getField ( pos );
             if ( fld->vehicle )
                if ( fld->vehicle->color == actmap->actplayer*8  &&
-                     ( fld->vehicle->typ->functions & cfgenerator))
+                    ( fld->vehicle->typ->hasFunction( ContainerBaseType::MatterConverter)))
                   if ( fld->vehicle->getGeneratorStatus() )
                      return true;
 
@@ -813,7 +813,7 @@ bool DestructBuilding::available( const MapCoordinate& pos, ContainerBase* subje
        if ( fld->vehicle )
           if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() )
              if (fld->vehicle->color == actmap->actplayer * 8)
-               if ((fld->vehicle->typ->functions & cfputbuilding) || !fld->vehicle->typ->buildingsBuildable.empty() )
+                if ( fld->vehicle->typ->hasFunction( ContainerBaseType::ConstructBuildings  ) || !fld->vehicle->typ->buildingsBuildable.empty() )
                   if ( fld->vehicle->getTank().fuel >= destruct_building_fuel_usage * fld->vehicle->typ->fuelConsumption )
                      return true;
     }
@@ -841,7 +841,7 @@ void DestructBuilding::execute(  const MapCoordinate& pos, ContainerBase* subjec
 }
 
 
-
+/*
 class SearchForMineralResources : public GuiFunction
 {
    public:
@@ -879,7 +879,7 @@ class SearchForMineralResources : public GuiFunction
          return "search for mineral resources";
       };
 };
-
+*/
 
 class OpenContainer : public GuiFunction
 {
@@ -1147,7 +1147,10 @@ class RefuelUnit : public GuiFunction
 
             if ( fld->building )
                if ( fld->building->color == actmap->actplayer * 8)
-                   if ( fld->building->typ->special & (cgexternalloadingb | cgexternalresourceloadingb | cgexternalammoloadingb ))
+                  if ( fld->building->typ->hasFunction( ContainerBaseType::ExternalEnergyTransfer ) ||
+                       fld->building->typ->hasFunction( ContainerBaseType::ExternalMaterialTransfer ) ||
+                       fld->building->typ->hasFunction( ContainerBaseType::ExternalFuelTransfer ) ||
+                       fld->building->typ->hasFunction( ContainerBaseType::ExternalAmmoTransfer ))
                       return true;
          } else
             if ( pendingVehicleActions.actionType == vat_service && pendingVehicleActions.service->guimode == 2) {
@@ -1299,10 +1302,10 @@ class PutMine : public GuiFunction
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          pfield fld = actmap->getField(pos);
-         if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
+         if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
             if ( fld->vehicle )
                if (fld->vehicle->color == actmap->actplayer * 8)
-                  if (fld->vehicle->typ->functions & cfminenleger )
+                  if (fld->vehicle->typ->hasFunction( ContainerBaseType::PlaceMines ) )
                      if ( !fld->vehicle->attacked )
                         return true;
          return false;
@@ -2360,7 +2363,7 @@ bool ConstructBuilding::available( const MapCoordinate& pos, ContainerBase* subj
        if ( fld->vehicle )
           if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() )
              if (fld->vehicle->color == actmap->actplayer * 8)
-               if (fld->vehicle->typ->functions & (cfputbuilding | cfspecificbuildingconstruction))
+                if (fld->vehicle->typ->hasFunction( ContainerBaseType::ConstructBuildings  ))
                   return true;
     }
     else
@@ -2634,7 +2637,7 @@ void registerGuiFunctions( GuiIconHandler& handler )
    handler.registerUserFunction( new GuiFunctions::BuildVehicle() );
    handler.registerUserFunction( new GuiFunctions::ConstructBuilding() );
    handler.registerUserFunction( new GuiFunctions::DestructBuilding() );
-   handler.registerUserFunction( new GuiFunctions::SearchForMineralResources() );
+//   handler.registerUserFunction( new GuiFunctions::SearchForMineralResources() );
    handler.registerUserFunction( new GuiFunctions::OpenContainer() );
    handler.registerUserFunction( new GuiFunctions::EnableReactionfire() );
    handler.registerUserFunction( new GuiFunctions::DisableReactionfire() );

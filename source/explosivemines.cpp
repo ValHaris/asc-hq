@@ -42,7 +42,7 @@
 
 bool Mine :: attacksunit ( const Vehicle* veh )
 {
-     if  (!( ( veh->typ->functions & cfmineimmune ) ||
+   if  (!( ( veh->typ->hasFunction( ContainerBaseType::ImmuneToMines  ) ) ||
               ( veh->height > chfahrend ) ||
               ( actmap->getPlayer(player).diplomacy.getState(veh->getOwner()) >= PEACE ) ||
               ( (veh->typ->movemalustyp ==  cmm_trooper) && (type != cmantipersonnelmine)) || 

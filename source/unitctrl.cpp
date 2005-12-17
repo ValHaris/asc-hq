@@ -34,6 +34,7 @@
 #include "gameoptions.h"
 #include "itemrepository.h"
 #include "astar2.h"
+#include "containercontrols.h"
 
 PendingVehicleActions pendingVehicleActions;
 
@@ -818,7 +819,7 @@ int VehicleAttack :: execute ( Vehicle* veh, int x, int y, int step, int _kamika
       int ad2 = battle->av.damage;
       int dd2 = battle->dv.damage;
 
-      if ( !(vehicle->typ->functions & cf_moveafterattack) )
+      if ( !vehicle->typ->hasFunction( ContainerBaseType::MoveAfterAttack )) 
          vehicle->setMovement ( 0 );
 
       battle->setresult ();
@@ -962,7 +963,7 @@ int  VehicleService :: avail ( const Vehicle* veh )
 {
    int av = 0;
    if ( veh && !veh->attacked ) {
-      if ( veh->canRepair( NULL ) && (veh->typ->functions & cfrepair))
+      if ( veh->canRepair( NULL ) && (veh->typ->hasFunction( ContainerBaseType::ExternalRepair  )))
          for ( int i = 0; i < veh->typ->weapons.count; i++ )
             if ( veh->typ->weapons.weapon[i].service() )
                av++;
@@ -972,15 +973,15 @@ int  VehicleService :: avail ( const Vehicle* veh )
       for ( int i = 0; i < fzt->weapons.count; i++ ) {
          if ( fzt->weapons.weapon[i].service() ) {
 
-            if ( veh->typ->functions & cfenergyref )
+            if ( veh->typ->hasFunction( ContainerBaseType::ExternalEnergyTransfer  ) )
                if ( fzt->tank.energy )
                   av++;
 
-            if ( veh->typ->functions & cfmaterialref )
+            if ( veh->typ->hasFunction( ContainerBaseType::ExternalMaterialTransfer  ) )
                if ( fzt->tank.material )
                   av++;
 
-            if ( veh->typ->functions & cffuelref )
+            if ( veh->typ->hasFunction( ContainerBaseType::ExternalFuelTransfer  ) )
                if ( fzt->tank.fuel )
                   av++;
 
@@ -1004,7 +1005,7 @@ int VehicleService :: getServices ( Vehicle* veh )
 {
    int res = 0;
    if ( veh ) {
-      if ( veh->canRepair( NULL ) && (veh->typ->functions & cfrepair))
+      if ( veh->canRepair( NULL ) && (veh->typ->hasFunction( ContainerBaseType::ExternalRepair  )))
          for ( int i = 0; i < veh->typ->weapons.count; i++ )
             if ( veh->typ->weapons.weapon[i].service() )
                if ( !veh->attacked )
@@ -1014,13 +1015,13 @@ int VehicleService :: getServices ( Vehicle* veh )
       const Vehicletype* fzt = veh->typ;
       for ( int i = 0; i < fzt->weapons.count; i++ ) {
          if ( fzt->weapons.weapon[i].service() ) {
-            if ( veh->typ->functions & cfenergyref )
+            if ( veh->typ->hasFunction( ContainerBaseType::ExternalEnergyTransfer  ) )
                if ( fzt->tank.energy )
                   res |= 1 << srv_resource;
-            if ( veh->typ->functions & cfmaterialref )
+            if ( veh->typ->hasFunction( ContainerBaseType::ExternalMaterialTransfer  ) )
                if ( fzt->tank.material )
                   res |= 1 << srv_resource;
-            if ( veh->typ->functions & cffuelref)
+            if ( veh->typ->hasFunction( ContainerBaseType::ExternalFuelTransfer  ) )
                if ( fzt->tank.fuel )
                   res |= 1 << srv_resource;
          }
@@ -1070,7 +1071,7 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( Vehicle
             const SingleWeapon& sourceWeapon = veh->typ->weapons.weapon[i];
             if ( sourceWeapon.service() || sourceWeapon.canRefuel() ) {
                if ( targetUnit && serviceWeapon )
-                  if ( !(targetUnit->typ->functions & cfnoairrefuel) || targetUnit->height <= chfahrend )
+                  if ( !targetUnit->typ->hasFunction(ContainerBaseType::NoInairRefuelling) || targetUnit->height <= chfahrend )
                      if ( serviceWeapon->targetingAccuracy[targetUnit->typ->movemalustyp] > 0  )
                         if ( actmap->player[veh->getOwner()].diplomacy.getState( targetUnit->getOwner()) >= PEACE )
                            if ( (serviceWeapon->maxdistance >= dist && serviceWeapon->mindistance <= dist) || bypassChecks.distance )
@@ -1099,9 +1100,11 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( Vehicle
                                  }
 
                                  if ( sourceWeapon.service() ) {
-                                    static int resourceVehicleFunctions[resourceTypeNum] = { cfenergyref, cfmaterialref, cffuelref };
+                                    static ContainerBaseType::ContainerFunctions resourceVehicleFunctions[resourceTypeNum] = { ContainerBaseType::ExternalEnergyTransfer,
+                                                                                             ContainerBaseType::ExternalMaterialTransfer,
+                                                                                             ContainerBaseType::ExternalFuelTransfer };
                                     for ( int r = 0; r < resourceTypeNum; r++ )
-                                       if ( veh->typ->tank.resource(r) && targetUnit->typ->tank.resource(r) && (veh->typ->functions & resourceVehicleFunctions[r])) {
+                                       if ( veh->typ->tank.resource(r) && targetUnit->typ->tank.resource(r) && veh->typ->hasFunction(resourceVehicleFunctions[r])) {
                                           VehicleService::Target::Service s;
                                           s.type = VehicleService::srv_resource;
                                           s.sourcePos = r;
@@ -1115,8 +1118,8 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( Vehicle
                                           targ.service.push_back ( s );
                                        }
 
-                                    if ( veh->canRepair( targetUnit ) && (veh->typ->functions & cfrepair))
-                                       if ( veh->getTank().fuel && veh->getTank().material )
+                                       if ( veh->canRepair( targetUnit ) && (veh->typ->hasFunction( ContainerBaseType::ExternalRepair )))
+                                          if ( veh->getTank().fuel && veh->getTank().material )
                                          // if ( targetUnit->getMovement() >= movement_cost_for_repaired_unit )
                                              if ( targetUnit->damage ) {
                                                 VehicleService::Target::Service s;
@@ -1163,7 +1166,7 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( Vehicl
       if ( targetUnit->typ->weapons.weapon[i].requiresAmmo() ) {
          int type = targetUnit->typ->weapons.weapon[i].getScalarWeaponType();
          if ( type >= 0 )
-            if ( (bld->ammo[type] || targetUnit->ammo[i] || (bld->typ->special & cgammunitionproductionb)) && ((bld->typ->special & (cgexternalloadingb | cgexternalammoloadingb )) || dist == 0 )) {
+            if ( (bld->ammo[type] || targetUnit->ammo[i] || (bld->typ->hasFunction(ContainerBaseType::AmmoProduction) && bld->typ->hasFunction(ContainerBaseType::ExternalAmmoTransfer)) || dist == 0 )) {
                const SingleWeapon& destWeapon = targetUnit->typ->weapons.weapon[i];
 
                VehicleService::Target::Service s;
@@ -1174,7 +1177,7 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( Vehicl
                s.orgSourceAmount = bld->ammo[type];
                int stillNeeded = destWeapon.count - targetUnit->ammo[i] - s.orgSourceAmount;
                int produceable;
-               if ( (stillNeeded > 0) && (bld->typ->special & cgammunitionproductionb)) {
+               if ( (stillNeeded > 0) && (bld->typ->hasFunction( ContainerBaseType::AmmoProduction  ))) {
                   Resources res;
                   for( int j = 0; j< resourceTypeNum; j++ )
                      res.resource(j) = cwaffenproduktionskosten[type][j] * stillNeeded;
@@ -1197,9 +1200,11 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( Vehicl
             }
       }
 
-   if ( bld->typ->special & (cgexternalloadingb | cgexternalresourceloadingb ))
+      static ContainerBaseType::ContainerFunctions resourceVehicleFunctions[resourceTypeNum] = { ContainerBaseType::ExternalEnergyTransfer,
+         ContainerBaseType::ExternalMaterialTransfer,
+         ContainerBaseType::ExternalFuelTransfer };
       for ( int r = 1; r < resourceTypeNum; r++ )  // no energy !!
-         if ( targetUnit->typ->tank.resource(r) ) {
+         if ( bld->typ->hasFunction( resourceVehicleFunctions[r]) && targetUnit->typ->tank.resource(r) ) {
             VehicleService::Target::Service s;
             s.type = VehicleService::srv_resource;
             s.sourcePos = r;
@@ -1276,7 +1281,10 @@ bool  VehicleService :: FieldSearch ::initrefuelling( int xp1, int yp1 )
    }
 
    if ( bld ) {
-      if ( bld->typ->special & (cgexternalloadingb | cgexternalresourceloadingb | cgexternalammoloadingb ))
+      if ( bld->typ->hasFunction( ContainerBaseType::ExternalEnergyTransfer  ) ||
+           bld->typ->hasFunction( ContainerBaseType::ExternalMaterialTransfer  ) ||
+           bld->typ->hasFunction( ContainerBaseType::ExternalFuelTransfer  ) ||
+           bld->typ->hasFunction( ContainerBaseType::ExternalAmmoTransfer  ) )
          maxdist = 1;
       else
          maxdist = 0;
@@ -1404,7 +1412,8 @@ int VehicleService :: execute ( Vehicle* veh, int targetNWID, int dummy, int ste
                           t.dest->ammo[ serv.targetPos ] += delta;
                           building->ammo[ serv.sourcePos ] -= delta;
                           if ( building->ammo[ serv.sourcePos ] < 0 ) {
-                             building->produceAmmo ( serv.sourcePos, -building->ammo[ serv.sourcePos ] );
+                             ContainerControls cc ( building );
+                             cc.produceAmmo ( serv.sourcePos, -building->ammo[ serv.sourcePos ] );
                           }
                           logtoreplayinfo ( rpl_refuel, t.dest->xpos, t.dest->ypos, t.dest->networkid, serv.targetPos, t.dest->ammo[ serv.targetPos ] );
                           MapCoordinate mc = building->getEntry();

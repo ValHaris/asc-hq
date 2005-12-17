@@ -234,7 +234,7 @@ void DashboardPanel::eval()
             if ( !veh->typ->weapons.weapon[i].service() && pos < 10 ) {
                 ASCString ps = ASCString::toString(pos);
                 setLabelText( "punch_weapon" + ps, veh->typ->weapons.weapon[i].maxstrength );
-                if ( (veh->typ->functions & cfno_reactionfire) || !veh->typ->weapons.weapon[i].shootable() || veh->typ->weapons.weapon[i].getScalarWeaponType() == cwminen )
+                if ( veh->typ->hasFunction( ContainerBaseType::NoReactionfire  ) || !veh->typ->weapons.weapon[i].shootable() || veh->typ->weapons.weapon[i].getScalarWeaponType() == cwminen )
                    setLabelText( "RF_weapon" + ps, "-" );
                 else
                    setLabelText( "RF_weapon" + ps, veh->typ->weapons.weapon[i].reactionFireShots );
@@ -440,7 +440,7 @@ WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const V
 
    }
    setLabelText( "weapon_shootaftermove", vt->wait ? "no" : "yes" );
-   setLabelText( "weapon_moveaftershoot", vt->functions & cf_moveafterattack ? "yes" : "no" );
+   setLabelText( "weapon_moveaftershoot", vt->hasFunction( ContainerBaseType::MoveAfterAttack  ) ? "yes" : "no" );
 
    /*
    for ( int i = 0; i < cmovemalitypenum; ++i ) 

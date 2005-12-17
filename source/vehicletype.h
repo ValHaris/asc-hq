@@ -25,9 +25,8 @@
  #include "terraintype.h"
  #include "research.h"
 
-
+/*
 //! The number of 'special' vehicle functions
-const int cvehiclefunctionsnum = 29;
 extern const char*  cvehiclefunctions[];
  #define cfsonar 1
  #define cfparatrooper 2
@@ -58,7 +57,7 @@ extern const char*  cvehiclefunctions[];
  #define cfonlytransmove ( 1 << 28 )
 
  #define cfvehiclefunctionsanzeige 0xFFFFFFFF
-
+*/
 
 #define cwaffentypennum 13
  extern const char*  cwaffentypen[cwaffentypennum] ;
@@ -175,6 +174,8 @@ extern const char*  cvehiclefunctions[];
         //! the image of the unit.
         Surface  image;
     public:
+        static const int legacyVehicleFunctionNum = 29;
+        
         //! short description of the units role, for example "strategic bomber"
         ASCString    description;
 
@@ -196,9 +197,6 @@ extern const char*  cvehiclefunctions[];
 
         //! the fuel consumption to move a single field
         int          fuelConsumption;
-
-        //! Special abilities of the unit (bitmapped). \see cvehiclefunctions
-        int          functions;
 
         //! the distance a unit can travel each round. One value for each of the 8 levels of height
         vector<int>  movement;
@@ -300,7 +298,8 @@ extern const char*  cvehiclefunctions[];
         const Surface&  getImage () const { return image;};
         Surface&  getImage () { return image;};
 
-     private:
+        static BitSet convertOldFunctions( int abilities, const ASCString& location );
+    private:
         void setupRemovableObjectsFromOldFileLayout();
  };
 

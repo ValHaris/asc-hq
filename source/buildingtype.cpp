@@ -40,7 +40,7 @@
  #include "sgstream.h"
 
 
-
+/*
 const char*  cbuildingfunctions[cbuildingfunctionnum+1]  =
               { "HQ",
                 "training",
@@ -67,7 +67,7 @@ const char*  cbuildingfunctions[cbuildingfunctionnum+1]  =
                 "self destruct on conquer",
                 "view satellites",
                 NULL };
-
+*/
 
 BuildingType :: BuildingType ( void )
 {
@@ -163,7 +163,7 @@ BuildingType::LocalCoordinate BuildingType::getLocalCoordinate( const MapCoordin
 
 
 
-const int building_version = 9;
+const int building_version = 10;
 
 
 void BuildingType :: read ( tnstream& stream )
@@ -226,7 +226,11 @@ void BuildingType :: read ( tnstream& stream )
       stream.readChar( ); // was: unitheightreq =
       productionCost.material = stream.readInt( );
       productionCost.fuel = stream.readInt( );
-      special = stream.readInt( );
+      if ( version <= 9 ) {
+         int special = stream.readInt( );
+         convertOldFunctions( special, stream.getLocation() );
+      }
+
       technologylevel = stream.readChar( );
       researchid = stream.readChar( );
 
@@ -348,7 +352,6 @@ void BuildingType :: write ( tnstream& stream ) const
    stream.writeChar ( 0 );
    stream.writeInt ( productionCost.material );
    stream.writeInt ( productionCost.fuel );
-   stream.writeInt ( special );
    stream.writeChar ( technologylevel );
    stream.writeChar ( researchid );
 
@@ -567,8 +570,13 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
 
       pc.addInteger( "Armor", _armor );
 
-      pc.addTagInteger ( "Functions", special, cbuildingfunctionnum, buildingFunctionTags );
-
+      if ( pc.find( "Functions" )) {
+         int special = 0;
+         pc.addTagInteger ( "Functions", special, cbuildingfunctionnum, buildingFunctionTags );
+         convertOldFunctions( special, pc.getFileName() );
+      } else
+         pc.addTagArray ( "Features", features, functionNum, containerFunctionTags );
+      
       pc.addInteger ( "Techlevel", technologylevel );
 
       pc.openBracket("TerrainAccess" );
@@ -617,5 +625,37 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
    catch ( InvalidString ) {
       pc.error ( "Could not parse building field coordinate");
    }
+}
+
+void BuildingType::convertOldFunctions( int abilities, const ASCString& location  )
+{
+   features.reset();
+   if ( abilities & 1 ) errorMessage ( location + ": The HQ function for buildings is not supported any more");
+   if ( abilities & 2 ) features.set( TrainingCenter );
+   if ( abilities & (1 << 3) ) features.set( InternalVehicleProduction );
+   if ( abilities & (1 << 4) ) features.set( AmmoProduction );
+   if ( abilities & (1 << 8) ) features.set( InternalUnitRepair );
+   if ( abilities & (1 << 9) ) features.set( RecycleUnits );
+   if ( abilities & (1 << 10) ) features.set( Research );
+   if ( abilities & (1 << 11) ) features.set( Sonar );
+   if ( abilities & (1 << 12) ) features.set( WindPowerPlant );
+   if ( abilities & (1 << 13) ) features.set( SolarPowerPlant );
+   if ( abilities & (1 << 14) ) features.set( MatterConverter );
+   if ( abilities & (1 << 15) ) features.set( MiningStation );
+   if ( abilities & (1 << 16) ) {
+      features.set( ExternalMaterialTransfer );
+      features.set( ExternalFuelTransfer );
+      features.set( ExternalAmmoTransfer );
+   }
+   if ( abilities & (1 << 17) ) features.set( ProduceNonLeavableUnits );
+   if ( abilities & (1 << 18) ) features.set( ResourceSink );
+   if ( abilities & (1 << 19) ) {
+      features.set( ExternalMaterialTransfer );
+      features.set( ExternalFuelTransfer );
+   }
+   if ( abilities & (1 << 20) ) features.set( ExternalAmmoTransfer );
+   if ( abilities & (1 << 21) ) features.set( NoObjectChaining );
+   if ( abilities & (1 << 22) ) features.set( SelfDestructOnConquer );
+   if ( abilities & (1 << 23) ) features.set( SatelliteView );
 }
 

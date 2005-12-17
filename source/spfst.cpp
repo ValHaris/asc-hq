@@ -929,7 +929,7 @@ void         calculateobject( int       x,
             if ( fld2->typ->terraintype->id == obj->linkableTerrain[t] )
                c |=  1 << dir ;
 
-         if ( fld2->building && !(fld2->building->typ->special & cgnoobjectchainingb) ) {
+         if ( fld2->building && !fld2->building->typ->hasFunction( ContainerBaseType::NoObjectChaining  ) ) {
             if ( (obj->netBehaviour & ObjectType::NetToBuildingEntry)  &&  (fld2->bdt & getTerrainBitType(cbbuildingentry) ).any() )
                c |= 1 << dir;
 
