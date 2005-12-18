@@ -124,6 +124,7 @@ class ItemSelectorWidget : public PG_Widget {
             
       void reLoad( bool show = false );
       void resetNamesearch();
+      ~ItemSelectorWidget();
 };
 
 

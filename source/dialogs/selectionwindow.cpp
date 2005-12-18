@@ -258,6 +258,12 @@ void ItemSelectorWidget::resetNamesearch()
    nameSearch->SetText( "" );
 }
 
+ItemSelectorWidget::~ItemSelectorWidget()
+{
+   delete factory;
+}
+
+
 
 ItemSelectorWindow::ItemSelectorWindow( PG_Widget *parent, const PG_Rect &r , SelectionItemFactory* itemFactory ) 
    : PG_Window( parent,r,"Item Selector") 

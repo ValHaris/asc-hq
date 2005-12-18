@@ -246,6 +246,9 @@ NewGuiHost :: NewGuiHost (PG_Widget *parent, MapDisplayPG* mapDisplay, const PG_
 
 void NewGuiHost::evalCursor()
 {
+   if ( !actmap )
+      return;
+   
    MapCoordinate mc = actmap->getCursor();
 
    if ( !mc.valid() )

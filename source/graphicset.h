@@ -48,7 +48,11 @@
                       return picmode[num] < 256;
                    else
                       return false;
-                };        
+                };
+                ~GraphicSet()
+                {
+                   printf("deleting graphicset");
+                }
         };
 
  

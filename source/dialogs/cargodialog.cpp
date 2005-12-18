@@ -774,6 +774,7 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
                }
          return cost;
       };
+
 };
 
 
