@@ -323,14 +323,27 @@ void Surface::read ( tnstream& stream )
       } else {
          int w =  (hd.id + 1) * (hd.size + 1) ;
          
+         SDL_Surface* s = SDL_CreateRGBSurface( SDL_SWSURFACE, hd.id+1, hd.size+1, 8, 0,0,0,0 );
+
+         for ( int y = 0; y <= hd.size; ++y ) {
+            char* pixeldata = (char*)(s->pixels) + y * s->pitch;
+            if ( y == 0 ) {
+               memcpy ( pixeldata, ((char*)&hd) + 4, sizeof ( hd ) - 4);
+               char* q = pixeldata + sizeof(hd) - 4;
+               stream.readdata ( q, s->w - sizeof(hd) + 4 ); 
+            } else {
+               stream.readdata ( pixeldata, s->w ); 
+            }
+         }
+/*
+
          char* pntr = (char*) asc_malloc( w );
-         memcpy ( pntr, ((char*)&hd) + 4, sizeof ( hd ) - 4);
-         char* q = pntr + sizeof(hd) - 4;
          stream.readdata ( q, w - sizeof(hd) + 4 ); // endian ok ?
 
+         SDL_SWSURFACE
          SDL_Surface* s = SDL_CreateRGBSurfaceFrom(pntr, hd.id+1, hd.size+1, 8, hd.id+1, 0, 0, 0, 0 );
 //         s->flags &= ~SDL_PREALLOC;
-         
+  */       
          SetSurface( s );
          SetColorKey( SDL_SRCCOLORKEY, 255 );
          assignDefaultPalette();

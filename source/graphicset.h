@@ -49,10 +49,6 @@
                    else
                       return false;
                 };
-                ~GraphicSet()
-                {
-                   printf("deleting graphicset");
-                }
         };
 
  

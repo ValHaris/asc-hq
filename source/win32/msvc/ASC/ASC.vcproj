@@ -184,6 +184,9 @@
 				RelativePath="..\..\..\containerbasetype.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\containercontrols.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\controls.cpp">
 			</File>
 			<File
