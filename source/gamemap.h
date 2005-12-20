@@ -218,6 +218,8 @@ class tmap {
       {
          return player[p.getID() ];
       }
+
+      int getNeutralPlayerNum() const { return 8; };
       
       MapCoordinate& getCursor();
       

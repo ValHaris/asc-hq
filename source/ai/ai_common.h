@@ -54,7 +54,7 @@
 //#include "../sg.h"
 #include "../resourcenet.h"
 #include "../itemrepository.h"
-#include "../building_controls.h"
+#include "../containercontrols.h"
 #include "../viewcalculation.h"
 #include "../replay.h"
 #include "../textfiletags.h"

@@ -45,7 +45,6 @@
 #include "dlg_box.h"
 #include "dialog.h"
 #include "attack.h"
-#include "building.h"
 #include "gamedlg.h"
 #include "sg.h"
 #include "gameoptions.h"
@@ -583,8 +582,8 @@ int  Building :: putResource ( int      need,    int resourcetype, bool queryonl
          PutResource putresource ( getMap(), scope );
          placed = putresource.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, color/8, scope );
       }
-      if ( !queryonly && placed > 0 )
-         resourceChanged();
+      // if ( !queryonly && placed > 0 )
+      //   resourceChanged();
       return placed;
    }
 }
@@ -600,13 +599,23 @@ int  Building :: getResource ( int      need,    int resourcetype, bool queryonl
          GetResource gr ( getMap(), scope );
          got = gr.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, color/8, scope );
       }
-      if ( !queryonly && got > 0 )
-         resourceChanged();
+      // if ( !queryonly && got > 0 )
+      //   resourceChanged();
       return got;
       
    }
 }
 
+int  Building :: getResource ( int      need,    int resourcetype ) const
+{
+   int scope = 1;
+   int got;
+   {
+      GetResource gr ( getMap(), scope );
+      got = gr.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, true, color/8, scope );
+   }
+   return got;
+}
 
 
 bool authenticateUser ( tmap* actmap, int forcepasswordchecking = 0, bool allowCancel = true )

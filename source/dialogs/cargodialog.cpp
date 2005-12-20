@@ -32,6 +32,7 @@
 #include "../unitctrl.h"
 #include "../cannedmessages.h"
 #include "../replay.h"
+#include "../dashboard.h"
 
 #include "selectionwindow.h"
 
@@ -125,7 +126,10 @@ class StoringPosition : public PG_Widget
             else
                ypos = 1;
 
-            storage[num]->typ->paint( clippingSurface, SPoint(0,ypos), storage[num]->getOwner() );
+            if( storage[num]->getMovement() > 0  )
+               storage[num]->typ->paint( clippingSurface, SPoint(0,ypos), storage[num]->getOwner() );
+            else
+               storage[num]->typ->paint( clippingSurface, SPoint(0,ypos), storage[num]->getMap()->getNeutralPlayerNum() );
          }
 
          PG_Draw::BlitSurface( clippingSurface.getBaseSurface(), src, PG_Application::GetScreen(), dst);
@@ -221,6 +225,18 @@ namespace CargoGuiFunctions {
          CargoDialog& parent;
       public:
          UnitProduction( CargoDialog& masterParent ) : parent( masterParent)  {};
+         bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
+         void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
+         ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
+   };
+   
+   class UnitTraining : public GuiFunction
+   {
+         CargoDialog& parent;
+      public:
+         UnitTraining( CargoDialog& masterParent ) : parent( masterParent)  {};
          bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
          void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
          bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
@@ -367,6 +383,9 @@ class CargoDialog : public Panel
          if ( mainScreenWidget&& mainScreenWidget->getGuiHost() ) {
             mainScreenWidget->getGuiHost()->eval( container->getPosition(), getMarkedUnit() );
          }
+         
+         if ( mainScreenWidget && mainScreenWidget->getUnitInfoPanel() )
+            mainScreenWidget->getUnitInfoPanel()->showUnitData( getMarkedUnit(), NULL, true );
 
       }
 
@@ -384,6 +403,7 @@ class CargoDialog : public Panel
          registerCargoGuiFunctions( handler );
          handler.registerUserFunction( new CargoGuiFunctions::Movement( *this ) );
          handler.registerUserFunction( new CargoGuiFunctions::UnitProduction( *this ));
+         handler.registerUserFunction( new CargoGuiFunctions::UnitTraining( *this ));
       }
 
       
@@ -398,8 +418,8 @@ class CargoDialog : public Panel
          registerGuiFunctions( guiIconHandler );
          
 
-         cb->resourceChanged.connect( SigC::slot( *this, &CargoDialog::updateResourceDisplay ));
-         cb->ammoChanged.connect( SigC::slot( *this, &CargoDialog::showAmmo ));
+         // cb->resourceChanged.connect( SigC::slot( *this, &CargoDialog::updateResourceDisplay ));
+         // cb->ammoChanged.connect( SigC::slot( *this, &CargoDialog::showAmmo ));
          NewGuiHost::pushIconHandler( &guiIconHandler );
 
          
@@ -482,6 +502,8 @@ class CargoDialog : public Panel
          //unitHighLight.setNew( unitHighLight.getMark() );
          unitHighLight.redrawAll();
          sigCargoChanged();
+         updateResourceDisplay();
+         showAmmo();
       }
       
       int RunModal()
@@ -578,6 +600,7 @@ class CargoDialog : public Panel
       };
 
       ContainerBase* getContainer() { return container; };
+      ContainerControls& getControls() { return containerControls; };
 
       ~CargoDialog()
       {
@@ -948,7 +971,7 @@ namespace CargoGuiFunctions {
 
    bool UnitProduction::available( const MapCoordinate& pos, ContainerBase* subject, int num )
    {
-      return true;
+      return parent.getContainer()->baseType->hasFunction( ContainerBaseType::InternalVehicleProduction );
    }
 
 
@@ -986,4 +1009,51 @@ namespace CargoGuiFunctions {
          parent.cargoChanged();
       }
    }
+
+
+   //////////////////////////////////////////////////////////////////////////////////////////////
+   
+
+   bool UnitTraining::available( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      if ( !subject )
+         return false;
+      
+      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+      if ( !veh )
+         return false;
+      
+      return parent.getContainer()->baseType->hasFunction( ContainerBaseType::TrainingCenter ) && parent.getControls().unitTrainingAvailable( veh );
+   }
+
+
+   bool UnitTraining::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   {
+      return ( key->keysym.sym == 't' );
+   };
+
+   Surface& UnitTraining::getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return IconRepository::getIcon("training.png");
+   };
+   
+   ASCString UnitTraining::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return "train unit";
+   };
+
+
+   void UnitTraining::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      if ( !subject )
+         return;
+      
+      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+      if ( !veh )
+         return;
+      
+      parent.getControls().trainUnit( veh );
+      parent.cargoChanged();
+   }
+   
 }

@@ -40,7 +40,6 @@
 #include "graphics/blitter.h"
 #include "viewcalculation.h"
 #include "spfst.h"
-#include "building.h"
 #include "gamedlg.h"
 #include "dialogs/cargodialog.h"
 

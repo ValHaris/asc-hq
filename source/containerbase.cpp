@@ -54,6 +54,13 @@ Resources ContainerBase :: getResource ( const Resources& res, bool queryonly, i
    return result;
 }
 
+Resources ContainerBase :: getResource ( const Resources& res ) const
+{
+   Resources result;
+   for ( int i = 0; i < resourceNum; i++ )
+      result.resource(i) = getResource ( res.resource(i), i );
+   return result;
+}
 
 
 int ContainerBase :: repairItem   ( ContainerBase* item, int newDamage  )

@@ -27,11 +27,6 @@
 
  typedef class tmap*  pmap;
  typedef class tmap Map;
- typedef class tresearch* presearch ;
- typedef char* pchar;
- typedef class tbasenetworkconnection* pbasenetworkconnection;
  typedef class  tfield* pfield ;
- class Vehicletype;
- class PropertyContainer;
 
 #endif

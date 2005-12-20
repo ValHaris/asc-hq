@@ -30,11 +30,7 @@
 #include "spfst.h"
 #include "resourcenet.h"
 #include "itemrepository.h"
-
-#ifdef sgmain
-# include "gameoptions.h"
-# include "building_controls.h"
-#endif
+#include "containercontrols.h"
 
 const float repairEfficiencyBuilding[resourceTypeNum*resourceTypeNum] = { 1./3., 0,     1. / 3. ,
                                                                           0,     1./3., 0,
@@ -157,6 +153,7 @@ void Building::paintSingleField ( Surface& s, SPoint imgpos, BuildingType::Local
 void Building :: execnetcontrol ( void ) {}
 int Building :: putResource ( int amount, int resourcetype, bool queryonly, int scope ) { return 0; };
 int Building :: getResource ( int amount, int resourcetype, bool queryonly, int scope ) { return 0; };
+int Building :: getResource ( int amount, int resourcetype ) const { return 0; };
 #endif
 
 void Building :: setCompletion ( int completion, bool setupImages )
@@ -631,7 +628,7 @@ int Building::getAmmo( int type, int num, bool queryOnly )
    int got = min( ammo[type], num );
    if ( !queryOnly ) {
       ammo[type] -= got;
-      ammoChanged();
+      // ammoChanged();
    }
    return got;
 }
@@ -641,7 +638,7 @@ int Building::putAmmo( int type, int num, bool queryOnly )
    assert( type >= 0 && type < waffenanzahl );
    if ( !queryOnly ) {
       ammo[type] += num;
-      ammoChanged();
+      // ammoChanged();
    }
    return num;
 }
@@ -650,8 +647,8 @@ int Building::putAmmo( int type, int num, bool queryOnly )
 
 void Building::endTurn(  )
 {
-#ifdef sgmain
-   if ( CGameOptions::Instance()->automaticTraining && (typ->hasFunction( ContainerBaseType::TrainingCenter  ) )) {
+#ifndef karteneditor
+   if ( typ->hasFunction( ContainerBaseType::TrainingCenter  ) ) {
       for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
          if ( *i ) {
             bool ammoFull = true;
@@ -660,17 +657,16 @@ void Building::endTurn(  )
                   ammoFull = false;
 
             if ( ammoFull ) {
-               cbuildingcontrols bc;
-               bc.init(this);
-               if ( bc.training.available( *i )) {
-                  bc.training.trainunit( *i );
-                  bc.refill.filleverything( *i );
+               ContainerControls cc ( this );
+               if ( cc.unitTrainingAvailable( *i )) {
+                  cc.trainUnit( *i );
+                  cc.refillResources( *i );
                }
             }
          }
    }
-   repairedThisTurn = 0;
 #endif
+   repairedThisTurn = 0;
 }
 
 

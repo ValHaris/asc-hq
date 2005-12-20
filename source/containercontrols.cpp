@@ -289,3 +289,119 @@ void  ContainerControls :: emptyeverything ( Vehicle* eht )
 
 
 
+Resources ContainerControls :: calcDestructionOutput( Vehicle* veh )
+{
+    int   output;
+    if ( container->baseType->hasFunction( ContainerBaseType::RecycleUnits ) )
+       output = recyclingoutput;
+    else
+       output = destructoutput;
+   
+    Resources res;
+
+    for (int i=0; i< veh->cargo.size(); i++)
+       if ( veh->cargo[i] )
+          res += calcDestructionOutput ( veh->cargo[i] );
+   
+    res.material += veh->typ->productionCost.material * (100 - veh->damage/2 ) / 100 / output;
+    return res;
+}
+
+
+void ContainerControls :: destructUnit( Vehicle* veh )
+{
+   Resources res = calcDestructionOutput ( veh );
+   emptyeverything ( veh );
+   
+   container->putResource ( res.material, Resources::Material, false );
+   container->removeUnitFromCargo( veh );
+   delete veh;
+}
+
+
+
+bool ContainerControls::unitTrainingAvailable( Vehicle* veh )
+{
+   tmap* actmap = container->getMap();
+   if ( actmap->getgameparameter( cgp_bi3_training ) )
+      return false;
+
+   if ( veh->experience < actmap->getgameparameter ( cgp_maxtrainingexperience ) )
+      if ( !veh->attacked ) 
+         if (  container->baseType->hasFunction( ContainerBaseType::TrainingCenter )) {
+            int num = 0;
+            int numsh = 0;
+            for (int i = 0; i < veh->typ->weapons.count; i++ )
+               if ( veh->typ->weapons.weapon[i].shootable() )
+                  if ( veh->ammo[i] )
+                     numsh++;
+                  else
+                     num++;
+
+            if ( num == 0  &&  numsh > 0 )
+               return true;
+         }
+         
+   return false;
+}
+
+
+void ContainerControls::trainUnit( Vehicle* veh )
+{
+   tmap* actmap = container->getMap();
+   if ( unitTrainingAvailable ( veh ) ) {
+      veh->experience+= actmap->getgameparameter( cgp_trainingIncrement );
+      for (int i = 0; i < veh->typ->weapons.count; i++ )
+         if ( veh->typ->weapons.weapon[i].shootable() )
+            veh->ammo[i]--;
+
+      if ( veh->experience > actmap->getgameparameter ( cgp_maxtrainingexperience ) )
+         veh->experience = actmap->getgameparameter ( cgp_maxtrainingexperience );
+
+      veh->attacked = 1;
+      veh->setMovement ( 0 );
+      logtoreplayinfo ( rpl_trainunit, container->getPosition().x, container->getPosition().y, veh->experience, veh->networkid );
+   }
+};
+
+
+Resources ContainerControls :: buildProductionLineResourcesNeeded( Vehicletype* veh )
+{
+   return veh->productionCost * productionLineConstructionCostFactor;
+}
+
+
+int ContainerControls :: buildProductionLine ( Vehicletype* veh  )
+{
+   if ( find( container->unitProduction.begin(), container->unitProduction.end(), veh ) != container->unitProduction.end() )
+      return -503;
+   
+   if ( container->getResource( buildProductionLineResourcesNeeded(veh), 1 ) < buildProductionLineResourcesNeeded(veh))
+      return -500;
+
+   container->getResource( buildProductionLineResourcesNeeded(veh), 0 );
+   container->unitProduction.push_back(  veh );
+   return 0;
+}
+
+
+Resources ContainerControls :: removeProductionLineResourcesNeeded( Vehicletype* veh )
+{
+   return veh->productionCost * productionLineRemovalCostFactor;
+}
+
+
+int ContainerControls :: removeProductionLine ( Vehicletype* veh  )
+{
+   if ( find( container->unitProduction.begin(), container->unitProduction.end(), veh ) == container->unitProduction.end() )
+      return -502;
+   
+   if ( container->getResource( removeProductionLineResourcesNeeded(veh), 1 ) < removeProductionLineResourcesNeeded(veh))
+      return -500;
+
+   container->getResource( removeProductionLineResourcesNeeded(veh), 0 );
+   container->unitProduction.erase( find( container->unitProduction.begin(), container->unitProduction.end(), veh ));
+   return 0;
+}
+
+

@@ -90,7 +90,6 @@
 #include "pd.h"
 #include "strtmesg.h"
 #include "gamedlg.h"
-#include "building.h"
 #include "sg.h"
 #include "soundList.h"
 #include "gameoptions.h"
@@ -194,22 +193,6 @@ void         loadMoreData(void)
       } /* endfor */
    }
 
-   {
-      tnfilestream stream ("weapicon.raw",tnstream::reading);
-      for ( int i=0; i<14 ;i++ )
-         stream.readrlepict(   &icons.unitinfoguiweapons[i], false, &w );
-   }
-
-   {
-      tnfilestream stream ("expicons.raw",tnstream::reading);
-      for ( int i=0; i<=maxunitexperience ;i++ )
-         stream.readrlepict(   &icons.experience[i], false, &w );
-   }
-
-   {
-      tnfilestream stream ("windrose.raw",tnstream::reading);
-      stream.readrlepict(   &icons.windbackground, false, &w);
-   }
 
    dataLoaderTicker();
    {
@@ -268,22 +251,6 @@ void         loadMoreData(void)
    loadmessages();
 
    dataLoaderTicker();
-   {
-      tnfilestream stream ("waffen.raw",tnstream::reading);
-      int num = stream.readInt();
-
-      static int xlatselectweaponguiicons[12] = { 2, 7, 6, 3, 4, 9, 0, 5, 10, 11, 11, 11 };
-
-      for ( int i = 0; i < num; i++ )
-         stream.readrlepict(   &icons.selectweapongui[xlatselectweaponguiicons[i]], false, &w );
-      stream.readrlepict(   &icons.selectweaponguicancel, false, &w );
-      stream.readrlepict(   &icons.selectweapongui[12], false, &w );
-   }
-
-   {
-      tnfilestream stream ("knorein.raw",tnstream::reading);
-      stream.readrlepict(   &icons.guiknopf, false, &w );
-   }
 
    {
       tnfilestream stream ("pfeil-a0.raw",tnstream::reading);

@@ -43,10 +43,6 @@
 #include "paradialog.h"
 
 
-#ifdef sgmain
- #include "building.h"
-#endif
-
 #ifdef _WIN32_
  #include <windows.h>
  #include <winuser.h>
@@ -173,10 +169,6 @@ tdialogbox::tdialogbox()
       prev = NULL;
    }
    next = NULL;
-#ifdef sgmain
-   if ( recursiondepth > -1 )
-      rdw = 0;
-#endif
 
    if ( rdw )
      dlg_mode |= 2;

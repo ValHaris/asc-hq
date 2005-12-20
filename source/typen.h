@@ -93,6 +93,8 @@ const int resourceTypeNum = 3;
 //! The number of different resources that ASC uses
 const int resourceNum = resourceTypeNum;
 
+class PropertyContainer;
+
 //! The Container for the three different Resources that ASC uses.
 class Resources {
   public:
@@ -489,15 +491,7 @@ struct ticons {
    void*        player[8];      // aktueller Spieler in der dashboard: FARBE.RAW
    void*        allianz[8][3];  // Allianzen in der dashboard: ALLIANC.RAW 
    void*        diplomaticstatus[8]; 
-   void*        selectweapongui[13];
-   void*        selectweaponguicancel;
-   void*        unitinfoguiweapons[14];
-   void*        experience[maxunitexperience+1];
- //  void*        wind[9];
- //  void*        windarrow;
    void*        stellplatz;
-   void*        guiknopf;   // reingedr?ckter knopf
-   void*        windbackground;
    void*        smallmapbackground;
    void*        weaponinfo[5];
    void*        X;

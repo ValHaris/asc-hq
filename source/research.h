@@ -36,6 +36,7 @@ class Research;
 class Technology;
 class Building;
 class Vehicle;
+class Vehicletype;
 
 class TechDependency: public LoadableItemType {
      typedef vector<IntRange> RequiredTechnologies;

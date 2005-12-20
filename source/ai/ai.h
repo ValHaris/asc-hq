@@ -34,7 +34,6 @@
 #include "../objecttype.h"
 #include "../spfst.h"
 #include "../unitctrl.h"
-#include "../building_controls.h"
 #include "../buildingtype.h"
 #include "../astar2.h"
 
@@ -412,7 +411,7 @@
             AiResult  strategy();
             AiResult  buildings ( int process );
             AiResult  transports ( int process );
-            AiResult  container ( ccontainercontrols& cc );
+            AiResult  container ( ContainerBase* cb );
             AiResult  executeServices ();
             void      setup();
 

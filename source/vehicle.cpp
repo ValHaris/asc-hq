@@ -216,8 +216,8 @@ int Vehicle :: putResource ( int amount, int resourcetype, bool queryonly, int s
       int tostore = min ( spaceAvail, amount);
       if ( !queryonly ) {
          tank.resource(resourcetype) += tostore;
-         if ( tostore > 0 )
-            resourceChanged();
+         // if ( tostore > 0 )
+         //   resourceChanged();
       }
 
       return tostore;
@@ -237,12 +237,29 @@ int Vehicle :: getResource ( int amount, int resourcetype, bool queryonly, int s
       int toget = min ( tank.resource(resourcetype), amount);
       if ( !queryonly ) {
          tank.resource(resourcetype) -= toget;
-         if ( toget > 0 )
-            resourceChanged();
+         // if ( toget > 0 )
+         //   resourceChanged();
       }
 
       return toget;
    }
+}
+
+int Vehicle :: getResource ( int amount, int resourcetype ) const
+{
+   //  if units start using/storing resources that will not be stored in the unit itself, the replays will fail !
+
+   if ( resourcetype == 0 && !getGeneratorStatus() )
+      return 0;
+
+   int toget = min ( tank.resource(resourcetype), amount);
+   return toget;
+}
+
+
+Resources Vehicle::getTank() const
+{
+   return tank;
 }
 
 
@@ -1515,8 +1532,8 @@ int Vehicle::getAmmo( int type, int num, bool queryOnly )
       }
       ++weap;
    }
-   if ( got && !queryOnly )
-      ammoChanged();
+   // if ( got && !queryOnly )
+   //   ammoChanged();
    return got;
 }
 
@@ -1533,8 +1550,8 @@ int Vehicle::putAmmo( int type, int num, bool queryOnly )
       }
       ++weap;
    }
-   if ( put && !queryOnly )
-      ammoChanged();
+   // if ( put && !queryOnly )
+   //   ammoChanged();
    return put;
 }
 

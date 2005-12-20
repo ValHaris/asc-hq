@@ -344,20 +344,22 @@ void AI::VehicleTypeEfficiencyCalculator::calc()
    ai.unitTypeSuccess[ownTypeID].second += ownValue   * (newOwnDamage   - orgOwnDamage  ) * 0.01;
 }
 
-AI::AiResult  AI :: container ( ccontainercontrols& cc )
+AI::AiResult  AI :: container ( ContainerBase* cb )
 {
+   ContainerControls cc( cb );
    AiResult result;
 
    // move idle units out
    std::vector<Vehicle*> idleUnits;
-   for ( int j= 0; j < 32; j++ ) {
-      Vehicle* veh = cc.getloadedunit ( j );
+   for ( vector<Vehicle*>::iterator j = cb->cargo.begin(); j != cb->cargo.end(); ++j ) {
+      Vehicle* veh = *j;
       if ( veh )
          if ( veh->canMove() )
             if ( veh->aiparam[ getPlayerNum() ]->getTask() == AiParameter::tsk_nothing
                || veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_script  )
             idleUnits.push_back ( veh );
    }
+   
    // move the most important unit first, to get the best position
    sort ( idleUnits.begin(), idleUnits.end(), vehicleValueComp );
 
@@ -368,7 +370,7 @@ AI::AiResult  AI :: container ( ccontainercontrols& cc )
 
       int preferredHeight = getBestHeight ( *i );
 
-      VehicleMovement* vm = cc.movement ( *i );
+      VehicleMovement* vm = ContainerControls::movement ( *i );
       // auto_ptr<VehicleMovement> vm ( cc.movement ( *i ) );
       if ( vm ) {
          vm->registerMapDisplay ( mapDisplay );
@@ -428,21 +430,22 @@ AI::AiResult AI::buildings( int process )
       buildingCounter++;
       displaymessage2("processing building %d", buildingCounter );
 
-      cbuildingcontrols bc;
-      bc.init ( *bi );
+      ContainerControls bc( *bi );
 
-      for ( int j= 0; j < 32; j++ ) {
-         Vehicle* veh = bc.getloadedunit ( j );
+      int unitCounter = 0;
+      for ( vector<Vehicle*>::iterator j=  (*bi)->cargo.begin(); j != (*bi)->cargo.end(); j++ ) {
+         Vehicle* veh = *j;
          if ( veh ) {
-            displaymessage2("processing building %d (unit %d)", buildingCounter, j );
+            ++unitCounter;
+            displaymessage2("processing building %d (unit %d)", buildingCounter, unitCounter );
             if ( veh->aiparam[ getPlayerNum() ]->getJob() != AiParameter::job_supply )
-               bc.refill.resource ( veh, Resources::Fuel, maxint );
+               bc.fillResource( veh, Resources::Fuel, maxint );
             else
-               bc.refill.filleverything( veh );
+               bc.refilleverything( veh );
          }
       }
 
-      result += container ( bc );
+      result += container ( *bi );
 
       checkKeys();
    }
@@ -464,10 +467,7 @@ AI::AiResult AI::transports( int process )
       transportCounter++;
       displaymessage2("processing unit %d for transportation ", transportCounter );
 
-      ctransportcontrols tc;
-      tc.init ( veh );
-
-      result += container ( tc );
+      result += container ( veh );
 
       checkKeys();
    }
@@ -912,13 +912,12 @@ void AI::production()
                       ProductionRating& pr = p->second;
 
                       if ( find ( lockedBuildings.begin(), lockedBuildings.end(), pr.bld ) == lockedBuildings.end()) {
-                         cbuildingcontrols bc;
-                         bc.init ( pr.bld );
-                         int lack;
-                         if  ( bc.produceunit.available( pr.vt, &lack ) && pr.bld->vehicleUnloadSystem ( pr.vt, 255 ) ) {
-                             Vehicle* veh = bc.produceunit.produce( pr.vt, true );
+                         ContainerControls bc( pr.bld );
+                         int lack = bc.unitProductionPrerequisites( pr.vt );
+                         if  ( !lack && pr.bld->vehicleUnloadSystem ( pr.vt, 255 ) ) {
+                             Vehicle* veh = bc.produceUnit( pr.vt, true, true );
                              calculateThreat ( veh );
-                             container ( bc );
+                             container ( pr.bld );
                              // currentUnitDistribution.group[i] += inc;
                              produced = true;
                              break;  // exit produceable llop

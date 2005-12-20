@@ -37,7 +37,7 @@
 
 
 DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme = true )
-               :Panel ( parent, r, panelName_, loadTheme )
+   :Panel ( parent, r, panelName_, loadTheme ), veh(NULL)
 {
    updateFieldInfo.connect ( SigC::slot( *this, &DashboardPanel::eval ));
    registerSpecialDisplay( "windarrow" );
@@ -67,7 +67,6 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
       return;
 
    Surface screen = Surface::Wrap( PG_Application::GetScreen() );
-   MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
 
    if ( name == "windarrow" ) {
       if ( actmap && actmap->weatherSystem->getCurrentWindSpeed() > 0 ) {
@@ -79,6 +78,7 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
    }
 
    if ( name == "field_weather" ) {
+      MapCoordinate mc = actmap->getCursor();
       if ( actmap && mc.valid() && fieldvisiblenow( actmap->getField(mc)) ) {
          MegaBlitter<4,colorDepth,ColorTransform_None, ColorMerger_AlphaOverwrite> blitter;
 
@@ -104,9 +104,6 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
    }
 
 
-
-   if ( mc.valid() && fieldvisiblenow( actmap->getField(mc)) ) {
-      Vehicle* veh = actmap->getField(mc)->vehicle;
 
       if ( name == "unitexp" ) {
          int experience = 0;
@@ -153,7 +150,6 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
           }
       }
 
-   }
 }
 
 
@@ -169,8 +165,6 @@ void DashboardPanel::eval()
    Vehicle* veh = fld? fld->vehicle : NULL;
 
    PG_Application::SetBulkMode(true);
-
-   int weaponsDisplayed = 0;
 
    setBargraphValue( "winddisplay", float(actmap->weatherSystem->getCurrentWindSpeed()) / 255  );
 
@@ -216,71 +210,92 @@ void DashboardPanel::eval()
 
    if ( mc.valid() ) {
       if ( veh && fieldvisiblenow( fld ) ) {
-
-         setLabelText( "unittypename", veh->typ->name );
-         setLabelText( "unitname", veh->name );
-         setBargraphValue( "unitdamage", float(100-veh->damage) / 100  );
-         setLabelText( "unitstatus", 100-veh->damage );
-         setBargraphValue( "unitfuel", veh->typ->tank.fuel ? float( veh->getTank().fuel) / veh->typ->tank.fuel : 0  );
-         setLabelText( "unitfuelstatus", veh->getTank().fuel );
-         setBargraphValue( "unitmaterial", veh->typ->tank.material ? float( veh->getTank().material) / veh->typ->tank.material : 0  );
-         setLabelText( "unitmaterialstatus", veh->getTank().material );
-         setBargraphValue( "unitenergy", veh->typ->tank.energy ? float( veh->getTank().energy) / veh->typ->tank.energy : 0  );
-         setLabelText( "unitenergystatus", veh->getTank().energy );
-         setLabelText( "movepoints", veh->getMovement() );
-
-         int &pos = weaponsDisplayed;
-         for ( int i = 0; i < veh->typ->weapons.count; ++i) {
-            if ( !veh->typ->weapons.weapon[i].service() && pos < 10 ) {
-                ASCString ps = ASCString::toString(pos);
-                setLabelText( "punch_weapon" + ps, veh->typ->weapons.weapon[i].maxstrength );
-                if ( veh->typ->hasFunction( ContainerBaseType::NoReactionfire  ) || !veh->typ->weapons.weapon[i].shootable() || veh->typ->weapons.weapon[i].getScalarWeaponType() == cwminen )
-                   setLabelText( "RF_weapon" + ps, "-" );
-                else
-                   setLabelText( "RF_weapon" + ps, veh->typ->weapons.weapon[i].reactionFireShots );
-                setLabelText( "status_ammo" + ps, veh->ammo[i] );
-                setBargraphValue( "bar_ammo" + ps, veh->typ->weapons.weapon[i].count ? float(veh->ammo[i]) / veh->typ->weapons.weapon[i].count : 0 );
-                ++pos;
-             }
-          }
-
-
+         showUnitData( veh, NULL );
       } else {
 
          Building* bld = fld->building;
-         if ( bld && fieldvisiblenow( fld ) ) {
-            setLabelText( "unittypename", bld->typ->name );
-            setLabelText( "unitname", bld->name );
-            setBargraphValue( "unitdamage", float(100-bld->damage) / 100  );
-            setLabelText( "unitstatus", 100-bld->damage );
-         } else {
-            setLabelText( "unittypename", "" );
-            setLabelText( "unitname", "" );
-            setBargraphValue( "unitdamage", 0  );
-            setLabelText( "unitstatus", "" );
-         }
-
-         setBargraphValue( "unitfuel", 0  );
-         setLabelText( "unitfuelstatus", "" );
-         setBargraphValue( "unitmaterial",  0  );
-         setLabelText( "unitmaterialstatus", "" );
-         setBargraphValue( "unitenergy",  0  );
-         setLabelText( "unitenergystatus", "" );
-         setLabelText( "movepoints", "" );
+         if ( bld && fieldvisiblenow( fld ) ) 
+            showUnitData( NULL, bld );
+         else
+            showUnitData( NULL, NULL );
       }
-      for ( int i = weaponsDisplayed; i < 10; ++i ) {
-          ASCString ps = ASCString::toString(i);
-          setLabelText( "punch_weapon" + ps, "" );
-          setLabelText( "RF_weapon" + ps, "" );
-          setLabelText( "status_ammo" + ps, "" );
-          setBargraphValue( "bar_ammo" + ps, 0 );
-       }
-
    }
 
    PG_Application::SetBulkMode(false);
    Redraw(true);
 }
+void DashboardPanel::showUnitData( const Vehicle* veh, const Building* bld, bool redraw )
+{
+   int weaponsDisplayed = 0;
+   this->veh = veh;
+   
+   bool bulk = PG_Application::GetBulkMode();
+   if ( redraw )
+      PG_Application::SetBulkMode(true);
+      
+   if ( veh ) {
+      setLabelText( "unittypename", veh->typ->name );
+      setLabelText( "unitname", veh->name );
+      setBargraphValue( "unitdamage", float(100-veh->damage) / 100  );
+      setLabelText( "unitstatus", 100-veh->damage );
+      setBargraphValue( "unitfuel", veh->typ->tank.fuel ? float( veh->getTank().fuel) / veh->typ->tank.fuel : 0  );
+      setLabelText( "unitfuelstatus", veh->getTank().fuel );
+      setBargraphValue( "unitmaterial", veh->typ->tank.material ? float( veh->getTank().material) / veh->typ->tank.material : 0  );
+      setLabelText( "unitmaterialstatus", veh->getTank().material );
+      setBargraphValue( "unitenergy", veh->typ->tank.energy ? float( veh->getTank().energy) / veh->typ->tank.energy : 0  );
+      setLabelText( "unitenergystatus", veh->getTank().energy );
+      setLabelText( "movepoints", veh->getMovement() );
+   
+      int &pos = weaponsDisplayed;
+      for ( int i = 0; i < veh->typ->weapons.count; ++i) {
+         if ( !veh->typ->weapons.weapon[i].service() && pos < 10 ) {
+            ASCString ps = ASCString::toString(pos);
+            setLabelText( "punch_weapon" + ps, veh->typ->weapons.weapon[i].maxstrength );
+            if ( veh->typ->hasFunction( ContainerBaseType::NoReactionfire  ) || !veh->typ->weapons.weapon[i].shootable() || veh->typ->weapons.weapon[i].getScalarWeaponType() == cwminen )
+               setLabelText( "RF_weapon" + ps, "-" );
+            else
+               setLabelText( "RF_weapon" + ps, veh->typ->weapons.weapon[i].reactionFireShots );
+            setLabelText( "status_ammo" + ps, veh->ammo[i] );
+            setBargraphValue( "bar_ammo" + ps, veh->typ->weapons.weapon[i].count ? float(veh->ammo[i]) / veh->typ->weapons.weapon[i].count : 0 );
+            ++pos;
+         }
+      }
+   } else {
+      if ( bld ) {
+         setLabelText( "unittypename", bld->typ->name );
+         setLabelText( "unitname", bld->name );
+         setBargraphValue( "unitdamage", float(100-bld->damage) / 100  );
+         setLabelText( "unitstatus", 100-bld->damage );
+      } else {
+         setLabelText( "unittypename", "" );
+         setLabelText( "unitname", "" );
+         setBargraphValue( "unitdamage", 0  );
+         setLabelText( "unitstatus", "" );
+      }
+   
+      setBargraphValue( "unitfuel", 0  );
+      setLabelText( "unitfuelstatus", "" );
+      setBargraphValue( "unitmaterial",  0  );
+      setLabelText( "unitmaterialstatus", "" );
+      setBargraphValue( "unitenergy",  0  );
+      setLabelText( "unitenergystatus", "" );
+      setLabelText( "movepoints", "" );
+   }
+   for ( int i = weaponsDisplayed; i < 10; ++i ) {
+      ASCString ps = ASCString::toString(i);
+      setLabelText( "punch_weapon" + ps, "" );
+      setLabelText( "RF_weapon" + ps, "" );
+      setLabelText( "status_ammo" + ps, "" );
+      setBargraphValue( "bar_ammo" + ps, 0 );
+   }
+   
+   if ( redraw ) {
+      if ( !bulk )
+         PG_Application::SetBulkMode(false);
+      Redraw(true);
+   }
+}
+
 
 
 WindInfoPanel::WindInfoPanel (PG_Widget *parent, const PG_Rect &r ) : DashboardPanel( parent, r, "WindInfo" )

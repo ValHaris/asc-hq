@@ -55,27 +55,27 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	spfst.$(OBJEXT) sgstream.$(OBJEXT) sg.$(OBJEXT) pd.$(OBJEXT) \
 	palette.$(OBJEXT) newfont.$(OBJEXT) network.$(OBJEXT) \
 	misc.$(OBJEXT) loadpcxc.$(OBJEXT) loaders.$(OBJEXT) \
-	loadbi3.$(OBJEXT) gui.$(OBJEXT) gamedlg.$(OBJEXT) \
-	dlg_box.$(OBJEXT) dialog.$(OBJEXT) controls.$(OBJEXT) \
-	building.$(OBJEXT) basestrm.$(OBJEXT) basegfx.$(OBJEXT) \
-	attack.$(OBJEXT) gameoptions.$(OBJEXT) astar2.$(OBJEXT) \
-	vehicletype.$(OBJEXT) objects.$(OBJEXT) buildingtype.$(OBJEXT) \
-	containerbase.$(OBJEXT) mapalgorithms.$(OBJEXT) \
-	viewcalculation.$(OBJEXT) gamemap.$(OBJEXT) password.$(OBJEXT) \
-	password_dialog.$(OBJEXT) replay.$(OBJEXT) research.$(OBJEXT) \
-	mapdisplay.$(OBJEXT) resourcenet.$(OBJEXT) dashboard.$(OBJEXT) \
-	ascstring.$(OBJEXT) graphicset.$(OBJEXT) vehicle.$(OBJEXT) \
-	buildings.$(OBJEXT) networkinterface.$(OBJEXT) \
-	textfileparser.$(OBJEXT) terraintype.$(OBJEXT) \
-	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
-	itemrepository.$(OBJEXT) stringtokenizer.$(OBJEXT) \
-	music.$(OBJEXT) messages.$(OBJEXT) paradialog.$(OBJEXT) \
-	textfile_evaluation.$(OBJEXT) containerbasetype.$(OBJEXT) \
-	messagedlg.$(OBJEXT) simplestream.$(OBJEXT) \
-	mappolygons.$(OBJEXT) prehistoricevents.$(OBJEXT) \
-	gameevents.$(OBJEXT) gameeventsystem.$(OBJEXT) \
-	gameevent_dialogs.$(OBJEXT) statisticdialog.$(OBJEXT) \
-	clipboard.$(OBJEXT) geometry.$(OBJEXT) weatherarea.$(OBJEXT) \
+	loadbi3.$(OBJEXT) gamedlg.$(OBJEXT) dlg_box.$(OBJEXT) \
+	dialog.$(OBJEXT) controls.$(OBJEXT) basestrm.$(OBJEXT) \
+	basegfx.$(OBJEXT) attack.$(OBJEXT) gameoptions.$(OBJEXT) \
+	astar2.$(OBJEXT) vehicletype.$(OBJEXT) objects.$(OBJEXT) \
+	buildingtype.$(OBJEXT) containerbase.$(OBJEXT) \
+	mapalgorithms.$(OBJEXT) viewcalculation.$(OBJEXT) \
+	gamemap.$(OBJEXT) password.$(OBJEXT) password_dialog.$(OBJEXT) \
+	replay.$(OBJEXT) research.$(OBJEXT) mapdisplay.$(OBJEXT) \
+	resourcenet.$(OBJEXT) dashboard.$(OBJEXT) ascstring.$(OBJEXT) \
+	graphicset.$(OBJEXT) vehicle.$(OBJEXT) buildings.$(OBJEXT) \
+	networkinterface.$(OBJEXT) textfileparser.$(OBJEXT) \
+	terraintype.$(OBJEXT) objecttype.$(OBJEXT) \
+	textfiletags.$(OBJEXT) itemrepository.$(OBJEXT) \
+	stringtokenizer.$(OBJEXT) music.$(OBJEXT) messages.$(OBJEXT) \
+	paradialog.$(OBJEXT) textfile_evaluation.$(OBJEXT) \
+	containerbasetype.$(OBJEXT) messagedlg.$(OBJEXT) \
+	simplestream.$(OBJEXT) mappolygons.$(OBJEXT) \
+	prehistoricevents.$(OBJEXT) gameevents.$(OBJEXT) \
+	gameeventsystem.$(OBJEXT) gameevent_dialogs.$(OBJEXT) \
+	statisticdialog.$(OBJEXT) clipboard.$(OBJEXT) \
+	geometry.$(OBJEXT) weatherarea.$(OBJEXT) \
 	guidimension.$(OBJEXT) guiiconhandler.$(OBJEXT) \
 	guifunctions.$(OBJEXT) iconrepository.$(OBJEXT) \
 	gamedialog.$(OBJEXT) infopopup.$(OBJEXT) \
@@ -242,8 +242,8 @@ AM_CXXFLAGS = $(SDL_CFLAGS) -Dsgmain $(PARAGUI_CFLAGS)  $(SIGC_CFLAGS)
 asc_SOURCES = unitctrl.cpp soundList.cpp typen.cpp \
 strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp pd.cpp palette.cpp \
 newfont.cpp network.cpp misc.cpp loadpcxc.cpp loaders.cpp \
-loadbi3.cpp gui.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp \
-building.cpp basestrm.cpp basegfx.cpp attack.cpp \
+loadbi3.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp \
+basestrm.cpp basegfx.cpp attack.cpp \
 gameoptions.cpp astar2.cpp vehicletype.cpp objects.cpp \
 buildingtype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp \
 gamemap.cpp password.cpp password_dialog.cpp replay.cpp research.cpp \
@@ -342,7 +342,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/attack.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/basegfx.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/basestrm.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/building.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildings.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildingtype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cannedmessages.Po@am__quote@
@@ -364,7 +363,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameoptions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/geometry.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/graphicset.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gui.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guidimension.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guifunctions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guiiconhandler.Po@am__quote@

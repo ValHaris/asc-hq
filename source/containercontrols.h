@@ -33,7 +33,7 @@ class ContainerControls {
       
    public:
       ContainerControls( ContainerBase* cb ) : container( cb ) {};
-      static VehicleMovement*   movement (  Vehicle* eht, bool simpleMode );
+      static VehicleMovement*   movement (  Vehicle* eht, bool simpleMode = false);
 
 
       bool unitProductionAvailable();
@@ -42,6 +42,18 @@ class ContainerControls {
       int unitProductionPrerequisites( const Vehicletype* type );
       Vehicle* produceUnit( const Vehicletype* type, bool fillWithAmmo, bool fillWithResources );
 
+      Resources calcDestructionOutput( Vehicle* veh );
+      void destructUnit( Vehicle* veh );
+
+      bool unitTrainingAvailable( Vehicle* veh );
+      void trainUnit( Vehicle* veh );
+
+      Resources buildProductionLineResourcesNeeded( Vehicletype* veh );
+      int  buildProductionLine( Vehicletype* veh );
+
+      Resources removeProductionLineResourcesNeeded( Vehicletype* veh );
+      int  removeProductionLine( Vehicletype* veh );
+      
       //! only to be used by the AI, this doesn't consume any resources, so the unit must be discarded
       Vehicle* produceUnitHypothetically( const Vehicletype* type );
 

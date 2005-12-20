@@ -33,6 +33,7 @@
 class Menu;
 class NewGuiHost;
 class MapDisplayPG;
+class DashboardPanel;
 
 class ASC_MainScreenWidget : public MainScreenWidget {
 public:
@@ -41,12 +42,12 @@ public:
     void spawnPanel ( Panels panel );
 
     NewGuiHost* getGuiHost() { return guiHost; };
-    Panel* getUnitInfoPanel() { return unitInfoPanel; };
+    DashboardPanel* getUnitInfoPanel() { return unitInfoPanel; };
     
 protected:
     NewGuiHost* guiHost;
     Menu* menu;
-    Panel* unitInfoPanel;
+    DashboardPanel* unitInfoPanel;
               
     bool eventKeyDown(const SDL_KeyboardEvent* key);
     ASCString getBackgroundImageFilename() { return "gamebackground.png"; };

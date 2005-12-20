@@ -811,8 +811,11 @@ void tmap :: write ( tnstream& stream )
 MapCoordinate& tmap::getCursor()
 {
    #ifdef sgmain
-   return player[actplayer].cursorPos;
-   #else
+   if ( actplayer >= 0 )
+      return player[actplayer].cursorPos;
+   else
+      return player[actplayer].cursorPos;
+#else
    return player[8].cursorPos;
    #endif
 }

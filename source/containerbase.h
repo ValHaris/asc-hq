@@ -86,9 +86,11 @@ class ContainerBase {
 
       virtual int putResource ( int amount, int resourcetype, bool queryonly, int scope = 1 ) = 0;
       virtual int getResource ( int amount, int resourcetype, bool queryonly, int scope = 1 ) = 0;
+      virtual int getResource ( int amount, int resourcetype ) const = 0;
 
       Resources putResource ( const Resources& res, bool queryonly, int scope = 1 );
       Resources getResource ( const Resources& res, bool queryonly, int scope = 1 );
+      Resources getResource ( const Resources& res ) const;
 
       virtual bool canRepair( const ContainerBase* item ) const = 0;
       pmap getMap ( ) { return gamemap; };
@@ -132,8 +134,8 @@ class ContainerBase {
       //! weight of all loaded units
       int cargoWeight() const;
 
-      SigC::Signal0<void> resourceChanged;
-      SigC::Signal0<void> ammoChanged;
+      // SigC::Signal0<void> resourceChanged;
+      // SigC::Signal0<void> ammoChanged;
       
       SigC::Signal0<void> conquered;
       SigC::Signal0<void> destroyed;

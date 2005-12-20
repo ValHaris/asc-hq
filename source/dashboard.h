@@ -35,6 +35,7 @@ class SingleWeapon;
 
 class DashboardPanel : public Panel {
     protected:
+       const Vehicle* veh;
       DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme );
 
       void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
@@ -42,6 +43,7 @@ class DashboardPanel : public Panel {
 
     public:
       void eval();
+      void showUnitData( const Vehicle* veh, const Building* bld, bool redraw = false );
 
 };
 

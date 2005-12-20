@@ -35,11 +35,12 @@
 #include "sg.h"
 #include "viewcalculation.h"
 #include "itemrepository.h"
-#include "building_controls.h"
+#include "containercontrols.h"
 #include "resourcenet.h"
 #include "guiiconhandler.h"
 #include "guifunctions.h"
 #include "cannedmessages.h"
+#include "unitctrl.h"
 
 trunreplay runreplay;
 
@@ -1408,10 +1409,8 @@ void trunreplay :: execnextreplaymove ( void )
                                  readnextaction();
                                  pfield fld = getfield(x,y);
                                  if ( !fld->vehicle || fld->vehicle->networkid != nwid && fld->building ) {
-                                    cbuildingcontrols bc;
-                                    bc.init ( fld->building );
-                                    Vehicle* veh = actmap->getUnit( nwid );
-                                    bc.recycling.recycle( veh );
+                                    ContainerControls cc ( fld->building );
+                                    cc.destructUnit( actmap->getUnit( nwid ) );
                                  } else
                                     if ( !fld->getContainer() || !fld->getContainer()->removeUnitFromCargo ( nwid, true ))
                                        displaymessage ( "severe replay inconsistency:\nCould not remove unit %d!", 1, nwid );
@@ -1428,10 +1427,9 @@ void trunreplay :: execnextreplaymove ( void )
                                  Vehicle* eht = actmap->getUnit ( x, y, nwid );
                                  Building* bld = actmap->getField ( x, y )->building;
                                  if ( eht && bld ) {
-                                    cbuildingcontrols bc;
-                                    bc.init( bld );
-                                    if ( bc.training.available( eht )) 
-                                       bc.training.trainunit( eht );
+                                    ContainerControls cc( bld );
+                                    if ( cc.unitTrainingAvailable(eht) )
+                                       cc.trainUnit( eht );
                                     else
                                        error("severe replay inconsistency:\nno vehicle for trainunit command !");
                                  } else
@@ -1621,9 +1619,8 @@ void trunreplay :: execnextreplaymove ( void )
                                  readnextaction();
                                  Building* bld = getfield(x,y)->building;
                                  if ( bld ) {
-                                    cbuildingcontrols bc;
-                                    bc.init ( bld );
-                                    bc.produceammunition.produce( type, amount );
+                                    ContainerControls cc( bld );
+                                    cc.produceAmmo( type, amount );
                                  } else
                                     error("severe replay inconsistency:\nno building for produce ammo command !");
 
@@ -1638,9 +1635,8 @@ void trunreplay :: execnextreplaymove ( void )
                                  Vehicletype* veh = actmap->getvehicletype_byid ( vehicleid );
                                  if ( bld && veh ) {
                                     if ( veh->techDependency.available( actmap->player[ bld->getOwner()].research )) {
-                                       cbuildingcontrols bc;
-                                       bc.init ( bld );
-                                       int result = bc.buildProductionLine.build( veh );
+                                       ContainerControls cc( bld );
+                                       int result = cc.buildProductionLine( veh );
                                        if ( result < 0)
                                           error("severe replay inconsistency:\ncould not build production line!\n%s !", getmessage(result));
                                     } else
@@ -1659,9 +1655,8 @@ void trunreplay :: execnextreplaymove ( void )
                                  Building* bld = dynamic_cast<Building*>( actmap->getContainer(building));
                                  Vehicletype* veh = actmap->getvehicletype_byid ( vehicleid );
                                  if ( bld && veh ) {
-                                    cbuildingcontrols bc;
-                                    bc.init ( bld );
-                                    int result = bc.removeProductionLine.remove( veh );
+                                    ContainerControls cc( bld );
+                                    int result = cc.removeProductionLine( veh );
                                     if ( result < 0)
                                        error("severe replay inconsistency:\ncould not remove production line!\n%s !", getmessage(result));
 
