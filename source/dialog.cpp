@@ -516,7 +516,7 @@ end;  */
 
 
 
-
+/*
 class  tchoice_dlg : public tdialogbox {
                public:
                   int      result;
@@ -602,7 +602,7 @@ int         choice_dlg( const char *       title,
   c.done(); 
   return a;
 } 
-
+*/
 
 
 /*********************************************************************************************/

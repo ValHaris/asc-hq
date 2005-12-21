@@ -18,6 +18,8 @@
 #include <pgimage.h>
 #include <pgtooltiphelp.h>
 #include "cargodialog.h"
+#include "vehicletypeselector.h"
+
 #include "../containerbase.h"
 #include "../paradialog.h"
 #include "../messaginghub.h"
@@ -643,132 +645,6 @@ void cargoDialog( ContainerBase* cb )
 
 
 
-class VehicleTypeWidget: public SelectionWidget  {
-      const Vehicletype* vt;
-      static Surface clippingSurface;
-      Surface& getClippingSurface() { return clippingSurface; };
-   public:
-      VehicleTypeWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, int lackingResources, const Resources& cost ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, fieldsizey+10 )), vt( vehicletype )
-      {
-         
-         int col1 = 50;
-         int lineheight  = 20;
-        
-         int sw = (width - col1 - 10) / 6;
-         
-         PG_Label* lbl1 = new PG_Label( this, PG_Rect( col1, 0, 3 * sw, lineheight ), vt->name );
-         lbl1->SetFontSize( lbl1->GetFontSize() -2 );
-         
-         PG_Label* lbl2 = new PG_Label( this, PG_Rect( col1, lineheight, 3 * sw, lineheight ), vt->description );
-         lbl2->SetFontSize( lbl2->GetFontSize() -2 );
-         
-         static const char* filenames[3] = { "energy.png", "material.png", "fuel.png" };
-         
-         for ( int i = 0; i < 3; ++i ) {
-            new PG_Image ( this, PG_Point( col1 + 2 + 5 * sw, i * 12 + 5), IconRepository::getIcon( filenames[i] ).getBaseSurface(), false  );
-            PG_Label* lbl = new PG_Label( this, PG_Rect( col1 + 3 * sw, i * 12, sw * 2, lineheight ), ASCString::toString(cost.resource(i)) );
-            lbl->SetAlignment( PG_Label::RIGHT );
-            lbl->SetFontSize( lbl->GetFontSize() - 3 );
-            if ( lackingResources & (1<<i) )
-               lbl->SetFontColor( 0xff0000);
-         }
-         
-         SetTransparency( 255 );
-      };
-      
-      ASCString getName() const { return vt->getName(); };
-      const Vehicletype* getVehicletype() const { return vt; };
-                 
-   protected:
-      
-      void display( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst )
-      {
-         if ( !getClippingSurface().valid() )
-            getClippingSurface() = Surface::createSurface( fieldsizex + 10, fieldsizey + 10, 32, 0 );
-      
-         getClippingSurface().Fill(0);
-
-         vt->paint( getClippingSurface(), SPoint(5,5), actmap->actplayer, 0 );
-         PG_Draw::BlitSurface( getClippingSurface().getBaseSurface(), src, surface, dst);
-      }
-      
-};
-
-Surface VehicleTypeWidget::clippingSurface;
-
-
-
-bool VehicleComp ( const Vehicletype* v1, const Vehicletype* v2 )
-{
-   int id1 = getUnitSetID(v1);
-   int id2 = getUnitSetID(v2);
-   return (id1 <  id2) ||
-         (id1 == id2 && v1->movemalustyp  < v2->movemalustyp ) ||
-         (id1 == id2 && v1->movemalustyp == v2->movemalustyp && v1->name < v2->name);
-};
-
-
-
-class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC::Object  {
-      Resources plantResources;
-   public:
-      typedef vector<Vehicletype*> Container;
-   protected:
-      Container::iterator it;
-      Container items;
-
-      virtual void vehicleTypeSelected( const Vehicletype* type ) = 0;
-      
-   private:
-      const Container& original_items;
-      
-   public:
-      VehicleTypeSelectionItemFactory( Resources plantResources, const Container& types ) : original_items( types )
-      {
-         restart();
-         this->plantResources = plantResources;
-      };
-      
-
-      SigC::Signal0<void> reloadAllItems;
-
-      void restart()
-      {
-         items = original_items;
-         sort( items.begin(), items.end(), VehicleComp );
-         it = items.begin();
-      };
-      
-      virtual Resources getCost( const Vehicletype* type ) = 0;
-      
-      SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos )
-      {
-         if ( it != items.end() ) {
-            const Vehicletype* v = *(it++);
-            Resources cost  = getCost(v);
-
-            int lackingResources = 0;
-            for ( int r = 0; r < 3; ++r )
-               if ( plantResources.resource(r) < cost.resource(r))
-                  lackingResources |= 1 << r;
-            return new VehicleTypeWidget( parent, pos, parent->Width() - 15, v, lackingResources, cost );
-         } else
-            return NULL;
-      };
-      
-     
-      void itemSelected( const SelectionWidget* widget, bool mouse )
-      {
-         if ( !widget )
-            return;
-            
-         const VehicleTypeWidget* fw = dynamic_cast<const VehicleTypeWidget*>(widget);
-         assert( fw );
-         vehicleTypeSelected( fw->getVehicletype() );
-      }
-
-};
-
 
 class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFactory  {
       bool fillResources;
@@ -784,7 +660,7 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
          if ( !widget )
             return;
             
-         const VehicleTypeWidget* fw = dynamic_cast<const VehicleTypeWidget*>(widget);
+         const VehicleTypeResourceWidget* fw = dynamic_cast<const VehicleTypeResourceWidget*>(widget);
          assert( fw );
          sigVehicleTypeMarked( fw->getVehicletype() );
       }
@@ -792,7 +668,7 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
       
    public:
       VehicleProduction_SelectionItemFactory( Resources plantResources, const Container& types )
-         : VehicleTypeSelectionItemFactory( plantResources, types ), fillResources(true), fillAmmo(true)
+         : VehicleTypeSelectionItemFactory( plantResources, types, actmap->actplayer ), fillResources(true), fillAmmo(true)
       {
       };
       
@@ -846,7 +722,7 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
 class AddProductionLine_SelectionItemFactory: public VehicleTypeSelectionItemFactory  {
       ContainerBase* plant;
    public:
-      AddProductionLine_SelectionItemFactory( ContainerBase* my_plant, const Container& types ) : VehicleTypeSelectionItemFactory( my_plant->getResource(Resources(maxint,maxint,maxint), true), types ), plant(my_plant)
+      AddProductionLine_SelectionItemFactory( ContainerBase* my_plant, const Container& types ) : VehicleTypeSelectionItemFactory( my_plant->getResource(Resources(maxint,maxint,maxint), true), types, actmap->actplayer ), plant(my_plant)
       {
          
       };

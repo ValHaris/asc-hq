@@ -52,19 +52,6 @@ extern void  statisticarmies(void);
    
 extern void  statisticbuildings(void);
    
-/*! displays a dialog with two buttons, to select one of them
-
-    \param title: the message text; printf style arguments allowed
-    \param s1 the text on the left button
-    \param s2 the text on the right button
-    \returns 1 if the left button has been pressed; 2 if the right button has been pressed
-*/
-extern int   choice_dlg(const char *       title,
-                        const char *       s1,
-                        const char *       s2,
-                        ... );
-   
-
 
 
 extern char mix3colors ( int p1, int p2, int p3 );

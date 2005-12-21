@@ -1441,6 +1441,8 @@ public:
 
 	void LoadThemeStyle(const std::string& widgettype);
 
+ PG_RichEdit* getTextBox() { return my_textbox; };
+
 protected:
 
 	/**
@@ -1455,6 +1457,7 @@ protected:
 
          virtual bool eventKeyDown (const SDL_KeyboardEvent *key);
         
+         
 private:
 
 	PG_RichEdit* my_textbox;
@@ -1595,6 +1598,18 @@ void infoMessageDialog( const ASCString& message )
    MessageDialog msg( NULL, size, "Information", message, "OK" );
    msg.Show();
    msg.RunModal();
+}
+
+
+int  choice_dlg(const ASCString& title, const ASCString& leftButton, const ASCString& rightButton )
+{
+   PG_Rect size = calcMessageBoxSize(title);
+   MessageDialog msg( NULL, size,"", "", leftButton, rightButton, PG_Label::CENTER, "Window" );
+   msg.getTextBox()->SetFontSize( msg.getTextBox()->GetFontSize() + 3 );
+   msg.getTextBox()->SetText(title);
+   
+   msg.Show();
+   return msg.RunModal();
 }
 
 

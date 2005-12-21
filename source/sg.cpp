@@ -125,7 +125,7 @@
 #include "dialogs/newgame.h"
 #include "dialogs/soundsettings.h"
 #include "dialogs/alliancesetup.h"
-
+#include "dialogs/unitcounting.h"
 
 pfield        getSelectedField(void)
 {
@@ -669,40 +669,6 @@ void renameUnit()
 }
 
 
-void calcCargoSummary( ContainerBase* cb, map<int,int>& summary )
-{
-   for ( ContainerBase::Cargo::iterator i = cb->cargo.begin(); i != cb->cargo.end(); ++i )
-      if ( *i ) {
-         calcCargoSummary( *i, summary );
-         summary[ (*i)->typ->id] += 1;
-      }
-}
-
-void showCargoSummary()
-{
-   typedef map<int,int> Summary;
-   Summary summary;
-
-   pfield fld = getSelectedField();
-   if ( fld && fld->vehicle && fld->vehicle->getOwner() == actmap->actplayer ) {
-      calcCargoSummary( fld->vehicle, summary );
-
-      ASCString s;
-
-      map<ASCString, int> sorter;
-
-      for ( Summary::iterator i = summary.begin(); i != summary.end(); ++i )
-         sorter[vehicleTypeRepository.getObject_byID( i->first )->name] = i->second;
-
-      for ( map<ASCString, int>::iterator i = sorter.begin(); i != sorter.end(); ++i )
-         s += i->first + ": " + strrr(i->second) + "\n";
-
-      tviewanytext vat ;
-      vat.init ( "Cargo information", s.c_str(), 20, -1 , 450, 480 );
-      vat.run();
-      vat.done();
-   }
-}
 
 
 void showSearchPath()
@@ -844,12 +810,6 @@ void execuseraction ( tuseractions action )
       case ua_bi3preferences:
          bi3preferences();
          break;
-
-      case ua_exitgame:
-         if (choice_dlg("do you really want to quit ?","~y~es","~n~o") == 1)
-            getPGApplication().Quit();
-         break;
-
 
       case ua_settribute :
          settributepayments ();
@@ -1076,9 +1036,6 @@ void execuseraction ( tuseractions action )
             }
          }
          break;
-      case ua_cargosummary: showCargoSummary();
-         break;
-
       case ua_showsearchdirs: showSearchPath();
          break;
 
@@ -1177,7 +1134,17 @@ void execuseraction2 ( tuseractions action )
       case ua_writemaptopcx :
          writemaptopcx ( actmap );
          break;
-      default:
+      case ua_exitgame:
+         if (choice_dlg("do you really want to quit ?","~y~es","~n~o") == 1)
+            getPGApplication().Quit();
+         break;
+      case ua_cargosummary: {
+            pfield fld = getSelectedField();
+            if ( fld && fld->vehicle && fld->vehicle->getOwner() == actmap->actplayer ) 
+               showUnitCargoSummary( fld->vehicle );
+         }
+         break;
+         default:
          break;
    }
 

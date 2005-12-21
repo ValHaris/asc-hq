@@ -53,7 +53,8 @@ am_libdialogs_la_OBJECTS = editmapparam.lo selectionwindow.lo \
 	soundsettings.lo emailsetup.lo unitinfodialog.lo
 libdialogs_la_OBJECTS = $(am_libdialogs_la_OBJECTS)
 libgamedialogs_la_DEPENDENCIES =
-am_libgamedialogs_la_OBJECTS = cargodialog.lo
+am_libgamedialogs_la_OBJECTS = cargodialog.lo vehicletypeselector.lo \
+	unitcounting.lo
 libgamedialogs_la_OBJECTS = $(am_libgamedialogs_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -195,7 +196,7 @@ AM_CXXFLAGS = $(SDL_CFLAGS) $(PARAGUI_CFLAGS)  $(SIGC_CFLAGS) -Dmaindialogs
 noinst_LTLIBRARIES = libdialogs.la libgamedialogs.la
 libdialogs_la_SOURCES = editmapparam.cpp selectionwindow.cpp fileselector.cpp playersetup.cpp alliancesetup.cpp newgame.cpp soundsettings.cpp emailsetup.cpp unitinfodialog.cpp 
 libdialogs_la_LIBADD = @SDL_LIBS@ 
-libgamedialogs_la_SOURCES = cargodialog.cpp
+libgamedialogs_la_SOURCES = cargodialog.cpp vehicletypeselector.cpp unitcounting.cpp
 libgamedialogs_la_LIBADD = @SDL_LIBS@ 
 all: all-am
 
@@ -259,7 +260,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/playersetup.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/selectionwindow.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/soundsettings.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitcounting.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitinfodialog.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicletypeselector.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
