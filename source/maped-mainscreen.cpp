@@ -472,7 +472,7 @@ template <class ItemType>
 void showSelectionWindow( PG_Widget* parent, PG_WindowPointer &selectionWindow, const ItemRepository<ItemType>& itemRepository  )
 {
    if ( !selectionWindow ) {
-      ItemSelectorWindow* sw = new ItemSelectorWindow( parent, PG_Rect( parent->Width()-300, 100, 280, parent->Height()-150), new MapItemTypeWidgetFactory< MapItemTypeWidget<ItemType> >(itemRepository) );
+      ItemSelectorWindow* sw = new ItemSelectorWindow( parent, PG_Rect( parent->Width()-300, 100, 280, parent->Height()-150), "select item", new MapItemTypeWidgetFactory< MapItemTypeWidget<ItemType> >(itemRepository) );
       filtersChangedSignal.connect( SigC::slot( *sw, &ItemSelectorWindow::reLoad ));
       selectionWindow = sw;
    }

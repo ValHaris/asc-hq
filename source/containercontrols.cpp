@@ -365,13 +365,13 @@ void ContainerControls::trainUnit( Vehicle* veh )
 };
 
 
-Resources ContainerControls :: buildProductionLineResourcesNeeded( Vehicletype* veh )
+Resources ContainerControls :: buildProductionLineResourcesNeeded( const Vehicletype* veh )
 {
    return veh->productionCost * productionLineConstructionCostFactor;
 }
 
 
-int ContainerControls :: buildProductionLine ( Vehicletype* veh  )
+int ContainerControls :: buildProductionLine ( const Vehicletype* veh  )
 {
    if ( find( container->unitProduction.begin(), container->unitProduction.end(), veh ) != container->unitProduction.end() )
       return -503;
@@ -380,18 +380,18 @@ int ContainerControls :: buildProductionLine ( Vehicletype* veh  )
       return -500;
 
    container->getResource( buildProductionLineResourcesNeeded(veh), 0 );
-   container->unitProduction.push_back(  veh );
+   container->unitProduction.push_back(  const_cast<Vehicletype*>(veh) );
    return 0;
 }
 
 
-Resources ContainerControls :: removeProductionLineResourcesNeeded( Vehicletype* veh )
+Resources ContainerControls :: removeProductionLineResourcesNeeded( const Vehicletype* veh )
 {
    return veh->productionCost * productionLineRemovalCostFactor;
 }
 
 
-int ContainerControls :: removeProductionLine ( Vehicletype* veh  )
+int ContainerControls :: removeProductionLine ( const Vehicletype* veh  )
 {
    if ( find( container->unitProduction.begin(), container->unitProduction.end(), veh ) == container->unitProduction.end() )
       return -502;
@@ -405,3 +405,22 @@ int ContainerControls :: removeProductionLine ( Vehicletype* veh  )
 }
 
 
+vector<Vehicletype*> ContainerControls :: productionLinesBuyable()
+{
+
+   vector<Vehicletype*>  list;
+
+   Resources r = container->getResource( Resources(maxint, maxint, maxint), 1 );
+   
+   for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) {
+      Vehicletype* veh = actmap->getvehicletype_bypos ( i );
+      if ( veh ) {
+         bool found = find( container->unitProduction.begin(), container->unitProduction.end(), veh ) != container->unitProduction.end();
+         if ( container->baseType->vehicleFit ( veh ) && !found )
+            if ( container->vehicleUnloadable(veh) || container->baseType->hasFunction( ContainerBaseType::ProduceNonLeavableUnits ))
+               if ( veh->techDependency.available ( container->getMap()->player[container->getMap()->actplayer].research ))
+                  list.push_back( veh );
+      }
+   }
+   return list;
+}

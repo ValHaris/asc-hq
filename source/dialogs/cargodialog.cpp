@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include <pgimage.h>
+#include <pgtooltiphelp.h>
 #include "cargodialog.h"
 #include "../containerbase.h"
 #include "../paradialog.h"
@@ -33,6 +34,7 @@
 #include "../cannedmessages.h"
 #include "../replay.h"
 #include "../dashboard.h"
+#include "../dialog.h"
 
 #include "selectionwindow.h"
 
@@ -243,6 +245,19 @@ namespace CargoGuiFunctions {
          Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
+
+   class RefuelUnit : public GuiFunction
+   {
+         CargoDialog& parent;
+      public:
+         RefuelUnit( CargoDialog& masterParent ) : parent( masterParent)  {};
+         bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
+         void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
+         ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
+   };
+
 }; // namespace CargoGuiFunctions
 
 
@@ -402,6 +417,7 @@ class CargoDialog : public Panel
       {
          registerCargoGuiFunctions( handler );
          handler.registerUserFunction( new CargoGuiFunctions::Movement( *this ) );
+         handler.registerUserFunction( new CargoGuiFunctions::RefuelUnit( *this ) );
          handler.registerUserFunction( new CargoGuiFunctions::UnitProduction( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::UnitTraining( *this ));
       }
@@ -504,6 +520,8 @@ class CargoDialog : public Panel
          sigCargoChanged();
          updateResourceDisplay();
          showAmmo();
+         if ( mainScreenWidget && mainScreenWidget->getUnitInfoPanel() )
+            mainScreenWidget->getUnitInfoPanel()->showUnitData( getMarkedUnit(), NULL, true );
       }
       
       int RunModal()
@@ -627,7 +645,6 @@ void cargoDialog( ContainerBase* cb )
 
 class VehicleTypeWidget: public SelectionWidget  {
       const Vehicletype* vt;
-      PG_Label*  resourceWidget[3];
       static Surface clippingSurface;
       Surface& getClippingSurface() { return clippingSurface; };
    public:
@@ -635,25 +652,25 @@ class VehicleTypeWidget: public SelectionWidget  {
       {
          
          int col1 = 50;
-         int lineheight  = 15;
+         int lineheight  = 20;
         
          int sw = (width - col1 - 10) / 6;
          
          PG_Label* lbl1 = new PG_Label( this, PG_Rect( col1, 0, 3 * sw, lineheight ), vt->name );
          lbl1->SetFontSize( lbl1->GetFontSize() -2 );
          
-         PG_Label* lbl2 = new PG_Label( this, PG_Rect( col1 + 3 * sw, 0, 3 * sw, lineheight ), vt->description );
+         PG_Label* lbl2 = new PG_Label( this, PG_Rect( col1, lineheight, 3 * sw, lineheight ), vt->description );
          lbl2->SetFontSize( lbl2->GetFontSize() -2 );
          
+         static const char* filenames[3] = { "energy.png", "material.png", "fuel.png" };
+         
          for ( int i = 0; i < 3; ++i ) {
-            PG_Label* lbl = new PG_Label( this, PG_Rect( col1 + 2 * i * sw, lineheight + 5, sw, lineheight ), resourceNames[i] );
-            lbl->SetFontSize( lbl->GetFontSize() -2 );
-
-            
-            resourceWidget[i] = new PG_Label( this, PG_Rect( col1 + 2 * i * sw + sw, lineheight + 5, sw, lineheight ), ASCString::toString(cost.resource(i)) );
-            resourceWidget[i]->SetFontSize( resourceWidget[i]->GetFontSize() -2 );
+            new PG_Image ( this, PG_Point( col1 + 2 + 5 * sw, i * 12 + 5), IconRepository::getIcon( filenames[i] ).getBaseSurface(), false  );
+            PG_Label* lbl = new PG_Label( this, PG_Rect( col1 + 3 * sw, i * 12, sw * 2, lineheight ), ASCString::toString(cost.resource(i)) );
+            lbl->SetAlignment( PG_Label::RIGHT );
+            lbl->SetFontSize( lbl->GetFontSize() - 3 );
             if ( lackingResources & (1<<i) )
-               resourceWidget[i]->SetFontColor( 0xff0000);
+               lbl->SetFontColor( 0xff0000);
          }
          
          SetTransparency( 255 );
@@ -699,11 +716,15 @@ class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC:
    protected:
       Container::iterator it;
       Container items;
+
+      virtual void vehicleTypeSelected( const Vehicletype* type ) = 0;
+      
+   private:
+      const Container& original_items;
+      
    public:
-      VehicleTypeSelectionItemFactory( Resources plantResources, const Container& types ) 
+      VehicleTypeSelectionItemFactory( Resources plantResources, const Container& types ) : original_items( types )
       {
-         items = types;
-         sort( items.begin(), items.end(), VehicleComp );
          restart();
          this->plantResources = plantResources;
       };
@@ -713,6 +734,8 @@ class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC:
 
       void restart()
       {
+         items = original_items;
+         sort( items.begin(), items.end(), VehicleComp );
          it = items.begin();
       };
       
@@ -733,8 +756,7 @@ class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC:
             return NULL;
       };
       
-      SigC::Signal1<void,const Vehicletype* > vehicleTypeSelected;
-      
+     
       void itemSelected( const SelectionWidget* widget, bool mouse )
       {
          if ( !widget )
@@ -751,6 +773,23 @@ class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC:
 class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFactory  {
       bool fillResources;
       bool fillAmmo;
+   protected:
+      void vehicleTypeSelected( const Vehicletype* type )
+      {
+         sigVehicleTypeSelected( type );
+      }
+
+      void itemMarked( const SelectionWidget* widget, bool mouse )
+      {
+         if ( !widget )
+            return;
+            
+         const VehicleTypeWidget* fw = dynamic_cast<const VehicleTypeWidget*>(widget);
+         assert( fw );
+         sigVehicleTypeMarked( fw->getVehicletype() );
+      }
+
+      
    public:
       VehicleProduction_SelectionItemFactory( Resources plantResources, const Container& types )
          : VehicleTypeSelectionItemFactory( plantResources, types ), fillResources(true), fillAmmo(true)
@@ -798,6 +837,34 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
          return cost;
       };
 
+      SigC::Signal1<void,const Vehicletype* > sigVehicleTypeSelected;
+      SigC::Signal1<void,const Vehicletype* > sigVehicleTypeMarked;
+      
+};
+
+
+class AddProductionLine_SelectionItemFactory: public VehicleTypeSelectionItemFactory  {
+      ContainerBase* plant;
+   public:
+      AddProductionLine_SelectionItemFactory( ContainerBase* my_plant, const Container& types ) : VehicleTypeSelectionItemFactory( my_plant->getResource(Resources(maxint,maxint,maxint), true), types ), plant(my_plant)
+      {
+         
+      };
+      
+      void vehicleTypeSelected( const Vehicletype* type )
+      {
+         ContainerControls cc( plant );
+         int res = cc.buildProductionLine( type );
+         if ( res < 0 )
+            errorMessage( getmessage ( res ));
+      }
+      
+      Resources getCost( const Vehicletype* type )
+      {
+         ContainerControls cc ( plant );
+         return cc.buildProductionLineResourcesNeeded( type );
+      };
+
 };
 
 
@@ -806,12 +873,22 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog {
       const Vehicletype* selected;
       ItemSelectorWidget* isw;
       VehicleProduction_SelectionItemFactory* factory;
+      ContainerBase* my_plant;
    protected:
-      void fileNameSelected( const Vehicletype* filename )
+      void vtSelected( const Vehicletype* filename )
       {
          selected = filename;
-         quitModalLoop(0);
+         // quitModalLoop(0);
       };
+
+      bool produce()
+      {
+         if ( selected ) {
+            quitModalLoop(0);
+            return true;
+         } else
+            return false;
+      }
 
       void reLoadAndUpdate()
       {
@@ -819,10 +896,11 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog {
       }
       
    public:
-      VehicleProduction_SelectionWindow( PG_Widget *parent, const PG_Rect &r, ContainerBase* plant, const vector<Vehicletype*>& items ) : ASC_PG_Dialog( parent, r, "Choose Vehicle Type" ), selected(NULL), isw(NULL), factory(NULL)
+      VehicleProduction_SelectionWindow( PG_Widget *parent, const PG_Rect &r, ContainerBase* plant, const vector<Vehicletype*>& items ) : ASC_PG_Dialog( parent, r, "Choose Vehicle Type" ), selected(NULL), isw(NULL), factory(NULL), my_plant( plant )
       {
          factory = new VehicleProduction_SelectionItemFactory( plant->getResource(Resources(maxint,maxint,maxint), true), items );
-         factory->vehicleTypeSelected.connect ( SigC::slot( *this, &VehicleProduction_SelectionWindow::fileNameSelected ));
+         factory->sigVehicleTypeSelected.connect ( SigC::slot( *this, &VehicleProduction_SelectionWindow::vtSelected ));
+         factory->sigVehicleTypeMarked.connect ( SigC::slot( *this, &VehicleProduction_SelectionWindow::vtSelected ));
 
          isw = new ItemSelectorWidget( this, PG_Rect(10, GetTitlebarHeight(), r.Width() - 20, r.Height() - GetTitlebarHeight() - 40), factory );
          isw->sigQuitModal.connect( SigC::slot( *this, &ItemSelectorWindow::QuitModal));
@@ -831,18 +909,53 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog {
          
          
          int y = GetTitlebarHeight() + isw->Height();
-         PG_CheckButton* fillRes = new PG_CheckButton( this, PG_Rect( 10, y + 2, r.Width() / 2 - 20, 20), "Fill with Resources" );
+         PG_CheckButton* fillRes = new PG_CheckButton( this, PG_Rect( 10, y + 2, r.Width() / 2 - 50, 20), "Fill with Resources" );
          fillRes->SetPressed();
          fillRes->sigClick.connect( SigC::slot( *factory, &VehicleProduction_SelectionItemFactory::setResourceFilling ));
          
-         PG_CheckButton* fillAmmo = new PG_CheckButton( this, PG_Rect( 10, y + 20, r.Width() / 2 - 20, 20), "Fill with Ammo" );
+         PG_CheckButton* fillAmmo = new PG_CheckButton( this, PG_Rect( 10, y + 20, r.Width() / 2 - 50, 20), "Fill with Ammo" );
          fillAmmo->SetPressed();
          fillAmmo->sigClick.connect( SigC::slot( *factory, &VehicleProduction_SelectionItemFactory::setAmmoFilling ));
+
+         PG_Rect rr ( r.Width() / 2 + 10, y + 2, (r.Width() - 20) - (r.Width() / 2 + 10) , 35);
+         PG_Button* b  = new PG_Button( this, PG_Rect( rr.x + rr.h + 5, rr.y, rr.w - 40, rr.h ) , "Produce" );
+         b->sigClick.connect( SigC::slot( *this,&VehicleProduction_SelectionWindow::produce ));
          
-         PG_Button* b = new PG_Button( this, PG_Rect( r.Width() / 2 + 10, y + 2, (r.Width() - 20) - (r.Width() / 2 + 10) , 35), "Produce" );
+         PG_Button* b2 = new PG_Button( this, PG_Rect( rr.x, rr.y, rr.h, rr.h ), "+" );
+         b2->sigClick.connect( SigC::slot( *this, &VehicleProduction_SelectionWindow::addProductionLine ));
+         new PG_ToolTipHelp( b2, "Add production line");
+
+         PG_Button* b3 = new PG_Button( this, PG_Rect( rr.x - rr.h - 5, rr.y, rr.h, rr.h ), "-" );
+         b3->sigClick.connect( SigC::slot( *this, &VehicleProduction_SelectionWindow::removeProductionLine ));
+         new PG_ToolTipHelp( b3, "Remove production line");
+
          
+         SetTransparency(0);
       };
 
+      bool addProductionLine()
+      {
+         ContainerControls cc ( my_plant );
+         {
+            ItemSelectorWindow isw( NULL, PG_Rect( 100, 150, 400, 400 ),  "choose production line", new AddProductionLine_SelectionItemFactory( my_plant, cc.productionLinesBuyable() ));
+            isw.Show();
+            isw.RunModal();
+         }
+         reLoadAndUpdate();
+         return true;
+      }
+
+      bool removeProductionLine()
+      {
+         if ( selected && choice_dlg("do you really want to remove this production line ?","~y~es","~n~o") == 1) {
+            ContainerControls cc ( my_plant );
+            cc.removeProductionLine( selected );
+            reLoadAndUpdate();
+         }
+         return true;
+      }
+
+      
       bool fillWithAmmo()
       {
          return factory->getAmmoFilling();
@@ -996,7 +1109,7 @@ namespace CargoGuiFunctions {
       bool refillResources;
       const Vehicletype* v;
       {
-         VehicleProduction_SelectionWindow fsw( NULL, PG_Rect( 10, 10, 400, 500 ), parent.getContainer(), parent.getContainer()->unitProduction );
+         VehicleProduction_SelectionWindow fsw( NULL, PG_Rect( 10, 10, 450, 550 ), parent.getContainer(), parent.getContainer()->unitProduction );
          fsw.Show();
          fsw.RunModal();
          v = fsw.getVehicletype();
@@ -1055,5 +1168,60 @@ namespace CargoGuiFunctions {
       parent.getControls().trainUnit( veh );
       parent.cargoChanged();
    }
+   
+   //////////////////////////////////////////////////////////////////////////////////////////////
+   
+
+   bool RefuelUnit::available( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      if ( !subject )
+         return false;
+
+      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+      if ( !veh )
+         return false;
+
+      for ( int r = 1; r < 3; ++r )
+         if ( veh->getTank().resource(r) < veh->typ->tank.resource(r))
+            return true;
+      
+      for ( int w = 0; w < veh->typ->weapons.count; ++w)
+         if ( veh->typ->weapons.weapon[w].requiresAmmo() )
+            if ( veh->typ->weapons.weapon[w].count > veh->ammo[w] )
+               return true;
+      
+      return false;
+   }
+
+
+   bool RefuelUnit::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   {
+      return ( key->keysym.sym == 'f' );
+   };
+
+   Surface& RefuelUnit::getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return IconRepository::getIcon("refuel.png");
+   };
+   
+   ASCString RefuelUnit::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return "refuel unit";
+   };
+
+
+   void RefuelUnit::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      if ( !subject )
+         return;
+      
+      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+      if ( !veh )
+         return;
+      
+      parent.getControls().refilleverything( veh );
+      parent.cargoChanged();
+   }
+
    
 }

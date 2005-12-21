@@ -265,8 +265,8 @@ ItemSelectorWidget::~ItemSelectorWidget()
 
 
 
-ItemSelectorWindow::ItemSelectorWindow( PG_Widget *parent, const PG_Rect &r , SelectionItemFactory* itemFactory ) 
-   : PG_Window( parent,r,"Item Selector") 
+ItemSelectorWindow::ItemSelectorWindow( PG_Widget *parent, const PG_Rect &r , const ASCString& title, SelectionItemFactory* itemFactory )
+   : PG_Window( parent,r, title) 
 {
    SetTransparency( 0 );
    

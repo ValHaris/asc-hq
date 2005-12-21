@@ -133,7 +133,7 @@ class ItemSelectorWindow: public PG_Window {
       void itemSelected( const SelectionWidget* );
    public:
       // the ItemSelectorWindow will take ownership over the itemFactory
-      ItemSelectorWindow( PG_Widget *parent, const PG_Rect &r , SelectionItemFactory* itemFactory ) ;
+      ItemSelectorWindow( PG_Widget *parent, const PG_Rect &r , const ASCString& title, SelectionItemFactory* itemFactory ) ;
      
       int RunModal();
       void reLoad();

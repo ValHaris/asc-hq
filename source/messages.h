@@ -30,6 +30,8 @@ class  Message {
      //! bitmapped variable showing the sender of the message. Bit 0 - 7 are the players, Bit 9 is the system.
      int from;
 
+     ASCString getFromText( const tmap* gamemap ) const;
+     
      //! bitmapped variable showing the recipients of the message.
      int to;
 

@@ -19,6 +19,7 @@
 #include "gamedlg.h"
 #include "messagedlg.h"
 #include "gamemap.h"
+#include "paradialog.h"
 
 class tnewmessage : public tmessagedlg  {
             protected:
@@ -621,13 +622,75 @@ void         tviewmessage::run(void)
 }
 
 
+class IngameMessageViewer : public ASC_PG_Dialog {
+
+   
+   public:
+      IngameMessageViewer ( const ASCString& title, const Message& msg, const ASCString& buttonText = "confirm" ) : ASC_PG_Dialog ( NULL, PG_Rect( 50, 50, 500, 400 ), title )
+      {
+         PG_Rect r;
+         if ( !msg.getFromText( actmap ).empty()  ) {
+            PG_Rect f( 10, 40, Width() - 20, 25 );
+
+            new PG_Label( this, PG_Rect( f.x, f.y, 50, f.h ), "From:");
+            Emboss* emb = new Emboss( this, PG_Rect( f.x + 50, f.y, f.w - 50, f.h ), true );
+            new PG_Label( emb, PG_Rect( emb->x +2, emb->y + 2, emb->w - 4, emb->h - 4), msg.getFromText( actmap ) );
+   
+            
+            r = PG_Rect ( 10, 75, Width() - 20, Height() - 125 );
+         } else
+            r = PG_Rect ( 10, 40, Width() - 20, Height() - 90 );
+            
+         new Emboss( this, r, true );
+         PG_RichEdit* re = new PG_RichEdit( this, PG_Rect(r.x + 2, r.y+2, r.w-4, r.h-4));
+
+         ASCString text  = msg.text;
+         while ( text.find ( "#crt#" ) != ASCString::npos )
+            text.replace ( text.find  ("#crt#"), 5, " \n");
+
+         re->SetText( text );
+         re->SetTransparency(255);
+
+         
+         PG_Button* b = new PG_Button( this, PG_Rect( Width() - 110, Height() - 40, 100, 30), buttonText );
+         b->sigClick.connect( SigC::slot( *this, &IngameMessageViewer::QuitModal) );
+      }
+
+      bool eventKeyDown (const SDL_KeyboardEvent *key)
+      {
+         if (  key->keysym.sym == SDLK_ESCAPE ) {
+            quitModalLoop(10);
+            return true;
+         }
+         if (  key->keysym.sym == SDLK_RETURN || key->keysym.sym == SDLK_KP_ENTER ) {
+            quitModalLoop(11);
+            return true;
+         }
+         if (  key->keysym.sym == SDLK_SPACE ) {
+            quitModalLoop(12);
+            return true;
+         }
+         return ASC_PG_Dialog::eventKeyDown( key );
+      }
+
+      
+};
+
 
 void viewmessage ( const Message& message )
 {
-   tviewmessage vm;
-   vm.init ( message );
-   vm.run();
-   vm.done();
+   if ( legacyEventSystemActive() ) {
+   
+      tviewmessage vm;
+      vm.init ( message );
+      vm.run();
+      vm.done();
+   } else {
+      IngameMessageViewer igm( "incoming message...", message );
+      igm.Show();
+      igm.RunModal();
+   }
+   
 }
 
 

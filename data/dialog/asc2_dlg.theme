@@ -564,6 +564,7 @@
             <type value="ThemeWidget"/>
             <name value="ScrollbarV"/>
             <property name="width" value="15"/>
+            <property name="transparency" value="255"/>
         </object>
     </widget>
         

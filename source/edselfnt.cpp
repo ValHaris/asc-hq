@@ -332,7 +332,7 @@ class CargoItemFactory: public MapItemTypeWidgetFactory<MapItemTypeWidget< Vehic
 
 void selcargo( PG_Window* parentWindow, ContainerBase* container )
 {
-   ItemSelectorWindow isw( parentWindow, PG_Rect( 100, 100, 280, 600), new CargoItemFactory( container ) );
+   ItemSelectorWindow isw( parentWindow, PG_Rect( 100, 100, 280, 600), "cargo", new CargoItemFactory( container ) );
    isw.Show();
    isw.RunModal();
 }

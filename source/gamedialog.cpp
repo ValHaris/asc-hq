@@ -808,7 +808,7 @@ void LoadGameDialog::loadGameDialog(PG_MessageObject* caller) {
 
 void LoadGameDialog::loadGameDialog(PG_MessageObject* caller) {
 
-    ItemSelectorWindow isw ( NULL, PG_Rect( 10,10,500,500) , new  FileSelectionItemFactory( "*.foo" )) ;
+    ItemSelectorWindow isw ( NULL, PG_Rect( 10,10,500,500) , "choose file", new FileSelectionItemFactory( "*.foo" )) ;
     
     isw.Show();
     isw.RunModal();

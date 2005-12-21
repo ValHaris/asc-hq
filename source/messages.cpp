@@ -24,6 +24,7 @@
 Message :: Message ( pmap spfld  )
 {
    from = 1 << spfld->actplayer;
+         
    gametime = spfld->time;
    time = ::time( NULL );
    to = 0;
@@ -49,6 +50,18 @@ Message :: Message ( const ASCString& msg, pmap gamemap, int rec, int _from )  /
    for ( int i = 0; i < 8; i++ )
       if ( to & ( 1 << i ))
          actmap->player[i].unreadmessage.push_back ( this );
+}
+
+
+ASCString Message::getFromText( const tmap* gamemap ) const
+{
+   if ( from <= 0 )
+      return "";
+   
+   if ( from == (1<<9))
+      return "system";
+   
+   return gamemap->player[log2(from)].getName();
 }
 
 
