@@ -1237,10 +1237,12 @@ void NextMap::setup()
 
 void LoseMap::execute( MapDisplayInterface* md )
 {
-   displaymessage ( "You have been defeated !", 3 );
-   delete gamemap;
-   gamemap = NULL;
-   throw NoMapLoaded();
+   if ( !gamemap->continueplaying ) {
+      displaymessage ( "You have been defeated !", 3 );
+      delete gamemap;
+      gamemap = NULL;
+      throw NoMapLoaded();
+   }
 }
 
 
