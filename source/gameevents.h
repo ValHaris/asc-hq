@@ -27,7 +27,6 @@
 #define gameeventsH
 
 #include "typen.h"
-#include "mapdisplay.h"
 #include "gameeventsystem.h"
 #include "mappolygons.h"
 

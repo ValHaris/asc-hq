@@ -32,10 +32,8 @@
 #ifndef controlsH
 #define controlsH
 #include "typen.h"
-// #include "mousecontrol.h"
 #include "soundList.h"
 #include "astar2.h"
-#include "mapdisplay.h"
 
 
 
@@ -142,33 +140,7 @@ extern Resources getDestructionCost( Building* bld, Vehicle* veh );
 //! this checks if one player has been using a new ASC version than the current player. If this is the case, the current player is notified and asked to upgrade
 extern void checkUsedASCVersions( Player& currentPlayer );
 
-class ReplayMapDisplay : public MapDisplayInterface {
-           MapDisplayInterface* mapDisplay;
-           int cursorDelay;
-           void wait ( int minTime = 0 );
-         public:
-           ReplayMapDisplay ( MapDisplayInterface* md ) { mapDisplay = md; cursorDelay = 20; };
-           int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback startSound );
-           void displayPosition ( int x, int y );
-           void displayMap ( Vehicle* additionalVehicle ) { mapDisplay->displayMap( additionalVehicle ); };
-           void displayMap ( void ) { mapDisplay->displayMap(); };
-           void resetMovement ( void ) { mapDisplay->resetMovement(); };
-           void startAction ( void ) { mapDisplay->startAction(); };
-           void stopAction ( void ) { mapDisplay->stopAction(); };
-           void cursor_goto( const MapCoordinate& pos ) { mapDisplay->cursor_goto(pos);};
-           void displayActionCursor ( int x1, int y1, int x2 , int y2 , int secondWait );
-           void displayActionCursor ( int x1, int y1 ) { displayActionCursor ( x1, y1, -1, -1, 0 ); };
-           void displayActionCursor ( int x1, int y1, int x2 , int y2 ) { displayActionCursor ( x1, y1, x2, y2, 0 ); };
-           void removeActionCursor ( void );
-           int checkMapPosition ( int x, int y );
-           void setCursorDelay  ( int time ) { cursorDelay = time; };
-           void updateDashboard() { mapDisplay->updateDashboard(); };
-           void repaintDisplay () { mapDisplay->repaintDisplay(); };
-
-    };
-
-    
-//! checks if a new technology must be chosen by the current player. Runs the appropriate dialogs    
+//! checks if a new technology must be chosen by the current player. Runs the appropriate dialogs
 extern void researchCheck( Player& player );
     
     

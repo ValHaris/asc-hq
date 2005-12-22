@@ -60,6 +60,7 @@
 #include "gameevent_dialogs.h"
 #include "cannedmessages.h"
 #include "network.h"
+#include "mapdisplay.h"
 
 tmoveparams moveparams;
 

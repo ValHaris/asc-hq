@@ -2,9 +2,12 @@
     \brief The random map generator
 */
 
-//     $Id: edgen.cpp,v 1.20.2.1 2005-06-12 11:05:15 mbickel Exp $
+//     $Id: edgen.cpp,v 1.20.2.2 2005-12-22 17:41:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20.2.1  2005/06/12 11:05:15  mbickel
+//      Further improved mapeditor conversion to paragui
+//
 //     Revision 1.20  2004/07/12 18:15:05  mbickel
 //      Lots of tweaks and fixed for more portability and compilation with mingw
 //
@@ -113,6 +116,7 @@
 #include "edgen.h"
 #include "vehicletype.h"
 #include "itemrepository.h"
+#include "paradialog.h"
 
 #define layercount 5
 #define centerlayer 65000

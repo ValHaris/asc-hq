@@ -57,25 +57,25 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	misc.$(OBJEXT) loadpcxc.$(OBJEXT) loaders.$(OBJEXT) \
 	loadbi3.$(OBJEXT) gamedlg.$(OBJEXT) dlg_box.$(OBJEXT) \
 	dialog.$(OBJEXT) controls.$(OBJEXT) basestrm.$(OBJEXT) \
-	basegfx.$(OBJEXT) attack.$(OBJEXT) gameoptions.$(OBJEXT) \
-	astar2.$(OBJEXT) vehicletype.$(OBJEXT) objects.$(OBJEXT) \
-	buildingtype.$(OBJEXT) containerbase.$(OBJEXT) \
-	mapalgorithms.$(OBJEXT) viewcalculation.$(OBJEXT) \
-	gamemap.$(OBJEXT) password.$(OBJEXT) password_dialog.$(OBJEXT) \
-	replay.$(OBJEXT) research.$(OBJEXT) mapdisplay.$(OBJEXT) \
-	resourcenet.$(OBJEXT) dashboard.$(OBJEXT) ascstring.$(OBJEXT) \
-	graphicset.$(OBJEXT) vehicle.$(OBJEXT) buildings.$(OBJEXT) \
-	networkinterface.$(OBJEXT) textfileparser.$(OBJEXT) \
-	terraintype.$(OBJEXT) objecttype.$(OBJEXT) \
-	textfiletags.$(OBJEXT) itemrepository.$(OBJEXT) \
-	stringtokenizer.$(OBJEXT) music.$(OBJEXT) messages.$(OBJEXT) \
-	paradialog.$(OBJEXT) textfile_evaluation.$(OBJEXT) \
-	containerbasetype.$(OBJEXT) messagedlg.$(OBJEXT) \
-	simplestream.$(OBJEXT) mappolygons.$(OBJEXT) \
-	prehistoricevents.$(OBJEXT) gameevents.$(OBJEXT) \
-	gameeventsystem.$(OBJEXT) gameevent_dialogs.$(OBJEXT) \
-	statisticdialog.$(OBJEXT) clipboard.$(OBJEXT) \
-	geometry.$(OBJEXT) weatherarea.$(OBJEXT) \
+	basegfx.$(OBJEXT) attack.$(OBJEXT) replaymapdisplay.$(OBJEXT) \
+	gameoptions.$(OBJEXT) astar2.$(OBJEXT) vehicletype.$(OBJEXT) \
+	objects.$(OBJEXT) buildingtype.$(OBJEXT) \
+	containerbase.$(OBJEXT) mapalgorithms.$(OBJEXT) \
+	viewcalculation.$(OBJEXT) gamemap.$(OBJEXT) password.$(OBJEXT) \
+	password_dialog.$(OBJEXT) replay.$(OBJEXT) research.$(OBJEXT) \
+	mapdisplay.$(OBJEXT) resourcenet.$(OBJEXT) dashboard.$(OBJEXT) \
+	ascstring.$(OBJEXT) graphicset.$(OBJEXT) vehicle.$(OBJEXT) \
+	buildings.$(OBJEXT) networkinterface.$(OBJEXT) \
+	textfileparser.$(OBJEXT) terraintype.$(OBJEXT) \
+	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
+	itemrepository.$(OBJEXT) stringtokenizer.$(OBJEXT) \
+	music.$(OBJEXT) messages.$(OBJEXT) paradialog.$(OBJEXT) \
+	textfile_evaluation.$(OBJEXT) containerbasetype.$(OBJEXT) \
+	messagedlg.$(OBJEXT) simplestream.$(OBJEXT) \
+	mappolygons.$(OBJEXT) prehistoricevents.$(OBJEXT) \
+	gameevents.$(OBJEXT) gameeventsystem.$(OBJEXT) \
+	gameevent_dialogs.$(OBJEXT) statisticdialog.$(OBJEXT) \
+	clipboard.$(OBJEXT) geometry.$(OBJEXT) weatherarea.$(OBJEXT) \
 	guidimension.$(OBJEXT) guiiconhandler.$(OBJEXT) \
 	guifunctions.$(OBJEXT) iconrepository.$(OBJEXT) \
 	gamedialog.$(OBJEXT) infopopup.$(OBJEXT) \
@@ -243,7 +243,7 @@ asc_SOURCES = unitctrl.cpp soundList.cpp typen.cpp \
 strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp pd.cpp palette.cpp \
 newfont.cpp network.cpp misc.cpp loadpcxc.cpp loaders.cpp \
 loadbi3.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp \
-basestrm.cpp basegfx.cpp attack.cpp \
+basestrm.cpp basegfx.cpp attack.cpp replaymapdisplay.cpp \
 gameoptions.cpp astar2.cpp vehicletype.cpp objects.cpp \
 buildingtype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp \
 gamemap.cpp password.cpp password_dialog.cpp replay.cpp research.cpp \
@@ -400,6 +400,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/prehistoricevents.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/reactionfire.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/replay.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/replaymapdisplay.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/research.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/resourcenet.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sg.Po@am__quote@

@@ -588,20 +588,6 @@ void execaction(int code)
        }
        break;
        */
-    case act_end : {
-       if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) {
-          execaction(act_switchmaps);
-          ch = ct_invvalue;
-       } else
-          if (choice_dlg("Do you really want to quit ?","~y~es","~n~o") == 1) {
-             if (mapsaved == false )
-                if (choice_dlg("Map not saved ! Save now ?","~y~es","~n~o") == 1) 
-                   k_savemap(false);
-                   
-             getPGApplication().Quit();
-          }
-       }   
-       break;
     case act_about :
     case act_aboutbox : {
          help(1020);
@@ -802,6 +788,19 @@ void execaction_pg(int code)
     case act_savemapas :  k_savemap(true);
        break;
     case act_maptopcx : writemaptopcx ( actmap );
+       break;
+    case act_end : {
+          if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) 
+             execaction(act_switchmaps);
+          else
+             if (choice_dlg("Do you really want to quit ?","~y~es","~n~o") == 1) {
+                if (mapsaved == false )
+                   if (choice_dlg("Map not saved ! Save now ?","~y~es","~n~o") == 1)
+                      k_savemap(false);
+                   
+                getPGApplication().Quit();
+             }
+       }
        break;
    };
 }

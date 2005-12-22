@@ -35,6 +35,7 @@
 #include "itemrepository.h"
 #include "astar2.h"
 #include "containercontrols.h"
+#include "mapdisplay.h"
 
 PendingVehicleActions pendingVehicleActions;
 

@@ -591,7 +591,7 @@ extern bool patimat (const ASCString& pat, const ASCString& str);
 
 extern int checkforvaliddirectory ( char* dir );
 
-extern char* getnextfilenumname ( const char* first, const char* suffix, int num = -1  );
+extern ASCString getnextfilenumname ( const ASCString& first, const ASCString& suffix, int num = -1  );
 
 
 #define writedata2(a)  writedata ( &(a), sizeof(a) )

@@ -38,7 +38,6 @@
 #include "events.h"
 #include "sgstream.h"
 #include "loadpcx.h"
-#include "mapdisplay.h"
 #include "password_dialog.h"
 #include "stack.h"
 #include "gamedlg.h"

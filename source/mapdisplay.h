@@ -192,7 +192,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       static MapDisplayPG* theMapDisplay;
       
             
-      float zoom;
+      int zoom;
       Surface* surface;
       
       MapCoordinate offset;
@@ -230,13 +230,15 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
 
 
    public:
-      void setNewZoom( float zoom );   
-      SigC::Signal1<void, float> newZoom;
+      void setNewZoom( int zoom );
+      int getZoom() const { return zoom; };
+      SigC::Signal1<void, int> newZoom;
       
       MapCoordinate screenPos2mapPos( const SPoint& pos );
       MapCoordinate widgetPos2mapPos( const SPoint& pos );
 
-      SPoint mapPos2internalPos ( const MapCoordinate& pos );
+      SPoint mapGlobalPos2internalPos ( const MapCoordinate& pos );
+      SPoint mapViewPos2internalPos ( const MapCoordinate& pos );
       SPoint internal2widget( const SPoint& pos );
       SPoint widget2screen( const SPoint& pos );
       
@@ -245,7 +247,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       
    protected:
 
-      void blitInternalSurface( SDL_Surface* dest, const SPoint& pnt );
+      void blitInternalSurface( SDL_Surface* dest, const SPoint& pnt, const PG_Rect& dstClip );
 
       
       static const int effectiveMovementSurfaceWidth = 4 * fielddisthalfx + fieldsizex;
@@ -315,6 +317,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       void keyboadCursorMovement( bool enable ) { disableKeyboardCursorMovement = !enable; }; 
       
    private:
+      void UpdateRect( const PG_Rect& rect );
       void moveCursor( int dir, int step );
 
    public:

@@ -514,7 +514,6 @@ MapDisplayPG* theGlobalMapDisplay = NULL;
 
 MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
       : PG_Widget ( parent, r, false ) ,
-      zoom( 0.75 ),
       surface(NULL),
       offset(0,0),
       dirty(Map),
@@ -529,7 +528,7 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
    
    dataLoaderTicker();
    
-   setNewZoom( zoom );
+   setNewZoom( CGameOptions::Instance()->mapzoom );
 
    repaintMap.connect( SigC::slot( *this, &MapDisplayPG::updateWidget ));
 
@@ -577,13 +576,13 @@ void MapDisplayPG::readData()
 }
 
 
-void MapDisplayPG::setNewZoom( float zoom )
+void MapDisplayPG::setNewZoom( int zoom )
 {
 
    this->zoom = zoom;
 
-   field.numx = int( ceil(float(Width())  / zoom / fielddistx) );
-   field.numy = int( ceil(float(Height()) / zoom / fielddisty) );
+   field.numx = int( ceil(float(Width()) * 100  / zoom / fielddistx) );
+   field.numy = int( ceil(float(Height()) * 100 / zoom / fielddisty) );
 
    field.viewPort.x1 = -1;
    field.viewPort.y1 = -1;
@@ -597,6 +596,10 @@ void MapDisplayPG::setNewZoom( float zoom )
    surface = new Surface( Surface::createSurface ( field.numx * fielddistx + 2 * surfaceBorder, (field.numy - 1) * fielddisty + fieldysize +  2 * surfaceBorder, colorDepth*8 ));
 
    dirty = Map;
+   if ( zoom != CGameOptions::Instance()->mapzoom ) {
+      CGameOptions::Instance()->mapzoom = zoom;
+      CGameOptions::Instance()->setChanged();
+   }
    newZoom( zoom );
 }
 
@@ -696,14 +699,19 @@ class TargetPixelSelector_Rect {
   };
 
 
-void MapDisplayPG::blitInternalSurface( SDL_Surface* dest, const SPoint& pnt )
+void MapDisplayPG::blitInternalSurface( SDL_Surface* dest, const SPoint& pnt, const PG_Rect& dstClip )
 {
-   if ( zoom != 1 ) {
+   if ( zoom != 100 ) {
+      float fzoom = float(zoom) / 100.0;
       MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_PlainOverwrite,PixSel,TargetPixelSelector_Rect> blitter;
-      blitter.setZoom( zoom );
+      blitter.setZoom( fzoom );
       blitter.initSource( *surface );
-      blitter.setRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), int(float(Width()) / zoom), int(float(Height()) / zoom));
-      blitter.setClippingRect( dest );
+      blitter.setRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), int(float(Width()) / fzoom), int(float(Height()) / fzoom));
+
+      PG_Rect clip= dstClip.IntersectRect( dest->clip_rect );
+      
+      // blitter.setClippingRect( dest );
+      blitter.setTargetRect( clip );
       Surface s = Surface::Wrap( dest );
       blitter.blit( *surface, s, SPoint(pnt.x, pnt.y ));
    } else {
@@ -723,7 +731,8 @@ void MapDisplayPG::eventDraw ( SDL_Surface* srf, const PG_Rect& rect)
    if ( dirty > Nothing )
       updateMap();
 
-   blitInternalSurface( srf, SPoint(0,0));
+   PG_Point p = ClientToScreen( rect.x, rect.y );
+   blitInternalSurface( srf, SPoint(0,0), PG_Rect( p.x, p.y, rect.w, rect.h  ));
 }
 
  
@@ -743,14 +752,24 @@ void MapDisplayPG::displayCursor( const PG_Rect& dst )
    if( x >= field.viewPort.x1 && x < field.viewPort.x2 && y >= field.viewPort.y1 && y < field.viewPort.y2 && x >= 0 && y >= 0 && x < actmap->xsize && y < actmap->ysize ) {
       // surface->Blit( icons.cursor, getFieldPos(x,y));
       MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom,TargetPixelSelector_Rect> blitter;
-      blitter.setZoom( zoom );
+      blitter.setZoom( float(zoom) / 100.0 );
       blitter.setTargetRect ( dst );
 
 
       Surface s = Surface::Wrap( PG_Application::GetScreen() );
       // PG_Point pnt = ClientToScreen( 0,0 );
-      blitter.blit( icons.cursor, s, widget2screen ( internal2widget( mapPos2internalPos( MapCoordinate(x,y)))) );
+      blitter.blit( icons.cursor, s, widget2screen ( internal2widget( mapViewPos2internalPos( MapCoordinate(x,y)))) );
    }
+}
+
+
+void MapDisplayPG::UpdateRect( const PG_Rect& rect )
+{
+   SPoint p = widget2screen (  SPoint( rect.x, rect.y));
+   PG_Rect sc ( p.x, p.y, rect.w, rect.h );
+   sc = sc.IntersectRect( *this );
+   eventBlit( GetWidgetSurface (), rect, sc );
+   SDL_UpdateRect(PG_Application::GetScreen(), sc.x, sc.y, sc.w, sc.h );
 }
 
 
@@ -761,7 +780,7 @@ void MapDisplayPG::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect
          updateMap();
 
       PG_Point pnt = ClientToScreen( 0,0 );
-      blitInternalSurface( PG_Application::GetScreen(), SPoint(pnt.x,pnt.y));
+      blitInternalSurface( PG_Application::GetScreen(), SPoint(pnt.x,pnt.y), dst );
    } else {
       PG_Widget::eventBlit(srf,src,dst);
    }
@@ -773,14 +792,20 @@ void MapDisplayPG::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect
 }
 
 
-SPoint MapDisplayPG::mapPos2internalPos ( const MapCoordinate& pos )
+SPoint MapDisplayPG::mapGlobalPos2internalPos ( const MapCoordinate& pos )
+{
+   return getFieldPos( pos.x - offset.x, pos.y - offset.y );
+}
+
+SPoint MapDisplayPG::mapViewPos2internalPos ( const MapCoordinate& pos )
 {
    return getFieldPos( pos.x, pos.y );
 }
 
+
 SPoint MapDisplayPG::internal2widget( const SPoint& pos )
 {
-   return SPoint( int(float(pos.x - surfaceBorder) * zoom), int(float(pos.y - surfaceBorder) * zoom));
+   return SPoint( int(ceil(float(pos.x - surfaceBorder) * zoom / 100.0)), int(ceil(float(pos.y - surfaceBorder) * zoom / 100.0)));
 }
 
 SPoint MapDisplayPG::widget2screen( const SPoint& pos )
@@ -801,8 +826,8 @@ MapCoordinate MapDisplayPG::screenPos2mapPos( const SPoint& pos )
 
 MapCoordinate MapDisplayPG::widgetPos2mapPos( const SPoint& pos )
 {
-   int x = int( float(pos.x) / zoom ) + surfaceBorder;
-   int y = int( float(pos.y) / zoom ) + surfaceBorder;
+   int x = int( float(pos.x) * 100 / zoom ) + surfaceBorder;
+   int y = int( float(pos.y) * 100 / zoom ) + surfaceBorder;
 
    for (int yy= field.viewPort.y1; yy < field.viewPort.y2; ++yy )
       for ( int xx=field.viewPort.x1; xx < field.viewPort.x2; ++xx ) {
@@ -968,7 +993,7 @@ void MapDisplayPG::displayMovementStep( Movement& movement, int percentage  )
 {
    FieldRenderInfo fieldRenderInfo( *movement.surf );
    fieldRenderInfo.playerView = movement.playerView;
-   for (int pass = 0; pass <= 18 ;pass++ )
+   for (int pass = 0; pass <= 18 ;pass++ ) {
       for ( int i = 0; i < touchedFieldNum; ++i ) {
          SPoint pos = movement.touchedFields[i].surfPos;
          fieldRenderInfo.pos = movement.touchedFields[i].mapPos;
@@ -978,18 +1003,18 @@ void MapDisplayPG::displayMovementStep( Movement& movement, int percentage  )
 
             paintSingleField( fieldRenderInfo, pass, pos );
 
-            if ( pass >= 2 && pass < 18 )
-              if ( !(pass & 1 ))
-                 if ( movement.veh->height & (1 << (( pass-2)/2))) {
-                    SPoint pos;
-                    pos.x = movement.from.x + (movement.to.x - movement.from.x) * percentage/100;
-                    pos.y = movement.from.y + (movement.to.y - movement.from.y) * percentage/100;
-                    movement.veh->paint( *movement.surf, pos, false );
-                 }
          }
 
       }
-   
+      if ( pass >= 2 && pass < 18 )
+         if ( !(pass & 1 ))
+            if ( movement.veh->height & (1 << (( pass-2)/2))) {
+               SPoint pos;
+               pos.x = movement.from.x + (movement.to.x - movement.from.x) * percentage/100;
+               pos.y = movement.from.y + (movement.to.y - movement.from.y) * percentage/100;
+               movement.veh->paint( *movement.surf, pos, false );
+            }
+   }
    
    MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite> alphaBlitter;
    alphaBlitter.blit( *movement.mask, *movement.surf, SPoint(0,0));
@@ -997,11 +1022,16 @@ void MapDisplayPG::displayMovementStep( Movement& movement, int percentage  )
    
    
    MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,PixSel,TargetPixelSelector_Rect> blitter;
-   blitter.setZoom( zoom );
+   blitter.setZoom( float(zoom) / 100.0 );
    blitter.initSource( *movement.surf );
    blitter.setRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), effectiveMovementSurfaceWidth, effectiveMovementSurfaceHeight );
    blitter.setTargetRect ( *this );
    Surface s = Surface::Wrap( PG_Application::GetScreen() );
+
+
+   PG_Point pnt = ClientToScreen( 0,0 );
+   blitter.setZoomOffset( movement.screenPos.x - pnt.x, movement.screenPos.y - pnt.y );
+   
    blitter.blit( *movement.surf, s, movement.screenPos );
    
    
@@ -1033,6 +1063,10 @@ bool MapDisplayPG::TouchedField::operator==( const MapDisplayPG::TouchedField& b
 void MapDisplayPG::displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoordinate3D& from, const MapCoordinate3D& to )
 {
    if ( !fieldInView( from ) && !fieldInView( to ))
+      return;
+
+   if ( from.x == to.x && from.y == to.y && from.getBitmappedHeight() <= chschwimmend && to.getBitmappedHeight() <= chschwimmend )
+      // we don't animate a descending or ascending submarine without movement
       return;
 
    int startTime = ticker;
@@ -1098,10 +1132,18 @@ void MapDisplayPG::displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoor
    movement.from = getFieldPos2( tempStart );
    movement.to = getFieldPos2( tempEnd );
    
-   movement.screenPos = widget2screen( internal2widget( mapPos2internalPos( MapCoordinate(0,0)) - mapPos2internalPos( tempStart ) + mapPos2internalPos( from - offset ) ));
+   // SPoint tmp = widget2screen( internal2widget( mapViewPos2internalPos( MapCoordinate(0,0)) - mapViewPos2internalPos( tempStart ) + mapViewPos2internalPos( from - offset ) ));
+   SPoint internal = mapViewPos2internalPos( from - offset - tempStart );
+   SPoint widPos = internal2widget( internal );
+   SPoint checkIntern = SPoint( int( floor( float(widPos.x) / (float( zoom ) / 100.0 )  )) + surfaceBorder, int( floor( float(widPos.y) / (float( zoom ) / 100.0 )  )) + surfaceBorder ) ;
+
+   if ( checkIntern.x != internal.x || checkIntern.y != internal.y ) {
+      printf("rounding error detected at zoom %d: dx = %d, dy = %d \n", zoom, internal.x - checkIntern.x, internal.y - checkIntern.y );
+   }
+   movement.screenPos = widget2screen( widPos );
    movement.screenUpdatePos = movement.screenPos;
    
-   SPoint lowerRight = SPoint( int( float(effectiveMovementSurfaceWidth) * zoom) + movement.screenPos.x, int( float(effectiveMovementSurfaceHeight) * zoom)+ movement.screenPos.y);
+   SPoint lowerRight = SPoint( int( float(effectiveMovementSurfaceWidth) * zoom / 100.0) + movement.screenPos.x, int( float(effectiveMovementSurfaceHeight) * zoom / 100.0)+ movement.screenPos.y);
    
    if ( movement.screenUpdatePos.x < 0 )
       movement.screenUpdatePos.x = 0;
@@ -1145,7 +1187,7 @@ void MapDisplayPG::displayAddons( Surface& surf, int pass)
 {
    if( additionalUnit ) 
       if ( pass == bitmappedHeight2pass( additionalUnit->height ) )  {
-         SPoint p = mapPos2internalPos( additionalUnit->getPosition() - offset );
+         SPoint p = mapViewPos2internalPos( additionalUnit->getPosition() - offset );
          if ( p.x >= 0 && p.y >= 0 && p.x + fieldsizex < surf.w() && p.y + fieldsizey < surf.h() )
             additionalUnit->paint( surf, p );
       }
@@ -1203,7 +1245,7 @@ void MapDisplayPG::moveCursor( int dir, int step )
       pos.y = 0;
 
    if ( pos != cursor.pos() ) {
-
+      MapCoordinate oldpos = cursor.pos();
       cursor.invisible = 0;
       dirty = Curs;
 
@@ -1218,10 +1260,10 @@ void MapDisplayPG::moveCursor( int dir, int step )
          offset.y = min( 0, pos.y & ~1);
 
       if ( pos.x > offset.x + field.numx - 2)
-         offset.x = pos.x - field.numx + 2;
+         offset.x = pos.x - field.numx + 6;
 
       if ( pos.y > offset.y + field.numy - 4 )
-         offset.y = (pos.y - field.numy + 4) & ~1;
+         offset.y = (pos.y - field.numy + 6) & ~1;
 
       if ( offset != oldOffset )
          dirty = Map;
@@ -1229,10 +1271,16 @@ void MapDisplayPG::moveCursor( int dir, int step )
       checkViewPosition();
       
       cursorMoved();
-      Update();
-      
-      if ( offset != oldOffset )
-          viewChanged();
+      if ( offset != oldOffset ) {
+         Update();
+         viewChanged();
+      } else {
+         SPoint p = internal2widget( mapGlobalPos2internalPos( oldpos ));
+         UpdateRect( PG_Rect( p.x, p.y, fieldsizex, fieldsizey ) );
+         
+         p = internal2widget( mapGlobalPos2internalPos( pos ));
+         UpdateRect( PG_Rect( p.x, p.y, fieldsizex, fieldsizey ) );
+      }
    }
 }
 
@@ -1262,8 +1310,8 @@ bool MapDisplayPG::keyboardHandler( const SDL_KeyboardEvent* keyEvent)
          }
       }   
       if ( keyEvent->keysym.sym == SDLK_KP_MINUS ) {
-         if ( zoom > 0.2 ) {
-            setNewZoom( zoom - 0.1 );
+         if ( zoom > 20 ) {
+            setNewZoom( zoom - 10 );
             Update();
             viewChanged();
          }
@@ -1271,8 +1319,8 @@ bool MapDisplayPG::keyboardHandler( const SDL_KeyboardEvent* keyEvent)
       }
 
       if ( keyEvent->keysym.sym == SDLK_KP_PLUS ) {
-         if ( zoom < 1 ) {
-            setNewZoom( min(1.0, zoom + 0.1) );
+         if ( zoom < 100 ) {
+            setNewZoom( min(100, zoom + 10) );
             Update();
             viewChanged();
          }

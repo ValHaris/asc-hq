@@ -20,6 +20,7 @@
 
 #include "controls.h"
 #include "reactionfire.h"
+#include "events.h"
 
 /*! \file replay.h
     \brief Interface for recording and playing replays

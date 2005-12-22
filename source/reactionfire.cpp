@@ -34,7 +34,7 @@
 #include "replay.h"
 #include "attack.h"
 #include "messaginghub.h"
-
+#include "mapdisplay.h"
 #include "reactionfire.h"
 
 

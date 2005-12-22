@@ -30,7 +30,6 @@
 #include "basestrm.h"
 #include "spfst.h"
 #include "attack.h"
-#include "mapdisplay.h"
 #include "astar2.h"
 
 

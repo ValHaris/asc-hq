@@ -37,7 +37,7 @@
 #include "overviewmappanel.h"
 #include "ai/ai.h"
 #include "itemrepository.h"
-
+#include "mapdisplay.h"
 
 ASC_MainScreenWidget*  mainScreenWidget = NULL ;
 
@@ -332,16 +332,6 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                }
                return true;
 
-            case SDLK_F11: 
-               {
-                  ASCString s;
-                  for ( int i = 0; i < 20; ++i )
-                     s += ASCString::toString(i) + "\n";
-                  
-                  displaymessage( s, 1 );
-               }
-            return true;
-
             case SDLK_1:
                execUserAction_ev ( ua_changeresourceview );
                return true;
@@ -402,6 +392,12 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
             case SDLK_F12:
                execUserAction_ev ( ua_exportUnitToFile );
                return true;
+               
+            case SDLK_F11:
+            {
+               printf(" current zoom is %d \n", mainScreenWidget->mapDisplay->getZoom() );
+            }
+            return true;
 
             case SDLK_x:
                execUserAction_ev ( ua_exitgame );

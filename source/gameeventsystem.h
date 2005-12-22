@@ -33,7 +33,7 @@
 #include "factory.h"
 
 #if defined(sgmain) || defined(karteneditor) || defined(maindialogs)
-# include "mapdisplay.h"
+ class MapDisplayInterface;
 #else
  class MapDisplayInterface {};
 #endif

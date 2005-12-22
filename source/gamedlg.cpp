@@ -1463,7 +1463,6 @@ void         tchoosenewsinglelevel::run(void)
             setmapparameters( actmap );
          }
 
-         tlockdispspfld lock;
          repaintDisplay();
          computeview( actmap );
 

@@ -27,10 +27,9 @@
 #define reactionfireH
 
 #include "typen.h"
-#include "mapdisplay.h"
 #include "astar2.h"
 
-
+class MapDisplayInterface;
 
 
 struct treactionfire_replayinfo {

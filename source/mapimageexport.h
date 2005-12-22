@@ -21,6 +21,7 @@
 #include "gamemap.h"
 #include "graphics/surface.h"
 
+#include "mapdisplay.h"
 
 class WholeMapRenderer : public MapRenderer {
    tmap* gamemap;

@@ -48,7 +48,6 @@
 #include "dialog.h"
 #include "loadbi3.h"
 #include "mapalgorithms.h"
-#include "mapdisplay.h"
 #include "vehicle.h"
 #include "buildings.h"
 #include "mapfield.h"

@@ -585,17 +585,17 @@ void MapInfoPanel::layerChanged( bool state, const ASCString& label )
 }
 
 
-void MapInfoPanel::zoomChanged( float zoom )
+void MapInfoPanel::zoomChanged( int zoom )
 {
    if ( !changeActive )
       if ( zoomSlider )
-         zoomSlider->SetPosition( 100 - int( zoom * 100 ));
+         zoomSlider->SetPosition( 100 - zoom );
 }
 
 bool MapInfoPanel::scrollTrack( long pos )
 {
    changeActive = true;
-   mapDisplay->setNewZoom( 1 - float(pos) / 100 );
+   mapDisplay->setNewZoom( 100 - pos );
    repaintMap();
    changeActive = false;
    return true;

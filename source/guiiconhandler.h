@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.17 2005-12-11 14:42:38 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.18 2005-12-22 17:41:30 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -32,10 +32,8 @@
 #include "graphics/surface.h"
 
 #include "paradialog.h"
-#include "mapdisplay.h"
-
 #include "typen.h"
-
+#include "containerbase.h"
 
 
 class GuiFunction {
@@ -135,6 +133,7 @@ class GuiIconHandler {
        virtual ~GuiIconHandler();
 };
 
+class MapDisplayPG;
 
 class NewGuiHost : public Panel {
         GuiIconHandler* handler;

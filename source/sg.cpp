@@ -121,6 +121,7 @@
 #include "networkinterface.h"
 #include "resourcenet.h"
 #include "mapimageexport.h"
+#include "loadpcx.h"
 
 #include "dialogs/newgame.h"
 #include "dialogs/soundsettings.h"
@@ -780,9 +781,10 @@ void execuseraction ( tuseractions action )
 
       case ua_writescreentopcx:
          {
-            // char* nm = getnextfilenumname ( "screen", "pcx", 0 );
-            // writepcx ( nm, 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, pal );
-            // displaymessage2( "screen saved to %s", nm );
+            ASCString name = getnextfilenumname ( "screen", "pcx", 0 );
+            Surface s ( PG_Application::GetScreen() );
+            writepcx ( name, s);
+            displaymessage2( "screen saved to %s", name.c_str() );
          }
          break;
 
@@ -1438,7 +1440,7 @@ void deployMapPlayingHooks ( tmap* map )
 
 int main(int argc, char *argv[] )
 {
-   // setenv( "DISPLAY", "192.168.0.61:0", 1 );
+   setenv( "DISPLAY", "192.168.0.61:0", 1 );
 
    assert ( sizeof(PointerSizedInt) == sizeof(int*));
 

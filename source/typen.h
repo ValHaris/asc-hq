@@ -250,6 +250,11 @@ inline MapCoordinate operator-( const MapCoordinate& a, const MapCoordinate& b )
   return MapCoordinate(a.x - b.x, a.y - b.y );
 }  
       
+inline MapCoordinate operator+( const MapCoordinate& a, const MapCoordinate& b )
+{
+   return MapCoordinate(a.x + b.x, a.y + b.y );
+}
+      
 
 //! Coordinate on the map including height
 class MapCoordinate3D : public MapCoordinate {

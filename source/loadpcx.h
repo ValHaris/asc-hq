@@ -34,8 +34,8 @@
 // extern char loadpcxxy ( const ASCString& name, bool setpal, int xpos, int ypos, int* xsize = NULL, int* ysize = NULL );
 // extern char loadpcxxy( pnstream stream, int x, int y, bool setpalette = false, int* xsize = NULL, int* ysize = NULL );
 extern void writepcx ( const ASCString& name, int x1, int y1, int x2, int y2, dacpalette256 pal );
-extern void writepcx ( const ASCString& name, Surface& s );
-extern void writepcx ( const ASCString& name, Surface& s, const SDLmm::SRect& rect );
+extern void writepcx ( const ASCString& name, const Surface& s );
+extern void writepcx ( const ASCString& name, const Surface& s, const SDLmm::SRect& rect );
 // extern int pcxGetColorDepth ( const ASCString& name, int* width = NULL, int* height= NULL );
 
 #endif

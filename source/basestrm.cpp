@@ -2114,37 +2114,30 @@ int tmemorystream :: dataavail ( void )
 }
 
 
-char tempstringbuf[ maxFileStringSize ];
 
-char* getnextfilenumname ( const char* first, const char* suffix, int num )
+ASCString getnextfilenumname ( const ASCString& first, const ASCString& suffix, int num )
 {
-
-   int found = 0;
-
+   ASCString name;
+   
    if ( num < 0 )
      num = 0;
 
-   // int sl = strlen ( first );
-   char tmp[260];
    do {
-      strcpy ( tmp, first );
-      itoa ( num, tempstringbuf, 10 );
-      while ( strlen ( tmp ) + strlen ( tempstringbuf ) < 8 )
-         strcat ( tmp, "0" );
-      strcat ( tmp, tempstringbuf );
-      strcat ( tmp, "." );
-      strcat ( tmp, suffix );
+      name = first;
+      while ( name.length() - first.length() + ASCString::toString(num).length() < 3 )
+         name += "0";
 
-      tfindfile ff ( tmp );
-      string c = ff.getnextname();
-      if ( c.empty() ) {
-         strcpy ( tempstringbuf, tmp );
-         found = 1;
-      }
+      name += ASCString::toString(num) + "." + suffix;
+
+      tfindfile ff ( name );
+      ASCString c = ff.getnextname();
+      if ( c.empty() )
+         return name;
+      
       num++;
-   } while ( found == 0 ); /* enddo */
+   } while ( true ); 
 
-   return tempstringbuf;
+   return "";
 }
 
 

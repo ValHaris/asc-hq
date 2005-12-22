@@ -42,7 +42,7 @@
 #include "spfst.h"
 #include "gamedlg.h"
 #include "dialogs/cargodialog.h"
-
+#include "mapdisplay.h"
 
 namespace GuiFunctions
 {

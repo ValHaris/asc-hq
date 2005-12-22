@@ -364,12 +364,12 @@ void writepcx ( const ASCString& name, int x1, int y1, int x2, int y2, dacpalett
 }
 
 
-void writepcx ( const ASCString& name, Surface& s )
+void writepcx ( const ASCString& name, const Surface& s )
 {
    writepcx( name, s, SDLmm::SRect( SPoint(0,0), s.w(), s.h() ));
 }
 
-void writepcx ( const ASCString& name, Surface& s, const SDLmm::SRect& rect )
+void writepcx ( const ASCString& name, const Surface& s, const SDLmm::SRect& rect )
 {
    int x1 = rect.x;
    int y1 = rect.y;

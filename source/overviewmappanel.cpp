@@ -21,6 +21,7 @@
 #include "spfst.h"
 #include "graphics/blitter.h"
 #include "graphics/drawing.h"
+#include "mapdisplay.h"
 
 OverviewMapPanel::OverviewMapPanel( PG_Widget *parent, const PG_Rect &r, MapDisplayPG* mapDisplay )
                  : Panel ( parent, r, "OverviewMap", true ), mapDisplayWidget( mapDisplay), currentZoom( 1 )

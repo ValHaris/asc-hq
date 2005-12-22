@@ -1077,7 +1077,7 @@ class ColorMerger_AlphaMixer<4> : public ColorMerger_AlphaHandler<4>
       {
          // STATIC_CHECK ( pixelsize == 1, wrong_pixel_size );
          if ( isOpaque(src ) ) {
-            *dest = ((*dest >> 1) & 0x7f7f7f7f) + (src >> 1) & 0x7f7f7f7f;
+            *dest = ((*dest >> 1) & 0x7f7f7f7f) + ((src >> 1) & 0x7f7f7f7f);
          }
       };
    public:
@@ -1502,6 +1502,8 @@ class SourcePixelSelector_CacheZoom : private ZoomCache, public SourcePixelSelec
 
       int* xp;
       int* yp;
+      int offsetx;
+      int offsety;
       ZoomMap::iterator cacheit;
    protected:
 
@@ -1540,13 +1542,25 @@ class SourcePixelSelector_CacheZoom : private ZoomCache, public SourcePixelSelec
          for ( int i = 0; i < *yp; ++i )
             SourcePixelSelector::skipWholeLine();
 
-         xp = &cacheit->second[0];
+         xp = &cacheit->second[offsetx];
          yp++;
       };
 
 
    public:
 
+      
+      void setZoomOffset( int x, int y )
+      {
+         offsetx = x;
+         offsety = y;
+         /*
+         for ( int i = 0; i < y; ++y )
+            next
+         */
+      }
+      
+      
       void setZoom( float factor )
       {
          this->zoomFactor = factor;
@@ -1557,27 +1571,29 @@ class SourcePixelSelector_CacheZoom : private ZoomCache, public SourcePixelSelec
          if ( cacheit == zoomCache.end() ) {
             int size  = max ( SDLmm::Display::GetDisplay().w(), SDLmm::Display::GetDisplay().h() );
 
-            int* buf = new int[size];
+            int* buf = new int[size+1];
+            buf[0] = 0;
 
             for ( int i = 0; i < size; ++i ) {
-               int a1 =  int( float(i) / zoomFactor );
-               int a2 =  int( float(i+1) / zoomFactor );
+               int a1 =  int( floor( float(i) / zoomFactor ));
+               int a2 =  int( floor( float(i+1) / zoomFactor ));
 
-               buf[i] = a2 - a1 - 1;
+               buf[i+1] = a2 - a1 - 1;
             }
 
             zoomCache[zoomFactor] = buf;
             cacheit = zoomCache.find( factor );
          }
-         xp = yp = &cacheit->second[0];
+         xp = &cacheit->second[offsetx];
+         yp = &cacheit->second[offsety];
       }
 
-      SourcePixelSelector_CacheZoom( NullParamType npt = nullParam ) : surface(NULL), zoomFactor(1), xp(NULL), yp(NULL)
+      SourcePixelSelector_CacheZoom( NullParamType npt = nullParam ) : surface(NULL), zoomFactor(1), xp(NULL), yp(NULL), offsetx(0), offsety(0)
       {
          cacheit = zoomCache.end();
       };
 
-      SourcePixelSelector_CacheZoom( float zoom ) : surface(NULL), zoomFactor(1), xp(NULL), yp(NULL)
+      SourcePixelSelector_CacheZoom( float zoom ) : surface(NULL), zoomFactor(1), xp(NULL), yp(NULL), offsetx(0), offsety(0)
       {
          cacheit = zoomCache.end();
          setZoom ( zoom );

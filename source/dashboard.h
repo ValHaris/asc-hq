@@ -26,12 +26,12 @@
  #define dashboardH
 
 #include "paradialog.h"
-#include "mapdisplay.h"
 
 class Vehicletype;
 class Vehicle;
+class Building;
 class SingleWeapon;
-
+class MapDisplay;
 
 class DashboardPanel : public Panel {
     protected:
@@ -79,6 +79,8 @@ class WeaponInfoPanel : public Panel {
 };
 
 
+class MapDisplayPG;
+
 class MapInfoPanel : public DashboardPanel {
         MapDisplayPG* mapDisplay;
         PG_Slider* zoomSlider;
@@ -87,7 +89,7 @@ class MapInfoPanel : public DashboardPanel {
         void layerChanged( bool state, const ASCString& label );        
         bool scrollTrack( long pos );
         bool checkBox( bool state, const char* name );
-        void zoomChanged( float zoom );
+        void zoomChanged( int zoom );
      protected:
         void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
      public:
