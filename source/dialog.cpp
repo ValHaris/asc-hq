@@ -516,7 +516,7 @@ end;  */
 
 
 
-/*
+
 class  tchoice_dlg : public tdialogbox {
                public:
                   int      result;
@@ -577,7 +577,7 @@ void         tchoice_dlg::run(void)
 } 
 
 
-int         choice_dlg( const char *       title,
+int         legacy_choice_dlg( const char *       title,
                         const char *       s1,
                         const char *       s2,
                         ... )
@@ -602,7 +602,18 @@ int         choice_dlg( const char *       title,
   c.done(); 
   return a;
 } 
-*/
+
+
+int  choice_dlg(const ASCString& title, const ASCString& leftButton, const ASCString& rightButton )
+{
+   if ( legacyEventSystemActive() ) {
+      return legacy_choice_dlg( title.c_str(), leftButton.c_str(), rightButton.c_str() );
+   } else {
+      return new_choice_dlg( title, leftButton, rightButton );
+   }
+   return 0;
+}
+
 
 
 /*********************************************************************************************/

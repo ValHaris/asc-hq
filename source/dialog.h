@@ -92,7 +92,16 @@ extern void viewterraininfo ( void );
 
 extern void viewUnitSetinfo ( void );
 
+/*! displays a dialog with two buttons, to select one of them
 
+    \param title: the message text; printf style arguments allowed
+    \param leftButton the text on the left button
+    \param rightButton the text on the right button
+    \returns 1 if the left button has been pressed; 2 if the right button has been pressed
+ */
+extern int   choice_dlg(const ASCString& title,
+                        const ASCString& leftButton,
+                        const ASCString& rightButton );
 
 
 

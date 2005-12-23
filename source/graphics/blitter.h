@@ -70,7 +70,7 @@ class TargetPixelSelector_All
       {
          return 0;
       };
-      void init( const Surface& srv, const SPoint& pos )
+      void init( const Surface& srv, const SPoint& pos, int xrange, int yrange )
       {}
       ;
    public:
@@ -82,6 +82,7 @@ class TargetPixelSelector_All
 class TargetPixelSelector_Valid
 {
       int w,h;
+      int xrange;
       SPoint dstPos;
    protected:
       int skipTarget( int x, int y )
@@ -95,16 +96,17 @@ class TargetPixelSelector_Valid
             if ( x < 0 )
                return -x;
             else
-               return 1;
+               return xrange - x;
       };
-      void init( const Surface& srv, const SPoint& pos )
+      void init( const Surface& srv, const SPoint& pos, int xrange, int yrange )
       {
          w = srv.w();
          h = srv.h();
          dstPos = pos;
+         this->xrange = xrange;
       };
    public:
-      TargetPixelSelector_Valid ( NullParamType npt = nullParam ) :w(0xffffff),h(0xffffff)
+      TargetPixelSelector_Valid ( NullParamType npt = nullParam ) :w(0xffffff),h(0xffffff),xrange(1)
       {}
       ;
 };
@@ -156,6 +158,12 @@ class SourcePixelSelector_Plain
       {
          pointer += pixNum;
       };
+
+      int getSourcePixelSkip()
+      {
+         return 0;
+      };
+      
       void skipWholeLine()
       {
          pointer += linelength;
@@ -341,7 +349,6 @@ class MegaBlitter : public SourceColorTransform<BytesPerSourcePixel>,
 
          ColorMerger<BytesPerTargetPixel>::init( BytesPerSourcePixel == BytesPerTargetPixel ? src : dst );
          SourcePixelSelector<BytesPerSourcePixel>::init( src );
-         TargetPixelSelector::init( dst, dstPos );
 
          ColorConverter<BytesPerSourcePixel,BytesPerTargetPixel> colorConverter( src, dst );
 
@@ -350,6 +357,8 @@ class MegaBlitter : public SourceColorTransform<BytesPerSourcePixel>,
          int h = SourcePixelSelector<BytesPerSourcePixel>::getHeight();
          int w = SourcePixelSelector<BytesPerSourcePixel>::getWidth();
 
+         TargetPixelSelector::init( dst, dstPos, w, h );
+         
          TargetPixelType* pix = (TargetPixelType*)( dst.pixels() );
 
          pix += dstPos.y * dst.pitch()/BytesPerTargetPixel + dstPos.x;
@@ -360,6 +369,9 @@ class MegaBlitter : public SourceColorTransform<BytesPerSourcePixel>,
          for ( int y = 0; y < h; ++y ) {
             for ( int x = 0; x < w; ++x ) {
                int s = TargetPixelSelector::skipTarget(x,y);
+               if ( SourcePixelSelector<BytesPerSourcePixel>::getSourcePixelSkip() > s )
+                  s = SourcePixelSelector<BytesPerSourcePixel>::getSourcePixelSkip();
+               
                if ( s==0 ) {
                   ColorMerger<BytesPerTargetPixel>::assign ( colorConverter.convert( SourceColorTransform<BytesPerSourcePixel>::transform( SourcePixelSelector<BytesPerSourcePixel>::nextPixel())), pix );
                   ++pix;
@@ -1226,6 +1238,11 @@ class SourcePixelSelector_Rotation: public SourcePixelSelector
          x += pixNum;
       };
 
+      int getSourcePixelSkip()
+      {
+         return 0;
+      };
+
       void nextLine()
       {
          x = 0;
@@ -1243,8 +1260,7 @@ class SourcePixelSelector_Rotation: public SourcePixelSelector
 
       SourcePixelSelector_Rotation( int degreesToRotate )  : degrees(degreesToRotate),x(0),y(0),w(0),h(0)
       {}
-}
-;
+};
 
 template<int pixelsize>
 class SourcePixelSelector_DirectRotation: public SourcePixelSelector_Rotation<pixelsize>
@@ -1325,6 +1341,10 @@ class SourcePixelSelector_CacheRotation : public RotationCache
          x += pixNum;
       };
 
+      int getSourcePixelSkip()
+      {
+         return 0;
+      };
 
       void nextLine()
       {
@@ -1432,6 +1452,11 @@ class SourcePixelSelector_Zoom: public SourcePixelSelector
          x += pixNum;
       };
 
+      int getSourcePixelSkip()
+      {
+         return 0;
+      };
+      
       void nextLine()
       {
          x= 0;
@@ -1500,6 +1525,8 @@ class SourcePixelSelector_CacheZoom : private ZoomCache, public SourcePixelSelec
       const Surface* surface;
       float zoomFactor;
 
+      int currSrcX;
+      int currSrcY;
       int* xp;
       int* yp;
       int offsetx;
@@ -1532,10 +1559,28 @@ class SourcePixelSelector_CacheZoom : private ZoomCache, public SourcePixelSelec
 
       void skipPixels( int pixNum )
       {
-         xp += pixNum;
-         SourcePixelSelector::skipPixels( int ( float(pixNum) / zoomFactor ));
+         int count = pixNum;
+         for ( int i = 0; i < pixNum; ++i ) {
+            count += *xp;
+            ++xp;
+         }
+         SourcePixelSelector::skipPixels( count );
       };
 
+      int getSourcePixelSkip()
+      {
+         int s = SourcePixelSelector::getSourcePixelSkip();
+         if ( s ) {
+            s = int(floor( float(s) * zoomFactor )) -2;  // to prevent rounding errors
+            if ( s < 1 )
+               return 1;
+            else
+               return s;
+         } else
+            return 0;
+      };
+
+      
       void nextLine()
       {
          SourcePixelSelector::nextLine();
@@ -1638,6 +1683,11 @@ class SourcePixelSelector_Flip: public SourcePixelSelector
       {
          x += pixNum;
       };
+      
+      int getSourcePixelSkip()
+      {
+         return 0;
+      };
 
       void nextLine()
       {
@@ -1716,6 +1766,11 @@ class SourcePixelSelector_Rectangle: public SourcePixelSelector_Plain<pixelsize>
          x += pixNum;
       };
 
+      int getSourcePixelSkip()
+      {
+         return 0;
+      };
+      
       void nextLine()
       {
          x= 0;
@@ -1723,14 +1778,14 @@ class SourcePixelSelector_Rectangle: public SourcePixelSelector_Plain<pixelsize>
       };
 
    public:
-      void setRectangle( SPoint pos, int width, int height )
+      void setSrcRectangle( SPoint pos, int width, int height )
       {
          x1 = pos.x;
          y1 = pos.y;
          w = width;
          h = height;
       };
-      void setRectangle( const SDLmm::SRect& rect )
+      void setSrcRectangle( const SDLmm::SRect& rect )
       {
          x1 = rect.x;
          y1 = rect.y;
@@ -1805,20 +1860,25 @@ class SourcePixelSelector_DirectRectangle
          pointer += pixNum;
       };
 
+      int getSourcePixelSkip()
+      {
+         return 0;
+      };
+      
       void nextLine()
       {
          pointer = startPointer + x1 + (y++) * linelength;
       };
 
    public:
-      void setRectangle( SPoint pos, int width, int height )
+      void setSrcRectangle( SPoint pos, int width, int height )
       {
          x1 = pos.x;
          y1 = pos.y;
          w = width;
          h = height;
       };
-      void setRectangle( const SDLmm::SRect& rect )
+      void setSrcRectangle( const SDLmm::SRect& rect )
       {
          x1 = rect.x;
          y1 = rect.y;

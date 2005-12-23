@@ -215,7 +215,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
    
       // Paragui stuff
       void eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& dst);
-      void eventDraw(SDL_Surface* surface, const PG_Rect& rect);
+      // void eventDraw(SDL_Surface* surface, const PG_Rect& rect);
 
 
       bool eventMouseButtonDown (const SDL_MouseButtonEvent *button);
@@ -260,39 +260,20 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
 
       void displayAddons( Surface& surf, int pass);
       
-      
-    public:
-      static const int touchedFieldNum = 10;
-    
-      class TouchedField {
-         public:
-            TouchedField( const MapCoordinate& real, const MapCoordinate& temp) : realMap(real), tempMap(temp) {};
-            MapCoordinate realMap;
-            MapCoordinate tempMap;
-            bool operator==(const TouchedField& b );
-      };
-      
-      
-    protected:  
-
       struct Movement {
          Vehicle* veh;
          SPoint from;
          SPoint to;
          pmap actmap;
-         Surface* surf;
          Surface* mask;
          int playerView;
-         
-        
-         //! the area of the screen that is overwritten
-         SPoint screenPos;
-         SPoint screenUpdatePos;
 
+         PG_Rect blitViewPort;
+         SPoint maskPosition;
+         SPoint targetBlitPos;
 
-         int screenWidth,screenHeight;
-         int maxScreenWidth,maxScreenHeight;
-
+         static const int touchedFieldNum = 10;
+         int actualFieldNum;
          struct {
             MapCoordinate mapPos;
             SPoint surfPos;
@@ -319,6 +300,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
    private:
       void UpdateRect( const PG_Rect& rect );
       void moveCursor( int dir, int step );
+      void redrawCursor ( const MapCoordinate& oldpos );
 
    public:
 

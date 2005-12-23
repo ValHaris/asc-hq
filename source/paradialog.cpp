@@ -1628,16 +1628,17 @@ void infoMessageDialog( const ASCString& message )
 }
 
 
-int  choice_dlg(const ASCString& title, const ASCString& leftButton, const ASCString& rightButton )
+int  new_choice_dlg(const ASCString& title, const ASCString& leftButton, const ASCString& rightButton )
 {
    PG_Rect size = calcMessageBoxSize(title);
    MessageDialog msg( NULL, size,"", "", leftButton, rightButton, PG_Label::CENTER, "Window" );
    msg.getTextBox()->SetFontSize( msg.getTextBox()->GetFontSize() + 3 );
    msg.getTextBox()->SetText(title);
-   
+      
    msg.Show();
    return msg.RunModal();
 }
+
 
 
 void ASC_PG_App:: messageDialog( const ASCString& message, MessagingHubBase::MessageType mt )
