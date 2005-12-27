@@ -141,6 +141,7 @@ class ContainerBase {
       SigC::Signal0<void> destroyed;
       static SigC::Signal0<void> anyContainerDestroyed;
 
+      static int calcShadowDist( int binaryHeight );
 
       virtual MapCoordinate3D getPosition ( ) const = 0;
       bool searchAndRemove( Vehicle* veh );

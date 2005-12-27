@@ -262,6 +262,7 @@ class MapCoordinate3D : public MapCoordinate {
          public:
             int getBitmappedHeight ( ) const { if ( z >= 0 ) return 1<<z; else return 0;};
             int getNumericalHeight ( ) const { return z; };
+            void setNumericalHeight ( int nh ) { z = nh; };
             // MapCoordinate3D& operator= ( const MapCoordinate& mc ) { x = mc.x; y = mc.y; z = -1 );
             MapCoordinate3D ( ) : MapCoordinate(), z(-1) {};
             MapCoordinate3D ( int _x, int _y, int bitmappedz) : MapCoordinate ( _x, _y ), z ( log2(bitmappedz) ) {};

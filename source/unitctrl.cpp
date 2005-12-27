@@ -147,8 +147,6 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
          vehicle->setAttacked();
 
 
-      // vehicle->decreaseMovement( mm.first );
-
       if ( next->getRealHeight() != pos->getRealHeight() && next->getRealHeight() >= 0 )
          vehicle->setNewHeight ( 1 << next->getRealHeight() );
 
@@ -194,17 +192,18 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
             evaluateviewcalculation ( actmap, 0);
 
          if ( vehicle ) {
-            // npush ( dest->vehicle );
-            // dest->vehicle = vehicle;
-            
-            
-            if ( mapDisplay )
-               mapDisplay->displayMap( vehicle );
-            
+
+            if ( mapDisplay ) {
+               // here comes an ugly hack to get the shadow of starting / descending aircraft right
+
+               int oldheight = vehicle->height;
+               if ( next->getRealHeight() > pos->getRealHeight() && pathStep < pathStepNum )
+                  vehicle->height = 1 << pos->getRealHeight();
                
+               mapDisplay->displayMap( vehicle );
 
-
-            // npop ( dest->vehicle );
+               vehicle->height = oldheight;
+            }
 
             if ( rf->checkfield ( to, vehicle, mapDisplay )) {
                cancelmovement = 1;

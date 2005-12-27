@@ -245,8 +245,11 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       MapCoordinate upperLeftCorner();
       MapCoordinate lowerRightCorner();
       
+   private:
+      SPoint upperLeftSourceBlitCorner;
    protected:
 
+      
       void blitInternalSurface( SDL_Surface* dest, const SPoint& pnt, const PG_Rect& dstClip );
 
       
@@ -264,11 +267,14 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
          Vehicle* veh;
          SPoint from;
          SPoint to;
+         int fromShadow;
+         int toShadow;
          pmap actmap;
          Surface* mask;
          int playerView;
 
-         PG_Rect blitViewPort;
+         PG_Rect blitViewPortInternal;
+         PG_Rect blitViewPortScreen;
          SPoint maskPosition;
          SPoint targetBlitPos;
 
@@ -300,7 +306,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
    private:
       void UpdateRect( const PG_Rect& rect );
       void moveCursor( int dir, int step );
-      void redrawCursor ( const MapCoordinate& oldpos );
+      void redrawMapAtCursor ( const MapCoordinate& oldpos );
 
    public:
 

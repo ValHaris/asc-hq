@@ -545,6 +545,8 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
    
    MapRenderer::additionalItemDisplayHook.connect( SigC::slot( *this, &MapDisplayPG::displayAddons ));
    
+   upperLeftSourceBlitCorner = SPoint( getFieldPosX(0,0), getFieldPosY(0,0));
+
    theMapDisplay = this;
    theGlobalMapDisplay = this;
    dataLoaderTicker();
@@ -713,7 +715,7 @@ void MapDisplayPG::blitInternalSurface( SDL_Surface* dest, const SPoint& pnt, co
       blitter.initSource( *surface );
 
       // SourcePixelSelector
-      blitter.setSrcRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), int(float(Width()) / fzoom), int(float(Height()) / fzoom));
+      blitter.setSrcRectangle( upperLeftSourceBlitCorner, int(float(Width()) / fzoom), int(float(Height()) / fzoom));
 
       PG_Rect clip= dstClip.IntersectRect( dest->clip_rect );
       
@@ -726,8 +728,7 @@ void MapDisplayPG::blitInternalSurface( SDL_Surface* dest, const SPoint& pnt, co
       blitter.initSource( *surface );
       
       // SourcePixelSelector
-      blitter.setSrcRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), Width(), Height() );
-#warning this parameters are constant, aren't they ?
+      blitter.setSrcRectangle( upperLeftSourceBlitCorner, Width(), Height() );
       
       blitter.setClippingRect( dest );
       Surface s = Surface::Wrap( dest );
@@ -736,17 +737,6 @@ void MapDisplayPG::blitInternalSurface( SDL_Surface* dest, const SPoint& pnt, co
    
 }
 
-/*
-void MapDisplayPG::eventDraw ( SDL_Surface* srf, const PG_Rect& rect)
-{
-   if ( dirty > Nothing )
-      updateMap();
-
-   PG_Point p = ClientToScreen( rect.x, rect.y );
-   blitInternalSurface( srf, SPoint(0,0), PG_Rect( p.x, p.y, rect.w, rect.h  ));
-}
-*/
- 
 
 void MapDisplayPG::displayCursor()
 {
@@ -895,7 +885,7 @@ bool MapDisplayPG::centerOnField( const MapCoordinate& mc )
 
 }
 
-void MapDisplayPG::redrawCursor ( const MapCoordinate& oldpos )
+void MapDisplayPG::redrawMapAtCursor ( const MapCoordinate& oldpos )
 {
    if ( oldpos.valid() ) {
       SPoint p = internal2widget( mapGlobalPos2internalPos( oldpos ));
@@ -922,10 +912,11 @@ bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
 
       updateFieldInfo();
 
-      mouseButtonOnField( mc, SPoint(button->x, button->y), changed );
       if ( changed )
-         redrawCursor( oldpos );
+         redrawMapAtCursor( oldpos );
 
+      mouseButtonOnField( mc, SPoint(button->x, button->y), changed );
+      
       return true;
    }
 
@@ -950,7 +941,7 @@ bool MapDisplayPG::eventMouseMotion (const SDL_MouseMotionEvent *button)
          cursor.invisible = 0;
          dirty = Curs;
 
-         redrawCursor( oldpos );
+         redrawMapAtCursor( oldpos );
          cursorMoved();
 
          mouseDraggedToField( mc, SPoint(button->x, button->y), changed );
@@ -1153,28 +1144,12 @@ void MapDisplayPG::displayMovementStep( Movement& movement, int percentage  )
                SPoint pos;
                pos.x = movement.from.x + (movement.to.x - movement.from.x) * percentage/100;
                pos.y = movement.from.y + (movement.to.y - movement.from.y) * percentage/100;
-               movement.veh->paint( *surface, pos, false );
+               int shadow = 0;
+               if ( movement.fromShadow >= 0 && movement.toShadow >= 0 )
+                  shadow = movement.fromShadow + (movement.toShadow - movement.fromShadow) * percentage/100;
+               movement.veh->paint( *surface, pos, false, shadow );
             }
    }
-   
-//   MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite> alphaBlitter;
-//   alphaBlitter.blit( *movement.mask, *movement.surf, SPoint(0,0));
-   
-   /*
-   MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,PixSel,TargetPixelSelector_Rect> blitter;
-   blitter.setZoom( float(zoom) / 100.0 );
-   blitter.initSource( *movement.surf );
-   blitter.setRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), effectiveMovementSurfaceWidth, effectiveMovementSurfaceHeight );
-   blitter.setTargetRect ( *this );
-   Surface s = Surface::Wrap( PG_Application::GetScreen() );
-
-
-   PG_Point pnt = ClientToScreen( 0,0 );
-   blitter.setZoomOffset( movement.screenPos.x - pnt.x, movement.screenPos.y - pnt.y );
-   
-   blitter.blit( *movement.surf, s, movement.screenPos );
-   */
-   
    
    PG_Rect targetArea  ( widget2screen( SPoint( 0, 0 )).x, widget2screen( SPoint( 0, 0 )).y, Width(), Height() );
    if ( zoom != 100 ) {
@@ -1184,7 +1159,7 @@ void MapDisplayPG::displayMovementStep( Movement& movement, int percentage  )
       blitter.initSource( *surface );
       
       blitter.setSrcRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), int(float(Width()) / fzoom), int(float(Height()) / fzoom));
-      blitter.setInnerSrcRectangle( movement.blitViewPort  );
+      blitter.setInnerSrcRectangle( movement.blitViewPortInternal  );
 
       blitter.setTargetRect( targetArea );
       Surface s = Surface::Wrap( PG_Application::GetScreen() );
@@ -1194,28 +1169,14 @@ void MapDisplayPG::displayMovementStep( Movement& movement, int percentage  )
       blitter.initSource( *surface );
       
       blitter.setSrcRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), Width(), Height() );
-      blitter.setInnerSrcRectangle( movement.blitViewPort  );
+      blitter.setInnerSrcRectangle( movement.blitViewPortInternal  );
       
       blitter.setTargetRect( targetArea  );
       Surface s = Surface::Wrap( PG_Application::GetScreen() );
       blitter.blit( *surface, s, movement.targetBlitPos );
    }
 
-   
-   // SDL_UpdateRect(PG_Application::GetScreen(), movement.screenUpdatePos.x, movement.screenUpdatePos.y, movement.screenWidth, movement.screenHeight);
-#warning internal
-   SDL_UpdateRect(PG_Application::GetScreen(), targetArea.x, targetArea.y, targetArea.w, targetArea.h );
-   
-   
-   /*
-   SDL_BlitSurface( movement.surf->getBaseSurface(), NULL, PG_Application::GetScreen(), NULL );
-   SDL_UpdateRect(PG_Application::GetScreen(), 0, 0,PG_Application::GetScreen()->w, PG_Application::GetScreen()->h ); 
-   */
-   
-
-   // PG_Point pnt = ClientToScreen( 0,0 );
-   // blitInternalSurface( PG_Application::GetScreen(), SPoint(pnt.x,pnt.y), dst );
-   
+   SDL_UpdateRect(PG_Application::GetScreen(), movement.blitViewPortScreen.x, movement.blitViewPortScreen.y, movement.blitViewPortScreen.w, movement.blitViewPortScreen.h );
 }
 
 
@@ -1230,8 +1191,6 @@ bool ccompare( const MapCoordinate& a, const MapCoordinate& b )
 
 void MapDisplayPG::displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoordinate3D& from, const MapCoordinate3D& to )
 { 
-   surface->Fill( 0xff00 );
-#warning remove   
    if ( !fieldInView( from ) && !fieldInView( to ))
       return;
 
@@ -1289,34 +1248,18 @@ void MapDisplayPG::displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoor
 
    const int maxShadowWidth = 32;
    SPoint p1 = SPoint( min( movement.from.x, movement.to.x), min( movement.from.y, movement.to.y) );
-   movement.blitViewPort = PG_Rect( p1.x, p1.y, max( movement.from.x, movement.to.x) - p1.x + maxShadowWidth + fieldsizex,
-                                                max( movement.from.y, movement.to.y) - p1.y + maxShadowWidth + fieldsizey );
+   movement.blitViewPortInternal  = PG_Rect( p1.x, p1.y, max( movement.from.x, movement.to.x) - p1.x + maxShadowWidth + fieldsizex,
+                                                         max( movement.from.y, movement.to.y) - p1.y + maxShadowWidth + fieldsizey );
 
-   movement.blitViewPort = movement.blitViewPort.IntersectRect( PG_Rect( 0, 0, surface->w(), surface->h() ) );
+   movement.blitViewPortInternal = movement.blitViewPortInternal.IntersectRect( PG_Rect( 0, 0, surface->w(), surface->h() ) );
    movement.targetBlitPos = widget2screen ( SPoint( 0, 0));
+   SPoint a = widget2screen( internal2widget( SPoint( movement.blitViewPortInternal.x, movement.blitViewPortInternal.y )));
+   SPoint b = widget2screen( internal2widget( SPoint( movement.blitViewPortInternal.x + movement.blitViewPortInternal.w, movement.blitViewPortInternal.y + movement.blitViewPortInternal.h )));
+   movement.blitViewPortScreen = PG_Rect( a.x, a.y, b.x - a.x + 1, b.y - a.y + 1 );
+
+   movement.toShadow  = ContainerBase::calcShadowDist( to.getNumericalHeight() );
+   movement.fromShadow  = ContainerBase::calcShadowDist( from.getNumericalHeight() );
    
-   /*
-   SPoint widPos = internal2widget( mapViewPos2internalPos( from - offset - tempStart ) );
-   asfdasdf
-   movement.screenPos = widget2screen( widPos );
-   movement.screenUpdatePos = movement.screenPos;
-   
-   SPoint lowerRight = SPoint( int( float(effectiveMovementSurfaceWidth) * zoom / 100.0) + movement.screenPos.x, int( float(effectiveMovementSurfaceHeight) * zoom / 100.0)+ movement.screenPos.y);
-   
-   if ( movement.screenUpdatePos.x < 0 )
-      movement.screenUpdatePos.x = 0;
-   if ( movement.screenUpdatePos.y < 0 )
-      movement.screenUpdatePos.y = 0;   
-   if ( lowerRight.x >= PG_Application::GetScreen()->w )
-      lowerRight.x = PG_Application::GetScreen()->w - 1;
-   if ( lowerRight.y >= PG_Application::GetScreen()->h )  
-      lowerRight.y = PG_Application::GetScreen()->h - 1;
-      
-   movement.screenWidth = lowerRight.x - movement.screenUpdatePos.x + 1;
-   movement.screenHeight= lowerRight.y - movement.screenUpdatePos.y + 1;
-   */
-   
-     
    movement.actmap = actmap;
    
    if ( dir < 0 ) {
@@ -1417,7 +1360,7 @@ void MapDisplayPG::moveCursor( int dir, int step )
       if ( pos.x > offset.x + field.numx - 2)
          offset.x = pos.x - field.numx + 6;
 
-      if ( pos.y > offset.y + field.numy - 4 )
+      if ( pos.y > offset.y + field.numy - 2 )
          offset.y = (pos.y - field.numy + 6) & ~1;
 
       if ( offset != oldOffset )
@@ -1430,11 +1373,14 @@ void MapDisplayPG::moveCursor( int dir, int step )
          Update();
          viewChanged();
       } else {
+         redrawMapAtCursor( oldpos );
+         /*
          SPoint p = internal2widget( mapGlobalPos2internalPos( oldpos ));
          UpdateRect( PG_Rect( p.x, p.y, fieldsizex, fieldsizey ) );
          
          p = internal2widget( mapGlobalPos2internalPos( pos ));
          UpdateRect( PG_Rect( p.x, p.y, fieldsizex, fieldsizey ) );
+         */
       }
    }
 }
@@ -1593,14 +1539,25 @@ int  PG_MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const Ma
    if ( actmap->playerView < 0 )
       return 0;
 
-   int height1 = start.getNumericalHeight();
-   int height2 = dest.getNumericalHeight();
-   if ( height2 == -1 )
-      height2 = height1;
+   MapCoordinate3D newstart = start;
+   MapCoordinate3D newdest = dest;
+   
+   if ( newdest.getNumericalHeight() == -1 )
+      newdest.setNumericalHeight( newstart.getNumericalHeight() );
    else
-      if ( height1== -1 )
-         height1 = height2;
+      if ( newstart.getNumericalHeight() == -1 )
+         newstart.setNumericalHeight( newdest.getNumericalHeight() );
 
+   if ( newstart.getNumericalHeight() < newdest.getNumericalHeight() ) {
+      if ( fieldnum+1 < totalmove )
+         newdest.setNumericalHeight( newstart.getNumericalHeight() );
+   }
+   
+   if ( newstart.getNumericalHeight() > newdest.getNumericalHeight() ) {
+      if ( fieldnum > 0  )
+         newdest.setNumericalHeight( newstart.getNumericalHeight() );
+   }
+   
    pfield fld1 = actmap->getField ( start );
    int view1 = fieldVisibility ( fld1, actmap->playerView );
 
@@ -1610,7 +1567,7 @@ int  PG_MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const Ma
    if (  (view1 >= visible_now  &&  view2 >= visible_now ) || ( vehicle->getOwner() == actmap->playerView ))
       if ( ((vehicle->height >= chschwimmend) && (vehicle->height <= chhochfliegend)) || (( view1 == visible_all) && ( view2 == visible_all )) || ( actmap->actplayer == actmap->playerView )) {
          soundStart( 1 );
-         mapDisplayWidget->displayUnitMovement( actmap, vehicle, start, dest );
+         mapDisplayWidget->displayUnitMovement( actmap, vehicle, newstart, newdest );
       }
 
 

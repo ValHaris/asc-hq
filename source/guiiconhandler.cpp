@@ -331,11 +331,11 @@ class SmallButtonHolder : public SpecialInputWidget {
 
 bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged )
 {
+   clearSmallIcons();
    PG_Application::SetBulkMode(true);
 
-   clearSmallIcons();
-
-   PG_Point p = mapDisplay->ScreenToClient( mousePos.x, mousePos.y );
+   // PG_Point p = mapDisplay->ScreenToClient( mousePos.x, mousePos.y );
+   PG_Point p ( mousePos.x, mousePos.y );
 
    pfield fld = actmap->getField(pos);
 
@@ -363,7 +363,7 @@ bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mous
       
       if ( count ) {
          delete smallButtonHolder;
-         smallButtonHolder = new SmallButtonHolder ( mapDisplay, PG_Rect( p.x, p.y, count * smallGuiIconSizeX + (count-1)*smallGuiIconSpace, smallGuiIconSizeY ));
+         smallButtonHolder = new SmallButtonHolder ( NULL, PG_Rect( p.x, p.y, count * smallGuiIconSizeX + (count-1)*smallGuiIconSpace, smallGuiIconSizeY ));
 
          PG_Rect r = PG_Rect( 0, 0, smallGuiIconSizeX, smallGuiIconSizeY  );
          for ( int j = 0; j < buttons.size(); ++j) {
@@ -491,21 +491,23 @@ bool NewGuiHost::clearSmallIcons()
 {
    bool bulk = PG_Application::GetBulkMode();
 
-   if ( !bulk )
-      PG_Application::SetBulkMode(true);
+ //  if ( !bulk )
+  //    PG_Application::SetBulkMode(true);
 
-      /*
-   for ( SmallButtons::iterator i = smallButtons.begin(); i != smallButtons.end(); ++i )
-      delete *i;
-   smallButtons.clear();
-      */
+   bool redraw;
+   PG_Rect redrawRect;
+   if ( smallButtonHolder ) {
+      redraw = true;
+      redrawRect = *smallButtonHolder;
+   } else
+      redraw = false;
    
    delete smallButtonHolder;
    smallButtonHolder = NULL;
 
    if ( !bulk ) {
-      PG_Application::SetBulkMode(false);
-      // mapDisplay->Update( true );
+    //  PG_Application::SetBulkMode(false);
+      // mapDisplay->UpdateRect( true );
    }
 
    return true;

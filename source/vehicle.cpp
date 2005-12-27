@@ -445,14 +445,14 @@ void Vehicle :: resetMovement ( void )
 }
 
 
-void Vehicle :: setNewHeight( int newHeight )
+void Vehicle :: setNewHeight( int bitmappedheight )
 {
   if ( maxMovement() ) {
      float oldperc = float(getMovement ( false )) / float(maxMovement());
-     height = newHeight;
+     height = bitmappedheight;
      setMovement ( int(floor(maxMovement() * oldperc + 0.5)) , 0 );
   } else {
-     height = newHeight;
+     height = bitmappedheight;
      warning("Internal error: unit has invalid height");
   }
 }

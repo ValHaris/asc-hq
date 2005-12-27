@@ -223,6 +223,17 @@ Vehicle* ContainerBase :: findUnit ( int nwid )
  };
 
 
+ int ContainerBase::calcShadowDist( int binaryHeight )
+ {
+    if ( binaryHeight <= 1 )
+       return 0;
+
+    if ( binaryHeight <= 3 )
+       return 1;
+    
+    return 6 * ( binaryHeight - log2 ( chfahrend ));
+ }
+
 
 void ContainerBase::paintField ( const Surface& img, Surface& dest, SPoint pos, int dir, bool shaded, int shadowDist ) const
 {
@@ -245,12 +256,9 @@ void ContainerBase::paintField ( const Surface& img, Surface& dest, SPoint pos, 
                       ( img, dest, pos, getOwner(),nullParam, dirpair, nullParam);
         }
     } else {
-        if ( height >= chfahrend ) {
+       if ( height >= chfahrend && shadowDist ) {
            if ( shadowDist == -1 )
-              if ( height >= chtieffliegend ) {
-                 shadowDist = 6 * ( log2 ( height) - log2 ( chfahrend ));
-              } else
-                 shadowDist = 1;
+              shadowDist = calcShadowDist( log2( height ));
 
            megaBlitter< ColorTransform_None,
                         ColorMerger_AlphaShadow,
