@@ -228,7 +228,18 @@ int readgameoptions ( const ASCString& filename )
 
    if ( exist ( completeFileName )) {
       displayLogMessage ( 6, "found, " );
-      CGameOptions::Instance()->load( completeFileName );
+      try {
+         CGameOptions::Instance()->load( completeFileName );
+      } 
+      catch ( ParsingError err ) {
+         fatalError ( "Error parsing text file " + err.getMessage() );
+      }
+      catch ( tfileerror err ) {
+         fatalError ( "Error loading file " + err.getFileName() );
+      }
+      catch ( ... ) {
+         fatalError ( "caught undefined exception" );
+      }
 
       if ( registryKeyFound ) {
          ASCString primaryPath = CGameOptions::Instance()->getSearchPath(0);

@@ -1540,12 +1540,12 @@ bool MessageDialog::eventKeyDown (const SDL_KeyboardEvent *key)
       return true;
    }
    
-   if (  key->keysym.sym == hotkey1 && hotkey1 ) {
+   if (  key->keysym.unicode == hotkey1 && hotkey1 ) {
       quitModalLoop(1);
       return true;
    }
    
-   if (  key->keysym.sym == hotkey2 && hotkey2 ) {
+   if (  key->keysym.unicode == hotkey2 && hotkey2 ) {
       quitModalLoop(2);
       return true;
    }

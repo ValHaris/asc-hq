@@ -163,9 +163,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\building.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\buildings.cpp">
 			</File>
 			<File
@@ -239,9 +236,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\graphicset.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\gui.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\guidimension.cpp">
@@ -359,6 +353,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\replay.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\replaymapdisplay.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\research.cpp">
@@ -502,7 +499,13 @@
 					RelativePath="..\..\..\dialogs\emailsetup.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\unitcounting.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\unitinfodialog.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\vehicletypeselector.cpp">
 				</File>
 			</Filter>
 		</Filter>
