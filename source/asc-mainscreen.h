@@ -34,6 +34,8 @@ class Menu;
 class NewGuiHost;
 class MapDisplayPG;
 class DashboardPanel;
+class UnitWeaponRangeLayer;
+class UnitMovementRangeLayer;
 
 class ASC_MainScreenWidget : public MainScreenWidget {
 public:
@@ -48,6 +50,8 @@ protected:
     NewGuiHost* guiHost;
     Menu* menu;
     DashboardPanel* unitInfoPanel;
+    UnitWeaponRangeLayer* weaponRangeLayer;
+    UnitMovementRangeLayer* movementRangeLayer;
               
     bool eventKeyDown(const SDL_KeyboardEvent* key);
     ASCString getBackgroundImageFilename() { return "gamebackground.png"; };

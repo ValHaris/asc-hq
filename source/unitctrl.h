@@ -60,6 +60,7 @@ class FieldList {
        T& getData ( int num );
        T& getData ( int x, int y );
        void getFieldCoordinates ( int num, int* x, int* y ) const;
+       MapCoordinate getFieldCoordinates ( int num ) const;
        void addField ( int x, int y, const T& _data );
        void addField ( const MapCoordinate& mc, const T& _data );
        void addField ( int x, int y );
@@ -440,6 +441,15 @@ template<class T> void FieldList<T> :: getFieldCoordinates ( int num, int* x, in
    } else {
       *x = -1;
       *y = -1;
+   }
+}
+
+template<class T> MapCoordinate FieldList<T> :: getFieldCoordinates ( int num ) const
+{
+   if ( num < fieldnum && num >= 0 ) {
+      return MapCoordinate( xpos[num], ypos[num] );
+   } else {
+      return MapCoordinate( -1, -1 );
    }
 }
 

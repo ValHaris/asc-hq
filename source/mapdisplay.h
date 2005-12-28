@@ -40,6 +40,7 @@ class MapDisplayInterface {
            virtual void displayMap ( void ) = 0;
            virtual void displayMap ( Vehicle* additionalVehicle ) = 0;
            virtual void displayPosition ( int x, int y ) = 0;
+           void displayPosition ( const MapCoordinate& pos ) { displayPosition(pos.x,pos.y ); };
            virtual void resetMovement ( void ) = 0;
            virtual void startAction ( void ) = 0;
            virtual void stopAction ( void ) = 0;
@@ -106,12 +107,13 @@ class MapRenderer {
     public:  
       class FieldRenderInfo {
             public:
-               FieldRenderInfo( Surface& s) : surface(s) {};
+               FieldRenderInfo( Surface& s, tmap* actmap) : surface(s), gamemap(actmap ) {};
                Surface& surface;
                VisibilityStates visibility;
                int playerView;
                pfield fld;
                MapCoordinate pos;
+               tmap* gamemap;
       };
 
     protected:
@@ -329,6 +331,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
 
       void addMapLayer( MapLayer* layer, const ASCString& name );
       void activateMapLayer( const ASCString& name, bool active );
+      void toggleMapLayer( const ASCString& name );
       SigC::Signal2<void, bool, const ASCString&> layerChanged;
 
       /** Signal that is fired when the mouse is pressed on a valid field, after the cursor evaluation has been run.

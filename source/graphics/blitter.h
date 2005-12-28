@@ -96,7 +96,7 @@ class TargetPixelSelector_Valid
             if ( x < 0 )
                return -x;
             else
-               return xrange - x;
+               return xrange - x + dstPos.x;
       };
       void init( const Surface& srv, const SPoint& pos, int xrange, int yrange )
       {
@@ -1044,7 +1044,7 @@ class ColorMerger_AlphaShadow<4> : public ColorMerger_AlphaHandler<4>
       void assign ( PixelType src, PixelType* dest )
       {
          if ( isOpaque(src ) ) {
-            *dest = (*dest >> 1) & 0x7f7f7f7f;
+            *dest = ((*dest >> 1) & 0x7f7f7f7f) | (*dest & 0xff000000 );
          }
       };
    public:

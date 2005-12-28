@@ -245,14 +245,6 @@ class tmap {
       //! only to be used by units and buildings. To speed up map destruction, the view won't be recalculated. No signals will be send when units & buildings are destroyed, either 
       bool __mapDestruction;
 
-      struct tcursorpos {
-        struct {
-          integer cx;
-          integer sx;
-          integer cy;
-          integer sy;
-        } position[8];
-      } cursorpos;
 
       /** The tribute can not only be used to demand resources from enemies but also to transfer resources to allies.
             tribute.avail[a][b].energy is the ammount of energy that player b may (still) extract from the net of player a

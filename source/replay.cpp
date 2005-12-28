@@ -1720,9 +1720,6 @@ int  trunreplay :: run ( int player, int viewingplayer )
 
    NewGuiHost::pushIconHandler( replayIconHandler );
 
-   actmap->xpos = orgmap->cursorpos.position[ viewingplayer ].sx;
-   actmap->ypos = orgmap->cursorpos.position[ viewingplayer ].sy;
-
    if ( stream->dataavail () )
       status = 1;
    else

@@ -42,6 +42,8 @@
 #include "iconrepository.h"
 
 
+#define debugmapdisplay
+
 MapRenderer::Icons MapRenderer::icons;
 
 
@@ -160,7 +162,6 @@ void PipeLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,
    }
 }
 
-#if 0
 
 class WeaponRange : public SearchFields
 {
@@ -191,79 +192,6 @@ int  WeaponRange :: run ( const Vehicle* veh )
 
 
  
-class UnitWeaponRangeLayer : public MapLayer, public SigC::Object {
-
-      map<MapCoordinate,int> fields;
-
-      void eval()
-      {
-         if ( act
-   if ( veh && !moveparams.movestatus  ) {
-      actmap->cleartemps ( 7 );
-      WeaponRange wr ( actmap );
-      int res = wr.run ( veh );
-      if ( res ) {
-         displaymap();
-
-         if ( taste != ct_invvalue ) {
-            while ( skeypress ( taste )) {
-
-               while ( keypress() )
-                  r_key();
-
-               releasetimeslice();
-            }
-         } else {
-            int mb = mouseparams.taste;
-            while ( mouseparams.taste == mb && !keypress() )
-               releasetimeslice();
-            while ( keypress() )
-               r_key();
-         }
-
-         actmap->cleartemps ( 7 );
-         displaymap();
-      }
-   }
-      
-      }
-      
-    public: 
-      UnitWeaponRangeLayer() {
-         cursorMoved.connect( SigC::slot( *this, UnitWeaponRangeLayer::cursorMoved ));
-      }
-      
-      void cursorMoved()
-      {
-         fields.clear();
-         if ( isActive() ) {
-            eval();            
-         }
-      }
-
-      void setActive( bool active ) { 
-         MapLayer::setActive(active);
-         eval(); 
-      };
-      
-            
-      bool onLayer( int layer ) { return layer == 17; };
-      void paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos ){
-         if ( fieldInfo.playerView >= visible_ago) {
-            if ( fieldInfo.fld->vehicle || (fieldInfo.fld->building && fieldInfo.fld->bdt.test(cbbuildingentry) )) {
-               ContainerBase* c = fieldInfo.fld->getContainer();
-               if ( c->getOwner() == fieldInfo.playerView && hasCargo(c) ) 
-                  fieldInfo.surface.Blit( marker, pos );
-               
-            }
-         }
-      }
-};
-
-
-
-#endif
-
 
 
 MapRenderer::ViewPort::ViewPort( int x1, int y1, int x2, int y2 ) 
@@ -463,7 +391,7 @@ void MapRenderer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInf
 
 void MapRenderer::paintTerrain( Surface& surf, tmap* actmap, int playerView, const ViewPort& viewPort, const MapCoordinate& offset )
 {
-   FieldRenderInfo fieldRenderInfo( surf );
+   FieldRenderInfo fieldRenderInfo( surf, actmap );
    fieldRenderInfo.playerView = playerView;
 
    GraphicSetManager::Instance().setActive ( actmap->graphicset );
@@ -710,7 +638,7 @@ void MapDisplayPG::blitInternalSurface( SDL_Surface* dest, const SPoint& pnt, co
 {
    if ( zoom != 100 ) {
       float fzoom = float(zoom) / 100.0;
-      MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_PlainOverwrite,PixSel,TargetPixelSelector_Rect> blitter;
+      MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,PixSel,TargetPixelSelector_Rect> blitter;
       blitter.setZoom( fzoom );
       blitter.initSource( *surface );
 
@@ -724,7 +652,7 @@ void MapDisplayPG::blitInternalSurface( SDL_Surface* dest, const SPoint& pnt, co
       Surface s = Surface::Wrap( dest );
       blitter.blit( *surface, s, SPoint(pnt.x, pnt.y ));
    } else {
-      MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_DirectRectangle,TargetPixelSelector_Rect> blitter;
+      MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectRectangle,TargetPixelSelector_Rect> blitter;
       blitter.initSource( *surface );
       
       // SourcePixelSelector
@@ -747,6 +675,9 @@ void MapDisplayPG::displayCursor( const PG_Rect& dst )
 {
    if ( !actmap )
       return;
+
+   if ( dst.w <= 0 || dst.h <= 0 )
+      return;
       
    int x = cursor.pos().x - offset.x;
    int y = cursor.pos().y  - offset.y;
@@ -754,12 +685,12 @@ void MapDisplayPG::displayCursor( const PG_Rect& dst )
       // surface->Blit( icons.cursor, getFieldPos(x,y));
       MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom,TargetPixelSelector_Rect> blitter;
       blitter.setZoom( float(zoom) / 100.0 );
+
       blitter.setTargetRect ( dst );
 
-
       Surface s = Surface::Wrap( PG_Application::GetScreen() );
-      // PG_Point pnt = ClientToScreen( 0,0 );
-      blitter.blit( icons.cursor, s, widget2screen ( internal2widget( mapViewPos2internalPos( MapCoordinate(x,y)))) );
+      SPoint pos = widget2screen ( internal2widget( mapViewPos2internalPos( MapCoordinate(x,y))));
+      blitter.blit( icons.cursor, s, pos );
    }
 }
 
@@ -972,7 +903,7 @@ bool MapDisplayPG::fieldInView(const MapCoordinate& mc )
 
 Surface MapDisplayPG::createMovementBufferSurface()
 {
-   Surface s = Surface::createSurface( 2*surfaceBorder + effectiveMovementSurfaceWidth, 2*surfaceBorder + effectiveMovementSurfaceHeight, 8*colorDepth, 0xffffffff ) ;
+   Surface s = Surface::createSurface( 2*surfaceBorder + effectiveMovementSurfaceWidth, 2*surfaceBorder + effectiveMovementSurfaceHeight, 8*colorDepth, 0x00ffffff ) ;
    s.SetColorKey( SDL_SRCCOLORKEY, 0xffffff);
    return s;
 }
@@ -1124,7 +1055,7 @@ class MovePixSel : public SourcePixelSelector_CacheZoom<pixelSize, SourcePixelSe
 
 void MapDisplayPG::displayMovementStep( Movement& movement, int percentage  )
 {
-   FieldRenderInfo fieldRenderInfo( *surface );
+   FieldRenderInfo fieldRenderInfo( *surface, movement.veh->getMap() );
    fieldRenderInfo.playerView = movement.playerView;
    for (int pass = 0; pass <= 18 ;pass++ ) {
       for ( int i = 0; i < movement.actualFieldNum; ++i ) {
@@ -1150,22 +1081,27 @@ void MapDisplayPG::displayMovementStep( Movement& movement, int percentage  )
                movement.veh->paint( *surface, pos, false, shadow );
             }
    }
+
+#ifndef debugmapdisplay
+   MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Plain,TargetPixelSelector_Valid> alphaBlitter;
+   alphaBlitter.blit( *movement.mask, *surface, movement.maskPosition);
+#endif
    
    PG_Rect targetArea  ( widget2screen( SPoint( 0, 0 )).x, widget2screen( SPoint( 0, 0 )).y, Width(), Height() );
    if ( zoom != 100 ) {
       float fzoom = float(zoom) / 100.0;
-      MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_PlainOverwrite,MovePixSel,TargetPixelSelector_Rect> blitter;
+      MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,MovePixSel,TargetPixelSelector_Rect> blitter;
       blitter.setZoom( fzoom );
       blitter.initSource( *surface );
       
       blitter.setSrcRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), int(float(Width()) / fzoom), int(float(Height()) / fzoom));
       blitter.setInnerSrcRectangle( movement.blitViewPortInternal  );
-
+      
       blitter.setTargetRect( targetArea );
       Surface s = Surface::Wrap( PG_Application::GetScreen() );
       blitter.blit( *surface, s, movement.targetBlitPos );
    } else {
-      MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_DirectSubRectangle,TargetPixelSelector_Rect> blitter;
+      MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectSubRectangle,TargetPixelSelector_Rect> blitter;
       blitter.initSource( *surface );
       
       blitter.setSrcRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), Width(), Height() );
@@ -1190,7 +1126,11 @@ bool ccompare( const MapCoordinate& a, const MapCoordinate& b )
 
 
 void MapDisplayPG::displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoordinate3D& from, const MapCoordinate3D& to )
-{ 
+{
+#ifdef debugmapdisplay
+   surface->Fill( 0xff00);
+#endif
+   
    if ( !fieldInView( from ) && !fieldInView( to ))
       return;
 
@@ -1267,7 +1207,7 @@ void MapDisplayPG::displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoor
       movement.maskPosition = mapGlobalPos2internalPos( from ) -  movementMask[0].startFieldPos;
    } else {
       movement.mask = &movementMask[dir].mask;
-      movement.maskPosition = mapGlobalPos2internalPos( from ) -  movementMask[0].startFieldPos;
+      movement.maskPosition = mapGlobalPos2internalPos( from ) -  movementMask[dir].startFieldPos;
    }
    
    movement.playerView = actmap->playerView;
@@ -1287,7 +1227,7 @@ void MapDisplayPG::displayAddons( Surface& surf, int pass)
       if ( pass == bitmappedHeight2pass( additionalUnit->height ) )  {
          SPoint p = mapViewPos2internalPos( additionalUnit->getPosition() - offset );
          if ( p.x >= 0 && p.y >= 0 && p.x + fieldsizex < surf.w() && p.y + fieldsizey < surf.h() )
-            additionalUnit->paint( surf, p );
+            additionalUnit->paint( surf, p, false, -1 );
       }
 
 }
@@ -1454,6 +1394,14 @@ void MapDisplayPG::activateMapLayer( const ASCString& name, bool active )
    }   
 }
 
+void MapDisplayPG::toggleMapLayer( const ASCString& name )
+{
+   LayerMap::iterator i = layerMap.find( name );
+   if ( i != layerMap.end() ) {
+      i->second->setActive( !i->second->isActive() );
+      layerChanged( i->second->isActive(), name );
+   }
+}
 
 
 
@@ -1602,7 +1550,10 @@ void PG_MapDisplay :: displayMap ( Vehicle* vehicle )
 
 void PG_MapDisplay :: displayPosition ( int x, int y )
 {
-   mapDisplayWidget->Update();
+   if ( !mapDisplayWidget->fieldInView( MapCoordinate(x,y) ))
+      mapDisplayWidget->centerOnField( MapCoordinate(x,y) );
+   else
+      mapDisplayWidget->Update();
 }
 
 

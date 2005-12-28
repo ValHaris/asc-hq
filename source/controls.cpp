@@ -659,11 +659,6 @@ bool authenticateUser ( tmap* actmap, int forcepasswordchecking = 0, bool allowC
 
    actmap->playerView = actmap->actplayer;
 
-   actmap->xpos = actmap->cursorpos.position[ actmap->actplayer ].sx;
-   actmap->ypos = actmap->cursorpos.position[ actmap->actplayer ].sy;
-
-//   cursor.gotoxy ( actmap->cursorpos.position[ actmap->actplayer ].cx, actmap->cursorpos.position[ actmap->actplayer ].cy , 0);
-
    computeview( actmap );
    actmap->beginTurn(); 
 

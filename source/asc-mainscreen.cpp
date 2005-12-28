@@ -215,6 +215,201 @@ Menu::Menu ( PG_Widget *parent, const PG_Rect &rect)
 
 
 
+class UnitWeaponRangeLayer : public MapLayer {
+   Surface& icon1;
+   Surface& icon2;
+   tmap* gamemap;
+
+   map<MapCoordinate,int> fields;
+
+   void markField( const MapCoordinate& pos )
+   {
+      fields[pos] |= 1;
+   }
+
+      bool addUnit( Vehicle* veh )
+      {
+         if ( fieldvisiblenow ( getfield ( veh->xpos, veh->ypos ))) {
+            int found = 0;
+            for ( int i = 0; i < veh->typ->weapons.count; i++ ) {
+               if ( veh->typ->weapons.weapon[i].shootable() ) {
+                  circularFieldIterator( gamemap,veh->getPosition(), veh->typ->weapons.weapon[i].maxdistance/minmalq, (veh->typ->weapons.weapon[i].mindistance+maxmalq-1)/maxmalq, FieldIterationFunctor( this, &UnitWeaponRangeLayer::markField )  );
+                  found++;
+               }
+            }
+            if ( found )
+               fields[veh->getPosition()] |= 2;
+            
+            return found;
+         } else
+            return false;
+      };
+
+      void reset()
+      {
+         fields.clear();
+      }
+   public:
+
+      void operateField( tmap* actmap, const MapCoordinate& pos )
+      {
+         if ( !pos.valid() )
+            return;
+         
+         if ( gamemap && gamemap != actmap ) 
+            reset();
+
+         gamemap = actmap;
+         
+         if ( fields.find( pos ) != fields.end() ) {
+            if ( fields[pos] & 2 ) {
+               reset();
+               setActive(false);
+               statusMessage("Weapon range layer disabled");
+               repaintMap();
+               return;
+            }
+         }
+         
+         if ( actmap->getField( pos )->vehicle ) {
+            if ( addUnit( actmap->getField( pos )->vehicle ) ) {
+               setActive(true);
+               statusMessage("Weapon range layer enabled");
+               repaintMap();
+            }
+         }
+      }
+      
+      UnitWeaponRangeLayer() : icon1 ( IconRepository::getIcon( "markedfield-red.png")), icon2 ( IconRepository::getIcon( "markedfield-red2.png")), gamemap(NULL) {
+         // cursorMoved.connect( SigC::slot( *this, UnitWeaponRangeLayer::cursorMoved ));
+      }
+
+      bool onLayer( int layer ) { return layer == 17; };
+      
+      void paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
+      {
+         if ( fieldInfo.gamemap != gamemap && gamemap) {
+            reset();
+            gamemap = NULL;
+            return;
+         }
+         
+         if ( fieldInfo.visibility >= visible_ago) {
+            if ( fields.find( fieldInfo.pos ) != fields.end() ) {
+               int p = fields[fieldInfo.pos];
+               if ( p & 1 )
+                  fieldInfo.surface.Blit( icon1, pos );
+               if ( p & 2 )
+                  fieldInfo.surface.Blit( icon2, pos );
+            }
+         }
+      }
+};
+
+
+
+class UnitMovementRangeLayer : public MapLayer, public SigC::Object {
+   Surface& icon;
+   tmap* gamemap;
+
+   map<MapCoordinate,int> fields;
+
+   void markField( const MapCoordinate& pos )
+   {
+      fields[pos] |= 1;
+   }
+
+   bool addUnit( Vehicle* veh )
+   {
+
+      if ( fieldvisiblenow ( getfield ( veh->xpos, veh->ypos ))) {
+         int counter = 0;
+         VehicleMovement vm ( NULL, NULL );
+         if ( vm.available ( veh )) {
+            vm.execute ( veh, -1, -1, 0, -1, -1 );
+            if ( vm.reachableFields.getFieldNum()) {
+               for  ( int i = 0; i < vm.reachableFields.getFieldNum(); i++ )
+                  if ( fieldvisiblenow ( vm.reachableFields.getField ( i ) )) {
+                     ++counter;
+                     markField( vm.reachableFields.getFieldCoordinates(i));
+                  }
+               for  ( int j = 0; j < vm.reachableFieldsIndirect.getFieldNum(); j++ )
+                  if ( fieldvisiblenow ( vm.reachableFieldsIndirect.getField ( j ))) {
+                     markField( vm.reachableFieldsIndirect.getFieldCoordinates(j));
+                     ++counter;
+                  }
+   
+            }
+         }
+      
+         if ( counter )
+            fields[veh->getPosition()] |= 2;
+            
+         return counter;
+      } else
+         return false;
+   };
+
+   void reset()
+   {
+      fields.clear();
+      if ( isActive() ) {
+         setActive(false);
+         statusMessage("Movement range layer disabled");
+         repaintMap();
+      }
+   }
+   public:
+
+      void operateField( tmap* actmap, const MapCoordinate& pos )
+      {
+         if ( !pos.valid() )
+            return;
+         
+         if ( gamemap && gamemap != actmap )
+            fields.clear();
+
+         gamemap = actmap;
+         
+         if ( fields.find( pos ) != fields.end() ) {
+            if ( fields[pos] & 2 ) {
+               reset();
+               return;
+            }
+         }
+         
+         if ( actmap->getField( pos )->vehicle ) {
+            if ( addUnit( actmap->getField( pos )->vehicle ) ) {
+               setActive(true);
+               statusMessage("Movement range layer enabled");
+               repaintMap();
+            }
+         }
+      }
+      
+      UnitMovementRangeLayer() : icon ( IconRepository::getIcon( "markedfield-blue.png")), gamemap(NULL) {
+         cursorMoved.connect( SigC::slot( *this, &UnitMovementRangeLayer::reset ));
+      }
+
+      bool onLayer( int layer ) { return layer == 17; };
+      
+      void paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
+      {
+         if ( fieldInfo.gamemap != gamemap && gamemap) {
+            reset();
+            gamemap = NULL;
+            return;
+         }
+         
+         if ( fieldInfo.visibility >= visible_ago) {
+            if ( fields.find( fieldInfo.pos ) != fields.end() ) {
+               int p = fields[fieldInfo.pos];
+               if ( p )
+                  fieldInfo.surface.Blit( icon, pos );
+            }
+         }
+      }
+};
 
 
 
@@ -245,6 +440,12 @@ ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
    dataLoaderTicker();
    spawnPanel ( OverviewMap );
 
+
+   weaponRangeLayer = new UnitWeaponRangeLayer();
+   mapDisplay->addMapLayer( weaponRangeLayer, "weaprange" );
+
+   movementRangeLayer = new UnitMovementRangeLayer();
+   mapDisplay->addMapLayer( movementRangeLayer, "moverange" );
 }
 
 
@@ -341,11 +542,11 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                return true;
 
             case SDLK_3:
-               // viewunitweaponrange ( getSelectedField()->vehicle, SDLK_3 );
+               weaponRangeLayer->operateField( actmap, actmap->getCursor() );
                return true;
 
             case SDLK_4:
-               // viewunitmovementrange ( getSelectedField()->vehicle, SDLK_4 );
+               movementRangeLayer->operateField( actmap, actmap->getCursor() );
                return true;
 
             case SDLK_5:
@@ -365,7 +566,8 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                return true;
 
             case SDLK_9:
-               // viewPipeNet ( SDLK_9 );
+               mapDisplay->toggleMapLayer("pipes");
+               repaintMap();
                return true;
 
             case SDLK_0: execUserAction_ev( ua_writescreentopcx );

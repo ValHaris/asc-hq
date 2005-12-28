@@ -225,13 +225,6 @@ tmap :: tmap ( void )
 
    levelfinished = 0;
 
-   for ( i = 0; i < 8; i++ ) {
-      cursorpos.position[i].cx = 0;
-      cursorpos.position[i].sx = 0;
-      cursorpos.position[i].cy = 0;
-      cursorpos.position[i].sy = 0;
-   }
-
    messageid = 0;
 
    continueplaying = false;
@@ -253,7 +246,7 @@ void tmap :: guiHooked()
    dialogsHooked = true;
 }
 
-const int tmapversion = 12;
+const int tmapversion = 13;
 
 void tmap :: read ( tnstream& stream )
 {
@@ -383,11 +376,13 @@ void tmap :: read ( tnstream& stream )
          alliance_names_not_used_any_more[i] = 0;
    }
 
-   for ( i = 0; i< 8; i++ ) {
-      cursorpos.position[i].cx = stream.readWord();
-      cursorpos.position[i].sx = stream.readWord();
-      cursorpos.position[i].cy = stream.readWord();
-      cursorpos.position[i].sy = stream.readWord();
+   if ( version <= 12 ) {
+      for ( i = 0; i< 8; i++ ) {
+         stream.readWord(); // cursorpos.position[i].cx = 
+         stream.readWord(); // cursorpos.position[i].sx = 
+         stream.readWord(); // cursorpos.position[i].cy = 
+         stream.readWord(); // cursorpos.position[i].sy = 
+      }
    }
 
    if ( version <= 9 )
@@ -667,13 +662,6 @@ void tmap :: write ( tnstream& stream )
    stream.writeInt( unitnetworkid );
    stream.writeChar( levelfinished );
 
-   for ( i = 0; i< 8; i++ ) {
-      stream.writeWord( cursorpos.position[i].cx );
-      stream.writeWord( cursorpos.position[i].sx );
-      stream.writeWord( cursorpos.position[i].cy );
-      stream.writeWord( cursorpos.position[i].sy );
-   }
-
    stream.writeInt( 1 );
    stream.writeInt( !messages.empty() );
 
@@ -811,9 +799,19 @@ void tmap :: write ( tnstream& stream )
 MapCoordinate& tmap::getCursor()
 {
    #ifdef sgmain
-   if ( actplayer >= 0 )
+   if ( actplayer >= 0 ) {
+      if ( !player[actplayer].cursorPos.valid() ) {
+         bool found = false;
+         for ( int y = 0; y < ysize && !found; ++y )
+            for ( int x = 0; x < xsize  && !found; ++x )
+               if ( getField(x,y)->getContainer() )
+                  if ( getField(x,y)->getContainer()->getOwner() == actplayer ) {
+                     player[actplayer].cursorPos = getField(x,y)->getContainer()->getPosition();
+                     found = true;
+                  }
+      }
       return player[actplayer].cursorPos;
-   else
+   } else
       return player[actplayer].cursorPos;
 #else
    return player[8].cursorPos;
@@ -1777,51 +1775,12 @@ void tmap :: startGame ( )
       player[j].queuedEvents = 1;
 
    levelfinished = false;
-   int num = 0;
-   int cols[72];
-
-   memset ( cols, 0, sizeof ( cols ));
-   int i;
-   for ( i = 0; i < 8 ; i++) {
-      if ( player[i].exist() ) {
-         num++;
-         cols[ i * 8 ] = 1;
-      } else
-         cols[ i * 8 ] = 0;
-
-      cursorpos.position[ i ].sx = 0;
-      cursorpos.position[ i ].sy = 0;
-
-   }
-
-   i = 0;                                                                        
-   int sze = xsize * ysize;
-   do {
-      if ( field[i].vehicle ) 
-         if ( cols[ field[i].vehicle->color] ) {
-            cursorpos.position[ field[i].vehicle->color / 8 ].cx = field[i].vehicle->xpos;
-            cursorpos.position[ field[i].vehicle->color / 8 ].cy = field[i].vehicle->ypos;
-            num--;
-            cols[ field[i].vehicle->color] = 0;
-         }
-
-      if ( field[i].building && field[i].building->color < 64 ) 
-         if ( cols[ field[i].building->color] ) {
-            cursorpos.position[ field[i].building->color / 8 ].cx = field[i].building->getEntry().x;
-            cursorpos.position[ field[i].building->color / 8 ].cy = field[i].building->getEntry().y;
-            num--;
-            cols[ field[i].building->color] = 0;
-         }
-      i++;
-   } while ( num   &&   i <= sze ); /* enddo */
-
 
    for ( int n = 0; n< 8; n++ ) {
       bi_resource[n].energy = 0;
       bi_resource[n].material = 0;
       bi_resource[n].fuel = 0;
    }
-
 
    #ifndef karteneditor
    actplayer = -1;

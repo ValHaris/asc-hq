@@ -426,7 +426,7 @@ void hookGuiToMap( tmap* map )
       map->sigPlayerUserInteractionEnds.connect( SigC::slot( viewOwnReplay));
             
       map->guiHooked();
-   }   
+   }
 }
 
 
@@ -442,9 +442,12 @@ void loadGame()
          throw  NoMapLoaded();
 
       computeview( actmap );
-      displaymap();
-      updateFieldInfo();
       hookGuiToMap ( actmap );
+      
+      updateFieldInfo();
+      getDefaultMapDisplay().displayPosition( actmap->getCursor() );
+      displaymap();
+
       moveparams.movestatus = 0;
    }
 }
