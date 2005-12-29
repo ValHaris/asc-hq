@@ -61,12 +61,12 @@ am_asc_mapedit_OBJECTS = edevents.$(OBJEXT) edgen.$(OBJEXT) \
 	loadbi3.$(OBJEXT) dlg_box.$(OBJEXT) dialog.$(OBJEXT) \
 	basestrm.$(OBJEXT) basegfx.$(OBJEXT) attack.$(OBJEXT) \
 	gameoptions.$(OBJEXT) maped-mainscreen.$(OBJEXT) \
-	buildingtype.$(OBJEXT) vehicletype.$(OBJEXT) \
-	containerbase.$(OBJEXT) mapalgorithms.$(OBJEXT) \
-	viewcalculation.$(OBJEXT) gamemap.$(OBJEXT) password.$(OBJEXT) \
-	password_dialog.$(OBJEXT) research.$(OBJEXT) \
-	mapdisplay.$(OBJEXT) ascstring.$(OBJEXT) graphicset.$(OBJEXT) \
-	vehicle.$(OBJEXT) buildings.$(OBJEXT) \
+	stdio-errorhandler.$(OBJEXT) buildingtype.$(OBJEXT) \
+	vehicletype.$(OBJEXT) containerbase.$(OBJEXT) \
+	mapalgorithms.$(OBJEXT) viewcalculation.$(OBJEXT) \
+	gamemap.$(OBJEXT) password.$(OBJEXT) password_dialog.$(OBJEXT) \
+	research.$(OBJEXT) mapdisplay.$(OBJEXT) ascstring.$(OBJEXT) \
+	graphicset.$(OBJEXT) vehicle.$(OBJEXT) buildings.$(OBJEXT) \
 	networkinterface.$(OBJEXT) resourcenet.$(OBJEXT) \
 	textfileparser.$(OBJEXT) terraintype.$(OBJEXT) \
 	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
@@ -241,7 +241,7 @@ asc_mapedit_SOURCES = edevents.cpp edgen.cpp edglobal.cpp edmain.cpp \
 edselfnt.cpp edmisc.cpp typen.cpp strtmesg.cpp stack.cpp \
 spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp \
 loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp \
-attack.cpp gameoptions.cpp maped-mainscreen.cpp \
+attack.cpp gameoptions.cpp maped-mainscreen.cpp stdio-errorhandler.cpp\
 buildingtype.cpp vehicletype.cpp containerbase.cpp \
 mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp \
 password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
@@ -399,6 +399,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/soundList.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spfst.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stack.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stdio-errorhandler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stringtokenizer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strtmesg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/terraintype.Po@am__quote@

@@ -34,7 +34,7 @@
 
 #include "ascstring.h"
 #include "sgstream.h"
-#include "spfst.h"
+#include "messages.h"
 
 
 
@@ -45,9 +45,6 @@ extern const char* savegameextension;
 extern const char* mapextension;
 extern const char* tournamentextension;
 
-
-
-extern pguiicon loadguiicon( const char *       name);
 
 
 //! saves the map located in #actmap to the map file name
@@ -68,7 +65,7 @@ extern tmap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadingFu
 extern tmap*  loadreplay( pmemorystreambuf streambuf );
 
 //! writes all replay relevant map information of player num to the replay variable of #actmap
-extern void  savereplay( int num );
+extern void  savereplay( tmap* gamemap, int num );
 
 
 extern void  loadicons(void);
@@ -83,7 +80,6 @@ const int actnetworkversion   = 0x0030;
 const int minnetworkversion   = 0x0004;
 const int actreplayversion    = 0x0003;
 const int minreplayversion    = 0x0001;
-
 
 
 class  tspfldloaders {

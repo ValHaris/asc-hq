@@ -844,14 +844,15 @@ void checkUsedASCVersions ( Player& currentPlayer )
 
 void continuenetworkgame ()
 {
-   ASCString filename = selectFile( ASCString("*") + tournamentextension, true );
+   ASCString filename = selectFile( ASCString("*") + tournamentextension + ";*.asc", true );
    if ( filename.empty() )
       return;
-      
+
+   StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "loading " + filename );
    FileTransfer ft;
    auto_ptr<tmap> newMap ( mapLoadingExceptionChecker( filename, MapLoadingFunction( &ft, &FileTransfer::loadPBEMFile )));
    if ( !newMap.get() )
-      return; 
+      return;
    
    if ( authenticateUser( newMap.get() )) {
       delete actmap;

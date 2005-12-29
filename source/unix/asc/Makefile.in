@@ -59,23 +59,24 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	dialog.$(OBJEXT) controls.$(OBJEXT) basestrm.$(OBJEXT) \
 	basegfx.$(OBJEXT) attack.$(OBJEXT) replaymapdisplay.$(OBJEXT) \
 	gameoptions.$(OBJEXT) astar2.$(OBJEXT) vehicletype.$(OBJEXT) \
-	objects.$(OBJEXT) buildingtype.$(OBJEXT) \
-	containerbase.$(OBJEXT) mapalgorithms.$(OBJEXT) \
-	viewcalculation.$(OBJEXT) gamemap.$(OBJEXT) password.$(OBJEXT) \
-	password_dialog.$(OBJEXT) replay.$(OBJEXT) research.$(OBJEXT) \
-	mapdisplay.$(OBJEXT) resourcenet.$(OBJEXT) dashboard.$(OBJEXT) \
-	ascstring.$(OBJEXT) graphicset.$(OBJEXT) vehicle.$(OBJEXT) \
-	buildings.$(OBJEXT) networkinterface.$(OBJEXT) \
-	textfileparser.$(OBJEXT) terraintype.$(OBJEXT) \
-	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
-	itemrepository.$(OBJEXT) stringtokenizer.$(OBJEXT) \
-	music.$(OBJEXT) messages.$(OBJEXT) paradialog.$(OBJEXT) \
-	textfile_evaluation.$(OBJEXT) containerbasetype.$(OBJEXT) \
-	messagedlg.$(OBJEXT) simplestream.$(OBJEXT) \
-	mappolygons.$(OBJEXT) prehistoricevents.$(OBJEXT) \
-	gameevents.$(OBJEXT) gameeventsystem.$(OBJEXT) \
-	gameevent_dialogs.$(OBJEXT) statisticdialog.$(OBJEXT) \
-	clipboard.$(OBJEXT) geometry.$(OBJEXT) weatherarea.$(OBJEXT) \
+	objects.$(OBJEXT) stdio-errorhandler.$(OBJEXT) \
+	buildingtype.$(OBJEXT) containerbase.$(OBJEXT) \
+	mapalgorithms.$(OBJEXT) viewcalculation.$(OBJEXT) \
+	gamemap.$(OBJEXT) password.$(OBJEXT) password_dialog.$(OBJEXT) \
+	replay.$(OBJEXT) research.$(OBJEXT) mapdisplay.$(OBJEXT) \
+	resourcenet.$(OBJEXT) dashboard.$(OBJEXT) ascstring.$(OBJEXT) \
+	graphicset.$(OBJEXT) vehicle.$(OBJEXT) buildings.$(OBJEXT) \
+	networkinterface.$(OBJEXT) textfileparser.$(OBJEXT) \
+	terraintype.$(OBJEXT) objecttype.$(OBJEXT) \
+	textfiletags.$(OBJEXT) itemrepository.$(OBJEXT) \
+	stringtokenizer.$(OBJEXT) music.$(OBJEXT) messages.$(OBJEXT) \
+	paradialog.$(OBJEXT) textfile_evaluation.$(OBJEXT) \
+	containerbasetype.$(OBJEXT) messagedlg.$(OBJEXT) \
+	simplestream.$(OBJEXT) mappolygons.$(OBJEXT) \
+	prehistoricevents.$(OBJEXT) gameevents.$(OBJEXT) \
+	gameeventsystem.$(OBJEXT) gameevent_dialogs.$(OBJEXT) \
+	statisticdialog.$(OBJEXT) clipboard.$(OBJEXT) \
+	geometry.$(OBJEXT) weatherarea.$(OBJEXT) \
 	guidimension.$(OBJEXT) guiiconhandler.$(OBJEXT) \
 	guifunctions.$(OBJEXT) iconrepository.$(OBJEXT) \
 	gamedialog.$(OBJEXT) infopopup.$(OBJEXT) \
@@ -244,7 +245,7 @@ strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp pd.cpp palette.cpp \
 newfont.cpp network.cpp misc.cpp loadpcxc.cpp loaders.cpp \
 loadbi3.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp \
 basestrm.cpp basegfx.cpp attack.cpp replaymapdisplay.cpp \
-gameoptions.cpp astar2.cpp vehicletype.cpp objects.cpp \
+gameoptions.cpp astar2.cpp vehicletype.cpp objects.cpp stdio-errorhandler.cpp \
 buildingtype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp \
 gamemap.cpp password.cpp password_dialog.cpp replay.cpp research.cpp \
 mapdisplay.cpp resourcenet.cpp dashboard.cpp ascstring.cpp graphicset.cpp \
@@ -410,6 +411,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spfst.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stack.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/statisticdialog.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stdio-errorhandler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stringtokenizer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strtmesg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/terraintype.Po@am__quote@

@@ -93,13 +93,6 @@ extern void  generatemap( TerrainType::Weather* bt,
                           int          xsize,
                           int          ysize);
 
-//! puts a line of objects from x1/y1 to x2/y2, moving round obstacles
-extern void  putstreets2( int          x1,
-                          int          y1,
-                          int          x2,
-                          int          y2,
-                          ObjectType* obj );
-
 
 /*! tests if the vehicle can move onto the field
 
@@ -194,8 +187,6 @@ class tdrawline8 : public tdrawline {
            virtual void putpix ( int x, int y );
            virtual void putpix8 ( int x, int y ) = 0;
        };
-
-extern int  rol ( int valuetorol, int rolwidth );
 
 extern SigC::Signal0<void> repaintMap;
 extern SigC::Signal0<void> repaintDisplay;

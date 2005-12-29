@@ -44,51 +44,51 @@
 
   class tcomputevehicleview : public tcomputeview {
                            public:
-                               tcomputevehicleview ( pmap actmap ) : tcomputeview ( actmap ) {};
+                               tcomputevehicleview ( pmap gamemap ) : tcomputeview ( gamemap ) {};
                                void          init( const Vehicle* eht, int _mode  );   // mode: +1 = add view  ;  -1 = remove view );
                            };
 
   class tcomputebuildingview : public tcomputeview  {
                               const Building*         building;
                            public:
-                              tcomputebuildingview ( pmap actmap ) : tcomputeview ( actmap ) {};
+                              tcomputebuildingview ( pmap gamemap ) : tcomputeview ( gamemap ) {};
                               void              init( const Building*    bld, int _mode );
                            };
 
   /** completely computes the view
-      \param actmap  the map that the view is generated on
+      \param gamemap  the map that the view is generated on
       \param player_fieldcount_mask bitmapped variable containing the players for whom the changed fields are calculated
       \returns the number of fields that have a changed visibility for the given players. If nothing changes, the map must not be displayed again after the view calculation
   */
-  extern int computeview( pmap actmap, int player_fieldcount_mask = 0 );
+  extern int computeview( pmap gamemap, int player_fieldcount_mask = 0 );
 
   /** evaluates the view on a given field.
       The view is NOT calculated. This must be done prior to calling this function !
-      \param actmap the map that contains field
+      \param gamemap the map that contains field
       \param fld    the field to evaluate
       \param player the player that the view is calculated for
       \param add    a bitmapped variable containing the players that share their view with player
       \param initial the initial visibility of the map when starting the game.
   */
-  extern int evaluatevisibilityfield ( pmap actmap, pfield fld, int player, int add, int initial );
+  extern int evaluatevisibilityfield ( pmap gamemap, pfield fld, int player, int add, int initial );
 
   /** evaluates the view on the whole map.
       The view is NOT calculated. This must be done prior to calling this function !
-      \param actmap the map that the view is calculated of
+      \param gamemap the map that the view is calculated of
       \param player_fieldcount_mask determines, which players should be counted when the view has changed
       \returns the number of fields which have a changed visibility status
   */
-  extern int  evaluateviewcalculation ( pmap actmap, int player_fieldcount_mask = 0 );
+  extern int  evaluateviewcalculation ( pmap gamemap, int player_fieldcount_mask = 0 );
 
   /** evaluates the view on a part of the map.
       The view is NOT calculated. This must be done prior to calling this function !
-      \param actmap the map that the view is calculated of
+      \param gamemap the map that the view is calculated of
       \param pos  the central position around which the view is calculated
       \param distance the radius of the circle around pos in which the view is evaluated. The view is calculated in AT LEAST this circle, in reality it is a rectangle containing this circle.
       \param player_fieldcount_mask determines, which players should be counted when the view has changed
       \returns the number of fields which have a changed visibility status
   */
-  extern int  evaluateviewcalculation ( pmap actmap, const MapCoordinate& pos, int distance, int player_fieldcount_mask = 0 );
+  extern int  evaluateviewcalculation ( pmap gamemap, const MapCoordinate& pos, int distance, int player_fieldcount_mask = 0 );
 
   extern SigC::Signal0<void> buildingSeen;
 

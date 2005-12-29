@@ -1214,7 +1214,7 @@ tmap*  tnetworkloaders::loadnwgame( pnstream strm )
 
    
    //NEW SaveData Weather  
-   if(version >= 0x0013){       
+   if(version >= 0x0030){
      if(spfld->weatherSystem != NULL) {
         delete spfld->weatherSystem;
      }
@@ -1361,24 +1361,24 @@ void  loadgame( const ASCString& name )
 
 
 
-void  savereplay( int num )
+void  savereplay( tmap* gamemap, int num )
 {
    try {
-      if ( !actmap->replayinfo )
-         displaymessage ( "treplayloaders :: savereplay   ;   No replay activated !",2);
+      if ( !gamemap->replayinfo )
+         fatalError ( "treplayloaders :: savereplay   ;   No replay activated !");
 
-      if ( actmap->replayinfo->map[num] ) {
-         delete actmap->replayinfo->map[num];
-         actmap->replayinfo->map[num] = NULL;
+      if ( gamemap->replayinfo->map[num] ) {
+         delete gamemap->replayinfo->map[num];
+         gamemap->replayinfo->map[num] = NULL;
       }
 
-      actmap->replayinfo->map[num] = new tmemorystreambuf;
-      tmemorystream memstream ( actmap->replayinfo->map[num], tnstream::writing );
+      gamemap->replayinfo->map[num] = new tmemorystreambuf;
+      tmemorystream memstream ( gamemap->replayinfo->map[num], tnstream::writing );
 
       memstream.writeInt( actreplayversion );
 
       tsavegameloaders sgl;
-      sgl.savegame ( &memstream, actmap, false );
+      sgl.savegame ( &memstream, gamemap, false );
 
       memstream.writeInt ( actreplayversion );
    }
@@ -1439,7 +1439,7 @@ tmap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadingFunction 
 {
    tmap* m = NULL;
    try {
-     m = loader( filename );
+      m = loader( filename );
    }
    catch ( InvalidID err ) {
       displaymessage( err.getMessage().c_str(), 1 );

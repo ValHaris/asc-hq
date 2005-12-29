@@ -31,6 +31,8 @@
 #include "gameeventsystem.h"
 #include "gameevents.h"
 #include "dialog.h"
+#include "buildings.h"
+#include "gamemap.h"
 
 //        .l             .l                !              .l                !               !
  enum { cemessage,   ceweatherchange, cenewtechnology, celosecampaign, cerunscript,     cenewtechnologyresearchable,

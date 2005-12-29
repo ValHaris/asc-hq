@@ -120,26 +120,26 @@ void checkforreplay ( void )
 
 void initReplayLogging( Player& player )
 {
-   tmap* actmap = player.getParentMap();
+   tmap* gamemap = player.getParentMap();
    
    if ( startreplaylate ) {
-      actmap->replayinfo = new tmap::ReplayInfo;
+      gamemap->replayinfo = new tmap::ReplayInfo;
       startreplaylate = 0;
    }
 
-   if ( actmap->replayinfo && player.stat != Player::off ) {
-      if ( actmap->replayinfo->actmemstream )
-         displaymessage2( "actmemstream already open at begin of turn ",2 );
+   if ( gamemap->replayinfo && player.stat != Player::off ) {
+      if ( gamemap->replayinfo->actmemstream )
+         fatalError( "actmemstream already open at begin of turn " );
 
-      if ( actmap->replayinfo->guidata[ player.getPosition() ] ) {
-         delete actmap->replayinfo->guidata[ player.getPosition() ];
-         actmap->replayinfo->guidata[ player.getPosition() ] = NULL;
+      if ( gamemap->replayinfo->guidata[ player.getPosition() ] ) {
+         delete gamemap->replayinfo->guidata[ player.getPosition() ];
+         gamemap->replayinfo->guidata[ player.getPosition() ] = NULL;
       }
 
-      savereplay ( player.getPosition() );
+      savereplay ( gamemap, player.getPosition() );
 
-      actmap->replayinfo->guidata[ player.getPosition() ] = new tmemorystreambuf;
-      actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[ player.getPosition() ], tnstream::writing );
+      gamemap->replayinfo->guidata[ player.getPosition() ] = new tmemorystreambuf;
+      gamemap->replayinfo->actmemstream = new tmemorystream ( gamemap->replayinfo->guidata[ player.getPosition() ], tnstream::writing );
    }
 }
 

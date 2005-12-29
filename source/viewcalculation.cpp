@@ -142,7 +142,7 @@ void         tcomputevehicleview::init( const Vehicle* eht, int _mode  )   // mo
 
    int view = eht->typ->view+1;
    if ( eht->height <= chfahrend)
-      view += actmap->getField ( eht->getPosition() )->viewbonus;
+      view += gamemap->getField ( eht->getPosition() )->viewbonus;
 
 
    tcomputeview::initviewcalculation( view, eht->typ->jamming, eht->xpos, eht->ypos, _mode, eht->height );
@@ -164,7 +164,7 @@ void         tcomputebuildingview::init( const Building*    bld,  int _mode )
    if (bld->getCompletion() == bld->typ->construction_steps - 1) {
       c = bld->typ->view + 1;
       if ( bld->typ->buildingheight <= chfahrend )
-         c += actmap->getField ( bld->getEntry() )->viewbonus;
+         c += gamemap->getField ( bld->getEntry() )->viewbonus;
       j = bld->typ->jamming;
    } else {
       c = 15;
@@ -199,20 +199,20 @@ void         tcomputebuildingview::init( const Building*    bld,  int _mode )
 
 
 
-void         clearvisibility( pmap actmap, int  reset )
+void         clearvisibility( pmap gamemap, int  reset )
 {
-   if (!actmap || (actmap->xsize <= 0) || (actmap->ysize <= 0))
+   if (!gamemap || (gamemap->xsize <= 0) || (gamemap->ysize <= 0))
      return;
 
    for ( int p = 0; p < 8; p++ )
-      for ( Player::VehicleList::iterator i = actmap->player[p].vehicleList.begin(); i != actmap->player[p].vehicleList.end(); i++ )
+      for ( Player::VehicleList::iterator i = gamemap->player[p].vehicleList.begin(); i != gamemap->player[p].vehicleList.end(); i++ )
          if ( (*i)->isViewing())
             (*i)->removeview();
 
    int l = 0;
-   for ( int x = 0; x < actmap->xsize ; x++)
-         for ( int y = 0; y < actmap->ysize ; y++) {
-            pfield fld = &actmap->field[l];
+   for ( int x = 0; x < gamemap->xsize ; x++)
+         for ( int y = 0; y < gamemap->ysize ; y++) {
+            pfield fld = &gamemap->field[l];
             memset ( fld->view, 0, sizeof ( fld->view ));
             l++;
          }
@@ -220,7 +220,7 @@ void         clearvisibility( pmap actmap, int  reset )
 
 }
 
-int  evaluatevisibilityfield ( pmap actmap, pfield fld, int player, int add, int initial )
+int  evaluatevisibilityfield ( pmap gamemap, pfield fld, int player, int add, int initial )
 {
    int originalVisibility;
    if ( initial == 2 ) {
@@ -236,7 +236,7 @@ int  evaluatevisibilityfield ( pmap actmap, pfield fld, int player, int add, int
       add = 0;
       for ( int i = 0; i < 8; i++ )
          if ( i != player )
-            if ( actmap->player[i].diplomacy.sharesView( player) )
+            if ( gamemap->player[i].diplomacy.sharesView( player) )
                add |= 1 << i;
    }
    add |= 1 << player;
@@ -277,30 +277,30 @@ int  evaluatevisibilityfield ( pmap actmap, pfield fld, int player, int add, int
 }
 
 
-int  evaluateviewcalculation ( pmap actmap, int player_fieldcount_mask )
+int  evaluateviewcalculation ( pmap gamemap, int player_fieldcount_mask )
 {
-   int initial = actmap->getgameparameter ( cgp_initialMapVisibility );
+   int initial = gamemap->getgameparameter ( cgp_initialMapVisibility );
    int fieldsChanged = 0;
    for ( int player = 0; player < 8; player++ )
-      if ( actmap->player[player].exist() ) {
+      if ( gamemap->player[player].exist() ) {
          int add = 0;
          for ( int i = 0; i < 8; i++ )
-            if ( actmap->player[i].exist() && i != player )
-               if ( actmap->player[i].diplomacy.sharesView( player) )
+            if ( gamemap->player[i].exist() && i != player )
+               if ( gamemap->player[i].diplomacy.sharesView( player) )
                   add |= 1 << i;
 
-         int nm = actmap->xsize * actmap->ysize;
+         int nm = gamemap->xsize * gamemap->ysize;
          if ( player_fieldcount_mask & (1 << player ))
             for ( int i = 0; i < nm; i++ )
-                fieldsChanged += evaluatevisibilityfield ( actmap, &actmap->field[i], player, add, initial );
+                fieldsChanged += evaluatevisibilityfield ( gamemap, &gamemap->field[i], player, add, initial );
          else
             for ( int i = 0; i < nm; i++ )
-                evaluatevisibilityfield ( actmap, &actmap->field[i], player, add, initial );
+                evaluatevisibilityfield ( gamemap, &gamemap->field[i], player, add, initial );
       }
    return fieldsChanged;
 }
 
-int  evaluateviewcalculation ( pmap actmap, const MapCoordinate& pos, int distance, int player_fieldcount_mask )
+int  evaluateviewcalculation ( pmap gamemap, const MapCoordinate& pos, int distance, int player_fieldcount_mask )
 {
    distance = (distance+maxmalq-1)/maxmalq;
    int x1 = pos.x - distance;
@@ -312,30 +312,30 @@ int  evaluateviewcalculation ( pmap actmap, const MapCoordinate& pos, int distan
       y1 = 0;
 
    int x2 = pos.x + distance;
-   if ( x2 >= actmap->xsize )
-      x2 = actmap->xsize-1;
+   if ( x2 >= gamemap->xsize )
+      x2 = gamemap->xsize-1;
 
    int y2 = pos.y + distance*2;
-   if ( y2 >= actmap->ysize )
-      y2 = actmap->ysize-1;
+   if ( y2 >= gamemap->ysize )
+      y2 = gamemap->ysize-1;
 
-   int initial = actmap->getgameparameter ( cgp_initialMapVisibility );
+   int initial = gamemap->getgameparameter ( cgp_initialMapVisibility );
    int fieldsChanged = 0;
    for ( int player = 0; player < 8; player++ )
-      if ( actmap->player[player].exist() ) {
+      if ( gamemap->player[player].exist() ) {
          int add = 0;
          for ( int i = 0; i < 8; i++ )
-            if ( actmap->player[i].exist() && i != player )
-               if ( actmap->player[i].diplomacy.sharesView( player) )
+            if ( gamemap->player[i].exist() && i != player )
+               if ( gamemap->player[i].diplomacy.sharesView( player) )
                   add |= 1 << i;
 
          for ( int yy = y1; yy <= y2; yy++ )
             for ( int xx = x1; xx <= x2; xx++ ) {
-               pfield fld = actmap->getField ( xx, yy );
+               pfield fld = gamemap->getField ( xx, yy );
                if ( player_fieldcount_mask & (1 << player ))
-                  fieldsChanged += evaluatevisibilityfield ( actmap, fld, player, add, initial );
+                  fieldsChanged += evaluatevisibilityfield ( gamemap, fld, player, add, initial );
                else
-                  evaluatevisibilityfield ( actmap, fld, player, add, initial );
+                  evaluatevisibilityfield ( gamemap, fld, player, add, initial );
             }
       }
    return fieldsChanged;
@@ -343,28 +343,28 @@ int  evaluateviewcalculation ( pmap actmap, const MapCoordinate& pos, int distan
 
 
 
-int computeview( pmap actmap, int player_fieldcount_mask )
+int computeview( pmap gamemap, int player_fieldcount_mask )
 {
-   if ((actmap->xsize == 0) || (actmap->ysize == 0))
+   if ((gamemap->xsize == 0) || (gamemap->ysize == 0))
       return 0;
 
-   clearvisibility( actmap, 1 );
+   clearvisibility( gamemap, 1 );
 
    for ( int a = 0; a < 8; a++)
-      if (actmap->player[a].exist() ) {
+      if (gamemap->player[a].exist() ) {
 
-         for ( Player::VehicleList::iterator i = actmap->player[a].vehicleList.begin(); i != actmap->player[a].vehicleList.end(); i++ ) {
+         for ( Player::VehicleList::iterator i = gamemap->player[a].vehicleList.begin(); i != gamemap->player[a].vehicleList.end(); i++ ) {
             Vehicle* actvehicle = *i;
-            if ( actvehicle == actmap->getField(actvehicle->xpos,actvehicle->ypos)->vehicle)
+            if ( actvehicle == gamemap->getField(actvehicle->xpos,actvehicle->ypos)->vehicle)
                actvehicle->addview();
          }
 
-         for ( Player::BuildingList::iterator i = actmap->player[a].buildingList.begin(); i != actmap->player[a].buildingList.end(); i++ )
+         for ( Player::BuildingList::iterator i = gamemap->player[a].buildingList.begin(); i != gamemap->player[a].buildingList.end(); i++ )
             (*i)->addview();
       }
 
 
-   return evaluateviewcalculation ( actmap, player_fieldcount_mask );
+   return evaluateviewcalculation ( gamemap, player_fieldcount_mask );
 }
 
 

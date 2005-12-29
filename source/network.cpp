@@ -92,7 +92,7 @@ void FileTransfer::send( const tmap* map, int lastPlayer, int lastturn )
          msg += " (" + map->player[map->actplayer].email + ")";
       infoMessage( msg );
    } catch ( tfileerror ) {
-      fatalError ( "error writing file %s ", filename.c_str() );
+      errorMessage ( "error writing file " + filename );
    }
 }
 
@@ -110,7 +110,8 @@ tmap* FileTransfer::loadPBEMFile( const ASCString& filename )
       tnetworkloaders nwl;
       map = nwl.loadnwgame( &gamefile );
    } catch ( tfileerror ) {
-      fatalError ( "%s is not a legal email game.", filename.c_str() );
+      errorMessage ( filename + " is not a legal email game" );
+      return NULL;
    }
    return map;
 }

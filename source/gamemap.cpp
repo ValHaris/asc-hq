@@ -812,7 +812,7 @@ MapCoordinate& tmap::getCursor()
       }
       return player[actplayer].cursorPos;
    } else
-      return player[actplayer].cursorPos;
+      return player[0].cursorPos;
 #else
    return player[8].cursorPos;
    #endif

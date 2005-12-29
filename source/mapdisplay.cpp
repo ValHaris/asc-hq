@@ -589,21 +589,21 @@ class TargetPixelSelector_Rect {
      protected:
         int skipTarget( int x, int y ) 
         { 
-           x += pos.x;
-           y += pos.y;
-           if ( x >= rect.x && y >= rect.y && x < x2 && y < y2 )
+           int nx = x + pos.x;
+           int ny = y + pos.y;
+           if ( nx >= rect.x && ny >= rect.y && nx < x2 && ny < y2 )
               return 0; 
            else {
-              if ( y < rect.y )
+              if ( ny < rect.y )
                  return xrange - x;
               else
-                 if ( x < rect.x )
-                    return rect.x - x;
+                 if ( nx < rect.x )
+                    return rect.x - nx;
                  else   
-                    if (y >= y2 )
+                    if (ny >= y2 )
                        return -1;
                     else
-                       if ( x >= x2 )
+                       if ( nx >= x2 )
                           return xrange - x;
                        else
                           return 1;     
@@ -646,9 +646,8 @@ void MapDisplayPG::blitInternalSurface( SDL_Surface* dest, const SPoint& pnt, co
       blitter.setSrcRectangle( upperLeftSourceBlitCorner, int(float(Width()) / fzoom), int(float(Height()) / fzoom));
 
       PG_Rect clip= dstClip.IntersectRect( dest->clip_rect );
-      
-      // blitter.setClippingRect( dest );
       blitter.setTargetRect( clip );
+      
       Surface s = Surface::Wrap( dest );
       blitter.blit( *surface, s, SPoint(pnt.x, pnt.y ));
    } else {
@@ -658,7 +657,9 @@ void MapDisplayPG::blitInternalSurface( SDL_Surface* dest, const SPoint& pnt, co
       // SourcePixelSelector
       blitter.setSrcRectangle( upperLeftSourceBlitCorner, Width(), Height() );
       
-      blitter.setClippingRect( dest );
+      PG_Rect clip= dstClip.IntersectRect( dest->clip_rect );
+      blitter.setTargetRect( clip );
+      
       Surface s = Surface::Wrap( dest );
       blitter.blit( *surface, s, SPoint(pnt.x, pnt.y ));
    }   
@@ -701,8 +702,8 @@ void MapDisplayPG::UpdateRect( const PG_Rect& rect )
    PG_Rect sc ( p.x, p.y, rect.w, rect.h );
    sc = sc.IntersectRect( *this );
    eventBlit( GetWidgetSurface (), rect, sc );
-   SDL_UpdateRect(PG_Application::GetScreen(), sc.x, sc.y, sc.w, sc.h );
-   
+   if ( sc.w && sc.h )
+      SDL_UpdateRect(PG_Application::GetScreen(), sc.x, sc.y, sc.w, sc.h );
 }
 
 

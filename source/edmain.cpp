@@ -2,7 +2,7 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.67.2.19 2005-12-11 14:42:38 mbickel Exp $
+//     $Id: edmain.cpp,v 1.67.2.20 2005-12-29 12:33:27 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -27,7 +27,7 @@
 #include <algorithm>
 #include <memory>
 #include <SDL_image.h>
-
+#include <signal.h>
 
 #include "edmisc.h"
 #include "loadbi3.h"
@@ -43,12 +43,9 @@
 #include "soundList.h"
 #include "maped-mainscreen.h"
 #include "cannedmessages.h"
+#include "stdio-errorhandler.h"
 
-#ifdef _DOS_
- #include "dos\memory.h"
-#endif
-
-// #define backgroundpict1 "BKGR2.PCX"  
+// #define backgroundpict1 "BKGR2.PCX"
 #define menutime 35
 
 
@@ -317,7 +314,8 @@ void setSaveNotification()
 
 int main(int argc, char *argv[] )
 { 
-
+   StdIoErrorHandler stdIoErrorHandler;
+   
    Cmdline* cl = NULL;
    auto_ptr<Cmdline> apcl ( cl );
    try {
@@ -347,6 +345,8 @@ int main(int argc, char *argv[] )
    #endif
 
    initFileIO( cl->c() );
+
+   signal ( SIGINT, SIG_IGN );
 
    fullscreen = !CGameOptions::Instance()->mapeditWindowedMode;
    if ( cl->f() )

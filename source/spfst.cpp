@@ -70,21 +70,9 @@ void displaymap()
 }   
 
   
-   tmap*    actmap;
+   tmap*    actmap = NULL;
 
    Schriften schriften;
-
-
-int  rol ( int valuetorol, int rolwidth )
-{
-   int newvalue = valuetorol << rolwidth;
-   newvalue |= valuetorol >> ( 32 - rolwidth );
-   return newvalue;
-}
-
-
-
-
 
 
 
@@ -437,56 +425,6 @@ void         putbuilding2( const MapCoordinate& entryPosition,
 
 
 
-
-void     putstreets2  ( int      x1,
-                        int      y1,
-                        int      x2,
-                        int      y2,
-                        ObjectType* obj )
-{
-
-   int x = x1;
-   int y = y1;
-
-   pfield fld = getfield( x1, y1 );
-
-
-   if ( !obj->buildable ( getfield(x2,y2)))
-      return;
-
-   if ( !obj->buildable ( fld ))
-      return;
-   
-   getfield ( x1, y1 ) -> addobject ( obj );
-
-   while ((x != x2) || (y != y2)) {
-      int orgdir = getdirection ( x, y, x2, y2 );
-      int dir = orgdir;
-      int t = 0;
-      int a, b;
-      do {
-
-         a = x;
-         b = y;
-         getnextfield ( a, b, dir );
-
-         static int obstacle[8] = { -1, 1, -2, 2, -3, 3, -4, 4 };
-
-         dir = orgdir + obstacle[t++];
-
-      } while ( !obj->buildable ( getfield( a, b )) && (t < sidenum)  );
-
-      if ( obj->buildable ( getfield( a, b ))) {
-         getfield ( a, b ) -> addobject ( obj );
-         x = a;
-         y = b;
-      } else 
-         getnextfield ( x, y, orgdir );
-
-   }
-
-   calculateallobjects();
-}
 
 
 
