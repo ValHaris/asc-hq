@@ -18,6 +18,7 @@
 #include <pgimage.h>
 #include <pgtooltiphelp.h>
 #include "cargodialog.h"
+#include "cargowidget.h"
 #include "vehicletypeselector.h"
 
 #include "../containerbase.h"
@@ -40,109 +41,9 @@
 
 #include "selectionwindow.h"
 
-class HighLightingManager
-{
-      int marked;
-   public:
-      HighLightingManager() : marked(-1)
-      {}
-      ;
-      int getMark()
-      {
-         return marked;
-      };
-      SigC::Signal2<void,int,int> markChanged;
-      void setNew(int pos )
-      {
-         int old = marked;
-         marked = pos;
-         markChanged(old,pos);
-      };
-
-      SigC::Signal0<void> redrawAll;
-};
+// #include "cargowidget.cpp"
 
 const Vehicletype* selectVehicletype( ContainerBase* plant, const vector<Vehicletype*>& items );
-
-
-typedef vector<Vehicle*> StorageVector;
-
-class StoringPosition : public PG_Widget
-{
-      static Surface clippingSurface;
-      HighLightingManager& highlight;
-      StorageVector& storage;
-      int num;
-      bool regular;
-   protected:
-      void markChanged(int old, int mark)
-      {
-         if ( num == old || num == mark )
-            Update();
-      }
-
-      bool eventMouseButtonDown (const SDL_MouseButtonEvent *button)
-      {
-         if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == SDL_BUTTON_LEFT ) {
-            highlight.setNew( num );
-            return true;
-         }
-         return false;
-      }
-
-   public:
-
-      static const int spWidth = 64;
-      static const int spHeight = 64;
-
-      StoringPosition( PG_Widget *parent, const PG_Point &pos, HighLightingManager& highLightingManager, StorageVector& storageVector, int number, bool regularPosition  )
-            : PG_Widget ( parent, PG_Rect( pos.x, pos.y, spWidth, spHeight)), highlight( highLightingManager ), storage( storageVector), num(number), regular(regularPosition)
-      {
-         if ( !clippingSurface.valid() )
-            clippingSurface = Surface::createSurface( spWidth + 10, spHeight + 10, 32, 0 );
-
-         highlight.markChanged.connect( SigC::slot( *this, &StoringPosition::markChanged ));
-         highlight.redrawAll.connect( SigC::bind( SigC::slot( *this, &StoringPosition::Update), true));
-      }
-
-
-
-
-      void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst)
-      {
-         clippingSurface.Fill(0);
-
-         ASCString background = "hexfield-bld-";
-         background += regular ? "1" : "2";
-         if (  num == highlight.getMark() )
-            background += "h";
-         background += ".png";
-
-         Surface& icon = IconRepository::getIcon( background );
-
-         MegaBlitter<4,4,ColorTransform_None, ColorMerger_AlphaOverwrite> blitter;
-         blitter.blit( icon, clippingSurface, SPoint(0,0));
-
-         if ( num < storage.size() && storage[num] ) {
-            int ypos;
-            if ( num == highlight.getMark() )
-               ypos = 0;
-            else
-               ypos = 1;
-
-            if( storage[num]->getMovement() > 0  )
-               storage[num]->typ->paint( clippingSurface, SPoint(0,ypos), storage[num]->getOwner() );
-            else
-               storage[num]->typ->paint( clippingSurface, SPoint(0,ypos), storage[num]->getMap()->getNeutralPlayerNum() );
-         }
-
-         PG_Draw::BlitSurface( clippingSurface.getBaseSurface(), src, PG_Application::GetScreen(), dst);
-      }
-};
-
-Surface StoringPosition::clippingSurface;
-
-
 
 
 
@@ -272,53 +173,18 @@ class CargoDialog : public Panel
       
       ContainerBase* container;
       bool setupOK;
-      int unitColumnCount;
       Surface infoImage;
 
       SigC::Signal0<void>  sigCargoChanged;
-      
-      vector<StoringPosition*> storingPositionVector;
-
-      HighLightingManager unitHighLight;
 
       deallocating_vector<SubWindow*> subwindows;
 
-      StorageVector& loadedUnits;
-
-      void moveSelection( int delta )
-      {
-         int newpos = unitHighLight.getMark() + delta;
-
-         if ( newpos < 0 )
-            newpos = 0;
-
-         if ( newpos >= storingPositionVector.size() )
-            newpos = storingPositionVector.size() -1 ;
-
-         if ( newpos != unitHighLight.getMark() )
-            unitHighLight.setNew( newpos );
-      }
+      CargoWidget* cargoWidget;
 
       bool eventKeyDown(const SDL_KeyboardEvent* key)
       {
          if ( key->keysym.sym == SDLK_ESCAPE ) {
             QuitModal();
-            return true;
-         }
-         if ( key->keysym.sym == SDLK_RIGHT )  {
-            moveSelection(1);
-            return true;
-         }
-         if ( key->keysym.sym == SDLK_LEFT )  {
-            moveSelection(-1);
-            return true;
-         }
-         if ( key->keysym.sym == SDLK_UP )  {
-            moveSelection(-unitColumnCount);
-            return true;
-         }
-         if ( key->keysym.sym == SDLK_DOWN )  {
-            moveSelection(unitColumnCount);
             return true;
          }
          return false;
@@ -389,32 +255,6 @@ class CargoDialog : public Panel
       }
 
 
-
-      void checkStoringPosition( int oldpos, int newpos )
-      {
-         PG_ScrollWidget* unitScrollArea = dynamic_cast<PG_ScrollWidget*>(FindChild( "UnitScrollArea", true ));
-         if ( unitScrollArea )
-            if ( newpos < storingPositionVector.size() && newpos >= 0 )
-               unitScrollArea->ScrollToWidget( storingPositionVector[newpos] );
-
-         if ( mainScreenWidget&& mainScreenWidget->getGuiHost() ) {
-            mainScreenWidget->getGuiHost()->eval( container->getPosition(), getMarkedUnit() );
-         }
-         
-         if ( mainScreenWidget && mainScreenWidget->getUnitInfoPanel() )
-            mainScreenWidget->getUnitInfoPanel()->showUnitData( getMarkedUnit(), NULL, true );
-
-      }
-
-      Vehicle* getMarkedUnit()
-      {
-         int pos = unitHighLight.getMark();
-         if ( pos < 0 || pos >= loadedUnits.size() )
-            return NULL;
-         else
-            return loadedUnits[pos];
-      }
-
       void registerGuiFunctions( GuiIconHandler& handler )
       {
          registerCargoGuiFunctions( handler );
@@ -424,12 +264,23 @@ class CargoDialog : public Panel
          handler.registerUserFunction( new CargoGuiFunctions::UnitTraining( *this ));
       }
 
+      void checkStoringPosition( Vehicle* unit )
+      {
+         if ( mainScreenWidget&& mainScreenWidget->getGuiHost() ) {
+            mainScreenWidget->getGuiHost()->eval( container->getPosition(), unit );
+         }
+         
+         if ( mainScreenWidget && mainScreenWidget->getUnitInfoPanel() )
+            mainScreenWidget->getUnitInfoPanel()->showUnitData( unit, NULL, true );
+      }
+
+      
       
    public:
 
 
       CargoDialog (PG_Widget *parent, ContainerBase* cb )
-         : Panel( parent, PG_Rect::null, "cargodialog", false ), containerControls( cb ), container(cb), setupOK(false), unitColumnCount(0), loadedUnits ( cb->cargo )
+   : Panel( parent, PG_Rect::null, "cargodialog", false ), containerControls( cb ), container(cb), setupOK(false), cargoWidget(NULL)
       {
          sigClose.connect( SigC::slot( *this, &CargoDialog::QuitModal ));
 
@@ -452,35 +303,12 @@ class CargoDialog : public Panel
             return;
          }
 
-
-         
-         unitHighLight.markChanged.connect( SigC::slot( *this, &CargoDialog::checkStoringPosition ));
-
-         /*
-         for ( int i = 0; i< 32; ++i )
-            if ( cb->loading[i] )
-               loadedUnits.push_back (  cb->loading[i] );
-               */
-
          PG_Widget* unitScrollArea = FindChild( "UnitScrollArea", true );
          if ( unitScrollArea ) {
-            int x = 0;
-            int y = 0;
-            int posNum = cb->baseType->maxLoadableUnits;
-            if ( loadedUnits.size() > posNum )
-               posNum = loadedUnits.size();
-
-            for ( int i = 0; i < posNum; ++i ) {
-               storingPositionVector.push_back( new StoringPosition( unitScrollArea, PG_Point( x, y), unitHighLight, loadedUnits, i, cb->baseType->maxLoadableUnits >= loadedUnits.size() ));
-               x += StoringPosition::spWidth;
-               if ( x + StoringPosition::spWidth >= unitScrollArea->Width() - 20 ) {
-                  if ( !unitColumnCount )
-                     unitColumnCount = i + 1;
-                  x = 0;
-                  y += StoringPosition::spHeight;
-               }
-            }
+            cargoWidget = new CargoWidget( unitScrollArea, PG_Rect( 1, 1, unitScrollArea->Width() -2 , unitScrollArea->Height() -2 ), cb );
+            cargoWidget->unitMarked.connect( SigC::slot( *this, &CargoDialog::checkStoringPosition ));
          }
+               
 
          if ( !cb->baseType->infoImageFilename.empty() && exist( cb->baseType->infoImageFilename )) {
             PG_Image* img = dynamic_cast<PG_Image*>(FindChild( "container_3dpic", true ));
@@ -518,12 +346,14 @@ class CargoDialog : public Panel
       void cargoChanged()
       {
          //unitHighLight.setNew( unitHighLight.getMark() );
-         unitHighLight.redrawAll();
+         if ( cargoWidget ) {
+            cargoWidget->redrawAll();
+            if ( mainScreenWidget && mainScreenWidget->getUnitInfoPanel() )
+               mainScreenWidget->getUnitInfoPanel()->showUnitData( cargoWidget->getMarkedUnit(), NULL, true );
+         }
          sigCargoChanged();
          updateResourceDisplay();
          showAmmo();
-         if ( mainScreenWidget && mainScreenWidget->getUnitInfoPanel() )
-            mainScreenWidget->getUnitInfoPanel()->showUnitData( getMarkedUnit(), NULL, true );
       }
       
       int RunModal()

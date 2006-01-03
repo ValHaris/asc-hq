@@ -45,6 +45,8 @@
 #include "textfile_evaluation.h"
 #include "textfiletags.h"
 #include "clipboard.h"
+#include "dialogs/cargowidget.h"
+
 
    tkey         ch;
    pfield               pf2;
@@ -2739,7 +2741,7 @@ void tvehiclecargo :: displaysingleitem ( int pos, int x, int y )
 
 void tvehiclecargo :: additem  ( void )
 {
-   selcargo ( transport );
+ //  selcargo ( transport );
 }
 
 void tvehiclecargo :: removeitem ( int pos )
@@ -2757,7 +2759,7 @@ void tvehiclecargo :: checkforadditionalkeys ( tkey ch )
        if ( ch == ct_p )
           changeunitvalues( transport->cargo[ cursorpos ] );
        if ( ch == ct_c )
-          unit_cargo( transport->cargo[ cursorpos ] );
+          cargoEditor( transport->cargo[ cursorpos ] );
 
        if ( ch == ct_c + ct_stp )
           if ( transport->cargo[ cursorpos ] ) {
@@ -2783,15 +2785,6 @@ void tvehiclecargo :: finish ( int cancel )
 }
 
 
-void         unit_cargo( Vehicle* vh )
-{
-   if ( vh && vh->typ->maxLoadableUnits ) {
-      tvehiclecargo laderaum ( vh );
-      laderaum.init();
-      laderaum.run();
-      laderaum.done();
-   }
-}
 
 #if 0
 

@@ -48,14 +48,18 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libdialogs_la_DEPENDENCIES =
-am_libdialogs_la_OBJECTS = editmapparam.lo selectionwindow.lo \
-	fileselector.lo playersetup.lo alliancesetup.lo newgame.lo \
-	soundsettings.lo emailsetup.lo unitinfodialog.lo
+am_libdialogs_la_OBJECTS = editmapparam.lo cargowidget.lo \
+	selectionwindow.lo fileselector.lo playersetup.lo \
+	alliancesetup.lo newgame.lo soundsettings.lo emailsetup.lo \
+	unitinfodialog.lo
 libdialogs_la_OBJECTS = $(am_libdialogs_la_OBJECTS)
 libgamedialogs_la_DEPENDENCIES =
 am_libgamedialogs_la_OBJECTS = cargodialog.lo vehicletypeselector.lo \
-	unitcounting.lo
+	unitcounting.lo cargowidget.lo
 libgamedialogs_la_OBJECTS = $(am_libgamedialogs_la_OBJECTS)
+libmapeddialogs_la_DEPENDENCIES =
+am_libmapeddialogs_la_OBJECTS = cargoeditor.lo cargowidget.lo
+libmapeddialogs_la_OBJECTS = $(am_libmapeddialogs_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -67,8 +71,10 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(libdialogs_la_SOURCES) $(libgamedialogs_la_SOURCES)
-DIST_SOURCES = $(libdialogs_la_SOURCES) $(libgamedialogs_la_SOURCES)
+SOURCES = $(libdialogs_la_SOURCES) $(libgamedialogs_la_SOURCES) \
+	$(libmapeddialogs_la_SOURCES)
+DIST_SOURCES = $(libdialogs_la_SOURCES) $(libgamedialogs_la_SOURCES) \
+	$(libmapeddialogs_la_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -193,11 +199,13 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = $(SDL_CFLAGS) $(PARAGUI_CFLAGS)  $(SIGC_CFLAGS) -Dmaindialogs
-noinst_LTLIBRARIES = libdialogs.la libgamedialogs.la
-libdialogs_la_SOURCES = editmapparam.cpp selectionwindow.cpp fileselector.cpp playersetup.cpp alliancesetup.cpp newgame.cpp soundsettings.cpp emailsetup.cpp unitinfodialog.cpp 
+noinst_LTLIBRARIES = libdialogs.la libgamedialogs.la libmapeddialogs.la
+libdialogs_la_SOURCES = editmapparam.cpp cargowidget.cpp selectionwindow.cpp fileselector.cpp playersetup.cpp alliancesetup.cpp newgame.cpp soundsettings.cpp emailsetup.cpp unitinfodialog.cpp
 libdialogs_la_LIBADD = @SDL_LIBS@ 
-libgamedialogs_la_SOURCES = cargodialog.cpp vehicletypeselector.cpp unitcounting.cpp
+libgamedialogs_la_SOURCES = cargodialog.cpp vehicletypeselector.cpp unitcounting.cpp cargowidget.cpp
 libgamedialogs_la_LIBADD = @SDL_LIBS@ 
+libmapeddialogs_la_SOURCES = cargoeditor.cpp cargowidget.cpp
+libmapeddialogs_la_LIBADD = @SDL_LIBS@
 all: all-am
 
 .SUFFIXES:
@@ -244,6 +252,8 @@ libdialogs.la: $(libdialogs_la_OBJECTS) $(libdialogs_la_DEPENDENCIES)
 	$(CXXLINK)  $(libdialogs_la_LDFLAGS) $(libdialogs_la_OBJECTS) $(libdialogs_la_LIBADD) $(LIBS)
 libgamedialogs.la: $(libgamedialogs_la_OBJECTS) $(libgamedialogs_la_DEPENDENCIES) 
 	$(CXXLINK)  $(libgamedialogs_la_LDFLAGS) $(libgamedialogs_la_OBJECTS) $(libgamedialogs_la_LIBADD) $(LIBS)
+libmapeddialogs.la: $(libmapeddialogs_la_OBJECTS) $(libmapeddialogs_la_DEPENDENCIES) 
+	$(CXXLINK)  $(libmapeddialogs_la_LDFLAGS) $(libmapeddialogs_la_OBJECTS) $(libmapeddialogs_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -253,6 +263,8 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/alliancesetup.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cargodialog.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cargoeditor.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cargowidget.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/editmapparam.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/emailsetup.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fileselector.Plo@am__quote@

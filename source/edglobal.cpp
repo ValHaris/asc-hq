@@ -426,14 +426,6 @@ void execaction(int code)
        break;
     case act_createresources2 : resourcePlacementDialog();
        break;
-    case act_changecargo :   {
-                 if ( getactfield()->building )                    
-                    building_cargo( getactfield()->building );
-                 else 
-                    if ( getactfield()->vehicle )
-                       unit_cargo( getactfield()->vehicle );
-              }
-       break;
     case act_events :   event();
        break;
        /*
@@ -801,6 +793,11 @@ void execaction_pg(int code)
                 getPGApplication().Quit();
              }
        }
+       break;
+       case act_changecargo :
+          if ( getactfield()->getContainer() )
+             cargoEditor( getactfield()->getContainer() );
+       
        break;
    };
 }

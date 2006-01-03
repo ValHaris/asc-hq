@@ -283,12 +283,15 @@ class CargoItemFactory: public MapItemTypeWidgetFactory<MapItemTypeWidget< Vehic
    protected:
       bool isFiltered( const ItemType& item ) {
          if ( Parent::isFiltered( item ))
-            return false;
+            return true;
       
-         bool result = false;
+         if ( !container->baseType->vehicleFit( &item ))
+            return true;
+              
+         bool result = true;
          Vehicle* unit = new Vehicle ( &item, actmap, container->getOwner() );
          if ( container->vehicleFit ( unit ))
-            result = true;
+            result = false;
          delete unit;
          return result;
       };
@@ -330,9 +333,9 @@ class CargoItemFactory: public MapItemTypeWidgetFactory<MapItemTypeWidget< Vehic
 };
 
 
-void selcargo( PG_Window* parentWindow, ContainerBase* container )
+void addCargo( ContainerBase* container )
 {
-   ItemSelectorWindow isw( parentWindow, PG_Rect( 100, 100, 280, 600), "cargo", new CargoItemFactory( container ) );
+   ItemSelectorWindow isw( NULL, PG_Rect( 100, 100, 280, 600), "cargo", new CargoItemFactory( container ) );
    isw.Show();
    isw.RunModal();
 }
@@ -1609,8 +1612,8 @@ void selbuildingproduction( Building* bld )
    if ( newcargo )
       bld->unitProduction.push_back( newcargo );
 }
-
-void selcargo( ContainerBase* container )
+/*
+void addCargo( ContainerBase* container )
 {
    SelectVehicleTypeForContainerCargo svtftc ( container );
    svtftc.init( vehicleTypeRepository.getVector() );
@@ -1640,4 +1643,6 @@ void selcargo( ContainerBase* container )
    }
 }
 
+
+*/
 
