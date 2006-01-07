@@ -135,7 +135,7 @@ int Vehicletype::maxsize ( void ) const
 }
 
 
-const int vehicle_version = 23;
+const int vehicle_version = 24;
 
 
 
@@ -519,6 +519,20 @@ void Vehicletype :: read ( tnstream& stream )
 
    if ( version >= 22 )
       readClassContainer( guideSortHelp, stream );
+
+   if ( version >= 24 ) {
+      efficiencyfuel = stream.readInt( );
+      efficiencymaterial = stream.readInt( );
+      asc_mode_tank.read( stream );
+      bi_mode_tank.read( stream );
+
+
+      maxresearchpoints = stream.readInt();
+      defaultMaxResearchpoints = stream.readInt();
+      nominalresearchpoints = stream.readInt();
+      maxplus.read( stream );
+      defaultProduction.read( stream );
+   }
 }
 
 
@@ -675,6 +689,19 @@ void Vehicletype:: write ( tnstream& stream ) const
    stream.writeString( movementSoundLabel );
    stream.writeString( killSoundLabel );
    writeClassContainer( guideSortHelp, stream );
+
+   stream.writeInt( efficiencyfuel );
+   stream.writeInt( efficiencymaterial );
+
+   asc_mode_tank.write( stream );
+   bi_mode_tank.write( stream );
+
+   stream.writeInt( maxresearchpoints );
+   stream.writeInt( defaultMaxResearchpoints );
+   stream.writeInt( nominalresearchpoints );
+   maxplus.write ( stream );
+   defaultProduction.write( stream );
+   
 }
 
 

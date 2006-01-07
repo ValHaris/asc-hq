@@ -143,9 +143,75 @@ class ContainerBase {
 
       static int calcShadowDist( int binaryHeight );
 
+
+    //! the current amount of research that the building conducts every turn
+      int         researchpoints;
+
+      int         maxresearchpoints;
+      
+    //! the Resources that are produced each turn
+      Resources   plus;
+
+    //! the maximum amount of Resources that the building can produce each turn in the ASC resource mode ; see also #bi_resourceplus
+      Resources   maxplus;
+
+    //! the maximum amount of Resources that the building can produce each turn in the BI resource mode ; see also #maxplus
+      Resources    bi_resourceplus;
+
+      
+
+    //! hook that is called when a player ends his turn
+      virtual void endOwnTurn( void );
+
+    //! hook that is called when any player (including owner) ends turn
+      virtual void endAnyTurn( void );
+
+    //! hook that is called the next round begins ( active player switching from player8 to player1 )
+      virtual void endRound ( void );
+      
+
+    //! returns the resource that the building consumes for its operation.
+      Resources getResourceUsage ( );
+
+      Resources getResourcePlus ( );
+      
+      //! returns the local storage capacity for the given resource, which depends on the resource mode of the map. \see tmap::_resourcemode
+      Resources getStorageCapacity() const;
+      
+    //! returns the amount of resources that the net which the building is connected to produces each turn
+      Resources netResourcePlus( ) const;
+      
+      class Work {
+         public:
+            virtual bool finished() = 0;
+            virtual bool run() = 0;
+            virtual Resources getPlus() = 0;
+            virtual Resources getUsage() = 0;
+            virtual ~Work() {};
+      };
+
+      class WorkClassFactory {
+         public:
+            virtual bool available( const ContainerBase* cnt ) = 0;
+            virtual Work* produce( ContainerBase* cnt, bool queryOnly ) = 0;
+            virtual ~WorkClassFactory() {};
+      };
+
+      static bool registerWorkClassFactory( WorkClassFactory* wcf, bool ASCmode = true );
+   private:
+      typedef list<WorkClassFactory*> WorkerClassList;
+      static WorkerClassList* workClassFactoriesASC;
+      static WorkerClassList* workClassFactoriesBI;
+   public:
+      
+      Work* spawnWorkClasses( bool justQuery );
+
+      
       virtual MapCoordinate3D getPosition ( ) const = 0;
       bool searchAndRemove( Vehicle* veh );
       virtual ~ContainerBase();
+
+      virtual vector<MapCoordinate> getCoveredFields() = 0;
 };
 
 class TemporaryContainerStorage  {

@@ -1465,13 +1465,13 @@ void         BuildingValues::init(void)
    addeingabe(10,&name[0],0,25);
 
    addbutton("~E~nergy-Storage",15,90,215,110,2,1,1,true);
-   addeingabe(1,&storage.energy,0,gbde.gettank(0));
+   addeingabe(1,&storage.energy,0,gbde.getStorageCapacity().resource(0));
 
    addbutton("~M~aterial-Storage",15,130,215,150,2,1,2,true);
-   addeingabe(2,&storage.material,0,gbde.gettank(1));
+   addeingabe(2,&storage.material,0,gbde.getStorageCapacity().resource(1));
 
    addbutton("~F~uel-Storage",15,170,215,190,2,1,3,true);
-   addeingabe(3,&storage.fuel,0,gbde.gettank(2));
+   addeingabe(3,&storage.fuel,0,gbde.getStorageCapacity().resource(2));
 
    if ( gbde.typ->hasFunction( ContainerBaseType::MatterConverter  ) ||
         gbde.typ->hasFunction( ContainerBaseType::SolarPowerPlant  ) ||

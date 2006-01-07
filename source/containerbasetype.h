@@ -162,6 +162,33 @@ class ContainerBaseType: public MapItemType, public LoadableItemType {
      void read ( tnstream& stream ) ;
      void write ( tnstream& stream ) const ;
 
+
+        //! currently only used by mining stations: the efficiency of the resource extraction from the ground. Base is 1024
+     int          efficiencyfuel;
+
+        //! currently only used by mining stations: the efficiency of the resource extraction from the ground. Base is 1024
+     int          efficiencymaterial;
+
+        //! the maximum number of research points a research center may produce
+     int          maxresearchpoints;
+
+        //! when a building of this type is placed on a map, its maxResearch property will be set to this value
+     int          defaultMaxResearchpoints;
+
+        //! the number of reseach points for which the plus settings apllies
+     int          nominalresearchpoints;
+
+     Resources    maxplus;
+
+        //! if a new building is constructed, this will be the resource production of the building
+     Resources    defaultProduction;
+
+     Resources   getStorageCapacity( int mode ) const;
+   protected:
+     Resources    asc_mode_tank;
+     Resources    bi_mode_tank;
+     
+     
  };
 
 #endif

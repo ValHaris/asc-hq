@@ -238,9 +238,9 @@ void BuildingType :: read ( tnstream& stream )
 
       construction_steps = stream.readInt( );
       maxresearchpoints = stream.readInt( );
-      _tank.energy = stream.readInt( );
-      _tank.material = stream.readInt( );
-      _tank.fuel = stream.readInt( );
+      asc_mode_tank.energy = stream.readInt( );
+      asc_mode_tank.material = stream.readInt( );
+      asc_mode_tank.fuel = stream.readInt( );
       maxplus.energy = stream.readInt( );
       maxplus.material = stream.readInt( );
       maxplus.fuel = stream.readInt( );
@@ -249,9 +249,9 @@ void BuildingType :: read ( tnstream& stream )
       stream.readInt( ); // guibuildicon
       stream.readInt( ); // terrain_access = (TerrainAccess*)
 
-      _bi_maxstorage.energy = stream.readInt( );
-      _bi_maxstorage.material = stream.readInt( );
-      _bi_maxstorage.fuel = stream.readInt( );
+      bi_mode_tank.energy = stream.readInt( );
+      bi_mode_tank.material = stream.readInt( );
+      bi_mode_tank.fuel = stream.readInt( );
 
       if ( version >= 5 ) {
          defaultProduction.energy = stream.readInt( );
@@ -359,9 +359,10 @@ void BuildingType :: write ( tnstream& stream ) const
 
    stream.writeInt ( construction_steps );
    stream.writeInt ( maxresearchpoints );
-   stream.writeInt ( _tank.energy );
-   stream.writeInt ( _tank.material );
-   stream.writeInt ( _tank.fuel );
+   stream.writeInt ( asc_mode_tank.energy );
+   stream.writeInt ( asc_mode_tank.material );
+   stream.writeInt ( asc_mode_tank.fuel );
+   
    stream.writeInt ( maxplus.energy );
    stream.writeInt ( maxplus.material );
    stream.writeInt ( maxplus.fuel );
@@ -370,9 +371,9 @@ void BuildingType :: write ( tnstream& stream ) const
    stream.writeInt ( 1 ); // guibuildicon
    stream.writeInt ( 1 );
 
-   stream.writeInt ( _bi_maxstorage.energy );
-   stream.writeInt ( _bi_maxstorage.material );
-   stream.writeInt ( _bi_maxstorage.fuel );
+   stream.writeInt ( bi_mode_tank.energy );
+   stream.writeInt ( bi_mode_tank.material );
+   stream.writeInt ( bi_mode_tank.fuel );
 
    stream.writeInt ( defaultProduction.energy );
    stream.writeInt ( defaultProduction.material );
@@ -584,36 +585,9 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
       pc.closeBracket();
 
 
-      pc.addInteger ( "MaxResearch", maxresearchpoints, 0 );
-      pc.addInteger ( "NominalResearch", nominalresearchpoints, maxresearchpoints/2 );
-      pc.addInteger ( "MaxResearchpointsDefault", defaultMaxResearchpoints, maxresearchpoints );
-
       pc.openBracket ( "ConstructionCost" );
        productionCost.runTextIO ( pc );
       pc.closeBracket ();
-
-      pc.openBracket ( "MaxResourceProduction" );
-       maxplus.runTextIO ( pc );
-      pc.closeBracket ();
-
-      pc.openBracket ( "ResourceExtractionEfficiency");
-       pc.addInteger( "Material", efficiencymaterial, 1024 );
-       pc.addInteger( "Fuel", efficiencyfuel, 1024 );
-      pc.closeBracket ();
-
-      pc.openBracket ( "StorageCapacity" );
-       pc.openBracket( "BImode" );
-        _bi_maxstorage.runTextIO ( pc );
-       pc.closeBracket();
-       pc.openBracket ( "ASCmode" );
-        _tank.runTextIO ( pc );
-       pc.closeBracket();
-      pc.closeBracket ();
-
-      pc.openBracket( "DefaultProduction" );
-       defaultProduction.runTextIO ( pc, Resources(0,0,0) );
-      pc.closeBracket();
-
 
       pc.addTagInteger( "Height", buildingheight, choehenstufennum, heightTags );
 

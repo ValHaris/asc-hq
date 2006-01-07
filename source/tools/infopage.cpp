@@ -635,7 +635,7 @@ void BuildingResourcePage::buildContent() {
   addTREntry("Effeciency material", bt.efficiencymaterial);
 
   {
-    Resources stor = bt._tank;
+     Resources stor = bt.getStorageCapacity(0);
     ASCString storage;
     int energyStorage = stor.resource(0);
     int materialStorage = stor.resource(1);
@@ -644,7 +644,7 @@ void BuildingResourcePage::buildContent() {
     addTREntry("Maximum storage (ASC mode)", storage);
   }
   {
-    Resources biStorage = bt._bi_maxstorage;
+     Resources biStorage = bt.getStorageCapacity(1);
     ASCString storage;
     int energyCost = biStorage.resource(0);
     int materialCost = biStorage.resource(1);

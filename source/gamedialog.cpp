@@ -22,6 +22,7 @@
 #include "dialogs/soundsettings.h"
 #include "sigc++/retype.h"
 #include "iconrepository.h"
+#include "sg.h"
 //#include "basestrm.h"
 
 
@@ -104,9 +105,7 @@ bool GameDialog::saveGame(PG_Button* button) {
 }
 
 bool GameDialog::loadGame(PG_Button* button) {
-    Hide();
-    LoadGameDialog::loadGameDialog(this);
-    Show();
+    ::loadGame();
     return true;
 }
 

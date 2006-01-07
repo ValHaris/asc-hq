@@ -51,5 +51,7 @@ extern void execUserAction_ev( tuseractions action );
 extern void execUserAction_ev( tuseractions action );
 
 
+extern void loadGame();
+
 #endif
 

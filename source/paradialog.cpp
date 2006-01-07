@@ -542,7 +542,7 @@ bool ASC_PG_Dialog::closeWindow(){
 
 
 
-const int widgetTypeNum = 15;
+const int widgetTypeNum = 16;
 const char* widgetTypes[widgetTypeNum]
 =
    { "image",
@@ -559,7 +559,8 @@ const char* widgetTypes[widgetTypeNum]
      "radiobutton",
      "checkbox",
      "lineedit",
-     "slider"
+     "slider",
+     "plain"
    };
 
 enum  WidgetTypes  { Image,
@@ -576,7 +577,8 @@ enum  WidgetTypes  { Image,
                      RadioButton,
                      CheckBox,
                      LineEdit,
-                     Slider };
+                     Slider,
+                     Plain };
 
 const int imageModeNum = 5;
 const char* imageModes[imageModeNum]
@@ -1084,6 +1086,16 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
             
          parsePanelASCTXT( pc, sb, widgetParams );
          newWidget = sb;
+      }
+      if ( type == Plain ) {
+         
+         PG_ThemeWidget* w = new PG_ThemeWidget( parent, r );
+         
+         if ( !hasStyle )
+            widgetParams.assign ( w );
+            
+         parsePanelASCTXT( pc, w, widgetParams );
+         newWidget = w;
       }
             
       if ( newWidget && newWidget->GetName().empty() )

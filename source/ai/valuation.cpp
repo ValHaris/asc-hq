@@ -269,7 +269,7 @@ void  AI :: calculateThreat ( Building* bld, int player )
 
 
    // Since we have two different resource modes now, this calculation should be rewritten....
-   int value = (bld->plus.energy / 10) + (bld->plus.fuel / 10) + (bld->plus.material / 10) + (bld->actstorage.energy / 20) + (bld->actstorage.fuel / 20) + (bld->actstorage.material / 20) + (bld->maxresearchpoints / 10) ;
+   int value = (bld->plus.energy / 10) + (bld->plus.fuel / 10) + (bld->plus.material / 10) + (bld->actstorage.energy / 20) + (bld->actstorage.fuel / 20) + (bld->actstorage.material / 20);
    
    for ( ContainerBase::Cargo::iterator i = bld->cargo.begin(); i != bld->cargo.end(); ++i )
       if ( *i ) {

@@ -38,7 +38,7 @@
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>source/unix/mapeditor/asc_mapedit</mainprogram>
+      <mainprogram>source/unix/asc/asc</mainprogram>
       <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>

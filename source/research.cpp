@@ -701,10 +701,10 @@ Research::~Research () {};
 
 
 
-Resources returnResourcenUseForResearch ( const Building* bld, int research )
+Resources returnResourcenUseForResearch ( const ContainerBase* bld, int research )
 {
    Resources res;
-   if ( bld->typ->nominalresearchpoints == 0 )
+   if ( bld->baseType->nominalresearchpoints == 0 )
       return res;
 
    int num = 0;
@@ -719,12 +719,12 @@ Resources returnResourcenUseForResearch ( const Building* bld, int research )
 
 
    for ( int r = 0; r < 3; ++r )
-      if ( bld->typ->maxplus.resource(r) < 0 )
-         if(  research > bld->typ->nominalresearchpoints ) {
-            float a = -bld->typ->maxplus.resource(r) / pow(double(bld->typ->nominalresearchpoints),2);
+      if ( bld->baseType->maxplus.resource(r) < 0 )
+         if(  research > bld->baseType->nominalresearchpoints ) {
+            float a = -bld->baseType->maxplus.resource(r) / pow(double(bld->baseType->nominalresearchpoints),2);
             res.resource(r) = int( pow(pow(double(research),2) * a, 0.98 + double(num)/50) );
          } else
-            res.resource(r) = -bld->typ->maxplus.resource(r) * research / bld->typ->nominalresearchpoints;
+            res.resource(r) = -bld->baseType->maxplus.resource(r) * research / bld->baseType->nominalresearchpoints;
 
    return res;
 }

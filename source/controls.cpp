@@ -554,7 +554,7 @@ void Building :: execnetcontrol ( void )
             if (  netcontrol & (cnet_storeenergy << i )) {
                npush (  netcontrol );
                netcontrol |= (cnet_stopenergyoutput << i );
-               actstorage.resource(i) += getResource ( gettank(i) -  actstorage.resource(i), i, 0 );
+               actstorage.resource(i) += getResource ( getStorageCapacity().resource(i) -  actstorage.resource(i), i, 0 );
                npop (  netcontrol );
             }
       }

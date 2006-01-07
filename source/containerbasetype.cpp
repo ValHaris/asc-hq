@@ -77,6 +77,8 @@ ContainerBaseType :: ContainerBaseType ()
    id = 0;
    jamming = 0;
    view = 0;
+   efficiencyfuel = 1024;
+   efficiencymaterial = 1024;
 }
 
 bool ContainerBaseType::hasFunction( ContainerFunctions function ) const
@@ -178,6 +180,33 @@ void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
 
    pc.addInteger( "Jamming", jamming, 0 );
    pc.addString( "InfoImage", infoImageFilename, "" );
+
+   pc.openBracket ( "MaxResourceProduction" );
+    maxplus.runTextIO ( pc );
+   pc.closeBracket ();
+
+   pc.openBracket ( "ResourceExtractionEfficiency");
+    pc.addInteger( "Material", efficiencymaterial, 1024 );
+    pc.addInteger( "Fuel", efficiencyfuel, 1024 );
+   pc.closeBracket ();
+
+   pc.openBracket ( "StorageCapacity" );
+    pc.openBracket( "BImode" );
+     bi_mode_tank.runTextIO ( pc );
+    pc.closeBracket();
+    pc.openBracket ( "ASCmode" );
+     asc_mode_tank.runTextIO ( pc );
+    pc.closeBracket();
+   pc.closeBracket ();
+   
+   pc.addInteger ( "MaxResearch", maxresearchpoints, 0 );
+   pc.addInteger ( "NominalResearch", nominalresearchpoints, maxresearchpoints/2 );
+   pc.addInteger ( "MaxResearchpointsDefault", defaultMaxResearchpoints, maxresearchpoints );
+   
+   pc.openBracket( "DefaultProduction" );
+    defaultProduction.runTextIO ( pc, Resources(0,0,0) );
+   pc.closeBracket();
+   
 }
 
 
@@ -279,6 +308,15 @@ void ContainerBaseType :: TransportationIO :: write ( tnstream& stream ) const
    stream.writeBitset ( requiresUnitFeature );
    stream.writeInt ( disableAttack );
    stream.writeInt ( movecost );
+}
+
+
+Resources ContainerBaseType::getStorageCapacity( int mode ) const
+{
+   if ( mode == 1 )
+      return bi_mode_tank;
+   else
+      return asc_mode_tank;
 }
 
 

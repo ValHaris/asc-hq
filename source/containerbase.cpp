@@ -26,12 +26,16 @@
 #include "vehicle.h"
 #include "spfst.h"
 #include "graphics/blitter.h"
+#include "containercontrols.h"
+#include "resourcenet.h"
 
 
 ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, pmap map, int player ) : gamemap ( map ), baseType (bt)
 {
    damage = 0;
    color = player*8;
+   maxresearchpoints = baseType->defaultMaxResearchpoints;
+   researchpoints = min ( maxresearchpoints, baseType->nominalresearchpoints );
 }
 
 SigC::Signal0<void> ContainerBase :: anyContainerDestroyed;
@@ -124,7 +128,7 @@ int ContainerBase :: vehiclesLoaded ( void ) const
 
    for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
       if ( *i )
-         ++a; 
+         ++a;
 
    return a;
 }
@@ -138,8 +142,8 @@ bool ContainerBase :: searchAndRemove( Vehicle* veh )
          if ( *i )
             if ( (*i)->searchAndRemove( veh ))
                return true;
-               
-   return false;               
+
+   return false;
 }
 
 
@@ -150,7 +154,7 @@ int ContainerBase::cargoWeight() const
    for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
       if ( *i )
          w += (*i)->weight();
-         
+
    return w;
 }
 
@@ -168,7 +172,7 @@ const ContainerBase* ContainerBase :: findParentUnit ( const Vehicle* veh ) cons
                return cb;
          }
       }
-      
+
    return NULL;
 }
 
@@ -183,12 +187,12 @@ bool ContainerBase::unitLoaded( int nwid )
                return true;
          }
       }
-      
+
    return false;
 
 }
 
-Vehicle* ContainerBase :: findUnit ( int nwid ) 
+Vehicle* ContainerBase :: findUnit ( int nwid )
 {
    for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
       if ( *i ) {
@@ -200,93 +204,100 @@ Vehicle* ContainerBase :: findUnit ( int nwid )
                return cb;
          }
       }
-      
+
    return NULL;
 }
 
 
- template<int pixelSize>
- class ColorTransform_UnitGray { };
+template<int pixelSize>
+class ColorTransform_UnitGray
+{ }
+;
 
- template<>
- class ColorTransform_UnitGray<1> : public ColorTransform_XLAT<1> {
-    public:
-       ColorTransform_UnitGray( NullParamType npt  = nullParam ) {
-          setTranslationTable( *xlatpictgraytable );
-       };
- };
+template<>
+class ColorTransform_UnitGray<1> : public ColorTransform_XLAT<1>
+{
+   public:
+      ColorTransform_UnitGray( NullParamType npt  = nullParam )
+      {
+         setTranslationTable( *xlatpictgraytable );
+      };
+};
 
- template<>
- class ColorTransform_UnitGray<4> : public ColorTransform_Gray<4> {
-     public:
-       ColorTransform_UnitGray( NullParamType npt  = nullParam ) {}
- };
+template<>
+class ColorTransform_UnitGray<4> : public ColorTransform_Gray<4>
+{
+   public:
+      ColorTransform_UnitGray( NullParamType npt  = nullParam )
+      {}
+}
+;
 
 
- int ContainerBase::calcShadowDist( int binaryHeight )
- {
-    if ( binaryHeight <= 1 )
-       return 0;
+int ContainerBase::calcShadowDist( int binaryHeight )
+{
+   if ( binaryHeight <= 1 )
+      return 0;
 
-    if ( binaryHeight <= 3 )
-       return 1;
-    
-    return 6 * ( binaryHeight - log2 ( chfahrend ));
- }
+   if ( binaryHeight <= 3 )
+      return 1;
+
+   return 6 * ( binaryHeight - log2 ( chfahrend ));
+}
 
 
 void ContainerBase::paintField ( const Surface& img, Surface& dest, SPoint pos, int dir, bool shaded, int shadowDist ) const
 {
 
-    pair<const Surface*, int> dirpair = make_pair(&img, directionangle[dir]);
+   pair<const Surface*, int> dirpair = make_pair(&img, directionangle[dir]);
 
-    int height = getHeight();
-    if ( height <= chgetaucht ) {
-        if ( shaded ) {
-           megaBlitter< ColorTransform_UnitGray,
-                        ColorMerger_AlphaMixer,
-                        SourcePixelSelector_CacheRotation,
-                        TargetPixelSelector_All>
-                      ( img, dest, pos, nullParam,nullParam, dirpair, nullParam);
-        } else {
-           megaBlitter< ColorTransform_PlayerCol,
-                        ColorMerger_AlphaMixer,
-                        SourcePixelSelector_CacheRotation,
-                        TargetPixelSelector_All>
-                      ( img, dest, pos, getOwner(),nullParam, dirpair, nullParam);
-        }
-    } else {
-       if ( height >= chfahrend && shadowDist ) {
-           if ( shadowDist == -1 )
-              shadowDist = calcShadowDist( log2( height ));
+   int height = getHeight();
+   if ( height <= chgetaucht ) {
+      if ( shaded ) {
+         megaBlitter< ColorTransform_UnitGray,
+         ColorMerger_AlphaMixer,
+         SourcePixelSelector_CacheRotation,
+         TargetPixelSelector_All>
+         ( img, dest, pos, nullParam,nullParam, dirpair, nullParam);
+      } else {
+         megaBlitter< ColorTransform_PlayerCol,
+         ColorMerger_AlphaMixer,
+         SourcePixelSelector_CacheRotation,
+         TargetPixelSelector_All>
+         ( img, dest, pos, getOwner(),nullParam, dirpair, nullParam);
+      }
+   } else {
+      if ( height >= chfahrend && shadowDist ) {
+         if ( shadowDist == -1 )
+            shadowDist = calcShadowDist( log2( height ));
 
-           megaBlitter< ColorTransform_None,
-                        ColorMerger_AlphaShadow,
-                        SourcePixelSelector_CacheRotation,
-                        TargetPixelSelector_All>
-                      ( img, dest, SPoint(pos.x+shadowDist, pos.y+shadowDist), nullParam,nullParam, dirpair, nullParam);
-        }
+         megaBlitter< ColorTransform_None,
+         ColorMerger_AlphaShadow,
+         SourcePixelSelector_CacheRotation,
+         TargetPixelSelector_All>
+         ( img, dest, SPoint(pos.x+shadowDist, pos.y+shadowDist), nullParam,nullParam, dirpair, nullParam);
+      }
 
-        if ( shaded ) {
-           megaBlitter< ColorTransform_UnitGray,
-                        ColorMerger_AlphaOverwrite,
-                        SourcePixelSelector_CacheRotation,
-                        TargetPixelSelector_All>
-                      ( img, dest, pos, nullParam,nullParam, dirpair, nullParam);
-        } else {
-           if ( img.GetPixelFormat().BytesPerPixel() == 1 ) {
-               MegaBlitter<1,gamemapPixelSize,ColorTransform_PlayerCol, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation> blitter;
-               blitter.setPlayer( getOwner() );
-               blitter.setAngle( img, directionangle[dir] );
-               blitter.blit( img, dest, pos );
-           } else {
-               MegaBlitter<4,gamemapPixelSize,ColorTransform_PlayerTrueCol, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation> blitter;
-               blitter.setColor( gamemap->player[getOwner()].getColor() );
-               blitter.setAngle( img, directionangle[dir] );
-               blitter.blit( img, dest, pos );
-           }
-        }
-    }
+      if ( shaded ) {
+         megaBlitter< ColorTransform_UnitGray,
+         ColorMerger_AlphaOverwrite,
+         SourcePixelSelector_CacheRotation,
+         TargetPixelSelector_All>
+         ( img, dest, pos, nullParam,nullParam, dirpair, nullParam);
+      } else {
+         if ( img.GetPixelFormat().BytesPerPixel() == 1 ) {
+            MegaBlitter<1,gamemapPixelSize,ColorTransform_PlayerCol, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation> blitter;
+            blitter.setPlayer( getOwner() );
+            blitter.setAngle( img, directionangle[dir] );
+            blitter.blit( img, dest, pos );
+         } else {
+            MegaBlitter<4,gamemapPixelSize,ColorTransform_PlayerTrueCol, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation> blitter;
+            blitter.setColor( gamemap->player[getOwner()].getColor() );
+            blitter.setAngle( img, directionangle[dir] );
+            blitter.blit( img, dest, pos );
+         }
+      }
+   }
 }
 
 
@@ -297,7 +308,7 @@ void ContainerBase :: addToCargo( Vehicle* veh )
          *i = veh;
          return;
       }
-         
+
    cargo.push_back( veh );
 }
 
@@ -305,15 +316,15 @@ bool ContainerBase :: removeUnitFromCargo( Vehicle* veh, bool recursive )
 {
    if ( !veh )
       return false;
-   else   
+   else
       return removeUnitFromCargo( veh->networkid );
 }
 
 bool ContainerBase :: removeUnitFromCargo( int nwid, bool recursive )
 {
-   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i ) 
+   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
       if ( *i ) {
-   
+
          if ( (*i)->networkid == nwid ) {
             *i = NULL;
             return true;
@@ -322,8 +333,8 @@ bool ContainerBase :: removeUnitFromCargo( int nwid, bool recursive )
             if ( (*i)->removeUnitFromCargo( nwid, recursive ))
                return true;
       }
-      
-   return false;   
+
+   return false;
 }
 
 
@@ -394,31 +405,31 @@ int  ContainerBase :: vehicleUnloadable ( const Vehicletype* vehicleType ) const
                               h += 1 << hh;
                         height |= i->height_abs & h;
                      } else
-                       if ( i->height_rel != -100 )
-                          height |= 1 << (getPosition().getNumericalHeight() + i->height_rel) ;
-                       else
-                          height |= i->height_abs ;
+                        if ( i->height_rel != -100 )
+                           height |= 1 << (getPosition().getNumericalHeight() + i->height_rel) ;
+                        else
+                           height |= i->height_abs ;
    return height & vehicleType->height;
 }
 
 const ContainerBaseType::TransportationIO* ContainerBase::vehicleUnloadSystem ( const Vehicletype* vehicleType, int height )
 {
-  if ( baseType->vehicleFit ( vehicleType ))
+   if ( baseType->vehicleFit ( vehicleType ))
       for ( ContainerBaseType::EntranceSystems::const_iterator i = baseType->entranceSystems.begin(); i != baseType->entranceSystems.end(); i++ )
          if ( i->mode & ContainerBaseType::TransportationIO::Out )
             if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))
                if ( i->vehicleCategoriesLoadable & (1<<vehicleType->movemalustyp))
-                 if ( vehicleType->hasAnyFunction(i->requiresUnitFeature) || i->requiresUnitFeature.none() )
-                    if ( i->height_abs != 0 && i->height_rel != -100 ) {
+                  if ( vehicleType->hasAnyFunction(i->requiresUnitFeature) || i->requiresUnitFeature.none() )
+                     if ( i->height_abs != 0 && i->height_rel != -100 ) {
                         if ( height & ( i->height_abs & (1 << (getPosition().getNumericalHeight() + i->height_rel ))))
                            return &(*i);
                      } else
-                       if ( i->height_rel != -100 ) {
-                          if ( height & ( 1 << (getPosition().getNumericalHeight() + i->height_rel)))
-                             return &(*i);
-                       } else
-                          if ( height & i->height_abs )
-                             return &(*i);
+                        if ( i->height_rel != -100 ) {
+                           if ( height & ( 1 << (getPosition().getNumericalHeight() + i->height_rel)))
+                              return &(*i);
+                        } else
+                           if ( height & i->height_abs )
+                              return &(*i);
    return NULL;
 
 }
@@ -438,10 +449,10 @@ int  ContainerBase :: vehicleDocking ( const Vehicle* vehicle, bool out ) const
                   if ( i->dockingHeight_abs != 0 && i->dockingHeight_rel != -100 )
                      height |= i->dockingHeight_abs & (1 << (getPosition().getNumericalHeight() + i->dockingHeight_rel ));
                   else
-                    if ( i->dockingHeight_rel != -100 )
-                       height |= 1 << (getPosition().getNumericalHeight() + i->dockingHeight_rel) ;
-                    else
-                       height |= i->dockingHeight_abs ;
+                     if ( i->dockingHeight_rel != -100 )
+                        height |= 1 << (getPosition().getNumericalHeight() + i->dockingHeight_rel) ;
+                     else
+                        height |= i->dockingHeight_abs ;
    return height;
 }
 
@@ -475,6 +486,132 @@ void TemporaryContainerStorage :: restore (  )
 
    tmemorystream stream ( &buf, tnstream::reading );
    cb->read ( stream );
+}
+
+
+
+
+
+
+void ContainerBase::endOwnTurn( void )
+{
+}
+
+void ContainerBase::endAnyTurn( void )
+{
+}
+
+void ContainerBase::endRound ( void )
+{
+#ifndef karteneditor
+   if ( baseType->hasFunction( ContainerBaseType::TrainingCenter  ) ) {
+      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+         if ( *i ) {
+            bool ammoFull = true;
+            for ( int w = 0; w < (*i)->typ->weapons.count; ++w )
+               if ( (*i)->ammo[w] < (*i)->typ->weapons.weapon[w].count )
+                  ammoFull = false;
+
+            if ( ammoFull ) {
+               ContainerControls cc ( this );
+               if ( cc.unitTrainingAvailable( *i )) {
+                  cc.trainUnit( *i );
+                  cc.refillResources( *i );
+               }
+            }
+         }
+   }
+#endif
+}
+
+
+
+Resources ContainerBase ::netResourcePlus( ) const
+{
+   Resources res;
+   for ( int resourcetype = 0; resourcetype < resourceTypeNum; resourcetype++ ) {
+      GetResourcePlus grp ( getMap() );
+      res.resource(resourcetype) += grp.getresource ( getPosition().x, getPosition().y, resourcetype, color/8, 1 );
+   }
+   return res;
+}
+
+
+
+
+
+
+Resources ContainerBase :: getResourcePlus( )
+{
+   Work* w = spawnWorkClasses ( true );
+   Resources r;
+   if ( w )
+      r = w->getPlus();
+   delete w;
+
+   //  printf ("building %s %d / %d : plus %d %d %d \n", typ->name.c_str(), getPosition().x, getPosition().y, r.energy, r.material, r.fuel );
+
+   return r;
+}
+
+Resources ContainerBase :: getResourceUsage( )
+{
+   Work* w = spawnWorkClasses ( true );
+   Resources r;
+   if ( w )
+      r = w->getUsage();
+   delete w;
+
+   if ( baseType->hasFunction( ContainerBaseType::Research ) )
+      r += returnResourcenUseForResearch( this, researchpoints );
+
+
+   return r;
+}
+
+Resources ContainerBase::getStorageCapacity() const
+{
+   if ( gamemap && gamemap->_resourcemode == 1 )
+      return baseType->getStorageCapacity( 1 );
+   else
+      return baseType->getStorageCapacity( 0 );
+}
+
+
+
+
+bool ContainerBase::registerWorkClassFactory( WorkClassFactory* wcf, bool ASCmode )
+{
+   if ( ASCmode )  {
+      if ( !workClassFactoriesASC )
+         workClassFactoriesASC = new WorkerClassList;
+      
+      workClassFactoriesASC->push_back( wcf );
+   } else {
+      if ( !workClassFactoriesBI )
+         workClassFactoriesBI = new WorkerClassList;
+      
+      workClassFactoriesBI->push_back( wcf );
+   }
+   return true;
+}
+
+ContainerBase::WorkerClassList* ContainerBase::workClassFactoriesASC = NULL;
+ContainerBase::WorkerClassList* ContainerBase::workClassFactoriesBI = NULL;
+
+
+ContainerBase ::Work* ContainerBase ::spawnWorkClasses( bool justQuery )
+{
+   if ( getMap()->_resourcemode != 1 ) {
+      for ( WorkerClassList::iterator i = workClassFactoriesASC->begin(); i != workClassFactoriesASC->end(); ++i )
+         if ( (*i)->available( this ) )
+            return (*i)->produce(this, justQuery);
+   } else {
+      for ( WorkerClassList::iterator i = workClassFactoriesBI->begin(); i != workClassFactoriesBI->end(); ++i )
+         if ( (*i)->available( this ) )
+            return (*i)->produce(this, justQuery);
+   }
+   return NULL;
 }
 
 

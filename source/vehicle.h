@@ -82,7 +82,7 @@ class BuildingType;
     int          xpos, ypos;
 #ifndef karteneditor
   private:
-#endif  
+#endif
     //! the resources that the unit is carrying
     Resources    tank;
   public:
@@ -169,6 +169,7 @@ class BuildingType;
     Resources putResource ( const Resources& res, bool queryonly, int scope = 1 ) { return ContainerBase::putResource ( res, queryonly, scope ); };
     Resources getResource ( const Resources& res, bool queryonly, int scope = 1 ) { return ContainerBase::getResource ( res, queryonly, scope ); };
 
+    //! returns the resources that the unit is carrying
     Resources getTank() const;
 
     int getHeight() const { return height; };
@@ -323,6 +324,9 @@ class BuildingType;
     bool weapexist ( void );
     void prepareForCleanRemove() { cleanRemove = true; };
     ~Vehicle ( );
+  protected:
+     vector<MapCoordinate> getCoveredFields();
+       
 };
 
 

@@ -374,6 +374,7 @@ void Vehicle :: repairunit(Vehicle* vehicle, int maxrepair )
 
 void Vehicle :: endRound ( void )
 {
+   ContainerBase::endRound();
    if ( typ->hasFunction( ContainerBaseType::MatterConverter )) {
       int endiff = typ->tank.energy - tank.energy;
       if ( tank.fuel < endiff * generatortruckefficiency )
@@ -386,12 +387,15 @@ void Vehicle :: endRound ( void )
 
 void Vehicle :: endAnyTurn()
 {
+   ContainerBase::endAnyTurn();
    reactionfire.endAnyTurn();
 }
 
 
 void Vehicle :: endOwnTurn()
 {
+   ContainerBase::endOwnTurn();
+   
    if ( typ->autorepairrate > 0 )
       if ( damage )
          repairItem ( this, max ( damage - typ->autorepairrate, 0 ) );
@@ -1103,7 +1107,7 @@ void Vehicle :: fillMagically( void )
 
 
 
-const int vehicleVersion = 5;
+const int vehicleVersion = 6;
 
 void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 {
@@ -1269,6 +1273,13 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
     stream.writeInt( unitProduction.size() );
     for ( int i = 0; i < unitProduction.size(); ++i )
        stream.writeInt( unitProduction[i]->id );
+
+    stream.writeInt( maxresearchpoints );
+    stream.writeInt( researchpoints );
+    plus.write( stream );
+    maxplus.write( stream );
+    // actstorage.write( stream );
+    bi_resourceplus.write( stream );
 }
 
 void   Vehicle::read ( tnstream& stream )
@@ -1491,6 +1502,14 @@ void   Vehicle::readData ( tnstream& stream )
              throw InvalidID ( "unit", id );
        }
     }
+
+    if ( version >= 6 ) {
+       maxresearchpoints = stream.readInt();
+       researchpoints = stream.readInt();
+       plus.read( stream );
+       maxplus.read( stream );
+       bi_resourceplus.read( stream );
+    } 
        
 }
 
@@ -1570,6 +1589,13 @@ void Vehicle::paint ( Surface& s, SPoint pos, int shadowDist ) const
 void Vehicle::paint ( Surface& s, SPoint pos, bool shaded, int shadowDist ) const
 {
    paintField( typ->getImage(), s, pos, direction, shaded, shadowDist );
+}
+
+vector<MapCoordinate> Vehicle::getCoveredFields()
+{
+   vector<MapCoordinate> fields;
+   fields.push_back( getPosition() );
+   return fields;
 }
 
 

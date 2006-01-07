@@ -228,10 +228,7 @@ void Player :: turnEnds( Player& p )
 {
    if ( &p == this ) {
       sendQueuedMessages();
-      
-      for ( BuildingList::iterator b = buildingList.begin(); b != buildingList.end(); ++b )
-         (*b)->endTurn();
-   }      
+   }
 }
 
 

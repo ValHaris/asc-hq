@@ -183,8 +183,10 @@ class TechAdapterDependency {
      ~Research ();
  };
 
+ class ContainerBase;
+ 
 //! Calculates the resources that are needed to research the given number of research
-extern Resources returnResourcenUseForResearch ( const Building* bld, int research );
+extern Resources returnResourcenUseForResearch ( const ContainerBase* bld, int research );
 
 #endif
 

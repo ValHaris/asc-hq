@@ -127,31 +127,6 @@ extern const char*  cbuildingfunctions[];
         //! the number of stages that are required to construct a building using a construction unit. Each stage has a separate picture. Range is 1 to 8
         int          construction_steps;
 
-        //! the maximum number of research points a research center may produce
-        int          maxresearchpoints;
-
-        //! when a building of this type is placed on a map, its maxResearch property will be set to this value
-        int          defaultMaxResearchpoints;
-
-        //! the number of reseach points for which the plus settings apllies
-        int          nominalresearchpoints;
-
-        //! the amount of resources stored in the building. Use Building::getResource( int, int, int, int) to access this field, since depending on the map settings some resources may be globally available and stored in a global pool: #tmap::bi_resource
-        Resources    _tank;
-        Resources    maxplus;
-
-        //! currently only used by mining stations: the efficiency of the resource extraction from the ground. Base is 1024
-        int          efficiencyfuel;
-
-        //! currently only used by mining stations: the efficiency of the resource extraction from the ground. Base is 1024
-        int          efficiencymaterial;
-
-        //! the maximum resource storage in BI resource mode.
-        Resources    _bi_maxstorage;
-
-        //! if a new building is constructed, this will be the resource production of the building
-        Resources    defaultProduction;
-
         //! bitmapped: the level of height that this building will reside on.
         int          buildingheight;
 

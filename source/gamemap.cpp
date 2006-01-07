@@ -1302,6 +1302,13 @@ void tmap::endTurn()
      for ( Player::VehicleList::iterator v = player[i].vehicleList.begin(); v != player[i].vehicleList.end(); ++v ) 
          (*v)->endAnyTurn();
 
+  for ( int i = 0; i < 9; ++i )
+     for ( Player::BuildingList::iterator v = player[i].buildingList.begin(); v != player[i].buildingList.end(); ++v ) {
+         if ( i == actplayer )
+            (*v)->endOwnTurn();
+         (*v)->endAnyTurn();
+     }
+  
    if ( replayinfo )
       replayinfo->closeLogging();
       
@@ -1325,15 +1332,25 @@ void tmap::endRound()
           for ( Player::VehicleList::iterator j = player[i].vehicleList.begin(); j != player[i].vehicleList.end(); j++ )
              (*j)->endRound();
 
-          typedef PointerList<Building::Work*> BuildingWork;
+          for ( Player::BuildingList::iterator j = player[i].buildingList.begin(); j != player[i].buildingList.end(); j++ )
+             (*j)->endRound();
+          
+          typedef PointerList<ContainerBase::Work*> BuildingWork;
           BuildingWork buildingWork;
 
           for ( Player::BuildingList::iterator j = player[i].buildingList.begin(); j != player[i].buildingList.end(); j++ ) {
-             Building::Work* w = (*j)->spawnWorkClasses( false );
+             ContainerBase::Work* w = (*j)->spawnWorkClasses( false );
              if ( w )
                 buildingWork.push_back ( w );
           }
 
+          for ( Player::VehicleList::iterator j = player[i].vehicleList.begin(); j != player[i].vehicleList.end(); j++ ) {
+             ContainerBase::Work* w = (*j)->spawnWorkClasses( false );
+             if ( w )
+                buildingWork.push_back ( w );
+          }
+          
+          
           bool didSomething;
           do {
              didSomething = false;

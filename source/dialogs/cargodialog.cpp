@@ -38,6 +38,7 @@
 #include "../replay.h"
 #include "../dashboard.h"
 #include "../dialog.h"
+#include "../containerbase-functions.h"
 
 #include "selectionwindow.h"
 
@@ -47,10 +48,24 @@ const Vehicletype* selectVehicletype( ContainerBase* plant, const vector<Vehicle
 
 
 
-const int subWindowNum = 11;
-static const char* subWindowName[subWindowNum] =
-   { "ammotransfer", "ammoproduction", "info", "cargoinfo", "conventionalpower", "mining", "netcontrol", "research", "resourceinfo", "solarpower", "windpower"
-   };
+class CargoDialog;
+
+class SubWindow
+{
+   protected:
+      CargoDialog* cargoDialog;
+      PG_Widget* widget;
+      
+      SubWindow() : cargoDialog(NULL), widget(NULL) {};
+      ContainerBase* container(); 
+   public:
+      virtual bool available( CargoDialog* cd ) = 0;
+      virtual ASCString getASCTXTname() = 0;
+      virtual void registerSubwindow( CargoDialog* cd );
+      virtual void update() = 0;
+      virtual ~SubWindow() {} ;
+};
+
 
 class SubWinButton : public PG_Button
 {
@@ -58,31 +73,15 @@ class SubWinButton : public PG_Button
       static const int buttonwidth = 47;
       static const int buttonheight = 23;
 
-      SubWinButton( PG_Widget *parent, const SPoint& pos, int subWindow ) : PG_Button( parent, PG_Rect( pos.x, pos.y, buttonwidth, buttonheight ), "", -1, "SubWinButton")
+      SubWinButton( PG_Widget *parent, const SPoint& pos, SubWindow* subWindow ) : PG_Button( parent, PG_Rect( pos.x, pos.y, buttonwidth, buttonheight ), "", -1, "SubWinButton")
       {
          SetBackground( PRESSED, IconRepository::getIcon("cargo-buttonpressed.png").getBaseSurface() );
          SetBackground( HIGHLITED, IconRepository::getIcon("cargo-buttonhighlighted.png").getBaseSurface() );
          SetBackground( UNPRESSED, IconRepository::getIcon("cargo-buttonunpressed.png").getBaseSurface() );
          SetBorderSize(0,0,0);
-         SetIcon( IconRepository::getIcon(ASCString("cargo-") + subWindowName[subWindow] + ".png" ).getBaseSurface() );
+         SetIcon( IconRepository::getIcon(ASCString("cargo-") + subWindow->getASCTXTname() + ".png" ).getBaseSurface() );
       };
 };
-
-
-class CargoDialog;
-
-class SubWindow
-{
-   public:
-      virtual bool available( CargoDialog* cd ) = 0;
-      virtual void registerSubwindow( CargoDialog* cd )
-      {}
-      ;
-      virtual ~SubWindow()
-      {}
-      ;
-};
-
 
 
 namespace CargoGuiFunctions {
@@ -177,7 +176,11 @@ class CargoDialog : public Panel
 
       SigC::Signal0<void>  sigCargoChanged;
 
-      deallocating_vector<SubWindow*> subwindows;
+      typedef vector<SubWindow*> Activesubwindows;
+      Activesubwindows activesubwindows;
+      
+      typedef deallocating_vector<SubWindow*> Subwindows;
+      Subwindows subwindows;
 
       CargoWidget* cargoWidget;
 
@@ -229,20 +232,23 @@ class CargoDialog : public Panel
 
       bool activate_i( int pane )
       {
-         activate( subWindowName[pane] );
+         if ( pane >= 0 && pane < activesubwindows.size() ) {
+            activate( activesubwindows[pane]->getASCTXTname() );
+            activesubwindows[pane]->update();
+         }
          return true;
       }
 
       void activate( const ASCString& pane )
       {
          PG_Application::SetBulkMode();
-         for ( int i = 0; i < subWindowNum; ++i )
-            if ( ASCString( subWindowName[i]) != pane )
-               hide( subWindowName[i] );
+         for ( int i = 0; i < activesubwindows.size(); ++i )
+            if ( activesubwindows[i]->getASCTXTname() != pane )
+               hide( activesubwindows[i]->getASCTXTname() );
 
-         for ( int i = 0; i < subWindowNum; ++i )
-            if ( ASCString( subWindowName[i]) == pane )
-               show( subWindowName[i] );
+         for ( int i = 0; i < activesubwindows.size(); ++i )
+            if ( activesubwindows[i]->getASCTXTname() == pane )
+               show( activesubwindows[i]->getASCTXTname() );
          PG_Application::SetBulkMode(false);
          Update();
       };
@@ -274,75 +280,24 @@ class CargoDialog : public Panel
             mainScreenWidget->getUnitInfoPanel()->showUnitData( unit, NULL, true );
       }
 
+      void updateLoadMeter()
+      {
+         if ( container->baseType->maxLoadableWeight > 0 ) 
+            setBargraphValue ( "LoadingMeter", float( container->cargoWeight()) / container->baseType->maxLoadableWeight );
+      }
+      
       
       
    public:
 
 
-      CargoDialog (PG_Widget *parent, ContainerBase* cb )
-   : Panel( parent, PG_Rect::null, "cargodialog", false ), containerControls( cb ), container(cb), setupOK(false), cargoWidget(NULL)
+      CargoDialog (PG_Widget *parent, ContainerBase* cb );
+
+      void addAvailableSubwin( SubWindow* w )
       {
-         sigClose.connect( SigC::slot( *this, &CargoDialog::QuitModal ));
-
-         registerGuiFunctions( guiIconHandler );
-         
-
-         // cb->resourceChanged.connect( SigC::slot( *this, &CargoDialog::updateResourceDisplay ));
-         // cb->ammoChanged.connect( SigC::slot( *this, &CargoDialog::showAmmo ));
-         NewGuiHost::pushIconHandler( &guiIconHandler );
-
-         
-         try {
-            if ( !setup() )
-               return;
-         } catch ( ParsingError err ) {
-            errorMessage( err.getMessage() );
-            return;
-         } catch ( ... ) {
-            errorMessage( "unknown exception" );
-            return;
-         }
-
-         PG_Widget* unitScrollArea = FindChild( "UnitScrollArea", true );
-         if ( unitScrollArea ) {
-            cargoWidget = new CargoWidget( unitScrollArea, PG_Rect( 1, 1, unitScrollArea->Width() -2 , unitScrollArea->Height() -2 ), cb );
-            cargoWidget->unitMarked.connect( SigC::slot( *this, &CargoDialog::checkStoringPosition ));
-         }
-               
-
-         if ( !cb->baseType->infoImageFilename.empty() && exist( cb->baseType->infoImageFilename )) {
-            PG_Image* img = dynamic_cast<PG_Image*>(FindChild( "container_3dpic", true ));
-            if ( img ) {
-               tnfilestream stream ( cb->baseType->infoImageFilename, tnstream::reading );
-               infoImage.readImageFile( stream );
-               img->SetDrawMode( PG_Draw::STRETCH );
-               img->SetImage( infoImage.getBaseSurface(), false );
-               img->SizeWidget( img->GetParent()->w, img->GetParent()->h );
-            }
-         }
-
-
-         setLabelText( "UnitName", cb->getName() );
-         if ( cb->getName() != cb->baseType->name )
-            setLabelText( "UnitClass", cb->baseType->name );
-
-         showAmmo();
-         /*
-         registerSpecialDisplay( "unitpad_unitsymbol");
-         registerSpecialDisplay( "unitpad_weapon_diagram");
-         registerSpecialDisplay( "unitpad_transport_transporterlevel");
-         registerSpecialDisplay( "unitpad_transport_unitlevel");
-         registerSpecialDisplay( "unitpad_transport_leveldisplay");
-         */
-
-         updateResourceDisplay();
-
-         activate_i(0);
-         Show();
-         setupOK = true;
-
+         activesubwindows.push_back( w );
       };
-
+      
       void cargoChanged()
       {
          //unitHighLight.setNew( unitHighLight.getMark() );
@@ -354,6 +309,7 @@ class CargoDialog : public Panel
          sigCargoChanged();
          updateResourceDisplay();
          showAmmo();
+         updateLoadMeter();
       }
       
       int RunModal()
@@ -400,8 +356,8 @@ class CargoDialog : public Panel
       {
          if ( label == "ButtonPanel" ) {
             int x = 0;
-            for ( int i = 0; i < subWindowNum; ++i ) {
-               SubWinButton* button = new SubWinButton( parent, SPoint( x, 0 ), i);
+            for ( int i = 0; i < activesubwindows.size(); ++i ) {
+               SubWinButton* button = new SubWinButton( parent, SPoint( x, 0 ), activesubwindows[i] );
                button->sigClick.connect( SigC::bind( SigC::slot( *this, &CargoDialog::activate_i  ), i));
                x += SubWinButton::buttonwidth;
             }
@@ -690,6 +646,161 @@ const Vehicletype* selectVehicletype( ContainerBase* plant, const vector<Vehicle
 */
 
 
+void SubWindow::registerSubwindow( CargoDialog* cd )
+{
+   cargoDialog = cd;
+   widget = cd->FindChild( getASCTXTname(), true);
+   cd->addAvailableSubwin( this );
+}
+
+
+ContainerBase* SubWindow::container()
+{
+   return cargoDialog->getContainer();
+}
+
+/*
+const int subWindowNum = 11;
+static const char* subWindowName[subWindowNum] =
+{ "ammotransfer", "ammoproduction", "info", "cargoinfo", "conventionalpower", "mining", "netcontrol", "research", "resourceinfo", "solarpower", "windpower"
+};
+*/
+
+
+
+class SolarPowerWindow : public SubWindow {
+  
+   public:
+      bool available( CargoDialog* cd )
+      {
+         return cd->getContainer()->baseType->hasFunction( ContainerBaseType::SolarPowerPlant  );
+      };
+      
+      ASCString getASCTXTname()
+      {
+         return "solarpower";
+      };
+      
+      void update()
+      {
+         cargoDialog->setLabelText( "MaxPower", container()->maxplus.energy, widget );
+      
+         SolarPowerplant solarPowerPlant ( container() );
+         Resources plus = solarPowerPlant.getPlus();
+         cargoDialog->setLabelText( "CurrentPower", plus.energy, widget );
+      }
+};
+
+class WindPowerWindow : public SubWindow {
+   public:
+      bool available( CargoDialog* cd )
+      {
+         return cd->getContainer()->baseType->hasFunction( ContainerBaseType::WindPowerPlant  );
+      };
+      
+      ASCString getASCTXTname()
+      {
+         return "windpower";
+      };
+      
+      void update()
+      {
+         cargoDialog->setLabelText( "MaxPower", container()->maxplus.energy, widget );
+      
+         WindPowerplant windPowerPlant ( container() );
+         Resources plus = windPowerPlant.getPlus();
+         cargoDialog->setLabelText( "CurrentPower", plus.energy, widget );
+      }
+};
+
+
+
+//*****************************************************************************************************
+//*****************************************************************************************************
+//
+//  Cargo Dialog
+//
+//*****************************************************************************************************
+//*****************************************************************************************************
+
+
+
+CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
+   : Panel( parent, PG_Rect::null, "cargodialog", false ), containerControls( cb ), container(cb), setupOK(false), cargoWidget(NULL)
+{
+   sigClose.connect( SigC::slot( *this, &CargoDialog::QuitModal ));
+
+   registerGuiFunctions( guiIconHandler );
+
+   subwindows.push_back( new SolarPowerWindow );
+   subwindows.push_back( new WindPowerWindow );
+   for ( Subwindows::iterator i = subwindows.begin(); i != subwindows.end(); ++i )
+      if ( (*i)->available( this ))
+         (*i)->registerSubwindow( this );
+   
+         
+
+         // cb->resourceChanged.connect( SigC::slot( *this, &CargoDialog::updateResourceDisplay ));
+         // cb->ammoChanged.connect( SigC::slot( *this, &CargoDialog::showAmmo ));
+   NewGuiHost::pushIconHandler( &guiIconHandler );
+
+         
+   try {
+      if ( !setup() )
+         return;
+   } catch ( ParsingError err ) {
+      errorMessage( err.getMessage() );
+      return;
+   } catch ( ... ) {
+      errorMessage( "unknown exception" );
+      return;
+   }
+
+
+   for ( Subwindows::iterator i = subwindows.begin(); i != subwindows.end(); ++i )
+      hide( (*i)->getASCTXTname() );
+
+
+   PG_Widget* unitScrollArea = FindChild( "UnitScrollArea", true );
+   if ( unitScrollArea ) {
+      cargoWidget = new CargoWidget( unitScrollArea, PG_Rect( 1, 1, unitScrollArea->Width() -2 , unitScrollArea->Height() -2 ), cb );
+      cargoWidget->unitMarked.connect( SigC::slot( *this, &CargoDialog::checkStoringPosition ));
+   }
+               
+
+   if ( !cb->baseType->infoImageFilename.empty() && exist( cb->baseType->infoImageFilename )) {
+      PG_Image* img = dynamic_cast<PG_Image*>(FindChild( "container_3dpic", true ));
+      if ( img ) {
+         tnfilestream stream ( cb->baseType->infoImageFilename, tnstream::reading );
+         infoImage.readImageFile( stream );
+         img->SetDrawMode( PG_Draw::STRETCH );
+         img->SetImage( infoImage.getBaseSurface(), false );
+         img->SizeWidget( img->GetParent()->w, img->GetParent()->h );
+      }
+   }
+
+
+   setLabelText( "UnitName", cb->getName() );
+   if ( cb->getName() != cb->baseType->name )
+      setLabelText( "UnitClass", cb->baseType->name );
+
+   showAmmo();
+         /*
+   registerSpecialDisplay( "unitpad_unitsymbol");
+   registerSpecialDisplay( "unitpad_weapon_diagram");
+   registerSpecialDisplay( "unitpad_transport_transporterlevel");
+   registerSpecialDisplay( "unitpad_transport_unitlevel");
+   registerSpecialDisplay( "unitpad_transport_leveldisplay");
+         */
+
+   updateResourceDisplay();
+   updateLoadMeter();
+
+   activate_i(0);
+   Show();
+   setupOK = true;
+
+};
 
 
 //*****************************************************************************************************

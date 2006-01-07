@@ -406,8 +406,8 @@ void PutResource :: checkbuilding ( Building* b )
             b->actstorage.resource( resourcetype ) = 0;
          }
          
-         if ( b->gettank ( resourcetype ) - b->actstorage.resource( resourcetype ) < tostore )
-            tostore = b->gettank ( resourcetype ) - b->actstorage.resource( resourcetype );
+         if ( b->getStorageCapacity().resource( resourcetype ) - b->actstorage.resource( resourcetype ) < tostore )
+            tostore = b->getStorageCapacity().resource( resourcetype ) - b->actstorage.resource( resourcetype );
       
          if ( !queryonly )
             b->actstorage.resource( resourcetype ) += tostore;
@@ -441,8 +441,8 @@ void PutTribute :: checkbuilding ( Building* b )
    if ( b->color/8 == targplayer ) {
       if ((b->netcontrol & (cnet_stopenergyinput << resourcetype)) == 0) {
          int tostore = need-got;
-         if ( b->gettank ( resourcetype ) - b->actstorage.resource( resourcetype ) < tostore )
-            tostore = b->gettank ( resourcetype ) - b->actstorage.resource( resourcetype );
+         if ( b->getStorageCapacity().resource( resourcetype ) - b->actstorage.resource( resourcetype ) < tostore )
+            tostore = b->getStorageCapacity().resource( resourcetype ) - b->actstorage.resource( resourcetype );
       
          if ( !queryonly ) {
             b->actstorage.resource( resourcetype ) += tostore;
@@ -592,7 +592,7 @@ void GetResourceCapacity :: checkbuilding ( Building* b )
 {
    if ( b->color/8 == player ) {
       if ((b->netcontrol & (cnet_stopenergyinput << resourcetype)) == 0) {
-         int t = b->gettank ( resourcetype );
+         int t = b->getStorageCapacity().resource( resourcetype );
          if ( t > maxint - got )
             got = maxint;
          else

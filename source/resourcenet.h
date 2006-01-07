@@ -23,6 +23,8 @@
 #ifndef resourcenetH
  #define resourcenetH
 
+#include "gamemap.h"
+
 //! Base class for the management of resource networks and globally stored resources
 class MapNetwork {
                 static int instancesrunning;

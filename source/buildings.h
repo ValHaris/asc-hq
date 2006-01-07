@@ -38,109 +38,11 @@ class  Building : public ContainerBase {
   protected:
     bool isBuilding() const { return true; };
 
-  public:
-    class Work {
-        public:
-          virtual bool finished() = 0;
-          virtual bool run() = 0;
-          virtual Resources getPlus() = 0;
-          virtual Resources getUsage() = 0;
-          virtual ~Work() {};
-    };
-
-
-    class MatterConverter : public Work {
-          Building* bld;
-          int percentage;
-        public:
-          MatterConverter( Building* _bld ) ;
-          virtual bool finished();
-          virtual bool run();
-          virtual Resources getPlus();
-          virtual Resources getUsage();
-    };
-
-    class ResourceSink : public Work {
-          Building* bld;
-          Resources toGet;
-        public:
-          ResourceSink( Building* _bld ) ;
-          virtual bool finished();
-          virtual bool run();
-          virtual Resources getPlus();
-          virtual Resources getUsage();
-    };
-
-    class RegenerativePowerPlant : public Work {
-        protected:
-          Building* bld;
-          Resources toProduce;
-        public:
-          RegenerativePowerPlant( Building* _bld ) ;
-          virtual bool finished();
-          virtual bool run();
-          virtual Resources getUsage();
-    };
-
-    class WindPowerplant : public RegenerativePowerPlant {
-        public:
-          WindPowerplant( Building* _bld ) : RegenerativePowerPlant ( _bld ) { toProduce = getPlus(); };
-          virtual Resources getPlus();
-    };
-
-    class SolarPowerplant : public RegenerativePowerPlant {
-        public:
-          SolarPowerplant( Building* _bld ) : RegenerativePowerPlant ( _bld ) { toProduce = getPlus(); };
-          virtual Resources getPlus();
-    };
-
-    class BiResourceGeneration: public RegenerativePowerPlant {
-        public:
-          BiResourceGeneration ( Building* bld_ ) : RegenerativePowerPlant ( bld_ ) { toProduce = getPlus(); };
-          virtual Resources getPlus();
-    };
-
-    class MiningStation : public Work, protected SearchFields {
-         Building* bld;
-         bool justQuery;
-         bool hasRun;
-         Resources toExtract_thisTurn;
-         Resources spaceAvail;
-         Resources powerAvail;
-         Resources actuallyExtracted; // with increasing distance this gets lower and lower
-
-         float consumed[3];
-         float usageRatio[3];
-      protected:
-          void testfield ( const MapCoordinate& mc );
-      public:
-          MiningStation( Building* _bld, bool justQuery_ ) ;
-          virtual bool finished();
-          virtual bool run();
-          virtual Resources getPlus();
-          virtual Resources getUsage();
-    };
-
-    Work* spawnWorkClasses( bool justQuery );
+   public:
     const BuildingType* typ;
-
-    //! the Resources that are produced each turn
-    Resources   plus;
-
-    //! the maximum amount of Resources that the building can produce each turn in the ASC resource mode ; see also #bi_resourceplus
-    Resources   maxplus;
-
-    //! the current storage of Resources
-    Resources   actstorage;
 
     //! the ammo that is stored in the building
     int         ammo[waffenanzahl];
-
-    //! the maximum amount of research that the building can conduct every turn
-    int         maxresearchpoints;
-
-    //! the current amount of research that the building conducts every turn
-    int         researchpoints;
 
     //! the building's name
     ASCString    name;
@@ -153,9 +55,6 @@ class  Building : public ContainerBase {
 
     //! is the building visible? Building can be made invisible, but this feature should be used only in some very special cases
     bool         visible;
-
-    //! the maximum amount of Resources that the building can produce each turn in the BI resource mode ; see also #maxplus
-    Resources    bi_resourceplus;
 
     //! the percantage that this build has already been repaired this turn. The maximum percentage may be limited by a gameparameter
     int           repairedThisTurn;
@@ -185,11 +84,10 @@ class  Building : public ContainerBase {
     Resources putResource ( const Resources& res, bool queryonly, int scope = 1 ) { return ContainerBase::putResource ( res, queryonly, scope ); };
     Resources getResource ( const Resources& res, bool queryonly, int scope = 1 ) { return ContainerBase::getResource ( res, queryonly, scope ); };
 
-    //! returns the resource that the building consumes for its operation.
-    Resources getResourceUsage ( );
 
-    Resources getResourcePlus ( );
-
+    //! the current storage of Resources
+    Resources   actstorage;
+    
     int getIdentification();
 
 
@@ -208,9 +106,6 @@ class  Building : public ContainerBase {
     //! Removes the view and jamming of the building from the player's global radar field
     void removeview ( void );
 
-    //! returns the local storage capacity for the given resource, which depends on the resource mode of the map. \see tmap::_resourcemode
-    int  gettank ( int resource );
-    
     //! returns the armor of the building. \see BuildingType::_armor
     int  getArmor( void );
 
@@ -242,8 +137,6 @@ class  Building : public ContainerBase {
     //! unregister the building from the map position
     int  unchainbuildingfromfield ( void );
 
-    // void getpowerplantefficiency ( int* material, int* fuel );
-
     //! returns the completion of the building. \see setCompletion(int,bool)
     int getCompletion() const { return _completion; };
 
@@ -255,13 +148,10 @@ class  Building : public ContainerBase {
     void setCompletion ( int completion, bool setupImages = true  );
 
     //! hook that is called when a turn ends
-    void endTurn( void );
+    void endRound( void );
 
     //! returns a name for the building. If the building itself has a name, it will be returned. If it doesn't, the name of the building type will be returned.
     ASCString getName ( ) const;
-
-    //! returns the amount of resources that the net which the building is connected to produces each turn
-    Resources netResourcePlus( ) const;
 
     int getAmmo( int type, int num, bool queryOnly );
     int putAmmo( int type, int num, bool queryOnly );
@@ -276,6 +166,7 @@ class  Building : public ContainerBase {
      ResourceMatrix repairEfficiency;
      const ResourceMatrix& getRepairEfficiency ( void ) { return repairEfficiency; };
      virtual void postRepair ( int oldDamage ) {};
+     vector<MapCoordinate> getCoveredFields();
 };
 
 
