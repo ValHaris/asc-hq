@@ -79,6 +79,7 @@ class PropertyContainer {
 
          virtual void openBracket( const ASCString& name );
          virtual void closeBracket();
+         ASCString getNameStack();
 
          void addString ( const ASCString& name, ASCString& property );
          void addString ( const ASCString& name, ASCString& property, const ASCString& defaultValue );

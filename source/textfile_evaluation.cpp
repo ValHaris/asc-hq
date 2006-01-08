@@ -297,6 +297,17 @@ void PropertyWritingContainer :: writeProperty ( Property& p, const ASCString& v
 }
 
 
+ASCString PropertyContainer :: getNameStack()
+{
+   ASCString s;
+   for ( Level::iterator i = level.begin(); i != level.end(); ++i ) {
+      if ( s.length() )
+         s += ".";
+      s += *i;
+   }
+   return s;
+}
+
 void PropertyContainer :: openBracket( const ASCString& name )
 {
    level.push_back ( name );

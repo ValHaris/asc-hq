@@ -1729,7 +1729,6 @@ class tresearchinfo: public tdialogbox {
                     public: 
                       tresearchinfo ( void );
                       void init ( void );
-                      void count ( void ); 
                       void buttonpressed ( int id );
                       void run ( void );
 
@@ -1753,7 +1752,7 @@ void tresearchinfo::init ( void )
    addkey( 1, ct_enter );
    addkey( 1, ct_esc );
    buildgraphics();
-   count();
+   rppt = actmap->player[actmap->actplayer].research.getResearchPerTurn();
    rahmen ( true, x1 + 19, y1 + 69, x1 + xsize - 19, y1 + 91 );
    bar ( x1 + 20, y1 + 70, x1 + xsize - 20, y1 + 90, dblue );
 
@@ -1796,13 +1795,6 @@ void tresearchinfo::init ( void )
    showtext2 ( strrr ( rppt ),                   textxpos, y1 + 260 );
 
 
-}
-
-
-void tresearchinfo::count ( void )
-{
-   for ( Player::BuildingList::iterator i = actmap->player[actmap->actplayer].buildingList.begin(); i != actmap->player[actmap->actplayer].buildingList.end(); i++ )
-      rppt += (*i)->researchpoints;
 }
 
 void tresearchinfo::buttonpressed ( int id )

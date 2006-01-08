@@ -79,10 +79,6 @@ BuildingType :: BuildingType ( void )
             for ( int c = 0; c < maxbuildingpicnum; ++c )
                 bi_picture[w][c][x][y] = -1;
       }
-      
-   maxresearchpoints = 0;
-   defaultMaxResearchpoints = 0;
-   nominalresearchpoints = 0;
 }
 
 

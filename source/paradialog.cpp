@@ -1098,8 +1098,12 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
          newWidget = w;
       }
             
-      if ( newWidget && newWidget->GetName().empty() )
+      if ( newWidget && newWidget->GetName().empty() ) 
          newWidget->SetName( childNames[i] );
+      
+      if ( newWidget && newWidget->GetName() == "$pos" )
+         newWidget->SetName( pc.getNameStack() );
+      
 
       if ( newWidget && !toolTipHelp.empty() )
          new PG_ToolTipHelp( newWidget, toolTipHelp );
@@ -1390,7 +1394,7 @@ void BarGraphWidget::eventBlit (SDL_Surface *surface, const PG_Rect &src, const 
       }   
 
 
-   SDL_FillRect(PG_Application::GetScreen(), (SDL_Rect*)&d, c);
+   SDL_FillRect(PG_Application::GetScreen(), &d, c);
 
 }
 

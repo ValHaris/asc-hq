@@ -79,6 +79,10 @@ ContainerBaseType :: ContainerBaseType ()
    view = 0;
    efficiencyfuel = 1024;
    efficiencymaterial = 1024;
+
+   maxresearchpoints = 0;
+   defaultMaxResearchpoints = 0;
+   nominalresearchpoints = 0;
 }
 
 bool ContainerBaseType::hasFunction( ContainerFunctions function ) const

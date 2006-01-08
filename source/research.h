@@ -179,6 +179,9 @@ class TechAdapterDependency {
          beginning of each turn */
      bool techsAvail;
 
+     int getResearchPerTurn() const;
+     int currentTechAvailableIn() const;
+     
      Research ( );
      ~Research ();
  };
@@ -187,6 +190,7 @@ class TechAdapterDependency {
  
 //! Calculates the resources that are needed to research the given number of research
 extern Resources returnResourcenUseForResearch ( const ContainerBase* bld, int research );
+extern Resources returnResourcenUseForResearch ( const ContainerBase* bld );
 
 #endif
 

@@ -39,6 +39,7 @@
 #include "../dashboard.h"
 #include "../dialog.h"
 #include "../containerbase-functions.h"
+#include "../resourcenet.h"
 
 #include "selectionwindow.h"
 
@@ -50,7 +51,7 @@ const Vehicletype* selectVehicletype( ContainerBase* plant, const vector<Vehicle
 
 class CargoDialog;
 
-class SubWindow
+class SubWindow: public SigC::Object
 {
    protected:
       CargoDialog* cargoDialog;
@@ -163,6 +164,7 @@ namespace CargoGuiFunctions {
 }; // namespace CargoGuiFunctions
 
 
+
 class CargoDialog : public Panel
 {
 
@@ -183,6 +185,7 @@ class CargoDialog : public Panel
       Subwindows subwindows;
 
       CargoWidget* cargoWidget;
+      SubWindow* researchWindow;
 
       bool eventKeyDown(const SDL_KeyboardEvent* key)
       {
@@ -352,58 +355,7 @@ class CargoDialog : public Panel
          setLabelText( "torpmun", container->getAmmo( cwtorpedon, maxint, true ));
       }
 
-      void userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams )
-      {
-         if ( label == "ButtonPanel" ) {
-            int x = 0;
-            for ( int i = 0; i < activesubwindows.size(); ++i ) {
-               SubWinButton* button = new SubWinButton( parent, SPoint( x, 0 ), activesubwindows[i] );
-               button->sigClick.connect( SigC::bind( SigC::slot( *this, &CargoDialog::activate_i  ), i));
-               x += SubWinButton::buttonwidth;
-            }
-
-            /*
-               int yoffset = 0;
-               for ( int i = 0; i < vt->heightChangeMethodNum; ++i ) {
-                  int srcLevelCount = 0;
-                  for ( int j = 0; j < 8; ++j )
-                     if ( vt->height & vt->heightChangeMethod[i].startHeight & (1 << j)) 
-                        ++srcLevelCount;
-
-                  pc.openBracket( "LineWidget" );
-                  PG_Rect r = parseRect( pc, parent);
-                  r.y += yoffset;
-                  r.my_height *= (srcLevelCount-1) / 3 + 1;
-                  widgetParams.runTextIO( pc );
-
-                  SpecialInputWidget* sw = new SpecialInputWidget ( parent, r );
-                  parsePanelASCTXT( pc, sw, widgetParams );
-                  pc.closeBracket();
-                  yoffset += sw->Height();
-
-
-
-                  int counter = 0;
-                  for ( int j = 0; j < 8; ++j )
-                     if ( vt->height & vt->heightChangeMethod[i].startHeight & (1 << j))  {
-                        ASCString filename = "height-a" + ASCString::toString(j) + ".png";
-                        int xoffs = 3 + IconRepository::getIcon(filename).w() * (counter % 3 );
-                        int yoffs = 2 + IconRepository::getIcon(filename).h() * (counter / 3 );
-                        new PG_Image( sw, PG_Point( xoffs, yoffs ), IconRepository::getIcon(filename).getBaseSurface(), false );
-                        ++counter;
-                     }
-
-                  ASCString delta = ASCString::toString( vt->heightChangeMethod[i].heightDelta );
-                  if ( vt->heightChangeMethod[i].heightDelta > 0 )
-                     delta = "+" + delta;
-                  setLabelText( "unitpad_move_changeheight_change", delta, sw );
-                  
-                  setLabelText( "unitpad_move_changeheight_movepoints", vt->heightChangeMethod[i].moveCost, sw );
-                  setLabelText( "unitpad_move_changeheight_distance", vt->heightChangeMethod[i].dist, sw );
-               }
-               */
-         }
-      };
+      void userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams );
 
       ContainerBase* getContainer() { return container; };
       ContainerControls& getControls() { return containerControls; };
@@ -528,7 +480,6 @@ class AddProductionLine_SelectionItemFactory: public VehicleTypeSelectionItemFac
       };
 
 };
-
 
 
 class VehicleProduction_SelectionWindow : public ASC_PG_Dialog {
@@ -713,6 +664,289 @@ class WindPowerWindow : public SubWindow {
       }
 };
 
+class ResourceInfoWindow : public SubWindow {
+
+   int  getvalue ( int resourcetype, int y, int scope )
+   {
+      switch ( y ) {
+         case 0:
+         {  // avail
+            GetResource gr ( container()->getMap() );
+            return gr.getresource ( container()->getPosition().x, container()->getPosition().y, resourcetype, maxint, 1, container()->getMap()->actplayer, scope );
+         }
+         case 1:
+         {  // tank
+            GetResourceCapacity grc ( container()->getMap() );
+            return grc.getresource ( container()->getPosition().x, container()->getPosition().y, resourcetype, maxint, 1, container()->getMap()->actplayer, scope );
+         }
+         case 2:
+         {  // plus
+            GetResourcePlus grp ( container()->getMap() );
+            return grp.getresource ( container()->getPosition().x, container()->getPosition().y, resourcetype, container()->getMap()->actplayer, scope );
+         }
+         case 3:
+         {  // usage
+            GetResourceUsage gru( container()->getMap() );
+            return gru.getresource ( container()->getPosition().x, container()->getPosition().y, resourcetype, container()->getMap()->actplayer, scope );
+         }
+      } /* endswitch */
+      return -1;
+   }
+   
+   public:
+      bool available( CargoDialog* cd )
+      {
+         return dynamic_cast<Building*>( cd->getContainer() ) != NULL;
+      };
+      
+      ASCString getASCTXTname()
+      {
+         return "resourceinfo";
+      };
+      
+      void update()
+      {
+         int value[3][3][4];
+         int mx = 0;
+
+         for ( int c = 0; c < 3; c++ )
+            for ( int x = 0; x < 3; x++ )
+               for ( int y = 0; y < 4; y++ ) {
+                  value[c][x][y] = getvalue ( x, y, c );
+                  if ( y != 1 )
+                     if ( value[c][x][y] > mx )
+                        mx = value[c][x][y];
+               }
+
+
+
+         for ( int c = 0; c < 3; c++ )
+            for ( int x = 0; x < 3; x++ )
+               for ( int y = 0; y < 4; y++ ) {
+                  char xx = 'A' + (c * 3 + x);
+                  char yy = '1' + y;
+                  ASCString label = "Res";
+                  label += xx;
+                  label += yy;
+                  cout << label << "\n";
+                  if ( (y != 1 || value[c][x][y] < mx*10 || value[c][x][y] < 1000000000 ) && ( !actmap->isResourceGlobal(x) || y!=0 ||c ==2))   // don't show extremely high numbers
+                     cargoDialog->setLabelText( label, value[c][x][y] );
+                  else
+                     cargoDialog->setLabelText( label, "-" );
+               }
+      }
+      
+};
+
+
+class GraphWidget : public PG_Widget {
+   map<int,int> verticalLines;
+   vector<int> curves;
+   protected:
+      int xrange;
+      int yrange;
+      virtual int getPoint( int curve, int x ) = 0;
+      virtual void click( int x, int button ) = 0;
+
+      bool   eventMouseMotion (const SDL_MouseMotionEvent *motion)
+      {
+         PG_Point p = ScreenToClient ( motion->x, motion->y );
+         if ( motion->type == SDL_MOUSEMOTION && (motion->state == SDL_BUTTON(1)))
+            click ( p.x, 1 );
+         
+         if ( motion->type == SDL_MOUSEMOTION && (motion->state == SDL_BUTTON(3)))
+            click( p.x, 3 );
+         
+         return true;
+      }
+      
+      bool   eventMouseButtonDown (const SDL_MouseButtonEvent *button)
+      {
+         PG_Point p = ScreenToClient ( button->x, button->y );
+         if ( button->type == SDL_MOUSEBUTTONDOWN && (button->button == SDL_BUTTON_LEFT))
+            click ( p.x, 1 );
+         
+         if ( button->type == SDL_MOUSEBUTTONDOWN && (button->button == SDL_BUTTON_RIGHT))
+            click ( p.x, 3 );
+         
+         return true;
+      }
+      
+   public:
+      GraphWidget( PG_Widget *parent, const PG_Rect& rect ) : PG_Widget( parent, rect ), xrange(1), yrange(1) {};
+      void setRange( int x, int y )
+      {
+         xrange = max( x, 1);
+         yrange = max( y, 1);
+      }
+
+      int addCurve( int color )
+      {
+         curves.push_back( color );
+         return curves.size();
+      }
+      
+      void addVerticalLine ( int x, int color )
+      {
+         verticalLines[x] = color;
+      }
+
+      void clearVerticalLines()
+      {
+         verticalLines.clear();
+      }
+      
+      void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst)
+      {
+         Surface s = Surface::Wrap( PG_Application::GetScreen() );
+         
+         for ( int c = 0; c < curves.size(); ++c ) {
+            PG_Color col = curves[c];
+            int realcol = col.MapRGBA( PG_Application::GetScreen()->format, 255-GetTransparency());
+
+            for ( int x = 0; x < Width(); ++x ) {
+               int y = getPoint( c, x * xrange / Width() ) * Height() / yrange;
+               if ( y < 0 )
+                  y = 0;
+               if ( y >= Height() )
+                  y = Height() -1 ;
+               PG_Point pos = ClientToScreen( x, Height() - y );
+               s.SetPixel( pos.x, pos.y, realcol );
+            }
+         }
+
+         for ( map<int,int>::iterator v = verticalLines.begin(); v != verticalLines.end(); ++v ) {
+            PG_Color col = v->second;
+            int realcol = col.MapRGBA( PG_Application::GetScreen()->format, 255-GetTransparency());
+            
+            int x = v->first * Width() / xrange;
+            for ( int y = 0; y < Height(); ++y ) {
+               PG_Point pos = ClientToScreen( x, y );
+               s.SetPixel( pos.x, pos.y, realcol );
+            }
+         }
+      };
+
+};
+
+class ResearchGraph : public GraphWidget {
+      ContainerBase* cont;
+   protected:
+      int getPoint( int curve, int x )
+      {
+         Resources cost = returnResourcenUseForResearch( cont, x );
+         return cost.energy;
+      }
+
+
+      void addSecondaryLab( ContainerBase* lab )
+      {
+         if ( lab->baseType->nominalresearchpoints && lab->baseType->hasFunction( ContainerBaseType::Research  ) ) {
+            int rel = lab->researchpoints * cont->baseType->nominalresearchpoints / lab->baseType->nominalresearchpoints;
+            addVerticalLine( rel, 0xd9d9d9 );
+         }
+      }
+      
+      void recalc()
+      {
+         clearVerticalLines();
+
+         Player& player = cont->getMap()->player[ cont->getOwner() ];
+         for ( Player::BuildingList::iterator i = player.buildingList.begin(); i != player.buildingList.end(); ++i )
+            addSecondaryLab( *i );
+         
+         for ( Player::VehicleList::iterator i = player.vehicleList.begin(); i != player.vehicleList.end(); ++i )
+            addSecondaryLab( *i );
+         
+         addVerticalLine( cont->researchpoints, 0xd5d200 );
+      }
+
+      bool setResearch ( ContainerBase* lab, int x )
+      {
+         if ( cont->baseType->nominalresearchpoints ) {
+            int res = x * xrange / Width() * lab->baseType->nominalresearchpoints / cont->baseType->nominalresearchpoints;
+            int old = lab->researchpoints;
+            lab->researchpoints = res;
+            return res != old;
+         } else
+            return false;
+      }
+
+
+      void click( int x, int button )
+      {
+         setResearch( x, button == 3 );
+      }
+      
+      void setResearch( int x, bool global = false )
+      {
+         if ( global ) {
+            Player& player = cont->getMap()->player[ cont->getOwner() ];
+            for ( Player::BuildingList::iterator i = player.buildingList.begin(); i != player.buildingList.end(); ++i )
+               setResearch( *i, x );
+         
+            for ( Player::VehicleList::iterator i = player.vehicleList.begin(); i != player.vehicleList.end(); ++i )
+               setResearch( *i, x );
+         }
+         
+         if ( setResearch( cont, x ) || global ) {
+            sigChange();
+            recalc();
+            Update();
+         }
+      }
+      
+   public:
+      ResearchGraph( PG_Widget *parent, const PG_Rect& rect, ContainerBase* container ) : GraphWidget( parent, rect ), cont( container )
+      {
+         setRange( cont->maxresearchpoints, returnResourcenUseForResearch( cont, cont->maxresearchpoints ).energy );
+         addCurve( 0x00ff00 );
+         recalc();
+      }
+
+      SigC::Signal0<void> sigChange;
+
+};
+
+
+class ResearchWindow : public SubWindow {
+   public:
+      bool available( CargoDialog* cd )
+      {
+         return cd->getContainer()->baseType->hasFunction( ContainerBaseType::Research  );
+      };
+      
+      ASCString getASCTXTname()
+      {
+         return "research";
+      };
+      
+      void update()
+      {
+         Player& player = container()->getMap()->player[ container()->getOwner() ];
+               
+         cargoDialog->setLabelText( "ResPerTurnLocal", container()->researchpoints, widget );
+         cargoDialog->setLabelText( "ResPerTurnGlobal", player.research.getResearchPerTurn(), widget );
+
+         Resources cost = returnResourcenUseForResearch( container() );
+         cargoDialog->setLabelText( "CostLocal", cost.energy, widget );
+
+         Resources globalCost;
+         for ( Player::BuildingList::iterator i = player.buildingList.begin(); i != player.buildingList.end(); ++i )
+            globalCost += returnResourcenUseForResearch( *i );
+         
+         for ( Player::VehicleList::iterator i = player.vehicleList.begin(); i != player.vehicleList.end(); ++i )
+            globalCost += returnResourcenUseForResearch( *i );
+         
+         cargoDialog->setLabelText( "CostGlobal", globalCost.energy, widget );
+         cargoDialog->setLabelText( "AvailGlobal", player.research.currentTechAvailableIn(), widget );
+         
+         if ( player.research.activetechnology )
+            cargoDialog->setLabelText( "CurrentTech", player.research.activetechnology->name, widget );
+         else
+            cargoDialog->setLabelText( "CurrentTech", "-", widget );
+      }
+};
 
 
 //*****************************************************************************************************
@@ -726,7 +960,7 @@ class WindPowerWindow : public SubWindow {
 
 
 CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
-   : Panel( parent, PG_Rect::null, "cargodialog", false ), containerControls( cb ), container(cb), setupOK(false), cargoWidget(NULL)
+   : Panel( parent, PG_Rect::null, "cargodialog", false ), containerControls( cb ), container(cb), setupOK(false), cargoWidget(NULL), researchWindow( NULL )
 {
    sigClose.connect( SigC::slot( *this, &CargoDialog::QuitModal ));
 
@@ -734,6 +968,9 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
 
    subwindows.push_back( new SolarPowerWindow );
    subwindows.push_back( new WindPowerWindow );
+   subwindows.push_back( new ResourceInfoWindow );
+   researchWindow = new ResearchWindow;
+   subwindows.push_back( researchWindow );
    for ( Subwindows::iterator i = subwindows.begin(); i != subwindows.end(); ++i )
       if ( (*i)->available( this ))
          (*i)->registerSubwindow( this );
@@ -742,7 +979,6 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
 
          // cb->resourceChanged.connect( SigC::slot( *this, &CargoDialog::updateResourceDisplay ));
          // cb->ammoChanged.connect( SigC::slot( *this, &CargoDialog::showAmmo ));
-   NewGuiHost::pushIconHandler( &guiIconHandler );
 
          
    try {
@@ -798,8 +1034,87 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
 
    activate_i(0);
    Show();
+   NewGuiHost::pushIconHandler( &guiIconHandler );
    setupOK = true;
 
+};
+
+
+void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams )
+{
+   if ( label == "ButtonPanel" ) {
+      int x = 0;
+      for ( int i = 0; i < activesubwindows.size(); ++i ) {
+         SubWinButton* button = new SubWinButton( parent, SPoint( x, 0 ), activesubwindows[i] );
+         button->sigClick.connect( SigC::bind( SigC::slot( *this, &CargoDialog::activate_i  ), i));
+         x += SubWinButton::buttonwidth;
+      }
+   }
+
+   if ( label == "ResourceTable" ) {
+      int gap = 2;
+      int cellwidth = (parent->Width() - 8 * gap) / 9;
+      int cellHeight = (parent->Height() - 3 * gap ) / 4;
+      for ( int x = 0; x < 9; ++x )
+         for ( int y = 0; y < 4; ++y ) {
+            PG_Rect r ( x * parent->Width() / 9, y * parent->Height() / 4, cellwidth, cellHeight );
+            PG_Label* l = new PG_Label ( parent, r, PG_NULLSTR );
+            widgetParams.assign( l );
+            ASCString label = "Res";
+            char xx = 'A' + x;
+            char yy = '1' + y;
+            label += xx;
+            label += yy;
+            l->SetName( label );
+         }
+   }
+
+   if ( label == "ResearchGraph" ) {
+      ResearchGraph* graph = new ResearchGraph( parent, PG_Rect( 0, 0, parent->Width(), parent->Height() ), container );
+      graph->sigChange.connect( SigC::slot( *researchWindow, &SubWindow::update ));
+   }
+
+            /*
+   int yoffset = 0;
+   for ( int i = 0; i < vt->heightChangeMethodNum; ++i ) {
+   int srcLevelCount = 0;
+   for ( int j = 0; j < 8; ++j )
+   if ( vt->height & vt->heightChangeMethod[i].startHeight & (1 << j))
+   ++srcLevelCount;
+
+   pc.openBracket( "LineWidget" );
+   PG_Rect r = parseRect( pc, parent);
+   r.y += yoffset;
+   r.my_height *= (srcLevelCount-1) / 3 + 1;
+   widgetParams.runTextIO( pc );
+
+   SpecialInputWidget* sw = new SpecialInputWidget ( parent, r );
+   parsePanelASCTXT( pc, sw, widgetParams );
+   pc.closeBracket();
+   yoffset += sw->Height();
+
+
+
+   int counter = 0;
+   for ( int j = 0; j < 8; ++j )
+   if ( vt->height & vt->heightChangeMethod[i].startHeight & (1 << j))  {
+   ASCString filename = "height-a" + ASCString::toString(j) + ".png";
+   int xoffs = 3 + IconRepository::getIcon(filename).w() * (counter % 3 );
+   int yoffs = 2 + IconRepository::getIcon(filename).h() * (counter / 3 );
+   new PG_Image( sw, PG_Point( xoffs, yoffs ), IconRepository::getIcon(filename).getBaseSurface(), false );
+   ++counter;
+}
+
+   ASCString delta = ASCString::toString( vt->heightChangeMethod[i].heightDelta );
+   if ( vt->heightChangeMethod[i].heightDelta > 0 )
+   delta = "+" + delta;
+   setLabelText( "unitpad_move_changeheight_change", delta, sw );
+                  
+   setLabelText( "unitpad_move_changeheight_movepoints", vt->heightChangeMethod[i].moveCost, sw );
+   setLabelText( "unitpad_move_changeheight_distance", vt->heightChangeMethod[i].dist, sw );
+}
+            */
+         
 };
 
 

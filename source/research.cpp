@@ -697,6 +697,28 @@ void Research::initchoosentechnology()
 }
 */
 
+int Research :: getResearchPerTurn() const
+{
+   int rppt = 0;
+   for ( Player::BuildingList::const_iterator i = map->player[player].buildingList.begin(); i != map->player[player].buildingList.end(); i++ )
+      rppt += (*i)->researchpoints;
+
+   for ( Player::VehicleList::const_iterator i = map->player[player].vehicleList.begin(); i != map->player[player].vehicleList.end(); i++ )
+      rppt += (*i)->researchpoints;
+   
+   return rppt;
+}
+
+int Research :: currentTechAvailableIn() const
+{
+   if ( activetechnology ) {
+      int rpt = getResearchPerTurn();
+      return ( activetechnology->researchpoints - progress + rpt - 1) / rpt;
+   } else
+      return 0;
+}
+
+
 Research::~Research () {};
 
 
@@ -728,6 +750,13 @@ Resources returnResourcenUseForResearch ( const ContainerBase* bld, int research
 
    return res;
 }
+
+Resources returnResourcenUseForResearch ( const ContainerBase* bld )
+{
+   return returnResourcenUseForResearch ( bld, bld->researchpoints );
+}
+
+
 
 #if 0
 void returnresourcenuseforresearch ( const Building* bld, int research, int* energy, int* material )

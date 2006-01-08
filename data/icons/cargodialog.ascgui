@@ -257,22 +257,30 @@ panel {
       x = 1
       y = 162
       x2 = -15
-      height = 250      
+      height = 200      
    } UnitScrollArea
 
    LoadingMeter {
       type = BarGraph
+
+      ; this graph shows how much of the transports max carrying weight is used up right now by its cargo
+
       x = -14
       y = 162
       x2 = -1
-      height = 250
+      height = 200
       Direction = buttom2top
       BackgroundColor = 0x00FF00
    } LoadingMeter
 
    SubWindowPane {
       type = plain
-      backgroundcolor = 0x3f3f3f
+      backgroundcolor = 0x3f3f30
+
+      x = 1
+      y = 352
+      x2 = -1
+      y2 = 519
 
       ChildWidgets = ammotransfer ammoproduction info cargoinfo conventionalpower mining netcontrol research resourceinfo solarpower windpower
       
@@ -410,21 +418,101 @@ panel {
       } netcontrol
       
       research {
-         type = dummy
+         type = image
+         Filename = cargo-dialog-research.png
          x = 0
          y = 0
          x2 = -1
          y2 = -1
-         
-         ChildWidgets = InfoText
-         InfoText {
+         ChildWidgets = CurrentTech ResPerTurnLabel ResPerTurnLocal ResPerTurnGlobal   CostLabel CostLocal CostGlobal   AvailLabel AvailGlobal GraphArea
+
+         CurrentTech {
+            type = TextOutput
+            x = 290
+            y = 5
+            x2 = 516
+            y2 = 22
+         } CurrentTech
+
+
+         ResPerTurnLabel {
             type = StaticText
-            text = research
+            text = Research / Turn
             x = 10
-            y = 10
-            height = 20
-            width = 100
-         } InfoText   
+            y = 64
+            x2 = 119
+            height = 13
+         } ResPerTurnLabel
+
+         ResPerTurnLocal {
+            type = TextOutput
+            x = 148
+            y = 64
+            x2 = 191
+            height = 13
+         } ResPerTurnLocal
+         ResPerTurnGlobal {
+            type = TextOutput
+            x = 209
+            y = 64
+            x2 = 154
+            height = 13
+         } ResPerTurnGlobal
+
+
+         CostLabel {
+            type = StaticText
+            text = Cost
+            x = 10
+            y = 92
+            x2 = 119
+            height = 13
+         } CostLabel
+
+         CostLocal {
+            type = TextOutput
+            x = 148
+            y = 92
+            x2 = 191
+            height = 13
+         } CostLocal
+         CostGlobal {
+            type = TextOutput
+            text = Cost
+            x = 209
+            y = 92
+            x2 = 254
+            height = 13
+         } CostGlobal
+
+
+         AvailLabel {
+            type = StaticText
+            text = Available in
+            x = 10
+            y = 118
+            x2 = 119
+            height = 13
+         } AvailLabel
+
+         AvailGlobal {
+            type = TextOutput
+            text = Cost
+            x = 209
+            y = 118
+            x2 = 254
+            height = 13
+         } AvailGlobal
+
+         GraphArea {
+            type = dummy
+            x = 276
+            y = 40
+            x2 = 509
+            y2 = 157
+            UserHandler = ResearchGraph
+         } GraphArea
+
          
       } research
 
@@ -435,15 +523,104 @@ panel {
          x2 = -1
          y2 = -1
          
-         ChildWidgets = InfoText
-         InfoText {
-            type = StaticText
-            text = resourceinfo
-            x = 10
-            y = 10
-            height = 20
-            width = 100
-         } InfoText   
+         ChildWidgets = Background
+         Background {
+            type = image
+            Filename = cargo-dialog-resourceinfo.png
+            x = 0
+            y = 0
+            x2 = -1
+            y2 = -1
+
+            ChildWidgets = LineLabels ColumnLabels Data
+             ; Local1 Local2 Local3 Net1 Net2 Net3 Global1 Global2 Global3
+            LineLabels {
+               type = dummy
+               x = 8
+               y = 88
+               x2 = 67
+               y2 = 157
+               ChildWidgets = avail capacity plus usage
+               avail {
+                  type = StaticText
+                  text = Avail
+                  x = 0
+                  y = 0
+                  x2 = -1 
+                  height = 12
+               } avail
+               capacity {
+                  type = StaticText
+                  text = Capacity
+                  x = 0
+                  y = 19
+                  x2 = -1 
+                  height = 12
+               } capacity
+               plus {
+                  type = StaticText
+                  text = Plus
+                  x = 0
+                  y = 38
+                  x2 = -1 
+                  height = 12
+               } plus
+               usage {
+                  type = StaticText
+                  text = Usage
+                  x = 0
+                  y = 57
+                  x2 = -1 
+                  height = 12
+               } usage
+            } LineLabels
+
+            ColumnLabels {
+               type = dummy
+               x = 116
+               y = 41
+               x2 = 480
+               y2 = 52
+               TextAlign = Center
+               ChildWidgets = local net global
+               local {
+                  type = StaticText
+                  text = Local
+                  x = 0
+                  y = 0
+                  width = 58
+                  y2 = -1
+               } local 
+
+               net {
+                  type = StaticText
+                  text = Network
+                  x = 150
+                  y = 0
+                  width = 58
+                  y2 = -1
+               } net 
+
+               global {
+                  type = StaticText
+                  text = Global
+                  x = 300
+                  y = 0
+                  width = 58
+                  y2 = -1
+               } global 
+            } ColumnLabels
+
+            Data {
+               type = dummy
+               TextAlign = Right
+               x = 72
+               y = 86
+               x2 = 515
+               y2 = 162
+               UserHandler = ResourceTable
+            } Data
+         } Background
          
       } resourceinfo
             
@@ -582,10 +759,6 @@ panel {
          } BKGR
       } windpower
       
-      x = 1
-      y = 402
-      x2 = -1
-      y2 = 519
    } SubWindowPane
   
    SubWindowSelectorPane {
