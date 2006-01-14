@@ -2,9 +2,12 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.67 2004-05-16 11:28:00 mbickel Exp $
+//     $Id: edmain.cpp,v 1.68 2006-01-14 23:01:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.67  2004/05/16 11:28:00  mbickel
+//      Speed up of startup loading by using a cache file
+//
 //     Revision 1.66  2004/05/12 20:05:52  mbickel
 //      Restructured file loading routines for upcoming data cache
 //
@@ -352,6 +355,11 @@
  #include "dos\memory.h"
 #endif
 
+#ifdef WIN32
+ #include  "win32/msvc/mdump.h"
+ MiniDumper miniDumper( "asc1mapeditor" );
+#endif
+
 // #define backgroundpict1 "BKGR2.PCX"  
 #define menutime 35
 
@@ -630,6 +638,12 @@ void         editor(void)
                      break;
                   case ct_f9 : execaction(act_selweather);
                      break;
+                  case ct_f12 + ct_stp:          
+                     if (choice_dlg("do you really want to crash the application ?","~y~es","~n~o") == 1) {
+                        char* c = NULL;
+                        *c = 10;
+                     }
+                     break;
                   case ct_a + ct_stp :  execaction(act_setupalliances);
                      break;
                   case ct_b + ct_stp:  execaction(act_toggleresourcemode);
@@ -895,7 +909,6 @@ int mapeditorMainThread ( void* _mapname )
 
 int main(int argc, char *argv[] )
 { 
-
    Cmdline* cl = NULL;
    auto_ptr<Cmdline> apcl ( cl );
    try {

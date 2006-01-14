@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.133 2005-07-09 10:44:46 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.134 2006-01-14 23:01:46 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -4536,6 +4536,7 @@ void resetPlayerData()
    buttonsP.push_back ( "~U~nits" );
    buttonsP.push_back ( "~B~uildings" );
    buttonsP.push_back ( "~R~esource" );
+   buttonsP.push_back ( "~T~ribute" );
    buttonsP.push_back ( "~c~lose" );
 
    pair<int,int> playerRes;
@@ -4592,10 +4593,18 @@ void resetPlayerData()
                   (*i)->actstorage = Resources();
                }
                actmap->bi_resource[player] = Resources();
+            }
 
+            if ( playerRes.first == 5 || playerRes.first == 6 ) {
+               for ( int j = 0; j< 8; ++j ) {
+                  actmap->tribute.avail[player][j] = Resources();
+                  actmap->tribute.avail[j][player]= Resources();
+                  actmap->tribute.paid[player][j] = Resources();
+                  actmap->tribute.paid[j][player]= Resources();
+               }
             }
          }
 
 
-   } while ( playerRes.first != 6 );
+   } while ( playerRes.first != 7 );
 }
