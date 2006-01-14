@@ -36,6 +36,7 @@ ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, pmap map, int pla
    color = player*8;
    maxresearchpoints = baseType->defaultMaxResearchpoints;
    researchpoints = min ( maxresearchpoints, baseType->nominalresearchpoints );
+   maxplus = baseType->maxplus;
 }
 
 SigC::Signal0<void> ContainerBase :: anyContainerDestroyed;

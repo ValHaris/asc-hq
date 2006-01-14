@@ -78,6 +78,19 @@ void MainScreenWidget::setup( bool messageLine )
 }
 
 
+void MainScreenWidget :: activateMapLayer( const ASCString& name, bool active )
+{
+   if ( mapDisplay )
+      mapDisplay->activateMapLayer( name , active );
+}
+
+void MainScreenWidget :: toggleMapLayer( const ASCString& name )
+{
+   if ( mapDisplay )
+      mapDisplay->toggleMapLayer( name );
+}
+
+
 bool MainScreenWidget :: idleHandler( )
 {
    if ( ticker > lastMessageTime + 300 ) {

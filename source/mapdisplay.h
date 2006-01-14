@@ -83,8 +83,6 @@ class tlockdispspfld {
 //! Determines if fields that have a temp value != 0 are being marked when displaying the map
 extern bool tempsvisible;
 
-extern int showresources;
-
 
 class MapLayer;
 

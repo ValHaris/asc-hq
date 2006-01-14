@@ -46,8 +46,10 @@ public:
     MainScreenWidget( PG_Application& application );
 
     void displayMessage( const ASCString& message );
-
     
+    void activateMapLayer( const ASCString& name, bool active );
+    void toggleMapLayer( const ASCString& name );
+
 protected:
     MapDisplayPG* mapDisplay;
     // Menu* menu;

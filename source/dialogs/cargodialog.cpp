@@ -63,6 +63,7 @@ class SubWindow: public SigC::Object
       virtual bool available( CargoDialog* cd ) = 0;
       virtual ASCString getASCTXTname() = 0;
       virtual void registerSubwindow( CargoDialog* cd );
+      virtual void registerChilds( CargoDialog* cd );
       virtual void update() = 0;
       virtual ~SubWindow() {} ;
 };
@@ -186,6 +187,7 @@ class CargoDialog : public Panel
 
       CargoWidget* cargoWidget;
       SubWindow* researchWindow;
+      SubWindow* matterWindow;
 
       bool eventKeyDown(const SDL_KeyboardEvent* key)
       {
@@ -600,8 +602,14 @@ const Vehicletype* selectVehicletype( ContainerBase* plant, const vector<Vehicle
 void SubWindow::registerSubwindow( CargoDialog* cd )
 {
    cargoDialog = cd;
-   widget = cd->FindChild( getASCTXTname(), true);
    cd->addAvailableSubwin( this );
+}
+
+void SubWindow::registerChilds( CargoDialog* cd )
+{
+   widget = cd->FindChild( getASCTXTname(), true);
+   if ( !widget )
+      warning( "Could not find widget with name " + getASCTXTname() );
 }
 
 
@@ -740,13 +748,16 @@ class ResourceInfoWindow : public SubWindow {
 
 
 class GraphWidget : public PG_Widget {
-   map<int,int> verticalLines;
-   vector<int> curves;
+      map<int,int> verticalLines;
+      vector<int> curves;
+      typedef vector< pair<int,int> > Bars;
+      Bars bars;
    protected:
       int xrange;
       int yrange;
-      virtual int getPoint( int curve, int x ) = 0;
-      virtual void click( int x, int button ) = 0;
+      virtual int getPoint( int curve, int x ) { return 0; };
+      virtual int getBarHeight( int bar ) { return 0; };
+      virtual void click( int x, int button ) {};
 
       bool   eventMouseMotion (const SDL_MouseMotionEvent *motion)
       {
@@ -771,6 +782,12 @@ class GraphWidget : public PG_Widget {
          
          return true;
       }
+
+      int mapColor( int col )
+      {
+         PG_Color color = col;
+         return color.MapRGBA( PG_Application::GetScreen()->format, 255-GetTransparency());
+      }
       
    public:
       GraphWidget( PG_Widget *parent, const PG_Rect& rect ) : PG_Widget( parent, rect ), xrange(1), yrange(1) {};
@@ -785,6 +802,13 @@ class GraphWidget : public PG_Widget {
          curves.push_back( color );
          return curves.size();
       }
+
+      int addBar( int pos, int color )
+      {
+         bars.push_back ( make_pair( pos, color ));
+         return bars.size();
+      }
+      
       
       void addVerticalLine ( int x, int color )
       {
@@ -801,8 +825,7 @@ class GraphWidget : public PG_Widget {
          Surface s = Surface::Wrap( PG_Application::GetScreen() );
          
          for ( int c = 0; c < curves.size(); ++c ) {
-            PG_Color col = curves[c];
-            int realcol = col.MapRGBA( PG_Application::GetScreen()->format, 255-GetTransparency());
+            int realcol = mapColor( curves[c] );
 
             for ( int x = 0; x < Width(); ++x ) {
                int y = getPoint( c, x * xrange / Width() ) * Height() / yrange;
@@ -816,8 +839,7 @@ class GraphWidget : public PG_Widget {
          }
 
          for ( map<int,int>::iterator v = verticalLines.begin(); v != verticalLines.end(); ++v ) {
-            PG_Color col = v->second;
-            int realcol = col.MapRGBA( PG_Application::GetScreen()->format, 255-GetTransparency());
+            int realcol = mapColor( v->second );
             
             int x = v->first * Width() / xrange;
             for ( int y = 0; y < Height(); ++y ) {
@@ -825,8 +847,25 @@ class GraphWidget : public PG_Widget {
                s.SetPixel( pos.x, pos.y, realcol );
             }
          }
-      };
+         int barNum = 0;
+         for ( Bars::iterator b = bars.begin(); b != bars.end(); ++b ) {
+            int x = b->first * Width() / xrange;
+            int x2 = (b->first + 1) * Width() / xrange - 1;
+            if ( x2 <= x )
+               x2 = x + 1;
 
+            int y = getBarHeight( barNum ) * Height() / yrange;
+            if ( y < 0 )
+               y = 0;
+            if ( y >= Height() )
+               y = Height() -1 ;
+            
+            PG_Point pos = ClientToScreen( x, Height() - y );
+            paintFilledRectangle<4>( s, SPoint( pos.x, pos.y), x2-x, y, ColorMerger_ColoredOverwrite<4>( mapColor( b->second ) ) );
+
+            ++barNum;
+         }
+      };
 };
 
 class ResearchGraph : public GraphWidget {
@@ -949,6 +988,179 @@ class ResearchWindow : public SubWindow {
 };
 
 
+
+class MatterAndMiningBaseWindow : public SubWindow {
+   PG_Slider* slider;
+   bool first;
+
+   protected:
+      virtual bool invertSlider() { return false; };
+   private:
+   
+   bool scrollTrack( long pos )
+   {
+      if ( invertSlider() )
+         pos = 100 - pos;
+      setnewpower( pos );
+      update();
+      return true;
+   };
+
+   void setnewpower ( ContainerBase* c, int power )
+   {
+      if ( hasFunction( c ) ) {
+         for ( int r = 0; r < 3; r++ )
+            c->plus.resource(r) = c->maxplus.resource(r) * power/100;
+      
+         logtoreplayinfo( rpl_setResourceProcessingAmount, c->getPosition().x, c->getPosition().y, c->plus.energy, c->plus.material, c->plus.fuel );
+      }
+   }
+      
+   void setnewpower ( int pwr )
+   {
+      if ( pwr < 0 )
+         pwr = 0;
+
+      if ( pwr > 100 )
+         pwr = 100;
+         
+      bool allbuildings = false;
+         
+      Player& player = container()->getMap()->player[ container()->getOwner() ];
+         
+      if ( allbuildings ) {
+         for ( Player::BuildingList::iterator bi = player.buildingList.begin(); bi != player.buildingList.end(); bi++ )
+            setnewpower( *bi, pwr );
+         for ( Player::VehicleList::iterator bi = player.vehicleList.begin(); bi != player.vehicleList.end(); bi++ )
+            setnewpower( *bi, pwr );
+      } else {
+         setnewpower( container(), pwr );
+      }
+   }
+
+   virtual bool hasFunction( const ContainerBase* container ) = 0;
+   
+   bool available( CargoDialog* cd )
+   {
+      return hasFunction( cd->getContainer() );
+   };
+   
+      
+   public:
+      MatterAndMiningBaseWindow () : slider(NULL), first(true) {};
+      
+      void update()
+      {
+         if ( widget )
+            slider = dynamic_cast<PG_Slider*>( widget->FindChild( "PowerSlider", true ));
+         if ( first && slider ) {
+            first = false;
+            slider->SetRange( 0, 100 );
+            slider->sigScrollPos.connect( SigC::slot( *this, &MatterAndMiningBaseWindow::scrollTrack ));
+            slider->sigScrollTrack.connect( SigC::slot( *this, &MatterAndMiningBaseWindow::scrollTrack ));
+
+            for ( int r = 0; r < 3; ++r )
+               if ( container()->maxplus.resource(r) ) {
+                  slider->SetPosition( 100 * container()->plus.energy / container()->maxplus.energy );
+                  break;
+               }
+         }
+
+         for ( int r = 0; r < 3; ++r ) {
+            ASCString s = Resources::name(r);
+            int amount = container()->plus.resource(r);
+            if ( container()->maxplus.resource(r) < 0 ) {
+               s += "In";
+               amount  = -amount;
+            } else {
+               s += "Out";
+            }
+            if ( container()->maxplus.resource(r) != 0 )
+               cargoDialog->setLabelText( s, amount, widget );
+         }
+      }
+};
+
+class MatterConversionWindow : public MatterAndMiningBaseWindow {
+   protected:
+      bool hasFunction( const ContainerBase* container )
+      {
+         return container->baseType->hasFunction( ContainerBaseType::MatterConverter );
+      };
+   public:
+      
+      ASCString getASCTXTname()
+      {
+         return "conventionalpower";
+      };
+      
+};
+
+
+
+class MiningGraph : public GraphWidget {
+      ContainerBase* cont;
+      GetMiningInfo::MiningInfo mininginfo;
+   protected:
+      
+      int getBarHeight( int bar )
+      {
+         int r = (bar % 4) - 1;
+         switch ( bar % 4 ) {
+            case 0:
+            case 1:
+               return 100;
+            case 2:
+            case 3:
+               return 100 * mininginfo.avail[bar/4].resource(r) / mininginfo.max[bar/4].resource(r);
+         };
+         return 0;
+      };
+      
+   public:
+      MiningGraph( PG_Widget *parent, const PG_Rect& rect, ContainerBase* container ) : GraphWidget( parent, rect ), cont( container )
+      {
+         setRange( (maxminingrange+1)*3+1, 110 );
+
+         GetMiningInfo gmi ( container );
+         mininginfo = gmi.getMiningInfo();
+
+         int neutralColor = 0x666666;
+
+         for ( int i = 0; i <= min( mininginfo.nextMiningDistance + 1, maxminingrange); ++i ) {
+            addBar( i * 3, neutralColor );
+            addBar( i * 3+1, neutralColor );
+            addBar( i * 3, Resources::materialColor );
+            addBar( i * 3+1, Resources::fuelColor );
+         }
+         
+      }
+};
+
+
+class MiningWindow : public MatterAndMiningBaseWindow {
+   protected:
+      bool hasFunction( const ContainerBase* container )
+      {
+         return container->baseType->hasFunction( ContainerBaseType::MiningStation );
+      };
+      
+      bool invertSlider() { return true; };
+      
+   public:
+     
+      ASCString getASCTXTname()
+      {
+         return "mining";
+      };
+      
+      void update()
+      {
+         MatterAndMiningBaseWindow::update();
+      }
+};
+
+
 //*****************************************************************************************************
 //*****************************************************************************************************
 //
@@ -960,7 +1172,7 @@ class ResearchWindow : public SubWindow {
 
 
 CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
-   : Panel( parent, PG_Rect::null, "cargodialog", false ), containerControls( cb ), container(cb), setupOK(false), cargoWidget(NULL), researchWindow( NULL )
+   : Panel( parent, PG_Rect::null, "cargodialog", false ), containerControls( cb ), container(cb), setupOK(false), cargoWidget(NULL), researchWindow( NULL ), matterWindow(NULL)
 {
    sigClose.connect( SigC::slot( *this, &CargoDialog::QuitModal ));
 
@@ -968,9 +1180,15 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
 
    subwindows.push_back( new SolarPowerWindow );
    subwindows.push_back( new WindPowerWindow );
+   subwindows.push_back( new MiningWindow );
    subwindows.push_back( new ResourceInfoWindow );
+   
    researchWindow = new ResearchWindow;
    subwindows.push_back( researchWindow );
+   
+   matterWindow = new MatterConversionWindow;
+   subwindows.push_back ( matterWindow );
+   
    for ( Subwindows::iterator i = subwindows.begin(); i != subwindows.end(); ++i )
       if ( (*i)->available( this ))
          (*i)->registerSubwindow( this );
@@ -992,9 +1210,13 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
       return;
    }
 
+   
 
-   for ( Subwindows::iterator i = subwindows.begin(); i != subwindows.end(); ++i )
+   for ( Subwindows::iterator i = subwindows.begin(); i != subwindows.end(); ++i ) {
+      if ( (*i)->available( this ))
+         (*i)->registerChilds( this );
       hide( (*i)->getASCTXTname() );
+   }
 
 
    PG_Widget* unitScrollArea = FindChild( "UnitScrollArea", true );
@@ -1073,7 +1295,10 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
       ResearchGraph* graph = new ResearchGraph( parent, PG_Rect( 0, 0, parent->Width(), parent->Height() ), container );
       graph->sigChange.connect( SigC::slot( *researchWindow, &SubWindow::update ));
    }
-
+   
+   if ( label == "MiningGraph" ) 
+      new MiningGraph( parent, PG_Rect( 0, 0, parent->Width(), parent->Height() ), container );
+   
             /*
    int yoffset = 0;
    for ( int i = 0; i < vt->heightChangeMethodNum; ++i ) {

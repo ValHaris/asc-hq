@@ -87,10 +87,13 @@ GetMiningInfo::MiningInfo::MiningInfo()
 {
    for ( int i = 0; i < maxminingrange+2; i++ )
       efficiency[i] = 0;
+   nextMiningDistance = -1;
 }
 
-GetMiningInfo :: GetMiningInfo ( pmap _gamemap ) : SearchFields ( _gamemap )
-{}
+GetMiningInfo :: GetMiningInfo ( const ContainerBase* container ) : SearchFields ( container->getMap() ), miningStation( container )
+{
+   run();
+}
 
 void GetMiningInfo :: testfield ( const MapCoordinate& mc )
 {
@@ -102,12 +105,19 @@ void GetMiningInfo :: testfield ( const MapCoordinate& mc )
    miningInfo.avail[dist].fuel     += fld->fuel     * resource_fuel_factor;
    miningInfo.max[dist].material   += 255 * resource_material_factor;
    miningInfo.max[dist].fuel       += 255 * resource_fuel_factor;
+   if ( miningInfo.nextMiningDistance == -1 ) {
+      if ( miningStation->maxplus.fuel > 0 && fld->fuel > 0 )
+         miningInfo.nextMiningDistance = dist;
+      
+      if ( miningStation->maxplus.material > 0 && fld->material > 0 )
+         miningInfo.nextMiningDistance = dist;
+   }
 }
 
 
-void GetMiningInfo :: run (  const Building* bld )
+void GetMiningInfo :: run ()
 {
-   initsearch ( bld->getEntry(), maxminingrange, 0 );
+   initsearch ( miningStation->getPosition(), 0, maxminingrange );
    startsearch();
 }
 

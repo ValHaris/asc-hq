@@ -768,9 +768,8 @@ void execuseraction ( tuseractions action )
          break;
 */
       case ua_changeresourceview:
-         showresources++;
-         if ( showresources >= 3 )
-            showresources = 0;
+         if ( mainScreenWidget ) 
+            mainScreenWidget->toggleMapLayer( "resources");
          displaymap();
          break;
 

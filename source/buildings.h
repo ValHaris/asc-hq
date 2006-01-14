@@ -170,26 +170,6 @@ class  Building : public ContainerBase {
 };
 
 
-//! calculates some mining statistics for a mining station
-class GetMiningInfo : public SearchFields {
-          protected:
-             void testfield ( const MapCoordinate& mc );
-          public:
-             class MiningInfo {
-                  public:
-                     MiningInfo ( );
-                     Resources avail[maxminingrange+2];
-                     int efficiency[maxminingrange+2];
-                     Resources max[maxminingrange+2];            // the theoretical maximum of the mineral resources in the given distance
-             };
-             GetMiningInfo ( pmap _gamemap );
-             const MiningInfo& getMiningInfo() {return miningInfo; };
-             void run ( const Building* bld );
-          protected:
-             MiningInfo miningInfo;
-         };
-
-
 extern void doresearch ( tmap* actmap, int player );
 
 #endif

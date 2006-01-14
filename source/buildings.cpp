@@ -63,11 +63,6 @@ Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const B
 
    if ( chainToField )
       chainbuildingtofield ( entryPosition, setupImages );
-   /*
-   #ifdef karteneditor
-   plus = maxplus = typ->maxplus;
-   #endif
-   */
    plus = typ->defaultProduction;
 }
 

@@ -108,5 +108,27 @@ class MiningStation : public ContainerBase::Work, protected SearchFields
 };
 
 
+//! calculates some mining statistics for a mining station
+class GetMiningInfo : public SearchFields {
+      const ContainerBase* miningStation;
+      void run();
+   protected:
+      void testfield ( const MapCoordinate& mc );
+   public:
+      class MiningInfo {
+         public:
+            MiningInfo ( );
+            Resources avail[maxminingrange+2];
+            int efficiency[maxminingrange+2];
+            Resources max[maxminingrange+2];            // the theoretical maximum of the mineral resources in the given distance
+            int nextMiningDistance;
+      };
+      GetMiningInfo ( const ContainerBase* container );
+      const MiningInfo& getMiningInfo() {return miningInfo; };
+//      void run ( const ContainerBase* bld );
+   protected:
+      MiningInfo miningInfo;
+};
+
 
 #endif

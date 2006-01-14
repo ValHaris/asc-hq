@@ -93,17 +93,17 @@ class ResourceGraphLayer : public MapLayer {
 
 void ResourceGraphLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
 {
+#ifndef karteneditor
    if ( fieldInfo.playerView >= visible_ago) {
-      #ifndef karteneditor
       if ( fieldInfo.fld->resourceview && (fieldInfo.fld->resourceview->visible & ( 1 << fieldInfo.playerView) ) ){
          paintBar( fieldInfo, pos, 0, fieldInfo.fld->resourceview->materialvisible[fieldInfo.playerView], Resources::materialColor );
          paintBar( fieldInfo, pos, 1, fieldInfo.fld->resourceview->fuelvisible[fieldInfo.playerView], Resources::fuelColor );
       }
-      #else
-      paintBar( fieldInfo, pos, 0, fieldInfo.fld->material, Resources::materialColor );
-      paintBar( fieldInfo, pos, 1, fieldInfo.fld->fuel, Resources::fuelColor );
-     #endif
    }
+#else
+   paintBar( fieldInfo, pos, 0, fieldInfo.fld->material, Resources::materialColor );
+   paintBar( fieldInfo, pos, 1, fieldInfo.fld->fuel, Resources::fuelColor );
+#endif
 }
 
 
@@ -1590,7 +1590,6 @@ MapDisplayInterface& getDefaultMapDisplay()
 
 
 int lockdisplaymap = 0;
-int showresources = 0;
 
 
 tlockdispspfld :: tlockdispspfld ( void )

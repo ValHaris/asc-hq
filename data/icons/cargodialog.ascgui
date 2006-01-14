@@ -361,40 +361,216 @@ panel {
       } cargoinfo
       
       conventionalpower {
-         type = dummy
+         type = image
+         filename = cargo-matterconverter.png
          x = 0
          y = 0
          x2 = -1
          y2 = -1
          
-         ChildWidgets = InfoText
-         InfoText {
-            type = StaticText
-            text = conventional power
-            x = 10
-            y = 10
-            height = 20
-            width = 100
-         } InfoText   
+         ; We only need two Lines: Input and Output
+
+         ChildWidgets = Input Output PowerSlider
+
+         PowerSlider {
+            type = slider
+            x = 277
+            y = 65
+            x2 = 500
+            height  = 15
+            Orientation = horizontal
+         } PowerSlider
+ 
+
+         Input {
+            type = dummy
+            x = 21
+            y = 62
+            x2 = 251
+            height = 15
+            ChildWidgets = Label energyIn materialIn fuelIn
+            Label {
+               type = StaticText
+               text = Consumption
+               x = 0
+               y = 0
+               width = 79
+               y2 = -1
+            } Label
+            energyIn {
+              type = TextOutput 
+              x = 86
+              y = 0
+              width = 45
+              y2 = -1
+            } energyIn 
+            materialIn {
+              type = TextOutput 
+              x = 135
+              y = 0
+              width = 45
+              y2 = -1
+            } materialIn
+            fuelIn {
+              type = TextOutput 
+              x = 184
+              y = 0
+              width = 45
+              y2 = -1
+            } fuelIn 
+         } Input
+         Output {
+            type = dummy
+            x = 21
+            y = 82
+            x2 = 251
+            height = 15
+            ChildWidgets = Label energyOut materialOut fuelOut
+            Label {
+               type = StaticText
+               text = Output
+               x = 0
+               y = 0
+               width = 79
+               y2 = -1
+            } Label
+            energyOut {
+              type = TextOutput 
+              x = 86
+              y = 0
+              width = 45
+              y2 = -1
+            } energyOut 
+            materialOut {
+              type = TextOutput 
+              x = 135
+              y = 0
+              width = 45
+              y2 = -1
+            } materialOut
+            fuelOut {
+              type = TextOutput 
+              x = 184
+              y = 0
+              width = 45
+              y2 = -1
+            } fuelOut 
+         } Output
+
+         GraphArea {
+            type = dummy
+            x = 275
+            y = 40
+            x2 = 509
+            y2 = 157
+            UserHandler = ResourceGraph
+         } GraphArea
          
       } conventionalpower
       
       mining {
-         type = dummy
+         type = image
+         filename = cargo-mining-window.png
          x = 0
          y = 0
          x2 = -1
          y2 = -1
-         
-         ChildWidgets = InfoText
-         InfoText {
-            type = StaticText
-            text = mining
-            x = 10
-            y = 10
-            height = 20
-            width = 100
-         } InfoText   
+
+         ChildWidgets = Input Output PowerSlider GraphArea
+
+         PowerSlider {
+            type = slider
+            x = 260
+            y = 40
+            width = 15
+            y2  = 156
+            Orientation = vertical
+         } PowerSlider
+ 
+
+         Input {
+            type = dummy
+            x = 21
+            y = 62
+            x2 = 251
+            height = 15
+            ChildWidgets = Label energyIn materialIn fuelIn
+            Label {
+               type = StaticText
+               text = Consumption
+               x = 0
+               y = 0
+               width = 79
+               y2 = -1
+            } Label
+            energyIn {
+              type = TextOutput 
+              x = 86
+              y = 0
+              width = 45
+              y2 = -1
+            } energyIn 
+            materialIn {
+              type = TextOutput 
+              x = 135
+              y = 0
+              width = 45
+              y2 = -1
+            } materialIn
+            fuelIn {
+              type = TextOutput 
+              x = 184
+              y = 0
+              width = 45
+              y2 = -1
+            } fuelIn 
+         } Input
+         Output {
+            type = dummy
+            x = 21
+            y = 82
+            x2 = 251
+            height = 15
+            ChildWidgets = Label energyOut materialOut fuelOut
+            Label {
+               type = StaticText
+               text = Output
+               x = 0
+               y = 0
+               width = 79
+               y2 = -1
+            } Label
+            energyOut {
+              type = TextOutput 
+              x = 86
+              y = 0
+              width = 45
+              y2 = -1
+            } energyOut 
+            materialOut {
+              type = TextOutput 
+              x = 135
+              y = 0
+              width = 45
+              y2 = -1
+            } materialOut
+            fuelOut {
+              type = TextOutput 
+              x = 184
+              y = 0
+              width = 45
+              y2 = -1
+            } fuelOut 
+         } Output
+
+         GraphArea {
+            type = dummy
+            x = 290
+            y = 40
+            x2 = 509
+            y2 = 157
+            UserHandler = MiningGraph
+         } GraphArea
          
       } mining
       

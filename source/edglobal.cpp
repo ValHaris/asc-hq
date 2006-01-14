@@ -359,9 +359,9 @@ void execaction(int code)
                      }
        break;
     case act_toggleresourcemode :  {
-                      if (showresources < 2) showresources++;
-                      else showresources = 0;
-                      displaymap();
+         if ( mainScreenWidget )
+            mainScreenWidget->toggleMapLayer( "resources");
+         displaymap();
        }
        break;
     case act_asc_resource :   {
@@ -422,9 +422,8 @@ void execaction(int code)
                            prd.init();
                            prd.run();
                            prd.done();
+                           displaymap();
                          }
-       break;
-    case act_createresources2 : resourcePlacementDialog();
        break;
     case act_events :   event();
        break;
@@ -798,6 +797,9 @@ void execaction_pg(int code)
           if ( getactfield()->getContainer() )
              cargoEditor( getactfield()->getContainer() );
        
+       break;
+       case act_createresources2 : resourcePlacementDialog();
+         displaymap();
        break;
    };
 }
