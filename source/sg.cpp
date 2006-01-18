@@ -129,6 +129,12 @@
 
 
 
+#ifdef WIN32
+ #include  "win32/msvc/mdump.h"
+ MiniDumper miniDumper( "main" );
+#endif
+
+
 class tsgonlinemousehelp : public tonlinemousehelp
 {
    public:

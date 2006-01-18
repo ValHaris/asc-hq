@@ -2,12 +2,21 @@
 // #include <stdafx.h>
 #include "mdump.h"
 
+
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>
 #include <mbstring.h>
 #include <wchar.h>
 #include <TCHAR.H>
+
+#include "../../ascstring.h"
+#include "../../strtmesg.h"
+
+
+// because the windows header are polluting the global namespace we can't include basestrm.h :-(
+extern int getSearchPathNum();
+extern ASCString getSearchPath ( int i );
 
 LPCSTR MiniDumper::m_szAppName;
 
@@ -59,10 +68,15 @@ LONG MiniDumper::TopLevelFilter( struct _EXCEPTION_POINTERS *pExceptionInfo )
 			char szDumpPath[_MAX_PATH];
 			char szScratch [_MAX_PATH];
 
-			// work out a good place for the dump file
-			if (!GetTempPath( _MAX_PATH, szDumpPath ))
-				_tcscpy( szDumpPath, "c:\\temp\\" );
+         if ( getSearchPathNum() ) {
+				_tcscpy( szDumpPath, getSearchPath(0).c_str() );
+         } else {
+			   // work out a good place for the dump file
+			   if (!GetTempPath( _MAX_PATH, szDumpPath ))
+				   _tcscpy( szDumpPath, "c:\\temp\\" );
+         }
 
+			_tcscat( szDumpPath, getFullVersionString() );
 			_tcscat( szDumpPath, m_szAppName );
 			_tcscat( szDumpPath, ".dmp" );
 
@@ -70,8 +84,7 @@ LONG MiniDumper::TopLevelFilter( struct _EXCEPTION_POINTERS *pExceptionInfo )
 			// if (::MessageBox( NULL, "ASC has crashed. would you like to save a diagnostic file?", m_szAppName, MB_YESNO )==IDYES)
 			if ( true ) {
 				// create the file
-				HANDLE hFile = ::CreateFile( szDumpPath, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS,
-											FILE_ATTRIBUTE_NORMAL, NULL );
+				HANDLE hFile = ::CreateFile( szDumpPath, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
 
 				if (hFile!=INVALID_HANDLE_VALUE)
 				{
@@ -85,7 +98,7 @@ LONG MiniDumper::TopLevelFilter( struct _EXCEPTION_POINTERS *pExceptionInfo )
 					BOOL bOK = pDump( GetCurrentProcess(), GetCurrentProcessId(), hFile, MiniDumpNormal, &ExInfo, NULL, NULL );
 					if (bOK)
 					{
-						sprintf( szScratch, "ASC has crashed.\nSaved dump file to '%s'\nPlease send it to bugs@asc-hq.org", szDumpPath );
+                  sprintf( szScratch, "ASC has crashed :-(\nSaved dump file to '%s'\nPlease send it to bugs@asc-hq.org", szDumpPath );
 						szResult = szScratch;
 						retval = EXCEPTION_EXECUTE_HANDLER;
 					}
@@ -95,6 +108,8 @@ LONG MiniDumper::TopLevelFilter( struct _EXCEPTION_POINTERS *pExceptionInfo )
 						szResult = szScratch;
 					}
 					::CloseHandle(hFile);
+		         ::MessageBox( NULL, szResult, m_szAppName, MB_OK | MB_ICONERROR );
+               return retval;
 				}
 				else
 				{
@@ -106,7 +121,8 @@ LONG MiniDumper::TopLevelFilter( struct _EXCEPTION_POINTERS *pExceptionInfo )
 		else
 		{
 			szResult = "DBGHELP.DLL too old";
-   		::MessageBox( NULL, szDbgHelpPath, m_szAppName, MB_OK );
+   		::MessageBox( NULL, szDbgHelpPath, m_szAppName, MB_OK | MB_ICONERROR);
+	      return retval;
 		}
 	}
 	else
@@ -115,7 +131,7 @@ LONG MiniDumper::TopLevelFilter( struct _EXCEPTION_POINTERS *pExceptionInfo )
 	}
 
 	if (szResult)
-		::MessageBox( NULL, szResult, m_szAppName, MB_OK );
+		::MessageBox( NULL, szResult, m_szAppName, MB_OK | MB_ICONERROR );
 
 	return retval;
 }
