@@ -184,6 +184,7 @@ class BuildingType;
 
     int getAmmo( int type, int num, bool queryOnly );
     int putAmmo( int type, int num, bool queryOnly );
+    int maxAmmo( int type ) const ;
 
 
   protected:

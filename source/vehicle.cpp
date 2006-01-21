@@ -1592,6 +1592,17 @@ int Vehicle::putAmmo( int type, int num, bool queryOnly )
 }
 
 
+int Vehicle::maxAmmo( int type ) const
+{
+   int ammo = 0;
+   for ( int i = 0; i < typ->weapons.count; ++i ) 
+      if ( typ->weapons.weapon[i].getScalarWeaponType() == type )
+         ammo += typ->weapons.weapon[i].count;
+   return ammo;
+
+}
+
+
 void Vehicle::paint ( Surface& s, SPoint pos, int shadowDist ) const
 {
   #ifdef sgmain

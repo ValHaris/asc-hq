@@ -94,6 +94,10 @@ const int  cwaffenproduktionskosten[cwaffentypennum][3]    =
    ;    // objectPlacement
 
 
+   const bool  weaponAmmo[cwaffentypennum] = {
+      true, true, true, true, true, true, true, true, false, false, false, false, false 
+   };
+   
 Vehicletype :: Vehicletype ( void )
 {
    recommendedAIJob = AiParameter::job_undefined;

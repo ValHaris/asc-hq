@@ -91,6 +91,7 @@ extern const char*  cvehiclefunctions[];
  extern const int cwaffenproduktionskosten[cwaffentypennum][3];  /*  Angabe: Waffentyp; energy - Material - Sprit ; jeweils fuer 5er Pack */
 
 
+ extern const bool weaponAmmo[cwaffentypennum];
 
 
 

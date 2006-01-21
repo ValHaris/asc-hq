@@ -121,6 +121,7 @@ class ContainerBase {
 
       virtual int getAmmo( int type, int num, bool queryOnly )  = 0;
       virtual int putAmmo( int type, int num, bool queryOnly )  = 0;
+      virtual int maxAmmo( int type ) const = 0 ;
 
       
       //! returns the player this vehicle/building belongs to

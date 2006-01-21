@@ -156,6 +156,7 @@ class  Building : public ContainerBase {
 
     int getAmmo( int type, int num, bool queryOnly );
     int putAmmo( int type, int num, bool queryOnly );
+    int maxAmmo( int type ) const { return maxint; };
 
 
     int getHeight() const { return typ->buildingheight; };
