@@ -162,9 +162,35 @@ namespace CargoGuiFunctions {
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
 
+   class MoveUnitUp : public GuiFunction
+   {
+         CargoDialog& parent;
+      public:
+         MoveUnitUp ( CargoDialog& masterParent ) : parent( masterParent)  {};
+         bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
+         void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
+         ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
+   };
+
+   class OpenContainer: public GuiFunction
+   {
+         CargoDialog& parent;
+      public:
+         OpenContainer( CargoDialog& masterParent ) : parent( masterParent)  {};
+         bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
+         void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
+         ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
+   };
+   
+   
 }; // namespace CargoGuiFunctions
 
 
+class DamageControlWindow;
 
 class CargoDialog : public Panel
 {
@@ -188,6 +214,7 @@ class CargoDialog : public Panel
       CargoWidget* cargoWidget;
       SubWindow* researchWindow;
       SubWindow* matterWindow;
+      DamageControlWindow* damageControlWindow;
 
       bool eventKeyDown(const SDL_KeyboardEvent* key)
       {
@@ -273,6 +300,8 @@ class CargoDialog : public Panel
          handler.registerUserFunction( new CargoGuiFunctions::RefuelUnit( *this ) );
          handler.registerUserFunction( new CargoGuiFunctions::UnitProduction( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::UnitTraining( *this ));
+         handler.registerUserFunction( new CargoGuiFunctions::MoveUnitUp( *this ));
+         handler.registerUserFunction( new CargoGuiFunctions::OpenContainer( *this ));
       }
 
       void checkStoringPosition( Vehicle* unit )
@@ -310,6 +339,8 @@ class CargoDialog : public Panel
             cargoWidget->redrawAll();
             if ( mainScreenWidget && mainScreenWidget->getUnitInfoPanel() )
                mainScreenWidget->getUnitInfoPanel()->showUnitData( cargoWidget->getMarkedUnit(), NULL, true );
+            
+            checkStoringPosition( cargoWidget->getMarkedUnit() );
          }
          sigCargoChanged();
          updateResourceDisplay();
@@ -671,6 +702,61 @@ class WindPowerWindow : public SubWindow {
          cargoDialog->setLabelText( "CurrentPower", plus.energy, widget );
       }
 };
+
+class DamageControlWindow : public SubWindow {
+   public:
+      SigC::Signal0<void> damageChanged;
+
+   
+      void registerChilds( CargoDialog* cd )
+      {
+         SubWindow::registerChilds( cd );
+
+         if ( widget ) {
+            PG_Button* b = dynamic_cast<PG_Button*>( widget->FindChild( "RepairButton", true ) );
+            if ( b )
+               b->sigClick.connect( SigC::slot( *this, &DamageControlWindow::repair ));
+         }
+      }
+
+      bool repair()
+      {
+         container()->repairItem(container(), 0 );
+         
+         damageChanged();
+         update();
+         
+         if  ( widget )
+            widget->Update();
+         
+         return true;
+      }
+            
+      
+      bool available( CargoDialog* cd )
+      {
+         Building* bld = dynamic_cast<Building*>(cd->getContainer() );
+         if ( bld && bld->damage > 0 )
+            return true;
+         else
+            return false;
+      };
+      
+      ASCString getASCTXTname()
+      {
+         return "damagecontrol";
+      };
+      
+      void update()
+      {
+         Resources res;
+         container()->getMaxRepair ( container(), 0, res  );
+         cargoDialog->setLabelText( "EnergyCost", res.energy, widget );
+         cargoDialog->setLabelText( "MaterialCost", res.material, widget );
+         cargoDialog->setLabelText( "FuelCost", res.fuel, widget );
+      }
+};
+
 
 class ResourceInfoWindow : public SubWindow {
 
@@ -1161,6 +1247,62 @@ class MiningWindow : public MatterAndMiningBaseWindow {
 };
 
 
+
+class DamageBarWidget : public PG_ThemeWidget {
+   private:
+      DI_Color color;
+      ContainerBase* container;
+   public:
+      DamageBarWidget (PG_Widget *parent, const PG_Rect &rect, DI_Color color, ContainerBase* container ) : PG_ThemeWidget( parent, rect, false )
+      {
+         this->container = container;
+         this->color = color;
+      };
+
+
+      void repaint()
+      {
+         Update();
+      }
+      
+      void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst)
+      {
+         PG_Rect r = dst;
+         r.w = (100 - container->damage ) * dst.w / 100;
+
+         Resources cost;
+         int w2 = (100 - container->damage + container->repairableDamage() ) * dst.w / 100;
+
+         Uint32 c = color.MapRGBA( PG_Application::GetScreen()->format, 255-GetTransparency());
+         if ( w > 0 ) {
+            SDL_FillRect(PG_Application::GetScreen(), &r, c );
+         }
+
+         if ( w2 > 0 ) {
+            int h = dst.h / 4;
+            Surface s = Surface::Wrap( PG_Application::GetScreen() );
+            ColorMerger_Set<4> cm ( c );
+            drawLine<4> ( s, cm, SPoint(dst.x, dst.y + h), SPoint( dst.x + w2, dst.y + h));
+            drawLine<4> ( s, cm, SPoint(dst.x, dst.y + dst.h - h), SPoint( dst.x + w2, dst.y + dst.h - h));
+            drawLine<4> ( s, cm, SPoint( dst.x + w2, dst.y), SPoint( dst.x + w2, dst.y + dst.h));
+         }
+      
+/*         Uint32 c = color.MapRGBA( PG_Application::GetScreen()->format, 255-GetTransparency());
+         for ( Colors::iterator i = colors.begin(); i != colors.end(); ++i)
+            if ( fraction < i->first ) {
+            PG_Color col = i->second;
+            c = col.MapRGBA( PG_Application::GetScreen()->format, 255-GetTransparency());
+            }
+*/      
+      
+      
+      }
+
+};
+
+
+
+
 //*****************************************************************************************************
 //*****************************************************************************************************
 //
@@ -1182,6 +1324,9 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
    subwindows.push_back( new WindPowerWindow );
    subwindows.push_back( new MiningWindow );
    subwindows.push_back( new ResourceInfoWindow );
+
+   damageControlWindow = new DamageControlWindow;
+   subwindows.push_back( damageControlWindow );
    
    researchWindow = new ResearchWindow;
    subwindows.push_back( researchWindow );
@@ -1299,6 +1444,12 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
    if ( label == "MiningGraph" ) 
       new MiningGraph( parent, PG_Rect( 0, 0, parent->Width(), parent->Height() ), container );
    
+   if ( label == "DamageBar" ) {
+      int color;
+      pc.addInteger("Color", color );
+      DamageBarWidget* dbw = new DamageBarWidget( parent, PG_Rect( 0, 0, parent->Width(), parent->Height() ), color, container );
+      damageControlWindow->damageChanged.connect( SigC::slot( *dbw, &DamageBarWidget::repaint ));
+   }
             /*
    int yoffset = 0;
    for ( int i = 0; i < vt->heightChangeMethodNum; ++i ) {
@@ -1541,12 +1692,12 @@ namespace CargoGuiFunctions {
       for ( int r = 1; r < 3; ++r )
          if ( veh->getTank().resource(r) < veh->typ->tank.resource(r))
             return true;
-      
+
       for ( int w = 0; w < veh->typ->weapons.count; ++w)
          if ( veh->typ->weapons.weapon[w].requiresAmmo() )
             if ( veh->typ->weapons.weapon[w].count > veh->ammo[w] )
                return true;
-      
+
       return false;
    }
 
@@ -1580,5 +1731,93 @@ namespace CargoGuiFunctions {
       parent.cargoChanged();
    }
 
+   //////////////////////////////////////////////////////////////////////////////////////////////
    
+
+   bool MoveUnitUp::available( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      if ( !subject )
+         return false;
+      
+      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+      if ( !veh )
+         return false;
+      
+      return parent.getControls().moveUnitUpAvail( veh );
+   }
+
+
+   bool MoveUnitUp::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   {
+      return ( key->keysym.sym == 'u' );
+   };
+
+   Surface& MoveUnitUp::getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return IconRepository::getIcon("moveunitup.png");
+   };
+   
+   ASCString MoveUnitUp::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return "move unit to upper transport";
+   };
+
+
+   void MoveUnitUp::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      if ( !subject )
+         return;
+
+
+      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+      if ( !veh )
+         return;
+      
+      parent.getControls().moveUnitUp( veh );
+      parent.cargoChanged();
+   }
+
+
+   //////////////////////////////////////////////////////////////////////////////////////////////
+   
+   bool OpenContainer :: available( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      if ( !subject )
+         return false;
+      
+      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+      if ( !veh )
+         return false;
+      
+      Player& player = veh->getMap()->player[veh->getOwner()];
+      if ( veh->typ->maxLoadableUnits && player.diplomacy.isAllied( actmap->actplayer)  )
+         return true;
+      
+      return false;
+   };
+
+   void OpenContainer :: execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      if ( !subject )
+         return;
+      
+      cargoDialog( subject );
+      parent.cargoChanged();
+   }
+
+   Surface& OpenContainer :: getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return IconRepository::getIcon("container.png");
+   };
+
+   bool OpenContainer :: checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   {
+      return ( key->keysym.unicode == 'l' );
+   };
+
+   ASCString OpenContainer :: getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return "open transport ";
+   };
+
 }

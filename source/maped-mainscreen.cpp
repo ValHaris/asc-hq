@@ -133,6 +133,9 @@ void Menu::setup()
    addbutton ( "~C~reate regional ressources", act_createresources );
    addbutton ( "~C~reate global ressources\tctrl+F", act_createresources2 );
    addbutton ( "~S~et turn number",        act_setTurnNumber );
+   currentMenu->addSeparator();
+   addbutton ( "~S~etup Players",     act_setupplayers );
+   addbutton ( "Setup ~A~lliances",     act_setupalliances );
    addbutton ( "~E~dit technologies",          act_editResearch );
    addbutton ( "edit ~R~search points",          act_editResearchPoints );
    addbutton ( "edit ~T~ech adapter",          act_editTechAdapter );
@@ -165,7 +168,6 @@ void Menu::setup()
     addbutton ( "~M~ap values\tctrl+M",          act_changemapvals );
     addbutton ( "~C~hange players\tO",           act_changeplayers);
     addbutton ( "~E~dit events\tE",              act_events );
-    addbutton ( "~S~etup Player + Alliances\tctrl+A",     act_setupalliances );
 //    addbutton ( "unit production ~L~imitation", act_specifyunitproduction );
    currentMenu->addSeparator();
     addbutton ( "~T~oggle ResourceView\tctrl+B", act_toggleresourcemode);

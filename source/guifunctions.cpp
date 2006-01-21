@@ -887,19 +887,18 @@ class OpenContainer : public GuiFunction
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
         pfield fld = actmap->getField(pos);
-        if ( fieldvisiblenow ( fld ))
-           if ( !containeractive && !moveparams.movestatus && pendingVehicleActions.actionType == vat_nothing && !pendingVehicleActions.action )
-              if ( fld->building  &&  ((fld->building->color == actmap->actplayer * 8) || (fld->building->color == 8*8) ))
+        if ( fieldvisiblenow ( fld ) && fld->getContainer() ) {
+           if ( !containeractive && !moveparams.movestatus && pendingVehicleActions.actionType == vat_nothing && !pendingVehicleActions.action ) {
+              Player& player = fld->getContainer()->getMap()->player[fld->getContainer()->getOwner()];
+              if ( fld->building && ( player.diplomacy.isAllied( actmap->actplayer) || actmap->getNeutralPlayerNum() == fld->building->getOwner() )) {
                  if ( fld->building->getCompletion() == fld->building->typ->construction_steps-1 )
                     return true;
-                 else
-                    return false;
-               else
-                 if ( fld->vehicle && fld->vehicle->typ->maxLoadableUnits  &&  fld->vehicle->color == actmap->actplayer * 8 )
+              }  else {
+                  if ( fld->vehicle && fld->vehicle->typ->maxLoadableUnits  &&  player.diplomacy.isAllied( actmap->actplayer)  )
                     return true;
-                 else
-                    return false;
-
+              }
+           }
+        }
         return false;
       };
 

@@ -45,6 +45,7 @@
 #include "dialogs/unitinfodialog.h"
 #include "dialogs/editmapparam.h"   
 #include "dialogs/alliancesetup.h"
+#include "dialogs/playersetup.h"
    
    const char* execactionnames[execactionscount] = {
         "End MapEdit",
@@ -60,6 +61,7 @@
         "Select mine",
         "Select weather",
         "Setup alliances",
+        "Setup Players",
         "Toggle ResourceMode",
         "Change UnitDirection",
         "Asc-Resource Mode",
@@ -750,6 +752,8 @@ void execaction_pg(int code)
     case act_setmapparameters: setmapparameters( actmap );
        break;
     case act_setupalliances :  setupalliances( actmap, true );
+       break;
+    case act_setupplayers :  setupPlayers( actmap, true );
        break;
     case act_loadmap :   {
                             if (mapsaved == false )

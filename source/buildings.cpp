@@ -67,6 +67,21 @@ Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const B
 }
 
 
+int Building::repairableDamage()
+{
+   int d = getMap()->getgameparameter ( cgp_maxbuildingrepair ) - repairedThisTurn;
+   if ( d < 0 )
+      d = 0;
+   if ( d > damage )
+      d = damage;
+   return d;
+}
+
+void Building::postRepair ( int oldDamage )
+{
+   repairedThisTurn += oldDamage - damage;
+}
+
 bool Building::canRepair ( const ContainerBase* item ) const
 {
    return typ->hasFunction( ContainerBaseType::InternalUnitRepair  ) ||

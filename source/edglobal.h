@@ -27,7 +27,7 @@
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 90;
+const int execactionscount = 91;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -45,6 +45,7 @@ enum tuseractions {
      act_selmine,
      act_selweather,
      act_setupalliances,
+     act_setupplayers,
      act_toggleresourcemode,
      act_changeunitdir,
      act_asc_resource,

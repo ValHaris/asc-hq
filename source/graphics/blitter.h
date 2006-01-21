@@ -1194,6 +1194,7 @@ class ColorMerger_Set
          *dest = col;
       };
 
+     
       ColorMerger_Set( SDLmm::Color color )
       {
          col = color;

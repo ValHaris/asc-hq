@@ -33,6 +33,7 @@
 #include "iconrepository.h"
 #include "mapdisplay.h"
 #include "sigc++/retype_return.h"
+#include "asc-mainscreen.h"
 
 const int guiIconSizeX = 49;
 const int guiIconSizeY = 35;
@@ -363,7 +364,7 @@ bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mous
       
       if ( count ) {
          delete smallButtonHolder;
-         smallButtonHolder = new SmallButtonHolder ( NULL, PG_Rect( p.x, p.y, count * smallGuiIconSizeX + (count-1)*smallGuiIconSpace, smallGuiIconSizeY ));
+         smallButtonHolder = new SmallButtonHolder ( mainScreenWidget, PG_Rect( p.x, p.y, count * smallGuiIconSizeX + (count-1)*smallGuiIconSpace, smallGuiIconSizeY ));
 
          PG_Rect r = PG_Rect( 0, 0, smallGuiIconSizeX, smallGuiIconSizeY  );
          for ( int j = 0; j < buttons.size(); ++j) {

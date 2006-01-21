@@ -919,6 +919,23 @@ int Vehicle :: searchstackforfreeweight ( Vehicle* searchedInnerVehicle )
          return -1;
    }
 }
+/*
+Vehicle* Vehicle::findCarrierUnit ( const Vehicle* veh )
+{
+   for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i ) {
+         if ( *i == veh )
+            return this;
+         else {
+            const ContainerBase* cb = (*i)->findParentUnit( veh );
+            if ( cb )
+               return cb;
+         }
+      }
+
+   return NULL;
+}
+*/
 
 
 int Vehicle :: freeWeight ()

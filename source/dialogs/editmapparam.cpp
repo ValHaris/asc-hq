@@ -122,7 +122,10 @@ bool GameParameterEditorWidget :: Valid()
 
 bool GameParameterEditorWidget :: Apply()
 {
-   return propertyEditor->Apply();
+   bool res = propertyEditor->Apply();
+   for ( int i = 0; i< gameparameternum; ++i )
+      actmap->setgameparameter ( GameParameter(i), values[i] );
+   return res;
 }
       
 
@@ -138,6 +141,7 @@ class EditMapParameters : public ASC_PG_Dialog {
          if ( gpew->Valid() ) {
             gpew->Apply();
             quitModalLoop(0);
+
             return true;
          } else
             return false;

@@ -543,6 +543,17 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( nwid_to );
          stream->writeInt ( nwid_moving );
       }
+      if ( action == rpl_moveUnitUp ) {
+         int x =  va_arg ( paramlist, int );
+         int y =  va_arg ( paramlist, int );
+         int nwid = va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         int size = 3;
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( nwid );
+      }
       if ( action == rpl_productionResourceUsage ) {
          int en = va_arg ( paramlist, int );
          int ma = va_arg ( paramlist, int );
@@ -1425,39 +1436,21 @@ void trunreplay :: execnextreplaymove ( void )
                                     error("severe replay inconsistency:\nno building for refuel-unit command !");
                               }
          break;
-      case rpl_moveUnitUpDown: {
+      case rpl_moveUnitUp: {
                                  stream->readInt();  // size
                                  int x =  stream->readInt();
                                  int y =  stream->readInt();
-                                 int nwid_from = stream->readInt();
-                                 int nwid_to = stream->readInt();
-                                 int nwid_moving = stream->readInt();
+                                 int nwid = stream->readInt();
 
                                  readnextaction();
 
-                                 Vehicle* eht = actmap->getUnit ( x, y, nwid_moving );
+                                 Vehicle* eht = actmap->getUnit ( x, y, nwid );
 
-                                 ContainerBase* from;
-                                 if ( nwid_from >= 0 )
-                                    from = actmap->getUnit ( x, y, nwid_from );
-                                 else
-                                    from = actmap->getField ( x, y )->building;
-
-                                 ContainerBase* to;
-                                 if ( nwid_to >= 0 )
-                                    to = actmap->getUnit ( x, y, nwid_to );
-                                 else
-                                    to = actmap->getField ( x, y )->building;
-
-                                 if ( eht && from && to ) {
-                                    if ( ! from->removeUnitFromCargo( eht )) {
-                                       error("severe replay inconsistency: container for moveUpDown 2 !");
-                                       return;
-                                    }
-
-                                    to->addToCargo( eht );
-                                 } else
-                                    error("severe replay inconsistency: container for moveUpDown !");
+                                 ContainerBase* from = eht->getCarrier();
+                                 ContainerControls cc ( from );
+                                 if ( !cc.moveUnitUp( eht ))
+                                    error("severe replay inconsistency in MoveUnitUp !");
+                                 
                               }
                               break;
       case rpl_repairUnit : {

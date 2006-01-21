@@ -47,6 +47,8 @@ class PlayerSetupWidget : public PG_ScrollWidget {
       Mode mode;   
 };
 
+void  setupPlayers( tmap* actmap, bool supervisor = false );
+
 
 #endif
 

@@ -50,7 +50,16 @@ DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCS
    registerSpecialDisplay( "showplayercolor0" );
    registerSpecialDisplay( "showplayercolor1" );
    registerSpecialDisplay( "field_weather" );
+
+   tmap::sigMapDeletion.connect( SigC::slot( *this, &DashboardPanel::reset ));
 };
+
+void DashboardPanel::reset(tmap& map)
+{
+   if ( veh && veh->getMap() == &map )
+      veh = NULL;
+}
+
 
 
 void DashboardPanel::registerSpecialDisplay( const ASCString& name )

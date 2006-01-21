@@ -2822,18 +2822,7 @@ void giveunitaway ( pfield fld )
 
 
 #define entervalue ct_space
-
-    class  tmunitionsbox : public tdialogbox {
-                  public:
-                       char          backgrnd;
-                       int           maxproduction;
-                       char*         strng2;
-                       char*         strr ( int a );
-                       void          init ( void );
-                       void          done ( void );
-                    };
-
-
+#if 0
     class  tverlademunition : public tmunitionsbox {
                           int abstand;
                           int firstliney;
@@ -2858,24 +2847,6 @@ void giveunitaway ( pfield fld )
                           void          checkpossible( int pos );
                           void          setloading ( int pos );
                        };
-
-
-
-void tmunitionsbox::init ( void ) {
-   tdialogbox::init();
-   strng2 = new char[100];
-}
-
-void tmunitionsbox::done ( void ) {
-   delete[] strng2 ;
-   tdialogbox::done();
-}
-
-
-char* tmunitionsbox::strr ( int a ) {
-   itoa( a, strng2, 10 );
-   return strng2;
-}
 
 
 void         tverlademunition::init( Vehicle* src, int _targetNWID, VehicleService* _serviceAction )
@@ -3158,14 +3129,16 @@ void         tverlademunition::setloading( int pos )
    zeichneschieberegler ( -1 );
 }
 
+#endif
 
 void         verlademunition( VehicleService* serv, int targetNWID )
 {
-   tverlademunition vlm;
-   vlm.init( serv->getVehicle(), targetNWID, serv );
-   vlm.run();
-   vlm.done(); 
+   // tverlademunition vlm;
+   // vlm.init( serv->getVehicle(), targetNWID, serv );
+   // vlm.run();
+   // vlm.done(); 
 }
+
 
 void showPlayerTime()
 {

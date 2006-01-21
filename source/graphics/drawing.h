@@ -123,8 +123,7 @@ class PutPixel: public ColorMerger<pixelsize>
          ColorMerger<pixelsize>::init( surface );
       };
 
-      void set
-         ( SPoint pos, PixelType src )
+      void set( SPoint pos, PixelType src )
       {
          PixelType* pix = (PixelType*)( surf.pixels() );
          pix += pos.y * surf.pitch()/pixelsize + pos.x;
@@ -132,6 +131,113 @@ class PutPixel: public ColorMerger<pixelsize>
          assign ( src, pix );
       };
 };
+
+template< int pixelsize, class ColorMerger >
+class PutPixel2
+{
+      typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+      Surface& surf;
+      const ColorMerger& colormerger;
+   public:
+      PutPixel2( Surface& surface, const ColorMerger& cm ) : surf ( surface ), colormerger(cm)
+      {
+      };
+
+      void set( SPoint pos, PixelType src )
+      {
+         PixelType* pix = (PixelType*)( surf.pixels() );
+         pix += pos.y * surf.pitch()/pixelsize + pos.x;
+
+         colormerger.assign ( src, pix );
+      };
+};
+
+
+template< int pixelsize, class ColorMerger >
+void drawLine ( Surface& surface, const ColorMerger& cm, const SPoint& pos, const SPoint& pos2  )
+{
+   PutPixel2<pixelsize, ColorMerger> pp ( surface, cm );
+   int      i, deltax, deltay, numpixels, d, dinc1, dinc2, x, xinc1, xinc2, y, yinc1, yinc2;
+
+   int x1 = pos.x;
+   int y1 = pos.y;
+   int x2 = pos2.x;
+   int y2 = pos2.y;
+
+   /*  calculate deltax and deltay for initialisation  */
+    
+   deltax = x2 - x1;
+   if ( deltax < 0 )
+      deltax = -deltax;
+
+   deltay = y2 - y1;
+   if ( deltay < 0 )
+      deltay = -deltay;
+
+   /*  initialize all vars based on which is the independent variable  */
+   if (deltax >= deltay)
+   {
+
+      /*  x is independent variable  */
+      numpixels = deltax + 1;
+      d = (2 * deltay) - deltax;
+      dinc1 = deltay << 1;
+      dinc2 = (deltay - deltax) << 1;
+      xinc1 = 1;
+      xinc2 = 1;
+      yinc1 = 0;
+      yinc2 = 1;
+   }
+   else
+   {
+
+      /*  y is independent variable  */
+      numpixels = deltay + 1;
+      d = (2 * deltax) - deltay;
+      dinc1 = deltax << 1;
+      dinc2 = (deltax - deltay) << 1;
+      xinc1 = 0;
+      xinc2 = 1;
+      yinc1 = 1;
+      yinc2 = 1;
+   }
+
+   /*  make sure x and y move in the right directions  */
+   if (x1 > x2)
+   {
+      xinc1 = -xinc1;
+      xinc2 = -xinc2;
+   }
+   if (y1 > y2)
+   {
+      yinc1 = -yinc1;
+      yinc2 = -yinc2;
+   }
+
+   /*  start drawing at <x1, y1>  */
+   x = x1;
+   y = y1;
+
+   /*  draw the pixels  */
+   for (i = 1; i <= numpixels; i++)
+   {
+      pp.set( SPoint(x, y), 1 );
+
+
+      if (d < 0)
+      {
+         d = d + dinc1;
+         x = x + xinc1;
+         y = y + yinc1;
+      }
+      else
+      {
+         d = d + dinc2;
+         x = x + xinc2;
+         y = y + yinc2;
+      }
+   }
+}
 
 
 

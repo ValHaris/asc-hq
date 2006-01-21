@@ -60,6 +60,7 @@ class DiplomaticStateVector : public SigC::Object {
       
       bool isHostile( int towardsPlayer ) { return getState( towardsPlayer ) == WAR; };
       bool sharesView( int receivingPlayer ) { return getState( receivingPlayer ) >= PEACE_SV; };
+      bool isAllied( int towardsPlayer ) { return getState( towardsPlayer ) >= ALLIANCE; };
 
       void turnBegins();
       

@@ -60,6 +60,7 @@ class BuildingType;
 
     Vehicle ( const Vehicletype* t, pmap actmap, int player );
 
+    int repairableDamage() { return damage; };
 
     const Vehicletype* typ;
     int          ammo[16];
@@ -271,6 +272,11 @@ class BuildingType;
     //! returns the units position; if  inside building then Height is -1
     MapCoordinate3D getPosition3D ( ) const;
 
+
+    // Searches this and all nested transport for the unit. Returns the direct parent carrier.
+    // Vehicle* findCarrierUnit ( const Vehicle* veh );
+
+    
     /** can the unit repair anything? This does not necessarily mean that the unit can repair
         other units, because a service weapon is additionally needed for that. It may be the
         case that the unit can only repair itself.

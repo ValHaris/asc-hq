@@ -38,6 +38,9 @@ class  Building : public ContainerBase {
   protected:
     bool isBuilding() const { return true; };
 
+    //! the percantage that this build has already been repaired this turn. The maximum percentage may be limited by a gameparameter
+    int           repairedThisTurn;
+    
    public:
     const BuildingType* typ;
 
@@ -56,8 +59,6 @@ class  Building : public ContainerBase {
     //! is the building visible? Building can be made invisible, but this feature should be used only in some very special cases
     bool         visible;
 
-    //! the percantage that this build has already been repaired this turn. The maximum percentage may be limited by a gameparameter
-    int           repairedThisTurn;
 
     AiValue*      aiparam[8];
 
@@ -162,10 +163,12 @@ class  Building : public ContainerBase {
     
     ~Building();
 
+    virtual int repairableDamage();
+
   protected:
      ResourceMatrix repairEfficiency;
      const ResourceMatrix& getRepairEfficiency ( void ) { return repairEfficiency; };
-     virtual void postRepair ( int oldDamage ) {};
+     virtual void postRepair ( int oldDamage );
      vector<MapCoordinate> getCoveredFields();
 };
 

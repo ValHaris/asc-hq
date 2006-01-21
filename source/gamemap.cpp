@@ -1408,9 +1408,11 @@ void tmap::objectGrowth()
       i->first->addobject ( getobjecttype_byid( i->second ));
 }
 
+SigC::Signal1<void,tmap&> tmap::sigMapDeletion;
 
 tmap :: ~tmap ()
 {
+   sigMapDeletion( *this );
    __mapDestruction = true;
 
    if ( field )

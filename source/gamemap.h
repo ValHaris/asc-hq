@@ -402,7 +402,8 @@ class tmap {
       SigC::Signal1<void,Player&> sigPlayerUserInteractionBegins;
       SigC::Signal1<void,Player&> sigPlayerUserInteractionEnds;
       SigC::Signal1<void,Player&> sigPlayerTurnEnds;
-      
+
+      static SigC::Signal1<void,tmap&> sigMapDeletion;
       
       //! called when a new round starts (after switching from player 7 to player 0 )
       SigC::Signal0<void> newRound;

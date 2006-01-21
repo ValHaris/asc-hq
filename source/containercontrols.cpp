@@ -424,3 +424,38 @@ vector<Vehicletype*> ContainerControls :: productionLinesBuyable()
    }
    return list;
 }
+
+
+
+bool ContainerControls :: moveUnitUpAvail( const Vehicle* veh )
+{
+   ContainerBase* carr = veh->getCarrier();
+   if ( carr ) {
+      ContainerBase* carr2 = carr->getCarrier();
+      if ( carr2 )
+         return carr2->vehicleFit( veh );
+   }
+   return false;
+}
+
+bool ContainerControls :: moveUnitUp( Vehicle* veh )
+{
+   if ( !veh )
+      return false;
+   
+   if ( !moveUnitUpAvail( veh ) )
+      return false;
+   
+   ContainerBase* source = veh->getCarrier();
+   if ( source ) {
+      ContainerBase* target = source->getCarrier();
+      if ( target  ) {
+         source->removeUnitFromCargo( veh, false );
+         target->addToCargo( veh );
+         
+         logtoreplayinfo ( rpl_moveUnitUp, target->getPosition().x, target->getPosition().y, veh->networkid );
+         return true;
+      }
+   }
+   return false;
+}

@@ -48,8 +48,8 @@ class ContainerBase {
 
       //! is called after a repair is perfored. Vehicles use this to reduce their experience.
       virtual void postRepair ( int oldDamage ) = 0;
+
       virtual bool isBuilding() const = 0;
-      const ContainerBase* findParentUnit ( const Vehicle* veh ) const;
       
       void paintField ( const Surface& src, Surface& dest, SPoint pos, int dir, bool shaded, int shadowDist = -1 ) const;
       
@@ -68,7 +68,17 @@ class ContainerBase {
       void addToCargo( Vehicle* veh );
       bool removeUnitFromCargo( Vehicle* veh, bool recursive = false );
       bool removeUnitFromCargo( int nwid, bool recursive = false );
+      
       bool unitLoaded( int nwid );
+      
+      //! if the unit is inside this container, returns the container which the unit is directly in (which may not be the current one as containers may be nested arbitrarily). 
+      const ContainerBase* findParent ( const ContainerBase* veh ) const;
+      ContainerBase* findParent ( const ContainerBase* veh );
+
+      //! if this is a unit and it is inside a building or transport, returns the transport. NULL otherwise.
+      ContainerBase* getCarrier() const;
+
+      
       Vehicle* findUnit ( int nwid );
       
      
@@ -97,8 +107,11 @@ class ContainerBase {
       const pmap getMap ( ) const { return gamemap; };
 
       int getMaxRepair ( const ContainerBase* item );
-      int getMaxRepair ( const ContainerBase* item, int newDamage, Resources& cost  );
+      int getMaxRepair ( const ContainerBase* item, int newDamage, Resources& cost, bool ignoreCost = false  );
       int repairItem   ( ContainerBase* item, int newDamage = 0 );
+      
+      //! returns the amount of damate that can still be repaired this turn
+      virtual int repairableDamage() = 0;
 
       virtual int getIdentification() = 0;
 

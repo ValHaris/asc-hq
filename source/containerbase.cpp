@@ -73,6 +73,10 @@ int ContainerBase :: repairItem   ( ContainerBase* item, int newDamage  )
    if ( !canRepair( item ) )
       return item->damage;
 
+   if ( item == this ) 
+      if ( damage - repairableDamage() > newDamage )
+         newDamage = damage - repairableDamage();
+   
    int orgdam = item->damage;
 
    Resources cost;
@@ -91,7 +95,7 @@ int ContainerBase :: getMaxRepair ( const ContainerBase* item )
    return getMaxRepair ( item, 0, res );
 }
 
-int ContainerBase :: getMaxRepair ( const ContainerBase* item, int newDamage, Resources& cost  )
+int ContainerBase :: getMaxRepair ( const ContainerBase* item, int newDamage, Resources& cost, bool ignoreCost  )
 {
    if ( !canRepair( item ) )
       return item->damage;
@@ -99,6 +103,10 @@ int ContainerBase :: getMaxRepair ( const ContainerBase* item, int newDamage, Re
    int i;
    if ( newDamage > item->damage )
       newDamage = item->damage;
+
+   if ( item == this )
+      if ( damage - repairableDamage() > newDamage )
+         newDamage = damage - repairableDamage();
 
    int toRepair = item->damage - newDamage;
 
@@ -108,14 +116,16 @@ int ContainerBase :: getMaxRepair ( const ContainerBase* item, int newDamage, Re
    for ( i = 0; i < resourceTypeNum; i++ )
       needed.resource(i) = maxNeeded.resource(i) * (item->damage-newDamage) / 100;
 
-   Resources avail = getResource ( needed, 1 );
-
-   for ( i = 0; i < resourceTypeNum; i++ )
-      if ( needed.resource(i) ) {
-         int repairable = toRepair * avail.resource(i) / needed.resource(i);
-         if ( item->damage - repairable > newDamage )
-            newDamage = item->damage - repairable;
-      }
+   if ( !ignoreCost ) {
+      Resources avail = getResource ( needed, 1 );
+   
+      for ( i = 0; i < resourceTypeNum; i++ )
+         if ( needed.resource(i) ) {
+            int repairable = toRepair * avail.resource(i) / needed.resource(i);
+            if ( item->damage - repairable > newDamage )
+               newDamage = item->damage - repairable;
+         }
+   }
 
    for ( i = 0; i < resourceTypeNum; i++ )
       cost.resource(i) = maxNeeded.resource(i) * (item->damage-newDamage) / 100;
@@ -161,14 +171,14 @@ int ContainerBase::cargoWeight() const
 
 
 
-const ContainerBase* ContainerBase :: findParentUnit ( const Vehicle* veh ) const
+const ContainerBase* ContainerBase :: findParent ( const ContainerBase* veh ) const
 {
    for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
       if ( *i ) {
          if ( *i == veh )
             return this;
          else {
-            const ContainerBase* cb = (*i)->findParentUnit( veh );
+            const ContainerBase* cb = (*i)->findParent( veh );
             if ( cb )
                return cb;
          }
@@ -176,6 +186,38 @@ const ContainerBase* ContainerBase :: findParentUnit ( const Vehicle* veh ) cons
 
    return NULL;
 }
+
+ContainerBase* ContainerBase :: findParent ( const ContainerBase* veh )
+{
+   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i ) {
+         if ( *i == veh )
+            return this;
+         else {
+            ContainerBase* cb = (*i)->findParent( veh );
+            if ( cb )
+               return cb;
+         }
+      }
+
+      return NULL;
+}
+
+ContainerBase* ContainerBase :: getCarrier() const
+{
+   pfield fld = getMap()->getField( getPosition() );
+   if ( fld->vehicle == this )
+      return NULL;
+   
+   if ( fld->building )
+      return fld->building->findParent( this );
+   
+   if ( fld->vehicle )
+      return fld->vehicle->findParent( this );
+
+   return NULL;
+}
+
 
 bool ContainerBase::unitLoaded( int nwid )
 {
@@ -343,8 +385,8 @@ bool ContainerBase :: vehicleFit ( const Vehicle* vehicle ) const
 {
 
    if ( baseType->vehicleFit ( vehicle->typ )) // checks size and type
-      if ( vehiclesLoaded() < min ( 32, baseType->maxLoadableUnits ) || (vehicle->color != color ) )
-         if ( cargoWeight() + vehicle->weight() <= baseType->maxLoadableWeight || findParentUnit ( vehicle ) || (vehicle->color != color )) // if the unit is already  loaded, the container already bears its weight
+      if ( vehiclesLoaded() < baseType->maxLoadableUnits || (vehicle->color != color ) )
+         if ( cargoWeight() + vehicle->weight() <= baseType->maxLoadableWeight || findParent ( vehicle ) || (vehicle->color != color )) // if the unit is already  loaded, the container already bears its weight
             return true;
 
    return false;
