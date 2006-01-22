@@ -233,7 +233,7 @@ void         destructbuildinglevel2( int xp, int yp)
 void         tputmine::testfield(const MapCoordinate& mc)
 {
    pfield fld = gamemap->getField(mc);
-   if ( !fld->vehicle  &&  !fld->building ) {
+   if ( !fld->vehicle  &&  !fld->building && fieldvisiblenow( fld, player )) {
       fld->a.temp = 0;
       if ( !fld->mines.empty() ) {
          fld->a.temp += 2;

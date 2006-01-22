@@ -141,8 +141,11 @@ void         tcomputevehicleview::init( const Vehicle* eht, int _mode  )   // mo
       eht->searchForMineralResources();
 
    int view = eht->typ->view+1;
-   if ( eht->height <= chfahrend)
+   if ( eht->height <= chfahrend) {
       view += gamemap->getField ( eht->getPosition() )->viewbonus;
+      if ( view < 1 )
+         view = 1;
+   }
 
 
    tcomputeview::initviewcalculation( view, eht->typ->jamming, eht->xpos, eht->ypos, _mode, eht->height );
@@ -163,8 +166,11 @@ void         tcomputebuildingview::init( const Building*    bld,  int _mode )
 
    if (bld->getCompletion() == bld->typ->construction_steps - 1) {
       c = bld->typ->view + 1;
-      if ( bld->typ->buildingheight <= chfahrend )
+      if ( bld->typ->buildingheight <= chfahrend ) {
          c += gamemap->getField ( bld->getEntry() )->viewbonus;
+         if ( c < 1 )
+            c = 1;
+      }
       j = bld->typ->jamming;
    } else {
       c = 15;

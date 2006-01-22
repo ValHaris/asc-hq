@@ -362,7 +362,7 @@ void AI :: calculateFieldInformation ( void )
 
                   TemporaryContainerStorage tus ( fld->vehicle );
 
-                  fld->vehicle->setMovement ( fld->vehicle->maxMovement(), 2);
+                  fld->vehicle->setMovement ( fld->vehicle->maxMovement(), 0);
 
                   VehicleMovement vm ( NULL, NULL );
                   if ( vm.available ( fld->vehicle )) {

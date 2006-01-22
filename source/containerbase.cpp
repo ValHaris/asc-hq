@@ -144,20 +144,6 @@ int ContainerBase :: vehiclesLoaded ( void ) const
    return a;
 }
 
-bool ContainerBase :: searchAndRemove( Vehicle* veh )
-{
-   if ( removeUnitFromCargo( veh ))
-      return true;
-   else
-      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
-         if ( *i )
-            if ( (*i)->searchAndRemove( veh ))
-               return true;
-
-   return false;
-}
-
-
 
 int ContainerBase::cargoWeight() const
 {

@@ -2,6 +2,7 @@
 
 
 #include "triangul.h"
+#include <string.h>
 
 
 static int initialise(n)

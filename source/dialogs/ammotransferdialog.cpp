@@ -27,14 +27,20 @@
 
 
 class ResourceWatch {
-
+      ContainerBase* container;
       Resources available;
       Resources storagelimit;
    public:
       ResourceWatch( ContainerBase* container )
       {
+         this->container = container;
          available = container->getResource( Resources( maxint, maxint, maxint), true );
          storagelimit = container->putResource( Resources( maxint, maxint, maxint), true ) + available;
+      };
+
+      ContainerBase* getContainer()
+      {
+         return container;
       };
 
       SigC::Signal0<void> sigChanged;
@@ -67,51 +73,118 @@ class ResourceWatch {
 class Transferrable {
    protected:
       int originalSourceAmount;
+      ResourceWatch& source;
+      ResourceWatch& dest;
+
+      ResourceWatch& getResourceWatch( const ContainerBase* unit )
+      {
+         assert( unit == source.getContainer() || unit == dest.getContainer() );
+         if ( unit == source.getContainer() )
+            return source;
+         else
+            return dest;
+      }
+      
+      ResourceWatch& getOpposingResourceWatch( const ContainerBase* unit )
+      {
+         return getResourceWatch ( opposingContainer( unit ));
+      }
+
+      ContainerBase* opposingContainer( const ContainerBase* unit )
+      {
+         assert( unit == source.getContainer() || unit == dest.getContainer() );
+         if ( unit == dest.getContainer() )
+            return source.getContainer();
+         else
+            return dest.getContainer();
+      }
+      
    public:
+      Transferrable( ResourceWatch& s, ResourceWatch& d ) : source( s ) , dest( d ) {};
       virtual ASCString getName() = 0;
-      virtual void fillDest() = 0;
-      virtual void emptyDest() = 0;
-      int a;
+
+      /** get maximum amount for that unit.
+         \param avail If true, the amount is limited by the resources which can actually provided by the other unit. If false, return the storage capacity
+      */
+      virtual int getMax( ContainerBase* c, bool avail ) = 0;
+      virtual int getMin( ContainerBase* c, bool avail ) = 0;
+      virtual int transfer( ContainerBase* target, int delta ) = 0;
+      virtual int getAmount ( ContainerBase* target ) = 0;
+      
+      int setAmount( ContainerBase* target, int newamount )
+      {
+         transfer( target, newamount - getAmount( target ) );
+         return getAmount( target );
+      }
+
+      void fill( ContainerBase* target )
+      {
+         setAmount( target, getMax( target, true ));
+      }
+
+      
+      void empty( ContainerBase* target )
+      {
+         setAmount( target, 0 );
+      }
+      
       virtual ~Transferrable() {};
 };
 
 class ResourceTransferrable : public Transferrable {
    private:
       int resourceType;
-      ResourceWatch& source;
-      ResourceWatch& dest;
       void warn()
       {
          warning( "Inconsistency in ResourceTransfer");
       };
          
    public:
-      ResourceTransferrable( int resource, ResourceWatch& src, ResourceWatch& dst ) : resourceType ( resource ), source(src), dest(dst) {};
+      ResourceTransferrable( int resource, ResourceWatch& src, ResourceWatch& dst ) : Transferrable( src, dst ), resourceType ( resource ) {};
       ASCString getName() { return Resources::name( resourceType ); };
       
-      void fillDest()
+      int getMax( ContainerBase* c, bool avail )
       {
-         int toTransfer = min( source.avail().resource(resourceType), dest.limit().resource(resourceType) - dest.avail().resource(resourceType));
-         Resources r;
-         r.resource( resourceType ) = toTransfer;
-         if ( !source.getResources( r ))
-            warn();
-          
-         if( !dest.putResources( r ))
-            warn();
+         if ( avail ) {
+            int needed = getResourceWatch( c ).limit().resource(resourceType) - getAmount( c );
+            int av = min ( needed, getOpposingResourceWatch( c ).avail().resource(resourceType) );
+
+            return getAmount( c ) + av;
+         } else
+            return getResourceWatch( c ).limit().resource(resourceType);
       }
       
-      void emptyDest()
+      int getMin( ContainerBase* c, bool avail )
       {
-         int toTransfer = min( dest.avail().resource(resourceType), source.limit().resource(resourceType) - source.avail().resource(resourceType));
-         Resources r;
-         r.resource( resourceType ) = toTransfer;
-         if ( !dest.getResources( r ))
-            warn();
-          
-         if( !source.putResources( r ))
-            warn();
+         if ( avail ) {
+            int space = getOpposingResourceWatch( c ).limit().resource(resourceType) - getOpposingResourceWatch( c ).avail().resource(resourceType);
+            if ( space > getAmount( c ) )
+               return 0;
+            else
+               return getAmount( c ) - space;
+         } else
+            return 0;
       }
+      
+      int getAmount ( ContainerBase* target )
+      {
+         return getResourceWatch( target ).avail().resource(resourceType);
+      }
+      
+      int transfer( ContainerBase* target, int delta )
+      {
+         if ( delta < 0 )
+            return transfer( opposingContainer( target ), -delta );
+         else {
+            delta = min( delta, getOpposingResourceWatch( target ).avail().resource(resourceType) );
+            delta = min( delta, getResourceWatch( target ).limit().resource(resourceType) - getAmount( target ));
+            getOpposingResourceWatch( target ).avail().resource(resourceType) -= delta;
+            getResourceWatch( target ).avail().resource(resourceType) += delta;
+            
+            return delta;
+         }
+      }
+      
 };
 
 class AmmoTransferrable : public Transferrable {
@@ -119,58 +192,99 @@ class AmmoTransferrable : public Transferrable {
       int ammoType;
       int sourceAmmo;
       int destAmmo;
-      ContainerBase* srcUnit;
-      ContainerBase* dstUnit;
-      ResourceWatch& source;
-      ResourceWatch& dest;
       bool& allowAmmoProduction;
-   public:
-      AmmoTransferrable( int ammo, ContainerBase* s, ContainerBase* d, ResourceWatch& src, ResourceWatch& dst, bool& allowProduction ) : ammoType ( ammo ), srcUnit(s), dstUnit(d), source(src), dest(dst), allowAmmoProduction( allowProduction )
+
+
+      int& getAmmo( const ContainerBase* unit )
       {
-         sourceAmmo = s->getAmmo( ammoType, maxint, true );
-         destAmmo   = d->getAmmo( ammoType, maxint, true );
+         assert( unit == source.getContainer() || unit == dest.getContainer() );
+         if ( unit == source.getContainer() )
+            return sourceAmmo;
+         else
+            return destAmmo;
+      }
+      
+   public:
+      AmmoTransferrable( int ammo, ResourceWatch& src, ResourceWatch& dst, bool& allowProduction ) : Transferrable( src, dst ), ammoType ( ammo ), allowAmmoProduction( allowProduction )
+      {
+         sourceAmmo = src.getContainer()->getAmmo( ammoType, maxint, true );
+         destAmmo   = dst.getContainer()->getAmmo( ammoType, maxint, true );
       };
       
       ASCString getName() { return cwaffentypen[ ammoType ]; };
       
-      void fillDest()
+      int get( ContainerBase* c, int toGet, bool queryOnly )
       {
-         int toTransfer = min( sourceAmmo, dstUnit->maxAmmo( ammoType) - destAmmo);
-         destAmmo += toTransfer;
-         sourceAmmo -= toTransfer;
+         int got = min ( toGet, getAmmo( c ));
+         int toProduce = toGet - got;
 
-         if ( allowAmmoProduction && destAmmo < dstUnit->maxAmmo( ammoType) && weaponAmmo[ammoType] ) {
-            int delta = dstUnit->maxAmmo( ammoType) - destAmmo;
-
-            
+         if ( allowAmmoProduction && toProduce > 0 && weaponAmmo[ammoType] ) {
             for ( int r = 0; r < resourceTypeNum; ++r ) {
                if ( cwaffenproduktionskosten[ammoType][r] ) {
-                  int produceable = source.avail().resource(r) / cwaffenproduktionskosten[ammoType][r];
-                  if ( produceable < delta )
-                     delta = produceable;
+                  int produceable = getResourceWatch(c).avail().resource(r) / cwaffenproduktionskosten[ammoType][r];
+                  if ( produceable < toProduce )
+                     toProduce = produceable;
                }
             }
+            if ( !queryOnly ) {
+               Resources res;
+               for ( int r = 0; r < resourceTypeNum; ++r )
+                  res.resource(r) = cwaffenproduktionskosten[ammoType][r] * toProduce;
 
-            Resources res;
-            for ( int r = 0; r < resourceTypeNum; ++r ) 
-               res.resource(r) = cwaffenproduktionskosten[ammoType][r] * delta;
+               getResourceWatch( c ).getResources( res );
+               
+               getAmmo(c) -= got;
+            }
+            got += toProduce;
+         } else {
+            if ( !queryOnly )
+               getAmmo(c) -= got;
+         }
+         return got;
+      }
+      
+      int getMax( ContainerBase* c, bool avail )
+      {
+         if ( avail ) {
+            int needed = c->maxAmmo( ammoType ) - getAmount( c );
+            int av = get( opposingContainer( c ), needed, true );
+            return getAmount( c ) + av;
+         } else
+            return c->maxAmmo( ammoType );
+      }
+      
+      int getMin( ContainerBase* c, bool avail )
+      {
+         if ( avail ) {
+            int storable = opposingContainer(c)->maxAmmo(ammoType) - getAmmo( opposingContainer(c) );
+            int transferable = min( getAmmo(c), storable );
+            return getAmmo(c) - transferable;
+         } else
+            return 0;
+      }
+      
+      int getAmount ( ContainerBase* target )
+      {
+         return getAmmo( target );
+      }
+      
+      int transfer( ContainerBase* target, int delta )
+      {
+         if ( delta < 0 )
+            return transfer( opposingContainer( target ), -delta );
+         else {
+            delta = min( delta, target->maxAmmo(ammoType) - getAmount( target ));
+            int got = get( opposingContainer( target ), delta, false );
 
-            source.getResources( res );
-            destAmmo += delta;
+            getAmmo(target) += got;
+            return got;
          }
       }
       
-      void emptyDest()
-      {
-         int toTransfer = min( destAmmo, srcUnit->maxAmmo( ammoType) - sourceAmmo);
-         destAmmo -= toTransfer;
-         sourceAmmo += toTransfer;
-      }
 };
 
 
 class TransferHandler {
-
    private:
       ResourceWatch sourceRes;
       ResourceWatch destRes;
@@ -202,7 +316,7 @@ class TransferHandler {
             if ( weaponAmmo[a] )
                if ( !externalTransfer || src->baseType->hasFunction( ContainerBaseType::ExternalAmmoTransfer ) ||  dst->baseType->hasFunction( ContainerBaseType::ExternalAmmoTransfer ) )
                   if ( src->maxAmmo( a ) && dst->maxAmmo( a )) 
-                     transfers.push_back ( new AmmoTransferrable( a, src, dst, sourceRes, destRes, allowProduction ));
+                     transfers.push_back ( new AmmoTransferrable( a, sourceRes, destRes, allowProduction ));
       };
 
       bool allowAmmoProduction( bool allow )

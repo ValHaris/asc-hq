@@ -178,9 +178,9 @@ char *strupr (const char *a)
    char *b;
 
    j = strlen (a);
-   b = (char *) malloc (j);
-   for (i = 0; i < j; i++)
-     b[i] = toupper (a[i]);
+   b = (char *) malloc (j+1);
+   for (i = 0; i < j; i++) b[i] = toupper (a[i]);
+   b[j] = '\0';
    return (b);
 }
 #endif

@@ -133,6 +133,12 @@
 # include "win32/win32-errormsg.h"
 #endif
 
+
+#ifdef WIN32
+#include  "win32/msvc/mdump.h"
+ MiniDumper miniDumper( "main" );
+#endif
+
 pfield        getSelectedField(void)
 {
    return actmap->getField( actmap->getCursor() ); 
@@ -622,7 +628,7 @@ void viewunitmovementrange ( Vehicle* veh, tkey taste )
 {
    if ( veh && !moveparams.movestatus && fieldvisiblenow ( getfield ( veh->xpos, veh->ypos ))) {
       actmap->cleartemps ( 7 );
-      TemporaryContainerStorage tcs ( veh, true );
+      TemporaryContainerStorage tcs ( veh, false );
       veh->reactionfire.disable();
       veh->setMovement ( veh->typ->movement[log2(veh->height)]);
       int oldcolor = veh->color;
@@ -661,7 +667,9 @@ void viewunitmovementrange ( Vehicle* veh, tkey taste )
          }
       }
       veh->color = oldcolor;
+      
       tcs.restore();
+      
    }
 }
 
@@ -676,8 +684,6 @@ void renameUnit()
          fld->building->name = editString ( "building name", fld->building->name );
    }
 }
-
-
 
 
 void showSearchPath()
@@ -970,6 +976,19 @@ void execuseraction ( tuseractions action )
          statisticDialog();
          break;
 
+      case ua_soundDialog:
+         soundSettings(NULL);
+         break;
+      case ua_togglesound:
+         if ( !SoundSystem::getInstance()->isOff() ) {
+            bool on = !SoundSystem::getInstance()->areEffectsMuted();
+            SoundSystem::getInstance()->setEffectsMute( on );
+            if ( on )
+               SoundSystem::getInstance()->pauseMusic();
+            else
+               SoundSystem::getInstance()->resumeMusic();
+         }
+         break;
       case ua_showPlayerSpeed:
          showPlayerTime();
          break;
@@ -1016,7 +1035,6 @@ void execuseraction ( tuseractions action )
                if ( t )
                   s += t->name + "\n";
             }
-
 
             tviewanytext vat ;
             vat.init ( "Research Status", s.c_str(), 20, -1 , 450, 480 );
@@ -1153,7 +1171,9 @@ void execuseraction2 ( tuseractions action )
                showUnitCargoSummary( fld->vehicle );
          }
          break;
-         default:
+      case ua_unitsummary: showUnitSummary( actmap );
+         break;
+      default:
          break;
    }
 

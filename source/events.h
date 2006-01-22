@@ -25,7 +25,6 @@
 #ifndef events_h_included
 #define events_h_included
 
-
 /**
   Defines what happens with the SDL events
   \param queue   Events are queued to be extracted with getQueuedEvent

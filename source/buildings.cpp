@@ -327,7 +327,7 @@ void    Building :: produceAmmo ( int type, int num )
 {
    Resources res;
    for( int j = 0; j< resourceTypeNum; j++ )
-      res.resource(j) = cwaffenproduktionskosten[type][j] * num / 5;
+      res.resource(j) = cwaffenproduktionskosten[type][j] * num;
 
    ContainerBase* cb = this;  // Really strange. Building is derived from Containerbase, but getResource doesn't work here
    Resources res2 = cb->getResource ( res, 1 );
@@ -336,14 +336,14 @@ void    Building :: produceAmmo ( int type, int num )
        if ( res.resource(i) )
           perc = min ( perc, 100 * res2.resource(i) / res.resource(i) );
    int produceable = num * perc / 100 ;
-   int produceablePackages = produceable / 5;
+   int produceablePackages = produceable;
 
    for( int k = 0; k< resourceTypeNum; k++ )
       res.resource(k) = cwaffenproduktionskosten[type][k] * produceablePackages;
 
    cb->getResource ( res, 0 );
 
-   ammo[type] += produceablePackages * 5;
+   ammo[type] += produceablePackages;
 }
 #endif
 

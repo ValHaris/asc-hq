@@ -58,78 +58,46 @@ class ContainerBase {
 
       const ContainerBaseType*  baseType;
 
-      typedef vector<Vehicle*> Cargo;
-      Cargo cargo;
 
       typedef vector<Vehicletype*> Production;
       Production unitProduction;
       
+
+    //! Cargo related functions
+    //@{
+
+      typedef vector<Vehicle*> Cargo;
+      Cargo cargo;
       
       void addToCargo( Vehicle* veh );
+      
+      //@{
+      //! removes the given unit from the container. \Returns true of the unit was found, false otherwise
       bool removeUnitFromCargo( Vehicle* veh, bool recursive = false );
       bool removeUnitFromCargo( int nwid, bool recursive = false );
+      //@}
       
       bool unitLoaded( int nwid );
       
+      //@{
       //! if the unit is inside this container, returns the container which the unit is directly in (which may not be the current one as containers may be nested arbitrarily). 
       const ContainerBase* findParent ( const ContainerBase* veh ) const;
       ContainerBase* findParent ( const ContainerBase* veh );
+      //@}
+      
 
+      //! returns the number of loaded units
+      int vehiclesLoaded ( void ) const;
+      
       //! if this is a unit and it is inside a building or transport, returns the transport. NULL otherwise.
       ContainerBase* getCarrier() const;
 
-      
+      //! searches for a the unit in the whole stack
       Vehicle* findUnit ( int nwid );
       
-     
-      int damage;
-      int color;
-
-      int vehiclesLoaded ( void ) const;
-
-      virtual void write ( tnstream& stream, bool includeLoadedUnits = true ) = 0;
-      virtual void read ( tnstream& stream ) = 0;
-
-      virtual void addview ( void ) = 0;
-      virtual void removeview ( void ) = 0;
-
-
-      virtual int putResource ( int amount, int resourcetype, bool queryonly, int scope = 1 ) = 0;
-      virtual int getResource ( int amount, int resourcetype, bool queryonly, int scope = 1 ) = 0;
-      virtual int getResource ( int amount, int resourcetype ) const = 0;
-
-      Resources putResource ( const Resources& res, bool queryonly, int scope = 1 );
-      Resources getResource ( const Resources& res, bool queryonly, int scope = 1 );
-      Resources getResource ( const Resources& res ) const;
-
-      virtual bool canRepair( const ContainerBase* item ) const = 0;
-      pmap getMap ( ) { return gamemap; };
-      const pmap getMap ( ) const { return gamemap; };
-
-      int getMaxRepair ( const ContainerBase* item );
-      int getMaxRepair ( const ContainerBase* item, int newDamage, Resources& cost, bool ignoreCost = false  );
-      int repairItem   ( ContainerBase* item, int newDamage = 0 );
-      
-      //! returns the amount of damate that can still be repaired this turn
-      virtual int repairableDamage() = 0;
-
-      virtual int getIdentification() = 0;
-
-      virtual int getHeight() const = 0;
-
-      virtual ASCString getName ( ) const = 0;
-
-      virtual int getAmmo( int type, int num, bool queryOnly )  = 0;
-      virtual int putAmmo( int type, int num, bool queryOnly )  = 0;
-      virtual int maxAmmo( int type ) const = 0 ;
-
-      
-      //! returns the player this vehicle/building belongs to
-      int getOwner() const { return color >> 3; };
-
       /** can the vehicle be loaded. If uheight is passed, it is assumed that vehicle is at
-          the height 'uheight' and not the actual level of height
-      */
+      the height 'uheight' and not the actual level of height
+       */
       bool vehicleLoadable ( const Vehicle* vehicle, int uheight = -1, const bool* attacked = NULL ) const;
 
       //! returns the levels of height on which this unit can be unloaded; or 0 if no unloading is possible
@@ -142,47 +110,44 @@ class ContainerBase {
       int  vehicleDocking ( const Vehicle* vehicle, bool out  ) const;
 
       /** Does the vehicle fit into the container? This does not include checking if it can reach the entry
-      */
+       */
       bool vehicleFit ( const Vehicle* vehicle ) const;
 
       //! weight of all loaded units
       int cargoWeight() const;
 
-      // SigC::Signal0<void> resourceChanged;
-      // SigC::Signal0<void> ammoChanged;
       
-      SigC::Signal0<void> conquered;
-      SigC::Signal0<void> destroyed;
-      static SigC::Signal0<void> anyContainerDestroyed;
+    //@}
 
-      static int calcShadowDist( int binaryHeight );
-
-
-    //! the current amount of research that the building conducts every turn
-      int         researchpoints;
-
-      int         maxresearchpoints;
       
-    //! the Resources that are produced each turn
-      Resources   plus;
+     
+      int damage;
+      
+      int color;
+      //! returns the player this vehicle/building belongs to
+      int getOwner() const { return color >> 3; };
+      
 
-    //! the maximum amount of Resources that the building can produce each turn in the ASC resource mode ; see also #bi_resourceplus
-      Resources   maxplus;
 
-    //! the maximum amount of Resources that the building can produce each turn in the BI resource mode ; see also #maxplus
-      Resources    bi_resourceplus;
+      virtual void write ( tnstream& stream, bool includeLoadedUnits = true ) = 0;
+      virtual void read ( tnstream& stream ) = 0;
+
+      virtual void addview ( void ) = 0;
+      virtual void removeview ( void ) = 0;
+
 
       
 
-    //! hook that is called when a player ends his turn
-      virtual void endOwnTurn( void );
-
-    //! hook that is called when any player (including owner) ends turn
-      virtual void endAnyTurn( void );
-
-    //! hook that is called the next round begins ( active player switching from player8 to player1 )
-      virtual void endRound ( void );
+    //! Resource related functions
+    //@{
       
+      virtual int putResource ( int amount, int resourcetype, bool queryonly, int scope = 1 ) = 0;
+      virtual int getResource ( int amount, int resourcetype, bool queryonly, int scope = 1 ) = 0;
+      virtual int getResource ( int amount, int resourcetype ) const = 0;
+
+      Resources putResource ( const Resources& res, bool queryonly, int scope = 1 );
+      Resources getResource ( const Resources& res, bool queryonly, int scope = 1 );
+      Resources getResource ( const Resources& res ) const;
 
     //! returns the resource that the building consumes for its operation.
       Resources getResourceUsage ( );
@@ -194,6 +159,68 @@ class ContainerBase {
       
     //! returns the amount of resources that the net which the building is connected to produces each turn
       Resources netResourcePlus( ) const;
+
+
+    //! the Resources that are produced each turn
+      Resources   plus;
+
+    //! the maximum amount of Resources that the building can produce each turn in the ASC resource mode ; see also #bi_resourceplus
+      Resources   maxplus;
+
+    //! the maximum amount of Resources that the building can produce each turn in the BI resource mode ; see also #maxplus
+      Resources    bi_resourceplus;
+      
+    //@}
+      
+
+      
+      
+      virtual bool canRepair( const ContainerBase* item ) const = 0;
+
+      int getMaxRepair ( const ContainerBase* item );
+      int getMaxRepair ( const ContainerBase* item, int newDamage, Resources& cost, bool ignoreCost = false  );
+      int repairItem   ( ContainerBase* item, int newDamage = 0 );
+      
+      //! returns the amount of damate that can still be repaired this turn
+      virtual int repairableDamage() = 0;
+
+
+      pmap getMap ( ) { return gamemap; };
+      const pmap getMap ( ) const { return gamemap; };
+      
+      virtual int getIdentification() = 0;
+
+      virtual int getHeight() const = 0;
+
+      virtual ASCString getName ( ) const = 0;
+
+      virtual int getAmmo( int type, int num, bool queryOnly )  = 0;
+      virtual int putAmmo( int type, int num, bool queryOnly )  = 0;
+      virtual int maxAmmo( int type ) const = 0 ;
+
+
+      SigC::Signal0<void> conquered;
+      SigC::Signal0<void> destroyed;
+      static SigC::Signal0<void> anyContainerDestroyed;
+
+      static int calcShadowDist( int binaryHeight );
+
+
+    //! the current amount of research that the building conducts every turn
+      int         researchpoints;
+
+      int         maxresearchpoints;
+
+    //! hook that is called when a player ends his turn
+      virtual void endOwnTurn( void );
+
+    //! hook that is called when any player (including owner) ends turn
+      virtual void endAnyTurn( void );
+
+    //! hook that is called the next round begins ( active player switching from player8 to player1 )
+      virtual void endRound ( void );
+      
+
       
       class Work {
          public:
@@ -222,7 +249,6 @@ class ContainerBase {
 
       
       virtual MapCoordinate3D getPosition ( ) const = 0;
-      bool searchAndRemove( Vehicle* veh );
       virtual ~ContainerBase();
 
       virtual vector<MapCoordinate> getCoveredFields() = 0;

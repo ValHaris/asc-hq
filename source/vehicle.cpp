@@ -127,10 +127,8 @@ Vehicle :: ~Vehicle (  )
       if ( fld->vehicle  == this )
         fld->vehicle = NULL;
       else {
-        if ( fld->building )
-           fld->building->searchAndRemove(this);
-        if ( fld->vehicle )
-           fld->vehicle->searchAndRemove(this);
+         if ( fld->getContainer() )
+            fld->getContainer()->removeUnitFromCargo( this, true );
       }
    }
 }

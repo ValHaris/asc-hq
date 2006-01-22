@@ -149,6 +149,7 @@ void Menu::setup()
    addbutton ( "~R~esearch", ua_researchinfo );
    addbutton ( "~P~lay time", ua_showPlayerSpeed );
    addbutton ( "~C~argo Summary", ua_cargosummary );
+   addbutton ( "Unito Summary", ua_unitsummary );
    // addbutton ( "~R~esearch status", ua_showResearchStatus );
 
    // addbutton ( "vehicle ~I~mprovement\tF7", ua_dispvehicleimprovement);

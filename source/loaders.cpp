@@ -1268,6 +1268,18 @@ tmap*  tnetworkloaders::loadnwgame( pnstream strm )
 
    spfld->levelfinished = false;
    
+   // there was a bug that made the ammo amount underflow
+   for ( int i = 0; i < 8; ++i)
+      for ( Player::BuildingList::iterator b = spfld->player[i].buildingList.begin(); b != spfld->player[i].buildingList.end(); ++b )
+         for ( int a = 0; a < waffenanzahl; ++a )
+            if ( (*b)->ammo[a] > 32000 ) {
+               ASCString s;
+               s.format( "Player %s had %d ammo of type %s in the building at %d/%d", spfld->player[i].getName().c_str(), (*b)->ammo[a], cwaffentypen[a], (*b)->getEntry().x, (*b)->getEntry().y );
+               new Message( s, spfld, 1 );
+               (*b)->ammo[a] = 0;
+            }
+
+   
    tmap* spfldcopy = spfld;
    spfld = NULL;
 
@@ -1275,6 +1287,7 @@ tmap*  tnetworkloaders::loadnwgame( pnstream strm )
    
    
    return spfldcopy;
+
 }
 
 

@@ -1242,8 +1242,8 @@ void         tcontinuecampaign::run(void)
       tmemorystream  memoryStream ( &memoryStreamBuffer, tnstream::reading );
 
       for (i=0;i<8 ; i++) {
-         actmap->player[i].research.read_struct ( memoryStream );
-         actmap->player[i].research.read_techs ( memoryStream );
+         actmap->player[i].research.read_struct ( memoryStream, true );
+         actmap->player[i].research.read_techs ( memoryStream, true );
          actmap->player[ i ].dissections = dissectedunits[i];
       }
 

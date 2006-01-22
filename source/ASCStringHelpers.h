@@ -440,9 +440,9 @@ inline int ASCStringHelpers::_Printf ( const charT* format, ... )
     int nRes = 0;
 
     #ifdef ASC_UNICODE
-        nRes = ::wprintf ( format, argptr );
+        nRes = ::vwprintf ( format, argptr );
     #else
-        nRes = ::printf ( format, argptr );
+        nRes = ::vprintf ( format, argptr );
     #endif
 
     va_end ( argptr );

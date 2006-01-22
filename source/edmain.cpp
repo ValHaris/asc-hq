@@ -2,8 +2,6 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.67.2.20 2005-12-29 12:33:27 mbickel Exp $
-
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -45,7 +43,11 @@
 #include "cannedmessages.h"
 #include "stdio-errorhandler.h"
 
-// #define backgroundpict1 "BKGR2.PCX"
+#ifdef WIN32
+ #include  "win32/msvc/mdump.h"
+ MiniDumper miniDumper( "asc1mapeditor" );
+#endif
+
 #define menutime 35
 
 

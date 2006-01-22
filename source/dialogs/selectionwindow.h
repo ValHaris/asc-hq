@@ -130,7 +130,7 @@ class ItemSelectorWidget : public PG_Widget {
 
 class ItemSelectorWindow: public PG_Window {
       ItemSelectorWidget* itemSelector;
-      void itemSelected( const SelectionWidget* );
+      virtual void itemSelected( const SelectionWidget* );
    public:
       // the ItemSelectorWindow will take ownership over the itemFactory
       ItemSelectorWindow( PG_Widget *parent, const PG_Rect &r , const ASCString& title, SelectionItemFactory* itemFactory ) ;

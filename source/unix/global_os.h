@@ -42,7 +42,6 @@
   #ifdef VERSION
   #undef VERSION
   #endif
-    
 
   typedef unsigned long PointerSizedInt;
 

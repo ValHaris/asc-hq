@@ -283,6 +283,9 @@
 				RelativePath="..\..\..\mappolygons.cpp">
 			</File>
 			<File
+				RelativePath="..\mdump.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\messagedlg.cpp">
 			</File>
 			<File

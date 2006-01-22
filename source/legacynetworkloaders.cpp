@@ -65,25 +65,42 @@ class  tnetwork {
 
 void        readLegacyNetworkData ( tnstream& stream )
 {
-   #if SDL_BYTEORDER == SDL_LIL_ENDIAN
-   if ( sizeof(tnetwork)==2040 ) {
-      int i;
+   tnetwork network;
+
+// #if SDL_BYTEORDER == SDL_LIL_ENDIAN
 
       // don't change anything for Big-Endian adaption,
-      // this part is really ugly and I'll rewrite it
+      // this part is really ugly and is rewrite for ASC2
 
-      tnetwork net; 
-      stream.readdata2 ( net );
-      for (i=0; i<8 ; i++ ) 
-         if (net.computer[i].name ) {
-            stream.readString();
-         }   
-   } else 
-   #endif
-   {
-      errorMessage("Unable to load map in old file format on this computer architecture\nPlease convert this file to the new file format on a 32 Bit little endian machine and try again");
-      throw tfileerror();
-   }
+         for ( int i = 0; i < 8; ++i ) {
+            network.player[i].compposition = stream.readChar();
+            network.player[i].codewordcrc = stream.readInt();
+         }
+
+         for ( int i = 0; i< 8; ++i ) {
+            network.computer[i].name = stream.readInt();
+            network.computer[i].send.transfermethodid = stream.readInt();
+            stream.readInt(); // network.computer[i].send.transfermethod = (pbasenetworkconnection) 
+            stream.readdata2( network.computer[i].send.data );
+            network.computer[i].receive.transfermethodid = stream.readInt();
+            stream.readInt(); // network.computer[i].receive.transfermethod = (pbasenetworkconnection) 
+            stream.readdata2( network.computer[i].receive.data );
+            network.computer[i].existent = stream.readInt();
+         }
+         network.computernum = stream.readInt();
+         network.turn = stream.readInt();
+         network.globalparams.enablesaveloadofgames = stream.readInt();
+         network.globalparams.reaskpasswords = stream.readInt();
+         for ( int i = 0; i< 48; ++i )
+            network.globalparams.dummy[i] = stream.readInt();
+         
+         for ( int i=0; i<8 ; i++ )
+            if (network.computer[i].name  )
+               stream.readString();
+// #else
+//         errorMessage("Unable to load map in old file format on this computer architecture\nPlease convert this file to the new file format on a 32 Bit little endian machine and try again");
+//         throw tfileerror();
+// #endif
 }
 
 

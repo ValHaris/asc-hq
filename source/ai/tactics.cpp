@@ -536,7 +536,7 @@ AI::AiResult AI::tactics( void )
 
    displaymessage2("starting tactics ... ");
 
-   typedef list<Vehicle*> TactVehicles;
+   typedef list<int> TactVehicles;
    TactVehicles tactVehicles;
 
    for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
@@ -586,7 +586,7 @@ AI::AiResult AI::tactics( void )
             }
 
          if ( unitUsable && enemiesNear)
-            tactVehicles.push_back ( veh );
+            tactVehicles.push_back ( veh->networkid );
       }
    }
 
@@ -604,77 +604,83 @@ AI::AiResult AI::tactics( void )
       do {
          directAttackNum = 0;
          for ( TactVehicles::iterator i = tactVehicles.begin(); i != tactVehicles.end(); ) {
-            Vehicle* veh = *i;
+            Vehicle* veh = getMap()->getUnit( *i );
+            if ( veh ) {
 
-            unitCounter++;
-            displaymessage2("tact: processing operation %d", unitCounter );
-            checkKeys();
-
-            int stat = changeVehicleHeight ( veh, NULL );
-            if ( stat == -1 ) { // couldn't change height due to blocked way or something similar
-               veh->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_wait );
-               result.unitsWaiting++;
-               i++;
-            } else {
-
-               AStar3D ast ( getMap(), veh, false, veh->getMovement() );
-               ast.findAllAccessibleFields ();
-               TargetVector tv;
-               getAttacks ( ast, veh, tv, hemmingBonus );
-
-               if ( tv.size() ) {
-                  MoveVariant* mv = *max_element( tv.begin(), tv.end(), moveVariantComp );
-
-                  // airplane landing constraints
-
-                  bool directAttack = false;
-                  if ( beeline ( mv->movePos.x, mv->movePos.y, mv->attackx, mv->attacky ) > maxmalq || veh->height >= chtieffliegend || (mv->enemy && mv->enemy->height >= chtieffliegend) )
-                     directAttack = true;
-
-                  int freeNeighbouringFields = 0;
-                  for ( int j = 0; j < sidenum; j++ ) {
-                     pfield fld = getMap()->getField ( getNeighbouringFieldCoordinate ( MapCoordinate(mv->attackx, mv->attacky), j));
-                     if ( fld )
-                        if ( !fld->building && !fld->vehicle )
-                           freeNeighbouringFields++;
-                  }
-
-                  if ( freeNeighbouringFields <= 1 )
-                     directAttack = true;
-
-                  if ( mv->enemyDamage >= 100 )
-                     directAttack = true;
-
-                  if ( directAttack ) {
-                     /* to avoid recalculating the vision with every variant we are going to make it
-                        easy...
-                        Since all units now only attack the neighbouring fields, which is generally
-                        visible, the AI does not cheat here.
-                     */
-                     VisibilityStates org_vision =  _vision ;
-                     _vision = visible_all;
-
-                     AiResult res = executeMoveAttack ( veh, tv );
-                     i = tactVehicles.erase ( i );
-
-                     if ( !res.unitsDestroyed )
-                        veh->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_tactics );
-
-                     result += res;
-                     directAttackNum++;
-
-                     _vision = org_vision;
-
-                  } else {
-                     targets[mv->enemy->networkid].push_back( *mv );
-                     i++;
-                  }
+               unitCounter++;
+               displaymessage2("tact: processing operation %d", unitCounter );
+               checkKeys();
+   
+               int stat = changeVehicleHeight ( veh, NULL );
+               if ( stat == -1 ) { // couldn't change height due to blocked way or something similar
+                  veh->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_wait );
+                  result.unitsWaiting++;
+                  i++;
                } else {
-                  // there is nothing the unit can do in tactics mode
-                  if ( veh->aiparam[ getPlayerNum() ]->getTask() != AiParameter::tsk_serviceRetreat )
-                     veh->aiparam[ getPlayerNum() ]->resetTask();
-                  i = tactVehicles.erase ( i );
+   
+                  AStar3D ast ( getMap(), veh, false, veh->getMovement() );
+                  ast.findAllAccessibleFields ();
+                  TargetVector tv;
+                  getAttacks ( ast, veh, tv, hemmingBonus );
+   
+                  if ( tv.size() ) {
+                     MoveVariant* mv = *max_element( tv.begin(), tv.end(), moveVariantComp );
+   
+                     // airplane landing constraints
+   
+                     bool directAttack = false;
+                     if ( beeline ( mv->movePos.x, mv->movePos.y, mv->attackx, mv->attacky ) > maxmalq || veh->height >= chtieffliegend || (mv->enemy && mv->enemy->height >= chtieffliegend) )
+                        directAttack = true;
+   
+                     int freeNeighbouringFields = 0;
+                     for ( int j = 0; j < sidenum; j++ ) {
+                        pfield fld = getMap()->getField ( getNeighbouringFieldCoordinate ( MapCoordinate(mv->attackx, mv->attacky), j));
+                        if ( fld )
+                           if ( !fld->building && !fld->vehicle )
+                              freeNeighbouringFields++;
+                     }
+   
+                     if ( freeNeighbouringFields <= 1 )
+                        directAttack = true;
+   
+                     if ( mv->enemyDamage >= 100 )
+                        directAttack = true;
+   
+                     if ( directAttack ) {
+                        /* to avoid recalculating the vision with every variant we are going to make it
+                           easy...
+                           Since all units now only attack the neighbouring fields, which is generally
+                           visible, the AI does not cheat here.
+                        */
+                        VisibilityStates org_vision =  _vision ;
+                        _vision = visible_all;
+   
+                        AiResult res = executeMoveAttack ( veh, tv );
+                        i = tactVehicles.erase ( i );
+   
+                        if ( !res.unitsDestroyed )
+                           veh->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_tactics );
+   
+                        result += res;
+                        directAttackNum++;
+   
+                        _vision = org_vision;
+   
+                     } else {
+                        targets[mv->enemy->networkid].push_back( *mv );
+                        i++;
+                     }
+                  } else {
+                     // there is nothing the unit can do in tactics mode
+                     if ( veh->aiparam[ getPlayerNum() ]->getTask() != AiParameter::tsk_serviceRetreat )
+                        veh->aiparam[ getPlayerNum() ]->resetTask();
+                     i = tactVehicles.erase ( i );
+                  }
                }
+            } else {
+               // unit not available any more, get next one
+               i = tactVehicles.erase ( i );
+
             }
          }
 
@@ -749,7 +755,7 @@ AI::AiResult AI::tactics( void )
                         // the unit may have been shot down due to reaction fire
 
                         if ( !getMap()->getUnit ( nwid ) ) {
-                           TactVehicles::iterator att = find ( tactVehicles.begin(), tactVehicles.end(), finalPositions[i] ) ;
+                           TactVehicles::iterator att = find ( tactVehicles.begin(), tactVehicles.end(), finalPositions[i]->networkid ) ;
                            tactVehicles.erase ( att );
                            finalPositions[i] = NULL;
                         }
@@ -796,7 +802,7 @@ AI::AiResult AI::tactics( void )
 
                            vtec.calc();
 
-                           TactVehicles::iterator att = find ( tactVehicles.begin(), tactVehicles.end(), a ) ;
+                           TactVehicles::iterator att = find ( tactVehicles.begin(), tactVehicles.end(), a->networkid ) ;
                            tactVehicles.erase ( att );
                         }
                      }

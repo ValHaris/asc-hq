@@ -58,6 +58,22 @@ class VehicleCounterFactory: public SelectionItemFactory, public SigC::Object  {
 
 VehicleCounterFactory :: VehicleCounterFactory( tmap* actmap ) : gamemap ( actmap )
 {
+   for ( int y = 0; y < actmap->ysize; ++y )
+      for ( int x = 0; x < actmap->xsize; ++x ) {
+         pfield fld = actmap->getField(x,y);
+         if ( fld ) {
+            if ( fld->vehicle && fld->vehicle->getOwner() == actmap->actplayer ) {
+               calcCargoSummary( fld->vehicle, counter );
+               counter[ fld->vehicle->typ] += 1;
+            }
+            if ( fld->building && fld->building->getOwner() == actmap->actplayer && (fld->bdt & getTerrainBitType(cbbuildingentry)).any() )
+               calcCargoSummary( fld->getContainer(), counter );
+          }
+      }
+
+   for ( Counter::iterator i = counter.begin(); i != counter.end(); ++i )
+      items.push_back( i->first );
+      
    sort( items.begin(), items.end(), VehicleComp );
    restart();
 };
@@ -101,15 +117,25 @@ void VehicleCounterFactory::itemSelected( const SelectionWidget* widget, bool mo
 }
 */
 
+class UnitSummaryWindow : public ItemSelectorWindow {
+   private:
+      virtual void itemSelected( const SelectionWidget* ) {};
+   public:
+      UnitSummaryWindow ( PG_Widget *parent, const PG_Rect &r , const ASCString& title, SelectionItemFactory* itemFactory ) : ItemSelectorWindow( parent, r, title, itemFactory ) {};
+};      
+      
+
 void showUnitCargoSummary( ContainerBase* cb )
 {
-   ItemSelectorWindow isw( NULL, PG_Rect( 100, 150, 400, 400 ),  "cargo summary", new VehicleCounterFactory( cb ));
+   UnitSummaryWindow isw( NULL, PG_Rect( 100, 150, 400, 400 ),  "cargo summary", new VehicleCounterFactory( cb ));
    isw.Show();
    isw.RunModal();
 }
 
 
-void showUnitCount( tmap* actmap )
+void showUnitSummary( tmap* actmap )
 {
-
+   UnitSummaryWindow isw( NULL, PG_Rect( 100, 150, 400, 400 ),  "cargo summary", new VehicleCounterFactory( actmap ));
+   isw.Show();
+   isw.RunModal();
 }

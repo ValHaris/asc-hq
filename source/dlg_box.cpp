@@ -1185,7 +1185,8 @@ void         tdialogbox::buildgraphics(void)
   if ( y1 == -1 )
      y1 = ( agmp->resolutiony - ysize ) / 2;
   else
-     y1 += (agmp->resolutiony - 480) / 2;
+     if ( y1 + ysize < 480 )
+         y1 += (agmp->resolutiony - 480) / 2;
 
   if ( xsize == -1)
      xsize = agmp->resolutionx - xsize*2;

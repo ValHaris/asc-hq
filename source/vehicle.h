@@ -133,6 +133,9 @@ class BuildingType;
 
     AiParameter* aiparam[8];
 
+
+    //! Movement related functions
+    //@{
     //! can the unit move from its current position (does not check neighbouring fields)
     bool canMove ( void ) const;
 
@@ -140,8 +143,8 @@ class BuildingType;
     int getMovement ( bool checkFuel = true ) const ;
 
     /** sets a new distance that the unit can move
-        \param cargoDivisor : the cargo of this unit gets 1/cargodivisor the change that this unit is getting; if 0 the cargo is not touched ; -1 is default
-    */
+    \param cargoDivisor : the cargo of this unit gets 1/cargodivisor the change that this unit is getting; if 0 the cargo is not touched ; -1 is default
+     */
     void setMovement ( int newmove, double cargoDivisor = -1 );
 
     //! did the unit move this turn
@@ -151,11 +154,15 @@ class BuildingType;
     int maxMovement ( ) const;
 
     /** reduces the movement by the given amount. Negative values are possible.
-        Don't use something like "setmovement ( getmovement() - amount )", because getmovement may return a lower amount due to lack of fuel. */
+    Don't use something like "setmovement ( getmovement() - amount )", because getmovement may return a lower amount due to lack of fuel. */
     void decreaseMovement ( int movement );
 
     //! resets a units movement. This is called at the beginning of each turn.
     void resetMovement( void );
+
+    //@}
+    
+    
 
     //! changes a units height and adjusts the movement so that the percentage of used movepoints remains constant
     void setNewHeight( int bitmappedheight );
@@ -163,6 +170,9 @@ class BuildingType;
     //! add the objects like tracks or broken ice
     void spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest );
 
+    //! Resource related functions
+    //@{
+    
     int putResource ( int amount, int resourcetype, bool queryonly, int scope = 1 );
     int getResource ( int amount, int resourcetype, bool queryonly, int scope = 1 );
     int getResource ( int amount, int resourcetype ) const;
@@ -173,11 +183,11 @@ class BuildingType;
     //! returns the resources that the unit is carrying
     Resources getTank() const;
 
+    //@}
+    
     int getHeight() const { return height; };
     
 
-    //! weight of unit including cargo
-    int weight( void ) const;
 
     //! returns the units name or, if it does not exist, the unit type's name or description
     ASCString    getName() const;
@@ -186,6 +196,15 @@ class BuildingType;
     int putAmmo( int type, int num, bool queryOnly );
     int maxAmmo( int type ) const ;
 
+    //! Cargo related functions
+    //@{
+
+    //! weight of unit including cargo
+    int weight( void ) const;
+    
+    //! returns the free weight that can be used for cargo
+    int freeWeight();
+    //@}
 
   protected:
     const ResourceMatrix& getRepairEfficiency ( void ) { return repairEfficiency; };
@@ -199,9 +218,6 @@ class BuildingType;
     int searchstackforfreeweight ( Vehicle* searchedInnerVehicle );
 
   public:
-
-    //! returns the free weight that can be used for cargo
-    int freeWeight();
 
     //! Returns the size of a unit. A size is equal to the weight of the unit without any cargo or carried resources.
     int size ( void );
@@ -219,12 +235,20 @@ class BuildingType;
     int getIdentification() { return networkid; };
 
 
+    //! Movement related functions
+    //@{
     //! constructs a vehicle at the given position.
     Vehicle* constructvehicle ( Vehicletype* tnk, int x, int y );
 
     //! checks whether the unit can construct a vehicle of the given type at the given position.
     bool vehicleconstructable ( Vehicletype* tnk, int x, int y );
 
+    /** checks whether the unit can construct a building of the given type.
+    This method does not check if there is enough space around the unit to place
+    the building */
+    bool buildingconstructable ( BuildingType* bld );
+    //@}
+    
     //! sets the unit (and its cargo) the a new position (the unit will not be chained to a field)
     void setnewposition ( int x, int y );
     void setnewposition ( const MapCoordinate& mc );
@@ -255,10 +279,6 @@ class BuildingType;
     bool isViewing ( ) const { return viewOnMap; };
     const SingleWeapon *getWeapon( unsigned weaponNum );
 
-    /** checks whether the unit can construct a building of the given type.
-        This method does not check if there is enough space around the unit to place
-        the building */
-    bool buildingconstructable ( BuildingType* bld );
 
     /** searches for mineral resources.
         \returns > 0 on success ; < 0 on failure (error number is returned => message.txt )

@@ -23,7 +23,7 @@
  class tmap;
  
  extern void showUnitCargoSummary( ContainerBase* cb );
- extern void showUnitCount( tmap* actmap );
+ extern void showUnitSummary( tmap* actmap );
 
 #endif
 

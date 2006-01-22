@@ -68,7 +68,7 @@ class SoundSystem {
    protected:
 
       //! loads a sound from the wave file called name to an Mix_buffer.
-      Mix_Chunk* SoundSystem::loadWave ( const ASCString& name );
+      Mix_Chunk* loadWave ( const ASCString& name );
       friend class Sound;
 
    public:

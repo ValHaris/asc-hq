@@ -3067,8 +3067,9 @@ int ccontainer :: cmovedown_icon_c :: available ( void )
                   return 1;
       }
    } else if ( main->unitmode == mloadintocontainer ) {
-      if ( movedownavail ( unittomove, main->getmarkedunit()))
-         return 1;
+      if ( unittomove != main->getmarkedunit() )
+         if ( movedownavail ( unittomove, main->getmarkedunit()))
+            return 1;
    }
    return 0;
 }
