@@ -210,8 +210,10 @@ void         tsearchputbuildingfields::testfield(const MapCoordinate& mc)
 void         putbuildinglevel1(void)
 {
 
-   tkey                       taste;
+   tkey                       taste=0;
    pvehicle                   eht;
+   int                        keyprn=0;
+   tkey                       input=0;
 
    eht = getactfield()->vehicle;
 
@@ -236,8 +238,6 @@ void         putbuildinglevel1(void)
    mousevisible(true);
    do {
       if ( keypress() ) {
-         int keyprn;
-         tkey input;
          getkeysyms( &input, &keyprn );
          selectbuildinggui.checkforkey(taste, keyprn );
       }

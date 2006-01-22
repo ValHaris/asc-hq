@@ -1,7 +1,7 @@
 #include "triangul.h"
 #include <math.h>
 #include <stdio.h>
-
+#include <string.h>
 
 node_t qs[QSIZE];		/* Query structure */
 trap_t tr[TRSIZE];		/* Trapezoid structure */
@@ -345,7 +345,7 @@ int locate_endpoint(v, vo, r)
 
     default:
       fprintf(stderr, "Haggu !!!!!\n");
-      break;
+      return 0;
     }
 }
 

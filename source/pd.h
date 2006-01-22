@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: pd.h,v 1.11 2004-07-12 18:15:08 mbickel Exp $
+//     $Id: pd.h,v 1.12 2006-01-22 10:33:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2004/07/12 18:15:08  mbickel
+//      Lots of tweaks and fixed for more portability and compilation with mingw
+//
 //     Revision 1.10  2002/01/19 22:39:19  mbickel
 //      Added music playing functions to ASC
 //
@@ -124,7 +127,7 @@
          virtual void setshortkeys(void);
          virtual void lines(int x1,int y1,int x2,int y2);
          virtual void nolines(int x1,int y1,int x2,int y2);
-         virtual void tpulldown::getleftrighttext(char *qtext, char *ltext, char *rtext);
+         virtual void getleftrighttext(char *qtext, char *ltext, char *rtext);
          virtual int getpdfieldheight(int pdfieldnr, int pos);
          virtual void done(void);
          void addbutton ( char* name, int id );

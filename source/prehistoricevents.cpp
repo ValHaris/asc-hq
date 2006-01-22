@@ -92,11 +92,11 @@ extern const char*  ceventtrigger[];
 
       TNextMapEvent:
              Data = NULL;
-             saveas: ID der n„chsten Karte;
+             saveas: ID der nchsten Karte;
 
       TRunScript+NextMapEvent:
              Data = pointer auf Dateinamen des Scriptes ( *.scr );
-             saveas: ID der n„chsten Karte;
+             saveas: ID der nchsten Karte;
 
       TeraseEvent:
              data[0] = ^int
@@ -106,31 +106,31 @@ extern const char*  ceventtrigger[];
       Tweatherchange            ( je ein int , alles unter Data )
               wetter            ( -> cwettertypen , Wind ist eigene eventaction )
               fieldadressierung      ( 1: gesamtes map     )
-                      ³              ( 0: polygone               )
-                      ³
-                      ÃÄÄÄÄÄ 0 ÄÄÄ>  polygonanzahl
-                      ³                   ÃÄÄ   eckenanzahl
-                      ³                             ÃÄÄ x position
-                      ³                                 y position
-                      ³
-                      ³
-                      ÀÄÄÄÄÄ 1 ÄÄÄ|
+                                    ( 0: polygone               )
+                      
+                      ï¿½ï¿½ï¿½ 0 ï¿½ï¿½  polygonanzahl
+                                         ï¿½ï¿½  eckenanzahl
+                                                   ï¿½ï¿½x position
+                                                       y position
+                      
+                      
+                      ï¿½ï¿½ï¿½ 1 ï¿½ï¿½
 
 +     Twindchange
-              intensit„t[3]         ( fuer tieffliegend, normalfliegend und hochfliegend ; -1 steht fuer keine Aenderung )
+              intensitt[3]         ( fuer tieffliegend, normalfliegend und hochfliegend ; -1 steht fuer keine Aenderung )
               Richtung[3]           ( dito )
 
 
       Tmapchange               ( je ein int , alles unter Data )        { wetter wird beibehalten ! }
             numberoffields ( nicht die Anzahl fielder insgesamt,
-               ÃÄÄ>  bodentypid
+               ï¿½ï¿½  bodentypid
                      drehrichtung
                      fieldadressierung   ( wie bei tweatherchange )
 
 
       Treinforcements        ( alles unter DATA )
-             int num      // ein int , der die Anzahl der vehicle angibt. Die vehicle, die ein Transporter geladen hat, werden NICHT mitgez„hlt.
-                  ÃÄÄÄÄ > die vehicle, mit tspfldloaders::writeunit in einen memory-stream geschrieben.
+             int num      // ein int , der die Anzahl der vehicle angibt. Die vehicle, die ein Transporter geladen hat, werden NICHT mitgezhlt.
+                  ï¿½ï¿½ï¿½> die vehicle, mit tspfldloaders::writeunit in einen memory-stream geschrieben.
 
 
       TnewVehicleDeveloped
@@ -138,12 +138,12 @@ extern const char*  ceventtrigger[];
 
 
       Tpalettechange
-           Data =  Pointer auf String, der den Dateinamen der Palettendatei enth„lt.
+           Data =  Pointer auf String, der den Dateinamen der Palettendatei enthlt.
 
       Talliancechange
            Data : Array[8][8] of int                      // status der Allianzen. Sollte vorerst symetrisch bleiben, also nur jeweils 7 Werte abfragen.
                                                              Vorerst einfach Zahlwerte eingeben.
-                                                             256 steht fuer unver„ndert,
+                                                             256 steht fuer unverndert,
                                                              257 fuer umkehrung
 
 +     TGameParameterchange
@@ -268,7 +268,7 @@ extern const char* ceventtriggerconn[];
  #define ceventtrigger_2klammerauf 16
  #define ceventtrigger_2klammerzu 32
  #define ceventtrigger_klammerzu 64
-  /*  reihenfolgenpriorit„t: in der Reihenfolge von oben nach unten wird der TriggerCon ausgewertet
+  /*  reihenfolgenprioritt: in der Reihenfolge von oben nach unten wird der TriggerCon ausgewertet
                AND   OR
                NOT
                (
@@ -302,6 +302,7 @@ const char* ceventtrigger[ceventtriggernum]  = {"*NONE*", "turn/move >=", "build
                                                  "energy tribute <", "material tribute <", "fuel tribute <",
                                                  "any unit enters polygon", "specific unit enters polygon", "building is seen", "irrelevant (used internally)"};
 
+Event*   readOldEvent( pnstream stream, pmap gamemap, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents );
 
 
 void  readOldEventLists ( pnstream stream, bool passedEvents, pmap spfld )

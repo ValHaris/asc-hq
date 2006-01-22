@@ -594,7 +594,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
                     ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog, ua_reloadDlgTheme, ua_showPlayerSpeed, ua_renameunit,
                     ua_statisticdialog, ua_viewPipeNet, ua_cancelResearch, ua_showResearchStatus, ua_exportUnitToFile, ua_cargosummary, ua_showsearchdirs,
-                    ua_unitsummary };
+                    ua_unitsummary, ua_togglesound };
 
 
 class tsgpulldown : public tpulldown
@@ -614,6 +614,8 @@ void         tsgpulldown :: init ( void )
    addbutton ( "~M~ouse options", ua_mousepreferences );
    #ifndef NO_PARAGUI
    addbutton ( "~S~ound options", ua_soundDialog );
+   #else
+   addbutton ( "sound on/off", ua_togglesound );
    #endif
    addbutton ( "seperator", -1);
    addbutton ( "E~x~itõctrl-x", ua_exitgame );
@@ -1664,6 +1666,16 @@ void execuseraction ( tuseractions action )
 
       case ua_soundDialog:
          soundSettings();
+         break;
+      case ua_togglesound:
+         if ( !SoundSystem::getInstance()->isOff() ) {
+            bool on = !SoundSystem::getInstance()->areEffectsMuted();
+            SoundSystem::getInstance()->setEffectsMute( on );
+            if ( on )
+               SoundSystem::getInstance()->pauseMusic();
+            else
+               SoundSystem::getInstance()->resumeMusic();
+         }
          break;
       case ua_showPlayerSpeed:
          showPlayerTime();
