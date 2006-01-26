@@ -26,13 +26,6 @@
 #include "../paradialog.h"
 
 
-class AmmoTransferWindow : public PG_Window {
-      ContainerBase* first;
-      ContainerBase* second;
-   public:
-      AmmoTransferWindow ( ContainerBase* source, ContainerBase* destination, PG_Widget* parent );
-};
-
 class VehicleService;
 
 extern void ammoTransferWindow ( ContainerBase* source, ContainerBase* destination );

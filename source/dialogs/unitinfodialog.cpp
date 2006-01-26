@@ -331,9 +331,9 @@ class UnitInfoDialog : public Panel {
                   setLabelText( "unitpad_unitcostenergy", vt->productionCost.energy );
                   setLabelText( "unitpad_unitcostmaterial", vt->productionCost.material );
                   setLabelText( "unitpad_unitcostfuel", vt->productionCost.fuel );
-                  setLabelText( "unitpad_unittankfuel", vt->tank.fuel );
-                  setLabelText( "unitpad_unittankenergy", vt->tank.energy );
-                  setLabelText( "unitpad_unittankmaterial", vt->tank.material );
+                  setLabelText( "unitpad_unittankfuel", vt->getStorageCapacity(0).fuel );
+                  setLabelText( "unitpad_unittankenergy", vt->getStorageCapacity(0).energy );
+                  setLabelText( "unitpad_unittankmaterial", vt->getStorageCapacity(0).material );
 
 
                   ASCString abilities;

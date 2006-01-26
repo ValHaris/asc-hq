@@ -2064,10 +2064,10 @@ void         tunit::init(  )
    addeingabe(2, &unit->damage, 0, 100 );
 
    addbutton("~F~uel of Unit",50,200,250,220,2,1,3,true);
-   addeingabe( 3, &unit->tank.fuel, 0, unit->typ->tank.fuel );
+   addeingabe( 3, &unit->tank.fuel, 0, unit->getStorageCapacity().fuel );
 
    addbutton("~M~aterial",50,240,250,260,2,1,12,true);
-   addeingabe(12,&unit->tank.material, 0, unit->typ->tank.material );
+   addeingabe(12,&unit->tank.material, 0, unit->getStorageCapacity().material );
 
    addbutton("AI Parameter", 50, 280, 250, 300, 0, 1, 115, true );
 

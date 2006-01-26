@@ -974,15 +974,15 @@ int  VehicleService :: avail ( const Vehicle* veh )
          if ( fzt->weapons.weapon[i].service() ) {
 
             if ( veh->typ->hasFunction( ContainerBaseType::ExternalEnergyTransfer  ) )
-               if ( fzt->tank.energy )
+               if ( veh->getStorageCapacity().energy )
                   av++;
 
             if ( veh->typ->hasFunction( ContainerBaseType::ExternalMaterialTransfer  ) )
-               if ( fzt->tank.material )
+               if ( veh->getStorageCapacity().material )
                   av++;
 
             if ( veh->typ->hasFunction( ContainerBaseType::ExternalFuelTransfer  ) )
-               if ( fzt->tank.fuel )
+               if ( veh->getStorageCapacity().fuel )
                   av++;
 
          }
@@ -1016,13 +1016,13 @@ int VehicleService :: getServices ( Vehicle* veh )
       for ( int i = 0; i < fzt->weapons.count; i++ ) {
          if ( fzt->weapons.weapon[i].service() ) {
             if ( veh->typ->hasFunction( ContainerBaseType::ExternalEnergyTransfer  ) )
-               if ( fzt->tank.energy )
+               if ( veh->getStorageCapacity().energy )
                   res |= 1 << srv_resource;
             if ( veh->typ->hasFunction( ContainerBaseType::ExternalMaterialTransfer  ) )
-               if ( fzt->tank.material )
+               if ( veh->getStorageCapacity().material )
                   res |= 1 << srv_resource;
             if ( veh->typ->hasFunction( ContainerBaseType::ExternalFuelTransfer  ) )
-               if ( fzt->tank.fuel )
+               if ( veh->getStorageCapacity().fuel )
                   res |= 1 << srv_resource;
          }
 
@@ -1104,7 +1104,7 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( Vehicle
                                                                                              ContainerBaseType::ExternalMaterialTransfer,
                                                                                              ContainerBaseType::ExternalFuelTransfer };
                                     for ( int r = 0; r < resourceTypeNum; r++ )
-                                       if ( veh->typ->tank.resource(r) && targetUnit->typ->tank.resource(r) && veh->typ->hasFunction(resourceVehicleFunctions[r])) {
+                                       if ( veh->getStorageCapacity().resource(r) && targetUnit->getStorageCapacity().resource(r) && veh->typ->hasFunction(resourceVehicleFunctions[r])) {
                                           VehicleService::Target::Service s;
                                           s.type = VehicleService::srv_resource;
                                           s.sourcePos = r;
@@ -1114,7 +1114,7 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( Vehicle
                                           s.maxAmount = s.curAmount + min ( targetUnit->putResource(maxint, r, 1) , s.orgSourceAmount );
                                           int sourceSpace = veh->putResource(maxint, r, 1);
                                           s.minAmount = max ( s.curAmount - sourceSpace, 0 );
-                                          s.maxPercentage = 100 * s.maxAmount/ veh->typ->tank.resource(r);
+                                          s.maxPercentage = 100 * s.maxAmount/ veh->getStorageCapacity().resource(r);
                                           targ.service.push_back ( s );
                                        }
 
@@ -1222,7 +1222,7 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( Vehicl
          ContainerBaseType::ExternalMaterialTransfer,
          ContainerBaseType::ExternalFuelTransfer };
       for ( int r = 1; r < resourceTypeNum; r++ )  // no energy !!
-         if ( bld->typ->hasFunction( resourceVehicleFunctions[r]) && targetUnit->typ->tank.resource(r) ) {
+         if ( bld->typ->hasFunction( resourceVehicleFunctions[r]) && targetUnit->getStorageCapacity().resource(r) ) {
             VehicleService::Target::Service s;
             s.type = VehicleService::srv_resource;
             s.sourcePos = r;

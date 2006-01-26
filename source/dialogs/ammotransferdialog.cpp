@@ -43,34 +43,47 @@ class ResourceWatch {
          return container;
       };
 
-      SigC::Signal0<void> sigChanged;
+      SigC::Signal1<void, int> sigChanged;
 
-      Resources avail() { return available; };
-      Resources limit() { return storagelimit; };
+      const Resources avail() { return available; };
+      const Resources limit() { return storagelimit; };
       
-      bool putResources( Resources res )
+      bool putResource( int resourcetype, int amount )
       {
-         Resources rr = available + res;
+         Resources rr = available;
+         rr.resource(resourcetype) += amount;
+         
          for ( int r = 0; r < resourceTypeNum; ++r)
             if ( rr.resource(r) > storagelimit.resource(r))
                return false;
          available = rr;
-         sigChanged();
+         sigChanged( resourcetype );
          return true;
       }
-         
-      bool getResources( Resources res )
+      
+        
+      bool getResource( int resourcetype, int amount )
       {
-         if ( available >= res ) {
-            available -= res;
-            sigChanged();
+         if ( available.resource(resourcetype) >= amount ) {
+            available.resource(resourcetype) -= amount;
+            sigChanged( resourcetype );
             return true;
          }
          return false;
       }
+
+      bool getResources( Resources res )
+      {
+         bool b = true;
+         for ( int r = 0; r < resourceTypeNum; ++r)
+            if ( res.resource(r) > 0 )
+               if ( !getResource( r, res.resource(r) ))
+                  b = false;
+         return b;
+      }
 };
 
-class Transferrable {
+class Transferrable: public SigC::Object {
    protected:
       int originalSourceAmount;
       ResourceWatch& source;
@@ -98,6 +111,15 @@ class Transferrable {
          else
             return dest.getContainer();
       }
+
+      void show( const ContainerBase* unit )
+      {
+         assert( unit == source.getContainer() || unit == dest.getContainer() );
+         if ( unit == dest.getContainer() )
+            return sigDestAmount( ASCString::toString( getAmount( unit )));
+         else
+            return sigSourceAmount( ASCString::toString( getAmount( unit )));
+      }
       
    public:
       Transferrable( ResourceWatch& s, ResourceWatch& d ) : source( s ) , dest( d ) {};
@@ -109,7 +131,18 @@ class Transferrable {
       virtual int getMax( ContainerBase* c, bool avail ) = 0;
       virtual int getMin( ContainerBase* c, bool avail ) = 0;
       virtual int transfer( ContainerBase* target, int delta ) = 0;
-      virtual int getAmount ( ContainerBase* target ) = 0;
+      virtual int getAmount ( const ContainerBase* target ) = 0;
+
+      // virtual bool valid() const = 0;
+
+      void showAll()
+      {
+         show( source.getContainer() );
+         show( dest.getContainer() );
+      }
+      
+      SigC::Signal1<void,const std::string&> sigSourceAmount;
+      SigC::Signal1<void,const std::string&> sigDestAmount;
       
       int setAmount( ContainerBase* target, int newamount )
       {
@@ -138,9 +171,28 @@ class ResourceTransferrable : public Transferrable {
       {
          warning( "Inconsistency in ResourceTransfer");
       };
+
+      void srcChanged( int res )
+      {
+         if ( res == resourceType ) {
+            show( source.getContainer() );
+         }
+      }
+      
+      void dstChanged( int res )
+      {
+         if ( res == resourceType ) {
+            show( dest.getContainer() );
+         }
+      }
+            
          
    public:
-      ResourceTransferrable( int resource, ResourceWatch& src, ResourceWatch& dst ) : Transferrable( src, dst ), resourceType ( resource ) {};
+      ResourceTransferrable( int resource, ResourceWatch& src, ResourceWatch& dst ) : Transferrable( src, dst ), resourceType ( resource )
+      {
+         source.sigChanged.connect( SigC::slot( *this, &ResourceTransferrable::srcChanged ));
+         dest.sigChanged.connect( SigC::slot( *this, &ResourceTransferrable::dstChanged ));
+      };
       ASCString getName() { return Resources::name( resourceType ); };
       
       int getMax( ContainerBase* c, bool avail )
@@ -166,7 +218,7 @@ class ResourceTransferrable : public Transferrable {
             return 0;
       }
       
-      int getAmount ( ContainerBase* target )
+      int getAmount ( const ContainerBase* target )
       {
          return getResourceWatch( target ).avail().resource(resourceType);
       }
@@ -178,13 +230,12 @@ class ResourceTransferrable : public Transferrable {
          else {
             delta = min( delta, getOpposingResourceWatch( target ).avail().resource(resourceType) );
             delta = min( delta, getResourceWatch( target ).limit().resource(resourceType) - getAmount( target ));
-            getOpposingResourceWatch( target ).avail().resource(resourceType) -= delta;
-            getResourceWatch( target ).avail().resource(resourceType) += delta;
-            
+            getOpposingResourceWatch( target ).getResource( resourceType, delta );
+            getResourceWatch( target ).putResource(resourceType, delta);
             return delta;
          }
       }
-      
+
 };
 
 class AmmoTransferrable : public Transferrable {
@@ -263,7 +314,7 @@ class AmmoTransferrable : public Transferrable {
             return 0;
       }
       
-      int getAmount ( ContainerBase* target )
+      int getAmount ( const ContainerBase* target )
       {
          return getAmmo( target );
       }
@@ -277,6 +328,7 @@ class AmmoTransferrable : public Transferrable {
             int got = get( opposingContainer( target ), delta, false );
 
             getAmmo(target) += got;
+            show( target );
             return got;
          }
       }
@@ -288,8 +340,11 @@ class TransferHandler {
    private:
       ResourceWatch sourceRes;
       ResourceWatch destRes;
-      
-      deallocating_vector<Transferrable*> transfers;
+
+   public:
+      typedef deallocating_vector<Transferrable*> Transfers;
+   private:
+      Transfers transfers;
 
       bool allowProduction;
 
@@ -309,8 +364,13 @@ class TransferHandler {
             ContainerBaseType::ExternalFuelTransfer };
 
          for ( int r = 0; r < resourceTypeNum; r++ ) 
-            if (  !externalTransfer ||  src->baseType->hasFunction( resourceVehicleFunctions[r] ) ||  dst->baseType->hasFunction( resourceVehicleFunctions[r] ) )
-               transfers.push_back(  new ResourceTransferrable( r, sourceRes, destRes ));
+            if (  externalTransfer ) {
+               if ( src->baseType->hasFunction( resourceVehicleFunctions[r] ) ||  dst->baseType->hasFunction( resourceVehicleFunctions[r] ) )
+                  transfers.push_back(  new ResourceTransferrable( r, sourceRes, destRes ));
+            } else {
+               if ( src->getStorageCapacity().resource(r) || dst->getStorageCapacity().resource(r) )
+                  transfers.push_back(  new ResourceTransferrable( r, sourceRes, destRes ));
+            }
 
          for ( int a = 0; a < cwaffentypennum; ++a ) 
             if ( weaponAmmo[a] )
@@ -333,18 +393,21 @@ class TransferHandler {
          return source->baseType->hasFunction( ContainerBaseType::AmmoProduction ) ||  dest->baseType->hasFunction( ContainerBaseType::AmmoProduction );
       }
 
-      vector<Transferrable*> getTransfers()
+      Transfers& getTransfers()
       {
          return transfers;
       }
 
       void fillDest()
       {
-
+         for ( Transfers::iterator i = transfers.begin(); i != transfers.end(); ++i )
+            (*i)->fill( dest );
       }
 
       void emptyDest()
       {
+         for ( Transfers::iterator i = transfers.begin(); i != transfers.end(); ++i )
+            (*i)->empty( dest );
 
       }
 
@@ -356,15 +419,55 @@ class TransferHandler {
 };
 
 
+class AmmoTransferWindow : public PG_Window {
+   private:
+      ContainerBase* first;
+      ContainerBase* second;
+      TransferHandler handler;
+   public:
+      AmmoTransferWindow ( ContainerBase* source, ContainerBase* destination, PG_Widget* parent );
+};
 
-AmmoTransferWindow :: AmmoTransferWindow ( ContainerBase* source, ContainerBase* destination, PG_Widget* parent ) : PG_Window( NULL, PG_Rect( 30, 30, 400, 400 ), "Transfer" ), first (source), second( destination )
+
+class TransferWidget : public PG_Widget {
+
+   public:
+      TransferWidget ( PG_Widget* parent, const PG_Rect& pos, Transferrable* transferrable ) : PG_Widget( parent,pos )
+      {
+         new PG_Slider( this, PG_Rect( 0, 30, pos.w, 15 ),  PG_ScrollBar::HORIZONTAL );
+         PG_Rect labels = PG_Rect( 0, 0, pos.w, 20 );
+         PG_Label* l = new PG_Label ( this, labels, transferrable->getName() );
+         l->SetAlignment( PG_Label::CENTER );
+         
+         l = new PG_Label ( this, labels );
+         l->SetAlignment( PG_Label::LEFT );
+         transferrable->sigSourceAmount.connect( SigC::slot( *l, &PG_Label::SetText ));
+         
+         l = new PG_Label ( this, labels );
+         l->SetAlignment( PG_Label::RIGHT );
+         transferrable->sigDestAmount.connect( SigC::slot( *l, &PG_Label::SetText ));
+      };
+};
+
+
+AmmoTransferWindow :: AmmoTransferWindow ( ContainerBase* source, ContainerBase* destination, PG_Widget* parent ) : PG_Window( NULL, PG_Rect( 30, 30, 400, 400 ), "Transfer" ), first (source), second( destination ), handler( source, destination )
 {
+   int ypos = 40;
+   int border = 10;
+   for ( TransferHandler::Transfers::iterator i = handler.getTransfers().begin(); i != handler.getTransfers().end(); ++i ) {
+      new TransferWidget( this, PG_Rect( border, ypos, w - 2*border, 50 ), *i );
+      ypos += 60;
+   }
    
+   for ( TransferHandler::Transfers::iterator i = handler.getTransfers().begin(); i != handler.getTransfers().end(); ++i ) 
+      (*i)->showAll();
 }
 
 void ammoTransferWindow ( ContainerBase* source, ContainerBase* destination )
 {
-   VehicleService service( );
+   AmmoTransferWindow atw( source, destination, NULL );
+   atw.Show();
+   atw.RunModal();
 }
 
 void ammoTransferWindow ( VehicleService* serviceAction, ContainerBase* destination )

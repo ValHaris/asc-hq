@@ -290,7 +290,7 @@ bool AI::RefuelConstraint::returnFromPositionPossible ( const MapCoordinate3D& p
             return true;
    }
 
-   if ( theoreticalFuel - (dist + dist2) / maxmalq * veh->typ->fuelConsumption > 0.2 * veh->typ->tank.fuel )
+   if ( theoreticalFuel - (dist + dist2) / maxmalq * veh->typ->fuelConsumption > 0.2 * veh->getStorageCapacity().fuel )
       return true;
    else
       return false;

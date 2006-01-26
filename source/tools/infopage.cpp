@@ -717,9 +717,9 @@ UnitInfoPage(vt, filePath, CARGOLINKSUFFIX, TITLE, generator) {}
 void UnitCargoPage::buildContent() {
   addHeadline("Capacaties: Resources", 4);
   startTable(1, RELATIVE, 100, RELATIVE, 100);
-  addTREntry("Energy", vt.tank.energy);
-  addTREntry("Material", vt.tank.material);
-  addTREntry("Fuel", vt.tank.fuel);
+  addTREntry("Energy", vt.getStorageCapacity(0).energy);
+  addTREntry("Material", vt.getStorageCapacity(0).material);
+  addTREntry("Fuel", vt.getStorageCapacity(0).fuel);
   endTable();
   addHeadline("Capacaties: Units", 4);
   if(cbt.maxLoadableUnits) {
@@ -910,9 +910,9 @@ UnitTerrainPage::UnitTerrainPage(const VehicleType&  vt, ASCString filePath, Uni
 void UnitTerrainPage::buildContent() {
   addHeadline("General", 4);
   startTable(1, RELATIVE, 100, RELATIVE, 100);
-  addTREntry("Fuel tank", vt.tank.fuel );
+  addTREntry("Fuel tank", vt.getStorageCapacity(0).fuel );
   addTREntry("Fuel Consumption", vt.fuelConsumption);
-  addTREntry("Range", vt.fuelConsumption ? strrr(vt.tank.fuel/vt.fuelConsumption) : "None");   
+  addTREntry("Range", vt.fuelConsumption ? strrr(vt.getStorageCapacity(0).fuel/vt.fuelConsumption) : "None");
   endTable();
   addHeadline("Speed", 4);
   startTable(1, RELATIVE, 100, NONE, 0);

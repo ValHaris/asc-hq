@@ -247,11 +247,11 @@ void DashboardPanel::showUnitData( const Vehicle* veh, const Building* bld, bool
       setLabelText( "unitname", veh->name );
       setBargraphValue( "unitdamage", float(100-veh->damage) / 100  );
       setLabelText( "unitstatus", 100-veh->damage );
-      setBargraphValue( "unitfuel", veh->typ->tank.fuel ? float( veh->getTank().fuel) / veh->typ->tank.fuel : 0  );
+      setBargraphValue( "unitfuel", veh->getStorageCapacity().fuel ? float( veh->getTank().fuel) / veh->getStorageCapacity().fuel : 0  );
       setLabelText( "unitfuelstatus", veh->getTank().fuel );
-      setBargraphValue( "unitmaterial", veh->typ->tank.material ? float( veh->getTank().material) / veh->typ->tank.material : 0  );
+      setBargraphValue( "unitmaterial", veh->getStorageCapacity().material ? float( veh->getTank().material) / veh->getStorageCapacity().material : 0  );
       setLabelText( "unitmaterialstatus", veh->getTank().material );
-      setBargraphValue( "unitenergy", veh->typ->tank.energy ? float( veh->getTank().energy) / veh->typ->tank.energy : 0  );
+      setBargraphValue( "unitenergy", veh->getStorageCapacity().energy ? float( veh->getTank().energy) / veh->getStorageCapacity().energy : 0  );
       setLabelText( "unitenergystatus", veh->getTank().energy );
       setLabelText( "movepoints", veh->getMovement() );
    

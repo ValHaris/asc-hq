@@ -186,7 +186,7 @@ void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
    pc.addString( "InfoImage", infoImageFilename, "" );
 
    pc.openBracket ( "MaxResourceProduction" );
-    maxplus.runTextIO ( pc );
+   maxplus.runTextIO ( pc, Resources(0,0,0) );
    pc.closeBracket ();
 
    pc.openBracket ( "ResourceExtractionEfficiency");
@@ -196,10 +196,10 @@ void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
 
    pc.openBracket ( "StorageCapacity" );
     pc.openBracket( "BImode" );
-     bi_mode_tank.runTextIO ( pc );
+     bi_mode_tank.runTextIO ( pc, Resources(0,0,0) );
     pc.closeBracket();
     pc.openBracket ( "ASCmode" );
-     asc_mode_tank.runTextIO ( pc );
+     asc_mode_tank.runTextIO ( pc, Resources(0,0,0) );
     pc.closeBracket();
    pc.closeBracket ();
    

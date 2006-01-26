@@ -754,7 +754,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
                          }
                       } else
                          if ( allowRefuellOrder ) {
-                            if ( rfc && rfc->returnFromPositionPossible ( MapCoordinate3D( xtogoSec, ytogoSec, h ), veh->typ->tank.fuel ))
+                            if ( rfc && rfc->returnFromPositionPossible ( MapCoordinate3D( xtogoSec, ytogoSec, h ), veh->getStorageCapacity().fuel ))
                                sectionsPossibleWithMaxFuell++;
                          }
 

@@ -313,8 +313,8 @@ class CargoItemFactory: public MapItemTypeWidgetFactory<MapItemTypeWidget< Vehic
             unit->tank.material = 0;
             unit->tank.fuel = 0;
             if ( container->vehicleFit ( unit )) {
-               unit->tank.material = unit->typ->tank.material;
-               unit->tank.fuel = unit->typ->tank.fuel;
+               unit->tank.material = unit->getStorageCapacity().material;
+               unit->tank.fuel = unit->getStorageCapacity().fuel;
       
                if ( !container->vehicleFit ( unit )) {
                   unit->tank.material = 0;

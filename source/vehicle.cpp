@@ -207,7 +207,7 @@ int Vehicle :: putResource ( int amount, int resourcetype, bool queryonly, int s
       if ( resourcetype == 0 )  // no energy storable
          return 0;
 
-      int spaceAvail = typ->tank.resource( resourcetype ) - tank.resource(resourcetype);
+      int spaceAvail = getStorageCapacity().resource( resourcetype ) - tank.resource(resourcetype);
       if ( spaceAvail < 0 )
          spaceAvail = 0;
 
@@ -286,9 +286,9 @@ void Vehicle::transform ( const Vehicletype* type )
 {
    typ = type;
 
-   tank.fuel = typ->tank.fuel;
-   tank.material = typ->tank.material;
+   tank = getStorageCapacity();
    tank.energy = 0;
+   
    generatoractive = 0;
 
    for ( int m = 0; m < typ->weapons.count ; m++) {
@@ -374,7 +374,7 @@ void Vehicle :: endRound ( void )
 {
    ContainerBase::endRound();
    if ( typ->hasFunction( ContainerBaseType::MatterConverter )) {
-      int endiff = typ->tank.energy - tank.energy;
+      int endiff = getStorageCapacity().energy - tank.energy;
       if ( tank.fuel < endiff * generatortruckefficiency )
          endiff = tank.fuel / generatortruckefficiency;
 
@@ -1081,7 +1081,7 @@ void Vehicle :: fillMagically( void )
    #ifndef karteneditor
    fprintf(stderr, "ASC: Warning, Vehicle :: fillMagically called outside mapeditor");
    #endif
-   tank = typ->tank;
+   tank = getStorageCapacity();
 
    for ( int m = 0; m < typ->weapons.count ; m++) {
       ammo[m] = typ->weapons.weapon[m].count;
@@ -1334,10 +1334,10 @@ void   Vehicle::readData ( tnstream& stream )
 
     if ( bm & cem_fuel ) {
        tank.fuel = stream.readInt();
-       if ( tank.fuel > typ->tank.fuel )
-          tank.fuel = typ->tank.fuel;
+       if ( tank.fuel > getStorageCapacity().fuel )
+          tank.fuel = getStorageCapacity().fuel;
     } else
-       tank.fuel = typ->tank.fuel;
+       tank.fuel = getStorageCapacity().fuel;
 
     if ( bm & cem_ammunition ) {
        for ( int i = 0; i < 8; i++ )
@@ -1406,16 +1406,16 @@ void   Vehicle::readData ( tnstream& stream )
        direction = 0;
 
     if ( bm & cem_material ){
-       tank.material = min( stream.readInt(), typ->tank.material);
+       tank.material = min( stream.readInt(), getStorageCapacity().material);
     } else
-       tank.material = typ->tank.material;
+       tank.material = getStorageCapacity().material;
 
     if ( bm & cem_energy ) {
-       tank.energy = min ( stream.readInt(), typ->tank.energy);
+       tank.energy = min ( stream.readInt(), getStorageCapacity().energy);
        if ( tank.energy < 0 )
           tank.energy = 0;
     } else
-       tank.energy = typ->tank.energy;
+       tank.energy = getStorageCapacity().energy;
 
     if ( bm & cem_class )
        stream.readChar(); // was: class

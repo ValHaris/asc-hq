@@ -51,11 +51,11 @@ libdialogs_la_DEPENDENCIES =
 am_libdialogs_la_OBJECTS = editmapparam.lo cargowidget.lo \
 	selectionwindow.lo fileselector.lo playersetup.lo \
 	alliancesetup.lo newgame.lo soundsettings.lo emailsetup.lo \
-	unitinfodialog.lo ammotransferdialog.lo
+	unitinfodialog.lo
 libdialogs_la_OBJECTS = $(am_libdialogs_la_OBJECTS)
 libgamedialogs_la_DEPENDENCIES =
 am_libgamedialogs_la_OBJECTS = cargodialog.lo vehicletypeselector.lo \
-	unitcounting.lo cargowidget.lo
+	unitcounting.lo cargowidget.lo ammotransferdialog.lo
 libgamedialogs_la_OBJECTS = $(am_libgamedialogs_la_OBJECTS)
 libmapeddialogs_la_DEPENDENCIES =
 am_libmapeddialogs_la_OBJECTS = cargoeditor.lo cargowidget.lo
@@ -200,9 +200,9 @@ target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = $(SDL_CFLAGS) $(PARAGUI_CFLAGS)  $(SIGC_CFLAGS) -Dmaindialogs
 noinst_LTLIBRARIES = libdialogs.la libgamedialogs.la libmapeddialogs.la
-libdialogs_la_SOURCES = editmapparam.cpp cargowidget.cpp selectionwindow.cpp fileselector.cpp playersetup.cpp alliancesetup.cpp newgame.cpp soundsettings.cpp emailsetup.cpp unitinfodialog.cpp ammotransferdialog.cpp
+libdialogs_la_SOURCES = editmapparam.cpp cargowidget.cpp selectionwindow.cpp fileselector.cpp playersetup.cpp alliancesetup.cpp newgame.cpp soundsettings.cpp emailsetup.cpp unitinfodialog.cpp 
 libdialogs_la_LIBADD = @SDL_LIBS@ 
-libgamedialogs_la_SOURCES = cargodialog.cpp vehicletypeselector.cpp unitcounting.cpp cargowidget.cpp
+libgamedialogs_la_SOURCES = cargodialog.cpp vehicletypeselector.cpp unitcounting.cpp cargowidget.cpp ammotransferdialog.cpp
 libgamedialogs_la_LIBADD = @SDL_LIBS@ 
 libmapeddialogs_la_SOURCES = cargoeditor.cpp cargowidget.cpp
 libmapeddialogs_la_LIBADD = @SDL_LIBS@

@@ -193,9 +193,6 @@ extern const char*  cvehiclefunctions[];
         //! If the unit cannot attack in the same turn after it has moved, it has to wait
         bool         wait;
 
-        //! the resource storage capacity
-        Resources    tank;
-
         //! the fuel consumption to move a single field
         int          fuelConsumption;
 

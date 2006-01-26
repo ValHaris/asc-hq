@@ -223,10 +223,15 @@ void Vehicletype :: read ( tnstream& stream )
       id = stream.readWord();
    else
       id = stream.readInt();
-   tank.fuel = stream.readInt();
-   fuelConsumption = stream.readWord();
-   tank.energy = stream.readInt();
-   tank.material = stream.readInt();
+
+   if( version < 24 ) {
+      bi_mode_tank.resource(2) = bi_mode_tank.resource(2) = stream.readInt();
+      fuelConsumption = stream.readWord();
+      bi_mode_tank.resource(0) = bi_mode_tank.resource(0) = stream.readInt();
+      bi_mode_tank.resource(1) = bi_mode_tank.resource(1) = stream.readInt();
+   } else
+      fuelConsumption = stream.readInt();
+   
    if ( version <= 22 ) {
       int functions = stream.readInt();
       features = convertOldFunctions ( functions, stream.getLocation() );
@@ -578,10 +583,7 @@ void Vehicletype:: write ( tnstream& stream ) const
    stream.writeChar(0);
    stream.writeChar(0);
    stream.writeInt(id );
-   stream.writeInt(tank.fuel );
-   stream.writeWord(fuelConsumption );
-   stream.writeInt(tank.energy );
-   stream.writeInt(tank.material );
+   stream.writeInt(fuelConsumption );
    for ( j = 0; j < 8; j++ )
       stream.writeInt( movement[j] );
 
@@ -887,8 +889,11 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    pc.addTagInteger( "Height", height, choehenstufennum, heightTags );
    pc.addBool ( "WaitFortack", wait );
    pc.openBracket( "Tank" );
+   Resources tank;
    tank.runTextIO ( pc );
    pc.closeBracket();
+   bi_mode_tank = tank;
+   asc_mode_tank = tank;
    pc.addInteger( "FuelConsumption", fuelConsumption );
    if ( pc.find("Abilities")) {
       int abilities;

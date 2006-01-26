@@ -42,6 +42,7 @@
 #include "../resourcenet.h"
 
 #include "selectionwindow.h"
+#include "ammotransferdialog.h"
 
 // #include "cargowidget.cpp"
 
@@ -155,6 +156,18 @@ namespace CargoGuiFunctions {
          CargoDialog& parent;
       public:
          RefuelUnit( CargoDialog& masterParent ) : parent( masterParent)  {};
+         bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
+         void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
+         ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
+   };
+   
+   class RefuelUnitDialog : public GuiFunction
+   {
+      CargoDialog& parent;
+      public:
+         RefuelUnitDialog( CargoDialog& masterParent ) : parent( masterParent)  {};
          bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
          void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
          bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
@@ -298,6 +311,7 @@ class CargoDialog : public Panel
          registerCargoGuiFunctions( handler );
          handler.registerUserFunction( new CargoGuiFunctions::Movement( *this ) );
          handler.registerUserFunction( new CargoGuiFunctions::RefuelUnit( *this ) );
+         handler.registerUserFunction( new CargoGuiFunctions::RefuelUnitDialog( *this ) );
          handler.registerUserFunction( new CargoGuiFunctions::UnitProduction( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::UnitTraining( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::MoveUnitUp( *this ));
@@ -473,7 +487,7 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
       {
          Resources cost = type->productionCost;
          if ( fillResources )
-            cost += Resources( 0, type->tank.material, type->tank.fuel );
+            cost += Resources( 0, type->getStorageCapacity(actmap->_resourcemode).material, type->getStorageCapacity(actmap->_resourcemode).fuel );
 
          if ( fillAmmo )
             for ( int w = 0; w < type->weapons.count; ++w )
@@ -1690,7 +1704,7 @@ namespace CargoGuiFunctions {
          return false;
 
       for ( int r = 1; r < 3; ++r )
-         if ( veh->getTank().resource(r) < veh->typ->tank.resource(r))
+         if ( veh->getTank().resource(r) < veh->getStorageCapacity().resource(r))
             return true;
 
       for ( int w = 0; w < veh->typ->weapons.count; ++w)
@@ -1780,6 +1794,52 @@ namespace CargoGuiFunctions {
 
    //////////////////////////////////////////////////////////////////////////////////////////////
    
+   bool RefuelUnitDialog :: available( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      if ( !subject )
+         return false;
+
+      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+      if ( !veh )
+         return false;
+
+      for ( int r = 1; r < 3; ++r )
+         if ( veh->getStorageCapacity().resource(r) )
+            return true;
+
+      for ( int w = 0; w < veh->typ->weapons.count; ++w)
+         if ( veh->typ->weapons.weapon[w].requiresAmmo() )
+            return true;
+
+      return false;
+   };
+
+   void RefuelUnitDialog :: execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      if ( !subject )
+         return;
+      
+      ammoTransferWindow( parent.getContainer(), subject );
+      parent.cargoChanged();
+   }
+
+   Surface& RefuelUnitDialog :: getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return IconRepository::getIcon("refuel-dialog.png");
+   };
+
+   bool RefuelUnitDialog :: checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   {
+      return ( key->keysym.unicode == 'd' );
+   };
+
+   ASCString RefuelUnitDialog :: getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return "Refuel Dialog";
+   };
+
+   //////////////////////////////////////////////////////////////////////////////////////////////
+   
    bool OpenContainer :: available( const MapCoordinate& pos, ContainerBase* subject, int num )
    {
       if ( !subject )
@@ -1819,5 +1879,5 @@ namespace CargoGuiFunctions {
    {
       return "open transport ";
    };
-
+   
 }
