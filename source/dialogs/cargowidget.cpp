@@ -27,7 +27,7 @@
 
 
 
-HighLightingManager::HighLightingManager() : marked(-1) {};
+HighLightingManager::HighLightingManager() : marked(0) {};
 
 int HighLightingManager::getMark()
 {
@@ -134,7 +134,7 @@ Surface StoringPosition::clippingSurface;
 
 
 
-CargoWidget :: CargoWidget( PG_Widget* parent, const PG_Rect& pos, ContainerBase* container ) : PG_ScrollWidget( parent, pos )
+CargoWidget :: CargoWidget( PG_Widget* parent, const PG_Rect& pos, ContainerBase* container ) : PG_ScrollWidget( parent, pos ), unitColumnCount(0)
 {
    this->container = container;
    SetTransparency( 255 );

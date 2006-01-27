@@ -1401,21 +1401,12 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
    if ( cb->getName() != cb->baseType->name )
       setLabelText( "UnitClass", cb->baseType->name );
 
-   showAmmo();
-         /*
-   registerSpecialDisplay( "unitpad_unitsymbol");
-   registerSpecialDisplay( "unitpad_weapon_diagram");
-   registerSpecialDisplay( "unitpad_transport_transporterlevel");
-   registerSpecialDisplay( "unitpad_transport_unitlevel");
-   registerSpecialDisplay( "unitpad_transport_leveldisplay");
-         */
 
-   updateResourceDisplay();
-   updateLoadMeter();
-
-   activate_i(0);
-   Show();
    NewGuiHost::pushIconHandler( &guiIconHandler );
+   
+   activate_i(0);
+   cargoChanged();
+   Show();
    setupOK = true;
 
 };

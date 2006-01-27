@@ -1441,6 +1441,11 @@ tmap :: ~tmap ()
       replayinfo = NULL;
    }
 
+   if ( campaign ) {
+      delete campaign;
+      campaign = NULL;
+   }
+
    if ( game_parameter ) {
       delete[] game_parameter;
       game_parameter = NULL;

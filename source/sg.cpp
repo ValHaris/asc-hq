@@ -1446,13 +1446,13 @@ int main(int argc, char *argv[] )
    assert ( sizeof(PointerSizedInt) == sizeof(int*));
 
    Cmdline* cl = NULL;
-   auto_ptr<Cmdline> apcl ( cl );
    try {
       cl = new Cmdline ( argc, argv );
    } catch ( string s ) {
       cerr << s;
       exit(1);
    }
+   auto_ptr<Cmdline> apcl ( cl );
 
    /*
    if ( cl->next_param() < argc ) {
@@ -1498,13 +1498,13 @@ int main(int argc, char *argv[] )
    if ( CGameOptions::Instance()->forceWindowedMode && !cl->f() )  // cl->f == force fullscreen command line param
       fullscreen = SDL_FALSE;
 
-   SDLmm::Surface* icon = NULL;
+   SDL_Surface *icn = NULL;
    try {
       tnfilestream iconl ( "icon_asc.gif", tnstream::reading );
-      SDL_Surface *icn = IMG_Load_RW ( SDL_RWFromStream( &iconl ), 1);
+      icn = IMG_Load_RW ( SDL_RWFromStream( &iconl ), 1);
       SDL_SetColorKey(icn, SDL_SRCCOLORKEY, *((Uint8 *)icn->pixels));
-      icon = new SDLmm::Surface ( icn );
    } catch ( ... ) {}
+   Surface icon ( icn );
 
 
    int xr = 1024;
@@ -1542,7 +1542,7 @@ int main(int argc, char *argv[] )
       flags |= SDL_FULLSCREEN;
 
 
-   SDL_WM_SetIcon( icon->GetSurface(), NULL );
+   SDL_WM_SetIcon( icon.GetSurface(), NULL );
    app.InitScreen( xr, yr, 32, flags);
   
 #ifdef WIN32
