@@ -789,7 +789,13 @@ bool fieldvisiblenow( const pfield pe, int player )
 } 
 
 
+
 VisibilityStates fieldVisibility( const pfield pe, int player )
+{
+   return fieldVisibility( pe, player, actmap );
+}
+
+VisibilityStates fieldVisibility( const pfield pe, int player, tmap* gamemap )
 {
   if ( pe && player >= 0 ) {
       VisibilityStates c = VisibilityStates((pe->visible >> ( player * 2)) & 3);
@@ -797,8 +803,8 @@ VisibilityStates fieldVisibility( const pfield pe, int player )
          c = visible_all;
       #endif
 
-      if ( c < actmap->getInitialMapVisibility( player ) )
-         c = actmap->getInitialMapVisibility( player );
+      if ( c < gamemap->getInitialMapVisibility( player ) )
+         c = gamemap->getInitialMapVisibility( player );
 
       return c;
    } else

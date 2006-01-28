@@ -177,6 +177,7 @@ extern int getheightdelta ( int height1, int height2 );
     \param player the player who is 'looking'
    */
   extern VisibilityStates fieldVisibility  ( const pfield pe, int player = actmap->actplayer );
+  extern VisibilityStates fieldVisibility  ( const pfield pe, int player, tmap* gamemap );
 
 
 

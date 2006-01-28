@@ -27,15 +27,33 @@
 
 
 
+enum TransferLimitation { NONE, GET, ALL };
+
+TransferLimitation getTransferLimitation( const ContainerBase* target )
+{
+   if ( target->getOwner() == target->getMap()->actplayer )
+      return NONE;
+
+   if ( target->getMap()->player[target->getMap()->actplayer].diplomacy.isAllied( target->getOwner() ))
+      return NONE;
+
+   if ( target->getMap()->player[target->getMap()->actplayer].diplomacy.getState( target->getOwner() ) >= PEACE )
+      return GET;
+
+   return ALL;
+}
+
+
 class ResourceWatch {
       ContainerBase* container;
       Resources available;
       Resources storagelimit;
+      Resources orgAmount;
    public:
       ResourceWatch( ContainerBase* container )
       {
          this->container = container;
-         available = container->getResource( Resources( maxint, maxint, maxint), true );
+         orgAmount = available = container->getResource( Resources( maxint, maxint, maxint), true );
          storagelimit = container->putResource( Resources( maxint, maxint, maxint), true ) + available;
       };
 
@@ -46,8 +64,29 @@ class ResourceWatch {
 
       SigC::Signal1<void, int> sigChanged;
 
-      const Resources avail() { return available; };
-      const Resources limit() { return storagelimit; };
+      const Resources avail() {
+         TransferLimitation limit = getTransferLimitation( container );
+         if ( limit == ALL )
+            return Resources();
+         
+         if ( limit == GET ) {
+            Resources res = available - orgAmount;
+            for ( int r = 0; r < resourceTypeNum; ++r ) 
+               if ( res.resource(r) < 0 )
+                  res.resource(r) = 0;
+
+            return res;
+         }
+                  
+         return available;
+      };
+      
+      const Resources limit() {
+         if(  getTransferLimitation( container ) == ALL )
+            return available;
+         else
+            return storagelimit;
+      };
       
       bool putResource( int resourcetype, int amount )
       {
@@ -120,6 +159,7 @@ class Transferrable: public SigC::Object {
          else
             return sigSourceAmount( ASCString::toString( getAmount( unit )));
       }
+
       
    public:
       Transferrable( ResourceWatch& s, ResourceWatch& d ) : source( s ) , dest( d ) {};
@@ -133,6 +173,7 @@ class Transferrable: public SigC::Object {
       virtual int transfer( ContainerBase* target, int delta ) = 0;
       virtual int getAmount ( const ContainerBase* target ) = 0;
       virtual void commit() = 0;
+      virtual bool isExchangable() const = 0;
 
 
       ContainerBase* getSrcContainer()
@@ -185,6 +226,8 @@ class Transferrable: public SigC::Object {
 class ResourceTransferrable : public Transferrable {
    private:
       int resourceType;
+      bool exchangable;
+      
       void warn()
       {
          warning( "Inconsistency in ResourceTransfer");
@@ -221,7 +264,7 @@ class ResourceTransferrable : public Transferrable {
          
       
    public:
-      ResourceTransferrable( int resource, ResourceWatch& src, ResourceWatch& dst ) : Transferrable( src, dst ), resourceType ( resource )
+      ResourceTransferrable( int resource, ResourceWatch& src, ResourceWatch& dst, bool isExchangable = true ) : Transferrable( src, dst ), resourceType ( resource ), exchangable( isExchangable )
       {
          source.sigChanged.connect( SigC::slot( *this, &ResourceTransferrable::srcChanged ));
          dest.sigChanged.connect( SigC::slot( *this, &ResourceTransferrable::dstChanged ));
@@ -269,6 +312,11 @@ class ResourceTransferrable : public Transferrable {
          }
       }
 
+      bool isExchangable() const
+      {
+         return exchangable;
+      }
+      
       void commit()
       {
          ContainerBase* target = dest.getContainer();
@@ -282,8 +330,8 @@ class AmmoTransferrable : public Transferrable {
       int ammoType;
       int sourceAmmo;
       int destAmmo;
-      int orgDestAmmo;
       map<const ContainerBase*,int> produced;
+      map<const ContainerBase*,int> orgAmmo;
       bool& allowAmmoProduction;
 
 
@@ -298,6 +346,11 @@ class AmmoTransferrable : public Transferrable {
       
       int put( ContainerBase* c, int toPut, bool queryOnly )
       {
+         TransferLimitation limit = getTransferLimitation( c );
+
+         if ( limit == ALL )
+            return 0;
+         
          int undoProduction = min( toPut, produced[c]);
          if ( undoProduction > 0 ) {
             if ( !queryOnly ) {
@@ -321,7 +374,21 @@ class AmmoTransferrable : public Transferrable {
             
       int get( ContainerBase* c, int toGet, bool queryOnly )
       {
-         int got = min ( toGet, getAmmo( c ));
+         TransferLimitation limit = getTransferLimitation( c );
+
+         if ( limit == ALL )
+            return 0;
+         
+         int gettable;
+         
+         if ( limit == GET ) {
+            gettable = getAmmo(c) - orgAmmo[c];
+            if ( gettable < 0 )
+               gettable = 0;
+         } else
+            gettable = getAmmo( c );
+         
+         int got = min ( toGet, gettable);
          int toProduce = toGet - got;
 
          if ( allowAmmoProduction && toProduce > 0 && weaponAmmo[ammoType] ) {
@@ -370,7 +437,10 @@ class AmmoTransferrable : public Transferrable {
       AmmoTransferrable( int ammo, ResourceWatch& src, ResourceWatch& dst, bool& allowProduction ) : Transferrable( src, dst ), ammoType ( ammo ), allowAmmoProduction( allowProduction )
       {
          sourceAmmo = src.getContainer()->getAmmo( ammoType, maxint, true );
-         orgDestAmmo = destAmmo   = dst.getContainer()->getAmmo( ammoType, maxint, true );
+         destAmmo   = dst.getContainer()->getAmmo( ammoType, maxint, true );
+         
+         orgAmmo[src.getContainer()] = sourceAmmo;
+         orgAmmo[dst.getContainer()] = destAmmo;
       };
       
       ASCString getName() { return cwaffentypen[ ammoType ]; };
@@ -413,9 +483,14 @@ class AmmoTransferrable : public Transferrable {
          }
       }
       
+      bool isExchangable() const
+      {
+         return true;
+      };
+      
       void commit()
       {
-         executeTransfer( source.getContainer(), dest.getContainer(), destAmmo - orgDestAmmo );
+         executeTransfer( source.getContainer(), dest.getContainer(), destAmmo - orgAmmo[dest.getContainer()] );
       }
       
 };
@@ -425,7 +500,6 @@ class TransferHandler : public SigC::Object {
    private:
       ResourceWatch sourceRes;
       ResourceWatch destRes;
-
    public:
       typedef deallocating_vector<Transferrable*> Transfers;
    private:
@@ -439,6 +513,9 @@ class TransferHandler : public SigC::Object {
    public:
       TransferHandler( ContainerBase* src, ContainerBase* dst ) : sourceRes( src ), destRes( dst ), allowProduction(false), source(src), dest(dst)
       {
+         if ( dst->getMap()->player[dst->getMap()->actplayer].diplomacy.getState( dst->getOwner() ) <= TRUCE )
+            return;
+         
          MapCoordinate spos = src->getPosition();
          MapCoordinate dpos = dst->getPosition();
          
@@ -448,27 +525,31 @@ class TransferHandler : public SigC::Object {
             ContainerBaseType::ExternalMaterialTransfer,
             ContainerBaseType::ExternalFuelTransfer };
 
+         /* it is important that the ammo transfers are in front of the resource transfers, because ammo production affects resource amounts
+            and their prelimarny commitment would cause inconsistencies */ 
+            
          for ( int a = 0; a < cwaffentypennum; ++a )
             if ( weaponAmmo[a] )
                if ( !externalTransfer || src->baseType->hasFunction( ContainerBaseType::ExternalAmmoTransfer ) ||  dst->baseType->hasFunction( ContainerBaseType::ExternalAmmoTransfer ) )
                   if ( src->maxAmmo( a ) && dst->maxAmmo( a )) 
                      transfers.push_back ( new AmmoTransferrable( a, sourceRes, destRes, allowProduction ));
 
-         for ( int r = 0; r < resourceTypeNum; r++ )
+         for ( int r = 0; r < resourceTypeNum; r++ ) {
+            bool active;
             if (  externalTransfer ) {
-               if ( src->baseType->hasFunction( resourceVehicleFunctions[r] ) ||  dst->baseType->hasFunction( resourceVehicleFunctions[r] ) )
-                  transfers.push_back(  new ResourceTransferrable( r, sourceRes, destRes ));
+               active = src->baseType->hasFunction( resourceVehicleFunctions[r] ) ||  dst->baseType->hasFunction( resourceVehicleFunctions[r] );
             } else {
-               if ( src->getStorageCapacity().resource(r) || dst->getStorageCapacity().resource(r) )
-                  transfers.push_back(  new ResourceTransferrable( r, sourceRes, destRes ));
+               active = src->getStorageCapacity().resource(r) || dst->getStorageCapacity().resource(r) ;
             }
-         
+            transfers.push_back(  new ResourceTransferrable( r, sourceRes, destRes, active ));
+         }
       };
 
       bool allowAmmoProduction( bool allow )
       {
          if ( ammoProductionPossible() ) {
             allowProduction = allow;
+            updateRanges();
             return true;
          } else
             return false;
@@ -505,7 +586,7 @@ class TransferHandler : public SigC::Object {
          return true;
       }
 
-      
+      SigC::Signal0<bool> updateRanges;
 };
 
 
@@ -516,7 +597,8 @@ class TransferWidget : public PG_Widget {
 
       bool updatePos( long a = 0 )
       {
-         slider->SetPosition( trans->getAmount( trans->getDstContainer() ));
+         if ( slider )
+            slider->SetPosition( trans->getAmount( trans->getDstContainer() ));
          return true;
       }
 
@@ -530,7 +612,8 @@ class TransferWidget : public PG_Widget {
          else
             max = trans->getMax( trans->getDstContainer(), false );
 
-         slider->SetRange( min, max );
+         if ( slider )
+            slider->SetRange( min, max );
          
          updatePos();
          return true;
@@ -538,14 +621,18 @@ class TransferWidget : public PG_Widget {
       
       
    public:
-      TransferWidget ( PG_Widget* parent, const PG_Rect& pos, Transferrable* transferrable ) : PG_Widget( parent,pos ), trans( transferrable )
+      TransferWidget ( PG_Widget* parent, const PG_Rect& pos, Transferrable* transferrable, TransferHandler& handler ) : PG_Widget( parent,pos ), trans( transferrable ), slider(NULL)
       {
-         slider = new PG_Slider( this, PG_Rect( 0, 30, pos.w, 15 ),  PG_ScrollBar::HORIZONTAL );
+         if ( transferrable->isExchangable() ) {
+            slider = new PG_Slider( this, PG_Rect( 0, 30, pos.w, 15 ),  PG_ScrollBar::HORIZONTAL );
+   
+            updateRange();
+   
+            slider->sigSlide.connect( SigC::slot( *transferrable, &Transferrable::setDestAmount ));
+            slider->sigSlideEnd.connect( SigC::slot( *this, &TransferWidget::updatePos));
 
-         updateRange();
-
-         slider->sigSlide.connect( SigC::slot( *transferrable, &Transferrable::setDestAmount ));
-         slider->sigSlideEnd.connect( SigC::slot( *this, &TransferWidget::updatePos));
+            handler.updateRanges.connect( SigC::slot( *this, &TransferWidget::updateRange));
+         }
 
          
          PG_Rect labels = PG_Rect( 0, 0, pos.w, 20 );
@@ -579,6 +666,8 @@ class AmmoTransferWindow : public PG_Window {
    public:
       AmmoTransferWindow ( ContainerBase* source, ContainerBase* destination, PG_Widget* parent );
 
+      bool somethingToTransfer() { return handler.getTransfers().size(); };
+      
       bool eventKeyDown(const SDL_KeyboardEvent* key)
       {
          if ( key->keysym.sym == SDLK_ESCAPE )  {
@@ -603,7 +692,7 @@ AmmoTransferWindow :: AmmoTransferWindow ( ContainerBase* source, ContainerBase*
    }
    
    for ( TransferHandler::Transfers::iterator i = handler.getTransfers().begin(); i != handler.getTransfers().end(); ++i ) {
-      new TransferWidget( this, PG_Rect( border, ypos, w - 2*border, 50 ), *i );
+      new TransferWidget( this, PG_Rect( border, ypos, w - 2*border, 50 ), *i, handler );
       ypos += 60;
    }
 
@@ -618,8 +707,10 @@ AmmoTransferWindow :: AmmoTransferWindow ( ContainerBase* source, ContainerBase*
 void ammoTransferWindow ( ContainerBase* source, ContainerBase* destination )
 {
    AmmoTransferWindow atw( source, destination, NULL );
-   atw.Show();
-   atw.RunModal();
+   if ( atw.somethingToTransfer() ) {
+      atw.Show();
+      atw.RunModal();
+   }
 }
 
 void ammoTransferWindow ( VehicleService* serviceAction, ContainerBase* destination )

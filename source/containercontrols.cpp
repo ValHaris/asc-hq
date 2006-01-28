@@ -207,9 +207,10 @@ int    ContainerControls :: getammunition ( int weapontype, int num, bool abbuch
 {
    int got = container->getAmmo( weapontype, num, !abbuchen );
    if ( got < num && container->baseType->hasFunction( ContainerBaseType::AmmoProduction ) && produceifrequired ) {
-      if ( abbuchen )
-         got += produceAmmo ( weapontype, num - got );
-      else
+      if ( abbuchen ) {
+         produceAmmo ( weapontype, num - got );
+         got += container->getAmmo( weapontype, num - got, !abbuchen );
+      } else
          got += ammoProducable( weapontype, num - got );
    }
    return got;

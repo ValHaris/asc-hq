@@ -95,7 +95,7 @@ void OverviewMapHolder::updateField( const MapCoordinate& pos )
    SPoint imgpos = OverviewMapImage::map2surface( pos );
 
    pfield fld = map.getField( pos );
-   VisibilityStates visi = fieldVisibility( fld, map.playerView );
+   VisibilityStates visi = fieldVisibility( fld, map.playerView, &map );
    if ( visi == visible_not ) {
       static SDLmm::Color invisible = 0;
       if ( !invisible ) {
