@@ -270,7 +270,7 @@ ItemSelectorWindow::ItemSelectorWindow( PG_Widget *parent, const PG_Rect &r , co
 {
    SetTransparency( 0 );
    
-   itemSelector = new ItemSelectorWidget( this, PG_Rect( 5, GetTitlebarHeight () + 2, Width(), Height()- GetTitlebarHeight ()- 5 ), itemFactory );
+   itemSelector = new ItemSelectorWidget( this, PG_Rect( 5, GetTitlebarHeight () + 2, Width()-5, Height()- GetTitlebarHeight ()- 5 ), itemFactory );
    
    itemSelector->sigItemSelected.connect(  SigC::slot( *this, &ItemSelectorWindow::itemSelected ));
    itemSelector->sigQuitModal.connect( SigC::slot( *this, &ItemSelectorWindow::QuitModal));

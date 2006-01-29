@@ -1652,6 +1652,7 @@ int  new_choice_dlg(const ASCString& title, const ASCString& leftButton, const A
    msg.getTextBox()->SetText(title);
       
    msg.Show();
+   // PG_Widget::UpdateScreen();
    return msg.RunModal();
 }
 

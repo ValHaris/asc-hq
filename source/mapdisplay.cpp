@@ -687,11 +687,15 @@ void MapDisplayPG::displayCursor( const PG_Rect& dst )
       MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom,TargetPixelSelector_Rect> blitter;
       blitter.setZoom( float(zoom) / 100.0 );
 
-      blitter.setTargetRect ( dst );
+      PG_Rect clip= dst.IntersectRect( PG_Application::GetScreen()->clip_rect );
 
-      Surface s = Surface::Wrap( PG_Application::GetScreen() );
-      SPoint pos = widget2screen ( internal2widget( mapViewPos2internalPos( MapCoordinate(x,y))));
-      blitter.blit( icons.cursor, s, pos );
+      if ( clip.w && clip.h ) {
+         blitter.setTargetRect ( clip );
+   
+         Surface s = Surface::Wrap( PG_Application::GetScreen() );
+         SPoint pos = widget2screen ( internal2widget( mapViewPos2internalPos( MapCoordinate(x,y))));
+         blitter.blit( icons.cursor, s, pos );
+      }
    }
 }
 
