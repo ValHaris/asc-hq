@@ -292,6 +292,11 @@ extern const char*  cvehiclefunctions[];
         ~Vehicletype ( );
         Resources calcProductionsCost();
 
+        int getMoveMalusType() const {
+           return movemalustyp;
+        }
+
+        
         void  paint ( Surface& s, SPoint pos, int player, int direction = 0 ) const;
         const Surface&  getImage () const { return image;};
         Surface&  getImage () { return image;};

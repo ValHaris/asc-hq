@@ -737,6 +737,11 @@ void EllipseOnScreen :: write ( tnstream& stream )
 }
 
 
+int getheightdelta ( const ContainerBase* c1, const ContainerBase* c2 )
+{
+   return getheightdelta( log2(c1->getHeight()), log2(c2->getHeight() ));
+}
+
 
 int getheightdelta ( int height1, int height2 )
 {

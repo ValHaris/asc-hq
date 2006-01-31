@@ -130,6 +130,11 @@ extern const char*  cbuildingfunctions[];
         //! bitmapped: the level of height that this building will reside on.
         int          buildingheight;
 
+        int getMoveMalusType() const {
+           return 11;
+        };
+
+        
         //! bitmapped: units on these levels of height may be refuelled when standing next to the buildings entry
         int          externalloadheight;
 
@@ -157,6 +162,8 @@ extern const char*  cbuildingfunctions[];
         void write ( tnstream& stream ) const ;
         void runTextIO ( PropertyContainer& pc );
 
+
+        
 };
 
 

@@ -496,7 +496,9 @@ class AmmoTransferrable : public Transferrable {
 };
 
 
-class TransferHandler : public SigC::Object {
+
+
+class TransferHandler : public SigC::Object, protected ServiceChecker {
    private:
       ResourceWatch sourceRes;
       ResourceWatch destRes;
@@ -510,39 +512,24 @@ class TransferHandler : public SigC::Object {
       ContainerBase* source;
       ContainerBase* dest;
       
-   public:
-      TransferHandler( ContainerBase* src, ContainerBase* dst ) : sourceRes( src ), destRes( dst ), allowProduction(false), source(src), dest(dst)
+   protected:
+      void ammo( ContainerBase* dest, int type )
       {
-         if ( dst->getMap()->player[dst->getMap()->actplayer].diplomacy.getState( dst->getOwner() ) <= TRUCE )
+         transfers.push_back ( new AmmoTransferrable( type, sourceRes, destRes, allowProduction ));
+      }
+      
+      void resource( ContainerBase* dest, int type, bool active )
+      {
+         transfers.push_back(  new ResourceTransferrable( type, sourceRes, destRes, active ));
+      }
+      
+   public:
+      TransferHandler( ContainerBase* src, ContainerBase* dst ) : ServiceChecker( src), sourceRes( src ), destRes( dst ), allowProduction(false), source(src), dest(dst)
+      {
+         if ( dest->getMap()->player[dest->getMap()->actplayer].diplomacy.getState( dest->getOwner() ) <= TRUCE )
             return;
          
-         MapCoordinate spos = src->getPosition();
-         MapCoordinate dpos = dst->getPosition();
-         
-         bool externalTransfer = spos != dpos;
-         
-         static ContainerBaseType::ContainerFunctions resourceVehicleFunctions[resourceTypeNum] = { ContainerBaseType::ExternalEnergyTransfer,
-            ContainerBaseType::ExternalMaterialTransfer,
-            ContainerBaseType::ExternalFuelTransfer };
-
-         /* it is important that the ammo transfers are in front of the resource transfers, because ammo production affects resource amounts
-            and their prelimarny commitment would cause inconsistencies */ 
-            
-         for ( int a = 0; a < cwaffentypennum; ++a )
-            if ( weaponAmmo[a] )
-               if ( !externalTransfer || src->baseType->hasFunction( ContainerBaseType::ExternalAmmoTransfer ) ||  dst->baseType->hasFunction( ContainerBaseType::ExternalAmmoTransfer ) )
-                  if ( src->maxAmmo( a ) && dst->maxAmmo( a )) 
-                     transfers.push_back ( new AmmoTransferrable( a, sourceRes, destRes, allowProduction ));
-
-         for ( int r = 0; r < resourceTypeNum; r++ ) {
-            bool active;
-            if (  externalTransfer ) {
-               active = src->baseType->hasFunction( resourceVehicleFunctions[r] ) ||  dst->baseType->hasFunction( resourceVehicleFunctions[r] );
-            } else {
-               active = src->getStorageCapacity().resource(r) || dst->getStorageCapacity().resource(r) ;
-            }
-            transfers.push_back(  new ResourceTransferrable( r, sourceRes, destRes, active ));
-         }
+         check( dst );
       };
 
       bool allowAmmoProduction( bool allow )

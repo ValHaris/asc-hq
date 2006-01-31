@@ -158,11 +158,15 @@ int          terrainaccessible2 ( const pfield        field, const TerrainAccess
 
 
 /*!
-  \brief calculate the height difference between two levels of height
+  \brief calculate the height difference between two levels of height. 
 
   Since floating and ground based are assumed to be the same effective height, a simple subtraction isn't sufficient.
+  Height is a numeric (and not bitmapped) value
  */
+//! {@ 
 extern int getheightdelta ( int height1, int height2 );
+extern int getheightdelta ( const ContainerBase* c1, const ContainerBase* c2 );
+//! }@
 
   /*!
     evaluates the visibility of a field

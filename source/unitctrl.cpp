@@ -1492,3 +1492,148 @@ VehicleService :: ~VehicleService ( )
 }
 
 
+
+
+
+const SingleWeapon* ServiceChecker :: getServiceWeapon()
+{
+   Vehicle* srcVehicle = dynamic_cast<Vehicle*>(source);
+   if ( !srcVehicle )
+      return false;
+
+   const SingleWeapon* serviceWeapon = NULL;
+   for (int i = 0; i < srcVehicle->typ->weapons.count ; i++)
+      if ( srcVehicle->typ->weapons.weapon[i].service() )
+         serviceWeapon = &srcVehicle->typ->weapons.weapon[i];
+
+   return serviceWeapon;
+}
+
+bool ServiceChecker::serviceWeaponFits( ContainerBase* dest )
+{
+   const SingleWeapon* serviceWeapon = getServiceWeapon();
+   if ( serviceWeapon )
+      if ( (ignoreChecks & ignoreHeight) || serviceWeapon->sourceheight && source->getHeight() )
+         if ( (ignoreChecks & ignoreHeight) || serviceWeapon->targ && dest->getHeight() ) {
+      int dist = beeline( source->getPosition(), dest->getPosition() );
+      if ( (ignoreChecks & ignoreDistance) || serviceWeapon->mindistance <= dist && serviceWeapon->maxdistance >= dist )
+         if ( serviceWeapon->targetingAccuracy[dest->baseType->getMoveMalusType()] > 0  )
+            return true;
+
+         }
+
+         return false;
+}
+
+ServiceChecker :: ServiceChecker( ContainerBase* src, int skipChecks ) : source(src), ignoreChecks( skipChecks )
+{
+}
+
+
+void ServiceChecker :: check( ContainerBase* dest )
+{
+   MapCoordinate spos = source->getPosition();
+   MapCoordinate dpos = dest->getPosition();
+   bool externalTransfer = spos != dpos;
+
+   if ( dest->getMap()->player[source->getOwner()].diplomacy.getState( dest->getOwner() ) <= TRUCE )
+      return;
+
+   static ContainerBaseType::ContainerFunctions resourceVehicleFunctions[resourceTypeNum] = { ContainerBaseType::ExternalEnergyTransfer,
+      ContainerBaseType::ExternalMaterialTransfer,
+      ContainerBaseType::ExternalFuelTransfer };
+
+   /* it is important that the ammo transfers are in front of the resource transfers, because ammo production affects resource amounts
+      and their prelimarny commitment would cause inconsistencies */
+
+      for ( int a = 0; a < cwaffentypennum; ++a ) {
+         if ( source->maxAmmo( a ) && dest->maxAmmo( a )) {
+            if ( weaponAmmo[a] ) {
+               if ( externalTransfer  ) {
+                  if ( source->baseType->hasFunction( ContainerBaseType::ExternalAmmoTransfer ) ||  dest->baseType->hasFunction( ContainerBaseType::ExternalAmmoTransfer ) ) {
+                     Vehicle* srcVehicle = dynamic_cast<Vehicle*>(source);
+                     if ( !srcVehicle ) {// it's a building
+                        if ( (ignoreChecks & ignoreHeight) || getheightdelta( source, dest)==0)
+                           if ( (ignoreChecks & ignoreDistance) || beeline(source->getPosition(), dest->getPosition()) < 20 )
+                              ammo(dest, a);
+                     } else {
+                        if ( serviceWeaponFits( dest ) )
+                           ammo(dest, a);
+                     }
+                  }
+               } else {
+                  ammo(dest, a);
+               }
+            }
+         }
+      }
+
+      for ( int r = 0; r < resourceTypeNum; r++ ) {
+         if (  externalTransfer ) {
+            Vehicle* srcVehicle = dynamic_cast<Vehicle*>(source);
+            if ( !srcVehicle ) {// it's a building
+               bool active = source->baseType->hasFunction( resourceVehicleFunctions[r] ) ||  dest->baseType->hasFunction( resourceVehicleFunctions[r] );
+               resource( dest, r, active );
+            } else {
+               if ( serviceWeaponFits( dest )) {
+                  bool active = source->baseType->hasFunction( resourceVehicleFunctions[r] ) ||  dest->baseType->hasFunction( resourceVehicleFunctions[r] );
+                  resource( dest, r, active );
+               }
+            }
+
+         } else {
+            bool active = source->getStorageCapacity().resource(r) || dest->getStorageCapacity().resource(r) ;
+            resource( dest, r, active );
+         }
+      }
+}
+
+
+
+void ServiceTargetSearcher::fieldChecker( const MapCoordinate& pos )
+{
+   pfield fld = gamemap->getField( pos );
+   if ( fld && fld->getContainer() )
+      check( fld->getContainer() );
+}
+
+void ServiceTargetSearcher::addTarget( ContainerBase* target )
+{
+   if ( find( targets.begin(), targets.end(), target ) == targets.end() )
+      targets.push_back( target );
+}
+
+void ServiceTargetSearcher::ammo( ContainerBase* dest, int type )
+{
+   addTarget ( dest );
+}
+
+void ServiceTargetSearcher::resource( ContainerBase* dest, int type, bool active )
+{
+   if ( active )
+      addTarget ( dest );
+}
+      
+ServiceTargetSearcher::ServiceTargetSearcher( ContainerBase* src ) : ServiceChecker( src )
+{
+   gamemap = src->getMap();
+}
+
+
+void ServiceTargetSearcher::startSearch()
+{
+   Vehicle* srcVehicle = dynamic_cast<Vehicle*>(source);
+   if ( srcVehicle ) {
+      if ( source->getMap()->getField( source->getPosition() )->unitHere( srcVehicle )) {
+         const SingleWeapon* weap = getServiceWeapon();
+         if( weap )
+            circularFieldIterator(source->getMap(), source->getPosition(), weap->maxdistance / maxmalq, (weap->mindistance + maxmalq - 1) / maxmalq, FieldIterationFunctor( this, &ServiceTargetSearcher::fieldChecker ) );
+      }
+   } else
+      circularFieldIterator(source->getMap(), source->getPosition(), 1, 1, FieldIterationFunctor( this, &ServiceTargetSearcher::fieldChecker ) );
+
+      for ( ContainerBase::Cargo::iterator i = source->cargo.begin(); i != source->cargo.end(); ++i )
+         if ( *i )
+            check( *i );
+};
+

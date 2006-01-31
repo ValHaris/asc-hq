@@ -372,6 +372,51 @@ class VehicleService : public VehicleAction {
 
 
 
+         class ServiceChecker {
+            protected:
+               ContainerBase* source;
+               int ignoreChecks;
+
+               const SingleWeapon* getServiceWeapon();
+               virtual void ammo( ContainerBase* dest, int type ) = 0;
+               virtual void resource( ContainerBase* dest, int type, bool active )  = 0;
+
+      
+            private:
+               bool serviceWeaponFits( ContainerBase* dest );
+      
+            public:
+               static const int ignoreHeight = 1;
+               static const int ignoreDistance = 2;
+               ServiceChecker( ContainerBase* src, int skipChecks = 0 );
+
+
+               void check( ContainerBase* dest );
+               virtual ~ServiceChecker() {};
+         };
+
+
+         class ServiceTargetSearcher : protected ServiceChecker {
+
+            private:
+               tmap* gamemap;
+      
+               void fieldChecker( const MapCoordinate& pos );
+               void addTarget( ContainerBase* target );
+
+            protected:
+               vector<ContainerBase*> targets;
+
+               void ammo( ContainerBase* dest, int type );
+               void resource( ContainerBase* dest, int type, bool active );
+      
+            public:
+               ServiceTargetSearcher( ContainerBase* src );
+               void startSearch();
+         };
+
+         
+
 
 class PendingVehicleActions {
           public:

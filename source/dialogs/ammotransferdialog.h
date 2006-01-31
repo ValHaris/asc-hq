@@ -26,10 +26,7 @@
 #include "../paradialog.h"
 
 
-class VehicleService;
-
 extern void ammoTransferWindow ( ContainerBase* source, ContainerBase* destination );
-extern void ammoTransferWindow ( VehicleService* serviceAction, ContainerBase* destination );
 
 
 #endif
