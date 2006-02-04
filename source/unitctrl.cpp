@@ -37,6 +37,8 @@
 #include "containercontrols.h"
 #include "mapdisplay.h"
 
+#include "actions/servicing.h"
+
 PendingVehicleActions pendingVehicleActions;
 
 SigC::Signal0<void> fieldCrossed;
@@ -944,7 +946,7 @@ VehicleAttack :: ~VehicleAttack ( )
 
 
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 VehicleService :: VehicleService ( MapDisplayInterface* md, PPendingVehicleActions _pva )
                : VehicleAction ( vat_service, _pva ), fieldSearch ( *this, actmap )
@@ -1495,145 +1497,189 @@ VehicleService :: ~VehicleService ( )
 
 
 
-const SingleWeapon* ServiceChecker :: getServiceWeapon()
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#if 1
+
+NewVehicleService :: NewVehicleService ( MapDisplayInterface* md, PPendingVehicleActions _pva )
+   : VehicleAction ( vat_newservice, _pva )
 {
-   Vehicle* srcVehicle = dynamic_cast<Vehicle*>(source);
-   if ( !srcVehicle )
-      return false;
-
-   const SingleWeapon* serviceWeapon = NULL;
-   for (int i = 0; i < srcVehicle->typ->weapons.count ; i++)
-      if ( srcVehicle->typ->weapons.weapon[i].service() )
-         serviceWeapon = &srcVehicle->typ->weapons.weapon[i];
-
-   return serviceWeapon;
+   container = NULL;
+   status = 0;
+   mapDisplay = md;
+   if ( pva )
+      pva->newservice = this;
 }
 
-bool ServiceChecker::serviceWeaponFits( ContainerBase* dest )
+bool NewVehicleService :: targetAvail( const ContainerBase* target )
 {
-   const SingleWeapon* serviceWeapon = getServiceWeapon();
-   if ( serviceWeapon )
-      if ( (ignoreChecks & ignoreHeight) || serviceWeapon->sourceheight && source->getHeight() )
-         if ( (ignoreChecks & ignoreHeight) || serviceWeapon->targ && dest->getHeight() ) {
-      int dist = beeline( source->getPosition(), dest->getPosition() );
-      if ( (ignoreChecks & ignoreDistance) || serviceWeapon->mindistance <= dist && serviceWeapon->maxdistance >= dist )
-         if ( serviceWeapon->targetingAccuracy[dest->baseType->getMoveMalusType()] > 0  )
-            return true;
-
-         }
-
-         return false;
-}
-
-ServiceChecker :: ServiceChecker( ContainerBase* src, int skipChecks ) : source(src), ignoreChecks( skipChecks )
-{
+   return find( targets.begin(), targets.end(), target) != targets.end();
 }
 
 
-void ServiceChecker :: check( ContainerBase* dest )
+int  NewVehicleService :: avail ( ContainerBase* veh  )
 {
-   MapCoordinate spos = source->getPosition();
-   MapCoordinate dpos = dest->getPosition();
-   bool externalTransfer = spos != dpos;
+   ServiceTargetSearcher sts( veh );
+   return sts.available();
+}
 
-   if ( dest->getMap()->player[source->getOwner()].diplomacy.getState( dest->getOwner() ) <= TRUCE )
-      return;
+int NewVehicleService :: available (  ContainerBase* veh ) const
+{
+   return avail(veh);
+}
 
-   static ContainerBaseType::ContainerFunctions resourceVehicleFunctions[resourceTypeNum] = { ContainerBaseType::ExternalEnergyTransfer,
-      ContainerBaseType::ExternalMaterialTransfer,
-      ContainerBaseType::ExternalFuelTransfer };
 
-   /* it is important that the ammo transfers are in front of the resource transfers, because ammo production affects resource amounts
-      and their prelimarny commitment would cause inconsistencies */
+int NewVehicleService :: available (  Vehicle* veh ) const
+{
+   return avail(veh);
+}
 
-      for ( int a = 0; a < cwaffentypennum; ++a ) {
-         if ( source->maxAmmo( a ) && dest->maxAmmo( a )) {
-            if ( weaponAmmo[a] ) {
-               if ( externalTransfer  ) {
-                  if ( source->baseType->hasFunction( ContainerBaseType::ExternalAmmoTransfer ) ||  dest->baseType->hasFunction( ContainerBaseType::ExternalAmmoTransfer ) ) {
-                     Vehicle* srcVehicle = dynamic_cast<Vehicle*>(source);
-                     if ( !srcVehicle ) {// it's a building
-                        if ( (ignoreChecks & ignoreHeight) || getheightdelta( source, dest)==0)
-                           if ( (ignoreChecks & ignoreDistance) || beeline(source->getPosition(), dest->getPosition()) < 20 )
-                              ammo(dest, a);
-                     } else {
-                        if ( serviceWeaponFits( dest ) )
-                           ammo(dest, a);
-                     }
-                  }
-               } else {
-                  ammo(dest, a);
+
+int NewVehicleService :: execute ( Vehicle* veh, int x, int y, int step, int pos, int amount )
+{
+   return executeContainer( veh, x, y, step, pos, amount );
+}
+
+int NewVehicleService :: executeContainer ( ContainerBase* veh, int x, int y, int step, int pos, int amount )
+{
+   if ( step != status )
+      return -1;
+
+   if ( status == 0 ) {
+      container = veh ;
+      if ( !container ) {
+         status = -101;
+         return status;
+      }
+
+      ServiceTargetSearcher sts( container );
+      sts.startSearch();
+      targets = sts.getTargets();
+            
+      if ( targets.size() > 0 )
+         status = 2;
+      else
+         status = -210;
+
+      return status;
+   } 
+#if 0
+else
+      if ( status == 2 ) {
+         TargetContainer::iterator i = dest.find(targetNWID);
+         if ( i == dest.end() )
+            return -211;
+
+         Target& t = i->second;
+         if ( pos < 0 || pos >= t.service.size())
+            return -211;
+
+         Target::Service& serv = t.service[pos];
+         if ( amount < serv.minAmount || amount > serv.maxAmount )
+            return -212;
+
+         if ( vehicle ) {
+            int delta;
+            switch ( serv.type ) {
+               case srv_resource: {
+                  delta = amount - serv.curAmount;
+                  int put = t.dest->putResource ( delta, serv.targetPos, 0 );
+                  int oldavail = vehicle->getTank().resource(serv.sourcePos);
+                  vehicle->getResource ( put, serv.sourcePos, 0 );
+                  logtoreplayinfo ( rpl_refuel2, t.dest->xpos, t.dest->ypos, t.dest->networkid, int(1000+serv.targetPos), amount, serv.curAmount );
+                  logtoreplayinfo ( rpl_refuel2, vehicle->xpos, vehicle->ypos, vehicle->networkid, int(1000+serv.sourcePos), vehicle->getTank().resource(serv.sourcePos), oldavail );
                }
+               break;
+               case srv_repair: vehicle->repairItem ( t.dest, amount );
+               logtoreplayinfo ( rpl_repairUnit, vehicle->networkid, t.dest->networkid, amount, vehicle->getTank().material, vehicle->getTank().fuel );
+                            /*
+               if ( mapDisplay )
+               if ( fieldvisiblenow ( fld, actmap->playerView ) || actmap->playerView*8  == vehicle->color )
+               SoundList::getInstance().playSound ( SoundList::conquer_building, 0 );
+                            */
+               break;
+               case srv_ammo: delta = amount - serv.curAmount;
+               t.dest->ammo[ serv.targetPos ] += delta;
+               vehicle->ammo[ serv.sourcePos ] -= delta;
+               logtoreplayinfo ( rpl_refuel, t.dest->xpos, t.dest->ypos, t.dest->networkid, serv.targetPos, t.dest->ammo[ serv.targetPos ] );
+               logtoreplayinfo ( rpl_refuel, vehicle->xpos, vehicle->ypos, vehicle->networkid, serv.targetPos, vehicle->ammo[ serv.sourcePos ] );
+               break;
+            }
+         } else if ( building ) {
+            int delta;
+            switch ( serv.type ) {
+               case srv_resource: {
+                  delta = amount - serv.curAmount;
+                  int put = t.dest->putResource ( delta, serv.targetPos, 0 );
+                  building->getResource ( put, serv.sourcePos, 0 );
+                  logtoreplayinfo ( rpl_refuel2, t.dest->xpos, t.dest->ypos, t.dest->networkid, int(1000+serv.targetPos), amount, serv.curAmount );
+                  MapCoordinate mc = building->getEntry();
+                  logtoreplayinfo ( rpl_bldrefuel, mc.x, mc.y, int(1000+serv.sourcePos), put );
+               }
+               break;
+               case srv_repair: building->repairItem ( t.dest, amount );
+                            // logtoreplayinfo ( rpl_refuel, eht->xpos, eht->ypos, eht->networkid, int(1002), newfuel );
+               break;
+               case srv_ammo: delta = amount - serv.curAmount;
+               t.dest->ammo[ serv.targetPos ] += delta;
+               building->ammo[ serv.sourcePos ] -= delta;
+               MapCoordinate mc = building->getEntry();
+               if ( building->ammo[ serv.sourcePos ] < 0 ) {
+                  ContainerControls cc ( building );
+                  cc.produceAmmo ( serv.sourcePos, -building->ammo[ serv.sourcePos ] );
+               }
+               if ( building->ammo[ serv.sourcePos ] < 0 )
+                  fatalError("negative amount of ammo available! \nPlease report this to bugs@asc-hq.org" );
+
+               logtoreplayinfo ( rpl_refuel, t.dest->xpos, t.dest->ypos, t.dest->networkid, serv.targetPos, t.dest->ammo[ serv.targetPos ] );
+               logtoreplayinfo ( rpl_bldrefuel, mc.x, mc.y, serv.targetPos, building->ammo[ serv.sourcePos ] );
+               break;
             }
          }
+         fieldSearch.init ( vehicle, building );
+         fieldSearch.run (  );
       }
+#endif
+      return status;
+}
 
-      for ( int r = 0; r < resourceTypeNum; r++ ) {
-         if (  externalTransfer ) {
-            Vehicle* srcVehicle = dynamic_cast<Vehicle*>(source);
-            if ( !srcVehicle ) {// it's a building
-               bool active = source->baseType->hasFunction( resourceVehicleFunctions[r] ) ||  dest->baseType->hasFunction( resourceVehicleFunctions[r] );
-               resource( dest, r, active );
-            } else {
-               if ( serviceWeaponFits( dest )) {
-                  bool active = source->baseType->hasFunction( resourceVehicleFunctions[r] ) ||  dest->baseType->hasFunction( resourceVehicleFunctions[r] );
-                  resource( dest, r, active );
-               }
-            }
 
-         } else {
-            bool active = source->getStorageCapacity().resource(r) || dest->getStorageCapacity().resource(r) ;
-            resource( dest, r, active );
-         }
-      }
+int NewVehicleService :: fillEverything ( ContainerBase* target, bool repairsToo )
+{
+   if ( status != 2 )
+      return -1;
+
+   if ( !targetAvail( target ))
+      return -211;
+
+   TransferHandler tf( getContainer(), target );
+   tf.fillDest();
+   tf.commit();
+
+   return 0;
+}
+
+
+void NewVehicleService :: registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva )
+{
+   VehicleAction::registerPVA ( _actionType, _pva );
+   if ( pva )
+      pva->newservice = this;
+}
+
+
+NewVehicleService :: ~NewVehicleService ( )
+{
+   if ( pva )
+      pva->newservice = NULL;
 }
 
 
 
-void ServiceTargetSearcher::fieldChecker( const MapCoordinate& pos )
-{
-   pfield fld = gamemap->getField( pos );
-   if ( fld && fld->getContainer() )
-      check( fld->getContainer() );
-}
+#endif
 
-void ServiceTargetSearcher::addTarget( ContainerBase* target )
-{
-   if ( find( targets.begin(), targets.end(), target ) == targets.end() )
-      targets.push_back( target );
-}
-
-void ServiceTargetSearcher::ammo( ContainerBase* dest, int type )
-{
-   addTarget ( dest );
-}
-
-void ServiceTargetSearcher::resource( ContainerBase* dest, int type, bool active )
-{
-   if ( active )
-      addTarget ( dest );
-}
-      
-ServiceTargetSearcher::ServiceTargetSearcher( ContainerBase* src ) : ServiceChecker( src )
-{
-   gamemap = src->getMap();
-}
-
-
-void ServiceTargetSearcher::startSearch()
-{
-   Vehicle* srcVehicle = dynamic_cast<Vehicle*>(source);
-   if ( srcVehicle ) {
-      if ( source->getMap()->getField( source->getPosition() )->unitHere( srcVehicle )) {
-         const SingleWeapon* weap = getServiceWeapon();
-         if( weap )
-            circularFieldIterator(source->getMap(), source->getPosition(), weap->maxdistance / maxmalq, (weap->mindistance + maxmalq - 1) / maxmalq, FieldIterationFunctor( this, &ServiceTargetSearcher::fieldChecker ) );
-      }
-   } else
-      circularFieldIterator(source->getMap(), source->getPosition(), 1, 1, FieldIterationFunctor( this, &ServiceTargetSearcher::fieldChecker ) );
-
-      for ( ContainerBase::Cargo::iterator i = source->cargo.begin(); i != source->cargo.end(); ++i )
-         if ( *i )
-            check( *i );
-};
 

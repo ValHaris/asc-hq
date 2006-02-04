@@ -1050,7 +1050,6 @@ Optional Features:
   --enable-docbook2man    will build the man pages from the sgml source files.
   --enable-genparse       enables recreation of the command line parsers
   --disable-sdltest       Do not try to compile and run a test SDL program
-  --disable-paragui       Don't use paragui .
   --disable-paraguitest       Do not try to compile and run a test PARAGUI program
   --enable-libbz2-static      compiles a static libbz2 into the binary of asc.
   --enable-debug          enables some debugging options and output
@@ -3708,7 +3707,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 3711 "configure"' > conftest.$ac_ext
+  echo '#line 3710 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -5299,7 +5298,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:5302:" \
+echo "$as_me:5301:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -6360,11 +6359,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6363: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6362: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6367: \$? = $ac_status" >&5
+   echo "$as_me:6366: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -6628,11 +6627,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6631: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6630: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6635: \$? = $ac_status" >&5
+   echo "$as_me:6634: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -6732,11 +6731,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6735: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6734: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:6739: \$? = $ac_status" >&5
+   echo "$as_me:6738: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -9090,7 +9089,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9093 "configure"
+#line 9092 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9190,7 +9189,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9193 "configure"
+#line 9192 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11528,11 +11527,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11531: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11530: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:11535: \$? = $ac_status" >&5
+   echo "$as_me:11534: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -11632,11 +11631,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11635: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11634: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:11639: \$? = $ac_status" >&5
+   echo "$as_me:11638: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -13220,11 +13219,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13223: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13222: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13227: \$? = $ac_status" >&5
+   echo "$as_me:13226: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13324,11 +13323,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13327: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13326: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13331: \$? = $ac_status" >&5
+   echo "$as_me:13330: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15547,11 +15546,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15550: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15549: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15554: \$? = $ac_status" >&5
+   echo "$as_me:15553: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15815,11 +15814,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15818: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15817: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15822: \$? = $ac_status" >&5
+   echo "$as_me:15821: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15919,11 +15918,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15922: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15921: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15926: \$? = $ac_status" >&5
+   echo "$as_me:15925: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -21152,15 +21151,6 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
 
-# Check whether --enable-paragui or --disable-paragui was given.
-if test "${enable_paragui+set}" = set; then
-  enableval="$enable_paragui"
-  useparagui=no
-fi;
-
-
-
-if test "x$useparagui" != "xno"; then
 
 
 # Check whether --with-paragui-prefix or --without-paragui-prefix was given.
@@ -21279,7 +21269,7 @@ cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
 #include "paragui.h"
-#include "pgapplication.h"
+#include "pglog.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21305,12 +21295,12 @@ int main (int argc, char *argv[])
   int major, minor, micro;
   char *tmp_version;
 
-  PG_Application app;
-
   /* This hangs on some systems (?)
   system ("touch conf.paraguitest");
   */
   { FILE *fp = fopen("conf.paraguitest", "a"); if ( fp ) fclose(fp); }
+
+  PG_LogConsole::SetLogLevel(PG_LOG_NONE);
 
   /* HP/UX 9 (%@#!) writes to sscanf strings */
   tmp_version = my_strdup("$min_paragui_version");
@@ -21450,32 +21440,21 @@ rm -f conftest.err conftest.$ac_objext \
      PARAGUI_CFLAGS=""
      PARAGUI_LIBS=""
      { { echo "$as_me:$LINENO: error:
-   *** PARAGUI version 1.1.7 not found! ASC requires the Paragui library.
-   If you have a distribution supplied Paragui.RPM installed, perhaps the
-   Paragui-devel.RPM is missing. If your distribution does not include the
-   Paragui library, you can get it from http://www.paragui.org/
-   Alternatively, you can add \"--disable-paragui\" to \"configure\" to build
-   ASC without Paragui. Some not-so-important dialogs will be missing, but
-   you will be able to play ASC " >&5
+*** PARAGUI version 1.1.7 not found! ASC requires the Paragui library.
+If you have a distribution supplied Paragui.RPM installed, perhaps the
+Paragui-devel.RPM is missing. If your distribution does not include the
+Paragui library, you can get it from http://www.paragui.org/ ASC " >&5
 echo "$as_me: error:
-   *** PARAGUI version 1.1.7 not found! ASC requires the Paragui library.
-   If you have a distribution supplied Paragui.RPM installed, perhaps the
-   Paragui-devel.RPM is missing. If your distribution does not include the
-   Paragui library, you can get it from http://www.paragui.org/
-   Alternatively, you can add \"--disable-paragui\" to \"configure\" to build
-   ASC without Paragui. Some not-so-important dialogs will be missing, but
-   you will be able to play ASC " >&2;}
+*** PARAGUI version 1.1.7 not found! ASC requires the Paragui library.
+If you have a distribution supplied Paragui.RPM installed, perhaps the
+Paragui-devel.RPM is missing. If your distribution does not include the
+Paragui library, you can get it from http://www.paragui.org/ ASC " >&2;}
    { (exit 1); exit 1; }; }
   fi
 
 
   rm -f conf.paraguitest
 
-
-   else
-   PARAGUI_CFLAGS="-DNO_PARAGUI"
-   PARAGUI_LIBS=""
-fi
 
 
 ac_ext=c
@@ -23028,7 +23007,7 @@ fi
 
 
 
-                                                                                                                                                                                                                                                                    ac_config_files="$ac_config_files Makefile asc.spec doc/Makefile doc/manpages/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/graphics/Makefile source/dialogs/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/libs/loki/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile source/unix/asc/Makefile data/Makefile data/dialog/Makefile data/music/Makefile"
+                                                                                                                                                                                                                                                                              ac_config_files="$ac_config_files Makefile asc.spec doc/Makefile doc/manpages/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/graphics/Makefile source/dialogs/Makefile source/actions/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/libs/loki/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile source/unix/asc/Makefile data/Makefile data/dialog/Makefile data/music/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -23617,6 +23596,7 @@ do
   "source/docs/en/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/docs/en/Makefile" ;;
   "source/graphics/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/graphics/Makefile" ;;
   "source/dialogs/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/dialogs/Makefile" ;;
+  "source/actions/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/actions/Makefile" ;;
   "source/libs/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/libs/Makefile" ;;
   "source/libs/sdlmm/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/libs/sdlmm/Makefile" ;;
   "source/libs/sdlmm/src/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/libs/sdlmm/src/Makefile" ;;

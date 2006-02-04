@@ -177,7 +177,7 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
-SUBDIRS = @GENCL@ docs sdl libs ai graphics dialogs unix tools 
+SUBDIRS = @GENCL@ docs sdl libs ai graphics dialogs actions unix tools 
 EXTRA_DIST = *.cpp *.h *.inc
 _SOURCES = mapimageexport.cpp
 all: all-recursive

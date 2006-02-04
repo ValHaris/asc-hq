@@ -151,7 +151,7 @@ class  tfield {
 
     void endRound( int turn );
 
-    //! some variables for the viewcalculation algorithm. see #viewcalculation.cpp for details
+    //! some variables for the viewcalculation algorithm. see viewcalculation.cpp for details
     struct View {
       int view;
       int jamming;

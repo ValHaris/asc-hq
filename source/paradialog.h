@@ -543,6 +543,77 @@ class BoolProperty : public PropertyEditorField, public SigC::Object  {
       };            
 };
 
+
+template<typename B>
+class DropDownSelectorProperty : public PropertyEditorField, public SigC::Object  {
+   private:
+      B* myProperty;
+      PG_DropDown* dropdown;
+         
+      bool click()
+      {
+         int value = dropdown->GetSelectedItemIndex();
+         sigValueChanged(this,value);
+         return true;
+      }
+      
+   public:
+      typedef PG_Signal2<DropDownSelectorProperty*, B> DropDownPropertySignal;
+      DropDownPropertySignal sigValueChanged;
+      DropDownPropertySignal sigValueApplied;
+
+      DropDownSelectorProperty( PropertyEditorWidget* propertyEditor, const std::string& name, B* b, const char** names ) : myProperty( b )
+      {
+         PG_Rect r = propertyEditor->RegisterProperty( name, this );
+         dropdown = new PG_DropDown( propertyEditor, r, -1, propertyEditor->GetStyleName() );
+
+         int i = 0;
+         while ( names[i] ) {
+            dropdown->AddItem( names[i] );
+            ++i;
+         }
+         
+         dropdown->sigSelectItem.connect( SigC::slot(*this, &DropDownSelectorProperty::click));
+         Reload();
+      };
+      /*
+      DropDownProperty( PropertyEditorWidget* propertyEditor, const std::string& name, B& b ) : myProperty( NULL )
+      {
+         PG_Rect r = propertyEditor->RegisterProperty( name, this );
+         checkbox = new PG_CheckButton( propertyEditor, r, PG_NULLSTR, -1, propertyEditor->GetStyleName() );
+         checkbox->sigClick.connect( SigC::slot(*this, &BoolProperty::click));
+
+         if ( b )
+            checkbox->SetPressed();
+         else
+            checkbox->SetUnpressed();
+      };
+      */
+
+      bool Valid() { return true; };
+      
+      bool Apply()
+      {
+         if ( myProperty )
+            *myProperty = dropdown->GetSelectedItemIndex();
+
+         return true;
+      };
+      
+      void Reload() {
+         if ( myProperty )
+            if ( *myProperty )
+               dropdown->SelectItem( *myProperty );
+         else
+            dropdown->SelectItem( 0 );
+      };
+};
+
+
+
+
+
+
 class MessageDialog;
 
 class PG_StatusWindowData : public StatusMessageWindowHolder::UserData {

@@ -1,7 +1,3 @@
-/*! \file controls.cpp
-   Controlling units (which is graudally moved to #vehicletype.cpp and #unitctrl.cpp );
-   Things that are run when starting and ending someones turn
-*/
 
 
 /*

@@ -1,6 +1,5 @@
-/*! \file guiiconhandler.cpp
-    \brief All the buttons of the user interface with which the unit actions are
-      controlled.
+/*! \file guifunctions.cpp
+    \brief All the buttons of the user interface with which the unit actions are controlled.
 */
 
 /*
@@ -42,6 +41,7 @@
 #include "spfst.h"
 #include "gamedlg.h"
 #include "dialogs/cargodialog.h"
+#include "dialogs/ammotransferdialog.h"
 #include "mapdisplay.h"
 
 namespace GuiFunctions
@@ -1137,28 +1137,15 @@ class RefuelUnit : public GuiFunction
       {
          pfield fld = actmap->getField(pos);
          if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
-            if ( fld->vehicle )
-               if (fld->vehicle->color == actmap->actplayer * 8)
-                  if ( VehicleService::avail ( fld->vehicle ))
-                     if ( VehicleService::getServices( fld->vehicle) & ((1 << VehicleService::srv_resource ) | (1 << VehicleService::srv_ammo )) )
-                        return true;
-
-            if ( fld->building )
-               if ( fld->building->color == actmap->actplayer * 8)
-                  if ( fld->building->typ->hasFunction( ContainerBaseType::ExternalEnergyTransfer ) ||
-                       fld->building->typ->hasFunction( ContainerBaseType::ExternalMaterialTransfer ) ||
-                       fld->building->typ->hasFunction( ContainerBaseType::ExternalFuelTransfer ) ||
-                       fld->building->typ->hasFunction( ContainerBaseType::ExternalAmmoTransfer ))
-                      return true;
+            if ( fld && fld->getContainer() )
+               if (fld->getContainer()->getOwner() == actmap->actplayer )
+                  if ( NewVehicleService::avail ( fld->getContainer() ) )
+                     return true;
          } else
-            if ( pendingVehicleActions.actionType == vat_service && pendingVehicleActions.service->guimode == 2) {
-               if ( fld->vehicle ) {
-                  VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.find(fld->vehicle->networkid);
-                  if ( i != pendingVehicleActions.service->dest.end() )
-                     for ( int j = 0; j < i->second.service.size(); j++ )
-                        if (   i->second.service[j].type == VehicleService::srv_resource
-                            || i->second.service[j].type == VehicleService::srv_ammo )
-                           return true;
+            if ( pendingVehicleActions.actionType == vat_newservice ) { // && pendingVehicleActions.service->guimode == 2
+               if ( fld && fld->getContainer() ) {
+                  if ( pendingVehicleActions.newservice->targetAvail( fld->getContainer() ))
+                     return true;
                }
             }
 
@@ -1172,24 +1159,23 @@ class RefuelUnit : public GuiFunction
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          if ( pendingVehicleActions.actionType == vat_nothing ) {
-            VehicleService* vs = new VehicleService ( &getDefaultMapDisplay(), &pendingVehicleActions );
-            pendingVehicleActions.service->guimode = 2;
-            int res = vs->execute ( actmap->getField(pos)->vehicle, pos.x, pos.y, 0, -1, -1 );
+            NewVehicleService* vs = new NewVehicleService ( &getDefaultMapDisplay(), &pendingVehicleActions );
+            // pendingVehicleActions.service->guimode = 2;
+            int res = vs->executeContainer ( actmap->getField(pos)->getContainer(), pos.x, pos.y, 0, -1, -1 );
             if ( res < 0 ) {
                dispmessage2 ( -res );
                delete vs;
                return;
             }
             int fieldCount = 0;
-            for ( VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.begin(); i != pendingVehicleActions.service->dest.end(); i++ ) {
-               pfield fld = getfield ( i->second.dest->xpos, i->second.dest->ypos );
-               if ( fld != actmap->getField(pos) )
-                  for ( int j = 0; j < i->second.service.size(); j++ )
-                     if (  i->second.service[j].type == VehicleService::srv_ammo
-                        || i->second.service[j].type == VehicleService::srv_resource ) {
-                        fieldCount++;
-                        fld->a.temp = 1;
-                     }
+            MapCoordinate srcPos = pendingVehicleActions.newservice->getContainer()->getPosition();
+            for ( NewVehicleService::Targets::iterator i = pendingVehicleActions.newservice->targets.begin(); i != pendingVehicleActions.newservice->targets.end(); i++ ) {
+               MapCoordinate targetPos = (*i)->getPosition();
+               if ( targetPos != srcPos ) {
+                  pfield fld = actmap->getField ( targetPos );
+                  fieldCount++;
+                  fld->a.temp = 1;
+               }
             }
             if ( !fieldCount ) {
                delete vs;
@@ -1197,13 +1183,10 @@ class RefuelUnit : public GuiFunction
             } else
                displaymap();
          } else {
-            for ( VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.begin(); i != pendingVehicleActions.service->dest.end(); i++ )
-               if ( i->second.dest == actmap->getField(pos)->vehicle )
-                  for ( int j = 0; j < i->second.service.size(); j++ )
-                     if (  i->second.service[j].type == VehicleService::srv_ammo
-                        || i->second.service[j].type == VehicleService::srv_resource )
-                        pendingVehicleActions.service->execute ( NULL, actmap->getField(pos)->vehicle->networkid, -1, 2, j, i->second.service[j].maxAmount );
-
+            pfield fld = actmap->getField( pos );
+            if ( fld && fld->getContainer() )
+               if ( pendingVehicleActions.newservice && pendingVehicleActions.newservice->targetAvail( fld->getContainer() ) )
+                  pendingVehicleActions.newservice->fillEverything( fld->getContainer() );
 
             delete pendingVehicleActions.service;
             actmap->cleartemps(7);
@@ -1230,7 +1213,7 @@ class RefuelUnitDialog : public GuiFunction
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          pfield fld = actmap->getField(pos);
-         if ( pendingVehicleActions.service && pendingVehicleActions.service->guimode == 2 && fld->a.temp && fld->vehicle )
+         if ( pendingVehicleActions.newservice && fld->a.temp && fld->getContainer() ) // && pendingVehicleActions.service->guimode == 2
             return true;
 
          return false;
@@ -1242,8 +1225,8 @@ class RefuelUnitDialog : public GuiFunction
 
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         verlademunition( pendingVehicleActions.service, actmap->getField(pos)->vehicle->networkid );
-         delete pendingVehicleActions.service;
+         ammoTransferWindow( pendingVehicleActions.newservice->getContainer(), actmap->getField(pos)->getContainer() );
+         delete pendingVehicleActions.newservice;
          actmap->cleartemps ( 7 );
          displaymap();
          updateFieldInfo();

@@ -439,7 +439,7 @@ ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
 
    displayLogMessage ( 7, "done\n  OverviewMap ");
    dataLoaderTicker();
-   spawnPanel ( OverviewMap );
+   // spawnPanel ( OverviewMap );
 
 
    weaponRangeLayer = new UnitWeaponRangeLayer();

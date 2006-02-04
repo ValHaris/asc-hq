@@ -75,6 +75,10 @@ class ContainerBaseType: public MapItemType, public LoadableItemType {
      bool hasFunction( ContainerFunctions function ) const;
      bool hasAnyFunction( std::bitset<64> functions ) const;
      static const char* getFunctionName( ContainerFunctions function );
+
+   protected:
+      void setFunction( ContainerFunctions function );
+   public:
      
      int id;
 

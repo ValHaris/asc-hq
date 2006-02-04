@@ -6,8 +6,8 @@
     email                : bickel@asc-hq.org
  ***************************************************************************/
 
-/*! \file buildingtype.h
-    \brief The interface for the Building class
+/*! \file buildings.h
+    \brief The buildings which a placed on the map
 */
 
 /***************************************************************************

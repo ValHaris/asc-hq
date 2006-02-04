@@ -41,9 +41,9 @@
   \param filename The name of the map
   \param trrn The terrain that is used for all fields which are unknown to ASC
   \param errorOutput Pointer to a string which will store all warning and error messages from the import. May be NULL.
-  \param fakeMap If true ASC tries to make the map look like the Battle Isle map, generating new ObjectType and TerrainType instances if necessary.
-                 This must not be used by any program other than map2pcx, since the maps can not be played. This is only used to generate
-                 the images of the Battle Isle Map Archive.   
+  \param __fakeMap If true ASC tries to make the map look like the Battle Isle map, generating new ObjectType and TerrainType instances if necessary.
+                   This must not be used by any program other than map2pcx, since the maps can not be played. This is only used to generate
+                   the images of the Battle Isle Map Archive.   
 */
 extern void importbattleislemap ( const char* path, const char* filename, TerrainType::Weather* trrn, string* errorOutput = NULL, bool __fakeMap = false );
 

@@ -23,7 +23,7 @@
 #include "graphics/surface.h"
 #include "typen.h"
 
-//! the image for a terraintype ( #tterraintype ) that is shown on the small map
+//! the image for a #TerrainType that is shown on the small map
 class OverviewMapImage {
          bool initialized;
       public:

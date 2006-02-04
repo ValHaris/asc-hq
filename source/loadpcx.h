@@ -1,7 +1,7 @@
 /*! \file loadpcx.h
     \brief Interface for loading and writing of PCX images. 
 
-    There are two independant implementations of these routines: #loadpcx.cpp and #dos/pcx.asm are written in assembly, and #loadpcxc.cpp is written in c++
+    There are two independant implementations of these routines: loadpcx.cpp and dos/pcx.asm are written in assembly, and loadpcxc.cpp is written in c++
 */
 
 /*

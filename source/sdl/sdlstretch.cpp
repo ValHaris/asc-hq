@@ -27,7 +27,7 @@
 #include <cstring>
 #include <math.h>
 #include <stdlib.h>
-#include "SDLStretch.h"
+#include "sdlstretch.h"
 
 #define sign(x) ((x)>0 ? 1:-1)
 

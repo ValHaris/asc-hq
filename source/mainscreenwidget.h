@@ -1,7 +1,3 @@
-/*! \file asc-mainscreen.h
-    \brief Everything that happens on the main screen of ASC
-*/
-
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger

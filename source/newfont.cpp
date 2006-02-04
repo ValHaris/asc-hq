@@ -1,7 +1,7 @@
 /*! \file newfont.cpp
     \brief Handling the fonts of ASC.
 
-    The routines for displaying fonts can be found in #basegfx.cpp (function #showtext ).
+    The routines for displaying fonts can be found in basegfx.cpp (function #showtext ).
     Although the file name contains is called newfont, the time when this was actually the case is long past (1993)...
 
 */

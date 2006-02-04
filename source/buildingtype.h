@@ -112,9 +112,6 @@ extern const char*  cbuildingfunctions[];
             Use Building::getArmor() to query the effective armor. */
         int          _armor;
 
-        //! bitmapped: functions the building can perfom. see #cbuildingfunctions
-        int          special;
-
         //! not used at the moment
         int          technologylevel;
 

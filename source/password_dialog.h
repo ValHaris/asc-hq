@@ -37,7 +37,7 @@
 
       \returns true if password successfully entered. 
                false if the cancel button has been pressed (if available).
-               the current map will be deleted and a #tnomaploaded exception 
+               the current map will be deleted and a #NoMapLoaded exception 
                    thrown if the exit button has been pressed (if available)
 */
   extern bool enterpassword ( Password& pwd, bool firstTime = false,

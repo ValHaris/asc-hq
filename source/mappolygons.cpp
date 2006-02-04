@@ -1,4 +1,4 @@
-/*! \file weather.cpp
+/*! \file mappolygons.cpp
     \brief Operating with polygons on the map
 */
 

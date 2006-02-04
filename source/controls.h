@@ -1,5 +1,5 @@
 /*! \file controls.h
-   Controlling units (which is graudally moved to #vehicletype.cpp and #unitctrl.cpp );
+   Controlling units (which is graudally moved to vehicletype.cpp and unitctrl.cpp );
    Resource networks
    Things that are run when starting and ending someones turn   
 */
@@ -74,7 +74,7 @@ extern pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
                                     bool*  inhibitAttack = NULL,
                                     bool container2container  = false );
 
-//! return the distance between x1/y1 and x2/y2 using the power of the wind factors calculated for a specific unit with #initwindmovement
+//! return the distance between x1/y1 and x2/y2 using the power of the wind factors precalculated in #WindMovement
 extern int windbeeline ( const MapCoordinate& start, const MapCoordinate& dest, WindMovement* wm );
 
 

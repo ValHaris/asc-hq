@@ -29,14 +29,14 @@
    THE central class of ASC is #tmap in gamemap.h . 
    It is the anchor where nearly all elements of ASC are chained to. The global 
    variable #actmap is a pointer to the active map. There can be a maximum of
-   8 players on a map, plus neutral units (which are handled like a 9th player). 
-   Hence the array of 9 tmap::Player classes in #tmap. 
+   8 #Player on a map, plus neutral units (which are handled like a 9th #Player).
+   Hence the array of 9 #tmap::player classes in #tmap.
    
    Each player has units and buildings, which are stored in the lists 
-   tmap::Player::vehicleList and tmap::Player::buildingList . 
+   #Player::vehicleList and #Player::buildingList .
    The terms units and vehicles are used synonymously in ASC. Since unit was a 
-   reserved word in Borland Pascal, we decided to use the term vehicle instead. 
-   But now, with ASC written in C++,  'unit' is also used.
+   reserved word in Borland Pascal (the language that ASC was originally written in),
+   we decided to use the term vehicle instead. But now, with ASC written in C++, 'unit' is also used.
    
    Every building and unit is of a certain 'type': Vehicletype and BuildingType .
    These are stored in the data files which are loaded on startup and are globally 
@@ -46,14 +46,15 @@
    terrain etc, while the vehicle stores things like remaining movement for this
    turn, ammo, fuel and cargo.
    
-   The primary contents of a map are its fields ( tfield). Each field has again a pointer 
+   The primary contents of a map are its fields ( #tfield ). Each field has again a pointer 
    to a certain weather of a TerrainType. Each TerrainType has up to 5 
    different weathers ("dry (standard)","light rain", "heavy rain", "few snow",
    "lot of snow"). If there is a unit or a building standing on a field, the field
    has a pointer to it: tfield::vehicle and tfield::building .
    
    On the field can be several instances of Object. Objects are another central class of 
-   ASC. Roads, pipleines, trenches and woods are examples of objects.
+   ASC. Roads, pipleines, trenches and woods are examples of objects. #Vehicle and #Building
+   are NOT objects.
  
 */
 

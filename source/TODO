@@ -18,33 +18,17 @@ Bugs:
 
 Small tasks:
 
--8- rewriting tdrawgettempline ( mapalgorithm.cpp ) which is way to slow
-   
 -7- direct invocation of and from mail clients to automate email games
 
 -5- replacing those ugly dynamic_array templates by std::vector
 
--9- Optimize  int VehicleMovement::getDistance ( int x, int y) in unitctrl.cpp
-    This function is pretty slow, but not called often enough to really 
-    beeing a problem
-    => not so important
-
--6- Caching of fullscreen image ( file sdl/loadimage.c )
-    converting an image from 24 bitt to 8 bit and resizing it is quite slow.
-    The image could be cached as PCX with 8 bit and correct resolution to be
-    loaded faster the next time.
-    -- not very important --
 
 -6- reaction fire doesn't fire on units which can suddenly be seen not because
     they themselfes are moving, but because some jamming vehicle went away.
 
--3- scrollable unit/building cargo (unlimited number of units)
-
 -6- displaying the cost for constructing buildings somewhere
 
 -7- movement cost for putObject action
-
--6- resize graphics to contain all vehicle categories in weapon info
 
 
 Medium sized tasks
@@ -53,29 +37,6 @@ Medium sized tasks
  Since DOS is no longer supported by ASC, we can now rewrite much legacy code
  to make use of features modern operating system and even Windows provide:
 
-
--3-  Introducing Truetype font support. 
-     Although the current font handling routines are quite old, I still think 
-     they are quite ok and relatively fast. But the creation of font files is 
-     problematic. The tfont structures should be created on program start from
-     TTF fonts. The SDL_TTF library provides the necessary background routines
-
--2-  new Keyboard handling. 
-     The handling of keyboard input was the biggest pain-in-the-ass under DOS.
-     The keyboard routines should be completely redesigend. Searching for
-     NEWKEYB will reveal all cruicial parts of the code which may be greatly
-     simplified with a new key class that routines like rkey should return.
-
--2-  new string handling
-     replacing all occurances of c-style strings (char*) and c++ strings
-     (std::string) by the new ASCString class (which is derived from
-     std::string)
-
--5-  new image storage for objects, so the images can be changed by graphic 
-     sets even when they were generated on runtime (mirroring)
-
--8-  embedding of units/objects/... in map
-     -> requires reinitialization of gui host
 
 -8-  input/output of raw height information in mapgenerator
      for usage by terragen or similar programs
@@ -88,23 +49,10 @@ Medium sized tasks
 
 Larger Tasks:
 
--1-  Rewriting the whole graphics engine
-     Currently is graphics engine is 8 bit depth only, cannot use hardware 
-     acceleration and an image is just a void* pointer (resulting in all the
-     delete void* warnings on compilation).
-
-     Creating a class that represents images and on which all graphic 
-     functions operate. 
-     This class should probably be a wrapper around a SDL_image structure.
-
 -2-  maintaining and improving the mapeditor
      Especially the user interface of the mapeditor has some room for
      improvements. This jobs involves asking the map-designers what they think
      should be improved there and then do it...
-
--3- Paragui has been chosen to be the new dialog engine for ASC.
-    Now many old and outdated dialogs (like the VehicleInfo dialog)
-    should be rewritten (www.paragui.org)
 
 
 Requested features:
@@ -143,6 +91,3 @@ Requested features:
 Requested features whos necessity should be discussed...
 
 -  loading of savegames in the mapeditor 
--  different jamming power for a unit on different levels of height
-
--  setting up new production facilities ingame 

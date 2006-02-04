@@ -1,5 +1,5 @@
 /*! \file objects.cpp
-    \brief Mine and Objects which can be placed on a map
+    \brief Mine and Objects which can be placed on a map field
 */
 
 /***************************************************************************

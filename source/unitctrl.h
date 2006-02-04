@@ -31,6 +31,7 @@
 #include "spfst.h"
 #include "attack.h"
 #include "astar2.h"
+#include "actions/servicing.h"
 
 
 /** \file unitctrl.h
@@ -79,7 +80,7 @@ typedef FieldList<AttackWeap> AttackFieldList;
 typedef class PendingVehicleActions* PPendingVehicleActions;
 
 
-enum VehicleActionType { vat_nothing, vat_move, vat_ascent, vat_descent, vat_attack, vat_service };
+enum VehicleActionType { vat_nothing, vat_move, vat_ascent, vat_descent, vat_attack, vat_service, vat_newservice };
 
 class VehicleAction {
            protected:
@@ -372,49 +373,62 @@ class VehicleService : public VehicleAction {
 
 
 
-         class ServiceChecker {
-            protected:
-               ContainerBase* source;
-               int ignoreChecks;
+         
+#if 1
 
-               const SingleWeapon* getServiceWeapon();
-               virtual void ammo( ContainerBase* dest, int type ) = 0;
-               virtual void resource( ContainerBase* dest, int type, bool active )  = 0;
-
-      
-            private:
-               bool serviceWeaponFits( ContainerBase* dest );
-      
+         class NewVehicleService : public VehicleAction {
             public:
-               static const int ignoreHeight = 1;
-               static const int ignoreDistance = 2;
-               ServiceChecker( ContainerBase* src, int skipChecks = 0 );
+               typedef ServiceTargetSearcher::Targets Targets;
+               ServiceTargetSearcher::Targets targets;
+            private:
+               ContainerBase* container;
+               int status;
+               
+               
+            protected:
+               MapDisplayInterface* mapDisplay;
+            public:
+               ContainerBase* getContainer() { return container; };
 
+               int getStatus( void ) { return status; };
+               virtual int available ( ContainerBase* veh ) const;
+               virtual int available ( Vehicle* veh ) const;
+               static int avail ( ContainerBase* veh );
+               int executeContainer ( ContainerBase* veh, int x, int y, int step, int pos, int amount );
+               int execute ( Vehicle* veh, int x, int y, int step, int pos, int amount );
+               
+               bool targetAvail( const ContainerBase* target );
+               
+               int fillEverything ( ContainerBase* target, bool repairsToo = false );
+               virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
+               NewVehicleService ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
+               virtual ~NewVehicleService ( );
 
-               void check( ContainerBase* dest );
-               virtual ~ServiceChecker() {};
+              //! here the gui stores which icon initiated the service; thus preventing the occurance of an repair icon when a fuel transfer was initiated.
+               int guimode;
          };
 
 
-         class ServiceTargetSearcher : protected ServiceChecker {
 
-            private:
-               tmap* gamemap;
-      
-               void fieldChecker( const MapCoordinate& pos );
-               void addTarget( ContainerBase* target );
+/* NewVehicleService:
+         *
+         *   Step 0:   execute ( vehicle, -1, -1, step = 0 , -1, -1 );
+         *                 if vehicle is going to service some units
+         *                  OR
+         *             execute ( NULL, xpos, ypos, step = 0 , -1, -1 );
+         *                 if the building at xpos, ypos is going to service some units
+         *
+         *                 dest then contains all units that can be services together with the services
+         *                 Use the units networkID as Index
+         *
+         *
+         *   Step 2:   execute ( NULL, targetNWID, -1, step = 2, pos, amount );
+         *                 targetNWID is the unit that is going to be serviced
+         *                 pos is the position of the service: dest[targetNWID].service[pos]
+         *                 amount is the amount of the service that is going to be transferred
+ */
 
-            protected:
-               vector<ContainerBase*> targets;
-
-               void ammo( ContainerBase* dest, int type );
-               void resource( ContainerBase* dest, int type, bool active );
-      
-            public:
-               ServiceTargetSearcher( ContainerBase* src );
-               void startSearch();
-         };
-
+#endif
          
 
 
@@ -429,6 +443,7 @@ class PendingVehicleActions {
             DecreaseVehicleHeight* descent;
             VehicleAttack* attack;
             VehicleService* service;
+            NewVehicleService* newservice;
             ~PendingVehicleActions ( );
          };
 

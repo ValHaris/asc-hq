@@ -1,6 +1,3 @@
-/*! \file gamemap.h
-    \brief Definition of THE central asc class: tmap 
-*/
 
 /***************************************************************************
                           gamemap.h  -  description

@@ -1,6 +1,5 @@
 /*! \file guiiconhandler.cpp
-    \brief All the buttons of the user interface with which the unit actions are
-      controlled.
+    \brief All system for controlling the buttons of the user interface with which the unit actions are controlled.
 */
 
 /*

@@ -1,6 +1,3 @@
-/*! \file objects.cpp
-    \brief Mine and Objects which can be placed on a map
-*/
 
 /***************************************************************************
                           gamemap.cpp  -  description

@@ -1,5 +1,5 @@
-/*! \file gamemap.h
-    \brief Definition of THE central asc class: tmap 
+/*! \file objects.h
+    \brief Mine and Objects which can be placed on a map field
 */
 
 /***************************************************************************
@@ -42,7 +42,7 @@ class AgeableItem {
        static bool age( AgeableItem& obj );
 };
 
-//! an instance of an object type (#tobjecttype) on the map
+//! an instance of an object type (#ObjectType) on the map
 class Object : public AgeableItem {
     public:
        const ObjectType* typ;

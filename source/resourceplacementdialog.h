@@ -6,10 +6,6 @@
     email                : bickel@asc-hq.org
  ***************************************************************************/
 
-/*! \file paradialog.h
-    \brief Dialog classes based on the Paragui library
-*/
-
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

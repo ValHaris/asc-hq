@@ -7,7 +7,7 @@
  ***************************************************************************/
 
 /*! \file buildings.cpp
-    \brief Implementation of the Building class 
+    \brief The buildings which a placed on the map
 */
 
 /***************************************************************************

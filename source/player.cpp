@@ -1,6 +1,3 @@
-/*! \file gamemap.cpp
-    \brief Implementation of THE central asc class: tmap 
-*/
 
 /***************************************************************************
                           gamemap.cpp  -  description

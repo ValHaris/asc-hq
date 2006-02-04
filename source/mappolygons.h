@@ -1,8 +1,8 @@
 /*! \file mappolygons.h
-    \brief operating with polygons on a map
+    \brief operating with polygons on tje map
 */
 
-//     $Id: mappolygons.h,v 1.1 2004-01-16 19:14:55 mbickel Exp $
+//     $Id: mappolygons.h,v 1.1.2.1 2006-02-04 13:57:01 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de

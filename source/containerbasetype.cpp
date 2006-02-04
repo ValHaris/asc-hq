@@ -94,6 +94,12 @@ bool ContainerBaseType::hasAnyFunction( BitSet functions ) const
 {
    return (features & functions).any();
 }
+
+void ContainerBaseType::setFunction( ContainerFunctions function )
+{
+   features.set( int(function) );
+}
+
            
 
 

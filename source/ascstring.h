@@ -235,7 +235,7 @@ inline ASCString::ASCString ( const ASCAdaptatorString& s, size_type pos, size_t
 // Copy Operators for ASCAdaptatorString type
 
 /*!
-    \overload ASCString& ASCString::operator=( const ASCAdaptatorString& s )
+    \overload ASCString& ASCString::operator= ( const ASCAdaptatorString& s )
 
     \param s a const reference to an ASCAdaptatorString object to be assigned to this ASCString.
 

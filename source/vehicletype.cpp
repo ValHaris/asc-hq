@@ -7,7 +7,7 @@
  ***************************************************************************/
 
 /*! \file vehicletype.cpp
-    \brief The #VehicleType class
+    \brief The #Vehicletype class
 */
 
 
@@ -542,6 +542,11 @@ void Vehicletype :: read ( tnstream& stream )
       maxplus.read( stream );
       defaultProduction.read( stream );
    }
+
+   for ( int w = 0; w < weapons.count; ++w )
+      if ( weapons.weapon[w].canRefuel() )
+         setFunction( ExternalAmmoTransfer );
+   
 }
 
 
@@ -1003,6 +1008,10 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    if ( pc.find( "guideSortHelp") )
       pc.addIntegerArray("guideSortHelp", guideSortHelp );
 
+   for ( int w = 0; w < weapons.count; ++w )
+      if ( weapons.weapon[w].canRefuel() )
+         setFunction( ExternalAmmoTransfer );
+   
 #ifndef converter
 
    buildicon = generate_gui_build_icon ( this );

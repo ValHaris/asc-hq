@@ -209,28 +209,14 @@ dnl If your distribution does not include the SDLmm library, you can get it
 dnl from http://sdlmm.sf.net ]]))
 
 
-AC_ARG_ENABLE( paragui, [  --disable-paragui       Don't use paragui .], useparagui=no )
 
-
-
-if test "x$useparagui" != "xno"; then
-
-   AM_PATH_PARAGUI(1.1.7,
-               :,
-               AC_MSG_ERROR([[
-   *** PARAGUI version 1.1.7 not found! ASC requires the Paragui library.
-   If you have a distribution supplied Paragui.RPM installed, perhaps the
-   Paragui-devel.RPM is missing. If your distribution does not include the
-   Paragui library, you can get it from http://www.paragui.org/
-   Alternatively, you can add "--disable-paragui" to "configure" to build
-   ASC without Paragui. Some not-so-important dialogs will be missing, but
-   you will be able to play ASC ]]))
-
-   dnl echo Paragui CFLAGS are $PARAGUI_CFLAGS
-else
-   PARAGUI_CFLAGS="-DNO_PARAGUI"
-   PARAGUI_LIBS=""
-fi
+AM_PATH_PARAGUI(1.1.7,
+            :,
+            AC_MSG_ERROR([[
+*** PARAGUI version 1.1.7 not found! ASC requires the Paragui library.
+If you have a distribution supplied Paragui.RPM installed, perhaps the
+Paragui-devel.RPM is missing. If your distribution does not include the
+Paragui library, you can get it from http://www.paragui.org/ ASC ]]))
 
 
 AC_LANG_RESTORE
@@ -457,6 +443,7 @@ AC_OUTPUT(  Makefile \
 	    source/docs/en/Makefile \
 	    source/graphics/Makefile \
 	    source/dialogs/Makefile \
+       source/actions/Makefile \
 	    source/libs/Makefile \
 	    source/libs/sdlmm/Makefile \
 	    source/libs/sdlmm/src/Makefile \

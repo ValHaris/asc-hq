@@ -21,7 +21,7 @@
 
 #include <SDL_image.h>
 #include <cmath>
-#include "../sdl/SDLStretch.h"
+#include "../sdl/sdlstretch.h"
 #include "surface.h"
 #include "blitter.h"
 #include "../basegfx.h"

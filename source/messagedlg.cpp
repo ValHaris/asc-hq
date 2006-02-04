@@ -626,7 +626,7 @@ class IngameMessageViewer : public ASC_PG_Dialog {
 
    
    public:
-      IngameMessageViewer ( const ASCString& title, const Message& msg, const ASCString& buttonText = "confirm" ) : ASC_PG_Dialog ( NULL, PG_Rect( 50, 50, 500, 400 ), title )
+      IngameMessageViewer ( const ASCString& title, const Message& msg, const ASCString& buttonText = "ok" ) : ASC_PG_Dialog ( NULL, PG_Rect( 50, 50, 500, 400 ), title )
       {
          PG_Rect r;
          if ( !msg.getFromText( actmap ).empty()  ) {

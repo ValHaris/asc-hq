@@ -26,7 +26,7 @@
 #include "../messaginghub.h"
 
 
-#include "SDLStretch.cpp"
+#include "sdlstretch.cpp"
 
 SDL_Surface *screen = NULL;
 int fullscreen = 1;

@@ -74,7 +74,7 @@ const int cwettertypennum = 6;
 //! The number of vehicle categories; Each category has its own move malus
 const int cmovemalitypenum  = 18;
 
-//! The movemalus type for a building. It is used for #SingleWeapon.targets_not_hittable .
+//! The movemalus type for a building. It is used for #SingleWeapon::targetingAccuracy .
 const int cmm_building = 11;
 const int cmm_trooper = 7;
 
