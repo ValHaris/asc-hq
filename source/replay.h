@@ -71,7 +71,8 @@ enum trpl_actions { rpl_attack,
                     rpl_cutFromGame,
                     rpl_removebuilding2,
                     rpl_setResourceProcessingAmount,
-                    rpl_removebuilding3 };
+                    rpl_removebuilding3,
+                    rpl_netcontrol };
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 

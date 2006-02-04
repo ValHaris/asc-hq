@@ -759,6 +759,19 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( m );
          stream->writeInt ( f );
       }
+      if ( action == rpl_netcontrol ) {
+         int x = va_arg ( paramlist, int );
+         int y = va_arg ( paramlist, int );
+         int cat = va_arg ( paramlist, int );
+         int stat = va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         int size = 4;
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( cat );
+         stream->writeInt ( stat );
+      }
 
       va_end ( paramlist );
    }
@@ -1788,6 +1801,24 @@ void trunreplay :: execnextreplaymove ( void )
                        if ( abs(p.resource(r)) > abs(bld->typ->maxplus.resource(r)) )
                           error ("Building can not produ ");
                      bld->plus = p;
+                 } else
+                    error ("Building not found on for rpl_setResourceProcessingAmount ");
+         }
+         break;
+         case rpl_netcontrol: {
+                 stream->readInt();
+                 int x = stream->readInt();
+                 int y = stream->readInt();
+                 int cat = stream->readInt();
+                 int stat = stream->readInt();
+                 readnextaction();
+
+                 Building* bld = actmap->getField(x,y)->building;
+                 if ( bld ) {
+                    cbuildingcontrols bc;
+                    bc.init( bld );
+                    bc.netcontrol.setnetmode( cat, stat );
+                    bld->execnetcontrol(); 
                  } else
                     error ("Building not found on for rpl_setResourceProcessingAmount ");
          }

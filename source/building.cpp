@@ -1309,6 +1309,7 @@ void   cbuildingcontrols :: cnetcontrol :: setnetmode ( int category, int stat )
    else
       cc_b->building->netcontrol &= ~category;
 
+   logtoreplayinfo( rpl_netcontrol, cc_b->building->getPosition().x, cc_b->building->getPosition().y, category, stat );
 
 };
 
