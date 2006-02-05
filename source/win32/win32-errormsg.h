@@ -13,7 +13,7 @@
 #define win32errorhandlerH
 
 #include <sigc++/sigc++.h>
-#include "ascstring.h"
+#include "../ascstring.h"
 
 
   class Win32IoErrorHandler : public SigC::Object {

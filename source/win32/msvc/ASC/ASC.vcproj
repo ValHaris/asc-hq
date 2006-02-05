@@ -175,6 +175,9 @@
 				RelativePath="..\..\..\clipboard.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\containerbase-functions.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\containerbase.cpp">
 			</File>
 			<File
@@ -370,6 +373,9 @@
 				RelativePath="..\..\..\dialogs\selectionwindow.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\actions\servicing.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\sg.cpp">
 			</File>
 			<File
@@ -392,6 +398,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\statisticdialog.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\stdio-errorhandler.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\stringtokenizer.cpp">
@@ -431,6 +440,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\weathercast.cpp">
+			</File>
+			<File
+				RelativePath="..\..\win32-errormsg.cpp">
 			</File>
 			<Filter
 				Name="AI"
@@ -496,7 +508,13 @@
 				Name="dialogs"
 				Filter="">
 				<File
+					RelativePath="..\..\..\dialogs\ammotransferdialog.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\cargodialog.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\cargowidget.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\emailsetup.cpp">

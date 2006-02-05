@@ -489,6 +489,9 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
         checkWind = false;
       }
 
+#ifndef WIN32
+#warning what to do with this ?
+#endif
 /*
    static const  int         movemalus[6]  = { 8, 6, 3, 0, 3, 6 };
    

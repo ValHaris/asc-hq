@@ -13,12 +13,12 @@
 #include <winuser.h>
 
 #include "win32-errormsg.h"
-#include "messaginghub.h"
+#include "../messaginghub.h"
 
 
 void Win32IoErrorHandler::printError( const ASCString& msg )
 {
-   Win32IoErrorHandlerMessageBox(NULL, msg.c_str(), "Error", MB_ICONERROR | MB_OK | MB_TASKMODAL );
+   MessageBox(NULL, msg.c_str(), "Error", MB_ICONERROR | MB_OK | MB_TASKMODAL );
 }
 
 Win32IoErrorHandler::Win32IoErrorHandler()
