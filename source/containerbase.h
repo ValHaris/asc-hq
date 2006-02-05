@@ -63,7 +63,7 @@ class ContainerBase {
       Production unitProduction;
       
 
-    //! Cargo related functions
+    //! @name Cargo related functions
     //@{
 
       typedef vector<Vehicle*> Cargo;
@@ -71,19 +71,15 @@ class ContainerBase {
       
       void addToCargo( Vehicle* veh );
       
-      //@{
       //! removes the given unit from the container. \Returns true of the unit was found, false otherwise
       bool removeUnitFromCargo( Vehicle* veh, bool recursive = false );
       bool removeUnitFromCargo( int nwid, bool recursive = false );
-      //@}
       
       bool unitLoaded( int nwid );
       
-      //@{
-      //! if the unit is inside this container, returns the container which the unit is directly in (which may not be the current one as containers may be nested arbitrarily). 
+      //! if the unit is inside this container, returns the container which the unit is directly in (which may not be the current one as containers may be nested arbitrarily).
       const ContainerBase* findParent ( const ContainerBase* veh ) const;
       ContainerBase* findParent ( const ContainerBase* veh );
-      //@}
       
 
       //! returns the number of loaded units
@@ -138,7 +134,7 @@ class ContainerBase {
 
       
 
-    //! Resource related functions
+    //! @name Resource related functions
     //@{
       
       virtual int putResource ( int amount, int resourcetype, bool queryonly, int scope = 1 ) = 0;

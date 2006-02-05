@@ -134,7 +134,7 @@ class BuildingType;
     AiParameter* aiparam[8];
 
 
-    //! Movement related functions
+    //! @name Movement related functions
     //@{
     //! can the unit move from its current position (does not check neighbouring fields)
     bool canMove ( void ) const;
@@ -170,7 +170,7 @@ class BuildingType;
     //! add the objects like tracks or broken ice
     void spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest );
 
-    //! Resource related functions
+    //! @name Resource related functions
     //@{
     
     int putResource ( int amount, int resourcetype, bool queryonly, int scope = 1 );
@@ -196,7 +196,7 @@ class BuildingType;
     int putAmmo( int type, int num, bool queryOnly );
     int maxAmmo( int type ) const ;
 
-    //! Cargo related functions
+    //! @name Cargo related functions
     //@{
 
     //! weight of unit including cargo
@@ -235,7 +235,7 @@ class BuildingType;
     int getIdentification() { return networkid; };
 
 
-    //! Movement related functions
+    //! @name Movement related functions
     //@{
     //! constructs a vehicle at the given position.
     Vehicle* constructvehicle ( Vehicletype* tnk, int x, int y );
