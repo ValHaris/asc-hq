@@ -545,7 +545,7 @@ bool Vehicle :: canMove ( void ) const
       } else {
          ContainerBase* cnt = fld->getContainer();
          if ( cnt )
-            for ( Cargo::iterator i = cnt->cargo.begin(); i != cnt->cargo.end(); ++i )
+            for ( Cargo::const_iterator i = cnt->getCargo().begin(); i != cnt->getCargo().end(); ++i )
                if ( *i == this ) 
                   if ( cnt->vehicleUnloadable( typ ) > 0 || cnt->vehicleDocking( this, true ) > 0 )
                      return true;
@@ -943,7 +943,7 @@ int Vehicle :: freeWeight ()
       return fld->vehicle->searchstackforfreeweight ( this );
    else
       if ( fld->building ) {
-         for ( Cargo::iterator i = fld->building->cargo.begin(); i != fld->building->cargo.end(); ++i )
+         for ( Cargo::const_iterator i = fld->building->getCargo().begin(); i != fld->building->getCargo().end(); ++i )
             if ( *i ) {
                int w3 = (*i)->searchstackforfreeweight ( this );
                if ( w3 >= 0 )

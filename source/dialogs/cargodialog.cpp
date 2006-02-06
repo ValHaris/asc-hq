@@ -186,7 +186,20 @@ namespace CargoGuiFunctions {
          Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
+   
+   class MoveUnitIntoInnerContainer : public GuiFunction
+   {
+      CargoDialog& parent;
+      public:
+         MoveUnitIntoInnerContainer ( CargoDialog& masterParent ) : parent( masterParent)  {};
+         bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
+         void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
+         ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
+   };
 
+   
    class OpenContainer: public GuiFunction
    {
          CargoDialog& parent;
@@ -315,6 +328,7 @@ class CargoDialog : public Panel
          handler.registerUserFunction( new CargoGuiFunctions::UnitProduction( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::UnitTraining( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::MoveUnitUp( *this ));
+         handler.registerUserFunction( new CargoGuiFunctions::MoveUnitIntoInnerContainer( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::OpenContainer( *this ));
       }
 
@@ -1382,6 +1396,9 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
    if ( unitScrollArea ) {
       cargoWidget = new CargoWidget( unitScrollArea, PG_Rect( 1, 1, unitScrollArea->Width() -2 , unitScrollArea->Height() -2 ), cb );
       cargoWidget->unitMarked.connect( SigC::slot( *this, &CargoDialog::checkStoringPosition ));
+
+      container->cargoChanged.connect( SigC::slot( *cargoWidget, &CargoWidget::redrawAll ));
+      
    }
                
 
@@ -1597,7 +1614,10 @@ namespace CargoGuiFunctions {
 
    bool UnitProduction::available( const MapCoordinate& pos, ContainerBase* subject, int num )
    {
-      return parent.getContainer()->baseType->hasFunction( ContainerBaseType::InternalVehicleProduction );
+      if ( parent.getContainer()->getOwner() == parent.getContainer()->getMap()->actplayer )
+         return parent.getContainer()->baseType->hasFunction( ContainerBaseType::InternalVehicleProduction );
+
+      return false;
    }
 
 
@@ -1648,8 +1668,13 @@ namespace CargoGuiFunctions {
       Vehicle* veh = dynamic_cast<Vehicle*>(subject);
       if ( !veh )
          return false;
+
+      tmap* map = parent.getContainer()->getMap();
+      if ( map->actplayer == veh->getOwner() || map->actplayer == parent.getContainer()->getOwner() )
+         if ( map->player[map->actplayer].diplomacy.isAllied( veh->getOwner() ))
+            return parent.getContainer()->baseType->hasFunction( ContainerBaseType::TrainingCenter ) && parent.getControls().unitTrainingAvailable( veh );
       
-      return parent.getContainer()->baseType->hasFunction( ContainerBaseType::TrainingCenter ) && parent.getControls().unitTrainingAvailable( veh );
+      return false;
    }
 
 
@@ -1779,6 +1804,119 @@ namespace CargoGuiFunctions {
          return;
       
       parent.getControls().moveUnitUp( veh );
+      parent.cargoChanged();
+   }
+
+   //////////////////////////////////////////////////////////////////////////////////////////////
+   
+
+   bool MoveUnitIntoInnerContainer::available( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      if ( !subject )
+         return false;
+      
+      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+      if ( !veh )
+         return false;
+      
+      return parent.getControls().moveUnitDownAvail( parent.getContainer(), veh );
+   }
+
+
+   bool MoveUnitIntoInnerContainer::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   {
+      return ( key->keysym.sym == 'i' );
+   };
+
+   Surface& MoveUnitIntoInnerContainer::getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return IconRepository::getIcon("container-in.png");
+   };
+   
+   ASCString MoveUnitIntoInnerContainer::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return "move unit into neighboring transport";
+   };
+
+
+
+   class VehicleWidget: public VehicleTypeBaseWidget  {
+      private:
+         Vehicle* veh;
+      public:
+         VehicleWidget( PG_Widget* parent, const PG_Point& pos, int width, Vehicle* unit )
+         : VehicleTypeBaseWidget( parent, pos, width, unit->typ, unit->getOwner() )
+         {
+            veh = unit;
+         };
+
+         Vehicle* getUnit() const { return veh; };
+   };
+   
+   class VehicleSelectionFactory: public SelectionItemFactory, public SigC::Object  {
+      public:
+         typedef vector<Vehicle*> Container;
+      protected:
+         Container::iterator it;
+         Container& items;
+
+      public:
+         VehicleSelectionFactory( Container& units ) : items ( units ), selected(NULL) {};
+         void restart() { it = items.begin(); };
+         
+         SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos )
+         {
+            if ( it != items.end() ) {
+               Vehicle* v = *(it++);
+               return new VehicleWidget( parent, pos, parent->Width() - 15, v );
+            } else
+               return NULL;
+         };
+
+         void itemSelected( const SelectionWidget* widget, bool mouse )
+         {
+            if ( !widget )
+               return;
+   
+            const VehicleWidget* vw = dynamic_cast<const VehicleWidget*>(widget);
+            assert( vw );
+            selected = vw->getUnit();
+         }
+         
+         Vehicle* selected;
+   };
+
+
+   Vehicle* selectVehicle( vector<Vehicle*> targets )
+   {
+      Vehicle* target = NULL;
+      VehicleSelectionFactory* vsf = new VehicleSelectionFactory( targets );
+      ItemSelectorWindow isw ( NULL, PG_Rect( 50, 50, 300, 400), "Please chose target unit", vsf );
+      isw.Show();
+      isw.RunModal();
+      target = vsf->selected;
+      return target;
+   }
+   
+
+   
+
+   void MoveUnitIntoInnerContainer::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      if ( !subject )
+         return;
+
+
+      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+      if ( !veh )
+         return;
+
+      vector<Vehicle*> targets = parent.getControls().moveUnitDownTargets( parent.getContainer(), veh );
+
+      Vehicle* target = selectVehicle( targets );
+      if ( target )
+         parent.getControls().moveUnitDown ( parent.getContainer(), veh, target );
+      
       parent.cargoChanged();
    }
 

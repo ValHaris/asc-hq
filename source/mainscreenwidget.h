@@ -32,7 +32,9 @@ class MainScreenWidget : public PG_Widget {
     PG_Application& app;
     Surface backgroundImage;
     SDL_Rect blitRects[4];
+    
     int lastMessageTime;
+    int lastMouseScrollTime;
 
     StatusMessageWindowHolder createStatusWindow( const ASCString& msg );
     
@@ -56,6 +58,8 @@ protected:
     void setup( bool messageLine );
     
     bool idleHandler( );
+
+    void mouseScrollChecker();
 
     virtual ASCString getBackgroundImageFilename() = 0;
     void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst) ;

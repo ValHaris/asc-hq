@@ -303,6 +303,8 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
    public:   
       void keyboadCursorMovement( bool enable ) { disableKeyboardCursorMovement = !enable; }; 
       
+      void scrollMap( int dir );
+      
    private:
       void UpdateRect( const PG_Rect& rect );
       void moveCursor( int dir, int step );

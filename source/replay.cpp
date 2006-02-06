@@ -159,7 +159,7 @@ LockReplayRecording::~LockReplayRecording()
 Resources getUnitResourceCargo ( Vehicle* veh )
 {
    Resources res = veh->getTank();
-   for ( ContainerBase::Cargo::iterator i = veh->cargo.begin(); i != veh->cargo.end(); ++i )
+   for ( ContainerBase::Cargo::const_iterator i = veh->getCargo().begin(); i != veh->getCargo().end(); ++i )
       if ( *i )
          res += getUnitResourceCargo ( *i );
    return res;
@@ -1436,7 +1436,32 @@ void trunreplay :: execnextreplaymove ( void )
                                     error("severe replay inconsistency:\nno building for refuel-unit command !");
                               }
          break;
-      case rpl_moveUnitUp: {
+         case rpl_moveUnitUpDown: {
+            stream->readInt();  // size
+            int x =  stream->readInt();
+            int y =  stream->readInt();
+            stream->readInt(); // dummy(basegfx_0)
+            int nwid_to = stream->readInt();
+            int nwid_moving = stream->readInt();
+
+            readnextaction();
+
+            ContainerBase* b = actmap->getField(x,y)->getContainer();
+            if ( b ) {
+               b->removeUnitFromCargo( nwid_moving, true );
+
+               Vehicle* veh_targ = actmap->getUnit( nwid_to );
+               Vehicle* veh_moving = actmap->getUnit( nwid_moving );
+               if ( veh_targ && veh_moving )
+                  veh_targ->addToCargo( veh_moving );
+               else
+                  error ( "Could not locate unit for MoveToInnerTransport");
+            } else
+               error("severe replay inconsistency in MoveUnitUp !");
+                                 
+         }
+         break;
+         case rpl_moveUnitUp: {
                                  stream->readInt();  // size
                                  int x =  stream->readInt();
                                  int y =  stream->readInt();

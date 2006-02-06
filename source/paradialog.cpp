@@ -150,7 +150,7 @@ void signalQuit( int i )
 }
 
 
-ASC_PG_App :: ASC_PG_App ( const ASCString& themeName ) 
+ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )  : fullScreen(false)
 {
    this->themeName = themeName;
    EnableSymlinks(true);
@@ -332,6 +332,8 @@ bool ASC_PG_App:: InitScreen ( int w, int h, int depth, Uint32 flags )
    if ( result ) {
       initASCGraphicSubsystem ( GetScreen(), NULL );
       Surface::SetScreen( GetScreen() );
+
+      fullScreen = flags & SDL_FULLSCREEN;
       
       MessagingHub::Instance().error.connect( SigC::bind( SigC::slot( *this, &ASC_PG_App:: messageDialog ), MessagingHubBase::Error ));
       MessagingHub::Instance().fatalError.connect( SigC::bind( SigC::slot( *this, &ASC_PG_App:: messageDialog ), MessagingHubBase::FatalError ));

@@ -1266,7 +1266,7 @@ void  VehicleService :: FieldSearch :: testfield( const MapCoordinate& mc )
    pfield fld = gamemap->getField ( mc );
    if ( fld && veh && fld->vehicle ) {
       if ( fld->vehicle == veh ) {
-         for ( ContainerBase::Cargo::iterator i = veh->cargo.begin(); i != veh->cargo.end(); ++i )
+         for ( ContainerBase::Cargo::const_iterator i = veh->getCargo().begin(); i != veh->getCargo().end(); ++i )
             if ( *i )
               checkVehicle2Vehicle ( *i, mc.x, mc.y );
       }
@@ -1276,7 +1276,7 @@ void  VehicleService :: FieldSearch :: testfield( const MapCoordinate& mc )
 
    if ( fld && bld ) {
       if ( fld->building == bld && beeline( mc.x, mc.y, startPos.x, startPos.y)== 0) {
-         for ( ContainerBase::Cargo::iterator i = bld->cargo.begin(); i != bld->cargo.end(); ++i )
+         for ( ContainerBase::Cargo::const_iterator i = bld->getCargo().begin(); i != bld->getCargo().end(); ++i )
             if ( *i )
                checkBuilding2Vehicle ( *i );
       }

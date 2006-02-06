@@ -50,7 +50,7 @@ MapRenderer::Icons MapRenderer::icons;
 class ContainerInfoLayer : public MapLayer {
       Surface& marker;
       bool hasCargo( const ContainerBase* c ) {
-         for ( ContainerBase::Cargo::const_iterator i = c->cargo.begin(); i != c->cargo.end(); ++i )
+         for ( ContainerBase::Cargo::const_iterator i = c->getCargo().begin(); i != c->getCargo().end(); ++i )
             if ( *i )
                return true;
          return false;
@@ -113,7 +113,7 @@ class PipeLayer : public MapLayer {
       ObjectType* buried_pipeline;
       ObjectType* pipeline;
       bool isPipe( const ContainerBase* c ) {
-         for ( ContainerBase::Cargo::const_iterator i = c->cargo.begin(); i != c->cargo.end(); ++i )
+         for ( ContainerBase::Cargo::const_iterator i = c->getCargo().begin(); i != c->getCargo().end(); ++i )
             if ( *i )
                return true;
          return false;
@@ -552,6 +552,12 @@ void MapDisplayPG::checkViewPosition()
 
    if ( offset.y & 1 )
       offset.y -= 1;
+
+   if ( offset.x < 0 )
+      offset.x = 0;
+
+   if ( offset.y < 0 )
+      offset.y = 0;
 }
 
 
@@ -1246,6 +1252,35 @@ MapCoordinate& MapDisplayPG::Cursor::pos()
       return mc;
    }
 }
+
+void MapDisplayPG::scrollMap( int dir )
+{
+   MapCoordinate oldOffset = offset;
+
+   const int stepWidth = 2;
+
+
+   if ( dir == 7 || dir == 0 || dir == 2 )
+      offset.y -= 2 * stepWidth;
+
+   if ( dir >= 1 && dir <= 3 )
+      offset.x += stepWidth;
+
+   if ( dir >= 3 && dir <= 5 )
+      offset.y += 2 * stepWidth;
+
+   if ( dir >= 5 && dir <= 7)
+      offset.x -= stepWidth;
+   
+   checkViewPosition();
+
+   if ( offset != oldOffset ) {
+      dirty = Map;
+      Update();
+      viewChanged();
+   }
+}
+
 
 void MapDisplayPG::moveCursor( int dir, int step )
 {

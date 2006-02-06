@@ -21,11 +21,10 @@
 
 #include "selectionwindow.h"
 #include "../graphics/surface.h"
+#include "../containerbase.h"
 
 class Vehicle;
 class ContainerBase;
-
-typedef vector<Vehicle*> StorageVector;
 
 class HighLightingManager
 {
@@ -43,7 +42,7 @@ class StoringPosition : public PG_Widget
 {
       static Surface clippingSurface;
       HighLightingManager& highlight;
-      StorageVector& storage;
+      const ContainerBase::Cargo& storage;
       int num;
       bool regular;
    protected:
@@ -56,7 +55,7 @@ class StoringPosition : public PG_Widget
       static const int spHeight = 64;
 
       static vector<StoringPosition*> setup( PG_Widget* parent, ContainerBase* container, HighLightingManager& highLightingManager, int& unitColumnCount );
-      StoringPosition( PG_Widget *parent, const PG_Point &pos, HighLightingManager& highLightingManager, StorageVector& storageVector, int number, bool regularPosition  );
+      StoringPosition( PG_Widget *parent, const PG_Point &pos, HighLightingManager& highLightingManager, const ContainerBase::Cargo& storageVector, int number, bool regularPosition  );
       void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst);
 };
 

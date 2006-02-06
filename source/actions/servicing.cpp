@@ -650,7 +650,7 @@ void ServiceTargetSearcher::startSearch()
    } else
       circularFieldIterator(source->getMap(), source->getPosition(), 1, 1, FieldIterationFunctor( this, &ServiceTargetSearcher::fieldChecker ) );
 
-      for ( ContainerBase::Cargo::iterator i = source->cargo.begin(); i != source->cargo.end(); ++i )
+      for ( ContainerBase::Cargo::const_iterator i = source->getCargo().begin(); i != source->getCargo().end(); ++i )
          if ( *i )
             check( *i );
 };

@@ -59,7 +59,7 @@ bool StoringPosition :: eventMouseButtonDown (const SDL_MouseButtonEvent *button
 }
 
 
-StoringPosition :: StoringPosition( PG_Widget *parent, const PG_Point &pos, HighLightingManager& highLightingManager, StorageVector& storageVector, int number, bool regularPosition  )
+StoringPosition :: StoringPosition( PG_Widget *parent, const PG_Point &pos, HighLightingManager& highLightingManager, const ContainerBase::Cargo& storageVector, int number, bool regularPosition  )
       : PG_Widget ( parent, PG_Rect( pos.x, pos.y, spWidth, spHeight)), highlight( highLightingManager ), storage( storageVector), num(number), regular(regularPosition)
 {
    if ( !clippingSurface.valid() )
@@ -111,11 +111,11 @@ vector<StoringPosition*> StoringPosition :: setup( PG_Widget* parent, ContainerB
       int x = 0;
       int y = 0;
       int posNum = container->baseType->maxLoadableUnits;
-      if ( container->cargo.size() > posNum )
-         posNum = container->cargo.size();
+      if ( container->getCargo().size() > posNum )
+         posNum = container->getCargo().size();
 
       for ( int i = 0; i < posNum; ++i ) {
-         storingPositionVector.push_back( new StoringPosition( parent, PG_Point( x, y), highLightingManager, container->cargo, i, container->baseType->maxLoadableUnits >= container->cargo.size() ));
+         storingPositionVector.push_back( new StoringPosition( parent, PG_Point( x, y), highLightingManager, container->getCargo(), i, container->baseType->maxLoadableUnits >= container->getCargo().size() ));
          x += StoringPosition::spWidth;
          if ( x + StoringPosition::spWidth >= parent->Width() - 20 ) {
             if ( !unitColumnCount )
@@ -198,9 +198,9 @@ void CargoWidget :: checkStoringPosition( int oldpos, int newpos )
 Vehicle* CargoWidget :: getMarkedUnit()
 {
    int pos = unitHighLight.getMark();
-   if ( !container || pos < 0 || pos >= container->cargo.size() )
+   if ( !container || pos < 0 || pos >= container->getCargo().size() )
       return NULL;
    else
-      return container->cargo[pos];
+      return container->getCargo()[pos];
 }
 

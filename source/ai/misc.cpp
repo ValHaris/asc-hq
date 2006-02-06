@@ -351,7 +351,7 @@ AI::AiResult  AI :: container ( ContainerBase* cb )
 
    // move idle units out
    std::vector<Vehicle*> idleUnits;
-   for ( vector<Vehicle*>::iterator j = cb->cargo.begin(); j != cb->cargo.end(); ++j ) {
+   for ( vector<Vehicle*>::const_iterator j = cb->getCargo().begin(); j != cb->getCargo().end(); ++j ) {
       Vehicle* veh = *j;
       if ( veh )
          if ( veh->canMove() )
@@ -433,7 +433,7 @@ AI::AiResult AI::buildings( int process )
       ContainerControls bc( *bi );
 
       int unitCounter = 0;
-      for ( vector<Vehicle*>::iterator j=  (*bi)->cargo.begin(); j != (*bi)->cargo.end(); j++ ) {
+      for ( vector<Vehicle*>::const_iterator j=  (*bi)->getCargo().begin(); j != (*bi)->getCargo().end(); j++ ) {
          Vehicle* veh = *j;
          if ( veh ) {
             ++unitCounter;

@@ -38,7 +38,7 @@ class VehicleCounterFactory: public SelectionItemFactory, public SigC::Object  {
 
       void calcCargoSummary( const ContainerBase* cb, Counter& summary )
       {
-         for ( ContainerBase::Cargo::const_iterator i = cb->cargo.begin(); i != cb->cargo.end(); ++i )
+         for ( ContainerBase::Cargo::const_iterator i = cb->getCargo().begin(); i != cb->getCargo().end(); ++i )
             if ( *i ) {
                calcCargoSummary( *i, summary );
                summary[ (*i)->typ] += 1;

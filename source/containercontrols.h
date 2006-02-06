@@ -73,6 +73,10 @@ class ContainerControls {
       bool moveUnitUpAvail( const Vehicle* veh );
       bool moveUnitUp( Vehicle* veh );
       
+      bool moveUnitDownAvail( const ContainerBase* outerContainer, const Vehicle* movingUnit );
+      vector<Vehicle*> moveUnitDownTargets( const ContainerBase* outerContainer, const Vehicle* movingUnit );
+      bool moveUnitDown( ContainerBase* outerContainer, Vehicle* veh, Vehicle* newTransport );
+      
 };
 
 #endif

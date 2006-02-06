@@ -40,7 +40,7 @@
 
 MainScreenWidget::MainScreenWidget( PG_Application& application )
               : PG_Widget(NULL, PG_Rect ( 0, 0, app.GetScreen()->w, app.GetScreen()->h ), false),
-              app ( application ) , lastMessageTime(0), messageLine(NULL)
+              app ( application ) , lastMessageTime(0), lastMouseScrollTime(0), messageLine(NULL)
 {
 }
 
@@ -96,8 +96,61 @@ bool MainScreenWidget :: idleHandler( )
    if ( ticker > lastMessageTime + 300 ) {
       displayMessage( "" );
       lastMessageTime = 0xfffffff;
-   }   
+   }
+
+   mouseScrollChecker();
    return true;
+}
+
+void MainScreenWidget :: mouseScrollChecker()
+{
+   if ( getPGApplication().isFullscreen() && IsMouseInside() ) {
+
+      if ( ticker > lastMouseScrollTime + 30 ) {
+         int x,y;
+         SDL_GetMouseState( &x, &y);
+   
+         if ( y <= 0 ) {
+            if ( x <= 0 ) {
+               mapDisplay->scrollMap( 7 );
+               return;
+            }
+
+            if ( x >= PG_Application::GetScreenWidth() - 1 ) {
+               mapDisplay->scrollMap( 1 );
+               return;
+            } 
+
+            mapDisplay->scrollMap(0);
+            return;
+         }
+
+         if ( y >= PG_Application::GetScreenHeight() - 1 ) {
+            if ( x <= 0 ) {
+               mapDisplay->scrollMap( 5 );
+               return;
+            }
+
+            if ( x >= PG_Application::GetScreenWidth() - 1 ) {
+               mapDisplay->scrollMap( 3 );
+               return;
+            }
+
+            mapDisplay->scrollMap(4);
+            return;
+         }
+
+         if ( x >= PG_Application::GetScreenWidth() - 1 ) {
+            mapDisplay->scrollMap( 2 );
+            return;
+         }
+
+         if ( x <= 0 ) {
+            mapDisplay->scrollMap( 6 );
+            return;
+         }
+      }
+   }
 }
 
 

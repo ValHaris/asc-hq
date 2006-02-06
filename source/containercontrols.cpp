@@ -93,7 +93,7 @@ Vehicle* ContainerControls::produceUnit( const Vehicletype* type, bool fillWithA
 
    container->getResource( type->productionCost, false );
 
-   container->cargo.push_back ( vehicle );
+   container->addToCargo( vehicle );
 
    if ( fillWithAmmo ) {
       /*
@@ -300,9 +300,9 @@ Resources ContainerControls :: calcDestructionOutput( Vehicle* veh )
    
     Resources res;
 
-    for (int i=0; i< veh->cargo.size(); i++)
-       if ( veh->cargo[i] )
-          res += calcDestructionOutput ( veh->cargo[i] );
+    for ( ContainerBase::Cargo::const_iterator i = veh->getCargo().begin(); i != veh->getCargo().end(); i++)
+       if ( *i )
+          res += calcDestructionOutput ( *i );
    
     res.material += veh->typ->productionCost.material * (100 - veh->damage/2 ) / 100 / output;
     return res;
@@ -459,4 +459,41 @@ bool ContainerControls :: moveUnitUp( Vehicle* veh )
       }
    }
    return false;
+}
+
+
+bool ContainerControls::moveUnitDownAvail( const ContainerBase* outerContainer, const Vehicle* movingUnit )
+{
+   return moveUnitDownTargets( outerContainer, movingUnit ).size() > 0;
+}
+
+vector<Vehicle*> ContainerControls::moveUnitDownTargets( const ContainerBase* outerContainer, const Vehicle* movingUnit )
+{
+   vector<Vehicle*> targets;
+   
+   if ( !outerContainer )
+      return targets;
+   
+   for ( ContainerBase::Cargo::const_iterator i = outerContainer->getCargo().begin(); i != outerContainer->getCargo().end(); ++i )
+      if ( *i != movingUnit && *i )
+         if ((*i)->vehicleFit ( movingUnit ))
+            targets.push_back( *i );
+
+   return targets;
+}
+
+
+bool ContainerControls::moveUnitDown( ContainerBase* outerContainer, Vehicle* veh, Vehicle* newTransport )
+{
+   if ( !outerContainer || !veh || !newTransport )
+      return false;
+
+   if ( !newTransport->vehicleFit( veh ))
+      return false;
+
+   outerContainer->removeUnitFromCargo( veh );
+   newTransport->addToCargo( veh );
+   
+   logtoreplayinfo ( rpl_moveUnitUpDown, outerContainer->getPosition().x, outerContainer->getPosition().y, 0, newTransport->networkid, veh->networkid );
+   return true;
 }

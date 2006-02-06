@@ -1513,6 +1513,7 @@ int main(int argc, char *argv[] )
    int xr = 1024;
    int yr = 768;
    // determining the graphics resolution
+   
    if ( CGameOptions::Instance()->xresolution != 1024 )
       xr = CGameOptions::Instance()->xresolution;
    if ( cl->x() != 1024 )
@@ -1523,7 +1524,7 @@ int main(int argc, char *argv[] )
    if ( cl->y() != 768 )
       yr = cl->y();
 
-
+   
    SoundSystem soundSystem ( CGameOptions::Instance()->sound.muteEffects, CGameOptions::Instance()->sound.muteMusic, cl->q() || CGameOptions::Instance()->sound.off );
 
    soundSystem.setMusicVolume ( CGameOptions::Instance()->sound.musicVolume );

@@ -158,7 +158,7 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( Vehicle* _eht )
       aip->threat.threat[l] = eht->typ->aiparam[ ai->getPlayerNum() ]->threat.threat[l];
 
    int value = eht->typ->aiparam[ ai->getPlayerNum() ]->getValue();
-   for ( ContainerBase::Cargo::iterator i = eht->cargo.begin(); i != eht->cargo.end(); ++i ) 
+   for ( ContainerBase::Cargo::const_iterator i = eht->getCargo().begin(); i != eht->getCargo().end(); ++i )
       if ( *i ) {
          if ( !(*i)->aiparam[ai->getPlayerNum()] ) {
             CalculateThreat_Vehicle ctv ( ai );
@@ -271,7 +271,7 @@ void  AI :: calculateThreat ( Building* bld, int player )
    // Since we have two different resource modes now, this calculation should be rewritten....
    int value = (bld->plus.energy / 10) + (bld->plus.fuel / 10) + (bld->plus.material / 10) + (bld->actstorage.energy / 20) + (bld->actstorage.fuel / 20) + (bld->actstorage.material / 20);
    
-   for ( ContainerBase::Cargo::iterator i = bld->cargo.begin(); i != bld->cargo.end(); ++i )
+   for ( ContainerBase::Cargo::const_iterator i = bld->getCargo().begin(); i != bld->getCargo().end(); ++i )
       if ( *i ) {
          if ( !(*i)->aiparam[ player ] )
             calculateThreat ( *i );

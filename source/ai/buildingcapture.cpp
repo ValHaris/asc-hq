@@ -114,7 +114,7 @@ void         SearchReconquerBuilding :: testfield(const MapCoordinate& mc)
             else
                if (mode >= 2)
                   if (eht->typ->maxLoadableUnits > 0)
-                     for ( ContainerBase::Cargo::iterator i = eht->cargo.begin(); i != eht->cargo.end(); ++i )
+                     for ( ContainerBase::Cargo::const_iterator i = eht->getCargo().begin(); i != eht->getCargo().end(); ++i )
                         if ( *i )
                            if ( canUnitCapture ( *i ))
                               if (eht->maxMovement() + (*i)->maxMovement() >= beeline(mc, startPos))
@@ -152,7 +152,7 @@ bool AI :: checkReConquer ( Building* bld, Vehicle* veh )
 
    if ( enemyNear && veh ) {
       float f = 0;
-      for ( ContainerBase::Cargo::iterator i = bld->cargo.begin(); i != bld->cargo.end(); ++i )
+      for ( ContainerBase::Cargo::const_iterator i = bld->getCargo().begin(); i != bld->getCargo().end(); ++i )
          if ( *i )
             if ( (*i)->getMovement() )
                f += (*i)->aiparam[ getPlayerNum()]->getValue();

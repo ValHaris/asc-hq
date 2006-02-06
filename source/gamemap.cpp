@@ -978,7 +978,7 @@ Vehicle* tmap :: getUnit ( Vehicle* eht, int nwid )
       if ( eht->networkid == nwid )
          return eht;
       else
-         for ( ContainerBase::Cargo::iterator i = eht->cargo.begin(); i != eht->cargo.end(); ++i )
+         for ( ContainerBase::Cargo::const_iterator i = eht->getCargo().begin(); i != eht->getCargo().end(); ++i )
             if ( *i ) 
                if ( (*i)->networkid == nwid )
                   return *i;

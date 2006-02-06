@@ -330,6 +330,13 @@ void ContainerBase::paintField ( const Surface& img, Surface& dest, SPoint pos, 
 }
 
 
+void ContainerBase :: clearCargo()
+{
+   cargo.clear();
+   cargoChanged();
+}
+
+
 void ContainerBase :: addToCargo( Vehicle* veh )
 {
    for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
@@ -339,14 +346,20 @@ void ContainerBase :: addToCargo( Vehicle* veh )
       }
 
    cargo.push_back( veh );
+   cargoChanged();
 }
 
 bool ContainerBase :: removeUnitFromCargo( Vehicle* veh, bool recursive )
 {
    if ( !veh )
       return false;
-   else
-      return removeUnitFromCargo( veh->networkid );
+   else {
+                     if ( removeUnitFromCargo( veh->networkid )) {
+         cargoChanged();
+         return true;
+      } else
+         return false;
+   }
 }
 
 bool ContainerBase :: removeUnitFromCargo( int nwid, bool recursive )
@@ -356,6 +369,7 @@ bool ContainerBase :: removeUnitFromCargo( int nwid, bool recursive )
 
          if ( (*i)->networkid == nwid ) {
             *i = NULL;
+            cargoChanged();
             return true;
          }
          if ( recursive )
@@ -510,8 +524,9 @@ TemporaryContainerStorage :: TemporaryContainerStorage ( ContainerBase* _cb, boo
 
 void TemporaryContainerStorage :: restore (  )
 {
-   if ( _storeCargo )
-      cb->cargo.clear();
+   if ( _storeCargo ) {
+      cb->clearCargo();
+   }
 
    tmemorystream stream ( &buf, tnstream::reading );
    cb->read ( stream );

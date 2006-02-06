@@ -2686,7 +2686,7 @@ void unitProductionLimitation(  )
 */
 
 
-
+#if 0
 
 
 
@@ -2785,6 +2785,7 @@ void tvehiclecargo :: finish ( int cancel )
 }
 
 
+#endif
 
 #if 0
 
@@ -3338,7 +3339,7 @@ Vehicletype* UnitTypeTransformation :: transformvehicletype ( const Vehicletype*
 
 void  UnitTypeTransformation ::transformvehicle ( Vehicle* veh, int unitsetnum, int translationnum )
 {
-   for ( ContainerBase::Cargo::iterator i = veh->cargo.begin(); i != veh->cargo.end(); ++i )
+   for ( ContainerBase::Cargo::const_iterator i = veh->getCargo().begin(); i != veh->getCargo().end(); ++i )
       if ( *i )
          transformvehicle ( *i, unitsetnum, translationnum );
 
@@ -3386,7 +3387,7 @@ void UnitTypeTransformation :: run ( void )
          if ( fld->vehicle )
             transformvehicle ( fld->vehicle, unitsetnum, translationsetnum );
          if ( fld->building && (fld->bdt & getTerrainBitType(cbbuildingentry) ).any() ) {
-            for ( ContainerBase::Cargo::iterator i = fld->building->cargo.begin(); i != fld->building->cargo.end(); ++i )
+            for ( ContainerBase::Cargo::const_iterator i = fld->building->getCargo().begin(); i != fld->building->getCargo().end(); ++i )
                if ( *i )
                   transformvehicle ( *i, unitsetnum, translationsetnum );
                   

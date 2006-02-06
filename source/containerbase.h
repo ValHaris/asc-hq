@@ -67,7 +67,15 @@ class ContainerBase {
     //@{
 
       typedef vector<Vehicle*> Cargo;
+   protected:  
       Cargo cargo;
+   public:
+      const Cargo& getCargo() const { return cargo; };
+
+      //! removes ALL units from cargo
+      void clearCargo();
+
+      SigC::Signal0<void> cargoChanged;
       
       void addToCargo( Vehicle* veh );
       
