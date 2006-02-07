@@ -26,7 +26,7 @@
 #ifndef replaymapdisplayH
 #define replaymapdisplayH
 #include "typen.h"
-#include "mapdisplay.h"
+#include "mapdisplayinterface.h"
 
 class ReplayMapDisplay : public MapDisplayInterface {
            MapDisplayInterface* mapDisplay;
@@ -50,6 +50,7 @@ class ReplayMapDisplay : public MapDisplayInterface {
            void setCursorDelay  ( int time ) { cursorDelay = time; };
            void updateDashboard() { mapDisplay->updateDashboard(); };
            void repaintDisplay () { mapDisplay->repaintDisplay(); };
+           void setTempView( bool view )  { mapDisplay->setTempView( view ); };
 
     };
 

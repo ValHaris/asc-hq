@@ -135,8 +135,8 @@ void AI::checkKeys ( void )
       tkey k = r_key();
       if ( k == ct_esc ) {
          mapDisplay = NULL;
-         tlockdispspfld a;
-         repaintDisplay();
+         // tlockdispspfld a;
+         // repaintDisplay();
       }
    }
 }
@@ -159,7 +159,9 @@ void AI:: run ( bool benchMark )
    _vision = visible_ago;
 
    int setupTime = ticker;
-   tempsvisible = false;
+   if ( mapDisplay ) 
+      mapDisplay->setTempView( false );
+   
    setup();
 
 //   tmap::Weather weatherBackup = getMap()->weather;
@@ -171,7 +173,10 @@ void AI:: run ( bool benchMark )
       originalUnitDistribution = calcUnitDistribution();
 
    calcReconPositions();
-   tempsvisible = true;
+
+   if ( mapDisplay )
+      mapDisplay->setTempView( true );
+   
    setupTime = ticker-setupTime;
 
    int serviceTime = ticker;

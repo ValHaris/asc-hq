@@ -352,13 +352,21 @@ class CargoDialog : public Panel
       
    public:
 
-
       CargoDialog (PG_Widget *parent, ContainerBase* cb );
 
       void addAvailableSubwin( SubWindow* w )
       {
          activesubwindows.push_back( w );
       };
+      
+
+      Vehicle* getMarkedUnit()
+      {
+         if ( cargoWidget )
+            return cargoWidget->getMarkedUnit();
+         else
+            return NULL;
+      }
       
       void cargoChanged()
       {
@@ -730,6 +738,98 @@ class WindPowerWindow : public SubWindow {
          cargoDialog->setLabelText( "CurrentPower", plus.energy, widget );
       }
 };
+
+class NetControlWindow : public SubWindow {
+
+   private:
+
+      bool click( PG_Button* b, int x, int y )
+      {
+         return true;
+      }
+
+      PG_Button* findButton( int x, int y )
+      {
+         char c = 'a' + x;
+         ASCString buttonName = "Button" + ASCString::toString(y) + c;
+         return dynamic_cast<PG_Button*>( widget->FindChild( buttonName, true ) );
+      }
+      
+   public:
+      bool available( CargoDialog* cd )
+      {
+         return dynamic_cast<Building*>(cd->getContainer()) != NULL;
+      };
+      
+      ASCString getASCTXTname()
+      {
+         return "netcontrol";
+      };
+      
+      void registerChilds( CargoDialog* cd )
+      {
+         SubWindow::registerChilds( cd );
+
+         if ( widget ) {
+            for ( int x = 0; x < 3; ++x ) {
+               for ( int y = 0; y < 4; ++y ) {
+                  PG_Button* b = findButton( x, y );
+                  if ( b ) {
+                     b->sigClick.connect( SigC::bind( SigC::bind( SigC::slot( *this, &NetControlWindow::click ), x), y));
+                     if( y >= 2)
+                        b->SetToggle( true );
+                  }
+               
+               }
+            }
+            
+         }
+      }
+      
+      void update()
+      {
+         
+      }
+};
+
+
+class CargoInfoWindow : public SubWindow {
+
+   public:
+      bool available( CargoDialog* cd )
+      {
+         return true;
+      };
+      
+      ASCString getASCTXTname()
+      {
+         return "cargoinfo";
+      };
+      
+
+      void registerChilds( CargoDialog* cd )
+      {
+         SubWindow::registerChilds( cd );
+
+      }
+      
+      void update()
+      {
+         ASCString s;
+         s.format( "%d / %d", container()->cargoWeight(), container()->baseType->maxLoadableWeight );
+         cargoDialog->setLabelText( "CargoUsage", s, widget );
+
+         
+         if ( cargoDialog->getMarkedUnit() )
+            cargoDialog->setLabelText( "CurrentCargo", cargoDialog->getMarkedUnit()->weight(), widget );
+         else
+            cargoDialog->setLabelText( "CurrentCargo", "-" , widget );
+            
+         if ( container()->baseType->maxLoadableWeight > 0 )
+            cargoDialog->setBargraphValue ( "LoadingMeter2", float( container()->cargoWeight()) / container()->baseType->maxLoadableWeight, widget );
+      }
+};
+
 
 class DamageControlWindow : public SubWindow {
    public:
@@ -1348,10 +1448,16 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
 
    registerGuiFunctions( guiIconHandler );
 
+
+
+   CargoInfoWindow* ciw = new CargoInfoWindow;
+         
+   subwindows.push_back( ciw );
    subwindows.push_back( new SolarPowerWindow );
    subwindows.push_back( new WindPowerWindow );
    subwindows.push_back( new MiningWindow );
    subwindows.push_back( new ResourceInfoWindow );
+   // subwindows.push_back( new NetControlWindow );
 
    damageControlWindow = new DamageControlWindow;
    subwindows.push_back( damageControlWindow );
@@ -1396,6 +1502,7 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
    if ( unitScrollArea ) {
       cargoWidget = new CargoWidget( unitScrollArea, PG_Rect( 1, 1, unitScrollArea->Width() -2 , unitScrollArea->Height() -2 ), cb );
       cargoWidget->unitMarked.connect( SigC::slot( *this, &CargoDialog::checkStoringPosition ));
+      cargoWidget->unitMarked.connect( SigC::hide<Vehicle*>( SigC::slot( *ciw, &CargoInfoWindow::update )));
 
       container->cargoChanged.connect( SigC::slot( *cargoWidget, &CargoWidget::redrawAll ));
       

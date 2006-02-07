@@ -42,7 +42,7 @@
 #include "errors.h"
 #include "itemrepository.h"
 #include "messagedlg.h"
-#include "mapdisplay.h"
+#include "mapdisplayinterface.h"
 
 #ifdef sgmain
 # include "gamedlg.h"

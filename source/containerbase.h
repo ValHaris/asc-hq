@@ -131,6 +131,8 @@ class ContainerBase {
       //! returns the player this vehicle/building belongs to
       int getOwner() const { return color >> 3; };
       
+      virtual void convert ( int player ) = 0;
+      
 
 
       virtual void write ( tnstream& stream, bool includeLoadedUnits = true ) = 0;

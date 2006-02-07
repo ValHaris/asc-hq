@@ -19,7 +19,7 @@
 #include "unitctrl.h"
 #include "gamemap.h"
 #include "replay.h"
-#include "mapdisplay.h"
+#include "mapdisplayinterface.h"
 
 tmap* ContainerControls::getMap()
 {

@@ -50,7 +50,7 @@ class  Building : public ContainerBase {
     //! the building's name
     ASCString    name;
 
-    //! a bitmapped variable containing the status of the resource-net connection. \see execnetcontrol()
+    //! a bitmapped variable containing the status of the resource-net connection. \see execnetcontrol() \deprecated
     int          netcontrol;
 
     //! bitmapped: are there events that are triggered by actions affecting this building

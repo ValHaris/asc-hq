@@ -104,6 +104,14 @@ void Building :: convert ( int player )
       delete this;
       return;
    }
+
+   int oldnetcontrol = netcontrol;
+   netcontrol = cnet_stopenergyinput + (cnet_stopenergyinput << 1) + (cnet_stopenergyinput << 2);
+   Resources put = putResource( actstorage, false );
+   actstorage -= put;
+
+   netcontrol = oldnetcontrol;
+
    #endif
 
    int oldcol = getOwner();
@@ -533,7 +541,10 @@ void Building :: readData ( tnstream& stream, int version )
 
     visible = stream.readChar();
     damage = stream.readChar();
+    
     netcontrol = stream.readInt();
+    netcontrol = 0;
+    
     name = stream.readString ();
 
     if ( version <= -2 )

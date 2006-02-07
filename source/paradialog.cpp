@@ -1011,9 +1011,9 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
          PG_Button* sw = new PG_Button( parent, r, style );
 
          ASCString text;
-         pc.addString( "text", text );
+         pc.addString( "text", text, "" );
          
-         if ( !text.empty() )
+         // if ( !text.empty() )
             sw->SetText( text );
          
          
@@ -1212,17 +1212,23 @@ void ASCGUI_Window::show ( const ASCString& widgetName, PG_Widget* parent )
 
 
 
-void ASCGUI_Window::setBargraphValue( const ASCString& widgetName, float fraction )
+void ASCGUI_Window::setBargraphValue( const ASCString& widgetName, float fraction, PG_Widget* parent )
 {
-   BarGraphWidget* bgw = dynamic_cast<BarGraphWidget*>( FindChild( widgetName, true ) );
+   if ( !parent )
+      parent = this;
+
+   BarGraphWidget* bgw = dynamic_cast<BarGraphWidget*>( parent->FindChild( widgetName, true ) );
    if ( bgw )
       bgw->setFraction( fraction );
 }
 
 
-void ASCGUI_Window::setBarGraphColor( const ASCString& widgetName, PG_Color color )
+void ASCGUI_Window::setBarGraphColor( const ASCString& widgetName, PG_Color color, PG_Widget* parent )
 {
-   BarGraphWidget* bgw = dynamic_cast<BarGraphWidget*>( FindChild( widgetName, true ) );
+   if ( !parent )
+      parent = this;
+
+   BarGraphWidget* bgw = dynamic_cast<BarGraphWidget*>( parent->FindChild( widgetName, true ) );
    if ( bgw )
       bgw->setColor( color );
 }

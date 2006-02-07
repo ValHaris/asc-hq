@@ -46,6 +46,8 @@
 
 MapRenderer::Icons MapRenderer::icons;
 
+bool tempsvisible = true;
+
 
 class ContainerInfoLayer : public MapLayer {
       Surface& marker;
@@ -1518,6 +1520,7 @@ class PG_MapDisplay : public MapDisplayInterface {
            void removeActionCursor ( void ) {};
            void updateDashboard ();
            void repaintDisplay ();
+           void setTempView( bool view ) { tempsvisible = view; };
     };
 
 
@@ -1640,8 +1643,6 @@ tlockdispspfld :: ~tlockdispspfld ()
 {
    lockdisplaymap --;
 }
-
-bool tempsvisible = true;
 
 
 #if 0

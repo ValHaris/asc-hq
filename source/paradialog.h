@@ -196,8 +196,8 @@ class ASCGUI_Window : public  PG_Window {
       void setImage ( const ASCString& widgetName, SDL_Surface* image = NULL, PG_Widget* parent = NULL );
       void hide( const ASCString& widgetName, PG_Widget* parent = NULL );
       void show( const ASCString& widgetName, PG_Widget* parent = NULL );
-      void setBargraphValue( const ASCString& widgetName, float fraction );
-      void setBarGraphColor( const ASCString& widgetName, PG_Color color );
+      void setBargraphValue( const ASCString& widgetName, float fraction, PG_Widget* parent = NULL );
+      void setBarGraphColor( const ASCString& widgetName, PG_Color color, PG_Widget* parent = NULL );
       void rename( const ASCString& widgetName, const ASCString& newname, PG_Widget* parent = NULL );
       void setWidgetTransparency ( const ASCString& widgetName, int transparency, PG_Widget* parent = NULL );
    protected:

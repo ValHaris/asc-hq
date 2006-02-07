@@ -24,7 +24,6 @@
 
 #include "../containerbase.h"
 #include "../vehicletype.h"
-#include "../paradialog.h"
 
 
 class ResourceWatch {
