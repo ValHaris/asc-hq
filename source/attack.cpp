@@ -43,13 +43,6 @@
 #include "graphics/drawing.h"
 
 #include "mapalgorithms.h"
-#include "paradialog.h"
-#define USE_COLOR_CONSTANTS
-#include "pgcolors.h"
-#include "iconrepository.h"
-#ifdef sgmain
- #include "soundList.h"
-#endif
 
 
 bool  AttackFormula :: checkHemming ( Vehicle*     d_eht,  int     direc )
@@ -239,229 +232,6 @@ void tfight :: calc ( void )
 
 
 
-
-#define maxdefenseshown 2
-#define maxattackshown 2
-
-void tunitattacksunit::calcdisplay( int ad, int dd ) {
-  #ifdef sgmain
-  SoundList::getInstance().playSound ( SoundList::shooting, _attackingunit->getWeapon(av.weapnum)->getScalarWeaponType(), false, _attackingunit->getWeapon(av.weapnum)->soundLabel );
-  #endif
-  tfight::calcdisplay(ad,dd);
-  #ifdef sgmain
-   if ( av.damage >= 100  )
-      SoundList::getInstance().playSound( SoundList::unitExplodes , 0, false, _attackingunit->typ->killSoundLabel );
-   if ( dv.damage >= 100 )
-      SoundList::getInstance().playSound( SoundList::unitExplodes , 0, false, _attackedunit->typ->killSoundLabel );
-
-
-  #endif
-}
-
-
-class AttackPanel : public Panel {
-       tfight& engine;
-       int attacker_exp;
-       int defender_exp;
-     public:
-        AttackPanel ( tfight& engine_ ) ;
-        void setBarGraphValue( const ASCString& widgetName, float fraction ) { Panel::setBargraphValue( widgetName, fraction ); };
-      void setLabelText ( const ASCString& widgetName, int i ) { Panel::setLabelText ( widgetName, i ); };
-      void setLabelText ( const ASCString& widgetName, const ASCString& i ) { Panel::setLabelText ( widgetName, i ); };
-      void dispValue ( const ASCString& name, float value, float maxvalue, PG_Color color );
-      void setBarGraphColor( const ASCString& widgetName, PG_Color color ) { Panel::setBarGraphColor( widgetName, color ); };
-      void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
-   private:
-      void registerSpecialDisplay( const ASCString& name );
-};
-
-
-
-AttackPanel::AttackPanel ( tfight& engine_ ) : Panel( PG_Application::GetWidgetById(ASC_PG_App::mainScreenID), PG_Rect(0,0,170,200), "Attack" ), engine( engine_ )
-{
-   registerSpecialDisplay( "attacker_unit_pic" );
-   registerSpecialDisplay( "defender_unit_pic" );
-   registerSpecialDisplay( "attacker_unitexp" );
-   registerSpecialDisplay( "defender_unitexp" );
-   registerSpecialDisplay( "attacker_level" );
-   registerSpecialDisplay( "defender_level" );
-   registerSpecialDisplay( "attacker_weaponsymbol" );
-   registerSpecialDisplay( "defender_weaponsymbol" );
-   attacker_exp = engine.av.experience;
-   defender_exp = engine.dv.experience;
-}
-
-
-void AttackPanel::registerSpecialDisplay( const ASCString& name )
-{
-   SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( name, true ) );
-   if ( sdw )
-     sdw->display.connect( SigC::slot( *this, &AttackPanel::painter ));
-}
-
-
-void AttackPanel::painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst)
-{
-   Surface s = Surface::Wrap( PG_Application::GetScreen() );
-
-   if ( name  == "attacker_unit_pic" ) {
-      engine.paintAttacker( s, dst );
-      return;
-   }
-   if ( name  == "defender_unit_pic" ) {
-      engine.paintTarget( s, dst );
-      return;
-   }
-   if ( name  == "attacker_unitexp" ) {
-      s.Blit( IconRepository::getIcon("experience" + ASCString::toString(attacker_exp) + ".png"), SPoint(dst.x, dst.y) );
-      return;
-   }
-   if ( name  == "defender_unitexp" ) {
-      s.Blit( IconRepository::getIcon("experience" + ASCString::toString(defender_exp) + ".png"), SPoint(dst.x, dst.y) );
-      return;
-   }
-   if ( name  == "attacker_level" && engine.av.height ) {
-      s.Blit( IconRepository::getIcon("height-a" + ASCString::toString(log2(engine.av.height)) + ".png"), SPoint(dst.x, dst.y) );
-      return;
-   }
-   if ( name  == "defender_level" && engine.dv.height ) {
-      s.Blit( IconRepository::getIcon("height-a" + ASCString::toString(log2(engine.dv.height)) + ".png"), SPoint(dst.x, dst.y) );
-      return;
-   }
-
-   if ( name  == "attacker_weaponsymbol" && engine.av.weapontype >= 0  ) {
-      s.Blit( IconRepository::getIcon(SingleWeapon::getIconFileName( engine.av.weapontype ) + "-small.png"), SPoint(dst.x, dst.y) );
-      return;
-   }
-   if ( name  == "defender_weaponsymbol" && engine.dv.weapontype >= 0  ) {
-      s.Blit( IconRepository::getIcon(SingleWeapon::getIconFileName( engine.dv.weapontype ) + "-small.png"), SPoint(dst.x, dst.y) );
-      return;
-   }
-
-}
-
-
-void AttackPanel::dispValue ( const ASCString& name, float value, float maxvalue, PG_Color color )
-{
-   if ( value > 0 ) {
-      setBarGraphColor( name + "bar", color );
-      if ( value > maxvalue )
-         setBarGraphValue( name + "bar", 1 );
-      else
-         setBarGraphValue( name + "bar", value / maxvalue );
-   } else {
-      setBarGraphColor( name + "bar", PG_Colormap::yellow );
-      if ( value < -maxvalue )
-         setBarGraphValue( name + "bar", 1 );
-      else
-         setBarGraphValue( name + "bar", -value / maxvalue );
-   }
-   ASCString s;
-   s.format ( "%d", int(value * 100) );
-   setLabelText( name, s );
-}
-
-
-void tfight :: calcdisplay ( int ad, int dd )
-{
-
-
-   auto_ptr<AttackPanel> at ( new AttackPanel(*this));
-
-   float avd = float( 100 - av.damage )/100;
-   float dvd = float( 100 - dv.damage )/100;
-
-   PG_Color attackingColor = lighten_Color( actmap->player[getAttackingPlayer()].getColor(), 22 );
-   PG_Color defendingColor = lighten_Color( actmap->player[getDefendingPlayer()].getColor(), 22 );
-
-   at->setBarGraphValue( "attacker_unitstatusbar", avd );
-   at->setBarGraphColor( "attacker_unitstatusbar", attackingColor );
-
-   at->setBarGraphValue( "defender_unitstatusbar", dvd );
-   at->setBarGraphColor( "defender_unitstatusbar", defendingColor );
-
-   at->setLabelText( "attacker_unitstatus", 100 - av.damage );
-   at->setLabelText( "defender_unitstatus", 100 - dv.damage );
-
-
-
-   at->setBarGraphValue( "attacker_hemmingbar", (dv.hemming -1) / 1.4 );
-   at->setBarGraphColor( "attacker_hemmingbar", attackingColor );
-   at->setBarGraphValue( "defender_hemmingbar", (av.hemming -1) / 1.4 );
-   at->setBarGraphColor( "defender_hemmingbar", defendingColor );
-
-   at->setLabelText( "defender_hemming", "-" );
-   at->setLabelText( "attacker_hemming", int((dv.hemming-1) * 100 ));
-
-   at->dispValue( "attacker_attackbonus", strength_attackbonus(av.attackbonus), maxattackshown, attackingColor );
-   at->dispValue( "defender_attackbonus", strength_attackbonus(dv.attackbonus), maxattackshown, defendingColor );
-
-
-   at->dispValue( "attacker_defencebonus", defense_defensebonus(av.defensebonus), maxattackshown, attackingColor );
-   at->dispValue( "defender_defencebonus", defense_defensebonus(dv.defensebonus), maxattackshown, defendingColor );
-
-
-   int t = ticker;
-   calc();
-   at->Show();
-
-
-   int time1 = CGameOptions::Instance()->attackspeed1;
-   if ( time1 <= 0 )
-      time1 = 30;
-
-   int time2 = CGameOptions::Instance()->attackspeed2;
-   if ( time2 <= 0 )
-      time2 = 50;
-
-   int time3 = CGameOptions::Instance()->attackspeed3;
-   if ( time3 <= 0 )
-      time3 = 30;
-
-   do {
-      releasetimeslice();
-   } while ( t + time1 > ticker ); /* enddo */
-
-
-
-   if ( ad != -1 )
-      av.damage = ad;
-
-   if ( dd != -1 )
-      dv.damage = dd;
-
-
-   float avd2 = float( 100 - av.damage )/100;
-   float dvd2 = float( 100 - dv.damage )/100;
-
-   int starttime = ticker;
-   while ( ticker < starttime + time2 ) {
-      float p = float(ticker - starttime ) / time2;
-
-      at->setBarGraphValue( "attacker_unitstatusbar", avd + (avd2-avd) * p );
-      at->setBarGraphValue( "defender_unitstatusbar", dvd + (dvd2-dvd) * p );
-
-      at->setLabelText( "attacker_unitstatus", int( 100.0 * (avd + (avd2-avd) * p )) );
-      at->setLabelText( "defender_unitstatus", int( 100.0 * (dvd + (dvd2-dvd) * p )) );
-      at->Update();
-   }
-
-   t = ticker;
-   do {
-      releasetimeslice();
-   } while ( t + time3 > ticker ); /* enddo */
-
-
-}
-
-
-void UnitAttacksSomething::paintAttacker( Surface& surface, const SDL_Rect &dst )
-{
-   _attackingunit->typ->paint( surface, SPoint( dst.x, dst.y ), _attackingunit->getOwner() );
-}
-
-
-
 tunitattacksunit :: tunitattacksunit ( Vehicle* &attackingunit, Vehicle* &attackedunit, bool respond, int weapon )
 {
    setup ( attackingunit, attackedunit, respond, weapon );
@@ -624,13 +394,6 @@ void tunitattacksunit :: setresult ( void )
 }
 
 
-void tunitattacksunit::paintTarget( Surface& surface, const SDL_Rect &dst )
-{
-   _attackedunit->paint( surface, SPoint( dst.x, dst.y ));
-}
-
-
-
 
 
 
@@ -718,18 +481,6 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
 }
 
 
-void tunitattacksbuilding::calcdisplay( int ad, int dd ) {
-  #ifdef sgmain
-   SoundList::getInstance().playSound( SoundList::shooting  , _attackingunit->getWeapon(av.weapnum)->getScalarWeaponType(), false, _attackingunit->getWeapon(av.weapnum)->soundLabel );
-  #endif
-  tfight::calcdisplay(ad,dd);
-  #ifdef sgmain
-   if ( dv.damage >= 100 )
-      SoundList::getInstance().playSound( SoundList::buildingCollapses );
-  #endif
-}
-
-
 void tunitattacksbuilding :: setresult ( void )
 {
    // _attackingunit->experience = av.experience;
@@ -755,12 +506,6 @@ void tunitattacksbuilding :: setresult ( void )
 
    actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
 }
-
-void tunitattacksbuilding :: paintTarget( Surface& surface, const SDL_Rect &dst )
-{
-   _attackedbuilding->paintSingleField( surface, SPoint(dst.x, dst.y), _attackedbuilding->getLocalCoordinate(MapCoordinate(_x,_y)));
-}
-
 
 
 
@@ -836,17 +581,6 @@ void tmineattacksunit :: setup ( pfield mineposition, int minenum, Vehicle* &att
    dv.height = attackedunit->height;
 }
 
-void tmineattacksunit::calcdisplay( int ad, int dd ) {
-  #ifdef sgmain
-  SoundList::getInstance().playSound( SoundList::shooting , 1 );
-  #endif
-  tfight::calcdisplay(ad,dd);
-  #ifdef sgmain
-   if ( dv.damage >= 100 )
-      SoundList::getInstance().playSound( SoundList::unitExplodes , 0, false, _attackedunit->typ->killSoundLabel );
-  #endif
-}
-
 
 void tmineattacksunit :: setresult ( void )
 {
@@ -870,26 +604,13 @@ void tmineattacksunit :: setresult ( void )
 }
 
 
-void tmineattacksunit :: paintAttacker( Surface& surface, const SDL_Rect &dst )
+Mine* tmineattacksunit :: getFirstMine()
 {
-  #if 0
-   if ( _minenum == -1 ) {
-      tfield::MineContainer::iterator m = _mineposition->mines.begin();
-      while ( ! m->attacksunit  ( _attackedunit ))
-         m++;
-
-      putspriteimage    ( xa, ya, getmineadress ( m->type ));
-   } else
-      putspriteimage    ( xa, ya, getmineadress ( _mineposition->getMine(_minenum).type ));
-
-  #endif
+   if ( _mineposition && _mineposition->mines.size() )
+      return &( * _mineposition->mines.begin() );
+   else
+      return NULL;
 }
-
-void tmineattacksunit :: paintTarget( Surface& surface, const SDL_Rect &dst )
-{
-   _attackedunit->typ->paint( surface, SPoint( dst.x, dst.y ), _attackedunit->getOwner() );
-}
-
 
 
 
@@ -978,13 +699,6 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
    dv.height = 0;
 }
 
-void tunitattacksobject::calcdisplay( int ad, int dd ) {
-  #ifdef sgmain
-  SoundList::getInstance().playSound ( SoundList::shooting, _attackingunit->getWeapon(av.weapnum)->getScalarWeaponType(), false, _attackingunit->getWeapon(av.weapnum)->soundLabel );
-  #endif
-  tfight::calcdisplay(ad,dd);
-}
-
 
 void tunitattacksobject :: setresult ( void )
 {
@@ -1011,14 +725,6 @@ void tunitattacksobject :: setresult ( void )
    actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
 
 }
-
-
-
-void tunitattacksobject :: paintTarget( Surface& surface, const SDL_Rect &dst )
-{
-   _obji->typ->display ( surface, SPoint( dst.x, dst.y ) );
-}
-
 
 
 

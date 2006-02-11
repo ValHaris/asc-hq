@@ -859,7 +859,8 @@ void trunreplay :: execnextreplaymove ( void )
                                 battle.dv.damage = dd1;
                                 if ( attackvisible ) {
                                    displayActionCursor ( x1, y1, x2, y2, 0 );
-                                   battle.calcdisplay ( );
+                                   ReplayMapDisplay rmd( &getDefaultMapDisplay() );
+                                   rmd.showBattle( battle );
                                    removeActionCursor();
                                 } else {
                                    battle.calc ();
@@ -880,7 +881,8 @@ void trunreplay :: execnextreplaymove ( void )
                                 battle.dv.damage = dd1;
                                 if ( attackvisible ) {
                                    displayActionCursor ( x1, y1, x2, y2, 0 );
-                                   battle.calcdisplay (  );
+                                   ReplayMapDisplay rmd( &getDefaultMapDisplay() );
+                                   rmd.showBattle( battle );
                                    removeActionCursor();
                                 } else {
                                    battle.calc ();
@@ -899,7 +901,8 @@ void trunreplay :: execnextreplaymove ( void )
                                 tunitattacksobject battle ( fld->vehicle, x2, y2, wpnum );
                                 if ( attackvisible ) {
                                    displayActionCursor ( x1, y1, x2, y2, 0 );
-                                   battle.calcdisplay (  );
+                                   ReplayMapDisplay rmd( &getDefaultMapDisplay() );
+                                   rmd.showBattle( battle );
                                    removeActionCursor();
                                 } else {
                                    battle.calc ();

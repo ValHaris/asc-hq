@@ -48,7 +48,7 @@ class MapDisplay : public MapDisplayInterface {
            void removeActionCursor ( void ) {};
            void updateDashboard ();
            void repaintDisplay ();
-    };
+};
 
 class tlockdispspfld {
       public:

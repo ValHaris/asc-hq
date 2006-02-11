@@ -26,6 +26,11 @@
 #include "editmapparam.h"
 #include "fileselector.h"
 
+#include <pgpropertyeditor.h>
+#include <pgpropertyfield_integer.h>
+#include <pgpropertyfield_checkbox.h>
+
+
 #include "../textfileparser.h"
 #include "../textfile_evaluation.h"
 
@@ -90,7 +95,7 @@ GameParameterEditorWidget :: GameParameterEditorWidget ( tmap* gamemap, PG_Widge
 {
    SetTransparency(255);
    
-   propertyEditor = new PropertyEditorWidget( this, PG_Rect( 0,0, rect.Width() - 110, rect.Height() ), "PropertyEditor", 70 );
+   propertyEditor = new PG_PropertyEditor( this, PG_Rect( 0,0, rect.Width() - 110, rect.Height() ), "PropertyEditor", 70 );
    
    PG_Button* load = new PG_Button( this, PG_Rect( rect.Width() - 100, 0,  100, 30 ), "Load" );
    load->sigClick.connect( SigC::slot( *this, &GameParameterEditorWidget::LoadParameter ));
@@ -106,9 +111,9 @@ GameParameterEditorWidget :: GameParameterEditorWidget ( tmap* gamemap, PG_Widge
       values[i] = actmap->getgameparameter ( GameParameter(i) );
       if ( !gameParameterSettings[i].legacy ) {
          if ( gameParameterSettings[i].minValue == 0 && gameParameterSettings[i].maxValue == 1 ) {
-            new BoolProperty<int>( propertyEditor , gameParameterSettings[i].longName, &values[i] );
+            new PG_PropertyField_Checkbox<int>( propertyEditor , gameParameterSettings[i].longName, &values[i] );
          } else {
-            IntegerProperty<int>* ip = new IntegerProperty<int>( propertyEditor , gameParameterSettings[i].longName, &values[i] );
+            PG_PropertyField_Integer<int>* ip = new PG_PropertyField_Integer<int>( propertyEditor , gameParameterSettings[i].longName, &values[i] );
             ip->SetRange( gameParameterSettings[i].minValue, gameParameterSettings[i].maxValue );
          }
       }   

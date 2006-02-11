@@ -101,7 +101,7 @@ int  treactionfirereplay :: checkfield ( const MapCoordinate3D& pos, Vehicle* &e
              battle.av.damage = rpli->ad1;
              battle.dv.damage = rpli->dd1;
              if ( md && attackvisible  )
-                battle.calcdisplay ( rpli->ad2, rpli->dd2 );
+                md->showBattle( battle ); // .calcdisplay ( rpli->ad2, rpli->dd2 );
              else {
                 battle.calc ();
                 battle.av.damage = rpli->ad2;
@@ -337,7 +337,7 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, Veh
                      dd1 = battle.dv.damage;
 
                      if ( md && visibility)
-                        battle.calcdisplay ();
+                        md->showBattle( battle ); 
                      else
                         battle.calc();
 

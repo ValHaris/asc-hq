@@ -41,6 +41,9 @@
 #include "loadpcx.h"
 #include "iconrepository.h"
 
+#ifndef karteneditor
+#include "dialogs/attackpanel.h"
+#endif
 
 #define debugmapdisplay
 
@@ -1521,7 +1524,8 @@ class PG_MapDisplay : public MapDisplayInterface {
            void updateDashboard ();
            void repaintDisplay ();
            void setTempView( bool view ) { tempsvisible = view; };
-    };
+           void showBattle( tfight& battle );
+};
 
 
 
@@ -1571,6 +1575,14 @@ int  PG_MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const Ma
 
    return result;
 }
+
+void PG_MapDisplay :: showBattle( tfight& battle )
+{
+#ifndef karteneditor
+   showAttackAnimation( battle, actmap );
+#endif
+}
+
 
 void PG_MapDisplay :: displayMap ( void )
 {

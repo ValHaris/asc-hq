@@ -226,7 +226,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
                tmineattacksunit battle ( dest, -1, vehicle );
 
                if ( mapDisplay && fieldvisiblenow ( dest, actmap->playerView) || dest->mineowner() == actmap->playerView )
-                  battle.calcdisplay ();
+                  mapDisplay->showBattle( battle );
                else
                   battle.calc();
 
@@ -810,7 +810,7 @@ int VehicleAttack :: execute ( Vehicle* veh, int x, int y, int step, int _kamika
       int shown;
       if ( mapDisplay && fieldvisiblenow ( getfield ( x, y ), actmap->playerView) ) {
          mapDisplay->displayActionCursor ( vehicle->xpos, vehicle->ypos, x, y );
-         battle->calcdisplay ();
+         mapDisplay->showBattle( *battle );
          mapDisplay->removeActionCursor ( );
          shown = 1;
       } else {

@@ -36,7 +36,6 @@
 #include "graphics/blitter.h"
 #include "overviewmapimage.h"
 #include "iconrepository.h"
-#include "paradialog.h"
 
 
 

@@ -24,7 +24,7 @@
 /*!
    \mainpage 
 
-   \section a short walk through the source
+   \section A short walk through the source
  
    THE central class of ASC is #tmap in gamemap.h . 
    It is the anchor where nearly all elements of ASC are chained to. The global 
@@ -55,6 +55,10 @@
    On the field can be several instances of Object. Objects are another central class of 
    ASC. Roads, pipleines, trenches and woods are examples of objects. #Vehicle and #Building
    are NOT objects.
+
+   \section The basic design of ASC
+   
+   <p><img src="../ClassDiagram1.png">
  
 */
 
@@ -128,6 +132,7 @@
 #include "dialogs/soundsettings.h"
 #include "dialogs/alliancesetup.h"
 #include "dialogs/unitcounting.h"
+#include "dialogs/editgameoptions.h"
 #include "stdio-errorhandler.h"
 
 #ifdef WIN32
@@ -815,10 +820,6 @@ void execuseraction ( tuseractions action )
          }
          break;
 
-      case ua_gamepreferences:
-         gamepreferences();
-         break;
-
       case ua_mousepreferences:
          mousepreferences();
          break;
@@ -1174,6 +1175,9 @@ void execuseraction2 ( tuseractions action )
          break;
       case ua_unitsummary: showUnitSummary( actmap );
          break;
+      case ua_gamepreferences:
+         editGameOptions();
+         break;
       default:
          break;
    }
@@ -1503,7 +1507,7 @@ int main(int argc, char *argv[] )
 
    SDL_Surface *icn = NULL;
    try {
-      tnfilestream iconl ( "icon_asc.gif", tnstream::reading );
+      tnfilestream iconl ( "program-icon.png", tnstream::reading );
       icn = IMG_Load_RW ( SDL_RWFromStream( &iconl ), 1);
       SDL_SetColorKey(icn, SDL_SRCCOLORKEY, *((Uint8 *)icn->pixels));
    } catch ( ... ) {}

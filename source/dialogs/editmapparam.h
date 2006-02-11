@@ -26,12 +26,12 @@
 #include "../paradialog.h"
 #include "../gamemap.h"
 
-class PropertyEditorWidget;
+class PG_PropertyEditor;
 
 class GameParameterEditorWidget : public PG_Widget {
       tmap* actmap;
       int values[gameparameternum];
-      PropertyEditorWidget* propertyEditor;
+      PG_PropertyEditor* propertyEditor;
       
       void runTextIO ( PropertyContainer& pc );
      

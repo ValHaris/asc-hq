@@ -17,6 +17,7 @@
  
 #include "typen.h"
 #include "vehicle.h"
+#include "attack.h"
 
 class MapDisplayInterface {
          public:
@@ -35,6 +36,7 @@ class MapDisplayInterface {
            virtual void updateDashboard () = 0;
            virtual void repaintDisplay () = 0;
            virtual void setTempView( bool view ) = 0;
+           virtual void showBattle( tfight& battle ) = 0;
            virtual ~MapDisplayInterface () {};
        };
 
