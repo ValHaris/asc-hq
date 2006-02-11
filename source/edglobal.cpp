@@ -171,7 +171,7 @@ const MapComponent* SelectionHolder::getSelection()
    return currentItem;
 }
 
-void SelectionHolder::pickup ( pfield fld )
+void SelectionHolder::pickup ( tfield* fld )
 {
    if ( fld->vehicle ) {
       VehicleItem v ( fld->vehicle->typ );
@@ -287,7 +287,7 @@ void showPipeNet()
       TerrainBits tb = getTerrainBitType(cbpipeline);
       for ( int x = 0; x < actmap->xsize; ++x )
          for ( int y = 0; y < actmap->ysize; ++y ) {
-             pfield fld = actmap->getField ( x, y );
+             tfield* fld = actmap->getField ( x, y );
              if ( (fld->bdt & tb).any() )
                 fld->a.temp = 1;
          }
@@ -760,7 +760,7 @@ void execaction_pg(int code)
                                if (choice_dlg("Map not saved ! Save now ?","~y~es","~n~o") == 1) 
                                   k_savemap(false);
 
-                            pmap oldmap = actmap;
+                            GameMap* oldmap = actmap;
                             actmap = NULL;
                             try {
                                 k_loadmap();

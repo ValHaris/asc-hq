@@ -21,7 +21,7 @@
 #include "replay.h"
 #include "mapdisplayinterface.h"
 
-tmap* ContainerControls::getMap()
+GameMap* ContainerControls::getMap()
 {
    return container->getMap();
 }
@@ -323,7 +323,7 @@ void ContainerControls :: destructUnit( Vehicle* veh )
 
 bool ContainerControls::unitTrainingAvailable( Vehicle* veh )
 {
-   tmap* actmap = container->getMap();
+   GameMap* actmap = container->getMap();
    if ( actmap->getgameparameter( cgp_bi3_training ) )
       return false;
 
@@ -349,7 +349,7 @@ bool ContainerControls::unitTrainingAvailable( Vehicle* veh )
 
 void ContainerControls::trainUnit( Vehicle* veh )
 {
-   tmap* actmap = container->getMap();
+   GameMap* actmap = container->getMap();
    if ( unitTrainingAvailable ( veh ) ) {
       veh->experience+= actmap->getgameparameter( cgp_trainingIncrement );
       for (int i = 0; i < veh->typ->weapons.count; i++ )

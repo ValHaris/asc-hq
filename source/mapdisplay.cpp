@@ -176,7 +176,7 @@ class WeaponRange : public SearchFields
       {
          gamemap->getField( mc )->tempw = 1;
       };
-      WeaponRange ( pmap _gamemap ) : SearchFields ( _gamemap )
+      WeaponRange ( GameMap* _gamemap ) : SearchFields ( _gamemap )
       {}
       ;
 };
@@ -261,7 +261,7 @@ void MapRenderer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInf
       if ( !(layer & 1 ))
          binaryUnitHeight = 1 << (( layer-2)/2);
    
-   pfield fld = fieldInfo.fld;
+   tfield* fld = fieldInfo.fld;
 
    if ( layer == 0 && fieldInfo.visibility >= visible_ago )
       fld->typ->paint ( fieldInfo.surface, pos );
@@ -394,7 +394,7 @@ void MapRenderer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInf
 
 
 
-void MapRenderer::paintTerrain( Surface& surf, tmap* actmap, int playerView, const ViewPort& viewPort, const MapCoordinate& offset )
+void MapRenderer::paintTerrain( Surface& surf, GameMap* actmap, int playerView, const ViewPort& viewPort, const MapCoordinate& offset )
 {
    FieldRenderInfo fieldRenderInfo( surf, actmap );
    fieldRenderInfo.playerView = playerView;
@@ -1141,7 +1141,7 @@ bool ccompare( const MapCoordinate& a, const MapCoordinate& b )
 }   
 
 
-void MapDisplayPG::displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoordinate3D& from, const MapCoordinate3D& to )
+void MapDisplayPG::displayUnitMovement( GameMap* actmap, Vehicle* veh, const MapCoordinate3D& from, const MapCoordinate3D& to )
 {
 #ifdef debugmapdisplay
    surface->Fill( 0xff00);
@@ -1553,10 +1553,10 @@ int  PG_MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const Ma
          newdest.setNumericalHeight( newstart.getNumericalHeight() );
    }
    
-   pfield fld1 = actmap->getField ( start );
+   tfield* fld1 = actmap->getField ( start );
    int view1 = fieldVisibility ( fld1, actmap->playerView );
 
-   pfield fld2 = actmap->getField ( dest );
+   tfield* fld2 = actmap->getField ( dest );
    int view2 = fieldVisibility ( fld2, actmap->playerView );
 
    if (  (view1 >= visible_now  &&  view2 >= visible_now ) || ( vehicle->getOwner() == actmap->playerView ))
@@ -2157,7 +2157,7 @@ void tgeneraldisplaymap :: pnt_terrain ( void )
 
    for (int y=dispmapdata.disp.y1; y < dispmapdata.disp.y2; y++ ) {
       for ( int x=dispmapdata.disp.x1; x < dispmapdata.disp.x2; x++ ) {
-         pfield fld = getfield ( actmap->xpos + x, actmap->ypos + y );
+         tfield* fld = getfield ( actmap->xpos + x, actmap->ypos + y );
          if ( fld ) {
             int b = fieldVisibility ( fld, playerview );
 
@@ -2302,7 +2302,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
       displaymessage("tgeneraldisplaymap :: pnt_main ; playerview < 0", 2 );
 
    int b;
-   pfield fld;
+   tfield* fld;
 
    int yp;
    int r;
@@ -2539,7 +2539,7 @@ void tdisplaymap :: displayadditionalunits ( int height )
                xp = vfbleftspace + (displaymovingunit.xpos - actmap->xpos) * fielddistx;
             int yp = vfbtopspace + (displaymovingunit.ypos - actmap->ypos) * fielddisty;
 
-            pfield fld = getfield ( displaymovingunit.xpos, displaymovingunit.ypos);
+            tfield* fld = getfield ( displaymovingunit.xpos, displaymovingunit.ypos);
             int b = fieldVisibility ( fld, playerview );
 
             int shadowdist = -1;
@@ -3263,10 +3263,10 @@ int  MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCo
       if ( height1== -1 )
          height1 = height2;
 
-   pfield fld1 = actmap->getField ( start );
+   tfield* fld1 = actmap->getField ( start );
    int view1 = fieldVisibility ( fld1, actmap->playerView );
 
-   pfield fld2 = actmap->getField ( dest );
+   tfield* fld2 = actmap->getField ( dest );
    int view2 = fieldVisibility ( fld2, actmap->playerView );
 
    if (  (view1 >= visible_now  &&  view2 >= visible_now ) || ( vehicle->getOwner() == actmap->playerView ))

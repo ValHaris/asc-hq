@@ -2,9 +2,12 @@
     \brief The random map generator
 */
 
-//     $Id: edgen.cpp,v 1.20.2.3 2006-02-11 20:48:41 mbickel Exp $
+//     $Id: edgen.cpp,v 1.20.2.4 2006-02-11 21:46:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20.2.3  2006/02/11 20:48:41  mbickel
+//      Some cleanup
+//
 //     Revision 1.20.2.2  2005/12/22 17:41:30  mbickel
 //      Fixed graphic problems
 //
@@ -154,7 +157,7 @@
                pmemoryblock mblocks[ layercount ];
                pterraintype btyp[numofbdts];
                int overwritecolor[maxoverwrite];
-               pfield pf;
+               tfield* pf;
                };
 
 const char* clayer[layercount]  = {"Land", "Forest", "Desert","Material","Fuel"};
@@ -478,7 +481,7 @@ char tmapgenerator::checkland(int x, int y)
 
 void tmapgenerator::addcoast(void)
 {
-   pfield pf;
+   tfield* pf;
    const int id[2]={42,83};
  
    for (int i=0;i<2;i++ ) {

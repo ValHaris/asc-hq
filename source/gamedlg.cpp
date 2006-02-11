@@ -821,7 +821,7 @@ int  setupnetwork ( tnetwork* nw, int edt, int player )
 /*   Neuen Level starten                                                                                 */
 /*********************************************************************************************************/
 
-void         tchoosenewcampaign::evaluatemapinfo( const char* srname, tmap* spfld )
+void         tchoosenewcampaign::evaluatemapinfo( const char* srname, GameMap* spfld )
 {
    if ( spfld->campaign &&  ( stricmp( spfld->codeword, password ) == 0 )) {
       strcat(message1, srname );
@@ -839,7 +839,7 @@ void         tchoosenewcampaign::evaluatemapinfo( const char* srname, tmap* spfl
 }
 
 
-void         tchoosenewsinglelevel::evaluatemapinfo( const char* srname, tmap* spfld )
+void         tchoosenewsinglelevel::evaluatemapinfo( const char* srname, GameMap* spfld )
 {
 
    if ( stricmp ( spfld->codeword, password ) == 0) {
@@ -1056,7 +1056,7 @@ void         tcontinuecampaign::showmapinfo( int ypos)
 }
 
 
-void         tcontinuecampaign::evaluatemapinfo( const char *srname, tmap* spfld )
+void         tcontinuecampaign::evaluatemapinfo( const char *srname, GameMap* spfld )
 {
 
    if ( spfld->campaign ) {
@@ -1168,7 +1168,7 @@ void         tcontinuecampaign::buttonpressed(int         id)
 }
 
 
-void         tcontinuecampaign::regroupevents ( pmap map )
+void         tcontinuecampaign::regroupevents ( GameMap* map )
 {
    int mapid = 0;
    if ( map->campaign )
@@ -1233,7 +1233,7 @@ void         tcontinuecampaign::run(void)
 
       regroupevents( actmap );
 
-      // tmap* oldmap = actmap;
+      // GameMap* oldmap = actmap;
       actmap = NULL;
 
       loadcampaignmap();
@@ -1369,7 +1369,7 @@ void         tchoosenewmap::init( char* ptitle )
 
 
 
-void         tchoosenewsinglelevel::checkforcampaign( tmap* spfld )
+void         tchoosenewsinglelevel::checkforcampaign( GameMap* spfld )
 {
    if ( spfld->campaign ) {
       if ( spfld->campaign->directaccess == 0 ) {
@@ -1390,7 +1390,7 @@ void         tchoosenewsinglelevel::checkforcampaign( tmap* spfld )
 
 }
 
-void         tchoosenewcampaign::checkforcampaign( tmap* spfld )
+void         tchoosenewcampaign::checkforcampaign( GameMap* spfld )
 {
    if ( spfld->campaign == NULL ) {
       strcpy( message1, "no campaign map" );
@@ -1519,7 +1519,7 @@ void         tchoosenewcampaign::init(void)
 } 
 
      class ttributepayments : public tdialogbox {
-                       tmap::ResourceTribute trib;
+                       GameMap::ResourceTribute trib;
                        int oldplayer;
                        int player;
                        void paintactplayer ( void );
@@ -2506,7 +2506,7 @@ void tmultiplayersettings :: buttonpressed ( int id )
              actmap->player[i].research.settechlevel ( techlevel );
 
       if ( replays )
-         actmap->replayinfo = new tmap::ReplayInfo;
+         actmap->replayinfo = new GameMap::ReplayInfo;
       else
          if ( actmap->replayinfo ) {
             delete actmap->replayinfo;
@@ -2665,12 +2665,12 @@ class tgiveunitawaydlg : public tdialogbox {
              int markedplayer;
              int status;
              void paintplayer ( int i );
-             pfield fld ;
+             tfield* fld ;
              int num;
              int ply[8];
              int xs;
            public:
-             void init ( pfield fld );
+             void init ( tfield* fld );
              void run ( void );
              void buttonpressed ( int id );
        };
@@ -2697,7 +2697,7 @@ void tgiveunitawaydlg :: paintplayer ( int i )
       showtext2 ( "neutral", x1 + 60, y1 + starty + xs+17 + i * 40 - activefontsettings.font->height / 2 );
 }
 
-void         tgiveunitawaydlg :: init( pfield fld )
+void         tgiveunitawaydlg :: init( tfield* fld )
 { 
    this->fld = fld;
 
@@ -2805,7 +2805,7 @@ void tgiveunitawaydlg :: run ( void )
    }
 }
 
-void giveunitaway ( pfield fld )
+void giveunitaway ( tfield* fld )
 {
    if ( ( fld->vehicle && fld->vehicle->color==actmap->actplayer*8) ||  (fld->building && fld->building->color == actmap->actplayer * 8 )) {
       tgiveunitawaydlg gua;

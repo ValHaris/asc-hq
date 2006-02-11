@@ -49,7 +49,7 @@ extern SigC::Signal0<void> fieldCrossed;
 
 template<class T>
 class FieldList {
-       pmap localmap;
+       GameMap* localmap;
        int fieldnum;
        std::vector<int> xpos;
        std::vector<int> ypos;
@@ -57,7 +57,7 @@ class FieldList {
      public:
        FieldList ( void );
        int getFieldNum ( void ) const;
-       pfield getField ( int num ) const;
+       tfield* getField ( int num ) const;
        T& getData ( int num );
        T& getData ( int x, int y );
        void getFieldCoordinates ( int num, int* x, int* y ) const;
@@ -66,8 +66,8 @@ class FieldList {
        void addField ( const MapCoordinate& mc, const T& _data );
        void addField ( int x, int y );
        void addField ( const MapCoordinate& mc );
-       void setMap ( pmap map );
-       pmap getMap ( void );
+       void setMap ( GameMap* map );
+       GameMap* getMap ( void );
        bool isMember ( int x, int y );
        bool isMember ( const MapCoordinate& mc );
      };
@@ -140,7 +140,7 @@ class BaseVehicleMovement : public VehicleAction {
 
                class PathFinder : public AStar3D {
                  public:
-                   PathFinder ( pmap actmap, Vehicle* veh, int maxDistance ) : AStar3D(actmap, veh, false, maxDistance ) {};
+                   PathFinder ( GameMap* actmap, Vehicle* veh, int maxDistance ) : AStar3D(actmap, veh, false, maxDistance ) {};
 
                    /** searches for all fields that are within the range of maxDist and marks them.
                        On each field one bit for each level of height will be set.
@@ -247,7 +247,7 @@ class VehicleAttack : public VehicleAction {
                                   void            init ( const Vehicle* eht, int _kamikaze, VehicleAttack* _va );
                                   virtual void    testfield ( const MapCoordinate& mc );
                                   int             run ( void );
-                                  tsearchattackablevehicles ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
+                                  tsearchattackablevehicles ( GameMap* _gamemap ) : SearchFields ( _gamemap ) {};
                           } search;
 
            protected:
@@ -307,7 +307,7 @@ class VehicleService : public VehicleAction {
                      bool             initrefuelling( int xp1, int yp1 );
                      void             init ( Vehicle* _veh, Building* _bld );
                      void             run (  );
-                     FieldSearch ( VehicleService& _vs, pmap _gamemap ) : SearchFields ( _gamemap ), vs ( _vs ) { bypassChecks.distance = false; bypassChecks.height = false; };
+                     FieldSearch ( VehicleService& _vs, GameMap* _gamemap ) : SearchFields ( _gamemap ), vs ( _vs ) { bypassChecks.distance = false; bypassChecks.height = false; };
                   } fieldSearch;
 
 
@@ -466,7 +466,7 @@ template<class T> int FieldList<T> :: getFieldNum ( void ) const
    return fieldnum;
 }
 
-template<class T> pfield FieldList<T> :: getField ( int num ) const
+template<class T> tfield* FieldList<T> :: getField ( int num ) const
 {
    if ( num < fieldnum && num >= 0 )
       return getfield ( xpos[num], ypos[num] );
@@ -557,12 +557,12 @@ template<class T> void FieldList<T> :: addField ( int x, int y )
 }
 
 
-template<class T> void FieldList<T> :: setMap ( pmap map )
+template<class T> void FieldList<T> :: setMap ( GameMap* map )
 {
    localmap = map;
 }
 
-template<class T> pmap FieldList<T> :: getMap ( void )
+template<class T> GameMap* FieldList<T> :: getMap ( void )
 {
    return localmap;
 }

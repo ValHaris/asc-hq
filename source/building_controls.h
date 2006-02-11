@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: building_controls.h,v 1.20.2.3 2005-07-30 07:50:36 mbickel Exp $
+//     $Id: building_controls.h,v 1.20.2.4 2006-02-11 21:46:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20.2.3  2005/07/30 07:50:36  mbickel
+//      Namespace cleanup
+//      changed unit cost
+//
 //     Revision 1.20.2.2  2005/07/24 12:51:20  mbickel
 //      Updated mapdisplaying
 //
@@ -84,7 +88,7 @@
 //      Fixed some compilation problems with gcc
 //
 //     Revision 1.4  2000/11/08 19:30:56  mbickel
-//      Rewrote IO for the tmap structure
+//      Rewrote IO for the GameMap structure
 //      Fixed crash when entering damaged building
 //      Fixed crash in AI
 //      Removed item CRCs
@@ -262,7 +266,7 @@ class    cbuildingcontrols : public virtual ccontainercontrols
       class    cnetcontrol
       {
          public:
-            void setnetmode (  int category, int stat );  // stat  1: setzen    0: l”schen
+            void setnetmode (  int category, int stat );  // stat  1: setzen    0: lschen
             int  getnetmode ( int mode );
             void emptyeverything ( void );
             void reset ( void );

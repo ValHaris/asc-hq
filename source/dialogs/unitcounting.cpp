@@ -34,7 +34,7 @@ class VehicleCounterFactory: public SelectionItemFactory, public SigC::Object  {
       
       typedef map<const Vehicletype*,int> Counter;
       Counter counter;
-      tmap* gamemap;
+      GameMap* gamemap;
 
       void calcCargoSummary( const ContainerBase* cb, Counter& summary )
       {
@@ -47,7 +47,7 @@ class VehicleCounterFactory: public SelectionItemFactory, public SigC::Object  {
 
       
    public:
-      VehicleCounterFactory( tmap* actmap );
+      VehicleCounterFactory( GameMap* actmap );
       VehicleCounterFactory( const ContainerBase* container );
         
       
@@ -56,11 +56,11 @@ class VehicleCounterFactory: public SelectionItemFactory, public SigC::Object  {
       void itemSelected( const SelectionWidget* widget, bool mouse ) {}
 };
 
-VehicleCounterFactory :: VehicleCounterFactory( tmap* actmap ) : gamemap ( actmap )
+VehicleCounterFactory :: VehicleCounterFactory( GameMap* actmap ) : gamemap ( actmap )
 {
    for ( int y = 0; y < actmap->ysize; ++y )
       for ( int x = 0; x < actmap->xsize; ++x ) {
-         pfield fld = actmap->getField(x,y);
+         tfield* fld = actmap->getField(x,y);
          if ( fld ) {
             if ( fld->vehicle && fld->vehicle->getOwner() == actmap->actplayer ) {
                calcCargoSummary( fld->vehicle, counter );
@@ -133,7 +133,7 @@ void showUnitCargoSummary( ContainerBase* cb )
 }
 
 
-void showUnitSummary( tmap* actmap )
+void showUnitSummary( GameMap* actmap )
 {
    UnitSummaryWindow isw( NULL, PG_Rect( 100, 150, 400, 400 ),  "cargo summary", new VehicleCounterFactory( actmap ));
    isw.Show();

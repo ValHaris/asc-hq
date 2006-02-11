@@ -73,7 +73,7 @@ bool FileTransfer::enterfilename()
 }
 
 
-void FileTransfer::send( const tmap* map, int lastPlayer, int lastturn )
+void FileTransfer::send( const GameMap* map, int lastPlayer, int lastturn )
 {
    while ( filename.empty() ) {
       if( !enterfilename() )
@@ -97,14 +97,14 @@ void FileTransfer::send( const tmap* map, int lastPlayer, int lastturn )
 }
 
 
-tmap* FileTransfer::receive()
+GameMap* FileTransfer::receive()
 {
    return loadPBEMFile( filename );
 }   
 
-tmap* FileTransfer::loadPBEMFile( const ASCString& filename )
+GameMap* FileTransfer::loadPBEMFile( const ASCString& filename )
 {
-   tmap* map = NULL;
+   GameMap* map = NULL;
    try {      
       tnfilestream gamefile ( filename, tnstream::reading );
       tnetworkloaders nwl;
@@ -116,7 +116,7 @@ tmap* FileTransfer::loadPBEMFile( const ASCString& filename )
    return map;
 }
 
-ASCString FileTransfer::constructFileName( const tmap* actmap, int lastPlayer, int lastturn ) const
+ASCString FileTransfer::constructFileName( const GameMap* actmap, int lastPlayer, int lastturn ) const
 {
    ASCString s = filename;
    while ( s.find( "$p") != ASCString::npos )
@@ -134,7 +134,7 @@ ASCString FileTransfer::constructFileName( const tmap* actmap, int lastPlayer, i
 void networksupervisor ( void )
 {
    class tcarefordeletionofmap {
-         pmap tmp;
+         GameMap* tmp;
       public:
          tcarefordeletionofmap ()
          {

@@ -20,7 +20,7 @@
 #define attackpanelH
 
 class tfight;
-class tmap;
+class GameMap;
  
 /** Performs the calculation of the attack and displays the result on screen.
     The result is not written to the involved units, this must be done separately.
@@ -29,7 +29,7 @@ class tmap;
     \param ad  Attacker damage override (used for replays)
     \param dd  Target damage override (used for replays)
 */
-extern void showAttackAnimation( tfight& battle, tmap* actmap, int ad = -1, int dd = -1 );
+extern void showAttackAnimation( tfight& battle, GameMap* actmap, int ad = -1, int dd = -1 );
 
 #endif
 

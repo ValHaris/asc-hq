@@ -59,7 +59,7 @@ SigC::Signal0<void> cursorMoved;
 SigC::Signal1<void,ContainerBase*> showContainerInfo;
 SigC::Signal1<void,Vehicletype*> showVehicleTypeInfo;
 SigC::Signal0<void> viewChanged;
-SigC::Signal1<void,tmap*> mapChanged;
+SigC::Signal1<void,GameMap*> mapChanged;
 SigC::Signal0<bool> idleEvent;
 
 
@@ -70,13 +70,13 @@ void displaymap()
 }   
 
   
-   tmap*    actmap = NULL;
+   GameMap*    actmap = NULL;
 
    Schriften schriften;
 
 
 
-int          terrainaccessible ( const pfield        field, const Vehicle*     vehicle, int uheight )
+int          terrainaccessible ( const tfield*        field, const Vehicle*     vehicle, int uheight )
 {
    int res  = terrainaccessible2 ( field, vehicle, uheight );
    if ( res < 0 )
@@ -85,7 +85,7 @@ int          terrainaccessible ( const pfield        field, const Vehicle*     v
       return res;
 }
 
-int          terrainaccessible2 ( const pfield        field, const Vehicle*     vehicle, int uheight )
+int          terrainaccessible2 ( const tfield*        field, const Vehicle*     vehicle, int uheight )
 {
    if ( uheight == -1 )
       uheight = vehicle->height;
@@ -97,7 +97,7 @@ int          terrainaccessible2 ( const pfield        field, const Vehicle*     
    return terrainaccessible2( field, vehicle->typ->terrainaccess, uheight );
 }
 
-int          terrainaccessible2 ( const pfield        field, const TerrainAccess& terrainAccess, int uheight )
+int          terrainaccessible2 ( const tfield*        field, const TerrainAccess& terrainAccess, int uheight )
 {
    if ( uheight >= chtieffliegend)
       return 2;
@@ -130,7 +130,7 @@ int          terrainaccessible2 ( const pfield        field, const TerrainAccess
 
 
 
-int         fieldAccessible( const pfield        field,
+int         fieldAccessible( const tfield*        field,
                             const Vehicle*     vehicle,
                             int  uheight,
                             const bool* attacked,
@@ -206,7 +206,7 @@ void         generatemap( TerrainType::Weather*   bt,
                                int                ysize)
 { 
    delete actmap;
-   actmap = new tmap;
+   actmap = new GameMap;
    for (int k = 1; k < 8; k++)
       actmap->player[k].stat = Player::computer;
 
@@ -230,7 +230,7 @@ void         generatemap( TerrainType::Weather*   bt,
 
 
 
-pfield        getfield(int          x,
+tfield*        getfield(int          x,
                      int          y)
 { 
    if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize))
@@ -313,7 +313,7 @@ void         putbuilding( const MapCoordinate& entryPosition,
    for ( int a = 0; a < 4; a++)
       for ( int b = 0; b < 6; b++ )
          if ( buildingtyp->fieldExists ( BuildingType::LocalCoordinate( a, b ) ) ) {
-            pfield field = actmap->getField( buildingtyp->getFieldCoordinate( entryPosition, BuildingType::LocalCoordinate(a,b) ));
+            tfield* field = actmap->getField( buildingtyp->getFieldCoordinate( entryPosition, BuildingType::LocalCoordinate(a,b) ));
             if (field == NULL) 
                return ;
             else {
@@ -344,7 +344,7 @@ void         putbuilding2( const MapCoordinate& entryPosition,
    for ( int a = 0; a < 4; a++)
       for ( int b = 0; b < 6; b++ )
          if ( buildingtyp->fieldExists ( BuildingType::LocalCoordinate( a, b ) ) ) {
-            pfield field = actmap->getField( buildingtyp->getFieldCoordinate( entryPosition, BuildingType::LocalCoordinate(a,b) ));
+            tfield* field = actmap->getField( buildingtyp->getFieldCoordinate( entryPosition, BuildingType::LocalCoordinate(a,b) ));
             if (field == NULL)
                return ;
             else {
@@ -362,7 +362,7 @@ void         putbuilding2( const MapCoordinate& entryPosition,
       /*
       int maxresearch = 0;
       bool found = false;
-      for ( tmap::Player::BuildingList::iterator i = actmap->player[color/8].buildingList.begin(); i != actmap->player[ color/8].buildingList.end(); i++ ) {
+      for ( GameMap::Player::BuildingList::iterator i = actmap->player[color/8].buildingList.begin(); i != actmap->player[ color/8].buildingList.end(); i++ ) {
          Building* bld = *i;
          if ( bld->typ == gbde->typ  && bld != gbde ) {
             found = true;
@@ -432,7 +432,7 @@ void checkobjectsforremoval ( void )
 {
    for ( int y = 0; y < actmap->ysize; y++ )
       for ( int x = 0; x < actmap->xsize; x++ ) {
-         pfield fld = getfield ( x, y );
+         tfield* fld = getfield ( x, y );
          for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end();  )
             if ( i->typ->getFieldModification(fld->getweather()).terrainaccess.accessible ( fld->bdt ) < 0 ) {
                fld->removeobject ( i->typ, true );
@@ -449,7 +449,7 @@ void  checkunitsforremoval ( void )
       for ( Player::VehicleList::iterator i = actmap->player[c].vehicleList.begin(); i != actmap->player[c].vehicleList.end();  ) {
 
           Vehicle* eht = *i;
-          pfield field = getfield(eht->xpos,eht->ypos);
+          tfield* field = getfield(eht->xpos,eht->ypos);
           bool erase = false;
 
           ASCString reason;
@@ -507,7 +507,7 @@ int  getwindheightforunit ( const Vehicle* eht, int uheight )
 
 int  getmaxwindspeedforunit ( const Vehicle* eht )
 {
-   pfield field = getfield(eht->xpos,eht->ypos);
+   tfield* field = getfield(eht->xpos,eht->ypos);
    if ( field->vehicle == eht) {
       if (eht->height >= chtieffliegend && eht->height <= chhochfliegend ) //    || ((eht->height == chfahrend) && ( field->typ->art & cbwater ))) ) 
          return eht->typ->movement[log2(eht->height)] * 256 ;
@@ -757,7 +757,7 @@ int getheightdelta ( int height1, int height2 )
    return hd;
 }
 
-bool fieldvisiblenow( const pfield pe, int player )
+bool fieldvisiblenow( const tfield* pe, int player )
 {
   if ( player < 0 ) {
      #ifdef karteneditor
@@ -795,12 +795,12 @@ bool fieldvisiblenow( const pfield pe, int player )
 
 
 
-VisibilityStates fieldVisibility( const pfield pe, int player )
+VisibilityStates fieldVisibility( const tfield* pe, int player )
 {
    return fieldVisibility( pe, player, actmap );
 }
 
-VisibilityStates fieldVisibility( const pfield pe, int player, tmap* gamemap )
+VisibilityStates fieldVisibility( const tfield* pe, int player, GameMap* gamemap )
 {
   if ( pe && player >= 0 ) {
       VisibilityStates c = VisibilityStates((pe->visible >> ( player * 2)) & 3);
@@ -841,14 +841,14 @@ void         calculateobject( int       x,
                               int       y,
                               bool      mof,
                               const ObjectType* obj,
-                              pmap actmap )
+                              GameMap* actmap )
 {
    if ( obj->netBehaviour & ObjectType::SpecialForest ) {
       // ForestCalculation::calculateforest( actmap, obj );
       return;
    }
 
-   pfield fld = actmap->getField(x,y) ;
+   tfield* fld = actmap->getField(x,y) ;
    Object* oi2 = fld-> checkforobject (  obj  );
 
    int c = 0;
@@ -856,7 +856,7 @@ void         calculateobject( int       x,
       int a = x;
       int b = y;
       getnextfield( a, b, dir );
-      pfield fld2 = actmap->getField(a,b);
+      tfield* fld2 = actmap->getField(a,b);
 
       if ( fld2 ) {
          for ( int oj = -1; oj < int(obj->linkableObjects.size()); oj++ ) {
@@ -899,7 +899,7 @@ void         calculateobject( int       x,
          int a = x;
          int b = y;
          getnextfield( a, b, dir );
-         pfield fld2 = actmap->getField(a,b);
+         tfield* fld2 = actmap->getField(a,b);
          if ( !fld2 ) {
             // if the field opposite of the border field is connected to, make a straight line out of the map.
             if ( c & (1 << ((dir+sidenum/2) % sidenum ))) {
@@ -922,12 +922,12 @@ void         calculateobject( int       x,
 
 
 
-void         calculateallobjects( pmap actmap )
+void         calculateallobjects( GameMap* actmap )
 {
    // vector<ObjectType*> forestObjects;
    for ( int y = 0; y < actmap->ysize ; y++)
       for ( int x = 0; x < actmap->xsize ; x++) {
-         pfield fld = actmap->getField(x,y);
+         tfield* fld = actmap->getField(x,y);
 
          for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ )
              // if ( !(i->typ->netBehaviour & ObjectType::SpecialForest) )

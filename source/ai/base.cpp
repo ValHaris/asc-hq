@@ -19,7 +19,7 @@
 
 #include "../replaymapdisplay.h"
 
-AI :: AI ( pmap _map, int _player ) : activemap ( _map ) , sections ( this )
+AI :: AI ( GameMap* _map, int _player ) : activemap ( _map ) , sections ( this )
 {
    strictChecks = false;
    benchMark = false;
@@ -163,7 +163,7 @@ void AI:: run ( bool benchMark )
    
    setup();
 
-//   tmap::Weather weatherBackup = getMap()->weather;
+//   GameMap::Weather weatherBackup = getMap()->weather;
 //   for ( int i = 0; i < 3; i++ )
 //      getMap()->weather.wind[i].speed = 0;
 
@@ -275,7 +275,7 @@ void AI :: showFieldInformation ( int x, int y )
                                 threat.threat[4], threat.threat[3], threat.threat[2],
                                 threat.threat[1], threat.threat[0], getFieldInformation(x,y).control );
 
-   pfield fld = getfield (x, y );
+   tfield* fld = getfield (x, y );
    if ( fld->vehicle && fieldvisiblenow ( fld ) && fld->vehicle->aiparam[getPlayerNum()] ) {
       char text2[1000];
       sprintf(text2, "\nunit nwid: %d ; typeid: %d", fld->vehicle->networkid, fld->vehicle->typ->id );

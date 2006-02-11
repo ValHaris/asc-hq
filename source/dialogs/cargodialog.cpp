@@ -1776,7 +1776,7 @@ namespace CargoGuiFunctions {
       if ( !veh )
          return false;
 
-      tmap* map = parent.getContainer()->getMap();
+      GameMap* map = parent.getContainer()->getMap();
       if ( map->actplayer == veh->getOwner() || map->actplayer == parent.getContainer()->getOwner() )
          if ( map->player[map->actplayer].diplomacy.isAllied( veh->getOwner() ))
             return parent.getContainer()->baseType->hasFunction( ContainerBaseType::TrainingCenter ) && parent.getControls().unitTrainingAvailable( veh );

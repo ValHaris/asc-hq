@@ -27,7 +27,7 @@
 #include "../gamemap.h"
 
 class EmailSetupWidget : public PG_ScrollWidget {
-      tmap* actmap;
+      GameMap* actmap;
       int  editable;
       
       struct PlayerWidgets {
@@ -40,7 +40,7 @@ class EmailSetupWidget : public PG_ScrollWidget {
       vector<PlayerWidgets> playerWidgets;
       
    public:
-      EmailSetupWidget( tmap* gamemap, int editablePlayers, PG_Widget *parent, const PG_Rect &r, const std::string &style="ScrollWidget" );
+      EmailSetupWidget( GameMap* gamemap, int editablePlayers, PG_Widget *parent, const PG_Rect &r, const std::string &style="ScrollWidget" );
       void Apply();
 };
 

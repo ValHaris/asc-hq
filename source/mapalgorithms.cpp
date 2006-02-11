@@ -27,7 +27,7 @@
 #include "gamemap.h"
 
 
-tdrawgettempline :: tdrawgettempline ( int _freefields, pmap _gamemap )
+tdrawgettempline :: tdrawgettempline ( int _freefields, GameMap* _gamemap )
 {
    gamemap = _gamemap;
    tempsum = 0;
@@ -205,7 +205,7 @@ void tdrawgettempline :: start ( int x1, int y1, int x2, int y2 )
 
 
 
-SearchFields :: SearchFields ( pmap _gamemap )
+SearchFields :: SearchFields ( GameMap* _gamemap )
 {
    gamemap = _gamemap;
    cancelSearch = false;
@@ -275,11 +275,11 @@ class SearchFieldsIterator : public SearchFields {
          myFunctor(pos);
       };      
    public: 
-      SearchFieldsIterator ( pmap _gamemap, MyFunctor& functor ) : SearchFields( _gamemap ), myFunctor( functor ) {};
+      SearchFieldsIterator ( GameMap* _gamemap, MyFunctor& functor ) : SearchFields( _gamemap ), myFunctor( functor ) {};
            
 };
 
-void circularFieldIterator( pmap gamemap, const MapCoordinate& center, int startDist, int stopDist, FieldIterationFunctor functor )
+void circularFieldIterator( GameMap* gamemap, const MapCoordinate& center, int startDist, int stopDist, FieldIterationFunctor functor )
 {
    SearchFieldsIterator searchFields( gamemap, functor );
    searchFields.initsearch( center, startDist, stopDist );

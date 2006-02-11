@@ -22,12 +22,12 @@
 
 class VehicleMovement;
 class Player;
-class tmap;
+class GameMap;
 
 class ContainerControls {
       ContainerBase* container;
 
-      tmap* getMap();
+      GameMap* getMap();
       Player& getPlayer();
       int getPlayerNum();
       

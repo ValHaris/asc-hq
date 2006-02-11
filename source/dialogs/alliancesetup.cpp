@@ -165,7 +165,7 @@ class DiplomaticModeChooser : public PG_Widget {
 };      
  
 
-AllianceSetupWidget::AllianceSetupWidget( tmap* gamemap, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style ) : PG_ScrollWidget( parent, r, style ) , actmap ( gamemap )
+AllianceSetupWidget::AllianceSetupWidget( GameMap* gamemap, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style ) : PG_ScrollWidget( parent, r, style ) , actmap ( gamemap )
 {
    this->allEditable = allEditable;
    int playerNum = 0;
@@ -333,7 +333,7 @@ AllianceSetupWidget::~AllianceSetupWidget()
 class AllianceSetupWindow : public ASC_PG_Dialog {
       AllianceSetupWidget* asw;
    public:
-      AllianceSetupWindow( tmap* actmap, bool allEditable, PG_Widget *parent, const PG_Rect &r ) : ASC_PG_Dialog( parent, r, "Diplomacy" )
+      AllianceSetupWindow( GameMap* actmap, bool allEditable, PG_Widget *parent, const PG_Rect &r ) : ASC_PG_Dialog( parent, r, "Diplomacy" )
       {
          asw = new AllianceSetupWidget( actmap, allEditable, this, PG_Rect( 5, 30, r.Width() - 10, r.Height() - 60 ));
          PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 200, Height() - 30, 90, 20 ), "OK" );
@@ -351,7 +351,7 @@ class AllianceSetupWindow : public ASC_PG_Dialog {
 
 };
 
-void  setupalliances( tmap* actmap, bool supervisor  )
+void  setupalliances( GameMap* actmap, bool supervisor  )
 {
    AllianceSetupWindow asw ( actmap, supervisor, NULL, PG_Rect( 100, 100, 600, 500 ));
    asw.Show();

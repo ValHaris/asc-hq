@@ -54,7 +54,7 @@ class   tnewcampaignlevel : public tdialogbox {
 
                          void           init ( void );
                          void           searchmapinfo ( void );
-                         virtual void   evaluatemapinfo( const char* srname, tmap* spfld ) = 0;
+                         virtual void   evaluatemapinfo( const char* srname, GameMap* spfld ) = 0;
                          void           loadcampaignmap ( void );
                          void           showmapinfo( int ypos );
                          void           done ( void );
@@ -66,12 +66,12 @@ class  tcontinuecampaign : public tnewcampaignlevel {
                          Player::DissectionContainer dissectedunits[8];
                     public:
                          void           init ( void );
-                         virtual void   evaluatemapinfo( const char* srname, tmap* spfld );
+                         virtual void   evaluatemapinfo( const char* srname, GameMap* spfld );
                          void           showmapinfo( int ypos );
                          virtual void   run ( void );
                          void           setid( int id );
                          virtual void   buttonpressed( int id );
-                         void           regroupevents ( pmap map );
+                         void           regroupevents ( GameMap* map );
                       };
 
 class  tchoosenewmap    : public tnewcampaignlevel {
@@ -79,23 +79,23 @@ class  tchoosenewmap    : public tnewcampaignlevel {
                           void          init( char* ptitle );
                           virtual void  buttonpressed( int id );
                           void          readmapinfo ( void );
-                          virtual void  checkforcampaign( tmap* spfld ) = 0;
+                          virtual void  checkforcampaign( GameMap* spfld ) = 0;
                       };
 
 class  tchoosenewcampaign : public tchoosenewmap {
                      public:
                           void          init ( void );
                           virtual void  run ( void );
-                          virtual void  checkforcampaign( tmap* spfld );
-                          virtual void  evaluatemapinfo( const char* srname, tmap* spfld );
+                          virtual void  checkforcampaign( GameMap* spfld );
+                          virtual void  evaluatemapinfo( const char* srname, GameMap* spfld );
                       };
 
 class  tchoosenewsinglelevel : public tchoosenewmap {
                      public:
                           void          init ( void );
                           virtual void  run ( void );
-                          virtual void  checkforcampaign( tmap* spfld );
-                          virtual void  evaluatemapinfo( const char* srname, tmap* spfld );
+                          virtual void  checkforcampaign( GameMap* spfld );
+                          virtual void  evaluatemapinfo( const char* srname, GameMap* spfld );
                       };
 
 
@@ -132,7 +132,7 @@ class tonlinehelplist {
 
 extern void multiplayersettings ( void );
 
-extern void giveunitaway ( pfield fld );
+extern void giveunitaway ( tfield* fld );
 
 extern void showGameParameters ( void );
 

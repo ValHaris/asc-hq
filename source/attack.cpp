@@ -52,7 +52,7 @@ bool  AttackFormula :: checkHemming ( Vehicle*     d_eht,  int     direc )
    int x = d_eht->xpos;
    int y = d_eht->ypos; 
    getnextfield(x, y, direc);
-   pfield fld = getfield(x,y);
+   tfield* fld = getfield(x,y);
 
    if ( fld )
       s_eht = fld->vehicle;
@@ -282,7 +282,7 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
    av.height = attackingunit->height;
    av.weapontype = attackingunit->typ->weapons.weapon[ _weapon ].getScalarWeaponType();
 
-   pfield field = getfield ( attackingunit->xpos, attackingunit->ypos );
+   tfield* field = getfield ( attackingunit->xpos, attackingunit->ypos );
 
    if ( attackingunit->height <= chfahrend ) {
       if ( dist <= maxmalq )
@@ -449,7 +449,7 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
    av.kamikaze   = attackingunit->typ->hasFunction( ContainerBaseType::KamikazeOnly  );
    av.height = attackingunit->height;
 
-   pfield field = getfield ( attackingunit->xpos, attackingunit->ypos );
+   tfield* field = getfield ( attackingunit->xpos, attackingunit->ypos );
 
    if ( attackingunit->height <= chfahrend ) {
       av.defensebonus = field->getdefensebonus();
@@ -509,12 +509,12 @@ void tunitattacksbuilding :: setresult ( void )
 
 
 
-tmineattacksunit :: tmineattacksunit ( pfield mineposition, int minenum, Vehicle* &attackedunit )
+tmineattacksunit :: tmineattacksunit ( tfield* mineposition, int minenum, Vehicle* &attackedunit )
 {
    setup ( mineposition, minenum, attackedunit );
 }
 
-void tmineattacksunit :: setup ( pfield mineposition, int minenum, Vehicle* &attackedunit )
+void tmineattacksunit :: setup ( tfield* mineposition, int minenum, Vehicle* &attackedunit )
 {
    if ( mineposition->mines.empty() )
       displaymessage(" tmineattacksunit :: setup \n no mine to attack !\n",2 );
@@ -671,7 +671,7 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
    av.height = attackingunit->height;
    av.weapontype = attackingunit->typ->weapons.weapon[ _weapon ].getScalarWeaponType();
 
-   pfield field2 = getfield ( attackingunit->xpos, attackingunit->ypos );
+   tfield* field2 = getfield ( attackingunit->xpos, attackingunit->ypos );
 
    if ( attackingunit->height <= chfahrend ) {
       av.defensebonus = field2->getdefensebonus();
@@ -745,7 +745,7 @@ pattackweap  attackpossible( const Vehicle*     angreifer, int x, int y)
    if (angreifer->typ->weapons.count == 0)
       return atw;
 
-   pfield efield = getfield(x,y);
+   tfield* efield = getfield(x,y);
 
    if ( efield->vehicle ) {
       if (fieldvisiblenow(efield, angreifer->color/8))
@@ -969,7 +969,7 @@ bool attackpossible2n( const Vehicle* attacker, const Vehicle* target, pattackwe
 }
 
 bool vehicleplattfahrbar( const Vehicle*     vehicle,
-                           const pfield        field)
+                           const tfield*        field)
 {
    return false;
 /*

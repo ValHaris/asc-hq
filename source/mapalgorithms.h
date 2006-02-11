@@ -26,21 +26,21 @@
   */
   class   SearchFields {
                 protected:
-                    pmap gamemap;
+                    GameMap* gamemap;
                     MapCoordinate startPos;
                     bool        cancelSearch;
                     int         firstDistance, lastDistance;
                     int         dist;
                     virtual void testfield ( const MapCoordinate& pos ) = 0;
                 public:
-                    SearchFields ( pmap _gamemap );
+                    SearchFields ( GameMap* _gamemap );
                     void initsearch ( const MapCoordinate& startPosition, int _firstDistance, int _lastDistance );
                     virtual void startsearch ( void );
                     virtual ~SearchFields() {};
                  };
 
   typedef Loki::Functor<void, TYPELIST_1(const MapCoordinate&) > FieldIterationFunctor;
-  extern void circularFieldIterator( pmap gamemap, const MapCoordinate& center, int startDist, int stopDist, FieldIterationFunctor functor ); 
+  extern void circularFieldIterator( GameMap* gamemap, const MapCoordinate& center, int startDist, int stopDist, FieldIterationFunctor functor ); 
 
                  
   /** draws a straight line on the hexagonal map and calls putpix8 for each field.
@@ -58,11 +58,11 @@
                   void init ( void );
 
                protected:
-                  pmap gamemap;
+                  GameMap* gamemap;
 
                public:
                    int tempsum;
-                   tdrawgettempline ( int _freefields, pmap _gamemap );
+                   tdrawgettempline ( int _freefields, GameMap* _gamemap );
 
                    void start ( int x1, int y1, int x2, int y2 );
 

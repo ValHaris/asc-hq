@@ -77,13 +77,13 @@ class MapRenderer {
     public:  
       class FieldRenderInfo {
             public:
-               FieldRenderInfo( Surface& s, tmap* actmap) : surface(s), gamemap(actmap ) {};
+               FieldRenderInfo( Surface& s, GameMap* actmap) : surface(s), gamemap(actmap ) {};
                Surface& surface;
                VisibilityStates visibility;
                int playerView;
-               pfield fld;
+               tfield* fld;
                MapCoordinate pos;
-               tmap* gamemap;
+               GameMap* gamemap;
       };
 
     protected:
@@ -118,7 +118,7 @@ class MapRenderer {
       };
       
       void paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos );
-      void paintTerrain( Surface& surf, tmap* actmap, int playerView, const ViewPort& viewPort, const MapCoordinate& offset );
+      void paintTerrain( Surface& surf, GameMap* actmap, int playerView, const ViewPort& viewPort, const MapCoordinate& offset );
       
       int bitmappedHeight2pass( int height );
       
@@ -241,7 +241,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
          SPoint to;
          int fromShadow;
          int toShadow;
-         pmap actmap;
+         GameMap* actmap;
          Surface* mask;
          int playerView;
 
@@ -288,7 +288,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
 
       MapDisplayPG ( PG_Widget *parent, const PG_Rect r );
 
-      void displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoordinate3D& from, const MapCoordinate3D& to );
+      void displayUnitMovement( GameMap* actmap, Vehicle* veh, const MapCoordinate3D& from, const MapCoordinate3D& to );
 
       bool fieldInView(const MapCoordinate& mc );
       bool centerOnField( const MapCoordinate& mc );

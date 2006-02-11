@@ -82,7 +82,7 @@ bool operator()(const GameTime& gt1, const GameTime& gt2) const{
 class WeatherArea{
 private:
 WeatherFields area;
-tmap* map;
+GameMap* map;
 MapCoordinate center;
 int duration;
 int width;
@@ -112,12 +112,12 @@ int calculateDiamondPointValue(int a, int b, int c, int d);
 void createWeatherFields();
 
 public:
-    WeatherArea(tmap* map, int xCenter, int yCenter, int width, int height, int duration, FalloutType fType, unsigned int seedValue, bool clustered = true);
-    WeatherArea(tmap* map, int xCenter, int yCenter, int radius);
-    WeatherArea(tmap* map);
+    WeatherArea(GameMap* map, int xCenter, int yCenter, int width, int height, int duration, FalloutType fType, unsigned int seedValue, bool clustered = true);
+    WeatherArea(GameMap* map, int xCenter, int yCenter, int radius);
+    WeatherArea(GameMap* map);
     
     ~WeatherArea();
-    inline tmap* getMap() const;
+    inline GameMap* getMap() const;
     
     Vector2D getWindVector() const;
    // void setWindVector(unsigned int speed, Direction windDirection);
@@ -164,20 +164,20 @@ RANDOMMODE
 class WeatherField{
 private:
 tfield* mapField;
-tmap* map;
+GameMap* map;
 int counter;
 int value;
 
 void setMapField(tfield* mapField);
 
 public:
-WeatherField(tmap* map);
+WeatherField(GameMap* map);
 WeatherField(MapCoordinate mapPos, const WeatherArea* area);
 ~WeatherField();
 void move(const Vector2D& vector);
-bool isOnMap(const tmap* map) const;
+bool isOnMap(const GameMap* map) const;
 void update(const WeatherArea*, FieldSet& processedFields);
-void reset(tmap* m, const WeatherArea*, FieldSet& processedFields);
+void reset(GameMap* m, const WeatherArea*, FieldSet& processedFields);
 void write (tnstream& outputStream) const;
 void read (tnstream& inputStream);
 void setValue(int v);
@@ -219,7 +219,7 @@ Percentages falloutPercentages;
 Percentages windDirPercentages;
 Percentages windSpeedPercentages;
 
-tmap* gameMap;
+GameMap* gameMap;
 WeatherSystemMode currentMode;
 
 WeatherSystem(const WeatherSystem&);
@@ -236,15 +236,15 @@ public:
   static const int WINDSPEEDDETAILLEVEL = 8;
   
   //Used to support old wind data
-  //Once the read order of tmap is changed and fields + weather are read inside of gamemap::read
+  //Once the read order of GameMap is changed and fields + weather are read inside of gamemap::read
   //get rid of this
   
   static int legacyWindSpeed;
   static int legacyWindDirection;
   
   
-  WeatherSystem(tmap* map);
-  WeatherSystem(tmap* map, int areaSpawns, float windspeed2FieldRatio, unsigned int timeInterval = 6, WeatherSystemMode mode = EVENTMODE, FalloutType defaultFallout = DRY);
+  WeatherSystem(GameMap* map);
+  WeatherSystem(GameMap* map, int areaSpawns, float windspeed2FieldRatio, unsigned int timeInterval = 6, WeatherSystemMode mode = EVENTMODE, FalloutType defaultFallout = DRY);
   ~WeatherSystem();
   inline void setSeedValue();
   void setLikelihoodFallOut(const Percentages& fol) throw (IllegalValueException);

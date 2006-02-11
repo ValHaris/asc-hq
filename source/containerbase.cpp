@@ -30,7 +30,7 @@
 #include "resourcenet.h"
 
 
-ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, pmap map, int player ) : gamemap ( map ), baseType (bt)
+ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, GameMap* map, int player ) : gamemap ( map ), baseType (bt)
 {
    damage = 0;
    color = player*8;
@@ -191,7 +191,7 @@ ContainerBase* ContainerBase :: findParent ( const ContainerBase* veh )
 
 ContainerBase* ContainerBase :: getCarrier() const
 {
-   pfield fld = getMap()->getField( getPosition() );
+   tfield* fld = getMap()->getField( getPosition() );
    if ( fld->vehicle == this )
       return NULL;
    

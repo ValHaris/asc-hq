@@ -24,7 +24,7 @@ const char*  cdirections[WeatherSystem::WindDirNum] = {"North", "NorthEast", "So
 //****************************************************************************************************************************************
 const int WeatherArea::MAXVALUE = 200;
 const int WeatherArea::MAXOFFSET = 100;
-WeatherArea::WeatherArea(tmap* m, int xCenter, int yCenter, int w, int h, int d, FalloutType fallout, unsigned int sV, bool clustered): map(m), center(xCenter, yCenter), width(w), height(h), duration(d), ft(fallout), stepCount(0), seedValue(sV), verticalWindAccu(0), horizontalWindAccu(0), clustered(clustered) {
+WeatherArea::WeatherArea(GameMap* m, int xCenter, int yCenter, int w, int h, int d, FalloutType fallout, unsigned int sV, bool clustered): map(m), center(xCenter, yCenter), width(w), height(h), duration(d), ft(fallout), stepCount(0), seedValue(sV), verticalWindAccu(0), horizontalWindAccu(0), clustered(clustered) {
     WeatherField* wf;
     for(int i = 0; i < width * height; i++) {
         int x =  i % width;
@@ -35,10 +35,10 @@ WeatherArea::WeatherArea(tmap* m, int xCenter, int yCenter, int w, int h, int d,
     createWeatherFields();
 }
 
-WeatherArea::WeatherArea(tmap* m): map(m) {}
+WeatherArea::WeatherArea(GameMap* m): map(m) {}
 
 
-WeatherArea::WeatherArea(tmap* m, int xCenter, int yCenter, int r):map(m), center(xCenter, yCenter), width(r), height(r), radius(r) {}
+WeatherArea::WeatherArea(GameMap* m, int xCenter, int yCenter, int r):map(m), center(xCenter, yCenter), width(r), height(r), radius(r) {}
 
 WeatherArea::~WeatherArea() {
     for(int i = 0; i < area.size(); i++) {
@@ -68,7 +68,7 @@ void WeatherArea::createWeatherFields() {
 }
 
 
-tmap* WeatherArea::getMap() const {
+GameMap* WeatherArea::getMap() const {
     return map;
 }
 
@@ -353,7 +353,7 @@ int WeatherArea::calculateDiamondPointValue(int a, int b, int c, int d) {
 
 //******************************************************************************************************************************************
 
-WeatherField::WeatherField(tmap* m):mapField(0), map(m) {}
+WeatherField::WeatherField(GameMap* m):mapField(0), map(m) {}
 
 WeatherField::WeatherField(MapCoordinate mapPos, const WeatherArea* area):posInArea(mapPos), mapField(0) {
     if(isOnMap(area->getMap())) {
@@ -372,7 +372,7 @@ void WeatherField::setMapField(tfield* field) {
     mapField = field;
 }
 
-bool WeatherField::isOnMap(const tmap* map) const {
+bool WeatherField::isOnMap(const GameMap* map) const {
     if((posInArea.x>=0) && (posInArea.x < map->xsize)&&
             (posInArea.y>=0) && (posInArea.y < map->ysize))
     return true;
@@ -381,7 +381,7 @@ bool WeatherField::isOnMap(const tmap* map) const {
 
     }
 
-void WeatherField::reset(tmap* m, const WeatherArea* area, FieldSet& processedFields) {
+void WeatherField::reset(GameMap* m, const WeatherArea* area, FieldSet& processedFields) {
         if(processedFields.find(mapField)== processedFields.end()) {
             mapField->setweather(m->weatherSystem->getDefaultFalloutType());
             mapField->setparams();
@@ -419,7 +419,7 @@ int WeatherField::getValue() {
 int WeatherSystem::legacyWindSpeed = 0;
 int WeatherSystem::legacyWindDirection = 0;
 
-WeatherSystem::WeatherSystem(tmap* map, int spawn, float ws2fr, unsigned int tInterval, WeatherSystemMode mode, FalloutType defaultFT):timeInterval(tInterval), windspeed2FieldRatio(ws2fr), areaSpawnAmount(spawn), maxForecast(5), gameMap(map), currentMode(mode), windspeed(0), globalWindDirection(S), lowerRandomSize(0.25), upperRandomSize(0.8), access2RandCount(0), defaultFallout(defaultFT), lowerRandomDuration(tInterval), upperRandomDuration(tInterval*3) {
+WeatherSystem::WeatherSystem(GameMap* map, int spawn, float ws2fr, unsigned int tInterval, WeatherSystemMode mode, FalloutType defaultFT):timeInterval(tInterval), windspeed2FieldRatio(ws2fr), areaSpawnAmount(spawn), maxForecast(5), gameMap(map), currentMode(mode), windspeed(0), globalWindDirection(S), lowerRandomSize(0.25), upperRandomSize(0.8), access2RandCount(0), defaultFallout(defaultFT), lowerRandomDuration(tInterval), upperRandomDuration(tInterval*3) {
     seedValue = time(0);
     seedValueIsSet = true;
     srand(static_cast<unsigned int>(seedValue));
@@ -457,7 +457,7 @@ WeatherSystem::WeatherSystem(tmap* map, int spawn, float ws2fr, unsigned int tIn
     map->newRound.connect(SigC::slot(*this, &WeatherSystem::update));
 }
 
-WeatherSystem::WeatherSystem(tmap* map):gameMap(map) {
+WeatherSystem::WeatherSystem(GameMap* map):gameMap(map) {
     map->newRound.connect(SigC::slot(*this, &WeatherSystem::update));
 
 

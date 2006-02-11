@@ -64,10 +64,10 @@ const int fileterminator = 0xa01a;
 
 
 
-void         seteventtriggers( pmap actmap )
+void         seteventtriggers( GameMap* actmap )
 {
    #ifdef sgmain
-   for ( tmap::Events::iterator i = actmap->events.begin(); i != actmap->events.end(); ++i )
+   for ( GameMap::Events::iterator i = actmap->events.begin(); i != actmap->events.end(); ++i )
        (*i)->arm();
 
    #endif
@@ -349,7 +349,7 @@ void     tgameloaders::initmap ( void )
 
 void     tspfldloaders::readmap ( void )
 {
-    spfld = new tmap;
+    spfld = new GameMap;
 
     spfld->read ( *stream );
 }
@@ -423,7 +423,7 @@ void   tspfldloaders::writefields ( void )
 
    do {
       cnt2 = 0; 
-      pfield fld = &spfld->field[l];
+      tfield* fld = &spfld->field[l];
       /*
 
       RLE encoding not supported any more, since tfield is becomming too complex
@@ -576,10 +576,10 @@ void tspfldloaders::readfields ( void )
       displaymessage ( "Could not allocate memory for map ",2);
 
    int l = 0;
-   pfield lfld = NULL;
+   tfield* lfld = NULL;
 
    do {
-      pfield fld2;
+      tfield* fld2;
 
       if (cnt2 == 0) { 
 
@@ -775,12 +775,12 @@ void tspfldloaders::readfields ( void )
 /*     Chain Items                                           */
 /**************************************************************/
 
-void   tspfldloaders::chainitems ( pmap actmap )
+void   tspfldloaders::chainitems ( GameMap* actmap )
 {
    int i = 0;
    for (int y = 0; y < actmap->ysize; y++)
       for (int x = 0; x < actmap->xsize; x++) {
-          pfield fld = &actmap->field[i];
+          tfield* fld = &actmap->field[i];
           fld->setparams();
           i++;
       }
@@ -792,7 +792,7 @@ void   tspfldloaders::chainitems ( pmap actmap )
 /*     Set Player Existencies                                */
 /**************************************************************/
 
-SigC::Signal1<void,tmap*> tspfldloaders::mapLoaded; 
+SigC::Signal1<void,GameMap*> tspfldloaders::mapLoaded;
 
 
 tspfldloaders::tspfldloaders ( void )
@@ -886,7 +886,7 @@ int          tmaploaders::savemap( const ASCString& name )
 
 
 
-tmap* tmaploaders::_loadmap( const ASCString& name )
+GameMap* tmaploaders::_loadmap( const ASCString& name )
 { 
     displayLogMessage ( 4, "loading map %s ... ", name.c_str() );
 
@@ -959,7 +959,7 @@ tmap* tmaploaders::_loadmap( const ASCString& name )
 
    displayLogMessage ( 4, "done\n");
 
-   tmap* m  = spfld;
+   GameMap* m  = spfld;
    spfld = NULL;
    
    mapLoaded( m );
@@ -968,7 +968,7 @@ tmap* tmaploaders::_loadmap( const ASCString& name )
 } 
 
 
-tmap* tmaploaders::loadmap ( const ASCString& name )
+GameMap* tmaploaders::loadmap ( const ASCString& name )
 {
      tmaploaders gl;
      return gl._loadmap ( name );
@@ -989,7 +989,7 @@ tmap* tmaploaders::loadmap ( const ASCString& name )
 
 
 
-void   tsavegameloaders::savegame( pnstream strm, pmap gamemap, bool writeReplays )
+void   tsavegameloaders::savegame( pnstream strm, GameMap* gamemap, bool writeReplays )
 {
    stream = strm;
    spfld = gamemap;
@@ -1034,7 +1034,7 @@ int   tsavegameloaders::loadgame( const ASCString& filename )
 {
    tnfilestream filestream ( filename, tnstream::reading );
 
-   pmap spfld = loadgame ( &filestream );
+   GameMap* spfld = loadgame ( &filestream );
 
    delete actmap;
    actmap = spfld;
@@ -1057,7 +1057,7 @@ int   tsavegameloaders::loadgame( const ASCString& filename )
    return 0;
 }
 
-tmap*          tsavegameloaders::loadgame( pnstream strm )
+GameMap*          tsavegameloaders::loadgame( pnstream strm )
 {
    stream = strm;
 
@@ -1109,7 +1109,7 @@ tmap*          tsavegameloaders::loadgame( pnstream strm )
          loadReplay = false;
 
    if ( loadReplay ) {
-      spfld->replayinfo = new tmap::ReplayInfo;
+      spfld->replayinfo = new GameMap::ReplayInfo;
       spfld->replayinfo->read ( *stream );
    } else
       spfld->replayinfo = NULL;
@@ -1128,7 +1128,7 @@ tmap*          tsavegameloaders::loadgame( pnstream strm )
 
    calculateallobjects( spfld );
 
-   tmap* s = spfld;
+   GameMap* s = spfld;
    spfld = NULL;  // to avoid that is is deleted by the destructor of tsavegameloaders
    return s;
 }
@@ -1182,7 +1182,7 @@ int          tnetworkloaders::savenwgame( pnstream strm )
 
 
 
-tmap*  tnetworkloaders::loadnwgame( pnstream strm )
+GameMap*  tnetworkloaders::loadnwgame( pnstream strm )
 { 
    char* name = "network game";
 
@@ -1245,7 +1245,7 @@ tmap*  tnetworkloaders::loadnwgame( pnstream strm )
    readdissections();
 
    if ( spfld->__loadreplayinfo ) {
-      spfld->replayinfo = new tmap::ReplayInfo;
+      spfld->replayinfo = new GameMap::ReplayInfo;
       spfld->replayinfo->read ( *stream );
    }
 
@@ -1278,7 +1278,7 @@ tmap*  tnetworkloaders::loadnwgame( pnstream strm )
             }
 
    
-   tmap* spfldcopy = spfld;
+   GameMap* spfldcopy = spfld;
    spfld = NULL;
 
    mapLoaded( spfldcopy );
@@ -1372,7 +1372,7 @@ void  loadgame( const ASCString& name )
 
 
 
-void  savereplay( tmap* gamemap, int num )
+void  savereplay( GameMap* gamemap, int num )
 {
    try {
       if ( !gamemap->replayinfo )
@@ -1398,9 +1398,9 @@ void  savereplay( tmap* gamemap, int num )
    } /* endcatch */
 }
 
-tmap*  loadreplay( pmemorystreambuf streambuf )
+GameMap*  loadreplay( pmemorystreambuf streambuf )
 {
-   tmap* replaymap = NULL;
+   GameMap* replaymap = NULL;
 
    try {
       char* name = "memorystream actmap->replayinfo";
@@ -1446,9 +1446,9 @@ tmap*  loadreplay( pmemorystreambuf streambuf )
 
 
 
-tmap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadingFunction loader )
+GameMap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadingFunction loader )
 {
-   tmap* m = NULL;
+   GameMap* m = NULL;
    try {
       m = loader( filename );
    }

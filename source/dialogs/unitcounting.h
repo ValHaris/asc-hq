@@ -20,10 +20,10 @@
 #define unitcountingH
 
  class ContainerBase;
- class tmap;
+ class GameMap;
  
  extern void showUnitCargoSummary( ContainerBase* cb );
- extern void showUnitSummary( tmap* actmap );
+ extern void showUnitSummary( GameMap* actmap );
 
 #endif
 

@@ -20,7 +20,7 @@
 */
 
 struct Rect {
-  pfield a, b, c, d;
+  tfield *a, *b, *c, *d;
 
 };
 
@@ -32,7 +32,7 @@ typedef list<Rect> RectList;
 
 class ResourcePlacement {
 private:
-  tmap& map;
+  GameMap& map;
   double fuelRoughness;
   double materialRoughness;
   bool placeFuel;
@@ -49,12 +49,12 @@ private:
   
   void setFieldValueFuel(tfield* f);
   void setFieldValueMaterial(tfield* f);
-  int calculateCornerValueFuel(pfield a, pfield b, pfield c);
-  int calculateDiamondValueFuel(pfield a, pfield b, pfield c, pfield d);
-  int calculateCornerValueMaterial(pfield a, pfield b, pfield c);
-  int calculateDiamondValueMaterial(pfield a, pfield b, pfield c, pfield d);
-  pfield calculateCornerPoint(pfield a, pfield b, pfield c);
-  pfield calculateDiamondPoint(pfield a, pfield b, pfield c, pfield d);
+  int calculateCornerValueFuel(tfield* a, tfield* b, tfield* c);
+  int calculateDiamondValueFuel(tfield* a, tfield* b, tfield* c, tfield* d);
+  int calculateCornerValueMaterial(tfield* a, tfield* b, tfield* c);
+  int calculateDiamondValueMaterial(tfield* a, tfield* b, tfield* c, tfield* d);
+  tfield* calculateCornerPoint(tfield* a, tfield* b, tfield* c);
+  tfield* calculateDiamondPoint(tfield* a, tfield* b, tfield* c, tfield* d);
   int calculateCurrentOffset(int offset);
   void step(Rect r);
   void runDS();
@@ -70,7 +70,7 @@ public:
   @param maxFuelOffSet Determines the absolut offset fuelFields might have
   @param maxMaterialOffSet Determines the absolut offset materialFields might have
   */
-  ResourcePlacement(tmap& map, double fuelRoughness, double materialRoughness, unsigned short maxFuelOffSet, unsigned short maxMaterialOffSet, 
+  ResourcePlacement(GameMap& map, double fuelRoughness, double materialRoughness, unsigned short maxFuelOffSet, unsigned short maxMaterialOffSet, 
                     int additionalFreeFieldsPercFuel = 0, int additionalFreeFieldsPercMaterial = 0);
   /**  
   @brief Destructor

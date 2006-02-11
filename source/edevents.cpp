@@ -880,7 +880,7 @@ void         teventsel::setup(void)
 void   teventsel::get_text(int nr) //gibt in txt den string zurck
 {
    int count = 0;
-   for ( tmap::Events::iterator i = actmap->events.begin(); i != actmap->events.end() && count <= nr; ++i, ++count )
+   for ( GameMap::Events::iterator i = actmap->events.begin(); i != actmap->events.end() && count <= nr; ++i, ++count )
       if( count == nr ) {
          strcpy(txt,EventActionName[(*i)->action->getActionID()]);
          strcat(txt,"  ");
@@ -901,7 +901,7 @@ void         teventsel::buttonpressed(int         id)
                 return;
              }
 
-             tmap::Events::iterator e = actmap->events.begin();
+             GameMap::Events::iterator e = actmap->events.begin();
              for ( int t = 0; t < redline && e != actmap->events.end(); t++ )
                 ++e;
 
@@ -921,7 +921,7 @@ void         teventsel::buttonpressed(int         id)
       case 5:  if ( actmap->events.size() ) { // edit
                    tmemorystreambuf buf;
                                               
-                   tmap::Events::iterator e = actmap->events.begin();
+                   GameMap::Events::iterator e = actmap->events.begin();
                    for ( int t = 0; t < redline && e != actmap->events.end(); t++ )
                       ++e;
 
@@ -942,7 +942,7 @@ void         teventsel::buttonpressed(int         id)
 
       case 7:   { // delete
 
-             tmap::Events::iterator e = actmap->events.begin();
+             GameMap::Events::iterator e = actmap->events.begin();
              for ( int t = 0; t < redline && e != actmap->events.end(); t++ )
                 ++e;
 

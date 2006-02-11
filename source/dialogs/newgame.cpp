@@ -42,7 +42,7 @@ class GameParameterEditorWidget;
 class StartMultiplayerGame: public ConfigurableWindow {
    private:
 
-      tmap* newMap;
+      GameMap* newMap;
       
       enum Pages { ModeSelection = 1, FilenameSelection, PlayerSetup, EmailSetup, AllianceSetup, MapParameterEditor, MultiPlayerOptions, PasswordSearch }; 
       Pages page;

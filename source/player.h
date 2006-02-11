@@ -72,13 +72,13 @@ class DiplomaticStateVector : public SigC::Object {
       void write ( tnstream& stream ) const;
 };
 
-class tmap;
+class GameMap;
 
 
 //! the different players in ASC. There may be 8 players (0..7) and neutral units (8)
 class Player : public SigC::Object {
       int player;
-      tmap* parentMap;
+      GameMap* parentMap;
       
       void turnBegins( Player& p );
       void userInteractionBegins( Player& p );
@@ -89,10 +89,10 @@ class Player : public SigC::Object {
       
       int getPosition() const { return player; };
       
-      const tmap* getParentMap() const { return parentMap; };
-      tmap* getParentMap() { return parentMap; };
+      const GameMap* getParentMap() const { return parentMap; };
+      GameMap* getParentMap() { return parentMap; };
       
-      void setParentMap( tmap* map, int pos );
+      void setParentMap( GameMap* map, int pos );
       
       //! does the player exist at all
       bool         exist();

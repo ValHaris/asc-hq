@@ -29,7 +29,7 @@
 class MapNetwork {
                 static int instancesrunning;
              protected:
-                pmap actmap;
+                GameMap* actmap;
                 int pass;
 
                 MapCoordinate startposition;
@@ -47,13 +47,13 @@ class MapNetwork {
              public:
                 enum Scope { singleField, net, wholeMap, globalPool };
                 virtual void start ( int x, int y );
-                MapNetwork ( pmap gamemap, int checkInstances = 1 );
+                MapNetwork ( GameMap* gamemap, int checkInstances = 1 );
                 virtual ~MapNetwork();
            };
 
 class ResourceNet : public MapNetwork {
                public:
-                  ResourceNet ( pmap gamemap, int _scope = -1 ) : MapNetwork ( gamemap, _scope != 0 ), resourcetype(-1), scope(_scope) {};
+                  ResourceNet ( GameMap* gamemap, int _scope = -1 ) : MapNetwork ( gamemap, _scope != 0 ), resourcetype(-1), scope(_scope) {};
                protected:
                   int resourcetype;
                   int scope;
@@ -71,7 +71,7 @@ class GetConnectedBuildings : public ResourceNet {
                 public:
                    typedef vector<Building*> BuildingContainer;
                    BuildingContainer& buildingContainer;
-                   GetConnectedBuildings ( BuildingContainer& buildingContainer_, pmap gamemap, int resourceType ) : ResourceNet ( gamemap, gamemap->isResourceGlobal(resourceType)?2:1), buildingContainer ( buildingContainer_) { resourcetype = 0; };
+                   GetConnectedBuildings ( BuildingContainer& buildingContainer_, GameMap* gamemap, int resourceType ) : ResourceNet ( gamemap, gamemap->isResourceGlobal(resourceType)?2:1), buildingContainer ( buildingContainer_) { resourcetype = 0; };
 };
 
 class StaticResourceNet : public ResourceNet {
@@ -84,7 +84,7 @@ class StaticResourceNet : public ResourceNet {
                   virtual int searchfinished ( void );
 
               public:
-                  StaticResourceNet ( pmap gamemap, int scope = -1 ) : ResourceNet ( gamemap, scope ) {};
+                  StaticResourceNet ( GameMap* gamemap, int scope = -1 ) : ResourceNet ( gamemap, scope ) {};
                   int getresource ( int x, int y, int resource, int _need, int _queryonly, int _player, int _scope );
                        /* _scope:  0 : only this field
                                    1 : net
@@ -99,7 +99,7 @@ class GetResource : public StaticResourceNet {
                   virtual void checkbuilding ( Building* b );
                   virtual void start ( int x, int y );
               public:
-                  GetResource ( pmap gamemap, int scope = -1 );
+                  GetResource ( GameMap* gamemap, int scope = -1 );
    };
 
 class PutResource : public StaticResourceNet {
@@ -108,7 +108,7 @@ class PutResource : public StaticResourceNet {
                   virtual void checkvehicle ( Vehicle* v ) {};
                   virtual void start ( int x, int y );
                public:
-                   PutResource ( pmap gamemap, int scope = -1 ) : StaticResourceNet ( gamemap, scope ) {};
+                   PutResource ( GameMap* gamemap, int scope = -1 ) : StaticResourceNet ( gamemap, scope ) {};
    };
 
 class PutTribute : public StaticResourceNet {
@@ -119,7 +119,7 @@ class PutTribute : public StaticResourceNet {
                   virtual void checkvehicle ( Vehicle* v ) {};
                   virtual void start ( int x, int y );
               public:
-                  PutTribute ( pmap gamemap ) : StaticResourceNet( gamemap ) {};
+                  PutTribute ( GameMap* gamemap ) : StaticResourceNet( gamemap ) {};
                   int puttribute ( Building* start, int resource, int _queryonly, int _forplayer, int _fromplayer, int _scope );
    };
 
@@ -131,7 +131,7 @@ class GetResourceCapacity : public StaticResourceNet {
                   virtual void start ( int x, int y );
                   virtual int searchfinished ( void ) { return 0; };
               public:
-                  GetResourceCapacity( pmap gamemap ) : StaticResourceNet ( gamemap ) {};
+                  GetResourceCapacity( GameMap* gamemap ) : StaticResourceNet ( gamemap ) {};
    };
 
 class ResourceChangeNet : public ResourceNet {
@@ -147,7 +147,7 @@ class ResourceChangeNet : public ResourceNet {
                                    1 : net
                                    2 : global
                        */
-                  ResourceChangeNet ( pmap gamemap ) : ResourceNet ( gamemap ) {};
+                  ResourceChangeNet ( GameMap* gamemap ) : ResourceNet ( gamemap ) {};
 
        };
 
@@ -157,7 +157,7 @@ class GetResourcePlus : public ResourceChangeNet {
                   virtual void checkbuilding ( Building* b );
                   virtual void checkvehicle ( Vehicle* v );
               public:
-                  GetResourcePlus ( pmap gamemap ) : ResourceChangeNet ( gamemap ) {};
+                  GetResourcePlus ( GameMap* gamemap ) : ResourceChangeNet ( gamemap ) {};
    };
 
 class GetResourceUsage : public ResourceChangeNet {
@@ -165,7 +165,7 @@ class GetResourceUsage : public ResourceChangeNet {
                   virtual void checkbuilding ( Building* b );
                   virtual void checkvehicle ( Vehicle* v ) {};
               public:
-                  GetResourceUsage ( pmap gamemap ) : ResourceChangeNet ( gamemap ) {};
+                  GetResourceUsage ( GameMap* gamemap ) : ResourceChangeNet ( gamemap ) {};
    };
 
 extern void transfer_all_outstanding_tribute( Player& player );

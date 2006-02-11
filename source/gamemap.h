@@ -1,5 +1,5 @@
 /*! \file gamemap.h
-    \brief Definition of THE central asc class: tmap 
+    \brief Definition of THE central asc class: GameMap 
 */
 
 /***************************************************************************
@@ -115,7 +115,7 @@ class LoadNextMap {
 
 
 class OverviewMapHolder : public SigC::Object {
-      tmap& map;
+      GameMap& map;
       Surface overviewMapImage;
       bool initialized;
       bool completed;
@@ -129,7 +129,7 @@ class OverviewMapHolder : public SigC::Object {
       void updateField( const MapCoordinate& pos );
       
    public:
-      OverviewMapHolder( tmap& gamemap );
+      OverviewMapHolder( GameMap& gamemap );
    
       /** 
       returns the overview surface for the map. 
@@ -137,7 +137,7 @@ class OverviewMapHolder : public SigC::Object {
       */
       const Surface& getOverviewMap( bool complete = true );
       
-      static void clearmap( tmap* actmap );
+      static void clearmap( GameMap* actmap );
       
       static SigC::Signal0<void> generationComplete;
       
@@ -149,8 +149,8 @@ class OverviewMapHolder : public SigC::Object {
 
 
 //! The map. THE central structure of ASC, which holds everything not globally available together
-class tmap {
-      void operator= ( const tmap& map );
+class GameMap {
+      void operator= ( const GameMap& map );
       bool dialogsHooked;
    public:
       //! the size of the map
@@ -160,7 +160,7 @@ class tmap {
       int          xpos, ypos;
 
       //! the array of fields
-      pfield       field;
+      tfield*       field;
 
       //! the codeword for accessing a map in a campaign
       char         codeword[11];
@@ -366,7 +366,7 @@ class tmap {
             IDsAllowed idsAllowed;
       } unitProduction;
 
-      tmap ( void );
+      GameMap ( void );
 
       Vehicle* getUnit ( int x, int y, int nwid );
       Vehicle* getUnit ( int nwid );
@@ -375,8 +375,8 @@ class tmap {
       void setgameparameter ( GameParameter num, int value );
       void cleartemps( int b = -1, int value = 0 );
       bool isResourceGlobal ( int resource );
-      pfield getField ( int x, int y );
-      pfield getField ( const MapCoordinate& pos );
+      tfield* getField ( int x, int y );
+      tfield* getField ( const MapCoordinate& pos );
       
       
       /** @name Turn Management
@@ -403,7 +403,7 @@ class tmap {
       SigC::Signal1<void,Player&> sigPlayerUserInteractionEnds;
       SigC::Signal1<void,Player&> sigPlayerTurnEnds;
 
-      static SigC::Signal1<void,tmap&> sigMapDeletion;
+      static SigC::Signal1<void,GameMap&> sigMapDeletion;
       
       //! called when a new round starts (after switching from player 7 to player 0 )
       SigC::Signal0<void> newRound;
@@ -423,7 +423,7 @@ class tmap {
       //! resizes the map. Positive numbers enlarge the map in that direction
       int  resize( int top, int bottom, int left, int right );
 
-      bool compareResources( tmap* replaymap, int player, ASCString* log = NULL );
+      bool compareResources( GameMap* replaymap, int player, ASCString* log = NULL );
 
       void calculateAllObjects ( void );
 
@@ -450,7 +450,7 @@ class tmap {
       int getBuildingTypeNum ( );
       int getTechnologyNum ( );
 
-      ~tmap();
+      ~GameMap();
 
       //! just a helper variable for loading the map; no function outside;
       bool loadOldEvents;

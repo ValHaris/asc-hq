@@ -35,7 +35,7 @@ void MapNetwork :: searchfield ( int x, int y, int dir )
 {
   int s;
 
-   pfield fld = actmap->getField ( x, y );
+   tfield* fld = actmap->getField ( x, y );
    if ( !fld )
       return;
 
@@ -103,7 +103,7 @@ void MapNetwork :: searchfield ( int x, int y, int dir )
 void MapNetwork :: searchvehicle ( int x, int y )
 {
    if ( pass == 2 ) {
-      pfield newfield = actmap->getField ( x, y );
+      tfield* newfield = actmap->getField ( x, y );
       if ( newfield )
          if ( !newfield->a.temp2 )
            if ( newfield->vehicle ) {
@@ -120,7 +120,7 @@ void MapNetwork :: searchbuilding ( int x, int y )
    if ( !bld )
       return;
 
-   pfield entry = bld->getEntryField();
+   tfield* entry = bld->getEntryField();
    if ( entry->a.temp )
       return;
 
@@ -133,13 +133,13 @@ void MapNetwork :: searchbuilding ( int x, int y )
       for( int i = 0; i < 4; i++ )
          for ( int j = 0; j < 6; j++ ) {
             MapCoordinate mc = bld->getFieldCoordinates ( BuildingType::LocalCoordinate(i, j) );
-            pfield fld2 = actmap->getField ( mc );
+            tfield* fld2 = actmap->getField ( mc );
             if ( fld2 && fld2->building == bld )
                for ( int d = 0; d < sidenum; d++ ) {
                   int xp2 = mc.x;
                   int yp2 = mc.y;
                   getnextfield ( xp2, yp2, d );
-                  pfield newfield = actmap->getField ( xp2, yp2 );
+                  tfield* newfield = actmap->getField ( xp2, yp2 );
                   if ( newfield && newfield->building != bld  && !newfield->a.temp )
                      searchfield ( xp2, yp2, d );
 
@@ -152,7 +152,7 @@ void MapNetwork :: searchbuilding ( int x, int y )
 
 int MapNetwork :: instancesrunning = 0;
 
-MapNetwork :: MapNetwork ( pmap gamemap, int checkInstances ) : actmap ( gamemap )
+MapNetwork :: MapNetwork ( GameMap* gamemap, int checkInstances ) : actmap ( gamemap )
 {
    if ( checkInstances ) {
       if ( instancesrunning )
@@ -179,11 +179,11 @@ void MapNetwork :: searchAllVehiclesNextToBuildings ( int player )
    for ( Player::VehicleList::iterator j = actmap->player[player].vehicleList.begin(); j != actmap->player[player].vehicleList.end(); j++ ) {
       MapCoordinate3D mc = (*j)->getPosition();
       for ( int s = 0; s < sidenum; s++ ) {
-         pfield fld = actmap->getField ( getNeighbouringFieldCoordinate ( mc, s ));
+         tfield* fld = actmap->getField ( getNeighbouringFieldCoordinate ( mc, s ));
          if ( fld ) {
             Building* bld = fld->building;
             if ( bld && bld->color == (*j)->color ) {
-               pfield fld2 = actmap->getField( (*j)->getPosition());
+               tfield* fld2 = actmap->getField( (*j)->getPosition());
                if ( !fld2->a.temp2 ) {
                   fld2->a.temp2 = 1;
                   checkvehicle ( *j );
@@ -225,7 +225,7 @@ void MapNetwork :: start ( int x, int y )
          }
       } else  
          if ( globalsearch() == 0 ) {
-            pfield fld = actmap->getField ( x, y );
+            tfield* fld = actmap->getField ( x, y );
             if ( fld )
                if ( fld->building ) {
                   if ( pass == 1 )
@@ -242,7 +242,7 @@ void MapNetwork :: start ( int x, int y )
 
 int ResourceNet :: fieldavail ( int x, int y )
 {
-    pfield fld = actmap->getField ( x, y );
+    tfield* fld = actmap->getField ( x, y );
 /*    Object* o = fld->checkforobject ( pipelineobject ) ; 
     if ( o )
        return o->dir;
@@ -261,7 +261,7 @@ int ResourceNet :: fieldavail ( int x, int y )
              int xp = x;
              int yp = y;
              getnextfield ( xp, yp , i );
-             pfield fld2 = actmap->getField ( xp, yp );
+             tfield* fld2 = actmap->getField ( xp, yp );
              if ( fld2 )
                 if ( (fld2->bdt & tb).any() ||  fld2->building )
                    d |= ( 1 << i );
@@ -306,7 +306,7 @@ int StaticResourceNet :: searchfinished ( void )
 
 
 
-GetResource :: GetResource ( pmap gamemap, int scope )
+GetResource :: GetResource ( GameMap* gamemap, int scope )
              : StaticResourceNet ( gamemap, scope )
 {
    memset ( tributegot, 0, sizeof ( tributegot ));
@@ -509,7 +509,7 @@ int PutTribute :: puttribute ( Building* start, int resource, int _queryonly, in
 void transfer_all_outstanding_tribute ( Player& player )
 {
    int targplayer = player.getPosition();
-   tmap* actmap = player.getParentMap();
+   GameMap* actmap = player.getParentMap();
    
    if ( actmap->player[targplayer].exist() ) {
       ASCString text;

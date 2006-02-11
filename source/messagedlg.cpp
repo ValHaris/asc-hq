@@ -697,7 +697,7 @@ void viewmessage ( const Message& message )
 
 void checkJournal( Player& player )
 {
-   tmap* actmap = player.getParentMap();
+   GameMap* actmap = player.getParentMap();
    
    if ( actmap->lastjournalchange.abstime )
       if ( (actmap->lastjournalchange.turn() == actmap->time.turn() ) ||

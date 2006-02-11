@@ -60,7 +60,7 @@ HexDirection ReverseDirection( HexDirection d )
 }
 
 
-AStar :: AStar ( pmap actmap, Vehicle* veh )
+AStar :: AStar ( GameMap* actmap, Vehicle* veh )
 {
    tempsMarked = NULL;
    _path = NULL;
@@ -140,7 +140,7 @@ void AStar::findPath( HexCoord A, HexCoord B, Path& path )
 {
     _path = &path;
     Vehicle* veh = _veh;
-    pmap actmap = _actmap;
+    GameMap* actmap = _actmap;
 
     if ( actmap->getField(A.m, A.n)->unitHere(veh) )
        if ( !veh->canMove() )
@@ -345,7 +345,7 @@ void AStar::findPath( Path& path, int x, int y )
 
 
 
-void findPath( pmap actmap, AStar::Path& path, Vehicle* veh, int x, int y )
+void findPath( GameMap* actmap, AStar::Path& path, Vehicle* veh, int x, int y )
 {
   AStar as ( actmap, veh );
   as.findPath ( AStar::HexCoord ( veh->xpos, veh->ypos ), AStar::HexCoord ( x, y ), path );
@@ -427,7 +427,7 @@ AStar3D::Container::iterator AStar3D::Container::find ( const MapCoordinate3D& p
 
 
 
-AStar3D :: AStar3D ( pmap actmap_, Vehicle* veh_, bool markTemps_, int maxDistance )
+AStar3D :: AStar3D ( GameMap* actmap_, Vehicle* veh_, bool markTemps_, int maxDistance )
          : operationLimiter ( NULL )
 {
    markTemps = markTemps_;
@@ -648,7 +648,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
         // If we're at the goal, then exit
         for ( vector<MapCoordinate3D>::const_iterator i = B.begin(); i != B.end(); i++ )
            if( N.h == *i ) {
-              pfield fld = actmap->getField(N.h);
+              tfield* fld = actmap->getField(N.h);
               if ( N.h.getNumericalHeight() == -1 || !(fld->building || (fld->vehicle && fld->vehicle != veh ))) {
                  found = true;
                  endpos = N.h;
@@ -720,7 +720,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                 if ( dock ) {
                    for ( int dir = 0; dir < 6; dir++ ) {
                       MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N.h, dir );
-                      pfield fld = actmap->getField( pos );
+                      tfield* fld = actmap->getField( pos );
                       if ( fld && fld->getContainer() && ( fld->getContainer() != actmap->getField(N.h)->getContainer() ))
                          if ( fld->getContainer()->vehicleDocking(veh, false ) & dock )
                             if ( fld->getContainer()->getOwner() == actmap->getField(N.h)->getContainer()->getOwner() )
@@ -806,7 +806,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                           MapCoordinate3D newpos = N.h;
                           bool access = true;
                           for ( int step = 0; step <= hcm->dist; step++ ) {
-                             pfield fld = actmap->getField(newpos);
+                             tfield* fld = actmap->getField(newpos);
                              if ( !fld ) {
                                 access = false;
                                 break;
@@ -828,7 +828,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                                    access = false;
                           }
 
-                          pfield fld = actmap->getField( newpos );
+                          tfield* fld = actmap->getField( newpos );
                           if ( fld && access ) {
                              Node N2;
                              N2.h.setnum ( newpos.x, newpos.y, N.h.getNumericalHeight() + hcm->heightDelta );
@@ -863,7 +863,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
         path.insert ( path.begin(), PathPoint ( h, int(N.gval), N.enterHeight, N.hasAttacked ) );
         while( !(h == A) )
         {
-            // pfield fld = actmap->getField ( h );
+            // tfield* fld = actmap->getField ( h );
             HexDirection dir = HexDirection ( getPosDir(h) );
 
             int prevHeight = getPosHHop(h);

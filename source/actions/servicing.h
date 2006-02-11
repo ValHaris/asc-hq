@@ -113,7 +113,7 @@ class ServiceChecker {
 class ServiceTargetSearcher : protected ServiceChecker {
 
    private:
-      tmap* gamemap;
+      GameMap* gamemap;
 
       void fieldChecker( const MapCoordinate& pos );
       void addTarget( ContainerBase* target );

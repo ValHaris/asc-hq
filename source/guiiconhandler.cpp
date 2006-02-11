@@ -337,7 +337,7 @@ bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mous
    // PG_Point p = mapDisplay->ScreenToClient( mousePos.x, mousePos.y );
    PG_Point p ( mousePos.x, mousePos.y );
 
-   pfield fld = actmap->getField(pos);
+   tfield* fld = actmap->getField(pos);
 
    bool positionedUnderCursor = false;
    if ( ( fld->vehicle || fld->building) && fieldvisiblenow(fld) )

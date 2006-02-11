@@ -198,7 +198,7 @@ Player :: Player()
    ASCversion = 0;
 }
 
-void Player :: setParentMap( tmap* map, int pos )
+void Player :: setParentMap( GameMap* map, int pos )
 {
    parentMap = map;
    player = pos;

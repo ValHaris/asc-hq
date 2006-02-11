@@ -27,7 +27,7 @@
 #include "../paradialog.h"
 
 class PlayerSetupWidget : public PG_ScrollWidget {
-      tmap* actmap;
+      GameMap* actmap;
       static const int spacing = 40;
       
       struct PlayerWidgets {
@@ -40,14 +40,14 @@ class PlayerSetupWidget : public PG_ScrollWidget {
       vector<PlayerWidgets> playerWidgets;
    public:
       enum Mode{ AllEditable, AllEditableSinglePlayer, SelfEditable };
-      PlayerSetupWidget( tmap* gamemap, Mode mode, PG_Widget *parent, const PG_Rect &r, const std::string &style="ScrollWidget" );
+      PlayerSetupWidget( GameMap* gamemap, Mode mode, PG_Widget *parent, const PG_Rect &r, const std::string &style="ScrollWidget" );
       bool Valid();
       bool Apply();
    private:
       Mode mode;   
 };
 
-void  setupPlayers( tmap* actmap, bool supervisor = false );
+void  setupPlayers( GameMap* actmap, bool supervisor = false );
 
 
 #endif

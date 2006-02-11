@@ -56,15 +56,15 @@ extern void  savegame( const ASCString& name );
 extern void  loadgame( const ASCString& name );
 
 
-typedef Loki::Functor<tmap*, TYPELIST_1(const ASCString&) > MapLoadingFunction;
-extern tmap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadingFunction loader );
+typedef Loki::Functor<GameMap*, TYPELIST_1(const ASCString&) > MapLoadingFunction;
+extern GameMap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadingFunction loader );
 
 
 
-extern tmap*  loadreplay( pmemorystreambuf streambuf );
+extern GameMap*  loadreplay( pmemorystreambuf streambuf );
 
 //! writes all replay relevant map information of player num to the replay variable of #actmap
-extern void  savereplay( tmap* gamemap, int num );
+extern void  savereplay( GameMap* gamemap, int num );
 
 
 // extern void  loadicons(void);
@@ -84,9 +84,9 @@ const int minreplayversion    = 0x0001;
 class  tspfldloaders {
        public:
            pnstream        stream;
-           tmap*     spfld;
+           GameMap*     spfld;
 
-           static SigC::Signal1<void,tmap*> mapLoaded; 
+           static SigC::Signal1<void,GameMap*> mapLoaded; 
 
            void            readoldevents     ( void );
 
@@ -109,7 +109,7 @@ class  tspfldloaders {
            void            readmessages ( void );
            void            readmessagelist( MessagePntrContainer& lst );
 
-           void            chainitems ( pmap actmap );
+           void            chainitems ( GameMap* actmap );
            void            setplayerexistencies ( void );
            virtual ~tspfldloaders();
            tspfldloaders ( void );
@@ -119,9 +119,9 @@ class  tspfldloaders {
 
 class  tmaploaders : public tspfldloaders {
            void            initmap ( void );
-           tmap*           _loadmap ( const ASCString& name );
+           GameMap*           _loadmap ( const ASCString& name );
          public:
-           static tmap* loadmap ( const ASCString& name );
+           static GameMap* loadmap ( const ASCString& name );
            
            
            int             savemap ( const ASCString& name );
@@ -139,14 +139,14 @@ class  tgameloaders : public tspfldloaders {
 
 class tnetworkloaders : public tgameloaders {
         public:
-           tmap*           loadnwgame ( pnstream strm );
+           GameMap*           loadnwgame ( pnstream strm );
            int             savenwgame ( pnstream strm );
 };
 
 class tsavegameloaders : public tgameloaders {
         public:
-           tmap*           loadgame ( pnstream strm );
-           void            savegame ( pnstream strm, pmap gamemap, bool writeReplays = true );
+           GameMap*           loadgame ( pnstream strm );
+           void            savegame ( pnstream strm, GameMap* gamemap, bool writeReplays = true );
 
            int             loadgame ( const ASCString& name );
            void            savegame ( const ASCString& name );

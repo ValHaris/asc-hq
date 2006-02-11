@@ -500,7 +500,7 @@ void unitInfoDialog( const Vehicletype* vt )
       uid.Show();
       uid.RunModal();
    } else {
-      pfield fld = actmap->getField( actmap->getCursor() );
+      tfield* fld = actmap->getField( actmap->getCursor() );
       if ( fld && fld->vehicle ) {
          UnitInfoDialog uid ( NULL, fld->vehicle, NULL );
          uid.Show();

@@ -351,7 +351,7 @@ void AI :: calculateFieldInformation ( void )
    for ( int y = 0; y < activemap->ysize; y++ ) {
       checkKeys();
       for ( int x = 0; x < activemap->xsize; x++ ) {
-         pfield fld = getfield ( x, y );
+         tfield* fld = getfield ( x, y );
          if ( config.wholeMapVisible || fieldvisiblenow ( fld, getPlayerNum() ) )
             if ( fld->vehicle && getPlayer().diplomacy.isHostile( fld->vehicle->getOwner() )) {
                WeaponThreatRange wr ( this );
@@ -397,7 +397,7 @@ void AI :: calculateFieldInformation ( void )
 
          FieldInformation& fi = fieldInformation[y*getMap()->xsize+x];
          for ( int i = 0; i< sidenum; i++ ) {
-            pfield f = getMap()->getField ( getNeighbouringFieldCoordinate ( MapCoordinate(x,y), i ));
+            tfield* f = getMap()->getField ( getNeighbouringFieldCoordinate ( MapCoordinate(x,y), i ));
             if ( f && f->vehicle && f->vehicle->weapexist() && f->vehicle->color < 8*8 )
                fi.units[f->vehicle->color/8] += 1;
          }
@@ -543,7 +543,7 @@ void AI :: Section :: init ( int _x, int _y, int xsize, int ysize, int _xp, int 
    for ( int y = y1; y <= y2; y++ )
       for ( int x = x1; x <= x2; x++ ) {
          absFieldThreat += ai->getFieldThreat ( x, y );
-         pfield fld = getfield ( x, y );
+         tfield* fld = getfield ( x, y );
          if ( fld->vehicle && ai->getPlayer().diplomacy.isHostile( fld->vehicle->getOwner() ) ) {
             if ( !fld->vehicle->aiparam[ ai->getPlayerNum() ] )
                ai->calculateThreat ( fld->vehicle );
@@ -712,7 +712,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
 
                    for ( int yp = sec.y1; yp <= sec.y2; yp++ )
                       for ( int xp = sec.x1; xp <= sec.x2; xp++ ) {
-                         pfield fld = ai->getMap()->getField(xp, yp );
+                         tfield* fld = ai->getMap()->getField(xp, yp );
                          if ( fld->a.temp & h ) {
                             int mandist = abs( sec.centerx - xp ) + 2*abs ( sec.centery - yp );
                             if ( mandist < mindist ) {

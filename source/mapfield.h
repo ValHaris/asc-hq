@@ -16,7 +16,6 @@
 
  #include "typen.h"
  #include "vehicle.h"
- #include "buildings.h"
  #include "basestrm.h"
  #include "explosivemines.h"
  
@@ -24,16 +23,16 @@
 
 //! a single field of the map
 class  tfield {
-    pmap gamemap;
+    GameMap* gamemap;
     void init();
   protected:
     tfield (  );
-    friend class tmap;
+    friend class GameMap;
   public:
-    tfield ( pmap gamemap_ );
+    tfield ( GameMap* gamemap_ );
     void operator= ( const tfield& f );
 
-    void setMap ( pmap gamemap_ ) { gamemap = gamemap_; };
+    void setMap ( GameMap* gamemap_ ) { gamemap = gamemap_; };
 
     //! the terraintype (#pwterraintype) of the field
     TerrainType::Weather* typ;
@@ -139,7 +138,7 @@ class  tfield {
     bool unitHere ( const Vehicle* veh );
 
     //! returns a pointer to the #ContainerBase of the field or NULL if there is none
-    ContainerBase* getContainer() { if ( vehicle ) return vehicle; else return building; };
+    ContainerBase* getContainer();
 
     //! put a mine of type typ for player col (0..7) and a punch of strength on the field. Strength is an absolute value (unlike the basestrength of a mine or the punch of the mine-weapon, which are just factors)
     bool  putmine ( int col, int typ, int strength );

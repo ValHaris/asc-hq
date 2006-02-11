@@ -131,7 +131,7 @@ void MapComponent::displayClip( PG_Widget* parent, SDL_Surface * surface, const 
 // template<class Vehicletype> Surface BasicItem<Vehicletype>::clippingSurface;
 int VehicleItem::place( const MapCoordinate& mc ) const
 {
-   pfield fld = actmap->getField(mc);
+   tfield* fld = actmap->getField(mc);
    if ( !fld )
       return -1;
 
@@ -231,7 +231,7 @@ int ObjectItem::place( const MapCoordinate& mc ) const
 template<typename T> Surface BasicItem<T>::clippingSurface;
 int TerrainItem::place( const MapCoordinate& mc ) const
 {
-   pfield fld = actmap->getField(mc);
+   tfield* fld = actmap->getField(mc);
    fld->typ = item->weather[0]; 
    fld->setweather( selection.getWeather() );
    fld->setparams();

@@ -32,6 +32,7 @@ class Vehicle;
 class Building;
 class SingleWeapon;
 class MapDisplay;
+class GameMap;
 
 class DashboardPanel : public Panel {
     protected:
@@ -41,7 +42,7 @@ class DashboardPanel : public Panel {
       void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
       void registerSpecialDisplay( const ASCString& name );
 
-      void reset(tmap& map);
+      void reset(GameMap& map);
     public:
       void eval();
       void showUnitData( const Vehicle* veh, const Building* bld, bool redraw = false );

@@ -53,7 +53,7 @@
            int maxWeapDist[8]; 
            int baseThreatsCalculated;
 
-           pmap activemap;
+           GameMap* activemap;
            MapDisplayInterface* mapDisplay;
            MapDisplayInterface* rmd;
 
@@ -250,7 +250,7 @@
 
 
            struct Config {
-               // int movesearchshortestway;   /*  kÅrzesten oder nur irgendeinen  */
+               // int movesearchshortestway;   /*  krzesten oder nur irgendeinen  */
                int lookIntoTransports;   /*  gegnerische transporter einsehen  */
                int lookIntoBuildings;
                int wholeMapVisible;
@@ -466,14 +466,14 @@
             void checkKeys ( void );
 
         public:
-           AI ( pmap _map, int _player ) ;
+           AI ( GameMap* _map, int _player ) ;
 
            void run (  ) { run ( false );};
            //! starts the Ai. If benchmark is true, the AI might take longer since it is not time limited, it won't display any graphics and will output the time it needed to run completely
            void run ( bool benchmark );
 
            //! returns the map this AI runson
-           pmap getMap ( void ) { return activemap; };
+           GameMap* getMap ( void ) { return activemap; };
 
            //! returns the number of the player which is controlled by this ai
            int getPlayerNum ( void ) { return player; };

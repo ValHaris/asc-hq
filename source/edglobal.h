@@ -18,7 +18,7 @@
     Boston, MA  02111-1307  USA
 */
 
-//*Actions fÅr Editor
+//*Actions fr Editor
 
 #ifndef edglobalH
 #define edglobalH
@@ -141,7 +141,7 @@ class SelectionHolder : public SigC::Object {
      int brushSize;
      const MapComponent* getSelection();
      void setSelection( const MapComponent& component ) ;
-     void pickup ( pfield fld );
+     void pickup ( tfield* fld );
      
      SigC::Signal1<void,const MapComponent*> selectionChanged;
    

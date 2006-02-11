@@ -1,5 +1,5 @@
 /*! \file gamemap.cpp
-    \brief Implementation of THE central asc class: tmap 
+    \brief Implementation of THE central asc class: GameMap
 */
 
 /***************************************************************************
@@ -73,7 +73,7 @@ unsigned int RandomGenerator::getRandomValue (int lowerLimit, int upperLimit){
 
 
 
-OverviewMapHolder :: OverviewMapHolder( tmap& gamemap ) : map(gamemap), initialized(false), completed(false), x(0),y(0) 
+OverviewMapHolder :: OverviewMapHolder( GameMap& gamemap ) : map(gamemap), initialized(false), completed(false), x(0),y(0)
 {
    idleEvent.connect( SigC::slot( *this, &OverviewMapHolder::idleHandler ));
 }
@@ -94,7 +94,7 @@ void OverviewMapHolder::updateField( const MapCoordinate& pos )
 {
    SPoint imgpos = OverviewMapImage::map2surface( pos );
 
-   pfield fld = map.getField( pos );
+   tfield* fld = map.getField( pos );
    VisibilityStates visi = fieldVisibility( fld, map.playerView, &map );
    if ( visi == visible_not ) {
       static SDLmm::Color invisible = 0;
@@ -180,14 +180,14 @@ void OverviewMapHolder::clear()
    startUpdate();
 }
 
-void OverviewMapHolder::clearmap( tmap* actmap )
+void OverviewMapHolder::clearmap( GameMap* actmap )
 {
    if ( actmap )
       actmap->overviewMapHolder.clear();
 }
 
 
-tmap :: tmap ( void )
+GameMap :: GameMap ( void )
       : overviewMapHolder( *this ), network(NULL)
 {
    randomSeed = rand();
@@ -241,14 +241,14 @@ tmap :: tmap ( void )
    setgameparameter( cgp_objectsDestroyedByTerrain, 1 );
 }
 
-void tmap :: guiHooked()
+void GameMap :: guiHooked()
 {
    dialogsHooked = true;
 }
 
 const int tmapversion = 13;
 
-void tmap :: read ( tnstream& stream )
+void GameMap :: read ( tnstream& stream )
 {
    int version;
    int i;
@@ -259,7 +259,7 @@ void tmap :: read ( tnstream& stream )
    if ( xsize == 0xfffe  && ysize == 0xfffc ) {
      version = stream.readInt();
      if ( version > tmapversion )
-        throw tinvalidversion ( "tmap", tmapversion, version );
+        throw tinvalidversion ( "GameMap", tmapversion, version );
 
      xsize = stream.readInt();
      ysize = stream.readInt();
@@ -288,7 +288,7 @@ void tmap :: read ( tnstream& stream )
 
    if ( version >= 11 ) 
       if ( stream.readInt() != 0x12345678 )
-         throw ASCmsgException("marker not matched when loading tmap");
+         throw ASCmsgException("marker not matched when loading GameMap");
    
       
    for ( int j = 0; j < 4; j++ )
@@ -349,7 +349,7 @@ void tmap :: read ( tnstream& stream )
    
    if ( version >= 11 ) 
       if ( stream.readInt() != 0x12345678 )
-         throw ASCmsgException("marker not matched when loading tmap");
+         throw ASCmsgException("marker not matched when loading GameMap");
          
 
 
@@ -452,7 +452,7 @@ void tmap :: read ( tnstream& stream )
 
    if ( version >= 11 ) 
       if ( stream.readInt() != 0x12345678 )
-         throw ASCmsgException("marker not matched when loading tmap");
+         throw ASCmsgException("marker not matched when loading GameMap");
 
 /////////////////////
 // Here initmap was called
@@ -605,7 +605,7 @@ void tmap :: read ( tnstream& stream )
 }
 
 
-void tmap :: write ( tnstream& stream )
+void GameMap :: write ( tnstream& stream )
 {
    int i;
 
@@ -796,7 +796,7 @@ void tmap :: write ( tnstream& stream )
 
 
 
-MapCoordinate& tmap::getCursor()
+MapCoordinate& GameMap::getCursor()
 {
    #ifdef sgmain
    if ( actplayer >= 0 ) {
@@ -819,7 +819,7 @@ MapCoordinate& tmap::getCursor()
 }
 
 
-void tmap :: cleartemps( int b, int value )
+void GameMap :: cleartemps( int b, int value )
 {
   if ( xsize <= 0 || ysize <= 0)
      return;
@@ -841,7 +841,7 @@ void tmap :: cleartemps( int b, int value )
      }
 }
 
-void tmap :: allocateFields ( int x, int y )
+void GameMap :: allocateFields ( int x, int y )
 {
    field = new tfield[x*y];
    for ( int i = 0; i < x*y; i++ )
@@ -851,12 +851,12 @@ void tmap :: allocateFields ( int x, int y )
 }
 
 
-void tmap :: calculateAllObjects ( void )
+void GameMap :: calculateAllObjects ( void )
 {
    calculateallobjects();
 }
 
-pfield  tmap :: getField(int x, int y)
+tfield*  GameMap :: getField(int x, int y)
 {
    if ((x < 0) || (y < 0) || (x >= xsize) || (y >= ysize))
       return NULL;
@@ -864,13 +864,13 @@ pfield  tmap :: getField(int x, int y)
       return (   &field[y * xsize + x] );
 }
 
-pfield  tmap :: getField(const MapCoordinate& pos )
+tfield*  GameMap :: getField(const MapCoordinate& pos )
 {
    return getField ( pos.x, pos.y );
 }
 
 
-bool tmap :: isResourceGlobal ( int resource )
+bool GameMap :: isResourceGlobal ( int resource )
 {
    if ( _resourcemode == 1 ) { // BI-Mode
       if ( resource == 1 ) // material
@@ -893,7 +893,7 @@ bool tmap :: isResourceGlobal ( int resource )
    }
 }
 
-int tmap :: getgameparameter ( GameParameter num )
+int GameMap :: getgameparameter ( GameParameter num )
 {
   if ( game_parameter && num < gameparameter_num ) {
      return game_parameter[num];
@@ -904,7 +904,7 @@ int tmap :: getgameparameter ( GameParameter num )
         return 0;
 }
 
-void tmap :: setgameparameter ( GameParameter num, int value )
+void GameMap :: setgameparameter ( GameParameter num, int value )
 {
    if ( game_parameter ) {
      if ( num < gameparameter_num )
@@ -935,7 +935,7 @@ void tmap :: setgameparameter ( GameParameter num, int value )
    }
 }
 
-void tmap :: setupResources ( void )
+void GameMap :: setupResources ( void )
 {
    for ( int n = 0; n< 8; n++ ) {
       bi_resource[n].energy = 0;
@@ -957,20 +957,20 @@ void tmap :: setupResources ( void )
 
 
 
-int tmap :: eventpassed( int saveas, int action, int mapid )
+int GameMap :: eventpassed( int saveas, int action, int mapid )
 {
    return eventpassed ( (action << 16) | saveas, mapid );
 }
 
 
 
-int tmap :: eventpassed( int id, int mapid )
+int GameMap :: eventpassed( int id, int mapid )
 {
    return 0;
 }
 
 
-Vehicle* tmap :: getUnit ( Vehicle* eht, int nwid )
+Vehicle* GameMap :: getUnit ( Vehicle* eht, int nwid )
 {
    if ( !eht )
       return NULL;
@@ -991,7 +991,7 @@ Vehicle* tmap :: getUnit ( Vehicle* eht, int nwid )
    }
 }
 
-Vehicle* tmap :: getUnit ( int nwid )
+Vehicle* GameMap :: getUnit ( int nwid )
 {
    VehicleLookupCache::iterator i = vehicleLookupCache.find( nwid );
    if ( i != vehicleLookupCache.end() )
@@ -1010,9 +1010,9 @@ Vehicle* tmap :: getUnit ( int nwid )
 }
 
 
-Vehicle* tmap :: getUnit ( int x, int y, int nwid )
+Vehicle* GameMap :: getUnit ( int x, int y, int nwid )
 {
-   pfield fld  = getField ( x, y );
+   tfield* fld  = getField ( x, y );
    if ( !fld )
       return NULL;
 
@@ -1026,7 +1026,7 @@ Vehicle* tmap :: getUnit ( int x, int y, int nwid )
      
 }
 
-ContainerBase* tmap::getContainer ( int nwid )
+ContainerBase* GameMap::getContainer ( int nwid )
 {
    if ( nwid > 0 )
       return getUnit(nwid);
@@ -1037,7 +1037,7 @@ ContainerBase* tmap::getContainer ( int nwid )
    }
 }
 
-bool tmap :: compareResources( tmap* replaymap, int player, ASCString* log )
+bool GameMap :: compareResources( GameMap* replaymap, int player, ASCString* log )
 {
   #ifdef sgmain   
    ASCString s;
@@ -1197,7 +1197,7 @@ bool tmap :: compareResources( tmap* replaymap, int player, ASCString* log )
 
 
 
-void tmap::beginTurn()
+void GameMap::beginTurn()
 {
    if ( !player[actplayer].exist() )
       if ( replayinfo )
@@ -1217,7 +1217,7 @@ void tmap::beginTurn()
 
 
 
-void tmap::endTurn()
+void GameMap::endTurn()
 {
    if ( player[actplayer].stat == Player::human || player[actplayer].stat == Player::supervisor )
       sigPlayerUserInteractionEnds( player[actplayer] );
@@ -1317,7 +1317,7 @@ void tmap::endTurn()
 }
 
 
-void tmap::endRound()
+void GameMap::endRound()
 {
     actplayer = 0;
     time.set ( time.turn()+1, 0 );
@@ -1371,22 +1371,22 @@ void tmap::endRound()
 #include "libs/rand/rand_r.h"
 #include "libs/rand/rand_r.c"
 
-int tmap::random( int max )
+int GameMap::random( int max )
 {
    return asc_rand_r( &randomSeed ) % max;
 }
 
-void tmap::objectGrowth()
+void GameMap::objectGrowth()
 {
-   typedef vector< pair<pfield,int> > NewObjects;
+   typedef vector< pair<tfield*,int> > NewObjects;
    NewObjects newObjects;
    for ( int y = 0; y < ysize; ++y )
       for ( int x = 0; x < xsize; ++x ) {
-          pfield fld = getField( x, y );
+          tfield* fld = getField( x, y );
           for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i)
              if ( i->typ->growthRate > 0 )
                 for ( int d = 0; d < 6; ++d ) {
-                   pfield fld2 = getField ( getNeighbouringFieldCoordinate( MapCoordinate(x,y), d ));
+                   tfield* fld2 = getField ( getNeighbouringFieldCoordinate( MapCoordinate(x,y), d ));
                    if ( fld2 && (!fld2->vehicle || fld2->vehicle->height >= chtieffliegend) && !fld2->building ) 
                       if ( fld2->objects.empty() || getgameparameter( cgp_objectGrowOnOtherObjects ) > 0 ) {
                         double d = i->typ->growthRate * getgameparameter( cgp_objectGrowthMultiplier) / 100;
@@ -1408,9 +1408,9 @@ void tmap::objectGrowth()
       i->first->addobject ( getobjecttype_byid( i->second ));
 }
 
-SigC::Signal1<void,tmap&> tmap::sigMapDeletion;
+SigC::Signal1<void,GameMap&> GameMap::sigMapDeletion;
 
-tmap :: ~tmap ()
+GameMap :: ~GameMap ()
 {
    sigMapDeletion( *this );
    __mapDestruction = true;
@@ -1481,7 +1481,7 @@ gamemap :: ResourceTribute :: tresourcetribute ( )
 }
 */
 
-bool tmap :: ResourceTribute :: empty ( )
+bool GameMap :: ResourceTribute :: empty ( )
 {
    for (int i = 0; i < 8; i++)
       for (int j = 0; j < 8; j++)
@@ -1497,7 +1497,7 @@ bool tmap :: ResourceTribute :: empty ( )
 
 const int tributeVersion = 1;  // we are counting backwards, -2 is newer than -1
 
-void tmap :: ResourceTribute :: read ( tnstream& stream )
+void GameMap :: ResourceTribute :: read ( tnstream& stream )
 {
    int version = stream.readInt();
    bool noVersion;
@@ -1527,7 +1527,7 @@ void tmap :: ResourceTribute :: read ( tnstream& stream )
              paid[b][c].resource(a) = stream.readInt();
 }
 
-void tmap :: ResourceTribute :: write ( tnstream& stream )
+void GameMap :: ResourceTribute :: write ( tnstream& stream )
 {
    stream.writeInt ( -tributeVersion );
    for ( int a = 0; a < 8; a++ )
@@ -1548,7 +1548,7 @@ void tmap :: ResourceTribute :: write ( tnstream& stream )
 
 
 
-int  tmap::resize( int top, int bottom, int left, int right )  // positive: larger
+int  GameMap::resize( int top, int bottom, int left, int right )  // positive: larger
 {
   if ( !top && !bottom && !left && !right )
      return 0;
@@ -1606,15 +1606,15 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
   int newx = xsize + left + right;
   int newy = ysize + top + bottom;
 
-  pfield newfield = new tfield [ newx * newy ];
+  tfield* newfield = new tfield [ newx * newy ];
   for ( int i = 0; i < newx * newy; i++ )
      newfield[i].setMap ( this );
 
   int x;
   for ( x = ox1; x < ox2; x++ )
      for ( int y = oy1; y < oy2; y++ ) {
-        pfield org = getField ( x, y );
-        pfield dst = &newfield[ (x + left) + ( y + top ) * newx];
+        tfield* org = getField ( x, y );
+        tfield* dst = &newfield[ (x + left) + ( y + top ) * newx];
         *dst = *org;
      }
 
@@ -1676,83 +1676,83 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
   return 0;
 }
 
-pterraintype tmap :: getterraintype_byid ( int id )
+pterraintype GameMap :: getterraintype_byid ( int id )
 {
    return terrainTypeRepository.getObject_byID ( id );
 }
 
-ObjectType* tmap :: getobjecttype_byid ( int id )
+ObjectType* GameMap :: getobjecttype_byid ( int id )
 {
    return objectTypeRepository.getObject_byID ( id );
 }
 
-Vehicletype* tmap :: getvehicletype_byid ( int id )
+Vehicletype* GameMap :: getvehicletype_byid ( int id )
 {
    return vehicleTypeRepository.getObject_byID ( id );
 }
 
-BuildingType* tmap :: getbuildingtype_byid ( int id )
+BuildingType* GameMap :: getbuildingtype_byid ( int id )
 {
    return buildingTypeRepository.getObject_byID ( id );
 }
 
-const Technology* tmap :: gettechnology_byid ( int id )
+const Technology* GameMap :: gettechnology_byid ( int id )
 {
    return technologyRepository.getObject_byID ( id );
 }
 
 
-pterraintype tmap :: getterraintype_bypos ( int pos )
+pterraintype GameMap :: getterraintype_bypos ( int pos )
 {
    return terrainTypeRepository.getObject_byPos ( pos );
 }
 
-ObjectType* tmap :: getobjecttype_bypos ( int pos )
+ObjectType* GameMap :: getobjecttype_bypos ( int pos )
 {
    return objectTypeRepository.getObject_byPos ( pos );
 }
 
-Vehicletype* tmap :: getvehicletype_bypos ( int pos )
+Vehicletype* GameMap :: getvehicletype_bypos ( int pos )
 {
    return vehicleTypeRepository.getObject_byPos ( pos );
 }
 
-BuildingType* tmap :: getbuildingtype_bypos ( int pos )
+BuildingType* GameMap :: getbuildingtype_bypos ( int pos )
 {
    return buildingTypeRepository.getObject_byPos ( pos );
 }
 
-const Technology* tmap :: gettechnology_bypos ( int pos )
+const Technology* GameMap :: gettechnology_bypos ( int pos )
 {
    return technologyRepository.getObject_byPos ( pos );
 }
 
-int tmap :: getTerrainTypeNum ( )
+int GameMap :: getTerrainTypeNum ( )
 {
    return  terrainTypeRepository.getNum();
 }
 
-int tmap :: getObjectTypeNum ( )
+int GameMap :: getObjectTypeNum ( )
 {
    return  objectTypeRepository.getNum();
 }
 
-int tmap :: getVehicleTypeNum ( )
+int GameMap :: getVehicleTypeNum ( )
 {
    return  vehicleTypeRepository.getNum();
 }
 
-int tmap :: getBuildingTypeNum ( )
+int GameMap :: getBuildingTypeNum ( )
 {
    return  buildingTypeRepository.getNum();
 }
 
-int tmap :: getTechnologyNum ( )
+int GameMap :: getTechnologyNum ( )
 {
    return  technologyRepository.getNum();
 }
 
-void tmap::processJournal()
+void GameMap::processJournal()
 {
   if ( !newJournal.empty() ) {
      ASCString add = gameJournal;
@@ -1791,7 +1791,7 @@ void tmap::processJournal()
 }
 
 
-void tmap :: startGame ( )
+void GameMap :: startGame ( )
 {
    time.set ( 1, 0 );
 
@@ -1818,16 +1818,16 @@ void tmap :: startGame ( )
    newRound();
 } 
 
-bool tmap::UnitProduction::check ( int id )
+bool GameMap::UnitProduction::check ( int id )
 {
-   for ( tmap::UnitProduction::IDsAllowed::iterator i = idsAllowed.begin(); i != idsAllowed.end(); i ++ )
+   for ( GameMap::UnitProduction::IDsAllowed::iterator i = idsAllowed.begin(); i != idsAllowed.end(); i ++ )
       if( *i == id )
          return true;
 
     return false;
 }
 
-VisibilityStates tmap::getInitialMapVisibility( int player )
+VisibilityStates GameMap::getInitialMapVisibility( int player )
 {
    VisibilityStates c = VisibilityStates( getgameparameter ( cgp_initialMapVisibility ));
 
@@ -1845,19 +1845,19 @@ VisibilityStates tmap::getInitialMapVisibility( int player )
 
 
 
-void tmap::operator= ( const tmap& map )
+void GameMap::operator= ( const GameMap& map )
 {
-  throw ASCmsgException ( "tmap::operator= undefined");
+  throw ASCmsgException ( "GameMap::operator= undefined");
 }
 
 /*
-tmap::Shareview :: Shareview ( const tmap::Shareview* org )
+GameMap::Shareview :: Shareview ( const GameMap::Shareview* org )
 {
    memcpy ( mode, org->mode, sizeof ( mode ));
    recalculateview = org->recalculateview;
 }
 
-tmap::Shareview :: Shareview ( void )
+GameMap::Shareview :: Shareview ( void )
 {
    recalculateview = 0;
    for ( int i = 0; i < 8; i++ )
@@ -1866,7 +1866,7 @@ tmap::Shareview :: Shareview ( void )
 }
 
 
-void tmap::Shareview :: read ( tnstream& stream )
+void GameMap::Shareview :: read ( tnstream& stream )
 {
    for ( int i = 0; i < 8; i++ )
       for ( int j =0; j < 8; j++ )
@@ -1874,7 +1874,7 @@ void tmap::Shareview :: read ( tnstream& stream )
    recalculateview = stream.readInt();
 }
 
-void tmap::Shareview :: write( tnstream& stream )
+void GameMap::Shareview :: write( tnstream& stream )
 {
    for ( int i = 0; i < 8; i++ )
       for ( int j =0; j < 8; j++ )
@@ -2058,7 +2058,7 @@ void AiParameter :: clearJobs()
 
 
 
-tmap :: ReplayInfo :: ReplayInfo ( void )
+GameMap :: ReplayInfo :: ReplayInfo ( void )
 {
    for (int i = 0; i < 8; i++) {
       guidata[i] = NULL;
@@ -2068,7 +2068,7 @@ tmap :: ReplayInfo :: ReplayInfo ( void )
    stopRecordingActions = 0;
 }
 
-void tmap :: ReplayInfo :: read ( tnstream& stream )
+void GameMap :: ReplayInfo :: read ( tnstream& stream )
 {
    bool loadgui[8];
    bool loadmap[8];
@@ -2098,7 +2098,7 @@ void tmap :: ReplayInfo :: read ( tnstream& stream )
    actmemstream = NULL;
 }
 
-void tmap :: ReplayInfo :: write ( tnstream& stream )
+void GameMap :: ReplayInfo :: write ( tnstream& stream )
 {
    for ( int i = 0; i < 8; i++ )
       stream.writeInt ( guidata[i] != NULL );
@@ -2117,7 +2117,7 @@ void tmap :: ReplayInfo :: write ( tnstream& stream )
    }
 }
 
-void tmap :: ReplayInfo :: closeLogging()
+void GameMap :: ReplayInfo :: closeLogging()
 {
    if ( actmemstream ) {
       delete actmemstream;
@@ -2125,7 +2125,7 @@ void tmap :: ReplayInfo :: closeLogging()
    }
 }
 
-tmap :: ReplayInfo :: ~ReplayInfo ( )
+GameMap :: ReplayInfo :: ~ReplayInfo ( )
 {
    for (int i = 0; i < 8; i++)  {
       if ( guidata[i] ) {

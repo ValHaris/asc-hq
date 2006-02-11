@@ -145,7 +145,7 @@
  MiniDumper miniDumper( "main" );
 #endif
 
-pfield        getSelectedField(void)
+tfield*        getSelectedField(void)
 {
    return actmap->getField( actmap->getCursor() ); 
 } 
@@ -184,7 +184,7 @@ bool maintainencecheck( void )
 
 
 
-void hookGuiToMap( tmap* map )
+void hookGuiToMap( GameMap* map )
 {
    if ( !map->getGuiHooked() ) {
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &viewunreadmessages ));
@@ -251,7 +251,7 @@ void saveGame( bool as )
 
 void loadmap( const ASCString& name )
 {
-   tmap* m = mapLoadingExceptionChecker( name, MapLoadingFunction( tmaploaders::loadmap ));
+   GameMap* m = mapLoadingExceptionChecker( name, MapLoadingFunction( tmaploaders::loadmap ));
    delete actmap;
    actmap = m;
    computeview( actmap );
@@ -436,7 +436,7 @@ void viewunitmovementrange ( Vehicle* veh, tkey taste )
 void renameUnit()
 {
    if ( actmap ) {
-      pfield fld = getSelectedField();
+      tfield* fld = getSelectedField();
       if ( fld && fld->vehicle && fld->vehicle->getOwner() == actmap->actplayer )
          fld->vehicle->name = editString ( "unit name", fld->vehicle->name );
       if ( fld && fld->building && fld->building->getOwner() == actmap->actplayer )
@@ -909,7 +909,7 @@ void execuseraction2 ( tuseractions action )
             getPGApplication().Quit();
          break;
       case ua_cargosummary: {
-            pfield fld = getSelectedField();
+            tfield* fld = getSelectedField();
             if ( fld && fld->vehicle && fld->vehicle->getOwner() == actmap->actplayer ) 
                showUnitCargoSummary( fld->vehicle );
          }
@@ -1177,7 +1177,7 @@ int gamethread ( void* data )
 }
 
 
-void deployMapPlayingHooks ( tmap* map )
+void deployMapPlayingHooks ( GameMap* map )
 {
    map->sigPlayerTurnBegins.connect( SigC::slot( initReplayLogging ));
    map->sigPlayerTurnBegins.connect( SigC::slot( transfer_all_outstanding_tribute ));   

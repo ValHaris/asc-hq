@@ -3,13 +3,17 @@
    STL. Should be scrapped and replaced by STL functions.
 */
 
-//     $Id: basetemp.h,v 1.7 2004-05-16 15:40:31 mbickel Exp $
+//     $Id: basetemp.h,v 1.7.2.1 2006-02-11 21:46:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2004/05/16 15:40:31  mbickel
+//      Fixed compilation problems with gcc
+//      Included SDLmm library
+//
 //     Revision 1.6  2001/02/18 15:37:02  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
-//         tmap, tfield and helper classes into separate file (gamemap.h)
+//         GameMap, tfield and helper classes into separate file (gamemap.h)
 //      basestrm : stream mode now specified by enum instead of int
 //
 //     Revision 1.5  2001/01/28 14:04:04  mbickel

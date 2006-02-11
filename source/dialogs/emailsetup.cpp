@@ -29,7 +29,7 @@
 
 
  
-EmailSetupWidget::EmailSetupWidget( tmap* gamemap, int editablePlayers, PG_Widget *parent, const PG_Rect &r, const std::string &style ) : PG_ScrollWidget( parent, r, style ) , actmap ( gamemap )
+EmailSetupWidget::EmailSetupWidget( GameMap* gamemap, int editablePlayers, PG_Widget *parent, const PG_Rect &r, const std::string &style ) : PG_ScrollWidget( parent, r, style ) , actmap ( gamemap )
 {
    int counter = 0; 
    int y1 = Width() * 4 / 10;

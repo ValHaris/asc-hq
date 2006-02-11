@@ -29,7 +29,7 @@
 class PG_PropertyEditor;
 
 class GameParameterEditorWidget : public PG_Widget {
-      tmap* actmap;
+      GameMap* actmap;
       int values[gameparameternum];
       PG_PropertyEditor* propertyEditor;
       
@@ -44,13 +44,13 @@ class GameParameterEditorWidget : public PG_Widget {
       bool SaveParameter();
       bool ResetParameter();
    public:
-      GameParameterEditorWidget ( tmap* gamemap, PG_Widget* parent, const PG_Rect& rect );
+      GameParameterEditorWidget ( GameMap* gamemap, PG_Widget* parent, const PG_Rect& rect );
       
       bool Valid();
       bool Apply();
 };
 
-extern void setmapparameters ( tmap* gamemap );
+extern void setmapparameters ( GameMap* gamemap );
 
 
 #endif

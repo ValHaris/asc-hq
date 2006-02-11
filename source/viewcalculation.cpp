@@ -59,7 +59,7 @@ void         tcomputeview::initviewcalculation(  int view, int jamming, int sx, 
 void         tcomputeview::testfield( const MapCoordinate& mc )
 {
    int f = beeline(startPos, mc);
-   pfield efield = gamemap->getField(mc);
+   tfield* efield = gamemap->getField(mc);
 
    if ( viewdist && ( f <= 15 ) && (gamemap->getgameparameter( cgp_disableDirectView) == 0  || f < 10 ) )
       efield->view[player].direct += mode;
@@ -194,7 +194,7 @@ void         tcomputebuildingview::init( const Building*    bld,  int _mode )
    for ( int a = 0; a < 4; a++)
       for (int b = 0; b < 6; b++)
          if ( building->typ->fieldExists ( BuildingType::LocalCoordinate( a, b ) )) {
-            pfield efield = building->getField ( BuildingType::LocalCoordinate( a, b ) );
+            tfield* efield = building->getField ( BuildingType::LocalCoordinate( a, b ) );
             if ( minenview )
                efield->view[player].mine += _mode;
             efield->view[player].direct += _mode;
@@ -205,7 +205,7 @@ void         tcomputebuildingview::init( const Building*    bld,  int _mode )
 
 
 
-void         clearvisibility( pmap gamemap, int  reset )
+void         clearvisibility( GameMap* gamemap, int  reset )
 {
    if (!gamemap || (gamemap->xsize <= 0) || (gamemap->ysize <= 0))
      return;
@@ -218,7 +218,7 @@ void         clearvisibility( pmap gamemap, int  reset )
    int l = 0;
    for ( int x = 0; x < gamemap->xsize ; x++)
          for ( int y = 0; y < gamemap->ysize ; y++) {
-            pfield fld = &gamemap->field[l];
+            tfield* fld = &gamemap->field[l];
             memset ( fld->view, 0, sizeof ( fld->view ));
             l++;
          }
@@ -226,7 +226,7 @@ void         clearvisibility( pmap gamemap, int  reset )
 
 }
 
-int  evaluatevisibilityfield ( pmap gamemap, pfield fld, int player, int add, int initial )
+int  evaluatevisibilityfield ( GameMap* gamemap, tfield* fld, int player, int add, int initial )
 {
    int originalVisibility;
    if ( initial == 2 ) {
@@ -283,7 +283,7 @@ int  evaluatevisibilityfield ( pmap gamemap, pfield fld, int player, int add, in
 }
 
 
-int  evaluateviewcalculation ( pmap gamemap, int player_fieldcount_mask )
+int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask )
 {
    int initial = gamemap->getgameparameter ( cgp_initialMapVisibility );
    int fieldsChanged = 0;
@@ -306,7 +306,7 @@ int  evaluateviewcalculation ( pmap gamemap, int player_fieldcount_mask )
    return fieldsChanged;
 }
 
-int  evaluateviewcalculation ( pmap gamemap, const MapCoordinate& pos, int distance, int player_fieldcount_mask )
+int  evaluateviewcalculation ( GameMap* gamemap, const MapCoordinate& pos, int distance, int player_fieldcount_mask )
 {
    distance = (distance+maxmalq-1)/maxmalq;
    int x1 = pos.x - distance;
@@ -337,7 +337,7 @@ int  evaluateviewcalculation ( pmap gamemap, const MapCoordinate& pos, int dista
 
          for ( int yy = y1; yy <= y2; yy++ )
             for ( int xx = x1; xx <= x2; xx++ ) {
-               pfield fld = gamemap->getField ( xx, yy );
+               tfield* fld = gamemap->getField ( xx, yy );
                if ( player_fieldcount_mask & (1 << player ))
                   fieldsChanged += evaluatevisibilityfield ( gamemap, fld, player, add, initial );
                else
@@ -349,7 +349,7 @@ int  evaluateviewcalculation ( pmap gamemap, const MapCoordinate& pos, int dista
 
 
 
-int computeview( pmap gamemap, int player_fieldcount_mask )
+int computeview( GameMap* gamemap, int player_fieldcount_mask )
 {
    if ((gamemap->xsize == 0) || (gamemap->ysize == 0))
       return 0;

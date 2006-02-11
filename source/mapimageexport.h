@@ -24,15 +24,15 @@
 #include "mapdisplay.h"
 
 class WholeMapRenderer : public MapRenderer {
-   tmap* gamemap;
+   GameMap* gamemap;
    Surface surface;
    void render();
    public:
-      WholeMapRenderer( tmap* actmap );
+      WholeMapRenderer( GameMap* actmap );
       void write( const ASCString& filename );
 
 };
 
-extern void writemaptopcx ( tmap* gamemap );
+extern void writemaptopcx ( GameMap* gamemap );
 
 #endif

@@ -27,7 +27,7 @@
 #include "../gamemap.h"
 
 class AllianceSetupWidget : public PG_ScrollWidget {
-      tmap* actmap;
+      GameMap* actmap;
       bool allEditable;
       // DiplomaticStates* states;
       
@@ -57,13 +57,13 @@ class AllianceSetupWidget : public PG_ScrollWidget {
       DiplomaticStates& getState( int actingPlayer, int secondPlayer );
 
    public:
-      AllianceSetupWidget( tmap* gamemap, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style="ScrollWidget" );
+      AllianceSetupWidget( GameMap* gamemap, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style="ScrollWidget" );
       void Apply();
       ~AllianceSetupWidget();
 };
 
 
-void  setupalliances( tmap* actmap, bool supervisor = false );
+void  setupalliances( GameMap* actmap, bool supervisor = false );
 
 
 #endif

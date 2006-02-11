@@ -582,7 +582,7 @@ void ServiceChecker :: check( ContainerBase* dest )
 
 void ServiceTargetSearcher::fieldChecker( const MapCoordinate& pos )
 {
-   pfield fld = gamemap->getField( pos );
+   tfield* fld = gamemap->getField( pos );
    if ( fld && fld->getContainer() )
       check( fld->getContainer() );
 }

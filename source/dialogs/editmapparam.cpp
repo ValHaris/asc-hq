@@ -91,7 +91,7 @@ bool GameParameterEditorWidget :: ResetParameter()
    return true;  
 }
             
-GameParameterEditorWidget :: GameParameterEditorWidget ( tmap* gamemap, PG_Widget* parent, const PG_Rect& rect ) : PG_Widget( parent, rect ), actmap ( gamemap )
+GameParameterEditorWidget :: GameParameterEditorWidget ( GameMap* gamemap, PG_Widget* parent, const PG_Rect& rect ) : PG_Widget( parent, rect ), actmap ( gamemap )
 {
    SetTransparency(255);
    
@@ -153,7 +153,7 @@ class EditMapParameters : public ASC_PG_Dialog {
       }
 
    public:
-      EditMapParameters( tmap* actmap, PG_Widget* parent ) : ASC_PG_Dialog( parent, PG_Rect( 50, 50, 500, 400 ), "Edit Map Parameters")
+      EditMapParameters( GameMap* actmap, PG_Widget* parent ) : ASC_PG_Dialog( parent, PG_Rect( 50, 50, 500, 400 ), "Edit Map Parameters")
       {
          gpew = new GameParameterEditorWidget ( actmap, this, PG_Rect( 10, GetTitlebarHeight(), Width() - 20, Height() - GetTitlebarHeight() - 40 ));
          PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 100, Height() - 40, 90, 30), "OK" );
@@ -163,7 +163,7 @@ class EditMapParameters : public ASC_PG_Dialog {
 };
 
 
-void setmapparameters ( tmap* gamemap )
+void setmapparameters ( GameMap* gamemap )
 {
    EditMapParameters emp( gamemap, NULL );
    emp.Show();

@@ -37,6 +37,7 @@ class Technology;
 class Building;
 class Vehicle;
 class Vehicletype;
+class GameMap;
 
 class TechDependency: public LoadableItemType {
      typedef vector<IntRange> RequiredTechnologies;
@@ -125,7 +126,7 @@ class TechAdapterDependency {
 
  class Research {
 
-     pmap map;
+     GameMap* map;
      int player;
 
      int ___loadActiveTech;
@@ -165,7 +166,7 @@ class TechAdapterDependency {
 
      void settechlevel ( int techlevel );
 
-     void chainToMap ( pmap _map, int _player ) { map = _map; player = _player; };
+     void chainToMap ( GameMap* _map, int _player ) { map = _map; player = _player; };
 
      //! Move the technology that is currently being reseached to the list of discovered technologies
      void addtechnology();

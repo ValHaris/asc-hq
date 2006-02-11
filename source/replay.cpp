@@ -119,10 +119,10 @@ void checkforreplay ( void )
 
 void initReplayLogging( Player& player )
 {
-   tmap* gamemap = player.getParentMap();
+   GameMap* gamemap = player.getParentMap();
    
    if ( startreplaylate ) {
-      gamemap->replayinfo = new tmap::ReplayInfo;
+      gamemap->replayinfo = new GameMap::ReplayInfo;
       startreplaylate = 0;
    }
 
@@ -143,7 +143,7 @@ void initReplayLogging( Player& player )
 }
 
 
-LockReplayRecording::LockReplayRecording( tmap::ReplayInfo& _ri )
+LockReplayRecording::LockReplayRecording( GameMap::ReplayInfo& _ri )
                     : ri ( _ri )
 {
    ri.stopRecordingActions++;
@@ -848,8 +848,8 @@ void trunreplay :: execnextreplaymove ( void )
                           int wpnum = stream->readInt();
                           readnextaction();
 
-                          pfield fld = getfield ( x1, y1 );
-                          pfield targ = getfield ( x2, y2 );
+                          tfield* fld = getfield ( x1, y1 );
+                          tfield* targ = getfield ( x2, y2 );
                           int attackvisible = fieldvisiblenow ( fld, actmap->playerView ) || fieldvisiblenow ( targ, actmap->playerView );
                           if ( fld && targ && fld->vehicle ) {
                              if ( targ->vehicle ) {
@@ -977,7 +977,7 @@ void trunreplay :: execnextreplaymove ( void )
                            readnextaction();
 
 
-                           pfield fld = getfield ( x, y );
+                           tfield* fld = getfield ( x, y );
                            if ( fld ) {
                               displayActionCursor ( x, y );
                               if ( fld->vehicle )
@@ -1012,7 +1012,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                            ObjectType* obj = objectTypeRepository.getObject_byID ( id );
 
-                           pfield fld = getfield ( x, y );
+                           tfield* fld = getfield ( x, y );
                            if ( obj && fld ) {
                               displayActionCursor ( x, y );
 
@@ -1080,7 +1080,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                            readnextaction();
 
-                           pfield fld = getfield ( x, y );
+                           tfield* fld = getfield ( x, y );
 
                            Vehicletype* tnk = vehicleTypeRepository.getObject_byID ( id );
 
@@ -1094,7 +1094,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  v->height = height;
 
                               if ( constx >= 0 && consty >= 0 ) {
-                                 pfield constructorField = getfield(constx, consty );
+                                 tfield* constructorField = getfield(constx, consty );
                                  if ( constructorField->vehicle ) {
                                     Resources r ( 0, tnk->productionCost.material, tnk->productionCost.energy );
                                     Resources rr = constructorField->getContainer()->getResource( r, 0 );
@@ -1129,7 +1129,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                                readnextaction();
 
-                               pfield fld = getfield ( x, y );
+                               tfield* fld = getfield ( x, y );
 
                                BuildingType* bld = buildingTypeRepository.getObject_byID ( id );
 
@@ -1173,7 +1173,7 @@ void trunreplay :: execnextreplaymove ( void )
                            int strength = stream->readInt();
                            readnextaction();
 
-                           pfield fld = getfield ( x, y );
+                           tfield* fld = getfield ( x, y );
                            if ( fld ) {
                               displayActionCursor ( x, y );
                               fld -> putmine ( col, typ, strength );
@@ -1194,7 +1194,7 @@ void trunreplay :: execnextreplaymove ( void )
                            int y = stream->readInt();
                            readnextaction();
 
-                           pfield fld = getfield ( x, y );
+                           tfield* fld = getfield ( x, y );
                            if ( fld ) {
                               displayActionCursor ( x, y );
                               fld -> removemine ( -1 );
@@ -1228,7 +1228,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                            readnextaction();
 
-                           pfield fld = getfield ( x, y );
+                           tfield* fld = getfield ( x, y );
                            if ( fld && fld->building ) {
                               displayActionCursor ( x, y );
                               Building* bb = fld->building;
@@ -1267,7 +1267,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  int nwid = stream->readInt();
                                  readnextaction();
 
-                                 pfield fld = getfield ( x, y );
+                                 tfield* fld = getfield ( x, y );
 
                                  Vehicletype* tnk = vehicleTypeRepository.getObject_byID ( id );
                                  if ( tnk && fld) {
@@ -1307,7 +1307,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  int y = stream->readInt();
                                  int nwid = stream->readInt();
                                  readnextaction();
-                                 pfield fld = getfield(x,y);
+                                 tfield* fld = getfield(x,y);
                                  if ( !fld->vehicle || fld->vehicle->networkid != nwid && fld->building ) {
                                     ContainerControls cc ( fld->building );
                                     cc.destructUnit( actmap->getUnit( nwid ) );
@@ -1341,7 +1341,7 @@ void trunreplay :: execnextreplaymove ( void )
          /*
       case rpl_shareviewchange: {
                                  int size = stream->readInt();
-                                 tmap::Shareview* sv = new tmap::Shareview;
+                                 GameMap::Shareview* sv = new GameMap::Shareview;
                                  if ( size ) {
                                     for ( int a = 0; a < 8; a++ )
                                        for ( int b = 0; b < 8; b++)
@@ -1772,8 +1772,8 @@ int  trunreplay :: run ( int player, int viewingplayer )
              actmap->endTurn();
              resourcesCompared = true;
              ASCString resourceComparisonResult;
-             tmap* comparisonMap = NULL;
-             tmap* nextPlayerMap = NULL;
+             GameMap* comparisonMap = NULL;
+             GameMap* nextPlayerMap = NULL;
              if ( actmap->actplayer == orgmap->actplayer )
                 comparisonMap = orgmap;
              else

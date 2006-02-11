@@ -43,7 +43,7 @@ class Vehicle;
 */
 class ContainerBase {
    protected:
-      const pmap gamemap;
+      GameMap* gamemap;
       virtual const ResourceMatrix& getRepairEfficiency ( void ) = 0;
 
       //! is called after a repair is perfored. Vehicles use this to reduce their experience.
@@ -54,7 +54,7 @@ class ContainerBase {
       void paintField ( const Surface& src, Surface& dest, SPoint pos, int dir, bool shaded, int shadowDist = -1 ) const;
       
    public:
-      ContainerBase ( const ContainerBaseType* bt, pmap map, int player );
+      ContainerBase ( const ContainerBaseType* bt, GameMap* map, int player );
 
       const ContainerBaseType*  baseType;
 
@@ -160,7 +160,7 @@ class ContainerBase {
 
       Resources getResourcePlus ( );
       
-      //! returns the local storage capacity for the given resource, which depends on the resource mode of the map. \see tmap::_resourcemode
+      //! returns the local storage capacity for the given resource, which depends on the resource mode of the map. \see GameMap::_resourcemode
       Resources getStorageCapacity() const;
       
     //! returns the amount of resources that the net which the building is connected to produces each turn
@@ -191,8 +191,7 @@ class ContainerBase {
       virtual int repairableDamage() = 0;
 
 
-      pmap getMap ( ) { return gamemap; };
-      const pmap getMap ( ) const { return gamemap; };
+      GameMap* getMap ( ) const { return gamemap; };
       
       virtual int getIdentification() = 0;
 

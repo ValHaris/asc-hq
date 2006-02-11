@@ -49,7 +49,7 @@
 
 
    tkey         ch;
-   pfield               pf2;
+   tfield*               pf2;
 
    pterraintype auswahl;
    Vehicletype* auswahlf;
@@ -101,7 +101,7 @@ bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePos, bool
    
 // õS Checkobject
 
-char checkobject(pfield pf)
+char checkobject(tfield* pf)
 {
    return !pf->objects.empty();
 }
@@ -356,7 +356,7 @@ void tputresources :: testfield ( const MapCoordinate& mc )
    int dist = beeline ( mc, centerPos ) / 10;
    int m = maxresource - dist * ( maxresource - minresource ) / maxdst;
 
-   pfield fld = gamemap->getField ( mc );
+   tfield* fld = gamemap->getField ( mc );
    if ( resourcetype == 1 )
       fld->material = m;
    else
@@ -701,7 +701,7 @@ void         tplayerchange::buttonpressed(int         id)
                  (*i)->convert(sel2);
 
               for (int i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
-                 pfield fld = &actmap->field[i];
+                 tfield* fld = &actmap->field[i];
                  for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); i++ )
                     if ( i->player == sel1 && sel2 != 8 )
                        i->player = sel2;
@@ -732,7 +732,7 @@ void         tplayerchange::buttonpressed(int         id)
                  (*i)->convert( sel1 );
 
               for (int i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
-                 pfield fld = &actmap->field[i];
+                 tfield* fld = &actmap->field[i];
                  for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); i++ )
                     if ( i->player == sel2 && sel1 != 8)
                        i->player = sel1;
@@ -906,7 +906,7 @@ void         k_loadmap(void)
    ASCString s1 = selectFile( mapextension, true );
    if ( !s1.empty() ) {
       StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "loading map " + s1 );
-      tmap* mp = mapLoadingExceptionChecker( s1, MapLoadingFunction( tmaploaders::loadmap ));
+      GameMap* mp = mapLoadingExceptionChecker( s1, MapLoadingFunction( tmaploaders::loadmap ));
       if ( !mp )
          return;
          
@@ -1021,7 +1021,7 @@ Vehicle*  selectUnitFromMap()
 class  ShowPolygonUsingTemps : public PolygonPainerSquareCoordinate {
         protected:
              virtual void setpointabs ( int x,  int y  ) {
-                pfield ffield = getfield ( x , y );
+                tfield* ffield = getfield ( x , y );
                 if (ffield)
                     ffield->a.temp2 = 1;
              };
@@ -1029,7 +1029,7 @@ class  ShowPolygonUsingTemps : public PolygonPainerSquareCoordinate {
              bool paintPolygon   (  const Poly_gon& poly ) {
                 bool res = PolygonPainerSquareCoordinate::paintPolygon ( poly );
                 for ( int i = 0; i < poly.vertex.size(); ++i ) {
-                   pfield ffield = actmap->getField ( poly.vertex[i] );
+                   tfield* ffield = actmap->getField ( poly.vertex[i] );
                    if (ffield)
                        ffield->a.temp = 1;
                 }
@@ -1042,7 +1042,7 @@ class  ShowPolygonUsingTemps : public PolygonPainerSquareCoordinate {
 /*
 void tfillpolygonbodentyp::setpointabs    ( int x,  int y  )
 {
-       pfield ffield = getfield ( x , y );
+       tfield* ffield = getfield ( x , y );
        if (ffield) {
            ffield->a.temp = tempvalue;
            if ( auswahl->weather[auswahlw] )
@@ -1067,7 +1067,7 @@ void tfillpolygonbodentyp::initevent ( void )
 
 void tfillpolygonunit::setpointabs    ( int x,  int y  )
 {
-       pfield ffield = getfield ( x , y );
+       tfield* ffield = getfield ( x , y );
        if (ffield) {
           if ( terrainaccessible(ffield,ffield->vehicle) )
                {
@@ -1162,7 +1162,7 @@ void editpolygon(Poly_gon& poly)
                char passwort[11];
                int sxsize,sysize;
                char valueflag,random,campaign;
-               tmap::Campaign cmpgn;
+               GameMap::Campaign cmpgn;
                pterraintype         tauswahl;
                int auswahlw;
                void init(void);
@@ -1302,7 +1302,7 @@ void         tnewmap::run(void)
       strcpy(actmap->codeword,passwort);
       if (campaign == true ) {
          if (actmap->campaign == NULL)
-            actmap->campaign = new tmap::Campaign;
+            actmap->campaign = new GameMap::Campaign;
 
          actmap->campaign->id = cmpgn.id;
          actmap->campaign->prevmap = cmpgn.prevmap;
@@ -2073,7 +2073,7 @@ void         tunit::init(  )
 
    int unitheights = 0;
    heightxs = 520;
-   pfield fld = getfield ( unit->xpos, unit->ypos);
+   tfield* fld = getfield ( unit->xpos, unit->ypos);
    if ( fld && fld->vehicle == unit ) {
       npush ( unit->height );
       for (i=0;i<=7 ;i++) {
@@ -2626,8 +2626,8 @@ void         tladeraum::done(void)
 #endif
 /*
 class UnitProductionLimitation : public tladeraum {
-              tmap::UnitProduction::IDsAllowed ids;
-              tmap::UnitProduction& up;
+              GameMap::UnitProduction::IDsAllowed ids;
+              GameMap::UnitProduction& up;
          protected:
               virtual const char* getinfotext ( int pos );
               virtual void additem ( void );
@@ -2635,7 +2635,7 @@ class UnitProductionLimitation : public tladeraum {
               void displaysingleitem ( int pos, int x, int y );
               virtual void finish ( int cancel );
           public:
-              UnitProductionLimitation ( tmap::UnitProduction& _up ) : up ( _up ) { ids = up.idsAllowed;  };
+              UnitProductionLimitation ( GameMap::UnitProduction& _up ) : up ( _up ) { ids = up.idsAllowed;  };
               void init (  );
 };
 
@@ -2669,7 +2669,7 @@ void UnitProductionLimitation :: additem  ( void )
 {
    Vehicletype* vt = selvehicletype ( ct_invvalue );
    if ( vt ) {
-      for ( tmap::UnitProduction::IDsAllowed::iterator i = ids.begin(); i != ids.end(); i++ )
+      for ( GameMap::UnitProduction::IDsAllowed::iterator i = ids.begin(); i != ids.end(); i++ )
          if ( *i == vt->id )
             return;
 
@@ -3064,7 +3064,7 @@ void         building_production( Building* bld )
 void movebuilding ( void )
 {
    mapsaved = false;
-   pfield fld = getactfield();
+   tfield* fld = getactfield();
    if ( fld->vehicle ) {
       Vehicle* v = fld->vehicle;
       fld->vehicle = NULL;
@@ -3410,7 +3410,7 @@ void UnitTypeTransformation :: run ( void )
 
    for ( int y = 0; y < actmap->ysize; y++ )
       for ( int x = 0; x < actmap->xsize; x++ ) {
-         pfield fld = getfield ( x, y );
+         tfield* fld = getfield ( x, y );
          if ( fld->vehicle )
             transformvehicle ( fld->vehicle, unitsetnum, translationsetnum );
          if ( fld->building && (fld->bdt & getTerrainBitType(cbbuildingentry) ).any() ) {
@@ -3558,7 +3558,7 @@ void transformMap ( )
 
    for ( int y = 0; y < actmap->ysize; y++ )
       for ( int x = 0; x < actmap->xsize; x++ ) {
-          pfield fld = actmap->getField ( x, y );
+          tfield* fld = actmap->getField ( x, y );
           for ( int i = 0; i < terraintranslation.size()/2; i++ )
              if ( fld->typ->terraintype->id == terraintranslation[i*2] ) {
                 TerrainType* tt = terrainTypeRepository.getObject_byID ( terraintranslation[i*2+1] );
@@ -3598,7 +3598,7 @@ void transformMap ( )
 
 
 class EditArchivalInformation : public tdialogbox {
-         tmap* gamemap;
+         GameMap* gamemap;
          char maptitle[10000];
          char author[10000];
          ASCString description;
@@ -3606,14 +3606,14 @@ class EditArchivalInformation : public tdialogbox {
          char requirements[10000];
          int action;
        public:
-         EditArchivalInformation ( tmap* map );
+         EditArchivalInformation ( GameMap* map );
          void init();
          void run();
          void buttonpressed ( int id );
 };
 
 
-EditArchivalInformation :: EditArchivalInformation ( tmap* map ) : gamemap ( map )
+EditArchivalInformation :: EditArchivalInformation ( GameMap* map ) : gamemap ( map )
 {
   strcpy ( maptitle, map->maptitle.c_str() );
   strcpy ( author, map->archivalInformation.author.c_str() );
@@ -4032,7 +4032,7 @@ void resetPlayerData()
             if ( playerRes.first == 0 ) {
                  for ( int x = 0; x < actmap->xsize; x++ )
                     for ( int y = 0; y < actmap->ysize; y++ ) {
-                       pfield fld = actmap->getField(x,y);
+                       tfield* fld = actmap->getField(x,y);
                        fld->setVisibility( visible_not, player );
                        if ( fld->resourceview )
                           fld->resourceview->visible &= ~(1<<player);
@@ -4084,7 +4084,7 @@ void resetPlayerData()
 }
 
 
-pfield        getactfield(void)
+tfield*        getactfield(void)
 {
    return actmap->getField( actmap->getCursor() );; 
 } 

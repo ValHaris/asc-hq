@@ -50,7 +50,7 @@ Vehicle :: Vehicle ( const Vehicle& v )
 }
 
 
-Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player )
+Vehicle :: Vehicle ( const Vehicletype* t, GameMap* actmap, int player )
           : ContainerBase ( t, actmap, player ), repairEfficiency ( repairEfficiencyVehicle ), typ ( t ), reactionfire ( this )
 {
    viewOnMap = false;
@@ -66,7 +66,7 @@ Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player )
    gamemap->vehicleLookupCache[networkid] = this;
 }
 
-Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player, int networkID )
+Vehicle :: Vehicle ( const Vehicletype* t, GameMap* actmap, int player, int networkID )
           : ContainerBase ( t, actmap, player ), repairEfficiency ( repairEfficiencyVehicle ), typ ( t ), reactionfire ( this )
 {
    viewOnMap = false;
@@ -94,7 +94,7 @@ Vehicle :: ~Vehicle (  )
 {
    #ifndef karteneditor
    if ( !typ->wreckageObject.empty() && gamemap && !gamemap->__mapDestruction && !cleanRemove) {
-      pfield fld = getMap()->getField(getPosition());
+      tfield* fld = getMap()->getField(getPosition());
       if ( fld->vehicle ==  this ) {
          for ( vector<int>::const_iterator i = typ->wreckageObject.begin(); i != typ->wreckageObject.end(); ++i ) {
             ObjectType* obj = getMap()->getobjecttype_byid( *i );
@@ -117,12 +117,12 @@ Vehicle :: ~Vehicle (  )
       if ( i != gamemap->player[c].vehicleList.end() )
          gamemap->player[c].vehicleList.erase ( i );
 
-      tmap::VehicleLookupCache::iterator j = gamemap->vehicleLookupCache.find(networkid);
+      GameMap::VehicleLookupCache::iterator j = gamemap->vehicleLookupCache.find(networkid);
       if ( j != gamemap->vehicleLookupCache.end() )
          gamemap->vehicleLookupCache.erase(j);
    }
 
-   pfield fld = gamemap->getField( xpos, ypos);
+   tfield* fld = gamemap->getField( xpos, ypos);
    if ( fld ) {
       if ( fld->vehicle  == this )
         fld->vehicle = NULL;
@@ -538,7 +538,7 @@ bool Vehicle :: canMove ( void ) const
    //   return false;
 
    if ( movementLeft() && reactionfire.canMove() ) {
-      pfield fld = gamemap->getField ( getPosition() );
+      tfield* fld = gamemap->getField ( getPosition() );
       if ( fld->unitHere ( this ) ) {
          if ( terrainaccessible ( fld, this ) || actmap->getgameparameter( cgp_movefrominvalidfields))
             return true;
@@ -562,8 +562,8 @@ void Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
    if ((typ->hasFunction( ContainerBaseType::MakesTracks) || typ->hasFunction( ContainerBaseType::IceBreaker)) && (height == chfahrend || height == chschwimmend))  {
      int dir = getdirection( start, dest );
 
-     pfield startField = gamemap->getField(start);
-     pfield destField = gamemap->getField(dest);
+     tfield* startField = gamemap->getField(start);
+     tfield* destField = gamemap->getField(dest);
      if ( typ->hasFunction( ContainerBaseType::MakesTracks ))
         if ( fahrspurobject )
            if ( (startField->bdt & getTerrainBitType(cbfahrspur)).any() )
@@ -938,7 +938,7 @@ Vehicle* Vehicle::findCarrierUnit ( const Vehicle* veh )
 
 int Vehicle :: freeWeight ()
 {
-   pfield fld = gamemap->getField ( xpos, ypos );
+   tfield* fld = gamemap->getField ( xpos, ypos );
    if ( fld->vehicle )
       return fld->vehicle->searchstackforfreeweight ( this );
    else
@@ -1005,7 +1005,7 @@ class tsearchforminablefields: public SearchFields {
       int numberoffields;
       int run ( const Vehicle*     eht );
       virtual void testfield ( const MapCoordinate& mc );
-      tsearchforminablefields ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
+      tsearchforminablefields ( GameMap* _gamemap ) : SearchFields ( _gamemap ) {};
   };
 
   /*
@@ -1018,7 +1018,7 @@ bool Vehicle::searchForMineralResourcesAvailable()
 
 void         tsearchforminablefields::testfield( const MapCoordinate& mc )
 {
-    pfield fld = gamemap->getField ( mc );
+    tfield* fld = gamemap->getField ( mc );
     if ( !fld->building  ||  fld->building->color == gamemap->actplayer*8  ||  fld->building->color == 8*8)
        if ( !fld->vehicle  ||  fld->vehicle->color == gamemap->actplayer*8 ||  fld->vehicle->color == 8*8) {
           if ( !fld->resourceview )
@@ -1626,7 +1626,7 @@ vector<MapCoordinate> Vehicle::getCoveredFields()
 
 
 
-Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream, int forceNetworkID )
+Vehicle* Vehicle::newFromStream ( GameMap* gamemap, tnstream& stream, int forceNetworkID )
 {
    int id = stream.readWord ();
    int version = 0;
@@ -1648,7 +1648,7 @@ Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream, int forceNetwo
    if ( forceNetworkID > 0 )
       v->networkid = forceNetworkID;
 
-   tmap::VehicleLookupCache::iterator j = gamemap->vehicleLookupCache.find( v->networkid);
+   GameMap::VehicleLookupCache::iterator j = gamemap->vehicleLookupCache.find( v->networkid);
    if ( j != gamemap->vehicleLookupCache.end() ) {
       // warning("duplicate network id detected !");
       gamemap->unitnetworkid++;

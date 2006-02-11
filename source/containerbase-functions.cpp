@@ -97,7 +97,7 @@ GetMiningInfo :: GetMiningInfo ( const ContainerBase* container ) : SearchFields
 
 void GetMiningInfo :: testfield ( const MapCoordinate& mc )
 {
-   pfield fld = gamemap->getField ( mc );
+   tfield* fld = gamemap->getField ( mc );
    if ( miningInfo.efficiency[ dist ] == 0 )
       miningInfo.efficiency[ dist ] = int(getminingstationeficency ( dist ) * 1024);
 
@@ -375,7 +375,7 @@ Resources SolarPowerplant :: getPlus()
    int num = 0;
    vector<MapCoordinate> fields = bld->getCoveredFields();
    for ( vector<MapCoordinate>::iterator i = fields.begin(); i != fields.end(); ++i ) {
-      pfield fld = bld->getMap()->getField ( *i );
+      tfield* fld = bld->getMap()->getField ( *i );
       int weather = 0;
       while ( fld->typ != fld->typ->terraintype->weather[weather] )
          weather++;
@@ -486,7 +486,7 @@ void MiningStation :: testfield ( const MapCoordinate& mc )
          cancelSearch = false;
 
    if ( cancelSearch == false ) {
-      pfield fld = gamemap->getField ( mc );
+      tfield* fld = gamemap->getField ( mc );
       float distEfficiency = getminingstationeficency ( dist );
 
       for ( int r = 1; r < 3; r++ ) {

@@ -62,7 +62,7 @@ const ObjectType::FieldModification&  ObjectType::getFieldModification ( int wea
       return fieldModification[0];
 }
 
-bool  ObjectType :: buildable ( pfield fld ) const
+bool  ObjectType :: buildable ( tfield* fld ) const
 {
    #ifndef converter
    if ( fld->building )
@@ -297,10 +297,10 @@ int  UnSmoothDarkBanksData [] = {
 
 
 class Smoothing {
-         pmap actmap;
+         GameMap* actmap;
        public:
-         Smoothing ( pmap gamemap ) : actmap ( gamemap ) {};
-         pfield getfield ( int x, int y )
+         Smoothing ( GameMap* gamemap ) : actmap ( gamemap ) {};
+         tfield* getfield ( int x, int y )
          {
             return actmap->getField ( x, y );
          }
@@ -344,7 +344,7 @@ class Smoothing {
                int x1 = x;
                int y1 = y;
                getnextfield ( x1, y1, d );
-               pfield fld = getfield ( x1, y1 );
+               tfield* fld = getfield ( x1, y1 );
                if ( fld ) {
 
                   Object* obj = fld->checkforobject ( o );
@@ -369,7 +369,7 @@ class Smoothing {
                int x1 = x;
                int y1 = y;
                getnextfield ( x1, y1, d );
-               pfield fld = getfield ( x1, y1 );
+               tfield* fld = getfield ( x1, y1 );
                if ( fld ) {
 
                   if ( IsInSetOfWord ( fld->typ->bi_pict, Arr ))
@@ -448,7 +448,7 @@ class Smoothing {
                           Res = 1;
                     }
                  } else {
-                    pfield fld = getfield ( X, Y );
+                    tfield* fld = getfield ( X, Y );
                     TerrainType::Weather* old = fld->typ;
                     // int odir = fld->direction;
 
@@ -648,18 +648,18 @@ Smoothdaten
 */
 
 
-void smooth ( int what, pmap gamemap, ObjectType* woodObj )
+void smooth ( int what, GameMap* gamemap, ObjectType* woodObj )
 {
   Smoothing s ( gamemap );
   s.smooth ( what, woodObj );
 }
 
 
-void calculateforest( pmap actmap, ObjectType* woodObj )
+void calculateforest( GameMap* actmap, ObjectType* woodObj )
 {
    for ( int y = 0; y < actmap->ysize ; y++)
      for ( int x = 0; x < actmap->xsize ; x++) {
-        pfield fld = actmap->getField(x,y);
+        tfield* fld = actmap->getField(x,y);
 
         for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ )
            if ( i->typ == woodObj )
@@ -676,7 +676,7 @@ void calculateforest( pmap actmap, ObjectType* woodObj )
       changed = 0;
       for ( int y = 0; y < actmap->ysize ; y++)
          for ( int x = 0; x < actmap->xsize ; x++) { 
-            pfield fld = actmap->getField(x,y);
+            tfield* fld = actmap->getField(x,y);
    
             for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ )
                if ( o->typ == woodObj ) {
@@ -685,7 +685,7 @@ void calculateforest( pmap actmap, ObjectType* woodObj )
                      int a = x;
                      int b = y;
                      getnextfield( a, b, i );
-                     pfield fld2 = actmap->getField(a,b);
+                     tfield* fld2 = actmap->getField(a,b);
 
                      if ( fld2 ) {
                         Object* oi = fld2->checkforobject ( o->typ );

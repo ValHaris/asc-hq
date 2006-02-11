@@ -29,7 +29,7 @@
 
 
 
-PlayerSetupWidget::PlayerSetupWidget( tmap* gamemap, Mode mode, PG_Widget *parent, const PG_Rect &r, const std::string &style ) : PG_ScrollWidget( parent, r, style ) , actmap ( gamemap )
+PlayerSetupWidget::PlayerSetupWidget( GameMap* gamemap, Mode mode, PG_Widget *parent, const PG_Rect &r, const std::string &style ) : PG_ScrollWidget( parent, r, style ) , actmap ( gamemap )
 {
    this->mode = mode;
    
@@ -121,7 +121,7 @@ bool PlayerSetupWidget::Apply() {
 class PlayerSetupWindow : public ASC_PG_Dialog {
    PlayerSetupWidget* asw;
    public:
-      PlayerSetupWindow( tmap* actmap, bool allEditable, PG_Widget *parent, const PG_Rect &r ) : ASC_PG_Dialog( parent, r, "Players" )
+      PlayerSetupWindow( GameMap* actmap, bool allEditable, PG_Widget *parent, const PG_Rect &r ) : ASC_PG_Dialog( parent, r, "Players" )
       {
          asw = new PlayerSetupWidget( actmap, PlayerSetupWidget::AllEditable, this, PG_Rect( 5, 30, r.Width() - 10, r.Height() - 60 ));
          PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 200, Height() - 30, 90, 20 ), "OK" );
@@ -139,7 +139,7 @@ class PlayerSetupWindow : public ASC_PG_Dialog {
 
 };
 
-void  setupPlayers( tmap* actmap, bool supervisor  )
+void  setupPlayers( GameMap* actmap, bool supervisor  )
 {
    PlayerSetupWindow asw ( actmap, supervisor, NULL, PG_Rect( 100, 100, 600, 500 ));
    asw.Show();

@@ -36,7 +36,7 @@ const float repairEfficiencyBuilding[resourceTypeNum*resourceTypeNum] = { 1./3.,
                                                                           0,     1./3., 0,
                                                                           0,     0,     0 };
 
-Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const BuildingType* type, int player, bool setupImages, bool chainToField )
+Building :: Building ( GameMap* actmap, const MapCoordinate& _entryPosition, const BuildingType* type, int player, bool setupImages, bool chainToField )
            : ContainerBase ( type, actmap, player ), typ ( type ), repairEfficiency ( repairEfficiencyBuilding )
 {
    int i;
@@ -151,7 +151,7 @@ void Building :: convert ( int player )
 const Surface& Building :: getPicture ( const BuildingType::LocalCoordinate& localCoordinate ) const
 {
    static Surface emptySurface;
-   pfield fld = getField ( localCoordinate );
+   tfield* fld = getField ( localCoordinate );
    if ( fld ) {
       return typ->getPicture(localCoordinate, fld->getweather(), _completion);
    } else
@@ -189,7 +189,7 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
    for ( int a = 0; a < 4; a++)
       for ( int b = 0; b < 6; b++)
          if ( typ->fieldExists ( BuildingType::LocalCoordinate( a, b) )) {
-            pfield f = getField( BuildingType::LocalCoordinate( a, b) );
+            tfield* f = getField( BuildingType::LocalCoordinate( a, b) );
             if ( !f || f->building ) {
                entryPosition = oldpos;
                return 1;
@@ -199,7 +199,7 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
    for ( int a = 0; a < 4; a++)
       for ( int b = 0; b < 6; b++)
          if ( typ->fieldExists ( BuildingType::LocalCoordinate( a , b ) )) {
-            pfield field = getField( BuildingType::LocalCoordinate( a, b) );
+            tfield* field = getField( BuildingType::LocalCoordinate( a, b) );
 
             tfield::ObjectContainer::iterator i = field->objects.begin();
             while ( i != field->objects.end()) {
@@ -221,7 +221,7 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
       if ( *i ) 
          (*i)->setnewposition ( entryPos.x, entryPos.y );
 
-   pfield field = getField( typ->entry );
+   tfield* field = getField( typ->entry );
    if ( field )
       field->bdt |= getTerrainBitType(cbbuildingentry) ;
 
@@ -249,7 +249,7 @@ int  Building :: unchainbuildingfromfield ( void )
    for (int i = 0; i <= 3; i++)
       for (int j = 0; j <= 5; j++)
          if ( typ->fieldExists ( BuildingType::LocalCoordinate(i,j) ) ) {
-            pfield fld = getField( BuildingType::LocalCoordinate(i,j) );
+            tfield* fld = getField( BuildingType::LocalCoordinate(i,j) );
             if ( fld && fld->building == this ) {
                set = 1;
                fld->building = NULL;
@@ -301,13 +301,13 @@ int Building :: getArmor ( void )
 }
 
 
-pfield        Building :: getField( const BuildingType::LocalCoordinate& lc ) const
+tfield*        Building :: getField( const BuildingType::LocalCoordinate& lc ) const
 {
   return gamemap->getField ( getFieldCoordinates ( lc ));
 }
 
 
-pfield        Building :: getEntryField( ) const
+tfield*        Building :: getEntryField( ) const
 {
   return getField ( typ->entry );
 }
@@ -446,7 +446,7 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits )
 }
 
 
-Building* Building::newFromStream ( pmap gamemap, tnstream& stream, bool chainToField )
+Building* Building::newFromStream ( GameMap* gamemap, tnstream& stream, bool chainToField )
 {
     int version = stream.readInt();
     int xpos, ypos, color;
@@ -698,7 +698,7 @@ void Building :: getresourceusage ( Resources* usage )
            };
 
 
-void doresearch ( tmap* actmap, int player )
+void doresearch ( GameMap* actmap, int player )
 {
 
    typedef vector<ResearchEfficiency> VRE;

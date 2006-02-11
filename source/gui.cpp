@@ -1402,7 +1402,7 @@ tnsguiiconputmine::tnsguiiconputmine ( void )
 
 int   tnsguiiconputmine::available    ( void )
 {
-   pfield fld = getactfield();
+   tfield* fld = getactfield();
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
       if ( fld->vehicle )
          if (fld->vehicle->color == actmap->actplayer * 8)
@@ -1434,7 +1434,7 @@ void tnsguiiconputmine::loadspecifics ( pnstream stream )
 int   tnsguiiconputgroundmine::available    ( void )
 {
    if (moveparams.movestatus == 90) {
-      pfield fld = getactfield();
+      tfield* fld = getactfield();
       if ( (fld->bdt & (getTerrainBitType( cbwater ).flip())).any() )
          if ( fld->a.temp & 1)
             if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
@@ -1486,7 +1486,7 @@ void  tnsguiiconputfloatingmine::exec         ( void )
 int   tnsguiiconputfloatingmine::available    ( void )
 {
    if (moveparams.movestatus == 90) {
-      pfield fld = getactfield();
+      tfield* fld = getactfield();
       if ( (fld->bdt & getTerrainBitType(cbwater0)).any()
            || (fld->bdt & getTerrainBitType(cbwater1)).any()
            || (fld->bdt & getTerrainBitType(cbwater2)).any()
@@ -1507,7 +1507,7 @@ tnsguiiconputmooredmine::tnsguiiconputmooredmine ( void )
 int   tnsguiiconputmooredmine::available    ( void )
 {
    if (moveparams.movestatus == 90) {
-      pfield fld = getactfield();
+      tfield* fld = getactfield();
       if ( (fld->typ->art & getTerrainBitType(cbwater2)).any()
            || (fld->typ->art & getTerrainBitType(cbwater3)).any() )
          if (fld->a.temp & 1 )
@@ -1545,7 +1545,7 @@ tnsguiiconremovemine::tnsguiiconremovemine ( void )
 int   tnsguiiconremovemine::available    ( void )
 {
    if (moveparams.movestatus == 90) {
-      pfield fld = getactfield();
+      tfield* fld = getactfield();
       if ( fld->a.temp )
          return !fld->mines.empty();
    }
@@ -1573,7 +1573,7 @@ tnsguiiconbuildany::tnsguiiconbuildany ( void )
 
 int   tnsguiiconbuildany::available    ( void )
 {
-   pfield fld = getactfield();
+   tfield* fld = getactfield();
    if ( fld->vehicle )
       if (fld->vehicle->color == actmap->actplayer * 8)
          if ( fld->vehicle->typ->objectsBuildable.size() || fld->vehicle->typ->objectsRemovable.size() || fld->vehicle->typ->objectGroupsBuildable.size() || fld->vehicle->typ->objectGroupsRemovable.size())
@@ -1601,7 +1601,7 @@ tnsguiiconrepair::tnsguiiconrepair ( void )
 int   tnsguiiconrepair::available    ( void )
 {
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
-      pfield fld = getactfield();
+      tfield* fld = getactfield();
       if ( fld->vehicle )
          if (fld->vehicle->color == actmap->actplayer * 8)
             if ( service.available ( fld->vehicle ))
@@ -1609,7 +1609,7 @@ int   tnsguiiconrepair::available    ( void )
                   return 1;
    } else
       if ( pendingVehicleActions.actionType == vat_service && pendingVehicleActions.service->guimode == 1 ) {
-         pfield fld = getactfield();
+         tfield* fld = getactfield();
          if ( fld->vehicle ) {
             // if ( pendingVehicleActions.service->getServices ( fld->vehicle) & ( 1 << VehicleService::srv_repair) ) {
             VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.find(fld->vehicle->networkid);
@@ -1636,7 +1636,7 @@ void  tnsguiiconrepair::exec         ( void )
       }
       int fieldCount = 0;
       for ( VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.begin(); i != pendingVehicleActions.service->dest.end(); i++ ) {
-         pfield fld = getfield ( i->second.dest->xpos, i->second.dest->ypos );
+         tfield* fld = getfield ( i->second.dest->xpos, i->second.dest->ypos );
          if ( fld != getactfield())
             for ( int j = 0; j < i->second.service.size(); j++ )
                if ( i->second.service[j].type == VehicleService::srv_repair ) {
@@ -1693,7 +1693,7 @@ int   tnsguiiconrefuel::available    ( void )
 {
 
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
-      pfield fld = getactfield();
+      tfield* fld = getactfield();
       if ( fld->vehicle )
          if (fld->vehicle->color == actmap->actplayer * 8)
             if ( service.available ( fld->vehicle ))
@@ -1706,7 +1706,7 @@ int   tnsguiiconrefuel::available    ( void )
                 return 1;
    } else
       if ( pendingVehicleActions.actionType == vat_service && pendingVehicleActions.service->guimode == 2) {
-         pfield fld = getactfield();
+         tfield* fld = getactfield();
          if ( fld->vehicle ) {
             VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.find(fld->vehicle->networkid);
             if ( i != pendingVehicleActions.service->dest.end() )
@@ -1733,7 +1733,7 @@ void  tnsguiiconrefuel::exec         ( void )
       }
       int fieldCount = 0;
       for ( VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.begin(); i != pendingVehicleActions.service->dest.end(); i++ ) {
-         pfield fld = getfield ( i->second.dest->xpos, i->second.dest->ypos );
+         tfield* fld = getfield ( i->second.dest->xpos, i->second.dest->ypos );
          if ( fld != getactfield())
             for ( int j = 0; j < i->second.service.size(); j++ )
                if (  i->second.service[j].type == VehicleService::srv_ammo
@@ -1775,7 +1775,7 @@ void  tnsguiiconrefuel::display      ( void )
 
    /*
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
-      pfield fld = getactfield();
+      tfield* fld = getactfield();
       if ( fld->vehicle )
          if ( fld->vehicle->typ->functions & cffuelref  )
             pict = 0;
@@ -1835,7 +1835,7 @@ int   tnsguiiconputbuilding::available    ( void )
    if ( actmap->getgameparameter(cgp_forbid_building_construction) )
       return 0;
 
-    pfield fld = getactfield();
+    tfield* fld = getactfield();
     if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
        if ( fld->vehicle )
           if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() )
@@ -1884,7 +1884,7 @@ tnsguiicondestructbuilding::tnsguiicondestructbuilding ( void )
 
 int   tnsguiicondestructbuilding::available    ( void )
 {
-    pfield fld = getactfield();
+    tfield* fld = getactfield();
     if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
        if ( fld->vehicle )
           if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() )
@@ -1927,7 +1927,7 @@ tnsguiicondig::tnsguiicondig ( void )
 
 int   tnsguiicondig::available    ( void )
 {
-   pfield fld = getactfield();
+   tfield* fld = getactfield();
    if (fld->vehicle != NULL)
       if (fld->vehicle->color == actmap->actplayer * 8)
          if ( (fld->vehicle->typ->functions &  cfmanualdigger) && !(fld->vehicle->typ->functions &  cfautodigger) )
@@ -2048,7 +2048,7 @@ tnsguiiconcontainer ::tnsguiiconcontainer ( void )
 
 int tnsguiiconcontainer :: available    ( void )
 {
-  pfield fld = getactfield();
+  tfield* fld = getactfield();
   if ( fieldvisiblenow ( fld ))
      if ( !containeractive && !moveparams.movestatus && pendingVehicleActions.actionType == vat_nothing && !pendingVehicleActions.action )
         if ( fld->building  &&  ((fld->building->color == actmap->actplayer * 8) || (fld->building->color == 8*8) ))
@@ -2068,7 +2068,7 @@ int tnsguiiconcontainer :: available    ( void )
 void tnsguiiconcontainer :: exec         ( void )
 {
    containeractive++;
-   pfield fld = getactfield ();
+   tfield* fld = getactfield ();
    /*
    if ( fld->vehicle && fld->building )
       displaymessage( "gui.cpp   tnsguiiconcontainer :: exec  ; both unit and building on a field", 1 );
@@ -2388,7 +2388,7 @@ void              tnputvehiclecontainerguiicon::exec( void )
 int         tnputvehiclecontainerguiicon::available( void )
 {
    if ( vehicle ) {
-      pfield fld = getactfield();
+      tfield* fld = getactfield();
       if ( !fld->vehicle ) {
 
          tselectvehiclecontainerguihost* bldhost = (tselectvehiclecontainerguihost*) host;
@@ -2503,7 +2503,7 @@ const char*       tnweapselguiicon::getinfotext  ( void )
 
       infotext = cwaffentypen[typ];
 
-      pfield fld = getactfield();
+      tfield* fld = getactfield();
 
       tfight* battle;
 

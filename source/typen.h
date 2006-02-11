@@ -37,7 +37,6 @@
 
 #include "basictypes.h"
 
-#include "pointers.h"
 #include "tpascal.inc"
 #include "basestrm.h"
 #include "messaginghub.h"

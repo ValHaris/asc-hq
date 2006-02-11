@@ -23,7 +23,7 @@
 
 
 
-WholeMapRenderer :: WholeMapRenderer ( tmap* actmap ) : gamemap ( actmap )
+WholeMapRenderer :: WholeMapRenderer ( GameMap* actmap ) : gamemap ( actmap )
 {
    int bufsizex = actmap->xsize * fielddistx + 200 ;
    int bufsizey = actmap->ysize * fielddisty + 200 ;
@@ -43,7 +43,7 @@ void WholeMapRenderer::write( const ASCString& filename )
    writepcx( filename, surface, SDLmm::SRect( SPoint( surfaceBorder, surfaceBorder), (gamemap->xsize-1) * fielddistx + fielddisthalfx + fieldsizex, (gamemap->ysize - 1) * fielddisty + fieldysize ) );
 }
 
-void writemaptopcx ( tmap* gamemap )
+void writemaptopcx ( GameMap* gamemap )
 {
    ASCString name = selectFile( "*.pcx", false );
    

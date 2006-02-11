@@ -2149,7 +2149,7 @@ void choosezoomlevel ( void )
 
 void showbdtbits( void )
 {
-   pfield fld = actmap->getField(actmap->getCursor());
+   tfield* fld = actmap->getField(actmap->getCursor());
    char m[200];
    m[0] = 0;
    for (int i = 0; i < cbodenartennum ; i++) {
@@ -2180,7 +2180,7 @@ void appendTerrainBits ( char* text, const TerrainBits* bdt )
 
 void viewterraininfo ( void )
 {
-   pfield fld = actmap->getField( actmap->getCursor() );
+   tfield* fld = actmap->getField( actmap->getCursor() );
    if ( fld && fieldvisiblenow  ( fld )) {
       const char* terraininfo = "#font02#Field Information (%d,%d)#font01##aeinzug20##eeinzug20##crtp10#"
                                             "ID: %d\n"
@@ -2318,7 +2318,7 @@ void viewterraininfo ( void )
 void viewUnitSetinfo ( void )
 {
    ASCString s;
-   pfield fld = actmap->getField( actmap->getCursor() );
+   tfield* fld = actmap->getField( actmap->getCursor() );
    if ( fld && fieldvisiblenow  ( fld ) && fld->vehicle ) {
 
          s += "#aeinzug0##eeinzug0#\n"

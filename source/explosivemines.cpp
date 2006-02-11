@@ -60,7 +60,7 @@ void Mine::paint( Surface& surf, SPoint pos )
 
 
 
-Mine::Mine( MineTypes type, int strength, int player, tmap* gamemap )
+Mine::Mine( MineTypes type, int strength, int player, GameMap* gamemap )
 {
    this->type = type;
    this->strength = strength;

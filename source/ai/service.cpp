@@ -177,7 +177,7 @@ bool AI::ServiceOrder::execute1st ( Vehicle* supplier )
              int x = targ->xpos;
              int y = targ->ypos;
              getnextfield ( x, y, i );
-             pfield fld = getfield ( x, y );
+             tfield* fld = getfield ( x, y );
              if ( fld && fieldAccessible ( fld, supplier, 1<<h ) == 2 && !fld->building && !fld->vehicle ) {
                 bool result = false;
                 TemporaryContainerStorage tus ( supplier );
@@ -697,7 +697,7 @@ AI::AiResult AI :: executeServices ( )
         if ( getMap()->getUnit ( nwid )) {
            if ( veh->getPosition3D() == veh->aiparam[ getPlayerNum() ]->dest ) {
               VehicleService vc ( mapDisplay, NULL );
-              pfield fld = getfield ( veh->xpos, veh->ypos );
+              tfield* fld = getfield ( veh->xpos, veh->ypos );
               if ( fld->building ) {
                  MapCoordinate mc = fld->building->getEntry();
                  vc.execute ( NULL, mc.x, mc.y, 0, -1, -1 );

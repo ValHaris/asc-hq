@@ -96,7 +96,7 @@ void ClipBoardBase::place ( const MapCoordinate& pos )
   tmemorystream stream ( &buf, tnstream::reading );
   Type type = Type(stream.readInt());
   if ( type == ClipVehicle ) {
-     pfield fld = actmap->getField ( pos );
+     tfield* fld = actmap->getField ( pos );
      Vehicle* veh = pasteUnit ( stream );
 
      if ( !fieldAccessible ( fld, veh ) && !actmap->getgameparameter( cgp_movefrominvalidfields) ) {
@@ -115,7 +115,7 @@ void ClipBoardBase::place ( const MapCoordinate& pos )
      for ( int x = 0; x < 4; x++ )
         for ( int y = 0; y < 6; y++ )
            if ( bld->typ->fieldExists ( BuildingType::LocalCoordinate( x , y ) )) {
-              pfield field = actmap->getField( bld->typ->getFieldCoordinate( pos, BuildingType::LocalCoordinate( x, y) ));
+              tfield* field = actmap->getField( bld->typ->getFieldCoordinate( pos, BuildingType::LocalCoordinate( x, y) ));
               if ( !field ) {
                  delete bld;
                  displaymessage("building does not fit here", 1 );

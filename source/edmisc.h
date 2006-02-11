@@ -118,7 +118,7 @@ extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePo
                            public:
                                void            init ( int sx , int sy, int dst, int restype, int resmax, int resmin );
                                virtual void    testfield ( const MapCoordinate& mc );
-                               tputresources ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
+                               tputresources ( GameMap* _gamemap ) : SearchFields ( _gamemap ) {};
                             };
 
    class tputresourcesdlg : public tdialogbox {
@@ -137,7 +137,7 @@ extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePo
 
 
    extern tkey                     ch;
-   extern pfield                    pf2;
+   extern tfield*                    pf2;
    extern pterraintype      auswahl;
    extern Vehicletype*        auswahlf;
    extern BuildingType*    auswahlb;
@@ -158,16 +158,16 @@ extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePo
 //   extern tcdrom                 cdrom;
 
 
-//* fÅr SelectNr
+//* fr SelectNr
 
 #define cselbodentyp 1                 //* terrain
 #define cselunit 2                      //* vehicletypeen
 #define cselcolor 3                       //* Farben
 #define cselbuilding 4                   //* Buildings
-#define cselunitunit 11                  //* Fahrzeuge fÅr vehicleCargo
+#define cselunitunit 11                  //* Fahrzeuge fr vehicleCargo
 #define cselobject 5                   //* Special Objects
-#define cselbuildingunit 12              //* Fahrzeuge fÅr BuildingCargo
-#define cselproduction 8               //* Fahrzeuge fÅr Production
+#define cselbuildingunit 12              //* Fahrzeuge fr BuildingCargo
+#define cselproduction 8               //* Fahrzeuge fr Production
 #define cselmine 6                       //* Minen
 #define cselweather 7                //* Wetter
 
@@ -192,7 +192,7 @@ extern void 	     playerchange(void);
 extern void         editpolygon (Poly_gon& poly);
 // extern int        getpolygon(ppolygon *poly); //return Fehlerstatus
 
-extern pfield getactfield();
+extern tfield* getactfield();
 
 
 extern void cdplayer( void );
@@ -210,7 +210,7 @@ class MapSwitcher {
         int active;
         class Mappntr {
            public:
-              pmap map;
+              GameMap* map;
               bool changed;
               int cursorx, cursory;
               Mappntr ( ) : map ( NULL ), changed ( false ) { cursorx=cursory=0;};

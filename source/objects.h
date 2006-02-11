@@ -26,11 +26,9 @@
  #include <vector>
 
  #include "typen.h"
- #include "vehicle.h"
- #include "buildings.h"
- #include "basestrm.h"
- #include "research.h"
  #include "mapitemtype.h"
+ 
+ class ObjectType;
 
 class AgeableItem {
     protected:

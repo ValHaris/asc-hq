@@ -80,12 +80,12 @@ class InitControls {
                                 char                    numberoffields;
                                 void                    searchtransferfields( Building* building );
                                 virtual void            testfield ( const MapCoordinate& mc );
-                                tsearchexternaltransferfields ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
+                                tsearchexternaltransferfields ( GameMap* _gamemap ) : SearchFields ( _gamemap ) {};
                              };
 
 void         tsearchexternaltransferfields :: testfield( const MapCoordinate& mc )
 { 
-     pfield fld  = gamemap->getField ( mc );
+     tfield* fld  = gamemap->getField ( mc );
      if ( fld && fld->vehicle )
         if ( fld->vehicle->height & bld->typ->externalloadheight ) {
            numberoffields++;
@@ -125,10 +125,10 @@ int searchexternaltransferfields ( Building* bld )
                       public:
                                 Vehicle*                vehicle;
                                 char                    numberoffields;
-                                pfield                  startfield;
+                                tfield*                  startfield;
                                 void                    initdestructbuilding( int x, int y );
                                 virtual void            testfield ( const MapCoordinate& mc );
-                                tsearchdestructbuildingfields ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
+                                tsearchdestructbuildingfields ( GameMap* _gamemap ) : SearchFields ( _gamemap ) {};
                              };
 
 
@@ -184,7 +184,7 @@ Resources getDestructionCost( Building* bld, Vehicle* veh )
 
 void         destructbuildinglevel2( int xp, int yp)
 {
-   pfield fld = getfield(xp,yp);
+   tfield* fld = getfield(xp,yp);
    if (fld->a.temp == 20)
       if (moveparams.movestatus == 115) {
          actmap->cleartemps(7);
@@ -225,13 +225,13 @@ void         destructbuildinglevel2( int xp, int yp)
                        virtual void     testfield ( const MapCoordinate& mc );
                        int              initpm( char mt, const Vehicle* eht );
                        void             run ( void );
-                       tputmine ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
+                       tputmine ( GameMap* _gamemap ) : SearchFields ( _gamemap ) {};
               };
 
 
 void         tputmine::testfield(const MapCoordinate& mc)
 {
-   pfield fld = gamemap->getField(mc);
+   tfield* fld = gamemap->getField(mc);
    if ( !fld->vehicle  &&  !fld->building && fieldvisiblenow( fld, player )) {
       fld->a.temp = 0;
       if ( !fld->mines.empty() ) {
@@ -310,7 +310,7 @@ void  putMine( const MapCoordinate& pos, int typ, int delta )
    else
       if (moveparams.movestatus == 90) {
          Vehicle* eht = moveparams.vehicletomove;
-         pfield fld = actmap->getField(pos);
+         tfield* fld = actmap->getField(pos);
          if ( fld->a.temp ) {
 
             if ( (fld->a.temp & 1) && ( delta > 0 )) {
@@ -330,7 +330,7 @@ void  putMine( const MapCoordinate& pos, int typ, int delta )
             }
 
             if ( (fld->a.temp & 2) && ( delta < 0 )) {
-               pfield fld = actmap->getField(pos);
+               tfield* fld = actmap->getField(pos);
                fld->removemine( -1 );
                eht->decreaseMovement ( mineremovemovedecrease );
                logtoreplayinfo ( rpl_removemine, pos.x, pos.y );
@@ -454,7 +454,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
                checkWind = false;
             } else {
                // not flying
-               pfield fld = getfield( dest.x, dest.y );
+               tfield* fld = getfield( dest.x, dest.y );
                if ( fld->building )
                   movecost = maxmalq;
                else
@@ -499,7 +499,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
          int x = dest.x;
          int y = dest.y;
          getnextfield( x,  y, c );
-         pfield fld = getfield ( x, y );
+         tfield* fld = getfield ( x, y );
          if ( fld ) {
            int d = (c - direc);
 
@@ -509,7 +509,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
            if (d < 0)
               d += sidenum;
 
-           pfield fld = getfield(x,y);
+           tfield* fld = getfield(x,y);
            if ( fld->vehicle && dest.getNumericalHeight() >= 0 ) {
               if ( getdiplomaticstatus(fld->vehicle->color) == cawar ) 
                  if ( attackpossible28(fld->vehicle,vehicle, NULL, dest.getBitmappedHeight() ))
@@ -621,7 +621,7 @@ int  Building :: getResource ( int      need,    int resourcetype ) const
 }
 
 
-bool authenticateUser ( tmap* actmap, int forcepasswordchecking = 0, bool allowCancel = true )
+bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool allowCancel = true )
 {
    for ( int p = 0; p < 8; p++ )
       actmap->player[p].existanceAtBeginOfTurn = actmap->player[p].exist() && actmap->player[p].stat != Player::off;
@@ -720,7 +720,7 @@ void runai( int playerView )
 }
 
 
-int findNextPlayer( tmap* actmap )
+int findNextPlayer( GameMap* actmap )
 {
    int p = actmap->actplayer;
    bool found = false;
@@ -852,7 +852,7 @@ void continuenetworkgame ()
 
    StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "loading " + filename );
    FileTransfer ft;
-   auto_ptr<tmap> newMap ( mapLoadingExceptionChecker( filename, MapLoadingFunction( &ft, &FileTransfer::loadPBEMFile )));
+   auto_ptr<GameMap> newMap ( mapLoadingExceptionChecker( filename, MapLoadingFunction( &ft, &FileTransfer::loadPBEMFile )));
    if ( !newMap.get() )
       return;
    
@@ -1070,7 +1070,7 @@ void cmousecontrol :: chkmouse ( void )
 
                     actgui->painticons();
                  }
-                 pfield fld = getactfield();
+                 tfield* fld = getactfield();
                  bool positionedUnderCursor = false;
                  if (( fld->vehicle || fld->building) && fieldvisiblenow(fld))
                     positionedUnderCursor = true;

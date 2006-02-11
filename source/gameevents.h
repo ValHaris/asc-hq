@@ -83,7 +83,7 @@ enum EventAction_ID { EventAction_Nothing,
 class EventTriggered;
 
 class FieldAddressing: protected PolygonPainerSquareCoordinate  {
-      pmap& gameMap;
+      GameMap*& gameMap;
    public:
       typedef vector<MapCoordinate> Fields;
       typedef vector< Poly_gon > Polygons;
@@ -94,7 +94,7 @@ class FieldAddressing: protected PolygonPainerSquareCoordinate  {
       virtual ~FieldAddressing() {};
 
    protected:
-      FieldAddressing( pmap& gamemap ) : gameMap(gamemap), addressingMode( none ) {};
+      FieldAddressing( GameMap*& gamemap ) : gameMap(gamemap), addressingMode( none ) {};
       enum AddressingMode { none, singleField, poly, global };
 
       AddressingMode addressingMode;
@@ -108,7 +108,7 @@ class FieldAddressing: protected PolygonPainerSquareCoordinate  {
       void setpointabs ( int x,  int y  );
 
       void setup();
-      friend Event* readOldEvent( pnstream stream, pmap gamemap, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents );
+      friend Event* readOldEvent( pnstream stream, GameMap* gamemap, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents );
 };
 
 

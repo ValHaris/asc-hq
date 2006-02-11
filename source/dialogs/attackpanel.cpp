@@ -261,7 +261,7 @@ const int maxdefenseshown = 2;
 const int maxattackshown = 2;
 
 
-void showAttackAnimation( tfight& battle, tmap* actmap, int ad, int dd )
+void showAttackAnimation( tfight& battle, GameMap* actmap, int ad, int dd )
 {
 
    BattleSoundPlayer bsp( battle );

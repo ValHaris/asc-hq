@@ -69,7 +69,7 @@ class EventTrigger {
    protected:
       EventTrigger ( EventTriggerID id ) : triggerID ( id ), gamemap(NULL), event(NULL), stateCache(unfulfilled), triggerFinal( false ), invert(false) {};
       virtual State getState( int player ) = 0;
-      tmap* gamemap;
+      GameMap* gamemap;
       Event* event;
 
       bool isFulfilled();
@@ -87,7 +87,7 @@ class EventTrigger {
       virtual ASCString getName() const = 0;
       virtual void setup() = 0;
       virtual void arm() {};
-      void setMap( tmap* gamemap_ ) { gamemap = gamemap_; };
+      void setMap( GameMap* gamemap_ ) { gamemap = gamemap_; };
       void setEvent( Event* ev ) { event = ev; };
       EventTriggerID getTriggerID() { return triggerID; };
 
@@ -99,7 +99,7 @@ class EventTrigger {
 class EventAction {
       EventActionID actionID;
    protected:
-      tmap* gamemap;
+      GameMap* gamemap;
       EventAction( EventActionID id ) : actionID ( id ), gamemap(NULL) {};
    public:
 
@@ -109,17 +109,17 @@ class EventAction {
 
       virtual void execute( MapDisplayInterface* md ) = 0;
       virtual void setup() = 0;
-      void setMap( tmap* gamemap_ ) { gamemap = gamemap_; };
+      void setMap( GameMap* gamemap_ ) { gamemap = gamemap_; };
       EventActionID getActionID() { return actionID; };
       virtual ~EventAction() {};
 };
 
 class Event {
-      tmap& gamemap;
+      GameMap& gamemap;
 
       void clear();
    public:
-      Event( tmap& map_ );
+      Event( GameMap& map_ );
 
       enum Status { Untriggered, Triggered, Timed, Executed } status;
 

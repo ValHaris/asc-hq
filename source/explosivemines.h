@@ -28,7 +28,7 @@
 
 class Mine : public AgeableItem {
    public:
-      Mine( MineTypes type, int strength, int player, tmap* gamemap );
+      Mine( MineTypes type, int strength, int player, GameMap* gamemap );
 
 
       MineTypes type;

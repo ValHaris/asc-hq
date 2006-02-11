@@ -24,13 +24,15 @@
 
  #include "typen.h"
 
+class GameMap;
+
 //! A Message to a player. It may either be send by another player or by the system.
 class  Message {
    public:
      //! bitmapped variable showing the sender of the message. Bit 0 - 7 are the players, Bit 9 is the system.
      int from;
 
-     ASCString getFromText( const tmap* gamemap ) const;
+     ASCString getFromText( const GameMap* gamemap ) const;
      
      //! bitmapped variable showing the recipients of the message.
      int to;
@@ -47,7 +49,7 @@ class  Message {
      //! the game time the messages was written
      GameTime gametime;
 
-     Message ( pmap spfld );
+     Message ( GameMap* spfld );
 
      /** Constructor.
          \param msg      The message text
@@ -55,7 +57,7 @@ class  Message {
          \param rec      The receipient. Bitmapped: each bit one player
          \param from     The sender. Bitmapped too! 512 = system
      */
-     Message ( const ASCString& msg, pmap gamemap,int rec, int from = 512 );
+     Message ( const ASCString& msg, GameMap* gamemap,int rec, int from = 512 );
 };
 
 typedef PointerList<Message*> MessageContainer;

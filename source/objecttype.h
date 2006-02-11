@@ -23,6 +23,7 @@
  #include "research.h"
  #include "overviewmapimage.h"
  #include "mapitemtype.h"
+ #include "mapfield.h"
 
 
  //! An object that can be placed on fields. Roads, pipelines and ditches are examples of objects. \sa Object
@@ -151,7 +152,7 @@
      const Surface& getPicture ( int i = 0, int weather = 0 ) const;
 
      //! can the object be build on the field fld
-     bool buildable ( pfield fld ) const;
+     bool buildable ( tfield* fld ) const;
 
      //! reads the objecttype from a stream
      void read ( tnstream& stream );
@@ -184,7 +185,7 @@ const int objectDisplayingMethodNum = 5;
 
 namespace ForestCalculation {
   //! automatically adjusting the pictures of woods and coasts to form coherent structures
-  extern void smooth ( int what, pmap gamemap, ObjectType* woodObj );
+  extern void smooth ( int what, GameMap* gamemap, ObjectType* woodObj );
 };
 
 

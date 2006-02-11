@@ -67,7 +67,7 @@ void         checkevents( MapDisplayInterface* md )
 
       actmap->player[actmap->actplayer].queuedEvents = 0;
 
-      for ( tmap::Events::iterator ev = actmap->events.begin(); ev != actmap->events.end(); ++ev )
+      for ( GameMap::Events::iterator ev = actmap->events.begin(); ev != actmap->events.end(); ++ev )
          (*ev)->check( md );
 
    }
@@ -118,7 +118,7 @@ const char* EventActionName[] = { "Nothing",
                                  "Set View Sharing" };
 
 
-Event::Event ( tmap& map_ ) : gamemap ( map_ ), playerBitmap(0xff), reArmNum(0), action(NULL)
+Event::Event ( GameMap& map_ ) : gamemap ( map_ ), playerBitmap(0xff), reArmNum(0), action(NULL)
 {
    id = ++gamemap.eventID;
    triggerTime.abstime = -1;

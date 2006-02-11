@@ -51,14 +51,14 @@ class BuildingType;
 
     bool movementLeft() const;
 
-    Vehicle ( const Vehicletype* t, pmap actmap, int player, int networkID  );
+    Vehicle ( const Vehicletype* t, GameMap* actmap, int player, int networkID  );
 
    protected:
      bool isBuilding() const { return false; };
 
    public:
 
-    Vehicle ( const Vehicletype* t, pmap actmap, int player );
+    Vehicle ( const Vehicletype* t, GameMap* actmap, int player );
 
     int repairableDamage() { return damage; };
 
@@ -266,11 +266,11 @@ class BuildingType;
     //! callback that is called after the unit has attacked
     void postAttack();
 
-    /** adds the units view to the map. The view must then be evaluated by functions like #evaluateviewcalculation ( pmap, int)
+    /** adds the units view to the map. The view must then be evaluated by functions like #evaluateviewcalculation ( GameMap*, int)
         \sa viewcalculation.cpp */
     void addview ( void );
 
-    /** removes the units view to the map. The view must then be evaluated by functions like #evaluateviewcalculation ( pmap, int)
+    /** removes the units view to the map. The view must then be evaluated by functions like #evaluateviewcalculation ( GameMap*, int)
         \sa viewcalculation.cpp */
     void removeview ( void );
 
@@ -313,7 +313,7 @@ class BuildingType;
     /** generates a new unit, loads its parameters from the stream (where they have been
         previously written with #write) and returns this new unit.
     */
-    static Vehicle* newFromStream ( pmap gamemap, tnstream& stream, int forceNetworkID = -1 );
+    static Vehicle* newFromStream ( GameMap* gamemap, tnstream& stream, int forceNetworkID = -1 );
 
     /** replaces the parameters of the unit by the ones form the stream. The VehicleType on
         the stream and the current one must be the same!

@@ -32,14 +32,14 @@ class FileTransfer : public GameTransferMechanism {
       void readChildData ( tnstream& stream );
       void writeChildData ( tnstream& stream ) const;
       bool enterfilename();
-      ASCString constructFileName( const tmap* actmap, int lastPlayer, int lastturn ) const;
+      ASCString constructFileName( const GameMap* actmap, int lastPlayer, int lastturn ) const;
    public:
       void setup();
       void setup( const ASCString& filename );
       
-      void send( const tmap* map, int lastPlayer, int lastturn  );
-      tmap* receive();
-      tmap* loadPBEMFile( const ASCString& filename );
+      void send( const GameMap* map, int lastPlayer, int lastturn  );
+      GameMap* receive();
+      GameMap* loadPBEMFile( const ASCString& filename );
       ASCString getMechanismID() const { return mechanismID(); };
       static ASCString mechanismID() { return "FileTransfer"; };
 };

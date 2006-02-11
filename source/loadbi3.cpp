@@ -554,7 +554,7 @@ class tloadBImap {
       protected:
         char* missing;
         virtual void preparemap ( int x, int y  ) = 0;
-        virtual pfield getfield ( int x, int y );
+        virtual tfield* getfield ( int x, int y );
 
 };
 
@@ -568,7 +568,7 @@ class ImportBiMap : public tloadBImap {
 class InsertBiMap : public tloadBImap {
          protected:
            virtual void preparemap ( int x, int y  );
-           virtual pfield getfield ( int x, int y );
+           virtual tfield* getfield ( int x, int y );
          public:
            InsertBiMap ( int x, int y, Bi3MapTranslationTable* _translationTable ) : tloadBImap (  _translationTable ) {
              xoffset = x; 
@@ -577,12 +577,12 @@ class InsertBiMap : public tloadBImap {
 };
 
 
-pfield tloadBImap :: getfield ( int x, int y )
+tfield* tloadBImap :: getfield ( int x, int y )
 {
    return ::getfield ( x, y );
 }
 
-pfield InsertBiMap :: getfield ( int x, int y )
+tfield* InsertBiMap :: getfield ( int x, int y )
 {
    return ::getfield ( xoffset + x, yoffset + y );
 }
@@ -725,7 +725,7 @@ void InsertBiMap :: preparemap ( int x, int y  )
 void  stu_height ( Vehicle* vehicle )
 {
    char l;
-   pfield fld = getfield ( vehicle->xpos, vehicle->ypos );
+   tfield* fld = getfield ( vehicle->xpos, vehicle->ypos );
 
    vehicle->height = chfahrend;
 
@@ -793,7 +793,7 @@ void        tloadBImap ::   ReadACTNPart(void)
             if ( Line[X] == translationTable->terraintranslation[tr].first )
                Line[X] = translationTable->terraintranslation[tr].second;
          int found = 0;
-         pfield fld = getfield ( X / 2, Y * 2 + (X & 1) );
+         tfield* fld = getfield ( X / 2, Y * 2 + (X & 1) );
          fld->tempw = Line[X];
          fld->temp3 = 0;
 
@@ -909,7 +909,7 @@ void        tloadBImap ::   ReadACTNPart(void)
                   if ( xlt[m] == translationTable->object2IDtranslate[i].first )  {
                      ObjectType* obj = objectTypeRepository.getObject_byID ( translationTable->object2IDtranslate[i].second );
                      if ( obj ) {
-                        pfield fld = getfield ( newx, newy );
+                        tfield* fld = getfield ( newx, newy );
                         if ( pass == 1 || obj->getFieldModification(fld->getweather()).terrainaccess.accessible ( fld->bdt )) {
                            fld -> addobject ( obj, 0, true );
                            found |= 1;
@@ -927,7 +927,7 @@ void        tloadBImap ::   ReadACTNPart(void)
                            if ( obj->weather.test(ww) )
                               for ( unsigned int j = 0; j < obj->weatherPicture[ww].images.size(); j++ )
                                  if ( obj->weatherPicture[ww].bi3pic[j] == xlt[m]  && !(found & 2)  && !( GraphicSetManager::Instance().getMode(xlt[m]) & 256) ) {
-                                    pfield fld = getfield ( newx, newy );
+                                    tfield* fld = getfield ( newx, newy );
                                     if ( pass == 1 || obj->getFieldModification(fld->getweather()).terrainaccess.accessible ( fld->bdt )) {
                                        fld -> addobject ( obj, 0, true );
                                        found |= 1;
@@ -946,7 +946,7 @@ void        tloadBImap ::   ReadACTNPart(void)
                   trrWeather = 0;
 
                if ( trrn->weather[trrWeather] ) {
-                  pfield fld = getfield ( newx, newy );
+                  tfield* fld = getfield ( newx, newy );
                   fld->typ = trrn->weather[trrWeather];
                   fld->setparams();
                }
@@ -1010,7 +1010,7 @@ void        tloadBImap ::   ReadACTNPart(void)
          int cl = convcol(Line[X] >> 8);
          Vehicle* eht = getunit ( tp, cl );
          if ( eht ) {
-            pfield fld = getfield ( X / 2, Y * 2 + (X & 1) );
+            tfield* fld = getfield ( X / 2, Y * 2 + (X & 1) );
             fld->vehicle = eht;
             fld->vehicle->xpos = xoffset + X / 2;
             fld->vehicle->ypos = yoffset + Y * 2 + (X & 1);
@@ -1058,7 +1058,7 @@ void       tloadBImap :: ReadSHOPPart( void )
            if ( IsVehCont ) {
               int Y = FileShop.Pos1 / 64;
               int X = FileShop.Pos1 % 64;
-              pfield fld = getfield ( X / 2, Y * 2 + (X & 1) );
+              tfield* fld = getfield ( X / 2, Y * 2 + (X & 1) );
               if ( fld->vehicle ) 
                  for ( int j = 0; j < 8; j++ ) 
                     if ( FileShop.a.Content.Veh[j] >= 0 ) {
@@ -1079,7 +1079,7 @@ void       tloadBImap :: ReadSHOPPart( void )
            int newx = X / 2;
            int newy = Y * 2 + (X & 1);
             
-           pfield fld = getfield ( newx, newy );
+           tfield* fld = getfield ( newx, newy );
 
            dynamic_array<blds> bldlist;
            int bldlistnum = 0;
@@ -1099,7 +1099,7 @@ void       tloadBImap :: ReadSHOPPart( void )
                                  for ( int n = 0; n < 6; n++ )
                                     if ( bld->fieldExists( BuildingType::LocalCoordinate(m , n) ) ) {
                                        MapCoordinate pos = bld->getFieldCoordinate ( MapCoordinate(newx, newy), BuildingType::LocalCoordinate(m, n) );
-                                       pfield fld2 = getfield ( pos.x, pos.y );
+                                       tfield* fld2 = getfield ( pos.x, pos.y );
                                        if ( !fld2 )
                                           fail = true;
                                        else {
@@ -1146,7 +1146,7 @@ void       tloadBImap :: ReadSHOPPart( void )
                                   if ( bld->fieldExists( BuildingType::LocalCoordinate(m , n) ) ) 
                                      if ( bld->getPicture( BuildingType::LocalCoordinate(m , n), w, p ).valid() ) {
                                         MapCoordinate pos = bld->getFieldCoordinate ( MapCoordinate(newx, newy), BuildingType::LocalCoordinate(m, n) );
-                                        pfield fld2 = getfield ( pos.x, pos.y );
+                                        tfield* fld2 = getfield ( pos.x, pos.y );
                                         if ( fld2->tempw != bld->getBIPicture( BuildingType::LocalCoordinate(m , n), w, p ))
                                            match = 0;
                                      }
@@ -1642,7 +1642,7 @@ Bi3MapTranslationTable* chooseImportTable ( )
 
 void importbattleislemap ( const char* path, const char* filename, TerrainType::Weather* trrn, string* errorOutput, bool fakemap  )
 {
-    pmap oldmap = actmap;
+    GameMap* oldmap = actmap;
     actmap = NULL;
     GraphicSetManager::Instance().setActive(1);
     try {

@@ -49,11 +49,11 @@
 
 
   //! this is the one and only map that is loaded by ASC
-  extern tmap* actmap; 
+  extern GameMap* actmap; 
 
 
 //! returns the field at the given coordinates
-extern pfield getfield(int x, int y);
+extern tfield* getfield(int x, int y);
 
 
 // ! returns the diplomatic status between actmap->actplayer and the player with color b (note that the color is playernum*8 ) 
@@ -74,7 +74,7 @@ extern void  putbuilding2( const MapCoordinate& entryPosition,
 
 
 //! recalculates the connection (like road interconnections) of all objects on the map
-extern void  calculateallobjects( pmap m = actmap );
+extern void  calculateallobjects( GameMap* m = actmap );
 
 /** recalculates the connection (like road interconnections) of an object
       \param x The x coordinate of the field
@@ -86,7 +86,7 @@ extern void  calculateobject(int  x,
                              int  y,
                              bool mof,
                              const ObjectType* obj,
-                             pmap gamemap = actmap );
+                             GameMap* gamemap = actmap );
 
 //! generate a map of size xsize/ysize and consisting just of fields bt. The map is stored in #actmap
 extern void  generatemap( TerrainType::Weather* bt,
@@ -101,7 +101,7 @@ extern void  generatemap( TerrainType::Weather* bt,
    \retval 1 unit can pass over the field
    \retval 2 unit can stop its movement there
 */
-extern int fieldAccessible( const pfield        field,
+extern int fieldAccessible( const tfield*        field,
                             const Vehicle*     vehicle,
                             int  uheight = -2,
                             const bool* attacked = NULL,
@@ -130,7 +130,7 @@ extern int          getwindheightforunit   ( const Vehicle* eht, int uheight = -
              1=unit can move across this field but cannot keep standing there
              2=unit can move and stand there
 */
-extern int          terrainaccessible (  const pfield field, const Vehicle* vehicle, int uheight = -1 );
+extern int          terrainaccessible (  const tfield* field, const Vehicle* vehicle, int uheight = -1 );
 
 /** Checks if the unit can drive on the field
     \param uheight if != -1, the unit is assumed to be on this height instead of the actual one.
@@ -142,7 +142,7 @@ extern int          terrainaccessible (  const pfield field, const Vehicle* vehi
                   -2   deep water required to submerge
                   -3   unit cannot drive onto terrain
 */
-extern int          terrainaccessible2 ( const pfield        field, const Vehicle* vehicle, int uheight = -1 );
+extern int          terrainaccessible2 ( const tfield*        field, const Vehicle* vehicle, int uheight = -1 );
 
 
 /** Checks if the field can be accessed
@@ -154,7 +154,7 @@ extern int          terrainaccessible2 ( const pfield        field, const Vehicl
                   -2   deep water required to submerge
                   -3   unit cannot drive onto terrain
 */
-int          terrainaccessible2 ( const pfield        field, const TerrainAccess& terrainAccess, int uheight );
+int          terrainaccessible2 ( const tfield*        field, const TerrainAccess& terrainAccess, int uheight );
 
 
 /*!
@@ -173,15 +173,15 @@ extern int getheightdelta ( const ContainerBase* c1, const ContainerBase* c2 );
     \param pe the field to be evaluated
     \param player the player who is 'looking'
   */
-  extern bool fieldvisiblenow( const pfield pe, int player = actmap->actplayer );
+  extern bool fieldvisiblenow( const tfield* pe, int player = actmap->actplayer );
 
   /*!
     evaluates the visibility of a field
     \param pe the field to be evaluated
     \param player the player who is 'looking'
    */
-  extern VisibilityStates fieldVisibility  ( const pfield pe, int player = actmap->actplayer );
-  extern VisibilityStates fieldVisibility  ( const pfield pe, int player, tmap* gamemap );
+  extern VisibilityStates fieldVisibility  ( const tfield* pe, int player = actmap->actplayer );
+  extern VisibilityStates fieldVisibility  ( const tfield* pe, int player, GameMap* gamemap );
 
 
 
@@ -198,7 +198,7 @@ extern SigC::Signal0<void> repaintDisplay;
 extern SigC::Signal0<void> updateFieldInfo;
 extern SigC::Signal0<void> cursorMoved;
 extern SigC::Signal0<void> viewChanged;
-extern SigC::Signal1<void,tmap*> mapChanged;
+extern SigC::Signal1<void,GameMap*> mapChanged;
 extern SigC::Signal1<void,ContainerBase*> showContainerInfo;
 extern SigC::Signal1<void,Vehicletype*> showVehicleTypeInfo;
 extern SigC::Signal0<bool> idleEvent;

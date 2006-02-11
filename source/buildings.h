@@ -28,6 +28,8 @@
  #include "buildingtype.h"
  #include "mapalgorithms.h"
 
+class tfield;
+
 //! An actual building on the map, which references a #BuildingType
 class  Building : public ContainerBase {
     MapCoordinate entryPosition;
@@ -62,13 +64,13 @@ class  Building : public ContainerBase {
 
     AiValue*      aiparam[8];
 
-    Building( pmap map, const MapCoordinate& entryPosition, const BuildingType* type , int player, bool setupImages = true, bool chainToField = true);
+    Building( GameMap* map, const MapCoordinate& entryPosition, const BuildingType* type , int player, bool setupImages = true, bool chainToField = true);
 
     int lastmineddist;
 
     bool canRepair ( const ContainerBase* item ) const;
 
-    static Building* newFromStream ( pmap gamemap, tnstream& stream, bool chainToField = true );
+    static Building* newFromStream ( GameMap* gamemap, tnstream& stream, bool chainToField = true );
     void write ( tnstream& stream, bool includeLoadedUnits = true );
     void read ( tnstream& stream );
   private:
@@ -111,13 +113,13 @@ class  Building : public ContainerBase {
     int  getArmor( void );
 
     //! returns the field the buildings entry is standing on
-    pfield getEntryField ( ) const;
+    tfield* getEntryField ( ) const;
 
     //! returns the position of the buildings entry
     MapCoordinate3D getEntry ( ) const;
 
     //! returns the pointer to the field which the given part of the building is standing on
-    pfield getField( const BuildingType::LocalCoordinate& localCoordinates ) const;
+    tfield* getField( const BuildingType::LocalCoordinate& localCoordinates ) const;
     
     //! returns the absolute map coordinate of the given part of the building
     MapCoordinate getFieldCoordinates( const BuildingType::LocalCoordinate& localCoordinates ) const;
@@ -174,6 +176,6 @@ class  Building : public ContainerBase {
 };
 
 
-extern void doresearch ( tmap* actmap, int player );
+extern void doresearch ( GameMap* actmap, int player );
 
 #endif

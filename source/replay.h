@@ -84,7 +84,7 @@ class trunreplay {
          protected:
             int movenum;
             void execnextreplaymove ( void );
-            pmap orgmap;
+            GameMap* orgmap;
             pmemorystream stream;
             void wait ( int t = ticker );
             void wait ( MapCoordinate pos, int t = ticker );
@@ -110,9 +110,9 @@ class trunreplay {
    };
 
 class LockReplayRecording {
-        tmap::ReplayInfo& ri;
+        GameMap::ReplayInfo& ri;
      public:
-        LockReplayRecording ( tmap::ReplayInfo& _ri );
+        LockReplayRecording ( GameMap::ReplayInfo& _ri );
         ~LockReplayRecording();
 };
 

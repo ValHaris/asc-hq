@@ -21,7 +21,7 @@
 #include "gamemap.h"
 #include "spfst.h"
 
-Message :: Message ( pmap spfld  )
+Message :: Message ( GameMap* spfld  )
 {
    from = 1 << spfld->actplayer;
          
@@ -35,7 +35,7 @@ Message :: Message ( pmap spfld  )
 }
 
 
-Message :: Message ( const ASCString& msg, pmap gamemap, int rec, int _from )  // f?r Meldungen vom System
+Message :: Message ( const ASCString& msg, GameMap* gamemap, int rec, int _from )  // f?r Meldungen vom System
 {
    from = _from;
    gametime = gamemap->time;
@@ -53,7 +53,7 @@ Message :: Message ( const ASCString& msg, pmap gamemap, int rec, int _from )  /
 }
 
 
-ASCString Message::getFromText( const tmap* gamemap ) const
+ASCString Message::getFromText( const GameMap* gamemap ) const
 {
    if ( from <= 0 )
       return "";

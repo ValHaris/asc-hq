@@ -102,7 +102,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
       wind = NULL;
 
 
-   pfield oldfield = getfield( vehicle->xpos, vehicle->ypos );
+   tfield* oldfield = getfield( vehicle->xpos, vehicle->ypos );
 
    AStar3D::Path::iterator pos = path.begin();
    AStar3D::Path::iterator stop = path.end()-1;
@@ -165,7 +165,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
             to = getNeighbouringFieldCoordinate ( to, getdirection ( to, *next ));
          to.setnum ( to.x, to.y, next->getRealHeight() );
 
-         pfield dest = getfield ( to.x, to.y );
+         tfield* dest = getfield ( to.x, to.y );
 
          if ( mapDisplay ) {
             if ( next == stop && to.x==next->x && to.y==next->y) // the unit will reach its destination
@@ -259,7 +259,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
       pos = next;
    }
 
-   pfield fld = getfield ( pos->x, pos->y );
+   tfield* fld = getfield ( pos->x, pos->y );
 
    actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
 
@@ -869,7 +869,7 @@ void     VehicleAttack :: tsearchattackablevehicles::testfield( const MapCoordin
          } 
          delete atw;
       } else {
-          pfield fld = gamemap->getField(mc);
+          tfield* fld = gamemap->getField(mc);
           if (fieldvisiblenow( fld )) {
              Vehicle* eht = fld->vehicle;
              if (eht != NULL) 
@@ -1263,7 +1263,7 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( Vehicl
 
 void  VehicleService :: FieldSearch :: testfield( const MapCoordinate& mc )
 {
-   pfield fld = gamemap->getField ( mc );
+   tfield* fld = gamemap->getField ( mc );
    if ( fld && veh && fld->vehicle ) {
       if ( fld->vehicle == veh ) {
          for ( ContainerBase::Cargo::const_iterator i = veh->getCargo().begin(); i != veh->getCargo().end(); ++i )

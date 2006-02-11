@@ -64,8 +64,8 @@ int  treactionfirereplay :: checkfield ( const MapCoordinate3D& pos, Vehicle* &e
          preactionfire_replayinfo rpli = replay[ i ];
          if ( eht && rpli->x2 == pos.x  && rpli->y2 == pos.y ) {
 
-             pfield fld = getfield ( rpli->x1, rpli->y1 );
-             pfield targ = getfield ( rpli->x2, rpli->y2 );
+             tfield* fld = getfield ( rpli->x1, rpli->y1 );
+             tfield* targ = getfield ( rpli->x2, rpli->y2 );
 
              npush ( targ->vehicle );
              targ->vehicle = eht;
@@ -270,7 +270,7 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, Veh
    int attacks = 0;
    int result = 0;
 
-   pfield fld = getfield( pos.x, pos.y );
+   tfield* fld = getfield( pos.x, pos.y );
    npush ( fld->vehicle );
    fld->vehicle = vehicle;
    vehicle->xpos = pos.x;

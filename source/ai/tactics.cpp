@@ -94,7 +94,7 @@ void AI :: searchTargets ( Vehicle* veh, const MapCoordinate3D& pos, TargetVecto
 
          for ( int nf = 0; nf < sidenum; nf++ ) {
             MapCoordinate mc = getNeighbouringFieldCoordinate ( MapCoordinate ( mv->attackx, mv->attacky), nf );
-            pfield fld = getMap()->getField(mc);
+            tfield* fld = getMap()->getField(mc);
             if ( fld && !veh->typ->wait)
                mv->neighbouringFieldsReachable[nf] = (vm.fieldVisited( MapCoordinate3D(mc.x, mc.y, pos.getBitmappedHeight()) ) || ( veh->xpos == mc.x && veh->ypos == mc.y )) && !fld->building && (!fld->vehicle || fld->unitHere(veh));
             else
@@ -117,7 +117,7 @@ void AI :: searchTargets ( Vehicle* veh, const MapCoordinate3D& pos, TargetVecto
             }
 
             MapCoordinate mc = getNeighbouringFieldCoordinate ( MapCoordinate ( mv->attackx, mv->attacky), checkDir%sidenum );
-            pfield fld = getMap()->getField(mc);
+            tfield* fld = getMap()->getField(mc);
             if ( fld && !fld->building && !fld->vehicle )
                hemmingFactor += AttackFormula::getHemmingFactor ( nf );
          }
@@ -196,7 +196,7 @@ void AI::getAttacks ( AStar3D& vm, Vehicle* veh, TargetVector& tv, int hemmingBo
    int enemycount = 0;
    for ( int y = y1; y <= y2 && !enemycount; ++y)
       for ( int x = x1; x <= x2; ++x) {
-         pfield fld = getMap()->getField(x,y);
+         tfield* fld = getMap()->getField(x,y);
          if ( fld && fld->vehicle)
             if ( getPlayer(fld->vehicle->getOwner()).diplomacy.isHostile( getPlayerNum() )  )
                enemycount++;
@@ -226,7 +226,7 @@ void AI::getAttacks ( AStar3D& vm, Vehicle* veh, TargetVector& tv, int hemmingBo
       int fuelLacking = 0;
       for ( AStar3D::Container::iterator ff = vm.visited.begin(); ff != vm.visited.end(); ++ff )
          if ( !ff->hasAttacked ) {
-            pfield fld = getMap()->getField (ff->h);
+            tfield* fld = getMap()->getField (ff->h);
             if ( !fld->vehicle && !fld->building ) {
                 if ( !apl || apl->returnFromPositionPossible ( ff->h )) {
                    searchTargets ( veh, ff->h, tv, beeline ( ff->h.x, ff->h.y, orgxpos, orgypos ), vm, hemmingBonus );
@@ -576,7 +576,7 @@ AI::AiResult AI::tactics( void )
          int xdist = ydist / 4;
          for ( int x = veh->xpos - xdist; x <= veh->xpos + xdist; x++ )
             for ( int y = veh->ypos - ydist; y <= veh->ypos + ydist; y++ ) {
-               pfield fld = getMap()->getField(x,y );
+               tfield* fld = getMap()->getField(x,y );
                if ( fld ) {
                   if ( fld->vehicle && getPlayer(veh->getOwner()).diplomacy.isHostile( fld->vehicle->getOwner() )  )
                      enemiesNear = true;
@@ -634,7 +634,7 @@ AI::AiResult AI::tactics( void )
    
                      int freeNeighbouringFields = 0;
                      for ( int j = 0; j < sidenum; j++ ) {
-                        pfield fld = getMap()->getField ( getNeighbouringFieldCoordinate ( MapCoordinate(mv->attackx, mv->attacky), j));
+                        tfield* fld = getMap()->getField ( getNeighbouringFieldCoordinate ( MapCoordinate(mv->attackx, mv->attacky), j));
                         if ( fld )
                            if ( !fld->building && !fld->vehicle )
                               freeNeighbouringFields++;
@@ -779,7 +779,7 @@ AI::AiResult AI::tactics( void )
                      tactics_findBestAttackOrder ( finalPositions, attackOrder, enemy, 0, enemy->damage, finalDamage, finalOrder, finalAttackNum );
 
 
-                     pfield enemyField = getMap()->getField(enemy->xpos, enemy->ypos);
+                     tfield* enemyField = getMap()->getField(enemy->xpos, enemy->ypos);
                      for ( int i = 0; i < finalAttackNum && enemyField->vehicle == enemy && finalAttackNum < maxint; i++ ) {
                         checkKeys();
                         if ( finalOrder[i] < 0 )
@@ -911,7 +911,7 @@ class UnitAttacksUnit_FakeHemming : public tunitattacksunit {
           UnitAttacksUnit_FakeHemming ( AI* ai, Vehicle* attacker, Vehicle* defender, Vehicle** _neighbours ) : tunitattacksunit ( attacker , defender )
           {
              for ( int i = 0; i < sidenum; i++ ) {
-                pfield fld = ai->getMap()->getField ( getNeighbouringFieldCoordinate ( attacker->getPosition(), i ));
+                tfield* fld = ai->getMap()->getField ( getNeighbouringFieldCoordinate ( attacker->getPosition(), i ));
 
                 Vehicle* v = NULL;
                 if ( fld )

@@ -28,7 +28,7 @@
 
 #include "basestrm.h"
 
-class tmap;
+class GameMap;
 
 class GameTransferMechanism {
    protected:   
@@ -36,8 +36,8 @@ class GameTransferMechanism {
       virtual void writeChildData ( tnstream& stream ) const = 0;
    public:
       virtual void setup() = 0;
-      virtual void send( const tmap* map, int lastPlayer, int lastturn ) = 0;
-      virtual tmap* receive() = 0;
+      virtual void send( const GameMap* map, int lastPlayer, int lastturn ) = 0;
+      virtual GameMap* receive() = 0;
       static GameTransferMechanism* read ( tnstream& stream );
       void write ( tnstream& stream ) const;
       virtual ASCString getMechanismID() const = 0;

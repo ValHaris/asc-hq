@@ -20,7 +20,7 @@ const int ResourcePlacement::MAXMATERIALVALUE = 255;
 const int ResourcePlacement::MINFUELVALUE = 0;
 const int ResourcePlacement::MINMATERIALVALUE = 0;
 
-ResourcePlacement::ResourcePlacement(tmap& m,double fr, double mr, unsigned short maxFOffset, unsigned short maxMOffset, int addFreeFieldsPercFuel, int addFreeFieldsPercMaterial): map(m), fuelRoughness(fr), materialRoughness(fr), maxFuelOffset(maxFOffset), maxMaterialOffset(maxMOffset), stepCount(0),
+ResourcePlacement::ResourcePlacement(GameMap& m,double fr, double mr, unsigned short maxFOffset, unsigned short maxMOffset, int addFreeFieldsPercFuel, int addFreeFieldsPercMaterial): map(m), fuelRoughness(fr), materialRoughness(fr), maxFuelOffset(maxFOffset), maxMaterialOffset(maxMOffset), stepCount(0),
 additionalResourceFreeFieldsPercentageFuel(addFreeFieldsPercFuel), additionalResourceFreeFieldsPercentageMaterial(addFreeFieldsPercMaterial) {
   double depth = 0.0;
   srand(static_cast<unsigned>(time(0)));
@@ -64,11 +64,11 @@ void ResourcePlacement::placeMaterialResources() {
 
 
 void ResourcePlacement::runDS() {
-  pfield a = map.getField(0,0);
-  pfield b = map.getField( map.xsize -1, 0 );
-  pfield c = map.getField(map.xsize -1, map.ysize -1);
-  pfield e = map.getField((map.xsize -1)/2, (map.ysize -1)/2);  //First diamond point
-  pfield d = map.getField(0, map.ysize -1 );
+  tfield* a = map.getField(0,0);
+  tfield* b = map.getField( map.xsize -1, 0 );
+  tfield* c = map.getField(map.xsize -1, map.ysize -1);
+  tfield* e = map.getField((map.xsize -1)/2, (map.ysize -1)/2);  //First diamond point
+  tfield* d = map.getField(0, map.ysize -1 );
   if(placeFuel) {   
     a->temp3 = createRandomValue(MAXFUELVALUE * (1 + additionalResourceFreeFieldsPercentageFuel/100 ));    
     b->temp3 = createRandomValue(MAXFUELVALUE * (1 + additionalResourceFreeFieldsPercentageFuel/100 ));    
@@ -99,7 +99,7 @@ void ResourcePlacement::runDS() {
 
 
 
-pfield ResourcePlacement::calculateCornerPoint(pfield a, pfield b, pfield diamondPoint) {
+tfield* ResourcePlacement::calculateCornerPoint(tfield* a, tfield* b, tfield* diamondPoint) {
   int x = 0;
   int y = 0;  
   if((a->getx() == b->getx())) {
@@ -113,7 +113,7 @@ pfield ResourcePlacement::calculateCornerPoint(pfield a, pfield b, pfield diamon
   }else{
      y = diamondPoint->gety();
   }
-  pfield cornerPoint = map.getField(x,y);
+  tfield* cornerPoint = map.getField(x,y);
   if(placeFuel) {
     cornerPoint->temp3  = calculateCornerValueFuel(a, b, diamondPoint);
     setFieldValueFuel(cornerPoint);
@@ -127,11 +127,11 @@ pfield ResourcePlacement::calculateCornerPoint(pfield a, pfield b, pfield diamon
 
 void ResourcePlacement::step(Rect r) { 
   ++stepCount;
-  pfield diamondPoint = calculateDiamondPoint(r.a, r.b, r.c, r.d);
-  pfield f = calculateCornerPoint(r.a, r.b, diamondPoint);
-  pfield g = calculateCornerPoint(r.b, r.c, diamondPoint);
-  pfield h = calculateCornerPoint(r.d, r.c, diamondPoint);
-  pfield i = calculateCornerPoint(r.a, r.d, diamondPoint);
+  tfield* diamondPoint = calculateDiamondPoint(r.a, r.b, r.c, r.d);
+  tfield* f = calculateCornerPoint(r.a, r.b, diamondPoint);
+  tfield* g = calculateCornerPoint(r.b, r.c, diamondPoint);
+  tfield* h = calculateCornerPoint(r.d, r.c, diamondPoint);
+  tfield* i = calculateCornerPoint(r.a, r.d, diamondPoint);
 
   Rect r1 ={r.a, f, diamondPoint, i};
   Rect r2 ={f, r.b, g, diamondPoint};
@@ -157,14 +157,14 @@ void ResourcePlacement::step(Rect r) {
 }
 
 
-pfield ResourcePlacement::calculateDiamondPoint(pfield a, pfield b, pfield c, pfield d) {
+tfield* ResourcePlacement::calculateDiamondPoint(tfield* a, tfield* b, tfield* c, tfield* d) {
   int x = 0;
   int y = 0;
   double xd = (b->getx() - a->getx())/2;
   double yd = (d->gety() - a->gety())/2;
   x =  static_cast<int>(xd) + a->getx();
   y = static_cast<int>(yd)  + a->gety();
-  pfield e = map.getField(x, y);
+  tfield* e = map.getField(x, y);
   if(placeFuel) {
     e->temp3 = calculateDiamondValueFuel(a, b, c, d);
     setFieldValueFuel(e);
@@ -194,7 +194,7 @@ short ResourcePlacement::createAlgebraicSign() {
     return 1;
 }
 
-int ResourcePlacement::calculateCornerValueFuel(pfield a, pfield b, pfield c) {
+int ResourcePlacement::calculateCornerValueFuel(tfield* a, tfield* b, tfield* c) {
   int value = (a->temp3 + b->temp3 + c->temp3)/3 + createRandomValue(static_cast<int>(calculateCurrentOffset(maxFuelOffset) * fuelRoughness))* createAlgebraicSign();
   if(value > MAXFUELVALUE * (1 + additionalResourceFreeFieldsPercentageFuel / 100)) {
     value = MAXFUELVALUE * (1 + additionalResourceFreeFieldsPercentageFuel /100);
@@ -205,7 +205,7 @@ int ResourcePlacement::calculateCornerValueFuel(pfield a, pfield b, pfield c) {
 }
 
 
-int ResourcePlacement::calculateDiamondValueFuel(pfield a, pfield b, pfield c, pfield d) {  
+int ResourcePlacement::calculateDiamondValueFuel(tfield* a, tfield* b, tfield* c, tfield* d) {
   int value = static_cast<int>((a->temp3 + b->temp3 + c->temp3 + d->temp3)/4 + createRandomValue(static_cast<int>(calculateCurrentOffset(maxFuelOffset) * fuelRoughness)) * createAlgebraicSign());
   if(value > MAXFUELVALUE * (1 + additionalResourceFreeFieldsPercentageFuel / 100)) {
     value = MAXFUELVALUE * (1 + additionalResourceFreeFieldsPercentageFuel /100);
@@ -215,7 +215,7 @@ int ResourcePlacement::calculateDiamondValueFuel(pfield a, pfield b, pfield c, p
   return value;
 }
 
-int ResourcePlacement::calculateCornerValueMaterial(pfield a, pfield b, pfield c) {
+int ResourcePlacement::calculateCornerValueMaterial(tfield* a, tfield* b, tfield* c) {
   int value = (a->temp4 + b->temp4 + c->temp4)/3 + createRandomValue(static_cast<int>(calculateCurrentOffset(maxMaterialOffset) * materialRoughness ) * createAlgebraicSign());
   if(value > MAXMATERIALVALUE * (1 + additionalResourceFreeFieldsPercentageMaterial / 100)) {
     value = MAXMATERIALVALUE * (1 + additionalResourceFreeFieldsPercentageMaterial / 100);
@@ -225,7 +225,7 @@ int ResourcePlacement::calculateCornerValueMaterial(pfield a, pfield b, pfield c
   return value;
 }
 
-int ResourcePlacement::calculateDiamondValueMaterial(pfield a, pfield b, pfield c, pfield d) {
+int ResourcePlacement::calculateDiamondValueMaterial(tfield* a, tfield* b, tfield* c, tfield* d) {
   int value = (a->temp4 + b->temp4 + c->temp4 + d->temp4)/4 + createRandomValue(static_cast<int>(calculateCurrentOffset(maxMaterialOffset)* materialRoughness)) * createAlgebraicSign();
   if(value > MAXMATERIALVALUE * (1 + additionalResourceFreeFieldsPercentageMaterial / 100)) {
     value = MAXMATERIALVALUE * (1 + additionalResourceFreeFieldsPercentageMaterial / 100);

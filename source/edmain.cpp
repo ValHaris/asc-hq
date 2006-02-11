@@ -391,9 +391,9 @@ int main(int argc, char *argv[] )
 
    virtualscreenbuf.init();
 
-   mapChanged.connect( SigC::hide<tmap*>( repaintMap.slot() ) );
-   mapChanged.connect( SigC::hide<tmap*>( updateFieldInfo.slot() ) );
-   mapChanged.connect( SigC::hide<tmap*>( SigC::slot( setSaveNotification) ));
+   mapChanged.connect( SigC::hide<GameMap*>( repaintMap.slot() ) );
+   mapChanged.connect( SigC::hide<GameMap*>( updateFieldInfo.slot() ) );
+   mapChanged.connect( SigC::hide<GameMap*>( SigC::slot( setSaveNotification) ));
    
    char* buf = new char[cl->l().length()+10];
    strcpy ( buf, cl->l().c_str() );

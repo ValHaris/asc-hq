@@ -51,10 +51,10 @@ DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCS
    registerSpecialDisplay( "showplayercolor1" );
    registerSpecialDisplay( "field_weather" );
 
-   tmap::sigMapDeletion.connect( SigC::slot( *this, &DashboardPanel::reset ));
+   GameMap::sigMapDeletion.connect( SigC::slot( *this, &DashboardPanel::reset ));
 };
 
-void DashboardPanel::reset(tmap& map)
+void DashboardPanel::reset(GameMap& map)
 {
    if ( veh && veh->getMap() == &map )
       veh = NULL;
@@ -169,7 +169,7 @@ void DashboardPanel::eval()
 
 
    MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
-   pfield fld = actmap->getField(mc);
+   tfield* fld = actmap->getField(mc);
 
    Vehicle* veh = fld? fld->vehicle : NULL;
 
@@ -331,7 +331,7 @@ bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent*
       if ( event->button == SDL_BUTTON_RIGHT ) {
          if ( event->type == SDL_MOUSEBUTTONDOWN  ) {
 
-            pfield fld = actmap->getField( actmap->player[actmap->actplayer].cursorPos );
+            tfield* fld = actmap->getField( actmap->player[actmap->actplayer].cursorPos );
             const Vehicletype* vt = NULL;
             const Vehicle* veh = NULL;
             if ( fld && fld->vehicle ) {

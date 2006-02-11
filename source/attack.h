@@ -200,7 +200,7 @@ class tunitattacksbuilding : public UnitAttacksSomething
 
 class tmineattacksunit : public tfight
 {
-      pfield _mineposition;
+      tfield* _mineposition;
       Vehicle* _attackedunit;
       int _minenum;
       Vehicle** _pattackedunit;
@@ -221,8 +221,8 @@ class tmineattacksunit : public tfight
           \param minenum The number of a specific mine which explodes. If -1 , all mines on this field which are able to attack the unit will explode.
           \param attackedunit The unit which moved onto the minefield.
       */
-      tmineattacksunit ( pfield mineposition, int minenum, Vehicle* &attackedunit );
-      void setup ( pfield mineposition, int minenum, Vehicle* &attackedunit );
+      tmineattacksunit ( tfield* mineposition, int minenum, Vehicle* &attackedunit );
+      void setup ( tfield* mineposition, int minenum, Vehicle* &attackedunit );
       void setresult ( void );
 
       Mine* getFirstMine();
@@ -240,7 +240,7 @@ class tmineattacksunit : public tfight
 
 class tunitattacksobject : public UnitAttacksSomething
 {
-      pfield       targetField;
+      tfield*       targetField;
       Object*      _obji;
       int _x, _y;
 
@@ -323,7 +323,7 @@ extern bool attackpossible28( const Vehicle* attacker, const Vehicle* target, pa
 extern bool attackpossible2n( const Vehicle* attacker, const Vehicle* target, pattackweap attackweap = NULL );
 
 //! Can the vehicle drive across the field and destroy any unit there by moving over them?
-extern bool vehicleplattfahrbar( const Vehicle* vehicle, const pfield field );
+extern bool vehicleplattfahrbar( const Vehicle* vehicle, const tfield* field );
 
 
 //! Some very old system to calculate the weapon efficiency over a given distance.

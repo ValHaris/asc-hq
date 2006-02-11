@@ -217,7 +217,7 @@ Menu::Menu ( PG_Widget *parent, const PG_Rect &rect)
 class UnitWeaponRangeLayer : public MapLayer {
    Surface& icon1;
    Surface& icon2;
-   tmap* gamemap;
+   GameMap* gamemap;
 
    map<MapCoordinate,int> fields;
 
@@ -250,7 +250,7 @@ class UnitWeaponRangeLayer : public MapLayer {
       }
    public:
 
-      void operateField( tmap* actmap, const MapCoordinate& pos )
+      void operateField( GameMap* actmap, const MapCoordinate& pos )
       {
          if ( !pos.valid() )
             return;
@@ -309,7 +309,7 @@ class UnitWeaponRangeLayer : public MapLayer {
 
 class UnitMovementRangeLayer : public MapLayer, public SigC::Object {
    Surface& icon;
-   tmap* gamemap;
+   GameMap* gamemap;
 
    map<MapCoordinate,int> fields;
 
@@ -360,7 +360,7 @@ class UnitMovementRangeLayer : public MapLayer, public SigC::Object {
    }
    public:
 
-      void operateField( tmap* actmap, const MapCoordinate& pos )
+      void operateField( GameMap* actmap, const MapCoordinate& pos )
       {
          if ( !pos.valid() )
             return;

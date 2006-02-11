@@ -39,7 +39,7 @@
 
 
 
-tfield :: tfield ( pmap gamemap_ )
+tfield :: tfield ( GameMap* gamemap_ )
 {
   init();
   setMap( gamemap_ );
@@ -241,6 +241,15 @@ bool tfield :: unitHere ( const Vehicle* veh )
       return true;
    return false;
 }
+
+ContainerBase* tfield :: getContainer()
+{
+   if ( vehicle )
+      return vehicle;
+   else
+      return building;
+}
+
 
 int tfield :: getweather ( void )
 {
