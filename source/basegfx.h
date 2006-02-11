@@ -112,7 +112,7 @@ extern tgraphmodeparameters activegraphmodeparameters;
 extern tgraphmodeparameters hardwaregraphmodeparameters;
 
 extern dacpalette256 activepalette;
-extern int       palette16[256][4];
+// extern int       palette16[256][4];
 extern void*     xlatbuffer;
 
 

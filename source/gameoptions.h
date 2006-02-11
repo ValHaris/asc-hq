@@ -158,35 +158,14 @@ class CGameOptions
       }
       sound;
 
-      class Container
-      {
-         public:
-            bool autoproduceammunition;
-            int filleverything;
-      }
-      container;
-
-      int onlinehelptime;
+      // int onlinehelptime;
       // int smallguiiconopenaftermove;
 
       int replayspeed;
       // int showUnitOwner;
 
-      struct Bi3
-      {
-         ASCString dir;
-         /*
-         struct Interpolate
-         {
-            int terrain;
-            int units;
-            int objects;
-            int buildings;
-         }
-         interpolate;
-         */
-      }
-      bi3;
+      ASCString BI3directory;
+      
       ASCString startupMap;
       ASCString defaultPassword;
       ASCString defaultSuperVisorPassword;

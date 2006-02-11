@@ -54,7 +54,6 @@
 #include "paradialog.h"
 #include "events.h"
 #include "gameoptions.h"
-#include "sg.h"
 #include "spfst.h"
 #include "strtmesg.h"
 
@@ -892,7 +891,7 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
                widgetParams.assign ( img );
                parsePanelASCTXT( pc, img, widgetParams );
             } catch ( tfileerror ) {
-               displaymessage( "unable to load " + filename, 1 );
+               warning( "unable to load " + filename );
             }
          } else {
             PG_Image* img = new PG_Image( parent, PG_Point(r.x, r.y ), NULL, false, PG_Draw::BkMode(imgMode) );
@@ -1295,9 +1294,9 @@ bool ASCGUI_Window::setup()
 
       return true;
    } catch ( ParsingError err ) {
-      displaymessage( ASCString("parsing error: ") + err.getMessage(), 1 );
+      warning( "parsing error: " + err.getMessage());
    } catch ( tfileerror err ) {
-      displaymessage( ASCString("could not acces file: ") + err.getFileName(), 1 );
+      warning( "could not acces file: " + err.getFileName() );
    }
    return false;
 

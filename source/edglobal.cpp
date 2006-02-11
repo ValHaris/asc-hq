@@ -257,7 +257,7 @@ ASCString getbipath ( void )
 
       appendbackslash(filename);
       
-      CGameOptions::Instance()->bi3.dir = filename;
+      CGameOptions::Instance()->BI3directory = filename;
       CGameOptions::Instance()->setChanged ( 1 );
 
       filename += "mis";

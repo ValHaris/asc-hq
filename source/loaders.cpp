@@ -42,7 +42,6 @@
 #include "dlg_box.h"
 #include "dialog.h"
 #include "sgstream.h"
-#include "sg.h"
 #include "attack.h"
 #include "errors.h"
 #include "strtmesg.h"
@@ -57,7 +56,6 @@
 
 
 const int fileterminator = 0xa01a;
-ticons icons;
 
 
  const char* savegameextension = "*.sav";
@@ -1598,7 +1596,7 @@ void         savecampaignrecoveryinformation( const ASCString& filename,
 
 
 
-
+#if 0
 void         loadicons(void)
 {
   int w2;
@@ -1647,4 +1645,4 @@ void         loadicons(void)
          stream.readrlepict( &icons.height[i],false,w);
    }
 }
-
+#endif

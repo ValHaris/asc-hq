@@ -32,7 +32,6 @@
 #include "dialog.h"
 #include "stack.h"
 #include "gameoptions.h"
-#include "sg.h"
 #include "viewcalculation.h"
 #include "itemrepository.h"
 #include "containercontrols.h"

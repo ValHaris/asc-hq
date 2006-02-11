@@ -130,9 +130,6 @@ class tonlinehelplist {
        };
 
 
-extern void gamepreferences  ( void );
-extern void mousepreferences ( void );
-
 extern void multiplayersettings ( void );
 
 extern void giveunitaway ( pfield fld );

@@ -147,36 +147,7 @@ private:
   OptionsDialog(PG_MessageObject* c);
   
   bool showSoundOptions(PG_Button* button);
-  bool showMouseOptions(PG_Button* button);
   bool showOtherOptions(PG_Button* button);
-  bool showDisplayOptions(PG_Button* button);
-  bool closeWindow();
-};
-
-
-
-class DisplayOptionsDialog: public ASC_PG_Dialog{
-public:  
-  static void displayOptionsDialog(PG_MessageObject* c);    
-  ~DisplayOptionsDialog();
-private:
-  static const int xSize;
-  static const int ySize;
-  static const int buttonIndent;
-    
-  
-  PG_Label* movementSpeedLabel;
-  PG_LineEdit* movementSpeedValue;
-  
-  PG_Label* mouseTipLabel;
-  PG_LineEdit* mouseTipValue;
-  
-  PG_Button* okButton;
-  PG_Button* cancelButton;
-  
-  DisplayOptionsDialog(PG_MessageObject* c);
-  
-  bool ok(PG_Button* button);
   bool closeWindow();
 };
 
@@ -235,7 +206,7 @@ class ChangePasswordDialog: public ASC_PG_Dialog{
 
 
 };
-
+/*
 class MousePreferencesDialog: public ASC_PG_Dialog{
   public:
    static void mousePreferencesDialog(PG_MessageObject* c);
@@ -247,6 +218,7 @@ private:
    MousePreferencesDialog(PG_MessageObject* c);
    bool ok(PG_Button* button);
 };
+*/
 
 class ChangeDefaultPasswordDialog: public ChangePasswordDialog{
 public:

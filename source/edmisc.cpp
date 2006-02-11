@@ -2115,13 +2115,34 @@ void         tunit::init(  )
 
    mousevisible(false);
 
-   if ( unitheights )
+
+   static bool heightIconsLoaded = false;
+   static void* iconsheight[8];
+   static void* iconspfeil[8];
+
+   
+   if ( !heightIconsLoaded ) {
+      {
+      tnfilestream stream ("height.raw",tnstream::reading);
+      int w;
+      for (i = 0; i <= 7; i++)
+         stream.readrlepict( &iconsheight[i],false,&w);
+      }
+      {
+      tnfilestream stream ("pfeil-a0.raw", tnstream::reading);
+      for (i=0;i<8 ;i++ ) stream.readrlepict( &iconspfeil[i], false, &w);
+      }
+   }
+         
+   
+   
+   if ( unitheights ) 
        for (i=0;i<=7 ;i++) {
            if ( unit->height == (1 << i) )
               bar(x1 + 25+( i * w2),y1 + heightxs-5,x1 + w2 * (i +1 ) - 5,y1 + heightxs-3,red);
 
            if ( unitheights & ( 1 << i ))
-              putimage(x1 + 28+( i * w2), y1 + heightxs + 2 ,icons.height[i]);
+              putimage(x1 + 28+( i * w2), y1 + heightxs + 2 ,iconsheight[i]);
        }
 
    // 8 im Kreis bis 7
@@ -2134,7 +2155,7 @@ void         tunit::init(  )
 
       addbutton("", x-10, y - 10, x + 10, y + 10,0,1,14+i,true);
       enablebutton ( 14 + i );
-      void* pic = rotatepict ( icons.pfeil2[0], directionangle[i] );
+      void* pic = rotatepict ( iconspfeil[0], directionangle[i] );
       int h,w;
       getpicsize ( pic, w, h );
       putspriteimage ( x1 + x - w/2, y1 + y - h/2, pic );
@@ -2414,7 +2435,7 @@ void         changeminestrength(void)
 }
 
 
-
+#if 0
 //* õS Laderaum Unit-Cargo
 
 class tladeraum : public tdialogbox {
@@ -2602,7 +2623,7 @@ void         tladeraum::done(void)
    npop ( farbwahl );
    ch = 0;
 }
-
+#endif
 /*
 class UnitProductionLimitation : public tladeraum {
               tmap::UnitProduction::IDsAllowed ids;
@@ -2879,6 +2900,8 @@ Vehicle* selectUnitFromContainer( ContainerBase* container )
 
 //* õS Laderaum2 Building-Cargo
 
+#if 0
+
 class tbuildingcargoprod : public tladeraum {
                     TemporaryContainerStorage tus;
                protected:
@@ -2894,6 +2917,7 @@ void tbuildingcargoprod :: finish ( int cancel )
    if ( cancel )
       tus.restore();
 }
+#endif
 #if 0
 class tbuildingcargo : public tbuildingcargoprod {
                protected:
@@ -2968,21 +2992,20 @@ const char* tbuildingcargo :: getinfotext ( int pos )
    return NULL;
 }
 
-#endif
 
 void         building_cargo( Building* bld )
 {
-#if 0
    if ( bld  ) {
       tbuildingcargo laderaum ( bld );
       laderaum.init( "cargo" );
       laderaum.run();
       laderaum.done();
    }
-   #endif
 }
 
+
 //* õS Production Building-Production
+
 
 class tbuildingproduction : public tbuildingcargoprod {
                protected:
@@ -3021,9 +3044,11 @@ const char* tbuildingproduction :: getinfotext ( int pos )
 }
 
 bool isNull(const Vehicletype* v ) { return !v; };
+#endif
 
 void         building_production( Building* bld )
 {
+#if 0
    if ( bld  && (bld->typ->hasFunction( ContainerBaseType::InternalVehicleProduction  ) ) ) {
       tbuildingproduction laderaum ( bld );
       laderaum.init( "production" );
@@ -3031,7 +3056,9 @@ void         building_production( Building* bld )
       laderaum.done();
       bld->unitProduction.erase(remove_if( bld->unitProduction.begin(), bld->unitProduction.end(),  isNull ), bld->unitProduction.end() );
    }
+#endif
 }
+
 
 
 void movebuilding ( void )

@@ -48,9 +48,10 @@ extern void  dispmessage2(int          id,
                           char *       st = NULL );
    
   
-extern void  statisticarmies(void);
+  
+// extern void  statisticarmies(void);
    
-extern void  statisticbuildings(void);
+// extern void  statisticbuildings(void);
    
 
 

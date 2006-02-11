@@ -48,7 +48,6 @@
 #include "stack.h"
 #include "network.h"
 #include "controls.h"
-#include "sg.h"
 #include "gameoptions.h"
 #include "loadimage.h"
 #include "errors.h"
@@ -1919,7 +1918,7 @@ void choosetechlevel ( void )
 
 
 
-
+#if 0
 
 const char* smallguiiconsundermouse[3] = { "never", "always", "units, buildings, marked fields" };
 const char* mousekeynames[9] = { "none", "left", "right", "left + right", "center", "center + left", "center + right", "center + left + right", "disabled"};
@@ -2413,6 +2412,7 @@ void mousepreferences  ( void )
    prefs.done();
 }
 
+#endif
 
 void writeGameParametersToString ( std::string& s)
 {

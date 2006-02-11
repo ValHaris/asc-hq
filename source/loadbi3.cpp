@@ -88,7 +88,7 @@ int libs_to_load = 9;
 
 void checkbi3dir ( void )
 {
-   if ( CGameOptions::Instance()->bi3.dir.empty() ) {
+   if ( CGameOptions::Instance()->BI3directory.empty() ) {
       readgameoptions();
       /*
       if ( !gameoptions.bi3.dir.getName() ) {
@@ -105,10 +105,10 @@ void checkbi3dir ( void )
       ASCString filename;
 
       for ( int i = 0; i < libs_to_load ; i++ ) {
-         filename =  CGameOptions::Instance()->bi3.dir + LIBFiles[i].Name ;
+         filename =  CGameOptions::Instance()->BI3directory + LIBFiles[i].Name ;
          
          if ( !exist ( filename ) ) {
-            filename = CGameOptions::Instance()->bi3.dir + "LIB" + pathdelimitterstring + LIBFiles[i].Name;
+            filename = CGameOptions::Instance()->BI3directory + "LIB" + pathdelimitterstring + LIBFiles[i].Name;
             if ( !exist ( filename ) ) {
                printf("Battle Isle file %s not found !\n", filename.c_str() );
                notfound = true;
@@ -120,8 +120,8 @@ void checkbi3dir ( void )
             printf("Enter Battle Isle directory:\n" );
             scanf ( "%s", bi3path );
 
-            CGameOptions::Instance()->bi3.dir = bi3path;
-            appendbackslash ( CGameOptions::Instance()->bi3.dir );
+            CGameOptions::Instance()->BI3directory = bi3path;
+            appendbackslash ( CGameOptions::Instance()->BI3directory );
             CGameOptions::Instance()->setChanged();
      }
    } while ( notfound ); /* enddo */
@@ -131,7 +131,7 @@ void checkbi3dir ( void )
 
 ASCString getbi3path ( void )
 {
-   return CGameOptions::Instance()->bi3.dir;
+   return CGameOptions::Instance()->BI3directory;
 }
 
 

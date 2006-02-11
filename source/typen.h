@@ -476,31 +476,22 @@ class MoveMalusType {
 
 #pragma pack(1)
 
-typedef struct tguiicon* pguiicon ;
-struct tguiicon {
-  void*      picture[2];
-  char         txt[31];
-  unsigned char         id;
-  char         key[4];
-  Uint16         realkey[4];
-  unsigned char         order;
-};
-
+#if 0
 
 struct ticons {
    struct {
      void      *pfeil1, *pfeil2;
    } weapinfo;
    void*        statarmy[3];
-   void*        height[8];      // fuer vehicleinfo - DLG-Box
-   void*        height2[3][8];  // fuer vehicleinfo am map
-   void*        player[8];      // aktueller Spieler in der dashboard: FARBE.RAW
-   void*        allianz[8][3];  // Allianzen in der dashboard: ALLIANC.RAW 
-   void*        diplomaticstatus[8]; 
-   void*        stellplatz;
-   void*        smallmapbackground;
-   void*        weaponinfo[5];
-   void*        X;
+   // void*        height[8];      // fuer vehicleinfo - DLG-Box
+   // void*        height2[3][8];  // fuer vehicleinfo am map
+   // void*        player[8];      // aktueller Spieler in der dashboard: FARBE.RAW
+   // void*        allianz[8][3];  // Allianzen in der dashboard: ALLIANC.RAW 
+   // void*        diplomaticstatus[8]; 
+   // void*        stellplatz;
+   // void*        smallmapbackground;
+   // void*        weaponinfo[5];
+   // void*        X;
    struct {
      struct       {
          void* active;
@@ -609,10 +600,11 @@ struct ticons {
      void* bkgr;
      void* orgbkgr;
    } attack;
-   void*        pfeil2[8];     // beispielsweise fuer das Mouse-Scrolling 
+//   void*        pfeil2[8];     // beispielsweise fuer das Mouse-Scrolling
    void*        fieldshape;
 };
 
+#endif
 
 
 

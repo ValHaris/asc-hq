@@ -319,17 +319,9 @@ OptionsDialog::OptionsDialog(PG_MessageObject* c ): ASC_PG_Dialog(NULL, PG_Rect(
     soundButton = new PG_Button(this, PG_Rect(buttonIndent, GuiDimension::getTopOffSet()*2, 150, GuiDimension::getButtonHeight()), "Sound Options", 90);
     soundButton->sigClick.connect( SigC::slot( *this, &OptionsDialog::showSoundOptions ));
 
-    PG_Point p = ScreenToClient(soundButton->x, soundButton->y);
-    mouseButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet(), 150, GuiDimension::getButtonHeight()), "Mouse Options", 90);
-    mouseButton->sigClick.connect( SigC::slot( *this, &OptionsDialog::showMouseOptions ));
-
-    p = ScreenToClient(mouseButton->x, mouseButton->y);
+    PG_Point p = ScreenToClient(mouseButton->x, mouseButton->y);
     otherButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet(), 150, GuiDimension::getButtonHeight()), "Game Options", 90);
     otherButton->sigClick.connect( SigC::slot( *this, &OptionsDialog::showOtherOptions ));
-
-    p = ScreenToClient(otherButton->x, otherButton->y);
-    displayButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet(), 150, GuiDimension::getButtonHeight()), "Display Options", 90);
-    displayButton->sigClick.connect( SigC::slot( *this, &OptionsDialog::showDisplayOptions ));
 
     p = ScreenToClient(displayButton->x, displayButton->y);
     PG_Button* okButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() * 2, 150, GuiDimension::getButtonHeight()), "Back", 90);
@@ -357,20 +349,14 @@ bool OptionsDialog::showSoundOptions(PG_Button* button) {
     Show();
     return true;
 }
-
-bool OptionsDialog::showDisplayOptions(PG_Button* button) {
-    Hide();
-    DisplayOptionsDialog::displayOptionsDialog(this);
-    Show();
-    return true;
-}
-
+/*
 bool OptionsDialog::showMouseOptions(PG_Button* button) {
     Hide();
     MousePreferencesDialog::mousePreferencesDialog(this);
     Show();
     return true;
 }
+*/
 
 bool OptionsDialog::showOtherOptions(PG_Button* button) {
     Hide();
@@ -385,64 +371,6 @@ void OptionsDialog::optionsDialog(PG_MessageObject* caller) {
     od.RunModal();
 }
 
-//*******************************************************************************************************************+
-const int DisplayOptionsDialog::xSize = 450;
-const int DisplayOptionsDialog::ySize = 220;
-const int DisplayOptionsDialog::buttonIndent = 60;
-
-DisplayOptionsDialog::DisplayOptionsDialog(PG_MessageObject* c): ASC_PG_Dialog(NULL, PG_Rect( 200, 100, xSize, ySize ), "Display Options",
-        SHOW_CLOSE ) {
-
-    mouseTipLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftIndent(), static_cast<int>(GuiDimension::getTopOffSet() * 1.5), 10, GetTextHeight() * 2), "Mouse Tip Delay (1/100 sec)");
-    mouseTipLabel->SetSizeByText();
-
-    PG_Point p = ScreenToClient(mouseTipLabel->x, mouseTipLabel->y);
-    PG_LineEdit* mouseTipValue = new PG_LineEdit(this, PG_Rect(xSize - (GuiDimension::getLineEditWidth() + GuiDimension::getLeftIndent()), p.y, GuiDimension::getLineEditWidth(), GetTextHeight() * 2));
-    mouseTipValue->SetText(strrr(CGameOptions::Instance()->CGameOptions::Instance()->onlinehelptime));
-    mouseTipValue->SetValidKeys("1234567890");
-
-    p = ScreenToClient(mouseTipLabel->x, mouseTipLabel->y);
-    movementSpeedLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftIndent(), p.y + GuiDimension::getTopOffSet() + GetTextHeight() * 2 , 10, GetTextHeight() * 2), "Movement Speed (1/100 sec)");
-    movementSpeedLabel->SetSizeByText();    
-
-    movementSpeedValue = new PG_LineEdit(this, PG_Rect(xSize - (GuiDimension::getLineEditWidth() + GuiDimension::getLeftIndent()), p.y + GuiDimension::getTopOffSet() + static_cast<int>(GetTextHeight() * 1.5), GuiDimension::getLineEditWidth(), GetTextHeight() * 2));
-    movementSpeedValue->SetText(strrr(CGameOptions::Instance()->CGameOptions::Instance()->movespeed));
-    movementSpeedValue->SetValidKeys("1234567890");
-
-    okButton = new PG_Button(this, PG_Rect( buttonIndent, ySize - (GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet()), GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "OK", 90);
-    okButton->sigClick.connect( SigC::slot( *this, &DisplayOptionsDialog::ok ));
-
-    p = ScreenToClient(okButton->x, okButton->y);
-    cancelButton = new PG_Button(this, PG_Rect(p.x + GuiDimension::getButtonWidth() + 10, p.y, GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "Cancel", 90);
-    cancelButton->sigClick.connect( SigC::slot( *this, &DisplayOptionsDialog::closeWindow ));
-
-    sigClose.connect( SigC::slot( *this, &DisplayOptionsDialog::closeWindow ));
-
-    caller = c;
-    SetInputFocus();
-}
-
-
-DisplayOptionsDialog::~DisplayOptionsDialog() {
-}
-
-bool DisplayOptionsDialog::closeWindow() {
-    quitModalLoop(1);
-    caller->SetInputFocus();
-    return true;
-}
-
-bool DisplayOptionsDialog::ok(PG_Button* button) {
-    CGameOptions::Instance()->CGameOptions::Instance()->onlinehelptime = atoi(mouseTipValue->GetText());
-    CGameOptions::Instance()->CGameOptions::Instance()->movespeed = atoi(movementSpeedValue->GetText());
-    return true;
-}
-
-void DisplayOptionsDialog::displayOptionsDialog(PG_MessageObject* c) {
-    DisplayOptionsDialog ced(c);
-    ced.Show();
-    ced.RunModal();
-}
 
 //*******************************************************************************************************************+
 const int GameOptionsDialog::xSize = 450;
@@ -455,22 +383,7 @@ GameOptionsDialog::GameOptionsDialog(PG_MessageObject* c): ASC_PG_Dialog(NULL, P
     autoAmmunitionLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftIndent(), static_cast<int>(GuiDimension::getTopOffSet() * 1.5), 10, GetTextHeight() * 2), "Auto Ammunition");
     autoAmmunitionLabel->SetSizeByText();
 
-    PG_Point p = ScreenToClient(autoAmmunitionLabel->x, autoAmmunitionLabel->y);
-    autoAmmunitionCButton = new PG_CheckButton(this, PG_Rect(xSize - (GuiDimension::getLineEditWidth() + GuiDimension::getLeftIndent()), p.y, GuiDimension::getLineEditWidth(), GetTextHeight() * 2));
-    if(CGameOptions::Instance()->CGameOptions::Instance()->container.autoproduceammunition){
-      autoAmmunitionCButton->SetPressed();
-    }
-    
-    p = ScreenToClient(autoAmmunitionLabel->x, autoAmmunitionLabel->y);
-    autoUnitTrainingLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftIndent(), p.y + GuiDimension::getTopOffSet() + GetTextHeight() * 2 , 10, GetTextHeight() * 2), "Automatic Unit Training");
-    autoUnitTrainingLabel->SetSizeByText();
-
-    autoUnitTrainingCButton = new PG_CheckButton(this, PG_Rect(xSize - (GuiDimension::getLineEditWidth() + GuiDimension::getLeftIndent()), p.y + GuiDimension::getTopOffSet() + static_cast<int>(GetTextHeight() * 1.5), GuiDimension::getLineEditWidth(), GetTextHeight() * 2));
-    if(CGameOptions::Instance()->CGameOptions::Instance()->automaticTraining){
-      autoUnitTrainingCButton->SetPressed();
-    }
-    
-    p = ScreenToClient(autoUnitTrainingLabel->x, autoUnitTrainingLabel->y);
+    PG_Point p = ScreenToClient(autoUnitTrainingLabel->x, autoUnitTrainingLabel->y);
     promptEndOfTurnLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftIndent(), p.y + GuiDimension::getTopOffSet() + GetTextHeight() * 2 , 10, GetTextHeight() * 2), "Prompt End of Turn");
     promptEndOfTurnLabel->SetSizeByText();
 
@@ -494,7 +407,6 @@ GameOptionsDialog::GameOptionsDialog(PG_MessageObject* c): ASC_PG_Dialog(NULL, P
 
     caller = c;
     SetInputFocus();
-
 }
 
 
@@ -514,8 +426,6 @@ Show();
 return true;
 }
 bool GameOptionsDialog::ok(PG_Button* button) {
-    CGameOptions::Instance()->CGameOptions::Instance()->automaticTraining = autoUnitTrainingCButton->GetPressed();
-    CGameOptions::Instance()->CGameOptions::Instance()->container.autoproduceammunition = autoAmmunitionCButton->GetPressed();
     CGameOptions::Instance()->CGameOptions::Instance()->endturnquestion = promptEndOfTurnCButton->GetPressed();
     quitModalLoop(1);
     return true;
@@ -596,6 +506,7 @@ void ChangeDefaultPasswordDialog::changeDefaultPasswordDialog(PG_MessageObject* 
 }
 
 //*******************************************************************************************************************
+#if 0
  const int MousePreferencesDialog::xSize = 450;
  const int MousePreferencesDialog::ySize = 220;
    
@@ -625,6 +536,7 @@ void ChangeDefaultPasswordDialog::changeDefaultPasswordDialog(PG_MessageObject* 
      mpd.Show();
      mpd.RunModal();
    }
+#endif
 //*******************************************************************************************************************
 
 

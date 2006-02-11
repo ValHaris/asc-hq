@@ -17,7 +17,6 @@
 
 #include "ai_common.h"
 
-#include "../sg.h"
 #include "../replaymapdisplay.h"
 
 AI :: AI ( pmap _map, int _player ) : activemap ( _map ) , sections ( this )

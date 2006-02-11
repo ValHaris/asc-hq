@@ -43,7 +43,6 @@
 #include "building.h"
 #include "building_controls.h"
 #include "controls.h"
-#include "sg.h"
 #include "stack.h"
 #include "gamedlg.h"
 #include "basestrm.h"

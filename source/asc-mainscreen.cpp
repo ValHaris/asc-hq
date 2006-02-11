@@ -26,7 +26,6 @@
 
 #include "basegfx.h"
 #include "misc.h"
-#include "sg.h"
 #include "iconrepository.h"
 #include "dashboard.h"
 #include "asc-mainscreen.h"
@@ -38,6 +37,7 @@
 #include "ai/ai.h"
 #include "itemrepository.h"
 #include "mapdisplay.h"
+#include "sg.h"
 
 ASC_MainScreenWidget*  mainScreenWidget = NULL ;
 
@@ -111,7 +111,6 @@ void Menu::setup()
    addbutton ( "toggle unit shading\t2", ua_toggleunitshading );
    currentMenu->addSeparator();
    addbutton ( "~O~ptions", ua_gamepreferences );
-   addbutton ( "~M~ouse options", ua_mousepreferences );
    addbutton ( "~S~ound options", ua_soundDialog );
    currentMenu->addSeparator();
    addbutton ( "E~x~it\tctrl-x", ua_exitgame );
@@ -156,9 +155,8 @@ void Menu::setup()
    // addbutton ( "show game ~P~arameters", ua_GameParameterInfo );
 
 
-   addfield ( "~S~tatistics" );
-   addbutton ( "~U~nits", ua_unitstatistics );
-   addbutton ( "~B~uildings", ua_buildingstatistics );
+   // addfield ( "~S~tatistics" );
+   
 //   addbutton ( "~R~esources ", ua_statisticdialog );
    // addbutton ( "seperator");
    // addbutton ( "~H~istory");

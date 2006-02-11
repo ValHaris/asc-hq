@@ -38,7 +38,6 @@
 
 
 
-extern ticons icons;
 extern const int fileterminator;
 
 extern const char* savegameextension;
@@ -68,7 +67,7 @@ extern tmap*  loadreplay( pmemorystreambuf streambuf );
 extern void  savereplay( tmap* gamemap, int num );
 
 
-extern void  loadicons(void);
+// extern void  loadicons(void);
 
 extern void  savecampaignrecoveryinformation( const ASCString& filename, int id);
 

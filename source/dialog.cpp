@@ -59,8 +59,10 @@
 #endif
 
 
-#define markedlettercolor red  
+#define markedlettercolor red
 
+
+#if 0
 
 
 void         doubleline(int x1, int y1, int x2, int y2)
@@ -451,7 +453,7 @@ void         statisticbuildings(void)
 } 
 
 
-
+#endif
 
 
 

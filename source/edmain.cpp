@@ -57,8 +57,9 @@
 
 
 
+#if 0
 void         loadcursor(void)
-{ 
+{
   int          w,i;
 
   {
@@ -88,11 +89,10 @@ void         loadcursor(void)
       palette16[w][2] = pal[w][2];
       xlattables.nochange[w] = w;
    } /* endfor */
-
-   loadicons(); 
-   loadmessages(); 
+   loadicons();
 
 } 
+#endif
 
 
 
@@ -101,7 +101,8 @@ void         loadcursor(void)
 void loaddata( void ) 
 {
 
-   loadcursor();
+   // loadcursor();
+   loadmessages();
 
    dataLoaderTicker();
 

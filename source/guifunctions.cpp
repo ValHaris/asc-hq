@@ -35,7 +35,6 @@
 #include "iconrepository.h"
 #include "replay.h"
 #include "attack.h"
-#include "sg.h"
 #include "graphics/blitter.h"
 #include "viewcalculation.h"
 #include "spfst.h"
@@ -43,6 +42,7 @@
 #include "dialogs/cargodialog.h"
 #include "dialogs/ammotransferdialog.h"
 #include "mapdisplay.h"
+#include "sg.h"
 
 namespace GuiFunctions
 {

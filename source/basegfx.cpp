@@ -1392,7 +1392,7 @@ int dpmscapabilities;
 int actdpmsmode;
  
 dacpalette256  activepalette;
-int       palette16[256][4];
+// int       palette16[256][4];
 void*     xlatbuffer;
  // dacpalette256  *activepalette256;
 

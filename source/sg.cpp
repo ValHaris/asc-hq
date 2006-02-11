@@ -184,253 +184,6 @@ bool maintainencecheck( void )
 
 
 
-
-
-void         loadMoreData(void)
-{
-   int          w;
-   {
-      tnfilestream stream ( "height2.raw", tnstream::reading );
-      for (int i=0;i<3 ;i++ )
-         for ( int j=0; j<8; j++)
-            stream.readrlepict( &icons.height2[i][j], false, &w );
-   }
-
-   {
-      tnfilestream stream ("farbe.raw",tnstream::reading);
-      for (int i=0;i<8 ;i++ )
-         stream.readrlepict( &icons.player[i], false, &w );
-   }
-
-   {
-      tnfilestream stream ("allianc.raw",tnstream::reading);
-      for ( int i=0;i<8 ;i++ ) {
-         stream.readrlepict(   &icons.allianz[i][0], false, &w );
-         stream.readrlepict(   &icons.allianz[i][1], false, &w );
-         stream.readrlepict(   &icons.allianz[i][2], false, &w );
-      } /* endfor */
-   }
-
-
-   dataLoaderTicker();
-   {
-      tnfilestream stream ("hexfld_a.raw",tnstream::reading);
-      stream.readrlepict(   &icons.container.mark.active, false, &w);
-   }
-
-   dataLoaderTicker();
-   {
-      tnfilestream stream ("hexfld.raw",tnstream::reading);
-      stream.readrlepict(   &icons.container.mark.inactive, false, &w);
-   }
-
-   {
-      tnfilestream stream ("in_ach.raw",tnstream::reading);
-      stream.readrlepict(   &icons.container.mark.movein_active, false, &w);
-   }
-
-   {
-      tnfilestream stream ("in_h.raw",tnstream::reading);
-      stream.readrlepict(   &icons.container.mark.movein_inactive, false, &w);
-   }
-
-   {
-      tnfilestream stream ("build_ah.raw",tnstream::reading);
-      stream.readrlepict(   &icons.container.mark.repairactive, false, &w);
-   }
-
-   {
-      tnfilestream stream ("build_h.raw",tnstream::reading);
-      stream.readrlepict(   &icons.container.mark.repairinactive, false, &w);
-   }
-
-   {
-      tnfilestream stream ("hexbuild.raw",tnstream::reading);
-      stream.readrlepict(   &icons.container.container_window, false, &w);
-   }
-
-   dataLoaderTicker();
-
-
-   loadpalette();
-   for (w=0;w<256 ;w++ ) {
-      palette16[w][0] = pal[w][0];
-      palette16[w][1] = pal[w][1];
-      palette16[w][2] = pal[w][2];
-      xlattables.nochange[w] = w;
-   } /* endfor */
-
-   dataLoaderTicker();
-
-   loadicons();
-
-   dataLoaderTicker();
-
-   loadmessages();
-
-   dataLoaderTicker();
-
-   {
-      tnfilestream stream ("pfeil-a0.raw",tnstream::reading);
-      for (int i=0; i<8 ;i++ ) {
-         stream.readrlepict(   &icons.pfeil2[i], false, &w );
-      } /* endfor */
-   }
-
-   {
-      tnfilestream stream ("gebasym2.raw",tnstream::reading);
-      for ( int i = 0; i < 12; i++ )
-         for ( int j = 0; j < 2; j++ )
-            stream.readrlepict(   &icons.container.lasche.sym[i][j], false, &w );
-   }
-
-   {
-      tnfilestream stream ("netcontr.raw",tnstream::reading);
-      stream.readrlepict(   &icons.container.subwin.netcontrol.start, false, &w );
-      stream.readrlepict(   &icons.container.subwin.netcontrol.inactive, false, &w );
-      stream.readrlepict(   &icons.container.subwin.netcontrol.active, false, &w );
-   }
-
-   {
-      tnfilestream stream ("ammoprod.raw",tnstream::reading);
-      stream.readrlepict(   &icons.container.subwin.ammoproduction.start, false, &w );
-      stream.readrlepict(   &icons.container.subwin.ammoproduction.button, false, &w );
-      stream.readrlepict(   &icons.container.subwin.ammoproduction.buttonpressed, false, &w );
-      for ( int i = 0; i < 4; i++ )
-         stream.readrlepict(   &icons.container.subwin.ammoproduction.schieber[i], false, &w );
-      stream.readrlepict(   &icons.container.subwin.ammoproduction.schiene, false, &w );
-   }
-
-   dataLoaderTicker();
-   {
-      tnfilestream stream ("resorinf.raw",tnstream::reading);
-      stream.readrlepict(   &icons.container.subwin.resourceinfo.start, false, &w );
-   }
-
-   {
-      tnfilestream stream ("windpowr.raw",tnstream::reading);
-      stream.readrlepict(   &icons.container.subwin.windpower.start, false, &w );
-   }
-
-   {
-      tnfilestream stream ("solarpwr.raw",tnstream::reading);
-      stream.readrlepict(   &icons.container.subwin.solarpower.start, false, &w );
-
-   }
-
-   {
-      tnfilestream stream ("ammotran.raw", tnstream::reading);
-      stream.readrlepict(   &icons.container.subwin.ammotransfer.start, false, &w );
-      stream.readrlepict(   &icons.container.subwin.ammotransfer.button, false, &w );
-      stream.readrlepict(   &icons.container.subwin.ammotransfer.buttonpressed, false, &w );
-      for ( int i = 0; i < 4; i++ )
-         stream.readrlepict(   &icons.container.subwin.ammotransfer.schieber[i], false, &w );
-      stream.readrlepict(   &icons.container.subwin.ammotransfer.schieneinactive, false, &w );
-      stream.readrlepict(   &icons.container.subwin.ammotransfer.schiene, false, &w );
-      if ( dataVersion >= 2 ) {
-         stream.readrlepict(   &icons.container.subwin.ammotransfer.singlepage[0], false, &w );
-         stream.readrlepict(   &icons.container.subwin.ammotransfer.singlepage[1], false, &w );
-         stream.readrlepict(   &icons.container.subwin.ammotransfer.plus[0], false, &w );
-         stream.readrlepict(   &icons.container.subwin.ammotransfer.plus[1], false, &w );
-         stream.readrlepict(   &icons.container.subwin.ammotransfer.minus[0], false, &w );
-         stream.readrlepict(   &icons.container.subwin.ammotransfer.minus[1], false, &w );
-      }
-
-   }
-
-   {
-      tnfilestream stream ("research.raw",tnstream::reading);
-      stream.readrlepict(   &icons.container.subwin.research.start, false, &w );
-      stream.readrlepict(   &icons.container.subwin.research.button[0], false, &w );
-      stream.readrlepict(   &icons.container.subwin.research.button[1], false, &w );
-      stream.readrlepict(   &icons.container.subwin.research.schieber, false, &w );
-   }
-
-   {
-      tnfilestream stream ("pwrplnt2.raw",tnstream::reading);
-      stream.readrlepict(   &icons.container.subwin.conventionelpowerplant.start, false, &w );
-      stream.readrlepict(   &icons.container.subwin.conventionelpowerplant.schieber, false, &w );
-      //stream.readrlepict(   &icons.container.subwin.conventionelpowerplant.button[1], false, &w );
-   }
-
-
-
-
-
-   int m; 
-   {
-      tnfilestream stream ( "bldinfo.raw", tnstream::reading );
-      stream.readrlepict( &icons.container.subwin.buildinginfo.start, false, &m );
-      for ( int i = 0; i < 8; i++ )
-         stream.readrlepict( &icons.container.subwin.buildinginfo.height1[i], false, &m );
-      for ( int i = 0; i < 8; i++ )
-         stream.readrlepict( &icons.container.subwin.buildinginfo.height2[i], false, &m );
-      stream.readrlepict( &icons.container.subwin.buildinginfo.repair, false, &m );
-      stream.readrlepict( &icons.container.subwin.buildinginfo.repairpressed, false, &m );
-      stream.readrlepict( &icons.container.subwin.buildinginfo.block, false, &m );
-   }
-
-
-   {
-      tnfilestream stream ("mining2.raw", tnstream::reading);
-      stream.readrlepict(   &icons.container.subwin.miningstation.start, false, &w );
-      stream.readrlepict(   &icons.container.subwin.miningstation.zeiger, false, &w );
-      /*
-      for ( i = 0; i < 2; i++ )
-         stream.readrlepict(   &icons.container.subwin.miningstation.button[i], false, &w );
-      for ( i = 0; i < 2; i++ )
-         stream.readrlepict(   &icons.container.subwin.miningstation.resource[i], false, &w );
-      for ( i = 0; i < 3; i++ )
-         stream.readrlepict(   &icons.container.subwin.miningstation.axis[i], false, &w );
-      for ( i = 0; i < 2; i++ )
-         stream.readrlepict(   &icons.container.subwin.miningstation.pageturn[i], false, &w );
-      stream.readrlepict(   &icons.container.subwin.miningstation.graph, false, &w );
-      */
-   }
-
-   {
-      tnfilestream stream ("mineral.raw", tnstream::reading);
-      stream.readrlepict(   &icons.container.subwin.mineralresources.start, false, &w );
-      stream.readrlepict(   &icons.container.subwin.mineralresources.zeiger, false, &w );
-   }
-
-   {
-      tnfilestream stream ("tabmark.raw", tnstream::reading);
-      stream.readrlepict (   &icons.container.tabmark[0], false, &w );
-      stream.readrlepict (   &icons.container.tabmark[1], false, &w );
-   }
-
-
-   {
-      tnfilestream stream ("traninfo.raw", tnstream::reading);
-      stream.readrlepict(   &icons.container.subwin.transportinfo.start, false, &w );
-      for ( int i = 0; i < 8; i++ )
-         stream.readrlepict(   &icons.container.subwin.transportinfo.height1[i], false, &w );
-      for ( int i = 0; i < 8; i++ )
-         stream.readrlepict(   &icons.container.subwin.transportinfo.height2[i], false, &w );
-      stream.readrlepict(   &icons.container.subwin.transportinfo.sum, false, &w );
-   }
-
-   dataLoaderTicker();
-   {
-      tnfilestream stream ("attack.raw", tnstream::reading);
-      stream.readrlepict (   &icons.attack.bkgr, false, &w );
-      icons.attack.orgbkgr = NULL;
-   }
-
-   {
-      tnfilestream stream ("hexfeld.raw", tnstream::reading);
-      stream.readrlepict ( &icons.fieldshape, false, &w );
-   }
-
-   {
-      tnfilestream stream ("weapinfo.raw", tnstream::reading);
-      for ( int i = 0; i < 5; i++ )
-         stream.readrlepict (   &icons.weaponinfo[i], false, &w );
-   }
-
-}
-
 void hookGuiToMap( tmap* map )
 {
    if ( !map->getGuiHooked() ) {
@@ -820,10 +573,6 @@ void execuseraction ( tuseractions action )
          }
          break;
 
-      case ua_mousepreferences:
-         mousepreferences();
-         break;
-
       case ua_bi3preferences:
          bi3preferences();
          break;
@@ -844,14 +593,6 @@ void execuseraction ( tuseractions action )
 
       case ua_researchinfo:
          researchinfo ();
-         break;
-
-      case ua_unitstatistics:
-         statisticarmies();
-         break;
-
-      case ua_buildingstatistics:
-         statisticbuildings();
          break;
 
       case ua_newmessage:
@@ -1297,7 +1038,11 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 
    dataLoaderTicker();
 
-   loadMoreData();
+   loadpalette();
+   
+   dataLoaderTicker();
+   
+   loadmessages();
 
    dataLoaderTicker();
 

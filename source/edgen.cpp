@@ -2,9 +2,12 @@
     \brief The random map generator
 */
 
-//     $Id: edgen.cpp,v 1.20.2.2 2005-12-22 17:41:30 mbickel Exp $
+//     $Id: edgen.cpp,v 1.20.2.3 2006-02-11 20:48:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20.2.2  2005/12/22 17:41:30  mbickel
+//      Fixed graphic problems
+//
 //     Revision 1.20.2.1  2005/06/12 11:05:15  mbickel
 //      Further improved mapeditor conversion to paragui
 //
@@ -272,11 +275,13 @@ void         tmapgenerator::init(void)
    showtext2(strcat(s1,strrr(plasma.maxx)),x1+10,y1+10);
    showtext2(strcat(s2,strrr(plasma.maxy)),x1+120,y1+10);
 
+   /*
    putspriteimage(x1 + 487,y1 + 83,icons.pfeil2[6]);
    putspriteimage(x1 + 537,y1 + 83,icons.pfeil2[2]);
 
    putspriteimage(x1 + 487,y1 + 373,icons.pfeil2[6]);
    putspriteimage(x1 + 537,y1 + 373,icons.pfeil2[2]);
+   */
 
    rahmen(true,x1 + 450,y1 + 40,x1 + 590,y1 + 400);
    rahmen(true,x1 + 10,y1 + 40,x1 + 440,y1 + 390);

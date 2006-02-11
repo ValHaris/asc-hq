@@ -131,10 +131,10 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    // add(new IntProperty("Mouse.dragndropmovement"		,&_pOptions->mouse.dragndropmovement));
    pc.closeBracket();
 
-   pc.addBool("ProduceAmmoAutomatically", container.autoproduceammunition, container.autoproduceammunition );
-   pc.addInteger("FillUnitsAutomatically", container.filleverything, container.filleverything );
+   // pc.addBool("ProduceAmmoAutomatically", container.autoproduceammunition, container.autoproduceammunition );
+   // pc.addInteger("FillUnitsAutomatically", container.filleverything, container.filleverything );
 
-   pc.addInteger("ToolTipHelpDelay", onlinehelptime, onlinehelptime );
+   // pc.addInteger("ToolTipHelpDelay", onlinehelptime, onlinehelptime );
    // add(new IntProperty("SmallGuiIconOpensAfterMove"	,	&_pOptions->smallguiiconopenaftermove));
    pc.addString("DefaultPassword", defaultPassword, defaultPassword );
    pc.addString("DefaultSupervisorPassword", defaultSuperVisorPassword, defaultSuperVisorPassword );
@@ -143,7 +143,7 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    pc.addString("StartupMap", startupMap, startupMap );
    pc.addBool("DebugReplay", debugReplay, debugReplay );
 
-   pc.addString("BI3.path", bi3.dir, bi3.dir );
+   pc.addString("BI3.path", BI3directory, BI3directory );
    /*
    add(new IntProperty("BI3.interpolate.terrain"		,	&_pOptions->bi3.interpolate.terrain));
    add(new IntProperty("BI3.interpolate.units"			,	&_pOptions->bi3.interpolate.units));
@@ -212,10 +212,7 @@ void CGameOptions::setDefaults ( void )
    mouse.singleClickAction=0;
    */
 
-   container.autoproduceammunition=true;
-   container.filleverything=2;
-
-   onlinehelptime=150;
+   // onlinehelptime=150;
    // smallguiiconopenaftermove=0;
    replayspeed=0;
 //   showUnitOwner = 0;

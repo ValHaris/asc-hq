@@ -46,7 +46,6 @@
 #include "dialog.h"
 #include "attack.h"
 #include "gamedlg.h"
-#include "sg.h"
 #include "gameoptions.h"
 #include "ai/ai.h"
 #include "errors.h"
