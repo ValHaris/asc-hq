@@ -409,7 +409,7 @@ void execaction(int code)
        break;
     case act_changeunitdir : {
                       pf2 = getactfield();
-                      if ( (pf2 != NULL) && (pf2->vehicle != NULL ) ){
+                      if ( pf2 && pf2->vehicle  ) {
                          pf2->vehicle->direction++;
                          if (pf2->vehicle->direction>sidenum-1) pf2->vehicle->direction = 0;
                          mapsaved = false;
@@ -525,8 +525,6 @@ void execaction(int code)
        break;
     case act_changemapvals :   changemapvalues();
        break;                                        
-    case act_changeproduction :   if ( getactfield()->building ) building_production( getactfield()->building );
-       break;
     case act_changeunitvals :   {
                  pf2 = getactfield();
                  if ( pf2  ) {
@@ -670,33 +668,35 @@ void execaction(int code)
    case act_specifyunitproduction: unitProductionLimitation();
       break;
       */
-   case act_pasteFromClipboard: if ( !getactfield()->getContainer() ) {
+   case act_pasteFromClipboard: if ( getactfield() && !getactfield()->getContainer() ) {
                                    ClipBoard::Instance().place( actmap->getCursor() );
                                    mapsaved = false;
                                    displaymap();
                                 }
       break;
-   case act_copyToClipboard: if ( getactfield()->vehicle ) {
-                                ClipBoard::Instance().clear();
-                                ClipBoard::Instance().addUnit( getactfield()->vehicle );
-                             } else
-                                if ( getactfield()->building ) {
-                                   ClipBoard::Instance().clear();
-                                   ClipBoard::Instance().addBuilding( getactfield()->building );
-                                }
+   case act_copyToClipboard: if ( getactfield() )
+                                 if ( getactfield()->vehicle ) {
+                                    ClipBoard::Instance().clear();
+                                    ClipBoard::Instance().addUnit( getactfield()->vehicle );
+                                 } else
+                                    if ( getactfield()->building ) {
+                                       ClipBoard::Instance().clear();
+                                       ClipBoard::Instance().addBuilding( getactfield()->building );
+                                    }
       break;
-   case act_cutToClipboard: if ( getactfield()->vehicle ) {
-                                ClipBoard::Instance().clear();
-                                ClipBoard::Instance().addUnit( getactfield()->vehicle );
-                                execaction ( act_deleteunit );
-                                mapsaved = false;
-                             } else
-                                if ( getactfield()->building ) {
-                                   ClipBoard::Instance().clear();
-                                   ClipBoard::Instance().addBuilding( getactfield()->building );
-                                   execaction ( act_deletebuilding );
-                                   mapsaved = false;
-                                }
+   case act_cutToClipboard: if ( getactfield() )
+                              if ( getactfield()->vehicle ) {
+                                 ClipBoard::Instance().clear();
+                                 ClipBoard::Instance().addUnit( getactfield()->vehicle );
+                                 execaction ( act_deleteunit );
+                                 mapsaved = false;
+                              } else
+                                 if ( getactfield()->building ) {
+                                    ClipBoard::Instance().clear();
+                                    ClipBoard::Instance().addBuilding( getactfield()->building );
+                                    execaction ( act_deletebuilding );
+                                    mapsaved = false;
+                                 }
       break;
    case act_saveClipboard:  saveClipboard();
       break;
@@ -798,12 +798,15 @@ void execaction_pg(int code)
        }
        break;
        case act_changecargo :
-          if ( getactfield()->getContainer() )
+          if ( getactfield() && getactfield()->getContainer() )
              cargoEditor( getactfield()->getContainer() );
        
        break;
        case act_createresources2 : resourcePlacementDialog();
          displaymap();
+       break;
+       case act_changeproduction :   if ( getactfield() && getactfield()->getContainer() )
+             editProduction( getactfield()->getContainer() );
        break;
    };
 }

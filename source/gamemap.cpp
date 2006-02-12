@@ -36,6 +36,7 @@
 #include "graphics/blitter.h"
 #include "overviewmapimage.h"
 #include "iconrepository.h"
+#include "gameeventsystem.h"
 
 #ifdef sgmain
  #include "gameoptions.h"
@@ -203,7 +204,6 @@ GameMap :: GameMap ( void )
    xpos = 0;
    ypos = 0;
    field = NULL;
-   codeword[0] = 0;
    campaign = NULL;
 
    actplayer = -1;
@@ -246,7 +246,7 @@ void GameMap :: guiHooked()
    dialogsHooked = true;
 }
 
-const int tmapversion = 13;
+const int tmapversion = 14;
 
 void GameMap :: read ( tnstream& stream )
 {
@@ -270,7 +270,15 @@ void GameMap :: read ( tnstream& stream )
    ypos = stream.readWord();
    stream.readInt(); // dummy
    field = NULL;
-   stream.readdata ( codeword, 11 ); // endian ok !
+
+   if ( version <= 13 ) {
+      char buf[11]; 
+      stream.readdata ( buf, 11 );
+      buf[10] = 0;
+      codeWord = buf;
+   } else {
+      codeWord = stream.readString();
+   }
 
    if ( version < 2 )
       ___loadtitle = stream.readInt();
@@ -619,7 +627,7 @@ void GameMap :: write ( tnstream& stream )
    stream.writeWord( xpos );
    stream.writeWord( ypos );
    stream.writeInt (1); // dummy
-   stream.writedata ( codeword, 11 );
+   stream.writeString ( codeWord );
 
    
    

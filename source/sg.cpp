@@ -127,6 +127,7 @@
 #include "resourcenet.h"
 #include "mapimageexport.h"
 #include "loadpcx.h"
+#include "gameeventsystem.h"
 
 #include "dialogs/newgame.h"
 #include "dialogs/soundsettings.h"
@@ -952,45 +953,6 @@ bool mainloopidle(  )
    return false;
 }
 
-void  mainloop2()
-{
-   displayLogMessage ( 4, "Spawning MainScreenWidget\n ");
-
-   mainScreenWidget->Show();
-
-   displayLogMessage ( 7, "Entering mainloop\n");
-   
-   getPGApplication().Run();
-   displayLogMessage ( 7, "mainloop exited\n");
-}
-
-void  mainloop ( void )
-{
-   do {
-      viewunreadmessages( actmap->player[ actmap->actplayer ] );
-      activefontsettings.background=0;
-      activefontsettings.length=50;
-      activefontsettings.color=14;
-
-      // mainloopgeneralmousecheck ( );
-
-      /************************************************************************************************/
-      /*        Pulldown Men?                                                                       . */
-      /************************************************************************************************/
-
-      while ( actmap->player[ actmap->actplayer ].queuedEvents )
-         checkevents( &getDefaultMapDisplay() );
-
-      checktimedevents( &getDefaultMapDisplay() );
-
-      checkforvictory();
-
-      releasetimeslice();
-
-   }  while ( true );
-
-}
-
 
 
 pfont load_font ( const char* name )
@@ -1143,8 +1105,14 @@ int gamethread ( void* data )
 
             updateFieldInfo();
 
-            displayLogMessage ( 5, "entering inner main loop.\n" );
-            mainloop2();
+            displayLogMessage ( 4, "Spawning MainScreenWidget\n ");
+
+            mainScreenWidget->Show();
+
+            displayLogMessage ( 7, "Entering main event loop\n");
+   
+            getPGApplication().Run();
+            displayLogMessage ( 7, "mainloop exited\n");
          }
       } /* endtry */
       catch ( NoMapLoaded ) { 

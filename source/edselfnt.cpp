@@ -35,6 +35,7 @@
 #include "graphics/blitter.h"
 #include "paradialog.h"
 
+#include "dialogs/vehicletypeselector.h"
 
 SigC::Signal0<void> filtersChangedSignal;
 
@@ -113,16 +114,24 @@ void MapComponent::displayClip( PG_Widget* parent, SDL_Surface * surface, const 
    
    static PG_ThemeWidget* fontProvidingWidget = NULL;
    if ( !fontProvidingWidget  )
-      fontProvidingWidget = new PG_ThemeWidget( NULL );
+      fontProvidingWidget = new PG_ThemeWidget( NULL, PG_Rect::null , false, "MapedItemSelector" );
       
+   /*
    SDL_Rect      blitRect;
    blitRect.x = 0;
    blitRect.y = displayHeight() + 2;
    blitRect.w = displayWidth();
    blitRect.h = displayHeight() - blitRect.y;
+
    PG_FontEngine::RenderText( getClippingSurface().getBaseSurface(), blitRect, blitRect.x, blitRect.y+fontProvidingWidget ->GetFontAscender(), getItemType()->getName(), fontProvidingWidget ->GetFont() );
-   
+   */
+
    PG_Draw::BlitSurface( getClippingSurface().getBaseSurface(), src, surface, dst);
+
+   int x = dst.x;
+   int y = dst.y + displayHeight() + fontProvidingWidget ->GetFontAscender();
+   
+   PG_FontEngine::RenderText( surface, dst, x, y, getItemType()->getName(), fontProvidingWidget ->GetFont() );
 }
 
 
@@ -349,7 +358,7 @@ void addCargo( ContainerBase* container )
 
 
 
-
+#if 0
 
 
 class SelectAnythingBase {
@@ -1528,7 +1537,6 @@ void setnewbuildingselection ( BuildingType* v )
 
 
 
-
 class SelectCargoVehicleType : public SelectVehicleType {
       public:
           void showiteminfos ( Vehicletype* item, int x1, int y1, int x2, int y2 );
@@ -1612,6 +1620,10 @@ void selbuildingproduction( Building* bld )
    if ( newcargo )
       bld->unitProduction.push_back( newcargo );
 }
+#endif
+
+
+
 /*
 void addCargo( ContainerBase* container )
 {
@@ -1645,4 +1657,198 @@ void addCargo( ContainerBase* container )
 
 
 */
+
+
+
+
+class ProductionItemFactory: public MapItemTypeWidgetFactory<MapItemTypeWidget< Vehicletype > > {
+      typedef MapItemTypeWidgetFactory<MapItemTypeWidget< Vehicletype > > Parent;
+      typedef MapItemTypeWidget< Vehicletype > WidgetType;
+      ContainerBase* container;
+      const Vehicletype* selectedItem;
+   protected:
+      bool isFiltered( const ItemType& item ) {
+         if ( Parent::isFiltered( item ))
+            return true;
+      
+         if ( !container->baseType->vehicleFit( &item ))
+            return true;
+              
+         return false;
+      };
+
+   public:
+      ProductionItemFactory(  ContainerBase* container_ )  : Parent(vehicleTypeRepository), container( container_ ), selectedItem(NULL) {};
+      
+
+      void itemMarked  ( const SelectionWidget* widget )
+      {
+         if ( !widget )
+            return;
+            
+         const WidgetType* mapItemWidget = dynamic_cast<const WidgetType*>(widget);
+         assert( mapItemWidget );
+         const Vehicletype* type = mapItemWidget->getItem();
+         if ( type ) {
+            selectedItem = type;
+         }
+      };
+      
+      void itemSelected( const SelectionWidget* widget, bool mouse )
+      {
+         itemMarked( widget );
+      }
+      
+      const Vehicletype* getSelectedVehicleType()
+      {
+         return selectedItem;
+      }
+     
+};
+
+
+class AvailableProductionItemFactory: public SelectionItemFactory, public SigC::Object  {
+   private:
+      const ContainerBase* container;
+      const Vehicletype* selectedItem;
+   protected:
+      ContainerBase::Production::const_iterator it;
+      ContainerBase::Production production;
+   public:
+      AvailableProductionItemFactory(  ContainerBase* container_, ContainerBase::Production& prod )  : container( container_ ), selectedItem(NULL), production( prod )
+      {
+         restart();
+      };
+      
+      void restart()
+      {
+         // sort( items.begin(), items.end(), VehicleComp );
+         it = production.begin();
+      }
+      
+      SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos )
+      {
+         if ( it != production.end() ) {
+            const Vehicletype* v = *(it++);
+            return new VehicleTypeBaseWidget( parent, pos, parent->Width() - 15, v, actmap->actplayer );
+         } else
+            return NULL;
+      };
+      
+      void itemMarked  ( const SelectionWidget* widget )
+      {
+         if ( !widget )
+            return;
+            
+         const VehicleTypeBaseWidget* mapItemWidget = dynamic_cast<const VehicleTypeBaseWidget*>(widget);
+         assert( mapItemWidget );
+         const Vehicletype* type = mapItemWidget->getVehicletype();
+         if ( type ) {
+            selectedItem = type;
+         }
+      }
+      
+      
+      void itemSelected( const SelectionWidget* widget, bool mouse )
+      {
+         itemMarked( widget );
+      }
+
+      const Vehicletype* getSelectedVehicleType()
+      {
+         return selectedItem;
+      }
+            
+};
+
+
+
+class ProductionEditorWindow : public ASC_PG_Dialog {
+   private:
+      ProductionItemFactory* allTypesFactory;
+      ItemSelectorWidget* allTypes;
+      
+      AvailableProductionItemFactory* productionFactory;
+      ItemSelectorWidget* productionWidget;
+      
+
+      ContainerBase* container;
+
+      ContainerBase::Production production;
+      
+
+      bool ok()
+      {
+         container->unitProduction = production;
+         QuitModal();
+         return true;
+      }
+
+      bool addOne()
+      {
+         const Vehicletype* v = allTypesFactory->getSelectedVehicleType();
+         if ( !v )
+            return false;
+         
+         if ( find( production.begin(), production.end(), v ) == production.end() ) {
+            production.push_back( v );
+            productionWidget->reLoad( true );
+            return true;
+         }
+         return false;
+      }
+      
+      bool removeOne()
+      {
+         const Vehicletype* v = productionFactory->getSelectedVehicleType();
+         if ( !v )
+            return false;
+
+         ContainerBase::Production::iterator i = find( production.begin(), production.end(), v );
+         if ( i != production.end() ) {
+            production.erase( i );
+            productionWidget->reLoad( true );
+            return true;
+         }
+         return false;
+      }
+
+      
+   public:
+      ProductionEditorWindow ( ContainerBase* container ) : ASC_PG_Dialog ( NULL, PG_Rect( 20,20, 700, 550 ), "Unit Production" )
+      {
+         this->container = container;
+         production = container->unitProduction;
+         
+         const int centerSpace = 80;
+         const int border  = 10;
+         
+         allTypesFactory = new ProductionItemFactory( container );
+         allTypes = new ItemSelectorWidget( this, PG_Rect( border, 50, (my_width- centerSpace) / 2 - 2 * border, my_height - 100 ), allTypesFactory );
+
+         productionFactory = new AvailableProductionItemFactory( container, production );
+         productionWidget = new ItemSelectorWidget( this, PG_Rect( (my_width + centerSpace) / 2 + border, 50, (my_width- centerSpace) / 2 - 2 * border, my_height - 100 ), productionFactory);
+
+
+         
+         PG_Button* addB = new PG_Button( this, PG_Rect( (my_width - centerSpace) / 2, 100, centerSpace, 30 ), "->" );
+         addB->sigClick.connect( SigC::slot( *this, &ProductionEditorWindow::addOne ));
+         
+         PG_Button* removeB = new PG_Button( this, PG_Rect( (my_width - centerSpace) / 2, 140, centerSpace, 30 ), "<-" );
+         removeB->sigClick.connect( SigC::slot( *this, &ProductionEditorWindow::removeOne ));
+
+         
+         PG_Button* ok = new PG_Button( this, PG_Rect( my_width - 100, my_height - 40, 90, 30 ), "OK" );
+         ok->sigClick.connect( SigC::slot( *this, &ProductionEditorWindow::ok ));
+      };
+
+};
+      
+
+void editProduction( ContainerBase* container )
+{
+   ProductionEditorWindow pew ( container );
+   pew.Show();
+   pew.RunModal();
+}
 

@@ -350,7 +350,7 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                         return true;
          case SDLK_e:  execaction_ev(act_events);
                         return true;
-         case SDLK_f:  execaction_ev(act_fillmode);
+         case SDLK_f:  execaction_ev(act_changeproduction);
                         return true;
          case SDLK_g: execaction_ev(act_mapgenerator);
                         return true;

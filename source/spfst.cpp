@@ -22,7 +22,7 @@
     Boston, MA  02111-1307  USA
 */
 
-#include <stdio.h>                                                                   
+#include <stdio.h>
 #include <cstring>
 #include <utility>
 #include <map>
@@ -33,20 +33,16 @@
 #include "buildingtype.h"
 
 #include "basestrm.h"
-// #include "tpascal.inc"
 #include "misc.h"
 #include "basegfx.h"
 #include "typen.h"
 #include "spfst.h"
 #include "events.h"
 #include "loaders.h"
-// #include "stack.h"
 #include "attack.h"
-// #include "gameoptions.h"
 #include "itemrepository.h"
 
 #include "dialog.h"
-#include "loadbi3.h"
 #include "mapalgorithms.h"
 #include "vehicle.h"
 #include "buildings.h"
@@ -238,66 +234,6 @@ tfield*        getfield(int          x,
    else
       return (   &actmap->field[y * actmap->xsize + x] );
 }
-
-
-
-
-
-
-/*
-
-int         getdiplomaticstatus(int         b)
-{
-   if ( b & 7 )
-     displaymessage("getdiplomaticstatus: \n parameter has to be in [0,8,16,..,64]",2);
-
-   if ( b/8 == actmap->actplayer )
-      return capeace;
-
-   if ( b == 64 )  // neutral
-      return capeace;
-
-   char d = actmap->alliances[ b/8 ][ actmap->actplayer ] ;
-   char e = actmap->alliances[ actmap->actplayer ][ b/8 ] ;
-
-   if (  (d == capeace || d == canewsetwar1 || d == cawarannounce || d == capeace_with_shareview )
-       &&(e == capeace || e == canewsetwar1 || e == cawarannounce || e == capeace_with_shareview))
-      return capeace;
-   else
-      return cawar;
-}
-
-
-int        getdiplomaticstatus2(int    b, int    c)
-{
-   if ( (b & 7) || ( c & 7 ) )
-      displaymessage("getdiplomaticstatus: \n parameters have to be in [0,8,16,..,64]",2);
-
-   if ( b == c )
-      return capeace;
-
-   if ( b == 64 || c == 64 )  // neutral
-      return capeace;
-
-
-   char d = actmap->alliances [ b/8][ c/8 ];
-   char e = actmap->alliances [ c/8][ b/8 ];
-
-   if (  (d == capeace || d == canewsetwar1 || d == cawarannounce || d == capeace_with_shareview )
-       &&(e == capeace || e == canewsetwar1 || e == cawarannounce || e == capeace_with_shareview))
-      return capeace;
-   else
-      return cawar;
-}
-
-
-*/
-
-
-
-
-
-
 
 
 
@@ -517,178 +453,6 @@ int  getmaxwindspeedforunit ( const Vehicle* eht )
    }
    return maxint;
 }
-
-
-
-
-/*
-int getcrc ( const Vehicletype* fzt )
-{
-    if ( !fzt )
-       return -1;
-
-    Vehicletype fz = *fzt;
-    fz.name = NULL;
-    fz.description = NULL;
-    fz.infotext = NULL;
-    for ( int i = 0; i < 8; i++ ) {
-       fz.picture[i] = NULL;
-       fz.classnames[i] = NULL;
-    }
-    fz.buildicon = NULL;
-    int terr = 0; // fz.terrainaccess->getcrc();
-    fz.terrainaccess = NULL;
-    
-    int crcob = 0;
-    if ( fz.objectsbuildablenum ) 
-       crcob = crc32buf ( fz.objectsbuildableid, fz.objectsbuildablenum*4 );
-    fz.objectsbuildableid = NULL;
-
-    int crcbld = 0;
-    if ( fz.buildingsbuildablenum ) 
-       crcbld = crc32buf ( fz.buildingsbuildable, fz.buildingsbuildablenum*sizeof(tbuildrange) );
-    fz.buildingsbuildable = NULL;
-
-
-    int crcfz = 0;
-    if ( fz.vehiclesbuildablenum ) 
-       crcob = crc32buf ( fz.vehiclesbuildableid, fz.vehiclesbuildablenum*4 );
-    fz.vehiclesbuildableid = NULL;
-
-   int crctr = 0;
-   if ( fz.terrainaccess ) 
-      crctr = crc32buf ( fz.terrainaccess, sizeof ( *fz.terrainaccess ));
-   
-   int crcweap = crc32buf ( fz.weapons, sizeof ( *fz.weapons ));
-   fz.weapons = NULL;
-
-   memset ( &fz.oldattack, 0 , sizeof ( fz.oldattack ));
-   
-   for ( int j = 0; j < 8; j++ )
-      fz.aiparam[j] = NULL;
-
-   fz.terrainaccess = NULL;
-   return crc32buf ( &fz, sizeof ( fz )) + crcob + crctr + crcfz + crcbld + terr + crcweap;
-}
-
-int getcrc ( const ptechnology tech )
-{
-  if ( !tech )
-       return -1;
-
-    ttechnology t = *tech;
-    t.icon = NULL;
-    t.infotext = NULL;
-    t.name = NULL;
-    for ( int i = 0; i < 6; i++ )
-       if ( tech->requiretechnology )
-          t.requiretechnologyid[i] = tech->requiretechnology[i]->id;
-       else
-          t.requiretechnologyid[i] = 0;
-
-    t.pictfilename = NULL;
-    
-    return crc32buf ( &t, sizeof ( t )) ;
-}
-
-int getcrc ( const ObjectType* obj )
-{
-    if ( !obj )
-       return -1;
-
-    tobjecttype o = *obj;
-    for ( int ww= 0; ww < cwettertypennum; ww++ )
-       o.picture[ww] = NULL;
-
-    int crc1;
-    if ( o.movemalus_plus_count )
-       crc1 = crc32buf ( o.movemalus_plus, o.movemalus_plus_count );
-    else
-       crc1 = 0;
-
-    int crc2;
-    if ( o.movemalus_abs_count )
-       crc2 = crc32buf ( o.movemalus_abs, o.movemalus_abs_count );
-    else
-       crc2 = 0;
-
-    o.movemalus_plus = NULL;
-    o.movemalus_abs  = NULL;
-
-    o.name = NULL;
-    o.buildicon = NULL;
-    o.removeicon = NULL;
-    o.objectslinkable = NULL;
-    o.oldpicture = NULL;
-    o.dirlist = NULL;
-    
-    return crc32buf ( &o, sizeof ( o )) + crc1 + crc2;
-}
-
-int getcrc ( const pterraintype bdn )
-{
-    if ( !bdn )
-       return -1;
-
-    int crc = bdn->id;
-    for ( int i = 0; i < cwettertypennum; i++ ) 
-       if ( bdn->weather[i] ) {
-          TerrainType::Weather b = *bdn->weather[i];
-          for ( int j = 0; j < 8; j++) {
-             b.picture[j] = NULL;
-             b.direcpict[j]= NULL;
-          }
-          if ( b.movemaluscount )
-             crc += crc32buf ( b.movemalus, b.movemaluscount );
-
-          b.movemalus = NULL;
-          b.terraintype = NULL;
-          b.quickview = NULL;
-
-          crc += crc32buf ( &b, sizeof ( b ));
-      }
-    
-    return crc;
-}
-
-
-int getcrc ( const BuildingType* bld )
-{
-    if ( !bld )
-       return -1;
-
-    Buildingtype b = *bld;
-    for ( int i = 0; i < maxbuildingpicnum; i++ )
-       for ( int j = 0; j < 4; j++ )
-          for ( int k = 0; k < 6; k++ )
-              for ( int w = 0; w < cwettertypennum; w++ )
-		b.w_picture[w][i][j][k] = NULL;
-
-    b.name = NULL;
-    b.guibuildicon = NULL;
-    b.terrain_access = NULL;
-    
-    return crc32buf ( &b, sizeof ( b ));
-}
-*/
-
-
-
-
-
-
-
-
-
-//////  Functions, that belong to TYPEN.CPP , but need functions defined here ...
-
-
-
-
-
-
-
-
 
 
 

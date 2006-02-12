@@ -65,7 +65,7 @@ Vehicle* selectUnitFromMap() { return NULL; };
 
 bool chooseWeather( int& weather )
 {
-#ifdef karteneditor
+#ifdef kkarteneditor
   auswahlw = weather;
   selweather( ct_invvalue );
   weather = auswahlw;
@@ -75,7 +75,7 @@ bool chooseWeather( int& weather )
 
 bool chooseTerrain( int& terrainID )
 {
-#ifdef karteneditor
+#ifdef kkarteneditor
   auswahl = actmap->getterraintype_byid( terrainID );
   selterraintype( ct_invvalue );
   terrainID = auswahl->id;
@@ -85,7 +85,7 @@ bool chooseTerrain( int& terrainID )
 
 bool chooseObject( int& objectID )
 {
-#ifdef karteneditor
+#ifdef kkarteneditor
   actobject  = actmap->getobjecttype_byid( objectID );
   selobject( ct_invvalue );
   objectID = actobject->id;
@@ -95,7 +95,7 @@ bool chooseObject( int& objectID )
 
 bool chooseVehicleType( int& vehicleTypeID )
 {
-#ifdef karteneditor
+#ifdef kkarteneditor
   auswahlf  = actmap->getvehicletype_byid( vehicleTypeID );
   selvehicletype( ct_invvalue );
   vehicleTypeID = auswahlf->id;

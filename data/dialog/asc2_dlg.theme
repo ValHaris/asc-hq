@@ -24,8 +24,18 @@
           <name value="ThemeWidget"/>
           <color    name="backgroundcolor" value="0x00447156"/>
           <gradient name="gradient" color0="0x00447156" color1="0x00447156" color2="0x00447156" color3="0x00447156"/>
-          <color name="textcolor" value="0x00d5fae4"/>
+          <color name="textcolor" value="0x00fffe8c"/>
           <property name="blend" value="0"/>
+      </object>
+    </widget>    
+    
+    <widget>
+      <type value="MapedItemSelector"/>
+       <object>
+          <!-- The default for all widgets that have no own section -->
+          <name value="ThemeWidget"/>
+          <color name="textcolor" value="0x00fffe8c"/>
+          <font name="default" value="asc/font.ttf" size="10"/>
       </object>
     </widget>    
     
@@ -78,7 +88,7 @@
        <object>
           <!-- The area in which the pull down menu items arer lieing ( load / save / etc... )  -->
           <name value="ThemeWidget"/>
-          <color name="textcolor" value="0x00FFFFFF"/>
+          <color name="textcolor" value="0x00fffd36"/>
           <property name="backmode" value="TILE"/>
           <property name="transparency" value="90"/>
           <gradient name="gradient" color0="0x759f8a" color1="0x759f8a" color2="0x759f8a" color3="0x759f8a"/>
@@ -370,7 +380,7 @@
         <!-- The main area of the standard window -->
           <name value="ThemeWidget"/>
           <filename name="background" value="asc/dialog_background2.png"/>
-          <color name="textcolor" value="0x00FFFFFF"/>
+          <color name="textcolor" value="0x00fffd36"/>
           <property name="backmode" value="TILE"/>
           <gradient name="gradient" color0="0x00FF7b56" color1="0x00737b56" color2="0x00737b56" color3="0x00737b56"/>
           <property name="blend" value="0"/>
@@ -460,7 +470,7 @@
       
     <object>
         <name value="LineEdit"/>
-        <color name="textcolor" value="0x00FFFFFF"/>
+        <color name="textcolor" value="0x00fffd36"/>
         <property name="bordersize" value="1"/>
         <property name ="simplebackground" value="0"/>
         <color    name="backgroundcolor" value="0x00508565"/>
@@ -472,7 +482,7 @@
     </object>
     <object>
         <name value="Label"/>
-        <color name="textcolor" value="0x00FFFFFF"/>
+        <color name="textcolor" value="0x00fffd36"/>
         <property name="bordersize" value="2"/>
         <property name ="simplebackground" value="1"/>
         <color    name="backgroundcolor" value="0x00508565"/>
@@ -518,7 +528,7 @@
      <object>
           <name value="ThemeWidget"/>
           <filename name="background" value="asc/dialog_background.png"/>
-          <color name="textcolor" value="0x00FFFFFF"/>
+          <color name="textcolor" value="0x00fffd36"/>
           <property name="backmode" value="TILE"/>
           <gradient name="gradient" color0="0x00FF7b56" color1="0x00737b56" color2="0x00737b56" color3="0x00737b56"/>
           <property name="blend" value="0"/>

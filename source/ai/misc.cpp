@@ -860,7 +860,7 @@ void AI::production()
       Building* bld = *bli;
       for ( int i = 0; i < bld->unitProduction.size(); i++ )
          if ( bld->unitProduction[i] && bld->vehicleUnloadable ( bld->unitProduction[i] )) {
-            Vehicletype* typ = bld->unitProduction[i];
+            const Vehicletype* typ = bld->unitProduction[i];
             float rating = 0;
             for ( int j = 0; j < aiValueTypeNum; j++ )
                rating += enemyValue[j] * typ->aiparam[getPlayerNum()]->threat.threat[j];

@@ -57,7 +57,7 @@ class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC:
       Resources plantResources;
       int actplayer;
    public:
-      typedef vector<Vehicletype*> Container;
+      typedef vector<const Vehicletype*> Container;
    protected:
       Container::iterator it;
       Container items;

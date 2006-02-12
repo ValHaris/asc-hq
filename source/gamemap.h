@@ -24,15 +24,14 @@
  #define gamemapH
 
  #include <vector>
+ #include <time.h>
 
  #include "typen.h"
  #include "baseaiinterface.h"
  #include "vehicle.h"
  #include "buildings.h"
  #include "basestrm.h"
- #include "time.h"
  #include "messages.h"
- #include "gameeventsystem.h"
  #include "research.h"
  #include "password.h"
  #include "weatherarea.h"
@@ -146,6 +145,7 @@ class OverviewMapHolder : public SigC::Object {
 };
 
 
+class Event;
 
 
 //! The map. THE central structure of ASC, which holds everything not globally available together
@@ -163,7 +163,7 @@ class GameMap {
       tfield*       field;
 
       //! the codeword for accessing a map in a campaign
-      char         codeword[11];
+      ASCString    codeWord;
 
       //! the title of the map
       ASCString    maptitle;
@@ -432,6 +432,12 @@ class GameMap {
 
       OverviewMapHolder overviewMapHolder;
 
+      /** @name Access to item types
+       *  
+       */
+      //@{
+
+      
       pterraintype getterraintype_byid ( int id );
       ObjectType* getobjecttype_byid ( int id );
       Vehicletype* getvehicletype_byid ( int id );
@@ -450,6 +456,8 @@ class GameMap {
       int getBuildingTypeNum ( );
       int getTechnologyNum ( );
 
+      //@}
+      
       ~GameMap();
 
       //! just a helper variable for loading the map; no function outside;

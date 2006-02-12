@@ -823,7 +823,7 @@ int  setupnetwork ( tnetwork* nw, int edt, int player )
 
 void         tchoosenewcampaign::evaluatemapinfo( const char* srname, GameMap* spfld )
 {
-   if ( spfld->campaign &&  ( stricmp( spfld->codeword, password ) == 0 )) {
+   if ( spfld->campaign &&  spfld->codeWord==password ) {
       strcat(message1, srname );
       strcat(message1, " ");
       if (status == 0) {
@@ -842,7 +842,7 @@ void         tchoosenewcampaign::evaluatemapinfo( const char* srname, GameMap* s
 void         tchoosenewsinglelevel::evaluatemapinfo( const char* srname, GameMap* spfld )
 {
 
-   if ( stricmp ( spfld->codeword, password ) == 0) {
+   if ( spfld->codeWord == password ) {
       strcat(message2, srname);
       strcat(message2, " ");
       if (status == 0) {
@@ -1073,7 +1073,7 @@ void         tcontinuecampaign::evaluatemapinfo( const char *srname, GameMap* sp
                   strcpy ( maptitle, spfld->maptitle.c_str() );
 
                   strcpy ( mapname, srname);
-                  strcpy(  password, spfld->codeword);
+                  strcpy(  password, spfld->codeWord.c_str() );
                }
                else
                   if ((status == 6) || (status == 8)) {
@@ -1091,7 +1091,7 @@ void         tcontinuecampaign::evaluatemapinfo( const char *srname, GameMap* sp
                strcpy ( mapinfo, dateiinfo );
                strcpy ( maptitle, spfld->maptitle.c_str());
                strcpy ( mapname, srname);
-               strcpy( password, spfld->codeword );
+               strcpy( password, spfld->codeWord.c_str() );
                status = 7;
             }
             else

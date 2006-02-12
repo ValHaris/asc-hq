@@ -184,7 +184,6 @@ extern void         changeminestrength(void);
 extern void         newmap(void);
 extern void         changemapvalues(void);
 extern void         cargoEditor ( ContainerBase* container );
-extern void         building_production( Building* bld );
 extern int          selectfield(int * cx ,int  * cy);
 extern void 	     playerchange(void);
 

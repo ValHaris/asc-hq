@@ -34,7 +34,7 @@ const int ccbt_training = 150;
                          protected:
                               AI*               ai;
 
-                              Vehicletype*      fzt;
+                              const Vehicletype*      fzt;
                               int               weapthreat[8];
                               int               value;
 
@@ -43,7 +43,7 @@ const int ccbt_training = 150;
                               virtual int       getammunition( int i )  { return 1;   };
                               virtual int       getheight ( void )      { return 255; };
                           public:
-                              void              calc_threat_vehicletype ( Vehicletype* _fzt );
+                              void              calc_threat_vehicletype ( const Vehicletype* _fzt );
                               CalculateThreat_VehicleType ( AI* _ai ) { ai = _ai; };
                               virtual ~CalculateThreat_VehicleType() {};
                        };
@@ -61,7 +61,7 @@ const int ccbt_training = 150;
                        };
 
 
-void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( Vehicletype* _fzt )
+void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( const Vehicletype* _fzt )
 {
    fzt = _fzt;
 
@@ -240,7 +240,7 @@ AiParameter::JobList AI::chooseJob ( const Vehicletype* typ )
 
 
 
-void  AI :: calculateThreat ( Vehicletype* vt)
+void  AI :: calculateThreat ( const Vehicletype* vt)
 {
    CalculateThreat_VehicleType ctvt ( this );
    ctvt.calc_threat_vehicletype( vt );

@@ -159,8 +159,8 @@ extern void selmine( tkey ench );
 extern void selweather( tkey ench );
 extern void selbuilding ( tkey ench );
 extern void addCargo( ContainerBase* container );
-extern void selbuildingproduction( Building* eht );
 
+extern void editProduction( ContainerBase* container );
 
 
 

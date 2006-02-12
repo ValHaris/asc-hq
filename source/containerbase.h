@@ -59,7 +59,7 @@ class ContainerBase {
       const ContainerBaseType*  baseType;
 
 
-      typedef vector<Vehicletype*> Production;
+      typedef vector<const Vehicletype*> Production;
       Production unitProduction;
       
 

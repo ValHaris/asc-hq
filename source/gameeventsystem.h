@@ -32,11 +32,9 @@
 #include "libs/loki/Singleton.h"
 #include "factory.h"
 
-#if defined(sgmain) || defined(karteneditor) || defined(maindialogs)
- class MapDisplayInterface;
-#else
- class MapDisplayInterface {};
-#endif
+#include "mapdisplayinterface.h"
+
+class MapDisplayInterface;
 
 enum  EventConnections { cconnection_destroy = 1,
                          cconnection_conquer = 2,

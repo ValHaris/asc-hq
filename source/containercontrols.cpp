@@ -406,10 +406,10 @@ int ContainerControls :: removeProductionLine ( const Vehicletype* veh  )
 }
 
 
-vector<Vehicletype*> ContainerControls :: productionLinesBuyable()
+vector<const Vehicletype*> ContainerControls :: productionLinesBuyable()
 {
 
-   vector<Vehicletype*>  list;
+   vector<const Vehicletype*>  list;
 
    Resources r = container->getResource( Resources(maxint, maxint, maxint), 1 );
    

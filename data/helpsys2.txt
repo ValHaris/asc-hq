@@ -94,7 +94,7 @@
 #pos10# shift-d #pos70#: Change direction of unit
 #pos10# ctrl-d #pos70#: Change direction of fields to place
 #pos10# e  #pos70#: Edit events
-#pos10# f  #pos70#: enable rectangle terrain placement mode
+#pos10# f  #pos70#: edit production
 #pos10# g  #pos70#: Map-Generator (Preview)
 #pos10# h  #pos70#: Select unit/terrain from cursor position
 #pos10# l  #pos70#: Show pallette 

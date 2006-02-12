@@ -913,11 +913,11 @@ void         k_loadmap(void)
       delete actmap;
       actmap =  mp;
 
-      if ( actmap->campaign && !actmap->campaign->directaccess && actmap->codeword[0]) {
+      if ( actmap->campaign && !actmap->campaign->directaccess && !actmap->codeWord.empty() ) {
          tlockdispspfld ldsf;
          removemessage();
          Password pwd;
-         pwd.setUnencoded ( actmap->codeword );
+         pwd.setUnencoded ( actmap->codeWord );
          enterpassword ( pwd );
       } else
          removemessage();
@@ -1197,7 +1197,7 @@ void         tnewmap::init(void)
       memset(&cmpgn,0,sizeof(cmpgn));
    }
    else {
-      strcpy(passwort, actmap->codeword);
+      strcpy(passwort, actmap->codeWord.c_str());
       if (actmap->campaign != NULL) {
          campaign = true;
          memcpy (&cmpgn , actmap->campaign, sizeof(cmpgn));
@@ -1299,7 +1299,8 @@ void         tnewmap::run(void)
 
       actmap->maptitle = maptitle;
 
-      strcpy(actmap->codeword,passwort);
+      actmap->codeWord = passwort;
+      
       if (campaign == true ) {
          if (actmap->campaign == NULL)
             actmap->campaign = new GameMap::Campaign;
@@ -3045,20 +3046,6 @@ const char* tbuildingproduction :: getinfotext ( int pos )
 
 bool isNull(const Vehicletype* v ) { return !v; };
 #endif
-
-void         building_production( Building* bld )
-{
-#if 0
-   if ( bld  && (bld->typ->hasFunction( ContainerBaseType::InternalVehicleProduction  ) ) ) {
-      tbuildingproduction laderaum ( bld );
-      laderaum.init( "production" );
-      laderaum.run();
-      laderaum.done();
-      bld->unitProduction.erase(remove_if( bld->unitProduction.begin(), bld->unitProduction.end(),  isNull ), bld->unitProduction.end() );
-   }
-#endif
-}
-
 
 
 void movebuilding ( void )

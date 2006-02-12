@@ -116,6 +116,7 @@ class VehicleAction {
 
 typedef int trichtungen[sidenum];
 
+class MapDisplayInterface;
 
 class BaseVehicleMovement : public VehicleAction {
            protected:

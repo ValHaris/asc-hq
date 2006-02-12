@@ -36,7 +36,7 @@
 #include "astar2.h"
 #include "containercontrols.h"
 #include "mapdisplayinterface.h"
-
+#include "gameeventsystem.h"
 #include "actions/servicing.h"
 
 PendingVehicleActions pendingVehicleActions;

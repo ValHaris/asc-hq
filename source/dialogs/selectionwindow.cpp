@@ -44,7 +44,7 @@ bool SelectionWidget::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
 void SelectionWidget::eventBlit ( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst )
 {
    if ( selectionCallBack && selectionCallBack->operator()(this) )
-      SDL_FillRect( PG_Application::GetScreen(), const_cast<PG_Rect*>(&dst), 0xff666666 );
+      SDL_FillRect( PG_Application::GetScreen(), const_cast<PG_Rect*>(&dst), 0xff888888 );
       
    display( PG_Application::GetScreen(), src, dst );
 };

@@ -32,12 +32,7 @@
 #include "graphics/surface.h"
 
 #include "errors.h"
-
-#ifdef sgmain
- #include "spfst.h"
-#endif
-
- #include "sgstream.h"
+#include "sgstream.h"
 
 
 /*

@@ -341,7 +341,7 @@
             */
             int changeVehicleHeight ( Vehicle* veh, VehicleMovement* vm, int preferredDirection = -1 );
 
-            void  calculateThreat ( Vehicletype* vt);
+            void  calculateThreat ( const Vehicletype* vt);
             void  calculateThreat ( Vehicle* eht );
             void  calculateThreat ( Building* bld );
             void  calculateThreat ( Building* bld, int player );
@@ -380,7 +380,7 @@
 
             UnitDistribution calcUnitDistribution();
             struct ProductionRating {
-               Vehicletype* vt;
+               const Vehicletype* vt;
                Building*    bld;
                float        rating;
                bool operator< ( const ProductionRating& pr ) { return rating < pr.rating; };

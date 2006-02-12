@@ -582,6 +582,7 @@ SaveGameBaseDialog::SaveGameBaseDialog(const ASCString& title, PG_MessageObject*
     }
     fileList->EnableScrollBar(true, PG_ScrollBar::VERTICAL);
     fileList->Update();
+#if 0
     /*
     tfindfile ff ( "*.sav" ); //wildcard
 
@@ -609,7 +610,7 @@ SaveGameBaseDialog::SaveGameBaseDialog(const ASCString& title, PG_MessageObject*
     }
     fileList->EnableScrollBar(true, PG_ScrollBar::VERTICAL);
     */
-
+#endif
     PG_Point p = ScreenToClient(fileList->x, fileList->y);
     /* slider = new PG_ScrollBar(this, PG_Rect(xSize - (GuiDimension::getLeftIndent() + GuiDimension::getSliderWidth()) , p.y, GuiDimension::getSliderWidth(), fileList->Height()), PG_ScrollBar::VERTICAL);
      slider->SetRange(0,fileList->GetWidgetCount());

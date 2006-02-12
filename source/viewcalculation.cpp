@@ -26,7 +26,7 @@
 #include "vehicletype.h"
 #include "buildingtype.h"
 #include "errors.h"
-
+#include "gameeventsystem.h"
 
 SigC::Signal0<void> buildingSeen;
 

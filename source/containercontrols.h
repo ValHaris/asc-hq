@@ -48,7 +48,7 @@ class ContainerControls {
       bool unitTrainingAvailable( Vehicle* veh );
       void trainUnit( Vehicle* veh );
 
-      vector<Vehicletype*> productionLinesBuyable();
+      vector<const Vehicletype*> productionLinesBuyable();
       
       Resources buildProductionLineResourcesNeeded( const Vehicletype* veh );
       int  buildProductionLine( const Vehicletype* veh );

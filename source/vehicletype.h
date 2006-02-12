@@ -252,7 +252,7 @@ extern const char*  cvehiclefunctions[];
         vector<int> wreckageObject;
 
         //! some information the AI stores about this unit
-        AiValue* aiparam[8];
+        mutable AiValue* aiparam[8];
 
         //! the recommended task for the unit, set by the unit creater
         AiParameter::Job recommendedAIJob;
