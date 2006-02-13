@@ -31,7 +31,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4267"/>
+				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4267;4290"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -92,7 +92,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4267"/>
+				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4267;4290"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -162,6 +162,12 @@
 			</File>
 			<File
 				RelativePath="..\..\..\cannedmessages.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\cargoeditor.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\cargowidget.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\clipboard.cpp">
@@ -323,6 +329,9 @@
 				RelativePath="..\..\..\player.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\dialogs\playersetup.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\prehistoricevents.cpp">
 			</File>
 			<File
@@ -356,6 +365,9 @@
 				RelativePath="..\..\..\stack.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\stdio-errorhandler.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\stringtokenizer.cpp">
 			</File>
 			<File
@@ -381,6 +393,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\vehicletype.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\vehicletypeselector.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\viewcalculation.cpp">

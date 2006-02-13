@@ -228,7 +228,7 @@ panel {
         y = 1
         height = 9
         width = 46
-        name = weapon_distancemax
+        name = weapon_distancemin
       } widget9
        widget10 {
         type = TextOutput
@@ -237,7 +237,7 @@ panel {
         y = 1
         height = 9
         width = 46
-        name = weapon_distancemin
+        name = weapon_distancemax
       } widget10
        widget11 {
         type = SpecialDisplay

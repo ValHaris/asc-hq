@@ -91,7 +91,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4290;4267"/>
+				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4290;4267;4290"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -511,10 +511,16 @@
 					RelativePath="..\..\..\dialogs\ammotransferdialog.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\attackpanel.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\cargodialog.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\cargowidget.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\editgameoptions.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\emailsetup.cpp">
@@ -879,9 +885,6 @@
 			</File>
 			<File
 				RelativePath=".\ASC.rc">
-			</File>
-			<File
-				RelativePath=".\icon2.ico">
 			</File>
 		</Filter>
 	</Files>

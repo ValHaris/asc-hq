@@ -720,9 +720,6 @@ void execuseraction ( tuseractions action )
          statisticDialog();
          break;
 
-      case ua_soundDialog:
-         soundSettings(NULL);
-         break;
       case ua_togglesound:
          if ( !SoundSystem::getInstance()->isOff() ) {
             bool on = !SoundSystem::getInstance()->areEffectsMuted();
