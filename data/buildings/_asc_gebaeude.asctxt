@@ -1,0 +1,9 @@
+itemfilter {
+   Vehicles =
+   Buildings = 0-7 10-49
+   Objects = 
+   Terrain = 
+   name = ASC buidlings
+   activated = false
+} itemfilter
+   

@@ -1,0 +1,39 @@
+BuildingType { 
+   Name = solar powerplant
+   ID = 15
+   Infotext = [Sonnenenergiekraftwerk]
+   Armor = 450
+   parent = 499
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A2 B1 B3 B2 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_asc_solar.pcx
+   } Pictures
+   RubbleObjects = false
+   Entry = B3
+   Transportation { 
+      MaxLoadableUnits = 5
+      MaxLoadableUnitSize = 25
+      MaxLoadableMass = 100
+      CategoriesNOT = Default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
+   } Transportation
+   Functions = Solar_Power_Plant 
+   ConstructionCost { 
+      Energy = 0
+      Material = 12500
+      fuel = 11500
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 3000
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 3000
+   } defaultProduction
+   StorageCapacity { 
+      ASCmode { 
+         Energy = 3000
+      } ASCmode
+   } StorageCapacity
+} BuildingType

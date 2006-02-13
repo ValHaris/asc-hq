@@ -1,0 +1,62 @@
+Grafiken: GAMER und Schicksal
+Spezifikationen: GAMER
+
+BUILDINGS HISTORY
+
+_________________
+v11.00
+-kl.Habrik kann keine hoovercrafts mehr laden
+-Eingang Trainingscenter auf 200 Erhöht, Gesamtzuladung von 1000 auf 500 verringert.
+-Jammergebäude +10 Jamming 
+_________________
+v10.01 06.01.2005
+-gr. Fabrik kann keine Helicopter mehr laden
+-Werft kann keine leichten Fahrzeuge mehr herstellen
+
+_________________
+v10.01 26.11.2004
+-Sonderforschungszentrum für Einzelmissionen hinzugefügt.
+-Stadt, Eingang auf 500 vergrößert
+
+v10.00 01.10.2004
+-Bugfix versteckte Stadt
+-Bugfix Munitionsproduktion Stadt
+-Trainingscenter mit Munitionsproduktion.
+-Turrets nicht mehr in Fabrik baubar.
+
+v9.02 25.08.2004
+-Produktion der Städte wiederhergestellt
+
+v9.01 20.08.2004
+-Jammer und Radargebäude aktualisiert
+
+v9.00 04.06.2004
+-Umstellung auf neue ASC-v1.15 Funktionen
+-Energie-Speicher allg. verringert.
+-Material+Fuel Speicherkapazität in allen Nicht-Depot Gebäuden verringert.
+
+v7.01 13.06.2004
+-Bugfix HQ Big
+-Bugfix Mine2
+
+v7.0 06.04.2004
+-Town Eingang vergrößert
+-Produktions Bugfix Secret Town, Villa Deng
+-Heli-Landepad vor alle Bohrinseln
+-Alle BI Wracks aus ASC Gebäuden entfernt
+-neue BI Mine mit nördlichem Eingang
+-neu Energiespeicher für Missionskarten
+-TrainingCenter, Eingang auf 120 vergrößert, 18 Stellplätze, Helicopter freigegeben
+-neues Jammergebäude für MK1
+
+v6.00 15.11.2003
+- 4 große ASC Häfen hinzugefügt.
+
+v5.00 09.09.2003
+-Für ASC SolarPowerplant, kleine Fabrik, 2x Oilplatform hinzugefügt.
+
+v4.00 17.08.2003
+-Gebäude allg: können nicht mehr über railraod, road und runway gebaut werden. Nur noch auf freiem Untergrund.
+-AirPorts: Stellplätze von 4 auf 6, alle orbitalen Einheiten können gebaut werden
+-Depots: Panzerung von 1800 auf 1000, Energiespeicher auf 200 verringert, Auftanken von Schiffen möglich
+
