@@ -8,7 +8,7 @@ MAINTAINERCLEANFILES	= Makefile.in
 INCLUDES		= -I$(top_builddir) -I$(top_src_dir) \
 			  -I$(top_builddir)/source -I$(top_src_dir)/source
 
-AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dkarteneditor  $(PARAGUI_CFLAGS) $(SIGC_CFLAGS)
+AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dkarteneditor  $(SIGC_CFLAGS)
 
 bin_PROGRAMS 		= asc_mapedit
 #asc_map2pcx
@@ -33,11 +33,12 @@ messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp
 
 asc_mapedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
+$(top_builddir)/source/libs/paragui/src/libparagui.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \
-$(PARAGUI_LIBS) $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
+$(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(top_builddir)/source/dialogs/libmapeddialogs.la  \
-@SDL_TTF_LDADD@ $(top_builddir)/source/libs/loki/libloki.la $(SDL_LIBS) 
+@SDL_TTF_LDADD@ $(top_builddir)/source/libs/loki/libloki.la $(SDL_LIBS) $(FREETYPE_LIBS)
 
 
 

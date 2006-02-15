@@ -89,14 +89,15 @@ am_asc_mapedit_OBJECTS = edevents.$(OBJEXT) edgen.$(OBJEXT) \
 asc_mapedit_OBJECTS = $(am_asc_mapedit_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
+	$(top_builddir)/source/libs/paragui/src/libparagui.la \
 	$(top_builddir)/source/libs/triangul/libtriangul.la \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1) \
 	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 	$(top_builddir)/source/graphics/libgraphics.la \
 	$(top_builddir)/source/dialogs/libdialogs.la \
 	$(top_builddir)/source/dialogs/libmapeddialogs.la \
 	$(top_builddir)/source/libs/loki/libloki.la \
-	$(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -141,8 +142,12 @@ ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
+EXPAT_INCLUDE = @EXPAT_INCLUDE@
+EXPAT_LIB = @EXPAT_LIB@
+EXPAT_SUBDIR = @EXPAT_SUBDIR@
 F77 = @F77@
 FFLAGS = @FFLAGS@
+FREETYPE_LIBS = @FREETYPE_LIBS@
 GENCL = @GENCL@
 GENCLL = @GENCLL@
 INSTALL_DATA = @INSTALL_DATA@
@@ -152,7 +157,9 @@ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LDADDLIBBZ2 = @LDADDLIBBZ2@
 LDFLAGS = @LDFLAGS@
 LIBBZ2 = @LIBBZ2@
+LIBEXPAT = @LIBEXPAT@
 LIBOBJS = @LIBOBJS@
+LIBPHYSFS = @LIBPHYSFS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
@@ -171,9 +178,11 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PARAGUI_CFLAGS = @PARAGUI_CFLAGS@
-PARAGUI_CONFIG = @PARAGUI_CONFIG@
 PARAGUI_LIBS = @PARAGUI_LIBS@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PHYSFS_INCLUDE = @PHYSFS_INCLUDE@
+PHYSFS_LIB = @PHYSFS_LIB@
+PHYSFS_SUBDIR = @PHYSFS_SUBDIR@
 PKG_CONFIG = @PKG_CONFIG@
 RANLIB = @RANLIB@
 SDL_CFLAGS = @SDL_CFLAGS@
@@ -212,6 +221,7 @@ build_os = @build_os@
 build_vendor = @build_vendor@
 datadir = @datadir@
 exec_prefix = @exec_prefix@
+freetype_config = @freetype_config@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -230,13 +240,14 @@ prefix = @prefix@
 program_transform_name = @program_transform_name@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
+subdirs = @subdirs@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
 INCLUDES = -I$(top_builddir) -I$(top_src_dir) \
 			  -I$(top_builddir)/source -I$(top_src_dir)/source
 
-AM_CXXFLAGS = $(SDL_CFLAGS) -Dkarteneditor  $(PARAGUI_CFLAGS) $(SIGC_CFLAGS)
+AM_CXXFLAGS = $(SDL_CFLAGS) -Dkarteneditor  $(SIGC_CFLAGS)
 #asc_map2pcx
 asc_mapedit_SOURCES = edevents.cpp edgen.cpp edglobal.cpp edmain.cpp \
 edselfnt.cpp edmisc.cpp typen.cpp strtmesg.cpp stack.cpp \
@@ -258,11 +269,12 @@ messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp
 
 asc_mapedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
+$(top_builddir)/source/libs/paragui/src/libparagui.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \
-$(PARAGUI_LIBS) $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
+$(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(top_builddir)/source/dialogs/libmapeddialogs.la  \
-@SDL_TTF_LDADD@ $(top_builddir)/source/libs/loki/libloki.la $(SDL_LIBS) 
+@SDL_TTF_LDADD@ $(top_builddir)/source/libs/loki/libloki.la $(SDL_LIBS) $(FREETYPE_LIBS)
 
 all: all-am
 

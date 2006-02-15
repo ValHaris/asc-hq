@@ -3,9 +3,9 @@
 if test "X$1" = X--force; then
    set -x
 
-   aclocal -I /usr/local/share/aclocal/ -I /home/martin/asc/paragui-inst/share/aclocal/
+   aclocal -I /usr/local/share/aclocal/ 
    libtoolize --force --copy --automake
-   aclocal -I /usr/local/share/aclocal/ -I /home/martin/asc/paragui-inst/share/aclocal/
+   aclocal -I /usr/local/share/aclocal/ 
    autoheader
    automake --gnu --add-missing --copy
    autoconf

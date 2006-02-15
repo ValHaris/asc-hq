@@ -463,7 +463,8 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT build build_cpu build_vendor build_os host host_cpu host_vendor host_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE EGREP LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL SGML2MAN DOCBOOK2MAN GENCLL GENCL SDL_CONFIG SDL_CFLAGS SDL_LIBS SDL_TTF_LDADD PKG_CONFIG ac_pt_PKG_CONFIG SIGC_CFLAGS SIGC_LIBS PARAGUI_CONFIG PARAGUI_CFLAGS PARAGUI_LIBS LIBBZ2 LDADDLIBBZ2 asc_version MAINCONDATA MUSICDIR LIBOBJS LTLIBOBJS'
+ac_subdirs_all="$ac_subdirs_all src/physfs"
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT build build_cpu build_vendor build_os host host_cpu host_vendor host_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE EGREP LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL SGML2MAN DOCBOOK2MAN GENCLL GENCL SDL_CONFIG SDL_CFLAGS SDL_LIBS SDL_TTF_LDADD PKG_CONFIG ac_pt_PKG_CONFIG SIGC_CFLAGS SIGC_LIBS freetype_config EXPAT_INCLUDE EXPAT_LIB EXPAT_SUBDIR LIBEXPAT subdirs PHYSFS_INCLUDE PHYSFS_LIB PHYSFS_SUBDIR LIBPHYSFS FREETYPE_LIBS LIBBZ2 LDADDLIBBZ2 asc_version MAINCONDATA MUSICDIR LIBOBJS LTLIBOBJS PARAGUI_CFLAGS PARAGUI_LIBS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1050,7 +1051,7 @@ Optional Features:
   --enable-docbook2man    will build the man pages from the sgml source files.
   --enable-genparse       enables recreation of the command line parsers
   --disable-sdltest       Do not try to compile and run a test SDL program
-  --disable-paraguitest       Do not try to compile and run a test PARAGUI program
+  --disable-ft2test       disable the freetype check
   --enable-libbz2-static      compiles a static libbz2 into the binary of asc.
   --enable-debug          enables some debugging options and output
 
@@ -1064,8 +1065,6 @@ Optional Packages:
                           include additional configurations [automatic]
   --with-sdl-prefix=PFX   Prefix where SDL is installed (optional)
   --with-sdl-exec-prefix=PFX Exec prefix where SDL is installed (optional)
-  --with-paragui-prefix=PFX   Prefix where PARAGUI is installed (optional)
-  --with-paragui-exec-prefix=PFX Exec prefix where PARAGUI is installed (optional)
 
 Some influential environment variables:
   CC          C compiler command
@@ -3707,7 +3706,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 3710 "configure"' > conftest.$ac_ext
+  echo '#line 3709 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -5298,7 +5297,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:5301:" \
+echo "$as_me:5300:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -6359,11 +6358,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6362: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6361: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6366: \$? = $ac_status" >&5
+   echo "$as_me:6365: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -6627,11 +6626,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6630: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6629: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6634: \$? = $ac_status" >&5
+   echo "$as_me:6633: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -6731,11 +6730,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6734: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6733: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:6738: \$? = $ac_status" >&5
+   echo "$as_me:6737: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -9089,7 +9088,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9092 "configure"
+#line 9091 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9189,7 +9188,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9192 "configure"
+#line 9191 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11527,11 +11526,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11530: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11529: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:11534: \$? = $ac_status" >&5
+   echo "$as_me:11533: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -11631,11 +11630,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11634: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11633: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:11638: \$? = $ac_status" >&5
+   echo "$as_me:11637: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -13219,11 +13218,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13222: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13221: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13226: \$? = $ac_status" >&5
+   echo "$as_me:13225: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13323,11 +13322,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13326: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13325: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13330: \$? = $ac_status" >&5
+   echo "$as_me:13329: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15546,11 +15545,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15549: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15548: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15553: \$? = $ac_status" >&5
+   echo "$as_me:15552: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15814,11 +15813,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15817: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15816: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15821: \$? = $ac_status" >&5
+   echo "$as_me:15820: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15918,11 +15917,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15921: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15920: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15925: \$? = $ac_status" >&5
+   echo "$as_me:15924: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -20124,9 +20123,13 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-CFLAGS="$CFLAGS -D_UNIX_ -D_SDL_"
+my_dir=`pwd`;
 
-CXXFLAGS="$CXXFLAGS -Wno-sign-compare -funsigned-char -D_UNIX_ -D_SDL_"
+CFLAGS="$CFLAGS -D_UNIX_ -D_SDL_"
+CXXFLAGS="$CXXFLAGS -Wno-sign-compare -funsigned-char -D_UNIX_ -D_SDL_ -I$my_dir/source/libs/paragui/include"
+
+
+
 
 # Check whether --enable-docbook2man or --disable-docbook2man was given.
 if test "${enable_docbook2man+set}" = set; then
@@ -21153,241 +21156,99 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
 
-# Check whether --with-paragui-prefix or --without-paragui-prefix was given.
-if test "${with_paragui_prefix+set}" = set; then
-  withval="$with_paragui_prefix"
-  paragui_prefix="$withval"
-else
-  paragui_prefix=""
+
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+
+
+
+ft2test=yes
+# Check whether --enable-ft2test or --disable-ft2test was given.
+if test "${enable_ft2test+set}" = set; then
+  enableval="$enable_ft2test"
+  ft2test=no
+
 fi;
 
-# Check whether --with-paragui-exec-prefix or --without-paragui-exec-prefix was given.
-if test "${with_paragui_exec_prefix+set}" = set; then
-  withval="$with_paragui_exec_prefix"
-  paragui_exec_prefix="$withval"
-else
-  paragui_exec_prefix=""
-fi;
-# Check whether --enable-paraguitest or --disable-paraguitest was given.
-if test "${enable_paraguitest+set}" = set; then
-  enableval="$enable_paraguitest"
+if test "$ft2test" = "yes"; then
 
-else
-  enable_paraguitest=yes
-fi;
 
-  if test x$paragui_exec_prefix != x ; then
-     paragui_args="$paragui_args --exec-prefix=$paragui_exec_prefix"
-     if test x${PARAGUI_CONFIG+set} != xset ; then
-        PARAGUI_CONFIG=$paragui_exec_prefix/bin/paragui-config
-     fi
-  fi
-  if test x$paragui_prefix != x ; then
-     paragui_args="$paragui_args --prefix=$paragui_prefix"
-     if test x${PARAGUI_CONFIG+set} != xset ; then
-        PARAGUI_CONFIG=$paragui_prefix/bin/paragui-config
-     fi
-  fi
-
-  # Extract the first word of "paragui-config", so it can be a program name with args.
-set dummy paragui-config; ac_word=$2
+    have_freetype=no
+    # Extract the first word of "freetype-config", so it can be a program name with args.
+set dummy freetype-config; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_PARAGUI_CONFIG+set}" = set; then
+if test "${ac_cv_path_freetype_config+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  case $PARAGUI_CONFIG in
+  case $freetype_config in
   [\\/]* | ?:[\\/]*)
-  ac_cv_path_PARAGUI_CONFIG="$PARAGUI_CONFIG" # Let the user override the test with a path.
+  ac_cv_path_freetype_config="$freetype_config" # Let the user override the test with a path.
   ;;
   *)
   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-as_dummy="$prefix/usr/bin:$prefix/bin:$PATH"
-for as_dir in $as_dummy
+for as_dir in $PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
   if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PARAGUI_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    ac_cv_path_freetype_config="$as_dir/$ac_word$ac_exec_ext"
     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
 done
 done
 
-  test -z "$ac_cv_path_PARAGUI_CONFIG" && ac_cv_path_PARAGUI_CONFIG="no"
+  test -z "$ac_cv_path_freetype_config" && ac_cv_path_freetype_config="no"
   ;;
 esac
 fi
-PARAGUI_CONFIG=$ac_cv_path_PARAGUI_CONFIG
+freetype_config=$ac_cv_path_freetype_config
 
-if test -n "$PARAGUI_CONFIG"; then
-  echo "$as_me:$LINENO: result: $PARAGUI_CONFIG" >&5
-echo "${ECHO_T}$PARAGUI_CONFIG" >&6
+if test -n "$freetype_config"; then
+  echo "$as_me:$LINENO: result: $freetype_config" >&5
+echo "${ECHO_T}$freetype_config" >&6
 else
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
-  min_paragui_version=1.1.7
-  echo "$as_me:$LINENO: checking for PARAGUI - version >= $min_paragui_version" >&5
-echo $ECHO_N "checking for PARAGUI - version >= $min_paragui_version... $ECHO_C" >&6
-  no_paragui=""
-  if test "$PARAGUI_CONFIG" = "no" ; then
-    no_paragui=yes
-  else
-    PARAGUI_CFLAGS=`$PARAGUI_CONFIG $paraguiconf_args --cflags`
-    PARAGUI_LIBS=`$PARAGUI_CONFIG $paraguiconf_args --libs`
-
-    paragui_major_version=`$PARAGUI_CONFIG $paragui_args --version | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
-    paragui_minor_version=`$PARAGUI_CONFIG $paragui_args --version | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
-    paragui_micro_version=`$PARAGUI_CONFIG $paragui_config_args --version | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
-    if test "x$enable_paraguitest" = "xyes" ; then
-      ac_save_CFLAGS="$CFLAGS"
-      ac_save_LIBS="$LIBS"
-      CXXFLAGS="$CFLAGS $PARAGUI_CFLAGS"
-      LIBS="$LIBS $PARAGUI_LIBS"
-      rm -f conf.paraguitest
-      ac_ext=cc
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-      if test "$cross_compiling" = yes; then
-  echo $ac_n "cross compiling; assumed OK... $ac_c"
+    if test "$ac_cv_path_freetype_config" != "no"; then
+      have_freetype=yes
+   FREETYPE_CFLAGS="`$ac_cv_path_freetype_config --cflags`"
+   FREETYPE_LIBS="`$ac_cv_path_freetype_config --libs`"
+    else
+   echo "$as_me:$LINENO: checking for FT_Init_FreeType in -lfreetype" >&5
+echo $ECHO_N "checking for FT_Init_FreeType in -lfreetype... $ECHO_C" >&6
+if test "${ac_cv_lib_freetype_FT_Init_FreeType+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  cat >conftest.$ac_ext <<_ACEOF
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lfreetype  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-#include "paragui.h"
-#include "pglog.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-char*
-my_strdup (char *str)
-{
-  char *new_str;
-
-  if (str)
-    {
-      new_str = (char *)malloc ((strlen (str) + 1) * sizeof(char));
-      strcpy (new_str, str);
-    }
-  else
-    new_str = NULL;
-
-  return new_str;
-}
-
-int main (int argc, char *argv[])
-{
-  int major, minor, micro;
-  char *tmp_version;
-
-  /* This hangs on some systems (?)
-  system ("touch conf.paraguitest");
-  */
-  { FILE *fp = fopen("conf.paraguitest", "a"); if ( fp ) fclose(fp); }
-
-  PG_LogConsole::SetLogLevel(PG_LOG_NONE);
-
-  /* HP/UX 9 (%@#!) writes to sscanf strings */
-  tmp_version = my_strdup("$min_paragui_version");
-  if (sscanf(tmp_version, "%d.%d.%d", &major, &minor, &micro) != 3) {
-     printf("%s, bad version string\n", "$min_paragui_version");
-     exit(1);
-   }
-
-   if (($paragui_major_version > major) ||
-      (($paragui_major_version == major) && ($paragui_minor_version > minor)) ||
-      (($paragui_major_version == major) && ($paragui_minor_version == minor) && ($paragui_micro_version >= micro)))
-    {
-      return 0;
-    }
-  else
-    {
-      printf("\n*** 'paragui-config --version' returned %d.%d.%d, but the minimum version\n", $paragui_major_version, $paragui_minor_version, $paragui_micro_version);
-      printf("*** of PARAGUI required is %d.%d.%d. If paragui-config is correct, then it is\n", major, minor, micro);
-      printf("*** best to upgrade to the required version.\n");
-      printf("*** If paragui-config was wrong, set the environment variable PARAGUI_CONFIG\n");
-      printf("*** to point to the correct copy of paragui-config, and remove the file\n");
-      printf("*** config.cache before re-running configure\n");
-      return 1;
-    }
-}
-
-
-_ACEOF
-rm -f conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  :
-else
-  echo "$as_me: program exited with status $ac_status" >&5
-echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-( exit $ac_status )
-no_paragui=yes
-fi
-rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
-fi
-       CFLAGS="$ac_save_CFLAGS"
-       LIBS="$ac_save_LIBS"
-     fi
-  fi
-  if test "x$no_paragui" = x ; then
-     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-     :
-  else
-     echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-     if test "$PARAGUI_CONFIG" = "no" ; then
-       echo "*** The paragui-config script installed by PARAGUI could not be found"
-       echo "*** If PARAGUI was installed in PREFIX, make sure PREFIX/bin is in"
-       echo "*** your path, or set the PARAGUI_CONFIG environment variable to the"
-       echo "*** full path to paragui-config."
-     else
-       if test -f conf.paraguitest ; then
-        :
-       else
-          echo "*** Could not run PARAGUI test program, checking why..."
-          CFLAGS="$CFLAGS $PARAGUI_CFLAGS"
-          LIBS="$LIBS $PARAGUI_LIBS"
-          cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-#include "paragui.h"
-#include <stdio.h>
-
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char FT_Init_FreeType ();
 int
 main ()
 {
- return 0;
+FT_Init_FreeType ();
   ;
   return 0;
 }
@@ -21401,7 +21262,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
@@ -21413,58 +21274,701 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-   echo "*** The test program compiled, but did not run. This usually means"
-          echo "*** that the run-time linker is not finding PARAGUI or finding the wrong"
-          echo "*** version of PARAGUI. If it is not finding PARAGUI, you'll need to set your"
-          echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
-          echo "*** to the installed location  Also, make sure you have run ldconfig if that"
-          echo "*** is required on your system"
-	  echo "***"
-          echo "*** If you have an old version installed, it is best to remove it, although"
-          echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"
+  ac_cv_lib_freetype_FT_Init_FreeType=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
- echo "*** The test program failed to compile or link. See the file config.log for the"
-          echo "*** exact error that occured. This usually means PARAGUI was incorrectly installed"
-          echo "*** or that you have moved PARAGUI since it was installed. In the latter case, you"
-          echo "*** may want to edit the paragui-config script: $PARAGUI_CONFIG"
+ac_cv_lib_freetype_FT_Init_FreeType=no
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-          CFLAGS="$ac_save_CFLAGS"
-          LIBS="$ac_save_LIBS"
-       fi
-     fi
-     PARAGUI_CFLAGS=""
-     PARAGUI_LIBS=""
-     { { echo "$as_me:$LINENO: error:
-*** PARAGUI version 1.1.7 not found! ASC requires the Paragui library.
-If you have a distribution supplied Paragui.RPM installed, perhaps the
-Paragui-devel.RPM is missing. If your distribution does not include the
-Paragui library, you can get it from http://www.paragui.org/ ASC " >&5
-echo "$as_me: error:
-*** PARAGUI version 1.1.7 not found! ASC requires the Paragui library.
-If you have a distribution supplied Paragui.RPM installed, perhaps the
-Paragui-devel.RPM is missing. If your distribution does not include the
-Paragui library, you can get it from http://www.paragui.org/ ASC " >&2;}
-   { (exit 1); exit 1; }; }
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_freetype_FT_Init_FreeType" >&5
+echo "${ECHO_T}$ac_cv_lib_freetype_FT_Init_FreeType" >&6
+if test $ac_cv_lib_freetype_FT_Init_FreeType = yes; then
+  have_freetype=yes
+fi
+
+   if test "${ac_cv_header_ft2build_h+set}" = set; then
+  echo "$as_me:$LINENO: checking for ft2build.h" >&5
+echo $ECHO_N "checking for ft2build.h... $ECHO_C" >&6
+if test "${ac_cv_header_ft2build_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_ft2build_h" >&5
+echo "${ECHO_T}$ac_cv_header_ft2build_h" >&6
+else
+  # Is the header compilable?
+echo "$as_me:$LINENO: checking ft2build.h usability" >&5
+echo $ECHO_N "checking ft2build.h usability... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <ft2build.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_header_compiler=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6
+
+# Is the header present?
+echo "$as_me:$LINENO: checking ft2build.h presence" >&5
+echo $ECHO_N "checking ft2build.h presence... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <ft2build.h>
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_c_preproc_warn_flag
+    ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+  else
+    ac_cpp_err=
   fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+rm -f conftest.err conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
+  yes:no: )
+    { echo "$as_me:$LINENO: WARNING: ft2build.h: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: ft2build.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: ft2build.h: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: ft2build.h: proceeding with the compiler's result" >&2;}
+    ac_header_preproc=yes
+    ;;
+  no:yes:* )
+    { echo "$as_me:$LINENO: WARNING: ft2build.h: present but cannot be compiled" >&5
+echo "$as_me: WARNING: ft2build.h: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: ft2build.h:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: ft2build.h:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: ft2build.h: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: ft2build.h: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: ft2build.h:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: ft2build.h:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: ft2build.h: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: ft2build.h: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: ft2build.h: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: ft2build.h: in the future, the compiler will take precedence" >&2;}
+    (
+      cat <<\_ASBOX
+## ------------------------------------------ ##
+## Report this to the AC_PACKAGE_NAME lists.  ##
+## ------------------------------------------ ##
+_ASBOX
+    ) |
+      sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+echo "$as_me:$LINENO: checking for ft2build.h" >&5
+echo $ECHO_N "checking for ft2build.h... $ECHO_C" >&6
+if test "${ac_cv_header_ft2build_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_header_ft2build_h=$ac_header_preproc
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_ft2build_h" >&5
+echo "${ECHO_T}$ac_cv_header_ft2build_h" >&6
+
+fi
+if test $ac_cv_header_ft2build_h = yes; then
+  have_ft2build=yes
+fi
 
 
-  rm -f conf.paraguitest
+   if test "$have_ft2build" != "yes"; then
+       have_freetype="no"
+   elif test "$have_freetype" = "yes"; then
+       FREETYPE_LIBS="-lfreetype"
+       ft2inc="no"
+       echo "$as_me:$LINENO: checking freetype2 include directory" >&5
+echo $ECHO_N "checking freetype2 include directory... $ECHO_C" >&6
+       if test -d /usr/local/include/freetype2; then
+      ft2inc="/usr/local/include/freetype2"
+       elif test -d /usr/include/freetype2; then
+      ft2inc="/usr/include/freetype2"
+       fi
+       echo "$as_me:$LINENO: result: $ft2inc" >&5
+echo "${ECHO_T}$ft2inc" >&6
+       FREETYPE_CFLAGS="-I$ft2inc"
+   fi
+    fi
+
+    if test x$have_freetype = xno; then
+   { { echo "$as_me:$LINENO: error: *** Unable to find the FreeType 2 library (http://www.freetype.org/)" >&5
+echo "$as_me: error: *** Unable to find the FreeType 2 library (http://www.freetype.org/)" >&2;}
+   { (exit 1); exit 1; }; }
+    fi
+
+fi
+
+    if test "${ac_cv_header_expat_h+set}" = set; then
+  echo "$as_me:$LINENO: checking for expat.h" >&5
+echo $ECHO_N "checking for expat.h... $ECHO_C" >&6
+if test "${ac_cv_header_expat_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_expat_h" >&5
+echo "${ECHO_T}$ac_cv_header_expat_h" >&6
+else
+  # Is the header compilable?
+echo "$as_me:$LINENO: checking expat.h usability" >&5
+echo $ECHO_N "checking expat.h usability... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <expat.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_header_compiler=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6
+
+# Is the header present?
+echo "$as_me:$LINENO: checking expat.h presence" >&5
+echo $ECHO_N "checking expat.h presence... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <expat.h>
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_c_preproc_warn_flag
+    ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+rm -f conftest.err conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
+  yes:no: )
+    { echo "$as_me:$LINENO: WARNING: expat.h: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: expat.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: expat.h: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: expat.h: proceeding with the compiler's result" >&2;}
+    ac_header_preproc=yes
+    ;;
+  no:yes:* )
+    { echo "$as_me:$LINENO: WARNING: expat.h: present but cannot be compiled" >&5
+echo "$as_me: WARNING: expat.h: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: expat.h:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: expat.h:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: expat.h: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: expat.h: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: expat.h:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: expat.h:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: expat.h: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: expat.h: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: expat.h: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: expat.h: in the future, the compiler will take precedence" >&2;}
+    (
+      cat <<\_ASBOX
+## ------------------------------------------ ##
+## Report this to the AC_PACKAGE_NAME lists.  ##
+## ------------------------------------------ ##
+_ASBOX
+    ) |
+      sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+echo "$as_me:$LINENO: checking for expat.h" >&5
+echo $ECHO_N "checking for expat.h... $ECHO_C" >&6
+if test "${ac_cv_header_expat_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_header_expat_h=$ac_header_preproc
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_expat_h" >&5
+echo "${ECHO_T}$ac_cv_header_expat_h" >&6
+
+fi
+if test $ac_cv_header_expat_h = yes; then
+  have_expat_include=yes
+fi
 
 
 
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
+    if test x$have_expat_include = xno; then
+          { { echo "$as_me:$LINENO: error: *** Unable to find expat header file! (http://expat.sourceforge.net)
+      Please install the library and header files if you want to link to the shared library,
+      or run './configure --enable-internalexpat' to compile an internal version of expat.
+      " >&5
+echo "$as_me: error: *** Unable to find expat header file! (http://expat.sourceforge.net)
+      Please install the library and header files if you want to link to the shared library,
+      or run './configure --enable-internalexpat' to compile an internal version of expat.
+      " >&2;}
+   { (exit 1); exit 1; }; }
+    fi
+
+    echo "$as_me:$LINENO: checking for XML_ParserCreate in -lexpat" >&5
+echo $ECHO_N "checking for XML_ParserCreate in -lexpat... $ECHO_C" >&6
+if test "${ac_cv_lib_expat_XML_ParserCreate+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lexpat  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char XML_ParserCreate ();
+int
+main ()
+{
+XML_ParserCreate ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_expat_XML_ParserCreate=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_expat_XML_ParserCreate=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_expat_XML_ParserCreate" >&5
+echo "${ECHO_T}$ac_cv_lib_expat_XML_ParserCreate" >&6
+if test $ac_cv_lib_expat_XML_ParserCreate = yes; then
+  have_expat_lib=yes
+fi
 
 
-CXXFLAGS=$SAVE_CXXFLAGS
+    if test x$have_expat_lib = xno; then
+   { { echo "$as_me:$LINENO: error: *** Unable to find expat xml library! (http://expat.sourceforge.net)
+       Please install the library and header files if you want to link to the shared library,
+       or run './configure --enable-internalexpat' to compile an internal version of expat.
+       " >&5
+echo "$as_me: error: *** Unable to find expat xml library! (http://expat.sourceforge.net)
+       Please install the library and header files if you want to link to the shared library,
+       or run './configure --enable-internalexpat' to compile an internal version of expat.
+       " >&2;}
+   { (exit 1); exit 1; }; }
+    fi
+
+
+EXPAT_INCLUDE=""
+EXPAT_LIB="-lexpat"
+EXPAT_SUBDIR=""
+LIBEXPAT="-lexpat"
+
+
+
+
+
+
+
+
+PHYSFS_INCLUDE=""
+PHYSFS_LIB="-lphysfs"
+PHYSFS_SUBDIR=""
+LIBPHYSFS="-lphysfs"
+
+    have_physfs_lib=no
+    have_physfs_include=no
+
+    if test "${ac_cv_header_physfs_h+set}" = set; then
+  echo "$as_me:$LINENO: checking for physfs.h" >&5
+echo $ECHO_N "checking for physfs.h... $ECHO_C" >&6
+if test "${ac_cv_header_physfs_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_physfs_h" >&5
+echo "${ECHO_T}$ac_cv_header_physfs_h" >&6
+else
+  # Is the header compilable?
+echo "$as_me:$LINENO: checking physfs.h usability" >&5
+echo $ECHO_N "checking physfs.h usability... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <physfs.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_header_compiler=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6
+
+# Is the header present?
+echo "$as_me:$LINENO: checking physfs.h presence" >&5
+echo $ECHO_N "checking physfs.h presence... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <physfs.h>
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_c_preproc_warn_flag
+    ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+rm -f conftest.err conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
+  yes:no: )
+    { echo "$as_me:$LINENO: WARNING: physfs.h: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: physfs.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: physfs.h: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: physfs.h: proceeding with the compiler's result" >&2;}
+    ac_header_preproc=yes
+    ;;
+  no:yes:* )
+    { echo "$as_me:$LINENO: WARNING: physfs.h: present but cannot be compiled" >&5
+echo "$as_me: WARNING: physfs.h: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: physfs.h:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: physfs.h:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: physfs.h: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: physfs.h: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: physfs.h:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: physfs.h:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: physfs.h: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: physfs.h: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: physfs.h: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: physfs.h: in the future, the compiler will take precedence" >&2;}
+    (
+      cat <<\_ASBOX
+## ------------------------------------------ ##
+## Report this to the AC_PACKAGE_NAME lists.  ##
+## ------------------------------------------ ##
+_ASBOX
+    ) |
+      sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+echo "$as_me:$LINENO: checking for physfs.h" >&5
+echo $ECHO_N "checking for physfs.h... $ECHO_C" >&6
+if test "${ac_cv_header_physfs_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_header_physfs_h=$ac_header_preproc
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_physfs_h" >&5
+echo "${ECHO_T}$ac_cv_header_physfs_h" >&6
+
+fi
+if test $ac_cv_header_physfs_h = yes; then
+  have_physfs_include=yes
+fi
+
+
+
+    if test x$have_physfs_include = xno; then
+          { { echo "$as_me:$LINENO: error: *** Unable to find PhysFS header file! (http://www.icculus.org/physfs)
+      Please install the library and header files if you want to link to the shared library,
+      or run './configure --enable-internalphysfs' to compile an internal version of physfs.
+      " >&5
+echo "$as_me: error: *** Unable to find PhysFS header file! (http://www.icculus.org/physfs)
+      Please install the library and header files if you want to link to the shared library,
+      or run './configure --enable-internalphysfs' to compile an internal version of physfs.
+      " >&2;}
+   { (exit 1); exit 1; }; }
+    fi
+
+    echo "$as_me:$LINENO: checking for PHYSFS_init in -lphysfs" >&5
+echo $ECHO_N "checking for PHYSFS_init in -lphysfs... $ECHO_C" >&6
+if test "${ac_cv_lib_physfs_PHYSFS_init+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lphysfs  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char PHYSFS_init ();
+int
+main ()
+{
+PHYSFS_init ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_physfs_PHYSFS_init=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_physfs_PHYSFS_init=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_physfs_PHYSFS_init" >&5
+echo "${ECHO_T}$ac_cv_lib_physfs_PHYSFS_init" >&6
+if test $ac_cv_lib_physfs_PHYSFS_init = yes; then
+  have_physfs_lib=yes
+fi
+
+
+    if test x$have_physfs_lib = xno; then
+   { { echo "$as_me:$LINENO: error: *** Unable to find PhysFS library! (http://www.icculus.org/physfs)
+       Please install the library and header files if you want to link to the shared library,
+       or run './configure --enable-internalphysfs' to compile an internal version of physfs.
+       " >&5
+echo "$as_me: error: *** Unable to find PhysFS library! (http://www.icculus.org/physfs)
+       Please install the library and header files if you want to link to the shared library,
+       or run './configure --enable-internalphysfs' to compile an internal version of physfs.
+       " >&2;}
+   { (exit 1); exit 1; }; }
+    fi
+
+
+
+subdirs="$subdirs src/physfs"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CXXFLAGS="$SAVE_CXXFLAGS $FREETYPE_CFLAGS"
+
+
 CFLAGS=$SAVE_CFLAGS
 LIBS=$SAVE_LIBS
 
@@ -23007,7 +23511,7 @@ fi
 
 
 
-                                                                                                                                                                                                                                                                              ac_config_files="$ac_config_files Makefile asc.spec doc/Makefile doc/manpages/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/graphics/Makefile source/dialogs/Makefile source/actions/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/libs/loki/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile source/unix/asc/Makefile data/Makefile data/dialog/Makefile data/music/Makefile"
+                                                                                                                                                                                                                                                                                                                                                              ac_config_files="$ac_config_files Makefile asc.spec doc/Makefile doc/manpages/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/graphics/Makefile source/dialogs/Makefile source/actions/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/libs/loki/Makefile source/libs/paragui/Makefile source/libs/paragui/src/Makefile source/libs/paragui/src/widgets/Makefile source/libs/paragui/src/core/Makefile source/libs/paragui/src/draw/Makefile source/libs/paragui/src/font/Makefile source/libs/paragui/src/themes/Makefile source/libs/paragui/src/ystring/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile source/unix/asc/Makefile data/Makefile data/dialog/Makefile data/music/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -23602,6 +24106,14 @@ do
   "source/libs/sdlmm/src/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/libs/sdlmm/src/Makefile" ;;
   "source/libs/triangul/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/libs/triangul/Makefile" ;;
   "source/libs/loki/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/libs/loki/Makefile" ;;
+  "source/libs/paragui/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/libs/paragui/Makefile" ;;
+  "source/libs/paragui/src/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/libs/paragui/src/Makefile" ;;
+  "source/libs/paragui/src/widgets/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/libs/paragui/src/widgets/Makefile" ;;
+  "source/libs/paragui/src/core/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/libs/paragui/src/core/Makefile" ;;
+  "source/libs/paragui/src/draw/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/libs/paragui/src/draw/Makefile" ;;
+  "source/libs/paragui/src/font/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/libs/paragui/src/font/Makefile" ;;
+  "source/libs/paragui/src/themes/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/libs/paragui/src/themes/Makefile" ;;
+  "source/libs/paragui/src/ystring/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/libs/paragui/src/ystring/Makefile" ;;
   "source/sdl/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/sdl/Makefile" ;;
   "source/tools/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/tools/Makefile" ;;
   "source/tools/lib/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/tools/lib/Makefile" ;;
@@ -23779,9 +24291,17 @@ s,@PKG_CONFIG@,$PKG_CONFIG,;t t
 s,@ac_pt_PKG_CONFIG@,$ac_pt_PKG_CONFIG,;t t
 s,@SIGC_CFLAGS@,$SIGC_CFLAGS,;t t
 s,@SIGC_LIBS@,$SIGC_LIBS,;t t
-s,@PARAGUI_CONFIG@,$PARAGUI_CONFIG,;t t
-s,@PARAGUI_CFLAGS@,$PARAGUI_CFLAGS,;t t
-s,@PARAGUI_LIBS@,$PARAGUI_LIBS,;t t
+s,@freetype_config@,$freetype_config,;t t
+s,@EXPAT_INCLUDE@,$EXPAT_INCLUDE,;t t
+s,@EXPAT_LIB@,$EXPAT_LIB,;t t
+s,@EXPAT_SUBDIR@,$EXPAT_SUBDIR,;t t
+s,@LIBEXPAT@,$LIBEXPAT,;t t
+s,@subdirs@,$subdirs,;t t
+s,@PHYSFS_INCLUDE@,$PHYSFS_INCLUDE,;t t
+s,@PHYSFS_LIB@,$PHYSFS_LIB,;t t
+s,@PHYSFS_SUBDIR@,$PHYSFS_SUBDIR,;t t
+s,@LIBPHYSFS@,$LIBPHYSFS,;t t
+s,@FREETYPE_LIBS@,$FREETYPE_LIBS,;t t
 s,@LIBBZ2@,$LIBBZ2,;t t
 s,@LDADDLIBBZ2@,$LDADDLIBBZ2,;t t
 s,@asc_version@,$asc_version,;t t
@@ -24505,6 +25025,183 @@ if test "$no_create" != yes; then
   $ac_cs_success || { (exit 1); exit 1; }
 fi
 
+#
+# CONFIG_SUBDIRS section.
+#
+if test "$no_recursion" != yes; then
+
+  # Remove --cache-file and --srcdir arguments so they do not pile up.
+  ac_sub_configure_args=
+  ac_prev=
+  for ac_arg in $ac_configure_args; do
+    if test -n "$ac_prev"; then
+      ac_prev=
+      continue
+    fi
+    case $ac_arg in
+    -cache-file | --cache-file | --cache-fil | --cache-fi \
+    | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
+      ac_prev=cache_file ;;
+    -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
+    | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* \
+    | --c=*)
+      ;;
+    --config-cache | -C)
+      ;;
+    -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
+      ac_prev=srcdir ;;
+    -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
+      ;;
+    -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
+      ac_prev=prefix ;;
+    -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* | --p=*)
+      ;;
+    *) ac_sub_configure_args="$ac_sub_configure_args $ac_arg" ;;
+    esac
+  done
+
+  # Always prepend --prefix to ensure using the same prefix
+  # in subdir configurations.
+  ac_sub_configure_args="--prefix=$prefix $ac_sub_configure_args"
+
+  ac_popdir=`pwd`
+  for ac_dir in : $subdirs; do test "x$ac_dir" = x: && continue
+
+    # Do not complain, so a configure script can configure whichever
+    # parts of a large source tree are present.
+    test -d $srcdir/$ac_dir || continue
+
+    { echo "$as_me:$LINENO: configuring in $ac_dir" >&5
+echo "$as_me: configuring in $ac_dir" >&6;}
+    { if $as_mkdir_p; then
+    mkdir -p "$ac_dir"
+  else
+    as_dir="$ac_dir"
+    as_dirs=
+    while test ! -d "$as_dir"; do
+      as_dirs="$as_dir $as_dirs"
+      as_dir=`(dirname "$as_dir") 2>/dev/null ||
+$as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+	 X"$as_dir" : 'X\(//\)[^/]' \| \
+	 X"$as_dir" : 'X\(//\)$' \| \
+	 X"$as_dir" : 'X\(/\)' \| \
+	 .     : '\(.\)' 2>/dev/null ||
+echo X"$as_dir" |
+    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+  	  /^X\(\/\/\)$/{ s//\1/; q; }
+  	  /^X\(\/\).*/{ s//\1/; q; }
+  	  s/.*/./; q'`
+    done
+    test ! -n "$as_dirs" || mkdir $as_dirs
+  fi || { { echo "$as_me:$LINENO: error: cannot create directory \"$ac_dir\"" >&5
+echo "$as_me: error: cannot create directory \"$ac_dir\"" >&2;}
+   { (exit 1); exit 1; }; }; }
+
+    ac_builddir=.
+
+if test "$ac_dir" != .; then
+  ac_dir_suffix=/`echo "$ac_dir" | sed 's,^\.[\\/],,'`
+  # A "../" for each directory in $ac_dir_suffix.
+  ac_top_builddir=`echo "$ac_dir_suffix" | sed 's,/[^\\/]*,../,g'`
+else
+  ac_dir_suffix= ac_top_builddir=
+fi
+
+case $srcdir in
+  .)  # No --srcdir option.  We are building in place.
+    ac_srcdir=.
+    if test -z "$ac_top_builddir"; then
+       ac_top_srcdir=.
+    else
+       ac_top_srcdir=`echo $ac_top_builddir | sed 's,/$,,'`
+    fi ;;
+  [\\/]* | ?:[\\/]* )  # Absolute path.
+    ac_srcdir=$srcdir$ac_dir_suffix;
+    ac_top_srcdir=$srcdir ;;
+  *) # Relative path.
+    ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
+    ac_top_srcdir=$ac_top_builddir$srcdir ;;
+esac
+
+# Do not use `cd foo && pwd` to compute absolute paths, because
+# the directories may not exist.
+case `pwd` in
+.) ac_abs_builddir="$ac_dir";;
+*)
+  case "$ac_dir" in
+  .) ac_abs_builddir=`pwd`;;
+  [\\/]* | ?:[\\/]* ) ac_abs_builddir="$ac_dir";;
+  *) ac_abs_builddir=`pwd`/"$ac_dir";;
+  esac;;
+esac
+case $ac_abs_builddir in
+.) ac_abs_top_builddir=${ac_top_builddir}.;;
+*)
+  case ${ac_top_builddir}. in
+  .) ac_abs_top_builddir=$ac_abs_builddir;;
+  [\\/]* | ?:[\\/]* ) ac_abs_top_builddir=${ac_top_builddir}.;;
+  *) ac_abs_top_builddir=$ac_abs_builddir/${ac_top_builddir}.;;
+  esac;;
+esac
+case $ac_abs_builddir in
+.) ac_abs_srcdir=$ac_srcdir;;
+*)
+  case $ac_srcdir in
+  .) ac_abs_srcdir=$ac_abs_builddir;;
+  [\\/]* | ?:[\\/]* ) ac_abs_srcdir=$ac_srcdir;;
+  *) ac_abs_srcdir=$ac_abs_builddir/$ac_srcdir;;
+  esac;;
+esac
+case $ac_abs_builddir in
+.) ac_abs_top_srcdir=$ac_top_srcdir;;
+*)
+  case $ac_top_srcdir in
+  .) ac_abs_top_srcdir=$ac_abs_builddir;;
+  [\\/]* | ?:[\\/]* ) ac_abs_top_srcdir=$ac_top_srcdir;;
+  *) ac_abs_top_srcdir=$ac_abs_builddir/$ac_top_srcdir;;
+  esac;;
+esac
+
+
+    cd $ac_dir
+
+    # Check for guested configure; otherwise get Cygnus style configure.
+    if test -f $ac_srcdir/configure.gnu; then
+      ac_sub_configure="$SHELL '$ac_srcdir/configure.gnu'"
+    elif test -f $ac_srcdir/configure; then
+      ac_sub_configure="$SHELL '$ac_srcdir/configure'"
+    elif test -f $ac_srcdir/configure.in; then
+      ac_sub_configure=$ac_configure
+    else
+      { echo "$as_me:$LINENO: WARNING: no configuration information is in $ac_dir" >&5
+echo "$as_me: WARNING: no configuration information is in $ac_dir" >&2;}
+      ac_sub_configure=
+    fi
+
+    # The recursion is here.
+    if test -n "$ac_sub_configure"; then
+      # Make the cache file name correct relative to the subdirectory.
+      case $cache_file in
+      [\\/]* | ?:[\\/]* ) ac_sub_cache_file=$cache_file ;;
+      *) # Relative path.
+	ac_sub_cache_file=$ac_top_builddir$cache_file ;;
+      esac
+
+      { echo "$as_me:$LINENO: running $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir" >&5
+echo "$as_me: running $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir" >&6;}
+      # The eval makes quoting arguments work.
+      eval $ac_sub_configure $ac_sub_configure_args \
+	   --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir ||
+	{ { echo "$as_me:$LINENO: error: $ac_sub_configure failed for $ac_dir" >&5
+echo "$as_me: error: $ac_sub_configure failed for $ac_dir" >&2;}
+   { (exit 1); exit 1; }; }
+    fi
+
+    cd "$ac_popdir"
+  done
+fi
+
 
 # Check whether --enable-debug or --disable-debug was given.
 if test "${enable_debug+set}" = set; then
@@ -24524,6 +25221,14 @@ if test "X$ENABLEDEBUG" = "X1"; then
    echo SIGC_CFLAGS $SIGC_CFLAGS
    echo SIGC_LIBS $SIGC_LIBS
 fi
+
+
+
+
+
+
+
+
 
 if test "x$missingmusic" != x ; then
   { echo "$as_me:$LINENO: WARNING:

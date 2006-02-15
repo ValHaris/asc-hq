@@ -1,7 +1,7 @@
 
 MAINTAINERCLEANFILES    = Makefile.in
 
-AM_CXXFLAGS             = $(SDL_CFLAGS) $(PARAGUI_CFLAGS)  $(SIGC_CFLAGS) -Dmaindialogs
+AM_CXXFLAGS             = $(SDL_CFLAGS) $(SIGC_CFLAGS) -Dmaindialogs
 
 noinst_LTLIBRARIES      = libdialogs.la libgamedialogs.la libmapeddialogs.la
 
