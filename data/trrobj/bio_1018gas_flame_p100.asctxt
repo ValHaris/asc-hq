@@ -1,0 +1,20 @@
+ObjectType { 
+   ID = 1018
+   parent = 100
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+   Name = gasflame hole
+   dry { 
+      UseGFXpics = true
+      GFXpictures = 1296 
+      FlipPictures = 0 
+   } dry
+   light_rain { 
+      UseGFXpics = true
+      GFXpictures = 1551 
+      FlipPictures = 0 
+   } light_rain
+   heavy_rain ->* ObjectType.light_rain
+   few_snow ->* ObjectType.light_rain
+   much_snow ->* ObjectType.light_rain
+   snow_and_ice ->* ObjectType.light_rain
+} ObjectType

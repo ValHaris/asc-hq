@@ -1,0 +1,17 @@
+TerrainType { 
+   Name = hillside way
+   ID = 1013
+   parent = 1212
+   dry { 
+      GFX_Picture = 221
+   } dry
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
+   few_snow { 
+      GFX_Picture = 686
+   } few_snow
+   much_snow { 
+      GFX_Picture = 792
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

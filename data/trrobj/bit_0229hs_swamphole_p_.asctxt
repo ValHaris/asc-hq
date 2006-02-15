@@ -1,0 +1,41 @@
+TerrainType { 
+   Name = Mudhole
+   ID = 229
+   Weather = dry few_snow much_snow snow_and_ice
+   dry { 
+      UseGFXpics = true
+      GFX_Picture = 225
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 30 
+      TerrainProperties = hard_sand swamp large_rocks
+   } dry
+   few_snow { 
+      UseGFXpics = true
+      GFX_Picture = 690
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 2
+      MoveMalus = 30 
+      TerrainProperties = hard_sand swamp large_rocks 
+   } few_snow
+   much_snow { 
+      UseGFXpics = true
+      GFX_Picture = 797
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 4
+      MoveMalus = 30 
+      TerrainProperties = hard_sand large_rocks snow
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = true
+      GFX_Picture = 797
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 4
+      MoveMalus = 30
+      TerrainProperties = hard_sand large_rocks snow
+   } snow_and_ice
+} TerrainType

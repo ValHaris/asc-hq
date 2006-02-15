@@ -1,0 +1,60 @@
+TerrainType { 
+   Name = coast vsw parent
+   ID = 1209
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+   abstract = true
+   dry { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+  ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 15  22  22  22  22  22  22  12  10  22  12  11  22  22  12  12  22  10
+      TerrainProperties = Very_shallow_water 
+   } dry
+   light_rain { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 1
+ ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 15  22  22  22  22  22  22  15  10  22  12  11  22  22  12  12  22  10
+      TerrainProperties = Very_shallow_water 
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 3
+  ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 25  25  25  25  25  25  25  25  11  25  14  11  25  25  14  14  25  25
+      TerrainProperties = Very_shallow_water 
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 2
+  ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 25  25  25  25  25  25  25  25  11  25  14  11  25  25  14  14  25  25
+      TerrainProperties = Very_shallow_water 
+   } few_snow
+   much_snow { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 4
+  ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 30  30  30  30  30  30  30  30  11  30  20  12  30  30  19  18  30  30
+      TerrainProperties = Very_shallow_water Pack_ice snow
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 4
+  ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 13  13  13  13  14  14  14  12  12 14  22  16  14  14  22  22  14  12
+      TerrainProperties = Very_shallow_water frozen_water track_possible snow
+   } snow_and_ice
+} TerrainType

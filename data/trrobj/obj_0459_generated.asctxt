@@ -1,0 +1,43 @@
+ObjectType { 
+   ID = 1022
+   Weather = dry 
+   visible_in_fogOfWar = true
+   LinkableObjects = 
+   Armor = 0
+   Movemalus_plus = 
+   Movemalus_abs = 10 255 255 255 255 255 255 18 255 
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 5
+   Jamming_abs = -1
+   Jammming_plus = 0
+   Height = 2
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+   Name = waterhole in mud
+   NoSelfChaining = true
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand Track_possible Mud Snow Deep_snow Lava 
+      terrain_all = 
+      terrain_not = Shallow_water Swamp Forest High_mountains Road Railroad Runway Pipeline Buried_pipeline Water Deep_water Mountains Very_shallow_water Ditch Hillside Turret_foundation Morass Installation Pack_ice River 
+      terrain_kill = 
+   } TerrainAccess
+   TerrainProperties_Filter = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Building_entry_dont_use_it Harbour Runway Pipeline Buried_pipeline Water Deep_water Hard_sand Soft_sand Track_possible Small_rocks Snow Deep_snow Mountains Very_shallow_water Large_rocks Lava Ditch Hillside Turret_foundation Morass Installation Pack_ice River Frozen_water 
+   TerrainProperties_Add = 
+   dry { 
+      UseGFXpics = true
+      GFXpictures = 1190 
+      FlipPictures = 0 
+   } dry
+} ObjectType

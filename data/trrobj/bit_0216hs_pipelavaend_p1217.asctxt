@@ -1,0 +1,17 @@
+TerrainType { 
+   Name = pipe lavaend
+   ID = 216
+   parent = 1217
+   dry { 
+      GFX_Picture = 195
+   } dry
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
+   few_snow { 
+      GFX_Picture = 660
+   } few_snow
+   much_snow { 
+      GFX_Picture = 766
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

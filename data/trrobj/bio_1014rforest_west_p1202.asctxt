@@ -1,0 +1,5 @@
+ObjectType { 
+   ID = 1014
+   parent = 81
+   LinkableObjects = 1001-1015
+} ObjectType

@@ -1,0 +1,15 @@
+TerrainType { 
+   Name = cityground
+   ID = 1024
+   Weather = dry 
+   dry { 
+      UseGFXpics = true
+      GFX_Picture = 490
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 11  12  60  80  12  60  80  11  11  80  80  80  80  80  80  80  80  40
+      TerrainProperties = road 
+   } dry
+} TerrainType

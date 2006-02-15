@@ -1,0 +1,23 @@
+TerrainType { 
+   Name = BI3 coast
+   ID = 145
+   parent = 1209
+   dry { 
+      GFX_Picture = 106
+   } dry
+   light_rain { 
+      GFX_Picture = 1084
+    } light_rain
+   heavy_rain { 
+      GFX_Picture = 1092
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 1036
+   } few_snow
+   much_snow { 
+      GFX_Picture = 1060
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 0966
+   } snow_and_ice
+} TerrainType

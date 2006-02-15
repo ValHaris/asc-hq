@@ -1,0 +1,23 @@
+TerrainType { 
+   Name = lowland uebergang
+   ID = 9
+   Parent = 1201
+   dry { 
+      GFX_Picture = 15
+   } dry
+   light_rain { 
+      GFX_Picture = 1910
+   } light_rain
+   heavy_rain { 
+      GFX_Picture = 1909
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 1908
+   } few_snow
+   much_snow { 
+      GFX_Picture = 1005
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 1005
+   } snow_and_ice
+} TerrainType

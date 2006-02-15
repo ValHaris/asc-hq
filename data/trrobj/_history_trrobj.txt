@@ -1,0 +1,61 @@
+Gfx terrain System
+Advanced Strategic Command
+Specifications by GAMER
+Grafics by GAMER & Snuggels
+
+_________________
+24.09.2005 v14.00
+-Stacheldraht weniger Armor
+- Unterteilung in 4 Typen Wald
+- Unterteilung in 2 Typen Rapsfelder
+- fließende Lava eingefügt
+- Lava und River an Wasserfelder angepasst
+- defensiv Turret neue Optik
+
+________________
+04.07.2005 v13.00
+-Übernahme aller baubaren Objekte in die trrobj.con
+-Anpassung auf neues Movementsystem bei Turrets
+-Pfad als Straße definiert
+
+_________________
+23.04.2005 v12.00
+-korrektur Movement für Flugzeuge am Boden und Turrets
+
+_________________
+22.04.2005 v11.00
+-Bugfix GroupID Buried Pipe
+-nachwachsende Wälder und Felder eingebaut
+-separate ASC2 Version mit Trennung vom BI System
+
+_________________
+02.01.2005 v10.01
+Neues Objekt: coast
+
+_________________
+01.10.2004 v10.00
+Basjamming Veringerung bei Wald und Bergen.
+Brücke bereits auf "mud" baubar
+
+________________
+20.08.2004 v9.04
+-Tankblocker verbraucht mehr MM beim Bau
+-Schienen verbrauchen mehr MM beim Bau
+-Bugfix Track, Terrain
+
+________________
+05.08.2004 v9.03
+buried_pipeline etwas teurer + GroupID15
+strong_pipeline, GroupID15
+
+________________
+13.06.2004 v9.02
+Bugfix Runway
+
+________________
+05.06.2004 v9.01
+Codeanpassungen verschiedener Objekte.
+
+__________
+20.03.2004
+Betonsockel teurer und kann nicht mehr auf Road + Runway gebaut werden, dafür aber auf Hillside

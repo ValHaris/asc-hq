@@ -1,0 +1,52 @@
+TerrainType { 
+   Name = hard_sand 11 Parent
+   ID = 1201
+   abstract = true
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+   dry { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 11  11  11  11  11  11  11  10  10  20  11  16  20  20  11  11  20  10
+      TerrainProperties = hard_sand track_possible
+   } dry
+   light_rain { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 1
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 13  12  12  12  13  13  13  12  10  20  13  16  20  20  13  13  20  10
+      TerrainProperties = hard_sand mud track_possible
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 3
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 16  14  14  14  16  16  16  14  10  20  16  16  20  20  16  16  20  10
+      TerrainProperties = hard_sand morass track_possible
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 2
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 12  11  11  11  12  12  12  11  10  20  12  16  20  20  12  12  20  10
+      TerrainProperties = hard_sand Track_possible snow
+   } few_snow
+   much_snow { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 4
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 17  15  15  15  17  17  17  15  12  20  17  16  20  20  17  17  20  12
+      TerrainProperties = hard_sand track_possible Deep_snow 
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

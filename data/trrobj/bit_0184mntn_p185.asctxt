@@ -1,0 +1,8 @@
+TerrainType { 
+   Name = BI3 import
+   ID = 184
+   parent = 185 1214
+   dry { 
+      GFX_Picture = 288
+   } dry
+} TerrainType

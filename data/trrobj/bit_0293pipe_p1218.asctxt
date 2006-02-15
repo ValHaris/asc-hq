@@ -1,0 +1,23 @@
+TerrainType { 
+   Name = hs pipeline
+   ID = 293
+   parent = 1218
+   dry { 
+      GFX_Picture = 158
+   } dry
+   light_rain { 
+      GFX_Picture = 158
+   } light_rain
+   heavy_rain { 
+      GFX_Picture = 158
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 623
+   } few_snow
+   much_snow { 
+      GFX_Picture = 729
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 729
+   } snow_And_ice
+} TerrainType

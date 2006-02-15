@@ -1,0 +1,17 @@
+TerrainType { 
+   Name = coast dark northlittle
+   ID = 153
+   parent = 1210
+   dry { 
+      GFX_Picture = 377
+   } dry
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
+   few_snow ->* TerrainType.dry 
+   much_snow { 
+      GFX_Picture = 877
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 962
+   } snow_and_ice
+} TerrainType

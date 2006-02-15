@@ -1,0 +1,15 @@
+TerrainType { 
+   Name = gas building
+   ID = 1014
+   Weather = dry 
+   dry { 
+      UseGFXpics = true
+      GFX_Picture = 1135
+      DefenseBonus = 2
+      AttackBonus = 1
+      BasicJamming = 5
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      Movemalus = 30  30  30  30  30  30  30  25  25  30  30  30  30  30  30  30  30  30 
+      TerrainProperties = Installation 
+   } dry
+} TerrainType

@@ -1,0 +1,6 @@
+ObjectType { 
+   Name = forest (nGr nDe nRe)
+   ID = 81
+   parent = 990
+   GroupID = 0
+} ObjectType

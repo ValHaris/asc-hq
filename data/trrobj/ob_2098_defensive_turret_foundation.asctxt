@@ -1,0 +1,57 @@
+ObjectType { 
+
+   ID = 2098
+   GroupID = 7
+
+   Weather = dry 
+
+   Name = defensive turret foundation
+   Armor = 500
+   Height = 118
+
+   visible_in_fogOfWar = false
+   LinkableObjects = 
+
+
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = 0
+   Movemalus_abs =  20  20  20  20  20  20  20  20  30  20  30  20  20  20  30  30  15  30
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 3
+   Jamming_abs = -1
+   Jammming_plus = 5
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 1000
+      fuel = 300
+      Movement = 30
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -250
+      fuel = 100
+      Movement = 12
+   } RemovalCost
+
+   TerrainAccess { 
+      terrain_any = lowland hard_sand soft_sand hillside 
+      terrain_all = 
+      terrain_not = forest road railroad runway ditch bridge
+      terrain_kill = water deep_water pack_ice river lava
+   } TerrainAccess
+   TerrainProperties_Filter = [Shallow_water very_shallow_water pack_ice river frozen_water
+                               Lowland Hard_sand Soft_sand
+                               Swamp mud morass
+                               forest installation
+                               track_possible harbour
+                               small_rocks large_rocks hillside mountains High_mountains
+                               road railroad runway ditch]
+   TerrainProperties_Add = turret_foundation 
+   dry { 
+      UseGFXpics = false
+      picture = ob_2098_turret.pcx 1
+   } dry
+} ObjectType

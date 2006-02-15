@@ -1,0 +1,40 @@
+ObjectType { 
+   ID = 101
+   abstract = true
+   canExistBeneathBuildings = true
+   Weather = dry
+   visible_in_fogOfWar = true
+   LinkableObjects = 
+   Armor = 0
+   Movemalus_plus = 7  5   5   5   7   7   7   5   0   7   7   0   7   7   7   7   7   10  
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   Movemalus_abs = 
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 
+   Height = 95
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+   NoSelfChaining = true
+   TerrainAccess { 
+      terrain_any = Shallow_water Lowland High_mountains Water Deep_water Hard_sand Soft_sand Small_rocks Mountains Very_shallow_water Large_rocks Ditch Hillside Turret_foundation Frozen_water 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = lava
+   } TerrainAccess
+   TerrainProperties_Filter =  
+   TerrainProperties_Add = small_rocks 
+} ObjectType

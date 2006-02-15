@@ -1,0 +1,23 @@
+TerrainType { 
+   Name = lowland rubber
+   ID = 319
+   Parent = 1206
+   dry { 
+      GFX_Picture = 311
+   } dry
+   light_rain { 
+      GFX_Picture = 839
+   } light_rain
+   heavy_rain { 
+      GFX_Picture = 846
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 612
+   } few_snow
+   much_snow { 
+      GFX_Picture = 700
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 700
+   } snow_and_ice
+} TerrainType

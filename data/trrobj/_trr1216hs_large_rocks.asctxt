@@ -1,0 +1,60 @@
+TerrainType { 
+   Name = HardSand large Rocks Parent
+   ID = 1216
+   abstract = true
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+   dry { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 20  20  20  20  20  20  20  15  10  20  20  18  20  20  20  20  20  30
+      TerrainProperties = hard_sand large_rocks track_possible
+   } dry
+   light_rain { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 1
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 20  20  20  20  20  20  20  15  10  20  20  18  20  20  20  20  20  30
+      TerrainProperties = hard_sand mud large_rocks track_possible
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 3
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 20  20  20  20  20  20  20  15  10  20  20  20  20  20  20  20  20  30
+      TerrainProperties = hard_sand mud large_rocks track_possible
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 2
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 20  20  20  20  20  20  20  15  10  20  20  18  20  20  20  20  20  30
+      TerrainProperties = hard_sand snow  large_rocks track_possible
+   } few_snow
+   much_snow { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 4
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 22  22  22  22  22  22  22  17  12  22  22  22  22  22  22  22  22  30
+      TerrainProperties = hard_sand Deep_snow large_rocks track_possible
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 4
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 22  22  22  22  22  22  22  17  12  22  22  22  22  22  22  22  22  30
+      TerrainProperties = hard_sand Deep_snow large_rocks track_possible
+   } snow_and_ice
+} TerrainType

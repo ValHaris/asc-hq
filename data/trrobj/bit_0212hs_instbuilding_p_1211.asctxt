@@ -1,0 +1,17 @@
+TerrainType { 
+   Name = BI3 import
+   ID = 212
+   parent = 1211
+   dry { 
+      GFX_Picture = 191
+   } dry
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
+   few_snow { 
+      GFX_Picture = 656
+   } few_snow
+   much_snow { 
+      GFX_Picture = 762
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

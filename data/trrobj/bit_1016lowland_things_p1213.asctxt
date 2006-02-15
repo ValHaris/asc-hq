@@ -1,0 +1,15 @@
+TerrainType { 
+   Name = Symetric Thing
+   ID = 1016
+   parent = 1212
+   dry { 
+      GFX_Picture = 396
+   } dry
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
+   few_snow ->* TerrainType.dry
+   much_snow { 
+      GFX_Picture = 896
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

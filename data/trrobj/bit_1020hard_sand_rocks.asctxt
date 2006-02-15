@@ -1,0 +1,15 @@
+TerrainType { 
+   Name = mud
+   ID = 1020
+   Weather = dry 
+   dry { 
+      UseGFXpics = true
+      GFX_Picture = 290
+      DefenseBonus = 6
+      AttackBonus = 0
+      BasicJamming = 3
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 20  20  20  20  20  20  20  15  11  20  20  20  20  20  20  20  20  30 
+      TerrainProperties = hard_sand Track_possible Small_rocks 
+   } dry
+} TerrainType

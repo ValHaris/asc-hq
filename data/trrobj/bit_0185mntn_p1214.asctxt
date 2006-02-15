@@ -1,0 +1,23 @@
+TerrainType { 
+   Name = green mountain
+   ID = 185
+   parent = 1214
+   dry { 
+      GFX_Picture = 291
+   } dry
+   light_rain { 
+      GFX_Picture = 291
+   } light_rain
+   heavy_rain { 
+      GFX_Picture = 291
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 1848
+   } few_snow
+   much_snow { 
+      GFX_Picture = 1847
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 1847
+   } snow_and_ice
+} TerrainType

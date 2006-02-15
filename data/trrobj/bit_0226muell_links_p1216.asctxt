@@ -1,0 +1,35 @@
+TerrainType { 
+   Name = muellberg links
+   ID = 226
+   parent = 1216
+   dry { 
+      UseGFXpics = true
+      GFX_Picture = 207
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 11 
+      TerrainProperties = 
+   } dry
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
+   few_snow { 
+      UseGFXpics = true
+      GFX_Picture = 672
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 11 
+      TerrainProperties = Track_possible Deep_snow 
+   } few_snow
+   much_snow { 
+      UseGFXpics = true
+      GFX_Picture = 778
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 11 
+      TerrainProperties = Track_possible Deep_snow 
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

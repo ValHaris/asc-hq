@@ -1,0 +1,45 @@
+TerrainType { 
+   Name = building with rail
+   ID = 1026
+   Weather = dry few_snow much_snow snow_and_ice
+   dry { 
+      UseGFXpics = true
+      GFX_Picture = 168
+      DefenseBonus = 1
+      AttackBonus = 1
+      BasicJamming = 6
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 25  25  25  25  25  25  25  20  10  25  25  19  25  25  25  25  25  35 
+      TerrainProperties = installation railroad 
+   } dry
+   few_snow { 
+      UseGFXpics = true
+      GFX_Picture = 633
+      DefenseBonus = 1
+      AttackBonus = 1
+      BasicJamming = 6
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 27  27  27  27  27  27  27  22  11  27  27  19  27  27  27  27  27  35 
+      TerrainProperties = installation railroad snow 
+   } few_snow
+   much_snow { 
+      UseGFXpics = true
+      GFX_Picture = 633
+      DefenseBonus = 1
+      AttackBonus = 1
+      BasicJamming = 6
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 27  27  27  27  27  27  27  22  11  27  27  19  27  27  27  27  27  35 
+      TerrainProperties = installation railroad deep_snow 
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = true
+      GFX_Picture = 633
+      DefenseBonus = 1
+      AttackBonus = 1
+      BasicJamming = 6
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 27  27  27  27  27  27  27  22  11  27  27  19  27  27  27  27  27  35 
+      TerrainProperties = installation railroad deep_snow 
+   } snow_and_ice
+} TerrainType

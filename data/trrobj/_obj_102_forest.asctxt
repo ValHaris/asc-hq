@@ -1,0 +1,40 @@
+ObjectType { 
+   ID = 102
+   groupID = 10
+   abstract = true
+   Weather = dry much_snow snow_and_ice
+   visible_in_fogOfWar = true
+   LinkableObjects = 
+   Armor = 0
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = 13  13  13  13  15  15  15  8   0   30  15  0  30  30  15  15  30  20
+   Movemalus_abs = -1 
+   AttackBonus_abs = -1
+   AttackBonus_plus = 1
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 5
+   Jamming_abs = -1
+   Jammming_plus = 5
+   Height = 115
+   ConstructionCost { 
+      Energy = 0
+      Material = 50
+      fuel = 50
+      Movement = 15
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -250
+      fuel = 20
+      Movement = 15
+   } RemovalCost
+   NoSelfChaining = true
+   TerrainAccess { 
+      terrain_any = Lowland Soft_sand hard_sand Hillside mountains very_shallow_water shallow_water 
+      terrain_all = 
+      terrain_not = Road railroad runway ditch pipeline installation turret_foundation
+      terrain_kill = water deep_water river lava
+   } TerrainAccess
+   TerrainProperties_Filter = railroad road runway
+   TerrainProperties_Add = Forest 
+} ObjectType

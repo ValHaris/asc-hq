@@ -1,0 +1,17 @@
+TerrainType { 
+   Name = Muell sued
+   ID = 225
+   parent = 1216
+   dry { 
+      GFX_Picture = 206
+   } dry
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
+   few_snow { 
+      GFX_Picture = 671
+   } few_snow
+   much_snow { 
+      GFX_Picture = 777
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

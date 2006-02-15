@@ -1,0 +1,23 @@
+TerrainType { 
+   Name = morass and bushes
+   ID = 282
+   parent = 281 1204
+   dry { 
+      GFX_Picture = 134
+   } dry
+   light_rain { 
+      GFX_Picture = 134
+   } light_rain
+   heavy_rain { 
+      GFX_Picture = 819
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 594
+   } few_snow
+   much_snow { 
+      GFX_Picture = 705
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 705
+   } snow_and_ice
+} TerrainType

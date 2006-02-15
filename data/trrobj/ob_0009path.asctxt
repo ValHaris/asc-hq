@@ -1,0 +1,57 @@
+ObjectType { 
+   name = path
+   canExistBeneathBuildings = true
+   ID = 9
+   groupID = 1
+   Weather = dry
+   visible_in_fogOfWar = false
+   LinkableObjects = 
+   Armor = 0
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = -2  -1  -1  -1  -1  -1  -1  -1  3   10  0   -4  10  10  0   0   -1  -1
+;   Movemalus_abs = 11  10  10  10  11  11  11  10  10  20  20  18  20  20  20  20  20  10
+   Movemalus_abs = -1
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 0
+   Height = 93
+   ConstructionCost { 
+      Energy = 0
+      Material = 10
+      fuel = 15
+      Movement = 5
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 10
+      Movement = 5
+   } RemovalCost
+   NetBehaviour = NetToSelf AutoBorder NetToBuildingEntry
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand  
+      terrain_all = 
+      terrain_not = Forest Ditch Turret_foundation Installation swamp small_rocks large_rocks
+      terrain_kill = very_shallow_water shallow_water water deep_water lava swamp
+   } TerrainAccess
+   TerrainProperties_Filter = morass mud small_rocks large_rocks mountains high_mountains installation snow deep_snow
+   TerrainProperties_Add = hard_sand road
+   dry { 
+      UseGFXpics = true
+      GFXpictures = 1500 1501 1502 1503 1502 1504 1523 1505 1501 1506 1504 1507 1503 1507 1505 1508 1502 1504 1509 1510 1511 1512 1513 1514 1503 1507 1510 1515 1516 1517 1518 1519 1502 1503 1511 1516 1509 1510 1513 1518 1504 1507 1512 1517 1510 1515 1514 1519 1523 1505 1513 1518 1513 1514 1520 1521 1505 1508 1514 1519 1518 1519 1521 1522 
+      FlipPictures = 0 0 0 0 2 0 0 0 2 0 2 0 2 2 2 0 3 1 0 0 0 0 0 0 3 3 3 0 0 0 0 0 1 1 2 2 1 1 2 2 3 1 2 2 2 1 2 2 1 1 3 3 1 1 0 0 3 1 3 3 1 1 2 0 
+   } dry
+;   much_snow { 
+;      UseGFXpics = true
+;      GFXpictures = 1650 1651 1652 1653 1652 1654 1673 1655 1651 1656 1654 1657 1653 1657 1655 1658 1652 1654 1659 1660 1661 1662 1663 1664 1653 1657 1660 1665 1666 1667 1668 1669 1652 1653 1661 1666 1659 1660 1663 1668 1654 1657 1662 1667 1660 1665 1664 1669 1673 1655 1663 1668 1663 1664 1670 1671 1655 1658 1664 1669 1668 1669 1671 1672 
+;      FlipPictures = 0 0 0 0 2 0 0 0 2 0 2 0 2 2 2 0 3 1 0 0 0 0 0 0 3 3 3 0 0 0 0 0 1 1 2 2 1 1 2 2 3 1 2 2 2 1 2 2 1 1 3 3 1 1 0 0 3 1 3 3 1 1 2 0 
+;   } much_snow
+;   snow_and_ice { 
+;      UseGFXpics = true
+;      GFXpictures = 1650 1651 1652 1653 1652 1654 1673 1655 1651 1656 1654 1657 1653 1657 1655 1658 1652 1654 1659 1660 1661 1662 1663 1664 1653 1657 1660 1665 1666 1667 1668 1669 1652 1653 1661 1666 1659 1660 1663 1668 1654 1657 1662 1667 1660 1665 1664 1669 1673 1655 1663 1668 1663 1664 1670 1671 1655 1658 1664 1669 1668 1669 1671 1672 
+;      FlipPictures = 0 0 0 0 2 0 0 0 2 0 2 0 2 2 2 0 3 1 0 0 0 0 0 0 3 3 3 0 0 0 0 0 1 1 2 2 1 1 2 2 3 1 2 2 2 1 2 2 1 1 3 3 1 1 0 0 3 1 3 3 1 1 2 0 
+;   } snow_and_ice
+} ObjectType

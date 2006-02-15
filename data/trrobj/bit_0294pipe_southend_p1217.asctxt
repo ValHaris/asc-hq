@@ -1,0 +1,17 @@
+TerrainType { 
+   Name = pipe southend
+   ID = 294
+   parent = 1217
+   dry { 
+      GFX_Picture = 159
+   } dry
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
+   few_snow { 
+      GFX_Picture = 624
+   } few_snow
+   much_snow { 
+      GFX_Picture = 730
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

@@ -1,0 +1,63 @@
+ObjectType { 
+   ID = 1040
+   Weather = dry light_rain heavy_rain much_snow snow_and_ice
+   visible_in_fogOfWar = true
+   LinkableObjects = 
+   Armor = 0
+   Movemalus_plus = 
+   Movemalus_abs = 
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 0
+   Height = 3
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+   Name = blue waterhole
+   NoSelfChaining = true
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand 
+      terrain_all = 
+      terrain_not = Shallow_water Water Deep_water Very_shallow_water River 
+      terrain_kill = 
+   } TerrainAccess
+   TerrainProperties_Filter = lowland hard_sand soft_sand
+   TerrainProperties_Add = very_Shallow_water 
+   dry { 
+      UseGFXpics = true
+      GFXpictures = 343 
+      FlipPictures = 0 
+   } dry
+   light_rain { 
+      UseGFXpics = true
+      GFXpictures = 1880 
+      FlipPictures = 0 
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = true
+      GFXpictures = 1879 
+      FlipPictures = 0 
+   } heavy_rain
+   much_snow { 
+      UseGFXpics = true
+      GFXpictures = 1878 
+      FlipPictures = 0 
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = true
+      GFXpictures = 1878 
+      FlipPictures = 0 
+   } snow_and_ice
+} ObjectType

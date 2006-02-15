@@ -1,0 +1,53 @@
+TerrainType { 
+   Name = Sitz und baumgruppe
+   ID = 12
+   Parent = 1201
+   dry { 
+      GFX_Picture = 33
+      DefenseBonus = 1
+      BasicJamming += 1
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus += 10 10  10  10  10  10  10  5   1   10  10  10  10  10  10  10  10  20 
+      TerrainProperties += small_rocks 
+   } dry
+   light_rain { 
+      GFX_Picture = 33
+      DefenseBonus = 1
+      BasicJamming += 1
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus += 10 10  10  10  10  10  10  5   1   10  10  10  10  10  10  10  10  20 
+      TerrainProperties += small_rocks 
+   } light_rain
+   heavy_rain { 
+      GFX_Picture = 33
+      DefenseBonus = 1
+      BasicJamming += 1
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus += 10 10  10  10  10  10  10  5   1   10  10  10  10  10  10  10  10  20 
+      TerrainProperties += small_rocks 
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 981
+      DefenseBonus = 1
+      BasicJamming += 1
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus += 10 10  10  10  10  10  10  5   1   10  10  10  10  10  10  10  10  20 
+      TerrainProperties += small_rocks 
+   } few_snow
+   much_snow { 
+      GFX_Picture = 1010
+      DefenseBonus = 1
+      BasicJamming += 1
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus += 10 10  10  10  10  10  10  5   1   10  10  10  10  10  10  10  10  20 
+      TerrainProperties += small_rocks 
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 1010
+      DefenseBonus = 1
+      BasicJamming += 1
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus += 10 10  10  10  10  10  10  5   1   10  10  10  10  10  10  10  10  20 
+      TerrainProperties += small_rocks 
+   } snow_and_ice
+} TerrainType
