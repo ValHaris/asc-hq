@@ -346,23 +346,6 @@ AC_SUBST(asc_version)
 dnl *************************************************************************
 dnl Checking and assembling the data files
 
-AC_MSG_CHECKING("data files")
-missingdata=`./checkfordata.pl data/buildings.con data/mk1.con data/trrobj.con data/trrobj2.con data/units-mk3.con`
-if test "x$missingdata" = x ; then
-  AC_MSG_RESULT("yes")
-else
-  AC_MSG_RESULT("no")
-  AC_MSG_ERROR( [ 
-The following data files could not be found: $missingdata .
-If you got the ASC source from CVS it is absolutely normal that this error
-occurs, since many data files are not managed with CVS.
-
-These files must be downloaded separately. This can be done automatically by
-calling the ./getdata script , or you can get them manually from
-http://www.asc-hq.org/download_updates.html 
-] )
-fi
-
 
 dnl what gehts packed into main.con (the data container file) and in which
 dnl order
@@ -433,6 +416,12 @@ AC_OUTPUT(  Makefile \
 	    source/unix/mapeditor/Makefile \
 	    source/unix/asc/Makefile \
 	    data/Makefile \
+       data/buildings/Makefile \
+       data/trrobj/Makefile \
+       data/trrobj2/Makefile \
+       data/units/Makefile \
+       data/units/MK1/Makefile \
+       data/units/MK3/Makefile \
 	    data/dialog/Makefile \
 	    data/music/Makefile  )
 

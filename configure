@@ -22834,36 +22834,6 @@ fi
 
 
 
-echo "$as_me:$LINENO: checking \"data files\"" >&5
-echo $ECHO_N "checking \"data files\"... $ECHO_C" >&6
-missingdata=`./checkfordata.pl data/buildings.con data/mk1.con data/trrobj.con data/trrobj2.con data/units-mk3.con`
-if test "x$missingdata" = x ; then
-  echo "$as_me:$LINENO: result: \"yes\"" >&5
-echo "${ECHO_T}\"yes\"" >&6
-else
-  echo "$as_me:$LINENO: result: \"no\"" >&5
-echo "${ECHO_T}\"no\"" >&6
-  { { echo "$as_me:$LINENO: error:
-The following data files could not be found: $missingdata .
-If you got the ASC source from CVS it is absolutely normal that this error
-occurs, since many data files are not managed with CVS.
-
-These files must be downloaded separately. This can be done automatically by
-calling the ./getdata script , or you can get them manually from
-http://www.asc-hq.org/download_updates.html
- " >&5
-echo "$as_me: error:
-The following data files could not be found: $missingdata .
-If you got the ASC source from CVS it is absolutely normal that this error
-occurs, since many data files are not managed with CVS.
-
-These files must be downloaded separately. This can be done automatically by
-calling the ./getdata script , or you can get them manually from
-http://www.asc-hq.org/download_updates.html
- " >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
 
 
 MAINCONDATA="palette.pal data.version title.jpg title_mapeditor.jpg \
@@ -22913,7 +22883,7 @@ fi
 
 
 
-                                                                                                                                                                                                                                      ac_config_files="$ac_config_files Makefile asc.spec doc/Makefile doc/manpages/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile source/unix/asc/Makefile data/Makefile data/dialog/Makefile data/music/Makefile"
+                                                                                                                                                                                                                                                                                                  ac_config_files="$ac_config_files Makefile asc.spec doc/Makefile doc/manpages/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile source/unix/asc/Makefile data/Makefile data/buildings/Makefile data/trrobj/Makefile data/trrobj2/Makefile data/units/Makefile data/units/MK1/Makefile data/units/MK3/Makefile data/dialog/Makefile data/music/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -23512,6 +23482,12 @@ do
   "source/unix/mapeditor/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/unix/mapeditor/Makefile" ;;
   "source/unix/asc/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/unix/asc/Makefile" ;;
   "data/Makefile" ) CONFIG_FILES="$CONFIG_FILES data/Makefile" ;;
+  "data/buildings/Makefile" ) CONFIG_FILES="$CONFIG_FILES data/buildings/Makefile" ;;
+  "data/trrobj/Makefile" ) CONFIG_FILES="$CONFIG_FILES data/trrobj/Makefile" ;;
+  "data/trrobj2/Makefile" ) CONFIG_FILES="$CONFIG_FILES data/trrobj2/Makefile" ;;
+  "data/units/Makefile" ) CONFIG_FILES="$CONFIG_FILES data/units/Makefile" ;;
+  "data/units/MK1/Makefile" ) CONFIG_FILES="$CONFIG_FILES data/units/MK1/Makefile" ;;
+  "data/units/MK3/Makefile" ) CONFIG_FILES="$CONFIG_FILES data/units/MK3/Makefile" ;;
   "data/dialog/Makefile" ) CONFIG_FILES="$CONFIG_FILES data/dialog/Makefile" ;;
   "data/music/Makefile" ) CONFIG_FILES="$CONFIG_FILES data/music/Makefile" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;

@@ -1,3 +1,114 @@
+2006-01-22 13:24  mbickel
+
+	* source/strtmesg.cpp:	Updated version
+
+2006-01-22 11:33  mbickel
+
+	* Makefile.in, asc.kdevelop, config.guess, config.sub, configure,
+	  configure.in, libtool, data/Makefile.in, data/dialog/Makefile.in,
+	  data/music/Makefile.in, doc/Makefile.in,
+	  doc/manpages/Makefile.in, source/Makefile.in,
+	  source/controls.cpp, source/pd.h, source/prehistoricevents.cpp,
+	  source/sg.cpp, source/strtmesg.cpp, source/ai/Makefile.in,
+	  source/clparser/Makefile.in, source/docs/Makefile.in,
+	  source/docs/en/Makefile.in, source/libs/Makefile.in,
+	  source/libs/sdlmm/Makefile.in, source/libs/sdlmm/src/Makefile.in,
+	  source/libs/triangul/Makefile.in,
+	  source/libs/triangul/construc.c, source/libs/triangul/monotone.c,
+	  source/libs/triangul/tri.c, source/sdl/Makefile.in,
+	  source/sdl/sound.h, source/tools/Makefile.in,
+	  source/tools/lib/Makefile.in, source/tools/linux/Makefile.in,
+	  source/unix/Makefile.in, source/unix/global_os.h,
+	  source/unix/asc/Makefile.in, source/unix/mapeditor/Makefile.in:
+	  Fixed compilation problems with SUSE
+
+2006-01-18 21:56  mbickel
+
+	* source/: dlg_box.cpp, sg.cpp, strtmesg.cpp, win32/msvc/mdump.cpp,
+	  win32/msvc/ASC/ASC.vcproj:  Improved crash dumping
+
+2006-01-15 00:01  mbickel
+
+	* source/: edmain.cpp, edmisc.cpp, strtmesg.cpp,
+	  win32/msvc/mdump.cpp, win32/msvc/mdump.h,
+	  win32/msvc/mapeditor/mapeditor.vcproj:  Added MDumps for Windows
+	  Mapeditor
+
+2005-12-22 21:28  mbickel
+
+	* data/asc007.map, source/gameevents.cpp:  Fixed energy storage in
+	  asc007
+	   once continueing a map, the defeat-event will be deactivated.
+
+2005-12-21 21:10  mbickel
+
+	* data/asc007.map:  Fixed lack of energy in campaign map 7
+
+2005-12-11 19:56  mbickel
+
+	* source/loaders.cpp:  Fixed message loading for 64 bit machines
+
+2005-12-10 21:51  mbickel
+
+	* source/loaders.cpp:  Fixed map loading with messages
+
+2005-12-07 21:02  mbickel
+
+	* source/misc.cpp:  Fixed memory allocation error
+
+2005-12-03 14:18  mbickel
+
+	* source/: containerbase.cpp, controls.cpp, sg.cpp, ai/tactics.cpp:
+	   Fixed triggering unit lost message when viewing unit movement
+	  range
+	   Fixed crash in AI
+
+2005-12-03 12:20  mbickel
+
+	* source/: building.cpp, events.h, strtmesg.cpp,
+	  viewcalculation.cpp:	Fixed: unit could be loaded into itself
+
+2005-11-12 10:21  mbickel
+
+	* source/: gamedlg.cpp, research.cpp, research.h:  Fixed research
+	  transfer when starting new campaign map from old one
+
+2005-11-07 20:18  mbickel
+
+	* source/: network.cpp, sg.cpp, strtmesg.cpp, unitctrl.cpp:  Fixed
+	  replay bug
+
+2005-09-01 07:59  mbickel
+
+	* source/ai/valuation.cpp:  Fixed: ai reduces movement of loaded
+	  units
+
+2005-08-20 16:09  mbickel
+
+	* source/: controls.cpp, strtmesg.cpp:	Fixed: mines could be
+	  placed in not visible areas
+	   Fixed: objects could be placed in not visible areas
+
+2005-08-17 20:56  mbickel
+
+	* source/ASCStringHelpers.h:  Fixed (unused) StringHelper function
+	  _Printf
+
+2005-08-11 21:10  mbickel
+
+	* source/: loaders.cpp, loaders.h, strtmesg.cpp:  Resetting large
+	  ammo amounts ( > 32000 ) on game load
+
+2005-08-10 19:44  mbickel
+
+	* source/: buildings.cpp, strtmesg.cpp, unitctrl.cpp:  Fixed ammo
+	  transfer bug
+
+2005-08-07 09:34  mbickel
+
+	* ChangeLog, source/strtmesg.cpp:  Updated version number and
+	  changelog
+
 2005-08-07 09:23  mbickel
 
 	* source/: edglobal.cpp, itemrepository.cpp, replay.cpp,
