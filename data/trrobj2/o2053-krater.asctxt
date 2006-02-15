@@ -1,0 +1,10 @@
+ObjectType { 
+   Parent = 3550
+   ID = 2053
+
+   TerrainProperties_Add = river large_rocks
+
+   dry { 
+      picture = o2053.pcx 1
+   } dry
+} ObjectType

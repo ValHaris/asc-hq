@@ -1,0 +1,25 @@
+ObjectType { 
+   Parent = 2045
+
+   ID = 2046
+
+   TerrainProperties_Add = Large_Rocks
+
+   RemovalCost { 
+      Energy = 0
+      Material = -1000
+      fuel = 50
+      Movement = 6
+   } RemovalCost
+
+   dry { 
+      picture = o2046.pcx 1
+   } dry
+   much_snow { 
+      picture = o2046ms.pcx 1
+   } much_snow
+   snow_and_ice { 
+      picture = o2046ms.pcx 1
+   } snow_and_ice
+
+} ObjectType

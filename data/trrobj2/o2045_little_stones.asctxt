@@ -1,0 +1,18 @@
+ObjectType { 
+   Parent = 2040
+
+   ID = 2045
+
+   Name = little Stones
+
+   dry { 
+      picture = o2045.pcx 1
+   } dry
+   much_snow { 
+      picture = o2045ms.pcx 1
+   } much_snow
+   snow_and_ice { 
+      picture = o2045ms.pcx 1
+   } snow_and_ice
+
+} ObjectType

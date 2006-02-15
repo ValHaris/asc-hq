@@ -1,0 +1,52 @@
+TerrainType { 
+   Abstract = true
+   ID = 3998
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+
+;----------------------------------------------------------------------------------------------------------
+;----   G L O B A L   D E F S   ---------------------------------------------------------------------------
+;----------------------------------------------------------------------------------------------------------
+
+   dry {
+      UseGFXpics = false
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+   } dry
+
+   light_rain {
+      UseGFXpics = false
+      DefenseBonus = 1
+      AttackBonus = 0
+      BasicJamming = 1
+   } light_rain
+
+   heavy_rain {
+      UseGFXpics = false
+      DefenseBonus = 2
+      AttackBonus = -1
+      BasicJamming = 3
+   } heavy_rain
+
+   few_snow {
+      UseGFXpics = false
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 2
+   } few_snow
+
+   much_snow {
+      UseGFXpics = false
+      DefenseBonus = 1
+      AttackBonus = 1
+      BasicJamming = 4
+   } much_snow
+
+   snow_and_ice {
+      UseGFXpics = false
+      DefenseBonus = 0
+      AttackBonus = 2
+      BasicJamming = 0
+   } snow_and_ice
+
+} TerrainType

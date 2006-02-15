@@ -1,0 +1,41 @@
+TerrainType { 
+   Parent = 2068
+   ID = 2941
+
+   Name = Lava + Grass
+
+   dry { 
+      Picture = t2941_grass_lava.pcx
+   } dry
+   light_rain { 
+      Picture = t2941_lr.pcx
+      DefenseBonus = 1
+      AttackBonus = 0
+      BasicJamming = 2
+   } light_rain
+   heavy_rain { 
+      Picture = t2941_hr.pcx
+      DefenseBonus = 2
+      AttackBonus = 0
+      BasicJamming = 4
+   } heavy_rain
+   few_snow { 
+      Picture = t2941_fs.pcx
+      DefenseBonus = -1
+      AttackBonus = 0
+      BasicJamming = 2
+   } few_snow
+   much_snow { 
+      Picture = t2068hs.pcx
+      DefenseBonus = 0
+      AttackBonus = 2
+      BasicJamming = 4
+   } much_snow
+   snow_and_ice { 
+      Picture = t2068hs.pcx
+      DefenseBonus = 0
+      AttackBonus = 2
+      BasicJamming = 4
+   } snow_and_ice
+
+} TerrainType

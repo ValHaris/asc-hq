@@ -1,0 +1,30 @@
+TerrainType { 
+   Parent = 2030
+   ID = 2918
+
+   ; Name = Between 2030-2065
+
+   dry { 
+      Picture = t2918_mud_kaibeton.pcx
+   } dry
+
+   light_rain { 
+      Picture = t2918_lr.pcx
+      BasicJamming = -1
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  15  12  14  13  14  17  15  12  10  12 255  16  12  12 255 255  12  11
+   } light_rain
+
+   heavy_rain { 
+      Picture = t2918_hr.pcx
+      BasicJamming = 2
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  10  22  17  15  32  24  22  13  12  20 255  16  20  20 255 255  20  12
+   } heavy_rain
+
+   few_snow { 
+      Picture = t2918_fs.pcx
+      DefenseBonus = -2
+   } few_snow
+
+} TerrainType

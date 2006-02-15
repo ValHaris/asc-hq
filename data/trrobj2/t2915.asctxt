@@ -1,0 +1,39 @@
+TerrainType { 
+   Parent = 2063
+   ID = 2915
+
+   ; Name = Between 2063-2065
+
+   dry { 
+      Picture = t2915_moon_surface.pcx
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  12  13  13  13  13  13  13  11  10  25 255  16  25  25 255 255  25  12
+   } dry
+
+   light_rain { 
+      Picture = t2915_lr.pcx
+      BasicJamming = 2
+   } light_rain
+
+   heavy_rain { 
+      Picture = t2915_hr.pcx
+      AttackBonus = 0
+      BasicJamming = 4
+   } heavy_rain
+
+   few_snow { 
+      Picture = t2915_fs.pcx
+      DefenseBonus = -1
+   } few_snow
+
+   much_snow { 
+      DefenseBonus = 0
+      AttackBonus = 2
+   } much_snow
+
+   snow_and_ice { 
+      DefenseBonus = 0
+      AttackBonus = 2
+   } snow_and_ice
+
+} TerrainType

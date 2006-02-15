@@ -1,0 +1,60 @@
+TerrainType { 
+   Name = Swamp
+   ID = 2100
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+   dry { 
+      UseGFXpics = false
+      Picture = t2100.pcx
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 20
+      TerrainProperties = Swamp
+   } dry
+   light_rain { 
+      UseGFXpics = false
+      Picture = t2100_lr.pcx
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 20
+      TerrainProperties = Swamp
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = false
+      Picture = t2100_hr.pcx
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 20
+      TerrainProperties = Swamp
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = false
+      Picture = t2100_fs.pcx
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 20
+      TerrainProperties = Swamp snow
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      Picture = t2100_ms.pcx
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 20
+      TerrainProperties = Swamp deep_snow
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = false
+      Picture = t2100_ms.pcx
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 20
+      TerrainProperties = Swamp deep_snow
+   } snow_and_ice
+
+} TerrainType

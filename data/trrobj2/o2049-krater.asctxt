@@ -1,0 +1,9 @@
+ObjectType { 
+   Parent = 3550
+   ID = 2049
+
+   dry { 
+      picture = o2049.pcx 1
+   } dry
+
+} ObjectType

@@ -1,0 +1,31 @@
+TerrainType { 
+   Parent = 3000
+   ID = 2000
+
+   Name = Deep Seawater
+   dry { 
+      Picture = t2000.pcx
+      TerrainProperties = Deep_water 
+   } dry
+   light_rain { 
+      Picture = t2000.pcx
+      TerrainProperties = Deep_water 
+   } light_rain
+   heavy_rain { 
+      Picture = t2000_hr.pcx
+      TerrainProperties = Deep_water 
+   } heavy_rain
+   few_snow { 
+      Picture = t2000.pcx
+      TerrainProperties = Deep_water
+   } few_snow
+   much_snow { 
+      Picture = t2000.pcx
+      TerrainProperties = Deep_water
+   } much_snow
+   snow_and_ice { 
+      Picture = t2000_ice.pcx
+      TerrainProperties = Deep_water Frozen_water
+   } snow_and_ice
+
+} TerrainType

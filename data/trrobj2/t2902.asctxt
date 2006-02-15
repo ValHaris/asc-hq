@@ -1,0 +1,39 @@
+TerrainType { 
+   Parent = 2060
+   ID = 2902
+
+   ; Name = Between 2062-2030
+
+   dry { 
+      Picture = t2902.pcx
+   } dry
+
+   light_rain { 
+      Picture = t2902_lr.pcx
+      BasicJamming = 2
+   } light_rain
+
+   heavy_rain { 
+      Picture = t2902_hr.pcx
+      AttackBonus = 0
+      BasicJamming = 4
+   } heavy_rain
+
+   few_snow { 
+      Picture = t2902_fs.pcx
+      DefenseBonus = -1
+   } few_snow
+
+   much_snow { 
+      Picture = t2060ms.pcx
+      DefenseBonus = 0
+      AttackBonus = 2
+   } much_snow
+
+   snow_and_ice { 
+      Picture = t2060ms.pcx
+      DefenseBonus = 0
+      AttackBonus = 2
+   } snow_and_ice
+
+} TerrainType

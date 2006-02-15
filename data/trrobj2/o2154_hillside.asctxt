@@ -1,0 +1,21 @@
+ObjectType { 
+   Parent = 2150
+
+   ID = 2154
+
+   LinkableObjects =
+
+   Name = Hillside SINGLE
+
+   NetBehaviour = 
+
+   ViewBonus_plus = 12
+   ViewBonus_abs =
+
+   dry { 
+      picture = o2154_hillside_dry.pcx 1
+      ImageReference = -1
+      FlipPictures = 0
+   } dry
+
+} ObjectType

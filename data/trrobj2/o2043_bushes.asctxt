@@ -1,0 +1,59 @@
+ObjectType { 
+
+
+
+   ID = 2043
+   GroupID = 10
+
+   Weather = dry much_snow
+
+   Name = bushes
+   Armor = 0
+   Height = 100 ;17-Aug 2003
+
+   visible_in_fogOfWar = true
+   LinkableObjects = 
+
+
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mdA mdS BTO liA hvA liS hvS Hli hov
+   Movemalus_plus =  10   1   1   1   2   2   2   0   0   0   0   0   0   0   0   0   0   2
+   Movemalus_abs = -1
+   AttackBonus_abs = -1
+   AttackBonus_plus = 1
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 1
+   Jamming_abs = -1
+   Jammming_plus = 1
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 25
+      fuel = 15
+      Movement = 0
+   } RemovalCost
+
+   TerrainAccess { 
+      terrain_any = lowland hard_sand mud
+      terrain_all = 
+      terrain_not = lava soft_sand morass swamp hillside very_shallow_water shallow_water water deep_water river ditch forest turret_foundation Installation mountains high_mountains
+      terrain_kill = 
+   } TerrainAccess
+   TerrainProperties_Filter = 
+   TerrainProperties_Add = small_rocks
+
+   dry { 
+      UseGFXpics = false
+      picture = o2043.pcx 1
+   } dry
+   much_snow { 
+      UseGFXpics = false
+      picture = o2043ms.pcx 1
+   } much_snow
+
+} ObjectType

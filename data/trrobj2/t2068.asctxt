@@ -1,0 +1,50 @@
+TerrainType { 
+   Parent = 3002
+   ID = 2068
+
+   Name = Frozen Lava
+
+   dry { 
+      Picture = t2068_frozen_lava.pcx
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  15  13  13  12  15  15  13  14  10 255 255  16 255 255 255 255 255  20
+;      TerrainProperties = lowland large_rocks track_possible lblock_possible
+      TerrainProperties = lowland track_possible
+   } dry
+   light_rain { 
+      Picture = t2068_lr.pcx
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  17  15  17  15  19  22  18  16  10 255 255  16 255 255 255 255 255  21
+;      TerrainProperties = lowland large_rocks track_possible lblock_possible
+      TerrainProperties = lowland track_possible
+   } light_rain
+   heavy_rain { 
+      Picture = t2068_hr.pcx
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  20  25  20  17  37  29  25  17  12 255 255  16 255 255 255 255 255  22
+;      TerrainProperties = lowland large_rocks track_possible lblock_possible
+      TerrainProperties = lowland track_possible
+   } heavy_rain
+   few_snow { 
+      Picture = t2068_fs.pcx
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  15  15  14  13  17  16  14  15  10 255 255  16 255 255 255 255 255  20
+;      TerrainProperties = snow lowland large_rocks track_possible lblock_possible
+      TerrainProperties = snow lowland track_possible
+   } few_snow
+   much_snow { 
+      Picture = t2068hs.pcx
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  15  25  23  19  26  22  18  20  14 255 255  16 255 255 255 255 255  22
+;      TerrainProperties = deep_snow lowland large_rocks track_possible lblock_possible
+      TerrainProperties = deep_snow lowland track_possible
+   } much_snow
+   snow_and_ice { 
+      Picture = t2068hs.pcx
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  15  25  23  19  26  22  18  20  14 255 255  16 255 255 255 255 255  22
+;      TerrainProperties = deep_snow lowland large_rocks track_possible lblock_possible
+      TerrainProperties = deep_snow lowland track_possible
+   } snow_and_ice
+
+} TerrainType
