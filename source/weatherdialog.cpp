@@ -9,6 +9,9 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
+
+#include <iostream>
+
 #include "weatherdialog.h"
 #include "weatherarea.h"
 #include "guidimension.h"

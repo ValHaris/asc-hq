@@ -30,9 +30,9 @@ legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimage
 containercontrols.cpp containerbase-functions.cpp
 
 asc_LDADD   		= $(top_builddir)/source/libs/triangul/libtriangul.la \
-$(top_builddir)/source/libs/paragui/src/libparagui.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 $(top_builddir)/source/sdl/libsdl.la  $(top_builddir)/source/libs/loki/libloki.la \
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(top_builddir)/source/dialogs/libgamedialogs.la $(top_builddir)/source/actions/libactions.la \
+$(top_builddir)/source/libs/paragui/src/libparagui.la \
  @LDADDLIBBZ2@  $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS)
