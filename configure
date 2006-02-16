@@ -21458,6 +21458,9 @@ echo "$as_me: error: *** Unable to find the FreeType 2 library (http://www.freet
 
 fi
 
+    have_expat_lib=no
+    have_expat_include=no
+
     if test "${ac_cv_header_expat_h+set}" = set; then
   echo "$as_me:$LINENO: checking for expat.h" >&5
 echo $ECHO_N "checking for expat.h... $ECHO_C" >&6
@@ -21602,12 +21605,10 @@ fi
 
     if test x$have_expat_include = xno; then
           { { echo "$as_me:$LINENO: error: *** Unable to find expat header file! (http://expat.sourceforge.net)
-      Please install the library and header files if you want to link to the shared library,
-      or run './configure --enable-internalexpat' to compile an internal version of expat.
+      Please install the library and header files
       " >&5
 echo "$as_me: error: *** Unable to find expat header file! (http://expat.sourceforge.net)
-      Please install the library and header files if you want to link to the shared library,
-      or run './configure --enable-internalexpat' to compile an internal version of expat.
+      Please install the library and header files
       " >&2;}
    { (exit 1); exit 1; }; }
     fi
@@ -21682,12 +21683,10 @@ fi
 
     if test x$have_expat_lib = xno; then
    { { echo "$as_me:$LINENO: error: *** Unable to find expat xml library! (http://expat.sourceforge.net)
-       Please install the library and header files if you want to link to the shared library,
-       or run './configure --enable-internalexpat' to compile an internal version of expat.
+       Please install the library and header files
        " >&5
 echo "$as_me: error: *** Unable to find expat xml library! (http://expat.sourceforge.net)
-       Please install the library and header files if you want to link to the shared library,
-       or run './configure --enable-internalexpat' to compile an internal version of expat.
+       Please install the library and header files
        " >&2;}
    { (exit 1); exit 1; }; }
     fi

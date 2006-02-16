@@ -263,13 +263,15 @@ if test "$ft2test" = "yes"; then
     
 fi
 
+    have_expat_lib=no
+    have_expat_include=no
+
     AC_CHECK_HEADER(expat.h, [have_expat_include=yes])
 
     if test x$have_expat_include = xno; then
           AC_MSG_ERROR(
       [*** Unable to find expat header file! (http://expat.sourceforge.net)]
-      [Please install the library and header files if you want to link to the shared library,]
-      [or run './configure --enable-internalexpat' to compile an internal version of expat.] 
+      [Please install the library and header files ]
       )
     fi
 
@@ -278,8 +280,7 @@ fi
     if test x$have_expat_lib = xno; then
    AC_MSG_ERROR(
        [*** Unable to find expat xml library! (http://expat.sourceforge.net)]
-       [Please install the library and header files if you want to link to the shared library,]
-       [or run './configure --enable-internalexpat' to compile an internal version of expat.] 
+       [Please install the library and header files ]
        )
     fi
 
