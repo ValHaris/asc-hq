@@ -690,7 +690,6 @@ LoadGameDialog::~LoadGameDialog() {
 bool LoadGameDialog::ok(PG_Button* button) {
     vector<PG_ListBoxBaseItem*> selectedFileList;
     PG_ListBoxItem* fileName = dynamic_cast<PG_ListBoxItem*>(selectedFileList.front());
-    cout << fileName->GetText().c_str() << endl;
     loadgame(fileName->GetText().c_str());
     quitModalLoop(1);
     return true;

@@ -457,7 +457,7 @@ char* int2string ( int i, char* buf )
       char buf2[50];
 
       int pot  = (int) log10 ( double(i) );
-      int base = (int) pow ( 10, pot );
+      int base = (int) pow ( float(10), float(pot) );
       int first = i / base;
       int rest = i - first * base;
 

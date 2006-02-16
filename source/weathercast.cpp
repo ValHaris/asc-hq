@@ -301,7 +301,7 @@ void Weathercast::painter (const PG_Rect &src, const ASCString& name, const PG_R
 	
 	blitter.blit( s, screen, SPoint(dstPoint.x, dstPoint.y) );	
 	generateWeatherMap(actmap->time.turn() + weatherPanel->getCounter());	       
-	cout << "counter: " << weatherPanel->getCounter() <<endl;
+//	cout << "counter: " << weatherPanel->getCounter() <<endl;
         
         SPoint ul = OverviewMapImage::map2surface( mapDisplayWidget->upperLeftCorner());
         SPoint lr = OverviewMapImage::map2surface( mapDisplayWidget->lowerRightCorner());
@@ -348,7 +348,7 @@ void Weathercast::generateWeatherMap(int turn) {
 }
 
 void Weathercast::paintWeatherArea(const WeatherArea* wa, int vMove, int hMove) {
-    cout << "painting area" << endl;
+//    cout << "painting area" << endl;
     MegaBlitter<gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom> blitter;    
     static const char* weathernames[] = {"terrain_weather_dry.png",
                                          "terrain_weather_lightrain.png",
@@ -361,7 +361,7 @@ void Weathercast::paintWeatherArea(const WeatherArea* wa, int vMove, int hMove) 
     Surface screen = Surface::Wrap( PG_Application::GetScreen() );
     Surface wSurface = IconRepository::getIcon(weathernames[wa->getFalloutType()]);
     if((wa->getCenterPos().x + hMove >0) && (wa->getCenterPos().y + vMove >0)) {
-        cout << "currentZoom: " << currentZoomX << endl;
+//        cout << "currentZoom: " << currentZoomX << endl;
         SPoint pixCenter = OverviewMapImage::map2surface(MapCoordinate(((wa->getCenterPos().x + hMove)* currentZoomX), (((wa->getCenterPos().y + vMove) * currentZoomY))));
 	PG_Point transformedPoint = PG_Point(ClientToScreen(pixCenter.x, pixCenter.y));
 	//transformedPoint.x += static_cast<float>(transformedPoint.x);
@@ -373,8 +373,8 @@ void Weathercast::paintWeatherArea(const WeatherArea* wa, int vMove, int hMove) 
             blitter.setRectangle( SPoint(0,0), wSurface.w(), wSurface.h());
         }*/	               
         blitter.blit(wSurface, screen, SPoint(transformedPoint.x, transformedPoint.y));//SPoint(transformedPoint.x, transformedPoint.y));
-	cout << "pixCenter.x " << pixCenter.x << endl;
-	cout << "pixCenter.y " << pixCenter.y << endl;
+//	cout << "pixCenter.x " << pixCenter.x << endl;
+//	cout << "pixCenter.y " << pixCenter.y << endl;
 	//cout << "trans.x " << transformedPoint.x << endl;
 	//cout << "trans.y " << transformedPoint.y << endl;
 	
