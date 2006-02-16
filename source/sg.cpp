@@ -775,8 +775,11 @@ void         repaintdisplay(void)
    if ( actmap && actmap->ellipse )
       actmap->ellipse->paint();
 
-   if ( actgui && actmap && actmap->xsize>0)
+   if ( actgui && actmap && actmap->xsize>0  ) {
+      if ( !getactfield() )
+         cursor.gotoxy( 0, 0, 0 );
       actgui->painticons();
+   }
 
 }
 
