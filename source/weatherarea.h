@@ -22,7 +22,7 @@
 #include "geometry.h"
 #include "typen.h"
 #include "basestreaminterface.h"
-#include "graphics/ascttfont.h"
+// #include "graphics/ascttfont.h"
 
 class IllegalValueException: public ASCmsgException{
 public:

@@ -1,6 +1,6 @@
 SUBDIRS = draw font themes core widgets ystring
 
-lib_LTLIBRARIES = libparagui.la
+noinst_LTLIBRARIES = libparagui.la
 
 libparagui_la_SOURCES = paragui.cpp
 
