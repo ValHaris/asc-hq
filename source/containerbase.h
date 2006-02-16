@@ -49,12 +49,13 @@ class ContainerBase {
       //! is called after a repair is perfored. Vehicles use this to reduce their experience.
       virtual void postRepair ( int oldDamage ) = 0;
 
-      virtual bool isBuilding() const = 0;
       
       void paintField ( const Surface& src, Surface& dest, SPoint pos, int dir, bool shaded, int shadowDist = -1 ) const;
       
    public:
       ContainerBase ( const ContainerBaseType* bt, GameMap* map, int player );
+
+      virtual bool isBuilding() const = 0;
 
       const ContainerBaseType*  baseType;
 

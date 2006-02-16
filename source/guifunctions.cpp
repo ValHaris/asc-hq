@@ -1182,6 +1182,8 @@ class RefuelUnit : public GuiFunction
                dispmessage2 ( 211 );
             } else
                displaymap();
+
+            updateFieldInfo();
          } else {
             tfield* fld = actmap->getField( pos );
             if ( fld && fld->getContainer() )

@@ -25,7 +25,7 @@
 #include "../vehicle.h"
 #include "../unitctrl.h"
 #include "../containercontrols.h"
-
+#include "../gameoptions.h"
 
 
 
@@ -526,6 +526,9 @@ void ServiceChecker :: check( ContainerBase* dest )
    MapCoordinate dpos = dest->getPosition();
    bool externalTransfer = spos != dpos;
 
+   if ( source->isBuilding() && dest->isBuilding() )
+      return; 
+
    if ( getTransferLimitation( dest ) == ALL )
       return;
 
@@ -667,8 +670,10 @@ void TransferHandler::resource( ContainerBase* dest, int type, bool active )
    transfers.push_back(  new ResourceTransferrable( type, sourceRes, destRes, active ));
 }
 
-TransferHandler::TransferHandler( ContainerBase* src, ContainerBase* dst ) : ServiceChecker( src), sourceRes( src ), destRes( dst ), allowProduction(false), source(src), dest(dst)
+TransferHandler::TransferHandler( ContainerBase* src, ContainerBase* dst ) : ServiceChecker( src), sourceRes( src ), destRes( dst ), source(src), dest(dst)
 {
+   allowProduction = CGameOptions::Instance()->autoproduceammunition ;
+
    if ( dest->getMap()->player[dest->getMap()->actplayer].diplomacy.getState( dest->getOwner() ) <= TRUCE )
       return;
 
@@ -683,6 +688,21 @@ bool TransferHandler::allowAmmoProduction( bool allow )
       return true;
    } else
       return false;
+}
+
+bool TransferHandler::allowAmmoProductionAllowed()
+{
+   return allowProduction;
+}
+
+
+
+TransferHandler::~TransferHandler()
+{
+   if ( allowProduction != CGameOptions::Instance()->autoproduceammunition  ) {
+      CGameOptions::Instance()->autoproduceammunition = allowProduction ;
+      CGameOptions::Instance()->setChanged();
+   }
 }
 
 bool TransferHandler::ammoProductionPossible()

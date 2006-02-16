@@ -158,6 +158,9 @@ class CGameOptions
       }
       sound;
 
+      //! produce required ammo upon refuelling
+      bool autoproduceammunition;
+
       // int onlinehelptime;
       // int smallguiiconopenaftermove;
 

@@ -119,6 +119,9 @@ Vehicle* ContainerControls::produceUnit( const Vehicletype* type, bool fillWithA
    if( fillWithResources )
       refillResources( vehicle );
 
+   vehicle->setMovement(0);
+   vehicle->setAttacked();
+
    return vehicle;
 }
 

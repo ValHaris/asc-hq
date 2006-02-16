@@ -186,7 +186,7 @@ void Menu::setup()
    addbutton ( "Unit Info Panel", ua_viewUnitInfoPanel );
    addbutton ( "Overview Map Panel", ua_viewOverviewMapPanel );
    addbutton ( "Map Control Panel", ua_viewMapControlPanel );
-   addbutton("Weathercast", ua_weathercast);
+   // addbutton("Weathercast", ua_weathercast);
    currentMenu->addSeparator();
    addbutton ( "clear image cache", ua_clearImageCache );
    addbutton ( "reload dialog theme", ua_reloadDlgTheme );

@@ -53,14 +53,14 @@ class BuildingType;
 
     Vehicle ( const Vehicletype* t, GameMap* actmap, int player, int networkID  );
 
-   protected:
-     bool isBuilding() const { return false; };
 
    public:
 
     Vehicle ( const Vehicletype* t, GameMap* actmap, int player );
 
     int repairableDamage() { return damage; };
+
+    bool isBuilding() const { return false; };
 
     const Vehicletype* typ;
     int          ammo[16];

@@ -131,7 +131,7 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    // add(new IntProperty("Mouse.dragndropmovement"		,&_pOptions->mouse.dragndropmovement));
    pc.closeBracket();
 
-   // pc.addBool("ProduceAmmoAutomatically", container.autoproduceammunition, container.autoproduceammunition );
+   pc.addBool("AmmoProductionOnRefuelling", autoproduceammunition, autoproduceammunition );
    // pc.addInteger("FillUnitsAutomatically", container.filleverything, container.filleverything );
 
    // pc.addInteger("ToolTipHelpDelay", onlinehelptime, onlinehelptime );
@@ -218,6 +218,7 @@ void CGameOptions::setDefaults ( void )
 //   showUnitOwner = 0;
    debugReplay = 0;
 
+   autoproduceammunition = false;
 /*
    bi3.dir.setName( NULL );
    bi3.interpolate.terrain=0;

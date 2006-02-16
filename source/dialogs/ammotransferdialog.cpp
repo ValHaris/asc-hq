@@ -138,6 +138,7 @@ AmmoTransferWindow :: AmmoTransferWindow ( ContainerBase* source, ContainerBase*
    ypos = 0;
    if ( handler.ammoProductionPossible() ) {
       PG_CheckButton* production = new PG_CheckButton( area, PG_Rect( border, ypos, area->w - 20, 20 ), "allow ammo production" );
+      production->SetPressed(  );
       production->sigClick.connect( SigC::slot( handler, &TransferHandler::allowAmmoProduction ));
       ypos += 30;
    }

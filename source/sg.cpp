@@ -834,7 +834,8 @@ void execuseraction2 ( tuseractions action )
          break;
       case ua_reloadDlgTheme:
              getPGApplication().reloadTheme();
-             soundSettings( NULL );
+             MessagingHub::Instance().message( MessagingHubBase::InfoMessage, "Theme reloaded" );
+             // soundSettings( NULL );
          break;
       case ua_viewButtonPanel:  mainScreenWidget->spawnPanel( ASC_MainScreenWidget::ButtonPanel );
          break;
@@ -897,7 +898,7 @@ void execuseraction2 ( tuseractions action )
          MessagingHub::Instance().message( MessagingHubBase::InfoMessage, "This is an informational message" );
          MessagingHub::Instance().message( MessagingHubBase::Warning,     "This is an warning message" );
          MessagingHub::Instance().message( MessagingHubBase::Error,       "This is an error message" );
-         MessagingHub::Instance().message( MessagingHubBase::FatalError,  "This is an fatal error message" );
+         MessagingHub::Instance().message( MessagingHubBase::FatalError,  "This is an fatal error message. Game will be exited." );
          break;
       case ua_writemaptopcx :
          writemaptopcx ( actmap );

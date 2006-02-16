@@ -151,9 +151,10 @@ class EditGameOptions : public ASC_PG_Dialog {
          new PG_PropertyField_Integer<int>( propertyEditor , "Attack Dialog PreWait (1/100 sec)", &o->attackspeed1 );
          new PG_PropertyField_Integer<int>( propertyEditor , "Attack Dialog Animate (1/100 sec)", &o->attackspeed2 );
          new PG_PropertyField_Integer<int>( propertyEditor , "Attack Dialog PostWait 3 (1/100 sec)", &o->attackspeed3 );
-         if ( mainApp )
+         if ( mainApp ) {
             new PG_PropertyField_Checkbox<bool>( propertyEditor, "Game running Fullscreen", &o->forceWindowedMode, true );
-         else
+            new PG_PropertyField_Checkbox<bool>( propertyEditor, "Produce Ammo when refuelling", &o->autoproduceammunition );
+         } else
             new PG_PropertyField_Checkbox<bool>( propertyEditor, "MapEd running Fullscreen", &o->mapeditWindowedMode, true );
 
          new PG_PropertyField_IntDropDown<int, GetVideoModes::VList::iterator>( propertyEditor, "Video Mode", &videoMode, vmodes.getList().begin(), vmodes.getList().end() );

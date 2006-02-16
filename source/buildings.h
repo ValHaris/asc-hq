@@ -38,7 +38,6 @@ class  Building : public ContainerBase {
 
     friend class tprocessminingfields;
   protected:
-    bool isBuilding() const { return true; };
 
     //! the percantage that this build has already been repaired this turn. The maximum percentage may be limited by a gameparameter
     int           repairedThisTurn;
@@ -98,6 +97,8 @@ class  Building : public ContainerBase {
     const Surface& getPicture ( const BuildingType::LocalCoordinate& localCoordinate ) const;
 
     void paintSingleField ( Surface& s, SPoint imgpos, BuildingType::LocalCoordinate pos ) const;
+
+    bool isBuilding() const { return true; };
     
     
     //! changes the building's owner. \param player range: 0 .. 8

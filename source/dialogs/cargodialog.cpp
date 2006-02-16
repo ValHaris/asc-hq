@@ -311,13 +311,6 @@ class CargoDialog : public Panel
          Update();
       };
 
-      void updateResourceDisplay()
-      {
-         setLabelText( "energyavail", container->getResource(maxint, 0, true ) );
-         setLabelText( "materialavail", container->getResource(maxint, 1, true ) );
-         setLabelText( "fuelavail", container->getResource(maxint, 2, true ) );
-      }
-
 
       void registerGuiFunctions( GuiIconHandler& handler )
       {
@@ -358,7 +351,14 @@ class CargoDialog : public Panel
       {
          activesubwindows.push_back( w );
       };
-      
+
+      void updateResourceDisplay()
+      {
+         setLabelText( "energyavail", container->getResource(maxint, 0, true ) );
+         setLabelText( "materialavail", container->getResource(maxint, 1, true ) );
+         setLabelText( "fuelavail", container->getResource(maxint, 2, true ) );
+      }
+
 
       Vehicle* getMarkedUnit()
       {
@@ -850,6 +850,7 @@ class DamageControlWindow : public SubWindow {
       bool repair()
       {
          container()->repairItem(container(), 0 );
+         cargoDialog->updateResourceDisplay();
          
          damageChanged();
          update();

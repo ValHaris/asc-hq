@@ -156,6 +156,7 @@ class TransferHandler : public SigC::Object, protected ServiceChecker {
    public:
       TransferHandler( ContainerBase* src, ContainerBase* dst );
       bool allowAmmoProduction( bool allow );
+      bool allowAmmoProductionAllowed();
       bool ammoProductionPossible();
       Transfers& getTransfers();
       void fillDest();
@@ -163,6 +164,7 @@ class TransferHandler : public SigC::Object, protected ServiceChecker {
       bool commit();
 
       SigC::Signal0<bool> updateRanges;
+      ~TransferHandler();
 };
 
 
