@@ -950,7 +950,6 @@ class ResourceInfoWindow : public SubWindow {
                   ASCString label = "Res";
                   label += xx;
                   label += yy;
-                  cout << label << "\n";
                   if ( (y != 1 || value[c][x][y] < mx*10 || value[c][x][y] < 1000000000 ) && ( !actmap->isResourceGlobal(x) || y!=0 ||c ==2))   // don't show extremely high numbers
                      cargoDialog->setLabelText( label, value[c][x][y] );
                   else
