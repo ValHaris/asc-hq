@@ -1234,7 +1234,7 @@ void MapDisplayPG::displayUnitMovement( GameMap* actmap, Vehicle* veh, const Map
       displayMovementStep( movement, (ticker - startTime) * 100 / duration );
       ++loopCounter;
    }
-   cout << (float(loopCounter) / float(ticker - loopStartTicker) * 100) << " / " << (float(loopCounter) / float(ticker - startTime) * 100) << " fps \n";
+//   cout << (float(loopCounter) / float(ticker - loopStartTicker) * 100) << " / " << (float(loopCounter) / float(ticker - startTime) * 100) << " fps \n";
 }
 
 void MapDisplayPG::displayAddons( Surface& surf, int pass)
