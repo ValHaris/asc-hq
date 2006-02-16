@@ -230,12 +230,6 @@ bool StartMultiplayerGame::Apply()
 
 bool StartMultiplayerGame::nextPage(PG_Button* button)
 {
-   static int counter  = 0;
-   ++counter;
-   if ( counter == 3 ) {
-      cout << "foo \n";
-      counter = 0;
-   }   
    int oldpage = page;
    switch ( page )  {
       case ModeSelection: {
