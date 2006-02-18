@@ -1,10 +1,11 @@
 #ifndef WIN32_CONFIG_INCLUDED
 #define WIN32_CONFIG_INCLUDED
 
-#ifndef PARAGUI_DYNAMIC_EXPORTS
+// #ifndef PARAGUI_DYNAMIC_EXPORTS
 #undef DECLSPEC
-#define DECLSPEC __declspec(dllimport)
-#endif
+#define DECLSPEC 
+// __declspec(dllimport)
+// #endif
 
 #ifndef __MINGW32__
 // disable some nerved non-critical warnings (for now)

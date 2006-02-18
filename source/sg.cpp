@@ -138,11 +138,7 @@
 
 #ifdef WIN32
 # include "win32/win32-errormsg.h"
-#endif
-
-
-#ifdef WIN32
-#include  "win32/msvc/mdump.h"
+# include  "win32/msvc/mdump.h"
  MiniDumper miniDumper( "main" );
 #endif
 

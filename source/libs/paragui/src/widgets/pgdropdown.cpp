@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-02-18 20:25:08 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgdropdown.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -137,8 +137,8 @@ bool PG_DropDown::handleButtonClick(PG_Button* button) {
 		pos.x = my_xpos;
 		pos.y = my_ypos+my_height;
 
-		pos.w = std::min( int(my_DropList->my_width), PG_Application::GetScreenWidth() - pos.x );
-		pos.h = std::min( int(my_DropList->my_height), PG_Application::GetScreenHeight() - pos.y);
+		pos.w = PG_MIN( my_DropList->my_width, PG_Application::GetScreenWidth() - pos.x );
+		pos.h = PG_MIN( my_DropList->my_height, PG_Application::GetScreenHeight() - pos.y);
 
 		my_DropList->MoveWidget( pos );
 

@@ -20,7 +20,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/sdlmm/src;../../../libs/getopt;&quot;$(libsigcpp)&quot;;&quot;$(paragui12)/include&quot;"
+				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/sdlmm/src;../../../libs/getopt;&quot;$(libsigcpp)&quot;;../../../libs/paragui/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;NOMINMAX"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -39,11 +39,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.debug.lib paragui_static.lib physfs.lib freetypeMT_D.lib"
+				AdditionalDependencies="triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.debug.lib paragui_static.lib physfs.lib freetypeMT_D.lib expat.lib"
 				ShowProgress="0"
 				OutputFile="$(OutDir)/bin/ASC2.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/Debug&quot;;&quot;$(SDL_image)/VisualC/Debug&quot;;&quot;$(OutDir)/lib&quot;;../../../libs/SDLmm/SDLmm/debug;&quot;$(SDL)/VisualC/SDLmain/Debug&quot;;&quot;$(SDL)/VisualC/SDL/Debug&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;../../../debug/lib;&quot;$(PARAGUI12)\VisualC\paragui_dynamic\Debug&quot;;&quot;$(physfs)/$(ConfigurationName)&quot;"
+				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/Debug&quot;;&quot;$(SDL_image)/VisualC/Debug&quot;;&quot;$(OutDir)/lib&quot;;../../../libs/SDLmm/SDLmm/debug;&quot;$(SDL)/VisualC/SDLmain/Debug&quot;;&quot;$(SDL)/VisualC/SDL/Debug&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;../../../debug/lib;../../../libs/paragui/VisualC/Debug;&quot;$(physfs)/$(ConfigurationName)&quot;;&quot;$(libexpat)/libs&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/ASC.pdb"
@@ -80,7 +80,7 @@
 				Name="VCCLCompilerTool"
 				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/sdlmm/src;../../../libs/getopt;&quot;$(libsigcpp)&quot;;&quot;$(paragui12)/include&quot;"
+				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/sdlmm/src;../../../libs/getopt;&quot;$(libsigcpp)&quot;;../../../libs/paragui/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;NOMINMAX"
 				RuntimeLibrary="2"
 				DefaultCharIsUnsigned="TRUE"
@@ -96,10 +96,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sdlevent.lib triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.lib paragui_static.lib physfs.lib freetypeMT.lib"
+				AdditionalDependencies="sdlevent.lib triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.lib paragui_static.lib physfs.lib freetypeMT.lib expat.lib"
 				OutputFile="$(OutDir)/bin/ASC2.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/Release&quot;;&quot;$(SDL_image)/VisualC/Release&quot;;../../../Release/lib;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;../../../libs/SDLmm/SDLmm/release;&quot;$(SDL)/VisualC/SDLmain/Release&quot;;&quot;$(SDL)/VisualC/SDL/Release&quot;;&quot;$(PARAGUI12)\VisualC\paragui_dynamic\Release&quot;;&quot;$(physfs)/$(ConfigurationName)&quot;"
+				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/Release&quot;;&quot;$(SDL_image)/VisualC/Release&quot;;../../../Release/lib;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;../../../libs/SDLmm/SDLmm/release;&quot;$(SDL)/VisualC/SDLmain/Release&quot;;&quot;$(SDL)/VisualC/SDL/Release&quot;;../../../libs/paragui/VisualC/Release;&quot;$(physfs)/$(ConfigurationName)&quot;;&quot;$(libexpat)/libs&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/ASC.pdb"
 				SubSystem="2"

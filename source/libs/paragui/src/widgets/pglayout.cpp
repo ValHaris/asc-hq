@@ -1058,7 +1058,7 @@ static void XMLStartDoc(void *userData, const char *name, const char **atts) {
 
 	//Tag <popupmenuitem> <PM>
 	if(IsTag("popupmenuitem", "PI", XML_SECTION_BODY)) {
-		if((!XMLParser->Section & XML_SECTION_POPUPMENU)) {
+		if(!(XMLParser->Section & XML_SECTION_POPUPMENU)) {
 			PG_LogERR("popupmenuitem can't be created in the current context!");
 			return;
 		}

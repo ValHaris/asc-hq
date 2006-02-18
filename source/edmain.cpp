@@ -44,64 +44,24 @@
 #include "stdio-errorhandler.h"
 
 #ifdef WIN32
- #include  "win32/msvc/mdump.h"
+# include "win32/win32-errormsg.h"
+# include  "win32/msvc/mdump.h"
  MiniDumper miniDumper( "asc1mapeditor" );
 #endif
-
-#define menutime 35
 
 
 
 // #define MEMCHK
 #include "memorycheck.cpp"
 
-
-
-#if 0
-void         loadcursor(void)
+pfont load_font(char* name)
 {
-  int          w,i;
-
-  {
-      tnfilestream stream ("hexfeld.raw", tnstream::reading);
-      stream.readrlepict ( &icons.fieldshape, false, &w );
-  }
-
-  {
-      tnfilestream stream ("hexfld_a.raw", tnstream::reading);
-    stream.readrlepict( &icons.stellplatz, false, &w);
-  }
-
-  {
-    tnfilestream stream ("x.raw", tnstream::reading);
-    stream.readrlepict( &icons.X, false, &w);
-  }
-
-  {
-     tnfilestream stream ("pfeil-a0.raw", tnstream::reading);
-     for (i=0;i<8 ;i++ ) stream.readrlepict( &icons.pfeil2[i], false, &w);
-  }
-
-   loadpalette();
-   for (w=0;w<256 ;w++ ) {
-      palette16[w][0] = pal[w][0];
-      palette16[w][1] = pal[w][1];
-      palette16[w][2] = pal[w][2];
-      xlattables.nochange[w] = w;
-   } /* endfor */
-   loadicons();
-
-} 
-#endif
-
-
-
-
+   tnfilestream stream ( name, tnstream::reading );
+   return loadfont ( &stream );
+}
 
 void loaddata( void ) 
 {
-
-   // loadcursor();
    loadmessages();
 
    dataLoaderTicker();
@@ -120,6 +80,13 @@ void loaddata( void )
    dataLoaderTicker();
 
    loadUnitSets();
+
+   schriften.smallarial = load_font("smalaril.fnt");
+   schriften.large = load_font("usablack.fnt");
+   schriften.arial8 = load_font("arial8.fnt");
+   schriften.smallsystem = load_font("msystem.fnt");
+   schriften.monogui = load_font("monogui.fnt");
+
 }
 
 void buildemptymap ( void )
@@ -129,109 +96,6 @@ void buildemptymap ( void )
    else
       generatemap(terrainTypeRepository.getObject_byPos(0)->weather[0], 10, 20);
 }
-
-
-void checkLeftMouseButton ( )
-{
-/*
-   static int buttonStat = 0;
-
-   int x,y;
-   if ( getfieldundermouse ( &x, &y ) ) {
-      x += actmap->xpos;
-      y += actmap->ypos;
-
-      if ( mouseparams.taste )
-         cursor.gotoxy ( x,y );
-
-      if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) {
-         if ( mouseparams.taste == 1 ) {
-            execaction(act_setactivefieldvals);
-            while ( mouseparams.taste == 1 )
-               releasetimeslice();
-         }
-
-      } else {
-
-         if ( mouseparams.taste == 1 ) {
-            if ( buttonStat < 2 ) {
-               execaction(act_placething);
-               if ( lastselectiontype == cselunit || lastselectiontype == cselcolor || lastselectiontype == cselbuilding )
-                  buttonStat = 2;
-               else {
-                 bool moved = false;
-                 do {
-                    int x1,y1;
-                    if ( getfieldundermouse ( &x1, &y1 ) ) {
-                       x1 += actmap->xpos;
-                       y1 += actmap->ypos;
-                       if ( x1 != x || y1 != y )
-                          moved = true;
-                    } else
-                       moved = true;
-
-                    if ( mouseparams.taste != 1 )
-                       moved = true;
-                 } while ( !moved );
-               }
-            }
-         } else
-            if ( buttonStat )
-               buttonStat = 0;
-      }
-   } 
-*/
-/*
-            if ( mouseparams.taste == 1 ) {
-               int mx, my;
-               starttimer();
-               curposchanged = false;
-               while ( mouseparams.taste == 1 ) {
-                 if ( getfieldundermouse ( &mx, &my ) )
-                    if ( ( mx != lastx ) || (my != lasty ) ) {
-                       mousevisible(false);
-                       cursor.hide();
-                       cursor.posx = mx;
-                       cursor.posy = my;
-                       cursor.show();
-                       mousevisible(true);
-
-                       lastx = mx;
-                       lasty = my;
-                       curposchanged = true;
-                       starttimer();
-                    }
-                    if (time_elapsed(menutime)) {
-                       execcode = -1;
-                       execcode = leftmousebox();
-                       if (execcode != -1 ) execaction(execcode);
-                       while ( mouseparams.taste != 0 );
-                  }
-                  releasetimeslice();
-               }
-               if (getfieldundermouse ( &mx, &my ) )
-                  if ( ! time_elapsed(menutime)) {
-                       if ( ! curposchanged ) {
-                          execaction(act_placething);
-                          while ( mouseparams.taste == 1 )
-                             releasetimeslice();
-                       }
-                  }
-            }
-*/
-
-}
-
-
-
-
-pfont load_font(char* name)
-{
-   tnfilestream stream ( name, tnstream::reading );
-   return loadfont ( &stream );
-}
-
-
 
 
 int mapeditorMainThread ( void* _mapname )
@@ -343,11 +207,17 @@ int main(int argc, char *argv[] )
    }
 
    MessagingHub::Instance().setVerbosity( cl->r() );
+   MessagingHub::Instance().exitHandler.connect( SigC::bind( SigC::slot( exit_asc ), -1 ));
 
    #ifdef logging
     logtofile ( kgetstartupmessage() );
     logtofile ( "\n new log started \n ");
    #endif
+
+#ifdef WIN32
+   Win32IoErrorHandler* win32ErrorDialogGenerator = new Win32IoErrorHandler;
+#endif
+
 
    initFileIO( cl->c() );
 
@@ -377,19 +247,15 @@ int main(int argc, char *argv[] )
       flags |= SDL_FULLSCREEN;
    
    app.InitScreen( xr, yr, 32, flags);
+#ifdef WIN32
+   delete win32ErrorDialogGenerator;
+#endif
       
    #ifdef pbpeditor
    setWindowCaption ( "Advanced Strategic Command : PBP Editor ");
    #else
    setWindowCaption ( "Advanced Strategic Command : Map Editor ");
    #endif
-
-   schriften.smallarial = load_font("smalaril.fnt");
-   schriften.large = load_font("usablack.fnt");
-   schriften.arial8 = load_font("arial8.fnt");
-   schriften.smallsystem = load_font("msystem.fnt");
-   schriften.monogui = load_font("monogui.fnt");
-   
 
    virtualscreenbuf.init();
 
