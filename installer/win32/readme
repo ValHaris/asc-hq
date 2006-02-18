@@ -1,0 +1,6 @@
+Place symlinks to the following files into this directory:
+ asc.exe
+ mapeditor.exe
+ mount.exe
+ demount.exe
+ weaponguide.exe

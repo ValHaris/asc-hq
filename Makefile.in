@@ -633,6 +633,12 @@ uninstall-info: uninstall-info-recursive
 	mostlyclean-libtool mostlyclean-recursive pdf pdf-am ps ps-am \
 	tags tags-recursive uninstall uninstall-am uninstall-info-am
 
+
+installer: 
+	cd $(top_srcdir)/installer && makensis pbp.nsi
+
+pbpinstaller: 
+	cd $(top_srcdir)/installer && makensis pbp.nsi
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
