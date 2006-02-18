@@ -73,6 +73,9 @@ bool ItemSelectorWidget::moveSelection( int amount )
          }
       }
    }
+
+   if ( i == widgets.end() )
+      return false;
    
    if ( *i != selectedItem ) {
       selectedItem = *i;
@@ -130,14 +133,9 @@ bool ItemSelectorWidget::eventKeyDown(const SDL_KeyboardEvent* key)
       }
    } 
 
-   if ( key->keysym.sym == SDLK_ESCAPE )  {
-      sigQuitModal();
-      QuitModal();
-      return true;
-   }
       
             
-   if ( key->keysym.unicode <= 255 ) {
+   if ( key->keysym.unicode <= 255 && key->keysym.unicode >= 0x20 ) {
       ASCString newtext = nameSearch->GetText() + char ( key->keysym.unicode );
       if ( locateObject( newtext ) || !namesConstrained ) 
          nameSearch->SetText( newtext );
@@ -282,6 +280,14 @@ void ItemSelectorWindow::itemSelected( const SelectionWidget* )
    QuitModal();
 }
 
+bool ItemSelectorWindow::eventKeyDown(const SDL_KeyboardEvent* key)
+{
+   if ( key->keysym.sym == SDLK_ESCAPE )  {
+      QuitModal();
+      return true;
+   }
+   return false;
+}
 
 int ItemSelectorWindow::RunModal()
 {

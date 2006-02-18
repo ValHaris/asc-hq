@@ -21856,12 +21856,10 @@ fi
 
     if test x$have_physfs_include = xno; then
           { { echo "$as_me:$LINENO: error: *** Unable to find PhysFS header file! (http://www.icculus.org/physfs)
-      Please install the library and header files if you want to link to the shared library,
-      or run './configure --enable-internalphysfs' to compile an internal version of physfs.
+      Please install the library and header files
       " >&5
 echo "$as_me: error: *** Unable to find PhysFS header file! (http://www.icculus.org/physfs)
-      Please install the library and header files if you want to link to the shared library,
-      or run './configure --enable-internalphysfs' to compile an internal version of physfs.
+      Please install the library and header files
       " >&2;}
    { (exit 1); exit 1; }; }
     fi
@@ -21936,12 +21934,10 @@ fi
 
     if test x$have_physfs_lib = xno; then
    { { echo "$as_me:$LINENO: error: *** Unable to find PhysFS library! (http://www.icculus.org/physfs)
-       Please install the library and header files if you want to link to the shared library,
-       or run './configure --enable-internalphysfs' to compile an internal version of physfs.
+       Please install the library and header files.
        " >&5
 echo "$as_me: error: *** Unable to find PhysFS library! (http://www.icculus.org/physfs)
-       Please install the library and header files if you want to link to the shared library,
-       or run './configure --enable-internalphysfs' to compile an internal version of physfs.
+       Please install the library and header files.
        " >&2;}
    { (exit 1); exit 1; }; }
     fi

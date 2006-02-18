@@ -154,9 +154,13 @@ class EditGameOptions : public ASC_PG_Dialog {
          if ( mainApp ) {
             new PG_PropertyField_Checkbox<bool>( propertyEditor, "Game running Fullscreen", &o->forceWindowedMode, true );
             new PG_PropertyField_Checkbox<bool>( propertyEditor, "Produce Ammo when refuelling", &o->autoproduceammunition );
-         } else
+         } else {
             new PG_PropertyField_Checkbox<bool>( propertyEditor, "MapEd running Fullscreen", &o->mapeditWindowedMode, true );
+            new PG_PropertyField_Checkbox<bool>( propertyEditor, "Modal Selection Window", &o->maped_modalSelectionWindow );
+         }
 
+
+            
          new PG_PropertyField_IntDropDown<int, GetVideoModes::VList::iterator>( propertyEditor, "Video Mode", &videoMode, vmodes.getList().begin(), vmodes.getList().end() );
          
          new PG_PropertyField_Checkbox<bool>( propertyEditor, "View own replays", &o->debugReplay );

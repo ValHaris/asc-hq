@@ -36,6 +36,7 @@
 #include "overviewmappanel.h"
 #include "edselfnt.h"
 #include "edmisc.h"
+#include "gameoptions.h"
 
 Maped_MainScreenWidget*  mainScreenWidget = NULL ;
 
@@ -468,19 +469,37 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
 
 
+class MapItemSelectionWindow : public ItemSelectorWindow {
+   public:
+      MapItemSelectionWindow( PG_Widget *parent, const PG_Rect &r , const ASCString& title, SelectionItemFactory* itemFactory )
+         : ItemSelectorWindow( parent, r, title, itemFactory ) {};
+      
+      void itemSelected( const SelectionWidget* )
+      {
+         if ( CGameOptions::Instance()->maped_modalSelectionWindow )
+            Hide();
+         QuitModal();
+      }
+
+};
+
 typedef PG_Window* PG_WindowPointer;
 
 template <class ItemType> 
 void showSelectionWindow( PG_Widget* parent, PG_WindowPointer &selectionWindow, const ItemRepository<ItemType>& itemRepository  )
 {
    if ( !selectionWindow ) {
-      ItemSelectorWindow* sw = new ItemSelectorWindow( parent, PG_Rect( parent->Width()-300, 100, 280, parent->Height()-150), "select item", new MapItemTypeWidgetFactory< MapItemTypeWidget<ItemType> >(itemRepository) );
+      ItemSelectorWindow* sw = new MapItemSelectionWindow( parent, PG_Rect( parent->Width()-300, 100, 280, parent->Height()-150), "select item", new MapItemTypeWidgetFactory< MapItemTypeWidget<ItemType> >(itemRepository) );
+
       filtersChangedSignal.connect( SigC::slot( *sw, &ItemSelectorWindow::reLoad ));
       selectionWindow = sw;
    }
    
    selectionWindow->Show();
    selectionWindow->RunModal();
+   if ( CGameOptions::Instance()->maped_modalSelectionWindow )
+      selectionWindow->Hide();
+      
 }
 
 

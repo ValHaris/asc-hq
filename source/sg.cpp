@@ -381,59 +381,6 @@ void benchgame ( int mode )
 
 
 
-
-
-
-void viewunitmovementrange ( Vehicle* veh, tkey taste )
-{
-   if ( veh && !moveparams.movestatus && fieldvisiblenow ( getfield ( veh->xpos, veh->ypos ))) {
-      actmap->cleartemps ( 7 );
-      TemporaryContainerStorage tcs ( veh, false );
-      veh->reactionfire.disable();
-      veh->setMovement ( veh->typ->movement[log2(veh->height)]);
-      int oldcolor = veh->color;
-      veh->color = actmap->actplayer*8;
-      VehicleMovement vm ( NULL, NULL );
-      if ( vm.available ( veh )) {
-         vm.execute ( veh, -1, -1, 0, -1, -1 );
-         veh->color = oldcolor;
-         if ( vm.reachableFields.getFieldNum()) {
-            for  ( int i = 0; i < vm.reachableFields.getFieldNum(); i++ )
-               if ( fieldvisiblenow ( vm.reachableFields.getField ( i ) ))
-                  vm.reachableFields.getField ( i )->a.temp = 1;
-            for  ( int j = 0; j < vm.reachableFieldsIndirect.getFieldNum(); j++ )
-               if ( fieldvisiblenow ( vm.reachableFieldsIndirect.getField ( j )))
-                  vm.reachableFieldsIndirect.getField ( j )->a.temp = 1;
-
-            displaymap();
-
-            if ( taste != ct_invvalue ) {
-               while ( skeypress ( taste )) {
-                  while ( keypress() )
-                     r_key();
-
-                  releasetimeslice();
-               }
-            } else {
-               int mb = mouseparams.taste;
-               while ( mouseparams.taste == mb && !keypress() )
-                  releasetimeslice();
-
-               while ( keypress() )
-                  r_key();
-            }
-            actmap->cleartemps ( 7 );
-            displaymap();
-         }
-      }
-      veh->color = oldcolor;
-      
-      tcs.restore();
-      
-   }
-}
-
-
 void renameUnit()
 {
    if ( actmap ) {
@@ -690,11 +637,11 @@ void execuseraction ( tuseractions action )
          showGameParameters();
          break;
       case ua_viewunitweaponrange:
-         // viewunitweaponrange ( getSelectedField()->vehicle, ct_invvalue );
+         mainScreenWidget->showWeaponRange( actmap, actmap->getCursor() );
          break;
 
       case ua_viewunitmovementrange:
-         viewunitmovementrange ( getSelectedField()->vehicle, ct_invvalue );
+         mainScreenWidget->showMovementRange( actmap, actmap->getCursor() );
          break;
 
       case ua_aibench:

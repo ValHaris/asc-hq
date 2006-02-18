@@ -43,11 +43,18 @@ void         checktimedevents ( MapDisplayInterface* md )
    if ( actmap->eventTimes.empty() )
       return;
                               
+   static bool isRunning = false;
+   if ( isRunning )
+      return;
+
+   VariableLocker l( isRunning );
+         
    GameTime t = actmap->eventTimes.back();
    if ( actmap->time.abstime >= t.abstime ) {
       checkevents( md );
       actmap->eventTimes.pop_back();
    }
+   
 }
 
 

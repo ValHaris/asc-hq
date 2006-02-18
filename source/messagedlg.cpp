@@ -20,6 +20,7 @@
 #include "messagedlg.h"
 #include "gamemap.h"
 #include "paradialog.h"
+#include "gameeventsystem.h"
 
 class tnewmessage : public tmessagedlg  {
             protected:
@@ -728,11 +729,20 @@ void editjournal ( void )
 
 void viewunreadmessages ( Player& player )
 {
+
+   static bool isRunning = false;
+   if ( isRunning )
+      return;
+
+   VariableLocker l( isRunning );
+   
    MessagePntrContainer::iterator mi = player.unreadmessage.begin();
    while ( mi != player.unreadmessage.end()  ) {
-      viewmessage ( **mi );
+      Message* msg = *mi;
       player.oldmessage.push_back ( *mi );
-      mi = player.unreadmessage.erase ( mi );
+      player.unreadmessage.erase ( mi );
+      viewmessage ( *msg );
+      mi = player.unreadmessage.begin();
    }
 }
 

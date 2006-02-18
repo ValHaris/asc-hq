@@ -36,7 +36,9 @@ class MapDisplayPG;
 class DashboardPanel;
 class UnitWeaponRangeLayer;
 class UnitMovementRangeLayer;
-
+class GameMap;
+class MapCoordinate;
+      
 class ASC_MainScreenWidget : public MainScreenWidget {
 public:
     ASC_MainScreenWidget( PG_Application& application );
@@ -45,6 +47,9 @@ public:
 
     NewGuiHost* getGuiHost() { return guiHost; };
     DashboardPanel* getUnitInfoPanel() { return unitInfoPanel; };
+    
+    void showMovementRange( GameMap* gamemap, const MapCoordinate& pos );
+    void showWeaponRange( GameMap* gamemap, const MapCoordinate& pos );
     
 protected:
     NewGuiHost* guiHost;

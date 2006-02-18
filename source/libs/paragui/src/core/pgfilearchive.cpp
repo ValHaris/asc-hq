@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-18 09:25:13 $
+    Update Date:      $Date: 2006-02-18 13:27:54 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/core/pgfilearchive.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.2 $
+    CVS/RCS Revision: $Revision: 1.1.2.3 $
     Status:           $State: Exp $
 */
 
@@ -41,6 +41,8 @@ Uint32 PG_FileArchive::my_instance_count = 0;
 PG_SurfaceCache PG_FileArchive::my_cache;
 #ifdef PG_LOAD_SDL_IMAGE_DYNAMICALLY
 static void* SDL_image_obj = NULL;
+#else
+#include <SDL_image.h>
 #endif
 
 typedef SDL_Surface* (*IMG_Load_RW_FT)(SDL_RWops* src, int freesrc);
@@ -71,6 +73,8 @@ PG_FileArchive::PG_FileArchive() {
 				SDL_image_obj = NULL;
 			}
 		}
+#else
+         IMG_Load_RW_FUNC = IMG_Load_RW;
 #endif
 	}
 

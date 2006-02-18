@@ -175,6 +175,18 @@ namespace CargoGuiFunctions {
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
 
+   class RepairUnit : public GuiFunction
+   {
+      CargoDialog& parent;
+      public:
+         RepairUnit( CargoDialog& masterParent ) : parent( masterParent)  {};
+         bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
+         void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
+         ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
+   };
+   
    class MoveUnitUp : public GuiFunction
    {
          CargoDialog& parent;
@@ -318,6 +330,7 @@ class CargoDialog : public Panel
          handler.registerUserFunction( new CargoGuiFunctions::Movement( *this ) );
          handler.registerUserFunction( new CargoGuiFunctions::RefuelUnit( *this ) );
          handler.registerUserFunction( new CargoGuiFunctions::RefuelUnitDialog( *this ) );
+         handler.registerUserFunction( new CargoGuiFunctions::RepairUnit( *this ) );
          handler.registerUserFunction( new CargoGuiFunctions::UnitProduction( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::UnitTraining( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::MoveUnitUp( *this ));
@@ -1870,6 +1883,52 @@ namespace CargoGuiFunctions {
 
    //////////////////////////////////////////////////////////////////////////////////////////////
    
+   bool RepairUnit::available( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      if ( !subject )
+         return false;
+
+      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+      if ( !veh )
+         return false;
+
+      return veh->damage > 0;
+   }
+
+
+   bool RepairUnit::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   {
+      return ( key->keysym.sym == 'p' );
+   };
+
+   Surface& RepairUnit::getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return IconRepository::getIcon("repair.png");
+   };
+   
+   ASCString RepairUnit::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return "repair unit";
+   };
+
+
+   void RepairUnit::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      if ( !subject )
+         return;
+      
+      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+      if ( !veh )
+         return;
+      
+
+      parent.getContainer()->repairItem ( veh , 0 );
+      logtoreplayinfo ( rpl_repairUnit2, parent.getContainer()->getPosition().x, parent.getContainer()->getPosition().y, veh->networkid, 0 );
+      
+      parent.cargoChanged();
+   }
+
+   //////////////////////////////////////////////////////////////////////////////////////////////
 
    bool MoveUnitUp::available( const MapCoordinate& pos, ContainerBase* subject, int num )
    {

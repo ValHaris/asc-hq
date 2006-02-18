@@ -33,6 +33,7 @@
 #include "mapdisplay.h"
 #include "dialogs/unitinfodialog.h"
 
+#include "sg.h"
 
 
 
@@ -581,6 +582,14 @@ MapInfoPanel::MapInfoPanel (PG_Widget *parent, const PG_Rect &r, MapDisplayPG* m
    
    mapDisplay->layerChanged.connect( SigC::slot( *this, &MapInfoPanel::layerChanged ));
       
+   PG_Button* b = dynamic_cast<PG_Button*>( FindChild( "weaprange", true ) );
+   if ( b )
+      b->sigClick.connect( SigC::slot( *this, &MapInfoPanel::showWeaponRange ));
+   
+   PG_Button* b2 = dynamic_cast<PG_Button*>( FindChild( "moverange", true ) );
+   if ( b2 )
+      b2->sigClick.connect( SigC::slot( *this, &MapInfoPanel::showMovementRange ));
+   
 }
 
 void MapInfoPanel::layerChanged( bool state, const ASCString& label )
@@ -591,6 +600,18 @@ void MapInfoPanel::layerChanged( bool state, const ASCString& label )
          cb->SetPressed();
       else
          cb->SetUnpressed();
+}
+
+bool MapInfoPanel::showWeaponRange()
+{
+   execuseraction( ua_viewunitweaponrange );
+   return true;
+}
+
+bool MapInfoPanel::showMovementRange()
+{
+   execuseraction( ua_viewunitmovementrange );
+   return true;
 }
 
 

@@ -1369,7 +1369,7 @@ void DisplayImmediateMessage::execute( MapDisplayInterface* md )
    if ( !message.empty() ) {
       new Message ( message, gamemap, 1 << gamemap->actplayer, 0 );
       #ifdef sgmain
-      viewunreadmessages ( actmap->player[ actmap->actplayer ] );
+      viewunreadmessages ( gamemap->player[ gamemap->actplayer ] );
       #endif
    }
 }

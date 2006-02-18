@@ -344,7 +344,7 @@ void showPlayerStrength()
 
 
 //! this executes all functions that use legacy Eventhandling
-void execaction(int code)
+void execaction( int code)
 {
    switch(code) {
     case act_help :   if ( polyfieldmode ) help ( 1040 );
@@ -460,7 +460,7 @@ void execaction(int code)
                                      pf2->removeobject( NULL );
 
                             mapsaved = false;
-                            displaymap();
+                            mapChanged( actmap );
                          }
                       }
         break;
@@ -470,7 +470,7 @@ void execaction(int code)
                             if (pf2->vehicle != NULL) {
                                delete pf2->vehicle;
                                mapsaved = false;
-                               displaymap();
+                               mapChanged( actmap );
                             }
                          }
         break;
@@ -480,7 +480,7 @@ void execaction(int code)
                             if (pf2->building != NULL) {
                                delete pf2->building;
                                mapsaved = false;
-                               displaymap();
+                               mapChanged( actmap );
                             }
                       }
         break;
@@ -489,7 +489,7 @@ void execaction(int code)
                          if ( pf2 ) {
                             mapsaved = false;
                             pf2->removeobject( actobject );
-                            displaymap();
+                            mapChanged( actmap );
                          }
                       }
         break;
@@ -498,7 +498,7 @@ void execaction(int code)
                          if ( pf2 ) {
                             mapsaved = false;
                             pf2->removeobject( NULL );
-                            displaymap();
+                            mapChanged( actmap );
                          }
                       }
         break;
@@ -508,7 +508,7 @@ void execaction(int code)
                             mapsaved = false;
                             pf2->objects.clear( );
                             calculateallobjects();
-                            displaymap();
+                            mapChanged( actmap );
                          }
                       }
         break;
@@ -517,7 +517,7 @@ void execaction(int code)
                          if (pf2 != NULL) {
                             mapsaved = false;
                             pf2->removemine( -1 );
-                            displaymap();
+                            mapChanged( actmap );
                          }
                       }
         break;
@@ -637,9 +637,6 @@ void execaction(int code)
    case act_setunitfilter: selectunitsetfilter();
                            filtersChangedSignal(); 
       break;
-   case act_selectgraphicset: selectgraphicset();
-                              // showallchoices();
-      break;
    case act_setzoom : choosezoomlevel();
       break;
    case act_unitsettransformation: unitsettransformation();
@@ -657,8 +654,6 @@ void execaction(int code)
    case act_switchmaps: mapSwitcher.toggle();
                         displaymap();
                         updateFieldInfo();
-      break;
-   case act_transformMap: transformMap();
       break;
    case act_editArchivalInformation: editArchivalInformation();
       break;
@@ -807,6 +802,11 @@ void execaction_pg(int code)
        break;
        case act_changeproduction :   if ( getactfield() && getactfield()->getContainer() )
              editProduction( getactfield()->getContainer() );
+       break;
+       case act_selectgraphicset: selectgraphicset();
+                              // showallchoices();
+       break;
+       case act_transformMap: transformMap();
        break;
    };
 }

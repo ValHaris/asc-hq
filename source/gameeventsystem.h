@@ -157,6 +157,13 @@ class Event {
       virtual ~Event();
 };
 
+class VariableLocker {
+   bool& var;
+   public:
+      VariableLocker( bool& variable ) : var ( variable ) { var = true; };
+      ~VariableLocker() { var = false; };
+};
+
 
 
 typedef Loki::SingletonHolder< Factory< EventTrigger, EventTriggerID > > triggerFactory;

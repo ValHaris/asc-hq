@@ -946,12 +946,14 @@ void         teventsel::buttonpressed(int         id)
              for ( int t = 0; t < redline && e != actmap->events.end(); t++ )
                 ++e;
 
-             delete *e;
-             actmap->events.erase ( e );
-
-             numberoflines--;
-             resettextfield();
-             viewtext();
+             if ( e != actmap->events.end() ) {
+               delete *e;
+               actmap->events.erase ( e );
+   
+               numberoflines--;
+               resettextfield();
+               viewtext();
+             }
           }
       break;
 

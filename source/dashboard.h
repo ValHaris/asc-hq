@@ -92,7 +92,10 @@ class MapInfoPanel : public DashboardPanel {
         bool scrollTrack( long pos );
         bool checkBox( bool state, const char* name );
         void zoomChanged( int zoom );
-     protected:
+
+        bool showWeaponRange();
+        bool showMovementRange();
+   protected:
         void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
      public:
         MapInfoPanel (PG_Widget *parent, const PG_Rect &r, MapDisplayPG* mapDisplay ) ;

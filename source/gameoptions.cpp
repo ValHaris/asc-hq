@@ -117,6 +117,7 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
 
    pc.addBool( "ForceWindowedMode", forceWindowedMode, forceWindowedMode );
    pc.addBool( "MapeditWindowedMode", mapeditWindowedMode, mapeditWindowedMode );
+   pc.addBool( "MapeditModalSelectionWindow", maped_modalSelectionWindow, maped_modalSelectionWindow );
    pc.addBool( "AutomaticTraining", automaticTraining, automaticTraining );
 
    pc.openBracket("Mouse");
@@ -179,6 +180,7 @@ void CGameOptions::setDefaults ( void )
 {
    forceWindowedMode = false;
    mapeditWindowedMode = true;
+   maped_modalSelectionWindow = true;
    fastmove = true;
    movespeed=15;
    endturnquestion=false;
@@ -206,16 +208,7 @@ void CGameOptions::setDefaults ( void )
    //mouse.smalliconundermouse=2;  // 0: nie=0;  1: immer=0; 2: nur wenn vehicle, geb„ude, oder temp unter MAUS
    mouse.centerbutton=2;    // Maustaste zum zentrieren des fielder, ?ber dem sich die Maus befindet=0;
 
-   /*
-   mouse.unitweaponinfo=0;
-   mouse.dragndropmovement=0;
-   mouse.singleClickAction=0;
-   */
-
-   // onlinehelptime=150;
-   // smallguiiconopenaftermove=0;
    replayspeed=0;
-//   showUnitOwner = 0;
    debugReplay = 0;
 
    autoproduceammunition = false;

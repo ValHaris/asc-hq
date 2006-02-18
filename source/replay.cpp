@@ -1509,7 +1509,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                                  readnextaction();
 
-                                 Building* bld = getfield(x,y)->building;
+                                 ContainerBase* bld = getfield(x,y)->getContainer();
                                  Vehicle* dest = actmap->getUnit ( destnwid );
                                  if ( bld && dest ) {
                                     bld->repairItem ( dest, amount );

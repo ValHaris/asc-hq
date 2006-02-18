@@ -496,6 +496,18 @@ void ASC_MainScreenWidget::spawnPanel ( Panels panel )
    }
 }
 
+
+void ASC_MainScreenWidget::showMovementRange( GameMap* gamemap, const MapCoordinate& pos )
+{
+   movementRangeLayer->operateField( gamemap, pos );
+}
+
+void ASC_MainScreenWidget::showWeaponRange( GameMap* gamemap, const MapCoordinate& pos )
+{
+   weaponRangeLayer->operateField( gamemap, pos );
+}
+
+
 bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 {
    int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
@@ -541,11 +553,11 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                return true;
 
             case SDLK_3:
-               weaponRangeLayer->operateField( actmap, actmap->getCursor() );
+               execUserAction_ev( ua_viewunitweaponrange );
                return true;
 
             case SDLK_4:
-               movementRangeLayer->operateField( actmap, actmap->getCursor() );
+               execUserAction_ev( ua_viewunitmovementrange );
                return true;
 
             case SDLK_5:

@@ -131,6 +131,9 @@ class ItemSelectorWidget : public PG_Widget {
 class ItemSelectorWindow: public PG_Window {
       ItemSelectorWidget* itemSelector;
       virtual void itemSelected( const SelectionWidget* );
+   protected:
+      bool eventKeyDown(const SDL_KeyboardEvent* key);
+      
    public:
       // the ItemSelectorWindow will take ownership over the itemFactory
       ItemSelectorWindow( PG_Widget *parent, const PG_Rect &r , const ASCString& title, SelectionItemFactory* itemFactory ) ;

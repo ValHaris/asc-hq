@@ -49,7 +49,7 @@ Message :: Message ( const ASCString& msg, GameMap* gamemap, int rec, int _from 
 
    for ( int i = 0; i < 8; i++ )
       if ( to & ( 1 << i ))
-         actmap->player[i].unreadmessage.push_back ( this );
+         gamemap->player[i].unreadmessage.push_back ( this );
 }
 
 

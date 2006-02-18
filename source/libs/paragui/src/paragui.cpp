@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-02-18 13:27:54 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/paragui.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -32,7 +32,7 @@
 
 namespace PG_Info {
 
-static std::string Version = VERSION;
+static std::string Version = "1.1.9";
 static std::string Homepage = "http://www.paragui.org";
 static std::string Licence = "LGPL (Lesser General Public Licence)";
 

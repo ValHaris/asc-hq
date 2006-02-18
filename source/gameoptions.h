@@ -106,6 +106,8 @@ class CGameOptions
       //! the vertical resolution the mapeditor uses
       int mapeditor_yresolution;
 
+      bool maped_modalSelectionWindow;
+      
       //! are units automatically trained in training centers
       bool automaticTraining;
 
