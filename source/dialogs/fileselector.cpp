@@ -168,8 +168,13 @@ void FileSelectionWindow::fileNameEntered( ASCString filename )
    fileNameSelected(filename);
 };
 
-FileSelectionWindow::FileSelectionWindow( PG_Widget *parent, const PG_Rect &r, const ASCString& fileWildcard, bool save ) : ASC_PG_Dialog( parent, r, "Choose Filename" ), wildcard( fileWildcard)
+FileSelectionWindow::FileSelectionWindow( PG_Widget *parent, const PG_Rect &r, const ASCString& fileWildcard, bool save ) : ASC_PG_Dialog( parent, r, "" ), wildcard( fileWildcard)
 {
+   if ( save )
+      SetTitle( "Enter Filename" );
+   else
+      SetTitle( "Choose File" );
+   
    FileSelectionItemFactory* factory = new FileSelectionItemFactory( fileWildcard );
    factory->filenameSelectedMouse.connect ( SigC::slot( *this, &FileSelectionWindow::fileNameSelected ));
    factory->filenameSelectedKeyb.connect ( SigC::slot( *this, &FileSelectionWindow::fileNameSelected ));
