@@ -1229,6 +1229,7 @@ void NextMap::writeData ( tnstream& stream )
 
 void NextMap::execute( MapDisplayInterface* md )
 {
+   savegame( "map-" + gamemap->preferredFileNames.mapname[0] );
    throw  LoadNextMap(mapID);
 }
 

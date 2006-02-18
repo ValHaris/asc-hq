@@ -67,10 +67,6 @@ extern GameMap*  loadreplay( pmemorystreambuf streambuf );
 extern void  savereplay( GameMap* gamemap, int num );
 
 
-// extern void  loadicons(void);
-
-extern void  savecampaignrecoveryinformation( const ASCString& filename, int id);
-
 const int actsavegameversion  = 0xff60;
 const int minsavegameversion  = 0xff31;
 const int actmapversion       = 0xfe50;
@@ -169,6 +165,15 @@ extern bool validatesavfile ( const ASCString& filename );
 
 //! checks, whether filename is a valid email game
 extern bool validateemlfile ( const ASCString& filename );
+
+
+struct MapConinuationInfo {
+   ASCString title;
+   ASCString codeword;
+   ASCString filename;
+};
+
+extern MapConinuationInfo findNextCampaignMap( int id = -1 );
 
 
 #endif

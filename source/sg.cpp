@@ -134,6 +134,7 @@
 #include "dialogs/alliancesetup.h"
 #include "dialogs/unitcounting.h"
 #include "dialogs/editgameoptions.h"
+#include "dialogs/nextcampaignmap.h"
 #include "stdio-errorhandler.h"
 
 #ifdef WIN32
@@ -344,11 +345,15 @@ void loadStartupMap ( const char *gameToLoad=NULL )
 
 void         startnextcampaignmap( int id)
 {
-   tcontinuecampaign ncm;
-   ncm.init();
-   ncm.setid(id);
-   ncm.run();
-   ncm.done();
+   GameMap* map = nextCampaignMap( id );
+   delete actmap;
+   actmap = map;
+
+   if ( actmap ) {
+      computeview( actmap );
+      hookGuiToMap( actmap );
+      repaintMap();
+   }
 }
 
 

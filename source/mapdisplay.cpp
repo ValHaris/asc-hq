@@ -323,40 +323,6 @@ void MapRenderer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInf
       }
    }
 
-   /* display resources */
-   /*
-   if ( layer == 8 && b >= visible_ago) {
-      #ifndef karteneditor
-      if ( fld->resourceview && (fld->resourceview->visible & ( 1 << playerview) ) ){
-         if ( showresources == 1 ) {
-            showtext2( strrr ( fld->resourceview->materialvisible[playerview] ) , r + 10 , yp +10 );
-            showtext2( strrr ( fld->resourceview->fuelvisible[playerview] )     , r + 10 , yp +20 );
-         } else
-            if ( showresources == 2 ) {
-               if ( fld->resourceview->materialvisible[playerview] )
-                  bar ( r + 10 , yp +2, r + 10 + fld->resourceview->materialvisible[playerview] / 10, yp +6, 23 );
-
-               if ( fld->resourceview->fuelvisible[playerview] )
-                  bar ( r + 10 , yp + 14 -2, r + 10 + fld->resourceview->fuelvisible[playerview] / 10, yp +14 +2 , 191 );
-            }
-      }
-      #else
-      if ( showresources == 1 ) {
-         showtext2( strrr ( fld->material ) , r + 10 , yp );
-         showtext2( strrr ( fld->fuel )     , r + 10 , yp + 10 );
-      }
-      else if ( showresources == 2 ) {
-         if ( fld->material )
-            bar ( r + 10 , yp -2, r + 10 + fld->material / 10, yp +2, 23 );
-         if ( fld->fuel )
-            bar ( r + 10 , yp +10 -2, r + 10 + fld->fuel / 10, yp +10 +2 , 191 );
-      }
-     #endif
-   }
-   */
-
-
-
 
    // display view obstructions
    if ( layer == 18 ) {

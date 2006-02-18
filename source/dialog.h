@@ -37,10 +37,6 @@ const int dbluedark = 248;
 
 ASCString  selectFile( const ASCString& ext, bool load );
 
-extern void  startnextcampaignmap( int id);
-
-
-   
 extern void displaymessage2( const char* formatstring, ... );
    
 //! displays a message in the message line

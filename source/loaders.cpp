@@ -1587,63 +1587,53 @@ bool validatesavfile ( const ASCString& filename )
 
 
 
-
-void         savecampaignrecoveryinformation( const ASCString& filename,
-                                             int id)
-{ 
-   displaymessage("This has not been implemented yet, sorry!", 2 );
-}
-
-
-
-
-#if 0
-void         loadicons(void)
+MapConinuationInfo findNextCampaignMap( int id  )
 {
-  int w2;
-  int          *w = & w2, i;
-
-
-  {
-      int xl[5] = { cawar, cawarannounce, capeaceproposal, capeace, capeace_with_shareview };
-      tnfilestream stream ("allianc2.raw",tnstream::reading);
-      for ( i = 0; i < 5; i++ )
-         stream.readrlepict( &icons.diplomaticstatus[xl[i]],false,w); 
-      icons.diplomaticstatus[canewsetwar1] = icons.diplomaticstatus[cawar];
-      icons.diplomaticstatus[canewsetwar2] = icons.diplomaticstatus[cawar];
-      icons.diplomaticstatus[canewpeaceproposal] = icons.diplomaticstatus[capeaceproposal];
-
-  }
+   MapConinuationInfo mi;
    
-  {
-      tnfilestream stream ("iconship.raw",tnstream::reading);
-      stream.readrlepict( &icons.statarmy[2],false,w);
-  }
+   tfindfile ff ( mapextension );
+   
+   ASCString filename = ff.getnextname();
+   while( !filename.empty() ) {
 
-  {
-      tnfilestream stream ("icontank.raw",tnstream::reading);
-      stream.readrlepict( &icons.statarmy[1],false,w);
-  }
-   
-  {
-      tnfilestream stream ("iconplan.raw",tnstream::reading);
-      stream.readrlepict( &icons.statarmy[0],false,w);
-  }
-   
-  {
-      tnfilestream stream ("pfeil2.raw",tnstream::reading);
-      stream.readrlepict( &icons.weapinfo.pfeil1, false, w);
-  }
-   
-  {
-      tnfilestream stream ("pfeil3.raw",tnstream::reading);
-      stream.readrlepict( &icons.weapinfo.pfeil2, false, w);
-  }
+      try {
+         tnfilestream filestream ( filename, tnstream::reading );
+         tmaploaders spfldloader;
+         spfldloader.stream = &filestream;
 
-  {
-      tnfilestream stream ("height.raw",tnstream::reading); 
-      for (i = 0; i <= 7; i++) 
-         stream.readrlepict( &icons.height[i],false,w);
+         CharBuf description;
+
+         spfldloader.stream->readpchar ( &description.buf );
+
+         int w = spfldloader.stream->readWord();
+
+         if ( w != fileterminator )
+            throw tinvalidversion ( filename.c_str(), w, fileterminator );
+
+         int version =  spfldloader.stream->readInt();
+
+         if (version > actmapversion || version < minmapversion )
+            throw tinvalidversion ( filename.c_str(), version, actmapversion );
+
+         spfldloader.readmap ();
+
+         if ( spfldloader.spfld->campaign && spfldloader.spfld->campaign->id == id ) {
+            mi.title = spfldloader.spfld->maptitle;
+            mi.codeword = spfldloader.spfld->codeWord;
+            mi.filename = filename;
+            return mi;
+         }
+      }
+      catch ( ... ) {
+      } /* endcatch */
+
+      filename = ff.getnextname();
    }
+
+   return mi;
 }
-#endif
+
+
+
+
+

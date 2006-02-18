@@ -39,70 +39,6 @@
 #include "unitctrl.h"
 
 
-class   tnewcampaignlevel : public tdialogbox {
-                      protected:
-                         tmaploaders  loader;
-                      public:
-                         int           status;
-                         char           dateiinfo[100];
-                         char           mapname [100];
-                         char           mapinfo [100];
-                         char           maptitle[100];
-                         char           message1[100];
-                         char           message2[100];
-                         char           password[100];
-
-                         void           init ( void );
-                         void           searchmapinfo ( void );
-                         virtual void   evaluatemapinfo( const char* srname, GameMap* spfld ) = 0;
-                         void           loadcampaignmap ( void );
-                         void           showmapinfo( int ypos );
-                         void           done ( void );
-                     };
-
-class  tcontinuecampaign : public tnewcampaignlevel {
-                         int           idsearched;
-                         tmemorystreambuf memoryStreamBuffer;
-                         Player::DissectionContainer dissectedunits[8];
-                    public:
-                         void           init ( void );
-                         virtual void   evaluatemapinfo( const char* srname, GameMap* spfld );
-                         void           showmapinfo( int ypos );
-                         virtual void   run ( void );
-                         void           setid( int id );
-                         virtual void   buttonpressed( int id );
-                         void           regroupevents ( GameMap* map );
-                      };
-
-class  tchoosenewmap    : public tnewcampaignlevel {
-                     public:
-                          void          init( char* ptitle );
-                          virtual void  buttonpressed( int id );
-                          void          readmapinfo ( void );
-                          virtual void  checkforcampaign( GameMap* spfld ) = 0;
-                      };
-
-class  tchoosenewcampaign : public tchoosenewmap {
-                     public:
-                          void          init ( void );
-                          virtual void  run ( void );
-                          virtual void  checkforcampaign( GameMap* spfld );
-                          virtual void  evaluatemapinfo( const char* srname, GameMap* spfld );
-                      };
-
-class  tchoosenewsinglelevel : public tchoosenewmap {
-                     public:
-                          void          init ( void );
-                          virtual void  run ( void );
-                          virtual void  checkforcampaign( GameMap* spfld );
-                          virtual void  evaluatemapinfo( const char* srname, GameMap* spfld );
-                      };
-
-
-
-
-
-
 extern void  choosetechnology(void);
 extern void  settributepayments ( void );
 
@@ -135,9 +71,6 @@ extern void multiplayersettings ( void );
 extern void giveunitaway ( tfield* fld );
 
 extern void showGameParameters ( void );
-
-//! a dialog box to transfer resources from one vehicle to another
-extern void  verlademunition( VehicleService* serv, int targetNWID );
 
 extern void showPlayerTime();
 extern void displaywindspeed();

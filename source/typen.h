@@ -467,147 +467,6 @@ class MoveMalusType {
 
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/// Even more miscellaneous structures...
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-
-#pragma pack(1)
-
-#if 0
-
-struct ticons {
-   struct {
-     void      *pfeil1, *pfeil2;
-   } weapinfo;
-   void*        statarmy[3];
-   // void*        height[8];      // fuer vehicleinfo - DLG-Box
-   // void*        height2[3][8];  // fuer vehicleinfo am map
-   // void*        player[8];      // aktueller Spieler in der dashboard: FARBE.RAW
-   // void*        allianz[8][3];  // Allianzen in der dashboard: ALLIANC.RAW 
-   // void*        diplomaticstatus[8]; 
-   // void*        stellplatz;
-   // void*        smallmapbackground;
-   // void*        weaponinfo[5];
-   // void*        X;
-   struct {
-     struct       {
-         void* active;
-         void* inactive;
-         void* repairactive;
-         void* repairinactive;
-         void* movein_active;
-         void* movein_inactive;
-     } mark;
-     struct       {
-         struct {
-           void* start;
-           void* active;
-           void* inactive;
-         } netcontrol;
-         struct {
-           void* start;
-           void* button;
-           void* buttonpressed;
-           void* schieber[4];
-           void* schiene;
-         } ammoproduction;
-         struct {
-           void* start;
-         } resourceinfo;
-         struct {
-           void* start;
-         } windpower;
-         struct {
-           void* start;
-         } solarpower;
-         struct {
-           void* start;
-           void* button;
-           void* buttonpressed;
-           void* schieber[4];
-           void* schiene;
-           void* schieneinactive;
-           void* singlepage[2];
-           void* plus[2];
-           void* minus[2];
-         } ammotransfer;
-         struct {
-           void* start;
-           void* button[2];
-           void* schieber;
-         } research;
-         struct {
-           void* start;
-           // void* button[2];
-           void* schieber;
-         } conventionelpowerplant;
-         struct {
-           void* start;
-           void* height1[8];
-           void* height2[8];
-           void* repair;
-           void* repairpressed;
-           void* block;
-         } buildinginfo;
-         struct {
-           void* start;
-                  void* zeiger;
-           void* button[2];
-           void* resource[2];
-           void* graph;
-           void* axis[3];
-           void* pageturn[2];
-         
-           void* schieber;
-         } miningstation;
-         struct {
-           void* start;
-                  void* zeiger;
-           void* schieber;
-         } mineralresources;
-         struct {
-           void* start;
-           void* height1[8];
-           void* height2[8];
-           void* sum;
-         } transportinfo;
-     } subwin;
-     union {
-        void* sym[11][2];
-        struct {
-          void*  ammotransfer[2];
-          void*  research[2];
-          void*  resourceinfo[2];
-          void*  netcontrol[2];
-          void*  solar[2];
-          void*  ammoproduction[2];
-          void*  wind[2];
-          void*  powerplant[2];
-          void*  buildinginfo[2];
-          void*  miningstation[2];
-          void*  transportinfo[2];
-          void*  mineralresources[2];
-        } a;
-     } lasche;
-
-     void* tabmark[2];
-     void* container_window;
-   } container;
-   struct {
-     void* bkgr;
-     void* orgbkgr;
-   } attack;
-//   void*        pfeil2[8];     // beispielsweise fuer das Mouse-Scrolling
-   void*        fieldshape;
-};
-
-#endif
-
-
-
-#pragma pack()
 
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
@@ -659,11 +518,8 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
-#define guiiconsizex 49  
-#define guiiconsizey 35  
 
-
- #define maxmalq 10  
+ #define maxmalq 10
  #define minmalq 10
  #define fieldxsize 48    /*  Breite eines terrainbildes  */ 
  #define fieldysize 48  
@@ -731,22 +587,11 @@ const int submarineMovement = 11;
 
 #define mineputmovedecrease 10
 #define mineremovemovedecrease 10
-#define streetmovemalus 8
-#define railroadmovemalus 8
-#define searchforresorcesmovedecrease 8
-
 
 #define fusstruppenplattfahrgewichtsfaktor 2  
 #define mingebaeudeeroberungsbeschaedigung 80  
 
-#define autorepairdamagedecrease 10    // only for old units ; new one use autorepairrate
-
-#define brigde1buildcostincrease 12       // jeweils Basis 8; flaches Wasser
-#define brigde2buildcostincrease 16       // jeweils Basis 8; mitteltiefes Wasser
-#define brigde3buildcostincrease 36       // jeweils Basis 8; tiefes Wasser
-
-
-#define lookintoenemytransports false  
+#define lookintoenemytransports false
 #define lookintoenemybuildings false
 
 #define recyclingoutput 2    /*  Material div RecyclingOutput  */
@@ -759,10 +604,6 @@ const int maxwindspeed = 60;          // Wind with a strength of 255 means that 
 #define generatortruckefficiency 2  // fuer jede vehicle Power wird soviel Sprit gebraucht !
 
 #define mine_movemalus_increase 50   // percent
-
-#define tfieldtemp2max 255
-#define tfieldtemp2min 0
-
 
 #define cnet_storeenergy        0x001           // es wird garantiert,  dass material immer das 2 und fuel das 4 fache von energy ist
 #define cnet_storematerial      0x002
@@ -800,8 +641,6 @@ const float productionLineConstructionCostFactor = 0.5;
 const float productionLineRemovalCostFactor = 0.2;
 
 
-#define objectbuildmovecost 16  // vehicle->movement -= (8 + ( fld->movemalus[0] - 8 ) / ( objectbuildmovecost / 8 ) ) * kosten des obj
-
 
 extern const int csolarkraftwerkleistung[];
 
@@ -812,10 +651,5 @@ const int cnetcontrolnum  = 12;
 extern const char* cnetcontrol[cnetcontrolnum];
 
 extern const char* cgeneralnetcontrol[];
-
-#define unspecified_error 9999
-
-#define greenbackgroundcol 156
-
 
 #endif

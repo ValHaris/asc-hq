@@ -343,7 +343,7 @@ void Vehicletype :: read ( tnstream& stream )
 
    if ( hasFunction( AutoRepair ) )
       if ( !autorepairrate )
-         autorepairrate = autorepairdamagedecrease; // which is 10
+         autorepairrate =  10;
 
    if ( version <= 18 ) {
       if ( picture[0] )

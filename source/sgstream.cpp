@@ -367,6 +367,10 @@ void initFileIO ( const ASCString& configFileName, int skipChecks )
 
    if ( ! (skipChecks & 0x20 ))
       checkFileLoadability ( "buildings.version" );
+
+   if ( ! (skipChecks & 0x40 ))
+      checkFileLoadability ( "markedfielddark.png" );
+   
 }
 
 void versionError( const ASCString& filename, const ASCString& location )
