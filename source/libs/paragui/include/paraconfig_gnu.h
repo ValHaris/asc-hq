@@ -5,7 +5,7 @@
 /* #undef ENABLE_UNICODE */
 
 /* Define if exceptions are enabled */
-/* #undef EXCEPTIONS_ENABLED */
+#define EXCEPTIONS_ENABLED 1
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #define HAVE_DLFCN_H 1
@@ -67,35 +67,9 @@
 /* Define if we enabled mpatrol */
 /* #undef MPATROL_ENABLED */
 
-/* Name of package */
-#define PACKAGE "paragui"
-
-/* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT ""
-
-/* Define to the full name of this package. */
-#define PACKAGE_NAME ""
-
-/* Define to the full name and version of this package. */
-#define PACKAGE_STRING ""
-
-/* Define to the one symbol short name of this package. */
-#define PACKAGE_TARNAME ""
-
-/* Define to the version of this package. */
-#define PACKAGE_VERSION ""
-
-/* default directory for themes */
-#define PARAGUI_THEMEDIR "/home/martin/asc/paragui-inst/share/paragui"
-
 /* Define if we enabled runtime type infos */
 #define RTTI_ENABLED 1
-
-/* SDL_image shared library */
-#define SDLIMAGE_LIB "libSDL_image-1.2.so.0"
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
 
-/* Version number of package */
-#define VERSION "1.1.9"

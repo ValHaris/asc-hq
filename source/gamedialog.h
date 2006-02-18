@@ -156,7 +156,7 @@ private:
 
 class GameOptionsDialog: public ASC_PG_Dialog{
 public:    
-   static void GameOptionsDialog::gameOptionsDialog(PG_MessageObject* c);  
+   static void gameOptionsDialog(PG_MessageObject* c);  
   ~GameOptionsDialog();
 private:
   static const int xSize;

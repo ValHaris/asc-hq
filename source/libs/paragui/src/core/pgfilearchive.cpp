@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-02-18 09:25:13 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/core/pgfilearchive.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -39,7 +39,9 @@
 
 Uint32 PG_FileArchive::my_instance_count = 0;
 PG_SurfaceCache PG_FileArchive::my_cache;
+#ifdef PG_LOAD_SDL_IMAGE_DYNAMICALLY
 static void* SDL_image_obj = NULL;
+#endif
 
 typedef SDL_Surface* (*IMG_Load_RW_FT)(SDL_RWops* src, int freesrc);
 static IMG_Load_RW_FT IMG_Load_RW_FUNC = NULL;
@@ -56,6 +58,7 @@ PG_FileArchive::PG_FileArchive() {
 			return;
 		}
 
+#ifdef PG_LOAD_SDL_IMAGE_DYNAMICALLY
 		// try different names to find SDL_image
 		SDL_image_obj = SDL_LoadObject(SDLIMAGE_LIB);
 		if(SDL_image_obj == NULL) {
@@ -68,6 +71,7 @@ PG_FileArchive::PG_FileArchive() {
 				SDL_image_obj = NULL;
 			}
 		}
+#endif
 	}
 
 }
@@ -83,10 +87,12 @@ PG_FileArchive::~PG_FileArchive() {
 
 	if(my_instance_count == 0) {
 		Deinit();
+#ifdef PG_LOAD_SDL_IMAGE_DYNAMICALLY
 		if(SDL_image_obj != NULL) {
 			SDL_UnloadObject(SDL_image_obj);
 			SDL_image_obj = NULL;
 		}
+#endif
 	}
 }
 
