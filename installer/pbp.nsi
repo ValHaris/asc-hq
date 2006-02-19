@@ -115,15 +115,18 @@ Section "Uninstall"
   DeleteRegKey HKLM SOFTWARE\NSIS_Example2
 
   ; Remove files and uninstaller
-  Delete $INSTDIR\example2.nsi
-  Delete $INSTDIR\uninstall.exe
+  Delete $INSTDIR\*.exe
+  Delete $INSTDIR\*.dll
+  Delete $INSTDIR\*.con
+  Delete $INSTDIR\*.cache
+  Delete $INSTDIR\*.gfx
 
   ; Remove shortcuts, if any
-  Delete "$SMPROGRAMS\Example2\*.*"
+  Delete "$SMPROGRAMS\Advanced Strategic Command\*.*"
 
   ; Remove directories used
-  RMDir "$SMPROGRAMS\Example2"
-  RMDir "$INSTDIR"
+  RMDir "$SMPROGRAMS\Advanced Strategic Command"
+  ; RMDir "$INSTDIR"
 
 
 !define Index "Line${__LINE__}"

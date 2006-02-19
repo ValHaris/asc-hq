@@ -16,6 +16,7 @@
 #include "itemrepository.h"
 #include "dlg_box.h"
 #include "textfile_evaluation.h"
+#include "sgstream.h"
 
 
 typedef vector<MusicPlayList*> PlayLists;
@@ -49,6 +50,8 @@ void MusicPlayList :: runTextIO ( PropertyContainer& pc )
    pc.addString( "Name", name );
    pc.addStringArray( "Tracks", files );
 
+   displayLogMessage ( 4, "Reading play list: " );
+
    for ( TrackList::iterator i = files.begin(); i != files.end(); i++ ) {
       tfindfile ff ( *i );
       int loc;
@@ -57,11 +60,15 @@ void MusicPlayList :: runTextIO ( PropertyContainer& pc )
       name = ff.getnextname ( &loc, &incontainer, &location );
       while ( !name.empty()) {
          if ( !incontainer ) {
-            fileNameList.push_back ( location + pathdelimitterstring + name );
+            ASCString filename = location + pathdelimitterstring + name;
+            displayLogMessage ( 4, filename + ", "  );
+            fileNameList.push_back ( filename );
          }
          name = ff.getnextname ( &loc, &incontainer, &location );
       };
    }
+   displayLogMessage ( 4, "Finished \n" );
+
    reset();
 }
 
@@ -111,6 +118,9 @@ void startMusic ()
 #ifndef karteneditor
   if ( !playLists.empty() )
      SoundSystem::getInstance()->playMusic ( playLists.front() );
+  else
+     displayLogMessage ( 1, "No play lists available!\n" );
+
 #endif
 }
 

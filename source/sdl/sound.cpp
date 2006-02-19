@@ -119,6 +119,7 @@ void SoundSystem :: nextTrack( void )
      musicBuf = NULL;
   }
 
+
   if ( currentPlaylist ) {
      ASCString filename = currentPlaylist->getNextTrack();
      if ( !filename.empty() ) {
@@ -133,7 +134,8 @@ void SoundSystem :: nextTrack( void )
            displayLogMessage ( 4, "Playing music on channel %d \n", chan );
         }
      }
-  }
+  } else
+     displayLogMessage ( 1, "No play list available \n" );
 }
 
 void SoundSystem :: playMusic ( MusicPlayList* playlist )

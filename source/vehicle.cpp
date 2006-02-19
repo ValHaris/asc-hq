@@ -628,9 +628,9 @@ int Vehicle::ReactionFire::enable ( void )
          return -213;
 
       if ( unit->typ->wait ) {
-         if ( unit->hasMoved())
-            status = init1a;
-         else
+         // if ( unit->hasMoved())
+         //    status = init1a;
+         // else
             status = init2;
       } else {
          status = init2;
