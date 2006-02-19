@@ -35,8 +35,6 @@ class  Building : public ContainerBase {
     char         _completion;
 
     friend class tprocessminingfields;
-  protected:
-    bool isBuilding() const { return true; };
 
   public:
     class Work {
@@ -186,6 +184,8 @@ class  Building : public ContainerBase {
     int lastmineddist;
 
     bool canRepair ( const ContainerBase* item );
+
+    bool isBuilding() const { return true; };
 
     static Building* newFromStream ( pmap gamemap, tnstream& stream, bool chainToField = true );
     void write ( tnstream& stream, bool includeLoadedUnits = true );

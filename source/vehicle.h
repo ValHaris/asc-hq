@@ -51,12 +51,12 @@
 
     Vehicle ( const Vehicletype* t, pmap actmap, int player, int networkID  );
 
-   protected:
-     bool isBuilding() const { return false; };
 
    public:
 
     Vehicle ( const Vehicletype* t, pmap actmap, int player );
+
+    bool isBuilding() const { return false; };
 
 
     const Vehicletype* typ;

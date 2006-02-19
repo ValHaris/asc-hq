@@ -63,6 +63,25 @@ Section "ASC main program (required)"
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "NoRepair" 1
   WriteUninstaller "uninstall.exe"
+
+
+ ; add file association
+
+!define Index "Line${__LINE__}"
+  ReadRegStr $1 HKCR ".asc" ""
+  StrCmp $1 "" "${Index}-NoBackup"
+    StrCmp $1 "AdvancedStrategicCommand.PBEMfile" "${Index}-NoBackup"
+    WriteRegStr HKCR ".asc" "backup_val" $1
+"${Index}-NoBackup:"
+  WriteRegStr HKCR ".asc" "" "AdvancedStrategicCommand.PBEMfile"
+  ReadRegStr $0 HKCR "AdvancedStrategicCommand.PBEMfile" ""
+  StrCmp $0 "" 0 "${Index}-Skip"
+	WriteRegStr HKCR "AdvancedStrategicCommand.PBEMfile" "" "ASC Mail Game"
+	WriteRegStr HKCR "AdvancedStrategicCommand.PBEMfile\shell" "" "open"
+	WriteRegStr HKCR "AdvancedStrategicCommand.PBEMfile\DefaultIcon" "" "$INSTDIR\execute.exe,0"
+"${Index}-Skip:"
+  WriteRegStr HKCR "AdvancedStrategicCommand.PBEMfile\shell\open\command" "" '$INSTDIR\asc.exe -l "%1"'
+!undef Index
   
 SectionEnd
 
@@ -93,5 +112,22 @@ Section "Uninstall"
   ; Remove directories used
   RMDir "$SMPROGRAMS\Example2"
   RMDir "$INSTDIR"
+
+
+!define Index "Line${__LINE__}"
+  ReadRegStr $1 HKCR ".asc" ""
+  StrCmp $1 "AdvancedStrategicCommand.PBEMfile" 0 "${Index}-NoOwn" ; only do this if we own it
+    ReadRegStr $1 HKCR ".asc" "backup_val"
+    StrCmp $1 "" 0 "${Index}-Restore" ; if backup="" then delete the whole key
+      DeleteRegKey HKCR ".asc"
+    Goto "${Index}-NoOwn"
+"${Index}-Restore:"
+      WriteRegStr HKCR ".asc" "" $1
+      DeleteRegValue HKCR ".asc" "backup_val"
+   
+    DeleteRegKey HKCR "AdvancedStrategicCommand.PBEMfile" ;Delete key with association settings
+ 
+"${Index}-NoOwn:"
+!undef Index
 
 SectionEnd
