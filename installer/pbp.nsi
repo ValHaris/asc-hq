@@ -49,6 +49,7 @@ Section "ASC main program (required)"
   File "../data/units/MK1/mk1.con"
   File "../data/units/MK3/units-mk3.con"
   File "../data/main.con"
+  File "../data/asc.gfx"
   File "../data/trrobj2/trrobj2.con"
   File "../data/buildings/buildings.con"
   File "../data/trrobj/trrobj.con"
@@ -64,6 +65,15 @@ Section "ASC main program (required)"
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "NoRepair" 1
   WriteUninstaller "uninstall.exe"
 
+ ; start menu entries
+
+
+CreateDirectory "$SMPROGRAMS\Advanced Strategic Command"
+ClearErrors
+CreateShortCut "$SMPROGRAMS\Advanced Strategic Command\Advanced Strategic Command.lnk" "$INSTDIR\asc.exe" 
+CreateShortCut "$SMPROGRAMS\Advanced Strategic Command\Map Editor.lnk" "$INSTDIR\mapeditor.exe" 
+WriteINIStr    "$SMPROGRAMS\Advanced Strategic Command\ASC Website.url" "InternetShortcut" "URL" "http://www.asc-hq.org/"
+
 
  ; add file association
 
@@ -78,7 +88,7 @@ Section "ASC main program (required)"
   StrCmp $0 "" 0 "${Index}-Skip"
 	WriteRegStr HKCR "AdvancedStrategicCommand.PBEMfile" "" "ASC Mail Game"
 	WriteRegStr HKCR "AdvancedStrategicCommand.PBEMfile\shell" "" "open"
-	WriteRegStr HKCR "AdvancedStrategicCommand.PBEMfile\DefaultIcon" "" "$INSTDIR\execute.exe,0"
+	WriteRegStr HKCR "AdvancedStrategicCommand.PBEMfile\DefaultIcon" "" "$INSTDIR\asc.exe,0"
 "${Index}-Skip:"
   WriteRegStr HKCR "AdvancedStrategicCommand.PBEMfile\shell\open\command" "" '$INSTDIR\asc.exe -l "%1"'
 !undef Index
@@ -89,6 +99,8 @@ Section "PBP components"
 
   File "win32/mount.exe"
   File "pbp/*"
+
+WriteINIStr    "$SMPROGRAMS\Advanced Strategic Command\PBP Website.url" "InternetShortcut" "URL" "http://www.battle-planet.de/"
   
 SectionEnd
 
