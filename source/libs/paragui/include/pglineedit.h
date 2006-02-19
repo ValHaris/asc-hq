@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-02-19 12:15:43 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pglineedit.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -151,6 +151,11 @@ class SignalEditReturn : public PG_Signal1<PG_LineEdit*, datatype> {}
 	SignalEditEnd<> sigEditEnd;
 	SignalEditReturn<> sigEditReturn;
 
+   /** sets the blinking interval of the cursor
+       Only PG_LineEdits created after setting this to a non-zero value will have a blinking cursor
+   */
+   static void SetBlinkingTime( int msec );
+   
 protected:
 
 	/** */
@@ -216,6 +221,11 @@ private:
 
 	DLLLOCAL bool IsValidKey(PG_Char c);
 
+   DLLLOCAL bool IdleBlinker();
+
+   DLLLOCAL bool GetBlinkState();
+   
+
 	std::string my_buffer;
 
 	int my_startMark;
@@ -223,6 +233,8 @@ private:
 	int my_endMark;
 
 	bool my_isCursorVisible;
+
+   bool my_cursorBlinkState;
 
 	int my_offsetX;
 
@@ -233,6 +245,9 @@ private:
 	PG_String my_validkeys;
 
 	PG_Char my_passchar;
+
+   //! in msec
+   static int cursorBlinkingTime;
 };
 
 #endif // PG_LINEEDIT

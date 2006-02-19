@@ -90,11 +90,14 @@ bool ItemSelectorWidget::moveSelection( int amount )
 bool ItemSelectorWidget::eventKeyDown(const SDL_KeyboardEvent* key) 
 {
    if ( key->keysym.sym == SDLK_BACKSPACE ) {
+      nameSearch->SendBackspace();
+      /*
       ASCString s = nameSearch->GetText();
       if ( s.length() > 0 ) {
          s.erase( s.length() - 1 );
          nameSearch->SetText( s );
       }
+      */
       return true;
    } 
    if ( key->keysym.sym == SDLK_RIGHT )  {
@@ -138,7 +141,7 @@ bool ItemSelectorWidget::eventKeyDown(const SDL_KeyboardEvent* key)
    if ( key->keysym.unicode <= 255 && key->keysym.unicode >= 0x20 ) {
       ASCString newtext = nameSearch->GetText() + char ( key->keysym.unicode );
       if ( locateObject( newtext ) || !namesConstrained ) 
-         nameSearch->SetText( newtext );
+         nameSearch->SendChar( key->keysym.unicode );
       
       return true;
    }   
@@ -190,13 +193,26 @@ bool ItemSelectorWidget::nameMatch( const SelectionWidget* selection, const ASCS
 };   
 
 
+class NonEditableLineEdit : public    PG_LineEdit {
+   public:
+      NonEditableLineEdit (PG_Widget *parent, const PG_Rect &r=PG_Rect::null, const std::string &style="LineEdit", int maximumLength=1000000) : PG_LineEdit( parent, r, style, maximumLength)
+      {
+         EditBegin();
+         SetTransparency(255);
+         SetBorderSize(0);
+      };
+      virtual bool   eventKeyDown (const SDL_KeyboardEvent *key) { return false; };
+      virtual bool   eventFilterKey (const SDL_KeyboardEvent *key) { return true; };
+      
+};
+
 ItemSelectorWidget::ItemSelectorWidget( PG_Widget *parent, const PG_Rect &r , SelectionItemFactory* itemFactory ) 
    : PG_Widget( parent,r ), namesConstrained(true), rowCount(0), scrollWidget( NULL), nameSearch(NULL), selectedItem(NULL), factory( itemFactory ), columnCount(-1), selectionCallBack( this, &ItemSelectorWidget::isItemMarked ) {
    SetTransparency(255);
    reLoad();
    int bottom = 0; // itemFactory->getBottomLineHeight();
    Emboss* e = new Emboss( this, PG_Rect( 1, Height() - 26 - bottom, Width()-20, 22), true );
-   nameSearch = new PG_Label ( e, PG_Rect( 4,1, e->Width()-4 , e->Height()-2 ));
+   nameSearch = new NonEditableLineEdit ( e, PG_Rect( 4,1, e->Width()-4 , e->Height()-2 ));
 
    // factory->spawnBottonWidgets( this, PG_Rect( 1, Height() - bottom, Width()-20, bottom-1));
    // nameSearch = new PG_Label ( this, PG_Rect( 5, Height() - 25, Width() - 10, 20 ));

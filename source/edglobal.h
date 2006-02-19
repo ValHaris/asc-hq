@@ -27,7 +27,7 @@
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 91;
+const int execactionscount = 93;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -121,7 +121,9 @@ enum tuseractions {
      act_createresources2,
      act_setactnewweather,
      act_primaryAction, 
-     act_playerStrengthSummary
+     act_playerStrengthSummary,
+     act_increase_zoom,
+     act_decrease_zoom
  };
 
 class SelectionHolder : public SigC::Object {

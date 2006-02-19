@@ -270,7 +270,7 @@ void MapRenderer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInf
    if ( fieldInfo.visibility > visible_ago ) {
 
       /* display buildings */
-      if ( fld->building  &&  (fld->building->typ->buildingheight & binaryUnitHeight) )
+      if ( fld->building  &&  (fld->building->typ->buildingheight & binaryUnitHeight) && fld->building->visible )
          if ((fieldInfo.visibility == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == fieldInfo.playerView*8 ))
             fld->building->paintSingleField( fieldInfo.surface, pos, fld->building->getLocalCoordinate( fieldInfo.pos ));
 
@@ -479,7 +479,14 @@ void MapDisplayPG::readData()
 
 void MapDisplayPG::setNewZoom( int zoom )
 {
+   if ( zoom > 100 )
+      zoom = 100;
+   if ( zoom < 20 )
+      zoom = 20;
 
+   if ( zoom == this->zoom )
+      return;
+   
    this->zoom = zoom;
 
    field.numx = int( ceil(float(Width()) * 100  / zoom / fielddistx) );
@@ -1361,24 +1368,6 @@ bool MapDisplayPG::keyboardHandler( const SDL_KeyboardEvent* keyEvent)
             return true;
          }
       }   
-      if ( keyEvent->keysym.sym == SDLK_KP_MINUS ) {
-         if ( zoom > 20 ) {
-            setNewZoom( zoom - 10 );
-            Update();
-            viewChanged();
-         }
-         return true;
-      }
-
-      if ( keyEvent->keysym.sym == SDLK_KP_PLUS ) {
-         if ( zoom < 100 ) {
-            setNewZoom( min(100, zoom + 10) );
-            Update();
-            viewChanged();
-         }
-         return true;
-      }
-
    }
    return false;
 }

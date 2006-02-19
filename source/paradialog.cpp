@@ -184,6 +184,7 @@ ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )  : fullScreen(false)
    
    signal ( SIGINT, &signalQuit );
    
+   PG_LineEdit::SetBlinkingTime( 500 );
    
 }
 
@@ -625,6 +626,7 @@ ASCGUI_Window::WidgetParameters::WidgetParameters()
         fontSize(8), fontSize_defined(false),
         backgroundColor_defined(false),
         transparency(0), transparency_defined(false),
+        bordersize(1), bordersize_defined(false),
         hidden(false)
 {
 }
@@ -673,6 +675,11 @@ void  ASCGUI_Window::WidgetParameters::runTextIO ( PropertyReadingContainer& pc 
       transparency_defined = true;
    }
    
+   if ( pc.find("Bordersize")) {
+      pc.addInteger("Bordersize", bordersize, bordersize );
+      bordersize_defined = true;
+   }
+
    pc.addBool( "hidden", hidden, hidden );
    pc.addString("Style", style, style );
 }
@@ -743,7 +750,10 @@ void  ASCGUI_Window::WidgetParameters::assign( PG_Widget* widget )
    
    if ( transparency_defined )
       widget->SetTransparency( transparency, true );
-      
+
+   if( bordersize_defined )
+      widget->SetBorderSize( bordersize );
+   
    if ( hidden )
       widget->Hide(false);
 }
@@ -1132,9 +1142,14 @@ void ASCGUI_Window::setLabelText ( const ASCString& widgetName, const ASCString&
    if ( l )
       l->SetText( text );
    else {
-      PG_MultiLineEdit* l = dynamic_cast<PG_MultiLineEdit*>( parent->FindChild( widgetName, true ) );
+      PG_LineEdit* l = dynamic_cast<PG_LineEdit*>( parent->FindChild( widgetName, true ) );
       if ( l )
          l->SetText( text );
+      else {
+         PG_MultiLineEdit* l = dynamic_cast<PG_MultiLineEdit*>( parent->FindChild( widgetName, true ) );
+         if ( l )
+            l->SetText( text );
+      }
    }
 }
 

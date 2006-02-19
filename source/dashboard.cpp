@@ -53,12 +53,33 @@ DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCS
    registerSpecialDisplay( "field_weather" );
 
    GameMap::sigMapDeletion.connect( SigC::slot( *this, &DashboardPanel::reset ));
+
+   PG_LineEdit* l = dynamic_cast<PG_LineEdit*>( parent->FindChild( "unitname", true ) );
+   if ( l ) {
+      l->sigEditEnd.connect( SigC::slot( *this, &DashboardPanel::containerRenamed ));
+   }
+   
 };
+
+
+bool DashboardPanel::containerRenamed( PG_LineEdit* lineEdit )
+{
+   if ( veh )
+      veh->name = lineEdit->GetText();
+   
+   if ( bld )
+      bld->name = lineEdit->GetText();
+
+   return true;
+}
 
 void DashboardPanel::reset(GameMap& map)
 {
    if ( veh && veh->getMap() == &map )
       veh = NULL;
+   
+   if ( bld && bld->getMap() == &map )
+      bld = NULL;
 }
 
 
@@ -234,10 +255,11 @@ void DashboardPanel::eval()
    PG_Application::SetBulkMode(false);
    Redraw(true);
 }
-void DashboardPanel::showUnitData( const Vehicle* veh, const Building* bld, bool redraw )
+void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, bool redraw )
 {
    int weaponsDisplayed = 0;
    this->veh = veh;
+   this->bld = bld;
    
    bool bulk = PG_Application::GetBulkMode();
    if ( redraw )

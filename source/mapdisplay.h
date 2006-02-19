@@ -202,6 +202,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
 
 
    public:
+      void changeZoom( int delta ) { setNewZoom( getZoom() + delta ); };
       void setNewZoom( int zoom );
       int getZoom() const { return zoom; };
       SigC::Signal1<void, int> newZoom;

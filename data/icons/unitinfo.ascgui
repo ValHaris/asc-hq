@@ -67,14 +67,17 @@ panel {
         
         WidgetNum = 1    
         Widget0 {
-           type = textoutput
+           type = LineEdit
+           text = 
            TextAlign = CENTER
            FontColor = 0xffffff
            Fontsize = 9
            x = 5
            y = 3
+           transparency = 255
+           bordersize = 0
 	   x2 = -5
-	   y2 = -7
+	   y2 = -3
            name = unitname
         } Widget0
       } Widget3

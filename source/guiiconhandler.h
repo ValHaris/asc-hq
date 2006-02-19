@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.18 2005-12-22 17:41:30 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.19 2006-02-19 12:15:43 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -99,6 +99,7 @@ class SmallGuiButton : public PG_Button {
        public:
           SmallGuiButton( PG_Widget *parent, const PG_Rect &r, GuiButton* guiButton, NewGuiHost* host );
           void press();
+          void showInfoText();
           ~SmallGuiButton();
 };
 

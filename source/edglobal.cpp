@@ -138,7 +138,9 @@
         "setup weather generation",
         "Primary action",
         "Reset Player Data...",
-        "View Player Strength" };
+        "View Player Strength",
+        "Increase Zoom",
+        "Decrease Zoom" };
 
 
 
@@ -808,6 +810,20 @@ void execaction_pg(int code)
        break;
        case act_transformMap: transformMap();
        break;
+      case act_increase_zoom:
+         if ( mainScreenWidget && mainScreenWidget->getMapDisplay() ) {
+            mainScreenWidget->getMapDisplay()->changeZoom( 10 );
+            viewChanged();
+            repaintMap();
+         }
+         break;
+      case act_decrease_zoom:
+         if ( mainScreenWidget && mainScreenWidget->getMapDisplay() ) {
+            mainScreenWidget->getMapDisplay()->changeZoom( -10 );
+            viewChanged();
+            repaintMap();
+         }
+         break;
    };
 }
 

@@ -1483,6 +1483,7 @@ class RemoveMine : public GuiFunction
 
 class ObjectBuildingGui : public GuiIconHandler, public GuiFunction {
       Vehicle* veh;
+      bool buttonDone( std::map<int,bool>& map, int id ) { return map.find( id ) != map.end(); };
    protected:
       enum Mode { Build, Remove };
 
@@ -1614,9 +1615,9 @@ ASCString ObjectBuildingGui::getName( const MapCoordinate& pos, ContainerBase* s
       return "";
 
    ASCString result;
-   if ( num < 0 ) {
+   if ( num >= 0 ) {
       result.format( "Build %s (%d Material, %d Fuel, %d Movepoints)", objtype->name.c_str(), objtype->buildcost.material, objtype->buildcost.fuel, objtype->build_movecost );
-      num = -num;
+      // num = -num;
    } else
       result.format( "Remove %s (%d Material, %d Fuel, %d Movepoints)", objtype->name.c_str(), objtype->removecost.material, objtype->removecost.fuel, objtype->remove_movecost );
 
@@ -1668,12 +1669,16 @@ void ObjectBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
    if ( fld->building || fld->vehicle || !fieldvisiblenow(fld) )
       return;
 
+   std::map<int,bool> buttons;
+   
    for ( int i = 0; i < veh->typ->objectsBuildable.size(); i++ )
      for ( int j = veh->typ->objectsBuildable[i].from; j <= veh->typ->objectsBuildable[i].to; j++ )
        if ( checkObject( fld, actmap->getobjecttype_byid ( j ), Build ))
-          if ( pass==1 )
-            addButton(num, pos, veh, j);
-          else {
+          if ( pass==1 ) {
+            if ( !buttonDone( buttons, j ))
+               addButton(num, pos, veh, j);
+            buttons[j] = true;
+          } else {
             ++num;
             fld->a.temp = 1;
           }
@@ -1685,9 +1690,11 @@ void ObjectBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
           ObjectType* objtype = objectTypeRepository.getObject_byPos ( k );
           if ( objtype->groupID == j )
              if ( checkObject( fld, objtype, Build ))
-               if ( pass==1 )
-                  addButton(num, pos, veh, objtype->id);
-                else {
+                if ( pass==1 ) {
+                  if ( !buttonDone( buttons, objtype->id ))
+                     addButton(num, pos, veh, objtype->id);
+                  buttons[objtype->id] = true;
+                } else {
                   ++num;
                   fld->a.temp = 1;
                 }
@@ -1696,9 +1703,11 @@ void ObjectBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
    for ( int i = 0; i < veh->typ->objectsRemovable.size(); i++ )
      for ( int j = veh->typ->objectsRemovable[i].from; j <= veh->typ->objectsRemovable[i].to; j++ )
        if ( checkObject( fld, actmap->getobjecttype_byid ( j ), Remove ))
-          if ( pass==1 )
-            addButton(num, pos, veh, -j);
-          else {
+          if ( pass==1 ) {
+            if ( !buttonDone( buttons, -j ))
+               addButton(num, pos, veh, -j);
+            buttons[-j] = true;
+          } else {
             ++num;
             fld->a.temp = 1;
           }
@@ -1710,9 +1719,11 @@ void ObjectBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
           ObjectType* objtype = objectTypeRepository.getObject_byPos ( k );
           if ( objtype->groupID == j )
              if ( checkObject( fld, objtype, Remove ))
-                if ( pass==1 )
-                   addButton(num, pos, veh, -objtype->id);
-                else {
+                if ( pass==1 ) {
+                  if ( !buttonDone( buttons, -objtype->id ))
+                     addButton(num, pos, veh, -objtype->id);
+                  buttons[-objtype->id] = true;
+                } else {
                   ++num;
                   fld->a.temp = 1;
                 }

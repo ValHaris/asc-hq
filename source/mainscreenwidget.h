@@ -48,6 +48,8 @@ public:
     void activateMapLayer( const ASCString& name, bool active );
     void toggleMapLayer( const ASCString& name );
 
+    MapDisplayPG* getMapDisplay() { return mapDisplay; };
+
 protected:
     MapDisplayPG* mapDisplay;
     // Menu* menu;

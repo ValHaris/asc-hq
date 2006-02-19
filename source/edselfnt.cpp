@@ -129,7 +129,7 @@ void MapComponent::displayClip( PG_Widget* parent, SDL_Surface * surface, const 
    PG_Draw::BlitSurface( getClippingSurface().getBaseSurface(), src, surface, dst);
 
    int x = dst.x;
-   int y = dst.y + displayHeight() + fontProvidingWidget ->GetFontAscender();
+   int y = dst.y + displayHeight() + fontProvidingWidget ->GetFontAscender() - src.y;
    
    PG_FontEngine::RenderText( surface, dst, x, y, getItemType()->getName(), fontProvidingWidget ->GetFont() );
 }

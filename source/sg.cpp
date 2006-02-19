@@ -866,6 +866,21 @@ void execuseraction2 ( tuseractions action )
       case ua_gamepreferences:
          editGameOptions();
          break;
+      case ua_increase_zoom:
+         if ( mainScreenWidget && mainScreenWidget->getMapDisplay() ) {
+            mainScreenWidget->getMapDisplay()->changeZoom( 10 );
+            viewChanged();
+            repaintMap();
+         }
+         break;
+      case ua_decrease_zoom:
+         if ( mainScreenWidget && mainScreenWidget->getMapDisplay() ) {
+            mainScreenWidget->getMapDisplay()->changeZoom( -10 );
+            viewChanged();
+            repaintMap();
+         }
+         break;
+         
       default:
          break;
    }
@@ -1105,7 +1120,7 @@ void deployMapPlayingHooks ( GameMap* map )
 
 int main(int argc, char *argv[] )
 {
-   // setenv( "DISPLAY", "192.168.0.61:0", 1 );
+   setenv( "DISPLAY", "192.168.0.61:0", 1 );
 
    assert ( sizeof(PointerSizedInt) == sizeof(int*));
 

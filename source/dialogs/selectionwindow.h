@@ -29,6 +29,7 @@
 #include <pgwidgetlist.h>
 #include <pgwindow.h>
 #include <pgapplication.h>
+#include <pglineedit.h>
 
 #include "../libs/loki/Functor.h"
 
@@ -95,7 +96,7 @@ class ItemSelectorWidget : public PG_Widget {
       PG_ScrollWidget* scrollWidget;
       static const int gapWidth = 5;
       
-      PG_Label* nameSearch;
+      PG_LineEdit* nameSearch;
       const SelectionWidget* selectedItem;
       
       SelectionItemFactory* factory;

@@ -131,7 +131,6 @@ void Menu::setup()
    currentMenu->addSeparator();
    addbutton ( "~D~iplomacy", ua_setupalliances);
    addbutton ( "transfer ~U~nit control", ua_giveunitaway );
-   addbutton ( "~r~ename unit/building", ua_renameunit );
    addbutton ( "~T~ransfer resources", ua_settribute);
    addbutton ( "~C~ancel Research", ua_cancelResearch );
 
@@ -191,6 +190,9 @@ void Menu::setup()
    addbutton ( "clear image cache", ua_clearImageCache );
    addbutton ( "reload dialog theme", ua_reloadDlgTheme );
    addbutton ( "test messages", ua_testMessages );
+   currentMenu->addSeparator();
+   addbutton ( "Increase Map Zoom\tKP+", ua_increase_zoom );
+   addbutton ( "Decrease Map Zoom\tKP-", ua_decrease_zoom );
 
 
    addfield ( "~H~elp" );
@@ -583,6 +585,15 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
             case SDLK_0: execUserAction_ev( ua_writescreentopcx );
                return true;
+
+            case SDLK_PLUS:   
+            case SDLK_KP_PLUS: execUserAction_ev( ua_increase_zoom );
+               return true;
+
+            case SDLK_MINUS:   
+            case SDLK_KP_MINUS: execUserAction_ev( ua_decrease_zoom );
+               return true;
+               
             default:;
       }
    }

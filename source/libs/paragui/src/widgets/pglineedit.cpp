@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-02-19 12:15:43 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pglineedit.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -42,8 +42,12 @@ PG_LineEdit::PG_LineEdit(PG_Widget* parent, const PG_Rect& r, const std::string&
 	my_startMark = -1;
 	my_endMark   = -1;
 	my_passchar = 0;
+   my_cursorBlinkState = true;
 
 	LoadThemeStyle(style);
+
+   if ( cursorBlinkingTime > 0 )
+      PG_Application::GetApp()->sigAppIdle.connect( SigC::slot( *this, &PG_LineEdit::IdleBlinker ));
 }
 
 PG_LineEdit::~PG_LineEdit() {}
@@ -86,6 +90,10 @@ void PG_LineEdit::DrawTextCursor() {
 	int y = my_ypos + 1;
 	int h = my_height - 2;
 
+   my_cursorBlinkState = GetBlinkState();
+   if ( !my_cursorBlinkState )
+      return;
+   
 	// draw simple cursor
 	if(my_srfTextCursor == NULL) {
 		DrawVLine(GetCursorXPos() + 2, 2, h-4, PG_Color(0,0,0));
@@ -579,4 +587,30 @@ void PG_LineEdit::SetPassHidden(const PG_Char& passchar) {
 
 char PG_LineEdit::GetPassHidden() {
 	return my_passchar;
+}
+
+
+int PG_LineEdit::cursorBlinkingTime = 0;
+
+void PG_LineEdit::SetBlinkingTime( int msec )
+{
+   cursorBlinkingTime = msec;
+}
+
+bool PG_LineEdit::GetBlinkState()
+{
+   if ( cursorBlinkingTime <= 0 )
+      return true;
+   else
+      return (SDL_GetTicks() / cursorBlinkingTime) & 1;
+}
+      
+
+bool PG_LineEdit::IdleBlinker()
+{
+   if ( my_isCursorVisible )
+      if ( GetBlinkState() != my_cursorBlinkState ) 
+         Update();
+   
+   return true;
 }

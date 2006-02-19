@@ -36,16 +36,20 @@ class GameMap;
 
 class DashboardPanel : public Panel {
     protected:
-       const Vehicle* veh;
+       Vehicle* veh;
+       Building* bld;
       DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme );
 
       void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
       void registerSpecialDisplay( const ASCString& name );
 
       void reset(GameMap& map);
+
+      bool containerRenamed( PG_LineEdit* lineEdit );
+      
     public:
       void eval();
-      void showUnitData( const Vehicle* veh, const Building* bld, bool redraw = false );
+      void showUnitData( Vehicle* veh, Building* bld, bool redraw = false );
 
 };
 

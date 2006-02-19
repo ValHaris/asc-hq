@@ -174,6 +174,9 @@ class ASCGUI_Window : public  PG_Window {
             
             int transparency;
             bool transparency_defined;
+
+            int bordersize;
+            bool bordersize_defined;
             bool hidden;
 
             void assign( PG_Widget* widget );

@@ -119,7 +119,8 @@ void Menu::setup()
     addbutton ( "~I~mport BI map\tctrl-i", act_import_bi_map );
     addbutton ( "Insert ~B~I map", act_insert_bi_map );
    currentMenu->addSeparator();
-    addbutton ( "set zoom level", act_setzoom );
+   addbutton ( "Increase Map Zoom\tKP+", act_increase_zoom );
+   addbutton ( "Decrease Map Zoom\tKP-", act_decrease_zoom );
    currentMenu->addSeparator();
    addbutton ( "E~x~it\tEsc", act_end);
 
@@ -398,7 +399,15 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                              else
                                 execaction_ev(act_end);
                         return true;
-         default:;
+         case SDLK_PLUS:
+         case SDLK_KP_PLUS: execaction_ev( act_increase_zoom );
+            return true;
+
+         case SDLK_MINUS:
+         case SDLK_KP_MINUS: execaction_ev( act_decrease_zoom );
+            return true;
+            
+            default:;
        }
    }
       

@@ -135,11 +135,17 @@ void SmallGuiButton::press()
    Update();
 }   
 
+void SmallGuiButton::showInfoText()
+{
+   if ( referenceButton && referenceButton->func )
+      MessagingHub::Instance().statusInformation( referenceButton->func->getName(referenceButton->pos, referenceButton->subject, referenceButton->id));
+}
+
+
 void SmallGuiButton::eventMouseEnter()
 {
    PG_Button::eventMouseEnter();
-   if ( referenceButton && referenceButton->func )
-      MessagingHub::Instance().statusInformation( referenceButton->func->getName(referenceButton->pos, referenceButton->subject, referenceButton->id));
+   showInfoText();
 }
 
 void SmallGuiButton::eventMouseLeave()
@@ -355,6 +361,8 @@ bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mous
       p.y += 2;
    }
 
+   SmallGuiButton* firstSmallButton = NULL;
+   
    if ( !cursorChanged ) {
       int count = 0;
       for ( int j = 0; j < buttons.size(); ++j) 
@@ -371,16 +379,22 @@ bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mous
             if ( !b->IsHidden() ) {
                SmallGuiButton* sgi = new SmallGuiButton( smallButtonHolder, r, b, this );
                r.x += smallGuiIconSizeX + smallGuiIconSpace;
-               if ( j == 0  && positionedUnderCursor )
-                  sgi->press();
+               if ( j == 0  && positionedUnderCursor ) 
+                  firstSmallButton = sgi;
             }
          }
       }
    }
 
    PG_Application::SetBulkMode(false);
-   if ( smallButtonHolder )
+   if ( smallButtonHolder ) {
       smallButtonHolder->Show();
+      if ( firstSmallButton ) {
+         firstSmallButton->press();
+         firstSmallButton->showInfoText();
+      }
+   }
+      
    /*
    for ( SmallButtons::iterator i = smallButtons.begin(); i != smallButtons.end(); ++i )
       (*i)->Show();
