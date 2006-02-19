@@ -304,7 +304,8 @@ int BytesPerTargetPixel,
 template<int> class SourceColorTransform, // = ColorTransform_None,
 template<int> class ColorMerger, // = ColorMerger_PlainOverwrite,
 template<int> class SourcePixelSelector = SourcePixelSelector_Plain,
-class TargetPixelSelector = TargetPixelSelector_All
+class TargetPixelSelector = TargetPixelSelector_All,
+template<int,int> class MyColorConverter = ColorConverter
 >
 class MegaBlitter : public SourceColorTransform<BytesPerSourcePixel>,
          public ColorMerger<BytesPerTargetPixel>,
@@ -350,7 +351,7 @@ class MegaBlitter : public SourceColorTransform<BytesPerSourcePixel>,
          ColorMerger<BytesPerTargetPixel>::init( BytesPerSourcePixel == BytesPerTargetPixel ? src : dst );
          SourcePixelSelector<BytesPerSourcePixel>::init( src );
 
-         ColorConverter<BytesPerSourcePixel,BytesPerTargetPixel> colorConverter( src, dst );
+         MyColorConverter<BytesPerSourcePixel,BytesPerTargetPixel> colorConverter( src, dst );
 
          SourceColorTransform<BytesPerSourcePixel>::init( src );
 
@@ -1100,6 +1101,8 @@ class ColorMerger_AlphaMixer<4> : public ColorMerger_AlphaHandler<4>
 
 
 
+extern const int ColorMerger_Alpha_XLAT_Table_shadings[8]; 
+
 template<int pixelsize>
 class ColorMerger_Alpha_XLAT_TableShifter : public ColorMerger_AlphaHandler<pixelsize>
 {
@@ -1107,7 +1110,12 @@ class ColorMerger_Alpha_XLAT_TableShifter : public ColorMerger_AlphaHandler<pixe
       const char* table;
    protected:
       void assign ( PixelType src, PixelType* dest )
-      {/*
+      {
+         if ( src == 0 || src >= 8 )
+            return;
+
+         *dest = lighten_Color( *dest, ColorMerger_Alpha_XLAT_Table_shadings[src] );
+         /*
                      // STATIC_CHECK ( pixelsize == 1, wrong_pixel_size );
                      if ( isOpaque(src ) ) {
                         *dest = table[ *dest + src*256 ];

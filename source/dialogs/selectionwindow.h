@@ -101,6 +101,7 @@ class ItemSelectorWidget : public PG_Widget {
       
       SelectionItemFactory* factory;
       int columnCount;
+      int visibleRowCount;
       
       SelectionWidget::SelectionCallBack selectionCallBack;
       

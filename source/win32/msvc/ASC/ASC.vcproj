@@ -526,6 +526,9 @@
 					RelativePath="..\..\..\dialogs\emailsetup.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\nextcampaignmap.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\unitcounting.cpp">
 				</File>
 				<File

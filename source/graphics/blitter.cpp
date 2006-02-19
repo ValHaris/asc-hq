@@ -36,3 +36,10 @@
  }
 
  
+ // base 10:
+ // const int ColorMerger_Alpha_XLAT_Table_shadings[8] = { 9, 8, 6, 4, 11, 12, 14, 17 };
+
+ // base 16:
+ const int ColorMerger_Alpha_XLAT_Table_shadings[8] = { 14, 12, 9, 6, 18, 20, 23, 28 };
+
+ 

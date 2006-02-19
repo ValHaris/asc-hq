@@ -116,6 +116,22 @@ bool ItemSelectorWidget::eventKeyDown(const SDL_KeyboardEvent* key)
       moveSelection(columnCount);
       return true;
    }
+   if ( key->keysym.sym == SDLK_HOME )  {
+      moveSelection(-widgets.size() );
+      return true;
+   }
+   if ( key->keysym.sym == SDLK_END )  {
+      moveSelection(widgets.size());
+      return true;
+   }
+   if ( key->keysym.sym == SDLK_PAGEUP )  {
+      moveSelection( -columnCount * visibleRowCount );
+      return true;
+   }
+   if ( key->keysym.sym == SDLK_PAGEDOWN )  {
+      moveSelection(columnCount * visibleRowCount);
+      return true;
+   }
 
    if ( key->keysym.sym == SDLK_RETURN ) {
       if ( namesConstrained ) {
@@ -207,7 +223,7 @@ class NonEditableLineEdit : public    PG_LineEdit {
 };
 
 ItemSelectorWidget::ItemSelectorWidget( PG_Widget *parent, const PG_Rect &r , SelectionItemFactory* itemFactory ) 
-   : PG_Widget( parent,r ), namesConstrained(true), rowCount(0), scrollWidget( NULL), nameSearch(NULL), selectedItem(NULL), factory( itemFactory ), columnCount(-1), selectionCallBack( this, &ItemSelectorWidget::isItemMarked ) {
+   : PG_Widget( parent,r ), namesConstrained(true), rowCount(0), scrollWidget( NULL), nameSearch(NULL), selectedItem(NULL), factory( itemFactory ), columnCount(-1), visibleRowCount(-1), selectionCallBack( this, &ItemSelectorWidget::isItemMarked ) {
    SetTransparency(255);
    reLoad();
    int bottom = 0; // itemFactory->getBottomLineHeight();
@@ -246,6 +262,9 @@ void ItemSelectorWidget::reLoad( bool show )
    
       if ( columnCount < 0 )
          columnCount = scrollWidget->Width() / (w->Width() + gapWidth);
+
+      if ( visibleRowCount < 0 )
+         visibleRowCount = scrollWidget->Height() / (w->Height() + gapWidth);
 
       w->itemSelected.connect( SigC::bind( SigC::slot( *this, &ItemSelectorWidget::itemSelected ), true ));
       w->itemMarked.connect( SigC::slot( *this, &ItemSelectorWidget::markItem ));

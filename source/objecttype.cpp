@@ -145,6 +145,28 @@ void ObjectType :: display ( Surface& surface, const SPoint& pos, int dir, int w
 }
 
 
+template<
+int BytesPerSourcePixel,
+int BytesPerTargetPixel
+>
+class ColorConverter_PassThrough
+{
+   public:
+      typedef typename PixelSize2Type<BytesPerTargetPixel>::PixelType SourcePixelType;
+      typedef typename PixelSize2Type<BytesPerTargetPixel>::PixelType TargetPixelType;
+   private:
+      SourcePixelType srcColorKey;
+      TargetPixelType destColorKey;
+   public:
+      ColorConverter_PassThrough( const Surface& sourceSurface, Surface& targetSurface )
+      {}
+      ;
+      TargetPixelType convert ( SourcePixelType sp )
+      {
+         return sp;
+      };
+};
+
 
 
 void ObjectType::realDisplay ( Surface& surface, const SPoint& pos, int dir, int weather ) const
@@ -157,7 +179,16 @@ void ObjectType::realDisplay ( Surface& surface, const SPoint& pos, int dir, int
       megaBlitter<ColorTransform_None, ColorMerger_AlphaLighter, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam, 0.7, flip, nullParam); 
    } else
       if ( displayMethod == 2 ) {  // translation
-         megaBlitter<ColorTransform_None, ColorMerger_Alpha_XLAT_TableShifter, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam, xlattables.nochange, flip, nullParam); 
+         MegaBlitter< 1,4,
+                     ColorTransform_None, 
+                     ColorMerger_Alpha_XLAT_TableShifter, 
+                     SourcePixelSelector_DirectFlip,
+                     TargetPixelSelector_All,
+                     ColorConverter_PassThrough
+                    >
+             blitter;
+         blitter.setFlipping( flip & 1, flip & 2 );
+         blitter.blit( getPicture( dir, weather), surface, pos );
       } else
          if ( displayMethod == 4 ) {
             megaBlitter<ColorTransform_None, ColorMerger_AlphaMixer, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
