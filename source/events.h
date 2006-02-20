@@ -43,7 +43,7 @@ extern void exit_asc( int returnresult );
 
 class ThreadExitException {};
 
-
+extern bool redrawScreen;
 
 /***************************************************************************
  *                                                                         *

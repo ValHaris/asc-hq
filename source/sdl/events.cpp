@@ -258,7 +258,7 @@ int  releasetimeslice( void )
    SDL_Delay(10);
    if ( redrawScreen ) {
       redrawScreen = false;
-      // copy2screen();
+      copy2screen();
    }
    return 0;
 }
@@ -389,13 +389,6 @@ int processEvents ( )
          case SDL_QUIT:
             exitprogram = 1;
             break;
-#ifdef _WIN32_
-         case SDL_ACTIVEEVENT:
-              // if ( event.active.state == SDL_APPACTIVE )
-              //   if ( event.active.gain )
-                    redrawScreen = true;
-            break;
-#endif
         } 
       }
       result = 1;
@@ -404,6 +397,14 @@ int processEvents ( )
          eventQueue.push ( event );
          SDL_mutexV( eventQueueMutex );
       }
+
+#ifdef _WIN32_
+      if ( event.type  == SDL_ACTIVEEVENT ) {
+         redrawScreen = true;
+         printf("Event encountered\n");
+      }
+#endif
+
    } else
       result = 0;
 

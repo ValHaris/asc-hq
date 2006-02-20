@@ -81,6 +81,7 @@ class StartupScreen: public SigC::Object {
        
     protected:
        bool eventQuit(int id, PG_MessageObject* widget, unsigned long data);
+	    void eventIdle();
        
     public:
        static const int mapDisplayID = 2;
