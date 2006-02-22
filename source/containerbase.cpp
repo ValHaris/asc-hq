@@ -413,9 +413,10 @@ bool  ContainerBase :: vehicleLoadable ( const Vehicle* vehicle, int uheight, co
                   if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))
                      if ( vehicle->typ->hasAnyFunction(i->requiresUnitFeature) || i->requiresUnitFeature.none() )
                         if ( i->vehicleCategoriesLoadable & (1<<vehicle->typ->movemalustyp)) {
+                           if ( getMap()->getPlayer(this).diplomacy.isAllied( vehicle->getOwner()) ) 
+                              return true;
+
                            if ( isBuilding() ) {
-                              if ( getOwner() == vehicle->getOwner())
-                                 return true;
                               if ( !hasAttacked ) {
                                  if ( getOwner() == 8 )
                                     return true;
@@ -423,9 +424,6 @@ bool  ContainerBase :: vehicleLoadable ( const Vehicle* vehicle, int uheight, co
                                     if (damage >= mingebaeudeeroberungsbeschaedigung  || vehicle->typ->hasFunction( ContainerBaseType::ConquerBuildings ) )
                                        return true;
                               }
-                           } else {
-                              if ( getOwner() == vehicle->getOwner() )
-                                 return true;
                            }
                         }
    return false;

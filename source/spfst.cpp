@@ -164,7 +164,7 @@ int         fieldAccessible( const tfield*        field,
          return 0;
    } else {
       if (field->vehicle) {
-         if (field->vehicle->color == vehicle->color) {
+         if ( vehicle->getMap()->getPlayer(vehicle).diplomacy.isAllied( field->vehicle->getOwner()) ) {
             if ( field->vehicle->vehicleLoadable ( vehicle, uheight ) )
                return 2;
             else

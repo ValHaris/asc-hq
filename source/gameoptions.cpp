@@ -126,7 +126,7 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    // add(new IntProperty("Mouse.SmallGuiIconButton"			,&_pOptions->mouse.smallguibutton));
    // add(new IntProperty("Mouse.LargeGuiIconButton"			,&_pOptions->mouse.largeguibutton));
    // add(new IntProperty("Mouse.SmallGuiIconUnderMouse"		,&_pOptions->mouse.smalliconundermouse ));
-   pc.addNamedInteger("MapCenterButton", mouse.fieldmarkbutton, mouseButtonNum, mouseButtons, mouse.fieldmarkbutton );
+   pc.addNamedInteger("MapCenterButton", mouse.centerbutton, mouseButtonNum, mouseButtons, mouse.centerbutton );
    // add(new IntProperty("Mouse.UnitWeaponInfoButton"		,&_pOptions->mouse.unitweaponinfo));
    // add(new IntProperty("Mouse.SingleClickAction"	   	,&_pOptions->mouse.singleClickAction));
    // add(new IntProperty("Mouse.dragndropmovement"		,&_pOptions->mouse.dragndropmovement));
