@@ -18,7 +18,6 @@
 #ifndef replayH
  #define replayH
 
-#include "controls.h"
 #include "reactionfire.h"
 #include "events.h"
 

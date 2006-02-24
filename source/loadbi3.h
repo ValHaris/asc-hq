@@ -29,7 +29,6 @@
 #include "palette.h"
 #include "itemrepository.h"
 
-
 #ifdef converter
  #error The small editors should not need to use LoadBi3
 #endif

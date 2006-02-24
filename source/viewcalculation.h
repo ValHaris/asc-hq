@@ -22,7 +22,6 @@
  #include "typen.h"
  #include "mapalgorithms.h"
  #include "gamemap.h"
- #include "spfst.h"
 
   class tcomputeview : public SearchFields {
                 protected:

@@ -65,7 +65,6 @@
 #include "global.h"
 
 #include <stdio.h>
-#include <cstring>
 #include <stdlib.h>
 #include <new>
 #include <cstdlib>
@@ -96,12 +95,10 @@
 #include "strtmesg.h"
 #include "gamedlg.h"
 #include "sg.h"
-#include "soundList.h"
 #include "gameoptions.h"
 #include "loadimage.h"
 #include "astar2.h"
 #include "errors.h"
-#include "password.h"
 #include "password_dialog.h"
 #include "viewcalculation.h"
 #include "replay.h"
@@ -112,7 +109,6 @@
 #include "messagedlg.h"
 #include "statisticdialog.h"
 #include "clipboard.h"
-#include "guiiconhandler.h"
 #include "guifunctions.h"
 #include "iconrepository.h"
 #include "dashboard.h"
@@ -128,6 +124,8 @@
 #include "mapimageexport.h"
 #include "loadpcx.h"
 #include "gameeventsystem.h"
+#include "sdl/sound.h"
+#include "soundList.h"
 
 #include "dialogs/newgame.h"
 #include "dialogs/soundsettings.h"
@@ -1120,7 +1118,7 @@ void deployMapPlayingHooks ( GameMap* map )
 
 int main(int argc, char *argv[] )
 {
-   // setenv( "DISPLAY", "192.168.0.61:0", 1 );
+   setenv( "DISPLAY", "192.168.0.61:0", 1 );
 
    assert ( sizeof(PointerSizedInt) == sizeof(int*));
 

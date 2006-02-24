@@ -32,6 +32,8 @@
 #include "messaginghub.h"
 #include "mapdisplayinterface.h"
 #include "reactionfire.h"
+#include "spfst.h"
+#include "itemrepository.h"
 
 
 treactionfirereplay :: treactionfirereplay ( void )

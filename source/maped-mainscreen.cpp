@@ -122,6 +122,8 @@ void Menu::setup()
    addbutton ( "Increase Map Zoom\tKP+", act_increase_zoom );
    addbutton ( "Decrease Map Zoom\tKP-", act_decrease_zoom );
    currentMenu->addSeparator();
+   addbutton( "Edit Preferences", act_editpreferences );
+   currentMenu->addSeparator();
    addbutton ( "E~x~it\tEsc", act_end);
 
   addfield ("~E~dit");

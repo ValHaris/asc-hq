@@ -48,6 +48,7 @@
 # include "gamedlg.h"
 # include "viewcalculation.h"
 # include "resourcenet.h"
+# include "unitctrl.h"
 #endif
 
 const int EventActionNum = 21;

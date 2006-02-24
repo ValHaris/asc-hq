@@ -20,6 +20,9 @@
 
  #include "messages.h"
 
+class Player;
+class Message;
+
 extern void editmessage( Message& msg );
 extern void newmessage();
 extern void viewmessages( char* title, const MessagePntrContainer& msgc, bool editable, int md  ) ;   // mode : 0 verschickte ; 1 empfangene

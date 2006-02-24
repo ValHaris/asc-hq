@@ -35,6 +35,7 @@ class HighLightingManager
       SigC::Signal2<void,int,int> markChanged;
       void setNew(int pos );
       SigC::Signal0<void> redrawAll;
+      SigC::Signal2<void,int, SPoint> clickOnMarkedUnit;
 };
 
 
@@ -68,12 +69,15 @@ class CargoWidget : public PG_ScrollWidget {
       vector<StoringPosition*> storingPositionVector;
       void checkStoringPosition( int oldpos, int newpos );
       HighLightingManager unitHighLight;
+
+      void click( int num, SPoint mousePos );
       
    public:
       CargoWidget( PG_Widget* parent, const PG_Rect& pos, ContainerBase* container );
       bool eventKeyDown(const SDL_KeyboardEvent* key);
       Vehicle* getMarkedUnit();
       SigC::Signal1<void,Vehicle*> unitMarked;
+      SigC::Signal2<void,Vehicle*,SPoint> unitClicked;
       void redrawAll();
 };
 

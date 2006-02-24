@@ -41,6 +41,7 @@
 #include "cannedmessages.h"
 #include "unitctrl.h"
 #include "replaymapdisplay.h"
+#include "loaders.h"
 
 trunreplay runreplay;
 

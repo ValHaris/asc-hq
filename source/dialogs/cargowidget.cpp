@@ -52,7 +52,12 @@ void StoringPosition :: markChanged(int old, int mark)
 bool StoringPosition :: eventMouseButtonDown (const SDL_MouseButtonEvent *button)
 {
    if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == SDL_BUTTON_LEFT ) {
+      // int oldPos = highlight.getMark();
       highlight.setNew( num );
+
+      // if ( num != oldPos ) 
+      highlight.clickOnMarkedUnit( num, SPoint(button->x, button->y));
+      
       return true;
    }
    return false;
@@ -115,7 +120,8 @@ vector<StoringPosition*> StoringPosition :: setup( PG_Widget* parent, ContainerB
          posNum = container->getCargo().size();
 
       for ( int i = 0; i < posNum; ++i ) {
-         storingPositionVector.push_back( new StoringPosition( parent, PG_Point( x, y), highLightingManager, container->getCargo(), i, container->baseType->maxLoadableUnits >= container->getCargo().size() ));
+         StoringPosition* sp = new StoringPosition( parent, PG_Point( x, y), highLightingManager, container->getCargo(), i, container->baseType->maxLoadableUnits >= container->getCargo().size() );
+         storingPositionVector.push_back( sp );
          x += StoringPosition::spWidth;
          if ( x + StoringPosition::spWidth >= parent->Width() - 20 ) {
             if ( !unitColumnCount )
@@ -141,7 +147,16 @@ CargoWidget :: CargoWidget( PG_Widget* parent, const PG_Rect& pos, ContainerBase
    storingPositionVector = StoringPosition::setup( this, container, unitHighLight, unitColumnCount );
 
    unitHighLight.markChanged.connect( SigC::slot( *this, &CargoWidget::checkStoringPosition ));
+
+   unitHighLight.clickOnMarkedUnit.connect( SigC::slot( *this, &CargoWidget::click ));
 };
+
+void CargoWidget::click( int num, SPoint mousePos )
+{
+   if ( container->getCargo().size() > num )
+      unitClicked( container->getCargo()[num], mousePos );
+}
+
 
 void CargoWidget :: redrawAll()
 {

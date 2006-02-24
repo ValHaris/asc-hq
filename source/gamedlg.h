@@ -27,17 +27,6 @@
 */
 
 
-#include "typen.h"
-#include "basegfx.h"
-#include "newfont.h"
-#include "spfst.h"
-#include "loaders.h"
-#include "misc.h"
-
-#include "dialog.h"
-#include "dlg_box.h"
-#include "unitctrl.h"
-
 
 extern void  choosetechnology(void);
 extern void  settributepayments ( void );
@@ -47,24 +36,7 @@ extern void researchinfo ( void );
 extern void choosetechlevel ( void );
 
 
-
-struct tonlinehelpitem {
-            tmouserect rect;
-            int messagenum;
-          };
-
-class tonlinehelplist {
-         public:
-           int num;
-           tonlinehelpitem* item;
-
-           tonlinehelplist ( void ) {
-              num = 0;
-              item = NULL;
-           }
-
-       };
-
+class tfield;
 
 extern void multiplayersettings ( void );
 

@@ -25,8 +25,6 @@
 #ifndef dlg_boxH
 #define dlg_boxH
 
-#include <cstring>
-
 #include "newfont.h"
 #include "events.h"
 #include "basegfx.h"

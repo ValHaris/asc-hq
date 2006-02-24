@@ -43,6 +43,9 @@
 #include "dialogs/ammotransferdialog.h"
 #include "mapdisplay.h"
 #include "sg.h"
+#include "loaders.h"
+#include "itemrepository.h"
+
 
 namespace GuiFunctions
 {
@@ -747,12 +750,12 @@ class PowerOff : public GuiFunction
 
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return IconRepository::getIcon("poweron.png");
+         return IconRepository::getIcon("poweroff.png");
       };
 
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "enable power generation";
+         return "disable power generation";
       };
 };
 

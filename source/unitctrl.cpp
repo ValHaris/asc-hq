@@ -38,6 +38,7 @@
 #include "mapdisplayinterface.h"
 #include "gameeventsystem.h"
 #include "actions/servicing.h"
+#include "soundList.h"
 
 PendingVehicleActions pendingVehicleActions;
 

@@ -23,6 +23,8 @@
 #include "sigc++/retype.h"
 #include "iconrepository.h"
 #include "sg.h"
+#include "loaders.h"
+#include "spfst.h"
 //#include "basestrm.h"
 
 

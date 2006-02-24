@@ -2238,7 +2238,7 @@ void         tunit::buttonpressed(int         id)
    case 21 :  {
                   unit->direction = id-14;
                   bar(dirx + x1 -fieldsizex/2, diry + y1 - fieldsizey/2 ,dirx + x1 + fieldsizex/2 ,diry + y1 +fieldsizey/2,lightgray);
-                  unit->paint( getActiveSurface(), SPoint(dirx + x1 - fieldsizex/2 ,diry + y1 - fieldsizey/2));
+                  // unit->paint( getActiveSurface(), SPoint(dirx + x1 - fieldsizex/2 ,diry + y1 - fieldsizey/2));
                }
          break;
    case 30 : {

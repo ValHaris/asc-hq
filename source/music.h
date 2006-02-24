@@ -7,7 +7,6 @@
 
 #include <vector>
 #include <map>
-#include <SDL_mixer.h>
 
 #include "global.h"
 #include "ascstring.h"

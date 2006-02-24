@@ -337,17 +337,16 @@ class SmallButtonHolder : public SpecialInputWidget {
 
 bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged )
 {
-   clearSmallIcons();
-   PG_Application::SetBulkMode(true);
 
    // PG_Point p = mapDisplay->ScreenToClient( mousePos.x, mousePos.y );
-   PG_Point p ( mousePos.x, mousePos.y );
+   SPoint p = mousePos;
 
    tfield* fld = actmap->getField(pos);
 
    bool positionedUnderCursor = false;
    if ( ( fld->vehicle || fld->building) && fieldvisiblenow(fld) )
       positionedUnderCursor = true;
+   
    if ( fld->a.temp ) {
       positionedUnderCursor = true;
       cursorChanged = false;
@@ -361,6 +360,15 @@ bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mous
       p.y += 2;
    }
 
+   showSmallIcons( mainScreenWidget, p, cursorChanged );
+   return true;
+}
+
+bool NewGuiHost::showSmallIcons( PG_Widget* parent, const SPoint& pos, bool cursorChanged )
+{
+   clearSmallIcons();
+   PG_Application::SetBulkMode(true);
+   
    SmallGuiButton* firstSmallButton = NULL;
    
    if ( !cursorChanged ) {
@@ -371,7 +379,7 @@ bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mous
       
       if ( count ) {
          delete smallButtonHolder;
-         smallButtonHolder = new SmallButtonHolder ( mainScreenWidget, PG_Rect( p.x, p.y, count * smallGuiIconSizeX + (count-1)*smallGuiIconSpace, smallGuiIconSizeY ));
+         smallButtonHolder = new SmallButtonHolder ( parent, PG_Rect( pos.x, pos.y, count * smallGuiIconSizeX + (count-1)*smallGuiIconSpace, smallGuiIconSizeY ));
 
          PG_Rect r = PG_Rect( 0, 0, smallGuiIconSizeX, smallGuiIconSizeY  );
          for ( int j = 0; j < buttons.size(); ++j) {
@@ -379,7 +387,7 @@ bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mous
             if ( !b->IsHidden() ) {
                SmallGuiButton* sgi = new SmallGuiButton( smallButtonHolder, r, b, this );
                r.x += smallGuiIconSizeX + smallGuiIconSpace;
-               if ( j == 0  && positionedUnderCursor ) 
+               if ( j == 0  && sgi->IsMouseInside() )
                   firstSmallButton = sgi;
             }
          }
@@ -394,13 +402,8 @@ bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mous
          firstSmallButton->showInfoText();
       }
    }
-      
-   /*
-   for ( SmallButtons::iterator i = smallButtons.begin(); i != smallButtons.end(); ++i )
-      (*i)->Show();
-      */
-
-   return false;
+   
+   return true;
 }
 
 

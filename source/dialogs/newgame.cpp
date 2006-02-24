@@ -34,7 +34,7 @@
 #include "../viewcalculation.h"
 #include "../networkinterface.h"
 #include "../network.h"
-
+#include "../spfst.h"
 
 class GameParameterEditorWidget;
 

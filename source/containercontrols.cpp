@@ -20,6 +20,8 @@
 #include "gamemap.h"
 #include "replay.h"
 #include "mapdisplayinterface.h"
+#include "itemrepository.h"
+
 
 GameMap* ContainerControls::getMap()
 {

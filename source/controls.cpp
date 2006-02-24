@@ -488,11 +488,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
         checkWind = false;
       }
 
-#ifndef WIN32
-#warning what to do with this ?
-#endif
-/*
-   static const  int         movemalus[6]  = { 8, 6, 3, 0, 3, 6 };
+   static const  int         movemalus[6]  = { 0, 3, 5, 0, 5, 3 };
    
    if ( checkHemming )
       for (int c = 0; c < sidenum; c++) {
@@ -511,14 +507,14 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
 
            tfield* fld = getfield(x,y);
            if ( fld->vehicle && dest.getNumericalHeight() >= 0 ) {
-              if ( getdiplomaticstatus(fld->vehicle->color) == cawar ) 
+              if ( vehicle->getMap()->getPlayer(vehicle).diplomacy.isHostile( fld->vehicle->getOwner() ) )
                  if ( attackpossible28(fld->vehicle,vehicle, NULL, dest.getBitmappedHeight() ))
                     movecost += movemalus[d];
               
            }
          }
       }
-*/
+
     /*******************************/
     /*    Wind calculation        ÿ */
     /*******************************/

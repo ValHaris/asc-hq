@@ -285,7 +285,7 @@ void Surface::read ( tnstream& stream )
             SDL_Surface* s = SDL_CreateRGBSurface ( SDL_SWSURFACE, hd.x, hd.y, 8, 0xff, 0xff, 0xff, 0xff );
             Uint8* p = (Uint8*)( s->pixels );
             for ( int y = 0; y < hd.y; ++y )
-               stream.readdata( p + y*hd.x, hd.x );
+               stream.readdata( p + y*s->pitch, hd.x );
             
                /*for ( int x = 0; x< hd.x; ++x )
                   *(p++) = stream.readChar();*/

@@ -22,6 +22,10 @@
 #include "paradialog.h"
 #include "gameeventsystem.h"
 
+#include "dialog.h"
+#include "dlg_box.h"
+#include "spfst.h"
+
 class tnewmessage : public tmessagedlg  {
             protected:
                char* rtitle;

@@ -29,9 +29,8 @@
 #include <sigc++/sigc++.h>
 #include "ascstring.h"
 #include "dlg_box.h"
-#include "loaders.h"
 #include "password.h"
-
+#include "typen.h"
 
 const int dbluedark = 248;
 

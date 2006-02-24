@@ -57,6 +57,10 @@
 #include "itemrepository.h"
 #include "strtmesg.h"
 #include "dialogs/editmapparam.h"
+#include "dlg_box.h"
+#include "spfst.h"
+#include "dialog.h"
+
 
 class   tchoosetechnology : public tdialogbox {
                            typedef vector<const Technology*> Techs;

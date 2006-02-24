@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.19 2006-02-19 12:15:43 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.20 2006-02-24 21:12:15 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -34,6 +34,9 @@
 #include "paradialog.h"
 #include "typen.h"
 #include "containerbase.h"
+
+extern const int smallGuiIconSizeX;
+extern const int smallGuiIconSizeY;
 
 
 class GuiFunction {
@@ -166,6 +169,7 @@ class NewGuiHost : public Panel {
         static void popIconHandler();
         void eval( const MapCoordinate& pos, ContainerBase* subject );
 
+        bool showSmallIcons( PG_Widget* parent, const SPoint& pos, bool cursorChanged );
         bool clearSmallIcons();
 
         GuiButton* getButton( int i );

@@ -46,6 +46,7 @@
 #include "dialogs/editmapparam.h"   
 #include "dialogs/alliancesetup.h"
 #include "dialogs/playersetup.h"
+#include "dialogs/editgameoptions.h"
    
    const char* execactionnames[execactionscount] = {
         "End MapEdit",
@@ -140,7 +141,8 @@
         "Reset Player Data...",
         "View Player Strength",
         "Increase Zoom",
-        "Decrease Zoom" };
+        "Decrease Zoom",
+        "Edit Preferences" };
 
 
 
@@ -824,6 +826,10 @@ void execaction_pg(int code)
             repaintMap();
          }
          break;
+      case act_editpreferences:
+         editGameOptions( false );
+         break;
+
    };
 }
 

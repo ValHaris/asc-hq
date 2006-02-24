@@ -224,6 +224,19 @@ namespace CargoGuiFunctions {
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
    
+   class RecycleUnit : public GuiFunction
+   {
+      CargoDialog& parent;
+      public:
+         RecycleUnit( CargoDialog& masterParent ) : parent( masterParent)  {};
+         bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
+         void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
+         ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
+   };
+
+   
    
 }; // namespace CargoGuiFunctions
 
@@ -289,6 +302,22 @@ class CargoDialog : public Panel
          return false;
       };
 
+      void onUnitClick ( Vehicle* veh,SPoint pos )
+      {
+         if ( veh )
+            if ( mainScreenWidget&& mainScreenWidget->getGuiHost() ) 
+               mainScreenWidget->getGuiHost()->showSmallIcons( this, SPoint( pos.x - my_xpos + 2, pos.y - my_ypos + 2  ), false );
+            
+      };
+
+      void clearSmallIcons( Vehicle* veh )
+      {
+         if ( mainScreenWidget && mainScreenWidget->getGuiHost() )
+            mainScreenWidget->getGuiHost()->clearSmallIcons();
+      }
+         
+
+      
       void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst)
       {
          Surface screen = Surface::Wrap( PG_Application::GetScreen() );
@@ -336,6 +365,7 @@ class CargoDialog : public Panel
          handler.registerUserFunction( new CargoGuiFunctions::MoveUnitUp( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::MoveUnitIntoInnerContainer( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::OpenContainer( *this ));
+         handler.registerUserFunction( new CargoGuiFunctions::RecycleUnit( *this ));
       }
 
       void checkStoringPosition( Vehicle* unit )
@@ -1516,8 +1546,13 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
       cargoWidget = new CargoWidget( unitScrollArea, PG_Rect( 1, 1, unitScrollArea->Width() -2 , unitScrollArea->Height() -2 ), cb );
       cargoWidget->unitMarked.connect( SigC::slot( *this, &CargoDialog::checkStoringPosition ));
       cargoWidget->unitMarked.connect( SigC::hide<Vehicle*>( SigC::slot( *ciw, &CargoInfoWindow::update )));
+      if ( mainScreenWidget && mainScreenWidget->getGuiHost() )
+         cargoWidget->unitMarked.connect( SigC::slot( *this, &CargoDialog::clearSmallIcons ));
+
+      cargoWidget->unitClicked.connect ( SigC::slot( *this, &CargoDialog::onUnitClick ));
 
       container->cargoChanged.connect( SigC::slot( *cargoWidget, &CargoWidget::redrawAll ));
+      
       
    }
                
@@ -2175,4 +2210,98 @@ namespace CargoGuiFunctions {
       return "open transport ";
    };
    
+
+
+   //////////////////////////////////////////////////////////////////////////////////////////////
+   
+bool RecycleUnit :: available( const MapCoordinate& pos, ContainerBase* subject, int num )
+{
+   if ( !subject )
+      return false;
+
+   if ( !parent.getContainer()->isBuilding() )
+      return false;
+      
+   Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+   if ( !veh )
+      return false;
+      
+   Player& player = veh->getMap()->player[veh->getOwner()];
+   if ( veh->typ->maxLoadableUnits && player.diplomacy.isAllied( veh->getMap()->actplayer)  )
+      return true;
+      
+   return false;
+};
+
+void RecycleUnit :: execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+{
+   if ( !subject )
+      return;
+      
+   Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+   if ( !veh )
+      return;
+      
+   if (choice_dlg("do you really want to recycle this unit ?","~y~es","~n~o") == 1) {
+      ContainerControls cc ( parent.getContainer() );
+      cc.destructUnit( veh );
+      parent.cargoChanged();
+   }
 }
+
+Surface& RecycleUnit :: getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+{
+   return IconRepository::getIcon("recycle.png");
+};
+
+bool RecycleUnit :: checkForKey( const SDL_KeyboardEvent* key, int modifier )
+{
+   return false;
+};
+
+ASCString RecycleUnit :: getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+{
+   if ( !subject )
+      return "";
+      
+   Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+   if ( !veh )
+      return "";
+
+   ContainerControls cc ( parent.getContainer() );
+   
+   ASCString s = "recycle unit - ";
+   Resources res = cc.calcDestructionOutput( veh );
+
+   bool cost = false;
+   for ( int r = 0; r < 3; ++r ) {
+      if ( res.resource(r) < 0 ) {
+         if ( !cost ) {
+            s += "Cost: ";
+            cost = true;
+         }
+         s += ASCString::toString( -res.resource( r ));
+         s += " ";
+         s += Resources::name( r );
+      }
+   }
+            
+   bool gain = false;
+   for ( int r = 0; r < 3; ++r ) {
+      if ( res.resource(r) > 0 ) {
+         if ( !gain ) {
+            s += "Gain: ";
+            cost = true;
+         }
+         s += ASCString::toString( res.resource( r ));
+         s += " ";
+         s += Resources::name( r );
+      }
+   }
+   
+   return s;
+         
+};
+   
+}
+

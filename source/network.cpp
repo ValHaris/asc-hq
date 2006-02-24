@@ -41,7 +41,8 @@
 #include "password_dialog.h"
 #include "stack.h"
 #include "gamedlg.h"
-
+#include "loaders.h"
+#include "gamemap.h"
 
 void FileTransfer::readChildData ( tnstream& stream )
 {
