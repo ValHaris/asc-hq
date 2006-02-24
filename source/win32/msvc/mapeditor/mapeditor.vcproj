@@ -442,6 +442,9 @@
 					RelativePath="..\..\..\dialogs\alliancesetup.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\editgameoptions.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\editmapparam.cpp">
 				</File>
 				<File

@@ -117,7 +117,7 @@ bool ItemSelectorWidget::eventKeyDown(const SDL_KeyboardEvent* key)
       return true;
    }
    if ( key->keysym.sym == SDLK_HOME )  {
-      moveSelection(-widgets.size() );
+      moveSelection(-int(widgets.size()) );
       return true;
    }
    if ( key->keysym.sym == SDLK_END )  {
