@@ -26,7 +26,6 @@
 
 #include <bitset>
  #include "global.h"
- #include "tpascal.inc"
 
  #include "ascstring.h"
 

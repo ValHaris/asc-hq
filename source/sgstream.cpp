@@ -38,7 +38,6 @@
 #include <fstream>
 
 #include "global.h"
-#include "tpascal.inc"
 #include "typen.h"
 #include "buildingtype.h"
 #include "vehicletype.h"
@@ -50,8 +49,6 @@
 #include "palette.h"
 #include "gameoptions.h"
 #include "graphicset.h"
-#include "itemrepository.h"
-#include "graphics/blitter.h"
 
 #ifdef _WIN32_
  #include <windows.h>

@@ -80,10 +80,10 @@ int getpicsize2( void* hd2 )
 
 void 
 rahmen(bool invers,
-       integer x1,
-       integer y1,
-       integer x2,
-       integer y2)
+       int x1,
+       int y1,
+       int x2,
+       int y2)
 {
 	collategraphicoperations cgo ( x1, y1, x2, y2 );
 	int col	=	(invers == false)	?	white	:	darkgray;

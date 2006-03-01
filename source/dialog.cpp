@@ -29,7 +29,6 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-#include "tpascal.inc"
 #include "typen.h"
 #include "buildingtype.h"
 #include "vehicletype.h"

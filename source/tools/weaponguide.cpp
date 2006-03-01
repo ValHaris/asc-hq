@@ -26,7 +26,6 @@
 #include <algorithm>
 
 
-#include "../tpascal.inc"
 #include "../typen.h"
 #include "../basestrm.h"
 #include "../misc.h"

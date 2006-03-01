@@ -27,7 +27,6 @@
 #include <cstdlib>
 #include <ctype.h>
 
-#include "tpascal.inc"
 #include "newfont.h"
 #include "basegfx.h"
 #include "events.h"

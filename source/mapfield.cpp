@@ -24,18 +24,11 @@
 #include <cmath>
 
 #include "global.h"
-#include "misc.h"
 #include "typen.h"
 #include "vehicletype.h"
 #include "buildingtype.h"
 #include "spfst.h"
-#include "dlg_box.h"
-#include "dialog.h"
-#include "itemrepository.h"
-#include "strtmesg.h"
-#include "graphics/blitter.h"
 #include "overviewmapimage.h"
-#include "iconrepository.h"
 
 
 
@@ -141,26 +134,17 @@ Mine& tfield::getMine ( int n )
   return *i;
 }
 
-void  tfield :: addobject( const ObjectType* obj, int dir, bool force )
+bool  tfield :: addobject( const ObjectType* obj, int dir, bool force )
 {
    if ( !obj )
-      return;
+      return false;
 
    Object* i = checkforobject ( obj );
    if ( !i ) {
      int buildable = obj->buildable ( this );
-     #ifdef karteneditor
      if ( !buildable )
           if ( force )
              buildable = 1;
-          else
-             if (choice_dlg("object cannot be built here","~i~gnore","~c~ancel") == 1)
-                buildable = 1;
-     #else
-     if ( !buildable )
-          if ( force )
-             buildable = 1;
-     #endif
 
      if ( buildable ) {
          Object o ( obj );
@@ -176,13 +160,17 @@ void  tfield :: addobject( const ObjectType* obj, int dir, bool force )
 
          sortobjects();
          setparams();
-     }
+         return true;
+     } else
+        return false;
+     
    } else {
       if ( dir != -1 )
          i->dir |= dir;
 
       i->lifetimer = obj->lifetime;
       sortobjects();
+      return true;
    }
 }
 

@@ -2157,7 +2157,7 @@ GameParameterSettings gameParameterSettings[gameparameternum ] = {
       {  "MoveFromInaccessibleFields",         0,                    0,   1,                  true,   false,   "move vehicles from unaccessible fields"},   //       cgp_movefrominvalidfields,          
       {  "BuildingConstructionFactorMaterial", 100,                  1,   maxint,             true,   false,   "building construction material factor (percent)"},   //       cgp_building_material_factor,       
       {  "BuildingConstructionFactorEnergy",   100,                  1,   maxint,             true,   false,   "building construction fuel factor (percent)"},   //       cgp_building_fuel_factor,           
-      {  "ForbitBuildingConstruction",         1,                    0,   1,                  true,   false,   "forbid construction of buildings"},   //       cgp_forbid_building_construction,   
+      {  "ForbidBuildingConstruction",         0,                    0,   1,                  true,   false,   "forbid construction of buildings"},   //       cgp_forbid_building_construction,
       {  "LimitUnitProductionByUnit",          0,                    0,   2,                  true,   false,   "limit construction of units by other units"},   //       cgp_forbid_unitunit_construction,   
       {  "Bi3Training",                        0,                    0,   maxunitexperience,  true,   false,   "use BI3 style training factor "},   //       cgp_bi3_training,                   
       {  "MaxMinesOnField",                    1,                    0,   maxint,             true,   false,   "maximum number of mines on a single field"},   //       cgp_maxminesonfield,                

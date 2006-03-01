@@ -232,7 +232,10 @@ void BuildingItem::display( Surface& s, const SPoint& pos ) const
 // template<> Surface BasicItem<ObjectType>::clippingSurface;
 int ObjectItem::place( const MapCoordinate& mc ) const
 {
-   actmap->getField(mc)->addobject( item );
+   if ( !actmap->getField(mc)->addobject( item ) )
+      if (choice_dlg("object cannot be built here","~i~gnore","~c~ancel") == 1)
+         actmap->getField(mc)->addobject( item, -1, true );
+
    return 0;
 }
 

@@ -37,7 +37,6 @@
 #include "basestreaminterface.h"
 #include "lzw.h"
 #include "errors.h"
-#include "tpascal.inc"
 
 #include "simplestream.h"
 

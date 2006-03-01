@@ -87,8 +87,9 @@ class  tfield {
          \param obj The object type
          \param dir The direction of the object type; -1 to use default direction
          \param force Put the object there even if it cannot normally be placed on this terrain
+         \returns true on success, false if the object could not be build
     **/
-    void addobject ( const ObjectType* obj, int dir = -1, bool force = false );
+    bool addobject ( const ObjectType* obj, int dir = -1, bool force = false );
 
     //! removes all objects of the given type from the field
     void removeobject ( const ObjectType* obj, bool force = false );

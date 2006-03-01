@@ -30,7 +30,6 @@
 #include <cstring>
 #include <iostream>
 
-#include "tpascal.inc"
 #include "typen.h"
 #include "basegfx.h"
 #include "newfont.h"
@@ -649,7 +648,7 @@ void         tdialogbox::rebuildtaborder(void)
 { 
   pbutton      pb;
   pbutton      pb2;
-  integer      i = 0; 
+  int      i = 0;
   ttaborder    b; 
 
    pb = firstbutton; 
@@ -992,7 +991,7 @@ void         tdialogbox::disablebutton(int         id)
   pbutton      pb; 
   int      *pl; 
   Uint16         *pw, *pw2; 
-  pascal_byte         *pbt; 
+  char         *pbt;
   char      *pbl;
   char*         s;
   char*         t;
@@ -1660,7 +1659,7 @@ void         tdialogbox::editfield(pbutton      pb)
   char         *ps;
   int      *pl; 
   Uint16         *pw; 
-  pascal_byte         *pbt; 
+  char         *pbt;
   int      l;
 
   activefontsettings.font = schriften.smallarial;
@@ -1712,10 +1711,10 @@ void         tdialogbox::editfield(pbutton      pb)
 
 
 void         tdialogbox::rahmen3(char *       txt,
-                     integer      x1,
-                     integer      y1,
-                     integer      x2,
-                     integer      y2,
+                     int      x1,
+                     int      y1,
+                     int      x2,
+                     int      y2,
                      int         style)
 { 
    collategraphicoperations cgs( x1, y1, x2, y2 );
@@ -2697,7 +2696,7 @@ void tviewtext::displaytext ( void )
 
   char         *actword, *s5;
   const char* s1;
-  integer      i;
+  int      i;
 
    tvt_xp = 0;
    tvt_yp = 0;
@@ -3447,7 +3446,7 @@ void         tstringselect::buttonpressed(int         id)
 void         tstringselect::run(void)
 {
   char      view;
-  integer      my;
+  int      my;
   int         ms;
 
    tdialogbox::run();
@@ -3548,7 +3547,7 @@ void         tstringselect::viewtext(void)
 {
   char         s1[200];
   Uint16         yp;
-  integer      l;
+  int      l;
 
    mousevisible(false);
    //showbutton(1);
@@ -3949,7 +3948,7 @@ void         tstringselect::buttonpressed(int         id)
 void         tstringselect::run(void)
 {
   char      view;
-  integer      my;
+  int      my;
   int         ms;
 
    tdialogbox::run();
@@ -4050,7 +4049,7 @@ void         tstringselect::viewtext(void)
 {
   char         s1[200];
   Uint16         yp;
-  integer      l;
+  int      l;
 
    mousevisible(false);
    //showbutton(1);

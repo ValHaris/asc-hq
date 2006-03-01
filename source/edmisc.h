@@ -26,7 +26,6 @@
 #include <cstdlib>
 #include <ctype.h>
 
-#include "tpascal.inc"
 #include "typen.h"
 #include "basegfx.h"
 #include "mappolygons.h"

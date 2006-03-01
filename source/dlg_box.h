@@ -47,7 +47,7 @@
                                                                                     þ 1:   standard
                                                                                     þ 2:   mit "dauerfeuer"  */
 
-                               integer      x1, y1, x2, y2;              /*  1: texteingabefield  */
+                               int      x1, y1, x2, y2;              /*  1: texteingabefield  */
                                int id;                          /*  2: zahleingabefield  */
                                int style;                       /*  3: checkbox
                                                                                   style:
@@ -80,7 +80,7 @@
                   struct ttaborder {
                      int         id;
                      tbutton*      button;
-                     integer      x1, y1, x2, y2;
+                     int      x1, y1, x2, y2;
                   };
 
                      pbutton      firstbutton;
@@ -155,7 +155,7 @@ typedef class tdialogbox* pdialogbox;
                      bool eventQueue;
                  public:
                      int             textcolor;
-                     integer          starty;
+                     int          starty;
                      int           ms;
                      void*      tp;
                      char      imagesaved; 
@@ -212,35 +212,35 @@ typedef class tdialogbox* pdialogbox;
                       virtual void copyvirtualframebuf ( void );
 
                       char knopfsuccessful;
-                      void         newknopf(integer      xx1,
-                                            integer      yy1,
-                                            integer      xx2,
-                                            integer      yy2);
+                      void         newknopf(int      xx1,
+                                            int      yy1,
+                                            int      xx2,
+                                            int      yy2);
                       void         knopfdruck(int      xx1,
                                               int      yy1,
                                               int      xx2,
                                               int      yy2);
-                      void         knopf(integer      xx1,
-                                         integer      yy1,
-                                         integer      xx2,
-                                         integer      yy2);
-                      void         newknopfdruck4(integer      xx1,
-                                                  integer      yy1,
-                                                  integer      xx2,
-                                                  integer      yy2);
-                      void         newknopfdruck3(integer      xx1,
-                                                  integer      yy1,
-                                                  integer      xx2,
-                                                  integer      yy2);
-                      void         newknopfdruck2(integer      xx1,
-                                                  integer      yy1,
-                                                  integer      xx2,
-                                                  integer      yy2);
+                      void         knopf(int      xx1,
+                                         int      yy1,
+                                         int      xx2,
+                                         int      yy2);
+                      void         newknopfdruck4(int      xx1,
+                                                  int      yy1,
+                                                  int      xx2,
+                                                  int      yy2);
+                      void         newknopfdruck3(int      xx1,
+                                                  int      yy1,
+                                                  int      xx2,
+                                                  int      yy2);
+                      void         newknopfdruck2(int      xx1,
+                                                  int      yy1,
+                                                  int      xx2,
+                                                  int      yy2);
 
-                      void         newknopfdruck(integer      xx1,
-                                                 integer      yy1,
-                                                 integer      xx2,
-                                                 integer      yy2);
+                      void         newknopfdruck(int      xx1,
+                                                 int      yy1,
+                                                 int      xx2,
+                                                 int      yy2);
                       void         rahmen(bool      invers,
                                           int          x1,
                                           int          y1,
@@ -250,10 +250,10 @@ typedef class tdialogbox* pdialogbox;
                                           tmouserect   rect );
 
                       void         rahmen3(char *       txt,
-                                           integer      x1,
-                                           integer      y1,
-                                           integer      x2,
-                                           integer      y2,
+                                           int      x1,
+                                           int      y1,
+                                           int      x2,
+                                           int      y2,
                                            int         style);
                       void         bar ( tmouserect rect, int color );
                       void         bar ( int x1, int y1, int x2, int y2, int color );

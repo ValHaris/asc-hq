@@ -1193,7 +1193,7 @@ class RefuelUnit : public GuiFunction
                if ( pendingVehicleActions.newservice && pendingVehicleActions.newservice->targetAvail( fld->getContainer() ) )
                   pendingVehicleActions.newservice->fillEverything( fld->getContainer() );
 
-            delete pendingVehicleActions.service;
+            delete pendingVehicleActions.newservice;
             actmap->cleartemps(7);
             displaymap();
             updateFieldInfo();
@@ -1566,7 +1566,7 @@ void ObjectBuildingGui::execute( const MapCoordinate& pos, ContainerBase* subjec
 
 Surface buildGuiIcon( const Surface& image, bool remove = false )
 {
-   const Surface& cancelIcon = IconRepository::getIcon("cancel.png");
+   const Surface& cancelIcon = IconRepository::getIcon("empty-pressed.png" ); //  "cancel.png"
    Surface s = Surface::createSurface( cancelIcon.w(), cancelIcon.h(), 32, 0 );
 
    const Surface& o = image;
@@ -2175,7 +2175,7 @@ void BuildingConstruction::execute( const MapCoordinate& pos, ContainerBase* sub
 
 Surface generate_gui_build_icon ( BuildingType* bld )
 {
-   Surface s = Surface::createSurface(500,500);
+   Surface s = Surface::createSurface(500,500,32, 0);
 
    int minx = 1000;
    int miny = 1000;
@@ -2196,26 +2196,35 @@ Surface generate_gui_build_icon ( BuildingType* bld )
              if ( yp > maxy )
                 maxy = yp;
 
+             // bld->paintSingleField( s, SPoint(xp,yp), BuildingType::LocalCoordinate(x,y) );
              s.Blit( bld->getPicture( BuildingType::LocalCoordinate(x,y)), SPoint(xp,yp) );
           }
    maxx += fieldxsize;
    maxy += fieldysize;
 
-   Surface s2 = Surface::createSurface(maxx-minx+1,maxy-miny+1);
-   s2.Blit( s, SDLmm::SRect(SPoint(minx,miny), SPoint(maxx,maxy) ), SPoint(0,0));
+   /*
+   Surface sc = Surface::Wrap( PG_Application::GetScreen() );
+   sc.Blit( s, SPoint(0,0 ));
+   SDL_UpdateRect( PG_Application::GetScreen(), 0,0,0,0);
+   */
+   
+   Surface s2 = Surface::createSurface(maxx-minx+1,maxy-miny+1,32,0);
+   // s2.Blit( s, SDLmm::SRect(SPoint(minx,miny), SPoint(maxx,maxy) ), SPoint(0,0));
 
-   return s2;
+   MegaBlitter<4,4,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Rectangle> blitter;
+   blitter.setSrcRectangle( SPoint( minx, miny ), maxx-minx, maxy-miny );
+   blitter.blit ( s, s2, SPoint(0,0) );
 
    /*
-   Surface s3 = leergui.Duplicate();
-   MegaBlitter<1,1,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Zoom> blitter;
+   
+   MegaBlitter<4,4,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Zoom> blitter;
 
    blitter.setSize( s2.w(), s2.h(), s3.w(), s3.h() );
    blitter.initSource ( s2 );
    blitter.blit ( s2, s3, SPoint((s3.w() - blitter.getWidth())/2, (s3.h() - blitter.getHeight())/2) );
-
-   return s3;
    */
+   
+   return s2;
 }
 
 
@@ -2344,7 +2353,7 @@ class ConstructBuilding : public GuiFunction
       };
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "Unit construction";
+         return "Building construction";
       };
 };
 

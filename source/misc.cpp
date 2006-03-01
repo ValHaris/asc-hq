@@ -31,7 +31,6 @@
 #endif
 
 #include "global.h"
-#include "tpascal.inc"
 #include "misc.h"
 #include "ascstring.h"
 

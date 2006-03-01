@@ -37,7 +37,6 @@
 #define basegfxH
 
 #include "libs/sdlmm/src/sdlmm.h"
-#include "tpascal.inc"
 #include "global.h"
 #include "palette.h"
 #include "sdl/graphics.h"
@@ -80,7 +79,7 @@ struct  tgraphmodeparameters {
 struct trleheader {
    Uint16 id;
    Uint16 size;
-   pascal_byte rle;
+   char rle;
    Uint16 x;
    Uint16 y;
 };
@@ -225,7 +224,7 @@ extern void*     xlatbuffer;
 
 /** paints a pseudo-3D rectangle on the screen. invers specifies wheather the rectangle
      seems to be pressed into the screen or coming out  */
-extern void         rahmen( bool invers, integer x1, integer y1, integer x2, integer y2);
+extern void         rahmen( bool invers, int x1, int y1, int x2, int y2);
 
 //! draws a simple line on the screen. Not very fast...
 extern void         line(int x1, int y1, int x2, int y2, char color );

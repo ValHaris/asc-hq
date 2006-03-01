@@ -20,7 +20,6 @@
 #define graphicsH
 
 #include "../global.h"
-#include "../tpascal.inc"
 #include "../palette.h"
 #include "../basegfx.h"
 #include "../graphics/surface.h"

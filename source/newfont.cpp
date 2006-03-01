@@ -33,7 +33,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include "global.h"
-#include "tpascal.inc"
 #include "newfont.h"
 #include "stack.h"
 #include "basestrm.h"

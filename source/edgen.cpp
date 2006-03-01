@@ -2,9 +2,12 @@
     \brief The random map generator
 */
 
-//     $Id: edgen.cpp,v 1.20.2.4 2006-02-11 21:46:17 mbickel Exp $
+//     $Id: edgen.cpp,v 1.20.2.5 2006-03-01 21:00:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20.2.4  2006/02/11 21:46:17  mbickel
+//      Move cleanup
+//
 //     Revision 1.20.2.3  2006/02/11 20:48:41  mbickel
 //      Some cleanup
 //
@@ -148,7 +151,7 @@
        protected :
                char flip,showland,showdesert,showforest,showmaterial,showfuel,correctvalues,calculatevalues;
                char initialized[ layercount ];
-               pascal_byte *constructionlayer;
+               char *constructionlayer;
                int layer,actlayer;
                int barsize,maxbarsize;
                int whereland;
@@ -199,7 +202,7 @@ void         tmapgenerator::init(void)
 
    barsize = maxbarsize;
 
-   constructionlayer = new ( pascal_byte[plasma.maxx * plasma.maxy ]); // =blockcount
+   constructionlayer = new ( char[plasma.maxx * plasma.maxy ]); // =blockcount
 
    addbutton("",480,80,510,100,0,1,7,true);
    addkey(7,ct_down);

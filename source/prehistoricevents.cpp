@@ -171,7 +171,7 @@ extern const char*  ceventtrigger[];
          int      id;               /* Id-Nr      ==> Technology.Requireevent; Tevent.trigger; etc.  */
        } ;
 
-       pascal_byte         player;   // 0..7  fuer die normalen Spieler
+       char         player;   // 0..7  fuer die normalen Spieler
        // 8 wenn das Event unabh"ngig vom Spieler sofort auftreten soll
 
        char         description[20];
@@ -222,8 +222,8 @@ extern const char*  ceventtrigger[];
 
        LargeTriggerData* trigger_data[4];
 
-       pascal_byte         triggerconnect[4];   /*  CEventTriggerConn */
-       pascal_byte         triggerstatus[4];   /*  Nur im Spiel: 0: noch nicht erf?llt
+       char         triggerconnect[4];   /*  CEventTriggerConn */
+       char         triggerstatus[4];   /*  Nur im Spiel: 0: noch nicht erf?llt
                                             1: erf?llt, kann sich aber noch "ndern
                                             2: unwiederruflich erf?llt
                                             3: unerf?llbar */
@@ -587,7 +587,7 @@ Event*   readOldEvent( pnstream stream, GameMap* gamemap, map<int,int>& eventTra
               (event1.trigger[m] == ceventt_buildingdestroyed) ||
               (event1.trigger[m] == ceventt_building_seen )) {
 
-              integer xpos, ypos;
+              Sint16 xpos, ypos;
               stream->readdata2 ( xpos );
               stream->readdata2 ( ypos );
 
@@ -612,7 +612,7 @@ Event*   readOldEvent( pnstream stream, GameMap* gamemap, map<int,int>& eventTra
               (event1.trigger[m] == ceventt_unitdestroyed)) {
 
               if ( version == 0 ) {
-                 integer xpos, ypos;
+                 Sint16 xpos, ypos;
                  stream->readdata2 ( xpos );
                  stream->readdata2 ( ypos );
                  event1.trigger_data[m]->xpos = xpos;

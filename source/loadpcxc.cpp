@@ -29,7 +29,6 @@
 #include <cstring>
 
 #include "basestrm.h"
-#include "tpascal.inc"
 #include "basegfx.h"
 #include "misc.h"
 #include "loadpcx.h"
