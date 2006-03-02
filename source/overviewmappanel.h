@@ -32,7 +32,8 @@ class MapDisplayPG;
 class OverviewMapPanel : public Panel {
         MapDisplayPG* mapDisplayWidget;
         PG_Widget* ovmap;
-        float currentZoom;  
+        float currentZoom;
+        bool locked;
      public:
         OverviewMapPanel( PG_Widget *parent, const PG_Rect &r, MapDisplayPG* mapDisplay ) ;
      protected:
@@ -41,6 +42,12 @@ class OverviewMapPanel : public Panel {
         bool mouseButtonDown ( const SDL_MouseButtonEvent *button);
         bool mouseMotion (  const SDL_MouseMotionEvent *motion);
         bool mouseClick ( SPoint pos );
+
+   private:
+      void lockPanel();
+      void unlockPanel();
+
+      
 };
 
 

@@ -93,6 +93,9 @@ bool OverviewMapHolder :: idleHandler( )
 
 void OverviewMapHolder::updateField( const MapCoordinate& pos )
 {
+   if ( map.playerView < 0 )
+      return;
+   
    SPoint imgpos = OverviewMapImage::map2surface( pos );
 
    tfield* fld = map.getField( pos );
@@ -177,6 +180,9 @@ void OverviewMapHolder::startUpdate()
 
 void OverviewMapHolder::clear()
 {
+   if ( !initialized )
+      return;
+   
    overviewMapImage.Fill( Surface::transparent );
    startUpdate();
 }

@@ -1379,10 +1379,7 @@ void   Vehicle::readData ( tnstream& stream )
        if ( c ) {
           for (int k = 0; k < c; k++) {
              Vehicle* v = Vehicle::newFromStream ( gamemap, stream );
-             if ( v->color != color )
-                 v->convert( color/8 );
              addToCargo(v);
-
           }
        }
     }

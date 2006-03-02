@@ -23,8 +23,9 @@
 #include "graphics/drawing.h"
 #include "mapdisplay.h"
 
+
 OverviewMapPanel::OverviewMapPanel( PG_Widget *parent, const PG_Rect &r, MapDisplayPG* mapDisplay )
-                 : Panel ( parent, r, "OverviewMap", true ), mapDisplayWidget( mapDisplay), currentZoom( 1 )
+   : Panel ( parent, r, "OverviewMap", true ), mapDisplayWidget( mapDisplay), currentZoom( 1 ), locked(false)
 {
    SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( "overviewmap", true ) );
    if ( sdw ) {
@@ -38,13 +39,17 @@ OverviewMapPanel::OverviewMapPanel( PG_Widget *parent, const PG_Rect &r, MapDisp
       
    viewChanged.connect ( SigC::slot( *this, &OverviewMapPanel::redraw ));
    OverviewMapHolder::generationComplete.connect ( SigC::slot( *this, &OverviewMapPanel::redraw ));
+
+   lockMapdisplay.connect( SigC::slot( *this, &OverviewMapPanel::lockPanel ));
+   unlockMapdisplay.connect( SigC::slot( *this, &OverviewMapPanel::unlockPanel ));
+   
 }
 
 
 void OverviewMapPanel::painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst)
 {
    Surface screen = Surface::Wrap( PG_Application::GetScreen() );
-   if ( name == "overviewmap" && actmap ) {
+   if ( name == "overviewmap" && actmap && !locked ) {
       Surface s = actmap->overviewMapHolder.getOverviewMap( false );
 
       MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom> blitter;
@@ -70,10 +75,23 @@ void OverviewMapPanel::painter ( const PG_Rect &src, const ASCString& name, cons
          lr.y = src.Height() -1;
 
       rectangle<4>(screen, SPoint(dst.x + ul.x, dst.y + ul.y), lr.x-ul.x, lr.y-ul.y, ColorMerger_Set<4>(0xff), ColorMerger_Set<4>(0xff) );
-
    }
 }
 
+
+void OverviewMapPanel::lockPanel()
+{
+   locked = true;
+   Update();
+}
+
+void OverviewMapPanel::unlockPanel()
+{
+   locked = false;
+   Update();
+}
+
+      
 bool OverviewMapPanel::mouseClick ( SPoint pos )
 {
    MapCoordinate mc = OverviewMapImage::surface2map( SPoint(int( float(pos.x) / currentZoom), int(float(pos.y) / currentZoom )));

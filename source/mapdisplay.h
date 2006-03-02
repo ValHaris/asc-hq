@@ -49,12 +49,6 @@ class MapDisplay : public MapDisplayInterface {
            void repaintDisplay ();
 };
 
-class tlockdispspfld {
-      public:
-        tlockdispspfld ( void );
-        ~tlockdispspfld ();
-      };
-
 
 class MapLayer;
 
@@ -118,6 +112,8 @@ class MapRenderer {
       
       void paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos );
       void paintTerrain( Surface& surf, GameMap* actmap, int playerView, const ViewPort& viewPort, const MapCoordinate& offset );
+      void paintBackground( Surface& surf, const ViewPort& viewPort );
+      void paintBackgroundField( Surface& surf, SPoint pos );
       
       int bitmappedHeight2pass( int height );
       
@@ -340,9 +336,28 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
             
       friend class CursorHiding;
 
+      class LockDisplay {
+         private:
+            void raiseLock();
+         public:
+            LockDisplay();
+            ~LockDisplay();
+      };
+
+      friend class LockDisplay;
+
+      
       ~MapDisplayPG ();
+   private:
+      int lock;
            
 };
+
+extern SigC::Signal0<void> lockMapdisplay;
+extern SigC::Signal0<void> unlockMapdisplay;
+
+
+typedef MapDisplayPG::LockDisplay tlockdispspfld;
 
 extern void benchMapDisplay();
 

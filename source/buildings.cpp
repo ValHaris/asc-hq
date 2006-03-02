@@ -562,13 +562,6 @@ void Building :: readData ( tnstream& stream, int version )
        for ( int k = 0; k < c; k++) {
           Vehicle* v = Vehicle::newFromStream ( gamemap, stream );
           v->setnewposition ( getEntry().x, getEntry().y );
-          if ( v->color != color ) {
-             ASCString msg;
-             msg.format("warning: the building at position %d / %d , which is owned by player %d, contained units from player %d ", getEntry().x, getEntry().y, color/8, v->color/8 );
-             warning(msg);
-             v->convert(getOwner());
-          }
-                          
           addToCargo(v);
        }
     }

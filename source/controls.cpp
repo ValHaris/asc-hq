@@ -816,7 +816,15 @@ void next_turn ( int playerView )
       }
    } while ( !closeLoop ); /* enddo */
 
-   authenticateUser( actmap, 0, false );
+   actmap->playerView = -1;
+   {
+      MapDisplayPG::LockDisplay ld;
+      repaintMap();
+      authenticateUser( actmap, 0, false );
+      actmap->overviewMapHolder.clear();
+   }
+   actmap->playerView  = actmap->actplayer;
+   actmap->sigPlayerUserInteractionBegins( actmap->player[actmap->actplayer] );
 }
 
 void checkUsedASCVersions ( Player& currentPlayer )

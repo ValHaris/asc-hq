@@ -54,6 +54,7 @@ class StartMultiplayerGame: public ConfigurableWindow {
       
       ASCString filename;
       ASCString PBEMfilename;
+      bool replay;
       
       GameParameterEditorWidget* mapParameterEditor;
       PG_Widget* mapParameterEditorParent;
@@ -133,7 +134,7 @@ const char* StartMultiplayerGame::buttonLabels[7] = {
 };
 
 
-StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWindow( NULL, PG_Rect::null, "newmultiplayergame", false ), newMap(NULL), page(ModeSelection), mode ( 0 ), 
+StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWindow( NULL, PG_Rect::null, "newmultiplayergame", false ), newMap(NULL), page(ModeSelection), mode ( 0 ), replay(false),
    mapParameterEditor(NULL), mapParameterEditorParent(NULL),
    allianceSetup(NULL), allianceSetupParent(NULL),
    playerSetup(NULL), playerSetupParent(NULL),
@@ -211,13 +212,19 @@ bool StartMultiplayerGame::Apply()
             break;   
       case MultiPlayerOptions:
          {
+            PG_CheckButton* cb = dynamic_cast<PG_CheckButton*>( FindChild( "Replay", true ));
+            if ( cb )
+               replay = cb->GetPressed();
+            
             PG_LineEdit* le = dynamic_cast<PG_LineEdit*>( FindChild( "Filename", true ));
             if ( le ) 
                if ( !le->GetText().empty() ) {
                   PBEMfilename = le->GetText();
                   return true;
                }
-            return false;      
+               
+             
+               return false;
          }      
          break;
               
@@ -455,6 +462,9 @@ void StartMultiplayerGame::setupNetwork()
 
 bool StartMultiplayerGame::start()
 {
+   if ( !Apply() )
+      return false;
+   
    if ( !newMap ) 
       newMap = mapLoadingExceptionChecker( filename, MapLoadingFunction( tmaploaders::loadmap ));
      
@@ -463,6 +473,15 @@ bool StartMultiplayerGame::start()
    
    if ( !checkPlayerStat() )
       return false;
+
+   if ( replay )
+      newMap->replayinfo = new GameMap::ReplayInfo;
+   else
+      if ( newMap->replayinfo ) {
+         delete newMap->replayinfo;
+         newMap->replayinfo = NULL;
+      }
+      
    
    setupNetwork();
   
