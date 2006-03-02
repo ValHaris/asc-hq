@@ -774,6 +774,10 @@ class UnitInfo : public GuiFunction
       {
          return "unit info";
       };
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == 'i' );
+      };
 };
 
 bool UnitInfo::available( const MapCoordinate& pos, ContainerBase* subject, int num )
@@ -1768,6 +1772,10 @@ class BuildObject : public GuiFunction
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return "Object construction";
+      };
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == 'r' );
       };
 };
 
