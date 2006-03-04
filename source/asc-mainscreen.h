@@ -44,6 +44,7 @@ public:
     ASC_MainScreenWidget( PG_Application& application );
     enum Panels { ButtonPanel, WindInfo, UnitInfo, OverviewMap, MapControl };
     void spawnPanel ( Panels panel );
+    void spawnPanel ( const ASCString& panelName );
 
     NewGuiHost* getGuiHost() { return guiHost; };
     DashboardPanel* getUnitInfoPanel() { return unitInfoPanel; };

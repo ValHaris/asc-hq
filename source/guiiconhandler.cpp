@@ -33,6 +33,7 @@
 #include "mapdisplay.h"
 #include "sigc++/retype_return.h"
 #include "asc-mainscreen.h"
+#include "gameoptions.h"
 
 const int guiIconSizeX = 49;
 const int guiIconSizeY = 35;
@@ -234,7 +235,7 @@ GuiIconHandler::~GuiIconHandler()
 NewGuiHost* NewGuiHost::theGuiHost = NULL;
 
 NewGuiHost :: NewGuiHost (PG_Widget *parent, MapDisplayPG* mapDisplay, const PG_Rect &r )
-         : Panel( parent, r, "GuiIcons", false ) , handler(NULL), enterKeyPressed(false), keyPressedButton(-1), smallButtonHolder(NULL)
+         : DashboardPanel( parent, r, "GuiIcons", false ) , handler(NULL), enterKeyPressed(false), keyPressedButton(-1), smallButtonHolder(NULL)
 {
    this->mapDisplay = mapDisplay;
    mapDisplay->mouseButtonOnField.connect( SigC::slot( *this, &NewGuiHost::mapIconProcessing ));
@@ -335,8 +336,12 @@ class SmallButtonHolder : public SpecialInputWidget {
 
  
 
-bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged )
+bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button )
 {
+   if ( button != CGameOptions::Instance()->mouse.fieldmarkbutton )
+      return false;
+
+   
 
    // PG_Point p = mapDisplay->ScreenToClient( mousePos.x, mousePos.y );
    SPoint p = mousePos;

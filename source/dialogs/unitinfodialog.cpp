@@ -18,6 +18,7 @@
 #include "../dialog.h"
 
 #include "../textfiletags.h"
+#include "../windowing.h"
 
 void assignWeaponInfo ( Panel* panel, PG_Widget* widget, const SingleWeapon& weapon )
 {

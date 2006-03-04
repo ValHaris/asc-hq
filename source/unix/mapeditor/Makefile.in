@@ -85,7 +85,8 @@ am_asc_mapedit_OBJECTS = edevents.$(OBJEXT) edgen.$(OBJEXT) \
 	overviewmappanel.$(OBJEXT) messaginghub.$(OBJEXT) \
 	explosivemines.$(OBJEXT) legacynetworkloaders.$(OBJEXT) \
 	player.$(OBJEXT) cannedmessages.$(OBJEXT) \
-	mapimageexport.$(OBJEXT) mainscreenwidget.$(OBJEXT)
+	mapimageexport.$(OBJEXT) mainscreenwidget.$(OBJEXT) \
+	windowing.$(OBJEXT)
 asc_mapedit_OBJECTS = $(am_asc_mapedit_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
@@ -266,7 +267,7 @@ gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialo
 geometry.cpp weatherarea.cpp guidimension.cpp weatherdialog.cpp \
 iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
 messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp \
-player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp
+player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp
 
 asc_mapedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \
@@ -426,6 +427,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/viewcalculation.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/weatherarea.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/weatherdialog.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/windowing.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

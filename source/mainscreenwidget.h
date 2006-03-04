@@ -55,7 +55,7 @@ protected:
     // Menu* menu;
     PG_Label* messageLine;
 
-    void spawnOverviewMapPanel ();
+    void spawnOverviewMapPanel ( const ASCString& panelName = "OverviewMap");
     
     void setup( bool messageLine );
     

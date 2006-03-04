@@ -23,6 +23,7 @@
 
 #include "paradialog.h"
 #include "pgtooltiphelp.h"
+#include "pgpopupmenu.h"
 
 #include "basegfx.h"
 #include "misc.h"
@@ -199,20 +200,172 @@ Menu::Menu ( PG_Widget *parent, const PG_Rect &rect)
    
 }  
 
+namespace ContextMenu {
+
+   class AutoTextContextAction : public ContextAction {
+      public:
+         ASCString getText( const MapCoordinate& pos )
+         {
+            return execactionnames[getActionID()];
+         };
+   };
+   
+class ContainerProperties: public ContextAction {
+   public:
+      bool available( const MapCoordinate& pos )
+      {
+         return actmap->getField(pos)->getContainer();
+      };
+
+      ASCString getText( const MapCoordinate& pos )
+      {
+         if ( actmap->getField(pos)->vehicle )
+            return "edit unit properties";
+         else
+            return "edit building properties";
+      };
+
+      int getActionID()
+      {
+         return act_changeunitvals ;
+      }
+};
+
+class ContainerCargo: public ContextAction {
+   public:
+      bool available( const MapCoordinate& pos )
+      {
+         return actmap->getField(pos)->getContainer() && actmap->getField(pos)->getContainer()->baseType->maxLoadableUnits > 0;
+      };
+
+      ASCString getText( const MapCoordinate& pos )
+      {
+         if ( actmap->getField(pos)->vehicle )
+            return "edit unit cargo";
+         else
+            return "edit building cargo";
+      };
+
+      int getActionID()
+      {
+         return act_changecargo ;
+      }
+};
+
+class DeleteContainer: public ContextAction {
+   public:
+      bool available( const MapCoordinate& pos )
+      {
+         return actmap->getField(pos)->getContainer();
+      };
+
+      ASCString getText( const MapCoordinate& pos )
+      {
+         if ( actmap->getField(pos)->vehicle )
+            return "delete unit";
+         else
+            return "delete building";
+      };
+
+      int getActionID()
+      {
+         return act_deleteunit ;
+      }
+};
+
+class ContainerProduction: public AutoTextContextAction {
+   public:
+      bool available( const MapCoordinate& pos )
+      {
+         return actmap->getField(pos)->getContainer() && actmap->getField(pos)->getContainer()->baseType->hasFunction( ContainerBaseType::InternalVehicleProduction  );
+      };
+
+      int getActionID()
+      {
+         return act_changeproduction ;
+      }
+};
+
+class DeleteMine: public AutoTextContextAction {
+   public:
+      bool available( const MapCoordinate& pos )
+      {
+         return !actmap->getField(pos)->mines.empty() ;
+      };
+
+      int getActionID()
+      {
+         return act_deletemine ;
+      }
+};
+
+class ChangeMineStrength: public AutoTextContextAction {
+   public:
+      bool available( const MapCoordinate& pos )
+      {
+         return !actmap->getField(pos)->mines.empty() ;
+      };
+
+      int getActionID()
+      {
+         return act_changeminestrength ;
+      }
+};
+
+class FieldResources: public AutoTextContextAction {
+   public:
+      bool available( const MapCoordinate& pos )
+      {
+         return true;
+      };
+
+      int getActionID()
+      {
+         return act_changeresources;
+      }
+};
+
+class DeleteTopObject: public AutoTextContextAction {
+   public:
+      bool available( const MapCoordinate& pos )
+      {
+         return !actmap->getField(pos)->objects.empty();
+      };
+
+      int getActionID()
+      {
+         return act_deletetopmostobject;
+      }
+};
+
+class DeleteAllObjects: public AutoTextContextAction {
+   public:
+      bool available( const MapCoordinate& pos )
+      {
+         return !actmap->getField(pos)->objects.empty();
+      };
+
+      int getActionID()
+      {
+         return act_deleteallobjects;
+      }
+};
 
 
-
-
+} // namespace ContextMenu
 
 Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
               : MainScreenWidget( application ),
               vehicleSelector( NULL ), buildingSelector( NULL ), objectSelector(NULL), terrainSelector(NULL), mineSelector(NULL),
-              weatherSelector( NULL ), selectionName(NULL), coordinateDisplay(NULL), currentSelectionWidget(NULL)
+              weatherSelector( NULL ), selectionName(NULL), coordinateDisplay(NULL), currentSelectionWidget(NULL), contextMenu(NULL)
 {
 
    setup( false );
    mapDisplay->mouseButtonOnField.connect( SigC::slot( mousePressedOnField ));
+   mapDisplay->mouseButtonOnField.connect( SigC::slot( *this, &Maped_MainScreenWidget::clickOnMap ));
    mapDisplay->mouseDraggedToField.connect( SigC::slot( mouseDraggedToField ));
+
+   
 
    
    setupStatusBar();
@@ -229,17 +382,14 @@ Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
    PG_Button* button = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Vehicle" );
    button->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectVehicle ));
    ypos += 25;
-   new PG_ToolTipHelp( button, "test" );
    
    PG_Button* button2 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Building" );
    button2->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectBuilding ));
    ypos += 25;
-   new PG_ToolTipHelp( button2, "test2" );
 
    PG_Button* button3 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Object" );
    button3->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectObject ));
    ypos += 25;
-   new PG_ToolTipHelp( button3, "MOOM" );
    
    PG_Button* button4 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Terrain" );
    button4->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectTerrain ));
@@ -283,6 +433,17 @@ Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
    selection.selectionChanged.connect( SigC::slot( *currentSelectionWidget, &SelectionItemWidget::set ));
    selection.selectionChanged.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectionChanged ));
 
+   spawnOverviewMapPanel( "Mapeditor_OverviewMap" );
+
+   addContextAction( new ContextMenu::ContainerProperties );
+   addContextAction( new ContextMenu::ContainerCargo );
+   addContextAction( new ContextMenu::ContainerProduction );
+   addContextAction( new ContextMenu::DeleteContainer );
+   addContextAction( new ContextMenu::ChangeMineStrength );
+   addContextAction( new ContextMenu::DeleteMine );
+   addContextAction( new ContextMenu::FieldResources );
+   addContextAction( new ContextMenu::DeleteTopObject );
+   addContextAction( new ContextMenu::DeleteAllObjects );
 }
 
 void Maped_MainScreenWidget::setupStatusBar()
@@ -320,6 +481,53 @@ void Maped_MainScreenWidget::brushChanged( int i )
    if ( selection.brushSize < 1 )
       selection.brushSize = 1;
 }
+
+void Maped_MainScreenWidget:: addContextAction( ContextAction* contextAction )
+{
+   contextActions.push_back( contextAction );
+}
+
+
+bool Maped_MainScreenWidget::clickOnMap( const MapCoordinate& field, const SPoint& pos, bool changed, int button)
+{
+   if( button == 3 ) {
+
+      mapDisplay->cursor.goTo( field );
+      
+      int counter = 0;
+      for ( deallocating_vector<ContextAction*>::iterator i = contextActions.begin(); i != contextActions.end(); ++i )
+         if ( (*i)->available( field ))
+            ++counter;
+
+      if ( !counter )
+         return false;
+
+      if ( contextMenu )
+         delete contextMenu;
+      
+      contextMenu = new PG_PopupMenu( this, pos.x, pos.y );
+
+      for ( deallocating_vector<ContextAction*>::iterator i = contextActions.begin(); i != contextActions.end(); ++i )
+         if ( (*i)->available( field )) {
+            MapCoordinate mc = field;
+            contextMenu->addMenuItem( (*i)->getText( field ), (*i)->getActionID() );
+         }
+
+      contextMenu->sigSelectMenuItem.connect( SigC::slot( *this, &Maped_MainScreenWidget::runContextAction   ));
+      
+      contextMenu->Show();
+      return true;
+   }
+   return false;
+}
+
+bool Maped_MainScreenWidget::runContextAction  (PG_PopupMenu::MenuItem* menuItem )
+{
+   execaction_ev( tuseractions( menuItem->getId() ) );
+
+   return true;
+}
+
 
 
 bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
@@ -396,10 +604,7 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
          case SDLK_TAB: execaction_ev(act_switchmaps );
                         return true;
 
-         case SDLK_ESCAPE :  if ( polyfieldmode )
-                                execaction_ev(act_endpolyfieldmode);
-                             else
-                                execaction_ev(act_end);
+         case SDLK_ESCAPE: execaction_ev(act_end);
                         return true;
          case SDLK_PLUS:
          case SDLK_KP_PLUS: execaction_ev( act_increase_zoom );
@@ -474,7 +679,15 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
          default:;
    
        } 
-   }                 
+   }
+
+   if ( mod & KMOD_SHIFT ) {
+      switch ( key->keysym.sym ) {
+         case SDLK_d: execaction_ev(act_changeunitdir);
+            return true;
+         default:;
+      }
+   }
    return false;
 }
 
@@ -563,16 +776,5 @@ void displaymessage2( const char* formatstring, ... )
 }
 
 
-
-
-void Maped_MainScreenWidget::spawnPanel ( Panels panel )
-{
-   if ( panel == OverviewMap ) {
-      assert( mapDisplay);
-      OverviewMapPanel* smp = new OverviewMapPanel( this, PG_Rect(Width()-170, 0, 170, 160), mapDisplay );
-      smp->Show();
-      mapChanged.connect( SigC::slot( OverviewMapHolder::clearmap ));
-   }
-}
 
 

@@ -166,7 +166,26 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
       pc.addString(ASCString("SearchPath") + strrr(i), searchPath[i] );
       
    searchPathNum = spn;   
-   
+
+   vector<ASCString> panels;
+   if ( pc.isReading() ) {
+      if ( pc.find( "Panels"))
+         pc.addStringArray( "Panels", panels );
+   } else {
+      for ( PanelDataContainer::iterator i = panelData.begin(); i != panelData.end(); ++i )
+         panels.push_back( i->first );
+      pc.addStringArray( "Panels", panels );
+   }
+
+   for ( vector<ASCString>::iterator i = panels.begin(); i != panels.end(); ++i ){
+      PanelData& pd = panelData[*i];
+      pc.openBracket( *i );
+      pc.addInteger( "x", pd.x );
+      pc.addInteger( "y", pd.y );
+      pc.addBool( "active", pd.visible );
+      pc.closeBracket();
+   }
+      
      
 }
 
@@ -351,3 +370,10 @@ Password CGameOptions :: getDefaultSupervisorPassword ( )
 
    return pwd;
 }
+
+void CGameOptions :: updatePanelData( const ASCString& name, PanelData data )
+{
+   panelData[name] = data;
+   setChanged();
+}
+

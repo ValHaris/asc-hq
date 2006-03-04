@@ -24,8 +24,8 @@
 #include "mapdisplay.h"
 
 
-OverviewMapPanel::OverviewMapPanel( PG_Widget *parent, const PG_Rect &r, MapDisplayPG* mapDisplay )
-   : Panel ( parent, r, "OverviewMap", true ), mapDisplayWidget( mapDisplay), currentZoom( 1 ), locked(false)
+OverviewMapPanel::OverviewMapPanel( PG_Widget *parent, const PG_Rect &r, MapDisplayPG* mapDisplay, const ASCString& widgetName )
+   : LayoutablePanel ( parent, r, widgetName, true ), mapDisplayWidget( mapDisplay), currentZoom( 1 ), locked(false)
 {
    SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( "overviewmap", true ) );
    if ( sdw ) {

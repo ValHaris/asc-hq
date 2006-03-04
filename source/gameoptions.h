@@ -169,6 +169,18 @@ class CGameOptions
       int replayspeed;
       // int showUnitOwner;
 
+
+      struct PanelData {
+         int x;
+         int y;
+         bool visible;
+      };
+
+      typedef map<ASCString, PanelData> PanelDataContainer;
+      PanelDataContainer panelData;
+
+      void updatePanelData( const ASCString& name, PanelData data );
+      
       ASCString BI3directory;
       
       ASCString startupMap;

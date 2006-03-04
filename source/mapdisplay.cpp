@@ -857,15 +857,17 @@ bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
       if ( changed )
          redrawMapAtCursor( oldpos );
 
-      mouseButtonOnField( mc, SPoint(button->x, button->y), changed );
-      
+      mouseButtonOnField( mc, SPoint(button->x, button->y), changed, button->button );
       return true;
+      
    }
 
    if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == CGameOptions::Instance()->mouse.centerbutton ) {
       return centerOnField( mc );
    }
 
+   mouseButtonOnField( mc, SPoint(button->x, button->y), false, button->button );
+   
    return false;
 }
 
@@ -1287,26 +1289,48 @@ void MapDisplayPG::moveCursor( int dir, int step )
    MapCoordinate pos = cursor.pos();
 
    switch ( dir ) {
-      case 0:  pos.y -= 2;
+      case 0:  pos.y -= 2 * step;
                break;
-      case 2:  if ( pos.y & 1 ) {
-                  if ( pos.x < actmap->xsize-1 ) {
-                     pos.x += 1;
-                     pos.y -= 1;
+      case 1:  pos.y -= 1 * step;
+               if ( !(pos.y & 1) )
+                  pos.x += 1 * step;
+               break;         
+      case 2:  if ( step & 1 ) {
+                  if ( pos.y & 1 ) {
+                     if ( pos.x < actmap->xsize-1 ) {
+                        pos.x += 1 * step;
+                        pos.y -= 1 * step;
+                     }
+                  } else
+                     pos.y += 1 * step;
+               } else
+                  pos.x += step/2;
+               break;
+      case 3:  pos.y += 1 * step;
+               if ( !(pos.y & 1) )
+                  pos.x += 1 * step;
+               break;
+      case 4:  pos.y += 2 * step;
+               break;
+      case 5:  pos.y += 1 * step;
+               if ( pos.y & 1 )
+                  pos.x -= 1 * step;
+               break;
+      case 6:  if ( step & 1) {
+                  if ( pos.y & 1 ) {
+                     pos.y -= 1 * step;
+                  } else {
+                     if ( pos.x > 0 ) {
+                        pos.x -= 1 * step;
+                        pos.y += 1 * step;
+                     }
                   }
                } else
-                   pos.y += 1;
+                  pos.x -= step/2;
                break;
-      case 4:  pos.y += 2;
-               break;
-      case 6:  if ( pos.y & 1 ) {
-                   pos.y -= 1;
-               } else {
-                   if ( pos.x > 0 ) {
-                      pos.x -= 1;
-                      pos.y += 1;
-                   }
-               }
+      case 7:  pos.y -= 1 * step;
+               if ( pos.y & 1 )
+                  pos.x -= 1 * step;
                break;
    }
 
@@ -1373,11 +1397,11 @@ bool MapDisplayPG::keyboardHandler( const SDL_KeyboardEvent* keyEvent)
 
    if ( keyEvent->type == SDL_KEYDOWN ) {
       if ( !disableKeyboardCursorMovement ) {
-         if ( keyEvent->keysym.sym == SDLK_RIGHT  || keyEvent->keysym.sym == SDLK_KP6 ) {
+         if ( keyEvent->keysym.sym == SDLK_RIGHT  ) {
             moveCursor(2, 1);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_LEFT  || keyEvent->keysym.sym == SDLK_KP4 ) {
+         if ( keyEvent->keysym.sym == SDLK_LEFT   ) {
             moveCursor(6, 1);
             return true;
          }
@@ -1389,6 +1413,31 @@ bool MapDisplayPG::keyboardHandler( const SDL_KeyboardEvent* keyEvent)
             moveCursor(4, 1);
             return true;
          }
+         if ( keyEvent->keysym.sym == SDLK_KP6 ) {
+            moveCursor(2, 2);
+            return true;
+         }
+         if ( keyEvent->keysym.sym == SDLK_KP4 ) {
+            moveCursor(6, 2);
+            return true;
+         }
+         if ( keyEvent->keysym.sym == SDLK_KP7 ) {
+            moveCursor(7, 1);
+            return true;
+         }
+         if ( keyEvent->keysym.sym == SDLK_KP9 ) {
+            moveCursor(1, 1);
+            return true;
+         }
+         if ( keyEvent->keysym.sym == SDLK_KP1 ) {
+            moveCursor(5, 1);
+            return true;
+         }
+         if ( keyEvent->keysym.sym == SDLK_KP3 ) {
+            moveCursor(3, 1);
+            return true;
+         }
+         
       }   
    }
    return false;

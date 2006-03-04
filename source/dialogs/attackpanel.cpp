@@ -21,6 +21,7 @@
 #include "../gamemap.h"
 #include "../events.h"
 #include "../gameoptions.h"
+#include "../windowing.h"
 
 #define USE_COLOR_CONSTANTS
 #include <pgcolors.h>

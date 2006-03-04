@@ -351,18 +351,7 @@ void showPlayerStrength()
 void execaction( int code)
 {
    switch(code) {
-    case act_help :   if ( polyfieldmode ) help ( 1040 );
-                       else help(1000);
-       break;
-    case act_selcolor : {
-                       ch = 0;
-                       // selcolor( ct_f5 );
-                     }
-       break;
-    case act_selweather : {
-                       ch = 0;
-                       // selweather( ct_f9  );   // !!!!!         // Test (Boolean) Testet, ob das wetter auch verfgbar ist fr bodentyp
-                     }
+    case act_help : help(1000);
        break;
     case act_toggleresourcemode :  {
          if ( mainScreenWidget )
@@ -415,7 +404,9 @@ void execaction( int code)
                       pf2 = getactfield();
                       if ( pf2 && pf2->vehicle  ) {
                          pf2->vehicle->direction++;
-                         if (pf2->vehicle->direction>sidenum-1) pf2->vehicle->direction = 0;
+                         if (pf2->vehicle->direction >= sidenum )
+                            pf2->vehicle->direction = 0;
+                         
                          mapsaved = false;
                          displaymap();
                       } 

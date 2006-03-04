@@ -26,6 +26,7 @@
  #define dashboardH
 
 #include "paradialog.h"
+#include "windowing.h"
 
 class Vehicletype;
 class Vehicle;
@@ -34,10 +35,11 @@ class SingleWeapon;
 class MapDisplay;
 class GameMap;
 
-class DashboardPanel : public Panel {
-    protected:
+class DashboardPanel : public LayoutablePanel {
+   protected:
        Vehicle* veh;
        Building* bld;
+       
       DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme );
 
       void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
@@ -47,7 +49,7 @@ class DashboardPanel : public Panel {
 
       bool containerRenamed( PG_LineEdit* lineEdit );
       
-    public:
+   public:
       void eval();
       void showUnitData( Vehicle* veh, Building* bld, bool redraw = false );
 

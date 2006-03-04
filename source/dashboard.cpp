@@ -32,13 +32,14 @@
 #include "textfiletags.h"
 #include "mapdisplay.h"
 #include "dialogs/unitinfodialog.h"
+#include "gameoptions.h"
 
 #include "sg.h"
 
 
 
 DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme = true )
-   :Panel ( parent, r, panelName_, loadTheme ), veh(NULL)
+   :LayoutablePanel ( parent, r, panelName_, loadTheme ), veh(NULL), bld(NULL)
 {
    updateFieldInfo.connect ( SigC::slot( *this, &DashboardPanel::eval ));
    registerSpecialDisplay( "windarrow" );
@@ -58,7 +59,6 @@ DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCS
    if ( l ) {
       l->sigEditEnd.connect( SigC::slot( *this, &DashboardPanel::containerRenamed ));
    }
-   
 };
 
 
@@ -239,7 +239,7 @@ void DashboardPanel::eval()
       setBarGraphColor( "winddisplay", 0x00ff00  );
    }
 
-   if ( mc.valid() ) {
+   if ( mc.valid() && fld ) {
       if ( veh && fieldvisiblenow( fld ) ) {
          showUnitData( veh, NULL );
       } else {
@@ -592,6 +592,7 @@ MapInfoPanel::MapInfoPanel (PG_Widget *parent, const PG_Rect &r, MapDisplayPG* m
       zoomSlider->SetRange(0,75); // results in zoomlevels from 100 - 25
       zoomSlider->sigSlide.connect( SigC::slot( *this, &MapInfoPanel::scrollTrack ));
       mapDisplay->newZoom.connect( SigC::slot( *this, &MapInfoPanel::zoomChanged ));
+      zoomSlider->SetPosition( 100 - mapDisplay->getZoom() );
    }   
 
    const int labelnum = 3;

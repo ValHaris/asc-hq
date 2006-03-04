@@ -26,6 +26,8 @@
 #include <cstdlib>
 #include <ctype.h>
 
+#include "pgpopupmenu.h"
+
 #include "typen.h"
 #include "basegfx.h"
 #include "mappolygons.h"
@@ -43,9 +45,8 @@
 #include "mapalgorithms.h"
 
 
-extern bool mousePressedOnField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged);
+extern bool mousePressedOnField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button );
 extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged);
-
 
   typedef struct selectrec {
                   int         srr;
@@ -59,33 +60,6 @@ extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePo
            int      x, y; 
         } xy; 
 
-/*
-   typedef struct tpolystructure* ppolystructure;
-
-   typedef struct tpolystructure {
-              ppolygon poly;
-              pascal_byte place;
-              int id;
-              ppolystructure next;
-        } tpolystruct;
-
-   class   tpolygon_management {
-           public :
-                 int polygonanz;
-                 ppolystructure firstpolygon, lastpolygon;
-                 tpolygon_management(void);
-                 void addpolygon(ppolygon *poly, int place, int id);
-                 void deletepolygon(ppolygon *poly);
-            };
-
-   class tmycursor : public tcursor {
-         public :
-              int sx,sy,ix,iy;
-              virtual void getimg  ( void );
-              virtual void putimg  ( void );
-              virtual void putbkgr ( void );
-   };
-*/
    class  PolygonEditor {
              Poly_gon& poly;
              void display();
@@ -93,21 +67,7 @@ extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePo
              PolygonEditor ( Poly_gon& polygon ) : poly( polygon ) {};
              void run(void);
    };
-/*
-   class  tfillpolygonbodentyp : public tfillpolygonsquarecoord {
-        public:
-             int tempvalue;
-             virtual void initevent ( void );
-             virtual void setpointabs ( int x,  int y  );
-   };
-
-   class  tfillpolygonunit : public tfillpolygonsquarecoord {
-        public:
-             int tempvalue;
-             virtual void initevent ( void );
-             virtual void setpointabs ( int x,  int y  );
-   };
-*/
+   
    class tputresources : public SearchFields {
                               int resourcetype;
                               int maxresource;
@@ -135,40 +95,15 @@ extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePo
 
 
 
-   extern tkey                     ch;
    extern tfield*                    pf2;
    extern pterraintype      auswahl;
    extern Vehicletype*        auswahlf;
    extern BuildingType*    auswahlb;
-   extern int                 auswahls;
    extern ObjectType*      actobject;
    extern int auswahlm;
    extern int auswahlw;
    extern int farbwahl;
-   extern int                     altefarbwahl;
-   extern tfontsettings         rsavefont;
-   extern int                   lastselectiontype;
-   // extern ppolygon               pfpoly;
-   extern char                tfill,polyfieldmode;
-   extern int                    fillx1, filly1;
-   extern Building*               gbde;
-   extern int                    variable;
    extern char                mapsaved;
-//   extern tcdrom                 cdrom;
-
-
-//* fr SelectNr
-
-#define cselbodentyp 1                 //* terrain
-#define cselunit 2                      //* vehicletypeen
-#define cselcolor 3                       //* Farben
-#define cselbuilding 4                   //* Buildings
-#define cselunitunit 11                  //* Fahrzeuge fr vehicleCargo
-#define cselobject 5                   //* Special Objects
-#define cselbuildingunit 12              //* Fahrzeuge fr BuildingCargo
-#define cselproduction 8               //* Fahrzeuge fr Production
-#define cselmine 6                       //* Minen
-#define cselweather 7                //* Wetter
 
 extern void         setstartvariables(void);
 extern void         exchg(int *a1,int *a2);
@@ -195,8 +130,6 @@ extern tfield* getactfield();
 
 extern void cdplayer( void );
 
-extern int rightmousebox(void);
-extern int leftmousebox(void);
 extern void selectunitsetfilter ( void );
 extern void movebuilding();
 extern void unitsettransformation( void );

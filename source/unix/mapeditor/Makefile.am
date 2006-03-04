@@ -30,7 +30,7 @@ gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialo
 geometry.cpp weatherarea.cpp guidimension.cpp weatherdialog.cpp \
 iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
 messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp \
-player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp
+player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp
 
 asc_mapedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \

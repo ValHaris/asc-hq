@@ -306,8 +306,9 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
            \param MapCoordinate the Coordinate of the field that was clicked
            \param SPoint the mouse position
            \param bool true if the cursor had been repositioned
+           \param int  the button that was pressed
       */
-      SigC::Signal3<bool,const MapCoordinate&, const SPoint&, bool> mouseButtonOnField;
+      SigC::Signal4<bool,const MapCoordinate&, const SPoint&, bool, int> mouseButtonOnField;
 
       /** Signal that is fired when the mouse is dragged onto a new field with mouse buttons pressed.
            \param MapCoordinate the Coordinate of the field that was clicked

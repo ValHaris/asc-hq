@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.20 2006-02-24 21:12:15 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.21 2006-03-04 20:40:11 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -34,6 +34,7 @@
 #include "paradialog.h"
 #include "typen.h"
 #include "containerbase.h"
+#include "dashboard.h"
 
 extern const int smallGuiIconSizeX;
 extern const int smallGuiIconSizeY;
@@ -139,7 +140,7 @@ class GuiIconHandler {
 
 class MapDisplayPG;
 
-class NewGuiHost : public Panel {
+class NewGuiHost : public DashboardPanel {
         GuiIconHandler* handler;
         static NewGuiHost* theGuiHost;
         list<GuiIconHandler*> iconHandlerStack;
@@ -147,7 +148,7 @@ class NewGuiHost : public Panel {
         bool enterKeyPressed;
         int keyPressedButton;
      protected:
-        bool mapIconProcessing( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged );
+        bool mapIconProcessing( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button );
 
         typedef vector<GuiButton*> Buttons;
         Buttons buttons;

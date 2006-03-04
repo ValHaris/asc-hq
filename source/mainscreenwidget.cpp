@@ -61,8 +61,6 @@ void MainScreenWidget::setup( bool messageLine )
    displayLogMessage ( 5, "done\nMainScreenWidget completed\n");
    dataLoaderTicker();
 
-   spawnOverviewMapPanel();
-
    repaintDisplay.connect ( SigC::bind( SigC::slot( *this, &MainScreenWidget::Update ), true ));
    
    buildBackgroundImage( messageLine );
@@ -259,10 +257,10 @@ StatusMessageWindowHolder MainScreenWidget::createStatusWindow( const ASCString&
    return StatusMessageWindowHolder( new PG_StatusWindowData( msg ));
 }
 
-void MainScreenWidget::spawnOverviewMapPanel ()
+void MainScreenWidget::spawnOverviewMapPanel ( const ASCString& panelName )
 {
    assert( mapDisplay);
-   OverviewMapPanel* smp = new OverviewMapPanel( this, PG_Rect(Width()-170, 0, 170, 160), mapDisplay );
+   OverviewMapPanel* smp = new OverviewMapPanel( this, PG_Rect(Width()-170, 0, 170, 160), mapDisplay, panelName );
    smp->Show();
    mapChanged.connect( SigC::slot( OverviewMapHolder::clearmap ));
 }

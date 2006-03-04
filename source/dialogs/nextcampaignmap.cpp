@@ -21,6 +21,7 @@
 
 #include "../paradialog.h"
 #include "../loaders.h"
+#include "../windowing.h"
 
 class NextCampaignMap : public ConfigurableWindow
 {

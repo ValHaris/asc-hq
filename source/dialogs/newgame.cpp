@@ -35,6 +35,7 @@
 #include "../networkinterface.h"
 #include "../network.h"
 #include "../spfst.h"
+#include "../windowing.h"
 
 class GameParameterEditorWidget;
 

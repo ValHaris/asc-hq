@@ -38,6 +38,7 @@
 #include "itemrepository.h"
 #include "mapdisplay.h"
 #include "sg.h"
+#include "gameoptions.h"
 
 ASC_MainScreenWidget*  mainScreenWidget = NULL ;
 
@@ -426,27 +427,27 @@ ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
    dataLoaderTicker();
    SetID( ASC_PG_App::mainScreenID );
 
-   displayLogMessage ( 7, "done\n  ButtonPanel ");
-   spawnPanel ( ButtonPanel );
-
-   dataLoaderTicker();
-   // displayLogMessage ( 7, "done\n  WindInfo ");
-   // spawnPanel ( WindInfo );
-
-   displayLogMessage ( 7, "done\n  UnitInfo ");
-   dataLoaderTicker();
-   spawnPanel ( UnitInfo );
-
-   displayLogMessage ( 7, "done\n  OverviewMap ");
-   dataLoaderTicker();
-   // spawnPanel ( OverviewMap );
-
-
+   
    weaponRangeLayer = new UnitWeaponRangeLayer();
    mapDisplay->addMapLayer( weaponRangeLayer, "weaprange" );
 
    movementRangeLayer = new UnitMovementRangeLayer();
    mapDisplay->addMapLayer( movementRangeLayer, "moverange" );
+
+   int counter = 0;
+   for ( CGameOptions::PanelDataContainer::iterator i = CGameOptions::Instance()->panelData.begin(); i != CGameOptions::Instance()->panelData.end(); ++i ) {
+      if ( i->second.visible ) {
+         ++counter;
+         spawnPanel( i->first );
+      }
+   }
+
+   if ( !counter ) {
+      spawnPanel( UnitInfo );
+      spawnPanel( ButtonPanel );
+      spawnPanel( OverviewMap );
+   }
+      
 }
 
 
@@ -472,6 +473,24 @@ void displaymessage2( const char* formatstring, ... )
 
 
 
+void ASC_MainScreenWidget::spawnPanel ( const ASCString& panelName )
+{
+   if ( panelName == "WindInfo" )
+      spawnPanel ( WindInfo );
+
+   if ( panelName == "UnitInfo" )
+      spawnPanel ( UnitInfo );
+   
+   if ( panelName == "GuiIcons" )
+      spawnPanel ( ButtonPanel );
+
+   if ( panelName == "OverviewMap" )
+      spawnPanel ( OverviewMap );
+
+   if ( panelName == "MapInfo" )
+      spawnPanel ( MapControl );
+
+}
 
 void ASC_MainScreenWidget::spawnPanel ( Panels panel )
 {

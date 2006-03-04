@@ -48,31 +48,19 @@
 #include "dialogs/cargowidget.h"
 
 
-   tkey         ch;
    tfield*               pf2;
 
    pterraintype auswahl;
    Vehicletype* auswahlf;
    ObjectType*  actobject;
-   BuildingType*        auswahlb;
-   int          auswahls;
-   int          auswahlm;       
+   BuildingType* auswahlb;
+   int          auswahlm;
    int          auswahlw;
    int          farbwahl;
-   int                  altefarbwahl;
-
-   tfontsettings        rsavefont;
-   int                  lastselectiontype;
-
-   char         tfill,polyfieldmode;
-   int          fillx1, filly1;
-
-   int                  i;
-   Building*            gbde;
    char         mapsaved;
 
 
-   
+
 void placeCurrentItem()
 {
    if ( selection.getSelection() && actmap->getCursor().valid() ) {
@@ -86,10 +74,13 @@ void placeCurrentItem()
 }
    
    
-bool mousePressedOnField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged)
+bool mousePressedOnField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button )
 {
-   execaction_ev( act_primaryAction );
-   return true;
+   if ( button == 1 ) {
+      execaction_ev( act_primaryAction );
+      return true;
+   } else
+      return false;
 }
 
 bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged)
@@ -106,6 +97,7 @@ char checkobject(tfield* pf)
    return !pf->objects.empty();
 }
 
+#if 0
 // õS MouseButtonBox
 
 #define maxmouseboxitems 20
@@ -243,12 +235,9 @@ void tmousebuttonbox::done(void)
    mousevisible(true);
    asc_free(background);
    activefontsettings.font = savefont;
-   while (keypress())
-      ch = r_key();
 
    while (mouseparams.taste != 0)
       releasetimeslice();
-   ch = ct_invvalue;
 }
 
 
@@ -337,6 +326,8 @@ int leftmousebox(void)
    tmb.done();
    return tmb.actcode;
 }
+
+#endif
 
 // õS PutResource
 
@@ -440,7 +431,6 @@ void placemine(void)
    mousevisible(false); 
    mapsaved = false;
    getactfield()->putmine(farbwahl,auswahlm+1,MineBasePunch[auswahlm]);
-   lastselectiontype = cselmine;
    displaymap();
    mousevisible(true); 
 }
@@ -566,7 +556,7 @@ void         tplayerchange::init(void)
 
    windowstyle = windowstyle ^ dlg_in3d;
 
-   for (i=0;i<=8 ;i++ ) {
+   for ( int i=0;i<=8 ;i++ ) {
       s1 = new(char[12]);
       if (i == 8) {
          strcpy(s1,"~N~eutral");
@@ -589,7 +579,7 @@ void         tplayerchange::init(void)
 
    buildgraphics();
 
-   for (i=0;i<=8 ;i++ ) bar(x1 + 170,y1 + 60 + i*30 ,x1 + 190 ,y1 + 70 + i * 30,20 + ( i << 3 ));
+   for ( int i=0;i<=8 ;i++ ) bar(x1 + 170,y1 + 60 + i*30 ,x1 + 190 ,y1 + 70 + i * 30,20 + ( i << 3 ));
 
    anzeige();
 
@@ -599,9 +589,10 @@ void         tplayerchange::init(void)
 void         tplayerchange::anzeige(void)
 {
    int e,b,m[9];
-   for (i=0;i<=8 ;i++ ) m[i] =0;
-   int i;
-   for (i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
+   for ( int i=0;i<=8 ;i++ )
+      m[i] =0;
+   
+   for ( int i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
       int color = actmap->field[i].mineowner();
       if ( color >= 0 && color < 8 )
          m[color]++;
@@ -615,7 +606,7 @@ void         tplayerchange::anzeige(void)
    showtext2("Units",x1+210,y1+35);
    showtext2("Build.",x1+260,y1+35);
    showtext2("Mines",x1+310,y1+35);
-   for (i=0;i<=8 ;i++ ) {
+   for ( int i=0;i<=8 ;i++ ) {
       if (i == sel1 ) rectangle (x1 + 16,y1+51+i*30,x1+154,y1+79+i*30, 20 );
       else if ( i == sel2 ) rectangle (x1 + 16,y1+51+i*30,x1+154,y1+79+i*30, 28 );
       else rectangle (x1 + 16,y1+51+i*30,x1+154,y1+79+i*30, bkgcolor );
@@ -945,13 +936,11 @@ void         setstartvariables(void)
    activefontsettings. background = 0;
 
    mapsaved = true;
-   polyfieldmode = false;
 
    auswahl  = terrainTypeRepository.getObject_byPos(0);
    auswahlf = vehicleTypeRepository.getObject_byPos(0);
    auswahlb = buildingTypeRepository.getObject_byPos(0);
    actobject = objectTypeRepository.getObject_byPos(0);
-   auswahls = 0;
    auswahlm = 1;
    auswahlw = 0;
    farbwahl = 0;
@@ -1336,7 +1325,6 @@ void         tnewmap::buttonpressed(int id)
          disablebutton(8);
       }
    if (id == 12) {
-      npush ( lastselectiontype );
       npush ( auswahl );
 
       void *p;
@@ -1346,9 +1334,6 @@ void         tnewmap::buttonpressed(int id)
       getimage(430,0,639,479,p);
       mousevisible(true);
 
-      lastselectiontype = cselbodentyp;
-//      selterraintype( ct_invvalue );
-
       mousevisible(false);
       putimage(430,0,p);
       mousevisible(true);
@@ -1356,7 +1341,6 @@ void         tnewmap::buttonpressed(int id)
       tauswahl = auswahl;
 
       npop ( auswahl );
-      npop ( lastselectiontype );
 
       if ( tauswahl->weather[auswahlw] )
          tauswahl->weather[auswahlw]->paint( getActiveSurface(), SPoint(x1 + 440,y1 + 182) );
@@ -2077,7 +2061,7 @@ void         tunit::init(  )
    tfield* fld = getfield ( unit->xpos, unit->ypos);
    if ( fld && fld->vehicle == unit ) {
       npush ( unit->height );
-      for (i=0;i<=7 ;i++) {
+      for ( int i=0;i<=7 ;i++) {
           unit->height = 1 << i;
           if (( ( unit->height & unit->typ->height ) > 0) && ( terrainaccessible( fld, unit ) == 2)) {
              addbutton("",20+( i * w2),heightxs,w2 * (i +1 ),heightxs+24,0,1,i+4,true);
@@ -2099,7 +2083,7 @@ void         tunit::init(  )
 
    const int maxeditable = 10;
 
-   for(i =0;i < unit->typ->weapons.count;i++) {
+   for( int i =0;i < unit->typ->weapons.count;i++) {
      if (i < maxeditable) {
         weaponammo = new(char[25]);
         strcpy(weaponammo,"Wpn Ammo ");
@@ -2124,21 +2108,22 @@ void         tunit::init(  )
    
    if ( !heightIconsLoaded ) {
       {
-      tnfilestream stream ("height.raw",tnstream::reading);
-      int w;
-      for (i = 0; i <= 7; i++)
-         stream.readrlepict( &iconsheight[i],false,&w);
+         tnfilestream stream ("height.raw",tnstream::reading);
+         int w;
+         for ( int i = 0; i <= 7; i++)
+            stream.readrlepict( &iconsheight[i],false,&w);
       }
       {
-      tnfilestream stream ("pfeil-a0.raw", tnstream::reading);
-      for (i=0;i<8 ;i++ ) stream.readrlepict( &iconspfeil[i], false, &w);
+         tnfilestream stream ("pfeil-a0.raw", tnstream::reading);
+         for ( int i=0;i<8 ;i++ )
+             stream.readrlepict( &iconspfeil[i], false, &w);
       }
    }
          
    
    
    if ( unitheights ) 
-       for (i=0;i<=7 ;i++) {
+       for ( int i=0;i<=7 ;i++) {
            if ( unit->height == (1 << i) )
               bar(x1 + 25+( i * w2),y1 + heightxs-5,x1 + w2 * (i +1 ) - 5,y1 + heightxs-3,red);
 
@@ -2213,7 +2198,7 @@ void         tunit::buttonpressed(int         id)
    {
      int h = 1 << ( id - 4 );
      bar(x1 +20,y1 + heightxs-5,x1 + 480,y1 + heightxs-3,lightgray);
-     for (i=0;i<=7 ;i++) {
+     for (int i=0;i<=7 ;i++) {
         ht = 1 << i;
         if ( ht == h ) bar(x1 + 25+( i * w2),y1 + heightxs-5,x1 + w2 * (i +1 ) - 5,y1 + heightxs-3,red);
      } /* endfor */

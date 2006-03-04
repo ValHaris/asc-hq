@@ -24,18 +24,18 @@
 
 
 #include "global.h"
-#include "paradialog.h"
+#include "windowing.h"
 
 class MapDisplayPG;
 
 
-class OverviewMapPanel : public Panel {
+class OverviewMapPanel : public LayoutablePanel {
         MapDisplayPG* mapDisplayWidget;
         PG_Widget* ovmap;
         float currentZoom;
         bool locked;
      public:
-        OverviewMapPanel( PG_Widget *parent, const PG_Rect &r, MapDisplayPG* mapDisplay ) ;
+        OverviewMapPanel( PG_Widget *parent, const PG_Rect &r, MapDisplayPG* mapDisplay, const ASCString& widgetName ) ;
      protected:
         void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
         void redraw() { Redraw(true); };

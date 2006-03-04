@@ -58,6 +58,14 @@ class SelectionItemWidget : public PG_Widget {
 };
 
 
+   class ContextAction {
+      public:
+         virtual bool available( const MapCoordinate& pos ) = 0;
+         virtual ASCString getText( const MapCoordinate& pos ) = 0;
+         virtual int getActionID() = 0;
+         virtual ~ContextAction() {};
+   };
+      
 class Maped_MainScreenWidget : public MainScreenWidget {
     PG_Window* vehicleSelector;
     PG_Window* buildingSelector;
@@ -70,10 +78,10 @@ class Maped_MainScreenWidget : public MainScreenWidget {
     PG_Label* selectionName;
     PG_Label* coordinateDisplay;
     SelectionItemWidget* currentSelectionWidget;
+    deallocating_vector<ContextAction*> contextActions;
+    PG_PopupMenu* contextMenu;
 public:
     Maped_MainScreenWidget( PG_Application& application );
-    enum Panels { ButtonPanel, WindInfo, UnitInfo, OverviewMap };
-    void spawnPanel ( Panels panel );
 
     bool selectVehicle();
     bool selectBuilding();
@@ -81,10 +89,13 @@ public:
     bool selectTerrain();
     bool selectMine();
     void updateStatusBar();
-    
+
+    void addContextAction( ContextAction* contextAction );
    
 protected:
 
+    bool clickOnMap( const MapCoordinate& field, const SPoint& pos, bool changed, int button);
+   
     NewGuiHost* guiHost;
     Menu* menu;
     
@@ -96,6 +107,8 @@ protected:
     ASCString getBackgroundImageFilename() { return "mapeditor-background.png"; };
     
     ~Maped_MainScreenWidget() { };
+   private:
+      bool runContextAction  (PG_PopupMenu::MenuItem* menuItem );
 };
 
 //! displays a message in the status line of ASC
