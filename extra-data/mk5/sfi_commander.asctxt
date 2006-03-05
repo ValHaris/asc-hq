@@ -1,0 +1,26 @@
+VehicleType { 
+   Name = COMMANDER
+   ID = 1415
+   parent = 204
+   Description = Scharfschuetze
+   Infotext = [ Spezialist fuer die geziehlte Eliminierung gegnerischer Roboter und Soldaten. Er verwendet 
+   Spezialmunition, die im Normalfall ausreicht um einen Gegner mit einem Schuss zu erledigen.]
+   Armor += 100
+   View += 6
+   Picture = SFI_COMMANDER.pcx
+   WreckageObject = 1416
+   Abilities += paratrooper view_mines
+   Movement += 0 0 0 5 0 0 0 0 
+   Weapons { 
+      Number = 3
+
+      Weapon1 ->* VehicleType.Sniper 
+      Weapon1.MaxRange = 40
+      Weapon1.Ammo = 6
+
+      Weapon2 ->* VehicleType.HGr 
+      Weapon2.Punch@MaxRange = 110
+      Weapon2.Punch@MinRange = 110
+
+   } Weapons
+} VehicleType

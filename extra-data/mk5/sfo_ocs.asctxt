@@ -1,0 +1,10 @@
+VehicleType { 
+   Name = OCS HT
+   ID = 1413
+   parent = 246
+   Description = Spionagesatellit
+   Infotext = [ Das OCS HT System ist das derzeit beste erhaeltliche Ortungssystem. Leider ist die Technik sehr störanfällig. Deshalb konnten keine Waffen oder Defensivsysteme eigebaut werden. Das System ist nicht in der lage eigenständig zu starten oder zu Landen, und muss deshalb ständig versorgt und beschützt werden.]
+   Picture = SFO_OCS.pcx
+   Armor -= 100
+   View += 12
+} VehicleType

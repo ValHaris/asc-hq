@@ -1,0 +1,16 @@
+ObjectType { 
+   Name = Quad Wreckage
+   ID = 1404
+   parent = 1416
+   Armor = 150
+   Movemalus_plus = 6
+   RemovalCost { 
+      Energy = 0
+      Material = -1000
+      fuel = 5
+      Movement = 5
+   } RemovalCost
+   dry { 
+      picture = sfg_quad_wreckage.pcx 1
+   } dry
+} ObjectType

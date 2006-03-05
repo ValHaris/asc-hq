@@ -1,0 +1,42 @@
+VehicleType { 
+   Name = DOOMSDAY
+   parent = 400 401 402 498 415 
+   ID = 1425
+   Description = space fighter
+   Infotext = [#crt# Universeller Raum- und Luftjaeger mit ansprechender Panzerung und Bewaffnung.]
+   RecommendedAIJob = fight
+   Armor = 445
+   Picture = SFA_doomsday.pcx
+   WreckageObject = 1301
+   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+   Tank { 
+      fuel = 3000
+   } Tank
+   Abilities += no_midair_refuel 
+   FuelConsumption = 15
+   Movement = 0 0 0 60 160 170 180 100 
+   MaxSurvivableStorm = 180
+   Weight = 140
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.Air_MG 
+      Weapon0.targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon0.shotFrom = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon0.Punch@MaxRange = 55
+      Weapon0.Punch@MinRange = 55
+
+      Weapon1 ->* VehicleType.AAMO
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 4
+      Weapon1.Punch@MaxRange = 80
+      Weapon1.Punch@MinRange = 85
+
+      Weapon2 ->* VehicleType.ASM
+      Weapon2.MaxRange = 20
+      Weapon2.Ammo = 4
+      Weapon2.Punch@MaxRange = 75
+      Weapon2.Punch@MinRange = 80
+
+   } Weapons
+} VehicleType

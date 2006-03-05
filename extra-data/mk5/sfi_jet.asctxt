@@ -1,0 +1,33 @@
+VehicleType { 
+   Name = JETSTAR PN2
+   parent = 400 401 402 410 497
+   ID = 1407
+   Description = Jet Trooper
+   Infotext = [ Dieser Spezialist ist mit einem Luftstrahlaggregat ausgeruestet, welches es ihm ermoeglicht, sich kurzfristig durch die Luft zu bewegen. Es kann nur in Erdnaehe verwendet werden und bietet vielfaelltige Einsatzmoeglichkeiten.]
+   Armor = 200
+   View = 31
+   Picture = SFI_jet.pcx
+   Height = ground_level low_level_flight 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 450
+   } Tank
+   FuelConsumption = 4
+   Abilities += no_midair_refuel move_after_attack
+   Movement = 0 0 0 33 71 0 0 0 
+   Weapons { 
+      Initiative = 30
+      Number = 2
+      Weapon0 ->* VehicleType.MG_Trooper 
+      Weapon0.Ammo = 6
+      Weapon0.Punch@MaxRange = 35
+      Weapon0.Punch@MinRange = 35
+      Weapon0.HitAccuracy.d1 = 80
+
+      Weapon1 ->* VehicleType.lowBomb 
+      Weapon1.Ammo = 4
+      Weapon1.Punch@MaxRange = 70
+      Weapon1.Punch@MinRange = 70
+   } Weapons
+} VehicleType

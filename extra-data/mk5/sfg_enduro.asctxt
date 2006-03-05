@@ -1,0 +1,47 @@
+VehicleType { 
+   Name = ENDURO HT9
+   ID = 1402
+   parent = 400 401 402 411
+   Description = Motorrad
+   Infotext = [Das Bike ist das schnellste Landfahrzeug. Durch seine Wendigkeit
+              ist es in der Lage sich nach einem Angriff sofort wieder zurückzuziehen.
+              Kleinere Anhöhen und schwieriges Gelände sind für das Motorrad
+              kein Problem. Auf einem Notsitz kann ein Spezialist platz finden.]
+   RecommendedAIJob = fight
+   Armor = 260
+   View = 40
+   Picture = SFG_ENDURO.pcx
+   WreckageObject = 1402
+   Jamming = 11
+   Transportation { 
+      MaxLoadableUnits = 1
+      MaxLoadableUnitSize = 10
+      MaxLoadableMass = 10
+      CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+   } Transportation
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 600
+   } Tank
+   FuelConsumption = 10
+   Abilities += conquer_buildings move_after_attack jam_only_own_field
+   Movement = 0 0 0 118 0 0 0 0 
+   Category = light_wheeled_vehicle
+   Weight = 2
+   TerrainAccess ->* VehicleType.offroad 
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.MG_Tank 
+      Weapon0.Ammo = 6
+
+      Weapon1 ->* VehicleType.smSSM 
+      Weapon1.Ammo = 2
+      Weapon1.maxRange = 20
+      Weapon1.Punch@MaxRange = 60
+      Weapon1.Punch@MinRange = 60
+   } Weapons
+} VehicleType

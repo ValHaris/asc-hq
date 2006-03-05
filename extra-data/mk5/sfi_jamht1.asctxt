@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = JAM HT1
+   ID = 1408
+   parent = 400 401 402 410
+   Description = Radarstörspezialist
+   Infotext = [ Spezialist fuer die Störung gegnerischen Radars. Die komplizierte Elektronik ist anfällig 
+   und muss vor feindlichem Beschuss geschuetzt werden. Im Zusammenspiel mit anderen Spezialisten entalltet 
+   der JAM HT erst richtig seine Fähigkeiten, da er diese Spezialisten praktisch unsichtbar macht.]
+   RecommendedAIJob = recon
+   Armor = 170
+   Picture = SFI_JAMHT1.pcx
+   Jamming = 41
+   Abilities = mine_layer view_mines self_repairing
+   Movement = 0 0 0 44 0 0 0 0 
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.MG_Trooper 
+
+      Weapon1 ->* VehicleType.MineWeapon 
+   } Weapons
+} VehicleType

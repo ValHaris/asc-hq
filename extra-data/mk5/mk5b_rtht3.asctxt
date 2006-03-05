@@ -1,0 +1,16 @@
+VehicleType { 
+   Name = RT HT3
+   ID = 1418
+   parent = 223
+   Description = Raketenabschussrampe 
+   Infotext = []
+   Picture = MK5b_RTHT3.pcx
+
+   Weapons { 
+      Weapon0 { 
+         MaxRange += 20
+         MinRange += 20
+         Reactionfireshots = 1
+      } Weapon0
+   } Weapons
+} VehicleType

@@ -1,0 +1,16 @@
+ObjectType { 
+   Name = Trike Wreckage
+   ID = 1403
+   parent = 1416
+   Armor = 150
+   Movemalus_plus = 6
+   RemovalCost { 
+      Energy = 0
+      Material = -500
+      fuel = 5
+      Movement = 5
+   } RemovalCost
+   dry { 
+      picture = sfg_trike_wreckage.pcx 1
+   } dry
+} ObjectType

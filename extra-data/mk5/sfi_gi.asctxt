@@ -1,0 +1,34 @@
+VehicleType { 
+   Name = GI ELITE
+   ID = 1400
+   parent = 400 401 402 410
+   Description = Soldat
+   Infotext = [Der GI ist das Rückrad der "Special Forces". Billig in der Rekrutierung
+              und vielseitig einsetzbar, ist er in der Lage die meisten Aufgaben
+              zu übernehmen und den Spezialisten Deckung zu geben.]
+   Armor = 205
+
+   Picture = SFI_GI.pcx
+   WreckageObject = 1416
+
+   Abilities += mine_layer view_mines paratrooper
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.MG_Trooper 
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 43
+      Weapon0.Punch@MinRange = 43
+
+      Weapon1 ->* VehicleType.HGr 
+      Weapon1.Punch@MaxRange = 120
+      Weapon1.Punch@MinRange = 120
+
+      Weapon2 ->* VehicleType.MineWeapon 
+      Weapon2.Ammo = 3
+      Weapon2.Punch@MaxRange = 140
+      Weapon2.Punch@MinRange = 140
+
+   } Weapons
+} VehicleType

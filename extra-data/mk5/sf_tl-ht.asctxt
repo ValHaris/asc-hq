@@ -1,0 +1,65 @@
+BuildingType { 
+   Name = subbase defence
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A1 
+   UseGFXpics = false
+   Pictures { 
+      dry = SF_TL-HT_dry.pcx
+   } Pictures
+   RubbleObjects = false
+   Entry = A1
+   ID = 1401
+   Armor = 800
+   View = 61
+   Jaming = 21
+   Transportation { 
+      MaxLoadableUnits = 10
+      MaxLoadableUnitSize = 2
+      MaxLoadableMass = 20
+      CategoriesNOT = default trooper light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft heavy_ship helicopter 
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = deep_submerged submerged 
+        UnitHeightRel = -100
+        ContainerHeight = deep_submerged submerged
+        CategoriesNOT = 
+        DockingHeightAbs = deep_submerged submerged
+        DockingHeightRel = -100 
+      } EntranceSystem0
+   } Transportation
+   Functions = Vehicle_Production Sonar External_Loading ammo_production
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Water Deep_water River 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = Lava
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 8000
+      fuel = 7500
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 500
+      Material = 500
+      fuel = 500
+   } MaxResourceProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 3000
+         Material = 3000
+         fuel = 3000
+      } BImode
+      ASCmode { 
+         Energy = 3000
+         Material = 3000
+         fuel = 3000
+      } ASCmode
+   } StorageCapacity
+   Height = deep_submerged 
+   ExternalLoading = deep_submerged submerged 
+} BuildingType

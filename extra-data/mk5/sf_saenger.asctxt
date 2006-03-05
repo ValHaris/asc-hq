@@ -1,0 +1,75 @@
+VehicleType { 
+   Name = SAENGER PLANE
+   parent = 498 493 499
+   ID = 1423
+   Description = Saenger main plane
+   Infotext = [Der Raumgleiter Saenger sollte laut Konzept zwei Astronauten Platz bieten. 
+   Die technische Lösung geht auf ein Konzept des Wissenschaftlers Eugen Sänger zurück. Sie 
+   wurde von 1961 bis 1964 bei Junkers im Zuge einiger Studien weiterentwickelt. Sänger II 
+   sollte von einem Transportflugzeug in 30km Höhe gebracht und von dort aus gestartet werden 
+   (diese 2. Stufe heisst "HORUS" = Hypersonic Orbital Upper Stage). Wegen der hohen 
+   Geschwindigkeiten sind sowohl Transporter als auch Gleiter äußerst spitz und pfeilartig 
+   konzipiert. Der Raumgleiter sollte eine Länge von rund 80 Metern und eine Flügelspannweite 
+   von rund 40 Metern haben. Eine unbemannte Version zur Beförderung schwerer Lasten wurde 
+   ebenfalls angedacht (CARGUS = Cargo Upper Stage). In Zeiten knapper Finanzmittel wird aber 
+   auch Sänger wohl nie verwirklicht. Die DASA hatte die Idee zuletzt wieder aufgenommen, bis 
+   jetzt jedoch nichts greifbares vorgestellt. Einige Erkenntnisse gingen jedoch in "Hopper" 
+   ein. Dabei handelt es sich bis jetzt um einen unbemannten Gleiter als Nachfolge-Vorschlag 
+   für die Ariane V. ]
+   Armor = 300
+   View = 31
+   Picture = SF_SAENGER.pcx
+   WreckageObject = 1423
+   ConstructionCost {
+      Energy = 10200
+      Material = 11000
+      fuel = 0
+   } ConstructionCost
+   Height = ground_level low_level_flight medium_level_flight high_level_flight
+   Jamming = 0
+   WaitFortack = false
+   Transportation { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 200
+      MaxLoadableMass = 200
+      CategoriesNOT = hoovercraft default medium_tracked_vehicle heavy_tracked_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship building|turret|object heavy_aircraft light_ship heavy_ship helicopter 
+      EntranceSystemNum = 2
+      EntranceSystem1 {
+        Mode = out
+        UnitHeightAbs = orbit
+        UnitHeightRel = -100
+        ContainerHeight = high_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs = 
+        DockingHeightRel = -100 
+      } EntranceSystem1
+   } Transportation
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2000
+   } Tank
+   FuelConsumption = 20
+   Abilities = fuel_transfer  
+   Movement = 0 0 0 40 120 160 160
+   Category = heavy_aircraft
+   MaxSurvivableStorm = 0
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 103
+   TerrainAccess { 
+      terrain_any = Runway 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = Shallow_water Swamp Water Deep_water Very_shallow_water Lava River 
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

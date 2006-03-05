@@ -1,0 +1,16 @@
+ObjectType { 
+   Name = Hoover Wreckage
+   ID = 1410
+   parent = 1416
+   Armor = 150
+   Movemalus_plus = 10
+   RemovalCost { 
+      Energy = 0
+      Material = -100
+      fuel = 0
+      Movement = 10
+   } RemovalCost
+   dry { 
+      picture = sfa_hoover_wreck.pcx 1
+   } dry
+} ObjectType

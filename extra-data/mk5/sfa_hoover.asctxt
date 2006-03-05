@@ -1,0 +1,82 @@
+VehicleType { 
+   Name = HOOVER HT 271
+   parent = 400 401 402 409 497
+   ID = 1410
+   Description = Senkrechtstarter
+   Infotext = [Der Hoover ist ein Allzwecktransporter und stellt das Gegenstueck
+              zum SM HS Unterseeboot dar. Er transportiert geringe Mengen
+              an Treibstoff, Rohmaterial und Munition. Die Schwenkduesen- und Fluegelkonstruktion
+              und die besonders auftriebsstarken Gleitkufen ermoeglichen einen
+              Senkrechtstart und eine gefahrlose Landung auf Wasser. Er kann
+              eine begrenzte Anzahl Soldaten und Kleingerät aufnehmen. Die
+              Bewaffnung ist bescheiden. Trotzdem verfügt er ueber eine enorme
+              Schlagkraft, denn er ist mit einer speziellen Bombe, einem
+              selbstaendig zielsuchenden Torpedo und einer Luft-Luft Rakete ausgerüstet.#crt# #crt#
+              Das Bild im UNITGUIDE ist ein Beispiel fuer das Design. Der Hoover verfügt ueber Turbinen.]
+   Armor = 320
+   Picture = SFA_HOOVER.pcx
+   WreckageObject = 1410
+   Height = ground_level low_level_flight medium_level_flight 
+   Transportation { 
+      MaxLoadableUnits = 4
+      MaxLoadableUnitSize = 50
+      MaxLoadableMass = 100
+      CategoriesNOT = hoovercraft medium_tracked_vehicle heavy_tracked_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship heavy_aircraft heavy_ship helicopter 
+      EntranceSystemNum = 3
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.Para
+      EntranceSystem2 ->* VehicleType.Diver_Out
+   } Transportation
+   Tank { 
+      Energy = 0
+      Material = 4000
+      fuel = 5000
+   } Tank
+   FuelConsumption = 20
+   Abilities += sonar fuel_transfer material_transfer
+   Movement = 0 0 0 50 130 130 0 0 
+   Category = helicopter
+   Weight = 45
+   TerrainAccess { 
+      terrain_any = Shallow_water Lowland Road Runway Water Hard_sand Soft_sand Very_shallow_water Frozen_water 
+      terrain_all = 
+      terrain_not = deep_snow
+      terrain_kill = Lava deep_water
+   } TerrainAccess
+   Weapons { 
+      Initiative = 0
+      Number = 5
+      Weapon0 ->* VehicleType.MiniGun 
+      Weapon0.targets = floating ground_level  
+      Weapon0.Ammo = 15
+      Weapon0.Punch@MaxRange = 45
+      Weapon0.Punch@MinRange = 65
+
+      Weapon1 ->* VehicleType.medBomb 
+      Weapon1.Ammo = 1
+      Weapon1.Punch@MaxRange = 95
+      Weapon1.Punch@MinRange = 95
+      
+      Weapon2 ->* VehicleType.ATorp 
+      Weapon2.targets = deep_submerged submerged floating 
+      Weapon2.shotFrom = ground_level low_level_flight 
+      Weapon2.MaxRange = 20
+      Weapon2.Ammo = 1
+      Weapon2.Punch@MaxRange = 100
+      Weapon2.Punch@MinRange = 100
+
+      Weapon3 ->* VehicleType.smAAM 
+      
+      Weapon4 ->* VehicleType.ServiceGround
+      
+      Weapon5 ->* VehicleType.AmmoMG
+      Weapon5.Ammo = 40 
+
+      Weapon6 ->* VehicleType.AmmoBomb
+      Weapon6.Ammo = 40 
+
+      Weapon7 ->* VehicleType.AmmoSM
+      Weapon7.Ammo = 40 
+
+   } Weapons
+} VehicleType

@@ -1,0 +1,66 @@
+VehicleType { 
+   Name = STR 412
+   parent = 400 401 402 421
+   ID = 1420
+   Description = TransportUBoot
+   Infotext = [Dieses kleine UBoot repraesentiert den neuesten stand der Technik. Schnell, wenig und 
+               platzsparend gebaut ist es vielseitig einsetzbar. Haupteinsatzgebiet ist aber die 
+               Versorgung unterseeischer Anlagen und der Transport von Langstreckentorpedos.]
+   Armor = 700
+   View = 41
+   Picture = SF_STR.pcx
+   ConstructionCost { 
+      Energy = 11375
+      Material = 9525
+      fuel = 0
+   } ConstructionCost
+   Transportation { 
+      MaxLoadableUnits = 6
+      MaxLoadableUnitSize = 50
+      MaxLoadableMass = 80
+      CategoriesNOT = hoovercraft default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship light_aircraft heavy_aircraft heavy_ship 
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.SubIO
+   } Transportation
+   Tank { 
+      Energy = 0
+      Material = 5000
+      fuel = 6000
+   } Tank
+   FuelConsumption = 16
+   Abilities += move_after_attack fuel_transfer material_transfer 
+   Movement = 91 91 71 0 0 0 0 0 
+   MaxSurvivableStorm = 240
+   Weight = 150
+   TerrainAccess { 
+      terrain_any = Shallow_water Water Deep_water Very_shallow_water River 
+      terrain_all = 
+      terrain_not = Frozen_water 
+      terrain_kill = Lava 
+   } TerrainAccess
+   Weapons { 
+      Initiative = 0
+      Number = 4
+      Weapon0 ->* VehicleType.Ship_MG 
+      Weapon0.Type = machinegun ammo_transfer shootable 
+      Weapon0.Ammo = 50
+      Weapon0.Punch@MaxRange = 55
+      Weapon0.Punch@MinRange = 55
+
+      Weapon1 ->* VehicleType.AmmoTorp 
+      Weapon1.targets = submerged floating ground_level
+      Weapon1.shotFrom = submerged floating 
+      Weapon1.Ammo = 20
+
+      Weapon2 ->* VehicleType.AmmoBomb 
+      Weapon2.targets = submerged floating ground_level 
+      Weapon2.shotFrom = submerged floating 
+      Weapon2.Ammo = 20
+
+      Weapon3 ->* VehicleType.ServiceGround 
+      Weapon3.targets = submerged floating ground_level 
+      Weapon3.shotFrom = submerged floating 
+
+   } Weapons
+} VehicleType

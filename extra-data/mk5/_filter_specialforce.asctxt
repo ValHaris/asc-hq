@@ -1,0 +1,10 @@
+itemfilter {
+   Vehicles = 1400-1499
+   Buildings = 1400-1499
+   Objects = 1400-1499
+   Terrain = 
+   Technologies = 1400-1499
+   name = Special Force 
+   activated = true
+} itemfilter
+   

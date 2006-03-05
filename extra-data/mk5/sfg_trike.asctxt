@@ -1,0 +1,43 @@
+VehicleType { 
+   Name = FV X3 OR
+   ID = 1403
+   parent = 400 401 402 411
+   Description = KampfTrike
+   Infotext = [ Dieses wendige dreiraedrige Gelaendefahrzeug ist mit je einer Boden-Boden und Boden-Luft Rakete ausgeruestet. Dadurch wird dieses Trike universell einsetzbar. Trotzdem sollte offensiver Einsatz moeglichst vermieden werden.]
+   Armor = 290
+   View = 41
+   Transportation ->* VehicleType.TransLowTrooper
+   Picture = SFG_TRIKE.pcx
+   WreckageObject = 1403
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 550
+   } Tank
+   FuelConsumption = 12
+   Abilities += move_after_attack
+   Movement = 0 0 0 104 0 0 0 0 
+   Category = light_wheeled_vehicle
+   Weight = 3
+   TerrainAccess ->* VehicleType.offroad 
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.MG_Tank 
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 45
+      Weapon0.Punch@MinRange = 45
+
+      Weapon1 ->* VehicleType.smSAM 
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 1
+      Weapon1.Punch@MaxRange = 60
+      Weapon1.Punch@MinRange = 60
+
+      Weapon2 ->* VehicleType.smSSM 
+      Weapon2.MaxRange = 20
+      Weapon2.Ammo = 1
+      Weapon2.Punch@MaxRange = 65
+      Weapon2.Punch@MinRange = 65
+   } Weapons
+} VehicleType
