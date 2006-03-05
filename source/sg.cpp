@@ -813,21 +813,10 @@ void execuseraction2 ( tuseractions action )
       case ua_savegame: saveGame( true );
          break;
       case ua_setupalliances:
-         setupalliances( actmap, false );
-         logtoreplayinfo ( rpl_alliancechange );
-         logtoreplayinfo ( rpl_shareviewchange );
-
-         /*
-         if ( actmap->shareview && actmap->shareview->recalculateview ) {
-            logtoreplayinfo ( rpl_shareviewchange );
-            computeview( actmap );
-            actmap->shareview->recalculateview = 0;
-            displaymap();
+         if ( setupalliances( actmap, actmap->getCurrentPlayer().stat == Player::supervisor ) ) {
+            if ( computeview( actmap ))
+               displaymap();
          }
-         */
-#ifndef WIN32
-         #warning SHAREVIEW
-#endif
          updateFieldInfo();
          break;
       case ua_mainmenu:
@@ -979,6 +968,8 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 
  
    registerGuiFunctions( GuiFunctions::primaryGuiIcons );
+
+   hookReplayToSystem();
 }
 
 

@@ -228,6 +228,11 @@ void         clearvisibility( GameMap* gamemap, int  reset )
 
 int  evaluatevisibilityfield ( GameMap* gamemap, tfield* fld, int player, int add, int initial )
 {
+   if ( gamemap->player[player].stat == Player::supervisor ) {
+      fld->setVisibility( visible_all, player);
+      return 0;
+   }
+   
    int originalVisibility;
    if ( initial == 2 ) {
       fld->setVisibility(visible_all, player);

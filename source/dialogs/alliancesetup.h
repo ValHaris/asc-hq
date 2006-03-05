@@ -29,8 +29,6 @@
 class AllianceSetupWidget : public PG_ScrollWidget {
       GameMap* actmap;
       bool allEditable;
-      // DiplomaticStates* states;
-      
       
       struct PlayerWidgets {
          PG_LineEdit* name;
@@ -63,7 +61,10 @@ class AllianceSetupWidget : public PG_ScrollWidget {
 };
 
 
-void  setupalliances( GameMap* actmap, bool supervisor = false );
+/**  runs the Alliance-Setup dialog.
+      \returns if the view should be recalculated
+*/
+bool  setupalliances( GameMap* actmap, bool supervisor = false );
 
 
 #endif

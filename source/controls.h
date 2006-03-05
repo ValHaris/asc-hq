@@ -142,6 +142,8 @@ extern void checkUsedASCVersions( Player& currentPlayer );
 //! checks if a new technology must be chosen by the current player. Runs the appropriate dialogs
 extern void researchCheck( Player& player );
     
+extern int findNextPlayer( GameMap* actmap );
+
     
 
 #endif

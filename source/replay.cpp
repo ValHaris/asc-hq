@@ -1373,7 +1373,6 @@ void trunreplay :: execnextreplaymove ( void )
                                  actmap->player[actingPlayer].diplomacy.setState( targetPlayer, DiplomaticStates( state ));
                                  
                                  readnextaction();
-                                 updateFieldInfo();
                               }
          break;
       case rpl_refuel :
@@ -1771,14 +1770,17 @@ int  trunreplay :: run ( int player, int viewingplayer )
              displaymessage2("running final comparison" );
 
              actmap->endTurn();
+             int nextplayer = findNextPlayer( actmap );
+             
              resourcesCompared = true;
              ASCString resourceComparisonResult;
              GameMap* comparisonMap = NULL;
              GameMap* nextPlayerMap = NULL;
-             if ( actmap->actplayer == orgmap->actplayer )
+
+             if ( nextplayer == orgmap->actplayer )
                 comparisonMap = orgmap;
              else
-                comparisonMap = nextPlayerMap = loadreplay ( orgmap->replayinfo->map[actmap->actplayer]  );
+                comparisonMap = nextPlayerMap = loadreplay ( orgmap->replayinfo->map[nextplayer]  );
 
              if ( comparisonMap ) {
                 if ( comparisonMap->compareResources( actmap, player, &resourceComparisonResult)) {
@@ -1817,4 +1819,15 @@ int  trunreplay :: run ( int player, int viewingplayer )
 void trunreplay :: firstinit ( void )
 {
     status = 0;
+}
+
+
+void logAllianceChanges( GameMap* map, int player1, int player2, DiplomaticStates s)
+{
+   logtoreplayinfo ( rpl_alliancechange2, player1, player2, int(s) );
+}
+
+void hookReplayToSystem()
+{
+   DiplomaticStateVector::anyStateChanged.connect( SigC::slot( &logAllianceChanges ));
 }

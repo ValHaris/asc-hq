@@ -49,12 +49,14 @@ class DiplomaticStateVector : public SigC::Object {
       
       typedef map<int,DiplomaticStates> QueuedStateChanges;
       QueuedStateChanges queuedStateChanges;
+
+      void changeToState( int towardsPlayer, DiplomaticStates s, bool mail = true );
       
    public:
       DiplomaticStateVector( Player& _player );
       
       DiplomaticStates getState( int towardsPlayer ) const;
-      void setState( int towardsPlayer, DiplomaticStates s );
+      void setState( int towardsPlayer, DiplomaticStates s, bool fireSignal = true );
       void propose ( int towardsPlayer, DiplomaticStates s );
       void sneakAttack( int towardsPlayer );
       
@@ -65,8 +67,7 @@ class DiplomaticStateVector : public SigC::Object {
       void turnBegins();
       
             
-      SigC::Signal2<void,int,DiplomaticStates> stateChanged;
-      static SigC::Signal3<void,int,int,DiplomaticStates> anyStateChanged;
+      static SigC::Signal4<void,GameMap*,int,int,DiplomaticStates> anyStateChanged;
    
       void read ( tnstream& stream );
       void write ( tnstream& stream ) const;

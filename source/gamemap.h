@@ -218,6 +218,11 @@ class GameMap {
       {
          return player[p.getID() ];
       }
+      
+      Player& getCurrentPlayer()
+      {
+         return player[actplayer];
+      }
 
       int getNeutralPlayerNum() const { return 8; };
       

@@ -332,8 +332,9 @@ AllianceSetupWidget::~AllianceSetupWidget()
 
 class AllianceSetupWindow : public ASC_PG_Dialog {
       AllianceSetupWidget* asw;
+      bool changed;
    public:
-      AllianceSetupWindow( GameMap* actmap, bool allEditable, PG_Widget *parent, const PG_Rect &r ) : ASC_PG_Dialog( parent, r, "Diplomacy" )
+      AllianceSetupWindow( GameMap* actmap, bool allEditable, PG_Widget *parent, const PG_Rect &r ) : ASC_PG_Dialog( parent, r, "Diplomacy" ), changed(false)
       {
          asw = new AllianceSetupWidget( actmap, allEditable, this, PG_Rect( 5, 30, r.Width() - 10, r.Height() - 60 ));
          PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 200, Height() - 30, 90, 20 ), "OK" );
@@ -346,14 +347,18 @@ class AllianceSetupWindow : public ASC_PG_Dialog {
       {
          asw->Apply();
          QuitModal();
+         changed = true;
          return true;
       }
 
+      bool isSomethingChanged() { return changed; };
+      
 };
 
-void  setupalliances( GameMap* actmap, bool supervisor  )
+bool  setupalliances( GameMap* actmap, bool supervisor  )
 {
    AllianceSetupWindow asw ( actmap, supervisor, NULL, PG_Rect( 100, 100, 600, 500 ));
    asw.Show();
    asw.RunModal();
+   return asw.isSomethingChanged();
 }

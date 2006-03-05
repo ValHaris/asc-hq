@@ -2454,8 +2454,14 @@ class ReplayPlay : public GuiFunction
 
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "start replay";
+         return "start re~p~lay";
       };
+
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == 'p' );
+      };
+      
 };
 
 
@@ -2483,8 +2489,14 @@ class ReplayPause : public GuiFunction
 
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "pause replay";
+         return "~p~ause replay";
       };
+      
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == 'p' );
+      };
+      
 };
 
 
@@ -2520,8 +2532,14 @@ class ReplayFaster : public GuiFunction
 
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "increase replay speed";
+         return "increase replay speed (~+~)";
       };
+
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == '+' );
+      };
+      
 };
 
 
@@ -2551,8 +2569,14 @@ class ReplaySlower : public GuiFunction
 
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "decrease replay speed";
+         return "decrease replay speed (~-~)";
       };
+
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == '-' );
+      };
+      
 };
 
 
@@ -2580,8 +2604,14 @@ class ReplayRewind : public GuiFunction
 
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "restart replay";
+         return "~r~estart replay";
       };
+
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == 'r' );
+      };
+      
 };
 
 
@@ -2609,8 +2639,14 @@ class ReplayExit : public GuiFunction
 
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "restart replay";
+         return "e~x~it replay";
       };
+
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == 'x' );
+      };
+      
 };
 
 

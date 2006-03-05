@@ -29,7 +29,7 @@
 #include "gamemap.h"
 #include "cannedmessages.h"
 
-SigC::Signal3<void,int,int,DiplomaticStates> DiplomaticStateVector::anyStateChanged;
+SigC::Signal4<void,GameMap*,int,int,DiplomaticStates> DiplomaticStateVector::anyStateChanged;
 
 
 const char* diplomaticStateNames[diplomaticStateNum+1] = 
@@ -48,6 +48,7 @@ DiplomaticStateVector::DiplomaticStateVector( Player& _player ) : player( _playe
 {
 }
 
+
 void DiplomaticStateVector::turnBegins()
 {
    for ( QueuedStateChanges::iterator i = queuedStateChanges.begin(); i != queuedStateChanges.end(); ++i ) {
@@ -56,27 +57,14 @@ void DiplomaticStateVector::turnBegins()
          setState( i->first, i->second );
          player.getParentMap()->player[ i->first ].diplomacy.setState( player.getPosition(), i->second);
       } else {
-         // we are browsing through the queued changes of the target player to look if a accepted our proposal
+         // we are browsing through the queued changes of the target player to look if he accepted our proposal
          
          DiplomaticStateVector& target = player.getParentMap()->player[ i->first ].diplomacy;
          QueuedStateChanges::iterator t = target.queuedStateChanges.find( player.getPosition() );
          if ( t != target.queuedStateChanges.end() ) {
-            if ( t->second > i->second ) {
-               // he proposes even more peace, we'll only set the state we proposed, but keep his proposal
-               setState( i->first, i->second );
-               target.setState( player.getPosition(), i->second );
-            } else {
-               // he proposes less peace, but we'll set the state he proposed and delete his proposal, because it's fulfilled
-               setState( i->first, t->second );
-               target.setState( player.getPosition(), t->second );
-               
-               ASCString txt;
-               txt.format( getmessage( 10005 ), target.player.getName().c_str(), diplomaticStateNames[t->second] ); // accepts peace
-               
-               new Message ( txt, player.getParentMap(), 1 << t->first );
-               
-               target.queuedStateChanges.erase( t );
-            }
+            // this should have been handled when the other player set his proposal 
+         } else {
+            // he did not answer
          }
       }
    }
@@ -95,13 +83,15 @@ DiplomaticStates DiplomaticStateVector::getState( int towardsPlayer ) const
       return WAR;
 }
 
-void DiplomaticStateVector::setState( int towardsPlayer, DiplomaticStates s )
+void DiplomaticStateVector::setState( int towardsPlayer, DiplomaticStates s, bool fireSignal )
 {
    if ( towardsPlayer >= states.size() ) 
       states.resize(towardsPlayer+1);
       
    states[towardsPlayer] = s;
-   stateChanged(towardsPlayer,s);
+   
+   if ( fireSignal )
+      anyStateChanged( player.getParentMap(), player.getPosition(), towardsPlayer,s);
 }
 
 void DiplomaticStateVector::sneakAttack( int towardsPlayer )
@@ -120,12 +110,54 @@ void DiplomaticStateVector::sneakAttack( int towardsPlayer )
 }
 
 
+void DiplomaticStateVector::changeToState( int towardsPlayer, DiplomaticStates s, bool mail )
+{
+   int msgid;
+   if ( s > getState( towardsPlayer ))
+      msgid = 10003;  //  propose peace
+   else
+      msgid = 10002;  // declare war
+      
+   setState( towardsPlayer, s );
+   
+   DiplomaticStateVector& targ = player.getParentMap()->player[ towardsPlayer ].diplomacy;
+   targ.setState( player.getPosition(), s );
+
+   if ( mail ) {
+      ASCString txt;
+      txt.format( getmessage( msgid ), player.getName().c_str(), diplomaticStateNames[s]  );
+      new Message ( txt, player.getParentMap(), 1 << towardsPlayer );
+   }
+
+   for ( int p = 0; p < player.getParentMap()->getPlayerCount(); ++p )
+      if ( p != player.getPosition() ) {
+         if ( getState( p ) == ALLIANCE ) {
+            // we have an allied player which must now react
+            DiplomaticStateVector& ally = player.getParentMap()->getPlayer( p ).diplomacy;
+            if ( ally.getState( towardsPlayer ) != s )
+               ally.changeToState( towardsPlayer, s );
+      
+         }
+         
+         if ( targ.getState( p ) == ALLIANCE ) {
+            // the opponent has an ally which must now react
+            if ( getState( p ) != s )
+               changeToState( p, s );
+      
+         }
+      }
+}
+
+
 void DiplomaticStateVector::propose( int towardsPlayer, DiplomaticStates s )
 {
-   const DiplomaticStateVector& targ = player.getParentMap()->player[ towardsPlayer ].diplomacy;
-   
-   if ( targ.queuedStateChanges.find( player.getPosition() ) == targ.queuedStateChanges.end() ) {
-      // we only send a message of this is an initial proposal. If the other player already has on himself for us, we don't send a message
+   DiplomaticStateVector& targ = player.getParentMap()->player[ towardsPlayer ].diplomacy;
+
+   QueuedStateChanges::iterator i = targ.queuedStateChanges.find( player.getPosition() );
+         
+   if ( i == targ.queuedStateChanges.end() || (s < getState( towardsPlayer ) && i->second > getState(towardsPlayer))) {
+      // we only send a message if this is an initial proposal OR
+      // if the other player proposed a more peaceful state, but we are setting a more hostile state
       ASCString txt;
       int msgid;
       if ( s > getState( towardsPlayer )) 
@@ -134,11 +166,36 @@ void DiplomaticStateVector::propose( int towardsPlayer, DiplomaticStates s )
          msgid = 10002;  //  declare war
             
       txt.format( getmessage( msgid ), player.getName().c_str(), diplomaticStateNames[s]  ); 
-      
       new Message ( txt, player.getParentMap(), 1 << towardsPlayer );
-   }   
+      
+      queuedStateChanges[towardsPlayer] = s;
+   }  else {
+      // we are answering a proposal by the other player
+      
+      if ( s > getState( towardsPlayer )) {
+         // our proposal is about going to a more peaceful state 
+
+         if ( s > i->second ) {
+            // we are proposing even more peace, but we'll only set the state he proposed and keep our proposal
+            changeToState( towardsPlayer, i->second );
+         } else {
+            // he proposes less or equal peace, but we'll set the state he proposed and delete his proposal, because it's fulfilled
+            changeToState( towardsPlayer, s, s < i->second );
+            targ.queuedStateChanges.erase( i );
+         }
+      } else {
+         if ( s < i->second ) {
+            // we go to an even more hostile state 
+            changeToState( towardsPlayer, i->second );
+            targ.queuedStateChanges.erase( i );
+         } else {
+            // we are going to a state that is more hostile than the current one, but less hostile then the other players declaration
+            changeToState( towardsPlayer, s, false );
+         }
+
+      }
+   }
    
-   queuedStateChanges[towardsPlayer] = s;  
 }
 
       
@@ -251,13 +308,10 @@ ASCString Player :: getName( ) const
    if ( name.length() ) 
       return name;
 
-      
-            
-   switch ( stat ) {
-     case 0: return ASCString("human ") + ASCString::toString(getPosition() );
-     case 1: return ASCString("AI ") + ASCString::toString(getPosition() );
-     default: return "off";
-   }
+   if ( stat == off )
+      return "off";
+
+   return ASCString("Player ") + ASCString::toString(getPosition() );
 }
 
 
