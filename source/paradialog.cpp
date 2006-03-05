@@ -204,7 +204,6 @@ bool ASC_PG_App::eventQuit(int id, PG_MessageObject* widget, unsigned long data)
 void ASC_PG_App::eventIdle()
 {
    if ( redrawScreen  ) {
-      printf("Redraw started\n");
       PG_Widget::UpdateScreen();
 	   SDL_UpdateRect(PG_Application::GetScreen(), 0,0,0,0);
       redrawScreen = false;

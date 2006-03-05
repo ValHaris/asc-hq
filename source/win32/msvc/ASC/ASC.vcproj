@@ -135,9 +135,6 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
 			<File
-				RelativePath="..\..\..\dialogs\alliancesetup.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\asc-mainscreen.cpp">
 			</File>
 			<File
@@ -444,6 +441,9 @@
 			<File
 				RelativePath="..\..\win32-errormsg.cpp">
 			</File>
+			<File
+				RelativePath="..\..\..\windowing.cpp">
+			</File>
 			<Filter
 				Name="AI"
 				Filter="">
@@ -507,6 +507,9 @@
 			<Filter
 				Name="dialogs"
 				Filter="">
+				<File
+					RelativePath="..\..\..\dialogs\alliancesetup.cpp">
+				</File>
 				<File
 					RelativePath="..\..\..\dialogs\ammotransferdialog.cpp">
 				</File>

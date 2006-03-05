@@ -29,7 +29,7 @@
 #include "alliancesetup.h"
 
 
-const int diplomaticStateIconSize = 18;
+const int diplomaticStateIconSize = 20;
 const int diplomaticStateIconSpace = 2;
 
 

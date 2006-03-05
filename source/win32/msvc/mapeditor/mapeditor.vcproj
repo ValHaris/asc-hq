@@ -412,6 +412,9 @@
 			<File
 				RelativePath="..\..\win32-errormsg.cpp">
 			</File>
+			<File
+				RelativePath="..\..\..\windowing.cpp">
+			</File>
 			<Filter
 				Name="graphics"
 				Filter="">

@@ -401,7 +401,7 @@ int processEvents ( )
 #ifdef _WIN32_
       if ( event.type  == SDL_ACTIVEEVENT ) {
          redrawScreen = true;
-         printf("Event encountered\n");
+         // printf("Event encountered\n");
       }
 #endif
 
