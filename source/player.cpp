@@ -37,7 +37,7 @@ const char* diplomaticStateNames[diplomaticStateNum+1] =
    "War",
    "Truce",
    "Peace",
-   "Peace with shared radar",
+   "Association",
    "Alliance",
    NULL
 };

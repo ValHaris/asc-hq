@@ -364,6 +364,7 @@ bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent*
             if ( vt || veh ) {
                WeaponInfoPanel* wip = new WeaponInfoPanel( PG_Application::GetWidgetById( ASC_PG_App::mainScreenID ), veh, vt );
                wip->Show();
+               wip->RunModal();
             }
             return true;
          }
