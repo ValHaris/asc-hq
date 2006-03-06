@@ -72,6 +72,12 @@ void initASCGraphicSubsystem ( SDL_Surface* _screen, SDLmm::Surface* icon )
   *hgmp = *agmp;
 }
 
+void shutdownASCGraphicSubsystem()
+{
+   if ( agmp && agmp->surface )
+      delete agmp->surface;
+}
+
 
 SDL_Surface* getScreen()
 {

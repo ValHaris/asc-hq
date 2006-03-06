@@ -82,6 +82,9 @@ class WeaponInfoPanel : public Panel {
         WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const Vehicletype* vt ) ;
         void showWeapon( const SingleWeapon* weap = NULL );
 
+        // virtual bool   eventMouseButtonDown (const SDL_MouseButtonEvent *button);
+        bool   eventMouseButtonUp (const SDL_MouseButtonEvent *button);
+        
         static const ASCString& WIP_Name();
         // void eval();
 };

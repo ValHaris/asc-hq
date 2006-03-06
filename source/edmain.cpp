@@ -270,6 +270,10 @@ int main(int argc, char *argv[] )
 
    writegameoptions ();
    
+   if ( actmap ) {
+      delete actmap;
+      actmap = NULL;
+   }
 
    return 0;
 }

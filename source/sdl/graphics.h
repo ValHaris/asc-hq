@@ -29,7 +29,7 @@
 //*********** Initialization ************
 
 extern void initASCGraphicSubsystem ( SDL_Surface* screen, SDLmm::Surface* icon );
-
+extern void shutdownASCGraphicSubsystem();
 
 //*********** Misc ************
 

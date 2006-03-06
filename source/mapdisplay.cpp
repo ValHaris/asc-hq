@@ -431,6 +431,7 @@ MapDisplayPG* theGlobalMapDisplay = NULL;
 
 MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
       : PG_Widget ( parent, r, false ) ,
+      zoom(-1),
       surface(NULL),
       offset(0,0),
       dirty(Map),

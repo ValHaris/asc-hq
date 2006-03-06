@@ -349,6 +349,9 @@ UnitInfoPanel::UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) : DashboardP
 
 bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event )
 {
+
+   static const bool modalWeaponInfo = true;
+   
    SpecialInputWidget* siw = dynamic_cast<SpecialInputWidget*>(obj);
    if ( siw ) {
       if ( event->button == SDL_BUTTON_RIGHT ) {
@@ -364,11 +367,16 @@ bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent*
             if ( vt || veh ) {
                WeaponInfoPanel* wip = new WeaponInfoPanel( PG_Application::GetWidgetById( ASC_PG_App::mainScreenID ), veh, vt );
                wip->Show();
-               wip->RunModal();
+               if ( modalWeaponInfo ) {
+                  wip->SetCapture();
+                  wip->RunModal();
+                  delete wip;
+               } // else
+              //     PG_Application::
             }
             return true;
          }
-         if ( event->type == SDL_MOUSEBUTTONUP ) {
+         if ( event->type == SDL_MOUSEBUTTONUP && !modalWeaponInfo ) {
             bool result = false;
             PG_Widget* wip;
             do  {
@@ -571,6 +579,18 @@ void WeaponInfoPanel::showWeapon( const SingleWeapon* weap )
       show( "weapon_symbol2" );
    } else
       hide( "weapon_symbol2" );
+}
+
+bool   WeaponInfoPanel::eventMouseButtonUp (const SDL_MouseButtonEvent *button)
+{
+   if ( Panel::eventMouseButtonUp( button ))
+      return true;
+   
+   if ( button->button == SDL_BUTTON_RIGHT ) {
+      QuitModal();
+      return true;
+   } else
+      return false;
 }
 
 
