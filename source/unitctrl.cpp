@@ -21,6 +21,8 @@
 #include <vector>
 #include <algorithm> 
 #include <cmath>
+#include <SDL.h>
+#include <SDL_thread.h>
 
 #include "unitctrl.h"
 #include "controls.h"
@@ -94,6 +96,134 @@ void BaseVehicleMovement :: PathFinder :: getMovementFields ( IntFieldList& reac
    }
 }
 
+bool multiThreadedViewCalculation = true;
+
+
+
+class BackgroundViewCalculator {
+   private:
+      SDL_Thread *viewThreat;
+      SDL_sem* sem;
+      bool endThreat;
+
+      enum Status { waiting, dataavail, running, finished } status;
+      
+   public:
+
+
+      struct Data {
+         GameMap* gamemap;
+         int view;
+         Data( GameMap* map, int v ) : gamemap ( map ), view( v) {};
+         Data() : gamemap(NULL), view(-1) {};
+      };
+      
+      BackgroundViewCalculator() : endThreat(false)
+      {
+         status = waiting;
+         sem = SDL_CreateSemaphore( 1 );
+         viewThreat = SDL_CreateThread( &BackgroundViewCalculator::calculator, this );
+      }
+
+      void postData( Data data )
+      {
+         SDL_SemWait( sem );
+         if ( status == waiting || status == finished ) {
+            this->data = data;
+            status = dataavail;
+         } else
+            fatalError( "Sequence error in BackgroundViewCalculator");
+         SDL_SemPost(sem );
+
+      }
+      
+      bool dataAvail( Data& data )
+      {
+         bool result;
+         SDL_SemWait( sem );
+         if ( status == dataavail ) {
+            result = true;
+            data = this->data;
+         } else
+            result = false;
+         SDL_SemPost(sem );
+         return result;
+      }
+
+      void setCalculationCompletion()
+      {
+         SDL_SemWait( sem );
+         status = finished;
+         SDL_SemPost(sem );
+      }
+
+      bool isCalculationCompleted()
+      {
+         bool result;
+         SDL_SemWait( sem );
+         if ( status == finished ) {
+            result = true;
+         } else
+            result = false;
+         SDL_SemPost(sem );
+         return result;
+      }
+
+      void waitForCompletion()
+      {
+         while ( !isCalculationCompleted() )
+            SDL_Delay(10);
+      }
+
+      bool haltThreat()
+      {
+         return endThreat;
+      }
+      
+      ~BackgroundViewCalculator()
+      {
+         endThreat = true;
+         SDL_WaitThread( viewThreat, NULL );
+         SDL_DestroySemaphore( sem );
+      }
+
+   private:
+
+      Data data;
+      
+      static int calculator( void* object )
+      {
+         BackgroundViewCalculator* bvc = static_cast<BackgroundViewCalculator*>(object);
+         Data data;
+         do {
+            SDL_Delay(10);
+            if ( bvc->dataAvail( data )) {
+               evaluateviewcalculation ( data.gamemap, data.view );
+               bvc->setCalculationCompletion();
+            }
+         } while ( !bvc->haltThreat() && !exitprogram );
+         return 0;
+      }
+
+};
+      
+
+
+void printTimer( int i )
+{
+#if 0
+   static int lastTimer = 0;
+   if ( i == 1 )
+      lastTimer = SDL_GetTicks();
+   else {
+      printf("%d - %d : %d \n", i-1, i, SDL_GetTicks() - lastTimer);
+      lastTimer = SDL_GetTicks();
+   }
+#endif
+}
+      
+      
+
 int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrupt )
 {
    WindMovement* wind;
@@ -132,6 +262,8 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
    int fueldist = 0;
    int networkID = vehicle->networkid;
 
+   bool viewInputChanged= false;
+
    bool inhibitAttack = false;
    while ( pos != stop  && vehicle && cancelmovement!=1 ) {
 
@@ -168,31 +300,68 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
          tfield* dest = getfield ( to.x, to.y );
 
+
+         if ( vehicle ) {
+            vehicle->xpos = to.x;
+            vehicle->ypos = to.y;
+            vehicle->addview();
+         }
+
+         
+         printTimer(1);
+         static BackgroundViewCalculator* bvc = NULL;
+         if ( multiThreadedViewCalculation ) {
+            
+            
+            if ( !bvc )
+               bvc = new BackgroundViewCalculator;
+
+            printTimer(2);
+            
+            int view;
+            if ( actmap->playerView >= 0 )
+               view = 1 << actmap->playerView ;
+            else
+               view = 0;
+               
+            
+            bvc->postData( BackgroundViewCalculator::Data( actmap, view ));
+            printTimer(3);
+         }
+
+         
          if ( mapDisplay ) {
+
             if ( next == stop && to.x==next->x && to.y==next->y) // the unit will reach its destination
                slm.fadeOut ( CGameOptions::Instance()->movespeed * 10 );
               mapDisplay->displayMovingUnit ( from, to, vehicle, pathStep, pathStepNum, MapDisplayInterface::SoundStartCallback( &slm, &SoundLoopManager::activate ));
          }
          pathStep++;
 
+         printTimer(4);
 
          if ( vehicle ) {
             vehicle->spawnMoveObjects( from, to );
             int dir = getdirection( from, to );
             if ( dir >= 0 && dir <= 5 )
                vehicle->direction = dir;
-            vehicle->xpos = to.x;
-            vehicle->ypos = to.y;
             if ( inhibitAttack )
                vehicle->setAttacked();
-            vehicle->addview();
          }
 
-         int fieldschanged = 0;
-         if ( actmap->playerView >= 0 )
-            fieldschanged = evaluateviewcalculation ( actmap, 1 << actmap->playerView );
-         else
-            evaluateviewcalculation ( actmap, 0);
+         
+         printTimer(5);
+         if ( multiThreadedViewCalculation ) {
+            bvc->waitForCompletion();
+         } else {
+            if ( actmap->playerView >= 0 )
+               evaluateviewcalculation ( actmap, 1 << actmap->playerView );
+            else
+               evaluateviewcalculation ( actmap, 0);
+         }
+         printTimer(6);
+
+         viewInputChanged = false;
 
          if ( vehicle ) {
 
@@ -215,14 +384,20 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
             }
             if ( !vehicle && mapDisplay ) {
                mapDisplay->displayMap();
+               viewInputChanged = true;
             }
          } else
             if ( mapDisplay ) {
                mapDisplay->displayMap();
             }
 
+         printTimer(7);
+            
+            
          if ( vehicle ) {
-            vehicle->removeview();
+            if ( stop->x != to.x || stop->y != to.y )
+               vehicle->removeview();
+            
             if ( dest->mineattacks ( vehicle )) {
                tmineattacksunit battle ( dest, -1, vehicle );
 
@@ -232,6 +407,11 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
                   battle.calc();
 
                battle.setresult ();
+               if ( battle.dv.damage >= 100 ) {
+                  vehicle = NULL;
+                  viewInputChanged = true;
+               }
+               
                updateFieldInfo();
                cancelmovement = 1;
            }
@@ -255,6 +435,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
                
             npop ( dest->vehicle );
          }
+         printTimer(8);
       } while ( (to.x != next->x || to.y != next->y) && vehicle );
 
       pos = next;
@@ -290,9 +471,16 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
       if ( vehicle ) {
          if ((fld->vehicle == NULL) && (fld->building == NULL)) {
             fld->vehicle = vehicle;
-            vehicle->addview();
+            if ( !vehicle->isViewing() ) {
+               vehicle->addview();
+               viewInputChanged = true;
+            }
          } else {
             ContainerBase* cn = fld->getContainer();
+            if ( vehicle->isViewing() ) {
+               vehicle->removeview();
+               viewInputChanged = true;
+            }
             cn->addToCargo( vehicle );
             if (cn->getOwner() != vehicle->getOwner() && fld->building ) {
                fld->building->convert( vehicle->color / 8 );
@@ -308,11 +496,13 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
       }
    }
 
-   int fieldschanged;
-   if ( actmap->playerView >= 0 )
-      fieldschanged = evaluateviewcalculation ( actmap, 1 << actmap->playerView );
-   else
-      fieldschanged = evaluateviewcalculation ( actmap, 0 );
+   if ( viewInputChanged ) {
+      int fieldschanged;
+      if ( actmap->playerView >= 0 )
+         fieldschanged = evaluateviewcalculation ( actmap, 1 << actmap->playerView );
+      else
+         fieldschanged = evaluateviewcalculation ( actmap, 0 );
+   }
 
    if ( mapDisplay ) {
       mapDisplay->resetMovement();
