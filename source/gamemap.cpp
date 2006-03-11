@@ -207,8 +207,6 @@ GameMap :: GameMap ( void )
 
    xsize = 0;
    ysize = 0;
-   xpos = 0;
-   ypos = 0;
    field = NULL;
    campaign = NULL;
 
@@ -272,8 +270,8 @@ void GameMap :: read ( tnstream& stream )
    } else
       version = 1;
 
-   xpos = stream.readWord();
-   ypos = stream.readWord();
+   stream.readWord(); // xpos
+   stream.readWord(); // ypos
    stream.readInt(); // dummy
    field = NULL;
 
@@ -630,8 +628,8 @@ void GameMap :: write ( tnstream& stream )
    stream.writeInt( xsize );
    stream.writeInt( ysize );
 
-   stream.writeWord( xpos );
-   stream.writeWord( ypos );
+   stream.writeWord( 0 );
+   stream.writeWord( 0 );
    stream.writeInt (1); // dummy
    stream.writeString ( codeWord );
 

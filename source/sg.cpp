@@ -178,11 +178,16 @@ bool maintainencecheck( void )
 #endif
 }
 
-
+void positionCursor( Player& player )
+{
+   getDefaultMapDisplay().displayPosition( player.getParentMap()->getCursor() );
+   
+}
 
 void hookGuiToMap( GameMap* map )
 {
    if ( !map->getGuiHooked() ) {
+      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &positionCursor ));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &viewunreadmessages ));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &researchCheck ));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkJournal ));
@@ -211,6 +216,7 @@ void loadGame()
       hookGuiToMap ( actmap );
       
       updateFieldInfo();
+      positionCursor( actmap->getCurrentPlayer() );
       getDefaultMapDisplay().displayPosition( actmap->getCursor() );
       displaymap();
 
@@ -1109,7 +1115,7 @@ void deployMapPlayingHooks ( GameMap* map )
 
 int main(int argc, char *argv[] )
 {
-   // setenv( "DISPLAY", "192.168.0.61:0", 1 );
+   setenv( "DISPLAY", "192.168.0.61:0", 1 );
 
    assert ( sizeof(PointerSizedInt) == sizeof(int*));
 

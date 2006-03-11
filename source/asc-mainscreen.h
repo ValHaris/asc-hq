@@ -40,29 +40,33 @@ class GameMap;
 class MapCoordinate;
       
 class ASC_MainScreenWidget : public MainScreenWidget {
-public:
-    ASC_MainScreenWidget( PG_Application& application );
-    enum Panels { ButtonPanel, WindInfo, UnitInfo, OverviewMap, MapControl };
-    void spawnPanel ( Panels panel );
-    void spawnPanel ( const ASCString& panelName );
+      bool standardActions;
+   public:
+      ASC_MainScreenWidget( PG_Application& application );
+      enum Panels { ButtonPanel, WindInfo, UnitInfo, OverviewMap, MapControl };
+      void spawnPanel ( Panels panel );
+      void spawnPanel ( const ASCString& panelName );
+   
+      NewGuiHost* getGuiHost() { return guiHost; };
+      DashboardPanel* getUnitInfoPanel() { return unitInfoPanel; };
+      
+      void showMovementRange( GameMap* gamemap, const MapCoordinate& pos );
+      void showWeaponRange( GameMap* gamemap, const MapCoordinate& pos );
+      
+      virtual void enableStandardAction( bool enable = true);
 
-    NewGuiHost* getGuiHost() { return guiHost; };
-    DashboardPanel* getUnitInfoPanel() { return unitInfoPanel; };
     
-    void showMovementRange( GameMap* gamemap, const MapCoordinate& pos );
-    void showWeaponRange( GameMap* gamemap, const MapCoordinate& pos );
-    
-protected:
-    NewGuiHost* guiHost;
-    Menu* menu;
-    DashboardPanel* unitInfoPanel;
-    UnitWeaponRangeLayer* weaponRangeLayer;
-    UnitMovementRangeLayer* movementRangeLayer;
-              
-    bool eventKeyDown(const SDL_KeyboardEvent* key);
-    ASCString getBackgroundImageFilename() { return "gamebackground.png"; };
-    
-    ~ASC_MainScreenWidget() { };
+   protected:
+      NewGuiHost* guiHost;
+      Menu* menu;
+      DashboardPanel* unitInfoPanel;
+      UnitWeaponRangeLayer* weaponRangeLayer;
+      UnitMovementRangeLayer* movementRangeLayer;
+               
+      bool eventKeyDown(const SDL_KeyboardEvent* key);
+      ASCString getBackgroundImageFilename() { return "gamebackground.png"; };
+      
+      ~ASC_MainScreenWidget() { };
 };
 
 //! displays a message in the status line of ASC

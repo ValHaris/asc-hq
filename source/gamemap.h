@@ -157,7 +157,7 @@ class GameMap {
       int          xsize, ysize;
 
       //! the coordinate of the map that is displayed on upper left corner of the screen
-      int          xpos, ypos;
+      // int          xpos, ypos;
 
       //! the array of fields
       tfield*       field;
@@ -238,9 +238,6 @@ class GameMap {
 
       vector<GameTime> eventTimes;
 
-      // required for loading the old map file format; no usage outside the loading routine
-      // bool loadeventstore,loadeventstocome,loadeventpassed;
-
       int eventpassed ( int saveas, int action, int mapid );
       int eventpassed ( int id, int mapid );
 
@@ -288,23 +285,6 @@ class GameMap {
       ASCString     newJournal;
       
       Password      supervisorpasswordcrc;
-/*
-      char          alliances_at_beginofturn[8];
-
-      class  Shareview {
-         public:
-            Shareview ( void );
-            Shareview ( const Shareview* org );
-            bool mode[8][8];
-            int recalculateview;
-            void read ( tnstream& stream );
-            void write( tnstream& stream );
-       };
-       
-       // mode[1][6] = visible_all    =>  Spieler 1 gibt Spieler 6 die view frei
-
-      Shareview*    shareview;
-*/
 
       class ReplayInfo {
       public:

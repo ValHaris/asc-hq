@@ -186,7 +186,7 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
 
 void DashboardPanel::eval()
 {
-   if ( !actmap )
+   if ( !actmap || actmap->actplayer < 0 )
       return;
 
 

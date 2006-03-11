@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-03-11 11:31:01 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgbutton.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -234,11 +234,12 @@ class SignalButtonClick : public PG_Signal1<PG_Button*, datatype> {}
 	@param icon_up the icon surface for the unpressed state
 	@param icon_down the icon for the pressed state
 	@param icon_over the icon for the highlited state
+   @param freeSurface if true, the surfaces are automatically freed on destruction or when setting another icon.
+                      If false, the user has to care himself for freeing the surfaces
 	@return true on success
 
-	@note The user has to care for freeing the surfaces after the button is deleted!
 	*/
-	bool SetIcon(SDL_Surface* icon_up, SDL_Surface* icon_down = NULL, SDL_Surface* icon_over = NULL);
+	bool SetIcon(SDL_Surface* icon_up, SDL_Surface* icon_down = NULL, SDL_Surface* icon_over = NULL, bool freeSurfaces = false );
 
 	/**
 	Returns an image for a given button state

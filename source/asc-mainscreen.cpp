@@ -39,6 +39,7 @@
 #include "mapdisplay.h"
 #include "sg.h"
 #include "gameoptions.h"
+#include "dialog.h"
 
 ASC_MainScreenWidget*  mainScreenWidget = NULL ;
 
@@ -57,6 +58,7 @@ class Menu : public PG_MenuBar {
    protected:
       void setup();   
       bool execAction  (PG_PopupMenu::MenuItem* menuItem );
+      // bool eventKeyDown(const SDL_KeyboardEvent* key);
 
    private:
       void addbutton(const char* name, int id );
@@ -416,7 +418,7 @@ class UnitMovementRangeLayer : public MapLayer, public SigC::Object {
 
 
 ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
-   : MainScreenWidget( application ), guiHost(NULL), menu(NULL), unitInfoPanel(NULL)
+   : MainScreenWidget( application ), standardActions(true), guiHost(NULL), menu(NULL), unitInfoPanel(NULL)
 {
 
    setup( true );
@@ -450,6 +452,16 @@ ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
       
 }
 
+void ASC_MainScreenWidget :: enableStandardAction( bool enable )
+{
+   if ( menu )
+      if ( enable )
+         menu->Show();
+      else
+         menu->Hide();
+
+      standardActions = enable;
+}
 
 
 
@@ -530,7 +542,11 @@ void ASC_MainScreenWidget::showWeaponRange( GameMap* gamemap, const MapCoordinat
 
 
 bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
+// bool Menu::eventKeyDown(const SDL_KeyboardEvent* key)
 {
+   if ( !standardActions )
+      return false;
+   
    int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
 
    if ( !mod  ) {
@@ -598,7 +614,7 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                return true;
 
             case SDLK_9:
-               mapDisplay->toggleMapLayer("pipes");
+               mainScreenWidget->getMapDisplay()->toggleMapLayer("pipes");
                repaintMap();
                return true;
 
@@ -633,12 +649,18 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                return true;
 
             case SDLK_F12:
-               execUserAction_ev ( ua_exportUnitToFile );
+               if ( mod & KMOD_SHIFT ) {
+                  if (choice_dlg("Do you really want to crash ASC ?","~y~es","~n~o") == 1) {
+                     char* c = NULL;
+                     *c = 1;
+                  }
+               } else
+                  execUserAction_ev ( ua_exportUnitToFile );
                return true;
                
             case SDLK_F11:
             {
-               printf(" current zoom is %d \n", mainScreenWidget->mapDisplay->getZoom() );
+               printf(" current zoom is %d \n", mainScreenWidget->getMapDisplay()->getZoom() );
             }
             return true;
 

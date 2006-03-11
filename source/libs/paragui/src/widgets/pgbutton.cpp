@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-03-11 11:31:01 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgbutton.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -378,7 +378,7 @@ bool PG_Button::SetIcon(const std::string& filenameup, const std::string& filena
 
 
 /**  */
-bool PG_Button::SetIcon(SDL_Surface* icon_up, SDL_Surface* icon_down,SDL_Surface* icon_over) {
+bool PG_Button::SetIcon(SDL_Surface* icon_up, SDL_Surface* icon_down,SDL_Surface* icon_over, bool freeSurfaces) {
 
 	if(!icon_up && !icon_down && !icon_over) {
 		return false;
@@ -390,7 +390,7 @@ bool PG_Button::SetIcon(SDL_Surface* icon_up, SDL_Surface* icon_down,SDL_Surface
 	(*_mid)[HIGHLITED].srf_icon = icon_over;
 	(*_mid)[PRESSED].srf_icon = icon_down;
 
-	_mid->free_icons = false;
+   _mid->free_icons = freeSurfaces;
 
 	return true;
 }

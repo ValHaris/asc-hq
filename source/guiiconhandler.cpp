@@ -122,13 +122,21 @@ SmallGuiButton::SmallGuiButton( PG_Widget *parent, const PG_Rect &r, GuiButton* 
 
   SetBehaviour( SIGNALONRELEASE );
 
-  SDL_Surface* icn = guiButton->GetIcon( UNPRESSED );
-  if ( icn ) {
-     smallIcon = PG_Draw::ScaleSurface( icn, smallGuiIconSizeFactor, smallGuiIconSizeFactor );
-     SetIcon( smallIcon );
-  } else
-     smallIcon = NULL;
+  updateIcon();
 }
+
+
+void SmallGuiButton::updateIcon()
+{
+   SDL_Surface* icn = referenceButton->GetIcon( UNPRESSED );
+   if ( icn ) {
+      smallIcon = PG_Draw::ScaleSurface( icn, smallGuiIconSizeFactor, smallGuiIconSizeFactor );
+      SetIcon( smallIcon, NULL, NULL, true );
+   } else
+      smallIcon = NULL;
+}
+
+
 
 void SmallGuiButton::press()
 {
@@ -158,8 +166,6 @@ void SmallGuiButton::eventMouseLeave()
 
 SmallGuiButton::~SmallGuiButton()
 {
-   if ( smallIcon )
-      SDL_FreeSurface( smallIcon );
 }
 
 
@@ -294,6 +300,8 @@ void NewGuiHost::popIconHandler( )
    if ( !theGuiHost )
       return;
 
+   theGuiHost->clearSmallIcons();
+
    assert( theGuiHost->handler );
 
    theGuiHost->handler->registerHost( NULL );
@@ -334,7 +342,6 @@ class SmallButtonHolder : public SpecialInputWidget {
 };      
 
 
- 
 
 bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button )
 {
@@ -369,6 +376,34 @@ bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mous
    return true;
 }
 
+
+SmallGuiButton* NewGuiHost::getSmallButton( int i )
+{
+   assert(smallButtonHolder);
+   while ( i >= smallButtons.size() ) {
+      PG_Rect r = PG_Rect( (smallGuiIconSizeX + smallGuiIconSpace) * smallButtons.size(), 0, smallGuiIconSizeX, smallGuiIconSizeY  );
+      SmallGuiButton* b = new SmallGuiButton ( smallButtonHolder, r, getButton(i), this);
+      smallButtons.push_back ( b );
+      b->Hide();
+   }
+
+   return smallButtons[i];
+}
+
+
+bool   NewGuiHost::ProcessEvent (const SDL_Event *event, bool bModal)
+{
+   if ( smallButtonHolder && smallButtonHolder->ProcessEvent( event, bModal ))
+      return true;
+   
+   if ( DashboardPanel::ProcessEvent( event, bModal ))
+      return true;
+
+   return false;
+}
+
+
+
 bool NewGuiHost::showSmallIcons( PG_Widget* parent, const SPoint& pos, bool cursorChanged )
 {
    clearSmallIcons();
@@ -376,31 +411,34 @@ bool NewGuiHost::showSmallIcons( PG_Widget* parent, const SPoint& pos, bool curs
    
    SmallGuiButton* firstSmallButton = NULL;
    
+   int count = 0;
    if ( !cursorChanged ) {
-      int count = 0;
-      for ( int j = 0; j < buttons.size(); ++j) 
+      for ( int j = 0; j < buttons.size(); ++j)
          if ( !getButton(j)->IsHidden() )
             ++count;
       
       if ( count ) {
-         delete smallButtonHolder;
-         smallButtonHolder = new SmallButtonHolder ( parent, PG_Rect( pos.x, pos.y, count * smallGuiIconSizeX + (count-1)*smallGuiIconSpace, smallGuiIconSizeY ));
+         if ( !smallButtonHolder ) 
+            smallButtonHolder = new SmallButtonHolder ( NULL, PG_Rect::null );
 
-         PG_Rect r = PG_Rect( 0, 0, smallGuiIconSizeX, smallGuiIconSizeY  );
+         smallButtonHolder->MoveWidget( PG_Rect( pos.x, pos.y, count * smallGuiIconSizeX + (count-1)*smallGuiIconSpace, smallGuiIconSizeY ), false );
+
          for ( int j = 0; j < buttons.size(); ++j) {
             GuiButton* b = getButton(j);
             if ( !b->IsHidden() ) {
-               SmallGuiButton* sgi = new SmallGuiButton( smallButtonHolder, r, b, this );
-               r.x += smallGuiIconSizeX + smallGuiIconSpace;
+               SmallGuiButton* sgi = getSmallButton( j );
+               sgi->updateIcon();
+               sgi->SetHidden(false);
                if ( j == 0  && sgi->IsMouseInside() )
                   firstSmallButton = sgi;
-            }
+            } else
+               getSmallButton( j )->SetHidden(true);
          }
       }
    }
 
    PG_Application::SetBulkMode(false);
-   if ( smallButtonHolder ) {
+   if ( smallButtonHolder && count ) {
       smallButtonHolder->Show();
       if ( firstSmallButton ) {
          firstSmallButton->press();
@@ -508,6 +546,7 @@ bool NewGuiHost::eventKeyUp(const SDL_KeyboardEvent* key)
 }
 
 
+#if 0
 
 bool NewGuiHost::clearSmallIcons()
 {
@@ -524,14 +563,23 @@ bool NewGuiHost::clearSmallIcons()
    } else
       redraw = false;
    
-   delete smallButtonHolder;
-   smallButtonHolder = NULL;
+      delete smallButtonHolder;
+      smallButtonHolder = NULL;
 
-   if ( !bulk ) {
+      if ( !bulk ) {
     //  PG_Application::SetBulkMode(false);
       // mapDisplay->UpdateRect( true );
-   }
+      }
 
+      return true;
+}
+
+#endif
+
+bool NewGuiHost::clearSmallIcons()
+{
+   if ( smallButtonHolder )
+      smallButtonHolder->Hide();
    return true;
 }
 
@@ -540,5 +588,7 @@ NewGuiHost::~NewGuiHost()
 {
    if ( handler )
       handler->registerHost( NULL );
+
+   delete smallButtonHolder;
 }
 

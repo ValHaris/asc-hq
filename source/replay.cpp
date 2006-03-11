@@ -41,6 +41,7 @@
 #include "cannedmessages.h"
 #include "unitctrl.h"
 #include "replaymapdisplay.h"
+#include "asc-mainscreen.h"
 #include "loaders.h"
 
 trunreplay runreplay;
@@ -1749,7 +1750,10 @@ int  trunreplay :: run ( int player, int viewingplayer )
    displaymap ();
 
    updateFieldInfo();
-   mousevisible( true );
+
+   if ( mainScreenWidget )
+      mainScreenWidget->enableStandardAction( false );
+   
 //   cursor.show();
 
 //   cursor.checkposition( getxpos(), getypos() );
@@ -1805,6 +1809,9 @@ int  trunreplay :: run ( int player, int viewingplayer )
 
    NewGuiHost::popIconHandler();
 
+   if ( mainScreenWidget )
+      mainScreenWidget->enableStandardAction( true );
+   
    int st = status;
    status = 0;
 

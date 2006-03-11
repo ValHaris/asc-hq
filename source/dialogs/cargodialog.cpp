@@ -306,7 +306,7 @@ class CargoDialog : public Panel
       {
          if ( veh )
             if ( mainScreenWidget&& mainScreenWidget->getGuiHost() ) 
-               mainScreenWidget->getGuiHost()->showSmallIcons( this, SPoint( pos.x - my_xpos + 2, pos.y - my_ypos + 2  ), false );
+               mainScreenWidget->getGuiHost()->showSmallIcons( this, SPoint( pos.x + 2, pos.y + 2  ), false );
             
       };
 
@@ -474,7 +474,7 @@ class CargoDialog : public Panel
 
       ~CargoDialog()
       {
-         if ( setupOK )
+         if ( setupOK ) 
             NewGuiHost::popIconHandler();
 
       }

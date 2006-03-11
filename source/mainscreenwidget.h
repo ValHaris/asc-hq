@@ -50,6 +50,9 @@ public:
 
     MapDisplayPG* getMapDisplay() { return mapDisplay; };
 
+
+    virtual void enableStandardAction( bool enable = true) {};
+    
 protected:
     MapDisplayPG* mapDisplay;
     // Menu* menu;

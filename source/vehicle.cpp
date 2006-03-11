@@ -105,6 +105,13 @@ Vehicle :: ~Vehicle (  )
    }
    #endif
 
+   for ( int i = 0; i < 8; i++ ) {
+      delete aiparam[i];
+      aiparam[i] = NULL;
+   }
+      
+
+   
    if ( viewOnMap && gamemap && !gamemap->__mapDestruction ) {
       removeview();
       viewOnMap = false;

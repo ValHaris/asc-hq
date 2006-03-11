@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.21 2006-03-04 20:40:11 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.22 2006-03-11 11:30:54 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -102,6 +102,7 @@ class SmallGuiButton : public PG_Button {
           void eventMouseLeave();
        public:
           SmallGuiButton( PG_Widget *parent, const PG_Rect &r, GuiButton* guiButton, NewGuiHost* host );
+          void updateIcon();
           void press();
           void showInfoText();
           ~SmallGuiButton();
@@ -153,6 +154,12 @@ class NewGuiHost : public DashboardPanel {
         typedef vector<GuiButton*> Buttons;
         Buttons buttons;
 
+        typedef vector<SmallGuiButton*> SmallButtons;
+        SmallButtons smallButtons;
+
+        SmallGuiButton* getSmallButton( int i );
+        
+        
         PG_Widget* smallButtonHolder;
 
 
@@ -178,6 +185,9 @@ class NewGuiHost : public DashboardPanel {
         //! disables all button from i onward
         void disableButtons( int i );
 
+        bool ProcessEvent (const SDL_Event *event, bool bModal);
+
+        
         ~NewGuiHost();
 
 };
