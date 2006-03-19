@@ -96,7 +96,7 @@ void BaseVehicleMovement :: PathFinder :: getMovementFields ( IntFieldList& reac
    }
 }
 
-bool multiThreadedViewCalculation = true;
+bool multiThreadedViewCalculation = false;
 
 
 

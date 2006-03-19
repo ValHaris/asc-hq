@@ -649,19 +649,17 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                return true;
 
             case SDLK_F12:
-               if ( mod & KMOD_SHIFT ) {
-                  if (choice_dlg("Do you really want to crash ASC ?","~y~es","~n~o") == 1) {
-                     char* c = NULL;
-                     *c = 1;
-                  }
-               } else
                   execUserAction_ev ( ua_exportUnitToFile );
                return true;
                
             case SDLK_F11:
-            {
-               printf(" current zoom is %d \n", mainScreenWidget->getMapDisplay()->getZoom() );
-            }
+               if ( mod & KMOD_SHIFT ) {
+                  if (choice_dlg("Do you really want to crash ASC ?","~y~es","~n~o") == 1) {
+                     memcpy(NULL, (void*) 0x1000000, 0x1000000 );
+                     char* c = NULL;
+                     *c = 1;
+                  }
+               } 
             return true;
 
             case SDLK_x:
@@ -670,5 +668,16 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
             default:;
       }
    }
+
+   if ( mod & KMOD_ALT ) {
+      switch ( key->keysym.sym ) {
+            case SDLK_RETURN:
+               getPGApplication().toogleFullscreen();
+               return true;
+
+            default:;
+      }
+   }
+
    return false;
 }

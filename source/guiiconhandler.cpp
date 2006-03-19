@@ -480,6 +480,10 @@ bool NewGuiHost::setNewButtonPressed( int i )
 
 bool NewGuiHost::eventKeyDown(const SDL_KeyboardEvent* key)
 {
+   int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
+   if ( mod )
+      return false;
+
    if ( key->keysym.sym == SDLK_RETURN   ) {
       if ( !enterKeyPressed ) {
          mapDisplay->keyboadCursorMovement( false );

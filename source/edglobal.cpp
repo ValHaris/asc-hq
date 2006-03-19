@@ -401,7 +401,7 @@ void execaction( int code)
              }
        break;
     case act_changeunitdir : {
-                      pf2 = getactfield();
+                      tfield* pf2 = getactfield();
                       if ( pf2 && pf2->vehicle  ) {
                          pf2->vehicle->direction++;
                          if (pf2->vehicle->direction >= sidenum )
@@ -440,7 +440,7 @@ void execaction( int code)
                                       selection.pickup( getactfield() ); 
        break;
     case act_deletething : {
-                         pf2 = getactfield();
+                         tfield* pf2 = getactfield();
                          mapsaved = false;
                          if (pf2 != NULL) {
                             if (pf2->vehicle != NULL)
@@ -460,7 +460,7 @@ void execaction( int code)
                       }
         break;
     case act_deleteunit : {
-                         pf2 = getactfield();
+                         tfield* pf2 = getactfield();
                          if (pf2 != NULL)
                             if (pf2->vehicle != NULL) {
                                delete pf2->vehicle;
@@ -470,7 +470,7 @@ void execaction( int code)
                          }
         break;
      case act_deletebuilding : {
-                         pf2 = getactfield();
+                         tfield* pf2 = getactfield();
                          if (pf2 != NULL)
                             if (pf2->building != NULL) {
                                delete pf2->building;
@@ -480,7 +480,7 @@ void execaction( int code)
                       }
         break;
      case act_deleteobject : {
-                         pf2 = getactfield();
+                         tfield* pf2 = getactfield();
                          if ( pf2 ) {
                             mapsaved = false;
                             pf2->removeobject( actobject );
@@ -489,7 +489,7 @@ void execaction( int code)
                       }
         break;
      case act_deletetopmostobject : {
-                         pf2 = getactfield();
+                         tfield* pf2 = getactfield();
                          if ( pf2 ) {
                             mapsaved = false;
                             pf2->removeobject( NULL );
@@ -498,7 +498,7 @@ void execaction( int code)
                       }
         break;
      case act_deleteallobjects : {
-                         pf2 = getactfield();
+                         tfield* pf2 = getactfield();
                          if ( pf2 ) {
                             mapsaved = false;
                             pf2->objects.clear( );
@@ -508,7 +508,7 @@ void execaction( int code)
                       }
         break;
      case act_deletemine : {
-                         pf2 = getactfield();
+                         tfield* pf2 = getactfield();
                          if (pf2 != NULL) {
                             mapsaved = false;
                             pf2->removemine( -1 );
@@ -521,7 +521,7 @@ void execaction( int code)
     case act_changemapvals :   changemapvalues();
        break;                                        
     case act_changeunitvals :   {
-                 pf2 = getactfield();
+                 tfield* pf2 = getactfield();
                  if ( pf2  ) {
                     if ( pf2->vehicle ) {
                        changeunitvalues(pf2->vehicle);

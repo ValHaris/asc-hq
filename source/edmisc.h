@@ -95,7 +95,6 @@ extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePo
 
 
 
-   extern tfield*                    pf2;
    extern pterraintype      auswahl;
    extern Vehicletype*        auswahlf;
    extern BuildingType*    auswahlb;

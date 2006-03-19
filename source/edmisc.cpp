@@ -48,14 +48,15 @@
 #include "dialogs/cargowidget.h"
 
 
-   tfield*               pf2;
-
-   pterraintype auswahl;
+   TerrainType* auswahl;
    Vehicletype* auswahlf;
    ObjectType*  actobject;
-   BuildingType* auswahlb;
-   int          auswahlm;
+   BuildingType*        auswahlb;
+   int          auswahls;
+   int          auswahlm;       
    int          auswahlw;
+   int          auswahld;
+
    int          farbwahl;
    char         mapsaved;
 
@@ -97,237 +98,7 @@ char checkobject(tfield* pf)
    return !pf->objects.empty();
 }
 
-#if 0
-// õS MouseButtonBox
 
-#define maxmouseboxitems 20
-
-class   tmousebuttonbox {
-           public :
-                 char holdbutton; //true : menu only opens if button is held
-                 int actcode;
-                 void init(void);
-                 void additem(int code);
-                 int getboxundermouse(void); 
-                 void checkfields(void);
-                 void run(void);
-                 void done(void);
-           protected :
-                 pfont savefont;
-                 void *background;
-                 int lastpos,actpos;
-                 int mousestat;
-                 int maxslots;
-                 int itemcount,boxxsize,boxysize,slotsize,boxx,boxy;
-                 int item[maxmouseboxitems];
-                 };
-
-void tmousebuttonbox::init(void)
-{
-   ch = ct_invvalue;
-   mousestat = mouseparams.taste;
-   boxx = mouseparams.x;
-   boxy = mouseparams.y;
-   itemcount = 0;
-   holdbutton=false;
-   boxxsize = 0;
-   boxysize = 0;
-   savefont = activefontsettings.font;
-   activefontsettings.font = schriften.smallarial;
-   activefontsettings.color = black;
-   slotsize = activefontsettings.font->height + 4;
-
-   if (maxmouseboxitems * slotsize > agmp->resolutiony ) maxslots = ( agmp->resolutiony - 20 ) / slotsize;
-   else maxslots = maxmouseboxitems;
-   
-}
-
-void tmousebuttonbox::additem(int code)
-{  int txtwidth;
-
-   if (itemcount < maxslots ) {
-
-      // two times the same item will be discarded; usually happens with separators only
-      if ( itemcount > 0 && item[itemcount-1] == code )
-         return;
-
-      item[itemcount] = code;
-      txtwidth = gettextwdth((char * ) execactionnames[code], activefontsettings.font);
-      if (txtwidth > boxxsize) boxxsize = txtwidth;
-      itemcount++;
-   } 
-}
-
-int tmousebuttonbox::getboxundermouse(void)
-{  int mx,my;
-
-   mx=mouseparams.x;
-   my=mouseparams.y;
-   if ( (mx > boxx ) && (mx < boxx+boxxsize ) ) 
-      if ( (my > boxy ) && (my < boxy + boxysize -5 ) ) {
-         return ( my - boxy - 4 ) / slotsize;
-      } 
-   return -1;
-}
-
-void tmousebuttonbox::checkfields(void)
-{
-   if (keypress()) ch = r_key();
-   actpos = getboxundermouse();
-   if (actpos != lastpos) {
-      mousevisible(false);
-      if ( ( lastpos != -1 ) && ( item[lastpos] != act_seperator) ) rectangle(boxx + 3, boxy + 3 + lastpos * slotsize, boxx + boxxsize -3, boxy + 3 + ( lastpos +1 ) * slotsize,lightgray);
-      if ( ( actpos != -1 ) && ( item[actpos] != act_seperator) ) lines(boxx + 3, boxy + 3 + actpos * slotsize, boxx + boxxsize -3, boxy + 3 + ( actpos +1 ) * slotsize);
-      mousevisible(true);
-      lastpos =actpos;
-      if (actpos != -1 ) {
-         if (item[actcode] != act_seperator) actcode = item[actpos];
-         else actcode = -1;
-      } else actcode = -1;
-   }
-}
-
-void tmousebuttonbox::run(void)
-{  
-   lastpos = -1;
-   actcode = -1;
-   boxxsize+=15;
-   boxysize= slotsize * itemcount + 5;
-
-   if (boxy + boxysize > agmp->resolutiony -5 ) boxy = agmp->resolutiony - 5 - boxysize;
-   if (boxx + boxxsize > agmp->resolutionx -5 ) boxx = agmp->resolutionx - 5 - boxxsize;
-
-   background = malloc(imagesize(boxx,boxy,boxx+boxxsize,boxy+boxysize));
-
-   mousevisible(false);
-   getimage(boxx,boxy,boxx+boxxsize,boxy+boxysize,background);
-
-   bar(boxx,boxy,boxx+boxxsize,boxy+boxysize,lightgray);
-   lines(boxx,boxy,boxx+boxxsize,boxy+boxysize);
-
-   activefontsettings.length = boxxsize - 10;
-   activefontsettings.background = lightgray;
-   activefontsettings.color = black;
-   activefontsettings.justify = lefttext;
-
-   for (int i=0;i < itemcount ;i++ ) {
-      if (item[i] != act_seperator) showtext2((char*) execactionnames[item[i]],boxx+5,boxy + 5 + slotsize * i);
-      else line( boxx + 5, boxy + 5 + slotsize / 2 + slotsize * i, boxx + boxxsize - 5, boxy + 5 + slotsize / 2 + slotsize * i,black) ;
-   } /* endfor */
-   mousevisible(true);
-   while (mouseparams.taste == mousestat) {
-      checkfields();
-      releasetimeslice();
-   } /* endwhile */
-   if ( (actpos == -1) && (holdbutton == false ) ) {
-      while ( (mouseparams.taste == 0) && (ch != ct_esc) ) {
-         checkfields();
-         releasetimeslice();
-      } /* endwhile */
-   }
-}
-
-
-void tmousebuttonbox::done(void)
-{
-   mousevisible(false);
-   putimage(boxx,boxy,background);
-   mousevisible(true);
-   asc_free(background);
-   activefontsettings.font = savefont;
-
-   while (mouseparams.taste != 0)
-      releasetimeslice();
-}
-
-
-// õS Rightmousebox
-
-int rightmousebox(void)
-{
-   /*
-   tmousebuttonbox tmb;
-
-   tmb.init();
-   pf2 = getactfield();
-   if (pf2 != NULL) {
-
-      if ( pf2->vehicle ) {
-         tmb.additem(act_changeunitvals);
-         if ( pf2->vehicle->typ->maxLoadableUnits > 0 )
-            tmb.additem(act_changecargo);
-         tmb.additem(act_deleteunit);
-      }
-      tmb.additem(act_seperator);
-      if ( pf2->building ) {
-         tmb.additem(act_changeunitvals);
-         if ( pf2->building->typ->maxLoadableUnits > 0  )
-            tmb.additem(act_changecargo);
-         if ( pf2->building->typ->hasFunction( ContainerBaseType::InternalVehicleProduction  ) )
-            tmb.additem(act_changeproduction);
-         tmb.additem(act_deletebuilding);
-         tmb.additem(act_deleteunit);
-      }
-      tmb.additem(act_seperator);
-      if ( !pf2->mines.empty() ) {
-         tmb.additem(act_changeminestrength);
-         tmb.additem(act_deletemine);
-      }
-      tmb.additem(act_seperator);
-
-      tmb.additem(act_changeresources);
-
-      tmb.additem(act_seperator);
-
-      if ( !pf2->objects.empty() ) {
-         tmb.additem( act_deletetopmostobject );
-         tmb.additem( act_deleteobject );
-         tmb.additem( act_deleteallobjects );
-      }
-   }
-
-   tmb.run();
-   tmb.done();
-   return tmb.actcode;
-   */
-   return 0;
-}
-
-// õS Leftmousebox
-
-int leftmousebox(void)
-{  tmousebuttonbox tmb;
-
-   tmb.init();
-   tmb.holdbutton=true;
-   tmb.additem(act_placemine);
-   tmb.additem(act_pasteFromClipboard);
-
-   tmb.additem(act_seperator);
-
-   //tmb.additem(act_selbodentyp);
-   //tmb.additem(act_selunit);
-   //tmb.additem(act_selbuilding);
-   //tmb.additem(act_selobject);
-   //tmb.additem(act_selmine);
-   //tmb.additem(act_selweather);
-   tmb.additem(act_setactivefieldvals);
-
-   //tmb.additem(act_seperator);
-
-   tmb.additem(act_viewmap);
-   tmb.additem(act_repaintdisplay);
-
-   tmb.additem(act_seperator);
-
-   tmb.additem(act_help);
-
-   tmb.run();
-   tmb.done();
-   return tmb.actcode;
-}
-
-#endif
 
 // õS PutResource
 
@@ -2270,6 +2041,7 @@ void         changeunitvalues(Vehicle* ae)
 //* õS Resource
 
      class tres: public tdialogbox {
+        tfield* pf2;
             public :
                 int action;
                 int fuel,material;
@@ -2347,6 +2119,7 @@ void         changeresource(void)
 //* õS MineStrength
 
      class tminestrength: public tdialogbox {
+               tfield* pf2;
             public :
                 int action;
                 int strength;
@@ -2410,8 +2183,7 @@ void         tminestrength::buttonpressed(int         id)
 
 void         changeminestrength(void)
 {
-   pf2 =  getactfield();
-   if ( pf2->mines.empty() )
+   if ( getactfield()->mines.empty() )
       return;
 
    tminestrength  ms;
@@ -4061,48 +3833,3 @@ tfield*        getactfield(void)
    return actmap->getField( actmap->getCursor() );; 
 } 
 
-/*
-void displaymessage2( const char* formatstring, ... )
-{
-   const int maxlength = 2000;
-   char stringtooutput[maxlength];
-   char* c = new char[maxlength];
-   // int linenum = 0;
-
-   memset (stringtooutput, 0, sizeof ( stringtooutput ));
-
-   va_list paramlist;
-   va_start ( paramlist, formatstring );
-
-   int lng = vsprintf( stringtooutput, formatstring, paramlist );
-   if ( lng >= maxlength )
-      displaymessage ( "dlg_box.cpp / displaymessage2:   string to long !\nPlease report this error",1 );
-
-   va_end ( paramlist );
-
-
-   npush ( activefontsettings );
-   activefontsettings.justify = lefttext;
-   activefontsettings.font = schriften.guifont;
-   activefontsettings.color = 20 + ((actmap)?actmap->actplayer:0) * 8;
-   activefontsettings.markcolor = yellow;
-   activefontsettings.background = 172;
-   activefontsettings.height = activefontsettings.font->height;
-   activefontsettings.length = agmp->resolutionx - ( 640 - 387);
-
-   int yy = agmp->resolutiony - ( 480 - 450 );
-   collategraphicoperations cgo ( 37, yy, 37 + activefontsettings.length, yy + activefontsettings.font->height );
-   showtext3c( stringtooutput, 37, yy );
-
-   npop( activefontsettings );
-
-   if ( formatstring == NULL  ||  formatstring[0] == 0 )
-      lastdisplayedmessageticker = 0xffffff;
-   else
-      lastdisplayedmessageticker = ticker;
-   
-
-   delete[] c;
-
-}
-*/

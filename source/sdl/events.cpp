@@ -27,7 +27,8 @@
 #include "../stack.h"
 #include "../basegfx.h"
 #include "../global.h"
-#include "keysymbols.h"
+// #include "keysymbols.h"
+#include "../errors.h"
 
 
 volatile tmousesettings mouseparams;
@@ -427,7 +428,6 @@ int eventthread ( void* nothing )
 }
 
 
-
 #ifdef FirstThreadEvents 
 int (*_gamethread)(void *);
 
@@ -438,8 +438,13 @@ int gameThreadWrapper ( void* data )
       closeEventThread = 1;
       return res;
    }
+#ifndef WIN32
    catch ( ... ) {
    }
+#else
+   catch ( ASCexception ) {
+   }
+#endif
    closeEventThread = -1;
    return -1;
 }
@@ -450,8 +455,10 @@ int gameThreadWrapper ( void* data )
 SDL_Thread* secondThreadHandle = NULL;
 
 
+
 int initializeEventHandling ( int (*gamethread)(void *) , void *data )
 {
+
    mouseparams.xsize = 10;
    mouseparams.ysize = 10;
 
@@ -488,6 +495,7 @@ int initializeEventHandling ( int (*gamethread)(void *) , void *data )
    int res = gamethread( data );
    closeEventThread = 1;
 #endif
+
 
    SDL_WaitThread ( secondThreadHandle, NULL );
    return res;

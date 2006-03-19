@@ -76,6 +76,7 @@ class StartupScreen: public SigC::Object {
  class ASC_PG_App : public PG_Application {
        ASCString themeName;
        bool fullScreen;
+       int bitsperpixel;
        
        void messageDialog( const ASCString& message, MessagingHubBase::MessageType mt );
        
@@ -95,6 +96,8 @@ class StartupScreen: public SigC::Object {
        void Quit ();
 
        bool isFullscreen() { return fullScreen; };
+       bool toogleFullscreen();
+
        
        void processEvent();
        bool enableLegacyEventHandling( bool use );

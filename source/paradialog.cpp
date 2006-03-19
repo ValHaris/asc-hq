@@ -149,7 +149,7 @@ void signalQuit( int i )
 }
 
 
-ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )  : fullScreen(false)
+ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )  : fullScreen(false), bitsperpixel(0)
 {
    this->themeName = themeName;
    EnableSymlinks(true);
@@ -336,9 +336,34 @@ StartupScreen::~StartupScreen()
 
 
 
+bool ASC_PG_App::toogleFullscreen()
+{
+   if ( !GetScreen() )
+      return false;
+
+   int w = GetScreen()->w;
+   int h = GetScreen()->h;
+
+   int flags = 0;
+   if ( !fullScreen )
+      flags |= SDL_FULLSCREEN;
+
+  	SDL_Surface* screen = SDL_SetVideoMode(w, h, bitsperpixel, flags);
+	if (screen == NULL) {
+  	   screen = SDL_SetVideoMode(w, h, bitsperpixel, 0);
+      fullScreen = false;
+	} else
+      fullScreen = !fullScreen;
+
+   SetScreen(screen);
+   PG_Widget::UpdateScreen();
+   return true;
+}
+
 
 bool ASC_PG_App:: InitScreen ( int w, int h, int depth, Uint32 flags )
 {
+   bitsperpixel = depth;
    bool result = PG_Application::InitScreen ( w, h, depth, flags  );
    if ( result ) {
       initASCGraphicSubsystem ( GetScreen(), NULL );

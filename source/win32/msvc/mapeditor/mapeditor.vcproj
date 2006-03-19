@@ -42,7 +42,7 @@
 				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/Debug&quot;;&quot;$(SDL_image)/VisualC/Debug&quot;;&quot;$(OutDir)/lib&quot;;../../../libs/SDLmm/SDLmm/debug;&quot;$(SDL)/VisualC/SDLmain/Debug&quot;;&quot;$(SDL)/VisualC/SDL/Debug&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;../../../debug/lib;../../../libs/paragui/VisualC/Debug;&quot;$(physfs)/$(ConfigurationName)&quot;;&quot;$(libexpat)/libs&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/mapeditor.pdb"
-				SubSystem="2"
+				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"/>

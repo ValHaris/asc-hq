@@ -252,24 +252,39 @@ class ContainerCargo: public ContextAction {
       }
 };
 
-class DeleteContainer: public ContextAction {
+class DeleteVehicle: public ContextAction {
    public:
       bool available( const MapCoordinate& pos )
       {
-         return actmap->getField(pos)->getContainer();
+         return actmap->getField(pos)->vehicle;
       };
 
       ASCString getText( const MapCoordinate& pos )
       {
-         if ( actmap->getField(pos)->vehicle )
-            return "delete unit";
-         else
-            return "delete building";
+         return "delete unit";
       };
 
       int getActionID()
       {
          return act_deleteunit ;
+      }
+};
+
+class DeleteBuilding: public ContextAction {
+   public:
+      bool available( const MapCoordinate& pos )
+      {
+         return actmap->getField(pos)->building;
+      };
+
+      ASCString getText( const MapCoordinate& pos )
+      {
+        return "delete building";
+      };
+
+      int getActionID()
+      {
+         return act_deletebuilding;
       }
 };
 
@@ -438,7 +453,8 @@ Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
    addContextAction( new ContextMenu::ContainerProperties );
    addContextAction( new ContextMenu::ContainerCargo );
    addContextAction( new ContextMenu::ContainerProduction );
-   addContextAction( new ContextMenu::DeleteContainer );
+   addContextAction( new ContextMenu::DeleteVehicle );
+   addContextAction( new ContextMenu::DeleteBuilding );
    addContextAction( new ContextMenu::ChangeMineStrength );
    addContextAction( new ContextMenu::DeleteMine );
    addContextAction( new ContextMenu::FieldResources );
@@ -517,6 +533,11 @@ bool Maped_MainScreenWidget::clickOnMap( const MapCoordinate& field, const SPoin
       
       contextMenu->Show();
       return true;
+   } else {
+      if ( contextMenu ) {
+         delete contextMenu;
+         contextMenu = NULL;
+      }
    }
    return false;
 }
@@ -528,6 +549,10 @@ bool Maped_MainScreenWidget::runContextAction  (PG_PopupMenu::MenuItem* menuItem
    return true;
 }
 
+#ifdef WIN32
+# include "win32/win32-errormsg.h"
+# include  "win32/msvc/mdump.h"
+#endif
 
 
 bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
@@ -676,6 +701,14 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
          case SDLK_x: execaction_ev(act_end);
                         return true;
+            case SDLK_F11:
+               if ( mod & KMOD_SHIFT ) {
+                  if (choice_dlg("Do you really want to crash ASC ?","~y~es","~n~o") == 1) {
+                     char* c = NULL;
+                     *c = 1;
+                  }
+               } 
+            return true;
          default:;
    
        } 
@@ -688,6 +721,17 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
          default:;
       }
    }
+
+   if ( mod & KMOD_ALT ) {
+      switch ( key->keysym.sym ) {
+            case SDLK_RETURN:
+               getPGApplication().toogleFullscreen();
+               return true;
+
+            default:;
+      }
+   }
+
    return false;
 }
 

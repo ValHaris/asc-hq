@@ -46,7 +46,7 @@
 #ifdef WIN32
 # include "win32/win32-errormsg.h"
 # include  "win32/msvc/mdump.h"
- MiniDumper miniDumper( "asc1mapeditor" );
+ MiniDumper miniDumper( "mapeditor" );
 #endif
 
 
@@ -103,7 +103,6 @@ int mapeditorMainThread ( void* _mapname )
    const char* mapname = (const char*) _mapname;
    loadpalette();
 
-  
    try {
       StartupScreen sus( "title_mapeditor.jpg", dataLoaderTicker );
       
@@ -239,6 +238,7 @@ int main(int argc, char *argv[] )
    int yr  = CGameOptions::Instance()->mapeditor_yresolution;
    if ( cl->y() != 600 )
       yr = cl->y();
+
 
    ASC_PG_App app ( "asc2_dlg" );
    

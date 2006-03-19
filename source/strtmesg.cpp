@@ -20,7 +20,7 @@
 
 
 // These strings should be the same as the release tags in CVS !
-const char* asc_release="ASC1.990.0.1";
+const char* asc_release="ASC1.990.0.2";
 
 #include <stdio.h>
 #include "strtmesg.h"
