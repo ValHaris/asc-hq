@@ -53,12 +53,10 @@ class Menu : public PG_MenuBar {
 
    public:
       Menu ( PG_Widget *parent, const PG_Rect &rect=PG_Rect::null);
-      ~Menu();
       
    protected:
       void setup();   
       bool execAction  (PG_PopupMenu::MenuItem* menuItem );
-      // bool eventKeyDown(const SDL_KeyboardEvent* key);
 
    private:
       void addbutton(const char* name, int id );
@@ -72,9 +70,6 @@ class Menu : public PG_MenuBar {
 
 
 
-Menu::~Menu()
-{
-}
 
 bool Menu::execAction  (PG_PopupMenu::MenuItem* menuItem )
 {
@@ -86,24 +81,16 @@ bool Menu::execAction  (PG_PopupMenu::MenuItem* menuItem )
 
 void Menu::addfield( const char* name )
 {
-   ASCString s = name;
-   while ( s.find ( "~") != ASCString::npos )
-      s.erase( s.find( "~"),1 );
-      
    currentMenu = new PG_PopupMenu( NULL, -1, -1, "" );
    categories.push_back ( currentMenu );
-   Add ( s, currentMenu );
+   Add ( name, currentMenu );
    currentMenu->sigSelectMenuItem.connect( SigC::slot( *this, &Menu::execAction ));
 
 }
 
 void Menu::addbutton( const char* name, int id )
 {
-   ASCString s = name;
-   while ( s.find ( "~") != ASCString::npos )
-      s.erase( s.find( "~"),1 );
-      
-   currentMenu->addMenuItem( s, id );
+   currentMenu->addMenuItem( name, id );
 }
 
 

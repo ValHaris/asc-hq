@@ -26,6 +26,7 @@ class GameMap;
     The result is not written to the involved units, this must be done separately.
 
     \param battle  The fight executer
+    \param actmap the map upon which the battle is fought
     \param ad  Attacker damage override (used for replays)
     \param dd  Target damage override (used for replays)
 */

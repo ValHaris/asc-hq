@@ -60,6 +60,7 @@ class Transferrable: public SigC::Object {
       virtual ASCString getName() = 0;
 
       /** get maximum amount for that unit.
+      \param c the container for which the maximum amount is calculated
       \param avail If true, the amount is limited by the resources which can actually provided by the other unit. If false, return the storage capacity
        */
       virtual int getMax( ContainerBase* c, bool avail ) = 0;

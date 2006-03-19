@@ -21,6 +21,7 @@ class Sound {
      /** Create a Sound from the .wav file specified by filename.
       *  If it's not possible to use the wave file for some reason, the
       *  sound is set to silence.
+      *  \param filename the file that is loaded
       *  \param fadeIn is a time in milliseconds
       */
      Sound( const ASCString& filename, int fadeIn = 0 );
@@ -73,7 +74,8 @@ class SoundSystem {
 
    public:
       /** Sets up ASC's sound system.
-         \param mute The sound is going to be initialized, but no sounds played. Sounds can be enabled at runtime
+         \param muteEffects The sound is going to be initialized, but no sounds played. Sounds can be enabled at runtime
+         \param muteMusic The sound is going to be initialized, but no music played. Music can be enabled at runtime
          \param off  The sound system is not even going to be initiliazed. Can only be restartet by restarting ASC
       */
       SoundSystem ( bool muteEffects, bool muteMusic, bool off );

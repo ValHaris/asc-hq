@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-03-19 19:56:01 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/font/pgfont.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -290,7 +290,7 @@ inline void BlitTemplate(DT pixels, SDL_Surface* Surface, FT_Bitmap *Bitmap, int
 	}
 }
 
-bool PG_FontEngine::BlitFTBitmap(SDL_Surface *Surface, FT_Bitmap *Bitmap, int PosX, int PosY, PG_Font *Param, PG_Rect* ClipRect) {
+bool PG_FontEngine::BlitFTBitmap(SDL_Surface *Surface, FT_Bitmap *Bitmap, int PosX, int PosY, PG_Font *Param, const PG_Rect* ClipRect) {
 	int BitmapRealWidth;
 
 	// i think we can skip that test
@@ -507,7 +507,7 @@ bool PG_FontEngine::RenderText(SDL_Surface *Surface, const PG_Rect& ClipRect, in
 	return RenderText(Surface, (PG_Rect*)&ClipRect, BaseLineX, BaseLineY, Text, ParamIn);
 }
 
-bool PG_FontEngine::RenderText(SDL_Surface *Surface, PG_Rect *ClipRect, int BaseLineX, int BaseLineY, const PG_String& Text, PG_Font* font) {
+bool PG_FontEngine::RenderText(SDL_Surface *Surface, const PG_Rect *ClipRect, int BaseLineX, int BaseLineY, const PG_String& Text, PG_Font* font) {
 	static bool bRecursion = false;
 	int OriBaseX = BaseLineX;
 	FT_UInt previous = 0;

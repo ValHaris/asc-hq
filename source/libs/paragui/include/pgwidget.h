@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-03-19 19:56:01 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgwidget.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -533,6 +533,8 @@ public:
 	*/
 	PG_Color GetFontColor();
 
+   PG_Color GetFontHighlightColor();
+   
 	/**
 	Set font color
 	@param Color PG_Color class contains color information (RGB)
@@ -540,6 +542,8 @@ public:
 	*/
 	void SetFontColor(const PG_Color& Color, bool bRecursive = false);
 
+   void SetFontHighlightColor(const PG_Color& Color, bool bRecursive = false);
+   
 	/**
 	Set font transparency (!!!)
 	@param	Alpha	Value 0 - 255 (0 = invisible, 255 = fully visible)
@@ -894,6 +898,9 @@ protected:
 
 	int my_bordersize;
 
+   static bool RenderText(SDL_Surface *Surface, const PG_Rect& ClipRect, int BaseLineX, int BaseLineY, const PG_String& Text, PG_Font* ParamIn);
+
+   
 private:
 
 	PG_Widget(const PG_Widget&);

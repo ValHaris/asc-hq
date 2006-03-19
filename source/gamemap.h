@@ -269,7 +269,7 @@ class GameMap {
       MessagePntrContainer  unsentmessage;
       bool __loadunsentmessage;
 
-      //! these are the messages themselfs. A #pmessagelist only stores pointers to message body which are archived here
+      //! these are the messages themselfs. A MessagePntrContainer only stores pointers to message body which are archived here
       MessageContainer messages;
       bool __loadmessages;
 

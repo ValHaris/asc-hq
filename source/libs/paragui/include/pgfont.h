@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-03-19 19:56:01 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgfont.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -79,6 +79,10 @@ public:
 	*/
 	PG_Font(const std::string& fontfile, int size=14, int index=0);
 
+   PG_Font( const PG_Font& font );
+
+   PG_Font& operator= ( const PG_Font& font );
+   
 	/**
 	*/
 	virtual ~PG_Font();
@@ -102,12 +106,14 @@ public:
 	@param c PG_Color class of the new color
 	*/
 	void SetColor(const PG_Color& c);
+   void SetHighlightColor(const PG_Color& c);
 
 	/**
 	Get the current color of the font
 	@return PG_Color class containing the current color
 	*/
 	PG_Color GetColor();
+   PG_Color GetHighlightColor();
 
 	/**
 	Set the transparency of the font
@@ -161,6 +167,9 @@ public:
 
 private:
 
+   void copy( const PG_Font& font );
+   void unlink();
+   
 	DLLLOCAL PG_FontFaceCacheItem* GetFaceCache(int index=0);
 
 	PG_FontDataInternal* my_internaldata;
@@ -195,7 +204,7 @@ public:
 	*/
 	static bool RenderText(SDL_Surface *Surface, const PG_Rect& ClipRect, int BaseLineX, int BaseLineY, const PG_String& Text, PG_Font* ParamIn);
 
-	static bool RenderText(SDL_Surface *Surface, PG_Rect *ClipRect, int BaseLineX, int BaseLineY, const PG_String& Text, PG_Font* ParamIn);
+	static bool RenderText(SDL_Surface *Surface, const PG_Rect *ClipRect, int BaseLineX, int BaseLineY, const PG_String& Text, PG_Font* ParamIn);
 
 	/**
 	*/
@@ -205,7 +214,7 @@ protected:
 
 	/**
 	*/
-	static bool BlitFTBitmap(SDL_Surface *Surface, FT_Bitmap *Bitmap, int PosX, int PosY, PG_Font* Param, PG_Rect *ClipRect);
+	static bool BlitFTBitmap(SDL_Surface *Surface, FT_Bitmap *Bitmap, int PosX, int PosY, PG_Font* Param, const PG_Rect *ClipRect);
 
 	/**
 	*/

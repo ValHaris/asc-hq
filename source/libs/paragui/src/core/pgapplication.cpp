@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-03-19 19:56:01 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/core/pgapplication.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -75,6 +75,7 @@ bool PG_Application::disableDirtyUpdates = false;
 PG_EventSupplier* PG_Application::my_eventSupplier = NULL;
 PG_EventSupplier* PG_Application::my_defaultEventSupplier = NULL;
 bool PG_Application::defaultUpdateOverlappingSiblings = true;
+PG_Char PG_Application::highlightingTag = 0;
 
 /**
 	new shutdown procedure (called at application termination
@@ -1264,6 +1265,18 @@ void PG_Application::SetUpdateOverlappingSiblings(bool update) {
 bool PG_Application::GetUpdateOverlappingSiblings() {
 	return defaultUpdateOverlappingSiblings;
 }
+
+
+void PG_Application::SetHighlightingTag( PG_Char c )
+{
+   highlightingTag = c;
+}
+   
+PG_Char PG_Application::GetHighlightingTag()
+{
+   return highlightingTag;
+}
+
 
 /*
  * Local Variables:

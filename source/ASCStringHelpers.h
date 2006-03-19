@@ -460,6 +460,8 @@ inline int ASCStringHelpers::_Printf ( const charT* format, ... )
 
     \param pSrc a pointer to a NULL-terminated string which will be converted.
 
+    \param count the size of the destination buffer
+
     \return returns the number of characters written to \a pDest.
 
 */

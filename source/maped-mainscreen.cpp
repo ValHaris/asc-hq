@@ -50,7 +50,6 @@ class Menu : public PG_MenuBar {
 
    public:
       Menu ( PG_Widget *parent, const PG_Rect &rect=PG_Rect::null);
-      ~Menu();
       
    protected:
       void setup();   
@@ -64,15 +63,6 @@ class Menu : public PG_MenuBar {
 
 
 
-Menu::~Menu()
-{
-/*
-   for ( Categories::iterator i = categories.begin(); i != categories.end(); ++i )
-      delete *i;
-*/      
-
-}
-
 bool Menu::execAction  (PG_PopupMenu::MenuItem* menuItem )
 {
    execaction_ev( tuseractions( menuItem->getId() ) );
@@ -83,24 +73,16 @@ bool Menu::execAction  (PG_PopupMenu::MenuItem* menuItem )
 
 void Menu::addfield( const char* name )
 {
-   ASCString s = name;
-   while ( s.find ( "~") != ASCString::npos )
-      s.erase( s.find( "~"),1 );
-      
    currentMenu = new PG_PopupMenu( NULL, -1, -1, "" );
    categories.push_back ( currentMenu );
-   Add ( s, currentMenu );
+   Add ( name, currentMenu );
    currentMenu->sigSelectMenuItem.connect( SigC::slot( *this, &Menu::execAction ));
 
 }
 
 void Menu::addbutton( const char* name, int id )
 {
-   ASCString s = name;
-   while ( s.find ( "~") != ASCString::npos )
-      s.erase( s.find( "~"),1 );
-      
-   currentMenu->addMenuItem( s, id );
+   currentMenu->addMenuItem( name, id );
 }
 
 

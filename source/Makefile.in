@@ -189,7 +189,6 @@ target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
 SUBDIRS = @GENCL@ docs sdl libs ai graphics dialogs actions unix tools 
 EXTRA_DIST = *.cpp *.h *.inc
-_SOURCES = mapimageexport.cpp
 all: all-recursive
 
 .SUFFIXES:
@@ -502,8 +501,7 @@ uninstall-info: uninstall-info-recursive
 
 htmldoc: doxygen.config
 	doxygen doxygen.config
-	cd libs/paragui
-	make htmldoc
+	cd libs/paragui ; make paraguidoc
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

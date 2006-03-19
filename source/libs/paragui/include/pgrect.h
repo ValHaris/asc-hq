@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-03-04 20:40:11 $
+    Update Date:      $Date: 2006-03-19 19:56:01 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgrect.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.2 $
+    CVS/RCS Revision: $Revision: 1.1.2.3 $
     Status:           $State: Exp $
 */
 
@@ -97,7 +97,7 @@ public:
 
 	/**
 	*/
-	PG_Rect operator / (PG_Rect& b);
+	PG_Rect operator / ( const PG_Rect& b) const ;
 
 	inline bool operator ==(const PG_Rect& r) const {
 		return (x == r.x) && (y == r.y) && (r.w == w) && (r.h == h);

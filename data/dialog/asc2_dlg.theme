@@ -25,6 +25,7 @@
           <color    name="backgroundcolor" value="0x00447156"/>
           <gradient name="gradient" color0="0x00447156" color1="0x00447156" color2="0x00447156" color3="0x00447156"/>
           <color name="textcolor" value="0x00fffe8c"/>
+          <color name="texthighlightcolor" value="0x00ffe08c"/>
           <property name="blend" value="0"/>
       </object>
     </widget>    

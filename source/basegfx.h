@@ -1,5 +1,5 @@
 /*! \file basegfx.h
-   \brief basegfx.h is the interface for the graphic routines (of which some are platform dependent).
+   \brief basegfx.h is the interface for the legacy graphic routines (of which some are platform dependent).
 
    basegfx.h additionally includes the definitions of routines, 
     whose implementation is platform dependant, but whose interface
@@ -8,9 +8,8 @@
     The graphic routines are older than ASC itself, first written in 1993 as a protected
     mode replacement for Borlands BGI. (That's why the uncompressed image structure
     is exactly the same as in the BGI).
-    This is the most badly designed and ugly part of ASC, which should be completely rewritten,
-    to make use of high- and truecolor, hardware acceleration and to provide a nice, object
-    oriented C++ interface.
+
+   the code here is being replaced by the new graphics system found in the graphics subdirectory
 */
 
 /*
@@ -210,7 +209,7 @@ extern void*     xlatbuffer;
       is allocated and returned, so it must be freed later                          */
  extern void* uncompress_rlepict ( void* pict );
 
- /** A translation table ( to be used by #xlatpict ) is generated to translate any color of palette
+ /** A translation table ( to be used by xlatpict ) is generated to translate any color of palette
       pal to its gray value. The new pixels after the translation are still to be used with the 
       palette pal. offset and size specify a range of colors that are assumed to be a linear
       transition from white to black. So all colors are mapped to one of the colors of the
@@ -258,7 +257,7 @@ void flippict ( void* s, void* d, int dir = 1 );
 
 /** reduces a pictures size. The new picture will have half the size in x and y direction, 
      resulting in a quarting of the area. The new image will be written to a static buffer that
-     is overwritten the next time halfpict or #xlatpict is called. The address of the buffer is
+     is overwritten the next time halfpict or xlatpict is called. The address of the buffer is
      returned.                                                                 */
 void* halfpict ( void* vbuf );
 

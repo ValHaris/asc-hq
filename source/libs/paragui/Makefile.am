@@ -2,5 +2,5 @@ MAINTAINERCLEANFILES	= Makefile.in
 
 SUBDIRS 		= src
 
-htmldoc: doxygen.config
-	doxygen doxygen.config
+paraguidoc: paragui.doxy
+	doxygen paragui.doxy

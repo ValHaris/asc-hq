@@ -81,6 +81,7 @@ extern void  calculateallobjects( GameMap* m = actmap );
       \param y The y coordinate of the field
       \param mof Should the neighbouring fields be modified if necessary
       \param obj The objecttype that is to be aligned on this field
+      \param gamemap the map that the object is on
 */
 extern void  calculateobject(int  x,
                              int  y,
@@ -95,7 +96,7 @@ extern void  generatemap( TerrainType::Weather* bt,
 
 
 /*! tests if the vehicle can move onto the field
-
+   
    \param uheight the level of height for which the check should be done. Use -2 to use the current height of the unit
    \retval 0 unit cannot move there
    \retval 1 unit can pass over the field
@@ -125,6 +126,8 @@ extern int          getwindheightforunit   ( const Vehicle* eht, int uheight = -
 
 
 /** Checks if the unit can drive on the field
+    \param field the field that the unit is checked again
+    \param vehicle the unit who accessabilit to field is tested
     \param uheight if != -1, the unit is assumed to be on this height instead of the actual one.
     \returns 0=unit cannot access this field; 
              1=unit can move across this field but cannot keep standing there
@@ -133,6 +136,8 @@ extern int          getwindheightforunit   ( const Vehicle* eht, int uheight = -
 extern int          terrainaccessible (  const tfield* field, const Vehicle* vehicle, int uheight = -1 );
 
 /** Checks if the unit can drive on the field
+    \param field the field that the unit is checked again
+    \param vehicle the unit who accessabilit to field is tested
     \param uheight if != -1, the unit is assumed to be on this height instead of the actual one.
     \returns 0=unit cannot access this field;
              1=unit can move across this field but cannot keep standing there;

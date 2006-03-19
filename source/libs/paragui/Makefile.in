@@ -498,8 +498,8 @@ uninstall-info: uninstall-info-recursive
 	uninstall uninstall-am uninstall-info-am
 
 
-htmldoc: doxygen.config
-	doxygen doxygen.config
+paraguidoc: paragui.doxy
+	doxygen paragui.doxy
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

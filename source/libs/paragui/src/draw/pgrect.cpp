@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-03-19 19:56:01 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/draw/pgrect.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -129,7 +129,7 @@ PG_Rect& PG_Rect::operator =(const PG_Rect& src) {
 	return *this;
 }
 
-PG_Rect PG_Rect::operator / (PG_Rect& b) {
+PG_Rect PG_Rect::operator / ( const PG_Rect& b) const {
 	return IntersectRect(b);
 }
 

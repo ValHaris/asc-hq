@@ -2,7 +2,7 @@
     \brief Loading and storing images in PCX format, written in C
 
     There is also an optimized assembler version for the DOS version around
-    which is called #loadpcx.cpp , but not used any more.
+    which is called loadpcx.cpp , but not used any more.
 */
 
 /*

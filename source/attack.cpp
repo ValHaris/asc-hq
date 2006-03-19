@@ -829,10 +829,10 @@ pattackweap  attackpossible( const Vehicle*     angreifer, int x, int y)
 }
 
 
-bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, pattackweap atw, int uheight )
+bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, pattackweap atw, int targetheight )
 {
-   if ( uheight == -1 )
-      uheight = target->height;
+   if ( targetheight == -1 )
+      targetheight = target->height;
 
    const Vehicle* angreifer = attacker;
    const Vehicle* verteidiger = target;
@@ -852,7 +852,7 @@ bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, pattackwe
    if ( actmap->player[angreifer->getOwner()].diplomacy.isHostile( verteidiger->getOwner() )  )
       for ( int i = 0; i < angreifer->typ->weapons.count ; i++)
          for ( int h = 0; h < 8; h++ )
-            if ( uheight & (1<<h))
+            if ( targetheight & (1<<h))
                if (angreifer->typ->weapons.weapon[i].shootable() )
                   if (angreifer->typ->weapons.weapon[i].offensive() )
                      if ( (1<<h) & angreifer->typ->weapons.weapon[i].targ )

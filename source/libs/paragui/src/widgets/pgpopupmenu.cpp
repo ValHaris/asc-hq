@@ -20,9 +20,9 @@
    pipelka@teleweb.at
  
    Last Update:      $Author: mbickel $
-   Update Date:      $Date: 2006-02-15 21:30:16 $
+   Update Date:      $Date: 2006-03-19 19:56:01 $
    Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgpopupmenu.cpp,v $
-   CVS/RCS Revision: $Revision: 1.1.2.1 $
+   CVS/RCS Revision: $Revision: 1.1.2.2 $
    Status:           $State: Exp $
  */
 
@@ -183,9 +183,9 @@ bool PG_PopupMenu::MenuItem::renderSurface(SDL_Surface *canvas, SDL_Surface **te
 
 			PG_Widget::GetTextSize( tw, th, myRightCaption, myParent->GetFont());
 
-			PG_FontEngine::RenderText(canvas, blitRect, blitRect.x + myParent->maxItemWidth() - tw, blitRect.y+myParent->GetFontAscender(), myRightCaption, myParent->GetFont());
+			RenderText(canvas, blitRect, blitRect.x + myParent->maxItemWidth() - tw, blitRect.y+myParent->GetFontAscender(), myRightCaption, myParent->GetFont());
 		}
-		PG_FontEngine::RenderText(canvas, blitRect, blitRect.x, blitRect.y+myParent->GetFontAscender(), myCaption, myParent->GetFont());
+		RenderText(canvas, blitRect, blitRect.x, blitRect.y+myParent->GetFontAscender(), myCaption, myParent->GetFont());
 
 	}
 	//SDL_BlitSurface(*text, NULL, canvas, &blitRect);

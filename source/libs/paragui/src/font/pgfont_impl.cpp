@@ -4,7 +4,8 @@
 
 struct PG_FontDataInternal {
 	PG_Color color;
-	int alpha;
+   PG_Color highlightColor;
+   int alpha;
 	PG_Font::Style style;
 
 	int size;
@@ -28,7 +29,10 @@ PG_Font::PG_Font(const std::string& fontfile, int size, int index) {
 	my_internaldata->color.r = 255;
 	my_internaldata->color.g = 255;
 	my_internaldata->color.b = 255;
-	my_internaldata->alpha = 255;
+   my_internaldata->highlightColor.r = 180;
+   my_internaldata->highlightColor.g = 180;
+   my_internaldata->highlightColor.b = 180;
+   my_internaldata->alpha = 255;
 	my_internaldata->style = NORMAL;
 
 	my_internaldata->FaceCache = PG_FontEngine::LoadFontFace(fontfile, size, index);
@@ -38,8 +42,39 @@ PG_Font::PG_Font(const std::string& fontfile, int size, int index) {
 	}
 }
 
-PG_Font::~PG_Font() {
-	delete my_internaldata;
+void PG_Font :: copy( const PG_Font& font )
+{
+   // my_internaldata = font.my_internaldata;
+   // my_internaldata->referenceCount++;
+   my_internaldata = new PG_FontDataInternal;
+   *my_internaldata = *font.my_internaldata;
+}
+
+void PG_Font :: unlink()
+{
+   delete my_internaldata;
+   my_internaldata = NULL;
+}
+
+
+PG_Font :: PG_Font( const PG_Font& font )
+{
+   copy ( font );
+}
+   
+   
+
+PG_Font& PG_Font::operator= ( const PG_Font& font )
+{
+   unlink();
+   copy ( font );
+   return *this;
+}
+
+
+PG_Font::~PG_Font()
+{
+   unlink();
 }
 
 int PG_Font::GetFontAscender() {
@@ -61,8 +96,16 @@ void PG_Font::SetColor(const PG_Color& c) {
 	my_internaldata->color = c;
 }
 
+void PG_Font::SetHighlightColor(const PG_Color& c) {
+   my_internaldata->highlightColor = c;
+}
+
 PG_Color PG_Font::GetColor() {
-	return my_internaldata->color;
+   return my_internaldata->color;
+}
+
+PG_Color PG_Font::GetHighlightColor() {
+	return my_internaldata->highlightColor;
 }
 
 void PG_Font::SetAlpha(int a) {

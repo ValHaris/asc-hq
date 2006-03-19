@@ -20,9 +20,9 @@
    pipelka@teleweb.at
  
    Last Update:      $Author: mbickel $
-   Update Date:      $Date: 2006-02-15 21:30:16 $
+   Update Date:      $Date: 2006-03-19 19:56:01 $
    Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgwidget.cpp,v $
-   CVS/RCS Revision: $Revision: 1.1.2.1 $
+   CVS/RCS Revision: $Revision: 1.1.2.2 $
    Status:           $State: Exp $
  */
 
@@ -901,6 +901,11 @@ void PG_Widget::LoadThemeStyle(const std::string& widgettype, const std::string&
 	t->GetColor(widgettype, objectname, PG_PropStr::textcolor, c);
 	SetFontColor(c);
 
+   c = GetFontHighlightColor();
+   t->GetColor(widgettype, objectname, PG_PropStr::texthighlightcolor, c);
+   SetFontHighlightColor(c);
+
+   
 	t->GetColor(widgettype, objectname, PG_PropStr::bordercolor0, my_colorBorder[0][0]);
 	t->GetColor(widgettype, objectname, PG_PropStr::bordercolor1, my_colorBorder[1][0]);
 	t->GetColor(widgettype, objectname, PG_PropStr::bordercolor0i, my_colorBorder[0][1]);
@@ -1265,6 +1270,19 @@ void PG_Widget::SetFontColor(const PG_Color& Color, bool bRecursive) {
 	}
 }
 
+void PG_Widget::SetFontHighlightColor(const PG_Color& Color, bool bRecursive) {
+   _mid->font->SetHighlightColor(Color);
+
+   if(!bRecursive || (GetChildList() == NULL)) {
+      return;
+   }
+
+   for(PG_Widget* i = GetChildList()->first(); i != NULL; i = i->next()) {
+      i->SetFontHighlightColor(Color, true);
+   }
+}
+
+
 void PG_Widget::SetFontAlpha(int Alpha, bool bRecursive) {
 	_mid->font->SetAlpha(Alpha);
 
@@ -1397,11 +1415,62 @@ int PG_Widget::GetTextHeight() {
 	return _mid->font->GetFontAscender();
 }
 
+bool PG_Widget::RenderText(SDL_Surface *Surface, const PG_Rect& ClipRect, int BaseLineX, int BaseLineY, const PG_String& Text, PG_Font* ParamIn)
+{
+   PG_Char c = PG_Application::GetHighlightingTag();
+   if ( !c || Text.find( c) == PG_String::npos )
+      return PG_FontEngine::RenderText( Surface, ClipRect, BaseLineX, BaseLineY, Text, ParamIn );
+   else {
+
+      PG_Font param = *ParamIn;
+
+      bool highLight = false;
+      
+      int pos = 0;
+      PG_String::size_type rendered = 0;
+      PG_String::size_type length = Text.length();
+      if ( !length )
+         return true;
+      
+      do {
+         PG_String::size_type i = Text.find( c, rendered );
+         if ( i > rendered || i == PG_String::npos ) {
+            PG_String subtext;
+            if ( i == PG_String::npos ) {
+               subtext = Text.substr( rendered );
+               rendered = length;
+            } else {
+               subtext = Text.substr( rendered, i - rendered );
+               rendered = i + 1;
+            }
+
+            if ( highLight )
+               param.SetColor( ParamIn->GetHighlightColor() );
+            else
+               param.SetColor( ParamIn->GetColor() );
+
+            PG_FontEngine::RenderText( Surface, ClipRect, BaseLineX + pos, BaseLineY, subtext, &param );
+            
+            Uint16 width;
+            PG_FontEngine::GetTextSize( subtext, ParamIn, &width );
+            pos += width;
+               
+         } else
+            if ( i == rendered )
+               ++rendered; // we skip the tag character
+         highLight = !highLight;
+      } while ( rendered < length );
+   }
+   return true;
+      
+}
+
+
 void PG_Widget::DrawText(const PG_Rect& rect, const PG_String& text) {
 	if(my_srfObject == NULL) {
-		PG_FontEngine::RenderText(PG_Application::GetScreen(), _mid->rectClip, my_xpos+ rect.x, my_ypos + rect.y + GetFontAscender(), text, _mid->font);
+		RenderText(PG_Application::GetScreen(), _mid->rectClip, my_xpos+ rect.x, my_ypos + rect.y + GetFontAscender(), text, _mid->font);
 	} else {
-		PG_FontEngine::RenderText(my_srfObject, PG_Rect(0,0,Width(),Height()), rect.x, rect.y + GetFontAscender(), text, _mid->font);
+		RenderText(my_srfObject, PG_Rect(0,0,Width(),Height()), rect.x, rect.y + GetFontAscender(), text, _mid->font);
 	}
 }
 
@@ -1766,6 +1835,11 @@ int PG_Widget::GetFontHeight() {
 PG_Color PG_Widget::GetFontColor() {
 	return _mid->font->GetColor();
 }
+
+PG_Color PG_Widget::GetFontHighlightColor() {
+   return _mid->font->GetHighlightColor();
+}
+
 
 PG_Font* PG_Widget::GetFont() {
 	return _mid->font;

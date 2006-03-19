@@ -36,7 +36,7 @@
 
 
 
-   //! some old system for keeping track which unit action is currently running. As units actions are moved to #unitctrl.cpp , this structure is beeing replaced by #pendingVehicleActions
+   //! some old system for keeping track which unit action is currently running. As units actions are moved to unitctrl.cpp , this structure is beeing replaced by #pendingVehicleActions
    struct tmoveparams { 
                         unsigned char         movestatus;       /*  Folgende Modi sind definiert : 
                                                                              0:  garnichts, standard

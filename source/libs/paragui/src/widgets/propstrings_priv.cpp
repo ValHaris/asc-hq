@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-03-19 19:56:01 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/propstrings_priv.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -55,6 +55,7 @@ const std::string PG_PropStr::background = "background";
 const std::string PG_PropStr::blend = "blend";
 const std::string PG_PropStr::bordersize = "bordersize";
 const std::string PG_PropStr::textcolor = "textcolor";
+const std::string PG_PropStr::texthighlightcolor = "texthighlightcolor";
 
 const std::string PG_PropStr::bordercolor0 = "bordercolor0";
 const std::string PG_PropStr::bordercolor1 = "bordercolor1";

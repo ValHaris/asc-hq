@@ -255,6 +255,9 @@ class tunitattacksobject : public UnitAttacksSomething
       };
 
       /*! Calculates the fight if one unit attacks the objects at coordinate x/y.
+          \param attackingunit the attacking unit
+          \param obj_x the X coordinate of the object on the map
+          \param obj_y the Y coordinate of the object on the map
           \param weapon  The number of the weapon which the attacking unit attacks with. If it is -1, the best weapon is chosen.
       */
       tunitattacksobject ( Vehicle* attackingunit, int obj_x, int obj_y, int weapon = -1 );
@@ -297,10 +300,13 @@ extern pattackweap attackpossible( const Vehicle* attacker, int x, int y);
      because the current distance of units A and B is not relevant for the check whether unit
      A can move across the field where B is standing.
  
+     \param attacker the attacking unit
+     \param target   the unit that is being attacked
      \param attackweap if != NULL, detailed information about the weapons which can perform
                           the attack are written to attackweap
-*/
-extern bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, pattackweap attackweap = NULL, int uheight = -1);      // distance is not evaluated
+     \param targetHeight if != -1 , assume the target unit was on this height (bitmapped!)
+ */
+extern bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, pattackweap attackweap = NULL, int targetheight = -1);      // distance is not evaluated
 
 
 /*! \brief Is attacker able to attack target ? Distance is assumed one field.
@@ -309,14 +315,19 @@ extern bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, pa
      example, because units moving next to enemies get a movement malus.
      Does not evaluate any diplomatic states
  
+     \param attacker the attacking unit
+     \param target   the unit that is being attacked
      \param attackweap if != NULL, detailed information about the weapons which can perform
                           the attack are written to attackweap
+     \param targetHeight if != -1 , assume the target unit was on this height (bitmapped!)
 */
 extern bool attackpossible28( const Vehicle* attacker, const Vehicle* target, pattackweap attackweap = NULL, int targetHeight = -1);       // distance is fixed as 1 field
 
 
 /*! \brief Is attacker able to attack target ? Actual distance used.
  
+     \param attacker the attacking unit
+     \param target   the unit that is being attacked
      \param attackweap if != NULL, detailed information about the weapons which can perform
                           the attack are written to attackweap
 */

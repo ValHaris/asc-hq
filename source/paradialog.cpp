@@ -185,6 +185,8 @@ ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )  : fullScreen(false), bi
    signal ( SIGINT, &signalQuit );
    
    PG_LineEdit::SetBlinkingTime( 500 );
+
+   SetHighlightingTag( '~' );
    
 }
 

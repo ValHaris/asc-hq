@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-03-19 19:56:01 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgapplication.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -573,6 +573,10 @@ class SignalAppIdle : public PG_Signal1<PG_MessageObject*, datatype> {}
 	*/
 	static bool GetUpdateOverlappingSiblings();
 
+   static void SetHighlightingTag( PG_Char c );
+   
+   static PG_Char GetHighlightingTag();
+   
 	SignalXMLTag<> sigXMLTag;
 	SignalAppIdle<> sigAppIdle;
 
@@ -637,6 +641,8 @@ private:
 	static SDL_mutex* mutexScreen;
 	static bool disableDirtyUpdates;
 	static bool defaultUpdateOverlappingSiblings;
+
+   static PG_Char highlightingTag;
 };
 
 /**

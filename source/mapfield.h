@@ -34,10 +34,10 @@ class  tfield {
 
     void setMap ( GameMap* gamemap_ ) { gamemap = gamemap_; };
 
-    //! the terraintype (#pwterraintype) of the field
+    //! the terraintype of the field
     TerrainType::Weather* typ;
 
-    //! mineral resources on this field (should be changed to #ResourcesType sometime...)
+    //! mineral resources on this field (should be changed to #Resources sometime...)
     char         fuel, material;
 
     //! can this field be seen be the player. Variable is bitmapped; two bits for each player. These two bits can have the states defined in ::VisibilityStates
