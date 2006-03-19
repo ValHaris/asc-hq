@@ -39,7 +39,7 @@ ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, GameMap* map, int
    maxplus = baseType->maxplus;
 }
 
-SigC::Signal0<void> ContainerBase :: anyContainerDestroyed;
+SigC::Signal1<void,ContainerBase*> ContainerBase :: anyContainerDestroyed;
 
 
 Resources ContainerBase :: putResource ( const Resources& res, bool queryonly, int scope  )
@@ -507,7 +507,7 @@ ContainerBase :: ~ContainerBase ( )
 
    if ( !gamemap->__mapDestruction ) {
       destroyed();
-      anyContainerDestroyed();
+      anyContainerDestroyed( this );
    }
 }
 

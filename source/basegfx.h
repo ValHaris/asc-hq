@@ -176,10 +176,12 @@ extern void*     xlatbuffer;
       The rectangle x1/y1 - x2/y2 may be larger than texture.                   */
  extern void putimageprt ( int x1, int y1, int x2, int y2, void *texture, int dx, int dy );
 
+#if 0
  /** Performs a color translation of the image pntr. The image is not modified. The new image
       is written to a static buffer. The address of the buffer is returned. The call to xlatpict
       will overwrite the buffer. The conversion itself will replace color by xl[color]    */
  extern void* xlatpict ( ppixelxlattable xl, void* pntr );
+#endif
 
  //! returns the position of the lowest bit of a which is set. This equals an inter logarithm to the base of 2
  extern int loga2 ( int a );
@@ -215,11 +217,12 @@ extern void*     xlatbuffer;
       offset-size range. */
  extern void  generategrayxlattable( ppixelxlattable tab, char offset, char size, dacpalette256* pal );
 
+#if 0
  /** puts a shadow of an image on the screen. This is done by replacing all pixels on the screen
       by xl[pixel] if the pixel of the image ptr is non-transparent. The actual color of the image
       does not matter. */
  extern void putshadow ( int x1, int y1, void* ptr, ppixelxlattable xl  );
-
+#endif
 
 
 /** paints a pseudo-3D rectangle on the screen. invers specifies wheather the rectangle

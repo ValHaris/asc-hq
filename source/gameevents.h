@@ -305,7 +305,9 @@ class EventTriggered : public EventTrigger, public SigC::Object {
 };
 
 class AllEnemyUnitsDestroyed : public EventTrigger, public SigC::Object {
-    protected:
+   private:
+      void triggered( ContainerBase* c );
+   protected:
       virtual State getState( int player );
     public:
       AllEnemyUnitsDestroyed() : EventTrigger ( Trigger_AllEnemyUnitsDestroyed ) {};
@@ -316,11 +318,12 @@ class AllEnemyUnitsDestroyed : public EventTrigger, public SigC::Object {
       ASCString getName() const;
       void setup() {};
       void arm();
-      void triggered();
 };
 
 class AllEnemyBuildingsDestroyed : public EventTrigger, public SigC::Object {
-    protected:
+   private:
+      void triggered( ContainerBase* c );
+   protected:
       virtual State getState( int player );
     public:
       AllEnemyBuildingsDestroyed() : EventTrigger ( Trigger_AllEnemyBuildingsDestroyed ) {};
@@ -330,7 +333,6 @@ class AllEnemyBuildingsDestroyed : public EventTrigger, public SigC::Object {
       ASCString getName() const;
       void setup() {};
       void arm();
-      void triggered();
 };
 
 class SpecificUnitEntersPolygon : public EventTrigger, public FieldAddressing, public SigC::Object {

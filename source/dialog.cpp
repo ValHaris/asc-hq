@@ -2511,9 +2511,9 @@ void tparagraph :: checkcursor( void )
 }
 
 
+
 void tparagraph :: addchar ( char c )
 {
-   assert ( c >= 0 );
    checkcursor();
    if ( size + 1 > allocated )
       changesize ( size + 1 );
@@ -2650,10 +2650,10 @@ int  tparagraph :: reflow( int all  )
 
    do {
 
-     if ( font->character[text[pos]].size ) {
-        length += font->character[text[pos]].width + 2 ;
+     if ( font->character[int(text[pos])].size ) {
+        length += font->character[int(text[pos])].width + 2 ;
         if ( pos )
-           length += font->kerning[text[pos]][text[pos-1]];
+           length += font->kerning[int(text[pos])][text[pos-1]];
      }
 
      if ( length > activefontsettings.length ) {
@@ -2710,10 +2710,10 @@ int  tparagraph :: reflow( int all  )
             }
         }
 
-        if ( font->character[text[pos]].size ) {
-             length += font->character[text[pos]].width + 2 ;
+        if ( font->character[int(text[pos])].size ) {
+             length += font->character[int(text[pos])].width + 2 ;
              if ( pos )
-                length += font->kerning[text[pos]][text[pos-1]];
+                length += font->kerning[int(text[pos])][text[pos-1]];
         }
 
      }

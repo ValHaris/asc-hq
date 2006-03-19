@@ -1646,13 +1646,12 @@ int    compressrle ( const void* p, void* q)
 
    {
       int bts[256];
-      int i;
       memset ( bts, 0, sizeof ( bts ));
-      for (i = 0; i < size ;i++ ) 
-        bts[s[i+4]]++;
+      for ( int i = 0; i < size ;i++ )
+         bts[int(s[i+4])]++;
 
       int min = 70000;
-      for ( i = 0; i < 256; i++ )
+      for ( int i = 0; i < 256; i++ )
          if ( bts[i] < min ) {
             min = bts[i];
             header->rle = i;

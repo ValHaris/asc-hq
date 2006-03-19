@@ -655,7 +655,6 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
             case SDLK_F11:
                if ( mod & KMOD_SHIFT ) {
                   if (choice_dlg("Do you really want to crash ASC ?","~y~es","~n~o") == 1) {
-                     memcpy(NULL, (void*) 0x1000000, 0x1000000 );
                      char* c = NULL;
                      *c = 1;
                   }

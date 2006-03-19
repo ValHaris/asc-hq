@@ -28,6 +28,7 @@
 #include "paradialog.h"
 #include "windowing.h"
 
+class ContainerBase;
 class Vehicletype;
 class Vehicle;
 class Building;
@@ -36,6 +37,8 @@ class MapDisplay;
 class GameMap;
 
 class DashboardPanel : public LayoutablePanel {
+   private:
+      void containerDeleted( ContainerBase* c );
    protected:
        Vehicle* veh;
        Building* bld;

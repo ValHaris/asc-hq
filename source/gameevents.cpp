@@ -553,7 +553,7 @@ void AllEnemyUnitsDestroyed::arm()
    ContainerBase::anyContainerDestroyed.connect( SigC::slot( *this, &AllEnemyUnitsDestroyed::triggered));
 }
 
-void AllEnemyUnitsDestroyed::triggered()
+void AllEnemyUnitsDestroyed::triggered( ContainerBase* c )
 {
    if ( isFulfilled() )
       eventReady();
@@ -581,7 +581,7 @@ void AllEnemyBuildingsDestroyed::arm()
    ContainerBase::anyContainerDestroyed.connect( SigC::slot( *this, &AllEnemyBuildingsDestroyed::triggered));
 }
 
-void AllEnemyBuildingsDestroyed::triggered()
+void AllEnemyBuildingsDestroyed::triggered( ContainerBase* c )
 {
    if ( isFulfilled() )
       eventReady();

@@ -53,6 +53,8 @@ DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCS
    registerSpecialDisplay( "showplayercolor1" );
    registerSpecialDisplay( "field_weather" );
 
+   ContainerBase::anyContainerDestroyed.connect( SigC::slot( *this, &DashboardPanel::containerDeleted ));
+   
    GameMap::sigMapDeletion.connect( SigC::slot( *this, &DashboardPanel::reset ));
 
    PG_LineEdit* l = dynamic_cast<PG_LineEdit*>( parent->FindChild( "unitname", true ) );
@@ -60,6 +62,15 @@ DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCS
       l->sigEditEnd.connect( SigC::slot( *this, &DashboardPanel::containerRenamed ));
    }
 };
+
+void DashboardPanel::containerDeleted( ContainerBase* c )
+{
+   if ( c == veh )
+      veh = NULL;
+   
+   if ( c == bld )
+      bld = NULL;
+}
 
 
 bool DashboardPanel::containerRenamed( PG_LineEdit* lineEdit )

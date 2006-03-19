@@ -423,7 +423,7 @@ void* halfpict ( void* vbuf )
    return xlatbuffer;
 } 
 
-
+#if 0
 void putshadow ( int x1, int y1, void* ptr, ppixelxlattable xl )
 {
    Uint16* w = (Uint16*) ptr;
@@ -445,7 +445,7 @@ void putshadow ( int x1, int y1, void* ptr, ppixelxlattable xl )
    }
 
 }
-
+#endif
 void putpicturemix ( int x1, int y1, void* ptr, int rotation, char* mixbuf )
 {
    Uint16* w = (Uint16*) ptr;
@@ -1893,7 +1893,7 @@ void copybuf2displaymemory(int size, void *buf)
    memcpy ( (void*) agmp->linearaddress, buf, size );
 }
 
-
+#if 0
 void* xlatpict ( ppixelxlattable xl, void* vbuf )
 {
 
@@ -1953,6 +1953,7 @@ void* xlatpict ( ppixelxlattable xl, void* vbuf )
    }
    return xlatbuffer;
 }
+#endif
 
 int loga2 ( int a )
 {
