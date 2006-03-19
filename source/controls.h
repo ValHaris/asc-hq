@@ -144,6 +144,6 @@ extern void researchCheck( Player& player );
     
 extern int findNextPlayer( GameMap* actmap );
 
-    
+
 
 #endif

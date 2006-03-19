@@ -1686,23 +1686,26 @@ void MapDisplayPG::LockDisplay::raiseLock()
 }
 
 
-MapDisplayPG::LockDisplay::LockDisplay() 
+MapDisplayPG::LockDisplay::LockDisplay( bool dummy ) : isDummy( dummy )
 {
-   raiseLock();      
+   if ( !dummy )
+      raiseLock();      
 }
 
 MapDisplayPG::LockDisplay::~LockDisplay()
 {
-   if ( theMapDisplay ) {
-      --theMapDisplay->lock;
-      if ( !theMapDisplay->lock  ) {
-         theMapDisplay->dirty = Map;
-         theMapDisplay->Update();
-
+   if ( !isDummy ) {
+      if ( theMapDisplay ) {
+         --theMapDisplay->lock;
+         if ( !theMapDisplay->lock  ) {
+            theMapDisplay->dirty = Map;
+            theMapDisplay->Update();
+   
+         }
       }
+      if ( !theMapDisplay->lock )
+         unlockMapdisplay();
    }
-   if ( !theMapDisplay->lock )
-      unlockMapdisplay();
 }
 
 

@@ -184,18 +184,29 @@ void positionCursor( Player& player )
    
 }
 
+void viewcomp( Player& player )
+{
+   computeview( player.getParentMap() );
+}
+
 void hookGuiToMap( GameMap* map )
 {
    if ( !map->getGuiHooked() ) {
+
+      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &viewcomp ) );
+      map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( repaintMap.slot() ));
+      
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &positionCursor ));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &viewunreadmessages ));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &researchCheck ));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkJournal ));
       map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( SigC::slot( &checkforreplay )));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkUsedASCVersions ));
-
+      map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( updateFieldInfo.slot() ));
+      
       map->sigPlayerUserInteractionEnds.connect( SigC::slot( viewOwnReplay));
-            
+
+      
       map->guiHooked();
    }
 }
@@ -1115,7 +1126,7 @@ void deployMapPlayingHooks ( GameMap* map )
 
 int main(int argc, char *argv[] )
 {
-   // setenv( "DISPLAY", "192.168.0.61:0", 1 );
+   setenv( "DISPLAY", "192.168.0.61:0", 1 );
 
    assert ( sizeof(PointerSizedInt) == sizeof(int*));
 

@@ -48,6 +48,8 @@ extern void execUserAction_ev( tuseractions action );
 //! switches the event handling between paragui and legacy depending on function called
 extern void execUserAction_ev( tuseractions action );
 
+class GameMap;
+extern void hookGuiToMap( GameMap* map );
 
 extern void loadGame();
 

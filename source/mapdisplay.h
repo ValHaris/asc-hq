@@ -339,9 +339,10 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
 
       class LockDisplay {
          private:
+            bool isDummy;
             void raiseLock();
          public:
-            LockDisplay();
+            LockDisplay( bool dummy = false );
             ~LockDisplay();
       };
 

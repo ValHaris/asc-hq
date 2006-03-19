@@ -617,7 +617,7 @@ int  Building :: getResource ( int      need,    int resourcetype ) const
 }
 
 
-bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool allowCancel = true )
+bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool allowCancel = true, bool lockView = true )
 {
    for ( int p = 0; p < 8; p++ )
       actmap->player[p].existanceAtBeginOfTurn = actmap->player[p].exist() && actmap->player[p].stat != Player::off;
@@ -629,7 +629,7 @@ bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool all
             humannum++;
 
    if ( humannum > 1  ||  forcepasswordchecking > 0 ) {
-      tlockdispspfld ldsf;
+      MapDisplayPG::LockDisplay ld ( !lockView );
 
       bool firstRound = actmap->time.turn() == 1;
       bool specifyPassword = firstRound && actmap->player[actmap->actplayer].passwordcrc.empty();
@@ -657,10 +657,6 @@ bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool all
 
    actmap->playerView = actmap->actplayer;
 
-   computeview( actmap );
-   actmap->beginTurn(); 
-
-   updateFieldInfo();
    return true;
    
 }
@@ -733,6 +729,7 @@ int findNextPlayer( GameMap* actmap )
    return p;
 }
 
+
 void next_turn ( int playerView )
 {
    int lastPlayer = actmap->actplayer;
@@ -776,10 +773,13 @@ void next_turn ( int playerView )
    bool closeLoop = false;
         
    do {
+
+      
+      int currentPlayer= actmap->actplayer;
       
       int nextPlayer = findNextPlayer( actmap );
       
-      if ( nextPlayer <= lastPlayer ) {
+      if ( nextPlayer <= currentPlayer ) {
          actmap->endRound();
          ++loop;
       }   
@@ -817,15 +817,15 @@ void next_turn ( int playerView )
    } while ( !closeLoop ); /* enddo */
 
    actmap->playerView = -1;
-   {
-      MapDisplayPG::LockDisplay ld;
-      repaintMap();
-      authenticateUser( actmap, 0, false );
-      actmap->overviewMapHolder.clear();
-   }
+   actmap->overviewMapHolder.clear();
+   
+   authenticateUser( actmap, 0, false );
+   
+   actmap->beginTurn();
    actmap->playerView  = actmap->actplayer;
    actmap->sigPlayerUserInteractionBegins( actmap->player[actmap->actplayer] );
 }
+
 
 void checkUsedASCVersions ( Player& currentPlayer )
 {
@@ -860,10 +860,17 @@ void continuenetworkgame ()
    if ( !newMap.get() )
       return;
    
-   if ( authenticateUser( newMap.get() )) {
+   if ( authenticateUser( newMap.get() , 0, true, false )) {
       delete actmap;
       actmap = newMap.release();
+
+      actmap->beginTurn();
+      actmap->playerView  = actmap->actplayer;
+      actmap->sigPlayerUserInteractionBegins( actmap->player[actmap->actplayer] );
+      
    }
+
+
 }
 
 

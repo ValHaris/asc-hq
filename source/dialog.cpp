@@ -2653,7 +2653,7 @@ int  tparagraph :: reflow( int all  )
      if ( font->character[int(text[pos])].size ) {
         length += font->character[int(text[pos])].width + 2 ;
         if ( pos )
-           length += font->kerning[int(text[pos])][text[pos-1]];
+           length += font->kerning[int(text[pos])][int(text[pos-1])];
      }
 
      if ( length > activefontsettings.length ) {
@@ -2713,7 +2713,7 @@ int  tparagraph :: reflow( int all  )
         if ( font->character[int(text[pos])].size ) {
              length += font->character[int(text[pos])].width + 2 ;
              if ( pos )
-                length += font->kerning[int(text[pos])][text[pos-1]];
+                length += font->kerning[int(text[pos])][int(text[pos-1])];
         }
 
      }
