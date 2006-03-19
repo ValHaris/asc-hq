@@ -2,9 +2,12 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.68 2006-01-14 23:01:46 mbickel Exp $
+//     $Id: edmain.cpp,v 1.69 2006-03-19 07:55:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.68  2006/01/14 23:01:46  mbickel
+//      Added MDumps for Windows Mapeditor
+//
 //     Revision 1.67  2004/05/16 11:28:00  mbickel
 //      Speed up of startup loading by using a cache file
 //
@@ -991,9 +994,9 @@ int main(int argc, char *argv[] )
    atexit ( closesvgamode );
 
    #ifdef pbpeditor
-   setWindowCaption ( "Advanced Strategic Command : PBP Editor ");
+   setWindowCaption ( "PBP Editor - Advanced Strategic Command");
    #else
-   setWindowCaption ( "Advanced Strategic Command : Map Editor ");
+   setWindowCaption ( "Map Editor - Advanced Strategic Command");
    #endif
 
    schriften.smallarial = load_font("smalaril.fnt");

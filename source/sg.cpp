@@ -1480,6 +1480,8 @@ void execuseraction ( tuseractions action )
       case ua_newcampaign:
          cursor.hide();
          newcampaign();
+         if ( !actmap )
+            throw NoMapLoaded();
          computeview( actmap );
          displaymap();
          cursor.show();

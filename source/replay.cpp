@@ -315,7 +315,7 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( y2 );
          stream->writeInt ( nwid );
       }
-      if ( action == rpl_move2 || action == rpl_move3 || action == rpl_move4 ) {
+      if ( action == rpl_move2 || action == rpl_move3 || action == rpl_move4 || action==rpl_move5) {
          int x1 =  va_arg ( paramlist, int );
          int y1 =  va_arg ( paramlist, int );
          int x2 =  va_arg ( paramlist, int );
@@ -324,22 +324,30 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          int height = va_arg ( paramlist, int );
 
          stream->writeChar ( action );
-         if ( action == rpl_move2 ) {
-            int size = 6;
-            stream->writeInt ( size );
-         } else {
-            int size = 7;
-            stream->writeInt ( size );
-         }
+         if ( action == rpl_move5 ) {
+            int size = 8;
+            stream->writeInt( size );
+         } else 
+            if ( action == rpl_move2 ) {
+               int size = 6;
+               stream->writeInt ( size );
+            } else {
+               int size = 7;
+               stream->writeInt ( size );
+            }
          stream->writeInt ( x1 );
          stream->writeInt ( y1 );
          stream->writeInt ( x2 );
          stream->writeInt ( y2 );
          stream->writeInt ( nwid );
          stream->writeInt ( height );
-         if ( action == rpl_move3 || action == rpl_move4 ) {
+         if ( action == rpl_move3 || action == rpl_move4 || action==rpl_move5) {
             int nointerrupt = va_arg ( paramlist, int );
             stream->writeInt ( nointerrupt );
+            if ( action==rpl_move5 ) {
+               int destDamage = va_arg( paramlist, int );
+               stream->writeInt( destDamage );
+            }
          }
       }
 
@@ -947,6 +955,7 @@ void trunreplay :: execnextreplaymove ( void )
                            error("severe replay inconsistency:\nno vehicle for move1 command !");
                      }
          break;
+      case rpl_move5:
       case rpl_move4:
       case rpl_move3:
       case rpl_move2: {
@@ -958,10 +967,16 @@ void trunreplay :: execnextreplaymove ( void )
                         int nwid = stream->readInt();
                         int height = stream->readInt();
                         int noInterrupt;
-                        if ( nextaction == rpl_move3 || nextaction == rpl_move4 )
+                        if ( nextaction == rpl_move3 || nextaction == rpl_move4 || nextaction == rpl_move5 )
                            noInterrupt = stream->readInt();
                         else
                            noInterrupt = -1;
+
+                        int destDamage;
+                        if ( nextaction == rpl_move5 )
+                           destDamage = stream->readInt();
+                        else
+                           destDamage = -1;
 
                         readnextaction();
 
@@ -977,6 +992,18 @@ void trunreplay :: execnextreplaymove ( void )
 
                            if ( vm.getStatus() != 1000 )
                               eht = NULL;
+
+                           if ( destDamage >= 0 ) {
+                              int realDamage;
+                              Vehicle* veh = actmap->getUnit( nwid );
+                              if ( veh )
+                                 realDamage = veh->damage;
+                              else
+                                 realDamage = 100;
+
+                              if ( destDamage != realDamage )
+                                 error( "severe replay inconsistency:\ndamage after movement differs: recorded=%d, actual=%d", destDamage, realDamage );
+                           }
                         }
 
                         if ( !eht )
