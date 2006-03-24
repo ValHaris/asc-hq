@@ -2,9 +2,12 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.69 2006-03-19 07:55:49 mbickel Exp $
+//     $Id: edmain.cpp,v 1.70 2006-03-24 19:07:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.69  2006/03/19 07:55:49  mbickel
+//      RF now correctly recorded in Replay
+//
 //     Revision 1.68  2006/01/14 23:01:46  mbickel
 //      Added MDumps for Windows Mapeditor
 //
@@ -912,6 +915,8 @@ int mapeditorMainThread ( void* _mapname )
 
 int main(int argc, char *argv[] )
 { 
+   putenv("SDL_VIDEO_CENTERED=1") ;
+
    Cmdline* cl = NULL;
    auto_ptr<Cmdline> apcl ( cl );
    try {
