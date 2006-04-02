@@ -873,7 +873,7 @@ void tvehicleinfo::showgeneralinfos ( void )
    showtext2("energy:", column1x + 10, productioncosty + 110);
    showtext2("fuel:", column1x + 10, productioncosty + 130);
    showtext2("units (mass):", column1x + 10, productioncosty + 150);
-   showtext2("units (height):", column1x + 10, productioncosty + 170);
+   showtext2("units (size):", column1x + 10, productioncosty + 170);
 
    showtext2("movement ", column1x,  productioncosty + 200);
    showtext2("height:", column1x + 10,  productioncosty + 220 );
@@ -966,6 +966,10 @@ void  tvehicleinfo::showgeneralinfovariables( void )
    showtext2( strrr(aktvehicle->tank.material), column1x + 100, productioncosty + 90);
    showtext2( strrr(aktvehicle->tank.energy), column1x + 100, productioncosty + 110);
    showtext2( strrr(aktvehicle->tank.fuel), column1x + 100, productioncosty + 130);
+
+   showtext2( strrr(aktvehicle->maxLoadableWeight), column1x + 100, productioncosty + 150);
+   showtext2( strrr(aktvehicle->maxLoadableUnitSize), column1x + 100, productioncosty + 170);
+
    // ####TRANS showtext2( strrr(aktvehicle->loadcapacity), column1x + 100, productioncosty + 150);
    showtext2( strrr(aktvehicle->fuelConsumption), column1x + 100,  productioncosty + 260 );
    // showtext2( strrr(aktvehicle->steigung), column1x + 100, productioncosty + 280 );
@@ -989,9 +993,9 @@ void  tvehicleinfo::showgeneralinfovariables( void )
    activefontsettings.length = 70;
 
    if (aktvehicle->height >= chfahrend)
-      showtext2("weight :",column2x + 10, productioncosty + 110);
+      showtext2("weight:",column2x + 10, productioncosty + 110);
    else
-      showtext2("draught :",column2x + 10, productioncosty + 110);
+      showtext2("draught:",column2x + 10, productioncosty + 110);
 
    npop ( activefontsettings );
    return;
