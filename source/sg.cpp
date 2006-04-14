@@ -58,7 +58,7 @@
 
    \section The basic design of ASC
    
-   <p><img src="../ClassDiagram1.png">
+   <p><img src="ClassDiagram1.png">
  
 */
 
@@ -643,9 +643,6 @@ void execuseraction ( tuseractions action )
             */
             displaymessage("Not implemented yet",3 );
          break;
-      case ua_selectgraphicset:
-         selectgraphicset();
-         break;
       case ua_UnitSetInfo:
          viewUnitSetinfo();
          break;
@@ -883,6 +880,9 @@ void execuseraction2 ( tuseractions action )
             viewChanged();
             repaintMap();
          }
+         break;
+      case ua_selectgraphicset:
+         selectgraphicset();
          break;
          
       default:
@@ -1126,7 +1126,7 @@ void deployMapPlayingHooks ( GameMap* map )
 
 int main(int argc, char *argv[] )
 {
-   setenv( "DISPLAY", "192.168.0.61:0", 1 );
+   // setenv( "DISPLAY", "192.168.0.61:0", 1 );
 
    assert ( sizeof(PointerSizedInt) == sizeof(int*));
 

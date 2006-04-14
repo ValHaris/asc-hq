@@ -362,6 +362,59 @@ bool ASC_PG_App::toogleFullscreen()
    return true;
 }
 
+#if 0
+
+#include "SDL_syswm.h"
+
+static void SDL_center_window(SDL_Surface *screen)
+{
+   SDL_SysWMinfo info;
+   SDL_VERSION(&info.version);
+	
+   if ( SDL_GetWMInfo(&info) > 0 ) {
+      int x, y;
+      int w, h;
+		
+#ifdef unix
+		
+      if ( info.subsystem == SDL_SYSWM_X11 ) {
+         info.info.x11.lock_func();
+         w = DisplayWidth(info.info.x11.display,
+                     DefaultScreen(info.info.x11.display));
+         h = DisplayHeight(info.info.x11.display,
+                     DefaultScreen(info.info.x11.display));
+         x = (w - screen->w)/2;
+         y = (h - screen->h)/2;
+         XMoveWindow(info.info.x11.display, info.info.x11.wmwindow, x,
+y);
+         info.info.x11.unlock_func();
+      }
+		
+#elif defined(WIN32)
+		
+      RECT windowRect, desktopRect;
+		
+      HWND desktop = GetDesktopWindow();
+      ::GetWindowRect(desktop, &desktopRect);
+      ::GetWindowRect(info.window, &windowRect);
+		
+      int desktopWidth = desktopRect.right - desktopRect.left;
+      int desktopHeight = desktopRect.bottom - desktopRect.top;
+      w = windowRect.right - windowRect.left;
+      h = windowRect.bottom - windowRect.top;
+      x = (desktopWidth - w) / 2;
+      y = (desktopHeight - h) / 2;
+		
+      ::MoveWindow(info.window, x, y, w, h, true);
+#else
+		
+#warning Need to implement these functions for other systems
+		
+#endif
+    }
+}
+
+#endif
 
 bool ASC_PG_App:: InitScreen ( int w, int h, int depth, Uint32 flags )
 {

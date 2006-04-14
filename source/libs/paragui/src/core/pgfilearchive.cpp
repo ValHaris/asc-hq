@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-18 13:27:54 $
+    Update Date:      $Date: 2006-04-14 15:38:23 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/core/pgfilearchive.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.3 $
+    CVS/RCS Revision: $Revision: 1.1.2.4 $
     Status:           $State: Exp $
 */
 
@@ -32,7 +32,7 @@
 #include "pglog.h"
 #include "pgfont.h"
 
-#include "SDL_loadso.h"
+///#include "SDL_loadso.h"
 #include "physfsrwops.h"
 #include <iostream>
 #include "paragui.h"

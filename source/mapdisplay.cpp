@@ -907,7 +907,7 @@ bool MapDisplayPG::eventMouseButtonUp (const SDL_MouseButtonEvent *button)
 
 bool MapDisplayPG::fieldInView(const MapCoordinate& mc )
 {
-   if ( mc.x < offset.x || mc.y < offset.y || mc.x > offset.x + field.numx || mc.y > offset.y +  field.numy )
+   if ( mc.x < offset.x || mc.y < offset.y || mc.x >= offset.x + field.numx || mc.y >= offset.y +  field.numy )
       return false;
    else
       return true;
@@ -1170,13 +1170,21 @@ void MapDisplayPG::displayUnitMovement( GameMap* actmap, Vehicle* veh, const Map
    TouchedFields touchedFields;
 
    touchedFields.push_back ( from );
-   for ( int ii = 0; ii < sidenum; ++ii ) 
-      touchedFields.push_back ( getNeighbouringFieldCoordinate(from, ii) );
+   for ( int ii = 0; ii < sidenum; ++ii ) {
+      MapCoordinate p = getNeighbouringFieldCoordinate(from, ii);
+      if ( fieldInView( p ) )
+         touchedFields.push_back ( p );
+   }
       
    if ( dir != -1 ) {
-      touchedFields.push_back ( to);
-      for ( int ii = 0; ii < sidenum; ++ii ) 
-         touchedFields.push_back ( getNeighbouringFieldCoordinate(to, ii) );
+      if ( fieldInView( to ))
+         touchedFields.push_back ( to);
+
+      for ( int ii = 0; ii < sidenum; ++ii ) {
+         MapCoordinate p = getNeighbouringFieldCoordinate(to, ii);
+         if ( fieldInView( p ) )
+            touchedFields.push_back ( p );
+      }
    }
    
 

@@ -68,16 +68,9 @@ StatusMessageWindowHolder MessagingHubBase::infoMessageWindow( const ASCString& 
    return StatusMessageWindowHolder( messageWindowFactory( msg )); 
 }
 
- 
-void MessagingHubBase::message( MessageType type, const ASCString& msg, ... )
-{
-   va_list arglist;
-   va_start ( arglist, msg );
 
-   ASCString message;
-   message.vaformat( msg.c_str(), arglist );
-   
-     
+void MessagingHubBase::message( MessageType type, const ASCString& message )
+{
    switch ( type ) {
       case FatalError: fatalError( message ); 
                        exitHandler();
@@ -88,6 +81,20 @@ void MessagingHubBase::message( MessageType type, const ASCString& msg, ... )
       case StatusInfo: statusInformation( message ); break;
       case LogMessage: logMessage( message, 0 ); break;
    };   
+
+}
+
+
+ 
+void MessagingHubBase::message( MessageType type, const char* msg, ... )
+{
+   va_list arglist;
+   va_start ( arglist, msg );
+
+   ASCString my_message;
+   my_message.vaformat( msg, arglist );
+   
+   message( type, my_message );  
    
    va_end ( arglist );
 }

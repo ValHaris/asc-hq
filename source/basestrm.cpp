@@ -1779,9 +1779,9 @@ tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition, SearchTy
          }
 
          int dirsToProcess;
-         if ( searchPosition == AllDirs )
+         if ( searchPosition == AllDirs ) {
             dirsToProcess = searchDirNum;
-         else
+         } else
             dirsToProcess = 1;
 
          dirNum = 0;
@@ -1802,6 +1802,12 @@ tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition, SearchTy
 
             directory[dirNum++] = dir + strippedPath;
          }
+
+         if ( !dirNum  ) {
+            directory[0] = ".";
+            dirNum = 1;
+         }
+
       }
 
       wildcard.assign ( name, ppos+1, name.npos );

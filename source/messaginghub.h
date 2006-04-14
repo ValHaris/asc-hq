@@ -87,8 +87,12 @@
        SigC::Signal2<void, const ASCString&,int> logMessage;
        
        //! displays any kind of message, as specified by parameter
-       void message( MessageType type, const ASCString& msg, ... );
-  
+       void message( MessageType type, const char* msg, ... );
+
+       //! displays any kind of message, as specified by parameter
+       void message( MessageType type, const ASCString& msg );
+
+
        /** Displays a status window. As long as a copy of the returned StatusMessageWindowHolder exists, the window is shown.
        Typical usage:
        \code
