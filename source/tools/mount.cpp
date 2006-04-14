@@ -424,17 +424,34 @@ int main(int argc, char *argv[] )
    for ( int df = cl.next_param(); df < argc-1; df++ ) {
       int compress = 1;
 
-      DIR *dirp;
-      struct ASC_direct *direntp;
 
-      dirp = opendir( "." );
+      char buf[10000];
+      strncpy( buf, argv[df], 10000 );
+
+      char* filename = buf;
+      char* dirname = ".";
+
+      while ( strchr( buf, foreignPathDelimitter ))
+         *strchr( buf, foreignPathDelimitter ) = pathdelimitter;
+
+      if ( strchr( filename , pathdelimitter )) {
+         char* c = filename + strlen( filename );
+         while ( *c != pathdelimitter ) 
+            c -= 1;
+         
+         dirname = buf;
+         filename = c+1;
+         *c = 0;
+      }
+
+      DIR * dirp = opendir( dirname );
       if( dirp != NULL ) {
          for(;;) {
-            direntp = readdir( dirp );
+            struct ASC_direct *direntp = readdir( dirp );
             if ( direntp == NULL )
                break;
 
-            if ( patimat ( argv[df] , direntp->d_name ) &&
+            if ( patimat ( filename , direntp->d_name ) &&
                   strcmp ( direntp->d_name, "." ) != 0 &&
                   strcmp ( direntp->d_name, ".." ) != 0 ) {
                int    fnd = 0;
@@ -447,6 +464,7 @@ int main(int argc, char *argv[] )
                }
 
                if ( !fnd ) {
+                  chdir(dirname);
                   if ( verbose )
                      printf( direntp->d_name );
                   if ( compress )

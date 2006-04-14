@@ -37,7 +37,7 @@
 				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib"
 				OutputFile="$(OutDir)/bin/mount.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SDL)/lib;$(OutDir)/lib"
+				AdditionalLibraryDirectories="&quot;$(SDL)/VisualC/SDL/Debug&quot;;&quot;$(OutDir)/lib&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/mount.pdb"/>
 			<Tool

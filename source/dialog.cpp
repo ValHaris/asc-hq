@@ -967,8 +967,16 @@ void  tvehicleinfo::showgeneralinfovariables( void )
    showtext2( strrr(aktvehicle->tank.energy), column1x + 100, productioncosty + 110);
    showtext2( strrr(aktvehicle->tank.fuel), column1x + 100, productioncosty + 130);
 
-   showtext2( strrr(aktvehicle->maxLoadableWeight), column1x + 100, productioncosty + 150);
-   showtext2( strrr(aktvehicle->maxLoadableUnitSize), column1x + 100, productioncosty + 170);
+   if ( aktvehicle->maxLoadableUnits > 0 )
+   {
+      showtext2( strrr(aktvehicle->maxLoadableWeight), column1x + 100, productioncosty + 150);
+      showtext2( strrr(aktvehicle->maxLoadableUnitSize), column1x + 100, productioncosty + 170);
+   }
+   else
+   {
+      showtext2( "-", column1x + 100, productioncosty + 150);
+      showtext2( "-", column1x + 100, productioncosty + 170);
+   }
 
    // ####TRANS showtext2( strrr(aktvehicle->loadcapacity), column1x + 100, productioncosty + 150);
    showtext2( strrr(aktvehicle->fuelConsumption), column1x + 100,  productioncosty + 260 );
