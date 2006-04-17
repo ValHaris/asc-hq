@@ -871,7 +871,11 @@ ContainerBase* tmap::getContainer ( int nwid )
    else {
       int x = (-nwid) & 0xffff;
       int y = (-nwid) >> 16;
-      return getfield(x,y)->building;
+      pfield fld = getfield(x,y);
+      if ( !fld )
+         return NULL;
+
+      return fld->building;
    }
 }
 
