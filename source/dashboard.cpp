@@ -32,6 +32,7 @@
 #include "textfiletags.h"
 #include "mapdisplay.h"
 #include "dialogs/unitinfodialog.h"
+#include "dialogs/vehicletypeselector.h"
 #include "gameoptions.h"
 
 #include "sg.h"
@@ -119,9 +120,17 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
       return;
    }
 
+   if( name == "showplayercolor0" || name == "showplayercolor1" ) {
+      MegaBlitter<4,4,ColorTransform_PlayerTrueCol,ColorMerger_PlainOverwrite> blitter;
+      blitter.setColor( actmap->player[actmap->actplayer].getColor() );
+      blitter.blit( IconRepository::getIcon("show_playercolor.png"), screen, SPoint(dst.x, dst.y));
+      return;
+   }
+   
+   
    if ( name == "field_weather" ) {
       MapCoordinate mc = actmap->getCursor();
-      if ( actmap && mc.valid() && fieldvisiblenow( actmap->getField(mc)) ) {
+      if ( actmap && mc.valid() && fieldvisiblenow( actmap->getField(mc), actmap->playerView ) ) {
          MegaBlitter<4,colorDepth,ColorTransform_None, ColorMerger_AlphaOverwrite> blitter;
 
          static const char* weathernames[] = {"terrain_weather_dry.png",
@@ -138,13 +147,11 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
 
 
 
-   if( name == "showplayercolor0" || name == "showplayercolor1" ) {
-      MegaBlitter<4,4,ColorTransform_PlayerTrueCol,ColorMerger_PlainOverwrite> blitter;
-      blitter.setColor( actmap->player[actmap->actplayer].getColor() );
-      blitter.blit( IconRepository::getIcon("show_playercolor.png"), screen, SPoint(dst.x, dst.y));
-      return;
-   }
 
+   
+   if ( veh && !fieldvisiblenow( veh->getMap()->getField( veh->getPosition() ), veh->getMap()->playerView ))
+      return;
+   
 
 
       if ( name == "unitexp" ) {
@@ -212,7 +219,7 @@ void DashboardPanel::eval()
 
    setLabelText( "windspeed", actmap->weatherSystem->getCurrentWindSpeed() );
 
-   if ( mc.valid() && fieldvisiblenow( fld )) {
+   if ( mc.valid() && fieldvisiblenow( fld, actmap->playerView )) {
       setLabelText( "terrain_harbour", fld->bdt.test(cbharbour) ? "YES" : "NO" );
       setLabelText( "terrain_pipe", fld->bdt.test(cbpipeline) || fld->building ? "YES" : "NO" );
 
@@ -251,12 +258,12 @@ void DashboardPanel::eval()
    }
 
    if ( mc.valid() && fld ) {
-      if ( veh && fieldvisiblenow( fld ) ) {
+      if ( veh && fieldvisiblenow( fld, actmap->playerView ) ) {
          showUnitData( veh, NULL );
       } else {
 
          Building* bld = fld->building;
-         if ( bld && fieldvisiblenow( fld ) ) 
+         if ( bld && fieldvisiblenow( fld, actmap->playerView ) ) 
             showUnitData( NULL, bld );
          else
             showUnitData( NULL, NULL );
@@ -355,6 +362,13 @@ UnitInfoPanel::UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) : DashboardP
       siw->sigMouseButtonDown.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
       siw->sigMouseButtonUp.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
    }
+
+   VehicleTypeSelectionItemFactory::showVehicleInfo.connect( SigC::slot( *this, &UnitInfoPanel::showUnitInfo ));
+}
+
+void UnitInfoPanel::showUnitInfo( const Vehicletype* vt )
+{
+   // showUnitData( vt, NULL, true );
 }
 
 
@@ -408,6 +422,7 @@ class WeaponInfoLine: public PG_Image {
       const SingleWeapon* weapon;
       const Vehicletype* veh;
       WeaponInfoPanel* wip;
+      static WeaponInfoLine* displayed;
    public:
       WeaponInfoLine( WeaponInfoPanel* parent, const PG_Point& p, SDL_Surface* image, const SingleWeapon* weap, const Vehicletype* vehicle )
            : PG_Image( parent, p, image, false ), weapon(weap), veh ( vehicle ), wip(parent)
@@ -449,14 +464,18 @@ class WeaponInfoLine: public PG_Image {
 	   void eventMouseEnter()
       {
          wip->showWeapon( weapon );
+         displayed = this;
       };
 
       void eventMouseLeave()
       {
-         wip->showWeapon();
+         if ( displayed == this )
+            wip->showWeapon();
       };
 
 };
+
+WeaponInfoLine* WeaponInfoLine::displayed = NULL;
 
 
 

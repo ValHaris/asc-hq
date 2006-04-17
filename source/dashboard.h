@@ -70,6 +70,7 @@ class WindInfoPanel : public DashboardPanel {
 class UnitInfoPanel : public DashboardPanel {
      protected:
         bool onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event );
+        void showUnitInfo( const Vehicletype* vt );
      public:
         UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) ;
 };

@@ -702,6 +702,7 @@ void researchCheck( Player& player )
 
 void runai( int playerView )
 {
+   MapDisplayPG::CursorHiding cusorHiding;
    actmap->playerView = playerView;
 
    if ( !actmap->player[ actmap->actplayer ].ai )

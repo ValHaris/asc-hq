@@ -109,6 +109,9 @@ GameParameterEditorWidget :: GameParameterEditorWidget ( GameMap* gamemap, PG_Wi
    
    for ( int i = 0; i< gameparameternum; ++i ) {
       values[i] = actmap->getgameparameter ( GameParameter(i) );
+      if ( values[i] < gameParameterSettings[i].minValue || values[i] > gameParameterSettings[i].maxValue )
+         values[i] = gameParameterSettings[i].defaultValue;
+      
       if ( !gameParameterSettings[i].legacy ) {
          if ( gameParameterSettings[i].minValue == 0 && gameParameterSettings[i].maxValue == 1 ) {
             new PG_PropertyField_Checkbox<int>( propertyEditor , gameParameterSettings[i].longName, &values[i] );
@@ -122,7 +125,7 @@ GameParameterEditorWidget :: GameParameterEditorWidget ( GameMap* gamemap, PG_Wi
 
 bool GameParameterEditorWidget :: Valid()
 {
-   return propertyEditor->Valid();
+   return propertyEditor->Valid( true );
 }
 
 bool GameParameterEditorWidget :: Apply()

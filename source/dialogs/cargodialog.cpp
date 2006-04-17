@@ -114,6 +114,19 @@ namespace CargoGuiFunctions {
    };
    
 
+   class CloseDialog : public GuiFunction
+   {
+      CargoDialog& parent;
+      public:
+         CloseDialog( CargoDialog& masterParent ) : parent( masterParent)  {};
+         bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
+         void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
+         ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
+   };
+
+   
    class Movement : public GuiFunction
    {
          CargoDialog& parent;
@@ -366,6 +379,7 @@ class CargoDialog : public Panel
          handler.registerUserFunction( new CargoGuiFunctions::MoveUnitIntoInnerContainer( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::OpenContainer( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::RecycleUnit( *this ));
+         handler.registerUserFunction( new CargoGuiFunctions::CloseDialog( *this ));
       }
 
       void checkStoringPosition( Vehicle* unit )
@@ -436,18 +450,17 @@ class CargoDialog : public Panel
 
       bool ProcessEvent ( const SDL_Event *   event,bool   bModal = false  )
       {
-         if ( !Panel::ProcessEvent( event, bModal )) {
-            if ( mainScreenWidget ) {
-               if ( mainScreenWidget->getGuiHost() ) {
-                  if ( mainScreenWidget->getGuiHost()->ProcessEvent( event, bModal ))
-                     return true;
 
-                  if ( mainScreenWidget->getUnitInfoPanel() ) {
-                     if ( mainScreenWidget->getUnitInfoPanel()->ProcessEvent( event, bModal ))
-                        return true;
-                  }
-               }
-            }
+         if ( mainScreenWidget && mainScreenWidget->getGuiHost() ) 
+            if ( mainScreenWidget->getGuiHost()->ProcessEvent( event, bModal ))
+               return true;
+         
+         if ( !Panel::ProcessEvent( event, bModal )) {
+            if ( mainScreenWidget && mainScreenWidget->getUnitInfoPanel() ) 
+               if ( mainScreenWidget->getUnitInfoPanel()->ProcessEvent( event, bModal ))
+                  return true;
+               
+            
 
          } else
             return true;
@@ -615,6 +628,20 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog {
             return false;
       }
 
+
+      bool closeWindow()
+      {
+         selected = NULL;
+         return ASC_PG_Dialog::closeWindow();
+      }
+      
+      bool quitSignalled()
+      {
+         selected = NULL;
+         QuitModal();
+         return true;
+      };
+      
       void reLoadAndUpdate()
       {
          isw->reLoad( true );
@@ -628,7 +655,7 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog {
          factory->sigVehicleTypeMarked.connect ( SigC::slot( *this, &VehicleProduction_SelectionWindow::vtSelected ));
 
          isw = new ItemSelectorWidget( this, PG_Rect(10, GetTitlebarHeight(), r.Width() - 20, r.Height() - GetTitlebarHeight() - 40), factory );
-         isw->sigQuitModal.connect( SigC::slot( *this, &ItemSelectorWindow::QuitModal));
+         isw->sigQuitModal.connect( SigC::slot( *this, &VehicleProduction_SelectionWindow::quitSignalled));
 
          factory->reloadAllItems.connect( SigC::slot( *this, &VehicleProduction_SelectionWindow::reLoadAndUpdate ));
          
@@ -2009,6 +2036,37 @@ namespace CargoGuiFunctions {
    }
 
    //////////////////////////////////////////////////////////////////////////////////////////////
+   
+
+   bool CloseDialog::available( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return true;
+   }
+
+
+   bool CloseDialog::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   {
+      return ( key->keysym.sym == 'x' );
+   };
+
+   Surface& CloseDialog::getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return IconRepository::getIcon("closecargodialog.png");
+   };
+   
+   ASCString CloseDialog::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return "close dialog";
+   };
+
+
+   void CloseDialog::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      parent.QuitModal();
+   }
+
+   //////////////////////////////////////////////////////////////////////////////////////////////
+   
    
 
    bool MoveUnitIntoInnerContainer::available( const MapCoordinate& pos, ContainerBase* subject, int num )

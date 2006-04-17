@@ -72,6 +72,7 @@ void DiplomaticStateVector::turnBegins()
 }
 
 
+
 DiplomaticStates DiplomaticStateVector::getState( int towardsPlayer ) const
 {
    if ( player.getPosition() == towardsPlayer )
@@ -197,6 +198,21 @@ void DiplomaticStateVector::propose( int towardsPlayer, DiplomaticStates s )
    }
    
 }
+
+bool DiplomaticStateVector::getProposal( int fromPlayer, DiplomaticStates* state )
+{
+   DiplomaticStateVector& targ = player.getParentMap()->player[ fromPlayer ].diplomacy;
+
+   QueuedStateChanges::iterator i = targ.queuedStateChanges.find( player.getPosition() );
+         
+   if ( i != targ.queuedStateChanges.end() ) {
+      if ( state )
+         *state = i->second;
+      return true;
+   } else
+      return false;
+}
+
 
       
 void DiplomaticStateVector::read ( tnstream& stream )

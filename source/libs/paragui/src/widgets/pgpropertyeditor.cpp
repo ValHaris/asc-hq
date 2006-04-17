@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-04-17 19:04:57 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgpropertyeditor.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -46,10 +46,13 @@ void PG_PropertyEditor :: Reload() {
 };
 
 
-bool PG_PropertyEditor :: Valid() {
+bool PG_PropertyEditor :: Valid( bool focus ) {
 	for ( PropertyFieldsType::iterator i = propertyFields.begin(); i != propertyFields.end(); ++i )
-		if ( ! (*i)->Valid() )
-			return false;
+      if ( ! (*i)->Valid() ) {
+         if ( focus )
+            (*i)->Focus();
+         return false;
+      }
 	return true;
 };
 

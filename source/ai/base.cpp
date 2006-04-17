@@ -167,6 +167,7 @@ void AI:: run ( bool benchMark )
 //   for ( int i = 0; i < 3; i++ )
 //      getMap()->weather.wind[i].speed = 0;
 
+   diplomacy();
 
    if ( !originalUnitDistribution.calculated )
       originalUnitDistribution = calcUnitDistribution();
@@ -239,6 +240,22 @@ void AI:: run ( bool benchMark )
    displaymessage2("AI completed in %d second", duration/100);
 
    checkforvictory();
+}
+
+
+void AI :: diplomacy ()
+{
+   for ( int i = 0; i < getMap()->getPlayerCount(); ++i ) {
+      if ( i != getPlayerNum() ) {
+         DiplomaticStates proposal;
+         if ( getPlayer().diplomacy.getProposal( i, &proposal )) {
+            if ( proposal > getPlayer().diplomacy.getState( i ))
+               new Message( "Your diplomatic proposal is declined", getMap(), 1 << i, 1 << getPlayerNum() );
+            else
+               getPlayer().diplomacy.propose( i, proposal );
+         }
+      }
+   }
 }
 
 

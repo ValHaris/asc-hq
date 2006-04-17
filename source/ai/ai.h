@@ -465,6 +465,9 @@
 
             void checkKeys ( void );
 
+            void diplomacy ();
+
+            
         public:
            AI ( GameMap* _map, int _player ) ;
 

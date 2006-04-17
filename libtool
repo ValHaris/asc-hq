@@ -82,13 +82,13 @@ AR="ar"
 AR_FLAGS="cru"
 
 # A C compiler.
-LTCC="gcc-4.1"
+LTCC="gcc"
 
 # LTCC compiler flags.
 LTCFLAGS="-O0 -g -Wall"
 
 # A language-specific compiler.
-CC="gcc-4.1"
+CC="gcc"
 
 # Is the compiler the GNU C compiler?
 with_gcc=yes
@@ -325,7 +325,7 @@ variables_saved_for_relink="PATH LD_LIBRARY_PATH LD_RUN_PATH GCC_EXEC_PREFIX COM
 link_all_deplibs=no
 
 # Compile-time system search path for libraries
-sys_lib_search_path_spec=" /usr/lib/gcc/x86_64-linux-gnu/4.1.0/ /usr/lib/gcc/x86_64-linux-gnu/4.1.0/ /usr/lib/gcc/x86_64-linux-gnu/4.1.0/../../../../x86_64-linux-gnu/lib/x86_64-linux-gnu/4.1.0/ /usr/lib/gcc/x86_64-linux-gnu/4.1.0/../../../../x86_64-linux-gnu/lib/ /usr/lib/gcc/x86_64-linux-gnu/4.1.0/../../../x86_64-linux-gnu/4.1.0/ /usr/lib/gcc/x86_64-linux-gnu/4.1.0/../../../ /lib/x86_64-linux-gnu/4.1.0/ /lib/ /usr/lib/x86_64-linux-gnu/4.1.0/ /usr/lib/"
+sys_lib_search_path_spec=" /usr/lib/gcc/x86_64-linux-gnu/4.0.3/ /usr/lib/gcc/x86_64-linux-gnu/4.0.3/ /usr/lib/gcc/x86_64-linux-gnu/4.0.3/../../../../x86_64-linux-gnu/lib/x86_64-linux-gnu/4.0.3/ /usr/lib/gcc/x86_64-linux-gnu/4.0.3/../../../../x86_64-linux-gnu/lib/ /usr/lib/gcc/x86_64-linux-gnu/4.0.3/../../../x86_64-linux-gnu/4.0.3/ /usr/lib/gcc/x86_64-linux-gnu/4.0.3/../../../ /lib/x86_64-linux-gnu/4.0.3/ /lib/ /usr/lib/x86_64-linux-gnu/4.0.3/ /usr/lib/"
 
 # Run-time system search path for libraries
 sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/X11R6/lib "
@@ -7261,7 +7261,7 @@ AR="ar"
 AR_FLAGS="cru"
 
 # A C compiler.
-LTCC="gcc-4.1"
+LTCC="gcc"
 
 # LTCC compiler flags.
 LTCFLAGS="-O0 -g -Wall"

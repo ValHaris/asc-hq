@@ -33,6 +33,7 @@ class VehicleTypeBaseWidget: public SelectionWidget  {
       static Surface clippingSurface;
       Surface& getClippingSurface() { return clippingSurface; };
       int actplayer;
+      bool info();
    public:
       VehicleTypeBaseWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, int player );
       ASCString getName() const;
@@ -58,6 +59,9 @@ class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC:
       int actplayer;
    public:
       typedef vector<const Vehicletype*> Container;
+
+      static SigC::Signal1<void,const Vehicletype*> showVehicleInfo;
+      
    protected:
       Container::iterator it;
       Container items;

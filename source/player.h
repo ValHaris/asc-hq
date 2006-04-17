@@ -68,7 +68,10 @@ class DiplomaticStateVector : public SigC::Object {
       
             
       static SigC::Signal4<void,GameMap*,int,int,DiplomaticStates> anyStateChanged;
-   
+
+      //! \returns true if there are any proposals
+      bool getProposal( int fromPlayer, DiplomaticStates* state );
+      
       void read ( tnstream& stream );
       void write ( tnstream& stream ) const;
 };

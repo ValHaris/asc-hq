@@ -115,7 +115,7 @@ class ASC_PG_Dialog : public PG_Window {
        // int quitModalLoopValue;       
     protected:
       PG_MessageObject* caller;
-      bool closeWindow();
+      virtual bool closeWindow();
       void quitModalLoop(int value ); 
       virtual bool eventKeyDown(const SDL_KeyboardEvent *key);
     public:

@@ -17,6 +17,7 @@
 
 #include "vehicletypeselector.h"
 #include "selectionwindow.h"
+#include "unitinfodialog.h"
 
 #include "../vehicletype.h"
 #include "../iconrepository.h"
@@ -35,8 +36,20 @@ VehicleTypeBaseWidget :: VehicleTypeBaseWidget( PG_Widget* parent, const PG_Poin
    PG_Label* lbl2 = new PG_Label( this, PG_Rect( col1, lineheight, 3 * sw, lineheight ), vt->description );
    lbl2->SetFontSize( lbl2->GetFontSize() -2 );
 
+
+   PG_Button* b = new PG_Button( this, PG_Rect( col1 + 3 * sw + 10, 0, 2*lineheight, 2*lineheight ));
+   b->SetIcon( IconRepository::getIcon( "blue-i.png").getBaseSurface() );
+   b->sigClick.connect( SigC::slot( *this, &VehicleTypeBaseWidget::info ));
+   
    SetTransparency( 255 );
 };
+
+bool VehicleTypeBaseWidget::info()
+{
+   unitInfoDialog( vt );
+   return true;
+}
+
 
 ASCString VehicleTypeBaseWidget::getName() const
 {
@@ -87,7 +100,7 @@ VehicleTypeCountWidget::VehicleTypeCountWidget( PG_Widget* parent, const PG_Poin
 
    int sw = (width - col1 - 10) / 6;
 
-   PG_Label* lbl = new PG_Label( this, PG_Rect( col1 + 3 * sw, 0, sw * 2, lineheight*2 ), ASCString::toString(number) );
+   PG_Label* lbl = new PG_Label( this, PG_Rect( col1 + 4 * sw, 0, sw * 2, lineheight*2 ), ASCString::toString(number) );
    lbl->SetAlignment( PG_Label::RIGHT );
    lbl->SetFontSize( lbl->GetFontSize() + 5 );
 }
@@ -137,6 +150,8 @@ SelectionWidget* VehicleTypeSelectionItemFactory::spawnNextItem( PG_Widget* pare
       return NULL;
 };
 
+SigC::Signal1<void,const Vehicletype*> VehicleTypeSelectionItemFactory::showVehicleInfo;
+
 
 void VehicleTypeSelectionItemFactory::itemSelected( const SelectionWidget* widget, bool mouse )
 {
@@ -145,6 +160,9 @@ void VehicleTypeSelectionItemFactory::itemSelected( const SelectionWidget* widge
 
    const VehicleTypeResourceWidget* fw = dynamic_cast<const VehicleTypeResourceWidget*>(widget);
    assert( fw );
+
+   showVehicleInfo( fw->getVehicletype() );
+   
    vehicleTypeSelected( fw->getVehicletype() );
 }
 

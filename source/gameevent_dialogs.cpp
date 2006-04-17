@@ -47,16 +47,27 @@
 #include "dialog.h"
 
 
+
 #ifdef karteneditor
-#include "edmisc.h"
-#include "edselfnt.h"
-extern int  selectfield(int * cx ,int  * cy);
+# include "edmisc.h"
+# include "edselfnt.h"
+# include "maped-mainscreen.h"
+ extern int  selectfield(int * cx ,int  * cy);
+
+template <class ItemType>
+bool selectItemID( int& id, const ItemRepository<ItemType>& itemRepository )
+{
+   ItemSelectorWindow isw( NULL, PG_Rect( 300, 50, 280, PG_Application::GetScreenHeight()-100), "select item", new MapItemTypeWidgetFactory_IDSelection< MapItemTypeWidget<ItemType> >(itemRepository, id) );
+   isw.Show();
+   isw.RunModal();
+   return true;
+}
+ 
 #else
 int  selectfield(int * cx ,int  * cy)
 {
   return 0;
 }
-void selweather( tkey ench ){};
 void editpolygon (Poly_gon& poly) {};
 Vehicle* selectUnitFromMap() { return NULL; };
 #endif
@@ -65,10 +76,18 @@ Vehicle* selectUnitFromMap() { return NULL; };
 
 bool chooseWeather( int& weather )
 {
-#ifdef kkarteneditor
-  auswahlw = weather;
-  selweather( ct_invvalue );
-  weather = auswahlw;
+#ifdef karteneditor
+   vector<ASCString> entries;
+
+   for ( int w = 0; w < cwettertypennum; ++w )
+      entries.push_back ( cwettertypen[ w ] );
+
+   int value = chooseString ( "choose operation target", entries, weather );
+   if ( value < 0 )
+      return false;
+   else
+      weather = value;
+
 #endif
   return true;
 }
@@ -76,9 +95,7 @@ bool chooseWeather( int& weather )
 bool chooseTerrain( int& terrainID )
 {
 #ifdef kkarteneditor
-  auswahl = actmap->getterraintype_byid( terrainID );
-  selterraintype( ct_invvalue );
-  terrainID = auswahl->id;
+   selectItemID( terrainID, terrainTypeRepository );
 #endif
   return true;
 }
@@ -86,9 +103,7 @@ bool chooseTerrain( int& terrainID )
 bool chooseObject( int& objectID )
 {
 #ifdef kkarteneditor
-  actobject  = actmap->getobjecttype_byid( objectID );
-  selobject( ct_invvalue );
-  objectID = actobject->id;
+   selectItemID( objectID, objectTypeRepository );
 #endif
   return true;
 }
@@ -96,9 +111,7 @@ bool chooseObject( int& objectID )
 bool chooseVehicleType( int& vehicleTypeID )
 {
 #ifdef kkarteneditor
-  auswahlf  = actmap->getvehicletype_byid( vehicleTypeID );
-  selvehicletype( ct_invvalue );
-  vehicleTypeID = auswahlf->id;
+   selectItemID( vehicleTypeID, vehicleTypeRepository );
 #endif
   return true;
 }

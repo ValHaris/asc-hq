@@ -86,7 +86,7 @@ class MapItemTypeWidget : public SelectionWidget {
 
 
 template <class MapItemWidget> 
-class MapItemTypeWidgetFactory : public SelectionItemFactory {
+class BaseMapItemTypeWidgetFactory : public SelectionItemFactory {
    protected:
       typedef typename MapItemWidget::ItemType ItemType;
       typedef vector<ItemType*> Items;
@@ -104,7 +104,7 @@ class MapItemTypeWidgetFactory : public SelectionItemFactory {
       
       
    public:
-      MapItemTypeWidgetFactory( const ItemRepository<ItemType>& itemRepository  )  : repository( itemRepository ) {
+      BaseMapItemTypeWidgetFactory( const ItemRepository<ItemType>& itemRepository  )  : repository( itemRepository ) {
          for ( size_t i = 0; i < repository.getNum(); ++i ) {
             ItemType* item = repository.getObject_byPos(i);
             if ( item ) 
@@ -129,7 +129,16 @@ class MapItemTypeWidgetFactory : public SelectionItemFactory {
          else
             return NULL;
       };
-      
+};
+
+template <class MapItemWidget> 
+class MapItemTypeWidgetFactory : public BaseMapItemTypeWidgetFactory<MapItemWidget>  {
+   protected:
+      typedef typename MapItemWidget::ItemType ItemType;
+   public:
+
+      MapItemTypeWidgetFactory( const ItemRepository<ItemType>& itemRepository  )  : BaseMapItemTypeWidgetFactory<MapItemWidget>( itemRepository ) { };
+
       void itemSelected( const SelectionWidget* widget, bool mouse )
       {
          if ( !widget )
@@ -138,26 +147,36 @@ class MapItemTypeWidgetFactory : public SelectionItemFactory {
          const MapItemWidget* mapItemWidget = dynamic_cast<const MapItemWidget*>(widget);
          assert( mapItemWidget );
          if ( mapItemWidget->getItem() ) {
-            typename ItemTypeSelector<ItemType>::type item ( mapItemWidget->getItem() );
+            typename ItemTypeSelector<typename MapItemWidget::ItemType>::type item ( mapItemWidget->getItem() );
             selection.setSelection( item );
          }
       }
-      
+};
+
+
+template <class MapItemWidget> 
+class MapItemTypeWidgetFactory_IDSelection : public BaseMapItemTypeWidgetFactory<MapItemWidget>  {
+      typedef typename MapItemWidget::ItemType ItemType;
+      int& itemID;
+   public:
+
+      MapItemTypeWidgetFactory_IDSelection( const ItemRepository<ItemType>& itemRepository, int& id  )  : BaseMapItemTypeWidgetFactory<MapItemWidget>( itemRepository ), itemID( id ) { };
+
+      void itemSelected( const SelectionWidget* widget, bool mouse )
+      {
+         if ( !widget )
+            return;
+
+         const MapItemWidget* mapItemWidget = dynamic_cast<const MapItemWidget*>(widget);
+         assert( mapItemWidget );
+         if ( mapItemWidget->getItem() ) 
+            itemID = mapItemWidget->getItem()->id;
+      }
 };
 
 
 
 
-
-
-
-extern void selterraintype( tkey ench );
-extern Vehicletype* selvehicletype(tkey ench );
-extern void selcolor( tkey ench );
-extern void selobject( tkey ench );
-extern void selmine( tkey ench );
-extern void selweather( tkey ench );
-extern void selbuilding ( tkey ench );
 extern void addCargo( ContainerBase* container );
 
 extern void editProduction( ContainerBase* container );

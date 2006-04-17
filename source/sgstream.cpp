@@ -211,8 +211,11 @@ int readgameoptions ( const ASCString& filename )
          }
 
 #endif
-         if ( !registryKeyFound )
-             fn = ASCString(".") + pathdelimitter + asc_configurationfile;
+         if ( !registryKeyFound ) {
+            fn = asc_configurationfile;
+            if ( fn.find( pathdelimitter ) == ASCString::npos )
+               fn = ASCString(".") + pathdelimitter + asc_configurationfile;
+         }
       }
 
    char completeFileName[10000];

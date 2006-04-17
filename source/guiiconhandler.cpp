@@ -439,6 +439,7 @@ bool NewGuiHost::showSmallIcons( PG_Widget* parent, const SPoint& pos, bool curs
 
    PG_Application::SetBulkMode(false);
    if ( smallButtonHolder && count ) {
+      smallButtonHolder->BringToFront();
       smallButtonHolder->Show();
       if ( firstSmallButton ) {
          firstSmallButton->press();

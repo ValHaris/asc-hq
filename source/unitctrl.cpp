@@ -365,7 +365,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
          if ( vehicle ) {
 
-            if ( mapDisplay ) {
+            if ( mapDisplay && fieldvisiblenow ( dest, actmap->playerView ) ) {
                // here comes an ugly hack to get the shadow of starting / descending aircraft right
 
                int oldheight = vehicle->height;
@@ -395,7 +395,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
             
             
          if ( vehicle ) {
-            if ( stop->x != to.x || stop->y != to.y )
+            if ( !(stop->x == to.x && stop->y == to.y && next == stop ))
                vehicle->removeview();
             
             if ( dest->mineattacks ( vehicle )) {

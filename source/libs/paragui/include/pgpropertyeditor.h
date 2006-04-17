@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-04-17 19:04:57 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgpropertyeditor.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -87,7 +87,7 @@ public:
 	void Reload();
 
 	//! Checks if all PropertyFields contain valid values
-	bool Valid();
+	bool Valid( bool focus = false );
 
 	//! Writes the PropertyFields' values to their original variables, provided they are valid
 	bool Apply();
