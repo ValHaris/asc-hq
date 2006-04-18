@@ -263,7 +263,7 @@ void testcompress ( char* name, int size )
       
    char newname[1000];
    char* orgname = name;
-   if ( patimat ( "*.pcx", name ) ) {
+   if ( patimat ( "*.pcx", name, true ) ) {
 
       FILE* infile = fopen ( name, filereadmode );
 
@@ -451,7 +451,7 @@ int main(int argc, char *argv[] )
             if ( direntp == NULL )
                break;
 
-            if ( patimat ( filename , direntp->d_name ) &&
+            if ( patimat ( filename , direntp->d_name, true ) &&
                   strcmp ( direntp->d_name, "." ) != 0 &&
                   strcmp ( direntp->d_name, ".." ) != 0 ) {
                int    fnd = 0;

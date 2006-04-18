@@ -1147,8 +1147,10 @@ void* ImageProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) cons
 {
    void* img;
 
+   ASCString lstring = copytoLower( entry.value );
+   
    try {
-      StringTokenizer st ( entry.value, fileNameDelimitter );
+      StringTokenizer st ( lstring, fileNameDelimitter );
       FileName fn = st.getNextToken();
       fn.toLower();
       if ( fn.suffix() == "png" ) {
@@ -1177,7 +1179,7 @@ void* ImageProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) cons
          }
    }
    catch ( ASCexception ){
-      propertyContainer->error( "error accessing file " + entry.value );
+      propertyContainer->error( "error accessing file " + lstring );
       return NULL;
    }
    return img;

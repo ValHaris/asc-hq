@@ -4,9 +4,13 @@
 */
 
 
-//     $Id: basestrm.h,v 1.61 2005-04-29 17:57:12 mbickel Exp $
+//     $Id: basestrm.h,v 1.62 2006-04-18 19:29:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2005/04/29 17:57:12  mbickel
+//      Prepared 1.16 release
+//      Added object translation
+//
 //     Revision 1.60  2005/04/24 10:09:30  mbickel
 //      Added object growth
 //      Updated version numbers
@@ -716,7 +720,7 @@ extern int compressrle ( const void* p, void* q);
 /** checks whether the regular expression pat matches the string str . This functions
     only understands dos/windows style wildcards: * and ?
 */
-extern bool patimat (const char *pat, const char *str);
+extern bool patimat (const char *pat, const char *str, bool forceCaseInsensitivity = false );
 
 extern int checkforvaliddirectory ( char* dir );
 
