@@ -490,8 +490,12 @@ int main(int argc, char *argv[] )
       writeInt( out, nindex[i].name ? 1 : 0 );
       writeInt( out, nindex[i].start );
       writeInt( out, nindex[i].end );
-      if ( nindex[i].name )
+
+      if ( nindex[i].name ) {
+         for ( int j = 0; j < strlen ( nindex[i].name ); ++j )
+            nindex[i].name[j] = tolower( nindex[i].name[j] );
          fwrite ( nindex[i].name, 1, strlen ( nindex[i].name ) + 1, out );
+      }
 
    } /* endfor */
 

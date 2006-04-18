@@ -319,6 +319,7 @@ AC_COMPILE_IFELSE( [
    void foo( int i ) {};
    void foo( size_t i ) {};
    void foo( unsigned int i ) {};
+   void foo( bool b ) {};
    int main() {
      size_t t = 7;
      foo(t);
@@ -377,7 +378,7 @@ persmine.nic tankmine.nic putmine.nic endturn.nic \
 informat.nic ascent.nic descent.nic attack.nic \
 movement.nic *.nic 640480.pcx *.raw *.scr *.fnt \
 *.dat *.map helpsys?.txt message?.txt *.pcx lcac2.jpg \
-bkgr4.scr *.wav *.gif *.asctxt"
+bkgr4.scr *.wav *.gif *.asctxt *.gfx"
 
 dnl what gehts packed into main.con (the data container file)
 AC_SUBST([MAINCONDATA])
