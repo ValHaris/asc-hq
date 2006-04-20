@@ -43,6 +43,7 @@
 
 #include "selectionwindow.h"
 #include "ammotransferdialog.h"
+#include "unitinfodialog.h"
 
 // #include "cargowidget.cpp"
 
@@ -249,6 +250,18 @@ namespace CargoGuiFunctions {
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
 
+   class UnitInfo : public GuiFunction
+   {
+      CargoDialog& parent;
+      public:
+         UnitInfo( CargoDialog& masterParent ) : parent( masterParent)  {};
+         bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
+         void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
+         ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
+   };
+   
    
    
 }; // namespace CargoGuiFunctions
@@ -380,6 +393,7 @@ class CargoDialog : public Panel
          handler.registerUserFunction( new CargoGuiFunctions::OpenContainer( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::RecycleUnit( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::CloseDialog( *this ));
+         handler.registerUserFunction( new CargoGuiFunctions::UnitInfo( *this ));
       }
 
       void checkStoringPosition( Vehicle* unit )
@@ -2063,6 +2077,42 @@ namespace CargoGuiFunctions {
    void CloseDialog::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
    {
       parent.QuitModal();
+   }
+
+   //////////////////////////////////////////////////////////////////////////////////////////////
+   
+
+   bool UnitInfo::available( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      if ( !subject )
+         return false;
+      
+      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+      return veh;
+   }
+
+
+   bool UnitInfo::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   {
+      return ( key->keysym.sym == 'i' );
+   };
+
+   Surface& UnitInfo::getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return IconRepository::getIcon("unitinfo.png");
+   };
+   
+   ASCString UnitInfo::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return "show unit ~i~nformation";
+   };
+
+
+   void UnitInfo::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+      if ( veh )
+         unitInfoDialog( veh->typ );
    }
 
    //////////////////////////////////////////////////////////////////////////////////////////////

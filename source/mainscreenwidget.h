@@ -24,9 +24,11 @@
 
 #include "paradialog.h"
 #include "messaginghub.h"
+#include "overviewmappanel.h"
 
 // class Menu;
 class MapDisplayPG;
+class OverviewMapPanel;
 
 class MainScreenWidget : public PG_Widget {
     PG_Application& app;
@@ -40,6 +42,8 @@ class MainScreenWidget : public PG_Widget {
     
     void buildBackgroundImage( bool messageLine );
         
+    OverviewMapPanel* overviewMapPanel;
+    
 public:
     MainScreenWidget( PG_Application& application );
 
@@ -50,6 +54,10 @@ public:
 
     MapDisplayPG* getMapDisplay() { return mapDisplay; };
 
+    OverviewMapPanel* getOverviewMapPanel()
+    {
+      return overviewMapPanel;
+    };
 
     virtual void enableStandardAction( bool enable = true) {};
     

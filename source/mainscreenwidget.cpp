@@ -40,7 +40,7 @@
 
 MainScreenWidget::MainScreenWidget( PG_Application& application )
               : PG_Widget(NULL, PG_Rect ( 0, 0, app.GetScreen()->w, app.GetScreen()->h ), false),
-              app ( application ) , lastMessageTime(0), lastMouseScrollTime(0), messageLine(NULL)
+              app ( application ) , lastMessageTime(0), lastMouseScrollTime(0), overviewMapPanel(NULL), messageLine(NULL)
 {
 }
 
@@ -260,8 +260,8 @@ StatusMessageWindowHolder MainScreenWidget::createStatusWindow( const ASCString&
 void MainScreenWidget::spawnOverviewMapPanel ( const ASCString& panelName )
 {
    assert( mapDisplay);
-   OverviewMapPanel* smp = new OverviewMapPanel( this, PG_Rect(Width()-170, 0, 170, 160), mapDisplay, panelName );
-   smp->Show();
+   overviewMapPanel = new OverviewMapPanel( this, PG_Rect(Width()-170, 0, 170, 160), mapDisplay, panelName );
+   overviewMapPanel->Show();
    mapChanged.connect( SigC::slot( OverviewMapHolder::clearmap ));
 }
 

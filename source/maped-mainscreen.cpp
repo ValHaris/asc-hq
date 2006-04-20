@@ -537,6 +537,8 @@ bool Maped_MainScreenWidget::runContextAction  (PG_PopupMenu::MenuItem* menuItem
 #endif
 
 
+extern void testFieldSelector();
+
 bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 {
    int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
@@ -641,7 +643,10 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
    
          case SDLK_c:  execaction_ev(act_copyToClipboard);
                         return true;
-   
+
+         case SDLK_d:  testFieldSelector();
+                        return true;
+
          case SDLK_f: execaction_ev(act_createresources);
                         return true;
    
@@ -689,7 +694,7 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                      char* c = NULL;
                      *c = 1;
                   }
-               } 
+               }  
             return true;
          default:;
    

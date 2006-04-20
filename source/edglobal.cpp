@@ -479,15 +479,7 @@ void execaction( int code)
                             }
                       }
         break;
-     case act_deleteobject : {
-                         tfield* pf2 = getactfield();
-                         if ( pf2 ) {
-                            mapsaved = false;
-                            pf2->removeobject( actobject );
-                            mapChanged( actmap );
-                         }
-                      }
-        break;
+     case act_deleteobject :
      case act_deletetopmostobject : {
                          tfield* pf2 = getactfield();
                          if ( pf2 ) {
@@ -598,10 +590,7 @@ void execaction( int code)
 
          ASCString filename = selectFile( wildcard, true );
          if ( !filename.empty() ) {
-            TerrainType::Weather* t = auswahl->weather[auswahlw];
-            if ( !t )
-               t = auswahl->weather[0];
-            importbattleislemap ( path.c_str(), filename.c_str(), t );
+            importbattleislemap ( path.c_str(), filename.c_str(), terrainTypeRepository.getObject_byID(9999)->weather[0] );
             displaymap();
          }
       }

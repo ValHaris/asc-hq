@@ -47,11 +47,8 @@
 #include "clipboard.h"
 #include "dialogs/cargowidget.h"
 
+#include "maped-mainscreen.h"
 
-   TerrainType* auswahl;
-   Vehicletype* auswahlf;
-   ObjectType*  actobject;
-   BuildingType*        auswahlb;
    int          auswahls;
    int          auswahlm;       
    int          auswahlw;
@@ -695,9 +692,145 @@ void         k_loadmap(void)
 #include "pbpeditor.cpp"
 
 #endif
+class CoordinateItem : public PG_ListBoxItem {
+   ASCString toString( const MapCoordinate& pos ) {
+      ASCString s;
+      s.format( "%d / %d", pos.x, pos.y );
+      return s;
+   };
+   MapCoordinate p;
+   
+   public:
+      CoordinateItem( PG_Widget *parent, const MapCoordinate& pos ) : PG_ListBoxItem( parent, 20, toString( pos ) ), p(pos) {};
+      MapCoordinate getPos() const { return p; };
+};
+
+   
+class SelectFromMap : public ASC_PG_Dialog{
+   private:
+      MapDisplayPG* md;
+      OverviewMapPanel* omp;
+
+      PG_ListBox* listbox;
+      
+   protected:
+      bool ProcessEvent ( const SDL_Event *   event,bool   bModal = false  )
+      {
+         if ( md->ProcessEvent( event, bModal ) )
+            return true;
+
+         if ( omp && omp->ProcessEvent( event, bModal ) )
+            return true;
+
+         return ASC_PG_Dialog::ProcessEvent( event, bModal );
+      }
+
+      bool mark()
+      {
+         MapCoordinate pos = actmap->getCursor();
+         CoordinateList::iterator i = find( coordinateList.begin(), coordinateList.end(), pos );
+         if ( i == coordinateList.end() ) {
+            actmap->getField( pos ) ->a.temp = 1;
+            coordinateList.push_back ( pos );
+         } else {
+            actmap->getField( pos ) -> a.temp = 0;
+            coordinateList.erase ( i );
+         }
+         repaintMap();
+         updateList();
+         return true;
+      }
+      
+      bool eventKeyDown (const SDL_KeyboardEvent *key)
+      {
+         if ( key->type == SDL_KEYDOWN ) {
+            if ( key->keysym.sym == SDLK_SPACE  ) {
+               mark();
+               return true;
+            }
+            if ( key->keysym.sym == SDLK_RETURN ) {
+               QuitModal();
+               return true;
+            }
+         }
+         return ASC_PG_Dialog::eventKeyDown( key );
+      }
+
+      void updateList()
+      {
+         listbox->RemoveAll();
+         for ( CoordinateList::iterator i = coordinateList.begin(); i != coordinateList.end(); ++i )
+            new CoordinateItem( listbox, *i );
+         
+         listbox->Show();
+      }
+
+      bool listItemClicked( PG_ListBoxBaseItem* item )
+      {
+         if ( item ) {
+            CoordinateItem* i = dynamic_cast<CoordinateItem*>(item);
+            if ( i )
+               md->cursor.goTo( i->getPos() );
+         }
+         return true;
+      }
+               
+      
+   public:
+      typedef vector<MapCoordinate> CoordinateList;
+      SelectFromMap( CoordinateList& list ) : ASC_PG_Dialog( NULL, PG_Rect( PG_Application::GetScreenWidth() - 150, PG_Application::GetScreenHeight() - 300, 150, 300 ), "Select Fields" ), listbox(NULL), coordinateList (list)
+      {
+         listbox = new PG_ListBox( this, PG_Rect( 10, 30, 130, 180 ));
+         listbox->sigSelectItem.connect( SigC::slot( *this, &SelectFromMap::listItemClicked ));
+         
+         PG_Button* m = new PG_Button ( this, PG_Rect( 10, 230, 130, 20 ), "mark (~space~)");
+         m->sigClick.connect( SigC::slot( *this, &SelectFromMap::mark ));
+
+         
+         PG_Button* b = new PG_Button ( this, PG_Rect( 10, 270, 130, 20 ), "~O~K");
+         b->sigClick.connect( SigC::slot( *this, &SelectFromMap::QuitModal ));
+         
+         omp = mainScreenWidget->getOverviewMapPanel();
+         md = mainScreenWidget->getMapDisplay();
+         actmap->cleartemps( 7 );
+
+         for ( CoordinateList::iterator i = list.begin(); i != list.end(); ++i ) {
+            tfield* fld = actmap->getField( *i );
+            if ( fld )
+               fld->a.temp = 1;
+         }
+         updateList();
+      };
 
 
+      void Show( bool fade = false )
+      {
+         md->Show();
+         ASC_PG_Dialog::Show( fade );
+         repaintMap();
+      }
 
+      ~SelectFromMap()
+      {
+         actmap->cleartemps(7);
+         repaintMap();
+      }
+      
+   private:
+      CoordinateList& coordinateList;
+         
+};
+
+
+void testFieldSelector()
+{
+   SelectFromMap::CoordinateList list;
+   list.push_back( MapCoordinate( 10,3 ));
+
+   SelectFromMap sfm( list );
+   sfm.Show();
+   sfm.RunModal();
+}
 
 
 void         setstartvariables(void)
@@ -708,10 +841,6 @@ void         setstartvariables(void)
 
    mapsaved = true;
 
-   auswahl  = terrainTypeRepository.getObject_byPos(0);
-   auswahlf = vehicleTypeRepository.getObject_byPos(0);
-   auswahlb = buildingTypeRepository.getObject_byPos(0);
-   actobject = objectTypeRepository.getObject_byPos(0);
    auswahlm = 1;
    auswahlw = 0;
    farbwahl = 0;
@@ -1008,7 +1137,7 @@ void         tnewmap::init(void)
    else addbutton("~S~et Mapvalues",20,ysize - 40,20 + w,ysize - 10,0,1,10,true);
    addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,4,true);
 
-   tauswahl = auswahl;
+   tauswahl = NULL;
 
    buildgraphics();
    if (valueflag == true )
@@ -1096,7 +1225,6 @@ void         tnewmap::buttonpressed(int id)
          disablebutton(8);
       }
    if (id == 12) {
-      npush ( auswahl );
 
       void *p;
 
@@ -1109,9 +1237,7 @@ void         tnewmap::buttonpressed(int id)
       putimage(430,0,p);
       mousevisible(true);
 
-      tauswahl = auswahl;
-
-      npop ( auswahl );
+      tauswahl = NULL;
 
       if ( tauswahl->weather[auswahlw] )
          tauswahl->weather[auswahlw]->paint( getActiveSurface(), SPoint(x1 + 440,y1 + 182) );
