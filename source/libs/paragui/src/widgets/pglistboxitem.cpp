@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-04-22 14:08:13 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pglistboxitem.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -46,8 +46,8 @@ PG_ListBoxItem::PG_ListBoxItem(PG_Widget* parent, int height, const std::string&
 		my_gradient[i] = NULL;
 	}
 
-	SetText(text);
 	LoadThemeStyle(style, PG_PropStr::ListBoxItem);
+   SetText(text);
 
 }
 

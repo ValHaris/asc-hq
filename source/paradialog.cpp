@@ -473,13 +473,25 @@ int ASC_PG_App::Run ( )
 
 
 ASC_PG_Dialog :: ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCString& windowtext, WindowFlags flags, const ASCString& style, int heightTitlebar )
-      :PG_Window ( parent, r, windowtext, flags, style, heightTitlebar ),
+   :PG_Window ( parent, centerWindow(r), windowtext, flags, style, heightTitlebar ),
       // quitModalLoopValue ( 0 ), 
       caller(0)
 {
    //   mainScreenWidget->setDirty();
    //   SDL_mutexP ( eventHandlingMutex );
    // sigMouseButtonDown.connect(SigC::slot(*this, &ASC_PG_Dialog::eventMouseButtonDown));
+}
+
+
+PG_Rect ASC_PG_Dialog::centerWindow( const PG_Rect& rect )
+{
+   PG_Rect r = rect;
+   if ( r.x < 0 )
+      r.x = (PG_Application::GetScreenWidth() - r.w) / 2;
+
+   if ( r.y < 0 )
+      r.y = (PG_Application::GetScreenHeight() - r.h) / 2;
+   return r;
 }
 
 

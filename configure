@@ -23366,7 +23366,7 @@ bkgr4.scr *.wav *.gif *.asctxt"
 
 echo "$as_me:$LINENO: checking \"music files\"" >&5
 echo $ECHO_N "checking \"music files\"... $ECHO_C" >&6
-missingmusic=`./checkfordata.pl data/music/frontiers.mp3 data/music/time_to_strike.mp3 data/music/machine_wars.mp3`
+missingmusic=`./checkfordata.pl data/music/frontiers.ogg data/music/time_to_strike.ogg data/music/machine_wars.ogg`
 if test "x$missingmusic" = x ; then
   echo "$as_me:$LINENO: result: \"yes\"" >&5
 echo "${ECHO_T}\"yes\"" >&6

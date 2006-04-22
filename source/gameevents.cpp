@@ -1593,32 +1593,10 @@ void Reinforcements :: setup ()
       objectNum = 0;
    }
 
-
-   displaymessage("use space to select the units/buildings\nfinish the selection by pressing enter",3);
-   int res;
-   do {
-      int x,y;
-      res = selectfield(&x,&y);
-      if ( res == 2 ) {
-         tfield* fld = gamemap->getField ( x, y );
-         if ( fld->vehicle ) {
-            tmemorystream stream ( &buf, tnstream::appending );
-            stream.writeInt( ReinfVehicle );
-            fld->vehicle->write ( stream );
-            objectNum++;
-            delete fld->vehicle;
-            fld->vehicle = NULL;
-         } else
-            if ( fld->building ) {
-               tmemorystream stream ( &buf, tnstream::appending );
-               stream.writeInt( ReinfBuilding );
-               fld->building->write ( stream );
-               objectNum++;
-               delete fld->building;
-               fld->building = NULL;
-            }
-      }
-   } while ( res == 2 ); /* enddo */
+   ReinforcementSelector::CoordinateList fieldlist;
+   ReinforcementSelector rs( fieldlist, gamemap, buf, objectNum );
+   rs.Show();
+   rs.RunModal();
 }
 
 class FindUnitPlacementPos : public SearchFields {

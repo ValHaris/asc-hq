@@ -848,149 +848,127 @@ bool   createevent( Event* event )
 
 // õS EventSel
 
-class   teventsel : public tstringselect {
-           public :
-                 int oi;
-                 void rebuildlines(void);
-                 void setup(void);
-                 virtual void buttonpressed(int id);
-                 virtual void get_text(int nr);
-                 virtual void run(void);
-                 };
 
-
-void         teventsel::setup(void)
-{
-   title = "Events";
-   numberoflines = actmap->events.size();
-   xsize = 570;
-   ysize = 360;
-   x1 = 35;
-   y1 = 60;
-
-   sy = 120;
-   ey = ysize - 20;
-   addbutton("~N~ew",20,40,90,70,0,1,4,true);
-   addbutton("~E~dit",110,40,180,70,0,1,5,true);
-   // addbutton("~C~hange",200,40,260,70,0,1,6,true);
-   addbutton("~D~elete",280,40,340,70,0,1,7,true);
-   addbutton("~O~K",360,40,420,70,0,1,8,true);
-}
-
-void   teventsel::get_text(int nr) //gibt in txt den string zurck
-{
-   int count = 0;
-   for ( GameMap::Events::iterator i = actmap->events.begin(); i != actmap->events.end() && count <= nr; ++i, ++count )
-      if( count == nr ) {
-         strcpy(txt,EventActionName[(*i)->action->getActionID()]);
-         strcat(txt,"  ");
-         strcat(txt,(*i)->description.c_str());
-      }
-}
-
-
-void         teventsel::buttonpressed(int         id)
-{
-   tstringselect::buttonpressed(id);
-   switch (id) {
-
-      case 4:   { // new
-             Event* ev = new Event(*actmap);
-             if ( !createevent( ev ) ) {
-                delete ev;
-                return;
-             }
-
-             GameMap::Events::iterator e = actmap->events.begin();
-             for ( int t = 0; t < redline && e != actmap->events.end(); t++ )
-                ++e;
-
-             actmap->events.insert( e, ev );
-
-             numberoflines++;
-             if ((numberoflines > lnshown) && (scrollbarvisible == false)) {
-                scrollbar_on();
-                enablebutton(1);
-                enablebutton(2);
-                enablebutton(3);
-             }
-
-             viewtext();
-          }
-      break;
-      case 5:  if ( actmap->events.size() ) { // edit
-                   tmemorystreambuf buf;
-                                              
-                   GameMap::Events::iterator e = actmap->events.begin();
-                   for ( int t = 0; t < redline && e != actmap->events.end(); t++ )
-                      ++e;
-
-                   {
-                     tmemorystream stream ( &buf, tnstream::writing );
-                     (*e)->write ( stream );
-                   }
-
-                   if ( ! createevent( *e ) ) {
-                     // cancel pressed, we are restoring the original event
-                     tmemorystream stream ( &buf, tnstream::reading );
-                     (*e)->read ( stream );
-                   }
-
-                   viewtext();
-                }
-      break;
-
-      case 7:   { // delete
-
-             GameMap::Events::iterator e = actmap->events.begin();
-             for ( int t = 0; t < redline && e != actmap->events.end(); t++ )
-                ++e;
-
-             if ( e != actmap->events.end() ) {
-               delete *e;
-               actmap->events.erase ( e );
-   
-               numberoflines--;
-               resettextfield();
-               viewtext();
-             }
-          }
-      break;
-
-      case 8:   action = 255;
-   break;
-   }
-}
-
-
-void         teventsel::run(void)
-{
-   mousevisible(false);
-   showtext2("Puffer :",x1 + 10,y1 + 90);
-   mousevisible(true);
-   do {
-      tstringselect::run();
-      switch (taste) {
-      case ct_up : {
-
-           }
-         break;
-      case ct_down : {
+class EventList : public ASC_PG_Dialog {
+   private:
+      bool ButtonNew()
+      {
+         Event* ev = new Event(*actmap);
+         if ( !createevent( ev ) ) {
+            delete ev;
+            return true;
          }
-         break;
-      default:
-        break;
-      } /* endswitch */
-   }  while (!((taste == ct_esc) || (action == 255)));
-}
+
+         actmap->events.push_back( ev );
+
+         updateListbox();
+         return true;
+      }
+
+      bool ButtonDelete()
+      {
+         int marked = listbox->GetSelectedIndex();
+         if ( marked < 0 )
+            return false;
+         
+         GameMap::Events::iterator e = actmap->events.begin();
+         for ( int t = 0; t < marked && e != actmap->events.end(); t++ )
+            ++e;
+
+         if ( e != actmap->events.end() ) {
+            delete *e;
+            actmap->events.erase ( e );
+            updateListbox();
+         }
+         
+         return true;
+      }
+
+      bool ButtonEdit()
+      {
+         if ( actmap->events.size() ) { 
+            tmemorystreambuf buf;
+            
+
+            int marked = listbox->GetSelectedIndex();
+            if ( marked < 0 )
+               return false;
+            
+            GameMap::Events::iterator e = actmap->events.begin();
+            for ( int t = 0; t < marked && e != actmap->events.end(); t++ )
+               ++e;
+
+            {
+               tmemorystream stream ( &buf, tnstream::writing );
+               (*e)->write ( stream );
+            }
+
+            if ( ! createevent( *e ) ) {
+                     // cancel pressed, we are restoring the original event
+               tmemorystream stream ( &buf, tnstream::reading );
+               (*e)->read ( stream );
+            }
+
+            updateListbox();
+            return true;
+         } else
+            return false;
+         
+      }
+      
+      bool ButtonOK()
+      {
+         QuitModal();
+         return true;
+      }
+      
+      PG_ListBox* listbox;
+
+
+      void updateListbox()
+      {
+         listbox->DeleteAll();
+         for ( GameMap::Events::iterator i = actmap->events.begin(); i != actmap->events.end(); ++i ) {
+            ASCString text = EventActionName[(*i)->action->getActionID()];
+            text += " - " + (*i)->description;
+            
+            new PG_ListBoxItem( listbox, 20, text );
+         }
+         listbox->Update();
+      }
+
+      
+      
+   public:
+      EventList() : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 600, 400 ), "Edit Events" )
+      {
+         int w = 500;
+         PG_Button* b = new PG_Button( this, PG_Rect ( w, 40, 90, 25 ), "~N~ew" );
+         b->sigClick.connect( SigC::slot( *this, &EventList::ButtonNew ));
+
+         b = new PG_Button( this, PG_Rect ( w, 80, 90, 25 ), "~E~dit" );
+         b->sigClick.connect( SigC::slot( *this, &EventList::ButtonEdit ));
+         
+         b = new PG_Button( this, PG_Rect ( w, 120, 90, 25 ), "~D~elete" );
+         b->sigClick.connect( SigC::slot( *this, &EventList::ButtonDelete ));
+         
+         b = new PG_Button( this, PG_Rect ( w, 160, 90, 25 ), "~O~K" );
+         b->sigClick.connect( SigC::slot( *this, &EventList::ButtonOK ));
+         
+
+         listbox = new PG_ListBox( this, PG_Rect( 20, 40, w - 30, Height()-50 ));
+         listbox->SetTransparency(255);
+         updateListbox();
+      };
+
+};
 
 
 void         event(void)
-{ teventsel    te;
-
-   te.init();
-   te.run();
-   te.done();
+{
+   EventList    te;
+   te.Show();
+   te.RunModal();
 }
 
 

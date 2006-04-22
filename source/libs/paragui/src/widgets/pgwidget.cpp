@@ -20,9 +20,9 @@
    pipelka@teleweb.at
  
    Last Update:      $Author: mbickel $
-   Update Date:      $Date: 2006-03-19 19:56:01 $
+   Update Date:      $Date: 2006-04-22 14:08:13 $
    Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgwidget.cpp,v $
-   CVS/RCS Revision: $Revision: 1.1.2.2 $
+   CVS/RCS Revision: $Revision: 1.1.2.3 $
    Status:           $State: Exp $
  */
 
@@ -1396,7 +1396,19 @@ void PG_Widget::GetTextSize(Uint16& w, Uint16& h, const std::string& text) {
 }
 
 void PG_Widget::GetTextSize(Uint16& w, Uint16& h, const PG_String& text, PG_Font* font) {
-	PG_FontEngine::GetTextSize(text, font, &w);
+   PG_Char c = PG_Application::GetHighlightingTag();
+   if ( !c || text.find( c) == PG_String::npos )
+      PG_FontEngine::GetTextSize(text, font, &w);
+   else {
+      PG_String t = text;
+      PG_String::size_type pos = t.find( c);
+      while ( pos != PG_String::npos )  {
+         t.erase( pos, 1 );
+         pos = t.find( c);
+      }
+      PG_FontEngine::GetTextSize(t, font, &w);
+   }
+      
 	h = font->GetFontHeight();
 }
 

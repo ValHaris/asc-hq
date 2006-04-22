@@ -46,7 +46,7 @@
 #include "gameevent_dialogs.h"
 #include "dialog.h"
 
-
+#include "dialogs/fieldmarker.h"
 
 #ifdef karteneditor
 # include "edmisc.h"
@@ -116,6 +116,7 @@ bool chooseVehicleType( int& vehicleTypeID )
   return true;
 }
 
+#if 0
 
 class  tgetxy : public tdialogbox {
               ASCString titlename;
@@ -316,6 +317,35 @@ void         getxy_building(int *x,int *y)
    *y = gb.y;
    gb.done();
 } 
+
+
+#endif
+
+
+void         getxy_building(int *x,int *y)
+{
+   SelectBuildingFromMap::CoordinateList list;
+   list.push_back ( MapCoordinate( *x, *y ));
+   
+   SelectBuildingFromMap sbfm( list, actmap );
+   sbfm.Show();
+   sbfm.RunModal();
+
+   if ( list.empty() ) {
+      *x = -1;
+      *y = -1;
+   } else {
+      *x = list.begin()->x;
+      *y = list.begin()->y;
+   }
+}
+
+void selectFields( FieldAddressing::Fields& fields )
+{
+   SelectFromMap sbfm( fields, actmap );
+   sbfm.Show();
+   sbfm.RunModal();
+}
 
 
 
@@ -615,36 +645,23 @@ void  tshownewtanks :: buttonpressed ( int id )
 }
 
 
-Vehicle* selectunit ( Vehicle* unit )
-{
-    int x, y;
-    int cnt = 0;
-    for ( int pp = 0; pp < 9; pp++ )
-       if ( !actmap->player[pp].vehicleList.empty() )
-          cnt++;
-    if ( cnt ) {
-       if ( unit ) {
-          x = unit->xpos;
-          y = unit->ypos;
-       } else {
-          x = 0;
-          y = 0;
-       }
-
-       // cursor.gotoxy(x,y);
-       return selectUnitFromMap();
-    } else {
-       displaymessage("no vehicles on map !", 1 );
-       return NULL;
-    }
-}
-
 int selectunit ( int unitnetworkid )
 {
   Vehicle* v = actmap->getUnit ( unitnetworkid );
-  v = selectunit ( v );
-  if ( v )
-     return v->networkid;
+
+
+  SelectUnitFromMap::CoordinateList list;
+  list.push_back ( v->getPosition() );
+  SelectUnitFromMap sufm ( list, actmap );
+  sufm.Show();
+  sufm.RunModal();
+
+  if ( list.empty() )
+     return 0;
+  
+  tfield* fld = actmap->getField( *list.begin() );
+  if ( fld && fld->vehicle )
+     return fld->vehicle->networkid;
   else
      return 0;
 }
@@ -760,6 +777,45 @@ void playerselall( int *playerbitmap)
    sc.run();
    sc.done();
    *playerbitmap = sc.playerbit;
+}
+
+
+
+bool ReinforcementSelector::mark()
+{
+   MapCoordinate pos = actmap->getCursor();
+   if  ( !accept(pos))
+      return false;
+
+   CoordinateList::iterator i = find( coordinateList.begin(), coordinateList.end(), pos );
+   if ( i == coordinateList.end() )
+      coordinateList.push_back ( pos );
+
+   tfield* fld = actmap->getField( pos );
+   if (!fld )
+      return false;
+
+   if ( fld->vehicle ) {
+      tmemorystream stream ( &buf, tnstream::appending );
+      stream.writeInt( Reinforcements::ReinfVehicle );
+      fld->vehicle->write ( stream );
+      objectNum++;
+      delete fld->vehicle;
+      fld->vehicle = NULL;
+   } else
+      if ( fld->building ) {
+         tmemorystream stream ( &buf, tnstream::appending );
+         stream.writeInt( Reinforcements::ReinfBuilding );
+         fld->building->write ( stream );
+         objectNum++;
+         delete fld->building;
+         fld->building = NULL;
+      }
+
+   showFieldMarking( coordinateList );
+
+   updateList();
+   return true;
 }
 
 

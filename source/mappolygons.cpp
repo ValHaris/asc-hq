@@ -35,13 +35,13 @@
 
 
 
-void  PolygonPainerSquareCoordinate::setpoint    ( int x,  int y  )
+void  PolygonPainterSquareCoordinate::setpoint    ( int x,  int y  )
 {
     if ( (x & 1) == (y & 1) )
        setpointabs ( x / 2, y);
 }
           
-bool    PolygonPainerSquareCoordinate::paintPolygon   ( const Poly_gon& poly )
+bool    PolygonPainterSquareCoordinate::paintPolygon   ( const Poly_gon& poly )
 {
    Poly_gon poly1;
    for ( int i=0; i< poly.vertex.size() ; i++ )

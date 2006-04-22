@@ -46,6 +46,7 @@
 #include "textfiletags.h"
 #include "clipboard.h"
 #include "dialogs/cargowidget.h"
+#include "dialogs/fieldmarker.h"
 
 #include "maped-mainscreen.h"
 
@@ -692,142 +693,29 @@ void         k_loadmap(void)
 #include "pbpeditor.cpp"
 
 #endif
-class CoordinateItem : public PG_ListBoxItem {
-   ASCString toString( const MapCoordinate& pos ) {
-      ASCString s;
-      s.format( "%d / %d", pos.x, pos.y );
-      return s;
-   };
-   MapCoordinate p;
-   
-   public:
-      CoordinateItem( PG_Widget *parent, const MapCoordinate& pos ) : PG_ListBoxItem( parent, 20, toString( pos ) ), p(pos) {};
-      MapCoordinate getPos() const { return p; };
-};
-
-   
-class SelectFromMap : public ASC_PG_Dialog{
-   private:
-      MapDisplayPG* md;
-      OverviewMapPanel* omp;
-
-      PG_ListBox* listbox;
-      
-   protected:
-      bool ProcessEvent ( const SDL_Event *   event,bool   bModal = false  )
-      {
-         if ( md->ProcessEvent( event, bModal ) )
-            return true;
-
-         if ( omp && omp->ProcessEvent( event, bModal ) )
-            return true;
-
-         return ASC_PG_Dialog::ProcessEvent( event, bModal );
-      }
-
-      bool mark()
-      {
-         MapCoordinate pos = actmap->getCursor();
-         CoordinateList::iterator i = find( coordinateList.begin(), coordinateList.end(), pos );
-         if ( i == coordinateList.end() ) {
-            actmap->getField( pos ) ->a.temp = 1;
-            coordinateList.push_back ( pos );
-         } else {
-            actmap->getField( pos ) -> a.temp = 0;
-            coordinateList.erase ( i );
-         }
-         repaintMap();
-         updateList();
-         return true;
-      }
-      
-      bool eventKeyDown (const SDL_KeyboardEvent *key)
-      {
-         if ( key->type == SDL_KEYDOWN ) {
-            if ( key->keysym.sym == SDLK_SPACE  ) {
-               mark();
-               return true;
-            }
-            if ( key->keysym.sym == SDLK_RETURN ) {
-               QuitModal();
-               return true;
-            }
-         }
-         return ASC_PG_Dialog::eventKeyDown( key );
-      }
-
-      void updateList()
-      {
-         listbox->RemoveAll();
-         for ( CoordinateList::iterator i = coordinateList.begin(); i != coordinateList.end(); ++i )
-            new CoordinateItem( listbox, *i );
-         
-         listbox->Show();
-      }
-
-      bool listItemClicked( PG_ListBoxBaseItem* item )
-      {
-         if ( item ) {
-            CoordinateItem* i = dynamic_cast<CoordinateItem*>(item);
-            if ( i )
-               md->cursor.goTo( i->getPos() );
-         }
-         return true;
-      }
-               
-      
-   public:
-      typedef vector<MapCoordinate> CoordinateList;
-      SelectFromMap( CoordinateList& list ) : ASC_PG_Dialog( NULL, PG_Rect( PG_Application::GetScreenWidth() - 150, PG_Application::GetScreenHeight() - 300, 150, 300 ), "Select Fields" ), listbox(NULL), coordinateList (list)
-      {
-         listbox = new PG_ListBox( this, PG_Rect( 10, 30, 130, 180 ));
-         listbox->sigSelectItem.connect( SigC::slot( *this, &SelectFromMap::listItemClicked ));
-         
-         PG_Button* m = new PG_Button ( this, PG_Rect( 10, 230, 130, 20 ), "mark (~space~)");
-         m->sigClick.connect( SigC::slot( *this, &SelectFromMap::mark ));
-
-         
-         PG_Button* b = new PG_Button ( this, PG_Rect( 10, 270, 130, 20 ), "~O~K");
-         b->sigClick.connect( SigC::slot( *this, &SelectFromMap::QuitModal ));
-         
-         omp = mainScreenWidget->getOverviewMapPanel();
-         md = mainScreenWidget->getMapDisplay();
-         actmap->cleartemps( 7 );
-
-         for ( CoordinateList::iterator i = list.begin(); i != list.end(); ++i ) {
-            tfield* fld = actmap->getField( *i );
-            if ( fld )
-               fld->a.temp = 1;
-         }
-         updateList();
-      };
 
 
-      void Show( bool fade = false )
-      {
-         md->Show();
-         ASC_PG_Dialog::Show( fade );
-         repaintMap();
-      }
+void selectUnitFromMap ( GameMap* gamemap, MapCoordinate& pos )
+{
+   SelectFromMap::CoordinateList list;
+   list.push_back( pos );
 
-      ~SelectFromMap()
-      {
-         actmap->cleartemps(7);
-         repaintMap();
-      }
-      
-   private:
-      CoordinateList& coordinateList;
-         
-};
+   SelectFromMap sfm( list, gamemap );
+   sfm.Show();
+   sfm.RunModal();
 
+   if ( list.empty() )
+      pos = MapCoordinate( -1, -1 );
+   else
+      pos = *list.begin();
+}
 
 void testFieldSelector()
 {
    SelectFromMap::CoordinateList list;
    list.push_back( MapCoordinate( 10,3 ));
 
-   SelectFromMap sfm( list );
+   SelectFromMap sfm( list, actmap );
    sfm.Show();
    sfm.RunModal();
 }
@@ -846,7 +734,7 @@ void         setstartvariables(void)
    farbwahl = 0;
 }
 
-
+#if 0
 
 int  selectfield(int * cx ,int  * cy)
 {
@@ -903,28 +791,10 @@ Vehicle*  selectUnitFromMap()
       return NULL;
 }
 
-
+#endif
 
 //* õS FillPolygonevent
 
-class  ShowPolygonUsingTemps : public PolygonPainerSquareCoordinate {
-        protected:
-             virtual void setpointabs ( int x,  int y  ) {
-                tfield* ffield = getfield ( x , y );
-                if (ffield)
-                    ffield->a.temp2 = 1;
-             };
-        public:
-             bool paintPolygon   (  const Poly_gon& poly ) {
-                bool res = PolygonPainerSquareCoordinate::paintPolygon ( poly );
-                for ( int i = 0; i < poly.vertex.size(); ++i ) {
-                   tfield* ffield = actmap->getField ( poly.vertex[i] );
-                   if (ffield)
-                       ffield->a.temp = 1;
-                }
-                return res;
-             };
-};
 
 
 //* õS FillPolygonbdt
@@ -997,48 +867,62 @@ void tfillpolygonunit::initevent ( void )
 // õS ChangePoly
 */
 
-void PolygonEditor::display()
-{
-   actmap->cleartemps();
-   ShowPolygonUsingTemps sput;
-   if ( !sput.paintPolygon ( poly ) )
-      displaymessage("Invalid Polygon !",1 );
-   displaymap();
-}
+
+class  ShowPolygonUsingTemps : public PolygonPainterSquareCoordinate {
+   protected:
+      virtual void setpointabs ( int x,  int y  ) {
+         tfield* ffield = getfield ( x , y );
+         if (ffield)
+            ffield->a.temp2 = 1;
+      };
+   public:
+      bool paintPolygon   (  const Poly_gon& poly ) {
+         bool res = PolygonPainterSquareCoordinate::paintPolygon ( poly );
+         for ( int i = 0; i < poly.vertex.size(); ++i ) {
+            tfield* ffield = actmap->getField ( poly.vertex[i] );
+            if (ffield)
+               ffield->a.temp = 1;
+         }
+         return res;
+      };
+};
 
 
+class PolygonEditor : public SelectFromMap {
+   protected:
+      void showFieldMarking( const CoordinateList& coordinateList )
+      {
+         Poly_gon poly;
+         for ( CoordinateList::const_iterator i = coordinateList.begin(); i != coordinateList.end(); ++i ) 
+            poly.vertex.push_back( MapCoordinate(*i) );
 
-
-void  PolygonEditor::run(void)
-{
-   int x = 0;
-   int y = 0;
-
-   display();
-
-   int r;
-   savemap ( "_backup_polygoneditor.map" );
-   displaymessage("use space to select the vertices of the polygon\nfinish the selection by pressing enter",3);
-   do {
-      r = selectfield(&x,&y);
-      if ( r != 1   &&   (x != 50000) ) {
-         Poly_gon::VertexIterator i = find ( poly.vertex.begin(), poly.vertex.end(), MapCoordinate (x,y) );
-         if ( i != poly.vertex.end() )
-            poly.vertex.erase( i );
-         else
-            poly.vertex.push_back ( MapCoordinate( x, y ));
-
-         display();
+         ShowPolygonUsingTemps sput;
+         if ( !sput.paintPolygon ( poly ) )
+            displaymessage("Invalid Polygon !",1 );
       }
-   } while ( r != 1 ); /* enddo */
-   actmap->cleartemps();
-   displaymap();
-}
+      
+   public:
+      PolygonEditor( CoordinateList& list, GameMap* map ) : SelectFromMap( list, map ) {};
+};
+
+
 
 void editpolygon(Poly_gon& poly)
 {
-  PolygonEditor cp ( poly );
-  cp.run();
+   savemap ( "_backup_polygoneditor.map" );
+
+   PolygonEditor::CoordinateList list;
+   
+   for ( Poly_gon::VertexIterator  i = poly.vertex.begin(); i != poly.vertex.end(); ++i )
+      list.push_back( *i );
+   
+   PolygonEditor cp ( list, actmap );
+   cp.Show();
+   cp.RunModal();
+
+   poly.vertex.clear();
+   for ( PolygonEditor::CoordinateList::iterator i = list.begin(); i != list.end(); ++i )
+      poly.vertex.push_back( *i );
 }
 
 
@@ -1877,12 +1761,13 @@ void         EditAiParam::buttonpressed(int         id)
                 aiv.setJob ( j );
              }
              break;
+             /*
    case 22 : getxy ( &aiv.dest.x, &aiv.dest.y );
              aiv.dest.setnum ( aiv.dest.x, aiv.dest.y, -2 );
              z = -2;
              redraw();
              break;
-
+             */
    case 30 : action = 1;
              aiv.dest.setnum ( aiv.dest.x, aiv.dest.y, z );
              break;
@@ -2933,6 +2818,8 @@ bool isNull(const Vehicletype* v ) { return !v; };
 
 void movebuilding ( void )
 {
+   warning("sorry, not implemented yet in ASC2!");
+#if 0
    mapsaved = false;
    tfield* fld = getactfield();
    if ( fld->vehicle ) {
@@ -2981,6 +2868,7 @@ void movebuilding ( void )
       }
       displaymap();
    }
+#endif
 }
 
 

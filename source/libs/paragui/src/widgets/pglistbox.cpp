@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-04-22 14:08:13 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pglistbox.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -37,7 +37,7 @@ PG_ListBox::PG_ListBox(PG_Widget* parent, const PG_Rect& r, const std::string& s
 my_selectedItem(NULL), my_alignment(PG_Label::LEFT) {
 	my_multiselect = false;
 	my_indent = 0;
-	my_selectindex = 0;
+	my_selectindex = -1;
 	PG_ThemeWidget::LoadThemeStyle(style, PG_PropStr::ListBox);
 	EnableScrollBar(false, PG_ScrollBar::HORIZONTAL);
 }
@@ -107,11 +107,13 @@ bool PG_ListBox::eventMouseMotion(const SDL_MouseMotionEvent* motion) {
 }
 
 void PG_ListBox::RemoveAll() {
-	my_selectedItem = NULL;
+   my_selectindex = -1;
+   my_selectedItem = NULL;
 	my_scrollarea->RemoveAll();
 }
 
 void PG_ListBox::DeleteAll() {
+   my_selectindex = -1;
 	my_selectedItem = NULL;
 	my_scrollarea->DeleteAll();
 	my_scrollarea->ScrollTo(0,0);
@@ -138,7 +140,7 @@ void PG_ListBox::SetIndent(Uint16 indent) {
 
 void PG_ListBox::SelectFirstItem() {
 	my_selectindex = 0;
-	PG_ListBoxBaseItem* item = (PG_ListBoxBaseItem*)FindWidget(0);
+   PG_ListBoxBaseItem* item = dynamic_cast<PG_ListBoxBaseItem*>(FindWidget(0));
 
 	if(item == NULL) {
 		return;
@@ -148,7 +150,7 @@ void PG_ListBox::SelectFirstItem() {
 }
 
 void PG_ListBox::SelectNextItem() {
-	PG_ListBoxBaseItem* item = (PG_ListBoxBaseItem*)FindWidget(my_selectindex+1);
+   PG_ListBoxBaseItem* item = dynamic_cast<PG_ListBoxBaseItem*>(FindWidget(my_selectindex+1));
 
 	if(item == NULL) {
 		return;
@@ -159,7 +161,7 @@ void PG_ListBox::SelectNextItem() {
 }
 
 void PG_ListBox::SelectPrevItem() {
-	PG_ListBoxBaseItem* item = (PG_ListBoxBaseItem*)FindWidget(my_selectindex-1);
+   PG_ListBoxBaseItem* item = dynamic_cast<PG_ListBoxBaseItem*>(FindWidget(my_selectindex-1));
 
 	if(item == NULL) {
 		return;

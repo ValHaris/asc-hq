@@ -2,7 +2,7 @@
     \brief operating with polygons on tje map
 */
 
-//     $Id: mappolygons.h,v 1.1.2.1 2006-02-04 13:57:01 mbickel Exp $
+//     $Id: mappolygons.h,v 1.1.2.2 2006-04-22 14:08:13 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -43,7 +43,7 @@ class Poly_gon {
 
 
 
-class  PolygonPainerSquareCoordinate : protected PolygonPainter<Poly_gon> {
+class  PolygonPainterSquareCoordinate : protected PolygonPainter<Poly_gon> {
         protected:
              virtual void setpoint    ( int x,  int y  );
              virtual void setpointabs ( int x,  int y  )=0;

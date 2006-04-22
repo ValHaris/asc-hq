@@ -544,7 +544,7 @@ dnl what gehts packed into main.con (the data container file)
 AC_SUBST([MAINCONDATA])
 
 AC_MSG_CHECKING("music files")
-missingmusic=`./checkfordata.pl data/music/frontiers.mp3 data/music/time_to_strike.mp3 data/music/machine_wars.mp3`
+missingmusic=`./checkfordata.pl data/music/frontiers.ogg data/music/time_to_strike.ogg data/music/machine_wars.ogg`
 if test "x$missingmusic" = x ; then
   AC_MSG_RESULT("yes")
   MUSICDIR=music

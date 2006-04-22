@@ -422,8 +422,6 @@ void execaction( int code)
                            displaymap();
                          }
        break;
-    case act_events :   event();
-       break;
        /*
     case act_fillmode :   if ( polyfieldmode == false ) {   
                  if (tfill == true) tfill = false;
@@ -810,6 +808,8 @@ void execaction_pg(int code)
          editGameOptions( false );
          break;
 
+      case act_events :   event();
+         break;
    };
 }
 

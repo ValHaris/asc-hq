@@ -59,6 +59,11 @@
    \section The basic design of ASC
    
    <p><img src="ClassDiagram1.png">
+
+   \section Paragui
+
+   ASC uses the Paragui as widget engine. The documentation is available at
+   <A HREF="http://terdon.asc-hq.org/asc/paragui-doc/html/">terdon.asc-hq.org</A>.
  
 */
 

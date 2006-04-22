@@ -41,6 +41,11 @@
 
 Maped_MainScreenWidget*  mainScreenWidget = NULL ;
 
+MainScreenWidget* getMainScreenWidget()
+{
+   return mainScreenWidget;
+}
+
 
 class Menu : public PG_MenuBar {
 

@@ -2,7 +2,7 @@
     \brief Interface to game event dialogs
 */
 
-//     $Id: gameevent_dialogs.h,v 1.2 2004-05-11 20:22:33 mbickel Exp $
+//     $Id: gameevent_dialogs.h,v 1.2.2.1 2006-04-22 14:08:13 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -32,6 +32,8 @@
 #include "gameevents.h"
 #include "dlg_box.h"
 #include "research.h"
+
+#include "dialogs/fieldmarker.h"
 
     //! checks, which vehicle types are newly available
     class NewVehicleTypeDetection  {
@@ -67,7 +69,16 @@ extern void getxy_building(int *x,int *y);
 extern int selectunit ( int unitnetworkid );
 extern void playerselall( int *playerbitmap);
 extern bool chooseVehicleType( int& vehicleTypeID );
-extern int  selectfield(int * cx ,int  * cy);
+
+class ReinforcementSelector : public SelectFromMap {
+   private:
+      tmemorystreambuf& buf;
+      int& objectNum;
+   protected:
+      bool mark();
+   public:
+      ReinforcementSelector( CoordinateList& list, GameMap* map, tmemorystreambuf& buffer, int& objNum ) : SelectFromMap( list, map ), buf( buffer), objectNum(objNum) {};
+};
 
 
 #endif

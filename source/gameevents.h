@@ -82,7 +82,7 @@ enum EventAction_ID { EventAction_Nothing,
 
 class EventTriggered;
 
-class FieldAddressing: protected PolygonPainerSquareCoordinate  {
+class FieldAddressing: protected PolygonPainterSquareCoordinate  {
       GameMap*& gameMap;
    public:
       typedef vector<MapCoordinate> Fields;
@@ -686,6 +686,7 @@ class AddResources : public EventAction {
 class Reinforcements : public EventAction {
       tmemorystreambuf buf;
       int objectNum;
+      friend class ReinforcementSelector;
       enum Type { ReinfVehicle, ReinfBuilding };
    public:
       Reinforcements(): EventAction( EventAction_Reinforcements ), objectNum(0) {};

@@ -80,5 +80,7 @@ protected:
 };
 
 
+extern MainScreenWidget* getMainScreenWidget();
+
 #endif
 

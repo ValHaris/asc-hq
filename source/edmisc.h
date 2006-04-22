@@ -60,14 +60,6 @@ extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePo
            int      x, y; 
         } xy; 
 
-   class  PolygonEditor {
-             Poly_gon& poly;
-             void display();
-        public:
-             PolygonEditor ( Poly_gon& polygon ) : poly( polygon ) {};
-             void run(void);
-   };
-   
    class tputresources : public SearchFields {
                               int resourcetype;
                               int maxresource;
@@ -113,7 +105,7 @@ extern void         changeminestrength(void);
 extern void         newmap(void);
 extern void         changemapvalues(void);
 extern void         cargoEditor ( ContainerBase* container );
-extern int          selectfield(int * cx ,int  * cy);
+// extern int          selectfield(int * cx ,int  * cy);
 extern void 	     playerchange(void);
 
 //extern void         setpolytemps (int value, ppolygon poly1); //* setzt in diesem Polygon den Tempvalue auf value
@@ -171,8 +163,8 @@ extern void editResearch();
 extern void editResearchPoints();
 extern void generateTechTree();
 extern void editTechAdapter();
-extern Vehicle* selectUnitFromContainer( ContainerBase* container );
-extern Vehicle*  selectUnitFromMap();
+// extern Vehicle* selectUnitFromContainer( ContainerBase* container );
+// extern Vehicle*  selectUnitFromMap();
 extern void resetPlayerData();
 
 extern void placeCurrentItem();

@@ -110,10 +110,9 @@ class StartupScreen: public SigC::Object {
  
  //! Adapter class for using Paragui Dialogs in ASC. This class transfers the event control from ASC to Paragui and back. All new dialog classes should be derived from this class
 class ASC_PG_Dialog : public PG_Window {
-       // SDL_Surface* background;
     private:
-       // int quitModalLoopValue;       
-    protected:
+       PG_Rect centerWindow( const PG_Rect& rect );
+   protected:
       PG_MessageObject* caller;
       virtual bool closeWindow();
       void quitModalLoop(int value ); 
