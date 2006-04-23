@@ -45,6 +45,7 @@
 #include "sg.h"
 #include "loaders.h"
 #include "itemrepository.h"
+#include "turncontrol.h"
 
 
 namespace GuiFunctions

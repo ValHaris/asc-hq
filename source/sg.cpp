@@ -131,6 +131,8 @@
 #include "gameeventsystem.h"
 #include "sdl/sound.h"
 #include "soundList.h"
+#include "turncontrol.h"
+#include "network.h"
 
 #include "dialogs/newgame.h"
 #include "dialogs/soundsettings.h"
@@ -673,10 +675,6 @@ void execuseraction ( tuseractions action )
             }
          }
          break;
-      case ua_networksupervisor:
-         networksupervisor();
-         displaymap();
-         break;
 
       case ua_selectPlayList:
          selectPlayList();
@@ -888,6 +886,10 @@ void execuseraction2 ( tuseractions action )
          break;
       case ua_selectgraphicset:
          selectgraphicset();
+         break;
+      case ua_networksupervisor:
+         networksupervisor();
+         displaymap();
          break;
          
       default:

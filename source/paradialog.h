@@ -229,6 +229,17 @@ class PG_StatusWindowData : public StatusMessageWindowHolder::UserData {
       ~PG_StatusWindowData() ;
 };
 
+template<typename T>
+class PG_ListBoxDataItem : public PG_ListBoxItem {
+   public:
+      typedef T DataType;
+   private:
+      T my_data;
+   public:
+      PG_ListBoxDataItem( PG_Widget *parent, int height, const std::string &text, const T& data, SDL_Surface *icon=NULL ) : PG_ListBoxItem( parent, height, text, icon ), my_data(data) {};
+      T getData() { return my_data; };
+};
+
 
 extern int  new_choice_dlg(const ASCString& title, const ASCString& leftButton, const ASCString& rightButton );
 

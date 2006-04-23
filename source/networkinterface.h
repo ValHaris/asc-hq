@@ -46,7 +46,5 @@ class GameTransferMechanism {
 
 typedef Loki::SingletonHolder< Factory< GameTransferMechanism, ASCString > > networkTransferMechanismFactory;
 
-extern void networksupervisor ();
-
 
 #endif

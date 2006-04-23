@@ -43,6 +43,7 @@
 #include "replaymapdisplay.h"
 #include "asc-mainscreen.h"
 #include "loaders.h"
+#include "turncontrol.h"
 
 trunreplay runreplay;
 

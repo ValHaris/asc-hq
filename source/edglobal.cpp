@@ -47,6 +47,7 @@
 #include "dialogs/alliancesetup.h"
 #include "dialogs/playersetup.h"
 #include "dialogs/editgameoptions.h"
+#include "dialogs/admingame.h"
    
    const char* execactionnames[execactionscount] = {
         "End MapEdit",
@@ -692,8 +693,6 @@ void execaction( int code)
       break;
    case act_editTechAdapter: editTechAdapter();
       break;
-   case act_resetPlayerData: resetPlayerData();
-      break;
    case act_playerStrengthSummary: showPlayerStrength();
       break;
 
@@ -809,6 +808,8 @@ void execaction_pg(int code)
          break;
 
       case act_events :   event();
+         break;
+      case act_resetPlayerData: adminGame( actmap );
          break;
    };
 }

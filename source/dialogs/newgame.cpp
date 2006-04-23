@@ -30,12 +30,13 @@
 #include "../loaders.h"
 #include "../gamemap.h"
 #include "../paradialog.h"
-#include "../controls.h"
+#include "../turncontrol.h"
 #include "../viewcalculation.h"
 #include "../networkinterface.h"
 #include "../network.h"
 #include "../spfst.h"
 #include "../windowing.h"
+#include "../controls.h"
 
 class GameParameterEditorWidget;
 

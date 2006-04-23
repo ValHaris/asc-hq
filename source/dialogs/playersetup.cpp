@@ -28,6 +28,15 @@
 
 
 
+int PlayerSetupWidget::guessHeight( GameMap* gamemap )
+{
+   int counter = 0;
+   for ( int i = 0; i < gamemap->getPlayerCount(); ++i )
+      if ( gamemap->player[i].exist() )
+         ++counter;
+   
+   return yoffset + counter * spacing + 30;
+}
 
 PlayerSetupWidget::PlayerSetupWidget( GameMap* gamemap, Mode mode, PG_Widget *parent, const PG_Rect &r, const std::string &style ) : PG_ScrollWidget( parent, r, style ) , actmap ( gamemap )
 {
@@ -40,7 +49,7 @@ PlayerSetupWidget::PlayerSetupWidget( GameMap* gamemap, Mode mode, PG_Widget *pa
          PlayerWidgets pw;
          pw.pos  = i;
          
-         int y = 20 + counter * spacing;
+         int y = yoffset + counter * spacing;
          
          ColoredBar* colbar = new ColoredBar( actmap->player[i].getColor(), this, PG_Rect( 20, y, Width() - 60, 30 ));
          colbar->SetTransparency( 128 );

@@ -3762,6 +3762,7 @@ void editTechAdapter()
 
 void resetPlayerData()
 {
+   
    vector<ASCString> buttonsP;
    buttonsP.push_back ( "~V~iew" );
    buttonsP.push_back ( "r~E~search" );
@@ -3839,6 +3840,7 @@ void resetPlayerData()
 
 
    } while ( playerRes.first != 7 );
+   
 }
 
 

@@ -19,39 +19,16 @@
 */
 
 
-#ifndef PLAYERSETUP_H
-#define PLAYERSETUP_H
+#ifndef admingameH
+#define admingameH
 
-#include <pgscrollwidget.h>
-#include "../gamemap.h"
-#include "../paradialog.h"
+#include "../libs/loki/Functor.h"
 
-class PlayerSetupWidget : public PG_ScrollWidget {
-      GameMap* actmap;
-      static const int spacing = 40;
-      static const int yoffset = 20;
-      
-      struct PlayerWidgets {
-         PG_LineEdit* name;
-         PG_DropDown* type;
-         int pos;
-      };
-         
-      
-      vector<PlayerWidgets> playerWidgets;
-   public:
-      enum Mode{ AllEditable, AllEditableSinglePlayer, SelfEditable };
-      PlayerSetupWidget( GameMap* gamemap, Mode mode, PG_Widget *parent, const PG_Rect &r, const std::string &style="ScrollWidget" );
-      bool Valid();
-      bool Apply();
+class GameMap;
 
-      static int guessHeight( GameMap* gamemap );
-      
-   private:
-      Mode mode;   
-};
+typedef Loki::Functor<void, TYPELIST_1(GameMap*) > TurnSkipper;
 
-extern void setupPlayers( GameMap* actmap, bool supervisor = false );
+extern bool adminGame( GameMap* actmap, TurnSkipper* turnSkipper = NULL );
 
 
 #endif

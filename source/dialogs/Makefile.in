@@ -52,7 +52,7 @@ am_libdialogs_la_OBJECTS = editmapparam.lo cargowidget.lo \
 	selectionwindow.lo fileselector.lo playersetup.lo \
 	alliancesetup.lo newgame.lo soundsettings.lo emailsetup.lo \
 	unitinfodialog.lo editgameoptions.lo vehicletypeselector.lo \
-	fieldmarker.lo
+	fieldmarker.lo admingame.lo
 libdialogs_la_OBJECTS = $(am_libdialogs_la_OBJECTS)
 libgamedialogs_la_DEPENDENCIES =
 am_libgamedialogs_la_OBJECTS = cargodialog.lo unitcounting.lo \
@@ -212,7 +212,7 @@ target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS) -Dmaindialogs
 noinst_LTLIBRARIES = libdialogs.la libgamedialogs.la libmapeddialogs.la
-libdialogs_la_SOURCES = editmapparam.cpp cargowidget.cpp selectionwindow.cpp fileselector.cpp playersetup.cpp alliancesetup.cpp newgame.cpp soundsettings.cpp emailsetup.cpp unitinfodialog.cpp  editgameoptions.cpp vehicletypeselector.cpp fieldmarker.cpp
+libdialogs_la_SOURCES = editmapparam.cpp cargowidget.cpp selectionwindow.cpp fileselector.cpp playersetup.cpp alliancesetup.cpp newgame.cpp soundsettings.cpp emailsetup.cpp unitinfodialog.cpp  editgameoptions.cpp vehicletypeselector.cpp fieldmarker.cpp admingame.cpp
 libdialogs_la_LIBADD = @SDL_LIBS@ 
 libgamedialogs_la_SOURCES = cargodialog.cpp unitcounting.cpp cargowidget.cpp ammotransferdialog.cpp attackpanel.cpp vehicletypeselector.cpp nextcampaignmap.cpp
 libgamedialogs_la_LIBADD = @SDL_LIBS@ 
@@ -273,6 +273,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/admingame.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/alliancesetup.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ammotransferdialog.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/attackpanel.Plo@am__quote@

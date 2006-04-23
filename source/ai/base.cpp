@@ -19,6 +19,8 @@
 
 #include "../replaymapdisplay.h"
 
+#include "../turncontrol.h"
+
 AI :: AI ( GameMap* _map, int _player ) : activemap ( _map ) , sections ( this )
 {
    strictChecks = false;

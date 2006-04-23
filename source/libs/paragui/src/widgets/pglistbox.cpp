@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-04-22 14:08:13 $
+    Update Date:      $Date: 2006-04-23 17:58:47 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pglistbox.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.2 $
+    CVS/RCS Revision: $Revision: 1.1.2.3 $
     Status:           $State: Exp $
 */
 
@@ -84,7 +84,8 @@ void PG_ListBox::SelectItem(PG_ListBoxBaseItem* item, bool select) {
 		my_selectedItem = item;
 		my_selectindex = item->GetID();
 		my_selectedItem->Update();
-	}
+	} else
+      item->Update();
 
 	sigSelectItem(item);
 	eventSelectItem(item);

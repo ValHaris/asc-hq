@@ -43,6 +43,9 @@
 #include "gamedlg.h"
 #include "loaders.h"
 #include "gamemap.h"
+#include "turncontrol.h"
+
+#include "dialogs/admingame.h"
 
 void FileTransfer::readChildData ( tnstream& stream )
 {
@@ -120,11 +123,19 @@ GameMap* FileTransfer::loadPBEMFile( const ASCString& filename )
 ASCString FileTransfer::constructFileName( const GameMap* actmap, int lastPlayer, int lastturn ) const
 {
    ASCString s = filename;
-   while ( s.find( "$p") != ASCString::npos )
-      s.replace( s.find( "$p"), 2, 1, 'A' + lastPlayer );
+   while ( s.find( "$p") != ASCString::npos ) {
+      if ( lastPlayer >= 0 )
+         s.replace( s.find( "$p"), 2, 1, 'A' + lastPlayer );
+      else
+         s.replace( s.find( "$p"), 2, "SV" );
+   }
 
-   while ( s.find( "$t") != ASCString::npos )
-      s.replace( s.find( "$t"), 2, ASCString::toString( lastturn ) );
+   while ( s.find( "$t") != ASCString::npos ) {
+      if ( lastturn >= 0 )
+         s.replace( s.find( "$t"), 2, ASCString::toString( lastturn ) );
+      else
+         s.replace( s.find( "$t"), 2, ASCString::toString ( actmap->time.turn() ) );
+   }
       
    s += tournamentextension;
    return s;
@@ -272,3 +283,45 @@ void networksupervisor ( void )
 namespace {
    const bool r1 = networkTransferMechanismFactory::Instance().registerClass( FileTransfer::mechanismID(), ObjectCreator<GameTransferMechanism, FileTransfer> );
 }
+
+
+
+void networksupervisor ()
+{
+   ASCString filename = selectFile( ASCString("*") + tournamentextension + ";*.asc", true );
+   if ( filename.empty() )
+      return;
+
+   StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "loading " + filename );
+   FileTransfer ft;
+   auto_ptr<GameMap> newMap ( mapLoadingExceptionChecker( filename, MapLoadingFunction( &ft, &FileTransfer::loadPBEMFile )));
+   if ( !newMap.get() )
+      return;
+
+   if( newMap->supervisorpasswordcrc.empty() ) {
+      errorMessage ("no supervisor setup in this game!" );
+      return;
+   }
+
+   smw.close();
+   
+
+   try {
+      bool ok = enterpassword ( newMap->supervisorpasswordcrc );
+      if ( !ok ) {
+         errorMessage ("invalid password!" );
+         return;
+      }
+   }
+   catch ( ... ) {
+      return;
+   }
+
+   TurnSkipper ts ( &skipTurn );
+   
+   if ( adminGame( newMap.get(), &ts  ) )
+      newMap->network->send( newMap.get(), -1, -1 );
+
+}
+
+
