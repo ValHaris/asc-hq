@@ -116,7 +116,7 @@ int ActiveGraphicPictures :: setActive ( int id )
          }
 
       if ( !found && id== 0 )
-         fatalError ( "fatal error: no default graphic set ( id=0 ) found !" );
+         fatalError ( "fatal error: no default graphic set ( id=0 ) found ! Check that asc.gfx is in your search path" );
 
       if ( !found )
          id = 0;

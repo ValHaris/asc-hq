@@ -1,6 +1,9 @@
-//     $Id: fileio.h,v 1.8 2003-11-18 18:29:23 mbickel Exp $
+//     $Id: fileio.h,v 1.9 2006-04-25 18:04:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2003/11/18 18:29:23  mbickel
+//      Fixed unix compilation problems
+//
 //     Revision 1.7  2002/10/19 16:42:05  mbickel
 //      Fixes to the build system
 //
@@ -75,6 +78,8 @@
   # endif
   #endif
   #define ASC_direct dirent
+ 
+  #include <unistd.h>
 
 extern const char* filereadmode;
 extern const char* filewritemode;
