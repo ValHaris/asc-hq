@@ -451,6 +451,9 @@
 					RelativePath="..\..\..\dialogs\editmapparam.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\fieldmarker.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\fileselector.cpp">
 				</File>
 				<File

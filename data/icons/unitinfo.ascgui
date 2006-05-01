@@ -52,9 +52,9 @@ panel {
            FontColor = 0xffffff
            Fontsize = 11
            x = 5
-           y = 3
+           y = 6
 	   x2 = -5
-	   y2 = -7
+	   y2 = -4
            name = unittypename
         } Widget0
      } Widget2
@@ -411,7 +411,7 @@ panel {
          widget1 {
            type = dummy
            name = weapon_punch
-           x = 3
+           x = 0
            y = 0
            widgetnum = 10
            Widget0 {
@@ -529,7 +529,7 @@ panel {
          widget2 {
            type = dummy
            name = weapon_RF
-           x = 3
+           x = 0
            y = 0
            widgetnum = 10
            Widget0 {
@@ -647,7 +647,7 @@ panel {
         widget3 {
           type = dummy
           name = ammobar
-          x = 3
+          x = 0
           y = 0
           widgetnum = 20 
           Widget0 {
@@ -854,7 +854,7 @@ panel {
 
         widget4 {
           type = SpecialDisplay
-          x = 75
+          x = 72
           y = 40
           width = 3
           height = 24
@@ -862,7 +862,7 @@ panel {
        } widget4
        widget5 {
          type = SpecialDisplay
-         x = 75
+         x = 72
          y = 70
          width = 3
          height = 24
