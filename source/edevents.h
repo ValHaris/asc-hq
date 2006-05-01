@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: edevents.h,v 1.10 2004-07-12 18:15:05 mbickel Exp $
+//     $Id: edevents.h,v 1.10.2.1 2006-05-01 15:20:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2004/07/12 18:15:05  mbickel
+//      Lots of tweaks and fixed for more portability and compilation with mingw
+//
 //     Revision 1.9  2004/01/16 15:33:46  mbickel
 //     Completely rewritten game event system
 //     TPWM-decoding-Patch
@@ -87,7 +90,6 @@
 
  #define clear_and_or 124
 
- extern void         event(void);
  extern void         setmapparameters( void );
 
  extern void         getxy( int *x, int *y);
