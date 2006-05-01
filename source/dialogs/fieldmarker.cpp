@@ -69,6 +69,7 @@ bool SelectFromMap::markField2( const MapCoordinate& pos, const SPoint& mouse, b
 {
    if ( prio <= 2 )
       markField( pos );
+   return true;
 }
 
 

@@ -185,7 +185,7 @@
 				RelativePath="..\..\..\dlg_box.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\edevents.cpp">
+				RelativePath="..\..\..\ed_mapcomponent.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\edgen.cpp">
@@ -442,6 +442,9 @@
 				Name="dialogs"
 				Filter="">
 				<File
+					RelativePath="..\..\..\dialogs\admingame.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\alliancesetup.cpp">
 				</File>
 				<File
@@ -449,6 +452,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\editmapparam.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\eventeditor.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\fieldmarker.cpp">

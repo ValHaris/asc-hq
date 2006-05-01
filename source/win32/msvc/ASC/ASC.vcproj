@@ -418,6 +418,9 @@
 				RelativePath="..\..\..\textfiletags.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\turncontrol.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\typen.cpp">
 			</File>
 			<File
@@ -507,6 +510,9 @@
 			<Filter
 				Name="dialogs"
 				Filter="">
+				<File
+					RelativePath="..\..\..\dialogs\admingame.cpp">
+				</File>
 				<File
 					RelativePath="..\..\..\dialogs\alliancesetup.cpp">
 				</File>
