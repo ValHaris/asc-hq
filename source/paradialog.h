@@ -112,6 +112,9 @@ class StartupScreen: public SigC::Object {
 class ASC_PG_Dialog : public PG_Window {
     private:
        PG_Rect centerWindow( const PG_Rect& rect );
+       int stdButtonNum;
+       static int windowNum;
+       friend class WindowCounter;
    protected:
       PG_MessageObject* caller;
       virtual bool closeWindow();
@@ -119,6 +122,8 @@ class ASC_PG_Dialog : public PG_Window {
       virtual bool eventKeyDown(const SDL_KeyboardEvent *key);
     public:
        ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCString& windowtext, WindowFlags flags=DEFAULT, const ASCString& style="Window", int heightTitlebar=25);
+       PG_Button* AddStandardButton( const ASCString& name );
+       int RunModal();
 };
 
 
@@ -128,6 +133,7 @@ class DropDownSelector: public PG_DropDown {
         bool itemSelected( ); // PG_ListBoxBaseItem* i, void* p );   
      public:
         DropDownSelector( PG_Widget *parent, const PG_Rect &r=PG_Rect::null, int id=-1, const std::string &style="DropDown");
+        DropDownSelector( PG_Widget *parent, const PG_Rect &r, int itemnum, const char** items, const std::string &style="DropDown" );
         void AddItem (const std::string &text, void *userdata=NULL, Uint16 height=0);
         SigC::Signal1<void, int> selectionSignal;
 };
@@ -219,6 +225,49 @@ class Emboss : public PG_Widget {
 };
 
 
+class MultiListBox : public PG_Widget {
+
+      PG_ListBox* listbox;
+      
+   public:
+      MultiListBox (PG_Widget *parent, const PG_Rect &r ) : PG_Widget( parent, r )
+      {
+         SetTransparency( 255 );
+         
+         listbox = new PG_ListBox( parent, PG_Rect( r.x, r.y, r.w, r.h - 30 ) );
+         listbox->SetMultiSelect( true );
+         
+         (new PG_Button( parent, PG_Rect( r.x, r.y + r.h - 25, r.w/2-5, 25 ), "All"))->sigClick.connect( SigC::slot( *this, &MultiListBox::all ));
+         (new PG_Button( parent, PG_Rect( r.x + r.w/2 + 5, r.y + r.h - 25, r.w/2-5, 25 ), "None"))->sigClick.connect( SigC::slot( *this, &MultiListBox::none ));
+      }
+
+      PG_ListBox* getListBox() { return listbox; };
+
+      bool all()
+      {
+         for ( int i = 0; i < listbox->GetWidgetCount(); ++i ) {
+            PG_ListBoxBaseItem* bi = dynamic_cast<PG_ListBoxBaseItem*>(listbox->FindWidget(i));
+            if ( bi )
+               bi->Select( true );
+         }
+         listbox->Update();
+         return true;
+      }
+
+      bool none()
+      {
+         for ( int i = 0; i < listbox->GetWidgetCount(); ++i ) {
+            PG_ListBoxBaseItem* bi = dynamic_cast<PG_ListBoxBaseItem*>(listbox->FindWidget(i));
+            if ( bi )
+               bi->Select( false );
+         }
+         listbox->Update();
+         return true;
+      }
+      
+};
+
+
 
 class MessageDialog;
 
@@ -243,7 +292,7 @@ class PG_ListBoxDataItem : public PG_ListBoxItem {
 
 extern int  new_choice_dlg(const ASCString& title, const ASCString& leftButton, const ASCString& rightButton );
 
-   
+extern pair<int,int> new_chooseString ( const ASCString& title, const vector<ASCString>& entries, const vector<ASCString>& buttons, int defaultEntry = -1 );
 
 
 #endif

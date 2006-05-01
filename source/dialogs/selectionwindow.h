@@ -78,8 +78,7 @@ class SelectionItemFactory{
       
       virtual void itemSelected( const SelectionWidget* widget, bool mouse ) = 0;
       virtual void itemMarked  ( const SelectionWidget* widget ) {};
-      // virtual int getBottomLineHeight() { return 0; };
-      // virtual void spawnBottonWidgets( ItemSelectorWidget* parent, const PG_Rect& area ) {};
+      virtual SelectionWidget* getDefaultItem() { return NULL; };
       virtual ~SelectionItemFactory() {};
 };
 

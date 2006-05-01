@@ -174,7 +174,7 @@ void ItemSelectorWidget::itemSelected( const SelectionWidget* w, bool mouse )
 
 void ItemSelectorWidget::markItem( const SelectionWidget* w )
 {
-   selectedItem = w;  
+   selectedItem = w;
    factory->itemMarked( w );
 }
 
@@ -226,6 +226,8 @@ ItemSelectorWidget::ItemSelectorWidget( PG_Widget *parent, const PG_Rect &r , Se
    : PG_Widget( parent,r ), namesConstrained(true), rowCount(0), scrollWidget( NULL), nameSearch(NULL), selectedItem(NULL), factory( itemFactory ), columnCount(-1), visibleRowCount(-1), selectionCallBack( this, &ItemSelectorWidget::isItemMarked ) {
    SetTransparency(255);
    reLoad();
+
+   markItem( itemFactory->getDefaultItem() );
    int bottom = 0; // itemFactory->getBottomLineHeight();
    Emboss* e = new Emboss( this, PG_Rect( 1, Height() - 26 - bottom, Width()-20, 22), true );
    nameSearch = new NonEditableLineEdit ( e, PG_Rect( 4,1, e->Width()-4 , e->Height()-2 ));

@@ -98,10 +98,11 @@ class BaseMapItemTypeWidgetFactory : public SelectionItemFactory {
          return ItemFiltrationSystem::isFiltered( &item );
       };
 
+      virtual void registerItem( MapItemWidget* item ) {};
+      
    private:      
       const ItemRepository<ItemType>& repository;
       Items items;
-      
       
    public:
       BaseMapItemTypeWidgetFactory( const ItemRepository<ItemType>& itemRepository  )  : repository( itemRepository ) {
@@ -124,9 +125,11 @@ class BaseMapItemTypeWidgetFactory : public SelectionItemFactory {
          while ( it != items.end() && isFiltered( **it) )
             ++it;
             
-         if ( it != items.end() )
-            return new MapItemWidget( parent, pos, *(it++) );
-         else
+         if ( it != items.end() ) {
+            MapItemWidget* myItem = new MapItemWidget( parent, pos, *(it++) );
+            registerItem( myItem );
+            return myItem;
+         } else
             return NULL;
       };
 };
@@ -158,10 +161,29 @@ template <class MapItemWidget>
 class MapItemTypeWidgetFactory_IDSelection : public BaseMapItemTypeWidgetFactory<MapItemWidget>  {
       typedef typename MapItemWidget::ItemType ItemType;
       int& itemID;
+      int defaultItemID;
+      std::map<int,SelectionWidget*> cache;
+   protected:
+      virtual void registerItem( MapItemWidget* itemWidget )
+      {
+         cache[itemWidget->getItem()->getID()] = itemWidget;
+      };
+      
    public:
 
-      MapItemTypeWidgetFactory_IDSelection( const ItemRepository<ItemType>& itemRepository, int& id  )  : BaseMapItemTypeWidgetFactory<MapItemWidget>( itemRepository ), itemID( id ) { };
+      MapItemTypeWidgetFactory_IDSelection( const ItemRepository<ItemType>& itemRepository, int& id  )  : BaseMapItemTypeWidgetFactory<MapItemWidget>( itemRepository ), itemID( id ), defaultItemID(id)
+      {
+      };
 
+      SelectionWidget* getDefaultItem()
+      {
+         if ( cache.find( defaultItemID ) != cache.end() )
+            return cache[defaultItemID];
+         else
+            return NULL;
+      }
+
+      
       void itemSelected( const SelectionWidget* widget, bool mouse )
       {
          if ( !widget )

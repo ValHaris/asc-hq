@@ -343,8 +343,11 @@ class SmallButtonHolder : public SpecialInputWidget {
 
 
 
-bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button )
+bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button, int prio )
 {
+   if ( prio > 1 )
+      return false;
+    
    if ( button != CGameOptions::Instance()->mouse.fieldmarkbutton )
       return false;
 

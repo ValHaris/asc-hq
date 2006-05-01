@@ -36,6 +36,8 @@ class SelectFromMap : public ASC_PG_Dialog{
       PG_ListBox* listbox;
       bool justOne;
 
+      bool markField2( const MapCoordinate& pos, const SPoint& mouse, bool cursorChanged, int button, int prio );
+      int oldprio;
       
    public:
       typedef vector<MapCoordinate> CoordinateList;
@@ -47,6 +49,7 @@ class SelectFromMap : public ASC_PG_Dialog{
       virtual bool accept( const MapCoordinate& pos );
       virtual void showFieldMarking( const CoordinateList& coordinateList );
       bool mark();
+      bool markField( const MapCoordinate& pos );
       bool eventKeyDown (const SDL_KeyboardEvent *key);
       void updateList();
       bool listItemClicked( PG_ListBoxBaseItem* item );

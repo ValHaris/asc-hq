@@ -29,46 +29,6 @@
 #include "playersetup.h"
 
 
-class MultiListBox : public PG_Widget {
-   private:
-      bool all()
-      {
-         for ( int i = 0; i < listbox->GetWidgetCount(); ++i ) {
-            PG_ListBoxBaseItem* bi = dynamic_cast<PG_ListBoxBaseItem*>(listbox->FindWidget(i));
-            if ( bi )
-               bi->Select( true );
-         }
-         listbox->Update();
-         return true;
-      }
-
-      bool none()
-      {
-         for ( int i = 0; i < listbox->GetWidgetCount(); ++i ) {
-            PG_ListBoxBaseItem* bi = dynamic_cast<PG_ListBoxBaseItem*>(listbox->FindWidget(i));
-            if ( bi )
-               bi->Select( false );
-         }
-         listbox->Update();
-         return true;
-      }
-
-      PG_ListBox* listbox;
-      
-   public:
-      MultiListBox (PG_Widget *parent, const PG_Rect &r ) : PG_Widget( parent, r )
-      {
-         SetTransparency( 255 );
-         
-         listbox = new PG_ListBox( parent, PG_Rect( r.x, r.y, r.w, r.h - 30 ) );
-         listbox->SetMultiSelect( true );
-         
-         (new PG_Button( parent, PG_Rect( r.x, r.y + r.h - 25, r.w/2-5, 25 ), "All"))->sigClick.connect( SigC::slot( *this, &MultiListBox::all ));
-         (new PG_Button( parent, PG_Rect( r.x + r.w/2 + 5, r.y + r.h - 25, r.w/2-5, 25 ), "None"))->sigClick.connect( SigC::slot( *this, &MultiListBox::none ));
-      }
-
-      PG_ListBox* getListBox() { return listbox; };
-};
 
 
 

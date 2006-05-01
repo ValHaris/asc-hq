@@ -13,12 +13,12 @@ AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dkarteneditor  $(SIGC_CFLAGS)
 bin_PROGRAMS 		= asc_mapedit
 #asc_map2pcx
 
-asc_mapedit_SOURCES 	= edevents.cpp edgen.cpp edglobal.cpp edmain.cpp \
+asc_mapedit_SOURCES 	= edgen.cpp edglobal.cpp edmain.cpp \
 edselfnt.cpp edmisc.cpp typen.cpp strtmesg.cpp stack.cpp \
 spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp \
 loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp \
 attack.cpp gameoptions.cpp maped-mainscreen.cpp stdio-errorhandler.cpp\
-buildingtype.cpp vehicletype.cpp containerbase.cpp \
+buildingtype.cpp vehicletype.cpp containerbase.cpp ed_mapcomponent.cpp \
 mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp \
 password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkinterface.cpp resourcenet.cpp textfileparser.cpp \

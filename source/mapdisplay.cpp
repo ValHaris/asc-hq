@@ -437,6 +437,7 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
       dirty(Map),
       additionalUnit(NULL),
       disableKeyboardCursorMovement(false),
+      signalPrio(0),
       cursor(this),
       lock(0)
 {
@@ -840,6 +841,13 @@ void MapDisplayPG::redrawMapAtCursor ( const MapCoordinate& oldpos )
 }
 
 
+int MapDisplayPG::setSignalPriority( int priority )
+{
+   int old = signalPrio;
+   signalPrio = priority;
+   return old;
+}
+      
 bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
 {
    MapCoordinate mc = screenPos2mapPos( SPoint(button->x, button->y));
@@ -858,7 +866,7 @@ bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
       if ( changed )
          redrawMapAtCursor( oldpos );
 
-      mouseButtonOnField( mc, SPoint(button->x, button->y), changed, button->button );
+      mouseButtonOnField( mc, SPoint(button->x, button->y), changed, button->button, signalPrio );
       return true;
       
    }
@@ -867,7 +875,7 @@ bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
       return centerOnField( mc );
    }
 
-   mouseButtonOnField( mc, SPoint(button->x, button->y), false, button->button );
+   mouseButtonOnField( mc, SPoint(button->x, button->y), false, button->button, signalPrio );
    
    return false;
 }
@@ -889,7 +897,7 @@ bool MapDisplayPG::eventMouseMotion (const SDL_MouseMotionEvent *button)
          redrawMapAtCursor( oldpos );
          cursorMoved();
 
-         mouseDraggedToField( mc, SPoint(button->x, button->y), changed );
+         mouseDraggedToField( mc, SPoint(button->x, button->y), changed, signalPrio );
    
          return true;
      }

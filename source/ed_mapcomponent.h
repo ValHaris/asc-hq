@@ -40,11 +40,15 @@ extern SigC::Signal0<void> filtersChangedSignal;
 
 
 class MapComponent {
+       static int currentPlayer;
+       static void setPlayer( int player );
+       static bool initialized;
     protected:
        const MapItemType* mapItem;
        virtual Surface& getClippingSurface() const = 0;
-    public:  
-       MapComponent( const MapItemType* item ) : mapItem( item ) {};
+       int getPlayer() const { return currentPlayer; };
+    public:
+       MapComponent( const MapItemType* item );
        static const int fontHeight = 20;
        const MapItemType* getItemType() const { return mapItem; };
        virtual int displayWidth() const = 0;
@@ -52,7 +56,7 @@ class MapComponent {
        virtual MapComponent* clone() const = 0;
        virtual int place( const MapCoordinate& mc ) const = 0;
        //! just a wrapper so we have a function return void
-       void vPlace( const MapCoordinate& mc ) const { place( mc ); };  
+       void vPlace( const MapCoordinate& mc ) const { place( mc ); };
        virtual void display( Surface& s, const SPoint& pos ) const = 0;
        virtual bool supportMultiFieldPlacement() const { return true; };
        void displayClip( PG_Widget* parent, SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst ) const;
@@ -65,7 +69,7 @@ template<class Item> class BasicItem : public MapComponent {
        const Item* item;
        static Surface clippingSurface;
        Surface& getClippingSurface() const { return clippingSurface; };
-    public:  
+    public:
        BasicItem( const Item* i ) : MapComponent(i), item( i ) {};
        ASCString getName() const { return item->getName(); };
        virtual int displayWidth() const { return Width(); };
@@ -78,10 +82,10 @@ template<class Item> class BasicItem : public MapComponent {
 template<class C> class ItemTypeSelector {};
 
 class VehicleItem : public BasicItem<Vehicletype> {
-    public:  
+    public:
        VehicleItem( const Vehicletype* vehicle ) : BasicItem<Vehicletype>( vehicle ) {};
        virtual int place( const MapCoordinate& mc ) const ;
-       virtual void display( Surface& s, const SPoint& pos ) const { item->paint ( s, pos, 0 ); };
+       virtual void display( Surface& s, const SPoint& pos ) const { item->paint ( s, pos, getPlayer() ); };
        virtual MapComponent* clone() const { return new VehicleItem( item ); };
 };
 template<> class ItemTypeSelector<Vehicletype> {
@@ -97,7 +101,7 @@ class BuildingItem : public MapComponent {
        static Surface fullSizeImage;
     protected:
        Surface& getClippingSurface() const { return clippingSurface; };
-    public:  
+    public:
        BuildingItem( const BuildingType* building ) : MapComponent( building ), bld( building ) {};
        ASCString getName() const { return bld->getName(); };
        virtual int displayWidth() const { return Width(); };
@@ -117,7 +121,7 @@ template<> class ItemTypeSelector<BuildingType> {
 
 
 class ObjectItem : public BasicItem<ObjectType> {
-    public:  
+    public:
        ObjectItem( const ObjectType* object ) : BasicItem<ObjectType>( object ) {};
        virtual int place( const MapCoordinate& mc ) const;
        virtual void display( Surface& s, const SPoint& pos ) const { item->display (s, pos); };
@@ -130,7 +134,7 @@ template<> class ItemTypeSelector<ObjectType> {
 
 
 class TerrainItem : public BasicItem<TerrainType> {
-    public:  
+    public:
        TerrainItem( const TerrainType* object ) : BasicItem<TerrainType>( object ) {};
        virtual int place( const MapCoordinate& mc ) const;
        virtual void display( Surface& s, const SPoint& pos ) const { item->weather[0]->paint (s, pos); };
@@ -146,7 +150,7 @@ template<> class ItemTypeSelector<TerrainType> {
 
 
 class MineItem : public BasicItem<MineType> {
-    public:  
+    public:
        MineItem( const MineType* object ) : BasicItem<MineType>( object ) {};
        virtual int place( const MapCoordinate& mc ) const;
        virtual void display( Surface& s, const SPoint& pos ) const { item->paint(s, pos); };

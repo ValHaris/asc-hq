@@ -431,8 +431,11 @@ class   tstringselect : public tdialogbox {
                      void done(void);
                  };
 
+
+                 
 extern int getid( const char* title, int lval, int min, int max );
 extern ASCString editString( const ASCString& title, const ASCString& defaultValue = "" );
+
 
 
 /** displays a dialogbox which lets you chose one of a number of strings.
@@ -440,7 +443,7 @@ extern ASCString editString( const ASCString& title, const ASCString& defaultVal
     \param entries the list of strings
     \param defaultEntry the entry that is selected by default (-1 if none)
     \returns the selected index or -1 if nothing was selected
-*/
+ */
 extern int chooseString ( const ASCString& title, const vector<ASCString>& entries, int defaultEntry = -1 );
 
 /** displays a dialogbox which lets you chose one of a number of strings.
@@ -449,9 +452,8 @@ extern int chooseString ( const ASCString& title, const vector<ASCString>& entri
     \param buttons the names of the buttons that are going to be displayed
     \param defaultEntry the entry that is selected by default (-1 if none)
     \returns button-number, selected index 
-*/
+ */
 extern pair<int,int> chooseString ( const ASCString& title, const vector<ASCString>& entries, const vector<ASCString>& buttons, int defaultEntry = -1 );
-
 
 #endif
 

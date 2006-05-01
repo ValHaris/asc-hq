@@ -33,7 +33,6 @@
 #include "buildingtype.h"
 #include "edmisc.h"
 #include "loadbi3.h"
-#include "edevents.h"
 #include "edgen.h"
 #include "edselfnt.h"
 #include "edglobal.h"
@@ -55,7 +54,6 @@
    int          auswahlw;
    int          auswahld;
 
-   int          farbwahl;
    char         mapsaved;
 
 
@@ -73,8 +71,11 @@ void placeCurrentItem()
 }
    
    
-bool mousePressedOnField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button )
+bool mousePressedOnField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button, int prio )
 {
+   if ( prio > 1 )
+      return false;
+   
    if ( button == 1 ) {
       execaction_ev( act_primaryAction );
       return true;
@@ -82,8 +83,10 @@ bool mousePressedOnField( const MapCoordinate& pos, const SPoint& mousePos, bool
       return false;
 }
 
-bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged)
+bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int prio )
 {
+   if ( prio > 1 )
+      return false;
    execaction_ev( act_primaryAction );
    return true;
 }
@@ -189,19 +192,6 @@ void tputresourcesdlg :: run ( void )
       tputresources pr ( actmap );
       pr.init ( actmap->getCursor().x, actmap->getCursor().y, dist, resourcetype ? 1 : 2, maxresource, minresource );
    }
-}
-
-
-
-
-
-void placemine(void)
-{
-   mousevisible(false); 
-   mapsaved = false;
-   getactfield()->putmine(farbwahl,auswahlm+1,MineBasePunch[auswahlm]);
-   displaymap();
-   mousevisible(true); 
 }
 
 
@@ -731,7 +721,6 @@ void         setstartvariables(void)
 
    auswahlm = 1;
    auswahlw = 0;
-   farbwahl = 0;
 }
 
 #if 0
@@ -899,6 +888,8 @@ class PolygonEditor : public SelectFromMap {
          ShowPolygonUsingTemps sput;
          if ( !sput.paintPolygon ( poly ) )
             displaymessage("Invalid Polygon !",1 );
+
+         repaintMap();
       }
       
    public:

@@ -3675,16 +3675,19 @@ int      getid( const char*  title, int lval,int min,int max)
 
 
 class   ChooseString : public tstringselect {
-                 const vector<ASCString>& strings;
-                 const vector<ASCString>& buttons;
-                 char buf[10000];
-           public :
-                 ChooseString ( const ASCString& _title, const vector<ASCString>& _strings , const vector<ASCString>& _buttons, int defaultEntry );
-                 void setup( );
-                 virtual void buttonpressed(int id);
-                 void run(void);
-                 virtual void get_text(int nr);
-              };
+   private:
+      const vector<ASCString>& strings;
+      const vector<ASCString>& buttons;
+      char buf[10000];
+   public :
+      ChooseString ( const ASCString& _title, const vector<ASCString>& _strings , const vector<ASCString>& _buttons, int defaultEntry );
+      void setup( );
+      virtual void buttonpressed(int id);
+      void run(void);
+      virtual void get_text(int nr);
+};
+
+
 
 ChooseString :: ChooseString ( const ASCString& _title, const vector<ASCString>& _strings, const vector<ASCString>& _buttons, int defaultEntry )
               : strings ( _strings ), buttons ( _buttons )
@@ -3735,6 +3738,13 @@ void         ChooseString ::run(void)
 }
 
 
+
+
+
+
+
+
+
 int chooseString ( const ASCString& title, const vector<ASCString>& entries, int defaultEntry  )
 {
    vector<ASCString> b;
@@ -3742,16 +3752,26 @@ int chooseString ( const ASCString& title, const vector<ASCString>& entries, int
    return chooseString ( title, entries, b, defaultEntry).second;
 }
 
+
+
+
 pair<int,int> chooseString ( const ASCString& title, const vector<ASCString>& entries, const vector<ASCString>& buttons, int defaultEntry  )
 {
-   ChooseString  gps ( title, entries, buttons, defaultEntry );
 
-   gps.init();
-   gps.run();
-   gps.done();
-   return make_pair(gps.action-20,gps.redline);
+   if ( legacyEventSystemActive() ) {
+      ChooseString  gps ( title, entries, buttons, defaultEntry );
+
+      gps.init();
+      gps.run();
+      gps.done();
+      return make_pair(gps.action-20,gps.redline);
+   } else {
+      return new_chooseString ( title, entries, buttons, defaultEntry );
+   }
+   
 
 }
+
 
 
 
@@ -3843,6 +3863,7 @@ ASCString editString( const ASCString& title, const ASCString& defaultValue  )
    gi.done();
    return gi.text;
 }
+
 
 
 

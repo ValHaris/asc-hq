@@ -94,7 +94,7 @@ public:
    
 protected:
 
-    bool clickOnMap( const MapCoordinate& field, const SPoint& pos, bool changed, int button);
+    bool clickOnMap( const MapCoordinate& field, const SPoint& pos, bool changed, int button, int prio);
    
     NewGuiHost* guiHost;
     Menu* menu;

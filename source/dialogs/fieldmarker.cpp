@@ -65,9 +65,15 @@ void SelectFromMap::showFieldMarking( const CoordinateList& coordinateList )
    repaintMap();
 }
 
-bool SelectFromMap::mark()
+bool SelectFromMap::markField2( const MapCoordinate& pos, const SPoint& mouse, bool cursorChanged, int button, int prio )
 {
-   MapCoordinate pos = actmap->getCursor();
+   if ( prio <= 2 )
+      markField( pos );
+}
+
+
+bool SelectFromMap::markField( const MapCoordinate& pos )
+{
    if  ( !accept(pos))
       return false;
 
@@ -85,6 +91,13 @@ bool SelectFromMap::mark()
    showFieldMarking( coordinateList );
    updateList();
    return true;
+}
+
+
+bool SelectFromMap::mark()
+{
+   MapCoordinate pos = actmap->getCursor();
+   return markField( pos );
 }
 
 bool SelectFromMap::eventKeyDown (const SDL_KeyboardEvent *key)
@@ -138,7 +151,10 @@ SelectFromMap::SelectFromMap( CoordinateList& list, GameMap* map, bool justOne )
    b->sigClick.connect( SigC::slot( *this, &SelectFromMap::closeDialog ));
 
    omp = getMainScreenWidget()->getOverviewMapPanel();
-   md = getMainScreenWidget()->getMapDisplay();
+   md  = getMainScreenWidget()->getMapDisplay();
+   md->mouseButtonOnField.connect( SigC::slot( *this, &SelectFromMap::markField2 ));
+   oldprio = md->setSignalPriority( 2 );
+   
 
    showFieldMarking( coordinateList );
    if ( !list.empty() )
@@ -150,6 +166,8 @@ SelectFromMap::SelectFromMap( CoordinateList& list, GameMap* map, bool justOne )
 
 void SelectFromMap::Show( bool fade)
 {
+   getMainScreenWidget()->BringToFront();
+   md->BringToFront();
    md->Show();
    ASC_PG_Dialog::Show( fade );
    repaintMap();
@@ -157,6 +175,9 @@ void SelectFromMap::Show( bool fade)
 
 SelectFromMap::~SelectFromMap()
 {
+   md->setSignalPriority( oldprio );
+         
+   getMainScreenWidget()->SendToBack();
    actmap->cleartemps(7);
    repaintMap();
 }

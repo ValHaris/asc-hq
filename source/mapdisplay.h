@@ -302,20 +302,28 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       void toggleMapLayer( const ASCString& name );
       SigC::Signal2<void, bool, const ASCString&> layerChanged;
 
+
+   private:
+      int signalPrio;
+   public:
+      int setSignalPriority( int priority );
+      
       /** Signal that is fired when the mouse is pressed on a valid field, after the cursor evaluation has been run.
            \param MapCoordinate the Coordinate of the field that was clicked
            \param SPoint the mouse position
            \param bool true if the cursor had been repositioned
            \param int  the button that was pressed
+           \param int  the priority of the signal
       */
-      SigC::Signal4<bool,const MapCoordinate&, const SPoint&, bool, int> mouseButtonOnField;
+      SigC::Signal5<bool,const MapCoordinate&, const SPoint&, bool, int, int> mouseButtonOnField;
 
       /** Signal that is fired when the mouse is dragged onto a new field with mouse buttons pressed.
            \param MapCoordinate the Coordinate of the field that was clicked
            \param SPoint the mouse position
            \param bool true if the cursor had been repositioned
-      */
-      SigC::Signal3<bool,const MapCoordinate&, const SPoint&, bool> mouseDraggedToField;
+           \param int  the priority of the signal
+       */
+      SigC::Signal4<bool,const MapCoordinate&, const SPoint&, bool, int> mouseDraggedToField;
       
       
       struct Cursor {

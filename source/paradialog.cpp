@@ -113,6 +113,17 @@ class EventSupplier: public PG_SDLEventSupplier {
 
 
 
+DropDownSelector::DropDownSelector( PG_Widget *parent, const PG_Rect &r, int itemnum, const char** items, const std::string &style )
+   : PG_DropDown( parent, r, -1, style ), first(true)
+{
+   SetEditable(false);
+   sigSelectItem.connect( SigC::slot( *this, &DropDownSelector::itemSelected ));
+
+   for ( int i = 0; i < itemnum; ++i )
+      AddItem( items[i] );
+      
+}
+
 
 DropDownSelector::DropDownSelector( PG_Widget *parent, const PG_Rect &r, int id, const std::string &style) 
      : PG_DropDown( parent, r, id, style ), first(true)
@@ -473,13 +484,28 @@ int ASC_PG_App::Run ( )
 
 
 ASC_PG_Dialog :: ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCString& windowtext, WindowFlags flags, const ASCString& style, int heightTitlebar )
-   :PG_Window ( parent, centerWindow(r), windowtext, flags, style, heightTitlebar ),
-      // quitModalLoopValue ( 0 ), 
-      caller(0)
+   :PG_Window ( parent, centerWindow(r), windowtext, flags, style, heightTitlebar ),stdButtonNum(0), caller(0)
 {
-   //   mainScreenWidget->setDirty();
-   //   SDL_mutexP ( eventHandlingMutex );
-   // sigMouseButtonDown.connect(SigC::slot(*this, &ASC_PG_Dialog::eventMouseButtonDown));
+
+   // it looks nice if you can see the map behind the dialog, but seeing other dialogs stacked above each other is just confusing, so we reduce transparency
+   int t = GetTransparency();
+   if ( windowNum >= 1 ) {
+      SetTransparency ( t/2 );
+   }
+}
+
+int ASC_PG_Dialog::windowNum = 0;
+
+class WindowCounter {
+   public:
+      WindowCounter() { ++ASC_PG_Dialog::windowNum; };
+      ~WindowCounter() { --ASC_PG_Dialog::windowNum; };
+};
+
+int ASC_PG_Dialog::RunModal()
+{
+   WindowCounter wc;
+   return PG_Window::RunModal();
 }
 
 
@@ -492,6 +518,12 @@ PG_Rect ASC_PG_Dialog::centerWindow( const PG_Rect& rect )
    if ( r.y < 0 )
       r.y = (PG_Application::GetScreenHeight() - r.h) / 2;
    return r;
+}
+
+PG_Button* ASC_PG_Dialog::AddStandardButton( const ASCString& name )
+{
+   ++stdButtonNum;
+   return new PG_Button( this, PG_Rect( Width() - 110, Height() - stdButtonNum * 40, 100, 30 ), name );
 }
 
 
@@ -990,3 +1022,67 @@ PG_StatusWindowData::~PG_StatusWindowData()
    delete md;
 };   
 
+
+class   NewStringChooser : public ASC_PG_Dialog {
+   PG_ListBox* listbox;
+   int button;
+   int item;
+   
+   bool buttonpressed( int i )
+   {
+      button = i;
+      QuitModal();
+      return true;
+   }
+
+   bool itemSelected( PG_ListBoxBaseItem* l )
+   {
+      PG_ListBoxDataItem<int>* listitem = dynamic_cast<PG_ListBoxDataItem<int>*>( l );
+      if ( listitem ) {
+         item = listitem->getData();
+         return true;
+      } else
+         return false;
+   }
+   
+   public :
+      NewStringChooser ( const ASCString& _title, const vector<ASCString>& _strings , const vector<ASCString>& _buttons, int defaultEntry ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 400, 300 ), _title ), button(-1), item(-1)
+      {
+         listbox = new PG_ListBox( this, PG_Rect( 10, 30, Width()-140, Height() - 40) );
+         listbox->SetMultiSelect( false );
+         listbox->sigSelectItem.connect( SigC::slot( *this, &NewStringChooser::itemSelected ));
+
+         int counter = 0;
+         for ( vector<ASCString>::const_iterator i = _strings.begin(); i != _strings.end(); ++i ) {
+           PG_ListBoxDataItem<int>* listitem = new PG_ListBoxDataItem<int>(listbox, 20, *i, counter );
+           if ( counter == defaultEntry )
+              listitem->Select();
+            ++counter;
+         }
+
+         counter = 0;
+         for ( vector<ASCString>::const_iterator i = _buttons.begin(); i != _buttons.end(); ++i ) {
+            AddStandardButton(*i)->sigClick.connect( SigC::bind( SigC::slot( *this, & NewStringChooser::buttonpressed ),counter ));
+            ++counter;
+         }
+      }
+
+      int getButton()
+      {
+         return button;
+      }
+      int getItem()
+      {
+         return item;
+      }
+         
+};
+
+
+pair<int,int> new_chooseString ( const ASCString& title, const vector<ASCString>& entries, const vector<ASCString>& buttons, int defaultEntry  )
+{
+   NewStringChooser nsc ( title, entries, buttons, defaultEntry );
+   nsc.Show();
+   nsc.RunModal();
+   return make_pair(nsc.getButton(), nsc.getItem() );
+}

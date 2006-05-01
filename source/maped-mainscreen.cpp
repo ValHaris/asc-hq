@@ -491,8 +491,11 @@ void Maped_MainScreenWidget:: addContextAction( ContextAction* contextAction )
 }
 
 
-bool Maped_MainScreenWidget::clickOnMap( const MapCoordinate& field, const SPoint& pos, bool changed, int button)
+bool Maped_MainScreenWidget::clickOnMap( const MapCoordinate& field, const SPoint& pos, bool changed, int button, int prio)
 {
+   if ( prio > 1 )
+      return false;
+   
    if( button == 3 ) {
 
       mapDisplay->cursor.goTo( field );

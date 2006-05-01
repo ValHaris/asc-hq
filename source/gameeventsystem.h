@@ -118,6 +118,7 @@ class Event {
       void clear();
    public:
       Event( GameMap& map_ );
+      const GameMap* getMap() const { return &gamemap; };
 
       enum Status { Untriggered, Triggered, Timed, Executed } status;
 

@@ -60,7 +60,8 @@ am_libgamedialogs_la_OBJECTS = cargodialog.lo unitcounting.lo \
 	vehicletypeselector.lo nextcampaignmap.lo
 libgamedialogs_la_OBJECTS = $(am_libgamedialogs_la_OBJECTS)
 libmapeddialogs_la_DEPENDENCIES =
-am_libmapeddialogs_la_OBJECTS = cargoeditor.lo cargowidget.lo
+am_libmapeddialogs_la_OBJECTS = cargoeditor.lo cargowidget.lo \
+	eventeditor.lo
 libmapeddialogs_la_OBJECTS = $(am_libmapeddialogs_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -216,7 +217,7 @@ libdialogs_la_SOURCES = editmapparam.cpp cargowidget.cpp selectionwindow.cpp fil
 libdialogs_la_LIBADD = @SDL_LIBS@ 
 libgamedialogs_la_SOURCES = cargodialog.cpp unitcounting.cpp cargowidget.cpp ammotransferdialog.cpp attackpanel.cpp vehicletypeselector.cpp nextcampaignmap.cpp
 libgamedialogs_la_LIBADD = @SDL_LIBS@ 
-libmapeddialogs_la_SOURCES = cargoeditor.cpp cargowidget.cpp
+libmapeddialogs_la_SOURCES = cargoeditor.cpp cargowidget.cpp eventeditor.cpp
 libmapeddialogs_la_LIBADD = @SDL_LIBS@
 all: all-am
 
@@ -283,6 +284,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/editgameoptions.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/editmapparam.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/emailsetup.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eventeditor.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fieldmarker.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fileselector.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/newgame.Plo@am__quote@

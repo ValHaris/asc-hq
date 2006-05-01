@@ -137,6 +137,7 @@ class SelectionHolder : public SigC::Object {
  
      int getPlayer() { return actplayer; };
      void setPlayer( int player );
+     SigC::Signal1<void,int> playerChanged;
      
      void setWeather( int weather );
      int getWeather() { return currentWeather; };

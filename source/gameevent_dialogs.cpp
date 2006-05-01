@@ -94,7 +94,7 @@ bool chooseWeather( int& weather )
 
 bool chooseTerrain( int& terrainID )
 {
-#ifdef kkarteneditor
+#ifdef karteneditor
    selectItemID( terrainID, terrainTypeRepository );
 #endif
   return true;
@@ -102,7 +102,7 @@ bool chooseTerrain( int& terrainID )
 
 bool chooseObject( int& objectID )
 {
-#ifdef kkarteneditor
+#ifdef karteneditor
    selectItemID( objectID, objectTypeRepository );
 #endif
   return true;
@@ -110,7 +110,7 @@ bool chooseObject( int& objectID )
 
 bool chooseVehicleType( int& vehicleTypeID )
 {
-#ifdef kkarteneditor
+#ifdef karteneditor
    selectItemID( vehicleTypeID, vehicleTypeRepository );
 #endif
   return true;

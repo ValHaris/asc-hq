@@ -45,8 +45,8 @@
 #include "mapalgorithms.h"
 
 
-extern bool mousePressedOnField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button );
-extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged);
+extern bool mousePressedOnField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button, int prio );
+extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int prio );
 
   typedef struct selectrec {
                   int         srr;
@@ -89,7 +89,6 @@ extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePo
 
    extern int auswahlm;
    extern int auswahlw;
-   extern int farbwahl;
    extern char                mapsaved;
 
 extern void         setstartvariables(void);
@@ -120,8 +119,6 @@ extern void cdplayer( void );
 extern void selectunitsetfilter ( void );
 extern void movebuilding();
 extern void unitsettransformation( void );
-
-extern void placemine(void);
 
 //! The class that manages the switching between the primary map (for editing) and the secondary map (for selecting objects and terrain)
 class MapSwitcher {

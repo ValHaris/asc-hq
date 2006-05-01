@@ -28,7 +28,6 @@
 #include "buildingtype.h"
 #include "edmisc.h"
 #include "loadbi3.h"
-#include "edevents.h"
 #include "edgen.h"
 #include "edselfnt.h"
 #include "edglobal.h"
@@ -48,6 +47,7 @@
 #include "dialogs/playersetup.h"
 #include "dialogs/editgameoptions.h"
 #include "dialogs/admingame.h"
+#include "dialogs/eventeditor.h"
    
    const char* execactionnames[execactionscount] = {
         "End MapEdit",
@@ -159,6 +159,7 @@ void SelectionHolder::setSelection( const MapComponent& component )
 void SelectionHolder::setPlayer( int player )
 {
    actplayer = player;
+   playerChanged( player );
    if ( currentItem )
       selectionChanged( currentItem );
 }
@@ -545,8 +546,8 @@ void execaction( int code)
                  }
        break;
        */
-    case act_placemine : placemine();
-       break;
+//    case act_placemine : placemine();
+//       break;
     case act_placething : placeCurrentItem();
        break;
        /*
@@ -807,7 +808,7 @@ void execaction_pg(int code)
          editGameOptions( false );
          break;
 
-      case act_events :   event();
+      case act_events :   eventEditor();
          break;
       case act_resetPlayerData: adminGame( actmap );
          break;

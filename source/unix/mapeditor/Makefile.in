@@ -52,17 +52,17 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
-am_asc_mapedit_OBJECTS = edevents.$(OBJEXT) edgen.$(OBJEXT) \
-	edglobal.$(OBJEXT) edmain.$(OBJEXT) edselfnt.$(OBJEXT) \
-	edmisc.$(OBJEXT) typen.$(OBJEXT) strtmesg.$(OBJEXT) \
-	stack.$(OBJEXT) spfst.$(OBJEXT) sgstream.$(OBJEXT) \
-	pd.$(OBJEXT) palette.$(OBJEXT) newfont.$(OBJEXT) \
-	misc.$(OBJEXT) loadpcxc.$(OBJEXT) loaders.$(OBJEXT) \
-	loadbi3.$(OBJEXT) dlg_box.$(OBJEXT) dialog.$(OBJEXT) \
-	basestrm.$(OBJEXT) basegfx.$(OBJEXT) attack.$(OBJEXT) \
-	gameoptions.$(OBJEXT) maped-mainscreen.$(OBJEXT) \
-	stdio-errorhandler.$(OBJEXT) buildingtype.$(OBJEXT) \
-	vehicletype.$(OBJEXT) containerbase.$(OBJEXT) \
+am_asc_mapedit_OBJECTS = edgen.$(OBJEXT) edglobal.$(OBJEXT) \
+	edmain.$(OBJEXT) edselfnt.$(OBJEXT) edmisc.$(OBJEXT) \
+	typen.$(OBJEXT) strtmesg.$(OBJEXT) stack.$(OBJEXT) \
+	spfst.$(OBJEXT) sgstream.$(OBJEXT) pd.$(OBJEXT) \
+	palette.$(OBJEXT) newfont.$(OBJEXT) misc.$(OBJEXT) \
+	loadpcxc.$(OBJEXT) loaders.$(OBJEXT) loadbi3.$(OBJEXT) \
+	dlg_box.$(OBJEXT) dialog.$(OBJEXT) basestrm.$(OBJEXT) \
+	basegfx.$(OBJEXT) attack.$(OBJEXT) gameoptions.$(OBJEXT) \
+	maped-mainscreen.$(OBJEXT) stdio-errorhandler.$(OBJEXT) \
+	buildingtype.$(OBJEXT) vehicletype.$(OBJEXT) \
+	containerbase.$(OBJEXT) ed_mapcomponent.$(OBJEXT) \
 	mapalgorithms.$(OBJEXT) viewcalculation.$(OBJEXT) \
 	gamemap.$(OBJEXT) password.$(OBJEXT) password_dialog.$(OBJEXT) \
 	research.$(OBJEXT) mapdisplay.$(OBJEXT) ascstring.$(OBJEXT) \
@@ -250,12 +250,12 @@ INCLUDES = -I$(top_builddir) -I$(top_src_dir) \
 
 AM_CXXFLAGS = $(SDL_CFLAGS) -Dkarteneditor  $(SIGC_CFLAGS)
 #asc_map2pcx
-asc_mapedit_SOURCES = edevents.cpp edgen.cpp edglobal.cpp edmain.cpp \
+asc_mapedit_SOURCES = edgen.cpp edglobal.cpp edmain.cpp \
 edselfnt.cpp edmisc.cpp typen.cpp strtmesg.cpp stack.cpp \
 spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp \
 loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp \
 attack.cpp gameoptions.cpp maped-mainscreen.cpp stdio-errorhandler.cpp\
-buildingtype.cpp vehicletype.cpp containerbase.cpp \
+buildingtype.cpp vehicletype.cpp containerbase.cpp ed_mapcomponent.cpp \
 mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp \
 password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkinterface.cpp resourcenet.cpp textfileparser.cpp \
@@ -360,7 +360,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containerbasetype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dlg_box.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edevents.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ed_mapcomponent.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edgen.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edglobal.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edmain.Po@am__quote@
