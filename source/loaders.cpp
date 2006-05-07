@@ -1617,7 +1617,7 @@ MapConinuationInfo findNextCampaignMap( int id  )
 
          spfldloader.readmap ();
 
-         if ( spfldloader.spfld->campaign && spfldloader.spfld->campaign->id == id ) {
+         if ( spfldloader.spfld->campaign.avail && spfldloader.spfld->campaign.id == id ) {
             mi.title = spfldloader.spfld->maptitle;
             mi.codeword = spfldloader.spfld->codeWord;
             mi.filename = filename;

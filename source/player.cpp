@@ -346,7 +346,7 @@ void Player :: sendQueuedMessages()
 }
 
 
-bool Player::exist()
+bool Player::exist() const
 {
   return !(buildingList.empty() && vehicleList.empty());
 }

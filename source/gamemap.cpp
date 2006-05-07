@@ -208,7 +208,6 @@ GameMap :: GameMap ( void )
    xsize = 0;
    ysize = 0;
    field = NULL;
-   campaign = NULL;
 
    actplayer = -1;
    time.abstime = 0;
@@ -233,7 +232,7 @@ GameMap :: GameMap ( void )
 
    continueplaying = false;
    replayinfo = NULL;
-   playerView = -1;
+   playerView = 0;
    lastjournalchange.abstime = 0;
    ellipse = 0;
    graphicset = 0;
@@ -245,12 +244,19 @@ GameMap :: GameMap ( void )
    setgameparameter( cgp_objectsDestroyedByTerrain, 1 );
 }
 
+GameMap::Campaign::Campaign()
+{
+   avail = false;
+   id = 0;
+   directaccess = true;
+}
+
 void GameMap :: guiHooked()
 {
    dialogsHooked = true;
 }
 
-const int tmapversion = 14;
+const int tmapversion = 15;
 
 void GameMap :: read ( tnstream& stream )
 {
@@ -476,13 +482,17 @@ void GameMap :: read ( tnstream& stream )
        maptitle = stream.readString();
 
     if ( loadCampaign ) {
-       campaign = new Campaign;
-       campaign->id = stream.readWord();
-       campaign->prevmap = stream.readWord();
-       campaign->player = stream.readChar();
-       campaign->directaccess = stream.readChar();
-       for ( int d = 0; d < 21; d++ )
-          stream.readChar(); // dummy
+       if ( version <= 14 ) {
+         campaign.id = stream.readWord();
+         stream.readWord(); // campaign->prevmap 
+         stream.readChar(); // campaign->player 
+         campaign.directaccess = stream.readChar();
+         for ( int d = 0; d < 21; d++ )
+            stream.readChar(); // dummy
+       } else {
+          campaign.id = stream.readInt();
+          campaign.directaccess = stream.readChar();
+       }
     }
 
     for ( int w=0; w<9 ; w++ ) {
@@ -635,7 +645,7 @@ void GameMap :: write ( tnstream& stream )
 
    
    
-   stream.writeInt( campaign != NULL);
+   stream.writeInt( campaign.avail  );
    stream.writeChar( actplayer );
    stream.writeInt( time.abstime );   
    
@@ -724,13 +734,9 @@ void GameMap :: write ( tnstream& stream )
 
    stream.writeString( maptitle );
 
-   if ( campaign ) {
-      stream.writeWord( campaign->id );
-      stream.writeWord( campaign->prevmap );
-      stream.writeChar( campaign->player );
-      stream.writeChar( campaign->directaccess );
-      for ( int d = 0; d < 21; d++ )
-         stream.writeChar(0); // dummy
+   if ( campaign.avail ) {
+      stream.writeInt( campaign.id );
+      stream.writeChar( campaign.directaccess );
    }
 
    for (int w=0; w<8 ; w++ ) 
@@ -853,11 +859,16 @@ void GameMap :: cleartemps( int b, int value )
      }
 }
 
-void GameMap :: allocateFields ( int x, int y )
+void GameMap :: allocateFields ( int x, int y, TerrainType::Weather* terrain )
 {
    field = new tfield[x*y];
-   for ( int i = 0; i < x*y; i++ )
+   for ( int i = 0; i < x*y; i++ ) {
+      if ( terrain ) {
+         field[i].typ = terrain;
+         field[i].setparams();
+      }
       field[i].setMap ( this );
+   }
    xsize = x;
    ysize = y;
 }
@@ -1451,11 +1462,6 @@ GameMap :: ~GameMap ()
    if ( replayinfo ) {
       delete replayinfo;
       replayinfo = NULL;
-   }
-
-   if ( campaign ) {
-      delete campaign;
-      campaign = NULL;
    }
 
    if ( game_parameter ) {

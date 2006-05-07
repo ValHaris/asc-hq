@@ -89,11 +89,12 @@ extern void  calculateobject(int  x,
                              const ObjectType* obj,
                              GameMap* gamemap = actmap );
 
+/*
 //! generate a map of size xsize/ysize and consisting just of fields bt. The map is stored in #actmap
 extern void  generatemap( TerrainType::Weather* bt,
                           int          xsize,
                           int          ysize);
-
+*/
 
 /*! tests if the vehicle can move onto the field
    

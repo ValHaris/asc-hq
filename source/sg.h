@@ -51,7 +51,8 @@ extern void execUserAction_ev( tuseractions action );
 class GameMap;
 extern void hookGuiToMap( GameMap* map );
 
-extern void loadGame();
+extern bool loadGame();
+extern bool continueAndStartMultiplayerGame();
 
 #endif
 

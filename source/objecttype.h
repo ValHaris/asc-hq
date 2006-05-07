@@ -119,6 +119,11 @@
      ASCString name;
      
      ASCString getName() const { return name; };
+
+     enum NamingMethod { ReplaceTerrain, AddToTerrain, UnNamed };
+     int  namingMethod;
+     static const char* namingMethodNames[];
+     static const int namingMethodNum;
      
      int getID() const { return id; };    
      

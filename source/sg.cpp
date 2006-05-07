@@ -220,7 +220,7 @@ void hookGuiToMap( GameMap* map )
 
 
 
-void loadGame()
+bool loadGame()
 {
    ASCString s1 = selectFile( savegameextension, true );
 
@@ -239,7 +239,9 @@ void loadGame()
       displaymap();
 
       moveparams.movestatus = 0;
-   }
+      return true;
+   } else
+      return false;
 }
 
 
@@ -774,6 +776,15 @@ void execuseraction ( tuseractions action )
       };
 }
 
+bool continueAndStartMultiplayerGame()
+{
+   if ( continuenetworkgame()) {
+      hookGuiToMap(actmap);
+      displaymap();
+      return true;
+   } else
+      return false;
+}
 
 
 
@@ -821,9 +832,7 @@ void execuseraction2 ( tuseractions action )
          hookGuiToMap(actmap);
          break;
       case ua_continuenetworkgame:
-         continuenetworkgame();
-         hookGuiToMap(actmap);
-         displaymap();
+         continueAndStartMultiplayerGame();
          break;
       case ua_loadgame: loadGame();
          break;
@@ -1098,7 +1107,7 @@ int gamethread ( void* data )
          actmap = NULL;
       }
       catch ( LoadNextMap lnm ) {
-         if ( actmap->campaign ) {
+         if ( actmap->campaign.avail ) {
             startnextcampaignmap( lnm.id );
          } else {
            viewtext2(904);

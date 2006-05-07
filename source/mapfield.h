@@ -124,6 +124,8 @@ class  tfield {
     int getweather ( void );
     void setweather( int weather );
 
+    ASCString getName();
+    
     //! the radar jamming that is on this field
     int getjamming ( void );
     int getmovemalus ( const Vehicle* veh );

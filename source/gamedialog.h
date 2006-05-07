@@ -43,6 +43,7 @@ private:
   GameDialog();
   
   bool closeWindow();
+  bool newGame(PG_Button* button);
   bool singleGame(PG_Button* button);
   bool multiGame(PG_Button* button);
   bool saveGame(PG_Button* button);

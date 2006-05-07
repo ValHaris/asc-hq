@@ -91,10 +91,12 @@ void loaddata( void )
 
 void buildemptymap ( void )
 {
-   if ( terrainTypeRepository.getObject_byID(30) )
-      generatemap(terrainTypeRepository.getObject_byID(30)->weather[0], 10, 20);
-   else
-      generatemap(terrainTypeRepository.getObject_byPos(0)->weather[0], 10, 20);
+   TerrainType::Weather* w = terrainTypeRepository.getObject_byID(30)->weather[0];
+   if ( !w )
+      w = terrainTypeRepository.getObject_byPos(0)->weather[0];
+
+   actmap = new GameMap;
+   actmap->allocateFields( 10, 20, w );
 }
 
 
@@ -270,10 +272,7 @@ int main(int argc, char *argv[] )
 
    writegameoptions ();
    
-   if ( actmap ) {
-      delete actmap;
-      actmap = NULL;
-   }
+   mapSwitcher.deleteMaps();
 
    return 0;
 }

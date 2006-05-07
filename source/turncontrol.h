@@ -45,14 +45,14 @@ extern void  checkforvictory ( );
 
 
 //! continues a PBeM game; the current map is deleted
-extern void continuenetworkgame ( );
+extern bool continuenetworkgame ( );
 
 
 //! this checks if one player has been using a new ASC version than the current player. If this is the case, the current player is notified and asked to upgrade
 extern void checkUsedASCVersions( Player& currentPlayer );
 
     
-extern int findNextPlayer( GameMap* actmap );
+extern int findNextPlayer( const GameMap* actmap );
 
 //! skips the next player. This is for administrative use, for example if a player does not react
 extern void skipTurn( GameMap* gamemap );

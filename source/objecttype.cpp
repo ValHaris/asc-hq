@@ -40,6 +40,7 @@ ObjectType :: FieldModification::FieldModification()
 
 ObjectType :: ObjectType ( void )
 {
+   namingMethod = AddToTerrain;
    groupID = -1;
 
    displayMethod = 0;
@@ -53,6 +54,13 @@ ObjectType :: ObjectType ( void )
    growthRate = 0;
    lifetime = -1;
 }
+
+const int ObjectType::namingMethodNum = 3;
+
+const char* ObjectType::namingMethodNames[namingMethodNum+1] = { "ReplaceTerrain", "AddToTerrain", "UnNamed", NULL };
+
+      
+
 
 const ObjectType::FieldModification&  ObjectType::getFieldModification ( int weather ) const
 {
@@ -763,7 +771,7 @@ void calculateforest( GameMap* actmap, ObjectType* woodObj )
 
 
 
-const int object_version = 15;
+const int object_version = 16;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -880,6 +888,9 @@ void ObjectType :: read ( tnstream& stream )
             }
          }
 
+      if ( version >= 16 )
+         namingMethod = NamingMethod( stream.readInt() );
+      
    } else
        throw tinvalidversion  ( stream.getLocation(), object_version, version );
 }
@@ -963,6 +974,8 @@ void ObjectType :: write ( tnstream& stream ) const
              stream.writeInt ( weatherPicture[ww].flip.at(l) );
           }
        }
+
+    stream.writeInt( namingMethod );
 }
 
 
@@ -1056,6 +1069,7 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
    pc.closeBracket ();
 
    pc.addString( "Name", name );
+   pc.addTagInteger ( "NamingMethod", namingMethod, namingMethodNum, namingMethodNames, int(0) );
 
    pc.addDFloat( "GrowthRate", growthRate, 0 );
    pc.addInteger( "LifeTime", lifetime, -1 );

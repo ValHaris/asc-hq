@@ -19,11 +19,13 @@
 */
 
 
-#ifndef NEWGAME_H
-#define NEWGAME_H
+#ifndef newmapH
+#define newmapH
 
+class GameMap;
 
-extern bool startMultiplayerGame();
+extern GameMap* createNewMap();
+extern void editMap( GameMap* map );
 
 
 #endif

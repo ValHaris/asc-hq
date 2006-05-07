@@ -20,6 +20,8 @@
 #include "dialogs/selectionwindow.h"
 #include "dialogs/fileselector.h"
 #include "dialogs/soundsettings.h"
+#include "dialogs/newgame.h"
+#include "dialogs/editgameoptions.h"
 #include "sigc++/retype.h"
 #include "iconrepository.h"
 #include "sg.h"
@@ -34,11 +36,11 @@ const int GameDialog::buttonIndent = 150;
 GameDialog* GameDialog::instance = 0;
 
 GameDialog::GameDialog():  ASC_PG_Dialog(NULL, PG_Rect( 200, 100, xSize, ySize ), "Game", SHOW_CLOSE ) {
-    singlePlayerButton = new PG_Button(this, PG_Rect(buttonIndent, GuiDimension::getTopOffSet()*2, 150, GuiDimension::getButtonHeight()), "Single Player", 90);
-    singlePlayerButton->sigClick.connect( SigC::slot( *this, &GameDialog::singleGame));
+    singlePlayerButton = new PG_Button(this, PG_Rect(buttonIndent, GuiDimension::getTopOffSet()*2, 150, GuiDimension::getButtonHeight()), "New Game", 90);
+    singlePlayerButton->sigClick.connect( SigC::slot( *this, &GameDialog::newGame));
 
     PG_Point p = ScreenToClient(singlePlayerButton->x, singlePlayerButton->y);
-    multiPlayerButton = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "MulitPlayer", 90);
+    multiPlayerButton = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Continue Mail Game", 90);
     multiPlayerButton->sigClick.connect( SigC::slot( *this, &GameDialog::multiGame));
 
     p = ScreenToClient(multiPlayerButton->x, multiPlayerButton->y);
@@ -58,9 +60,11 @@ GameDialog::GameDialog():  ASC_PG_Dialog(NULL, PG_Rect( 200, 100, xSize, ySize )
     exitButton  = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "End Game", 90);
     exitButton->sigClick.connect( SigC::slot( *this, &GameDialog::exitGame));
 
-    p = ScreenToClient(exitButton->x, exitButton->y);
-    continueButton = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + 2 * GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Continue Game", 90);
-    continueButton->sigClick.connect( SigC::slot( *this, &GameDialog::closeWindow ));
+    if ( actmap ) {
+      p = ScreenToClient(exitButton->x, exitButton->y);
+      continueButton = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + 2 * GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Continue Game", 90);
+      continueButton->sigClick.connect( SigC::slot( *this, &GameDialog::closeWindow ));
+    }
 
     sigClose.connect( SigC::slot( *this, &GameDialog::closeWindow ));    
     SetInputFocus();
@@ -107,9 +111,24 @@ bool GameDialog::saveGame(PG_Button* button) {
 }
 
 bool GameDialog::loadGame(PG_Button* button) {
-    ::loadGame();
+   if ( ::loadGame()) 
+      QuitModal();
+      
     return true;
 }
+
+bool GameDialog::newGame(PG_Button* button)
+{
+   Hide();
+   if ( startMultiplayerGame() ) {
+      hookGuiToMap(actmap);
+      QuitModal();
+      
+   } else
+      Show();
+   return true;
+}
+
 
 bool GameDialog::singleGame(PG_Button* button) {
     Hide();
@@ -120,8 +139,11 @@ bool GameDialog::singleGame(PG_Button* button) {
 
 bool GameDialog::multiGame(PG_Button* button) {
     Hide();
-    MultiPlayerDialog::multiPlayerDialog(this);
-    Show();
+    // MultiPlayerDialog::multiPlayerDialog(this);
+    if ( continueAndStartMultiplayerGame() ) {
+       QuitModal();
+    } else
+      Show();
     return true;
 }
 
@@ -321,11 +343,11 @@ OptionsDialog::OptionsDialog(PG_MessageObject* c ): ASC_PG_Dialog(NULL, PG_Rect(
     soundButton = new PG_Button(this, PG_Rect(buttonIndent, GuiDimension::getTopOffSet()*2, 150, GuiDimension::getButtonHeight()), "Sound Options", 90);
     soundButton->sigClick.connect( SigC::slot( *this, &OptionsDialog::showSoundOptions ));
 
-    PG_Point p = ScreenToClient(mouseButton->x, mouseButton->y);
+    PG_Point p = ScreenToClient(soundButton->x, soundButton->y);
     otherButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet(), 150, GuiDimension::getButtonHeight()), "Game Options", 90);
     otherButton->sigClick.connect( SigC::slot( *this, &OptionsDialog::showOtherOptions ));
 
-    p = ScreenToClient(displayButton->x, displayButton->y);
+    p = ScreenToClient(otherButton->x, otherButton->y);
     PG_Button* okButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() * 2, 150, GuiDimension::getButtonHeight()), "Back", 90);
     okButton->sigClick.connect( SigC::slot( *this, &OptionsDialog::closeWindow ));
 
@@ -362,7 +384,7 @@ bool OptionsDialog::showMouseOptions(PG_Button* button) {
 
 bool OptionsDialog::showOtherOptions(PG_Button* button) {
     Hide();
-    GameOptionsDialog::gameOptionsDialog(this);
+    editGameOptions();
     Show();
     return true;
 }

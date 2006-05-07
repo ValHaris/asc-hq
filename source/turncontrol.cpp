@@ -39,6 +39,7 @@
 #include "loaders.h"
 #include "network.h"
 #include "cannedmessages.h"
+#include "viewcalculation.h"
 
 bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool allowCancel = true, bool lockView = true )
 {
@@ -87,7 +88,7 @@ bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool all
 
 
 
-void runai( int playerView )
+void runai( GameMap* actmap, int playerView )
 {
    MapDisplayPG::CursorHiding cusorHiding;
    actmap->playerView = playerView;
@@ -100,7 +101,7 @@ void runai( int playerView )
 }
 
 
-int findNextPlayer( GameMap* actmap )
+int findNextPlayer( const GameMap* actmap )
 {
    int p = actmap->actplayer;
    bool found = false;
@@ -147,7 +148,7 @@ void iterateToNextPlayer( GameMap* actmap, bool saveNetwork, int lastPlayer, int
       
       if ( actmap->player[nextPlayer].stat == Player::computer ) {
          actmap->beginTurn();
-         runai( lastPlayer );
+         runai( actmap, lastPlayer );
          actmap->endTurn();
       }
       
@@ -247,27 +248,29 @@ void checkUsedASCVersions ( Player& currentPlayer )
 
 
 
-void continuenetworkgame ()
+bool continuenetworkgame ()
 {
    ASCString filename = selectFile( ASCString("*") + tournamentextension + ";*.asc", true );
    if ( filename.empty() )
-      return;
+      return false;
 
    StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "loading " + filename );
    FileTransfer ft;
    auto_ptr<GameMap> newMap ( mapLoadingExceptionChecker( filename, MapLoadingFunction( &ft, &FileTransfer::loadPBEMFile )));
    if ( !newMap.get() )
-      return;
-   
-   if ( authenticateUser( newMap.get() , 0, true, false )) {
-      delete actmap;
-      actmap = newMap.release();
+      return false;
 
-      actmap->beginTurn();
-      actmap->playerView  = actmap->actplayer;
-      actmap->sigPlayerUserInteractionBegins( actmap->player[actmap->actplayer] );
-      
-   }
+   if ( !authenticateUser( newMap.get() , 0, true, false ))
+      return false;
+   
+   delete actmap;
+   actmap = newMap.release();
+
+   computeview( actmap );
+   actmap->beginTurn();
+   actmap->playerView  = actmap->actplayer;
+   actmap->sigPlayerUserInteractionBegins( actmap->player[actmap->actplayer] );
+   return true;
 }
 
 

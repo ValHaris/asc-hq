@@ -48,6 +48,8 @@
 #include "dialogs/editgameoptions.h"
 #include "dialogs/admingame.h"
 #include "dialogs/eventeditor.h"
+#include "dialogs/newmap.h"
+
    
    const char* execactionnames[execactionscount] = {
         "End MapEdit",
@@ -373,8 +375,6 @@ void execaction( int code)
        break;
     case act_changeplayers : playerchange();
        break;
-    case act_newmap :   newmap();
-       break;
        /*
     case act_polymode :   {
           getpolygon(&pfpoly);
@@ -510,8 +510,6 @@ void execaction( int code)
         break;
     case act_changeminestrength : changeminestrength();
        break;
-    case act_changemapvals :   changemapvalues();
-       break;                                        
     case act_changeunitvals :   {
                  tfield* pf2 = getactfield();
                  if ( pf2  ) {
@@ -811,6 +809,10 @@ void execaction_pg(int code)
       case act_events :   eventEditor();
          break;
       case act_resetPlayerData: adminGame( actmap );
+         break;
+      case act_changemapvals :   editMap(actmap);
+         break;
+      case act_newmap :   newmap();
          break;
    };
 }

@@ -170,22 +170,16 @@ class GameMap {
 
 
       struct Campaign {
+          //! is this a campaign map?
+          bool avail;
+         
           //! an identification for identifying a map in the chain of maps that make up a campaign
           int         id;
 
-          //! the id of the previous map in the campaign. This is only used as a fallback mechanism if the event based chaining fails. It will probably be discared sooner or later
-          int         prevmap;   
-
-          //! a campaign is usually designed to be played by a specific player
-          unsigned char         player;
-
           //! can the map be loaded just by knowing its filenmae? If 0, the codeword is required
-          char      directaccess;   
-
-      };
-
-      //! the campaign properties of map
-      Campaign*    campaign;
+          bool      directaccess;
+          Campaign();
+      } campaign;
 
       //! the player who is currently making his moves (may be human or AI)
       signed char  actplayer; 
@@ -279,7 +273,7 @@ class GameMap {
       //! temporary variables for loading the map
       bool ___loadJournal, ___loadNewJournal, ___loadtitle, ___loadLegacyNetwork;
 
-      void allocateFields ( int x, int y );
+      void allocateFields ( int x, int y, TerrainType::Weather* terrain = NULL );
 
       ASCString     gameJournal;
       ASCString     newJournal;

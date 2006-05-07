@@ -352,6 +352,21 @@ int tfield :: getdefensebonus ( void )
       return -7;
 }
 
+ASCString tfield :: getName()
+{
+   ASCString a = typ->terraintype->name;
+   for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
+      if ( o->typ->namingMethod == ObjectType::ReplaceTerrain )
+         a = o->typ->getName();
+      else
+         if ( o->typ->namingMethod == ObjectType::AddToTerrain )
+            a += ", " + o->typ->getName();
+   }
+   
+   return a;
+}
+
+
 int tfield :: getjamming ( void )
 {
    int a = typ->basicjamming;

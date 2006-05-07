@@ -99,7 +99,7 @@ class Player : public SigC::Object {
       void setParentMap( GameMap* map, int pos );
       
       //! does the player exist at all
-      bool         exist();
+      bool         exist() const;
 
       //! did the player exist when the turn started? Required for checking if a player has been terminated
       bool existanceAtBeginOfTurn;

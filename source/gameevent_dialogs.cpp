@@ -54,15 +54,6 @@
 # include "maped-mainscreen.h"
  extern int  selectfield(int * cx ,int  * cy);
 
-template <class ItemType>
-bool selectItemID( int& id, const ItemRepository<ItemType>& itemRepository )
-{
-   ItemSelectorWindow isw( NULL, PG_Rect( 300, 50, 280, PG_Application::GetScreenHeight()-100), "select item", new MapItemTypeWidgetFactory_IDSelection< MapItemTypeWidget<ItemType> >(itemRepository, id) );
-   isw.Show();
-   isw.RunModal();
-   return true;
-}
- 
 #else
 int  selectfield(int * cx ,int  * cy)
 {

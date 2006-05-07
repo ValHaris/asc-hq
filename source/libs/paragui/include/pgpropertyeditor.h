@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-04-17 19:04:57 $
+    Update Date:      $Date: 2006-05-07 17:22:55 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgpropertyeditor.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.2 $
+    CVS/RCS Revision: $Revision: 1.1.2.3 $
     Status:           $State: Exp $
 */
 
@@ -97,7 +97,7 @@ public:
 	    The PropertyEditor will take ownership of the PropertyEditorFields and delete them on its
 	    own destruction.
 	*/
-	PG_Rect RegisterProperty( const std::string& name, PG_PropertyEditorField* propertyEditorField );
+	PG_Rect RegisterProperty( const std::string& name, PG_PropertyEditorField* propertyEditorField, int height = -1 );
 
 	~PG_PropertyEditor() ;
 

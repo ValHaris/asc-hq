@@ -361,7 +361,7 @@ class tviewtext {
          int tvt_maxlineheight;
          const char*  tvt_text;
          char*  actline;
-         void*  tvt_firstlinebuf;
+         char*  tvt_firstlinebuf;
          tgraphmodeparameters tvt_firstlinebufparm;
          int   tvt_firstlinebufheight;
                      

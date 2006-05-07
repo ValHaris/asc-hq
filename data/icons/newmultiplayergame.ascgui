@@ -22,7 +22,7 @@ panel {
     type = button
     text = Next >
     name = next
-    x = -130
+    x = -30
     y = -20
     height  = 30
     width = 90
@@ -32,7 +32,7 @@ panel {
     type = button
     text = QuickStart
     name = quickstart
-    x = -230
+    x = -130
     y = -20
     height  = 30
     width = 90
@@ -191,7 +191,7 @@ panel {
     x2 = -20
     y2 = -80
 
-    ChildWidgets = Replay SupervisorOn SupervisorPlain SupervisorEnc Filename FilenameLabel
+    ChildWidgets = Replay SupervisorOn Filename FilenameLabel SuperVisor
     
     Replay {
       type = Checkbox
@@ -210,38 +210,75 @@ panel {
       height = 25
       width = 300
     } SupervisorOn
+          
 
-    
-    SupervisorPlain {
-      type = LineEdit
-      x = 60
+    SuperVisor {
+      x = 70
       y = 90
-      height = 25
-      width = 280
-    } SupervisorPlain
-    
-    SupervisorEnc {
-      type = LineEdit
-      x = 60
-      y = 120
-      height = 25
-      width = 280
-    } SupervisorEnc
+      x2 = -1
+      height = 100
+      ChildWidgets = SupervisorPlain SupervisorEnc SVLabel1 OR SVLabel2      
+      type = dummy
+
+      SVLabel1 {
+         x = 10
+         y = 00
+         height = 25
+         width = 150
+         type = StaticText
+         Text = Unencoded password:
+      } SVLabel1
+
+      SupervisorPlain {
+         type = LineEdit
+         x = 170
+         y = 00
+         height = 25
+         width = 280
+      } SupervisorPlain
+   
+      OR {
+         x = 0
+         y = 20
+         height = 25
+         width = 100
+         type = StaticText
+         Text = OR
+         Fontsize = 16
+      } OR
+   
+      SVLabel2 {
+         x = 10
+         y = 40
+         height = 25
+         width = 150
+         type = StaticText
+         Text = Encoded password:
+      } SVLabel2
+      
+      SupervisorEnc {
+         type = LineEdit
+         x = 170
+         y = 40
+         height = 25
+         width = 280
+      } SupervisorEnc
+   } SuperVisor
 
     
     FilenameLabel {
       x = 40
-      y = 150
+      y = 170
       height = 25
-      width = 100
+      width = 120
       type = StaticText
-      Text = Filename: 
+      Text = Filename schema:
     } FilenameLabel
         
     Filename {
       type = LineEdit
-      x = 160
-      y = 150
+      x = 180
+      y = 170
       height = 25
       width = 300
     } Filename

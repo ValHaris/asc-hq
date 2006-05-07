@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-04-17 19:04:57 $
+    Update Date:      $Date: 2006-05-07 17:22:55 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgpropertyeditor.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.2 $
+    CVS/RCS Revision: $Revision: 1.1.2.3 $
     Status:           $State: Exp $
 */
 
@@ -70,15 +70,18 @@ bool PG_PropertyEditor :: Apply() {
 	return true;
 };
 
-PG_Rect PG_PropertyEditor :: RegisterProperty( const std::string& name, PG_PropertyEditorField* propertyEditorField ) {
+PG_Rect PG_PropertyEditor :: RegisterProperty( const std::string& name, PG_PropertyEditorField* propertyEditorField, int height ) {
 	propertyFields.push_back( propertyEditorField );
 
+   if ( height <= 0 )
+      height = lineHeight;
+   
 	int w = Width() - my_widthScrollbar - 2 * lineSpacing;
 
-	PG_Label* label = new PG_Label( this, PG_Rect( 0, ypos, w * labelWidth / 100 - 1, lineHeight), name );
+   PG_Label* label = new PG_Label( this, PG_Rect( 0, ypos, w * labelWidth / 100 - 1, height), name );
 	label->LoadThemeStyle( styleName, "Label" );
-	PG_Rect r  ( w * labelWidth / 100 , ypos, w * ( 100 - labelWidth ) / 100  - 1, lineHeight );
-	ypos += lineHeight + lineSpacing;
+   PG_Rect r  ( w * labelWidth / 100 , ypos, w * ( 100 - labelWidth ) / 100  - 1, height );
+   ypos += height + lineSpacing;
 	return r;
 };
 

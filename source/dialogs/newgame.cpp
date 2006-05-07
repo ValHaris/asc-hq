@@ -43,7 +43,7 @@ class GameParameterEditorWidget;
 
 class StartMultiplayerGame: public ConfigurableWindow {
    private:
-
+      bool success;
       GameMap* newMap;
       
       enum Pages { ModeSelection = 1, FilenameSelection, PlayerSetup, EmailSetup, AllianceSetup, MapParameterEditor, MultiPlayerOptions, PasswordSearch }; 
@@ -57,6 +57,8 @@ class StartMultiplayerGame: public ConfigurableWindow {
       ASCString filename;
       ASCString PBEMfilename;
       bool replay;
+      bool supervisorEnabled;
+      Password supervisorPassword;
       
       GameParameterEditorWidget* mapParameterEditor;
       PG_Widget* mapParameterEditorParent;
@@ -95,9 +97,30 @@ class StartMultiplayerGame: public ConfigurableWindow {
             start();
          return true;
       }
+
+
+      void showSupervisorWidgets()
+      {
+         if ( page == MultiPlayerOptions )
+            if ( supervisorEnabled )
+               show( "SuperVisor" );
+            else
+               hide( "SuperVisor" );
+
+      }
+      
+      bool togglesupervisor( bool on )
+      {
+         supervisorEnabled = on;
+         showSupervisorWidgets();
+         return true;
+      }
       
       void showButtons( bool start, bool quickstart, bool next )
       {
+         assert ( start != next );
+         assert ( start != quickstart );
+         
          if ( next )
             show("next");
          else
@@ -119,9 +142,22 @@ class StartMultiplayerGame: public ConfigurableWindow {
       bool start();
       bool Apply();
       
+      bool eventKeyDown(const SDL_KeyboardEvent *key){
+         if(key->keysym.sym == SDLK_ESCAPE) {
+            if ( page <= 2 )
+               QuitModal();
+         }
+         return true;
+      }
+      
    public:
       StartMultiplayerGame(PG_MessageObject* c);
       ~StartMultiplayerGame();
+
+      bool getSuccess()
+      {
+         return success;
+      }
    
 };
 
@@ -136,7 +172,7 @@ const char* StartMultiplayerGame::buttonLabels[7] = {
 };
 
 
-StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWindow( NULL, PG_Rect::null, "newmultiplayergame", false ), newMap(NULL), page(ModeSelection), mode ( 0 ), replay(false),
+StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWindow( NULL, PG_Rect::null, "newmultiplayergame", false ), success(false), newMap(NULL), page(ModeSelection), mode ( 0 ), replay(true), supervisorEnabled(false),
    mapParameterEditor(NULL), mapParameterEditorParent(NULL),
    allianceSetup(NULL), allianceSetupParent(NULL),
    playerSetup(NULL), playerSetupParent(NULL),
@@ -161,6 +197,28 @@ StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWin
     if ( qstart )
       qstart->sigClick.connect( SigC::slot( *this, &StartMultiplayerGame::quickstart ));
       
+    PG_CheckButton* supervisor = dynamic_cast<PG_CheckButton*>(FindChild("SupervisorOn", true ));
+    if ( supervisor ) {
+       if ( supervisorEnabled )
+         supervisor->SetPressed();
+       else
+          supervisor->SetUnpressed();
+       supervisor->sigClick.connect( SigC::slot( *this, &StartMultiplayerGame::togglesupervisor ));
+    }
+
+    PG_LineEdit* s1 = dynamic_cast<PG_LineEdit*>( FindChild( "SupervisorPlain", true ));
+    if ( s1 )
+       s1->SetPassHidden ('*');
+    
+    
+    PG_CheckButton* cb = dynamic_cast<PG_CheckButton*>( FindChild( "Replay", true ));
+    if ( cb )
+       if ( replay )
+         cb->SetPressed( );
+       else
+         cb->SetUnpressed();
+
+    
     showPage();
     showButtons(false,false,true);
 }
@@ -219,14 +277,32 @@ bool StartMultiplayerGame::Apply()
                replay = cb->GetPressed();
             
             PG_LineEdit* le = dynamic_cast<PG_LineEdit*>( FindChild( "Filename", true ));
-            if ( le ) 
-               if ( !le->GetText().empty() ) {
-                  PBEMfilename = le->GetText();
-                  return true;
-               }
+            if ( le &&  !le->GetText().empty() ) 
+               PBEMfilename = le->GetText();
                
-             
-               return false;
+            if ( supervisorEnabled ) {
+               PG_LineEdit* s1 = dynamic_cast<PG_LineEdit*>( FindChild( "SupervisorPlain", true ));
+               PG_LineEdit* s2 = dynamic_cast<PG_LineEdit*>( FindChild( "SupervisorEnc", true ));
+
+               if ( s1 && s2 && !s1->GetText().empty() && !s2->GetText().empty()) {
+                  Password pwd;
+                  pwd.setUnencoded( s1->GetText() );
+                  
+                  Password pwd2;
+                  pwd2.setEncoded( s2->GetText() );
+                  if ( pwd != pwd2 ) {
+                     warning ( "Passwords don't match!");
+                     return false;
+                  }
+               }
+
+               if ( s1 && !s1->GetText().empty() )
+                  supervisorPassword.setUnencoded( s1->GetText() );
+
+               if ( s2 && !s2->GetText().empty() )
+                  supervisorPassword.setEncoded( s2->GetText() );
+            }
+            return true;
          }      
          break;
               
@@ -335,6 +411,7 @@ void StartMultiplayerGame::showPage()
       else   
          hide( name );
    }
+   showSupervisorWidgets();
    
    switch ( page ) {
       case FilenameSelection: 
@@ -483,6 +560,9 @@ bool StartMultiplayerGame::start()
          delete newMap->replayinfo;
          newMap->replayinfo = NULL;
       }
+
+   if ( supervisorEnabled )
+      newMap->supervisorpasswordcrc = supervisorPassword;
       
    
    setupNetwork();
@@ -497,16 +577,18 @@ bool StartMultiplayerGame::start()
    displaymap();
    updateFieldInfo();
    moveparams.movestatus = 0;
+   success = true;
    return true;
 }
 
 
 
-void startMultiplayerGame(PG_MessageObject* c)
+bool startMultiplayerGame()
 {
-    StartMultiplayerGame smg(c);
+    StartMultiplayerGame smg(NULL);
     smg.Show();
     smg.RunModal();
+    return smg.getSuccess();
 }
 
 

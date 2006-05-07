@@ -197,33 +197,6 @@ int         fieldAccessible( const tfield*        field,
 
 
 
-void         generatemap( TerrainType::Weather*   bt,
-                               int                xsize,
-                               int                ysize)
-{ 
-   delete actmap;
-   actmap = new GameMap;
-   for (int k = 1; k < 8; k++)
-      actmap->player[k].stat = Player::computer;
-
-   actmap->maptitle = "new map";
-
-   actmap->allocateFields(xsize, ysize);
-
-   if ( actmap->field== NULL)
-      displaymessage ( "Could not generate map !! \nProbably out of enough memory !",2);
-
-   for ( int l = 0; l < xsize*ysize; l++ ) {
-      actmap->field[l].typ = bt;
-      actmap->field[l].setparams();
-      actmap->field[l].setMap( actmap );
-   }
-
-   actmap->_resourcemode = 1;
-   actmap->playerView = 0;
-}
-
-
 
 
 tfield*        getfield(int          x,
@@ -566,6 +539,9 @@ VisibilityStates fieldVisibility( const tfield* pe, int player )
 
 VisibilityStates fieldVisibility( const tfield* pe, int player, GameMap* gamemap )
 {
+#ifdef karteneditor
+   player = 0;
+#endif
   if ( pe && player >= 0 ) {
       VisibilityStates c = VisibilityStates((pe->visible >> ( player * 2)) & 3);
       #ifdef karteneditor

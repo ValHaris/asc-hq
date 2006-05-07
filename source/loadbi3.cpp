@@ -681,6 +681,31 @@ Vehicle* tloadBImap :: getunit ( int tp, int col )
    return NULL;
 }
 
+void         generatemap( TerrainType::Weather*   bt,
+                          int                xsize,
+                          int                ysize)
+{
+   delete actmap;
+   actmap = new GameMap;
+   for (int k = 1; k < 8; k++)
+      actmap->player[k].stat = Player::computer;
+
+   actmap->maptitle = "new map";
+
+   actmap->allocateFields(xsize, ysize);
+
+   if ( actmap->field== NULL)
+      displaymessage ( "Could not generate map !! \nProbably out of enough memory !",2);
+
+   for ( int l = 0; l < xsize*ysize; l++ ) {
+      actmap->field[l].typ = bt;
+      actmap->field[l].setparams();
+      actmap->field[l].setMap( actmap );
+   }
+
+   actmap->_resourcemode = 1;
+   actmap->playerView = 0;
+}
 
 
 void ImportBiMap :: preparemap ( int x, int y  )

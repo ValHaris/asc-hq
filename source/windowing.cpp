@@ -371,7 +371,13 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
       
    PG_RadioButton* radioButtonGroup = NULL;
 
+
+   WidgetParameters originalWidgetParams = widgetParams;
+            
    for ( int i = 0; i < childNames.size(); ++i) {
+
+      widgetParams  = originalWidgetParams;
+      
       pc.openBracket( childNames[i] );
 
       ASCString toolTipHelp;

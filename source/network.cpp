@@ -91,9 +91,12 @@ void FileTransfer::send( const GameMap* map, int lastPlayer, int lastturn )
          tnetworkloaders nwl;
          nwl.savenwgame( &gamefile );
       }
-      ASCString msg = "Data written to file\nPlease send " + fname + " to \n" + map->player[map->actplayer].getName();
-      if ( !map->player[map->actplayer].email.empty() )
-         msg += " (" + map->player[map->actplayer].email + ")";
+
+      int nextPlayer = findNextPlayer( map );
+      
+      ASCString msg = "Data written!\nPlease send " + fname + " to \n" + map->player[nextPlayer].getName();
+      if ( !map->player[nextPlayer].email.empty() )
+         msg += " (" + map->player[nextPlayer].email + ")";
       infoMessage( msg );
    } catch ( tfileerror ) {
       errorMessage ( "error writing file " + filename );

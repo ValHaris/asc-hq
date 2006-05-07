@@ -46,6 +46,7 @@
 #include "clipboard.h"
 #include "dialogs/cargowidget.h"
 #include "dialogs/fieldmarker.h"
+#include "dialogs/newmap.h"
 
 #include "maped-mainscreen.h"
 
@@ -663,7 +664,7 @@ void         k_loadmap(void)
       delete actmap;
       actmap =  mp;
 
-      if ( actmap->campaign && !actmap->campaign->directaccess && !actmap->codeWord.empty() ) {
+      if ( actmap->campaign.avail && !actmap->campaign.directaccess && !actmap->codeWord.empty() ) {
          tlockdispspfld ldsf;
          removemessage();
          Password pwd;
@@ -917,250 +918,21 @@ void editpolygon(Poly_gon& poly)
 }
 
 
-//* õS NewMap
-
-  class tnewmap : public tdialogbox {
-            char maptitle[10000];
-        public :
-               int action;
-               char passwort[11];
-               int sxsize,sysize;
-               char valueflag,random,campaign;
-               GameMap::Campaign cmpgn;
-               pterraintype         tauswahl;
-               int auswahlw;
-               void init(void);
-               virtual void run(void);
-               virtual void buttonpressed(int  id);
-               void done(void);
-               };
-
-
-void         tnewmap::init(void)
-{
-  int w;
-  char      b;
-
-   tdialogbox::init();
-   action = 0;
-   if (valueflag == true )
-      title = "New Map";
-   else
-      title = "Map Values";
-   x1 = 70;
-   xsize = 500;
-   y1 = 70;
-   ysize = 350;
-   campaign = !!actmap->campaign;
-   sxsize = actmap->xsize;
-   sysize = actmap->ysize;
-   strcpy ( maptitle, actmap->maptitle.c_str() );
-
-   if (valueflag == true ) {
-      strcpy(passwort,"");
-      memset(&cmpgn,0,sizeof(cmpgn));
-   }
-   else {
-      strcpy(passwort, actmap->codeWord.c_str());
-      if (actmap->campaign != NULL) {
-         campaign = true;
-         memcpy (&cmpgn , actmap->campaign, sizeof(cmpgn));
-      }
-      else memset(&cmpgn,0,sizeof(cmpgn));
-   }
-   random = false;
-   auswahlw = 0; /* !!! */
-
-   w = (xsize - 60) / 2;
-   windowstyle = windowstyle ^ dlg_in3d;
-
-   addbutton("~T~itle",15,70,xsize - 30,90,1,1,1,true);
-   addeingabe(1,maptitle,0,100);
-
-   if (valueflag == true ) {
-      addbutton("~X~ Size",15,130,235,150,2,1,2,true);
-      addeingabe(2,&sxsize,10,65534);
-
-      addbutton("~Y~ Size",250,130,470,150,2,1,3,true);
-      addeingabe(3,&sysize,10,65534);
-
-      addbutton("~R~andom",250,190,310,210,3,1,11,true);
-      addeingabe(11,&random,0,lightgray);
-
-      if ( ! random) b = true;
-      else b =false;
-
-      addbutton("~B~dt",350,190,410,210,0,1,12,b);
-   }
-
-   addbutton("~P~assword (10 letters)",15,190,235,210,1,1,9,true);
-   addeingabe(9,passwort,10,10);
-
-   addbutton("C~a~mpaign",15,230,235,245,3,1,5,true);
-   addeingabe(5,&campaign,0,lightgray);
-
-   addbutton("~M~ap ID",15,270,235,290,2,1,6,campaign);
-   addeingabe(6,&cmpgn.id,0,65535);
-
-   addbutton("Pr~e~vious Map ID",250,270,470,290,2,1,7,campaign);
-   addeingabe(7,&cmpgn.prevmap,0,65535);
-
-   addbutton("~D~irect access to map",250,230,470,245,3,1,8,campaign);
-   addeingabe(8,&cmpgn.directaccess,0,lightgray);
-
-   if (valueflag == true ) addbutton("~S~et Map",20,ysize - 40,20 + w,ysize - 10,0,1,10,true);
-   else addbutton("~S~et Mapvalues",20,ysize - 40,20 + w,ysize - 10,0,1,10,true);
-   addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,4,true);
-
-   tauswahl = NULL;
-
-   buildgraphics();
-   if (valueflag == true )
-      if ( ! random ) {
-         mousevisible(false);
-         if ( tauswahl->weather[auswahlw] )
-            tauswahl->weather[auswahlw]->paint ( getActiveSurface(), SPoint(x1 + 440,y1 + 182) );
-         else
-            tauswahl->weather[0]->paint ( getActiveSurface(), SPoint(x1 + 440,y1 + 182) );
-         mousevisible(true);
-      }
-   rahmen(true,x1 + 10,y1 + starty,x1 + xsize - 10,y1 + ysize - 45);
-   rahmen(true,x1 + 11,y1 + starty + 1,x1 + xsize - 11,y1 + ysize - 46);
-   mousevisible(true);
-}
-
-
-void         tnewmap::run(void)
-{
-   do {
-      tdialogbox::run();
-      if (action == 3) {
-         if ( sysize & 1 ) {
-            displaymessage("YSize must be even !",1 );
-            action = 0;
-         }
-         #ifdef UseMemAvail
-         if (action != 4)
-            if ( sxsize * sysize * sizeof( tfield ) > memavail() ) {
-               displaymessage("Not enough memory for map.\nGenerate smaller map or free more memory",1);
-               action = 0;
-            }
-         #endif
-      }
-   }  while (!((taste == ct_esc) || (action >= 2)));
-
-   if (action == 3) {
-      if (valueflag == true ) {
-         if ( tauswahl->weather[auswahlw] )
-            generatemap(tauswahl->weather[auswahlw], sxsize , sysize );
-         else
-            generatemap(tauswahl->weather[0], sxsize , sysize );
-         if ( random)
-            mapgenerator();
-      }
-
-      mapsaved = false;
-
-      actmap->maptitle = maptitle;
-
-      actmap->codeWord = passwort;
-      
-      if (campaign == true ) {
-         if (actmap->campaign == NULL)
-            actmap->campaign = new GameMap::Campaign;
-
-         actmap->campaign->id = cmpgn.id;
-         actmap->campaign->prevmap = cmpgn.prevmap;
-         actmap->campaign->directaccess = cmpgn.directaccess;
-      }
-      else
-         if ( actmap->campaign ) {
-            delete actmap->campaign;
-            actmap->campaign = NULL;
-         }
-   }
-}
-
-
-void         tnewmap::buttonpressed(int id)
-{
-   if (id == 4)
-      action = 2;
-   if (id == 10)
-      action = 3;
-   if (id == 5)
-      if (campaign) {
-         enablebutton(6);
-         enablebutton(7);
-         enablebutton(8);
-      }
-      else {
-         disablebutton(6);
-         disablebutton(7);
-         disablebutton(8);
-      }
-   if (id == 12) {
-
-      void *p;
-
-      mousevisible(false);
-      p=malloc( imagesize(430,0,639,479) );
-      getimage(430,0,639,479,p);
-      mousevisible(true);
-
-      mousevisible(false);
-      putimage(430,0,p);
-      mousevisible(true);
-
-      tauswahl = NULL;
-
-      if ( tauswahl->weather[auswahlw] )
-         tauswahl->weather[auswahlw]->paint( getActiveSurface(), SPoint(x1 + 440,y1 + 182) );
-      else
-         tauswahl->weather[0]->paint ( getActiveSurface(), SPoint(x1 + 440,y1 + 182) );
-   }
-   if (id == 11)
-      if ( ! random) {
-         enablebutton(12);
-      }
-      else {
-         disablebutton(12);
-      }
-}
-
-
-void         tnewmap::done(void)
-{
-   tdialogbox::done();
-   if (action == 3) displaymap();
-}
-
-
 
 void         newmap(void)
 {
-  tnewmap      nm;
-
-   nm.valueflag = true;
-   nm.init();
-   nm.run();
-   nm.done();
+   GameMap* map = createNewMap();
+   if ( map ) {
+      delete actmap;
+      actmap = map;
+      // displaymap();
+      mapChanged( actmap );
+      // tspfldloaders::mapLoaded( actmap );
+   }
 }
 
 
 //* õS MapVals
-
-
-void         changemapvalues(void)
-{
-  tnewmap      nm;
-
-   nm.valueflag = false;
-   nm.init();
-   nm.run();
-   nm.done();
-//   if (actmap->campaign != NULL) setupalliances();
-}
 
 
 
@@ -3214,6 +2986,15 @@ void unitsettransformation( void )
    utt.run();
 }
 
+
+void MapSwitcher::deleteMaps()
+{
+   delete actmap;
+   actmap = NULL;
+   toggle();
+   delete actmap;
+   actmap = NULL;
+}
 
 void MapSwitcher :: toggle ( )
 {

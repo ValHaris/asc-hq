@@ -102,7 +102,6 @@ extern void         changeresource(void);
 extern void         changebuildingvalues( Building& b);
 extern void         changeminestrength(void);
 extern void         newmap(void);
-extern void         changemapvalues(void);
 extern void         cargoEditor ( ContainerBase* container );
 // extern int          selectfield(int * cx ,int  * cy);
 extern void 	     playerchange(void);
@@ -136,6 +135,7 @@ class MapSwitcher {
         Action getDefaultAction ( );
         void toggle ();
         string getName ();
+        void deleteMaps();
         MapSwitcher ( ) : active ( 0 ) {};
 };
 
