@@ -846,7 +846,7 @@ void tspfldloaders::readfields ( void )
          else
             fld2->visible = 0;
 
-         bool tempObjects[16];
+         // bool tempObjects[16];
          int  tempObjectNum;
 
          if (b3 & csm_object ) {
@@ -861,7 +861,7 @@ void tspfldloaders::readfields ( void )
             tempObjectNum = stream->readInt();
 
             for ( int i = 0; i < 16; i++ )
-               tempObjects[i] = stream->readInt();
+               stream->readInt(); // tempObjects[i] =
          }
 
          int objectversion = 1;
@@ -880,6 +880,9 @@ void tspfldloaders::readfields ( void )
                int player = stream->readInt();
                if ( player < 0 || player > 7 )
                   player = 0;
+
+               assert( strength >= 0 );
+               assert( type > 0 && type <= 4 );
 
                Mine m ( type, strength, player, spfld );
                if ( objectversion == 1 ) {

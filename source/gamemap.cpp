@@ -1774,6 +1774,7 @@ void tfield::operator= ( const tfield& f )
 
 Mine::Mine( MineTypes type, int strength, int player, tmap* gamemap )
 {
+   assert( type > 0 && type <= 4 );
    this->type = type;
    this->strength = strength;
    this->player = player;
