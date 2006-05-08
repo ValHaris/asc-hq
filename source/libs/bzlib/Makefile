@@ -203,3 +203,6 @@ manual.pdf: $(MANUAL_SRCS)
 
 manual.html: $(MANUAL_SRCS)
 	./xmlproc.sh -html manual.xml
+
+uninstall: 
+
