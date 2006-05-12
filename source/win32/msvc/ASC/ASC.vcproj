@@ -337,9 +337,6 @@
 				RelativePath="..\..\..\password.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\password_dialog.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\pd.cpp">
 			</File>
 			<File
@@ -539,6 +536,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\nextcampaignmap.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\pwd_dlg.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\unitcounting.cpp">

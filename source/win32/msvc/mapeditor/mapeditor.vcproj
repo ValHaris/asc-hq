@@ -320,9 +320,6 @@
 				RelativePath="..\..\..\password.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\password_dialog.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\pd.cpp">
 			</File>
 			<File
@@ -461,6 +458,12 @@
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\fileselector.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\newmap.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\pwd_dlg.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\selectionwindow.cpp">
