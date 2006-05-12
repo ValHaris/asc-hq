@@ -38,7 +38,9 @@ extern SigC::Signal0<void> filtersChangedSignal;
 
 
 
-
+/** A MapComponent represents any kind of item that can be placed on the map by the user.
+    It is the abstract class on which the Brush edit function operates
+*/
 class MapComponent {
        static int currentPlayer;
        static void setPlayer( int player );

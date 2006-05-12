@@ -478,8 +478,10 @@ int ASC_PG_App::Run ( )
    return 0;
 }
 
-
-
+ASC_PG_App :: ~ASC_PG_App()
+{
+   shutdownASCGraphicSubsystem();
+}
 
 
 

@@ -73,7 +73,7 @@ class InitControls {
 } initControls;
 
 
-
+/*
   class   tsearchexternaltransferfields : public SearchFields {
                       public:
                                 Building*            bld;
@@ -116,9 +116,8 @@ int searchexternaltransferfields ( Building* bld )
    setf.searchtransferfields ( bld );
    return setf.numberoffields;
 }
+*/
 
-
-// #define netdebug
 
 
   class   tsearchdestructbuildingfields : public SearchFields {

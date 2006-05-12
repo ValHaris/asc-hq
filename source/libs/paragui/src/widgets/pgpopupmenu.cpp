@@ -20,9 +20,9 @@
    pipelka@teleweb.at
  
    Last Update:      $Author: mbickel $
-   Update Date:      $Date: 2006-03-19 19:56:01 $
+   Update Date:      $Date: 2006-05-12 19:08:47 $
    Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgpopupmenu.cpp,v $
-   CVS/RCS Revision: $Revision: 1.1.2.2 $
+   CVS/RCS Revision: $Revision: 1.1.2.3 $
    Status:           $State: Exp $
  */
 
@@ -48,7 +48,7 @@ PG_PopupMenu::MenuItem::MenuItem(PG_PopupMenu *parent, const std::string& captio
 		sSelected(0),
 		sDisabled(0),
 		selected(false),
-needRecalc(true) {
+      needRecalc(true) {
 	initItem( caption );
 	myFlags &= ~MIF_SUBMENU;
 }
@@ -236,6 +236,7 @@ PG_PopupMenu::PG_PopupMenu(PG_Widget *parent,
 		itemHeight(0),
 		selected(0),
 		tracking(false),
+      wasTracking(false),
 		buttonDown(false),
 		activeSub(0),
 myMaster(0) {

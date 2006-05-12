@@ -62,10 +62,10 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	objects.$(OBJEXT) stdio-errorhandler.$(OBJEXT) \
 	buildingtype.$(OBJEXT) containerbase.$(OBJEXT) \
 	mapalgorithms.$(OBJEXT) viewcalculation.$(OBJEXT) \
-	gamemap.$(OBJEXT) password.$(OBJEXT) password_dialog.$(OBJEXT) \
-	replay.$(OBJEXT) research.$(OBJEXT) mapdisplay.$(OBJEXT) \
-	resourcenet.$(OBJEXT) dashboard.$(OBJEXT) ascstring.$(OBJEXT) \
-	graphicset.$(OBJEXT) vehicle.$(OBJEXT) buildings.$(OBJEXT) \
+	gamemap.$(OBJEXT) password.$(OBJEXT) replay.$(OBJEXT) \
+	research.$(OBJEXT) mapdisplay.$(OBJEXT) resourcenet.$(OBJEXT) \
+	dashboard.$(OBJEXT) ascstring.$(OBJEXT) graphicset.$(OBJEXT) \
+	vehicle.$(OBJEXT) buildings.$(OBJEXT) \
 	networkinterface.$(OBJEXT) textfileparser.$(OBJEXT) \
 	terraintype.$(OBJEXT) objecttype.$(OBJEXT) \
 	textfiletags.$(OBJEXT) itemrepository.$(OBJEXT) \
@@ -261,7 +261,7 @@ loadbi3.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp \
 basestrm.cpp basegfx.cpp attack.cpp replaymapdisplay.cpp \
 gameoptions.cpp astar2.cpp vehicletype.cpp objects.cpp stdio-errorhandler.cpp \
 buildingtype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp \
-gamemap.cpp password.cpp password_dialog.cpp replay.cpp research.cpp \
+gamemap.cpp password.cpp replay.cpp research.cpp \
 mapdisplay.cpp resourcenet.cpp dashboard.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkinterface.cpp textfileparser.cpp terraintype.cpp \
 objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp music.cpp \
@@ -412,7 +412,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/palette.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/paradialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password_dialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pd.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/player.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/prehistoricevents.Po@am__quote@

@@ -1,0 +1,148 @@
+/*! \file password_dialog.cpp
+    \brief Dialog for entering and asking for passwords
+*/
+
+/***************************************************************************
+                          password_dialog.cpp  -  description
+                             -------------------
+    begin                : Mon Nov 27 2000
+    copyright            : (C) 2000 by Martin Bickel
+    email                : bickel@asc-hq.org
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#include <string>
+
+#include "../paradialog.h"
+#include "../gameoptions.h"
+#include "../password.h"
+
+ class PasswordDialog : public ASC_PG_Dialog {
+               Password& password;
+               PG_LineEdit* line1;
+               PG_LineEdit* line2;
+               
+               bool ok()
+               {
+                  if ( firstTime ) {
+                     assert( line2 );
+                     if ( line1->GetText() != line2->GetText() )
+                        return false;
+                     else {
+                        password.setUnencoded( line1->GetText() );
+                        success = true;
+                        QuitModal();
+                        return true;
+                     }
+                  } else {
+                     Password p2;
+                     p2.setUnencoded( line1->GetText() );
+                     if ( p2 != password )
+                        return false;
+                     else {
+                        success = true;
+                        QuitModal();
+                        return true;
+                     }
+                  }
+               }
+               
+               bool cancel()
+               {
+                  QuitModal();
+                  return true;
+               }
+
+               bool def()
+               {
+                  if ( CGameOptions::Instance()->getDefaultPassword().empty() ) {
+                     warning ( "no default password setup!" );
+                     return false;
+                  }
+
+                  password = CGameOptions::Instance()->getDefaultPassword();
+                  QuitModal();
+                  return true;
+               }
+
+               static const int border  = 20;
+
+               int buttonNum;
+               PG_Button* addButton( const ASCString& label, int totalNum )
+               {
+                  int width = (Width() - (totalNum+1)*border) / totalNum;
+                  return new PG_Button( this, PG_Rect( border + buttonNum * (width + border), Height()-40, width , 30 ), label );
+               }
+
+               bool success;
+               
+               
+            protected:
+               bool firstTime;
+               bool cancelAllowed;
+               bool defaultAllowed;
+            public:
+               PasswordDialog ( Password& crc, bool _firstTime, bool _cancelAllowed, bool _defaultAllowed ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 300, 180), "Enter Password"),
+                     password ( crc ), buttonNum(0), success(false), firstTime ( _firstTime ), cancelAllowed ( _cancelAllowed ), defaultAllowed ( _defaultAllowed )
+               {
+                  line1 = new PG_LineEdit( this, PG_Rect( border, 40, Width() - 2 * border, 20));
+                  line1->SetPassHidden('*');
+
+                  if ( firstTime ) {
+                     line2 = new PG_LineEdit( this, PG_Rect( border, 70, Width() - 2 * border, 20));
+                     line2->SetPassHidden('*');
+                  } else {
+                     line2 = NULL;
+                  }
+
+                  int bnum;
+                  if ( firstTime && defaultAllowed && cancelAllowed )
+                     bnum = 3;
+                  else
+                     bnum = 2;
+
+                  
+                  addButton ( "~O~k", bnum ) -> sigClick.connect( SigC::slot( *this, &PasswordDialog::ok ));
+                  
+                  if ( firstTime && defaultAllowed ) {
+                     addButton ( "~D~efault", bnum ) -> sigClick.connect( SigC::slot( *this, &PasswordDialog::def ));
+                     if ( cancelAllowed ) {
+                        addButton ( "~C~ancel", bnum ) -> sigClick.connect( SigC::slot( *this, &PasswordDialog::cancel ));
+                     }
+                  } else {
+                     if ( cancelAllowed ) {
+                        addButton ( "~C~ancel", bnum ) -> sigClick.connect( SigC::slot( *this, &PasswordDialog::cancel ));
+                     } else {
+                        addButton ( "~A~bort", bnum ) -> sigClick.connect( SigC::slot( *this, &PasswordDialog::cancel ));
+                     }
+                  }
+               };
+
+               bool getSuccess()
+               {
+                  return success;
+               }
+           };
+
+
+bool enterpassword ( Password& pwd, bool firstTime, bool cancelAllowed, bool defaultAllowed )
+{
+   Password def = CGameOptions::Instance()->getDefaultPassword();
+
+   if ( !pwd.empty() && !def.empty() && pwd==def && !firstTime )
+      return true;
+
+
+   PasswordDialog pwod ( pwd, firstTime, cancelAllowed, defaultAllowed );
+   pwod.Show();
+   pwod.RunModal();
+   return pwod.getSuccess();
+}

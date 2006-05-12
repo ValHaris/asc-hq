@@ -101,6 +101,8 @@ class StartupScreen: public SigC::Object {
        
        void processEvent();
        bool enableLegacyEventHandling( bool use );
+
+       ~ASC_PG_App();
        
        // SigC::Signal0<void> sigQuit;
       // PG_Theme* LoadTheme(const char* xmltheme, bool asDefault = true, const char* searchpath = NULL );

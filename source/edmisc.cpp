@@ -50,12 +50,7 @@
 
 #include "maped-mainscreen.h"
 
-   int          auswahls;
-   int          auswahlm;       
-   int          auswahlw;
-   int          auswahld;
-
-   char         mapsaved;
+   bool       mapsaved;
 
 
 
@@ -701,15 +696,6 @@ void selectUnitFromMap ( GameMap* gamemap, MapCoordinate& pos )
       pos = *list.begin();
 }
 
-void testFieldSelector()
-{
-   SelectFromMap::CoordinateList list;
-   list.push_back( MapCoordinate( 10,3 ));
-
-   SelectFromMap sfm( list, actmap );
-   sfm.Show();
-   sfm.RunModal();
-}
 
 
 void         setstartvariables(void)
@@ -720,8 +706,6 @@ void         setstartvariables(void)
 
    mapsaved = true;
 
-   auswahlm = 1;
-   auswahlw = 0;
 }
 
 #if 0

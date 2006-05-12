@@ -105,7 +105,7 @@ extern void dissectvehicle ( Vehicle* eht );
 
 
 
-extern int searchexternaltransferfields ( Building* bld );
+// extern int searchexternaltransferfields ( Building* bld );
 
 extern Resources getDestructionCost( Building* bld, Vehicle* veh );
 

@@ -611,7 +611,7 @@ void execaction( int code)
       break;
    case act_movebuilding: movebuilding();
       break;
-   case act_setactweatherglobal: setweatherall ( auswahlw );
+      case act_setactweatherglobal: setweatherall ( selection.getWeather() );
                                  displaymap();
       break;
    case act_terraininfo: viewterraininfo();

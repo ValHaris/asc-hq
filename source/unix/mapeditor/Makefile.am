@@ -20,7 +20,7 @@ loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp \
 attack.cpp gameoptions.cpp maped-mainscreen.cpp stdio-errorhandler.cpp\
 buildingtype.cpp vehicletype.cpp containerbase.cpp ed_mapcomponent.cpp \
 mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp \
-password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
+research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkinterface.cpp resourcenet.cpp textfileparser.cpp \
 terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \

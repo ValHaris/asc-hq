@@ -48,18 +48,6 @@
 extern bool mousePressedOnField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button, int prio );
 extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int prio );
 
-  typedef struct selectrec {
-                  int         srr;
-                  int         xpos, ypos;
-                  int         maxx,maxy,maxsr;
-                  int         maxanz;
-                  char     showall;
-               } selectrec; 
-
-  typedef struct xy { 
-           int      x, y; 
-        } xy; 
-
    class tputresources : public SearchFields {
                               int resourcetype;
                               int maxresource;
@@ -87,9 +75,7 @@ extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePo
 
 
 
-   extern int auswahlm;
-   extern int auswahlw;
-   extern char                mapsaved;
+   extern bool mapsaved;
 
 extern void         setstartvariables(void);
 extern void         exchg(int *a1,int *a2);
@@ -112,8 +98,6 @@ extern void         editpolygon (Poly_gon& poly);
 
 extern tfield* getactfield();
 
-
-extern void cdplayer( void );
 
 extern void selectunitsetfilter ( void );
 extern void movebuilding();

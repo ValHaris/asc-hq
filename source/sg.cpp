@@ -405,19 +405,6 @@ void benchgame ( int mode )
 }
 
 
-
-void renameUnit()
-{
-   if ( actmap ) {
-      tfield* fld = getSelectedField();
-      if ( fld && fld->vehicle && fld->vehicle->getOwner() == actmap->actplayer )
-         fld->vehicle->name = editString ( "unit name", fld->vehicle->name );
-      if ( fld && fld->building && fld->building->getOwner() == actmap->actplayer )
-         fld->building->name = editString ( "building name", fld->building->name );
-   }
-}
-
-
 void showSearchPath()
 {
 
@@ -560,10 +547,7 @@ void execuseraction ( tuseractions action )
          else
             displaymessage("Sorry, this function has been disabled when starting the map!", 1 );
          break;
-      case ua_renameunit:
-         renameUnit();
-         break;
-
+         
       case ua_researchinfo:
          researchinfo ();
          break;
@@ -1156,12 +1140,6 @@ int main(int argc, char *argv[] )
       exit(1);
    }
    auto_ptr<Cmdline> apcl ( cl );
-
-   /*
-   if ( cl->next_param() < argc ) {
-      cerr << "invalid command line parameter\n";
-      exit(1);
-   }*/
 
    if ( cl->v() ) {
       ASCString msg = getstartupmessage();
