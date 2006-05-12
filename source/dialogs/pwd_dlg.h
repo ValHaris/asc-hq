@@ -1,5 +1,5 @@
 /***************************************************************************
-                          password_dialog.h  -  description
+                          pwd_dlg.h  -  description
                              -------------------
     begin                : Mon Nov 27 2000
     copyright            : (C) 2000 by Martin Bickel
@@ -18,7 +18,7 @@
 #ifndef password_dialog_h_included
  #define password_dialog_h_included
 
- #include "password.h"
+#include "../password.h"
 
 /*! opens a dialog box for entering a password.
       \param pwd Reference to a password class which may either contain a 

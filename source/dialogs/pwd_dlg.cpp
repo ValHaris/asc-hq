@@ -1,4 +1,4 @@
-/*! \file password_dialog.cpp
+/*! \file pwd_dlg.cpp
     \brief Dialog for entering and asking for passwords
 */
 
@@ -79,7 +79,7 @@
                PG_Button* addButton( const ASCString& label, int totalNum )
                {
                   int width = (Width() - (totalNum+1)*border) / totalNum;
-                  return new PG_Button( this, PG_Rect( border + buttonNum * (width + border), Height()-40, width , 30 ), label );
+                  return new PG_Button( this, PG_Rect( border + buttonNum++ * (width + border), Height()-40, width , 30 ), label );
                }
 
                bool success;
@@ -95,10 +95,12 @@
                {
                   line1 = new PG_LineEdit( this, PG_Rect( border, 40, Width() - 2 * border, 20));
                   line1->SetPassHidden('*');
+                  line1->sigEditReturn.connect( SigC::slot( *this, &PasswordDialog::ok ));
 
                   if ( firstTime ) {
                      line2 = new PG_LineEdit( this, PG_Rect( border, 70, Width() - 2 * border, 20));
                      line2->SetPassHidden('*');
+                     line2->sigEditReturn.connect( SigC::slot( *this, &PasswordDialog::ok ));
                   } else {
                      line2 = NULL;
                   }
@@ -129,6 +131,12 @@
                bool getSuccess()
                {
                   return success;
+               }
+
+               int RunModal()
+               {
+                  line1->EditBegin();
+                  return ASC_PG_Dialog::RunModal();
                }
            };
 

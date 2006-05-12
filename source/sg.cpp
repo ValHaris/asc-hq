@@ -104,7 +104,7 @@
 #include "loadimage.h"
 #include "astar2.h"
 #include "errors.h"
-#include "password_dialog.h"
+#include "dialogs/pwd_dlg.h"
 #include "viewcalculation.h"
 #include "replay.h"
 #include "graphicset.h"

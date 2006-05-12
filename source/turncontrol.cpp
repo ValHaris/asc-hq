@@ -29,7 +29,7 @@
 #include "gamemap.h"
 #include "mapdisplay.h"
 #include "gameoptions.h"
-#include "password_dialog.h"
+#include "dialogs/pwd_dlg.h"
 #include "controls.h"
 #include "spfst.h"
 #include "dlg_box.h"

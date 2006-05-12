@@ -49,7 +49,7 @@
 #include "gameoptions.h"
 #include "ai/ai.h"
 #include "errors.h"
-#include "password_dialog.h"
+// #include "password_dialog.h"
 #include "viewcalculation.h"
 #include "replay.h"
 #include "resourcenet.h"

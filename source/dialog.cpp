@@ -45,7 +45,7 @@
 #include "attack.h"
 #include "gameoptions.h"
 #include "errors.h"
-#include "password_dialog.h"
+// #include "password_dialog.h"
 #include "itemrepository.h"
 #include "mapdisplay.h"
 #include "graphicset.h"

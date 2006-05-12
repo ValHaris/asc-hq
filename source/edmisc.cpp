@@ -36,7 +36,7 @@
 #include "edgen.h"
 #include "edselfnt.h"
 #include "edglobal.h"
-#include "password_dialog.h"
+#include "dialogs/pwd_dlg.h"
 #include "mapdisplay.h"
 #include "graphicset.h"
 #include "itemrepository.h"

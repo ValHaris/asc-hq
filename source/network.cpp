@@ -38,7 +38,7 @@
 #include "events.h"
 #include "sgstream.h"
 #include "loadpcx.h"
-#include "password_dialog.h"
+#include "dialogs/pwd_dlg.h"
 #include "stack.h"
 #include "gamedlg.h"
 #include "loaders.h"
