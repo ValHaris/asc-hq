@@ -67,5 +67,14 @@
   class ShutDownMap : public ASCexception {};
   class OutOfRange  : public ASCexception {};
 
+  
+  class AssertionException : public ASCmsgException {
+     public:
+        AssertionException ( const ASCString& check, const ASCString& file, int line ) : ASCmsgException ( ASCString("Assertion failed: ") + check + " at " + file + ":" + ASCString::toString(line)  ) {};
+  };
+
+#define assertOrThrow(expr)  (static_cast<void> ( (expr) ? 0 : (throw AssertionException (__STRING(expr), __FILE__, __LINE__))))
+  
+  
 
 #endif

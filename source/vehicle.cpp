@@ -597,7 +597,7 @@ void Vehicle::ReactionFire::checkData ( )
 
 void Vehicle::ReactionFire::resetShotCount()
 {
-   assert( unit->typ->weapons.count <= weaponShots.size() );
+   assertOrThrow( unit->typ->weapons.count <= weaponShots.size() );
    for ( int i = 0; i < unit->typ->weapons.count; ++i ) 
       weaponShots[i] = unit->typ->weapons.weapon[i].reactionFireShots;
 }

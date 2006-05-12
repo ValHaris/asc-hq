@@ -2087,6 +2087,10 @@ void continuenetworkgame ( void )
       displaymessage( "error reading game %s ", 1, err.getFileName().c_str() );
       throw NoMapLoaded();
    } /* endcatch */
+   catch ( ASCmsgException msg ) {
+      displaymessage ("error loading game. Message is:\n" + msg.getMessage() ,1 );
+      throw NoMapLoaded();
+   } /* endcatch */
    catch ( ASCexception ) {
       displaymessage( "error loading game", 1 );
       throw NoMapLoaded();
