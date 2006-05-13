@@ -22,6 +22,7 @@
 #include "dialogs/soundsettings.h"
 #include "dialogs/newgame.h"
 #include "dialogs/editgameoptions.h"
+#include "dialog.h"
 #include "sigc++/retype.h"
 #include "iconrepository.h"
 #include "sg.h"
@@ -91,7 +92,9 @@ bool GameDialog::closeWindow() {
 
 bool GameDialog::exitGame(PG_Button* button) {
     Hide();
-    ConfirmExitDialog::confirmExitDialog(this);
+    if (choice_dlg( "do you really want to quit ?", "~y~es","~n~o") == 1) {
+       getPGApplication().Quit();
+    }
     quitModalLoop(1);
     return true;
 }

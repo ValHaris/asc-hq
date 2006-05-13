@@ -2,262 +2,323 @@
 panel {
    x = 50
    y = 50
-   width = 702
-   height = 550
+   width = 704
+   height = 604
    FontColor = 0xffffff
    name = MainWidget
-   localtransparency = 255
+   TitlebarHeight = 0
    
    Title = Cargo
+
+   backgroundimage = cargo_pad.png
       
    ChildWidgets = GeneralInfoPane UnitScrollArea SubWindowPane SubWindowSelectorPane LoadingMeter
    
    GeneralInfoPane {
       type = dummy
-      x = 1
-      y = 1
-      x2 = -1
-      height = 160      
+      x = 69
+      y = 22
+      x2 = 672
+      y2 = 87      
 
-      ChildWidgets = Background 
-      
-      Background {
-         type = Image
+      ChildWidgets = Resources Names MunitionsIMG MunitionsCNT
+
+      Resources {
+         type = dummy
          
-         x = 0
-         y = 10
-         width  = 700
-         height = 150
-         FileName  = cargo-gip-bk1.png
-
-         ChildWidgets = Resources Names MunitionsIMG MunitionsCNT
-
-         Resources {
-            type = dummy
-            
-            x = 21
-            y = 40
-            height = 20
-            width = 200 
-            
-            ChildWidgets = Energy Material Fuel
-               
-            Energy {
-               type = TextOutput
-               x = 30
-               y = 0
-               width = 50
-               name = energyavail
-            } Energy
-   
-            Material {
-               type = TextOutput
-               x = 104
-               y = 0
-               width = 50
-               name = materialavail
-            } Material
-            
-            Fuel {
-               type = TextOutput
-               x = 175
-               y = 0
-               width = 50
-               name = fuelavail
-            } Fuel
-         } Resources
+         x = 259
+         y = 0
+         width = 340
+         height = 36
          
-         Names { 
-            type = dummy
-      
-            x = 30
-            y = 12
-            height = 20
-            width = 248
-      
-            Childwidgets = UnitName UnitClass
-      
-            UnitName {
-                     type = TextOutput
-                     x = 1
-                     y = 1
-                     width = 50
-                     name = UnitName
-            } UnitName
-      
-            UnitClass {
-                     type = TextOutput
-                     x = 112
-                     y = 1
-                     width = 50
-                     name = UnitClass
-            } UnitClass
-   
-         } Names
+         ChildWidgets = Energy Material Fuel Damage EnergyLabel MaterialLabel FuelLabel DamageLabel
+            
+         Damage {
+            type = TextOutput
+            x = 0
+            y = 0
+            width = 165
+            height = 17
+            name = numericaldamage
+            TextAlign = Right
+         } Damage
+
+         Energy {
+            type = TextOutput
+            x = 172
+            y = 0
+            width = 165
+            height = 17
+            name = energyavail
+            TextAlign = Right
+         } Energy
+
+         Material {
+            type = TextOutput
+            x = 0
+            y = 18
+            width = 165
+            height = 17
+            name = materialavail
+            TextAlign = Right
+         } Material
          
-         MunitionsIMG {
-                  type = dummy
-   
-                  x = 12
-                  y = 115
-                  height = 20
-                  width = 248
-   
-            Childwidgets = CruiseMissile Mine Bomb LargeMissile SmallMissile MachineGun Cannon Torpedo
-      
-            CruiseMissile {
-                              type = image
-                              x = 7
-                              y = 1
-                              filename = weap-cruisemissile-small.png
-                              } CruiseMissile
-      
-            Mine {
-                              type = image
-                              x = 33
-                              y = 1
-                              width = 20         
-                              filename = weap-mine-small.png
-                              } Mine   
-            
-            Bomb {
-                              type = image
-                              x = 63
-                              y = 1
-                              width = 20         
-                              filename = weap-bomb-small.png
-                              } Bomb
-      
-            LargeMissile  {
-                              type = image
-                              x = 91
-                              y = 1
-                              width = 20         
-                              filename = weap-bigmissile-small.png
-                              } LargeMissile
-      
-            SmallMissile  {
-                              type = image
-                              x = 119
-                              y = 1
-                              width = 20         
-                              filename = weap-smallmissile-small.png
-                              } SmallMissile
-      
-            MachineGun    {
-                              type = image
-                              x = 144
-                              y = 1
-                              width = 20         
-                              filename = weap-machinegun-small.png
-                              } MachineGun
-      
-            Cannon          {
-                              type = image
-                              x = 172
-                              y = 1
-                              width = 20         
-                              filename = weap-cannon-small.png
-                              } Cannon
-      
-            Torpedo {
-                              type = image
-                              x = 202
-                              y = 1
-                              width = 20         
-                              filename = weap-torpedo-small.png
-                              } Torpedo      
-         } MunitionsIMG
-   
-   
-         MunitionsCNT {
-            type = dummy
+         Fuel {
+            type = TextOutput
+            x = 172
+            y = 18
+            width = 165
+            height = 17
+            name = fuelavail
+            TextAlign = Right
+         } Fuel
 
-            x = 10
-            y = 123
-            height = 18
-            width = 248
-   
-            Childwidgets = CruiseMissile Mine Bomb LargeMissile SmallMissile MachineGun Cannon Torpedo
-      
-            CruiseMissile {
-                              type = TextOutput
-                              x = 9
-                              y = 1
-                              name = cmmun
-                              } CruiseMissile
-      
-            Mine {
-                              type = TextOutput
-                              x = 35
-                              y = 1
-                              width = 20         
-                              name = minemun
-                              } Mine   
-            
-            Bomb {
-                              type = TextOutput
-                              x = 65
-                              y = 1
-                              width = 20         
-                              name = bombmun
-                              } Bomb
-      
-            LargeMissile  {
-                              type = TextOutput
-                              x = 93
-                              y = 1
-                              width = 20         
-                              name = lmmun
-                              } LargeMissile
-      
-            SmallMissile  {
-                              type = TextOutput
-                              x = 121
-                              y = 1
-                              width = 20         
-                              name = smmun
-                              } SmallMissile
-      
-            MachineGun    {
-                              type = TextOutput
-                              x = 145
-                              y = 1
-                              width = 20         
-                              name = mgmun
-                              } MachineGun
-      
-            Cannon          {
-                              type = TextOutput
-                              x = 175
-                              y = 1
-                              width = 20         
-                              name = canmun
-                              } Cannon
-      
-            Torpedo {
-                              type = TextOutput
-                              x = 205
-                              y = 1
-                              width = 20         
-                              name = torpmun
-                              } Torpedo      
-   
-                                                                                                   
-   
-         } MunitionsCNT
+         DamageLabel {
+            type = StaticText
+            x = 2
+            y = 0
+            width = 165
+            height = 17
+            Text = Damage
+         } DamageLabel
 
-   } Background
+         EnergyLabel {
+            type = StaticText
+            x = 174
+            y = 0
+            width = 165
+            height = 17
+            Text = Energy
+         } EnergyLabel
+
+         MaterialLabel {
+            type = StaticText
+            x = 2
+            y = 18
+            width = 165
+            height = 17
+            Text = Material
+         } MaterialLabel
+         
+         FuelLabel {
+            type = StaticText
+            x = 174
+            y = 18
+            width = 165
+            height = 17
+            Text = Fuel
+         } FuelLabel
+
+      } Resources
       
+      Names { 
+         type = dummy
+   
+         x = 65
+         y = 0
+         x2 = 231
+         y2 = 62
+   
+         Childwidgets = UnitName UnitClass
+   
+         UnitName {
+                  type = TextOutput
+                  x = 1
+                  y = 42
+                  x2 = -1
+                  height = 15
+                  name = UnitName
+         } UnitName
+   
+         UnitClass {
+                  type = TextOutput
+                  x = 1
+                  y = 1
+                  x2 = -1
+                  height = 15
+                  name = UnitClass
+         } UnitClass
+
+      } Names
+      
+      MunitionsIMG {
+         type = dummy
+
+         x = 264
+         y = 40
+         height = 10
+         x2 = 672
+
+         Childwidgets = CruiseMissile Mine Bomb LargeMissile SmallMissile MachineGun Cannon Torpedo
+   
+         CruiseMissile {
+                           type = image
+                           x = 0
+                           y = 1
+                           filename = weap-cruisemissile-small.png
+                           ToolTipHelp = Cruise Missile
+                           } CruiseMissile
+   
+         Mine {
+                           type = image
+                           x = 35
+                           y = 1
+                           width = 20         
+                           filename = weap-mine-small.png
+                           ToolTipHelp = Mine
+                           } Mine   
+         
+         Bomb {
+                           type = image
+                           x = 70
+                           y = 1
+                           width = 20         
+                           filename = weap-bomb-small.png
+                           ToolTipHelp = Bomb
+                           } Bomb
+   
+         LargeMissile  {
+                           type = image
+                           x = 105
+                           y = 1
+                           width = 20         
+                           filename = weap-bigmissile-small.png
+                           ToolTipHelp = Big Missile
+                           } LargeMissile
+   
+         SmallMissile  {
+                           type = image
+                           x = 140
+                           y = 1
+                           width = 20         
+                           filename = weap-smallmissile-small.png
+                           ToolTipHelp = Small Missile
+                           } SmallMissile
+   
+         MachineGun    {
+                           type = image
+                           x = 175
+                           y = 1
+                           width = 20         
+                           filename = weap-machinegun-small.png
+                           ToolTipHelp = Machine Gun
+                           } MachineGun
+   
+         Cannon          {
+                           type = image
+                           x = 210
+                           y = 1
+                           width = 20         
+                           filename = weap-cannon-small.png
+                           ToolTipHelp = Cannon
+                           } Cannon
+   
+         Torpedo {
+                           type = image
+                           x = 245
+                           y = 1
+                           width = 20         
+                           filename = weap-torpedo-small.png
+                           ToolTipHelp = Torpedo
+                           } Torpedo      
+      } MunitionsIMG
+
+
+      MunitionsCNT {
+         type = dummy
+
+         x = 264
+         y = 54
+         height = 10
+         x2 = 672
+         TextAlign = Right  
+
+         Childwidgets = CruiseMissile Mine Bomb LargeMissile SmallMissile MachineGun Cannon Torpedo
+   
+         CruiseMissile {
+                           type = TextOutput
+                           x = 0
+                           y = 1
+                           width = 20         
+                           name = cmmun
+                           ToolTipHelp = Cruise Missile
+                           } CruiseMissile
+   
+         Mine {
+                           type = TextOutput
+                           x = 35
+                           y = 1
+                           width = 20         
+                           name = minemun
+                           ToolTipHelp = Mine
+                           } Mine   
+         
+         Bomb {
+                           type = TextOutput
+                           x = 70
+                           y = 1
+                           width = 20         
+                           name = bombmun
+                           ToolTipHelp = Bomb
+                           } Bomb
+   
+         LargeMissile  {
+                           type = TextOutput
+                           x = 105
+                           y = 1
+                           width = 20         
+                           name = lmmun
+                           ToolTipHelp = Large Missile
+                           } LargeMissile
+   
+         SmallMissile  {
+                           type = TextOutput
+                           x = 140
+                           y = 1
+                           width = 20         
+                           name = smmun
+                           ToolTipHelp = Small Missile
+                           } SmallMissile
+   
+         MachineGun    {
+                           type = TextOutput
+                           x = 175
+                           y = 1
+                           width = 20         
+                           name = mgmun
+                           ToolTipHelp = Machine Gun
+                           } MachineGun
+   
+         Cannon          {
+                           type = TextOutput
+                           x = 210
+                           y = 1
+                           width = 20         
+                           name = canmun
+                           ToolTipHelp = Cannon
+                           } Cannon
+   
+         Torpedo {
+                           type = TextOutput
+                           x = 245
+                           y = 1
+                           width = 20         
+                           name = torpmun
+                           ToolTipHelp = Torpedo
+                           } Torpedo      
+      } MunitionsCNT
+
+    
    } GeneralInfoPane
   
    UnitScrollArea {
-      type = plain
-      backgroundcolor = 0x3f3f3f
-      x = 1
-      y = 162
-      x2 = -15
-      height = 200      
+      type = dummy
+      ; backgroundcolor = 0x3f3f3f
+      ; localtransparency = 255
+      x = 144
+      y = 148
+      x2 = 638
+      y2 = 365
    } UnitScrollArea
 
    LoadingMeter {
@@ -275,12 +336,13 @@ panel {
 
    SubWindowPane {
       type = plain
+      localtransparency = 255
       backgroundcolor = 0x3f3f30
 
-      x = 1
-      y = 352
-      x2 = -1
-      y2 = 519
+      x = 116
+      y = 418
+      x2 = 638
+      y2 = 586
 
       ChildWidgets = info cargoinfo conventionalpower mining research resourceinfo solarpower windpower damagecontrol
       
@@ -1199,10 +1261,10 @@ panel {
   
    SubWindowSelectorPane {
       type = dummy
-      x = 1
-      y = 520
-      x2 = -1
-      y2 = -1
+      x = 14
+      y = 234
+      x2 = 63
+      y2 = 562
       Userhandler = ButtonPanel
    
    } SubWindowSelectorPane

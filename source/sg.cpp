@@ -613,7 +613,7 @@ void execuseraction ( tuseractions action )
          break;
 
       case ua_computerturn:
-         if ( maintainencecheck() || 1) {
+         if ( maintainencecheck() ) {
             displaymessage("This function is under development and for programmers only\n"
                            "unpredictable things may happen ...",3 ) ;
 
@@ -734,8 +734,7 @@ void execuseraction ( tuseractions action )
          break;
       case ua_exportUnitToFile:
          if ( getSelectedField()->vehicle && getSelectedField()->vehicle->getOwner() == actmap->actplayer ){
-            ASCString s = "do you really want to cut this unit from the game?";
-            if (choice_dlg(s.c_str(),"~y~es","~n~o") == 1) {
+            if (choice_dlg( "do you really want to cut this unit from the game?", "~y~es","~n~o") == 1) {
                Vehicle* veh = getSelectedField()->vehicle;
                ClipBoard::Instance().clear();
                ClipBoard::Instance().addUnit( veh );

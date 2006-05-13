@@ -642,7 +642,7 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
             case SDLK_F12:
                   execUserAction_ev ( ua_exportUnitToFile );
                return true;
-               
+
             case SDLK_F11:
                if ( mod & KMOD_SHIFT ) {
                   if (choice_dlg("Do you really want to crash ASC ?","~y~es","~n~o") == 1) {

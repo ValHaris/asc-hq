@@ -219,15 +219,33 @@ void  ASCGUI_Window::WidgetParameters::assign( BarGraphWidget* widget )
 }
 
 
+bool hasTransparency( const Surface& surf )
+{
+   if ( surf.GetPixelFormat().BytesPerPixel() == 4 ) {
+      const Uint32* p = (const Uint32*) surf.pixels();
+      int aMask = surf.GetPixelFormat().Amask();
+      int aShift = surf.GetPixelFormat().Ashift();
+      for ( int y = 0; y < surf.h() ; ++y ) {
+         for ( int x = 0; x < surf.w() ; ++x)
+            if ( ((p[x] & aMask) >> aShift ) != Surface::opaque )
+               return true;
+         p += surf.pitch() / 4;
+      }
+   }
+   return false;
+}
+
+
 void  ASCGUI_Window::WidgetParameters::assign( PG_ThemeWidget* widget )
 {
    if ( !widget )
       return;
 
    
-   if ( !backgroundImage.empty() )
+   if ( !backgroundImage.empty() ) {
       widget->SetBackground( IconRepository::getIcon(backgroundImage).getBaseSurface(), backgroundMode );
-   else {
+      widget->SetDirtyUpdate( !hasTransparency( IconRepository::getIcon(backgroundImage) ));
+   } else {
       if ( backgroundColor_defined ) {
          widget->SetBackground( NULL );
          widget->SetSimpleBackground( true );
@@ -336,6 +354,8 @@ PG_Rect ASCGUI_Window::parseRect ( PropertyReadingContainer& pc, PG_Widget* pare
 }
 
 
+
+
 void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams )
 {
    ASCString name;
@@ -407,23 +427,10 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
          
          if ( !filename.empty() ) {
             try {
-               bool dirtyUpdate = true;
                Surface& surf = IconRepository::getIcon(filename);
-               if ( surf.GetPixelFormat().BytesPerPixel() == 4 ) {
-                  Uint32* p = (Uint32*) surf.pixels();
-                  int aMask = surf.GetPixelFormat().Amask();
-                  int aShift = surf.GetPixelFormat().Ashift();
-                  for ( int y = 0; y < surf.h() && dirtyUpdate; ++y ) {
-                     for ( int x = 0; x < surf.w() && dirtyUpdate; ++x)
-                        if ( ((p[x] & aMask) >> aShift ) != Surface::opaque )
-                           dirtyUpdate = false;
-                      p += surf.pitch() / 4;
-                  }
-               }
-               
                PG_Image* img = new PG_Image( parent, PG_Point(r.x, r.y ), surf.getBaseSurface(), false, PG_Draw::BkMode(imgMode) );
                newWidget = img;
-               img->SetDirtyUpdate(dirtyUpdate);
+               img->SetDirtyUpdate( !hasTransparency( surf ));
 
                widgetParams.assign ( img );
                parsePanelASCTXT( pc, img, widgetParams );

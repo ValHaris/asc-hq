@@ -75,7 +75,7 @@ class SubWinButton : public PG_Button
 {
    public:
       static const int buttonwidth = 47;
-      static const int buttonheight = 23;
+      static const int buttonheight = 28;
 
       SubWinButton( PG_Widget *parent, const SPoint& pos, SubWindow* subWindow ) : PG_Button( parent, PG_Rect( pos.x, pos.y, buttonwidth, buttonheight ), "", -1, "SubWinButton")
       {
@@ -428,6 +428,7 @@ class CargoDialog : public Panel
          setLabelText( "energyavail", container->getResource(maxint, 0, true ) );
          setLabelText( "materialavail", container->getResource(maxint, 1, true ) );
          setLabelText( "fuelavail", container->getResource(maxint, 2, true ) );
+         setLabelText( "numericaldamage", container->damage );
       }
 
 
@@ -1629,10 +1630,16 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
 {
    if ( label == "ButtonPanel" ) {
       int x = 0;
+      int y = 0;
       for ( int i = 0; i < activesubwindows.size(); ++i ) {
-         SubWinButton* button = new SubWinButton( parent, SPoint( x, 0 ), activesubwindows[i] );
+         SubWinButton* button = new SubWinButton( parent, SPoint( x, y ), activesubwindows[i] );
          button->sigClick.connect( SigC::bind( SigC::slot( *this, &CargoDialog::activate_i  ), i));
-         x += SubWinButton::buttonwidth;
+         if ( x + 2*SubWinButton::buttonwidth < parent->Width() )
+            x += SubWinButton::buttonwidth;
+         else {
+            x = 0;
+            y += SubWinButton::buttonheight;
+         }
       }
    }
 
