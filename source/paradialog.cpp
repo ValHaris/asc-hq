@@ -357,6 +357,8 @@ bool ASC_PG_App::toogleFullscreen()
    int w = GetScreen()->w;
    int h = GetScreen()->h;
 
+   SDL_ShowCursor(0);
+
    int flags = 0;
    if ( !fullScreen )
       flags |= SDL_FULLSCREEN;
@@ -370,6 +372,9 @@ bool ASC_PG_App::toogleFullscreen()
 
    SetScreen(screen);
    PG_Widget::UpdateScreen();
+
+   SDL_ShowCursor(1);
+
    return true;
 }
 

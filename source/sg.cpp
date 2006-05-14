@@ -146,6 +146,11 @@
 # include "win32/win32-errormsg.h"
 # include  "win32/msvc/mdump.h"
  MiniDumper miniDumper( "main" );
+
+#include <direct.h>
+#include <stdlib.h>
+#include <stdio.h>
+
 #endif
 
 tfield*        getSelectedField(void)
@@ -415,6 +420,17 @@ void showSearchPath()
       s += "\n";
       s += "Configuration file used: \n";
       s += getConfigFileName();
+
+#ifdef WIN32
+     char buffer[_MAX_PATH];
+
+     if( _getcwd( buffer, _MAX_PATH ) ) {
+         s += "\nCurrent working directory: \n";
+         s += buffer;
+     }
+#endif
+
+
 
       tviewanytext vat ;
       vat.init ( "Search Path", s.c_str(), 20, -1 , 450, 480 );

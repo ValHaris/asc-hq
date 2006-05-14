@@ -52,8 +52,8 @@ class StoringPosition : public PG_Widget
 
    public:
 
-      static const int spWidth = 64;
-      static const int spHeight = 64;
+      static int spWidth;
+      static int spHeight;
 
       static vector<StoringPosition*> setup( PG_Widget* parent, ContainerBase* container, HighLightingManager& highLightingManager, int& unitColumnCount );
       StoringPosition( PG_Widget *parent, const PG_Point &pos, HighLightingManager& highLightingManager, const ContainerBase::Cargo& storageVector, int number, bool regularPosition  );

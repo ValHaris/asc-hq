@@ -228,7 +228,7 @@ panel {
          type = dummy
 
          x = 264
-         y = 54
+         y = 55
          height = 10
          x2 = 672
          TextAlign = Right  
@@ -315,8 +315,8 @@ panel {
       type = dummy
       ; backgroundcolor = 0x3f3f3f
       ; localtransparency = 255
-      x = 144
-      y = 148
+      x = 143
+      y = 147
       x2 = 638
       y2 = 365
    } UnitScrollArea

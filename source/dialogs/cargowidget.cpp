@@ -64,14 +64,25 @@ bool StoringPosition :: eventMouseButtonDown (const SDL_MouseButtonEvent *button
 }
 
 
+int StoringPosition :: spWidth = -1;
+int StoringPosition :: spHeight = -1;
+
+
 StoringPosition :: StoringPosition( PG_Widget *parent, const PG_Point &pos, HighLightingManager& highLightingManager, const ContainerBase::Cargo& storageVector, int number, bool regularPosition  )
       : PG_Widget ( parent, PG_Rect( pos.x, pos.y, spWidth, spHeight)), highlight( highLightingManager ), storage( storageVector), num(number), regular(regularPosition)
 {
+   highlight.markChanged.connect( SigC::slot( *this, &StoringPosition::markChanged ));
+   highlight.redrawAll.connect( SigC::bind( SigC::slot( *this, &StoringPosition::Update), true));
+
+   if ( spWidth < 0 ) {
+      Surface& icon = IconRepository::getIcon( "hexfield-bld-1.png" );
+      spWidth = icon.w();
+      spHeight = icon.h();
+   }
+
    if ( !clippingSurface.valid() )
       clippingSurface = Surface::createSurface( spWidth + 10, spHeight + 10, 32, 0 );
 
-   highlight.markChanged.connect( SigC::slot( *this, &StoringPosition::markChanged ));
-   highlight.redrawAll.connect( SigC::bind( SigC::slot( *this, &StoringPosition::Update), true));
 }
 
 
@@ -93,16 +104,15 @@ void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, con
    blitter.blit( icon, clippingSurface, SPoint(0,0));
 
    if ( num < storage.size() && storage[num] ) {
-      int ypos;
-      if ( num == highlight.getMark() )
-         ypos = 0;
-      else
-         ypos = 1;
+      int ypos = (spHeight - fieldsizey) / 2;
+      int xpos = (spWidth - fieldsizex) / 2;
+      if ( num != highlight.getMark() )
+         ypos += 1;
 
       if( storage[num]->getMovement() > 0  )
-         storage[num]->typ->paint( clippingSurface, SPoint(0,ypos), storage[num]->getOwner() );
+         storage[num]->typ->paint( clippingSurface, SPoint(xpos,ypos), storage[num]->getOwner() );
       else
-         storage[num]->typ->paint( clippingSurface, SPoint(0,ypos), storage[num]->getMap()->getNeutralPlayerNum() );
+         storage[num]->typ->paint( clippingSurface, SPoint(xpos,ypos), storage[num]->getMap()->getNeutralPlayerNum() );
    }
 
    PG_Draw::BlitSurface( clippingSurface.getBaseSurface(), src, PG_Application::GetScreen(), dst);
