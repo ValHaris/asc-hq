@@ -235,7 +235,7 @@ class BuildingType;
     int getIdentification() { return networkid; };
 
 
-    //! @name Movement related functions
+    //! @name Construction related functions
     //@{
     //! constructs a vehicle at the given position.
     Vehicle* constructvehicle ( Vehicletype* tnk, int x, int y );

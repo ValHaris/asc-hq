@@ -46,18 +46,26 @@ class StoringPosition : public PG_Widget
       const ContainerBase::Cargo& storage;
       int num;
       bool regular;
+      bool bars;
+
+      void showBar( Surface& surf, const PG_Rect& r, DI_Color col, int percentage );
+      
+      static int spWidth;
+      static int spHeight;
+
+      static PG_Rect CalcSize( const PG_Point& pos  );
+      
    protected:
       void markChanged(int old, int mark);
       bool eventMouseButtonDown (const SDL_MouseButtonEvent *button);
 
+      void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst);
+      
    public:
 
-      static int spWidth;
-      static int spHeight;
-
       static vector<StoringPosition*> setup( PG_Widget* parent, ContainerBase* container, HighLightingManager& highLightingManager, int& unitColumnCount );
-      StoringPosition( PG_Widget *parent, const PG_Point &pos, HighLightingManager& highLightingManager, const ContainerBase::Cargo& storageVector, int number, bool regularPosition  );
-      void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst);
+      
+      StoringPosition( PG_Widget *parent, const PG_Point &pos, HighLightingManager& highLightingManager, const ContainerBase::Cargo& storageVector, int number, bool regularPosition, bool showBars = false  );
 };
 
 

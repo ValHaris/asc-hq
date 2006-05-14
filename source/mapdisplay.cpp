@@ -715,7 +715,7 @@ void MapDisplayPG::UpdateRect( const PG_Rect& rect )
    sc = sc.IntersectRect( *this );
    eventBlit( GetWidgetSurface (), rect, sc );
    if ( sc.w && sc.h )
-      SDL_UpdateRect(PG_Application::GetScreen(), sc.x, sc.y, sc.w, sc.h );
+      PG_Application::UpdateRect(PG_Application::GetScreen(), sc.x, sc.y, sc.w, sc.h );
 }
 
 
@@ -1134,7 +1134,7 @@ void MapDisplayPG::displayMovementStep( Movement& movement, int percentage  )
       blitter.blit( *surface, s, movement.targetBlitPos );
    }
 
-   SDL_UpdateRect(PG_Application::GetScreen(), movement.blitViewPortScreen.x, movement.blitViewPortScreen.y, movement.blitViewPortScreen.w, movement.blitViewPortScreen.h );
+   PG_Application::UpdateRect(PG_Application::GetScreen(), movement.blitViewPortScreen.x, movement.blitViewPortScreen.y, movement.blitViewPortScreen.w, movement.blitViewPortScreen.h );
 }
 
 

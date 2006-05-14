@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-03-19 19:56:01 $
+    Update Date:      $Date: 2006-05-14 19:02:32 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgapplication.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.2 $
+    CVS/RCS Revision: $Revision: 1.1.2.3 $
     Status:           $State: Exp $
 */
 
@@ -576,6 +576,9 @@ class SignalAppIdle : public PG_Signal1<PG_MessageObject*, datatype> {}
    static void SetHighlightingTag( PG_Char c );
    
    static PG_Char GetHighlightingTag();
+
+   static void UpdateRect(SDL_Surface *screen, Sint32 x, Sint32 y, Sint32 w, Sint32 h);
+   static void UpdateRects(SDL_Surface *screen, int numrects, SDL_Rect *rects);
    
 	SignalXMLTag<> sigXMLTag;
 	SignalAppIdle<> sigAppIdle;

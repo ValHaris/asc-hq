@@ -349,9 +349,9 @@ class CargoDialog : public Panel
          Surface screen = Surface::Wrap( PG_Application::GetScreen() );
 
          if ( name == "unitpad_unitsymbol" ) {
-            // if ( vt )
-            //   vt->paint( screen, SPoint( dst.x, dst.y ), veh ? veh->getOwner() : 0 );
-
+            Vehicle* v = dynamic_cast<Vehicle*>(container);
+            if ( v ) 
+               v->paint( screen, SPoint( dst.x, dst.y ));
          }
       };
 
@@ -1574,6 +1574,7 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
       return;
    }
 
+   registerSpecialDisplay( "unitpad_unitsymbol" );
    
 
    for ( Subwindows::iterator i = subwindows.begin(); i != subwindows.end(); ++i ) {
@@ -1582,6 +1583,7 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
       hide( (*i)->getASCTXTname() );
    }
 
+   
 
    PG_Widget* unitScrollArea = FindChild( "UnitScrollArea", true );
    if ( unitScrollArea ) {
@@ -1600,7 +1602,7 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
                
 
    if ( !cb->baseType->infoImageFilename.empty() && exist( cb->baseType->infoImageFilename )) {
-      PG_Image* img = dynamic_cast<PG_Image*>(FindChild( "container_3dpic", true ));
+      PG_Image* img = dynamic_cast<PG_Image*>(FindChild( "ContainerImage", true ));
       if ( img ) {
          tnfilestream stream ( cb->baseType->infoImageFilename, tnstream::reading );
          infoImage.readImageFile( stream );
@@ -1608,7 +1610,14 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
          img->SetImage( infoImage.getBaseSurface(), false );
          img->SizeWidget( img->GetParent()->w, img->GetParent()->h );
       }
+   } else {
+      PG_Image* img = dynamic_cast<PG_Image*>(FindChild( "ContainerImage", true ));
+      Vehicle* v = dynamic_cast<Vehicle*>(cb);
+      if ( img && v ) 
+         img->SetImage( infoImage.getBaseSurface(), false );
+
    }
+      
 
 
    setLabelText( "UnitName", cb->getName() );

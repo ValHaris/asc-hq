@@ -2214,7 +2214,7 @@ Surface generate_gui_build_icon ( BuildingType* bld )
    /*
    Surface sc = Surface::Wrap( PG_Application::GetScreen() );
    sc.Blit( s, SPoint(0,0 ));
-   SDL_UpdateRect( PG_Application::GetScreen(), 0,0,0,0);
+   PG_Application::UpdateRect( PG_Application::GetScreen(), 0,0,0,0);
    */
    
    Surface s2 = Surface::createSurface(maxx-minx+1,maxy-miny+1,32,0);

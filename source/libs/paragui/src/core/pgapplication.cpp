@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-03-19 19:56:01 $
+    Update Date:      $Date: 2006-05-14 19:02:32 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/core/pgapplication.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.2 $
+    CVS/RCS Revision: $Revision: 1.1.2.3 $
     Status:           $State: Exp $
 */
 
@@ -331,7 +331,7 @@ void PG_Application::DrawCursor(bool update) {
 
 	if(!GetBulkMode() && update) {
 		SDL_Rect rects[3] = {horizontal, vertical, my_mouse_position};
-		SDL_UpdateRects(screen, 3, rects);
+		UpdateRects(screen, 3, rects);
 	}
 }
 void PG_Application::Quit() {
@@ -376,7 +376,7 @@ bool PG_Application::eventResize(const SDL_ResizeEvent* event) {
 	             screen->flags);
 
 	PG_Widget::UpdateRect(PG_Rect(0,0,event->w,event->h));
-	SDL_UpdateRect(screen,0,0,event->w,event->h);
+	UpdateRect(screen,0,0,event->w,event->h);
 	sigVideoResize(this, event);
 
 	return true;
@@ -392,7 +392,7 @@ void PG_Application::SetCursor(SDL_Surface *image) {
 		UnloadSurface(my_mouse_pointer);
 		my_mouse_pointer = NULL;
 		ClearOldMousePosition();
-		SDL_UpdateRects(screen, 1, &my_mouse_position);
+		UpdateRects(screen, 1, &my_mouse_position);
 		SDL_ShowCursor(SDL_ENABLE);
 		return;
 	}
@@ -427,10 +427,32 @@ PG_Application::CursorMode PG_Application::ShowCursor(CursorMode mode) {
 	CursorMode orig = my_mouse_mode;
 	if(mode != SOFTWARE && my_mouse_mode == SOFTWARE) {
 		ClearOldMousePosition();
-		SDL_UpdateRects(screen, 1, &my_mouse_position);
+		UpdateRects(screen, 1, &my_mouse_position);
 	}
 	my_mouse_mode = mode;
 	return orig;
+}
+
+void PG_Application::UpdateRect(SDL_Surface *screen, Sint32 x, Sint32 y, Sint32 w, Sint32 h)
+{
+#ifdef WIN32
+   SDL_ShowCursor(SDL_DISABLE);
+#endif
+   SDL_UpdateRect( screen,x,y,w,h);
+#ifdef WIN32
+   SDL_ShowCursor(SDL_ENABLE);
+#endif
+}
+
+void PG_Application::UpdateRects(SDL_Surface *screen, int numrects, SDL_Rect *rects)
+{
+#ifdef WIN32
+   SDL_ShowCursor(SDL_DISABLE);
+#endif
+   SDL_UpdateRects( screen, numrects, rects );
+#ifdef WIN32
+   SDL_ShowCursor(SDL_ENABLE);
+#endif
 }
 
 
@@ -447,7 +469,7 @@ SDL_Surface* PG_Application::SetScreen(SDL_Surface* surf) {
 	SDL_EnableUNICODE(true);
 
 	PG_Widget::UpdateRect(PG_Rect(0,0,screen->w,screen->h));
-	SDL_UpdateRect(screen, 0,0,screen->w,screen->h);
+	UpdateRect(screen, 0,0,screen->w,screen->h);
 
 	return PG_Application::screen;
 }
@@ -485,7 +507,7 @@ bool PG_Application::SetBackground(SDL_Surface* surface, PG_Draw::BkMode mode, b
 	RedrawBackground(PG_Rect(0,0,screen->w,screen->h));
 	PG_Widget::GetWidgetList()->Blit();
 	if(!GetBulkMode() )
-		SDL_UpdateRect(screen,0,0,GetScreen()->w,GetScreen()->h);
+		UpdateRect(screen,0,0,GetScreen()->w,GetScreen()->h);
 	return true;
 }
 

@@ -187,8 +187,11 @@ class ContainerBaseType: public MapItemType, public LoadableItemType {
         //! if a new building is constructed, this will be the resource production of the building
      Resources    defaultProduction;
 
-     virtual int getMoveMalusType() const = 0; 
+     virtual int getMoveMalusType() const = 0;
      
+     /**  returns the Storage capacity of the unit
+          \param mode: 0 = ASC Resource mode ; 1 = BI Resource mode
+     */
      Resources   getStorageCapacity( int mode ) const;
    protected:
      Resources    asc_mode_tank;

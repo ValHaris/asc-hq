@@ -20,9 +20,9 @@
    pipelka@teleweb.at
  
    Last Update:      $Author: mbickel $
-   Update Date:      $Date: 2006-04-22 14:08:13 $
+   Update Date:      $Date: 2006-05-14 19:02:32 $
    Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgwidget.cpp,v $
-   CVS/RCS Revision: $Revision: 1.1.2.3 $
+   CVS/RCS Revision: $Revision: 1.1.2.4 $
    Status:           $State: Exp $
  */
 
@@ -380,7 +380,7 @@ bool PG_Widget::MoveWidget(int x, int y, bool update) {
 		UpdateRect(_mid->rectClip);
 		PG_Application::LockScreen();
 		SDL_Rect rects[3] = {_mid->rectClip, vertical, horizontal};
-		SDL_UpdateRects(screen, 3, rects);
+		PG_Application::UpdateRects(screen, 3, rects);
 		PG_Application::UnlockScreen();*/
 
 		int minx, maxx;
@@ -398,7 +398,7 @@ bool PG_Widget::MoveWidget(int x, int y, bool update) {
 		PG_Application::LockScreen();
 		PG_Rect rect(minx,miny,maxx-minx,maxy-miny);
 		UpdateRect(rect);
-		SDL_UpdateRects(screen, 1, &rect);
+		PG_Application::UpdateRects(screen, 1, &rect);
 		PG_Application::UnlockScreen();
 	}
 
@@ -461,7 +461,7 @@ bool PG_Widget::SizeWidget(Uint16 w, Uint16 h, bool update) {
 				u.my_height = PG_Application::GetScreenHeight() - my_ypos;
 
 			UpdateRect(u);
-			SDL_UpdateRects(PG_Application::GetScreen(), 1, &u);
+			PG_Application::UpdateRects(PG_Application::GetScreen(), 1, &u);
 		} else {
 			Update();
 		}
@@ -670,7 +670,7 @@ void PG_Widget::Hide(bool fade) {
 		UpdateRect(_mid->rectClip);
 
 		PG_Application::LockScreen();
-		SDL_UpdateRects(screen, 1, &_mid->rectClip);
+		PG_Application::UpdateRects(screen, 1, &_mid->rectClip);
 		PG_Application::UnlockScreen();
 	}
 
@@ -805,7 +805,7 @@ void PG_Widget::Update(bool doBlit) {
 	PG_LogDBG("UPD: x:%d y:%d w:%d h:%d",dst.x,dst.y,dst.w,dst.h);
 #endif // DEBUG
 
-	SDL_UpdateRects(PG_Application::GetScreen(), 1, &_mid->rectClip);
+	PG_Application::UpdateRects(PG_Application::GetScreen(), 1, &_mid->rectClip);
 
 	SDL_SetClipRect(PG_Application::GetScreen(), NULL);
 	PG_Application::UnlockScreen();
@@ -938,7 +938,7 @@ void PG_Widget::FadeOut() {
 		RestoreBackground(NULL, true);
 		SDL_SetAlpha(srfFade, SDL_SRCALPHA, 255-i);
 		SDL_BlitSurface(srfFade, NULL, screen, this);
-		SDL_UpdateRects(screen, 1, &_mid->rectClip);
+		PG_Application::UpdateRects(screen, 1, &_mid->rectClip);
 	}
 
 	RestoreBackground(NULL, true);
@@ -982,7 +982,7 @@ void PG_Widget::FadeIn() {
 		RestoreBackground(NULL, true);
 		SDL_SetAlpha(srfFade, SDL_SRCALPHA, 255-i);
 		PG_Draw::BlitSurface(srfFade, src, screen, _mid->rectClip);
-		SDL_UpdateRects(screen, 1, &_mid->rectClip);
+		PG_Application::UpdateRects(screen, 1, &_mid->rectClip);
 	}
 
 	PG_Application::UnlockScreen();

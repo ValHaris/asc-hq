@@ -24,6 +24,7 @@
 #include "../vehicle.h"
 #include "../gamemap.h"
 #include "../graphics/blitter.h"
+#include "../graphics/drawing.h"
 
 
 
@@ -67,18 +68,24 @@ bool StoringPosition :: eventMouseButtonDown (const SDL_MouseButtonEvent *button
 int StoringPosition :: spWidth = -1;
 int StoringPosition :: spHeight = -1;
 
-
-StoringPosition :: StoringPosition( PG_Widget *parent, const PG_Point &pos, HighLightingManager& highLightingManager, const ContainerBase::Cargo& storageVector, int number, bool regularPosition  )
-      : PG_Widget ( parent, PG_Rect( pos.x, pos.y, spWidth, spHeight)), highlight( highLightingManager ), storage( storageVector), num(number), regular(regularPosition)
+PG_Rect StoringPosition :: CalcSize( const PG_Point& pos  )
 {
-   highlight.markChanged.connect( SigC::slot( *this, &StoringPosition::markChanged ));
-   highlight.redrawAll.connect( SigC::bind( SigC::slot( *this, &StoringPosition::Update), true));
-
    if ( spWidth < 0 ) {
       Surface& icon = IconRepository::getIcon( "hexfield-bld-1.png" );
       spWidth = icon.w();
       spHeight = icon.h();
    }
+
+   return PG_Rect( pos.x, pos.y, spWidth, spHeight );
+}
+
+
+StoringPosition :: StoringPosition( PG_Widget *parent, const PG_Point &pos, HighLightingManager& highLightingManager, const ContainerBase::Cargo& storageVector, int number, bool regularPosition, bool showBars  )
+   : PG_Widget ( parent, CalcSize(pos)), highlight( highLightingManager ), storage( storageVector), num(number), regular(regularPosition), bars ( showBars )
+{
+   highlight.markChanged.connect( SigC::slot( *this, &StoringPosition::markChanged ));
+   highlight.redrawAll.connect( SigC::bind( SigC::slot( *this, &StoringPosition::Update), true));
+
 
    if ( !clippingSurface.valid() )
       clippingSurface = Surface::createSurface( spWidth + 10, spHeight + 10, 32, 0 );
@@ -86,6 +93,39 @@ StoringPosition :: StoringPosition( PG_Widget *parent, const PG_Point &pos, High
 }
 
 
+
+void StoringPosition :: showBar( Surface& surf, const PG_Rect& r, DI_Color col, int percentage )
+{
+   PG_Rect d = r;
+   /*
+   if ( dir == l2r ) {
+      d.w = min( max(0, int( float(dst.w) * fraction)), int(dst.w)) ;
+   }
+   if ( dir == r2l ) {
+      int x2 = d.x + d.w;
+      d.w = min( max(0, int( float(dst.w) * fraction)), int(dst.w)) ;
+      d.x = x2 - d.w;
+   }
+   if ( dir == t2b ) {
+      d.h = min( max(0, int( float(dst.h) * fraction)), int(dst.h)) ;
+   }
+   if ( dir == b2t ) {
+   */
+      int y2 = d.y + d.h;
+      d.h = min( max(0, int( float(r.h) * percentage/100)), int(r.h)) ;
+      d.y = y2 - d.h;
+   // }
+
+   if ( d.h <= 0 || d.w <= 0 )
+      return;
+
+
+   Uint32 c = col.MapRGBA( PG_Application::GetScreen()->format, 255);
+
+   paintFilledRectangle<4>( surf, SPoint( d.x, d.y), d.w, d.h, ColorMerger_ColoredOverwrite<4>( c ) );
+   
+   // SDL_FillRect(surf.getBaseSurface(), &d, c);
+}
 
 
 void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst)
@@ -113,6 +153,18 @@ void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, con
          storage[num]->typ->paint( clippingSurface, SPoint(xpos,ypos), storage[num]->getOwner() );
       else
          storage[num]->typ->paint( clippingSurface, SPoint(xpos,ypos), storage[num]->getMap()->getNeutralPlayerNum() );
+
+      if ( bars ) {
+         const int xborder = 6;
+         const int yborder = 3;
+         const int barwidth = 7;
+         showBar( clippingSurface, PG_Rect( xborder, yborder, barwidth, spHeight - 2*yborder), 0xff00, 100 - storage[num]->damage );
+
+         if ( storage[num]->getStorageCapacity().fuel ) {
+            int f = 100 * storage[num]->getResource( maxint, 2, true, 0 ) / storage[num]->getStorageCapacity().fuel;
+            showBar( clippingSurface, PG_Rect( spWidth - xborder - barwidth, yborder, barwidth, spHeight - 2*yborder), 0xff, f );
+         }
+      } 
    }
 
    PG_Draw::BlitSurface( clippingSurface.getBaseSurface(), src, PG_Application::GetScreen(), dst);
@@ -130,7 +182,7 @@ vector<StoringPosition*> StoringPosition :: setup( PG_Widget* parent, ContainerB
          posNum = container->getCargo().size();
 
       for ( int i = 0; i < posNum; ++i ) {
-         StoringPosition* sp = new StoringPosition( parent, PG_Point( x, y), highLightingManager, container->getCargo(), i, container->baseType->maxLoadableUnits >= container->getCargo().size() );
+         StoringPosition* sp = new StoringPosition( parent, PG_Point( x, y), highLightingManager, container->getCargo(), i, container->baseType->maxLoadableUnits >= container->getCargo().size(), true );
          storingPositionVector.push_back( sp );
          x += StoringPosition::spWidth;
          if ( x + StoringPosition::spWidth >= parent->Width() - 20 ) {

@@ -12,16 +12,26 @@ panel {
 
    backgroundimage = cargo_pad.png
       
-   ChildWidgets = GeneralInfoPane UnitScrollArea SubWindowPane SubWindowSelectorPane LoadingMeter
+   ChildWidgets = GeneralInfoPane UnitScrollArea SubWindowPane SubWindowSelectorPane LoadingMeter 
    
+
    GeneralInfoPane {
       type = dummy
       x = 69
       y = 22
-      x2 = 672
-      y2 = 87      
+      x2 = 674
+      y2 = 90      
 
-      ChildWidgets = Resources Names MunitionsIMG MunitionsCNT
+      ChildWidgets = Resources Names MunitionsIMG MunitionsCNT ContainerImage AmmoSkipper1 AmmoSkipper2
+
+      ContainerImage {
+         type = SpecialDisplay
+         x = 2
+         y = 6 
+         x2 = 50
+         y2 = 60
+         name = unitpad_unitsymbol
+      } ContainerImage
 
       Resources {
          type = dummy
@@ -145,7 +155,7 @@ panel {
          type = dummy
 
          x = 264
-         y = 40
+         y = 41
          height = 10
          x2 = 672
 
@@ -154,7 +164,7 @@ panel {
          CruiseMissile {
                            type = image
                            x = 0
-                           y = 1
+                           y = 0
                            filename = weap-cruisemissile-small.png
                            ToolTipHelp = Cruise Missile
                            } CruiseMissile
@@ -162,7 +172,7 @@ panel {
          Mine {
                            type = image
                            x = 35
-                           y = 1
+                           y = 0
                            width = 20         
                            filename = weap-mine-small.png
                            ToolTipHelp = Mine
@@ -171,7 +181,7 @@ panel {
          Bomb {
                            type = image
                            x = 70
-                           y = 1
+                           y = 0
                            width = 20         
                            filename = weap-bomb-small.png
                            ToolTipHelp = Bomb
@@ -180,7 +190,7 @@ panel {
          LargeMissile  {
                            type = image
                            x = 105
-                           y = 1
+                           y = 0
                            width = 20         
                            filename = weap-bigmissile-small.png
                            ToolTipHelp = Big Missile
@@ -189,7 +199,7 @@ panel {
          SmallMissile  {
                            type = image
                            x = 140
-                           y = 1
+                           y = 0
                            width = 20         
                            filename = weap-smallmissile-small.png
                            ToolTipHelp = Small Missile
@@ -198,7 +208,7 @@ panel {
          MachineGun    {
                            type = image
                            x = 175
-                           y = 1
+                           y = 0
                            width = 20         
                            filename = weap-machinegun-small.png
                            ToolTipHelp = Machine Gun
@@ -207,7 +217,7 @@ panel {
          Cannon          {
                            type = image
                            x = 210
-                           y = 1
+                           y = 0
                            width = 20         
                            filename = weap-cannon-small.png
                            ToolTipHelp = Cannon
@@ -216,7 +226,7 @@ panel {
          Torpedo {
                            type = image
                            x = 245
-                           y = 1
+                           y = 0
                            width = 20         
                            filename = weap-torpedo-small.png
                            ToolTipHelp = Torpedo
@@ -308,7 +318,25 @@ panel {
                            } Torpedo      
       } MunitionsCNT
 
-    
+
+      AmmoSkipper1 {
+         type = Plain
+         x = 538
+         y = 38
+         width = 32
+         height = 30
+         BackgroundColor = 0x5e5e5e
+      } AmmoSkipper1
+
+      AmmoSkipper2 {
+         type = Plain
+         x = 573
+         y = 38
+         width = 32
+         height = 30  
+         BackgroundColor = 0x5e5e5e
+      } AmmoSkipper2
+
    } GeneralInfoPane
   
    UnitScrollArea {

@@ -613,7 +613,7 @@ Resources ContainerBase :: getResourceUsage( )
 
 Resources ContainerBase::getStorageCapacity() const
 {
-   if ( gamemap && gamemap->_resourcemode == 1 )
+   if ( gamemap && gamemap->_resourcemode == 1 && isBuilding() )
       return baseType->getStorageCapacity( 1 );
    else
       return baseType->getStorageCapacity( 0 );

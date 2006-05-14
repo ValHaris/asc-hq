@@ -218,7 +218,7 @@ void ASC_PG_App::eventIdle()
 {
    if ( redrawScreen  ) {
       PG_Widget::UpdateScreen();
-	   SDL_UpdateRect(PG_Application::GetScreen(), 0,0,0,0);
+	   PG_Application::UpdateRect(PG_Application::GetScreen(), 0,0,0,0);
       redrawScreen = false;
    }
 

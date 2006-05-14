@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-05-14 19:02:32 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgwidgetdnd.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -405,7 +405,7 @@ void PG_WidgetDnD::updateDragArea(PG_Point pt, SDL_Surface* image) {
 	dstrect.w = image->w;
 	dstrect.h = image->h;
 
-	SDL_UpdateRects(PG_Application::GetScreen(), 1, &dstrect);
+	PG_Application::UpdateRects(PG_Application::GetScreen(), 1, &dstrect);
 }
 
 /**  */

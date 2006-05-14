@@ -147,7 +147,12 @@ class ContainerBase {
 
     //! @name Resource related functions
     //@{
-      
+
+      /** scope: 0 = local
+                 1 = resource network
+                 2 = global in all buildings
+                 3 = map wide pool( used only internally! )
+      */
       virtual int putResource ( int amount, int resourcetype, bool queryonly, int scope = 1 ) = 0;
       virtual int getResource ( int amount, int resourcetype, bool queryonly, int scope = 1 ) = 0;
       virtual int getResource ( int amount, int resourcetype ) const = 0;
