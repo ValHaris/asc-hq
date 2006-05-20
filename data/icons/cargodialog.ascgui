@@ -12,7 +12,7 @@ panel {
 
    backgroundimage = cargo_pad.png
       
-   ChildWidgets = GeneralInfoPane UnitScrollArea SubWindowPane SubWindowSelectorPane LoadingMeter 
+   ChildWidgets = GeneralInfoPane UnitScrollArea SubWindowPane SubWindowSelectorPane 
    
 
    GeneralInfoPane {
