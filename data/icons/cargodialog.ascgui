@@ -347,6 +347,38 @@ panel {
       y = 147
       x2 = 638
       y2 = 365
+      userhandler = ScrollArea
+      UnitSlot {
+         type = SpecialDisplay
+         x = 0
+         y = 0
+         width = 78
+         height = 71 
+         ChildWidgets = DamageBar FuelBar 
+
+         unitposx = 15
+         unitposy = 11
+
+         DamageBar {
+           type = BarGraph
+           BackgroundColor = 0xff00
+           x = 5 
+           y = 5
+           width = 10
+           height = 60
+           Direction = buttom2top
+         } DamageBar
+         FuelBar {
+           type = BarGraph
+           BackgroundColor = 0xff
+           x = 61 
+           y = 5
+           width = 10
+           height = 60
+           Direction = buttom2top
+         } FuelBar
+      } UnitSlot
+
    } UnitScrollArea
 
    LoadingMeter {
@@ -1172,46 +1204,46 @@ panel {
             Description {
                type = StaticText
                text = Solar Power Plant
-               x = 16
-               y = 4
-               x2 = 160
-               y2 = 14
+               x = 10
+               y = 9
+               x2 = 285
+               y2 = 21
             } Description
 
             MaxPower2 {
                type = StaticText
                text = Max Power
-               x = 7
-               y = 60
-               x2 = 102
-               y2 = 70
+               x = 28
+               y = 37
+               x2 = 164
+               height = 14
             } MaxPower2
 
             MaxPower {
                type = TextOutput
-               x = 118
-               y = 60
-               x2 = 169
-               y2 = 70
+               x = 167
+               y = 37
+               x2 = 226
+               height = 14
             } MaxPower
 
             CurrentPower2 {
                type = StaticText
                text = Current Power
-               x = 7
-               y = 37
-               x2 = 102
-               y2 = 46
+               x = 28
+               y = 68
+               x2 = 164
+               height = 14
             } CurrentPower2
 
 
             CurrentPower {
                type = TextOutput
                text = Solar Power Plant
-               x = 118
-               y = 37
-               x2 = 169
-               y2 = 46
+               x = 167
+               y = 68
+               x2 = 226
+               height = 14
             } CurrentPower
 
 
@@ -1241,46 +1273,46 @@ panel {
             Description {
                type = StaticText
                text = Wind Power Plant
-               x = 16
-               y = 4
-               x2 = 160
-               y2 = 14
+               x = 10
+               y = 9
+               x2 = 285
+               y2 = 21
             } Description
 
             MaxPower2 {
                type = StaticText
                text = Max Power
-               x = 7
-               y = 60
-               x2 = 102
-               y2 = 70
+               x = 28
+               y = 37
+               x2 = 164
+               height = 14
             } MaxPower2
 
             MaxPower {
                type = TextOutput
-               x = 118
-               y = 60
-               x2 = 169
-               y2 = 70
+               x = 167
+               y = 37
+               x2 = 226
+               height = 14
             } MaxPower
 
             CurrentPower2 {
                type = StaticText
                text = Current Power
-               x = 7
-               y = 37
-               x2 = 102
-               y2 = 46
+               x = 28
+               y = 68
+               x2 = 164
+               height = 14
             } CurrentPower2
 
 
             CurrentPower {
                type = TextOutput
                text = Solar Power Plant
-               x = 118
-               y = 37
-               x2 = 169
-               y2 = 46
+               x = 167
+               y = 68
+               x2 = 226
+               height = 14
             } CurrentPower
          } BKGR
       } windpower

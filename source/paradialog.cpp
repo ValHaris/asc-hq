@@ -496,18 +496,13 @@ ASC_PG_Dialog :: ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCS
 
    // it looks nice if you can see the map behind the dialog, but seeing other dialogs stacked above each other is just confusing, so we reduce transparency
    int t = GetTransparency();
-   if ( windowNum >= 1 ) {
+   if ( WindowCounter::num() >= 1 ) {
       SetTransparency ( t/2 );
    }
 }
 
-int ASC_PG_Dialog::windowNum = 0;
+int WindowCounter::windowNum = 0;
 
-class WindowCounter {
-   public:
-      WindowCounter() { ++ASC_PG_Dialog::windowNum; };
-      ~WindowCounter() { --ASC_PG_Dialog::windowNum; };
-};
 
 int ASC_PG_Dialog::RunModal()
 {

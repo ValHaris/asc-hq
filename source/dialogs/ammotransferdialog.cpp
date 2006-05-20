@@ -88,7 +88,7 @@ class TransferWidget : public PG_Widget {
 };
 
 
-class AmmoTransferWindow : public PG_Window {
+class AmmoTransferWindow : public ASC_PG_Dialog {
    private:
       ContainerBase* first;
       ContainerBase* second;
@@ -118,7 +118,7 @@ class AmmoTransferWindow : public PG_Window {
 };
 
 
-AmmoTransferWindow :: AmmoTransferWindow ( ContainerBase* source, ContainerBase* destination, PG_Widget* parent ) : PG_Window( NULL, PG_Rect( 30, 30, 400, 400 ), "Transfer" ), first (source), second( destination ), handler( source, destination )
+AmmoTransferWindow :: AmmoTransferWindow ( ContainerBase* source, ContainerBase* destination, PG_Widget* parent ) : ASC_PG_Dialog( NULL, PG_Rect( 30, 30, 400, 400 ), "Transfer" ), first (source), second( destination ), handler( source, destination )
 {
    int ypos = 30;
    int border = 10;

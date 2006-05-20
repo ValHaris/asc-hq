@@ -152,6 +152,13 @@ ASCGUI_Window::WidgetParameters::WidgetParameters()
 {
 }
 
+int ASCGUI_Window::RunModal()
+{
+   WindowCounter wc;
+   return PG_Window::RunModal();
+}
+
+
 void  ASCGUI_Window::WidgetParameters::runTextIO ( PropertyReadingContainer& pc )
 {
    if ( pc.find( "BackgroundImage" )) {

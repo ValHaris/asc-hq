@@ -46,10 +46,9 @@ class StoringPosition : public PG_Widget
       const ContainerBase::Cargo& storage;
       int num;
       bool regular;
-      bool bars;
 
-      void showBar( Surface& surf, const PG_Rect& r, DI_Color col, int percentage );
-      
+      PG_Point unitPosition;
+            
       static int spWidth;
       static int spHeight;
 
@@ -61,11 +60,13 @@ class StoringPosition : public PG_Widget
 
       void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst);
       
+      void setBargraphValue( const ASCString& widgetName, float fraction);
+      
    public:
 
       static vector<StoringPosition*> setup( PG_Widget* parent, ContainerBase* container, HighLightingManager& highLightingManager, int& unitColumnCount );
       
-      StoringPosition( PG_Widget *parent, const PG_Point &pos, HighLightingManager& highLightingManager, const ContainerBase::Cargo& storageVector, int number, bool regularPosition, bool showBars = false  );
+      StoringPosition( PG_Widget *parent, const PG_Point &pos, const PG_Point& unitPos, HighLightingManager& highLightingManager, const ContainerBase::Cargo& storageVector, int number, bool regularPosition  );
 };
 
 
@@ -81,12 +82,15 @@ class CargoWidget : public PG_ScrollWidget {
       void click( int num, SPoint mousePos );
       
    public:
-      CargoWidget( PG_Widget* parent, const PG_Rect& pos, ContainerBase* container );
+      CargoWidget( PG_Widget* parent, const PG_Rect& pos, ContainerBase* container, bool setup );
       bool eventKeyDown(const SDL_KeyboardEvent* key);
       Vehicle* getMarkedUnit();
       SigC::Signal1<void,Vehicle*> unitMarked;
       SigC::Signal2<void,Vehicle*,SPoint> unitClicked;
       void redrawAll();
+
+      void registerStoringPositions( vector<StoringPosition*> sp, int colcount );
+      HighLightingManager& getHighLightingManager() { return unitHighLight; };
 };
 
 

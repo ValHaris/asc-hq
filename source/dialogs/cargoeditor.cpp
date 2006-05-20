@@ -124,7 +124,7 @@ class CargoEditor : public PG_Window {
          updateGraph();
          
          ++stack;
-         cargoWidget = new CargoWidget( this, PG_Rect( 10, 60, Width()-20, Height() - 120 ), container);
+         cargoWidget = new CargoWidget( this, PG_Rect( 10, 60, Width()-20, Height() - 120 ), container, true);
 
          int buttonLine = Height() - 110 + 60;
          int buttonHeight = 30;

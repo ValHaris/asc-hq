@@ -276,13 +276,15 @@ void saveGame( bool as )
 
 
 
-void loadmap( const ASCString& name )
+void loadmap( const ASCString& name, bool campaign )
 {
    GameMap* m = mapLoadingExceptionChecker( name, MapLoadingFunction( tmaploaders::loadmap ));
    delete actmap;
    actmap = m;
    computeview( actmap );
    hookGuiToMap( actmap );
+   if ( !campaign )
+      actmap->campaign.avail = false;
 }
 
 void loadStartupMap ( const char *gameToLoad=NULL )
@@ -317,7 +319,7 @@ void loadStartupMap ( const char *gameToLoad=NULL )
                fatalError ( "Mapfile %s is invalid. Aborting.", gameToLoad );
 
             try {
-               loadmap( gameToLoad );
+               loadmap( gameToLoad, false );
             } catch ( tfileerror ) {
                fatalError ( "%s is not a legal map. ", gameToLoad );
             }
@@ -366,7 +368,7 @@ void loadStartupMap ( const char *gameToLoad=NULL )
          s = filename;
       }
 
-      loadmap( s );
+      loadmap( s, true );
       displayLogMessage ( 6, "done\n" );
    }
 }

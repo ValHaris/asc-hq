@@ -25,7 +25,7 @@
 #include "../gamemap.h"
 #include "../graphics/blitter.h"
 #include "../graphics/drawing.h"
-
+#include "../paradialog.h"
 
 
 HighLightingManager::HighLightingManager() : marked(0) {};
@@ -80,51 +80,27 @@ PG_Rect StoringPosition :: CalcSize( const PG_Point& pos  )
 }
 
 
-StoringPosition :: StoringPosition( PG_Widget *parent, const PG_Point &pos, HighLightingManager& highLightingManager, const ContainerBase::Cargo& storageVector, int number, bool regularPosition, bool showBars  )
-   : PG_Widget ( parent, CalcSize(pos)), highlight( highLightingManager ), storage( storageVector), num(number), regular(regularPosition), bars ( showBars )
+StoringPosition :: StoringPosition( PG_Widget *parent, const PG_Point &pos, const PG_Point& unitPos, HighLightingManager& highLightingManager, const ContainerBase::Cargo& storageVector, int number, bool regularPosition  )
+   : PG_Widget ( parent, CalcSize(pos)), highlight( highLightingManager ), storage( storageVector), num(number), regular(regularPosition), unitPosition( unitPos )
 {
    highlight.markChanged.connect( SigC::slot( *this, &StoringPosition::markChanged ));
    highlight.redrawAll.connect( SigC::bind( SigC::slot( *this, &StoringPosition::Update), true));
 
+   if ( unitPosition.x < 0 ) {
+      unitPosition.x = (Width() - fieldsizex)/2;
+      unitPosition.y = (Height() - fieldsizey)/2;
+   }
 
    if ( !clippingSurface.valid() )
       clippingSurface = Surface::createSurface( spWidth + 10, spHeight + 10, 32, 0 );
 
 }
 
-
-
-void StoringPosition :: showBar( Surface& surf, const PG_Rect& r, DI_Color col, int percentage )
+void StoringPosition::setBargraphValue( const ASCString& widgetName, float fraction )
 {
-   PG_Rect d = r;
-   /*
-   if ( dir == l2r ) {
-      d.w = min( max(0, int( float(dst.w) * fraction)), int(dst.w)) ;
-   }
-   if ( dir == r2l ) {
-      int x2 = d.x + d.w;
-      d.w = min( max(0, int( float(dst.w) * fraction)), int(dst.w)) ;
-      d.x = x2 - d.w;
-   }
-   if ( dir == t2b ) {
-      d.h = min( max(0, int( float(dst.h) * fraction)), int(dst.h)) ;
-   }
-   if ( dir == b2t ) {
-   */
-      int y2 = d.y + d.h;
-      d.h = min( max(0, int( float(r.h) * percentage/100)), int(r.h)) ;
-      d.y = y2 - d.h;
-   // }
-
-   if ( d.h <= 0 || d.w <= 0 )
-      return;
-
-
-   Uint32 c = col.MapRGBA( PG_Application::GetScreen()->format, 255);
-
-   paintFilledRectangle<4>( surf, SPoint( d.x, d.y), d.w, d.h, ColorMerger_ColoredOverwrite<4>( c ) );
-   
-   // SDL_FillRect(surf.getBaseSurface(), &d, c);
+   BarGraphWidget* bgw = dynamic_cast<BarGraphWidget*>( FindChild( widgetName, true ) );
+   if ( bgw )
+      bgw->setFraction( fraction );
 }
 
 
@@ -144,8 +120,8 @@ void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, con
    blitter.blit( icon, clippingSurface, SPoint(0,0));
 
    if ( num < storage.size() && storage[num] ) {
-      int ypos = (spHeight - fieldsizey) / 2;
-      int xpos = (spWidth - fieldsizex) / 2;
+      int xpos = unitPosition.x;
+      int ypos = unitPosition.y;
       if ( num != highlight.getMark() )
          ypos += 1;
 
@@ -154,17 +130,17 @@ void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, con
       else
          storage[num]->typ->paint( clippingSurface, SPoint(xpos,ypos), storage[num]->getMap()->getNeutralPlayerNum() );
 
-      if ( bars ) {
-         const int xborder = 6;
-         const int yborder = 3;
-         const int barwidth = 7;
-         showBar( clippingSurface, PG_Rect( xborder, yborder, barwidth, spHeight - 2*yborder), 0xff00, 100 - storage[num]->damage );
+      setBargraphValue( "DamageBar", float(100-storage[num]->damage)/100 );
 
-         if ( storage[num]->getStorageCapacity().fuel ) {
-            int f = 100 * storage[num]->getResource( maxint, 2, true, 0 ) / storage[num]->getStorageCapacity().fuel;
-            showBar( clippingSurface, PG_Rect( spWidth - xborder - barwidth, yborder, barwidth, spHeight - 2*yborder), 0xff, f );
-         }
-      } 
+      if ( storage[num]->getStorageCapacity().fuel ) {
+         float f = float(storage[num]->getResource( maxint, 2, true, 0 )) / storage[num]->getStorageCapacity().fuel;
+         setBargraphValue( "FuelBar", f );
+      } else
+         setBargraphValue( "FuelBar", 0 );
+ 
+   } else {
+      setBargraphValue( "DamageBar", 0 );
+      setBargraphValue( "FuelBar", 0 );
    }
 
    PG_Draw::BlitSurface( clippingSurface.getBaseSurface(), src, PG_Application::GetScreen(), dst);
@@ -182,7 +158,7 @@ vector<StoringPosition*> StoringPosition :: setup( PG_Widget* parent, ContainerB
          posNum = container->getCargo().size();
 
       for ( int i = 0; i < posNum; ++i ) {
-         StoringPosition* sp = new StoringPosition( parent, PG_Point( x, y), highLightingManager, container->getCargo(), i, container->baseType->maxLoadableUnits >= container->getCargo().size(), true );
+         StoringPosition* sp = new StoringPosition( parent, PG_Point( x, y), PG_Point(-1,-1), highLightingManager, container->getCargo(), i, container->baseType->maxLoadableUnits >= container->getCargo().size() );
          storingPositionVector.push_back( sp );
          x += StoringPosition::spWidth;
          if ( x + StoringPosition::spWidth >= parent->Width() - 20 ) {
@@ -202,16 +178,23 @@ Surface StoringPosition::clippingSurface;
 
 
 
-CargoWidget :: CargoWidget( PG_Widget* parent, const PG_Rect& pos, ContainerBase* container ) : PG_ScrollWidget( parent, pos ), unitColumnCount(0)
+CargoWidget :: CargoWidget( PG_Widget* parent, const PG_Rect& pos, ContainerBase* container, bool setup ) : PG_ScrollWidget( parent, pos ), unitColumnCount(0)
 {
    this->container = container;
    SetTransparency( 255 );
-   storingPositionVector = StoringPosition::setup( this, container, unitHighLight, unitColumnCount );
 
-   unitHighLight.markChanged.connect( SigC::slot( *this, &CargoWidget::checkStoringPosition ));
-
-   unitHighLight.clickOnMarkedUnit.connect( SigC::slot( *this, &CargoWidget::click ));
+   if ( setup ) 
+      registerStoringPositions( StoringPosition::setup( this, container, unitHighLight, unitColumnCount ), unitColumnCount );
 };
+
+void CargoWidget::registerStoringPositions( vector<StoringPosition*> sp, int colCount )
+{
+   unitColumnCount = colCount;
+   storingPositionVector  = sp;
+   unitHighLight.markChanged.connect( SigC::slot( *this, &CargoWidget::checkStoringPosition ));
+   unitHighLight.clickOnMarkedUnit.connect( SigC::slot( *this, &CargoWidget::click ));
+}
+
 
 void CargoWidget::click( int num, SPoint mousePos )
 {

@@ -86,6 +86,8 @@ class ASCGUI_Window : public  PG_Window {
       void setBarGraphColor( const ASCString& widgetName, PG_Color color, PG_Widget* parent = NULL );
       void rename( const ASCString& widgetName, const ASCString& newname, PG_Widget* parent = NULL );
       void setWidgetTransparency ( const ASCString& widgetName, int transparency, PG_Widget* parent = NULL );
+      
+      int RunModal();
    protected:
 
       virtual void userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams ) {}; 

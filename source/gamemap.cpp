@@ -256,7 +256,7 @@ void GameMap :: guiHooked()
    dialogsHooked = true;
 }
 
-const int tmapversion = 15;
+const int tmapversion = 16;
 
 void GameMap :: read ( tnstream& stream )
 {
@@ -487,11 +487,14 @@ void GameMap :: read ( tnstream& stream )
          stream.readWord(); // campaign->prevmap 
          stream.readChar(); // campaign->player 
          campaign.directaccess = stream.readChar();
+         campaign.avail = true;
          for ( int d = 0; d < 21; d++ )
             stream.readChar(); // dummy
        } else {
           campaign.id = stream.readInt();
           campaign.directaccess = stream.readChar();
+          if ( version > 15 )
+             campaign.avail = stream.readInt();
        }
     }
 
@@ -647,7 +650,7 @@ void GameMap :: write ( tnstream& stream )
    
    stream.writeInt( campaign.avail  );
    stream.writeChar( actplayer );
-   stream.writeInt( time.abstime );   
+   stream.writeInt( time.abstime );
    
    stream.writeInt( 0x12345678 );
    
@@ -737,6 +740,7 @@ void GameMap :: write ( tnstream& stream )
    if ( campaign.avail ) {
       stream.writeInt( campaign.id );
       stream.writeChar( campaign.directaccess );
+      stream.writeInt( campaign.avail );
    }
 
    for (int w=0; w<8 ; w++ ) 

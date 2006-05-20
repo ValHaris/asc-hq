@@ -268,6 +268,7 @@ namespace CargoGuiFunctions {
 
 
 class DamageControlWindow;
+class CargoInfoWindow;
 
 class CargoDialog : public Panel
 {
@@ -293,6 +294,8 @@ class CargoDialog : public Panel
       SubWindow* matterWindow;
       DamageControlWindow* damageControlWindow;
 
+      CargoInfoWindow* ciw;
+      
       bool eventKeyDown(const SDL_KeyboardEvent* key)
       {
          if ( key->keysym.sym == SDLK_ESCAPE ) {
@@ -1535,7 +1538,7 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
 
 
 
-   CargoInfoWindow* ciw = new CargoInfoWindow;
+   ciw = new CargoInfoWindow;
          
    subwindows.push_back( ciw );
    subwindows.push_back( new SolarPowerWindow );
@@ -1584,22 +1587,6 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
    }
 
    
-
-   PG_Widget* unitScrollArea = FindChild( "UnitScrollArea", true );
-   if ( unitScrollArea ) {
-      cargoWidget = new CargoWidget( unitScrollArea, PG_Rect( 1, 1, unitScrollArea->Width() -2 , unitScrollArea->Height() -2 ), cb );
-      cargoWidget->unitMarked.connect( SigC::slot( *this, &CargoDialog::checkStoringPosition ));
-      cargoWidget->unitMarked.connect( SigC::hide<Vehicle*>( SigC::slot( *ciw, &CargoInfoWindow::update )));
-      if ( mainScreenWidget && mainScreenWidget->getGuiHost() )
-         cargoWidget->unitMarked.connect( SigC::slot( *this, &CargoDialog::clearSmallIcons ));
-
-      cargoWidget->unitClicked.connect ( SigC::slot( *this, &CargoDialog::onUnitClick ));
-
-      container->cargoChanged.connect( SigC::slot( *cargoWidget, &CargoWidget::redrawAll ));
-      
-      
-   }
-               
 
    if ( !cb->baseType->infoImageFilename.empty() && exist( cb->baseType->infoImageFilename )) {
       PG_Image* img = dynamic_cast<PG_Image*>(FindChild( "ContainerImage", true ));
@@ -1684,47 +1671,60 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
       DamageBarWidget* dbw = new DamageBarWidget( parent, PG_Rect( 0, 0, parent->Width(), parent->Height() ), color, container );
       damageControlWindow->damageChanged.connect( SigC::slot( *dbw, &DamageBarWidget::repaint ));
    }
-            /*
-   int yoffset = 0;
-   for ( int i = 0; i < vt->heightChangeMethodNum; ++i ) {
-   int srcLevelCount = 0;
-   for ( int j = 0; j < 8; ++j )
-   if ( vt->height & vt->heightChangeMethod[i].startHeight & (1 << j))
-   ++srcLevelCount;
 
-   pc.openBracket( "LineWidget" );
-   PG_Rect r = parseRect( pc, parent);
-   r.y += yoffset;
-   r.my_height *= (srcLevelCount-1) / 3 + 1;
-   widgetParams.runTextIO( pc );
+   if ( label == "ScrollArea" ) {
+      PG_Widget* unitScrollArea = parent;
+      if ( unitScrollArea ) {
+         cargoWidget = new CargoWidget( unitScrollArea, PG_Rect( 1, 1, unitScrollArea->Width() -2 , unitScrollArea->Height() -2 ), container, false );
 
-   SpecialInputWidget* sw = new SpecialInputWidget ( parent, r );
-   parsePanelASCTXT( pc, sw, widgetParams );
-   pc.closeBracket();
-   yoffset += sw->Height();
-
-
-
-   int counter = 0;
-   for ( int j = 0; j < 8; ++j )
-   if ( vt->height & vt->heightChangeMethod[i].startHeight & (1 << j))  {
-   ASCString filename = "height-a" + ASCString::toString(j) + ".png";
-   int xoffs = 3 + IconRepository::getIcon(filename).w() * (counter % 3 );
-   int yoffs = 2 + IconRepository::getIcon(filename).h() * (counter / 3 );
-   new PG_Image( sw, PG_Point( xoffs, yoffs ), IconRepository::getIcon(filename).getBaseSurface(), false );
-   ++counter;
-}
-
-   ASCString delta = ASCString::toString( vt->heightChangeMethod[i].heightDelta );
-   if ( vt->heightChangeMethod[i].heightDelta > 0 )
-   delta = "+" + delta;
-   setLabelText( "unitpad_move_changeheight_change", delta, sw );
-                  
-   setLabelText( "unitpad_move_changeheight_movepoints", vt->heightChangeMethod[i].moveCost, sw );
-   setLabelText( "unitpad_move_changeheight_distance", vt->heightChangeMethod[i].dist, sw );
-}
-            */
+         vector<StoringPosition*> storingPositionVector;
          
+         int x = 0;
+         int y = 0;
+         
+         int posNum = container->baseType->maxLoadableUnits;
+         if ( container->getCargo().size() > posNum )
+            posNum = container->getCargo().size();
+
+         int unitColumnCount = 0;
+         for ( int i = 0; i < posNum; ++i ) {
+            pc.openBracket( "UnitSlot" );
+
+            int unitposx, unitposy;
+            pc.addInteger( "unitposx", unitposx );
+            pc.addInteger( "unitposy", unitposy );
+            
+            StoringPosition* sp = new StoringPosition( cargoWidget, PG_Point( x, y), PG_Point(unitposx, unitposy), cargoWidget->getHighLightingManager(), container->getCargo(), i, container->baseType->maxLoadableUnits >= container->getCargo().size() );
+            storingPositionVector.push_back( sp );
+            x += sp->Width();
+            if ( x + sp->Width() >= parent->Width() - 20 ) {
+               if ( !unitColumnCount )
+                  unitColumnCount = i + 1;
+               x = 0;
+               y += sp->Height();
+            }
+
+            
+            widgetParams.runTextIO( pc );
+            parsePanelASCTXT( pc, sp, widgetParams );
+            pc.closeBracket();
+            
+         }
+
+         cargoWidget->registerStoringPositions( storingPositionVector, unitColumnCount );
+
+         cargoWidget->unitMarked.connect( SigC::slot( *this, &CargoDialog::checkStoringPosition ));
+         cargoWidget->unitMarked.connect( SigC::hide<Vehicle*>( SigC::slot( *ciw, &CargoInfoWindow::update )));
+         if ( mainScreenWidget && mainScreenWidget->getGuiHost() )
+            cargoWidget->unitMarked.connect( SigC::slot( *this, &CargoDialog::clearSmallIcons ));
+
+         cargoWidget->unitClicked.connect ( SigC::slot( *this, &CargoDialog::onUnitClick ));
+
+         container->cargoChanged.connect( SigC::slot( *cargoWidget, &CargoWidget::redrawAll ));
+      }
+
+   }
+
 };
 
 

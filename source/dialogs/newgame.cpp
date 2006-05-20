@@ -238,6 +238,9 @@ bool StartMultiplayerGame::Apply()
                if ( exist( filename )) {
                   newMap = mapLoadingExceptionChecker( filename, MapLoadingFunction( tmaploaders::loadmap ));
                   if ( newMap ) {
+                     if ( mode != NewCampagin && mode != ContinueCampaign )
+                        newMap->campaign.avail = false;
+                     
                      if ( checkPlayerStat() )
                         return true;
                      else {
