@@ -119,7 +119,7 @@ class StartMultiplayerGame: public ConfigurableWindow {
       void showButtons( bool start, bool quickstart, bool next )
       {
          assert ( start != next );
-         assert ( start != quickstart );
+         assert ( !(start && quickstart) );
          
          if ( next )
             show("next");

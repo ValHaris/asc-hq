@@ -98,6 +98,7 @@ class StartupScreen: public SigC::Object {
        bool isFullscreen() { return fullScreen; };
        bool toogleFullscreen();
 
+       void setIcon( const ASCString& filename );
        
        void processEvent();
        bool enableLegacyEventHandling( bool use );
@@ -136,16 +137,6 @@ class ASC_PG_Dialog : public PG_Window {
 };
 
 
-class DropDownSelector: public PG_DropDown {
-        bool first;
-     protected:
-        bool itemSelected( ); // PG_ListBoxBaseItem* i, void* p );   
-     public:
-        DropDownSelector( PG_Widget *parent, const PG_Rect &r=PG_Rect::null, int id=-1, const std::string &style="DropDown");
-        DropDownSelector( PG_Widget *parent, const PG_Rect &r, int itemnum, const char** items, const std::string &style="DropDown" );
-        void AddItem (const std::string &text, void *userdata=NULL, Uint16 height=0);
-        SigC::Signal1<void, int> selectionSignal;
-};
 
 
 class ColoredBar : public PG_ThemeWidget {
@@ -157,9 +148,6 @@ class ColoredBar : public PG_ThemeWidget {
          SetBackgroundBlend ( 255 );
       };
 };
-
-
-class BarGraphWidget;
 
 
 
@@ -185,26 +173,6 @@ class SpecialDisplayWidget : public PG_Widget {
       };
       */
 
-};
-
-class BarGraphWidget : public PG_ThemeWidget {
-      float fraction;
-      PG_Color color;
-   public:
-      typedef vector<pair<double,int> > Colors;
-      enum Direction { l2r, r2l, t2b, b2t };
-   private:
-      Direction dir;
-      Colors colors;
-   public:
-      BarGraphWidget (PG_Widget *parent, const PG_Rect &rect, Direction direction );
-
-      void setFraction( float f );
-      void setColor( int c ) { color = c; };
-      void setColor( PG_Color c ) { color = c; };
-      void setColor( Colors colors ) { this->colors = colors; };
-
-      void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst);
 };
 
 
@@ -234,47 +202,6 @@ class Emboss : public PG_Widget {
 };
 
 
-class MultiListBox : public PG_Widget {
-
-      PG_ListBox* listbox;
-      
-   public:
-      MultiListBox (PG_Widget *parent, const PG_Rect &r ) : PG_Widget( parent, r )
-      {
-         SetTransparency( 255 );
-         
-         listbox = new PG_ListBox( parent, PG_Rect( r.x, r.y, r.w, r.h - 30 ) );
-         listbox->SetMultiSelect( true );
-         
-         (new PG_Button( parent, PG_Rect( r.x, r.y + r.h - 25, r.w/2-5, 25 ), "All"))->sigClick.connect( SigC::slot( *this, &MultiListBox::all ));
-         (new PG_Button( parent, PG_Rect( r.x + r.w/2 + 5, r.y + r.h - 25, r.w/2-5, 25 ), "None"))->sigClick.connect( SigC::slot( *this, &MultiListBox::none ));
-      }
-
-      PG_ListBox* getListBox() { return listbox; };
-
-      bool all()
-      {
-         for ( int i = 0; i < listbox->GetWidgetCount(); ++i ) {
-            PG_ListBoxBaseItem* bi = dynamic_cast<PG_ListBoxBaseItem*>(listbox->FindWidget(i));
-            if ( bi )
-               bi->Select( true );
-         }
-         listbox->Update();
-         return true;
-      }
-
-      bool none()
-      {
-         for ( int i = 0; i < listbox->GetWidgetCount(); ++i ) {
-            PG_ListBoxBaseItem* bi = dynamic_cast<PG_ListBoxBaseItem*>(listbox->FindWidget(i));
-            if ( bi )
-               bi->Select( false );
-         }
-         listbox->Update();
-         return true;
-      }
-      
-};
 
 
 
@@ -285,17 +212,6 @@ class PG_StatusWindowData : public StatusMessageWindowHolder::UserData {
    public:
       PG_StatusWindowData( const ASCString& msg );
       ~PG_StatusWindowData() ;
-};
-
-template<typename T>
-class PG_ListBoxDataItem : public PG_ListBoxItem {
-   public:
-      typedef T DataType;
-   private:
-      T my_data;
-   public:
-      PG_ListBoxDataItem( PG_Widget *parent, int height, const std::string &text, const T& data, SDL_Surface *icon=NULL ) : PG_ListBoxItem( parent, height, text, icon ), my_data(data) {};
-      T getData() { return my_data; };
 };
 
 

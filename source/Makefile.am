@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES	= Makefile.in
 
-SUBDIRS 		= @GENCL@ docs sdl libs ai graphics dialogs actions unix tools 
+SUBDIRS 		= @GENCL@ docs sdl libs ai graphics dialogs widgets actions unix tools 
 
 EXTRA_DIST 		= *.cpp *.h *.inc
 

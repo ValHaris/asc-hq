@@ -31,8 +31,8 @@
 #include "../spfst.h"
 #include "../gameeventsystem.h"
 
-
-
+#include "../widgets/dropdownselector.h"
+#include "../widgets/multilistbox.h"
 
 class EventEditor : public ASC_PG_Dialog {
    private:

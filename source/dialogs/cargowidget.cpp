@@ -25,6 +25,7 @@
 #include "../gamemap.h"
 #include "../graphics/blitter.h"
 #include "../graphics/drawing.h"
+#include "../widgets/bargraphwidget.h"
 #include "../paradialog.h"
 
 

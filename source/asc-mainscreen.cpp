@@ -531,6 +531,8 @@ void ASC_MainScreenWidget::showWeaponRange( GameMap* gamemap, const MapCoordinat
    weaponRangeLayer->operateField( gamemap, pos );
 }
 
+extern void testText();
+
 
 bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 // bool Menu::eventKeyDown(const SDL_KeyboardEvent* key)
@@ -620,6 +622,10 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
             case SDLK_KP_MINUS: execUserAction_ev( ua_decrease_zoom );
                return true;
                
+         case SDLK_F10:
+            testText();
+            break;
+               
             default:;
       }
    }
@@ -651,6 +657,7 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                   }
                } 
             return true;
+
 
             case SDLK_x:
                execUserAction_ev ( ua_exitgame );

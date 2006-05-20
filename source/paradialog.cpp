@@ -21,6 +21,8 @@
 #include <SDL_image.h>
 #include <signal.h>
 
+#include <boost/regex.hpp>
+
 #include <paragui.h>
 #include <pgapplication.h>
 #include <pgmessagebox.h>
@@ -50,6 +52,8 @@
 #include "pgmultilineedit.h"
 #include "pgtooltiphelp.h"
 
+#include "widgets/multilistbox.h"
+#include "widgets/textrenderer.h"
 
 #include "paradialog.h"
 #include "events.h"
@@ -113,42 +117,6 @@ class EventSupplier: public PG_SDLEventSupplier {
 
 
 
-DropDownSelector::DropDownSelector( PG_Widget *parent, const PG_Rect &r, int itemnum, const char** items, const std::string &style )
-   : PG_DropDown( parent, r, -1, style ), first(true)
-{
-   SetEditable(false);
-   sigSelectItem.connect( SigC::slot( *this, &DropDownSelector::itemSelected ));
-
-   for ( int i = 0; i < itemnum; ++i )
-      AddItem( items[i] );
-      
-}
-
-
-DropDownSelector::DropDownSelector( PG_Widget *parent, const PG_Rect &r, int id, const std::string &style) 
-     : PG_DropDown( parent, r, id, style ), first(true)
-{
-   SetEditable(false);
-   sigSelectItem.connect( SigC::slot( *this, &DropDownSelector::itemSelected ));
-}
-
-bool DropDownSelector::itemSelected(  ) // PG_ListBoxBaseItem* i, void* p
-{
-   selectionSignal( GetSelectedItemIndex ());
-   return true;
-}
-
-
-void DropDownSelector::AddItem (const std::string &text, void *userdata, Uint16 height)
-{
-   PG_DropDown::AddItem( text, userdata, height );
-   if ( first ) {
-      first = false;
-      SelectFirstItem();
-   }   
-}
-
-
 
 
 ASC_PG_App* pgApp = NULL;
@@ -199,6 +167,17 @@ ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )  : fullScreen(false), bi
 
    SetHighlightingTag( '~' );
    
+}
+
+void ASC_PG_App :: setIcon( const ASCString& filename )
+{
+   SDL_Surface *icn = NULL;
+   try {
+      tnfilestream iconl ( filename, tnstream::reading );
+      icn = IMG_Load_RW ( SDL_RWFromStream( &iconl ), 1);
+      // SDL_SetColorKey(icn, SDL_SRCCOLORKEY, *((Uint8 *)icn->pixels));
+      SDL_WM_SetIcon( icn, NULL );
+   } catch ( ... ) {}
 }
 
 void ASC_PG_App :: Quit()
@@ -673,62 +652,6 @@ bool ASC_PG_Dialog::closeWindow(){
 
 
 
-BarGraphWidget:: BarGraphWidget (PG_Widget *parent, const PG_Rect &rect, Direction direction ) : PG_ThemeWidget( parent, rect, false ), fraction(1), dir(direction)
-{
-}
-
-void BarGraphWidget::eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst)
-{
-   PG_Rect d = dst;
-   if ( dir == l2r ) {
-      d.w = min( max(0, int( float(dst.w) * fraction)), int(dst.w)) ;
-   }
-   if ( dir == r2l ) {
-      int x2 = d.x + d.w;
-      d.w = min( max(0, int( float(dst.w) * fraction)), int(dst.w)) ;
-      d.x = x2 - d.w;
-   }
-   if ( dir == t2b ) {
-      d.h = min( max(0, int( float(dst.h) * fraction)), int(dst.h)) ;
-   }
-   if ( dir == b2t ) {
-      int y2 = d.y + d.h;
-      d.h = min( max(0, int( float(dst.h) * fraction)), int(dst.h)) ;
-      d.y = y2 - d.h;
-   }
-
-   if ( d.h <= 0 || d.w <= 0 )
-      return;
-
-
-/*   PG_Draw::DrawThemedSurface(
-          surface,
-          d,
-          my_has_gradient ? &my_gradient : 0,
-          my_background,
-          my_backgroundMode,
-          my_blendLevel );
-          */
-
-   Uint32 c = color.MapRGBA( PG_Application::GetScreen()->format, 255-GetTransparency());
-   for ( Colors::iterator i = colors.begin(); i != colors.end(); ++i)
-      if ( fraction < i->first ) {
-         PG_Color col = i->second;
-         c = col.MapRGBA( PG_Application::GetScreen()->format, 255-GetTransparency());
-      }   
-
-
-   SDL_FillRect(PG_Application::GetScreen(), &d, c);
-
-}
-
-
-void BarGraphWidget::setFraction( float f )
-{
-   fraction = f;
-}
-
-
 
 
 
@@ -1087,4 +1010,350 @@ pair<int,int> new_chooseString ( const ASCString& title, const vector<ASCString>
    nsc.Show();
    nsc.RunModal();
    return make_pair(nsc.getButton(), nsc.getItem() );
+}
+
+
+#if 0
+
+class PageRenderer : public PG_ScrollWidget {
+
+   struct RenderingAttribute {
+      RenderingAttribute() : spaceAfter(0), baseline(0),linebreak(0), firstLineIndent(-1), furtherLineIndent(-1) {};
+      int spaceAfter;
+      int baseline;
+      int linebreak;
+      int firstLineIndent;
+      int furtherLineIndent;
+   };
+   /*
+   class Attributes {
+      public:
+         Attributes();
+         virtual ~Attributes();
+         virtual void assign( PG_Widget* w );
+      int size;
+      int color 
+};*/
+
+   struct TextAttributes {
+      TextAttributes() : fontsize(10), textcolor(-1), backgroundcolor(-1) {};
+      int fontsize;
+      int textcolor;
+      int backgroundcolor;
+      void assign ( PG_Widget* w )
+      {
+
+         static PG_ThemeWidget* theme = NULL;
+         if ( !theme )
+            theme = new PG_ThemeWidget( NULL );
+         
+         w->SetFontSize( fontsize );
+         if ( textcolor > 0 )
+            w->SetFontColor ( textcolor );
+         else
+            w->SetFontColor ( theme->GetFontColor() );
+      }
+   };
+
+   TextAttributes textAttributes;
+   
+   typedef std::map<PG_Widget*,RenderingAttribute> Attributes;
+   Attributes attributes;
+
+
+   typedef list<PG_Widget*> Widgets;
+   Widgets widgets;
+   PG_Widget* lastWidget;
+   
+   public:
+      PageRenderer (PG_Widget *parent, const PG_Rect &r=PG_Rect::null, const std::string &style="ScrollWidget") : PG_ScrollWidget( parent, r, style ), lastWidget(NULL)
+      {
+         SetTransparency(255);
+      };
+
+      void SetText( const ASCString& text )
+      {
+         // PG_ThemeWidget::SetText( text );
+         // parse( text );
+      };
+
+      bool isSpace( ASCString::charT character )
+      {
+         return character == ' ' || character == '\n' || character=='\r' || character == '\t';
+      }
+
+      bool isBreaker( ASCString::charT character )
+      {
+         return character == ':' || character == ',' || character=='.' || character == ';' || character == '-';
+      }
+
+
+      void arrangeLine( int y, const Widgets& line, int lineHeight )
+      {
+         int x = 0;
+         for ( Widgets::const_iterator i = line.begin(); i != line.end(); ++i ) {
+            (*i)->MoveWidget( x, y + lineHeight- (*i)->Height(), false );
+            x += (*i)->Width();
+            if ( attributes.find(*i ) != attributes.end() )
+               x += attributes[*i].spaceAfter;
+         }
+      }
+
+      int AreaWidth()
+      {
+         return max( int(GetListWidth()), Width() - 15 );
+         // return Width() - 15;
+      }
+
+      void layout()
+      {
+         int x = 0;
+         int y = 0;
+         int lineHeight = 0;
+         Widgets currentLine;
+         
+         int breakNow = 0;
+
+         int firstLineIndent = 0;
+         int furtherLineIndent = 0;
+               
+         for ( Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i ) {
+            if ( (x + (*i)->Width() >= AreaWidth() && x > 0) || breakNow ) {
+               arrangeLine( y, currentLine, lineHeight );
+               y += lineHeight + breakNow;
+               
+               if ( breakNow )
+                  x = firstLineIndent;
+               else
+                  x = furtherLineIndent;
+               
+               lineHeight = 0;
+               currentLine.clear();
+               breakNow = 0;
+            }
+            
+            currentLine.push_back ( *i );
+            
+            if ( lineHeight < (*i)->Height() )
+               lineHeight = (*i)->Height();
+               
+            x += (*i)->Width();
+            Attributes::iterator at = attributes.find(*i );
+            if ( at != attributes.end()) {
+               x += at->second.spaceAfter;
+               if ( at->second.linebreak )
+                  breakNow = at->second.linebreak;
+               
+               if ( at->second.firstLineIndent >= 0 )
+                  firstLineIndent = at->second.firstLineIndent;
+               
+               if ( at->second.furtherLineIndent >= 0 )
+                  furtherLineIndent = at->second.furtherLineIndent;
+            }
+                  
+         }
+         arrangeLine( y, currentLine, lineHeight );
+         
+      }
+
+      void addWidget( PG_Widget* w )
+      {
+         if ( w ) {
+            widgets.push_back( w );
+            lastWidget = w;
+         }
+      }
+
+      void addSpace( int space )
+      {
+         if ( lastWidget ) 
+            attributes[lastWidget].spaceAfter += space * 5;
+      }
+
+      void addLinebreak( int pixel, int lines )
+      {
+         if ( lastWidget )  
+            attributes[lastWidget].linebreak += pixel + 1 + (lines-1) * (textAttributes.fontsize+3);
+      }
+
+      void addIndentation( int firstLine, int furtherLines )
+      {
+         if ( lastWidget ) {
+            if ( firstLine >= 0 ) 
+               attributes[lastWidget].firstLineIndent = firstLine;
+
+            if ( furtherLines >= 0 )
+               attributes[lastWidget].firstLineIndent = furtherLines;
+         }
+      }
+      
+
+      ASCString substr( const ASCString& text, ASCString::const_iterator begin, ASCString::const_iterator end )
+      {
+         return text.substr( begin-text.begin(), end-begin+1);
+      }
+      
+      ASCString::const_iterator token ( const ASCString& text, ASCString::const_iterator start )
+      {
+         ASCString::const_iterator end = start;
+         bool isTag = *start == '#';
+         
+         while( end+1 != text.end() && (!isBreaker(*end) || isTag) && !isSpace(*end))
+            ++end;
+
+         if ( isSpace( *end )) {
+            addWidget( render ( substr( text, start, end-1)));
+
+            int hspace = 0;
+            int vspace = 0;
+            
+            while ( end != text.end() && isSpace( *end)) {
+               if ( *end == ' ' )
+                  hspace += 1;
+               else
+                  if ( *end == '\n' ) {
+                     hspace = 0;
+                     vspace += 1;
+                  }
+                  
+               ++end;
+            }
+            if ( hspace )
+               addSpace( hspace );
+            
+            if ( vspace )
+               addLinebreak( 0, vspace );
+            
+            return end;
+         } else {
+            addWidget( render( substr( text, start, end)));
+            ++end;
+            return end;
+         }
+      }
+      
+      void parse( const ASCString& text )
+      {
+         ASCString::const_iterator pos = text.begin();
+
+         // skip spaces at beginning to text
+         while ( pos == text.end() && isSpace(*pos) )
+            ++pos;
+
+         if ( pos == text.end() )
+            return;
+        
+         while ( pos != text.end() )
+            pos = token ( text, pos );
+
+      }
+
+      PG_Widget* parsingError( const ASCString& errorMessage )
+      {
+         PG_Widget* w = new PG_Label( this );
+         textAttributes.assign( w );
+         w->SetText( errorMessage );
+         w->SetSizeByText();
+         w->SetFontColor( 0xff0000 );
+         return w;
+      }
+      
+      virtual PG_Widget* render( const ASCString& token )
+      {
+         if ( token[0] == '#' ) {
+            boost::smatch what;
+            
+            static boost::regex size( "#fontsize=(\\d+)#");
+            if( boost::regex_match( token, what, size)) {
+               ASCString s;
+               s.assign( what[1].first, what[1].second );
+               textAttributes.fontsize = atoi(s.c_str() );
+               return NULL;
+            }
+            
+            static boost::regex image( "#image=(\\S+)#");
+            if( boost::regex_match( token, what, image)) {
+               ASCString s;
+               s.assign( what[1].first, what[1].second );
+               Surface& surf = IconRepository::getIcon(s);
+               PG_Widget* w = new PG_Image( this, PG_Point(0,0), surf.getBaseSurface(), false );
+               return w;
+            }
+            
+            static boost::regex color( "#fontcolor=(\\d+)#");
+            if( boost::regex_match( token, what, color)) {
+               ASCString s;
+               s.assign( what[1].first, what[1].second );
+               textAttributes.textcolor = atoi(s.c_str() );
+               return NULL;
+            }
+            
+            static boost::regex defcolor( "#fontcolor=default#");
+            if( boost::regex_match( token, what, defcolor)) {
+               textAttributes.textcolor = -1;
+               return NULL;
+            }
+            
+            static boost::regex legacycolor( "#color(\\d{3})#");
+            if( boost::regex_match( token, what, legacycolor)) {
+               ASCString s;
+               s.assign( what[1].first, what[1].second );
+               int index = atoi(s.c_str() );
+               textAttributes.textcolor = pal[index][0] << 16 + pal[index][1] << 8 + pal[index][2];
+               return NULL;
+            }
+            
+            static boost::regex crtp( "#crtp=?(\\d+)#");
+            if( boost::regex_match( token, what, crtp)) {
+               ASCString s;
+               s.assign( what[1].first, what[1].second );
+               addLinebreak( atoi ( s.c_str()), 0);
+               return NULL;
+            }
+
+            static boost::regex crt( "#crt#");
+            if( boost::regex_match( token, what, crt)) {
+               addLinebreak( 0, 1 );
+               return NULL;
+            }
+
+            static boost::regex firstindent( "#eeinzug(\\d+)#");
+            if( boost::regex_match( token, what, firstindent)) {
+               ASCString s;
+               s.assign( what[1].first, what[1].second );
+               addIndentation( atoi(s.c_str()), -1 );
+               return NULL;
+            }
+            
+            static boost::regex furtherindent( "#aeinzug(\\d+)#");
+            if( boost::regex_match( token, what, furtherindent)) {
+               ASCString s;
+               s.assign( what[1].first, what[1].second );
+               addIndentation( -1, atoi(s.c_str()) );
+               return NULL;
+            }
+            
+            
+            
+            return parsingError ( "unknown token: " + token );
+         } else {
+               PG_Widget* w = new PG_Label( this );
+               textAttributes.assign( w );
+               w->SetText( token );
+               w->SetSizeByText();
+               w->SizeWidget( w->Width(), textAttributes.fontsize*4/3, false );
+               return w;
+         }
+         return NULL;
+      };
+};
+#endif
+
+
+void testText()
+{
+   // ViewFormattedText vft ( "Test", "Hallo #fontsize=12# Welt #image=program-icon.png#\nNext Line g o U J ", PG_Rect( -1, -1, 400, 400 ));
+   ViewFormattedText vft ( "Test", "g o U J ", PG_Rect( -1, -1, 400, 400 ));
+   vft.Show();
+   vft.RunModal();
 }

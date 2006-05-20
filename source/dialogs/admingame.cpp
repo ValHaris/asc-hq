@@ -28,6 +28,7 @@
 #include "../spfst.h"
 #include "playersetup.h"
 
+#include "../widgets/multilistbox.h"
 
 
 

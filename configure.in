@@ -339,6 +339,8 @@ dnl PARAGUI_LIBS="-lparagui $SIGC_LIBS $SDL_LIBS $LIBEXPAT $FREETYPE_LIBS $EXTRA
 AC_SUBST(FREETYPE_LIBS)
 
 
+BOOST_LIBS="-lboost_regex"
+AC_SUBST(BOOST_LIBS)
 
 dnl ***********************************
 
@@ -567,6 +569,7 @@ AC_OUTPUT(  Makefile \
 	    source/docs/en/Makefile \
 	    source/graphics/Makefile \
 	    source/dialogs/Makefile \
+       source/widgets/Makefile \
        source/actions/Makefile \
 	    source/libs/Makefile \
 	    source/libs/sdlmm/Makefile \

@@ -29,6 +29,7 @@
 #include "paradialog.h"
 #include "edselfnt.h"
 #include "graphics/surface.h"
+#include "widgets/dropdownselector.h"
 #include "mainscreenwidget.h"
 
 class Menu;

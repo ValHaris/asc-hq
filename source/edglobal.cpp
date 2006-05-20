@@ -49,6 +49,7 @@
 #include "dialogs/admingame.h"
 #include "dialogs/eventeditor.h"
 #include "dialogs/newmap.h"
+#include "dialogs/terraininfo.h"
 
    
    const char* execactionnames[execactionscount] = {
@@ -614,7 +615,7 @@ void execaction( int code)
       case act_setactweatherglobal: setweatherall ( selection.getWeather() );
                                  displaymap();
       break;
-   case act_terraininfo: viewterraininfo();
+   case act_terraininfo: viewterraininfo( actmap, actmap->getCursor(), true);
       break;
    case act_setunitfilter: selectunitsetfilter();
                            filtersChangedSignal(); 

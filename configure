@@ -464,7 +464,7 @@ ac_includes_default="\
 #endif"
 
 ac_subdirs_all="$ac_subdirs_all src/physfs"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT build build_cpu build_vendor build_os host host_cpu host_vendor host_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE EGREP LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL SGML2MAN DOCBOOK2MAN GENCLL GENCL SDL_CONFIG SDL_CFLAGS SDL_LIBS SDL_TTF_LDADD PKG_CONFIG ac_pt_PKG_CONFIG SIGC_CFLAGS SIGC_LIBS freetype_config EXPAT_INCLUDE EXPAT_LIB EXPAT_SUBDIR LIBEXPAT subdirs PHYSFS_INCLUDE PHYSFS_LIB PHYSFS_SUBDIR LIBPHYSFS FREETYPE_LIBS LIBBZ2 LDADDLIBBZ2 asc_version MAINCONDATA MUSICDIR LIBOBJS LTLIBOBJS PARAGUI_CFLAGS PARAGUI_LIBS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT build build_cpu build_vendor build_os host host_cpu host_vendor host_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE EGREP LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL SGML2MAN DOCBOOK2MAN GENCLL GENCL SDL_CONFIG SDL_CFLAGS SDL_LIBS SDL_TTF_LDADD PKG_CONFIG ac_pt_PKG_CONFIG SIGC_CFLAGS SIGC_LIBS freetype_config EXPAT_INCLUDE EXPAT_LIB EXPAT_SUBDIR LIBEXPAT subdirs PHYSFS_INCLUDE PHYSFS_LIB PHYSFS_SUBDIR LIBPHYSFS FREETYPE_LIBS BOOST_LIBS LIBBZ2 LDADDLIBBZ2 asc_version MAINCONDATA MUSICDIR LIBOBJS LTLIBOBJS PARAGUI_CFLAGS PARAGUI_LIBS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -21832,6 +21832,8 @@ subdirs="$subdirs src/physfs"
 
 
 
+BOOST_LIBS="-lboost_regex"
+
 
 
 
@@ -23380,7 +23382,7 @@ fi
 
 
 
-                                                                                                                                                                                                                                                                                                                                                              ac_config_files="$ac_config_files Makefile asc.spec doc/Makefile doc/manpages/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/graphics/Makefile source/dialogs/Makefile source/actions/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/libs/loki/Makefile source/libs/paragui/Makefile source/libs/paragui/src/Makefile source/libs/paragui/src/widgets/Makefile source/libs/paragui/src/core/Makefile source/libs/paragui/src/draw/Makefile source/libs/paragui/src/font/Makefile source/libs/paragui/src/themes/Makefile source/libs/paragui/src/ystring/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile source/unix/asc/Makefile data/Makefile data/dialog/Makefile data/music/Makefile"
+                                                                                                                                                                                                                                                                                                                                                                        ac_config_files="$ac_config_files Makefile asc.spec doc/Makefile doc/manpages/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/graphics/Makefile source/dialogs/Makefile source/widgets/Makefile source/actions/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/libs/loki/Makefile source/libs/paragui/Makefile source/libs/paragui/src/Makefile source/libs/paragui/src/widgets/Makefile source/libs/paragui/src/core/Makefile source/libs/paragui/src/draw/Makefile source/libs/paragui/src/font/Makefile source/libs/paragui/src/themes/Makefile source/libs/paragui/src/ystring/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile source/unix/asc/Makefile data/Makefile data/dialog/Makefile data/music/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -23969,6 +23971,7 @@ do
   "source/docs/en/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/docs/en/Makefile" ;;
   "source/graphics/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/graphics/Makefile" ;;
   "source/dialogs/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/dialogs/Makefile" ;;
+  "source/widgets/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/widgets/Makefile" ;;
   "source/actions/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/actions/Makefile" ;;
   "source/libs/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/libs/Makefile" ;;
   "source/libs/sdlmm/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/libs/sdlmm/Makefile" ;;
@@ -24171,6 +24174,7 @@ s,@PHYSFS_LIB@,$PHYSFS_LIB,;t t
 s,@PHYSFS_SUBDIR@,$PHYSFS_SUBDIR,;t t
 s,@LIBPHYSFS@,$LIBPHYSFS,;t t
 s,@FREETYPE_LIBS@,$FREETYPE_LIBS,;t t
+s,@BOOST_LIBS@,$BOOST_LIBS,;t t
 s,@LIBBZ2@,$LIBBZ2,;t t
 s,@LDADDLIBBZ2@,$LDADDLIBBZ2,;t t
 s,@asc_version@,$asc_version,;t t

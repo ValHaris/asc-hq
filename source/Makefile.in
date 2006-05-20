@@ -66,6 +66,7 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+BOOST_LIBS = @BOOST_LIBS@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
@@ -187,7 +188,7 @@ subdirs = @subdirs@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
-SUBDIRS = @GENCL@ docs sdl libs ai graphics dialogs actions unix tools 
+SUBDIRS = @GENCL@ docs sdl libs ai graphics dialogs widgets actions unix tools 
 EXTRA_DIST = *.cpp *.h *.inc
 all: all-recursive
 

@@ -38,6 +38,7 @@
 #include "edselfnt.h"
 #include "edmisc.h"
 #include "gameoptions.h"
+#include "widgets/dropdownselector.h"
 
 Maped_MainScreenWidget*  mainScreenWidget = NULL ;
 

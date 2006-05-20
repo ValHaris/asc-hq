@@ -84,8 +84,6 @@ extern void resizemap ( void );
 
 extern void choosezoomlevel ( void );
 
-extern void viewterraininfo ( void );
-
 extern void viewUnitSetinfo ( void );
 
 /*! displays a dialog with two buttons, to select one of them

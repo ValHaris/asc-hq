@@ -27,6 +27,7 @@
 #include <sigc++/sigc++.h>
 
 #include "paradialog.h"
+#include "widgets/bargraphwidget.h"
 
 class ASCGUI_Window : public  PG_Window {
       ASCString panelName;

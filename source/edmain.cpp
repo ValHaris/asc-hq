@@ -248,6 +248,7 @@ int main(int argc, char *argv[] )
    if ( fullscreen )
       flags |= SDL_FULLSCREEN;
    
+   app.setIcon( "mapeditor-icon.png" );
    app.InitScreen( xr, yr, 32, flags);
 #ifdef WIN32
    delete win32ErrorDialogGenerator;
