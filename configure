@@ -20787,6 +20787,86 @@ SDL_TTF_LDADD="-lSDL_ttf"
 
 
 
+echo "$as_me:$LINENO: checking for main in -lboost_regex" >&5
+echo $ECHO_N "checking for main in -lboost_regex... $ECHO_C" >&6
+if test "${ac_cv_lib_boost_regex_main+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lboost_regex  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+main ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_boost_regex_main=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_boost_regex_main=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_boost_regex_main" >&5
+echo "${ECHO_T}$ac_cv_lib_boost_regex_main" >&6
+if test $ac_cv_lib_boost_regex_main = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBBOOST_REGEX 1
+_ACEOF
+
+  LIBS="-lboost_regex $LIBS"
+
+else
+  { { echo "$as_me:$LINENO: error:
+ASC requires the Boost library. If you have a distribution supplied
+Boost package installed, perhaps the Boost-devel package is missing.
+If your distribution does not include the Boost library, you can get it
+from http://www.boost.org/ " >&5
+echo "$as_me: error:
+ASC requires the Boost library. If you have a distribution supplied
+Boost package installed, perhaps the Boost-devel package is missing.
+If your distribution does not include the Boost library, you can get it
+from http://www.boost.org/ " >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+
+
 # Check for libsigc++
 #AM_PATH_SIGC(1.0.0, , AC_MSG_ERROR( [[
 #ASC requires the sigc++ library. If you have a distribution supplied

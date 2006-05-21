@@ -190,4 +190,6 @@
            ASCString devicename; 
 };
 
+
+
 #endif // basestreaminterface_h_included

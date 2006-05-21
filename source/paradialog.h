@@ -215,8 +215,6 @@ class PG_StatusWindowData : public StatusMessageWindowHolder::UserData {
 };
 
 
-extern int  new_choice_dlg(const ASCString& title, const ASCString& leftButton, const ASCString& rightButton );
-
 extern pair<int,int> new_chooseString ( const ASCString& title, const vector<ASCString>& entries, const vector<ASCString>& buttons, int defaultEntry = -1 );
 
 

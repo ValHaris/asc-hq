@@ -277,7 +277,7 @@ void Surface::read ( tnstream& stream )
          if ( version > surfaceVersion )
             throw tinvalidversion( stream.getLocation(), version, surfaceVersion );
              
-         int bitsPerPixel = stream.readChar();
+         stream.readChar(); // int bitsPerPixel = 
          int bytesPerPixel = stream.readChar();
          int colorkey = stream.readInt();
          int flags = stream.readInt();
@@ -321,7 +321,7 @@ void Surface::read ( tnstream& stream )
             SetAlpha ( 0, SDL_ALPHA_OPAQUE);
             
       } else {
-         int w =  (hd.id + 1) * (hd.size + 1) ;
+         // int w =  (hd.id + 1) * (hd.size + 1) ;
          
          SDL_Surface* s = SDL_CreateRGBSurface( SDL_SWSURFACE, hd.id+1, hd.size+1, 8, 0,0,0,0 );
 

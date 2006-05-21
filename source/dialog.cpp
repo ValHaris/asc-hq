@@ -53,6 +53,8 @@
 #include "paradialog.h"
 #include "cannedmessages.h"
 
+#include "dialogs/messagedialog.h"
+
 #ifndef karteneditor
  #include "gamedlg.h"
 #endif

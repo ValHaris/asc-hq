@@ -5,7 +5,10 @@ AM_CXXFLAGS             = $(SDL_CFLAGS) $(SIGC_CFLAGS)
 
 noinst_LTLIBRARIES      = libdialogs.la libgamedialogs.la libmapeddialogs.la
 
-libdialogs_la_SOURCES   = editmapparam.cpp cargowidget.cpp selectionwindow.cpp fileselector.cpp playersetup.cpp alliancesetup.cpp newgame.cpp soundsettings.cpp emailsetup.cpp unitinfodialog.cpp  editgameoptions.cpp vehicletypeselector.cpp fieldmarker.cpp admingame.cpp pwd_dlg.cpp terraininfo.cpp
+libdialogs_la_SOURCES   = editmapparam.cpp cargowidget.cpp selectionwindow.cpp fileselector.cpp playersetup.cpp alliancesetup.cpp newgame.cpp soundsettings.cpp \
+                          emailsetup.cpp unitinfodialog.cpp  editgameoptions.cpp vehicletypeselector.cpp fieldmarker.cpp admingame.cpp pwd_dlg.cpp terraininfo.cpp \
+                          messagedialog.cpp
+                          
 libdialogs_la_LIBADD    = @SDL_LIBS@ 
 
 libgamedialogs_la_SOURCES   = cargodialog.cpp unitcounting.cpp cargowidget.cpp ammotransferdialog.cpp attackpanel.cpp vehicletypeselector.cpp nextcampaignmap.cpp

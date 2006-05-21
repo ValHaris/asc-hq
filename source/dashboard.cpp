@@ -61,6 +61,7 @@ DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCS
    PG_LineEdit* l = dynamic_cast<PG_LineEdit*>( parent->FindChild( "unitname", true ) );
    if ( l ) {
       l->sigEditEnd.connect( SigC::slot( *this, &DashboardPanel::containerRenamed ));
+      l->sigEditUpdate.connect( SigC::slot( *this, &DashboardPanel::containerRenamed ));
    }
 };
 

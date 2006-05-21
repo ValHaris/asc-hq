@@ -610,7 +610,7 @@ SaveGameBaseDialog::SaveGameBaseDialog(const ASCString& title, PG_MessageObject*
     fileList->EnableScrollBar(true, PG_ScrollBar::VERTICAL);
     fileList->Update();
 #if 0
-    /*
+    
     tfindfile ff ( "*.sav" ); //wildcard
 
     ASCString location;
@@ -631,7 +631,7 @@ SaveGameBaseDialog::SaveGameBaseDialog(const ASCString& title, PG_MessageObject*
        fileList->
        //files.push_back ( f );
 
-       numberoffiles++;*/
+       numberoffiles++;
 
     /* fileName = ff.getnextname(NULL, NULL, &location );
     }

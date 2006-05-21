@@ -659,5 +659,129 @@ class RWOPS_Handler {
 
 #endif
 
+
+
+template<typename C>
+      void writePointerContainer ( const C& c, tnstream& stream  )
+{
+   stream.writeInt ( 1 );
+   stream.writeInt ( c.size() );
+   typedef typename C::const_iterator IT;
+   for ( IT i = c.begin(); i != c.end(); ++i )
+      (*i)->write ( stream );
+}
+
+template<typename BaseType>
+      void readPointerContainer ( vector<BaseType*>& v, tnstream& stream  )
+{
+   stream.readInt(); // version
+   int num = stream.readInt();
+   v.clear();
+   for ( int i = 0; i < num; ++i ) {
+      BaseType* bt = new BaseType;
+      bt->read( stream );
+      v.push_back( bt );
+   }
+}
+
+
+
+template<typename C>
+      void writeClassContainer ( const C& c, tnstream& stream  )
+{
+   stream.writeInt ( 1 );
+   stream.writeInt ( c.size() );
+   typedef typename C::const_iterator IT;
+   for ( IT i = c.begin(); i != c.end(); ++i )
+      i->write ( stream );
+}
+
+template<typename C>
+      void readClassContainer ( C& c, tnstream& stream  )
+{
+   int version = stream.readInt();
+   if ( version != 1 )
+      throw tinvalidversion( stream.getLocation(), 1, version );
+      
+   int num = stream.readInt();
+   c.clear();
+   for ( int i = 0; i < num; ++i ) {
+      typedef typename C::value_type VT;
+      VT vt;
+      vt.read( stream );
+      c.push_back( vt );
+   }
+}
+
+template<>
+      inline void writeClassContainer<> ( const vector<ASCString>& c, tnstream& stream  )
+{
+   stream.writeInt ( 1 );
+   stream.writeInt ( c.size() );
+   typedef vector<ASCString>::const_iterator IT;
+   for ( IT i = c.begin(); i != c.end(); ++i )
+      stream.writeString(*i);
+}
+
+
+template<>
+      inline void readClassContainer<> ( vector<ASCString>& c, tnstream& stream  )
+{
+   stream.readInt(); // version
+   int num = stream.readInt();
+   c.clear();
+   for ( int i = 0; i < num; ++i )
+      c.push_back( stream.readString() );
+}
+
+template<>
+      inline void writeClassContainer<> ( const vector<int>& c, tnstream& stream  )
+{
+   stream.writeInt ( 1 );
+   stream.writeInt ( c.size() );
+   typedef vector<int>::const_iterator IT;
+   for ( IT i = c.begin(); i != c.end(); ++i )
+      stream.writeInt(*i);
+}
+
+
+template<>
+      inline void readClassContainer<> ( vector<int>& c, tnstream& stream  )
+{
+   stream.readInt(); // version
+   int num = stream.readInt();
+   c.clear();
+   for ( int i = 0; i < num; ++i )
+      c.push_back ( stream.readInt() );
+}
+
+template<>
+      inline void writeClassContainer<> ( const vector<pair<int,int> >& c, tnstream& stream  )
+{
+   stream.writeInt ( 1 );
+   stream.writeInt ( c.size() );
+   typedef vector<pair<int,int> >::const_iterator IT;
+   for ( IT i = c.begin(); i != c.end(); ++i ) {
+      stream.writeInt(i->first);
+      stream.writeInt(i->second );
+   }
+}
+
+
+template<>
+      inline void readClassContainer<> ( vector<pair<int,int> >& c, tnstream& stream  )
+{
+   stream.readInt(); // version
+   int num = stream.readInt();
+   c.clear();
+   for ( int i = 0; i < num; ++i ) {
+      int first = stream.readInt();
+      int second = stream.readInt();
+      c.push_back ( make_pair(first,second) );
+   }
+}
+
+
+
 #endif
 

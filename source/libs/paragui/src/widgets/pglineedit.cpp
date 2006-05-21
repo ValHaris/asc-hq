@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-19 12:15:43 $
+    Update Date:      $Date: 2006-05-21 18:05:44 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pglineedit.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.2 $
+    CVS/RCS Revision: $Revision: 1.1.2.3 $
     Status:           $State: Exp $
 */
 
@@ -419,12 +419,14 @@ void PG_LineEdit::InsertChar(const PG_Char& c) {
 		#endif*/
 		my_text.insert(my_cursorPosition, 1, c);
 		SetCursorPos(++my_cursorPosition);
+      sigEditUpdate(this);
 	}
 }
 
 /** */
 void PG_LineEdit::DeleteChar(Uint16 pos) {
 	my_text.erase(pos, 1);
+   sigEditUpdate(this);
 }
 
 /** */

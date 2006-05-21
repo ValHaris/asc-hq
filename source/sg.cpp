@@ -562,10 +562,6 @@ void execuseraction ( tuseractions action )
          else
             displaymessage("Sorry, this function has been disabled when starting the map!", 1 );
          break;
-         
-      case ua_researchinfo:
-         researchinfo ();
-         break;
 
       case ua_newmessage:
          newmessage();
@@ -901,6 +897,9 @@ void execuseraction2 ( tuseractions action )
       case ua_networksupervisor:
          networksupervisor();
          displaymap();
+         break;
+      case ua_researchinfo:
+         researchinfo ();
          break;
          
       default:

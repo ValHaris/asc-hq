@@ -29,7 +29,7 @@ class TextRenderer : public PG_ScrollWidget {
       };
    
       struct TextAttributes {
-         TextAttributes() : fontsize(10), textcolor(-1), backgroundcolor(-1) {};
+         TextAttributes() : fontsize(12), textcolor(-1), backgroundcolor(-1) {};
          int fontsize;
          int textcolor;
          int backgroundcolor;

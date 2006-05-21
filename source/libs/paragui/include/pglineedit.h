@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-19 12:15:43 $
+    Update Date:      $Date: 2006-05-21 18:05:44 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pglineedit.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.2 $
+    CVS/RCS Revision: $Revision: 1.1.2.3 $
     Status:           $State: Exp $
 */
 
@@ -64,6 +64,9 @@ class SignalEditEnd : public PG_Signal1<PG_LineEdit*, datatype> {}
 	template<class datatype = PG_Pointer>
 class SignalEditReturn : public PG_Signal1<PG_LineEdit*, datatype> {}
 	;
+   template<class datatype = PG_Pointer>
+class SignalEditUpdate : public PG_Signal1<PG_LineEdit*, datatype> {}
+   ;
 
 	/** */
 	PG_LineEdit(PG_Widget* parent, const PG_Rect& r = PG_Rect::null, const std::string& style="LineEdit", int maximumLength = 1000000);
@@ -150,7 +153,10 @@ class SignalEditReturn : public PG_Signal1<PG_LineEdit*, datatype> {}
 	SignalEditBegin<> sigEditBegin;
 	SignalEditEnd<> sigEditEnd;
 	SignalEditReturn<> sigEditReturn;
+   SignalEditUpdate<> sigEditUpdate;
 
+
+   
    /** sets the blinking interval of the cursor
        Only PG_LineEdits created after setting this to a non-zero value will have a blinking cursor
    */

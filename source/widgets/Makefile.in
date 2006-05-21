@@ -49,7 +49,7 @@ CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libwidgets_la_DEPENDENCIES =
 am_libwidgets_la_OBJECTS = textrenderer.lo bargraphwidget.lo \
-	dropdownselector.lo multilistbox.lo
+	dropdownselector.lo multilistbox.lo autoprogressbar.lo
 libwidgets_la_OBJECTS = $(am_libwidgets_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -200,7 +200,7 @@ target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS) 
 noinst_LTLIBRARIES = libwidgets.la 
-libwidgets_la_SOURCES = textrenderer.cpp bargraphwidget.cpp dropdownselector.cpp  multilistbox.cpp 
+libwidgets_la_SOURCES = textrenderer.cpp bargraphwidget.cpp dropdownselector.cpp  multilistbox.cpp autoprogressbar.cpp
 libwidgets_la_LIBADD = @SDL_LIBS@
 all: all-am
 
@@ -253,6 +253,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/autoprogressbar.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bargraphwidget.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dropdownselector.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/multilistbox.Plo@am__quote@

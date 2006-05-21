@@ -182,6 +182,12 @@ AC_SUBST(SDL_TTF_LDADD)
 #AC_MSG_RESULT("yes")
 
 
+AC_CHECK_LIB( boost_regex, main,, AC_MSG_ERROR([[
+ASC requires the Boost library. If you have a distribution supplied
+Boost package installed, perhaps the Boost-devel package is missing.
+If your distribution does not include the Boost library, you can get it
+from http://www.boost.org/ ]]))
+
 
 # Check for libsigc++
 #AM_PATH_SIGC(1.0.0, , AC_MSG_ERROR( [[

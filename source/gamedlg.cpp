@@ -61,6 +61,7 @@
 #include "spfst.h"
 #include "dialog.h"
 
+#include "widgets/textrenderer.h"
 
 class   tchoosetechnology : public tdialogbox {
                            typedef vector<const Technology*> Techs;
@@ -628,19 +629,17 @@ void researchinfo ( void )
          s += *i + "\n";
 
 
-      tviewanytext vat ;
-      vat.init ( "Developed Technologies", s.c_str(), 20, -1 , 450, 480 );
-      vat.run();
-      vat.done();
+      ViewFormattedText vft ( "Developed Technologies", s, PG_Rect( -1, -1, 500, 500 ));
+      vft.Show();
+      vft.RunModal();
 
    }
    if ( skeypress( ct_lshift)) {
       ASCString s = actmap->player[actmap->actplayer].research.listTriggeredTechAdapter();
 
-      tviewanytext vat ;
-      vat.init ( "Triggered TechAdapter", s.c_str(), 20, -1 , 450, 480 );
-      vat.run();
-      vat.done();
+      ViewFormattedText vft ( "Triggered TechAdapter", s, PG_Rect( -1, -1, 500, 500 ));
+      vft.Show();
+      vft.RunModal();
    }
 
 }
