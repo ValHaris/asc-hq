@@ -799,9 +799,18 @@ class SolarPowerWindow : public SubWindow {
       {
          cargoDialog->setLabelText( "MaxPower", container()->maxplus.energy, widget );
       
+         static const char* weathernames[] = {"terrain_weather_dry.png",
+                                              "terrain_weather_lightrain.png",
+                                              "terrain_weather_heavyrain.png",
+                                              "terrain_weather_lightsnow.png",
+                                              "terrain_weather_heavysnow.png",
+                                              "terrain_weather_ice.png" };
+
+
          SolarPowerplant solarPowerPlant ( container() );
          Resources plus = solarPowerPlant.getPlus();
          cargoDialog->setLabelText( "CurrentPower", plus.energy, widget );
+         cargoDialog->setImage( "Weather", weathernames[ container()->getMap()->getField( container()->getPosition() )->getweather() ], widget );
       }
 };
 
@@ -824,6 +833,8 @@ class WindPowerWindow : public SubWindow {
          WindPowerplant windPowerPlant ( container() );
          Resources plus = windPowerPlant.getPlus();
          cargoDialog->setLabelText( "CurrentPower", plus.energy, widget );
+         if ( container()->getMap()->weatherSystem )
+         cargoDialog->setLabelText( "Weather", container()->getMap()->weatherSystem->getCurrentWindSpeed(), widget );
       }
 };
 

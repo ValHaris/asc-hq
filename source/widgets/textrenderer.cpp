@@ -286,7 +286,7 @@ PG_Widget* TextRenderer :: eval_command( const ASCString& token )
       s.assign( what[1].first, what[1].second );
       int index = strtol(s.c_str(), NULL, 0 );
       if ( index > 0 )
-         textAttributes.textcolor = pal[index][0] << 16 + pal[index][1] << 8 + pal[index][2];
+         textAttributes.textcolor = (pal[index][0] << 16) + (pal[index][1] << 8) + pal[index][2];
       else
          textAttributes.textcolor = -1;
       return NULL;

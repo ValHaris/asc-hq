@@ -399,10 +399,10 @@ panel {
       localtransparency = 255
       backgroundcolor = 0x3f3f30
 
-      x = 116
+      x = 115
       y = 418
-      x2 = 638
-      y2 = 586
+      x2 = 639
+      y2 = 588
 
       ChildWidgets = info cargoinfo conventionalpower mining research resourceinfo solarpower windpower damagecontrol
       
@@ -1186,21 +1186,21 @@ panel {
          type = dummy
          x = 0
          y = 0
-         x2 = -1
-         y2 = -1
+         width = 524
+         height = 170
          
          ChildWidgets = BKGR
          BKGR {
             type = image
             FileName = cargo-dialog-solar.png
-            x = 5
-            y = 5
-            x2 = -1
-            y2 = -1
+            x = 0
+            y = 0
+            width = 524
+            height = 170
 
             ; We don't really need a third line with "power storable" 
 
-            ChildWidgets = Description MaxPower CurrentPower MaxPower2 CurrentPower2
+            ChildWidgets = Description MaxPower CurrentPower MaxPower2 CurrentPower2 Weather Weather2
             Description {
                type = StaticText
                text = Solar Power Plant
@@ -1210,11 +1210,30 @@ panel {
                y2 = 21
             } Description
 
+            Weather2 {
+               type = StaticText
+               text = Current Weather
+               x = 28
+               y = 38
+               x2 = 164
+               height = 14
+            } Weather2
+
+            Weather {
+               type = image
+               x = 196
+               y = 38
+               x2 = 226
+               height = 14
+               textalign = right
+            } Weather
+
+
             MaxPower2 {
                type = StaticText
                text = Max Power
                x = 28
-               y = 37
+               y = 100
                x2 = 164
                height = 14
             } MaxPower2
@@ -1222,16 +1241,17 @@ panel {
             MaxPower {
                type = TextOutput
                x = 167
-               y = 37
+               y = 100
                x2 = 226
                height = 14
+               textalign = right
             } MaxPower
 
             CurrentPower2 {
                type = StaticText
                text = Current Power
                x = 28
-               y = 68
+               y = 69
                x2 = 164
                height = 14
             } CurrentPower2
@@ -1241,9 +1261,10 @@ panel {
                type = TextOutput
                text = Solar Power Plant
                x = 167
-               y = 68
+               y = 69
                x2 = 226
                height = 14
+               textalign = right
             } CurrentPower
 
 
@@ -1255,21 +1276,21 @@ panel {
          type = dummy
          x = 0
          y = 0
-         x2 = -1
-         y2 = -1
+         width = 524
+         height = 170
          
          ChildWidgets = BKGR
          BKGR {
             type = image
             FileName = cargo-dialog-wind.png
-            x = 5
-            y = 5
-            x2 = -1
-            y2 = -1
+            x = 0
+            y = 0
+            width = 524
+            height = 170
 
             ; We don't really need a third line with "power storable" 
 
-            ChildWidgets = Description MaxPower CurrentPower MaxPower2 CurrentPower2
+            ChildWidgets = Description MaxPower CurrentPower MaxPower2 CurrentPower2 Weather Weather2
             Description {
                type = StaticText
                text = Wind Power Plant
@@ -1279,11 +1300,31 @@ panel {
                y2 = 21
             } Description
 
+
+            Weather2 {
+               type = StaticText
+               text = Wind Speed
+               x = 28
+               y = 38
+               x2 = 164
+               height = 14
+            } Weather2
+
+            Weather {
+               type = TextOutput
+               x = 167
+               y = 38
+               x2 = 226
+               height = 14
+               textalign = right
+            } Weather
+
+
             MaxPower2 {
                type = StaticText
                text = Max Power
                x = 28
-               y = 37
+               y = 100
                x2 = 164
                height = 14
             } MaxPower2
@@ -1291,16 +1332,17 @@ panel {
             MaxPower {
                type = TextOutput
                x = 167
-               y = 37
+               y = 100
                x2 = 226
                height = 14
+               textalign = right
             } MaxPower
 
             CurrentPower2 {
                type = StaticText
                text = Current Power
                x = 28
-               y = 68
+               y = 69
                x2 = 164
                height = 14
             } CurrentPower2
@@ -1310,9 +1352,10 @@ panel {
                type = TextOutput
                text = Solar Power Plant
                x = 167
-               y = 68
+               y = 69
                x2 = 226
                height = 14
+               textalign = right
             } CurrentPower
          } BKGR
       } windpower

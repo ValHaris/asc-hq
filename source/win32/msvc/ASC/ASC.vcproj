@@ -441,9 +441,6 @@
 			<File
 				RelativePath="..\..\win32-errormsg.cpp">
 			</File>
-			<File
-				RelativePath="..\..\..\windowing.cpp">
-			</File>
 			<Filter
 				Name="AI"
 				Filter="">
@@ -541,6 +538,9 @@
 					RelativePath="..\..\..\dialogs\pwd_dlg.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\terraininfo.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\unitcounting.cpp">
 				</File>
 				<File
@@ -548,6 +548,25 @@
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\vehicletypeselector.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\windowing.cpp">
+				</File>
+			</Filter>
+			<Filter
+				Name="widgets"
+				Filter="">
+				<File
+					RelativePath="..\..\..\widgets\bargraphwidget.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\widgets\dropdownselector.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\widgets\multilistbox.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\widgets\textrenderer.cpp">
 				</File>
 			</Filter>
 		</Filter>

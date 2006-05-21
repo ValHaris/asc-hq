@@ -716,6 +716,13 @@ void ASCGUI_Window::setLabelText ( const ASCString& widgetName, int i, PG_Widget
    setLabelText ( widgetName, s, parent );
 }
 
+
+void ASCGUI_Window::setImage ( const ASCString& widgetName, const ASCString& filename, PG_Widget* parent )
+{
+   setImage( widgetName, IconRepository::getIcon( filename ), parent );
+}
+
+
 void ASCGUI_Window::setImage ( const ASCString& widgetName, Surface& image, PG_Widget* parent )
 {
    setImage( widgetName, image.getBaseSurface(), parent);

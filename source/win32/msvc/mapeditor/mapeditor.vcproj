@@ -469,7 +469,26 @@
 					RelativePath="..\..\..\dialogs\selectionwindow.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\terraininfo.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\unitinfodialog.cpp">
+				</File>
+			</Filter>
+			<Filter
+				Name="widgets"
+				Filter="">
+				<File
+					RelativePath="..\..\..\widgets\bargraphwidget.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\widgets\dropdownselector.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\widgets\multilistbox.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\widgets\textrenderer.cpp">
 				</File>
 			</Filter>
 		</Filter>
@@ -645,6 +664,9 @@
 		<Filter
 			Name="Resource Files"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+			<File
+				RelativePath=".\mapeditor-icon.ico">
+			</File>
 			<File
 				RelativePath=".\mapeditor.rc">
 			</File>
