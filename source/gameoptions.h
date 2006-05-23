@@ -170,6 +170,8 @@ class CGameOptions
       // int showUnitOwner;
 
 
+      bool cacheASCGUI;
+
       struct PanelData {
          int x;
          int y;

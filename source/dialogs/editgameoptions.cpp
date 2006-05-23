@@ -176,6 +176,8 @@ class EditGameOptions : public ASC_PG_Dialog {
          if ( mainApp )
             new PG_PropertyField_String<ASCString>( propertyEditor , "Startup Map", &o->startupMap );
 
+         new PG_PropertyField_Checkbox<bool>( propertyEditor, "Cache GUI Definition (*.ascgui)", &o->cacheASCGUI );
+
         
          PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 100, Height() - 40, 90, 30), "OK" );
          ok->sigClick.connect( SigC::slot( *this, &EditGameOptions::ok ));

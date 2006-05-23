@@ -512,7 +512,7 @@ WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const V
       WidgetParameters widgetParams = getDefaultWidgetParams();
       WeaponInfoLine* lineWidget = new WeaponInfoLine ( this, PG_Point( 0,  lineStartY + i * line.h() ), line.getBaseSurface(), displayedWeapons[i], vt );
 
-      PropertyReadingContainer pc ( "panel", textPropertyGroup );
+      PropertyReadingContainer pc ( "panel", GetImpl(textPropertyGroup) );
 
       pc.openBracket("LineWidget");
       parsePanelASCTXT( pc, lineWidget, widgetParams );

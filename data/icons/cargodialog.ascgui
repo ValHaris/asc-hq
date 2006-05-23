@@ -567,6 +567,7 @@ panel {
       
       conventionalpower {
          type = image
+         fontsize = 10
          filename = cargo-matterconverter.png
          x = 0
          y = 0
@@ -589,9 +590,9 @@ panel {
 
          Input {
             type = dummy
-            x = 21
-            y = 62
-            x2 = 251
+            x = 27
+            y = 56
+            x2 = 295
             height = 15
             ChildWidgets = Label energyIn materialIn fuelIn
             Label {
@@ -599,36 +600,39 @@ panel {
                text = Consumption
                x = 0
                y = 0
-               width = 79
+               width = 110
                y2 = -1
             } Label
             energyIn {
               type = TextOutput 
-              x = 86
+              x = 115
               y = 0
-              width = 45
+              width = 50
               y2 = -1
+              TextAlign = Right
             } energyIn 
             materialIn {
               type = TextOutput 
-              x = 135
+              x = 167
               y = 0
-              width = 45
+              width = 50
               y2 = -1
+              TextAlign = Right
             } materialIn
             fuelIn {
               type = TextOutput 
-              x = 184
+              x = 219
               y = 0
-              width = 45
+              width = 50
               y2 = -1
+              TextAlign = Right
             } fuelIn 
          } Input
          Output {
             type = dummy
-            x = 21
-            y = 82
-            x2 = 251
+            x = 27
+            y = 74
+            x2 = 295
             height = 15
             ChildWidgets = Label energyOut materialOut fuelOut
             Label {
@@ -641,24 +645,27 @@ panel {
             } Label
             energyOut {
               type = TextOutput 
-              x = 86
+              x = 115
               y = 0
               width = 45
               y2 = -1
+              TextAlign = Right
             } energyOut 
             materialOut {
               type = TextOutput 
-              x = 135
+              x = 167
               y = 0
               width = 45
               y2 = -1
+              TextAlign = Right
             } materialOut
             fuelOut {
               type = TextOutput 
-              x = 184
+              x = 219
               y = 0
               width = 45
               y2 = -1
+              TextAlign = Right
             } fuelOut 
          } Output
 
@@ -751,6 +758,7 @@ panel {
               y = 0
               width = 45
               y2 = -1
+              TextAlign = Right
             } energyOut 
             materialOut {
               type = TextOutput 
@@ -758,6 +766,7 @@ panel {
               y = 0
               width = 45
               y2 = -1
+              TextAlign = Right
             } materialOut
             fuelOut {
               type = TextOutput 
@@ -765,6 +774,7 @@ panel {
               y = 0
               width = 45
               y2 = -1
+              TextAlign = Right
             } fuelOut 
          } Output
 
@@ -986,20 +996,20 @@ panel {
 
          CurrentTech {
             type = TextOutput
-            x = 290
-            y = 5
-            x2 = 516
-            y2 = 22
+            x = 48
+            y = 35
+            x2 = 195
+            y2 = 49
          } CurrentTech
 
 
          ResPerTurnLabel {
             type = StaticText
             text = Research / Turn
-            x = 10
-            y = 64
-            x2 = 119
-            height = 13
+            x = 48
+            y = 60
+            x2 = 163
+            height = 15
          } ResPerTurnLabel
 
          ResPerTurnLocal {
@@ -1064,10 +1074,10 @@ panel {
 
          GraphArea {
             type = dummy
-            x = 276
-            y = 40
-            x2 = 509
-            y2 = 157
+            x = 274
+            y = 38
+            x2 = 477
+            y2 = 144
             UserHandler = ResearchGraph
          } GraphArea
 

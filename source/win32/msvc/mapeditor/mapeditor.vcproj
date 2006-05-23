@@ -460,6 +460,9 @@
 					RelativePath="..\..\..\dialogs\fileselector.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\messagedialog.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\newmap.cpp">
 				</File>
 				<File
@@ -478,6 +481,9 @@
 			<Filter
 				Name="widgets"
 				Filter="">
+				<File
+					RelativePath="..\..\..\widgets\autoprogressbar.cpp">
+				</File>
 				<File
 					RelativePath="..\..\..\widgets\bargraphwidget.cpp">
 				</File>

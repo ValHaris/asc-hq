@@ -160,12 +160,16 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
       pc.addInteger("SearchPathNum", searchPathNum, 0 );
       spn = searchPathNum;
    }   
-      
+   
          
    for ( int i = 0; i < min(spn, 30); ++i )
       pc.addString(ASCString("SearchPath") + strrr(i), searchPath[i] );
       
    searchPathNum = spn;   
+
+
+   pc.addBool( "cacheASCGUI", cacheASCGUI, cacheASCGUI );
+
 
    vector<ASCString> panels;
    if ( pc.isReading() ) {
@@ -242,6 +246,7 @@ void CGameOptions::setDefaults ( void )
    // defaultSuperVisorPassword.setName ( "" );
    startupMap =  "asc001.map";
 
+   cacheASCGUI = true;
 
 #if USE_HOME_DIRECTORY == 0
 

@@ -83,18 +83,37 @@ bool Menu::execAction  (PG_PopupMenu::MenuItem* menuItem )
 }
 
 
+
+
 void Menu::addfield( const char* name )
 {
    currentMenu = new PG_PopupMenu( NULL, -1, -1, "" );
+
+#ifdef HIGHLIGHT
    categories.push_back ( currentMenu );
    Add ( name, currentMenu );
-   currentMenu->sigSelectMenuItem.connect( SigC::slot( *this, &Menu::execAction ));
+#else
+   ASCString s = name;
+   while ( s.find ( "~") != ASCString::npos )
+      s.erase( s.find( "~"),1 );
+   Add ( s, currentMenu );
+#endif
 
+   currentMenu->sigSelectMenuItem.connect( SigC::slot( *this, &Menu::execAction ));
 }
 
 void Menu::addbutton( const char* name, int id )
 {
+#ifdef HIGHLIGHT
    currentMenu->addMenuItem( name, id );
+#else
+   ASCString s = name;
+   while ( s.find ( "~") != ASCString::npos )
+      s.erase( s.find( "~"),1 );
+
+   currentMenu->addMenuItem( s, id );
+#endif
+
 }
 
 

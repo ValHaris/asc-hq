@@ -306,7 +306,7 @@ void  ASCGUI_Window::WidgetParameters::assign( PG_Widget* widget )
 
 
 ASCGUI_Window::ASCGUI_Window ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, const ASCString& baseStyle, bool loadTheme )
-      : PG_Window ( parent, r, "", DEFAULT, baseStyle, 9 ), panelName( panelName_ ), textPropertyGroup(NULL)
+      : PG_Window ( parent, r, "", DEFAULT, baseStyle, 9 ), panelName( panelName_ )
 {
       // FIXME Hide button does not delete Panel      
 }
@@ -802,15 +802,24 @@ bool ASCGUI_Window::setup()
 {
    try {
       WidgetParameters widgetParameters = getDefaultWidgetParams();
-      
-      {
-         tnfilestream s ( panelName.toLower() + ".ascgui", tnstream::reading );
+
+      panelName.toLower();
+
+      typedef map<ASCString, Loki::SmartPtr<TextPropertyGroup, Loki::RefCounted> > GuiCache;
+      static GuiCache guiCache;
+
+      if ( !CGameOptions::Instance()->cacheASCGUI || guiCache.find(panelName) == guiCache.end() ) {
+         tnfilestream s ( panelName + ".ascgui", tnstream::reading );
 
          TextFormatParser tfp ( &s );
          textPropertyGroup = tfp.run();
-      }
 
-      PropertyReadingContainer pc ( "panel", textPropertyGroup );
+         if ( CGameOptions::Instance()->cacheASCGUI ) 
+            guiCache[panelName] = textPropertyGroup;
+      } else 
+         textPropertyGroup = guiCache[panelName];
+
+      PropertyReadingContainer pc ( "panel", GetImpl(textPropertyGroup) );
 
       int w, h;
       pc.addInteger( "width", w, 0 );
@@ -867,8 +876,6 @@ bool ASCGUI_Window::setup()
 
 ASCGUI_Window::~ASCGUI_Window()
 {
-   if ( textPropertyGroup )
-      delete textPropertyGroup;
 }
 
 

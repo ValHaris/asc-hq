@@ -726,7 +726,10 @@ int Research :: currentTechAvailableIn() const
 {
    if ( activetechnology ) {
       int rpt = getResearchPerTurn();
-      return ( activetechnology->researchpoints - progress + rpt - 1) / rpt;
+      if ( !rpt )
+         return 0;
+      else
+         return ( activetechnology->researchpoints - progress + rpt - 1) / rpt;
    } else
       return 0;
 }

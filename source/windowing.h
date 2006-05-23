@@ -26,6 +26,8 @@
 
 #include <sigc++/sigc++.h>
 
+#include "libs/loki/SmartPtr.h"
+
 #include "paradialog.h"
 #include "widgets/bargraphwidget.h"
 
@@ -74,7 +76,8 @@ class ASCGUI_Window : public  PG_Window {
 
       virtual WidgetParameters getDefaultWidgetParams() = 0;
 
-      TextPropertyGroup* textPropertyGroup;
+      typedef Loki::SmartPtr<TextPropertyGroup, Loki::RefCounted> TextPropertyGroupPointer;
+      TextPropertyGroupPointer textPropertyGroup;
    public:
       void setLabelText ( const ASCString& widgetName, const ASCString& text, PG_Widget* parent = NULL );
       void setLabelText ( const ASCString& widgetName, int i, PG_Widget* parent = NULL );

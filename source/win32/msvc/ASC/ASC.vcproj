@@ -532,6 +532,9 @@
 					RelativePath="..\..\..\dialogs\fieldmarker.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\messagedialog.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\nextcampaignmap.cpp">
 				</File>
 				<File
@@ -556,6 +559,9 @@
 			<Filter
 				Name="widgets"
 				Filter="">
+				<File
+					RelativePath="..\..\..\widgets\autoprogressbar.cpp">
+				</File>
 				<File
 					RelativePath="..\..\..\widgets\bargraphwidget.cpp">
 				</File>
